@@ -86,9 +86,6 @@ class AudioPort : public SubComponent {
     // Time stamp of the last write pointer alignment
     util::Time lastAlignment;
 
-    // Volume control
-    Volume volume;
-
     // Volume scaling factors
     float vol[4];
     float volL;
@@ -205,24 +202,6 @@ public:
 
 
     //
-    // Controlling volume
-    //
-    
-public:
-
-    /* Starts to ramp up the volume. This function configures variables volume
-     * and targetVolume to simulate a smooth audio fade in.
-     */
-    void rampUp();
-    void rampUpFromZero();
-    
-    /* Starts to ramp down the volume. This function configures variables
-     * volume and targetVolume to simulate a quick audio fade out.
-     */
-    void rampDown();
-    
-    
-    //
     // Generating audio streams
     //
     
@@ -250,15 +229,50 @@ public:
 
 
     //
+    // Controlling volume
+    //
+
+public:
+
+    /* Starts to ramp up the volume. This function configures variables volume
+     * and targetVolume to simulate a smooth audio fade in.
+     */
+    // void rampUp(); // DEPRECATED
+    // void rampUpFromZero(); // DEPRECATED
+
+    /* Starts to ramp down the volume. This function configures variables
+     * volume and targetVolume to simulate a quick audio fade out.
+     */
+    // void rampDown(); // DEPRECATED
+
+    // Rescale the existing samples to gradually fade out (to avoid cracks)
+    void fadeOut();
+
+    // Gradually decrease the master volume to zero
+    /*
+    void mute() { volL.mute(); volR.mute(); }
+    void mute(isize steps) { volL.mute(steps); volR.mute(steps); }
+
+    // Gradually inrease the master volume to max
+    void unmute() { volL.unmute(); volR.unmute(); }
+    void unmute(isize steps) { volL.unmute(steps); volR.unmute(steps); }
+    */
+
+
+    //
     // Reading audio samples
     //
     
 public:
     
-    // Copies a certain amout of audio samples into a buffer
-    isize copy(void *buffer, isize n);
-    isize copy(void *buffer1, void *buffer2, isize n);
-    
+    /* Copies n audio samples into a memory buffer. These functions mark the
+     * final step in the audio pipeline. They are used to copy the generated
+     * sound samples into the buffers of the native sound device. The function
+     * returns the number of copied samples.
+     */
+    isize copy(float *buffer, isize n);
+    isize copy(float *buffer1, float *buffer2, isize n);
+
     /* Returns a pointer to a buffer holding a certain amount of audio samples
      * without copying data. This function has been implemented for speedup.
      * Instead of copying ring buffer data into the target buffer, it returns

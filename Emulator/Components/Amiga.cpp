@@ -1136,6 +1136,7 @@ Amiga::setDebugVariable(const string &name, int val)
     else if (name == "AUDREG_DEBUG")     AUDREG_DEBUG    = val;
     else if (name == "AUD_DEBUG")        AUD_DEBUG       = val;
     else if (name == "AUDBUF_DEBUG")     AUDBUF_DEBUG    = val;
+    else if (name == "AUDVOL_DEBUG")     AUDVOL_DEBUG    = val;
     else if (name == "DISABLE_AUDIRQ")   DISABLE_AUDIRQ  = val;
 
     else if (name == "POSREG_DEBUG")     POSREG_DEBUG    = val;

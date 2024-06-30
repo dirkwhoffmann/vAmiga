@@ -40,73 +40,26 @@ AudioStream<T>::alignWritePtr()
 }
 
 template <class T> void
-AudioStream<T>::copy(void *buffer, isize n, Volume &vol)
+AudioStream<T>::copy(float *buffer, isize n)
 {
     // The caller has to ensure that no buffer underflows occurs
     assert(this->count() >= n);
 
-    // Quick path: Volume is stable at 0 or 1
-    if (!vol.fading()) {
-
-        if (vol.current == 0.0) {
-            
-            T zero;
-            for (isize i = 0; i < n; i++) {
-                zero.copy(buffer, i);
-            }
-            return;
-        }
-        if (vol.current == 1.0) {
-
-            for (isize i = 0; i < n; i++) {
-                T sample = this->read();
-                sample.copy(buffer, i);
-            }
-            return;
-        }
-    }
-    
-    // Generic path: Modulate the volume
     for (isize i = 0; i < n; i++) {
-        vol.shift();
         T sample = this->read();
-        sample.modulate(vol.current);
         sample.copy(buffer, i);
     }
+    return;
 }
 
 template <class T> void
-AudioStream<T>::copy(void *buffer1, void *buffer2, isize n, Volume &vol)
+AudioStream<T>::copy(float *buffer1, float *buffer2, isize n)
 {
     // The caller has to ensure that no buffer underflows occurs
     assert(this->count() >= n);
 
-    // Quick path: Volume is stable at 0 or 1
-    if (!vol.fading()) {
-
-        if (vol.current == 0) {
-
-            T zero;
-            for (isize i = 0; i < n; i++) {
-                zero.copy(buffer1, buffer2, i);
-            }
-            return;
-        }
-        if (vol.current == 1.0) {
-
-            for (isize i = 0; i < n; i++) {
-                T sample = this->read();
-                sample.copy(buffer1, buffer2, i);
-            }
-            return;
-        }
-    }
-    
-    // Generic path: Modulate the volume
     for (isize i = 0; i < n; i++) {
-        vol.shift();
         T sample = this->read();
-        sample.modulate(vol.current);
         sample.copy(buffer1, buffer2, i);
     }
 }
@@ -161,8 +114,8 @@ AudioStream<T>::draw(u32 *buffer, isize width, isize height,
 
 template void AudioStream<SAMPLE_T>::wipeOut();
 template void AudioStream<SAMPLE_T>::alignWritePtr();
-template void AudioStream<SAMPLE_T>::copy(void *, isize, Volume &);
-template void AudioStream<SAMPLE_T>::copy(void *, void *, isize, Volume &);
+template void AudioStream<SAMPLE_T>::copy(float *, isize);
+template void AudioStream<SAMPLE_T>::copy(float *, float *, isize);
 template float AudioStream<SAMPLE_T>::draw(u32 *, isize, isize, bool, float, u32) const;
 
 }

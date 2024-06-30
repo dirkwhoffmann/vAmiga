@@ -1067,21 +1067,6 @@ using namespace vamiga::moira;
     return [self paula]->paula->audioPort.copy(target1, target2, n);
 }
 
-- (void)rampUp
-{
-    [self paula]->paula->audioPort.rampUp();
-}
-
-- (void)rampUpFromZero
-{
-    [self paula]->paula->audioPort.rampUpFromZero();
-}
-
-- (void)rampDown
-{
-    [self paula]->paula->audioPort.rampDown();
-}
-
 - (float)drawWaveformL:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(u32)c
 {
     return [self paula]->paula->audioPort.stream.draw(buffer, w, h, true, s, c);

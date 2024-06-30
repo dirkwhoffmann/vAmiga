@@ -235,6 +235,7 @@ extern debugflag WT_DEBUG;
 extern debugflag AUDREG_DEBUG;
 extern debugflag AUD_DEBUG;
 extern debugflag AUDBUF_DEBUG;
+extern debugflag AUDVOL_DEBUG;
 extern debugflag DISABLE_AUDIRQ;
 
 // Ports

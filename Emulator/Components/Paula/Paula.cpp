@@ -72,13 +72,13 @@ Paula::_warpOn()
      * sync. To cope with it, we ramp down the volume when warping is switched
      * on and fade in smoothly when it is switched off.
      */
-    audioPort.rampDown();
+    // audioPort.rampDown();
 }
 
 void
 Paula::_warpOff()
 {
-    audioPort.rampUp();
+    // audioPort.rampUp();
     audioPort.clear();
 }
 

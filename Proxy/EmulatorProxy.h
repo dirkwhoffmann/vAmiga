@@ -603,10 +603,6 @@
 - (NSInteger)copyMono:(float *)target size:(NSInteger)n;
 - (NSInteger)copyStereo:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n;
 
-- (void)rampUp;
-- (void)rampUpFromZero;
-- (void)rampDown;
-
 - (float)drawWaveformL:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(u32)c;
 - (float)drawWaveformL:(u32 *)buffer size:(NSSize)size scale:(float)s color:(u32)c;
 - (float)drawWaveformR:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(u32)c;

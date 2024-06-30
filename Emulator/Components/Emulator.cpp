@@ -604,6 +604,7 @@ Emulator::getDebugVariable(DebugFlag flag)
         case FLAG_AUDREG_DEBUG:     return AUDREG_DEBUG;
         case FLAG_AUD_DEBUG:        return AUD_DEBUG;
         case FLAG_AUDBUF_DEBUG:     return AUDBUF_DEBUG;
+        case FLAG_AUDVOL_DEBUG:     return AUDVOL_DEBUG;
         case FLAG_DISABLE_AUDIRQ:   return DISABLE_AUDIRQ;
 
             // Ports
@@ -743,6 +744,7 @@ Emulator::setDebugVariable(DebugFlag flag, bool val)
         case FLAG_AUDREG_DEBUG:     AUDREG_DEBUG = val; break;
         case FLAG_AUD_DEBUG:        AUD_DEBUG = val; break;
         case FLAG_AUDBUF_DEBUG:     AUDBUF_DEBUG = val; break;
+        case FLAG_AUDVOL_DEBUG:     AUDVOL_DEBUG = val; break;
         case FLAG_DISABLE_AUDIRQ:   DISABLE_AUDIRQ = val; break;
 
             // Ports

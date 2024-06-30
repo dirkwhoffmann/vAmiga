@@ -105,6 +105,7 @@ enum_long(DEBUG_FLAG)
     FLAG_AUDREG_DEBUG,     ///< Audio registers
     FLAG_AUD_DEBUG,        ///< Audio execution
     FLAG_AUDBUF_DEBUG,     ///< Audio buffers
+    FLAG_AUDVOL_DEBUG,     ///< Audio volume
     FLAG_DISABLE_AUDIRQ,   ///< Disable audio interrupts
 
     // Ports
@@ -238,6 +239,7 @@ struct DebugFlagEnum : util::Reflection<DebugFlagEnum, DebugFlag>
             case FLAG_AUDREG_DEBUG:     return "AUDREG_DEBUG";
             case FLAG_AUD_DEBUG:        return "AUD_DEBUG";
             case FLAG_AUDBUF_DEBUG:     return "AUDBUF_DEBUG";
+            case FLAG_AUDVOL_DEBUG:     return "AUDVOL_DEBUG";
             case FLAG_DISABLE_AUDIRQ:   return "DISABLE_AUDIRQ";
 
                 // Ports
@@ -365,6 +367,7 @@ struct DebugFlagEnum : util::Reflection<DebugFlagEnum, DebugFlag>
             case FLAG_AUDREG_DEBUG:     return "Audio registers";
             case FLAG_AUD_DEBUG:        return "Audio execution";
             case FLAG_AUDBUF_DEBUG:     return "Audio buffers";
+            case FLAG_AUDVOL_DEBUG:     return "Audio volumes";
             case FLAG_DISABLE_AUDIRQ:   return "Disable audio interrupts";
 
                 // Ports

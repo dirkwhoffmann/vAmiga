@@ -70,14 +70,12 @@ AudioPort::_didReset(bool hard)
 void
 AudioPort::_focus()
 {
-    rampUpFromZero();
     // unmute(100000);
 }
 
 void
 AudioPort::_unfocus()
 {
-    rampDown();
     // mute(100000);
 }
 
@@ -202,6 +200,7 @@ AudioPort::_didLoad()
     for (isize i = 0; i < 4; i++) sampler[i].reset();
 }
 
+/*
 void
 AudioPort::rampUp()
 {    
@@ -226,6 +225,41 @@ AudioPort::rampDown()
     volume.delta = 50;
     
     ignoreNextUnderOrOverflow();
+}
+*/
+
+void
+AudioPort::fadeOut()
+{
+    stream.lock();
+
+    debug(AUDVOL_DEBUG, "Fading out (%ld samples)...\n", stream.count());
+
+    volL = 0;
+    volR = 0;
+    // volL.set(0.0);
+    // volR.set(0.0);
+
+    float scale = 1.0f;
+    float delta = 1.0f / stream.count();
+
+    // Rescale the existing samples
+    for (isize i = stream.begin(); i != stream.end(); i = stream.next(i)) {
+
+        scale -= delta;
+        assert(scale >= -0.1 && scale < 1.0);
+
+        stream.elements[i].l *= scale;
+        stream.elements[i].r *= scale;
+    }
+
+    // Wipe out the rest of the buffer
+    for (isize i = stream.end(); i != stream.begin(); i = stream.next(i)) {
+
+        stream.elements[i] = { 0, 0 };
+    }
+
+    stream.unlock();
 }
 
 void
@@ -279,6 +313,15 @@ AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
 {
     assert(count > 0);
 
+    /*
+    auto vol0 = vol[0]; auto pan0 = pan[0];
+    auto vol1 = vol[1]; auto pan1 = pan[1];
+    auto vol2 = vol[2]; auto pan2 = pan[2];
+    auto vol3 = vol[3]; auto pan3 = pan[3];
+    auto curL = volL.current;
+    auto curR = volR.current;
+    */
+
     stream.lock();
     
     // Check for a buffer overflow
@@ -331,6 +374,7 @@ AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
 
             cycle += cyclesPerSample;
         }
+
     } else {
 
         // Fast path: Repeat the most recent sample
@@ -412,7 +456,7 @@ AudioPort::ignoreNextUnderOrOverflow()
 }
 
 isize
-AudioPort::copy(void *buffer, isize n)
+AudioPort::copy(float *buffer, isize n)
 {
     stream.lock();
     
@@ -420,7 +464,7 @@ AudioPort::copy(void *buffer, isize n)
     if (stream.count() < n) handleBufferUnderflow();
     
     // Copy sound samples
-    stream.copy(buffer, n, volume);
+    stream.copy(buffer, n);
     stats.consumedSamples += n;
     
     stream.unlock();
@@ -429,7 +473,7 @@ AudioPort::copy(void *buffer, isize n)
 }
 
 isize
-AudioPort::copy(void *buffer1, void *buffer2, isize n)
+AudioPort::copy(float *buffer1, float *buffer2, isize n)
 {
     stream.lock();
     
@@ -437,7 +481,7 @@ AudioPort::copy(void *buffer1, void *buffer2, isize n)
     if (stream.count() < n) handleBufferUnderflow();
     
     // Copy sound samples
-    stream.copy(buffer1, buffer2, n, volume);
+    stream.copy(buffer1, buffer2, n);
     stats.consumedSamples += n;
 
     stream.unlock();

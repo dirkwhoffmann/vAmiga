@@ -94,6 +94,7 @@ debugflag WT_DEBUG        = 0; // Write-through mode
 debugflag AUDREG_DEBUG    = 0; // Audio registers
 debugflag AUD_DEBUG       = 0; // Audio execution
 debugflag AUDBUF_DEBUG    = 0; // Audio buffers
+debugflag AUDVOL_DEBUG    = 0; // Audio volume
 debugflag DISABLE_AUDIRQ  = 0; // Disable audio interrupts
 
 // Ports

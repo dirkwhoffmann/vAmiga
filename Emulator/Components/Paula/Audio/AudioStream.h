@@ -167,9 +167,9 @@ public:
      * to copying, the volume is modulated if the music is supposed to fade
      * in or fade out.
      */
-    void copy(void *buffer, isize n, Volume &vol);
-    void copy(void *buffer1, void *buffer2, isize n, Volume &vol);
-    
+    void copy(float *buffer, isize n);
+    void copy(float *buffer1, float *buffer2, isize n);
+
     
     //
     // Visualizing the waveform
