@@ -35,7 +35,7 @@ struct FloatStereo
     float r;
     
     FloatStereo() : l(0.0f), r(0.0f) { }
-    FloatStereo(float l, float r) : l(l * AUD_SCALE), r(r * AUD_SCALE) { }
+    FloatStereo(float l, float r) : l(l), r(r) { }
 };
 
 

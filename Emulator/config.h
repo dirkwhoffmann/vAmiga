@@ -26,7 +26,7 @@
 #define SNP_BETA 0
 
 // Uncomment this setting in a release build
-#define RELEASEBUILD
+// #define RELEASEBUILD
 
 
 //
@@ -107,14 +107,6 @@
 
 
 //
-// Audio settings
-//
-
-// Scaling factor (handle with care to protect your hearing)
-#define AUD_SCALE 0.00001f
-
-
-//
 // Execution settings
 //
 
@@ -146,6 +138,11 @@ static const bool betaRelease = 0;
 static const bool betaRelease = 1;
 #endif
 
+#ifdef __EMSCRIPTEN__
+static const bool emscripten = 1;
+#else
+static const bool emscripten = 0;
+#endif
 
 // General
 extern debugflag XFILES;
