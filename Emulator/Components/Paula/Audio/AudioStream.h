@@ -22,20 +22,15 @@ namespace vamiga {
  * The audio stream is the last element in the audio pipeline. It is a temporary
  * storage for the final audio samples, waiting to be handed over to the audio
  * unit of the host machine.
- *
- * The audio stream is designes as a ring buffer, because samples are written
- * and read asynchroneously. Since reading and writing is carried out in
- * different threads, accesses to the audio stream need to be preceded by a call
- * to lock() and followed by a call to unlock().
-*/
+ */
 
-struct FloatStereo
+struct SamplePair
 {
+    // Audio sample of the left stereo channel
     float l;
+
+    // Audio sample of the right stereo channel
     float r;
-    
-    FloatStereo() : l(0.0f), r(0.0f) { }
-    FloatStereo(float l, float r) : l(l), r(r) { }
 };
 
 
@@ -43,28 +38,17 @@ struct FloatStereo
 // AudioStream
 //
 
-class AudioStream : public CoreObject, public Synchronizable, public util::RingBuffer <FloatStereo, 16384> {
-
-    // Mutex for synchronizing read / write accesses
-    // util::ReentrantMutex mutex;
+class AudioStream : public CoreObject, public Synchronizable, public util::RingBuffer <SamplePair, 16384> {
 
 public:
     
     const char *objectName() const override { return "AudioStream"; }
-
-    // Locks or unlocks the mutex
-    // void lock() { mutex.lock(); }
-    // void unlock() { mutex.unlock(); }
 
     // Initializes the ring buffer with zeroes
     void wipeOut();
     
     // Rescales the existing samples to gradually fade out (to avoid cracks)
     void fadeOut();
-
-    // Adds a sample to the ring buffer
-    void add(const FloatStereo &lr) { this->write(lr); }
-    void add(float l, float r) { this->write(FloatStereo(l,r)); }
 
     // Puts the write pointer somewhat ahead of the read pointer
     void alignWritePtr();

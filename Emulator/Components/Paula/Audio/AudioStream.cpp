@@ -18,7 +18,7 @@ AudioStream::wipeOut()
 {
     {   SYNCHRONIZED
 
-        clear(FloatStereo(0,0));
+        clear(SamplePair{0,0});
     }
 }
 

@@ -379,7 +379,7 @@ AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
             assert(abs(r) < 1.0);
 
             // Write sample into ringbuffer
-            stream.add(float(l), float(r));
+            stream.write( SamplePair { float(l), float(r) } );
 
             cycle += cyclesPerSample;
         }
@@ -387,9 +387,10 @@ AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
     } else {
 
         // Fast path: Repeat the most recent sample
-        auto latest = stream.isEmpty() ? FloatStereo() : stream.latest();
+        auto latest = stream.isEmpty() ? SamplePair() : stream.latest();
+        
         for (isize i = 0; i < count; i++) {
-            stream.add(latest);
+            stream.write(latest);
         }
     }
 
