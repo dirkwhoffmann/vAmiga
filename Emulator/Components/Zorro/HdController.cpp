@@ -46,14 +46,6 @@ HdController::_dump(Category category, std::ostream& os) const
 }
 
 void
-HdController::_initialize()
-{
-    CoreComponent::_initialize();
-
-    nr = drive.getNr();
-}
-
-void
 HdController::_didReset(bool hard)
 {    
     if (hard) {
@@ -62,7 +54,7 @@ HdController::_didReset(bool hard)
         rom.init(exprom, EXPROM_SIZE);
         
         // Make the device name unique
-        char dosName[] = "hrddrive?.device"; dosName[8] = char('0' + nr);
+        char dosName[] = "hrddrive?.device"; dosName[8] = char('0' + objid);
         rom.patch("virtualhd.device", dosName);
 
         // Patch Kickstart Rom (1.2 only)
@@ -108,13 +100,13 @@ HdController::setOption(Option option, i64 value)
                 
                 config.connected = true;
                 drive.connect();
-                msgQueue.put(MSG_HDC_CONNECT, DriveMsg { i16(nr), true, 0, 0 } );
+                msgQueue.put(MSG_HDC_CONNECT, DriveMsg { i16(objid), true, 0, 0 } );
 
             } else {
                 
                 config.connected = false;
                 drive.disconnect();
-                msgQueue.put(MSG_HDC_CONNECT, DriveMsg { i16(nr), false, 0, 0 } );
+                msgQueue.put(MSG_HDC_CONNECT, DriveMsg { i16(objid), false, 0, 0 } );
             }
             return;
 
@@ -179,7 +171,7 @@ void
 HdController::resetHdcState()
 {
     hdcState = HDC_UNDETECTED;
-    msgQueue.put(MSG_HDC_STATE, HdcMsg { i16(nr), hdcState });
+    msgQueue.put(MSG_HDC_STATE, HdcMsg { i16(objid), hdcState });
 }
 
 void
@@ -190,7 +182,7 @@ HdController::changeHdcState(HdcState newState)
         debug(HDR_DEBUG, "Changing state to %s\n", HdcStateEnum::key(newState));
         
         hdcState = newState;
-        msgQueue.put(MSG_HDC_STATE, HdcMsg { i16(nr), hdcState });
+        msgQueue.put(MSG_HDC_STATE, HdcMsg { i16(objid), hdcState });
     }
 }
 
@@ -394,15 +386,15 @@ HdController::processInit(u32 ptr)
         name[0] = 'D';
         name[1] = 'H';
 
-        if (nr == 0) {
-            
+        if (objid == 0) {
+
             name[2] = '0' + char(partition);
             name[3] = 0;
             name[4] = 0;
 
         } else {
 
-            name[2] = '0' + char(nr);
+            name[2] = '0' + char(objid);
             name[3] = '0' + char(partition);
             name[4] = 0;
 

@@ -1362,7 +1362,7 @@ using namespace vamiga::moira;
 
 - (NSInteger)nr
 {
-    return [self drive]->drive->getNr();
+    return [self drive]->drive->objid;
 }
 
 - (BOOL)isConnected
@@ -1498,7 +1498,7 @@ using namespace vamiga::moira;
 
 - (NSInteger)nr
 {
-    return [self drive]->drive->getNr();
+    return [self drive]->drive->objid;
 }
 
 - (BOOL)isConnected

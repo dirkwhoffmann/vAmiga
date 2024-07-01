@@ -46,9 +46,6 @@ class HdController : public ZorroBoard {
         OPT_HDC_CONNECT
     };
 
-    // Number of this controller
-    isize nr;
-
     // The hard drive this controller is connected to
     HardDrive &drive;
 
@@ -99,7 +96,7 @@ public:
     
 private:
     
-    void _initialize() override;
+    // void _initialize() override;
     
     template <class T>
     void serialize(T& worker)
@@ -137,7 +134,7 @@ public:
     virtual u8 product() const override          { return 0x88; }
     virtual u8 flags() const override            { return 0x00; }
     virtual u16 manufacturer() const override    { return 0x0539; }
-    virtual u32 serialNumber() const override    { return 31415 + u32(nr); }
+    virtual u32 serialNumber() const override    { return 31415 + u32(objid); }
     virtual u16 initDiagVec() const override     { return 0x40; }
     virtual string vendorName() const override   { return "RASTEC"; }
     virtual string productName() const override  { return "HD controller"; }

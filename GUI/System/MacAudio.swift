@@ -175,7 +175,6 @@ public class MacAudio: NSObject {
         
         let ptr = bufferList[0].mData!.assumingMemoryBound(to: Float.self)
         let n = Int(frameCount)
-        // emu.paula.readMonoSamples(ptr, size: Int(frameCount))
 
         switch state {
 
@@ -211,7 +210,6 @@ public class MacAudio: NSObject {
         let ptr2 = bufferList[1].mData!.assumingMemoryBound(to: Float.self)
         let n = Int(frameCount)
 
-        // emu.paula.readStereoSamples(ptr1, buffer2: ptr2, size: Int(frameCount))
         switch state {
 
         case .on:
@@ -237,34 +235,6 @@ public class MacAudio: NSObject {
         }
     }
     
-    // Connects Paula to the audio backend
-    /*
-    @discardableResult
-    func startPlayback() -> Bool {
-
-        if !isRunning {
-            
-            do { try audiounit.startHardware() } catch {
-                
-                warn("Failed to start audio hardware")
-                return false
-            }
-        }
-        
-        isRunning = true
-        return true
-    }
-
-    // Disconnects Paula from the audio backend
-    func stopPlayback() {
-
-        if isRunning {
-            audiounit.stopHardware()
-            isRunning = false
-        }
-    }
-    */
-
     // Plays a sound file
     func playSound(_ name: String, volume: Int, pan: Int) {
         

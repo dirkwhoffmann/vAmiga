@@ -23,9 +23,7 @@ class Drive : public SubComponent {
 
 public:
 
-    Drive(Amiga& ref, isize nr);
-
-    isize getNr() { return objid; }
+    using SubComponent::SubComponent;
 
     
     //

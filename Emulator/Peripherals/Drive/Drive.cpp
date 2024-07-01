@@ -12,10 +12,12 @@
 
 namespace vamiga {
 
+/*
 Drive::Drive(Amiga& ref, isize nr) : SubComponent(ref, nr)
 {
     assert(nr >= 0 && nr <= 3);
 }
+*/
 
 void
 Drive::toggleWriteProtection()
