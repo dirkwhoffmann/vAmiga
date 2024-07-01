@@ -729,7 +729,7 @@ extension DefaultsProxy {
         remove(.CPU_OVERCLOCKING)
         remove(.AGNUS_REVISION)
         remove(.DENISE_REVISION)
-        remove(.CIA_REVISION)
+        remove(.CIA_REVISION, [0, 1])
         remove(.RTC_MODEL)
     }
 }
@@ -766,7 +766,7 @@ extension Configuration {
         defaults.set(.CPU_OVERCLOCKING, cpuSpeed)
         defaults.set(.AGNUS_REVISION, agnusRev)
         defaults.set(.DENISE_REVISION, deniseRev)
-        defaults.set(.CIA_REVISION, ciaRev)
+        defaults.set(.CIA_REVISION, [0,1], ciaRev)
         defaults.set(.RTC_MODEL, rtClock)
         defaults.save()
 
@@ -995,7 +995,7 @@ extension DefaultsProxy {
         remove(.DENISE_CLX_SPR_PLF)
         remove(.DENISE_CLX_PLF_PLF)
         remove(.DENISE_FRAME_SKIPPING)
-        remove(.CIA_IDLE_SLEEP)
+        remove(.CIA_IDLE_SLEEP, [0, 1])
         remove(.AUD_FASTPATH)
     }
 }
@@ -1038,7 +1038,7 @@ extension Configuration {
         defaults.set(.DENISE_CLX_SPR_PLF, clxSprPlf)
         defaults.set(.DENISE_CLX_PLF_PLF, clxPlfPlf)
         defaults.set(.DENISE_FRAME_SKIPPING, frameSkipping)
-        defaults.set(.CIA_IDLE_SLEEP, ciaIdleSleep)
+        defaults.set(.CIA_IDLE_SLEEP, [0,1], ciaIdleSleep)
         defaults.set(.AUD_FASTPATH, audioFastPath)
         defaults.save()
 
@@ -1063,8 +1063,8 @@ extension DefaultsProxy {
         debug(.defaults)
         
         remove(.BLITTER_ACCURACY)
-        remove(.CIA_TODBUG)
-        remove(.CIA_ECLOCK_SYNCING)
+        remove(.CIA_TODBUG, [0, 1])
+        remove(.CIA_ECLOCK_SYNCING, [0, 1])
         remove(.DC_SPEED)
         remove(.DC_LOCK_DSKSYNC)
         remove(.DC_AUTO_DSKSYNC)
@@ -1083,8 +1083,8 @@ extension Configuration {
         amiga.suspend()
         
         defaults.set(.BLITTER_ACCURACY, blitterAccuracy)
-        defaults.set(.CIA_TODBUG, todBug)
-        defaults.set(.CIA_ECLOCK_SYNCING, eClockSyncing)
+        defaults.set(.CIA_TODBUG, [0,1], todBug)
+        defaults.set(.CIA_ECLOCK_SYNCING, [0,1], eClockSyncing)
         defaults.set(.DC_SPEED, driveSpeed)
         defaults.set(.DC_LOCK_DSKSYNC, lockDskSync)
         defaults.set(.DC_AUTO_DSKSYNC, autoDskSync)

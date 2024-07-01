@@ -265,7 +265,7 @@ CommandConsole::initCommands(Command &root)
                      "Displays the user defaults storage",
                      [this](Arguments& argv, long value) {
 
-                dump(amiga, Category::Defaults);
+                dump(emulator, Category::Defaults);
             });
 
             initSetters(root, amiga);
