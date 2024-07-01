@@ -454,29 +454,6 @@ CommandConsole::initCommands(Command &root)
 
         {   VAMIGA_GROUP("")
 
-            /*
-            root.add({cmd, "audio"},
-                     "Audio unit");
-
-            root.add({cmd, "audio", ""},
-                     "Displays the current configuration",
-                     [this](Arguments& argv, long value) {
-
-                dump(paula.audioPort, Category::Config);
-            });
-
-            initSetters(root, paula.audioPort);
-
-            root.add({cmd, "audio", "filter"},
-                     "Displays the current configuration",
-                     [this](Arguments& argv, long value) {
-
-                dump(paula.audioPort.filter, Category::Config);
-            });
-
-            initSetters(root, paula.audioPort.filter);
-            */
-
             root.add({cmd, "dc"},
                      "Disk controller");
 
@@ -579,6 +556,19 @@ CommandConsole::initCommands(Command &root)
             });
 
             initSetters(root, audioPort);
+
+            auto cmd2 = audioPort.filter.shellName();
+            auto description2 = audioPort.filter.description();
+            root.add({cmd, cmd2}, description2);
+
+            root.add({cmd, cmd2, ""},
+                     "Displays the current configuration",
+                     [this](Arguments& argv, long value) {
+
+                dump(audioPort.filter, Category::Config);
+            });
+
+            initSetters(*root.seek("audio"), paula.audioPort.filter);
         }
 
         //

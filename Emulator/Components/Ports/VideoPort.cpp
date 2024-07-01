@@ -36,6 +36,7 @@ VideoPort::~VideoPort()
 {
     // Don't free the white-noise framebuffer as it points to managed data
     whiteNoise.pixels.ptr = nullptr;
+    whiteNoise.pixels.size = 0;
 }
 
 void

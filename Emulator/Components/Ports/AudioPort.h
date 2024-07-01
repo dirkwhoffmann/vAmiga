@@ -253,7 +253,7 @@ public:
 public:
 
     // Rescale the existing samples to gradually fade out (to avoid cracks)
-    void fadeOut();
+    void eliminateCracks();
 
     // Gradually decrease the master volume to zero
     void mute(isize steps = 0) { volL.fadeOut(steps); volR.fadeOut(steps); }

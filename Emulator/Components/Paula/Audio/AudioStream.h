@@ -47,8 +47,8 @@ public:
     // Initializes the ring buffer with zeroes
     void wipeOut();
     
-    // Rescales the existing samples to gradually fade out (to avoid cracks)
-    void fadeOut();
+    // Rescales the existing samples to gradually fade out
+    void eliminateCracks();
 
     // Puts the write pointer somewhat ahead of the read pointer
     void alignWritePtr();

@@ -104,14 +104,14 @@ AudioPort::_run()
 void
 AudioPort::_pause()
 {
-    fadeOut();
+    eliminateCracks();
     mute();
 }
 
 void
 AudioPort::_warpOn()
 {
-    fadeOut();
+    eliminateCracks();
     mute();
 }
 
@@ -247,9 +247,9 @@ AudioPort::_didLoad()
 }
 
 void
-AudioPort::fadeOut()
+AudioPort::eliminateCracks()
 {
-    stream.fadeOut();
+    stream.eliminateCracks();
     volL.current = 0;
     volR.current = 0;
 }

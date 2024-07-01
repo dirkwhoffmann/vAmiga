@@ -268,7 +268,6 @@ Headless::reportSize()
     msg("        RetroShell : %zu bytes\n", sizeof(RetroShell));
     msg("           Sampler : %zu bytes\n", sizeof(Sampler));
     msg("        SerialPort : %zu bytes\n", sizeof(SerialPort));
-    msg("            Volume : %zu bytes\n", sizeof(Volume));
     msg("             Zorro : %zu bytes\n", sizeof(ZorroManager));
     msg("\n");
 }

@@ -15,7 +15,7 @@ namespace vamiga {
 
 class References {
 
-protected:
+public:
 
     class Agnus &agnus;
     class Amiga &amiga;

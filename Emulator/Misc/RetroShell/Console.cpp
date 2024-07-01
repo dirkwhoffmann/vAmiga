@@ -591,6 +591,8 @@ Console::exec(QueuedCmd cmd)
 void
 Console::asyncExecScript(std::stringstream &ss)
 {
+    SYNCHRONIZED
+    
     std::string line;
     isize nr = 1;
 

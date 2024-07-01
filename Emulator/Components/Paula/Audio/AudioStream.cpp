@@ -23,11 +23,11 @@ AudioStream::wipeOut()
 }
 
 void
-AudioStream::fadeOut()
+AudioStream::eliminateCracks()
 {
     {   SYNCHRONIZED
 
-        debug(AUDVOL_DEBUG, "Fading out (%ld samples)...\n", count());
+        debug(AUDVOL_DEBUG, "Eliminating cracks (%ld samples)...\n", count());
 
         float scale = 1.0f;
         float delta = 1.0f / count();
