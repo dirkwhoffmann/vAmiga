@@ -19,6 +19,7 @@ protected:
 
     class Agnus &agnus;
     class Amiga &amiga;
+    class AudioPort &audioPort;
     class Blitter &blitter;
     class CIAA &ciaa;
     class CIAB &ciab;

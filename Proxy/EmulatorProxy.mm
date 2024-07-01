@@ -1054,22 +1054,22 @@ using namespace vamiga::moira;
 
 - (AudioPortStats)audioPortStats
 {
-    return [self paula]->paula->audioPort.getStats();
+    return [self paula]->paula->emulator.main.audioPort.getStats();
 }
 
 - (NSInteger)copyMono:(float *)target size:(NSInteger)n
 {
-    return [self paula]->paula->audioPort.copyMono(target, n);
+    return [self paula]->paula->emulator.main.audioPort.copyMono(target, n);
 }
 
 - (NSInteger)copyStereo:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n
 {
-    return [self paula]->paula->audioPort.copyStereo(target1, target2, n);
+    return [self paula]->paula->emulator.main.audioPort.copyStereo(target1, target2, n);
 }
 
 - (float)drawWaveformL:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(u32)c
 {
-    return [self paula]->paula->audioPort.stream.draw(buffer, w, h, true, s, c);
+    return [self paula]->paula->emulator.main.audioPort.stream.draw(buffer, w, h, true, s, c);
 }
 
 - (float)drawWaveformL:(u32 *)buffer size:(NSSize)size scale:(float)s color:(u32)c
@@ -1083,7 +1083,7 @@ using namespace vamiga::moira;
 
 - (float)drawWaveformR:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(u32)c
 {
-    return [self paula]->paula->audioPort.stream.draw(buffer, w, h, false, s, c);
+    return [self paula]->paula->emulator.main.audioPort.stream.draw(buffer, w, h, false, s, c);
 }
 
 - (float)drawWaveformR:(u32 *)buffer size:(NSSize)size scale:(float)s color:(u32)c

@@ -565,8 +565,8 @@ CommandConsole::initCommands(Command &root)
         // Audio port
         //
 
-        auto cmd = paula.audioPort.shellName();
-        auto description = paula.audioPort.description();
+        auto cmd = audioPort.shellName();
+        auto description = audioPort.description();
         root.add({cmd}, description);
 
         {   VAMIGA_GROUP("")
@@ -575,10 +575,10 @@ CommandConsole::initCommands(Command &root)
                      "Displays the current configuration",
                      [this](Arguments& argv, long value) {
 
-                dump(paula.audioPort, Category::Config);
+                dump(audioPort, Category::Config);
             });
 
-            initSetters(root, paula.audioPort);
+            initSetters(root, audioPort);
         }
 
         //

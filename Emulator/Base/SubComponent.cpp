@@ -17,6 +17,7 @@ References::References(Amiga& ref) :
 
 agnus(ref.agnus),
 amiga(ref),
+audioPort(ref.audioPort),
 blitter(ref.agnus.blitter),
 ciaa(ref.ciaA),
 ciab(ref.ciaB),

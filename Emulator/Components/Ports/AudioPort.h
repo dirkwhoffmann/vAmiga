@@ -74,7 +74,7 @@ class AudioPort : public SubComponent {
     };
 
     friend class Paula;
-    
+
     // Current configuration
     AudioPortConfig config = {};
     

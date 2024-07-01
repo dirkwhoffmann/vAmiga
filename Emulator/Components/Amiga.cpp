@@ -56,6 +56,7 @@ Amiga::Amiga(class Emulator& ref, isize id) : CoreComponent(ref, id)
     subComponents = std::vector<CoreComponent *> {
 
         &agnus,
+        &audioPort,
         &videoPort,
         &rtc,
         &denise,

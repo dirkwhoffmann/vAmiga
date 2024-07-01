@@ -23,7 +23,6 @@ Paula::Paula(Amiga& ref) : SubComponent(ref)
         &channel1,
         &channel2,
         &channel3,
-        &audioPort,
         &diskController,
         &uart
     };
@@ -56,13 +55,13 @@ Paula::_didReset(bool hard)
 void
 Paula::_run()
 {
-    audioPort.clear();
+
 }
 
 void
 Paula::_pause()
 {
-    audioPort.clear();
+
 }
 
 void

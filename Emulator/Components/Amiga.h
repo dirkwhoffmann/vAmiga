@@ -98,12 +98,13 @@ public:
     Paula paula = Paula(*this);
 
     // Logic board
+    AudioPort audioPort = AudioPort(*this);
     VideoPort videoPort = VideoPort(*this);
-    RTC rtc = RTC(*this);
-    ZorroManager zorro = ZorroManager(*this);
     ControlPort controlPort1 = ControlPort(*this, 0);
     ControlPort controlPort2 = ControlPort(*this, 1);
     SerialPort serialPort = SerialPort(*this);
+    RTC rtc = RTC(*this);
+    ZorroManager zorro = ZorroManager(*this);
 
     // Floppy drives
     FloppyDrive df0 = FloppyDrive(*this, 0);

@@ -359,12 +359,12 @@ Recorder::recordAudio(Cycle target)
 {
     
     // Clone Paula's AudioPort contents
-    audioPort.sampler[0] = paula.audioPort.sampler[0];
-    audioPort.sampler[1] = paula.audioPort.sampler[1];
-    audioPort.sampler[2] = paula.audioPort.sampler[2];
-    audioPort.sampler[3] = paula.audioPort.sampler[3];
-    assert(audioPort.sampler[0].r == paula.audioPort.sampler[0].r);
-    assert(audioPort.sampler[0].w == paula.audioPort.sampler[0].w);
+    audioPort.sampler[0] = audioPort.sampler[0];
+    audioPort.sampler[1] = audioPort.sampler[1];
+    audioPort.sampler[2] = audioPort.sampler[2];
+    audioPort.sampler[3] = audioPort.sampler[3];
+    assert(audioPort.sampler[0].r == audioPort.sampler[0].r);
+    assert(audioPort.sampler[0].w == audioPort.sampler[0].w);
 
     // If this is the first frame to record, adjust the audio clock
     if (audioClock == 0) audioClock = target-1;

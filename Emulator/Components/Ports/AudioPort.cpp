@@ -200,14 +200,12 @@ AudioPort::setOption(Option option, i64 value)
             
             config.volL = std::clamp(value, 0LL, 100LL);
             volL = float(pow(value / 50.0, 1.4));
-            printf("OPT_AUD_VOLL: %lld %f(%f)\n", config.volL, volL.current, volL.maximum);
             return;
 
         case OPT_AUD_VOLR:
 
             config.volR = std::clamp(value, 0LL, 100LL);
             volR = float(pow(value / 50.0, 1.4));
-            printf("OPT_AUD_VOLR: %lld %f(%f)\n", config.volR, volR.current, volR.maximum);
             return;
 
         case OPT_AUD_PAN3: channel++;

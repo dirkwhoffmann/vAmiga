@@ -139,6 +139,7 @@ CoreComponent::routeOption(Option opt, isize objid)
     return nullptr;
 }
 
+/*
 void
 CoreComponent::routeOption(Option opt, std::vector<Configurable *> &result)
 {
@@ -149,6 +150,7 @@ CoreComponent::routeOption(Option opt, std::vector<Configurable *> &result)
         c->routeOption(opt, result);
     }
 }
+*/
 
 isize
 CoreComponent::size()

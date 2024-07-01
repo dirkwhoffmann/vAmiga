@@ -11,7 +11,7 @@
 
 // General
 debugflag XFILES          = 0; // Report paranormal activity
-debugflag CNF_DEBUG       = 0; // Configuration options
+debugflag CNF_DEBUG       = 1; // Configuration options
 debugflag OBJ_DEBUG       = 0; // Object life-times
 debugflag DEF_DEBUG       = 0; // User defaults
 debugflag MIMIC_UAE       = 0; // Enable to compare debug logs with UAE
