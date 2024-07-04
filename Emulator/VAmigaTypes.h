@@ -10,23 +10,36 @@
 /// 
 #pragma once
 
+// Base
+#include "MsgQueueTypes.h"
+#include "CmdQueueTypes.h"
+
+// Components
 #include "AgnusTypes.h"
 #include "AmigaTypes.h"
 #include "AudioFilterTypes.h"
-#include "MsgQueueTypes.h"
 #include "CIATypes.h"
-#include "CmdQueueTypes.h"
 #include "CPUTypes.h"
 #include "DeniseTypes.h"
-#include "DmaDebuggerTypes.h"
-#include "FloppyDriveTypes.h"
-#include "HardDriveTypes.h"
 #include "MemoryTypes.h"
 #include "PaulaTypes.h"
-#include "PixelEngineTypes.h"
+
+// Ports
+#include "AudioPortTypes.h"
+#include "ControlPortTypes.h"
+#include "SerialPortTypes.h"
+#include "VideoPortTypes.h"
+
+// Peripherals
+#include "FloppyDriveTypes.h"
+#include "HardDriveTypes.h"
+#include "HdControllerTypes.h"
+#include "JoystickTypes.h"
+#include "KeyboardTypes.h"
+#include "MouseTypes.h"
+#include "ZorroBoardTypes.h"
+
+// Miscellaneous
 #include "RemoteServerTypes.h"
 #include "RetroShellTypes.h"
 #include "RTCTypes.h"
-#include "SamplerTypes.h"
-#include "SerialPortTypes.h"
-#include "VideoPortTypes.h"

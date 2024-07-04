@@ -11,6 +11,8 @@
 
 #include "Aliases.h"
 #include "Reflection.h"
+#include "PixelEngineTypes.h"
+
 
 //
 // Enumerations

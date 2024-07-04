@@ -73,10 +73,8 @@ UART::serviceRxdEvent(EventID id)
 {
     // debug(SER_DEBUG, "serveRxdEvent(%d)\n", id);
 
+    // Shift in the next bit from the RXD line
     bool rxd = serialPort.getRXD();
-    // debug(SER_DEBUG, "Receiving bit %d: %d\n", recCnt, rxd);
-
-    // Shift in bit from RXD line
     REPLACE_BIT(receiveShiftReg, recCnt++, rxd);
 
     // Check if this was the last bit to receive

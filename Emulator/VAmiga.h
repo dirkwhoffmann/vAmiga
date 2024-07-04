@@ -40,13 +40,23 @@ public:
 };
 
 //
-// Public APIs
+// Components
 //
 
 struct AmigaAPI : API {
 
     class Amiga *amiga = nullptr;
 
+    /** @brief  Returns the component's current configuration.
+     */
+    const AmigaConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    const AmigaInfo &getInfo() const;
+    const AmigaInfo &getCachedInfo() const;
+
+    
     /// @}
     /// @name Handling snapshots
     /// @{
@@ -70,27 +80,301 @@ struct AmigaAPI : API {
 struct AgnusAPI : API {
 
     class Agnus *agnus = nullptr;
+
+    /** @brief  Returns the component's current configuration.
+     */
+    const AgnusConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    const AgnusInfo &getInfo() const;
+    const AgnusInfo &getCachedInfo() const;
 };
 
 struct BlitterAPI : API {
 
     class Blitter *blitter = nullptr;
+
+    /** @brief  Returns the component's current configuration.
+     */
+    const BlitterConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    const BlitterInfo &getInfo() const;
+    const BlitterInfo &getCachedInfo() const;
 };
 
 struct CIAAPI : API {
 
     class CIA *cia = nullptr;
+
+    /** @brief  Returns the component's current configuration.
+     */
+    const CIAConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    const CIAInfo &getInfo() const;
+    const CIAInfo &getCachedInfo() const;
 };
 
 struct CopperAPI : API {
 
     class Copper *copper = nullptr;
+
+    /** @brief  Returns the component's current configuration.
+     */
+    // const BlitterConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    const CopperInfo &getInfo() const;
+    const CopperInfo &getCachedInfo() const;
 };
 
 struct CPUAPI : API {
 
     class CPU *cpu = nullptr;
+
+    /** @brief  Returns the component's current configuration.
+     */
+    const CPUConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    const CPUInfo &getInfo() const;
+    const CPUInfo &getCachedInfo() const;
 };
+
+struct GuardsAPI : API {
+
+    class moira::Guards *guards = nullptr;
+};
+
+struct DeniseAPI : API {
+
+    class Denise *denise = nullptr;
+
+    /** @brief  Returns the component's current configuration.
+     */
+    const DeniseConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    const DeniseInfo &getInfo() const;
+    const DeniseInfo &getCachedInfo() const;
+};
+
+struct DiskControllerAPI : API {
+
+    class DiskController *diskController = nullptr;
+
+    /** @brief  Returns the component's current configuration.
+     */
+    const DiskControllerConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    const DiskControllerInfo &getInfo() const;
+    const DiskControllerInfo &getCachedInfo() const;
+};
+
+struct DmaDebuggerAPI : API {
+
+    class DmaDebugger *dmaDebugger = nullptr;
+
+    /** @brief  Returns the component's current configuration.
+     */
+    const DmaDebuggerConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    const DmaDebuggerInfo &getInfo() const;
+    const DmaDebuggerInfo &getCachedInfo() const;
+};
+
+struct MemoryAPI : API {
+
+    class Memory *mem = nullptr;
+
+    /** @brief  Returns the component's current configuration.
+     */
+    const MemoryConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+     // const MemoryInfo &getInfo() const;
+     // const MemoryInfo &getCachedInfo() const;
+};
+
+struct PaulaAPI : API {
+
+    class Paula *paula = nullptr;
+
+    /** @brief  Returns the component's current configuration.
+     */
+    // const PaulaConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    const PaulaInfo &getInfo() const;
+    const PaulaInfo &getCachedInfo() const;
+};
+
+struct RtcAPI : API {
+
+    class RTC *rtc = nullptr;
+
+    /** @brief  Returns the component's current configuration.
+     */
+    const RTCConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    // const RTCInfo &getInfo() const;
+    // const RTCInfo &getCachedInfo() const;
+};
+
+
+//
+// Peripherals
+//
+
+struct FloppyDriveAPI : API {
+
+    class FloppyDrive *drive = nullptr;
+
+    /** @brief  Returns the component's current configuration.
+     */
+    const FloppyDriveConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    const FloppyDriveInfo &getInfo() const;
+    const FloppyDriveInfo &getCachedInfo() const;
+};
+
+struct HardDriveAPI : API {
+
+    class HardDrive *drive = nullptr;
+
+    /** @brief  Returns the component's current configuration.
+     */
+    const HardDriveConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    const HardDriveInfo &getInfo() const;
+    const HardDriveInfo &getCachedInfo() const;
+};
+
+struct JoystickAPI : API {
+
+    class Joystick *joystick = nullptr;
+
+    /** @brief  Returns the component's current configuration.
+     */
+    const JoystickConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    // const JoystickInfo &getInfo() const;
+    // const JoystickInfo &getCachedInfo() const;
+};
+
+struct KeyboardAPI : API {
+
+    class Keyboard *keyboard = nullptr;
+
+    /** @brief  Returns the component's current configuration.
+     */
+    const KeyboardConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    // const KeyboardInfo &getInfo() const;
+    // const KeyboardInfo &getCachedInfo() const;
+};
+
+struct MouseAPI : API {
+
+    class Mouse *mouse = nullptr;
+
+    /** @brief  Returns the component's current configuration.
+     */
+    const MouseConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    // const MouseInfo &getInfo() const;
+    // const MouseInfo &getCachedInfo() const;
+};
+
+
+//
+// Ports
+//
+
+struct SerialPortAPI : API {
+
+    class SerialPort *serialPort = nullptr;
+};
+
+struct ControlPortAPI : API {
+
+    class ControlPort *controlPort = nullptr;
+
+    JoystickAPI joystick;
+    MouseAPI mouse;
+
+    /** @brief  Returns the component's current configuration.
+     */
+    // const ControlPortConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    const ControlPortInfo &getInfo() const;
+    const ControlPortInfo &getCachedInfo() const;
+};
+
+struct VideoPortAPI : API {
+
+    class VideoPort *videoPort = nullptr;
+
+    /** @brief  Returns the component's current configuration.
+     */
+    const VideoPortConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    const VideoPortInfo &getInfo() const;
+    const VideoPortInfo &getCachedInfo() const;
+
+    /// @}
+    /// @name Retrieving video data
+    /// @{
+
+    /** @brief  Returns a pointer to the most recent stable texture
+     *
+     * The texture dimensions are given by constants vc64::Texture::width
+     * and vc64::Texture::height texels. Each texel is represented by a
+     * 32 bit color value.
+     */
+    const class FrameBuffer &getTexture() const;
+
+};
+
+
+
+//
+// Media
+//
+
+
+//
+// Misc
+//
 
 struct DebuggerAPI : API {
 
@@ -327,75 +611,9 @@ public:
     /// @}
 };
 
-struct DeniseAPI : API {
-
-    class Denise *denise = nullptr;
-};
-
-struct DiskControllerAPI : API {
-
-    class DiskController *diskController = nullptr;
-};
-
-struct DmaDebuggerAPI : API {
-
-    class DmaDebugger *dmaDebugger = nullptr;
-};
-
-struct FloppyDriveAPI : API {
-
-    class FloppyDrive *drive = nullptr;
-};
-
-struct GuardsAPI : API {
-
-    class moira::Guards *guards = nullptr;
-};
-
-struct HardDriveAPI : API {
-
-    class HardDrive *drive = nullptr;
-};
-
 struct HostAPI : API {
 
     class Host *host = nullptr;
-};
-
-struct JoystickAPI : API {
-
-    class Joystick *joystick = nullptr;
-};
-
-struct KeyboardAPI : API {
-
-    class Keyboard *keyboard = nullptr;
-};
-
-struct MemoryAPI : API {
-
-    class Memory *mem = nullptr;
-
-    /** @brief  Returns the component's current configuration.
-     */
-    const MemoryConfig &getConfig() const;
-
-    /** @brief  Returns the component's current state.
-     */
-    /*
-    const MemoryInfo &getInfo() const;
-    const MemoryInfo &getCachedInfo() const;
-    */
-};
-
-struct MouseAPI : API {
-
-    class Mouse *mouse = nullptr;
-};
-
-struct PaulaAPI : API {
-
-    class Paula *paula = nullptr;
 };
 
 /** RetroShell Public API
@@ -472,10 +690,6 @@ struct RetroShellAPI : API {
     /// @}
 };
 
-struct RtcAPI : API {
-
-    class RTC *rtc = nullptr;
-};
 
 struct RecorderAPI : API {
 
@@ -487,36 +701,10 @@ struct RemoteManagerAPI : API {
     class RemoteManager *remoteManager = nullptr;
 };
 
-struct SerialPortAPI : API {
 
-    class SerialPort *serialPort = nullptr;
-};
-
-struct ControlPortAPI : API {
-
-    class ControlPort *controlPort = nullptr;
-
-    JoystickAPI joystick;
-    MouseAPI mouse;
-};
-
-struct VideoPortAPI : API {
-
-    class VideoPort *videoPort = nullptr;
-
-    /// @}
-    /// @name Retrieving video data
-    /// @{
-
-    /** @brief  Returns a pointer to the most recent stable texture
-     *
-     * The texture dimensions are given by constants vc64::Texture::width
-     * and vc64::Texture::height texels. Each texel is represented by a
-     * 32 bit color value.
-     */
-    const class FrameBuffer &getTexture() const;
-
-};
+//
+// Top-level API
+//
 
 class VAmiga : public API {
 

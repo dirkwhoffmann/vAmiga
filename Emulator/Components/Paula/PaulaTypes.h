@@ -11,6 +11,8 @@
 
 #include "Aliases.h"
 #include "Reflection.h"
+#include "DiskControllerTypes.h"
+#include "UARTTypes.h"
 
 //
 // Enumerations

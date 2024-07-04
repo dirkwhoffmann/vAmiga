@@ -11,8 +11,11 @@
 
 #include "Aliases.h"
 #include "BeamTypes.h"
+#include "BlitterTypes.h"
 #include "BusTypes.h"
+#include "CopperTypes.h"
 #include "DeniseTypes.h"
+#include "DmaDebuggerTypes.h"
 #include "SequencerTypes.h"
 #include "Reflection.h"
 
@@ -325,7 +328,7 @@ enum_i8(EventID)
     TXD_BIT             = 1,
     TXD_EVENT_COUNT,
 
-    // Serial data out (UART)
+    // Serial data in (UART)
     RXD_BIT             = 1,
     RXD_EVENT_COUT,
 

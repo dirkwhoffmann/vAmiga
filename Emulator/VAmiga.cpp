@@ -13,6 +13,10 @@
 
 namespace vamiga {
 
+//
+// API
+//
+
 void
 API::suspend()
 {
@@ -30,6 +34,483 @@ API::isUserThread() const
 {
     return !emu->isEmulatorThread();
 }
+
+
+//
+// Components (Amiga)
+//
+
+const AmigaConfig &
+AmigaAPI::getConfig() const
+{
+    return amiga->getConfig();
+}
+
+const AmigaInfo &
+AmigaAPI::getInfo() const
+{
+    return amiga->getInfo();
+}
+
+const AmigaInfo &
+AmigaAPI::getCachedInfo() const
+{
+    return amiga->getCachedInfo();
+}
+
+
+//
+// Components (Agnus)
+//
+
+const AgnusConfig &
+AgnusAPI::getConfig() const
+{
+    return agnus->getConfig();
+}
+
+const AgnusInfo &
+AgnusAPI::getInfo() const
+{
+    return agnus->getInfo();
+}
+
+const AgnusInfo &
+AgnusAPI::getCachedInfo() const
+{
+    return agnus->getCachedInfo();
+}
+
+
+//
+// Components (CIA)
+//
+
+const CIAConfig &
+CIAAPI::getConfig() const
+{
+    return cia->getConfig();
+}
+
+const CIAInfo &
+CIAAPI::getInfo() const
+{
+    return cia->getInfo();
+}
+
+const CIAInfo &
+CIAAPI::getCachedInfo() const
+{
+    return cia->getCachedInfo();
+}
+
+
+//
+// Components (Copper)
+//
+
+const CopperInfo &
+CopperAPI::getInfo() const
+{
+    return copper->getInfo();
+}
+
+const CopperInfo &
+CopperAPI::getCachedInfo() const
+{
+    return copper->getCachedInfo();
+}
+
+
+//
+// Components (CPU)
+//
+
+const CPUConfig &
+CPUAPI::getConfig() const
+{
+    return cpu->getConfig();
+}
+
+const CPUInfo &
+CPUAPI::getInfo() const
+{
+    return cpu->getInfo();
+}
+
+const CPUInfo &
+CPUAPI::getCachedInfo() const
+{
+    return cpu->getCachedInfo();
+}
+
+
+//
+// Components (Denise)
+//
+
+const DeniseConfig &
+DeniseAPI::getConfig() const
+{
+    return denise->getConfig();
+}
+
+const DeniseInfo &
+DeniseAPI::getInfo() const
+{
+    return denise->getInfo();
+}
+
+const DeniseInfo &
+DeniseAPI::getCachedInfo() const
+{
+    return denise->getCachedInfo();
+}
+
+
+//
+// Components (DiskController)
+//
+
+const DiskControllerConfig &
+DiskControllerAPI::getConfig() const
+{
+    return diskController->getConfig();
+}
+
+const DiskControllerInfo &
+DiskControllerAPI::getInfo() const
+{
+    return diskController->getInfo();
+}
+
+const DiskControllerInfo &
+DiskControllerAPI::getCachedInfo() const
+{
+    return diskController->getCachedInfo();
+}
+
+
+//
+// Components (Memory)
+//
+
+const MemoryConfig &
+MemoryAPI::getConfig() const
+{
+    return mem->getConfig();
+}
+
+
+//
+// Components (Paula)
+//
+
+const PaulaInfo &
+PaulaAPI::getInfo() const
+{
+    return paula->getInfo();
+}
+
+const PaulaInfo &
+PaulaAPI::getCachedInfo() const
+{
+    return paula->getCachedInfo();
+}
+
+
+//
+// Miscellaneous (Debugger)
+//
+
+string
+DebuggerAPI::ascDump(Accessor acc, u32 addr, isize bytes) const
+{
+    assert(isUserThread());
+
+    switch (acc) {
+
+        case ACCESSOR_CPU:      return debugger->ascDump<ACCESSOR_CPU>(addr, bytes);
+        case ACCESSOR_AGNUS:    return debugger->ascDump<ACCESSOR_AGNUS>(addr, bytes);
+
+        default:
+            fatalError;
+    }
+}
+
+string
+DebuggerAPI::hexDump(Accessor acc, u32 addr, isize bytes, isize sz) const
+{
+    assert(isUserThread());
+
+    switch (acc) {
+
+        case ACCESSOR_CPU:      return debugger->hexDump<ACCESSOR_CPU>(addr, bytes, sz);
+        case ACCESSOR_AGNUS:    return debugger->hexDump<ACCESSOR_AGNUS>(addr, bytes, sz);
+
+        default:
+            fatalError;
+    }
+}
+
+string
+DebuggerAPI::memDump(Accessor acc, u32 addr, isize bytes, isize sz) const
+{
+    assert(isUserThread());
+
+    switch (acc) {
+
+        case ACCESSOR_CPU:      return debugger->memDump<ACCESSOR_CPU>(addr, bytes, sz);
+        case ACCESSOR_AGNUS:    return debugger->memDump<ACCESSOR_AGNUS>(addr, bytes, sz);
+
+        default:
+            fatalError;
+    }
+}
+
+
+//
+// DefaultsAPI
+//
+
+void
+DefaultsAPI::load(const fs::path &path)
+{
+    defaults->load(path);
+}
+
+void
+DefaultsAPI::load(std::ifstream &stream)
+{
+    defaults->load(stream);
+}
+
+void
+DefaultsAPI::load(std::stringstream &stream)
+{
+    defaults->load(stream);
+}
+
+void
+DefaultsAPI::save(const fs::path &path)
+{
+    defaults->save(path);
+}
+
+void
+DefaultsAPI::save(std::ofstream &stream)
+{
+    defaults->save(stream);
+}
+
+void
+DefaultsAPI::save(std::stringstream &stream)
+{
+    defaults->save(stream);
+}
+
+string
+DefaultsAPI::getRaw(const string &key) const
+{
+    return defaults->getRaw(key);
+}
+
+i64
+DefaultsAPI::get(const string &key) const
+{
+    return defaults->get(key);
+}
+
+i64
+DefaultsAPI::get(Option option, isize nr) const
+{
+    return defaults->get(option, nr);
+}
+
+string
+DefaultsAPI::getFallbackRaw(const string &key) const
+{
+    return defaults->getFallbackRaw(key);
+}
+
+i64
+DefaultsAPI::getFallback(const string &key) const
+{
+    return defaults->getFallback(key);
+}
+
+i64
+DefaultsAPI::getFallback(Option option, isize nr) const
+{
+    return defaults->getFallback(option, nr);
+}
+
+void
+DefaultsAPI::set(const string &key, const string &value)
+{
+    defaults->set(key, value);
+}
+
+void
+DefaultsAPI::set(Option opt, const string &value)
+{
+    defaults->set(opt, value);
+}
+
+void
+DefaultsAPI::set(Option opt, const string &value, std::vector<isize> objids)
+{
+    defaults->set(opt, value, objids);
+}
+
+void
+DefaultsAPI::set(Option opt, i64 value)
+{
+    defaults->set(opt, value);
+}
+
+void
+DefaultsAPI::set(Option opt, i64 value, std::vector<isize> objids)
+{
+    defaults->set(opt, value, objids);
+}
+
+void
+DefaultsAPI::setFallback(const string &key, const string &value)
+{
+    defaults->setFallback(key, value);
+}
+
+void
+DefaultsAPI::setFallback(Option opt, const string &value)
+{
+    defaults->setFallback(opt, value);
+}
+
+void
+DefaultsAPI::setFallback(Option opt, const string &value, std::vector<isize> objids)
+{
+    defaults->setFallback(opt, value, objids);
+}
+
+void
+DefaultsAPI::setFallback(Option opt, i64 value)
+{
+    defaults->setFallback(opt, value);
+}
+
+void
+DefaultsAPI::setFallback(Option opt, i64 value, std::vector<isize> objids)
+{
+    defaults->setFallback(opt, value, objids);
+}
+
+void
+DefaultsAPI::remove()
+{
+    defaults->remove();
+}
+
+void
+DefaultsAPI::remove(const string &key)
+{
+    defaults->remove(key);
+}
+
+void
+DefaultsAPI::remove(Option option)
+{
+    defaults->remove(option);
+}
+
+void
+DefaultsAPI::remove(Option option, std::vector <isize> objids)
+{
+    defaults->remove(option, objids);
+}
+
+
+//
+// RetroShellAPI
+//
+
+const char *
+RetroShellAPI::text()
+{
+    return retroShell->text();
+}
+
+isize
+RetroShellAPI::cursorRel()
+{
+    return retroShell->cursorRel();
+}
+
+void
+RetroShellAPI::press(RetroShellKey key, bool shift)
+{
+    retroShell->press(key, shift);
+}
+
+void
+RetroShellAPI::press(char c)
+{
+    retroShell->press(c);
+}
+
+void
+RetroShellAPI::press(const string &s)
+{
+    retroShell->press(s);
+}
+
+void
+RetroShellAPI::execScript(std::stringstream &ss)
+{
+    retroShell->execScript(ss);
+}
+
+void
+RetroShellAPI::execScript(const std::ifstream &fs)
+{
+    retroShell->execScript(fs);
+}
+
+void
+RetroShellAPI::execScript(const string &contents)
+{
+    retroShell->execScript(contents);
+}
+
+/*
+ void
+ RetroShellAPI::execScript(const MediaFile &file)
+ {
+ retroShell->execScript(file);
+ }
+ */
+
+void
+RetroShellAPI::setStream(std::ostream &os)
+{
+    retroShell->setStream(os);
+}
+
+
+//
+// VideoPortAPI
+//
+
+const class FrameBuffer &
+VideoPortAPI::getTexture() const
+{
+    return videoPort->getTexture();
+}
+
+
+//
+// VAmiga API
+//
 
 VAmiga::VAmiga() {
 
@@ -413,323 +894,6 @@ void
 AmigaAPI::loadSnapshot(const Snapshot &snapshot)
 {
     amiga->loadSnapshot(snapshot);
-}
-
-
-//
-// DebuggerAPI
-//
-
-string
-DebuggerAPI::ascDump(Accessor acc, u32 addr, isize bytes) const
-{
-    assert(isUserThread());
-
-    switch (acc) {
-
-        case ACCESSOR_CPU:      return debugger->ascDump<ACCESSOR_CPU>(addr, bytes);
-        case ACCESSOR_AGNUS:    return debugger->ascDump<ACCESSOR_AGNUS>(addr, bytes);
-
-        default:
-            fatalError;
-    }
-}
-
-string
-DebuggerAPI::hexDump(Accessor acc, u32 addr, isize bytes, isize sz) const
-{
-    assert(isUserThread());
-
-    switch (acc) {
-
-        case ACCESSOR_CPU:      return debugger->hexDump<ACCESSOR_CPU>(addr, bytes, sz);
-        case ACCESSOR_AGNUS:    return debugger->hexDump<ACCESSOR_AGNUS>(addr, bytes, sz);
-
-        default:
-            fatalError;
-    }
-}
-
-string
-DebuggerAPI::memDump(Accessor acc, u32 addr, isize bytes, isize sz) const
-{
-    assert(isUserThread());
-
-    switch (acc) {
-
-        case ACCESSOR_CPU:      return debugger->memDump<ACCESSOR_CPU>(addr, bytes, sz);
-        case ACCESSOR_AGNUS:    return debugger->memDump<ACCESSOR_AGNUS>(addr, bytes, sz);
-
-        default:
-            fatalError;
-    }
-}
-
-
-//
-// DefaultsAPI
-//
-
-void
-DefaultsAPI::load(const fs::path &path)
-{
-    defaults->load(path);
-}
-
-void
-DefaultsAPI::load(std::ifstream &stream)
-{
-    defaults->load(stream);
-}
-
-void
-DefaultsAPI::load(std::stringstream &stream)
-{
-    defaults->load(stream);
-}
-
-void
-DefaultsAPI::save(const fs::path &path)
-{
-    defaults->save(path);
-}
-
-void
-DefaultsAPI::save(std::ofstream &stream)
-{
-    defaults->save(stream);
-}
-
-void
-DefaultsAPI::save(std::stringstream &stream)
-{
-    defaults->save(stream);
-}
-
-string
-DefaultsAPI::getRaw(const string &key) const
-{
-    return defaults->getRaw(key);
-}
-
-i64
-DefaultsAPI::get(const string &key) const
-{
-    return defaults->get(key);
-}
-
-i64
-DefaultsAPI::get(Option option, isize nr) const
-{
-    return defaults->get(option, nr);
-}
-
-string
-DefaultsAPI::getFallbackRaw(const string &key) const
-{
-    return defaults->getFallbackRaw(key);
-}
-
-i64
-DefaultsAPI::getFallback(const string &key) const
-{
-    return defaults->getFallback(key);
-}
-
-i64
-DefaultsAPI::getFallback(Option option, isize nr) const
-{
-    return defaults->getFallback(option, nr);
-}
-
-void
-DefaultsAPI::set(const string &key, const string &value)
-{
-    defaults->set(key, value);
-}
-
-void
-DefaultsAPI::set(Option opt, const string &value)
-{
-    defaults->set(opt, value);
-}
-
-void
-DefaultsAPI::set(Option opt, const string &value, std::vector<isize> objids)
-{
-    defaults->set(opt, value, objids);
-}
-
-void
-DefaultsAPI::set(Option opt, i64 value)
-{
-    defaults->set(opt, value);
-}
-
-void
-DefaultsAPI::set(Option opt, i64 value, std::vector<isize> objids)
-{
-    defaults->set(opt, value, objids);
-}
-
-void
-DefaultsAPI::setFallback(const string &key, const string &value)
-{
-    defaults->setFallback(key, value);
-}
-
-void
-DefaultsAPI::setFallback(Option opt, const string &value)
-{
-    defaults->setFallback(opt, value);
-}
-
-void
-DefaultsAPI::setFallback(Option opt, const string &value, std::vector<isize> objids)
-{
-    defaults->setFallback(opt, value, objids);
-}
-
-void
-DefaultsAPI::setFallback(Option opt, i64 value)
-{
-    defaults->setFallback(opt, value);
-}
-
-void
-DefaultsAPI::setFallback(Option opt, i64 value, std::vector<isize> objids)
-{
-    defaults->setFallback(opt, value, objids);
-}
-
-void
-DefaultsAPI::remove()
-{
-    defaults->remove();
-}
-
-void
-DefaultsAPI::remove(const string &key)
-{
-    defaults->remove(key);
-}
-
-void
-DefaultsAPI::remove(Option option)
-{
-    defaults->remove(option);
-}
-
-void
-DefaultsAPI::remove(Option option, std::vector <isize> objids)
-{
-    defaults->remove(option, objids);
-}
-
-
-//
-// MemoryAPI
-//
-
-const MemoryConfig &
-MemoryAPI::getConfig() const
-{
-    assert(isUserThread());
-    return mem->getConfig();
-}
-
-/*
-const MemInfo &
-MemoryAPI::getInfo() const
-{
-    assert(isUserThread());
-    return mem->getInfo();
-}
-
-const MemInfo &
-MemoryAPI::getCachedInfo() const
-{
-    assert(isUserThread());
-    return mem->getCachedInfo();
-}
-*/
-
-
-//
-// RetroShellAPI
-//
-
-const char *
-RetroShellAPI::text()
-{
-    return retroShell->text();
-}
-
-isize
-RetroShellAPI::cursorRel()
-{
-    return retroShell->cursorRel();
-}
-
-void
-RetroShellAPI::press(RetroShellKey key, bool shift)
-{
-    retroShell->press(key, shift);
-}
-
-void
-RetroShellAPI::press(char c)
-{
-    retroShell->press(c);
-}
-
-void
-RetroShellAPI::press(const string &s)
-{
-    retroShell->press(s);
-}
-
-void
-RetroShellAPI::execScript(std::stringstream &ss)
-{
-    retroShell->execScript(ss);
-}
-
-void
-RetroShellAPI::execScript(const std::ifstream &fs)
-{
-    retroShell->execScript(fs);
-}
-
-void
-RetroShellAPI::execScript(const string &contents)
-{
-    retroShell->execScript(contents);
-}
-
-/*
-void
-RetroShellAPI::execScript(const MediaFile &file)
-{
-    retroShell->execScript(file);
-}
-*/
-
-void
-RetroShellAPI::setStream(std::ostream &os)
-{
-    retroShell->setStream(os);
-}
-
-
-//
-// VideoPortAPI
-//
-
-const class FrameBuffer &
-VideoPortAPI::getTexture() const
-{
-    return videoPort->getTexture();
 }
 
 }
