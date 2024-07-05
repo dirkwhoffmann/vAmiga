@@ -47,6 +47,9 @@ struct AmigaAPI : API {
 
     class Amiga *amiga = nullptr;
 
+    /// @name Analyzing the emulator
+    /// @{
+
     /** @brief  Returns the component's current configuration.
      */
     const AmigaConfig &getConfig() const;
@@ -56,7 +59,23 @@ struct AmigaAPI : API {
     const AmigaInfo &getInfo() const;
     const AmigaInfo &getCachedInfo() const;
 
-    
+    /// @}
+    /// @name Resetting the Amiga
+    /// @{
+
+    /** @brief  Performs a hard reset
+     *
+     *  A hard reset affects all components. The effect is similar to
+     *  switching power off and on.
+     */
+    void hardReset();
+
+    /** @brief  Performs a hard reset
+     *
+     *  A soft reset emulates the execution of the CPU's reset instruction.
+     */
+    void softReset();
+
     /// @}
     /// @name Handling snapshots
     /// @{
@@ -768,6 +787,9 @@ public:
     VAmiga();
     ~VAmiga();
 
+    /// @name Analyzing the emulator
+    /// @{
+
     /** @brief  Returns the component's current state.
      */
     const EmulatorInfo &getInfo() const;
@@ -857,6 +879,19 @@ public:
      * enteres a frozes state where no more frames are computed.
      */
     void pause();
+
+    /** @brief   Performs a hard reset
+     *
+     *  A hard reset affects all components. The effect is similar to
+     *  switching power off and on.
+     */
+    void hardReset();
+
+    /** @brief   Performs a soft reset
+     *
+     *  A soft reset is similar to executing the CPU's reset instruction.
+     */
+    void softReset();
 
     /** @brief   Terminates the emulator thread
      *

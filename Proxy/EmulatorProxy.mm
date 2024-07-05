@@ -2973,12 +2973,12 @@ using namespace vamiga::moira;
 
 - (void)hardReset
 {
-    [self emu]->emu->main.reset(true);
+    [self emu]->hardReset();
 }
 
 - (void)softReset
 {
-    [self emu]->emu->main.reset(false);
+    [self emu]->softReset();
 }
 
 - (BOOL)poweredOn

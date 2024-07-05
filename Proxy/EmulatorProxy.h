@@ -711,20 +711,6 @@
 @property (readonly) FloppyDriveInfo info;
 @property (readonly) FloppyDriveInfo cachedInfo;
 
-/*
-@property (readonly) NSInteger nr;
-@property (readonly) BOOL isConnected;
-@property (readonly) NSInteger currentCyl;
-@property (readonly) NSInteger currentHead;
-@property (readonly) NSInteger currentOffset;
-
-@property (readonly) BOOL hasDisk;
-@property (readonly) BOOL hasModifiedDisk;
-@property (readonly) BOOL hasProtectedDisk;
-@property (readonly) BOOL hasUnmodifiedDisk;
-@property (readonly) BOOL hasUnprotectedDisk;
-*/
-
 - (void)setModificationFlag:(BOOL)value;
 - (void)setProtectionFlag:(BOOL)value;
 - (void)markDiskAsModified;

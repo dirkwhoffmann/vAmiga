@@ -762,6 +762,18 @@ VAmiga::pause()
     emu->pause();
 }
 
+void 
+VAmiga::hardReset()
+{
+    emu->hardReset();
+}
+
+void
+VAmiga::softReset()
+{
+    emu->softReset();
+}
+
 void
 VAmiga::halt()
 {

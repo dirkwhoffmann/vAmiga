@@ -106,8 +106,6 @@ public: // private
     // Returns the target component for an option
     Configurable *routeOption(Option opt, isize objid);
     const Configurable *routeOption(Option opt, isize objid) const;
-    // [[deprecated]] std::vector<Configurable *> routeOption(Option opt);
-    // [[deprecated]] std::vector<const Configurable *> routeOption(Option opt) const;
 
     // Overrides a config option if the corresponding debug option is enabled
     i64 overrideOption(Option opt, i64 value) const;
@@ -148,19 +146,12 @@ public:
 
 public:
 
+    void hardReset();
+    void softReset();
+
     void stepInto();
     void stepOver();
 
-
-    //
-    // Audio and Video
-    //
-
-    /*
-    u32 *getTexture() const;
-    u32 *getDmaTexture() const;
-    */
-    
 
     //
     // Command queue
