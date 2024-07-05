@@ -9,7 +9,7 @@
 
 class MyToolbar: NSToolbar {
     
-    var amiga: EmulatorProxy { return parent.amiga }
+    var amiga: EmulatorProxy { return parent.emu }
     
     @IBOutlet weak var parent: MyController!
     @IBOutlet weak var controlPort1: NSPopUpButton!

@@ -16,7 +16,7 @@ class PartitionSelector: DialogController {
     @IBOutlet weak var upperCyl: NSTextField!
 
     var nr = 0
-    var drive: HardDriveProxy { amiga.hd(nr)! }
+    var drive: HardDriveProxy { emu.hd(nr)! }
     var partition: Int { return partitionPopup.selectedTag() }
     var userSelection: Int?
     

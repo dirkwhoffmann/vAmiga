@@ -56,7 +56,7 @@ class MyDocument: NSDocument {
         debug(.lifetime)
         
         let controller = MyController(windowNibName: "MyDocument")
-        controller.amiga = amiga
+        controller.emu = amiga
         self.addWindowController(controller)
     }
   

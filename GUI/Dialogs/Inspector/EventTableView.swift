@@ -16,7 +16,7 @@ class EventTableView: NSTableView {
 
     override func awakeFromNib() {
 
-        amiga = inspector.amiga
+        amiga = inspector.emu
         delegate = self
         dataSource = self
         target = self

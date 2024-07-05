@@ -832,7 +832,6 @@
 
 @interface DebuggerProxy : CoreComponentProxy { }
 
-- (void)stopAndGo;
 - (void)stepInto;
 - (void)stepOver;
 

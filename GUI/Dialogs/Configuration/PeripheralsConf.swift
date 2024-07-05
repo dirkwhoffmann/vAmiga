@@ -11,7 +11,7 @@ extension ConfigurationController {
 
     func refreshPeripheralsTab() {
 
-        let poweredOff = amiga.poweredOff
+        let poweredOff = emu.poweredOff
         
         // Floppy drives
         perDf1Connect.state = config.df1Connected ? .on : .off
@@ -143,7 +143,7 @@ extension ConfigurationController {
 
     @IBAction func perPresetAction(_ sender: NSPopUpButton!) {
          
-        amiga.suspend()
+        emu.suspend()
         
         // Revert to standard settings
         EmulatorProxy.defaults.removePeripheralsUserDefaults()
@@ -151,7 +151,7 @@ extension ConfigurationController {
         // Update the configuration
         config.applyPeripheralsUserDefaults()
 
-        amiga.resume()
+        emu.resume()
         refresh()
      }
 

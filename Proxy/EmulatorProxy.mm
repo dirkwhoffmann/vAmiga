@@ -1861,19 +1861,14 @@ using namespace vamiga::moira;
     return proxy;
 }
 
-- (void)stopAndGo
-{
-    [self debugger]->debugger->stopAndGo();
-}
-
 - (void)stepInto
 {
-    [self debugger]->debugger->stepInto();
+    [self debugger]->emu->stepInto();
 }
 
 - (void)stepOver
 {
-    [self debugger]->debugger->stepOver();
+    [self debugger]->emu->stepOver();
 }
 
 - (NSString *)ascDump:(Accessor)accessor addr:(NSInteger)addr bytes:(NSInteger)bytes

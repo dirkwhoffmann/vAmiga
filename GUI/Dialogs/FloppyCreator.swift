@@ -28,7 +28,7 @@ class FloppyCreator: DialogController {
     var nr = 0
     var diskType: String!
 
-    var drive: FloppyDriveProxy? { amiga.df(nr) }
+    var drive: FloppyDriveProxy? { emu.df(nr) }
     var hasVirus: Bool { return bootBlock.selectedTag() >= 3 }
     
     //
@@ -45,7 +45,7 @@ class FloppyCreator: DialogController {
         
         super.awakeFromNib()
         
-        let type = amiga.getConfig(.DRIVE_TYPE, drive: nr)
+        let type = emu.getConfig(.DRIVE_TYPE, drive: nr)
         switch FloppyDriveType(rawValue: type) {
             
         case .DD_35:

@@ -606,7 +606,7 @@ class Inspector: DialogController {
     override func showWindow(_ sender: Any?) {
 
         super.showWindow(self)
-        amiga.trackMode = true
+        emu.trackMode = true
         updateInspectionTarget()
     }
 
@@ -636,7 +636,7 @@ class Inspector: DialogController {
     func continuousRefresh() {
         
         if isRunning { refresh(count: refreshCnt) }
-        isRunning = amiga.running
+        isRunning = emu.running
         refreshCnt += 1
     }
     
@@ -646,7 +646,7 @@ class Inspector: DialogController {
 
         if full {
         
-            if parent!.amiga.running {
+            if parent!.emu.running {
                 stopAndGoButton.image = NSImage(named: "pauseTemplate")
                 stepIntoButton.isEnabled = false
                 stepOverButton.isEnabled = false
@@ -743,7 +743,7 @@ class Inspector: DialogController {
 
     func signalCatchPoint(pc: Int, vector: Int) {
     
-        let name = amiga.cpu.vectorName(vector)!
+        let name = emu.cpu.vectorName(vector)!
         message.stringValue = "Catched exception vector \(vector) (\(name))"
         cpuInstrView.alertAddr = pc
         scrollToPC(pc: pc)
@@ -773,17 +773,19 @@ class Inspector: DialogController {
     
     @IBAction func stopAndGoAction(_ sender: NSButton!) {
 
-        amiga.debugger.stopAndGo()
+        if let emu = emu {
+            if emu.running { emu.pause() } else { try? emu.run() }
+        }
     }
-    
+
     @IBAction func stepIntoAction(_ sender: NSButton!) {
 
-        amiga.debugger.stepInto()
+        emu.debugger.stepInto()
     }
     
     @IBAction func stepOverAction(_ sender: NSButton!) {
 
-        amiga.debugger.stepOver()
+        emu.debugger.stepOver()
     }
 }
 
@@ -794,8 +796,8 @@ extension Inspector {
         super.windowWillClose(notification)
 
         // Leave debug mode
-        amiga?.trackMode = false
-        amiga?.removeInspectionTarget()
+        emu?.trackMode = false
+        emu?.removeInspectionTarget()
     }
 }
 
@@ -807,16 +809,16 @@ extension Inspector: NSTabViewDelegate {
 
             switch id {
 
-            case "CPU":     amiga.inspectionTarget = .CPU
-            case "CIA":     amiga.inspectionTarget = .CIA
-            case "Memory":  amiga.inspectionTarget = .MEM
-            case "Agnus":   amiga.inspectionTarget = .AGNUS
-            case "Copper":  amiga.inspectionTarget = .COPPER
-            case "Blitter": amiga.inspectionTarget = .BLITTER
-            case "Denise":  amiga.inspectionTarget = .DENISE
-            case "Paula":   amiga.inspectionTarget = .PAULA
-            case "Ports":   amiga.inspectionTarget = .PORTS
-            case "Events":  amiga.inspectionTarget = .EVENTS
+            case "CPU":     emu.inspectionTarget = .CPU
+            case "CIA":     emu.inspectionTarget = .CIA
+            case "Memory":  emu.inspectionTarget = .MEM
+            case "Agnus":   emu.inspectionTarget = .AGNUS
+            case "Copper":  emu.inspectionTarget = .COPPER
+            case "Blitter": emu.inspectionTarget = .BLITTER
+            case "Denise":  emu.inspectionTarget = .DENISE
+            case "Paula":   emu.inspectionTarget = .PAULA
+            case "Ports":   emu.inspectionTarget = .PORTS
+            case "Events":  emu.inspectionTarget = .EVENTS
             default:        break
             }
             

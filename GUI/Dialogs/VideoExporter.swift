@@ -42,16 +42,16 @@ class VideoExporter: DialogController {
         }
 
         debug(.exec, "Export to \(path)")
-        if amiga.recorder.export(as: path.absoluteString) {
+        if emu.recorder.export(as: path.absoluteString) {
                         
             text.stringValue = "MPEG-4 Video Stream"
             icon.isHidden = false
             exportButton.isHidden = false
             sizeOnDisk.stringValue = path.fileSizeString
-            duration.stringValue = String(format: "%.1f sec", amiga.recorder.duration)
-            frameRate.stringValue = "\(amiga.recorder.frameRate) Hz"
-            bitRate.stringValue = "\(amiga.recorder.bitRate) kHz"
-            sampleRate.stringValue = "\(amiga.recorder.sampleRate) Hz"
+            duration.stringValue = String(format: "%.1f sec", emu.recorder.duration)
+            frameRate.stringValue = "\(emu.recorder.frameRate) Hz"
+            bitRate.stringValue = "\(emu.recorder.bitRate) kHz"
+            sampleRate.stringValue = "\(emu.recorder.sampleRate) Hz"
 
         } else {
             

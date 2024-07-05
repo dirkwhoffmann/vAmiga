@@ -401,7 +401,7 @@ extension MyController {
     }
 
     func proceedWithUnsavedHardDisk(drive: Int) -> Bool {
-        return mydocument.proceedWithUnsavedHardDisk(drive: amiga.hd(drive)!)
+        return mydocument.proceedWithUnsavedHardDisk(drive: emu.hd(drive)!)
     }
 
     func proceedWithUnsavedHardDisks() -> Bool {

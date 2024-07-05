@@ -11,7 +11,7 @@ extension Inspector {
 
     private func cacheCPU() {
 
-        cpuInfo = amiga.paused ? amiga.cpu.info : amiga.cpu.cachedInfo
+        cpuInfo = emu.paused ? emu.cpu.info : emu.cpu.cachedInfo
     }
 
     func refreshCPU(count: Int = 0, full: Bool = false) {
@@ -48,15 +48,15 @@ extension Inspector {
 
             for (c, f) in elements { assignFormatter(f, c!) }
 
-            let style = amiga.getConfig(.CPU_DASM_SYNTAX)
+            let style = emu.getConfig(.CPU_DASM_SYNTAX)
             cpuDasmStyle1.selectItem(withTag: style)
             cpuDasmStyle2.selectItem(withTag: style)
 
-            let dasmRev = amiga.getConfig(.CPU_DASM_REVISION)
+            let dasmRev = emu.getConfig(.CPU_DASM_REVISION)
             cpuDasmRev1.selectItem(withTag: dasmRev)
             cpuDasmRev2.selectItem(withTag: dasmRev)
 
-            let rev = CPURevision(rawValue: amiga.getConfig(.CPU_REVISION))
+            let rev = CPURevision(rawValue: emu.getConfig(.CPU_REVISION))
             let below10 = rev == ._68000
             let below20 = rev == ._68000 || rev == ._68010
             cpuMSP.isHidden = below20
@@ -147,7 +147,7 @@ extension Inspector {
 
     @IBAction func cpuClearTraceBufferAction(_ sender: NSButton!) {
 
-        amiga.cpu.clearLog()
+        emu.cpu.clearLog()
         refreshCPU(full: true)
     }
     
@@ -164,11 +164,11 @@ extension Inspector {
 
     @IBAction func cpuSyntaxAction(_ sender: NSPopUpButton!) {
 
-        amiga.configure(.CPU_DASM_SYNTAX, value: sender.selectedTag())
+        emu.configure(.CPU_DASM_SYNTAX, value: sender.selectedTag())
     }
 
     @IBAction func cpuDasmRevAction(_ sender: NSPopUpButton!) {
 
-        amiga.configure(.CPU_DASM_REVISION, value: sender.selectedTag())
+        emu.configure(.CPU_DASM_REVISION, value: sender.selectedTag())
     }
 }

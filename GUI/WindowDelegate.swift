@@ -19,7 +19,7 @@ extension MyController: NSWindowDelegate {
         myAppDelegate.windowDidBecomeMain(window)
         
         // Restart the emulator if it was paused when the window lost focus
-        if pref.pauseInBackground && pauseInBackgroundSavedState { try? amiga.run() }
+        if pref.pauseInBackground && pauseInBackgroundSavedState { try? emu.run() }
 
         // Register to receive mouse movement events
         window.acceptsMouseMovedEvents = true
@@ -34,9 +34,9 @@ extension MyController: NSWindowDelegate {
     public func windowDidResignMain(_ notification: Notification) {
         
         // Stop emulator if it is configured to pause in background
-        if amiga != nil {
-            pauseInBackgroundSavedState = amiga.running
-            if pref.pauseInBackground { amiga.pause() }
+        if emu != nil {
+            pauseInBackgroundSavedState = emu.running
+            if pref.pauseInBackground { emu.pause() }
         }
     }
     
@@ -59,13 +59,13 @@ extension MyController: NSWindowDelegate {
         renderer.halt()
         
         debug(.shutdown, "Closing auxiliary windows...")
-        configurator?.amiga = nil
+        configurator?.emu = nil
         configurator?.close()
-        inspector?.amiga = nil
+        inspector?.emu = nil
         inspector?.close()
-        monitor?.amiga = nil
+        monitor?.emu = nil
         monitor?.close()
-        virtualKeyboard?.amiga = nil
+        virtualKeyboard?.emu = nil
         virtualKeyboard?.close()
 
         debug(.shutdown, "Shutting down the audio backend...")
@@ -75,7 +75,7 @@ extension MyController: NSWindowDelegate {
         gamePadManager.shutDown()
         
         debug(.shutdown, "Shutting down the emulator...")
-        amiga.halt()
+        emu.halt()
 
         debug(.shutdown, "Shut down completed.")
     }
@@ -84,8 +84,8 @@ extension MyController: NSWindowDelegate {
                 
         debug(.shutdown, "Removing proxy...")
         
-        amiga.kill()
-        amiga = nil
+        emu.kill()
+        emu = nil
     }
     
     public func windowWillEnterFullScreen(_ notification: Notification) {

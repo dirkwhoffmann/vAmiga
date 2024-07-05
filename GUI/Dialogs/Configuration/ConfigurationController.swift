@@ -319,8 +319,8 @@ class ConfigurationController: DialogController {
 
     var bootable: Bool {
         
-        do { try amiga.isReady() } catch { return false }
-        return amiga.poweredOff
+        do { try emu.isReady() } catch { return false }
+        return emu.poweredOff
     }
     
     // The tab to open first
@@ -365,8 +365,8 @@ class ConfigurationController: DialogController {
     
     @IBAction func unlockAction(_ sender: Any!) {
 
-        amiga.pause()
-        amiga.powerOff()
+        emu.pause()
+        emu.powerOff()
         refresh()
     }
     
@@ -379,7 +379,7 @@ class ConfigurationController: DialogController {
     @IBAction func powerAction(_ sender: Any!) {
         
         hide()
-        try? amiga.run()
+        try? emu.run()
     }
 }
 

@@ -22,7 +22,7 @@ public class MacAudio: NSObject {
     var parent: MyController!
 
     // Audio source
-    var emu: EmulatorProxy? { return parent.amiga }
+    var emu: EmulatorProxy? { return parent.emu }
 
     // Component state
     enum MacAudioState { case off, on, shutdown }

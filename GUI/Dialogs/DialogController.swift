@@ -33,7 +33,7 @@ protocol DialogControllerDelegate: AnyObject {
 class DialogController: NSWindowController, DialogControllerDelegate {
 
     var parent: MyController!
-    var amiga: EmulatorProxy!
+    var emu: EmulatorProxy!
 
     // References to all open dialogs (to make ARC happy)
     static var active: [DialogController] = []
@@ -49,7 +49,7 @@ class DialogController: NSWindowController, DialogControllerDelegate {
         self.init(windowNibName: nibName)
         
         parent = controller
-        amiga = parent.amiga
+        emu = parent.emu
     }
 
     func register() {

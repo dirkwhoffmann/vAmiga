@@ -11,15 +11,15 @@ extension MyController: NSMenuItemValidation {
     
     open func validateMenuItem(_ item: NSMenuItem) -> Bool {
         
-        let powered = amiga.poweredOn
-        let running = amiga.running
-        let paused = amiga.paused
-        let recording = amiga.recorder.recording
+        let powered = emu.poweredOn
+        let running = emu.running
+        let paused = emu.paused
+        let recording = emu.recorder.recording
 
         var driveNr: Int { return item.tag / 10 }
         var slotNr: Int { return item.tag % 10 }
-        var dfn: FloppyDriveProxy { return amiga.df(item.tag)! }
-        var hdn: HardDriveProxy { return amiga.hd(item.tag)! }
+        var dfn: FloppyDriveProxy { return emu.df(item.tag)! }
+        var hdn: HardDriveProxy { return emu.hd(item.tag)! }
 
         func validateURLlist(_ list: [URL], image: NSImage) -> Bool {
             
@@ -104,7 +104,7 @@ extension MyController: NSMenuItemValidation {
             return validateURLlist(myAppDelegate.attachedHardDrives, image: smallHdr)
 
         case #selector(MyController.exportRecentHdDummyAction(_:)):
-            return amiga.hd(item)!.hasDisk
+            return emu.hd(item)!.hasDisk
 
         case #selector(MyController.exportRecentHdrAction(_:)):
             return validateURLlist(myAppDelegate.exportedHardDrives[driveNr],
@@ -170,8 +170,8 @@ extension MyController: NSMenuItemValidation {
         pref.applyUserDefaults()
         
         // Power on
-        amiga.powerOn()
-        try? amiga.run()
+        emu.powerOn()
+        try? emu.run()
     }
 
     @IBAction func importScriptAction(_ sender: Any!) {
@@ -216,7 +216,7 @@ extension MyController: NSMenuItemValidation {
             if result == .OK, let url = savePanel.url {
 
                 do {
-                    try self.amiga.exportConfig(url: url)
+                    try self.emu.exportConfig(url: url)
                 } catch {
                     self.showAlert(.cantExport(url: url), error: error, async: true)
                 }
@@ -277,7 +277,7 @@ extension MyController: NSMenuItemValidation {
     @IBAction func takeSnapshotAction(_ sender: Any!) {
         
         // amiga.requestUserSnapshot()
-        mydocument.snapshots.append(amiga.amiga.takeSnapshot())
+        mydocument.snapshots.append(emu.amiga.takeSnapshot())
         renderer.flash()
     }
     
@@ -327,13 +327,13 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func captureScreenAction(_ sender: Any!) {
 
-        if amiga.recorder.recording {
+        if emu.recorder.recording {
             
-            amiga.recorder.stopRecording()
+            emu.recorder.stopRecording()
             return
         }
         
-        if !amiga.recorder.hasFFmpeg {
+        if !emu.recorder.hasFFmpeg {
 
             if pref.ffmpegPath != "" {
                 showAlert(.noFFmpegFound(exec: pref.ffmpegPath))
@@ -344,7 +344,7 @@ extension MyController: NSMenuItemValidation {
         }
 
         do {
-            try amiga.recorder.startRecording(rect: renderer.recordingRect,
+            try emu.recorder.startRecording(rect: renderer.recordingRect,
                                               rate: pref.bitRate,
                                               ax: pref.aspectX,
                                               ay: pref.aspectY)
@@ -377,38 +377,44 @@ extension MyController: NSMenuItemValidation {
     }
     
     @IBAction func stopAndGoAction(_ sender: Any!) {
-        
-        amiga?.debugger.stopAndGo()
+
+        if let emu = emu {
+            if emu.running { emu.pause() } else { try? emu.run() }
+        }
     }
-    
+
     @IBAction func stepIntoAction(_ sender: Any!) {
         
         needsSaving = true
-        amiga?.debugger.stepInto()
+        if let emu = emu {
+            emu.debugger.stepInto()
+        }
     }
     
     @IBAction func stepOverAction(_ sender: Any!) {
         
         needsSaving = true
-        amiga?.debugger.stepOver()
+        if let emu = emu {
+            emu.debugger.stepOver()
+        }
     }
     
     @IBAction func resetAction(_ sender: Any!) {
         
-        amiga.hardReset()
-        try? amiga.run()
+        emu.hardReset()
+        try? emu.run()
     }
     
     @IBAction func powerAction(_ sender: Any!) {
         
-        if amiga.poweredOn {
+        if emu.poweredOn {
             
-            amiga.powerOff()
+            emu.powerOff()
             
         } else {
 
             do {
-                try amiga.run()
+                try emu.run()
             } catch {
                 showAlert(.cantRun, error: error)
             }
@@ -482,7 +488,7 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func clearKeyboardMatrixAction(_ sender: Any!) {
         
-        amiga.keyboard.releaseAllKeys()
+        emu.keyboard.releaseAllKeys()
     }
     
     @IBAction func delKeyAction(_ sender: Any!) {
@@ -499,9 +505,9 @@ extension MyController: NSMenuItemValidation {
         
         DispatchQueue.global().async {
             
-            self.amiga.keyboard.pressKey(keyCode)
+            self.emu.keyboard.pressKey(keyCode)
             usleep(useconds_t(20000))
-            self.amiga.keyboard.releaseKey(keyCode)
+            self.emu.keyboard.releaseKey(keyCode)
             completion?()
         }
     }
@@ -512,7 +518,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func newDiskAction(_ sender: NSMenuItem!) {
 
-        let drive = amiga.df(sender.tag)!
+        let drive = emu.df(sender.tag)!
 
         // Ask the user if a modified hard drive should be detached
         if !proceedWithUnsavedFloppyDisk(drive: drive) { return }
@@ -523,7 +529,7 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func insertDiskAction(_ sender: NSMenuItem!) {
 
-        let drive = amiga.df(sender.tag)!
+        let drive = emu.df(sender.tag)!
         
         // Ask the user if an unsafed disk should be replaced
         if !proceedWithUnsavedFloppyDisk(drive: drive) { return }
@@ -578,9 +584,9 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func writeProtectAction(_ sender: NSMenuItem!) {
         
-        amiga.suspend()
-        amiga.df(sender)!.toggleWriteProtection()
-        amiga.resume()
+        emu.suspend()
+        emu.df(sender)!.toggleWriteProtection()
+        emu.resume()
     }
 
     @IBAction func exportRecentDiskDummyAction(_ sender: NSMenuItem!) {}
@@ -616,7 +622,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func ejectDiskAction(_ sender: NSMenuItem!) {
         
-        let drive = amiga.df(sender.tag)!
+        let drive = emu.df(sender.tag)!
         
         if proceedWithUnsavedFloppyDisk(drive: drive) {
             
@@ -657,7 +663,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func newHdrAction(_ sender: NSMenuItem!) {
 
-        let drive = amiga.hd(sender.tag)!
+        let drive = emu.hd(sender.tag)!
         
         // Ask the user if an unsafed disk should be discarded
         if !proceedWithUnsavedHardDisk(drive: drive) { return }
@@ -671,7 +677,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func attachHdrAction(_ sender: NSMenuItem!) {
         
-        let drive = amiga.hd(sender.tag)!
+        let drive = emu.hd(sender.tag)!
         
         // Ask the user if an unsafed disk should be discarded
         if !proceedWithUnsavedHardDisk(drive: drive) { return }
@@ -802,14 +808,14 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func writeProtectHdrAction(_ sender: NSMenuItem!) {
         
-        amiga.hd(sender)!.toggleWriteProtection()
+        emu.hd(sender)!.toggleWriteProtection()
     }
 
     @IBAction func writeThroughHdrAction(_ sender: NSMenuItem!) {
         
         if sender.state == .on {
 
-            amiga.hd(sender)!.disableWriteThrough()
+            emu.hd(sender)!.disableWriteThrough()
             sender.state = .off
 
             try? FileManager.default.removeItem(at: UserDefaults.hdUrl(sender.tag)!)
@@ -817,7 +823,7 @@ extension MyController: NSMenuItemValidation {
         } else {
             
             do {
-                try amiga.hd(sender)!.enableWriteThrough()
+                try emu.hd(sender)!.enableWriteThrough()
                 sender.state = .on
             } catch {
                 sender.state = .off

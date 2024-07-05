@@ -14,8 +14,8 @@ extension Inspector {
     
     private func cacheCIA() {
 
-        let cia = ciaA ? amiga.ciaA! : amiga.ciaB!
-        ciaInfo = amiga.paused ? cia.info : cia.cachedInfo
+        let cia = ciaA ? emu.ciaA! : emu.ciaB!
+        ciaInfo = emu.paused ? cia.info : cia.cachedInfo
     }
 
     func refreshCIA(count: Int = 0, full: Bool = false) {

@@ -819,15 +819,13 @@ VAmiga::trackOff(isize source)
 void
 VAmiga::stepInto()
 {
-    assert(isUserThread());
-    emu->main.debugger.stepInto();
+    emu->stepInto();
 }
 
 void
 VAmiga::stepOver()
 {
-    assert(isUserThread());
-    emu->main.debugger.stepOver();
+    emu->stepOver();
 }
 
 void

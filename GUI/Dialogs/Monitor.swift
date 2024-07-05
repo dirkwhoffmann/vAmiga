@@ -71,12 +71,12 @@ class Monitor: DialogController {
     @IBOutlet weak var synOpacity: NSSlider!
 
     var layers: Int {
-        get { return amiga.getConfig(.DENISE_HIDDEN_LAYERS) }
-        set { amiga.configure(.DENISE_HIDDEN_LAYERS, value: newValue) }
+        get { return emu.getConfig(.DENISE_HIDDEN_LAYERS) }
+        set { emu.configure(.DENISE_HIDDEN_LAYERS, value: newValue) }
     }
     var layerAlpha: Int {
-        get { return 255 - amiga.getConfig(.DENISE_HIDDEN_LAYER_ALPHA) }
-        set { amiga.configure(.DENISE_HIDDEN_LAYER_ALPHA, value: 255 - newValue) }
+        get { return 255 - emu.getConfig(.DENISE_HIDDEN_LAYER_ALPHA) }
+        set { emu.configure(.DENISE_HIDDEN_LAYER_ALPHA, value: 255 - newValue) }
     }
     
     override func awakeFromNib() {
@@ -91,15 +91,15 @@ class Monitor: DialogController {
             return parent.renderer.monitors.monitors[i].hidden ? .off : .on
         }
         
-        let bus = amiga.getConfig(.DMA_DEBUG_ENABLE) != 0
+        let bus = emu.getConfig(.DMA_DEBUG_ENABLE) != 0
         let mon = monEnable.state == .on
         let syn = synEnable.state == .on
         let col = bus || monEnable.isEnabled
                 
         // Bus debugger
-        let info = amiga.dmaDebugger.info
-        let opacity = amiga.getConfig(.DMA_DEBUG_OPACITY)
-        let mode = amiga.getConfig(.DMA_DEBUG_MODE)
+        let info = emu.dmaDebugger.info
+        let opacity = emu.getConfig(.DMA_DEBUG_OPACITY)
+        let mode = emu.getConfig(.DMA_DEBUG_MODE)
         
         busEnable.state = bus ? .on : .off
         busCopper.state = info.visualizeCopper ? .on : .off
@@ -226,14 +226,14 @@ class Monitor: DialogController {
         let rgb = (r << 24) | (g << 16) | (b << 8)
 
         switch sender.tag {
-        case 0:  amiga.configure(.DMA_DEBUG_COLOR0, value: rgb)
-        case 1:  amiga.configure(.DMA_DEBUG_COLOR1, value: rgb)
-        case 2:  amiga.configure(.DMA_DEBUG_COLOR2, value: rgb)
-        case 3:  amiga.configure(.DMA_DEBUG_COLOR3, value: rgb)
-        case 4:  amiga.configure(.DMA_DEBUG_COLOR4, value: rgb)
-        case 5:  amiga.configure(.DMA_DEBUG_COLOR5, value: rgb)
-        case 6:  amiga.configure(.DMA_DEBUG_COLOR6, value: rgb)
-        case 7:  amiga.configure(.DMA_DEBUG_COLOR7, value: rgb)
+        case 0:  emu.configure(.DMA_DEBUG_COLOR0, value: rgb)
+        case 1:  emu.configure(.DMA_DEBUG_COLOR1, value: rgb)
+        case 2:  emu.configure(.DMA_DEBUG_COLOR2, value: rgb)
+        case 3:  emu.configure(.DMA_DEBUG_COLOR3, value: rgb)
+        case 4:  emu.configure(.DMA_DEBUG_COLOR4, value: rgb)
+        case 5:  emu.configure(.DMA_DEBUG_COLOR5, value: rgb)
+        case 6:  emu.configure(.DMA_DEBUG_COLOR6, value: rgb)
+        case 7:  emu.configure(.DMA_DEBUG_COLOR7, value: rgb)
         default: break
         }
 
@@ -244,21 +244,21 @@ class Monitor: DialogController {
 
     @IBAction func busEnableAction(_ sender: NSButton!) {
         
-        amiga.configure(.DMA_DEBUG_ENABLE, enable: sender.state == .on)
+        emu.configure(.DMA_DEBUG_ENABLE, enable: sender.state == .on)
         refresh()
     }
     
     @IBAction func busDisplayAction(_ sender: NSButton!) {
         
         switch sender.tag {
-        case 0:  amiga.configure(.DMA_DEBUG_CHANNEL0, enable: sender.state == .on)
-        case 1:  amiga.configure(.DMA_DEBUG_CHANNEL1, enable: sender.state == .on)
-        case 2:  amiga.configure(.DMA_DEBUG_CHANNEL2, enable: sender.state == .on)
-        case 3:  amiga.configure(.DMA_DEBUG_CHANNEL3, enable: sender.state == .on)
-        case 4:  amiga.configure(.DMA_DEBUG_CHANNEL4, enable: sender.state == .on)
-        case 5:  amiga.configure(.DMA_DEBUG_CHANNEL5, enable: sender.state == .on)
-        case 6:  amiga.configure(.DMA_DEBUG_CHANNEL6, enable: sender.state == .on)
-        case 7:  amiga.configure(.DMA_DEBUG_CHANNEL7, enable: sender.state == .on)
+        case 0:  emu.configure(.DMA_DEBUG_CHANNEL0, enable: sender.state == .on)
+        case 1:  emu.configure(.DMA_DEBUG_CHANNEL1, enable: sender.state == .on)
+        case 2:  emu.configure(.DMA_DEBUG_CHANNEL2, enable: sender.state == .on)
+        case 3:  emu.configure(.DMA_DEBUG_CHANNEL3, enable: sender.state == .on)
+        case 4:  emu.configure(.DMA_DEBUG_CHANNEL4, enable: sender.state == .on)
+        case 5:  emu.configure(.DMA_DEBUG_CHANNEL5, enable: sender.state == .on)
+        case 6:  emu.configure(.DMA_DEBUG_CHANNEL6, enable: sender.state == .on)
+        case 7:  emu.configure(.DMA_DEBUG_CHANNEL7, enable: sender.state == .on)
         default: break
         }
         refresh()
@@ -266,13 +266,13 @@ class Monitor: DialogController {
     
     @IBAction func busDisplayModeAction(_ sender: NSPopUpButton!) {
         
-        amiga.configure(.DMA_DEBUG_MODE, value: sender.selectedTag())
+        emu.configure(.DMA_DEBUG_MODE, value: sender.selectedTag())
         refresh()
     }
     
     @IBAction func busOpacityAction(_ sender: NSSlider!) {
 
-        amiga.configure(.DMA_DEBUG_OPACITY, value: sender.integerValue)
+        emu.configure(.DMA_DEBUG_OPACITY, value: sender.integerValue)
         refresh()
     }
     

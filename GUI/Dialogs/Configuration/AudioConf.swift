@@ -169,7 +169,7 @@ extension ConfigurationController {
 
     @IBAction func audPresetAction(_ sender: NSPopUpButton!) {
         
-        amiga.suspend()
+        emu.suspend()
 
         // Revert to standard settings
         EmulatorProxy.defaults.removeAudioUserDefaults()
@@ -201,7 +201,7 @@ extension ConfigurationController {
             fatalError()
         }
         
-        amiga.resume()
+        emu.resume()
         
         refresh()
     }

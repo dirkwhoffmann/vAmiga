@@ -18,24 +18,24 @@ extension MyController {
 
         if WarpMode(rawValue: config.warpMode) == .AUTO {
 
-            return NSImage(named: amiga.isWarping ? "hourglass3Template" : "hourglass1Template")
+            return NSImage(named: emu.isWarping ? "hourglass3Template" : "hourglass1Template")
 
         } else {
 
-            return NSImage(named: amiga.isWarping ? "warpOnTemplate" : "warpOffTemplate")
+            return NSImage(named: emu.isWarping ? "warpOnTemplate" : "warpOffTemplate")
         }
     }
     
     func refreshStatusBar() {
         
-        let running = amiga.running
-        let halted = amiga.cpu.halted
-        let warp = amiga.isWarping
+        let running = emu.running
+        let halted = emu.cpu.halted
+        let warp = emu.isWarping
 
         // Df0 - Df3
         for n in 0...3 where drv[n] != nil {
             
-            let dfn = amiga.df(n)!
+            let dfn = emu.df(n)!
             let info = dfn.info
 
             refreshStatusBar(drive: n, led: dfn.ledIcon)
@@ -46,7 +46,7 @@ extension MyController {
         // Hd0 - Hd3
         for n in 4...7 where drv[n] != nil {
             
-            let hdn = amiga.hd(n - 4)!
+            let hdn = emu.hd(n - 4)!
             
             refreshStatusBar(drive: n, led: hdn.ledIcon)
             refreshStatusBar(drive: n, cylinder: hdn.currentCyl)
@@ -60,7 +60,7 @@ extension MyController {
         cmdRightIcon.image = cmdKeyIcon(mapRight)
 
         // Remote server icon
-        debugIcon.image = amiga.remoteManager.icon
+        debugIcon.image = emu.remoteManager.icon
         
         // Warp mode icon
         warpIcon.image = hourglassIcon
@@ -129,7 +129,7 @@ extension MyController {
         
         for n in 0...3 where drv[n] != nil {
             
-            let dfn = amiga.df(n)!
+            let dfn = emu.df(n)!
             refreshStatusBar(drive: n, led: dfn.ledIcon)
         }            
     }
@@ -141,16 +141,16 @@ extension MyController {
         var nr = 0
 
         // Update slot assignments for Df0 - Df3
-        if amiga.df0.info.isConnected { drv[0] = nr; nr += 1 }
-        if amiga.df1.info.isConnected { drv[1] = nr; nr += 1 }
-        if amiga.df2.info.isConnected { drv[2] = nr; nr += 1 }
-        if amiga.df3.info.isConnected { drv[3] = nr; nr += 1 }
+        if emu.df0.info.isConnected { drv[0] = nr; nr += 1 }
+        if emu.df1.info.isConnected { drv[1] = nr; nr += 1 }
+        if emu.df2.info.isConnected { drv[2] = nr; nr += 1 }
+        if emu.df3.info.isConnected { drv[3] = nr; nr += 1 }
 
         // Update slot assignments for Hd0 - Hd3
-        if amiga.hd0.isConnected, nr < 4 { drv[4] = nr; nr += 1 }
-        if amiga.hd1.isConnected, nr < 4 { drv[5] = nr; nr += 1 }
-        if amiga.hd2.isConnected, nr < 4 { drv[6] = nr; nr += 1 }
-        if amiga.hd3.isConnected, nr < 4 { drv[7] = nr; nr += 1 }
+        if emu.hd0.isConnected, nr < 4 { drv[4] = nr; nr += 1 }
+        if emu.hd1.isConnected, nr < 4 { drv[5] = nr; nr += 1 }
+        if emu.hd2.isConnected, nr < 4 { drv[6] = nr; nr += 1 }
+        if emu.hd3.isConnected, nr < 4 { drv[7] = nr; nr += 1 }
         
         // Update reference tables
         for device in 0...7 {
@@ -217,10 +217,10 @@ extension MyController {
             activityBar.fillColor = color[index]
         }
 
-        let clock = amiga.cpu.clock
+        let clock = emu.cpu.clock
 
         speedometer.updateWith(cycle: clock,
-                               emuFrame: Int64(amiga.agnus.frameCount),
+                               emuFrame: Int64(emu.agnus.frameCount),
                                gpuFrame: renderer.frames)
 
         // Set value
@@ -239,7 +239,7 @@ extension MyController {
             setColor(color: [.systemRed, .systemYellow, .systemGreen, .systemYellow, .systemRed])
 
         case 2:
-            let cpu = amiga.cpuLoad
+            let cpu = emu.cpuLoad
             activityBar.integerValue = cpu
             activityInfo.stringValue = String(format: "%d%% CPU", cpu)
             setColor(color: [.systemGreen, .systemGreen, .systemGreen, .systemYellow, .systemRed])
@@ -251,7 +251,7 @@ extension MyController {
             setColor(color: [.systemRed, .systemYellow, .systemGreen, .systemYellow, .systemRed])
 
         case 4:
-            let fill = amiga.paula.audioPortStats.fillLevel * 100.0
+            let fill = emu.paula.audioPortStats.fillLevel * 100.0
             activityBar.doubleValue = fill
             activityInfo.stringValue = String(format: "Fill level %d%%", Int(fill))
             setColor(color: [.systemRed, .systemYellow, .systemGreen, .systemYellow, .systemRed])

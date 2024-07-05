@@ -462,7 +462,7 @@ class GamePad {
     @discardableResult
     func processJoystickEvents(events: [GamePadAction]) -> Bool {
         
-        let amiga = manager.parent.amiga!
+        let amiga = manager.parent.emu!
         
         if port == 1 { for e in events { amiga.controlPort1.joystick.trigger(e) } }
         if port == 2 { for e in events { amiga.controlPort2.joystick.trigger(e) } }
@@ -476,7 +476,7 @@ class GamePad {
     @discardableResult
     func processMouseEvents(events: [GamePadAction]) -> Bool {
         
-        let amiga = manager.parent.amiga!
+        let amiga = manager.parent.emu!
         
         if port == 1 { for e in events { amiga.controlPort1.mouse.trigger(e) } }
         if port == 2 { for e in events { amiga.controlPort2.mouse.trigger(e) } }
@@ -486,7 +486,7 @@ class GamePad {
     
     func processMouseEvents(delta: NSPoint) {
         
-        let amiga = manager.parent.amiga!
+        let amiga = manager.parent.emu!
 
         // Check for a shaking mouse
         amiga.controlPort1.mouse.detectShakeRel(delta)
@@ -525,7 +525,7 @@ class GamePad {
 
     func processKeyboardEvent(events: [GamePadAction]) {
 
-        let amiga = manager.parent.amiga!
+        let amiga = manager.parent.emu!
         
         if isMouse {
             if port == 1 { for e in events { amiga.controlPort1.mouse.trigger(e) } }

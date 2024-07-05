@@ -209,12 +209,12 @@ extension MyAppDelegate {
             
             if c.window == window {
                 
-                c.amiga?.put(.FOCUS, value: 1)
+                c.emu?.put(.FOCUS, value: 1)
                 c.hideOrShowDriveMenus()
 
             } else {
                 
-                c.amiga?.put(.FOCUS, value: 0)
+                c.emu?.put(.FOCUS, value: 0)
             }
         }
     }

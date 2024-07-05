@@ -68,7 +68,7 @@ class VirtualKeyboardController: DialogController {
 
         let keyboard = VirtualKeyboardController(windowNibName: xibName)
         keyboard.parent = parent
-        keyboard.amiga = parent.amiga
+        keyboard.emu = parent.emu
 
         return keyboard
     }
@@ -117,7 +117,7 @@ class VirtualKeyboardController: DialogController {
     
     fileprivate func refresh() {
                        
-        guard let keyboard = amiga.keyboard else { return }
+        guard let keyboard = emu.keyboard else { return }
         
         for keycode in 0 ... 127 {
             
@@ -146,13 +146,13 @@ class VirtualKeyboardController: DialogController {
     
     func pressKey(keyCode: Int) {
 
-        amiga.keyboard.pressKey(keyCode)
+        emu.keyboard.pressKey(keyCode)
         refresh()
         
         DispatchQueue.main.async {
             
             usleep(useconds_t(100000))
-            self.amiga.keyboard.releaseAllKeys()
+            self.emu.keyboard.releaseAllKeys()
             self.refresh()
         }
         
@@ -163,7 +163,7 @@ class VirtualKeyboardController: DialogController {
     
     func holdKey(keyCode: Int) {
         
-        guard let keyboard = amiga.keyboard else { return }
+        guard let keyboard = emu.keyboard else { return }
         
         keyboard.toggleKey(keyCode)
         refresh()
@@ -207,7 +207,7 @@ extension VirtualKeyboardController {
     static func kbStyle(_ parent: MyController) -> KBStyle {
         
         // Determine if an A1000 is emulated
-        let a1000 = parent.amiga.mem.info.hasBootRom
+        let a1000 = parent.emu.mem.info.hasBootRom
 
         // Use a narrow keyboard for the A1000 and a wide keyboard otherwise
         return a1000 ? .narrow : .wide

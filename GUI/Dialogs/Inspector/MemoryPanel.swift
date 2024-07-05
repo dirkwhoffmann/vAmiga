@@ -29,7 +29,7 @@ extension Inspector {
 
     private func cacheMem() {
 
-        memInfo = amiga.paused ? amiga.mem.info : amiga.mem.cachedInfo
+        memInfo = emu.paused ? emu.mem.info : emu.mem.cachedInfo
     }
 
     var accessor: Accessor {
@@ -38,7 +38,7 @@ extension Inspector {
     
     func memSrc(bank: Int) -> MemorySource {  
 
-        return parent.amiga.mem.memSrc(accessor, addr: bank << 16)
+        return parent.emu.mem.memSrc(accessor, addr: bank << 16)
     }
     
     var memLayoutImage: NSImage? {
@@ -113,7 +113,7 @@ extension Inspector {
 
     private func refreshMemoryLayout() {
 
-        let config = amiga.mem.config
+        let config = emu.mem.config
         let size = NSSize(width: 16, height: 16)
 
         memLayoutButton.image   = memLayoutImage

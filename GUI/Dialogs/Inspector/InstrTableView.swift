@@ -11,7 +11,7 @@ class InstrTableView: NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
     
-    var amiga: EmulatorProxy { return inspector.parent.amiga }
+    var amiga: EmulatorProxy { return inspector.parent.emu }
     var cpu: CPUProxy { return amiga.cpu }
     var breakpoints: GuardsProxy { return amiga.breakpoints }
     

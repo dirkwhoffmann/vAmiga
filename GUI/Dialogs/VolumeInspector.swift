@@ -172,7 +172,7 @@ class VolumeInspector: DialogController {
     
     func show(diskDrive nr: Int) throws {
         
-        let dfn = amiga.df(nr)!
+        let dfn = emu.df(nr)!
         let adf = try ADFFileProxy.make(with: dfn)
         vol = try FileSystemProxy.make(withADF: adf)
         
@@ -183,7 +183,7 @@ class VolumeInspector: DialogController {
         
         var partition: Int?
         
-        if amiga.hd(nr)!.partitions == 1 {
+        if emu.hd(nr)!.partitions == 1 {
         
             // Analyze the first partition
             partition = 0
@@ -204,7 +204,7 @@ class VolumeInspector: DialogController {
     
     func show(hardDrive nr: Int, partition: Int) throws {
         
-        let hdn = amiga.hd(nr)!
+        let hdn = emu.hd(nr)!
         let hdf = try HDFFileProxy.make(with: hdn)
         vol = try FileSystemProxy.make(withHDF: hdf, partition: partition)
         

@@ -54,7 +54,7 @@ class DiskExporter: DialogController {
     
     func showSheet(diskDrive nr: Int) {
                 
-        dfn = amiga.df(nr)
+        dfn = emu.df(nr)
 
         // Run the ADF decoder
         adf = try? ADFFileProxy.make(with: dfn!)
@@ -73,7 +73,7 @@ class DiskExporter: DialogController {
 
     func showSheet(hardDrive nr: Int) {
                 
-        hdn = amiga.hd(nr)
+        hdn = emu.hd(nr)
 
         // Run the HDF decoder
         hdf = try? HDFFileProxy.make(with: hdn!)

@@ -498,6 +498,20 @@ Emulator::softReset()
     }
 }
 
+void 
+Emulator::stepInto()
+{
+    if (isRunning()) return;
+    main.debugger.stepInto();
+}
+
+void 
+Emulator::stepOver()
+{
+    if (isRunning()) return;
+    main.debugger.stepOver();
+}
+
 void
 Emulator::computeFrame()
 {

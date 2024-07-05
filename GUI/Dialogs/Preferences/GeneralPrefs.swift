@@ -17,7 +17,7 @@ extension PreferencesController {
             genFFmpegPath.tag = 1
             
             for i in 0...5 {
-                if let path = amiga.recorder.findFFmpeg(i) {
+                if let path = emu.recorder.findFFmpeg(i) {
                     genFFmpegPath.addItem(withObjectValue: path)
                 } else {
                     break
@@ -36,8 +36,8 @@ extension PreferencesController {
         genScreenshotTargetPopup.selectItem(withTag: pref.screenshotTargetIntValue)
                 
         // Screen captures
-        let hasFFmpeg = amiga.recorder.hasFFmpeg
-        genFFmpegPath.stringValue = amiga.recorder.path
+        let hasFFmpeg = emu.recorder.hasFFmpeg
+        genFFmpegPath.stringValue = emu.recorder.path
         genFFmpegPath.textColor = hasFFmpeg ? .textColor : .warningColor
         genSource.selectItem(withTag: pref.captureSourceIntValue)
         genBitRate.stringValue = "\(pref.bitRate)"
@@ -189,7 +189,7 @@ extension PreferencesController {
         
         pref.closeWithoutAsking = (sender.state == .on)
         for c in myAppDelegate.controllers {
-            c.needsSaving = c.amiga.running
+            c.needsSaving = c.emu.running
         }
         refresh()
     }

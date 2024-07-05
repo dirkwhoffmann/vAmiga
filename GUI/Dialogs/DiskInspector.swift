@@ -76,7 +76,7 @@ class DiskInspector: DialogController {
         
     func show(diskDrive nr: Int) {
                 
-        drive = amiga.df(nr)
+        drive = emu.df(nr)
         
         titleString = "Floppy Drive DF\(nr)"
 
@@ -104,7 +104,7 @@ class DiskInspector: DialogController {
         titleString = "Hard Drive HD\(nr)"
 
         // Run the HDF decoder
-        decoder = try? HDFFileProxy.make(with: amiga.hd(nr)!)
+        decoder = try? HDFFileProxy.make(with: emu.hd(nr)!)
 
         image = NSImage(named: "hdf")!
         showAsWindow()

@@ -11,7 +11,7 @@ extension ConfigurationController {
 
     func refreshPerformanceTab() {
 
-        let poweredOff = amiga.poweredOff
+        let poweredOff = emu.poweredOff
 
         // Warp
         prfWarpMode.selectItem(withTag: config.warpMode)
@@ -122,7 +122,7 @@ extension ConfigurationController {
 
     @IBAction func prfPresetAction(_ sender: NSPopUpButton!) {
 
-        amiga.suspend()
+        emu.suspend()
 
         // Revert to standard settings
         EmulatorProxy.defaults.removePerformanceUserDefaults()
@@ -130,7 +130,7 @@ extension ConfigurationController {
         // Update the configutation
         config.applyPerformanceUserDefaults()
 
-        amiga.resume()
+        emu.resume()
         refresh()
     }
 

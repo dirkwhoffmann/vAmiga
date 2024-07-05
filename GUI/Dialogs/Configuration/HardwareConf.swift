@@ -15,9 +15,9 @@ extension ConfigurationController {
         refreshMemoryTab()
 
         // Lock
-        hwLockImage.isHidden = amiga.poweredOff
-        hwLockInfo1.isHidden = amiga.poweredOff
-        hwLockInfo2.isHidden = amiga.poweredOff
+        hwLockImage.isHidden = emu.poweredOff
+        hwLockInfo1.isHidden = emu.poweredOff
+        hwLockInfo2.isHidden = emu.poweredOff
 
         // Buttons
         hwPowerButton.isHidden = !bootable
@@ -41,7 +41,7 @@ extension ConfigurationController {
 
     func refreshChipsetTab() {
 
-        let poweredOff = amiga.poweredOff
+        let poweredOff = emu.poweredOff
         let pal = config.machineType == VideoFormat.PAL.rawValue
 
         // CPU
@@ -251,8 +251,8 @@ extension ConfigurationController {
 
     func refreshMemoryTab() {
 
-        let poweredOff = amiga.poweredOff
-        let traits = amiga.agnus.traits
+        let poweredOff = emu.poweredOff
+        let traits = emu.agnus.traits
 
         // Memory
         memChipRamPopup.selectItem(withTag: config.chipRam)
@@ -320,7 +320,7 @@ extension ConfigurationController {
 
         let defaults = EmulatorProxy.defaults!
 
-        amiga.suspend()
+        emu.suspend()
 
         // Revert to standard settings
         EmulatorProxy.defaults.removeMemoryUserDefaults()
@@ -363,7 +363,7 @@ extension ConfigurationController {
         // Update the configutation
         config.applyMemoryUserDefaults()
 
-        amiga.resume()
+        emu.resume()
     }
 
     @IBAction func memDefaultsAction(_ sender: NSButton!) {

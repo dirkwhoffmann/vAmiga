@@ -30,7 +30,7 @@ class MyController: NSWindowController, MessageReceiver {
     var mydocument: MyDocument!
     
     // Amiga proxy (bridge between the Swift frontend and the C++ backend)
-    var amiga: EmulatorProxy!
+    var emu: EmulatorProxy!
     
     // Inspector panel of this emulator instance
     var inspector: Inspector?
@@ -199,15 +199,15 @@ extension MyController {
 
         do {
             // Switch the Amiga on
-            amiga.powerOn()
+            emu.powerOn()
         
             // Start emulation
-            try amiga.run()
+            try emu.run()
             
         } catch {
             
             // Switch the Amiga off
-            amiga.powerOff()
+            emu.powerOff()
             
             // Open the Rom dialog after a small delay
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
@@ -252,7 +252,7 @@ extension MyController {
         // Convert 'self' to a void pointer
         let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
 
-        amiga.launch(myself) { (ptr, msg: Message) in
+        emu.launch(myself) { (ptr, msg: Message) in
 
             // Convert void pointer back to 'self'
             let myself = Unmanaged<MyController>.fromOpaque(ptr!).takeUnretainedValue()
@@ -312,7 +312,7 @@ extension MyController {
         if !renderer.monitors.isVisible { return }
         
         // DMA monitors
-        let dma = amiga.agnus.stats
+        let dma = emu.agnus.stats
         let copDMA = Float(dma.copperActivity) / (313 * 120)
         let bltDMA = Float(dma.blitterActivity) / (313 * 120)
         let dskDMA = Float(dma.diskActivity) / (313 * 3)
@@ -328,7 +328,7 @@ extension MyController {
         addValue(Monitors.Monitor.bitplane, bplDMA)
         
         // Memory monitors
-        let mem = amiga.mem.stats
+        let mem = emu.mem.stats
 
         let max = Float((HPOS_CNT_PAL * VPOS_CNT) / 2)
         let chipR = Float(mem.chipReads.accumulated) / max
@@ -358,7 +358,7 @@ extension MyController {
         var acceleration: Double { return Double(msg.value == 0 ? 1 : msg.value) }
 
         // Only proceed if the proxy object is still alive
-        if amiga == nil { return }
+        if emu == nil { return }
         
         switch msg.type {
                         
@@ -562,17 +562,17 @@ extension MyController {
             resetAction(self)
             
         case .SER_IN:
-            var c = amiga.serialPort.readIncomingPrintableByte()
+            var c = emu.serialPort.readIncomingPrintableByte()
             while c != -1 {
                 serialIn += String(UnicodeScalar(UInt8(c)))
-                c = amiga.serialPort.readIncomingPrintableByte()
+                c = emu.serialPort.readIncomingPrintableByte()
             }
 
         case .SER_OUT:
-            var c = amiga.serialPort.readOutgoingPrintableByte()
+            var c = emu.serialPort.readOutgoingPrintableByte()
             while c != -1 {
                 serialOut += String(UnicodeScalar(UInt8(c)))
-                c = amiga.serialPort.readOutgoingPrintableByte()
+                c = emu.serialPort.readOutgoingPrintableByte()
             }
 
         case .SNAPSHOT_TAKEN:

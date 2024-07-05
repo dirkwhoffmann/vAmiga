@@ -34,7 +34,7 @@ class HardDiskCreator: DialogController {
     var sectors = 0
     var bsize = 0
         
-    var drive: HardDriveProxy? { amiga.hd(nr) }
+    var drive: HardDriveProxy? { emu.hd(nr) }
     
     //
     // Selecting a block

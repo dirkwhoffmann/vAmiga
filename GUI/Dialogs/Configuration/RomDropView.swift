@@ -22,7 +22,7 @@ extension NSDraggingInfo {
 class DropView: NSImageView {
     
     @IBOutlet var parent: ConfigurationController!
-    var amiga: EmulatorProxy { return parent.amiga }
+    var amiga: EmulatorProxy { return parent.emu }
 
     var oldImage: NSImage?
     

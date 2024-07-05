@@ -17,12 +17,12 @@ extension Inspector {
 
     private func cachePaula() {
 
-        paulaInfo = amiga.paused ? amiga.paula.info : amiga.paula.cachedInfo
-        audioInfo0 = amiga.paula.audioInfo0
-        audioInfo1 = amiga.paula.audioInfo1
-        audioInfo2 = amiga.paula.audioInfo2
-        audioInfo3 = amiga.paula.audioInfo3
-        diskInfo = amiga.diskController.info
+        paulaInfo = emu.paused ? emu.paula.info : emu.paula.cachedInfo
+        audioInfo0 = emu.paula.audioInfo0
+        audioInfo1 = emu.paula.audioInfo1
+        audioInfo2 = emu.paula.audioInfo2
+        audioInfo3 = emu.paula.audioInfo3
+        diskInfo = emu.diskController.info
     }
 
     func refreshPaula(count: Int = 0, full: Bool = false) {

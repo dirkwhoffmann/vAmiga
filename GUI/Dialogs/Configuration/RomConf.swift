@@ -11,11 +11,11 @@ extension ConfigurationController {
     
     func refreshRomTab() {
 
-        let config = amiga.mem.config
-        let romTraits = amiga.mem.romTraits
-        let extTraits = amiga.mem.extTraits
+        let config = emu.mem.config
+        let romTraits = emu.mem.romTraits
+        let extTraits = emu.mem.extTraits
 
-        let poweredOff      = amiga.poweredOff
+        let poweredOff      = emu.poweredOff
 
         // let romCrc          = amiga.mem.romFingerprint
         let hasRom          = romTraits.crc != 0
@@ -150,13 +150,13 @@ extension ConfigurationController {
 
     @IBAction func romDeleteAction(_ sender: NSButton!) {
 
-        amiga.mem.deleteRom()
+        emu.mem.deleteRom()
         refresh()
     }
 
     @IBAction func extDeleteAction(_ sender: NSButton!) {
 
-        amiga.mem.deleteExt()
+        emu.mem.deleteExt()
         refresh()
     }
 
@@ -188,7 +188,7 @@ extension ConfigurationController {
 
         default:
             if let url = UserDefaults.romUrl(fingerprint: crc32) {
-                try? amiga.mem.loadRom(url)
+                try? emu.mem.loadRom(url)
             }
         }
 
@@ -237,21 +237,21 @@ extension ConfigurationController {
         config.extStart = 0xE0
 
         // Make sure the machine has enough Ram to run Aros
-        let chip = amiga.getConfig(.MEM_CHIP_RAM)
-        let slow = amiga.getConfig(.MEM_SLOW_RAM)
-        let fast = amiga.getConfig(.MEM_FAST_RAM)
+        let chip = emu.getConfig(.MEM_CHIP_RAM)
+        let slow = emu.getConfig(.MEM_SLOW_RAM)
+        let fast = emu.getConfig(.MEM_FAST_RAM)
         if chip + slow + fast < 1024*1024 { config.slowRam = 512 }
     }
 
     func install(rom: String) {
 
         let data = NSDataAsset(name: rom)!.data
-        try? amiga.mem.loadRom(buffer: data)
+        try? emu.mem.loadRom(buffer: data)
     }
 
     func install(ext: String) {
 
         let data = NSDataAsset(name: ext)!.data
-        try? amiga.mem.loadExt(buffer: data)
+        try? emu.mem.loadExt(buffer: data)
     }
 }
