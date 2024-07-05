@@ -12,6 +12,7 @@
 #include "Aliases.h"
 #include "Reflection.h"
 
+
 //
 // Constants
 //
@@ -90,3 +91,64 @@ static const u32 CRC32_DIAG12                   = 0x771CD0EA;
 static const u32 CRC32_DIAG121                  = 0x850209CD;
 static const u32 CRC32_DIAG13                   = 0x55E2E127;
 static const u32 CRC32_LOGICA20                 = 0x8484F426;
+
+
+//
+// Enumerations
+//
+
+enum_long(ROM_VENDOR)
+{
+    ROM_VENDOR_COMMODORE,
+    ROM_VENDOR_AROS,
+    ROM_VENDOR_HYPERION,
+    ROM_VENDOR_DIAG,
+    ROM_VENDOR_EMUTOS,
+    ROM_VENDOR_OTHER
+};
+typedef ROM_VENDOR RomVendor;
+
+#ifdef __cplusplus
+struct RomVendorEnum : util::Reflection<RomVendorEnum, RomVendor> {
+
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = ROM_VENDOR_OTHER;
+    static bool isValid(auto value) { return value >= minVal && value <= maxVal; }
+
+    static const char *prefix() { return "ROM_VENDOR"; }
+    static const char *key(long value)
+    {
+        switch (value) {
+
+            case ROM_VENDOR_COMMODORE:  return "COMMODORE";
+            case ROM_VENDOR_AROS:       return "AROS";
+            case ROM_VENDOR_HYPERION:   return "HYPERION";
+            case ROM_VENDOR_DIAG:       return "DIAG";
+            case ROM_VENDOR_EMUTOS:     return "EMUTOS";
+            case ROM_VENDOR_OTHER:      return "OTHER";
+        }
+        return "???";
+    }
+};
+#endif
+
+
+//
+// Structures
+//
+
+typedef struct {
+
+    u32 crc;
+
+    const char *title;
+    const char *revision;
+    const char *released;
+    const char *model;
+
+    RomVendor vendor;
+    bool boot;
+    bool patched;
+    bool relocated;
+}
+RomTraits;

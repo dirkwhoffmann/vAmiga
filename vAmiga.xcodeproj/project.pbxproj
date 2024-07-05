@@ -607,6 +607,7 @@
 		505A13202C2FE27A00FF8D2C /* VideoPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoPort.h; sourceTree = "<group>"; };
 		505A13232C2FE29600FF8D2C /* VideoPortTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoPortTypes.h; sourceTree = "<group>"; };
 		505A13282C313BB700FF8D2C /* Animated.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Animated.h; sourceTree = "<group>"; };
+		505A133B2C3704DB00FF8D2C /* RomDatabase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RomDatabase.h; sourceTree = "<group>"; };
 		505A214E22869FF10016EA21 /* AudioFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioFilter.cpp; sourceTree = "<group>"; };
 		505A214F22869FF10016EA21 /* AudioFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioFilter.h; sourceTree = "<group>"; };
 		505AD259224A67CD0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -1056,6 +1057,7 @@
 			children = (
 				50CF464C2620433400BB3B95 /* CMakeLists.txt */,
 				50A61470260DCA6200A01428 /* RomFileTypes.h */,
+				505A133B2C3704DB00FF8D2C /* RomDatabase.h */,
 				509F7F1C21EDEA0200A530E4 /* RomFile.h */,
 				509F7F1B21EDEA0200A530E4 /* RomFile.cpp */,
 				50ECF98522B153FB007B3DE7 /* ExtendedRomFile.h */,

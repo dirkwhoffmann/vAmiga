@@ -12,6 +12,7 @@
 #include "IOUtils.h"
 #include "MemUtils.h"
 #include "Macros.h"
+#include "RomDatabase.h"
 
 namespace vamiga {
 
@@ -210,6 +211,7 @@ RomFile::isPatchedRom(u32 crc32)
     }
 }
 
+/*
 const char *
 RomFile::shortName(u32 crc32)
 {
@@ -296,6 +298,7 @@ RomFile::shortName(u32 crc32)
             return str;
     }
 }
+*/
 
 const char *
 RomFile::title(u32 crc32)
@@ -313,7 +316,7 @@ RomFile::title(u32 crc32)
         case CRC32_KICK11_32_034_PAL:       return "Kickstart 1.1";
         case CRC32_KICK12_33_166:
         case CRC32_KICK12_33_180:           return "Kickstart 1.2";
-        case CRC32_KICK121_34_004:          return "Kickstart 1.21";
+        case CRC32_KICK121_34_004:          return "Kickstart 1.2";
         case CRC32_KICK13_34_005_A500:
         case CRC32_KICK13_34_005_A3000:     return "Kickstart 1.3";
 
@@ -483,7 +486,7 @@ RomFile::released(u32 crc32)
         case CRC32_KICK11_32_034_PAL:       return "February 1986";
         case CRC32_KICK12_33_166:           return "September 1986";
         case CRC32_KICK12_33_180:           return "October 1986";
-        case CRC32_KICK121_34_004:          return "November 1987";
+        case CRC32_KICK121_34_004:          return "October 1986";
         case CRC32_KICK13_34_005_A500:      return "December 1987";
         case CRC32_KICK13_34_005_A3000:     return "December 1987";
 
