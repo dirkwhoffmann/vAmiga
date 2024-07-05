@@ -637,13 +637,10 @@ Agnus::eofHandler()
     copper.eofHandler();
     controlPort1.joystick.eofHandler();
     controlPort2.joystick.eofHandler();
+    mem.eofHandler();
 
     // Update statistics
     updateStats();
-    mem.updateStats();
-
-    // Let the thread synchronize
-    // amiga.setFlag(RL::SYNC_THREAD);
 }
 
 void

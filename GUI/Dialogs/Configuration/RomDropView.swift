@@ -86,7 +86,7 @@ class RomDropView: DropView {
             try amiga.mem.loadRom(rom)
 
             // Check if we should keep this Rom
-            let hash = Int(amiga.mem.romFingerprint)
+            let hash = Int(amiga.mem.romTraits.crc)
 
             for item in parent.romArosPopup.itemArray {
 

@@ -431,55 +431,30 @@
 
 @interface MemProxy : CoreComponentProxy { }
 
-@property (readonly) MemoryConfig config;
-
-- (MemoryStats) getStats;
+@property (readonly) MemConfig config;
+@property (readonly) MemInfo info;
+@property (readonly) MemInfo cachedInfo;
+@property (readonly) MemStats stats;
 
 @property (readonly) RomTraits romTraits;
 @property (readonly) RomTraits womTraits;
 @property (readonly) RomTraits extTraits;
 
-/*
-- (BOOL) isBootRom:(u32)crc32;
-- (BOOL) isArosRom:(u32)crc32;
-- (BOOL) isDiagRom:(u32)crc32;
-- (BOOL) isCommodoreRom:(u32)crc32;
-- (BOOL) isHyperionRom:(u32)crc32;
-- (BOOL) isEmutosRom:(u32)crc32;
-- (BOOL) isPatchedRom:(u32)crc32;
-- (NSString *) romTitleOf:(u32)crc32;
-*/
-
-@property (readonly) BOOL hasRom;
-@property (readonly) BOOL hasBootRom;
-@property (readonly) BOOL hasKickRom;
 - (void)deleteRom;
 - (BOOL)isRom:(NSURL *)url;
 - (void)loadRom:(RomFileProxy *)proxy exception:(ExceptionWrapper *)ex;
 - (void)loadRomFromBuffer:(NSData *)buffer exception:(ExceptionWrapper *)ex;
 - (void)loadRomFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
-@property (readonly) BOOL isRelocated;
-@property (readonly) u32 romFingerprint;
-/*
-@property (readonly, copy) NSString *romTitle;
-@property (readonly, copy) NSString *romVersion;
-@property (readonly, copy) NSString *romReleased;
-@property (readonly, copy) NSString *romModel;
-*/
+// @property (readonly) BOOL isRelocated;
+// @property (readonly) u32 romFingerprint;
 
-- (BOOL)hasExt;
+// - (BOOL)hasExt;
 - (void)deleteExt;
 - (BOOL)isExt:(NSURL *)url;
 - (void)loadExt:(ExtendedRomFileProxy *)proxy exception:(ExceptionWrapper *)ex;
 - (void)loadExtFromBuffer:(NSData *)buffer exception:(ExceptionWrapper *)ex;
 - (void)loadExtFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
-@property (readonly) u32 extFingerprint;
-/*
-@property (readonly, copy) NSString *extTitle;
-@property (readonly, copy) NSString *extVersion;
-@property (readonly, copy) NSString *extReleased;
-@property (readonly, copy) NSString *extModel;
-*/
+// @property (readonly) u32 extFingerprint;
 @property (readonly) NSInteger extStart;
 
 - (void)saveRom:(NSURL *)url exception:(ExceptionWrapper *)ex;

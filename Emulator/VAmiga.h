@@ -200,12 +200,12 @@ struct MemoryAPI : API {
 
     /** @brief  Returns the component's current configuration.
      */
-    const MemoryConfig &getConfig() const;
+    const MemConfig &getConfig() const;
 
     /** @brief  Returns the component's current state.
      */
-     // const MemoryInfo &getInfo() const;
-     // const MemoryInfo &getCachedInfo() const;
+     const MemInfo &getInfo() const;
+     const MemInfo &getCachedInfo() const;
 };
 
 struct PaulaAPI : API {

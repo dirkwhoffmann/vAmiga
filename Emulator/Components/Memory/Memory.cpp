@@ -393,6 +393,25 @@ Memory::operator << (SerWriter &worker)
 }
 
 void
+Memory::cacheInfo(MemInfo &result) const
+{
+    result.hasRom = hasRom();
+    result.hasWom = hasWom();
+    result.hasExt = hasExt();
+    result.hasBootRom = hasBootRom();
+    result.hasKickRom = hasKickRom();
+    result.womLock = womIsLocked;
+
+    result.romMask = romMask;
+    result.womMask = womMask;
+    result.extMask = extMask;
+    result.chipMask = chipMask;
+
+    for (isize i = 0; i < 256; i++) result.cpuMemSrc[i] = cpuMemSrc[i];
+    for (isize i = 0; i < 256; i++) result.agnusMemSrc[i] = agnusMemSrc[i];
+}
+
+void
 Memory::_isReady() const
 {    
     auto traits = getRomTraits();
@@ -414,36 +433,36 @@ Memory::_isReady() const
     }
 }
 
-void
-Memory::updateStats()
+void 
+Memory::cacheStats(MemStats &result) const
 {
     const double w = 0.5;
     
-    stats.chipReads.accumulated =
+    result.chipReads.accumulated =
     w * stats.chipReads.accumulated + (1.0 - w) * stats.chipReads.raw;
-    stats.chipWrites.accumulated =
+    result.chipWrites.accumulated =
     w * stats.chipWrites.accumulated + (1.0 - w) * stats.chipWrites.raw;
-    stats.slowReads.accumulated =
+    result.slowReads.accumulated =
     w * stats.slowReads.accumulated + (1.0 - w) * stats.slowReads.raw;
-    stats.slowWrites.accumulated =
+    result.slowWrites.accumulated =
     w * stats.slowWrites.accumulated + (1.0 - w) * stats.slowWrites.raw;
-    stats.fastReads.accumulated =
+    result.fastReads.accumulated =
     w * stats.fastReads.accumulated + (1.0 - w) * stats.fastReads.raw;
-    stats.fastWrites.accumulated =
+    result.fastWrites.accumulated =
     w * stats.fastWrites.accumulated + (1.0 - w) * stats.fastWrites.raw;
-    stats.kickReads.accumulated =
+    result.kickReads.accumulated =
     w * stats.kickReads.accumulated + (1.0 - w) * stats.kickReads.raw;
-    stats.kickWrites.accumulated =
+    result.kickWrites.accumulated =
     w * stats.kickWrites.accumulated + (1.0 - w) * stats.kickWrites.raw;
 
-    stats.chipReads.raw = 0;
-    stats.chipWrites.raw = 0;
-    stats.slowReads.raw = 0;
-    stats.slowWrites.raw = 0;
-    stats.fastReads.raw = 0;
-    stats.fastWrites.raw = 0;
-    stats.kickReads.raw = 0;
-    stats.kickWrites.raw = 0;
+    result.chipReads.raw = 0;
+    result.chipWrites.raw = 0;
+    result.slowReads.raw = 0;
+    result.slowWrites.raw = 0;
+    result.fastReads.raw = 0;
+    result.fastWrites.raw = 0;
+    result.kickReads.raw = 0;
+    result.kickWrites.raw = 0;
 }
 
 void
@@ -2720,6 +2739,13 @@ Memory::patch(u32 addr, u8 *buf, isize len)
     for (isize i = 0; i < len; i++) {
         patch(u32(addr + i), buf[i]);
     }
+}
+
+void 
+Memory::eofHandler()
+{
+    // Update statistics
+    (void)getStats();
 }
 
 std::vector <u32>

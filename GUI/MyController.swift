@@ -328,8 +328,8 @@ extension MyController {
         addValue(Monitors.Monitor.bitplane, bplDMA)
         
         // Memory monitors
-        let mem = amiga.mem.getStats()
-        
+        let mem = amiga.mem.stats
+
         let max = Float((HPOS_CNT_PAL * VPOS_CNT) / 2)
         let chipR = Float(mem.chipReads.accumulated) / max
         let chipW = Float(mem.chipWrites.accumulated) / max

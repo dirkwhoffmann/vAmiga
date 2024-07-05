@@ -102,7 +102,7 @@ assert((x) >= 0xE80000 && (x) <= 0xE8FFFF);
 #define WRITE_EXT_16(x,y)   W16BE(ext + ((x) & extMask), (y))
 
 
-class Memory : public SubComponent {
+class Memory : public SubComponent, public Inspectable<MemInfo, MemStats> {
 
     Descriptions descriptions = {{
 
@@ -126,10 +126,7 @@ class Memory : public SubComponent {
     };
 
     // Current configuration
-    MemoryConfig config = {};
-
-    // Current workload
-    MemoryStats stats = {};
+    MemConfig config = {};
 
 public:
 
@@ -167,7 +164,7 @@ public:
      * Each memory type is represented by three variables:
      *
      *    A pointer to the allocates memory.
-     *    A variable storing the memory size in bytes (in MemoryConfig).
+     *    A variable storing the memory size in bytes (in MemConfig).
      *    A bit mask to emulate address mirroring.
      *
      * The following invariants hold:
@@ -218,29 +215,28 @@ public:
     
 
     //
-    // Initializing
+    // Methods
     //
-    
+
 public:
     
     using SubComponent::SubComponent;
 
+    Memory& operator= (const Memory& other) {
+
+        // TODO
+        assert(false);
+
+        return *this;
+    }
+
 
     //
-    // Methods from CoreObject
+    // Methods from Serializable
     //
-    
-private:
-    
-    void _dump(Category category, std::ostream& os) const override;
-    
-    
-    //
-    // Methods from CoreComponent
-    //
-    
-private:
-    
+
+public:
+
     void _initialize() override;
 
     template <class T>
@@ -272,9 +268,18 @@ private:
     void operator << (SerWriter &worker) override;
     void _didReset(bool hard) override;
     
+
+    //
+    // Methods from CoreComponent
+    //
+
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
+
+private:
+
+    void _dump(Category category, std::ostream& os) const override;
 
 
     //
@@ -283,21 +288,22 @@ public:
 
 public:
     
-    const MemoryConfig &getConfig() const { return config; }
+    const MemConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
     i64 getOption(Option option) const override;
     void setOption(Option option, i64 value) override;
 
-    
+
     //
-    // Analyzing
+    // Methods from Inspectable
     //
-    
+
 public:
-    
-    const MemoryStats &getStats() { return stats; }
-    
-    void clearStats() { stats = { }; }
+
+    void cacheInfo(MemInfo &result) const override;
+    void cacheStats(MemStats &result) const override;
+
+
     void updateStats();
 
     
@@ -376,23 +382,10 @@ public:
     u32 romFingerprint() const;
     u32 extFingerprint() const;
 
-    /*
-    const char *romTitle();
-    const char *romVersion();
-    const char *romReleased();
-    const char *romModel();
-
-    const char *extTitle();
-    const char *extVersion();
-    const char *extReleased();
-    const char *extModel();
-    */
-
     // Checks if a certain Rom is present
     bool hasRom() const { return rom != nullptr; }
     bool hasBootRom() const { return hasRom() && config.romSize <= KB(16); }
     bool hasKickRom() const { return hasRom() && config.romSize >= KB(256); }
-    // bool hasArosRom() const;
     bool hasWom() const { return wom != nullptr; }
     bool hasExt() const { return ext != nullptr; }
 
@@ -525,7 +518,15 @@ public:
     void patch(u32 addr, u32 value);
     void patch(u32 addr, u8 *buf, isize len);
 
-    
+
+    //
+    // Perfoming periodic tasks
+    //
+
+    // Finishes up the current frame
+    void eofHandler();
+
+
     //
     // Debugging
     //

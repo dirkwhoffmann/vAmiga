@@ -205,10 +205,10 @@ class Keycap: NSButton {
 extension VirtualKeyboardController {
 
     static func kbStyle(_ parent: MyController) -> KBStyle {
-
-        // Determine if an A1000 is emulated
-        let a1000 = parent.amiga.mem.hasBootRom
         
+        // Determine if an A1000 is emulated
+        let a1000 = parent.amiga.mem.info.hasBootRom
+
         // Use a narrow keyboard for the A1000 and a wide keyboard otherwise
         return a1000 ? .narrow : .wide
     }

@@ -226,7 +226,26 @@ typedef struct
     // Specifies how to deal with unmapped memory
     UnmappedMemory unmappingType;
 }
-MemoryConfig;
+MemConfig;
+
+typedef struct
+{
+    bool hasRom;
+    bool hasWom;
+    bool hasExt;
+    bool hasBootRom;
+    bool hasKickRom;
+    bool womLock;
+
+    u32 romMask;
+    u32 womMask;
+    u32 extMask;
+    u32 chipMask;
+
+    MemorySource cpuMemSrc[256];
+    MemorySource agnusMemSrc[256];
+}
+MemInfo;
 
 typedef struct
 {
@@ -239,4 +258,4 @@ typedef struct
     struct { isize raw; double accumulated; } kickReads;
     struct { isize raw; double accumulated; } kickWrites;
 }
-MemoryStats;
+MemStats;

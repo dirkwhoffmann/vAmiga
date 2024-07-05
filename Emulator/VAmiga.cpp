@@ -195,10 +195,25 @@ DiskControllerAPI::getCachedInfo() const
 // Components (Memory)
 //
 
-const MemoryConfig &
+const MemConfig &
 MemoryAPI::getConfig() const
 {
+    assert(isUserThread());
     return mem->getConfig();
+}
+
+const MemInfo &
+MemoryAPI::getInfo() const
+{
+    assert(isUserThread());
+    return mem->getInfo();
+}
+
+const MemInfo &
+MemoryAPI::getCachedInfo() const
+{
+    assert(isUserThread());
+    return mem->getCachedInfo();
 }
 
 

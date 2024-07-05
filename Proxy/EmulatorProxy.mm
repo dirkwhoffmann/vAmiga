@@ -467,12 +467,22 @@ using namespace vamiga::moira;
     return (MemoryAPI *)obj;
 }
 
-- (MemoryConfig)config
+- (MemConfig)config
 {
     return [self mem]->mem->getConfig();
 }
 
-- (MemoryStats)getStats
+- (MemInfo)info
+{
+    return [self mem]->mem->getInfo();
+}
+
+- (MemInfo)cachedInfo
+{
+    return [self mem]->mem->getCachedInfo();
+}
+
+- (MemStats)stats
 {
     return [self mem]->mem->getStats();
 }
@@ -490,64 +500,6 @@ using namespace vamiga::moira;
 - (RomTraits)extTraits
 {
     return [self mem]->mem->getExtTraits();
-}
-
-/*
-- (BOOL)isBootRom:(u32)crc32
-{
-    return RomFile::isBootRom(crc32);
-}
-
-- (BOOL)isArosRom:(u32)crc32
-{
-    return RomFile::isArosRom(crc32);
-}
-
-- (BOOL)isDiagRom:(u32)crc32
-{
-    return RomFile::isDiagRom(crc32);
-}
-
-- (BOOL)isCommodoreRom:(u32)crc32
-{
-    return RomFile::isCommodoreRom(crc32);
-}
-
-- (BOOL)isHyperionRom:(u32)crc32
-{
-    return RomFile::isHyperionRom(crc32);
-}
-
-- (BOOL) isEmutosRom:(u32)crc32
-{
-    return RomFile::isEmutosRom(crc32);
-}
-
-- (BOOL)isPatchedRom:(u32)crc32
-{
-    return RomFile::isPatchedRom(crc32);
-}
-
-- (NSString *) romTitleOf:(u32)crc32
-{
-    const char *str = RomFile::title(crc32);
-    return str ? @(str) : nullptr;
-}
-*/
-
-- (BOOL)hasRom
-{
-    return [self mem]->mem->hasKickRom();
-}
-
-- (BOOL)hasBootRom
-{
-    return [self mem]->mem->hasBootRom();
-}
-
-- (BOOL)hasKickRom
-{
-    return [self mem]->mem->hasKickRom();
 }
 
 - (void)deleteRom
@@ -581,6 +533,7 @@ using namespace vamiga::moira;
     catch (Error &error) { [ex save:error]; }
 }
 
+/*
 - (BOOL)isRelocated
 {
     return [self mem]->mem->isRelocated();
@@ -590,37 +543,7 @@ using namespace vamiga::moira;
 {
     return [self mem]->mem->romFingerprint();
 }
-
-/*
-- (NSString *)romTitle
-{
-    const char *str = [self mem]->mem->romTitle();
-    return str ? @(str) : nullptr;
-}
-
-- (NSString *)romVersion
-{
-    const char *str = [self mem]->mem->romVersion();
-    return str ? @(str) : nullptr;
-}
-
-- (NSString *)romReleased
-{
-    const char *str = [self mem]->mem->romReleased();
-    return str ? @(str) : nullptr;
-}
-
-- (NSString *)romModel
-{
-    const char *str = [self mem]->mem->romModel();
-    return str ? @(str) : nullptr;
-}
 */
-
-- (BOOL)hasExt
-{
-    return [self mem]->mem->hasExt();
-}
 
 - (void)deleteExt
 {
@@ -658,34 +581,10 @@ using namespace vamiga::moira;
     catch (Error &error) { [ex save:error]; }
 }
 
+/*
 - (u32)extFingerprint
 {
     return [self mem]->mem->extFingerprint();
-}
-
-/*
-- (NSString *)extTitle
-{
-    const char *str = [self mem]->mem->extTitle();
-    return str ? @(str) : nullptr;
-}
-
-- (NSString *)extVersion
-{
-    const char *str = [self mem]->mem->extVersion();
-    return str ? @(str) : nullptr;
-}
-
-- (NSString *)extReleased
-{
-    const char *str = [self mem]->mem->extReleased();
-    return str ? @(str) : nullptr;
-}
-
-- (NSString *)extModel
-{
-    const char *str = [self mem]->mem->extModel();
-    return str ? @(str) : nullptr;
 }
 */
 
