@@ -127,6 +127,8 @@
 
 @interface CoreComponentProxy : Proxy { }
 
+@property (readonly) NSInteger objid;
+
 @end
 
 
@@ -445,17 +447,12 @@
 - (void)loadRom:(RomFileProxy *)proxy exception:(ExceptionWrapper *)ex;
 - (void)loadRomFromBuffer:(NSData *)buffer exception:(ExceptionWrapper *)ex;
 - (void)loadRomFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
-// @property (readonly) BOOL isRelocated;
-// @property (readonly) u32 romFingerprint;
 
-// - (BOOL)hasExt;
 - (void)deleteExt;
 - (BOOL)isExt:(NSURL *)url;
 - (void)loadExt:(ExtendedRomFileProxy *)proxy exception:(ExceptionWrapper *)ex;
 - (void)loadExtFromBuffer:(NSData *)buffer exception:(ExceptionWrapper *)ex;
 - (void)loadExtFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
-// @property (readonly) u32 extFingerprint;
-@property (readonly) NSInteger extStart;
 
 - (void)saveRom:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)saveWom:(NSURL *)url exception:(ExceptionWrapper *)ex;
@@ -473,16 +470,13 @@
 
 @interface AgnusProxy : CoreComponentProxy { }
 
-@property (readonly) NSInteger chipRamLimit;
 @property (readonly) AgnusInfo info;
 @property (readonly) AgnusInfo cachedInfo;
+@property (readonly) AgnusStats stats;
+@property (readonly) AgnusTraits traits;
+
 - (EventSlotInfo)cachedSlotInfo:(NSInteger)slot;
-@property (readonly) BOOL isOCS;
-@property (readonly) BOOL isECS;
-@property (readonly) BOOL isPAL;
-@property (readonly) BOOL isNTSC;
 @property (readonly) NSInteger frameCount;
-- (AgnusStats)getStats;
 
 @end
 
@@ -703,7 +697,7 @@
 @property (readonly) DiskControllerInfo info;
 @property (readonly) NSInteger selectedDrive;
 @property (readonly) DriveState state;
-@property (readonly, getter=isSpinning) BOOL spinning;
+@property (readonly) BOOL spinning;
 
 @end
 
@@ -714,6 +708,10 @@
 
 @interface FloppyDriveProxy : CoreComponentProxy { }
 
+@property (readonly) FloppyDriveInfo info;
+@property (readonly) FloppyDriveInfo cachedInfo;
+
+/*
 @property (readonly) NSInteger nr;
 @property (readonly) BOOL isConnected;
 @property (readonly) NSInteger currentCyl;
@@ -725,14 +723,13 @@
 @property (readonly) BOOL hasProtectedDisk;
 @property (readonly) BOOL hasUnmodifiedDisk;
 @property (readonly) BOOL hasUnprotectedDisk;
+*/
 
 - (void)setModificationFlag:(BOOL)value;
 - (void)setProtectionFlag:(BOOL)value;
 - (void)markDiskAsModified;
 - (void)markDiskAsUnmodified;
 - (void)toggleWriteProtection;
-
-@property (readonly) FloppyDriveInfo info;
 
 - (BOOL)isInsertable:(Diameter)type density:(Density)density;
 - (void)eject;

@@ -576,7 +576,7 @@ class Inspector: DialogController {
 
     @IBOutlet weak var evTableView: EventTableView!
 
-    // Cached state of all Amiga components
+    // Cached states of all Amiga components
     var cpuInfo: CPUInfo!
     var ciaInfo: CIAInfo!
     var agnusInfo: AgnusInfo!
@@ -585,6 +585,7 @@ class Inspector: DialogController {
     var deniseInfo: DeniseInfo!
     var spriteInfo: SpriteInfo!
     var paulaInfo: PaulaInfo!
+    var memInfo: MemInfo!
     var audioInfo0: StateMachineInfo!
     var audioInfo1: StateMachineInfo!
     var audioInfo2: StateMachineInfo!
@@ -594,7 +595,6 @@ class Inspector: DialogController {
     var port2Info: ControlPortInfo!
     var serInfo: SerialPortInfo!
     var uartInfo: UARTInfo!
-    // var eventInfo: EventInfo!
     var isRunning = true
 
     // Returns the number of the currently inspected sprite

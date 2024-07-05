@@ -27,11 +27,17 @@ extension Inspector {
         static let auto = NSColor(r: 0xFF, g: 0x66, b: 0xB2, a: 0xFF)
     }
 
+    private func cacheMem() {
+
+        memInfo = amiga.paused ? amiga.mem.info : amiga.mem.cachedInfo
+    }
+
     var accessor: Accessor {
         return memBankMap.selectedTag() == 0 ? .CPU : .AGNUS
     }
     
-    func memSrc(bank: Int) -> MemorySource {        
+    func memSrc(bank: Int) -> MemorySource {  
+
         return parent.amiga.mem.memSrc(accessor, addr: bank << 16)
     }
     
@@ -138,6 +144,8 @@ extension Inspector {
 
     func refreshMemory(count: Int = 0, full: Bool = false) {
 
+        cacheMem()
+        
         if full { refreshMemoryLayout() }
 
         memTableView.refresh(count: count, full: full)

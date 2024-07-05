@@ -108,9 +108,16 @@ FloppyDriveConfig;
 
 typedef struct
 {
+    isize nr;
     DriveHead head;
+    bool isConnected;
     bool hasDisk;
+    bool hasModifiedDisk;
+    bool hasUnmodifiedDisk;
+    bool hasProtectedDisk;
+    bool hasUnprotectedDisk;
     bool motor;
+    bool writing;
 }
 FloppyDriveInfo;
 

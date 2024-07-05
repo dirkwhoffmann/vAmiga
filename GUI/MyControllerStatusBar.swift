@@ -36,9 +36,10 @@ extension MyController {
         for n in 0...3 where drv[n] != nil {
             
             let dfn = amiga.df(n)!
-            
+            let info = dfn.info
+
             refreshStatusBar(drive: n, led: dfn.ledIcon)
-            refreshStatusBar(drive: n, cylinder: dfn.currentCyl)
+            refreshStatusBar(drive: n, cylinder: info.head.cylinder)
             refreshStatusBar(drive: n, icon: dfn.templateIcon, toolTip: dfn.toolTip)
         }
         
@@ -140,10 +141,10 @@ extension MyController {
         var nr = 0
 
         // Update slot assignments for Df0 - Df3
-        if amiga.df0.isConnected { drv[0] = nr; nr += 1 }
-        if amiga.df1.isConnected { drv[1] = nr; nr += 1 }
-        if amiga.df2.isConnected { drv[2] = nr; nr += 1 }
-        if amiga.df3.isConnected { drv[3] = nr; nr += 1 }
+        if amiga.df0.info.isConnected { drv[0] = nr; nr += 1 }
+        if amiga.df1.info.isConnected { drv[1] = nr; nr += 1 }
+        if amiga.df2.info.isConnected { drv[2] = nr; nr += 1 }
+        if amiga.df3.info.isConnected { drv[3] = nr; nr += 1 }
 
         // Update slot assignments for Hd0 - Hd3
         if amiga.hd0.isConnected, nr < 4 { drv[4] = nr; nr += 1 }

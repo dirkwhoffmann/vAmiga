@@ -86,18 +86,18 @@ extension MyController: NSMenuItemValidation {
             #selector(MyController.exportFloppyDiskAction(_:)),
             #selector(MyController.inspectFloppyDiskAction(_:)),
             #selector(MyController.inspectDfnVolumeAction(_:)):
-            return dfn.hasDisk
+            return dfn.info.hasDisk
 
         case #selector(MyController.exportRecentDiskDummyAction(_:)):
-            return amiga.df(item)!.hasDisk
+            return dfn.info.hasDisk
 
         case #selector(MyController.exportRecentDiskAction(_:)):
             return validateURLlist(myAppDelegate.exportedFloppyDisks[driveNr],
                                    image: smallDisk)
             
         case #selector(MyController.writeProtectAction(_:)):
-            item.state = dfn.hasProtectedDisk ? .on : .off
-            return dfn.hasDisk
+            item.state = dfn.info.hasProtectedDisk ? .on : .off
+            return dfn.info.hasDisk
 
             // Hd<n> menu
         case #selector(MyController.attachRecentHdrAction(_:)):
@@ -621,7 +621,7 @@ extension MyController: NSMenuItemValidation {
         if proceedWithUnsavedFloppyDisk(drive: drive) {
             
             drive.eject()
-            myAppDelegate.clearRecentlyExportedDiskURLs(df: drive.nr)
+            myAppDelegate.clearRecentlyExportedDiskURLs(df: drive.info.nr)
         }
     }
     

@@ -81,6 +81,12 @@ AgnusAPI::getCachedInfo() const
     return agnus->getCachedInfo();
 }
 
+AgnusTraits
+AgnusAPI::getTraits() const
+{
+    return agnus->getTraits();
+}
+
 
 //
 // Components (CIA)

@@ -66,7 +66,7 @@ class DropZone: Layer {
 
         if !enabled[zone] {
             return type == .HDF ? hdDisabled : dfDisabled
-        } else if amiga.df(zone)!.hasDisk {
+        } else if amiga.df(zone)!.info.hasDisk {
             return type == .HDF ? hdInUse : dfInUse
         } else {
             return type == .HDF ? hdEmpty : dfEmpty
@@ -88,10 +88,10 @@ class DropZone: Layer {
         switch type {
         
         case .ADF, .EADF, .IMG, .ST, .DMS, .EXE, .DIR:
-            enabled = [ amiga.df0.isConnected,
-                        amiga.df1.isConnected,
-                        amiga.df2.isConnected,
-                        amiga.df3.isConnected ]
+            enabled = [ amiga.df0.info.isConnected,
+                        amiga.df1.info.isConnected,
+                        amiga.df2.info.isConnected,
+                        amiga.df3.info.isConnected ]
 
         case .HDF:
             enabled = [ true, true, true, true ]

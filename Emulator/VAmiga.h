@@ -89,6 +89,10 @@ struct AgnusAPI : API {
      */
     const AgnusInfo &getInfo() const;
     const AgnusInfo &getCachedInfo() const;
+
+    /** @brief  Provides details about the currently selected chip revision.
+     */
+    AgnusTraits getTraits() const;
 };
 
 struct BlitterAPI : API {

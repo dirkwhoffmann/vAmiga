@@ -252,6 +252,7 @@ extension ConfigurationController {
     func refreshMemoryTab() {
 
         let poweredOff = amiga.poweredOff
+        let traits = amiga.agnus.traits
 
         // Memory
         memChipRamPopup.selectItem(withTag: config.chipRam)
@@ -272,13 +273,13 @@ extension ConfigurationController {
         // Chipset features
         compSlowRamDelay.state = config.slowRamDelay ? .on : .off
         compSlowRamMirror.state = config.slowRamMirror ? .on : .off
-        compSlowRamMirror.isEnabled = amiga.agnus.isECS
+        compSlowRamMirror.isEnabled = traits.isECS
 
         // Warning
-        let badAgnus = amiga.agnus.chipRamLimit < config.chipRam
+        let badAgnus = traits.chipRamLimit < config.chipRam
         if badAgnus {
             memWarnInfo1.stringValue = "Chip Ram is not fully usable."
-            memWarnInfo2.stringValue = "The selected Agnus revision is limited to address \(amiga.agnus.chipRamLimit) KB."
+            memWarnInfo2.stringValue = "The selected Agnus revision is limited to address \(traits.chipRamLimit) KB."
         }
         memWarnImage.isHidden = !badAgnus
         memWarnInfo1.isHidden = !badAgnus

@@ -34,7 +34,7 @@ extension Canvas {
     // Returns the largest visibile texture area (excluding HBLANK and VBLANK)
     var largestVisible: CGRect {
 
-        let pal = amiga.agnus.isPAL
+        let pal = amiga.agnus.traits.isPAL
         
         let x1 = 4 * Int(TPP) * HBLANK_CNT
         let x2 = 4 * Int(TPP) * HPOS_CNT_PAL

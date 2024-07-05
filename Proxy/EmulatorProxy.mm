@@ -109,6 +109,11 @@ using namespace vamiga::moira;
     return (CoreComponent *)obj;
 }
 
+-(NSInteger)objid
+{
+    return [self component]->objid;
+}
+
 @end
 
 //
@@ -533,18 +538,6 @@ using namespace vamiga::moira;
     catch (Error &error) { [ex save:error]; }
 }
 
-/*
-- (BOOL)isRelocated
-{
-    return [self mem]->mem->isRelocated();
-}
-
-- (u32)romFingerprint
-{
-    return [self mem]->mem->romFingerprint();
-}
-*/
-
 - (void)deleteExt
 {
     [self mem]->mem->deleteExt();
@@ -579,18 +572,6 @@ using namespace vamiga::moira;
 {
     try { return [self mem]->mem->loadExt([url fileSystemRepresentation]); }
     catch (Error &error) { [ex save:error]; }
-}
-
-/*
-- (u32)extFingerprint
-{
-    return [self mem]->mem->extFingerprint();
-}
-*/
-
-- (NSInteger)extStart
-{
-    return [self mem]->mem->getOption(OPT_MEM_EXT_START);
 }
 
 - (void)saveRom:(NSURL *)url exception:(ExceptionWrapper *)ex
@@ -647,11 +628,6 @@ using namespace vamiga::moira;
     return (AgnusAPI *)obj;
 }
 
-- (NSInteger)chipRamLimit
-{
-    return [self agnus]->agnus->chipRamLimit();
-}
-
 - (AgnusInfo)info
 {
     return [self agnus]->agnus->getInfo();
@@ -662,39 +638,24 @@ using namespace vamiga::moira;
     return [self agnus]->agnus->getCachedInfo();
 }
 
+- (AgnusStats)stats
+{
+    return [self agnus]->agnus->getStats();
+}
+
+- (AgnusTraits)traits
+{
+    return [self agnus]->agnus->getTraits();
+}
+
 - (EventSlotInfo)cachedSlotInfo:(NSInteger)slot
 {
     return [self agnus]->agnus->getCachedInfo().slotInfo[slot];
 }
 
-- (BOOL)isOCS
-{
-    return [self agnus]->agnus->isOCS();
-}
-
-- (BOOL)isECS
-{
-    return [self agnus]->agnus->isECS();
-}
-
-- (BOOL)isPAL
-{
-    return [self agnus]->agnus->isPAL();
-}
-
-- (BOOL)isNTSC
-{
-    return [self agnus]->agnus->isNTSC();
-}
-
 - (NSInteger)frameCount
 {
     return [self agnus]->agnus->pos.frame;
-}
-
-- (AgnusStats)getStats
-{
-    return [self agnus]->agnus->getStats();
 }
 
 @end
@@ -1261,7 +1222,7 @@ using namespace vamiga::moira;
     return [self dc]->diskController->getState();
 }
 
-- (BOOL)isSpinning
+- (BOOL)spinning
 {
     return [self dc]->diskController->spinning();
 }
@@ -1280,6 +1241,7 @@ using namespace vamiga::moira;
     return (FloppyDriveAPI *)obj;
 }
 
+/*
 - (NSInteger)nr
 {
     return [self drive]->drive->objid;
@@ -1329,6 +1291,7 @@ using namespace vamiga::moira;
 {
     return [self drive]->drive->hasUnprotectedDisk();
 }
+*/
 
 - (void)setModificationFlag:(BOOL)value
 {
@@ -1358,6 +1321,11 @@ using namespace vamiga::moira;
 - (FloppyDriveInfo)info
 {
     return [self drive]->drive->getInfo();
+}
+
+- (FloppyDriveInfo)cachedInfo
+{
+    return [self drive]->drive->getCachedInfo();
 }
 
 - (BOOL)isInsertable:(Diameter)type density:(Density)density

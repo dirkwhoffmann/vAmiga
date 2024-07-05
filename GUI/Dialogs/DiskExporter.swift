@@ -176,8 +176,8 @@ class DiskExporter: DialogController {
             
         case Format.adf, Format.ext, Format.img, Format.ima:
             
-            let wp = dfn!.hasProtectedDisk
-            
+            let wp = dfn!.info.hasProtectedDisk
+
             icon.image =
             adf?.icon(protected: wp) ??
             img?.icon(protected: wp) ??
@@ -372,7 +372,7 @@ class DiskExporter: DialogController {
             }
             
             dfn!.markDiskAsUnmodified()
-            myAppDelegate.noteNewRecentlyExportedDiskURL(url, df: dfn!.nr)
+            myAppDelegate.noteNewRecentlyExportedDiskURL(url, df: dfn!.info.nr)
             
             hide()
 

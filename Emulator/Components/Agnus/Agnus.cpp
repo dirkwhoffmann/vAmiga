@@ -131,6 +131,22 @@ Agnus::setVideoFormat(VideoFormat newFormat)
     msgQueue.put(MSG_VIDEO_FORMAT, newFormat);
 }
 
+AgnusTraits 
+Agnus::getTraits() const
+{
+    return AgnusTraits {
+
+        .isOCS = isOCS(),
+        .isECS = isECS(),
+        .isPAL = isPAL(),
+        .isNTSC = isNTSC(),
+        .idBits = idBits(),
+        .chipRamLimit = chipRamLimit(),
+        .vStrobeLine = vStrobeLine(),
+        .ddfMask = ddfMask()
+    };
+}
+
 bool
 Agnus::isOCS() const
 {

@@ -160,9 +160,16 @@ FloppyDrive::cacheInfo(FloppyDriveInfo &info) const
 {
     {   SYNCHRONIZED
         
+        info.nr = objid;
         info.head = head;
+        info.isConnected = isConnected();
         info.hasDisk = hasDisk();
+        info.hasModifiedDisk = hasModifiedDisk();
+        info.hasUnmodifiedDisk = hasUnmodifiedDisk();
+        info.hasProtectedDisk = hasProtectedDisk();
+        info.hasUnprotectedDisk = hasUnprotectedDisk();
         info.motor = getMotor();
+        info.writing = isWriting();
     }
 }
 

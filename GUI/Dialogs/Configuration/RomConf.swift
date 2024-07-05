@@ -11,6 +11,7 @@ extension ConfigurationController {
     
     func refreshRomTab() {
 
+        let config = amiga.mem.config
         let romTraits = amiga.mem.romTraits
         let extTraits = amiga.mem.extTraits
 
@@ -80,7 +81,7 @@ extension ConfigurationController {
         extSubtitle.stringValue = String(cString: extTraits.revision)
         extSubsubtitle.stringValue = String(cString: extTraits.released)
         extModel.stringValue = String(cString: extTraits.model)
-        extMapAddr.selectItem(withTag: amiga.mem.extStart)
+        extMapAddr.selectItem(withTag: Int(config.extStart))
 
         // Hide some controls
         romDeleteButton.isHidden = !hasRom
@@ -100,11 +101,8 @@ extension ConfigurationController {
         if isRelocatedRom {
             romExpImage.image = NSImage(named: "NSCaution")
             romExpImage.isHidden = false
-            // romExpInfo1.stringValue = "The selected Kickstart Rom is a relocation image."
-            // romExpInfo1.stringValue = "The selected Kickstart Rom won't work in the Rom slot."
             romExpInfo1.stringValue = "The selected Kickstart Rom is a relocation image."
             romExpInfo1.isHidden = false
-            // romExpInfo2.stringValue = "It won't work in the Rom slot and needs to be loaded from disk."
             romExpInfo2.stringValue = "It won't work in the Rom slot."
             romExpInfo2.isHidden = false
         } else {

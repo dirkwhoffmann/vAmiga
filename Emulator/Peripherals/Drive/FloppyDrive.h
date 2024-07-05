@@ -238,7 +238,6 @@ public:
 public:
     
     // Returns the result of the latest inspection
-    // FloppyDriveInfo getInfo() const { return CoreComponent::getInfo(info); }
     void cacheInfo(FloppyDriveInfo &info) const override;
 
     // Return the identification pattern of this drive

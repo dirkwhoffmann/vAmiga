@@ -312,7 +312,7 @@ extension MyController {
         if !renderer.monitors.isVisible { return }
         
         // DMA monitors
-        let dma = amiga.agnus.getStats()
+        let dma = amiga.agnus.stats
         let copDMA = Float(dma.copperActivity) / (313 * 120)
         let bltDMA = Float(dma.blitterActivity) / (313 * 120)
         let dskDMA = Float(dma.diskActivity) / (313 * 3)

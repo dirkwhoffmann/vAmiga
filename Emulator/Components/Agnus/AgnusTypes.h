@@ -457,6 +457,20 @@ struct SprDmaStateEnum : util::Reflection<SprDmaStateEnum, SprDMAState>
 
 typedef struct
 {
+    bool isOCS;
+    bool isECS;
+    bool isPAL;
+    bool isNTSC;
+
+    u16 idBits;
+    isize chipRamLimit;
+    isize vStrobeLine;
+    u16 ddfMask;
+}
+AgnusTraits;
+
+typedef struct
+{
     AgnusRevision revision;
     bool ptrDrops;
 }
