@@ -12,6 +12,7 @@
 #include "KeyboardTypes.h"
 #include "AgnusTypes.h"
 #include "SubComponent.h"
+#include "CmdQueue.h"
 #include "RingBuffer.h"
 
 namespace vamiga {
@@ -120,7 +121,7 @@ public:
     
 public:
 
-    bool keyIsPressed(KeyCode keycode) const;
+    bool isPressed(KeyCode keycode) const;
     void pressKey(KeyCode keycode);
     void releaseKey(KeyCode keycode);
     void toggleKey(KeyCode keycode);
@@ -170,6 +171,16 @@ private:
 
     // Sends a sync pulse to the Amiga
     void sendSyncPulse();
+
+
+    //
+    // Processing commands
+    //
+
+public:
+
+    // Processes a command from the command queue
+    void processCommand(const Cmd &cmd);
 };
 
 }

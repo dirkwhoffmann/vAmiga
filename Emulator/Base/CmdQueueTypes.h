@@ -10,6 +10,8 @@
 #pragma once
 
 #include "OptionTypes.h"
+#include "JoystickTypes.h"
+#include "KeyboardTypes.h"
 
 //
 // Enumerations
@@ -59,7 +61,7 @@ enum_long(CMD_TYPE)
     CMD_WP_DISABLE_NR,          ///< Disable the n-th watchpoint
     CMD_WP_DISABLE_AT,          ///< Disable the watchpoint at an address
     CMD_WP_DISABLE_ALL,         ///< Disable all watchpoints
-
+    */
     // Keyboard
     CMD_KEY_PRESS,              ///< Press a key on the C64 keyboard
     CMD_KEY_RELEASE,            ///< Release a key on the C64 keyboard
@@ -78,7 +80,6 @@ enum_long(CMD_TYPE)
     CMD_DSK_TOGGLE_WP,          ///< Toggle write-protection
     CMD_DSK_MODIFIED,           ///< Signal that the disk has been saved
     CMD_DSK_UNMODIFIED,         ///< Signan that the disk needs saving
-     */
 
     // RetroShell
     CMD_RSH_EXECUTE,            ///< Execute a script command
@@ -134,7 +135,7 @@ struct CmdTypeEnum : util::Reflection<CmdType, CmdType> {
             case CMD_WP_DISABLE_NR:         return "WP_DISABLE_NR";
             case CMD_WP_DISABLE_AT:         return "WP_DISABLE_AT";
             case CMD_WP_DISABLE_ALL:        return "WP_DISABLE_ALL";
-
+            */
             case CMD_KEY_PRESS:             return "KEY_PRESS";
             case CMD_KEY_RELEASE:           return "KEY_RELEASE";
             case CMD_KEY_RELEASE_ALL:       return "KEY_RELEASE_ALL";
@@ -149,7 +150,6 @@ struct CmdTypeEnum : util::Reflection<CmdType, CmdType> {
             case CMD_DSK_TOGGLE_WP:         return "DSK_TOGGLE_WP";
             case CMD_DSK_MODIFIED:          return "DSK_MODIFIED";
             case CMD_DSK_UNMODIFIED:        return "DSK_UNMODIFIED";
-             */
 
             case CMD_RSH_EXECUTE:           return "RSH_EXECUTE";
 
@@ -173,10 +173,9 @@ typedef struct
 }
 ConfigCmd;
 
-/*
 typedef struct
 {
-    u8 keycode;
+    KeyCode keycode;
     double delay;
 }
 KeyCmd;
@@ -196,12 +195,7 @@ typedef struct
 }
 GamePadCmd;
 
-typedef struct
-{
-    void *tape;
-}
-TapeCmd;
-
+/*
 typedef struct
 {
     i64 cycle;
@@ -216,7 +210,6 @@ typedef struct
 ShellCmd;
 */
 
-#ifdef __cplusplus
 struct Cmd
 {
     // Header
@@ -227,27 +220,27 @@ struct Cmd
 
         struct { i64 value; i64 value2; };
         ConfigCmd config;
-        /*
         KeyCmd key;
-        CoordCmd coord;
         GamePadCmd action;
-        TapeCmd tape;
+        CoordCmd coord;
+        /*
         AlarmCmd alarm;
         ShellCmd shell;
         */
     };
 
+#ifdef __cplusplus
+
     Cmd() { }
     Cmd(CmdType type, i64 v1 = 0, i64 v2 = 0) : type(type), value(v1), value2(v2) { }
     Cmd(CmdType type, const ConfigCmd &cmd) : type(type), config(cmd) { }
-    /*
     Cmd(CmdType type, const KeyCmd &cmd) : type(type), key(cmd) { }
-    Cmd(CmdType type, const CoordCmd &cmd) : type(type), coord(cmd) { }
     Cmd(CmdType type, const GamePadCmd &cmd) : type(type), action(cmd) { }
-    Cmd(CmdType type, const TapeCmd &cmd) : type(type), tape(cmd) { }
+    Cmd(CmdType type, const CoordCmd &cmd) : type(type), coord(cmd) { }
+    /*
     Cmd(CmdType type, const AlarmCmd &cmd) : type(type), alarm(cmd) { }
     Cmd(CmdType type, const ShellCmd &cmd) : type(type), shell(cmd) { }
     */
+#endif
 };
 
-#endif

@@ -1163,29 +1163,29 @@ using namespace vamiga::moira;
     return (KeyboardAPI *)obj;
 }
 
-- (BOOL)keyIsPressed:(NSInteger)keycode
+- (BOOL)isPressed:(NSInteger)keycode
 {
-    return [self kb]->keyboard->keyIsPressed((KeyCode)keycode);
+    return [self kb]->isPressed((KeyCode)keycode);
 }
 
-- (void)pressKey:(NSInteger)keycode
+- (void)press:(NSInteger)keycode
 {
-    [self kb]->keyboard->pressKey((KeyCode)keycode);
+    [self kb]->press((KeyCode)keycode);
 }
 
-- (void)releaseKey:(NSInteger)keycode
+- (void)release:(NSInteger)keycode
 {
-    [self kb]->keyboard->releaseKey((KeyCode)keycode);
+    [self kb]->release((KeyCode)keycode);
 }
 
-- (void)toggleKey:(NSInteger)keycode
+- (void)toggle:(NSInteger)keycode
 {
-    [self kb]->keyboard->toggleKey((KeyCode)keycode);
+    [self isPressed: keycode] ? [self release: keycode] : [self press: keycode];
 }
 
-- (void)releaseAllKeys
+- (void)releaseAll
 {
-    [self kb]->keyboard->releaseAllKeys();
+    [self kb]->releaseAll();
 }
 
 @end
@@ -3160,7 +3160,6 @@ using namespace vamiga::moira;
     [self emu]->put(type, value, value2);
 }
 
-/*
 - (void)put:(CmdType)type key:(KeyCmd)cmd
 {
     [self emu]->put(type, cmd);
@@ -3175,6 +3174,5 @@ using namespace vamiga::moira;
 {
     [self emu]->put(type, cmd);
 }
-*/
 
 @end

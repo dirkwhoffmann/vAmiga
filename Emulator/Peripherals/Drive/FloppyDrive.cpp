@@ -15,6 +15,7 @@
 #include "FloppyFile.h"
 #include "MutableFileSystem.h"
 #include "MsgQueue.h"
+#include "CmdQueue.h"
 #include "OSDescriptors.h"
 
 namespace vamiga {
@@ -1085,6 +1086,21 @@ FloppyDrive::serviceDiskChangeEvent()
 
     // Remove the event
     agnus.cancel <s> ();
+}
+
+void
+FloppyDrive::processCommand(const Cmd &cmd)
+{
+
+    switch (cmd.type) {
+
+        case CMD_DSK_TOGGLE_WP:     toggleWriteProtection(); break;
+        case CMD_DSK_MODIFIED:      markDiskAsModified(); break;
+        case CMD_DSK_UNMODIFIED:    markDiskAsUnmodified(); break;
+
+        default:
+            fatalError;
+    }
 }
 
 void

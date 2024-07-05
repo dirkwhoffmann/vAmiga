@@ -241,6 +241,47 @@ PaulaAPI::getCachedInfo() const
 
 
 //
+// Peripherals (Keyboard)
+//
+
+bool
+KeyboardAPI::isPressed(KeyCode key) const
+{
+    return keyboard->isPressed(key);
+}
+
+void
+KeyboardAPI::press(KeyCode key, double delay)
+{
+    if (delay != 0) throw std::runtime_error("Not implemented yet");
+    emu->put(Cmd(CMD_KEY_PRESS, KeyCmd { .keycode = key, .delay = delay }));
+}
+
+void
+KeyboardAPI::release(KeyCode key, double delay)
+{
+    if (delay != 0) throw std::runtime_error("Not implemented yet");
+    emu->put(Cmd(CMD_KEY_RELEASE, KeyCmd { .keycode = key, .delay = delay }));
+}
+
+void
+KeyboardAPI::releaseAll()
+{
+    emu->put(Cmd(CMD_KEY_RELEASE_ALL));
+}
+
+void KeyboardAPI::autoType(const string &text)
+{
+    throw std::runtime_error("Not implemented yet");
+}
+
+void KeyboardAPI::abortAutoTyping()
+{
+    throw std::runtime_error("Not implemented yet");
+}
+
+
+//
 // Miscellaneous (Debugger)
 //
 

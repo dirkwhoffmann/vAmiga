@@ -121,7 +121,7 @@ class VirtualKeyboardController: DialogController {
         
         for keycode in 0 ... 127 {
             
-            if keyboard.keyIsPressed(keycode) {
+            if keyboard.isPressed(keycode) {
                 keyView[keycode]?.image = pressedKeyImage[keycode]
             } else {
                 keyView[keycode]?.image = keyImage[keycode]
@@ -146,13 +146,13 @@ class VirtualKeyboardController: DialogController {
     
     func pressKey(keyCode: Int) {
 
-        emu.keyboard.pressKey(keyCode)
+        emu.keyboard.press(keyCode)
         refresh()
         
         DispatchQueue.main.async {
             
             usleep(useconds_t(100000))
-            self.emu.keyboard.releaseAllKeys()
+            self.emu.keyboard.releaseAll()
             self.refresh()
         }
         
@@ -165,7 +165,7 @@ class VirtualKeyboardController: DialogController {
         
         guard let keyboard = emu.keyboard else { return }
         
-        keyboard.toggleKey(keyCode)
+        keyboard.toggle(keyCode)
         refresh()
     }
         

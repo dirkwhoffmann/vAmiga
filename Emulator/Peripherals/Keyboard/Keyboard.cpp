@@ -85,7 +85,7 @@ Keyboard::_dump(Category category, std::ostream& os) const
 }
 
 bool
-Keyboard::keyIsPressed(KeyCode keycode) const
+Keyboard::isPressed(KeyCode keycode) const
 {
     assert(keycode < 0x80);
     return keyDown[keycode];
@@ -133,7 +133,7 @@ Keyboard::releaseKey(KeyCode keycode)
 void
 Keyboard::toggleKey(KeyCode keycode)
 {
-    keyIsPressed(keycode) ? releaseKey(keycode) : pressKey(keycode);
+    isPressed(keycode) ? releaseKey(keycode) : pressKey(keycode);
 }
 
 void
@@ -324,6 +324,31 @@ Keyboard::sendSyncPulse()
         
         // In simple keyboard mode, send a whole byte
         sendKeyCode(0xFF);
+    }
+}
+
+void
+Keyboard::processCommand(const Cmd &cmd)
+{
+    if (cmd.key.delay > 0) {
+
+        /*
+        pending.insert(cpu.clock + C64::sec(cmd.key.delay),
+                       Cmd(cmd.type, KeyCmd { .keycode = cmd.key.keycode }));
+        c64.scheduleImm<SLOT_KEY>(KEY_AUTO_TYPE);
+        return;
+        */
+    }
+
+    switch (cmd.type) {
+
+        case CMD_KEY_PRESS:         pressKey(cmd.key.keycode); break;
+        case CMD_KEY_RELEASE:       releaseKey(cmd.key.keycode); break;
+        case CMD_KEY_RELEASE_ALL:   releaseAllKeys(); break;
+        case CMD_KEY_TOGGLE:        toggleKey(cmd.key.keycode); break;
+
+        default:
+            fatalError;
     }
 }
 

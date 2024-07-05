@@ -12,6 +12,7 @@
 #include "Option.h"
 #include "Amiga.h"
 #include "Aliases.h"
+#include "CmdQueue.h"
 #include <algorithm>
 
 namespace vamiga {
@@ -370,6 +371,9 @@ Emulator::update()
     Cmd cmd;
     bool cmdConfig = false;
     
+    auto dfn = [&]() -> FloppyDrive& { return *main.df[cmd.value]; };
+    auto cp = [&]() -> ControlPort& { return cmd.value ? main.controlPort2 : main.controlPort1; };
+
     shouldWarp() ? warpOn() : warpOff();
 
     while (cmdQueue.poll(cmd)) {
@@ -386,6 +390,33 @@ Emulator::update()
 
                 cmdConfig = true;
                 set(cmd.config.option, cmd.config.value, { });
+                break;
+
+            case CMD_KEY_PRESS:
+            case CMD_KEY_RELEASE:
+            case CMD_KEY_RELEASE_ALL:
+            case CMD_KEY_TOGGLE:
+
+                main.keyboard.processCommand(cmd);
+                break;
+
+            case CMD_DSK_TOGGLE_WP:
+            case CMD_DSK_MODIFIED:
+            case CMD_DSK_UNMODIFIED:
+
+                dfn().processCommand(cmd);
+                break;
+
+            case CMD_MOUSE_MOVE_ABS:
+            case CMD_MOUSE_MOVE_REL:
+
+                cp().processCommand(cmd); break;
+                break;
+
+            case CMD_MOUSE_EVENT:
+            case CMD_JOY_EVENT:
+
+                cp().processCommand(cmd); break;
                 break;
 
             case CMD_RSH_EXECUTE:

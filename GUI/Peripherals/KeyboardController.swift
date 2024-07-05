@@ -140,7 +140,7 @@ class KeyboardController: NSObject {
             if pref.disconnectJoyKeys { return }
         }
 
-        if let amigaKey = macKey.amigaKeyCode { keyboard.pressKey(amigaKey) }
+        if let amigaKey = macKey.amigaKeyCode { keyboard.press(amigaKey) }
         parent.virtualKeyboard?.refreshIfVisible()
     }
     
@@ -154,21 +154,21 @@ class KeyboardController: NSObject {
             if pref.disconnectJoyKeys { return }
         }
 
-        if let amigaKey = macKey.amigaKeyCode { keyboard.releaseKey(amigaKey) }
+        if let amigaKey = macKey.amigaKeyCode { keyboard.release(amigaKey) }
         parent.virtualKeyboard?.refreshIfVisible()
     }
 
     func keyDown(with keyCode: UInt16) {
 
         let macKey = MacKey(keyCode: keyCode)
-        if let amigaKey = macKey.amigaKeyCode { keyboard.pressKey(amigaKey) }
+        if let amigaKey = macKey.amigaKeyCode { keyboard.press(amigaKey) }
         parent.virtualKeyboard?.refreshIfVisible()
     }
 
     func keyUp(with keyCode: UInt16) {
 
         let macKey = MacKey(keyCode: keyCode)
-        if let amigaKey = macKey.amigaKeyCode { keyboard.releaseKey(amigaKey) }
+        if let amigaKey = macKey.amigaKeyCode { keyboard.release(amigaKey) }
         parent.virtualKeyboard?.refreshIfVisible()
     }
 
@@ -202,11 +202,11 @@ class KeyboardController: NSObject {
         var shift = false
 
         func pressShift() {
-            if !shift { keyboard.pressKey(MacKey.shift.amigaKeyCode!) }
+            if !shift { keyboard.press(MacKey.shift.amigaKeyCode!) }
             shift = true
         }
         func releaseShift() {
-            if shift { keyboard.releaseKey(MacKey.shift.amigaKeyCode!) }
+            if shift { keyboard.release(MacKey.shift.amigaKeyCode!) }
             shift = false
         }
 
@@ -219,8 +219,8 @@ class KeyboardController: NSObject {
                 if let amigaKeyCode = MacKey(keyCode: keyCode).amigaKeyCode {
                     
                     releaseShift()
-                    keyboard.pressKey(amigaKeyCode)
-                    keyboard.releaseKey(amigaKeyCode)
+                    keyboard.press(amigaKeyCode)
+                    keyboard.release(amigaKeyCode)
                     continue
                 }
             }
@@ -229,8 +229,8 @@ class KeyboardController: NSObject {
                 if let amigaKeyCode = MacKey(keyCode: keyCode).amigaKeyCode {
                     
                     pressShift()
-                    keyboard.pressKey(amigaKeyCode)
-                    keyboard.releaseKey(amigaKeyCode)
+                    keyboard.press(amigaKeyCode)
+                    keyboard.release(amigaKeyCode)
                     continue
                 }
             }

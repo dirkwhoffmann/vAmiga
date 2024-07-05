@@ -17,6 +17,7 @@
 #include "FloppyDisk.h"
 #include "DiskController.h"
 #include "Thread.h"
+#include "CmdQueueTypes.h"
 
 namespace vamiga {
 
@@ -388,7 +389,7 @@ public:
     
     
     //
-    // Serving events
+    // Processing events and commands
     //
     
 public:
@@ -396,7 +397,10 @@ public:
     // Services an event in the disk change slot
     template <EventSlot s> void serviceDiskChangeEvent();
     
-    
+    // Processes a command from the command queue
+    void processCommand(const Cmd &cmd);
+
+
     //
     // Delegation methods
     //

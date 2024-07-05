@@ -318,6 +318,48 @@ struct KeyboardAPI : API {
      */
     // const KeyboardInfo &getInfo() const;
     // const KeyboardInfo &getCachedInfo() const;
+
+    /** @brief  Checks if a key is currently pressed.
+     *  @param  key     The key to check.
+     */
+    bool isPressed(KeyCode key) const;
+
+    /** @brief  Presses a key
+     *  @param  key     The key to press.
+     *  @param  delay   An optional delay in seconds.
+     *
+     *  If no delay is specified, the function will immediately modify the
+     *  C64's keyboard matrix. Otherwise, it will ask the event scheduler
+     *  to modify the matrix with the specified delay.
+     *
+     *  @note If you wish to press multiple keys, make sure to let some time
+     *  pass between two key presses. You need to give the C64 time to scan the
+     *  keyboard matrix before another key can be pressed.
+     */
+    void press(KeyCode key, double delay = 0.0);
+
+    /** @brief  Releases a key
+     *  @param  key     The key to release.
+     *  @param  delay   An optional delay in seconds.
+     *
+     *  If no delay is specified, the function will immediately modify the
+     *  C64's keyboard matrix. Otherwise, it will ask the event scheduler
+     *  to modify the matrix with the specified delay.
+     */
+    void release(KeyCode key, double delay = 0.0);
+
+    /** @brief  Releases all currently pressed keys
+     */
+    void releaseAll();
+
+    /** @brief  Uses the auto-typing daemon to type a string.
+     *  @param  text    The text to type.
+     */
+    void autoType(const string &text);
+
+    /** @brief  Aborts any active auto-typing activity.
+     */
+    void abortAutoTyping();
 };
 
 struct MouseAPI : API {
@@ -1080,11 +1122,10 @@ public:
     void put(const Cmd &cmd);
     void put(CmdType type, i64 payload = 0, i64 payload2 = 0) { put(Cmd(type, payload, payload2)); }
     void put(CmdType type, ConfigCmd payload)  { put(Cmd(type, payload)); }
-    /*
     void put(CmdType type, KeyCmd payload)  { put(Cmd(type, payload)); }
-    void put(CmdType type, CoordCmd payload)  { put(Cmd(type, payload)); }
     void put(CmdType type, GamePadCmd payload)  { put(Cmd(type, payload)); }
-    void put(CmdType type, TapeCmd payload)  { put(Cmd(type, payload)); }
+    void put(CmdType type, CoordCmd payload)  { put(Cmd(type, payload)); }
+    /*
     void put(CmdType type, AlarmCmd payload)  { put(Cmd(type, payload)); }
     */
     /// @}

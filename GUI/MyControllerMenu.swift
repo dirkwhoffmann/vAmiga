@@ -488,7 +488,7 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func clearKeyboardMatrixAction(_ sender: Any!) {
         
-        emu.keyboard.releaseAllKeys()
+        emu.keyboard.releaseAll()
     }
     
     @IBAction func delKeyAction(_ sender: Any!) {
@@ -505,9 +505,9 @@ extension MyController: NSMenuItemValidation {
         
         DispatchQueue.global().async {
             
-            self.emu.keyboard.pressKey(keyCode)
+            self.emu.keyboard.press(keyCode)
             usleep(useconds_t(20000))
-            self.emu.keyboard.releaseKey(keyCode)
+            self.emu.keyboard.release(keyCode)
             completion?()
         }
     }
