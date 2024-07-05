@@ -11,25 +11,28 @@ extension ConfigurationController {
     
     func refreshRomTab() {
 
+        let romTraits = amiga.mem.romTraits
+        let extTraits = amiga.mem.extTraits
+
         let poweredOff      = amiga.poweredOff
 
-        let romCrc          = amiga.mem.romFingerprint
-        let hasRom          = romCrc != CRC32_MISSING
-        let hasArosRom      = amiga.mem.isArosRom(romCrc)
-        let hasDiagRom      = amiga.mem.isDiagRom(romCrc)
-        let hasCommodoreRom = amiga.mem.isCommodoreRom(romCrc)
-        let hasHyperionRom  = amiga.mem.isHyperionRom(romCrc)
-        let hasEmutosRom    = amiga.mem.isEmutosRom(romCrc)
-        let hasPatchedRom   = amiga.mem.isPatchedRom(romCrc)
-        let isRelocatedRom  = amiga.mem.isRelocated
+        // let romCrc          = amiga.mem.romFingerprint
+        let hasRom          = romTraits.crc != 0
+        let hasArosRom      = romTraits.vendor == .AROS
+        let hasDiagRom      = romTraits.vendor == .DIAG
+        let hasCommodoreRom = romTraits.vendor == .COMMODORE
+        let hasHyperionRom  = romTraits.vendor == .HYPERION
+        let hasEmutosRom    = romTraits.vendor == .EMUTOS
+        let hasPatchedRom   = romTraits.patched
+        let isRelocatedRom  = romTraits.relocated
 
-        let extCrc          = amiga.mem.extFingerprint
-        let hasExt          = extCrc != CRC32_MISSING
-        let hasArosExt      = amiga.mem.isArosRom(extCrc)
-        let hasDiagExt      = amiga.mem.isDiagRom(extCrc)
-        let hasCommodoreExt = amiga.mem.isCommodoreRom(extCrc)
-        let hasHyperionExt  = amiga.mem.isHyperionRom(extCrc)
-        let hasPatchedExt   = amiga.mem.isPatchedRom(extCrc)
+        // let extCrc          = amiga.mem.extFingerprint
+        let hasExt          = extTraits.crc != 0
+        let hasArosExt      = extTraits.vendor == .AROS
+        let hasDiagExt      = extTraits.vendor == .DIAG
+        let hasCommodoreExt = extTraits.vendor == .COMMODORE
+        let hasHyperionExt  = extTraits.vendor == .HYPERION
+        let hasPatchedExt   = extTraits.patched
 
         let romMissing      = NSImage(named: "rom_missing")
         let romOrig         = NSImage(named: "rom_original")
@@ -68,16 +71,16 @@ extension ConfigurationController {
         hasExt          ? romUnknown : romMissing
 
         // Titles and subtitles
-        romTitle.stringValue = amiga.mem.romTitle
-        romSubtitle.stringValue = amiga.mem.romVersion
-        romSubsubtitle.stringValue = amiga.mem.romReleased
-        romModel.stringValue = amiga.mem.romModel
-        
-        extTitle.stringValue = amiga.mem.extTitle
-        extSubtitle.stringValue = amiga.mem.extVersion
-        extSubsubtitle.stringValue = amiga.mem.extReleased
+        romTitle.stringValue = String(cString: romTraits.title)
+        romSubtitle.stringValue = String(cString: romTraits.revision)
+        romSubsubtitle.stringValue = String(cString: romTraits.released)
+        romModel.stringValue = String(cString: romTraits.model)
+
+        extTitle.stringValue = String(cString: extTraits.title)
+        extSubtitle.stringValue = String(cString: extTraits.revision)
+        extSubsubtitle.stringValue = String(cString: extTraits.released)
+        extModel.stringValue = String(cString: extTraits.model)
         extMapAddr.selectItem(withTag: amiga.mem.extStart)
-        extModel.stringValue = amiga.mem.extModel
 
         // Hide some controls
         romDeleteButton.isHidden = !hasRom

@@ -366,10 +366,17 @@ private:
 
 public:
 
+    // Queries ROM information
+    static RomTraits getRomTraits(u32 crc);
+    RomTraits getRomTraits() const;
+    RomTraits getWomTraits() const;
+    RomTraits getExtTraits() const;
+
     // Computes a CRC-32 checksum
     u32 romFingerprint() const;
     u32 extFingerprint() const;
 
+    /*
     const char *romTitle();
     const char *romVersion();
     const char *romReleased();
@@ -379,12 +386,13 @@ public:
     const char *extVersion();
     const char *extReleased();
     const char *extModel();
+    */
 
     // Checks if a certain Rom is present
     bool hasRom() const { return rom != nullptr; }
     bool hasBootRom() const { return hasRom() && config.romSize <= KB(16); }
     bool hasKickRom() const { return hasRom() && config.romSize >= KB(256); }
-    bool hasArosRom() const;
+    // bool hasArosRom() const;
     bool hasWom() const { return wom != nullptr; }
     bool hasExt() const { return ext != nullptr; }
 

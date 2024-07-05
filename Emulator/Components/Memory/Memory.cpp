@@ -21,6 +21,7 @@
 #include "RomFile.h"
 #include "RTC.h"
 #include "ZorroManager.h"
+#include "RomDatabase.h"
 
 namespace vamiga {
 
@@ -34,28 +35,38 @@ Memory::_dump(Category category, std::ostream& os) const
 
     if (category == Category::State) {
 
+        auto romTraits = getRomTraits();
+        auto womTraits = getWomTraits();
+        auto extTraits = getExtTraits();
+
         auto romcrc = util::crc32(rom, config.romSize);
         auto womcrc = util::crc32(wom, config.womSize);
         auto extcrc = util::crc32(ext, config.extSize);
+        /*
         auto chipcrc = util::crc32(chip, config.chipSize);
         auto slowcrc = util::crc32(slow, config.slowSize);
         auto fastcrc = util::crc32(fast, config.fastSize);
+        */
+
+        assert(romTraits.crc == romcrc);
+        assert(womTraits.crc == womcrc);
+        assert(extTraits.crc == extcrc);
 
         os << util::tab("Rom");
-        os << util::hex(romcrc) << " (CRC32)  ";
-        os << RomFile::title(romcrc) << " " << RomFile::version(romcrc) << std::endl;
+        os << util::hex(romTraits.crc) << " (CRC32)  ";
+        os << romTraits.title << " " << romTraits.released << std::endl;
         os << util::tab("Wom");
-        os << util::hex(womcrc) << " (CRC32)  ";
-        os << RomFile::title(womcrc) << " " << RomFile::version(womcrc) << std::endl;
+        os << util::hex(womTraits.crc) << " (CRC32)  ";
+        os << womTraits.title << " " << womTraits.released << std::endl;
         os << util::tab("Extended Rom");
-        os << util::hex(extcrc) << " (CRC32)  ";
-        os << RomFile::title(extcrc) << " " << RomFile::version(extcrc) << std::endl;
+        os << util::hex(extTraits.crc) << " (CRC32)  ";
+        os << extTraits.title << " " << extTraits.released << std::endl;
         os << util::tab("Chip Ram");
-        os << util::hex(chipcrc) << " (CRC32)  " << std::endl;
+        os << util::hex(util::crc32(chip, config.chipSize)) << " (CRC32)  " << std::endl;
         os << util::tab("Slow Ram");
-        os << util::hex(slowcrc) << " (CRC32)  " << std::endl;
+        os << util::hex(util::crc32(slow, config.slowSize)) << " (CRC32)  " << std::endl;
         os << util::tab("Fast Ram");
-        os << util::hex(fastcrc) << " (CRC32)  " << std::endl;
+        os << util::hex(util::crc32(fast, config.fastSize)) << " (CRC32)  " << std::endl;
 
         os << std::endl;
         os << util::tab("Data bus");
@@ -384,16 +395,21 @@ Memory::operator << (SerWriter &worker)
 void
 Memory::_isReady() const
 {    
-    if (!hasRom() || FORCE_ROM_MISSING) {
+    auto traits = getRomTraits();
+
+    bool hasRom = traits.crc != 0;
+    bool hasAros = traits.vendor == ROM_VENDOR_AROS;
+
+    if (!hasRom || FORCE_ROM_MISSING) {
         throw Error(ERROR_ROM_MISSING);
     }
-    if (!hasChipRam() || FORCE_CHIP_RAM_MISSING) {
+    if (!chip || FORCE_CHIP_RAM_MISSING) {
         throw Error(ERROR_CHIP_RAM_MISSING);
     }
-    if ((hasArosRom() && !hasExt()) || FORCE_AROS_NO_EXTROM) {
+    if ((hasAros && !ext) || FORCE_AROS_NO_EXTROM) {
         throw Error(ERROR_AROS_NO_EXTROM);
     }
-    if ((hasArosRom() && ramSize() < MB(1)) || FORCE_AROS_RAM_LIMIT) {
+    if ((hasAros && ramSize() < MB(1)) || FORCE_AROS_RAM_LIMIT) {
         throw Error(ERROR_AROS_RAM_LIMIT);
     }
 }
@@ -529,6 +545,41 @@ Memory::fillRamWithInitPattern()
     }
 }
 
+RomTraits
+Memory::getRomTraits(u32 crc)
+{
+    // Crawl through the Rom database
+    for (auto &traits : roms) if (traits.crc == crc) return traits;
+
+    return RomTraits {
+
+        .crc = crc,
+        .title = "Unknown ROM",
+        .revision = "",
+        .released = "",
+        .model = "",
+        .vendor = ROM_VENDOR_OTHER
+    };
+}
+
+RomTraits 
+Memory::getRomTraits() const
+{
+    return getRomTraits(util::crc32(rom, config.romSize));
+}
+
+RomTraits
+Memory::getWomTraits() const
+{
+    return getRomTraits(util::crc32(wom, config.womSize));
+}
+
+RomTraits
+Memory::getExtTraits() const
+{
+    return getRomTraits(util::crc32(ext, config.extSize));
+}
+
 u32
 Memory::romFingerprint() const
 {
@@ -541,6 +592,7 @@ Memory::extFingerprint() const
     return util::crc32(ext, config.extSize);
 }
 
+/*
 const char *
 Memory::romTitle()
 {
@@ -594,6 +646,7 @@ Memory::hasArosRom() const
 {
     return RomFile::isArosRom(romFingerprint());
 }
+*/
 
 void
 Memory::loadRom(RomFile &file)

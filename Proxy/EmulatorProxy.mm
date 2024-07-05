@@ -477,6 +477,22 @@ using namespace vamiga::moira;
     return [self mem]->mem->getStats();
 }
 
+- (RomTraits)romTraits
+{
+    return [self mem]->mem->getRomTraits();
+}
+
+- (RomTraits)womTraits
+{
+    return [self mem]->mem->getWomTraits();
+}
+
+- (RomTraits)extTraits
+{
+    return [self mem]->mem->getExtTraits();
+}
+
+/*
 - (BOOL)isBootRom:(u32)crc32
 {
     return RomFile::isBootRom(crc32);
@@ -517,6 +533,7 @@ using namespace vamiga::moira;
     const char *str = RomFile::title(crc32);
     return str ? @(str) : nullptr;
 }
+*/
 
 - (BOOL)hasRom
 {
@@ -574,6 +591,7 @@ using namespace vamiga::moira;
     return [self mem]->mem->romFingerprint();
 }
 
+/*
 - (NSString *)romTitle
 {
     const char *str = [self mem]->mem->romTitle();
@@ -597,6 +615,7 @@ using namespace vamiga::moira;
     const char *str = [self mem]->mem->romModel();
     return str ? @(str) : nullptr;
 }
+*/
 
 - (BOOL)hasExt
 {
@@ -644,6 +663,7 @@ using namespace vamiga::moira;
     return [self mem]->mem->extFingerprint();
 }
 
+/*
 - (NSString *)extTitle
 {
     const char *str = [self mem]->mem->extTitle();
@@ -667,6 +687,7 @@ using namespace vamiga::moira;
     const char *str = [self mem]->mem->extModel();
     return str ? @(str) : nullptr;
 }
+*/
 
 - (NSInteger)extStart
 {
