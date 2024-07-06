@@ -32,7 +32,7 @@ struct SamplingMethodEnum : util::Reflection<SamplingMethodEnum, SamplingMethod>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "SMP"; }
-    static const char *key(SamplingMethod value)
+    static const char *_key(long value)
     {
         switch (value) {
                 

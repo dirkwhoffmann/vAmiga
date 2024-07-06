@@ -187,7 +187,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "OPT"; }
-    static const char *key(Option value)
+    static const char *_key(long value)
     {
         switch (value) {
 

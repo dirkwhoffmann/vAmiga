@@ -39,7 +39,7 @@ struct CPURevisionEnum : util::Reflection<CPURevisionEnum, CPURevision>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "CPU"; }
-    static const char *key(CPURevision value)
+    static const char *_key(long value)
     {
         switch (value) {
 
@@ -74,7 +74,7 @@ struct DasmRevisionEnum : util::Reflection<DasmRevisionEnum, DasmRevision>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "DASM"; }
-    static const char *key(DasmRevision value)
+    static const char *_key(long value)
     {
         switch (value) {
 
@@ -111,7 +111,7 @@ struct DasmSyntaxEnum : util::Reflection<DasmSyntaxEnum, DasmSyntax>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "DASM_SYNTAX"; }
-    static const char *key(CPURevision value)
+    static const char *_key(long value)
     {
         switch (value) {
 

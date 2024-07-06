@@ -36,7 +36,7 @@ struct PaletteEnum : util::Reflection<PaletteEnum, Palette>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "PALETTE"; }
-    static const char *key(Palette value)
+    static const char *_key(long value)
     {
         switch (value) {
                 

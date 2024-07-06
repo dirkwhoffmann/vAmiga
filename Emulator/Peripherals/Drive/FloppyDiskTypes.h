@@ -32,7 +32,7 @@ struct DiameterEnum : util::Reflection<DiameterEnum, Diameter>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return ""; }
-    static const char *key(Diameter value)
+    static const char *_key(long value)
     {
         switch (value) {
                 
@@ -60,13 +60,40 @@ struct DensityEnum : util::Reflection<DensityEnum, Density>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "DENSITY"; }
-    static const char *key(Density value)
+    static const char *_key(long value)
     {
         switch (value) {
                 
             case DENSITY_SD:     return "SD";
             case DENSITY_DD:     return "DD";
             case DENSITY_HD:     return "HD";
+        }
+        return "???";
+    }
+};
+#endif
+
+enum_long(FLAG_DISK)
+{
+    FLAG_PROTECTED  = 1,
+    FLAG_MODIFIED   = 2
+};
+typedef FLAG_DISK DiskFlags;
+
+#ifdef __cplusplus
+struct DiskFlagsEnum : util::Reflection<DiskFlagsEnum, DiskFlags>
+{
+    static constexpr long minVal = FLAG_PROTECTED;
+    static constexpr long maxVal = FLAG_MODIFIED;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
+
+    static const char *prefix() { return "FLAG"; }
+    static const char *_key(long value)
+    {
+        switch (value) {
+
+            case FLAG_PROTECTED:    return "PROTECTED";
+            case FLAG_MODIFIED:     return "MODIFIED";
         }
         return "???";
     }

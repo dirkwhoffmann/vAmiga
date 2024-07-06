@@ -46,7 +46,7 @@ struct MemorySourceEnum : util::Reflection<MemorySourceEnum, MemorySource>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "MEM"; }
-    static const char *key(MemorySource value)
+    static const char *_key(long value)
     {
         switch (value) {
                 
@@ -88,7 +88,7 @@ struct AccessorEnum : util::Reflection<AccessorEnum, Accessor>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "ACCESSOR"; }
-    static const char *key(Accessor value)
+    static const char *_key(long value)
     {
         switch (value) {
                 
@@ -117,7 +117,7 @@ struct BankMapEnum : util::Reflection<BankMapEnum, BankMap>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "BANK_MAP"; }
-    static const char *key(BankMap value)
+    static const char *_key(long value)
     {
         switch (value) {
                 
@@ -147,7 +147,7 @@ struct RamInitPatternEnum : util::Reflection<RamInitPatternEnum, RamInitPattern>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "RAM_INIT"; }
-    static const char *key(RamInitPattern value)
+    static const char *_key(long value)
     {
         switch (value) {
                 
@@ -176,7 +176,7 @@ struct UnmappedMemoryEnum : util::Reflection<UnmappedMemoryEnum, UnmappedMemory>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "UNMAPPED"; }
-    static const char *key(UnmappedMemory value)
+    static const char *_key(long value)
     {
         switch (value) {
                 

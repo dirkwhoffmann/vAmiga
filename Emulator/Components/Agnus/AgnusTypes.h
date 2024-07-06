@@ -57,7 +57,7 @@ struct AgnusRevisionEnum : util::Reflection<AgnusRevisionEnum, AgnusRevision>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "AGNUS"; }
-    static const char *key(AgnusRevision value)
+    static const char *_key(long value)
     {
         switch (value) {
                 
@@ -129,7 +129,7 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "SLOT"; }
-    static const char *key(EventSlot value)
+    static const char *_key(long value)
     {
         switch (value) {
                 
@@ -438,7 +438,7 @@ struct SprDmaStateEnum : util::Reflection<SprDmaStateEnum, SprDMAState>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "SPR_DMA"; }
-    static const char *key(SprDMAState value)
+    static const char *_key(long value)
     {
         switch (value) {
                 

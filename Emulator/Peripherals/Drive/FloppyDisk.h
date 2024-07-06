@@ -81,14 +81,16 @@ private:
         i32 cylinder[84][2];
         i32 track[168];
     } length;
-    
-    
+
+    // Disk state
+    DiskFlags flags = 0;
+
     // Indicates if this disk is write protected
-    bool writeProtected = false;
-    
+    [[deprecated]] bool writeProtected = false;
+
     // Indicates if the disk has been written to
-    bool modified = false;
-    
+    [[deprecated]] bool modified = false;
+
     // Checksum of this disk if it was created from an ADF file, 0 otherwise
     u64 fnv = 0;
     
@@ -139,10 +141,10 @@ private:
         << diameter
         << density
         << data.raw
-        << writeProtected
-        << modified;
-
-    }; //  SERIALIZERS(serialize);
+        << flags;
+        // << writeProtected
+        // << modified;
+    };
 
     //
     // Performing sanity checks

@@ -31,7 +31,7 @@ struct FrameTypeEnum : util::Reflection<FrameTypeEnum, FrameType>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "FRAME"; }
-    static const char *key(FrameType value)
+    static const char *_key(long value)
     {
         switch (value) {
 

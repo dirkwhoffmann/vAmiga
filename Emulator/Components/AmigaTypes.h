@@ -32,7 +32,7 @@ struct VideoFormatEnum : util::Reflection<VideoFormatEnum, VideoFormat>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return ""; }
-    static const char *key(VideoFormat value)
+    static const char *_key(long value)
     {
         switch (value) {
 
@@ -60,7 +60,7 @@ struct WarpModeEnum : util::Reflection<WarpModeEnum, WarpMode>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "WARP"; }
-    static const char *key(WarpMode value)
+    static const char *_key(long value)
     {
         switch (value) {
 
@@ -90,7 +90,7 @@ struct ConfigSchemeEnum : util::Reflection<ConfigSchemeEnum, ConfigScheme>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "CONFIG"; }
-    static const char *key(ConfigScheme value)
+    static const char *_key(long value)
     {
         switch (value) {
                 
@@ -129,7 +129,7 @@ struct InspectionTargetEnum : util::Reflection<InspectionTargetEnum, InspectionT
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "INSPECTION"; }
-    static const char *key(InspectionTarget value)
+    static const char *_key(long value)
     {
         switch (value) {
                 
@@ -217,7 +217,7 @@ struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "REG"; }
-    static const char *key(ConfigScheme value)
+    static const char *_key(long value)
     {
         static const char *name[] = {
 

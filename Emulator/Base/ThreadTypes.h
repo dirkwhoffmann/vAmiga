@@ -36,7 +36,7 @@ struct ExecStateEnum : util::Reflection<ExecStateEnum, ExecState>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "STATE"; }
-    static const char *key(ExecState value)
+    static const char *_key(long value)
     {
         switch (value) {
 

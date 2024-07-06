@@ -42,7 +42,7 @@ struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "FILETYPE"; }
-    static const char *key(FileType value)
+    static const char *_key(long value)
     {
         switch (value) {
                 

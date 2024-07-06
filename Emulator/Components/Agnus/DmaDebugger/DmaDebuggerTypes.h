@@ -29,7 +29,7 @@ struct DmaDisplayModeEnum : util::Reflection<DmaDisplayModeEnum, DmaDisplayMode>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "DMA_DISPLAY_MODE"; }
-    static const char *key(DmaDisplayMode value)
+    static const char *_key(long value)
     {
         switch (value) {
                 
@@ -65,7 +65,7 @@ struct DmaChannelEnum : util::Reflection<DmaChannelEnum, DmaChannel>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "DMA_CHANNEL"; }
-    static const char *key(DmaDisplayMode value)
+    static const char *_key(long value)
     {
         switch (value) {
                 

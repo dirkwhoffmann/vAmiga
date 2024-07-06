@@ -41,27 +41,28 @@ template <class T, typename E> struct Reflection {
     static constexpr bool bitField = T::minVal == 1;
 
     // Returns the key as a C string
-    static string key(long value) {
+    static const char *key(long value) {
 
-        string result;
+        static string result;
 
+        result = "";
         if constexpr (bitField) {
 
             for (isize i = T::minVal; i <= T::maxVal; i *= 2) {
-                if (value & i) result += (result.empty() ? "" : " | ") + T::key((E)value);
+                if (value & i) result += (result.empty() ? "" : " | ") + string(T::_key((E)i));
             }
 
         } else {
             
-            result = T::key((E)value);
+            result = string(T::_key((E)value));
         }
 
-        return result;
+        return result.c_str();
     }
 
     // Returns the key without the section prefix (if any)
     // TODO: Integrate into key()
-    static string plainkey(isize nr) {
+    static const char *plainkey(isize nr) {
 
         auto *p = T::key((E)nr);
         for (isize i = 0; p[i]; i++) if (p[i] == '.') return p + i + 1;

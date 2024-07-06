@@ -34,7 +34,7 @@ struct SerialPortDeviceEnum : util::Reflection<SerialPortDeviceEnum, SerialPortD
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "SPD"; }
-    static const char *key(SerialPortDevice value)
+    static const char *_key(long value)
     {
         switch (value) {
 

@@ -34,7 +34,7 @@ struct KeyboardStateEnum : util::Reflection<KeyboardStateEnum, KeyboardState>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "KB"; }
-    static const char *key(KeyboardState value)
+    static const char *_key(long value)
     {
         switch (value) {
                 

@@ -33,7 +33,7 @@ struct DeniseRevisionEnum : util::Reflection<DeniseRevisionEnum, DeniseRevision>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "DENISE"; }
-    static const char *key(DeniseRevision value)
+    static const char *_key(long value)
     {
         switch (value) {
                 
@@ -54,14 +54,14 @@ enum_long(RESOLUTION)
 typedef RESOLUTION Resolution;
 
 #ifdef __cplusplus
-struct ResolutionEnum : util::Reflection<ResolutionEnum, ResolutionEnum>
+struct ResolutionEnum : util::Reflection<ResolutionEnum, Resolution>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = SHRES;
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return ""; }
-    static const char *key(Resolution value)
+    static const char *_key(long value)
     {
         switch (value) {
 

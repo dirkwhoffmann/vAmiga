@@ -33,7 +33,7 @@ struct CIARevisionEnum : util::Reflection<CIARevisionEnum, CIARevision>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "CIA"; }
-    static const char *key(CIARevision value)
+    static const char *_key(long value)
     {
         switch (value) {
                 
@@ -74,7 +74,7 @@ struct CIARegEnum : util::Reflection<CIARegEnum, CIAReg>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "CIAREG"; }
-    static const char *key(CIAReg value)
+    static const char *_key(long value)
     {
         switch (value) {
                 

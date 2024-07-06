@@ -35,7 +35,7 @@ struct FSVolumeTypeEnum : util::Reflection<FSVolumeTypeEnum, FSVolumeType>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "FS"; }
-    static const char *key(FSVolumeType value)
+    static const char *_key(long value)
     {
         switch (value) {
                 
@@ -100,7 +100,7 @@ struct FSBlockTypeEnum : util::Reflection<FSBlockTypeEnum, FSBlockType>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "FS"; }
-    static const char *key(FSBlockType value)
+    static const char *_key(long value)
     {
         switch (value) {
                 
@@ -173,7 +173,7 @@ struct FSItemTypeEnum : util::Reflection<FSItemTypeEnum, FSItemType>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "FS"; }
-    static const char *key(FSItemType value)
+    static const char *_key(long value)
     {
         switch (value) {
                 

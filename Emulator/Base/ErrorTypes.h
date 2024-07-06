@@ -206,7 +206,7 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "ERROR"; }
-    static const char *key(ErrorCode value)
+    static const char *_key(long value)
     {
         switch (value) {
                 

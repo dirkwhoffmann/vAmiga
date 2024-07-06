@@ -48,7 +48,7 @@ struct GamePadActionEnum : util::Reflection<GamePadActionEnum, GamePadAction>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return nullptr; }
-    static const char *key(GamePadAction value)
+    static const char *_key(long value)
     {
         switch (value) {
                 

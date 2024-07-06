@@ -35,7 +35,7 @@ struct SrvStateEnum : util::Reflection<SrvStateEnum, SrvState>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "SRV"; }
-    static const char *key(SrvState value)
+    static const char *_key(long value)
     {
         switch (value) {
                 
@@ -65,7 +65,7 @@ struct ServerProtocolEnum : util::Reflection<ServerProtocolEnum, ServerProtocol>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "SRVPROT"; }
-    static const char *key(SrvState value)
+    static const char *_key(long value)
     {
         switch (value) {
                 

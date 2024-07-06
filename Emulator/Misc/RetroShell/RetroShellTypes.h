@@ -41,7 +41,7 @@ struct RetroShellKeyEnum : util::Reflection<RetroShellKeyEnum, RetroShellKey>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "RSKEY"; }
-    static const char *key(RetroShellKey value)
+    static const char *_key(long value)
     {
         switch (value) {
                 

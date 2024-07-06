@@ -52,7 +52,7 @@ struct BusOwnerEnum : util::Reflection<BusOwnerEnum, BusOwner>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "BUS"; }
-    static const char *key(BusOwner value)
+    static const char *_key(long value)
     {
         switch (value) {
                 

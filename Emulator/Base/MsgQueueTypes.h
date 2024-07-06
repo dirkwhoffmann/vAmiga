@@ -133,7 +133,7 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "MSG"; }
-    static const char *key(MsgType value)
+    static const char *_key(long value)
     {
         switch (value) {
                 

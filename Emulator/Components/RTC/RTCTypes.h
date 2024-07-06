@@ -32,7 +32,7 @@ struct RTCRevisionEnum : util::Reflection<RTCRevisionEnum, RTCRevision>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "RTC"; }
-    static const char *key(RTCRevision value)
+    static const char *_key(long value)
     {
         switch (value) {
                 

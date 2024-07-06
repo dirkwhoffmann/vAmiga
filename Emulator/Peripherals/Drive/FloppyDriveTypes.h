@@ -31,7 +31,7 @@ struct FloppyDriveTypeEnum : util::Reflection<FloppyDriveTypeEnum, FloppyDriveTy
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "DRIVE"; }
-    static const char *key(FloppyDriveType value)
+    static const char *_key(long value)
     {
         switch (value) {
                 
@@ -59,7 +59,7 @@ struct DriveMechanicsEnum : util::Reflection<DriveMechanicsEnum, DriveMechanics>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "DMECHANICS"; }
-    static const char *key(DriveMechanics value)
+    static const char *_key(long value)
     {
         switch (value) {
 

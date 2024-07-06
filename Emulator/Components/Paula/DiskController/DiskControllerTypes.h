@@ -40,7 +40,7 @@ struct DriveStateEnum : util::Reflection<DriveStateEnum, DriveState>
         return "DRIVE_DMA";
     }
     
-    static const char *key(DriveState value)
+    static const char *_key(long value)
     {
         switch (value) {
                 

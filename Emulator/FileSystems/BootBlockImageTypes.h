@@ -32,7 +32,7 @@ struct BootBlockTypeEnum : util::Reflection<BootBlockTypeEnum, BootBlockType>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "BB"; }
-    static const char *key(BootBlockType value)
+    static const char *_key(long value)
     {
         switch (value) {
                 
@@ -63,7 +63,7 @@ struct BootBlockIdEnum : util::Reflection<BootBlockIdEnum, BootBlockId>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "BB"; }
-    static const char *key(BootBlockId value)
+    static const char *_key(long value)
     {
         switch (value) {
                 

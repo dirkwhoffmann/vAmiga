@@ -83,7 +83,7 @@ struct IoCommandEnum : util::Reflection<IoCommandEnum, IoCommand>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "CMD"; }
-    static const char *key(IoCommand value)
+    static const char *_key(long value)
     {
         switch (value) {
 
@@ -136,7 +136,7 @@ struct HdcStateEnum : util::Reflection<HdcStateEnum, HdcState>
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "HDC"; }
-    static const char *key(IoCommand value)
+    static const char *_key(long value)
     {
         switch (value) {
 
