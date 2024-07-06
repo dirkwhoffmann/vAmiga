@@ -590,7 +590,7 @@ class Inspector: DialogController {
     var audioInfo1: StateMachineInfo!
     var audioInfo2: StateMachineInfo!
     var audioInfo3: StateMachineInfo!
-    var diskInfo: DiskControllerInfo!
+    var dcInfo: DiskControllerInfo!
     var port1Info: ControlPortInfo!
     var port2Info: ControlPortInfo!
     var serInfo: SerialPortInfo!

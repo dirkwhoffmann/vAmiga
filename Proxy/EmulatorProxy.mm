@@ -1202,7 +1202,7 @@ using namespace vamiga::moira;
     return (DiskControllerAPI *)obj;
 }
 
-- (DiskControllerConfig)getConfig
+- (DiskControllerConfig)config
 {
     return [self dc]->diskController->getConfig();
 }
@@ -1212,19 +1212,9 @@ using namespace vamiga::moira;
     return [self dc]->diskController->getInfo();
 }
 
-- (NSInteger)selectedDrive
+- (DiskControllerInfo)cachedInfo
 {
-    return [self dc]->diskController->getSelected();
-}
-
-- (DriveState)state
-{
-    return [self dc]->diskController->getState();
-}
-
-- (BOOL)spinning
-{
-    return [self dc]->diskController->spinning();
+    return [self dc]->diskController->getCachedInfo();
 }
 
 @end
@@ -1241,57 +1231,10 @@ using namespace vamiga::moira;
     return (FloppyDriveAPI *)obj;
 }
 
-/*
-- (NSInteger)nr
+- (FloppyDriveConfig)config
 {
-    return [self drive]->drive->objid;
+    return [self drive]->getConfig();
 }
-
-- (BOOL)isConnected
-{
-    return [self drive]->drive->isConnected();
-}
-
-- (NSInteger)currentCyl
-{
-    return [self drive]->drive->currentCyl();
-}
-
-- (NSInteger)currentHead
-{
-    return [self drive]->drive->currentHead();
-}
-
-- (NSInteger)currentOffset
-{
-    return [self drive]->drive->currentOffset();
-}
-
-- (BOOL)hasDisk
-{
-    return [self drive]->drive->hasDisk();
-}
-
-- (BOOL)hasModifiedDisk
-{
-    return [self drive]->drive->hasModifiedDisk();
-}
-
-- (BOOL)hasProtectedDisk
-{
-    return [self drive]->drive->hasProtectedDisk();
-}
-
-- (BOOL)hasUnmodifiedDisk
-{
-    return [self drive]->drive->hasUnmodifiedDisk();
-}
-
-- (BOOL)hasUnprotectedDisk
-{
-    return [self drive]->drive->hasUnprotectedDisk();
-}
-*/
 
 - (void)setModificationFlag:(BOOL)value
 {

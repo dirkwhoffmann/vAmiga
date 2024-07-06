@@ -15,17 +15,37 @@
 #include <functional>
 #include <map>
 
+/* The purpose of the Reflection interface is to make the internal names of
+ * an enumeration type available inside the application. I.e., it provides
+ * several functions for converting enum numbers to strings and vice versa.
+ *
+ * Two general types on enumerations are distinguished:
+ *
+ * - Standard enumerations
+ *
+ *   The enumeration members are numbered 0, 1, 2, etc. Each member of the
+ *   enumeration is treated as a stand-alone option.
+ *
+ * - Bit field enumerations
+ *
+ *   The enumeration members are numbered 1, 2, 4, etc. Each member of the
+ *   enumeration is treated as flag of a combined bit field.
+ */
 namespace util {
 
 #define assert_enum(e,v) assert(e##Enum::isValid(v))
 
 template <class T, typename E> struct Reflection {
 
-    // Returns the shortened key as a C string
+    // Determines if this enum represents a bit field
+    static constexpr bool isBitField() { return T::minVal == 1; }
+
+    // Returns the key as a C string
     static const char *key(long nr) { return T::key((E)nr); }
 
     // Returns the key without the section prefix (if any)
     static const char *plainkey(isize nr) {
+    
         auto *p = key(nr);
         for (isize i = 0; p[i]; i++) if (p[i] == '.') return p + i + 1;
         return p;

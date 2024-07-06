@@ -691,11 +691,9 @@
 
 @interface DiskControllerProxy : CoreComponentProxy { }
 
-- (DiskControllerConfig)getConfig;
+@property (readonly) DiskControllerConfig config;
 @property (readonly) DiskControllerInfo info;
-@property (readonly) NSInteger selectedDrive;
-@property (readonly) DriveState state;
-@property (readonly) BOOL spinning;
+@property (readonly) DiskControllerInfo cachedInfo;
 
 @end
 
@@ -706,6 +704,7 @@
 
 @interface FloppyDriveProxy : CoreComponentProxy { }
 
+@property (readonly) FloppyDriveConfig config;
 @property (readonly) FloppyDriveInfo info;
 @property (readonly) FloppyDriveInfo cachedInfo;
 

@@ -22,7 +22,7 @@ extension Inspector {
         audioInfo1 = emu.paula.audioInfo1
         audioInfo2 = emu.paula.audioInfo2
         audioInfo3 = emu.paula.audioInfo3
-        diskInfo = emu.diskController.info
+        dcInfo = emu.diskController.info
     }
 
     func refreshPaula(count: Int = 0, full: Bool = false) {
@@ -97,7 +97,7 @@ extension Inspector {
         paulaReq0.state  = (intreq & 0b0000000000000001 != 0) ? .on : .off
 
         // Disk controller
-        switch diskInfo.state {
+        switch dcInfo.state {
         case .OFF:
             dskStateText.stringValue = "Idle"
         case .WAIT:
@@ -110,9 +110,9 @@ extension Inspector {
             dskStateText.stringValue = "UNKNOWN"
         }
 
-        let selectedDrive = diskInfo.selectedDrive
-        let dsklen = Int(diskInfo.dsklen)
-        let dskbytr = Int(diskInfo.dskbytr)
+        let selectedDrive = dcInfo.selectedDrive
+        let dsklen = Int(dcInfo.dsklen)
+        let dskbytr = Int(dcInfo.dskbytr)
         let adkcon = Int(paulaInfo.adkcon)
 
         dskSelectDf0.state = (selectedDrive == 0) ? .on : .off
@@ -139,11 +139,11 @@ extension Inspector {
         dskMsbsync.state  = (adkcon & 0x0200 != 0) ? .on : .off
         dskFast.state     = (adkcon & 0x0100 != 0) ? .on : .off
 
-        let dsksync = Int(diskInfo.dsksync)
+        let dsksync = Int(dcInfo.dsksync)
         dskDsksync.integerValue = dsksync
         dskDsksync.textColor = (dsksync == 0x4489) ? .textColor : .warningColor
         
-        switch diskInfo.fifoCount {
+        switch dcInfo.fifoCount {
         case 0: dskFifo0.stringValue = ""; fallthrough
         case 1: dskFifo1.stringValue = ""; fallthrough
         case 2: dskFifo2.stringValue = ""; fallthrough
@@ -153,13 +153,13 @@ extension Inspector {
         default: break
         }
 
-        switch diskInfo.fifoCount {
-        case 6: dskFifo5.stringValue = String(format: "%02X", diskInfo.fifo.5); fallthrough
-        case 5: dskFifo4.stringValue = String(format: "%02X", diskInfo.fifo.4); fallthrough
-        case 4: dskFifo3.stringValue = String(format: "%02X", diskInfo.fifo.3); fallthrough
-        case 3: dskFifo2.stringValue = String(format: "%02X", diskInfo.fifo.2); fallthrough
-        case 2: dskFifo1.stringValue = String(format: "%02X", diskInfo.fifo.1); fallthrough
-        case 1: dskFifo0.stringValue = String(format: "%02X", diskInfo.fifo.0); fallthrough
+        switch dcInfo.fifoCount {
+        case 6: dskFifo5.stringValue = String(format: "%02X", dcInfo.fifo.5); fallthrough
+        case 5: dskFifo4.stringValue = String(format: "%02X", dcInfo.fifo.4); fallthrough
+        case 4: dskFifo3.stringValue = String(format: "%02X", dcInfo.fifo.3); fallthrough
+        case 3: dskFifo2.stringValue = String(format: "%02X", dcInfo.fifo.2); fallthrough
+        case 2: dskFifo1.stringValue = String(format: "%02X", dcInfo.fifo.1); fallthrough
+        case 1: dskFifo0.stringValue = String(format: "%02X", dcInfo.fifo.0); fallthrough
         default: break
         }
 

@@ -282,6 +282,29 @@ void KeyboardAPI::abortAutoTyping()
 
 
 //
+// Peripherals (FloppyDrive)
+//
+
+const FloppyDriveConfig &
+FloppyDriveAPI::getConfig() const
+{
+    return drive->getConfig();
+}
+
+const FloppyDriveInfo &
+FloppyDriveAPI::getInfo() const
+{
+    return drive->getInfo();
+}
+
+const FloppyDriveInfo &
+FloppyDriveAPI::getCachedInfo() const
+{
+    return drive->getCachedInfo();
+}
+
+
+//
 // Miscellaneous (Debugger)
 //
 
