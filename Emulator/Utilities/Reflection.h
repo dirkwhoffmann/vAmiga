@@ -41,9 +41,26 @@ template <class T, typename E> struct Reflection {
     static constexpr bool bitField = T::minVal == 1;
 
     // Returns the key as a C string
-    static string key(long nr) { return T::key((E)nr); }
+    static string key(long value) {
+
+        string result;
+
+        if constexpr (bitField) {
+
+            for (isize i = T::minVal; i <= T::maxVal; i *= 2) {
+                if (value & i) result += (result.empty() ? "" : " | ") + T::key((E)value);
+            }
+
+        } else {
+            
+            result = T::key((E)value);
+        }
+
+        return result;
+    }
 
     // Returns the key without the section prefix (if any)
+    // TODO: Integrate into key()
     static string plainkey(isize nr) {
 
         auto *p = T::key((E)nr);
@@ -52,12 +69,12 @@ template <class T, typename E> struct Reflection {
     }
     
     // Collects all key / value pairs
-    static std::map <string, long> pairs() {
-        
+    static std::map <string,long> pairs(std::function<bool(E)> filter = [](E){ return true; }) {
+
         std::map <string,long> result;
-                
+
         for (isize i = T::minVal; i <= T::maxVal; i++) {
-            if (T::isValid(i)) result.insert(std::make_pair(key(i), i));
+            if (T::isValid(i) && filter(E(i))) result.insert(std::make_pair(key(i), i));
         }
 
         return result;
@@ -68,13 +85,8 @@ template <class T, typename E> struct Reflection {
 
         string result;
 
-        for (auto i = T::minVal; i <= T::maxVal; i++) {
-
-            if (T::isValid(i) && filter(E(i))) {
-
-                if (result != "") result += delim;
-                result += (key(i));
-            }
+        for (const auto &pair : pairs(filter)) {
+            result += (result.empty() ? "" : delim) + pair.first;
         }
 
         return result;
