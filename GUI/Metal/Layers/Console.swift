@@ -120,19 +120,19 @@ class Console: Layer {
 
         switch macKey.keyCode {
 
-        case kVK_ANSI_A where ctrl: amiga.retroShell.pressHome()
-        case kVK_ANSI_E where ctrl: amiga.retroShell.pressEnd()
-        case kVK_ANSI_K where ctrl: amiga.retroShell.pressCut()
-        case kVK_UpArrow: amiga.retroShell.pressUp()
-        case kVK_DownArrow: amiga.retroShell.pressDown()
-        case kVK_LeftArrow: amiga.retroShell.pressLeft()
-        case kVK_RightArrow: amiga.retroShell.pressRight()
-        case kVK_Home: amiga.retroShell.pressHome()
-        case kVK_End: amiga.retroShell.pressEnd()
-        case kVK_Delete: amiga.retroShell.pressBackspace()
-        case kVK_ForwardDelete: amiga.retroShell.pressDelete()
-        case kVK_Return: shift ? amiga.retroShell.pressShiftReturn() : amiga.retroShell.pressReturn()
-        case kVK_Tab: amiga.retroShell.pressTab()
+        case kVK_ANSI_A where ctrl: amiga.retroShell.pressSpecialKey(.HOME)
+        case kVK_ANSI_E where ctrl: amiga.retroShell.pressSpecialKey(.END)
+        case kVK_ANSI_K where ctrl: amiga.retroShell.pressSpecialKey(.CUT)
+        case kVK_UpArrow: amiga.retroShell.pressSpecialKey(.UP)
+        case kVK_DownArrow: amiga.retroShell.pressSpecialKey(.DOWN)
+        case kVK_LeftArrow: amiga.retroShell.pressSpecialKey(.LEFT)
+        case kVK_RightArrow: amiga.retroShell.pressSpecialKey(.RIGHT)
+        case kVK_Home: amiga.retroShell.pressSpecialKey(.HOME)
+        case kVK_End: amiga.retroShell.pressSpecialKey(.END)
+        case kVK_Delete: amiga.retroShell.pressSpecialKey(.BACKSPACE)
+        case kVK_ForwardDelete: amiga.retroShell.pressSpecialKey(.DEL)
+        case kVK_Return: amiga.retroShell.pressSpecialKey(.RETURN, shift: shift)
+        case kVK_Tab: amiga.retroShell.pressSpecialKey(.TAB)
         case kVK_Escape: close()
         
         default:

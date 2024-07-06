@@ -833,19 +833,9 @@
 @property (readonly) NSInteger cursorRel;
 
 - (NSString *)getText;
-- (void)pressUp;
-- (void)pressDown;
-- (void)pressLeft;
-- (void)pressRight;
-- (void)pressHome;
-- (void)pressEnd;
-- (void)pressBackspace;
-- (void)pressDelete;
-- (void)pressCut;
-- (void)pressReturn;
-- (void)pressShiftReturn;
-- (void)pressTab;
 - (void)pressKey:(char)c;
+- (void)pressSpecialKey:(RetroShellKey)key;
+- (void)pressSpecialKey:(RetroShellKey)key shift:(BOOL)shift;
 
 @end
 
