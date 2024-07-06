@@ -71,10 +71,6 @@ FloppyDisk::_dump(Category category, std::ostream& os) const
         os << dec(numHeads()) << std::endl;
         os << tab("numTracks()");
         os << dec(numTracks()) << std::endl;
-        os << tab("Write protected");
-        os << bol(writeProtected) << std::endl;
-        os << tab("Modified");
-        os << bol(modified) << std::endl;
 
         isize oldlen = length.track[0];
         for (isize i = 0, oldi = 0; i <= numTracks(); i++) {
@@ -195,7 +191,7 @@ FloppyDisk::writeByte(Track t, isize offset, u8 value)
     assert(offset < length.track[t]);
 
     data.track[t][offset] = value;
-    modified = true;
+    setModified(true);
 }
 
 void
@@ -206,15 +202,15 @@ FloppyDisk::writeByte(Cylinder c, Head h, isize offset, u8 value)
     assert(offset < length.cylinder[c][h]);
 
     data.cylinder[c][h][offset] = value;
-    modified = true;
+    setModified(true);
 }
 
 void
 FloppyDisk::clearDisk()
 {
     fnv = 0;
-    modified = bool(FORCE_DISK_MODIFIED);
-    
+    setModified(FORCE_DISK_MODIFIED);
+
     // Initialize with random data
     srand(0);
     for (isize i = 0; i < isizeof(data.raw); i++) {

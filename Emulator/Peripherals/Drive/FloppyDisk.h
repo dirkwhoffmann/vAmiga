@@ -175,12 +175,16 @@ public:
     isize numHeads() const { return 2; }
     isize numTracks() const { return diameter == INCH_525 ? 84 : 168; }
     
-    bool isWriteProtected() const { return writeProtected; }
-    void setWriteProtection(bool value) { writeProtected = value; }
-    
-    bool isModified() const { return modified; }
-    void setModified(bool value) { modified = value; }
-        
+    bool isWriteProtected() const { return flags & FLAG_PROTECTED; }
+    void setWriteProtection(bool value) { value ? flags |= FLAG_PROTECTED : flags &= ~FLAG_PROTECTED; }
+
+    bool isModified() const { return flags & FLAG_MODIFIED; }
+    void setModified(bool value) { value ? flags |= FLAG_MODIFIED : flags &= ~FLAG_MODIFIED; }
+
+    void setFlag(DiskFlags mask, bool value) { value ? flags |= mask : flags &= ~mask; }
+    void setFlag(DiskFlags flag) { setFlag(flag, true); }
+    void clearFlag(DiskFlags flag) { setFlag(flag, false); }
+
     
     //
     // Reading and writing
