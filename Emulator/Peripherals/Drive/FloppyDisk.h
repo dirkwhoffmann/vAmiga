@@ -10,6 +10,7 @@
 #pragma once
 
 #include "FloppyDiskTypes.h"
+#include "DriveTypes.h"
 #include "CoreComponent.h"
 
 namespace vamiga {
@@ -181,6 +182,7 @@ public:
     bool isModified() const { return flags & FLAG_MODIFIED; }
     void setModified(bool value) { value ? flags |= FLAG_MODIFIED : flags &= ~FLAG_MODIFIED; }
 
+    bool getFlag(DiskFlags mask) { return (flags & mask) == mask; }
     void setFlag(DiskFlags mask, bool value) { value ? flags |= mask : flags &= ~mask; }
     void setFlag(DiskFlags flag) { setFlag(flag, true); }
     void clearFlag(DiskFlags flag) { setFlag(flag, false); }

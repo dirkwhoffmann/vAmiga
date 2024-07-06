@@ -303,6 +303,53 @@ FloppyDriveAPI::getCachedInfo() const
     return drive->getCachedInfo();
 }
 
+bool
+FloppyDriveAPI::getFlag(DiskFlags mask)
+{
+    return drive->getFlag(mask);
+}
+
+void
+FloppyDriveAPI::setFlag(DiskFlags mask, bool value)
+{
+    drive->setFlag(mask, value);
+}
+
+
+//
+// Peripherals (HardDrive)
+//
+
+const HardDriveConfig &
+HardDriveAPI::getConfig() const
+{
+    return drive->getConfig();
+}
+
+const HardDriveInfo &
+HardDriveAPI::getInfo() const
+{
+    return drive->getInfo();
+}
+
+const HardDriveInfo &
+HardDriveAPI::getCachedInfo() const
+{
+    return drive->getCachedInfo();
+}
+
+bool 
+HardDriveAPI::getFlag(DiskFlags mask)
+{
+    return drive->getFlag(mask);
+}
+
+void
+HardDriveAPI::setFlag(DiskFlags mask, bool value)
+{
+    drive->setFlag(mask, value);
+}
+
 
 //
 // Miscellaneous (Debugger)

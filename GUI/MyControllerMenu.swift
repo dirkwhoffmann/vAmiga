@@ -584,9 +584,8 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func writeProtectAction(_ sender: NSMenuItem!) {
         
-        emu.suspend()
-        emu.df(sender)!.toggleWriteProtection()
-        emu.resume()
+        let dfn = emu.df(sender)!
+        dfn.setFlag(.PROTECTED, value: !dfn.getFlag(.PROTECTED))
     }
 
     @IBAction func exportRecentDiskDummyAction(_ sender: NSMenuItem!) {}
@@ -808,7 +807,8 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func writeProtectHdrAction(_ sender: NSMenuItem!) {
         
-        emu.hd(sender)!.toggleWriteProtection()
+        let hdn = emu.hd(sender)!
+        hdn.setFlag(.PROTECTED, value: !hdn.getFlag(.PROTECTED))
     }
 
     @IBAction func writeThroughHdrAction(_ sender: NSMenuItem!) {

@@ -371,7 +371,7 @@ class DiskExporter: DialogController {
                 fatalError()
             }
             
-            dfn!.markDiskAsUnmodified()
+            dfn!.setFlag(.MODIFIED, value: false)
             myAppDelegate.noteNewRecentlyExportedDiskURL(url, df: dfn!.info.nr)
             
             hide()
@@ -409,7 +409,7 @@ class DiskExporter: DialogController {
                 fatalError()
             }
 
-            hdn!.markDiskAsUnmodified()
+            hdn!.setFlag(.MODIFIED, value: false)
             myAppDelegate.noteNewRecentlyExportedHdrURL(url, hd: hdn!.nr)
             
             hide()

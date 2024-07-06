@@ -276,6 +276,14 @@ struct FloppyDriveAPI : API {
      */
     const FloppyDriveInfo &getInfo() const;
     const FloppyDriveInfo &getCachedInfo() const;
+
+    /** @brief Queries a disk flag
+     */
+    bool getFlag(DiskFlags mask);
+
+    /** @brief Sets or clears one or more disk flags
+     */
+    void setFlag(DiskFlags mask, bool value);
 };
 
 struct HardDriveAPI : API {
@@ -290,6 +298,14 @@ struct HardDriveAPI : API {
      */
     const HardDriveInfo &getInfo() const;
     const HardDriveInfo &getCachedInfo() const;
+
+    /** @brief Queries a disk flag
+     */
+    bool getFlag(DiskFlags mask);
+
+    /** @brief Sets or clears one or more disk flags
+     */
+    void setFlag(DiskFlags mask, bool value);
 };
 
 struct JoystickAPI : API {

@@ -253,15 +253,17 @@ class MyDocument: NSDocument {
         }
         
         try export(fileProxy: df!, to: url)
-        amiga.df(nr)!.markDiskAsUnmodified()
+        amiga.df(nr)!.setFlag(.MODIFIED, value: false)
         myAppDelegate.noteNewRecentlyExportedDiskURL(url, df: nr)
         
         debug(.media, "Disk exported successfully")
     }
 
     func export(hardDrive nr: Int, to url: URL) throws {
-                        
+        
+        let hdn = amiga.hd(nr)!
         var dh: HDFFileProxy?
+
         switch url.pathExtension.uppercased() {
         case "HDF":
             dh = try HDFFileProxy.make(with: amiga.hd(nr)!)
@@ -272,7 +274,7 @@ class MyDocument: NSDocument {
         
         try export(fileProxy: dh!, to: url)
 
-        amiga.hd(nr)!.markDiskAsUnmodified()
+        hdn.setFlag(.MODIFIED, value: false)
         myAppDelegate.noteNewRecentlyExportedHdrURL(url, hd: nr)
 
         debug(.media, "Hard Drive exported successfully")

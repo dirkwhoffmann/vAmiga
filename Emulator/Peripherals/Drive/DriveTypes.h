@@ -12,6 +12,37 @@
 #include "Aliases.h"
 #include "Reflection.h"
 
+//
+// Enumerations
+//
+
+enum_long(FLAG_DISK)
+{
+    FLAG_PROTECTED  = 1,
+    FLAG_MODIFIED   = 2
+};
+typedef FLAG_DISK DiskFlags;
+
+#ifdef __cplusplus
+struct DiskFlagsEnum : util::Reflection<DiskFlagsEnum, DiskFlags>
+{
+    static constexpr long minVal = FLAG_PROTECTED;
+    static constexpr long maxVal = FLAG_MODIFIED;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
+
+    static const char *prefix() { return "FLAG"; }
+    static const char *_key(long value)
+    {
+        switch (value) {
+
+            case FLAG_PROTECTED:    return "PROTECTED";
+            case FLAG_MODIFIED:     return "MODIFIED";
+        }
+        return "???";
+    }
+};
+#endif
+
 
 //
 // Structures

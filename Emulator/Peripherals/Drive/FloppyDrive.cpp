@@ -357,6 +357,18 @@ FloppyDrive::hasProtectedDisk() const
     return hasDisk() ? disk->isWriteProtected() : false;
 }
 
+bool 
+FloppyDrive::getFlag(DiskFlags mask) const
+{
+    return disk ? disk->getFlag(mask) : false;
+}
+
+void 
+FloppyDrive::setFlag(DiskFlags mask, bool value)
+{
+    if (disk) disk->setFlag(mask, value);
+}
+
 void
 FloppyDrive::setModificationFlag(bool value)
 {

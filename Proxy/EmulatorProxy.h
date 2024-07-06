@@ -708,19 +708,13 @@
 @property (readonly) FloppyDriveInfo info;
 @property (readonly) FloppyDriveInfo cachedInfo;
 
-- (void)setModificationFlag:(BOOL)value;
-- (void)setProtectionFlag:(BOOL)value;
-- (void)markDiskAsModified;
-- (void)markDiskAsUnmodified;
-- (void)toggleWriteProtection;
+- (BOOL)getFlag:(DiskFlags)mask;
+- (void)setFlag:(DiskFlags)mask value:(BOOL)value;
 
 - (BOOL)isInsertable:(Diameter)type density:(Density)density;
 - (void)eject;
 - (void)swap:(FloppyFileProxy *)fileProxy exception:(ExceptionWrapper *)ex;
 - (void)insertNew:(FSVolumeType)fs bootBlock:(BootBlockId)bb name:(NSString *)name exception:(ExceptionWrapper *)ex;
-@property (readonly) BOOL motor;
-@property (readonly) BOOL selected;
-@property (readonly) BOOL writing;
 
 - (NSString *)readTrackBits:(NSInteger)track;
 
@@ -745,11 +739,16 @@
 @property (readonly) BOOL hasUnmodifiedDisk;
 @property (readonly) BOOL hasUnprotectedDisk;
 
+- (BOOL)getFlag:(DiskFlags)mask;
+- (void)setFlag:(DiskFlags)mask value:(BOOL)value;
+
+/*
 - (void)setModificationFlag:(BOOL)value;
 - (void)setProtectionFlag:(BOOL)value;
 - (void)markDiskAsModified;
 - (void)markDiskAsUnmodified;
 - (void)toggleWriteProtection;
+*/
 
 @property (readonly) HardDriveInfo info;
 @property (readonly) NSInteger capacity;

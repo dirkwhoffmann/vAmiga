@@ -1236,29 +1236,14 @@ using namespace vamiga::moira;
     return [self drive]->getConfig();
 }
 
-- (void)setModificationFlag:(BOOL)value
+- (BOOL)getFlag:(DiskFlags)mask
 {
-    [self drive]->drive->setModificationFlag(value);
+    return [self drive]->getFlag(mask);
 }
 
-- (void)setProtectionFlag:(BOOL)value
+- (void)setFlag:(DiskFlags)mask value:(BOOL)value
 {
-    [self drive]->drive->setProtectionFlag(value);
-}
-
-- (void)markDiskAsModified
-{
-    [self drive]->drive->markDiskAsModified();
-}
-
-- (void)markDiskAsUnmodified
-{
-    [self drive]->drive->markDiskAsUnmodified();
-}
-
-- (void)toggleWriteProtection
-{
-    [self drive]->drive->toggleWriteProtection();
+    [self drive]->setFlag(mask, value);
 }
 
 - (FloppyDriveInfo)info
@@ -1291,21 +1276,6 @@ using namespace vamiga::moira;
 {
     try { return [self drive]->drive->insertNew(fs, bb, [name UTF8String]); }
     catch (Error &error) { [ex save:error]; }
-}
-
-- (BOOL)motor
-{
-    return [self drive]->drive->getMotor();
-}
-
-- (BOOL)selected
-{
-    return [self drive]->drive->isSelected();
-}
-
-- (BOOL)writing
-{
-    return [self drive]->drive->isWriting();
 }
 
 - (NSString *)readTrackBits:(NSInteger)track
@@ -1377,6 +1347,17 @@ using namespace vamiga::moira;
     return [self drive]->drive->hasUnprotectedDisk();
 }
 
+- (BOOL)getFlag:(DiskFlags)mask
+{
+    return [self drive]->getFlag(mask);
+}
+
+- (void)setFlag:(DiskFlags)mask value:(BOOL)value
+{
+    [self drive]->setFlag(mask, value);
+}
+
+/*
 - (void)setModificationFlag:(BOOL)value
 {
     [self drive]->drive->setModificationFlag(value);
@@ -1401,6 +1382,7 @@ using namespace vamiga::moira;
 {
     [self drive]->drive->toggleWriteProtection();
 }
+*/
 
 - (HardDriveInfo)info
 {

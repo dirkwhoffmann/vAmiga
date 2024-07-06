@@ -89,8 +89,9 @@ class HardDrive : public Drive, public Inspectable<HardDriveInfo> {
     HardDriveState state = HDR_IDLE;
     
     // Disk state flags
-    bool modified = false;
-    bool writeProtected = false;
+    DiskFlags flags = 0;
+    [[deprecated]] bool modified = false;
+    [[deprecated]] bool writeProtected = false;
     optional <bool> bootable;
 
     // Indicates if write-through mode is enabled
@@ -173,8 +174,9 @@ private:
         << ptable
         << drivers
         << data
-        << modified
-        << writeProtected
+        << flags
+        // << modified
+        // << writeProtected
         << bootable;
 
     } SERIALIZERS(serialize);
@@ -207,6 +209,10 @@ public:
     isize currentOffset() const override { return head.offset; }
 
     bool hasDisk() const override;
+
+    bool getFlag(DiskFlags mask) const override;
+    void setFlag(DiskFlags mask, bool value) override;
+
     bool hasModifiedDisk() const override;
     bool hasProtectedDisk() const override;
     void setModificationFlag(bool value) override;
@@ -255,8 +261,8 @@ public:
     HardDriveState getState() const { return state; }
     
     // Gets or sets the 'modification' flag
-    bool isModified() const { return modified; }
-    void setModified(bool value) { modified = value; }
+    bool isModified() const { return flags & FLAG_MODIFIED; }
+    void setModified(bool value) { value ? flags |= FLAG_MODIFIED : flags &= ~FLAG_MODIFIED; }
 
     // Returns the current controller state
     HdcState getHdcState();

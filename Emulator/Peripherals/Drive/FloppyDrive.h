@@ -213,6 +213,10 @@ public:
     bool hasDisk() const override;
     bool hasModifiedDisk() const override;
     bool hasProtectedDisk() const override;
+
+    bool getFlag(DiskFlags mask) const override;
+    void setFlag(DiskFlags mask, bool value) override;
+
     void setModificationFlag(bool value) override;
     void setProtectionFlag(bool value) override;
 
