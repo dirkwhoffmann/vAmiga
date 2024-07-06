@@ -38,15 +38,15 @@ namespace util {
 template <class T, typename E> struct Reflection {
 
     // Determines if this enum represents a bit field
-    static constexpr bool isBitField() { return T::minVal == 1; }
+    static constexpr bool bitField = T::minVal == 1;
 
     // Returns the key as a C string
-    static const char *key(long nr) { return T::key((E)nr); }
+    static string key(long nr) { return T::key((E)nr); }
 
     // Returns the key without the section prefix (if any)
-    static const char *plainkey(isize nr) {
-    
-        auto *p = key(nr);
+    static string plainkey(isize nr) {
+
+        auto *p = T::key((E)nr);
         for (isize i = 0; p[i]; i++) if (p[i] == '.') return p + i + 1;
         return p;
     }
