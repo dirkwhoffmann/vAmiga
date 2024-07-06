@@ -742,21 +742,8 @@
 - (BOOL)getFlag:(DiskFlags)mask;
 - (void)setFlag:(DiskFlags)mask value:(BOOL)value;
 
-/*
-- (void)setModificationFlag:(BOOL)value;
-- (void)setProtectionFlag:(BOOL)value;
-- (void)markDiskAsModified;
-- (void)markDiskAsUnmodified;
-- (void)toggleWriteProtection;
-*/
-
 @property (readonly) HardDriveInfo info;
-@property (readonly) NSInteger capacity;
-@property (readonly) NSInteger partitions;
-@property (readonly) NSInteger cylinders;
-@property (readonly) NSInteger heads;
-@property (readonly) NSInteger sectors;
-@property (readonly) NSInteger bsize;
+
 @property (readonly) HdcState hdcState;
 @property (readonly) BOOL isCompatible;
 @property (readonly) BOOL writeThroughEnabled;

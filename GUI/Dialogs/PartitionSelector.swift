@@ -36,7 +36,7 @@ class PartitionSelector: DialogController {
         
         partitionPopup.removeAllItems()
         
-        let partitions = drive.partitions
+        let partitions = drive.info.partitions
         for i in 0 ..< partitions {
             
             partitionPopup.addItem(withTitle: "Partition \(i)")

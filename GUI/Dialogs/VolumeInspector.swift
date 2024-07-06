@@ -181,9 +181,10 @@ class VolumeInspector: DialogController {
     
     func show(hardDrive nr: Int) throws {
         
+        let hdn = emu.hd(nr)!
         var partition: Int?
         
-        if emu.hd(nr)!.partitions == 1 {
+        if hdn.info.partitions == 1 {
         
             // Analyze the first partition
             partition = 0

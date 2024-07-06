@@ -1357,33 +1357,6 @@ using namespace vamiga::moira;
     [self drive]->setFlag(mask, value);
 }
 
-/*
-- (void)setModificationFlag:(BOOL)value
-{
-    [self drive]->drive->setModificationFlag(value);
-}
-
-- (void)setProtectionFlag:(BOOL)value
-{
-    [self drive]->drive->setProtectionFlag(value);
-}
-
-- (void)markDiskAsModified
-{
-    [self drive]->drive->markDiskAsModified();
-}
-
-- (void)markDiskAsUnmodified
-{
-    [self drive]->drive->markDiskAsUnmodified();
-}
-
-- (void)toggleWriteProtection
-{
-    [self drive]->drive->toggleWriteProtection();
-}
-*/
-
 - (HardDriveInfo)info
 {
     return [self drive]->drive->getInfo();

@@ -78,13 +78,14 @@ class HardDiskConfigurator: DialogController {
     //
     
     func show(forDrive nr: Int) {
-                
+
         self.nr = nr
         
-        origCyls = drive.cylinders
-        origHeads = drive.heads
-        origSectors = drive.sectors
-        origBsize = drive.bsize
+        let info = drive.info
+        origCyls = info.cylinders
+        origHeads = info.heads
+        origSectors = info.sectors
+        origBsize = info.bsize
 
         cyls = origCyls
         heads = origHeads
@@ -169,7 +170,7 @@ class HardDiskConfigurator: DialogController {
         }
         
         // Check if the geometry is consistent with the HDF
-        let matching = cyls * heads * sectors * bsize == drive.capacity
+        let matching = cyls * heads * sectors * bsize == drive.info.bytes
         warningText.isHidden = matching
         okButton.isEnabled = matching
     }

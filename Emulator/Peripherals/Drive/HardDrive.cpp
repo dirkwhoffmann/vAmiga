@@ -299,7 +299,25 @@ HardDrive::cacheInfo(HardDriveInfo &info) const
 {
     {   SYNCHRONIZED
         
-        info.modified = isModified();
+        info.cylinders = geometry.cylinders;
+        info.heads = geometry.heads;
+        info.sectors = geometry.sectors;
+        info.bsize = geometry.bsize;
+
+        info.tracks = geometry.numTracks();
+        info.blocks = geometry.numBlocks();
+        info.bytes = geometry.numBytes();
+        info.upperCyl = geometry.upperCyl();
+        info.upperHead = geometry.upperHead();
+        info.upperTrack = geometry.upperTrack();
+
+        info.partitions = numPartitions();
+
+        // Flags
+        info.writeProtected = getFlag(FLAG_PROTECTED);
+        info.modified = getFlag(FLAG_MODIFIED);
+
+        // Head
         info.head = head;
     }
 }

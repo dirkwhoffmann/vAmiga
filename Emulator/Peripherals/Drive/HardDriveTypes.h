@@ -89,7 +89,28 @@ HardDriveConfig;
 
 typedef struct
 {
-    DriveHead head;
+    // Physical layout (geometry)
+    isize cylinders;
+    isize heads;
+    isize sectors;
+    isize bsize;
+
+    // Computed values
+    isize tracks;
+    isize blocks;
+    isize bytes;
+    isize upperCyl;
+    isize upperHead;
+    isize upperTrack;
+
+    // Logical layout (partitions)
+    isize partitions;
+
+    // Flags
+    bool writeProtected;
     bool modified;
+
+    // Head
+    DriveHead head;
 }
 HardDriveInfo;
