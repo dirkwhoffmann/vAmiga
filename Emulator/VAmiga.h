@@ -454,7 +454,7 @@ struct VideoPortAPI : API {
 
 
 //
-// Misc
+// Misc (Debugger)
 //
 
 struct DebuggerAPI : API {
@@ -467,6 +467,10 @@ struct DebuggerAPI : API {
     string hexDump(Accessor acc, u32 addr, isize bytes, isize sz = 1) const;
     string memDump(Accessor acc, u32 addr, isize bytes, isize sz = 1) const;
 };
+
+//
+// Misc (Defaults)
+//
 
 /** The user's defaults storage
  *
@@ -697,6 +701,11 @@ struct HostAPI : API {
     class Host *host = nullptr;
 };
 
+
+//
+// Misc (RetroShell)
+//
+
 /** RetroShell Public API
  */
 struct RetroShellAPI : API {
@@ -772,14 +781,33 @@ struct RetroShellAPI : API {
 };
 
 
+//
+// Misc (Recorder)
+//
+
 struct RecorderAPI : API {
 
     class Recorder *recorder = nullptr;
 };
 
+
+//
+// Misc (Debugger)
+//
+
 struct RemoteManagerAPI : API {
 
     class RemoteManager *remoteManager = nullptr;
+
+    /// @name Analyzing the emulator
+    /// @{
+
+    /** @brief  Returns the component's current state.
+     */
+    const RemoteManagerInfo &getInfo() const;
+    const RemoteManagerInfo &getCachedInfo() const;
+
+    /// @}
 };
 
 

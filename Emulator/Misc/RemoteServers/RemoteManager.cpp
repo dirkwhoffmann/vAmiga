@@ -51,43 +51,14 @@ RemoteManager::_dump(Category category, std::ostream& os) const
     }
 }
 
-/*
-i64
-RemoteManager::getConfigItem(Option option, long id) const
-{
-    switch ((ServerType)id) {
-            
-        case SERVER_SER: return serServer.getOption(option);
-        case SERVER_RSH: return rshServer.getOption(option);
-        case SERVER_GDB: return gdbServer.getOption(option);
-
-        default:
-            fatalError;
-    }
-}
-
 void
-RemoteManager::setOption(Option option, i64 value)
+RemoteManager::cacheInfo(RemoteManagerInfo &result) const
 {
-    for (auto &server : servers) {
-        server->setOption(option, value);
-    }
+    info.numLaunching = numLaunching();
+    info.numListening = numListening();
+    info.numConnected = numConnected();
+    info.numErroneous = numErroneous();
 }
-
-void
-RemoteManager::setConfigItem(Option option, long id, i64 value)
-{
-    switch ((ServerType)id) {
-            
-        case SERVER_SER: serServer.setOption(option, value); break;
-        case SERVER_RSH: rshServer.setOption(option, value); break;
-        case SERVER_GDB: gdbServer.setOption(option, value); break;
-
-        default:
-            fatalError;
-    }
-}
-*/
 
 isize
 RemoteManager::numLaunching() const

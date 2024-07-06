@@ -216,14 +216,13 @@ using namespace vamiga::moira;
 
 - (AmigaInfo)info
 {
-    return [self amiga]->amiga->getInfo();
+    return [self amiga]->getInfo();
 }
-/*
+
 - (AmigaInfo)cachedInfo
 {
-    return [self cia]->amiga->getCachedInfo();
+    return [self amiga]->getCachedInfo();
 }
-*/
 
 - (SnapshotProxy *)takeSnapshot
 {
@@ -1872,24 +1871,9 @@ using namespace vamiga::moira;
     return proxy;
 }
 
--(NSInteger)numLaunching
+- (RemoteManagerInfo)info
 {
-    return [self manager]->remoteManager->numLaunching();
-}
-
--(NSInteger)numListening
-{
-    return [self manager]->remoteManager->numListening();
-}
-
--(NSInteger)numConnected
-{
-    return [self manager]->remoteManager->numConnected();
-}
-
--(NSInteger)numErroneous
-{
-    return [self manager]->remoteManager->numErroneous();
+    return [self manager]->getInfo();
 }
 
 @end

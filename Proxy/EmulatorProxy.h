@@ -406,7 +406,7 @@
 @interface AmigaProxy : CoreComponentProxy { }
 
 @property (readonly) AmigaInfo info;
-// @property (readonly) AmigaInfo cachedInfo;
+@property (readonly) AmigaInfo cachedInfo;
 
 - (SnapshotProxy *) takeSnapshot;
 
@@ -839,18 +839,17 @@
 
 @end
 
+
 //
 // RemoteManager
 //
 
 @interface RemoteManagerProxy : Proxy { }
 
-@property (readonly) NSInteger numLaunching;
-@property (readonly) NSInteger numListening;
-@property (readonly) NSInteger numConnected;
-@property (readonly) NSInteger numErroneous;
+@property (readonly) RemoteManagerInfo info;
 
 @end
+
 
 //
 // F I L E   T Y P E   P R O X I E S

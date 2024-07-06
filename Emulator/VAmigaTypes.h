@@ -40,6 +40,7 @@
 #include "ZorroBoardTypes.h"
 
 // Miscellaneous
+#include "RemoteManagerTypes.h"
 #include "RemoteServerTypes.h"
 #include "RetroShellTypes.h"
 #include "RTCTypes.h"

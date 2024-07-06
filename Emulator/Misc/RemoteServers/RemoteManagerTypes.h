@@ -44,3 +44,17 @@ struct ServerTypeEnum : util::Reflection<ServerTypeEnum, ServerType>
     }
 };
 #endif
+
+
+//
+// Structures
+//
+
+typedef struct
+{
+    isize numLaunching;
+    isize numListening;
+    isize numConnected;
+    isize numErroneous;
+}
+RemoteManagerInfo;

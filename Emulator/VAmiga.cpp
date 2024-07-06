@@ -561,8 +561,23 @@ DefaultsAPI::remove(Option option, std::vector <isize> objids)
     defaults->remove(option, objids);
 }
 
-
 //
+// RemoteManagerAPI
+//
+
+const RemoteManagerInfo &
+RemoteManagerAPI::getInfo() const
+{
+    return remoteManager->getInfo();
+}
+
+const RemoteManagerInfo &
+RemoteManagerAPI::getCachedInfo() const
+{
+    return remoteManager->getCachedInfo();
+}
+
+
 // RetroShellAPI
 //
 
