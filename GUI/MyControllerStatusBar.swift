@@ -18,11 +18,11 @@ extension MyController {
 
         if WarpMode(rawValue: config.warpMode) == .AUTO {
 
-            return NSImage(named: emu.isWarping ? "hourglass3Template" : "hourglass1Template")
+            return NSImage(named: emu.warping ? "hourglass3Template" : "hourglass1Template")
 
         } else {
 
-            return NSImage(named: emu.isWarping ? "warpOnTemplate" : "warpOffTemplate")
+            return NSImage(named: emu.warping ? "warpOnTemplate" : "warpOffTemplate")
         }
     }
     
@@ -30,7 +30,7 @@ extension MyController {
         
         let running = emu.running
         let halted = emu.cpu.halted
-        let warp = emu.isWarping
+        let warp = emu.warping
 
         // Df0 - Df3
         for n in 0...3 where drv[n] != nil {
@@ -239,7 +239,7 @@ extension MyController {
             setColor(color: [.systemRed, .systemYellow, .systemGreen, .systemYellow, .systemRed])
 
         case 2:
-            let cpu = emu.cpuLoad
+            let cpu = Int(emu.stats.cpuLoad * 100.0)
             activityBar.integerValue = cpu
             activityInfo.stringValue = String(format: "%d%% CPU", cpu)
             setColor(color: [.systemGreen, .systemGreen, .systemGreen, .systemYellow, .systemRed])

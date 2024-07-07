@@ -205,15 +205,44 @@
 - (void)dealloc;
 - (void)kill;
 
-@property (readonly) AmigaInfo info;
-@property (readonly) BOOL isWarping;
-@property BOOL trackMode;
-@property (readonly) NSInteger cpuLoad;
-@property (readonly) BOOL fpuSupport;
-@property InspectionTarget inspectionTarget;
-- (void) removeInspectionTarget;
+@property (class, readonly) NSString *build;
+@property (class, readonly) NSString *version;
+
+@property (readonly) EmulatorInfo info;
+@property (readonly) EmulatorInfo cachedInfo;
+@property (readonly) EmulatorStats stats;
+
+@property (readonly) BOOL poweredOn;
+@property (readonly) BOOL poweredOff;
+@property (readonly) BOOL paused;
+@property (readonly) BOOL running;
+@property (readonly) BOOL suspended;
+@property (readonly) BOOL halted;
+@property (readonly) BOOL warping;
+@property (readonly) BOOL tracking;
+
+- (void)isReady:(ExceptionWrapper *)ex;
+- (void)powerOn;
+- (void)powerOff;
+- (void)run:(ExceptionWrapper *)ex;
+- (void)pause;
+- (void)halt;
+- (void)suspend;
+- (void)resume;
+- (void)warpOn;
+- (void)warpOn:(NSInteger)source;
+- (void)warpOff;
+- (void)warpOff:(NSInteger)source;
+- (void)trackOn;
+- (void)trackOn:(NSInteger)source;
+- (void)trackOff;
+- (void)trackOff:(NSInteger)source;
+
+- (void)hardReset;
+- (void)softReset;
 
 - (void)launch:(const void *)listener function:(Callback *)func;
+- (void)wakeUp;
 
 - (NSInteger)get:(Option)opt;
 - (NSInteger)get:(Option)opt id:(NSInteger)id;
@@ -225,25 +254,16 @@
 - (BOOL)set:(Option)opt drive:(NSInteger)id value:(NSInteger)val;
 - (BOOL)set:(Option)opt drive:(NSInteger)id enable:(BOOL)val;
 
-- (void)hardReset;
-- (void)softReset;
 
-@property (readonly) BOOL poweredOn;
-@property (readonly) BOOL poweredOff;
-@property (readonly) BOOL running;
-@property (readonly) BOOL paused;
+@property InspectionTarget inspectionTarget;
+- (void) removeInspectionTarget;
 
-- (void)isReady:(ExceptionWrapper *)ex;
-- (void)powerOn;
-- (void)powerOff;
-- (void)run:(ExceptionWrapper *)ex;
-- (void)pause;
-- (void)halt;
 
-- (void)wakeUp;
 
-- (void)suspend;
-- (void)resume;
+
+
+
+
 
 // - (void)continueScript;
 

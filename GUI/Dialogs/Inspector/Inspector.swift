@@ -606,7 +606,7 @@ class Inspector: DialogController {
     override func showWindow(_ sender: Any?) {
 
         super.showWindow(self)
-        emu.trackMode = true
+        emu.trackOn()
         updateInspectionTarget()
     }
 
@@ -796,7 +796,7 @@ extension Inspector {
         super.windowWillClose(notification)
 
         // Leave debug mode
-        emu?.trackMode = false
+        emu?.trackOff()
         emu?.removeInspectionTarget()
     }
 }

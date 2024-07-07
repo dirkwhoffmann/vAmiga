@@ -2647,6 +2647,16 @@ using namespace vamiga::moira;
     return [[DefaultsProxy alloc] initWith:&Emulator::defaults];
 }
 
++ (NSString *)build
+{
+    return @(VAmiga::build().c_str());
+}
+
++ (NSString *)version
+{
+    return @(VAmiga::version().c_str());
+}
+
 - (void)dealloc
 {
     NSLog(@"dealloc");
@@ -2661,20 +2671,62 @@ using namespace vamiga::moira;
     obj = NULL;
 }
 
-- (AmigaInfo)info
+- (EmulatorInfo)info
 {
-    return [self emu]->emu->main.getInfo();
+    return [self emu]->getInfo();
 }
 
-- (BOOL)isWarping
+- (EmulatorInfo)cachedInfo
+{
+    return [self emu]->getCachedInfo();
+}
+
+- (EmulatorStats)stats
+{
+    return [self emu]->getStats();
+}
+
+- (BOOL)poweredOn
+{
+    return [self emu]->isPoweredOn();
+}
+
+- (BOOL)poweredOff
+{
+    return [self emu]->isPoweredOff();
+}
+
+- (BOOL)paused
+{
+    return [self emu]->isPaused();
+}
+
+- (BOOL)running
+{
+    return [self emu]->isRunning();
+}
+
+- (BOOL)suspended
+{
+    return [self emu]->isSuspended();
+}
+
+- (BOOL)halted
+{
+    return [self emu]->isHalted();
+}
+
+- (BOOL)warping
 {
     return [self emu]->isWarping();
 }
 
-- (BOOL)trackMode
+- (BOOL)tracking
 {
     return [self emu]->isTracking();
 }
+
+
 
 - (void)setTrackMode:(BOOL)value
 {
@@ -2685,11 +2737,13 @@ using namespace vamiga::moira;
     }
 }
 
+/*
 - (NSInteger)cpuLoad
 {
     double load = [self emu]->emu->getStats().cpuLoad;
     return (NSInteger)(100 * load);
 }
+*/
 
 - (InspectionTarget)inspectionTarget
 {
@@ -2803,26 +2857,6 @@ using namespace vamiga::moira;
     [self emu]->softReset();
 }
 
-- (BOOL)poweredOn
-{
-    return [self emu]->isPoweredOn();
-}
-
-- (BOOL)poweredOff
-{
-    return [self emu]->isPoweredOff();
-}
-
-- (BOOL)running
-{
-    return [self emu]->isRunning();
-}
-
-- (BOOL)paused
-{
-    return [self emu]->isPaused();
-}
-
 - (void)isReady:(ExceptionWrapper *)ex
 {
     try { [self emu]->isReady(); }
@@ -2855,19 +2889,59 @@ using namespace vamiga::moira;
     [self emu]->halt();
 }
 
-- (void)wakeUp
-{
-    [self emu]->wakeUp();
-}
-
 - (void)suspend
 {
-    return [self emu]->suspend();
+    [self emu]->suspend();
 }
 
 - (void)resume
 {
-    return [self emu]->resume();
+    [self emu]->resume();
+}
+
+- (void)warpOn
+{
+    [self emu]->warpOn();
+}
+
+- (void)warpOn:(NSInteger)source
+{
+    [self emu]->warpOn(source);
+}
+
+- (void)warpOff
+{
+    [self emu]->warpOff();
+}
+
+- (void)warpOff:(NSInteger)source
+{
+    [self emu]->warpOff(source);
+}
+
+- (void)trackOn
+{
+    [self emu]->trackOn();
+}
+
+- (void)trackOn:(NSInteger)source
+{
+    [self emu]->trackOn(source);
+}
+
+- (void)trackOff
+{
+    [self emu]->trackOff();
+}
+
+- (void)trackOff:(NSInteger)source
+{
+    [self emu]->trackOff(source);
+}
+
+- (void)wakeUp
+{
+    [self emu]->wakeUp();
 }
 
 - (void)loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex
