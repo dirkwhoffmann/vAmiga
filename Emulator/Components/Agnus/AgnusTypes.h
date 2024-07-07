@@ -393,17 +393,7 @@ enum_i8(EventID)
     ALA_EVENT_COUNT,
 
     // Inspector slot
-    INS_AMIGA           = 1,
-    INS_CPU,
-    INS_MEM,
-    INS_CIA,
-    INS_AGNUS,
-    INS_BLITTER,
-    INS_COPPER,
-    INS_PAULA,
-    INS_DENISE,
-    INS_PORTS,
-    INS_EVENTS,
+    INS_RECORD          = 1,
     INS_EVENT_COUNT
 };
 

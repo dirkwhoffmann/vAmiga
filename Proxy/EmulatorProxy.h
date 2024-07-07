@@ -212,6 +212,8 @@
 @property (readonly) EmulatorInfo cachedInfo;
 @property (readonly) EmulatorStats stats;
 
+@property NSInteger autoInspectionMask;
+
 @property (readonly) BOOL poweredOn;
 @property (readonly) BOOL poweredOff;
 @property (readonly) BOOL paused;
@@ -254,12 +256,6 @@
 - (BOOL)set:(Option)opt drive:(NSInteger)id value:(NSInteger)val;
 - (BOOL)set:(Option)opt drive:(NSInteger)id enable:(BOOL)val;
 
-
-/*
-@property CType inspectionTarget;
-- (void) removeInspectionTarget;
-*/
-@property NSInteger autoInspectionMask;
 
 
 

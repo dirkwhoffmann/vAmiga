@@ -1053,4 +1053,17 @@ AmigaAPI::loadSnapshot(const Snapshot &snapshot)
     amiga->loadSnapshot(snapshot);
 }
 
+u64 
+AmigaAPI::getAutoInspectionMask()
+{
+    return amiga->getAutoInspectionMask();
+}
+
+void
+AmigaAPI::setAutoInspectionMask(u64 mask)
+{
+    amiga->setAutoInspectionMask(mask);
+}
+
+
 }

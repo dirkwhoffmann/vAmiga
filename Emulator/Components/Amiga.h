@@ -267,10 +267,11 @@ public:
     u64 getAutoInspectionMask() const;
     void setAutoInspectionMask(u64 mask);
 
+    /*
     [[deprecated]] CType getInspectionTarget() const;
     [[deprecated]] void setInspectionTarget(CType target, Cycle trigger = 0);
     [[deprecated]] void removeInspectionTarget() { setInspectionTarget(0); }
-
+    */
 
     //
     // Methods from Configurable

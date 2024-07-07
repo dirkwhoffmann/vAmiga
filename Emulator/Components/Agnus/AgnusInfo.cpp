@@ -455,17 +455,7 @@ Agnus::eventName(EventSlot slot, EventID id)
             switch (id) {
 
                 case EVENT_NONE:    return "none";
-                case INS_AMIGA:     return "INS_AMIGA";
-                case INS_CPU:       return "INS_CPU";
-                case INS_MEM:       return "INS_MEM";
-                case INS_CIA:       return "INS_CIA";
-                case INS_AGNUS:     return "INS_AGNUS";
-                case INS_BLITTER:   return "INS_BLITTER";
-                case INS_COPPER:    return "INS_COPPER";
-                case INS_PAULA:     return "INS_PAULA";
-                case INS_DENISE:    return "INS_DENISE";
-                case INS_PORTS:     return "INS_PORTS";
-                case INS_EVENTS:    return "INS_EVENTS";
+                case INS_RECORD:    return "INS_RECORD";
                 default:            return "*** INVALID ***";
             }
             break;

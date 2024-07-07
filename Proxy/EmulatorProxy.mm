@@ -2686,6 +2686,16 @@ using namespace vamiga::moira;
     return [self emu]->getStats();
 }
 
+- (NSInteger)autoInspectionMask
+{
+    return [self emu]->emu->main.getAutoInspectionMask();
+}
+
+- (void)setAutoInspectionMask:(NSInteger)mask
+{
+    [self emu]->emu->main.setAutoInspectionMask(mask);
+}
+
 - (BOOL)poweredOn
 {
     return [self emu]->isPoweredOn();
@@ -2726,8 +2736,6 @@ using namespace vamiga::moira;
     return [self emu]->isTracking();
 }
 
-
-
 - (void)setTrackMode:(BOOL)value
 {
     if (value) {
@@ -2736,42 +2744,6 @@ using namespace vamiga::moira;
         [self emu]->emu->trackOff();
     }
 }
-
-/*
-- (NSInteger)cpuLoad
-{
-    double load = [self emu]->emu->getStats().cpuLoad;
-    return (NSInteger)(100 * load);
-}
-*/
-
-/*
-- (CType)inspectionTarget
-{
-    return [self emu]->emu->main.getInspectionTarget();
-}
-
-- (void)setInspectionTarget:(CType)target
-{
-    [self emu]->emu->main.setInspectionTarget(target);
-}
-
-- (void) removeInspectionTarget
-{
-    [self emu]->emu->main.removeInspectionTarget();
-}
-*/
-
-- (NSInteger)autoInspectionMask
-{
-    return [self emu]->emu->main.getAutoInspectionMask();
-}
-
-- (void)setAutoInspectionMask:(NSInteger)mask
-{
-    [self emu]->emu->main.setAutoInspectionMask(mask);
-}
-
 
 - (SnapshotProxy *)takeSnapshot
 {

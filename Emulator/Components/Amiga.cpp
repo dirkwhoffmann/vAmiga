@@ -341,7 +341,7 @@ Amiga::setAutoInspectionMask(u64 mask)
     if (mask) {
 
         agnus.data[SLOT_INS] = mask;
-        agnus.serviceINSEvent(INS_AMIGA);
+        agnus.serviceINSEvent();
 
     } else {
 
@@ -350,62 +350,7 @@ Amiga::setAutoInspectionMask(u64 mask)
     }
 }
 
-CType
-Amiga::getInspectionTarget() const
-{
-    switch(agnus.id[SLOT_INS]) {
-
-        case EVENT_NONE:  return COMP_UNKNOWN;
-        case INS_AMIGA:   return COMP_AMIGA;
-        case INS_CPU:     return COMP_CPU;
-        case INS_MEM:     return COMP_MEM;
-        case INS_CIA:     return COMP_CIA;
-        case INS_AGNUS:   return COMP_AGNUS;
-        case INS_BLITTER: return COMP_BLITTER;
-        case INS_COPPER:  return COMP_COPPER;
-        case INS_PAULA:   return COMP_PAULA;
-        case INS_DENISE:  return COMP_DENISE;
-        case INS_PORTS:   return COMP_CONTROL_PORT;
-        case INS_EVENTS:  return COMP_AGNUS;
-
-        default:
-            fatalError;
-    }
-}
-
-void
-Amiga::setInspectionTarget(CType target, Cycle trigger)
-{
-    EventID id;
-
-    {   SUSPENDED
-
-        switch(target) {
-
-            case COMP_UNKNOWN:      agnus.cancel<SLOT_INS>(); return;
-
-            case COMP_AMIGA:        id = INS_AMIGA; break;
-            case COMP_CPU:          id = INS_CPU; break;
-            case COMP_MEM:          id = INS_MEM; break;
-            case COMP_CIA:          id = INS_CIA; break;
-            case COMP_AGNUS:        id = INS_AGNUS; break;
-            case COMP_BLITTER:      id = INS_BLITTER; break;
-            case COMP_COPPER:       id = INS_COPPER; break;
-            case COMP_PAULA:        id = INS_PAULA; break;
-            case COMP_DENISE:       id = INS_DENISE; break;
-            case COMP_CONTROL_PORT: id = INS_PORTS; break;
-            // case COMP_EVENTS:       id = INS_EVENTS; break;
-
-            default:
-                fatalError;
-        }
-
-        agnus.scheduleRel<SLOT_INS>(trigger, id);
-        if (trigger == 0) agnus.serviceINSEvent(id);
-    }
-}
-
-double 
+double
 Amiga::nativeRefreshRate() const
 {
     switch (config.type) {

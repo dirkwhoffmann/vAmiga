@@ -94,6 +94,32 @@ struct AmigaAPI : API {
      *  @param  snapshot    Reference to a snapshot.
      */
     void loadSnapshot(const Snapshot &snapshot);
+
+    /// @}
+    /// @name Auto-inspecting components
+    /// @{
+
+    /** @brief  Gets the current auto-inspection mask
+     *  The GUI utilizes Auto-Inspection to display life updates of the internal
+     *  emulator state in the Inspector panel. As soon as an auto-inspection
+     *  mask is set, the emulator caches the internal states of the inspected
+     *  components at periodic intervals. The inspected components are
+     *  specified as a bit mask.
+     *
+     *  @return A bit mask indicating the components under inspection
+     */
+    u64 getAutoInspectionMask();
+
+    /** @brief  Sets the current auto-inspection mask
+     *
+     *  @example The following call enables auto-inspections for the CIA chips
+     *  and Paula: setAutoInspectionMask(1 << COMP_CIA | 1 << COMP_PAULA);
+     *
+     *  @param  mask A bit mask indicating the components under inspection
+     */
+    void setAutoInspectionMask(u64 mask);
+
+    /// @}
 };
 
 struct AgnusAPI : API {

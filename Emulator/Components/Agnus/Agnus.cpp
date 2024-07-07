@@ -437,7 +437,7 @@ Agnus::executeUntil(Cycle cycle) {
                 amiga.serviceAlarmEvent();
             }
             if (isDue<SLOT_INS>(cycle)) {
-                agnus.serviceINSEvent(id[SLOT_INS]);
+                agnus.serviceINSEvent();
             }
 
             // Determine the next trigger cycle for all tertiary slots

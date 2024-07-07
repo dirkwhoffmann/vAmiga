@@ -786,7 +786,7 @@ public:
     void serviceDASEvent(EventID id);
     
     // Services an inspection event
-    void serviceINSEvent(EventID id);
+    void serviceINSEvent();
 };
 
 }
