@@ -40,6 +40,7 @@ class Console : public SubComponent {
 
     Descriptions descriptions = {{
 
+        .type           = COMP_CONSOLE,
         .name           = "Console",
         .description    = "Command shell",
         .shell          = ""

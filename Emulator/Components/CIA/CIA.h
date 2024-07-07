@@ -74,11 +74,13 @@ class CIA : public SubComponent, public Inspectable<CIAInfo> {
     
     Descriptions descriptions = {
         {
+            .type           = COMP_CIA,
             .name           = "CIAA",
             .description    = "Complex Interface Adapter A",
             .shell          = "ciaa"
         },
         {
+            .type           = COMP_CIA,
             .name           = "CIAB",
             .description    = "Complex Interface Adapter B",
             .shell          = "ciab"

@@ -20,6 +20,7 @@ class Debugger : public SubComponent {
 
     Descriptions descriptions = {{
 
+        .type           = COMP_DEBUGGER,
         .name           = "Debugger",
         .description    = "Hardware Debugger",
         .shell          = ""

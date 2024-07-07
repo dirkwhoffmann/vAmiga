@@ -145,6 +145,7 @@ class AudioFilter : public SubComponent {
     
     Descriptions descriptions = {{
 
+        .type           = COMP_AUDIO_FILTER,
         .name           = "AudioFilter",
         .description    = "Audio Filter",
         .shell          = "filter"

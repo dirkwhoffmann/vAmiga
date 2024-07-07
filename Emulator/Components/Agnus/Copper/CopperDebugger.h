@@ -45,6 +45,7 @@ class CopperDebugger: public SubComponent {
 
     Descriptions descriptions = {{
 
+        .type           = COMP_COPPER_DEBUGGER,
         .name           = "cdebugger",
         .description    = "Copper Debugger",
         .shell          = ""

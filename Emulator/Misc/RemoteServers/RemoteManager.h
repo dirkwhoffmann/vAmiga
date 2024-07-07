@@ -21,6 +21,7 @@ class RemoteManager : public SubComponent, public Inspectable<RemoteManagerInfo>
 
     Descriptions descriptions = {{
 
+        .type           = COMP_REMOTE_MANAGER,
         .name           = "RemoteManager",
         .description    = "Remote Manager",
         .shell          = "server"

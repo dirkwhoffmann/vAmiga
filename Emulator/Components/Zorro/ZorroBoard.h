@@ -20,6 +20,7 @@ protected:
     
     Descriptions descriptions = {{
 
+        .type           = COMP_ZORRO_BOARD,
         .name           = "ZorroBoard",
         .description    = "Zorro Board",
         .shell          = ""

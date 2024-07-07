@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "CoreComponentTypes.h"
 #include "EmulatorTypes.h"
 #include "ThreadTypes.h"
 #include "CoreObject.h"
@@ -25,6 +26,7 @@ namespace vamiga {
 
 struct Description {
 
+    const CType type;               // Component type
     const char *name;               // Short name
     const char *description;        // Textual descripiton
     const char *shell;              // RetroShell access

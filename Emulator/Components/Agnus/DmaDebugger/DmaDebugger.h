@@ -21,6 +21,7 @@ class DmaDebugger : public SubComponent {
 
     Descriptions descriptions = {{
 
+        .type           = COMP_DMA_DEBUGGER,
         .name           = "DmaDebugger",
         .description    = "DMA Debugger",
         .shell          = "dmadebugger"

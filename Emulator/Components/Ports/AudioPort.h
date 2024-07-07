@@ -45,11 +45,13 @@ class AudioPort : public SubComponent {
 
     Descriptions descriptions = {
         {
+            .type           = COMP_AUDIO_PORT,
             .name           = "AudioPort",
             .description    = "Audio Port",
             .shell          = "audio"
         },
         {
+            .type           = COMP_AUDIO_PORT,
             .name           = "AudioPort",
             .description    = "Audio Port (Recorder)",
             .shell          = ""

@@ -19,6 +19,7 @@ class DeniseDebugger: public SubComponent {
 
     Descriptions descriptions = {{
 
+        .type           = COMP_DENISE_DEBUGGER,
         .name           = "DeniseDebugger",
         .description    = "Denise Debugger",
         .shell          = ""

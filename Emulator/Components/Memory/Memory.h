@@ -106,6 +106,7 @@ class Memory : public SubComponent, public Inspectable<MemInfo, MemStats> {
 
     Descriptions descriptions = {{
 
+        .type           = COMP_MEM,
         .name           = "Memory",
         .description    = "Memory",
         .shell          = "mem"

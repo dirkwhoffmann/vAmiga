@@ -20,6 +20,7 @@ class ZorroManager : public SubComponent {
     
     Descriptions descriptions = {{
 
+        .type           = COMP_ZORRO_MANAGER,
         .name           = "ZorroManager",
         .description    = "Zorro Manager",
         .shell          = "zorro"

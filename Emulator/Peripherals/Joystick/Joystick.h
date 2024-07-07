@@ -18,11 +18,13 @@ class Joystick : public SubComponent {
 
     Descriptions descriptions = {
         {
+            .type           = COMP_JOYSTICK,
             .name           = "Joystick1",
             .description    = "Joystick in Port 1",
             .shell          = "joystick 1"
         },
         {
+            .type           = COMP_JOYSTICK,
             .name           = "Joystick2",
             .description    = "Joystick in Port 2",
             .shell          = "joystick 2"

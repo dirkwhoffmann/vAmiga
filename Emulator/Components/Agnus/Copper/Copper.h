@@ -23,6 +23,7 @@ class Copper : public SubComponent, public Inspectable<CopperInfo>
 {
     Descriptions descriptions = {{
 
+        .type           = COMP_COPPER,
         .name           = "Copper",
         .description    = "Copper",
         .shell          = "copper"

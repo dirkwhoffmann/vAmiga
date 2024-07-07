@@ -24,6 +24,7 @@ class Denise : public SubComponent, public Inspectable<DeniseInfo> {
 
     Descriptions descriptions = {{
 
+        .type           = COMP_DENISE,
         .name           = "Denise",
         .description    = "Graphics",
         .shell          = "denise"
