@@ -797,7 +797,7 @@ extension Inspector {
 
         // Leave debug mode
         emu?.trackOff()
-        emu?.removeInspectionTarget()
+        emu?.autoInspectionMask = 0
     }
 }
 
@@ -805,20 +805,29 @@ extension Inspector: NSTabViewDelegate {
 
     func updateInspectionTarget() {
 
+        func mask(_ types: [CType]) -> Int {
+
+            var result = 0
+            for type in types { result = result | 1 << type.rawValue }
+            return result
+        }
+        func mask(_ type: CType) -> Int { return mask([type]) }
+
+
         if let id = panel.selectedTabViewItem?.label {
 
             switch id {
 
-            case "CPU":     emu.inspectionTarget = .CPU
-            case "CIA":     emu.inspectionTarget = .CIA
-            case "Memory":  emu.inspectionTarget = .MEM
-            case "Agnus":   emu.inspectionTarget = .AGNUS
-            case "Copper":  emu.inspectionTarget = .COPPER
-            case "Blitter": emu.inspectionTarget = .BLITTER
-            case "Denise":  emu.inspectionTarget = .DENISE
-            case "Paula":   emu.inspectionTarget = .PAULA
-            case "Ports":   emu.inspectionTarget = .PORTS
-            case "Events":  emu.inspectionTarget = .EVENTS
+            case "CPU":     emu.autoInspectionMask = mask([.CPU])
+            case "CIA":     emu.autoInspectionMask = mask([.CIA])
+            case "Memory":  emu.autoInspectionMask = mask([.MEM])
+            case "Agnus":   emu.autoInspectionMask = mask([.AGNUS])
+            case "Copper":  emu.autoInspectionMask = mask([.COPPER])
+            case "Blitter": emu.autoInspectionMask = mask([.BLITTER])
+            case "Denise":  emu.autoInspectionMask = mask([.DENISE])
+            case "Paula":   emu.autoInspectionMask = mask([.PAULA])
+            case "Ports":   emu.autoInspectionMask = mask([.PAULA, .CONTROL_PORT, .SERIAL_PORT])
+            case "Events":  emu.autoInspectionMask =  mask([.AGNUS])
             default:        break
             }
             

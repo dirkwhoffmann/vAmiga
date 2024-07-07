@@ -12,6 +12,7 @@
 
 // Base
 #include "CmdQueueTypes.h"
+#include "CoreComponentTypes.h"
 #include "ErrorTypes.h"
 #include "MsgQueueTypes.h"
 

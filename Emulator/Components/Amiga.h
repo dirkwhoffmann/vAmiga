@@ -264,6 +264,13 @@ public:
 
     void cacheInfo(AmigaInfo &result) const override;
 
+    u64 getAutoInspectionMask() const;
+    void setAutoInspectionMask(u64 mask);
+
+    [[deprecated]] CType getInspectionTarget() const;
+    [[deprecated]] void setInspectionTarget(CType target, Cycle trigger = 0);
+    [[deprecated]] void removeInspectionTarget() { setInspectionTarget(0); }
+
 
     //
     // Methods from Configurable
@@ -300,10 +307,6 @@ public:
     // AmigaInfo getInfo() const { return CoreComponent::getInfo(info); }
 
     void computeFrame();
-
-    InspectionTarget getInspectionTarget() const;
-    void setInspectionTarget(InspectionTarget target, Cycle trigger = 0);
-    void removeInspectionTarget() { setInspectionTarget(INSPECTION_NONE); }
 
     // Returns the native refresh rate of the emulated Amiga (50Hz or 60Hz)
     double nativeRefreshRate() const;

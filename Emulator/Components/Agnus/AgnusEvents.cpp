@@ -762,6 +762,21 @@ Agnus::serviceDASEvent(EventID id)
 void
 Agnus::serviceINSEvent(EventID id)
 {    
+    u64 mask = data[SLOT_INS];
+
+    if (mask & 1LL << COMP_AMIGA)           amiga.record();
+    if (mask & 1LL << COMP_CPU)             cpu.record();
+    if (mask & 1LL << COMP_MEM)             mem.record();
+    if (mask & 1LL << COMP_CIA)             ciaa.record(); ciab.record();
+    if (mask & 1LL << COMP_AGNUS)           agnus.record();
+    if (mask & 1LL << COMP_BLITTER)         blitter.record();
+    if (mask & 1LL << COMP_COPPER)          copper.record();
+    if (mask & 1LL << COMP_PAULA)           paula.record();
+    if (mask & 1LL << COMP_CONTROL_PORT)    controlPort1.record(); controlPort2.record();
+    if (mask & 1LL << COMP_SERIAL_PORT)     serialPort.record();
+    if (mask & 1LL << COMP_UART)            uart.record();
+
+    /*
     switch (id) {
 
         case INS_AMIGA:
@@ -825,6 +840,7 @@ Agnus::serviceINSEvent(EventID id)
         default:
             fatalError;
     }
+    */
 
     // Reschedule event
     rescheduleRel<SLOT_INS>((Cycle)(inspectionInterval * 28000000));

@@ -255,9 +255,11 @@
 - (BOOL)set:(Option)opt drive:(NSInteger)id enable:(BOOL)val;
 
 
-@property InspectionTarget inspectionTarget;
+/*
+@property CType inspectionTarget;
 - (void) removeInspectionTarget;
-
+*/
+@property NSInteger autoInspectionMask;
 
 
 

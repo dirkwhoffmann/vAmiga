@@ -329,23 +329,44 @@ Amiga::overrideOption(Option option, i64 value)
     return value;
 }
 
-InspectionTarget
+u64 
+Amiga::getAutoInspectionMask() const
+{
+    return agnus.data[SLOT_INS];
+}
+
+void 
+Amiga::setAutoInspectionMask(u64 mask)
+{
+    if (mask) {
+
+        agnus.data[SLOT_INS] = mask;
+        agnus.serviceINSEvent(INS_AMIGA);
+
+    } else {
+
+        agnus.data[SLOT_INS] = 0;
+        agnus.cancel<SLOT_INS>();
+    }
+}
+
+CType
 Amiga::getInspectionTarget() const
 {
     switch(agnus.id[SLOT_INS]) {
 
-        case EVENT_NONE:  return INSPECTION_NONE;
-        case INS_AMIGA:   return INSPECTION_AMIGA;
-        case INS_CPU:     return INSPECTION_CPU;
-        case INS_MEM:     return INSPECTION_MEM;
-        case INS_CIA:     return INSPECTION_CIA;
-        case INS_AGNUS:   return INSPECTION_AGNUS;
-        case INS_BLITTER: return INSPECTION_BLITTER;
-        case INS_COPPER:  return INSPECTION_COPPER;
-        case INS_PAULA:   return INSPECTION_PAULA;
-        case INS_DENISE:  return INSPECTION_DENISE;
-        case INS_PORTS:   return INSPECTION_PORTS;
-        case INS_EVENTS:  return INSPECTION_EVENTS;
+        case EVENT_NONE:  return COMP_UNKNOWN;
+        case INS_AMIGA:   return COMP_AMIGA;
+        case INS_CPU:     return COMP_CPU;
+        case INS_MEM:     return COMP_MEM;
+        case INS_CIA:     return COMP_CIA;
+        case INS_AGNUS:   return COMP_AGNUS;
+        case INS_BLITTER: return COMP_BLITTER;
+        case INS_COPPER:  return COMP_COPPER;
+        case INS_PAULA:   return COMP_PAULA;
+        case INS_DENISE:  return COMP_DENISE;
+        case INS_PORTS:   return COMP_CONTROL_PORT;
+        case INS_EVENTS:  return COMP_AGNUS;
 
         default:
             fatalError;
@@ -353,7 +374,7 @@ Amiga::getInspectionTarget() const
 }
 
 void
-Amiga::setInspectionTarget(InspectionTarget target, Cycle trigger)
+Amiga::setInspectionTarget(CType target, Cycle trigger)
 {
     EventID id;
 
@@ -361,19 +382,19 @@ Amiga::setInspectionTarget(InspectionTarget target, Cycle trigger)
 
         switch(target) {
 
-            case INSPECTION_NONE:    agnus.cancel<SLOT_INS>(); return;
+            case COMP_UNKNOWN:      agnus.cancel<SLOT_INS>(); return;
 
-            case INSPECTION_AMIGA:   id = INS_AMIGA; break;
-            case INSPECTION_CPU:     id = INS_CPU; break;
-            case INSPECTION_MEM:     id = INS_MEM; break;
-            case INSPECTION_CIA:     id = INS_CIA; break;
-            case INSPECTION_AGNUS:   id = INS_AGNUS; break;
-            case INSPECTION_BLITTER: id = INS_BLITTER; break;
-            case INSPECTION_COPPER:  id = INS_COPPER; break;
-            case INSPECTION_PAULA:   id = INS_PAULA; break;
-            case INSPECTION_DENISE:  id = INS_DENISE; break;
-            case INSPECTION_PORTS:   id = INS_PORTS; break;
-            case INSPECTION_EVENTS:  id = INS_EVENTS; break;
+            case COMP_AMIGA:        id = INS_AMIGA; break;
+            case COMP_CPU:          id = INS_CPU; break;
+            case COMP_MEM:          id = INS_MEM; break;
+            case COMP_CIA:          id = INS_CIA; break;
+            case COMP_AGNUS:        id = INS_AGNUS; break;
+            case COMP_BLITTER:      id = INS_BLITTER; break;
+            case COMP_COPPER:       id = INS_COPPER; break;
+            case COMP_PAULA:        id = INS_PAULA; break;
+            case COMP_DENISE:       id = INS_DENISE; break;
+            case COMP_CONTROL_PORT: id = INS_PORTS; break;
+            // case COMP_EVENTS:       id = INS_EVENTS; break;
 
             default:
                 fatalError;

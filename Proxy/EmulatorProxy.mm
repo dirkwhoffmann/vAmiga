@@ -2745,12 +2745,13 @@ using namespace vamiga::moira;
 }
 */
 
-- (InspectionTarget)inspectionTarget
+/*
+- (CType)inspectionTarget
 {
     return [self emu]->emu->main.getInspectionTarget();
 }
 
-- (void)setInspectionTarget:(InspectionTarget)target
+- (void)setInspectionTarget:(CType)target
 {
     [self emu]->emu->main.setInspectionTarget(target);
 }
@@ -2759,6 +2760,18 @@ using namespace vamiga::moira;
 {
     [self emu]->emu->main.removeInspectionTarget();
 }
+*/
+
+- (NSInteger)autoInspectionMask
+{
+    return [self emu]->emu->main.getAutoInspectionMask();
+}
+
+- (void)setAutoInspectionMask:(NSInteger)mask
+{
+    [self emu]->emu->main.setAutoInspectionMask(mask);
+}
+
 
 - (SnapshotProxy *)takeSnapshot
 {

@@ -104,6 +104,7 @@ struct ConfigSchemeEnum : util::Reflection<ConfigSchemeEnum, ConfigScheme>
 };
 #endif
 
+/*
 enum_long(INSPECTION_TARGET)
 {
     INSPECTION_NONE,
@@ -150,6 +151,7 @@ struct InspectionTargetEnum : util::Reflection<InspectionTargetEnum, InspectionT
     }
 };
 #endif
+*/
 
 enum_long(REG_CHIPSET)
 {
