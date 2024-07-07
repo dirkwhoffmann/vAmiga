@@ -45,7 +45,7 @@ class FloppyCreator: DialogController {
         
         super.awakeFromNib()
         
-        let type = emu.getConfig(.DRIVE_TYPE, drive: nr)
+        let type = emu.get(.DRIVE_TYPE, drive: nr)
         switch FloppyDriveType(rawValue: type) {
             
         case .DD_35:

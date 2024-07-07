@@ -48,15 +48,15 @@ extension Inspector {
 
             for (c, f) in elements { assignFormatter(f, c!) }
 
-            let style = emu.getConfig(.CPU_DASM_SYNTAX)
+            let style = emu.get(.CPU_DASM_SYNTAX)
             cpuDasmStyle1.selectItem(withTag: style)
             cpuDasmStyle2.selectItem(withTag: style)
 
-            let dasmRev = emu.getConfig(.CPU_DASM_REVISION)
+            let dasmRev = emu.get(.CPU_DASM_REVISION)
             cpuDasmRev1.selectItem(withTag: dasmRev)
             cpuDasmRev2.selectItem(withTag: dasmRev)
 
-            let rev = CPURevision(rawValue: emu.getConfig(.CPU_REVISION))
+            let rev = CPURevision(rawValue: emu.get(.CPU_REVISION))
             let below10 = rev == ._68000
             let below20 = rev == ._68000 || rev == ._68010
             cpuMSP.isHidden = below20
@@ -164,11 +164,11 @@ extension Inspector {
 
     @IBAction func cpuSyntaxAction(_ sender: NSPopUpButton!) {
 
-        emu.configure(.CPU_DASM_SYNTAX, value: sender.selectedTag())
+        emu.set(.CPU_DASM_SYNTAX, value: sender.selectedTag())
     }
 
     @IBAction func cpuDasmRevAction(_ sender: NSPopUpButton!) {
 
-        emu.configure(.CPU_DASM_REVISION, value: sender.selectedTag())
+        emu.set(.CPU_DASM_REVISION, value: sender.selectedTag())
     }
 }

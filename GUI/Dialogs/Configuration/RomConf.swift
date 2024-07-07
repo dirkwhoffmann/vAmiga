@@ -237,9 +237,9 @@ extension ConfigurationController {
         config.extStart = 0xE0
 
         // Make sure the machine has enough Ram to run Aros
-        let chip = emu.getConfig(.MEM_CHIP_RAM)
-        let slow = emu.getConfig(.MEM_SLOW_RAM)
-        let fast = emu.getConfig(.MEM_FAST_RAM)
+        let chip = emu.get(.MEM_CHIP_RAM)
+        let slow = emu.get(.MEM_SLOW_RAM)
+        let fast = emu.get(.MEM_FAST_RAM)
         if chip + slow + fast < 1024*1024 { config.slowRam = 512 }
     }
 

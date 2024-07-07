@@ -392,6 +392,21 @@ Emulator::update()
                 set(cmd.config.option, cmd.config.value, { });
                 break;
 
+            case CMD_ALARM_ABS:
+
+                main.setAlarmAbs(cmd.alarm.cycle, cmd.alarm.value);
+                break;
+
+            case CMD_ALARM_REL:
+
+                main.setAlarmRel(cmd.alarm.cycle, cmd.alarm.value);
+                break;
+
+            case CMD_INSPECTION_TARGET:
+
+                main.setAutoInspectionMask(cmd.value);
+                break;
+
             case CMD_KEY_PRESS:
             case CMD_KEY_RELEASE:
             case CMD_KEY_RELEASE_ALL:

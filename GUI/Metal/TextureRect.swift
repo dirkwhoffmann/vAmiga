@@ -120,7 +120,7 @@ extension Canvas {
     
     func updateTextureRect() {
 
-        if amiga.getConfig(.DMA_DEBUG_ENABLE) != 0 {
+        if amiga.get(.DMA_DEBUG_ENABLE) != 0 {
             textureRect = entireNormalized
         } else {
             textureRect = visibleNormalized

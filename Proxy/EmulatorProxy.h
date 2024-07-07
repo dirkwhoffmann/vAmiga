@@ -255,33 +255,6 @@
 - (BOOL)set:(Option)opt id:(NSInteger)id enable:(BOOL)val;
 - (BOOL)set:(Option)opt drive:(NSInteger)id value:(NSInteger)val;
 - (BOOL)set:(Option)opt drive:(NSInteger)id enable:(BOOL)val;
-
-
-
-
-
-
-
-
-// - (void)continueScript;
-
- - (void) loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex;
-
-- (NSInteger)getConfig:(Option)opt;
-- (NSInteger)getConfig:(Option)opt id:(NSInteger)id;
-- (NSInteger)getConfig:(Option)opt drive:(NSInteger)id;
-- (BOOL)configure:(Option)opt value:(NSInteger)val;
-- (BOOL)configure:(Option)opt enable:(BOOL)val;
-- (BOOL)configure:(Option)opt id:(NSInteger)id value:(NSInteger)val;
-- (BOOL)configure:(Option)opt id:(NSInteger)id enable:(BOOL)val;
-- (BOOL)configure:(Option)opt drive:(NSInteger)id value:(NSInteger)val;
-- (BOOL)configure:(Option)opt drive:(NSInteger)id enable:(BOOL)val;
-
-- (void)setListener:(const void *)sender function:(Callback *)func;
-
-- (void)setAlarmAbs:(NSInteger)cycle payload:(NSInteger)value;
-- (void)setAlarmRel:(NSInteger)cycle payload:(NSInteger)value;
-
 - (void)exportConfig:(NSURL *)url exception:(ExceptionWrapper *)ex;
 
 - (void)put:(CmdType)cmd;
@@ -291,11 +264,13 @@
 - (void)put:(CmdType)type action:(GamePadCmd)cmd;
 - (void)put:(CmdType)type coord:(CoordCmd)cmd;
 
+ - (void) loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex;
+
 @end
 
 
 //
-// Properties
+// Defaults
 //
 
 @interface DefaultsProxy : Proxy { }

@@ -25,7 +25,7 @@ extension MyDocument {
 
         func attach() throws {
                       
-            amiga.configure(.HDC_CONNECT, drive: n, enable: true)
+            amiga.set(.HDC_CONNECT, drive: n, enable: true)
             if let proxy = file { try hdn.attach(hdf: proxy) }
         }
         
@@ -51,7 +51,7 @@ extension MyDocument {
 
         func detach() throws {
                       
-            amiga.configure(.HDC_CONNECT, drive: n, enable: false)
+            amiga.set(.HDC_CONNECT, drive: n, enable: false)
         }
         
         if force || proceedWithUnsavedHardDisk(drive: hdn) {

@@ -26,12 +26,12 @@ enum_long(CMD_TYPE)
     CMD_CONFIG,                 ///< Configure the emulator
     CMD_CONFIG_ALL,             ///< Configure the emulator
 
-    /*
-    // C64
+    // Amiga
     CMD_ALARM_ABS,              ///< Schedule an alarm (absolute cycle)
     CMD_ALARM_REL,              ///< Schedule an alarm (relative cycle)
-    CMD_INSPECTION_TARGET,      ///< Sets the auto-inspection component
+    CMD_INSPECTION_TARGET,      ///< Sets the auto-inspection mask
 
+    /*
     // CPU
     CMD_CPU_BRK,                ///< Let the CPU execute a BRK instruction
     CMD_CPU_NMI,                ///< Emulate an external expansion port NMI
@@ -106,11 +106,11 @@ struct CmdTypeEnum : util::Reflection<CmdTypeEnum, CmdType> {
             case CMD_CONFIG:                return "CONFIG";
             case CMD_CONFIG_ALL:            return "CONFIG_ALL";
 
-            /*
             case CMD_ALARM_ABS:             return "ALARM_ABS";
             case CMD_ALARM_REL:             return "ALARM_REL";
             case CMD_INSPECTION_TARGET:     return "INSPECTION_TARGET";
 
+            /*
             case CMD_CPU_BRK:               return "CPU_BRK";
             case CMD_CPU_NMI:               return "CPU_NMI";
 
@@ -195,7 +195,6 @@ typedef struct
 }
 GamePadCmd;
 
-/*
 typedef struct
 {
     i64 cycle;
@@ -203,6 +202,7 @@ typedef struct
 }
 AlarmCmd;
 
+/*
 typedef struct
 {
     const char *command;
@@ -223,8 +223,8 @@ struct Cmd
         KeyCmd key;
         GamePadCmd action;
         CoordCmd coord;
-        /*
         AlarmCmd alarm;
+        /*
         ShellCmd shell;
         */
     };
@@ -237,8 +237,8 @@ struct Cmd
     Cmd(CmdType type, const KeyCmd &cmd) : type(type), key(cmd) { }
     Cmd(CmdType type, const GamePadCmd &cmd) : type(type), action(cmd) { }
     Cmd(CmdType type, const CoordCmd &cmd) : type(type), coord(cmd) { }
-    /*
     Cmd(CmdType type, const AlarmCmd &cmd) : type(type), alarm(cmd) { }
+    /*
     Cmd(CmdType type, const ShellCmd &cmd) : type(type), shell(cmd) { }
     */
 #endif
