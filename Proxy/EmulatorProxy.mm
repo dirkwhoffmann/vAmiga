@@ -9,21 +9,9 @@
 
 #import "config.h"
 #import "EmulatorProxy.h"
-#import "Amiga.h"
-#import "vAmiga-Swift.h"
-#import "DMSFile.h"
-#import "EXEFile.h"
-#import "ExtendedRomFile.h"
-#import "EADFFile.h"
-#import "Folder.h"
-#import "MutableFileSystem.h"
-#import "IMGFile.h"
-#import "RomFile.h"
-#import "Script.h"
-#import "Snapshot.h"
-#import "STFile.h"
 #import "VAmiga.h"
 #import "Emulator.h"
+#import "vAmiga-Swift.h"
 
 using namespace vamiga;
 using namespace vamiga::moira;

@@ -10,9 +10,10 @@
 #pragma once
 
 #include "Aliases.h"
-#include "Reflection.h"
 #include "DiskControllerTypes.h"
+#include "StateMachineTypes.h"
 #include "UARTTypes.h"
+#include "Reflection.h"
 
 //
 // Enumerations

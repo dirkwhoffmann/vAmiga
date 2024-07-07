@@ -11,7 +11,7 @@
 
 #include "Types.h"
 
-namespace vamiga {
+// namespace vamiga {
 
 //
 // Structures
@@ -30,4 +30,4 @@ typedef struct
 }
 VideoPortInfo;
 
-}
+// }

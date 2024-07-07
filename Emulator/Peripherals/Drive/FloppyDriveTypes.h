@@ -10,6 +10,8 @@
 #pragma once
 
 #include "DriveTypes.h"
+#include "FloppyDiskTypes.h"
+#include "BootBlockImageTypes.h"
 
 //
 // Enumerations

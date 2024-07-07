@@ -20,5 +20,6 @@
 #include "DiskFiles/Folder.h"
 #include "DiskFiles/HDFFile.h"
 #include "DiskFiles/IMGFile.h"
+#include "DiskFiles/STFile.h"
 #include "RomFiles/ExtendedRomFile.h"
 #include "RomFiles/RomFile.h"

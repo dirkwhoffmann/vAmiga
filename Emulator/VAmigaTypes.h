@@ -11,10 +11,12 @@
 #pragma once
 
 // Base
-#include "MsgQueueTypes.h"
 #include "CmdQueueTypes.h"
+#include "ErrorTypes.h"
+#include "MsgQueueTypes.h"
 
 // Components
+#include "EmulatorTypes.h"
 #include "AgnusTypes.h"
 #include "AmigaTypes.h"
 #include "AudioFilterTypes.h"
@@ -38,6 +40,11 @@
 #include "KeyboardTypes.h"
 #include "MouseTypes.h"
 #include "ZorroBoardTypes.h"
+
+// Media
+#include "AmigaFileTypes.h"
+#include "FSTypes.h"
+#include "RomFileTypes.h"
 
 // Miscellaneous
 #include "RemoteManagerTypes.h"
