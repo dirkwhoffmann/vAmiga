@@ -27,7 +27,12 @@ class MemoryDebugger final : public SubComponent
 
     };
 
-    
+public:
+
+    // Last used address (current object location) (TODO: MOVE TO CALLER SIDE?!)
+    u32 current = 0;
+
+
     //
     // Methods
     //
@@ -72,6 +77,54 @@ public:
 
     const ConfigOptions &getOptions() const override { return options; }
 
+
+    //
+    // Managing memory
+    //
+
+public:
+    
+    // Returns a memory dump in ASCII, hex, or both
+    template <Accessor A> const char *ascDump(u32 addr, isize bytes) const;
+    template <Accessor A> const char *hexDump(u32 addr, isize bytes, isize sz = 1) const;
+    template <Accessor A> const char *memDump(u32 addr, isize bytes, isize sz = 1) const;
+
+    // Writes a memory dump into a stream
+    template <Accessor A> void ascDump(std::ostream& os, u32 addr, isize lines);
+    template <Accessor A> void hexDump(std::ostream& os, u32 addr, isize lines, isize sz);
+    template <Accessor A> void memDump(std::ostream& os, u32 addr, isize lines, isize sz);
+
+    // Searches a number sequence in memory
+    i64 memSearch(const string &pattern, u32 addr, isize align);
+
+    // Reads a value from memory
+    u32 read(u32 addr, isize sz);
+
+    // Writes a value into memory (multiple times)
+    void write(u32 addr, u32 val, isize sz, isize repeats = 1);
+
+
+    //
+    // Handling registers
+    //
+
+    bool isUnused(ChipsetReg reg) const;
+    bool isReadable(ChipsetReg reg) const;
+    bool isWritable(ChipsetReg reg) const;
+
+    u16 readCs(ChipsetReg reg) const;
+    void writeCs(ChipsetReg reg, u16 value);
+
+
+    //
+    // Displaying expressions (TODO: REPLACE BY GENERIC FORMAT STRING FORMATTER)
+    //
+
+    // Displays a value in different number formats (hex, dec, bin, alpha)
+    void convertNumeric(std::ostream& os, u8 value) const;
+    void convertNumeric(std::ostream& os, u16 value) const;
+    void convertNumeric(std::ostream& os, u32 value) const;
+    void convertNumeric(std::ostream& os, string value) const;
 };
 
 }
