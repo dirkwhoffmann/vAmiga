@@ -10,7 +10,7 @@
 #pragma once
 
 #include "MemoryTypes.h"
-#include "SubComponent.h"
+#include "MemoryDebugger.h"
 #include "RomFileTypes.h"
 #include "MemUtils.h"
 #include "Buffer.h"
@@ -129,6 +129,9 @@ class Memory : public SubComponent, public Inspectable<MemInfo, MemStats> {
     // Current configuration
     MemConfig config = {};
 
+    // Subcomponents
+    MemoryDebugger debugger = MemoryDebugger(amiga);
+
 public:
 
     /* About
@@ -221,7 +224,7 @@ public:
 
 public:
     
-    using SubComponent::SubComponent;
+    Memory(Amiga& ref);
 
     Memory& operator= (const Memory& other) {
 

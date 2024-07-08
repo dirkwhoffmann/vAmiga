@@ -25,6 +25,14 @@
 
 namespace vamiga {
 
+Memory::Memory(Amiga& ref) : SubComponent(ref)
+{
+    subComponents = std::vector<CoreComponent *> {
+
+        &debugger
+    };
+}
+
 void
 Memory::_dump(Category category, std::ostream& os) const
 {
