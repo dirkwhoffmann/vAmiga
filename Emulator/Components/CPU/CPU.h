@@ -247,12 +247,45 @@ public:
     void willExecute(moira::ExceptionType exc, u16 vector);
     void didExecute(moira::ExceptionType exc, u16 vector);
 
+
+    //
+    // Processing commands
+    //
+
+public:
+
+    // Processes a command from the command queue
+    void processCommand(const class Cmd &cmd);
     
+
     //
     // Debugging
     //
     
+    void setGuard(GuardType type, u32 addr, isize ignores = 0) throws;
+    void moveGuard(GuardType, isize nr, u32 newAddr) throws;
+    void deleteGuard(GuardType type, isize nr) throws;
+    void deleteGuardAt(GuardType type, u32 addr) throws;
+    void deleteAllGuards(GuardType type) throws;
+    void enableGuard(GuardType type, isize nr) throws { setEnableGuard(type, nr, true); }
+    void enableGuardAt(GuardType type, u32 addr) throws { setEnableGuardAt(type, addr, true); }
+    void enableAllGuards(GuardType type) throws { setEnableAllGuards(type, true); }
+    void disableGuard(GuardType type, isize nr) throws { setEnableGuard(type, nr, false); }
+    void disableGuardAt(GuardType type, u32 addr) throws { setEnableGuardAt(type, addr, false); }
+    void disableAllGuards(GuardType type) throws { setEnableAllGuards(type, false); }
+    void toggleGuard(GuardType type, isize nr) throws;
+
+private:
+
+    void setEnableGuard(GuardType type, isize nr, bool value) throws;
+    void setEnableGuardAt(GuardType type, u32 addr, bool value) throws;
+    void setEnableAllGuards(GuardType type, bool value) throws;
+
+
+    // OLD API
+
     // Manages the breakpoint list
+    /*
     void setBreakpoint(u32 addr, isize ignores = 0) throws;
     void deleteBreakpoint(isize nr) throws;
     void enableBreakpoint(isize nr) throws;
@@ -275,6 +308,7 @@ public:
     void disableCatchpoint(isize nr) throws;
     void toggleCatchpoint(isize nr) throws;
     void ignoreCatchpoint(isize nr, isize ignores) throws;
+     */
 };
 
 }

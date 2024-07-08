@@ -1195,9 +1195,8 @@ public:
     void put(CmdType type, KeyCmd payload)  { put(Cmd(type, payload)); }
     void put(CmdType type, GamePadCmd payload)  { put(Cmd(type, payload)); }
     void put(CmdType type, CoordCmd payload)  { put(Cmd(type, payload)); }
-    /*
     void put(CmdType type, AlarmCmd payload)  { put(Cmd(type, payload)); }
-    */
+
     /// @}
 };
 

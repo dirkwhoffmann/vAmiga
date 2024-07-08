@@ -31,11 +31,6 @@ enum_long(CMD_TYPE)
     CMD_ALARM_REL,              ///< Schedule an alarm (relative cycle)
     CMD_INSPECTION_TARGET,      ///< Sets the auto-inspection mask
 
-    /*
-    // CPU
-    CMD_CPU_BRK,                ///< Let the CPU execute a BRK instruction
-    CMD_CPU_NMI,                ///< Emulate an external expansion port NMI
-
     // CPU (Breakpoints)
     CMD_BP_SET_AT,              ///< Set a breakpoint
     CMD_BP_MOVE_TO,             ///< Change the address of breakpoint
@@ -48,6 +43,8 @@ enum_long(CMD_TYPE)
     CMD_BP_DISABLE_NR,          ///< Disable the n-th breakpoint
     CMD_BP_DISABLE_AT,          ///< Disable the breakpoint at an address
     CMD_BP_DISABLE_ALL,         ///< Disable all brekpoints
+
+    /*
 
     // CPU (Watchpoints)
     CMD_WP_SET_AT,              ///< Set a watchpoint
@@ -110,10 +107,6 @@ struct CmdTypeEnum : util::Reflection<CmdTypeEnum, CmdType> {
             case CMD_ALARM_REL:             return "ALARM_REL";
             case CMD_INSPECTION_TARGET:     return "INSPECTION_TARGET";
 
-            /*
-            case CMD_CPU_BRK:               return "CPU_BRK";
-            case CMD_CPU_NMI:               return "CPU_NMI";
-
             case CMD_BP_SET_AT:             return "BP_SET_AT";
             case CMD_BP_REMOVE_NR:          return "BP_REMOVE_NR";
             case CMD_BP_REMOVE_AT:          return "BP_REMOVE_AT";
@@ -125,6 +118,7 @@ struct CmdTypeEnum : util::Reflection<CmdTypeEnum, CmdType> {
             case CMD_BP_DISABLE_AT:         return "BP_DISABLE_AT";
             case CMD_BP_DISABLE_ALL:        return "BP_DISABLE_ALL";
 
+                /*
             case CMD_WP_SET_AT:             return "WP_SET_AT";
             case CMD_WP_REMOVE_NR:          return "WP_REMOVE_NR";
             case CMD_WP_REMOVE_AT:          return "WP_REMOVE_AT";

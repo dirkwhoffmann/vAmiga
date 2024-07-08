@@ -106,10 +106,13 @@ public:
 
     void enable(long nr) { setEnable(nr, true); }
     void enableAt(u32 addr) { setEnableAt(addr, true); }
+    void enableAll() { setEnableAll(true); }
     void disable(long nr) { setEnable(nr, false); }
     void disableAt(u32 addr) { setEnableAt(addr, false); }
+    void disableAll() { setEnableAll(false); }
     void setEnable(long nr, bool val);
     void setEnableAt(u32 addr, bool val);
+    void setEnableAll(bool val);
 
     void ignore(long nr, long count);
 

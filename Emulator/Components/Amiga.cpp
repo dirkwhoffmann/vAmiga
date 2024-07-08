@@ -959,6 +959,31 @@ Amiga::takeUserSnapshot()
 */
 
 void
+Amiga::processCommand(const Cmd &cmd)
+{
+    switch (cmd.type) {
+
+        case CMD_ALARM_ABS:
+
+            setAlarmAbs(cmd.alarm.cycle, cmd.alarm.value);
+            break;
+
+        case CMD_ALARM_REL:
+
+            setAlarmRel(cmd.alarm.cycle, cmd.alarm.value);
+            break;
+
+        case CMD_INSPECTION_TARGET:
+
+            setAutoInspectionMask(cmd.value);
+            break;
+
+        default:
+            fatalError;
+    }
+}
+
+void
 Amiga::eolHandler()
 {
     // Get the maximum number of rasterlines

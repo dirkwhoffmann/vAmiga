@@ -128,21 +128,21 @@ DebugConsole::initCommands(Command &root)
 
                 auto addr = parseAddr(argv[0]);
                 if (IS_ODD(addr)) throw Error(ERROR_ADDR_UNALIGNED);
-                cpu.setBreakpoint(addr, parseNum(argv, 1, 0));
+                cpu.setGuard(GUARD_BREAKPOINT, addr, parseNum(argv, 1, 0));
             });
 
             root.add({"break", "delete"}, { Arg::nr },
                      "Delete breakpoints",
                      [this](Arguments& argv, long value) {
 
-                cpu.deleteBreakpoint(parseNum(argv[0]));
+                cpu.deleteGuard(GUARD_BREAKPOINT, parseNum(argv[0]));
             });
 
             root.add({"break", "toggle"}, { Arg::nr },
                      "Enable or disable breakpoints",
                      [this](Arguments& argv, long value) {
 
-                cpu.toggleBreakpoint(parseNum(argv[0]));
+                cpu.toggleGuard(GUARD_BREAKPOINT, parseNum(argv[0]));
             });
         }
 
@@ -161,21 +161,21 @@ DebugConsole::initCommands(Command &root)
                      "Set a watchpoint at the specified address",
                      [this](Arguments& argv, long value) {
 
-                cpu.setWatchpoint(u32(parseNum(argv[0])), parseNum(argv[1], 0));
+                cpu.setGuard(GUARD_WATCHPOINT, u32(parseNum(argv[0])), parseNum(argv[1], 0));
             });
 
             root.add({"watch", "delete"}, { Arg::address },
                      "Delete a watchpoint",
                      [this](Arguments& argv, long value) {
 
-                cpu.deleteWatchpoint(parseNum(argv[0]));
+                cpu.deleteGuard(GUARD_WATCHPOINT, parseNum(argv[0]));
             });
 
             root.add({"watch", "toggle"}, { Arg::address },
                      "Enable or disable a watchpoint",
                      [this](Arguments& argv, long value) {
 
-                cpu.toggleWatchpoint(parseNum(argv[0]));
+                cpu.toggleGuard(GUARD_WATCHPOINT, parseNum(argv[0]));
             });
         }
 
@@ -195,7 +195,7 @@ DebugConsole::initCommands(Command &root)
 
                     auto nr = parseNum(argv[0]);
                     if (nr < 0 || nr > 255) throw Error(ERROR_OPT_INV_ARG, "0...255");
-                    cpu.setCatchpoint(u8(nr), parseNum(argv[1], 0));
+                    cpu.setGuard(GUARD_CATCHPOINT, u8(nr), parseNum(argv[1], 0));
                 }
             });
 
@@ -205,7 +205,7 @@ DebugConsole::initCommands(Command &root)
 
                 auto nr = parseNum(argv[0]);
                 if (nr < 0 || nr > 255) throw Error(ERROR_OPT_INV_ARG, "0...255");
-                cpu.setCatchpoint(u8(nr), parseNum(argv[1], 0));
+                cpu.setGuard(GUARD_CATCHPOINT, u8(nr), parseNum(argv[1], 0));
             });
 
             root.add({"catch", "interrupt"}, { Arg::value }, { Arg::ignores },
@@ -214,7 +214,7 @@ DebugConsole::initCommands(Command &root)
 
                 auto nr = parseNum(argv[0]);
                 if (nr < 1 || nr > 7) throw Error(ERROR_OPT_INV_ARG, "1...7");
-                cpu.setCatchpoint(u8(nr + 24), parseNum(argv[1], 0));
+                cpu.setGuard(GUARD_CATCHPOINT, u8(nr + 24), parseNum(argv[1], 0));
             });
 
             root.add({"catch", "trap"}, { Arg::value }, { Arg::ignores },
@@ -223,21 +223,21 @@ DebugConsole::initCommands(Command &root)
 
                 auto nr = parseNum(argv[0]);
                 if (nr < 0 || nr > 15) throw Error(ERROR_OPT_INV_ARG, "0...15");
-                cpu.setCatchpoint(u8(nr + 32));
+                cpu.setGuard(GUARD_CATCHPOINT, u8(nr + 32));
             });
 
             root.add({"catch", "delete"}, { Arg::value },
                      "Delete a catchpoint",
                      [this](Arguments& argv, long value) {
 
-                cpu.deleteCatchpoint(parseNum(argv[0]));
+                cpu.deleteGuard(GUARD_CATCHPOINT, parseNum(argv[0]));
             });
 
             root.add({"catch", "toggle"}, { Arg::value },
                      "Enable or disable a catchpoint",
                      [this](Arguments& argv, long value) {
 
-                cpu.enableCatchpoint(parseNum(argv[0]));
+                cpu.enableGuard(GUARD_CATCHPOINT, parseNum(argv[0]));
             });
         }
 

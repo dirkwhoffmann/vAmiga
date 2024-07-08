@@ -126,6 +126,35 @@ struct DasmSyntaxEnum : util::Reflection<DasmSyntaxEnum, DasmSyntax>
 };
 #endif
 
+enum_long(GUARD_TYPE)
+{
+    GUARD_BREAKPOINT,
+    GUARD_WATCHPOINT,
+    GUARD_CATCHPOINT,
+};
+typedef GUARD_TYPE GuardType;
+
+#ifdef __cplusplus
+struct GuardTypeEnum : util::Reflection<GuardTypeEnum, GuardType>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = GUARD_CATCHPOINT;
+    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
+
+    static const char *prefix() { return "GUARD"; }
+    static const char *_key(long value)
+    {
+        switch (value) {
+
+            case GUARD_BREAKPOINT:  return "BREAKPOINT";
+            case GUARD_WATCHPOINT:  return "WATCHPOINT";
+            case GUARD_CATCHPOINT:  return "CATCHPOINT";
+        }
+        return "???";
+    }
+};
+#endif
+
 
 //
 // Structures

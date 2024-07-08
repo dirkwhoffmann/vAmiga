@@ -157,6 +157,12 @@ Guards::setEnableAt(u32 addr, bool val)
     if (guard) guard->enabled = val;
 }
 
+void 
+Guards::setEnableAll(bool val)
+{
+    for (int i = 0; i < count; i++) guards[i].enabled = val;
+}
+
 void
 Guards::ignore(long nr, long count)
 {

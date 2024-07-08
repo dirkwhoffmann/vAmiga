@@ -393,18 +393,37 @@ Emulator::update()
                 break;
 
             case CMD_ALARM_ABS:
-
-                main.setAlarmAbs(cmd.alarm.cycle, cmd.alarm.value);
-                break;
-
             case CMD_ALARM_REL:
-
-                main.setAlarmRel(cmd.alarm.cycle, cmd.alarm.value);
-                break;
-
             case CMD_INSPECTION_TARGET:
 
-                main.setAutoInspectionMask(cmd.value);
+                main.processCommand(cmd);
+                break;
+
+            case CMD_BP_SET_AT:
+            case CMD_BP_MOVE_TO:
+            case CMD_BP_REMOVE_NR:
+            case CMD_BP_REMOVE_AT:
+            case CMD_BP_REMOVE_ALL:
+            case CMD_BP_ENABLE_NR:
+            case CMD_BP_ENABLE_AT:
+            case CMD_BP_ENABLE_ALL:
+            case CMD_BP_DISABLE_NR:
+            case CMD_BP_DISABLE_AT:
+            case CMD_BP_DISABLE_ALL:
+                /*
+            case CMD_WP_SET_AT:
+            case CMD_WP_MOVE_TO:
+            case CMD_WP_REMOVE_NR:
+            case CMD_WP_REMOVE_AT:
+            case CMD_WP_REMOVE_ALL:
+            case CMD_WP_ENABLE_NR:
+            case CMD_WP_ENABLE_AT:
+            case CMD_WP_ENABLE_ALL:
+            case CMD_WP_DISABLE_NR:
+            case CMD_WP_DISABLE_AT:
+            case CMD_WP_DISABLE_ALL:
+                 */
+                main.cpu.processCommand(cmd);
                 break;
 
             case CMD_KEY_PRESS:

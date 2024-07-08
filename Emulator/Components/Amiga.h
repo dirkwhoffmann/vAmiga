@@ -402,10 +402,13 @@ private:
 
 
     //
-    // Managing events
+    // Managing commands and events
     //
 
 public:
+
+    // Processes a command from the command queue
+    void processCommand(const Cmd &cmd);
 
     // End-of-line handler
     void eolHandler();
