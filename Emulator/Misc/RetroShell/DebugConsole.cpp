@@ -250,21 +250,21 @@ DebugConsole::initCommands(Command &root)
 
                 auto addr = parseAddr(argv[0]);
                 if (IS_ODD(addr)) throw Error(ERROR_ADDR_UNALIGNED);
-                copper.debugger.setBreakpoint(addr, parseNum(argv[1], 0));
+                copper.debugger.breakpoints.setAt(addr, parseNum(argv[1], 0));
             });
 
             root.add({"cbreak", "delete"}, { Arg::value },
                      "Delete a breakpoint",
                      [this](Arguments& argv, long value) {
 
-                copper.debugger.deleteBreakpoint(parseNum(argv[0]));
+                copper.debugger.breakpoints.remove(parseNum(argv[0]));
             });
 
             root.add({"cbreak", "toggle"}, { Arg::value },
                      "Enable or disable a breakpoint",
                      [this](Arguments& argv, long value) {
 
-                copper.debugger.toggleBreakpoint(parseNum(argv[0]));
+                copper.debugger.breakpoints.toggle(parseNum(argv[0]));
             });
         }
 
@@ -285,21 +285,21 @@ DebugConsole::initCommands(Command &root)
 
                 auto addr = parseAddr(argv[0]);
                 if (IS_ODD(addr)) throw Error(ERROR_ADDR_UNALIGNED);
-                copper.debugger.setWatchpoint(addr, parseNum(argv[1], 0));
+                copper.debugger.watchpoints.setAt(addr, parseNum(argv[1], 0));
             });
 
             root.add({"cwatch", "delete"}, { Arg::value },
                      "Delete a watchpoint",
                      [this](Arguments& argv, long value) {
 
-                copper.debugger.deleteWatchpoint(parseNum(argv[0]));
+                copper.debugger.watchpoints.remove(parseNum(argv[0]));
             });
 
             root.add({"cwatch", "toggle"}, { Arg::value },
                      "Enable or disable a watchpoint",
                      [this](Arguments& argv, long value) {
 
-                copper.debugger.toggleWatchpoint(parseNum(argv[0]));
+                copper.debugger.watchpoints.toggle(parseNum(argv[0]));
             });
         }
     }

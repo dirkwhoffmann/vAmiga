@@ -172,10 +172,6 @@ struct CopperAPI : API {
 
     class Copper *copper = nullptr;
 
-    /** @brief  Returns the component's current configuration.
-     */
-    // const BlitterConfig &getConfig() const;
-
     /** @brief  Returns the component's current state.
      */
     const CopperInfo &getInfo() const;
@@ -186,16 +182,62 @@ struct GuardsAPI : API {
 
     class GuardsWrapper *guards = nullptr;
 
+    /** @brief  Sets a guard.
+     *  @param  target  The observed target. For breakpoints and watchpoints,
+     *                  the target is a memory address. For catchpoints, the
+     *                  target is a vector number (interrupts or traps).
+     *  @param  ignores If a value greater zero is given, the guard has to
+     *                  to be hit the specified number of times until program
+     *                  execution is paused.
+     */
     void setAt(u32 target, isize ignores = 0);
-    void moveTo(isize nr, u32 newTarget);
+
+    /** @brief  Relocates a guard.
+     *  @param  nr      Number of the guard in the guard list
+     *  @param  target  New target
+     */
+    void moveTo(isize nr, u32 target);
+
+    /** @brief  Deletes a guard.
+     *  @param  nr      Number of the guard in the guard list
+     */
     void remove(isize nr);
+
+    /** @brief  Deletes a guard.
+     *  @param  target  The target of the guard to be deleted.
+     */
     void removeAt(u32 target);
+
+    /** @brief  Deletes all guards.
+     */
     void removeAll();
+
+    /** @brief  Enables a guard.
+     *  @param  nr      Number of the guard in the guard list
+     */
     void enable(isize nr);
+
+    /** @brief  Enables a guard.
+     *  @param  target  The target of the guard to be deleted
+     */
     void enableAt(u32 target);
+
+    /** @brief  Enables all guards.
+     */
     void enableAll();
+
+    /** @brief  Disables a guard.
+     *  @param  nr      Number of the guard in the guard list
+     */
     void disable(isize nr);
+
+    /** @brief  Disables a guard.
+     *  @param  target  The target of the guard to be deleted
+     */
     void disableAt(u32 target);
+
+    /** @brief  Disables all guards.
+     */
     void disableAll();
     void toggle(isize nr);
 
