@@ -81,7 +81,13 @@ AgnusAPI::getCachedInfo() const
     return agnus->getCachedInfo();
 }
 
-AgnusTraits
+const AgnusStats &
+AgnusAPI::getStats() const
+{
+    return agnus->getStats();
+}
+
+const AgnusTraits
 AgnusAPI::getTraits() const
 {
     return agnus->getTraits();

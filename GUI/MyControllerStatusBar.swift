@@ -220,7 +220,7 @@ extension MyController {
         let clock = emu.cpu.clock
 
         speedometer.updateWith(cycle: clock,
-                               emuFrame: Int64(emu.agnus.frameCount),
+                               emuFrame: Int64(emu.agnus.info.frame),
                                gpuFrame: renderer.frames)
 
         // Set value

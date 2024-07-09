@@ -33,17 +33,23 @@ public:
     API() { }
     API(Emulator *emu) : emu(emu) { }
     
+    bool isUserThread() const;
+
+private:
+
     void suspend();
     void resume();
-    
-    bool isUserThread() const;
 };
 
 //
 // Components
 //
 
-struct AmigaAPI : API {
+class AmigaAPI : public API {
+
+    friend class VAmiga;
+
+public:
 
     class Amiga *amiga = nullptr;
 
@@ -122,10 +128,14 @@ struct AmigaAPI : API {
     /// @}
 };
 
-struct AgnusAPI : API {
+class AgnusAPI : public API {
+
+    friend class VAmiga;
 
     class Agnus *agnus = nullptr;
 
+public:
+    
     /** @brief  Returns the component's current configuration.
      */
     const AgnusConfig &getConfig() const;
@@ -135,12 +145,16 @@ struct AgnusAPI : API {
     const AgnusInfo &getInfo() const;
     const AgnusInfo &getCachedInfo() const;
 
+    /** @brief  Returns statistical information about the components.
+     */
+    const AgnusStats &getStats() const;
+
     /** @brief  Provides details about the currently selected chip revision.
      */
-    AgnusTraits getTraits() const;
+    const AgnusTraits getTraits() const;
 };
 
-struct BlitterAPI : API {
+struct BlitterAPI : public API {
 
     class Blitter *blitter = nullptr;
 
@@ -154,7 +168,7 @@ struct BlitterAPI : API {
     const BlitterInfo &getCachedInfo() const;
 };
 
-struct CIAAPI : API {
+struct CIAAPI : public API {
 
     class CIA *cia = nullptr;
 
@@ -168,7 +182,7 @@ struct CIAAPI : API {
     const CIAInfo &getCachedInfo() const;
 };
 
-struct CopperAPI : API {
+struct CopperAPI : public API {
 
     class Copper *copper = nullptr;
 
@@ -178,10 +192,10 @@ struct CopperAPI : API {
     const CopperInfo &getCachedInfo() const;
 };
 
-struct GuardsAPI : API {
+struct GuardsAPI : public API {
 
     class GuardsWrapper *guards = nullptr;
-    
+
     /** @brief  Returns the number of guards in the guard list.
      */
     isize elements() const;
@@ -257,7 +271,7 @@ struct GuardsAPI : API {
 
 };
 
-struct CPUAPI : API {
+struct CPUAPI : public API {
 
     class CPU *cpu = nullptr;
 
@@ -274,7 +288,7 @@ struct CPUAPI : API {
     const CPUInfo &getCachedInfo() const;
 };
 
-struct DeniseAPI : API {
+struct DeniseAPI : public API {
 
     class Denise *denise = nullptr;
 
@@ -288,7 +302,7 @@ struct DeniseAPI : API {
     const DeniseInfo &getCachedInfo() const;
 };
 
-struct DiskControllerAPI : API {
+struct DiskControllerAPI : public API {
 
     class DiskController *diskController = nullptr;
 
@@ -302,7 +316,7 @@ struct DiskControllerAPI : API {
     const DiskControllerInfo &getCachedInfo() const;
 };
 
-struct DmaDebuggerAPI : API {
+struct DmaDebuggerAPI : public API {
 
     class DmaDebugger *dmaDebugger = nullptr;
 
@@ -316,7 +330,7 @@ struct DmaDebuggerAPI : API {
     const DmaDebuggerInfo &getCachedInfo() const;
 };
 
-struct MemoryAPI : API {
+struct MemoryAPI : public API {
 
     class Memory *mem = nullptr;
 
@@ -330,7 +344,7 @@ struct MemoryAPI : API {
      const MemInfo &getCachedInfo() const;
 };
 
-struct PaulaAPI : API {
+struct PaulaAPI : public API {
 
     class Paula *paula = nullptr;
 
@@ -344,7 +358,7 @@ struct PaulaAPI : API {
     const PaulaInfo &getCachedInfo() const;
 };
 
-struct RtcAPI : API {
+struct RtcAPI : public API {
 
     class RTC *rtc = nullptr;
 
@@ -363,7 +377,7 @@ struct RtcAPI : API {
 // Peripherals
 //
 
-struct FloppyDriveAPI : API {
+struct FloppyDriveAPI : public API {
 
     class FloppyDrive *drive = nullptr;
 
@@ -385,7 +399,7 @@ struct FloppyDriveAPI : API {
     void setFlag(DiskFlags mask, bool value);
 };
 
-struct HardDriveAPI : API {
+struct HardDriveAPI : public API {
 
     class HardDrive *drive = nullptr;
 
@@ -407,7 +421,7 @@ struct HardDriveAPI : API {
     void setFlag(DiskFlags mask, bool value);
 };
 
-struct JoystickAPI : API {
+struct JoystickAPI : public API {
 
     class Joystick *joystick = nullptr;
 
@@ -421,7 +435,7 @@ struct JoystickAPI : API {
     // const JoystickInfo &getCachedInfo() const;
 };
 
-struct KeyboardAPI : API {
+struct KeyboardAPI : public API {
 
     class Keyboard *keyboard = nullptr;
 
@@ -477,7 +491,7 @@ struct KeyboardAPI : API {
     void abortAutoTyping();
 };
 
-struct MouseAPI : API {
+struct MouseAPI : public API {
 
     class Mouse *mouse = nullptr;
 
@@ -496,12 +510,12 @@ struct MouseAPI : API {
 // Ports
 //
 
-struct SerialPortAPI : API {
+struct SerialPortAPI : public API {
 
     class SerialPort *serialPort = nullptr;
 };
 
-struct ControlPortAPI : API {
+struct ControlPortAPI : public API {
 
     class ControlPort *controlPort = nullptr;
 
@@ -518,7 +532,7 @@ struct ControlPortAPI : API {
     const ControlPortInfo &getCachedInfo() const;
 };
 
-struct VideoPortAPI : API {
+struct VideoPortAPI : public API {
 
     class VideoPort *videoPort = nullptr;
 
@@ -556,7 +570,7 @@ struct VideoPortAPI : API {
 // Misc (Debugger)
 //
 
-struct DebuggerAPI : API {
+struct DebuggerAPI : public API {
 
     class Debugger *debugger = nullptr;
 
@@ -596,7 +610,7 @@ struct DebuggerAPI : API {
  *    storing shader-relevant parameters that are irrelevant to the emulation
  *    core.
  */
-struct DefaultsAPI : API {
+struct DefaultsAPI : public API {
 
     class Defaults *defaults = nullptr;
 
@@ -795,7 +809,7 @@ public:
     /// @}
 };
 
-struct HostAPI : API {
+struct HostAPI : public API {
 
     class Host *host = nullptr;
 };
@@ -807,7 +821,7 @@ struct HostAPI : API {
 
 /** RetroShell Public API
  */
-struct RetroShellAPI : API {
+struct RetroShellAPI : public API {
 
     class RetroShell *retroShell = nullptr;
     
@@ -884,7 +898,7 @@ struct RetroShellAPI : API {
 // Misc (Recorder)
 //
 
-struct RecorderAPI : API {
+struct RecorderAPI : public API {
 
     class Recorder *recorder = nullptr;
 };
@@ -894,7 +908,7 @@ struct RecorderAPI : API {
 // Misc (Debugger)
 //
 
-struct RemoteManagerAPI : API {
+struct RemoteManagerAPI : public API {
 
     class RemoteManager *remoteManager = nullptr;
 

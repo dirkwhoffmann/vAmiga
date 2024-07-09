@@ -431,7 +431,6 @@
 @property (readonly) AgnusTraits traits;
 
 - (EventSlotInfo)cachedSlotInfo:(NSInteger)slot;
-@property (readonly) NSInteger frameCount;
 
 @end
 

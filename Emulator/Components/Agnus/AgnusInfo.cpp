@@ -613,6 +613,7 @@ Agnus::cacheInfo(AgnusInfo &info) const
     
     info.vpos     = pos.v;
     info.hpos     = pos.h;
+    info.frame    = pos.frame;
     
     info.dmacon   = dmacon;
     info.bplcon0  = bplcon0;

@@ -623,32 +623,27 @@ using namespace vamiga::moira;
 
 - (AgnusInfo)info
 {
-    return [self agnus]->agnus->getInfo();
+    return [self agnus]->getInfo();
 }
 
 - (AgnusInfo)cachedInfo
 {
-    return [self agnus]->agnus->getCachedInfo();
+    return [self agnus]->getCachedInfo();
 }
 
 - (AgnusStats)stats
 {
-    return [self agnus]->agnus->getStats();
+    return [self agnus]->getStats();
 }
 
 - (AgnusTraits)traits
 {
-    return [self agnus]->agnus->getTraits();
+    return [self agnus]->getTraits();
 }
 
 - (EventSlotInfo)cachedSlotInfo:(NSInteger)slot
 {
-    return [self agnus]->agnus->getCachedInfo().slotInfo[slot];
-}
-
-- (NSInteger)frameCount
-{
-    return [self agnus]->agnus->pos.frame;
+    return [self agnus]->getCachedInfo().slotInfo[slot];
 }
 
 @end
@@ -1965,12 +1960,7 @@ using namespace vamiga::moira;
 
 + (instancetype)makeWithAmiga:(AmigaProxy *)proxy
 {
-    AmigaAPI *amiga = (AmigaAPI *)proxy->obj;
-
-    amiga->suspend();
-    Snapshot *snapshot = new Snapshot(*(amiga->amiga));
-    amiga->resume();
-    
+    Snapshot *snapshot = ((AmigaAPI *)proxy->obj)->takeSnapshot();
     return [self make:snapshot];
 }
 
