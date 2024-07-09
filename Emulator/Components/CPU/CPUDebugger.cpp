@@ -14,6 +14,26 @@
 
 namespace vamiga {
 
+std::optional<GuardInfo>
+GuardsWrapper::guardNr(long nr) const
+{
+    if (auto *g = guards.guardNr(nr); g) {
+        return GuardInfo {.addr = g->addr, .enabled = g->enabled, .ignore = g->ignore };
+    }
+
+    return { };
+}
+
+std::optional<GuardInfo>
+GuardsWrapper::guardAt(u32 addr) const
+{
+    if (auto *g = guards.guardAt(addr); g) {
+        return GuardInfo {.addr = g->addr, .enabled = g->enabled, .ignore = g->ignore };
+    }
+
+    return { };
+}
+
 void
 GuardsWrapper::setAt(u32 target, isize ignores)
 {

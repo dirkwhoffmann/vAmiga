@@ -33,10 +33,9 @@ public:
     //
 
     long elements() const { return guards.elements(); }
-    moira::Guard *guardNr(long nr) const { return guards.guardNr(nr); }
-    moira::Guard *guardAt(u32 addr) const { return guards.guardAt(addr); }
-
-    std::optional<u32> guardAddr(long nr) const { return guards.guardAddr(nr); }
+    std::optional<GuardInfo> guardNr(long nr) const;
+    std::optional<GuardInfo> guardAt(u32 addr) const;
+    // std::optional<u32> guardAddr(long nr) const { return guards.guardAddr(nr); }
 
 
     //

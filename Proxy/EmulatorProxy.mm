@@ -234,33 +234,34 @@ using namespace vamiga::moira;
 
 - (NSInteger)count
 {
-    return [self guards]->guards->elements();
+    return [self guards]->elements();
 }
 
 - (NSInteger)addr:(NSInteger)nr
 {
-    auto addr = [self guards]->guards->guardAddr(nr);
-    return addr ? *addr : 0;
+    auto guard = [self guards]->guardNr(nr);
+    return guard ? (*guard).addr : 0;
 }
 
 - (BOOL)isSet:(NSInteger)nr
 {
-    return [self guards]->guards->isSet(nr);
+    auto guard = [self guards]->guardNr(nr);
+    return guard.has_value();
 }
 
 - (BOOL)isSetAt:(NSInteger)addr
 {
-    return [self guards]->guards->isSetAt(u32(addr));
+    auto guard = [self guards]->guardAt(u32(addr));
+    return guard.has_value();
 }
 
 - (void)setAt:(NSInteger)addr
 {
-    [self guards]->guards->setAt((u32)addr);
+    [self guards]->setAt((u32)addr);
 }
 
 - (void)remove:(NSInteger)nr
 {
-    // return [self guards]->guards->remove(nr);
     [self guards]->remove(nr);
 }
 
@@ -281,42 +282,46 @@ using namespace vamiga::moira;
 
 - (BOOL)isEnabled:(NSInteger)nr
 {
-    return [self guards]->guards->isEnabled(nr);
+    auto guard = [self guards]->guardNr(nr);
+    return guard ? (*guard).enabled : false;
 }
 
 - (BOOL)isEnabledAt:(NSInteger)addr
 {
-    return [self guards]->guards->isEnabledAt(u32(addr));
+    auto guard = [self guards]->guardAt(u32(addr));
+    return guard ? (*guard).enabled : false;
 }
 
 - (BOOL)isDisabled:(NSInteger)nr
 {
-    return [self guards]->guards->isDisabled(nr);
+    auto guard = [self guards]->guardNr(nr);
+    return guard ? (*guard).enabled == false : false;
 }
 
 - (BOOL)isDisabledAt:(NSInteger)addr
 {
-    return [self guards]->guards->isDisabledAt(u32(addr));
+    auto guard = [self guards]->guardAt(u32(addr));
+    return guard ? (*guard).enabled == false : false;
 }
 
 - (void)enable:(NSInteger)nr
 {
-    [self guards]->guards->enable(nr);
+    [self guards]->enable(nr);
 }
 
 - (void)enableAt:(NSInteger)addr
 {
-    [self guards]->guards->enableAt((u32)addr);
+    [self guards]->enableAt((u32)addr);
 }
 
 - (void)disable:(NSInteger)nr
 {
-    [self guards]->guards->disable(nr);
+    [self guards]->disable(nr);
 }
 
 - (void)disableAt:(NSInteger)addr
 {
-    [self guards]->guards->disableAt((u32)addr);
+    [self guards]->disableAt((u32)addr);
 }
 
 @end

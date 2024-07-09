@@ -132,7 +132,25 @@ CopperAPI::getCachedInfo() const
 // Components (CPU)
 //
 
-void 
+isize 
+GuardsAPI::elements() const
+{
+    return guards->elements();
+}
+
+std::optional<GuardInfo>
+GuardsAPI::guardNr(long nr) const
+{
+    return guards->guardNr(nr);
+}
+
+std::optional<GuardInfo>
+GuardsAPI::guardAt(u32 target) const
+{
+    return guards->guardAt(target);
+}
+
+void
 GuardsAPI::setAt(u32 target, isize ignores)
 {
     emu->put(Cmd(CMD_GUARD_SET_AT, (void *)guards, target, ignores));

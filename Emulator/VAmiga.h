@@ -181,6 +181,20 @@ struct CopperAPI : API {
 struct GuardsAPI : API {
 
     class GuardsWrapper *guards = nullptr;
+    
+    /** @brief  Returns the number of guards in the guard list.
+     */
+    isize elements() const;
+
+    /** @brief  Returns information about a guard.
+     *  @param  nr      Number of the guard in the guard list
+     */
+    std::optional<GuardInfo> guardNr(long nr) const;
+
+    /** @brief  Returns information about a guard.
+     *  @param  target  The target of the guard to query
+     */
+    std::optional<GuardInfo> guardAt(u32 target) const;
 
     /** @brief  Sets a guard.
      *  @param  target  The observed target. For breakpoints and watchpoints,

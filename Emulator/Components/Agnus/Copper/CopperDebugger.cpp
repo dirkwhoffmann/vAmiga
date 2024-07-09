@@ -44,14 +44,14 @@ CopperDebugger::_dump(Category category, std::ostream& os) const
 
         for (int i = 0; i < guards.elements(); i++) {
 
-            auto bp =  guards.guardNr(i);
+            auto bp = *guards.guardNr(i);
             auto nr = name + std::to_string(i);
 
             os << tab(nr);
-            os << hex(bp->addr);
+            os << hex(bp.addr);
 
-            if (!bp->enabled) os << " (Disabled)";
-            else if (bp->ignore) os << " (Disabled for " << dec(bp->ignore) << " hits)";
+            if (!bp.enabled) os << " (Disabled)";
+            else if (bp.ignore) os << " (Disabled for " << dec(bp.ignore) << " hits)";
             os << std::endl;
         }
     };
