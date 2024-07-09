@@ -110,6 +110,8 @@ public:
     void disable(long nr) { setEnable(nr, false); }
     void disableAt(u32 addr) { setEnableAt(addr, false); }
     void disableAll() { setEnableAll(false); }
+    void toggle(long nr) { setEnable(nr, isDisabled(nr)); }
+    void toggleAt(u32 addr) { setEnableAt(addr, isDisabledAt(addr)); }
     void setEnable(long nr, bool val);
     void setEnableAt(u32 addr, bool val);
     void setEnableAll(bool val);

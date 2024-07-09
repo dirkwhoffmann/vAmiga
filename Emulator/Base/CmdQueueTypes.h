@@ -31,34 +31,20 @@ enum_long(CMD_TYPE)
     CMD_ALARM_REL,              ///< Schedule an alarm (relative cycle)
     CMD_INSPECTION_TARGET,      ///< Sets the auto-inspection mask
 
-    // CPU (Breakpoints)
-    CMD_BP_SET_AT,              ///< Set a breakpoint
-    CMD_BP_MOVE_TO,             ///< Change the address of breakpoint
-    CMD_BP_REMOVE_NR,           ///< Remove the n-th breakpoint
-    CMD_BP_REMOVE_AT,           ///< Remove the breakpoint at an address
-    CMD_BP_REMOVE_ALL,          ///< Remove all brekpoints
-    CMD_BP_ENABLE_NR,           ///< Enable the n-th breakpoint
-    CMD_BP_ENABLE_AT,           ///< Enable the breakpoint at an address
-    CMD_BP_ENABLE_ALL,          ///< Enable all brekpoints
-    CMD_BP_DISABLE_NR,          ///< Disable the n-th breakpoint
-    CMD_BP_DISABLE_AT,          ///< Disable the breakpoint at an address
-    CMD_BP_DISABLE_ALL,         ///< Disable all brekpoints
+    // CPU (Breakpoints, Watchpoints, Catchpoints)
+    CMD_GUARD_SET_AT,
+    CMD_GUARD_REMOVE_NR,        ///< Remove the n-th guard
+    CMD_GUARD_MOVE_NR,          ///< Change the address of a guard
+    CMD_GUARD_IGNORE_NR,        ///< Change the ignore count of a guard
+    CMD_GUARD_REMOVE_AT,        ///< Remove the guard at an address
+    CMD_GUARD_REMOVE_ALL,       ///< Remove all guards
+    CMD_GUARD_ENABLE_NR,        ///< Enable the n-th guard
+    CMD_GUARD_ENABLE_AT,        ///< Enable the guard at an address
+    CMD_GUARD_ENABLE_ALL,       ///< Enable all guards
+    CMD_GUARD_DISABLE_NR,       ///< Disable the n-th guard
+    CMD_GUARD_DISABLE_AT,       ///< Disable the guard at an address
+    CMD_GUARD_DISABLE_ALL,      ///< Disable all guards
 
-    /*
-
-    // CPU (Watchpoints)
-    CMD_WP_SET_AT,              ///< Set a watchpoint
-    CMD_WP_MOVE_TO,             ///< Change the address of watchpoint
-    CMD_WP_REMOVE_NR,           ///< Remove the n-th watchpoint
-    CMD_WP_REMOVE_AT,           ///< Remove the watchpoint at an address
-    CMD_WP_REMOVE_ALL,          ///< Remove all watchpoints
-    CMD_WP_ENABLE_NR,           ///< Enable the n-th watchpoint
-    CMD_WP_ENABLE_AT,           ///< Enable the watchpoint at an address
-    CMD_WP_ENABLE_ALL,          ///< Enable all watchpoints
-    CMD_WP_DISABLE_NR,          ///< Disable the n-th watchpoint
-    CMD_WP_DISABLE_AT,          ///< Disable the watchpoint at an address
-    CMD_WP_DISABLE_ALL,         ///< Disable all watchpoints
-    */
     // Keyboard
     CMD_KEY_PRESS,              ///< Press a key on the C64 keyboard
     CMD_KEY_RELEASE,            ///< Release a key on the C64 keyboard
@@ -80,6 +66,9 @@ enum_long(CMD_TYPE)
 
     // RetroShell
     CMD_RSH_EXECUTE,            ///< Execute a script command
+
+    // Experimental
+    CMD_FUNC,
 
     // Host machine
     CMD_FOCUS                   ///< The emulator windows got or lost focus
@@ -107,29 +96,19 @@ struct CmdTypeEnum : util::Reflection<CmdTypeEnum, CmdType> {
             case CMD_ALARM_REL:             return "ALARM_REL";
             case CMD_INSPECTION_TARGET:     return "INSPECTION_TARGET";
 
-            case CMD_BP_SET_AT:             return "BP_SET_AT";
-            case CMD_BP_REMOVE_NR:          return "BP_REMOVE_NR";
-            case CMD_BP_REMOVE_AT:          return "BP_REMOVE_AT";
-            case CMD_BP_REMOVE_ALL:         return "BP_REMOVE_ALL";
-            case CMD_BP_ENABLE_NR:          return "BP_ENABLE_NR";
-            case CMD_BP_ENABLE_AT:          return "BP_ENABLE_AT";
-            case CMD_BP_ENABLE_ALL:         return "BP_ENABLE_ALL";
-            case CMD_BP_DISABLE_NR:         return "BP_DISABLE_NR";
-            case CMD_BP_DISABLE_AT:         return "BP_DISABLE_AT";
-            case CMD_BP_DISABLE_ALL:        return "BP_DISABLE_ALL";
+            case CMD_GUARD_SET_AT:          return "GUARD_SET_AT";
+            case CMD_GUARD_MOVE_NR:         return "GUARD_MOVE_TO";
+            case CMD_GUARD_IGNORE_NR:       return "GUARD_IGNORE_NR";
+            case CMD_GUARD_REMOVE_NR:       return "GUARD_REMOVE_NR";
+            case CMD_GUARD_REMOVE_AT:       return "GUARD_REMOVE_AT";
+            case CMD_GUARD_REMOVE_ALL:      return "GUARD_REMOVE_ALL";
+            case CMD_GUARD_ENABLE_NR:       return "GUARD_ENABLE_NR";
+            case CMD_GUARD_ENABLE_AT:       return "GUARD_ENABLE_AT";
+            case CMD_GUARD_ENABLE_ALL:      return "GUARD_ENABLE_ALL";
+            case CMD_GUARD_DISABLE_NR:      return "GUARD_DISABLE_NR";
+            case CMD_GUARD_DISABLE_AT:      return "GUARD_DISABLE_AT";
+            case CMD_GUARD_DISABLE_ALL:     return "GUARD_DISABLE_ALL";
 
-                /*
-            case CMD_WP_SET_AT:             return "WP_SET_AT";
-            case CMD_WP_REMOVE_NR:          return "WP_REMOVE_NR";
-            case CMD_WP_REMOVE_AT:          return "WP_REMOVE_AT";
-            case CMD_WP_REMOVE_ALL:         return "WP_REMOVE_ALL";
-            case CMD_WP_ENABLE_NR:          return "WP_ENABLE_NR";
-            case CMD_WP_ENABLE_AT:          return "WP_ENABLE_AT";
-            case CMD_WP_ENABLE_ALL:         return "WP_ENABLE_ALL";
-            case CMD_WP_DISABLE_NR:         return "WP_DISABLE_NR";
-            case CMD_WP_DISABLE_AT:         return "WP_DISABLE_AT";
-            case CMD_WP_DISABLE_ALL:        return "WP_DISABLE_ALL";
-            */
             case CMD_KEY_PRESS:             return "KEY_PRESS";
             case CMD_KEY_RELEASE:           return "KEY_RELEASE";
             case CMD_KEY_RELEASE_ALL:       return "KEY_RELEASE_ALL";
@@ -147,6 +126,7 @@ struct CmdTypeEnum : util::Reflection<CmdTypeEnum, CmdType> {
 
             case CMD_RSH_EXECUTE:           return "RSH_EXECUTE";
 
+            case CMD_FUNC:                  return "FUNC";
             case CMD_FOCUS:                 return "FOCUS";
 
         }
@@ -209,6 +189,9 @@ struct Cmd
     // Header
     CmdType type;
 
+    // Sender
+    void *sender;
+
     // Payload
     union {
 
@@ -227,6 +210,7 @@ struct Cmd
 
     Cmd() { }
     Cmd(CmdType type, i64 v1 = 0, i64 v2 = 0) : type(type), value(v1), value2(v2) { }
+    Cmd(CmdType type, void *s, i64 v1 = 0, i64 v2 = 0) : type(type), sender(s), value(v1), value2(v2) { }
     Cmd(CmdType type, const ConfigCmd &cmd) : type(type), config(cmd) { }
     Cmd(CmdType type, const KeyCmd &cmd) : type(type), key(cmd) { }
     Cmd(CmdType type, const GamePadCmd &cmd) : type(type), action(cmd) { }

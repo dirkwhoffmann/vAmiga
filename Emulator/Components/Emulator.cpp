@@ -175,6 +175,12 @@ Emulator::put(const Cmd &cmd)
     cmdQueue.put(cmd);
 }
 
+void 
+Emulator::put(CmdType type, i64 payload)
+{
+    put (Cmd(type, payload));
+}
+
 i64
 Emulator::get(Option opt, isize objid) const
 {
@@ -399,30 +405,19 @@ Emulator::update()
                 main.processCommand(cmd);
                 break;
 
-            case CMD_BP_SET_AT:
-            case CMD_BP_MOVE_TO:
-            case CMD_BP_REMOVE_NR:
-            case CMD_BP_REMOVE_AT:
-            case CMD_BP_REMOVE_ALL:
-            case CMD_BP_ENABLE_NR:
-            case CMD_BP_ENABLE_AT:
-            case CMD_BP_ENABLE_ALL:
-            case CMD_BP_DISABLE_NR:
-            case CMD_BP_DISABLE_AT:
-            case CMD_BP_DISABLE_ALL:
-                /*
-            case CMD_WP_SET_AT:
-            case CMD_WP_MOVE_TO:
-            case CMD_WP_REMOVE_NR:
-            case CMD_WP_REMOVE_AT:
-            case CMD_WP_REMOVE_ALL:
-            case CMD_WP_ENABLE_NR:
-            case CMD_WP_ENABLE_AT:
-            case CMD_WP_ENABLE_ALL:
-            case CMD_WP_DISABLE_NR:
-            case CMD_WP_DISABLE_AT:
-            case CMD_WP_DISABLE_ALL:
-                 */
+            case CMD_GUARD_SET_AT:
+            case CMD_GUARD_MOVE_NR:
+            case CMD_GUARD_IGNORE_NR:
+            case CMD_GUARD_REMOVE_NR:
+            case CMD_GUARD_REMOVE_AT:
+            case CMD_GUARD_REMOVE_ALL:
+            case CMD_GUARD_ENABLE_NR:
+            case CMD_GUARD_ENABLE_AT:
+            case CMD_GUARD_ENABLE_ALL:
+            case CMD_GUARD_DISABLE_NR:
+            case CMD_GUARD_DISABLE_AT:
+            case CMD_GUARD_DISABLE_ALL:
+
                 main.cpu.processCommand(cmd);
                 break;
 
@@ -457,7 +452,7 @@ Emulator::update()
 
                 main.retroShell.exec();
                 break;
-
+                
             case CMD_FOCUS:
 
                 cmd.value ? main.focus() : main.unfocus();

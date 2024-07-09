@@ -182,9 +182,31 @@ struct CopperAPI : API {
     const CopperInfo &getCachedInfo() const;
 };
 
+struct GuardsAPI : API {
+
+    class GuardsWrapper *guards = nullptr;
+
+    void setAt(u32 target, isize ignores = 0);
+    void moveTo(isize nr, u32 newTarget);
+    void remove(isize nr);
+    void removeAt(u32 target);
+    void removeAll();
+    void enable(isize nr);
+    void enableAt(u32 target);
+    void enableAll();
+    void disable(isize nr);
+    void disableAt(u32 target);
+    void disableAll();
+    void toggle(isize nr);
+
+};
+
 struct CPUAPI : API {
 
     class CPU *cpu = nullptr;
+
+    GuardsAPI breakpoints;
+    GuardsAPI watchpoints;
 
     /** @brief  Returns the component's current configuration.
      */
@@ -194,11 +216,6 @@ struct CPUAPI : API {
      */
     const CPUInfo &getInfo() const;
     const CPUInfo &getCachedInfo() const;
-};
-
-struct GuardsAPI : API {
-
-    class moira::Guards *guards = nullptr;
 };
 
 struct DeniseAPI : API {
@@ -850,7 +867,7 @@ public:
     AmigaAPI amiga;
     AgnusAPI agnus;
     BlitterAPI blitter;
-    GuardsAPI breakpoints;
+    // GuardsAPI breakpoints;
     CIAAPI ciaA, ciaB;
     VideoPortAPI videoPort;
     ControlPortAPI controlPort1;
@@ -873,7 +890,7 @@ public:
     RecorderAPI recorder;
     RemoteManagerAPI remoteManager;
     SerialPortAPI serialPort;
-    GuardsAPI watchpoints;
+    // GuardsAPI watchpoints;
 
     //
     // Static methods

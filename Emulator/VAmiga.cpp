@@ -132,6 +132,78 @@ CopperAPI::getCachedInfo() const
 // Components (CPU)
 //
 
+void 
+GuardsAPI::setAt(u32 target, isize ignores)
+{
+    emu->put(Cmd(CMD_GUARD_SET_AT, (void *)guards, target, ignores));
+}
+
+void 
+GuardsAPI::moveTo(isize nr, u32 newTarget)
+{
+    emu->put(Cmd(CMD_GUARD_MOVE_NR, (void *)guards, nr, newTarget));
+}
+
+void 
+GuardsAPI::remove(isize nr)
+{
+    emu->put(Cmd(CMD_GUARD_REMOVE_NR, (void *)guards, nr));
+}
+
+void 
+GuardsAPI::removeAt(u32 target)
+{
+    emu->put(Cmd(CMD_GUARD_REMOVE_AT, (void *)guards, target));
+}
+
+void 
+GuardsAPI::removeAll()
+{
+    emu->put(Cmd(CMD_GUARD_REMOVE_ALL, (void *)guards));
+}
+
+void 
+GuardsAPI::enable(isize nr)
+{
+    emu->put(Cmd(CMD_GUARD_ENABLE_NR, (void *)guards, nr));
+}
+
+void 
+GuardsAPI::enableAt(u32 target)
+{
+    emu->put(Cmd(CMD_GUARD_ENABLE_AT, (void *)guards, target));
+}
+
+void 
+GuardsAPI::enableAll()
+{
+    emu->put(Cmd(CMD_GUARD_ENABLE_ALL, (void *)guards));
+}
+
+void 
+GuardsAPI::disable(isize nr)
+{
+    emu->put(Cmd(CMD_GUARD_DISABLE_NR, (void *)guards, nr));
+}
+
+void 
+GuardsAPI::disableAt(u32 target)
+{
+    guards->disableAt(target);
+}
+
+void 
+GuardsAPI::disableAll()
+{
+    guards->disableAll();
+}
+
+void 
+GuardsAPI::toggle(isize nr)
+{
+    guards->toggle(nr);
+}
+
 const CPUConfig &
 CPUAPI::getConfig() const
 {
@@ -672,8 +744,8 @@ VAmiga::VAmiga() {
     blitter.emu = emu;
     blitter.blitter = &emu->main.agnus.blitter;
 
-    breakpoints.emu = emu;
-    breakpoints.guards = &emu->main.cpu.debugger.breakpoints;
+    // breakpoints.emu = emu;
+    // breakpoints.guards = &emu->main.cpu.debugger.breakpoints;
 
     ciaA.emu = emu;
     ciaA.cia = &emu->main.ciaA;
@@ -703,6 +775,10 @@ VAmiga::VAmiga() {
 
     cpu.emu = emu;
     cpu.cpu = &emu->main.cpu;
+    cpu.breakpoints.emu = emu;
+    cpu.breakpoints.guards = &emu->main.cpu.breakpoints;
+    cpu.watchpoints.emu = emu;
+    cpu.watchpoints.guards = &emu->main.cpu.watchpoints;
 
     debugger.emu = emu;
     debugger.debugger = &emu->main.debugger;
@@ -770,8 +846,8 @@ VAmiga::VAmiga() {
     videoPort.emu = emu;
     videoPort.videoPort = &emu->main.videoPort;
     
-    watchpoints.emu = emu;
-    watchpoints.guards = &emu->main.cpu.debugger.watchpoints;
+    // watchpoints.emu = emu;
+    // watchpoints.guards = &emu->main.cpu.debugger.watchpoints;
 }
 
 VAmiga::~VAmiga()

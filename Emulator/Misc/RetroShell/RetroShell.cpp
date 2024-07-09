@@ -10,6 +10,7 @@
 #include "config.h"
 #include "RetroShell.h"
 #include "Emulator.h"
+#include "CmdQueue.h"
 #include "Parser.h"
 #include <istream>
 #include <sstream>

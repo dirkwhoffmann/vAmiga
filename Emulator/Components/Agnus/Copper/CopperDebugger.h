@@ -10,6 +10,7 @@
 #pragma once
 
 #include "SubComponent.h"
+#include "CPU.h"
 #include "MoiraDebugger.h"
 #include <map>
 
@@ -70,8 +71,13 @@ class CopperDebugger: public SubComponent {
 public:
     
     // Breakpoint and watchpoints
-    CopperBreakpoints breakpoints = CopperBreakpoints(copper);
-    CopperWatchpoints watchpoints = CopperWatchpoints(copper);
+    CopperBreakpoints cbreakpoints = CopperBreakpoints(copper);
+    CopperWatchpoints cwatchpoints = CopperWatchpoints(copper);
+
+public:
+
+    GuardsWrapper breakpoints = GuardsWrapper(emulator, cbreakpoints);
+    GuardsWrapper watchpoints = GuardsWrapper(emulator, cwatchpoints);
 
     
     //

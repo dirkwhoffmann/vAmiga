@@ -68,6 +68,14 @@ Error::Error(ErrorCode code, const string &s)
             description = "CPU revision is not supported yet.";
             break;
 
+        case ERROR_GUARD_NOT_FOUND:
+            description = "Entry " + s + " not found.";
+            break;
+
+        case ERROR_GUARD_ALREADY_SET:
+            description = "Target " + s + " is already observed.";
+            break;
+
         case ERROR_BP_NOT_FOUND:
             description = "Breakpoint " + s + " not found.";
             break;
@@ -92,10 +100,12 @@ Error::Error(ErrorCode code, const string &s)
             description = "This catchpoint is already set.";
             break;
 
+        /*
         case ERROR_CP_CANT_CATCH:
             description = "Exception vector " + s + " cannot be catched.";
             break;
-            
+        */
+
         case ERROR_DIR_NOT_FOUND:
             description = "Folder \"" + s + "\" not found.";
             break;

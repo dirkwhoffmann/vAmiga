@@ -10,13 +10,15 @@
 #pragma once
 
 #include "CPUTypes.h"
+#include "CPUDebugger.h"
 #include "SubComponent.h"
+#include "CmdQueue.h"
 #include "RingBuffer.h"
 #include "Moira.h"
 
 namespace vamiga {
 
-class CPU : public moira::Moira, public Inspectable<CPUInfo> 
+class CPU : public moira::Moira, public Inspectable<CPUInfo>
 {
     Descriptions descriptions = {{
 
@@ -41,6 +43,13 @@ class CPU : public moira::Moira, public Inspectable<CPUInfo>
 
     // Result of the latest inspection
     mutable CPUInfo info = {};
+
+public:
+    
+    // Breakpoints, Watchpoints, Catchpoints
+    GuardsWrapper breakpoints = GuardsWrapper(emulator, debugger.breakpoints);
+    GuardsWrapper watchpoints = GuardsWrapper(emulator, debugger.watchpoints);
+    GuardsWrapper catchpoints = GuardsWrapper(emulator, debugger.catchpoints);
 
 
     //
@@ -255,60 +264,7 @@ public:
 public:
 
     // Processes a command from the command queue
-    void processCommand(const class Cmd &cmd);
-    
-
-    //
-    // Debugging
-    //
-    
-    void setGuard(GuardType type, u32 addr, isize ignores = 0) throws;
-    void moveGuard(GuardType, isize nr, u32 newAddr) throws;
-    void deleteGuard(GuardType type, isize nr) throws;
-    void deleteGuardAt(GuardType type, u32 addr) throws;
-    void deleteAllGuards(GuardType type) throws;
-    void enableGuard(GuardType type, isize nr) throws { setEnableGuard(type, nr, true); }
-    void enableGuardAt(GuardType type, u32 addr) throws { setEnableGuardAt(type, addr, true); }
-    void enableAllGuards(GuardType type) throws { setEnableAllGuards(type, true); }
-    void disableGuard(GuardType type, isize nr) throws { setEnableGuard(type, nr, false); }
-    void disableGuardAt(GuardType type, u32 addr) throws { setEnableGuardAt(type, addr, false); }
-    void disableAllGuards(GuardType type) throws { setEnableAllGuards(type, false); }
-    void toggleGuard(GuardType type, isize nr) throws;
-
-private:
-
-    void setEnableGuard(GuardType type, isize nr, bool value) throws;
-    void setEnableGuardAt(GuardType type, u32 addr, bool value) throws;
-    void setEnableAllGuards(GuardType type, bool value) throws;
-
-
-    // OLD API
-
-    // Manages the breakpoint list
-    /*
-    void setBreakpoint(u32 addr, isize ignores = 0) throws;
-    void deleteBreakpoint(isize nr) throws;
-    void enableBreakpoint(isize nr) throws;
-    void disableBreakpoint(isize nr) throws;
-    void toggleBreakpoint(isize nr) throws;
-    void ignoreBreakpoint(isize nr, isize ignores) throws;
-
-    // Manages the watchpoint list
-    void setWatchpoint(u32 addr, isize ignores = 0) throws;
-    void deleteWatchpoint(isize nr) throws;
-    void enableWatchpoint(isize nr) throws;
-    void disableWatchpoint(isize nr) throws;
-    void toggleWatchpoint(isize nr) throws;
-    void ignoreWatchpoint(isize nr, isize ignores) throws;
-
-    // Manages the catchpoint list
-    void setCatchpoint(u8 vector, isize ignores = 0) throws;
-    void deleteCatchpoint(isize nr) throws;
-    void enableCatchpoint(isize nr) throws;
-    void disableCatchpoint(isize nr) throws;
-    void toggleCatchpoint(isize nr) throws;
-    void ignoreCatchpoint(isize nr, isize ignores) throws;
-     */
+    void processCommand(const Cmd &cmd);
 };
 
 }

@@ -92,6 +92,8 @@
 		505A13222C2FE27B00FF8D2C /* VideoPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A131F2C2FE27A00FF8D2C /* VideoPort.cpp */; };
 		505A133F2C3BA8A000FF8D2C /* MemoryDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A133D2C3BA8A000FF8D2C /* MemoryDebugger.cpp */; };
 		505A13402C3BA8A000FF8D2C /* MemoryDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A133D2C3BA8A000FF8D2C /* MemoryDebugger.cpp */; };
+		505A13432C3D15F200FF8D2C /* CPUDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A13412C3D15F200FF8D2C /* CPUDebugger.cpp */; };
+		505A13442C3D15F200FF8D2C /* CPUDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A13412C3D15F200FF8D2C /* CPUDebugger.cpp */; };
 		505A215022869FF10016EA21 /* AudioFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A214E22869FF10016EA21 /* AudioFilter.cpp */; };
 		505B331F2B46D25700D3736F /* config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505B331E2B46D0CA00D3736F /* config.cpp */; };
 		505B33202B46D25700D3736F /* config.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505B331E2B46D0CA00D3736F /* config.cpp */; };
@@ -613,6 +615,8 @@
 		505A133C2C3A837A00FF8D2C /* CoreComponentTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CoreComponentTypes.h; sourceTree = "<group>"; };
 		505A133D2C3BA8A000FF8D2C /* MemoryDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MemoryDebugger.cpp; sourceTree = "<group>"; };
 		505A133E2C3BA8A000FF8D2C /* MemoryDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MemoryDebugger.h; sourceTree = "<group>"; };
+		505A13412C3D15F200FF8D2C /* CPUDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CPUDebugger.cpp; sourceTree = "<group>"; };
+		505A13422C3D15F200FF8D2C /* CPUDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPUDebugger.h; sourceTree = "<group>"; };
 		505A214E22869FF10016EA21 /* AudioFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioFilter.cpp; sourceTree = "<group>"; };
 		505A214F22869FF10016EA21 /* AudioFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioFilter.h; sourceTree = "<group>"; };
 		505AD259224A67CD0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -1338,6 +1342,8 @@
 				5051922822B61C8A0012C4BB /* CPUTypes.h */,
 				508E7F942206CDBD00F7D88C /* CPU.h */,
 				508E7F932206CDBD00F7D88C /* CPU.cpp */,
+				505A13422C3D15F200FF8D2C /* CPUDebugger.h */,
+				505A13412C3D15F200FF8D2C /* CPUDebugger.cpp */,
 				50E2BE25240D417200155AE4 /* Moira */,
 			);
 			path = CPU;
@@ -2348,6 +2354,7 @@
 				5057E4C5243DF10A004005EB /* Primitives.swift in Sources */,
 				50826F7827F0B2AD005FBF3B /* DiagBoard.cpp in Sources */,
 				507957AC244AD25B007B8B8D /* Configuration.swift in Sources */,
+				505A13432C3D15F200FF8D2C /* CPUDebugger.cpp in Sources */,
 				50F54B3024B5D31D0078FDC9 /* u_quick.c in Sources */,
 				50DD33CC2756113300AE18B4 /* pfile.c in Sources */,
 				50950ED822881B7A0073F755 /* ZorroManager.cpp in Sources */,
@@ -2559,6 +2566,7 @@
 				50FC04A427DA198100C3E566 /* Copper.cpp in Sources */,
 				50FC04A627DA198100C3E566 /* CopperEvents.cpp in Sources */,
 				50FC04C427DA19DE00C3E566 /* ExtendedRomFile.cpp in Sources */,
+				505A13442C3D15F200FF8D2C /* CPUDebugger.cpp in Sources */,
 				50DA83E62C161961001209AA /* VAmiga.cpp in Sources */,
 				50FC04D027DA19F600C3E566 /* FileSystem.cpp in Sources */,
 				50EFB0CD2C18D95B0013B73C /* Inspectable.cpp in Sources */,

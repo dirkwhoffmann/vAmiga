@@ -36,13 +36,15 @@ enum_long(ERROR_CODE)
 
     // CPU
     ERROR_CPU_UNSUPPORTED,      ///< Unsupported CPU model
-    ERROR_BP_NOT_FOUND,         ///< Breakpoint is not set
-    ERROR_BP_ALREADY_SET,       ///< Breakpoint is already set
-    ERROR_WP_NOT_FOUND,         ///< Watchpoint is not set
-    ERROR_WP_ALREADY_SET,       ///< Watchpoint is already set
-    ERROR_CP_NOT_FOUND,         ///< Catchpoint is not set
-    ERROR_CP_ALREADY_SET,       ///< Catchpoint is already set
-    ERROR_CP_CANT_CATCH,
+    ERROR_GUARD_NOT_FOUND,      ///< Guard is not set
+    ERROR_GUARD_ALREADY_SET,    ///< Guard is already set
+    ERROR_BP_NOT_FOUND,         ///< Breakpoint is not set (DEPRECATED)
+    ERROR_BP_ALREADY_SET,       ///< Breakpoint is already set (DEPRECATED)
+    ERROR_WP_NOT_FOUND,         ///< Watchpoint is not set (DEPRECATED)
+    ERROR_WP_ALREADY_SET,       ///< Watchpoint is already set (DEPRECATED)
+    ERROR_CP_NOT_FOUND,         ///< Catchpoint is not set (DEPRECATED)
+    ERROR_CP_ALREADY_SET,       ///< Catchpoint is already set (DEPRECATED)
+    // ERROR_CP_CANT_CATCH,
 
     // Memory
     ERROR_OUT_OF_MEMORY,        ///< Out of memory
@@ -228,13 +230,15 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
             case ERROR_SYNTAX:                      return "SYNTAX";
                 
             case ERROR_CPU_UNSUPPORTED:             return "CPU_UNSUPPORTED";
+            case ERROR_GUARD_NOT_FOUND:             return "GUARD_NOT_FOUND";
+            case ERROR_GUARD_ALREADY_SET:           return "GUARD_ALREADY_SET";
             case ERROR_BP_NOT_FOUND:                return "BP_NOT_FOUND";
             case ERROR_BP_ALREADY_SET:              return "BP_ALREADY_SET";
             case ERROR_WP_NOT_FOUND:                return "WP_NOT_FOUND";
             case ERROR_WP_ALREADY_SET:              return "WP_ALREADY_SET";
             case ERROR_CP_NOT_FOUND:                return "CP_NOT_FOUND";
             case ERROR_CP_ALREADY_SET:              return "CP_ALREADY_SET";
-            case ERROR_CP_CANT_CATCH:               return "CP_CANT_CATCH";
+            // case ERROR_CP_CANT_CATCH:               return "CP_CANT_CATCH";
 
             case ERROR_OUT_OF_MEMORY:               return "OUT_OF_MEMORY";
 

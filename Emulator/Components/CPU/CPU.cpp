@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "CmdQueue.h"
+#include "Emulator.h"
 #include "CPU.h"
 #include "Agnus.h"
 #include "Amiga.h"
@@ -419,7 +420,7 @@ CPU::cacheInfo(CPUInfo &info) const
 void
 CPU::_dump(Category category, std::ostream& os) const
 {
-    auto print = [&](const string &name, const moira::Guards &guards) {
+    auto print = [&](const string &name, const GuardsWrapper &guards) {
 
         for (int i = 0; i < guards.elements(); i++) {
 
@@ -516,7 +517,7 @@ CPU::_dump(Category category, std::ostream& os) const
     if (category == Category::Breakpoints) {
 
         if (debugger.breakpoints.elements()) {
-            print("Breakpoint", debugger.breakpoints);
+            print("Breakpoint", breakpoints);
         } else {
             os << "No breakpoints set" << std::endl;
         }
@@ -525,7 +526,7 @@ CPU::_dump(Category category, std::ostream& os) const
     if (category == Category::Watchpoints) {
 
         if (debugger.watchpoints.elements()) {
-            print("Watchpoint", debugger.watchpoints);
+            print("Watchpoint", watchpoints);
         } else {
             os << "No watchpoints set" << std::endl;
         }
@@ -786,443 +787,26 @@ CPU::processCommand(const Cmd &cmd)
 {
     isize nr = isize(cmd.value);
     u32 addr = u32(cmd.value);
-    u32 newAddr = u32(cmd.value2);
+    auto guards = (GuardsWrapper *)cmd.sender;
 
     switch (cmd.type) {
 
-        case CMD_BP_SET_AT:         cpu.setGuard(GUARD_BREAKPOINT, addr); break;
-        case CMD_BP_MOVE_TO:        cpu.moveGuard(GUARD_BREAKPOINT, nr, newAddr); break;
-        case CMD_BP_REMOVE_NR:      cpu.deleteGuard(GUARD_BREAKPOINT, nr); break;
-        case CMD_BP_REMOVE_AT:      cpu.deleteGuardAt(GUARD_BREAKPOINT, addr); break;
-        case CMD_BP_REMOVE_ALL:     cpu.deleteAllGuards(GUARD_BREAKPOINT); break;
-        case CMD_BP_ENABLE_NR:      cpu.enableGuard(GUARD_BREAKPOINT, nr); break;
-        case CMD_BP_ENABLE_AT:      cpu.enableGuardAt(GUARD_BREAKPOINT, addr); break;
-        case CMD_BP_ENABLE_ALL:     cpu.enableAllGuards(GUARD_BREAKPOINT); break;
-        case CMD_BP_DISABLE_NR:     cpu.disableGuard(GUARD_BREAKPOINT, nr); break;
-        case CMD_BP_DISABLE_AT:     cpu.disableGuardAt(GUARD_BREAKPOINT, addr); break;
-        case CMD_BP_DISABLE_ALL:    cpu.disableAllGuards(GUARD_BREAKPOINT); break;
-
-            /*
-        case CMD_WP_SET_AT:         cpu.setWatchpoint(u32(cmd.value)); break;
-        case CMD_WP_MOVE_TO:        cpu.moveWatchpoint(isize(cmd.value), u32(cmd.value2)); break;
-        case CMD_WP_REMOVE_NR:      cpu.deleteWatchpoint(isize(cmd.value)); break;
-        case CMD_WP_REMOVE_AT:      cpu.deleteWatchpointAt(u32(cmd.value)); break;
-        case CMD_WP_REMOVE_ALL:     cpu.deleteAllWatchpoints(); break;
-        case CMD_WP_ENABLE_NR:      cpu.enableWatchpoint(isize(cmd.value)); break;
-        case CMD_WP_ENABLE_AT:      cpu.enableWatchpoint(u32(cmd.value)); break;
-        case CMD_WP_ENABLE_ALL:     cpu.enableAllWatchpoints(); break;
-        case CMD_WP_DISABLE_NR:     cpu.disableWatchpoint(isize(cmd.value)); break;
-        case CMD_WP_DISABLE_AT:     cpu.disableWatchpoint(u32(cmd.value)); break;
-        case CMD_WP_DISABLE_ALL:    cpu.disableAllWatchpoints(); break;
-             */
+        case CMD_GUARD_SET_AT:      guards->setAt(addr); break;
+        case CMD_GUARD_REMOVE_NR:   guards->remove(nr); break;
+        case CMD_GUARD_MOVE_NR:     guards->moveTo(nr, u32(cmd.value2)); break;
+        case CMD_GUARD_IGNORE_NR:   guards->ignore(nr, long(cmd.value2)); break;
+        case CMD_GUARD_REMOVE_AT:   guards->removeAt(addr); break;
+        case CMD_GUARD_REMOVE_ALL:  guards->removeAll(); break;
+        case CMD_GUARD_ENABLE_NR:   guards->enable(nr); break;
+        case CMD_GUARD_ENABLE_AT:   guards->enableAt(addr); break;
+        case CMD_GUARD_ENABLE_ALL:  guards->enableAll(); break;
+        case CMD_GUARD_DISABLE_NR:  guards->disable(nr); break;
+        case CMD_GUARD_DISABLE_AT:  guards->disableAt(addr); break;
+        case CMD_GUARD_DISABLE_ALL: guards->disableAll(); break;
             
         default:
             fatalError;
     }
 }
-
-void
-CPU::setGuard(GuardType type, u32 target, isize ignores)
-{
-    switch (type) {
-
-        case GUARD_BREAKPOINT:
-
-            if (debugger.breakpoints.isSetAt(target)) throw Error(ERROR_BP_ALREADY_SET, target);
-            debugger.breakpoints.setAt(target, ignores);
-            msgQueue.put(MSG_BREAKPOINT_UPDATED);
-            break;
-
-        case GUARD_WATCHPOINT:
-
-            if (debugger.watchpoints.isSetAt(target)) throw Error(ERROR_WP_ALREADY_SET, target);
-            debugger.watchpoints.setAt(target, ignores);
-            msgQueue.put(MSG_WATCHPOINT_UPDATED);
-            break;
-
-        case GUARD_CATCHPOINT:
-
-            if (debugger.catchpoints.isSetAt(target)) throw Error(ERROR_CP_ALREADY_SET, target);
-            debugger.catchpoints.setAt(target, ignores);
-            msgQueue.put(MSG_CATCHPOINT_UPDATED);
-            break;
-
-        default:
-            fatalError;
-    }
-}
-
-void
-CPU::moveGuard(GuardType type, isize nr, u32 target)
-{
-    switch (type) {
-
-        case GUARD_BREAKPOINT:
-
-            if (!debugger.breakpoints.guardNr(nr)) throw Error(ERROR_BP_NOT_FOUND, nr);
-            debugger.breakpoints.replace(nr, target);
-            msgQueue.put(MSG_BREAKPOINT_UPDATED);
-            break;
-
-        case GUARD_WATCHPOINT:
-
-            if (!debugger.watchpoints.guardNr(nr)) throw Error(ERROR_WP_NOT_FOUND, nr);
-            debugger.watchpoints.replace(nr, target);
-            msgQueue.put(MSG_WATCHPOINT_UPDATED);
-            break;
-
-        case GUARD_CATCHPOINT:
-
-            if (!debugger.catchpoints.guardNr(nr)) throw Error(ERROR_CP_NOT_FOUND, nr);
-            debugger.catchpoints.replace(nr, target);
-            msgQueue.put(MSG_CATCHPOINT_UPDATED);
-            break;
-
-        default:
-            fatalError;
-    }
-}
-
-void
-CPU::deleteGuard(GuardType type, isize nr)
-{
-    switch (type) {
-
-        case GUARD_BREAKPOINT:
-
-            if (!debugger.breakpoints.isSet(nr)) throw Error(ERROR_BP_NOT_FOUND, nr);
-            debugger.breakpoints.remove(nr);
-            msgQueue.put(MSG_BREAKPOINT_UPDATED);
-            break;
-
-        case GUARD_WATCHPOINT:
-
-            if (!debugger.watchpoints.isSet(nr)) throw Error(ERROR_WP_NOT_FOUND, nr);
-            debugger.watchpoints.remove(nr);
-            msgQueue.put(MSG_WATCHPOINT_UPDATED);
-            break;
-
-        case GUARD_CATCHPOINT:
-
-            if (!debugger.catchpoints.isSet(nr)) throw Error(ERROR_CP_NOT_FOUND, nr);
-            debugger.catchpoints.remove(nr);
-            msgQueue.put(MSG_CATCHPOINT_UPDATED);
-            break;
-
-        default:
-            fatalError;
-    }
-}
-
-void
-CPU::deleteGuardAt(GuardType type, u32 addr)
-{
-    switch (type) {
-
-        case GUARD_BREAKPOINT:
-
-            if (!debugger.breakpoints.isSetAt(addr)) throw Error(ERROR_BP_NOT_FOUND, addr);
-            debugger.breakpoints.removeAt(addr);
-            msgQueue.put(MSG_BREAKPOINT_UPDATED);
-            break;
-
-        case GUARD_WATCHPOINT:
-
-            if (!debugger.watchpoints.isSetAt(addr)) throw Error(ERROR_WP_NOT_FOUND, addr);
-            debugger.watchpoints.removeAt(addr);
-            msgQueue.put(MSG_WATCHPOINT_UPDATED);
-            break;
-
-        case GUARD_CATCHPOINT:
-
-            if (!debugger.catchpoints.isSetAt(addr)) throw Error(ERROR_CP_NOT_FOUND, addr);
-            debugger.catchpoints.remove(addr);
-            msgQueue.put(MSG_CATCHPOINT_UPDATED);
-            break;
-
-        default:
-            fatalError;
-    }
-}
-
-void 
-CPU::deleteAllGuards(GuardType type)
-{
-    switch (type) {
-
-        case GUARD_BREAKPOINT:
-
-            debugger.breakpoints.removeAll();
-            msgQueue.put(MSG_BREAKPOINT_UPDATED);
-            break;
-
-        case GUARD_WATCHPOINT:
-
-            debugger.watchpoints.removeAll();
-            msgQueue.put(MSG_WATCHPOINT_UPDATED);
-            break;
-
-        case GUARD_CATCHPOINT:
-
-            debugger.catchpoints.removeAll();
-            msgQueue.put(MSG_CATCHPOINT_UPDATED);
-            break;
-
-        default:
-            fatalError;
-    }
-}
-
-void
-CPU::toggleGuard(GuardType type, isize nr)
-{
-    switch (type) {
-
-        case GUARD_BREAKPOINT:
-
-            setEnableGuard(type, nr, !debugger.breakpoints.isEnabled(nr));
-            break;
-
-        case GUARD_WATCHPOINT:
-
-            setEnableGuard(type, nr, !debugger.watchpoints.isEnabled(nr));
-            break;
-
-        case GUARD_CATCHPOINT:
-
-            setEnableGuard(type, nr, !debugger.catchpoints.isEnabled(nr));
-            break;
-
-        default:
-            fatalError;
-    }
-}
-
-void 
-CPU::setEnableGuard(GuardType type, isize nr, bool value)
-{
-    switch (type) {
-
-        case GUARD_BREAKPOINT:
-
-            if (!debugger.breakpoints.isSet(nr)) throw Error(ERROR_BP_NOT_FOUND, nr);
-            debugger.breakpoints.setEnable(nr, value);
-            msgQueue.put(MSG_BREAKPOINT_UPDATED);
-            break;
-
-        case GUARD_WATCHPOINT:
-
-            if (!debugger.watchpoints.isSet(nr)) throw Error(ERROR_WP_NOT_FOUND, nr);
-            debugger.watchpoints.setEnable(nr, value);
-            msgQueue.put(MSG_WATCHPOINT_UPDATED);
-            break;
-
-        case GUARD_CATCHPOINT:
-
-            if (!debugger.catchpoints.isSet(nr)) throw Error(ERROR_CP_NOT_FOUND, nr);
-            debugger.catchpoints.setEnable(nr, value);
-            msgQueue.put(MSG_CATCHPOINT_UPDATED);
-            break;
-
-        default:
-            fatalError;
-    }
-}
-
-void
-CPU::setEnableGuardAt(GuardType type, u32 addr, bool value)
-{
-    switch (type) {
-
-        case GUARD_BREAKPOINT:
-
-            if (!debugger.breakpoints.isSetAt(addr)) throw Error(ERROR_BP_NOT_FOUND, addr);
-            debugger.breakpoints.setEnableAt(addr, value);
-            msgQueue.put(MSG_BREAKPOINT_UPDATED);
-            break;
-
-        case GUARD_WATCHPOINT:
-
-            if (!debugger.watchpoints.isSetAt(addr)) throw Error(ERROR_WP_NOT_FOUND, addr);
-            debugger.watchpoints.setEnableAt(addr, value);
-            msgQueue.put(MSG_WATCHPOINT_UPDATED);
-            break;
-
-        case GUARD_CATCHPOINT:
-
-            if (!debugger.catchpoints.isSetAt(addr)) throw Error(ERROR_CP_NOT_FOUND, addr);
-            debugger.catchpoints.setEnableAt(addr, value);
-            msgQueue.put(MSG_CATCHPOINT_UPDATED);
-            break;
-
-        default:
-            fatalError;
-    }
-}
-
-void
-CPU::setEnableAllGuards(GuardType type, bool value)
-{
-    switch (type) {
-
-        case GUARD_BREAKPOINT:
-
-            debugger.breakpoints.setEnableAll(value);
-            msgQueue.put(MSG_BREAKPOINT_UPDATED);
-            break;
-
-        case GUARD_WATCHPOINT:
-
-            debugger.watchpoints.setEnableAll(value);
-            msgQueue.put(MSG_WATCHPOINT_UPDATED);
-            break;
-
-        case GUARD_CATCHPOINT:
-
-            debugger.catchpoints.setEnableAll(value);
-            msgQueue.put(MSG_CATCHPOINT_UPDATED);
-            break;
-
-        default:
-            fatalError;
-    }
-}
-
-/*
-void
-CPU::enableBreakpoint(isize nr)
-{
-    if (!debugger.breakpoints.isSet(nr)) throw Error(ERROR_BP_NOT_FOUND, nr);
-
-    debugger.breakpoints.enable(nr);
-    msgQueue.put(MSG_BREAKPOINT_UPDATED);
-}
-
-void
-CPU::disableBreakpoint(isize nr)
-{
-    if (!debugger.breakpoints.isSet(nr)) throw Error(ERROR_BP_NOT_FOUND, nr);
-
-    debugger.breakpoints.disable(nr);
-    msgQueue.put(MSG_BREAKPOINT_UPDATED);
-}
-
-void 
-CPU::toggleBreakpoint(isize nr)
-{
-    debugger.breakpoints.isEnabled(nr) ? disableBreakpoint(nr) : enableBreakpoint(nr);
-}
-
-void
-CPU::ignoreBreakpoint(isize nr, isize count)
-{
-    if (!debugger.breakpoints.isSet(nr)) throw Error(ERROR_BP_NOT_FOUND, nr);
-
-    debugger.breakpoints.ignore(nr, count);
-    msgQueue.put(MSG_BREAKPOINT_UPDATED);
-}
-
-void
-CPU::setWatchpoint(u32 addr, isize ignores)
-{
-    if (debugger.watchpoints.isSetAt(addr)) throw Error(ERROR_WP_ALREADY_SET, addr);
-
-    debugger.watchpoints.setAt(addr, ignores);
-    msgQueue.put(MSG_WATCHPOINT_UPDATED);
-}
-
-void
-CPU::deleteWatchpoint(isize nr)
-{
-    if (!debugger.watchpoints.isSet(nr)) throw Error(ERROR_WP_NOT_FOUND, nr);
-
-    debugger.watchpoints.remove(nr);
-    msgQueue.put(MSG_WATCHPOINT_UPDATED);
-}
-
-void
-CPU::enableWatchpoint(isize nr)
-{
-    if (!debugger.watchpoints.isSet(nr)) throw Error(ERROR_WP_NOT_FOUND, nr);
-
-    debugger.watchpoints.enable(nr);
-    msgQueue.put(MSG_WATCHPOINT_UPDATED);
-}
-
-void
-CPU::disableWatchpoint(isize nr)
-{
-    if (!debugger.watchpoints.isSet(nr)) throw Error(ERROR_WP_NOT_FOUND, nr);
-
-    debugger.watchpoints.disable(nr);
-    msgQueue.put(MSG_WATCHPOINT_UPDATED);
-}
-
-void
-CPU::toggleWatchpoint(isize nr)
-{
-    debugger.watchpoints.isEnabled(nr) ? disableWatchpoint(nr) : enableWatchpoint(nr);
-}
-
-void
-CPU::ignoreWatchpoint(isize nr, isize count)
-{
-    if (!debugger.watchpoints.isSet(nr)) throw Error(ERROR_WP_NOT_FOUND, nr);
-
-    debugger.watchpoints.ignore(nr, count);
-    msgQueue.put(MSG_WATCHPOINT_UPDATED);
-}
-
-void
-CPU::setCatchpoint(u8 vector, isize ignores)
-{
-    if (debugger.catchpoints.isSetAt(vector)) throw Error(ERROR_CP_ALREADY_SET, vector);
-
-    debugger.catchpoints.setAt(vector, ignores);
-    msgQueue.put(MSG_CATCHPOINT_UPDATED);
-}
-
-void
-CPU::deleteCatchpoint(isize nr)
-{
-    if (!debugger.catchpoints.isSet(nr)) throw Error(ERROR_CP_NOT_FOUND, nr);
-
-    debugger.catchpoints.remove(nr);
-    msgQueue.put(MSG_CATCHPOINT_UPDATED);
-}
-
-void
-CPU::enableCatchpoint(isize nr)
-{
-    if (!debugger.catchpoints.isSet(nr)) throw Error(ERROR_CP_NOT_FOUND, nr);
-
-    debugger.catchpoints.enable(nr);
-    msgQueue.put(MSG_CATCHPOINT_UPDATED);
-}
-
-void
-CPU::disableCatchpoint(isize nr)
-{
-    if (!debugger.catchpoints.isSet(nr)) throw Error(ERROR_CP_NOT_FOUND, nr);
-
-    debugger.catchpoints.disable(nr);
-    msgQueue.put(MSG_CATCHPOINT_UPDATED);
-}
-
-void
-CPU::toggleCatchpoint(isize nr)
-{
-    debugger.catchpoints.isEnabled(nr) ? disableCatchpoint(nr) : enableCatchpoint(nr);
-}
-
-void
-CPU::ignoreCatchpoint(isize nr, isize count)
-{
-    if (!debugger.catchpoints.isSet(nr)) throw Error(ERROR_CP_NOT_FOUND, nr);
-
-    debugger.catchpoints.ignore(nr, count);
-    msgQueue.put(MSG_CATCHPOINT_UPDATED);
-}
-*/
 
 }

@@ -453,7 +453,11 @@ extension MyController {
         case .BREAKPOINT_UPDATED, .WATCHPOINT_UPDATED, .CATCHPOINT_UPDATED,
                 .COPPERBP_UPDATED, .COPPERWP_UPDATED:
             inspector?.fullRefresh()
-            
+
+        case .GUARD_UPDATED:
+            print(".GUARD_UPDATED")
+            inspector?.fullRefresh()
+
         case .BREAKPOINT_REACHED:
             inspector?.signalBreakPoint(pc: pc)
             

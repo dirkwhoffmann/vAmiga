@@ -260,22 +260,23 @@ using namespace vamiga::moira;
 
 - (void)remove:(NSInteger)nr
 {
-    return [self guards]->guards->remove(nr);
+    // return [self guards]->guards->remove(nr);
+    [self guards]->remove(nr);
 }
 
 - (void)removeAt:(NSInteger)addr
 {
-    [self guards]->guards->removeAt((u32)addr);
+    [self guards]->removeAt((u32)addr);
 }
 
 - (void)removeAll
 {
-    return [self guards]->guards->removeAll();
+    return [self guards]->removeAll();
 }
 
 - (void)replace:(NSInteger)nr addr:(NSInteger)addr
 {
-    [self guards]->guards->replace(nr, (u32)addr);
+    [self guards]->moveTo(nr, (u32)addr);
 }
 
 - (BOOL)isEnabled:(NSInteger)nr
@@ -2603,7 +2604,7 @@ using namespace vamiga::moira;
     agnus = [[AgnusProxy alloc] initWith:&vamiga->agnus];
     amiga = [[AmigaProxy alloc] initWith:&vamiga->amiga];
     blitter = [[BlitterProxy alloc] initWith:&vamiga->blitter];
-    breakpoints = [[GuardsProxy alloc] initWith:&vamiga->breakpoints];
+    breakpoints = [[GuardsProxy alloc] initWith:&vamiga->cpu.breakpoints];
     ciaA = [[CIAProxy alloc] initWith:&vamiga->ciaA];
     ciaB = [[CIAProxy alloc] initWith:&vamiga->ciaB];
     controlPort1 = [[ControlPortProxy alloc] initWith:&vamiga->controlPort1];
@@ -2632,7 +2633,7 @@ using namespace vamiga::moira;
     remoteManager = [[RemoteManagerProxy alloc] initWith:&vamiga->remoteManager];
     serialPort = [[SerialPortProxy alloc] initWith:&vamiga->serialPort];
     videoPort = [[VideoPortProxy alloc] initWith:&vamiga->videoPort];
-    watchpoints = [[GuardsProxy alloc] initWith:&vamiga->watchpoints];
+    watchpoints = [[GuardsProxy alloc] initWith:&vamiga->cpu.watchpoints];
 
     return self;
 }
