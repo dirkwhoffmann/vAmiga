@@ -443,12 +443,12 @@ using namespace vamiga::moira;
 
 - (CIAInfo)info
 {
-    return [self cia]->cia->getInfo();
+    return [self cia]->getInfo();
 }
 
 - (CIAInfo)cachedInfo
 {
-    return [self cia]->cia->getCachedInfo();
+    return [self cia]->getCachedInfo();
 }
 
 @end
@@ -662,28 +662,28 @@ using namespace vamiga::moira;
 
 - (CopperInfo)info
 {
-    return [self copper]->copper->getInfo();
+    return [self copper]->getInfo();
 }
 
 - (CopperInfo)cachedInfo
 {
-    return [self copper]->copper->getCachedInfo();
+    return [self copper]->getCachedInfo();
 }
 
 - (BOOL)isIllegalInstr:(NSInteger)addr
 {
-    return [self copper]->copper->isIllegalInstr((u32)addr);
+    return [self copper]->isIllegalInstr((u32)addr);
 }
 
 - (NSString *)disassemble:(NSInteger)addr symbolic:(BOOL)sym
 {
-    string str = [self copper]->copper->debugger.disassemble((u32)addr, sym);
+    string str = [self copper]->disassemble((u32)addr, sym);
     return @(str.c_str());
 }
 
 - (NSString *)disassemble:(NSInteger)list instr:(NSInteger)offset symbolic:(BOOL)sym
 {
-    string str = [self copper]->copper->debugger.disassemble(list, offset, sym);
+    string str = [self copper]->disassemble(list, offset, sym);
     return @(str.c_str());
 }
 
@@ -703,12 +703,12 @@ using namespace vamiga::moira;
 
 - (BlitterInfo)info
 {
-    return [self blitter]->blitter->getInfo();
+    return [self blitter]->getInfo();
 }
 
 - (BlitterInfo)cachedInfo
 {
-    return [self blitter]->blitter->getCachedInfo();
+    return [self blitter]->getCachedInfo();
 }
 
 @end

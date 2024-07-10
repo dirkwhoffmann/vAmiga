@@ -95,6 +95,23 @@ AgnusAPI::getTraits() const
 
 
 //
+// Components (Blitter)
+//
+
+const BlitterInfo &
+BlitterAPI::getInfo() const
+{
+    return blitter->getInfo();
+}
+
+const BlitterInfo &
+BlitterAPI::getCachedInfo() const
+{
+    return blitter->getCachedInfo();
+}
+
+
+//
 // Components (CIA)
 //
 
@@ -131,6 +148,24 @@ const CopperInfo &
 CopperAPI::getCachedInfo() const
 {
     return copper->getCachedInfo();
+}
+
+string 
+CopperAPI::disassemble(isize list, isize offset, bool symbolic) const
+{
+    return copper->debugger.disassemble(list, offset, symbolic);
+}
+
+string
+CopperAPI::disassemble(u32 addr, bool symbolic) const
+{
+    return copper->debugger.disassemble(addr, symbolic);
+}
+
+bool 
+CopperAPI::isIllegalInstr(u32 addr) const
+{
+    return copper->isIllegalInstr(addr);
 }
 
 

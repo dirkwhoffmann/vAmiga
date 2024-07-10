@@ -154,9 +154,13 @@ public:
     const AgnusTraits getTraits() const;
 };
 
-struct BlitterAPI : public API {
+class BlitterAPI : public API {
+
+    friend class VAmiga;
 
     class Blitter *blitter = nullptr;
+
+public:
 
     /** @brief  Returns the component's current configuration.
      */
@@ -168,9 +172,13 @@ struct BlitterAPI : public API {
     const BlitterInfo &getCachedInfo() const;
 };
 
-struct CIAAPI : public API {
+class CIAAPI : public API {
+
+    friend class VAmiga;
 
     class CIA *cia = nullptr;
+
+public:
 
     /** @brief  Returns the component's current configuration.
      */
@@ -182,19 +190,51 @@ struct CIAAPI : public API {
     const CIAInfo &getCachedInfo() const;
 };
 
-struct CopperAPI : public API {
+class CopperAPI : public API {
+
+    friend class VAmiga;
 
     class Copper *copper = nullptr;
+
+public:
 
     /** @brief  Returns the component's current state.
      */
     const CopperInfo &getInfo() const;
     const CopperInfo &getCachedInfo() const;
+
+    /** @brief  Disassembles a Copper instruction.
+     *  @param  list     The Cooper list to take the instruction from
+     *  @param  offset   Offset of the instruction relative to the start of the
+     *                   list.
+     *  @param  symbolic The output format. The flag indicates whether the
+     *                   instruction should be be disassembled in symbolic,
+     *                   human-readable form or in raw form as a sequence of
+     *                   hexadecimal numbers.
+     */
+    string disassemble(isize list, isize offset, bool symbolic) const;
+
+    /** @brief  Disassembles a Copper instruction.
+     *  @param  addr     The address of the Cooper instruction in memory.
+     *  @param  symbolic Output format.
+     */
+     string disassemble(u32 addr, bool symbolic) const;
+
+    /** @brief  Checks whether a Copper instruction is illegal.
+     *          A Copper instruction is classified as illegal if it is tries
+     *          custom chip register it has no access to.
+     *  @param  addr     The address of the Cooper instruction in memory.
+     */
+    bool isIllegalInstr(u32 addr) const;
 };
 
-struct GuardsAPI : public API {
+class GuardsAPI : public API {
+
+    friend class VAmiga;
 
     class GuardsWrapper *guards = nullptr;
+
+public:
 
     /** @brief  Returns the number of guards in the guard list.
      */
