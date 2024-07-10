@@ -348,11 +348,13 @@ public:
     const DeniseInfo &getCachedInfo() const;
 };
 
-struct DiskControllerAPI : public API {
+class DiskControllerAPI : public API {
 
     friend class VAmiga;
 
     class DiskController *diskController = nullptr;
+
+public:
 
     /** @brief  Returns the component's current configuration.
      */
@@ -364,12 +366,14 @@ struct DiskControllerAPI : public API {
     const DiskControllerInfo &getCachedInfo() const;
 };
 
-struct DmaDebuggerAPI : public API {
+class DmaDebuggerAPI : public API {
 
     friend class VAmiga;
 
     class DmaDebugger *dmaDebugger = nullptr;
 
+public:
+    
     /** @brief  Returns the component's current configuration.
      */
     const DmaDebuggerConfig &getConfig() const;
@@ -386,6 +390,8 @@ struct MemoryAPI : public API {
 
     class Memory *mem = nullptr;
 
+public:
+    
     /** @brief  Returns the component's current configuration.
      */
     const MemConfig &getConfig() const;
@@ -394,6 +400,22 @@ struct MemoryAPI : public API {
      */
      const MemInfo &getInfo() const;
      const MemInfo &getCachedInfo() const;
+
+    /** @brief  Returns statistical information about the components.
+     */
+    const MemStats &getStats() const;
+
+    /** @brief  Provides details about the installed ROM, WOM, or ROM extension.
+     */
+    const RomTraits &getRomTraits() const;
+    const RomTraits &getWomTraits() const;
+    const RomTraits &getExtTraits() const;
+
+    /** @brief  Removes a ROM
+     */
+    void deleteRom();
+    void deleteWom();
+    void deleteExt();
 
     /** @brief  Returns a string representations for a portion of memory.
      */

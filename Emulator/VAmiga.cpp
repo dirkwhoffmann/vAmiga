@@ -329,6 +329,29 @@ DiskControllerAPI::getCachedInfo() const
 
 
 //
+// Components (DmaDebugger)
+//
+
+const DmaDebuggerConfig &
+DmaDebuggerAPI::getConfig() const
+{
+    return dmaDebugger->getConfig();
+}
+
+const DmaDebuggerInfo &
+DmaDebuggerAPI::getInfo() const
+{
+    return dmaDebugger->getInfo();
+}
+
+const DmaDebuggerInfo &
+DmaDebuggerAPI::getCachedInfo() const
+{
+    return dmaDebugger->getCachedInfo();
+}
+
+
+//
 // Components (Memory)
 //
 
@@ -351,6 +374,49 @@ MemoryAPI::getCachedInfo() const
 {
     assert(isUserThread());
     return mem->getCachedInfo();
+}
+
+const MemStats &
+MemoryAPI::getStats() const
+{
+    assert(isUserThread());
+    return mem->getStats();
+}
+
+const RomTraits &
+MemoryAPI::getRomTraits() const
+{
+    return mem->getRomTraits();
+}
+
+const RomTraits &
+MemoryAPI::getWomTraits() const
+{
+    return mem->getWomTraits();
+}
+
+const RomTraits &
+MemoryAPI::getExtTraits() const
+{
+    return mem->getExtTraits();
+}
+
+void 
+MemoryAPI::deleteRom()
+{
+    mem->deleteRom();
+}
+
+void 
+MemoryAPI::deleteWom()
+{
+    mem->deleteWom();
+}
+
+void 
+MemoryAPI::deleteExt()
+{
+    mem->deleteExt();
 }
 
 string

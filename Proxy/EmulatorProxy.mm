@@ -467,42 +467,42 @@ using namespace vamiga::moira;
 
 - (MemConfig)config
 {
-    return [self mem]->mem->getConfig();
+    return [self mem]->getConfig();
 }
 
 - (MemInfo)info
 {
-    return [self mem]->mem->getInfo();
+    return [self mem]->getInfo();
 }
 
 - (MemInfo)cachedInfo
 {
-    return [self mem]->mem->getCachedInfo();
+    return [self mem]->getCachedInfo();
 }
 
 - (MemStats)stats
 {
-    return [self mem]->mem->getStats();
+    return [self mem]->getStats();
 }
 
 - (RomTraits)romTraits
 {
-    return [self mem]->mem->getRomTraits();
+    return [self mem]->getRomTraits();
 }
 
 - (RomTraits)womTraits
 {
-    return [self mem]->mem->getWomTraits();
+    return [self mem]->getWomTraits();
 }
 
 - (RomTraits)extTraits
 {
-    return [self mem]->mem->getExtTraits();
+    return [self mem]->getExtTraits();
 }
 
 - (void)deleteRom
 {
-    [self mem]->mem->deleteRom();
+    [self mem]->deleteRom();
 }
 
 - (BOOL)isRom:(NSURL *)url
@@ -743,7 +743,7 @@ using namespace vamiga::moira;
 
 - (DmaDebuggerInfo)info
 {
-    return [self debugger]->dmaDebugger->getInfo();
+    return [self debugger]->getInfo();
 }
 
 @end
@@ -1198,17 +1198,17 @@ using namespace vamiga::moira;
 
 - (DiskControllerConfig)config
 {
-    return [self dc]->diskController->getConfig();
+    return [self dc]->getConfig();
 }
 
 - (DiskControllerInfo)info
 {
-    return [self dc]->diskController->getInfo();
+    return [self dc]->getInfo();
 }
 
 - (DiskControllerInfo)cachedInfo
 {
-    return [self dc]->diskController->getCachedInfo();
+    return [self dc]->getCachedInfo();
 }
 
 @end
@@ -1242,12 +1242,12 @@ using namespace vamiga::moira;
 
 - (FloppyDriveInfo)info
 {
-    return [self drive]->drive->getInfo();
+    return [self drive]->getInfo();
 }
 
 - (FloppyDriveInfo)cachedInfo
 {
-    return [self drive]->drive->getCachedInfo();
+    return [self drive]->getCachedInfo();
 }
 
 - (BOOL)isInsertable:(Diameter)type density:(Density)density

@@ -161,7 +161,6 @@ public:
 public:
     
     // Returns the result of the latest inspection
-    // CopperInfo getInfo() const { return CoreComponent::getInfo(info); }
     void cacheInfo(CopperInfo &result) const override;
 
     //

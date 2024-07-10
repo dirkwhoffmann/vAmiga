@@ -17,7 +17,7 @@
 
 namespace vamiga {
 
-class DmaDebugger : public SubComponent {
+class DmaDebugger : public SubComponent, public Inspectable<DmaDebuggerInfo> {
 
     Descriptions descriptions = {{
 
@@ -77,23 +77,41 @@ public:
 
     DmaDebugger(Amiga &ref);
 
-    
-    //
-    // Methods from CoreObject
-    //
-    
-private:
-    
-    void _dump(Category category, std::ostream& os) const override { }
+public:
+
+    // Returns the result of the most recent call to inspect()
+    // DmaDebuggerInfo getInfo();
 
     
+    //
+    // Methods from Serializable
+    //
+
+private:
+
+    template <class T> void serialize(T& worker) { } SERIALIZERS(serialize);
+
+
     //
     // Methods from CoreComponent
     //
-    
+
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
+
+private:
+
+    void _dump(Category category, std::ostream& os) const override { }
+
+
+    //
+    // Methods from Inspectable
+    //
+
+public:
+
+    void cacheInfo(DmaDebuggerInfo &result) const override;
 
 
     //
@@ -101,7 +119,7 @@ public:
     //
 
 public:
-    
+
     const DmaDebuggerConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
     i64 getOption(Option option) const override;
@@ -109,28 +127,9 @@ public:
 
 private:
 
-    void getColor(DmaChannel channel, double *rgb);
+    void getColor(DmaChannel channel, double *rgb) const;
     void setColor(BusOwner owner, u32 rgba);
 
-    
-    //
-    // Analyzing
-    //
-    
-public:
-
-    // Returns the result of the most recent call to inspect()
-    DmaDebuggerInfo getInfo();
-
-    
-    //
-    // Serializing
-    //
-
-private:
-
-    template <class T> void serialize(T& worker) { } SERIALIZERS(serialize);
-        
 
     //
     // Running the debugger

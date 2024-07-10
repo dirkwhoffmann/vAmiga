@@ -206,11 +206,9 @@ DmaDebugger::setOption(Option option, i64 value)
     }
 }
 
-DmaDebuggerInfo
-DmaDebugger::getInfo()
+void
+DmaDebugger::cacheInfo(DmaDebuggerInfo &result) const
 {
-    DmaDebuggerInfo result;
-    
     {   SYNCHRONIZED
         
         result.visualizeCopper = config.visualize[DMA_CHANNEL_COPPER];
@@ -231,12 +229,10 @@ DmaDebugger::getInfo()
         getColor(DMA_CHANNEL_CPU, result.cpuColor);
         getColor(DMA_CHANNEL_REFRESH, result.refreshColor);
     }
-
-    return result;
 }
 
 void
-DmaDebugger::getColor(DmaChannel channel, double *rgb)
+DmaDebugger::getColor(DmaChannel channel, double *rgb) const
 {
     assert_enum(DmaChannel, channel);
     

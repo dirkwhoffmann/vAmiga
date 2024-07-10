@@ -377,10 +377,10 @@ private:
 public:
 
     // Queries ROM information
-    static RomTraits getRomTraits(u32 crc);
-    RomTraits getRomTraits() const;
-    RomTraits getWomTraits() const;
-    RomTraits getExtTraits() const;
+    static RomTraits &getRomTraits(u32 crc);
+    RomTraits &getRomTraits() const;
+    RomTraits &getWomTraits() const;
+    RomTraits &getExtTraits() const;
 
     // Computes a CRC-32 checksum
     u32 romFingerprint() const;
