@@ -392,6 +392,12 @@ struct MemoryAPI : public API {
      */
      const MemInfo &getInfo() const;
      const MemInfo &getCachedInfo() const;
+
+    /** @brief  Returns a string representations for a portion of memory.
+     */
+    string ascDump(Accessor acc, u32 addr, isize bytes) const;
+    string hexDump(Accessor acc, u32 addr, isize bytes, isize sz = 1) const;
+    string memDump(Accessor acc, u32 addr, isize bytes, isize sz = 1) const;
 };
 
 class PaulaAPI : public API {
@@ -630,18 +636,16 @@ struct SerialPortAPI : public API {
     class SerialPort *serialPort = nullptr;
 };
 
-struct ControlPortAPI : public API {
+class ControlPortAPI : public API {
 
     friend class VAmiga;
 
     class ControlPort *controlPort = nullptr;
 
+public:
+
     JoystickAPI joystick;
     MouseAPI mouse;
-
-    /** @brief  Returns the component's current configuration.
-     */
-    // const ControlPortConfig &getConfig() const;
 
     /** @brief  Returns the component's current state.
      */
@@ -649,9 +653,11 @@ struct ControlPortAPI : public API {
     const ControlPortInfo &getCachedInfo() const;
 };
 
-struct VideoPortAPI : public API {
+class VideoPortAPI : public API {
 
     friend class VAmiga;
+
+public:
 
     class VideoPort *videoPort = nullptr;
 
@@ -689,17 +695,21 @@ struct VideoPortAPI : public API {
 // Misc (Debugger)
 //
 
-struct DebuggerAPI : public API {
+class DebuggerAPI : public API {
 
     friend class VAmiga;
 
     class Debugger *debugger = nullptr;
 
+public:
+
     /** @brief  Returns a string representations for a portion of memory.
      */
+    /*
     string ascDump(Accessor acc, u32 addr, isize bytes) const;
     string hexDump(Accessor acc, u32 addr, isize bytes, isize sz = 1) const;
     string memDump(Accessor acc, u32 addr, isize bytes, isize sz = 1) const;
+     */
 };
 
 //
@@ -950,9 +960,11 @@ public:
 
 /** RetroShell Public API
  */
-struct RetroShellAPI : public API {
+class RetroShellAPI : public API {
 
     friend class VAmiga;
+
+public:
 
     class RetroShell *retroShell = nullptr;
     

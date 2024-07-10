@@ -129,10 +129,10 @@ class Memory : public SubComponent, public Inspectable<MemInfo, MemStats> {
     // Current configuration
     MemConfig config = {};
 
+public:
+
     // Subcomponents
     MemoryDebugger debugger = MemoryDebugger(amiga);
-
-public:
 
     /* About
      *

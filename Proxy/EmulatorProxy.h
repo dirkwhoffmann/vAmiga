@@ -416,6 +416,9 @@
 - (MemorySource)memSrc:(Accessor)accessor addr:(NSInteger)addr;
 - (NSInteger)spypeek16:(Accessor)accessor addr:(NSInteger)addr;
 
+- (NSString *)ascDump:(Accessor)accessor addr:(NSInteger)addr bytes:(NSInteger)bytes;
+- (NSString *)hexDump:(Accessor)accessor addr:(NSInteger)addr bytes:(NSInteger)bytes;
+
 @end
 
 
@@ -774,8 +777,10 @@
 - (void)stepInto;
 - (void)stepOver;
 
+/*
 - (NSString *)ascDump:(Accessor)accessor addr:(NSInteger)addr bytes:(NSInteger)bytes;
 - (NSString *)hexDump:(Accessor)accessor addr:(NSInteger)addr bytes:(NSInteger)bytes;
+*/
 
 @end
 

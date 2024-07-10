@@ -353,6 +353,51 @@ MemoryAPI::getCachedInfo() const
     return mem->getCachedInfo();
 }
 
+string
+MemoryAPI::ascDump(Accessor acc, u32 addr, isize bytes) const
+{
+    assert(isUserThread());
+
+    switch (acc) {
+
+        case ACCESSOR_CPU:      return mem->debugger.ascDump<ACCESSOR_CPU>(addr, bytes);
+        case ACCESSOR_AGNUS:    return mem->debugger.ascDump<ACCESSOR_AGNUS>(addr, bytes);
+
+        default:
+            fatalError;
+    }
+}
+
+string
+MemoryAPI::hexDump(Accessor acc, u32 addr, isize bytes, isize sz) const
+{
+    assert(isUserThread());
+
+    switch (acc) {
+
+        case ACCESSOR_CPU:      return mem->debugger.hexDump<ACCESSOR_CPU>(addr, bytes, sz);
+        case ACCESSOR_AGNUS:    return mem->debugger.hexDump<ACCESSOR_AGNUS>(addr, bytes, sz);
+
+        default:
+            fatalError;
+    }
+}
+
+string
+MemoryAPI::memDump(Accessor acc, u32 addr, isize bytes, isize sz) const
+{
+    assert(isUserThread());
+
+    switch (acc) {
+
+        case ACCESSOR_CPU:      return mem->debugger.memDump<ACCESSOR_CPU>(addr, bytes, sz);
+        case ACCESSOR_AGNUS:    return mem->debugger.memDump<ACCESSOR_AGNUS>(addr, bytes, sz);
+
+        default:
+            fatalError;
+    }
+}
+
 
 //
 // Components (Paula)
@@ -368,6 +413,22 @@ const PaulaInfo &
 PaulaAPI::getCachedInfo() const
 {
     return paula->getCachedInfo();
+}
+
+//
+// Ports (ControlPort)
+//
+
+const ControlPortInfo &
+ControlPortAPI::getInfo() const
+{
+    return controlPort->getInfo();
+}
+
+const ControlPortInfo &
+ControlPortAPI::getCachedInfo() const
+{
+    return controlPort->getCachedInfo();
 }
 
 
@@ -531,56 +592,6 @@ void
 MouseAPI::trigger(GamePadAction action)
 {
     emu->put(Cmd(CMD_MOUSE_EVENT, GamePadCmd { .port = mouse->objid, .action = action }));
-}
-
-
-//
-// Miscellaneous (Debugger)
-//
-
-string
-DebuggerAPI::ascDump(Accessor acc, u32 addr, isize bytes) const
-{
-    assert(isUserThread());
-
-    switch (acc) {
-
-        case ACCESSOR_CPU:      return debugger->ascDump<ACCESSOR_CPU>(addr, bytes);
-        case ACCESSOR_AGNUS:    return debugger->ascDump<ACCESSOR_AGNUS>(addr, bytes);
-
-        default:
-            fatalError;
-    }
-}
-
-string
-DebuggerAPI::hexDump(Accessor acc, u32 addr, isize bytes, isize sz) const
-{
-    assert(isUserThread());
-
-    switch (acc) {
-
-        case ACCESSOR_CPU:      return debugger->hexDump<ACCESSOR_CPU>(addr, bytes, sz);
-        case ACCESSOR_AGNUS:    return debugger->hexDump<ACCESSOR_AGNUS>(addr, bytes, sz);
-
-        default:
-            fatalError;
-    }
-}
-
-string
-DebuggerAPI::memDump(Accessor acc, u32 addr, isize bytes, isize sz) const
-{
-    assert(isUserThread());
-
-    switch (acc) {
-
-        case ACCESSOR_CPU:      return debugger->memDump<ACCESSOR_CPU>(addr, bytes, sz);
-        case ACCESSOR_AGNUS:    return debugger->memDump<ACCESSOR_AGNUS>(addr, bytes, sz);
-
-        default:
-            fatalError;
-    }
 }
 
 
