@@ -448,7 +448,6 @@ public:
 
 public:
     
-    // DeniseInfo getInfo() const { return CoreComponent::getInfo(info); }
     void cacheInfo(DeniseInfo &result) const override;
 
 

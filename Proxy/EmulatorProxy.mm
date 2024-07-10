@@ -762,32 +762,22 @@ using namespace vamiga::moira;
 
 - (DeniseInfo)info
 {
-    return [self denise]->denise->getInfo();
+    return [self denise]->getInfo();
 }
 
 - (DeniseInfo)cachedInfo
 {
-    return [self denise]->denise->getCachedInfo();
+    return [self denise]->getCachedInfo();
 }
 
 - (SpriteInfo)getSpriteInfo:(NSInteger)nr
 {
-    return [self denise]->denise->debugger.getSpriteInfo(nr);
+    return [self info].sprite[nr];
 }
 
-- (NSInteger)sprDataLines:(NSInteger)nr
+- (SpriteInfo)getCachedSpriteInfo:(NSInteger)nr
 {
-    return [self denise]->denise->debugger.getSpriteHeight(nr);
-}
-
-- (u64)sprData:(NSInteger)nr line:(NSInteger)line
-{
-    return [self denise]->denise->debugger.getSpriteData(nr, line);
-}
-
-- (u16)sprColor:(NSInteger)nr reg:(NSInteger)reg
-{
-    return [self denise]->denise->debugger.getSpriteColor(nr, reg);
+    return [self cachedInfo].sprite[nr];
 }
 
 @end

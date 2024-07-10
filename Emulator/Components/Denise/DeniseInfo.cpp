@@ -45,6 +45,10 @@ Denise::cacheInfo(DeniseInfo &info) const
             info.colorReg[i] = pixelEngine.getColor(i);
             info.color[i] = (u32)pixelEngine.palette[i];
         }
+        for (isize i = 0; i < 8; i++) {
+            info.sprite[i] = debugger.latchedSpriteInfo[i];
+            info.sprite[i].data = debugger.latchedSpriteData[i];
+        }
     }
 }
 

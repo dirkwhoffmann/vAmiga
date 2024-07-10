@@ -486,10 +486,7 @@
 @property (readonly) DeniseInfo info;
 @property (readonly) DeniseInfo cachedInfo;
 - (SpriteInfo)getSpriteInfo:(NSInteger)nr;
-
-- (NSInteger)sprDataLines:(NSInteger)nr;
-- (u64)sprData:(NSInteger)nr line:(NSInteger)line;
-- (u16)sprColor:(NSInteger)nr reg:(NSInteger)reg;
+- (SpriteInfo)getCachedSpriteInfo:(NSInteger)nr;
 
 @end
 

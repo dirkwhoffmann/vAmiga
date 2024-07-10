@@ -11,8 +11,16 @@ extension Inspector {
 
     private func cacheDenise() {
 
-        deniseInfo = emu.paused ? emu.denise.info : emu.denise.cachedInfo
-        spriteInfo = emu.denise.getSpriteInfo(selectedSprite)
+        if emu.paused {
+
+            deniseInfo = emu.denise.info
+            spriteInfo = emu.denise.getSpriteInfo(selectedSprite)
+
+        } else {
+
+            deniseInfo = emu.denise.cachedInfo
+            spriteInfo = emu.denise.getCachedSpriteInfo(selectedSprite)
+        }
     }
 
     func refreshDenise(count: Int = 0, full: Bool = false) {
@@ -73,14 +81,14 @@ extension Inspector {
         deniseCLXDAT.integerValue = Int(deniseInfo.clxdat)
 
         // Sprite section
-        sprArmed1.state = emu.denise.sprDataLines(0) != 0 ? .on : .off
-        sprArmed2.state = emu.denise.sprDataLines(1) != 0 ? .on : .off
-        sprArmed3.state = emu.denise.sprDataLines(2) != 0 ? .on : .off
-        sprArmed4.state = emu.denise.sprDataLines(3) != 0 ? .on : .off
-        sprArmed5.state = emu.denise.sprDataLines(4) != 0 ? .on : .off
-        sprArmed6.state = emu.denise.sprDataLines(5) != 0 ? .on : .off
-        sprArmed7.state = emu.denise.sprDataLines(6) != 0 ? .on : .off
-        sprArmed8.state = emu.denise.sprDataLines(7) != 0 ? .on : .off
+        sprArmed1.state = deniseInfo.sprite.0.height != 0 ? .on : .off
+        sprArmed2.state = deniseInfo.sprite.1.height != 0 ? .on : .off
+        sprArmed3.state = deniseInfo.sprite.2.height != 0 ? .on : .off
+        sprArmed4.state = deniseInfo.sprite.3.height != 0 ? .on : .off
+        sprArmed5.state = deniseInfo.sprite.4.height != 0 ? .on : .off
+        sprArmed6.state = deniseInfo.sprite.5.height != 0 ? .on : .off
+        sprArmed7.state = deniseInfo.sprite.6.height != 0 ? .on : .off
+        sprArmed8.state = deniseInfo.sprite.7.height != 0 ? .on : .off
 
         sprHStart.integerValue = Int(spriteInfo.hstrt)
         sprVStart.integerValue = Int(spriteInfo.vstrt)

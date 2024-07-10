@@ -126,6 +126,9 @@ typedef struct
     
     // Upper 16 color registers (at the time the observed sprite starts)
     u16 colors[16];
+
+    // Latched sprite data
+    const u64 *data;
 }
 SpriteInfo;
 
@@ -158,5 +161,7 @@ typedef struct
 
     u16 colorReg[32];
     u32 color[32];
+
+    SpriteInfo sprite[8];
 }
 DeniseInfo;

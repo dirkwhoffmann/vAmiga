@@ -17,6 +17,8 @@ namespace vamiga {
 
 class DeniseDebugger: public SubComponent {
 
+    friend class Denise;
+    
     Descriptions descriptions = {{
 
         .type           = COMP_DENISE_DEBUGGER,

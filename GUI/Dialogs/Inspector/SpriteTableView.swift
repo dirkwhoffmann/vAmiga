@@ -10,6 +10,9 @@
 class SpriteTableView: NSTableView {
 
     @IBOutlet weak var inspector: Inspector!
+    var deniseInfo: DeniseInfo { return inspector.deniseInfo }
+    var spriteInfo: SpriteInfo { return inspector.spriteInfo }
+
     var amiga: EmulatorProxy!
 
     var spriteDat = [UInt64](repeating: 0, count: Int(VPOS_CNT))
@@ -26,15 +29,25 @@ class SpriteTableView: NSTableView {
 
     private func cache() {
 
-        let nr = inspector.selectedSprite
-        
-        for i in 0 ..< 16 {
-            spriteCol[i] = NSColor(amigaRGB: amiga.denise.sprColor(nr, reg: i))
-        }
-        spriteLines = amiga.denise.sprDataLines(inspector.selectedSprite)
-        for i in 0 ..< spriteLines {
-            spriteDat[i] = amiga.denise.sprData(nr, line: i)
-        }
+        spriteCol[0] = NSColor(amigaRGB: spriteInfo.colors.0)
+        spriteCol[1] = NSColor(amigaRGB: spriteInfo.colors.1)
+        spriteCol[2] = NSColor(amigaRGB: spriteInfo.colors.2)
+        spriteCol[3] = NSColor(amigaRGB: spriteInfo.colors.3)
+        spriteCol[4] = NSColor(amigaRGB: spriteInfo.colors.4)
+        spriteCol[5] = NSColor(amigaRGB: spriteInfo.colors.5)
+        spriteCol[6] = NSColor(amigaRGB: spriteInfo.colors.6)
+        spriteCol[7] = NSColor(amigaRGB: spriteInfo.colors.7)
+        spriteCol[8] = NSColor(amigaRGB: spriteInfo.colors.8)
+        spriteCol[9] = NSColor(amigaRGB: spriteInfo.colors.9)
+        spriteCol[10] = NSColor(amigaRGB: spriteInfo.colors.10)
+        spriteCol[11] = NSColor(amigaRGB: spriteInfo.colors.11)
+        spriteCol[12] = NSColor(amigaRGB: spriteInfo.colors.12)
+        spriteCol[13] = NSColor(amigaRGB: spriteInfo.colors.13)
+        spriteCol[14] = NSColor(amigaRGB: spriteInfo.colors.14)
+        spriteCol[15] = NSColor(amigaRGB: spriteInfo.colors.15)
+
+        spriteLines = spriteInfo.height
+        for i in 0 ..< spriteLines { spriteDat[i] = (spriteInfo.data + i).pointee }
     }
 
     func refresh(count: Int = 0, full: Bool = false) {

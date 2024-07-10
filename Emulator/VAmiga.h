@@ -330,12 +330,14 @@ struct CPUAPI : public API {
     const CPUInfo &getCachedInfo() const;
 };
 
-struct DeniseAPI : public API {
+class DeniseAPI : public API {
 
     friend class VAmiga;
 
     class Denise *denise = nullptr;
 
+public:
+    
     /** @brief  Returns the component's current configuration.
      */
     const DeniseConfig &getConfig() const;
