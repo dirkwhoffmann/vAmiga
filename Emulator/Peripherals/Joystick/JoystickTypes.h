@@ -87,3 +87,11 @@ typedef struct
     isize autofireDelay;
 }
 JoystickConfig;
+
+typedef struct
+{
+    bool button;
+    int axisX;
+    int axisY;
+}
+JoystickInfo;

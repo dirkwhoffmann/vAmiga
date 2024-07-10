@@ -14,7 +14,7 @@
 
 namespace vamiga {
 
-class Joystick : public SubComponent {
+class Joystick : public SubComponent, public Inspectable<JoystickInfo> {
 
     Descriptions descriptions = {
         {
@@ -70,18 +70,20 @@ public:
     
     Joystick(Amiga& ref, ControlPort& pref);
 
+    Joystick& operator= (const Joystick& other) {
+
+        CLONE(button)
+        CLONE(axisX)
+        CLONE(axisY)
+
+        CLONE(config)
+
+        return *this;
+    }
+
     
     //
-    // Methods from CoreObject
-    //
-    
-private:
-    
-    void _dump(Category category, std::ostream& os) const override;
-    
-    
-    //
-    // Methods from CoreComponent
+    // Methods from Serializable
     //
 
 private:
@@ -104,9 +106,27 @@ private:
 
     void _didLoad() override;
 
+
+    //
+    // Methods from CoreComponent
+    //
+
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
+
+private:
+
+    void _dump(Category category, std::ostream& os) const override;
+
+
+    //
+    // Methods from Inspectable
+    //
+
+private:
+
+    void cacheInfo(JoystickInfo &result) const override;
 
 
     //

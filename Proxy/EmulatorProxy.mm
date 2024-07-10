@@ -999,27 +999,27 @@ using namespace vamiga::moira;
 
 - (BOOL)detectShakeAbs:(NSPoint)pos
 {
-    return [self mouse]->mouse->detectShakeXY(pos.x, pos.y);
+    return [self mouse]->detectShakeXY(pos.x, pos.y);
 }
 
 - (BOOL)detectShakeRel:(NSPoint)pos
 {
-    return [self mouse]->mouse->detectShakeDxDy(pos.x, pos.y);
+    return [self mouse]->detectShakeDxDy(pos.x, pos.y);
 }
 
 - (void)setXY:(NSPoint)pos
 {
-    [self mouse]->mouse->setXY((double)pos.x, (double)pos.y);
+    [self mouse]->setXY(pos.x, pos.y);
 }
 
 - (void)setDxDy:(NSPoint)pos
 {
-    [self mouse]->mouse->setDxDy((double)pos.x, (double)pos.y);
+    [self mouse]->setDxDy((double)pos.x, (double)pos.y);
 }
 
 - (void)trigger:(GamePadAction)event
 {
-    [self mouse]->mouse->trigger(event);
+    [self mouse]->trigger(event);
 }
 
 @end

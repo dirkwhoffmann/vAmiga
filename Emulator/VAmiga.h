@@ -313,6 +313,8 @@ public:
 
 struct CPUAPI : public API {
 
+    friend class VAmiga;
+
     class CPU *cpu = nullptr;
 
     GuardsAPI breakpoints;
@@ -330,6 +332,8 @@ struct CPUAPI : public API {
 
 struct DeniseAPI : public API {
 
+    friend class VAmiga;
+
     class Denise *denise = nullptr;
 
     /** @brief  Returns the component's current configuration.
@@ -343,6 +347,8 @@ struct DeniseAPI : public API {
 };
 
 struct DiskControllerAPI : public API {
+
+    friend class VAmiga;
 
     class DiskController *diskController = nullptr;
 
@@ -358,6 +364,8 @@ struct DiskControllerAPI : public API {
 
 struct DmaDebuggerAPI : public API {
 
+    friend class VAmiga;
+
     class DmaDebugger *dmaDebugger = nullptr;
 
     /** @brief  Returns the component's current configuration.
@@ -372,6 +380,8 @@ struct DmaDebuggerAPI : public API {
 
 struct MemoryAPI : public API {
 
+    friend class VAmiga;
+
     class Memory *mem = nullptr;
 
     /** @brief  Returns the component's current configuration.
@@ -384,7 +394,11 @@ struct MemoryAPI : public API {
      const MemInfo &getCachedInfo() const;
 };
 
-struct PaulaAPI : public API {
+class PaulaAPI : public API {
+
+    friend class VAmiga;
+
+public:
 
     class Paula *paula = nullptr;
 
@@ -399,6 +413,8 @@ struct PaulaAPI : public API {
 };
 
 struct RtcAPI : public API {
+
+    friend class VAmiga;
 
     class RTC *rtc = nullptr;
 
@@ -418,6 +434,8 @@ struct RtcAPI : public API {
 //
 
 struct FloppyDriveAPI : public API {
+
+    friend class VAmiga;
 
     class FloppyDrive *drive = nullptr;
 
@@ -441,6 +459,8 @@ struct FloppyDriveAPI : public API {
 
 struct HardDriveAPI : public API {
 
+    friend class VAmiga;
+
     class HardDrive *drive = nullptr;
 
     /** @brief  Returns the component's current configuration.
@@ -461,8 +481,12 @@ struct HardDriveAPI : public API {
     void setFlag(DiskFlags mask, bool value);
 };
 
-struct JoystickAPI : public API {
+class JoystickAPI : public API {
 
+    friend class VAmiga;
+
+public:
+    
     class Joystick *joystick = nullptr;
 
     /** @brief  Returns the component's current configuration.
@@ -471,13 +495,17 @@ struct JoystickAPI : public API {
 
     /** @brief  Returns the component's current state.
      */
-    // const JoystickInfo &getInfo() const;
-    // const JoystickInfo &getCachedInfo() const;
+    const JoystickInfo &getInfo() const;
+    const JoystickInfo &getCachedInfo() const;
 };
 
-struct KeyboardAPI : public API {
+class KeyboardAPI : public API {
+
+    friend class VAmiga;
 
     class Keyboard *keyboard = nullptr;
+
+public:
 
     /** @brief  Returns the component's current configuration.
      */
@@ -531,9 +559,13 @@ struct KeyboardAPI : public API {
     void abortAutoTyping();
 };
 
-struct MouseAPI : public API {
+class MouseAPI : public API {
+
+    friend class VAmiga;
 
     class Mouse *mouse = nullptr;
+
+public:
 
     /** @brief  Returns the component's current configuration.
      */
@@ -543,6 +575,47 @@ struct MouseAPI : public API {
      */
     // const MouseInfo &getInfo() const;
     // const MouseInfo &getCachedInfo() const;
+
+    /** Feeds a coordinate into the shake detector.
+     *
+     *  The shake detector keeps track of the transmitted coordinates and
+     *  scans for rapid movements caused by shaking the mouse.
+     *
+     *  @param x    Current horizontal mouse position.
+     *  @param y    Current vertical mouse position.
+     *  @return     true iff a shaking mouse has been detected.
+     */
+    bool detectShakeXY(double x, double y);
+
+    /** Feeds a coordinate into the shake detector.
+     *
+     *  The shake detector keeps track of the transmitted coordinates and
+     *  scans for rapid movements caused by shaking the mouse.
+     *
+     *  @param dx   Current horizontal mouse position, relative to the
+     *              previous position.
+     *  @param dy   Current vertical mouse position, relative to the
+     *              previous position.
+     *  @return     true iff a shaking mouse has been detected.
+     */
+    bool detectShakeDxDy(double dx, double dy);
+
+    /** Moves the mouse
+     *  @param x    New absolute horizontal coordinate
+     *  @param y    New absolute vertical coordinate
+     */
+    void setXY(double x, double y);
+
+    /** Moves the mouse
+     *  @param dx       Relative horizontal mouse movement
+     *  @param dy       Relative vertical mouse movement
+     */
+    void setDxDy(double dx, double dy);
+
+    /** Triggers a mouse button event
+     *  @param action   The triggered event
+     */
+    void trigger(GamePadAction action);
 };
 
 
@@ -552,10 +625,14 @@ struct MouseAPI : public API {
 
 struct SerialPortAPI : public API {
 
+    friend class VAmiga;
+
     class SerialPort *serialPort = nullptr;
 };
 
 struct ControlPortAPI : public API {
+
+    friend class VAmiga;
 
     class ControlPort *controlPort = nullptr;
 
@@ -573,6 +650,8 @@ struct ControlPortAPI : public API {
 };
 
 struct VideoPortAPI : public API {
+
+    friend class VAmiga;
 
     class VideoPort *videoPort = nullptr;
 
@@ -612,6 +691,8 @@ struct VideoPortAPI : public API {
 
 struct DebuggerAPI : public API {
 
+    friend class VAmiga;
+
     class Debugger *debugger = nullptr;
 
     /** @brief  Returns a string representations for a portion of memory.
@@ -650,9 +731,13 @@ struct DebuggerAPI : public API {
  *    storing shader-relevant parameters that are irrelevant to the emulation
  *    core.
  */
-struct DefaultsAPI : public API {
+class DefaultsAPI : public API {
+
+    friend class VAmiga;
 
     class Defaults *defaults = nullptr;
+
+public:
 
     DefaultsAPI(Defaults *defaults) : defaults(defaults) { }
 
@@ -849,7 +934,11 @@ public:
     /// @}
 };
 
-struct HostAPI : public API {
+class HostAPI : public API {
+
+    friend class VAmiga;
+
+public:
 
     class Host *host = nullptr;
 };
@@ -862,6 +951,8 @@ struct HostAPI : public API {
 /** RetroShell Public API
  */
 struct RetroShellAPI : public API {
+
+    friend class VAmiga;
 
     class RetroShell *retroShell = nullptr;
     
@@ -940,6 +1031,8 @@ struct RetroShellAPI : public API {
 
 struct RecorderAPI : public API {
 
+    friend class VAmiga;
+
     class Recorder *recorder = nullptr;
 };
 
@@ -949,6 +1042,8 @@ struct RecorderAPI : public API {
 //
 
 struct RemoteManagerAPI : public API {
+
+    friend class VAmiga;
 
     class RemoteManager *remoteManager = nullptr;
 

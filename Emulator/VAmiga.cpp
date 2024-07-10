@@ -483,6 +483,58 @@ HardDriveAPI::setFlag(DiskFlags mask, bool value)
 
 
 //
+// Peripherals (Joystick)
+//
+
+const JoystickInfo &
+JoystickAPI::getInfo() const
+{
+    return joystick->getInfo();
+}
+
+const JoystickInfo &
+JoystickAPI::getCachedInfo() const
+{
+    return joystick->getCachedInfo();
+}
+
+
+//
+// Mouse
+//
+
+bool 
+MouseAPI::detectShakeXY(double x, double y)
+{
+    return mouse->detectShakeXY(x, y);
+}
+
+bool 
+MouseAPI::detectShakeDxDy(double dx, double dy)
+{
+    return mouse->detectShakeDxDy(dx, dy);
+}
+
+void 
+MouseAPI::setXY(double x, double y)
+{
+    emu->put(Cmd(CMD_MOUSE_MOVE_ABS, CoordCmd { .port = mouse->objid, .x = x, .y = y }));
+}
+
+void 
+MouseAPI::setDxDy(double dx, double dy)
+{
+    emu->put(Cmd(CMD_MOUSE_MOVE_REL, CoordCmd { .port = mouse->objid, .x = dx, .y = dy }));
+}
+
+void 
+MouseAPI::trigger(GamePadAction action)
+{
+    emu->put(Cmd(CMD_MOUSE_EVENT, GamePadCmd { .port = mouse->objid, .action = action }));
+}
+
+
+//
 // Miscellaneous (Debugger)
 //
 

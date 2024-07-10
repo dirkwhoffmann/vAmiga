@@ -19,6 +19,17 @@ Joystick::Joystick(Amiga& ref, ControlPort& pref) : SubComponent(ref, pref.objid
 
 };
 
+void
+Joystick::cacheInfo(JoystickInfo &result) const
+{
+    {   SYNCHRONIZED
+
+        result.button = button;
+        result.axisX = axisX;
+        result.axisY = axisY;
+    }
+}
+
 i64
 Joystick::getOption(Option option) const
 {
