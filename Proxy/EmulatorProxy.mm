@@ -1318,14 +1318,12 @@ using namespace vamiga::moira;
 {
     return [self drive]->drive->objid;
 }
-*/
 
 - (BOOL)isConnected
 {
     return [self drive]->drive->isConnected();
 }
 
-/*
 - (NSInteger)currentCyl
 {
     return [self drive]->drive->currentCyl();
@@ -1532,6 +1530,29 @@ using namespace vamiga::moira;
 - (void)disableWriteThrough
 {
     [self drive]->drive->disableWriteThrough();
+}
+
+@end
+
+//
+// HdController proxy
+//
+
+@implementation HdControllerProxy
+
+- (HdControllerAPI *)controller
+{
+    return (HdControllerAPI *)obj;
+}
+
+- (HdcInfo)info
+{
+    return [self controller]->getInfo();
+}
+
+- (HdcStats)stats
+{
+    return [self controller]->getStats();
 }
 
 @end
@@ -2577,6 +2598,10 @@ using namespace vamiga::moira;
 @synthesize hd1;
 @synthesize hd2;
 @synthesize hd3;
+@synthesize hd0con;
+@synthesize hd1con;
+@synthesize hd2con;
+@synthesize hd3con;
 @synthesize keyboard;
 @synthesize mem;
 @synthesize paula;
@@ -2622,6 +2647,10 @@ using namespace vamiga::moira;
     hd1 = [[HardDriveProxy alloc] initWith:&vamiga->hd1];
     hd2 = [[HardDriveProxy alloc] initWith:&vamiga->hd2];
     hd3 = [[HardDriveProxy alloc] initWith:&vamiga->hd3];
+    hd0con = [[HdControllerProxy alloc] initWith:&vamiga->hd0con];
+    hd1con = [[HdControllerProxy alloc] initWith:&vamiga->hd1con];
+    hd2con = [[HdControllerProxy alloc] initWith:&vamiga->hd2con];
+    hd3con = [[HdControllerProxy alloc] initWith:&vamiga->hd3con];
     keyboard = [[KeyboardProxy alloc] initWith:&vamiga->keyboard];
     mem = [[MemProxy alloc] initWith:&vamiga->mem];
     paula = [[PaulaProxy alloc] initWith:&vamiga->paula];

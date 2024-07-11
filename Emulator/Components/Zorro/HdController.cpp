@@ -45,6 +45,19 @@ HdController::_dump(Category category, std::ostream& os) const
     }
 }
 
+void 
+HdController::cacheInfo(HdcInfo &result) const
+{
+    result.pluggedIn = pluggedIn();
+    result.state = state;
+}
+
+void 
+HdController::cacheStats(HdcStats &result) const
+{
+    
+}
+
 void
 HdController::_didReset(bool hard)
 {    

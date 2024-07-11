@@ -43,6 +43,7 @@
 @class FolderProxy;
 @class GuardsProxy;
 @class HardDriveProxy;
+@class HdControllerProxy;
 @class HDFFileProxy;
 @class IMGFileProxy;
 @class JoystickProxy;
@@ -156,6 +157,10 @@
     HardDriveProxy *hd1;
     HardDriveProxy *hd2;
     HardDriveProxy *hd3;
+    HdControllerProxy *hd0con;
+    HdControllerProxy *hd1con;
+    HdControllerProxy *hd2con;
+    HdControllerProxy *hd3con;
     KeyboardProxy *keyboard;
     MemProxy *mem;
     PaulaProxy *paula;
@@ -193,6 +198,10 @@
 @property (readonly, strong) HardDriveProxy *hd1;
 @property (readonly, strong) HardDriveProxy *hd2;
 @property (readonly, strong) HardDriveProxy *hd3;
+@property (readonly, strong) HdControllerProxy *hd0con;
+@property (readonly, strong) HdControllerProxy *hd1con;
+@property (readonly, strong) HdControllerProxy *hd2con;
+@property (readonly, strong) HdControllerProxy *hd3con;
 @property (readonly, strong) KeyboardProxy *keyboard;
 @property (readonly, strong) MemProxy *mem;
 @property (readonly, strong) PaulaProxy *paula;
@@ -701,9 +710,9 @@
 @property (readonly) HardDriveInfo info;
 @property (readonly) HardDriveTraits traits;
 
-// @property (readonly) NSInteger nr;
-@property (readonly) BOOL isConnected;
 /*
+@property (readonly) NSInteger nr;
+@property (readonly) BOOL isConnected;
 @property (readonly) NSInteger currentCyl;
 @property (readonly) NSInteger currentHead;
 @property (readonly) NSInteger currentOffset;
@@ -728,6 +737,17 @@
 - (void)writeToFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)enableWriteThrough:(ExceptionWrapper *)ex;
 - (void)disableWriteThrough;
+
+@end
+
+//
+// HdController
+//
+
+@interface HdControllerProxy : CoreComponentProxy { }
+
+@property (readonly) HdcInfo info;
+@property (readonly) HdcStats stats;
 
 @end
 

@@ -162,6 +162,13 @@ HdcConfig;
 
 typedef struct
 {
+    bool pluggedIn;
+    HdcState state;
+}
+HdcInfo;
+
+typedef struct
+{
     // Tracks the number of executed commands
     isize cmdCount[25];
 }

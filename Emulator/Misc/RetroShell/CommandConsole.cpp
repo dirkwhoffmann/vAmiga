@@ -907,7 +907,7 @@ CommandConsole::initCommands(Command &root)
         for (isize i = 0; i <= 4; i++) {
 
             string hd = i == 4 ? "hdn" : "hd" + std::to_string(i);
-            root.add({hd}, "Floppy drive");
+            root.add({hd}, "Hard drive");
 
             {   VAMIGA_GROUP("")
 

@@ -552,6 +552,10 @@ public:
 // Peripherals
 //
 
+//
+// Peripherals (FloppyDrive)
+//
+
 struct FloppyDriveAPI : public API {
 
     friend class VAmiga;
@@ -575,6 +579,11 @@ struct FloppyDriveAPI : public API {
      */
     void setFlag(DiskFlags mask, bool value);
 };
+
+
+//
+// Peripherals (HardDrive)
+//
 
 struct HardDriveAPI : public API {
 
@@ -604,6 +613,38 @@ struct HardDriveAPI : public API {
     void setFlag(DiskFlags mask, bool value);
 };
 
+
+//
+// Peripherals (HardDrive)
+//
+
+class HdControllerAPI : public API {
+
+    friend class VAmiga;
+
+    class HdController *controller = nullptr;
+
+public:
+
+    /** @brief  Provides details about the currently selected chip revision.
+     */
+    // const HdcTraits &getTraits() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    const HdcInfo &getInfo() const;
+    const HdcInfo &getCachedInfo() const;
+
+    /** @brief  Returns statistical information about the components.
+     */
+    const HdcStats &getStats() const;
+};
+
+
+//
+// Peripherals (Joystick)
+//
+
 class JoystickAPI : public API {
 
     friend class VAmiga;
@@ -621,6 +662,11 @@ public:
     const JoystickInfo &getInfo() const;
     const JoystickInfo &getCachedInfo() const;
 };
+
+
+//
+// Peripherals (Keyboard)
+//
 
 class KeyboardAPI : public API {
 
@@ -681,6 +727,11 @@ public:
      */
     void abortAutoTyping();
 };
+
+
+//
+// Peripherals (Mouse)
+//
 
 class MouseAPI : public API {
 
@@ -882,7 +933,6 @@ public:
     const class FrameBuffer &getTexture() const;
 
 };
-
 
 
 //
@@ -1301,7 +1351,8 @@ public:
 
     // Peripherals
     FloppyDriveAPI df0, df1, df2, df3;
-    HardDriveAPI hd0,hd1, hd2, hd3;
+    HardDriveAPI hd0, hd1, hd2, hd3;
+    HdControllerAPI hd0con, hd1con, hd2con, hd3con;
     KeyboardAPI keyboard;
 
     // Misc

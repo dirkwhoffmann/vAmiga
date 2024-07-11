@@ -89,6 +89,8 @@ HardDriveConfig;
 
 typedef struct
 {
+    bool isConnected;
+    
     // Disk properties
     bool hasDisk;
     bool hasModifiedDisk;

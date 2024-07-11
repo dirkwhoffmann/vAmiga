@@ -299,6 +299,8 @@ HardDrive::cacheInfo(HardDriveInfo &info) const
 {
     {   SYNCHRONIZED
         
+        info.isConnected = isConnected();
+        
         info.hasDisk = hasDisk();
         info.hasModifiedDisk = hasModifiedDisk();
         info.hasUnmodifiedDisk = hasUnmodifiedDisk();

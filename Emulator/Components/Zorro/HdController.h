@@ -16,8 +16,8 @@
 
 namespace vamiga {
 
-class HdController : public ZorroBoard {
-    
+class HdController : public ZorroBoard, public Inspectable<HdcInfo, HdcStats> {
+
     Descriptions descriptions = {
         {
             .name           = "HdController0",
@@ -52,9 +52,6 @@ class HdController : public ZorroBoard {
     // Current configuration
     HdcConfig config = {};
     
-    // Usage profile
-    HdcStats stats = {};
-    
     // The current controller state
     HdcState hdcState = HDC_UNDETECTED;
     
@@ -69,7 +66,7 @@ class HdController : public ZorroBoard {
 
 
     //
-    // Initializing
+    // Methods
     //
     
 public:
@@ -78,26 +75,11 @@ public:
 
 
     //
-    // Methods from CoreObject
+    // Methods from Serializable
     //
     
 private:
-    
-    void _dump(Category category, std::ostream& os) const override;
 
-public:
-
-    const Descriptions &getDescriptions() const override { return descriptions; }
-
-
-    //
-    // Methods from CoreComponent
-    //
-    
-private:
-    
-    // void _initialize() override;
-    
     template <class T>
     void serialize(T& worker)
     {
@@ -121,6 +103,29 @@ private:
 
     void _didReset(bool hard) override;
     
+
+    //
+    // Methods from CoreComponent
+    //
+
+public:
+
+    const Descriptions &getDescriptions() const override { return descriptions; }
+
+private:
+
+    void _dump(Category category, std::ostream& os) const override;
+
+
+    //
+    // Methods from Inspectable
+    //
+
+public:
+
+    void cacheInfo(HdcInfo &result) const override;
+    void cacheStats(HdcStats &result) const override;
+
 
     //
     // Methods from ZorroBoard
@@ -163,8 +168,8 @@ public:
     
 public:
     
-    const HdcStats &getStats() { return stats; }
-    void clearStats() { stats = { }; }
+    // const HdcStats &getStats() { return stats; }
+    // void clearStats() { stats = { }; }
     
     // Returns the current controller state
     HdcState getHdcState() { return hdcState; }

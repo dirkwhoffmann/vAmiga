@@ -472,11 +472,11 @@ extension HardDriveProxy {
         }
     }
     
-    func ledIcon(state: HardDriveState) -> NSImage? {
+    func ledIcon(info: HardDriveInfo) -> NSImage? {
 
-        if !isConnected { return nil }
-        
-        switch state {
+        if !info.isConnected { return nil }
+
+        switch info.state {
             
         case .IDLE: return NSImage(named: "ledGrey")
         case .READING: return NSImage(named: "ledGreen")

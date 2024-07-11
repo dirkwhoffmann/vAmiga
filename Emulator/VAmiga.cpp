@@ -726,6 +726,29 @@ HardDriveAPI::setFlag(DiskFlags mask, bool value)
 
 
 //
+// Peripherals (HdController)
+//
+
+const HdcInfo &
+HdControllerAPI::getInfo() const
+{
+    return controller->getInfo();
+}
+
+const HdcInfo &
+HdControllerAPI::getCachedInfo() const
+{
+    return controller->getCachedInfo();
+}
+
+const HdcStats &
+HdControllerAPI::getStats() const
+{
+    return controller->getStats();
+}
+
+
+//
 // Peripherals (Joystick)
 //
 
@@ -1108,6 +1131,18 @@ VAmiga::VAmiga() {
 
     hd3.emu = emu;
     hd3.drive = &emu->main.hd3;
+
+    hd0con.emu = emu;
+    hd0con.controller = &emu->main.hd0con;
+
+    hd1con.emu = emu;
+    hd1con.controller = &emu->main.hd1con;
+
+    hd2con.emu = emu;
+    hd2con.controller = &emu->main.hd2con;
+
+    hd3con.emu = emu;
+    hd3con.controller = &emu->main.hd3con;
 
     host.emu = emu;
     host.host = &emu->host;

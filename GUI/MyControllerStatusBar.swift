@@ -49,7 +49,7 @@ extension MyController {
             let hdn = emu.hd(n - 4)!
             let info = hdn.info
 
-            refreshStatusBar(drive: n, led: hdn.ledIcon(state: info.state))
+            refreshStatusBar(drive: n, led: hdn.ledIcon(info: info))
             refreshStatusBar(drive: n, cylinder: info.head.cylinder)
             refreshStatusBar(drive: n, icon: hdn.templateIcon, toolTip: hdn.toolTip)
         }
@@ -148,11 +148,11 @@ extension MyController {
         if emu.df3.info.isConnected { drv[3] = nr; nr += 1 }
 
         // Update slot assignments for Hd0 - Hd3
-        if emu.hd0.isConnected, nr < 4 { drv[4] = nr; nr += 1 }
-        if emu.hd1.isConnected, nr < 4 { drv[5] = nr; nr += 1 }
-        if emu.hd2.isConnected, nr < 4 { drv[6] = nr; nr += 1 }
-        if emu.hd3.isConnected, nr < 4 { drv[7] = nr; nr += 1 }
-        
+        if emu.hd0.info.isConnected, nr < 4 { drv[4] = nr; nr += 1 }
+        if emu.hd1.info.isConnected, nr < 4 { drv[5] = nr; nr += 1 }
+        if emu.hd2.info.isConnected, nr < 4 { drv[6] = nr; nr += 1 }
+        if emu.hd3.info.isConnected, nr < 4 { drv[7] = nr; nr += 1 }
+
         // Update reference tables
         for device in 0...7 {
             
