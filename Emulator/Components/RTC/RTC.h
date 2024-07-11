@@ -55,27 +55,34 @@ class RTC : public SubComponent {
     
     
     //
-    // Constructing
+    // Methods
     //
-    
+
 public:
     
     using SubComponent::SubComponent;
     
-    
-    //
-    // Methods from CoreObject
-    //
-    
-private:
-    
-    void _dump(Category category, std::ostream& os) const override;
+    RTC& operator= (const RTC& other) {
+        
+        CLONE(timeDiff)
+        CLONE_ARRAY(reg[0])
+        CLONE_ARRAY(reg[1])
+        CLONE_ARRAY(reg[2])
+        CLONE_ARRAY(reg[3])
+        CLONE(lastCall)
+        CLONE(lastMeasure)
+        CLONE(lastMeasuredValue)
 
-    
+        CLONE(config.model)
+
+        return *this;
+    }
+
+
     //
-    // Methods from CoreComponent
+    // Methods from Serializable
     //
-    
+
 private:
         
     template <class T>
@@ -104,11 +111,20 @@ private:
     void operator << (SerReader &worker) override { serialize(worker); }
     void operator << (SerWriter &worker) override { serialize(worker); }
 
+
+    //
+    // Methods from CoreComponent
+    //
+
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
 
-    
+private:
+
+    void _dump(Category category, std::ostream& os) const override;
+
+
     //
     // Methods from Configurable
     //

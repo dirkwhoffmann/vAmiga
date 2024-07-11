@@ -1008,7 +1008,7 @@ using namespace vamiga::moira;
 
 - (void)update
 {
-    [self rtc]->rtc->update();
+    [self rtc]->update();
 }
 
 @end
@@ -1313,6 +1313,16 @@ using namespace vamiga::moira;
     return (HardDriveAPI *)obj;
 }
 
+- (HardDriveTraits)traits
+{
+    return [self drive]->getTraits();
+}
+
+- (HardDriveInfo)info
+{
+    return [self drive]->getInfo();
+}
+
 - (NSInteger)nr
 {
     return [self drive]->drive->objid;
@@ -1338,6 +1348,7 @@ using namespace vamiga::moira;
     return [self drive]->drive->currentOffset();
 }
 
+/*
 - (BOOL)hasDisk
 {
     return [self drive]->drive->hasDisk();
@@ -1362,6 +1373,7 @@ using namespace vamiga::moira;
 {
     return [self drive]->drive->hasUnprotectedDisk();
 }
+*/
 
 - (BOOL)getFlag:(DiskFlags)mask
 {
@@ -1371,11 +1383,6 @@ using namespace vamiga::moira;
 - (void)setFlag:(DiskFlags)mask value:(BOOL)value
 {
     [self drive]->setFlag(mask, value);
-}
-
-- (HardDriveInfo)info
-{
-    return [self drive]->drive->getInfo();
 }
 
 - (NSInteger)capacity

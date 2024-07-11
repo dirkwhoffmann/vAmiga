@@ -508,6 +508,23 @@ PaulaAPI::getCachedInfo() const
 
 
 //
+// Components (RTC)
+//
+
+const RTCConfig &
+RTCAPI::getConfig() const
+{
+    return rtc->getConfig();
+}
+
+void
+RTCAPI::update()
+{
+    rtc->update();
+}
+
+
+//
 // Ports
 //
 
@@ -689,7 +706,13 @@ HardDriveAPI::getCachedInfo() const
     return drive->getCachedInfo();
 }
 
-bool 
+const HardDriveTraits &
+HardDriveAPI::getTraits() const
+{
+    return drive->getTraits();
+}
+
+bool
 HardDriveAPI::getFlag(DiskFlags mask)
 {
     return drive->getFlag(mask);

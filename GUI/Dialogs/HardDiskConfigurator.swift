@@ -81,11 +81,11 @@ class HardDiskConfigurator: DialogController {
 
         self.nr = nr
         
-        let info = drive.info
-        origCyls = info.cylinders
-        origHeads = info.heads
-        origSectors = info.sectors
-        origBsize = info.bsize
+        let traits = drive.traits
+        origCyls = traits.cylinders
+        origHeads = traits.heads
+        origSectors = traits.sectors
+        origBsize = traits.bsize
 
         cyls = origCyls
         heads = origHeads
@@ -132,8 +132,9 @@ class HardDiskConfigurator: DialogController {
     
     func update() {
                   
+        let traits = drive.traits
         let custom = geometryPopup.selectedTag() == 0
-        
+
         // Update text fields and steppers
         cylinderField.stringValue      = String(format: "%d", cyls)
         cylinderStepper.integerValue   = cyls
@@ -170,7 +171,7 @@ class HardDiskConfigurator: DialogController {
         }
         
         // Check if the geometry is consistent with the HDF
-        let matching = cyls * heads * sectors * bsize == drive.info.bytes
+        let matching = cyls * heads * sectors * bsize == traits.bytes
         warningText.isHidden = matching
         okButton.isEnabled = matching
     }

@@ -37,9 +37,9 @@ HardDrive::init()
     diskVendor = "VAMIGA";
     diskProduct = "VDRIVE";
     diskRevision = "1.0";
-    controllerVendor = amiga.hdcon[objid]->vendorName();
-    controllerProduct = amiga.hdcon[objid]->productName();
-    controllerRevision = amiga.hdcon[objid]->revisionName();
+    controllerVendor = "RASTEC";
+    controllerProduct = "HD controller";
+    controllerRevision = "0.3";
     geometry = GeometryDescriptor();
     ptable.clear();
     drivers.clear();
@@ -299,17 +299,11 @@ HardDrive::cacheInfo(HardDriveInfo &info) const
 {
     {   SYNCHRONIZED
         
-        info.cylinders = geometry.cylinders;
-        info.heads = geometry.heads;
-        info.sectors = geometry.sectors;
-        info.bsize = geometry.bsize;
-
-        info.tracks = geometry.numTracks();
-        info.blocks = geometry.numBlocks();
-        info.bytes = geometry.numBytes();
-        info.upperCyl = geometry.upperCyl();
-        info.upperHead = geometry.upperHead();
-        info.upperTrack = geometry.upperTrack();
+        info.hasDisk = hasDisk();
+        info.hasModifiedDisk = hasModifiedDisk();
+        info.hasUnmodifiedDisk = hasUnmodifiedDisk();
+        info.hasProtectedDisk = hasProtectedDisk();
+        info.hasUnprotectedDisk = hasUnprotectedDisk();
 
         info.partitions = numPartitions();
 

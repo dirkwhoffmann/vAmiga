@@ -621,11 +621,11 @@
 
 @interface MouseProxy : CoreComponentProxy { }
 
-- (BOOL)detectShakeAbs:(NSPoint)pos;
-- (BOOL)detectShakeRel:(NSPoint)pos;
 - (void)setXY:(NSPoint)pos;
 - (void)setDxDy:(NSPoint)pos;
 - (void)trigger:(GamePadAction)event;
+- (BOOL)detectShakeAbs:(NSPoint)pos;
+- (BOOL)detectShakeRel:(NSPoint)pos;
 
 @end
 
@@ -698,22 +698,25 @@
 
 @interface HardDriveProxy : CoreComponentProxy { }
 
+@property (readonly) HardDriveInfo info;
+@property (readonly) HardDriveTraits traits;
+
 @property (readonly) NSInteger nr;
 @property (readonly) BOOL isConnected;
 @property (readonly) NSInteger currentCyl;
 @property (readonly) NSInteger currentHead;
 @property (readonly) NSInteger currentOffset;
 
+/*
 @property (readonly) BOOL hasDisk;
 @property (readonly) BOOL hasModifiedDisk;
 @property (readonly) BOOL hasProtectedDisk;
 @property (readonly) BOOL hasUnmodifiedDisk;
 @property (readonly) BOOL hasUnprotectedDisk;
+*/
 
 - (BOOL)getFlag:(DiskFlags)mask;
 - (void)setFlag:(DiskFlags)mask value:(BOOL)value;
-
-@property (readonly) HardDriveInfo info;
 
 @property (readonly) HdcState hdcState;
 @property (readonly) BOOL isCompatible;

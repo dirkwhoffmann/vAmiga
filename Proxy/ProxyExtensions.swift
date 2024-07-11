@@ -449,7 +449,7 @@ extension HardDriveProxy {
             name = "hdrETemplate"
             
         default:
-            name = hasModifiedDisk ? "hdrUTemplate" : "hdrTemplate"
+            name = info.hasModifiedDisk ? "hdrUTemplate" : "hdrTemplate"
         }
         
         return NSImage(named: name)!

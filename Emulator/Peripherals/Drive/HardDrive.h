@@ -122,6 +122,32 @@ public:
     // Creates a hard drive with the contents of an HDF file
     void init(const string &path) throws;
 
+    const HardDriveTraits &getTraits() const {
+
+        static HardDriveTraits traits;
+
+        traits.diskVendor = diskVendor.c_str();
+        traits.diskProduct = diskProduct.c_str();
+        traits.diskRevision = diskRevision.c_str();
+        traits.controllerVendor = controllerVendor.c_str();
+        traits.controllerProduct = controllerProduct.c_str();
+        traits.controllerRevision = controllerRevision.c_str();
+
+        traits.cylinders = geometry.cylinders;
+        traits.heads = geometry.heads;
+        traits.sectors = geometry.sectors;
+        traits.bsize = geometry.bsize;
+
+        traits.tracks = geometry.numTracks();
+        traits.blocks = geometry.numBlocks();
+        traits.bytes = geometry.numBytes();
+        traits.upperCyl = geometry.upperCyl();
+        traits.upperHead = geometry.upperHead();
+        traits.upperTrack = geometry.upperTrack();
+
+        return traits;
+    }
+
 private:
 
     // Restors the initial state
@@ -243,7 +269,6 @@ private:
 public:
 
     // Returns information about the disk or one of its partitions
-    // HardDriveInfo getInfo() const { return CoreComponent::getInfo(info); }
     void cacheInfo(HardDriveInfo &info) const override;
 
     const PartitionDescriptor &getPartitionInfo(isize nr);

@@ -528,20 +528,23 @@ public:
     const PaulaInfo &getCachedInfo() const;
 };
 
-struct RTCAPI : public API {
+class RTCAPI : public API {
 
     friend class VAmiga;
 
     class RTC *rtc = nullptr;
 
+public:
+
     /** @brief  Returns the component's current configuration.
      */
     const RTCConfig &getConfig() const;
 
-    /** @brief  Returns the component's current state.
+    /** @brief  Updates the RTC's internal state.
+     *          Call this function if you want, e.g., spypeek to return an
+     *          up-to-date value from the RTC register memory locations.
      */
-    // const RTCInfo &getInfo() const;
-    // const RTCInfo &getCachedInfo() const;
+    void update();
 };
 
 
@@ -587,6 +590,10 @@ struct HardDriveAPI : public API {
      */
     const HardDriveInfo &getInfo() const;
     const HardDriveInfo &getCachedInfo() const;
+
+    /** @brief  Provides details about the currently selected chip revision.
+     */
+    const HardDriveTraits &getTraits() const;
 
     /** @brief Queries a disk flag
      */

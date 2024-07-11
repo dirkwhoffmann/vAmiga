@@ -89,6 +89,7 @@ HardDriveConfig;
 
 typedef struct
 {
+    /*
     // Physical layout (geometry)
     isize cylinders;
     isize heads;
@@ -102,7 +103,13 @@ typedef struct
     isize upperCyl;
     isize upperHead;
     isize upperTrack;
-
+     */
+    bool hasDisk;
+    bool hasModifiedDisk;
+    bool hasUnmodifiedDisk;
+    bool hasProtectedDisk;
+    bool hasUnprotectedDisk;
+    
     // Logical layout (partitions)
     isize partitions;
 
@@ -114,3 +121,30 @@ typedef struct
     DriveHead head;
 }
 HardDriveInfo;
+
+
+typedef struct
+{
+    // Product information
+    const char *diskVendor;
+    const char *diskProduct;
+    const char *diskRevision;
+    const char *controllerVendor;
+    const char *controllerProduct;
+    const char *controllerRevision;
+    
+    // Physical layout
+    isize cylinders;
+    isize heads;
+    isize sectors;
+    isize bsize;
+
+    // Derived values
+    isize tracks;
+    isize blocks;
+    isize bytes;
+    isize upperCyl;
+    isize upperHead;
+    isize upperTrack;
+}
+HardDriveTraits;

@@ -1306,8 +1306,8 @@
 				502F7DD0222170AE00AEEC65 /* Agnus */,
 				505B801C23FE626E002407FE /* Memory */,
 				50EC7A2E29C9EC1000060CAA /* RTC */,
-				505B801D23FE628F002407FE /* Ports */,
 				508AC36527B7F634006AD2E7 /* Zorro */,
+				505B801D23FE628F002407FE /* Ports */,
 			);
 			path = Components;
 			sourceTree = "<group>";
