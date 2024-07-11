@@ -348,24 +348,6 @@ public:
     const DeniseInfo &getCachedInfo() const;
 };
 
-class DiskControllerAPI : public API {
-
-    friend class VAmiga;
-
-    class DiskController *diskController = nullptr;
-
-public:
-
-    /** @brief  Returns the component's current configuration.
-     */
-    const DiskControllerConfig &getConfig() const;
-
-    /** @brief  Returns the component's current state.
-     */
-    const DiskControllerInfo &getInfo() const;
-    const DiskControllerInfo &getCachedInfo() const;
-};
-
 class DmaDebuggerAPI : public API {
 
     friend class VAmiga;
@@ -384,6 +366,25 @@ public:
     const DmaDebuggerInfo &getCachedInfo() const;
 };
 
+//
+// Memory
+//
+
+class MemoryDebuggerAPI : public API {
+
+    friend class VAmiga;
+
+    class MemoryDebugger *debugger = nullptr;
+
+public:
+
+    /** @brief  Returns a string representations for a portion of memory.
+     */
+    string ascDump(Accessor acc, u32 addr, isize bytes) const;
+    string hexDump(Accessor acc, u32 addr, isize bytes, isize sz = 1) const;
+    string memDump(Accessor acc, u32 addr, isize bytes, isize sz = 1) const;
+};
+
 struct MemoryAPI : public API {
 
     friend class VAmiga;
@@ -391,6 +392,8 @@ struct MemoryAPI : public API {
     class Memory *mem = nullptr;
 
 public:
+    
+    MemoryDebuggerAPI debugger;
     
     /** @brief  Returns the component's current configuration.
      */
@@ -416,12 +419,45 @@ public:
     void deleteRom();
     void deleteWom();
     void deleteExt();
+};
 
-    /** @brief  Returns a string representations for a portion of memory.
+//
+// Paula
+//
+
+class AudioChannelAPI : public API {
+
+    friend class VAmiga;
+
+    class Paula *paula = nullptr;
+    isize channel = 0;
+
+public:
+
+    AudioChannelAPI(isize channel) : API(), channel(channel) { }
+
+    /** @brief  Returns the component's current state.
      */
-    string ascDump(Accessor acc, u32 addr, isize bytes) const;
-    string hexDump(Accessor acc, u32 addr, isize bytes, isize sz = 1) const;
-    string memDump(Accessor acc, u32 addr, isize bytes, isize sz = 1) const;
+    const StateMachineInfo &getInfo() const;
+    const StateMachineInfo &getCachedInfo() const;
+};
+
+class DiskControllerAPI : public API {
+
+    friend class VAmiga;
+
+    class DiskController *diskController = nullptr;
+
+public:
+
+    /** @brief  Returns the component's current configuration.
+     */
+    const DiskControllerConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    const DiskControllerInfo &getInfo() const;
+    const DiskControllerInfo &getCachedInfo() const;
 };
 
 class PaulaAPI : public API {
@@ -431,6 +467,12 @@ class PaulaAPI : public API {
 public:
 
     class Paula *paula = nullptr;
+
+    AudioChannelAPI audioChannel0 = AudioChannelAPI(0);
+    AudioChannelAPI audioChannel1 = AudioChannelAPI(1);
+    AudioChannelAPI audioChannel2 = AudioChannelAPI(2);
+    AudioChannelAPI audioChannel3 = AudioChannelAPI(3);
+    DiskControllerAPI diskController;
 
     /** @brief  Returns the component's current configuration.
      */
@@ -1108,7 +1150,6 @@ public:
     AmigaAPI amiga;
     AgnusAPI agnus;
     BlitterAPI blitter;
-    // GuardsAPI breakpoints;
     CIAAPI ciaA, ciaB;
     VideoPortAPI videoPort;
     ControlPortAPI controlPort1;
@@ -1118,7 +1159,6 @@ public:
     CPUAPI cpu;
     DebuggerAPI debugger;
     DeniseAPI denise;
-    DiskControllerAPI diskController;
     DmaDebuggerAPI dmaDebugger;
     FloppyDriveAPI df0, df1, df2, df3;
     HardDriveAPI hd0,hd1, hd2, hd3;
@@ -1131,7 +1171,6 @@ public:
     RecorderAPI recorder;
     RemoteManagerAPI remoteManager;
     SerialPortAPI serialPort;
-    // GuardsAPI watchpoints;
 
     //
     // Static methods

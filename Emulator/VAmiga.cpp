@@ -304,30 +304,6 @@ DeniseAPI::getCachedInfo() const
     return denise->getCachedInfo();
 }
 
-
-//
-// Components (DiskController)
-//
-
-const DiskControllerConfig &
-DiskControllerAPI::getConfig() const
-{
-    return diskController->getConfig();
-}
-
-const DiskControllerInfo &
-DiskControllerAPI::getInfo() const
-{
-    return diskController->getInfo();
-}
-
-const DiskControllerInfo &
-DiskControllerAPI::getCachedInfo() const
-{
-    return diskController->getCachedInfo();
-}
-
-
 //
 // Components (DmaDebugger)
 //
@@ -354,6 +330,51 @@ DmaDebuggerAPI::getCachedInfo() const
 //
 // Components (Memory)
 //
+
+string
+MemoryDebuggerAPI::ascDump(Accessor acc, u32 addr, isize bytes) const
+{
+    assert(isUserThread());
+
+    switch (acc) {
+
+        case ACCESSOR_CPU:      return debugger->ascDump<ACCESSOR_CPU>(addr, bytes);
+        case ACCESSOR_AGNUS:    return debugger->ascDump<ACCESSOR_AGNUS>(addr, bytes);
+
+        default:
+            fatalError;
+    }
+}
+
+string
+MemoryDebuggerAPI::hexDump(Accessor acc, u32 addr, isize bytes, isize sz) const
+{
+    assert(isUserThread());
+
+    switch (acc) {
+
+        case ACCESSOR_CPU:      return debugger->hexDump<ACCESSOR_CPU>(addr, bytes, sz);
+        case ACCESSOR_AGNUS:    return debugger->hexDump<ACCESSOR_AGNUS>(addr, bytes, sz);
+
+        default:
+            fatalError;
+    }
+}
+
+string
+MemoryDebuggerAPI::memDump(Accessor acc, u32 addr, isize bytes, isize sz) const
+{
+    assert(isUserThread());
+
+    switch (acc) {
+
+        case ACCESSOR_CPU:      return debugger->memDump<ACCESSOR_CPU>(addr, bytes, sz);
+        case ACCESSOR_AGNUS:    return debugger->memDump<ACCESSOR_AGNUS>(addr, bytes, sz);
+
+        default:
+            fatalError;
+    }
+}
 
 const MemConfig &
 MemoryAPI::getConfig() const
@@ -419,55 +440,51 @@ MemoryAPI::deleteExt()
     mem->deleteExt();
 }
 
-string
-MemoryAPI::ascDump(Accessor acc, u32 addr, isize bytes) const
-{
-    assert(isUserThread());
-
-    switch (acc) {
-
-        case ACCESSOR_CPU:      return mem->debugger.ascDump<ACCESSOR_CPU>(addr, bytes);
-        case ACCESSOR_AGNUS:    return mem->debugger.ascDump<ACCESSOR_AGNUS>(addr, bytes);
-
-        default:
-            fatalError;
-    }
-}
-
-string
-MemoryAPI::hexDump(Accessor acc, u32 addr, isize bytes, isize sz) const
-{
-    assert(isUserThread());
-
-    switch (acc) {
-
-        case ACCESSOR_CPU:      return mem->debugger.hexDump<ACCESSOR_CPU>(addr, bytes, sz);
-        case ACCESSOR_AGNUS:    return mem->debugger.hexDump<ACCESSOR_AGNUS>(addr, bytes, sz);
-
-        default:
-            fatalError;
-    }
-}
-
-string
-MemoryAPI::memDump(Accessor acc, u32 addr, isize bytes, isize sz) const
-{
-    assert(isUserThread());
-
-    switch (acc) {
-
-        case ACCESSOR_CPU:      return mem->debugger.memDump<ACCESSOR_CPU>(addr, bytes, sz);
-        case ACCESSOR_AGNUS:    return mem->debugger.memDump<ACCESSOR_AGNUS>(addr, bytes, sz);
-
-        default:
-            fatalError;
-    }
-}
-
-
 //
 // Components (Paula)
 //
+
+const StateMachineInfo &
+AudioChannelAPI::getInfo() const
+{
+    switch (channel) {
+
+        case 0:     return paula->channel0.getInfo();
+        case 1:     return paula->channel1.getInfo();
+        case 2:     return paula->channel2.getInfo();
+        default:    return paula->channel3.getInfo();
+    }
+}
+
+const StateMachineInfo &
+AudioChannelAPI::getCachedInfo() const
+{
+    switch (channel) {
+
+        case 0:     return paula->channel0.getCachedInfo();
+        case 1:     return paula->channel1.getCachedInfo();
+        case 2:     return paula->channel2.getCachedInfo();
+        default:    return paula->channel3.getCachedInfo();
+    }
+}
+
+const DiskControllerConfig &
+DiskControllerAPI::getConfig() const
+{
+    return diskController->getConfig();
+}
+
+const DiskControllerInfo &
+DiskControllerAPI::getInfo() const
+{
+    return diskController->getInfo();
+}
+
+const DiskControllerInfo &
+DiskControllerAPI::getCachedInfo() const
+{
+    return diskController->getCachedInfo();
+}
 
 const PaulaInfo &
 PaulaAPI::getInfo() const
@@ -923,6 +940,8 @@ VAmiga::VAmiga() {
 
     emu = new Emulator();
 
+    // Wire all APIs...
+
     amiga.emu = emu;
     amiga.amiga = &emu->main;
 
@@ -931,9 +950,6 @@ VAmiga::VAmiga() {
 
     blitter.emu = emu;
     blitter.blitter = &emu->main.agnus.blitter;
-
-    // breakpoints.emu = emu;
-    // breakpoints.guards = &emu->main.cpu.debugger.breakpoints;
 
     ciaA.emu = emu;
     ciaA.cia = &emu->main.ciaA;
@@ -974,9 +990,6 @@ VAmiga::VAmiga() {
     denise.emu = emu;
     denise.denise = &emu->main.denise;
 
-    diskController.emu = emu;
-    diskController.diskController = &emu->main.paula.diskController;
-
     dmaDebugger.emu = emu;
     dmaDebugger.dmaDebugger = &emu->main.agnus.dmaDebugger;
 
@@ -1012,9 +1025,21 @@ VAmiga::VAmiga() {
 
     mem.emu = emu;
     mem.mem = &emu->main.mem;
+    mem.debugger.emu = emu;
+    mem.debugger.debugger = &emu->main.mem.debugger;
 
     paula.emu = emu;
     paula.paula = &emu->main.paula;
+    paula.audioChannel0.emu = emu;
+    paula.audioChannel0.paula = &emu->main.paula;
+    paula.audioChannel1.emu = emu;
+    paula.audioChannel1.paula = &emu->main.paula;
+    paula.audioChannel2.emu = emu;
+    paula.audioChannel2.paula = &emu->main.paula;
+    paula.audioChannel3.emu = emu;
+    paula.audioChannel3.paula = &emu->main.paula;
+    paula.diskController.emu = emu;
+    paula.diskController.diskController = &emu->main.paula.diskController;
 
     retroShell.emu = emu;
     retroShell.retroShell = &emu->main.retroShell;

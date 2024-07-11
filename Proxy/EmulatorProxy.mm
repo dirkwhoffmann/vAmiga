@@ -610,7 +610,7 @@ using namespace vamiga::moira;
 - (NSString *)ascDump:(Accessor)accessor addr:(NSInteger)addr bytes:(NSInteger)bytes
 {
     assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
-    auto str = [self mem]->ascDump(accessor, (u32)addr, bytes);
+    auto str = [self mem]->debugger.ascDump(accessor, (u32)addr, bytes);
 
     return @(str.c_str());
 }
@@ -618,7 +618,7 @@ using namespace vamiga::moira;
 - (NSString *)hexDump:(Accessor)accessor addr: (NSInteger)addr bytes:(NSInteger)bytes
 {
     assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
-    auto str = [self mem]->hexDump(accessor, (u32)addr, bytes);
+    auto str = [self mem]->debugger.hexDump(accessor, (u32)addr, bytes);
 
     return @(str.c_str());
 }
@@ -889,32 +889,32 @@ using namespace vamiga::moira;
 
 - (PaulaInfo)info
 {
-    return [self paula]->paula->getInfo();
+    return [self paula]->getInfo();
 }
 
 - (PaulaInfo)cachedInfo
 {
-    return [self paula]->paula->getCachedInfo();
+    return [self paula]->getCachedInfo();
 }
 
 - (StateMachineInfo)audioInfo0
 {
-    return [self paula]->paula->channel0.getInfo();
+    return [self paula]->audioChannel0.getInfo();
 }
 
 - (StateMachineInfo)audioInfo1
 {
-    return [self paula]->paula->channel1.getInfo();
+    return [self paula]->audioChannel1.getInfo();
 }
 
 - (StateMachineInfo)audioInfo2
 {
-    return [self paula]->paula->channel2.getInfo();
+    return [self paula]->audioChannel2.getInfo();
 }
 
 - (StateMachineInfo)audioInfo3
 {
-    return [self paula]->paula->channel3.getInfo();
+    return [self paula]->audioChannel3.getInfo();
 }
 
 - (UARTInfo)uartInfo
@@ -2587,7 +2587,7 @@ using namespace vamiga::moira;
     cpu = [[CPUProxy alloc] initWith:&vamiga->cpu];
     debugger = [[DebuggerProxy alloc] initWith:&vamiga->debugger];
     denise = [[DeniseProxy alloc] initWith:&vamiga->denise];
-    diskController = [[DiskControllerProxy alloc] initWith:&vamiga->diskController];
+    diskController = [[DiskControllerProxy alloc] initWith:&vamiga->paula.diskController];
     dmaDebugger = [[DmaDebuggerProxy alloc] initWith:&vamiga->dmaDebugger];
     df0 = [[FloppyDriveProxy alloc] initWith:&vamiga->df0];
     df1 = [[FloppyDriveProxy alloc] initWith:&vamiga->df1];
