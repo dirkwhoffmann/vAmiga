@@ -482,6 +482,18 @@ DiskControllerAPI::getCachedInfo() const
     return diskController->getCachedInfo();
 }
 
+const UARTInfo &
+UARTAPI::getInfo() const
+{
+    return uart->getInfo();
+}
+
+const UARTInfo &
+UARTAPI::getCachedInfo() const
+{
+    return uart->getCachedInfo();
+}
+
 const PaulaInfo &
 PaulaAPI::getInfo() const
 {
@@ -493,6 +505,47 @@ PaulaAPI::getCachedInfo() const
 {
     return paula->getCachedInfo();
 }
+
+
+//
+// Ports
+//
+
+
+//
+// Ports (AudioPort)
+//
+
+const AudioPortConfig &
+AudioPortAPI::getConfig() const
+{
+    return port->getConfig();
+}
+
+const AudioPortStats &
+AudioPortAPI::getStats() const
+{
+    return port->getStats();
+}
+
+isize
+AudioPortAPI::copyMono(float *buffer, isize n)
+{
+    return port->copyMono(buffer, n);
+}
+
+isize
+AudioPortAPI::copyStereo(float *left, float *right, isize n)
+{
+    return port->copyStereo(left, right, n);
+}
+
+isize
+AudioPortAPI::copyInterleaved(float *buffer, isize n)
+{
+    return port->copyInterleaved(buffer, n);
+}
+
 
 //
 // Ports (ControlPort)
@@ -510,6 +563,21 @@ ControlPortAPI::getCachedInfo() const
     return controlPort->getCachedInfo();
 }
 
+
+//
+// Ports (VideoPort)
+//
+
+const class FrameBuffer &
+VideoPortAPI::getTexture() const
+{
+    return videoPort->getTexture();
+}
+
+
+//
+// Peripherals
+//
 
 //
 // Peripherals (Keyboard)
@@ -918,17 +986,6 @@ RetroShellAPI::setStream(std::ostream &os)
 
 
 //
-// VideoPortAPI
-//
-
-const class FrameBuffer &
-VideoPortAPI::getTexture() const
-{
-    return videoPort->getTexture();
-}
-
-
-//
 // VAmiga API
 //
 
@@ -938,6 +995,7 @@ VAmiga::VAmiga() {
 
     // Wire all APIs...
 
+    // Components
     amiga.emu = emu;
     amiga.amiga = &emu->main;
 
@@ -946,15 +1004,20 @@ VAmiga::VAmiga() {
     agnus.dma.emu = emu;
     agnus.dma.debugger.emu = emu;
     agnus.dma.debugger.dmaDebugger = &emu->main.agnus.dmaDebugger;
-
-    blitter.emu = emu;
-    blitter.blitter = &emu->main.agnus.blitter;
+    agnus.copper.emu = emu;
+    agnus.copper.copper = &emu->main.agnus.copper;
+    agnus.blitter.emu = emu;
+    agnus.blitter.blitter = &emu->main.agnus.blitter;
 
     ciaA.emu = emu;
     ciaA.cia = &emu->main.ciaA;
 
     ciaB.emu = emu;
     ciaB.cia = &emu->main.ciaB;
+
+    // Ports
+    audioPort.emu = emu;
+    audioPort.port = &emu->main.audioPort;
 
     controlPort1.emu = emu;
     controlPort1.controlPort = &emu->main.controlPort1;
@@ -970,8 +1033,6 @@ VAmiga::VAmiga() {
     controlPort2.mouse.emu = emu;
     controlPort2.mouse.mouse = &emu->main.controlPort2.mouse;
 
-    copper.emu = emu;
-    copper.copper = &emu->main.agnus.copper;
 
     copperBreakpoints.emu = emu;
     copperBreakpoints.guards = &emu->main.agnus.copper.debugger.breakpoints;
@@ -1036,6 +1097,8 @@ VAmiga::VAmiga() {
     paula.audioChannel3.paula = &emu->main.paula;
     paula.diskController.emu = emu;
     paula.diskController.diskController = &emu->main.paula.diskController;
+    paula.uart.emu = emu;
+    paula.uart.uart = &emu->main.paula.uart;
 
     retroShell.emu = emu;
     retroShell.retroShell = &emu->main.retroShell;

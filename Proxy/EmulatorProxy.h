@@ -20,6 +20,7 @@
 // Forward declarations
 //
 
+@class AudioPortProxy;
 @class ADFFileProxy;
 @class AgnusProxy;
 @class AmigaProxy;
@@ -132,6 +133,7 @@
 
 @interface EmulatorProxy : CoreComponentProxy {
         
+    AudioPortProxy *audioPort;
     AgnusProxy *agnus;
     AmigaProxy *amiga;
     CIAProxy *ciaA;
@@ -166,6 +168,7 @@
     VideoPortProxy *videoPort;
 }
 
+@property (readonly, strong) AudioPortProxy *audioPort;
 @property (readonly, strong) AgnusProxy *agnus;
 @property (readonly, strong) AmigaProxy *amiga;
 @property (readonly, strong) BlitterProxy *blitter;
@@ -423,6 +426,21 @@
 
 
 //
+// Audio port
+//
+
+@interface AudioPortProxy : CoreComponentProxy { }
+
+@property (readonly) AudioPortStats stats;
+
+- (NSInteger)copyMono:(float *)target size:(NSInteger)n;
+- (NSInteger)copyStereo:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n;
+- (NSInteger)copyInterleaved:(float *)target size:(NSInteger)n;
+
+@end
+
+
+//
 // Agnus
 //
 
@@ -536,10 +554,10 @@
 - (NSInteger)copyMono:(float *)target size:(NSInteger)n;
 - (NSInteger)copyStereo:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n;
 
-- (float)drawWaveformL:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(u32)c;
-- (float)drawWaveformL:(u32 *)buffer size:(NSSize)size scale:(float)s color:(u32)c;
-- (float)drawWaveformR:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(u32)c;
-- (float)drawWaveformR:(u32 *)buffer size:(NSSize)size scale:(float)s color:(u32)c;
+- (void)drawWaveformL:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h color:(u32)c;
+- (void)drawWaveformL:(u32 *)buffer size:(NSSize)size color:(u32)c;
+- (void)drawWaveformR:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h color:(u32)c;
+- (void)drawWaveformR:(u32 *)buffer size:(NSSize)size color:(u32)c;
 
 @end
 

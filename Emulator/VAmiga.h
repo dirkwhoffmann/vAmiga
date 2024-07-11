@@ -25,14 +25,14 @@ namespace moira { class Guards; }
 //
 
 class API {
-    
+
 public:
-    
+
     class Emulator *emu = nullptr;
-    
+
     API() { }
     API(Emulator *emu) : emu(emu) { }
-    
+
     bool isUserThread() const;
 
 private:
@@ -156,7 +156,7 @@ class DmaAPI : public API {
     friend class VAmiga;
 
 public:
-    
+
     DmaDebuggerAPI debugger;
 };
 
@@ -225,6 +225,8 @@ class AgnusAPI : public API {
 public:
 
     DmaAPI dma;
+    CopperAPI copper;
+    BlitterAPI blitter;
 
     /** @brief  Returns the component's current configuration.
      */
@@ -381,7 +383,7 @@ class DeniseAPI : public API {
     class Denise *denise = nullptr;
 
 public:
-    
+
     /** @brief  Returns the component's current configuration.
      */
     const DeniseConfig &getConfig() const;
@@ -419,7 +421,7 @@ struct MemoryAPI : public API {
     class Memory *mem = nullptr;
 
 public:
-    
+
     MemoryDebuggerAPI debugger;
 
     /** @brief  Returns the component's current configuration.
@@ -428,8 +430,8 @@ public:
 
     /** @brief  Returns the component's current state.
      */
-     const MemInfo &getInfo() const;
-     const MemInfo &getCachedInfo() const;
+    const MemInfo &getInfo() const;
+    const MemInfo &getCachedInfo() const;
 
     /** @brief  Returns statistical information about the components.
      */
@@ -487,6 +489,20 @@ public:
     const DiskControllerInfo &getCachedInfo() const;
 };
 
+class UARTAPI : public API {
+
+    friend class VAmiga;
+
+    class UART *uart = nullptr;
+
+public:
+
+    /** @brief  Returns the component's current state.
+     */
+    const UARTInfo &getInfo() const;
+    const UARTInfo &getCachedInfo() const;
+};
+
 class PaulaAPI : public API {
 
     friend class VAmiga;
@@ -500,6 +516,7 @@ public:
     AudioChannelAPI audioChannel2 = AudioChannelAPI(2);
     AudioChannelAPI audioChannel3 = AudioChannelAPI(3);
     DiskControllerAPI diskController;
+    UARTAPI uart;
 
     /** @brief  Returns the component's current configuration.
      */
@@ -511,7 +528,7 @@ public:
     const PaulaInfo &getCachedInfo() const;
 };
 
-struct RtcAPI : public API {
+struct RTCAPI : public API {
 
     friend class VAmiga;
 
@@ -585,7 +602,7 @@ class JoystickAPI : public API {
     friend class VAmiga;
 
 public:
-    
+
     class Joystick *joystick = nullptr;
 
     /** @brief  Returns the component's current configuration.
@@ -722,12 +739,76 @@ public:
 // Ports
 //
 
-struct SerialPortAPI : public API {
+
+//
+// Ports (AudioPort)
+//
+
+class AudioPortAPI : public API {
 
     friend class VAmiga;
 
-    class SerialPort *serialPort = nullptr;
+public:
+
+    class AudioPort *port = nullptr;
+
+    /** @brief  Returns the component's current configuration.
+     */
+    const AudioPortConfig &getConfig() const;
+
+    /** @brief  Returns statistical information about the components.
+     */
+    const AudioPortStats &getStats() const;
+
+    /// @}
+    /// @name Retrieving audio data
+    /// @{
+
+    /** @brief  Extracts a number of mono samples from the audio buffer
+     *  Internally, the audio port maintains a ringbuffer storing stereo
+     *  audio samples. When this function is used, both internal stream are
+     *  added together and written to to the destination buffer.
+     *  @param  buffer  Pointer to the destination buffer
+     *  @param  n       Number of sound samples to copy.
+     *  @return         Number of actually copied sound sound samples.
+     */
+    isize copyMono(float *buffer, isize n);
+
+    /** @brief  Extracts a number of stereo samples from the audio buffer.
+     *  @param  left    Pointer to the left channel's destination buffer.
+     *  @param  right   Pointer to the right channel's destination buffer.
+     *  @param  n       Number of sound samples to copy.
+     *  @return         Number of actually copied sound sound samples.
+     */
+    isize copyStereo(float *left, float *right, isize n);
+
+    /** @brief  Extracts a number of stereo samples from the audio buffer.
+     *  This function has to be used if a stereo stream is managed in a
+     *  single destination buffer. The samples of both channels will be
+     *  interleaved, that is, a sample for the left channel will be
+     *  followed by a sample of the right channel and vice versa.
+     *  @param  buffer  Pointer to the destinationleft buffer.
+     *  @param  n       Number of sound samples to copy.
+     *  @return         Number of actually copied sound sound samples.
+     */
+    isize copyInterleaved(float *buffer, isize n);
+
+    /// @}
+    /// @name Visualizing waveforms
+    /// @{
+
+    /** @brief  Draws a visual representation of the waveform.
+     *  The Mac app uses this function to visualize the contents of the
+     *  audio buffer in one of it's inspector panels. */
+    float draw(u32 *buffer, isize width, isize height,
+               float maxAmp, u32 color, isize sid = -1) const;
+    /// @}};
 };
+
+
+//
+// Ports (ControlPort)
+//
 
 class ControlPortAPI : public API {
 
@@ -745,6 +826,23 @@ public:
     const ControlPortInfo &getInfo() const;
     const ControlPortInfo &getCachedInfo() const;
 };
+
+
+//
+// Ports (SerialPort)
+//
+
+struct SerialPortAPI : public API {
+
+    friend class VAmiga;
+
+    class SerialPort *serialPort = nullptr;
+};
+
+
+//
+// Ports (VideoPort)
+//
 
 class VideoPortAPI : public API {
 
@@ -1174,30 +1272,36 @@ public:
 
     static DefaultsAPI defaults;
 
+    // Components
     AmigaAPI amiga;
     AgnusAPI agnus;
-    BlitterAPI blitter;
     CIAAPI ciaA, ciaB;
+    CPUAPI cpu;
+    DeniseAPI denise;
+    MemoryAPI mem;
+    PaulaAPI paula;
+    RTCAPI rtc;
+
+    // Ports
+    AudioPortAPI audioPort;
     VideoPortAPI videoPort;
     ControlPortAPI controlPort1;
     ControlPortAPI controlPort2;
-    CopperAPI copper;
     GuardsAPI copperBreakpoints;
-    CPUAPI cpu;
     DebuggerAPI debugger;
-    DeniseAPI denise;
-    // DmaDebuggerAPI dmaDebugger;
+    SerialPortAPI serialPort;
+
+    // Peripherals
     FloppyDriveAPI df0, df1, df2, df3;
     HardDriveAPI hd0,hd1, hd2, hd3;
-    HostAPI host;
     KeyboardAPI keyboard;
-    MemoryAPI mem;
-    PaulaAPI paula;
-    RetroShellAPI retroShell;
-    RtcAPI rtc;
+
+    // Misc
+    HostAPI host;
     RecorderAPI recorder;
     RemoteManagerAPI remoteManager;
-    SerialPortAPI serialPort;
+    RetroShellAPI retroShell;
+
 
     //
     // Static methods

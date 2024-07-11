@@ -162,42 +162,68 @@ AudioStream::copyInterleaved(float *buffer, isize n)
     }
 }
 
-float
-AudioStream::draw(u32 *buffer, isize width, isize height,
-                     bool left, float highestAmplitude, u32 color) const
+void 
+AudioStream::drawL(u32 *buffer, isize width, isize height, u32 color) const
 {
-    isize dw = cap() / width;
+    static float highest = 0.01f;
+    highest = drawL(buffer, width, height, highest, color);
+}
+
+void
+AudioStream::drawR(u32 *buffer, isize width, isize height, u32 color) const
+{
+    static float highest = 0.01f;
+    highest = drawR(buffer, width, height, highest, color);
+}
+
+float
+AudioStream::drawL(u32 *buffer, isize width, isize height, float highest, u32 color) const
+{
+    return draw(buffer, width, height, highest,
+                [this](float x) { return std::abs(current(isize(cap() * x)).l); }, color);
+}
+
+float
+AudioStream::drawR(u32 *buffer, isize width, isize height, float highest, u32 color) const
+{
+    return draw(buffer, width, height, highest,
+                [this](float x) { return std::abs(current(isize(cap() * x)).r); }, color);
+}
+
+float
+AudioStream::draw(u32 *buffer, isize width, isize height, float highest,
+                  std::function<float(float x)> data, u32 color) const
+{
     float newHighestAmplitude = 0.001f;
-    
+
     // Clear buffer
     for (isize i = 0; i < width * height; i++) {
         buffer[i] = color & 0xFFFFFF;
     }
-    
+
     // Draw waveform
     for (isize w = 0; w < width; w++) {
-        
-        // Read samples from ringbuffer
-        auto pair = current(w * dw);
-        float sample = left ? std::abs(pair.l) : std::abs(pair.r);
-        
+
+        // Get a sample from the data provider
+        auto sample = data((float)w / (float)width);
+
         if (sample == 0) {
-            
+
             // Draw some noise to make it look sexy
             unsigned *ptr = buffer + width * height / 2 + w;
             *ptr = color;
             if (rand() % 2) *(ptr + width) = color;
             if (rand() % 2) *(ptr - width) = color;
-            
+
         } else {
-            
+
             // Remember the highest amplitude
             if (sample > newHighestAmplitude) newHighestAmplitude = sample;
-            
+
             // Scale the sample
-            isize scaled = isize(sample * height / highestAmplitude);
+            isize scaled = isize(sample * height / highest);
             if (scaled > height) scaled = height;
-            
+
             // Draw vertical line
             u32 *ptr = buffer + width * ((height - scaled) / 2) + w;
             for (isize j = 0; j < scaled; j++, ptr += width) *ptr = color;

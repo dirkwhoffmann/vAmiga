@@ -627,6 +627,40 @@ using namespace vamiga::moira;
 
 
 //
+// Audio port
+//
+
+@implementation AudioPortProxy
+
+- (AudioPortAPI *)port
+{
+    return (AudioPortAPI *)obj;
+}
+
+- (AudioPortStats)stats
+{
+    return [self port]->getStats();
+}
+
+- (NSInteger)copyMono:(float *)target size:(NSInteger)n
+{
+    return [self port]->copyMono(target, n);
+}
+
+- (NSInteger)copyStereo:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n
+{
+    return [self port]->copyStereo(target1, target2, n);
+}
+
+- (NSInteger)copyInterleaved:(float *)target size:(NSInteger)n
+{
+    return [self port]->copyInterleaved(target, n);
+}
+
+@end
+
+
+//
 // Agnus proxy
 //
 
@@ -942,32 +976,30 @@ using namespace vamiga::moira;
     return [self paula]->paula->emulator.main.audioPort.copyStereo(target1, target2, n);
 }
 
-- (float)drawWaveformL:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(u32)c
+- (void)drawWaveformL:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h color:(u32)c
 {
-    return [self paula]->paula->emulator.main.audioPort.stream.draw(buffer, w, h, true, s, c);
+    [self paula]->paula->emulator.main.audioPort.stream.drawL(buffer, w, h, c);
 }
 
-- (float)drawWaveformL:(u32 *)buffer size:(NSSize)size scale:(float)s color:(u32)c
+- (void)drawWaveformL:(u32 *)buffer size:(NSSize)size color:(u32)c
 {
-    return [self drawWaveformL:buffer
-                             w:(NSInteger)size.width
-                             h:(NSInteger)size.height
-                         scale:s
-                         color:c];
+    [self drawWaveformL:buffer
+                      w:(NSInteger)size.width
+                      h:(NSInteger)size.height
+                  color:c];
 }
 
-- (float)drawWaveformR:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(u32)c
+- (void)drawWaveformR:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h color:(u32)c
 {
-    return [self paula]->paula->emulator.main.audioPort.stream.draw(buffer, w, h, false, s, c);
+    [self paula]->paula->emulator.main.audioPort.stream.drawR(buffer, w, h, c);
 }
 
-- (float)drawWaveformR:(u32 *)buffer size:(NSSize)size scale:(float)s color:(u32)c
+- (void)drawWaveformR:(u32 *)buffer size:(NSSize)size color:(u32)c
 {
-    return [self drawWaveformR:buffer
-                             w:(NSInteger)size.width
-                             h:(NSInteger)size.height
-                         scale:s
-                         color:c];
+    [self drawWaveformR:buffer
+                      w:(NSInteger)size.width
+                      h:(NSInteger)size.height
+                  color:c];
 }
 
 @end
@@ -979,9 +1011,9 @@ using namespace vamiga::moira;
 
 @implementation RtcProxy
 
-- (RtcAPI *)rtc
+- (RTCAPI *)rtc
 {
-    return (RtcAPI *)obj;
+    return (RTCAPI *)obj;
 }
 
 - (void)update
@@ -2530,6 +2562,7 @@ using namespace vamiga::moira;
 
 @implementation EmulatorProxy
 
+@synthesize audioPort;
 @synthesize agnus;
 @synthesize amiga;
 @synthesize blitter;
@@ -2574,15 +2607,16 @@ using namespace vamiga::moira;
     obj = vamiga;
 
     // Create sub proxys
+    audioPort = [[AudioPortProxy alloc] initWith:&vamiga->audioPort];
     agnus = [[AgnusProxy alloc] initWith:&vamiga->agnus];
     amiga = [[AmigaProxy alloc] initWith:&vamiga->amiga];
-    blitter = [[BlitterProxy alloc] initWith:&vamiga->blitter];
+    blitter = [[BlitterProxy alloc] initWith:&vamiga->agnus.blitter];
     breakpoints = [[GuardsProxy alloc] initWith:&vamiga->cpu.breakpoints];
     ciaA = [[CIAProxy alloc] initWith:&vamiga->ciaA];
     ciaB = [[CIAProxy alloc] initWith:&vamiga->ciaB];
     controlPort1 = [[ControlPortProxy alloc] initWith:&vamiga->controlPort1];
     controlPort2 = [[ControlPortProxy alloc] initWith:&vamiga->controlPort2];
-    copper = [[CopperProxy alloc] initWith:&vamiga->copper];
+    copper = [[CopperProxy alloc] initWith:&vamiga->agnus.copper];
     copperBreakpoints = [[GuardsProxy alloc] initWith:&vamiga->copperBreakpoints];
     cpu = [[CPUProxy alloc] initWith:&vamiga->cpu];
     debugger = [[DebuggerProxy alloc] initWith:&vamiga->debugger];

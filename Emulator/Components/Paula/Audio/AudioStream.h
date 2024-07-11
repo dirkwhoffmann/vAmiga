@@ -41,23 +41,23 @@ struct SamplePair
 class AudioStream : public CoreObject, public Synchronizable, public util::RingBuffer <SamplePair, 16384> {
 
 public:
-    
+
     const char *objectName() const override { return "AudioStream"; }
 
     // Initializes the ring buffer with zeroes
     void wipeOut();
-    
+
     // Rescales the existing samples to gradually fade out
     void eliminateCracks();
 
     // Puts the write pointer somewhat ahead of the read pointer
     void alignWritePtr();
-    
-    
+
+
     //
     // Copying data
     //
-    
+
     /* Copies n audio samples into a memory buffer. These functions mark the
      * final step in the audio pipeline. They are used to copy the generated
      * sound samples into the buffers of the native sound device. In additon
@@ -68,18 +68,27 @@ public:
     isize copyStereo(float *left, float *right, isize n);
     isize copyInterleaved(float *buffer, isize n);
 
-    
+
     //
     // Visualizing the waveform
     //
-    
+
     /* Plots a graphical representation of the waveform. Returns the highest
      * amplitute that was found in the ringbuffer. To implement auto-scaling,
      * pass the returned value as parameter highestAmplitude in the next call
      * to this function.
      */
-    float draw(u32 *buffer, isize width, isize height,
-               bool left, float highestAmplitude, u32 color) const;
+    void drawL(u32 *buffer, isize width, isize height, u32 color) const;
+    void drawR(u32 *buffer, isize width, isize height, u32 color) const;
+
+private:
+
+    float drawL(u32 *buffer, isize width, isize height, float highest, u32 color) const;
+    float drawR(u32 *buffer, isize width, isize height, float highest, u32 color) const;
+
+    float draw(u32 *buffer, isize width, isize height, float scale,
+               std::function<float(float x)>data, u32 color) const;
+
 };
 
 }

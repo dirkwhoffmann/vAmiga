@@ -433,7 +433,7 @@ class WaveformMonitor: ActivityMonitor {
     var count = 0
     
     // Factors used for auto-scaling
-    var scale = Float(0.001)
+    // var scale = Float(0.001)
 
     // Texture size
     var size: MTLSize!
@@ -517,12 +517,9 @@ class WaveformMonitor: ActivityMonitor {
             let nssize = NSSize(width: size.width, height: size.height)
             
             if leftChannel {
-                scale = paula.drawWaveformL(fgBuffer, size: nssize,
-                                            scale: scale, color: color)
-                // track("New scale = \(scale)")
+                 paula.drawWaveformL(fgBuffer, size: nssize, color: color)
             } else {
-                scale = paula.drawWaveformR(fgBuffer, size: nssize,
-                                            scale: scale, color: color)
+                 paula.drawWaveformR(fgBuffer, size: nssize, color: color)
             }
             updateFgTexture()
         }
