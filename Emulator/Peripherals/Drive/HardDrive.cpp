@@ -311,7 +311,8 @@ HardDrive::cacheInfo(HardDriveInfo &info) const
         info.writeProtected = getFlag(FLAG_PROTECTED);
         info.modified = getFlag(FLAG_MODIFIED);
 
-        // Head
+        // State
+        info.state = state;
         info.head = head;
     }
 }

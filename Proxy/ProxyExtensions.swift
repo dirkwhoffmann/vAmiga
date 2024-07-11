@@ -472,8 +472,8 @@ extension HardDriveProxy {
         }
     }
     
-    var ledIcon: NSImage? {
-        
+    func ledIcon(state: HardDriveState) -> NSImage? {
+
         if !isConnected { return nil }
         
         switch state {

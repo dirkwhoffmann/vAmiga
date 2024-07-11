@@ -410,7 +410,7 @@ class DiskExporter: DialogController {
             }
 
             hdn!.setFlag(.MODIFIED, value: false)
-            myAppDelegate.noteNewRecentlyExportedHdrURL(url, hd: hdn!.nr)
+            myAppDelegate.noteNewRecentlyExportedHdrURL(url, hd: hdn!.traits.nr)
             
             hide()
             

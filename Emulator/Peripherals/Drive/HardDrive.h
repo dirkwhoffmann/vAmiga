@@ -126,6 +126,8 @@ public:
 
         static HardDriveTraits traits;
 
+        traits.nr = objid;
+        
         traits.diskVendor = diskVendor.c_str();
         traits.diskProduct = diskProduct.c_str();
         traits.diskRevision = diskRevision.c_str();
@@ -229,16 +231,15 @@ public:
     string getControllerRevision() const override { return controllerRevision; }
 
     bool isConnected() const override;
-    
+
     Cylinder currentCyl() const override { return head.cylinder; }
     Head currentHead() const override { return head.head; }
     isize currentOffset() const override { return head.offset; }
 
-    bool hasDisk() const override;
-
     bool getFlag(DiskFlags mask) const override;
     void setFlag(DiskFlags mask, bool value) override;
 
+    bool hasDisk() const override;
     bool hasModifiedDisk() const override;
     bool hasProtectedDisk() const override;
     void setModificationFlag(bool value) override;

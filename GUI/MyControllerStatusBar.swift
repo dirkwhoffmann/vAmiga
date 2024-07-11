@@ -47,9 +47,10 @@ extension MyController {
         for n in 4...7 where drv[n] != nil {
             
             let hdn = emu.hd(n - 4)!
-            
-            refreshStatusBar(drive: n, led: hdn.ledIcon)
-            refreshStatusBar(drive: n, cylinder: hdn.currentCyl)
+            let info = hdn.info
+
+            refreshStatusBar(drive: n, led: hdn.ledIcon(state: info.state))
+            refreshStatusBar(drive: n, cylinder: info.head.cylinder)
             refreshStatusBar(drive: n, icon: hdn.templateIcon, toolTip: hdn.toolTip)
         }
 

@@ -701,18 +701,12 @@
 @property (readonly) HardDriveInfo info;
 @property (readonly) HardDriveTraits traits;
 
-@property (readonly) NSInteger nr;
+// @property (readonly) NSInteger nr;
 @property (readonly) BOOL isConnected;
+/*
 @property (readonly) NSInteger currentCyl;
 @property (readonly) NSInteger currentHead;
 @property (readonly) NSInteger currentOffset;
-
-/*
-@property (readonly) BOOL hasDisk;
-@property (readonly) BOOL hasModifiedDisk;
-@property (readonly) BOOL hasProtectedDisk;
-@property (readonly) BOOL hasUnmodifiedDisk;
-@property (readonly) BOOL hasUnprotectedDisk;
 */
 
 - (BOOL)getFlag:(DiskFlags)mask;
@@ -724,7 +718,7 @@
 - (NSString *)nameOfPartition:(NSInteger)nr;
 - (NSInteger)lowerCylOfPartition:(NSInteger)nr;
 - (NSInteger)upperCylOfPartition:(NSInteger)nr;
-@property (readonly) HardDriveState state;
+// @property (readonly) HardDriveState state;
 - (void)attachFile:(NSURL *)path exception:(ExceptionWrapper *)ex;
 - (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex;
 - (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;

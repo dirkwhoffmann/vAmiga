@@ -92,16 +92,6 @@ using namespace vamiga::moira;
 
 @implementation CoreComponentProxy
 
--(CoreComponent *)component
-{
-    return (CoreComponent *)obj;
-}
-
--(NSInteger)objid
-{
-    return [self component]->objid;
-}
-
 @end
 
 //
@@ -1323,16 +1313,19 @@ using namespace vamiga::moira;
     return [self drive]->getInfo();
 }
 
+/*
 - (NSInteger)nr
 {
     return [self drive]->drive->objid;
 }
+*/
 
 - (BOOL)isConnected
 {
     return [self drive]->drive->isConnected();
 }
 
+/*
 - (NSInteger)currentCyl
 {
     return [self drive]->drive->currentCyl();
@@ -1348,7 +1341,6 @@ using namespace vamiga::moira;
     return [self drive]->drive->currentOffset();
 }
 
-/*
 - (BOOL)hasDisk
 {
     return [self drive]->drive->hasDisk();
@@ -1448,10 +1440,12 @@ using namespace vamiga::moira;
     return info.highCyl;
 }
 
+/*
 - (HardDriveState)state
 {
     return [self drive]->drive->getState();
 }
+*/
 
 - (void)attachFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {

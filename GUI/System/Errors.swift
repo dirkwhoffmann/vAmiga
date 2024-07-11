@@ -344,7 +344,7 @@ extension MyDocument {
             return true
         }
         
-        let names = modified.map({ "hd" + String($0.nr) }).joined(separator: ", ")
+        let names = modified.map({ "hd" + String($0.traits.nr) }).joined(separator: ", ")
         let text = modified.count == 1 ?
         "Hard drive \(names) contains an unsaved disk." :
         "Hard drives \(names) contain unsaved disks."
