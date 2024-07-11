@@ -421,8 +421,8 @@ class BarChart: ActivityMonitor {
 class WaveformMonitor: ActivityMonitor {
 
     // Reference to Paula
-    var paula: PaulaProxy!
-    
+    var audioPort: AudioPortProxy!
+
     // Left or right audio channel
     var leftChannel: Bool!
     
@@ -431,9 +431,6 @@ class WaveformMonitor: ActivityMonitor {
 
     // Update counter
     var count = 0
-    
-    // Factors used for auto-scaling
-    // var scale = Float(0.001)
 
     // Texture size
     var size: MTLSize!
@@ -452,11 +449,11 @@ class WaveformMonitor: ActivityMonitor {
     var fgTexture: MTLTexture!
     var fgRect: Node!
 
-    init(device: MTLDevice, paula: PaulaProxy, leftChannel: Bool) {
-        
+    init(device: MTLDevice, audioPort: AudioPortProxy, leftChannel: Bool) {
+
         super.init(device: device)
 
-        self.paula = paula
+        self.audioPort = audioPort
         self.leftChannel = leftChannel
 
         size = MTLSizeMake(300, 240, 0)
@@ -517,9 +514,9 @@ class WaveformMonitor: ActivityMonitor {
             let nssize = NSSize(width: size.width, height: size.height)
             
             if leftChannel {
-                 paula.drawWaveformL(fgBuffer, size: nssize, color: color)
+                audioPort.drawWaveformL(fgBuffer, size: nssize, color: color)
             } else {
-                 paula.drawWaveformR(fgBuffer, size: nssize, color: color)
+                audioPort.drawWaveformR(fgBuffer, size: nssize, color: color)
             }
             updateFgTexture()
         }

@@ -180,11 +180,11 @@ public class MacAudio: NSObject {
 
         case .on:
 
-            emu?.paula.copyMono(ptr, size: n)
+            emu?.audioPort.copyMono(ptr, size: n)
 
         case .shutdown:
 
-            if let cnt = emu?.paula.copyMono(ptr, size: n) {
+            if let cnt = emu?.audioPort.copyMono(ptr, size: n) {
 
                 debug(.shutdown, "Copied \(cnt) mono samples.")
                 if cnt == n { break }
@@ -214,11 +214,11 @@ public class MacAudio: NSObject {
 
         case .on:
 
-            emu?.paula.copyStereo(ptr1, buffer2: ptr2, size: n)
+            emu?.audioPort.copyStereo(ptr1, buffer2: ptr2, size: n)
 
         case .shutdown:
 
-            if let cnt = emu?.paula.copyStereo(ptr1, buffer2: ptr2, size: n) {
+            if let cnt = emu?.audioPort.copyStereo(ptr1, buffer2: ptr2, size: n) {
 
                 debug(.shutdown, "Copied \(cnt) stereo samples.")
                 if cnt == n { break }

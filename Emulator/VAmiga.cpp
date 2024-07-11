@@ -546,6 +546,18 @@ AudioPortAPI::copyInterleaved(float *buffer, isize n)
     return port->copyInterleaved(buffer, n);
 }
 
+void 
+AudioPortAPI::drawL(u32 *buffer, isize width, isize height, u32 color) const
+{
+    port->stream.drawL(buffer, width, height, color);
+}
+
+void
+AudioPortAPI::drawR(u32 *buffer, isize width, isize height, u32 color) const
+{
+    port->stream.drawR(buffer, width, height, color);
+}
+
 
 //
 // Ports (ControlPort)

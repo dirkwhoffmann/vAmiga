@@ -437,6 +437,11 @@
 - (NSInteger)copyStereo:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n;
 - (NSInteger)copyInterleaved:(float *)target size:(NSInteger)n;
 
+- (void)drawWaveformL:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h color:(u32)c;
+- (void)drawWaveformL:(u32 *)buffer size:(NSSize)size color:(u32)c;
+- (void)drawWaveformR:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h color:(u32)c;
+- (void)drawWaveformR:(u32 *)buffer size:(NSSize)size color:(u32)c;
+
 @end
 
 
@@ -550,14 +555,6 @@
 @property (readonly) UARTInfo uartInfo;
 @property (readonly) UARTInfo cachedUartInfo;
 @property (readonly) AudioPortStats audioPortStats;
-
-- (NSInteger)copyMono:(float *)target size:(NSInteger)n;
-- (NSInteger)copyStereo:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n;
-
-- (void)drawWaveformL:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h color:(u32)c;
-- (void)drawWaveformL:(u32 *)buffer size:(NSSize)size color:(u32)c;
-- (void)drawWaveformR:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h color:(u32)c;
-- (void)drawWaveformR:(u32 *)buffer size:(NSSize)size color:(u32)c;
 
 @end
 

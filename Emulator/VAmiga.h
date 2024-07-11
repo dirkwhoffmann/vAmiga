@@ -800,8 +800,9 @@ public:
     /** @brief  Draws a visual representation of the waveform.
      *  The Mac app uses this function to visualize the contents of the
      *  audio buffer in one of it's inspector panels. */
-    float draw(u32 *buffer, isize width, isize height,
-               float maxAmp, u32 color, isize sid = -1) const;
+    void drawL(u32 *buffer, isize width, isize height, u32 color) const;
+    void drawR(u32 *buffer, isize width, isize height, u32 color) const;
+
     /// @}};
 };
 

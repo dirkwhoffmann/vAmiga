@@ -657,6 +657,32 @@ using namespace vamiga::moira;
     return [self port]->copyInterleaved(target, n);
 }
 
+- (void)drawWaveformL:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h color:(u32)c
+{
+    [self port]->drawL(buffer, w, h, c);
+}
+
+- (void)drawWaveformL:(u32 *)buffer size:(NSSize)size color:(u32)c
+{
+    [self drawWaveformL:buffer
+                      w:(NSInteger)size.width
+                      h:(NSInteger)size.height
+                  color:c];
+}
+
+- (void)drawWaveformR:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h color:(u32)c
+{
+    [self port]->drawR(buffer, w, h, c);
+}
+
+- (void)drawWaveformR:(u32 *)buffer size:(NSSize)size color:(u32)c
+{
+    [self drawWaveformR:buffer
+                      w:(NSInteger)size.width
+                      h:(NSInteger)size.height
+                  color:c];
+}
+
 @end
 
 
@@ -964,42 +990,6 @@ using namespace vamiga::moira;
 - (AudioPortStats)audioPortStats
 {
     return [self paula]->paula->emulator.main.audioPort.getStats();
-}
-
-- (NSInteger)copyMono:(float *)target size:(NSInteger)n
-{
-    return [self paula]->paula->emulator.main.audioPort.copyMono(target, n);
-}
-
-- (NSInteger)copyStereo:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n
-{
-    return [self paula]->paula->emulator.main.audioPort.copyStereo(target1, target2, n);
-}
-
-- (void)drawWaveformL:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h color:(u32)c
-{
-    [self paula]->paula->emulator.main.audioPort.stream.drawL(buffer, w, h, c);
-}
-
-- (void)drawWaveformL:(u32 *)buffer size:(NSSize)size color:(u32)c
-{
-    [self drawWaveformL:buffer
-                      w:(NSInteger)size.width
-                      h:(NSInteger)size.height
-                  color:c];
-}
-
-- (void)drawWaveformR:(u32 *)buffer w:(NSInteger)w h:(NSInteger)h color:(u32)c
-{
-    [self paula]->paula->emulator.main.audioPort.stream.drawR(buffer, w, h, c);
-}
-
-- (void)drawWaveformR:(u32 *)buffer size:(NSSize)size color:(u32)c
-{
-    [self drawWaveformR:buffer
-                      w:(NSInteger)size.width
-                      h:(NSInteger)size.height
-                  color:c];
 }
 
 @end

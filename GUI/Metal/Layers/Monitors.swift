@@ -79,8 +79,8 @@ class Monitors: Layer {
         monitors.append(BarChart(device: device, name: "CPU (Rom)", splitView: true))
 
         // Waveform monitors
-        monitors.append(WaveformMonitor(device: device, paula: amiga.paula, leftChannel: true))
-        monitors.append(WaveformMonitor(device: device, paula: amiga.paula, leftChannel: false))
+        monitors.append(WaveformMonitor(device: device, audioPort: amiga.audioPort, leftChannel: true))
+        monitors.append(WaveformMonitor(device: device, audioPort: amiga.audioPort, leftChannel: false))
 
         updateMonitorPositions()
     }
