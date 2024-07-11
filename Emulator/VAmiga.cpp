@@ -63,6 +63,24 @@ AmigaAPI::getCachedInfo() const
 // Components (Agnus)
 //
 
+const DmaDebuggerConfig &
+DmaDebuggerAPI::getConfig() const
+{
+    return dmaDebugger->getConfig();
+}
+
+const DmaDebuggerInfo &
+DmaDebuggerAPI::getInfo() const
+{
+    return dmaDebugger->getInfo();
+}
+
+const DmaDebuggerInfo &
+DmaDebuggerAPI::getCachedInfo() const
+{
+    return dmaDebugger->getCachedInfo();
+}
+
 const AgnusConfig &
 AgnusAPI::getConfig() const
 {
@@ -302,28 +320,6 @@ const DeniseInfo &
 DeniseAPI::getCachedInfo() const
 {
     return denise->getCachedInfo();
-}
-
-//
-// Components (DmaDebugger)
-//
-
-const DmaDebuggerConfig &
-DmaDebuggerAPI::getConfig() const
-{
-    return dmaDebugger->getConfig();
-}
-
-const DmaDebuggerInfo &
-DmaDebuggerAPI::getInfo() const
-{
-    return dmaDebugger->getInfo();
-}
-
-const DmaDebuggerInfo &
-DmaDebuggerAPI::getCachedInfo() const
-{
-    return dmaDebugger->getCachedInfo();
 }
 
 
@@ -947,6 +943,9 @@ VAmiga::VAmiga() {
 
     agnus.emu = emu;
     agnus.agnus = &emu->main.agnus;
+    agnus.dma.emu = emu;
+    agnus.dma.debugger.emu = emu;
+    agnus.dma.debugger.dmaDebugger = &emu->main.agnus.dmaDebugger;
 
     blitter.emu = emu;
     blitter.blitter = &emu->main.agnus.blitter;
@@ -989,9 +988,6 @@ VAmiga::VAmiga() {
 
     denise.emu = emu;
     denise.denise = &emu->main.denise;
-
-    dmaDebugger.emu = emu;
-    dmaDebugger.dmaDebugger = &emu->main.agnus.dmaDebugger;
 
     df0.emu = emu;
     df0.drive = &emu->main.df0;

@@ -128,30 +128,36 @@ public:
     /// @}
 };
 
-class AgnusAPI : public API {
+
+//
+// Agnus
+//
+
+class DmaDebuggerAPI : public API {
 
     friend class VAmiga;
 
-    class Agnus *agnus = nullptr;
-
 public:
-    
+
+    class DmaDebugger *dmaDebugger = nullptr;
+
     /** @brief  Returns the component's current configuration.
      */
-    const AgnusConfig &getConfig() const;
+    const DmaDebuggerConfig &getConfig() const;
 
     /** @brief  Returns the component's current state.
      */
-    const AgnusInfo &getInfo() const;
-    const AgnusInfo &getCachedInfo() const;
+    const DmaDebuggerInfo &getInfo() const;
+    const DmaDebuggerInfo &getCachedInfo() const;
+};
 
-    /** @brief  Returns statistical information about the components.
-     */
-    const AgnusStats &getStats() const;
+class DmaAPI : public API {
 
-    /** @brief  Provides details about the currently selected chip revision.
-     */
-    const AgnusTraits getTraits() const;
+    friend class VAmiga;
+
+public:
+    
+    DmaDebuggerAPI debugger;
 };
 
 class BlitterAPI : public API {
@@ -170,24 +176,6 @@ public:
      */
     const BlitterInfo &getInfo() const;
     const BlitterInfo &getCachedInfo() const;
-};
-
-class CIAAPI : public API {
-
-    friend class VAmiga;
-
-    class CIA *cia = nullptr;
-
-public:
-
-    /** @brief  Returns the component's current configuration.
-     */
-    const CIAConfig &getConfig() const;
-
-    /** @brief  Returns the component's current state.
-     */
-    const CIAInfo &getInfo() const;
-    const CIAInfo &getCachedInfo() const;
 };
 
 class CopperAPI : public API {
@@ -218,7 +206,7 @@ public:
      *  @param  addr     The address of the Cooper instruction in memory.
      *  @param  symbolic Output format.
      */
-     string disassemble(u32 addr, bool symbolic) const;
+    string disassemble(u32 addr, bool symbolic) const;
 
     /** @brief  Checks whether a Copper instruction is illegal.
      *          A Copper instruction is classified as illegal if it is tries
@@ -227,6 +215,62 @@ public:
      */
     bool isIllegalInstr(u32 addr) const;
 };
+
+class AgnusAPI : public API {
+
+    friend class VAmiga;
+
+    class Agnus *agnus = nullptr;
+
+public:
+
+    DmaAPI dma;
+
+    /** @brief  Returns the component's current configuration.
+     */
+    const AgnusConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    const AgnusInfo &getInfo() const;
+    const AgnusInfo &getCachedInfo() const;
+
+    /** @brief  Returns statistical information about the components.
+     */
+    const AgnusStats &getStats() const;
+
+    /** @brief  Provides details about the currently selected chip revision.
+     */
+    const AgnusTraits getTraits() const;
+};
+
+
+//
+// CIA
+//
+
+class CIAAPI : public API {
+
+    friend class VAmiga;
+
+    class CIA *cia = nullptr;
+
+public:
+
+    /** @brief  Returns the component's current configuration.
+     */
+    const CIAConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    const CIAInfo &getInfo() const;
+    const CIAInfo &getCachedInfo() const;
+};
+
+
+//
+// CPU
+//
 
 class GuardsAPI : public API {
 
@@ -348,23 +392,6 @@ public:
     const DeniseInfo &getCachedInfo() const;
 };
 
-class DmaDebuggerAPI : public API {
-
-    friend class VAmiga;
-
-    class DmaDebugger *dmaDebugger = nullptr;
-
-public:
-    
-    /** @brief  Returns the component's current configuration.
-     */
-    const DmaDebuggerConfig &getConfig() const;
-
-    /** @brief  Returns the component's current state.
-     */
-    const DmaDebuggerInfo &getInfo() const;
-    const DmaDebuggerInfo &getCachedInfo() const;
-};
 
 //
 // Memory
@@ -394,7 +421,7 @@ struct MemoryAPI : public API {
 public:
     
     MemoryDebuggerAPI debugger;
-    
+
     /** @brief  Returns the component's current configuration.
      */
     const MemConfig &getConfig() const;
@@ -1159,7 +1186,7 @@ public:
     CPUAPI cpu;
     DebuggerAPI debugger;
     DeniseAPI denise;
-    DmaDebuggerAPI dmaDebugger;
+    // DmaDebuggerAPI dmaDebugger;
     FloppyDriveAPI df0, df1, df2, df3;
     HardDriveAPI hd0,hd1, hd2, hd3;
     HostAPI host;

@@ -2588,7 +2588,7 @@ using namespace vamiga::moira;
     debugger = [[DebuggerProxy alloc] initWith:&vamiga->debugger];
     denise = [[DeniseProxy alloc] initWith:&vamiga->denise];
     diskController = [[DiskControllerProxy alloc] initWith:&vamiga->paula.diskController];
-    dmaDebugger = [[DmaDebuggerProxy alloc] initWith:&vamiga->dmaDebugger];
+    dmaDebugger = [[DmaDebuggerProxy alloc] initWith:&vamiga->agnus.dma.debugger];
     df0 = [[FloppyDriveProxy alloc] initWith:&vamiga->df0];
     df1 = [[FloppyDriveProxy alloc] initWith:&vamiga->df1];
     df2 = [[FloppyDriveProxy alloc] initWith:&vamiga->df2];
