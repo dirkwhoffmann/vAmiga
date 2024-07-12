@@ -150,6 +150,19 @@ public:
         return traits;
     }
 
+    const PartitionTraits &getPartitionTraits(isize nr) const {
+
+        static PartitionTraits traits;
+
+        auto descr = getPartitionDescriptor(nr);
+        traits.nr = nr;
+        traits.name = descr.name.c_str();
+        traits.lowerCyl = descr.lowCyl;
+        traits.upperCyl = descr.highCyl;
+
+        return traits;
+    }
+
 private:
 
     // Restors the initial state
@@ -269,10 +282,13 @@ private:
 
 public:
 
-    // Returns information about the disk or one of its partitions
+    // Returns information about the disk
     void cacheInfo(HardDriveInfo &info) const override;
 
-    const PartitionDescriptor &getPartitionInfo(isize nr);
+    // Returns information about a specific partition
+    // void getPartitionInfo(isize nr) const;
+
+    const PartitionDescriptor &getPartitionDescriptor(isize nr) const;
 
     // Returns the disk geometry
     const GeometryDescriptor &getGeometry() const { return geometry; }
@@ -291,10 +307,10 @@ public:
     void setModified(bool value) { value ? flags |= FLAG_MODIFIED : flags &= ~FLAG_MODIFIED; }
 
     // Returns the current controller state
-    HdcState getHdcState();
+    HdcState getHdcState() const;
 
     // Checks whether the drive will work with the currently installed Rom
-    bool isCompatible();
+    bool isCompatible() const;
     
     
     //
@@ -302,7 +318,7 @@ public:
     //
     
     // Returns a default volume name
-    string defaultName(isize partition = 0);
+    string defaultName(isize partition = 0) const;
 
     // Formats the disk
     void format(FSVolumeType fs, string name) throws;

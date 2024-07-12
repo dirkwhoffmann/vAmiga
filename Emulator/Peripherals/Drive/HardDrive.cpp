@@ -276,20 +276,20 @@ HardDrive::disconnect()
 }
 
 const PartitionDescriptor &
-HardDrive::getPartitionInfo(isize nr)
+HardDrive::getPartitionDescriptor(isize nr) const
 {
     assert(nr >= 0 && nr < numPartitions());
     return ptable[nr];
 }
 
 HdcState
-HardDrive::getHdcState()
+HardDrive::getHdcState() const
 {
     return amiga.hdcon[objid]->getHdcState();
 }
 
 bool
-HardDrive::isCompatible()
+HardDrive::isCompatible() const
 {
     return amiga.hdcon[objid]->isCompatible();
 }
@@ -300,7 +300,9 @@ HardDrive::cacheInfo(HardDriveInfo &info) const
     {   SYNCHRONIZED
         
         info.isConnected = isConnected();
-        
+        info.isCompatible = isCompatible();
+        info.writeThrough = writeThroughEnabled();
+
         info.hasDisk = hasDisk();
         info.hasModifiedDisk = hasModifiedDisk();
         info.hasUnmodifiedDisk = hasUnmodifiedDisk();
@@ -517,7 +519,7 @@ HardDrive::saveWriteThroughImage()
 }
 
 string
-HardDrive::defaultName(isize partition)
+HardDrive::defaultName(isize partition) const
 {
     if (objid >= 1) partition += amiga.hd0.numPartitions();
     if (objid >= 2) partition += amiga.hd1.numPartitions();

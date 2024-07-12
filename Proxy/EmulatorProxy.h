@@ -730,16 +730,12 @@
 
 @property (readonly) HardDriveInfo info;
 @property (readonly) HardDriveTraits traits;
+- (PartitionTraits) partitionTraits:(NSInteger)nr;
 
 - (BOOL)getFlag:(DiskFlags)mask;
 - (void)setFlag:(DiskFlags)mask value:(BOOL)value;
 
-@property (readonly) BOOL isCompatible;
-@property (readonly) BOOL writeThroughEnabled;
-- (NSString *)nameOfPartition:(NSInteger)nr;
-- (NSInteger)lowerCylOfPartition:(NSInteger)nr;
-- (NSInteger)upperCylOfPartition:(NSInteger)nr;
-- (void)attachFile:(NSURL *)path exception:(ExceptionWrapper *)ex;
+ - (void)attachFile:(NSURL *)path exception:(ExceptionWrapper *)ex;
 - (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex;
 - (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
 - (void)format:(FSVolumeType)fs name:(NSString *)name exception:(ExceptionWrapper *)ex;

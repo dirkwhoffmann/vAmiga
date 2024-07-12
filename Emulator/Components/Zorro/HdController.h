@@ -172,8 +172,8 @@ public:
     HdcState getHdcState() const { return hdcState; }
 
     // Informs whether the controller is compatible with a certain Kickstart
-    bool isCompatible(u32 crc32);
-    bool isCompatible();
+    bool isCompatible(u32 crc32) const;
+    bool isCompatible() const;
 
 private:
     

@@ -712,6 +712,12 @@ HardDriveAPI::getTraits() const
     return drive->getTraits();
 }
 
+const PartitionTraits &
+HardDriveAPI::getPartitionTraits(isize nr) const
+{
+    return drive->getPartitionTraits(nr);
+}
+
 bool
 HardDriveAPI::getFlag(DiskFlags mask)
 {

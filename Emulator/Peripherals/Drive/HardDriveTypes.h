@@ -89,7 +89,48 @@ HardDriveConfig;
 
 typedef struct
 {
+    // Object information
+    isize nr;
+
+    // Product information
+    const char *diskVendor;
+    const char *diskProduct;
+    const char *diskRevision;
+    const char *controllerVendor;
+    const char *controllerProduct;
+    const char *controllerRevision;
+
+    // Physical layout
+    isize cylinders;
+    isize heads;
+    isize sectors;
+    isize bsize;
+
+    // Derived values
+    isize tracks;
+    isize blocks;
+    isize bytes;
+    isize upperCyl;
+    isize upperHead;
+    isize upperTrack;
+}
+HardDriveTraits;
+
+typedef struct
+{
+    isize nr;
+    const char *name;
+    isize lowerCyl;
+    isize upperCyl;
+}
+PartitionTraits;
+
+typedef struct
+{
+    // Drive properties
     bool isConnected;
+    bool isCompatible;
+    bool writeThrough;
     
     // Disk properties
     bool hasDisk;
@@ -110,33 +151,3 @@ typedef struct
     DriveHead head;
 }
 HardDriveInfo;
-
-
-typedef struct
-{
-    // Object information
-    isize nr;
-
-    // Product information
-    const char *diskVendor;
-    const char *diskProduct;
-    const char *diskRevision;
-    const char *controllerVendor;
-    const char *controllerProduct;
-    const char *controllerRevision;
-    
-    // Physical layout
-    isize cylinders;
-    isize heads;
-    isize sectors;
-    isize bsize;
-
-    // Derived values
-    isize tracks;
-    isize blocks;
-    isize bytes;
-    isize upperCyl;
-    isize upperHead;
-    isize upperTrack;
-}
-HardDriveTraits;

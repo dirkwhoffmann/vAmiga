@@ -626,9 +626,10 @@ public:
     const HardDriveInfo &getInfo() const;
     const HardDriveInfo &getCachedInfo() const;
 
-    /** @brief  Provides details about the currently selected chip revision.
+    /** @brief  Provides details about the hard drive and its partitions
      */
     const HardDriveTraits &getTraits() const;
+    const PartitionTraits &getPartitionTraits(isize nr) const;
 
     /** @brief Queries a disk flag
      */

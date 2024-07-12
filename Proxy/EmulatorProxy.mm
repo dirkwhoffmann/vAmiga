@@ -1321,6 +1321,11 @@ using namespace vamiga::moira;
     return [self drive]->getTraits();
 }
 
+- (PartitionTraits) partitionTraits:(NSInteger)nr
+{
+    return [self drive]->getPartitionTraits(nr);
+}
+
 - (HardDriveInfo)info
 {
     return [self drive]->getInfo();
@@ -1365,48 +1370,6 @@ using namespace vamiga::moira;
 {
     return [self drive]->drive->getGeometry().bsize;
 }
-
-/*
-- (HdcState)hdcState
-{
-    return [self drive]->drive->getHdcState();
-}
-*/
-
-- (BOOL)isCompatible
-{
-    return [self drive]->drive->isCompatible();
-}
-
-- (BOOL)writeThroughEnabled
-{
-    return [self drive]->drive->writeThroughEnabled();
-}
-
-- (NSString *)nameOfPartition:(NSInteger)nr
-{
-    auto &info = [self drive]->drive->getPartitionInfo(nr);
-    return @(info.name.c_str());
-}
-
-- (NSInteger)lowerCylOfPartition:(NSInteger)nr
-{
-    auto &info = [self drive]->drive->getPartitionInfo(nr);
-    return info.lowCyl;
-}
-
-- (NSInteger)upperCylOfPartition:(NSInteger)nr
-{
-    auto &info = [self drive]->drive->getPartitionInfo(nr);
-    return info.highCyl;
-}
-
-/*
-- (HardDriveState)state
-{
-    return [self drive]->drive->getState();
-}
-*/
 
 - (void)attachFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {

@@ -145,7 +145,7 @@ HdController::updateMemSrcTables()
 }
 
 bool
-HdController::isCompatible(u32 crc32)
+HdController::isCompatible(u32 crc32) const
 {
     switch (crc32) {
             
@@ -175,7 +175,7 @@ HdController::isCompatible(u32 crc32)
 }
 
 bool
-HdController::isCompatible()
+HdController::isCompatible() const
 {
     return isCompatible(mem.romFingerprint());
 }

@@ -115,11 +115,11 @@ extension MyController: NSMenuItemValidation {
             return hdn.info.hasDisk
 
         case #selector(MyController.writeThroughHdrAction(_:)):
-            item.state = hdn.writeThroughEnabled ? .on : .off
+            item.state = hdn.info.writeThrough ? .on : .off
             return true
 
         case #selector(MyController.writeThroughFinderAction(_:)):
-            item.isHidden = !hdn.writeThroughEnabled
+            item.isHidden = !hdn.info.writeThrough
             return true
 
         default:
