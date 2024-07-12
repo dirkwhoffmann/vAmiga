@@ -443,8 +443,8 @@ extension HardDriveProxy {
         
         var name: String
                 
-        switch hdcState {
-            
+        switch controller.info.state {
+
         case .UNDETECTED, .INITIALIZING:
             name = "hdrETemplate"
             
@@ -457,7 +457,7 @@ extension HardDriveProxy {
     
     var toolTip: String? {
         
-        switch hdcState {
+        switch controller.info.state {
             
         case .UNDETECTED:
             return "The hard drive is waiting to be initialized by the OS."

@@ -167,13 +167,10 @@ public:
     //
     
 public:
-    
-    // const HdcStats &getStats() { return stats; }
-    // void clearStats() { stats = { }; }
-    
+        
     // Returns the current controller state
-    HdcState getHdcState() { return hdcState; }
-    
+    HdcState getHdcState() const { return hdcState; }
+
     // Informs whether the controller is compatible with a certain Kickstart
     bool isCompatible(u32 crc32);
     bool isCompatible();

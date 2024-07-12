@@ -157,10 +157,12 @@
     HardDriveProxy *hd1;
     HardDriveProxy *hd2;
     HardDriveProxy *hd3;
+    /*
     HdControllerProxy *hd0con;
     HdControllerProxy *hd1con;
     HdControllerProxy *hd2con;
     HdControllerProxy *hd3con;
+    */
     KeyboardProxy *keyboard;
     MemProxy *mem;
     PaulaProxy *paula;
@@ -198,10 +200,12 @@
 @property (readonly, strong) HardDriveProxy *hd1;
 @property (readonly, strong) HardDriveProxy *hd2;
 @property (readonly, strong) HardDriveProxy *hd3;
+/*
 @property (readonly, strong) HdControllerProxy *hd0con;
 @property (readonly, strong) HdControllerProxy *hd1con;
 @property (readonly, strong) HdControllerProxy *hd2con;
 @property (readonly, strong) HdControllerProxy *hd3con;
+*/
 @property (readonly, strong) KeyboardProxy *keyboard;
 @property (readonly, strong) MemProxy *mem;
 @property (readonly, strong) PaulaProxy *paula;
@@ -702,32 +706,39 @@
 
 
 //
+// HdController
+//
+
+@interface HdControllerProxy : CoreComponentProxy { }
+
+@property (readonly) HdcInfo info;
+@property (readonly) HdcStats stats;
+
+@end
+
+
+//
 // HardDrive
 //
 
-@interface HardDriveProxy : CoreComponentProxy { }
+@interface HardDriveProxy : CoreComponentProxy { 
+
+    HdControllerProxy *controller;
+}
+
+@property (readonly, strong) HdControllerProxy *controller;
 
 @property (readonly) HardDriveInfo info;
 @property (readonly) HardDriveTraits traits;
 
-/*
-@property (readonly) NSInteger nr;
-@property (readonly) BOOL isConnected;
-@property (readonly) NSInteger currentCyl;
-@property (readonly) NSInteger currentHead;
-@property (readonly) NSInteger currentOffset;
-*/
-
 - (BOOL)getFlag:(DiskFlags)mask;
 - (void)setFlag:(DiskFlags)mask value:(BOOL)value;
 
-@property (readonly) HdcState hdcState;
 @property (readonly) BOOL isCompatible;
 @property (readonly) BOOL writeThroughEnabled;
 - (NSString *)nameOfPartition:(NSInteger)nr;
 - (NSInteger)lowerCylOfPartition:(NSInteger)nr;
 - (NSInteger)upperCylOfPartition:(NSInteger)nr;
-// @property (readonly) HardDriveState state;
 - (void)attachFile:(NSURL *)path exception:(ExceptionWrapper *)ex;
 - (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex;
 - (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
@@ -737,17 +748,6 @@
 - (void)writeToFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)enableWriteThrough:(ExceptionWrapper *)ex;
 - (void)disableWriteThrough;
-
-@end
-
-//
-// HdController
-//
-
-@interface HdControllerProxy : CoreComponentProxy { }
-
-@property (readonly) HdcInfo info;
-@property (readonly) HdcStats stats;
 
 @end
 

@@ -1122,27 +1122,23 @@ VAmiga::VAmiga() {
 
     hd0.emu = emu;
     hd0.drive = &emu->main.hd0;
+    hd0.controller.emu = emu;
+    hd0.controller.controller = &emu->main.hd0con;
 
     hd1.emu = emu;
     hd1.drive = &emu->main.hd1;
+    hd1.controller.emu = emu;
+    hd1.controller.controller = &emu->main.hd1con;
 
     hd2.emu = emu;
     hd2.drive = &emu->main.hd2;
+    hd2.controller.emu = emu;
+    hd2.controller.controller = &emu->main.hd2con;
 
     hd3.emu = emu;
     hd3.drive = &emu->main.hd3;
-
-    hd0con.emu = emu;
-    hd0con.controller = &emu->main.hd0con;
-
-    hd1con.emu = emu;
-    hd1con.controller = &emu->main.hd1con;
-
-    hd2con.emu = emu;
-    hd2con.controller = &emu->main.hd2con;
-
-    hd3con.emu = emu;
-    hd3con.controller = &emu->main.hd3con;
+    hd3.controller.emu = emu;
+    hd3.controller.controller = &emu->main.hd3con;
 
     host.emu = emu;
     host.host = &emu->host;

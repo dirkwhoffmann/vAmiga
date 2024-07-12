@@ -1298,6 +1298,19 @@ using namespace vamiga::moira;
 
 @implementation HardDriveProxy
 
+@synthesize controller;
+
+- (instancetype)initWith:(void *)ref
+{
+    if (self = [super init]) {
+
+        HardDriveAPI *hd = (HardDriveAPI *)ref;
+        obj = ref;
+        controller = [[HdControllerProxy alloc] initWith:&hd->controller];
+    }
+    return self;
+}
+
 - (HardDriveAPI *)drive
 {
     return (HardDriveAPI *)obj;
@@ -1312,58 +1325,6 @@ using namespace vamiga::moira;
 {
     return [self drive]->getInfo();
 }
-
-/*
-- (NSInteger)nr
-{
-    return [self drive]->drive->objid;
-}
-
-- (BOOL)isConnected
-{
-    return [self drive]->drive->isConnected();
-}
-
-- (NSInteger)currentCyl
-{
-    return [self drive]->drive->currentCyl();
-}
-
-- (NSInteger)currentHead
-{
-    return [self drive]->drive->currentHead();
-}
-
-- (NSInteger)currentOffset
-{
-    return [self drive]->drive->currentOffset();
-}
-
-- (BOOL)hasDisk
-{
-    return [self drive]->drive->hasDisk();
-}
-
-- (BOOL)hasModifiedDisk
-{
-    return [self drive]->drive->hasModifiedDisk();
-}
-
-- (BOOL)hasProtectedDisk
-{
-    return [self drive]->drive->hasProtectedDisk();
-}
-
-- (BOOL)hasUnmodifiedDisk
-{
-    return [self drive]->drive->hasUnmodifiedDisk();
-}
-
-- (BOOL)hasUnprotectedDisk
-{
-    return [self drive]->drive->hasUnprotectedDisk();
-}
-*/
 
 - (BOOL)getFlag:(DiskFlags)mask
 {
@@ -1405,10 +1366,12 @@ using namespace vamiga::moira;
     return [self drive]->drive->getGeometry().bsize;
 }
 
+/*
 - (HdcState)hdcState
 {
     return [self drive]->drive->getHdcState();
 }
+*/
 
 - (BOOL)isCompatible
 {
@@ -2598,10 +2561,6 @@ using namespace vamiga::moira;
 @synthesize hd1;
 @synthesize hd2;
 @synthesize hd3;
-@synthesize hd0con;
-@synthesize hd1con;
-@synthesize hd2con;
-@synthesize hd3con;
 @synthesize keyboard;
 @synthesize mem;
 @synthesize paula;
@@ -2647,10 +2606,12 @@ using namespace vamiga::moira;
     hd1 = [[HardDriveProxy alloc] initWith:&vamiga->hd1];
     hd2 = [[HardDriveProxy alloc] initWith:&vamiga->hd2];
     hd3 = [[HardDriveProxy alloc] initWith:&vamiga->hd3];
+    /*
     hd0con = [[HdControllerProxy alloc] initWith:&vamiga->hd0con];
     hd1con = [[HdControllerProxy alloc] initWith:&vamiga->hd1con];
     hd2con = [[HdControllerProxy alloc] initWith:&vamiga->hd2con];
     hd3con = [[HdControllerProxy alloc] initWith:&vamiga->hd3con];
+    */
     keyboard = [[KeyboardProxy alloc] initWith:&vamiga->keyboard];
     mem = [[MemProxy alloc] initWith:&vamiga->mem];
     paula = [[PaulaProxy alloc] initWith:&vamiga->paula];

@@ -49,7 +49,7 @@ void
 HdController::cacheInfo(HdcInfo &result) const
 {
     result.pluggedIn = pluggedIn();
-    result.state = state;
+    result.state = getHdcState();
 }
 
 void 
