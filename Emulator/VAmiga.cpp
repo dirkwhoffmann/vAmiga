@@ -730,6 +730,18 @@ HardDriveAPI::setFlag(DiskFlags mask, bool value)
     drive->setFlag(mask, value);
 }
 
+std::vector<std::tuple<isize,isize,isize>>
+HardDriveAPI::geometries(isize numBlocks)
+{
+    return GeometryDescriptor::driveGeometries(numBlocks);
+}
+
+void 
+HardDriveAPI::changeGeometry(isize c, isize h, isize s, isize b)
+{
+    return drive->changeGeometry(c, h, s, b);
+}
+
 
 //
 // Peripherals (HdController)

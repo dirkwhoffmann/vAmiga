@@ -109,6 +109,20 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
     if (FS_DEBUG) printDirectory(true);
 }
 
+FSTraits &
+FileSystem::getTraits()
+{
+    traits.dos = dos;
+    traits.ofs = isOFS();
+    traits.ffs = isFFS();
+
+    traits.blocks = numBlocks();
+    traits.bytes = numBytes();
+    traits.bsize = blockSize();
+
+    return traits;
+}
+
 void
 FileSystem::_dump(Category category, std::ostream& os) const
 {

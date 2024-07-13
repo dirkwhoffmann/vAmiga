@@ -45,6 +45,19 @@ GeometryDescriptor::operator < (const GeometryDescriptor &rhs) const
     return cylinders < rhs.cylinders;
 }
 
+std::vector<std::tuple<isize,isize,isize>> 
+GeometryDescriptor::driveGeometries(isize numBlocks)
+{
+    std::vector<std::tuple<isize,isize,isize>> result;
+
+    for (auto &geometry : driveGeometries(numBlocks, 512)) {
+
+        result.push_back(std::tuple<isize,isize,isize>
+                         (geometry.cylinders, geometry.heads, geometry.sectors));
+    }
+    return result;
+}
+
 std::vector<GeometryDescriptor>
 GeometryDescriptor::driveGeometries(isize numBlocks, isize bsize)
 {
@@ -88,7 +101,7 @@ GeometryDescriptor::driveGeometries(isize numBlocks, isize bsize)
 bool
 GeometryDescriptor::unique() const
 {
-    return driveGeometries(numBytes()).size() == 1;
+    return driveGeometries(numBytes(), 512).size() == 1;
 }
 
 void

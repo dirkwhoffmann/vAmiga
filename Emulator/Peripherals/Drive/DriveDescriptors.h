@@ -48,7 +48,8 @@ struct GeometryDescriptor : Serializable {
 
 
     // Returns a vector with compatible geometries for a given block count
-    static std::vector<GeometryDescriptor> driveGeometries(isize numBlocks, isize bsize = 512);
+    static std::vector<std::tuple<isize,isize,isize>> driveGeometries(isize numBlocks);
+    static std::vector<GeometryDescriptor> driveGeometries(isize numBlocks, isize bsize);
 
     // Checks whether the geometry is unique
     bool unique() const;

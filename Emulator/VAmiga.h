@@ -638,6 +638,21 @@ public:
     /** @brief Sets or clears one or more disk flags
      */
     void setFlag(DiskFlags mask, bool value);
+
+    /** @brief Returns possible drive geometries for a given capacity.
+     *  The function takes a number of blocks and returns all common
+     *  cyclinder/heads/sectors combinations that match the given size.
+     */
+    std::vector<std::tuple<isize,isize,isize>> geometries(isize numBlocks);
+
+    /** @brief Changes the drives geometry.
+     *  @param c    Cylinders
+     *  @param h    Heads
+     *  @param s    Sectors
+     *  @param b    Block size
+     *  ‘
+     */
+    void changeGeometry(isize c, isize h, isize s, isize b = 512);
 };
 
 

@@ -41,6 +41,9 @@ class FileSystem : public CoreObject {
     
 protected:
 
+    // File system information
+     FSTraits traits;
+
     // File system version
     FSVolumeType dos = FS_NODOS;
     
@@ -103,6 +106,8 @@ protected:
     //
 
 public:
+
+    FSTraits &getTraits();
 
     // Returns capacity information
     isize numBlocks() const { return isize(blocks.size()); }

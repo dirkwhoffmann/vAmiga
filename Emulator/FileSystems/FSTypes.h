@@ -234,3 +234,16 @@ typedef struct
     long lastErrorBlock;
 }
 FSErrorReport;
+
+typedef struct
+{
+    FSVolumeType dos;
+    bool ofs;
+    bool ffs;
+
+    isize blocks;
+    isize bytes;
+    isize bsize;
+}
+FSTraits;
+

@@ -871,7 +871,7 @@
 
 @property (readonly) FileType type;
 @property (readonly) NSInteger size;
-@property (readonly) NSString *sizeAsString;
+@property (readonly) NSString *getSizeAsString;
 @property (readonly) u64 fnv;
 
 - (void)setPath:(NSString *)path;

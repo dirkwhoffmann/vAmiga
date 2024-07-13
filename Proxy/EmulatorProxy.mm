@@ -1419,7 +1419,7 @@ using namespace vamiga::moira;
 - (void)changeGeometry:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex
 {
     try {
-        [self drive]->drive->changeGeometry(c, h, s, b);
+        [self drive]->changeGeometry(c, h, s, b);
     }  catch (Error &error) {
         [ex save:error];
     }
@@ -1428,13 +1428,16 @@ using namespace vamiga::moira;
 - (NSMutableArray *)geometries
 {
     NSMutableArray *data = [[NSMutableArray alloc] init];
-    
-    auto geometry = [self drive]->drive->getGeometry();
-    auto geometries = GeometryDescriptor::driveGeometries(geometry.numBlocks());
-        
+
+    auto geometries = [self drive]->geometries([self traits].blocks);
+
     for (auto &g : geometries) {
-        
-        NSInteger encoded = g.cylinders << 32 | g.heads << 16 | g.sectors;
+
+        auto c = std::get<0>(g);
+        auto h = std::get<1>(g);
+        auto s = std::get<2>(g);
+
+        NSInteger encoded = c << 32 | h << 16 | s;
         [data addObject: [NSNumber numberWithInteger:encoded]];
     }
     
@@ -1843,12 +1846,12 @@ using namespace vamiga::moira;
 
 - (NSInteger)size
 {
-    return [self file]->size();
+    return [self file]->getSize();
 }
 
-- (NSString *)sizeAsString
+- (NSString *)getSizeAsString
 {
-    const string &str = [self file]->sizeAsString();
+    const string &str = [self file]->getSizeAsString();
     return @(str.c_str());
 }
 

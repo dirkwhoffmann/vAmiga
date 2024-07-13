@@ -96,12 +96,15 @@ AmigaFile::flash(u8 *buf, isize offset) const
     flash (buf, offset, data.size);
 }
 
+/*
 void
 AmigaFile::flash(u8 *buf) const
 {
     flash(buf, 0);
 }
+*/
 
+/*
 FileType
 AmigaFile::type(const string &path)
 {
@@ -144,9 +147,10 @@ AmigaFile::type(const string &path)
     
     return FILETYPE_UNKNOWN;
 }
+*/
 
 string
-AmigaFile::sizeAsString()
+AmigaFile::getSizeAsString()
 {
     return util::byteCountAsString(data.size);
 }

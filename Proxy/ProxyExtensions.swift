@@ -558,7 +558,7 @@ extension HDFFileProxy {
     
     var layoutInfo: String {
         
-        let capacity = sizeAsString!
+        let capacity = getSizeAsString!
         return "\(capacity), \(numBlocks) sectors"
     }
     

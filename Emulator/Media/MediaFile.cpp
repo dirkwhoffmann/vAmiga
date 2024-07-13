@@ -1,0 +1,147 @@
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
+//
+// Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
+// Licensed under the Mozilla Public License v2
+//
+// See https://mozilla.org/MPL/2.0 for license information
+// -----------------------------------------------------------------------------
+
+#include "config.h"
+#include "MediaFile.h"
+#include "VAmiga.h"
+#include "ADFFile.h"
+#include "DMSFile.h"
+#include "EADFFile.h"
+#include "EXEFile.h"
+#include "ExtendedRomFile.h"
+#include "FloppyFile.h"
+#include "Folder.h"
+#include "HDFFile.h"
+#include "IMGFile.h"
+#include "Script.h"
+#include "Snapshot.h"
+#include "RomFile.h"
+#include "STFile.h"
+
+namespace vamiga {
+
+FileType
+MediaFile::type(const fs::path &path)
+{
+    std::ifstream stream(path, std::ifstream::binary);
+
+    if (stream.is_open()) {
+
+        if (Snapshot::isCompatible(path) &&
+            Snapshot::isCompatible(stream)) return FILETYPE_SNAPSHOT;
+
+        if (Script::isCompatible(path) &&
+            Script::isCompatible(stream)) return FILETYPE_SCRIPT;
+
+        if (ADFFile::isCompatible(path) &&
+            ADFFile::isCompatible(stream)) return FILETYPE_ADF;
+
+        if (EADFFile::isCompatible(path) &&
+            EADFFile::isCompatible(stream)) return FILETYPE_EADF;
+
+        if (HDFFile::isCompatible(path) &&
+            HDFFile::isCompatible(stream)) return FILETYPE_HDF;
+
+        if (IMGFile::isCompatible(path) &&
+            IMGFile::isCompatible(stream)) return FILETYPE_IMG;
+
+        if (STFile::isCompatible(path) &&
+            STFile::isCompatible(stream)) return FILETYPE_ST;
+
+        if (DMSFile::isCompatible(path) &&
+            DMSFile::isCompatible(stream)) return FILETYPE_DMS;
+
+        if (EXEFile::isCompatible(path) &&
+            EXEFile::isCompatible(stream)) return FILETYPE_EXE;
+
+        if (RomFile::isCompatible(path) &&
+            RomFile::isCompatible(stream)) return FILETYPE_ROM;
+
+        if (Folder::isCompatible(path)) return FILETYPE_DIR;
+    }
+
+    return FILETYPE_UNKNOWN;
+}
+
+MediaFile *
+MediaFile::make(const fs::path &path)
+{
+    return make(path, type(path));
+}
+
+MediaFile *
+MediaFile::make(const fs::path &path, FileType type)
+{
+    switch (type) {
+
+        case FILETYPE_SNAPSHOT:     return new Snapshot(path);
+        case FILETYPE_SCRIPT:       return new Script(path);
+        case FILETYPE_ADF:          return new ADFFile(path);
+        case FILETYPE_EADF:         return new EADFFile(path);
+        case FILETYPE_HDF:          return new HDFFile(path);
+        case FILETYPE_IMG:          return new IMGFile(path);
+        case FILETYPE_ST:           return new STFile(path);
+        case FILETYPE_DMS:          return new DMSFile(path);
+        case FILETYPE_EXE:          return new EXEFile(path);
+        case FILETYPE_ROM:          return new RomFile(path);
+        case FILETYPE_EXTENDED_ROM: return new ExtendedRomFile(path);
+
+        default:
+            return nullptr;
+    }
+}
+
+MediaFile *
+MediaFile::make(const u8 *buf, isize len, FileType type)
+{
+    switch (type) {
+
+        case FILETYPE_SNAPSHOT:     return new Snapshot(buf, len);
+        case FILETYPE_SCRIPT:       return new Script(buf, len);
+        case FILETYPE_ADF:          return new ADFFile(buf, len);
+        case FILETYPE_EADF:         return new EADFFile(buf, len);
+        case FILETYPE_HDF:          return new HDFFile(buf, len);
+        case FILETYPE_IMG:          return new IMGFile(buf, len);
+        case FILETYPE_ST:           return new STFile(buf, len);
+        case FILETYPE_DMS:          return new DMSFile(buf, len);
+        case FILETYPE_EXE:          return new EXEFile(buf, len);
+        case FILETYPE_ROM:          return new RomFile(buf, len);
+        case FILETYPE_EXTENDED_ROM: return new ExtendedRomFile(buf, len);
+
+        default:
+            return nullptr;
+    }
+}
+
+MediaFile *
+MediaFile::make(class MutableFileSystem &fs, FileType type)
+{
+    switch (type) {
+
+        case FILETYPE_ADF:        return new ADFFile(fs);
+
+        default:
+            return nullptr;
+    }
+}
+
+MediaFile *
+MediaFile::make(const FloppyDriveAPI &drive, FileType type)
+{
+    switch (type) {
+
+        case FILETYPE_ADF:        return new ADFFile(*drive.drive);
+
+        default:
+            return nullptr;
+    }
+}
+
+}
+

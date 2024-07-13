@@ -43,7 +43,7 @@
 #include "ZorroBoardTypes.h"
 
 // Media
-#include "AmigaFileTypes.h"
+#include "MediaFileTypes.h"
 #include "FSTypes.h"
 #include "RomFileTypes.h"
 
