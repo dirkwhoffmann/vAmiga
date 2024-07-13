@@ -780,12 +780,12 @@ class Inspector: DialogController {
 
     @IBAction func stepIntoAction(_ sender: NSButton!) {
 
-        emu.debugger.stepInto()
+        emu.stepInto()
     }
     
     @IBAction func stepOverAction(_ sender: NSButton!) {
 
-        emu.debugger.stepOver()
+        emu.stepOver()
     }
 }
 

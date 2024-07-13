@@ -1707,36 +1707,6 @@ using namespace vamiga::moira;
 
 @end
 
-//
-// Debugger proxy
-//
-
-@implementation DebuggerProxy
-
-- (vamiga::DebuggerAPI *)debugger
-{
-    return (vamiga::DebuggerAPI *)obj;
-}
-
-+ (instancetype)make:(vamiga::DebuggerAPI *)object
-{
-    if (object == nullptr) { return nil; }
-
-    DebuggerProxy *proxy = [[self alloc] initWith: object];
-    return proxy;
-}
-
-- (void)stepInto
-{
-    [self debugger]->emu->stepInto();
-}
-
-- (void)stepOver
-{
-    [self debugger]->emu->stepOver();
-}
-
-@end
 
 //
 // RetroShell proxy
@@ -2515,7 +2485,6 @@ using namespace vamiga::moira;
 @synthesize copper;
 @synthesize copperBreakpoints;
 @synthesize cpu;
-@synthesize debugger;
 @synthesize denise;
 @synthesize df0;
 @synthesize df1;
@@ -2560,7 +2529,6 @@ using namespace vamiga::moira;
     copper = [[CopperProxy alloc] initWith:&vamiga->agnus.copper];
     copperBreakpoints = [[GuardsProxy alloc] initWith:&vamiga->copperBreakpoints];
     cpu = [[CPUProxy alloc] initWith:&vamiga->cpu];
-    debugger = [[DebuggerProxy alloc] initWith:&vamiga->debugger];
     denise = [[DeniseProxy alloc] initWith:&vamiga->denise];
     diskController = [[DiskControllerProxy alloc] initWith:&vamiga->paula.diskController];
     dmaDebugger = [[DmaDebuggerProxy alloc] initWith:&vamiga->agnus.dma.debugger];
@@ -2572,12 +2540,6 @@ using namespace vamiga::moira;
     hd1 = [[HardDriveProxy alloc] initWith:&vamiga->hd1];
     hd2 = [[HardDriveProxy alloc] initWith:&vamiga->hd2];
     hd3 = [[HardDriveProxy alloc] initWith:&vamiga->hd3];
-    /*
-    hd0con = [[HdControllerProxy alloc] initWith:&vamiga->hd0con];
-    hd1con = [[HdControllerProxy alloc] initWith:&vamiga->hd1con];
-    hd2con = [[HdControllerProxy alloc] initWith:&vamiga->hd2con];
-    hd3con = [[HdControllerProxy alloc] initWith:&vamiga->hd3con];
-    */
     keyboard = [[KeyboardProxy alloc] initWith:&vamiga->keyboard];
     mem = [[MemProxy alloc] initWith:&vamiga->mem];
     paula = [[PaulaProxy alloc] initWith:&vamiga->paula];
@@ -2691,6 +2653,7 @@ using namespace vamiga::moira;
     return [self emu]->isTracking();
 }
 
+/*
 - (void)setTrackMode:(BOOL)value
 {
     if (value) {
@@ -2698,6 +2661,17 @@ using namespace vamiga::moira;
     } else {
         [self emu]->emu->trackOff();
     }
+}
+*/
+
+- (void)stepInto
+{
+    [self emu]->emu->stepInto();
+}
+
+- (void)stepOver
+{
+    [self emu]->emu->stepOver();
 }
 
 - (SnapshotProxy *)takeSnapshot

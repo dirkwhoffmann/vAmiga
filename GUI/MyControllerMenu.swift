@@ -387,7 +387,7 @@ extension MyController: NSMenuItemValidation {
         
         needsSaving = true
         if let emu = emu {
-            emu.debugger.stepInto()
+            emu.stepInto()
         }
     }
     
@@ -395,7 +395,7 @@ extension MyController: NSMenuItemValidation {
         
         needsSaving = true
         if let emu = emu {
-            emu.debugger.stepOver()
+            emu.stepOver()
         }
     }
     

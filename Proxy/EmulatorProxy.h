@@ -30,7 +30,6 @@
 @class ControlPortProxy;
 @class CopperProxy;
 @class CPUProxy;
-@class DebuggerProxy;
 @class DeniseProxy;
 @class DiskControllerProxy;
 @class DiskFileProxy;
@@ -143,7 +142,6 @@
     ControlPortProxy *controlPort2;
     CopperProxy *copper;
     CPUProxy *cpu;
-    DebuggerProxy *debugger;
     DeniseProxy *denise;
     DiskControllerProxy *diskController;
     DmaDebuggerProxy *dmaDebugger;
@@ -185,7 +183,6 @@
 @property (readonly, strong) ControlPortProxy *controlPort2;
 @property (readonly, strong) CopperProxy *copper;
 @property (readonly, strong) CPUProxy *cpu;
-@property (readonly, strong) DebuggerProxy *debugger;
 @property (readonly, strong) DeniseProxy *denise;
 @property (readonly, strong) DiskControllerProxy *diskController;
 @property (readonly, strong) DmaDebuggerProxy *dmaDebugger;
@@ -200,12 +197,6 @@
 @property (readonly, strong) HardDriveProxy *hd1;
 @property (readonly, strong) HardDriveProxy *hd2;
 @property (readonly, strong) HardDriveProxy *hd3;
-/*
-@property (readonly, strong) HdControllerProxy *hd0con;
-@property (readonly, strong) HdControllerProxy *hd1con;
-@property (readonly, strong) HdControllerProxy *hd2con;
-@property (readonly, strong) HdControllerProxy *hd3con;
-*/
 @property (readonly, strong) KeyboardProxy *keyboard;
 @property (readonly, strong) MemProxy *mem;
 @property (readonly, strong) PaulaProxy *paula;
@@ -239,6 +230,9 @@
 @property (readonly) BOOL warping;
 @property (readonly) BOOL tracking;
 
+- (void)launch:(const void *)listener function:(Callback *)func;
+- (void)wakeUp;
+
 - (void)isReady:(ExceptionWrapper *)ex;
 - (void)powerOn;
 - (void)powerOff;
@@ -259,8 +253,8 @@
 - (void)hardReset;
 - (void)softReset;
 
-- (void)launch:(const void *)listener function:(Callback *)func;
-- (void)wakeUp;
+- (void)stepInto;
+- (void)stepOver;
 
 - (NSInteger)get:(Option)opt;
 - (NSInteger)get:(Option)opt id:(NSInteger)id;
@@ -789,23 +783,6 @@
 - (NSInteger)diagnoseImageSlice:(NSInteger)column;
 - (NSInteger)nextBlockOfType:(FSBlockType)type after:(NSInteger)after;
 - (NSInteger)nextCorruptedBlock:(NSInteger)after;
-
-@end
-
-
-//
-// Debugger
-//
-
-@interface DebuggerProxy : CoreComponentProxy { }
-
-- (void)stepInto;
-- (void)stepOver;
-
-/*
-- (NSString *)ascDump:(Accessor)accessor addr:(NSInteger)addr bytes:(NSInteger)bytes;
-- (NSString *)hexDump:(Accessor)accessor addr:(NSInteger)addr bytes:(NSInteger)bytes;
-*/
 
 @end
 
