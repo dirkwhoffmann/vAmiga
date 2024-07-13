@@ -14,7 +14,7 @@
 namespace vamiga {
 
 void
-FloppyDisk::init(Diameter dia, Density den)
+FloppyDisk::init(Diameter dia, Density den, bool wp)
 {
     diameter = dia;
     density = den;
@@ -31,19 +31,20 @@ FloppyDisk::init(Diameter dia, Density den)
     
     for (isize i = 0; i < 168; i++) length.track[i] = trackLength;
     clearDisk();
+    setWriteProtection(wp);
 }
 
 void
-FloppyDisk::init(const class FloppyFile &file)
+FloppyDisk::init(const class FloppyFile &file, bool wp)
 {
-    init(file.getDiameter(), file.getDensity());
+    init(file.getDiameter(), file.getDensity(), wp);
     encodeDisk(file);
 }
 
 void
-FloppyDisk::init(SerReader &reader, Diameter dia, Density den)
+FloppyDisk::init(SerReader &reader, Diameter dia, Density den, bool wp)
 {
-    init(dia, den);
+    init(dia, den, wp);
     serialize(reader);
 }
 

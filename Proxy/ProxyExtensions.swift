@@ -197,7 +197,7 @@ extension FloppyDriveProxy {
     func insertNew(fileSystem: FSVolumeType, bootBlock: BootBlockId, name: String) throws {
         
         let exception = ExceptionWrapper()
-        insertNew(fileSystem, bootBlock: bootBlock, name: name, exception: exception)
+        insertBlankDisk(fileSystem, bootBlock: bootBlock, name: name, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 }

@@ -1267,6 +1267,17 @@ using namespace vamiga::moira;
     return [self drive]->drive->isInsertable(type, density);
 }
 
+- (void)insertBlankDisk:(FSVolumeType)fs bootBlock:(BootBlockId)bb name:(NSString *)name exception:(ExceptionWrapper *)ex
+{
+    try { return [self drive]->drive->insertNew(fs, bb, [name UTF8String]); }
+    catch (Error &error) { [ex save:error]; }
+}
+
+- (void)insertMedia:(MediaFileProxy *)proxy protected:(BOOL)wp
+{
+    [self drive]->insertMedia(*(MediaFile *)proxy->obj, wp);
+}
+
 - (void)eject
 {
     [self drive]->drive->ejectDisk();
@@ -1275,12 +1286,6 @@ using namespace vamiga::moira;
 - (void)swap:(FloppyFileProxy *)fileProxy exception:(ExceptionWrapper *)ex
 {
     try { return [self drive]->drive->swapDisk(*(FloppyFile *)fileProxy->obj); }
-    catch (Error &error) { [ex save:error]; }
-}
-
-- (void)insertNew:(FSVolumeType)fs bootBlock:(BootBlockId)bb name:(NSString *)name exception:(ExceptionWrapper *)ex
-{
-    try { return [self drive]->drive->insertNew(fs, bb, [name UTF8String]); }
     catch (Error &error) { [ex save:error]; }
 }
 
@@ -1787,6 +1792,138 @@ using namespace vamiga::moira;
 }
 
 @end
+
+
+//
+// MediaFile
+//
+
+@implementation MediaFileProxy
+
+- (MediaFile *)file
+{
+    return (MediaFile *)obj;
+}
+
++ (instancetype)make:(MediaFile *)file
+{
+    return file ? [[self alloc] initWith:file] : nil;
+}
+
++ (FileType)typeOfUrl:(NSURL *)url
+{
+    return MediaFile::type([url fileSystemRepresentation]);
+}
+
++ (instancetype)makeWithFile:(NSString *)path
+                   exception:(ExceptionWrapper *)ex
+{
+    try { return [self make: MediaFile::make([path fileSystemRepresentation])]; }
+    catch (Error &error) { [ex save:error]; return nil; }
+}
+
++ (instancetype)makeWithFile:(NSString *)path
+                        type:(FileType)type
+                   exception:(ExceptionWrapper *)ex
+{
+    try { return [self make: MediaFile::make([path fileSystemRepresentation], type)]; }
+    catch (Error &error) { [ex save:error]; return nil; }
+}
+
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len
+                          type:(FileType)type
+                     exception:(ExceptionWrapper *)ex
+{
+    try { return [self make: MediaFile::make((u8 *)buf, len, type)]; }
+    catch (Error &error) { [ex save:error]; return nil; }
+}
+
++ (instancetype)makeWithAmiga:(EmulatorProxy *)proxy
+{
+    auto amiga = (VAmiga *)proxy->obj;
+    return [self make:amiga->amiga.takeSnapshot()];
+}
+
++ (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy
+                         type:(FileType)type
+                    exception:(ExceptionWrapper *)ex
+{
+    auto drive = (FloppyDriveAPI *)proxy->obj;
+    try { return [self make: MediaFile::make(*drive, type)]; }
+    catch (Error &error) { [ex save:error]; return nil; }
+}
+
++ (instancetype)makeWithFileSystem:(FileSystemProxy *)proxy
+                              type:(FileType)type
+                         exception:(ExceptionWrapper *)ex
+{
+    auto fs = (MutableFileSystem *)proxy->obj;
+    try { return [self make: MediaFile::make(*fs, type)]; }
+    catch (Error &error) { [ex save:error]; return nil; }
+}
+
+- (FileType)type
+{
+    return [self file]->type();
+}
+
+/*
+- (NSString *)name
+{
+    return @([self file]->getName().c_str());
+}
+*/
+
+- (u64)fnv
+{
+    return [self file]->fnv64();
+}
+
+- (void)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex
+{
+    try { [self file]->writeToFile(string([path fileSystemRepresentation])); }
+    catch (Error &err) { [ex save:err]; }
+}
+
+- (NSImage *)previewImage
+{
+    // Return cached image (if any)
+    if (preview) { return preview; }
+
+    // Get dimensions and data
+    auto size = [self file]->previewImageSize();
+    auto data = (unsigned char *)[self file]->previewImageData();
+
+    // Create preview image
+    if (data) {
+
+        NSBitmapImageRep *rep = [[NSBitmapImageRep alloc]
+                                 initWithBitmapDataPlanes: &data
+                                 pixelsWide:size.first
+                                 pixelsHigh:size.second
+                                 bitsPerSample:8
+                                 samplesPerPixel:4
+                                 hasAlpha:true
+                                 isPlanar:false
+                                 colorSpaceName:NSCalibratedRGBColorSpace
+                                 bytesPerRow:4*size.first
+                                 bitsPerPixel:32];
+
+        preview = [[NSImage alloc] initWithSize:[rep size]];
+        [preview addRepresentation:rep];
+
+        // image.makeGlossy()
+    }
+    return preview;
+}
+
+- (time_t)timeStamp
+{
+    return [self file]->timestamp();
+}
+
+@end
+
 
 //
 // AmigaFile proxy

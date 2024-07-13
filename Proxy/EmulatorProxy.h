@@ -47,6 +47,7 @@
 @class IMGFileProxy;
 @class JoystickProxy;
 @class KeyboardProxy;
+@class MediaFileProxy;
 @class MemProxy;
 @class MouseProxy;
 @class PaulaProxy;
@@ -690,9 +691,10 @@
 - (void)setFlag:(DiskFlags)mask value:(BOOL)value;
 
 - (BOOL)isInsertable:(Diameter)type density:(Density)density;
+- (void)insertBlankDisk:(FSVolumeType)fs bootBlock:(BootBlockId)bb name:(NSString *)name exception:(ExceptionWrapper *)ex;
+- (void)insertMedia:(MediaFileProxy *)proxy protected:(BOOL)wp;
 - (void)eject;
 - (void)swap:(FloppyFileProxy *)fileProxy exception:(ExceptionWrapper *)ex;
-- (void)insertNew:(FSVolumeType)fs bootBlock:(BootBlockId)bb name:(NSString *)name exception:(ExceptionWrapper *)ex;
 
 - (NSString *)readTrackBits:(NSInteger)track;
 
@@ -740,7 +742,6 @@
 - (void)disableWriteThrough;
 
 @end
-
 
 //
 // FileSystem
@@ -837,6 +838,37 @@
 @protocol MakeWithFileSystem <NSObject>
 + (instancetype)makeWithFileSystem:(FileSystemProxy *)proxy exception:(ExceptionWrapper *)ex;
 @end
+
+
+//
+// MediaFile
+//
+
+@interface MediaFileProxy : Proxy
+{
+    NSImage *preview;
+}
+
++ (FileType) typeOfUrl:(NSURL *)url;
+
++ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithFile:(NSString *)path type:(FileType)t exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len type:(FileType)t exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithAmiga:(EmulatorProxy *)proxy;
++ (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy type:(FileType)t exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithFileSystem:(FileSystemProxy *)proxy type:(FileType)t exception:(ExceptionWrapper *)ex;
+
+@property (readonly) FileType type;
+// @property (readonly) NSString *name;
+@property (readonly) u64 fnv;
+
+- (void)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex;
+
+@property (readonly, strong) NSImage *previewImage;
+@property (readonly) time_t timeStamp;
+
+@end
+
 
 //
 // AmigaFile

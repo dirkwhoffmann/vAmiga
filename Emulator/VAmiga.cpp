@@ -683,6 +683,35 @@ FloppyDriveAPI::setFlag(DiskFlags mask, bool value)
     drive->setFlag(mask, value);
 }
 
+void
+FloppyDriveAPI::insertBlankDisk(FSVolumeType fstype, BootBlockId bb, string name)
+{
+    drive->insertNew(fstype, bb, name);
+}
+
+void
+FloppyDriveAPI::insertMedia(MediaFile &file, bool wp)
+{
+    drive->insertMediaFile(file, wp);
+}
+
+/*
+void
+FloppyDriveAPI::insertFileSystem(const class MutableFileSystem &fs, bool wp);
+{
+
+    // NOT IMPLEMENTED YET
+    assert(false);
+    // drive->insertFileSystem(device, wp);
+}
+*/
+
+void
+FloppyDriveAPI::ejectDisk()
+{
+    drive->ejectDisk();
+}
+
 
 //
 // Peripherals (HardDrive)

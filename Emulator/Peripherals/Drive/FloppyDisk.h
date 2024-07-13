@@ -103,18 +103,18 @@ private:
 public:
     
     FloppyDisk() = default;
-    FloppyDisk(Diameter dia, Density den) throws { init(dia, den); }
-    FloppyDisk(const FloppyFile &file) throws { init(file); }
-    FloppyDisk(SerReader &reader, Diameter dia, Density den) throws {
-        init(reader, dia, den); }
+    FloppyDisk(Diameter dia, Density den, bool wp = false) throws { init(dia, den, wp); }
+    FloppyDisk(const FloppyFile &file, bool wp = false) throws { init(file, wp); }
+    FloppyDisk(SerReader &reader, Diameter dia, Density den, bool wp = false) throws {
+        init(reader, dia, den, wp); }
     ~FloppyDisk();
     
 private:
     
-    void init(Diameter dia, Density den) throws;
-    void init(const class FloppyFile &file) throws;
-    void init(SerReader &reader, Diameter dia, Density den) throws;
-    
+    void init(Diameter dia, Density den, bool wp) throws;
+    void init(const class FloppyFile &file, bool wp) throws;
+    void init(SerReader &reader, Diameter dia, Density den, bool wp) throws;
+
     
     //
     // Methods from CoreObject

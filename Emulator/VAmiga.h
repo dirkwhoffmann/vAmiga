@@ -578,6 +578,29 @@ struct FloppyDriveAPI : public API {
     /** @brief Sets or clears one or more disk flags
      */
     void setFlag(DiskFlags mask, bool value);
+
+    /** @brief  Inserts a new disk.
+     *  @param  fstype  File system format
+     *  @param  id      Boot block identifier
+     *  @param  name    Name of the disk
+     */
+    void insertBlankDisk(FSVolumeType fstype, BootBlockId id, string name);
+
+    /** @brief  Inserts a disk created from a media file.
+     *  @param  file    A media file wrapper object.
+     *  @param  wp      Write-protection status of the disk.
+     */
+    void insertMedia(MediaFile &file, bool wp);
+
+    /** @brief  Inserts a disk created from a file system.
+     *  @param  fs      A file system wrapper object.
+     *  @param  wp      Write-protection status of the disk.
+     */
+    void insertFileSystem(const class MutableFileSystem &fs, bool wp);
+
+    /** @brief  Ejects the current disk.
+     */
+    void ejectDisk();
 };
 
 
