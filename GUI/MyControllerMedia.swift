@@ -19,6 +19,7 @@ extension MyDocument {
         }
     }
 
+    /*
     @available(*, deprecated)
     func insert(df n: Int, file: FloppyFileProxy, force: Bool = false) throws {
         
@@ -29,6 +30,7 @@ extension MyDocument {
             try dfn.swap(file: file)
         }
     }
+    */
 
     func attach(hd n: Int, file: MediaFileProxy? = nil, force: Bool = false) throws {
 

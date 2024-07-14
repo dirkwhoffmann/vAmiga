@@ -86,12 +86,6 @@ private:
     // Disk state
     DiskFlags flags = 0;
 
-    // Indicates if this disk is write protected
-    [[deprecated]] bool writeProtected = false;
-
-    // Indicates if the disk has been written to
-    [[deprecated]] bool modified = false;
-
     // Checksum of this disk if it was created from an ADF file, 0 otherwise
     u64 fnv = 0;
     

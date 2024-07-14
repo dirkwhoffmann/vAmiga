@@ -1500,19 +1500,26 @@ VAmiga::put(const Cmd &cmd)
 // AmigaAPI
 //
 
-Snapshot *
+MediaFile *
 AmigaAPI::takeSnapshot()
 {
     return amiga->takeSnapshot();
 }
 
+void 
+AmigaAPI::loadSnapshot(const MediaFile &snapshot)
+{
+    amiga->loadSnapshot(snapshot);
+}
+/*
 void
 AmigaAPI::loadSnapshot(const Snapshot &snapshot)
 {
     amiga->loadSnapshot(snapshot);
 }
-
-u64 
+*/
+    
+u64
 AmigaAPI::getAutoInspectionMask()
 {
     return amiga->getAutoInspectionMask();

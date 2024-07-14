@@ -182,36 +182,6 @@ using namespace vamiga::moira;
 
 
 //
-// Amiga proxy
-//
-
-@implementation AmigaProxy
-
-- (AmigaAPI *)amiga
-{
-    return (AmigaAPI *)obj;
-}
-
-- (AmigaInfo)info
-{
-    return [self amiga]->getInfo();
-}
-
-- (AmigaInfo)cachedInfo
-{
-    return [self amiga]->getCachedInfo();
-}
-
-- (SnapshotProxy *)takeSnapshot
-{
-    Snapshot *snapshot = [self amiga]->takeSnapshot();
-    return [SnapshotProxy make:snapshot];
-}
-
-@end
-
-
-//
 // Guards (Breakpoints, Watchpoints)
 //
 
@@ -1284,11 +1254,13 @@ using namespace vamiga::moira;
     [self drive]->drive->ejectDisk();
 }
 
+/*
 - (void)swap:(FloppyFileProxy *)fileProxy exception:(ExceptionWrapper *)ex
 {
     try { return [self drive]->drive->swapDisk(*(FloppyFile *)fileProxy->obj); }
     catch (Error &error) { [ex save:error]; }
 }
+*/
 
 - (NSString *)readTrackBits:(NSInteger)track
 {
@@ -1887,6 +1859,11 @@ using namespace vamiga::moira;
     return [self file]->fnv64();
 }
 
+- (NSInteger)size
+{
+    return [self file]->getSize();
+}
+
 - (void)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { [self file]->writeToFile(string([path fileSystemRepresentation])); }
@@ -2026,7 +2003,7 @@ using namespace vamiga::moira;
 
 + (instancetype)makeWithAmiga:(AmigaProxy *)proxy
 {
-    Snapshot *snapshot = ((AmigaAPI *)proxy->obj)->takeSnapshot();
+    MediaFile *snapshot = ((AmigaAPI *)proxy->obj)->takeSnapshot();
     return [self make:snapshot];
 }
 
@@ -2613,6 +2590,36 @@ using namespace vamiga::moira;
 
 
 //
+// Amiga proxy
+//
+
+@implementation AmigaProxy
+
+- (AmigaAPI *)amiga
+{
+    return (AmigaAPI *)obj;
+}
+
+- (AmigaInfo)info
+{
+    return [self amiga]->getInfo();
+}
+
+- (AmigaInfo)cachedInfo
+{
+    return [self amiga]->getCachedInfo();
+}
+
+- (MediaFileProxy *)takeSnapshot
+{
+    MediaFile *file = [self amiga]->takeSnapshot();
+    return [MediaFileProxy make:file];
+}
+
+@end
+
+
+//
 // Emulator
 //
 
@@ -3003,9 +3010,9 @@ using namespace vamiga::moira;
     [self emu]->wakeUp();
 }
 
-- (void)loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex
+- (void)loadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { [self emu]->emu->main.loadSnapshot(*[proxy snapshot]); }
+    try { [self emu]->emu->main.loadSnapshot(*[proxy file]); }
     catch (Error &error) { [ex save:error]; }
 }
 

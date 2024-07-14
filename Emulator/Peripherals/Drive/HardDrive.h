@@ -90,8 +90,6 @@ class HardDrive : public Drive, public Inspectable<HardDriveInfo> {
     
     // Disk state flags
     DiskFlags flags = 0;
-    [[deprecated]] bool modified = false;
-    [[deprecated]] bool writeProtected = false;
     optional <bool> bootable;
 
     // Indicates if write-through mode is enabled

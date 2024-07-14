@@ -90,6 +90,8 @@
     @public void *obj;    
 }
 
+- (instancetype) initWith:(void *)ref;
+
 @end
 
 @interface CoreComponentProxy : Proxy { }
@@ -275,7 +277,8 @@
 - (void)put:(CmdType)type action:(GamePadCmd)cmd;
 - (void)put:(CmdType)type coord:(CoordCmd)cmd;
 
- - (void) loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex;
+// - (void) loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex;
+- (void) loadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
 
 @end
 
@@ -377,7 +380,7 @@
 @property (readonly) AmigaInfo info;
 @property (readonly) AmigaInfo cachedInfo;
 
-- (SnapshotProxy *) takeSnapshot;
+- (MediaFileProxy *) takeSnapshot;
 
 @end
 
@@ -694,7 +697,7 @@
 - (void)insertBlankDisk:(FSVolumeType)fs bootBlock:(BootBlockId)bb name:(NSString *)name exception:(ExceptionWrapper *)ex;
 - (void)insertMedia:(MediaFileProxy *)proxy protected:(BOOL)wp exception:(ExceptionWrapper *)ex;
 - (void)eject;
-- (void)swap:(FloppyFileProxy *)fileProxy exception:(ExceptionWrapper *)ex __deprecated;
+// - (void)swap:(FloppyFileProxy *)fileProxy exception:(ExceptionWrapper *)ex __deprecated;
 
 - (NSString *)readTrackBits:(NSInteger)track;
 
@@ -854,6 +857,7 @@
 
 + (FileType) typeOfUrl:(NSURL *)url;
 
+// + (instancetype)make:(MediaFile *)file;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithFile:(NSString *)path type:(FileType)t exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len type:(FileType)t exception:(ExceptionWrapper *)ex;
@@ -864,6 +868,7 @@
 @property (readonly) FileType type;
 // @property (readonly) NSString *name;
 @property (readonly) u64 fnv;
+@property (readonly) NSInteger size;
 
 - (void)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 

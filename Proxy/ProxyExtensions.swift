@@ -171,7 +171,7 @@ extension EmulatorProxy {
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 
-    func loadSnapshot(_ proxy: SnapshotProxy) throws {
+    func loadSnapshot(_ proxy: MediaFileProxy) throws {
 
         let exception = ExceptionWrapper()
         loadSnapshot(proxy, exception: exception)
@@ -254,6 +254,7 @@ extension FloppyDriveProxy {
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 
+    /*
     @available(*, deprecated)
     func swap(file: FloppyFileProxy) throws {
         
@@ -261,6 +262,7 @@ extension FloppyDriveProxy {
         swap(file, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
+    */
     
     func insertNew(fileSystem: FSVolumeType, bootBlock: BootBlockId, name: String) throws {
         

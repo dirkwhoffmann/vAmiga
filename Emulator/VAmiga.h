@@ -93,13 +93,14 @@ public:
      *  @note   The function transfers the ownership to the caller. It is
      *          his responsibility of the caller to free the object.
      */
-    Snapshot *takeSnapshot();
+    MediaFile *takeSnapshot();
 
     /** @brief  Loads a snapshot into the emulator.
      *
      *  @param  snapshot    Reference to a snapshot.
      */
-    void loadSnapshot(const Snapshot &snapshot);
+    void loadSnapshot(const MediaFile &snapshot);
+    // void loadSnapshot(const Snapshot &snapshot);
 
     /// @}
     /// @name Auto-inspecting components

@@ -387,9 +387,10 @@ public:
 public:
 
     // Takes a snapshot
-    Snapshot *takeSnapshot();
+    MediaFile *takeSnapshot();
 
     // Loads the current state from a snapshot file
+    void loadSnapshot(const MediaFile &file) throws;
     void loadSnapshot(const Snapshot &snapshot) throws;
 
     // Services a snapshot event

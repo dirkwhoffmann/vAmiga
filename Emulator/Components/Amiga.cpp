@@ -817,7 +817,7 @@ Amiga::clearFlag(u32 flag)
     flags &= ~flag;
 }
 
-Snapshot *
+MediaFile *
 Amiga::takeSnapshot()
 {
     {   SUSPENDED
@@ -901,6 +901,20 @@ Amiga::latestUserSnapshot()
     return result;
 }
 */
+
+void 
+Amiga::loadSnapshot(const MediaFile &file)
+{
+    try {
+
+        const Snapshot &snapshot = dynamic_cast<const Snapshot &>(file);
+        loadSnapshot(snapshot);
+
+    } catch (...) {
+
+        throw Error(ERROR_FILE_TYPE_MISMATCH);
+    }
+}
 
 void
 Amiga::loadSnapshot(const Snapshot &snapshot)

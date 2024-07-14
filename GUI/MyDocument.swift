@@ -21,7 +21,7 @@ class MyDocument: NSDocument {
     var amiga: EmulatorProxy!
 
     // Snapshots
-    private(set) var snapshots = ManagedArray<SnapshotProxy>(maxSize: 512 * 1024 * 1024)
+    private(set) var snapshots = ManagedArray<MediaFileProxy>(maxSize: 512 * 1024 * 1024)
 
     //
     // Initializing
@@ -64,7 +64,7 @@ class MyDocument: NSDocument {
     // Creating file proxys
     //
 
-    func createMediaFileProxy(from url: URL, allowedTypes: [FileType]) throws -> MediaFileProxy? {
+    func createMediaFileProxy(from url: URL, allowedTypes: [FileType]) throws -> MediaFileProxy {
 
         debug(.media, "Reading file \(url.lastPathComponent)")
 
@@ -97,6 +97,7 @@ class MyDocument: NSDocument {
                       "The type of this file is not known to the emulator.")
     }
 
+    /*
     func createFileProxy(from url: URL, allowedTypes: [FileType]) throws -> AmigaFileProxy? {
             
         debug(.media, "Reading file \(url.lastPathComponent)")
@@ -155,6 +156,7 @@ class MyDocument: NSDocument {
         throw VAError(.FILE_TYPE_MISMATCH,
                       "The type of this file is not known to the emulator.")
     }
+    */
 
     //
     // Loading
@@ -227,16 +229,26 @@ class MyDocument: NSDocument {
                   force: Bool = false,
                   remember: Bool = true) throws {
         
-        let proxy = try createFileProxy(from: url, allowedTypes: types)
-        
-        if remember && proxy is FloppyFileProxy {
-            myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
+        let file = try createMediaFileProxy(from: url, allowedTypes: types)
+
+        // Remember the URL if requested
+        if remember {
+
+            switch file.type {
+
+            case .SNAPSHOT:
+                // document.snapshots.append(file)
+                break
+
+            case .ADF, .EADF, .HDF, .EXE, .IMG, .ST:
+                myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
+
+            default:
+                break
+            }
         }
-        if remember && proxy is HDFFileProxy {
-            myAppDelegate.noteNewRecentlyAttachedHdrURL(url)
-        }
-        
-        try addMedia(proxy: proxy!, df: df, hd: hd, force: force)
+
+        try addMedia(proxy: file, df: df, hd: hd, force: force)
     }
     
     func addMedia(proxy: MediaFileProxy,
@@ -271,6 +283,7 @@ class MyDocument: NSDocument {
         }
     }
 
+    /*
     @available(*, deprecated, message: "Use addMedia:(proxy: MediaFileProxy instead")
     func addMedia(proxy: AmigaFileProxy,
                   df: Int = 0,
@@ -294,20 +307,22 @@ class MyDocument: NSDocument {
             try insert(df: df, file: proxy, force: force)
         }
     }
+    */
 
     func processSnapshotFile(_ proxy: MediaFileProxy, force: Bool = false) throws {
 
-        // TODO: UNCOMMENT:
-        // try amiga.loadSnapshot(proxy)
-        // snapshots.append(proxy, size: proxy.size)
+        try amiga.loadSnapshot(proxy)
+        snapshots.append(proxy, size: proxy.size)
     }
 
+    /*
     @available(*, deprecated)
     func processSnapshotFile(_ proxy: SnapshotProxy, force: Bool = false) throws {
         
         try amiga.loadSnapshot(proxy)
         snapshots.append(proxy, size: proxy.size)
     }
+    */
     
     //
     // Exporting disks
