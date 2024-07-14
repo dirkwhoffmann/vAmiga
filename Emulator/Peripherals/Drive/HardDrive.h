@@ -116,6 +116,9 @@ public:
     // Creates a hard drive with the contents of a file system
     void init(const MutableFileSystem &fs) throws;
 
+    // Creates a hard drive with the contents of a media file
+    void init(const MediaFile &file) throws;
+
     // Creates a hard drive with the contents of an HDF
     void init(const HDFFile &hdf) throws;
 

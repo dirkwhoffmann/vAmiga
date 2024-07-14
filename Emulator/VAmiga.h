@@ -1318,7 +1318,7 @@ public:
     void execScript(std::stringstream &ss);
     void execScript(const std::ifstream &fs);
     void execScript(const string &contents);
-    // void execScript(const MediaFile &file);
+    void execScript(const MediaFile &file);
 
     /// @}
 };

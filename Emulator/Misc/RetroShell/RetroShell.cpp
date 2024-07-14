@@ -185,6 +185,25 @@ RetroShell::execScript(const string &contents)
 }
 
 void
+RetroShell::execScript(const MediaFile &file)
+{
+    string s;
+
+    switch (file.type()) {
+
+        case FILETYPE_SCRIPT:
+
+            s = string((char *)file.getData(), file.getSize());
+            try { execScript(s); } catch (util::Exception &) { }
+
+        default:
+
+            throw Error(ERROR_FILE_TYPE_MISMATCH);
+    }
+
+}
+
+void
 RetroShell::serviceEvent()
 {
     emulator.put(Cmd(CMD_RSH_EXECUTE));

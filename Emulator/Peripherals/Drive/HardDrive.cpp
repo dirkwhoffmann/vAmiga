@@ -82,6 +82,20 @@ HardDrive::init(const MutableFileSystem &fs)
     fs.exportVolume(data.ptr, geometry.numBytes());
 }
 
+void 
+HardDrive::init(const MediaFile &file)
+{
+    try {
+
+        const HDFFile &hdf = dynamic_cast<const HDFFile &>(file);
+        init(hdf);
+
+    } catch (...) {
+
+        throw Error(ERROR_FILE_TYPE_MISMATCH);
+    }
+}
+
 void
 HardDrive::init(const HDFFile &hdf)
 {

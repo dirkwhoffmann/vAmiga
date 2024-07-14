@@ -692,9 +692,9 @@
 
 - (BOOL)isInsertable:(Diameter)type density:(Density)density;
 - (void)insertBlankDisk:(FSVolumeType)fs bootBlock:(BootBlockId)bb name:(NSString *)name exception:(ExceptionWrapper *)ex;
-- (void)insertMedia:(MediaFileProxy *)proxy protected:(BOOL)wp;
+- (void)insertMedia:(MediaFileProxy *)proxy protected:(BOOL)wp exception:(ExceptionWrapper *)ex;
 - (void)eject;
-- (void)swap:(FloppyFileProxy *)fileProxy exception:(ExceptionWrapper *)ex;
+- (void)swap:(FloppyFileProxy *)fileProxy exception:(ExceptionWrapper *)ex __deprecated;
 
 - (NSString *)readTrackBits:(NSInteger)track;
 
@@ -731,8 +731,10 @@
 - (BOOL)getFlag:(DiskFlags)mask;
 - (void)setFlag:(DiskFlags)mask value:(BOOL)value;
 
+- (void)attachMediaFile:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
+
  - (void)attachFile:(NSURL *)path exception:(ExceptionWrapper *)ex;
-- (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex;
+- (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex __deprecated;
 - (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
 - (void)format:(FSVolumeType)fs name:(NSString *)name exception:(ExceptionWrapper *)ex;
 - (void)changeGeometry:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
@@ -800,6 +802,7 @@
 - (void)pressKey:(char)c;
 - (void)pressSpecialKey:(RetroShellKey)key;
 - (void)pressSpecialKey:(RetroShellKey)key shift:(BOOL)shift;
+- (void)executeScript:(MediaFileProxy *)file;
 
 @end
 

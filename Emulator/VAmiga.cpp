@@ -1075,13 +1075,11 @@ RetroShellAPI::execScript(const string &contents)
     retroShell->execScript(contents);
 }
 
-/*
- void
- RetroShellAPI::execScript(const MediaFile &file)
- {
- retroShell->execScript(file);
- }
- */
+void
+RetroShellAPI::execScript(const MediaFile &file)
+{
+    retroShell->execScript(file);
+}
 
 void
 RetroShellAPI::setStream(std::ostream &os)

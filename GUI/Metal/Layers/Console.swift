@@ -149,6 +149,15 @@ class Console: Layer {
         
     }
 
+    func runScript(script: MediaFileProxy) {
+
+        open()
+
+        amiga.retroShell.executeScript(script)
+        isDirty = true
+    }
+
+    @available(*, deprecated)
     func runScript(script: ScriptProxy) {
         
         open()

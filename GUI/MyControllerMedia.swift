@@ -8,7 +8,18 @@
 // -----------------------------------------------------------------------------
 
 extension MyDocument {
-    
+
+    func insert(df n: Int, file: MediaFileProxy, force: Bool = false) throws {
+
+        var dfn: FloppyDriveProxy { return amiga.df(n)! }
+
+        if force || proceedWithUnsavedFloppyDisk(drive: dfn) {
+
+            try dfn.swap(file: file)
+        }
+    }
+
+    @available(*, deprecated)
     func insert(df n: Int, file: FloppyFileProxy, force: Bool = false) throws {
         
         var dfn: FloppyDriveProxy { return amiga.df(n)! }
@@ -19,6 +30,33 @@ extension MyDocument {
         }
     }
 
+    func attach(hd n: Int, file: MediaFileProxy? = nil, force: Bool = false) throws {
+
+        var hdn: HardDriveProxy { return amiga.hd(n)! }
+
+        func attach() throws {
+
+            amiga.set(.HDC_CONNECT, drive: n, enable: true)
+            if let proxy = file { try hdn.attach(file: proxy) }
+        }
+
+        if force || proceedWithUnsavedHardDisk(drive: hdn) {
+
+            if amiga.poweredOff {
+
+                try attach()
+
+            } else if force || askToPowerOff() {
+
+                amiga.powerOff()
+                try attach()
+                amiga.powerOn()
+                try amiga.run()
+            }
+        }
+    }
+
+    @available(*, deprecated)
     func attach(hd n: Int, file: HDFFileProxy? = nil, force: Bool = false) throws {
         
         var hdn: HardDriveProxy { return amiga.hd(n)! }

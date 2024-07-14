@@ -13,6 +13,66 @@ import Darwin
 // Factory extensions
 //
 
+extension MediaFileProxy {
+
+    static func makeWith(buffer: UnsafeRawPointer, length: Int, type: FileType) throws -> Self {
+
+        let exc = ExceptionWrapper()
+        let obj = make(withBuffer: buffer, length: length, type: type, exception: exc)
+        if exc.errorCode != .OK { throw VAError(exc) }
+        return obj!
+    }
+
+    static func make(with data: Data, type: FileType) throws -> Self {
+
+        let exc = ExceptionWrapper()
+        let obj = make(with: data, type: type, exception: exc)
+        if exc.errorCode != .OK { throw VAError(exc) }
+        return obj!
+    }
+
+    private static func make(with data: Data, type: FileType, exception: ExceptionWrapper) -> Self? {
+
+        return data.withUnsafeBytes { uwbp -> Self? in
+
+            return make(withBuffer: uwbp.baseAddress!, length: uwbp.count, type: type, exception: exception)
+        }
+    }
+
+    static func make(with url: URL) throws -> Self {
+
+        let exc = ExceptionWrapper()
+        let obj = make(withFile: url.path, exception: exc)
+        if exc.errorCode != .OK { throw VAError(exc) }
+        return obj!
+    }
+
+    static func make(with url: URL, type: FileType) throws -> Self {
+
+        let exc = ExceptionWrapper()
+        let obj = make(withFile: url.path, type: type, exception: exc)
+        if exc.errorCode != .OK { throw VAError(exc) }
+        return obj!
+    }
+
+    static func make(with drive: FloppyDriveProxy, type: FileType) throws -> Self {
+
+        let exc = ExceptionWrapper()
+        let obj = make(withDrive: drive, type: type, exception: exc)
+        if exc.errorCode != .OK { throw VAError(exc) }
+        return obj!
+    }
+
+    static func make(with fs: FileSystemProxy, type: FileType) throws -> Self {
+
+        let exc = ExceptionWrapper()
+        let obj = make(withFileSystem: fs, type: type, exception: exc)
+        if exc.errorCode != .OK { throw VAError(exc) }
+        return obj!
+    }
+}
+
+
 extension MakeWithBuffer {
     
     static func makeWith(buffer: UnsafeRawPointer, length: Int) throws -> Self {
@@ -187,6 +247,14 @@ extension MemProxy {
 
 extension FloppyDriveProxy {
 
+    func swap(file: MediaFileProxy) throws {
+
+        let exception = ExceptionWrapper()
+        insertMedia(file, protected: false, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+
+    @available(*, deprecated)
     func swap(file: FloppyFileProxy) throws {
         
         let exception = ExceptionWrapper()
@@ -211,6 +279,14 @@ extension HardDriveProxy {
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 
+    func attach(file: MediaFileProxy) throws {
+
+        let exception = ExceptionWrapper()
+        attachMediaFile(file, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+
+    @available(*, deprecated)
     func attach(hdf: HDFFileProxy) throws {
         
         let exception = ExceptionWrapper()

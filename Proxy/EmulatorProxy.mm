@@ -1273,9 +1273,10 @@ using namespace vamiga::moira;
     catch (Error &error) { [ex save:error]; }
 }
 
-- (void)insertMedia:(MediaFileProxy *)proxy protected:(BOOL)wp
+- (void)insertMedia:(MediaFileProxy *)proxy protected:(BOOL)wp exception:(ExceptionWrapper *)ex
 {
-    [self drive]->insertMedia(*(MediaFile *)proxy->obj, wp);
+    try { [self drive]->insertMedia(*(MediaFile *)proxy->obj, wp); }
+    catch (Error &error) { [ex save:error]; }
 }
 
 - (void)eject
@@ -1380,6 +1381,15 @@ using namespace vamiga::moira;
 {
     try {
         [self drive]->drive->init([url fileSystemRepresentation]);
+    }  catch (Error &error) {
+        [ex save:error];
+    }
+}
+
+- (void)attachMediaFile:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
+{
+    try {
+        [self drive]->drive->init(*(MediaFile *)proxy->obj);
     }  catch (Error &error) {
         [ex save:error];
     }
@@ -1758,12 +1768,10 @@ using namespace vamiga::moira;
     [self shell]->press(key, shift);
 }
 
-/*
 - (void)executeScript:(MediaFileProxy *)file
 {
     [self shell]->execScript(*(MediaFile *)file->obj);
 }
-*/
 
 @end
 

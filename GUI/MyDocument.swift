@@ -64,6 +64,39 @@ class MyDocument: NSDocument {
     // Creating file proxys
     //
 
+    func createMediaFileProxy(from url: URL, allowedTypes: [FileType]) throws -> MediaFileProxy? {
+
+        debug(.media, "Reading file \(url.lastPathComponent)")
+
+        // If the provided URL points to compressed file, decompress it first
+        let newUrl = url.unpacked(maxSize: 2048 * 1024)
+
+        // Iterate through all allowed file types
+        for type in allowedTypes {
+
+            do {
+                switch type {
+
+                case .SNAPSHOT, .SCRIPT, .ADF, .EADF, .IMG, .ST, .DMS, .EXE, .DIR, .HDF:
+
+                    return try MediaFileProxy.make(with: newUrl, type: type)
+
+                default:
+                    break
+                }
+
+            } catch let error as VAError {
+                if error.errorCode != .FILE_TYPE_MISMATCH {
+                    throw error
+                }
+            }
+        }
+
+        // None of the allowed types matched the file
+        throw VAError(.FILE_TYPE_MISMATCH,
+                      "The type of this file is not known to the emulator.")
+    }
+
     func createFileProxy(from url: URL, allowedTypes: [FileType]) throws -> AmigaFileProxy? {
             
         debug(.media, "Reading file \(url.lastPathComponent)")
@@ -206,6 +239,39 @@ class MyDocument: NSDocument {
         try addMedia(proxy: proxy!, df: df, hd: hd, force: force)
     }
     
+    func addMedia(proxy: MediaFileProxy,
+                  df: Int = 0,
+                  hd: Int = 0,
+                  force: Bool = false) throws {
+
+        switch proxy.type {
+
+        case .SNAPSHOT:
+
+            try processSnapshotFile(proxy)
+
+        case .SCRIPT:
+
+            // TODO: Uncomment
+            // parent.renderer.console.runScript(script: proxy)
+            break
+
+        case .HDF:
+
+            // TODO: Uncomment
+            try attach(hd: hd, file: proxy, force: force)
+            break
+
+        case .ADF, .DMS, .EXE, .EADF, .IMG, .ST:
+
+            try insert(df: df, file: proxy, force: force)
+
+        default:
+            break
+        }
+    }
+
+    @available(*, deprecated, message: "Use addMedia:(proxy: MediaFileProxy instead")
     func addMedia(proxy: AmigaFileProxy,
                   df: Int = 0,
                   hd: Int = 0,
@@ -228,7 +294,15 @@ class MyDocument: NSDocument {
             try insert(df: df, file: proxy, force: force)
         }
     }
-    
+
+    func processSnapshotFile(_ proxy: MediaFileProxy, force: Bool = false) throws {
+
+        // TODO: UNCOMMENT:
+        // try amiga.loadSnapshot(proxy)
+        // snapshots.append(proxy, size: proxy.size)
+    }
+
+    @available(*, deprecated)
     func processSnapshotFile(_ proxy: SnapshotProxy, force: Bool = false) throws {
         
         try amiga.loadSnapshot(proxy)
