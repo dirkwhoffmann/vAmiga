@@ -320,7 +320,7 @@ using namespace vamiga::moira;
 - (NSString *)disassembleRecordedInstr:(NSInteger)i length:(NSInteger *)len
 {
     isize result;
-    const char *str = [self cpu]->cpu->disassembleRecordedInstr((int)i, &result);
+    const char *str = [self cpu]->debugger.disassembleRecordedInstr((int)i, &result);
     *len = (NSInteger)result;
     
     return str ? @(str) : nullptr;
@@ -328,38 +328,38 @@ using namespace vamiga::moira;
 
 - (NSString *)disassembleRecordedBytes:(NSInteger)i length:(NSInteger)len
 {
-    const char *str = [self cpu]->cpu->disassembleRecordedWords(i, len);
+    const char *str = [self cpu]->debugger.disassembleRecordedWords(i, len);
     return str ? @(str) : nullptr;
 }
 
 - (NSString *)disassembleRecordedFlags:(NSInteger)i
 {
-    const char *str = [self cpu]->cpu->disassembleRecordedFlags((int)i);
+    const char *str = [self cpu]->debugger.disassembleRecordedFlags((int)i);
     return str ? @(str) : nullptr;
 }
 
 - (NSString *)disassembleRecordedPC:(NSInteger)i
 {
-    const char *str = [self cpu]->cpu->disassembleRecordedPC((int)i);
+    const char *str = [self cpu]->debugger.disassembleRecordedPC((int)i);
     return str ? @(str) : nullptr;
 }
 
 - (NSString *)disassembleWord:(NSInteger)value
 {
-    const char *str = [self cpu]->cpu->disassembleWord((u16)value);
+    const char *str = [self cpu]->debugger.disassembleWord((u16)value);
     return str ? @(str) : nullptr;
 }
 
 - (NSString *)disassembleAddr:(NSInteger)addr
 {
-    const char *str = [self cpu]->cpu->disassembleAddr((u32)addr);
+    const char *str = [self cpu]->debugger.disassembleAddr((u32)addr);
     return str ? @(str) : nullptr;
 }
 
 - (NSString *)disassembleInstr:(NSInteger)addr length:(NSInteger *)len
 {
     isize result;
-    const char *str = [self cpu]->cpu->disassembleInstr((u32)addr, &result);
+    const char *str = [self cpu]->debugger.disassembleInstr((u32)addr, &result);
     *len = result;
     
     return str ? @(str) : nullptr;
@@ -367,13 +367,13 @@ using namespace vamiga::moira;
 
 - (NSString *)disassembleWords:(NSInteger)addr length:(NSInteger)len
 {
-    const char *str = [self cpu]->cpu->disassembleWords((u32)addr, len);
+    const char *str = [self cpu]->debugger.disassembleWords((u32)addr, len);
     return str ? @(str) : nullptr;
 }
 
 - (NSString *)vectorName:(NSInteger)nr
 {
-    auto name = [self cpu]->cpu->debugger.vectorName(u8(nr));
+    auto name = [self cpu]->debugger.vectorName(u8(nr));
     return @(name.c_str());
 }
 
@@ -471,19 +471,19 @@ using namespace vamiga::moira;
     assert(data);
     const u8 *bytes = (const u8 *)[data bytes];
     
-    try { return [self mem]->mem->loadRom(bytes, [data length]); }
+    try { return [self mem]->loadRom(bytes, [data length]); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (void)loadRomFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
-    try { return [self mem]->mem->loadRom([url fileSystemRepresentation]); }
+    try { return [self mem]->loadRom([url fileSystemRepresentation]); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (void)deleteExt
 {
-    [self mem]->mem->deleteExt();
+    [self mem]->deleteExt();
 }
 
 - (BOOL)isExt:(NSURL *)url
@@ -491,16 +491,9 @@ using namespace vamiga::moira;
     return ExtendedRomFile::isExtendedRomFile([url fileSystemRepresentation]);
 }
 
-/*
-- (void)loadExt:(MediaFileProxy *)proxy
-{
-    [self mem]->mem->loadExt(*(MediaFile *)proxy->obj);
-}
-*/
-
 - (void)loadExt:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self mem]->mem->loadExt(*(MediaFile *)proxy->obj); }
+    try { return [self mem]->loadExt(*(MediaFile *)proxy->obj); }
     catch (Error &error) { [ex save:error]; }
 }
 
@@ -509,31 +502,31 @@ using namespace vamiga::moira;
     assert(data);
     const u8 *bytes = (const u8 *)[data bytes];
     
-    try { return [self mem]->mem->loadExt(bytes, [data length]); }
+    try { return [self mem]->loadExt(bytes, [data length]); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (void)loadExtFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
-    try { return [self mem]->mem->loadExt([url fileSystemRepresentation]); }
+    try { return [self mem]->loadExt([url fileSystemRepresentation]); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (void)saveRom:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
-    try { return [self mem]->mem->saveRom([url fileSystemRepresentation]); }
+    try { return [self mem]->saveRom([url fileSystemRepresentation]); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (void)saveWom:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
-    try { return [self mem]->mem->saveWom([url fileSystemRepresentation]); }
+    try { return [self mem]->saveWom([url fileSystemRepresentation]); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (void)saveExt:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
-    try { return [self mem]->mem->saveExt([url fileSystemRepresentation]); }
+    try { return [self mem]->saveExt([url fileSystemRepresentation]); }
     catch (Error &error) { [ex save:error]; }
 }
 
@@ -542,9 +535,9 @@ using namespace vamiga::moira;
     assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
     
     if (accessor == ACCESSOR_CPU) {
-        return [self mem]->mem->getMemSrc <ACCESSOR_CPU> ((u32)addr);
+        return [self mem]->debugger.getMemSrc(ACCESSOR_CPU, (u32)addr);
     } else {
-        return [self mem]->mem->getMemSrc <ACCESSOR_AGNUS> ((u32)addr);
+        return [self mem]->debugger.getMemSrc(ACCESSOR_AGNUS, (u32)addr);
     }
 }
 
@@ -553,9 +546,9 @@ using namespace vamiga::moira;
     assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
     
     if (accessor == ACCESSOR_CPU) {
-        return [self mem]->mem->spypeek16 <ACCESSOR_CPU> ((u32)addr);
+        return [self mem]->debugger.spypeek16(ACCESSOR_CPU, (u32)addr);
     } else {
-        return [self mem]->mem->spypeek16 <ACCESSOR_AGNUS> ((u32)addr);
+        return [self mem]->debugger.spypeek16(ACCESSOR_AGNUS, (u32)addr);
     }
 }
 

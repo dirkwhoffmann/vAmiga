@@ -284,13 +284,67 @@ GuardsAPI::toggle(isize nr)
 isize
 CPUDebuggerAPI::loggedInstructions() const
 {
-    return debugger->loggedInstructions();
+    return cpu->debugger.loggedInstructions();
 }
 
 void
 CPUDebuggerAPI::clearLog()
 {
-    return debugger->clearLog();
+    return cpu->debugger.clearLog();
+}
+
+const char *
+CPUDebuggerAPI::disassembleRecordedInstr(isize i, isize *len)
+{
+    return cpu->disassembleRecordedInstr(i, len);
+}
+
+const char *
+CPUDebuggerAPI::disassembleRecordedWords(isize i, isize len)
+{
+    return cpu->disassembleRecordedWords(i, len);
+}
+
+const char *
+CPUDebuggerAPI::disassembleRecordedFlags(isize i)
+{
+    return cpu->disassembleRecordedFlags(i);
+}
+
+const char *
+CPUDebuggerAPI::disassembleRecordedPC(isize i)
+{
+    return cpu->disassembleRecordedPC(i);
+}
+
+const char *
+CPUDebuggerAPI::disassembleWord(u16 value)
+{
+    return cpu->disassembleWord(value);
+}
+
+const char *
+CPUDebuggerAPI::disassembleAddr(u32 addr)
+{
+    return cpu->disassembleAddr(addr);
+}
+
+const char *
+CPUDebuggerAPI::disassembleInstr(u32 addr, isize *len)
+{
+    return cpu->disassembleInstr(addr, len);
+}
+
+const char *
+CPUDebuggerAPI::disassembleWords(u32 addr, isize len)
+{
+    return cpu->disassembleWords(addr, len);
+}
+
+string
+CPUDebuggerAPI::vectorName(isize i)
+{
+    return cpu->debugger.vectorName(u8(i));
 }
 
 const CPUConfig &
@@ -339,6 +393,45 @@ DeniseAPI::getCachedInfo() const
 // Components (Memory)
 //
 
+MemorySource 
+MemoryDebuggerAPI::getMemSrc(Accessor acc, u32 addr) const
+{
+    switch (acc) {
+
+        case ACCESSOR_CPU:      return mem->getMemSrc<ACCESSOR_CPU>(addr);
+        case ACCESSOR_AGNUS:    return mem->getMemSrc<ACCESSOR_AGNUS>(addr);
+
+        default:
+            fatalError;
+    }
+}
+
+u8
+MemoryDebuggerAPI::spypeek8(Accessor acc, u32 addr) const
+{
+    switch (acc) {
+
+        case ACCESSOR_CPU:      return mem->spypeek8<ACCESSOR_CPU>(addr);
+        case ACCESSOR_AGNUS:    return mem->spypeek8<ACCESSOR_AGNUS>(addr);
+
+        default:
+            fatalError;
+    }
+}
+
+u16 
+MemoryDebuggerAPI::spypeek16(Accessor acc, u32 addr) const
+{
+    switch (acc) {
+
+        case ACCESSOR_CPU:      return mem->spypeek16<ACCESSOR_CPU>(addr);
+        case ACCESSOR_AGNUS:    return mem->spypeek16<ACCESSOR_AGNUS>(addr);
+
+        default:
+            fatalError;
+    }
+}
+
 string
 MemoryDebuggerAPI::ascDump(Accessor acc, u32 addr, isize bytes) const
 {
@@ -346,8 +439,8 @@ MemoryDebuggerAPI::ascDump(Accessor acc, u32 addr, isize bytes) const
 
     switch (acc) {
 
-        case ACCESSOR_CPU:      return debugger->ascDump<ACCESSOR_CPU>(addr, bytes);
-        case ACCESSOR_AGNUS:    return debugger->ascDump<ACCESSOR_AGNUS>(addr, bytes);
+        case ACCESSOR_CPU:      return mem->debugger.ascDump<ACCESSOR_CPU>(addr, bytes);
+        case ACCESSOR_AGNUS:    return mem->debugger.ascDump<ACCESSOR_AGNUS>(addr, bytes);
 
         default:
             fatalError;
@@ -361,8 +454,8 @@ MemoryDebuggerAPI::hexDump(Accessor acc, u32 addr, isize bytes, isize sz) const
 
     switch (acc) {
 
-        case ACCESSOR_CPU:      return debugger->hexDump<ACCESSOR_CPU>(addr, bytes, sz);
-        case ACCESSOR_AGNUS:    return debugger->hexDump<ACCESSOR_AGNUS>(addr, bytes, sz);
+        case ACCESSOR_CPU:      return mem->debugger.hexDump<ACCESSOR_CPU>(addr, bytes, sz);
+        case ACCESSOR_AGNUS:    return mem->debugger.hexDump<ACCESSOR_AGNUS>(addr, bytes, sz);
 
         default:
             fatalError;
@@ -376,8 +469,8 @@ MemoryDebuggerAPI::memDump(Accessor acc, u32 addr, isize bytes, isize sz) const
 
     switch (acc) {
 
-        case ACCESSOR_CPU:      return debugger->memDump<ACCESSOR_CPU>(addr, bytes, sz);
-        case ACCESSOR_AGNUS:    return debugger->memDump<ACCESSOR_AGNUS>(addr, bytes, sz);
+        case ACCESSOR_CPU:      return mem->debugger.memDump<ACCESSOR_CPU>(addr, bytes, sz);
+        case ACCESSOR_AGNUS:    return mem->debugger.memDump<ACCESSOR_AGNUS>(addr, bytes, sz);
 
         default:
             fatalError;
@@ -437,9 +530,51 @@ MemoryAPI::loadRom(const fs::path &path)
 }
 
 void
+MemoryAPI::loadExt(const fs::path &path)
+{
+    mem->loadExt(path);
+}
+
+void
 MemoryAPI::loadRom(MediaFile &file)
 {
     mem->loadRom(file);
+}
+
+void
+MemoryAPI::loadExt(MediaFile &file)
+{
+    mem->loadExt(file);
+}
+
+void
+MemoryAPI::loadRom(const u8 *buf, isize len)
+{
+    mem->loadRom(buf, len);
+}
+
+void
+MemoryAPI::loadExt(const u8 *buf, isize len)
+{
+    mem->loadExt(buf, len);
+}
+
+void 
+MemoryAPI::saveRom(const string &path)
+{
+    mem->saveRom(path);
+}
+
+void 
+MemoryAPI::saveWom(const string &path)
+{
+    mem->saveWom(path);
+}
+
+void 
+MemoryAPI::saveExt(const string &path)
+{
+    mem->saveExt(path);
 }
 
 void
@@ -1168,7 +1303,7 @@ VAmiga::VAmiga() {
     cpu.emu = emu;
     cpu.cpu = &emu->main.cpu;
     cpu.debugger.emu = emu;
-    cpu.debugger.debugger = &emu->main.cpu.debugger;
+    cpu.debugger.cpu = &emu->main.cpu;
     cpu.breakpoints.emu = emu;
     cpu.breakpoints.guards = &emu->main.cpu.breakpoints;
     cpu.watchpoints.emu = emu;
@@ -1221,7 +1356,7 @@ VAmiga::VAmiga() {
     mem.emu = emu;
     mem.mem = &emu->main.mem;
     mem.debugger.emu = emu;
-    mem.debugger.debugger = &emu->main.mem.debugger;
+    mem.debugger.mem = &emu->main.mem;
 
     paula.emu = emu;
     paula.paula = &emu->main.paula;

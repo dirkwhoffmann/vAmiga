@@ -363,7 +363,7 @@ class CPUDebuggerAPI : public API {
 
     friend class VAmiga;
 
-    class moira::Debugger *debugger = nullptr;
+    class CPU *cpu = nullptr;
 
 public:
 
@@ -378,15 +378,31 @@ public:
     /** @brief  Empties the record buffer.
      */
     void clearLog();
+
+    /** @brief  Disassembles a recorded instruction from the log buffer
+     */
+    const char *disassembleRecordedInstr(isize i, isize *len);
+    const char *disassembleRecordedWords(isize i, isize len);
+    const char *disassembleRecordedFlags(isize i);
+    const char *disassembleRecordedPC(isize i);
+
+    /** @brief  Disassembles the instruction at the specified address
+     */
+    const char *disassembleWord(u16 value);
+    const char *disassembleAddr(u32 addr);
+    const char *disassembleInstr(u32 addr, isize *len);
+    const char *disassembleWords(u32 addr, isize len);
+
+    string vectorName(isize i);
 };
 
 class CPUAPI : public API {
 
     friend class VAmiga;
 
-public:
-
     class CPU *cpu = nullptr;
+
+public:
 
     CPUDebuggerAPI debugger;
     GuardsAPI breakpoints;
@@ -429,12 +445,21 @@ class MemoryDebuggerAPI : public API {
 
     friend class VAmiga;
 
-    class MemoryDebugger *debugger = nullptr;
+    class Memory *mem = nullptr;
 
 public:
 
     /// @name Debugging memory
     /// @{
+
+    /**  @brief  Returns the memory source for a given address
+     */
+    MemorySource getMemSrc(Accessor acc, u32 addr) const;
+
+    /** @brief  Reads a value from memory without causing side effects.
+     */
+    u8 spypeek8(Accessor acc, u32 addr) const;
+    u16 spypeek16(Accessor acc, u32 addr) const;
 
     /** @brief  Returns a string representations for a portion of memory.
      */
@@ -445,7 +470,7 @@ public:
     /// @}
 };
 
-struct MemoryAPI : public API {
+class MemoryAPI : public API {
 
     friend class VAmiga;
 
@@ -485,10 +510,23 @@ public:
      *          The ROM type is determined automatically.
      */
     void loadRom(const fs::path &path);
+    void loadExt(const fs::path &path);
 
-    /** @brief  Loads a ROM, provided by a RomFile object
+    /** @brief  Loads a ROM, provided by a RomFile
      */
     void loadRom(MediaFile &file);
+    void loadExt(MediaFile &file);
+
+    /** @brief  Loads a ROM, provided by a memory buffer
+     */
+    void loadRom(const u8 *buf, isize len);
+    void loadExt(const u8 *buf, isize len);
+
+    /** @brief  Saves a Rom to disk
+     */
+    void saveRom(const string &path);
+    void saveWom(const string &path);
+    void saveExt(const string &path);
 
     /** @brief  Removes a ROM
      */
