@@ -394,6 +394,8 @@ CPU::cacheInfo(CPUInfo &info) const
 {
     {   SYNCHRONIZED
         
+        info.clock = clock;
+
         info.pc0 = getPC0() & 0xFFFFFF;
         info.ird = getIRD();
         info.irc = getIRC();
@@ -413,6 +415,7 @@ CPU::cacheInfo(CPUInfo &info) const
         info.caar = (u8)getCAAR();
         info.ipl = (u8)getIPL();
         info.fc = (u8)readFC(); // TODO
+        
         info.halt = isHalted();
     }
 }

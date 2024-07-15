@@ -281,6 +281,18 @@ GuardsAPI::toggle(isize nr)
     guards->toggle(nr);
 }
 
+isize
+CPUDebuggerAPI::loggedInstructions() const
+{
+    return debugger->loggedInstructions();
+}
+
+void
+CPUDebuggerAPI::clearLog()
+{
+    return debugger->clearLog();
+}
+
 const CPUConfig &
 CPUAPI::getConfig() const
 {
@@ -1155,6 +1167,8 @@ VAmiga::VAmiga() {
 
     cpu.emu = emu;
     cpu.cpu = &emu->main.cpu;
+    cpu.debugger.emu = emu;
+    cpu.debugger.debugger = &emu->main.cpu.debugger;
     cpu.breakpoints.emu = emu;
     cpu.breakpoints.guards = &emu->main.cpu.breakpoints;
     cpu.watchpoints.emu = emu;

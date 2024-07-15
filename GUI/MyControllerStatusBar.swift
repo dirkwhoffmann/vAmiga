@@ -29,7 +29,7 @@ extension MyController {
     func refreshStatusBar() {
         
         let running = emu.running
-        let halted = emu.cpu.halted
+        let cpuinfo = emu.cpu.info
         let warp = emu.warping
 
         // Df0 - Df3
@@ -84,7 +84,7 @@ extension MyController {
             cylSlot2: true,
             cylSlot3: true,
 
-            haltIcon: halted,
+            haltIcon: cpuinfo.halt,
             cmdLeftIcon: false, // mapLeft || mapRight,
             cmdRightIcon: false, // mapLeft || mapRight,
             debugIcon: true,
@@ -218,9 +218,9 @@ extension MyController {
             activityBar.fillColor = color[index]
         }
 
-        let clock = emu.cpu.clock
+        let state = emu.cpu.info
 
-        speedometer.updateWith(cycle: clock,
+        speedometer.updateWith(cycle: state.clock,
                                emuFrame: Int64(emu.agnus.info.frame),
                                gpuFrame: renderer.frames)
 

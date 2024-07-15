@@ -299,32 +299,22 @@ using namespace vamiga::moira;
 
 - (CPUInfo)info
 {
-    return [self cpu]->cpu->getInfo();
+    return [self cpu]->getInfo();
 }
 
 - (CPUInfo)cachedInfo
 {
-    return [self cpu]->cpu->getCachedInfo();
-}
-
-- (i64)clock
-{
-    return [self cpu]->cpu->getCpuClock();
-}
-
-- (BOOL)halted
-{
-    return [self cpu]->cpu->isHalted();
+    return [self cpu]->getCachedInfo();
 }
 
 - (NSInteger)loggedInstructions
 {
-    return [self cpu]->cpu->debugger.loggedInstructions();
+    return [self cpu]->debugger.loggedInstructions();
 }
 
 - (void)clearLog
 {
-    return [self cpu]->cpu->debugger.clearLog();
+    return [self cpu]->debugger.clearLog();
 }
 
 - (NSString *)disassembleRecordedInstr:(NSInteger)i length:(NSInteger *)len

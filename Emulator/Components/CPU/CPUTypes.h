@@ -172,6 +172,8 @@ CPUConfig;
 
 typedef struct
 {
+    Cycle clock;
+
     u32 pc0;
     u16 ird;
     u16 irc;
@@ -188,6 +190,7 @@ typedef struct
     u8 caar;
     u8 ipl;
     u8 fc;
+
     bool halt;
 }
 CPUInfo;

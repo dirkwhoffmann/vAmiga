@@ -343,8 +343,6 @@
     
 @property (readonly) CPUInfo info;
 @property (readonly) CPUInfo cachedInfo;
-@property (readonly) i64 clock;
-@property (readonly) BOOL halted;
 
 @property (readonly) NSInteger loggedInstructions;
 - (void)clearLog;

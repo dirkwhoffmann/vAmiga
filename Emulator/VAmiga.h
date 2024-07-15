@@ -19,7 +19,7 @@
 
 namespace vamiga {
 
-namespace moira { class Guards; }
+namespace moira { class Guards; class Debugger; }
 
 //
 // Base class for all APIs
@@ -359,12 +359,36 @@ public:
 
 };
 
-struct CPUAPI : public API {
+class CPUDebuggerAPI : public API {
 
     friend class VAmiga;
 
+    class moira::Debugger *debugger = nullptr;
+
+public:
+
+    /** @brief  Returns the number of instructions in the record buffer.
+     *  @note   The record buffer is only filled in track mode. To save
+     *          computation time, the GUI enables track mode when the CPU
+     *          inspector is opened and disables track mode when it is
+     *          closed.
+     */
+    isize loggedInstructions() const;
+
+    /** @brief  Empties the record buffer.
+     */
+    void clearLog();
+};
+
+class CPUAPI : public API {
+
+    friend class VAmiga;
+
+public:
+
     class CPU *cpu = nullptr;
 
+    CPUDebuggerAPI debugger;
     GuardsAPI breakpoints;
     GuardsAPI watchpoints;
 

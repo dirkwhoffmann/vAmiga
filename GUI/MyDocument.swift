@@ -13,6 +13,7 @@ class MyDocument: NSDocument {
     
     // The window controller for this document
     var parent: MyController { return windowControllers.first as! MyController }
+    var console: Console { return parent.renderer.console }
 
     // Optional media URL provided on app launch
     var launchUrl: URL?
@@ -264,13 +265,11 @@ class MyDocument: NSDocument {
 
         case .SCRIPT:
 
-            // TODO: Uncomment
-            // parent.renderer.console.runScript(script: proxy)
+            console.runScript(script: proxy)
             break
 
         case .HDF:
 
-            // TODO: Uncomment
             try attach(hd: hd, file: proxy, force: force)
             break
 

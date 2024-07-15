@@ -195,7 +195,8 @@ RetroShell::execScript(const MediaFile &file)
 
             s = string((char *)file.getData(), file.getSize());
             try { execScript(s); } catch (util::Exception &) { }
-
+            break;
+            
         default:
 
             throw Error(ERROR_FILE_TYPE_MISMATCH);
