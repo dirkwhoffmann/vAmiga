@@ -408,11 +408,16 @@ class MemoryDebuggerAPI : public API {
 
 public:
 
+    /// @name Debugging memory
+    /// @{
+
     /** @brief  Returns a string representations for a portion of memory.
      */
     string ascDump(Accessor acc, u32 addr, isize bytes) const;
     string hexDump(Accessor acc, u32 addr, isize bytes, isize sz = 1) const;
     string memDump(Accessor acc, u32 addr, isize bytes, isize sz = 1) const;
+
+    /// @}
 };
 
 struct MemoryAPI : public API {
@@ -424,6 +429,9 @@ struct MemoryAPI : public API {
 public:
 
     MemoryDebuggerAPI debugger;
+
+    /// @name Analying the component
+    /// @{
 
     /** @brief  Returns the component's current configuration.
      */
@@ -444,11 +452,26 @@ public:
     const RomTraits &getWomTraits() const;
     const RomTraits &getExtTraits() const;
 
+    /// @}
+    /// @name Handling ROMs
+    /// @{
+
+    /** @brief  Loads a ROM from a file
+     *          The ROM type is determined automatically.
+     */
+    void loadRom(const fs::path &path);
+
+    /** @brief  Loads a ROM, provided by a RomFile object
+     */
+    void loadRom(MediaFile &file);
+
     /** @brief  Removes a ROM
      */
     void deleteRom();
     void deleteWom();
     void deleteExt();
+
+    /// @}
 };
 
 //

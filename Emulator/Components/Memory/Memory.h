@@ -399,13 +399,13 @@ public:
     void eraseExt() { std::memset(ext, 0, config.extSize); }
     
     // Installs a Boot Rom or Kickstart Rom
-    void loadRom(class RomFile &rom) throws;
-    void loadRom(const string &path) throws;
+    void loadRom(class MediaFile &file) throws;
+    void loadRom(const std::filesystem::path &path) throws;
     void loadRom(const u8 *buf, isize len) throws;
     
     // Installs a Kickstart expansion Rom
-    void loadExt(class ExtendedRomFile &rom) throws;
-    void loadExt(const string &path) throws;
+    void loadExt(class MediaFile &file) throws;
+    void loadExt(const std::filesystem::path &path) throws;
     void loadExt(const u8 *buf, isize len) throws;
 
     // Saves a Rom to disk

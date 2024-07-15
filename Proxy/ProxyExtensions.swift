@@ -181,7 +181,7 @@ extension EmulatorProxy {
 
 extension MemProxy {
  
-    func loadRom(_ proxy: RomFileProxy) throws {
+    func loadRom(_ proxy: MediaFileProxy) throws {
 
         let exception = ExceptionWrapper()
         loadRom(proxy, exception: exception)
@@ -202,7 +202,7 @@ extension MemProxy {
         if exception.errorCode != .OK { throw VAError(exception) }
     }
     
-    func loadExt(_ proxy: ExtendedRomFileProxy) throws {
+    func loadExt(_ proxy: MediaFileProxy) throws {
 
         let exception = ExceptionWrapper()
         loadExt(proxy, exception: exception)

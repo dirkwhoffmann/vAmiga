@@ -419,6 +419,18 @@ MemoryAPI::getExtTraits() const
 }
 
 void 
+MemoryAPI::loadRom(const fs::path &path)
+{
+    mem->loadRom(path);
+}
+
+void
+MemoryAPI::loadRom(MediaFile &file)
+{
+    mem->loadRom(file);
+}
+
+void
 MemoryAPI::deleteRom()
 {
     mem->deleteRom();
@@ -435,6 +447,7 @@ MemoryAPI::deleteExt()
 {
     mem->deleteExt();
 }
+
 
 //
 // Components (Paula)

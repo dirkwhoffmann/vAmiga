@@ -470,9 +470,9 @@ using namespace vamiga::moira;
     return RomFile::isRomFile([url fileSystemRepresentation]);
 }
 
-- (void)loadRom:(RomFileProxy *)proxy exception:(ExceptionWrapper *)ex
+- (void)loadRom:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self mem]->mem->loadRom(*(RomFile *)proxy->obj); }
+    try { return [self mem]->loadRom(*(MediaFile *)proxy->obj); }
     catch (Error &error) { [ex save:error]; }
 }
 
@@ -501,14 +501,16 @@ using namespace vamiga::moira;
     return ExtendedRomFile::isExtendedRomFile([url fileSystemRepresentation]);
 }
 
-- (void)loadExt:(ExtendedRomFileProxy *)proxy
+/*
+- (void)loadExt:(MediaFileProxy *)proxy
 {
-    [self mem]->mem->loadExt(*(ExtendedRomFile *)proxy->obj);
+    [self mem]->mem->loadExt(*(MediaFile *)proxy->obj);
 }
+*/
 
-- (void)loadExt:(ExtendedRomFileProxy *)proxy exception:(ExceptionWrapper *)ex
+- (void)loadExt:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self mem]->mem->loadExt(*(ExtendedRomFile *)proxy->obj); }
+    try { return [self mem]->mem->loadExt(*(MediaFile *)proxy->obj); }
     catch (Error &error) { [ex save:error]; }
 }
 

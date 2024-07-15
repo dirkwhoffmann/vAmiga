@@ -200,7 +200,6 @@ RetroShell::execScript(const MediaFile &file)
 
             throw Error(ERROR_FILE_TYPE_MISMATCH);
     }
-
 }
 
 void

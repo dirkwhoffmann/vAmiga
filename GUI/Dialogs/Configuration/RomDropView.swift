@@ -82,7 +82,7 @@ class RomDropView: DropView {
         
         do {
             
-            let rom = try RomFileProxy.make(with: url)
+            let rom = try MediaFileProxy.make(with: url)
             try amiga.mem.loadRom(rom)
 
             // Check if we should keep this Rom
@@ -129,7 +129,7 @@ class ExtRomDropView: DropView {
         
         do {
             
-            let ext = try ExtendedRomFileProxy.make(with: url)
+            let ext = try MediaFileProxy.make(with: url)
             try amiga.mem.loadExt(ext)
             return true
             

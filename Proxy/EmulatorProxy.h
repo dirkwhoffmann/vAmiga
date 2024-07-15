@@ -158,12 +158,6 @@
     HardDriveProxy *hd1;
     HardDriveProxy *hd2;
     HardDriveProxy *hd3;
-    /*
-    HdControllerProxy *hd0con;
-    HdControllerProxy *hd1con;
-    HdControllerProxy *hd2con;
-    HdControllerProxy *hd3con;
-    */
     KeyboardProxy *keyboard;
     MemProxy *mem;
     PaulaProxy *paula;
@@ -277,7 +271,6 @@
 - (void)put:(CmdType)type action:(GamePadCmd)cmd;
 - (void)put:(CmdType)type coord:(CoordCmd)cmd;
 
-// - (void) loadSnapshot:(SnapshotProxy *)proxy exception:(ExceptionWrapper *)ex;
 - (void) loadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
 
 @end
@@ -413,13 +406,13 @@
 
 - (void)deleteRom;
 - (BOOL)isRom:(NSURL *)url;
-- (void)loadRom:(RomFileProxy *)proxy exception:(ExceptionWrapper *)ex;
+- (void)loadRom:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
 - (void)loadRomFromBuffer:(NSData *)buffer exception:(ExceptionWrapper *)ex;
 - (void)loadRomFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
 
 - (void)deleteExt;
 - (BOOL)isExt:(NSURL *)url;
-- (void)loadExt:(ExtendedRomFileProxy *)proxy exception:(ExceptionWrapper *)ex;
+- (void)loadExt:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
 - (void)loadExtFromBuffer:(NSData *)buffer exception:(ExceptionWrapper *)ex;
 - (void)loadExtFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
 

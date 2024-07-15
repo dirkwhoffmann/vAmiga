@@ -678,28 +678,37 @@ Memory::hasArosRom() const
 */
 
 void
-Memory::loadRom(RomFile &file)
+Memory::loadRom(MediaFile &file)
 {
     assert(amiga.isPoweredOff());
     
-    // Decrypt Rom
-    file.decrypt();
+    try {
 
-    // Allocate memory
-    allocRom((i32)file.data.size);
+        RomFile &romFile = dynamic_cast<RomFile &>(file);
 
-    // Load Rom
-    file.flash(rom);
+        // Decrypt Rom
+        romFile.decrypt();
 
-    // Add a Wom if a Boot Rom is installed instead of a Kickstart Rom
-    hasBootRom() ? (void)allocWom(KB(256)) : deleteWom();
+        // Allocate memory
+        allocRom((i32)romFile.data.size);
 
-    // Remove extended Rom (if any)
-    deleteExt();
+        // Load Rom
+        romFile.flash(rom);
+
+        // Add a Wom if a Boot Rom is installed instead of a Kickstart Rom
+        hasBootRom() ? (void)allocWom(KB(256)) : deleteWom();
+
+        // Remove extended Rom (if any)
+        deleteExt();
+
+    } catch (...) {
+
+        throw Error(ERROR_FILE_TYPE_MISMATCH);
+    }
 }
 
 void
-Memory::loadRom(const string &path)
+Memory::loadRom(const std::filesystem::path &path)
 {
     RomFile file(path);
     loadRom(file);
@@ -713,17 +722,26 @@ Memory::loadRom(const u8 *buf, isize len)
 }
 
 void
-Memory::loadExt(ExtendedRomFile &file)
+Memory::loadExt(MediaFile &file)
 {
-    // Allocate memory
-    allocExt((i32)file.data.size);
-    
-    // Load Rom
-    file.flash(ext);
+    try {
+
+        RomFile &extFile = dynamic_cast<RomFile &>(file);
+
+        // Allocate memory
+        allocExt((i32)extFile.data.size);
+
+        // Load Rom
+        file.flash(ext);
+
+    } catch (...) {
+
+        throw Error(ERROR_FILE_TYPE_MISMATCH);
+    }
 }
 
 void
-Memory::loadExt(const string &path)
+Memory::loadExt(const std::filesystem::path &path)
 {
     ExtendedRomFile file(path);
     loadExt(file);
