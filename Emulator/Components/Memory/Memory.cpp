@@ -684,10 +684,11 @@ Memory::loadRom(MediaFile &file)
     
     try {
 
-        RomFile &romFile = dynamic_cast<RomFile &>(file);
+        auto &romFile = dynamic_cast<RomFile &>(file);
 
-        // Decrypt Rom
-        romFile.decrypt();
+        if (romFile.type())
+            // Decrypt Rom
+            romFile.decrypt();
 
         // Allocate memory
         allocRom((i32)romFile.data.size);
@@ -701,10 +702,20 @@ Memory::loadRom(MediaFile &file)
         // Remove extended Rom (if any)
         deleteExt();
 
+    } catch (...) { try {
+
+        auto &extFile = dynamic_cast<ExtendedRomFile &>(file);
+
+        // Allocate memory
+        allocExt((i32)extFile.data.size);
+
+        // Load Rom
+        extFile.flash(ext);
+
     } catch (...) {
 
         throw Error(ERROR_FILE_TYPE_MISMATCH);
-    }
+    }}
 }
 
 void

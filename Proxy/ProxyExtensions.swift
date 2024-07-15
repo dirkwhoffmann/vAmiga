@@ -288,14 +288,6 @@ extension HardDriveProxy {
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 
-    @available(*, deprecated)
-    func attach(hdf: HDFFileProxy) throws {
-        
-        let exception = ExceptionWrapper()
-        attach(hdf, exception: exception)
-        if exception.errorCode != .OK { throw VAError(exception) }
-    }
-
     func attach(c: Int, h: Int, s: Int, b: Int) throws {
         
         let exception = ExceptionWrapper()

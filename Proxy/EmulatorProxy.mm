@@ -1369,10 +1369,10 @@ using namespace vamiga::moira;
     }
 }
 
-- (void)attach:(HDFFileProxy *)hdf exception:(ExceptionWrapper *)ex
+- (void)attach:(MediaFileProxy *)file exception:(ExceptionWrapper *)ex
 {
     try {
-        [self drive]->drive->init(*(HDFFile *)hdf->obj);
+        [self drive]->drive->init(*(HDFFile *)file->obj);
     }  catch (Error &error) {
         [ex save:error];
     }
@@ -2072,14 +2072,6 @@ using namespace vamiga::moira;
 {
     try { return [self make: new Script((const u8 *)buf, len)]; }
     catch (Error &error) { [ex save:error]; return nil; }
-}
-
-- (void)execute:(EmulatorProxy *)proxy
-{
-    auto *am = [proxy amiga];
-    auto *amiga = (AmigaAPI *)am->obj;
-
-    [self script]->execute(*(amiga->amiga));
 }
 
 @end

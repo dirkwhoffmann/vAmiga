@@ -58,33 +58,6 @@ extension MyDocument {
         }
     }
 
-    @available(*, deprecated)
-    func attach(hd n: Int, file: HDFFileProxy? = nil, force: Bool = false) throws {
-        
-        var hdn: HardDriveProxy { return amiga.hd(n)! }
-
-        func attach() throws {
-                      
-            amiga.set(.HDC_CONNECT, drive: n, enable: true)
-            if let proxy = file { try hdn.attach(hdf: proxy) }
-        }
-        
-        if force || proceedWithUnsavedHardDisk(drive: hdn) {
-            
-            if amiga.poweredOff {
-                
-                try attach()
-                
-            } else if force || askToPowerOff() {
-                
-                amiga.powerOff()
-                try attach()
-                amiga.powerOn()
-                try amiga.run()
-            }
-        }
-    }
-    
     func detach(hd n: Int, force: Bool = false) throws {
         
         var hdn: HardDriveProxy { return amiga.hd(n)! }

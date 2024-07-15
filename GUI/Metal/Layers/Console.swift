@@ -156,12 +156,4 @@ class Console: Layer {
         amiga.retroShell.executeScript(script)
         isDirty = true
     }
-
-    @available(*, deprecated)
-    func runScript(script: ScriptProxy) {
-        
-        open()
-        script.execute(amiga)
-        isDirty = true
-    }
 }

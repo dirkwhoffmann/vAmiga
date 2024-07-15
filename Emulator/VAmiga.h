@@ -11,6 +11,7 @@
 
 #include "VAmigaTypes.h"
 #include "Error.h"
+#include "MediaFile.h"
 #include <filesystem>
 
 // REMOVE EVENTUALLY:
@@ -33,12 +34,12 @@ public:
     API() { }
     API(Emulator *emu) : emu(emu) { }
 
-    bool isUserThread() const;
-
-private:
-
     void suspend();
     void resume();
+
+protected:
+
+    bool isUserThread() const;
 };
 
 //
@@ -49,9 +50,9 @@ class AmigaAPI : public API {
 
     friend class VAmiga;
 
-public:
-
     class Amiga *amiga = nullptr;
+
+public:
 
     /// @name Analyzing the emulator
     /// @{
@@ -138,9 +139,9 @@ class DmaDebuggerAPI : public API {
 
     friend class VAmiga;
 
-public:
-
     class DmaDebugger *dmaDebugger = nullptr;
+
+public:
 
     /** @brief  Returns the component's current configuration.
      */
