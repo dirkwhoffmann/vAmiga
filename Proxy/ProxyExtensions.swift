@@ -275,7 +275,7 @@ extension FloppyDriveProxy {
 extension HardDriveProxy {
 
     func attach(url: URL) throws {
-        
+
         let exception = ExceptionWrapper()
         attachFile(url, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
@@ -284,31 +284,31 @@ extension HardDriveProxy {
     func attach(file: MediaFileProxy) throws {
 
         let exception = ExceptionWrapper()
-        attachMediaFile(file, exception: exception)
+        attach(file, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 
     func attach(c: Int, h: Int, s: Int, b: Int) throws {
-        
+
         let exception = ExceptionWrapper()
         attach(c, h: h, s: s, b: b, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 
     func format(fs: FSVolumeType, name: String) throws {
-        
+
         let exception = ExceptionWrapper()
         format(fs, name: name, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 
     func changeGeometry(c: Int, h: Int, s: Int, b: Int = 512) throws {
-        
+
         let exception = ExceptionWrapper()
         changeGeometry(c, h: h, s: s, b: b, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
-    
+
     func writeToFile(_ url: URL) throws {
 
         let exception = ExceptionWrapper()
@@ -321,6 +321,15 @@ extension HardDriveProxy {
         let exception = ExceptionWrapper()
         enableWriteThrough(exception)
         if exception.errorCode != .OK { throw VAError(exception) }
+    }
+
+    func createHDF() throws -> HDFFileProxy? {
+
+        let exception = ExceptionWrapper()
+        let result = createHDF(exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+
+        return result;
     }
 }
 

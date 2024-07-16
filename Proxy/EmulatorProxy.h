@@ -608,6 +608,7 @@
 
 @interface SerialPortProxy : CoreComponentProxy { }
 
+@property (readonly) SerialPortConfig config;
 @property (readonly) SerialPortInfo info;
 @property (readonly) SerialPortInfo cachedInfo;
 
@@ -724,7 +725,7 @@
 - (BOOL)getFlag:(DiskFlags)mask;
 - (void)setFlag:(DiskFlags)mask value:(BOOL)value;
 
-- (void)attachMediaFile:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
+- (void)attach:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
 
  - (void)attachFile:(NSURL *)path exception:(ExceptionWrapper *)ex;
 - (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
@@ -735,6 +736,7 @@
 - (void)enableWriteThrough:(ExceptionWrapper *)ex;
 - (void)disableWriteThrough;
 
+- (HDFFileProxy *)createHDF:(ExceptionWrapper *)ex;
 @end
 
 //
@@ -1015,6 +1017,7 @@
 @interface HDFFileProxy : DiskFileProxy <MakeWithFile, MakeWithBuffer, MakeWithHardDrive> {
 }
 
++ (instancetype)make:(void *)obj;
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithHardDrive:(HardDriveProxy *)drive exception:(ExceptionWrapper *)ex;

@@ -754,6 +754,41 @@ ControlPortAPI::getCachedInfo() const
 
 
 //
+// Ports (SerialPort)
+//
+
+const SerialPortConfig &
+SerialPortAPI::getConfig() const
+{
+    return serialPort->getConfig();
+}
+
+const SerialPortInfo &
+SerialPortAPI::getInfo() const
+{
+    return serialPort->getInfo();
+}
+
+const SerialPortInfo &
+SerialPortAPI::getCachedInfo() const
+{
+    return serialPort->getCachedInfo();
+}
+
+int 
+SerialPortAPI::readIncomingPrintableByte() const
+{
+    return serialPort->readIncomingPrintableByte();
+}
+
+int 
+SerialPortAPI::readOutgoingPrintableByte() const
+{
+    return serialPort->readOutgoingPrintableByte();
+}
+
+
+//
 // Ports (VideoPort)
 //
 
@@ -947,6 +982,55 @@ void
 HardDriveAPI::changeGeometry(isize c, isize h, isize s, isize b)
 {
     return drive->changeGeometry(c, h, s, b);
+}
+
+void
+HardDriveAPI::attach(const std::filesystem::path &path)
+{
+    drive->init(path.string());
+}
+
+void 
+HardDriveAPI::attach(const MediaFile &file)
+{
+    drive->init(file);
+}
+
+void
+HardDriveAPI::attach(isize c, isize h, isize s, isize b)
+{
+    auto geometry = GeometryDescriptor(c, h, s, b);
+    drive->init(geometry);
+}
+
+void 
+HardDriveAPI::format(FSVolumeType fs, const string &name)
+{
+    drive->format(fs, name);
+}
+
+void 
+HardDriveAPI::writeToFile(std::filesystem::path path)
+{
+    drive->writeToFile(path);
+}
+
+void 
+HardDriveAPI::enableWriteThrough()
+{
+    drive->enableWriteThrough();
+}
+
+void 
+HardDriveAPI::disableWriteThrough()
+{
+    drive->disableWriteThrough();
+}
+
+MediaFile *
+HardDriveAPI::createHDF()
+{
+    return new HDFFile(*drive);
 }
 
 

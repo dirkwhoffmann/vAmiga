@@ -719,7 +719,7 @@ class HdControllerAPI : public API {
 
 public:
 
-    /** @brief  Provides details about the currently selected chip revision.
+    /** @brief  Provides details about the controller
      */
     // const HdcTraits &getTraits() const;
 
@@ -733,7 +733,7 @@ public:
     const HdcStats &getStats() const;
 };
 
-struct HardDriveAPI : public API {
+class HardDriveAPI : public API {
 
     friend class VAmiga;
 
@@ -776,9 +776,37 @@ public:
      *  @param h    Heads
      *  @param s    Sectors
      *  @param b    Block size
-     *  ‘
      */
     void changeGeometry(isize c, isize h, isize s, isize b = 512);
+
+    /** @brief  Attaches a hard drive provided by an URL to a media file.
+     *  @param  path    Path to the media file.
+     */
+    void attach(const std::filesystem::path &path);
+
+    /** @brief  Attaches a hard drive provided by a media file.
+     *  @param  file    A media file wrapper object.
+     */
+    void attach(const MediaFile &file);
+
+    /** @brief  Attaches a hard drive with a particular geometry.
+     *  @param  c       Number of cylinders
+     *  @param  h       Number of heads
+     *  @param  s       Number of sectors
+     *  @param  b       Bytes per sector
+     */
+    void attach(isize c, isize h, isize s, isize b = 512);
+
+    /** @brief  Formats the hard drive
+     */
+    void format(FSVolumeType fs, const string &name);
+
+    void writeToFile(std::filesystem::path path);
+
+    void enableWriteThrough();
+    void disableWriteThrough();
+
+    MediaFile *createHDF();
 };
 
 
@@ -947,9 +975,9 @@ class AudioPortAPI : public API {
 
     friend class VAmiga;
 
-public:
-
     class AudioPort *port = nullptr;
+
+public:
 
     /** @brief  Returns the component's current configuration.
      */
@@ -1032,11 +1060,25 @@ public:
 // Ports (SerialPort)
 //
 
-struct SerialPortAPI : public API {
+class SerialPortAPI : public API {
 
     friend class VAmiga;
 
     class SerialPort *serialPort = nullptr;
+
+public:
+
+    /** @brief  Returns the component's current configuration.
+     */
+    const SerialPortConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    const SerialPortInfo &getInfo() const;
+    const SerialPortInfo &getCachedInfo() const;
+
+    int readIncomingPrintableByte() const;
+    int readOutgoingPrintableByte() const;
 };
 
 
@@ -1048,9 +1090,9 @@ class VideoPortAPI : public API {
 
     friend class VAmiga;
 
-public:
-
     class VideoPort *videoPort = nullptr;
+
+public:
 
     /** @brief  Returns the component's current configuration.
      */
@@ -1139,13 +1181,9 @@ class DefaultsAPI : public API {
 
 public:
 
-    DefaultsAPI(Defaults *defaults) : defaults(defaults) { }
-
     ///
     /// @{
     /// @name Loading and saving the key-value storage
-
-public:
 
     /** @brief  Loads a storage file from disk
      *  @throw  VC64Error (#ERROR_FILE_NOT_FOUND)
@@ -1180,8 +1218,6 @@ public:
     /// @}
     /// @{
     /// @name Reading key-value pairs
-
-public:
 
     /** @brief  Queries a key-value pair.
      *  @param  key     The key.
@@ -1338,9 +1374,10 @@ class HostAPI : public API {
 
     friend class VAmiga;
 
+    class Host *host = nullptr;
+
 public:
 
-    class Host *host = nullptr;
 };
 
 
@@ -1354,10 +1391,10 @@ class RetroShellAPI : public API {
 
     friend class VAmiga;
 
+    class RetroShell *retroShell = nullptr;
+
 public:
 
-    class RetroShell *retroShell = nullptr;
-    
     /// @name Querying the console
     /// @{
     ///
@@ -1443,11 +1480,13 @@ struct RecorderAPI : public API {
 // Misc (Debugger)
 //
 
-struct RemoteManagerAPI : public API {
+class RemoteManagerAPI : public API {
 
     friend class VAmiga;
 
     class RemoteManager *remoteManager = nullptr;
+
+public:
 
     /// @name Analyzing the emulator
     /// @{
@@ -1505,9 +1544,7 @@ public:
     //
     // Static methods
     //
-    
-public:
-    
+
     /** @brief  Returns a version string for this release.
      */
     static string version();
@@ -1520,9 +1557,7 @@ public:
     //
     // Initializing
     //
-    
-public:
-    
+
     VAmiga();
     ~VAmiga();
 

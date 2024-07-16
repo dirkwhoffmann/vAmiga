@@ -1090,24 +1090,29 @@ using namespace vamiga::moira;
     return (SerialPortAPI *)obj;
 }
 
+- (SerialPortConfig)config
+{
+    return [self serial]->getConfig();
+}
+
 - (SerialPortInfo)info
 {
-    return [self serial]->serialPort->getInfo();
+    return [self serial]->getInfo();
 }
 
 - (SerialPortInfo)cachedInfo
 {
-    return [self serial]->serialPort->getCachedInfo();
+    return [self serial]->getCachedInfo();
 }
 
 - (NSInteger)readIncomingPrintableByte
 {
-    return [self serial]->serialPort->readIncomingPrintableByte();
+    return [self serial]->readIncomingPrintableByte();
 }
 
 - (NSInteger)readOutgoingPrintableByte
 {
-    return [self serial]->serialPort->readOutgoingPrintableByte();
+    return [self serial]->readOutgoingPrintableByte();
 }
 
 @end
@@ -1246,185 +1251,6 @@ using namespace vamiga::moira;
 
 @end
 
-//
-// HardDrive proxy
-//
-
-@implementation HardDriveProxy
-
-@synthesize controller;
-
-- (instancetype)initWith:(void *)ref
-{
-    if (self = [super init]) {
-
-        HardDriveAPI *hd = (HardDriveAPI *)ref;
-        obj = ref;
-        controller = [[HdControllerProxy alloc] initWith:&hd->controller];
-    }
-    return self;
-}
-
-- (HardDriveAPI *)drive
-{
-    return (HardDriveAPI *)obj;
-}
-
-- (HardDriveTraits)traits
-{
-    return [self drive]->getTraits();
-}
-
-- (PartitionTraits) partitionTraits:(NSInteger)nr
-{
-    return [self drive]->getPartitionTraits(nr);
-}
-
-- (HardDriveInfo)info
-{
-    return [self drive]->getInfo();
-}
-
-- (BOOL)getFlag:(DiskFlags)mask
-{
-    return [self drive]->getFlag(mask);
-}
-
-- (void)setFlag:(DiskFlags)mask value:(BOOL)value
-{
-    [self drive]->setFlag(mask, value);
-}
-
-- (NSInteger)capacity
-{
-    return [self drive]->drive->getGeometry().numBytes();
-}
-
-- (NSInteger)partitions
-{
-    return [self drive]->drive->numPartitions();
-}
-
-- (NSInteger)cylinders
-{
-    return [self drive]->drive->getGeometry().cylinders;
-}
-
-- (NSInteger)heads
-{
-    return [self drive]->drive->getGeometry().heads;
-}
-
-- (NSInteger)sectors
-{
-    return [self drive]->drive->getGeometry().sectors;
-}
-
-- (NSInteger)bsize
-{
-    return [self drive]->drive->getGeometry().bsize;
-}
-
-- (void)attachFile:(NSURL *)url exception:(ExceptionWrapper *)ex
-{
-    try {
-        [self drive]->drive->init([url fileSystemRepresentation]);
-    }  catch (Error &error) {
-        [ex save:error];
-    }
-}
-
-- (void)attachMediaFile:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
-{
-    try {
-        [self drive]->drive->init(*(MediaFile *)proxy->obj);
-    }  catch (Error &error) {
-        [ex save:error];
-    }
-}
-
-- (void)attach:(MediaFileProxy *)file exception:(ExceptionWrapper *)ex
-{
-    try {
-        [self drive]->drive->init(*(HDFFile *)file->obj);
-    }  catch (Error &error) {
-        [ex save:error];
-    }
-}
-
-- (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b
-        exception:(ExceptionWrapper *)ex
-{
-    GeometryDescriptor geometry;
-    geometry.cylinders = c;
-    geometry.heads = h;
-    geometry.sectors = s;
-    geometry.bsize = b;
-    
-    try {
-        [self drive]->drive->init(geometry);
-    }  catch (Error &error) {
-        [ex save:error];
-    }
-}
-
-- (void)format:(FSVolumeType)fs name:(NSString *)name exception:(ExceptionWrapper *)ex
-{
-    auto str = string([name UTF8String]);
-    
-    try {
-        [self drive]->drive->format(fs, str);
-    }  catch (Error &error) {
-        [ex save:error];
-    }
-}
-
-- (void)changeGeometry:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex
-{
-    try {
-        [self drive]->changeGeometry(c, h, s, b);
-    }  catch (Error &error) {
-        [ex save:error];
-    }
-}
-
-- (NSMutableArray *)geometries
-{
-    NSMutableArray *data = [[NSMutableArray alloc] init];
-
-    auto geometries = [self drive]->geometries([self traits].blocks);
-
-    for (auto &g : geometries) {
-
-        auto c = std::get<0>(g);
-        auto h = std::get<1>(g);
-        auto s = std::get<2>(g);
-
-        NSInteger encoded = c << 32 | h << 16 | s;
-        [data addObject: [NSNumber numberWithInteger:encoded]];
-    }
-    
-    return data;
-}
-
-- (void)writeToFile:(NSURL *)url exception:(ExceptionWrapper *)ex
-{
-    try { return [self drive]->drive->writeToFile([url fileSystemRepresentation]); }
-    catch (Error &error) { [ex save:error]; }
-}
-
-- (void)enableWriteThrough:(ExceptionWrapper *)ex
-{
-    try { return [self drive]->drive->enableWriteThrough(); }
-    catch (Error &error) { [ex save:error]; }
-}
-
-- (void)disableWriteThrough
-{
-    [self drive]->drive->disableWriteThrough();
-}
-
-@end
 
 //
 // HdController proxy
@@ -1887,6 +1713,153 @@ using namespace vamiga::moira;
 
 
 //
+// HardDrive proxy
+//
+
+@implementation HardDriveProxy
+
+@synthesize controller;
+
+- (instancetype)initWith:(void *)ref
+{
+    if (self = [super init]) {
+
+        HardDriveAPI *hd = (HardDriveAPI *)ref;
+        obj = ref;
+        controller = [[HdControllerProxy alloc] initWith:&hd->controller];
+    }
+    return self;
+}
+
+- (HardDriveAPI *)drive
+{
+    return (HardDriveAPI *)obj;
+}
+
+- (HardDriveTraits)traits
+{
+    return [self drive]->getTraits();
+}
+
+- (PartitionTraits) partitionTraits:(NSInteger)nr
+{
+    return [self drive]->getPartitionTraits(nr);
+}
+
+- (HardDriveInfo)info
+{
+    return [self drive]->getInfo();
+}
+
+- (BOOL)getFlag:(DiskFlags)mask
+{
+    return [self drive]->getFlag(mask);
+}
+
+- (void)setFlag:(DiskFlags)mask value:(BOOL)value
+{
+    [self drive]->setFlag(mask, value);
+}
+
+- (void)attachFile:(NSURL *)url exception:(ExceptionWrapper *)ex
+{
+    try {
+        [self drive]->attach([url fileSystemRepresentation]);
+    }  catch (Error &error) {
+        [ex save:error];
+    }
+}
+
+- (void)attach:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
+{
+    try {
+        [self drive]->attach(*(MediaFile *)proxy->obj);
+    }  catch (Error &error) {
+        [ex save:error];
+    }
+}
+
+- (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b
+     exception:(ExceptionWrapper *)ex
+{
+    try {
+        [self drive]->attach(c, h, s, b);
+    }  catch (Error &error) {
+        [ex save:error];
+    }
+}
+
+- (void)format:(FSVolumeType)fs name:(NSString *)name exception:(ExceptionWrapper *)ex
+{
+    auto str = string([name UTF8String]);
+
+    try {
+        [self drive]->format(fs, str);
+    }  catch (Error &error) {
+        [ex save:error];
+    }
+}
+
+- (void)changeGeometry:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex
+{
+    try {
+        [self drive]->changeGeometry(c, h, s, b);
+    }  catch (Error &error) {
+        [ex save:error];
+    }
+}
+
+- (NSMutableArray *)geometries
+{
+    NSMutableArray *data = [[NSMutableArray alloc] init];
+
+    auto geometries = [self drive]->geometries([self traits].blocks);
+
+    for (auto &g : geometries) {
+
+        auto c = std::get<0>(g);
+        auto h = std::get<1>(g);
+        auto s = std::get<2>(g);
+
+        NSInteger encoded = c << 32 | h << 16 | s;
+        [data addObject: [NSNumber numberWithInteger:encoded]];
+    }
+
+    return data;
+}
+
+- (void)writeToFile:(NSURL *)url exception:(ExceptionWrapper *)ex
+{
+    try { return [self drive]->writeToFile([url fileSystemRepresentation]); }
+    catch (Error &error) { [ex save:error]; }
+}
+
+- (void)enableWriteThrough:(ExceptionWrapper *)ex
+{
+    try { return [self drive]->enableWriteThrough(); }
+    catch (Error &error) { [ex save:error]; }
+}
+
+- (void)disableWriteThrough
+{
+    [self drive]->disableWriteThrough();
+}
+
+- (HDFFileProxy *)createHDF:(ExceptionWrapper *)ex
+{
+    try {
+        MediaFile *file = [self drive]->createHDF();
+        return [HDFFileProxy make:file];
+    } catch (Error &error) { [ex save:error]; }
+
+    return nullptr;
+}
+
+
+@end
+
+
+//
 // AmigaFile proxy
 //
 
@@ -2307,8 +2280,9 @@ using namespace vamiga::moira;
     return (HDFFile *)obj;
 }
 
-+ (instancetype)make:(HDFFile *)file
++ (instancetype)make:(void *)obj
 {
+    HDFFile *file = (HDFFile *)obj;
     return file ? [[self alloc] initWith:file] : nil;
 }
 
@@ -2326,7 +2300,8 @@ using namespace vamiga::moira;
 
 + (instancetype)makeWithHardDrive:(HardDriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: new HDFFile(*[proxy drive]->drive)]; }
+    // try { return [self make: new HDFFile(*[proxy drive]->drive)]; }
+    try { return [self make: [proxy drive]->createHDF()]; }
     catch (Error &error) { [ex save:error]; return nil; }
 }
 
