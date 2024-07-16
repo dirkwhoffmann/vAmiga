@@ -1191,4 +1191,10 @@ FloppyDrive::PRBdidChange(u8 oldValue, u8 newValue)
     selectSide((newValue & 0b100) ? 0 : 1);
 }
 
+string
+FloppyDrive::readTrackBits(isize track)
+{
+    return hasDisk() ? disk->readTrackBits(track) : "";
+}
+
 }

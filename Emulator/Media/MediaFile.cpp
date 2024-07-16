@@ -132,11 +132,11 @@ MediaFile::make(class MutableFileSystem &fs, FileType type)
 }
 
 MediaFile *
-MediaFile::make(const FloppyDriveAPI &drive, FileType type)
+MediaFile::make(FloppyDriveAPI &drive, FileType type)
 {
     switch (type) {
 
-        case FILETYPE_ADF:        return new ADFFile(*drive.drive);
+        case FILETYPE_ADF:        return new ADFFile(drive.getDisk());
 
         default:
             return nullptr;

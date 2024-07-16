@@ -415,6 +415,13 @@ public:
     
     // Write handler for the PRB register of CIA B
     void PRBdidChange(u8 oldValue, u8 newValue);
+
+
+    //
+    // Debugging
+    //
+
+    string readTrackBits(isize track);
 };
 
 }

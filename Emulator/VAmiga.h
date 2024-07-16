@@ -643,11 +643,13 @@ public:
 // Peripherals (FloppyDrive)
 //
 
-struct FloppyDriveAPI : public API {
+class FloppyDriveAPI : public API {
 
     friend class VAmiga;
 
     class FloppyDrive *drive = nullptr;
+
+public:
 
     /** @brief  Returns the component's current configuration.
      */
@@ -658,6 +660,11 @@ struct FloppyDriveAPI : public API {
     const FloppyDriveInfo &getInfo() const;
     const FloppyDriveInfo &getCachedInfo() const;
 
+    /** @brief  Getter for the raw disk object
+     *  @return A pointer to the disk object or nullptr if no disk is present.
+     */
+    class FloppyDisk &getDisk();
+
     /** @brief Queries a disk flag
      */
     bool getFlag(DiskFlags mask);
@@ -665,6 +672,11 @@ struct FloppyDriveAPI : public API {
     /** @brief Sets or clears one or more disk flags
      */
     void setFlag(DiskFlags mask, bool value);
+
+    /** @brief  Checks whether the drive is compatible with disks of a
+     *          particular geometry.
+     */
+    bool isInsertable(Diameter t, Density d) const;
 
     /** @brief  Inserts a new disk.
      *  @param  fstype  File system format
@@ -688,6 +700,10 @@ struct FloppyDriveAPI : public API {
     /** @brief  Ejects the current disk.
      */
     void ejectDisk();
+
+    /** @brief  Creates a textual bit representation of a track's data
+     */
+    string readTrackBits(isize track);
 };
 
 

@@ -1219,12 +1219,12 @@ using namespace vamiga::moira;
 
 - (BOOL)isInsertable:(Diameter)type density:(Density)density
 {
-    return [self drive]->drive->isInsertable(type, density);
+    return [self drive]->isInsertable(type, density);
 }
 
 - (void)insertBlankDisk:(FSVolumeType)fs bootBlock:(BootBlockId)bb name:(NSString *)name exception:(ExceptionWrapper *)ex
 {
-    try { return [self drive]->drive->insertNew(fs, bb, [name UTF8String]); }
+    try { return [self drive]->insertBlankDisk(fs, bb, [name UTF8String]); }
     catch (Error &error) { [ex save:error]; }
 }
 
@@ -1236,21 +1236,12 @@ using namespace vamiga::moira;
 
 - (void)eject
 {
-    [self drive]->drive->ejectDisk();
+    [self drive]->ejectDisk();
 }
-
-/*
-- (void)swap:(FloppyFileProxy *)fileProxy exception:(ExceptionWrapper *)ex
-{
-    try { return [self drive]->drive->swapDisk(*(FloppyFile *)fileProxy->obj); }
-    catch (Error &error) { [ex save:error]; }
-}
-*/
 
 - (NSString *)readTrackBits:(NSInteger)track
 {
-    if (![self drive]->drive->hasDisk()) return @("");
-    return @([self drive]->drive->disk->readTrackBits(track).c_str());
+    return @([self drive]->readTrackBits(track).c_str());
 }
 
 @end
@@ -2286,7 +2277,7 @@ using namespace vamiga::moira;
 
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: new ADFFile(*[proxy drive]->drive)]; }
+    try { return [self make: new ADFFile([proxy drive]->getDisk())]; }
     catch (Error &error) { [ex save:error]; return nil; }
 }
 
@@ -2393,7 +2384,7 @@ using namespace vamiga::moira;
 
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: new EADFFile(*[proxy drive]->drive)]; }
+    try { return [self make: new EADFFile([proxy drive]->getDisk())]; }
     catch (Error &error) { [ex save:error]; return nil; }
 }
 
@@ -2430,7 +2421,7 @@ using namespace vamiga::moira;
 
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: new IMGFile(*[proxy drive]->drive->disk)]; }
+    try { return [self make: new IMGFile([proxy drive]->getDisk())]; }
     catch (Error &error) { [ex save:error]; return nil; }
 }
 
@@ -2467,7 +2458,7 @@ using namespace vamiga::moira;
 
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex
 {
-    try { return [self make: new STFile(*[proxy drive]->drive->disk)]; }
+    try { return [self make: new STFile([proxy drive]->getDisk())]; }
     catch (Error &error) { [ex save:error]; return nil; }
 }
 

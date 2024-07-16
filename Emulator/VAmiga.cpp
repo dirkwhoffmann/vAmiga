@@ -831,6 +831,12 @@ FloppyDriveAPI::getCachedInfo() const
     return drive->getCachedInfo();
 }
 
+FloppyDisk &
+FloppyDriveAPI::getDisk()
+{
+    return *(drive->disk);
+}
+
 bool
 FloppyDriveAPI::getFlag(DiskFlags mask)
 {
@@ -841,6 +847,12 @@ void
 FloppyDriveAPI::setFlag(DiskFlags mask, bool value)
 {
     drive->setFlag(mask, value);
+}
+
+bool 
+FloppyDriveAPI::isInsertable(Diameter t, Density d) const
+{
+    return drive->isInsertable(t, d);
 }
 
 void
@@ -870,6 +882,12 @@ void
 FloppyDriveAPI::ejectDisk()
 {
     drive->ejectDisk();
+}
+
+string
+FloppyDriveAPI::readTrackBits(isize track)
+{
+    return drive->readTrackBits(track);
 }
 
 
