@@ -33,13 +33,9 @@
 @class DeniseProxy;
 @class DiskControllerProxy;
 @class DiskFileProxy;
-@class DMSFileProxy;
 @class DmaDebuggerProxy;
 @class FloppyDriveProxy;
-@class EXEFileProxy;
-@class ExtendedRomFileProxy;
 @class FloppyFileProxy;
-@class FolderProxy;
 @class GuardsProxy;
 @class HardDriveProxy;
 @class HdControllerProxy;
@@ -54,12 +50,9 @@
 @class DefaultsProxy;
 @class RemoteManagerProxy;
 @class RetroShellProxy;
-@class RomFileProxy;
 @class RtcProxy;
 @class RecorderProxy;
-@class ScriptProxy;
 @class SerialPortProxy;
-@class STFileProxy;
 @class VideoPortProxy;
 
 
@@ -887,42 +880,6 @@
 
 
 //
-// Script
-//
-
-@interface ScriptProxy : AmigaFileProxy <MakeWithFile, MakeWithBuffer> { }
-
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
-
-@end
-
-
-//
-// RomFile
-//
-
-@interface RomFileProxy : AmigaFileProxy <MakeWithFile, MakeWithBuffer> { }
-
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
- 
-@end
-
-
-//
-// ExtendedRomFile
-//
-
-@interface ExtendedRomFileProxy : AmigaFileProxy <MakeWithFile, MakeWithBuffer> { }
-
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
- 
-@end
-
-
-//
 // DiskFileProxy
 //
 
@@ -1032,58 +989,5 @@
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex;
-
-@end
-
-
-//
-// STFileProxy
-//
-
-@interface STFileProxy : FloppyFileProxy <MakeWithFile, MakeWithBuffer> {
-}
-
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
-
-@end
-
-
-//
-// DMSFileProxy
-//
-
-@interface DMSFileProxy : FloppyFileProxy <MakeWithFile, MakeWithBuffer> {
-}
-
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
-
-@end
-
-
-//
-// EXEFileProxy
-//
-
-@interface EXEFileProxy : FloppyFileProxy <MakeWithFile, MakeWithBuffer> {
-}
-
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
-
-@end
-
-
-//
-// Folder
-//
-
-@interface FolderProxy : FloppyFileProxy <MakeWithFile> {
-}
-
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
-
-@property (readonly) ADFFileProxy *adf;
 
 @end
