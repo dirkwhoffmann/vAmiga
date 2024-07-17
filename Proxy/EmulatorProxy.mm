@@ -809,17 +809,17 @@ using namespace vamiga::moira;
 {
     if ([path length] == 0) {
         [self recorder]->setExecPath("");
-        // FFmpeg::setExecPath("");
     } else {
         [self recorder]->setExecPath([path fileSystemRepresentation]);
-        // FFmpeg::setExecPath(string([path fileSystemRepresentation]));
     }
 }
 
 - (NSString *)findFFmpeg:(NSInteger)nr
 {
-    if (nr < (NSInteger)FFmpeg::paths.size()) {
-        return @(FFmpeg::paths[nr].c_str());
+    auto &paths = [self recorder]->paths();
+
+    if (nr < (NSInteger)paths.size()) {
+        return @(paths[nr].c_str());
     } else {
         return nil;
     }

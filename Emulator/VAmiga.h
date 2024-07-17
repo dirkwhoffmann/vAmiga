@@ -1189,7 +1189,7 @@ class DefaultsAPI : public API {
     class Defaults *defaults = nullptr;
 
     DefaultsAPI(Defaults *defaults) : defaults(defaults) { }
-    
+
 public:
 
     ///
@@ -1495,6 +1495,9 @@ public:
      */
     // const RecorderInfo &getInfo() const;
     // const RecorderInfo &getCachedInfo() const;
+
+    const std::vector<string> &paths() const;
+    bool hasFFmpeg() const;
 
     /** @brief  Returns the path to the FFmpeg executable.
      */

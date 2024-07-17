@@ -1328,6 +1328,18 @@ isize RecorderAPI::getBitRate() const { return recorder->getBitRate(); }
 isize RecorderAPI::getSampleRate() const { return recorder->getSampleRate(); }
 bool RecorderAPI::isRecording() const { return recorder->isRecording(); }
 
+const std::vector<string> &
+RecorderAPI::paths() const
+{
+    return FFmpeg::paths;
+}
+
+bool 
+RecorderAPI::hasFFmpeg() const
+{
+    return FFmpeg::available();
+}
+
 const fs::path
 RecorderAPI::getExecPath() const
 {
