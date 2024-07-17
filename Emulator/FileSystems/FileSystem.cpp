@@ -24,6 +24,19 @@ FileSystem::~FileSystem()
     for (auto &b : blocks) delete b;
 }
 
+void 
+FileSystem::init(const MediaFile &file, isize part) throws
+{
+    switch (file.type()) {
+
+        case FILETYPE_ADF:  init(dynamic_cast<const ADFFile &>(file)); break;
+        case FILETYPE_HDF:  init(dynamic_cast<const HDFFile &>(file), part); break;
+
+        default:
+            throw Error(ERROR_FILE_TYPE_UNSUPPORTED);
+    }
+}
+
 void
 FileSystem::init(const ADFFile &adf)
 {

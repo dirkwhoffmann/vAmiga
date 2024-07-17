@@ -736,6 +736,7 @@
 
 @interface FileSystemProxy : Proxy { }
 
++ (instancetype)makeWithMedia:(MediaFileProxy *)proxy partition:(NSInteger)nr exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithADF:(ADFFileProxy *)adf exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithHDF:(HDFFileProxy *)hdf partition:(NSInteger)nr exception:(ExceptionWrapper *)ex;
 

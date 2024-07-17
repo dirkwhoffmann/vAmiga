@@ -12,7 +12,9 @@
 #include "Amiga.h"
 #include "BootBlockImage.h"
 #include "DiskController.h"
-#include "FloppyFile.h"
+#include "ADFFile.h"
+#include "EADFFile.h"
+#include "IMGFile.h"
 #include "MutableFileSystem.h"
 #include "MsgQueue.h"
 #include "CmdQueue.h"
@@ -909,6 +911,20 @@ FloppyDrive::ejectDisk(Cycle delay)
     if (objid == 1) ejectDisk <SLOT_DC1> (delay);
     if (objid == 2) ejectDisk <SLOT_DC2> (delay);
     if (objid == 3) ejectDisk <SLOT_DC3> (delay);
+}
+
+MediaFile *
+FloppyDrive::exportDisk(FileType type)
+{
+    switch (type) {
+
+        case FILETYPE_ADF:      return new ADFFile(*this);
+        case FILETYPE_EADF:     return new EADFFile(*this);
+        case FILETYPE_IMG:      return new IMGFile(*this);
+
+        default:
+            throw Error(ERROR_FILE_TYPE_UNSUPPORTED);
+    }
 }
 
 template <EventSlot s> void

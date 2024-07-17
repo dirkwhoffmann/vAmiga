@@ -1290,6 +1290,36 @@ using namespace vamiga::moira;
     return proxy;
 }
 
++ (instancetype)makeWithMedia:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
+{
+    try {
+
+        auto file = (MediaFile *)(proxy->obj);
+        auto dev = new MutableFileSystem(*file);
+        return [self make:dev];
+
+    }  catch (Error &error) {
+
+        [ex save:error];
+        return nil;
+    }
+}
+
++ (instancetype)makeWithMedia:(MediaFileProxy *)proxy partition:(NSInteger)nr exception:(ExceptionWrapper *)ex
+{
+    try {
+
+        auto file = (MediaFile *)(proxy->obj);
+        auto dev = new MutableFileSystem(*file, nr);
+        return [self make:dev];
+
+    }  catch (Error &error) {
+
+        [ex save:error];
+        return nil;
+    }
+}
+
 + (instancetype)makeWithADF:(ADFFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try {

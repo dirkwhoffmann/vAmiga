@@ -10,7 +10,7 @@
 #include "config.h"
 #include "IMGFile.h"
 #include "Checksum.h"
-#include "FloppyDisk.h"
+#include "FloppyDrive.h"
 #include "IOUtils.h"
 
 namespace vamiga {
@@ -50,6 +50,13 @@ IMGFile::init(FloppyDisk &disk)
 {
     init(INCH_35, DENSITY_DD);
     decodeDisk(disk);
+}
+
+void
+IMGFile::init(FloppyDrive &drive)
+{
+    if (drive.disk == nullptr) throw Error(ERROR_DISK_MISSING);
+    init(*drive.disk);
 }
 
 isize

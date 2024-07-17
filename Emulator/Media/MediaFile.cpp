@@ -136,7 +136,9 @@ MediaFile::make(FloppyDriveAPI &drive, FileType type)
 {
     switch (type) {
 
-        case FILETYPE_ADF:        return new ADFFile(drive.getDisk());
+        case FILETYPE_ADF:      return new ADFFile(drive.getDisk());
+        case FILETYPE_EADF:     return new EADFFile(drive.getDisk());
+        case FILETYPE_IMG:      return new IMGFile(drive.getDisk());
 
         default:
             return nullptr;

@@ -351,7 +351,7 @@ public:
     // Returns true if the drive is in disk polling mode
     bool pollsForDisk() const;
 
-    
+
     //
     // Handling disks
     //
@@ -362,12 +362,16 @@ public:
     bool isInsertable(const FloppyFile &file) const;
     bool isInsertable(const FloppyDisk &disk) const;
 
-    // Ejects the current disk with an optional delay
-    void ejectDisk(Cycle delay = 0);
-    
     // Inserts a new disk with an optional delay
     void insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay = 0) throws;
-    
+    void insertMediaFile(class MediaFile &file, bool wp);
+
+    // Ejects the current disk with an optional delay
+    void ejectDisk(Cycle delay = 0);
+
+    // Exports the current disk
+    MediaFile *exportDisk(FileType type);
+
     // Replaces the current disk (recommended way to insert disks)
     void swapDisk(std::unique_ptr<FloppyDisk> disk) throws;
     void swapDisk(class FloppyFile &file) throws;
@@ -375,8 +379,6 @@ public:
 
     // Replaces the current disk with a factory-fresh disk
     void insertNew(FSVolumeType fs, BootBlockId bb, string name) throws;
-
-    void insertMediaFile(class MediaFile &file, bool wp);
 
 private:
     

@@ -379,7 +379,16 @@ extension HDFFileProxy {
 }
 
 extension FileSystemProxy {
-            
+
+    static func make(with file: MediaFileProxy, part: Int = 0) throws -> FileSystemProxy {
+
+        let exception = ExceptionWrapper()
+        let result = FileSystemProxy.make(withMedia: file, partition: part, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+
+        return result!
+    }
+
     static func make(withADF adf: ADFFileProxy) throws -> FileSystemProxy {
         
         let exception = ExceptionWrapper()
