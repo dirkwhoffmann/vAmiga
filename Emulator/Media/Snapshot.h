@@ -83,6 +83,10 @@ public:
     
 public:
     
+    std::pair <isize,isize> previewImageSize() const override;
+    const u32 *previewImageData() const override;
+    time_t timestamp() const override;
+
     // Checks the snapshot version number
     bool isTooOld() const;
     bool isTooNew() const;
@@ -97,7 +101,7 @@ public:
     
     // Returns pointer to the core data
     u8 *getData() const override { return data.ptr + sizeof(SnapshotHeader); }
-    
+
     // Takes a screenshot
     void takeScreenshot(Amiga &amiga);
 };

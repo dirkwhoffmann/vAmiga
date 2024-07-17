@@ -206,11 +206,11 @@ class MyDocument: NSDocument {
         
         if typeName == "vAmiga" {
 
-            if let snapshot = SnapshotProxy.make(withAmiga: amiga.amiga) {
+            if let snapshot = amiga.amiga.takeSnapshot() {
 
                 do {
-                    try snapshot.writeToFile(url: url)
-                    
+                    try snapshot.writeToFile(url)
+
                 } catch let error as VAError {
                     
                     throw NSError(error: error)
@@ -282,46 +282,12 @@ class MyDocument: NSDocument {
         }
     }
 
-    /*
-    @available(*, deprecated, message: "Use addMedia:(proxy: MediaFileProxy instead")
-    func addMedia(proxy: AmigaFileProxy,
-                  df: Int = 0,
-                  hd: Int = 0,
-                  force: Bool = false) throws {
-        
-        if let proxy = proxy as? SnapshotProxy {
-            
-            try processSnapshotFile(proxy)
-        }
-        if let proxy = proxy as? ScriptProxy {
-
-            parent.renderer.console.runScript(script: proxy)
-        }
-        if let proxy = proxy as? HDFFileProxy {
-            
-            try attach(hd: hd, file: proxy, force: force)
-        }
-        if let proxy = proxy as? FloppyFileProxy {
-            
-            try insert(df: df, file: proxy, force: force)
-        }
-    }
-    */
-
     func processSnapshotFile(_ proxy: MediaFileProxy, force: Bool = false) throws {
 
         try amiga.loadSnapshot(proxy)
         snapshots.append(proxy, size: proxy.size)
     }
 
-    /*
-    @available(*, deprecated)
-    func processSnapshotFile(_ proxy: SnapshotProxy, force: Bool = false) throws {
-        
-        try amiga.loadSnapshot(proxy)
-        snapshots.append(proxy, size: proxy.size)
-    }
-    */
     
     //
     // Exporting disks

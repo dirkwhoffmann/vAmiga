@@ -59,7 +59,6 @@
 @class RecorderProxy;
 @class ScriptProxy;
 @class SerialPortProxy;
-@class SnapshotProxy;
 @class STFileProxy;
 @class VideoPortProxy;
 
@@ -886,25 +885,6 @@
 
 @end
 
-//
-// Snapshot
-//
-
-@interface SnapshotProxy : AmigaFileProxy <MakeWithFile, MakeWithBuffer> {
-    
-    NSImage *preview;
-}
-
-+ (instancetype)make:(void *)file;
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithAmiga:(AmigaProxy *)proxy;
-
-@property (readonly, strong) NSImage *previewImage;
-@property (readonly) time_t timeStamp;
-
-@end
-
 
 //
 // Script
@@ -914,8 +894,6 @@
 
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
- 
-// - (void)execute:(EmulatorProxy *)proxy;
 
 @end
 

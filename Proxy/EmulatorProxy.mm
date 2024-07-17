@@ -1917,79 +1917,6 @@ using namespace vamiga::moira;
 
 
 //
-// Snapshot proxy
-//
-
-@implementation SnapshotProxy
-
-- (Snapshot *)snapshot
-{
-    return (Snapshot *)obj;
-}
-
-+ (instancetype)make:(void *)snapshot
-{
-    SnapshotProxy *proxy = [[self alloc] initWith:snapshot];
-    if (proxy) { proxy->preview = nullptr; }
-    return proxy;
-}
-
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex
-{
-    try { return [self make: new Snapshot([path fileSystemRepresentation])]; }
-    catch (Error &error) { [ex save:error]; return nil; }
-}
-
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex
-{
-    try { return [self make: new Snapshot((u8 *)buf, len)]; }
-    catch (Error &error) { [ex save:error]; return nil; }
-}
-
-+ (instancetype)makeWithAmiga:(AmigaProxy *)proxy
-{
-    MediaFile *snapshot = ((AmigaAPI *)proxy->obj)->takeSnapshot();
-    return [self make:snapshot];
-}
-
-- (NSImage *)previewImage
-{
-    // Return cached image (if any)
-    if (preview) { return preview; }
-
-    // Create preview image
-    const Thumbnail &thumbnail = [self snapshot]->getThumbnail();
-    unsigned char *data = (unsigned char *)thumbnail.screen;
-    
-    NSBitmapImageRep *rep = [[NSBitmapImageRep alloc]
-                             initWithBitmapDataPlanes:&data
-                             pixelsWide:thumbnail.width
-                             pixelsHigh:thumbnail.height
-                             bitsPerSample:8
-                             samplesPerPixel:4
-                             hasAlpha:true
-                             isPlanar:false
-                             colorSpaceName:NSCalibratedRGBColorSpace
-                             bytesPerRow:4*thumbnail.width
-                             bitsPerPixel:32];
-    
-    preview = [[NSImage alloc] initWithSize:[rep size]];
-    [preview addRepresentation:rep];
-    
-    // image.makeGlossy()
-
-    return preview;
-}
-
-- (time_t)timeStamp
-{
-    return [self snapshot]->getThumbnail().timestamp;
-}
-
-@end
-
-
-//
 // Script proxy
 //
 
@@ -2763,13 +2690,6 @@ using namespace vamiga::moira;
 - (void)stepOver
 {
     [self emu]->stepOver();
-}
-
-- (SnapshotProxy *)takeSnapshot
-{
-    Amiga *amiga = (Amiga *)[self amiga]->obj;
-    auto *snapshot = amiga->takeSnapshot();
-    return [SnapshotProxy make:snapshot];
 }
 
 - (void)launch:(const void *)listener function:(Callback *)func

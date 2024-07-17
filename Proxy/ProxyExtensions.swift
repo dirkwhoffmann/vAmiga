@@ -70,8 +70,14 @@ extension MediaFileProxy {
         if exc.errorCode != .OK { throw VAError(exc) }
         return obj!
     }
-}
 
+    func writeToFile(_ url: URL) throws {
+
+        let exception = ExceptionWrapper()
+        write(toFile: url.path, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+}
 
 extension MakeWithBuffer {
     
