@@ -235,7 +235,7 @@ class Canvas: Layer {
         precondition(sfTexture != nil)
 
         // Get the emulator texture
-        var buffer: UnsafeMutablePointer<u32>!
+        var buffer: UnsafePointer<u32>!
         var nr = 0
         amiga.videoPort.texture(&buffer, nr: &nr, lof: &currLOF, prevlof: &prevLOF)
 

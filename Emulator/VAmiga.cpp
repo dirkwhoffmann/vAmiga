@@ -13,6 +13,8 @@
 
 namespace vamiga {
 
+DefaultsAPI VAmiga::defaults(&Emulator::defaults);
+
 //
 // API
 //
@@ -792,10 +794,30 @@ SerialPortAPI::readOutgoingPrintableByte() const
 // Ports (VideoPort)
 //
 
+/*
 const class FrameBuffer &
 VideoPortAPI::getTexture() const
 {
     return videoPort->getTexture();
+}
+*/
+
+const u32 *
+VideoPortAPI::getTexture() const
+{
+    return videoPort->getTexture().pixels.ptr;
+}
+
+const u32 *
+VideoPortAPI::getTexture(isize *nr, bool *lof, bool *prevlof) const
+{
+    auto &frameBuffer = videoPort->getTexture();
+    
+    *nr = frameBuffer.nr;
+    *lof = frameBuffer.lof;
+    *prevlof = frameBuffer.prevlof;
+
+    return frameBuffer.pixels.ptr;
 }
 
 
@@ -1073,6 +1095,12 @@ JoystickAPI::getCachedInfo() const
     return joystick->getCachedInfo();
 }
 
+void 
+JoystickAPI::trigger(GamePadAction event)
+{
+    emu->put(CMD_JOY_EVENT, GamePadCmd { .port = joystick->objid, .action = event });
+}
+
 
 //
 // Mouse
@@ -1268,6 +1296,69 @@ DefaultsAPI::remove(Option option, std::vector <isize> objids)
 {
     defaults->remove(option, objids);
 }
+
+
+//
+// RecorderAPI
+//
+
+/*
+const RecorderConfig &
+RecorderAPI::getConfig() const
+{
+    return recorder->getConfig();
+}
+
+const RecorderInfo &
+RecorderAPI::getInfo() const
+{
+    return recorder->getInfo();
+}
+
+const RecorderInfo &
+RecorderAPI::getCachedInfo() const
+{
+    return recorder->getCachedInfo();
+}
+*/
+
+util::Time RecorderAPI::getDuration() const { return recorder->getDuration(); }
+isize RecorderAPI::getFrameRate() const { return recorder->getFrameRate(); }
+isize RecorderAPI::getBitRate() const { return recorder->getBitRate(); }
+isize RecorderAPI::getSampleRate() const { return recorder->getSampleRate(); }
+bool RecorderAPI::isRecording() const { return recorder->isRecording(); }
+
+const fs::path
+RecorderAPI::getExecPath() const
+{
+    return FFmpeg::getExecPath();
+}
+
+void RecorderAPI::setExecPath(const std::filesystem::path &path)
+{
+    FFmpeg::setExecPath(path);
+}
+
+void
+RecorderAPI::startRecording(isize x1, isize y1, isize x2, isize y2,
+                            isize bitRate,
+                            isize aspectX, isize aspectY)
+{
+    recorder->startRecording(x1, y1, x2, y2, bitRate, aspectX, aspectY);
+}
+
+void
+RecorderAPI::stopRecording()
+{
+    recorder->stopRecording();
+}
+
+bool
+RecorderAPI::exportAs(const std::filesystem::path &path)
+{
+    return recorder->exportAs(path);
+}
+
 
 //
 // RemoteManagerAPI

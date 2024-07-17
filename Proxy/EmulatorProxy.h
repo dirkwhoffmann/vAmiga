@@ -216,8 +216,6 @@
 @property (readonly) EmulatorInfo cachedInfo;
 @property (readonly) EmulatorStats stats;
 
-@property NSInteger autoInspectionMask;
-
 @property (readonly) BOOL poweredOn;
 @property (readonly) BOOL poweredOff;
 @property (readonly) BOOL paused;
@@ -370,6 +368,7 @@
 
 @property (readonly) AmigaInfo info;
 @property (readonly) AmigaInfo cachedInfo;
+@property NSInteger autoInspectionMask;
 
 - (MediaFileProxy *) takeSnapshot;
 
@@ -556,7 +555,7 @@
 @property (readonly) StateMachineInfo audioInfo3;
 @property (readonly) UARTInfo uartInfo;
 @property (readonly) UARTInfo cachedUartInfo;
-@property (readonly) AudioPortStats audioPortStats;
+// @property (readonly) AudioPortStats audioPortStats;
 
 @end
 
@@ -597,7 +596,7 @@
 
 @interface VideoPortProxy : CoreComponentProxy { }
 
-- (void)texture:(u32 **)ptr nr:(NSInteger *)nr lof:(bool *)lof prevlof:(bool *)prevlof;
+- (void)texture:(const u32 **)ptr nr:(NSInteger *)nr lof:(bool *)lof prevlof:(bool *)prevlof;
 
 @end
 

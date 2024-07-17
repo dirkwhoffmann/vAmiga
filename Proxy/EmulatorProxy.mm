@@ -10,7 +10,7 @@
 #import "config.h"
 #import "EmulatorProxy.h"
 #import "VAmiga.h"
-#import "Emulator.h"
+// #import "Emulator.h"
 #import "vAmiga-Swift.h"
 
 using namespace vamiga;
@@ -100,9 +100,9 @@ using namespace vamiga::moira;
 
 @implementation DefaultsProxy
 
-- (Defaults *)props
+- (DefaultsAPI *)props
 {
-    return (Defaults *)obj;
+    return (DefaultsAPI *)obj;
 }
 
 - (void)load:(NSURL *)url exception:(ExceptionWrapper *)ex
@@ -572,7 +572,7 @@ using namespace vamiga::moira;
 
 
 //
-// Audio port
+// AudioPort
 //
 
 @implementation AudioPortProxy
@@ -801,16 +801,18 @@ using namespace vamiga::moira;
 
 - (NSString *)path
 {
-    auto path = FFmpeg::getExecPath();
+    auto path = [self recorder]->getExecPath(); // FFmpeg::getExecPath();
     return @(path.c_str());
 }
 
 - (void)setPath:(NSString *)path
 {
     if ([path length] == 0) {
-        FFmpeg::setExecPath("");
+        [self recorder]->setExecPath("");
+        // FFmpeg::setExecPath("");
     } else {
-        FFmpeg::setExecPath(string([path fileSystemRepresentation]));
+        [self recorder]->setExecPath([path fileSystemRepresentation]);
+        // FFmpeg::setExecPath(string([path fileSystemRepresentation]));
     }
 }
 
@@ -830,27 +832,27 @@ using namespace vamiga::moira;
 
 - (BOOL)recording
 {
-    return [self recorder]->recorder->isRecording();
+    return [self recorder]->isRecording();
 }
 
 - (double)duration
 {
-    return [self recorder]->recorder->getDuration().asSeconds();
+    return [self recorder]->getDuration().asSeconds();
 }
 
 - (NSInteger)frameRate
 {
-    return [self recorder]->recorder->getFrameRate();
+    return [self recorder]->getFrameRate();
 }
 
 - (NSInteger)bitRate
 {
-    return [self recorder]->recorder->getBitRate();
+    return [self recorder]->getBitRate();
 }
 
 - (NSInteger)sampleRate
 {
-    return [self recorder]->recorder->getSampleRate();
+    return [self recorder]->getSampleRate();
 }
 
 - (void)startRecording:(NSRect)rect
@@ -864,18 +866,18 @@ using namespace vamiga::moira;
     auto x2 = isize(x1 + (int)rect.size.width);
     auto y2 = isize(y1 + (int)rect.size.height);
     
-    try { return [self recorder]->recorder->startRecording(x1, y1, x2, y2, rate, aspectX, aspectY); }
+    try { return [self recorder]->startRecording(x1, y1, x2, y2, rate, aspectX, aspectY); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (void)stopRecording
 {
-    [self recorder]->recorder->stopRecording();
+    [self recorder]->stopRecording();
 }
 
 - (BOOL)exportAs:(NSString *)path
 {
-    return [self recorder]->recorder->exportAs(string([path fileSystemRepresentation]));
+    return [self recorder]->exportAs(string([path fileSystemRepresentation]));
 }
 
 @end
@@ -924,17 +926,12 @@ using namespace vamiga::moira;
 
 - (UARTInfo)uartInfo
 {
-    return [self paula]->paula->uart.getInfo();
+    return [self paula]->uart.getInfo();
 }
 
 - (UARTInfo)cachedUartInfo
 {
-    return [self paula]->paula->uart.getCachedInfo();
-}
-
-- (AudioPortStats)audioPortStats
-{
-    return [self paula]->paula->emulator.main.audioPort.getStats();
+    return [self paula]->uart.getCachedInfo();
 }
 
 @end
@@ -1011,7 +1008,7 @@ using namespace vamiga::moira;
 
 - (void)trigger:(GamePadAction)event
 {
-    [self joystick]->joystick->trigger(event);
+    [self joystick]->trigger(event);
 }
 
 @end
@@ -1067,13 +1064,12 @@ using namespace vamiga::moira;
     return (VideoPortAPI *)obj;
 }
 
-- (void)texture:(u32 **)ptr nr:(NSInteger *)nr lof:(bool *)lof prevlof:(bool *)prevlof
+- (void)texture:(const u32 **)ptr nr:(NSInteger *)nr lof:(bool *)lof prevlof:(bool *)prevlof
 {
-    auto &frameBuffer = [self port]->getTexture();
-    *ptr = frameBuffer.pixels.ptr;
-    *nr = NSInteger(frameBuffer.nr);
-    *lof = frameBuffer.lof;
-    *prevlof = frameBuffer.prevlof;
+    isize inr;
+
+    *ptr = [self port]->getTexture(&inr, lof, prevlof);
+    *nr = inr;
 }
 
 @end
@@ -2553,6 +2549,16 @@ using namespace vamiga::moira;
     return [self amiga]->getCachedInfo();
 }
 
+- (NSInteger)autoInspectionMask
+{
+    return (NSInteger)[self amiga]->getAutoInspectionMask();
+}
+
+- (void)setAutoInspectionMask:(NSInteger)mask
+{
+    return [self amiga]->setAutoInspectionMask(u64(mask));
+}
+
 - (MediaFileProxy *)takeSnapshot
 {
     MediaFile *file = [self amiga]->takeSnapshot();
@@ -2656,7 +2662,7 @@ using namespace vamiga::moira;
 
 + (DefaultsProxy *) defaults
 {
-    return [[DefaultsProxy alloc] initWith:&Emulator::defaults];
+    return [[DefaultsProxy alloc] initWith:&VAmiga::defaults];
 }
 
 + (NSString *)build
@@ -2696,16 +2702,6 @@ using namespace vamiga::moira;
 - (EmulatorStats)stats
 {
     return [self emu]->getStats();
-}
-
-- (NSInteger)autoInspectionMask
-{
-    return [self emu]->emu->main.getAutoInspectionMask();
-}
-
-- (void)setAutoInspectionMask:(NSInteger)mask
-{
-    [self emu]->emu->main.setAutoInspectionMask(mask);
 }
 
 - (BOOL)poweredOn
@@ -2761,12 +2757,12 @@ using namespace vamiga::moira;
 
 - (void)stepInto
 {
-    [self emu]->emu->stepInto();
+    [self emu]->stepInto();
 }
 
 - (void)stepOver
 {
-    [self emu]->emu->stepOver();
+    [self emu]->stepOver();
 }
 
 - (SnapshotProxy *)takeSnapshot

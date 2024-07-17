@@ -797,7 +797,7 @@ extension Inspector {
 
         // Leave debug mode
         emu?.trackOff()
-        emu?.autoInspectionMask = 0
+        emu?.amiga.autoInspectionMask = 0
     }
 }
 
@@ -818,16 +818,16 @@ extension Inspector: NSTabViewDelegate {
 
             switch id {
 
-            case "CPU":     emu.autoInspectionMask = mask([.CPU])
-            case "CIA":     emu.autoInspectionMask = mask([.CIA])
-            case "Memory":  emu.autoInspectionMask = mask([.MEM])
-            case "Agnus":   emu.autoInspectionMask = mask([.AGNUS])
-            case "Copper":  emu.autoInspectionMask = mask([.COPPER])
-            case "Blitter": emu.autoInspectionMask = mask([.BLITTER])
-            case "Denise":  emu.autoInspectionMask = mask([.DENISE])
-            case "Paula":   emu.autoInspectionMask = mask([.PAULA])
-            case "Ports":   emu.autoInspectionMask = mask([.PAULA, .CONTROL_PORT, .SERIAL_PORT])
-            case "Events":  emu.autoInspectionMask =  mask([.AGNUS])
+            case "CPU":     amiga.autoInspectionMask = mask([.CPU])
+            case "CIA":     amiga.autoInspectionMask = mask([.CIA])
+            case "Memory":  amiga.autoInspectionMask = mask([.MEM])
+            case "Agnus":   amiga.autoInspectionMask = mask([.AGNUS])
+            case "Copper":  amiga.autoInspectionMask = mask([.COPPER])
+            case "Blitter": amiga.autoInspectionMask = mask([.BLITTER])
+            case "Denise":  amiga.autoInspectionMask = mask([.DENISE])
+            case "Paula":   amiga.autoInspectionMask = mask([.PAULA])
+            case "Ports":   amiga.autoInspectionMask = mask([.PAULA, .CONTROL_PORT, .SERIAL_PORT])
+            case "Events":  amiga.autoInspectionMask =  mask([.AGNUS])
             default:        break
             }
             

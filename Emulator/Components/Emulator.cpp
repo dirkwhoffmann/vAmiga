@@ -175,11 +175,13 @@ Emulator::put(const Cmd &cmd)
     cmdQueue.put(cmd);
 }
 
-void 
+/*
+void
 Emulator::put(CmdType type, i64 payload)
 {
     put (Cmd(type, payload));
 }
+*/
 
 i64
 Emulator::get(Option opt, isize objid) const

@@ -159,7 +159,7 @@ public:
     // Callback handler for function ControlPort::ciapa()
     u8 ciapa() const;
     
-    // Triggers a gamepad event
+    // Triggers a joystick event
     void trigger(GamePadAction event);
 
     // To be called after each frame

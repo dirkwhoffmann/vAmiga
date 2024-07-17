@@ -203,7 +203,7 @@ public:
     //
     // Recording a video stream
     //
-
+   
 public:
 
     // Records a single frame

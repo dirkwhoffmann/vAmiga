@@ -185,7 +185,7 @@ extension MTLTexture {
         return MTLSize(width: width, height: height, depth: 1)
     }
 
-    func replace(region: MTLRegion, buffer: UnsafeMutablePointer<UInt32>?) {
+    func replace(region: MTLRegion, buffer: UnsafePointer<UInt32>?) {
         
         if buffer != nil {
             let bpr = 4 * region.size.width
@@ -193,13 +193,13 @@ extension MTLTexture {
         }
     }
     
-    func replace(size: MTLSize, buffer: UnsafeMutablePointer<UInt32>?) {
+    func replace(size: MTLSize, buffer: UnsafePointer<UInt32>?) {
         
         let region = MTLRegionMake2D(0, 0, size.width, size.height)
         replace(region: region, buffer: buffer)
     }
     
-    func replace(w: Int, h: Int, buffer: UnsafeMutablePointer<UInt32>?) {
+    func replace(w: Int, h: Int, buffer: UnsafePointer<UInt32>?) {
         
         let region = MTLRegionMake2D(0, 0, w, h)
         replace(region: region, buffer: buffer)

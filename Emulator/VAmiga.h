@@ -15,6 +15,8 @@
 #include <filesystem>
 
 // REMOVE EVENTUALLY:
+#include "Emulator.h"
+#include "FFmpeg.h"
 #include "Media.h"
 
 namespace vamiga {
@@ -594,9 +596,9 @@ class PaulaAPI : public API {
 
     friend class VAmiga;
 
-public:
-
     class Paula *paula = nullptr;
+
+public:
 
     AudioChannelAPI audioChannel0 = AudioChannelAPI(0);
     AudioChannelAPI audioChannel1 = AudioChannelAPI(1);
@@ -818,9 +820,9 @@ class JoystickAPI : public API {
 
     friend class VAmiga;
 
-public:
-
     class Joystick *joystick = nullptr;
+
+public:
 
     /** @brief  Returns the component's current configuration.
      */
@@ -830,6 +832,10 @@ public:
      */
     const JoystickInfo &getInfo() const;
     const JoystickInfo &getCachedInfo() const;
+
+    /** @brief  Triggers a joystick action.
+     */
+    void trigger(GamePadAction event);
 };
 
 
@@ -1113,7 +1119,10 @@ public:
      * and vc64::Texture::height texels. Each texel is represented by a
      * 32 bit color value.
      */
-    const class FrameBuffer &getTexture() const;
+    // const class FrameBuffer &getTexture() const;
+    const u32 *getTexture() const;
+    const u32 *getTexture(isize *nr, bool *lof, bool *prevlof) const;
+
 
 };
 
@@ -1179,6 +1188,8 @@ class DefaultsAPI : public API {
 
     class Defaults *defaults = nullptr;
 
+    DefaultsAPI(Defaults *defaults) : defaults(defaults) { }
+    
 public:
 
     ///
@@ -1468,11 +1479,60 @@ public:
 // Misc (Recorder)
 //
 
-struct RecorderAPI : public API {
+class RecorderAPI : public API {
 
     friend class VAmiga;
 
     class Recorder *recorder = nullptr;
+
+public:
+
+    /** @brief  Returns the component's configuration.
+     */
+    // const RecorderConfig &getConfig() const;
+
+    /** @brief  Returns the component's current state.
+     */
+    // const RecorderInfo &getInfo() const;
+    // const RecorderInfo &getCachedInfo() const;
+
+    /** @brief  Returns the path to the FFmpeg executable.
+     */
+    const fs::path getExecPath() const;
+
+    /** @brief  Sets the path to the FFmpeg executable.
+     */
+    void setExecPath(const std::filesystem::path &path);
+
+    // INTEGRATE INTO RecorderInfo, RecorderConfig
+    util::Time getDuration() const;
+    isize getFrameRate() const;
+    isize getBitRate() const;
+    isize getSampleRate() const;
+    bool isRecording() const;
+
+    /** @brief  Starts the recorder.
+     *  @param  x1      Horizontal start coordinate of the recorded area
+     *  @param  y1      Vertical start coordinate of the recorded area
+     *  @param  x2      Horizontal end coordinate of the recorded area
+     *  @param  y2      Vertical stop coordinate of the recorded area
+     *  @param  bitRate To be removed
+     *  @param  aspectX To be removed
+     *  @param  aspectY To be removed
+     */
+    void startRecording(isize x1, isize y1, isize x2, isize y2,
+                        isize bitRate,
+                        isize aspectX, isize aspectY) throws;
+
+    /** @brief  Interrupts a recording in progress.
+     */
+    void stopRecording();
+
+    /** @brief  Exports the recorded video to a file.
+     *  @param  path    The export destination.
+     *  @return true on success.
+     */
+    bool exportAs(const std::filesystem::path &path);
 };
 
 

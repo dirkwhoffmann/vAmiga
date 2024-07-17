@@ -252,7 +252,7 @@ extension MyController {
             setColor(color: [.systemRed, .systemYellow, .systemGreen, .systemYellow, .systemRed])
 
         case 4:
-            let fill = emu.paula.audioPortStats.fillLevel * 100.0
+            let fill = emu.audioPort.stats.fillLevel * 100.0
             activityBar.doubleValue = fill
             activityInfo.stringValue = String(format: "Fill level %d%%", Int(fill))
             setColor(color: [.systemRed, .systemYellow, .systemGreen, .systemYellow, .systemRed])
