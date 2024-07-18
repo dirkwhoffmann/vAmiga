@@ -703,6 +703,8 @@ public:
      */
     void ejectDisk();
 
+    class MediaFile *exportDisk(FileType type);
+
     /** @brief  Creates a textual bit representation of a track's data
      */
     string readTrackBits(isize track);

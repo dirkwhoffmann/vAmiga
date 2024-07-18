@@ -46,7 +46,6 @@ class DiskExporter: DialogController {
     var numPartitions: Int { return hdf?.numPartitions ?? 1 }
     
     // Results of the different decoders
-    // var media: MediaFileProxy?
     var hdf: HDFFileProxy?
     var adf: ADFFileProxy?
     var ext: EADFFileProxy?
@@ -56,8 +55,6 @@ class DiskExporter: DialogController {
     func showSheet(diskDrive nr: Int) {
                 
         dfn = emu.df(nr)
-
-        // media = dfn.exportDisk(.ADF)
 
         // Run the ADF decoder
         adf = try? ADFFileProxy.make(with: dfn!)

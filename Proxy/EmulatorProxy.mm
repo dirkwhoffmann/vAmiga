@@ -1240,6 +1240,13 @@ using namespace vamiga::moira;
     [self drive]->ejectDisk();
 }
 
+- (MediaFileProxy *)exportDisk:(FileType)type exception:(ExceptionWrapper *)ex
+{
+    try { return [MediaFileProxy make:[self drive]->exportDisk(type)]; }
+    catch (Error &error) { [ex save:error]; }
+    return nil;
+}
+
 - (NSString *)readTrackBits:(NSInteger)track
 {
     return @([self drive]->readTrackBits(track).c_str());
@@ -1613,7 +1620,7 @@ using namespace vamiga::moira;
     return (MediaFile *)obj;
 }
 
-+ (instancetype)make:(MediaFile *)file
++ (instancetype)make:(void *)file
 {
     return file ? [[self alloc] initWith:file] : nil;
 }
@@ -1692,6 +1699,11 @@ using namespace vamiga::moira;
     return [self file]->getSize();
 }
 
+- (u8 *)data
+{
+    return [self file]->getData();
+}
+
 - (void)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { [self file]->writeToFile(string([path fileSystemRepresentation])); }
@@ -1733,6 +1745,11 @@ using namespace vamiga::moira;
 - (time_t)timeStamp
 {
     return [self file]->timestamp();
+}
+
+- (FloppyDiskInfo)floppyDiskInfo
+{
+    return [self file]->getFloppyDiskInfo();
 }
 
 @end

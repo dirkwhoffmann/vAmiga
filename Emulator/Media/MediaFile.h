@@ -10,6 +10,7 @@
 #pragma once
 
 #include "MediaFileTypes.h"
+#include "FloppyDiskTypes.h"
 #include <sstream>
 #include <fstream>
 #include <filesystem>
@@ -50,6 +51,9 @@ public:
     // Returns the size of this file
     virtual isize getSize() const = 0;
 
+    // Returns a textual representation of the file size
+    virtual string getSizeAsString() const;
+
     // Returns a pointer to the file data
     virtual u8 *getData() const = 0;
 
@@ -68,6 +72,8 @@ public:
 
     // Return a preview image (only available for snapshot files)
     virtual const u32 *previewImageData() const { return nullptr; }
+
+    FloppyDiskInfo getFloppyDiskInfo() const;
 
     //
     virtual void flash(u8 *buf, isize offset, isize len) const = 0;

@@ -77,6 +77,31 @@ extension MediaFileProxy {
         write(toFile: url.path, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
+
+    func icon(protected: Bool = false) -> NSImage {
+        
+        var name = ""
+        
+        switch type {
+            
+        case .ADF, .EADF, .IMG:
+            
+            let info = floppyDiskInfo
+            name = (info.density == .HD ? "hd" : "dd") +
+            (type == .IMG ? "_dos" : info.dos == .NODOS ? "_other" : "_adf")
+            
+        case .HDF:
+            
+            name = "hdf"
+            
+        default:
+            
+            name = ""
+        }
+        
+        if protected { name += "_protected" }
+        return NSImage(named: name)!
+    }
 }
 
 extension MakeWithBuffer {
@@ -275,6 +300,15 @@ extension FloppyDriveProxy {
         let exception = ExceptionWrapper()
         insertBlankDisk(fileSystem, bootBlock: bootBlock, name: name, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
+    }
+
+    func exportDisk(type: FileType) throws -> MediaFileProxy? {
+
+        let exception = ExceptionWrapper()
+        let result = exportDisk(type, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+
+        return result;
     }
 }
 

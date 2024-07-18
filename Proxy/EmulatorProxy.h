@@ -680,6 +680,7 @@
 - (void)insertBlankDisk:(FSVolumeType)fs bootBlock:(BootBlockId)bb name:(NSString *)name exception:(ExceptionWrapper *)ex;
 - (void)insertMedia:(MediaFileProxy *)proxy protected:(BOOL)wp exception:(ExceptionWrapper *)ex;
 - (void)eject;
+- (MediaFileProxy *)exportDisk:(FileType)type exception:(ExceptionWrapper *)ex;
 
 - (NSString *)readTrackBits:(NSInteger)track;
 
@@ -840,7 +841,7 @@
 
 + (FileType) typeOfUrl:(NSURL *)url;
 
-// + (instancetype)make:(MediaFile *)file;
++ (instancetype)make:(void *)file;
 + (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithFile:(NSString *)path type:(FileType)t exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len type:(FileType)t exception:(ExceptionWrapper *)ex;
@@ -852,11 +853,13 @@
 // @property (readonly) NSString *name;
 @property (readonly) u64 fnv;
 @property (readonly) NSInteger size;
+@property (readonly) u8 *data;
 
 - (void)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex;
 
 @property (readonly, strong) NSImage *previewImage;
 @property (readonly) time_t timeStamp;
+@property (readonly) FloppyDiskInfo floppyDiskInfo;
 
 @end
 

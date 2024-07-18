@@ -11,7 +11,8 @@
 
 #include "Aliases.h"
 #include "Reflection.h"
-
+#include "FSTypes.h"
+#include "BootBlockImageTypes.h"
 
 //
 // Enumerations
@@ -86,3 +87,14 @@ typedef struct
     isize cylinders;
 }
 FloppyDiskDescriptor;
+
+typedef struct
+{
+    FSVolumeType dos;
+    Diameter diameter;
+    Density density;
+    BootBlockType bootBlockType;
+    const char *bootBlockName;
+    bool hasVirus;
+}
+FloppyDiskInfo;

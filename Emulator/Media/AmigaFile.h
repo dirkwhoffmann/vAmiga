@@ -106,7 +106,7 @@ private:
 public:
 
     virtual isize getSize() const override { return data.size; }
-    virtual string getSizeAsString();
+    // virtual string getSizeAsString() override;
     virtual u8 *getData() const override { return data.ptr; }
     virtual u64 fnv64() const override { return data.fnv64(); }
     virtual u32 crc32() const override { return data.crc32(); }

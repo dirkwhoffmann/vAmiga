@@ -941,6 +941,12 @@ FloppyDriveAPI::ejectDisk()
     drive->ejectDisk();
 }
 
+class MediaFile *
+FloppyDriveAPI::exportDisk(FileType type)
+{
+    return drive->exportDisk(type);
+}
+
 string
 FloppyDriveAPI::readTrackBits(isize track)
 {

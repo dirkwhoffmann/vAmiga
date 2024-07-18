@@ -149,12 +149,6 @@ AmigaFile::type(const string &path)
 }
 */
 
-string
-AmigaFile::getSizeAsString()
-{
-    return util::byteCountAsString(data.size);
-}
-
 isize
 AmigaFile::readFromStream(std::istream &stream)
 {

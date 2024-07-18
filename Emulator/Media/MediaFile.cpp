@@ -145,5 +145,35 @@ MediaFile::make(FloppyDriveAPI &drive, FileType type)
     }
 }
 
+string
+MediaFile::getSizeAsString() const
+{
+    return util::byteCountAsString(getSize());
+}
+
+FloppyDiskInfo
+MediaFile::getFloppyDiskInfo() const
+{
+    FloppyDiskInfo result;
+
+    try {
+
+        auto &disk = dynamic_cast<const FloppyFile &>(*this);
+
+        result.dos = disk.getDos();
+        result.diameter = disk.getDiameter();
+        result.density = disk.getDensity();
+        result.bootBlockType = disk.bootBlockType();
+        result.bootBlockName = disk.bootBlockName();
+        result.hasVirus = disk.hasVirus();
+
+        return result;
+
+    } catch (...) {
+
+        throw Error(ERROR_FILE_TYPE_MISMATCH);
+    }
+}
+
 }
 
