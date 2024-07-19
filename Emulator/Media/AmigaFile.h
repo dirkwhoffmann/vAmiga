@@ -144,6 +144,7 @@ public:
 
     isize writeToStream(std::ostream &stream) override throws;
     isize writeToFile(const string &path) override throws;
+    isize writePartitionToFile(const string &path, isize partition) override throws;
     isize writeToBuffer(u8 *buf) override throws;
     isize writeToBuffer(Buffer<u8> &buffer) throws;
 

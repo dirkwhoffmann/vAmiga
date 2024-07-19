@@ -64,3 +64,10 @@ struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType>
     }
 };
 #endif
+
+typedef struct
+{
+    isize partitions;
+    bool hasRDB;
+}
+HDFInfo;

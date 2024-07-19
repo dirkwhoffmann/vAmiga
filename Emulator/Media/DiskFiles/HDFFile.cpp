@@ -284,6 +284,14 @@ HDFFile::getFileSystemDescriptor(isize nr) const
     return result;
 }
 
+HDFInfo 
+HDFFile::getInfo() const
+{
+    HDFInfo info;
+
+    return info;
+}
+
 bool
 HDFFile::hasRDB() const
 {

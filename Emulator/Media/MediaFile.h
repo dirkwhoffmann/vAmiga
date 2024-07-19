@@ -39,6 +39,7 @@ public:
     static MediaFile *make(const u8 *buf, isize len, FileType type);
     static MediaFile *make(class MutableFileSystem &fs, FileType type);
     static MediaFile *make(struct FloppyDriveAPI &drive, FileType type);
+    static MediaFile *make(struct HardDriveAPI &drive, FileType type);
 
 
     //
@@ -74,6 +75,7 @@ public:
     virtual const u32 *previewImageData() const { return nullptr; }
 
     FloppyDiskInfo getFloppyDiskInfo() const;
+    HDFInfo getHDFInfo() const;
 
     //
     virtual void flash(u8 *buf, isize offset, isize len) const = 0;
@@ -92,6 +94,7 @@ public:
 
     virtual isize writeToStream(std::ostream &stream) = 0;
     virtual isize writeToFile(const string &path) = 0;
+    virtual isize writePartitionToFile(const string &path, isize partition) = 0;
     virtual isize writeToBuffer(u8 *buf) = 0;
 };
 

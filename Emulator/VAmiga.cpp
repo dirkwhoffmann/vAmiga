@@ -958,6 +958,12 @@ FloppyDriveAPI::readTrackBits(isize track)
 // Peripherals (HardDrive)
 //
 
+class HardDrive &
+HardDriveAPI::getDrive()
+{
+    return *drive;
+}
+
 const HardDriveConfig &
 HardDriveAPI::getConfig() const
 {

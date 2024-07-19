@@ -1668,6 +1668,15 @@ using namespace vamiga::moira;
     catch (Error &error) { [ex save:error]; return nil; }
 }
 
++ (instancetype)makeWithHardDrive:(HardDriveProxy *)proxy
+                             type:(FileType)type
+                        exception:(ExceptionWrapper *)ex
+{
+    auto drive = (HardDriveAPI *)proxy->obj;
+    try { return [self make: MediaFile::make(*drive, type)]; }
+    catch (Error &error) { [ex save:error]; return nil; }
+}
+
 + (instancetype)makeWithFileSystem:(FileSystemProxy *)proxy
                               type:(FileType)type
                          exception:(ExceptionWrapper *)ex
@@ -1707,6 +1716,12 @@ using namespace vamiga::moira;
 - (void)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { [self file]->writeToFile(string([path fileSystemRepresentation])); }
+    catch (Error &err) { [ex save:err]; }
+}
+
+- (void)writeToFile:(NSString *)path partition:(NSInteger)part exception:(ExceptionWrapper *)ex
+{
+    try { [self file]->writePartitionToFile(string([path fileSystemRepresentation]), part); }
     catch (Error &err) { [ex save:err]; }
 }
 
@@ -1750,6 +1765,11 @@ using namespace vamiga::moira;
 - (FloppyDiskInfo)floppyDiskInfo
 {
     return [self file]->getFloppyDiskInfo();
+}
+
+-(HDFInfo)hdfInfo
+{
+    return [self file]->getHDFInfo();
 }
 
 @end

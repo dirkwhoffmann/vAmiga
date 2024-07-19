@@ -270,6 +270,12 @@ AmigaFile::writeToFile(const string &path)
     return writeToFile(path, 0, data.size);
 }
 
+isize 
+AmigaFile::writePartitionToFile(const string &path, isize partition)
+{
+    throw Error(ERROR_FILE_TYPE_UNSUPPORTED);
+}
+
 isize
 AmigaFile::writeToBuffer(u8 *buf)
 {

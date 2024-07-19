@@ -145,6 +145,18 @@ MediaFile::make(FloppyDriveAPI &drive, FileType type)
     }
 }
 
+MediaFile *
+MediaFile::make(HardDriveAPI &drive, FileType type)
+{
+    switch (type) {
+
+        case FILETYPE_HDF:      return new HDFFile(drive.getDrive());
+
+        default:
+            return nullptr;
+    }
+}
+
 string
 MediaFile::getSizeAsString() const
 {
@@ -160,6 +172,14 @@ MediaFile::getFloppyDiskInfo() const
 
         auto &disk = dynamic_cast<const FloppyFile &>(*this);
 
+        result.cyls = disk.numCyls();
+        result.heads = disk.numHeads();
+        result.sectors = disk.numSectors();
+        result.bsize = disk.bsize();
+        result.tracks = disk.numTracks();
+        result.blocks = disk.numBlocks();
+        result.bytes = disk.numBytes();
+
         result.dos = disk.getDos();
         result.diameter = disk.getDiameter();
         result.density = disk.getDensity();
@@ -167,6 +187,26 @@ MediaFile::getFloppyDiskInfo() const
         result.bootBlockName = disk.bootBlockName();
         result.hasVirus = disk.hasVirus();
 
+        return result;
+
+    } catch (...) {
+
+        throw Error(ERROR_FILE_TYPE_MISMATCH);
+    }
+}
+
+HDFInfo
+MediaFile::getHDFInfo() const
+{
+    HDFInfo result;
+
+    try {
+
+        auto &hdf = dynamic_cast<const HDFFile &>(*this);
+
+        result.partitions = hdf.numPartitions();
+        result.hasRDB = hdf.hasRDB();
+        
         return result;
 
     } catch (...) {

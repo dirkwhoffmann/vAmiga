@@ -63,6 +63,14 @@ extension MediaFileProxy {
         return obj!
     }
 
+    static func make(with hardDrive: HardDriveProxy, type: FileType) throws -> Self {
+
+        let exc = ExceptionWrapper()
+        let obj = make(withHardDrive: hardDrive, type: type, exception: exc)
+        if exc.errorCode != .OK { throw VAError(exc) }
+        return obj!
+    }
+
     static func make(with fs: FileSystemProxy, type: FileType) throws -> Self {
 
         let exc = ExceptionWrapper()
@@ -71,34 +79,78 @@ extension MediaFileProxy {
         return obj!
     }
 
-    func writeToFile(_ url: URL) throws {
+    func writeToFile(url: URL) throws {
 
         let exception = ExceptionWrapper()
         write(toFile: url.path, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 
+    func writeToFile(url: URL, partition: Int) throws {
+
+        let exception = ExceptionWrapper()
+        write(toFile: url.path, partition: partition, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+
+    var typeInfo: String {
+
+        var result = ""
+        let info = floppyDiskInfo
+
+        if info.diameter == .INCH_35 { result += "3.5\"" }
+        if info.diameter == .INCH_525 { result += "5.25\"" }
+
+        return result
+    }
+
+    var layoutInfo: String {
+
+        var result = ""
+        let info = floppyDiskInfo
+
+        if info.heads == 1 { result += "Single sided, " }
+        if info.heads == 2 { result += "Double sided, " }
+        if info.density == .SD { result += "Single density" }
+        if info.density == .DD { result += "Double density" }
+        if info.density == .HD { result += "High density" }
+
+        return result
+    }
+
+    var bootInfo: String {
+
+        let info = floppyDiskInfo
+        let name = String(cString: info.bootBlockName)
+
+        if info.bootBlockType == .VIRUS {
+            return "Contagious boot block (\(name))"
+        } else {
+            return name
+        }
+    }
+
     func icon(protected: Bool = false) -> NSImage {
-        
+
         var name = ""
-        
+
         switch type {
-            
+
         case .ADF, .EADF, .IMG:
-            
+
             let info = floppyDiskInfo
             name = (info.density == .HD ? "hd" : "dd") +
             (type == .IMG ? "_dos" : info.dos == .NODOS ? "_other" : "_adf")
-            
+
         case .HDF:
-            
+
             name = "hdf"
-            
+
         default:
-            
+
             name = ""
         }
-        
+
         if protected { name += "_protected" }
         return NSImage(named: name)!
     }
@@ -414,10 +466,10 @@ extension HDFFileProxy {
 
 extension FileSystemProxy {
 
-    static func make(with file: MediaFileProxy, part: Int = 0) throws -> FileSystemProxy {
+    static func make(with file: MediaFileProxy, partition: Int = 0) throws -> FileSystemProxy {
 
         let exception = ExceptionWrapper()
-        let result = FileSystemProxy.make(withMedia: file, partition: part, exception: exception)
+        let result = FileSystemProxy.make(withMedia: file, partition: partition, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
 
         return result!
@@ -649,22 +701,6 @@ extension FloppyFileProxy {
         return result
     }
 
-    /*
-    var layoutInfo: String {
-                
-        var result = numHeads == 1 ? "Single sided" : "Double sided"
-
-        if diskDensity == .SD { result += ", single density" }
-        if diskDensity == .DD { result += ", double density" }
-        if diskDensity == .HD { result += ", high density" }
-
-        result += " disk, \(numTracks) tracks"
-        if numSectors > 0 { result += " with \(numSectors) sectors each" }
-        
-        return result
-    }
-    */
-        
     var bootInfo: String {
         
         let name = bootBlockName!

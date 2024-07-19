@@ -209,7 +209,7 @@ class MyDocument: NSDocument {
             if let snapshot = amiga.amiga.takeSnapshot() {
 
                 do {
-                    try snapshot.writeToFile(url)
+                    try snapshot.writeToFile(url: url)
 
                 } catch let error as VAError {
                     
@@ -333,7 +333,13 @@ class MyDocument: NSDocument {
 
         debug(.media, "Hard Drive exported successfully")
     }
-    
+
+    func export(fileProxy: MediaFileProxy, to url: URL) throws {
+
+        debug(.media, "Exporting to \(url)")
+        try fileProxy.writeToFile(url: url)
+    }
+
     func export(fileProxy: AmigaFileProxy, to url: URL) throws {
         
         debug(.media, "Exporting to \(url)")

@@ -10,6 +10,7 @@
 #pragma once
 
 #include "DiskFile.h"
+#include "MediaFileTypes.h"
 #include "MutableFileSystem.h"
 #include "DriveTypes.h"
 
@@ -107,6 +108,9 @@ public:
 
 public:
     
+    // Returns information about the hard drive in this file
+    HDFInfo getInfo() const;
+
     // Returns the (predicted) geometry for this disk
     const GeometryDescriptor getGeometry() const { return geometry; }
     
@@ -165,7 +169,7 @@ private:
     
 public:
     
-    isize writePartitionToFile(const string &path, isize nr);
+    isize writePartitionToFile(const string &path, isize nr) override;
 };
 
 }

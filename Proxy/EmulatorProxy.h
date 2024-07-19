@@ -847,6 +847,7 @@
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len type:(FileType)t exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithAmiga:(EmulatorProxy *)proxy;
 + (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy type:(FileType)t exception:(ExceptionWrapper *)ex;
++ (instancetype)makeWithHardDrive:(HardDriveProxy *)proxy type:(FileType)t exception:(ExceptionWrapper *)ex;
 + (instancetype)makeWithFileSystem:(FileSystemProxy *)proxy type:(FileType)t exception:(ExceptionWrapper *)ex;
 
 @property (readonly) FileType type;
@@ -856,10 +857,12 @@
 @property (readonly) u8 *data;
 
 - (void)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex;
+- (void)writeToFile:(NSString *)path partition:(NSInteger)part exception:(ExceptionWrapper *)ex;
 
 @property (readonly, strong) NSImage *previewImage;
 @property (readonly) time_t timeStamp;
 @property (readonly) FloppyDiskInfo floppyDiskInfo;
+@property (readonly) HDFInfo hdfInfo;
 
 @end
 

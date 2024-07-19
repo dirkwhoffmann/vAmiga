@@ -43,13 +43,13 @@ class DiskExporter: DialogController {
     var partition: Int?
 
     // Number of available partitions
-    var numPartitions: Int { return hdf?.numPartitions ?? 1 }
-    
+    var numPartitions: Int { return hdf?.hdfInfo.partitions ?? 1 }
+
     // Results of the different decoders
-    var hdf: HDFFileProxy?
-    var adf: ADFFileProxy?
-    var ext: EADFFileProxy?
-    var img: IMGFileProxy?
+    var hdf: MediaFileProxy?
+    var adf: MediaFileProxy?
+    var ext: MediaFileProxy?
+    var img: MediaFileProxy?
     var vol: FileSystemProxy?
     
     func showSheet(diskDrive nr: Int) {
@@ -57,14 +57,14 @@ class DiskExporter: DialogController {
         dfn = emu.df(nr)
 
         // Run the ADF decoder
-        adf = try? ADFFileProxy.make(with: dfn!)
+        adf = try? MediaFileProxy.make(with: dfn!, type: .ADF)
 
         // Run the extended ADF decoder
-        ext = try? EADFFileProxy.make(with: dfn!)
+        ext = try? MediaFileProxy.make(with: dfn!, type: .EADF)
 
         // Run the DOS decoder
-        img = try? IMGFileProxy.make(with: dfn!)
-                        
+        img = try? MediaFileProxy.make(with: dfn!, type: .IMG)
+
         // Select the export partition
         select(partition: 0)
         
@@ -76,8 +76,8 @@ class DiskExporter: DialogController {
         hdn = emu.hd(nr)
 
         // Run the HDF decoder
-        hdf = try? HDFFileProxy.make(with: hdn!)
-                                
+        hdf = try? MediaFileProxy.make(with: hdn!, type: .HDF)
+
         // Select the export partition
         select(partition: numPartitions == 1 ? 0 : nil)
         
@@ -91,12 +91,12 @@ class DiskExporter: DialogController {
         if hdf != nil && nr != nil {
 
             // Try to decode the file system from the HDF
-            vol = try? FileSystemProxy.make(withHDF: hdf!, partition: nr!)
+            vol = try? FileSystemProxy.make(with: hdf!, partition: nr!)
         
         } else if adf != nil {
 
             // Try to decode the file system from the ADF
-            vol = try? FileSystemProxy.make(withADF: adf!)
+            vol = try? FileSystemProxy.make(with: adf!)
 
         } else {
                
@@ -118,7 +118,7 @@ class DiskExporter: DialogController {
 
         addItem("Entire disk", tag: -1)
 
-        if hdf?.hasRDB == true {
+        if hdf?.hdfInfo.hasRDB == true {
 
             for i in 1...numPartitions {
                 addItem("Partition \(i)", tag: i - 1)
@@ -216,13 +216,15 @@ class DiskExporter: DialogController {
     }
     
     func updateHardDiskInfo() {
-    
-        let num = hdf!.numPartitions
+
+        let info = hdf!.hdfInfo
+
+        let num = info.partitions
         let s = num == 1 ? "" : "s"
         
         if partition == nil {
             
-            if hdf!.hasRDB {
+            if info.hasRDB {
                 info1.stringValue = "RDB hard drive with \(num) partition\(s)"
             } else {
                 info1.stringValue = "Standard hard drive"
@@ -241,7 +243,7 @@ class DiskExporter: DialogController {
     }
         
     func updateFloppyDiskInfo() {
-            
+
         if adf != nil {
             info1.stringValue = adf!.typeInfo + ", " + adf!.layoutInfo
         } else {

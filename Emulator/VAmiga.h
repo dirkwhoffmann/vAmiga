@@ -747,6 +747,10 @@ public:
 
     HdControllerAPI controller;
 
+    /** @brief  Getter for the raw disk object
+     */
+    class HardDrive &getDrive();
+
     /** @brief  Returns the component's current configuration.
      */
     const HardDriveConfig &getConfig() const;
