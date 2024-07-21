@@ -93,6 +93,18 @@ extension MediaFileProxy {
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 
+    var fileTypeInfo: String {
+
+        switch type {
+
+        case .ADF:  return "Amiga Floppy Disk"
+        case .EADF: return "Amiga Floppy Disk (Ext)"
+        case .IMG:  return "PC Disk"
+        case .HDF:  return "Amiga Hard Drive"
+        default:    return ""
+        }
+    }
+
     var typeInfo: String {
 
         var result = ""
@@ -107,13 +119,14 @@ extension MediaFileProxy {
     var layoutInfo: String {
 
         var result = ""
-        let info = floppyDiskInfo
+        let info = diskInfo
+        let floppyInfo = floppyDiskInfo
 
         if info.heads == 1 { result += "Single sided, " }
         if info.heads == 2 { result += "Double sided, " }
-        if info.density == .SD { result += "Single density" }
-        if info.density == .DD { result += "Double density" }
-        if info.density == .HD { result += "High density" }
+        if floppyInfo.density == .SD { result += "Single density" }
+        if floppyInfo.density == .DD { result += "Double density" }
+        if floppyInfo.density == .HD { result += "High density" }
 
         return result
     }

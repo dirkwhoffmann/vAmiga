@@ -65,9 +65,27 @@ struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType>
 };
 #endif
 
+
+//
+// Structures
+//
+
+typedef struct
+{
+    isize cyls;
+    isize heads;
+    isize sectors;
+    isize bsize;
+    isize tracks;
+    isize blocks;
+    isize bytes;
+}
+DiskInfo;
+
 typedef struct
 {
     isize partitions;
+    isize drivers;
     bool hasRDB;
 }
 HDFInfo;

@@ -74,6 +74,7 @@ public:
     // Return a preview image (only available for snapshot files)
     virtual const u32 *previewImageData() const { return nullptr; }
 
+    DiskInfo getDiskInfo() const;
     FloppyDiskInfo getFloppyDiskInfo() const;
     HDFInfo getHDFInfo() const;
 
@@ -81,6 +82,27 @@ public:
     virtual void flash(u8 *buf, isize offset, isize len) const = 0;
     virtual void flash(u8 *buf, isize offset = 0) const = 0;
 
+
+    //
+    // Accessing raw data
+    //
+
+public:
+
+    virtual u8 readByte(isize b, isize offset) const { return 0; }
+    virtual u8 readByte(isize t, isize s, isize offset) const { return 0; }
+    virtual void readSector(u8 *dst, isize b) const { }
+    virtual void readSector(u8 *dst, isize t, isize s) const { }
+
+    // Generates a hex dump for some sector data
+    virtual string hexdump(isize b, isize offset, isize len) const { return ""; }
+    virtual string hexdump(isize t, isize s, isize offset, isize len) const { return ""; }
+    virtual string hexdump(isize c, isize h, isize s, isize offset, isize len) const { return ""; }
+
+    // Generates an ASCII dump for some sector data
+    virtual string asciidump(isize b, isize offset, isize len) const { return ""; }
+    virtual string asciidump(isize t, isize s, isize offset, isize len) const { return ""; }
+    virtual string asciidump(isize c, isize h, isize s, isize offset, isize len) const { return ""; }
 
     //
     // Serializing

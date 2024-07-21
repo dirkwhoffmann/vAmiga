@@ -861,8 +861,16 @@
 
 @property (readonly, strong) NSImage *previewImage;
 @property (readonly) time_t timeStamp;
+@property (readonly) DiskInfo diskInfo;
 @property (readonly) FloppyDiskInfo floppyDiskInfo;
 @property (readonly) HDFInfo hdfInfo;
+@property (readonly) NSString *describeCapacity;
+
+- (NSInteger)readByte:(NSInteger)b offset:(NSInteger)offset;
+- (void)readSector:(NSInteger)b destination:(unsigned char *)buf;
+
+- (NSString *)hexdump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len;
+- (NSString *)asciidump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len;
 
 @end
 

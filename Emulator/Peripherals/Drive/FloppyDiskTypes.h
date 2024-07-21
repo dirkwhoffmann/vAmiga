@@ -90,14 +90,6 @@ FloppyDiskDescriptor;
 
 typedef struct
 {
-    isize cyls;
-    isize heads;
-    isize sectors;
-    isize bsize;
-    isize tracks;
-    isize blocks;
-    isize bytes;
-
     FSVolumeType dos;
     Diameter diameter;
     Density density;

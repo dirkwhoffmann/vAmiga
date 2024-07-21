@@ -163,14 +163,14 @@ MediaFile::getSizeAsString() const
     return util::byteCountAsString(getSize());
 }
 
-FloppyDiskInfo
-MediaFile::getFloppyDiskInfo() const
+DiskInfo
+MediaFile::getDiskInfo() const
 {
-    FloppyDiskInfo result;
+    DiskInfo result;
 
     try {
 
-        auto &disk = dynamic_cast<const FloppyFile &>(*this);
+        auto &disk = dynamic_cast<const DiskFile &>(*this);
 
         result.cyls = disk.numCyls();
         result.heads = disk.numHeads();
@@ -179,6 +179,23 @@ MediaFile::getFloppyDiskInfo() const
         result.tracks = disk.numTracks();
         result.blocks = disk.numBlocks();
         result.bytes = disk.numBytes();
+
+        return result;
+
+    } catch (...) {
+
+        throw Error(ERROR_FILE_TYPE_MISMATCH);
+    }
+}
+
+FloppyDiskInfo
+MediaFile::getFloppyDiskInfo() const
+{
+    FloppyDiskInfo result;
+
+    try {
+
+        auto &disk = dynamic_cast<const FloppyFile &>(*this);
 
         result.dos = disk.getDos();
         result.diameter = disk.getDiameter();
@@ -205,8 +222,9 @@ MediaFile::getHDFInfo() const
         auto &hdf = dynamic_cast<const HDFFile &>(*this);
 
         result.partitions = hdf.numPartitions();
+        result.drivers = hdf.numDrivers();
         result.hasRDB = hdf.hasRDB();
-        
+
         return result;
 
     } catch (...) {

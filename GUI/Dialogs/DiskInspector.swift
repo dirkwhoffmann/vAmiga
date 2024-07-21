@@ -45,17 +45,17 @@ class DiskInspector: DialogController {
     var image: NSImage?
     
     // Block data provider
-    var decoder: DiskFileProxy?
+    var decoder: MediaFileProxy?
 
     // MFM data provider
     var drive: FloppyDriveProxy?
 
     // Drive geometry
-    var numCyls: Int { return decoder?.numCyls ?? 0 }
-    var numHeads: Int { return decoder?.numHeads ?? 0 }
-    var numSectors: Int { return decoder?.numSectors ?? 0 }
-    var numTracks: Int { return decoder?.numTracks ?? 0 }
-    var numBlocks: Int { return decoder?.numBlocks ?? 0 }
+    var numCyls: Int { return decoder?.diskInfo.cyls ?? 0 }
+    var numHeads: Int { return decoder?.diskInfo.heads ?? 0 }
+    var numSectors: Int { return decoder?.diskInfo.sectors ?? 0 }
+    var numTracks: Int { return decoder?.diskInfo.tracks ?? 0 }
+    var numBlocks: Int { return decoder?.diskInfo.blocks ?? 0 }
 
     var upperCyl: Int { return max(numCyls - 1, 0) }
     var upperHead: Int { return max(numHeads - 1, 0) }
@@ -81,21 +81,21 @@ class DiskInspector: DialogController {
         titleString = "Floppy Drive DF\(nr)"
 
         // Run the ADF decoder
-        decoder = try? ADFFileProxy.make(with: drive!)
-        
+        decoder = try? MediaFileProxy.make(with: drive!, type: .ADF)
+
         if decoder == nil {
 
             // Run the DOS decoder
-            decoder = try? IMGFileProxy.make(with: drive!)
+            decoder = try? MediaFileProxy.make(with: drive!, type: .IMG)
         }
         if decoder == nil {
             
             // Run the extended ADF decoder
-            decoder = try? EADFFileProxy.make(with: drive!)
+            decoder = try? MediaFileProxy.make(with: drive!, type: .EADF)
         }
 
         let protected = drive!.info.hasProtectedDisk
-        image = (decoder as? FloppyFileProxy)?.icon(protected: protected)
+        image = decoder?.icon(protected: protected)
         showAsWindow()
     }
     
@@ -104,7 +104,7 @@ class DiskInspector: DialogController {
         titleString = "Hard Drive HD\(nr)"
 
         // Run the HDF decoder
-        decoder = try? HDFFileProxy.make(with: emu.hd(nr)!)
+        decoder = try? MediaFileProxy.make(with: emu.hd(nr)!, type: .HDF)
 
         image = NSImage(named: "hdf")!
         showAsWindow()
@@ -121,7 +121,7 @@ class DiskInspector: DialogController {
         blockStepper.maxValue = .greatestFiniteMagnitude
                 
         // Remove the MFM tab if a hard drive is analyzed
-        if decoder is HDFFileProxy {
+        if decoder?.type == .HDF {
             tabView.removeTabViewItem(tabView.tabViewItem(at: 1))
         }
         
@@ -145,14 +145,45 @@ class DiskInspector: DialogController {
         icon.image = image
         title.stringValue = titleString
 
-        switch decoder {
-            
-        case is HDFFileProxy: subTitle1.stringValue = "Standard Hard Drive"
-        case is ADFFileProxy: subTitle1.stringValue = "Amiga Floppy Disk"
-        case is EADFFileProxy: subTitle1.stringValue = "Amiga Floppy Disk (Ext)"
-        case is IMGFileProxy: subTitle1.stringValue = "PC Disk"
+        switch decoder?.type {
+
+        case .HDF:
+
+            let info = decoder!.diskInfo
+            let hdfInfo = decoder!.hdfInfo
+
+            subTitle1.stringValue = decoder!.fileTypeInfo
+            subTitle2.stringValue = "\(hdfInfo.partitions) Partition"
+            subTitle2.stringValue += hdfInfo.partitions != 1 ? "s" : ""
+            subTitle3.stringValue = hdfInfo.hasRDB ? "Rigid Disk Block" : "No Rigid Disk Block"
+            subTitle3.stringValue += ", " + (hdfInfo.drivers == 0 ? "no" : "\(hdfInfo.drivers)")
+            subTitle3.stringValue += " loadable file system"
+            subTitle3.stringValue += hdfInfo.drivers != 1 ? "s" : ""
+            cylindersInfo.integerValue = info.cyls
+            headsInfo.integerValue = info.heads
+            sectorsInfo.integerValue = info.sectors
+            blocksInfo.integerValue = info.blocks
+            bsizeInfo.stringValue = "\(info.bsize) Bytes"
+            capacityInfo.stringValue = String(capacity: info.bytes)
+
+
+        case .ADF, .EADF, .IMG:
+
+            let info = decoder!.diskInfo
+            // let floppyInfo = decoder!.floppyDiskInfo
+
+            subTitle1.stringValue = decoder!.fileTypeInfo
+            subTitle2.stringValue = decoder!.typeInfo + " " + decoder!.layoutInfo
+            subTitle3.stringValue = ""
+            cylindersInfo.integerValue = info.cyls
+            headsInfo.integerValue = info.heads
+            sectorsInfo.integerValue = info.sectors
+            blocksInfo.integerValue = info.blocks
+            bsizeInfo.stringValue = "\(info.bsize) Bytes"
+            capacityInfo.stringValue = String(capacity: info.bytes)
 
         default:
+
             subTitle1.stringValue = "Raw MFM stream"
             subTitle2.stringValue = ""
             subTitle3.stringValue = ""
@@ -162,38 +193,7 @@ class DiskInspector: DialogController {
             capacityInfo.stringValue = ""
             blocksInfo.stringValue = "-"
             bsizeInfo.stringValue = "-"
-            return
         }
-        
-        if let hdf = decoder as? HDFFileProxy {
-                        
-            var num = hdf.numPartitions
-            subTitle2.stringValue = "\(num) Partition"
-            subTitle2.stringValue += num != 1 ? "s" : ""
-            
-            if hdf.hasRDB {
-                subTitle3.stringValue = "Rigid Disk Block"
-            } else {
-                subTitle3.stringValue = "No Rigid Disk Block"
-            }
-
-            num = hdf.numDrivers
-            subTitle3.stringValue += ", " + (num == 0 ? "no" : "\(num)")
-            subTitle3.stringValue += " loadable file system"
-            subTitle3.stringValue += num != 1 ? "s" : ""
-        }
-        if let floppy = decoder as? FloppyFileProxy {
-            
-            subTitle2.stringValue = floppy.typeInfo + " " + floppy.layoutInfo
-            subTitle3.stringValue = ""
-        }
-        
-        cylindersInfo.integerValue = decoder!.numCyls
-        headsInfo.integerValue = decoder!.numHeads
-        sectorsInfo.integerValue = decoder!.numSectors
-        blocksInfo.integerValue = decoder!.numBlocks
-        bsizeInfo.stringValue = "\(decoder!.bsize) Bytes"
-        capacityInfo.stringValue = decoder!.describeCapacity
     }
      
     func updateSelection() {

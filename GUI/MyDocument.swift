@@ -98,66 +98,6 @@ class MyDocument: NSDocument {
                       "The type of this file is not known to the emulator.")
     }
 
-    /*
-    func createFileProxy(from url: URL, allowedTypes: [FileType]) throws -> AmigaFileProxy? {
-            
-        debug(.media, "Reading file \(url.lastPathComponent)")
-        
-        // If the provided URL points to compressed file, decompress it first
-        let newUrl = url.unpacked(maxSize: 2048 * 1024)
-        
-        // Iterate through all allowed file types
-        for type in allowedTypes {
-            
-            do {
-                switch type {
-                
-                case .SNAPSHOT:
-                    return try SnapshotProxy.make(with: newUrl)
-                    
-                case .SCRIPT:
-                    return try ScriptProxy.make(with: newUrl)
-                    
-                case .ADF:
-                    return try ADFFileProxy.make(with: newUrl)
-                    
-                case .EADF:
-                    return try EADFFileProxy.make(with: newUrl)
-                    
-                case .IMG:
-                    return try IMGFileProxy.make(with: newUrl)
-
-                case .ST:
-                    return try STFileProxy.make(with: newUrl)
-
-                case .DMS:
-                    return try DMSFileProxy.make(with: newUrl)
-                    
-                case .EXE:
-                    return try EXEFileProxy.make(with: newUrl)
-                    
-                case .DIR:
-                    return try FolderProxy.make(with: newUrl)
-                    
-                case .HDF:
-                    return try HDFFileProxy.make(with: newUrl)
-                    
-                default:
-                    fatalError()
-                }
-                
-            } catch let error as VAError {
-                if error.errorCode != .FILE_TYPE_MISMATCH {
-                    throw error
-                }
-            }
-        }
-        
-        // None of the allowed types matched the file
-        throw VAError(.FILE_TYPE_MISMATCH,
-                      "The type of this file is not known to the emulator.")
-    }
-    */
 
     //
     // Loading
@@ -295,12 +235,12 @@ class MyDocument: NSDocument {
     
     func export(drive nr: Int, to url: URL) throws {
                         
-        var df: FloppyFileProxy?
+        var df: MediaFileProxy?
         switch url.pathExtension.uppercased() {
         case "ADF":
-            df = try ADFFileProxy.make(with: amiga.df(nr)!)
+            df = try MediaFileProxy.make(with: amiga.df(nr)!, type: .ADF)
         case "IMG", "IMA":
-            df = try IMGFileProxy.make(with: amiga.df(nr)!)
+            df = try MediaFileProxy.make(with: amiga.df(nr)!, type: .IMG)
         default:
             warn("Invalid path extension")
             return
@@ -316,11 +256,11 @@ class MyDocument: NSDocument {
     func export(hardDrive nr: Int, to url: URL) throws {
         
         let hdn = amiga.hd(nr)!
-        var dh: HDFFileProxy?
+        var dh: MediaFileProxy?
 
         switch url.pathExtension.uppercased() {
         case "HDF":
-            dh = try HDFFileProxy.make(with: amiga.hd(nr)!)
+            dh = try MediaFileProxy.make(with: amiga.hd(nr)!, type: .HDF)
         default:
             warn("Invalid path extension")
             return
@@ -339,10 +279,4 @@ class MyDocument: NSDocument {
         debug(.media, "Exporting to \(url)")
         try fileProxy.writeToFile(url: url)
     }
-
-    func export(fileProxy: AmigaFileProxy, to url: URL) throws {
-        
-        debug(.media, "Exporting to \(url)")
-        try fileProxy.writeToFile(url: url)        
-    }        
 }

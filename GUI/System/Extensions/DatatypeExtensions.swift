@@ -70,6 +70,26 @@ extension String {
         return indices
     }
 
+    init(capacity: Int) {
+
+        let kb = capacity / 1024
+        let mb = capacity / (1024 * 1024)
+        let gb = capacity / (1024 * 1024 * 1024)
+        let kbfrac = (capacity * 100 / 1024) % 100
+        let mbfrac = (capacity * 100 / (1024 * 1024)) % 100
+        let gbfrac = (capacity * 100 / (1024 * 1024 * 1024)) % 100
+
+        if (capacity < 1024) {
+            self.init("\(capacity) Bytes")
+        } else if (capacity < 1024 * 1024) {
+            self.init(kbfrac == 0 ? "\(kb) KB" : "\(kb).\(kbfrac) KB")
+        } else if (capacity < 1024 * 1024 * 1024) {
+            self.init(mbfrac == 0 ? "\(mb) MB" : "\(mb).\(mbfrac) MB")
+        } else {
+            self.init(gbfrac == 0 ? "\(gb) GB" : "\(gb).\(gbfrac) GB")
+        }
+    }
+
     init?(keyCode: UInt16, carbonFlags: Int) {
         
         let source = TISCopyCurrentASCIICapableKeyboardLayoutInputSource().takeRetainedValue()

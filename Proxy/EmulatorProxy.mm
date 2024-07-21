@@ -1762,6 +1762,11 @@ using namespace vamiga::moira;
     return [self file]->timestamp();
 }
 
+- (DiskInfo)diskInfo
+{
+    return [self file]->getDiskInfo();
+}
+
 - (FloppyDiskInfo)floppyDiskInfo
 {
     return [self file]->getFloppyDiskInfo();
@@ -1770,6 +1775,26 @@ using namespace vamiga::moira;
 -(HDFInfo)hdfInfo
 {
     return [self file]->getHDFInfo();
+}
+
+- (NSInteger)readByte:(NSInteger)b offset:(NSInteger)offset
+{
+    return [self file]->readByte(b, offset);
+}
+
+- (void)readSector:(NSInteger)b destination:(unsigned char *)buf
+{
+    [self file]->readSector(buf, b);
+}
+
+- (NSString *)hexdump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len
+{
+    return @([self file]->hexdump(b, offset, len).c_str());
+}
+
+- (NSString *)asciidump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len
+{
+    return @([self file]->asciidump(b, offset, len).c_str());
 }
 
 @end
