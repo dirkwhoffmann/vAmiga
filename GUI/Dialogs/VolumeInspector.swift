@@ -173,9 +173,9 @@ class VolumeInspector: DialogController {
     func show(diskDrive nr: Int) throws {
         
         let dfn = emu.df(nr)!
-        let adf = try ADFFileProxy.make(with: dfn)
-        vol = try FileSystemProxy.make(withADF: adf)
-        
+        let adf = try MediaFileProxy.make(with: dfn, type: .ADF)
+        vol = try FileSystemProxy.make(with: adf)
+
         showAsWindow()
     }
     
