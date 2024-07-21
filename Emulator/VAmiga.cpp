@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "VAmiga.h"
-#include "Emulator.h"
 
 namespace vamiga {
 

@@ -15,7 +15,7 @@ class SpriteTableView: NSTableView {
 
     var amiga: EmulatorProxy!
 
-    var spriteDat = [UInt64](repeating: 0, count: Int(VPOS_CNT))
+    var spriteDat = [UInt64](repeating: 0, count: Int(Constants.vpos_cnt))
     var spriteCol = [NSColor](repeating: NSColor.white, count: 16)
     var spriteLines = 0
 

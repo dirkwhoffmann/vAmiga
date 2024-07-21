@@ -23,7 +23,7 @@ extension Canvas {
     // Returns the entire texture area (including HBLANK and VBLANK)
     var entire: CGRect {
         
-        return CGRect(x: 0, y: 0, width: 4 * Int(TPP) * HPOS_CNT, height: VPOS_CNT)
+        return CGRect(x: 0, y: 0, width: 4 * Int(TPP) * Constants.hpos_cnt, height: Constants.vpos_cnt)
     }
     
     var entireNormalized: CGRect {
@@ -36,11 +36,11 @@ extension Canvas {
 
         let pal = amiga.agnus.traits.isPAL
         
-        let x1 = 4 * Int(TPP) * HBLANK_CNT
-        let x2 = 4 * Int(TPP) * HPOS_CNT_PAL
-        let y1 = VBLANK_CNT
-        let y2 = pal ? VPOS_CNT_PAL : VPOS_CNT_NTSC
-        
+        let x1 = 4 * Int(TPP) * Constants.hblank_cnt
+        let x2 = 4 * Int(TPP) * Constants.hpos_cnt_pal
+        let y1 = Constants.vblank_cnt
+        let y2 = pal ? Constants.vpos_cnt_pal : Constants.vpos_cnt_ntsc
+
         return CGRect(x: x1, y: y1, width: x2 - x1, height: y2 - y1)
     }
     
@@ -138,8 +138,8 @@ extension Canvas {
         y2 = CGFloat(vstop)
 
         // Compensate the texture shift
-        x1 -= CGFloat(HBLANK_MIN) * CGFloat(TPP) * 4
-        x2 -= CGFloat(HBLANK_MIN) * CGFloat(TPP) * 4
+        x1 -= CGFloat(Constants.hblank_min) * CGFloat(TPP) * 4
+        x2 -= CGFloat(Constants.hblank_min) * CGFloat(TPP) * 4
 
         // Crop
         let max = largestVisible

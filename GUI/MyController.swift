@@ -330,7 +330,8 @@ extension MyController {
         // Memory monitors
         let mem = emu.mem.stats
 
-        let max = Float((HPOS_CNT_PAL * VPOS_CNT) / 2)
+        // let max = Float((HPOS_CNT_PAL * VPOS_CNT) / 2)
+        let max = Float((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 2)
         let chipR = Float(mem.chipReads.accumulated) / max
         let chipW = Float(mem.chipWrites.accumulated) / max
         let slowR = Float(mem.slowReads.accumulated) / max

@@ -64,6 +64,17 @@ using namespace vamiga::moira;
 
 @implementation Constants
 
++ (NSInteger)hpixels { return HPIXELS; }
++ (NSInteger)vpixels { return VPIXELS; }
+
++ (NSInteger)hblank_cnt { return HBLANK_CNT; }
++ (NSInteger)hblank_min { return HBLANK_MIN; }
++ (NSInteger)hblank_max { return HBLANK_MAX; }
+
++ (NSInteger)vblank_cnt { return VBLANK_CNT; }
++ (NSInteger)vblank_min { return VBLANK_MIN; }
++ (NSInteger)vblank_max { return VBLANK_MAX; }
+
 + (NSInteger)vpos_cnt_pal { return VPOS_CNT_PAL; }
 + (NSInteger)vpos_max_pal { return VPOS_MAX_PAL; }
 

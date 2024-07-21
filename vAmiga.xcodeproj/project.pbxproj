@@ -2865,6 +2865,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Proxy/Bridging-Header.h";
+				SWIFT_OBJC_INTEROP_MODE = objc;
 				SWIFT_VERSION = 5.0;
 				WARNING_CFLAGS = (
 					"-Wno-gnu-anonymous-struct",
@@ -2913,6 +2914,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Proxy/Bridging-Header.h";
+				SWIFT_OBJC_INTEROP_MODE = objc;
 				SWIFT_VERSION = 5.0;
 				WARNING_CFLAGS = (
 					"-Wno-gnu-anonymous-struct",

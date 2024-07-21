@@ -96,6 +96,17 @@
 
 }
 
+@property (class, readonly) NSInteger hpixels;
+@property (class, readonly) NSInteger vpixels;
+
+@property (class, readonly) NSInteger hblank_cnt;
+@property (class, readonly) NSInteger hblank_min;
+@property (class, readonly) NSInteger hblank_max;
+
+@property (class, readonly) NSInteger vblank_cnt;
+@property (class, readonly) NSInteger vblank_min;
+@property (class, readonly) NSInteger vblank_max;
+
 @property (class, readonly) NSInteger vpos_cnt_pal;
 @property (class, readonly) NSInteger vpos_max_pal;
 
