@@ -21,7 +21,6 @@
 //
 
 @class AudioPortProxy;
-@class ADFFileProxy;
 @class AgnusProxy;
 @class AmigaProxy;
 @class AmigaFileProxy;
@@ -39,7 +38,6 @@
 @class GuardsProxy;
 @class HardDriveProxy;
 @class HdControllerProxy;
-@class HDFFileProxy;
 @class IMGFileProxy;
 @class JoystickProxy;
 @class KeyboardProxy;
@@ -728,7 +726,6 @@
 - (void)enableWriteThrough:(ExceptionWrapper *)ex;
 - (void)disableWriteThrough;
 
-- (HDFFileProxy *)createHDF:(ExceptionWrapper *)ex;
 @end
 
 //
@@ -738,8 +735,6 @@
 @interface FileSystemProxy : Proxy { }
 
 + (instancetype)makeWithMedia:(MediaFileProxy *)proxy partition:(NSInteger)nr exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithADF:(ADFFileProxy *)adf exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithHDF:(HDFFileProxy *)hdf partition:(NSInteger)nr exception:(ExceptionWrapper *)ex;
 
 @property (readonly) NSString *name;
 @property (readonly) NSString *creationDate;
@@ -938,58 +933,6 @@
 @property (readonly) BOOL hasVirus;
 
 - (void)killVirus;
-
-@end
-
-
-//
-// ADFFileProxy
-//
-
-@interface ADFFileProxy : FloppyFileProxy <MakeWithFile, MakeWithBuffer, MakeWithDrive> {
-}
-
-+ (instancetype)makeWithDiameter:(Diameter)type density:(Density)density exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithDrive:(FloppyDriveProxy *)drive exception:(ExceptionWrapper *)ex;
-
-- (void)format:(FSVolumeType)fs bootBlock:(NSInteger)bb name:(NSString *)name;
-
-@end
-
-
-//
-// HDFFile
-//
-
-@interface HDFFileProxy : DiskFileProxy <MakeWithFile, MakeWithBuffer, MakeWithHardDrive> {
-}
-
-+ (instancetype)make:(void *)obj;
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithHardDrive:(HardDriveProxy *)drive exception:(ExceptionWrapper *)ex;
-
-@property (readonly) BOOL hasRDB;
-@property (readonly) NSInteger numPartitions;
-@property (readonly) NSInteger numDrivers;
-
-- (NSInteger)writeToFile:(NSString *)path partition:(NSInteger)nr exception:(ExceptionWrapper *)ex;
-
-@end
-
-
-//
-// EADFFileProxy
-//
-
-@interface EADFFileProxy : FloppyFileProxy <MakeWithFile, MakeWithBuffer, MakeWithDrive> {
-}
-
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithDrive:(FloppyDriveProxy *)drive exception:(ExceptionWrapper *)ex;
 
 @end
 

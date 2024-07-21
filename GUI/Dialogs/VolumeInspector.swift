@@ -206,8 +206,8 @@ class VolumeInspector: DialogController {
     func show(hardDrive nr: Int, partition: Int) throws {
         
         let hdn = emu.hd(nr)!
-        let hdf = try HDFFileProxy.make(with: hdn)
-        vol = try FileSystemProxy.make(withHDF: hdf, partition: partition)
+        let hdf = try MediaFileProxy.make(with: hdn, type: .HDF)
+        vol = try FileSystemProxy.make(with: hdf, partition: partition)
         
         showAsWindow()
     }

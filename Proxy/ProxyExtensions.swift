@@ -427,15 +427,6 @@ extension HardDriveProxy {
         enableWriteThrough(exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
-
-    func createHDF() throws -> HDFFileProxy? {
-
-        let exception = ExceptionWrapper()
-        let result = createHDF(exception)
-        if exception.errorCode != .OK { throw VAError(exception) }
-
-        return result;
-    }
 }
 
 extension AmigaFileProxy {
@@ -451,32 +442,6 @@ extension AmigaFileProxy {
     }
 }
 
-extension ADFFileProxy {
-
-    static func make (diameter: Diameter, density: Density) throws -> ADFFileProxy {
-
-        let exception = ExceptionWrapper()
-        let result = ADFFileProxy.make(with: diameter, density: density, exception: exception)
-        if exception.errorCode != .OK { throw VAError(exception) }
-        
-        return result!
-
-    }
-}
-
-extension HDFFileProxy {
-    
-    @discardableResult
-    func writeToFile(url: URL, partition nr: Int) throws -> Int {
-        
-        let exception = ExceptionWrapper()
-        let result = write(toFile: url.path, partition: nr, exception: exception)
-        if exception.errorCode != .OK { throw VAError(exception) }
-        
-        return result
-    }
-}
-
 extension FileSystemProxy {
 
     static func make(with file: MediaFileProxy, partition: Int = 0) throws -> FileSystemProxy {
@@ -485,24 +450,6 @@ extension FileSystemProxy {
         let result = FileSystemProxy.make(withMedia: file, partition: partition, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
 
-        return result!
-    }
-
-    static func make(withADF adf: ADFFileProxy) throws -> FileSystemProxy {
-        
-        let exception = ExceptionWrapper()
-        let result = FileSystemProxy.make(withADF: adf, exception: exception)
-        if exception.errorCode != .OK { throw VAError(exception) }
-        
-        return result!
-    }
-
-    static func make(withHDF hdf: HDFFileProxy, partition nr: Int) throws -> FileSystemProxy {
-        
-        let exception = ExceptionWrapper()
-        let result = FileSystemProxy.make(withHDF: hdf, partition: nr, exception: exception)
-        if exception.errorCode != .OK { throw VAError(exception) }
-        
         return result!
     }
 
@@ -723,25 +670,6 @@ extension FloppyFileProxy {
         } else {
             return name
         }
-    }
-}
-
-extension HDFFileProxy {
-    
-    func icon() -> NSImage {
-        
-        return NSImage(named: "hdf")!
-    }
-    
-    var layoutInfo: String {
-        
-        let capacity = getSizeAsString!
-        return "\(capacity), \(numBlocks) sectors"
-    }
-    
-    var bootInfo: String {
-
-        return ""
     }
 }
 
