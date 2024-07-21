@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Types.h"
 #include "SamplerTypes.h"
 #include "Constants.h"
 #include "RingBuffer.h"

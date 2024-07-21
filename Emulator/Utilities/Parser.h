@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
+#include "BaseTypes.h"
 #include "Exception.h"
 
 namespace util {

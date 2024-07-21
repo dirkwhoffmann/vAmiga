@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
+#include "BaseTypes.h"
 #include "StringUtils.h"
 
 #include <fcntl.h>

@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Aliases.h"
+#include "Types.h"
 #include "DiskControllerTypes.h"
 #include "StateMachineTypes.h"
 #include "UARTTypes.h"

@@ -16,8 +16,6 @@
 
 // REMOVE EVENTUALLY:
 #include "Emulator.h"
-#include "FFmpeg.h"
-#include "Media.h"
 
 namespace vamiga {
 

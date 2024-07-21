@@ -9,8 +9,8 @@
 
 #pragma once
 
+#include "Types.h"
 #include "MediaFileTypes.h"
-#include "Aliases.h"
 #include "Reflection.h"
 
 //

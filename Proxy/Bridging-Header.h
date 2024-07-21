@@ -4,5 +4,6 @@
 
 #define __SWIFT__
 
+#import "Constants.h"
 #import "EmulatorProxy.h"
 #import "iCarousel.h"

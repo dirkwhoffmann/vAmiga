@@ -10,7 +10,6 @@
 #import "config.h"
 #import "EmulatorProxy.h"
 #import "VAmiga.h"
-// #import "Emulator.h"
 #import "vAmiga-Swift.h"
 
 using namespace vamiga;
@@ -457,7 +456,7 @@ using namespace vamiga::moira;
 
 - (BOOL)isRom:(NSURL *)url
 {
-    return RomFile::isRomFile([url fileSystemRepresentation]);
+    return MediaFile::type([url fileSystemRepresentation]) == FILETYPE_ROM;
 }
 
 - (void)loadRom:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
@@ -488,7 +487,7 @@ using namespace vamiga::moira;
 
 - (BOOL)isExt:(NSURL *)url
 {
-    return ExtendedRomFile::isExtendedRomFile([url fileSystemRepresentation]);
+    return MediaFile::type([url fileSystemRepresentation]) == FILETYPE_EXTENDED_ROM;
 }
 
 - (void)loadExt:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex

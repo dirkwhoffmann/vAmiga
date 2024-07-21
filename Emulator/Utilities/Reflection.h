@@ -11,7 +11,7 @@
 
 #ifdef __cplusplus
 
-#include "Types.h"
+#include "BaseTypes.h"
 #include <functional>
 #include <map>
 

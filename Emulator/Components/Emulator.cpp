@@ -11,7 +11,7 @@
 #include "Emulator.h"
 #include "Option.h"
 #include "Amiga.h"
-#include "Aliases.h"
+#include "Types.h"
 #include "CmdQueue.h"
 #include <algorithm>
 

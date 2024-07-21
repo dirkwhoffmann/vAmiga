@@ -52,3 +52,6 @@
 #include "RemoteServerTypes.h"
 #include "RetroShellTypes.h"
 #include "RTCTypes.h"
+
+// Constants
+#include "Constants.h"

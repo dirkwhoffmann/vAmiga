@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Aliases.h"
+#include "Types.h"
 #include "AudioFilterTypes.h"
 #include "SamplerTypes.h"
 

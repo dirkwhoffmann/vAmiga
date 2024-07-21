@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
+#include "BaseTypes.h"
 
 /* The Texel datatype is utilized to access single texture elements. Each
  * texture element represents an Amiga hires pixel. On the emulator side, the

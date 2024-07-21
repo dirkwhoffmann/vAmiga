@@ -9,7 +9,6 @@
 
 #pragma once
 
-#import "Constants.h"
 #import "config.h"
 #import "VAmigaTypes.h"
 #import <Cocoa/Cocoa.h>

@@ -9,7 +9,8 @@
 
 #pragma once
 
-#include "Aliases.h"
+#include "Types.h"
+#include "AmigaTypes.h"
 #include "BeamTypes.h"
 #include "BlitterTypes.h"
 #include "BusTypes.h"

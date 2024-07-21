@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Aliases.h"
+#include "Types.h"
 
 #ifdef __cplusplus
 namespace vamiga

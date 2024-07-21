@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Aliases.h"
+#include "Types.h"
 #include "CoreObject.h"
 #include "Concurrency.h"
 #include "RingBuffer.h"

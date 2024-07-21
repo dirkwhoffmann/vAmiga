@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Types.h"
 #include "OptionTypes.h"
 #include "JoystickTypes.h"
 #include "KeyboardTypes.h"

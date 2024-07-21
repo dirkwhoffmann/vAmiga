@@ -751,6 +751,7 @@
 		50985AB92C418D190079CFC5 /* MediaFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MediaFile.cpp; sourceTree = "<group>"; };
 		50985ABA2C418D190079CFC5 /* MediaFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaFile.h; sourceTree = "<group>"; };
 		50985ABD2C418D370079CFC5 /* MediaFileTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaFileTypes.h; sourceTree = "<group>"; };
+		50985ABE2C4D4FAA0079CFC5 /* Types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Types.h; sourceTree = "<group>"; };
 		5099432B29C2116500867E8F /* VAmiga.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VAmiga.h; sourceTree = "<group>"; };
 		5099432C29C224BB00867E8F /* Media.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Media.h; sourceTree = "<group>"; };
 		509C3658260B1766004F160A /* Command.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Command.cpp; sourceTree = "<group>"; };
@@ -861,7 +862,7 @@
 		50C0B78125EC367000CDE1F2 /* IOUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOUtils.h; sourceTree = "<group>"; };
 		50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStatusBar.swift; sourceTree = "<group>"; };
 		50C50B85220479E000D796DA /* BankTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTableView.swift; sourceTree = "<group>"; };
-		50C8C42C2605D51A00F4E012 /* Types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Types.h; sourceTree = "<group>"; };
+		50C8C42C2605D51A00F4E012 /* BaseTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseTypes.h; sourceTree = "<group>"; };
 		50C8C4492607396200F4E012 /* Layer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layer.swift; sourceTree = "<group>"; };
 		50C8C44E260740AC00F4E012 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
 		50C8C451260747EA00F4E012 /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
@@ -1112,6 +1113,7 @@
 			isa = PBXGroup;
 			children = (
 				50CF461F2620423300BB3B95 /* CMakeLists.txt */,
+				50985ABE2C4D4FAA0079CFC5 /* Types.h */,
 				5082D83A21EF891200CF7692 /* Constants.h */,
 				50A6145A260D14FE00A01428 /* ErrorTypes.h */,
 				5039924625B219FC0084B808 /* Error.h */,
@@ -1800,7 +1802,7 @@
 			isa = PBXGroup;
 			children = (
 				5078BEA6264D6F8200EDA161 /* CMakeLists.txt */,
-				50C8C42C2605D51A00F4E012 /* Types.h */,
+				50C8C42C2605D51A00F4E012 /* BaseTypes.h */,
 				50104E8525ECD0EF0047A9AA /* Macros.h */,
 				50CA602E260E02B700C4A22C /* Reflection.h */,
 				505A13282C313BB700FF8D2C /* Animated.h */,
