@@ -19,19 +19,6 @@ extension MyDocument {
         }
     }
 
-    /*
-    @available(*, deprecated)
-    func insert(df n: Int, file: FloppyFileProxy, force: Bool = false) throws {
-        
-        var dfn: FloppyDriveProxy { return amiga.df(n)! }
-        
-        if force || proceedWithUnsavedFloppyDisk(drive: dfn) {
-        
-            try dfn.swap(file: file)
-        }
-    }
-    */
-
     func attach(hd n: Int, file: MediaFileProxy? = nil, force: Bool = false) throws {
 
         var hdn: HardDriveProxy { return amiga.hd(n)! }

@@ -34,11 +34,9 @@
 @class DiskFileProxy;
 @class DmaDebuggerProxy;
 @class FloppyDriveProxy;
-@class FloppyFileProxy;
 @class GuardsProxy;
 @class HardDriveProxy;
 @class HdControllerProxy;
-@class IMGFileProxy;
 @class JoystickProxy;
 @class KeyboardProxy;
 @class MediaFileProxy;
@@ -910,42 +908,5 @@
 
 - (NSString *)hexdump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len;
 - (NSString *)asciidump:(NSInteger)b offset:(NSInteger)offset len:(NSInteger)len;
-
-@end
-
-
-//
-// FloppyFileProxy
-//
-
-@interface FloppyFileProxy : DiskFileProxy {
-}
-
-@property (readonly) FSVolumeType dos;
-@property (readonly) Diameter diskType;
-@property (readonly) Density diskDensity;
-@property (readonly) BOOL isSD;
-@property (readonly) BOOL isDD;
-@property (readonly) BOOL isHD;
-
-@property (readonly) BootBlockType bootBlockType;
-@property (readonly) NSString *bootBlockName;
-@property (readonly) BOOL hasVirus;
-
-- (void)killVirus;
-
-@end
-
-
-//
-// IMGFileProxy
-//
-
-@interface IMGFileProxy : FloppyFileProxy <MakeWithFile, MakeWithBuffer, MakeWithDrive> {
-}
-
-+ (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithFile:(NSString *)path exception:(ExceptionWrapper *)ex;
-+ (instancetype)makeWithDrive:(FloppyDriveProxy *)proxy exception:(ExceptionWrapper *)ex;
 
 @end

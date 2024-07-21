@@ -350,16 +350,6 @@ extension FloppyDriveProxy {
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 
-    /*
-    @available(*, deprecated)
-    func swap(file: FloppyFileProxy) throws {
-        
-        let exception = ExceptionWrapper()
-        swap(file, exception: exception)
-        if exception.errorCode != .OK { throw VAError(exception) }
-    }
-    */
-    
     func insertNew(fileSystem: FSVolumeType, bootBlock: BootBlockId, name: String) throws {
         
         let exception = ExceptionWrapper()
@@ -623,52 +613,6 @@ extension HardDriveProxy {
         case .WRITING: return NSImage(named: "ledRed")
             
         default: fatalError()
-        }
-    }
-}
-
-extension FloppyFileProxy {
-    
-    func icon(protected: Bool) -> NSImage {
-        
-        let name = (diskDensity == .HD ? "hd" : "dd") +
-        (type == .IMG ? "_dos" : dos == .NODOS ? "_other" : "_adf") +
-        (protected ? "_protected" : "")
-
-        return NSImage(named: name)!
-    }
-
-    var typeInfo: String {
-
-        var result = ""
-
-        if diskType == .INCH_35 { result += "3.5\"" }
-        if diskType == .INCH_525 { result += "5.25\"" }
-        
-        return result
-    }
-    
-    var layoutInfo: String {
-                
-        var result = ""
-
-        if numHeads == 1 { result += "Single sided, " }
-        if numHeads == 2 { result += "Double sided, " }
-        if diskDensity == .SD { result += "Single density" }
-        if diskDensity == .DD { result += "Double density" }
-        if diskDensity == .HD { result += "High density" }
-        
-        return result
-    }
-
-    var bootInfo: String {
-        
-        let name = bootBlockName!
-        
-        if bootBlockType == .VIRUS {
-            return "Contagious boot block (\(name))"
-        } else {
-            return name
         }
     }
 }
