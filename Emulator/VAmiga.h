@@ -16,6 +16,7 @@
 
 // REMOVE EVENTUALLY:
 #include "Emulator.h"
+#include "MutableFileSystem.h"
 
 namespace vamiga {
 
@@ -101,7 +102,6 @@ public:
      *  @param  snapshot    Reference to a snapshot.
      */
     void loadSnapshot(const MediaFile &snapshot);
-    // void loadSnapshot(const Snapshot &snapshot);
 
     /// @}
     /// @name Auto-inspecting components
@@ -1512,7 +1512,7 @@ public:
     void setExecPath(const std::filesystem::path &path);
 
     // INTEGRATE INTO RecorderInfo, RecorderConfig
-    util::Time getDuration() const;
+    double getDuration() const;
     isize getFrameRate() const;
     isize getBitRate() const;
     isize getSampleRate() const;

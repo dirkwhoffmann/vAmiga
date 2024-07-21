@@ -256,8 +256,6 @@
 - (void)put:(CmdType)type action:(GamePadCmd)cmd;
 - (void)put:(CmdType)type coord:(CoordCmd)cmd;
 
-- (void) loadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
-
 @end
 
 
@@ -358,6 +356,7 @@
 @property NSInteger autoInspectionMask;
 
 - (MediaFileProxy *) takeSnapshot;
+- (void) loadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
 
 @end
 

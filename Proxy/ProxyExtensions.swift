@@ -13,6 +13,16 @@ import Darwin
 // Factory extensions
 //
 
+extension AmigaProxy {
+
+    func loadSnapshot(_ proxy: MediaFileProxy) throws {
+
+        let exception = ExceptionWrapper()
+        loadSnapshot(proxy, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+}
+
 extension MediaFileProxy {
 
     static func makeWith(buffer: UnsafeRawPointer, length: Int, type: FileType) throws -> Self {
@@ -264,13 +274,6 @@ extension EmulatorProxy {
 
         let exception = ExceptionWrapper()
         exportConfig(url, exception: exception)
-        if exception.errorCode != .OK { throw VAError(exception) }
-    }
-
-    func loadSnapshot(_ proxy: MediaFileProxy) throws {
-
-        let exception = ExceptionWrapper()
-        loadSnapshot(proxy, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 }

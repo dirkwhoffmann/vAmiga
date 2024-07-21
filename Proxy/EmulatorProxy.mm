@@ -826,7 +826,7 @@ using namespace vamiga::moira;
 
 - (BOOL)hasFFmpeg
 {
-    return FFmpeg::available();
+    return [self recorder]->hasFFmpeg();
 }
 
 - (BOOL)recording
@@ -836,7 +836,7 @@ using namespace vamiga::moira;
 
 - (double)duration
 {
-    return [self recorder]->getDuration().asSeconds();
+    return [self recorder]->getDuration();
 }
 
 - (NSInteger)frameRate
@@ -2077,6 +2077,12 @@ using namespace vamiga::moira;
     return [MediaFileProxy make:file];
 }
 
+- (void)loadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
+{
+    try { [self amiga]->loadSnapshot(*[proxy file]); }
+    catch (Error &error) { [ex save:error]; }
+}
+
 @end
 
 
@@ -2452,12 +2458,6 @@ using namespace vamiga::moira;
 - (void)wakeUp
 {
     [self emu]->wakeUp();
-}
-
-- (void)loadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
-{
-    try { [self emu]->emu->main.loadSnapshot(*[proxy file]); }
-    catch (Error &error) { [ex save:error]; }
 }
 
 - (void)exportConfig:(NSURL *)url exception:(ExceptionWrapper *)ex

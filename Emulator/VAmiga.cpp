@@ -1334,7 +1334,7 @@ RecorderAPI::getCachedInfo() const
 }
 */
 
-util::Time RecorderAPI::getDuration() const { return recorder->getDuration(); }
+double RecorderAPI::getDuration() const { return recorder->getDuration().asSeconds(); }
 isize RecorderAPI::getFrameRate() const { return recorder->getFrameRate(); }
 isize RecorderAPI::getBitRate() const { return recorder->getBitRate(); }
 isize RecorderAPI::getSampleRate() const { return recorder->getSampleRate(); }
@@ -1890,13 +1890,6 @@ AmigaAPI::loadSnapshot(const MediaFile &snapshot)
 {
     amiga->loadSnapshot(snapshot);
 }
-/*
-void
-AmigaAPI::loadSnapshot(const Snapshot &snapshot)
-{
-    amiga->loadSnapshot(snapshot);
-}
-*/
     
 u64
 AmigaAPI::getAutoInspectionMask()

@@ -19,7 +19,7 @@ class MyDocument: NSDocument {
     var launchUrl: URL?
 
     // Gateway to the core emulator
-    var amiga: EmulatorProxy!
+    var emu: EmulatorProxy!
 
     // Snapshots
     private(set) var snapshots = ManagedArray<MediaFileProxy>(maxSize: 512 * 1024 * 1024)
@@ -49,7 +49,7 @@ class MyDocument: NSDocument {
         EmulatorProxy.defaults.load()
         
         // Create an emulator instance
-        amiga = EmulatorProxy()
+        emu = EmulatorProxy()
     }
  
     override open func makeWindowControllers() {
@@ -57,7 +57,7 @@ class MyDocument: NSDocument {
         debug(.lifetime)
         
         let controller = MyController(windowNibName: "MyDocument")
-        controller.emu = amiga
+        controller.emu = emu
         self.addWindowController(controller)
     }
   
@@ -146,7 +146,7 @@ class MyDocument: NSDocument {
         
         if typeName == "vAmiga" {
 
-            if let snapshot = amiga.amiga.takeSnapshot() {
+            if let snapshot = emu.amiga.takeSnapshot() {
 
                 do {
                     try snapshot.writeToFile(url: url)
@@ -224,7 +224,7 @@ class MyDocument: NSDocument {
 
     func processSnapshotFile(_ proxy: MediaFileProxy, force: Bool = false) throws {
 
-        try amiga.loadSnapshot(proxy)
+        try emu.amiga.loadSnapshot(proxy)
         snapshots.append(proxy, size: proxy.size)
     }
 
@@ -238,16 +238,16 @@ class MyDocument: NSDocument {
         var df: MediaFileProxy?
         switch url.pathExtension.uppercased() {
         case "ADF":
-            df = try MediaFileProxy.make(with: amiga.df(nr)!, type: .ADF)
+            df = try MediaFileProxy.make(with: emu.df(nr)!, type: .ADF)
         case "IMG", "IMA":
-            df = try MediaFileProxy.make(with: amiga.df(nr)!, type: .IMG)
+            df = try MediaFileProxy.make(with: emu.df(nr)!, type: .IMG)
         default:
             warn("Invalid path extension")
             return
         }
         
         try export(fileProxy: df!, to: url)
-        amiga.df(nr)!.setFlag(.MODIFIED, value: false)
+        emu.df(nr)!.setFlag(.MODIFIED, value: false)
         myAppDelegate.noteNewRecentlyExportedDiskURL(url, df: nr)
         
         debug(.media, "Disk exported successfully")
@@ -255,12 +255,12 @@ class MyDocument: NSDocument {
 
     func export(hardDrive nr: Int, to url: URL) throws {
         
-        let hdn = amiga.hd(nr)!
+        let hdn = emu.hd(nr)!
         var dh: MediaFileProxy?
 
         switch url.pathExtension.uppercased() {
         case "HDF":
-            dh = try MediaFileProxy.make(with: amiga.hd(nr)!, type: .HDF)
+            dh = try MediaFileProxy.make(with: emu.hd(nr)!, type: .HDF)
         default:
             warn("Invalid path extension")
             return

@@ -11,7 +11,7 @@ extension MyDocument {
 
     func insert(df n: Int, file: MediaFileProxy, force: Bool = false) throws {
 
-        var dfn: FloppyDriveProxy { return amiga.df(n)! }
+        var dfn: FloppyDriveProxy { return emu.df(n)! }
 
         if force || proceedWithUnsavedFloppyDisk(drive: dfn) {
 
@@ -21,51 +21,51 @@ extension MyDocument {
 
     func attach(hd n: Int, file: MediaFileProxy? = nil, force: Bool = false) throws {
 
-        var hdn: HardDriveProxy { return amiga.hd(n)! }
+        var hdn: HardDriveProxy { return emu.hd(n)! }
 
         func attach() throws {
 
-            amiga.set(.HDC_CONNECT, drive: n, enable: true)
+            emu.set(.HDC_CONNECT, drive: n, enable: true)
             if let proxy = file { try hdn.attach(file: proxy) }
         }
 
         if force || proceedWithUnsavedHardDisk(drive: hdn) {
 
-            if amiga.poweredOff {
+            if emu.poweredOff {
 
                 try attach()
 
             } else if force || askToPowerOff() {
 
-                amiga.powerOff()
+                emu.powerOff()
                 try attach()
-                amiga.powerOn()
-                try amiga.run()
+                emu.powerOn()
+                try emu.run()
             }
         }
     }
 
     func detach(hd n: Int, force: Bool = false) throws {
         
-        var hdn: HardDriveProxy { return amiga.hd(n)! }
+        var hdn: HardDriveProxy { return emu.hd(n)! }
 
         func detach() throws {
                       
-            amiga.set(.HDC_CONNECT, drive: n, enable: false)
+            emu.set(.HDC_CONNECT, drive: n, enable: false)
         }
         
         if force || proceedWithUnsavedHardDisk(drive: hdn) {
             
-            if amiga.poweredOff {
+            if emu.poweredOff {
                 
                 try detach()
                 
             } else if force || askToPowerOff() {
                 
-                amiga.powerOff()
+                emu.powerOff()
                 try detach()
-                amiga.powerOn()
-                try amiga.run()
+                emu.powerOn()
+                try emu.run()
             }
         }
     }

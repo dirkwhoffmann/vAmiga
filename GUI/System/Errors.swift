@@ -332,7 +332,7 @@ extension MyDocument {
             
     func proceedWithUnsavedFloppyDisks() -> Bool {
         
-        let drives = [amiga.df0!, amiga.df1!, amiga.df2!, amiga.df3!]
+        let drives = [emu.df0!, emu.df1!, emu.df2!, emu.df3!]
         return proceedWithUnsavedFloppyDisks(drives: drives)
     }
 
@@ -359,13 +359,13 @@ extension MyDocument {
     
     func proceedWithUnsavedHardDisks() -> Bool {
         
-        let drives = [amiga.hd0!, amiga.hd1!, amiga.hd2!, amiga.hd3!]
+        let drives = [emu.hd0!, emu.hd1!, emu.hd2!, emu.hd3!]
         return proceedWithUnsavedHardDisks(drives: drives)
     }
     
     func askToPowerOff() -> Bool {
         
-        if amiga.poweredOn {
+        if emu.poweredOn {
             
             let alert = NSAlert()
             
@@ -377,7 +377,7 @@ extension MyDocument {
             alert.addButton(withTitle: "Cancel")
             
             if alert.runSheet(for: windowForSheet!) == .alertFirstButtonReturn {
-                amiga.powerOff()
+                emu.powerOff()
             } else {
                 return false
             }
