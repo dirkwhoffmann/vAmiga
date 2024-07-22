@@ -104,38 +104,47 @@ class Configuration {
         precondition(0 <= n && n <= 3)
         return amiga.get(.DRIVE_CONNECT, drive: n) != 0
     }
+
     func setDfnConnected(_ n: Int, connect: Bool) {
         precondition(0 <= n && n <= 3)
         amiga.set(.DRIVE_CONNECT, drive: n, enable: connect)
     }
+
     func dfnType(_ n: Int) -> Int {
         precondition(0 <= n && n <= 3)
         return amiga.get(.DRIVE_TYPE, drive: n)
     }
+
     func setDfnType(_ n: Int, type: Int) {
         precondition(0 <= n && n <= 3)
         amiga.set(.DRIVE_TYPE, drive: n, value: type)
     }
+
     func dfnRpm(_ n: Int) -> Int {
         precondition(0 <= n && n <= 3)
         return amiga.get(.DRIVE_RPM, drive: n)
     }
+
     func setDfnRpm(_ n: Int, type: Int) {
         precondition(0 <= n && n <= 3)
         amiga.set(.DRIVE_RPM, drive: n, value: type)
     }
+
     func hdnConnected(_ n: Int) -> Bool {
         precondition(0 <= n && n <= 3)
         return amiga.get(.HDC_CONNECT, drive: n) != 0
     }
+
     func setHdnConnected(_ n: Int, connect: Bool) {
         precondition(0 <= n && n <= 3)
         amiga.set(.HDC_CONNECT, drive: n, enable: connect)
     }
+
     func hdnType(_ n: Int) -> Int {
         precondition(0 <= n && n <= 3)
         return amiga.get(.HDR_TYPE, drive: n)
     }
+
     func setHdnType(_ n: Int, type: Int) {
         precondition(0 <= n && n <= 3)
         amiga.set(.HDR_TYPE, drive: n, value: type)
@@ -145,83 +154,101 @@ class Configuration {
         get { return dfnConnected(0) }
         set { setDfnConnected(0, connect: newValue) }
     }
+
     var df0Type: Int {
         get { return dfnType(0) }
         set { setDfnType(0, type: newValue) }
     }
+
     var df0Rpm: Int {
         get { return dfnRpm(0) }
         set { setDfnRpm(0, type: newValue) }
     }
+
     var df1Connected: Bool {
         get { return dfnConnected(1) }
         set { setDfnConnected(1, connect: newValue) }
     }
+
     var df1Type: Int {
         get { return dfnType(1) }
         set { setDfnType(1, type: newValue) }
     }
+
     var df1Rpm: Int {
         get { return dfnRpm(1) }
         set { setDfnRpm(1, type: newValue) }
     }
+
     var df2Connected: Bool {
         get { return dfnConnected(2) }
         set { setDfnConnected(2, connect: newValue) }
     }
+
     var df2Type: Int {
         get { return dfnType(2) }
         set { setDfnType(2, type: newValue) }
     }
+
     var df2Rpm: Int {
         get { return dfnRpm(2) }
         set { setDfnRpm(2, type: newValue) }
     }
+
     var df3Connected: Bool {
         get { return dfnConnected(3) }
         set { setDfnConnected(3, connect: newValue) }
     }
+
     var df3Type: Int {
         get { return dfnType(3) }
         set { setDfnType(3, type: newValue) }
     }
+
     var df3Rpm: Int {
         get { return dfnRpm(3) }
         set { setDfnRpm(3, type: newValue) }
     }
+
     var hd0Connected: Bool {
         get { return hdnConnected(0) }
         set { setHdnConnected(0, connect: newValue) }
     }
+
     var hd0Type: Int {
         get { return hdnType(0) }
         set { setHdnType(0, type: newValue) }
     }
+
     var hd1Connected: Bool {
         get { return hdnConnected(1) }
         set { setHdnConnected(1, connect: newValue) }
     }
+
     var hd1Type: Int {
         get { return hdnType(1) }
         set { setHdnType(1, type: newValue) }
     }
+
     var hd2Connected: Bool {
         get { return hdnConnected(2) }
         set { setHdnConnected(2, connect: newValue) }
     }
+
     var hd2Type: Int {
         get { return hdnType(2) }
         set { setHdnType(2, type: newValue) }
     }
+
     var hd3Connected: Bool {
         get { return hdnConnected(3) }
         set { setHdnConnected(3, connect: newValue) }
     }
+
     var hd3Type: Int {
         get { return hdnType(3) }
         set { setHdnType(3, type: newValue) }
     }
-    // var hdPersist = [ false, false, false, false ]
 
     var gameDevice1 = -1 {
         didSet {
@@ -237,6 +264,7 @@ class Configuration {
             parent.toolbar.validateVisibleItems()
         }
     }
+
     var gameDevice2 = -1 {
         didSet {
  
@@ -251,10 +279,32 @@ class Configuration {
             parent.toolbar.validateVisibleItems()
         }
     }
+
+    var autofire: Bool {
+        get { return amiga.get(.JOY_AUTOFIRE, id: 1) != 0 }
+        set { amiga.set(.JOY_AUTOFIRE, enable: newValue) }
+    }
+
+    var autofireBursts: Bool {
+        get { return amiga.get(.JOY_AUTOFIRE_BURSTS, id: 1) != 0 }
+        set { amiga.set(.JOY_AUTOFIRE_BURSTS, enable: newValue) }
+    }
+
+    var autofireBullets: Int {
+        get { return amiga.get(.JOY_AUTOFIRE_BULLETS, id: 1) }
+        set { amiga.set(.JOY_AUTOFIRE_BULLETS, value: newValue) }
+    }
+
+    var autofireFrequency: Int {
+        get { return amiga.get(.JOY_AUTOFIRE_DELAY, id: 1) }
+        set { amiga.set(.JOY_AUTOFIRE_DELAY, value: newValue) }
+    }
+
     var serialDevice: Int {
         get { return amiga.get(.SER_DEVICE) }
         set { amiga.set(.SER_DEVICE, value: newValue) }
     }
+
     var serialDevicePort: Int {
         get { return amiga.get(.SRV_PORT, id: ServerType.SER.rawValue) }
         set { amiga.set(.SRV_PORT, id: ServerType.SER.rawValue, value: newValue) }

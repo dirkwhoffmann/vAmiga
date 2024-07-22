@@ -11,6 +11,14 @@ extension ConfigurationController {
 
     func refreshPeripheralsTab() {
 
+        func update(_ component: NSTextField, enable: Bool) {
+            component.textColor = enable ? .controlTextColor : .disabledControlTextColor
+            component.isEnabled = enable
+        }
+        func update(_ component: NSControl, enable: Bool) {
+            component.isEnabled = enable
+        }
+        
         let poweredOff = emu.poweredOff
         
         // Floppy drives
@@ -43,6 +51,20 @@ extension ConfigurationController {
         perSerialPort.isHidden = config.serialDevice != nullmodem
         perSerialPortText.isHidden = config.serialDevice != nullmodem
         
+        // Joysticks
+        let enable = config.autofire
+        perAutofire.state = enable ? .on : .off
+        perAutofireCease.state = config.autofireBursts ? .on : .off
+        perAutofireBullets.integerValue = config.autofireBullets
+        perAutofireFrequency.integerValue = config.autofireFrequency
+        update(perAutofireFrequency, enable: enable)
+        update(perAutofireFrequencyText1, enable: enable)
+        update(perAutofireFrequencyText2, enable: enable)
+        update(perAutofireCease, enable: enable)
+        update(perAutofireCeaseText, enable: enable)
+        update(perAutofireBullets, enable: enable && perAutofireCease.state == .on)
+        update(perAutofireBulletsText, enable: enable && perAutofireCease.state == .on)
+
         // Lock controls if emulator is powered on
         perDf1Connect.isEnabled = poweredOff
         perDf2Connect.isEnabled = poweredOff && perDf1Connect.state == .on
@@ -118,6 +140,26 @@ extension ConfigurationController {
         case 2: config.gameDevice2 = sender.selectedTag()
         default: fatalError()
         }
+    }
+
+    @IBAction func perAutofireAction(_ sender: NSButton!) {
+
+        config.autofire = (sender.state == .on)
+    }
+
+    @IBAction func perAutofireCeaseAction(_ sender: NSButton!) {
+
+        config.autofireBursts = (sender.state == .on)
+    }
+
+    @IBAction func perAutofireBulletsAction(_ sender: NSTextField!) {
+
+        config.autofireBullets = sender.integerValue
+    }
+
+    @IBAction func perAutofireFrequencyAction(_ sender: NSSlider!) {
+
+        config.autofireFrequency = sender.integerValue
     }
 
     @IBAction func perSerialDeviceAction(_ sender: NSPopUpButton!) {

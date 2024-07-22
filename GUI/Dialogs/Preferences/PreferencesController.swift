@@ -93,13 +93,6 @@ class PreferencesController: DialogController {
     @IBOutlet weak var conReleaseMouseWithKeys: NSButton!
     @IBOutlet weak var conReleaseMouseByShaking: NSButton!
 
-    // Joystick
-    @IBOutlet weak var conAutofire: NSButton!
-    @IBOutlet weak var conAutofireCease: NSButton!
-    @IBOutlet weak var conAutofireCeaseText: NSTextField!
-    @IBOutlet weak var conAutofireBullets: NSTextField!
-    @IBOutlet weak var conAutofireFrequency: NSSlider!
-
     //
     // Devices
     //
@@ -247,13 +240,7 @@ extension PreferencesController: NSTextFieldDelegate {
                 if formatter?.number(from: view.stringValue) != nil {
                     genSnapshotIntervalAction(view)
                 }
-                
-            case conAutofireBullets:
-                
-                if formatter?.number(from: view.stringValue) != nil {
-                    conAutofireBulletsAction(view)
-                }
-                
+
             default:
                 break
             }
