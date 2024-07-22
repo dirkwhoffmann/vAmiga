@@ -59,12 +59,12 @@ extension PreferencesController {
 
         // Joystick buttons
         conAutofire.state = pref.autofire ? .on : .off
-        conAutofireCease.state = pref.autofireBullets > 0 ? .on : .off
-        conAutofireBullets.integerValue = Int(pref.autofireBullets.magnitude)
-        conAutofireFrequency.doubleValue = pref.autofireFrequency
+        conAutofireCease.state = pref.autofireBursts ? .on : .off
+        conAutofireBullets.integerValue = pref.autofireBullets
+        conAutofireFrequency.integerValue = pref.autofireFrequency
         conAutofireCease.isEnabled = conAutofire.state == .on
         conAutofireCeaseText.textColor = conAutofire.state == .on ? .controlTextColor : .disabledControlTextColor
-        conAutofireBullets.isEnabled = conAutofire.state == .on
+        conAutofireBullets.isEnabled = conAutofire.state == .on && conAutofireCease.state == .on
         conAutofireFrequency.isEnabled = conAutofire.state == .on
         
         // Mouse
@@ -144,15 +144,13 @@ extension PreferencesController {
 
     @IBAction func conAutofireAction(_ sender: NSButton!) {
         
-        pref.autofire = (sender.state == .on)
+        pref.autofire = sender.state == .on
         refresh()
     }
     
     @IBAction func conAutofireCeaseAction(_ sender: NSButton!) {
         
-        let sign = sender.state == .on ? 1 : -1
-        let bullets = pref.autofireBullets.magnitude
-        pref.autofireBullets = Int(bullets) * sign
+        pref.autofireBursts = sender.state == .on
         refresh()
     }
     
@@ -164,7 +162,7 @@ extension PreferencesController {
     
     @IBAction func conAutofireFrequencyAction(_ sender: NSSlider!) {
         
-        pref.autofireFrequency = sender.doubleValue
+        pref.autofireFrequency = sender.integerValue
         refresh()
     }
         

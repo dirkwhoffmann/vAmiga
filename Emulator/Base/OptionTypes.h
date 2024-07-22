@@ -149,9 +149,11 @@ enum_long(OPT)
     OPT_MOUSE_VELOCITY,
 
     // Joystick
-    OPT_JOY_AUTOFIRE,
-    OPT_JOY_AUTOFIRE_BULLETS,
-    OPT_JOY_AUTOFIRE_DELAY,
+    // Joystick
+    OPT_JOY_AUTOFIRE,           ///< Autofire status [on/off]
+    OPT_JOY_AUTOFIRE_BURSTS,    ///< Burst mode [on/off]
+    OPT_JOY_AUTOFIRE_BULLETS,   ///< Number of bullets per burst
+    OPT_JOY_AUTOFIRE_DELAY,     ///< Delay between two shots [frames]
 
     // Paula audio
     OPT_AUD_SAMPLING_METHOD,
@@ -302,6 +304,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_MOUSE_VELOCITY:            return "MOUSE.VELOCITY";
 
             case OPT_JOY_AUTOFIRE:              return "JOY.AUTOFIRE";
+            case OPT_JOY_AUTOFIRE_BURSTS:       return "JOY.AUTOFIRE_BURSTS";
             case OPT_JOY_AUTOFIRE_BULLETS:      return "JOY.AUTOFIRE_BULLETS";
             case OPT_JOY_AUTOFIRE_DELAY:        return "JOY.AUTOFIRE_DELAY";
 
@@ -444,6 +447,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_MOUSE_VELOCITY:            return "Mouse velocity";
 
             case OPT_JOY_AUTOFIRE:              return "Autofire";
+            case OPT_JOY_AUTOFIRE_BURSTS:       return "Burst mode";
             case OPT_JOY_AUTOFIRE_BULLETS:      return "Number of bullets per burst";
             case OPT_JOY_AUTOFIRE_DELAY:        return "Autofire delay in frames";
 

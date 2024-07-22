@@ -146,8 +146,9 @@ Defaults::Defaults()
     setFallback(OPT_MOUSE_VELOCITY,             100,                    { 0, 1} );
 
     setFallback(OPT_JOY_AUTOFIRE,               false,                  { 0, 1} );
-    setFallback(OPT_JOY_AUTOFIRE_BULLETS,       -3,                     { 0, 1} );
-    setFallback(OPT_JOY_AUTOFIRE_DELAY,         125,                    { 0, 1} );
+    setFallback(OPT_JOY_AUTOFIRE_BURSTS,        false,                  { 0, 1} );
+    setFallback(OPT_JOY_AUTOFIRE_BULLETS,       3,                      { 0, 1} );
+    setFallback(OPT_JOY_AUTOFIRE_DELAY,         5,                      { 0, 1} );
     setFallback(OPT_AUD_SAMPLING_METHOD,        SMP_NONE);
     setFallback(OPT_AUD_FILTER_TYPE,            FILTER_A500);
     setFallback(OPT_AUD_PAN0,                   50);

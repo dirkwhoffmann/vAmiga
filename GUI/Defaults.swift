@@ -457,6 +457,7 @@ extension Keys {
         
         // Joysticks
         static let autofire              = "Controls.Autofire"
+        static let autofireBursts        = "Controls.AutofireBursts"
         static let autofireBullets       = "Controls.AutofireBullets"
         static let autofireFrequency     = "Controls.AutofireFrequency"
         
@@ -505,8 +506,9 @@ extension DefaultsProxy {
         
         // Joysticks
         register(Keys.Con.autofire, false)
-        register(Keys.Con.autofireBullets, -3)
-        register(Keys.Con.autofireFrequency, 2.5)
+        register(Keys.Con.autofireBursts, false)
+        register(Keys.Con.autofireBullets, 3)
+        register(Keys.Con.autofireFrequency, 25)
 
         // Mouse
         register(Keys.Con.retainMouseKeyComb, 0)
@@ -556,6 +558,7 @@ extension Preferences {
         defaults.set(Keys.Con.disconnectJoyKeys, disconnectJoyKeys)
 
         defaults.set(Keys.Con.autofire, autofire)
+        defaults.set(Keys.Con.autofireBursts, autofireBursts)
         defaults.set(Keys.Con.autofireBullets, autofireBullets)
         defaults.set(Keys.Con.autofireFrequency, autofireFrequency)
 
@@ -581,9 +584,10 @@ extension Preferences {
         disconnectJoyKeys = defaults.bool(Keys.Con.disconnectJoyKeys)
         
         autofire = defaults.bool(Keys.Con.autofire)
+        autofireBursts = defaults.bool(Keys.Con.autofireBursts)
         autofireBullets = defaults.int(Keys.Con.autofireBullets)
-        autofireFrequency = defaults.double(Keys.Con.autofireFrequency)
-        
+        autofireFrequency = defaults.int(Keys.Con.autofireFrequency)
+
         retainMouseKeyComb = defaults.int(Keys.Con.retainMouseKeyComb)
         retainMouseWithKeys = defaults.bool(Keys.Con.retainMouseWithKeys)
         retainMouseByClick = defaults.bool(Keys.Con.retainMouseByClick)

@@ -136,6 +136,7 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_MOUSE_VELOCITY:            return numParser();
 
         case OPT_JOY_AUTOFIRE:              return boolParser();
+        case OPT_JOY_AUTOFIRE_BURSTS:       return boolParser();
         case OPT_JOY_AUTOFIRE_BULLETS:      return numParser();
         case OPT_JOY_AUTOFIRE_DELAY:        return numParser();
 

@@ -34,6 +34,7 @@ class Joystick : public SubComponent, public Inspectable<JoystickInfo> {
     ConfigOptions options = {
 
         OPT_JOY_AUTOFIRE,
+        OPT_JOY_AUTOFIRE_BURSTS,
         OPT_JOY_AUTOFIRE_BULLETS,
         OPT_JOY_AUTOFIRE_DELAY
     };
@@ -55,12 +56,13 @@ class Joystick : public SubComponent, public Inspectable<JoystickInfo> {
     // Vertical joystick position (-1 = up, 1 = down, 0 = released)
     int axisY = 0;
 
-    // Bullet counter used in multi-fire mode
+    // Bullet counter used in autofire mode
     i64 bulletCounter = 0;
     
     // Next frame to auto-press or auto-release the fire button
     i64 nextAutofireFrame = 0;
-    
+    i64 nextAutofireReleaseFrame = 0;
+
     
     //
     // Initializing
@@ -167,8 +169,19 @@ public:
     
 private:
 
+    // Sets the button state
+    void setButton(bool value);
+
+    // Checks whether autofiring is active
+    bool isAutofiring();
+
+    // Starts or stops autofire mode
+    void startAutofire();
+    void stopAutofire();
+
     // Reloads the autofire magazine
     void reload();
+    void reload(isize bullets);
     
     // Updates variable nextAutofireFrame
     void scheduleNextShot();

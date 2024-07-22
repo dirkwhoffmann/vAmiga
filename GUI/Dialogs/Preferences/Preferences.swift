@@ -44,25 +44,12 @@ class Preferences {
         }
     }
 
-
     // Snapshots
     var snapshotStorage = 0 {
         didSet { for c in myAppDelegate.controllers {
             c.mydocument.snapshots.maxSize = snapshotStorage * 1024 * 1024 }
         }
     }
-    /*
-    var autoSnapshots = false {
-        didSet { for c in myAppDelegate.controllers {
-            c.validateSnapshotTimer() }
-        }
-    }
-    var snapshotInterval = 0 {
-        didSet { for c in myAppDelegate.controllers {
-            c.validateSnapshotTimer() }
-        }
-    }
-    */
 
     // Screenshots
     var screenshotSource = 0
@@ -131,6 +118,13 @@ class Preferences {
             }
         }
     }
+    var autofireBursts: Bool! {
+        didSet {
+            for amiga in myAppDelegate.proxies {
+                amiga.set(.JOY_AUTOFIRE_BURSTS, enable: autofireBursts)
+            }
+        }
+    }
     var autofireBullets: Int! {
         didSet {
             for amiga in myAppDelegate.proxies {
@@ -138,12 +132,11 @@ class Preferences {
             }
         }
     }
-    var autofireFrequency: Double! {
+    var autofireFrequency: Int! {
         didSet {
-            autofireFrequency = autofireFrequency.clamped(1, 4)
-            let autofireDelay = Int(50.0 / autofireFrequency)
+            autofireFrequency = autofireFrequency.clamped(4, 50)
             for amiga in myAppDelegate.proxies {
-                amiga.set(.JOY_AUTOFIRE_DELAY, value: autofireDelay)
+                amiga.set(.JOY_AUTOFIRE_DELAY, value: autofireFrequency)
             }
         }
     }
