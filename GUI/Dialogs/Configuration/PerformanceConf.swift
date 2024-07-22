@@ -51,13 +51,11 @@ extension ConfigurationController {
     @IBAction func prfWarpModeAction(_ sender: NSPopUpButton!) {
 
         config.warpMode = sender.selectedTag()
-        refresh()
     }
 
     @IBAction func prfWarpBootAction(_ sender: NSTextField!) {
 
         config.warpBoot = sender.integerValue
-        refresh()
     }
     
     //
@@ -67,13 +65,11 @@ extension ConfigurationController {
     @IBAction func prfVSyncAction(_ sender: NSButton!) {
 
         config.vsync = sender.state == .on
-        refresh()
     }
 
     @IBAction func prfTimeLapseAction(_ sender: NSSlider!) {
 
         config.timeLapse = sender.integerValue
-        refresh()
     }
 
     //
@@ -83,19 +79,16 @@ extension ConfigurationController {
     @IBAction func prfClxSprSprAction(_ sender: NSButton!) {
 
         config.clxSprSpr = sender.state == .on
-        refresh()
     }
 
     @IBAction func prfClxSprPlfAction(_ sender: NSButton!) {
 
         config.clxSprPlf = sender.state == .on
-        refresh()
     }
 
     @IBAction func prfClxPlfPlfAction(_ sender: NSButton!) {
 
         config.clxPlfPlf = sender.state == .on
-        refresh()
     }
 
     //
@@ -105,19 +98,16 @@ extension ConfigurationController {
     @IBAction func prfCiaIdleSleepAction(_ sender: NSButton!) {
 
         config.ciaIdleSleep = sender.state == .on
-        refresh()
     }
 
     @IBAction func prfFrameSkippingAction(_ sender: NSButton!) {
 
         config.frameSkipping = sender.state == .on ? 16 : 0
-        refresh()
     }
 
     @IBAction func prfAudioFastPathAction(_ sender: NSButton!) {
 
         config.audioFastPath = sender.state == .on
-        refresh()
     }
 
     @IBAction func prfPresetAction(_ sender: NSPopUpButton!) {
@@ -131,7 +121,6 @@ extension ConfigurationController {
         config.applyPerformanceUserDefaults()
 
         emu.resume()
-        refresh()
     }
 
     @IBAction func prfDefaultsAction(_ sender: NSButton!) {

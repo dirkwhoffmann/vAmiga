@@ -83,8 +83,6 @@ extension ConfigurationController {
         // Disconnect df(n+1) if dfn is disconnected
         if !config.df1Connected { config.df2Connected = false }
         if !config.df2Connected { config.df3Connected = false }
-
-        refresh()
     }
     
     @IBAction func perDriveTypeAction(_ sender: NSPopUpButton!) {
@@ -96,7 +94,6 @@ extension ConfigurationController {
         case 3: config.df3Type = sender.selectedTag()
         default: fatalError()
         }
-        refresh()
     }
 
     @IBAction func perHdrConnectAction(_ sender: NSButton!) {
@@ -108,13 +105,10 @@ extension ConfigurationController {
         case 3: config.hd3Connected = sender.state == .on
         default: fatalError()
         }
-        
-        refresh()
     }
     
     @IBAction func perHdrTypeAction(_ sender: NSPopUpButton!) {
         
-        refresh()
     }
     
     @IBAction func perGameDeviceAction(_ sender: NSPopUpButton!) {
@@ -124,13 +118,11 @@ extension ConfigurationController {
         case 2: config.gameDevice2 = sender.selectedTag()
         default: fatalError()
         }
-        refresh()
     }
 
     @IBAction func perSerialDeviceAction(_ sender: NSPopUpButton!) {
 
         config.serialDevice = sender.selectedTag()
-        refresh()
     }
 
     @IBAction func perSerialDevicePortAction(_ sender: NSTextField!) {
@@ -138,7 +130,6 @@ extension ConfigurationController {
         if sender.integerValue > 0 && sender.integerValue < 65536 {
             config.serialDevicePort = sender.integerValue
         }
-        refresh()
     }
 
     @IBAction func perPresetAction(_ sender: NSPopUpButton!) {
@@ -152,7 +143,6 @@ extension ConfigurationController {
         config.applyPeripheralsUserDefaults()
 
         emu.resume()
-        refresh()
      }
 
      @IBAction func perDefaultsAction(_ sender: NSButton!) {

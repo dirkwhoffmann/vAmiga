@@ -163,7 +163,6 @@ extension ConfigurationController {
     @IBAction func extMapAddrAction(_ sender: NSPopUpButton!) {
 
         config.extStart = sender.selectedTag()
-        refresh()
     }
 
     @IBAction func installRomAction(_ sender: NSButton!) {
