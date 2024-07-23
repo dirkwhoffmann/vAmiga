@@ -32,6 +32,7 @@ enum_long(OPT)
     OPT_AMIGA_SPEED_BOOST,      ///< Speed adjustment in percent
     OPT_AMIGA_SNAPSHOTS,        ///< Automatically take a snapshots
     OPT_AMIGA_SNAPSHOT_DELAY,   ///< Delay between two snapshots in seconds
+    OPT_AMIGA_RUN_AHEAD,        ///< Number of run-ahead frames
 
     // Agnus
     OPT_AGNUS_REVISION,
@@ -205,6 +206,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_AMIGA_SPEED_BOOST:         return "AMIGA.SPEED_BOOST";
             case OPT_AMIGA_SNAPSHOTS:           return "AMIGA.SNAPSHOTS";
             case OPT_AMIGA_SNAPSHOT_DELAY:      return "AMIGA.SNAPSHOT_DELAY";
+            case OPT_AMIGA_RUN_AHEAD:           return "AMIGA.RUN_AHEAD";
 
             case OPT_AGNUS_REVISION:            return "AGNUS.REVISION";
             case OPT_AGNUS_PTR_DROPS:           return "AGNUS.PTR_DROPS";
@@ -348,6 +350,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_AMIGA_SPEED_BOOST:         return "Speed adjustment";
             case OPT_AMIGA_SNAPSHOTS:           return "Automatically take snapshots";
             case OPT_AMIGA_SNAPSHOT_DELAY:      return "Time span between two snapshots";
+            case OPT_AMIGA_RUN_AHEAD:           return "Run-ahead frames";
 
             case OPT_AGNUS_REVISION:            return "Chip revision";
             case OPT_AGNUS_PTR_DROPS:           return "Ignore certain register writes";

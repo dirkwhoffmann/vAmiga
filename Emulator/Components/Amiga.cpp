@@ -176,6 +176,7 @@ Amiga::getOption(Option option) const
         case OPT_AMIGA_SPEED_BOOST:     return config.timeLapse;
         case OPT_AMIGA_SNAPSHOTS:       return config.snapshots;
         case OPT_AMIGA_SNAPSHOT_DELAY:  return config.snapshotDelay;
+        case OPT_AMIGA_RUN_AHEAD:       return config.runAhead;
 
         default:
             fatalError;
@@ -209,6 +210,13 @@ Amiga::checkOption(Option opt, i64 value)
 
             if (value < 10 || value > 3600) {
                 throw Error(ERROR_OPT_INV_ARG, "10...3600");
+            }
+            return;
+
+        case OPT_AMIGA_RUN_AHEAD:
+
+            if (value < 0 || value > 12) {
+                throw Error(ERROR_OPT_INV_ARG, "0...12");
             }
             return;
 
@@ -275,6 +283,11 @@ Amiga::setOption(Option option, i64 value)
 
             config.snapshotDelay = isize(value);
             scheduleNextSnpEvent();
+            return;
+
+        case OPT_AMIGA_RUN_AHEAD:
+
+            config.runAhead = isize(value);
             return;
 
         default:
@@ -833,8 +846,7 @@ Amiga::serviceSnpEvent(EventID eventId)
     if (objid == 0) {
 
         // Take snapshot and hand it over to GUI
-        autoSnapshot = new Snapshot(*this);
-        msgQueue.put(MSG_SNAPSHOT_TAKEN, SnapshotMsg { .snapshot = autoSnapshot } );
+        msgQueue.put(MSG_SNAPSHOT_TAKEN, SnapshotMsg { .snapshot = new Snapshot(*this) } );
     }
 
     // Schedule the next event

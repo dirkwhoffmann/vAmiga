@@ -138,6 +138,8 @@
                 <outlet property="prfLockInfo2" destination="2AS-Tr-ndZ" id="nm9-lK-KaI"/>
                 <outlet property="prfOKButton" destination="HW4-LT-rs8" id="h6H-GG-2Ya"/>
                 <outlet property="prfPowerButton" destination="Qwc-dN-z7X" id="dyR-6O-RRs"/>
+                <outlet property="prfRunAheadInfo" destination="QxE-Mv-W98" id="zmi-lu-h4q"/>
+                <outlet property="prfRunAheadSlider" destination="eeE-9P-GOA" id="2XG-4W-0Ip"/>
                 <outlet property="prfTimeLapse" destination="8H2-RW-mQb" id="Krk-Il-YFn"/>
                 <outlet property="prfTimeLapseInfo" destination="6IB-5J-YHo" id="JhN-Dh-OM8"/>
                 <outlet property="prfVSync" destination="Bvy-6w-UaV" id="gp1-DG-1oM"/>
@@ -201,7 +203,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="646" height="496"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1496" height="933"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
             <value key="minSize" type="size" width="646" height="486"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="646" height="496"/>
@@ -2183,6 +2185,32 @@ DQ
                                                 <action selector="prfVSyncAction:" target="-2" id="6RL-Uy-AnJ"/>
                                             </connections>
                                         </button>
+                                        <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eeE-9P-GOA">
+                                            <rect key="frame" x="104" y="127" width="107" height="28"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <sliderCell key="cell" continuous="YES" state="on" alignment="left" maxValue="12" tickMarkPosition="above" numberOfTickMarks="13" allowsTickMarkValuesOnly="YES" sliderType="linear" id="wtI-Qm-zG1"/>
+                                            <connections>
+                                                <action selector="prfRunAheadAction:" target="-2" id="h7Z-Xm-w7D"/>
+                                            </connections>
+                                        </slider>
+                                        <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xbm-XD-YYA">
+                                            <rect key="frame" x="15" y="132" width="85" height="20"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="right" title="Run ahead:" id="k4E-d3-iMu">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QxE-Mv-W98">
+                                            <rect key="frame" x="215" y="128" width="80" height="23"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="left" title="0 frames" id="aL4-dm-gid">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                     </subviews>
                                 </view>
                             </tabViewItem>

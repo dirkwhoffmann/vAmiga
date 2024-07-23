@@ -179,6 +179,8 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var prfVSync: NSButton!
     @IBOutlet weak var prfTimeLapse: NSSlider!
     @IBOutlet weak var prfTimeLapseInfo: NSTextField!
+    @IBOutlet weak var prfRunAheadSlider: NSSlider!
+    @IBOutlet weak var prfRunAheadInfo: NSTextField!
 
     // Collision detection
     @IBOutlet weak var prfClxSprSpr: NSButton!

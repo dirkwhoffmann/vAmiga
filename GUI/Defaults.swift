@@ -995,6 +995,7 @@ extension DefaultsProxy {
         remove(.AMIGA_WARP_BOOT)
         remove(.AMIGA_VSYNC)
         remove(.AMIGA_SPEED_BOOST)
+        remove(.AMIGA_RUN_AHEAD)
         remove(.DENISE_CLX_SPR_SPR)
         remove(.DENISE_CLX_SPR_PLF)
         remove(.DENISE_CLX_PLF_PLF)
@@ -1017,6 +1018,7 @@ extension Configuration {
         warpBoot = defaults.get(.AMIGA_WARP_BOOT)
         vsync = defaults.get(.AMIGA_VSYNC) != 0
         timeLapse = defaults.get(.AMIGA_SPEED_BOOST)
+        runAhead = defaults.get(.AMIGA_RUN_AHEAD)
         clxSprSpr = defaults.get(.DENISE_CLX_SPR_SPR) != 0
         clxSprPlf = defaults.get(.DENISE_CLX_SPR_PLF) != 0
         clxPlfPlf = defaults.get(.DENISE_CLX_PLF_PLF) != 0
@@ -1038,6 +1040,7 @@ extension Configuration {
         defaults.set(.AMIGA_WARP_BOOT, warpBoot)
         defaults.set(.AMIGA_VSYNC, vsync)
         defaults.set(.AMIGA_SPEED_BOOST, timeLapse)
+        defaults.set(.AMIGA_RUN_AHEAD, runAhead)
         defaults.set(.DENISE_CLX_SPR_SPR, clxSprSpr)
         defaults.set(.DENISE_CLX_SPR_PLF, clxSprPlf)
         defaults.set(.DENISE_CLX_PLF_PLF, clxPlfPlf)

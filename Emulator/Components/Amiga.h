@@ -10,54 +10,59 @@
 #pragma once
 
 #include "AmigaTypes.h"
-#include "CoreComponent.h"
+#include "MsgQueue.h"
+#include "Thread.h"
+
+// Components
 #include "Agnus.h"
-#include "ControlPort.h"
 #include "CIA.h"
 #include "CPU.h"
 #include "Debugger.h"
 #include "Defaults.h"
 #include "Denise.h"
-#include "FloppyDrive.h"
-#include "GdbServer.h"
-#include "HardDrive.h"
-#include "Host.h"
-#include "Keyboard.h"
 #include "Memory.h"
-#include "MsgQueue.h"
-#include "OSDebugger.h"
 #include "Paula.h"
+#include "RTC.h"
+
+// Ports
+#include "AudioPort.h"
+#include "ControlPort.h"
+#include "VideoPort.h"
+#include "ZorroManager.h"
+
+// Peripherals
+#include "FloppyDrive.h"
+#include "HardDrive.h"
+#include "Keyboard.h"
+
+// Misc
+#include "GdbServer.h"
+#include "Host.h"
+#include "OSDebugger.h"
 #include "RegressionTester.h"
 #include "RemoteManager.h"
 #include "RetroShell.h"
 #include "RshServer.h"
-#include "RTC.h"
 #include "SerialPort.h"
-#include "Snapshot.h"
-#include "Thread.h"
-#include "VideoPort.h"
-#include "ZorroManager.h"
 
 namespace vamiga {
 
-/* A complete virtual Amiga. This class is the most prominent one of all. To
- * run the emulator, it is sufficient to create a single object of this type.
- * All subcomponents are created automatically. The public API gives you
- * control over the emulator's behaviour such as running and pausing emulation.
- * Please note that most subcomponents have their own public API. E.g., to
- * query information from Paula, you need to invoke a public method on
- * amiga.paula.
- */
 class Amiga final : public CoreComponent, public Inspectable<AmigaInfo> {
 
     friend class Emulator;
-    
-    Descriptions descriptions = {{
 
-        .name           = "Amiga",
-        .description    = "Commodore Amiga",
-        .shell          = "amiga"
-    }};
+    Descriptions descriptions = {
+        {
+            .name           = "Amiga",
+            .description    = "Commodore Amiga",
+            .shell          = "amiga"
+        },
+        {
+            .name           = "Amiga[run-ahead]",
+            .description    = "Commodore Amiga",
+            .shell          = ""
+        }
+    };
 
     ConfigOptions options = {
 
@@ -67,19 +72,12 @@ class Amiga final : public CoreComponent, public Inspectable<AmigaInfo> {
         OPT_AMIGA_VSYNC,
         OPT_AMIGA_SPEED_BOOST,
         OPT_AMIGA_SNAPSHOTS,
-        OPT_AMIGA_SNAPSHOT_DELAY
+        OPT_AMIGA_SNAPSHOT_DELAY,
+        OPT_AMIGA_RUN_AHEAD
     };
     
     // The current configuration
     AmigaConfig config = {};
-
-    /* Result of the latest inspection. In order to update the GUI inspector
-     * panels, the emulator schedules events in the inspector slot (SLOT_INS in
-     * the secondary table) on a periodic basis. Inside the event handler, the
-     * current state is recorded. When the GUI updates the inspector panels, it
-     * displays the result of the latest inspection.
-     */
-    // mutable AmigaInfo info = {};
 
 
     //
@@ -88,7 +86,7 @@ class Amiga final : public CoreComponent, public Inspectable<AmigaInfo> {
 
 public:
 
-    // Core components
+    // Components
     CPU cpu = CPU(*this);
     CIAA ciaA = CIAA(*this);
     CIAB ciaB = CIAB(*this);
@@ -96,14 +94,14 @@ public:
     Agnus agnus = Agnus(*this);
     Denise denise = Denise(*this);
     Paula paula = Paula(*this);
+    RTC rtc = RTC(*this);
 
-    // Logic board
+    // Ports
     AudioPort audioPort = AudioPort(*this);
     VideoPort videoPort = VideoPort(*this);
     ControlPort controlPort1 = ControlPort(*this, 0);
     ControlPort controlPort2 = ControlPort(*this, 1);
     SerialPort serialPort = SerialPort(*this);
-    RTC rtc = RTC(*this);
     ZorroManager zorro = ZorroManager(*this);
 
     // Floppy drives
@@ -129,11 +127,6 @@ public:
     // Other Peripherals
     Keyboard keyboard = Keyboard(*this);
 
-    // Shortcuts
-    FloppyDrive *df[4] = { &df0, &df1, &df2, &df3 };
-    HardDrive *hd[4] = { &hd0, &hd1, &hd2, &hd3 };
-    HdController *hdcon[4] = { &hd0con, &hd1con, &hd2con, &hd3con };
-
     // Gateway to the GUI
     MsgQueue msgQueue = MsgQueue();
 
@@ -143,6 +136,11 @@ public:
     Debugger debugger = Debugger(*this);
     OSDebugger osDebugger = OSDebugger(*this);
     RegressionTester regressionTester = RegressionTester(*this);
+
+    // Shortcuts
+    FloppyDrive *df[4] = { &df0, &df1, &df2, &df3 };
+    HardDrive *hd[4] = { &hd0, &hd1, &hd2, &hd3 };
+    HdController *hdcon[4] = { &hd0con, &hd1con, &hd2con, &hd3con };
 
 
     //
@@ -165,9 +163,6 @@ private:
     //
 
 private:
-
-    Snapshot *autoSnapshot = nullptr;
-    // Snapshot *userSnapshot = nullptr;
 
     typedef struct { Cycle trigger; i64 payload; } Alarm;
     std::vector<Alarm> alarms;
@@ -197,10 +192,51 @@ public:
 
 
     //
-    // Methods from CoreObject
+    // Methods from CoreComponent
     //
 
 public:
+
+    Amiga& operator= (const Amiga& other) {
+
+        /*
+        CLONE(cpu)
+        CLONE(ciaA)
+        CLONE(ciaB)
+        CLONE(mem)
+        CLONE(agnus)
+        CLONE(denise)
+        CLONE(paula)
+        CLONE(rtc)
+        CLONE(audioPort)
+        CLONE(videoPort)
+        CLONE(controlPort1)
+        CLONE(controlPort2)
+        CLONE(serialPort)
+        CLONE(zorro)
+        CLONE(df0)
+        CLONE(df1)
+        CLONE(df2)
+        CLONE(df3)
+        CLONE(hd0)
+        CLONE(hd1)
+        CLONE(hd2)
+        CLONE(hd3)
+        CLONE(hd0con)
+        CLONE(hd1con)
+        CLONE(hd2con)
+        CLONE(hd3con)
+        CLONE(ramExpansion)
+        CLONE(diagBoard)
+        CLONE(keyboard)
+        */
+        
+        CLONE(flags)
+
+        CLONE(config)
+
+        return *this;
+    }
 
     void prefix() const override;
 
@@ -267,11 +303,6 @@ public:
     u64 getAutoInspectionMask() const;
     void setAutoInspectionMask(u64 mask);
 
-    /*
-    [[deprecated]] CType getInspectionTarget() const;
-    [[deprecated]] void setInspectionTarget(CType target, Cycle trigger = 0);
-    [[deprecated]] void removeInspectionTarget() { setInspectionTarget(0); }
-    */
 
     //
     // Methods from Configurable
@@ -391,7 +422,7 @@ public:
 
     // Loads the current state from a snapshot file
     void loadSnapshot(const MediaFile &file) throws;
-    void loadSnapshot(const Snapshot &snapshot) throws;
+    void loadSnapshot(const class Snapshot &snapshot) throws;
 
     // Services a snapshot event
     void serviceSnpEvent(EventID id);

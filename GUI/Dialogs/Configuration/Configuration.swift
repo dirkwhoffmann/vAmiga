@@ -354,6 +354,10 @@ class Configuration {
         get { return amiga.get(.AMIGA_SPEED_BOOST) }
         set { amiga.set(.AMIGA_SPEED_BOOST, value: newValue) }
     }
+    var runAhead: Int {
+        get { return amiga.get(.AMIGA_RUN_AHEAD) }
+        set { amiga.set(.AMIGA_RUN_AHEAD, value: newValue) }
+    }
 
     //
     // Compatibility

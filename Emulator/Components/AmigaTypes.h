@@ -297,6 +297,9 @@ typedef struct
 
     //! Delay between two auto-snapshots in seconds
     isize snapshotDelay;
+
+    //! Number of run-ahead frames (0 = run-ahead is disabled)
+    isize runAhead;
 }
 AmigaConfig;
 

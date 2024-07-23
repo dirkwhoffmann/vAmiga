@@ -19,11 +19,14 @@ extension ConfigurationController {
 
         // Threading
         let vsync = config.vsync
+        let runAhead = config.runAhead
         prfVSync.state = config.vsync ? .on : .off
         prfTimeLapse.integerValue = config.timeLapse
         prfTimeLapseInfo.stringValue = "\(config.timeLapse) %"
         prfTimeLapse.isEnabled = !vsync
         prfTimeLapseInfo.textColor = vsync ? .tertiaryLabelColor : .labelColor
+        prfRunAheadSlider.integerValue = runAhead
+        prfRunAheadInfo.stringValue = "\(runAhead) frame" + (runAhead == 1 ? "" : "s")
 
         // Collision detection
         prfClxSprSpr.state = config.clxSprSpr ? .on : .off
@@ -70,6 +73,11 @@ extension ConfigurationController {
     @IBAction func prfTimeLapseAction(_ sender: NSSlider!) {
 
         config.timeLapse = sender.integerValue
+    }
+
+    @IBAction func prfRunAheadAction(_ sender: NSSlider!) {
+
+        config.runAhead = sender.integerValue
     }
 
     //

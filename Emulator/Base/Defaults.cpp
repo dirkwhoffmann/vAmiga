@@ -44,6 +44,7 @@ Defaults::Defaults()
     setFallback(OPT_AMIGA_SPEED_BOOST,          100);
     setFallback(OPT_AMIGA_SNAPSHOTS,            false);
     setFallback(OPT_AMIGA_SNAPSHOT_DELAY,       10);
+    setFallback(OPT_AMIGA_RUN_AHEAD,            0);
 
     setFallback(OPT_AGNUS_REVISION,             AGNUS_ECS_1MB);
     setFallback(OPT_AGNUS_PTR_DROPS,            true);
