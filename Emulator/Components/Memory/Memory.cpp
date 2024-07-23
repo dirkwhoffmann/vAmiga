@@ -575,18 +575,20 @@ Memory::fillRamWithInitPattern()
 RomTraits &
 Memory::getRomTraits(u32 crc)
 {
-    static RomTraits fallback = RomTraits {
+    static RomTraits fallback;
+
+    // Crawl through the Rom database
+    for (auto &traits : roms) if (traits.crc == crc) return traits;
+
+    fallback = RomTraits {
 
         .crc = crc,
-        .title = "Unknown ROM",
+        .title = crc ? "Unknown ROM" : "",
         .revision = "",
         .released = "",
         .model = "",
         .vendor = ROM_VENDOR_OTHER
     };
-
-    // Crawl through the Rom database
-    for (auto &traits : roms) if (traits.crc == crc) return traits;
 
     return fallback;
 }
