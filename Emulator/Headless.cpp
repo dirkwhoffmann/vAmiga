@@ -61,10 +61,6 @@ int main(int argc, char *argv[])
 
 namespace vamiga {
 
-Headless::Headless() { // }: amiga(&vamiga.emu->main) {
-
-}
-
 int
 Headless::main(int argc, char *argv[])
 {
@@ -279,7 +275,7 @@ Headless::execScript()
     VAmiga vamiga;
     
     // Redirect shell output to the console in verbose mode
-    if (keys.find("verbose") != keys.end()) vamiga.amiga.amiga->retroShell.setStream(std::cout);
+    if (keys.find("verbose") != keys.end()) vamiga.retroShell.setStream(std::cout);
 
     // Read the input script
     Script script(keys["arg1"]);
@@ -287,10 +283,11 @@ Headless::execScript()
     // Launch the emulator thread
     vamiga.launch(this, vamiga::process);
 
-    // Execute the script
+    // Execute scripts
     barrier.lock();
-    script.execute(*vamiga.amiga.amiga);
-    
+    vamiga.retroShell.execScript(script);
+    barrier.lock();
+
     return *returnCode;
 }
 

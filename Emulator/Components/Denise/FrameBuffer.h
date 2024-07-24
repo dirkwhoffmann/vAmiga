@@ -18,8 +18,10 @@ using util::Buffer;
 
 namespace vamiga {
 
-struct FrameBuffer {
+class FrameBuffer {
 
+public:
+    
     // Predefined colors
     static constexpr Texel black    = TEXEL(0xFF000000);
     static constexpr Texel grey2    = TEXEL(0xFF222222);

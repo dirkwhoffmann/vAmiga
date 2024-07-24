@@ -38,13 +38,20 @@ class Console : public SubComponent {
     friend class RshServer;
     friend class Interpreter;
 
-    Descriptions descriptions = {{
-
-        .type           = COMP_CONSOLE,
-        .name           = "Console",
-        .description    = "Command shell",
-        .shell          = ""
-    }};
+    Descriptions descriptions = {
+        {
+            .type           = COMP_CONSOLE,
+            .name           = "CmdConsole",
+            .description    = "Command shell",
+            .shell          = ""
+        },
+        {
+            .type           = COMP_CONSOLE,
+            .name           = "DbgConsole",
+            .description    = "Debug shell",
+            .shell          = ""
+        }
+    };
 
     ConfigOptions options = {
 

@@ -538,6 +538,9 @@ Console::exec()
 {
     SYNCHRONIZED
 
+    // Indicates if we're executing commands from a script
+    bool scriptMode = false;
+
     // Only proceed if there is anything to process
     if (commands.empty()) return;
 
@@ -550,10 +553,26 @@ Console::exec()
             cmd = commands.front();
             commands.erase(commands.begin());
 
+            // Commands from a script carry a line number
+            scriptMode |= cmd.first != 0;
+
             exec(cmd);
+
+            if (commands.empty() && scriptMode) {
+                msgQueue.put(MSG_SCRIPT_DONE);
+            }
         }
 
-    } catch (...) { }
+    } catch (ScriptInterruption &) {
+
+    } catch (...) { 
+
+        // Remove all remaining commands
+        commands = { };
+
+        // Inform the GUI if a script had been executed
+        if (scriptMode) msgQueue.put(MSG_SCRIPT_ABORT);
+    }
 
     // Print prompt
     *this << getPrompt();
@@ -619,17 +638,6 @@ Console::asyncExecScript(const string &contents)
     ss << contents;
     asyncExecScript(ss);
 }
-
-/*
- void
- Console::asyncExecScript(const MediaFile &file)
- {
- if (file.type() != FILETYPE_SCRIPT) throw Error(ERROR_FILE_TYPE_MISMATCH);
-
- string s((char *)file.getData(), file.getSize());
- try { execScript(s); } catch (util::Exception &) { }
- }
- */
 
 void
 Console::abortScript()

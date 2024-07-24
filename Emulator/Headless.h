@@ -37,15 +37,6 @@ class Headless {
     // Return code
     std::optional<int> returnCode;
 
-
-    //
-    // Initializing
-    //
-
-public:
-
-    Headless();
-
     
     //
     // Launching
@@ -85,7 +76,7 @@ public:
 };
 
 //
-// Self-test script
+// Self-test scripts
 //
 
 static const char *script[] = {
@@ -145,6 +136,8 @@ static const char *script[] = {
     "mem set SAVE_ROMS false",
     "mem set SLOW_RAM_DELAY true",
     "mem set SLOW_RAM_DELAY false",
+    "mem set SLOW_RAM_MIRROR true",
+    "mem set SLOW_RAM_MIRROR false",
     "mem set BANKMAP A500",
     "mem set BANKMAP A1000",
     "mem set BANKMAP A2000A",
@@ -209,8 +202,6 @@ static const char *script[] = {
     "agnus set REVISION OCS",
     "agnus set REVISION ECS_1MB",
     "agnus set REVISION ECS_2MB",
-    "agnus set SLOW_RAM_MIRROR true",
-    "agnus set SLOW_RAM_MIRROR false",
     "agnus set PTR_DROPS true",
     "agnus set PTR_DROPS false",
 
@@ -426,11 +417,11 @@ static const char *script[] = {
     "server gdb",
     "server gdb set PORT 8000",
     "server gdb set VERBOSE true",
-    "server gdb set VERBOSE false",
+    "server gdb set VERBOSE false"
+};
 
-    "",
-    "# Entering the debugger...",
-    ".",
+/*
+static const char *debugScript[] = {
 
     "",
     "break",
@@ -540,5 +531,6 @@ static const char *script[] = {
     "i host",
     "i server"
 };
+*/
 
 }
