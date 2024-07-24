@@ -80,20 +80,11 @@ public:
 
 
     //
-    // Methods from CoreObject
+    // Methods from Serializable
     //
-    
-private:
-    
-    void _dump(Category category, std::ostream& os) const override;
 
-    
-    //
-    // Methods from CoreComponent
-    //
-    
 private:
-        
+
     template <class T>
     void serialize(T& worker)
     {
@@ -109,12 +100,20 @@ private:
         << recCnt;
 
     } SERIALIZERS(serialize);
-    
+
+
+    //
+    // Methods from CoreComponent
+    //
+
 public:
 
-    void _didReset(bool hard) override;
-
     const Descriptions &getDescriptions() const override { return descriptions; }
+
+private:
+    
+    void _dump(Category category, std::ostream& os) const override;
+    void _didReset(bool hard) override;
 
 
     //
@@ -127,14 +126,14 @@ public:
 
 
     //
-    // Analyzing
+    // Methods from Inspectable
     //
 
 public:
 
-    // UARTInfo getInfo() const { return CoreComponent::getInfo(info); }
     void cacheInfo(UARTInfo &result) const override;
 
+    
     //
     // Accessing
     //

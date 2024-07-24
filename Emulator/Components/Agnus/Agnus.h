@@ -200,6 +200,13 @@ public:
 
     
     //
+    // Class methods
+    //
+
+    static const char *eventName(EventSlot slot, EventID id);
+
+
+    //
     // Initializing
     //
     
@@ -258,42 +265,26 @@ public:
 
 
     //
-    // Class methods
+    // Methods from Serializable
     //
-    
-    static const char *eventName(EventSlot slot, EventID id);
 
-    
-    //
-    // Methods from CoreObject
-    //
-    
 private:
-    
-    void _dump(Category category, std::ostream& os) const override;
 
-    
-    //
-    // Methods from CoreComponent
-    //
-    
-private:
-    
     template <class T>
     void serialize(T& worker)
     {
         worker
-        
+
         << trigger
         << id
         << data
         << nextTrigger
         << changeRecorder
         << syncEvent
-        
+
         << pos
         << latchedPos
-        
+
         << bplcon0
         << bplcon0Initial
         << bplcon1
@@ -310,7 +301,7 @@ private:
         << res
         << scrollOdd
         << scrollEven
-        
+
         << busValue
         << busOwner
         << lastCtlWrite
@@ -344,9 +335,18 @@ private:
     void operator << (SerReader &worker) override { serialize(worker); }
     void operator << (SerWriter &worker) override { serialize(worker); }
 
+
+    //
+    // Methods from CoreComponent
+    //
+
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
+
+private:
+    
+    void _dump(Category category, std::ostream& os) const override;
 
     
     //

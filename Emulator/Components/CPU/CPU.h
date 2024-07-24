@@ -63,13 +63,6 @@ public:
 
     CPU(Amiga& ref);
 
-
-    //
-    // Operators
-    //
-
-public:
-
     CPU& operator= (const CPU& other) {
 
         CLONE(debt)
@@ -117,25 +110,13 @@ public:
         return *this;
     }
 
-
-    //
-    // Methods from CoreObject
-    //
-    
-private:
-    
-    void _dump(Category category, std::ostream& os) const override;
-
     
     //
-    // Methods from CoreComponent
+    // Methods from Serializable
     //
     
 private:
-    
-    void _trackOn() override;
-    void _trackOff() override;
-    
+
     template <class T>
     void serialize(T& worker)
     {
@@ -197,7 +178,19 @@ private:
 
     } SERIALIZERS(serialize);
 
+
+    //
+    // Methods from CoreComponent
+    //
+
+private:
+
+    void _dump(Category category, std::ostream& os) const override;
+
+
     void _didLoad() override;
+    void _trackOn() override;
+    void _trackOff() override;
 
 public:
 
@@ -214,6 +207,15 @@ public:
     
 
     //
+    // Methods from Inspectable
+    //
+
+public:
+
+    void cacheInfo(CPUInfo &result) const override;
+
+
+    //
     // Methods from Configurable
     //
 
@@ -224,15 +226,6 @@ public:
     i64 getOption(Option opt) const override;
     void setOption(Option opt, i64 value) override;
 
-    
-    //
-    // Analyzing
-    //
-    
-public:
-    
-    // CPUInfo getInfo() const { return CoreComponent::getInfo(info); }
-    void cacheInfo(CPUInfo &result) const override;
 
     //
     // Working with the clock

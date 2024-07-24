@@ -102,14 +102,12 @@ public:
     
     Recorder(Amiga& ref);
     
-    
-    //
-    // Methods from CoreObject
-    //
-    
-private:
-    
-    void _dump(Category category, std::ostream& os) const override;
+    Recorder& operator= (const Recorder& other) {
+
+        CLONE(audioClock)
+
+        return *this;
+    }
 
 
     //
@@ -117,7 +115,7 @@ private:
     //
 
 public:
-    
+
     template <class T>
     void serialize(T& worker)
     {
@@ -139,6 +137,7 @@ public:
 
 private:
 
+    void _dump(Category category, std::ostream& os) const override;
     void _initialize() override;
 
 

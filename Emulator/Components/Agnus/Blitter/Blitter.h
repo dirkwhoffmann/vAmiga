@@ -32,6 +32,8 @@ namespace vamiga {
 
 class Blitter : public SubComponent, public Inspectable<BlitterInfo>
 {
+    friend class Agnus;
+
     Descriptions descriptions = {{
 
         .type           = COMP_BLITTER,
@@ -45,8 +47,6 @@ class Blitter : public SubComponent, public Inspectable<BlitterInfo>
         OPT_BLITTER_ACCURACY
     };
 
-    friend class Agnus;
-    
     // Current configuration
     BlitterConfig config = {};
 
@@ -358,13 +358,13 @@ public:
     
     
     //
-    // Analyzing
+    // Methods from Inspectable
     //
     
 public:
     
-    // BlitterInfo getInfo() const { return CoreComponent::getInfo(info); }
     void cacheInfo(BlitterInfo &result) const override;
+
 
     //
     // Accessing

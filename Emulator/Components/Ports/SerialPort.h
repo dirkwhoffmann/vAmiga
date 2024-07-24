@@ -119,14 +119,14 @@ public:
     
 
     //
-    // Analyzing
+    // Methods from Inspectable
     //
-    
+
 public:
 
-    // SerialPortInfo getInfo() const { return CoreComponent::getInfo(info); }
     void cacheInfo(SerialPortInfo &info) const override;
 
+    
     //
     // Accessing port pins
     //

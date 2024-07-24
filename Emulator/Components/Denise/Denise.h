@@ -333,6 +333,8 @@ public:
 
     Denise& operator= (const Denise& other) {
 
+        CLONE(pixelEngine)
+        
         CLONE(diwstrt)
         CLONE(diwstop)
         CLONE(diwhigh)
@@ -384,16 +386,7 @@ public:
 
 
     //
-    // Methods from CoreObject
-    //
-    
-private:
-    
-    void _dump(Category category, std::ostream& os) const override;
-    
-    
-    //
-    // Methods from CoreComponent
+    // Methods from Serializable
     //
     
 private:
@@ -461,10 +454,19 @@ private:
         << config.clxPlfPlf;
 
     } SERIALIZERS(serialize);
-    
+
+
+    //
+    // Methods from CoreComponent
+    //
+
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
+
+private:
+
+    void _dump(Category category, std::ostream& os) const override;
     void _didReset(bool hard) override;
     
 

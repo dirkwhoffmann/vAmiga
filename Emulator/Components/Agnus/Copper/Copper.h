@@ -121,16 +121,7 @@ public:
 
 
     //
-    // Methods from CoreObject
-    //
-    
-private:
-    
-    void _dump(Category category, std::ostream& os) const override;
-
-    
-    //
-    // Methods from CoreComponent
+    // Methods from Serializable
     //
     
 private:
@@ -159,22 +150,26 @@ public:
 
 
     //
-    // Methods from Configurable
+    // Methods from CoreComponent
     //
 
 public:
 
     const ConfigOptions &getOptions() const override { return options; }
 
+private:
+
+    void _dump(Category category, std::ostream& os) const override;
+
 
     //
-    // Analyzing
+    // Methods from Inspectable
     //
 
 public:
-    
-    // Returns the result of the latest inspection
+
     void cacheInfo(CopperInfo &result) const override;
+    
 
     //
     // Accessing

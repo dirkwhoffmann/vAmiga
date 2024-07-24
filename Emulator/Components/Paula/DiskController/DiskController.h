@@ -135,13 +135,9 @@ public:
 
 
     //
-    // Methods from CoreObject
+    // Methods from Serializable
     //
-    
-private:
-    
-    void _dump(Category category, std::ostream& os) const override;
-    
+
 private:
         
     template <class T>
@@ -179,9 +175,18 @@ private:
     void operator << (SerReader &worker) override { serialize(worker); }
     void operator << (SerWriter &worker) override { serialize(worker); }
 
+
+    //
+    // Methods from CoreComponent
+    //
+
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
+
+private:
+
+    void _dump(Category category, std::ostream& os) const override;
 
 
     //
@@ -204,7 +209,6 @@ public:
     
 public:
     
-    // DiskControllerInfo getInfo() const { return CoreComponent::getInfo(info); }
     void cacheInfo(DiskControllerInfo &result) const override;
 
     //

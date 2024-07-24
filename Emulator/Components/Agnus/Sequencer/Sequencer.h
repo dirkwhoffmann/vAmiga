@@ -254,22 +254,11 @@ private:
 
 
     //
-    // Methods from CoreObject
+    // Methods from Serializable
     //
 
 private:
 
-    void _dump(Category category, std::ostream& os) const override;
-
-
-    //
-    // Methods from CoreComponent
-    //
-
-private:
-
-    void _initialize() override;
-    
     template <class T>
     void serialize(T& worker)
     {
@@ -305,9 +294,19 @@ private:
     void operator << (SerReader &worker) override { serialize(worker); }
     void operator << (SerWriter &worker) override { serialize(worker); }
 
+
+    //
+    // Methods from CoreComponent
+    //
+
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
+
+private:
+
+    void _initialize() override;
+    void _dump(Category category, std::ostream& os) const override;
 
 
     //

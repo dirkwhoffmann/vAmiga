@@ -88,28 +88,28 @@ public:
     
     using SubComponent::SubComponent;
 
-
-    //
-    // Methods from CoreObject
-    //
-    
-private:
-    
-    void _dump(Category category, std::ostream& os) const override;
-    
     
     //
-    // Methods from CoreComponent
+    // Methods from Serializable
     //
 
 private:
         
     template <class T> void serialize(T& worker) { } SERIALIZERS(serialize);
-    void _didReset(bool hard) override;
+
+
+    //
+    // Methods from CoreComponent
+    //
 
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
+
+private:
+
+    void _dump(Category category, std::ostream& os) const override;
+    void _didReset(bool hard) override;
 
 
     //

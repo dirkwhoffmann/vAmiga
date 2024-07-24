@@ -109,43 +109,23 @@ public:
     // Initializes both frame buffers with a checkerboard pattern
     void clearAll();
 
+    PixelEngine& operator= (const PixelEngine& other) {
+
+        CLONE(colChanges)
+        CLONE_ARRAY(color)
+        CLONE(hamMode)
+        CLONE(shresMode)
+
+        return *this;
+    }
+
 
     //
-    // Methods from CoreObject
+    // Methods from Serializable
     //
-    
+
 private:
-    
-    void _dump(Category category, std::ostream& os) const override;
 
-    
-    //
-    // Methods from CoreComponent
-    //
-    
-private:
-    
-    void _initialize() override;
-
-    
-    //
-    // Methods from Configurable
-    //
-
-public:
-    
-    const PixelEngineConfig &getConfig() const { return config; }
-    const ConfigOptions &getOptions() const override { return options; }
-    i64 getOption(Option option) const override;
-    void setOption(Option option, i64 value) override;
-
-    
-    //
-    // Serializing
-    //
-    
-private:
-    
     template <class T>
     void serialize(T& worker)
     {
@@ -158,21 +138,34 @@ private:
 
     } SERIALIZERS(serialize);
 
-    void _didLoad() override;
 
+    //
+    // Methods from CoreComponent
+    //
+    
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
-    void _didReset(bool hard) override;
-    
 
-    //
-    // Controlling
-    //
-    
 private:
 
+    void _dump(Category category, std::ostream& os) const override;
+    void _initialize() override;
     void _powerOn() override;
+    void _didLoad() override;
+    void _didReset(bool hard) override;
+
+    
+    //
+    // Methods from Configurable
+    //
+
+public:
+    
+    const PixelEngineConfig &getConfig() const { return config; }
+    const ConfigOptions &getOptions() const override { return options; }
+    i64 getOption(Option option) const override;
+    void setOption(Option option, i64 value) override;
 
 
     //
