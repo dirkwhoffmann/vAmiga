@@ -70,8 +70,8 @@ constexpr u64 CIADelayMask = ~CIALast
 & ~CIAReadIcr0 & ~CIAClearIcr0 & ~CIAAckIcr0 & ~CIASetIcr0 & ~CIATODInt0
 & ~CIASerInt0 & ~CIASdrToSsr0 & ~CIASsrToSdr0 & ~CIASerClk0;
 
-class CIA : public SubComponent, public Inspectable<CIAInfo> {
-    
+class CIA : public SubComponent, public Inspectable<CIAInfo, CIAStats> {
+
     Descriptions descriptions = {
         {
             .type           = COMP_CIA,
@@ -335,20 +335,11 @@ public:
 
 
     //
-    // Methods from CoreObject
-    //
-    
-private:
-    
-    void _dump(Category category, std::ostream& os) const override;
-    
-    
-    //
-    // Methods from CoreComponent
+    // Methods from Serializable
     //
 
-    void _initialize() override;
-    
+public:
+
     template <class T>
     void serialize(T& worker)
     {
@@ -411,12 +402,32 @@ private:
     void operator << (SerReader &worker) override { serialize(worker); }
     void operator << (SerWriter &worker) override { serialize(worker); }
 
+    
+    //
+    // Methods from CoreComponent
+    //
+
 public:
 
+    const Descriptions &getDescriptions() const override { return descriptions; }
+
+private:
+
+    void _dump(Category category, std::ostream& os) const override;
+    void _initialize() override;
     void _willReset(bool hard) override;
     void _didReset(bool hard) override;
 
-    const Descriptions &getDescriptions() const override { return descriptions; }
+
+
+    //
+    // Methods from Inspectable
+    //
+
+public:
+
+    void cacheInfo(CIAInfo &result) const override;
+    void cacheStats(CIAStats &result) const override;
 
 
     //
@@ -437,8 +448,6 @@ public:
     
 public:
     
-    // CIAInfo getInfo() const { return CoreComponent::getInfo(info); }
-    void cacheInfo(CIAInfo &result) const override;
     Cycle getClock() const { return clock; }
 
     

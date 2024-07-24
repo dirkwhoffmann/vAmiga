@@ -152,6 +152,12 @@ CIAAPI::getCachedInfo() const
     return cia->getCachedInfo();
 }
 
+CIAStats
+CIAAPI::getStats() const
+{
+    return cia->getStats();
+}
+
 
 //
 // Components (Copper)

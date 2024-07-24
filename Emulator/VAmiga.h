@@ -269,6 +269,10 @@ public:
      */
     const CIAInfo &getInfo() const;
     const CIAInfo &getCachedInfo() const;
+
+    /** @brief  Returns statistical information about the components.
+     */
+    CIAStats getStats() const;
 };
 
 

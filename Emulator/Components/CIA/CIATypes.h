@@ -148,10 +148,15 @@ typedef struct
     bool irq;
     
     TODInfo tod;
-    bool todIrqEnable;
-    
+    bool todIrqEnable;    
+}
+CIAInfo;
+
+typedef struct
+{
     Cycle idleSince;
     Cycle idleTotal;
     double idlePercentage;
 }
-CIAInfo;
+CIAStats;
+

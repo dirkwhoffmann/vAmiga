@@ -15,7 +15,9 @@ extension Inspector {
     private func cacheCIA() {
 
         let cia = ciaA ? emu.ciaA! : emu.ciaB!
+
         ciaInfo = emu.paused ? cia.info : cia.cachedInfo
+        ciaStats = cia.stats
     }
 
     func refreshCIA(count: Int = 0, full: Bool = false) {
@@ -131,8 +133,8 @@ extension Inspector {
         ciaSDR.intValue = Int32(ciaInfo.sdr)
         ciaSSR.intValue = Int32(ciaInfo.ssr)
 
-        let idlePercentage = Int(ciaInfo.idlePercentage * 100)
-        ciaIdleCycles.stringValue = "\(ciaInfo.idleSince) cycles"
+        let idlePercentage = Int(ciaStats.idlePercentage * 100)
+        ciaIdleCycles.stringValue = "\(ciaStats.idleSince) cycles"
         ciaIdleLevel.integerValue = idlePercentage
         ciaIdleLevelText.stringValue = "\(idlePercentage) %"
     }

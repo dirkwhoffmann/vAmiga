@@ -579,6 +579,7 @@ class Inspector: DialogController {
     // Cached states of all Amiga components
     var cpuInfo: CPUInfo!
     var ciaInfo: CIAInfo!
+    var ciaStats: CIAStats!
     var agnusInfo: AgnusInfo!
     var copperInfo: CopperInfo!
     var blitterInfo: BlitterInfo!

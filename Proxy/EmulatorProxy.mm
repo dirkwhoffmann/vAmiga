@@ -411,6 +411,11 @@ using namespace vamiga::moira;
     return [self cia]->getCachedInfo();
 }
 
+- (CIAStats)stats
+{
+    return [self cia]->getStats();
+}
+
 @end
 
 

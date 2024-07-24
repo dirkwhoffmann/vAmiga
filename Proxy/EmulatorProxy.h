@@ -380,6 +380,7 @@
  
 @property (readonly) CIAInfo info;
 @property (readonly) CIAInfo cachedInfo;
+@property (readonly) CIAStats stats;
 
 @end
 

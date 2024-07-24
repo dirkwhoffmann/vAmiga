@@ -155,11 +155,19 @@ CIA::cacheInfo(CIAInfo &info) const
         info.irq = irq;
         
         info.tod = tod.info;
-        info.todIrqEnable = imr & 0x04;
-        
-        info.idleSince = idleSince();
-        info.idleTotal = idleTotal();
-        info.idlePercentage = clock ? (double)idleCycles / (double)clock : 100.0;
+        info.todIrqEnable = imr & 0x04;        
+    }
+}
+
+
+void 
+CIA::cacheStats(CIAStats &result) const
+{
+    {   SYNCHRONIZED
+
+        result.idleSince = idleSince();
+        result.idleTotal = idleTotal() + result.idleSince;
+        result.idlePercentage =  clock ? (double)result.idleTotal / (double)clock : 100.0;
     }
 }
 
