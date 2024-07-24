@@ -43,9 +43,6 @@ public:
 
 private:
     
-    // Result of the latest inspection
-    mutable CopperInfo info = {};
-    
     // The currently executed Copper list (1 or 2)
     isize copList = 1;
 

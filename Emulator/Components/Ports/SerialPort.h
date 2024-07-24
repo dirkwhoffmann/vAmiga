@@ -44,9 +44,6 @@ class SerialPort : public SubComponent, public Inspectable<SerialPortInfo> {
     // Current configuration
     SerialPortConfig config = {};
 
-    // Result of the latest inspection
-    mutable SerialPortInfo info = {};
-
     // The current values of the port pins
     u32 port = 0;
 

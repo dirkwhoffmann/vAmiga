@@ -99,14 +99,8 @@ class CIA : public SubComponent, public Inspectable<CIAInfo, CIAStats> {
     
 protected:
 
-    // Identification number (0 = CIA A, 1 = CIA B)
-    // const int nr;
-
     // Current configuration
     CIAConfig config = {};
-
-    // Result of the latest inspection
-    mutable CIAInfo info = {};
 
 
     //

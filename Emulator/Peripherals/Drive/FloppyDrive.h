@@ -65,9 +65,6 @@ class FloppyDrive : public Drive, public Inspectable<FloppyDriveInfo> {
     // Current configuration
     FloppyDriveConfig config = {};
 
-    // Result of the latest inspection
-    mutable FloppyDriveInfo info = {};
-
     // The current head location
     DriveHead head;
 

@@ -51,12 +51,6 @@ class Agnus : public SubComponent, public Inspectable<AgnusInfo, AgnusStats> {
     // Current configuration
     AgnusConfig config = {};
 
-    // Result of the latest inspection
-    mutable AgnusInfo info = {};
-
-    // Current workload
-    AgnusStats stats = {};
-
 
     //
     // Subcomponents

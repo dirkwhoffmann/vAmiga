@@ -35,11 +35,6 @@ class Paula : public SubComponent, public Inspectable<PaulaInfo> {
 
     };
 
-private:
-
-    // Result of the latest inspection
-    mutable PaulaInfo info = {};
-
     
     //
     // Subcomponents
@@ -139,24 +134,10 @@ public:
 
 
     //
-    // Methods from CoreObject
-    //
-    
-private:
-    
-    void _dump(Category category, std::ostream& os) const override;
-
-    
-    //
-    // Methods from CoreComponent
+    // Methods from Serializable
     //
 
 private:
-    
-    void _run() override;
-    void _pause() override;
-    void _warpOn() override;
-    void _warpOff() override;
 
     template <class T>
     void serialize(T& worker)
@@ -186,12 +167,26 @@ private:
 
     } SERIALIZERS(serialize);
 
-    void _didLoad() override;
+
+    //
+    // Methods from CoreObject
+    //
 
 public:
 
-    void _didReset(bool hard) override;
     const Descriptions &getDescriptions() const override { return descriptions; }
+
+private:
+
+    void _dump(Category category, std::ostream& os) const override;
+
+    void _run() override;
+    void _pause() override;
+    void _warpOn() override;
+    void _warpOff() override;
+
+    void _didReset(bool hard) override;
+    void _didLoad() override;
 
 
     //
@@ -204,12 +199,11 @@ public:
 
 
     //
-    // Analyzing
+    // Methods from Inspectable
     //
     
 public:
     
-    // PaulaInfo getInfo() const { return CoreComponent::getInfo(info); }
     void cacheInfo(PaulaInfo &result) const override;
 
 

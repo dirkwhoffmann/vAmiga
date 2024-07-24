@@ -50,9 +50,6 @@ class StateMachine : public SubComponent, public Inspectable<StateMachineInfo> {
 
     };
 
-    // Result of the latest inspection
-    mutable StateMachineInfo info = {};
-
 public:
 
     // The state machine has been executed up to this clock cycle
@@ -137,16 +134,7 @@ public:
 
 
     //
-    // Methods from CoreObject
-    //
-    
-private:
-    
-    void _dump(Category category, std::ostream& os) const override;
-
-    
-    //
-    // Methods from CoreComponent
+    // Methods from Serializable
     //
     
 private:
@@ -179,9 +167,27 @@ private:
 
     } SERIALIZERS(serialize);
 
+
+    //
+    // Methods from CoreComponent
+    //
+
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
+
+private:
+
+    void _dump(Category category, std::ostream& os) const override;
+
+
+    //
+    // Methods from Inspectable
+    //
+
+public:
+
+    void cacheInfo(StateMachineInfo &result) const override;
 
 
     //
@@ -192,15 +198,6 @@ public:
 
     const ConfigOptions &getOptions() const override { return options; }
 
-
-    //
-    // Analyzing
-    //
-    
-public:
-    
-    // StateMachineInfo getInfo() const { return CoreComponent::getInfo(info); }
-    void cacheInfo(StateMachineInfo &result) const override;
 
     //
     // Performing state machine actions

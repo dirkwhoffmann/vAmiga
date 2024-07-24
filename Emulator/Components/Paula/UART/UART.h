@@ -32,9 +32,6 @@ class UART : public SubComponent, public Inspectable<UARTInfo> {
 
     friend class SerServer;
     
-    // Result of the latest inspection
-    mutable UARTInfo info = {};
-
     // Port period and control register
     u16 serper;
 

@@ -41,9 +41,6 @@ class CPU : public moira::Moira, public Inspectable<CPUInfo>
     // The current configuration
     CPUConfig config = {};
 
-    // Result of the latest inspection
-    mutable CPUInfo info = {};
-
 public:
     
     // Breakpoints, Watchpoints, Catchpoints

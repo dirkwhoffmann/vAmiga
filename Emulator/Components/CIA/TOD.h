@@ -45,9 +45,6 @@ class TOD : public SubComponent, public Inspectable<TODInfo> {
     // Reference to the connected CIA
     class CIA &cia;
 
-    // Result of the latest inspection
-    mutable TODInfo info = {};
-
     // The 24 bit counter
     Counter24 tod;
     
@@ -106,20 +103,11 @@ public:
 
 
     //
-    // Methods from CoreObject
+    // Methods from Serializable
     //
-    
-private:
-    
-    void _dump(Category category, std::ostream& os) const override;
 
-    
-    //
-    // Methods from CoreComponent
-    //
-    
 private:
-    
+
     template <class T>
     void serialize(T& worker)
     {
@@ -142,9 +130,27 @@ private:
     void operator << (SerReader &worker) override { serialize(worker); }
     void operator << (SerWriter &worker) override { serialize(worker); }
 
+
+    //
+    // Methods from CoreComponent
+    //
+    
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
+
+private:
+    
+    void _dump(Category category, std::ostream& os) const override;
+
+
+    //
+    // Methods from Inspectable
+    //
+
+public:
+
+    void cacheInfo(TODInfo &result) const override;
 
 
     //
@@ -154,15 +160,6 @@ public:
 public:
 
     const ConfigOptions &getOptions() const override { return options; }
-
-
-    //
-    // Analyzing
-    //
-    
-public:
-
-    void cacheInfo(TODInfo &result) const override;
 
 
     //

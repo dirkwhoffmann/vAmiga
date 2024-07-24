@@ -36,9 +36,6 @@ class DiskController : public SubComponent, public Inspectable<DiskControllerInf
     // Current configuration
     DiskControllerConfig config = {};
 
-    // Result of the latest inspection
-    mutable DiskControllerInfo info = {};
-    
     // The currently selected drive (-1 if no drive is selected)
     isize selected = -1;
 

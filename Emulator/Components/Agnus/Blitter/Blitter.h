@@ -49,10 +49,7 @@ class Blitter : public SubComponent, public Inspectable<BlitterInfo>
     
     // Current configuration
     BlitterConfig config = {};
-    
-    // Result of the latest inspection
-    mutable BlitterInfo info = {};
-    
+
     // The fill pattern lookup tables
     u8 fillPattern[2][2][256];     // [inclusive/exclusive][carry in][data]
     u8 nextCarryIn[2][256];        // [carry in][data]

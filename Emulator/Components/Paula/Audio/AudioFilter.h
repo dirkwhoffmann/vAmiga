@@ -190,18 +190,9 @@ public:
         return *this;
     }
 
-
-    //
-    // Methods from CoreObject
-    //
-    
-private:
-    
-    void _dump(Category category, std::ostream& os) const override;
-
     
     //
-    // Methods from CoreComponent
+    // Methods from Serializable
     //
     
 private:
@@ -221,6 +212,15 @@ public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
 
+
+    //
+    // Methods from CoreComponent
+    //
+
+private:
+
+    void _dump(Category category, std::ostream& os) const override;
+    
 
     //
     // Methods from Configurable

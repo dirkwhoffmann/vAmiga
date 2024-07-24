@@ -59,9 +59,6 @@ class HardDrive : public Drive, public Inspectable<HardDriveInfo> {
     // Current configuration
     HardDriveConfig config = {};
     
-    // Result of the latest inspection
-    mutable HardDriveInfo info = {};
-
     // Product information
     string diskVendor;
     string diskProduct;

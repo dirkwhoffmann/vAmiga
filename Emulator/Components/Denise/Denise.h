@@ -48,9 +48,6 @@ class Denise : public SubComponent, public Inspectable<DeniseInfo> {
 
     // Current configuration
     DeniseConfig config = {};
-
-    // Result of the latest inspection
-    // mutable DeniseInfo info = {};
     
     
     //
