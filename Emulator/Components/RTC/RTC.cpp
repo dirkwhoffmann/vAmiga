@@ -188,8 +188,8 @@ RTC::poke(isize nr, u8 value)
     trace(RTC_DEBUG, "poke(%ld, $%02X) [bank %ld]\n", nr, value, bank());
 
     // Ony proceed if a real-time clock is installed
-    if (rtc.isPresent()) return;
-    
+    if (config.model == RTC_NONE) return;
+
     switch (nr) {
             
         case 0xD: pokeD(value); break;

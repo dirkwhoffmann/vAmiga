@@ -215,6 +215,7 @@ public:
     u16 dataBus;
 
     // Static buffer for returning textual representations
+    // TODO: Replace by "static string str" and make it local
     char str[256];
     
 
@@ -298,18 +299,6 @@ private:
 
 
     //
-    // Methods from Configurable
-    //
-
-public:
-    
-    const MemConfig &getConfig() const { return config; }
-    const ConfigOptions &getOptions() const override { return options; }
-    i64 getOption(Option option) const override;
-    void setOption(Option option, i64 value) override;
-
-
-    //
     // Methods from Inspectable
     //
 
@@ -319,7 +308,16 @@ public:
     void cacheStats(MemStats &result) const override;
 
 
-    void updateStats();
+    //
+    // Methods from Configurable
+    //
+
+public:
+    
+    const MemConfig &getConfig() const { return config; }
+    const ConfigOptions &getOptions() const override { return options; }
+    i64 getOption(Option option) const override;
+    void setOption(Option option, i64 value) override;
 
     
     //

@@ -136,8 +136,6 @@ public:
     i64 getOption(Option option) const override;
     void setOption(Option option, i64 value) override;
 
-    bool isPresent() const { return config.model != RTC_NONE; }
-
     
     //
     // Accessing time

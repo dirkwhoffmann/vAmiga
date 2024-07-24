@@ -194,6 +194,13 @@ public:
     
     Blitter(Amiga& ref);
     
+private:
+
+    void initFastBlitter();
+    void initSlowBlitter();
+
+public:
+
     Blitter& operator= (const Blitter& other) {
 
         CLONE(bltcon0)
@@ -252,30 +259,13 @@ public:
         return *this;
     }
 
-private:
-    
-    void initFastBlitter();
-    void initSlowBlitter();
-    
-    
+
     //
-    // Methods from CoreObject
+    // Methods from Serializable
     //
     
-private:
-    
-    void _dump(Category category, std::ostream& os) const override;
-    
-    
-    //
-    // Methods from CoreComponent
-    //
-    
-private:
-    
-    void _initialize() override;
-    void _run() override;
-    
+public:
+
     template <class T>
     void serialize(T& worker)
     {
@@ -339,11 +329,32 @@ private:
         << config.accuracy;
 
     } SERIALIZERS(serialize);
+
+    
+    //
+    // Methods from CoreComponent
+    //
     
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
+
+private:
+
+    void _dump(Category category, std::ostream& os) const override;
+    void _initialize() override;
+    void _run() override;
     void _didReset(bool hard) override;
+
+
+    //
+    // Methods from Inspectable
+    //
+
+public:
+
+    void cacheInfo(BlitterInfo &result) const override;
+    
 
     //
     // Methods from Configurable
@@ -355,15 +366,6 @@ public:
     const ConfigOptions &getOptions() const override { return options; }
     i64 getOption(Option option) const override;
     void setOption(Option option, i64 value) override;
-    
-    
-    //
-    // Methods from Inspectable
-    //
-    
-public:
-    
-    void cacheInfo(BlitterInfo &result) const override;
 
 
     //

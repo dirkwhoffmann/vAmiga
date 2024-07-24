@@ -70,7 +70,7 @@ private:
 
 
     //
-    // Configuring
+    // Methods from Configurable
     //
 
 public:

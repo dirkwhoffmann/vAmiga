@@ -77,11 +77,6 @@ public:
 
     DmaDebugger(Amiga &ref);
 
-public:
-
-    // Returns the result of the most recent call to inspect()
-    // DmaDebuggerInfo getInfo();
-
     
     //
     // Methods from Serializable
