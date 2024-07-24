@@ -39,11 +39,6 @@ class ControlPort : public SubComponent, public Inspectable<ControlPortInfo> {
 
     };
 
-public:
-
-    // [[deprecated]] static constexpr isize PORT1 = 0;
-    // [[deprecated]] static constexpr isize PORT2 = 1;
-
 private:
 
     // The connected device
@@ -79,6 +74,16 @@ public:
 public:
 
     ControlPort(Amiga& ref, isize nr);
+
+    ControlPort& operator= (const ControlPort& other) {
+
+        CLONE(mouseCounterX)
+        CLONE(mouseCounterY)
+        CLONE(chargeDX)
+        CLONE(chargeDY)
+
+        return *this;
+    }
 
 
     //

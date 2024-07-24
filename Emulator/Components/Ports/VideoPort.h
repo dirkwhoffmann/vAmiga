@@ -50,14 +50,14 @@ public:
     VideoPort(Amiga &ref);
     ~VideoPort();
 
-    const Descriptions &getDescriptions() const override { return descriptions; }
-
     VideoPort& operator= (const VideoPort& other) {
 
         CLONE(config)
 
         return *this;
     }
+
+    const Descriptions &getDescriptions() const override { return descriptions; }
 
 
     //

@@ -213,7 +213,56 @@ public:
     
     Agnus(Amiga& ref);
     
-    
+    Agnus& operator= (const Agnus& other) {
+
+        CLONE_ARRAY(trigger)
+        CLONE_ARRAY(id)
+        CLONE_ARRAY(data)
+        CLONE(nextTrigger)
+        CLONE(changeRecorder)
+        CLONE(syncEvent)
+
+        CLONE(pos)
+        CLONE(latchedPos)
+
+        CLONE(bplcon0)
+        CLONE(bplcon0Initial)
+        CLONE(bplcon1)
+        CLONE(bplcon1Initial)
+        CLONE(dmacon)
+        CLONE(dmaconInitial)
+        CLONE(dskpt)
+        CLONE_ARRAY(audpt)
+        CLONE_ARRAY(audlc)
+        CLONE_ARRAY(bplpt)
+        CLONE(bpl1mod)
+        CLONE(bpl2mod)
+        CLONE_ARRAY(sprpt)
+        CLONE(res)
+        CLONE(scrollOdd)
+        CLONE(scrollEven)
+
+        CLONE_ARRAY(busValue)
+        CLONE_ARRAY(busOwner)
+        CLONE_ARRAY(lastCtlWrite)
+
+        CLONE_ARRAY(audxDR)
+        CLONE_ARRAY(audxDSR)
+        CLONE(bls)
+
+        CLONE_ARRAY(sprVStrt)
+        CLONE_ARRAY(sprVStop)
+        CLONE_ARRAY(sprDmaState)
+
+        CLONE(clock)
+
+        CLONE(config)
+        CLONE(ptrMask)
+
+        return *this;
+    }
+
+
     //
     // Class methods
     //

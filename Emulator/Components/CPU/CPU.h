@@ -51,17 +51,10 @@ public:
     GuardsWrapper watchpoints = GuardsWrapper(emulator, debugger.watchpoints);
     GuardsWrapper catchpoints = GuardsWrapper(emulator, debugger.catchpoints);
 
-
-    //
-    // Overclocking
-    //
-
-public:
-
-    // Sub-cycle counter
+    // Sub-cycle counter (overclocking)
     i64 debt;
 
-    // Number of cycles that should be executed at normal speed
+    // Number of cycles that should be executed at normal speed (overclocking)
     i64 slowCycles;
 
 
@@ -73,7 +66,61 @@ public:
 
     CPU(Amiga& ref);
 
-    
+
+    //
+    // Operators
+    //
+
+public:
+
+    CPU& operator= (const CPU& other) {
+
+        CLONE(debt)
+        CLONE(slowCycles)
+
+        CLONE(clock)
+        CLONE(reg.pc)
+        CLONE(reg.pc0)
+        CLONE(reg.sr.t1)
+        CLONE(reg.sr.t0)
+        CLONE(reg.sr.s)
+        CLONE(reg.sr.m)
+        CLONE(reg.sr.x)
+        CLONE(reg.sr.n)
+        CLONE(reg.sr.z)
+        CLONE(reg.sr.v)
+        CLONE(reg.sr.c)
+        CLONE(reg.sr.ipl)
+        CLONE_ARRAY(reg.r)
+        CLONE(reg.usp)
+        CLONE(reg.isp)
+        CLONE(reg.msp)
+        CLONE(reg.ipl)
+        CLONE(reg.vbr)
+        CLONE(reg.sfc)
+        CLONE(reg.dfc)
+        CLONE(reg.cacr)
+        CLONE(reg.caar)
+
+        CLONE(queue.irc)
+        CLONE(queue.ird)
+
+        CLONE(ipl)
+        CLONE(fcl)
+        CLONE(fcSource)
+        CLONE(exception)
+        CLONE(cp)
+        CLONE(loopModeDelay)
+        CLONE(readBuffer)
+        CLONE(writeBuffer)
+        CLONE(flags)
+
+        CLONE(config)
+
+        return *this;
+    }
+
+
     //
     // Methods from CoreObject
     //

@@ -105,6 +105,28 @@ public:
     HardDrive(Amiga& ref, isize nr);
     ~HardDrive();
     
+    HardDrive& operator= (const HardDrive& other) {
+
+        CLONE(head)
+        CLONE(state)
+
+        CLONE(config)
+        CLONE(diskVendor)
+        CLONE(diskProduct)
+        CLONE(diskRevision)
+        CLONE(controllerVendor)
+        CLONE(controllerProduct)
+        CLONE(controllerRevision)
+        CLONE(geometry)
+        CLONE(ptable)
+        CLONE(drivers)
+        CLONE(data)
+        CLONE(flags)
+        CLONE(bootable)
+
+        return *this;
+    }
+
     // Creates a hard drive with a certain geometry
     void init(const GeometryDescriptor &geometry);
 
@@ -217,8 +239,6 @@ private:
         << drivers
         << data
         << flags
-        // << modified
-        // << writeProtected
         << bootable;
 
     } SERIALIZERS(serialize);

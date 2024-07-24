@@ -115,7 +115,28 @@ public:
     
     using SubComponent::SubComponent;
 
-    
+    DiskController& operator= (const DiskController& other) {
+
+        CLONE(selected)
+        CLONE(state)
+        CLONE(syncCycle)
+        CLONE(syncCounter)
+        CLONE(dskEventDelay)
+        CLONE(incoming)
+        CLONE(dataReg)
+        CLONE(dataRegCount)
+        CLONE(fifo)
+        CLONE(fifoCount)
+        CLONE(dsklen)
+        CLONE(dsksync)
+        CLONE(prb)
+
+        CLONE(config)
+
+        return *this;
+    }
+
+
     //
     // Methods from CoreObject
     //

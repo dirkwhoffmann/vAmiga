@@ -63,7 +63,15 @@ public:
 
     using SubComponent::SubComponent;
 
-    
+    SerialPort& operator= (const SerialPort& other) {
+
+        CLONE(port)
+        CLONE(config)
+
+        return *this;
+    }
+
+
     //
     // Methods from CoreObject
     //

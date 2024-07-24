@@ -90,7 +90,21 @@ public:
 
     TOD(CIA &ciaref, Amiga& ref);
 
-    
+    TOD& operator= (const TOD& other) {
+
+        CLONE(tod.value)
+        CLONE(preTod.value)
+        CLONE(lastInc)
+        CLONE(latch.value)
+        CLONE(alarm.value)
+        CLONE(frozen)
+        CLONE(stopped)
+        CLONE(matching)
+
+        return *this;
+    }
+
+
     //
     // Methods from CoreObject
     //

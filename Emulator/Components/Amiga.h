@@ -192,14 +192,13 @@ public:
 
 
     //
-    // Methods from CoreComponent
+    // Operators
     //
 
 public:
 
     Amiga& operator= (const Amiga& other) {
 
-        /*
         CLONE(cpu)
         CLONE(ciaA)
         CLONE(ciaB)
@@ -229,14 +228,41 @@ public:
         CLONE(ramExpansion)
         CLONE(diagBoard)
         CLONE(keyboard)
-        */
-        
+
         CLONE(flags)
 
         CLONE(config)
 
         return *this;
     }
+
+
+    //
+    // Methods from Serializable
+    //
+
+    template <class T>
+    void serialize(T& worker)
+    {
+        if (isResetter(worker)) return;
+
+        worker
+
+        << config.type
+        << config.warpMode
+        << config.warpBoot
+        << config.vsync
+        << config.timeLapse;
+
+    } SERIALIZERS(serialize);
+
+public:
+
+    void _willReset(bool hard) override;
+    void _didReset(bool hard) override;
+    isize load(const u8 *buffer) override;
+    isize save(u8 *buffer) override;
+
 
     void prefix() const override;
 
@@ -268,28 +294,6 @@ private:
     void _warpOff() override;
     void _trackOn() override;
     void _trackOff() override;
-
-    template <class T>
-    void serialize(T& worker)
-    {
-        if (isResetter(worker)) return;
-
-        worker
-
-        << config.type
-        << config.warpMode
-        << config.warpBoot
-        << config.vsync
-        << config.timeLapse;
-
-    } SERIALIZERS(serialize);
-
-public:
-
-    void _willReset(bool hard) override;
-    void _didReset(bool hard) override;
-    isize load(const u8 *buffer) override;
-    isize save(u8 *buffer) override;
 
 
     //
@@ -336,10 +340,6 @@ private:
 
 public:
 
-    // AmigaInfo getInfo() const { return CoreComponent::getInfo(info); }
-
-    void computeFrame();
-
     // Returns the native refresh rate of the emulated Amiga (50Hz or 60Hz)
     double nativeRefreshRate() const;
 
@@ -376,7 +376,16 @@ public:
 
 
     //
-    // Interacting with the run loop
+    // Emulating
+    //
+
+public:
+
+    void computeFrame();
+
+
+    //
+    // Controlling the run loop
     //
 
 public:

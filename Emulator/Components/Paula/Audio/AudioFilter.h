@@ -185,7 +185,12 @@ public:
     
     using SubComponent::SubComponent;
     
-    
+    AudioFilter& operator= (const AudioFilter& other) {
+
+        return *this;
+    }
+
+
     //
     // Methods from CoreObject
     //

@@ -62,6 +62,19 @@ public:
     
     using SubComponent::SubComponent;
     
+    Keyboard& operator= (const Keyboard& other) {
+
+        CLONE(state)
+        CLONE(shiftReg)
+        CLONE(spLow)
+        CLONE(spHigh)
+        CLONE(queue)
+
+        CLONE(config)
+
+        return *this;
+    }
+
     
     //
     // Methods from CoreObject

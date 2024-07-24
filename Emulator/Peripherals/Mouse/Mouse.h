@@ -117,7 +117,24 @@ public:
     
     Mouse(Amiga& ref, ControlPort& pref);
     
-    
+    Mouse& operator= (const Mouse& other) {
+
+        CLONE(leftButton)
+        CLONE(middleButton)
+        CLONE(rightButton)
+        CLONE(mouseX)
+        CLONE(mouseY)
+        CLONE(oldMouseX)
+        CLONE(oldMouseY)
+        CLONE(targetX)
+        CLONE(targetY)
+
+        CLONE(config)
+
+        return *this;
+    }
+
+
     //
     // Methods from CoreObject
     //

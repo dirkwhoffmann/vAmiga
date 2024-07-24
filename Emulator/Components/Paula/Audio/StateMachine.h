@@ -114,7 +114,28 @@ public:
 
     StateMachine(Amiga& ref);
 
-    
+    StateMachine& operator= (const StateMachine& other) {
+
+        CLONE(state)
+        CLONE(buffer)
+        CLONE(audlenLatch)
+        CLONE(audlen)
+        CLONE(audperLatch)
+        CLONE(audper)
+        CLONE(audvolLatch)
+        CLONE(audvol)
+        CLONE(auddat)
+        CLONE(audlcLatch)
+        CLONE(audDR)
+        CLONE(intreq2)
+        CLONE(enablePenlo)
+        CLONE(enablePenhi)
+        CLONE(clock)
+
+        return *this;
+    }
+
+
     //
     // Methods from CoreObject
     //

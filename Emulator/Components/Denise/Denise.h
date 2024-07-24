@@ -334,7 +334,58 @@ public:
 
     Denise(Amiga& ref);
 
-    
+    Denise& operator= (const Denise& other) {
+
+        CLONE(diwstrt)
+        CLONE(diwstop)
+        CLONE(diwhigh)
+        CLONE(hstrt)
+        CLONE(hstop)
+        CLONE(hflop)
+        CLONE(borderBufferIsDirty)
+        CLONE(bplcon0)
+        CLONE(bplcon1)
+        CLONE(bplcon2)
+        CLONE(bplcon3)
+        CLONE(initialBplcon0)
+        CLONE(initialBplcon1)
+        CLONE(initialBplcon2)
+        CLONE(res)
+        CLONE(pixelOffsetOdd)
+        CLONE(pixelOffsetEven)
+        CLONE(borderColor)
+        CLONE_ARRAY(bpldat)
+        CLONE_ARRAY(bpldatPipe)
+        CLONE(clxdat)
+        CLONE(clxcon)
+        CLONE_ARRAY(shiftReg)
+        CLONE(armedOdd)
+        CLONE(armedEven)
+        CLONE(conChanges)
+        CLONE_ARRAY(sprChanges)
+        CLONE(diwChanges)
+
+        CLONE_ARRAY(sprdata)
+        CLONE_ARRAY(sprdatb)
+        CLONE_ARRAY(sprpos)
+        CLONE_ARRAY(sprctl)
+        CLONE_ARRAY(sprhpos)
+        CLONE_ARRAY(sprhppos)
+        CLONE_ARRAY(ssra)
+        CLONE_ARRAY(ssrb)
+        CLONE(armed)
+        CLONE(wasArmed)
+        CLONE(spriteClipBegin)
+        CLONE(spriteClipEnd)
+
+        CLONE(clock)
+
+        CLONE(config)
+
+        return *this;
+    }
+
+
     //
     // Methods from CoreObject
     //

@@ -23,7 +23,15 @@ public:
     
     using ZorroBoard::ZorroBoard;
     
-    
+    RamExpansion& operator= (const RamExpansion& other) {
+
+        CLONE(baseAddr)
+        CLONE(state)
+
+        return *this;
+    }
+
+
     //
     // Methods from CoreObject
     //
@@ -46,8 +54,8 @@ private:
 
         worker
 
-        << state
-        << baseAddr;
+        << baseAddr
+        << state;
 
     } SERIALIZERS(serialize);
 

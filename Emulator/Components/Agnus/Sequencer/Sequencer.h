@@ -219,6 +219,35 @@ public:
     
     Sequencer(Amiga& ref);
 
+    Sequencer& operator= (const Sequencer& other) {
+
+        CLONE(dmaDAS)
+        CLONE_ARRAY(fetch[0])
+        CLONE_ARRAY(fetch[1])
+        CLONE_ARRAY(bplEvent)
+        CLONE_ARRAY(dasEvent)
+        CLONE_ARRAY(nextBplEvent)
+        CLONE_ARRAY(nextDasEvent)
+
+        CLONE(ddfstrt)
+        CLONE(ddfstop)
+        CLONE(ddfInitial)
+        CLONE(ddf)
+        CLONE(bprunUp)
+
+        CLONE(diwstrt)
+        CLONE(diwstop)
+        CLONE(diwhigh)
+        CLONE(vstrt)
+        CLONE(vstop)
+
+        CLONE(sigRecorder)
+
+        CLONE(hsyncActions)
+
+        return *this;
+    }
+
 private:
     
     void initDasEventTable();

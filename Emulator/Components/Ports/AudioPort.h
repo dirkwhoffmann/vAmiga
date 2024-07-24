@@ -136,6 +136,18 @@ public:
     
     AudioPort(Amiga& ref, isize objid = 0);
 
+    AudioPort& operator= (const AudioPort& other) {
+
+        CLONE(config)
+        CLONE_ARRAY(pan)
+        CLONE_ARRAY(vol)
+        CLONE(volL)
+        CLONE(volR)
+
+        return *this;
+    }
+
+
     // Resets the output buffer and the two audio filters
     void clear();
 

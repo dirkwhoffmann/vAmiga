@@ -73,6 +73,19 @@ public:
     
     HdController(Amiga& ref, HardDrive& hdr);
 
+    HdController& operator= (const HdController& other) {
+
+        CLONE(baseAddr)
+        CLONE(state)
+        CLONE(hdcState)
+        CLONE(numPartitions)
+        CLONE(pointer)
+
+        CLONE(config)
+
+        return *this;
+    }
+
 
     //
     // Methods from Serializable

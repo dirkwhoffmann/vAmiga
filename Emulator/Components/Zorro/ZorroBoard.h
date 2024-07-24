@@ -38,7 +38,7 @@ protected:
     u32 baseAddr = 0;
     
     // Current state
-    BoardState state;
+    BoardState state = STATE_AUTOCONF;
     
     
     //
@@ -48,7 +48,7 @@ protected:
 public:
     
     using SubComponent::SubComponent;
-    
+
     
     //
     // Methods from CoreObject

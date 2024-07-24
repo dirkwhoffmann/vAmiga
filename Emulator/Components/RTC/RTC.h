@@ -73,7 +73,7 @@ public:
         CLONE(lastMeasure)
         CLONE(lastMeasuredValue)
 
-        CLONE(config.model)
+        CLONE(config)
 
         return *this;
     }

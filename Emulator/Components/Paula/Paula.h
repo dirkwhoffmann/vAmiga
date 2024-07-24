@@ -116,7 +116,28 @@ public:
 
     Paula(Amiga& ref);
     
-    
+    Paula& operator= (const Paula& other) {
+
+        CLONE(intreq)
+        CLONE(intena)
+        CLONE_ARRAY(setIntreq)
+        CLONE(iplPipe)
+        CLONE(potgo)
+        CLONE(potCntX0)
+        CLONE(potCntY0)
+        CLONE(potCntX1)
+        CLONE(potCntY1)
+        CLONE(chargeX0)
+        CLONE(chargeY0)
+        CLONE(chargeX1)
+        CLONE(chargeY1)
+        CLONE(adkcon)
+        CLONE(audioClock)
+
+        return *this;
+    }
+
+
     //
     // Methods from CoreObject
     //

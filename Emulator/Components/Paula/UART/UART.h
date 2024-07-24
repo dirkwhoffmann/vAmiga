@@ -67,7 +67,21 @@ public:
     
     using SubComponent::SubComponent;
     
-    
+    UART& operator= (const UART& other) {
+
+        CLONE(serper)
+        CLONE(receiveBuffer)
+        CLONE(receiveShiftReg)
+        CLONE(transmitBuffer)
+        CLONE(transmitShiftReg)
+        CLONE(outBit)
+        CLONE(ovrun)
+        CLONE(recCnt)
+
+        return *this;
+    }
+
+
     //
     // Methods from CoreObject
     //

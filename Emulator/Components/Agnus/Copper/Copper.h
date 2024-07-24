@@ -106,7 +106,23 @@ public:
     
     Copper(Amiga& ref);
 
-    
+    Copper& operator= (const Copper& other) {
+
+        CLONE(copList)
+        CLONE(skip)
+        CLONE(cop1lc)
+        CLONE(cop2lc)
+        CLONE(cdang)
+        CLONE(cop1ins)
+        CLONE(cop2ins)
+        CLONE(coppc)
+        CLONE(coppc0)
+        CLONE(activeInThisFrame)
+
+        return *this;
+    }
+
+
     //
     // Methods from CoreObject
     //

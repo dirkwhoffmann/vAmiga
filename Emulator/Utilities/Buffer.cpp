@@ -16,6 +16,13 @@
 
 namespace util {
 
+template <class T> Allocator<T>& 
+Allocator<T>::operator= (const Allocator<T>& other)
+{
+    size = other.size;
+    if (size) memcpy(ptr, other.ptr, size);
+}
+
 template <class T> void
 Allocator<T>::alloc(isize elements)
 {

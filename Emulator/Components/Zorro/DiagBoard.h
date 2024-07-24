@@ -41,6 +41,7 @@ class DiagBoard : public ZorroBoard {
 public:
     
     using ZorroBoard::ZorroBoard;
+    DiagBoard& operator= (const DiagBoard& other) { return *this; }
 
 
     //

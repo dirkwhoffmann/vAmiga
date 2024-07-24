@@ -228,9 +228,20 @@ public:
 
     Memory& operator= (const Memory& other) {
 
-        // TODO
-        assert(false);
+        CLONE(romAllocator)
+        CLONE(womAllocator)
+        CLONE(extAllocator)
+        CLONE(chipAllocator)
+        CLONE(slowAllocator)
+        CLONE(fastAllocator)
 
+        CLONE(womIsLocked)
+        CLONE_ARRAY(cpuMemSrc)
+        CLONE_ARRAY(agnusMemSrc)
+        CLONE(dataBus)
+
+        CLONE(config)
+        
         return *this;
     }
 

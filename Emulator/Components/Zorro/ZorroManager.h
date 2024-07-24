@@ -56,8 +56,8 @@ private:
 public:
     
     using SubComponent::SubComponent;
-    
-    
+    ZorroManager& operator= (const ZorroManager& other) { return *this; }
+
     //
     // Methods from CoreObject
     //

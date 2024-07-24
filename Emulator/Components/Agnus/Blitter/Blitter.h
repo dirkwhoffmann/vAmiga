@@ -197,6 +197,64 @@ public:
     
     Blitter(Amiga& ref);
     
+    Blitter& operator= (const Blitter& other) {
+
+        CLONE(bltcon0)
+        CLONE(bltcon1)
+
+        CLONE(bltapt)
+        CLONE(bltbpt)
+        CLONE(bltcpt)
+        CLONE(bltdpt)
+
+        CLONE(bltafwm)
+        CLONE(bltalwm)
+
+        CLONE(bltsizeH)
+        CLONE(bltsizeV)
+
+        CLONE(bltamod)
+        CLONE(bltbmod)
+        CLONE(bltcmod)
+        CLONE(bltdmod)
+
+        CLONE(anew)
+        CLONE(bnew)
+        CLONE(aold)
+        CLONE(bold)
+        CLONE(ahold)
+        CLONE(bhold)
+        CLONE(chold)
+        CLONE(dhold)
+        CLONE(ashift)
+        CLONE(bshift)
+
+        CLONE(bltpc)
+        CLONE(iteration)
+
+        CLONE(xCounter)
+        CLONE(yCounter)
+        CLONE(cntA)
+        CLONE(cntB)
+        CLONE(cntC)
+        CLONE(cntD)
+
+        CLONE(fillCarry)
+        CLONE(mask)
+        CLONE(lockD)
+
+        CLONE(running)
+        CLONE(bbusy)
+        CLONE(bzero)
+        CLONE(birq)
+
+        CLONE(remaining)
+
+        CLONE(config)
+
+        return *this;
+    }
+
 private:
     
     void initFastBlitter();

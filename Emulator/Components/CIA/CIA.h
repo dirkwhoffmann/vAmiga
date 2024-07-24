@@ -291,7 +291,49 @@ public:
     bool isCIAA() const { return objid == 0; }
     bool isCIAB() const { return objid == 1; }
 
-    
+    CIA& operator= (const CIA& other) {
+
+        CLONE(tod)
+
+        CLONE(delay)
+        CLONE(feed)
+        CLONE(counterA)
+        CLONE(counterB)
+        CLONE(latchA)
+        CLONE(latchB)
+        CLONE(cra)
+        CLONE(crb)
+        CLONE(imr)
+        CLONE(icr)
+        CLONE(icrAck)
+        CLONE(pra)
+        CLONE(prb)
+        CLONE(ddra)
+        CLONE(ddrb)
+        CLONE(pb67TimerMode)
+        CLONE(pb67TimerOut)
+        CLONE(pb67Toggle)
+        CLONE(pa)
+        CLONE(pb)
+        CLONE(sp)
+        CLONE(cnt)
+        CLONE(irq)
+        CLONE(sdr)
+        CLONE(serCounter)
+
+        CLONE(clock)
+        CLONE(idleCycles)
+        CLONE(tiredness)
+        CLONE(sleeping)
+        CLONE(sleepCycle)
+        CLONE(wakeUpCycle)
+
+        CLONE(config)
+
+        return *this;
+    }
+
+
     //
     // Methods from CoreObject
     //

@@ -110,6 +110,19 @@ private:
     void init(SerReader &reader, Diameter dia, Density den, bool wp) throws;
 
     
+public:
+
+    FloppyDisk& operator= (const FloppyDisk& other) {
+
+        CLONE(diameter)
+        CLONE(density)
+        CLONE_ARRAY(data.raw)
+        CLONE(flags)
+
+        return *this;
+    }
+
+
     //
     // Methods from CoreObject
     //
@@ -137,8 +150,6 @@ private:
         << density
         << data.raw
         << flags;
-        // << writeProtected
-        // << modified;
     };
 
     //
