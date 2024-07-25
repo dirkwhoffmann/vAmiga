@@ -47,19 +47,6 @@ Memory::_dump(Category category, std::ostream& os) const
         auto womTraits = getWomTraits();
         auto extTraits = getExtTraits();
 
-        auto romcrc = util::crc32(rom, config.romSize);
-        auto womcrc = util::crc32(wom, config.womSize);
-        auto extcrc = util::crc32(ext, config.extSize);
-        /*
-        auto chipcrc = util::crc32(chip, config.chipSize);
-        auto slowcrc = util::crc32(slow, config.slowSize);
-        auto fastcrc = util::crc32(fast, config.fastSize);
-        */
-
-        assert(romTraits.crc == romcrc);
-        assert(womTraits.crc == womcrc);
-        assert(extTraits.crc == extcrc);
-
         os << util::tab("Rom");
         os << util::hex(romTraits.crc) << " (CRC32)  ";
         os << romTraits.title << " " << romTraits.released << std::endl;
