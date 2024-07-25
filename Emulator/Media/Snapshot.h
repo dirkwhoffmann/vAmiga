@@ -51,7 +51,7 @@ class Snapshot : public AmigaFile {
 
 public:
     
-    static bool isCompatible(const string &path);
+    static bool isCompatible(const std::filesystem::path &path);
     static bool isCompatible(std::istream &stream);
 
 
@@ -59,7 +59,7 @@ public:
     // Initializing
     //
     
-    Snapshot(const string &path) throws { init(path); }
+    Snapshot(const std::filesystem::path &path) throws { init(path); }
     Snapshot(const u8 *buf, isize len) throws { init(buf, len); }
     Snapshot(isize capacity);
     Snapshot(Amiga &amiga);
@@ -72,7 +72,7 @@ public:
     //
     
     FileType type() const override { return FILETYPE_SNAPSHOT; }
-    bool isCompatiblePath(const string &path) const override { return isCompatible(path); }
+    bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
     bool isCompatibleStream(std::istream &stream) const override { return isCompatible(stream); }
     void finalizeRead() throws override;
     

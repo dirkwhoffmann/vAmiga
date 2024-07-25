@@ -26,52 +26,30 @@ namespace fs = std::filesystem;
 namespace util {
 
 //
-// Handling file names
+// Handling files
 //
-
-// Extracts a certain component from a path
-string extractPath(const string &path);
-string extractName(const string &path);
-string extractSuffix(const string &path);
-
-// Strips a certain component from a path
-string stripPath(const string &path);
-string stripName(const string &path);
-string stripSuffix(const string &path);
-
-// Concatenates two path segments
-string appendPath(const string &path, const string &path2);
-
-// Checks or creates an absolute path
-bool isAbsolutePath(const string &path);
-string makeAbsolutePath(const string &path);
 
 // Makes a file name unique if a file with the provided name already exists
 fs::path makeUniquePath(const fs::path &path);
 
-
-//
-// Handling files
-//
-
 // Returns the size of a file in bytes
-isize getSizeOfFile(const string &path);
+isize getSizeOfFile(const std::filesystem::path &path);
 
 // Checks if a file exists
-bool fileExists(const string &path);
+bool fileExists(const std::filesystem::path &path);
 
 // Checks if a path points to a directory
-bool isDirectory(const string &path);
+bool isDirectory(const std::filesystem::path &path);
 
 // Creates a directory
-bool createDirectory(const string &path);
+bool createDirectory(const std::filesystem::path &path);
 
 // Returns the number of files in a directory
-isize numDirectoryItems(const string &path);
+isize numDirectoryItems(const std::filesystem::path &path);
 
 // Returns a list of files in a directory
-std::vector<string> files(const string &path, const string &suffix = "");
-std::vector<string> files(const string &path, std::vector <string> &suffixes);
+std::vector<string> files(const std::filesystem::path &path, const string &suffix = "");
+std::vector<string> files(const std::filesystem::path &path, std::vector <string> &suffixes);
 
 // Checks the header signature (magic bytes) of a stream or buffer
 bool matchingStreamHeader(std::istream &is, const u8 *header, isize len, isize offset = 0);

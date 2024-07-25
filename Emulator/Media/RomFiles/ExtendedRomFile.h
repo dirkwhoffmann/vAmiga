@@ -23,21 +23,21 @@ private:
 
 public:
 
-    static bool isCompatible(const string &path);
+    static bool isCompatible(const std::filesystem::path &path);
     static bool isCompatible(std::istream &stream);
 
-    bool isCompatiblePath(const string &path) const override { return isCompatible(path); }
+    bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
     bool isCompatibleStream(std::istream &stream) const override { return isCompatible(stream); }
 
 
-    static bool isExtendedRomFile(const string &path);
+    static bool isExtendedRomFile(const std::filesystem::path &path);
 
     
     //
     // Initializing
     //
 
-    ExtendedRomFile(const string &path) throws { init(path); }
+    ExtendedRomFile(const std::filesystem::path &path) throws { init(path); }
     ExtendedRomFile(const u8 *buf, isize len) throws { init(buf, len); }
 
     const char *objectName() const override { return "ExtendedRom"; }

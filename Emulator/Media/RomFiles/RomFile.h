@@ -26,19 +26,19 @@ class RomFile : public AmigaFile {
 
 public:
 
-    static bool isCompatible(const string &path);
+    static bool isCompatible(const std::filesystem::path &path);
     static bool isCompatible(std::istream &stream);
 
     static bool isRomBuffer(const u8 *buf, isize len);
-    static bool isRomFile(const string &path);
+    static bool isRomFile(const std::filesystem::path &path);
 
 
     //
     // Initializing
     //
 
-    RomFile(const string &path) throws { init(path); }
-    RomFile(const string &path, std::istream &stream) throws { init(path, stream); }
+    RomFile(const std::filesystem::path &path) throws { init(path); }
+    RomFile(const std::filesystem::path &path, std::istream &stream) throws { init(path, stream); }
     RomFile(const u8 *buf, isize len) throws { init(buf, len); }
 
     const char *objectName() const override { return "ROM"; }
@@ -49,7 +49,7 @@ public:
     //
 
     FileType type() const override { return FILETYPE_ROM; }
-    bool isCompatiblePath(const string &path) const override { return isCompatible(path); }
+    bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
     bool isCompatibleStream(std::istream &stream) const override { return isCompatible(stream); }
 
 

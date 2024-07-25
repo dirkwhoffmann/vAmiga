@@ -19,7 +19,7 @@ public:
 
     static constexpr isize IMGSIZE_35_DD = 737280;  // 720 KB PC disk
     
-    static bool isCompatible(const string &path);
+    static bool isCompatible(const std::filesystem::path &path);
     static bool isCompatible(std::istream &stream);
 
     
@@ -31,8 +31,8 @@ public:
     
     using AmigaFile::init;
     
-    IMGFile(const string &path) throws { init(path); }
-    IMGFile(const string &path, std::istream &stream) throws { init(path, stream); }
+    IMGFile(const std::filesystem::path &path) throws { init(path); }
+    IMGFile(const std::filesystem::path &path, std::istream &stream) throws { init(path, stream); }
     IMGFile(const u8 *buf, isize len) throws { init(buf, len); }
     IMGFile(Diameter dia, Density den) throws { init(dia, den); }
     IMGFile(class FloppyDisk &disk) throws { init(disk); }
@@ -58,7 +58,7 @@ public:
     // Methods from AmigaFile
     //
 
-    bool isCompatiblePath(const string &path) const override { return isCompatible(path); }
+    bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
     bool isCompatibleStream(std::istream &stream) const override { return isCompatible(stream); }
     FileType type() const override { return FILETYPE_IMG; }
     

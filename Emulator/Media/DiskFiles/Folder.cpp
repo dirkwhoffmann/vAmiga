@@ -15,13 +15,13 @@
 namespace vamiga {
 
 bool
-Folder::isCompatible(const string &path)
+Folder::isCompatible(const std::filesystem::path &path)
 {
     return util::isDirectory(path);
 }
 
 void
-Folder::init(const string &path)
+Folder::init(const std::filesystem::path &path)
 {
     debug(FS_DEBUG, "make(%s)\n", path.c_str());
 

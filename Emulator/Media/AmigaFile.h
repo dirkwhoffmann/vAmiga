@@ -65,8 +65,8 @@ class AmigaFile : public CoreObject, public MediaFile {
 public:
     
     // Physical location of this file
-    string path;
-    
+    std::filesystem::path path;
+
     // The raw data of this file
     Buffer<u8> data;
     
@@ -80,11 +80,11 @@ public:
     virtual ~AmigaFile();
 
     void init(std::istream &stream) throws;
-    void init(const string &path, std::istream &stream) throws;
+    void init(const std::filesystem::path &path, std::istream &stream) throws;
     void init(isize len) throws;
     void init(const u8 *buf, isize len) throws;
     void init(const Buffer<u8> &buffer) throws;
-    void init(const string &path) throws;
+    void init(const std::filesystem::path &path) throws;
     void init(FILE *file) throws;
     
     explicit operator bool() const { return data.ptr != nullptr; }
@@ -106,7 +106,6 @@ private:
 public:
 
     virtual isize getSize() const override { return data.size; }
-    // virtual string getSizeAsString() override;
     virtual u8 *getData() const override { return data.ptr; }
     virtual u64 fnv64() const override { return data.fnv64(); }
     virtual u32 crc32() const override { return data.crc32(); }
@@ -127,24 +126,24 @@ public:
     
 protected:
     
-    virtual bool isCompatiblePath(const string &path) const = 0;
+    virtual bool isCompatiblePath(const std::filesystem::path &path) const = 0;
     virtual bool isCompatibleStream(std::istream &stream) const = 0;
     
     isize readFromStream(std::istream &stream) override throws;
-    isize readFromFile(const string &path) override throws;
+    isize readFromFile(const std::filesystem::path &path) override throws;
     isize readFromBuffer(const u8 *buf, isize len) override throws;
     isize readFromBuffer(const Buffer<u8> &buffer) throws;
 
 public:
     
     isize writeToStream(std::ostream &stream, isize offset, isize len) throws;
-    isize writeToFile(const string &path, isize offset, isize len) throws;
+    isize writeToFile(const std::filesystem::path &path, isize offset, isize len) throws;
     isize writeToBuffer(u8 *buf, isize offset, isize len) throws;
     isize writeToBuffer(Buffer<u8> &buffer, isize offset, isize len) throws;
 
     isize writeToStream(std::ostream &stream) override throws;
-    isize writeToFile(const string &path) override throws;
-    isize writePartitionToFile(const string &path, isize partition) override throws;
+    isize writeToFile(const std::filesystem::path &path) override throws;
+    isize writePartitionToFile(const std::filesystem::path &path, isize partition) override throws;
     isize writeToBuffer(u8 *buf) override throws;
     isize writeToBuffer(Buffer<u8> &buffer) throws;
 

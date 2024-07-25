@@ -48,7 +48,7 @@ class EADFFile : public FloppyFile {
     
 public:
 
-    static bool isCompatible(const string &path);
+    static bool isCompatible(const std::filesystem::path &path);
     static bool isCompatible(std::istream &stream);
 
 
@@ -60,7 +60,7 @@ public:
 
     using AmigaFile::init;
     
-    EADFFile(const string &path) throws { init(path); }
+    EADFFile(const std::filesystem::path &path) throws { init(path); }
     EADFFile(const u8 *buf, isize len) throws { init(buf, len); }
     EADFFile(class FloppyDisk &disk) throws { init(disk); }
     EADFFile(class FloppyDrive &drive) throws { init(drive); }
@@ -85,7 +85,7 @@ public:
 public:
     
     FileType type() const override { return FILETYPE_EADF; }
-    bool isCompatiblePath(const string &path) const override { return isCompatible(path); }
+    bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
     bool isCompatibleStream(std::istream &stream) const override { return isCompatible(stream); }
     void finalizeRead() throws override;
     

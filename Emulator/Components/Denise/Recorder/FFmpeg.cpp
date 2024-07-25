@@ -19,7 +19,7 @@ string FFmpeg::exec;
 void
 FFmpeg::init()
 {
-    auto add = [&](const string &path) {
+    auto add = [&](const std::filesystem::path &path) {
         if (util::getSizeOfFile(path) > 0 && !FORCE_NO_FFMPEG) {
             paths.push_back(path);
         }
@@ -45,7 +45,7 @@ FFmpeg::getExecPath()
 }
 
 void
-FFmpeg::setExecPath(const string &path)
+FFmpeg::setExecPath(const std::filesystem::path &path)
 {
     // If an empty string is passed, assign the first default location
     if (path == "" && !paths.empty()) {

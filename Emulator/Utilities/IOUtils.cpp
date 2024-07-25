@@ -19,87 +19,6 @@
 
 namespace util {
 
-string
-extractPath(const string &s)
-{
-    auto idx = s.rfind('/');
-    auto pos = 0;
-    auto len = idx != string::npos ? idx + 1 : 0;
-    return s.substr(pos, len);
-}
-
-string
-extractName(const string &s)
-{
-    auto idx = s.rfind('/');
-    auto pos = idx != string::npos ? idx + 1 : 0;
-    auto len = string::npos;
-    return s.substr(pos, len);
-}
-
-string
-extractSuffix(const string &s)
-{
-    auto idx = s.rfind('.');
-    auto pos = idx != string::npos ? idx + 1 : 0;
-    auto len = string::npos;
-    return s.substr(pos, len);
-}
-
-string
-stripPath(const string &s)
-{
-    auto idx = s.rfind('/');
-    auto pos = idx != string::npos ? idx + 1 : 0;
-    auto len = string::npos;
-    return s.substr(pos, len);
-}
-
-string
-stripName(const string &s)
-{
-    auto idx = s.rfind('/');
-    auto pos = 0;
-    auto len = idx != string::npos ? idx : 0;
-    return s.substr(pos, len);
-}
-
-string
-stripSuffix(const string &s)
-{
-    auto idx = s.rfind('.');
-    auto pos = 0;
-    auto len = idx != string::npos ? idx : string::npos;
-    return s.substr(pos, len);
-}
-
-string
-appendPath(const string &path, const string &path2)
-{
-    if (path.empty()) {
-        return path2;
-    }
-    if (path.back() == '/') {
-        return path + path2;
-    }
-    return path + "/" + path2;
-}
-
-bool
-isAbsolutePath(const string &path)
-{
-    return !path.empty() && path.front() == '/';
-}
-
-string makeAbsolutePath(const string &path)
-{
-    if (isAbsolutePath(path)) {
-        return path;
-    } else {
-        return appendPath(std::filesystem::current_path().string(), path);
-    }
-}
-
 fs::path
 makeUniquePath(const fs::path &path)
 {
@@ -119,13 +38,13 @@ makeUniquePath(const fs::path &path)
 }
 
 bool
-fileExists(const string &path)
+fileExists(const std::filesystem::path &path)
 {
     return getSizeOfFile(path) >= 0;
 }
 
 bool
-isDirectory(const string &path)
+isDirectory(const std::filesystem::path &path)
 {
     try {
         
@@ -139,11 +58,11 @@ isDirectory(const string &path)
 }
 
 bool
-createDirectory(const string &path)
+createDirectory(const std::filesystem::path &path)
 {
     try {
         
-        return fs::create_directory(fs::path(path));
+        return fs::create_directory(path);
     
     } catch (...) {
         
@@ -152,7 +71,7 @@ createDirectory(const string &path)
 }
 
 isize
-numDirectoryItems(const string &path)
+numDirectoryItems(const std::filesystem::path &path)
 {
     isize result = 0;
     
@@ -170,7 +89,7 @@ numDirectoryItems(const string &path)
 }
 
 std::vector<string>
-files(const string &path, const string &suffix)
+files(const std::filesystem::path &path, const string &suffix)
 {
     std::vector <string> suffixes;
     if (suffix != "") suffixes.push_back(suffix);
@@ -179,7 +98,7 @@ files(const string &path, const string &suffix)
 }
 
 std::vector<string>
-files(const string &path, std::vector <string> &suffixes)
+files(const std::filesystem::path &path, std::vector <string> &suffixes)
 {
     std::vector<string> result;
     
@@ -187,9 +106,9 @@ files(const string &path, std::vector <string> &suffixes)
         
         for (const auto &entry : fs::directory_iterator(path)) {
             
-            const auto &name = entry.path().filename().string();
-            string suffix = lowercased(extractSuffix(name));
-            
+            const auto &name = entry.path().filename();
+            auto suffix = name.extension().string();
+
             if (std::find(suffixes.begin(), suffixes.end(), suffix) != suffixes.end()) {
                 result.push_back(name);
             }
@@ -201,11 +120,11 @@ files(const string &path, std::vector <string> &suffixes)
 }
 
 isize
-getSizeOfFile(const string &path)
+getSizeOfFile(const std::filesystem::path &path)
 {
     struct stat fileProperties;
         
-    if (stat(path.c_str(), &fileProperties) != 0)
+    if (stat(path.string().c_str(), &fileProperties) != 0)
         return -1;
     
     return (isize)fileProperties.st_size;

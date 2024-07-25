@@ -19,7 +19,7 @@ class EXEFile : public FloppyFile {
 
 public:
     
-    static bool isCompatible(const string &path);
+    static bool isCompatible(const std::filesystem::path &path);
     static bool isCompatible(std::istream &stream);
 
     
@@ -31,8 +31,8 @@ public:
     
     using AmigaFile::init;
     
-    EXEFile(const string &path) throws { init(path); }
-    EXEFile(const string &path, std::istream &stream) throws { init(path, stream); }
+    EXEFile(const std::filesystem::path &path) throws { init(path); }
+    EXEFile(const std::filesystem::path &path, std::istream &stream) throws { init(path, stream); }
     EXEFile(const u8 *buf, isize len) throws { init(buf, len); }
     
     const char *objectName() const override { return "EXE"; }
@@ -44,7 +44,7 @@ public:
     
     FileType type() const override { return FILETYPE_EXE; }
     u64 fnv64() const override { return adf.fnv64(); }
-    bool isCompatiblePath(const string &path) const override { return isCompatible(path); }
+    bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
     bool isCompatibleStream(std::istream &stream) const override { return isCompatible(stream); }
     void finalizeRead() throws override;
     

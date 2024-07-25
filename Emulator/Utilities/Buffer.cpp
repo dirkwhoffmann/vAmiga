@@ -94,7 +94,7 @@ Allocator<T>::init(const Allocator<T> &other)
 }
 
 template <class T> void
-Allocator<T>::init(const string &path)
+Allocator<T>::init(const std::filesystem::path &path)
 {
     // Open stream in binary mode
     std::ifstream stream(path, std::ifstream::binary);
@@ -117,9 +117,9 @@ Allocator<T>::init(const string &path)
 }
 
 template <class T> void
-Allocator<T>::init(const string &path, const string &name)
+Allocator<T>::init(const std::filesystem::path &path, const string &name)
 {
-    init(path + "/" + name);
+    init(path / name);
 }
 
 template <class T> void
@@ -209,8 +209,8 @@ template void Allocator<T>::dealloc(); \
 template void Allocator<T>::init(isize bytes, T value); \
 template void Allocator<T>::init(const T *buf, isize len); \
 template void Allocator<T>::init(const Allocator<T> &other); \
-template void Allocator<T>::init(const string &path); \
-template void Allocator<T>::init(const string &path, const string &name); \
+template void Allocator<T>::init(const std::filesystem::path &path); \
+template void Allocator<T>::init(const std::filesystem::path &path, const string &name); \
 template void Allocator<T>::resize(isize elements); \
 template void Allocator<T>::resize(isize elements, T value); \
 template void Allocator<T>::clear(T value, isize offset, isize len); \

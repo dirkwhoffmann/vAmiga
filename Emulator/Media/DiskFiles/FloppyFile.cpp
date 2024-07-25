@@ -19,7 +19,7 @@
 namespace vamiga {
 
 FloppyFile *
-FloppyFile::make(const string &path)
+FloppyFile::make(const std::filesystem::path &path)
 {
     std::ifstream stream(path, std::ifstream::binary);
     if (!stream.is_open()) throw Error(ERROR_FILE_NOT_FOUND, path);

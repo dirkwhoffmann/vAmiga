@@ -140,7 +140,7 @@ public:
     void init(const HDFFile &hdf) throws;
 
     // Creates a hard drive with the contents of an HDF file
-    void init(const string &path) throws;
+    void init(const std::filesystem::path &path) throws;
 
     const HardDriveTraits &getTraits() const {
 
@@ -381,7 +381,7 @@ public:
     bool restoreDisk() throws;
 
     // Exports the disk in HDF format
-    void writeToFile(const string &path) throws;
+    void writeToFile(const std::filesystem::path &path) throws;
 
     
     //

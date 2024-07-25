@@ -528,9 +528,9 @@ public:
 
     /** @brief  Saves a Rom to disk
      */
-    void saveRom(const string &path);
-    void saveWom(const string &path);
-    void saveExt(const string &path);
+    void saveRom(const std::filesystem::path &path);
+    void saveWom(const std::filesystem::path &path);
+    void saveExt(const std::filesystem::path &path);
 
     /** @brief  Removes a ROM
      */

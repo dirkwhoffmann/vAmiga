@@ -21,10 +21,10 @@
 namespace vamiga {
 
 bool
-ADFFile::isCompatible(const string &path)
+ADFFile::isCompatible(const std::filesystem::path &path)
 {
-    auto suffix = util::uppercased(util::extractSuffix(path));
-    return suffix == "ADF";
+    auto suffix = util::uppercased(path.extension().string());
+    return suffix == ".ADF";
 }
 
 bool

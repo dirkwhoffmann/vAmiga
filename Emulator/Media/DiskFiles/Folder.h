@@ -19,7 +19,7 @@ public:
 
     ADFFile *adf = nullptr;
 
-    static bool isCompatible(const string &path);
+    static bool isCompatible(const std::filesystem::path &path);
     static bool isCompatible(std::istream &stream) { return false; }
 
     
@@ -27,11 +27,11 @@ public:
     // Initializing
     //
     
-    Folder(const string &path) throws { init(path); }
+    Folder(const std::filesystem::path &path) throws { init(path); }
     
 private:
     
-    void init(const string &path) throws;
+    void init(const std::filesystem::path &path) throws;
     
     
     //
@@ -47,7 +47,7 @@ public:
     // Methods from AmigaFile
     //
     
-    bool isCompatiblePath(const string &path) const override { return isCompatible(path); }
+    bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
     bool isCompatibleStream(std::istream &stream) const override { return isCompatible(stream); }
     FileType type() const override { return FILETYPE_DIR; }
     u64 fnv64() const override { return adf->fnv64(); }

@@ -951,7 +951,7 @@ FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
 }
 
 void
-FloppyDrive::catchFile(const string &path)
+FloppyDrive::catchFile(const std::filesystem::path &path)
 {
     {   SUSPENDED
         
@@ -1061,12 +1061,10 @@ FloppyDrive::swapDisk(class FloppyFile &file)
 }
 
 void
-FloppyDrive::swapDisk(const string &name)
+FloppyDrive::swapDisk(const std::filesystem::path &path)
 {
-    bool append = !util::isAbsolutePath(name) && searchPath != "";
-    string path = append ? searchPath + "/" + name : name;
-    
-    std::unique_ptr<FloppyFile> file(FloppyFile::make(path));
+    auto location = path.is_absolute() ? path : searchPath / path;
+    std::unique_ptr<FloppyFile> file(FloppyFile::make(location));
     swapDisk(*file);
 }
 

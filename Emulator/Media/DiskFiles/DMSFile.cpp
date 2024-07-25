@@ -19,10 +19,10 @@ unsigned short extractDMS(const unsigned char *in, size_t inSize,
 namespace vamiga {
 
 bool
-DMSFile::isCompatible(const string &path)
+DMSFile::isCompatible(const std::filesystem::path &path)
 {
-    auto suffix = util::uppercased(util::extractSuffix(path));
-    return suffix == "DMS";
+    auto suffix = util::uppercased(path.extension().string());
+    return suffix == ".DMS";
 }
 
 bool

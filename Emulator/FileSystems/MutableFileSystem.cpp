@@ -67,7 +67,7 @@ MutableFileSystem::init(Diameter dia, Density den, FSVolumeType dos)
 }
 
 void
-MutableFileSystem::init(Diameter dia, Density den, const string &path)
+MutableFileSystem::init(Diameter dia, Density den, const std::filesystem::path &path)
 {
     init(dia, den, FS_OFS);
     
@@ -85,7 +85,7 @@ MutableFileSystem::init(Diameter dia, Density den, const string &path)
 }
 
 void
-MutableFileSystem::init(FSVolumeType type, const string &path)
+MutableFileSystem::init(FSVolumeType type, const std::filesystem::path &path)
 {
     // Try to fit the directory into files system with DD disk capacity
     try { init(INCH_35, DENSITY_DD, path); return; } catch (...) { };
@@ -562,7 +562,7 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
 }
 
 void
-MutableFileSystem::importDirectory(const string &path, bool recursive)
+MutableFileSystem::importDirectory(const std::filesystem::path &path, bool recursive)
 {
     fs::directory_entry dir;
     
@@ -677,7 +677,7 @@ MutableFileSystem::exportBlocks(Block first, Block last, u8 *dst, isize size, Er
 }
 
 void
-MutableFileSystem::exportDirectory(const string &path, bool createDir)
+MutableFileSystem::exportDirectory(const std::filesystem::path &path, bool createDir)
 {
     // Try to create the directory if it doesn't exist
     if (!util::isDirectory(path) && createDir && !util::createDirectory(path)) {

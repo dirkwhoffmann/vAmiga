@@ -168,7 +168,7 @@ HardDrive::init(const HDFFile &hdf)
 }
 
 void
-HardDrive::init(const string &path) throws
+HardDrive::init(const std::filesystem::path &path) throws
 {
     HDFFile hdf(path);
     init(hdf);
@@ -742,7 +742,7 @@ HardDrive::moveHead(isize c, isize h, isize s)
 }
 
 void
-HardDrive::writeToFile(const string &path) throws
+HardDrive::writeToFile(const std::filesystem::path &path) throws
 {
     if (!path.empty()) {
 

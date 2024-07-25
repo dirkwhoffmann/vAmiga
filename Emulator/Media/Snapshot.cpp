@@ -41,7 +41,7 @@ Thumbnail::take(Amiga &amiga, isize dx, isize dy)
 }
 
 bool
-Snapshot::isCompatible(const string &path)
+Snapshot::isCompatible(const std::filesystem::path &path)
 {
     return true;
 }

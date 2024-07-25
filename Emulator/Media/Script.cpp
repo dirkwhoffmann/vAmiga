@@ -17,10 +17,10 @@
 namespace vamiga {
 
 bool
-Script::isCompatible(const string &path)
+Script::isCompatible(const std::filesystem::path &path)
 {
-    auto suffix = util::uppercased(util::extractSuffix(path));
-    return suffix == "INI";
+    auto suffix = util::uppercased(path.extension().string());
+    return suffix == ".INI";
 }
 
 bool

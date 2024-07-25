@@ -768,7 +768,7 @@ Memory::loadExt(const u8 *buf, isize len)
 }
 
 void
-Memory::saveRom(const string &path)
+Memory::saveRom(const std::filesystem::path &path)
 {
     if (rom == nullptr) return;
     
@@ -777,7 +777,7 @@ Memory::saveRom(const string &path)
 }
 
 void
-Memory::saveWom(const string &path)
+Memory::saveWom(const std::filesystem::path &path)
 {
     if (wom == nullptr) return;
     
@@ -786,7 +786,7 @@ Memory::saveWom(const string &path)
 }
 
 void
-Memory::saveExt(const string &path)
+Memory::saveExt(const std::filesystem::path &path)
 {
     if (ext == nullptr) return;
 

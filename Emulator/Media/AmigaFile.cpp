@@ -25,7 +25,7 @@
 namespace vamiga {
 
 void
-AmigaFile::init(const string &path)
+AmigaFile::init(const std::filesystem::path &path)
 {
     std::ifstream stream(path, std::ifstream::binary);
     if (!stream.is_open()) throw Error(ERROR_FILE_NOT_FOUND, path);
@@ -33,7 +33,7 @@ AmigaFile::init(const string &path)
 }
 
 void
-AmigaFile::init(const string &path, std::istream &stream)
+AmigaFile::init(const std::filesystem::path &path, std::istream &stream)
 {
     if (!isCompatiblePath(path)) throw Error(ERROR_FILE_TYPE_MISMATCH);
     init(stream);
@@ -96,59 +96,6 @@ AmigaFile::flash(u8 *buf, isize offset) const
     flash (buf, offset, data.size);
 }
 
-/*
-void
-AmigaFile::flash(u8 *buf) const
-{
-    flash(buf, 0);
-}
-*/
-
-/*
-FileType
-AmigaFile::type(const string &path)
-{
-    std::ifstream stream(path, std::ifstream::binary);
-    
-    if (stream.is_open()) {
-        
-        if (Snapshot::isCompatible(path) &&
-            Snapshot::isCompatible(stream)) return FILETYPE_SNAPSHOT;
-
-        if (Script::isCompatible(path) &&
-            Script::isCompatible(stream)) return FILETYPE_SCRIPT;
-
-        if (ADFFile::isCompatible(path) &&
-            ADFFile::isCompatible(stream)) return FILETYPE_ADF;
-
-        if (EADFFile::isCompatible(path) &&
-            EADFFile::isCompatible(stream)) return FILETYPE_EADF;
-
-        if (HDFFile::isCompatible(path) &&
-            HDFFile::isCompatible(stream)) return FILETYPE_HDF;
-
-        if (IMGFile::isCompatible(path) &&
-            IMGFile::isCompatible(stream)) return FILETYPE_IMG;
-
-        if (STFile::isCompatible(path) &&
-            STFile::isCompatible(stream)) return FILETYPE_ST;
-
-        if (DMSFile::isCompatible(path) &&
-            DMSFile::isCompatible(stream)) return FILETYPE_DMS;
-        
-        if (EXEFile::isCompatible(path) &&
-            EXEFile::isCompatible(stream)) return FILETYPE_EXE;
-        
-        if (RomFile::isCompatible(path) &&
-            RomFile::isCompatible(stream)) return FILETYPE_ROM;
-        
-        if (Folder::isCompatible(path)) return FILETYPE_DIR;
-    }
-    
-    return FILETYPE_UNKNOWN;
-}
-*/
-
 isize
 AmigaFile::readFromStream(std::istream &stream)
 {
@@ -170,8 +117,8 @@ AmigaFile::readFromStream(std::istream &stream)
 }
 
 isize
-AmigaFile::readFromFile(const string &path)
-{        
+AmigaFile::readFromFile(const std::filesystem::path &path)
+{
     std::ifstream stream(path, std::ifstream::binary);
 
     if (!stream.is_open()) {
@@ -220,7 +167,7 @@ AmigaFile::writeToStream(std::ostream &stream, isize offset, isize len)
 }
 
 isize
-AmigaFile::writeToFile(const string &path, isize offset, isize len)
+AmigaFile::writeToFile(const std::filesystem::path &path, isize offset, isize len)
 {
     if (util::isDirectory(path)) {
         throw Error(ERROR_FILE_IS_DIRECTORY);
@@ -265,13 +212,13 @@ AmigaFile::writeToStream(std::ostream &stream)
 }
 
 isize
-AmigaFile::writeToFile(const string &path)
+AmigaFile::writeToFile(const std::filesystem::path &path)
 {
     return writeToFile(path, 0, data.size);
 }
 
 isize 
-AmigaFile::writePartitionToFile(const string &path, isize partition)
+AmigaFile::writePartitionToFile(const std::filesystem::path &path, isize partition)
 {
     throw Error(ERROR_FILE_TYPE_UNSUPPORTED);
 }

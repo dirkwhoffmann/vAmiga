@@ -19,10 +19,10 @@ class Script : public AmigaFile {
     
 public:
     
-    static bool isCompatible(const string &path);
+    static bool isCompatible(const std::filesystem::path &path);
     static bool isCompatible(std::istream &stream);
     
-    bool isCompatiblePath(const string &path) const override { return isCompatible(path); }
+    bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
     bool isCompatibleStream(std::istream &stream) const override { return isCompatible(stream); }
 
     
@@ -32,7 +32,7 @@ public:
 
 public:
 
-    Script(const string &path) throws { init(path); }
+    Script(const std::filesystem::path &path) throws { init(path); }
     Script(const u8 *buf, isize len) throws { init(buf, len); }
 
     const char *objectName() const override { return "Script"; }

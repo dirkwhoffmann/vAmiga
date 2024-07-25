@@ -11,6 +11,7 @@
 
 #include "BaseTypes.h"
 #include <vector>
+#include <filesystem>
 
 namespace vamiga {
 
@@ -39,8 +40,8 @@ public:
 
     // Getter and setter for the FFmpeg executable path
     static const string getExecPath();
-    static void setExecPath(const string &path);
-    
+    static void setExecPath(const std::filesystem::path &path);
+
     // Checks whether FFmeg is available
     static bool available();
     

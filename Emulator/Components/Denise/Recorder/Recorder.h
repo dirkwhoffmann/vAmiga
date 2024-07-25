@@ -196,8 +196,8 @@ public:
     void stopRecording();
 
     // Exports the recorded video
-    bool exportAs(const string &path);
-    
+    bool exportAs(const std::filesystem::path &path);
+
     
     //
     // Recording a video stream

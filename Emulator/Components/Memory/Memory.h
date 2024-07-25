@@ -418,9 +418,9 @@ public:
     void loadExt(const u8 *buf, isize len) throws;
 
     // Saves a Rom to disk
-    void saveRom(const string &path) throws;
-    void saveWom(const string &path) throws;
-    void saveExt(const string &path) throws;
+    void saveRom(const std::filesystem::path &path) throws;
+    void saveWom(const std::filesystem::path &path) throws;
+    void saveExt(const std::filesystem::path &path) throws;
 
     // Fixes two bugs in Kickstart 1.2 expansion.library
     void patchExpansionLib();

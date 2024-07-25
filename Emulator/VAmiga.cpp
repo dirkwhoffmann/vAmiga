@@ -567,19 +567,19 @@ MemoryAPI::loadExt(const u8 *buf, isize len)
 }
 
 void 
-MemoryAPI::saveRom(const string &path)
+MemoryAPI::saveRom(const std::filesystem::path &path)
 {
     mem->saveRom(path);
 }
 
 void 
-MemoryAPI::saveWom(const string &path)
+MemoryAPI::saveWom(const std::filesystem::path &path)
 {
     mem->saveWom(path);
 }
 
 void 
-MemoryAPI::saveExt(const string &path)
+MemoryAPI::saveExt(const std::filesystem::path &path)
 {
     mem->saveExt(path);
 }
