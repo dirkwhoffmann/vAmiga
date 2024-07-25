@@ -10,12 +10,12 @@
 #include "config.h"
 #include "Macros.h"
 #include "IOUtils.h"
-#include <assert.h>
-#include <vector>
-#include <fstream>
 #include <algorithm>
-#include <iomanip>
+#include <assert.h>
 #include <bitset>
+#include <fstream>
+#include <iomanip>
+#include <vector>
 
 namespace util {
 
@@ -34,7 +34,7 @@ makeUniquePath(const fs::path &path)
         if (!util::fileExists(result.string())) return result;
     }
 
-    return path;
+    unreachable;
 }
 
 bool

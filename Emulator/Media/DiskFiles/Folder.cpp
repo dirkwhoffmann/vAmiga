@@ -23,7 +23,7 @@ Folder::isCompatible(const std::filesystem::path &path)
 void
 Folder::init(const std::filesystem::path &path)
 {
-    debug(FS_DEBUG, "make(%s)\n", path.c_str());
+    debug(FS_DEBUG, "make(%s)\n", path.string().c_str());
 
     // Only proceed if the provided filename points to a directory
     if (!isCompatiblePath(path)) throw Error(ERROR_FILE_TYPE_MISMATCH);

@@ -38,7 +38,7 @@ FFmpeg::init()
     }
 }
 
-const string
+const std::filesystem::path
 FFmpeg::getExecPath()
 {
     return exec;
@@ -80,7 +80,7 @@ FFmpeg::launch(const string &args)
     
 #else
     
-    auto cmd = getExecPath() + " " + args;
+    auto cmd = getExecPath().string() + " " + args;
     handle = popen(cmd.c_str(), "w");
     return handle != nullptr;
     

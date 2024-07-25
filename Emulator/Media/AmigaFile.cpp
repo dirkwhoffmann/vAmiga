@@ -125,7 +125,7 @@ AmigaFile::readFromFile(const std::filesystem::path &path)
         throw Error(ERROR_FILE_CANT_READ, path);
     }
 
-    this->path = string(path);
+    this->path = path;
 
     isize result = readFromStream(stream);
     assert(result == data.size);

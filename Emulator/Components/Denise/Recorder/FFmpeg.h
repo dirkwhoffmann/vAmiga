@@ -39,7 +39,7 @@ public:
     static void init();
 
     // Getter and setter for the FFmpeg executable path
-    static const string getExecPath();
+    static const std::filesystem::path getExecPath();
     static void setExecPath(const std::filesystem::path &path);
 
     // Checks whether FFmeg is available

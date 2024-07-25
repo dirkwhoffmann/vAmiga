@@ -127,7 +127,7 @@ Joystick::startAutofire()
     debug(true, "startAutofire()\n");
 
     // Load magazine
-    reload(config.autofireBursts ? config.autofireBullets : INT64_MAX);
+    reload(config.autofireBursts ? config.autofireBullets : INT_MAX);
 
     // Fire the first shot
     setButton(true);

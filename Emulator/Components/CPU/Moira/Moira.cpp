@@ -832,11 +832,14 @@ Moira::getIrqVector(u8 level) const {
 InstrInfo
 Moira::getInstrInfo(u16 op) const
 {
-    if constexpr (BUILD_INSTR_INFO_TABLE == false) {
+    if constexpr (BUILD_INSTR_INFO_TABLE) {
+
+        return info[op];
+
+    } else {
+
         throw std::runtime_error("This feature requires BUILD_INSTR_INFO_TABLE = true\n");
     }
-
-    return info[op];
 }
 
 template u32 Moira::readD <Long> (int n) const;

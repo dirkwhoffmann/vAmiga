@@ -818,7 +818,7 @@ VideoPortAPI::getTexture(isize *nr, bool *lof, bool *prevlof) const
 {
     auto &frameBuffer = videoPort->getTexture();
     
-    *nr = frameBuffer.nr;
+    *nr = isize(frameBuffer.nr);
     *lof = frameBuffer.lof;
     *prevlof = frameBuffer.prevlof;
 

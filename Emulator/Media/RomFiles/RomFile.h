@@ -22,7 +22,7 @@ class RomFile : public AmigaFile {
     static const u8 encrRomHeaders[1][11];
 
     // Path to the rom.key file (if needed)
-    string romKeyPath = "";
+    std::filesystem::path romKeyPath;
 
 public:
 

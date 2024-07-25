@@ -503,8 +503,8 @@ typedef struct
 {
     isize vpos;
     isize hpos;
-    isize frame;
-    
+    i64 frame;
+
     u16 dmacon;
     u16 bplcon0;
     u16 ddfstrt;

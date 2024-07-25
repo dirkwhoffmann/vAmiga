@@ -111,7 +111,7 @@ Headless::parseArguments(int argc, char *argv[])
     opterr = 0;
     
     // Remember the execution path
-    keys["exec"] = util::makeAbsolutePath(argv[0]);
+    keys["exec"] = std::filesystem::absolute(argv[0]);
 
     // Parse all options
     while (1) {
@@ -150,7 +150,9 @@ Headless::parseArguments(int argc, char *argv[])
     // Parse all remaining arguments
     auto nr = 1;
     while (optind < argc) {
-        keys["arg" + std::to_string(nr++)] = util::makeAbsolutePath(argv[optind++]);
+
+        auto path = std::filesystem::path(argv[optind++]);
+        keys["arg" + std::to_string(nr++)] = std::filesystem::absolute(path).string();
     }
 
     // Check for syntax errors

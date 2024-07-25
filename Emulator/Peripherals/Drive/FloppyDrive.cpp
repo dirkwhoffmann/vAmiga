@@ -959,7 +959,7 @@ FloppyDrive::catchFile(const std::filesystem::path &path)
         auto fs = MutableFileSystem(*this);
         
         // Seek file
-        auto file = fs.seekFile(path);
+        auto file = fs.seekFile(path.string());
         if (file == nullptr) throw Error(ERROR_FILE_NOT_FOUND);
         
         // Extract file
