@@ -1504,7 +1504,7 @@ public:
     // const RecorderInfo &getInfo() const;
     // const RecorderInfo &getCachedInfo() const;
 
-    const std::vector<string> &paths() const;
+    const std::vector<std::filesystem::path> &paths() const;
     bool hasFFmpeg() const;
 
     /** @brief  Returns the path to the FFmpeg executable.

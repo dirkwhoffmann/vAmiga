@@ -727,7 +727,16 @@ Amiga::computeFrame()
     }
 }
 
-void 
+void
+Amiga::fastForward(isize frames)
+{
+    auto target = agnus.pos.frame + frames;
+
+    // Execute until the target frame has been reached
+    while (agnus.pos.frame < target) computeFrame();
+}
+
+void
 Amiga::cacheInfo(AmigaInfo &result) const
 {
     {   SYNCHRONIZED

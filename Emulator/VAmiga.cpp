@@ -1345,7 +1345,7 @@ isize RecorderAPI::getBitRate() const { return recorder->getBitRate(); }
 isize RecorderAPI::getSampleRate() const { return recorder->getSampleRate(); }
 bool RecorderAPI::isRecording() const { return recorder->isRecording(); }
 
-const std::vector<string> &
+const std::vector<std::filesystem::path> &
 RecorderAPI::paths() const
 {
     return FFmpeg::paths;

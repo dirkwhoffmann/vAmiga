@@ -23,6 +23,10 @@ debugflag WARP_DEBUG      = 0; // Warp mode
 debugflag QUEUE_DEBUG     = 0; // Message queue
 debugflag SNP_DEBUG       = 0; // Serialization (snapshots)
 
+// Run ahead
+debugflag RUA_DEBUG       = 1;
+debugflag RUA_ON_STEROIDS = 1;
+
 // CPU
 debugflag CPU_DEBUG       = 0; // CPU
 debugflag CST_DEBUG       = 0; // Call stack recording

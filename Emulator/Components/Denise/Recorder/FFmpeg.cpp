@@ -13,8 +13,8 @@
 
 namespace vamiga {
 
-std::vector<string> FFmpeg::paths;
-string FFmpeg::exec;
+std::vector<std::filesystem::path> FFmpeg::paths;
+std::filesystem::path FFmpeg::exec;
 
 void
 FFmpeg::init()

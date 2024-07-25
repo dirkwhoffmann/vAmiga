@@ -113,7 +113,6 @@ public:
 
     // Returns the target components for a given configuration option
     Configurable *routeOption(Option opt, isize objid);
-    // [[deprecated]] void routeOption(Option opt, std::vector<Configurable *> &result);
 
 
     //
@@ -175,6 +174,9 @@ public:
     //
 
 public:
+
+    // Compares two components and reports differences (for debugging)
+    void diff(CoreComponent &other);
 
     // Exports the current configuration to a script file
     void exportConfig(std::ostream& ss, bool diff = false) const;

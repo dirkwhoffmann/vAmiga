@@ -37,19 +37,13 @@ namespace util {
 
 template <class T, typename E> struct Reflection {
 
-    // Determines if this enum represents a bit field
-    // static constexpr bool bitField = T::minVal == 1;
-
     // Returns the key as a C string
     static const char *key(long value) {
 
         static string result;
 
-        // Determine if this enum represents a bit field
-        // bool bitField = T::minVal == 1;
-
         result = "";
-        if (T::minVal == 1) {
+        if constexpr (T::minVal == 1) {
 
             // This enum is a bit field
             for (isize i = T::minVal; i <= T::maxVal; i *= 2) {

@@ -34,6 +34,10 @@ enum_long(DEBUG_FLAG)
     FLAG_QUEUE_DEBUG,      ///< Message queue
     FLAG_SNP_DEBUG,        ///< Serialization (snapshots)
 
+    // Run ahead
+    FLAG_RUA_DEBUG,         ///< Debug run-ahead mode
+    FLAG_RUA_ON_STEROIDS,   ///< Update the run-ahead instance in every frame
+
     // CPU
     FLAG_CPU_DEBUG,        ///< CPU
     FLAG_CST_DEBUG,        ///< Call stack recording
@@ -169,6 +173,10 @@ struct DebugFlagEnum : util::Reflection<DebugFlagEnum, DebugFlag>
             case FLAG_QUEUE_DEBUG:      return "QUEUE_DEBUG";
             case FLAG_SNP_DEBUG:        return "SNP_DEBUG";
 
+                // Run ahead
+            case FLAG_RUA_DEBUG:        return "RUA_DEBUG";
+            case FLAG_RUA_ON_STEROIDS:  return "RUA_ON_STEROIDS";
+
                 // CPU
             case FLAG_CPU_DEBUG:        return "CPU_DEBUG";
             case FLAG_CST_DEBUG:        return "CST_DEBUG";
@@ -290,7 +298,7 @@ struct DebugFlagEnum : util::Reflection<DebugFlagEnum, DebugFlag>
             case FLAG_DEF_DEBUG:        return "User defaults";
             case FLAG_MIMIC_UAE:        return "Enable to compare debug logs with UAE";
 
-                // Runloop
+                // Emulator
             case FLAG_RUN_DEBUG:        return "Run loop, component states";
             case FLAG_TIM_DEBUG:        return "Thread synchronization";
             case FLAG_WARP_DEBUG:       return "Warp mode";

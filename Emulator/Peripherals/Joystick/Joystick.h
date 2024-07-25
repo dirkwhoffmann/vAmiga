@@ -51,14 +51,14 @@ class Joystick : public SubComponent, public Inspectable<JoystickInfo> {
     bool button3 = false;
 
     // Horizontal joystick position (-1 = left, 1 = right, 0 = released)
-    int axisX = 0;
-    
+    isize axisX = 0;
+
     // Vertical joystick position (-1 = up, 1 = down, 0 = released)
-    int axisY = 0;
+    isize axisY = 0;
 
     // Bullet counter used in autofire mode
-    i64 bulletCounter = 0;
-    
+    isize bulletCounter = 0;
+
     // Next frame to auto-press or auto-release the fire button
     i64 nextAutofireFrame = 0;
     i64 nextAutofireReleaseFrame = 0;

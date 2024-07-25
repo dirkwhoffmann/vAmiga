@@ -28,6 +28,12 @@ public:
     // The virtual Amiga
     Amiga main = Amiga(*this, 0);
 
+    // The run-ahead instance
+    Amiga ahead = Amiga(*this, 1);
+
+    // Indicates if the run-ahead instance needs to be updated
+    bool isDirty = true;
+
 public:
 
     // User default settings

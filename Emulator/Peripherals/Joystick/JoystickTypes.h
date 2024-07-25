@@ -92,7 +92,7 @@ JoystickConfig;
 typedef struct
 {
     bool button;
-    int axisX;
-    int axisY;
+    isize axisX;
+    isize axisY;
 }
 JoystickInfo;

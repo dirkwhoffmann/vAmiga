@@ -250,6 +250,21 @@ CoreComponent::postorderWalk(std::function<void(CoreComponent *)> func)
 }
 
 void
+CoreComponent::diff(CoreComponent &other)
+{
+    auto num = subComponents.size();
+    assert(num == other.subComponents.size());
+
+    // Compare all subcomponents
+    for (usize i = 0; i < num; i++) subComponents[i]->diff(*other.subComponents[i]);
+
+    // Compare this component
+    if (auto check1 = checksum(), check2 = checksum(); check1 != check2) {
+        debug(true, "Checksum mismatch: %lld != %lld\n", check1, check2);
+    }
+}
+
+void
 CoreComponent::exportConfig(std::ostream& ss, bool diff) const
 {
     bool first = true;

@@ -154,7 +154,7 @@ Joystick::reload()
 {
     if (config.autofire) {
 
-        reload(config.autofireBursts ? config.autofireBullets : INT64_MAX);
+        reload(config.autofireBursts ? config.autofireBullets : INT_MAX);
 
     } else {
 
@@ -313,7 +313,6 @@ Joystick::eofHandler()
             setButton(false);
             if (--bulletCounter > 0) {
                 nextAutofireFrame = nextAutofireReleaseFrame + config.autofireDelay;
-                printf("bullets = %lld delay = %ld\n", bulletCounter, config.autofireDelay);
             } else {
                 stopAutofire();
             }

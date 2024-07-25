@@ -48,8 +48,8 @@ bool createDirectory(const std::filesystem::path &path);
 isize numDirectoryItems(const std::filesystem::path &path);
 
 // Returns a list of files in a directory
-std::vector<string> files(const std::filesystem::path &path, const string &suffix = "");
-std::vector<string> files(const std::filesystem::path &path, std::vector <string> &suffixes);
+std::vector<std::filesystem::path> files(const std::filesystem::path &path, const string &suffix = "");
+std::vector<std::filesystem::path> files(const std::filesystem::path &path, std::vector <string> &suffixes);
 
 // Checks the header signature (magic bytes) of a stream or buffer
 bool matchingStreamHeader(std::istream &is, const u8 *header, isize len, isize offset = 0);

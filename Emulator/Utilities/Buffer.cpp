@@ -19,8 +19,13 @@ namespace util {
 template <class T> Allocator<T>& 
 Allocator<T>::operator= (const Allocator<T>& other)
 {
-    size = other.size;
+    // Reallocate buffer if needed
+    if (size != other.size) alloc(other.size);
+    assert(size == other.size);
+
+    // Copy buffer
     if (size) memcpy(ptr, other.ptr, size);
+    return *this;
 }
 
 template <class T> void
@@ -204,6 +209,7 @@ Allocator<T>::patch(const char *seq, const char *subst)
 //
 
 #define INSTANTIATE_ALLOCATOR(T) \
+template Allocator<T>& Allocator<T>::operator=(const Allocator<T>& other); \
 template void Allocator<T>::alloc(isize bytes); \
 template void Allocator<T>::dealloc(); \
 template void Allocator<T>::init(isize bytes, T value); \

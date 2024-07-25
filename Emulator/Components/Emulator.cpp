@@ -577,34 +577,57 @@ Emulator::stepOver()
 void
 Emulator::computeFrame()
 {
-    main.computeFrame();
+    auto &config = main.getConfig();
 
-    /*
     if (config.runAhead) {
 
         try {
 
             // Run the main instance
-            main.execute();
+            main.computeFrame();
 
             // Recreate the run-ahead instance if necessary
-            if (main.isDirty || RUA_ON_STEROIDS) recreateRunAheadInstance();
+            if (isDirty || RUA_ON_STEROIDS) recreateRunAheadInstance();
 
             // Run the runahead instance
-            ahead.execute();
+            ahead.computeFrame();
 
         } catch (StateChangeException &) {
 
-            main.markAsDirty();
+            isDirty = true;
             throw;
         }
 
     } else {
 
         // Only run the main instance
-        main.execute();
+        main.computeFrame();
     }
-    */
+}
+
+void
+Emulator::recreateRunAheadInstance()
+{
+    auto &config = main.getConfig();
+
+    debug(RUA_DEBUG, "%lld: Recomputing the run-ahead instance\n", main.agnus.pos.frame);
+
+    // clones++;
+
+    // Recreate the runahead instance from scratch
+    ahead = main; isDirty = false;
+
+    if (RUA_DEBUG && ahead != main) {
+
+        main.diff(ahead);
+        fatal("Corrupted run-ahead clone detected");
+    } else {
+        // REMOVE
+        printf("INSTANCE OK\n");
+    }
+
+    // Advance to the proper frame
+    ahead.fastForward(config.runAhead - 1);
 }
 
 void
@@ -624,42 +647,38 @@ Emulator::getDebugVariable(DebugFlag flag)
 
     switch (flag) {
 
-            // General
         case FLAG_XFILES:           return XFILES;
         case FLAG_CNF_DEBUG:        return CNF_DEBUG;
         case FLAG_OBJ_DEBUG:        return OBJ_DEBUG;
         case FLAG_DEF_DEBUG:        return DEF_DEBUG;
         case FLAG_MIMIC_UAE:        return MIMIC_UAE;
 
-            // Runloop
         case FLAG_RUN_DEBUG:        return RUN_DEBUG;
         case FLAG_TIM_DEBUG:        return TIM_DEBUG;
         case FLAG_WARP_DEBUG:       return WARP_DEBUG;
         case FLAG_QUEUE_DEBUG:      return QUEUE_DEBUG;
         case FLAG_SNP_DEBUG:        return SNP_DEBUG;
 
-            // CPU
+        case FLAG_RUA_DEBUG:        return RUA_DEBUG;
+        case FLAG_RUA_ON_STEROIDS:  return RUA_ON_STEROIDS;
+
         case FLAG_CPU_DEBUG:        return CPU_DEBUG;
         case FLAG_CST_DEBUG:        return CST_DEBUG;
 
-            // Memory access
         case FLAG_OCSREG_DEBUG:     return OCSREG_DEBUG;
         case FLAG_ECSREG_DEBUG:     return ECSREG_DEBUG;
         case FLAG_INVREG_DEBUG:     return INVREG_DEBUG;
         case FLAG_MEM_DEBUG:        return MEM_DEBUG;
 
-            // Agnus
         case FLAG_DMA_DEBUG:        return DMA_DEBUG;
         case FLAG_DDF_DEBUG:        return DDF_DEBUG;
         case FLAG_SEQ_DEBUG:        return SEQ_DEBUG;
         case FLAG_NTSC_DEBUG:       return NTSC_DEBUG;
 
-            // Copper
         case FLAG_COP_CHECKSUM:     return COP_CHECKSUM;
         case FLAG_COPREG_DEBUG:     return COPREG_DEBUG;
         case FLAG_COP_DEBUG:        return COP_DEBUG;
 
-            // Blitter
         case FLAG_BLT_CHECKSUM:     return BLT_CHECKSUM;
         case FLAG_BLTREG_DEBUG:     return BLTREG_DEBUG;
         case FLAG_BLT_REG_GUARD:    return BLT_REG_GUARD;
@@ -669,7 +688,6 @@ Emulator::getDebugVariable(DebugFlag flag)
         case FLAG_SLOW_BLT_DEBUG:   return SLOW_BLT_DEBUG;
         case FLAG_OLD_LINE_BLIT:    return OLD_LINE_BLIT;
 
-            // Denise
         case FLAG_BPLREG_DEBUG:     return BPLREG_DEBUG;
         case FLAG_BPLDAT_DEBUG:     return BPLDAT_DEBUG;
         case FLAG_BPLMOD_DEBUG:     return BPLMOD_DEBUG;
@@ -682,17 +700,14 @@ Emulator::getDebugVariable(DebugFlag flag)
         case FLAG_CLX_DEBUG:        return CLX_DEBUG;
         case FLAG_BORDER_DEBUG:     return BORDER_DEBUG;
 
-            // Paula
         case FLAG_INTREG_DEBUG:     return INTREG_DEBUG;
         case FLAG_INT_DEBUG:        return INT_DEBUG;
 
-            // CIAs
         case FLAG_CIAREG_DEBUG:     return CIAREG_DEBUG;
         case FLAG_CIASER_DEBUG:     return CIASER_DEBUG;
         case FLAG_CIA_DEBUG:        return CIA_DEBUG;
         case FLAG_TOD_DEBUG:        return TOD_DEBUG;
 
-            // Floppy Drives
         case FLAG_ALIGN_HEAD:       return ALIGN_HEAD;
         case FLAG_DSK_CHECKSUM:     return DSK_CHECKSUM;
         case FLAG_DSKREG_DEBUG:     return DSKREG_DEBUG;
@@ -700,19 +715,16 @@ Emulator::getDebugVariable(DebugFlag flag)
         case FLAG_MFM_DEBUG:        return MFM_DEBUG;
         case FLAG_FS_DEBUG:         return FS_DEBUG;
 
-            // Hard Drives
         case FLAG_HDR_ACCEPT_ALL:   return HDR_ACCEPT_ALL;
         case FLAG_HDR_FS_LOAD_ALL:  return HDR_FS_LOAD_ALL;
         case FLAG_WT_DEBUG:         return WT_DEBUG;
 
-            // Audio
         case FLAG_AUDREG_DEBUG:     return AUDREG_DEBUG;
         case FLAG_AUD_DEBUG:        return AUD_DEBUG;
         case FLAG_AUDBUF_DEBUG:     return AUDBUF_DEBUG;
         case FLAG_AUDVOL_DEBUG:     return AUDVOL_DEBUG;
         case FLAG_DISABLE_AUDIRQ:   return DISABLE_AUDIRQ;
 
-            // Ports
         case FLAG_POSREG_DEBUG:     return POSREG_DEBUG;
         case FLAG_JOYREG_DEBUG:     return JOYREG_DEBUG;
         case FLAG_POTREG_DEBUG:     return POTREG_DEBUG;
@@ -723,23 +735,19 @@ Emulator::getDebugVariable(DebugFlag flag)
         case FLAG_HOLD_MOUSE_M:     return HOLD_MOUSE_M;
         case FLAG_HOLD_MOUSE_R:     return HOLD_MOUSE_R;
 
-            // Expansion boards
         case FLAG_ZOR_DEBUG:        return ZOR_DEBUG;
         case FLAG_ACF_DEBUG:        return ACF_DEBUG;
         case FLAG_FAS_DEBUG:        return FAS_DEBUG;
         case FLAG_HDR_DEBUG:        return HDR_DEBUG;
         case FLAG_DBD_DEBUG:        return DBD_DEBUG;
 
-            // Media types
         case FLAG_ADF_DEBUG:        return ADF_DEBUG;
         case FLAG_DMS_DEBUG:        return DMS_DEBUG;
         case FLAG_IMG_DEBUG:        return IMG_DEBUG;
 
-            // Other components
         case FLAG_RTC_DEBUG:        return RTC_DEBUG;
         case FLAG_KBD_DEBUG:        return KBD_DEBUG;
 
-            // Misc
         case FLAG_REC_DEBUG:        return REC_DEBUG;
         case FLAG_SCK_DEBUG:        return SCK_DEBUG;
         case FLAG_SRV_DEBUG:        return SRV_DEBUG;

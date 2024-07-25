@@ -88,7 +88,7 @@ numDirectoryItems(const std::filesystem::path &path)
     return result;
 }
 
-std::vector<string>
+std::vector<std::filesystem::path>
 files(const std::filesystem::path &path, const string &suffix)
 {
     std::vector <string> suffixes;
@@ -97,11 +97,11 @@ files(const std::filesystem::path &path, const string &suffix)
     return files(path, suffixes);
 }
 
-std::vector<string>
+std::vector<std::filesystem::path>
 files(const std::filesystem::path &path, std::vector <string> &suffixes)
 {
-    std::vector<string> result;
-    
+    std::vector<std::filesystem::path> result;
+
     try {
         
         for (const auto &entry : fs::directory_iterator(path)) {

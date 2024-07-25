@@ -383,6 +383,9 @@ public:
 
     void computeFrame();
 
+    // Fast-forward the run-ahead instance
+    void fastForward(isize frames);
+
 
     //
     // Controlling the run loop
