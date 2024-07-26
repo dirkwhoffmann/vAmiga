@@ -73,6 +73,9 @@ Emulator::initialize()
     // Perform a hard reset
     main.hardReset();
 
+    // Get the runahead instance up-to-date
+    ahead = main;
+
     // Switch state
     state = newState = STATE_OFF;
     assert(isInitialized());

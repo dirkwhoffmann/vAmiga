@@ -115,6 +115,7 @@ public:
         CLONE_ARRAY(color)
         CLONE(hamMode)
         CLONE(shresMode)
+        CLONE_ARRAY(palette)
 
         return *this;
     }

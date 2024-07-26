@@ -29,8 +29,8 @@ class Inspectable {
 
 protected:
 
-    mutable T1 info;
-    mutable T2 stats;
+    mutable T1 info = { };
+    mutable T2 stats = { };
 
 public:
 
