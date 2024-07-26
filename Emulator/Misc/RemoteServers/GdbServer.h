@@ -63,7 +63,13 @@ public:
     
     using RemoteServer::RemoteServer;
     
-    
+    GdbServer& operator= (const GdbServer& other) {
+
+        RemoteServer::operator = (other);
+        return *this;
+    }
+
+
     //
     // Methods from CoreObject
     //

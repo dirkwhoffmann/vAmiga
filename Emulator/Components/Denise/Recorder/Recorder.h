@@ -104,6 +104,7 @@ public:
     
     Recorder& operator= (const Recorder& other) {
 
+        CLONE(audioPort)
         CLONE(audioClock)
 
         return *this;

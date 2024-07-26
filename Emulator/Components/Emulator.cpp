@@ -64,6 +64,7 @@ Emulator::initialize()
 
     // Initialize all components
     main.initialize();
+    ahead.initialize();
 
     // Setup the default configuration
     host.resetConfig();
@@ -173,6 +174,7 @@ void
 Emulator::put(const Cmd &cmd)
 {
     cmdQueue.put(cmd);
+    isDirty = true;
 }
 
 /*
@@ -621,9 +623,6 @@ Emulator::recreateRunAheadInstance()
 
         main.diff(ahead);
         fatal("Corrupted run-ahead clone detected");
-    } else {
-        // REMOVE
-        printf("INSTANCE OK\n");
     }
 
     // Advance to the proper frame

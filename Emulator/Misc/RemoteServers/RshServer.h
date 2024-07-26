@@ -26,6 +26,13 @@ public:
     
     using RemoteServer::RemoteServer;
 
+    RshServer& operator= (const RshServer& other) {
+
+        RemoteServer::operator = (other);
+        return *this;
+    }
+
+
     //
     // Methods from CoreObject
     //

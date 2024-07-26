@@ -50,6 +50,12 @@ public:
     
     using RemoteServer::RemoteServer;
 
+    SerServer& operator= (const SerServer& other) {
+
+        RemoteServer::operator = (other);
+        return *this;
+    }
+
 
     //
     // Methods from CoreObject

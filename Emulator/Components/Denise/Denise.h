@@ -334,7 +334,14 @@ public:
     Denise& operator= (const Denise& other) {
 
         CLONE(pixelEngine)
-        
+        CLONE(screenRecorder)
+
+        CLONE_ARRAY(dBuffer)
+        CLONE_ARRAY(bBuffer)
+        CLONE_ARRAY(iBuffer)
+        CLONE_ARRAY(mBuffer)
+        CLONE_ARRAY(zBuffer)
+
         CLONE(diwstrt)
         CLONE(diwstop)
         CLONE(diwhigh)

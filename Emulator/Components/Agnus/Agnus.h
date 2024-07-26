@@ -216,6 +216,10 @@ public:
     
     Agnus& operator= (const Agnus& other) {
 
+        CLONE(sequencer)
+        CLONE(copper)
+        CLONE(blitter)
+
         CLONE_ARRAY(trigger)
         CLONE_ARRAY(id)
         CLONE_ARRAY(data)

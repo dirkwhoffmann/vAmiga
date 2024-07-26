@@ -241,6 +241,11 @@ public:
         CLONE_ARRAY(agnusMemSrc)
         CLONE(dataBus)
 
+        CLONE(romMask)
+        CLONE(womMask)
+        CLONE(extMask)
+        CLONE(chipMask)
+
         CLONE(config)
         
         return *this;
@@ -268,6 +273,11 @@ public:
         if (isResetter(worker)) return;
 
         worker
+
+        << romMask
+        << womMask
+        << extMask
+        << chipMask
 
         << config.extStart
         << config.slowRamDelay

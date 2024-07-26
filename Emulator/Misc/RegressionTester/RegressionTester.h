@@ -59,7 +59,12 @@ public:
     
     using SubComponent::SubComponent;
     
-    
+    RegressionTester& operator= (const RegressionTester& other) {
+
+        return *this;
+    }
+
+
     //
     // Methods from CoreObject
     //

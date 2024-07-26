@@ -199,20 +199,17 @@ public:
 
     Amiga& operator= (const Amiga& other) {
 
-        CLONE(cpu)
-        CLONE(ciaA)
-        CLONE(ciaB)
-        CLONE(mem)
         CLONE(agnus)
-        CLONE(denise)
-        CLONE(paula)
-        CLONE(rtc)
         CLONE(audioPort)
         CLONE(videoPort)
+        CLONE(rtc)
+        CLONE(denise)
+        CLONE(paula)
+        CLONE(zorro)
         CLONE(controlPort1)
         CLONE(controlPort2)
         CLONE(serialPort)
-        CLONE(zorro)
+        CLONE(keyboard)
         CLONE(df0)
         CLONE(df1)
         CLONE(df2)
@@ -227,10 +224,17 @@ public:
         CLONE(hd3con)
         CLONE(ramExpansion)
         CLONE(diagBoard)
-        CLONE(keyboard)
+        CLONE(ciaA)
+        CLONE(ciaB)
+        CLONE(mem)
+        CLONE(cpu)
+        CLONE(remoteManager)
+        CLONE(retroShell)
+        CLONE(debugger)
+        CLONE(osDebugger)
+        CLONE(regressionTester)
 
         CLONE(flags)
-
         CLONE(config)
 
         return *this;

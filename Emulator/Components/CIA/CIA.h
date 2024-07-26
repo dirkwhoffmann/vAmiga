@@ -313,6 +313,7 @@ public:
         CLONE(cnt)
         CLONE(irq)
         CLONE(sdr)
+        CLONE(ssr)
         CLONE(serCounter)
 
         CLONE(clock)
@@ -366,9 +367,6 @@ public:
         << ssr
         << serCounter;
 
-        if (isResetter(worker)) {
-            updatePA();updatePB();
-        }
         if (isSoftResetter(worker)) return;
 
         worker

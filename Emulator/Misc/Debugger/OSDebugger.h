@@ -39,7 +39,12 @@ public:
     
     using SubComponent::SubComponent;
     
-    
+    OSDebugger& operator= (const OSDebugger& other) {
+
+        return *this;
+    }
+
+
     //
     // Methods from CoreObject
     //

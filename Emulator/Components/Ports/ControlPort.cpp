@@ -18,7 +18,11 @@ namespace vamiga {
 ControlPort::ControlPort(Amiga& ref, isize nr) : SubComponent(ref, nr)
 {
     assert(nr >= 0 && nr <= 1);
-    subComponents = std::vector<CoreComponent *> { &mouse, &joystick };
+    subComponents = std::vector<CoreComponent *> {
+
+        &mouse,
+        &joystick
+    };
 }
 
 void 

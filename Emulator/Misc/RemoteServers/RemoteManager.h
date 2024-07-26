@@ -52,7 +52,16 @@ public:
     
     RemoteManager(Amiga& ref);
     
-    
+    RemoteManager& operator= (const RemoteManager& other) {
+
+        CLONE(serServer)
+        CLONE(rshServer)
+        CLONE(gdbServer)
+
+        return *this;
+    }
+
+
     //
     // Methods from CoreObject
     //

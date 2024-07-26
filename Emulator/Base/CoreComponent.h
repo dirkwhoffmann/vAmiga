@@ -83,7 +83,7 @@ public:
     const char *shellName() const;
 
     // Computes a checksum
-    u64 checksum(bool recursive = false);
+    u64 checksum(bool recursive);
 
     // State properties (see Thread class for details)
     virtual bool isInitialized() const;

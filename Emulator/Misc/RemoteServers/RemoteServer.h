@@ -67,7 +67,14 @@ public:
     ~RemoteServer() { shutDownServer(); }
     void shutDownServer();
     
-    
+    RemoteServer& operator= (const RemoteServer& other) {
+
+        CLONE(config)
+        
+        return *this;
+    }
+
+
     //
     // Methods from CoreObject
     //

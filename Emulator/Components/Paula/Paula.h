@@ -113,6 +113,13 @@ public:
     
     Paula& operator= (const Paula& other) {
 
+        CLONE(channel0)
+        CLONE(channel1)
+        CLONE(channel2)
+        CLONE(channel3)
+        CLONE(diskController)
+        CLONE(uart)
+
         CLONE(intreq)
         CLONE(intena)
         CLONE_ARRAY(setIntreq)

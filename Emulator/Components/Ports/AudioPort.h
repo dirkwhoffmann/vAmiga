@@ -138,6 +138,8 @@ public:
 
     AudioPort& operator= (const AudioPort& other) {
 
+        CLONE(filter)
+        
         CLONE(config)
         CLONE_ARRAY(pan)
         CLONE_ARRAY(vol)

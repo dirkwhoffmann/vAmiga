@@ -19,7 +19,7 @@ namespace vamiga {
 bool
 CoreComponent::operator== (CoreComponent &other)
 {
-    return checksum() == other.checksum();
+    return checksum(true) == other.checksum(true);
 }
 
 const char *
@@ -187,7 +187,7 @@ CoreComponent::load(const u8 *buffer)
     ptr = reader.ptr;
 
     // Check integrity
-    if (hash != checksum() || FORCE_SNAP_CORRUPTED) {
+    if (hash != checksum(false) || FORCE_SNAP_CORRUPTED) {
         throw Error(ERROR_SNAP_CORRUPTED);
     }
 
@@ -207,8 +207,8 @@ CoreComponent::save(u8 *buffer)
     }
 
     // Save the checksum for this component
-    write64(ptr, checksum());
-    
+    write64(ptr, checksum(false));
+
     // Save the internal state of this component
     SerWriter writer(ptr);
     *this << writer;
@@ -256,11 +256,15 @@ CoreComponent::diff(CoreComponent &other)
     assert(num == other.subComponents.size());
 
     // Compare all subcomponents
-    for (usize i = 0; i < num; i++) subComponents[i]->diff(*other.subComponents[i]);
+    for (usize i = 0; i < num; i++) {
+        printf("Checking %s...\n", subComponents[i]->objectName());
+        subComponents[i]->diff(*other.subComponents[i]);
+    }
 
     // Compare this component
-    if (auto check1 = checksum(), check2 = checksum(); check1 != check2) {
-        debug(true, "Checksum mismatch: %lld != %lld\n", check1, check2);
+    if (auto check1 = checksum(false), check2 = other.checksum(false); check1 != check2) {
+        // printf("%s\n", objectName());
+        debug(true, "Checksum mismatch: %llx != %llx\n", check1, check2);
     }
 }
 

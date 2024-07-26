@@ -279,6 +279,9 @@ AudioPort::synthesize(Cycle clock, Cycle target)
 {
     assert(target > clock);
 
+    // Do not synthesize anything if this is the run-ahead instance
+    if (amiga.objid != 0) return;
+
     // Determine the current sample rate
     double rate = double(emulator.host.getOption(OPT_HOST_SAMPLE_RATE)) + sampleRateCorrection;
 

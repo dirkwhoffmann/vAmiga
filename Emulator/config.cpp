@@ -25,7 +25,7 @@ debugflag SNP_DEBUG       = 0; // Serialization (snapshots)
 
 // Run ahead
 debugflag RUA_DEBUG       = 1;
-debugflag RUA_ON_STEROIDS = 1;
+debugflag RUA_ON_STEROIDS = 0;
 
 // CPU
 debugflag CPU_DEBUG       = 0; // CPU

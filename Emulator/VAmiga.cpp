@@ -534,36 +534,42 @@ void
 MemoryAPI::loadRom(const fs::path &path)
 {
     mem->loadRom(path);
+    emu->isDirty = true;
 }
 
 void
 MemoryAPI::loadExt(const fs::path &path)
 {
     mem->loadExt(path);
+    emu->isDirty = true;
 }
 
 void
 MemoryAPI::loadRom(MediaFile &file)
 {
     mem->loadRom(file);
+    emu->isDirty = true;
 }
 
 void
 MemoryAPI::loadExt(MediaFile &file)
 {
     mem->loadExt(file);
+    emu->isDirty = true;
 }
 
 void
 MemoryAPI::loadRom(const u8 *buf, isize len)
 {
     mem->loadRom(buf, len);
+    emu->isDirty = true;
 }
 
 void
 MemoryAPI::loadExt(const u8 *buf, isize len)
 {
     mem->loadExt(buf, len);
+    emu->isDirty = true;
 }
 
 void 
@@ -588,18 +594,21 @@ void
 MemoryAPI::deleteRom()
 {
     mem->deleteRom();
+    emu->isDirty = true;
 }
 
 void 
 MemoryAPI::deleteWom()
 {
     mem->deleteWom();
+    emu->isDirty = true;
 }
 
 void 
 MemoryAPI::deleteExt()
 {
     mem->deleteExt();
+    emu->isDirty = true;
 }
 
 
@@ -688,6 +697,7 @@ void
 RTCAPI::update()
 {
     rtc->update();
+    emu->isDirty = true;
 }
 
 

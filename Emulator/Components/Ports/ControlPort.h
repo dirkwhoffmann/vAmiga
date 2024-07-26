@@ -77,6 +77,9 @@ public:
 
     ControlPort& operator= (const ControlPort& other) {
 
+        CLONE(mouse)
+        CLONE(joystick)
+
         CLONE(mouseCounterX)
         CLONE(mouseCounterY)
         CLONE(chargeDX)

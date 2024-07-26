@@ -187,6 +187,8 @@ public:
     
     AudioFilter& operator= (const AudioFilter& other) {
 
+        CLONE(config)
+        
         return *this;
     }
 
