@@ -43,6 +43,14 @@ template <class T, isize capacity> struct Array
     Array() { clear(); }
     ~Array() { delete[] elements; }
 
+    Array& operator= (const Array& other) {
+
+        for (isize i = 0; i < capacity; i++) elements[i] = other.elements[i];
+        w = other.w;
+
+        return *this;
+    }
+
     void clear() { w = 0; }
     void clear(T t) { for (isize i = 0; i < capacity; i++) elements[i] = t; clear(); }
     void align(isize offset) { w = offset; }
@@ -95,6 +103,14 @@ struct SortedArray : public Array<T, capacity>
     //
 
     ~SortedArray() { delete[] keys; }
+
+    SortedArray& operator= (const SortedArray& other) {
+
+        Array<T, capacity>::operator=(other);
+        for (isize i = 0; i < capacity; i++) keys[i] = other.keys[i];
+
+        return *this;
+    }
 
 
     //

@@ -11,6 +11,7 @@
 #include "StateMachine.h"
 #include "Paula.h"
 #include "IOUtils.h"
+#include "Amiga.h"
 
 namespace vamiga {
 
@@ -147,6 +148,9 @@ StateMachine<nr>::AUDxAP() const
 template <isize nr> void
 StateMachine<nr>::penhi()
 {
+    // Only proceed if this is not the run-ahead instance
+    if (amiga.objid != 0) return;
+
     if (!enablePenhi) return;
 
     Sampler &sampler = audioPort.sampler[nr];
@@ -168,6 +172,9 @@ StateMachine<nr>::penhi()
 template <isize nr> void
 StateMachine<nr>::penlo()
 {
+    // Only proceed if this is not the run-ahead instance
+    if (amiga.objid != 0) return;
+
     if (!enablePenlo) return;
 
     Sampler &sampler = audioPort.sampler[nr];

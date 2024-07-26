@@ -129,28 +129,9 @@ private:
 
 public:
 
-    FloppyDrive(Amiga& ref, isize nr);
-    
-    FloppyDrive& operator= (const FloppyDrive& other) {
+    using Drive::Drive;
 
-        CLONE(head)
-        CLONE(motor)
-        CLONE(switchCycle)
-        CLONE(switchSpeed)
-        CLONE(idCount)
-        CLONE(idBit)
-        CLONE(latestStepUp)
-        CLONE(latestStepDown)
-        CLONE(latestStep)
-        CLONE(dskchange)
-        CLONE(dsklen)
-        CLONE(prb)
-        CLONE(cylinderHistory)
-
-        CLONE(config)
-
-        return *this;
-    }
+    FloppyDrive& operator= (const FloppyDrive& other);
 
 
     //

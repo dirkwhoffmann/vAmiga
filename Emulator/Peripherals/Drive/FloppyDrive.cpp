@@ -22,9 +22,39 @@
 
 namespace vamiga {
 
-FloppyDrive::FloppyDrive(Amiga& ref, isize nr) : Drive(ref, nr)
-{
+FloppyDrive& 
+FloppyDrive::operator= (const FloppyDrive& other) {
 
+    auto clone = [&](std::unique_ptr<FloppyDisk> &disk, const std::unique_ptr<FloppyDisk> &other) {
+
+        if (other) {
+            if (disk == nullptr) disk = std::make_unique<FloppyDisk>();
+            *disk = *other;
+        } else {
+            disk = nullptr;
+        }
+    };
+
+    clone(disk, other.disk);
+    clone(diskToInsert, other.diskToInsert);
+
+    CLONE(head)
+    CLONE(motor)
+    CLONE(switchCycle)
+    CLONE(switchSpeed)
+    CLONE(idCount)
+    CLONE(idBit)
+    CLONE(latestStepUp)
+    CLONE(latestStepDown)
+    CLONE(latestStep)
+    CLONE(dskchange)
+    CLONE(dsklen)
+    CLONE(prb)
+    CLONE(cylinderHistory)
+
+    CLONE(config)
+
+    return *this;
 }
 
 void

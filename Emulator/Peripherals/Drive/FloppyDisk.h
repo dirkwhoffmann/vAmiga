@@ -85,9 +85,6 @@ private:
 
     // Disk state
     DiskFlags flags = 0;
-
-    // Checksum of this disk if it was created from an ADF file, 0 otherwise
-    u64 fnv = 0;
     
     
     //
@@ -117,6 +114,7 @@ public:
         CLONE(diameter)
         CLONE(density)
         CLONE_ARRAY(data.raw)
+        CLONE_ARRAY(length.track)
         CLONE(flags)
 
         return *this;
@@ -149,6 +147,7 @@ private:
         << diameter
         << density
         << data.raw
+        << length.track
         << flags;
     };
 

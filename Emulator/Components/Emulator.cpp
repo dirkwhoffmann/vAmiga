@@ -50,7 +50,7 @@ Emulator::launch(const void *listener, Callback *func)
     main.msgQueue.setListener(listener, func);
 
     // Disable the message queue of the run-ahead instance
-    // ahead.msgQueue.disable();
+    ahead.msgQueue.disable();
 
     // Launch the emulator thread
     Thread::launch();

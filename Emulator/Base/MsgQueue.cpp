@@ -32,7 +32,9 @@ MsgQueue::setListener(const void *listener, Callback *callback)
 void
 MsgQueue::put(const Message &msg)
 {
-    {   SYNCHRONIZED
+    if (enabled) {
+
+        SYNCHRONIZED
 
         debug(QUEUE_DEBUG, "%s [%llx]\n", MsgTypeEnum::key(msg.type), msg.value);
 

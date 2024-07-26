@@ -209,7 +209,6 @@ FloppyDisk::writeByte(Cylinder c, Head h, isize offset, u8 value)
 void
 FloppyDisk::clearDisk()
 {
-    fnv = 0;
     setModified(FORCE_DISK_MODIFIED);
 
     // Initialize with random data
