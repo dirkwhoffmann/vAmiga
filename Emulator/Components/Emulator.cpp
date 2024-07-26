@@ -511,15 +511,18 @@ Emulator::missingFrames() const
     return isize(target - frameCounter);
 }
 
-/*
-u32 *
+const FrameBuffer &
 Emulator::getTexture() const
 {
-    return main.config.runAhead && isRunning() ?
+    auto &result = main.config.runAhead && isRunning() ?
     ahead.videoPort.getTexture() :
     main.videoPort.getTexture();
+
+    // printf("Frame: %lld\n", result.nr);
+    return result;
 }
 
+/*
 u32 *
 Emulator::getDmaTexture() const
 {

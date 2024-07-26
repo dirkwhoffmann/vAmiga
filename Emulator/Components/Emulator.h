@@ -160,6 +160,13 @@ public:
 
 
     //
+    // Audio and Video
+    //
+
+    const FrameBuffer &getTexture() const;
+    
+
+    //
     // Command queue
     //
 

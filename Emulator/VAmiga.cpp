@@ -820,14 +820,14 @@ VideoPortAPI::getTexture() const
 const u32 *
 VideoPortAPI::getTexture() const
 {
-    return videoPort->getTexture().pixels.ptr;
+    return emu->getTexture().pixels.ptr;
 }
 
 const u32 *
 VideoPortAPI::getTexture(isize *nr, bool *lof, bool *prevlof) const
 {
-    auto &frameBuffer = videoPort->getTexture();
-    
+    auto &frameBuffer = emu->getTexture();
+
     *nr = isize(frameBuffer.nr);
     *lof = frameBuffer.lof;
     *prevlof = frameBuffer.prevlof;

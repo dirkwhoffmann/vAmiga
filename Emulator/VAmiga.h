@@ -1123,8 +1123,8 @@ public:
 
     /** @brief  Returns a pointer to the most recent stable texture
      *
-     * The texture dimensions are given by constants vc64::Texture::width
-     * and vc64::Texture::height texels. Each texel is represented by a
+     * The texture dimensions are given by constants vamiga::Texture::width
+     * and vamiga::Texture::height texels. Each texel is represented by a
      * 32 bit color value.
      */
     // const class FrameBuffer &getTexture() const;

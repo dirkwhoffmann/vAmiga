@@ -111,9 +111,7 @@ void
 Joystick::setButton(bool value)
 {
     button = value;
-    printf("button = %d\n", button);
 }
-
 
 bool
 Joystick::isAutofiring()
