@@ -79,6 +79,9 @@ class HardDrive : public Drive, public Inspectable<HardDriveInfo> {
     // Disk data
     Buffer<u8> data;
     
+    // Keeps track of modified blocks (to update the run-ahead instance)
+    Buffer<bool> dirty;
+
     // Current position of the read/write head
     DriveHead head;
 
@@ -102,27 +105,7 @@ public:
     HardDrive(Amiga& ref, isize nr);
     ~HardDrive();
     
-    HardDrive& operator= (const HardDrive& other) {
-
-        CLONE(head)
-        CLONE(state)
-
-        CLONE(config)
-        CLONE(diskVendor)
-        CLONE(diskProduct)
-        CLONE(diskRevision)
-        CLONE(controllerVendor)
-        CLONE(controllerProduct)
-        CLONE(controllerRevision)
-        CLONE(geometry)
-        CLONE(ptable)
-        CLONE(drivers)
-        CLONE(data)
-        CLONE(flags)
-        CLONE(bootable)
-
-        return *this;
-    }
+    HardDrive& operator= (const HardDrive& other);
 
     // Creates a hard drive with a certain geometry
     void init(const GeometryDescriptor &geometry);

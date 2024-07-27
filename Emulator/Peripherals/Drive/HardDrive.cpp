@@ -29,10 +29,52 @@ HardDrive::~HardDrive()
     disableWriteThrough();
 }
 
+HardDrive& 
+HardDrive::operator= (const HardDrive& other) {
+
+    CLONE(config)
+
+    CLONE(diskVendor)
+    CLONE(diskProduct)
+    CLONE(diskRevision)
+    CLONE(controllerVendor)
+    CLONE(controllerProduct)
+    CLONE(controllerRevision)
+    CLONE(geometry)
+    CLONE(ptable)
+    CLONE(drivers)
+    CLONE(head)
+    CLONE(state)
+    CLONE(flags)
+    CLONE(bootable)
+
+    if (RUA_ON_STEROIDS) {
+
+        // Clone all blocks
+        CLONE(data)
+
+    } else {
+
+        // Clone dirty blocks
+        data.resize(other.data.size);
+        for (isize i = 0; i < other.dirty.size; i++) {
+
+            if (other.dirty[i]) {
+
+                debug(RUA_DEBUG, "Cloning block %ld\n", i);
+                memcpy(data.ptr + 512 * i, other.data.ptr + 512 * i, 512);
+            }
+        }
+    }
+
+    return *this;
+}
+
 void
 HardDrive::init()
 {
     data.dealloc();
+    dirty.dealloc();
 
     diskVendor = "VAMIGA";
     diskProduct = "VDRIVE";
@@ -62,6 +104,7 @@ HardDrive::init(const GeometryDescriptor &geometry)
 
     // Create the new drive
     data.resize(geometry.numBytes());
+    dirty.resize(geometry.numBytes() / 512, true);
 }
 
 void
@@ -204,6 +247,9 @@ void
 HardDrive::_didReset(bool hard)
 {
     if (FORCE_HDR_MODIFIED) { setFlag(FLAG_MODIFIED, true); }
+
+    // Mark all blocks as dirty
+    dirty.clear(true);
 }
 
 i64
@@ -339,6 +385,9 @@ void
 HardDrive::_didLoad()
 {
     disableWriteThrough();
+
+    // Mark all blocks as dirty
+    dirty.clear(true);
 }
 
 void

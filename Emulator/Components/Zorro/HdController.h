@@ -77,11 +77,13 @@ public:
 
         CLONE(baseAddr)
         CLONE(state)
-        CLONE(hdcState)
-        CLONE(numPartitions)
-        CLONE(pointer)
 
         CLONE(config)
+
+        CLONE(hdcState)
+        CLONE(rom)
+        CLONE(numPartitions)
+        CLONE(pointer)
 
         return *this;
     }
