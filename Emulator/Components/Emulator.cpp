@@ -177,7 +177,6 @@ void
 Emulator::put(const Cmd &cmd)
 {
     cmdQueue.put(cmd);
-    isDirty = true;
 }
 
 /*
@@ -391,6 +390,8 @@ Emulator::update()
 
     while (cmdQueue.poll(cmd)) {
 
+        isDirty = true;
+        
         switch (cmd.type) {
 
             case CMD_CONFIG:
@@ -521,7 +522,6 @@ Emulator::getTexture() const
     ahead.videoPort.getTexture() :
     main.videoPort.getTexture();
 
-    // printf("Frame: %lld\n", result.nr);
     return result;
 }
 

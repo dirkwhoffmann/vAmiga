@@ -80,8 +80,11 @@ public:
         CLONE(mouse)
         CLONE(joystick)
 
+        CLONE(device)
         CLONE(mouseCounterX)
         CLONE(mouseCounterY)
+        CLONE(mouseX)
+        CLONE(mouseY)
         CLONE(chargeDX)
         CLONE(chargeDY)
 

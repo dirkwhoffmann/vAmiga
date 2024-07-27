@@ -245,7 +245,7 @@ class Canvas: Layer {
             debug(.vsync, "Frame sync mismatch (\(prevNr) -> \(nr))")
 
             // Return immediately if we alredy have this texture
-            if nr == prevNr { return }
+            // if nr == prevNr { return }
         }
         prevNr = nr
 

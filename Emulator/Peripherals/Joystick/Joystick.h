@@ -74,11 +74,16 @@ public:
 
     Joystick& operator= (const Joystick& other) {
 
+        CLONE(config)
+
         CLONE(button)
+        CLONE(button2)
+        CLONE(button3)
         CLONE(axisX)
         CLONE(axisY)
-
-        CLONE(config)
+        CLONE(bulletCounter)
+        CLONE(nextAutofireFrame)
+        CLONE(nextAutofireReleaseFrame)
 
         return *this;
     }
@@ -101,7 +106,10 @@ private:
             << button2
             << button3
             << axisX
-            << axisY;
+            << axisY
+            << bulletCounter
+            << nextAutofireFrame
+            << nextAutofireReleaseFrame;
         }
 
     } SERIALIZERS(serialize);
