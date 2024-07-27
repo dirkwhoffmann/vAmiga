@@ -257,13 +257,11 @@ CoreComponent::diff(CoreComponent &other)
 
     // Compare all subcomponents
     for (usize i = 0; i < num; i++) {
-        printf("Checking %s...\n", subComponents[i]->objectName());
         subComponents[i]->diff(*other.subComponents[i]);
     }
 
     // Compare this component
     if (auto check1 = checksum(false), check2 = other.checksum(false); check1 != check2) {
-        // printf("%s\n", objectName());
         debug(true, "Checksum mismatch: %llx != %llx\n", check1, check2);
     }
 }

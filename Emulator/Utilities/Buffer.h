@@ -81,6 +81,8 @@ template <class T> struct Buffer : public Allocator <T> {
     Buffer(const std::filesystem::path &path, const string &name)
     : Allocator<T>(ptr) { this->init(path, name); }
     
+    Buffer& operator= (const Buffer& other) { Allocator<T>::operator=(other); return *this; }
+
     T operator [] (isize i) const { return ptr[i]; }
     T &operator [] (isize i) { return ptr[i]; }
 };
