@@ -883,6 +883,10 @@ extension DefaultsProxy {
         remove(.HDR_TYPE, [0, 1, 2, 3])
         remove(.SER_DEVICE)
         remove(.SRV_PORT, nr: ServerType.SER.rawValue)
+        remove(.JOY_AUTOFIRE, [0, 1])
+        remove(.JOY_AUTOFIRE_BURSTS, [0, 1])
+        remove(.JOY_AUTOFIRE_BULLETS, [0, 1])
+        remove(.JOY_AUTOFIRE_DELAY, [0, 1])
         removeKey(Keys.Per.gameDevice1)
         removeKey(Keys.Per.gameDevice2)
     }
@@ -925,9 +929,14 @@ extension Configuration {
         defaults.set(.SER_DEVICE, serialDevice)
         defaults.set(.SRV_PORT, ServerType.SER.rawValue, serialDevicePort)
 
+        defaults.set(.JOY_AUTOFIRE, [0, 1], autofire)
+        defaults.set(.JOY_AUTOFIRE_BURSTS, [0, 1], autofireBursts)
+        defaults.set(.JOY_AUTOFIRE_BULLETS, [0, 1], autofireBullets)
+        defaults.set(.JOY_AUTOFIRE_DELAY, [0, 1], autofireDelay)
+
         defaults.set(Keys.Per.gameDevice1, gameDevice1)
         defaults.set(Keys.Per.gameDevice2, gameDevice2)
-        
+
         defaults.save()
         
         amiga.resume()
@@ -970,6 +979,11 @@ extension Configuration {
 
         gameDevice1 = defaults.int(Keys.Per.gameDevice1)
         gameDevice2 = defaults.int(Keys.Per.gameDevice2)
+
+        autofire = defaults.get(.JOY_AUTOFIRE, 0) != 0
+        autofireBursts = defaults.get(.JOY_AUTOFIRE_BURSTS, 0) != 0
+        autofireBullets = defaults.get(.JOY_AUTOFIRE_BULLETS, 0)
+        autofireDelay = defaults.get(.JOY_AUTOFIRE_DELAY, 0)
 
         amiga.resume()
     }

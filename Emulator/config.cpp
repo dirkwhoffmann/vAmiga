@@ -24,7 +24,7 @@ debugflag QUEUE_DEBUG     = 0; // Message queue
 debugflag SNP_DEBUG       = 0; // Serialization (snapshots)
 
 // Run ahead
-debugflag RUA_DEBUG       = 1;
+debugflag RUA_DEBUG       = 0;
 debugflag RUA_ON_STEROIDS = 0;
 
 // CPU
@@ -105,7 +105,7 @@ debugflag DISABLE_AUDIRQ  = 0; // Disable audio interrupts
 debugflag POSREG_DEBUG    = 0; // POSxxx registers
 debugflag JOYREG_DEBUG    = 0; // JOYxxx registers
 debugflag POTREG_DEBUG    = 0; // POTxxx registers
-debugflag PRT_DEBUG       = 1; // Control ports and connected devices
+debugflag PRT_DEBUG       = 0; // Control ports and connected devices
 debugflag SER_DEBUG       = 0; // Serial interface
 debugflag POT_DEBUG       = 0; // Potentiometer inputs
 debugflag HOLD_MOUSE_L    = 0; // Hold down the left mouse button

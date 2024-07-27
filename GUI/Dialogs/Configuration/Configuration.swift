@@ -295,7 +295,7 @@ class Configuration {
         set { amiga.set(.JOY_AUTOFIRE_BULLETS, value: newValue) }
     }
 
-    var autofireFrequency: Int {
+    var autofireDelay: Int {
         get { return amiga.get(.JOY_AUTOFIRE_DELAY, id: 1) }
         set { amiga.set(.JOY_AUTOFIRE_DELAY, value: newValue) }
     }

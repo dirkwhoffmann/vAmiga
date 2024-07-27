@@ -618,12 +618,16 @@ Emulator::recreateRunAheadInstance()
 {
     auto &config = main.getConfig();
 
-    debug(RUA_DEBUG, "%lld: Recomputing the run-ahead instance\n", main.agnus.pos.frame);
+    // debug(RUA_DEBUG, "%lld: Recomputing the run-ahead instance\n", main.agnus.pos.frame);
+    debug(true, "%lld: Recomputing the run-ahead instance\n", main.agnus.pos.frame);
 
     // clones++;
 
     // Recreate the runahead instance from scratch
     ahead = main; isDirty = false;
+
+    // REMOVE ASAP
+    main = ahead;
 
     if (RUA_DEBUG && ahead != main) {
 

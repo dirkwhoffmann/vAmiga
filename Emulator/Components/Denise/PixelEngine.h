@@ -111,6 +111,7 @@ public:
 
     PixelEngine& operator= (const PixelEngine& other) {
 
+        CLONE_ARRAY(colorSpace)
         CLONE(colChanges)
         CLONE_ARRAY(color)
         CLONE(hamMode)

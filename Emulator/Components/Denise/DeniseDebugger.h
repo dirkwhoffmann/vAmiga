@@ -60,7 +60,12 @@ public:
     
     using SubComponent::SubComponent;
 
+    DeniseDebugger& operator= (const DeniseDebugger& other) {
 
+        return *this;
+    }
+
+    
     //
     // Methods from Serializable
     //

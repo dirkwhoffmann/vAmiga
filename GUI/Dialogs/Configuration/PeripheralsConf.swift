@@ -11,12 +11,14 @@ extension ConfigurationController {
 
     func refreshPeripheralsTab() {
 
-        func update(_ component: NSTextField, enable: Bool) {
+        func update(_ component: NSTextField, enable: Bool = true, hidden: Bool = false) {
             component.textColor = enable ? .controlTextColor : .disabledControlTextColor
             component.isEnabled = enable
+            component.isHidden = hidden
         }
-        func update(_ component: NSControl, enable: Bool) {
+        func update(_ component: NSControl, enable: Bool = true, hidden: Bool = false) {
             component.isEnabled = enable
+            component.isHidden = hidden
         }
         
         let poweredOff = emu.poweredOff
@@ -52,18 +54,19 @@ extension ConfigurationController {
         perSerialPortText.isHidden = config.serialDevice != nullmodem
         
         // Joysticks
-        let enable = config.autofire
-        perAutofire.state = enable ? .on : .off
+        let autofire = config.autofire
+        let bursts = config.autofireBursts
+        perAutofire.state = autofire ? .on : .off
         perAutofireCease.state = config.autofireBursts ? .on : .off
         perAutofireBullets.integerValue = config.autofireBullets
-        perAutofireFrequency.integerValue = config.autofireFrequency
-        update(perAutofireFrequency, enable: enable)
-        update(perAutofireFrequencyText1, enable: enable)
-        update(perAutofireFrequencyText2, enable: enable)
-        update(perAutofireCease, enable: enable)
-        update(perAutofireCeaseText, enable: enable)
-        update(perAutofireBullets, enable: enable && perAutofireCease.state == .on)
-        update(perAutofireBulletsText, enable: enable && perAutofireCease.state == .on)
+        perAutofireFrequency.integerValue = config.autofireDelay
+        update(perAutofireFrequency, hidden: !autofire)
+        update(perAutofireFrequencyText1, hidden: !autofire)
+        update(perAutofireFrequencyText2, hidden: !autofire)
+        update(perAutofireCease, hidden: !autofire)
+        update(perAutofireCeaseText, hidden: !autofire)
+        update(perAutofireBullets, hidden: !autofire || !bursts)
+        update(perAutofireBulletsText, hidden: !autofire || !bursts)
 
         // Lock controls if emulator is powered on
         perDf1Connect.isEnabled = poweredOff
@@ -159,7 +162,7 @@ extension ConfigurationController {
 
     @IBAction func perAutofireFrequencyAction(_ sender: NSSlider!) {
 
-        config.autofireFrequency = sender.integerValue
+        config.autofireDelay = sender.integerValue
     }
 
     @IBAction func perSerialDeviceAction(_ sender: NSPopUpButton!) {

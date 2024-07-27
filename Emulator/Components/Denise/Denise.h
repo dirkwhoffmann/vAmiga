@@ -333,14 +333,13 @@ public:
 
     Denise& operator= (const Denise& other) {
 
+        CLONE(config)
+
         CLONE(pixelEngine)
+        CLONE(debugger)
         CLONE(screenRecorder)
 
-        CLONE_ARRAY(dBuffer)
-        CLONE_ARRAY(bBuffer)
-        CLONE_ARRAY(iBuffer)
-        CLONE_ARRAY(mBuffer)
-        CLONE_ARRAY(zBuffer)
+        CLONE(clock)
 
         CLONE(diwstrt)
         CLONE(diwstop)
@@ -368,7 +367,7 @@ public:
         CLONE(armedOdd)
         CLONE(armedEven)
         CLONE(conChanges)
-        CLONE_ARRAY(sprChanges)
+        for (isize i = 0; i < 4; i++) CLONE(sprChanges[i])
         CLONE(diwChanges)
 
         CLONE_ARRAY(sprdata)
@@ -384,9 +383,11 @@ public:
         CLONE(spriteClipBegin)
         CLONE(spriteClipEnd)
 
-        CLONE(clock)
-
-        CLONE(config)
+        CLONE_ARRAY(dBuffer)
+        CLONE_ARRAY(bBuffer)
+        CLONE_ARRAY(iBuffer)
+        CLONE_ARRAY(mBuffer)
+        CLONE_ARRAY(zBuffer)
 
         return *this;
     }
