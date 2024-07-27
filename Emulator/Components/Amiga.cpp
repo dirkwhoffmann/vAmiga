@@ -1202,4 +1202,22 @@ Amiga::setDebugVariable(const string &name, int val)
 #endif
 }
 
+u32
+Amiga::random()
+{
+    return random(u32(agnus.clock));
+}
+
+u32
+Amiga::random(u32 seed)
+{
+    // Parameters for the Linear Congruential Generator (LCG)
+    u64 a = 1664525;
+    u64 c = 1013904223;
+    u64 m = 1LL << 32;
+
+    // Apply the LCG formula
+    return u32((a * seed + c) % m);
+}
+
 }

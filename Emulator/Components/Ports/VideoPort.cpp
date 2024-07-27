@@ -117,42 +117,4 @@ VideoPort::getTexture() const
     return blank;
 }
 
-/*
-u32 *
-VideoPort::getNoiseTexture() const
-{
-    static u32 *noise = nullptr;
-    constexpr isize noiseSize = 16 * 512 * 512;
-
-    if (!noise) {
-
-        noise = new u32[noiseSize];
-
-        for (isize i = 0; i < noiseSize; i++) {
-            noise[i] = rand() % 2 ? 0xFF000000 : 0xFFFFFFFF;
-        }
-    }
-
-    int offset = rand() % (512 * 512);
-    return noise + offset;
-}
-
-u32 *
-VideoPort::getBlankTexture() const
-{
-    static u32 *blank = nullptr;
-
-    if (!blank) {
-
-        blank = new u32[Texture::height * Texture::width];
-
-        for (isize i = 0; i < Texture::height * Texture::width; i++) {
-            blank[i] = 0xFF000000;
-        }
-    }
-
-    return blank;
-}
-*/
-
 }

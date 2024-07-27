@@ -485,6 +485,12 @@ public:
 
     // Modifies an internal debug variable (only available in debug builds)
     static void setDebugVariable(const string &name, int val);
+
+    // Translates the current clock cycle into pseudo-random number
+    u32 random();
+
+    // Translates seed into a pseudo-random number
+    u32 random(u32 seed);
 };
 
 }

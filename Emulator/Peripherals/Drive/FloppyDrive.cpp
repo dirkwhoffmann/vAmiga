@@ -664,8 +664,8 @@ FloppyDrive::readByte() const
     if (!disk) return 0xFF;
 
     // Case 2: A step operation is in progress
-    if (agnus.clock < latestStepCompleted) return u8(rand() & 0x55);
-    
+    if (agnus.clock < latestStepCompleted) return u8(amiga.random() & 0x55);
+
     // Case 3: Normal operation
     return disk->readByte(head.cylinder, head.head, head.offset);
 }
