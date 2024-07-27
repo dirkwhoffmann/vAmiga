@@ -367,7 +367,8 @@ public:
         CLONE(armedOdd)
         CLONE(armedEven)
         CLONE(conChanges)
-        for (isize i = 0; i < 4; i++) CLONE(sprChanges[i])
+        // for (isize i = 0; i < 4; i++) CLONE(sprChanges[i])
+        CLONE_ARRAY(sprChanges)
         CLONE(diwChanges)
 
         CLONE_ARRAY(sprdata)

@@ -169,6 +169,7 @@ private:
         << latestStepUp
         << latestStepDown
         << latestStep
+        << latestStepCompleted
         << dskchange
         << dsklen
         << prb

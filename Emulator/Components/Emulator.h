@@ -127,7 +127,6 @@ private:
     bool shouldWarp() const;
     isize missingFrames() const override;
     void computeFrame() override;
-    void recreateRunAheadInstance();
 
     void _powerOn() override { main.powerOn(); }
     void _powerOff() override { main.powerOff(); }
@@ -144,6 +143,19 @@ private:
 public:
 
     double refreshRate() const override;
+
+
+    //
+    // Managing the run-ahead instance
+    //
+
+private:
+    
+    // Clones the run-ahead instance
+    void cloneRunAheadInstance();
+
+    // Clones the run-ahead instance and fast forwards it to the proper frame
+    void recreateRunAheadInstance();
 
 
     //

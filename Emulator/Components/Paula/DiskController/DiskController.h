@@ -114,6 +114,8 @@ public:
 
     DiskController& operator= (const DiskController& other) {
 
+        CLONE(config)
+
         CLONE(selected)
         CLONE(state)
         CLONE(syncCycle)
@@ -127,8 +129,6 @@ public:
         CLONE(dsklen)
         CLONE(dsksync)
         CLONE(prb)
-
-        CLONE(config)
 
         return *this;
     }

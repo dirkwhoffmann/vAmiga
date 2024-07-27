@@ -613,30 +613,41 @@ Emulator::computeFrame()
     }
 }
 
-void
-Emulator::recreateRunAheadInstance()
+void 
+Emulator::cloneRunAheadInstance()
 {
-    auto &config = main.getConfig();
-
-    // debug(RUA_DEBUG, "%lld: Recomputing the run-ahead instance\n", main.agnus.pos.frame);
-    debug(true, "%lld: Recomputing the run-ahead instance\n", main.agnus.pos.frame);
-
     // clones++;
 
     // Recreate the runahead instance from scratch
     ahead = main; isDirty = false;
 
-    // REMOVE ASAP
-    main = ahead;
-
-    if (RUA_DEBUG && ahead != main) {
+    if (RUA_CHECKSUM && ahead != main) {
 
         main.diff(ahead);
         fatal("Corrupted run-ahead clone detected");
     }
+}
+
+void
+Emulator::recreateRunAheadInstance()
+{
+    auto &config = main.getConfig();
+
+    // Clone the main instance
+    if (RUA_DEBUG) {
+        util::StopWatch watch("Run-ahead: Clone");
+        cloneRunAheadInstance();
+    } else {
+        cloneRunAheadInstance();
+    }
 
     // Advance to the proper frame
-    ahead.fastForward(config.runAhead - 1);
+    if (RUA_DEBUG) {
+        util::StopWatch watch("Run-ahead: Fast-forward");
+        ahead.fastForward(config.runAhead - 1);
+    } else {
+        ahead.fastForward(config.runAhead - 1);
+    }
 }
 
 void
@@ -669,6 +680,7 @@ Emulator::getDebugVariable(DebugFlag flag)
         case FLAG_SNP_DEBUG:        return SNP_DEBUG;
 
         case FLAG_RUA_DEBUG:        return RUA_DEBUG;
+        case FLAG_RUA_CHECKSUM:     return RUA_CHECKSUM;
         case FLAG_RUA_ON_STEROIDS:  return RUA_ON_STEROIDS;
 
         case FLAG_CPU_DEBUG:        return CPU_DEBUG;

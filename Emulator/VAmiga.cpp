@@ -910,7 +910,7 @@ FloppyDriveAPI::getDisk()
 }
 
 bool
-FloppyDriveAPI::getFlag(DiskFlags mask)
+FloppyDriveAPI::getFlag(DiskFlags mask) const
 {
     return drive->getFlag(mask);
 }
@@ -919,6 +919,7 @@ void
 FloppyDriveAPI::setFlag(DiskFlags mask, bool value)
 {
     drive->setFlag(mask, value);
+    emu->isDirty = true;
 }
 
 bool 
@@ -931,12 +932,14 @@ void
 FloppyDriveAPI::insertBlankDisk(FSVolumeType fstype, BootBlockId bb, string name)
 {
     drive->insertNew(fstype, bb, name);
+    emu->isDirty = true;
 }
 
 void
 FloppyDriveAPI::insertMedia(MediaFile &file, bool wp)
 {
     drive->insertMediaFile(file, wp);
+    emu->isDirty = true;
 }
 
 /*

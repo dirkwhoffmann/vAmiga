@@ -671,7 +671,7 @@ public:
 
     /** @brief Queries a disk flag
      */
-    bool getFlag(DiskFlags mask);
+    bool getFlag(DiskFlags mask) const;
 
     /** @brief Sets or clears one or more disk flags
      */

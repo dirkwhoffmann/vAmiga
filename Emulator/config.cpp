@@ -24,7 +24,8 @@ debugflag QUEUE_DEBUG     = 0; // Message queue
 debugflag SNP_DEBUG       = 0; // Serialization (snapshots)
 
 // Run ahead
-debugflag RUA_DEBUG       = 0;
+debugflag RUA_DEBUG       = 1;
+debugflag RUA_CHECKSUM    = 0;
 debugflag RUA_ON_STEROIDS = 0;
 
 // CPU

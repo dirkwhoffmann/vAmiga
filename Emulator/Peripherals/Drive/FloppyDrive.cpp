@@ -38,6 +38,8 @@ FloppyDrive::operator= (const FloppyDrive& other) {
     clone(disk, other.disk);
     clone(diskToInsert, other.diskToInsert);
 
+    CLONE(config)
+
     CLONE(head)
     CLONE(motor)
     CLONE(switchCycle)
@@ -47,12 +49,11 @@ FloppyDrive::operator= (const FloppyDrive& other) {
     CLONE(latestStepUp)
     CLONE(latestStepDown)
     CLONE(latestStep)
+    CLONE(latestStepCompleted)
     CLONE(dskchange)
     CLONE(dsklen)
     CLONE(prb)
     CLONE(cylinderHistory)
-
-    CLONE(config)
 
     return *this;
 }
@@ -1106,22 +1107,10 @@ FloppyDrive::insertMediaFile(class MediaFile &file, bool wp)
         const ADFFile &adf = dynamic_cast<const ADFFile &>(file);
         swapDisk(std::make_unique<FloppyDisk>(adf, wp));
 
-        /*
-    } catch (...) { try {
-
-        const G64File &g64 = dynamic_cast<const G64File &>(file);
-        insertDisk(std::make_unique<Disk>(g64, wp));
-
-    } catch (...) { try {
-
-        AnyCollection &collection = dynamic_cast<AnyCollection &>(file);
-        insertDisk(std::make_unique<Disk>(collection, wp));
-         */
-
     } catch (...) {
 
         throw Error(ERROR_FILE_TYPE_MISMATCH);
-    } // }}
+    }
 }
 
 template <EventSlot s> void
