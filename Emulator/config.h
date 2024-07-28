@@ -59,16 +59,10 @@
  { \
  { OPT_AGNUS_REVISION,   AGNUS_OCS      }, \
  { OPT_BLITTER_ACCURACY, 0              }, \
- { OPT_CHIP_RAM,         512            }, \
- { OPT_SLOW_RAM,         512            }, \
- { OPT_FAST_RAM,         0              }, \
- { OPT_RTC_MODEL,        RTC_NONE       }, \
- { OPT_DRIVE_SPEED,      -1             }  }
+ { OPT_MEM_CHIP_RAM,     512            }, \
+ { OPT_MEM_SLOW_RAM,     512            }, \
+ { OPT_MEM_FAST_RAM,     0              }
 */
-
-// Uncomment to colorize a certain scanline
-// #define LINE_DEBUG (vpos == 0 || vpos == 160)
-// #define LINE_DEBUG (vpos == 200)
 
 
 //
@@ -98,10 +92,10 @@
 // Video settings
 //
 
-/* Texels per pixel. Set to 1 to generate a texture in hires resolution (every
- * hires pixel is represented by a single texel). Set to 2 to generate a
- * texture in super-hires resolution (every hires pixel is represented by a
- * two texels).
+/* Texels per pixel. Set to 1 to create a texture in hires resolution where
+ * every hires pixel is represented by a single texel). Set to 2 to generate a
+ * texture in super-hires resolution where every hires pixel is represented by
+ * two texels.
  */
 #define TPP 1
 
@@ -206,6 +200,7 @@ extern debugflag DIW_DEBUG;
 extern debugflag SPR_DEBUG;
 extern debugflag CLX_DEBUG;
 extern debugflag BORDER_DEBUG;
+extern debugflag LINE_DEBUG;
 
 // Paula
 extern debugflag INTREG_DEBUG;

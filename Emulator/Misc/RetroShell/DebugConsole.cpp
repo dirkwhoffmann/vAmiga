@@ -1133,12 +1133,28 @@ DebugConsole::initCommands(Command &root)
     //
     {   VAMIGA_GROUP("Miscellaneous");
 
-        root.add({"set"}, { "<variable>", Arg::value },
-                 "Sets an internal debug variable",
+        root.add({"debug"}, "Debug variables");
+
+        root.add({"debug", ""}, {},
+                 "Display all debug variables",
                  [this](Arguments& argv, long value) {
 
-            Amiga::setDebugVariable(argv[0], int(parseNum(argv[1])));
+            dump(emulator, Category::Debug);
         });
+
+        if (debugBuild) {
+
+            for (isize i = DebugFlagEnum::minVal; i < DebugFlagEnum::maxVal; i++) {
+
+                root.add({"debug", DebugFlagEnum::key(i)}, { Arg::boolean },
+                         DebugFlagEnum::help(i),
+                         [this](Arguments& argv, long value) {
+
+                    amiga.setDebugVariable(DebugFlag(value), int(util::parseNum(argv[0])));
+
+                }, i);
+            }
+        }
 
         root.add({"?"}, { Arg::value },
                  "Convert a value into different formats",

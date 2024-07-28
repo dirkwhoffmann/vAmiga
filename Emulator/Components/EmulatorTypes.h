@@ -82,6 +82,7 @@ enum_long(DEBUG_FLAG)
     FLAG_SPR_DEBUG,        ///< Sprites
     FLAG_CLX_DEBUG,        ///< Collision detection
     FLAG_BORDER_DEBUG,     ///< Draw the border in debug colors
+    FLAG_LINE_DEBUG,       ///< Draw the specified line in debug colors
 
     // Paula
     FLAG_INTREG_DEBUG,     ///< Interrupt registers
@@ -222,6 +223,7 @@ struct DebugFlagEnum : util::Reflection<DebugFlagEnum, DebugFlag>
             case FLAG_SPR_DEBUG:        return "SPR_DEBUG";
             case FLAG_CLX_DEBUG:        return "CLX_DEBUG";
             case FLAG_BORDER_DEBUG:     return "BORDER_DEBUG";
+            case FLAG_LINE_DEBUG:       return "LINE_DEBUG";
 
                 // Paula
             case FLAG_INTREG_DEBUG:     return "INTREG_DEBUG";
@@ -350,6 +352,7 @@ struct DebugFlagEnum : util::Reflection<DebugFlagEnum, DebugFlag>
             case FLAG_SPR_DEBUG:        return "Sprites";
             case FLAG_CLX_DEBUG:        return "Collision detection";
             case FLAG_BORDER_DEBUG:     return "Draw the border in debug colors";
+            case FLAG_LINE_DEBUG:       return "Draw a certain line in debug color";
 
                 // Paula
             case FLAG_INTREG_DEBUG:     return "Interrupt registers";

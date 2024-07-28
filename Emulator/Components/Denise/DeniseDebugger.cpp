@@ -122,25 +122,17 @@ DeniseDebugger::getSpriteInfo(isize nr)
 void
 DeniseDebugger::hsyncHandler(isize vpos)
 {
-#ifdef LINE_DEBUG
-
     if (LINE_DEBUG) {
 
-        u32 *ptr = pixelEngine.frameBufferAddr(vpos);
+        if (LINE_DEBUG == vpos) {
 
-        for (Pixel i = 0; i < HPIXELS; i++) {
-            ptr[i] = (i & 1) ? 0xFF0000FF : 0xFFFFFFFF;
+            u32 *ptr = pixelEngine.workingPtr(vpos);
+
+            for (Pixel i = 0; i < HPIXELS; i++) {
+                ptr[i] = (i & 1) ? 0xFF0000FF : 0xFFFFFFFF;
+            }
         }
-
-        trace(false, "BPLCON0: %x BPLCON1: %x Hires: %d BPU: %d\n",
-
-              denise.bplcon0,
-              denise.bplcon1,
-              denise.hires(),
-              denise.bpu());
     }
-
-#endif
 }
 
 void

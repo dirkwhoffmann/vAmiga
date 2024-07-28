@@ -91,7 +91,7 @@ Emulator::_dump(Category category, std::ostream& os) const
         for (isize i = DebugFlagEnum::minVal; i < DebugFlagEnum::maxVal; i++) {
 
             os << tab(DebugFlagEnum::key(i));
-            os << bol(getDebugVariable(DebugFlag(i))) << std::endl;
+            os << dec(getDebugVariable(DebugFlag(i))) << std::endl;
         }
     }
 
@@ -656,7 +656,7 @@ Emulator::isReady()
     main.isReady();
 }
 
-bool
+int
 Emulator::getDebugVariable(DebugFlag flag)
 {
 #ifdef RELEASEBUILD
@@ -720,6 +720,7 @@ Emulator::getDebugVariable(DebugFlag flag)
         case FLAG_SPR_DEBUG:        return SPR_DEBUG;
         case FLAG_CLX_DEBUG:        return CLX_DEBUG;
         case FLAG_BORDER_DEBUG:     return BORDER_DEBUG;
+        case FLAG_LINE_DEBUG:       return LINE_DEBUG;
 
         case FLAG_INTREG_DEBUG:     return INTREG_DEBUG;
         case FLAG_INT_DEBUG:        return INT_DEBUG;
@@ -850,6 +851,7 @@ Emulator::setDebugVariable(DebugFlag flag, bool val)
         case FLAG_SPR_DEBUG:        SPR_DEBUG = val; break;
         case FLAG_CLX_DEBUG:        CLX_DEBUG = val; break;
         case FLAG_BORDER_DEBUG:     BORDER_DEBUG = val; break;
+        case FLAG_LINE_DEBUG:       LINE_DEBUG = val; break;
 
             // Paula
         case FLAG_INTREG_DEBUG:     INTREG_DEBUG = val; break;

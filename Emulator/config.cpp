@@ -71,6 +71,7 @@ debugflag DIW_DEBUG       = 0; // Display window
 debugflag SPR_DEBUG       = 0; // Sprites
 debugflag CLX_DEBUG       = 0; // Collision detection
 debugflag BORDER_DEBUG    = 0; // Draw the border in debug colors
+debugflag LINE_DEBUG      = 0; // Draw a certain line in debug color 
 
 // Paula
 debugflag INTREG_DEBUG    = 0; // Interrupt registers
