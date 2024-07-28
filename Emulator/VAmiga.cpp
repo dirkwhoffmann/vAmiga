@@ -1668,55 +1668,55 @@ VAmiga::getStats() const
 }
 
 bool
-VAmiga::isPoweredOn()
+VAmiga::isPoweredOn() const
 {
     return emu->main.isPoweredOn();
 }
 
 bool
-VAmiga::isPoweredOff()
+VAmiga::isPoweredOff() const
 {
     return emu->main.isPoweredOff();
 }
 
 bool
-VAmiga::isPaused()
+VAmiga::isPaused() const
 {
     return emu->main.isPaused();
 }
 
 bool
-VAmiga::isRunning()
+VAmiga::isRunning() const
 {
     return emu->main.isRunning();
 }
 
 bool
-VAmiga::isSuspended()
+VAmiga::isSuspended() const
 {
     return emu->main.isSuspended();
 }
 
 bool
-VAmiga::isHalted()
+VAmiga::isHalted() const
 {
     return emu->main.isHalted();
 }
 
 bool
-VAmiga::isWarping()
+VAmiga::isWarping() const
 {
     return emu->isWarping();
 }
 
 bool
-VAmiga::isTracking()
+VAmiga::isTracking() const
 {
     return emu->isTracking();
 }
 
 void
-VAmiga::isReady()
+VAmiga::isReady() const
 {
     return emu->isReady();
 }
@@ -1725,42 +1725,49 @@ void
 VAmiga::powerOn()
 {
     emu->Thread::powerOn();
+    emu->isDirty = true;
 }
 
 void
 VAmiga::powerOff()
 {
     emu->Thread::powerOff();
+    emu->isDirty = true;
 }
 
 void
 VAmiga::run()
 {
     emu->run();
+    emu->isDirty = true;
 }
 
 void
 VAmiga::pause()
 {
     emu->pause();
+    emu->isDirty = true;
 }
 
 void 
 VAmiga::hardReset()
 {
     emu->hardReset();
+    emu->isDirty = true;
 }
 
 void
 VAmiga::softReset()
 {
     emu->softReset();
+    emu->isDirty = true;
 }
 
 void
 VAmiga::halt()
 {
     emu->halt();
+    emu->isDirty = true;
 }
 
 void
@@ -1849,7 +1856,7 @@ VAmiga::set(ConfigScheme model)
 {
     assert(isUserThread());
     emu->set(model);
-    // emu->main.markAsDirty();
+    emu->isDirty = true;
 }
 
 void
@@ -1859,7 +1866,7 @@ VAmiga::set(Option opt, i64 value) throws
 
     emu->check(opt, value);
     put(CMD_CONFIG_ALL, ConfigCmd { .option = opt, .value = value });
-    // emu->main.markAsDirty();
+    emu->isDirty = true;
 }
 
 void
@@ -1869,7 +1876,7 @@ VAmiga::set(Option opt, i64 value, long id)
 
     emu->check(opt, value, { id });
     put(CMD_CONFIG, ConfigCmd { .option = opt, .value = value, .id = id });
-    // emu->main.markAsDirty();
+    emu->isDirty = true;
 }
 
 void
@@ -1908,10 +1915,11 @@ void
 AmigaAPI::loadSnapshot(const MediaFile &snapshot)
 {
     amiga->loadSnapshot(snapshot);
+    emu->isDirty = true;
 }
     
 u64
-AmigaAPI::getAutoInspectionMask()
+AmigaAPI::getAutoInspectionMask() const
 {
     return amiga->getAutoInspectionMask();
 }

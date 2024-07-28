@@ -113,7 +113,7 @@ public:
      *
      *  @return A bit mask indicating the components under inspection
      */
-    u64 getAutoInspectionMask();
+    u64 getAutoInspectionMask() const;
 
     /** @brief  Sets the current auto-inspection mask
      *
@@ -1647,42 +1647,42 @@ public:
 
     /** @brief  Returns true iff the emulator if the emulator is powered on.
      */
-    bool isPoweredOn();
+    bool isPoweredOn() const;
 
     /** @brief  Returns true iff the emulator if the emulator is powered off.
      */
-    bool isPoweredOff();
+    bool isPoweredOff() const;
 
     /** @brief  Returns true iff the emulator is in paused state.
      */
-    bool isPaused();
+    bool isPaused() const;
 
     /** @brief  Returns true iff the emulator is running.
      */
-    bool isRunning();
+    bool isRunning() const;
 
     /** @brief  Returns true iff the emulator has been suspended.
      */
-    bool isSuspended();
+    bool isSuspended() const;
 
     /** @brief  Returns true iff the emulator has shut down.
      */
-    bool isHalted();
+    bool isHalted() const;
 
     /** @brief  Returns true iff warp mode is active.
      */
-    bool isWarping();
+    bool isWarping() const;
 
     /** @brief  Returns true iff the emulator runs in track mode.
      */
-    bool isTracking();
+    bool isTracking() const;
 
     /** @brief  Checks if the emulator is runnable.
      *  The function checks if the necessary ROMs are installed to lauch the
      *  emulator. On success, the functions returns. Otherwise, an exception
      *  is thrown.
      */
-    void isReady();
+    void isReady() const;
 
 
     /// @}
