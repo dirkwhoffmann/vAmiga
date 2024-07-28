@@ -10,6 +10,7 @@
 #import "config.h"
 #import "EmulatorProxy.h"
 #import "VAmiga.h"
+#import "MutableFileSystem.h"
 #import "vAmiga-Swift.h"
 
 using namespace vamiga;

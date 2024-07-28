@@ -14,9 +14,6 @@
 #include "MediaFile.h"
 #include <filesystem>
 
-// REMOVE EVENTUALLY:
-#include "Emulator.h"
-#include "MutableFileSystem.h"
 
 namespace vamiga {
 
