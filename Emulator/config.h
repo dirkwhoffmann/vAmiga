@@ -104,8 +104,6 @@
 // Execution settings
 //
 
-static const int NO_SEQ_FASTPATH = 0; // Disable sequencer fast path
-static const int NO_BPL_FASTPATH = 0; // Disable drawing fast path
 static const int DIAG_BOARD      = 0; // Plug in the diagnose board
 
 
@@ -171,6 +169,7 @@ extern debugflag MEM_DEBUG;
 extern debugflag DMA_DEBUG;
 extern debugflag DDF_DEBUG;
 extern debugflag SEQ_DEBUG;
+extern debugflag SEQ_ON_STEROIDS;
 extern debugflag NTSC_DEBUG;
 
 // Copper
@@ -195,12 +194,13 @@ extern debugflag BPLMOD_DEBUG;
 extern debugflag SPRREG_DEBUG;
 extern debugflag COLREG_DEBUG;
 extern debugflag CLXREG_DEBUG;
-extern debugflag BPL_DEBUG;
+extern debugflag BPL_ON_STEROIDS;
 extern debugflag DIW_DEBUG;
 extern debugflag SPR_DEBUG;
 extern debugflag CLX_DEBUG;
 extern debugflag BORDER_DEBUG;
 extern debugflag LINE_DEBUG;
+extern debugflag DENISE_ON_STEROIDS;
 
 // Paula
 extern debugflag INTREG_DEBUG;

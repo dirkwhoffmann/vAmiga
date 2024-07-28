@@ -1111,6 +1111,7 @@ Amiga::getDebugVariable(DebugFlag flag)
         case FLAG_DMA_DEBUG:        return DMA_DEBUG;
         case FLAG_DDF_DEBUG:        return DDF_DEBUG;
         case FLAG_SEQ_DEBUG:        return SEQ_DEBUG;
+        case FLAG_SEQ_ON_STEROIDS:  return SEQ_ON_STEROIDS;
         case FLAG_NTSC_DEBUG:       return NTSC_DEBUG;
 
         case FLAG_COP_CHECKSUM:     return COP_CHECKSUM;
@@ -1132,7 +1133,7 @@ Amiga::getDebugVariable(DebugFlag flag)
         case FLAG_SPRREG_DEBUG:     return SPRREG_DEBUG;
         case FLAG_COLREG_DEBUG:     return COLREG_DEBUG;
         case FLAG_CLXREG_DEBUG:     return CLXREG_DEBUG;
-        case FLAG_BPL_DEBUG:        return BPL_DEBUG;
+        case FLAG_BPL_ON_STEROIDS:  return BPL_ON_STEROIDS;
         case FLAG_DIW_DEBUG:        return DIW_DEBUG;
         case FLAG_SPR_DEBUG:        return SPR_DEBUG;
         case FLAG_CLX_DEBUG:        return CLX_DEBUG;
@@ -1233,6 +1234,7 @@ Amiga::setDebugVariable(DebugFlag flag, int val)
         case FLAG_DMA_DEBUG:        DMA_DEBUG       = val; break;
         case FLAG_DDF_DEBUG:        DDF_DEBUG       = val; break;
         case FLAG_SEQ_DEBUG:        SEQ_DEBUG       = val; break;
+        case FLAG_SEQ_ON_STEROIDS:  SEQ_ON_STEROIDS = val; break;
         case FLAG_NTSC_DEBUG:       NTSC_DEBUG      = val; break;
 
         case FLAG_COP_CHECKSUM:     COP_CHECKSUM    = val; break;
@@ -1254,7 +1256,7 @@ Amiga::setDebugVariable(DebugFlag flag, int val)
         case FLAG_SPRREG_DEBUG:     SPRREG_DEBUG    = val; break;
         case FLAG_COLREG_DEBUG:     COLREG_DEBUG    = val; break;
         case FLAG_CLXREG_DEBUG:     CLXREG_DEBUG    = val; break;
-        case FLAG_BPL_DEBUG:        BPL_DEBUG       = val; break;
+        case FLAG_BPL_ON_STEROIDS:  BPL_ON_STEROIDS = val; break;
         case FLAG_DIW_DEBUG:        DIW_DEBUG       = val; break;
         case FLAG_SPR_DEBUG:        SPR_DEBUG       = val; break;
         case FLAG_CLX_DEBUG:        CLX_DEBUG       = val; break;

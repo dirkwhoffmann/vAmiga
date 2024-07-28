@@ -56,7 +56,7 @@ Sequencer::computeBplEventTable(const SigRecorder &sr)
     if (!state.bpv) { state.bprun = false; state.cnt = 0; }
     
     // Fill the event table
-    if (sr.modified || (state.bpv && state.bmapen) || NO_SEQ_FASTPATH) {
+    if (sr.modified || (state.bpv && state.bmapen) || SEQ_ON_STEROIDS) {
         computeBplEventsSlow <ecs> (sr, state);
     } else {
         computeBplEventsFast <ecs> (sr, state);

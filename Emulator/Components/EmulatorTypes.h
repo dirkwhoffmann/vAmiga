@@ -53,6 +53,7 @@ enum_long(DEBUG_FLAG)
     FLAG_DMA_DEBUG,        ///< DMA registers
     FLAG_DDF_DEBUG,        ///< Display data fetch
     FLAG_SEQ_DEBUG,        ///< Bitplane sequencer
+    FLAG_SEQ_ON_STEROIDS,  ///< Disable sequencer fast-paths
     FLAG_NTSC_DEBUG,       ///< NTSC mode
 
     // Copper
@@ -77,7 +78,7 @@ enum_long(DEBUG_FLAG)
     FLAG_SPRREG_DEBUG,     ///< Sprite registers
     FLAG_COLREG_DEBUG,     ///< Color registers
     FLAG_CLXREG_DEBUG,     ///< Collision detection registers
-    FLAG_BPL_DEBUG,        ///< Bitplane DMA
+    FLAG_BPL_ON_STEROIDS,  ///< Disable drawing fast-paths
     FLAG_DIW_DEBUG,        ///< Display window
     FLAG_SPR_DEBUG,        ///< Sprites
     FLAG_CLX_DEBUG,        ///< Collision detection
@@ -194,6 +195,7 @@ struct DebugFlagEnum : util::Reflection<DebugFlagEnum, DebugFlag>
             case FLAG_DMA_DEBUG:        return "DMA_DEBUG";
             case FLAG_DDF_DEBUG:        return "DDF_DEBUG";
             case FLAG_SEQ_DEBUG:        return "SEQ_DEBUG";
+            case FLAG_SEQ_ON_STEROIDS:  return "SEQ_ON_STEROIDS";
             case FLAG_NTSC_DEBUG:       return "NTSC_DEBUG";
 
                 // Copper
@@ -218,7 +220,7 @@ struct DebugFlagEnum : util::Reflection<DebugFlagEnum, DebugFlag>
             case FLAG_SPRREG_DEBUG:     return "SPRREG_DEBUG";
             case FLAG_COLREG_DEBUG:     return "COLREG_DEBUG";
             case FLAG_CLXREG_DEBUG:     return "CLXREG_DEBUG";
-            case FLAG_BPL_DEBUG:        return "BPL_DEBUG";
+            case FLAG_BPL_ON_STEROIDS:  return "BPL_ON_STEROIDS";
             case FLAG_DIW_DEBUG:        return "DIW_DEBUG";
             case FLAG_SPR_DEBUG:        return "SPR_DEBUG";
             case FLAG_CLX_DEBUG:        return "CLX_DEBUG";
@@ -323,6 +325,7 @@ struct DebugFlagEnum : util::Reflection<DebugFlagEnum, DebugFlag>
             case FLAG_DMA_DEBUG:        return "DMA registers";
             case FLAG_DDF_DEBUG:        return "Display data fetch";
             case FLAG_SEQ_DEBUG:        return "Bitplane sequencer";
+            case FLAG_SEQ_ON_STEROIDS:  return "Disable sequencer fast-paths";
             case FLAG_NTSC_DEBUG:       return "NTSC mode";
 
                 // Copper
@@ -347,7 +350,7 @@ struct DebugFlagEnum : util::Reflection<DebugFlagEnum, DebugFlag>
             case FLAG_SPRREG_DEBUG:     return "Sprite registers";
             case FLAG_COLREG_DEBUG:     return "Color registers";
             case FLAG_CLXREG_DEBUG:     return "Collision detection registers";
-            case FLAG_BPL_DEBUG:        return "Bitplane DMA";
+            case FLAG_BPL_ON_STEROIDS:  return "Disable drawing fast-paths";
             case FLAG_DIW_DEBUG:        return "Display window";
             case FLAG_SPR_DEBUG:        return "Sprites";
             case FLAG_CLX_DEBUG:        return "Collision detection";
