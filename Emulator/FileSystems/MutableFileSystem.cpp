@@ -677,7 +677,7 @@ MutableFileSystem::exportBlocks(Block first, Block last, u8 *dst, isize size, Er
 }
 
 void
-MutableFileSystem::exportDirectory(const std::filesystem::path &path, bool createDir)
+MutableFileSystem::exportDirectory(const std::filesystem::path &path, bool createDir) const
 {
     // Try to create the directory if it doesn't exist
     if (!util::isDirectory(path) && createDir && !util::createDirectory(path)) {

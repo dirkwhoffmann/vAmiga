@@ -560,7 +560,7 @@ FileSystem::seekRef(FSName name)
 }
 
 void
-FileSystem::collect(Block nr, std::vector<Block> &result, bool recursive)
+FileSystem::collect(Block nr, std::vector<Block> &result, bool recursive) const
 {
     std::stack<Block> remainingItems;
     std::set<Block> visited;
@@ -584,7 +584,7 @@ FileSystem::collect(Block nr, std::vector<Block> &result, bool recursive)
 
 void
 FileSystem::collectHashedRefs(Block nr,
-                              std::stack<Block> &result, std::set<Block> &visited)
+                              std::stack<Block> &result, std::set<Block> &visited) const
 {
     if (FSBlock *b = blockPtr(nr)) {
         
@@ -597,7 +597,7 @@ FileSystem::collectHashedRefs(Block nr,
 
 void
 FileSystem::collectRefsWithSameHashValue(Block nr,
-                                         std::stack<Block> &result, std::set<Block> &visited)
+                                         std::stack<Block> &result, std::set<Block> &visited) const
 {
     std::stack<Block> refs;
     

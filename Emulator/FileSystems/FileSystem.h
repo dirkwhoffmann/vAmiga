@@ -260,17 +260,17 @@ public:
 protected:
     
     // Returns a collections of nodes for all items in the current directory
-    void collect(Block nr, std::vector<Block> &list, bool recursive = true) throws;
+    void collect(Block nr, std::vector<Block> &list, bool recursive = true) const throws;
     
 private:
     
     // Collects all references stored in a hash table
     void collectHashedRefs(Block nr, std::stack<Block> &list,
-                           std::set<Block> &visited) throws;
-    
+                           std::set<Block> &visited) const throws;
+
     // Collects all references with the same hash value
     void collectRefsWithSameHashValue(Block nr, std::stack<Block> &list,
-                                      std::set<Block> &visited) throws;
+                                      std::set<Block> &visited) const throws;
 
     
     //
@@ -289,19 +289,14 @@ protected:
     
 
     //
-    // Importing and exporting
+    // GUI helper functions
     //
-    
+
 public:
 
     // Predicts the type of a block by analyzing its number and data
     FSBlockType predictBlockType(Block nr, const u8 *buffer);
 
-
-    //
-    // GUI helper functions
-    //
-    
     // Determines how the layout image should look like in a certain column
     FSBlockType getDisplayType(isize column);
 
