@@ -150,11 +150,10 @@ enum_long(OPT)
     OPT_MOUSE_VELOCITY,
 
     // Joystick
-    // Joystick
     OPT_JOY_AUTOFIRE,           ///< Autofire status [on/off]
     OPT_JOY_AUTOFIRE_BURSTS,    ///< Burst mode [on/off]
     OPT_JOY_AUTOFIRE_BULLETS,   ///< Number of bullets per burst
-    OPT_JOY_AUTOFIRE_DELAY,     ///< Delay between two shots [frames]
+    OPT_JOY_AUTOFIRE_DELAY,     ///< Delay between two button events [frames]
 
     // Paula audio
     OPT_AUD_SAMPLING_METHOD,

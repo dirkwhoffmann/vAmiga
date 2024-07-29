@@ -53,19 +53,16 @@ Joystick::setOption(Option option, i64 value)
         case OPT_JOY_AUTOFIRE:
 
             config.autofire = bool(value);
-            reload();
             return;
 
         case OPT_JOY_AUTOFIRE_BURSTS:
 
             config.autofireBursts = bool(value);
-            reload();
             return;
 
         case OPT_JOY_AUTOFIRE_BULLETS:
 
             config.autofireBullets = isize(value);
-            reload();
             return;
 
         case OPT_JOY_AUTOFIRE_DELAY:
@@ -110,6 +107,7 @@ Joystick::_didLoad()
 void
 Joystick::setButton(bool value)
 {
+    trace(PRT_DEBUG, "Button = %d\n", value);
     button = value;
 }
 
@@ -122,7 +120,7 @@ Joystick::isAutofiring()
 void
 Joystick::startAutofire()
 {
-    debug(true, "startAutofire()\n");
+    trace(PRT_DEBUG, "startAutofire()\n");
 
     // Load magazine
     reload(config.autofireBursts ? config.autofireBullets : INT_MAX);
@@ -131,13 +129,13 @@ Joystick::startAutofire()
     setButton(true);
 
     // Schedule the release event
-    nextAutofireReleaseFrame = agnus.pos.frame + 2;
+    nextAutofireReleaseFrame = agnus.pos.frame + config.autofireDelay;
 }
 
 void
 Joystick::stopAutofire()
 {
-    debug(true, "stopAutofire()\n");
+    trace(PRT_DEBUG, "stopAutofire()\n");
 
     // Release button and empty the bullet counter
     setButton(false);
@@ -248,6 +246,7 @@ Joystick::trigger(GamePadAction event)
 
         case PRESS_FIRE:
 
+            printf("bulletCounter = %ld\n", bulletCounter);
             // If autofire is enabled...
             if (config.autofire) {
 
@@ -297,7 +296,7 @@ Joystick::eofHandler()
         if (agnus.pos.frame == nextAutofireFrame) {
 
             setButton(true);
-            nextAutofireReleaseFrame = nextAutofireFrame + 2;
+            nextAutofireReleaseFrame = nextAutofireFrame + config.autofireDelay;
         }
 
         if (agnus.pos.frame == nextAutofireReleaseFrame) {
