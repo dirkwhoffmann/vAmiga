@@ -35,6 +35,28 @@ Mouse::getOption(Option option) const
 }
 
 void
+Mouse::checkOption(Option opt, i64 value)
+{
+    switch (opt) {
+
+        case OPT_MOUSE_PULLUP_RESISTORS:
+        case OPT_MOUSE_SHAKE_DETECTION:
+
+            return;
+
+        case OPT_MOUSE_VELOCITY:
+
+            if (value < 0 || value > 255) {
+                throw Error(ERROR_OPT_INV_ARG, "0...255");
+            }
+            return;
+
+        default:
+            throw(ERROR_OPT_UNSUPPORTED);
+    }
+}
+
+void
 Mouse::setOption(Option option, i64 value)
 {
     switch (option) {
@@ -51,9 +73,6 @@ Mouse::setOption(Option option, i64 value)
             
         case OPT_MOUSE_VELOCITY:
             
-            if (value < 0 || value > 255) {
-                throw Error(ERROR_OPT_INV_ARG, "0...255");
-            }
             config.velocity = (isize)value;
             updateScalingFactors();
             return;

@@ -95,31 +95,43 @@ HdController::getOption(Option option) const
 }
 
 void
+HdController::checkOption(Option opt, i64 value)
+{
+    switch (opt) {
+
+        case OPT_HDC_CONNECT:
+
+            if (!isPoweredOff()) {
+                throw Error(ERROR_OPT_LOCKED);
+            }
+            return;
+
+        default:
+            throw(ERROR_OPT_UNSUPPORTED);
+    }
+}
+
+void
 HdController::setOption(Option option, i64 value)
 {
     switch (option) {
 
         case OPT_HDC_CONNECT:
-            
-            if (!isPoweredOff()) {
-                throw Error(ERROR_OPT_LOCKED);
-            }
-            
-            if (bool(value) == config.connected) {
-                break;
-            }
 
-            if (value) {
-                
-                config.connected = true;
-                drive.connect();
-                msgQueue.put(MSG_HDC_CONNECT, DriveMsg { i16(objid), true, 0, 0 } );
+            if (bool(value) != config.connected) {
 
-            } else {
-                
-                config.connected = false;
-                drive.disconnect();
-                msgQueue.put(MSG_HDC_CONNECT, DriveMsg { i16(objid), false, 0, 0 } );
+                if (value) {
+
+                    config.connected = true;
+                    drive.connect();
+                    msgQueue.put(MSG_HDC_CONNECT, DriveMsg { i16(objid), true, 0, 0 } );
+
+                } else {
+
+                    config.connected = false;
+                    drive.disconnect();
+                    msgQueue.put(MSG_HDC_CONNECT, DriveMsg { i16(objid), false, 0, 0 } );
+                }
             }
             return;
 

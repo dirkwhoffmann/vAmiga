@@ -81,6 +81,23 @@ RemoteServer::getOption(Option option) const
 }
 
 void
+RemoteServer::checkOption(Option opt, i64 value)
+{
+    switch (opt) {
+
+        case OPT_SRV_PORT:
+        case OPT_SRV_PROTOCOL:
+        case OPT_SRV_AUTORUN:
+        case OPT_SRV_VERBOSE:
+
+            return;
+
+        default:
+            throw(ERROR_OPT_UNSUPPORTED);
+    }
+}
+
+void
 RemoteServer::setOption(Option option, i64 value)
 {
     switch (option) {
@@ -94,8 +111,6 @@ RemoteServer::setOption(Option option, i64 value)
                     config.port = (u16)value;
 
                 } else {
-
-                    SUSPENDED
 
                     stop();
                     config.port = (u16)value;

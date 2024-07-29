@@ -300,6 +300,42 @@ CPU::getOption(Option option) const
 }
 
 void
+CPU::checkOption(Option opt, i64 value)
+{
+    switch (opt) {
+
+        case OPT_CPU_REVISION:
+
+            if (!CPURevisionEnum::isValid(value)) {
+                throw Error(ERROR_OPT_INV_ARG, CPURevisionEnum::keyList());
+            }
+            return;
+
+        case OPT_CPU_DASM_REVISION:
+
+            if (!DasmRevisionEnum::isValid(value)) {
+                throw Error(ERROR_OPT_INV_ARG, DasmRevisionEnum::keyList());
+            }
+            return;
+
+        case OPT_CPU_DASM_SYNTAX:
+
+            if (!DasmSyntaxEnum::isValid(value)) {
+                throw Error(ERROR_OPT_INV_ARG, DasmSyntaxEnum::keyList());
+            }
+            return;
+
+        case OPT_CPU_OVERCLOCKING:
+        case OPT_CPU_RESET_VAL:
+
+            return;
+
+        default:
+            throw(ERROR_OPT_UNSUPPORTED);
+    }
+}
+
+void
 CPU::setOption(Option option, i64 value)
 {
     auto cpuModel = [&](CPURevision rev) { return moira::Model(rev); };
@@ -310,45 +346,25 @@ CPU::setOption(Option option, i64 value)
 
         case OPT_CPU_REVISION:
 
-            if (!CPURevisionEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INV_ARG, CPURevisionEnum::keyList());
-            }
-
-            suspend();
             config.revision = CPURevision(value);
             setModel(cpuModel(config.revision), dasmModel(config.dasmRevision));
-            resume();
             return;
 
         case OPT_CPU_DASM_REVISION:
 
-            if (!DasmRevisionEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INV_ARG, DasmRevisionEnum::keyList());
-            }
-
-            suspend();
             config.dasmRevision = DasmRevision(value);
             setModel(cpuModel(config.revision), dasmModel(config.dasmRevision));
-            resume();
             return;
 
         case OPT_CPU_DASM_SYNTAX:
 
-            if (!DasmSyntaxEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INV_ARG, DasmSyntaxEnum::keyList());
-            }
-
-            suspend();
             config.dasmSyntax = DasmSyntax(value);
             setDasmSyntax(syntax(config.dasmSyntax));
-            resume();
             return;
 
         case OPT_CPU_OVERCLOCKING:
 
-            suspend();
             config.overclocking = isize(value);
-            resume();
             msgQueue.put(MSG_OVERCLOCKING, config.overclocking);
             return;
 

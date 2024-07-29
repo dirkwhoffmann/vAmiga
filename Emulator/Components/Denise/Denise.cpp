@@ -40,19 +40,48 @@ Denise::getOption(Option option) const
 {
     switch (option) {
             
-        case OPT_DENISE_REVISION:     return config.revision;
-        case OPT_DENISE_VIEWPORT_TRACKING:   return config.viewportTracking;
-        case OPT_DENISE_FRAME_SKIPPING:      return config.frameSkipping;
-        case OPT_DENISE_HIDDEN_BITPLANES:    return config.hiddenBitplanes;
-        case OPT_DENISE_HIDDEN_SPRITES:      return config.hiddenSprites;
-        case OPT_DENISE_HIDDEN_LAYERS:       return config.hiddenLayers;
-        case OPT_DENISE_HIDDEN_LAYER_ALPHA:  return config.hiddenLayerAlpha;
-        case OPT_DENISE_CLX_SPR_SPR:         return config.clxSprSpr;
-        case OPT_DENISE_CLX_SPR_PLF:         return config.clxSprPlf;
-        case OPT_DENISE_CLX_PLF_PLF:         return config.clxPlfPlf;
+        case OPT_DENISE_REVISION:           return config.revision;
+        case OPT_DENISE_VIEWPORT_TRACKING:  return config.viewportTracking;
+        case OPT_DENISE_FRAME_SKIPPING:     return config.frameSkipping;
+        case OPT_DENISE_HIDDEN_BITPLANES:   return config.hiddenBitplanes;
+        case OPT_DENISE_HIDDEN_SPRITES:     return config.hiddenSprites;
+        case OPT_DENISE_HIDDEN_LAYERS:      return config.hiddenLayers;
+        case OPT_DENISE_HIDDEN_LAYER_ALPHA: return config.hiddenLayerAlpha;
+        case OPT_DENISE_CLX_SPR_SPR:        return config.clxSprSpr;
+        case OPT_DENISE_CLX_SPR_PLF:        return config.clxSprPlf;
+        case OPT_DENISE_CLX_PLF_PLF:        return config.clxPlfPlf;
             
         default:
             fatalError;
+    }
+}
+
+void
+Denise::checkOption(Option opt, i64 value)
+{
+    switch (opt) {
+
+        case OPT_DENISE_REVISION:
+
+            if (!DeniseRevisionEnum::isValid(value)) {
+                throw Error(ERROR_OPT_INV_ARG, DeniseRevisionEnum::keyList());
+            }
+            return;
+
+        case OPT_DENISE_VIEWPORT_TRACKING:
+        case OPT_DENISE_FRAME_SKIPPING:
+        case OPT_DENISE_HIDDEN_BITPLANES:
+        case OPT_DENISE_HIDDEN_SPRITES:
+        case OPT_DENISE_HIDDEN_LAYERS:
+        case OPT_DENISE_HIDDEN_LAYER_ALPHA:
+        case OPT_DENISE_CLX_SPR_SPR:
+        case OPT_DENISE_CLX_SPR_PLF:
+        case OPT_DENISE_CLX_PLF_PLF:
+
+            return;
+
+        default:
+            throw(ERROR_OPT_UNSUPPORTED);
     }
 }
 
@@ -62,11 +91,7 @@ Denise::setOption(Option option, i64 value)
     switch (option) {
             
         case OPT_DENISE_REVISION:
-            
-            if (!DeniseRevisionEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INV_ARG, DeniseRevisionEnum::keyList());
-            }
-            
+
             config.revision = (DeniseRevision)value;
             return;
 

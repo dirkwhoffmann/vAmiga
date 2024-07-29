@@ -93,38 +93,29 @@ PixelEngine::getOption(Option option) const
 }
 
 void
-PixelEngine::setOption(Option option, i64 value)
+PixelEngine::checkOption(Option opt, i64 value)
 {
-    switch (option) {
-            
+    switch (opt) {
+
         case OPT_MON_PALETTE:
-            
+
             if (!PaletteEnum::isValid(value)) {
                 throw Error(ERROR_OPT_INV_ARG, PaletteEnum::keyList());
             }
-            
-            config.palette = (Palette)value;
-            updateRGBA();
             return;
 
         case OPT_MON_BRIGHTNESS:
-            
+
             if (value < 0 || value > 100) {
                 throw Error(ERROR_OPT_INV_ARG, "0...100");
             }
-            
-            config.brightness = (isize)value;
-            updateRGBA();
             return;
-            
+
         case OPT_MON_CONTRAST:
 
             if (value < 0 || value > 100) {
                 throw Error(ERROR_OPT_INV_ARG, "0...100");
             }
-            
-            config.contrast = (isize)value;
-            updateRGBA();
             return;
 
         case OPT_MON_SATURATION:
@@ -132,7 +123,38 @@ PixelEngine::setOption(Option option, i64 value)
             if (value < 0 || value > 100) {
                 throw Error(ERROR_OPT_INV_ARG, "0...100");
             }
+            return;
+
+        default:
+            throw(ERROR_OPT_UNSUPPORTED);
+    }
+}
+
+void
+PixelEngine::setOption(Option option, i64 value)
+{
+    switch (option) {
             
+        case OPT_MON_PALETTE:
+
+            config.palette = (Palette)value;
+            updateRGBA();
+            return;
+
+        case OPT_MON_BRIGHTNESS:
+
+            config.brightness = (isize)value;
+            updateRGBA();
+            return;
+            
+        case OPT_MON_CONTRAST:
+
+            config.contrast = (isize)value;
+            updateRGBA();
+            return;
+
+        case OPT_MON_SATURATION:
+
             config.saturation = (isize)value;
             updateRGBA();
             return;

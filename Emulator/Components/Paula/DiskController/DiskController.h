@@ -198,6 +198,7 @@ public:
     const DiskControllerConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
     i64 getOption(Option option) const override;
+    void checkOption(Option opt, i64 value) override;
     void setOption(Option option, i64 value) override;
 
     bool turboMode() const { return config.speed == -1; }

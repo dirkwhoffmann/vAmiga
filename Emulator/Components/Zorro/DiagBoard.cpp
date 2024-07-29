@@ -53,15 +53,29 @@ DiagBoard::getOption(Option option) const
 }
 
 void
+DiagBoard::checkOption(Option opt, i64 value)
+{
+    switch (opt) {
+
+        case OPT_DIAG_BOARD:
+
+            if (!isPoweredOff()) {
+                throw Error(ERROR_OPT_LOCKED);
+            }
+            return;
+
+        default:
+            throw(ERROR_OPT_UNSUPPORTED);
+    }
+}
+
+void
 DiagBoard::setOption(Option option, i64 value)
 {
     switch (option) {
             
         case OPT_DIAG_BOARD:
 
-            if (!isPoweredOff()) {
-                throw Error(ERROR_OPT_LOCKED);
-            }
             config.enabled = value;
             return;
             

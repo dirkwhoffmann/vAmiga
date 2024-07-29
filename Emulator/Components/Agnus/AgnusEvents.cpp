@@ -720,15 +720,6 @@ Agnus::serviceDASEvent(EventID id)
             ciab.tod.increment();
             break;
 
-            /*
-             case DAS_HSYNC:
-
-             syncEvent = id;
-             // recordRegisterChange(DMA_CYCLES(1), REG_NONE, 0);
-             scheduleRel <SLOT_REG> (DMA_CYCLES(1), REG_CHANGE);
-             break;
-             */
-
         case DAS_EOL:
 
             assert(pos.h == HPOS_MAX_PAL || pos.h == HPOS_MAX_NTSC);

@@ -46,21 +46,37 @@ DiskController::getOption(Option option) const
 }
 
 void
+DiskController::checkOption(Option opt, i64 value)
+{
+    switch (opt) {
+
+        case OPT_DC_SPEED:
+
+            if (!isValidDriveSpeed((isize)value)) {
+                throw Error(ERROR_OPT_INV_ARG, "-1, 1, 2, 4, 8");
+            }
+            return;
+
+        case OPT_DC_AUTO_DSKSYNC:
+        case OPT_DC_LOCK_DSKSYNC:
+
+            return;
+
+        default:
+            throw(ERROR_OPT_UNSUPPORTED);
+    }
+}
+
+void
 DiskController::setOption(Option option, i64 value)
 {
     switch (option) {
             
         case OPT_DC_SPEED:
-        {
-            if (!isValidDriveSpeed((isize)value)) {
-                throw Error(ERROR_OPT_INV_ARG, "-1, 1, 2, 4, 8");
-            }
-            
-            SUSPENDED
+
             config.speed = (i32)value;
             scheduleFirstDiskEvent();
             return;
-        }
 
         case OPT_DC_AUTO_DSKSYNC:
             

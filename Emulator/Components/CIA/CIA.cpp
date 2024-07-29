@@ -77,13 +77,36 @@ CIA::getOption(Option option) const
 {
     switch (option) {
             
-        case OPT_CIA_REVISION:   return config.revision;
-        case OPT_CIA_TODBUG:         return config.todBug;
-        case OPT_CIA_ECLOCK_SYNCING: return config.eClockSyncing;
-        case OPT_CIA_IDLE_SLEEP: return config.idleSleep;
+        case OPT_CIA_REVISION:          return config.revision;
+        case OPT_CIA_TODBUG:            return config.todBug;
+        case OPT_CIA_ECLOCK_SYNCING:    return config.eClockSyncing;
+        case OPT_CIA_IDLE_SLEEP:        return config.idleSleep;
 
         default:
             fatalError;
+    }
+}
+
+void
+CIA::checkOption(Option opt, i64 value)
+{
+    switch (opt) {
+
+        case OPT_CIA_REVISION:
+
+            if (!CIARevisionEnum::isValid(value)) {
+                throw Error(ERROR_OPT_INV_ARG, CIARevisionEnum::keyList());
+            }
+            return;
+
+        case OPT_CIA_TODBUG:
+        case OPT_CIA_ECLOCK_SYNCING:
+        case OPT_CIA_IDLE_SLEEP:
+
+            return;
+
+        default:
+            throw(ERROR_OPT_UNSUPPORTED);
     }
 }
 
@@ -93,11 +116,7 @@ CIA::setOption(Option option, i64 value)
     switch (option) {
             
         case OPT_CIA_REVISION:
-            
-            if (!CIARevisionEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INV_ARG, CIARevisionEnum::keyList());
-            }
-            
+
             config.revision = (CIARevision)value;
             return;
 

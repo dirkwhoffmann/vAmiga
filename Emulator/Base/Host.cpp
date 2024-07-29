@@ -38,6 +38,7 @@ Host::checkOption(Option opt, i64 value)
         case OPT_HOST_SAMPLE_RATE:
         case OPT_HOST_FRAMEBUF_WIDTH:
         case OPT_HOST_FRAMEBUF_HEIGHT:
+            
             return;
 
         default:

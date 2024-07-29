@@ -140,55 +140,105 @@ Memory::getOption(Option option) const
 }
 
 void
-Memory::setOption(Option option, i64 value)
+Memory::checkOption(Option opt, i64 value)
 {
-    switch (option) {
-            
+    switch (opt) {
+
         case OPT_MEM_CHIP_RAM:
-            
+
             if (!isPoweredOff()) {
                 throw Error(ERROR_OPT_LOCKED);
             }
             if (value != 256 && value != 512 && value != 1024 && value != 2048) {
                 throw Error(ERROR_OPT_INV_ARG, "256, 512, 1024, 2048");
             }
-            
-            mem.allocChip((i32)KB(value));
             return;
-            
+
         case OPT_MEM_SLOW_RAM:
-            
+
             if (!isPoweredOff()) {
                 throw Error(ERROR_OPT_LOCKED);
             }
             if ((value % 256) != 0 || value > 1536) {
                 throw Error(ERROR_OPT_INV_ARG, "0, 256, 512, ..., 1536");
             }
-
-            mem.allocSlow((i32)KB(value));
             return;
-            
+
         case OPT_MEM_FAST_RAM:
-            
+
             if (!isPoweredOff()) {
                 throw Error(ERROR_OPT_LOCKED);
             }
             if ((value % 64) != 0 || value > 8192) {
                 throw Error(ERROR_OPT_INV_ARG, "0, 64, 128, ..., 8192");
             }
-
-            mem.allocFast((i32)KB(value));
             return;
-            
+
         case OPT_MEM_EXT_START:
-            
+
             if (!isPoweredOff()) {
                 throw Error(ERROR_OPT_LOCKED);
             }
             if (value != 0xE0 && value != 0xF0) {
                 throw Error(ERROR_OPT_INV_ARG, "E0, F0");
             }
+            return;
+
+        case OPT_MEM_SAVE_ROMS:
+        case OPT_MEM_SLOW_RAM_DELAY:
+        case OPT_MEM_SLOW_RAM_MIRROR:
+
+            return;
+
+        case OPT_MEM_BANKMAP:
+
+            if (!BankMapEnum::isValid(value)) {
+                throw Error(ERROR_OPT_INV_ARG, BankMapEnum::keyList());
+            }
+            return;
+
+        case OPT_MEM_UNMAPPING_TYPE:
+
+            if (!UnmappedMemoryEnum::isValid(value)) {
+                throw Error(ERROR_OPT_INV_ARG, UnmappedMemoryEnum::keyList());
+            }
+            return;
+
+        case OPT_MEM_RAM_INIT_PATTERN:
+
+            if (!RamInitPatternEnum::isValid(value)) {
+                throw Error(ERROR_OPT_INV_ARG, RamInitPatternEnum::keyList());
+            }
+            return;
+
+        default:
+            throw(ERROR_OPT_UNSUPPORTED);
+    }
+}
+
+
+void
+Memory::setOption(Option option, i64 value)
+{
+    switch (option) {
             
+        case OPT_MEM_CHIP_RAM:
+
+            mem.allocChip((i32)KB(value));
+            return;
+            
+        case OPT_MEM_SLOW_RAM:
+
+            mem.allocSlow((i32)KB(value));
+            return;
+            
+        case OPT_MEM_FAST_RAM:
+
+            mem.allocFast((i32)KB(value));
+            return;
+            
+        case OPT_MEM_EXT_START:
+
             config.extStart = (u32)value;
             updateMemSrcTables();
             return;
@@ -210,29 +260,17 @@ Memory::setOption(Option option, i64 value)
             return;
 
         case OPT_MEM_BANKMAP:
-        {
-            if (!BankMapEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INV_ARG, BankMapEnum::keyList());
-            }
-            
+
             config.bankMap = (BankMap)value;
             updateMemSrcTables();
             return;
-        }
+
         case OPT_MEM_UNMAPPING_TYPE:
-        {
-            if (!UnmappedMemoryEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INV_ARG, UnmappedMemoryEnum::keyList());
-            }
-            
+
             config.unmappingType = (UnmappedMemory)value;
             return;
-        }
-        case OPT_MEM_RAM_INIT_PATTERN:
 
-            if (!RamInitPatternEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INV_ARG, RamInitPatternEnum::keyList());
-            }
+        case OPT_MEM_RAM_INIT_PATTERN:
 
             config.ramInitPattern = (RamInitPattern)value;
             if (isPoweredOff()) fillRamWithInitPattern();

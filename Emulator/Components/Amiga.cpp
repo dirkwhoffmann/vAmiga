@@ -189,6 +189,12 @@ Amiga::checkOption(Option opt, i64 value)
     switch (opt) {
 
         case OPT_AMIGA_VIDEO_FORMAT:
+
+            if (!VideoFormatEnum::isValid(value)) {
+                throw Error(ERROR_OPT_INV_ARG, VideoFormatEnum::keyList());
+            }
+            return;
+
         case OPT_AMIGA_WARP_BOOT:
 
             return;
@@ -201,7 +207,16 @@ Amiga::checkOption(Option opt, i64 value)
             return;
 
         case OPT_AMIGA_VSYNC:
+
+            return;
+
         case OPT_AMIGA_SPEED_BOOST:
+
+            if (value < 50 || value > 200) {
+                throw Error(ERROR_OPT_INV_ARG, "50...200");
+            }
+            return;
+
         case OPT_AMIGA_SNAPSHOTS:
 
             return;
@@ -232,13 +247,7 @@ Amiga::setOption(Option option, i64 value)
 
         case OPT_AMIGA_VIDEO_FORMAT:
 
-            if (!VideoFormatEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INV_ARG, VideoFormatEnum::keyList());
-            }
-
             if (value != config.type) {
-
-                SUSPENDED
 
                 config.type = VideoFormat(value);
                 agnus.setVideoFormat(config.type);
@@ -252,10 +261,6 @@ Amiga::setOption(Option option, i64 value)
 
         case OPT_AMIGA_WARP_MODE:
 
-            if (!WarpModeEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INV_ARG, WarpModeEnum::keyList());
-            }
-
             config.warpMode = WarpMode(value);
             return;
 
@@ -265,10 +270,6 @@ Amiga::setOption(Option option, i64 value)
             return;
 
         case OPT_AMIGA_SPEED_BOOST:
-
-            if (value < 50 || value > 200) {
-                throw Error(ERROR_OPT_INV_ARG, "50...200");
-            }
 
             config.timeLapse = isize(value);
             return;

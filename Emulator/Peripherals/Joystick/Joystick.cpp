@@ -46,6 +46,23 @@ Joystick::getOption(Option option) const
 }
 
 void
+Joystick::checkOption(Option opt, i64 value)
+{
+    switch (opt) {
+
+        case OPT_JOY_AUTOFIRE:
+        case OPT_JOY_AUTOFIRE_BURSTS:
+        case OPT_JOY_AUTOFIRE_BULLETS:
+        case OPT_JOY_AUTOFIRE_DELAY:
+
+            return;
+
+        default:
+            throw(ERROR_OPT_UNSUPPORTED);
+    }
+}
+
+void
 Joystick::setOption(Option option, i64 value)
 {
     switch (option) {

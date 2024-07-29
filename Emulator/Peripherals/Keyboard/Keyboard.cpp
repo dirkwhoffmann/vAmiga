@@ -35,6 +35,20 @@ Keyboard::getOption(Option option) const
 }
 
 void
+Keyboard::checkOption(Option opt, i64 value)
+{
+    switch (opt) {
+
+        case OPT_KBD_ACCURACY:
+
+            return;
+
+        default:
+            throw(ERROR_OPT_UNSUPPORTED);
+    }
+}
+
+void
 Keyboard::setOption(Option option, i64 value)
 {
     switch (option) {

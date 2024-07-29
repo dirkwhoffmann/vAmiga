@@ -267,6 +267,28 @@ HardDrive::getOption(Option option) const
 }
 
 void
+HardDrive::checkOption(Option opt, i64 value)
+{
+    switch (opt) {
+
+        case OPT_HDR_TYPE:
+
+            if (!HardDriveTypeEnum::isValid(value)) {
+                throw Error(ERROR_OPT_INV_ARG, HardDriveTypeEnum::keyList());
+            }
+            return;
+
+        case OPT_HDR_PAN:
+        case OPT_HDR_STEP_VOLUME:
+            
+            return;
+
+        default:
+            throw(ERROR_OPT_UNSUPPORTED);
+    }
+}
+
+void
 HardDrive::setOption(Option option, i64 value)
 {
     switch (option) {

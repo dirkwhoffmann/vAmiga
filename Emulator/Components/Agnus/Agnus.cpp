@@ -77,9 +77,9 @@ Agnus::getOption(Option option) const
 }
 
 void
-Agnus::setOption(Option option, i64 value)
+Agnus::checkOption(Option opt, i64 value)
 {
-    switch (option) {
+    switch (opt) {
 
         case OPT_AGNUS_REVISION:
 
@@ -89,6 +89,23 @@ Agnus::setOption(Option option, i64 value)
             if (!AgnusRevisionEnum::isValid(value)) {
                 throw Error(ERROR_OPT_INV_ARG, AgnusRevisionEnum::keyList());
             }
+            return;
+
+        case OPT_AGNUS_PTR_DROPS:
+
+            return;
+
+        default:
+            throw(ERROR_OPT_UNSUPPORTED);
+    }
+}
+
+void
+Agnus::setOption(Option option, i64 value)
+{
+    switch (option) {
+
+        case OPT_AGNUS_REVISION:
 
             switch (config.revision = (AgnusRevision)value) {
                     

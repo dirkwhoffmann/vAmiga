@@ -28,10 +28,10 @@ RTC::getOption(Option option) const
 }
 
 void
-RTC::setOption(Option option, i64 value)
+RTC::checkOption(Option opt, i64 value)
 {
-    switch (option) {
-            
+    switch (opt) {
+
         case OPT_RTC_MODEL:
 
             if (!isPoweredOff()) {
@@ -40,7 +40,20 @@ RTC::setOption(Option option, i64 value)
             if (!RTCRevisionEnum::isValid(value)) {
                 throw Error(ERROR_OPT_INV_ARG, RTCRevisionEnum::keyList());
             }
+            return;
+
+        default:
+            throw(ERROR_OPT_UNSUPPORTED);
+    }
+}
+
+void
+RTC::setOption(Option option, i64 value)
+{
+    switch (option) {
             
+        case OPT_RTC_MODEL:
+
             config.model = (RTCRevision)value;
             mem.updateMemSrcTables();
             return;

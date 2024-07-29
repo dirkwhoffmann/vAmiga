@@ -171,6 +171,38 @@ AudioPort::getOption(Option option) const
 }
 
 void
+AudioPort::checkOption(Option opt, i64 value)
+{
+    switch (opt) {
+
+        case OPT_AUD_SAMPLING_METHOD:
+
+            if (!SamplingMethodEnum::isValid(value)) {
+                throw Error(ERROR_OPT_INV_ARG, SamplingMethodEnum::keyList());
+            }
+            return;
+
+        case OPT_AUD_PAN0:
+        case OPT_AUD_PAN1:
+        case OPT_AUD_PAN2:
+        case OPT_AUD_PAN3:
+        case OPT_AUD_VOL0:
+        case OPT_AUD_VOL1:
+        case OPT_AUD_VOL2:
+        case OPT_AUD_VOL3:
+        case OPT_AUD_VOLL:
+        case OPT_AUD_VOLR:
+        case OPT_AUD_FASTPATH:
+        case OPT_AUD_FILTER_TYPE:
+
+            return;
+
+        default:
+            throw(ERROR_OPT_UNSUPPORTED);
+    }
+}
+
+void
 AudioPort::setOption(Option option, i64 value)
 {
     isize channel = 0;
@@ -178,11 +210,7 @@ AudioPort::setOption(Option option, i64 value)
     switch (option) {
             
         case OPT_AUD_SAMPLING_METHOD:
-            
-            if (!SamplingMethodEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INV_ARG, SamplingMethodEnum::keyList());
-            }
-            
+                        
             config.samplingMethod = (SamplingMethod)value;
             return;
             

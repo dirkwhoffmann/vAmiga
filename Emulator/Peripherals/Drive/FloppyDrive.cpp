@@ -112,6 +112,47 @@ FloppyDrive::getOption(Option option) const
 }
 
 void
+FloppyDrive::checkOption(Option opt, i64 value)
+{
+    switch (opt) {
+
+        case OPT_DRIVE_CONNECT:
+
+            return;
+
+        case OPT_DRIVE_TYPE:
+
+            if (!FloppyDriveTypeEnum::isValid(value)) {
+                throw Error(ERROR_OPT_INV_ARG, FloppyDriveTypeEnum::keyList());
+            }
+            if (value != DRIVE_DD_35 && value != DRIVE_HD_35) {
+                throw Error(ERROR_OPT_UNSUPPORTED);
+            }
+            return;
+
+        case OPT_DRIVE_MECHANICS:
+
+            if (!DriveMechanicsEnum::isValid(value)) {
+                throw Error(ERROR_OPT_INV_ARG, DriveMechanicsEnum::keyList());
+            }
+            return;
+
+        case OPT_DRIVE_RPM:
+        case OPT_DRIVE_SWAP_DELAY:
+        case OPT_DRIVE_PAN:
+        case OPT_DRIVE_STEP_VOLUME:
+        case OPT_DRIVE_POLL_VOLUME:
+        case OPT_DRIVE_EJECT_VOLUME:
+        case OPT_DRIVE_INSERT_VOLUME:
+
+            return;
+
+        default:
+            throw(ERROR_OPT_UNSUPPORTED);
+    }
+}
+
+void
 FloppyDrive::setOption(Option option, i64 value)
 {
     switch (option) {
@@ -129,22 +170,11 @@ FloppyDrive::setOption(Option option, i64 value)
             break;
 
         case OPT_DRIVE_TYPE:
-            
-            if (!FloppyDriveTypeEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INV_ARG, FloppyDriveTypeEnum::keyList());
-            }
-            if (value != DRIVE_DD_35 && value != DRIVE_HD_35) {
-                throw Error(ERROR_OPT_UNSUPPORTED);
-            }
-            
+
             config.type = (FloppyDriveType)value;
             break;
 
         case OPT_DRIVE_MECHANICS:
-
-            if (!DriveMechanicsEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INV_ARG, DriveMechanicsEnum::keyList());
-            }
 
             config.mechanics = (DriveMechanics)value;
             break;

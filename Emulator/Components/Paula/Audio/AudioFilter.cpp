@@ -246,15 +246,28 @@ AudioFilter::getOption(Option option) const
 }
 
 void
-AudioFilter::setOption(Option option, i64 value)
+AudioFilter::checkOption(Option opt, i64 value)
 {
-    switch (option) {
+    switch (opt) {
 
         case OPT_AUD_FILTER_TYPE:
 
             if (!FilterTypeEnum::isValid(value)) {
                 throw Error(ERROR_OPT_INV_ARG, FilterTypeEnum::keyList());
             }
+            return;
+
+        default:
+            throw(ERROR_OPT_UNSUPPORTED);
+    }
+}
+
+void
+AudioFilter::setOption(Option option, i64 value)
+{
+    switch (option) {
+
+        case OPT_AUD_FILTER_TYPE:
 
             config.filterType = (FilterType)value;
             setup(double(emulator.get(OPT_HOST_SAMPLE_RATE)));

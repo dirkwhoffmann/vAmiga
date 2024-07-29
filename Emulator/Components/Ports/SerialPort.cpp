@@ -28,6 +28,27 @@ SerialPort::getOption(Option option) const
 }
 
 void
+SerialPort::checkOption(Option opt, i64 value)
+{
+    switch (opt) {
+
+        case OPT_SER_DEVICE:
+
+            if (!SerialPortDeviceEnum::isValid(value)) {
+                throw Error(ERROR_OPT_INV_ARG, SerialPortDeviceEnum::keyList());
+            }
+            return;
+
+        case OPT_SER_VERBOSE:
+
+            return;
+
+        default:
+            throw(ERROR_OPT_UNSUPPORTED);
+    }
+}
+
+void
 SerialPort::setOption(Option option, i64 value)
 {
     switch (option) {
