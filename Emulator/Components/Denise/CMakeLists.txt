@@ -11,5 +11,3 @@ FrameBuffer.cpp
 PixelEngine.cpp
 
 )
-
-add_subdirectory(Recorder)

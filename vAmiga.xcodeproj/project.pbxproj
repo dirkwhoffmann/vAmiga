@@ -1180,7 +1180,6 @@
 				50627FD1286EBA7300F2A835 /* FrameBuffer.cpp */,
 				50D2B85126D292B7008040E5 /* DeniseDebugger.h */,
 				50D2B85026D292B7008040E5 /* DeniseDebugger.cpp */,
-				50E19057277F693C00B8DBE2 /* Recorder */,
 			);
 			path = Denise;
 			sourceTree = "<group>";
@@ -1967,6 +1966,7 @@
 				50AD90502770CEDA0011ECCB /* RegressionTester */,
 				50BF1CCA276DBF2E00386540 /* RemoteServers */,
 				50B9C42A2609430F00A86C31 /* RetroShell */,
+				50E19057277F693C00B8DBE2 /* Recorder */,
 			);
 			path = Misc;
 			sourceTree = "<group>";
