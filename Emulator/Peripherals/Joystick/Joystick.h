@@ -190,9 +190,6 @@ private:
     // Reloads the autofire magazine
     void reload();
     void reload(isize bullets);
-    
-    // Updates variable nextAutofireFrame
-    void scheduleNextShot();
 };
 
 }

@@ -223,13 +223,13 @@ Headless::process(Message msg)
 
     switch (msg.type) {
             
-        case MSG_SCRIPT_DONE:
+        case MSG_RSH_EXEC:
 
             returnCode = 0;
             barrier.unlock();
             break;
 
-        case MSG_SCRIPT_ABORT:
+        case MSG_RSH_ERROR:
         case MSG_ABORT:
 
             returnCode = 1;

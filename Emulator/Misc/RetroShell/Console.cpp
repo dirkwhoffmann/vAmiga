@@ -152,7 +152,7 @@ Console::setStream(std::ostream &os)
 void
 Console::needsDisplay()
 {
-    msgQueue.put(MSG_CONSOLE_UPDATE);
+    msgQueue.put(MSG_RSH_UPDATE);
 }
 
 void
@@ -538,9 +538,6 @@ Console::exec()
 {
     SYNCHRONIZED
 
-    // Indicates if we're executing commands from a script
-    bool scriptMode = false;
-
     // Only proceed if there is anything to process
     if (commands.empty()) return;
 
@@ -552,26 +549,20 @@ Console::exec()
 
             cmd = commands.front();
             commands.erase(commands.begin());
-
-            // Commands from a script carry a line number
-            scriptMode |= cmd.first != 0;
-
             exec(cmd);
-
-            if (commands.empty() && scriptMode) {
-                msgQueue.put(MSG_SCRIPT_DONE);
-            }
         }
+        msgQueue.put(MSG_RSH_EXEC);
 
     } catch (ScriptInterruption &) {
 
-    } catch (...) { 
+        msgQueue.put(MSG_RSH_WAIT);
+
+    } catch (...) {
 
         // Remove all remaining commands
         commands = { };
 
-        // Inform the GUI if a script had been executed
-        if (scriptMode) msgQueue.put(MSG_SCRIPT_ABORT);
+        msgQueue.put(MSG_RSH_ERROR);
     }
 
     // Print prompt

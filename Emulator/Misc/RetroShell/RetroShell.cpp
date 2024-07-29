@@ -40,13 +40,13 @@ RetroShell::switchConsole() {
 
         current = &debugger;
         emulator.trackOn(1);
-        msgQueue.put(MSG_CONSOLE_DEBUGGER, true);
+        msgQueue.put(MSG_RSH_DEBUGGER, true);
 
     } else {
 
         current = &commander;
         emulator.trackOff(1);
-        msgQueue.put(MSG_CONSOLE_DEBUGGER, false);
+        msgQueue.put(MSG_RSH_DEBUGGER, false);
     }
 }
 

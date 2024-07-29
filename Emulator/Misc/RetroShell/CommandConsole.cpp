@@ -104,7 +104,7 @@ Console::initCommands(Command &root)
                  "Hide the console window",
                  [this](Arguments& argv, long value) {
 
-            msgQueue.put(MSG_CONSOLE_CLOSE);
+            msgQueue.put(MSG_RSH_CLOSE);
         });
 
         root.add({"help"}, { }, {Arg::command},

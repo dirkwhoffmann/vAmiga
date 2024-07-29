@@ -167,12 +167,6 @@ Joystick::reload(isize bullets)
 }
 
 void
-Joystick::scheduleNextShot()
-{
-    nextAutofireFrame = agnus.pos.frame + config.autofireDelay;
-}
-
-void
 Joystick::changePotgo(u16 &potgo) const
 {
     u16 maskR = port.isPort1() ? 0x0400 : 0x4000;
