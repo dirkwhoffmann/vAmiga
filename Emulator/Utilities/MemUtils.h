@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "BaseTypes.h"
+#include "BasicTypes.h"
 #include "Checksum.h"
 #include <bit>
 

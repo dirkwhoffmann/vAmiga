@@ -22,7 +22,7 @@ class RegressionTester : public SubComponent {
         .type           = COMP_REGRESSION_TESTER,
         .name           = "Regression",
         .description    = "Regression Tester",
-        .shell          = ""
+        .shell          = "regression"
     }};
 
     ConfigOptions options = {
