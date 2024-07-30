@@ -30,7 +30,7 @@ enum_long(FILTER_TYPE)
 typedef FILTER_TYPE FilterType;
 
 #ifdef __cplusplus
-struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType>
+struct FilterTypeEnum : vamiga::util::Reflection<FilterTypeEnum, FilterType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = FILTER_HIGH;

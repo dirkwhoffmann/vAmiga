@@ -29,7 +29,7 @@ enum_long(DRIVE_DMA_STATE)
 typedef DRIVE_DMA_STATE DriveState;
 
 #ifdef __cplusplus
-struct DriveStateEnum : util::Reflection<DriveStateEnum, DriveState>
+struct DriveStateEnum : vamiga::util::Reflection<DriveStateEnum, DriveState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = DRIVE_DMA_FLUSH;

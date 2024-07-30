@@ -31,7 +31,7 @@
  *   The enumeration members are numbered 1, 2, 4, etc. Each member of the
  *   enumeration is treated as flag of a combined bit field.
  */
-namespace util {
+namespace vamiga::util {
 
 #define assert_enum(e,v) assert(e##Enum::isValid(v))
 

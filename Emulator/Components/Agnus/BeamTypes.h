@@ -24,7 +24,7 @@ enum_long(FRAME_TYPE)
 typedef FRAME_TYPE FrameType;
 
 #ifdef __cplusplus
-struct FrameTypeEnum : util::Reflection<FrameTypeEnum, FrameType>
+struct FrameTypeEnum : vamiga::util::Reflection<FrameTypeEnum, FrameType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = FRAME_NTSC_SF_SL;

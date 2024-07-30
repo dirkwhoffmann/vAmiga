@@ -13,7 +13,7 @@
 #include "Checksum.h"
 #include <filesystem>
 
-namespace util {
+namespace vamiga::util {
 
 template <class T> struct Allocator {
 

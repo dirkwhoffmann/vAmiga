@@ -11,7 +11,7 @@
 
 #include "BasicTypes.h"
 
-namespace util {
+namespace vamiga::util {
 
 /* This class provides a wrapper around a value type making it fadable. I.e.,
  * the value can be smoothly increased to it's maximum value or decreases to

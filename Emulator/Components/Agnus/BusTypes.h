@@ -45,7 +45,7 @@ enum_i8(BUS_OWNER)
 typedef BUS_OWNER BusOwner;
 
 #ifdef __cplusplus
-struct BusOwnerEnum : util::Reflection<BusOwnerEnum, BusOwner>
+struct BusOwnerEnum : vamiga::util::Reflection<BusOwnerEnum, BusOwner>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = BUS_COUNT - 1;

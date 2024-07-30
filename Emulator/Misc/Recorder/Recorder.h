@@ -16,9 +16,9 @@
 #include "AudioPort.h"
 #include "NamedPipe.h"
 
-using util::Buffer;
-
 namespace vamiga {
+
+using util::Buffer;
 
 class Recorder : public SubComponent {
 

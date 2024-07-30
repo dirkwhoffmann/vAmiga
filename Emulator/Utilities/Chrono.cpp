@@ -17,7 +17,7 @@
 #endif
 
 
-namespace util {
+namespace vamiga::util {
 
 #if defined(__MACH__)
 

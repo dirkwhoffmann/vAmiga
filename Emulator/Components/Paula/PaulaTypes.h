@@ -39,7 +39,7 @@ enum_long(INT_SOURCE)
 typedef INT_SOURCE IrqSource;
 
 #ifdef __cplusplus
-struct IrqSourceEnum : util::Reflection<IrqSourceEnum, IrqSource>
+struct IrqSourceEnum : vamiga::util::Reflection<IrqSourceEnum, IrqSource>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = INT_EXTER;

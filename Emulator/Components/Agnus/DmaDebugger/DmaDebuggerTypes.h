@@ -22,7 +22,7 @@ enum_long(DMA_DISPLAY_MODE)
 typedef DMA_DISPLAY_MODE DmaDisplayMode;
 
 #ifdef __cplusplus
-struct DmaDisplayModeEnum : util::Reflection<DmaDisplayModeEnum, DmaDisplayMode>
+struct DmaDisplayModeEnum : vamiga::util::Reflection<DmaDisplayModeEnum, DmaDisplayMode>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = DMA_DISPLAY_MODE_ODD_EVEN_LAYERS;
@@ -58,7 +58,7 @@ enum_long(DMA_CHANNEL)
 typedef DMA_CHANNEL DmaChannel;
 
 #ifdef __cplusplus
-struct DmaChannelEnum : util::Reflection<DmaChannelEnum, DmaChannel>
+struct DmaChannelEnum : vamiga::util::Reflection<DmaChannelEnum, DmaChannel>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = DMA_CHANNEL_COUNT - 1;

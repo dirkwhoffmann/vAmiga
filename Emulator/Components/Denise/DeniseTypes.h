@@ -26,7 +26,7 @@ enum_long(DENISE_REV)
 typedef DENISE_REV DeniseRevision;
 
 #ifdef __cplusplus
-struct DeniseRevisionEnum : util::Reflection<DeniseRevisionEnum, DeniseRevision>
+struct DeniseRevisionEnum : vamiga::util::Reflection<DeniseRevisionEnum, DeniseRevision>
 {    
     static constexpr long minVal = 0;
     static constexpr long maxVal = DENISE_ECS;
@@ -54,7 +54,7 @@ enum_long(RESOLUTION)
 typedef RESOLUTION Resolution;
 
 #ifdef __cplusplus
-struct ResolutionEnum : util::Reflection<ResolutionEnum, Resolution>
+struct ResolutionEnum : vamiga::util::Reflection<ResolutionEnum, Resolution>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = SHRES;

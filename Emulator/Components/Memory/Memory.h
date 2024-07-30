@@ -15,10 +15,10 @@
 #include "MemUtils.h"
 #include "Buffer.h"
 
+namespace vamiga {
+
 using util::Allocator;
 using util::Buffer;
-
-namespace vamiga {
 
 #define SLOW_RAM_STRT 0xC00000
 #define FAST_RAM_STRT ramExpansion.getBaseAddr()

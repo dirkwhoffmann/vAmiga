@@ -25,7 +25,7 @@ enum_long(FLAG_DISK)
 typedef FLAG_DISK DiskFlags;
 
 #ifdef __cplusplus
-struct DiskFlagsEnum : util::Reflection<DiskFlagsEnum, DiskFlags>
+struct DiskFlagsEnum : vamiga::util::Reflection<DiskFlagsEnum, DiskFlags>
 {
     static constexpr long minVal = FLAG_PROTECTED;
     static constexpr long maxVal = FLAG_MODIFIED;

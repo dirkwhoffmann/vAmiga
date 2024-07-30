@@ -12,7 +12,7 @@
 #include "BasicTypes.h"
 #include <vector>
 
-namespace util {
+namespace vamiga::util {
 
 //
 // Creating

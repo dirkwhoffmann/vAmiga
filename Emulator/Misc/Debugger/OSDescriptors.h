@@ -13,9 +13,9 @@
 #include "Buffer.h"
 #include <vector>
 
-using util::Buffer;
-
 namespace vamiga {
+
+using util::Buffer;
 
 #define HUNK_UNIT       999
 #define HUNK_NAME       1000

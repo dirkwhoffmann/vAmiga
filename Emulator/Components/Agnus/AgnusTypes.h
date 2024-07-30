@@ -51,7 +51,7 @@ enum_long(AGNUS_REVISION)
 typedef AGNUS_REVISION AgnusRevision;
 
 #ifdef __cplusplus
-struct AgnusRevisionEnum : util::Reflection<AgnusRevisionEnum, AgnusRevision>
+struct AgnusRevisionEnum : vamiga::util::Reflection<AgnusRevisionEnum, AgnusRevision>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = AGNUS_ECS_2MB;
@@ -123,7 +123,7 @@ enum_long(SLOT)
 typedef SLOT EventSlot;
 
 #ifdef __cplusplus
-struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
+struct EventSlotEnum : vamiga::util::Reflection<EventSlotEnum, EventSlot>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = SLOT_COUNT - 1;
@@ -422,7 +422,7 @@ enum_long(SPR_DMA_STATE)
 typedef SPR_DMA_STATE SprDMAState;
 
 #ifdef __cplusplus
-struct SprDmaStateEnum : util::Reflection<SprDmaStateEnum, SprDMAState>
+struct SprDmaStateEnum : vamiga::util::Reflection<SprDmaStateEnum, SprDMAState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = SPR_DMA_ACTIVE;

@@ -201,7 +201,7 @@ enum_long(ERROR_CODE)
 typedef ERROR_CODE ErrorCode;
 
 #ifdef __cplusplus
-struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
+struct ErrorCodeEnum : vamiga::util::Reflection<ErrorCodeEnum, ErrorCode>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = ERROR_FS_INVALID_HASHTABLE_SIZE;

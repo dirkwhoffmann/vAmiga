@@ -26,7 +26,7 @@ enum_long(CIA_REVISION)
 typedef CIA_REVISION CIARevision;
 
 #ifdef __cplusplus
-struct CIARevisionEnum : util::Reflection<CIARevisionEnum, CIARevision>
+struct CIARevisionEnum : vamiga::util::Reflection<CIARevisionEnum, CIARevision>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = CIA_MOS_8520_PLCC;
@@ -67,7 +67,7 @@ enum_long(CIAREG)
 typedef CIAREG CIAReg;
 
 #ifdef __cplusplus
-struct CIARegEnum : util::Reflection<CIARegEnum, CIAReg>
+struct CIARegEnum : vamiga::util::Reflection<CIARegEnum, CIAReg>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = CIAREG_CRB;

@@ -14,7 +14,7 @@
 #include "Serializable.h"
 #include <fstream>
 
-namespace util {
+namespace vamiga::util {
 
 template <class T> Allocator<T>& 
 Allocator<T>::operator= (const Allocator<T>& other)

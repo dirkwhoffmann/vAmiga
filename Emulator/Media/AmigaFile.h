@@ -18,9 +18,9 @@
 #include <sstream>
 #include <fstream>
 
-using util::Buffer;
-
 namespace vamiga {
+
+using util::Buffer;
 
 /* All media files are organized in the class hierarchy displayed below. Two
  * abstract classes are involed: AmigaFile, DiskFile, and FloppyFile.

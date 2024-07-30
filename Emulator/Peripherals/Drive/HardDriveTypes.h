@@ -27,7 +27,7 @@ enum_long(HDR_TYPE)
 typedef HDR_TYPE HardDriveType;
 
 #ifdef __cplusplus
-struct HardDriveTypeEnum : util::Reflection<HardDriveTypeEnum, HardDriveType>
+struct HardDriveTypeEnum : vamiga::util::Reflection<HardDriveTypeEnum, HardDriveType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = HDR_GENERIC;
@@ -54,7 +54,7 @@ enum_long(HDR_STATE)
 typedef HDR_STATE HardDriveState;
 
 #ifdef __cplusplus
-struct HardDriveStateEnum : util::Reflection<HardDriveStateEnum, HardDriveState>
+struct HardDriveStateEnum : vamiga::util::Reflection<HardDriveStateEnum, HardDriveState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = HDR_STATE_WRITING;

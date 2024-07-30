@@ -17,9 +17,9 @@
 #include "BootBlockImage.h"
 #include <vector>
 
-using util::Buffer;
-
 namespace vamiga {
+
+using util::Buffer;
 
 struct FSBlock : CoreObject {
 

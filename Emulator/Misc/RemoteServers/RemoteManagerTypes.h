@@ -25,7 +25,7 @@ enum_long(SERVER_TYPE)
 typedef SERVER_TYPE ServerType;
 
 #ifdef __cplusplus
-struct ServerTypeEnum : util::Reflection<ServerTypeEnum, ServerType>
+struct ServerTypeEnum : vamiga::util::Reflection<ServerTypeEnum, ServerType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = SERVER_GDB;

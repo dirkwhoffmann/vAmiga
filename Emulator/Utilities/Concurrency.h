@@ -13,7 +13,7 @@
 #include <thread>
 #include <future>
 
-namespace util {
+namespace vamiga::util {
 
 class Mutex
 {

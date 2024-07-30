@@ -12,7 +12,7 @@
 #include "BasicTypes.h"
 #include <utility>
 
-namespace util {
+namespace vamiga::util {
 
 /* The emulator uses buffers at various places. Most of them are derived from
  * one of the following two classes:

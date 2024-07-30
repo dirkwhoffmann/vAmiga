@@ -25,7 +25,7 @@ enum_long(VIDEO_FORMAT)
 typedef VIDEO_FORMAT VideoFormat;
 
 #ifdef __cplusplus
-struct VideoFormatEnum : util::Reflection<VideoFormatEnum, VideoFormat>
+struct VideoFormatEnum : vamiga::util::Reflection<VideoFormatEnum, VideoFormat>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = NTSC;
@@ -53,7 +53,7 @@ enum_long(WARP_MODE)
 typedef WARP_MODE WarpMode;
 
 #ifdef __cplusplus
-struct WarpModeEnum : util::Reflection<WarpModeEnum, WarpMode>
+struct WarpModeEnum : vamiga::util::Reflection<WarpModeEnum, WarpMode>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = WARP_ALWAYS;
@@ -83,7 +83,7 @@ enum_long(CONFIG_SCHEME)
 typedef CONFIG_SCHEME ConfigScheme;
 
 #ifdef __cplusplus
-struct ConfigSchemeEnum : util::Reflection<ConfigSchemeEnum, ConfigScheme>
+struct ConfigSchemeEnum : vamiga::util::Reflection<ConfigSchemeEnum, ConfigScheme>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = CONFIG_A500_PLUS_1MB;
@@ -163,7 +163,7 @@ typedef REG_CHIPSET ChipsetReg;
 
 #ifdef __cplusplus
 static_assert(REG_NO_OP == (0x1FE >> 1));
-struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
+struct ChipsetRegEnum : vamiga::util::Reflection<ChipsetRegEnum, ChipsetReg>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = REG_NO_OP;

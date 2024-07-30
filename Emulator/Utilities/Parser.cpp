@@ -10,7 +10,7 @@
 #include "config.h"
 #include "Parser.h"
 
-namespace util {
+namespace vamiga::util {
 
 bool isBool(const string& token)
 {

@@ -34,7 +34,7 @@ enum_long(RSKEY_KEY)
 typedef RSKEY_KEY RetroShellKey;
 
 #ifdef __cplusplus
-struct RetroShellKeyEnum : util::Reflection<RetroShellKeyEnum, RetroShellKey>
+struct RetroShellKeyEnum : vamiga::util::Reflection<RetroShellKeyEnum, RetroShellKey>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = RSKEY_CR;

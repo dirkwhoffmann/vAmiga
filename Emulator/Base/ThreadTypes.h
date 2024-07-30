@@ -29,7 +29,7 @@ enum_long(EXEC_STATE)
 typedef EXEC_STATE ExecState;
 
 #ifdef __cplusplus
-struct ExecStateEnum : util::Reflection<ExecStateEnum, ExecState>
+struct ExecStateEnum : vamiga::util::Reflection<ExecStateEnum, ExecState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = STATE_HALTED;

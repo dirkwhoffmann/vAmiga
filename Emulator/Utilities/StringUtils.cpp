@@ -11,7 +11,7 @@
 #include "StringUtils.h"
 #include <sstream>
 
-namespace util {
+namespace vamiga::util {
 
 string createStr(const u8 *buf, isize maxLen)
 {

@@ -35,7 +35,7 @@ enum_long(FILETYPE)
 typedef FILETYPE FileType;
 
 #ifdef __cplusplus
-struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType>
+struct FileTypeEnum : vamiga::util::Reflection<FileTypeEnum, FileType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = FILETYPE_EXTENDED_ROM;

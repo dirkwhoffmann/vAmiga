@@ -27,7 +27,7 @@ enum_long(SPD)
 typedef SPD SerialPortDevice;
 
 #ifdef __cplusplus
-struct SerialPortDeviceEnum : util::Reflection<SerialPortDeviceEnum, SerialPortDevice>
+struct SerialPortDeviceEnum : vamiga::util::Reflection<SerialPortDeviceEnum, SerialPortDevice>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = SPD_COMMANDER;

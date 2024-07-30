@@ -26,7 +26,7 @@ enum_long(DIAMETER)
 typedef DIAMETER Diameter;
 
 #ifdef __cplusplus
-struct DiameterEnum : util::Reflection<DiameterEnum, Diameter>
+struct DiameterEnum : vamiga::util::Reflection<DiameterEnum, Diameter>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = INCH_525;
@@ -54,7 +54,7 @@ enum_long(DENSITY)
 typedef DENSITY Density;
 
 #ifdef __cplusplus
-struct DensityEnum : util::Reflection<DensityEnum, Density>
+struct DensityEnum : vamiga::util::Reflection<DensityEnum, Density>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = DENSITY_HD;

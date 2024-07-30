@@ -68,7 +68,7 @@ enum_long(COMP_TYPE)
 typedef COMP_TYPE CType;
 
 #ifdef __cplusplus
-struct CTypeEnum : util::Reflection<CTypeEnum, CType>
+struct CTypeEnum : vamiga::util::Reflection<CTypeEnum, CType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = COMP_VIDEO_PORT;

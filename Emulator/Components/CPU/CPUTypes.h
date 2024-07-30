@@ -32,7 +32,7 @@ enum_long(CPU_REVISION)
 typedef CPU_REVISION CPURevision;
 
 #ifdef __cplusplus
-struct CPURevisionEnum : util::Reflection<CPURevisionEnum, CPURevision>
+struct CPURevisionEnum : vamiga::util::Reflection<CPURevisionEnum, CPURevision>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = CPU_68EC020;
@@ -67,7 +67,7 @@ enum_long(DASM_REVISION)
 typedef DASM_REVISION DasmRevision;
 
 #ifdef __cplusplus
-struct DasmRevisionEnum : util::Reflection<DasmRevisionEnum, DasmRevision>
+struct DasmRevisionEnum : vamiga::util::Reflection<DasmRevisionEnum, DasmRevision>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = DASM_68040;
@@ -104,7 +104,7 @@ enum_long(DASM_SYNTAX)
 typedef DASM_SYNTAX DasmSyntax;
 
 #ifdef __cplusplus
-struct DasmSyntaxEnum : util::Reflection<DasmSyntaxEnum, DasmSyntax>
+struct DasmSyntaxEnum : vamiga::util::Reflection<DasmSyntaxEnum, DasmSyntax>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = DASM_SYNTAX_MUSASHI;
@@ -135,7 +135,7 @@ enum_long(GUARD_TYPE)
 typedef GUARD_TYPE GuardType;
 
 #ifdef __cplusplus
-struct GuardTypeEnum : util::Reflection<GuardTypeEnum, GuardType>
+struct GuardTypeEnum : vamiga::util::Reflection<GuardTypeEnum, GuardType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = GUARD_CATCHPOINT;

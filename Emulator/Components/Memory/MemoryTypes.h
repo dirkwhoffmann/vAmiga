@@ -39,7 +39,7 @@ enum_long(MEM_SOURCE)
 typedef MEM_SOURCE MemorySource;
 
 #ifdef __cplusplus
-struct MemorySourceEnum : util::Reflection<MemorySourceEnum, MemorySource>
+struct MemorySourceEnum : vamiga::util::Reflection<MemorySourceEnum, MemorySource>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = MEM_EXT;
@@ -81,7 +81,7 @@ enum_long(ACCESSOR_TYPE)
 typedef ACCESSOR_TYPE Accessor;
 
 #ifdef __cplusplus
-struct AccessorEnum : util::Reflection<AccessorEnum, Accessor>
+struct AccessorEnum : vamiga::util::Reflection<AccessorEnum, Accessor>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = ACCESSOR_AGNUS;
@@ -110,7 +110,7 @@ enum_long(BANK_MAP)
 typedef BANK_MAP BankMap;
 
 #ifdef __cplusplus
-struct BankMapEnum : util::Reflection<BankMapEnum, BankMap>
+struct BankMapEnum : vamiga::util::Reflection<BankMapEnum, BankMap>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = BANK_MAP_A2000B;
@@ -140,7 +140,7 @@ enum_long(RAM_INIT_PATTERN)
 typedef RAM_INIT_PATTERN RamInitPattern;
 
 #ifdef __cplusplus
-struct RamInitPatternEnum : util::Reflection<RamInitPatternEnum, RamInitPattern>
+struct RamInitPatternEnum : vamiga::util::Reflection<RamInitPatternEnum, RamInitPattern>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = RAM_INIT_RANDOMIZED;
@@ -169,7 +169,7 @@ enum_long(UNMAPPED_MEMORY)
 typedef UNMAPPED_MEMORY UnmappedMemory;
 
 #ifdef __cplusplus
-struct UnmappedMemoryEnum : util::Reflection<UnmappedMemoryEnum, UnmappedMemory>
+struct UnmappedMemoryEnum : vamiga::util::Reflection<UnmappedMemoryEnum, UnmappedMemory>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = UNMAPPED_ALL_ONES;

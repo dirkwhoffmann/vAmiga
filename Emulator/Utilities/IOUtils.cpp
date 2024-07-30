@@ -17,7 +17,7 @@
 #include <iomanip>
 #include <vector>
 
-namespace util {
+namespace vamiga::util {
 
 fs::path
 makeUniquePath(const fs::path &path)

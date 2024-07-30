@@ -25,7 +25,7 @@ enum_long(SMP_METHOD)
 typedef SMP_METHOD SamplingMethod;
 
 #ifdef __cplusplus
-struct SamplingMethodEnum : util::Reflection<SamplingMethodEnum, SamplingMethod>
+struct SamplingMethodEnum : vamiga::util::Reflection<SamplingMethodEnum, SamplingMethod>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = SMP_LINEAR;

@@ -28,7 +28,7 @@ enum_long(SRV_STATE)
 typedef SRV_STATE SrvState;
 
 #ifdef __cplusplus
-struct SrvStateEnum : util::Reflection<SrvStateEnum, SrvState>
+struct SrvStateEnum : vamiga::util::Reflection<SrvStateEnum, SrvState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = SRV_STATE_ERROR;
@@ -58,7 +58,7 @@ enum_long(SRVPROT)
 typedef SRVPROT ServerProtocol;
 
 #ifdef __cplusplus
-struct ServerProtocolEnum : util::Reflection<ServerProtocolEnum, ServerProtocol>
+struct ServerProtocolEnum : vamiga::util::Reflection<ServerProtocolEnum, ServerProtocol>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = SRVPROT_DEFAULT;

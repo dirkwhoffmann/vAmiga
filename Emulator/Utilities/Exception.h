@@ -12,7 +12,7 @@
 #include "BasicTypes.h"
 #include <exception>
 
-namespace util {
+namespace vamiga::util {
 
 struct Exception : public std::exception {
     

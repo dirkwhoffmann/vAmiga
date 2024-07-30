@@ -109,7 +109,7 @@ enum_long(ROM_VENDOR)
 typedef ROM_VENDOR RomVendor;
 
 #ifdef __cplusplus
-struct RomVendorEnum : util::Reflection<RomVendorEnum, RomVendor> {
+struct RomVendorEnum : vamiga::util::Reflection<RomVendorEnum, RomVendor> {
 
     static constexpr long minVal = 0;
     static constexpr long maxVal = ROM_VENDOR_OTHER;

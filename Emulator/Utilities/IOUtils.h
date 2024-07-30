@@ -23,7 +23,7 @@
 
 namespace fs = std::filesystem;
 
-namespace util {
+namespace vamiga::util {
 
 //
 // Handling files

@@ -28,7 +28,7 @@ enum_long(FS_VOLUME_TYPE)
 typedef FS_VOLUME_TYPE FSVolumeType;
 
 #ifdef __cplusplus
-struct FSVolumeTypeEnum : util::Reflection<FSVolumeTypeEnum, FSVolumeType>
+struct FSVolumeTypeEnum : vamiga::util::Reflection<FSVolumeTypeEnum, FSVolumeType>
 {
     static constexpr long minVal = FS_NODOS;
     static constexpr long maxVal = FS_FFS_LNFS;
@@ -93,7 +93,7 @@ enum_long(FS_BLOCK_TYPE)
 typedef FS_BLOCK_TYPE FSBlockType;
 
 #ifdef __cplusplus
-struct FSBlockTypeEnum : util::Reflection<FSBlockTypeEnum, FSBlockType>
+struct FSBlockTypeEnum : vamiga::util::Reflection<FSBlockTypeEnum, FSBlockType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = FS_DATA_BLOCK_FFS;
@@ -166,7 +166,7 @@ enum_long(FSI_TYPE)
 typedef FSI_TYPE FSItemType;
 
 #ifdef __cplusplus
-struct FSItemTypeEnum : util::Reflection<FSItemTypeEnum, FSItemType>
+struct FSItemTypeEnum : vamiga::util::Reflection<FSItemTypeEnum, FSItemType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = FSI_BITMAP;

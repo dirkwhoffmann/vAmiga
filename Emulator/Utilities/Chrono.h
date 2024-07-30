@@ -12,7 +12,7 @@
 #include "BasicTypes.h"
 #include <ctime>
 
-namespace util {
+namespace vamiga::util {
 
 class Time {
     

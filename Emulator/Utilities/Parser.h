@@ -12,7 +12,7 @@
 #include "BasicTypes.h"
 #include "Exception.h"
 
-namespace util {
+namespace vamiga::util {
 
 struct ParseError : public std::exception {
 

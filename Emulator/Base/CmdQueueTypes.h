@@ -77,7 +77,7 @@ enum_long(CMD_TYPE)
 typedef CMD_TYPE CmdType;
 
 #ifdef __cplusplus
-struct CmdTypeEnum : util::Reflection<CmdTypeEnum, CmdType> {
+struct CmdTypeEnum : vamiga::util::Reflection<CmdTypeEnum, CmdType> {
 
     static constexpr long minVal = 0;
     static constexpr long maxVal = CMD_FOCUS;

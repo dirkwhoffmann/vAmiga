@@ -14,9 +14,10 @@
 #include "Constants.h"
 #include "Colors.h"
 
-using util::Buffer;
 
 namespace vamiga {
+
+using util::Buffer;
 
 class FrameBuffer {
 
