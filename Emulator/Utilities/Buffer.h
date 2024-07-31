@@ -15,8 +15,10 @@
 
 namespace vamiga::util {
 
-template <class T> struct Allocator {
+namespace fs = ::std::filesystem;
 
+template <class T> struct Allocator {
+    
     static constexpr isize maxCapacity = 512 * 1024 * 1024;
     
     T *&ptr;
@@ -26,7 +28,7 @@ template <class T> struct Allocator {
     Allocator(const Allocator&) = delete;
     ~Allocator() { dealloc(); }
     Allocator& operator= (const Allocator& other);
-
+    
     // Queries the buffer state
     isize bytesize() const { return size * sizeof(T); }
     bool empty() const { return size == 0; }
@@ -38,9 +40,9 @@ template <class T> struct Allocator {
     void init(isize elements, T value = 0);
     void init(const T *buf, isize elements);
     void init(const Allocator<T> &other);
-    void init(const std::filesystem::path &path);
-    void init(const std::filesystem::path &path, const string &name);
-    
+    void init(const fs::path &path);
+    void init(const fs::path &path, const string &name);
+
     // Resizes an existing buffer
     void resize(isize elements);
     void resize(isize elements, T pad);
@@ -76,9 +78,9 @@ template <class T> struct Buffer : public Allocator <T> {
     : Allocator<T>(ptr) { this->init(bytes, value); }
     Buffer(const T *buf, isize len)
     : Allocator<T>(ptr) { this->init(buf, len); }
-    Buffer(const std::filesystem::path &path)
+    Buffer(const fs::path &path)
     : Allocator<T>(ptr) { this->init(path); }
-    Buffer(const std::filesystem::path &path, const string &name)
+    Buffer(const fs::path &path, const string &name)
     : Allocator<T>(ptr) { this->init(path, name); }
     
     Buffer& operator= (const Buffer& other) { Allocator<T>::operator=(other); return *this; }

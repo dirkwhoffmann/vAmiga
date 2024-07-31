@@ -21,7 +21,8 @@
 #include <sys/stat.h>
 #include <vector>
 
-namespace fs = std::filesystem;
+// Namespace aliases
+namespace vamiga { namespace fs = std::filesystem; }
 
 namespace vamiga::util {
 
@@ -33,23 +34,23 @@ namespace vamiga::util {
 fs::path makeUniquePath(const fs::path &path);
 
 // Returns the size of a file in bytes
-isize getSizeOfFile(const std::filesystem::path &path);
+isize getSizeOfFile(const fs::path &path);
 
 // Checks if a file exists
-bool fileExists(const std::filesystem::path &path);
+bool fileExists(const fs::path &path);
 
 // Checks if a path points to a directory
-bool isDirectory(const std::filesystem::path &path);
+bool isDirectory(const fs::path &path);
 
 // Creates a directory
-bool createDirectory(const std::filesystem::path &path);
+bool createDirectory(const fs::path &path);
 
 // Returns the number of files in a directory
-isize numDirectoryItems(const std::filesystem::path &path);
+isize numDirectoryItems(const fs::path &path);
 
 // Returns a list of files in a directory
-std::vector<std::filesystem::path> files(const std::filesystem::path &path, const string &suffix = "");
-std::vector<std::filesystem::path> files(const std::filesystem::path &path, std::vector <string> &suffixes);
+std::vector<fs::path> files(const fs::path &path, const string &suffix = "");
+std::vector<fs::path> files(const fs::path &path, std::vector <string> &suffixes);
 
 // Checks the header signature (magic bytes) of a stream or buffer
 bool matchingStreamHeader(std::istream &is, const u8 *header, isize len, isize offset = 0);
@@ -98,9 +99,9 @@ struct bin {
 };
 
 struct flt {
-    
+
     double value;
-    
+
     flt(double v) : value(v) { };
     flt(float v) : value(double(v)) { };
     std::ostream &operator()(std::ostream &os) const;

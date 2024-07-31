@@ -129,9 +129,9 @@ protected:
     virtual bool isCompatiblePath(const std::filesystem::path &path) const = 0;
     virtual bool isCompatibleStream(std::istream &stream) const = 0;
     
-    isize readFromStream(std::istream &stream) override throws;
-    isize readFromFile(const std::filesystem::path &path) override throws;
-    isize readFromBuffer(const u8 *buf, isize len) override throws;
+    isize readFromStream(std::istream &stream) throws override;
+    isize readFromFile(const std::filesystem::path &path) throws override;
+    isize readFromBuffer(const u8 *buf, isize len) throws override;
     isize readFromBuffer(const Buffer<u8> &buffer) throws;
 
 public:
@@ -141,10 +141,10 @@ public:
     isize writeToBuffer(u8 *buf, isize offset, isize len) throws;
     isize writeToBuffer(Buffer<u8> &buffer, isize offset, isize len) throws;
 
-    isize writeToStream(std::ostream &stream) override throws;
-    isize writeToFile(const std::filesystem::path &path) override throws;
-    isize writePartitionToFile(const std::filesystem::path &path, isize partition) override throws;
-    isize writeToBuffer(u8 *buf) override throws;
+    isize writeToStream(std::ostream &stream) throws override;
+    isize writeToFile(const std::filesystem::path &path) throws override;
+    isize writePartitionToFile(const std::filesystem::path &path, isize partition) throws override;
+    isize writeToBuffer(u8 *buf) throws override;
     isize writeToBuffer(Buffer<u8> &buffer) throws;
 
 private:

@@ -11,12 +11,11 @@
 #include "Buffer.h"
 #include "IOUtils.h"
 #include "MemUtils.h"
-#include "Serializable.h"
 #include <fstream>
 
 namespace vamiga::util {
 
-template <class T> Allocator<T>& 
+template <class T> Allocator<T>&
 Allocator<T>::operator= (const Allocator<T>& other)
 {
     // Reallocate buffer if needed

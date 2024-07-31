@@ -74,13 +74,11 @@ template <class T, isize capacity> struct Array
     
     T operator [] (isize i) const
     {
-        assert(i >= 0 && i < capacity);
         return elements[i];
     }
 
     T& operator [] (isize i)
     {
-        assert(i >= 0 && i < capacity);
         return elements[i];
     }
 
@@ -156,7 +154,7 @@ struct SortedArray : public Array<T, capacity>
 template <class T, isize capacity> struct RingBuffer
 {
     // Element storage
-    T *elements = new T[capacity];
+    T *elements = new T[capacity]();
 
     // Read and write pointers
     isize r, w;
@@ -188,13 +186,12 @@ template <class T, isize capacity> struct RingBuffer
     //
 
     isize cap() const { return capacity; }
-    isize oldcount() const { return (capacity + w - r) % capacity; }
-    isize count() const { assert(oldcount() == (r > w ? capacity - (r - w) : w - r)); return r > w ? capacity - (r - w) : w - r; }
+    isize count() const { return r > w ? capacity - (r - w) : w - r; }
     isize free() const { return capacity - count() - 1; }
     double fillLevel() const { return (double)count() / capacity; }
     bool isEmpty() const { return r == w; }
     bool isFull() const { return count() == capacity - 1; }
-    
+
     
     //
     // Working with indices
@@ -274,7 +271,7 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
 {
     // Key storage
     i64 *keys = new i64[capacity];
- 
+
 
     //
     // Initializing

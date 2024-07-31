@@ -50,9 +50,9 @@ public:
     // Methods from RemoteServer
     //
     
-    string doReceive() override throws;
-    void doProcess(const string &packet) override throws;
-    void doSend(const string &packet) override throws;
+    string doReceive() throws override;
+    void doProcess(const string &packet) throws override;
+    void doSend(const string &packet)throws  override;
     void didStart() override;
     void didConnect() override;
 };

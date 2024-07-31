@@ -90,9 +90,9 @@ public:
 public:
     
     bool shouldRun() override;
-    string doReceive() override throws;
-    void doSend(const string &payload) override throws;
-    void doProcess(const string &payload) override throws;
+    string doReceive() throws override;
+    void doSend(const string &payload) throws override;
+    void doProcess(const string &payload) throws override;
     void didStart() override;
     void didStop() override;
     void didConnect() override;

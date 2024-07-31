@@ -31,20 +31,31 @@ makeUniquePath(const fs::path &path)
         auto index = std::to_string(nr);
         fs::path result = location / fs::path(name + index) / extension;
 
-        if (!util::fileExists(result.string())) return result;
+        if (!util::fileExists(result)) return result;
     }
 
     unreachable;
 }
 
+isize
+getSizeOfFile(const fs::path &path)
+{
+    struct stat fileProperties;
+
+    if (stat(path.string().c_str(), &fileProperties) != 0)
+        return -1;
+
+    return (isize)fileProperties.st_size;
+}
+
 bool
-fileExists(const std::filesystem::path &path)
+fileExists(const fs::path &path)
 {
     return getSizeOfFile(path) >= 0;
 }
 
 bool
-isDirectory(const std::filesystem::path &path)
+isDirectory(const fs::path &path)
 {
     try {
         
@@ -58,7 +69,7 @@ isDirectory(const std::filesystem::path &path)
 }
 
 bool
-createDirectory(const std::filesystem::path &path)
+createDirectory(const fs::path &path)
 {
     try {
         
@@ -71,7 +82,7 @@ createDirectory(const std::filesystem::path &path)
 }
 
 isize
-numDirectoryItems(const std::filesystem::path &path)
+numDirectoryItems(const fs::path &path)
 {
     isize result = 0;
     
@@ -88,8 +99,8 @@ numDirectoryItems(const std::filesystem::path &path)
     return result;
 }
 
-std::vector<std::filesystem::path>
-files(const std::filesystem::path &path, const string &suffix)
+std::vector<fs::path>
+files(const fs::path &path, const string &suffix)
 {
     std::vector <string> suffixes;
     if (suffix != "") suffixes.push_back(suffix);
@@ -97,15 +108,15 @@ files(const std::filesystem::path &path, const string &suffix)
     return files(path, suffixes);
 }
 
-std::vector<std::filesystem::path>
-files(const std::filesystem::path &path, std::vector <string> &suffixes)
+std::vector<fs::path>
+files(const fs::path &path, std::vector <string> &suffixes)
 {
-    std::vector<std::filesystem::path> result;
+    std::vector<fs::path> result;
 
     try {
         
         for (const auto &entry : fs::directory_iterator(path)) {
-            
+
             const auto &name = entry.path().filename();
             auto suffix = name.extension().string();
 
@@ -117,17 +128,6 @@ files(const std::filesystem::path &path, std::vector <string> &suffixes)
     } catch (...) { }
     
     return result;
-}
-
-isize
-getSizeOfFile(const std::filesystem::path &path)
-{
-    struct stat fileProperties;
-        
-    if (stat(path.string().c_str(), &fileProperties) != 0)
-        return -1;
-    
-    return (isize)fileProperties.st_size;
 }
 
 bool
@@ -250,7 +250,6 @@ str::operator()(std::ostream &os) const
 
     return os;
 };
-
 
 const string &bol::yes = "yes";
 const string &bol::no = "no";

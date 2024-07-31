@@ -14,7 +14,7 @@ namespace vamiga::util {
 
 bool isBool(const string& token)
 {
-    return 
+    return
     token == "1" || token == "true" || token == "yes" ||
     token == "0" || token == "false" || token == "no";
 }
@@ -43,7 +43,6 @@ parseBool(const string& token)
     if (token == "1" || token == "true" || token == "yes") return true;
     if (token == "0" || token == "false" || token == "no") return false;
 
-    assert(!isBool(token));
     throw ParseBoolError(token);
 }
 
@@ -53,7 +52,6 @@ parseOnOff(const string& token)
     if (token == "on") return true;
     if (token == "off") return false;
 
-    assert(!isOnOff(token));
     throw ParseOnOffError(token);
 }
 
