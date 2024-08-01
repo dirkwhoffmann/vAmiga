@@ -10,6 +10,7 @@
 #pragma once
 
 #include "Reflection.h"
+#include "ThreadTypes.h"
 #include "AmigaTypes.h"
 
 // namespace vamiga {

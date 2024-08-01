@@ -139,6 +139,12 @@ CoreComponent::routeOption(Option opt, isize objid)
     return nullptr;
 }
 
+i64
+CoreComponent::getFallback(Option opt) const
+{
+    return emulator.defaults.get(opt);
+}
+
 void
 CoreComponent::initialize()
 {

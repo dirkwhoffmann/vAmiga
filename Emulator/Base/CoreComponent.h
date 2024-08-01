@@ -11,7 +11,6 @@
 
 #include "CoreComponentTypes.h"
 #include "EmulatorTypes.h"
-#include "ThreadTypes.h"
 #include "CoreObject.h"
 #include "Inspectable.h"
 #include "Synchronizable.h"
@@ -119,6 +118,9 @@ public:
     // Returns the target component for a given configuration option
     Configurable *routeOption(Option opt, isize objid);
 
+    // Returns the fallback value for a config option
+    i64 getFallback(Option opt) const override;
+
 
     //
     // Controlling the state
@@ -127,7 +129,6 @@ public:
 public:
 
     void initialize();
-    void reset(bool hard);
     void powerOn();
     void powerOff();
     void run();
@@ -140,23 +141,18 @@ public:
     void focus();
     void unfocus();
 
-    void hardReset() { reset(true); }
-    void softReset() { reset(false); }
-
     void powerOnOff(bool value) { value ? powerOn() : powerOff(); }
     void warpOnOff(bool value) { value ? warpOn() : warpOff(); }
     void trackOnOff(bool value) { value ? trackOn() : trackOff(); }
 
 
     //
-    // Processing state changes
+    // Performing state changes
     //
 
 private:
     
     virtual void _initialize() { }
-    virtual void _willReset(bool hard) { }
-    virtual void _didReset(bool hard) { }
     virtual void _isReady() const throws { }
     virtual void _powerOn() { }
     virtual void _powerOff() { }
@@ -180,13 +176,20 @@ public:
     // Returns the size of the internal state in bytes
     isize size();
 
+    // Resets the internal state
+    void hardReset() { reset(true); }
+    void softReset() { reset(false); }
+    void reset(bool hard);
+    virtual void _willReset(bool hard) { }
+    virtual void _didReset(bool hard) { }
+
     // Loads the internal state from a memory buffer
     virtual isize load(const u8 *buf) throws;
-    virtual void _didLoad() { };
+    virtual void _didLoad() { }
 
     // Saves the internal state to a memory buffer
     virtual isize save(u8 *buf);
-    virtual void _didSave() { };
+    virtual void _didSave() { }
 
 
     //
