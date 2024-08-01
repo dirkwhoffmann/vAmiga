@@ -20,6 +20,7 @@ debugflag MIMIC_UAE       = 0;
 debugflag RUN_DEBUG       = 0;
 debugflag TIM_DEBUG       = 0;
 debugflag WARP_DEBUG      = 0;
+debugflag CMD_DEBUG       = 0;
 debugflag QUEUE_DEBUG     = 0;
 debugflag SNP_DEBUG       = 0;
 

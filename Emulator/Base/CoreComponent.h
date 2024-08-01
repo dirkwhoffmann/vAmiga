@@ -35,7 +35,7 @@ struct Description {
 typedef std::vector<Description> Descriptions;
 
 class CoreComponent : 
-public CoreObject, public Serializable, public Synchronizable, public Suspendable, public Configurable {
+public CoreObject, public Serializable, public Suspendable, public Synchronizable, public Configurable {
 
 public:
     
@@ -82,9 +82,6 @@ public:
     const char *description() const override;
     const char *shellName() const;
 
-    // Computes a checksum
-    u64 checksum(bool recursive);
-
     // State properties (see Thread class for details)
     virtual bool isInitialized() const;
     virtual bool isPoweredOff() const;
@@ -94,16 +91,24 @@ public:
     virtual bool isSuspended() const;
     virtual bool isHalted() const;
 
+    // Throws an exception if the emulator is not ready to power on
+    virtual void isReady() const throws;
+
+    // Computes a checksum
+    u64 checksum(bool recursive);
+
+
+    //
+    // Suspending and Resuming
+    //
+
     // Suspends or resumes the emulator thread
     void suspend() override;
     void resume() override;
 
-    // Throws an exception if the emulator is not ready to power on
-    virtual void isReady() const throws;
-
 
     //
-    // Configurating
+    // Configuring
     //
 
 public:
@@ -111,8 +116,36 @@ public:
     // Initializes all configuration items with their default values
     virtual void resetConfig();
 
-    // Returns the target components for a given configuration option
+    // Returns the target component for a given configuration option
     Configurable *routeOption(Option opt, isize objid);
+
+
+    //
+    // Controlling the state
+    //
+
+public:
+
+    void initialize();
+    void reset(bool hard);
+    void powerOn();
+    void powerOff();
+    void run();
+    void pause();
+    void halt();
+    void warpOn();
+    void warpOff();
+    void trackOn();
+    void trackOff();
+    void focus();
+    void unfocus();
+
+    void hardReset() { reset(true); }
+    void softReset() { reset(false); }
+
+    void powerOnOff(bool value) { value ? powerOn() : powerOff(); }
+    void warpOnOff(bool value) { value ? warpOn() : warpOff(); }
+    void trackOnOff(bool value) { value ? trackOn() : trackOff(); }
 
 
     //
@@ -159,6 +192,8 @@ public:
     //
     // Working with subcomponents
     //
+
+public:
 
     // Collects references to this components and all subcomponents
     std::vector<CoreComponent *> collectComponents();

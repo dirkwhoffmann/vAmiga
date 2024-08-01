@@ -17,6 +17,8 @@ CmdQueue::put(const Cmd &cmd)
 {
     {   SYNCHRONIZED
 
+        debug(CMD_DEBUG, "%s [%llx]\n", CmdTypeEnum::key(cmd.type), cmd.value);
+
         if (!queue.isFull()) {
             queue.write(cmd);
         } else {
@@ -42,3 +44,4 @@ CmdQueue::poll(Cmd &cmd)
 }
 
 }
+

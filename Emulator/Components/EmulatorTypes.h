@@ -31,6 +31,7 @@ enum_long(DEBUG_FLAG)
     FLAG_RUN_DEBUG,        ///< Run loop, component states
     FLAG_TIM_DEBUG,        ///< Thread synchronization
     FLAG_WARP_DEBUG,       ///< Warp mode
+    FLAG_CMD_DEBUG,        ///< Debug the command queue
     FLAG_QUEUE_DEBUG,      ///< Message queue
     FLAG_SNP_DEBUG,        ///< Serialization (snapshots)
 
@@ -173,6 +174,7 @@ struct DebugFlagEnum : vamiga::util::Reflection<DebugFlagEnum, DebugFlag>
             case FLAG_RUN_DEBUG:        return "RUN_DEBUG";
             case FLAG_TIM_DEBUG:        return "TIM_DEBUG";
             case FLAG_WARP_DEBUG:       return "WARP_DEBUG";
+            case FLAG_CMD_DEBUG:        return "CMD_DEBUG";
             case FLAG_QUEUE_DEBUG:      return "QUEUE_DEBUG";
             case FLAG_SNP_DEBUG:        return "SNP_DEBUG";
 
@@ -308,6 +310,7 @@ struct DebugFlagEnum : vamiga::util::Reflection<DebugFlagEnum, DebugFlag>
             case FLAG_RUN_DEBUG:        return "Run loop, component states";
             case FLAG_TIM_DEBUG:        return "Thread synchronization";
             case FLAG_WARP_DEBUG:       return "Warp mode";
+            case FLAG_CMD_DEBUG:        return "Command queue";
             case FLAG_QUEUE_DEBUG:      return "Message queue";
             case FLAG_SNP_DEBUG:        return "Serialization (snapshots)";
 

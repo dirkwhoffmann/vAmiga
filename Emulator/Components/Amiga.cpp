@@ -124,27 +124,6 @@ Amiga::prefix() const
 }
 
 void
-Amiga::reset(bool hard)
-{
-    SerResetter resetter(hard);
-
-    {   SUSPENDED
-
-        // Call the pre-reset delegate
-        postorderWalk([hard](CoreComponent *c) { c->_willReset(hard); });
-
-        // Revert to a clean state
-        postorderWalk([&resetter](CoreComponent *c) { *c << resetter; });
-
-        // Call the post-reset delegate
-        postorderWalk([hard](CoreComponent *c) { c->_didReset(hard); });
-    }
-
-    // Inform the GUI
-    if (hard) msgQueue.put(MSG_RESET);
-}
-
-void
 Amiga::_willReset(bool hard)
 {
     // If a disk change is in progress, finish it
@@ -162,6 +141,9 @@ Amiga::_didReset(bool hard)
 
     // Clear all runloop flags
     flags = 0;
+
+    // Inform the GUI
+    if (hard) msgQueue.put(MSG_RESET);
 }
 
 i64
@@ -753,78 +735,6 @@ Amiga::cacheInfo(AmigaInfo &result) const
 }
 
 void
-Amiga::initialize()
-{
-    postorderWalk([](CoreComponent *c) { c->_initialize(); });
-}
-
-void
-Amiga::powerOn()
-{
-    postorderWalk([](CoreComponent *c) { c->_powerOn(); });
-}
-
-void
-Amiga::powerOff()
-{
-    postorderWalk([](CoreComponent *c) { c->_powerOff(); });
-}
-
-void
-Amiga::run()
-{
-    postorderWalk([](CoreComponent *c) { c->_run(); });
-}
-
-void
-Amiga::pause()
-{
-    postorderWalk([](CoreComponent *c) { c->_pause(); });
-}
-
-void
-Amiga::halt()
-{
-    postorderWalk([](CoreComponent *c) { c->_halt(); });
-}
-
-void
-Amiga::warpOn()
-{
-    postorderWalk([](CoreComponent *c) { c->_warpOn(); });
-}
-
-void
-Amiga::warpOff()
-{
-    postorderWalk([](CoreComponent *c) { c->_warpOff(); });
-}
-
-void
-Amiga::trackOn()
-{
-    postorderWalk([](CoreComponent *c) { c->_trackOn(); });
-}
-
-void
-Amiga::trackOff()
-{
-    postorderWalk([](CoreComponent *c) { c->_trackOff(); });
-}
-
-void
-Amiga::focus()
-{
-    postorderWalk([](CoreComponent *c) { c->_focus(); });
-}
-
-void
-Amiga::unfocus()
-{
-    postorderWalk([](CoreComponent *c) { c->_unfocus(); });
-}
-
-void
 Amiga::setFlag(u32 flag)
 {
     SYNCHRONIZED
@@ -1098,6 +1008,7 @@ Amiga::getDebugVariable(DebugFlag flag)
         case FLAG_RUN_DEBUG:        return RUN_DEBUG;
         case FLAG_TIM_DEBUG:        return TIM_DEBUG;
         case FLAG_WARP_DEBUG:       return WARP_DEBUG;
+        case FLAG_CMD_DEBUG:        return CMD_DEBUG;
         case FLAG_QUEUE_DEBUG:      return QUEUE_DEBUG;
         case FLAG_SNP_DEBUG:        return SNP_DEBUG;
 
@@ -1221,6 +1132,7 @@ Amiga::setDebugVariable(DebugFlag flag, int val)
         case FLAG_RUN_DEBUG:        RUN_DEBUG       = val; break;
         case FLAG_TIM_DEBUG:        TIM_DEBUG       = val; break;
         case FLAG_WARP_DEBUG:       WARP_DEBUG      = val; break;
+        case FLAG_CMD_DEBUG:        CMD_DEBUG       = val; break;
         case FLAG_QUEUE_DEBUG:      QUEUE_DEBUG     = val; break;
         case FLAG_SNP_DEBUG:        SNP_DEBUG       = val; break;
 

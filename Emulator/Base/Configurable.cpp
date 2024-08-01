@@ -41,7 +41,7 @@ Configurable::checkOption(const string &opt, const string &value)
 }
 
 void
-Configurable::setOption(Option opt, const string &value)
+Configurable::setOption(Option opt, const string &value) 
 {
     setOption(opt, OptionParser::parse(opt, value));
 }
@@ -56,16 +56,7 @@ void
 Configurable::resetConfig(const Defaults &defaults, isize objid)
 {
     for (auto &option : getOptions()) {
-
-        try {
-
-            setOption(option, defaults.get(option, objid));
-
-        } catch (Error &e) {
-
-            std::cout << "Config error: " << e.what() << std::endl;
-            throw;
-        }
+        setOption(option, defaults.get(option, objid));
     }
 }
 

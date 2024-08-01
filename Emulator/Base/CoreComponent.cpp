@@ -139,18 +139,95 @@ CoreComponent::routeOption(Option opt, isize objid)
     return nullptr;
 }
 
-/*
 void
-CoreComponent::routeOption(Option opt, std::vector<Configurable *> &result)
+CoreComponent::initialize()
 {
-    for (auto &o : getOptions()) {
-        if (o == opt) result.push_back(this);
-    }
-    for (auto &c : subComponents) {
-        c->routeOption(opt, result);
+    postorderWalk([](CoreComponent *c) { c->_initialize(); });
+}
+
+void
+CoreComponent::reset(bool hard)
+{
+    SerResetter resetter(hard);
+
+    {   SUSPENDED
+
+        // Call the pre-reset delegate
+        postorderWalk([hard](CoreComponent *c) { c->_willReset(hard); });
+
+        // Revert to a clean state
+        postorderWalk([&resetter](CoreComponent *c) { *c << resetter; });
+
+        // Call the post-reset delegate
+        postorderWalk([hard](CoreComponent *c) { c->_didReset(hard); });
     }
 }
-*/
+
+void
+CoreComponent::powerOn()
+{
+    postorderWalk([](CoreComponent *c) { c->_powerOn(); });
+}
+
+void
+CoreComponent::powerOff()
+{
+    postorderWalk([](CoreComponent *c) { c->_powerOff(); });
+}
+
+void
+CoreComponent::run()
+{
+    postorderWalk([](CoreComponent *c) { c->_run(); });
+}
+
+void
+CoreComponent::pause()
+{
+    postorderWalk([](CoreComponent *c) { c->_pause(); });
+}
+
+void
+CoreComponent::halt()
+{
+    postorderWalk([](CoreComponent *c) { c->_halt(); });
+}
+
+void
+CoreComponent::warpOn()
+{
+    postorderWalk([](CoreComponent *c) { c->_warpOn(); });
+}
+
+void
+CoreComponent::warpOff()
+{
+    postorderWalk([](CoreComponent *c) { c->_warpOff(); });
+}
+
+void
+CoreComponent::trackOn()
+{
+    postorderWalk([](CoreComponent *c) { c->_trackOn(); });
+}
+
+void
+CoreComponent::trackOff()
+{
+    postorderWalk([](CoreComponent *c) { c->_trackOff(); });
+}
+
+void
+CoreComponent::focus()
+{
+    postorderWalk([](CoreComponent *c) { c->_focus(); });
+}
+
+void
+CoreComponent::unfocus()
+{
+    postorderWalk([](CoreComponent *c) { c->_unfocus(); });
+}
 
 isize
 CoreComponent::size()

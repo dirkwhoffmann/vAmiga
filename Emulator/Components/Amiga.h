@@ -262,8 +262,6 @@ public:
 
 public:
 
-    void _willReset(bool hard) override;
-    void _didReset(bool hard) override;
     isize load(const u8 *buffer) override;
     isize save(u8 *buffer) override;
 
@@ -283,12 +281,10 @@ public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
 
-    void reset(bool hard);
-    void hardReset() { reset(true); }
-    void softReset() { reset(false); }
-
 private:
 
+    void _willReset(bool hard) override;
+    void _didReset(bool hard) override;
     void _powerOn() override;
     void _powerOff() override;
     void _run() override;
@@ -355,28 +351,6 @@ public:
 
     // Returns the master clock frequency based on the emulated refresh rate
     i64 masterClockFrequency() const;
-
-
-    //
-    // Controlling the state
-    //
-
-    void initialize();
-    void powerOn();
-    void powerOff();
-    void run();
-    void pause();
-    void halt();
-    void warpOn();
-    void warpOff();
-    void trackOn();
-    void trackOff();
-    void focus();
-    void unfocus();
-
-    void powerOnOff(bool value) { value ? powerOn() : powerOff(); }
-    void warpOnOff(bool value) { value ? warpOn() : warpOff(); }
-    void trackOnOff(bool value) { value ? trackOn() : trackOff(); }
 
 
     //
