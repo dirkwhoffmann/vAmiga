@@ -23,9 +23,7 @@ Blitter::Blitter(Amiga& ref) : SubComponent(ref)
 
 void
 Blitter::_initialize()
-{
-    CoreComponent::_initialize();
-    
+{    
     // Initialize the fill pattern tables
     for (isize carryIn = 0; carryIn < 2; carryIn++) {
 

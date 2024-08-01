@@ -20,8 +20,6 @@ namespace vamiga {
 void
 Console::_initialize()
 {
-    CoreComponent::_initialize();
-
     // Register commands
     initCommands(root);
 

@@ -61,8 +61,6 @@ FloppyDrive::operator= (const FloppyDrive& other) {
 void
 FloppyDrive::_initialize()
 {
-    CoreComponent::_initialize();
-
     string path;
 
     if (objid == 0) path = INITIAL_DF0;

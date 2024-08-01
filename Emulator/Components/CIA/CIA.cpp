@@ -32,8 +32,6 @@ CIA::CIA(Amiga& ref, isize objid) : SubComponent(ref, objid)
 void
 CIA::_initialize()
 {
-    CoreComponent::_initialize();
-
     pa = 0xFF;
     pb = 0xFF;
 }

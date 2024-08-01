@@ -24,8 +24,6 @@ Recorder::Recorder(Amiga& ref) : SubComponent(ref)
 void
 Recorder::_initialize()
 {
-    CoreComponent::_initialize();
-
     FFmpeg::init();
 }
 

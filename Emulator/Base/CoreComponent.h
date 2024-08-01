@@ -152,7 +152,7 @@ public:
     // Processing state changes
     //
 
-public:
+private:
     
     virtual void _initialize() { }
     virtual void _willReset(bool hard) { }

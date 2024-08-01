@@ -220,8 +220,6 @@ HardDrive::init(const std::filesystem::path &path) throws
 void
 HardDrive::_initialize()
 {
-    CoreComponent::_initialize();
-
     string path;
 
     if (objid == 0) path = INITIAL_HD0;

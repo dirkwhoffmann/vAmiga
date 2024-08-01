@@ -76,8 +76,6 @@ AudioPort::_dump(Category category, std::ostream& os) const
 void
 AudioPort::_initialize()
 {
-    CoreComponent::_initialize();
-
     setSampleRate(44100);
 }
 

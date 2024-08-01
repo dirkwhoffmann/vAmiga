@@ -39,8 +39,6 @@ PixelEngine::_dump(Category category, std::ostream& os) const
 void
 PixelEngine::_initialize()
 {
-    CoreComponent::_initialize();
-
     // Setup ECS BRDRBLNK color
     palette[64] = TEXEL(GpuColor(0x00, 0x00, 0x00).rawValue);
     

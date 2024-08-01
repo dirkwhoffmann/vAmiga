@@ -96,9 +96,7 @@ Memory::_dump(Category category, std::ostream& os) const
 
 void
 Memory::_initialize()
-{
-    CoreComponent::_initialize();
-    
+{    
     if (auto romPath = Emulator::defaults.getRaw("ROM_PATH"); romPath != "") {
 
         debug(CNF_DEBUG, "Trying to load Rom from %s...\n", romPath.c_str());
