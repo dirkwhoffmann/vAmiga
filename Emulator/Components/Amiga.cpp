@@ -591,25 +591,6 @@ Amiga::_trackOff()
     msgQueue.put(MSG_TRACK, 0);
 }
 
-isize
-Amiga::load(const u8 *buffer)
-{
-    auto result = CoreComponent::load(buffer);
-    postorderWalk([](CoreComponent *c) { c->_didLoad(); });
-
-    return result;
-}
-
-isize
-Amiga::save(u8 *buffer)
-{
-    auto result = CoreComponent::save(buffer);
-    postorderWalk([](CoreComponent *c) { c->_didSave(); });
-
-    return result;
-}
-
-
 void
 Amiga::computeFrame()
 {

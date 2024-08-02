@@ -262,10 +262,6 @@ public:
 
 public:
 
-    isize load(const u8 *buffer) override;
-    isize save(u8 *buffer) override;
-
-
     void prefix() const override;
 
 private:
