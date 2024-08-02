@@ -676,6 +676,7 @@ Emulator::getDebugVariable(DebugFlag flag)
         case FLAG_RUN_DEBUG:        return RUN_DEBUG;
         case FLAG_TIM_DEBUG:        return TIM_DEBUG;
         case FLAG_WARP_DEBUG:       return WARP_DEBUG;
+        case FLAG_CMD_DEBUG:        return CMD_DEBUG;
         case FLAG_QUEUE_DEBUG:      return QUEUE_DEBUG;
         case FLAG_SNP_DEBUG:        return SNP_DEBUG;
 
@@ -806,6 +807,7 @@ Emulator::setDebugVariable(DebugFlag flag, bool val)
         case FLAG_RUN_DEBUG:        RUN_DEBUG = val; break;
         case FLAG_TIM_DEBUG:        TIM_DEBUG = val; break;
         case FLAG_WARP_DEBUG:       WARP_DEBUG = val; break;
+        case FLAG_CMD_DEBUG:        CMD_DEBUG = val; break;
         case FLAG_QUEUE_DEBUG:      QUEUE_DEBUG = val; break;
         case FLAG_SNP_DEBUG:        SNP_DEBUG = val; break;
 

@@ -17,7 +17,7 @@ bool
 CoreObject::verbose = true;
 
 void
-CoreObject::prefix() const
+CoreObject::prefix(bool verbose) const
 {
     fprintf(stderr, "%s: ", objectName());
 }

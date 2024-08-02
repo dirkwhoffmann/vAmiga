@@ -98,28 +98,33 @@ Amiga::~Amiga()
 }
 
 void
-Amiga::prefix() const
+Amiga::prefix(bool verbose) const
 {
-    fprintf(stderr, "[%lld] (%3ld,%3ld) ",
-            agnus.pos.frame, agnus.pos.v, agnus.pos.h);
+    if (objid == 1 && RUA_DEBUG) fprintf(stderr, "[Run-ahead] ");
 
-    fprintf(stderr, "%06X ", cpu.getPC0());
-    fprintf(stderr, "%2X ", cpu.getIPL());
+    if (verbose) {
+        
+        fprintf(stderr, "[%lld] (%3ld,%3ld) ",
+                agnus.pos.frame, agnus.pos.v, agnus.pos.h);
 
-    u16 dmacon = agnus.dmacon;
-    bool dmaen = dmacon & DMAEN;
-    fprintf(stderr, "%c%c%c%c%c%c ",
-            (dmacon & BPLEN) ? (dmaen ? 'B' : 'B') : '-',
-            (dmacon & COPEN) ? (dmaen ? 'C' : 'c') : '-',
-            (dmacon & BLTEN) ? (dmaen ? 'B' : 'b') : '-',
-            (dmacon & SPREN) ? (dmaen ? 'S' : 's') : '-',
-            (dmacon & DSKEN) ? (dmaen ? 'D' : 'd') : '-',
-            (dmacon & AUDEN) ? (dmaen ? 'A' : 'a') : '-');
+        fprintf(stderr, "%06X ", cpu.getPC0());
+        fprintf(stderr, "%2X ", cpu.getIPL());
 
-    fprintf(stderr, "%04X %04X ", paula.intena, paula.intreq);
+        u16 dmacon = agnus.dmacon;
+        bool dmaen = dmacon & DMAEN;
+        fprintf(stderr, "%c%c%c%c%c%c ",
+                (dmacon & BPLEN) ? (dmaen ? 'B' : 'B') : '-',
+                (dmacon & COPEN) ? (dmaen ? 'C' : 'c') : '-',
+                (dmacon & BLTEN) ? (dmaen ? 'B' : 'b') : '-',
+                (dmacon & SPREN) ? (dmaen ? 'S' : 's') : '-',
+                (dmacon & DSKEN) ? (dmaen ? 'D' : 'd') : '-',
+                (dmacon & AUDEN) ? (dmaen ? 'A' : 'a') : '-');
 
-    if (agnus.copper.servicing) {
-        fprintf(stderr, "[%06X] ", agnus.copper.getCopPC0());
+        fprintf(stderr, "%04X %04X ", paula.intena, paula.intreq);
+
+        if (agnus.copper.servicing) {
+            fprintf(stderr, "[%06X] ", agnus.copper.getCopPC0());
+        }
     }
 }
 
@@ -993,6 +998,10 @@ Amiga::getDebugVariable(DebugFlag flag)
         case FLAG_QUEUE_DEBUG:      return QUEUE_DEBUG;
         case FLAG_SNP_DEBUG:        return SNP_DEBUG;
 
+        case FLAG_RUA_DEBUG:        return RUA_DEBUG;
+        case FLAG_RUA_CHECKSUM:     return RUA_CHECKSUM;
+        case FLAG_RUA_ON_STEROIDS:  return RUA_ON_STEROIDS;
+
         case FLAG_CPU_DEBUG:        return CPU_DEBUG;
         case FLAG_CST_DEBUG:        return CST_DEBUG;
 
@@ -1116,6 +1125,10 @@ Amiga::setDebugVariable(DebugFlag flag, int val)
         case FLAG_CMD_DEBUG:        CMD_DEBUG       = val; break;
         case FLAG_QUEUE_DEBUG:      QUEUE_DEBUG     = val; break;
         case FLAG_SNP_DEBUG:        SNP_DEBUG       = val; break;
+
+        case FLAG_RUA_DEBUG:        RUA_DEBUG       = val; break;
+        case FLAG_RUA_CHECKSUM:     RUA_CHECKSUM    = val; break;
+        case FLAG_RUA_ON_STEROIDS:  RUA_ON_STEROIDS = val; break;
 
         case FLAG_CPU_DEBUG:        CPU_DEBUG       = val; break;
         case FLAG_CST_DEBUG:        CST_DEBUG       = val; break;

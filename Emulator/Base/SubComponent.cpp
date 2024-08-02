@@ -63,9 +63,9 @@ zorro(ref.zorro)
 SubComponent::SubComponent(Amiga& ref, isize id) : CoreComponent(ref.emulator, id), References(ref) { };
 
 void
-SubComponent::prefix() const
+SubComponent::prefix(bool verbose) const
 {
-    amiga.prefix();
+    amiga.prefix(verbose);
 }
 
 }

@@ -75,7 +75,7 @@ public:
 
     SubComponent(Amiga& ref, isize id = 0);
 
-    void prefix() const override;
+    void prefix(bool verbose) const override;
 };
 
 }

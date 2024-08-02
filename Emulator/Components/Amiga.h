@@ -262,7 +262,7 @@ public:
 
 public:
 
-    void prefix() const override;
+    void prefix(bool verbose) const override;
 
 private:
 

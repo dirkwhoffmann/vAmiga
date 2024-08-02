@@ -37,7 +37,7 @@ public:
     virtual const char *description() const { return ""; }
     
     // Called by debug() and trace() to produce a detailed debug output
-    virtual void prefix() const;
+    virtual void prefix(bool verbose) const;
 };
 
 /* This file provides several macros for printing messages:
@@ -76,6 +76,7 @@ fprintf(stderr, "Warning: " format __VA_OPT__(,) __VA_ARGS__);
 
 #define debug(enable, format, ...) \
 if (enable) { if (verbose) { \
+prefix(false); \
 fprintf(stderr, "%s:%d " format, objectName(), __LINE__ __VA_OPT__(,) __VA_ARGS__); }}
 
 #define plain(enable, format, ...) \
@@ -84,12 +85,12 @@ fprintf(stderr, format __VA_OPT__(,) __VA_ARGS__); }}
 
 #define trace(enable, format, ...) \
 if (enable) { if (verbose) { \
-prefix(); \
+prefix(true); \
 fprintf(stderr, "%s:%d " format, objectName(), __LINE__ __VA_OPT__(,) __VA_ARGS__); }}
 
 #define xfiles(format, ...) \
 if (XFILES) { if (verbose) { \
-prefix(); \
+prefix(true); \
 fprintf(stderr, "XFILES: " format __VA_OPT__(,) __VA_ARGS__); }}
 
 }
