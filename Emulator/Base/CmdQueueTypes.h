@@ -21,7 +21,7 @@
 /// Emulator command
 enum_long(CMD_TYPE)
 {
-    CMD_NONE = 0,               ///< None
+    CMD_NONE,                   ///< None
 
     // Emulator
     CMD_CONFIG,                 ///< Configure the emulator

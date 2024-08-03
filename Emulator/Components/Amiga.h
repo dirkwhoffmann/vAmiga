@@ -260,14 +260,6 @@ public:
 
     } SERIALIZERS(serialize);
 
-public:
-
-    void prefix(isize level, isize line) const override;
-
-private:
-
-    void _dump(Category category, std::ostream& os) const override;
-
 
     //
     // Methods from CoreComponent
@@ -276,8 +268,11 @@ private:
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
+    void prefix(isize level, isize line) const override;
 
 private:
+
+    void _dump(Category category, std::ostream& os) const override;
 
     void _willReset(bool hard) override;
     void _didReset(bool hard) override;
