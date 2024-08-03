@@ -18,8 +18,15 @@ class CoreObject : public Dumpable {
 
 protected:
 
-    // Set to false to disable all debug messages
-    static bool verbose;
+    /* Verbosity level.
+     *
+     * The variable controls the amount and overall format of generated debug
+     * output. If set to zero, all debug messages are omitted. If set to a
+     * value of 1 or above, the debug message is prefixed with additional
+     * information about the emulator state, such as the component name issuing
+     * the message, the currently processed frame, or the value of CPU flags.
+     */
+    static isize verbosity;
 
     
     //
@@ -37,7 +44,7 @@ public:
     virtual const char *description() const { return ""; }
     
     // Called by debug() and trace() to produce a detailed debug output
-    virtual void prefix(bool verbose) const;
+    virtual void prefix(isize level, isize line) const;
 };
 
 /* This file provides several macros for printing messages:
@@ -46,7 +53,6 @@ public:
  *   - warn   Warning message       (Shows up in all builds)
  *   - fatal  Error message + Exit  (Shows up in all builds)
  *   - debug  Debug message         (Shows up in debug builds, only)
- *   - plain  Plain debug message   (Shows up in debug builds, only)
  *   - trace  Detailed debug output (Shows up in debug builds, only)
  *
  * Debug messages are prefixed by the component name and a line number. Trace
@@ -74,23 +80,21 @@ fprintf(stderr, "Warning: " format __VA_OPT__(,) __VA_ARGS__);
 #define fatal(format, ...) \
 { fprintf(stderr, "Fatal: " format __VA_OPT__(,) __VA_ARGS__); exit(1); }
 
-#define debug(enable, format, ...) \
-if (enable) { if (verbose) { \
-prefix(false); \
-fprintf(stderr, "%s:%d " format, objectName(), __LINE__ __VA_OPT__(,) __VA_ARGS__); }}
-
-#define plain(enable, format, ...) \
-if (enable) { if (verbose) { \
+#define debugmsg(enable, level, format, ...) \
+if (enable) { if (verbosity) { \
+prefix(level, __LINE__); \
 fprintf(stderr, format __VA_OPT__(,) __VA_ARGS__); }}
 
+#define debug(enable, format, ...) \
+debugmsg(enable, verbosity, format __VA_OPT__(,) __VA_ARGS__);
+
+// DEPRECATED
 #define trace(enable, format, ...) \
-if (enable) { if (verbose) { \
-prefix(true); \
-fprintf(stderr, "%s:%d " format, objectName(), __LINE__ __VA_OPT__(,) __VA_ARGS__); }}
+debugmsg(enable, 5, format __VA_OPT__(,) __VA_ARGS__);
 
 #define xfiles(format, ...) \
-if (XFILES) { if (verbose) { \
-prefix(true); \
+if (XFILES) { if (verbosity) { \
+prefix(verbosity, __LINE__); \
 fprintf(stderr, "XFILES: " format __VA_OPT__(,) __VA_ARGS__); }}
 
 }

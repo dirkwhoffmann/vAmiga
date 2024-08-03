@@ -98,33 +98,43 @@ Amiga::~Amiga()
 }
 
 void
-Amiga::prefix(bool verbose) const
+Amiga::prefix(isize level, isize line) const
 {
-    if (objid == 1 && RUA_DEBUG) fprintf(stderr, "[Run-ahead] ");
+    if (level) {
 
-    if (verbose) {
-        
-        fprintf(stderr, "[%lld] (%3ld,%3ld) ",
-                agnus.pos.frame, agnus.pos.v, agnus.pos.h);
+        if (level >= 2) {
 
-        fprintf(stderr, "%06X ", cpu.getPC0());
-        fprintf(stderr, "%2X ", cpu.getIPL());
-
-        u16 dmacon = agnus.dmacon;
-        bool dmaen = dmacon & DMAEN;
-        fprintf(stderr, "%c%c%c%c%c%c ",
-                (dmacon & BPLEN) ? (dmaen ? 'B' : 'B') : '-',
-                (dmacon & COPEN) ? (dmaen ? 'C' : 'c') : '-',
-                (dmacon & BLTEN) ? (dmaen ? 'B' : 'b') : '-',
-                (dmacon & SPREN) ? (dmaen ? 'S' : 's') : '-',
-                (dmacon & DSKEN) ? (dmaen ? 'D' : 'd') : '-',
-                (dmacon & AUDEN) ? (dmaen ? 'A' : 'a') : '-');
-
-        fprintf(stderr, "%04X %04X ", paula.intena, paula.intreq);
-
-        if (agnus.copper.servicing) {
-            fprintf(stderr, "[%06X] ", agnus.copper.getCopPC0());
+            if (objid == 1) fprintf(stderr, "[Run-ahead] ");
+            fprintf(stderr, "%s:%ld", objectName(), line);
         }
+        if (level >= 3) {
+
+            fprintf(stderr, " [%lld] (%3ld,%3ld)",
+                    agnus.pos.frame, agnus.pos.v, agnus.pos.h);
+        }
+        if (level >= 4) {
+
+            fprintf(stderr, " %06X ", cpu.getPC0());
+            if (agnus.copper.servicing) {
+                fprintf(stderr, " [%06X]", agnus.copper.getCopPC0());
+            }
+            fprintf(stderr, " %2X ", cpu.getIPL());
+        }
+        if (level >= 5) {
+
+            u16 dmacon = agnus.dmacon;
+            bool dmaen = dmacon & DMAEN;
+            fprintf(stderr, " %c%c%c%c%c%c",
+                    (dmacon & BPLEN) ? (dmaen ? 'B' : 'B') : '-',
+                    (dmacon & COPEN) ? (dmaen ? 'C' : 'c') : '-',
+                    (dmacon & BLTEN) ? (dmaen ? 'B' : 'b') : '-',
+                    (dmacon & SPREN) ? (dmaen ? 'S' : 's') : '-',
+                    (dmacon & DSKEN) ? (dmaen ? 'D' : 'd') : '-',
+                    (dmacon & AUDEN) ? (dmaen ? 'A' : 'a') : '-');
+
+            fprintf(stderr, " %04X %04X", paula.intena, paula.intreq);
+        }
+        fprintf(stderr, " ");
     }
 }
 

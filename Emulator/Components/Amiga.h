@@ -58,7 +58,7 @@ class Amiga final : public CoreComponent, public Inspectable<AmigaInfo> {
             .shell          = "amiga"
         },
         {
-            .name           = "Amiga[run-ahead]",
+            .name           = "Amiga",
             .description    = "Commodore Amiga",
             .shell          = ""
         }
@@ -262,7 +262,7 @@ public:
 
 public:
 
-    void prefix(bool verbose) const override;
+    void prefix(isize level, isize line) const override;
 
 private:
 

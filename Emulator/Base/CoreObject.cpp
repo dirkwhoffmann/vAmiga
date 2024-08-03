@@ -13,13 +13,18 @@
 
 namespace vamiga {
 
-bool
-CoreObject::verbose = true;
+isize
+CoreObject::verbosity = 2;
 
 void
-CoreObject::prefix(bool verbose) const
+CoreObject::prefix(isize level, isize line) const
 {
-    fprintf(stderr, "%s: ", objectName());
+    if (level == 1) {
+        fprintf(stderr, "%s: ", objectName());
+    }
+    if (level >= 2) {
+        fprintf(stderr, "%s:%ld ", objectName(), line);
+    }
 }
 
 }
