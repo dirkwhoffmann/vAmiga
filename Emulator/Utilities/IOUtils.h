@@ -21,9 +21,6 @@
 #include <sys/stat.h>
 #include <vector>
 
-// Namespace aliases
-namespace vamiga { namespace fs = std::filesystem; }
-
 namespace vamiga::util {
 
 //

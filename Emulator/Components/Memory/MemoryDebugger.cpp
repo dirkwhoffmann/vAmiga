@@ -216,6 +216,46 @@ MemoryDebugger::write(u32 addr, u32 val, isize sz, isize repeats)
     }
 }
 
+void 
+MemoryDebugger::load(std::istream& is, u32 addr)
+{
+    for (;; addr++) {
+
+        auto val = is.get();
+        if (val == EOF) return;
+
+        mem.patch(addr, u8(val));
+    }
+}
+
+void
+MemoryDebugger::load(fs::path& path, u32 addr)
+{
+    std::ifstream stream(path, std::ifstream::binary);
+    if (!stream.is_open()) throw Error(ERROR_FILE_NOT_FOUND, path);
+
+    load(stream, addr);
+}
+
+void
+MemoryDebugger::save(std::ostream& os, u32 addr, isize count)
+{
+    for (isize i = 0; i < count; i++) {
+
+        auto val = mem.peek8 <ACCESSOR_CPU> (u32(addr + i));
+        os.put(val);
+    }
+}
+
+void
+MemoryDebugger::save(fs::path& path, u32 addr, isize count)
+{
+    std::ofstream stream(path, std::ifstream::binary);
+    if (!stream.is_open()) throw Error(ERROR_FILE_CANT_CREATE, path);
+
+    save(stream, addr, count);
+}
+
 bool
 MemoryDebugger::isReadable(ChipsetReg reg) const
 {

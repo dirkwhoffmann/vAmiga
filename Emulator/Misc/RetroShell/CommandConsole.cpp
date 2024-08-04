@@ -319,7 +319,7 @@ CommandConsole::initCommands(Command &root)
             initSetters(root, mem);
 
             root.add({cmd, "load"},
-                     "Installs a Rom image");
+                     "Load memory contents from a file");
 
             root.add({cmd, "load", "rom"}, { Arg::path },
                      "Installs a Kickstart Rom",
@@ -328,11 +328,44 @@ CommandConsole::initCommands(Command &root)
                 amiga.mem.loadRom(argv.front());
             });
 
-            root.add({cmd, "load", "extrom"}, { Arg::path },
-                     "Installs a Rom extension",
+            root.add({cmd, "load", "ext"}, { Arg::path },
+                     "Installs an extension Rom",
                      [this](Arguments& argv, long value) {
 
                 amiga.mem.loadExt(argv.front());
+            });
+
+            root.add({cmd, "load", "bin"}, { Arg::path, Arg::address },
+                     "Loads a chunk of memory",
+                     [this](Arguments& argv, long value) {
+
+                fs::path path(argv[0]);
+                amiga.mem.debugger.load(path, parseAddr(argv[1]));
+            });
+
+            root.add({cmd, "save"},
+                     "Save memory contents to a file");
+
+            root.add({cmd, "save", "rom"}, { Arg::path },
+                     "Saves the Kickstart Rom",
+                     [this](Arguments& argv, long value) {
+
+                amiga.mem.saveRom(argv[0]);
+            });
+
+            root.add({cmd, "save", "ext"}, { Arg::path },
+                     "Saves the extension Rom",
+                     [this](Arguments& argv, long value) {
+
+                amiga.mem.saveExt(argv[0]);
+            });
+
+            root.add({cmd, "save", "bin"}, { Arg::path, Arg::address, Arg::count },
+                     "Loads a chunk of memory",
+                     [this](Arguments& argv, long value) {
+
+                fs::path path(argv[0]);
+                amiga.mem.debugger.save(path, parseAddr(argv[1]), parseNum(argv[2]));
             });
         }
 

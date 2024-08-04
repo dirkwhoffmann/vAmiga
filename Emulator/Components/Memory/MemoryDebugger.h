@@ -103,6 +103,14 @@ public:
     // Writes a value into memory (multiple times)
     void write(u32 addr, u32 val, isize sz, isize repeats = 1);
 
+    // Loads a chunk of memory from a stream or file
+    void load(std::istream& is, u32 addr);
+    void load(fs::path& path, u32 addr);
+
+    // Saves a chunk of memory to a stream or file
+    void save(std::ostream& is, u32 addr, isize count);
+    void save(fs::path& path, u32 addr, isize count);
+
 
     //
     // Handling registers

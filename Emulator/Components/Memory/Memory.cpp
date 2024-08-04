@@ -655,67 +655,11 @@ Memory::extFingerprint() const
     return util::crc32(ext, config.extSize);
 }
 
-/*
-const char *
-Memory::romTitle()
-{
-    return RomFile::title(romFingerprint());
-}
-
-const char *
-Memory::romVersion()
-{
-    return RomFile::version(romFingerprint());
-}
-
-const char *
-Memory::romReleased()
-{
-    return RomFile::released(romFingerprint());
-}
-
-const char *
-Memory::romModel()
-{
-    return RomFile::model(romFingerprint());
-}
-
-const char *
-Memory::extTitle()
-{
-    return RomFile::title(extFingerprint());
-}
-
-const char *
-Memory::extVersion()
-{
-    return RomFile::version(extFingerprint());
-}
-
-const char *
-Memory::extReleased()
-{
-    return RomFile::released(extFingerprint());
-}
-
-const char *
-Memory::extModel()
-{
-    return RomFile::model(extFingerprint());
-}
-
-bool
-Memory::hasArosRom() const
-{
-    return RomFile::isArosRom(romFingerprint());
-}
-*/
-
 void
 Memory::loadRom(MediaFile &file)
 {
-    assert(amiga.isPoweredOff());
-    
+    // if (amiga.isPoweredOn()) throw Error(ERROR_POWERED_ON);
+
     try {
 
         auto &romFile = dynamic_cast<RomFile &>(file);
@@ -802,8 +746,8 @@ Memory::loadExt(const u8 *buf, isize len)
 void
 Memory::saveRom(const std::filesystem::path &path)
 {
-    if (rom == nullptr) return;
-    
+    if (rom == nullptr) throw Error(ERROR_ROM_MISSING);
+
     RomFile file(rom, config.romSize);
     file.writeToFile(path);
 }
@@ -811,8 +755,8 @@ Memory::saveRom(const std::filesystem::path &path)
 void
 Memory::saveWom(const std::filesystem::path &path)
 {
-    if (wom == nullptr) return;
-    
+    if (wom == nullptr) throw Error(ERROR_ROM_MISSING);
+
     RomFile file(wom, config.womSize);
     file.writeToFile(path);
 }
@@ -820,7 +764,7 @@ Memory::saveWom(const std::filesystem::path &path)
 void
 Memory::saveExt(const std::filesystem::path &path)
 {
-    if (ext == nullptr) return;
+    if (ext == nullptr) throw Error(ERROR_ROM_MISSING);
 
     RomFile file(ext, config.extSize);
     file.writeToFile(path);

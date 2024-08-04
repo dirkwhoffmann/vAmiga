@@ -33,6 +33,16 @@ using std::string;
 
 
 //
+// Filesystem
+//
+
+#ifdef __cplusplus
+#include <filesystem>
+namespace vamiga { namespace fs = std::filesystem; }
+#endif
+
+
+//
 // Integers
 //
 
