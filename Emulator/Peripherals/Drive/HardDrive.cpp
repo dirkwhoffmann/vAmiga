@@ -194,8 +194,8 @@ HardDrive::init(const HDFFile &hdf)
     hdf.flash(data.ptr, 0, numBytes);
     
     // Replace the write-through image on disk
-    if (writeThrough) {
-        
+    if (config.writeThrough) {
+
         // Delete the existing image
         disableWriteThrough();
         
@@ -256,6 +256,7 @@ HardDrive::getOption(Option option) const
     switch (option) {
             
         case OPT_HDR_TYPE:          return (long)config.type;
+        case OPT_HDR_WRITE_THROUGH: return (long)config.writeThrough;
         case OPT_HDR_PAN:           return (long)config.pan;
         case OPT_HDR_STEP_VOLUME:   return (long)config.stepVolume;
 
@@ -274,6 +275,10 @@ HardDrive::checkOption(Option opt, i64 value)
             if (!HardDriveTypeEnum::isValid(value)) {
                 throw Error(ERROR_OPT_INV_ARG, HardDriveTypeEnum::keyList());
             }
+            return;
+
+        case OPT_HDR_WRITE_THROUGH:
+
             return;
 
         case OPT_HDR_PAN:
@@ -297,6 +302,11 @@ HardDrive::setOption(Option option, i64 value)
                 throw Error(ERROR_OPT_INV_ARG, HardDriveTypeEnum::keyList());
             }
             config.type = (HardDriveType)value;
+            return;
+
+        case OPT_HDR_WRITE_THROUGH:
+
+            value ? enableWriteThrough() : disableWriteThrough();
             return;
 
         case OPT_HDR_PAN:
@@ -381,7 +391,6 @@ HardDrive::cacheInfo(HardDriveInfo &info) const
         
         info.isConnected = isConnected();
         info.isCompatible = isCompatible();
-        info.writeThrough = writeThroughEnabled();
 
         info.hasDisk = hasDisk();
         info.hasModifiedDisk = hasModifiedDisk();
@@ -543,25 +552,25 @@ HardDrive::enableWriteThrough()
 {
     debug(WT_DEBUG, "enableWriteThrough()\n");
     
-    if (!writeThrough) {
+    if (!config.writeThrough) {
 
         saveWriteThroughImage();
 
         debug(WT_DEBUG, "Write-through mode enabled\n");
-        writeThrough = true;
+        config.writeThrough = true;
     }
 }
 
 void
 HardDrive::disableWriteThrough()
 {
-    if (writeThrough) {
-        
+    if (config.writeThrough) {
+
         // Close file
         wtStream[objid].close();
         
         debug(WT_DEBUG, "Write-through mode disabled\n");
-        writeThrough = false;
+        config.writeThrough = false;
     }
 }
 
@@ -594,6 +603,7 @@ HardDrive::saveWriteThroughImage()
     if (!util::fileExists(path)) {
         throw Error(ERROR_WT, "Can't create storage file");
     }
+
     // Open file
     wtStream[objid].open(path, std::ios::binary | std::ios::in | std::ios::out);
     if (!wtStream[objid].is_open()) {
@@ -711,7 +721,8 @@ HardDrive::write(isize offset, isize length, u32 addr)
             mem.spypeek <ACCESSOR_CPU> (addr, length, data.ptr + offset);
             
             // Handle write-through mode
-            if (writeThrough) {
+            if (config.writeThrough) {
+                
                 wtStream[objid].seekp(offset);
                 wtStream[objid].write((char *)(data.ptr + offset), length);
             }

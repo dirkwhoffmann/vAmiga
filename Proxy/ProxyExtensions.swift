@@ -414,12 +414,14 @@ extension HardDriveProxy {
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 
+    /*
     func enableWriteThrough() throws {
 
         let exception = ExceptionWrapper()
         enableWriteThrough(exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
+    */
 }
 
 extension AmigaFileProxy {

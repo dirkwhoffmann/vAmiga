@@ -1810,6 +1810,16 @@ using namespace vamiga::moira;
     return (HardDriveAPI *)obj;
 }
 
+- (HardDriveConfig)config
+{
+    return [self drive]->getConfig();
+}
+
+- (HardDriveInfo)info
+{
+    return [self drive]->getInfo();
+}
+
 - (HardDriveTraits)traits
 {
     return [self drive]->getTraits();
@@ -1818,11 +1828,6 @@ using namespace vamiga::moira;
 - (PartitionTraits) partitionTraits:(NSInteger)nr
 {
     return [self drive]->getPartitionTraits(nr);
-}
-
-- (HardDriveInfo)info
-{
-    return [self drive]->getInfo();
 }
 
 - (BOOL)getFlag:(DiskFlags)mask
@@ -1906,17 +1911,6 @@ using namespace vamiga::moira;
 {
     try { return [self drive]->writeToFile([url fileSystemRepresentation]); }
     catch (Error &error) { [ex save:error]; }
-}
-
-- (void)enableWriteThrough:(ExceptionWrapper *)ex
-{
-    try { return [self drive]->enableWriteThrough(); }
-    catch (Error &error) { [ex save:error]; }
-}
-
-- (void)disableWriteThrough
-{
-    [self drive]->disableWriteThrough();
 }
 
 @end

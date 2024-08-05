@@ -115,11 +115,11 @@ extension MyController: NSMenuItemValidation {
             return hdn.info.hasDisk
 
         case #selector(MyController.writeThroughHdrAction(_:)):
-            item.state = hdn.info.writeThrough ? .on : .off
+            item.state = hdn.config.writeThrough ? .on : .off
             return true
 
         case #selector(MyController.writeThroughFinderAction(_:)):
-            item.isHidden = !hdn.info.writeThrough
+            item.isHidden = !hdn.config.writeThrough
             return true
 
         default:
@@ -813,22 +813,27 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func writeThroughHdrAction(_ sender: NSMenuItem!) {
         
+        // let hdn = emu.hd(sender)!
+
         if sender.state == .on {
 
-            emu.hd(sender)!.disableWriteThrough()
-            sender.state = .off
+            emu.set(.HDR_WRITE_THROUGH, id: sender.tag, enable: false)
+            // sender.state = .off
 
             try? FileManager.default.removeItem(at: UserDefaults.hdUrl(sender.tag)!)
             
         } else {
             
+            emu.set(.HDR_WRITE_THROUGH, id: sender.tag, enable: true)
+            /*
             do {
-                try emu.hd(sender)!.enableWriteThrough()
+                emu.set(.HDR_WRITE_THROUGH, enable: false)
                 sender.state = .on
             } catch {
                 sender.state = .off
                 showAlert(.cantWriteThrough, error: error)
             }
+            */
         }
     }
     

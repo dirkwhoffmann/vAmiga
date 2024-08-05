@@ -125,6 +125,7 @@ enum_long(OPT)
 
     // Hard drives
     OPT_HDR_TYPE,
+    OPT_HDR_WRITE_THROUGH,
     OPT_HDR_PAN,
     OPT_HDR_STEP_VOLUME,
 
@@ -285,6 +286,7 @@ struct OptionEnum : vamiga::util::Reflection<OptionEnum, Option>
             case OPT_HDC_CONNECT:               return "HDC.CONNECT";
 
             case OPT_HDR_TYPE:                  return "HDR.TYPE";
+            case OPT_HDR_WRITE_THROUGH:         return "HDR.WRITE_THROUGH";
             case OPT_HDR_PAN:                   return "HDR.PAN";
             case OPT_HDR_STEP_VOLUME:           return "HDR.STEP_VOLUME";
 
@@ -429,6 +431,7 @@ struct OptionEnum : vamiga::util::Reflection<OptionEnum, Option>
             case OPT_HDC_CONNECT:               return "Connected";
 
             case OPT_HDR_TYPE:                  return "Drive model";
+            case OPT_HDR_WRITE_THROUGH:         return "Keep data alive";
             case OPT_HDR_PAN:                   return "Pan";
             case OPT_HDR_STEP_VOLUME:           return "Head step volume";
 

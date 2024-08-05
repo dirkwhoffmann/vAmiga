@@ -46,6 +46,7 @@ class HardDrive : public Drive, public Inspectable<HardDriveInfo> {
     ConfigOptions options = {
 
         OPT_HDR_TYPE,
+        OPT_HDR_WRITE_THROUGH, 
         OPT_HDR_PAN,
         OPT_HDR_STEP_VOLUME
     };
@@ -92,9 +93,6 @@ class HardDrive : public Drive, public Inspectable<HardDriveInfo> {
     DiskFlags flags = 0;
     optional <bool> bootable;
 
-    // Indicates if write-through mode is enabled
-    bool writeThrough = false;
-    
     
     //
     // Initializing
@@ -372,7 +370,6 @@ public:
     // Managing write-through mode
     //
     
-    bool writeThroughEnabled() const { return writeThrough; }
     void enableWriteThrough() throws;
     void disableWriteThrough();
 

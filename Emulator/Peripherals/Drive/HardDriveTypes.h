@@ -82,6 +82,7 @@ struct HardDriveStateEnum : vamiga::util::Reflection<HardDriveStateEnum, HardDri
 typedef struct
 {
     HardDriveType type;
+    bool writeThrough;
     i16 pan;
     u8 stepVolume;
 }
@@ -130,7 +131,6 @@ typedef struct
     // Drive properties
     bool isConnected;
     bool isCompatible;
-    bool writeThrough;
     
     // Disk properties
     bool hasDisk;
