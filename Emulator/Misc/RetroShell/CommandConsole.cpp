@@ -14,9 +14,7 @@
 
 namespace vamiga {
 
-#define VAMIGA_CONCAT(x,y) x##y
-#define VAMIGA_GROUP_NAME(x) VAMIGA_CONCAT(group_,x)
-#define VAMIGA_GROUP(x) CommandGroup VAMIGA_GROUP_NAME(__COUNTER__)(root,x); Command::currentGroup = x;
+#define VAMIGA_GROUP(x) Command::currentGroup = x;
 
 void
 CommandConsole::_pause()

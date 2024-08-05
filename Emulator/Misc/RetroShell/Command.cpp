@@ -16,24 +16,7 @@
 
 namespace vamiga {
 
-std::vector<string> Command::groups;
-std::stack<isize> Command::groupStack;
 string Command::currentGroup;
-
-void
-Command::pushGroup(const string &description, const string &postfix)
-{
-    auto name = description.empty() ? "" : description + postfix;
-
-    groupStack.push(isize(groups.size()));
-    groups.push_back(name);
-}
-
-void
-Command::popGroup()
-{
-    groupStack.pop();
-}
 
 void
 Command::add(const std::vector<string> &tokens,
@@ -99,14 +82,15 @@ Command::add(const std::vector<string> &rawtokens,
     Command d;
     d.name = tokens.back();
     d.fullName = (cmd->fullName.empty() ? "" : cmd->fullName + " ") + help.first;
-    d.group = groupStack.top();
-    d.groupName = currentGroup; currentGroup = "";
+    d.groupName = currentGroup;
     d.requiredArgs = requiredArgs;
     d.optionalArgs = optionalArgs;
     d.help = help;
     d.callback = func;
     d.param = param;
     d.hidden = help.second.empty();
+
+    if (!d.hidden) currentGroup = "";
 
     // Register the instruction
     cmd->subCommands.push_back(d);
