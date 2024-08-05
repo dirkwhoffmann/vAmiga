@@ -813,27 +813,22 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func writeThroughHdrAction(_ sender: NSMenuItem!) {
         
-        // let hdn = emu.hd(sender)!
-
         if sender.state == .on {
 
-            emu.set(.HDR_WRITE_THROUGH, id: sender.tag, enable: false)
-            // sender.state = .off
+            emu.hd(sender)!.disableWriteThrough()
+            sender.state = .off
 
             try? FileManager.default.removeItem(at: UserDefaults.hdUrl(sender.tag)!)
             
         } else {
             
-            emu.set(.HDR_WRITE_THROUGH, id: sender.tag, enable: true)
-            /*
             do {
-                emu.set(.HDR_WRITE_THROUGH, enable: false)
+                try emu.hd(sender)!.enableWriteThrough()
                 sender.state = .on
             } catch {
                 sender.state = .off
                 showAlert(.cantWriteThrough, error: error)
             }
-            */
         }
     }
     

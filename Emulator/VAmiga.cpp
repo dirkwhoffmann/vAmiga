@@ -1068,6 +1068,18 @@ HardDriveAPI::writeToFile(std::filesystem::path path)
     drive->writeToFile(path);
 }
 
+void 
+HardDriveAPI::enableWriteThrough()
+{
+    drive->enableWriteThrough();
+}
+
+void 
+HardDriveAPI::disableWriteThrough()
+{
+    drive->disableWriteThrough();
+}
+
 MediaFile *
 HardDriveAPI::createHDF()
 {

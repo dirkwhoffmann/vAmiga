@@ -1913,6 +1913,17 @@ using namespace vamiga::moira;
     catch (Error &error) { [ex save:error]; }
 }
 
+- (void)enableWriteThrough:(ExceptionWrapper *)ex
+{
+    try { return [self drive]->enableWriteThrough(); }
+    catch (Error &error) { [ex save:error]; }
+}
+
+- (void)disableWriteThrough
+{
+    [self drive]->disableWriteThrough();
+}
+
 @end
 
 
