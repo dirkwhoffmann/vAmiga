@@ -389,6 +389,8 @@ HardDrive::cacheInfo(HardDriveInfo &info) const
 {
     {   SYNCHRONIZED
         
+        info.nr = objid;
+        
         info.isConnected = isConnected();
         info.isCompatible = isCompatible();
 

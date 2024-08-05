@@ -128,6 +128,8 @@ PartitionTraits;
 
 typedef struct
 {
+    isize nr;
+    
     // Drive properties
     bool isConnected;
     bool isCompatible;

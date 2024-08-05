@@ -10,6 +10,7 @@
 #import "config.h"
 #import "EmulatorProxy.h"
 #import "VAmiga.h"
+#import "Emulator.h"
 #import "MutableFileSystem.h"
 #import "vAmiga-Swift.h"
 
@@ -1915,13 +1916,15 @@ using namespace vamiga::moira;
 
 - (void)enableWriteThrough:(ExceptionWrapper *)ex
 {
-    try { return [self drive]->enableWriteThrough(); }
+    auto id = [self drive]->getInfo().nr;
+    try { return [self drive]->emu->set(OPT_HDR_WRITE_THROUGH, true, { id }); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (void)disableWriteThrough
 {
-    [self drive]->disableWriteThrough();
+    auto id = [self drive]->getInfo().nr;
+    [self drive]->emu->set(OPT_HDR_WRITE_THROUGH, false, { id });
 }
 
 @end

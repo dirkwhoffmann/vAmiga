@@ -810,9 +810,6 @@ public:
 
     void writeToFile(std::filesystem::path path);
 
-    void enableWriteThrough();
-    void disableWriteThrough();
-
     MediaFile *createHDF();
 };
 

@@ -162,6 +162,7 @@ HdcConfig;
 
 typedef struct
 {
+    isize nr;
     bool pluggedIn;
     HdcState state;
 }
