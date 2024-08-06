@@ -16,7 +16,6 @@ class Console: Layer {
     
     var window: NSWindow { return controller.window! }
     var contentView: NSView { return window.contentView! }
-    
     let scrollView = NSTextView.scrollableTextView()
     var textView: NSTextView
 

@@ -687,7 +687,7 @@ CIA::executeOneCycle()
     // Write back local copy
     this->delay = delay;
 
-    // Sleep if threshold is reached
+    // Sleep when threshold is reached
     if (tiredness > 8 && config.idleSleep) {
         sleep();
         scheduleWakeUp();
@@ -711,10 +711,17 @@ CIA::sleep()
     if (!(feed & CIACountA0)) sleepA = INT64_MAX;
     if (!(feed & CIACountB0)) sleepB = INT64_MAX;
     
-    // ZZzzz
-    sleepCycle = clock;
-    wakeUpCycle = std::min(sleepA, sleepB);;
-    sleeping = true;
+    // Determine the wakeup cycle
+    auto wakeupAt = std::min(sleepA, sleepB);
+
+    if (wakeupAt > clock) {
+
+        // ZZzzz
+        sleepCycle = clock;
+        wakeUpCycle = std::min(sleepA, sleepB);
+        sleeping = true;
+    }
+
     tiredness = 0;
 }
 
@@ -741,10 +748,12 @@ CIA::wakeUp(Cycle targetCycle)
     if (missedCycles > 0) {
         
         if (feed & CIACountA0) {
+
             assert(counterA >= AS_CIA_CYCLES(missedCycles));
             counterA -= (u16)AS_CIA_CYCLES(missedCycles);
         }
         if (feed & CIACountB0) {
+
             assert(counterB >= AS_CIA_CYCLES(missedCycles));
             counterB -= (u16)AS_CIA_CYCLES(missedCycles);
         }

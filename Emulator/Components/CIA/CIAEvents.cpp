@@ -46,10 +46,12 @@ CIA::scheduleNextExecution()
 void
 CIA::scheduleWakeUp()
 {
+    auto event = isSleeping() ? CIA_WAKEUP : CIA_EXECUTE;
+
     if (isCIAA()) {
-        agnus.scheduleAbs<SLOT_CIAA>(wakeUpCycle, CIA_WAKEUP);
+        agnus.scheduleAbs<SLOT_CIAA>(wakeUpCycle, event);
     } else {
-        agnus.scheduleAbs<SLOT_CIAB>(wakeUpCycle, CIA_WAKEUP);
+        agnus.scheduleAbs<SLOT_CIAB>(wakeUpCycle, event);
     }
 }
 
