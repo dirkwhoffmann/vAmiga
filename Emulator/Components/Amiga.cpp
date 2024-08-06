@@ -294,7 +294,7 @@ Amiga::setOption(Option option, i64 value)
 }
 
 void
-Amiga::exportConfig(const fs::path &path) const
+Amiga::exportConfig(const fs::path &path, bool diff) const
 {
     auto fs = std::ofstream(path, std::ofstream::binary);
 
@@ -302,17 +302,17 @@ Amiga::exportConfig(const fs::path &path) const
         throw Error(ERROR_FILE_CANT_WRITE);
     }
 
-    exportConfig(fs);
+    exportConfig(fs, diff);
 }
 
 void
-Amiga::exportConfig(std::ostream &stream) const
+Amiga::exportConfig(std::ostream &stream, bool diff) const
 {
     stream << "# vAmiga " << Amiga::build() << "\n";
     stream << "\n";
     stream << "amiga power off\n";
     stream << "\n";
-    CoreComponent::exportConfig(stream);
+    CoreComponent::exportConfig(stream, diff);
     stream << "amiga power on\n";
 }
 

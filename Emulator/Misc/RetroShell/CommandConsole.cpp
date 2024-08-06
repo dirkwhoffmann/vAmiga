@@ -990,7 +990,37 @@ CommandConsole::initCommands(Command &root)
         initSetters(root, hd3);
     }
 
+    //
+    // Miscellaneous
+    //
+
     {   VAMIGA_GROUP("Miscellaneous")
+
+        //
+        // Miscellaneous (Diff)
+        //
+
+        root.add({"config"},
+                 "Virtual machine configuration");
+
+        root.add({"config", ""},
+                 "Displays the current configuration",
+                 [this](Arguments& argv, long value) {
+
+            std::stringstream ss;
+            amiga.exportConfig(ss);
+            *this << ss;
+        });
+
+        root.add({"config", "diff"},
+                 "Displays the difference to the default configuration",
+                 [this](Arguments& argv, long value) {
+
+            std::stringstream ss;
+            amiga.exportDiff(ss);
+            *this << ss;
+        });
+
 
         //
         // Miscellaneous (Host)
@@ -1011,7 +1041,7 @@ CommandConsole::initCommands(Command &root)
 
 
         //
-        // Remote server
+        // Miscellaneous (Remote server)
         //
 
         root.add({"server"},        "Remote connections");

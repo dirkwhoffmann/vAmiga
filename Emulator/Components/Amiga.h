@@ -313,8 +313,8 @@ public:
     void setOption(Option option, i64 value) override;
 
     // Exports the current configuration to a script file
-    void exportConfig(const fs::path &path) const;
-    void exportConfig(std::ostream& stream) const;
+    void exportConfig(const fs::path &path, bool diff = false) const;
+    void exportConfig(std::ostream& stream, bool diff = false) const;
 
     // Reverts to factory settings
     void revertToFactorySettings();
