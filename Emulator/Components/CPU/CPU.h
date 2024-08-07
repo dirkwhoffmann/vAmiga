@@ -44,9 +44,9 @@ class CPU : public moira::Moira, public Inspectable<CPUInfo>
 public:
     
     // Breakpoints, Watchpoints, Catchpoints
-    MoiraGuardList breakpoints = MoiraGuardList(emulator, debugger.breakpoints);
-    MoiraGuardList watchpoints = MoiraGuardList(emulator, debugger.watchpoints);
-    MoiraGuardList catchpoints = MoiraGuardList(emulator, debugger.catchpoints);
+    GuardList breakpoints = GuardList(emulator, debugger.breakpoints);
+    GuardList watchpoints = GuardList(emulator, debugger.watchpoints);
+    GuardList catchpoints = GuardList(emulator, debugger.catchpoints);
 
     // Sub-cycle counter (overclocking)
     i64 debt;

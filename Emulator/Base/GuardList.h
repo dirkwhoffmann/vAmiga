@@ -14,11 +14,12 @@
 
 namespace vamiga {
 
-class MoiraGuardList {
+class GuardList {
 
 protected:
 
     class Emulator &emu;
+    moira::Guards _guards;
     moira::Guards &guards;
 
 public:
@@ -32,8 +33,9 @@ public:
 
 public:
 
-    MoiraGuardList(Emulator &emu, moira::Guards &guards) : emu(emu), guards(guards) { }
-    virtual ~MoiraGuardList() { }
+    GuardList(Emulator &emu) : emu(emu), guards(_guards) { }
+    GuardList(Emulator &emu, moira::Guards &guards) : emu(emu), guards(guards) { }
+    virtual ~GuardList() { }
 
     //
     // Inspecting the guard list
@@ -94,15 +96,4 @@ public:
     virtual void setNeedsCheck(bool value) { };
 };
 
-class GuardList : public MoiraGuardList {
-
-    moira::Guards guards;
-
-public:
-
-    GuardList(Emulator &emu) : MoiraGuardList(emu, guards) { }
-    virtual ~GuardList() { }
-};
-
 }
-

@@ -14,7 +14,7 @@
 namespace vamiga {
 
 std::optional<GuardInfo>
-MoiraGuardList::guardNr(long nr) const
+GuardList::guardNr(long nr) const
 {
     if (auto *g = guards.guardNr(nr); g) {
         return GuardInfo {.addr = g->addr, .enabled = g->enabled, .ignore = g->ignore };
@@ -24,7 +24,7 @@ MoiraGuardList::guardNr(long nr) const
 }
 
 std::optional<GuardInfo>
-MoiraGuardList::guardAt(u32 addr) const
+GuardList::guardAt(u32 addr) const
 {
     if (auto *g = guards.guardAt(addr); g) {
         return GuardInfo {.addr = g->addr, .enabled = g->enabled, .ignore = g->ignore };
@@ -34,7 +34,7 @@ MoiraGuardList::guardAt(u32 addr) const
 }
 
 std::optional<GuardInfo> 
-MoiraGuardList::hit() const
+GuardList::hit() const
 {
     if (auto g = guards.hit; g) {
         return GuardInfo {.addr = g->addr, .enabled = g->enabled, .ignore = g->ignore };
@@ -44,7 +44,7 @@ MoiraGuardList::hit() const
 }
 
 void
-MoiraGuardList::setAt(u32 target, isize ignores)
+GuardList::setAt(u32 target, isize ignores)
 {
     if (guards.isSetAt(target)) throw Error(ERROR_GUARD_ALREADY_SET, target);
     guards.setAt(target, ignores);
@@ -53,7 +53,7 @@ MoiraGuardList::setAt(u32 target, isize ignores)
 }
 
 void
-MoiraGuardList::moveTo(isize nr, u32 newTarget)
+GuardList::moveTo(isize nr, u32 newTarget)
 {
     if (!guards.guardNr(nr)) throw Error(ERROR_GUARD_NOT_FOUND, nr);
     guards.replace(nr, newTarget);
@@ -62,7 +62,7 @@ MoiraGuardList::moveTo(isize nr, u32 newTarget)
 }
 
 void
-MoiraGuardList::ignore(long nr, long count)
+GuardList::ignore(long nr, long count)
 {
     if (!guards.guardNr(nr)) throw Error(ERROR_GUARD_NOT_FOUND, nr);
     guards.ignore(nr, count);
@@ -71,7 +71,7 @@ MoiraGuardList::ignore(long nr, long count)
 }
 
 void
-MoiraGuardList::remove(isize nr)
+GuardList::remove(isize nr)
 {
     if (!guards.isSet(nr)) throw Error(ERROR_GUARD_NOT_FOUND, nr);
     guards.remove(nr);
@@ -80,7 +80,7 @@ MoiraGuardList::remove(isize nr)
 }
 
 void
-MoiraGuardList::removeAt(u32 target)
+GuardList::removeAt(u32 target)
 {
     if (!guards.isSetAt(target)) throw Error(ERROR_GUARD_NOT_FOUND, target);
     guards.removeAt(target);
@@ -89,7 +89,7 @@ MoiraGuardList::removeAt(u32 target)
 }
 
 void
-MoiraGuardList::removeAll()
+GuardList::removeAll()
 {
     guards.removeAll();
     update();
@@ -97,7 +97,7 @@ MoiraGuardList::removeAll()
 }
 
 void
-MoiraGuardList::enable(isize nr)
+GuardList::enable(isize nr)
 {
     if (!guards.isSet(nr)) throw Error(ERROR_GUARD_NOT_FOUND, nr);
     guards.enable(nr);
@@ -106,7 +106,7 @@ MoiraGuardList::enable(isize nr)
 }
 
 void
-MoiraGuardList::enableAt(u32 target)
+GuardList::enableAt(u32 target)
 {
     if (!guards.isSetAt(target)) throw Error(ERROR_GUARD_NOT_FOUND, target);
     guards.enableAt(target);
@@ -115,7 +115,7 @@ MoiraGuardList::enableAt(u32 target)
 }
 
 void
-MoiraGuardList::enableAll()
+GuardList::enableAll()
 {
     guards.enableAll();
     update();
@@ -123,7 +123,7 @@ MoiraGuardList::enableAll()
 }
 
 void
-MoiraGuardList::disable(isize nr)
+GuardList::disable(isize nr)
 {
     if (!guards.isSet(nr)) throw Error(ERROR_GUARD_NOT_FOUND, nr);
     guards.disable(nr);
@@ -132,7 +132,7 @@ MoiraGuardList::disable(isize nr)
 }
 
 void
-MoiraGuardList::disableAt(u32 target)
+GuardList::disableAt(u32 target)
 {
     if (!guards.isSetAt(target)) throw Error(ERROR_GUARD_NOT_FOUND, target);
     guards.disableAt(target);
@@ -141,7 +141,7 @@ MoiraGuardList::disableAt(u32 target)
 }
 
 void
-MoiraGuardList::disableAll()
+GuardList::disableAll()
 {
     guards.disableAll();
     update();
@@ -149,13 +149,13 @@ MoiraGuardList::disableAll()
 }
 
 void
-MoiraGuardList::toggle(isize nr)
+GuardList::toggle(isize nr)
 {
     guards.isEnabled(nr) ? disable(nr) : enable(nr);
 }
 
 void 
-MoiraGuardList::update() {
+GuardList::update() {
 
     needsCheck = false;
     for (isize i = 0; i < guards.elements(); i++) {

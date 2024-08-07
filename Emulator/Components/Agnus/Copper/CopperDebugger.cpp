@@ -50,7 +50,7 @@ CopperDebugger::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
 
-    auto print = [&](const string &name, const MoiraGuardList &guards) {
+    auto print = [&](const string &name, const GuardList &guards) {
 
         for (int i = 0; i < guards.elements(); i++) {
 
