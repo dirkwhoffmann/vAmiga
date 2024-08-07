@@ -281,7 +281,7 @@ class GuardsAPI : public API {
 
     friend class VAmiga;
 
-    class GuardsWrapper *guards = nullptr;
+    class MoiraGuardList *guards = nullptr;
 
 public:
 

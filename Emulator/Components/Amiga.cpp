@@ -670,7 +670,7 @@ Amiga::computeFrame()
             // Did we reach a Copper breakpoint?
             if (flags & RL::COPPERBP_REACHED) {
                 clearFlag(RL::COPPERBP_REACHED);
-                auto addr = u8(agnus.copper.debugger.cbreakpoints.hit->addr);
+                auto addr = u8(agnus.copper.debugger.breakpoints.hit()->addr);
                 msgQueue.put(MSG_COPPERBP_REACHED, CpuMsg { addr, 0 });
                 throw StateChangeException(STATE_PAUSED);
                 break;
@@ -679,7 +679,7 @@ Amiga::computeFrame()
             // Did we reach a Copper watchpoint?
             if (flags & RL::COPPERWP_REACHED) {
                 clearFlag(RL::COPPERWP_REACHED);
-                auto addr = u8(agnus.copper.debugger.cwatchpoints.hit->addr);
+                auto addr = u8(agnus.copper.debugger.watchpoints.hit()->addr);
                 msgQueue.put(MSG_COPPERWP_REACHED, CpuMsg { addr, 0 });
                 throw StateChangeException(STATE_PAUSED);
                 break;

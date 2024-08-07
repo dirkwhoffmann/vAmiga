@@ -22,23 +22,23 @@ struct CopperList {
     u32 end;
 };
 
-class CopperBreakpoints : public moira::Guards {
+class CopperBreakpoints : public GuardList {
 
     class Copper &copper;
 
 public:
     
-    CopperBreakpoints(Copper& ref) : copper(ref) { }
+    CopperBreakpoints(Copper& ref);
     void setNeedsCheck(bool value) override;
 };
 
-class CopperWatchpoints : public moira::Guards {
+class CopperWatchpoints : public GuardList {
 
     class Copper &copper;
 
 public:
     
-    CopperWatchpoints(Copper& ref) : copper(ref) { }
+    CopperWatchpoints(Copper& ref);
     void setNeedsCheck(bool value) override;
 };
 
@@ -71,13 +71,8 @@ class CopperDebugger: public SubComponent {
 public:
     
     // Breakpoint and watchpoints
-    CopperBreakpoints cbreakpoints = CopperBreakpoints(copper);
-    CopperWatchpoints cwatchpoints = CopperWatchpoints(copper);
-
-public:
-
-    GuardsWrapper breakpoints = GuardsWrapper(emulator, cbreakpoints);
-    GuardsWrapper watchpoints = GuardsWrapper(emulator, cwatchpoints);
+    CopperBreakpoints breakpoints = CopperBreakpoints(copper);
+    CopperWatchpoints watchpoints = CopperWatchpoints(copper);
 
     
     //

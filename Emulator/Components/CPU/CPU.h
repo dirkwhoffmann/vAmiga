@@ -10,7 +10,6 @@
 #pragma once
 
 #include "CPUTypes.h"
-#include "CPUDebugger.h"
 #include "SubComponent.h"
 #include "CmdQueue.h"
 #include "GuardList.h"
@@ -45,9 +44,9 @@ class CPU : public moira::Moira, public Inspectable<CPUInfo>
 public:
     
     // Breakpoints, Watchpoints, Catchpoints
-    GuardsWrapper breakpoints = GuardsWrapper(emulator, debugger.breakpoints);
-    GuardsWrapper watchpoints = GuardsWrapper(emulator, debugger.watchpoints);
-    GuardsWrapper catchpoints = GuardsWrapper(emulator, debugger.catchpoints);
+    MoiraGuardList breakpoints = MoiraGuardList(emulator, debugger.breakpoints);
+    MoiraGuardList watchpoints = MoiraGuardList(emulator, debugger.watchpoints);
+    MoiraGuardList catchpoints = MoiraGuardList(emulator, debugger.catchpoints);
 
     // Sub-cycle counter (overclocking)
     i64 debt;

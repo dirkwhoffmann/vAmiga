@@ -15,10 +15,20 @@
 
 namespace vamiga {
 
+CopperBreakpoints::CopperBreakpoints(Copper& ref) : GuardList(ref.emulator), copper(ref)
+{
+
+}
+
 void
 CopperBreakpoints::setNeedsCheck(bool value)
 {
     copper.checkForBreakpoints = value;
+}
+
+CopperWatchpoints::CopperWatchpoints(Copper& ref) : GuardList(ref.emulator), copper(ref)
+{
+
 }
 
 void
@@ -40,7 +50,7 @@ CopperDebugger::_dump(Category category, std::ostream& os) const
 {
     using namespace util;
 
-    auto print = [&](const string &name, const GuardsWrapper &guards) {
+    auto print = [&](const string &name, const MoiraGuardList &guards) {
 
         for (int i = 0; i < guards.elements(); i++) {
 

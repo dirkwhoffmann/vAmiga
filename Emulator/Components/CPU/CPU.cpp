@@ -440,7 +440,7 @@ CPU::cacheInfo(CPUInfo &info) const
 void
 CPU::_dump(Category category, std::ostream& os) const
 {
-    auto print = [&](const string &name, const GuardsWrapper &guards) {
+    auto print = [&](const string &name, const MoiraGuardList &guards) {
 
         for (int i = 0; i < guards.elements(); i++) {
 
@@ -807,7 +807,7 @@ CPU::processCommand(const Cmd &cmd)
 {
     isize nr = isize(cmd.value);
     u32 addr = u32(cmd.value);
-    auto guards = (GuardsWrapper *)cmd.sender;
+    auto guards = (MoiraGuardList *)cmd.sender;
 
     switch (cmd.type) {
 

@@ -10,7 +10,7 @@
 #include "config.h"
 #include "VAmiga.h"
 #include "Emulator.h"
-// #include "GuardList.h"
+#include "GuardList.h"
 
 namespace vamiga {
 
