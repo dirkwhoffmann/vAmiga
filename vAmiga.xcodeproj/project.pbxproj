@@ -524,6 +524,7 @@
 		501B00142C629A0500749664 /* Beamtraps.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beamtraps.h; sourceTree = "<group>"; };
 		501B00172C63589500749664 /* GuardList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GuardList.cpp; sourceTree = "<group>"; };
 		501B00182C63589500749664 /* GuardList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GuardList.h; sourceTree = "<group>"; };
+		501B001B2C63C7E100749664 /* GuardListTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GuardListTypes.h; sourceTree = "<group>"; };
 		501B821B2262FFB200042871 /* RTC.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RTC.cpp; sourceTree = "<group>"; };
 		501B821C2262FFB200042871 /* RTC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTC.h; sourceTree = "<group>"; };
 		501C362F2C1C176C000FA274 /* EmulatorTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulatorTypes.h; sourceTree = "<group>"; };
@@ -1165,6 +1166,7 @@
 				5020B38D295336E5009732AC /* Host.h */,
 				5020B38C295336E5009732AC /* Host.cpp */,
 				508C6BCF23F7E77500D8938F /* ChangeRecorder.h */,
+				501B001B2C63C7E100749664 /* GuardListTypes.h */,
 				501B00182C63589500749664 /* GuardList.h */,
 				501B00172C63589500749664 /* GuardList.cpp */,
 			);

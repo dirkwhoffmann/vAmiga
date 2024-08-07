@@ -14,6 +14,7 @@
 #include "CmdQueueTypes.h"
 #include "CoreComponentTypes.h"
 #include "ErrorTypes.h"
+#include "GuardListTypes.h"
 #include "MsgQueueTypes.h"
 
 // Components

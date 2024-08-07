@@ -9,18 +9,10 @@
 
 #pragma once
 
-#include "BasicTypes.h"
+#include "GuardListTypes.h"
 #include "MoiraDebugger.h"
 
 namespace vamiga {
-
-typedef struct
-{
-    u32 addr;
-    bool enabled;
-    isize ignore;
-}
-GuardListInfo;
 
 class MoiraGuardList {
 

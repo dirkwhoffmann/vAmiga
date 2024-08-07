@@ -13,6 +13,7 @@
 #include "CPUDebugger.h"
 #include "SubComponent.h"
 #include "CmdQueue.h"
+#include "GuardList.h"
 #include "RingBuffer.h"
 #include "Moira.h"
 
