@@ -18,6 +18,37 @@ DmaDebugger::DmaDebugger(Amiga &ref) : SubComponent(ref)
     
 }
 
+void 
+DmaDebugger::_dump(Category category, std::ostream& os) const
+{
+    auto print = [&]() {
+
+        using namespace util;
+
+        for (int i = 0; i < beamtraps.elements(); i++) {
+
+            auto bp = *beamtraps.guardNr(i);
+            auto v = std::to_string(HI_WORD(bp.addr));
+            auto h = std::to_string(LO_WORD(bp.addr));
+            os << tab("Beamtrap " + std::to_string(i));
+            os << "(" + v + "," + h + ")";
+
+            if (!bp.enabled) os << " (Disabled)";
+            else if (bp.ignore) os << " (Disabled for " << dec(bp.ignore) << " hits)";
+            os << std::endl;
+        }
+    };
+
+    if (category == Category::Beamtraps) {
+
+        if (beamtraps.elements()) {
+            print();
+        } else {
+            os << "No beamtraps set" << std::endl;
+        }
+    }
+}
+
 i64
 DmaDebugger::getOption(Option option) const
 {

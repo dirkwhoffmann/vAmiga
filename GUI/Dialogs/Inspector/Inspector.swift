@@ -767,6 +767,11 @@ class Inspector: DialogController {
         message.stringValue = "Copper watchpoint reached"
     }
 
+    func signalBeamtrap() {
+
+        message.stringValue = "Beamtrap reached"
+    }
+
     @IBAction func refreshAction(_ sender: Any!) {
         
         fullRefresh()

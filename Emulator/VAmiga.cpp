@@ -1520,7 +1520,6 @@ VAmiga::VAmiga() {
     controlPort2.mouse.emu = emu;
     controlPort2.mouse.mouse = &emu->main.controlPort2.mouse;
 
-
     copperBreakpoints.emu = emu;
     copperBreakpoints.guards = &emu->main.agnus.copper.debugger.breakpoints;
 

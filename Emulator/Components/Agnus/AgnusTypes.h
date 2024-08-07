@@ -115,6 +115,7 @@ enum_long(SLOT)
     SLOT_KEY,                       // Auto-typing
     SLOT_SRV,                       // Remote server manager
     SLOT_SER,                       // Serial remote server
+    SLOT_BTR,                       // Beam traps
     SLOT_ALA,                       // Alarms (set by the GUI)
     SLOT_INS,                       // Handles periodic calls to inspect()
 
@@ -172,6 +173,7 @@ struct EventSlotEnum : vamiga::util::Reflection<EventSlotEnum, EventSlot>
             case SLOT_KEY:   return "KEY";
             case SLOT_SRV:   return "SRV";
             case SLOT_SER:   return "SER";
+            case SLOT_BTR:   return "BTR";
             case SLOT_ALA:   return "ALA";
             case SLOT_INS:   return "INS";
 
@@ -388,6 +390,10 @@ enum_i8(EventID)
     // Serial remote server
     SER_RECEIVE         = 1,
     SER_EVENT_COUNT,
+
+    // Beamtrap event slot
+    BTR_TRIGGER         = 1,
+    BTR_EVENT_COUNT,
 
     // Alarm event slot
     ALA_TRIGGER         = 1,

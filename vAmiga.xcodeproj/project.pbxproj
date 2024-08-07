@@ -30,6 +30,10 @@
 		5019605D23125E680051B669 /* Monitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5019605C23125E680051B669 /* Monitor.swift */; };
 		5019B1F0254B292D00A7AB95 /* EXEFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5019B1EE254B292D00A7AB95 /* EXEFile.cpp */; };
 		501A9937243A07A100D269B2 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501A9936243A07A100D269B2 /* Storage.swift */; };
+		501B00152C629A0500749664 /* Beamtraps.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B00132C629A0500749664 /* Beamtraps.cpp */; };
+		501B00162C629A0500749664 /* Beamtraps.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B00132C629A0500749664 /* Beamtraps.cpp */; };
+		501B00192C63589500749664 /* GuardList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B00172C63589500749664 /* GuardList.cpp */; };
+		501B001A2C63589500749664 /* GuardList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B00172C63589500749664 /* GuardList.cpp */; };
 		501B821D2262FFB200042871 /* RTC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B821B2262FFB200042871 /* RTC.cpp */; };
 		501C36322C1C17B1000FA274 /* CmdQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501C36302C1C17B1000FA274 /* CmdQueue.cpp */; };
 		501C36332C1C17B1000FA274 /* CmdQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501C36302C1C17B1000FA274 /* CmdQueue.cpp */; };
@@ -516,6 +520,10 @@
 		5019B1EE254B292D00A7AB95 /* EXEFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EXEFile.cpp; sourceTree = "<group>"; };
 		5019B1EF254B292D00A7AB95 /* EXEFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EXEFile.h; sourceTree = "<group>"; };
 		501A9936243A07A100D269B2 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
+		501B00132C629A0500749664 /* Beamtraps.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Beamtraps.cpp; sourceTree = "<group>"; };
+		501B00142C629A0500749664 /* Beamtraps.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beamtraps.h; sourceTree = "<group>"; };
+		501B00172C63589500749664 /* GuardList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GuardList.cpp; sourceTree = "<group>"; };
+		501B00182C63589500749664 /* GuardList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GuardList.h; sourceTree = "<group>"; };
 		501B821B2262FFB200042871 /* RTC.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RTC.cpp; sourceTree = "<group>"; };
 		501B821C2262FFB200042871 /* RTC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTC.h; sourceTree = "<group>"; };
 		501C362F2C1C176C000FA274 /* EmulatorTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmulatorTypes.h; sourceTree = "<group>"; };
@@ -1157,6 +1165,8 @@
 				5020B38D295336E5009732AC /* Host.h */,
 				5020B38C295336E5009732AC /* Host.cpp */,
 				508C6BCF23F7E77500D8938F /* ChangeRecorder.h */,
+				501B00182C63589500749664 /* GuardList.h */,
+				501B00172C63589500749664 /* GuardList.cpp */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -1793,6 +1803,8 @@
 				50769B8B24BD7B01006FE743 /* DmaDebuggerTypes.h */,
 				50E204E92295A3F20082B63D /* DmaDebugger.h */,
 				50E204E82295A3F20082B63D /* DmaDebugger.cpp */,
+				501B00142C629A0500749664 /* Beamtraps.h */,
+				501B00132C629A0500749664 /* Beamtraps.cpp */,
 			);
 			path = DmaDebugger;
 			sourceTree = "<group>";
@@ -2236,6 +2248,7 @@
 				509C3663260B1D95004F160A /* CommandConsole.cpp in Sources */,
 				50AE6EDF24D93EDD000AA367 /* AgnusRegs.cpp in Sources */,
 				50AEBEE024D3D9080037082D /* KeyboardEvents.cpp in Sources */,
+				501B00192C63589500749664 /* GuardList.cpp in Sources */,
 				50FC08B127819E4100F0C567 /* BlitterInfo.cpp in Sources */,
 				5020B17D21EF121E00B9E80E /* Agnus.cpp in Sources */,
 				50FAC7702515EBED00E47421 /* IMGFile.cpp in Sources */,
@@ -2360,6 +2373,7 @@
 				5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */,
 				50FC08AD27819CD100F0C567 /* AgnusInfo.cpp in Sources */,
 				50AE6F8525D71FBE0004AFBC /* Error.cpp in Sources */,
+				501B00152C629A0500749664 /* Beamtraps.cpp in Sources */,
 				50672CC02946100F004113F5 /* DebugConsole.cpp in Sources */,
 				5057E4C5243DF10A004005EB /* Primitives.swift in Sources */,
 				50826F7827F0B2AD005FBF3B /* DiagBoard.cpp in Sources */,
@@ -2476,6 +2490,7 @@
 				50FC04FB27DA1AA200C3E566 /* DiskControllerRegs.cpp in Sources */,
 				50FC04BE27DA19C900C3E566 /* Joystick.cpp in Sources */,
 				50672CC12946100F004113F5 /* DebugConsole.cpp in Sources */,
+				501B001A2C63589500749664 /* GuardList.cpp in Sources */,
 				50FC04F627DA1A8F00C3E566 /* AudioPort.cpp in Sources */,
 				50FC04DA27DA1A0000C3E566 /* Console.cpp in Sources */,
 				50FC04C927DA19E900C3E566 /* EADFFile.cpp in Sources */,
@@ -2587,6 +2602,7 @@
 				50FC04D827DA1A0000C3E566 /* RetroShell.cpp in Sources */,
 				50FC04A527DA198100C3E566 /* CopperInfo.cpp in Sources */,
 				50FC04F327DA1A8F00C3E566 /* AudioFilter.cpp in Sources */,
+				501B00162C629A0500749664 /* Beamtraps.cpp in Sources */,
 				50FC04E627DA1A1400C3E566 /* pfile.c in Sources */,
 				50FC04AF27DA199200C3E566 /* DmaDebugger.cpp in Sources */,
 				50FC04ED27DA1A4500C3E566 /* Socket.cpp in Sources */,

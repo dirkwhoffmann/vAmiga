@@ -450,6 +450,9 @@ Agnus::executeUntil(Cycle cycle) {
             if (isDue<SLOT_SER>(cycle)) {
                 remoteManager.serServer.serviceSerEvent();
             }
+            if (isDue<SLOT_BTR>(cycle)) {
+                dmaDebugger.beamtraps.serviceEvent();
+            }
             if (isDue<SLOT_ALA>(cycle)) {
                 amiga.serviceAlarmEvent();
             }

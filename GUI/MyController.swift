@@ -487,6 +487,10 @@ extension MyController {
         case .CPU_HALT:
             refreshStatusBar()
             
+        case .BEAMTRAP_REACHED:
+
+            inspector?.signalBeamtrap()
+
         case .VIEWPORT:
             renderer.canvas.updateTextureRect(hstrt: Int(msg.viewport.hstrt),
                                               vstrt: Int(msg.viewport.vstrt),

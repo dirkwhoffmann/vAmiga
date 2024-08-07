@@ -57,6 +57,10 @@ enum_long(MSG_TYPE)
     MSG_SWTRAP_REACHED,
     MSG_CPU_HALT,
     
+    // Agnus
+    MSG_BEAMTRAP_REACHED,
+    MSG_BEAMTRAP_UPDATED,
+
     // Copper
     MSG_COPPERBP_REACHED,
     MSG_COPPERBP_UPDATED,
@@ -169,6 +173,9 @@ struct MsgTypeEnum : vamiga::util::Reflection<MsgTypeEnum, MsgType>
             case MSG_CATCHPOINT_REACHED:    return "CATCHPOINT_REACHED";
             case MSG_SWTRAP_REACHED:        return "SWTRAP_REACHED";
             case MSG_CPU_HALT:              return "CPU_HALT";
+
+            case MSG_BEAMTRAP_REACHED:      return "BEAMTRAP_REACHED";
+            case MSG_BEAMTRAP_UPDATED:      return "BEAMTRAP_UPDATED";
 
             case MSG_COPPERBP_REACHED:      return "COPPERBP_REACHED";
             case MSG_COPPERBP_UPDATED:      return "COPPERBP_UPDATED";

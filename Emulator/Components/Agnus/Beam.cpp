@@ -97,11 +97,15 @@ Beam::operator-(const isize i) const
 isize
 Beam::diff(isize v2, isize h2) const
 {
-    assert(v2 > v || (v2 == v && h2 >= h));
-
     isize result = 0;
 
     auto b = *this;
+
+    if (b.v == v2 && h2 < b.h) {
+
+        b = b + HPOS_CNT_PAL;
+        result += HPOS_CNT_PAL;
+    }
     while (b.v != v2) {
         b = b + HPOS_CNT_PAL;
         result += HPOS_CNT_PAL;

@@ -51,6 +51,7 @@ extension EventSlot: CustomStringConvertible {
         case .KEY:      return "Auto Typing"
         case .SRV:      return "Server Daemon"
         case .SER:      return "Null Modem Cable"
+        case .BTR:      return "Beam Traps"
         case .ALA:      return "Alarms"
         case .INS:      return "Inspector"
 

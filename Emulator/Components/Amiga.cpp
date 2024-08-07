@@ -617,19 +617,6 @@ Amiga::computeFrame()
         // Check if special action needs to be taken
         if (flags) {
 
-            // Are we requested to take a snapshot?
-            /*
-            if (flags & RL::AUTO_SNAPSHOT) {
-                clearFlag(RL::AUTO_SNAPSHOT);
-                takeAutoSnapshot();
-            }
-
-            if (flags & RL::USER_SNAPSHOT) {
-                clearFlag(RL::USER_SNAPSHOT);
-                takeUserSnapshot();
-            }
-            */
-
             // Did we reach a soft breakpoint?
             if (flags & RL::SOFTSTOP_REACHED) {
                 clearFlag(RL::SOFTSTOP_REACHED);
@@ -641,7 +628,7 @@ Amiga::computeFrame()
             if (flags & RL::BREAKPOINT_REACHED) {
                 clearFlag(RL::BREAKPOINT_REACHED);
                 auto addr = cpu.debugger.breakpoints.hit->addr;
-                msgQueue.put(MSG_BREAKPOINT_REACHED, CpuMsg { addr, 0});
+                msgQueue.put(MSG_BREAKPOINT_REACHED, CpuMsg { addr, 0 });
                 throw StateChangeException(STATE_PAUSED);
                 break;
             }
@@ -650,7 +637,7 @@ Amiga::computeFrame()
             if (flags & RL::WATCHPOINT_REACHED) {
                 clearFlag(RL::WATCHPOINT_REACHED);
                 auto addr = cpu.debugger.watchpoints.hit->addr;
-                msgQueue.put(MSG_WATCHPOINT_REACHED, CpuMsg {addr, 0});
+                msgQueue.put(MSG_WATCHPOINT_REACHED, CpuMsg { addr, 0 });
                 throw StateChangeException(STATE_PAUSED);
                 break;
             }
@@ -659,7 +646,7 @@ Amiga::computeFrame()
             if (flags & RL::CATCHPOINT_REACHED) {
                 clearFlag(RL::CATCHPOINT_REACHED);
                 auto vector = u8(cpu.debugger.catchpoints.hit->addr);
-                msgQueue.put(MSG_CATCHPOINT_REACHED, CpuMsg {cpu.getPC0(), vector});
+                msgQueue.put(MSG_CATCHPOINT_REACHED, CpuMsg { cpu.getPC0(), vector });
                 throw StateChangeException(STATE_PAUSED);
                 break;
             }
@@ -667,7 +654,15 @@ Amiga::computeFrame()
             // Did we reach a software trap?
             if (flags & RL::SWTRAP_REACHED) {
                 clearFlag(RL::SWTRAP_REACHED);
-                msgQueue.put(MSG_SWTRAP_REACHED, CpuMsg {cpu.getPC0(), 0});
+                msgQueue.put(MSG_SWTRAP_REACHED, CpuMsg { cpu.getPC0(), 0 });
+                throw StateChangeException(STATE_PAUSED);
+                break;
+            }
+
+            // Did we reach a beam trap?
+            if (flags & RL::BEAMTRAP_REACHED) {
+                clearFlag(RL::BEAMTRAP_REACHED);
+                msgQueue.put(MSG_BEAMTRAP_REACHED, CpuMsg { 0, 0 });
                 throw StateChangeException(STATE_PAUSED);
                 break;
             }

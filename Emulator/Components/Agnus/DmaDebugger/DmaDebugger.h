@@ -12,6 +12,7 @@
 #include "DmaDebuggerTypes.h"
 #include "FrameBufferTypes.h"
 #include "SubComponent.h"
+#include "Beamtraps.h"
 #include "Colors.h"
 #include "Constants.h"
 
@@ -68,6 +69,11 @@ class DmaDebugger : public SubComponent, public Inspectable<DmaDebuggerInfo> {
     // HSYNC handler information (recorded in the EOL handler)
     isize pixel0 = 0;
 
+public:
+
+    // Beamtraps
+    Beamtraps beamtraps = Beamtraps(agnus);
+    // GuardsWrapper beamtraps = GuardsWrapper(emulator, _beamtraps);
 
     //
     // Initializing
@@ -97,7 +103,7 @@ public:
 
 private:
 
-    void _dump(Category category, std::ostream& os) const override { }
+    void _dump(Category category, std::ostream& os) const override;
 
 
     //

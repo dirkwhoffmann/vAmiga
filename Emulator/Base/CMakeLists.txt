@@ -9,6 +9,7 @@ CoreObject.cpp
 CoreComponent.cpp
 Defaults.cpp
 Dumpable.cpp
+GuardList.cpp
 Host.cpp
 MsgQueue.cpp
 Option.cpp

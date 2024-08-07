@@ -17,6 +17,7 @@ enum class Category
 {
     BankMap, 
     Beam,
+    Beamtraps,
     Blocks,
     Breakpoints,
     Bus,

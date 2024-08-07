@@ -440,6 +440,16 @@ Agnus::eventName(EventSlot slot, EventID id)
             }
             break;
 
+        case SLOT_BTR:
+
+            switch (id) {
+
+                case EVENT_NONE:    return "none";
+                case BTR_TRIGGER:   return "BTR_TRIGGER";
+                default:            return "*** INVALID ***";
+            }
+            break;
+
         case SLOT_ALA:
 
             switch (id) {
