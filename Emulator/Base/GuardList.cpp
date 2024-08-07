@@ -13,21 +13,31 @@
 
 namespace vamiga {
 
-std::optional<GuardListInfo>
+std::optional<GuardInfo>
 MoiraGuardList::guardNr(long nr) const
 {
     if (auto *g = guards.guardNr(nr); g) {
-        return GuardListInfo {.addr = g->addr, .enabled = g->enabled, .ignore = g->ignore };
+        return GuardInfo {.addr = g->addr, .enabled = g->enabled, .ignore = g->ignore };
     }
 
     return { };
 }
 
-std::optional<GuardListInfo>
+std::optional<GuardInfo>
 MoiraGuardList::guardAt(u32 addr) const
 {
     if (auto *g = guards.guardAt(addr); g) {
-        return GuardListInfo {.addr = g->addr, .enabled = g->enabled, .ignore = g->ignore };
+        return GuardInfo {.addr = g->addr, .enabled = g->enabled, .ignore = g->ignore };
+    }
+
+    return { };
+}
+
+std::optional<GuardInfo> 
+MoiraGuardList::hit() const
+{
+    if (auto g = guards.hit; g) {
+        return GuardInfo {.addr = g->addr, .enabled = g->enabled, .ignore = g->ignore };
     }
 
     return { };

@@ -10,6 +10,7 @@
 #pragma once
 
 #include "CPUTypes.h"
+#include "GuardListTypes.h"
 #include "Moira.h"
 
 namespace vamiga {
@@ -35,7 +36,6 @@ public:
     long elements() const { return guards.elements(); }
     std::optional<GuardInfo> guardNr(long nr) const;
     std::optional<GuardInfo> guardAt(u32 addr) const;
-    // std::optional<u32> guardAddr(long nr) const { return guards.guardAddr(nr); }
 
 
     //

@@ -21,4 +21,4 @@ typedef struct
     bool enabled;
     isize ignore;
 }
-GuardListInfo;
+GuardInfo;

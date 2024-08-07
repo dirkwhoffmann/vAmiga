@@ -40,8 +40,9 @@ public:
     //
 
     long elements() const { return guards.elements(); }
-    std::optional<GuardListInfo> guardNr(long nr) const;
-    std::optional<GuardListInfo> guardAt(u32 addr) const;
+    std::optional<GuardInfo> guardNr(long nr) const;
+    std::optional<GuardInfo> guardAt(u32 addr) const;
+    std::optional<GuardInfo> hit() const;
 
 
     //
