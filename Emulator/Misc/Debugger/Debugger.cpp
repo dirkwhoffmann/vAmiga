@@ -40,9 +40,6 @@ Debugger::stepInto()
 
     cpu.debugger.stepInto();
     emulator.run();
-
-    // Inform the GUI
-    msgQueue.put(MSG_STEP);
 }
 
 void
@@ -52,9 +49,6 @@ Debugger::stepOver()
 
     cpu.debugger.stepOver();
     emulator.run();
-
-    // Inform the GUI
-    msgQueue.put(MSG_STEP);
 }
 
 void

@@ -620,6 +620,7 @@ Amiga::computeFrame()
             // Did we reach a soft breakpoint?
             if (flags & RL::SOFTSTOP_REACHED) {
                 clearFlag(RL::SOFTSTOP_REACHED);
+                msgQueue.put(MSG_STEP);
                 throw StateChangeException(STATE_PAUSED);
                 break;
             }
