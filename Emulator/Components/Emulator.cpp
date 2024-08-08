@@ -67,7 +67,6 @@ Emulator::initialize()
     ahead.initialize();
 
     // Setup the default configuration
-    host.resetConfig();
     main.resetConfig();
 
     // Perform a hard reset
@@ -321,10 +320,6 @@ Emulator::set(ConfigScheme scheme)
 Configurable *
 Emulator::routeOption(Option opt, isize objid)
 {
-    // Check global components
-    if (host.isValidOption(opt) && objid == host.objid) return &host;
-
-    // Check components of the main instance
     return main.routeOption(opt, objid);
 }
 
@@ -334,34 +329,6 @@ Emulator::routeOption(Option opt, isize objid) const
     auto result = const_cast<Emulator *>(this)->routeOption(opt, objid);
     return const_cast<const Configurable *>(result);
 }
-
-/*
-std::vector<Configurable *>
-Emulator::routeOption(Option opt)
-{
-    std::vector<Configurable *> result;
-
-    // Check global components
-    if (host.isValidOption(opt)) result.push_back(&host);
-
-    // Check components of the main instance
-    main.routeOption(opt, result);
-
-    assert(!result.empty());
-    return result;
-}
-
-std::vector<const Configurable *>
-Emulator::routeOption(Option opt) const
-{
-    std::vector<const Configurable *> result;
-
-    for (const auto &target : const_cast<Emulator *>(this)->routeOption(opt)) {
-        result.push_back(const_cast<const Configurable *>(target));
-    }
-    return result;
-}
-*/
 
 i64
 Emulator::overrideOption(Option opt, i64 value) const
@@ -543,7 +510,7 @@ Emulator::refreshRate() const
 
     if (config.vsync) {
 
-        return double(host.getOption(OPT_HOST_REFRESH_RATE));
+        return double(main.host.getOption(OPT_HOST_REFRESH_RATE));
 
     } else {
 

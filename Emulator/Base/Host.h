@@ -9,16 +9,16 @@
 
 #pragma once
 
-#include "CoreComponent.h"
+#include "SubComponent.h"
 #include "HostTypes.h"
 #include "IOUtils.h"
 
 namespace vamiga {
 
-/* This class stores some information about the host system. The values have
- * are set the GUI on start and updated on-the-fly when a value changes.
+/* This class stores some information about the host system. The values need to
+ * be set by the GUI on start and updated on-the-fly when a value changes.
  */
-class Host : public CoreComponent {
+class Host : public SubComponent {
 
     Descriptions descriptions = {{
 
@@ -46,7 +46,7 @@ class Host : public CoreComponent {
 
 public:
 
-    using CoreComponent::CoreComponent;
+    using SubComponent::SubComponent;
 
     Host& operator= (const Host& other) {
 

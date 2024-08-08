@@ -1572,7 +1572,7 @@ VAmiga::VAmiga() {
     hd3.controller.controller = &emu->main.hd3con;
 
     host.emu = emu;
-    host.host = &emu->host;
+    host.host = &emu->main.host;
 
     keyboard.emu = emu;
     keyboard.keyboard = &emu->main.keyboard;

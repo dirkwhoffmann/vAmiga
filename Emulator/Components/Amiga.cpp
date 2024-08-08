@@ -55,6 +55,7 @@ Amiga::Amiga(class Emulator& ref, isize id) : CoreComponent(ref, id)
 
     subComponents = std::vector<CoreComponent *> {
 
+        &host,
         &agnus,
         &audioPort,
         &videoPort,
@@ -392,7 +393,7 @@ Amiga::refreshRate() const
 {
     if (config.vsync) {
 
-        return double(emulator.host.getOption(OPT_HOST_REFRESH_RATE));
+        return double(host.getOption(OPT_HOST_REFRESH_RATE));
 
     } else {
 

@@ -309,7 +309,7 @@ AudioPort::synthesize(Cycle clock, Cycle target)
     if (amiga.objid != 0) return;
 
     // Determine the current sample rate
-    double rate = double(emulator.host.getOption(OPT_HOST_SAMPLE_RATE)) + sampleRateCorrection;
+    double rate = double(host.getOption(OPT_HOST_SAMPLE_RATE)) + sampleRateCorrection;
 
     // Determine the number of elapsed cycles per audio sample
     double cps = double(amiga.masterClockFrequency()) / rate;

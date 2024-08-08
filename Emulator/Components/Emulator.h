@@ -42,9 +42,6 @@ public:
     // Incoming external events
     CmdQueue cmdQueue;
 
-    // Host system information
-    Host host = Host(*this);
-
 
     //
     // Methods

@@ -86,6 +86,9 @@ class Amiga final : public CoreComponent, public Inspectable<AmigaInfo> {
 
 public:
 
+    // Host system information
+    Host host = Host(*this);
+
     // Components
     CPU cpu = CPU(*this);
     CIAA ciaA = CIAA(*this);
@@ -199,6 +202,7 @@ public:
 
     Amiga& operator= (const Amiga& other) {
 
+        CLONE(host)
         CLONE(agnus)
         CLONE(audioPort)
         CLONE(videoPort)
