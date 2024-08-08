@@ -36,22 +36,21 @@ Beamtraps::serviceEvent()
 void 
 Beamtraps::scheduleNextEvent()
 {
-    if (elements() == 0) {
+    agnus.cancel<SLOT_BTR>();
 
-        agnus.cancel<SLOT_BTR>();
-        return;
-    }
-
-    isize next = INT_MAX;
-    for (isize i = 0; i < elements(); i++) {
+    for (isize i = 0, next = INT_MAX; i < elements(); i++) {
 
         const auto guard = guardNr(i);
         auto v = HI_WORD(guard->addr);
         auto h = LO_WORD(guard->addr);
-        auto d = DMA_CYCLES(agnus.pos.diff(v, h));
+        auto d = agnus.pos.diff(v, h);
 
         // printf("Beamtrap (%d,%d) diff: %lld\n", v, h, d);
-        if (d < next) { next = d; agnus.scheduleRel<SLOT_BTR>(d, BTR_TRIGGER); }
+        if (d >= 0 && d < next) {
+
+            next = d;
+            agnus.scheduleRel<SLOT_BTR>(DMA_CYCLES(d), BTR_TRIGGER);
+        }
     }
 }
 

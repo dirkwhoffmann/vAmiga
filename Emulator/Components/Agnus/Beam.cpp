@@ -98,17 +98,28 @@ isize
 Beam::diff(isize v2, isize h2) const
 {
     isize result = 0;
+    isize threshold = 2 * cyclesPerFrame(FRAME_PAL_LF);
 
     auto b = *this;
 
+    // If (v2,h2) is in the same line, but already passed, make sure to wrap
+    // over to the next frame.
     if (b.v == v2 && h2 < b.h) {
 
         b = b + HPOS_CNT_PAL;
         result += HPOS_CNT_PAL;
     }
+
     while (b.v != v2) {
+
         b = b + HPOS_CNT_PAL;
         result += HPOS_CNT_PAL;
+
+        if (result > threshold) {
+
+            // The specified beam position will never match
+            return -1;
+        }
     }
     result += h2 - b.h;
 

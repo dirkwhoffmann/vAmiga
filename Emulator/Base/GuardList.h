@@ -14,16 +14,27 @@
 
 namespace vamiga {
 
+/* This class provides functionality for managing a guard list. The term "guard"
+ * is used as a general term to denote breakpoints, watchpoints, catchpoints,
+ * beamtraps, and similar constructs. Internally, the class utilizes an object
+ * of type moira::Guards, which already offers the necessary functionality.
+ * Encapsulating this functionality in a new class enables its use by other
+ * components, such as the Copper, in addition to the CPU.
+ */
 class GuardList {
 
 protected:
 
+    // Reference to the emulator object
     class Emulator &emu;
-    moira::Guards _guards;
+
+    // Reference to the guard list
     moira::Guards &guards;
 
-public:
+    // This guard list is used if no custom list is provided in the constructor
+    moira::Guards _guards;
 
+    // Indicates if active guards are present
     bool needsCheck = false;
 
 
@@ -37,9 +48,12 @@ public:
     GuardList(Emulator &emu, moira::Guards &guards) : emu(emu), guards(guards) { }
     virtual ~GuardList() { }
 
+
     //
     // Inspecting the guard list
     //
+
+public:
 
     long elements() const { return guards.elements(); }
     std::optional<GuardInfo> guardNr(long nr) const;
@@ -50,6 +64,8 @@ public:
     //
     // Adding or removing guards
     //
+
+public:
 
     bool isSet(long nr) const { return guards.isSet(nr); }
     bool isSetAt(u32 addr) const { return guards.isSetAt(addr); }
@@ -65,6 +81,8 @@ public:
     //
     // Enabling or disabling guards
     //
+
+public:
 
     bool isEnabled(long nr) const { return guards.isEnabled(nr); }
     bool isEnabledAt(u32 addr) const { return guards.isEnabledAt(addr); }
@@ -85,15 +103,22 @@ public:
 
 
     //
-    // Internals
+    // Delegates
     //
-
-    // Updates the needsCheck variable
-    void update();
 
 public:
 
     virtual void setNeedsCheck(bool value) { };
+
+
+    //
+    // Internals
+    //
+
+private:
+
+    // Updates the needsCheck variable
+    void update();
 };
 
 }
