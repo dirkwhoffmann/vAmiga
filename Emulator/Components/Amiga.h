@@ -350,6 +350,10 @@ public:
 
 public:
 
+    // Called by the Emulator class in it's own update function
+    void update();
+
+    // Emulates a frame
     void computeFrame();
 
     // Fast-forward the run-ahead instance

@@ -150,7 +150,7 @@ Console::setStream(std::ostream &os)
 void
 Console::needsDisplay()
 {
-    msgQueue.put(MSG_RSH_UPDATE);
+    retroShell.isDirty = true;
 }
 
 void

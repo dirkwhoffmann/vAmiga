@@ -51,10 +51,17 @@ class RetroShell : public SubComponent {
 
     };
 
+public:
+
     // Consoles
     CommandConsole commander = CommandConsole(amiga, 0);
     DebugConsole debugger = DebugConsole(amiga, 1);
 
+    // Indicates if one of the consoles has new contents
+    bool isDirty = false;
+
+private:
+    
     // The currently active console
     Console *current = &commander;
 

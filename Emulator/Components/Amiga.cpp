@@ -606,6 +606,16 @@ Amiga::_trackOff()
     msgQueue.put(MSG_TRACK, 0);
 }
 
+void 
+Amiga::update()
+{
+    if (retroShell.isDirty) {
+
+        retroShell.isDirty = false;
+        msgQueue.put(MSG_RSH_UPDATE);
+    }
+}
+
 void
 Amiga::computeFrame()
 {

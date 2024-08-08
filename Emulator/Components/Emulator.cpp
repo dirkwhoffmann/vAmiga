@@ -386,6 +386,7 @@ Emulator::update()
     auto dfn = [&]() -> FloppyDrive& { return *main.df[cmd.value]; };
     auto cp = [&]() -> ControlPort& { return cmd.value ? main.controlPort2 : main.controlPort1; };
 
+    main.update();
     shouldWarp() ? warpOn() : warpOff();
 
     while (cmdQueue.poll(cmd)) {

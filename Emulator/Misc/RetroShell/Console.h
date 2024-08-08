@@ -67,6 +67,8 @@ protected:
     // Text storage
     //
 
+protected:
+    
     // The text storage
     TextStorage storage;
 
@@ -80,6 +82,8 @@ protected:
     //
     // User input
     //
+
+protected:
 
     // Input line
     string input;
