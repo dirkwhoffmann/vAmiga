@@ -30,10 +30,15 @@ protocol DialogControllerDelegate: AnyObject {
     func cleanup()
 }
 
+/* Base class for all auxiliary windows. The class extends NSWindowController
+ * by a reference to the controller of the connected emulator window (parent)
+ * and a reference to the parents proxy object. It also provides some wrappers
+ * around showing and hiding the window.
+ */
 class DialogController: NSWindowController, DialogControllerDelegate {
 
     var parent: MyController!
-    var emu: EmulatorProxy!
+    var emu: EmulatorProxy! { return parent.emu }
     var amiga: AmigaProxy { return emu.amiga }
 
     // References to all open dialogs (to make ARC happy)
@@ -42,6 +47,9 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     // Remembers whether awakeFromNib has been called
     var awake = false
 
+    // Lock that is kept during the lifetime of the dialog
+    var lock = NSLock()
+
     // Indicates if this dialog is displayed as a sheet
     var sheet = false
 
@@ -49,8 +57,8 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     
         self.init(windowNibName: nibName)
         
+        lock.lock()
         parent = controller
-        emu = parent.emu
     }
 
     func register() {
@@ -131,6 +139,14 @@ class DialogController: NSWindowController, DialogControllerDelegate {
         
         hide()
     }
+
+    func join() {
+
+        debug(.shutdown, "Wait until window is closed...")
+
+        lock.lock()
+        lock.unlock()
+    }
 }
 
 extension DialogController: NSWindowDelegate {
@@ -138,5 +154,6 @@ extension DialogController: NSWindowDelegate {
     func windowWillClose(_ notification: Notification) {
 
         unregister()
+        lock.unlock()
     }
 }

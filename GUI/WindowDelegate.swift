@@ -55,29 +55,30 @@ extension MyController: NSWindowDelegate {
         
         debug(.lifetime)
                 
-        debug(.shutdown, "Stopping renderer...")
-        renderer.halt()
-        
-        debug(.shutdown, "Closing auxiliary windows...")
-        configurator?.emu = nil
-        configurator?.close()
-        inspector?.emu = nil
-        inspector?.close()
-        monitor?.emu = nil
-        monitor?.close()
-        virtualKeyboard?.emu = nil
-        virtualKeyboard?.close()
+        debug(.shutdown, "Pause emulation...")
+        emu!.pause()
 
-        debug(.shutdown, "Shutting down the audio backend...")
+        debug(.shutdown, "Shut down the audio unit...")
         macAudio.shutDown()
 
-        debug(.shutdown, "Disconnecting gaming devices...")
-        gamePadManager.shutDown()
-        
-        debug(.shutdown, "Shutting down the emulator...")
-        emu.halt()
+        debug(.shutdown, "Close the inspector...")
+        inspector?.close()
+        inspector?.join()
 
-        debug(.shutdown, "Shut down completed.")
+        debug(.shutdown, "Close the monitor...")
+        monitor?.close()
+        monitor?.join()
+
+        debug(.shutdown, "Stop the renderer...")
+        renderer.halt()
+
+        debug(.shutdown, "Disconnect all gaming devices...")
+        gamePadManager.shutDown()
+
+        debug(.shutdown, "Shut down the emulator...")
+        emu!.halt()
+
+        debug(.shutdown, "Done")
     }
     
     func shutDown() {

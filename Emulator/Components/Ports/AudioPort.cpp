@@ -508,7 +508,7 @@ AudioPort::copyMono(float *buffer, isize n)
     // Check for a buffer underflow
     if (cnt < n) handleBufferUnderflow();
 
-    return n;
+    return cnt;
 }
 
 isize
@@ -521,7 +521,7 @@ AudioPort::copyStereo(float *buffer1, float *buffer2, isize n)
     // Check for a buffer underflow
     if (cnt < n) handleBufferUnderflow();
 
-    return n;
+    return cnt;
 }
 
 isize
@@ -534,7 +534,7 @@ AudioPort::copyInterleaved(float *buffer, isize n)
     // Check for a buffer underflow
     if (cnt < n) handleBufferUnderflow();
 
-    return n;
+    return cnt;
 }
 
 }

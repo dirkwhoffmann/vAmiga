@@ -68,7 +68,6 @@ class VirtualKeyboardController: DialogController {
 
         let keyboard = VirtualKeyboardController(windowNibName: xibName)
         keyboard.parent = parent
-        keyboard.emu = parent.emu
 
         return keyboard
     }
