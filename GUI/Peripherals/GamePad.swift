@@ -41,6 +41,7 @@ class GamePad {
     // References to other objects
     var manager: GamePadManager
     var prefs: Preferences { return manager.parent.pref }
+    var config: Configuration { return manager.parent.config }
     var db: DeviceDatabase { return myAppDelegate.database }
     
     // The Amiga port this device is connected to (1, 2, or nil)
@@ -149,10 +150,10 @@ class GamePad {
         
         print(name != "" ? "\(name) " : "Placeholder device ", terminator: "")
         print(isMouse ? "(Mouse) " : "", terminator: "")
-        print(port != nil ? "[\(port!)] " : "[-] ", terminator: "")
-        if vendorID != "" { print("v: \(vendorID) ", terminator: "") }
-        if productID != "" { print("p: \(productID) ", terminator: "") }
-        if locationID != "" { print("l: \(locationID) ", terminator: "") }
+        print(port != nil ? "[\(port!)]" : "[-] ", terminator: "")
+        print(vendorID == "" ? "" : "v: \(vendorID) ", terminator: "")
+        print(productID == "" ? "" : "v: \(productID) ", terminator: "")
+        print(locationID == "" ? "" : "v: \(locationID) ")
         print("")
     }
     
