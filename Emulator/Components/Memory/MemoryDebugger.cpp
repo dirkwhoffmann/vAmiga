@@ -354,6 +354,12 @@ MemoryDebugger::isWritable(ChipsetReg reg) const
     }
 }
 
+const char *
+MemoryDebugger::regName(u32 addr)
+{
+    return ChipsetRegEnum::key((addr >> 1) & 0xFF);
+}
+
 bool
 MemoryDebugger::isUnused(ChipsetReg reg) const
 {

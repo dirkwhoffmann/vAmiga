@@ -2160,7 +2160,7 @@ Memory::peekCustom16(u32 addr)
 
     }
 
-    trace(OCSREG_DEBUG, "peekCustom16(%X [%s]) = %X\n", addr, Debugger::regName(addr), result);
+    trace(OCSREG_DEBUG, "peekCustom16(%X [%s]) = %X\n", addr, MemoryDebugger::regName(addr), result);
 
     dataBus = result;
     return result;
@@ -2239,7 +2239,7 @@ Memory::pokeCustom16(u32 addr, u16 value)
     if ((addr & 0xFFF) == 0x30) {
         trace(OCSREG_DEBUG, "pokeCustom16(SERDAT, '%c')\n", (char)value);
     } else {
-        trace(OCSREG_DEBUG, "pokeCustom16(%X [%s], %X)\n", addr, Debugger::regName(addr), value);
+        trace(OCSREG_DEBUG, "pokeCustom16(%X [%s], %X)\n", addr, MemoryDebugger::regName(addr), value);
     }
 
     dataBus = value;
@@ -2660,10 +2660,10 @@ Memory::pokeCustom16(u32 addr, u16 value)
     
     if (addr <= 0x1E) {
         trace(INVREG_DEBUG,
-              "pokeCustom16(%X [%s]): READ-ONLY\n", addr, Debugger::regName(addr));
+              "pokeCustom16(%X [%s]): READ-ONLY\n", addr, MemoryDebugger::regName(addr));
     } else {
         trace(INVREG_DEBUG,
-              "pokeCustom16(%X [%s]): NON-OCS\n", addr, Debugger::regName(addr));
+              "pokeCustom16(%X [%s]): NON-OCS\n", addr, MemoryDebugger::regName(addr));
     }
 }
 

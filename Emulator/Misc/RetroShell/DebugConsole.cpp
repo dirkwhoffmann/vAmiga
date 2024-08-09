@@ -61,7 +61,7 @@ DebugConsole::pressReturn(bool shift)
 {
     if (!shift && input.empty()) {
 
-        emulator.isRunning() ? emulator.pause() : debugger.stepInto();
+        emulator.isRunning() ? emulator.pause() : emulator.stepInto();
 
     } else {
 
@@ -84,7 +84,7 @@ DebugConsole::initCommands(Command &root)
                  std::pair <string, string>("g[oto]", "Goto address"),
                  [this](Arguments& argv, long value) {
 
-            argv.empty() ? emulator.run() : debugger.jump(parseAddr(argv[0]));
+            argv.empty() ? emulator.run() : cpu.jump(parseAddr(argv[0]));
         });
 
         root.clone("g", {"goto"});
@@ -93,7 +93,7 @@ DebugConsole::initCommands(Command &root)
                  std::pair <string, string>("s[tep]", "Step into the next instruction"),
                  [this](Arguments& argv, long value) {
 
-            debugger.stepInto();
+            emulator.stepInto();
         });
 
         root.clone("s", {"step"});
@@ -102,7 +102,7 @@ DebugConsole::initCommands(Command &root)
                  std::pair <string, string>("n[next]", "Step over the next instruction"),
                  [this](Arguments& argv, long value) {
 
-            debugger.stepOver();
+            emulator.stepOver();
         });
 
         root.clone("n", {"next"});
@@ -351,7 +351,7 @@ DebugConsole::initCommands(Command &root)
                  [this](Arguments& argv, long value) {
 
             std::stringstream ss;
-            debugger.ascDump<ACCESSOR_CPU>(ss, parseAddr(argv, 0, debugger.current), 16);
+            mem.debugger.ascDump<ACCESSOR_CPU>(ss, parseAddr(argv, 0, mem.debugger.current), 16);
             retroShell << '\n' << ss << '\n';
         });
 
@@ -360,7 +360,7 @@ DebugConsole::initCommands(Command &root)
                  [this](Arguments& argv, long value) {
 
             std::stringstream ss;
-            debugger.memDump<ACCESSOR_CPU>(ss, parseAddr(argv, 0, debugger.current), 16, value);
+            mem.debugger.memDump<ACCESSOR_CPU>(ss, parseAddr(argv, 0, mem.debugger.current), 16, value);
             retroShell << '\n' << ss << '\n';
         }, 2);
 
@@ -373,7 +373,7 @@ DebugConsole::initCommands(Command &root)
                  [this](Arguments& argv, long value) {
 
             // Resolve address
-            u32 addr = debugger.current;
+            u32 addr = mem.debugger.current;
 
             if (argv.size() > 1) {
                 try {
@@ -384,7 +384,7 @@ DebugConsole::initCommands(Command &root)
             }
 
             // Access memory
-            debugger.write(addr, u32(parseNum(argv[0])), value);
+            mem.debugger.write(addr, u32(parseNum(argv[0])), value);
         }, 2);
 
         root.clone("w.b", {"w"}, "", 1);
@@ -425,13 +425,13 @@ DebugConsole::initCommands(Command &root)
             {   SUSPENDED
 
                 auto pattern = parseSeq(argv[0]);
-                auto addr = u32(parseNum(argv[1], debugger.current));
-                auto found = debugger.memSearch(pattern, addr, value == 1 ? 1 : 2);
+                auto addr = u32(parseNum(argv[1], mem.debugger.current));
+                auto found = mem.debugger.memSearch(pattern, addr, value == 1 ? 1 : 2);
 
                 if (found >= 0) {
 
                     std::stringstream ss;
-                    debugger.memDump<ACCESSOR_CPU>(ss, u32(found), 1, value);
+                    mem.debugger.memDump<ACCESSOR_CPU>(ss, u32(found), 1, value);
                     retroShell << ss;
 
                 } else {
@@ -462,7 +462,7 @@ DebugConsole::initCommands(Command &root)
                 auto count = parseNum(argv[1]);
                 auto val = u32(parseNum(argv, 2, 0));
 
-                debugger.write(addr, val, value, count);
+                mem.debugger.write(addr, val, value, count);
             }
         }, 1);
 
@@ -1201,9 +1201,9 @@ DebugConsole::initCommands(Command &root)
             std::stringstream ss;
 
             if (isNum(argv[0])) {
-                debugger.convertNumeric(ss, u32(parseNum(argv[0])));
+                mem.debugger.convertNumeric(ss, u32(parseNum(argv[0])));
             } else {
-                debugger.convertNumeric(ss, argv.front());
+                mem.debugger.convertNumeric(ss, argv.front());
             }
 
             retroShell << '\n' << ss << '\n';

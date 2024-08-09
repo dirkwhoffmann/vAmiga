@@ -115,8 +115,6 @@
 		506B47182562E06A009FEFC3 /* VolumeInspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 506B47172562E06A009FEFC3 /* VolumeInspector.xib */; };
 		506B471D256396BC009FEFC3 /* VolumeInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506B471C256396BC009FEFC3 /* VolumeInspector.swift */; };
 		506D6AB2276C7B2D002C9711 /* StringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506D6AB0276C7B2D002C9711 /* StringUtils.cpp */; };
-		506F30362B6BCAC70083EAEA /* Debugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506F30342B6BCAC70083EAEA /* Debugger.cpp */; };
-		506F30372B6BCAC70083EAEA /* Debugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506F30342B6BCAC70083EAEA /* Debugger.cpp */; };
 		5071B7872621F88800D6FB54 /* CopperDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5071B7852621F88800D6FB54 /* CopperDebugger.cpp */; };
 		507215A925EAB4AC00787591 /* Chrono.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5072159F25EA9AE600787591 /* Chrono.cpp */; };
 		5072CAFA2456D1C800C8F606 /* AudioConf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5072CAF92456D1C800C8F606 /* AudioConf.swift */; };
@@ -652,9 +650,6 @@
 		506B471C256396BC009FEFC3 /* VolumeInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeInspector.swift; sourceTree = "<group>"; };
 		506D6AB0276C7B2D002C9711 /* StringUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StringUtils.cpp; sourceTree = "<group>"; };
 		506D6AB1276C7B2D002C9711 /* StringUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StringUtils.h; sourceTree = "<group>"; };
-		506F30332B6BCA9D0083EAEA /* DebuggerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DebuggerTypes.h; sourceTree = "<group>"; };
-		506F30342B6BCAC70083EAEA /* Debugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Debugger.cpp; sourceTree = "<group>"; };
-		506F30352B6BCAC70083EAEA /* Debugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Debugger.h; sourceTree = "<group>"; };
 		5071B7852621F88800D6FB54 /* CopperDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperDebugger.cpp; sourceTree = "<group>"; };
 		5071B7862621F88800D6FB54 /* CopperDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CopperDebugger.h; sourceTree = "<group>"; };
 		5072159C25EA698600787591 /* Exception.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
@@ -1671,13 +1666,10 @@
 			path = Peripherals;
 			sourceTree = "<group>";
 		};
-		50AD904F2770CECD0011ECCB /* Debugger */ = {
+		50AD904F2770CECD0011ECCB /* OSDebugger */ = {
 			isa = PBXGroup;
 			children = (
 				50AD90562770CF5D0011ECCB /* CMakeLists.txt */,
-				506F30332B6BCA9D0083EAEA /* DebuggerTypes.h */,
-				506F30352B6BCAC70083EAEA /* Debugger.h */,
-				506F30342B6BCAC70083EAEA /* Debugger.cpp */,
 				501FB313275E461B00D0A57B /* OSDebuggerTypes.h */,
 				50CC209627ECCD6D00AEA010 /* OSDescriptors.h */,
 				50CC209527ECCD6D00AEA010 /* OSDescriptors.cpp */,
@@ -1686,7 +1678,7 @@
 				501FB3162762008C00D0A57B /* OSDebuggerRead.cpp */,
 				501FB318276200A000D0A57B /* OSDebuggerDump.cpp */,
 			);
-			path = Debugger;
+			path = OSDebugger;
 			sourceTree = "<group>";
 		};
 		50AD90502770CEDA0011ECCB /* RegressionTester */ = {
@@ -1970,7 +1962,7 @@
 			isa = PBXGroup;
 			children = (
 				501FB314275E46EC00D0A57B /* CMakeLists.txt */,
-				50AD904F2770CECD0011ECCB /* Debugger */,
+				50AD904F2770CECD0011ECCB /* OSDebugger */,
 				50AD90502770CEDA0011ECCB /* RegressionTester */,
 				50BF1CCA276DBF2E00386540 /* RemoteServers */,
 				50B9C42A2609430F00A86C31 /* RetroShell */,
@@ -2459,7 +2451,6 @@
 				5019B1F0254B292D00A7AB95 /* EXEFile.cpp in Sources */,
 				50EFB0CC2C18D95B0013B73C /* Inspectable.cpp in Sources */,
 				5010A78222B50B690041388B /* PortPanel.swift in Sources */,
-				506F30362B6BCAC70083EAEA /* Debugger.cpp in Sources */,
 				509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */,
 				50F580662431D1A000E7D84D /* Screenshot.swift in Sources */,
 				50AEBEC724D3D39D0037082D /* BlitterEvents.cpp in Sources */,
@@ -2561,7 +2552,6 @@
 				50FC04EF27DA1A4500C3E566 /* RemoteManager.cpp in Sources */,
 				50FC049027DA196500C3E566 /* Denise.cpp in Sources */,
 				50FC04FC27DA1AA200C3E566 /* DiskController.cpp in Sources */,
-				506F30372B6BCAC70083EAEA /* Debugger.cpp in Sources */,
 				50EFB0D52C199C850013B73C /* Suspendable.cpp in Sources */,
 				50FC049527DA196C00C3E566 /* FFmpeg.cpp in Sources */,
 				50FC04A127DA197A00C3E566 /* SequencerInfo.cpp in Sources */,

@@ -198,13 +198,13 @@ Copper::move(u32 addr, u16 value)
     assert(addr < 0x1FF);
     
     trace(COP_DEBUG,
-          "COPPC: %X move(%s, $%X) (%d)\n", coppc0, Debugger::regName(addr), value, value);
+          "COPPC: %X move(%s, $%X) (%d)\n", coppc0, MemoryDebugger::regName(addr), value, value);
 
     // Catch registers with special timing needs
     if (addr >= 0x180 && addr <= 0x1BE) {
 
         trace(OCSREG_DEBUG,
-              "pokeCustom16(%X [%s], %X)\n", addr, Debugger::regName(addr), value);
+              "pokeCustom16(%X [%s], %X)\n", addr, MemoryDebugger::regName(addr), value);
 
         // Color registers
         pixelEngine.colChanges.insert(agnus.pos.pixel(), RegChange { addr, value} );

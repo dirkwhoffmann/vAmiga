@@ -27,7 +27,6 @@ public:
     class ControlPort &controlPort2;
     class Copper &copper;
     class CPU &cpu;
-    class Debugger &debugger;
     class Denise &denise;
     class DiagBoard &diagBoard;
     class DiskController &diskController;

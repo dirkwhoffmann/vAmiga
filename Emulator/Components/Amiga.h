@@ -17,7 +17,6 @@
 #include "Agnus.h"
 #include "CIA.h"
 #include "CPU.h"
-#include "Debugger.h"
 #include "Defaults.h"
 #include "Denise.h"
 #include "Memory.h"
@@ -136,7 +135,6 @@ public:
     // Misc
     RetroShell retroShell = RetroShell(*this);
     RemoteManager remoteManager = RemoteManager(*this);
-    Debugger debugger = Debugger(*this);
     OSDebugger osDebugger = OSDebugger(*this);
     RegressionTester regressionTester = RegressionTester(*this);
 
@@ -234,7 +232,6 @@ public:
         CLONE(cpu)
         CLONE(remoteManager)
         CLONE(retroShell)
-        CLONE(debugger)
         CLONE(osDebugger)
         CLONE(regressionTester)
 

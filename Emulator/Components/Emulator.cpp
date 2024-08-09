@@ -343,14 +343,16 @@ void
 Emulator::stepInto()
 {
     if (isRunning()) return;
-    main.debugger.stepInto();
+    main.cpu.debugger.stepInto();
+    run();
 }
 
 void 
 Emulator::stepOver()
 {
     if (isRunning()) return;
-    main.debugger.stepOver();
+    main.cpu.debugger.stepOver();
+    run();
 }
 
 void

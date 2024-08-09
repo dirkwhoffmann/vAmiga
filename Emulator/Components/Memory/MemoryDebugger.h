@@ -116,6 +116,9 @@ public:
     // Handling registers
     //
 
+    // Returns the name of a chipset register
+    static const char *regName(u32 addr);
+
     bool isUnused(ChipsetReg reg) const;
     bool isReadable(ChipsetReg reg) const;
     bool isWritable(ChipsetReg reg) const;

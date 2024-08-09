@@ -127,7 +127,7 @@ GdbServer::process <'v', GdbCmd::Cont> (string arg)
     }
     if (arg == "s") {
         
-        debugger.stepInto();
+        emulator.stepInto();
         return;
     }
     

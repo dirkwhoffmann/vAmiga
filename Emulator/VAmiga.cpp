@@ -1533,9 +1533,6 @@ VAmiga::VAmiga() {
     cpu.watchpoints.emu = emu;
     cpu.watchpoints.guards = &emu->main.cpu.watchpoints;
 
-    debugger.emu = emu;
-    debugger.debugger = &emu->main.debugger;
-
     denise.emu = emu;
     denise.denise = &emu->main.denise;
 

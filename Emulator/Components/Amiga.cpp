@@ -88,7 +88,6 @@ Amiga::Amiga(class Emulator& ref, isize id) : CoreComponent(ref, id)
         &cpu,
         &remoteManager,
         &retroShell,
-        &debugger,
         &osDebugger,
         &regressionTester
     };
