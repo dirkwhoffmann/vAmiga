@@ -105,6 +105,7 @@
 //
 
 static const int DIAG_BOARD      = 0; // Plug in the diagnose board
+static const int ALLOW_ALL_ROMS  = 0; // Disable the magic bytes check
 
 
 //

@@ -85,7 +85,7 @@ RomFile::isCompatible(std::istream &stream)
         for (isize i = 0; i < cnt; i++) {
             if (util::matchingStreamHeader(stream, bootRomHeaders[i], len)) return true;
         }
-        return false;
+        return ALLOW_ALL_ROMS;
     }
 
     // Kickstart Roms
@@ -97,7 +97,7 @@ RomFile::isCompatible(std::istream &stream)
         for (isize i = 0; i < cnt; i++) {
             if (util::matchingStreamHeader(stream, kickRomHeaders[i], len)) return true;
         }
-        return false;
+        return ALLOW_ALL_ROMS;
     }
 
     // Encrypted Kickstart Roms
@@ -111,7 +111,7 @@ RomFile::isCompatible(std::istream &stream)
         }
     }
 
-    return false;
+    return ALLOW_ALL_ROMS;
 }
 
 bool
