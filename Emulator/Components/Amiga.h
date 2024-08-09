@@ -330,6 +330,38 @@ private:
 
 
     //
+    // Main API for configuring the emulator
+    //
+
+public:
+
+    // Queries an option
+    i64 get(Option opt, isize id = 0) const throws;
+
+    // Checks an option
+    void check(Option opt, i64 value, const std::vector<isize> objids = { }) throws;
+
+    // Sets an option
+    void set(Option opt, i64 value, const std::vector<isize> objids = { }) throws;
+
+    // Convenience wrappers
+    void set(Option opt, const string &value, const std::vector<isize> objids = { }) throws;
+    void set(const string &opt, const string &value, const std::vector<isize> objids = { }) throws;
+
+    // Configures the emulator to match a specific Amiga model
+    void set(ConfigScheme model);
+
+public: // private
+
+    // Returns the target component for an option
+    Configurable *routeOption(Option opt, isize objid);
+    const Configurable *routeOption(Option opt, isize objid) const;
+
+    // Overrides a config option if the corresponding debug option is enabled
+    i64 overrideOption(Option opt, i64 value) const;
+
+
+    //
     // Analyzing
     //
 

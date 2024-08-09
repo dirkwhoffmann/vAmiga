@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "Emulator.h"
-#include "Option.h"
+// #include "Option.h"
 #include "Amiga.h"
 #include "Types.h"
 #include "CmdQueue.h"
@@ -178,27 +178,26 @@ Emulator::put(const Cmd &cmd)
     cmdQueue.put(cmd);
 }
 
-/*
-void
-Emulator::put(CmdType type, i64 payload)
-{
-    put (Cmd(type, payload));
-}
-*/
-
 i64
 Emulator::get(Option opt, isize objid) const
 {
+    return main.get(opt, objid);
+    
+    /*
     debug(CNF_DEBUG, "get(%s, %ld)\n", OptionEnum::key(opt), objid);
 
     auto target = routeOption(opt, objid);
     if (target == nullptr) throw Error(ERROR_OPT_INV_ID);
     return target->getOption(opt);
+    */
 }
 
 void
 Emulator::check(Option opt, i64 value, const std::vector<isize> objids)
 {
+    return main.check(opt, value, objids);
+
+    /*
     value = overrideOption(opt, value);
 
     if (objids.empty()) {
@@ -221,11 +220,15 @@ Emulator::check(Option opt, i64 value, const std::vector<isize> objids)
 
         target->checkOption(opt, value);
     }
+    */
 }
 
 void
 Emulator::set(Option opt, i64 value, const std::vector<isize> objids)
 {
+    return main.set(opt, value, objids);
+
+    /*
     value = overrideOption(opt, value);
 
     if (objids.empty()) {
@@ -248,23 +251,35 @@ Emulator::set(Option opt, i64 value, const std::vector<isize> objids)
 
         target->setOption(opt, value);
     }
+    */
 }
 
 void 
 Emulator::set(Option opt, const string &value, const std::vector<isize> objids)
 {
+    return main.set(opt, value, objids);
+
+    /*
     set(opt, OptionParser::parse(opt, value), objids);
+    */
 }
 
 void
 Emulator::set(const string &opt, const string &value, const std::vector<isize> objids)
 {
+    return main.set(opt, value, objids);
+
+    /*
     set(Option(util::parseEnum<OptionEnum>(opt)), value, objids);
+    */
 }
 
 void
 Emulator::set(ConfigScheme scheme)
 {
+    main.set(scheme);
+
+    /*
     assert_enum(ConfigScheme, scheme);
 
     {   SUSPENDED
@@ -315,6 +330,7 @@ Emulator::set(ConfigScheme scheme)
                 fatalError;
         }
     }
+    */
 }
 
 Configurable *
@@ -326,13 +342,20 @@ Emulator::routeOption(Option opt, isize objid)
 const Configurable *
 Emulator::routeOption(Option opt, isize objid) const
 {
+    return main.routeOption(opt, objid);
+
+    /*
     auto result = const_cast<Emulator *>(this)->routeOption(opt, objid);
     return const_cast<const Configurable *>(result);
+    */
 }
 
 i64
 Emulator::overrideOption(Option opt, i64 value) const
 {
+    return main.overrideOption(opt, value);
+
+    /*
     static std::map<Option,i64> overrides = OVERRIDES;
 
     if (overrides.find(opt) != overrides.end()) {
@@ -342,6 +365,7 @@ Emulator::overrideOption(Option opt, i64 value) const
     }
 
     return value;
+    */
 }
 
 void

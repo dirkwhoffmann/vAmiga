@@ -10,6 +10,7 @@
 #include "config.h"
 #include "Amiga.h"
 #include "Emulator.h"
+#include "Option.h"
 #include "Snapshot.h"
 #include "ADFFile.h"
 #include <algorithm>
@@ -341,7 +342,165 @@ Amiga::overrideOption(Option option, i64 value)
     return value;
 }
 
-u64 
+i64
+Amiga::get(Option opt, isize objid) const
+{
+    debug(CNF_DEBUG, "get(%s, %ld)\n", OptionEnum::key(opt), objid);
+
+    auto target = routeOption(opt, objid);
+    if (target == nullptr) throw Error(ERROR_OPT_INV_ID);
+    return target->getOption(opt);
+}
+
+void
+Amiga::check(Option opt, i64 value, const std::vector<isize> objids)
+{
+    value = overrideOption(opt, value);
+
+    if (objids.empty()) {
+
+        for (isize objid = 0;; objid++) {
+
+            auto target = routeOption(opt, objid);
+            if (target == nullptr) break;
+
+            debug(CNF_DEBUG, "check(%s, %lld, %ld)\n", OptionEnum::key(opt), value, objid);
+            target->checkOption(opt, value);
+        }
+    }
+    for (auto &objid : objids) {
+
+        debug(CNF_DEBUG, "check(%s, %lld, %ld)\n", OptionEnum::key(opt), value, objid);
+
+        auto target = routeOption(opt, objid);
+        if (target == nullptr) throw Error(ERROR_OPT_INV_ID);
+
+        target->checkOption(opt, value);
+    }
+}
+
+void
+Amiga::set(Option opt, i64 value, const std::vector<isize> objids)
+{
+    value = overrideOption(opt, value);
+
+    if (objids.empty()) {
+
+        for (isize objid = 0;; objid++) {
+
+            auto target = routeOption(opt, objid);
+            if (target == nullptr) break;
+
+            debug(CNF_DEBUG, "set(%s, %lld, %ld)\n", OptionEnum::key(opt), value, objid);
+            target->setOption(opt, value);
+        }
+    }
+    for (auto &objid : objids) {
+
+        debug(CNF_DEBUG, "set(%s, %lld, %ld)\n", OptionEnum::key(opt), value, objid);
+
+        auto target = routeOption(opt, objid);
+        if (target == nullptr) throw Error(ERROR_OPT_INV_ID);
+
+        target->setOption(opt, value);
+    }
+}
+
+void
+Amiga::set(Option opt, const string &value, const std::vector<isize> objids)
+{
+    set(opt, OptionParser::parse(opt, value), objids);
+}
+
+void
+Amiga::set(const string &opt, const string &value, const std::vector<isize> objids)
+{
+    set(Option(util::parseEnum<OptionEnum>(opt)), value, objids);
+}
+
+void
+Amiga::set(ConfigScheme scheme)
+{
+    assert_enum(ConfigScheme, scheme);
+
+    {   SUSPENDED
+
+        switch(scheme) {
+
+            case CONFIG_A1000_OCS_1MB:
+
+                set(OPT_CPU_REVISION, CPU_68000);
+                set(OPT_AGNUS_REVISION, AGNUS_OCS_OLD);
+                set(OPT_DENISE_REVISION, DENISE_OCS);
+                set(OPT_AMIGA_VIDEO_FORMAT, PAL);
+                set(OPT_MEM_CHIP_RAM, 512);
+                set(OPT_MEM_SLOW_RAM, 512);
+                break;
+
+            case CONFIG_A500_OCS_1MB:
+
+                set(OPT_CPU_REVISION, CPU_68000);
+                set(OPT_AGNUS_REVISION, AGNUS_OCS);
+                set(OPT_DENISE_REVISION, DENISE_OCS);
+                set(OPT_AMIGA_VIDEO_FORMAT, PAL);
+                set(OPT_MEM_CHIP_RAM, 512);
+                set(OPT_MEM_SLOW_RAM, 512);
+                break;
+
+            case CONFIG_A500_ECS_1MB:
+
+                set(OPT_CPU_REVISION, CPU_68000);
+                set(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
+                set(OPT_DENISE_REVISION, DENISE_OCS);
+                set(OPT_AMIGA_VIDEO_FORMAT, PAL);
+                set(OPT_MEM_CHIP_RAM, 512);
+                set(OPT_MEM_SLOW_RAM, 512);
+                break;
+
+            case CONFIG_A500_PLUS_1MB:
+
+                set(OPT_CPU_REVISION, CPU_68000);
+                set(OPT_AGNUS_REVISION, AGNUS_ECS_2MB);
+                set(OPT_DENISE_REVISION, DENISE_ECS);
+                set(OPT_AMIGA_VIDEO_FORMAT, PAL);
+                set(OPT_MEM_CHIP_RAM, 512);
+                set(OPT_MEM_SLOW_RAM, 512);
+                break;
+
+            default:
+                fatalError;
+        }
+    }
+}
+
+Configurable *
+Amiga::routeOption(Option opt, isize objid)
+{
+    return CoreComponent::routeOption(opt, objid);
+}
+
+const Configurable *
+Amiga::routeOption(Option opt, isize objid) const
+{
+    auto result = const_cast<Amiga *>(this)->routeOption(opt, objid);
+    return const_cast<const Configurable *>(result);
+}
+
+i64
+Amiga::overrideOption(Option opt, i64 value) const
+{
+    static std::map<Option,i64> overrides = OVERRIDES;
+
+    if (overrides.find(opt) != overrides.end()) {
+
+        msg("Overriding option: %s = %lld\n", OptionEnum::key(opt), value);
+        return overrides[opt];
+    }
+
+    return value;
+}
+
+u64
 Amiga::getAutoInspectionMask() const
 {
     return agnus.data[SLOT_INS];
