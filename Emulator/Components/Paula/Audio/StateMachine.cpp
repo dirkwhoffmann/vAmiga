@@ -77,6 +77,16 @@ StateMachine<nr>::disableDMA()
 
             move_001_000();
             break;
+            
+        case 0b010:
+            
+            move_010_000();
+            break;
+            
+        case 0b011:
+            
+            move_011_000();
+            break;
 
         case 0b101:
 
@@ -307,6 +317,18 @@ StateMachine<nr>::move_010_011() {
 
     state = 0b011;
     penlo();
+}
+
+template <isize nr> void
+StateMachine<nr>::move_010_000() {
+
+    trace(AUD_DEBUG, "move_010_000\n");
+
+    constexpr EventSlot slot = (EventSlot)(SLOT_CH0 + nr);
+    agnus.cancel<slot>();
+
+    intreq2 = false;
+    state = 0b000;
 }
 
 template <isize nr> void
