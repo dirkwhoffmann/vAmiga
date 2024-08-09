@@ -182,155 +182,36 @@ i64
 Emulator::get(Option opt, isize objid) const
 {
     return main.get(opt, objid);
-    
-    /*
-    debug(CNF_DEBUG, "get(%s, %ld)\n", OptionEnum::key(opt), objid);
-
-    auto target = routeOption(opt, objid);
-    if (target == nullptr) throw Error(ERROR_OPT_INV_ID);
-    return target->getOption(opt);
-    */
 }
 
 void
 Emulator::check(Option opt, i64 value, const std::vector<isize> objids)
 {
     return main.check(opt, value, objids);
-
-    /*
-    value = overrideOption(opt, value);
-
-    if (objids.empty()) {
-
-        for (isize objid = 0;; objid++) {
-
-            auto target = routeOption(opt, objid);
-            if (target == nullptr) break;
-
-            debug(CNF_DEBUG, "check(%s, %lld, %ld)\n", OptionEnum::key(opt), value, objid);
-            target->checkOption(opt, value);
-        }
-    }
-    for (auto &objid : objids) {
-
-        debug(CNF_DEBUG, "check(%s, %lld, %ld)\n", OptionEnum::key(opt), value, objid);
-
-        auto target = routeOption(opt, objid);
-        if (target == nullptr) throw Error(ERROR_OPT_INV_ID);
-
-        target->checkOption(opt, value);
-    }
-    */
 }
 
 void
 Emulator::set(Option opt, i64 value, const std::vector<isize> objids)
 {
     return main.set(opt, value, objids);
-
-    /*
-    value = overrideOption(opt, value);
-
-    if (objids.empty()) {
-
-        for (isize objid = 0;; objid++) {
-
-            auto target = routeOption(opt, objid);
-            if (target == nullptr) break;
-
-            debug(CNF_DEBUG, "set(%s, %lld, %ld)\n", OptionEnum::key(opt), value, objid);
-            target->setOption(opt, value);
-        }
-    }
-    for (auto &objid : objids) {
-
-        debug(CNF_DEBUG, "set(%s, %lld, %ld)\n", OptionEnum::key(opt), value, objid);
-
-        auto target = routeOption(opt, objid);
-        if (target == nullptr) throw Error(ERROR_OPT_INV_ID);
-
-        target->setOption(opt, value);
-    }
-    */
 }
 
 void 
 Emulator::set(Option opt, const string &value, const std::vector<isize> objids)
 {
     return main.set(opt, value, objids);
-
-    /*
-    set(opt, OptionParser::parse(opt, value), objids);
-    */
 }
 
 void
 Emulator::set(const string &opt, const string &value, const std::vector<isize> objids)
 {
     return main.set(opt, value, objids);
-
-    /*
-    set(Option(util::parseEnum<OptionEnum>(opt)), value, objids);
-    */
 }
 
 void
 Emulator::set(ConfigScheme scheme)
 {
     main.set(scheme);
-
-    /*
-    assert_enum(ConfigScheme, scheme);
-
-    {   SUSPENDED
-
-        switch(scheme) {
-
-            case CONFIG_A1000_OCS_1MB:
-
-                set(OPT_CPU_REVISION, CPU_68000);
-                set(OPT_AGNUS_REVISION, AGNUS_OCS_OLD);
-                set(OPT_DENISE_REVISION, DENISE_OCS);
-                set(OPT_AMIGA_VIDEO_FORMAT, PAL);
-                set(OPT_MEM_CHIP_RAM, 512);
-                set(OPT_MEM_SLOW_RAM, 512);
-                break;
-
-            case CONFIG_A500_OCS_1MB:
-
-                set(OPT_CPU_REVISION, CPU_68000);
-                set(OPT_AGNUS_REVISION, AGNUS_OCS);
-                set(OPT_DENISE_REVISION, DENISE_OCS);
-                set(OPT_AMIGA_VIDEO_FORMAT, PAL);
-                set(OPT_MEM_CHIP_RAM, 512);
-                set(OPT_MEM_SLOW_RAM, 512);
-                break;
-
-            case CONFIG_A500_ECS_1MB:
-
-                set(OPT_CPU_REVISION, CPU_68000);
-                set(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
-                set(OPT_DENISE_REVISION, DENISE_OCS);
-                set(OPT_AMIGA_VIDEO_FORMAT, PAL);
-                set(OPT_MEM_CHIP_RAM, 512);
-                set(OPT_MEM_SLOW_RAM, 512);
-                break;
-
-            case CONFIG_A500_PLUS_1MB:
-
-                set(OPT_CPU_REVISION, CPU_68000);
-                set(OPT_AGNUS_REVISION, AGNUS_ECS_2MB);
-                set(OPT_DENISE_REVISION, DENISE_ECS);
-                set(OPT_AMIGA_VIDEO_FORMAT, PAL);
-                set(OPT_MEM_CHIP_RAM, 512);
-                set(OPT_MEM_SLOW_RAM, 512);
-                break;
-
-            default:
-                fatalError;
-        }
-    }
-    */
 }
 
 Configurable *
@@ -343,129 +224,27 @@ const Configurable *
 Emulator::routeOption(Option opt, isize objid) const
 {
     return main.routeOption(opt, objid);
-
-    /*
-    auto result = const_cast<Emulator *>(this)->routeOption(opt, objid);
-    return const_cast<const Configurable *>(result);
-    */
 }
 
 i64
 Emulator::overrideOption(Option opt, i64 value) const
 {
     return main.overrideOption(opt, value);
-
-    /*
-    static std::map<Option,i64> overrides = OVERRIDES;
-
-    if (overrides.find(opt) != overrides.end()) {
-
-        msg("Overriding option: %s = %lld\n", OptionEnum::key(opt), value);
-        return overrides[opt];
-    }
-
-    return value;
-    */
 }
 
 void
 Emulator::update()
 {
-    Cmd cmd;
-    bool cmdConfig = false;
-    
-    auto dfn = [&]() -> FloppyDrive& { return *main.df[cmd.value]; };
-    auto cp = [&]() -> ControlPort& { return cmd.value ? main.controlPort2 : main.controlPort1; };
-
-    main.update();
+    // Switch warp mode on or off
     shouldWarp() ? warpOn() : warpOff();
 
-    while (cmdQueue.poll(cmd)) {
+    // Mark the run-ahead instance dirty when the command queue has entries
+    isDirty |= !cmdQueue.empty;
 
-        isDirty = true;
-        
-        switch (cmd.type) {
+    // Process all commands
+    main.update(cmdQueue);
 
-            case CMD_CONFIG:
 
-                cmdConfig = true;
-                set(cmd.config.option, cmd.config.value, { cmd.config.id });
-                break;
-
-            case CMD_CONFIG_ALL:
-
-                cmdConfig = true;
-                set(cmd.config.option, cmd.config.value, { });
-                break;
-
-            case CMD_ALARM_ABS:
-            case CMD_ALARM_REL:
-            case CMD_INSPECTION_TARGET:
-
-                main.processCommand(cmd);
-                break;
-
-            case CMD_GUARD_SET_AT:
-            case CMD_GUARD_MOVE_NR:
-            case CMD_GUARD_IGNORE_NR:
-            case CMD_GUARD_REMOVE_NR:
-            case CMD_GUARD_REMOVE_AT:
-            case CMD_GUARD_REMOVE_ALL:
-            case CMD_GUARD_ENABLE_NR:
-            case CMD_GUARD_ENABLE_AT:
-            case CMD_GUARD_ENABLE_ALL:
-            case CMD_GUARD_DISABLE_NR:
-            case CMD_GUARD_DISABLE_AT:
-            case CMD_GUARD_DISABLE_ALL:
-
-                main.cpu.processCommand(cmd);
-                break;
-
-            case CMD_KEY_PRESS:
-            case CMD_KEY_RELEASE:
-            case CMD_KEY_RELEASE_ALL:
-            case CMD_KEY_TOGGLE:
-
-                main.keyboard.processCommand(cmd);
-                break;
-
-            case CMD_DSK_TOGGLE_WP:
-            case CMD_DSK_MODIFIED:
-            case CMD_DSK_UNMODIFIED:
-
-                dfn().processCommand(cmd);
-                break;
-
-            case CMD_MOUSE_MOVE_ABS:
-            case CMD_MOUSE_MOVE_REL:
-
-                cp().processCommand(cmd); break;
-                break;
-
-            case CMD_MOUSE_EVENT:
-            case CMD_JOY_EVENT:
-
-                cp().processCommand(cmd); break;
-                break;
-
-            case CMD_RSH_EXECUTE:
-
-                main.retroShell.exec();
-                break;
-                
-            case CMD_FOCUS:
-
-                cmd.value ? main.focus() : main.unfocus();
-                break;
-
-            default:
-                fatal("Unhandled command: %s\n", CmdTypeEnum::key(cmd.type));
-        }
-    }
-
-    if (cmdConfig) {
-        main.msgQueue.put(MSG_CONFIG);
-    }
 }
 
 bool

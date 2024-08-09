@@ -767,13 +767,101 @@ Amiga::_trackOff()
 }
 
 void 
-Amiga::update()
+Amiga::update(CmdQueue &queue)
 {
-    if (retroShell.isDirty) {
+    Cmd cmd;
+    bool cmdConfig = false;
 
-        retroShell.isDirty = false;
-        msgQueue.put(MSG_RSH_UPDATE);
+    auto dfn = [&]() -> FloppyDrive& { return *df[cmd.value]; };
+    auto cp = [&]() -> ControlPort& { return cmd.value ? controlPort2 : controlPort1; };
+
+    // Process all commands
+    while (queue.poll(cmd)) {
+
+        switch (cmd.type) {
+
+            case CMD_CONFIG:
+
+                cmdConfig = true;
+                set(cmd.config.option, cmd.config.value, { cmd.config.id });
+                break;
+
+            case CMD_CONFIG_ALL:
+
+                cmdConfig = true;
+                set(cmd.config.option, cmd.config.value, { });
+                break;
+
+            case CMD_ALARM_ABS:
+            case CMD_ALARM_REL:
+            case CMD_INSPECTION_TARGET:
+
+                processCommand(cmd);
+                break;
+
+            case CMD_GUARD_SET_AT:
+            case CMD_GUARD_MOVE_NR:
+            case CMD_GUARD_IGNORE_NR:
+            case CMD_GUARD_REMOVE_NR:
+            case CMD_GUARD_REMOVE_AT:
+            case CMD_GUARD_REMOVE_ALL:
+            case CMD_GUARD_ENABLE_NR:
+            case CMD_GUARD_ENABLE_AT:
+            case CMD_GUARD_ENABLE_ALL:
+            case CMD_GUARD_DISABLE_NR:
+            case CMD_GUARD_DISABLE_AT:
+            case CMD_GUARD_DISABLE_ALL:
+
+                cpu.processCommand(cmd);
+                break;
+
+            case CMD_KEY_PRESS:
+            case CMD_KEY_RELEASE:
+            case CMD_KEY_RELEASE_ALL:
+            case CMD_KEY_TOGGLE:
+
+                keyboard.processCommand(cmd);
+                break;
+
+            case CMD_DSK_TOGGLE_WP:
+            case CMD_DSK_MODIFIED:
+            case CMD_DSK_UNMODIFIED:
+
+                dfn().processCommand(cmd);
+                break;
+
+            case CMD_MOUSE_MOVE_ABS:
+            case CMD_MOUSE_MOVE_REL:
+
+                cp().processCommand(cmd); break;
+                break;
+
+            case CMD_MOUSE_EVENT:
+            case CMD_JOY_EVENT:
+
+                cp().processCommand(cmd); break;
+                break;
+
+            case CMD_RSH_EXECUTE:
+
+                retroShell.exec();
+                break;
+
+            case CMD_FOCUS:
+
+                cmd.value ? focus() : unfocus();
+                break;
+
+            default:
+                fatal("Unhandled command: %s\n", CmdTypeEnum::key(cmd.type));
+        }
     }
+
+    // Inform the GUI about a changed machine configuration
+    if (cmdConfig) { msgQueue.put(MSG_CONFIG); }
+
+    // Inform the GUI about new RetroShell content
+    if (retroShell.isDirty) { retroShell.isDirty = false; msgQueue.put(MSG_RSH_UPDATE); }
 }
 
 void

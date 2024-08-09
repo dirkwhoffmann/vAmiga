@@ -191,8 +191,8 @@
             filePath = "Emulator/Components/Amiga.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1275"
-            endingLineNumber = "1275"
+            startingLineNumber = "1363"
+            endingLineNumber = "1363"
             landmarkName = "Amiga::getDebugVariable(flag)"
             landmarkType = "7">
          </BreakpointContent>
@@ -207,8 +207,8 @@
             filePath = "Emulator/Components/Amiga.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1403"
-            endingLineNumber = "1403"
+            startingLineNumber = "1491"
+            endingLineNumber = "1491"
             landmarkName = "Amiga::setDebugVariable(flag, val)"
             landmarkType = "7">
          </BreakpointContent>
@@ -223,8 +223,8 @@
             filePath = "Emulator/Components/Emulator.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "773"
-            endingLineNumber = "773"
+            startingLineNumber = "552"
+            endingLineNumber = "552"
             landmarkName = "Emulator::getDebugVariable(flag)"
             landmarkType = "7">
          </BreakpointContent>
@@ -239,8 +239,8 @@
             filePath = "Emulator/Components/Emulator.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "916"
-            endingLineNumber = "916"
+            startingLineNumber = "695"
+            endingLineNumber = "695"
             landmarkName = "Emulator::setDebugVariable(flag, val)"
             landmarkType = "7">
          </BreakpointContent>
