@@ -278,6 +278,7 @@ private:
     void move_101_010();
     void move_010_011();
     void move_011_000();
+    void move_010_000();
     void move_011_010();
 
     
