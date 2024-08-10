@@ -444,7 +444,7 @@ HardDrive::_dump(Category category, std::ostream& os) const
         os << tab("State");
         os << HardDriveStateEnum::key(state) << std::endl;
         os << tab("Flags");
-        os << DiskFlagsEnum::key(flags) << std::endl;
+        os << DiskFlagsEnum::mask(flags) << std::endl;
         os << tab("Bootable");
         if (bootable) {
             os << bol(*bootable) << std::endl;

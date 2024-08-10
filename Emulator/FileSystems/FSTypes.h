@@ -29,7 +29,7 @@ typedef FS_VOLUME_TYPE FSVolumeType;
 #ifdef __cplusplus
 struct FSVolumeTypeEnum : vamiga::util::Reflection<FSVolumeTypeEnum, FSVolumeType>
 {
-    static constexpr long minVal = FS_OFS;
+    static constexpr long minVal = 0;
     static constexpr long maxVal = FS_NODOS;
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
@@ -56,6 +56,7 @@ struct FSVolumeTypeEnum : vamiga::util::Reflection<FSVolumeTypeEnum, FSVolumeTyp
 inline bool isOFSVolumeType(long value)
 {
     switch (value) {
+
         case FS_OFS:
         case FS_OFS_INTL:
         case FS_OFS_DC:
@@ -67,6 +68,7 @@ inline bool isOFSVolumeType(long value)
 inline bool isFFSVolumeType(long value)
 {
     switch (value) {
+
         case FS_FFS:
         case FS_FFS_INTL:
         case FS_FFS_DC:

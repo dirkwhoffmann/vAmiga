@@ -27,7 +27,7 @@ typedef FLAG_DISK DiskFlags;
 #ifdef __cplusplus
 struct DiskFlagsEnum : vamiga::util::Reflection<DiskFlagsEnum, DiskFlags>
 {
-    static constexpr long minVal = FLAG_PROTECTED;
+    static constexpr long minVal = 1;
     static constexpr long maxVal = FLAG_MODIFIED;
     static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 

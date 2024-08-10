@@ -65,7 +65,7 @@ FloppyDisk::_dump(Category category, std::ostream& os) const
         os << tab("Density");
         os << DensityEnum::key(density) << std::endl;
         os << tab("Flags");
-        os << DiskFlagsEnum::key(flags) << std::endl;
+        os << DiskFlagsEnum::mask(flags) << std::endl;
         os << tab("numCyls()");
         os << dec(numCyls()) << std::endl;
         os << tab("numHeads()");

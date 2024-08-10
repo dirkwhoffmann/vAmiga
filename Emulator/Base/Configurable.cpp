@@ -67,7 +67,7 @@ Configurable::dumpConfig(std::ostream& os) const
 
     for (auto &opt: getOptions()) {
 
-        auto name = OptionEnum::plainkey(opt);
+        auto name = OptionEnum::key(opt);
         auto help = OptionEnum::help(opt);
         auto arg  = OptionParser::asString(opt, getOption(opt));
 
@@ -75,18 +75,6 @@ Configurable::dumpConfig(std::ostream& os) const
         os << std::setw(16) << std::left << std::setfill(' ') << arg;
         os <<help << std::endl;
     }
-}
-
-string 
-Configurable::keyList() 
-{
-    return OptionEnum::keyList([&](Option i) { return isValidOption(i); });
-}
-
-string
-Configurable::argList() 
-{
-    return OptionEnum::argList([&](Option i) { return isValidOption(i); });
 }
 
 }

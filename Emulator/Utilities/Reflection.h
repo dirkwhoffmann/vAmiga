@@ -34,56 +34,68 @@
 
 namespace vamiga::util {
 
-#define assert_enum(e,v) assert(e##Enum::isValid(v))
+#define assert_enum(e,v) assert(v >= e##Enum::minVal && v <= e##Enum::maxVal)
 
 template <class T, typename E> struct Reflection {
 
-    // Returns the key as a C string
+    // Checks whether this enum is a bit fiels rather than a standard enum
+    static constexpr bool isBitField() { return T::minVal == 1; }
+
+    // Returns the key as a C string (including the section prefix)
+    static const char *rawkey(isize value) { return T::_key((E)value); }
+
+    // Returns the key as a C string (excluding the section prefix)
     static const char *key(isize value) {
 
+        auto *p = rawkey(value);
+        for (isize i = 0; p[i]; i++) if (p[i] == '.') return p + i + 1;
+        return p;
+    }
+    
+    // Returns a textual representation for a bit mask
+    static const char *mask(isize mask) {
+
         static string result;
-
         result = "";
-        if constexpr (T::minVal == 1) {
 
-            // The enum is a bit field
+        if (isBitField()) {
+
             for (isize i = T::minVal; i <= T::maxVal; i *= 2) {
-                if (value & i) result += (result.empty() ? "" : " | ") + string(T::_key((E)i));
+                if (mask & i) result += (result.empty() ? "" : " | ") + string(T::_key((E)i));
             }
 
         } else {
-            
-            // The enum is a standard enumeration
-            result = string(T::_key((E)value));
+
+            for (isize i = T::minVal; i <= T::maxVal; i++) {
+                if (mask & (1 << i)) result += (result.empty() ? "" : " | ") + string(T::_key((E)i));
+            }
         }
 
         return result.c_str();
     }
 
-    // Returns the key without the section prefix (if any)
-    static const char *plainkey(isize nr) {
-
-        // Don't call this method for bit fields
-        assert(T::minVal == 0);
-
-        auto *p = T::key((E)nr);
-        for (isize i = 0; p[i]; i++) if (p[i] == '.') return p + i + 1;
-        return p;
-    }
-    
     // Collects all key / value pairs
     static std::map <string,long> pairs(std::function<bool(E)> filter = [](E){ return true; }) {
 
         std::map <string,long> result;
 
-        for (isize i = T::minVal; i <= T::maxVal; i++) {
-            if (T::isValid(i) && filter(E(i))) result.insert(std::make_pair(key(i), i));
+        if (isBitField()) {
+
+            for (isize i = T::minVal; i <= T::maxVal; i *= 2) {
+                if (T::isValid(i) && filter(E(i))) result.insert(std::make_pair(key(i), i));
+            }
+
+        } else {
+
+            for (isize i = T::minVal; i <= T::maxVal; i++) {
+                if (T::isValid(i) && filter(E(i))) result.insert(std::make_pair(key(i), i));
+            }
         }
 
         return result;
     }
 
-    // Returns a list in form of a colon seperated string
+    // Returns all keys in form of a textual list representation
     static string keyList(std::function<bool(E)> filter = [](E){ return true; }, const string &delim = ", ") {
 
         string result;

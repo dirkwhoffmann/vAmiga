@@ -399,11 +399,11 @@ Defaults::get(Option option, isize nr) const
 {
     try {
 
-        return get(string(OptionEnum::key(option)) + std::to_string(nr));
+        return get(string(OptionEnum::rawkey(option)) + std::to_string(nr));
 
     } catch (...) {
 
-        return get(string(OptionEnum::key(option)));
+        return get(string(OptionEnum::rawkey(option)));
     }
 }
 
@@ -436,11 +436,11 @@ Defaults::getFallback(Option option, isize nr) const
 {
     try {
 
-        return getFallback(string(OptionEnum::key(option)) + std::to_string(nr));
+        return getFallback(string(OptionEnum::rawkey(option)) + std::to_string(nr));
 
     } catch (...) {
 
-        return getFallback(string(OptionEnum::key(option)));
+        return getFallback(string(OptionEnum::rawkey(option)));
     }
 }
 
@@ -465,13 +465,13 @@ Defaults::set(const string &key, const string &value)
 void
 Defaults::set(Option option, const string &value)
 {
-    set(OptionEnum::key(option), value);
+    set(OptionEnum::rawkey(option), value);
 }
 
 void
 Defaults::set(Option option, const string &value, std::vector <isize> objids)
 {
-    auto key = string(OptionEnum::key(option));
+    auto key = string(OptionEnum::rawkey(option));
 
     for (auto &nr : objids) {
         set(key + std::to_string(nr), value);
@@ -503,13 +503,13 @@ Defaults::setFallback(const string &key, const string &value)
 void
 Defaults::setFallback(Option option, const string &value)
 {
-    setFallback(OptionEnum::key(option), value);
+    setFallback(OptionEnum::rawkey(option), value);
 }
 
 void
 Defaults::setFallback(Option option, const string &value, std::vector <isize> objids)
 {
-    auto key = string(OptionEnum::key(option));
+    auto key = string(OptionEnum::rawkey(option));
 
     for (auto &nr : objids) {
         setFallback(key + std::to_string(nr), value);
@@ -554,14 +554,14 @@ Defaults::remove(const string &key)
 void
 Defaults::remove(Option option)
 {
-    remove(string(OptionEnum::key(option)));
+    remove(string(OptionEnum::rawkey(option)));
 }
 
 void
 Defaults::remove(Option option, std::vector <isize> nrs)
 {
     for (auto &nr : nrs) {
-        remove(string(OptionEnum::key(option)) + std::to_string(nr));
+        remove(string(OptionEnum::rawkey(option)) + std::to_string(nr));
     }
 }
 

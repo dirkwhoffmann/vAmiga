@@ -50,10 +50,6 @@ public:
 
     // Dumps the current configuration
     void dumpConfig(std::ostream& os) const;
-
-    // Returns a textual description for all available options
-    string keyList();
-    string argList();
 };
 
 }
