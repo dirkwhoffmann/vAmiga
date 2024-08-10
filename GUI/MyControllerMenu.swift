@@ -276,9 +276,11 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func takeSnapshotAction(_ sender: Any!) {
         
-        // amiga.requestUserSnapshot()
-        mydocument.snapshots.append(emu.amiga.takeSnapshot())
-        renderer.flash()
+        if let snapshot = emu.amiga.takeSnapshot() {
+
+            mydocument.snapshots.append(snapshot, size: snapshot.size)
+            renderer.flash()
+        }
     }
     
     @IBAction func restoreSnapshotAction(_ sender: Any!) {

@@ -593,8 +593,8 @@ extension MyController {
 
         case .SNAPSHOT_TAKEN:
             let ptr = msg.snapshot.snapshot
-
-            mydocument.snapshots.append(MediaFileProxy.init(ptr))
+            let proxy = MediaFileProxy.init(ptr)!
+            mydocument.snapshots.append(proxy, size: proxy.size)
 
         case .SNAPSHOT_RESTORED:
             renderer.flash(steps: 60)

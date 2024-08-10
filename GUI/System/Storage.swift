@@ -43,7 +43,7 @@ class ManagedArray<Element> {
         return elements.count > 0 ? elements[elements.count - 1].0 : nil
     }
 
-    func append(_ newElement: Element, size: Int = 0) {
+    func append(_ newElement: Element, size: Int) {
 
         // Append the elements
         elements.append((newElement, size))
