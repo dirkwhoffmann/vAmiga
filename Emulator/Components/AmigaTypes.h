@@ -43,6 +43,34 @@ struct VideoFormatEnum : vamiga::util::Reflection<VideoFormatEnum, VideoFormat>
 };
 #endif
 
+enum_long(RESOLUTION)
+{
+    LORES,      // Lores mode
+    HIRES,      // Hires mode
+    SHRES       // SuperHires mode (ECS only)
+};
+typedef RESOLUTION Resolution;
+
+#ifdef __cplusplus
+struct ResolutionEnum : vamiga::util::Reflection<ResolutionEnum, Resolution>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = SHRES;
+
+    static const char *prefix() { return ""; }
+    static const char *_key(long value)
+    {
+        switch (value) {
+
+            case LORES:          return "LORES";
+            case HIRES:          return "HIRES";
+            case SHRES:          return "SHRES";
+        }
+        return "???";
+    }
+};
+#endif
+
 enum_long(WARP_MODE)
 {
     WARP_AUTO,

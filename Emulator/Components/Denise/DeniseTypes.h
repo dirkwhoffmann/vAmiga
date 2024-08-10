@@ -44,34 +44,6 @@ struct DeniseRevisionEnum : vamiga::util::Reflection<DeniseRevisionEnum, DeniseR
 };
 #endif
 
-enum_long(RESOLUTION)
-{
-    LORES,      // Lores mode
-    HIRES,      // Hires mode
-    SHRES       // SuperHires mode (ECS only)
-};
-typedef RESOLUTION Resolution;
-
-#ifdef __cplusplus
-struct ResolutionEnum : vamiga::util::Reflection<ResolutionEnum, Resolution>
-{
-    static constexpr long minVal = 0;
-    static constexpr long maxVal = SHRES;
-
-    static const char *prefix() { return ""; }
-    static const char *_key(long value)
-    {
-        switch (value) {
-
-            case LORES:          return "LORES";
-            case HIRES:          return "HIRES";
-            case SHRES:          return "SHRES";
-        }
-        return "???";
-    }
-};
-#endif
-
 
 //
 // Structures

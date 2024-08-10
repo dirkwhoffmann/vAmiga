@@ -15,7 +15,6 @@
 #include "BlitterTypes.h"
 #include "BusTypes.h"
 #include "CopperTypes.h"
-#include "DeniseTypes.h"
 #include "DmaDebuggerTypes.h"
 #include "SequencerTypes.h"
 #include "Reflection.h"
