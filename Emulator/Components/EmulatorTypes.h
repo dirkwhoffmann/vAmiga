@@ -121,6 +121,7 @@ enum_long(DEBUG_FLAG)
     FLAG_POSREG_DEBUG,     ///< POSxxx registers
     FLAG_JOYREG_DEBUG,     ///< JOYxxx registers
     FLAG_POTREG_DEBUG,     ///< POTxxx registers
+    FLAG_VID_DEBUG,        ///< Video port
     FLAG_PRT_DEBUG,        ///< Control ports and connected devices
     FLAG_SER_DEBUG,        ///< Serial interface
     FLAG_POT_DEBUG,        ///< Potentiometer inputs
@@ -263,6 +264,7 @@ struct DebugFlagEnum : vamiga::util::Reflection<DebugFlagEnum, DebugFlag>
             case FLAG_POSREG_DEBUG:     return "POSREG_DEBUG";
             case FLAG_JOYREG_DEBUG:     return "JOYREG_DEBUG";
             case FLAG_POTREG_DEBUG:     return "POTREG_DEBUG";
+            case FLAG_VID_DEBUG:        return "VID_DEBUG";
             case FLAG_PRT_DEBUG:        return "PRT_DEBUG";
             case FLAG_SER_DEBUG:        return "SER_DEBUG";
             case FLAG_POT_DEBUG:        return "POT_DEBUG";
@@ -394,6 +396,7 @@ struct DebugFlagEnum : vamiga::util::Reflection<DebugFlagEnum, DebugFlag>
             case FLAG_POSREG_DEBUG:     return "POSxxx registers";
             case FLAG_JOYREG_DEBUG:     return "JOYxxx registers";
             case FLAG_POTREG_DEBUG:     return "POTxxx registers";
+            case FLAG_VID_DEBUG:        return "Video port";
             case FLAG_PRT_DEBUG:        return "Control ports and connected devices";
             case FLAG_SER_DEBUG:        return "Serial interface";
             case FLAG_POT_DEBUG:        return "Potentiometer inputs";

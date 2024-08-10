@@ -525,6 +525,7 @@ Emulator::getDebugVariable(DebugFlag flag)
         case FLAG_POSREG_DEBUG:     return POSREG_DEBUG;
         case FLAG_JOYREG_DEBUG:     return JOYREG_DEBUG;
         case FLAG_POTREG_DEBUG:     return POTREG_DEBUG;
+        case FLAG_VID_DEBUG:        return VID_DEBUG;
         case FLAG_PRT_DEBUG:        return PRT_DEBUG;
         case FLAG_SER_DEBUG:        return SER_DEBUG;
         case FLAG_POT_DEBUG:        return POT_DEBUG;
@@ -664,6 +665,7 @@ Emulator::setDebugVariable(DebugFlag flag, bool val)
         case FLAG_POSREG_DEBUG:     POSREG_DEBUG = val; break;
         case FLAG_JOYREG_DEBUG:     JOYREG_DEBUG = val; break;
         case FLAG_POTREG_DEBUG:     POTREG_DEBUG = val; break;
+        case FLAG_VID_DEBUG:        VID_DEBUG = val; break;
         case FLAG_PRT_DEBUG:        PRT_DEBUG = val; break;
         case FLAG_SER_DEBUG:        SER_DEBUG = val; break;
         case FLAG_POT_DEBUG:        POT_DEBUG = val; break;

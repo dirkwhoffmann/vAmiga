@@ -309,6 +309,8 @@ PixelEngine::stablePtr(isize row, isize col)
 void
 PixelEngine::swapBuffers()
 {
+    videoPort.buffersWillSwap();
+
     isize oldActiveBuffer = activeBuffer;
     isize newActiveBuffer = !oldActiveBuffer;
 

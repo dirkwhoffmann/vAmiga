@@ -134,7 +134,7 @@ public:
 
 
     //
-    // Analyzing
+    // Methods from Inspectable
     //
 
 public:

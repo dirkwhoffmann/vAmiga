@@ -109,6 +109,7 @@ debugflag DISABLE_AUDIRQ  = 0;
 debugflag POSREG_DEBUG    = 0;
 debugflag JOYREG_DEBUG    = 0;
 debugflag POTREG_DEBUG    = 0;
+debugflag VID_DEBUG       = 0;
 debugflag PRT_DEBUG       = 0;
 debugflag SER_DEBUG       = 0;
 debugflag POT_DEBUG       = 0;

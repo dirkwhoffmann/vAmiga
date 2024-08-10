@@ -97,12 +97,26 @@ VideoPort::setOption(Option opt, i64 value)
     }
 }
 
+void 
+VideoPort::cacheInfo(VideoPortInfo &result) const
+{
+
+}
+
+void 
+VideoPort::cacheStats(VideoPortStats &result) const
+{
+
+}
+
 const FrameBuffer &
 VideoPort::getTexture() const
 {
     if (isPoweredOn()) {
 
-        return denise.pixelEngine.getStableBuffer();
+        auto &result = denise.pixelEngine.getStableBuffer();
+        info.latestGrabbedFrame = result.nr;
+        return result;
     }
     if (config.whiteNoise) {
 
@@ -115,6 +129,21 @@ VideoPort::getTexture() const
     }
 
     return blank;
+}
+
+void 
+VideoPort::buffersWillSwap()
+{
+    // Check if the texture has been grabbed
+    auto grabbed = info.latestGrabbedFrame;
+    auto current = denise.pixelEngine.getStableBuffer().nr;
+
+    if (grabbed < current) {
+
+        stats.droppedFrames++;
+        debug(VID_DEBUG, "Frame %lld dropped (total: %ld latest: %lld)\n", 
+            current, stats.droppedFrames, grabbed);
+    }
 }
 
 }

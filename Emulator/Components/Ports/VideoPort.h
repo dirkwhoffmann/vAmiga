@@ -15,7 +15,7 @@
 
 namespace vamiga {
 
-class VideoPort final : public SubComponent {
+class VideoPort final : public SubComponent, public Inspectable<VideoPortInfo, VideoPortStats> {
 
     Descriptions descriptions = {{
 
@@ -101,6 +101,16 @@ public:
 
 
     //
+    // Methods from Inspectable
+    //
+
+public:
+
+    void cacheInfo(VideoPortInfo &result) const override;
+    void cacheStats(VideoPortStats &result) const override;
+
+
+    //
     // Getting textures
     //
 
@@ -109,10 +119,11 @@ public:
     // Returns a pointer to the stable emulator texture
     const class FrameBuffer &getTexture() const;
 
+    // Informs the video port about a buffer swap
+    void buffersWillSwap();
+
     // Returns a pointer to the stable DMA debugger texture
     // u32 *getDmaTexture() const;
-
-private:
 
     // Returns a pointer to a white-noise texture
     // u32 *getNoiseTexture() const;

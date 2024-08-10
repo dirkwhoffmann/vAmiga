@@ -238,6 +238,7 @@ extern debugflag DISABLE_AUDIRQ;
 extern debugflag POSREG_DEBUG;
 extern debugflag JOYREG_DEBUG;
 extern debugflag POTREG_DEBUG;
+extern debugflag VID_DEBUG;
 extern debugflag PRT_DEBUG;
 extern debugflag SER_DEBUG;
 extern debugflag POT_DEBUG;
