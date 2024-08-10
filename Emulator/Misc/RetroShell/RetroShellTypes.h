@@ -38,8 +38,7 @@ struct RetroShellKeyEnum : vamiga::util::Reflection<RetroShellKeyEnum, RetroShel
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = RSKEY_CR;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
-    
+
     static const char *prefix() { return "RSKEY"; }
     static const char *_key(long value)
     {

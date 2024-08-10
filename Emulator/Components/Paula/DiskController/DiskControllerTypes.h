@@ -33,7 +33,6 @@ struct DriveStateEnum : vamiga::util::Reflection<DriveStateEnum, DriveState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = DRIVE_DMA_FLUSH;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix()
     {

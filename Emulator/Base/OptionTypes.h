@@ -187,7 +187,6 @@ struct OptionEnum : vamiga::util::Reflection<OptionEnum, Option>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = OPT_SRV_VERBOSE;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "OPT"; }
     static const char *_key(long value)

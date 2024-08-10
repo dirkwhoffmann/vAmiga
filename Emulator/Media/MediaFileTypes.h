@@ -39,7 +39,6 @@ struct FileTypeEnum : vamiga::util::Reflection<FileTypeEnum, FileType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = FILETYPE_EXTENDED_ROM;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "FILETYPE"; }
     static const char *_key(long value)

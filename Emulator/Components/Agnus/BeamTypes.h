@@ -28,7 +28,6 @@ struct FrameTypeEnum : vamiga::util::Reflection<FrameTypeEnum, FrameType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = FRAME_NTSC_SF_SL;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "FRAME"; }
     static const char *_key(long value)

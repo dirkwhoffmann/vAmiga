@@ -41,6 +41,9 @@ template <class T, typename E> struct Reflection {
     // Checks whether this enum is a bit fiels rather than a standard enum
     static constexpr bool isBitField() { return T::minVal == 1; }
 
+    // Checks if the provides value is inside the valid range
+    static constexpr bool isValid(isize value) { return value >= T::minVal && value <= T::maxVal; }
+
     // Returns the key as a C string (including the section prefix)
     static const char *rawkey(isize value) { return T::_key((E)value); }
 
@@ -82,13 +85,13 @@ template <class T, typename E> struct Reflection {
         if (isBitField()) {
 
             for (isize i = T::minVal; i <= T::maxVal; i *= 2) {
-                if (T::isValid(i) && filter(E(i))) result.insert(std::make_pair(key(i), i));
+                if (filter(E(i))) result.insert(std::make_pair(key(i), i));
             }
 
         } else {
 
             for (isize i = T::minVal; i <= T::maxVal; i++) {
-                if (T::isValid(i) && filter(E(i))) result.insert(std::make_pair(key(i), i));
+                if (filter(E(i))) result.insert(std::make_pair(key(i), i));
             }
         }
 

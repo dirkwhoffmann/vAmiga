@@ -29,7 +29,6 @@ struct SamplingMethodEnum : vamiga::util::Reflection<SamplingMethodEnum, Samplin
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = SMP_LINEAR;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "SMP"; }
     static const char *_key(long value)

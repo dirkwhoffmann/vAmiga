@@ -45,7 +45,6 @@ struct GamePadActionEnum : vamiga::util::Reflection<GamePadActionEnum, GamePadAc
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = RELEASE_RIGHT;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return nullptr; }
     static const char *_key(long value)

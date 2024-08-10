@@ -31,7 +31,6 @@ struct KeyboardStateEnum : vamiga::util::Reflection<KeyboardStateEnum, KeyboardS
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = KB_SEND;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "KB"; }
     static const char *_key(long value)

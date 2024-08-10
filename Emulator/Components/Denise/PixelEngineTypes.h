@@ -33,7 +33,6 @@ struct PaletteEnum : vamiga::util::Reflection<PaletteEnum, Palette>
 {    
     static constexpr long minVal = 0;
     static constexpr long maxVal = PALETTE_SEPIA;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "PALETTE"; }
     static const char *_key(long value)

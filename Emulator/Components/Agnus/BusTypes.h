@@ -49,7 +49,6 @@ struct BusOwnerEnum : vamiga::util::Reflection<BusOwnerEnum, BusOwner>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = BUS_COUNT - 1;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "BUS"; }
     static const char *_key(long value)

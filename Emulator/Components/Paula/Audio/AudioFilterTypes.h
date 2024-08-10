@@ -34,7 +34,6 @@ struct FilterTypeEnum : vamiga::util::Reflection<FilterTypeEnum, FilterType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = FILTER_HIGH;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "FILTER"; }
     static const char *_key(long value)

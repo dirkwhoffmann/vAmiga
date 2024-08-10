@@ -133,7 +133,6 @@ struct MsgTypeEnum : vamiga::util::Reflection<MsgTypeEnum, MsgType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = MSG_ALARM;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "MSG"; }
     static const char *_key(long value)

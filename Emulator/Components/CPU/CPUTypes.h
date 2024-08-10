@@ -36,7 +36,6 @@ struct CPURevisionEnum : vamiga::util::Reflection<CPURevisionEnum, CPURevision>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = CPU_68EC020;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "CPU"; }
     static const char *_key(long value)
@@ -71,7 +70,6 @@ struct DasmRevisionEnum : vamiga::util::Reflection<DasmRevisionEnum, DasmRevisio
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = DASM_68040;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "DASM"; }
     static const char *_key(long value)
@@ -108,7 +106,6 @@ struct DasmSyntaxEnum : vamiga::util::Reflection<DasmSyntaxEnum, DasmSyntax>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = DASM_SYNTAX_MUSASHI;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "DASM_SYNTAX"; }
     static const char *_key(long value)
@@ -139,7 +136,6 @@ struct GuardTypeEnum : vamiga::util::Reflection<GuardTypeEnum, GuardType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = GUARD_CATCHPOINT;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "GUARD"; }
     static const char *_key(long value)

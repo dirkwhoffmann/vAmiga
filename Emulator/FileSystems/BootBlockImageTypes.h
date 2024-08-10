@@ -29,8 +29,7 @@ struct BootBlockTypeEnum : vamiga::util::Reflection<BootBlockTypeEnum, BootBlock
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = BB_CUSTOM;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
-    
+
     static const char *prefix() { return "BB"; }
     static const char *_key(long value)
     {
@@ -60,7 +59,6 @@ struct BootBlockIdEnum : vamiga::util::Reflection<BootBlockIdEnum, BootBlockId>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = BB_BYTE_BANDIT;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "BB"; }
     static const char *_key(long value)

@@ -30,8 +30,7 @@ struct FloppyDriveTypeEnum : vamiga::util::Reflection<FloppyDriveTypeEnum, Flopp
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = DRIVE_DD_525;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
-    
+
     static const char *prefix() { return "DRIVE"; }
     static const char *_key(long value)
     {
@@ -58,7 +57,6 @@ struct DriveMechanicsEnum : vamiga::util::Reflection<DriveMechanicsEnum, DriveMe
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = MECHANICS_A1010;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "DMECHANICS"; }
     static const char *_key(long value)

@@ -26,7 +26,6 @@ struct DmaDisplayModeEnum : vamiga::util::Reflection<DmaDisplayModeEnum, DmaDisp
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = DMA_DISPLAY_MODE_ODD_EVEN_LAYERS;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "DMA_DISPLAY_MODE"; }
     static const char *_key(long value)
@@ -62,7 +61,6 @@ struct DmaChannelEnum : vamiga::util::Reflection<DmaChannelEnum, DmaChannel>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = DMA_CHANNEL_COUNT - 1;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "DMA_CHANNEL"; }
     static const char *_key(long value)

@@ -31,8 +31,7 @@ struct FSVolumeTypeEnum : vamiga::util::Reflection<FSVolumeTypeEnum, FSVolumeTyp
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = FS_NODOS;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
-    
+
     static const char *prefix() { return "FS"; }
     static const char *_key(long value)
     {
@@ -98,8 +97,7 @@ struct FSBlockTypeEnum : vamiga::util::Reflection<FSBlockTypeEnum, FSBlockType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = FS_DATA_BLOCK_FFS;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
-    
+
     static const char *prefix() { return "FS"; }
     static const char *_key(long value)
     {
@@ -171,7 +169,6 @@ struct FSItemTypeEnum : vamiga::util::Reflection<FSItemTypeEnum, FSItemType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = FSI_BITMAP;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "FS"; }
     static const char *_key(long value)

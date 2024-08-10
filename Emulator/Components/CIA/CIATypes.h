@@ -30,7 +30,6 @@ struct CIARevisionEnum : vamiga::util::Reflection<CIARevisionEnum, CIARevision>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = CIA_MOS_8520_PLCC;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "CIA"; }
     static const char *_key(long value)
@@ -71,7 +70,6 @@ struct CIARegEnum : vamiga::util::Reflection<CIARegEnum, CIAReg>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = CIAREG_CRB;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "CIAREG"; }
     static const char *_key(long value)

@@ -55,7 +55,6 @@ struct AgnusRevisionEnum : vamiga::util::Reflection<AgnusRevisionEnum, AgnusRevi
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = AGNUS_ECS_2MB;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "AGNUS"; }
     static const char *_key(long value)
@@ -128,8 +127,7 @@ struct EventSlotEnum : vamiga::util::Reflection<EventSlotEnum, EventSlot>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = SLOT_COUNT - 1;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
-    
+
     static const char *prefix() { return "SLOT"; }
     static const char *_key(long value)
     {
@@ -176,7 +174,6 @@ struct EventSlotEnum : vamiga::util::Reflection<EventSlotEnum, EventSlot>
             case SLOT_BTR:   return "BTR";
             case SLOT_ALA:   return "ALA";
             case SLOT_INS:   return "INS";
-
             case SLOT_COUNT: return "???";
         }
         return "???";
@@ -432,7 +429,6 @@ struct SprDmaStateEnum : vamiga::util::Reflection<SprDmaStateEnum, SprDMAState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = SPR_DMA_ACTIVE;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "SPR_DMA"; }
     static const char *_key(long value)

@@ -43,7 +43,6 @@ struct MemorySourceEnum : vamiga::util::Reflection<MemorySourceEnum, MemorySourc
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = MEM_EXT;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "MEM"; }
     static const char *_key(long value)
@@ -85,7 +84,6 @@ struct AccessorEnum : vamiga::util::Reflection<AccessorEnum, Accessor>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = ACCESSOR_AGNUS;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "ACCESSOR"; }
     static const char *_key(long value)
@@ -114,7 +112,6 @@ struct BankMapEnum : vamiga::util::Reflection<BankMapEnum, BankMap>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = BANK_MAP_A2000B;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "BANK_MAP"; }
     static const char *_key(long value)
@@ -144,7 +141,6 @@ struct RamInitPatternEnum : vamiga::util::Reflection<RamInitPatternEnum, RamInit
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = RAM_INIT_RANDOMIZED;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "RAM_INIT"; }
     static const char *_key(long value)
@@ -173,7 +169,6 @@ struct UnmappedMemoryEnum : vamiga::util::Reflection<UnmappedMemoryEnum, Unmappe
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = UNMAPPED_ALL_ONES;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "UNMAPPED"; }
     static const char *_key(long value)

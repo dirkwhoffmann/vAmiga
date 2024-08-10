@@ -72,7 +72,6 @@ struct CTypeEnum : vamiga::util::Reflection<CTypeEnum, CType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = COMP_VIDEO_PORT;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "COMP"; }
     static const char *_key(long value)

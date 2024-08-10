@@ -30,7 +30,6 @@ struct DeniseRevisionEnum : vamiga::util::Reflection<DeniseRevisionEnum, DeniseR
 {    
     static constexpr long minVal = 0;
     static constexpr long maxVal = DENISE_ECS;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "DENISE"; }
     static const char *_key(long value)
@@ -58,7 +57,6 @@ struct ResolutionEnum : vamiga::util::Reflection<ResolutionEnum, Resolution>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = SHRES;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return ""; }
     static const char *_key(long value)

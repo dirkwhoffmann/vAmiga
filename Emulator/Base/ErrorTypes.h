@@ -205,7 +205,6 @@ struct ErrorCodeEnum : vamiga::util::Reflection<ErrorCodeEnum, ErrorCode>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = ERROR_FS_INVALID_HASHTABLE_SIZE;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "ERROR"; }
     static const char *_key(long value)

@@ -31,8 +31,7 @@ struct HardDriveTypeEnum : vamiga::util::Reflection<HardDriveTypeEnum, HardDrive
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = HDR_GENERIC;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
-    
+
     static const char *prefix() { return "HDR"; }
     static const char *_key(long value)
     {
@@ -58,7 +57,6 @@ struct HardDriveStateEnum : vamiga::util::Reflection<HardDriveStateEnum, HardDri
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = HDR_STATE_WRITING;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "HDR_STATE"; }
     static const char *_key(long value)

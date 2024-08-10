@@ -29,7 +29,6 @@ struct VideoFormatEnum : vamiga::util::Reflection<VideoFormatEnum, VideoFormat>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = NTSC;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return ""; }
     static const char *_key(long value)
@@ -57,7 +56,6 @@ struct WarpModeEnum : vamiga::util::Reflection<WarpModeEnum, WarpMode>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = WARP_ALWAYS;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "WARP"; }
     static const char *_key(long value)
@@ -87,7 +85,6 @@ struct ConfigSchemeEnum : vamiga::util::Reflection<ConfigSchemeEnum, ConfigSchem
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = CONFIG_A500_PLUS_1MB;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "CONFIG"; }
     static const char *_key(long value)
@@ -167,7 +164,6 @@ struct ChipsetRegEnum : vamiga::util::Reflection<ChipsetRegEnum, ChipsetReg>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = REG_NO_OP;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "REG"; }
     static const char *_key(long value)

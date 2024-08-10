@@ -30,7 +30,6 @@ struct ControlPortDeviceEnum : vamiga::util::Reflection<ControlPortDeviceEnum, C
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = CPD_JOYSTICK;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "CPD"; }
     static const char *_key(long value)

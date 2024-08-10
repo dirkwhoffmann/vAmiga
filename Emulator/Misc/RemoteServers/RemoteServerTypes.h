@@ -32,8 +32,7 @@ struct SrvStateEnum : vamiga::util::Reflection<SrvStateEnum, SrvState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = SRV_STATE_ERROR;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
-    
+
     static const char *prefix() { return "SRV"; }
     static const char *_key(long value)
     {
@@ -62,7 +61,6 @@ struct ServerProtocolEnum : vamiga::util::Reflection<ServerProtocolEnum, ServerP
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = SRVPROT_DEFAULT;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
     
     static const char *prefix() { return "SRVPROT"; }
     static const char *_key(long value)

@@ -43,7 +43,6 @@ struct IrqSourceEnum : vamiga::util::Reflection<IrqSourceEnum, IrqSource>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = INT_EXTER;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "INT"; }
     static const char *_key(long value)

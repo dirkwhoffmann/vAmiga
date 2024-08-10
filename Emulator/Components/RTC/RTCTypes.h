@@ -29,7 +29,6 @@ struct RTCRevisionEnum : vamiga::util::Reflection<RTCRevisionEnum, RTCRevision>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = RTC_RICOH;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "RTC"; }
     static const char *_key(long value)

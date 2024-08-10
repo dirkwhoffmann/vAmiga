@@ -29,7 +29,6 @@ struct DiskFlagsEnum : vamiga::util::Reflection<DiskFlagsEnum, DiskFlags>
 {
     static constexpr long minVal = 1;
     static constexpr long maxVal = FLAG_MODIFIED;
-    static bool isValid(auto val) { return val >= minVal && val <= maxVal; }
 
     static const char *prefix() { return "FLAG"; }
     static const char *_key(long value)
