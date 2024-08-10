@@ -485,10 +485,6 @@ private:
 
 public:
 
-    // Gets or sets an internal debug variable (only available in debug builds)
-    static int getDebugVariable(DebugFlag flag);
-    static void setDebugVariable(DebugFlag flag, int val);
-
     // Translates the current clock cycle into pseudo-random number
     u32 random();
 

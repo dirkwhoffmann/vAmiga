@@ -1181,7 +1181,7 @@ DebugConsole::initCommands(Command &root)
                          DebugFlagEnum::help(i),
                          [this](Arguments& argv, long value) {
 
-                    amiga.setDebugVariable(DebugFlag(value), int(util::parseNum(argv[0])));
+                    emulator.setDebugVariable(DebugFlag(value), int(util::parseNum(argv[0])));
 
                 }, i);
             }
