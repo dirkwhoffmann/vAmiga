@@ -2268,7 +2268,7 @@ DQ
                                                         <menuItem title="Revert to..." hidden="YES" id="3px-lD-sYg">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="Standard Settings" id="QSQ-lh-vgh">
+                                                        <menuItem title="Standard Settings" hidden="YES" id="QSQ-lh-vgh">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
                                                         <menuItem title="High Accuracy Settings" tag="1" id="PcB-Zc-YDR"/>

@@ -715,7 +715,7 @@ Memory::loadExt(MediaFile &file)
 {
     try {
 
-        RomFile &extFile = dynamic_cast<RomFile &>(file);
+        ExtendedRomFile &extFile = dynamic_cast<ExtendedRomFile &>(file);
 
         // Allocate memory
         allocExt((i32)extFile.data.size);

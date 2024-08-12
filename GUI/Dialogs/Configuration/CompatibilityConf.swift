@@ -111,9 +111,7 @@ extension ConfigurationController {
         case 1:
             
             // Accurate
-            defaults.set(.DENISE_CLX_SPR_SPR, true)
-            defaults.set(.DENISE_CLX_SPR_PLF, true)
-            defaults.set(.DENISE_CLX_PLF_PLF, true)
+            break
 
         case 2:
             
