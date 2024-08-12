@@ -18,7 +18,7 @@ class RshServer : public RemoteServer {
     Descriptions descriptions = {{
 
         .name           = "RshServer",
-        .description    = "Serial Port Server",
+        .description    = "Remote Shell Server",
         .shell          = "server rshell"
     }};
 

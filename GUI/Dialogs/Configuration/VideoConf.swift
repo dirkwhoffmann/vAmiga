@@ -132,6 +132,7 @@ extension ConfigurationController {
     @IBAction func vidZoomAction(_ sender: NSPopUpButton) {
 
         config.zoom = sender.selectedTag()
+        refresh()
     }
 
     @IBAction func vidHZoomAction(_ sender: NSSlider!) {
@@ -149,6 +150,7 @@ extension ConfigurationController {
     @IBAction func vidCenterAction(_ sender: NSPopUpButton) {
 
         config.center = sender.selectedTag()
+        refresh()
     }
 
     @IBAction func vidHCenterAction(_ sender: NSSlider!) {
