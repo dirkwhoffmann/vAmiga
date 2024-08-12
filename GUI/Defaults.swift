@@ -658,15 +658,20 @@ extension Configuration {
         
         do {
 
-            url = UserDefaults.romUrl
-            if url == nil { throw VAError(.FILE_CANT_WRITE) }
-            try? fm.removeItem(at: url!)
-            try amiga.mem.saveRom(url!)
+            if amiga.mem.info.hasRom {
 
-            url = UserDefaults.extUrl
-            if url == nil { throw VAError(.FILE_CANT_WRITE) }
-            try? fm.removeItem(at: url!)
-            try amiga.mem.saveExt(url!)
+                url = UserDefaults.romUrl
+                if url == nil { throw VAError(.FILE_CANT_WRITE) }
+                try? fm.removeItem(at: url!)
+                try amiga.mem.saveRom(url!)
+            }
+            if amiga.mem.info.hasExt {
+
+                url = UserDefaults.extUrl
+                if url == nil { throw VAError(.FILE_CANT_WRITE) }
+                try? fm.removeItem(at: url!)
+                try amiga.mem.saveExt(url!)
+            }
 
         } catch {
 
