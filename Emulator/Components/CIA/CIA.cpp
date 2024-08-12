@@ -290,7 +290,6 @@ CIA::emulateRisingEdgeOnCntPin()
             
             // Trigger interrupt
             delay |= CIASerInt0;
-            // debug(KBD_DEBUG, "Received serial byte: %02x\n", sdr);
         }
     }
 }

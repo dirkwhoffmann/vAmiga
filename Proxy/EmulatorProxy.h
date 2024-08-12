@@ -649,7 +649,10 @@
 
 - (BOOL)isPressed:(NSInteger)keycode;
 - (void)press:(NSInteger)keycode;
+- (void)press:(NSInteger)keycode delay:(double)delay;
+- (void)press:(NSInteger)keycode delay:(double)delay duration:(double)duration;
 - (void)release:(NSInteger)keycode;
+- (void)release:(NSInteger)keycode delay:(double)delay;
 - (void)toggle:(NSInteger)keycode;
 - (void)releaseAll;
 
@@ -855,7 +858,6 @@
 + (instancetype)makeWithFileSystem:(FileSystemProxy *)proxy type:(FileType)t exception:(ExceptionWrapper *)ex;
 
 @property (readonly) FileType type;
-// @property (readonly) NSString *name;
 @property (readonly) u64 fnv;
 @property (readonly) NSInteger size;
 @property (readonly) u8 *data;

@@ -53,9 +53,12 @@ class Keyboard : public SubComponent {
     // Remebers the keys that are currently held down
     bool keyDown[128];
 
-    
+    // Delayed keyboard commands (used, e.g., for auto-typing)
+    util::SortedRingBuffer<Cmd, 1024> pending;
+
+
     //
-    // Initialization
+    // Methods
     //
     
 public:
@@ -69,6 +72,7 @@ public:
         CLONE(spLow)
         CLONE(spHigh)
         CLONE(queue)
+        CLONE(pending)
 
         CLONE(config)
 
@@ -136,19 +140,36 @@ public:
     
 public:
 
+    // Checks whether a certain key is pressed
     bool isPressed(KeyCode keycode) const;
-    void pressKey(KeyCode keycode);
-    void releaseKey(KeyCode keycode);
-    void toggleKey(KeyCode keycode);
-    void releaseAllKeys();
 
-    void autoType(KeyCode keycode, Cycle duration = MSEC(100), Cycle delay = 0);
+    // Presses or releases a key
+    void press(KeyCode keycode);
+    void release(KeyCode keycode);
+    void toggle(KeyCode keycode);
+    void releaseAll();
+
+    // DEPRECATED
+    // void autoType(KeyCode keycode, Cycle duration = MSEC(100), Cycle delay = 0);
     
 private:
     
     // Wake up the keyboard if it has gone idle
     void wakeUp();
     
+
+    //
+    // Auto typing
+    //
+
+public:
+
+    // Auto-types a string
+    void autoType(const string &text);
+
+    // Discards all pending key events
+    void abortAutoTyping();
+
 
     //
     // Talking to the Amiga
@@ -189,7 +210,7 @@ private:
 
 
     //
-    // Processing commands
+    // Processing commands and events
     //
 
 public:

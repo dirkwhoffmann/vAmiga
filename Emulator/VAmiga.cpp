@@ -853,16 +853,22 @@ KeyboardAPI::isPressed(KeyCode key) const
 }
 
 void
-KeyboardAPI::press(KeyCode key, double delay)
+KeyboardAPI::press(KeyCode key, double delay, double duration)
 {
-    if (delay != 0) throw std::runtime_error("Not implemented yet");
+    printf("press(%d) delay: %f duration: %f\n", key, delay, duration);
+
     emu->put(Cmd(CMD_KEY_PRESS, KeyCmd { .keycode = key, .delay = delay }));
+
+    if (duration != 0.0) {
+        emu->put(Cmd(CMD_KEY_RELEASE, KeyCmd { .keycode = key, .delay = delay + duration }));
+    }
 }
 
 void
 KeyboardAPI::release(KeyCode key, double delay)
 {
-    if (delay != 0) throw std::runtime_error("Not implemented yet");
+    printf("release(%d) delay: %f\n", key, delay);
+
     emu->put(Cmd(CMD_KEY_RELEASE, KeyCmd { .keycode = key, .delay = delay }));
 }
 
@@ -872,14 +878,16 @@ KeyboardAPI::releaseAll()
     emu->put(Cmd(CMD_KEY_RELEASE_ALL));
 }
 
+/*
 void KeyboardAPI::autoType(const string &text)
 {
-    throw std::runtime_error("Not implemented yet");
+    keyboard->autoType(text);
 }
+*/
 
 void KeyboardAPI::abortAutoTyping()
 {
-    throw std::runtime_error("Not implemented yet");
+    keyboard->abortAutoTyping();
 }
 
 

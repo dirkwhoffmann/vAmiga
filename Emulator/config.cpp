@@ -132,6 +132,7 @@ debugflag IMG_DEBUG       = 0;
 // Other components
 debugflag RTC_DEBUG       = 0;
 debugflag KBD_DEBUG       = 0;
+debugflag KEY_DEBUG       = 1;
 
 // Misc
 debugflag REC_DEBUG       = 0;

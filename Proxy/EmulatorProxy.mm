@@ -1149,12 +1149,27 @@ using namespace vamiga::moira;
 
 - (void)press:(NSInteger)keycode
 {
-    [self kb]->press((KeyCode)keycode);
+    [self press:keycode delay: 0.0];
+}
+
+- (void)press:(NSInteger)keycode delay:(double)delay
+{
+    [self kb]->press((KeyCode)keycode, delay);
+}
+
+- (void)press:(NSInteger)keycode delay:(double)delay duration:(double)duration
+{
+    [self kb]->press((KeyCode)keycode, delay, duration);
 }
 
 - (void)release:(NSInteger)keycode
 {
-    [self kb]->release((KeyCode)keycode);
+    [self release:keycode delay: 0.0];
+}
+
+- (void)release:(NSInteger)keycode delay:(double)delay
+{
+    [self kb]->release((KeyCode)keycode, delay);
 }
 
 - (void)toggle:(NSInteger)keycode

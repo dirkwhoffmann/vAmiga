@@ -106,7 +106,7 @@ Keyboard::isPressed(KeyCode keycode) const
 }
 
 void
-Keyboard::pressKey(KeyCode keycode)
+Keyboard::press(KeyCode keycode)
 {
     assert(keycode < 0x80);
     
@@ -128,7 +128,7 @@ Keyboard::pressKey(KeyCode keycode)
 }
 
 void
-Keyboard::releaseKey(KeyCode keycode)
+Keyboard::release(KeyCode keycode)
 {
     assert(keycode < 0x80);
     
@@ -145,24 +145,26 @@ Keyboard::releaseKey(KeyCode keycode)
 }
 
 void
-Keyboard::toggleKey(KeyCode keycode)
+Keyboard::toggle(KeyCode keycode)
 {
-    isPressed(keycode) ? releaseKey(keycode) : pressKey(keycode);
+    isPressed(keycode) ? release(keycode) : press(keycode);
 }
 
 void
-Keyboard::releaseAllKeys()
+Keyboard::releaseAll()
 {
     for (KeyCode i = 0; i < 0x80; i++) {
-        releaseKey(i);
+        release(i);
     }
 }
 
+/*
 void
 Keyboard::autoType(KeyCode keycode, Cycle duration, Cycle delay)
 {
     agnus.scheduleRel<SLOT_KEY>(delay, KEY_PRESS, duration << 8 | keycode);
 }
+*/
 
 void
 Keyboard::wakeUp()
@@ -172,6 +174,56 @@ Keyboard::wakeUp()
         trace(KBD_DEBUG, "Wake up\n");
         state = KB_SEND;
         execute();
+    }
+}
+
+void
+Keyboard::autoType(const string &text)
+{
+    SUSPENDED
+
+    debug(KEY_DEBUG, "autoType(%s)\n", text.c_str());
+    fatalError;
+    /*
+    auto trigger = agnus.clock;
+
+    for (char const &c: text) {
+
+        auto keys = C64Key::translate(c);
+
+        if (pending.free() > isize(2 * keys.size())) {
+
+            // Schedule key presses
+            for (C64Key &k : keys) {
+                pending.insert(trigger, Cmd(CMD_KEY_PRESS, KeyCmd { .keycode = u8(k.nr) }));
+            }
+
+            trigger += C64::msec(30);
+
+            // Schedule key releases
+            for (C64Key &k : keys) {
+                pending.insert(trigger, Cmd(CMD_KEY_RELEASE, KeyCmd { .keycode = u8(k.nr) }));
+            }
+            trigger += C64::msec(30);
+        }
+    }
+
+    if (!c64.hasEvent<SLOT_KEY>()) c64.scheduleImm<SLOT_KEY>(KEY_AUTO_TYPE);
+    */
+}
+
+void
+Keyboard::abortAutoTyping()
+{
+    debug(KEY_DEBUG, "abortAutoTyping()\n");
+
+    {   SYNCHRONIZED
+
+        if (!pending.isEmpty()) {
+
+            pending.clear();
+            releaseAll();
+        }
     }
 }
 
@@ -346,23 +398,26 @@ Keyboard::processCommand(const Cmd &cmd)
 {
     if (cmd.key.delay > 0) {
 
-        /*
-        pending.insert(cpu.clock + C64::sec(cmd.key.delay),
+        trace(KEY_DEBUG, "%s: Delayed for %f sec\n", CmdTypeEnum::key(cmd.type), cmd.key.delay);
+
+        pending.insert(agnus.clock + SEC(cmd.key.delay),
                        Cmd(cmd.type, KeyCmd { .keycode = cmd.key.keycode }));
-        c64.scheduleImm<SLOT_KEY>(KEY_AUTO_TYPE);
-        return;
-        */
-    }
+        agnus.scheduleImm<SLOT_KEY>(KEY_AUTO_TYPE);
 
-    switch (cmd.type) {
+    } else {
 
-        case CMD_KEY_PRESS:         pressKey(cmd.key.keycode); break;
-        case CMD_KEY_RELEASE:       releaseKey(cmd.key.keycode); break;
-        case CMD_KEY_RELEASE_ALL:   releaseAllKeys(); break;
-        case CMD_KEY_TOGGLE:        toggleKey(cmd.key.keycode); break;
+        trace(KEY_DEBUG, "%s\n", CmdTypeEnum::key(cmd.type));
 
-        default:
-            fatalError;
+        switch (cmd.type) {
+
+            case CMD_KEY_PRESS:         press(cmd.key.keycode); break;
+            case CMD_KEY_RELEASE:       release(cmd.key.keycode); break;
+            case CMD_KEY_RELEASE_ALL:   releaseAll(); break;
+            case CMD_KEY_TOGGLE:        toggle(cmd.key.keycode); break;
+
+            default:
+                fatalError;
+        }
     }
 }
 

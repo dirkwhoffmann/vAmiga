@@ -182,55 +182,61 @@ class KeyboardController: NSObject {
         parent.config.warpMode = WarpMode.NEVER.rawValue
     }
 
-    func autoTypeAsync(_ string: String, completion: (() -> Void)? = nil) {
-        
+    func autoType(_ string: String, max: Int) {
+
         var truncated = string
         
         // Shorten string if it is too large
-        if string.count > 255 { truncated = truncated.prefix(256) + "..." }
-        
+        if string.count > max { truncated = truncated.prefix(max) + "..." }
+
         // Type string
-        DispatchQueue.global().async {
-            
-            self.autoType(truncated)
-            completion?()
-        }
+        self.autoType(truncated)
     }
     
     func autoType(_ string: String) {
-        
+
         var shift = false
+        var delay = 0.0
+        let delta = 0.02
 
         func pressShift() {
-            if !shift { keyboard.press(MacKey.shift.amigaKeyCode!) }
-            shift = true
+            if !shift {
+                keyboard.press(MacKey.shift.amigaKeyCode!, delay: delay)
+                delay += delta
+                shift = true
+            }
         }
         func releaseShift() {
-            if shift { keyboard.release(MacKey.shift.amigaKeyCode!) }
-            shift = false
+            if shift {
+                keyboard.release(MacKey.shift.amigaKeyCode!, delay: delay)
+                delay += delta
+                shift = false
+            }
         }
 
         for scalar in string.unicodeScalars {
-            
-            usleep(useconds_t(50000))
-            
+
             if let keyCode = symKeyMap[scalar] {
-                
+
                 if let amigaKeyCode = MacKey(keyCode: keyCode).amigaKeyCode {
-                    
+
                     releaseShift()
-                    keyboard.press(amigaKeyCode)
-                    keyboard.release(amigaKeyCode)
+                    keyboard.press(amigaKeyCode, delay: delay)
+                    delay += delta
+                    keyboard.release(amigaKeyCode, delay: delay)
+                    delay += delta
                     continue
                 }
             }
             if let keyCode = symKeyMapShifted[scalar] {
-                
+
                 if let amigaKeyCode = MacKey(keyCode: keyCode).amigaKeyCode {
-                    
+
                     pressShift()
-                    keyboard.press(amigaKeyCode)
+                    keyboard.press(amigaKeyCode, delay: delay)
+                    delay += delta
                     keyboard.release(amigaKeyCode)
+                    delay += delta
                     continue
                 }
             }

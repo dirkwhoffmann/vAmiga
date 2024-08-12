@@ -545,6 +545,7 @@ Emulator::getDebugVariable(DebugFlag flag)
 
         case FLAG_RTC_DEBUG:        return RTC_DEBUG;
         case FLAG_KBD_DEBUG:        return KBD_DEBUG;
+        case FLAG_KEY_DEBUG:        return KEY_DEBUG;
 
         case FLAG_REC_DEBUG:        return REC_DEBUG;
         case FLAG_SCK_DEBUG:        return SCK_DEBUG;
@@ -688,6 +689,7 @@ Emulator::setDebugVariable(DebugFlag flag, bool val)
             // Other components
         case FLAG_RTC_DEBUG:        RTC_DEBUG = val; break;
         case FLAG_KBD_DEBUG:        KBD_DEBUG = val; break;
+        case FLAG_KEY_DEBUG:        KEY_DEBUG = val; break;
 
             // Misc
         case FLAG_REC_DEBUG:        REC_DEBUG = val; break;

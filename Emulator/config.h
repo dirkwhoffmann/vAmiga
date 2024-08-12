@@ -258,9 +258,12 @@ extern debugflag ADF_DEBUG;
 extern debugflag DMS_DEBUG;
 extern debugflag IMG_DEBUG;
 
-// Other components
+// Real-time clock
 extern debugflag RTC_DEBUG;
+
+// Keyboard
 extern debugflag KBD_DEBUG;
+extern debugflag KEY_DEBUG;
 
 // Misc
 extern debugflag REC_DEBUG;

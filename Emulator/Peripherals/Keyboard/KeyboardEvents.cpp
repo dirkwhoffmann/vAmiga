@@ -24,7 +24,7 @@ Keyboard::serviceKeyboardEvent(EventID id)
         case KBD_TIMEOUT:
             
             trace(KBD_DEBUG, "KBD_TIMEOUT\n");
-            
+
             // A timeout has occured. Try to resynchronize with the Amiga.
             state = KB_SYNC;
             execute();
@@ -102,24 +102,34 @@ Keyboard::serviceKeyboardEvent(EventID id)
 void
 Keyboard::serviceKeyEvent()
 {
-    auto id = agnus.id[SLOT_KEY];
-    auto code = (KeyCode)(agnus.data[SLOT_KEY]);
-    auto duration = (Cycle)(agnus.data[SLOT_KEY] >> 8);
+    trace(KEY_DEBUG, "Keyboard::serviceKeyEvent()\n");
 
-    switch(id) {
-            
-        case KEY_PRESS:
-            
-            pressKey(code);
-            agnus.scheduleRel <SLOT_KEY> (duration, KEY_RELEASE, code);
+    switch(agnus.id[SLOT_KEY]) {
+
+        case KEY_AUTO_TYPE:
+
+            // Process all pending events
+            while (!pending.isEmpty()) {
+
+                if (pending.keys[pending.r] > agnus.clock) break;
+
+                auto cmd = pending.read();
+                assert(cmd.key.delay == 0.0);
+                processCommand(cmd);
+            }
+
+            // Schedule next event
+            if (pending.isEmpty()) {
+
+                releaseAll();
+                agnus.cancel<SLOT_KEY>();
+
+            } else {
+
+                agnus.rescheduleAbs<SLOT_KEY>(pending.keys[pending.r]);
+            }
             break;
-            
-        case KEY_RELEASE:
-            
-            releaseKey(code);
-            agnus.cancel <SLOT_KEY> ();
-            break;
-            
+
         default:
             fatalError;
     }

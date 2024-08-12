@@ -414,8 +414,7 @@ Agnus::eventName(EventSlot slot, EventID id)
             switch (id) {
                     
                 case EVENT_NONE:        return "none";
-                case KEY_PRESS:         return "KEY_PRESS";
-                case KEY_RELEASE:       return "KEY_RELEASE";
+                case KEY_AUTO_TYPE:     return "KEY_AUTO_TYPE";
                 default:                return "*** INVALID ***";
             }
             break;

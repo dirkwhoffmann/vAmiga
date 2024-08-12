@@ -111,7 +111,7 @@ public extension MetalView {
         guard let text = pasteBoard.string(forType: .string) else {
             return false
         }
-        parent.keyboard.autoTypeAsync(text)
+        parent.keyboard.autoType(text, max: 256)
         return true
     }
 

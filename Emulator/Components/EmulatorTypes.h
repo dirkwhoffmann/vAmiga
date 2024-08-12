@@ -144,6 +144,7 @@ enum_long(DEBUG_FLAG)
     // Other components
     FLAG_RTC_DEBUG,        ///< Real-time clock
     FLAG_KBD_DEBUG,        ///< Keyboard
+    FLAG_KEY_DEBUG,        ///< Keyboard key events
 
     // Misc
     FLAG_REC_DEBUG,        ///< Screen recorder
@@ -287,6 +288,7 @@ struct DebugFlagEnum : vamiga::util::Reflection<DebugFlagEnum, DebugFlag>
                 // Other components
             case FLAG_RTC_DEBUG:        return "RTC_DEBUG";
             case FLAG_KBD_DEBUG:        return "KBD_DEBUG";
+            case FLAG_KEY_DEBUG:        return "KEY_DEBUG";
 
                 // Misc
             case FLAG_REC_DEBUG:        return "REC_DEBUG";
@@ -419,6 +421,7 @@ struct DebugFlagEnum : vamiga::util::Reflection<DebugFlagEnum, DebugFlag>
                 // Other components
             case FLAG_RTC_DEBUG:        return "Real-time clock";
             case FLAG_KBD_DEBUG:        return "Keyboard";
+            case FLAG_KEY_DEBUG:        return "Keyboard key events";
 
                 // Misc
             case FLAG_REC_DEBUG:        return "Screen recorder";

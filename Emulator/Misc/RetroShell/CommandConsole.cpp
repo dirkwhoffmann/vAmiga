@@ -664,7 +664,9 @@ CommandConsole::initCommands(Command &root)
                      "Sends a keycode to the keyboard",
                      [this](Arguments& argv, long value) {
 
-                keyboard.autoType(KeyCode(parseNum(argv[0])));
+                auto code = KeyCode(parseNum(argv[0]));
+                emulator.put(Cmd(CMD_KEY_PRESS, KeyCmd { .keycode = code, .delay = 0.0 }));
+                emulator.put(Cmd(CMD_KEY_RELEASE, KeyCmd { .keycode = code, .delay = 0.5 }));
             });
         }
 
