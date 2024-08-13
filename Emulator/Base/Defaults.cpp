@@ -18,7 +18,7 @@ namespace vamiga {
 Defaults::Defaults()
 {
     setFallback(OPT_HOST_REFRESH_RATE,          60);
-    setFallback(OPT_HOST_SAMPLE_RATE,           44100);
+    setFallback(OPT_HOST_SAMPLE_RATE,           0);
     setFallback(OPT_HOST_FRAMEBUF_WIDTH,        0);
     setFallback(OPT_HOST_FRAMEBUF_HEIGHT,       0);
     

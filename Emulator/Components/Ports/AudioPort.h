@@ -84,14 +84,14 @@ class AudioPort : public SubComponent {
     // Underflow and overflow counters
     AudioPortStats stats = {};
 
+    // Current sample rate
+    double sampleRate = 0.0;
+
     // Fraction of a sample that hadn't been generated in synthesize
     double fraction = 0.0;
 
     // Time stamp of the last write pointer alignment
-    util::Time lastAlignment;
-
-    // Sample rate adjustment
-    double sampleRateCorrection = 0.0;
+    util::Time lastAlignment = util::Time::now();
     
     // Channel volumes
     float vol[4] = { };
@@ -220,7 +220,8 @@ public:
     void checkOption(Option opt, i64 value) override;
     void setOption(Option option, i64 value) override;
 
-    void setSampleRate(double hz);
+    // void setSampleRate(double hz);
+    void updateSampleRate();
 
 
     //
@@ -249,7 +250,7 @@ public:
     void synthesize(Cycle clock, Cycle target);
 
     // Returns the sample rate adjustment
-    double getSampleRateCorrection() { return sampleRateCorrection; }
+    // double getSampleRateCorrection() { return sampleRateCorrection; }
 
 private:
 

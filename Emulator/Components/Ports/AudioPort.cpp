@@ -69,15 +69,15 @@ AudioPort::_dump(Category category, std::ostream& os) const
         os << flt(pan[2]) << std::endl;
         os << tab("Channel 3 pan");
         os << flt(pan[3]) << std::endl;
-        os << tab("Sample rate correction");
-        os << flt(sampleRateCorrection) << " Hz" << std::endl;
+        os << tab("Sample rate");
+        os << flt(sampleRate) << " Hz" << std::endl;
     }
 }
 
 void
 AudioPort::_initialize()
 {
-    setSampleRate(44100);
+    updateSampleRate();
 }
 
 void
@@ -91,7 +91,7 @@ AudioPort::_didReset(bool hard)
 void
 AudioPort::_powerOn()
 {
-    sampleRateCorrection = 0.0;
+
 }
 
 void
@@ -151,17 +151,17 @@ AudioPort::getOption(Option option) const
     switch (option) {
             
         case OPT_AUD_SAMPLING_METHOD:   return config.samplingMethod;
-        case OPT_AUD_PAN0:           return config.pan[0];
-        case OPT_AUD_PAN1:           return config.pan[1];
-        case OPT_AUD_PAN2:           return config.pan[2];
-        case OPT_AUD_PAN3:           return config.pan[3];
-        case OPT_AUD_VOL0:           return config.vol[0];
-        case OPT_AUD_VOL1:           return config.vol[1];
-        case OPT_AUD_VOL2:           return config.vol[2];
-        case OPT_AUD_VOL3:           return config.vol[3];
-        case OPT_AUD_VOLL:           return config.volL;
-        case OPT_AUD_VOLR:           return config.volR;
-        case OPT_AUD_FASTPATH:      return config.idleFastPath;
+        case OPT_AUD_PAN0:              return config.pan[0];
+        case OPT_AUD_PAN1:              return config.pan[1];
+        case OPT_AUD_PAN2:              return config.pan[2];
+        case OPT_AUD_PAN3:              return config.pan[3];
+        case OPT_AUD_VOL0:              return config.vol[0];
+        case OPT_AUD_VOL1:              return config.vol[1];
+        case OPT_AUD_VOL2:              return config.vol[2];
+        case OPT_AUD_VOL3:              return config.vol[3];
+        case OPT_AUD_VOLL:              return config.volL;
+        case OPT_AUD_VOLR:              return config.volR;
+        case OPT_AUD_FASTPATH:          return config.idleFastPath;
         case OPT_AUD_FILTER_TYPE:       return filter.getOption(option);
 
         default:
@@ -259,12 +259,35 @@ AudioPort::setOption(Option option, i64 value)
     }
 }
 
+/*
 void
 AudioPort::setSampleRate(double hz)
 {
     trace(AUD_DEBUG, "setSampleRate(%f)\n", hz);
 
+    sampleRate = hz;
     filter.setup(hz);
+}
+*/
+
+void
+AudioPort::updateSampleRate()
+{
+    if (host.getConfig().sampleRate) {
+
+        // If the Host class provides a sample rate, take it.
+        sampleRate = host.getConfig().sampleRate;
+        trace(AUD_DEBUG, "New sample rate: %.1f (from host)\n", sampleRate);
+
+    } else {
+
+        // Otherwise, get it from the detector.
+        sampleRate = detector.sampleRate();
+        trace(AUD_DEBUG, "New sample rate: %.1f (from detector)\n", sampleRate);
+    }
+
+    filter.setup(sampleRate);
+
 }
 
 void
@@ -310,10 +333,10 @@ AudioPort::synthesize(Cycle clock, Cycle target)
     if (amiga.objid != 0) return;
 
     // Determine the current sample rate
-    double rate = double(host.getOption(OPT_HOST_SAMPLE_RATE)) + sampleRateCorrection;
+    // double rate = double(host.getOption(OPT_HOST_SAMPLE_RATE)) + sampleRateCorrection;
 
     // Determine the number of elapsed cycles per audio sample
-    double cps = double(amiga.masterClockFrequency()) / rate;
+    double cps = double(amiga.masterClockFrequency()) / sampleRate;
 
     // Determine how many samples we need to produce
     double exact = (double)(target - clock) / cps + fraction;
@@ -455,12 +478,10 @@ AudioPort::handleBufferUnderflow()
     // Adjust the sample rate, if condition (1) holds
     if (elapsedTime.asSeconds() > 10.0) {
 
-        // Increase the sample rate based on what we've measured
-        sampleRateCorrection += (stream.cap() / 2) / elapsedTime.asSeconds();
+        warn("Audio buffer underflow after %f seconds\n", elapsedTime.asSeconds());
 
+        updateSampleRate();
         stats.bufferUnderflows++;
-        warn("Last underflow: %f seconds ago\n", elapsedTime.asSeconds());
-        warn("New sample rate correction: %f\n", sampleRateCorrection);
     }
 }
 
@@ -483,13 +504,11 @@ AudioPort::handleBufferOverflow()
     
     // Adjust the sample rate, if condition (1) holds
     if (elapsedTime.asSeconds() > 10.0) {
-        
-        // Decrease the sample rate based on what we've measured
-        sampleRateCorrection -= (stream.cap() / 2) / elapsedTime.asSeconds();
 
+        warn("Audio buffer overflow after %f seconds\n", elapsedTime.asSeconds());
+
+        updateSampleRate();
         stats.bufferOverflows++;
-        warn("Last overflow: %f seconds ago\n", elapsedTime.asSeconds());
-        warn("New sample rate correction: %f\n", sampleRateCorrection);
     }
 }
 
