@@ -74,7 +74,7 @@ public:
 
     SubComponent(Amiga& ref, isize id = 0);
 
-    void prefix(isize level, isize line) const override;
+    void prefix(isize level,  const char *component, isize line) const override;
 };
 
 }
