@@ -11,11 +11,12 @@
 
 #include "AudioPortTypes.h"
 #include "SubComponent.h"
+#include "Animated.h"
 #include "AudioStream.h"
 #include "AudioFilter.h"
 #include "Chrono.h"
 #include "Sampler.h"
-#include "Animated.h"
+#include "SampleRateDetector.h"
 
 namespace vamiga {
 
@@ -127,7 +128,10 @@ public:
     // The audio filter pipeline
     AudioFilter filter = AudioFilter(amiga);
 
-    
+    // Detector for measuring the sample rate
+    SampleRateDetector detector = SampleRateDetector(amiga);
+
+
     //
     // Methods
     //

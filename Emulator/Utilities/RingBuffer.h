@@ -264,6 +264,15 @@ template <class T, isize capacity> struct RingBuffer
     {
         return elements[prev(w)];
     }
+
+    std::vector<T> vector() const
+    {
+        std::vector<T> result;
+        for (auto i = begin(); i != end(); i = next(i)) {
+            result.push_back(elements[i]);
+        }
+        return result;
+    }
 };
 
 template <class T, isize capacity>

@@ -6,5 +6,6 @@ AudioPort.cpp
 ControlPort.cpp
 SerialPort.cpp
 VideoPort.cpp
+SampleRateDetector.cpp
 
 )

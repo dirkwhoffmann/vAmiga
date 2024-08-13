@@ -22,7 +22,8 @@ AudioPort::AudioPort(Amiga& ref, isize objid) : SubComponent(ref, objid)
 {
     subComponents = std::vector<CoreComponent *> {
 
-        &filter
+        &filter,
+        &detector
     };
 }
 
@@ -514,6 +515,9 @@ AudioPort::copyMono(float *buffer, isize n)
 isize
 AudioPort::copyStereo(float *buffer1, float *buffer2, isize n)
 {
+    // Inform the sample rate detector about the number of requested samples
+    detector.feed(n);
+
     // Copy sound samples
     auto cnt = stream.copyStereo(buffer1, buffer2, n);
     stats.consumedSamples += cnt;

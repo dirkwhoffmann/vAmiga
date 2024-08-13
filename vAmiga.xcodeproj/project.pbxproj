@@ -248,6 +248,8 @@
 		50C8C44F260740AC00F4E012 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C44E260740AC00F4E012 /* SplashScreen.swift */; };
 		50C8C452260747EA00F4E012 /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C451260747EA00F4E012 /* Canvas.swift */; };
 		50C8C4552607524400F4E012 /* Monitors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C4542607524400F4E012 /* Monitors.swift */; };
+		50C9A6352C6A747F00007A12 /* SampleRateDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C9A6332C6A747F00007A12 /* SampleRateDetector.cpp */; };
+		50C9A6362C6A747F00007A12 /* SampleRateDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C9A6332C6A747F00007A12 /* SampleRateDetector.cpp */; };
 		50CC209727ECCD6D00AEA010 /* OSDescriptors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50CC209527ECCD6D00AEA010 /* OSDescriptors.cpp */; };
 		50CC209827ECCD6D00AEA010 /* OSDescriptors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50CC209527ECCD6D00AEA010 /* OSDescriptors.cpp */; };
 		50CFF56A2C259FB900A47ECC /* Serializable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50CFF5692C259FB900A47ECC /* Serializable.cpp */; };
@@ -867,6 +869,8 @@
 		50C8C44E260740AC00F4E012 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
 		50C8C451260747EA00F4E012 /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
 		50C8C4542607524400F4E012 /* Monitors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monitors.swift; sourceTree = "<group>"; };
+		50C9A6332C6A747F00007A12 /* SampleRateDetector.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SampleRateDetector.cpp; sourceTree = "<group>"; };
+		50C9A6342C6A747F00007A12 /* SampleRateDetector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SampleRateDetector.h; sourceTree = "<group>"; };
 		50CA602E260E02B700C4A22C /* Reflection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reflection.h; sourceTree = "<group>"; };
 		50CC209527ECCD6D00AEA010 /* OSDescriptors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OSDescriptors.cpp; sourceTree = "<group>"; };
 		50CC209627ECCD6D00AEA010 /* OSDescriptors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OSDescriptors.h; sourceTree = "<group>"; };
@@ -1266,6 +1270,8 @@
 				50A61421260CD74E00A01428 /* AudioPortTypes.h */,
 				50B70CAC252CE0BF006B5191 /* AudioPort.h */,
 				50B70CAB252CE0BF006B5191 /* AudioPort.cpp */,
+				50C9A6342C6A747F00007A12 /* SampleRateDetector.h */,
+				50C9A6332C6A747F00007A12 /* SampleRateDetector.cpp */,
 				50A61445260CF23D00A01428 /* ControlPortTypes.h */,
 				50A2953E21FF12EF0046BAA0 /* ControlPort.h */,
 				50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */,
@@ -2308,6 +2314,7 @@
 				50AE8B1C27833D2500991F89 /* DeniseInfo.cpp in Sources */,
 				5019605D23125E680051B669 /* Monitor.swift in Sources */,
 				5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */,
+				50C9A6352C6A747F00007A12 /* SampleRateDetector.cpp in Sources */,
 				50AEBEDA24D3D78F0037082D /* DiskControllerEvents.cpp in Sources */,
 				50E98B51275A124900AA0CB9 /* Socket.cpp in Sources */,
 				50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */,
@@ -2585,6 +2592,7 @@
 				50FC049727DA196C00C3E566 /* NamedPipe.cpp in Sources */,
 				50FC04D827DA1A0000C3E566 /* RetroShell.cpp in Sources */,
 				50FC04A527DA198100C3E566 /* CopperInfo.cpp in Sources */,
+				50C9A6362C6A747F00007A12 /* SampleRateDetector.cpp in Sources */,
 				50FC04F327DA1A8F00C3E566 /* AudioFilter.cpp in Sources */,
 				501B00162C629A0500749664 /* Beamtraps.cpp in Sources */,
 				50FC04E627DA1A1400C3E566 /* pfile.c in Sources */,

@@ -53,7 +53,7 @@ class SerialPort : public SubComponent, public Inspectable<SerialPortInfo> {
 
 
     //
-    // Initializing
+    // Methods
     //
 
 public:
