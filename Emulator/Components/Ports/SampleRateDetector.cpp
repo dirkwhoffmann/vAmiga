@@ -10,6 +10,7 @@
 #include "config.h"
 #include "SampleRateDetector.h"
 #include "Emulator.h"
+#include <algorithm>
 
 namespace vamiga {
 
@@ -62,13 +63,13 @@ SampleRateDetector::sampleRate()
     if (size < usize(2 * trash + 1)) { return 44100; }
 
     // Sort all entries
-    sort(samples.begin(), samples.end());
+    std::sort(samples.begin(), samples.end());
 
     // Compute average (lowest two and highest two value are ignored)
     for (usize i = trash; i < size - trash; i++) result += samples[i];
     result /= size - 2 * trash;
 
-    trace(TIM_DEBUG, "Sample rate = %f\n", std::round(result));
+    trace(TIM_DEBUG, "Sample rate = %.2f\n", result);
     return result;
 }
 
