@@ -222,7 +222,6 @@ public:
     void setOption(Option option, i64 value) override;
 
     void setSampleRate(double hz);
-    // void updateSampleRate();
 
 
     //

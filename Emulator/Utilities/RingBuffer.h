@@ -11,6 +11,7 @@
 
 #include "BasicTypes.h"
 #include <utility>
+#include <vector>
 
 namespace vamiga::util {
 

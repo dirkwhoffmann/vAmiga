@@ -255,10 +255,20 @@ AudioPort::setOption(Option option, i64 value)
 void
 AudioPort::setSampleRate(double hz)
 {
-    trace(AUD_DEBUG, "setSampleRate(%f)\n", hz);
+    // Set the sample rate or get it from the detector if none is provided
+    if (hz != 0.0) {
 
-    sampleRate = hz;
-    filter.setup(hz);
+        sampleRate = hz;
+        trace(AUD_DEBUG, "setSampleRate(%.2f)\n", sampleRate);
+
+    } else {
+
+        sampleRate = detector.sampleRate();
+        trace(AUD_DEBUG, "setSampleRate(%.2f) (predicted)\n", sampleRate);
+    }
+
+    // Inform the audio filter about the new sample rate
+    filter.setup(sampleRate);
 }
 
 void
@@ -437,15 +447,14 @@ AudioPort::handleBufferUnderflow()
     lastAlignment = util::Time::now();
     
     // Adjust the sample rate, if condition (1) holds
-    // if (elapsedTime.asSeconds() > 10.0) {
     if (emulator.isRunning() && !emulator.isWarping()) {
 
         stats.bufferUnderflows++;
         warn("Audio buffer underflow after %f seconds\n", elapsedTime.asSeconds());
 
-        // Adjust the sample rate to what we have measured
-        setSampleRate(detector.sampleRate());
-        warn("Ajusted sample rate to %.2f\n", sampleRate);
+        // Adjust the sample rate
+        setSampleRate(host.getConfig().sampleRate);
+        msg("New sample rate = %.2f\n", sampleRate);
     }
 }
 
@@ -467,15 +476,14 @@ AudioPort::handleBufferOverflow()
     lastAlignment = util::Time::now();
 
     // Adjust the sample rate, if condition (1) holds
-    // if (elapsedTime.asSeconds() > 10.0) {
     if (emulator.isRunning() && !emulator.isWarping()) {
 
         stats.bufferOverflows++;
         warn("Audio buffer overflow after %f seconds\n", elapsedTime.asSeconds());
 
-        // Adjust the sample rate to what we have measured
-        setSampleRate(detector.sampleRate());
-        warn("Ajusted sample rate to %.2f\n", sampleRate);
+        // Adjust the sample rate
+        setSampleRate(host.getConfig().sampleRate);
+        msg("New sample rate = %.2f\n", sampleRate);
     }
 }
 

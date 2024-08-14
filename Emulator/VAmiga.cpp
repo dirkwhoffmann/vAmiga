@@ -855,8 +855,6 @@ KeyboardAPI::isPressed(KeyCode key) const
 void
 KeyboardAPI::press(KeyCode key, double delay, double duration)
 {
-    printf("press(%d) delay: %f duration: %f\n", key, delay, duration);
-
     emu->put(Cmd(CMD_KEY_PRESS, KeyCmd { .keycode = key, .delay = delay }));
 
     if (duration != 0.0) {
@@ -867,8 +865,6 @@ KeyboardAPI::press(KeyCode key, double delay, double duration)
 void
 KeyboardAPI::release(KeyCode key, double delay)
 {
-    printf("release(%d) delay: %f\n", key, delay);
-
     emu->put(Cmd(CMD_KEY_RELEASE, KeyCmd { .keycode = key, .delay = delay }));
 }
 
