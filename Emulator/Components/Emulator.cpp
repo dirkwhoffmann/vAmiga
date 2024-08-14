@@ -279,11 +279,14 @@ Emulator::missingFrames() const
     // Compute the elapsed time
     auto elapsed = util::Time::now() - baseTime;
 
-    // Compute which slice should be reached by now
-    auto target = elapsed.asNanoseconds() * i64(refreshRate()) / 1000000000;
+    // Compute which master-clock cycle should be reached by now
+    auto targetCycle = main.masterClockFrequency() * elapsed.asMilliseconds() / 1000;
 
-    // Compute the number of missing slices
-    return isize(target - frameCounter);
+    // Compute the nummer of missing cycles
+    auto diff = targetCycle - main.agnus.clock;
+
+    // Compute the number of missing frames
+    return diff < 0 ? 0 : (diff / (main.masterClockFrequency() / i64(refreshRate())));
 }
 
 const FrameBuffer &
