@@ -44,6 +44,8 @@ namespace vamiga {
 
 class AudioPort : public SubComponent {
 
+    friend class AudioFilter;
+
     Descriptions descriptions = {
         {
             .type           = COMP_AUDIO_PORT,
@@ -53,7 +55,7 @@ class AudioPort : public SubComponent {
         },
         {
             .type           = COMP_AUDIO_PORT,
-            .name           = "AudioPort",
+            .name           = "RecAudioPort",
             .description    = "Audio Port (Recorder)",
             .shell          = ""
         },
@@ -72,8 +74,7 @@ class AudioPort : public SubComponent {
         OPT_AUD_VOL3,
         OPT_AUD_VOLL,
         OPT_AUD_VOLR,
-        OPT_AUD_FASTPATH,
-        OPT_AUD_FILTER_TYPE
+        OPT_AUD_FASTPATH
     };
 
     friend class Paula;
@@ -85,7 +86,7 @@ class AudioPort : public SubComponent {
     AudioPortStats stats = {};
 
     // Current sample rate
-    double sampleRate = 0.0;
+    double sampleRate = 44100;
 
     // Fraction of a sample that hadn't been generated in synthesize
     double fraction = 0.0;
@@ -126,7 +127,7 @@ public:
     AudioStream stream;
 
     // The audio filter pipeline
-    AudioFilter filter = AudioFilter(amiga);
+    AudioFilter filter = AudioFilter(amiga, *this);
 
     // Detector for measuring the sample rate
     SampleRateDetector detector = SampleRateDetector(amiga);
@@ -220,8 +221,8 @@ public:
     void checkOption(Option opt, i64 value) override;
     void setOption(Option option, i64 value) override;
 
-    // void setSampleRate(double hz);
-    void updateSampleRate();
+    void setSampleRate(double hz);
+    // void updateSampleRate();
 
 
     //

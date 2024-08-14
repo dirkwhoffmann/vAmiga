@@ -59,7 +59,7 @@ Host::setOption(Option opt, i64 value)
         case OPT_HOST_SAMPLE_RATE:
 
             config.sampleRate = isize(value);
-            audioPort.updateSampleRate();
+            audioPort.setSampleRate(double(value));
             return;
 
         case OPT_HOST_FRAMEBUF_WIDTH:

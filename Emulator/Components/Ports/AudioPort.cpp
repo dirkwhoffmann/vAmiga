@@ -77,7 +77,7 @@ AudioPort::_dump(Category category, std::ostream& os) const
 void
 AudioPort::_initialize()
 {
-    updateSampleRate();
+
 }
 
 void
@@ -162,7 +162,6 @@ AudioPort::getOption(Option option) const
         case OPT_AUD_VOLL:              return config.volL;
         case OPT_AUD_VOLR:              return config.volR;
         case OPT_AUD_FASTPATH:          return config.idleFastPath;
-        case OPT_AUD_FILTER_TYPE:       return filter.getOption(option);
 
         default:
             fatalError;
@@ -192,7 +191,6 @@ AudioPort::checkOption(Option opt, i64 value)
         case OPT_AUD_VOLL:
         case OPT_AUD_VOLR:
         case OPT_AUD_FASTPATH:
-        case OPT_AUD_FILTER_TYPE:
 
             return;
 
@@ -249,17 +247,11 @@ AudioPort::setOption(Option option, i64 value)
             config.idleFastPath = (bool)value;
             return;
 
-        case OPT_AUD_FILTER_TYPE:
-
-            filter.setOption(option, value);
-            return;
-
         default:
             fatalError;
     }
 }
 
-/*
 void
 AudioPort::setSampleRate(double hz)
 {
@@ -267,27 +259,6 @@ AudioPort::setSampleRate(double hz)
 
     sampleRate = hz;
     filter.setup(hz);
-}
-*/
-
-void
-AudioPort::updateSampleRate()
-{
-    if (host.getConfig().sampleRate) {
-
-        // If the Host class provides a sample rate, take it.
-        sampleRate = host.getConfig().sampleRate;
-        trace(AUD_DEBUG, "New sample rate: %.1f (from host)\n", sampleRate);
-
-    } else {
-
-        // Otherwise, get it from the detector.
-        sampleRate = detector.sampleRate();
-        trace(AUD_DEBUG, "New sample rate: %.1f (from detector)\n", sampleRate);
-    }
-
-    filter.setup(sampleRate);
-
 }
 
 void
@@ -413,7 +384,6 @@ AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
     bool loEnabled = filter.loFilterEnabled();
     bool ledEnabled = filter.ledFilterEnabled();
     bool hiEnabled = filter.hiFilterEnabled();
-    bool legacyEnabled = filter.legacyFilterEnabled();
 
     for (isize i = 0; i < count; i++) {
 
@@ -430,12 +400,6 @@ AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
         if (loEnabled) filter.loFilter.applyLP(l, r);
         if (ledEnabled) filter.ledFilter.applyLP(l, r);
         if (hiEnabled) filter.hiFilter.applyHP(l, r);
-
-        // Apply the legacy filter if applicable
-        if (legacyEnabled) {
-            l = filter.butterworthL.apply(float(l));
-            r = filter.butterworthR.apply(float(r));
-        }
 
         // Modulate the master volume
         if (fading) { volL.shift(); volR.shift(); }
@@ -476,12 +440,15 @@ AudioPort::handleBufferUnderflow()
     lastAlignment = util::Time::now();
     
     // Adjust the sample rate, if condition (1) holds
-    if (elapsedTime.asSeconds() > 10.0) {
+    // if (elapsedTime.asSeconds() > 10.0) {
+    if (emulator.isRunning() && !emulator.isWarping()) {
 
+        stats.bufferUnderflows++;
         warn("Audio buffer underflow after %f seconds\n", elapsedTime.asSeconds());
 
-        updateSampleRate();
-        stats.bufferUnderflows++;
+        // Adjust the sample rate to what we have measured
+        setSampleRate(detector.sampleRate());
+        warn("Ajusted sample rate to %.2f\n", sampleRate);
     }
 }
 
@@ -492,23 +459,26 @@ AudioPort::handleBufferOverflow()
     //
     // (1) The consumer runs slightly slower than the producer
     // (2) The consumer is halted or not startet yet
-    
+
     debug(AUDBUF_DEBUG, "OVERFLOW (r: %ld w: %ld)\n", stream.r, stream.w);
-    
+
     // Reset the write pointer
     stream.alignWritePtr();
 
     // Determine the number of elapsed seconds since the last adjustment
     auto elapsedTime = util::Time::now() - lastAlignment;
     lastAlignment = util::Time::now();
-    
-    // Adjust the sample rate, if condition (1) holds
-    if (elapsedTime.asSeconds() > 10.0) {
 
+    // Adjust the sample rate, if condition (1) holds
+    // if (elapsedTime.asSeconds() > 10.0) {
+    if (emulator.isRunning() && !emulator.isWarping()) {
+
+        stats.bufferOverflows++;
         warn("Audio buffer overflow after %f seconds\n", elapsedTime.asSeconds());
 
-        updateSampleRate();
-        stats.bufferOverflows++;
+        // Adjust the sample rate to what we have measured
+        setSampleRate(detector.sampleRate());
+        warn("Ajusted sample rate to %.2f\n", sampleRate);
     }
 }
 

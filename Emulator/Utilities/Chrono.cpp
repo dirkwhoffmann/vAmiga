@@ -275,7 +275,12 @@ Clock::Clock()
 void
 Clock::updateElapsed()
 {
-    auto now = Time::now();
+    updateElapsed(Time::now());
+}
+
+void 
+Clock::updateElapsed(Time now)
+{
     if (!paused) elapsed += now - start;
     start = now;
 }
@@ -306,10 +311,12 @@ Clock::go()
 Time
 Clock::restart()
 {
-    updateElapsed();
+    auto now = Time::now();
+
+    updateElapsed(now);
     auto result = elapsed;
 
-    start = Time::now();
+    start = now;
     elapsed = 0;
     paused = false;
     

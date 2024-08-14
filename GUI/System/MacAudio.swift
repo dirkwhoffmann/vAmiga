@@ -73,8 +73,7 @@ public class MacAudio: NSObject {
         let stereo = (channels > 1)
         
         // Pass some host parameters to the emulator
-        // emu?.set(.HOST_SAMPLE_RATE, value: Int(sampleRate))
-        emu?.set(.HOST_SAMPLE_RATE, value: 0)
+        emu?.set(.HOST_SAMPLE_RATE, value: Int(sampleRate))
 
         // Make input bus compatible with output bus
         let renderFormat = AVAudioFormat(standardFormatWithSampleRate: sampleRate,

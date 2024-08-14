@@ -100,7 +100,7 @@ debugflag WT_DEBUG        = 0;
 
 // Audio
 debugflag AUDREG_DEBUG    = 0;
-debugflag AUD_DEBUG       = 1;
+debugflag AUD_DEBUG       = 0;
 debugflag AUDBUF_DEBUG    = 0;
 debugflag AUDVOL_DEBUG    = 0;
 debugflag DISABLE_AUDIRQ  = 0;

@@ -34,9 +34,6 @@
  *     FILTER_A1000:    Runs all three filter stages.
  *     FILTER_A1200:    Runs filter stage 2 and 3. Skips stage 2 if the power
  *                      LED is dimmed.
- *     FILTER_VAMIGA:   Runs the legacy filter which had been used up to
- *                      version 2.4b1. This filter is deprecated and will be
- *                      deleted in future.
  *
  * The remaining filter types are meant for debugging:
  *
@@ -46,37 +43,6 @@
  */
 
 namespace vamiga {
-
-//
-// Butterworth filter (used in vAmiga up to v2.3)
-//
-
-struct ButterworthFilter : CoreObject {
-
-    // Coefficients of the butterworth filter
-    double a1 = 0.0;
-    double a2 = 0.0;
-    double b0 = 0.0;
-    double b1 = 0.0;
-    double b2 = 0.0;
-
-    // The butterworth filter pipeline
-    double x1 = 0.0;
-    double x2 = 0.0;
-    double y1 = 0.0;
-    double y2 = 0.0;
-
-    void setSampleRate(double sampleRate);
-
-    const char *objectName() const override { return "Butterworth"; }
-    void _dump(Category category, std::ostream& os) const override { };
-
-    // Initializes the filter pipeline with zero elements
-    void clear();
-
-    // Inserts a sample into the filter pipeline
-    float apply(float sample);
-};
 
 //
 // OnePoleFilter (based on 8bitbubsy/pt2-clone)
@@ -143,20 +109,31 @@ struct TwoPoleFilter : CoreObject {
 
 class AudioFilter : public SubComponent {
     
-    Descriptions descriptions = {{
+    friend class AudioPort;
 
-        .type           = COMP_AUDIO_FILTER,
-        .name           = "AudioFilter",
-        .description    = "Audio Filter",
-        .shell          = "filter"
-    }};
+    Descriptions descriptions = {
+
+        {
+            .type           = COMP_AUDIO_FILTER,
+            .name           = "AudioFilter",
+            .description    = "Audio Filter",
+            .shell          = "filter"
+        },
+        {
+            .type           = COMP_AUDIO_FILTER,
+            .name           = "RecAudioFilter",
+            .description    = "Audio Filter (Recorder)",
+            .shell          = ""
+        }
+    };
 
     ConfigOptions options = {
 
         OPT_AUD_FILTER_TYPE
     };
 
-    friend class AudioPort;
+    // Reference to the audio port this device belongs to
+    AudioPort &port;
 
 public:
 
@@ -172,10 +149,6 @@ private:
     TwoPoleFilter ledFilter;
     OnePoleFilter hiFilter;
 
-    // Legacy filters (used up to vAmiga 2.4b1)
-    ButterworthFilter butterworthL;
-    ButterworthFilter butterworthR;
-
 
     //
     // Initializing
@@ -183,8 +156,8 @@ private:
     
 public:
     
-    using SubComponent::SubComponent;
-    
+    AudioFilter(Amiga& amiga, AudioPort& port);
+
     AudioFilter& operator= (const AudioFilter& other) {
 
         CLONE(config)
@@ -252,7 +225,6 @@ private:
     bool loFilterEnabled() const;
     bool ledFilterEnabled() const;
     bool hiFilterEnabled() const;
-    bool legacyFilterEnabled() const;
 
 
     //

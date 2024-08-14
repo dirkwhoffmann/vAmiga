@@ -71,6 +71,7 @@ class Clock {
     bool paused = false;
 
     void updateElapsed();
+    void updateElapsed(Time now);
 
 public:
     

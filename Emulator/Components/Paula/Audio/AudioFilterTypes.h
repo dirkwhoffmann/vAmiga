@@ -22,7 +22,6 @@ enum_long(FILTER_TYPE)
     FILTER_A500,
     FILTER_A1000,
     FILTER_A1200,
-    FILTER_VAMIGA,
     FILTER_LOW,
     FILTER_LED,
     FILTER_HIGH
@@ -44,7 +43,6 @@ struct FilterTypeEnum : vamiga::util::Reflection<FilterTypeEnum, FilterType>
             case FILTER_A500:       return "A500";
             case FILTER_A1000:      return "A1000";
             case FILTER_A1200:      return "A1200";
-            case FILTER_VAMIGA:     return "VAMIGA";
             case FILTER_LOW:        return "LOW";
             case FILTER_LED:        return "LED";
             case FILTER_HIGH:       return "HIGH";
