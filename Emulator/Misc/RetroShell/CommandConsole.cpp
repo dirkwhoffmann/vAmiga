@@ -179,7 +179,7 @@ CommandConsole::initCommands(Command &root)
 
     {   VAMIGA_GROUP("Regression testing")
 
-        root.add({"regression"},    "Runs the regression tester");
+        root.add({"regression"}, debugBuild ? "Runs the regression tester" : "");
 
         {   VAMIGA_GROUP("");
 
@@ -202,7 +202,7 @@ CommandConsole::initCommands(Command &root)
             });
         }
 
-        root.add({"screenshot"},    "Manages screenshots");
+        root.add({"screenshot"}, debugBuild ? "Manages screenshots" : "");
 
         {   VAMIGA_GROUP("")
 
