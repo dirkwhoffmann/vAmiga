@@ -283,10 +283,10 @@ Emulator::missingFrames() const
     auto targetCycle = main.masterClockFrequency() * elapsed.asMilliseconds() / 1000;
 
     // Compute the nummer of missing cycles
-    auto diff = targetCycle - main.agnus.clock;
+    auto diff = targetCycle - (main.agnus.clock - baseCycle);
 
     // Compute the number of missing frames
-    return diff < 0 ? 0 : (diff / (main.masterClockFrequency() / i64(refreshRate())));
+    return diff / (main.masterClockFrequency() / i64(refreshRate()));
 }
 
 const FrameBuffer &
@@ -324,7 +324,13 @@ Emulator::refreshRate() const
     }
 }
 
-void 
+Cycle 
+Emulator::currentCycle() const
+{
+    return main.agnus.clock;
+}
+
+void
 Emulator::hardReset()
 {
     {   SUSPENDED

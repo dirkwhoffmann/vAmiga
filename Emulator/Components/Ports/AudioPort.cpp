@@ -454,7 +454,7 @@ AudioPort::handleBufferUnderflow()
 
         // Adjust the sample rate
         setSampleRate(host.getConfig().sampleRate);
-        debug(AUD_DEBUG, "New sample rate = %.2f\n", sampleRate);
+        debug(true, "New sample rate = %.2f\n", sampleRate);
     }
 }
 

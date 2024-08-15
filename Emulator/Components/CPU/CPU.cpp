@@ -390,9 +390,10 @@ CPU::_didReset(bool hard)
         for(int i = 0; i < 8; i++) reg.d[i] = reg.a[i] = config.regResetVal;
         reg.a[7] = reg.isp;
         
-        // Remove all previously recorded instructions
+        // Remove all recorded instructions and set the log flag if needed
         debugger.clearLog();
-        
+        if (emulator.isTracking()) flags |= moira::CPU_LOG_INSTRUCTION;
+
     } else {
         
         /* "The RESET instruction causes the processor to assert RESET for 124
