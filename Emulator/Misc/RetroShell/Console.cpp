@@ -30,7 +30,7 @@ Console::_initialize()
     history.push_back( { "", 0 } );
 
     // Print the startup message and the input prompt
-    asyncExec("welcome");
+    // retroShell.asyncExec("welcome");
 }
 
 Console&
@@ -160,6 +160,18 @@ Console::clear()
     needsDisplay();
 }
 
+bool
+Console::isEmpty()
+{
+    return storage.isCleared();
+}
+
+bool 
+Console::lastLineIsEmpty()
+{
+    return storage.lastLineIsEmpty();
+}
+
 void
 Console::printState()
 {
@@ -254,7 +266,7 @@ Console::press(RetroShellKey key, bool shift)
             if (tabPressed) {
 
                 // TAB was pressed twice
-                asyncExec("help \"" + input + "\"");
+                retroShell.asyncExec("help \"" + input + "\"");
 
             } else {
 
@@ -339,7 +351,8 @@ Console::pressReturn(bool shift)
     if (shift) {
 
         // Switch the interpreter
-        retroShell.switchConsole();
+        // retroShell.switchConsole();
+        retroShell.asyncExec(".");
 
     } else {
 
@@ -352,7 +365,7 @@ Console::pressReturn(bool shift)
         ipos = (isize)history.size() - 1;
 
         // Feed the command into the command queue
-        asyncExec(input);
+        retroShell.asyncExec(input);
 
         // Clear the input line
         input = "";
@@ -521,124 +534,6 @@ Command &
 Console::getRoot()
 {
     return root;
-}
-
-void
-Console::asyncExec(const string &command)
-{
-    // Feed the command into the command queue
-    commands.push_back({ 0, command});
-    emulator.put(Cmd(CMD_RSH_EXECUTE));
-}
-
-void
-Console::exec()
-{
-    SYNCHRONIZED
-
-    // Only proceed if there is anything to process
-    if (commands.empty()) return;
-
-    std::pair<isize, string> cmd;
-
-    try {
-
-        while (!commands.empty()) {
-
-            cmd = commands.front();
-            commands.erase(commands.begin());
-            exec(cmd);
-        }
-        msgQueue.put(MSG_RSH_EXEC);
-
-    } catch (ScriptInterruption &) {
-
-        msgQueue.put(MSG_RSH_WAIT);
-
-    } catch (...) {
-
-        // Remove all remaining commands
-        commands = { };
-
-        msgQueue.put(MSG_RSH_ERROR);
-    }
-
-    // Print prompt
-    *this << getPrompt();
-}
-
-void
-Console::exec(QueuedCmd cmd)
-{
-    auto line = cmd.first;
-    auto command = cmd.second;
-
-    try {
-
-        // Print the command if it comes from a script
-        if (line) *this << command << '\n';
-
-        // Call the interpreter
-        exec(command);
-
-    } catch (ScriptInterruption &) {
-
-        // Rethrow the exception
-        throw;
-
-    } catch (std::exception &err) {
-
-        // Print error message
-        describe(err, line, command);
-
-        // Rethrow the exception if the command is not prefixed with 'try'
-        if (command.rfind("try", 0)) throw;
-    }
-}
-
-void
-Console::asyncExecScript(std::stringstream &ss)
-{
-    SYNCHRONIZED
-    
-    std::string line;
-    isize nr = 1;
-
-    while (std::getline(ss, line)) {
-
-        commands.push_back({ nr++, line });
-    }
-
-    emulator.put(Cmd(CMD_RSH_EXECUTE));
-}
-
-void
-Console::asyncExecScript(const std::ifstream &fs)
-{
-    std::stringstream ss;
-    ss << fs.rdbuf();
-    asyncExecScript(ss);
-}
-
-void
-Console::asyncExecScript(const string &contents)
-{
-    std::stringstream ss;
-    ss << contents;
-    asyncExecScript(ss);
-}
-
-void
-Console::abortScript()
-{
-    {   SYNCHRONIZED
-
-        if (!commands.empty()) {
-
-            commands.clear();
-            agnus.cancel<SLOT_RSH>();
-        }
-    }
 }
 
 void

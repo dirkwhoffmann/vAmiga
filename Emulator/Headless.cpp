@@ -285,7 +285,7 @@ Headless::execScript()
     // Launch the emulator thread
     vamiga.launch(this, vamiga::process);
 
-    // Execute scripts
+    // Execute script
     barrier.lock();
     vamiga.retroShell.execScript(script);
     barrier.lock();

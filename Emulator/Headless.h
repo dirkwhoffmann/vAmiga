@@ -417,11 +417,10 @@ static const char *script[] = {
     "server gdb",
     "server gdb set PORT 8000",
     "server gdb set VERBOSE true",
-    "server gdb set VERBOSE false"
-};
+    "server gdb set VERBOSE false",
 
-/*
-static const char *debugScript[] = {
+    // Enter debugger
+    ".",
 
     "",
     "break",
@@ -531,6 +530,5 @@ static const char *debugScript[] = {
     "i host",
     "i server"
 };
-*/
 
 }

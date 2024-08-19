@@ -30,26 +30,162 @@ RetroShell::RetroShell(Amiga& ref) : SubComponent(ref)
 void
 RetroShell::_initialize()
 {
-
+    enterCommander();
 }
 
 void
 RetroShell::switchConsole() {
 
-    if (inCommandShell()) {
+    inCommandShell() ? enterDebugger() : enterCommander();
+}
 
-        current = &debugger;
-        emulator.trackOn(1);
-        msgQueue.put(MSG_RSH_DEBUGGER, true);
+void 
+RetroShell::enterDebugger()
+{
+    // Assign the new console
+    current = &debugger;
 
-    } else {
+    // Enter tracking mode
+    emulator.trackOn(1);
+    msgQueue.put(MSG_RSH_DEBUGGER, true);
+    
+    // Print the welcome message if entered the first time
+    if (current->isEmpty()) asyncExec("welcome");
+    // if (current->isEmpty()) current->welcome();
+}
 
-        current = &commander;
-        emulator.trackOff(1);
-        msgQueue.put(MSG_RSH_DEBUGGER, false);
+void
+RetroShell::enterCommander()
+{
+    // Assign the new console
+    current = &commander;
+
+    // Leave tracking mode
+    emulator.trackOff(1);
+    msgQueue.put(MSG_RSH_DEBUGGER, false);
+    
+    // Print the welcome message if entered the first time
+    if (current->isEmpty()) asyncExec("welcome");
+    // if (current->isEmpty()) current->welcome();
+}
+
+void
+RetroShell::asyncExec(const string &command)
+{
+    // Feed the command into the command queue
+    commands.push_back({ 0, command});
+    emulator.put(Cmd(CMD_RSH_EXECUTE));
+}
+
+void
+RetroShell::asyncExecScript(std::stringstream &ss)
+{
+    SYNCHRONIZED
+
+    std::string line;
+    isize nr = 1;
+
+    while (std::getline(ss, line)) {
+
+        commands.push_back({ nr++, line });
+    }
+
+    emulator.put(Cmd(CMD_RSH_EXECUTE));
+}
+
+void
+RetroShell::asyncExecScript(const std::ifstream &fs)
+{
+    std::stringstream ss;
+    ss << fs.rdbuf();
+    asyncExecScript(ss);
+}
+
+void
+RetroShell::asyncExecScript(const string &contents)
+{
+    std::stringstream ss;
+    ss << contents;
+    asyncExecScript(ss);
+}
+
+void
+RetroShell::abortScript()
+{
+    {   SYNCHRONIZED
+
+        if (!commands.empty()) {
+
+            commands.clear();
+            agnus.cancel<SLOT_RSH>();
+        }
     }
 }
 
+void
+RetroShell::exec()
+{
+    SYNCHRONIZED
+
+    // Only proceed if there is anything to process
+    if (commands.empty()) return;
+
+    std::pair<isize, string> cmd;
+
+    try {
+
+        while (!commands.empty()) {
+
+            cmd = commands.front();
+            commands.erase(commands.begin());
+            exec(cmd);
+        }
+        msgQueue.put(MSG_RSH_EXEC);
+
+    } catch (ScriptInterruption &) {
+
+        msgQueue.put(MSG_RSH_WAIT);
+
+    } catch (...) {
+
+        // Remove all remaining commands
+        commands = { };
+
+        msgQueue.put(MSG_RSH_ERROR);
+    }
+
+    // Print prompt
+    if (current->lastLineIsEmpty()) *this << current->getPrompt();
+}
+
+void
+RetroShell::exec(QueuedCmd cmd)
+{
+    auto line = cmd.first;
+    auto command = cmd.second;
+
+    try {
+
+        // Print the command if it comes from a script
+        if (line) *this << command << '\n';
+
+        // Call the interpreter
+        current->exec(command);
+
+    } catch (ScriptInterruption &) {
+
+        // Rethrow the exception
+        throw;
+
+    } catch (std::exception &err) {
+
+        // Print error message
+        current->describe(err, line, command);
+
+        // Rethrow the exception if the command is not prefixed with 'try'
+        if (command.rfind("try", 0)) throw;
+    }
+}
 
 RetroShell &
 RetroShell::operator<<(char value)
@@ -147,41 +283,33 @@ RetroShell::press(const string &s)
 void
 RetroShell::setStream(std::ostream &os)
 {
-    current->setStream(os);
-}
-
-void
-RetroShell::exec()
-{
-    // Only proceed of the shell does not process a 'wait' command
-    if (agnus.hasEvent<SLOT_RSH>()) return;
-    
-    commander.exec();
-    debugger.exec();
+    // current->setStream(os);
+    commander.setStream(os);
+    debugger.setStream(os);
 }
 
 void
 RetroShell::exec(const string &command)
 {
-    current->asyncExec(command);
+    asyncExec(command);
 }
 
 void
 RetroShell::execScript(std::stringstream &ss)
 {
-    current->asyncExecScript(ss);
+    asyncExecScript(ss);
 }
 
 void
 RetroShell::execScript(const std::ifstream &fs)
 {
-    current->asyncExecScript(fs);
+    asyncExecScript(fs);
 }
 
 void
 RetroShell::execScript(const string &contents)
 {
-    current->asyncExecScript(contents);
+    asyncExecScript(contents);
 }
 
 void

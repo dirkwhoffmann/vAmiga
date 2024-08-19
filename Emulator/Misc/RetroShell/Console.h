@@ -35,6 +35,7 @@ struct ScriptInterruption: util::Exception {
 
 class Console : public SubComponent {
 
+    friend class RetroShell;
     friend class RshServer;
     friend class Interpreter;
 
@@ -87,9 +88,6 @@ protected:
 
     // Input line
     string input;
-
-    // Command queue (stores all pending commands)
-    std::vector<QueuedCmd> commands;
 
     // Cursor position
     isize cursor = 0;
@@ -183,6 +181,12 @@ protected:
 
     // Clears the console window
     void clear();
+
+    // Returns true if the console is cleared
+    bool isEmpty();
+
+    // Returns true if the last line contains no text
+    bool lastLineIsEmpty();
 
     // Prints the welcome message
     virtual void welcome() = 0;
@@ -281,31 +285,6 @@ public:
 
     // Returns the root node of the currently active instruction tree
     Command &getRoot();
-
-
-    //
-    // Executing commands
-    //
-
-public:
-
-    // Adds a command to the list of pending commands
-    void asyncExec(const string &command);
-
-    // Adds the commands of a shell script to the list of pending commands
-    void asyncExecScript(std::stringstream &ss) throws;
-    void asyncExecScript(const std::ifstream &fs) throws;
-    void asyncExecScript(const string &contents) throws;
-    // void asyncExecScript(const class MediaFile &script) throws;
-
-    // Aborts the execution of a script
-    void abortScript();
-
-    // Executes all pending commands
-    void exec() throws;
-
-    // Executes a single pending command
-    void exec(QueuedCmd cmd) throws;
 
 protected:
 

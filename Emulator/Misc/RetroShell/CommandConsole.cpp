@@ -135,7 +135,7 @@ Console::initCommands(Command &root)
 
             auto stream = std::ifstream(argv.front());
             if (!stream.is_open()) throw Error(ERROR_FILE_NOT_FOUND, argv.front());
-            asyncExecScript(stream);
+            retroShell.asyncExecScript(stream);
         });
 
         root.add({"wait"}, {Arg::value, Arg::seconds},

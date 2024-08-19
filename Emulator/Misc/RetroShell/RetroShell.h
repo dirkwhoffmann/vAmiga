@@ -62,6 +62,9 @@ public:
 
 private:
     
+    // Command queue (stores all pending commands)
+    std::vector<QueuedCmd> commands;
+
     // The currently active console
     Console *current = &commander;
 
@@ -116,7 +119,33 @@ public:
     //
 
     void switchConsole();
+    void enterDebugger();
+    void enterCommander();
 
+
+    //
+    // Executing commands
+    //
+
+public:
+
+    // Adds a command to the list of pending commands
+    void asyncExec(const string &command);
+
+    // Adds the commands of a shell script to the list of pending commands
+    void asyncExecScript(std::stringstream &ss) throws;
+    void asyncExecScript(const std::ifstream &fs) throws;
+    void asyncExecScript(const string &contents) throws;
+    
+    // Aborts the execution of a script
+    void abortScript();
+    
+    // Executes all pending commands
+    void exec() throws;
+
+    // Executes a single pending command
+    void exec(QueuedCmd cmd) throws;
+    
 
     //
     // Bridge functions
@@ -138,7 +167,6 @@ public:
     void press(char c);
     void press(const string &s);
     void setStream(std::ostream &os);
-    void exec();
     void exec(const string &command);
     void execScript(std::stringstream &ss);
     void execScript(const std::ifstream &fs);
