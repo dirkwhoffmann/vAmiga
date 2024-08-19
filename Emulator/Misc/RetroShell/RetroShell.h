@@ -130,18 +130,21 @@ public:
 public:
 
     // Adds a command to the list of pending commands
-    void asyncExec(const string &command);
+    void asyncExec(const string &command, bool append = true);
 
     // Adds the commands of a shell script to the list of pending commands
-    void asyncExecScript(std::stringstream &ss) throws;
-    void asyncExecScript(const std::ifstream &fs) throws;
-    void asyncExecScript(const string &contents) throws;
-    
+    void asyncExecScript(std::stringstream &ss);
+    void asyncExecScript(const std::ifstream &fs);
+    void asyncExecScript(const string &contents);
+    void asyncExecScript(const class MediaFile &script) throws;
+
     // Aborts the execution of a script
     void abortScript();
     
     // Executes all pending commands
     void exec() throws;
+
+private:
 
     // Executes a single pending command
     void exec(QueuedCmd cmd) throws;
@@ -151,6 +154,8 @@ public:
     // Bridge functions
     //
 
+public:
+    
     RetroShell &operator<<(char value);
     RetroShell &operator<<(const string &value);
     RetroShell &operator<<(int value);
@@ -167,11 +172,12 @@ public:
     void press(char c);
     void press(const string &s);
     void setStream(std::ostream &os);
+    /*
     void exec(const string &command);
     void execScript(std::stringstream &ss);
     void execScript(const std::ifstream &fs);
     void execScript(const string &contents);
-    void execScript(const class MediaFile &script);
+     */
 
     void serviceEvent();
 };

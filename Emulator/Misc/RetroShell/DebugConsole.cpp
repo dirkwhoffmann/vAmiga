@@ -483,7 +483,7 @@ DebugConsole::initCommands(Command &root)
                          "Inspects the internal state",
                          [this](Arguments& argv, long value) {
 
-                    dump(amiga, { Category::Config, Category::State } );
+                    dump(amiga, Category::State );
                 });
             }
 
@@ -495,7 +495,7 @@ DebugConsole::initCommands(Command &root)
                          "Inspects the internal state",
                          [this](Arguments& argv, long value) {
 
-                    dump(mem, { Category::Config, Category::State } );
+                    dump(mem, Category::State );
                 });
 
                 root.add({"i", "memory", "bankmap"},
@@ -514,7 +514,7 @@ DebugConsole::initCommands(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    dump(cpu, { Category::Config, Category::State } );
+                    dump(cpu, Category::State );
                 });
             }
 
@@ -530,9 +530,9 @@ DebugConsole::initCommands(Command &root)
                              [this](Arguments& argv, long value) {
 
                         if (value == 0) {
-                            dump(ciaa, { Category::Config, Category::State } );
+                            dump(ciaa, Category::State );
                         } else {
-                            dump(ciab, { Category::Config, Category::State } );
+                            dump(ciab, Category::State );
                         }
                     }, i);
 
@@ -557,7 +557,7 @@ DebugConsole::initCommands(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    dump(agnus, { Category::Config, Category::State } );
+                    dump(agnus, Category::State );
                 });
 
                 root.add({"i", "agnus", "beam"},
@@ -597,7 +597,7 @@ DebugConsole::initCommands(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    dump(blitter, { Category::Config, Category::State } );
+                    dump(blitter, Category::State );
                 });
             }
 
@@ -609,7 +609,7 @@ DebugConsole::initCommands(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    dump(copper, { Category::Config, Category::State } );
+                    dump(copper, Category::State );
                 });
 
                 root.add({"i", "copper", "list"}, { Arg::value },
@@ -646,21 +646,21 @@ DebugConsole::initCommands(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    dump(audioPort, { Category::Config, Category::State } );
+                    dump(audioPort, Category::State );
                 });
 
                 root.add({"i", "paula", "audio", "filter"},
                          "Inspect the internal filter state",
                          [this](Arguments& argv, long value) {
 
-                    dump(audioPort.filter, { Category::Config, Category::State } );
+                    dump(audioPort.filter, Category::State );
                 });
 
                 root.add({"i", "paula", "dc", ""},
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    dump(diskController, { Category::Config, Category::State } );
+                    dump(diskController, Category::State );
                 });
 
                 root.add({"i", "paula", "uart", ""},
@@ -679,7 +679,7 @@ DebugConsole::initCommands(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    dump(denise, { Category::Config, Category::State } );
+                    dump(denise, Category::State );
                 });
             }
 
@@ -691,7 +691,7 @@ DebugConsole::initCommands(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    dump(rtc, { Category::Config, Category::State } );
+                    dump(rtc, Category::State );
                 });
             }
 
@@ -749,7 +749,7 @@ DebugConsole::initCommands(Command &root)
                          "Display the internal state",
                          [this](Arguments& argv, long value) {
 
-                    dump(serialPort, { Category::Config, Category::State } );
+                    dump(serialPort, Category::State );
                 });
             }
         }
@@ -763,7 +763,7 @@ DebugConsole::initCommands(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    dump(keyboard, { Category::Config, Category::State } );
+                    dump(keyboard, Category::State );
                 });
             }
 
@@ -782,8 +782,8 @@ DebugConsole::initCommands(Command &root)
                              "Inspect the internal state",
                              [this](Arguments& argv, long value) {
 
-                        if (value == 1) dump(controlPort1.mouse, { Category::Config, Category::State } );
-                        if (value == 2) dump(controlPort2.mouse, { Category::Config, Category::State } );
+                        if (value == 1) dump(controlPort1.mouse, Category::State );
+                        if (value == 2) dump(controlPort2.mouse, Category::State );
 
                     }, i);
                 }
@@ -827,7 +827,7 @@ DebugConsole::initCommands(Command &root)
                              "Inspect the internal state",
                              [this](Arguments& argv, long value) {
 
-                        dump(*amiga.df[value], { Category::Config, Category::State } );
+                        dump(*amiga.df[value], Category::State );
 
                     }, i);
 
@@ -857,7 +857,7 @@ DebugConsole::initCommands(Command &root)
                              "Inspect the internal state",
                              [this](Arguments& argv, long value) {
 
-                        dump(*amiga.hd[value], { Category::Config, Category::State } );
+                        dump(*amiga.hd[value], Category::State );
 
                     }, i);
 
@@ -919,7 +919,7 @@ DebugConsole::initCommands(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    dump(remoteManager.serServer, { Category::Config, Category::State } );
+                    dump(remoteManager.serServer, Category::State );
                 });
 
                 root.add({"i", "server", "rshell"},
@@ -929,7 +929,7 @@ DebugConsole::initCommands(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    dump(remoteManager.rshServer, { Category::Config, Category::State } );
+                    dump(remoteManager.rshServer, Category::State );
                 });
 
                 root.add({"i", "server", "gdb"},
@@ -939,7 +939,7 @@ DebugConsole::initCommands(Command &root)
                          "Inspect the internal state",
                          [this](Arguments& argv, long value) {
 
-                    dump(remoteManager.gdbServer, { Category::Config, Category::State } );
+                    dump(remoteManager.gdbServer, Category::State );
                 });
             }
         }

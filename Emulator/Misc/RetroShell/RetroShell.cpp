@@ -50,8 +50,7 @@ RetroShell::enterDebugger()
     msgQueue.put(MSG_RSH_DEBUGGER, true);
     
     // Print the welcome message if entered the first time
-    if (current->isEmpty()) asyncExec("welcome");
-    // if (current->isEmpty()) current->welcome();
+    if (current->isEmpty()) asyncExec("welcome", false);
 }
 
 void
@@ -65,15 +64,20 @@ RetroShell::enterCommander()
     msgQueue.put(MSG_RSH_DEBUGGER, false);
     
     // Print the welcome message if entered the first time
-    if (current->isEmpty()) asyncExec("welcome");
-    // if (current->isEmpty()) current->welcome();
+    if (current->isEmpty()) asyncExec("welcome", false);
 }
 
 void
-RetroShell::asyncExec(const string &command)
+RetroShell::asyncExec(const string &command, bool append)
 {
     // Feed the command into the command queue
-    commands.push_back({ 0, command});
+    if (append) {
+        commands.push_back({ 0, command});
+    } else {
+        commands.insert(commands.begin(), { 0, command});
+    }
+
+    // Process the command queue in the next update cycle
     emulator.put(Cmd(CMD_RSH_EXECUTE));
 }
 
@@ -107,6 +111,25 @@ RetroShell::asyncExecScript(const string &contents)
     std::stringstream ss;
     ss << contents;
     asyncExecScript(ss);
+}
+
+void
+RetroShell::asyncExecScript(const MediaFile &file)
+{
+    string s;
+
+    switch (file.type()) {
+
+        case FILETYPE_SCRIPT:
+
+            s = string((char *)file.getData(), file.getSize());
+            asyncExecScript(s);
+            break;
+
+        default:
+
+            throw Error(ERROR_FILE_TYPE_MISMATCH);
+    }
 }
 
 void
@@ -283,52 +306,8 @@ RetroShell::press(const string &s)
 void
 RetroShell::setStream(std::ostream &os)
 {
-    // current->setStream(os);
     commander.setStream(os);
     debugger.setStream(os);
-}
-
-void
-RetroShell::exec(const string &command)
-{
-    asyncExec(command);
-}
-
-void
-RetroShell::execScript(std::stringstream &ss)
-{
-    asyncExecScript(ss);
-}
-
-void
-RetroShell::execScript(const std::ifstream &fs)
-{
-    asyncExecScript(fs);
-}
-
-void
-RetroShell::execScript(const string &contents)
-{
-    asyncExecScript(contents);
-}
-
-void
-RetroShell::execScript(const MediaFile &file)
-{
-    string s;
-
-    switch (file.type()) {
-
-        case FILETYPE_SCRIPT:
-
-            s = string((char *)file.getData(), file.getSize());
-            try { execScript(s); } catch (util::Exception &) { }
-            break;
-            
-        default:
-
-            throw Error(ERROR_FILE_TYPE_MISMATCH);
-    }
 }
 
 void
