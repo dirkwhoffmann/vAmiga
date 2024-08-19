@@ -475,7 +475,7 @@ DebugConsole::initCommands(Command &root)
 
         {   VAMIGA_GROUP("Components");
 
-            root.add({"i", "amiga"},         "Main computer");
+            root.add({"i", "amiga"}, "Main computer");
 
             {   VAMIGA_GROUP("")
 
@@ -487,7 +487,7 @@ DebugConsole::initCommands(Command &root)
                 });
             }
 
-            root.add({"i", "memory"},        "RAM and ROM");
+            root.add({"i", "memory"}, "RAM and ROM");
 
             {   VAMIGA_GROUP("")
 
@@ -506,7 +506,7 @@ DebugConsole::initCommands(Command &root)
                 });
             }
 
-            root.add({"i", "cpu"},           "Motorola CPU");
+            root.add({"i", "cpu"}, "Motorola CPU");
 
             {   VAMIGA_GROUP("")
 
@@ -521,7 +521,7 @@ DebugConsole::initCommands(Command &root)
             for (isize i = 0; i < 2; i++) {
 
                 string cia = (i == 0) ? "ciaa" : "ciab";
-                root.add({"i", cia},          "Complex Interface Adapter");
+                root.add({"i", cia}, "Complex Interface Adapter");
 
                 {   VAMIGA_GROUP("")
 
@@ -549,7 +549,7 @@ DebugConsole::initCommands(Command &root)
                 }
             }
 
-            root.add({"i", "agnus"},         "Custom Chipset");
+            root.add({"i", "agnus"}, "Custom Chipset");
 
             {   VAMIGA_GROUP("")
 
@@ -589,7 +589,7 @@ DebugConsole::initCommands(Command &root)
                 });
             }
 
-            root.add({"i", "blitter"},       "Coprocessor");
+            root.add({"i", "blitter"}, "Coprocessor");
 
             {   VAMIGA_GROUP("")
 
@@ -601,7 +601,7 @@ DebugConsole::initCommands(Command &root)
                 });
             }
 
-            root.add({"i", "copper"},        "Coprocessor");
+            root.add({"i", "copper"}, "Coprocessor");
 
             {   VAMIGA_GROUP("")
 
@@ -629,7 +629,7 @@ DebugConsole::initCommands(Command &root)
                 });
             }
 
-            root.add({"i", "paula"},         "Ports, Audio, Interrupts");
+            root.add({"i", "paula"}, "Ports, Audio, Interrupts");
 
             {   VAMIGA_GROUP("")
 
@@ -671,7 +671,7 @@ DebugConsole::initCommands(Command &root)
                 });
             }
 
-            root.add({"i", "denise"},        "Graphics");
+            root.add({"i", "denise"}, "Graphics");
 
             {   VAMIGA_GROUP("")
 
@@ -683,7 +683,7 @@ DebugConsole::initCommands(Command &root)
                 });
             }
 
-            root.add({"i", "rtc"},           "Real-time clock");
+            root.add({"i", "rtc"}, "Real-time clock");
 
             {   VAMIGA_GROUP("")
 
@@ -695,7 +695,7 @@ DebugConsole::initCommands(Command &root)
                 });
             }
 
-            root.add({"i", "zorro"},         "Expansion boards");
+            root.add({"i", "zorro"}, "Expansion boards");
 
             {   VAMIGA_GROUP("")
 
@@ -719,7 +719,7 @@ DebugConsole::initCommands(Command &root)
                 });
             }
 
-            root.add({"i", "controlport"},   "Control ports");
+            root.add({"i", "controlport"}, "Control ports");
 
             {   VAMIGA_GROUP("")
 
@@ -741,7 +741,7 @@ DebugConsole::initCommands(Command &root)
                 }
             }
 
-            root.add({"i", "serial"},        "Serial port");
+            root.add({"i", "serial"}, "Serial port");
 
             {   VAMIGA_GROUP("")
 
@@ -755,7 +755,7 @@ DebugConsole::initCommands(Command &root)
         }
         {   VAMIGA_GROUP("Peripherals")
 
-            root.add({"i", "keyboard"},      "Keyboard");
+            root.add({"i", "keyboard"}, "Keyboard");
 
             {   VAMIGA_GROUP("")
 
@@ -767,7 +767,7 @@ DebugConsole::initCommands(Command &root)
                 });
             }
 
-            root.add({"i", "mouse"},         "Mouse");
+            root.add({"i", "mouse"}, "Mouse");
 
             {   VAMIGA_GROUP("")
 
@@ -789,7 +789,7 @@ DebugConsole::initCommands(Command &root)
                 }
             }
 
-            root.add({"i", "joystick"},      "Joystick");
+            root.add({"i", "joystick"}, "Joystick");
 
             {   VAMIGA_GROUP("")
 
@@ -889,7 +889,7 @@ DebugConsole::initCommands(Command &root)
         }
         {   VAMIGA_GROUP("Miscellaneous")
 
-            root.add({"i", "host"},          "Host machine");
+            root.add({"i", "host"}, "Host machine");
 
             {   VAMIGA_GROUP("")
 
@@ -901,7 +901,7 @@ DebugConsole::initCommands(Command &root)
                 });
             }
 
-            root.add({"i", "server"},        "Remote server");
+            root.add({"i", "server"}, "Remote server");
 
             {   VAMIGA_GROUP("")
 
