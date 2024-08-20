@@ -21,7 +21,7 @@ class PixelEngine : public SubComponent {
 
     Descriptions descriptions = {{
 
-        .type           = COMP_PIXEL_ENGINE,
+        .type           = PixelEngineClass,
         .name           = "PixelEngine",
         .description    = "Pixel Engine",
         .shell          = "monitor"

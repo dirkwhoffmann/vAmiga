@@ -114,13 +114,13 @@ class AudioFilter : public SubComponent {
     Descriptions descriptions = {
 
         {
-            .type           = COMP_AUDIO_FILTER,
+            .type           = AudioFilterClass,
             .name           = "AudioFilter",
             .description    = "Audio Filter",
             .shell          = "filter"
         },
         {
-            .type           = COMP_AUDIO_FILTER,
+            .type           = AudioFilterClass,
             .name           = "RecAudioFilter",
             .description    = "Audio Filter (Recorder)",
             .shell          = ""

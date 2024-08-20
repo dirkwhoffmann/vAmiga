@@ -41,13 +41,13 @@ class Console : public SubComponent {
 
     Descriptions descriptions = {
         {
-            .type           = COMP_CONSOLE,
+            .type           = ConsoleClass,
             .name           = "CmdConsole",
             .description    = "Command shell",
             .shell          = ""
         },
         {
-            .type           = COMP_CONSOLE,
+            .type           = ConsoleClass,
             .name           = "DbgConsole",
             .description    = "Debug shell",
             .shell          = ""

@@ -22,6 +22,7 @@ class Host : public SubComponent {
 
     Descriptions descriptions = {{
 
+        .type           = HostClass,
         .name           = "Host",
         .description    = "Host Computer",
         .shell          = "host"

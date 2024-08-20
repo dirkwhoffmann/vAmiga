@@ -119,7 +119,7 @@ class Sequencer : public SubComponent
 {
     Descriptions descriptions = {{
 
-        .type           = COMP_SEQUENCER,
+        .type           = SequencerClass,
         .name           = "Sequencer",
         .description    = "Agnus Sequencer",
         .shell          = ""

@@ -20,7 +20,7 @@ class DiskController : public SubComponent, public Inspectable<DiskControllerInf
 {
     Descriptions descriptions = {{
 
-        .type           = COMP_DISK_CONTROLLER,
+        .type           = DiskControllerClass,
         .name           = "DiskController",
         .description    = "Disk Controller",
         .shell          = "paula dc"

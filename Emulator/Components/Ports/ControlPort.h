@@ -21,13 +21,13 @@ class ControlPort : public SubComponent, public Inspectable<ControlPortInfo> {
 
     Descriptions descriptions = {
         {
-            .type           = COMP_CONTROL_PORT,
+            .type           = ControlPortClass,
             .name           = "ControlPort1",
             .description    = "Control Port 1",
             .shell          = "port1"
         },
         {
-            .type           = COMP_CONTROL_PORT,
+            .type           = ControlPortClass,
             .name           = "ControlPort2",
             .description    = "Control Port 2",
             .shell          = "port2"

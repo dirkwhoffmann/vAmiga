@@ -19,7 +19,7 @@ class RegressionTester : public SubComponent {
 
     Descriptions descriptions = {{
 
-        .type           = COMP_REGRESSION_TESTER,
+        .type           = RegressionTesterClass,
         .name           = "Regression",
         .description    = "Regression Tester",
         .shell          = "regression"

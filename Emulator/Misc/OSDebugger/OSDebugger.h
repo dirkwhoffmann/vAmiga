@@ -19,7 +19,7 @@ class OSDebugger : public SubComponent {
     
     Descriptions descriptions = {{
 
-        .type           = COMP_OS_DEBUGGER,
+        .type           = OSDebuggerClass,
         .name           = "OSDebugger",
         .description    = "Operating System Debugger",
         .shell          = "os"

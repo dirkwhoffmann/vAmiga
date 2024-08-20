@@ -27,7 +27,7 @@ class SerialPort : public SubComponent, public Inspectable<SerialPortInfo> {
 
     Descriptions descriptions = {{
 
-        .type           = COMP_SERIAL_PORT,
+        .type           = SerialPortClass,
         .name           = "SerialPort",
         .description    = "Serial Port",
         .shell          = "serial"

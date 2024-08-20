@@ -19,7 +19,7 @@ class VideoPort final : public SubComponent, public Inspectable<VideoPortInfo, V
 
     Descriptions descriptions = {{
 
-        .type           = COMP_VIDEO_PORT,
+        .type           = VideoPortClass,
         .name           = "Video",
         .description    = "Video Port",
         .shell          = "video"

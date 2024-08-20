@@ -24,7 +24,7 @@ class Recorder : public SubComponent {
 
     Descriptions descriptions = {{
 
-        .type           = COMP_RECORDER,
+        .type           = RecorderClass,
         .name           = "Recorder",
         .description    = "Video Recorder",
         .shell          = ""

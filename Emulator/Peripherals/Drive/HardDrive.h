@@ -22,21 +22,25 @@ class HardDrive : public Drive, public Inspectable<HardDriveInfo> {
     
     Descriptions descriptions = {
         {
+            .type           = HardDriveClass,
             .name           = "HardDrive0",
             .description    = "Hard Drive 0",
             .shell          = "hd0"
         },
         {
+            .type           = HardDriveClass,
             .name           = "HardDrive1",
             .description    = "Hard Drive 1",
             .shell          = "hd1"
         },
         {
+            .type           = HardDriveClass,
             .name           = "HardDrive2",
             .description    = "Hard Drive 2",
             .shell          = "hd2"
         },
         {
+            .type           = HardDriveClass,
             .name           = "HardDrive3",
             .description    = "Hard Drive 3",
             .shell          = "hd3"

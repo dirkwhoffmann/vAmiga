@@ -23,7 +23,6 @@ class RemoteServer : public SubComponent {
 
     Descriptions descriptions = {{
 
-        .type           = COMP_REMOTE_SERVER,
         .name           = "RemoteServer",
         .description    = "Remote Server",
         .shell          = ""

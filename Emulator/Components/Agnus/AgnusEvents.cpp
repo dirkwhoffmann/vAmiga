@@ -756,18 +756,18 @@ Agnus::serviceINSEvent()
     u64 mask = data[SLOT_INS];
 
     // Analyze bit mask
-    if (mask & 1LL << COMP_AGNUS)           { agnus.record(); }
-    if (mask & 1LL << COMP_AMIGA)           { amiga.record(); }
-    if (mask & 1LL << COMP_BLITTER)         { blitter.record(); }
-    if (mask & 1LL << COMP_COPPER)          { copper.record(); }
-    if (mask & 1LL << COMP_CIA)             { ciaa.record(); ciab.record(); }
-    if (mask & 1LL << COMP_CPU)             { cpu.record(); }
-    if (mask & 1LL << COMP_DENISE)          { denise.record(); }
-    if (mask & 1LL << COMP_MEM)             { mem.record(); }
-    if (mask & 1LL << COMP_PAULA)           { paula.record(); }
-    if (mask & 1LL << COMP_UART)            { uart.record(); }
-    if (mask & 1LL << COMP_CONTROL_PORT)    { controlPort1.record(); controlPort2.record(); }
-    if (mask & 1LL << COMP_SERIAL_PORT)     { serialPort.record(); }
+    if (mask & 1LL << AgnusClass)           { agnus.record(); }
+    if (mask & 1LL << AmigaClass)           { amiga.record(); }
+    if (mask & 1LL << BlitterClass)         { blitter.record(); }
+    if (mask & 1LL << CopperClass)          { copper.record(); }
+    if (mask & 1LL << CIAClass)             { ciaa.record(); ciab.record(); }
+    if (mask & 1LL << CPUClass)             { cpu.record(); }
+    if (mask & 1LL << DeniseClass)          { denise.record(); }
+    if (mask & 1LL << MemoryClass)             { mem.record(); }
+    if (mask & 1LL << PaulaClass)           { paula.record(); }
+    if (mask & 1LL << UARTClass)            { uart.record(); }
+    if (mask & 1LL << ControlPortClass)    { controlPort1.record(); controlPort2.record(); }
+    if (mask & 1LL << SerialPortClass)     { serialPort.record(); }
 
     // Reschedule the event
     rescheduleRel<SLOT_INS>((Cycle)(inspectionInterval * 28000007));

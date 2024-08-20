@@ -18,6 +18,7 @@ class MemoryDebugger final : public SubComponent
 {
     Descriptions descriptions = {{
 
+        .type           = MemoryDebuggerClass,
         .name           = "MemoryDebugger",
         .description    = "Memory Debugger",
         .shell          = ""

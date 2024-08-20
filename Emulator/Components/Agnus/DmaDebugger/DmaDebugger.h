@@ -22,7 +22,7 @@ class DmaDebugger : public SubComponent, public Inspectable<DmaDebuggerInfo> {
 
     Descriptions descriptions = {{
 
-        .type           = COMP_DMA_DEBUGGER,
+        .type           = DmaDebuggerClass,
         .name           = "DmaDebugger",
         .description    = "DMA Debugger",
         .shell          = "dmadebugger"

@@ -22,6 +22,7 @@ class CPU : public moira::Moira, public Inspectable<CPUInfo>
 {
     Descriptions descriptions = {{
 
+        .type           = CPUClass,
         .name           = "CPU",
         .description    = "Central Processing Unit",
         .shell          = "cpu"

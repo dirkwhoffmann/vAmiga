@@ -824,16 +824,16 @@ extension Inspector: NSTabViewDelegate {
 
             switch id {
 
-            case "CPU":     amiga.autoInspectionMask = mask([.CPU])
-            case "CIA":     amiga.autoInspectionMask = mask([.CIA])
-            case "Memory":  amiga.autoInspectionMask = mask([.MEM])
-            case "Agnus":   amiga.autoInspectionMask = mask([.AGNUS])
-            case "Copper":  amiga.autoInspectionMask = mask([.COPPER])
-            case "Blitter": amiga.autoInspectionMask = mask([.BLITTER])
-            case "Denise":  amiga.autoInspectionMask = mask([.DENISE])
-            case "Paula":   amiga.autoInspectionMask = mask([.PAULA])
-            case "Ports":   amiga.autoInspectionMask = mask([.PAULA, .CONTROL_PORT, .SERIAL_PORT])
-            case "Events":  amiga.autoInspectionMask =  mask([.AGNUS])
+            case "CPU":     amiga.autoInspectionMask = mask([.CPUClass])
+            case "CIA":     amiga.autoInspectionMask = mask([.CIAClass])
+            case "Memory":  amiga.autoInspectionMask = mask([.MemoryClass])
+            case "Agnus":   amiga.autoInspectionMask = mask([.AgnusClass])
+            case "Copper":  amiga.autoInspectionMask = mask([.CopperClass])
+            case "Blitter": amiga.autoInspectionMask = mask([.BlitterClass])
+            case "Denise":  amiga.autoInspectionMask = mask([.DeniseClass])
+            case "Paula":   amiga.autoInspectionMask = mask([.PaulaClass])
+            case "Ports":   amiga.autoInspectionMask = mask([.PaulaClass, .ControlPortClass, .SerialPortClass])
+            case "Events":  amiga.autoInspectionMask =  mask([.AgnusClass])
             default:        break
             }
             

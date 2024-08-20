@@ -21,7 +21,7 @@ class Keyboard : public SubComponent {
 
     Descriptions descriptions = {{
 
-        .type           = COMP_KEYBOARD,
+        .type           = KeyboardClass,
         .name           = "Keyboard",
         .description    = "Keyboard",
         .shell          = "keyboard"

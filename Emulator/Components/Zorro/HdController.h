@@ -20,21 +20,25 @@ class HdController : public ZorroBoard, public Inspectable<HdcInfo, HdcStats> {
 
     Descriptions descriptions = {
         {
+            .type           = HdControllerClass,
             .name           = "HdController0",
             .description    = "Hard Drive Controller 0",
             .shell          = ""
         },
         {
+            .type           = HdControllerClass,
             .name           = "HdController1",
             .description    = "Hard Drive Controller 1",
             .shell          = ""
         },
         {
+            .type           = HdControllerClass,
             .name           = "HdController2",
             .description    = "Hard Drive Controller 2",
             .shell          = ""
         },
         {
+            .type           = HdControllerClass,
             .name           = "HdController3",
             .description    = "Hard Drive Controller 3",
             .shell          = ""
