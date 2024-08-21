@@ -10,12 +10,10 @@
 #pragma once
 
 #include "RetroShellTypes.h"
+#include "SubComponent.h"
 #include "Command.h"
 #include "Parser.h"
-#include "SubComponent.h"
 #include "TextStorage.h"
-#include <sstream>
-#include <fstream>
 
 namespace vamiga {
 
@@ -133,7 +131,6 @@ protected:
 
     void _dump(Category category, std::ostream& os) const override { }
     void _initialize() override;
-    // void _pause() override;
 
 
     //
@@ -283,8 +280,8 @@ protected:
 
 public:
 
-    // Returns the root node of the currently active instruction tree
-    Command &getRoot();
+    // Returns the root node of the instruction tree
+    Command &getRoot() { return root; }
 
 protected:
 

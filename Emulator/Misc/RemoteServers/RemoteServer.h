@@ -27,9 +27,9 @@ class RemoteServer : public SubComponent {
         .description    = "Serial Port Server",
         .shell          = "server serial"
     }, {
-        .name           = "RemoteServer",
-        .description    = "Remote Server",
-        .shell          = ""
+        .name           = "RshServer",
+        .description    = "Remote Shell Server",
+        .shell          = "server rshell"
     }, {
         .name           = "GdbServer",
         .description    = "GDB Remote Server",

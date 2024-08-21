@@ -28,9 +28,6 @@ Console::_initialize()
 
     // Initialize the input buffer
     history.push_back( { "", 0 } );
-
-    // Print the startup message and the input prompt
-    // retroShell.asyncExec("welcome");
 }
 
 Console&
@@ -528,12 +525,6 @@ string
 Console::parseSeq(const string &argv, const string &fallback)
 {
     try { return parseSeq(argv); } catch(...) { return fallback; }
-}
-
-Command &
-Console::getRoot()
-{
-    return root;
 }
 
 void

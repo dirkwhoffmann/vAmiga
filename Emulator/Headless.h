@@ -9,14 +9,13 @@
 
 #pragma once
 
-#include "config.h"
+// #include "config.h"
 #include "VAmiga.h"
-#include "Emulator.h"
-#include "Amiga.h"
-#include "Media.h"
-
-using std::map;
-using std::vector;
+#include "Concurrency.h"
+#include <map>
+// #include "Emulator.h"
+// #include "Amiga.h"
+// #include "Media.h"
 
 namespace vamiga {
 
@@ -24,12 +23,13 @@ struct SyntaxError : public std::runtime_error {
     using runtime_error::runtime_error;
 };
 
+// The message listener
 void process(const void *listener, Message msg);
 
 class Headless {
 
     // Parsed command line arguments
-    map<string,string> keys;
+    std::map<string,string> keys;
 
     // Barrier for syncing script execution
     util::Mutex barrier;

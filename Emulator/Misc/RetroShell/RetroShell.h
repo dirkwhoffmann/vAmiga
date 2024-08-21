@@ -37,7 +37,7 @@ namespace vamiga {
 class RetroShell : public SubComponent {
 
     friend class RshServer;
-    friend class Interpreter;
+    // friend class Interpreter;
 
     Descriptions descriptions = {{
 
@@ -172,13 +172,7 @@ public:
     void press(char c);
     void press(const string &s);
     void setStream(std::ostream &os);
-    /*
-    void exec(const string &command);
-    void execScript(std::stringstream &ss);
-    void execScript(const std::ifstream &fs);
-    void execScript(const string &contents);
-     */
-
+ 
     void serviceEvent();
 };
 

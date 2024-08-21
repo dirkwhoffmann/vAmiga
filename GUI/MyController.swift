@@ -420,11 +420,6 @@ extension MyController {
             NSSound.beep()
             renderer.console.isDirty = true
 
-            /*
-        case .SCRIPT_DONE, .SCRIPT_ABORT:
-            renderer.console.isDirty = true
-             */
-
         case .SHUTDOWN:
             shutDown()
             

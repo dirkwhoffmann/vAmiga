@@ -279,7 +279,7 @@ Thread::pause()
 void
 Thread::halt()
 {
-    if (state != STATE_HALTED) {
+    if (state != STATE_UNINIT && state != STATE_HALTED) {
 
         debug(RUN_DEBUG, "Switching to HALT state...\n");
         changeStateTo(STATE_HALTED);

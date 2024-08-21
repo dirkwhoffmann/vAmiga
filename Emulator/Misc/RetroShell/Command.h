@@ -10,7 +10,6 @@
 #pragma once
 
 #include "Types.h"
-#include "BasicTypes.h"
 #include <functional>
 #include <vector>
 #include <stack>
@@ -45,13 +44,7 @@ static const std::string string     = "<string>";
 
 struct Command {
 
-    // Textual descriptions of all command groups
-    // static std::vector<string> groups;
-
-    // Group stack
-    // static std::stack<isize> groupStack;
-
-    //
+    // Used during command registration
     static string currentGroup;
 
     // Group of this command
@@ -149,15 +142,5 @@ struct Command {
     // Returns a syntax string for this command
     string usage() const;
 };
-
-/*
-struct CommandGroup {
-
-    Command &root;
-
-    CommandGroup(Command &root, const string &group) : root(root) { root.pushGroup(group); }
-    ~CommandGroup() { root.popGroup(); }
-};
-*/
 
 }

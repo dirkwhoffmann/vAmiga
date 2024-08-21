@@ -9,6 +9,7 @@
 
 #include "config.h"
 #include "Headless.h"
+#include "Amiga.h"
 #include "Script.h"
 #include <filesystem>
 #include <chrono>
@@ -41,13 +42,13 @@ int main(int argc, char *argv[])
 
     } catch (vamiga::Error &e) {
 
-        std::cout << "Error: " << std::endl;
+        std::cout << "VAError: " << std::endl;
         std::cout << e.what() << std::endl;
         return 1;
         
     } catch (std::exception &e) {
 
-        std::cout << "Error: " << std::endl;
+        std::cout << "System Error: " << std::endl;
         std::cout << e.what() << std::endl;
         return 1;
     
