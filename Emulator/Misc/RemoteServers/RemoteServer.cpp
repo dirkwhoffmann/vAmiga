@@ -19,7 +19,7 @@
 
 namespace vamiga {
 
-RemoteServer::RemoteServer(Amiga& ref) : SubComponent(ref)
+RemoteServer::RemoteServer(Amiga& ref, isize objid) : SubComponent(ref, objid)
 {
 
 }

@@ -785,6 +785,17 @@
 
 
 //
+// RemoteManager
+//
+
+@interface RemoteManagerProxy : Proxy { }
+
+@property (readonly) RemoteManagerInfo info;
+
+@end
+
+
+//
 // RetroShell
 //
 
@@ -797,17 +808,6 @@
 - (void)pressSpecialKey:(RetroShellKey)key;
 - (void)pressSpecialKey:(RetroShellKey)key shift:(BOOL)shift;
 - (void)executeScript:(MediaFileProxy *)file;
-
-@end
-
-
-//
-// RemoteManager
-//
-
-@interface RemoteManagerProxy : Proxy { }
-
-@property (readonly) RemoteManagerInfo info;
 
 @end
 

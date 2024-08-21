@@ -1399,7 +1399,7 @@ struct RecorderAPI : public API {
 
 
 //
-// Misc (Debugger)
+// Misc (RemoteManager)
 //
 
 struct RemoteManagerAPI : public API {

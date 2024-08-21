@@ -33,9 +33,9 @@ class RemoteManager : public SubComponent, public Inspectable<RemoteManagerInfo>
 public:
     
     // The remote servers
-    SerServer serServer = SerServer(amiga);
-    RshServer rshServer = RshServer(amiga);
-    GdbServer gdbServer = GdbServer(amiga);
+    SerServer serServer = SerServer(amiga, SERVER_SER);
+    RshServer rshServer = RshServer(amiga, SERVER_RSH);
+    GdbServer gdbServer = GdbServer(amiga, SERVER_GDB);
     
     // Convenience wrapper
     std::vector <RemoteServer *> servers = {

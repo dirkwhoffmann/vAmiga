@@ -1533,6 +1533,33 @@ using namespace vamiga::moira;
 
 
 //
+// RemoteManager proxy
+//
+
+@implementation RemoteManagerProxy
+
+- (RemoteManagerAPI *)manager
+{
+    return (RemoteManagerAPI *)obj;
+}
+
++ (instancetype)make:(RemoteManagerAPI *)manager
+{
+    if (manager == nullptr) { return nil; }
+
+    RemoteManagerProxy *proxy = [[self alloc] initWith: manager];
+    return proxy;
+}
+
+- (RemoteManagerInfo)info
+{
+    return [self manager]->getInfo();
+}
+
+@end
+
+
+//
 // RetroShell proxy
 //
 
@@ -1580,32 +1607,6 @@ using namespace vamiga::moira;
 - (void)executeScript:(MediaFileProxy *)file
 {
     [self shell]->execScript(*(MediaFile *)file->obj);
-}
-
-@end
-
-//
-// RemoteManager proxy
-//
-
-@implementation RemoteManagerProxy
-
-- (RemoteManagerAPI *)manager
-{
-    return (RemoteManagerAPI *)obj;
-}
-
-+ (instancetype)make:(RemoteManagerAPI *)manager
-{
-    if (manager == nullptr) { return nil; }
-    
-    RemoteManagerProxy *proxy = [[self alloc] initWith: manager];
-    return proxy;
-}
-
-- (RemoteManagerInfo)info
-{
-    return [self manager]->getInfo();
 }
 
 @end

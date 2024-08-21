@@ -23,9 +23,17 @@ class RemoteServer : public SubComponent {
 
     Descriptions descriptions = {{
 
+        .name           = "SerServer",
+        .description    = "Serial Port Server",
+        .shell          = "server serial"
+    }, {
         .name           = "RemoteServer",
         .description    = "Remote Server",
         .shell          = ""
+    }, {
+        .name           = "GdbServer",
+        .description    = "GDB Remote Server",
+        .shell          = "server gdb"
     }};
 
     ConfigOptions options = {
@@ -62,7 +70,7 @@ protected:
     
 public:
     
-    RemoteServer(Amiga& ref);
+    RemoteServer(Amiga& ref, isize objid);
     ~RemoteServer() { shutDownServer(); }
     void shutDownServer();
     
