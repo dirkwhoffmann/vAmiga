@@ -19,7 +19,7 @@
 enum_long(SRV_STATE)
 {
     SRV_STATE_OFF,        // The server is inactive
-    SRV_STATE_STARTING,  // The server is starting up
+    SRV_STATE_STARTING,   // The server is starting up
     SRV_STATE_LISTENING,  // The server is waiting for a client to connect
     SRV_STATE_CONNECTED,  // The server is connected to a client
     SRV_STATE_STOPPING,   // The server is shutting down

@@ -29,6 +29,7 @@ extension MyController {
     func refreshStatusBar() {
         
         let running = emu.running
+        let tracking = emu.tracking
         let cpuinfo = emu.cpu.info
         let warp = emu.warping
 
@@ -61,7 +62,7 @@ extension MyController {
         cmdRightIcon.image = cmdKeyIcon(mapRight)
 
         // Remote server icon
-        debugIcon.image = emu.remoteManager.icon
+        serverIcon.image = emu.remoteManager.icon
         
         // Warp mode icon
         warpIcon.image = hourglassIcon
@@ -85,9 +86,10 @@ extension MyController {
             cylSlot3: true,
 
             haltIcon: cpuinfo.halt,
+            trackIcon: tracking,
             cmdLeftIcon: false, // mapLeft || mapRight,
             cmdRightIcon: false, // mapLeft || mapRight,
-            debugIcon: true,
+            serverIcon: true,
             muteIcon: warp || muted,
 
             warpIcon: running,
