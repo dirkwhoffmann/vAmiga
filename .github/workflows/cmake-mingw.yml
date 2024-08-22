@@ -54,5 +54,5 @@ jobs:
         cmake --build build --config ${{env.BUILD_TYPE}}
       
     - name: Test
-      working-directory: build
+      working-directory: ${{ steps.strings.outputs.build-output-dir }}
       run: ctest --verbose -C ${{env.BUILD_TYPE}}
