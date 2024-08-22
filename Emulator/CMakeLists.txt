@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 project(vAmigaCore)
 
 # Enable testing
+list(APPEND CMAKE_CTEST_ARGUMENTS "--verbose")
 enable_testing()
 
 # Specify the C++ standard
