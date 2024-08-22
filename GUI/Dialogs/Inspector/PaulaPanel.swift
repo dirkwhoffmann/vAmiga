@@ -141,7 +141,7 @@ extension Inspector {
 
         let dsksync = Int(dcInfo.dsksync)
         dskDsksync.integerValue = dsksync
-        dskDsksync.textColor = (dsksync == 0x4489) ? .textColor : .warningColor
+        dskDsksync.textColor = (dsksync == 0x4489) ? .textColor : .warning
         
         switch dcInfo.fifoCount {
         case 0: dskFifo0.stringValue = ""; fallthrough

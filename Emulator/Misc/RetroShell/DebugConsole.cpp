@@ -1188,7 +1188,7 @@ DebugConsole::initCommands(Command &root)
 
             root.add({"debug", "verbosity"}, { Arg::value },
                      "Set the verbosity level for generated debug output",
-                     [this](Arguments& argv, long value) {
+                     [](Arguments& argv, long value) {
 
                 CoreObject::verbosity = isize(util::parseNum(argv[0]));
             });

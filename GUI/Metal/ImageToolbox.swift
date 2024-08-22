@@ -148,16 +148,6 @@ extension NSColor {
         
         return (r << 8) | (g << 4) | b
     }
-    
-    static var warningColor: NSColor {
-        return NSColor(named: NSColor.Name("warningColor"))!
-    }
-    static var keyCapColor: NSColor {
-        return NSColor(named: NSColor.Name("keyCapColor"))!
-    }
-    static var keyCapColor2: NSColor {
-        return NSColor(named: NSColor.Name("keyCapColor2"))!
-    }
 }
 
 //

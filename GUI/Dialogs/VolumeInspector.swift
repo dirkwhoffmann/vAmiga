@@ -307,8 +307,8 @@ class VolumeInspector: DialogController {
             
             virus.isHidden = false
             virusInfo.stringValue = "Positive"
-            virusInfo.textColor = .warningColor
-            bootblockInfo.textColor = .warningColor
+            virusInfo.textColor = .warning
+            bootblockInfo.textColor = .warning
 
         } else {
 
@@ -487,9 +487,9 @@ extension VolumeInspector: NSTableViewDelegate {
             
             if row == selectedRow && col == selectedCol {
                 cell?.textColor = .white
-                cell?.backgroundColor = error == .OK ? .selectedContentBackgroundColor : .warningColor
+                cell?.backgroundColor = error == .OK ? .selectedContentBackgroundColor : .warning
             } else {
-                cell?.textColor = error == .OK ? .textColor : .warningColor
+                cell?.textColor = error == .OK ? .textColor : .warning
                 cell?.backgroundColor = NSColor.alternatingContentBackgroundColors[row % 2]
             }
         } else {

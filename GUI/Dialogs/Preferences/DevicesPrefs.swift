@@ -59,7 +59,7 @@ extension PreferencesController {
             devInfoBoxTitle.textColor = .secondaryLabelColor
         } else if pad?.isKnown == false {
             devInfoBoxTitle.stringValue = "This device is not known to the emulator. It may or may not work."
-            devInfoBoxTitle.textColor = .warningColor
+            devInfoBoxTitle.textColor = .warning
         } else {
             devInfoBoxTitle.stringValue = "Not connected"
             devInfoBoxTitle.textColor = .secondaryLabelColor

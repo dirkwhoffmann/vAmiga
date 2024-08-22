@@ -224,7 +224,7 @@ extension CopperTableView: NSTableViewDelegate {
             
             if tableColumn?.identifier.rawValue == "instr" {
                 if illegalInRow[row] == true {
-                    cell.textColor = .warningColor
+                    cell.textColor = .warning
                     return
                 }
             }

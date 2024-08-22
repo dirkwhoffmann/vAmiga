@@ -301,9 +301,7 @@ extension NSImage {
                  x: CGFloat, y: CGFloat, fontSize: CGFloat, tint: String) {
 
         let font = NSFont.systemFont(ofSize: fontSize)
-        let color: NSColor =
-        tint == "white" ? .keyCapColor :
-        tint == "dark" ? .keyCapColor2 : .black
+        let color: NSColor = tint == "white" ? .keyCap : tint == "dark" ? .keyCapDark : .black
 
         imprint(text: text, x: x, y: y, font: font, color: color)
     }

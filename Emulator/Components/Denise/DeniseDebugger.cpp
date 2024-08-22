@@ -155,7 +155,7 @@ DeniseDebugger::vsyncHandler()
             latchedMaxViewPort = maxViewPort;
             
             // Notify the GUI if the last message was sent a while ago
-            if (abs(agnus.clock - vpMsgSent) > MSEC(200)) {
+            if (std::abs(agnus.clock - vpMsgSent) > MSEC(200)) {
 
                 msgQueue.put(MSG_VIEWPORT, ViewportMsg {
                     i16(latchedMaxViewPort.hstrt),
