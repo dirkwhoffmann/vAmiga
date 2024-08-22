@@ -259,8 +259,7 @@ public:
 
 protected:
 
-#if false
-// #if VIRTUAL_API == true
+#if VIRTUAL_API == true
 
     // Advances the clock
     virtual void sync(int cycles) { clock += cycles; }

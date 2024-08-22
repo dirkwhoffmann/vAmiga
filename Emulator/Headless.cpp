@@ -14,10 +14,6 @@
 #include <filesystem>
 #include <chrono>
 
-#ifndef _WIN32
-#include <getopt.h>
-#endif
-
 int main(int argc, char *argv[])
 {
     try {
@@ -26,35 +22,33 @@ int main(int argc, char *argv[])
         
     } catch (vamiga::SyntaxError &e) {
         
-        std::cout << "Usage: vAmigaCore [-csvm] | { [-vm] <script> } " << std::endl;
+        std::cout << "Usage: vAmigaCore [-svm] [<script>]" << std::endl;
         std::cout << std::endl;
-        std::cout << "       -c or --check     Checks the integrity of the build" << std::endl;
         std::cout << "       -s or --size      Reports the size of certain objects" << std::endl;
         std::cout << "       -v or --verbose   Print executed script lines" << std::endl;
         std::cout << "       -m or --messages  Observe the message queue" << std::endl;
+        std::cout << "       <script>          Execute this script instead of the default" << std::endl;
         std::cout << std::endl;
         
         if (auto what = string(e.what()); !what.empty()) {
             std::cout << what << std::endl;
         }
-        
         return 1;
 
     } catch (vamiga::Error &e) {
 
-        std::cout << "VAError: " << std::endl;
-        std::cout << e.what() << std::endl;
+        std::cout << "VAError: " << e.what() << std::endl;
         return 1;
         
     } catch (std::exception &e) {
 
-        std::cout << "System Error: " << std::endl;
-        std::cout << e.what() << std::endl;
+        std::cout << "System Error: " << e.what() << std::endl;
         return 1;
     
     } catch (...) {
     
         std::cout << "Error" << std::endl;
+        return 1;
     }
     
     return 0;
@@ -83,112 +77,48 @@ Headless::main(int argc, char *argv[])
     }
 }
 
-#ifdef _WIN32
-
 void
 Headless::parseArguments(int argc, char *argv[])
 {
-    keys["check"] = "1";
-    keys["size"] = "1";
-    keys["verbose"] = "1";
-    keys["arg1"] = selfTestScript();
-}
-
-#else
-
-void
-Headless::parseArguments(int argc, char *argv[])
-{
-    static struct option long_options[] = {
-        
-        { "check",      no_argument,    NULL,   'c' },
-        { "size",       no_argument,    NULL,   's' },
-        { "verbose",    no_argument,    NULL,   'v' },
-        { "messages",   no_argument,    NULL,   'm' },
-        { NULL,         0,              NULL,    0  }
-    };
-    
-    // Don't print the default error messages
-    opterr = 0;
-    
     // Remember the execution path
     keys["exec"] = std::filesystem::absolute(argv[0]);
 
-    // Parse all options
-    while (1) {
-        
-        int arg = getopt_long(argc, argv, ":csvm", long_options, NULL);
-        if (arg == -1) break;
+    // Parse command line arguments
+    for (isize i = 1, n = 1; i < argc; i++) {
 
-        switch (arg) {
-                
-            case 'c':
-                keys["check"] = "1";
-                break;
+        auto arg = string(argv[i]);
 
-            case 's':
-                keys["size"] = "1";
-                break;
+        if (arg[0] == '-') {
 
-            case 'v':
-                keys["verbose"] = "1";
-                break;
+            if (arg == "-s" || arg == "--size")     { keys["size"] = "1"; continue; }
+            if (arg == "-v" || arg == "--verbose")  { keys["verbose"] = "1"; continue; }
+            if (arg == "-m" || arg == "--messages") { keys["messages"] = "1"; continue; }
 
-            case 'm':
-                keys["messages"] = "1";
-                break;
-
-            case ':':
-                throw SyntaxError("Missing argument for option '" +
-                                  string(argv[optind - 1]) + "'");
-                
-            default:
-                throw SyntaxError("Invalid option '" +
-                                  string(argv[optind - 1]) + "'");
+            throw SyntaxError("Invalid option '" + arg + "'");
         }
-    }
-    
-    // Parse all remaining arguments
-    auto nr = 1;
-    while (optind < argc) {
 
-        auto path = std::filesystem::path(argv[optind++]);
-        keys["arg" + std::to_string(nr++)] = std::filesystem::absolute(path).string();
+        auto path = std::filesystem::path(arg);
+        keys["arg" + std::to_string(n++)] = std::filesystem::absolute(path).string();
     }
 
     // Check for syntax errors
     checkArguments();
 
-    // Create the selftest script if needed
-    if (keys.find("check") != keys.end()) keys["arg1"] = selfTestScript();
+    // Create the selftest script if no custom script is specified
+    if (keys.find("arg1") == keys.end()) keys["arg1"] = selfTestScript();
 }
-
-#endif
 
 void
 Headless::checkArguments()
 {
-    if (keys.find("check") != keys.end() || keys.find("size") != keys.end()) {
+    // At most one file must be specified
+    if (keys.find("arg2") != keys.end()) {
+        throw SyntaxError("More than one script file is given");
+    }
 
-        // No input file must be given
-        if (keys.find("arg1") != keys.end()) {
-            throw SyntaxError("No script file must be given");
-        }
-
-    } else {
-
-        // The user needs to specify a single input file
-        if (keys.find("arg1") == keys.end()) {
-            throw SyntaxError("No script file is given");
-        }
-        if (keys.find("arg2") != keys.end()) {
-            throw SyntaxError("More than one script file is given");
-        }
-
-        // The input file must exist
-        if (!util::fileExists(keys["arg1"])) {
-            throw SyntaxError("File " + keys["arg1"] + " does not exist");
-        }
+    // The input file must exist
+    if (keys.find("arg1") != keys.end() && !util::fileExists(keys["arg1"])) {
+        throw SyntaxError("File " + keys["arg1"] + " does not exist");
     }
 }
 

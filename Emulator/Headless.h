@@ -9,13 +9,9 @@
 
 #pragma once
 
-// #include "config.h"
 #include "VAmiga.h"
 #include "Concurrency.h"
 #include <map>
-// #include "Emulator.h"
-// #include "Amiga.h"
-// #include "Media.h"
 
 namespace vamiga {
 
