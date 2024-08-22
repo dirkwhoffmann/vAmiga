@@ -102,7 +102,7 @@ class HardDiskConfigurator: DialogController {
         cylinderStepper.maxValue = .greatestFiniteMagnitude
         headStepper.maxValue = .greatestFiniteMagnitude
         sectorStepper.maxValue = .greatestFiniteMagnitude
-        warningText.textColor = .warningColor
+        warningText.textColor = .warning
 
         geometryPopup.removeAllItems()
         geometryPopup.addItem(withTitle: "Custom")

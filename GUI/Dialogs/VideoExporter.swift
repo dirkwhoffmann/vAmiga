@@ -56,7 +56,7 @@ class VideoExporter: DialogController {
         } else {
             
             text.stringValue = "Encoding error"
-            text.textColor = .warningColor
+            text.textColor = .warning
         }
         
         cancelButton.isHidden = false

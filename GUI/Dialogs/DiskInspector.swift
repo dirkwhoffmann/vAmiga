@@ -216,7 +216,7 @@ class DiskInspector: DialogController {
         if tabView.numberOfTabViewItems == 1 { return }
         
         let size = NSSize(width: 32, height: 32)
-        syncColorButton.image = NSImage(color: .warningColor, size: size)
+        syncColorButton.image = NSImage(color: .warning, size: size)
 
         // Read a whole MFM encoded track
         let mfm = drive?.readTrackBits(currentTrack) ?? ""

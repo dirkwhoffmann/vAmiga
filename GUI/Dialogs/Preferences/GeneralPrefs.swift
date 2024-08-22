@@ -38,7 +38,7 @@ extension PreferencesController {
         // Screen captures
         let hasFFmpeg = emu.recorder.hasFFmpeg
         genFFmpegPath.stringValue = emu.recorder.path
-        genFFmpegPath.textColor = hasFFmpeg ? .textColor : .warningColor
+        genFFmpegPath.textColor = hasFFmpeg ? .textColor : .warning
         genSource.selectItem(withTag: pref.captureSourceIntValue)
         genBitRate.stringValue = "\(pref.bitRate)"
         genAspectX.integerValue = pref.aspectX

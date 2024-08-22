@@ -208,7 +208,7 @@ extension InstrTableView: NSTableViewDelegate {
         let cell = cell as? NSTextFieldCell
 
         if bpInRow[row] == .enabled {
-            cell?.textColor = .warningColor
+            cell?.textColor = .warning
         } else if bpInRow[row] == .disabled {
             cell?.textColor = .disabledControlTextColor
         } else {

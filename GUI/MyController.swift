@@ -599,7 +599,7 @@ extension MyController {
             refreshStatusBar()
             
         case .RECORDING_STARTED:
-            window?.backgroundColor = .warningColor
+            window?.backgroundColor = .warning
             window?.styleMask.remove(.resizable)
             refreshStatusBar()
             
