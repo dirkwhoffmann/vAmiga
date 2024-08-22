@@ -81,7 +81,7 @@ void
 Headless::parseArguments(int argc, char *argv[])
 {
     // Remember the execution path
-    keys["exec"] = std::filesystem::absolute(argv[0]);
+    keys["exec"] = std::filesystem::absolute(std::filesystem::path(argv[0]));
 
     // Parse command line arguments
     for (isize i = 1, n = 1; i < argc; i++) {

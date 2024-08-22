@@ -42,7 +42,7 @@ template <class T, typename E> struct Reflection {
     static constexpr bool isBitField() { return T::minVal == 1; }
 
     // Checks if the provides value is inside the valid range
-    static constexpr bool isValid(isize value) { return value >= T::minVal && value <= T::maxVal; }
+    static constexpr bool isValid(auto value) { return long(value) >= T::minVal && long(value) <= T::maxVal; }
 
     // Returns the key as a C string (including the section prefix)
     static const char *rawkey(isize value) { return T::_key((E)value); }
