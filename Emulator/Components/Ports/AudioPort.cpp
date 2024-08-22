@@ -416,8 +416,8 @@ AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
         r *= volR;
 
         // Prevent hearing loss
-        assert(abs(l) < 1.0);
-        assert(abs(r) < 1.0);
+        assert(std::abs(l) < 1.0);
+        assert(std::abs(r) < 1.0);
 
         // Write sample into ringbuffer
         stream.write( SamplePair { float(l), float(r) } );
