@@ -259,14 +259,14 @@ CommandConsole::initCommands(Command &root)
                 dump(amiga, Category::Config);
             });
 
+            initSetters(root, amiga);
+
             root.add({cmd, "defaults"},
                      "Displays the user defaults storage",
                      [this](Arguments& argv, long value) {
 
                 dump(emulator, Category::Defaults);
             });
-
-            initSetters(root, amiga);
 
             root.add({cmd, "power"}, { Arg::onoff },
                      "Switches the Amiga on or off",

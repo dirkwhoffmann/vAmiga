@@ -243,8 +243,6 @@ Emulator::update()
 
     // Process all commands
     main.update(cmdQueue);
-
-
 }
 
 bool
