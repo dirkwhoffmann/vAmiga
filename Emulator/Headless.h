@@ -88,11 +88,13 @@ static const char *script[] = {
     "joshua",       // Test a hidden command
     "try joshu",    // Catch an error with 'try'
 
+#ifndef _WIN32
     "",
     "regression setup A1000_OCS_1MB",
     "regression setup A500_OCS_1MB",
     "regression setup A500_ECS_1MB",
     "regression setup A500_PLUS_1MB",
+#endif
 
     "",
     "amiga",

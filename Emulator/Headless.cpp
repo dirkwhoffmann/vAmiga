@@ -126,7 +126,7 @@ string
 Headless::selfTestScript()
 {
     auto path = std::filesystem::temp_directory_path() / "selftest.ini";
-    auto file = std::ofstream(path);
+    auto file = std::ofstream(path, std::ios::binary);
 
     for (isize i = 0; i < isizeof(script) / isizeof(const char *); i++) {
         file << script[i] << std::endl;
