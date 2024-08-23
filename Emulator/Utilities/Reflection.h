@@ -34,7 +34,7 @@
 
 namespace vamiga::util {
 
-#define assert_enum(e,v) assert(v >= e##Enum::minVal && v <= e##Enum::maxVal)
+#define assert_enum(e,v) assert(e##Enum::isValid(v))
 
 template <class T, typename E> struct Reflection {
 

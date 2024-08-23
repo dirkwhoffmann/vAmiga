@@ -157,14 +157,14 @@ Headless::process(Message msg)
         case MSG_RSH_EXEC:
 
             returnCode = 0;
-            barrier.unlock();
+            wakeUp();
             break;
 
         case MSG_RSH_ERROR:
         case MSG_ABORT:
 
             returnCode = 1;
-            barrier.unlock();
+            wakeUp();
             break;
 
         default:
@@ -217,9 +217,9 @@ Headless::execScript()
     vamiga.launch(this, vamiga::process);
 
     // Execute script
-    barrier.lock();
+    const auto timeout = util::Time::seconds(60.0);
     vamiga.retroShell.execScript(script);
-    barrier.lock();
+    waitForWakeUp(timeout);
 
     return *returnCode;
 }

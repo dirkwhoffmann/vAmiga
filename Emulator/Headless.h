@@ -10,7 +10,7 @@
 #pragma once
 
 #include "VAmiga.h"
-#include "Concurrency.h"
+#include "Wakeable.h"
 #include <map>
 
 namespace vamiga {
@@ -22,13 +22,10 @@ struct SyntaxError : public std::runtime_error {
 // The message listener
 void process(const void *listener, Message msg);
 
-class Headless {
+class Headless : Wakeable {
 
     // Parsed command line arguments
     std::map<string,string> keys;
-
-    // Barrier for syncing script execution
-    util::Mutex barrier;
 
     // Return code
     std::optional<int> returnCode;
