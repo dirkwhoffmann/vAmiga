@@ -246,7 +246,7 @@ DebugConsole::initCommands(Command &root)
 
                 auto addr = parseAddr(argv[0]);
                 if (IS_ODD(addr)) throw Error(ERROR_ADDR_UNALIGNED);
-                copper.debugger.breakpoints.setAt(addr, parseNum(argv[1], 0));
+                copper.debugger.breakpoints.setAt(addr, parseNum(argv, 1, 0));
             });
 
             root.add({"cbreak", "delete"}, { Arg::value },
@@ -281,7 +281,7 @@ DebugConsole::initCommands(Command &root)
 
                 auto addr = parseAddr(argv[0]);
                 if (IS_ODD(addr)) throw Error(ERROR_ADDR_UNALIGNED);
-                copper.debugger.watchpoints.setAt(addr, parseNum(argv[1], 0));
+                copper.debugger.watchpoints.setAt(addr, parseNum(argv, 1, 0));
             });
 
             root.add({"cwatch", "delete"}, { Arg::value },
@@ -316,7 +316,7 @@ DebugConsole::initCommands(Command &root)
 
                 auto v = parseNum(argv[0]);
                 auto h = parseNum(argv[1]);
-                agnus.dmaDebugger.beamtraps.setAt(HI_W_LO_W(v, h), parseNum(argv[2], 0));
+                agnus.dmaDebugger.beamtraps.setAt(HI_W_LO_W(v, h), parseNum(argv, 2, 0));
             });
 
             root.add({"btrap", "delete"}, { Arg::value },
@@ -425,7 +425,7 @@ DebugConsole::initCommands(Command &root)
             {   SUSPENDED
 
                 auto pattern = parseSeq(argv[0]);
-                auto addr = u32(parseNum(argv[1], mem.debugger.current));
+                auto addr = u32(parseNum(argv, 1, mem.debugger.current));
                 auto found = mem.debugger.memSearch(pattern, addr, value == 1 ? 1 : 2);
 
                 if (found >= 0) {
