@@ -11,7 +11,6 @@
 
 #include "VAmiga.h"
 #include "Wakeable.h"
-#include "HeadlessScripts.h"
 #include <map>
 
 namespace vamiga {
@@ -29,7 +28,7 @@ class Headless : Wakeable {
     std::map<string,string> keys;
 
     // Return code
-    std::optional<int> returnCode;
+    int returnCode = 0;
 
     
     //
@@ -50,8 +49,8 @@ private:
     void checkArguments() throws;
 
     // Runs a RetroShell script
-    int runScript(const char **script);
-    int runScript(const std::filesystem::path &path);
+    void runScript(const char **script);
+    void runScript(const std::filesystem::path &path);
 
     
     //

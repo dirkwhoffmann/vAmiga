@@ -13,8 +13,6 @@
 
 namespace vamiga {
 
-#define VAMIGA_GROUP(x) Command::currentGroup = x;
-
 void
 DebugConsole::_pause()
 {
@@ -78,7 +76,7 @@ DebugConsole::initCommands(Command &root)
     // Top-level commands
     //
 
-    {   VAMIGA_GROUP("Program execution")
+    {   Command::currentGroup = "Program execution";
 
         root.add({"goto"}, { }, { Arg::value },
                  std::pair <string, string>("g[oto]", "Goto address"),
@@ -109,7 +107,7 @@ DebugConsole::initCommands(Command &root)
 
         root.add({"break"},     "Manage CPU breakpoints");
 
-        {   VAMIGA_GROUP("")
+        {
 
             root.add({"break", ""},
                      "List all breakpoints",
@@ -144,7 +142,7 @@ DebugConsole::initCommands(Command &root)
 
         root.add({"watch"},     "Manage CPU watchpoints");
 
-        {   VAMIGA_GROUP("")
+        {
 
             root.add({"watch", ""},
                      "Lists all watchpoints",
@@ -178,7 +176,7 @@ DebugConsole::initCommands(Command &root)
 
         root.add({"catch"},     "Manage CPU catchpoints");
 
-        {   VAMIGA_GROUP("")
+        {
 
             root.add({"catch", ""},
                      "List all catchpoints",
@@ -231,7 +229,7 @@ DebugConsole::initCommands(Command &root)
 
         root.add({"cbreak"},    "Manage Copper breakpoints");
 
-        {   VAMIGA_GROUP("")
+        {
 
             root.add({"cbreak", ""},
                      "List all breakpoints",
@@ -266,7 +264,7 @@ DebugConsole::initCommands(Command &root)
 
         root.add({"cwatch"},    "Manage Copper watchpoints");
 
-        {   VAMIGA_GROUP("")
+        {
 
             root.add({"cwatch", ""},
                      "List all watchpoints",
@@ -301,7 +299,7 @@ DebugConsole::initCommands(Command &root)
 
         root.add({"btrap"},    "Manage beamtraps");
 
-        {   VAMIGA_GROUP("")
+        {
 
             root.add({"btrap", ""},
                      "List all beamtraps",
@@ -335,7 +333,7 @@ DebugConsole::initCommands(Command &root)
         }
     }
 
-    {   VAMIGA_GROUP("Monitoring")
+    {   Command::currentGroup = "Monitoring";
 
         root.add({"d"}, { }, { Arg::address },
                  "Disassemble instructions",
@@ -473,11 +471,11 @@ DebugConsole::initCommands(Command &root)
         root.add({"i"},
                  "Inspect a component");
 
-        {   VAMIGA_GROUP("Components");
+        {   Command::currentGroup = "Components";
 
             root.add({"i", "amiga"}, "Main computer");
 
-            {   VAMIGA_GROUP("")
+            {
 
                 root.add({"i", "amiga", ""},
                          "Inspects the internal state",
@@ -489,7 +487,7 @@ DebugConsole::initCommands(Command &root)
 
             root.add({"i", "memory"}, "RAM and ROM");
 
-            {   VAMIGA_GROUP("")
+            {
 
                 root.add({"i", "memory", ""},
                          "Inspects the internal state",
@@ -508,7 +506,7 @@ DebugConsole::initCommands(Command &root)
 
             root.add({"i", "cpu"}, "Motorola CPU");
 
-            {   VAMIGA_GROUP("")
+            {
 
                 root.add({"i", "cpu", ""},
                          "Inspect the internal state",
@@ -523,7 +521,7 @@ DebugConsole::initCommands(Command &root)
                 string cia = (i == 0) ? "ciaa" : "ciab";
                 root.add({"i", cia}, "Complex Interface Adapter");
 
-                {   VAMIGA_GROUP("")
+                {
 
                     root.add({"i", cia, ""},
                              "Inspect the internal state",
@@ -551,7 +549,7 @@ DebugConsole::initCommands(Command &root)
 
             root.add({"i", "agnus"}, "Custom Chipset");
 
-            {   VAMIGA_GROUP("")
+            {
 
                 root.add({"i", "agnus", ""},
                          "Inspect the internal state",
@@ -591,7 +589,7 @@ DebugConsole::initCommands(Command &root)
 
             root.add({"i", "blitter"}, "Coprocessor");
 
-            {   VAMIGA_GROUP("")
+            {
 
                 root.add({"i", "blitter", ""},
                          "Inspect the internal state",
@@ -603,7 +601,7 @@ DebugConsole::initCommands(Command &root)
 
             root.add({"i", "copper"}, "Coprocessor");
 
-            {   VAMIGA_GROUP("")
+            {
 
                 root.add({"i", "copper", ""},
                          "Inspect the internal state",
@@ -631,7 +629,7 @@ DebugConsole::initCommands(Command &root)
 
             root.add({"i", "paula"}, "Ports, Audio, Interrupts");
 
-            {   VAMIGA_GROUP("")
+            {
 
                 root.add({"i", "paula", "audio"},
                          "Audio unit");
@@ -673,7 +671,7 @@ DebugConsole::initCommands(Command &root)
 
             root.add({"i", "denise"}, "Graphics");
 
-            {   VAMIGA_GROUP("")
+            {
 
                 root.add({"i", "denise", ""},
                          "Inspect the internal state",
@@ -685,7 +683,7 @@ DebugConsole::initCommands(Command &root)
 
             root.add({"i", "rtc"}, "Real-time clock");
 
-            {   VAMIGA_GROUP("")
+            {
 
                 root.add({"i", "rtc", ""},
                          "Inspect the internal state",
@@ -697,7 +695,7 @@ DebugConsole::initCommands(Command &root)
 
             root.add({"i", "zorro"}, "Expansion boards");
 
-            {   VAMIGA_GROUP("")
+            {
 
                 root.add({"i", "zorro", ""},
                          "List all connected boards",
@@ -721,7 +719,7 @@ DebugConsole::initCommands(Command &root)
 
             root.add({"i", "controlport"}, "Control ports");
 
-            {   VAMIGA_GROUP("")
+            {
 
                 for (isize i = 1; i <= 2; i++) {
 
@@ -743,7 +741,7 @@ DebugConsole::initCommands(Command &root)
 
             root.add({"i", "serial"}, "Serial port");
 
-            {   VAMIGA_GROUP("")
+            {
 
                 root.add({"i", "serial", ""},
                          "Display the internal state",
@@ -753,11 +751,11 @@ DebugConsole::initCommands(Command &root)
                 });
             }
         }
-        {   VAMIGA_GROUP("Peripherals")
+        {   Command::currentGroup = "Peripherals";
 
             root.add({"i", "keyboard"}, "Keyboard");
 
-            {   VAMIGA_GROUP("")
+            {
 
                 root.add({"i", "keyboard", ""},
                          "Inspect the internal state",
@@ -769,7 +767,7 @@ DebugConsole::initCommands(Command &root)
 
             root.add({"i", "mouse"}, "Mouse");
 
-            {   VAMIGA_GROUP("")
+            {
 
                 for (isize i = 1; i <= 2; i++) {
 
@@ -791,7 +789,7 @@ DebugConsole::initCommands(Command &root)
 
             root.add({"i", "joystick"}, "Joystick");
 
-            {   VAMIGA_GROUP("")
+            {
 
                 for (isize i = 1; i <= 2; i++) {
 
@@ -821,7 +819,7 @@ DebugConsole::initCommands(Command &root)
                     root.add({"i", df}, "");
                 }
 
-                {   VAMIGA_GROUP("")
+                {
 
                     root.add({"i", df, ""},
                              "Inspect the internal state",
@@ -851,7 +849,7 @@ DebugConsole::initCommands(Command &root)
                     root.add({"i", hd}, "");
                 }
 
-                {   VAMIGA_GROUP("")
+                {
 
                     root.add({"i", hd, ""},
                              "Inspect the internal state",
@@ -887,11 +885,11 @@ DebugConsole::initCommands(Command &root)
                 }
             }
         }
-        {   VAMIGA_GROUP("Miscellaneous")
+        {   Command::currentGroup = "Miscellaneous";
 
             root.add({"i", "host"}, "Host machine");
 
-            {   VAMIGA_GROUP("")
+            {
 
                 root.add({"i", "host", ""},
                          "Display information about the host machine",
@@ -903,7 +901,7 @@ DebugConsole::initCommands(Command &root)
 
             root.add({"i", "server"}, "Remote server");
 
-            {   VAMIGA_GROUP("")
+            {
 
                 root.add({"i", "server", ""},
                          "Display a server status summary",
@@ -947,7 +945,7 @@ DebugConsole::initCommands(Command &root)
 
         root.add({"r"}, "Show registers");
 
-        {   VAMIGA_GROUP("")
+        {
 
             root.add({"r", "cpu"},
                      "Motorola CPU",
@@ -1020,7 +1018,7 @@ DebugConsole::initCommands(Command &root)
         root.add({"os"},
                  "Run the OS debugger");
 
-        {   VAMIGA_GROUP("")
+        {
 
             root.add({"os", "info"},
                      "Display basic system information",
@@ -1162,7 +1160,7 @@ DebugConsole::initCommands(Command &root)
     //
     // Miscellaneous
     //
-    {   VAMIGA_GROUP("Miscellaneous");
+    {   Command::currentGroup = "Miscellaneous";
 
         root.add({"debug"}, "Debug variables");
 

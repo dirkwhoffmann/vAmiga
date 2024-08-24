@@ -14,8 +14,6 @@
 
 namespace vamiga {
 
-#define VAMIGA_GROUP(x) Command::currentGroup = x;
-
 void
 CommandConsole::_pause()
 {
@@ -69,125 +67,15 @@ CommandConsole::pressReturn(bool shift)
 }
 
 void
-Console::initCommands(Command &root)
-{
-    //
-    // Common commands
-    //
-
-    {   VAMIGA_GROUP("Shell commands");
-
-        root.add({"welcome"},
-                 "", // Prints the welcome message
-                 [this](Arguments& argv, long value) {
-
-            welcome();
-        });
-
-        root.add({"."},
-                 "Enter or exit the debugger",
-                 [this](Arguments& argv, long value) {
-
-            retroShell.switchConsole();
-        });
-
-        root.add({"clear"},
-                 "Clear the console window",
-                 [this](Arguments& argv, long value) {
-
-            clear();
-        });
-
-        root.add({"close"},
-                 "Hide the console window",
-                 [this](Arguments& argv, long value) {
-
-            msgQueue.put(MSG_RSH_CLOSE);
-        });
-
-        root.add({"help"}, { }, {Arg::command},
-                 "Print usage information",
-                 [this](Arguments& argv, long value) {
-
-            help(argv.empty() ? "" : argv.front());
-        });
-
-        root.add({"state"},
-                 "", // Prints the welcome message
-                 [this](Arguments& argv, long value) {
-
-            printState();
-        });
-
-        root.add({"joshua"},
-                 "",
-                 [this](Arguments& argv, long value) {
-
-            *this << "\nGREETINGS PROFESSOR HOFFMANN.\n";
-            *this << "THE ONLY WINNING MOVE IS NOT TO PLAY.\n";
-            *this << "HOW ABOUT A NICE GAME OF CHESS?\n\n";
-        });
-
-        root.add({"source"}, {Arg::path},
-                 "Process a command script",
-                 [this](Arguments& argv, long value) {
-
-            auto stream = std::ifstream(argv.front());
-            if (!stream.is_open()) throw Error(ERROR_FILE_NOT_FOUND, argv.front());
-            retroShell.asyncExecScript(stream);
-        });
-
-        root.add({"wait"}, {Arg::value, Arg::seconds},
-                 "", // Pause the execution of a command script",
-                 [this](Arguments& argv, long value) {
-
-            auto seconds = parseNum(argv[0]);
-            agnus.scheduleRel<SLOT_RSH>(SEC(seconds), RSH_WAKEUP);
-            throw ScriptInterruption();
-        });
-
-        root.add({"shutdown"},
-                 "Terminates the application",
-                 [this](Arguments& argv, long value) {
-
-            msgQueue.put(MSG_ABORT, 0);
-        });
-    }
-}
-
-void
-Console::initSetters(Command &root, const CoreComponent &c)
-{
-    if (auto cmd = string(c.shellName()); !cmd.empty()) {
-
-        if (auto &options = c.getOptions(); !options.empty()) {
-
-            root.add({cmd, "set"}, "Configure the component");
-            for (auto &opt : options) {
-
-                root.add({cmd, "set", OptionEnum::key(opt)},
-                         {OptionParser::argList(opt)},
-                         OptionEnum::help(opt),
-                         [this](Arguments& argv, long value) {
-
-                    emulator.set(Option(HI_WORD(value)), argv[0], { LO_WORD(value) });
-
-                }, HI_W_LO_W(opt, c.objid));
-            }
-        }
-    }
-}
-
-void
 CommandConsole::initCommands(Command &root)
 {
     Console::initCommands(root);
 
-    {   VAMIGA_GROUP("Regression testing")
+    {   Command::currentGroup = "Regression testing";
 
         root.add({"regression"}, debugBuild ? "Runs the regression tester" : "");
 
-        {   VAMIGA_GROUP("");
+        {   Command::currentGroup = "";
 
             root.add({"regression", "setup"}, { ConfigSchemeEnum::argList() }, { Arg::path, Arg::path },
                      "Initializes the test environment",
@@ -210,7 +98,7 @@ CommandConsole::initCommands(Command &root)
 
         root.add({"screenshot"}, debugBuild ? "Manages screenshots" : "");
 
-        {   VAMIGA_GROUP("")
+        {   Command::currentGroup = "";
 
             root.add({"screenshot", "set"},
                      "Configures the screenshot");
@@ -246,7 +134,7 @@ CommandConsole::initCommands(Command &root)
         }
     }
 
-    {   VAMIGA_GROUP("Components")
+    {   Command::currentGroup = "Components";
 
         //
         // Amiga
@@ -256,7 +144,7 @@ CommandConsole::initCommands(Command &root)
         auto description = amiga.description();
         root.add({cmd}, description);
 
-        {   VAMIGA_GROUP("")
+        {   Command::currentGroup = "";
 
             root.add({cmd, ""},
                      "Displays the current configuration",
@@ -311,7 +199,7 @@ CommandConsole::initCommands(Command &root)
         description = mem.description();
         root.add({cmd}, description);
 
-        {   VAMIGA_GROUP("")
+        {
 
             root.add({cmd, ""},
                      "Displays the current configuration",
@@ -381,7 +269,7 @@ CommandConsole::initCommands(Command &root)
         description = cpu.description();
         root.add({cmd}, description);
 
-        {   VAMIGA_GROUP("")
+        {
 
             root.add({cmd, ""},
                      "Displays the current configuration",
@@ -403,7 +291,7 @@ CommandConsole::initCommands(Command &root)
             description = (i == 0) ? ciaa.description() : ciab.description();
             root.add({cmd}, description);
 
-            {   VAMIGA_GROUP("")
+            {
 
                 root.add({cmd, ""},
                          "Displays the current configuration",
@@ -428,7 +316,7 @@ CommandConsole::initCommands(Command &root)
         description = agnus.description();
         root.add({cmd}, description);
 
-        {   VAMIGA_GROUP("")
+        {
 
             root.add({cmd, ""},
                      "Displays the current configuration",
@@ -448,7 +336,7 @@ CommandConsole::initCommands(Command &root)
         description = blitter.description();
         root.add({cmd}, description);
 
-        {   VAMIGA_GROUP("")
+        {
 
             root.add({cmd, ""},
                      "Displays the current configuration",
@@ -469,7 +357,7 @@ CommandConsole::initCommands(Command &root)
         description = denise.description();
         root.add({cmd}, description);
 
-        {   VAMIGA_GROUP("")
+        {
 
             root.add({cmd, ""},
                      "Displays the current configuration",
@@ -489,7 +377,7 @@ CommandConsole::initCommands(Command &root)
         description = paula.description();
         root.add({cmd}, description);
 
-        {   VAMIGA_GROUP("")
+        {
 
             root.add({cmd, "dc"},
                      "Disk controller");
@@ -510,7 +398,7 @@ CommandConsole::initCommands(Command &root)
 
         root.add({"rtc"},           "Real-time clock");
 
-        {   VAMIGA_GROUP("")
+        {
 
             root.add({"rtc", ""},
                      "Displays the current configuration",
@@ -528,7 +416,7 @@ CommandConsole::initCommands(Command &root)
 
         root.add({"serial"},        "Serial port");
 
-        {   VAMIGA_GROUP("")
+        {
 
             root.add({"serial", ""},
                      "Displays the current configuration",
@@ -553,7 +441,7 @@ CommandConsole::initCommands(Command &root)
 
         root.add({"dmadebugger"},   "DMA Debugger");
 
-        {   VAMIGA_GROUP("")
+        {
 
             root.add({"dmadebugger", "open"},
                      "Opens the DMA debugger",
@@ -573,7 +461,7 @@ CommandConsole::initCommands(Command &root)
         }
     }
 
-    {   VAMIGA_GROUP("Ports")
+    {   Command::currentGroup = "Ports";
 
         //
         // Audio port
@@ -583,7 +471,7 @@ CommandConsole::initCommands(Command &root)
         auto description = audioPort.description();
         root.add({cmd}, description);
 
-        {   VAMIGA_GROUP("")
+        {
 
             root.add({cmd, ""},
                      "Displays the current configuration",
@@ -616,7 +504,7 @@ CommandConsole::initCommands(Command &root)
         description = videoPort.description();
         root.add({cmd}, description);
 
-        {   VAMIGA_GROUP("")
+        {
 
             root.add({cmd, ""},
                      "Displays the current configuration",
@@ -629,7 +517,7 @@ CommandConsole::initCommands(Command &root)
         }
     }
 
-    {   VAMIGA_GROUP("Peripherals")
+    {   Command::currentGroup = "Peripherals";
 
         //
         // Monitor
@@ -637,7 +525,7 @@ CommandConsole::initCommands(Command &root)
 
         root.add({"monitor"}, "Amiga monitor");
 
-        {   VAMIGA_GROUP("")
+        {
 
             root.add({"monitor", ""},
                      "Displays the current configuration",
@@ -655,7 +543,7 @@ CommandConsole::initCommands(Command &root)
 
         root.add({"keyboard"}, "Keyboard");
 
-        {   VAMIGA_GROUP("")
+        {
 
             root.add({"keyboard", ""},
                      "Displays the current configuration",
@@ -682,7 +570,7 @@ CommandConsole::initCommands(Command &root)
 
         root.add({"joystick"}, "Joystick");
 
-        {   VAMIGA_GROUP("")
+        {
 
             for (isize i = 0; i <= 1; i++) {
 
@@ -809,7 +697,7 @@ CommandConsole::initCommands(Command &root)
 
         root.add({"mouse"}, "Mouse");
 
-        {   VAMIGA_GROUP("")
+        {
 
             for (isize i = 0; i <= 1; i++) {
 
@@ -874,7 +762,7 @@ CommandConsole::initCommands(Command &root)
             string df = "df" + std::to_string(i);
             root.add({df}, "Floppy drive");
 
-            {   VAMIGA_GROUP("")
+            {
 
                 root.add({df, ""},
                          "Displays the current configuration",
@@ -948,7 +836,7 @@ CommandConsole::initCommands(Command &root)
             string hd = i == 4 ? "hdn" : "hd" + std::to_string(i);
             root.add({hd}, "Hard drive");
 
-            {   VAMIGA_GROUP("")
+            {
 
                 if (i != 4) {
 
@@ -1002,7 +890,7 @@ CommandConsole::initCommands(Command &root)
     // Miscellaneous
     //
 
-    {   VAMIGA_GROUP("Miscellaneous")
+    {   Command::currentGroup = "Miscellaneous";
 
         //
         // Miscellaneous (Diff)
@@ -1054,7 +942,7 @@ CommandConsole::initCommands(Command &root)
 
         root.add({"server"},        "Remote connections");
 
-        {   VAMIGA_GROUP("");
+        {   
 
             root.add({"server", ""},
                      "Displays a server status summary",

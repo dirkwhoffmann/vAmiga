@@ -11,6 +11,7 @@
 #include "Console.h"
 #include "Emulator.h"
 #include "Parser.h"
+#include "Option.h"
 #include <istream>
 #include <sstream>
 #include <string>
@@ -762,6 +763,116 @@ Console::_dump(CoreObject &component, Category category)
     component.dump(category, ss);
 
     *this << ss << '\n';
+}
+
+void
+Console::initCommands(Command &root)
+{
+    //
+    // Common commands
+    //
+
+    {   Command::currentGroup = "Shell commands";
+
+        root.add({"welcome"},
+                 "", // Prints the welcome message
+                 [this](Arguments& argv, long value) {
+
+            welcome();
+        });
+
+        root.add({"."},
+                 "Enter or exit the debugger",
+                 [this](Arguments& argv, long value) {
+
+            retroShell.switchConsole();
+        });
+
+        root.add({"clear"},
+                 "Clear the console window",
+                 [this](Arguments& argv, long value) {
+
+            clear();
+        });
+
+        root.add({"close"},
+                 "Hide the console window",
+                 [this](Arguments& argv, long value) {
+
+            msgQueue.put(MSG_RSH_CLOSE);
+        });
+
+        root.add({"help"}, { }, {Arg::command},
+                 "Print usage information",
+                 [this](Arguments& argv, long value) {
+
+            help(argv.empty() ? "" : argv.front());
+        });
+
+        root.add({"state"},
+                 "", // Prints the welcome message
+                 [this](Arguments& argv, long value) {
+
+            printState();
+        });
+
+        root.add({"joshua"},
+                 "",
+                 [this](Arguments& argv, long value) {
+
+            *this << "\nGREETINGS PROFESSOR HOFFMANN.\n";
+            *this << "THE ONLY WINNING MOVE IS NOT TO PLAY.\n";
+            *this << "HOW ABOUT A NICE GAME OF CHESS?\n\n";
+        });
+
+        root.add({"source"}, {Arg::path},
+                 "Process a command script",
+                 [this](Arguments& argv, long value) {
+
+            auto stream = std::ifstream(argv.front());
+            if (!stream.is_open()) throw Error(ERROR_FILE_NOT_FOUND, argv.front());
+            retroShell.asyncExecScript(stream);
+        });
+
+        root.add({"wait"}, {Arg::value, Arg::seconds},
+                 "", // Pause the execution of a command script",
+                 [this](Arguments& argv, long value) {
+
+            auto seconds = parseNum(argv[0]);
+            agnus.scheduleRel<SLOT_RSH>(SEC(seconds), RSH_WAKEUP);
+            throw ScriptInterruption();
+        });
+
+        root.add({"shutdown"},
+                 "Terminates the application",
+                 [this](Arguments& argv, long value) {
+
+            msgQueue.put(MSG_ABORT, 0);
+        });
+    }
+}
+
+void
+Console::initSetters(Command &root, const CoreComponent &c)
+{
+    if (auto cmd = string(c.shellName()); !cmd.empty()) {
+
+        if (auto &options = c.getOptions(); !options.empty()) {
+
+            root.add({cmd, "set"}, "Configure the component");
+            for (auto &opt : options) {
+
+                root.add({cmd, "set", OptionEnum::key(opt)},
+                         {OptionParser::argList(opt)},
+                         OptionEnum::help(opt),
+                         [this](Arguments& argv, long value) {
+
+                    emulator.set(Option(HI_WORD(value)), argv[0], { LO_WORD(value) });
+
+                }, HI_W_LO_W(opt, c.objid));
+            }
+        }
+    }
 }
 
 }

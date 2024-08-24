@@ -6,13 +6,14 @@
 //
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
+/// @file
 
 #include "config.h"
 #include "Headless.h"
+#include "HeadlessScripts.h"
 #include "Amiga.h"
 #include "Script.h"
 #include "DiagRom.h"
-#include <filesystem>
 #include <chrono>
 
 int main(int argc, char *argv[])
@@ -74,7 +75,7 @@ Headless::main(int argc, char *argv[])
     if (keys.find("diagnose") != keys.end())    { runScript(selfTestScript); }
     if (keys.find("arg1") != keys.end())        { runScript(keys["arg1"]); }
 
-    return 0;
+    return returnCode;
 }
 
 void
@@ -121,7 +122,7 @@ Headless::checkArguments()
     }
 }
 
-int
+void
 Headless::runScript(const char **script)
 {
     auto path = std::filesystem::temp_directory_path() / "script.ini";
@@ -130,10 +131,10 @@ Headless::runScript(const char **script)
     for (isize i = 0; script[i] != nullptr; i++) {
         file << script[i] << std::endl;
     }
-    return runScript(path);
+    runScript(path);
 }
 
-int
+void
 Headless::runScript(const std::filesystem::path &path)
 {
     // Read the input script
@@ -155,8 +156,6 @@ Headless::runScript(const std::filesystem::path &path)
     const auto timeout = util::Time::seconds(500.0);
     vamiga.retroShell.execScript(script);
     waitForWakeUp(timeout);
-
-    return *returnCode;
 }
 
 void
@@ -169,7 +168,6 @@ void
 Headless::process(Message msg)
 {
     static bool messages = keys.find("messages") != keys.end();
-    static string serout;
 
     if (messages) {
         
@@ -182,13 +180,12 @@ Headless::process(Message msg)
             
         case MSG_RSH_ERROR:
 
-            returnCode = 0;
+            returnCode = 1;
             wakeUp();
             break;
 
         case MSG_ABORT:
 
-            returnCode = msg.value;
             wakeUp();
             break;
 

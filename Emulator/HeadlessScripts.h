@@ -486,7 +486,9 @@ static const char *smokeTestScript[] = {
 
     "i host",
     "i server",
-    
+
+    "shutdown",
+
     nullptr
 };
 

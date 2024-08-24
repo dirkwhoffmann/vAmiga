@@ -71,9 +71,9 @@ Thread::execute()
 
         // The emulator got out of sync
         if (missing > 0) {
-            warn("Emulation is way too slow (%ld frames behind)\n", missing);
+            debug(VID_DEBUG, "Emulation is way too slow (%ld frames behind)\n", missing);
         } else {
-            warn("Emulation is way too fast (%ld time slices ahead)\n", -missing);
+            debug(VID_DEBUG, "Emulation is way too fast (%ld time slices ahead)\n", -missing);
         }
 
         resync();
