@@ -119,7 +119,6 @@ Console::initCommands(Command &root)
             printState();
         });
 
-
         root.add({"joshua"},
                  "",
                  [this](Arguments& argv, long value) {
@@ -145,6 +144,13 @@ Console::initCommands(Command &root)
             auto seconds = parseNum(argv[0]);
             agnus.scheduleRel<SLOT_RSH>(SEC(seconds), RSH_WAKEUP);
             throw ScriptInterruption();
+        });
+
+        root.add({"shutdown"},
+                 "Terminates the application",
+                 [this](Arguments& argv, long value) {
+
+            msgQueue.put(MSG_ABORT, 0);
         });
     }
 }

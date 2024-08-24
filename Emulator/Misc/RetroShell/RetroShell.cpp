@@ -48,7 +48,7 @@ RetroShell::enterDebugger()
     msgQueue.put(MSG_RSH_DEBUGGER, true);
     
     // Print the welcome message if entered the first time
-    if (current->isEmpty()) asyncExec("welcome", false);
+    if (current->isEmpty()) { current->exec("welcome"); *this << current->getPrompt(); }
 }
 
 void
@@ -62,7 +62,7 @@ RetroShell::enterCommander()
     msgQueue.put(MSG_RSH_DEBUGGER, false);
     
     // Print the welcome message if entered the first time
-    if (current->isEmpty()) asyncExec("welcome", false);
+    if (current->isEmpty()) { current->exec("welcome"); *this << current->getPrompt(); }
 }
 
 void
@@ -161,7 +161,7 @@ RetroShell::exec()
             commands.erase(commands.begin());
             exec(cmd);
         }
-        msgQueue.put(MSG_RSH_EXEC);
+        // msgQueue.put(MSG_RSH_EXEC);
 
     } catch (ScriptInterruption &) {
 

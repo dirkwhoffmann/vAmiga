@@ -11,6 +11,7 @@
 #include "Headless.h"
 #include "Amiga.h"
 #include "Script.h"
+#include "DiagRom.h"
 #include <filesystem>
 #include <chrono>
 
@@ -22,12 +23,14 @@ int main(int argc, char *argv[])
         
     } catch (vamiga::SyntaxError &e) {
         
-        std::cout << "Usage: vAmigaCore [-svm] [<script>]" << std::endl;
+        std::cout << "Usage: vAmigaCore [-fsdvm] [<script>]" << std::endl;
         std::cout << std::endl;
-        std::cout << "       -s or --size      Reports the size of certain objects" << std::endl;
-        std::cout << "       -v or --verbose   Print executed script lines" << std::endl;
-        std::cout << "       -m or --messages  Observe the message queue" << std::endl;
-        std::cout << "       <script>          Execute this script instead of the default" << std::endl;
+        std::cout << "       -f or --footprint   Reports the size of certain objects" << std::endl;
+        std::cout << "       -s or --smoke       Runs some smoke tests to test the build" << std::endl;
+        std::cout << "       -d or --diagnose    Run DiagRom in the background" << std::endl;
+        std::cout << "       -v or --verbose     Print executed script lines" << std::endl;
+        std::cout << "       -m or --messages    Observe the message queue" << std::endl;
+        std::cout << "       <script>            Execute this script instead of the default" << std::endl;
         std::cout << std::endl;
         
         if (auto what = string(e.what()); !what.empty()) {
@@ -65,16 +68,13 @@ Headless::main(int argc, char *argv[])
     // Parse all command line arguments
     parseArguments(argc, argv);
 
-    // Check for the --size option
-    if (keys.find("size") != keys.end()) {
+    // Check options
+    if (keys.find("footprint") != keys.end())   { reportSize(); }
+    if (keys.find("smoke") != keys.end())       { runScript(smokeTestScript); }
+    if (keys.find("diagnose") != keys.end())    { runScript(selfTestScript); }
+    if (keys.find("arg1") != keys.end())        { runScript(keys["arg1"]); }
 
-        reportSize();
-        return 0;
-
-    } else {
-
-        return execScript();
-    }
+    return 0;
 }
 
 void
@@ -90,9 +90,11 @@ Headless::parseArguments(int argc, char *argv[])
 
         if (arg[0] == '-') {
 
-            if (arg == "-s" || arg == "--size")     { keys["size"] = "1"; continue; }
-            if (arg == "-v" || arg == "--verbose")  { keys["verbose"] = "1"; continue; }
-            if (arg == "-m" || arg == "--messages") { keys["messages"] = "1"; continue; }
+            if (arg == "-f" || arg == "--footprint") { keys["footprint"] = "1"; continue; }
+            if (arg == "-s" || arg == "--smoke")     { keys["smoke"] = "1"; continue; }
+            if (arg == "-d" || arg == "--diagnose")  { keys["diagnose"] = "1"; continue; }
+            if (arg == "-v" || arg == "--verbose")   { keys["verbose"] = "1"; continue; }
+            if (arg == "-m" || arg == "--messages")  { keys["messages"] = "1"; continue; }
 
             throw SyntaxError("Invalid option '" + arg + "'");
         }
@@ -103,9 +105,6 @@ Headless::parseArguments(int argc, char *argv[])
 
     // Check for syntax errors
     checkArguments();
-
-    // Create the selftest script if no custom script is specified
-    if (keys.find("arg1") == keys.end()) keys["arg1"] = selfTestScript();
 }
 
 void
@@ -122,16 +121,42 @@ Headless::checkArguments()
     }
 }
 
-string
-Headless::selfTestScript()
+int
+Headless::runScript(const char **script)
 {
-    auto path = std::filesystem::temp_directory_path() / "selftest.ini";
+    auto path = std::filesystem::temp_directory_path() / "script.ini";
     auto file = std::ofstream(path, std::ios::binary);
 
-    for (isize i = 0; i < isizeof(script) / isizeof(const char *); i++) {
+    for (isize i = 0; script[i] != nullptr; i++) {
         file << script[i] << std::endl;
     }
-    return path.string();
+    return runScript(path);
+}
+
+int
+Headless::runScript(const std::filesystem::path &path)
+{
+    // Read the input script
+    Script script(path);
+
+    // Create an emulator instance
+    VAmiga vamiga;
+
+    // Plug in DiagRom
+    vamiga.mem.loadRom(diagROM13, sizeofDiagRom13);
+
+    // Redirect shell output to the console in verbose mode
+    if (keys.find("verbose") != keys.end()) vamiga.retroShell.setStream(std::cout);
+
+    // Launch the emulator thread
+    vamiga.launch(this, vamiga::process);
+
+    // Execute script
+    const auto timeout = util::Time::seconds(500.0);
+    vamiga.retroShell.execScript(script);
+    waitForWakeUp(timeout);
+
+    return *returnCode;
 }
 
 void
@@ -144,7 +169,8 @@ void
 Headless::process(Message msg)
 {
     static bool messages = keys.find("messages") != keys.end();
-    
+    static string serout;
+
     if (messages) {
         
         std::cout << MsgTypeEnum::key(msg.type);
@@ -154,16 +180,15 @@ Headless::process(Message msg)
 
     switch (msg.type) {
             
-        case MSG_RSH_EXEC:
+        case MSG_RSH_ERROR:
 
             returnCode = 0;
             wakeUp();
             break;
 
-        case MSG_RSH_ERROR:
         case MSG_ABORT:
 
-            returnCode = 1;
+            returnCode = msg.value;
             wakeUp();
             break;
 
@@ -199,29 +224,6 @@ Headless::reportSize()
     msg("        SerialPort : %zu bytes\n", sizeof(SerialPort));
     msg("             Zorro : %zu bytes\n", sizeof(ZorroManager));
     msg("\n");
-}
-
-int
-Headless::execScript()
-{
-    // Create an emulator instance
-    VAmiga vamiga;
-    
-    // Redirect shell output to the console in verbose mode
-    if (keys.find("verbose") != keys.end()) vamiga.retroShell.setStream(std::cout);
-
-    // Read the input script
-    Script script(keys["arg1"]);
-
-    // Launch the emulator thread
-    vamiga.launch(this, vamiga::process);
-
-    // Execute script
-    const auto timeout = util::Time::seconds(60.0);
-    vamiga.retroShell.execScript(script);
-    waitForWakeUp(timeout);
-
-    return *returnCode;
 }
 
 }

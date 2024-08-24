@@ -56,12 +56,16 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-c"
+            argument = "--footprint"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "--smoke"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-m"
-            isEnabled = "NO">
+            argument = "--diagnose"
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-s"
@@ -73,15 +77,15 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-v"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--messages"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-verbose"
-            isEnabled = "NO">
+            argument = "--verbose"
+            isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>

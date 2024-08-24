@@ -65,5 +65,5 @@ find_package(Threads REQUIRED)
 target_link_libraries(vAmigaCore xdms Threads::Threads)
 
 # Add tests
-add_test(NAME SelfTest1 COMMAND vAmigaConsole --size)
+add_test(NAME SelfTest1 COMMAND vAmigaConsole --footprint)
 add_test(NAME SelfTest2 COMMAND vAmigaConsole --verbose --messages)

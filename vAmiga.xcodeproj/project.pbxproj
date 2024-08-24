@@ -971,6 +971,7 @@
 		50EAB95B26C10B9400BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50EAD99B256E76820053F9AC /* HDFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDFFile.h; sourceTree = "<group>"; };
 		50EAD99F256E76A40053F9AC /* HDFFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDFFile.cpp; sourceTree = "<group>"; };
+		50EAF5282C79B9BA005AC890 /* HeadlessScripts.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HeadlessScripts.h; sourceTree = "<group>"; };
 		50EB8CC925306E8E0053988A /* VideoExporter.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoExporter.xib; sourceTree = "<group>"; };
 		50EB8CCD2530710E0053988A /* VideoExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoExporter.swift; sourceTree = "<group>"; };
 		50EC7A2F29C9EC3900060CAA /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
@@ -1029,6 +1030,7 @@
 		50F6EEB721F4F5C60091155D /* FloppyDisk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloppyDisk.h; sourceTree = "<group>"; };
 		50F6EEBC21F4F61F0091155D /* FloppyDrive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FloppyDrive.cpp; sourceTree = "<group>"; };
 		50F6EEBD21F4F61F0091155D /* FloppyDrive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloppyDrive.h; sourceTree = "<group>"; };
+		50F79C9F2C79B04A006A13A8 /* DiagRom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiagRom.h; sourceTree = "<group>"; };
 		50FAC76E2515EBED00E47421 /* IMGFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IMGFile.cpp; sourceTree = "<group>"; };
 		50FAC76F2515EBED00E47421 /* IMGFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMGFile.h; sourceTree = "<group>"; };
 		50FAC77325160BBF00E47421 /* FloppyFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FloppyFile.cpp; sourceTree = "<group>"; };
@@ -1081,6 +1083,7 @@
 				509F7F1B21EDEA0200A530E4 /* RomFile.cpp */,
 				50ECF98522B153FB007B3DE7 /* ExtendedRomFile.h */,
 				50ECF98422B153FB007B3DE7 /* ExtendedRomFile.cpp */,
+				50F79C9F2C79B04A006A13A8 /* DiagRom.h */,
 			);
 			path = RomFiles;
 			sourceTree = "<group>";
@@ -1533,6 +1536,7 @@
 				50DA83E32C161961001209AA /* VAmiga.cpp */,
 				50FC050027DA205D00C3E566 /* Headless.h */,
 				50FC047427DA108500C3E566 /* Headless.cpp */,
+				50EAF5282C79B9BA005AC890 /* HeadlessScripts.h */,
 				50B14C0421EB212E002E32A6 /* Utilities */,
 				50104E8825ECDAA30047A9AA /* Base */,
 				506436E329C1D90B00768528 /* Components */,

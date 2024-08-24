@@ -135,8 +135,8 @@ AudioPort::_unfocus()
 void
 AudioPort::clear()
 {
-    debug(AUDBUF_DEBUG, "clear()\n");
-    
+    debug(AUDBUF_DEBUG, "Clearing the audio sample buffer\n");
+
     // Wipe out the ringbuffer
     stream.wipeOut();
     stream.alignWritePtr();
@@ -436,8 +436,8 @@ AudioPort::handleBufferUnderflow()
     // (1) The consumer runs slightly faster than the producer
     // (2) The producer is halted or not startet yet
     
-    debug(AUDBUF_DEBUG, "UNDERFLOW (r: %ld w: %ld)\n", stream.r, stream.w);
-    
+    // debug(AUDBUF_DEBUG, "UNDERFLOW (r: %ld w: %ld)\n", stream.r, stream.w);
+
     // Reset the write pointer
     stream.clear(SamplePair{0,0});
     stream.alignWritePtr();
@@ -450,11 +450,11 @@ AudioPort::handleBufferUnderflow()
     if (emulator.isRunning() && !emulator.isWarping()) {
 
         stats.bufferUnderflows++;
-        warn("Audio buffer underflow after %f seconds\n", elapsedTime.asSeconds());
+        debug(AUDBUF_DEBUG, "Audio buffer underflow after %f seconds\n", elapsedTime.asSeconds());
 
         // Adjust the sample rate
         setSampleRate(host.getConfig().sampleRate);
-        debug(true, "New sample rate = %.2f\n", sampleRate);
+        debug(AUDBUF_DEBUG, "New sample rate = %.2f\n", sampleRate);
     }
 }
 
@@ -466,7 +466,7 @@ AudioPort::handleBufferOverflow()
     // (1) The consumer runs slightly slower than the producer
     // (2) The consumer is halted or not startet yet
 
-    debug(AUDBUF_DEBUG, "OVERFLOW (r: %ld w: %ld)\n", stream.r, stream.w);
+    // debug(AUDBUF_DEBUG, "OVERFLOW (r: %ld w: %ld)\n", stream.r, stream.w);
 
     // Reset the write pointer
     stream.alignWritePtr();
@@ -479,11 +479,11 @@ AudioPort::handleBufferOverflow()
     if (emulator.isRunning() && !emulator.isWarping()) {
 
         stats.bufferOverflows++;
-        warn("Audio buffer overflow after %f seconds\n", elapsedTime.asSeconds());
+        debug(AUDBUF_DEBUG, "Audio buffer overflow after %f seconds\n", elapsedTime.asSeconds());
 
         // Adjust the sample rate
         setSampleRate(host.getConfig().sampleRate);
-        debug(AUD_DEBUG, "New sample rate = %.2f\n", sampleRate);
+        debug(AUDBUF_DEBUG, "New sample rate = %.2f\n", sampleRate);
     }
 }
 
