@@ -101,17 +101,17 @@ CommandConsole::initCommands(Command &root)
         {   Command::currentGroup = "";
 
             root.add({"screenshot", "set"},
-                     "Configures the screenshot");
+                     "Configure the screenshot");
 
             root.add({"screenshot", "set", "filename"}, { Arg::path },
-                     "Assigns the screen shot filename",
+                     "Assign the screen shot filename",
                      [this](Arguments& argv, long value) {
 
                 amiga.regressionTester.dumpTexturePath = argv.front();
             });
 
             root.add({"screenshot", "set", "cutout"}, { Arg::value, Arg::value, Arg::value, Arg::value },
-                     "Adjusts the texture cutout",
+                     "Adjust the texture cutout",
                      [this](Arguments& argv, long value) {
 
                 isize x1 = parseNum(argv[0]);
@@ -217,14 +217,14 @@ CommandConsole::initCommands(Command &root)
                      "Installs a Kickstart Rom",
                      [this](Arguments& argv, long value) {
 
-                amiga.mem.loadRom(argv.front());
+                mem.loadRom(argv.front());
             });
 
             root.add({cmd, "load", "ext"}, { Arg::path },
                      "Installs an extension Rom",
                      [this](Arguments& argv, long value) {
 
-                amiga.mem.loadExt(argv.front());
+                mem.loadExt(argv.front());
             });
 
             root.add({cmd, "load", "bin"}, { Arg::path, Arg::address },
@@ -232,7 +232,7 @@ CommandConsole::initCommands(Command &root)
                      [this](Arguments& argv, long value) {
 
                 fs::path path(argv[0]);
-                amiga.mem.debugger.load(path, parseAddr(argv[1]));
+                mem.debugger.load(path, parseAddr(argv[1]));
             });
 
             root.add({cmd, "save"},
@@ -242,14 +242,14 @@ CommandConsole::initCommands(Command &root)
                      "Saves the Kickstart Rom",
                      [this](Arguments& argv, long value) {
 
-                amiga.mem.saveRom(argv[0]);
+                mem.saveRom(argv[0]);
             });
 
             root.add({cmd, "save", "ext"}, { Arg::path },
                      "Saves the extension Rom",
                      [this](Arguments& argv, long value) {
 
-                amiga.mem.saveExt(argv[0]);
+                mem.saveExt(argv[0]);
             });
 
             root.add({cmd, "save", "bin"}, { Arg::path, Arg::address, Arg::count },
@@ -257,7 +257,7 @@ CommandConsole::initCommands(Command &root)
                      [this](Arguments& argv, long value) {
 
                 fs::path path(argv[0]);
-                amiga.mem.debugger.save(path, parseAddr(argv[1]), parseNum(argv[2]));
+                mem.debugger.save(path, parseAddr(argv[1]), parseNum(argv[2]));
             });
         }
 

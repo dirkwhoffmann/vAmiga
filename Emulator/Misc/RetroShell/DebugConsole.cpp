@@ -1160,6 +1160,7 @@ DebugConsole::initCommands(Command &root)
     //
     // Miscellaneous
     //
+
     {   Command::currentGroup = "Miscellaneous";
 
         root.add({"debug"}, "Debug variables");
@@ -1177,9 +1178,9 @@ DebugConsole::initCommands(Command &root)
 
                 root.add({"debug", DebugFlagEnum::key(i)}, { Arg::boolean },
                          DebugFlagEnum::help(i),
-                         [this](Arguments& argv, long value) {
+                         [](Arguments& argv, long value) {
 
-                    emulator.setDebugVariable(DebugFlag(value), int(util::parseNum(argv[0])));
+                    Emulator::setDebugVariable(DebugFlag(value), int(util::parseNum(argv[0])));
 
                 }, i);
             }

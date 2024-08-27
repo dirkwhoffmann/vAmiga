@@ -350,7 +350,7 @@ public:
     // Configures the emulator to match a specific Amiga model
     void set(ConfigScheme model);
 
-public: // private
+public:
 
     // Returns the target component for an option
     Configurable *routeOption(Option opt, isize objid);

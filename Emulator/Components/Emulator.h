@@ -34,8 +34,6 @@ public:
     // Indicates if the run-ahead instance needs to be updated
     bool isDirty = true;
 
-public:
-
     // User default settings
     static Defaults defaults;
 
@@ -103,15 +101,6 @@ public:
 
     // Configures the emulator to match a specific Amiga model
     void set(ConfigScheme model);
-
-public: // private
-
-    // Returns the target component for an option
-    Configurable *routeOption(Option opt, isize objid);
-    const Configurable *routeOption(Option opt, isize objid) const;
-
-    // Overrides a config option if the corresponding debug option is enabled
-    i64 overrideOption(Option opt, i64 value) const;
 
 
     //

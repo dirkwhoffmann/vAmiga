@@ -10,7 +10,7 @@
 #pragma once
 
 #include "Types.h"
-#include "Reflection.h"
+
 
 //
 // Enumerations

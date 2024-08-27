@@ -763,11 +763,11 @@ Agnus::serviceINSEvent()
     if (mask & 1LL << CIAClass)             { ciaa.record(); ciab.record(); }
     if (mask & 1LL << CPUClass)             { cpu.record(); }
     if (mask & 1LL << DeniseClass)          { denise.record(); }
-    if (mask & 1LL << MemoryClass)             { mem.record(); }
+    if (mask & 1LL << MemoryClass)          { mem.record(); }
     if (mask & 1LL << PaulaClass)           { paula.record(); }
     if (mask & 1LL << UARTClass)            { uart.record(); }
-    if (mask & 1LL << ControlPortClass)    { controlPort1.record(); controlPort2.record(); }
-    if (mask & 1LL << SerialPortClass)     { serialPort.record(); }
+    if (mask & 1LL << ControlPortClass)     { controlPort1.record(); controlPort2.record(); }
+    if (mask & 1LL << SerialPortClass)      { serialPort.record(); }
 
     // Reschedule the event
     rescheduleRel<SLOT_INS>((Cycle)(inspectionInterval * 28000007));

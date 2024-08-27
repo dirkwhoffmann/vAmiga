@@ -214,24 +214,6 @@ Emulator::set(ConfigScheme scheme)
     main.set(scheme);
 }
 
-Configurable *
-Emulator::routeOption(Option opt, isize objid)
-{
-    return main.routeOption(opt, objid);
-}
-
-const Configurable *
-Emulator::routeOption(Option opt, isize objid) const
-{
-    return main.routeOption(opt, objid);
-}
-
-i64
-Emulator::overrideOption(Option opt, i64 value) const
-{
-    return main.overrideOption(opt, value);
-}
-
 void
 Emulator::update()
 {
@@ -592,6 +574,11 @@ Emulator::setDebugVariable(DebugFlag flag, bool val)
         case FLAG_CMD_DEBUG:        CMD_DEBUG = val; break;
         case FLAG_QUEUE_DEBUG:      QUEUE_DEBUG = val; break;
         case FLAG_SNP_DEBUG:        SNP_DEBUG = val; break;
+
+            // Run-ahead
+        case FLAG_RUA_DEBUG:        RUA_DEBUG = val; break;
+        case FLAG_RUA_CHECKSUM:     RUA_CHECKSUM = val; break;
+        case FLAG_RUA_ON_STEROIDS:  RUA_ON_STEROIDS = val; break;
 
             // CPU
         case FLAG_CPU_DEBUG:        CPU_DEBUG = val; break;

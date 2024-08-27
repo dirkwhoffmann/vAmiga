@@ -161,7 +161,6 @@ RetroShell::exec()
             commands.erase(commands.begin());
             exec(cmd);
         }
-        // msgQueue.put(MSG_RSH_EXEC);
 
     } catch (ScriptInterruption &) {
 

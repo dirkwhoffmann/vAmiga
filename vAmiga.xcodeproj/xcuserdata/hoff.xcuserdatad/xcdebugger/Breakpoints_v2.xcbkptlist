@@ -191,8 +191,8 @@
             filePath = "Emulator/Components/Emulator.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "563"
-            endingLineNumber = "563"
+            startingLineNumber = "545"
+            endingLineNumber = "545"
             landmarkName = "Emulator::getDebugVariable(flag)"
             landmarkType = "7">
          </BreakpointContent>
@@ -207,8 +207,8 @@
             filePath = "Emulator/Components/Emulator.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "708"
-            endingLineNumber = "708"
+            startingLineNumber = "695"
+            endingLineNumber = "695"
             landmarkName = "Emulator::setDebugVariable(flag, val)"
             landmarkType = "7">
          </BreakpointContent>

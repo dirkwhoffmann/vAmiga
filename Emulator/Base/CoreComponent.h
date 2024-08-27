@@ -25,7 +25,7 @@ namespace vamiga {
 
 struct Description {
 
-    const CType type;               // Component type
+    const CType type;               // Class identifier
     const char *name;               // Short name
     const char *description;        // Textual descripiton
     const char *shell;              // RetroShell access

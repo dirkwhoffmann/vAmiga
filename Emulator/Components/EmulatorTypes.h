@@ -318,6 +318,12 @@ struct DebugFlagEnum : vamiga::util::Reflection<DebugFlagEnum, DebugFlag>
             case FLAG_QUEUE_DEBUG:      return "Message queue";
             case FLAG_SNP_DEBUG:        return "Serialization (snapshots)";
 
+                // Run ahead
+            case FLAG_RUA_DEBUG:        return "Inform about run-ahead activity";
+            case FLAG_RUA_CHECKSUM:     return "Verify the integrity of the run-ahead instance";
+            case FLAG_RUA_ON_STEROIDS:  return "Update the run-ahead instance in every frame";
+
+
                 // CPU
             case FLAG_CPU_DEBUG:        return "CPU";
             case FLAG_CST_DEBUG:        return "Call stack recording";

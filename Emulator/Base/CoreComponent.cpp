@@ -360,7 +360,7 @@ CoreComponent::diff(CoreComponent &other)
 
     // Compare this component
     if (auto check1 = checksum(false), check2 = other.checksum(false); check1 != check2) {
-        debug(true, "Checksum mismatch: %llx != %llx\n", check1, check2);
+        msg("Checksum mismatch: %llx != %llx\n", check1, check2);
     }
 }
 
