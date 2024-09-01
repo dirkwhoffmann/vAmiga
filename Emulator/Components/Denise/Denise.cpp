@@ -64,7 +64,7 @@ Denise::checkOption(Option opt, i64 value)
         case OPT_DENISE_REVISION:
 
             if (!DeniseRevisionEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INV_ARG, DeniseRevisionEnum::keyList());
+                throw Error(VAERROR_OPT_INV_ARG, DeniseRevisionEnum::keyList());
             }
             return;
 
@@ -81,7 +81,7 @@ Denise::checkOption(Option opt, i64 value)
             return;
 
         default:
-            throw(ERROR_OPT_UNSUPPORTED);
+            throw(VAERROR_OPT_UNSUPPORTED);
     }
 }
 

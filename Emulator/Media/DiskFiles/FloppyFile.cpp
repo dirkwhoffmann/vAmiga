@@ -22,7 +22,7 @@ FloppyFile *
 FloppyFile::make(const std::filesystem::path &path)
 {
     std::ifstream stream(path, std::ifstream::binary);
-    if (!stream.is_open()) throw Error(ERROR_FILE_NOT_FOUND, path);
+    if (!stream.is_open()) throw Error(VAERROR_FILE_NOT_FOUND, path);
     
     switch (type(path)) {
             
@@ -35,7 +35,7 @@ FloppyFile::make(const std::filesystem::path &path)
         default:
             break;
     }
-    throw Error(ERROR_FILE_TYPE_MISMATCH);
+    throw Error(VAERROR_FILE_TYPE_MISMATCH);
 }
 
 FloppyDiskDescriptor

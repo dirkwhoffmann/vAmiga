@@ -60,12 +60,12 @@ DiagBoard::checkOption(Option opt, i64 value)
         case OPT_DIAG_BOARD:
 
             if (!isPoweredOff()) {
-                throw Error(ERROR_OPT_LOCKED);
+                throw Error(VAERROR_OPT_LOCKED);
             }
             return;
 
         default:
-            throw(ERROR_OPT_UNSUPPORTED);
+            throw(VAERROR_OPT_UNSUPPORTED);
     }
 }
 
@@ -321,7 +321,7 @@ DiagBoard::catchTask(const string &name)
     {   SUSPENDED
         
         if (!diagBoard.pluggedIn()) {
-            throw Error(ERROR_OSDB, "Diagnose board is not plugged in.");
+            throw Error(VAERROR_OSDB, "Diagnose board is not plugged in.");
         }
         if (std::find(targets.begin(), targets.end(), name) == targets.end()) {
             targets.push_back(name);

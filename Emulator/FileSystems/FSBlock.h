@@ -324,73 +324,73 @@ typedef FSBlock* BlockPtr;
 //
 
 #define EXPECT_BYTE(exp) { \
-if (value != (exp)) { *expected = (exp); return ERROR_FS_EXPECTED_VALUE; } }
+if (value != (exp)) { *expected = (exp); return VAERROR_FS_EXPECTED_VALUE; } }
 
 #define EXPECT_LONGWORD(exp) { \
 if ((byte % 4) == 0 && BYTE3(value) != BYTE3((u32)exp)) \
-{ *expected = (BYTE3((u32)exp)); return ERROR_FS_EXPECTED_VALUE; } \
+{ *expected = (BYTE3((u32)exp)); return VAERROR_FS_EXPECTED_VALUE; } \
 if ((byte % 4) == 1 && BYTE2(value) != BYTE2((u32)exp)) \
-{ *expected = (BYTE2((u32)exp)); return ERROR_FS_EXPECTED_VALUE; } \
+{ *expected = (BYTE2((u32)exp)); return VAERROR_FS_EXPECTED_VALUE; } \
 if ((byte % 4) == 2 && BYTE1(value) != BYTE1((u32)exp)) \
-{ *expected = (BYTE1((u32)exp)); return ERROR_FS_EXPECTED_VALUE; } \
+{ *expected = (BYTE1((u32)exp)); return VAERROR_FS_EXPECTED_VALUE; } \
 if ((byte % 4) == 3 && BYTE0(value) != BYTE0((u32)exp)) \
-{ *expected = (BYTE0((u32)exp)); return ERROR_FS_EXPECTED_VALUE; } }
+{ *expected = (BYTE0((u32)exp)); return VAERROR_FS_EXPECTED_VALUE; } }
 
 #define EXPECT_CHECKSUM EXPECT_LONGWORD(checksum())
 
 #define EXPECT_LESS_OR_EQUAL(exp) { \
 if (value > (u32)exp) \
-{ *expected = (u8)(exp); return ERROR_FS_EXPECTED_SMALLER_VALUE; } }
+{ *expected = (u8)(exp); return VAERROR_FS_EXPECTED_SMALLER_VALUE; } }
 
 #define EXPECT_DOS_REVISION { \
-if (!FSVolumeTypeEnum::isValid((isize)value)) return ERROR_FS_EXPECTED_DOS_REVISION; }
+if (!FSVolumeTypeEnum::isValid((isize)value)) return VAERROR_FS_EXPECTED_DOS_REVISION; }
 
 #define EXPECT_REF { \
-if (!device.block(value)) return ERROR_FS_EXPECTED_REF; }
+if (!device.block(value)) return VAERROR_FS_EXPECTED_REF; }
 
 #define EXPECT_SELFREF { \
-if (value != nr) return ERROR_FS_EXPECTED_SELFREF; }
+if (value != nr) return VAERROR_FS_EXPECTED_SELFREF; }
 
 #define EXPECT_FILEHEADER_REF { \
-if (ErrorCode e = device.checkBlockType(value, FS_FILEHEADER_BLOCK); e != ERROR_OK) return e; }
+if (ErrorCode e = device.checkBlockType(value, FS_FILEHEADER_BLOCK); e != VAERROR_OK) return e; }
 
 #define EXPECT_HASH_REF { \
-if (ErrorCode e = device.checkBlockType(value, FS_FILEHEADER_BLOCK, FS_USERDIR_BLOCK); e != ERROR_OK) return e; }
+if (ErrorCode e = device.checkBlockType(value, FS_FILEHEADER_BLOCK, FS_USERDIR_BLOCK); e != VAERROR_OK) return e; }
 
 #define EXPECT_OPTIONAL_HASH_REF { \
 if (value) { EXPECT_HASH_REF } }
 
 #define EXPECT_PARENT_DIR_REF { \
-if (ErrorCode e = device.checkBlockType(value, FS_ROOT_BLOCK, FS_USERDIR_BLOCK); e != ERROR_OK) return e; }
+if (ErrorCode e = device.checkBlockType(value, FS_ROOT_BLOCK, FS_USERDIR_BLOCK); e != VAERROR_OK) return e; }
 
 #define EXPECT_FILELIST_REF { \
-if (ErrorCode e = device.checkBlockType(value, FS_FILELIST_BLOCK); e != ERROR_OK) return e; }
+if (ErrorCode e = device.checkBlockType(value, FS_FILELIST_BLOCK); e != VAERROR_OK) return e; }
 
 #define EXPECT_OPTIONAL_FILELIST_REF { \
 if (value) { EXPECT_FILELIST_REF } }
 
 #define EXPECT_BITMAP_REF { \
-if (ErrorCode e = device.checkBlockType(value, FS_BITMAP_BLOCK); e != ERROR_OK) return e; }
+if (ErrorCode e = device.checkBlockType(value, FS_BITMAP_BLOCK); e != VAERROR_OK) return e; }
 
 #define EXPECT_OPTIONAL_BITMAP_REF { \
 if (value) { EXPECT_BITMAP_REF } }
 
 #define EXPECT_BITMAP_EXT_REF { \
-if (ErrorCode e = device.checkBlockType(value, FS_BITMAP_EXT_BLOCK); e != ERROR_OK) return e; }
+if (ErrorCode e = device.checkBlockType(value, FS_BITMAP_EXT_BLOCK); e != VAERROR_OK) return e; }
 
 #define EXPECT_OPTIONAL_BITMAP_EXT_REF { \
 if (value) { EXPECT_BITMAP_EXT_REF } }
 
 #define EXPECT_DATABLOCK_REF { \
-if (ErrorCode e = device.checkBlockType(value, FS_DATA_BLOCK_OFS, FS_DATA_BLOCK_FFS); e != ERROR_OK) return e; }
+if (ErrorCode e = device.checkBlockType(value, FS_DATA_BLOCK_OFS, FS_DATA_BLOCK_FFS); e != VAERROR_OK) return e; }
 
 #define EXPECT_OPTIONAL_DATABLOCK_REF { \
 if (value) { EXPECT_DATABLOCK_REF } }
 
 #define EXPECT_DATABLOCK_NUMBER { \
-if (value == 0) return ERROR_FS_EXPECTED_DATABLOCK_NR; }
+if (value == 0) return VAERROR_FS_EXPECTED_DATABLOCK_NR; }
 
 #define EXPECT_HASHTABLE_SIZE { \
-if (value != 72) return ERROR_FS_INVALID_HASHTABLE_SIZE; }
+if (value != 72) return VAERROR_FS_INVALID_HASHTABLE_SIZE; }
 
 }

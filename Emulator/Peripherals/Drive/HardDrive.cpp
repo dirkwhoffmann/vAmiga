@@ -135,7 +135,7 @@ HardDrive::init(const MediaFile &file)
 
     } catch (...) {
 
-        throw Error(ERROR_FILE_TYPE_MISMATCH);
+        throw Error(VAERROR_FILE_TYPE_MISMATCH);
     }
 }
 
@@ -273,7 +273,7 @@ HardDrive::checkOption(Option opt, i64 value)
         case OPT_HDR_TYPE:
 
             if (!HardDriveTypeEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INV_ARG, HardDriveTypeEnum::keyList());
+                throw Error(VAERROR_OPT_INV_ARG, HardDriveTypeEnum::keyList());
             }
             return;
 
@@ -287,7 +287,7 @@ HardDrive::checkOption(Option opt, i64 value)
             return;
 
         default:
-            throw(ERROR_OPT_UNSUPPORTED);
+            throw(VAERROR_OPT_UNSUPPORTED);
     }
 }
 
@@ -299,7 +299,7 @@ HardDrive::setOption(Option option, i64 value)
         case OPT_HDR_TYPE:
             
             if (!HardDriveTypeEnum::isValid(value)) {
-                throw Error(ERROR_OPT_INV_ARG, HardDriveTypeEnum::keyList());
+                throw Error(VAERROR_OPT_INV_ARG, HardDriveTypeEnum::keyList());
             }
             config.type = (HardDriveType)value;
             return;
@@ -589,12 +589,12 @@ HardDrive::saveWriteThroughImage()
     
     // Only proceed if a storage file is given
     if (path.empty()) {
-        throw Error(ERROR_WT, "No storage path specified");
+        throw Error(VAERROR_WT, "No storage path specified");
     }
     
     // Only proceed if no other emulator instance is using the storage file
     if (wtStream[objid].is_open()) {
-        throw Error(ERROR_WT_BLOCKED);
+        throw Error(VAERROR_WT_BLOCKED);
     }
     
     // Delete the old storage file
@@ -603,13 +603,13 @@ HardDrive::saveWriteThroughImage()
     // Recreate the storage file with the contents of this disk
     writeToFile(path);
     if (!util::fileExists(path)) {
-        throw Error(ERROR_WT, "Can't create storage file");
+        throw Error(VAERROR_WT, "Can't create storage file");
     }
 
     // Open file
     wtStream[objid].open(path, std::ios::binary | std::ios::in | std::ios::out);
     if (!wtStream[objid].is_open()) {
-        throw Error(ERROR_WT, "Can't open storage file");
+        throw Error(VAERROR_WT, "Can't open storage file");
     }
 }
 
@@ -670,7 +670,7 @@ HardDrive::changeGeometry(const GeometryDescriptor &geometry)
 
     } else {
         
-        throw Error(ERROR_HDR_UNMATCHED_GEOMETRY);
+        throw Error(VAERROR_HDR_UNMATCHED_GEOMETRY);
     }
 }
 

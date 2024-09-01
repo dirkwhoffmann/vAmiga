@@ -49,7 +49,7 @@ EXEFile::finalizeRead()
     
     // Add the executable
     FSBlock *file = volume.createFile("file", data.ptr, data.size);
-    if (!file) throw Error(ERROR_FS_OUT_OF_SPACE);
+    if (!file) throw Error(VAERROR_FS_OUT_OF_SPACE);
     
     // Add a script directory
     volume.createDir("s");
@@ -57,7 +57,7 @@ EXEFile::finalizeRead()
     
     // Add a startup sequence
     file = volume.createFile("startup-sequence", "file");
-    if (!file) throw Error(ERROR_FS_OUT_OF_SPACE);
+    if (!file) throw Error(VAERROR_FS_OUT_OF_SPACE);
 
     // Finalize
     volume.updateChecksums();

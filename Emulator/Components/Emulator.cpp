@@ -60,7 +60,7 @@ void
 Emulator::initialize()
 {
     // Make sure this function is only called once
-    if (isInitialized()) throw Error(ERROR_LAUNCH, "The emulator is already initialized.");
+    if (isInitialized()) throw Error(VAERROR_LAUNCH, "The emulator is already initialized.");
 
     // Initialize all components
     main.initialize();
@@ -423,7 +423,7 @@ Emulator::getDebugVariable(DebugFlag flag)
 {
 #ifdef RELEASEBUILD
 
-    throw Error(ERROR_OPT_UNSUPPORTED, "Debug variables are only accessible in debug builds.");
+    throw Error(VAERROR_OPT_UNSUPPORTED, "Debug variables are only accessible in debug builds.");
 
 #else
 
@@ -542,7 +542,7 @@ Emulator::getDebugVariable(DebugFlag flag)
         case FLAG_GDB_DEBUG:        return GDB_DEBUG;
 
         default:
-            throw Error(ERROR_OPT_UNSUPPORTED,
+            throw Error(VAERROR_OPT_UNSUPPORTED,
                         "Unhandled debug variable: " + string(DebugFlagEnum::key(flag)));
     }
 
@@ -554,7 +554,7 @@ Emulator::setDebugVariable(DebugFlag flag, bool val)
 {
 #ifdef RELEASEBUILD
 
-    throw Error(ERROR_OPT_UNSUPPORTED, "Debug variables are only accessible in debug builds.");
+    throw Error(VAERROR_OPT_UNSUPPORTED, "Debug variables are only accessible in debug builds.");
 
 #else
 
@@ -692,7 +692,7 @@ Emulator::setDebugVariable(DebugFlag flag, bool val)
         case FLAG_GDB_DEBUG:        GDB_DEBUG = val; break;
 
         default:
-            throw Error(ERROR_OPT_UNSUPPORTED,
+            throw Error(VAERROR_OPT_UNSUPPORTED,
                         "Unhandled debug variable: " + string(DebugFlagEnum::key(flag)));
     }
 #endif

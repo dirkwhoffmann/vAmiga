@@ -602,7 +602,7 @@ CommandConsole::initCommands(Command &root)
                         case 3: port.joystick.trigger(PRESS_FIRE3); break;
 
                         default:
-                            throw Error(ERROR_OPT_INV_ARG, "1...3");
+                            throw Error(VAERROR_OPT_INV_ARG, "1...3");
                     }
 
                 }, i);
@@ -621,7 +621,7 @@ CommandConsole::initCommands(Command &root)
                         case 3: port.joystick.trigger(RELEASE_FIRE3); break;
 
                         default:
-                            throw Error(ERROR_OPT_INV_ARG, "1...3");
+                            throw Error(VAERROR_OPT_INV_ARG, "1...3");
                     }
 
                 }, i);

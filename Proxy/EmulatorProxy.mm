@@ -26,7 +26,7 @@ using namespace vamiga::moira;
 
     if (self = [super init]) {
         
-        errorCode = ERROR_OK;
+        errorCode = VAERROR_OK;
         what = @"";
     }
     return self;

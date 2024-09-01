@@ -127,7 +127,7 @@ i64
 MemoryDebugger::memSearch(const string &pattern, u32 addr, isize align)
 {
     // Check alignment
-    if (align != 1 && IS_ODD(addr)) throw Error(ERROR_ADDR_UNALIGNED);
+    if (align != 1 && IS_ODD(addr)) throw Error(VAERROR_ADDR_UNALIGNED);
 
     if (isize length = isize(pattern.length()); length > 0) {
 
@@ -161,7 +161,7 @@ MemoryDebugger::read(u32 addr, isize sz)
     printf("sz = %ld addr = %d\n", sz, addr);
 
     // Check alignment
-    if (sz != 1 && IS_ODD(addr)) throw Error(ERROR_ADDR_UNALIGNED);
+    if (sz != 1 && IS_ODD(addr)) throw Error(VAERROR_ADDR_UNALIGNED);
 
     {   SUSPENDED
 
@@ -186,7 +186,7 @@ void
 MemoryDebugger::write(u32 addr, u32 val, isize sz, isize repeats)
 {
     // Check alignment
-    if (sz != 1 && IS_ODD(addr)) throw Error(ERROR_ADDR_UNALIGNED);
+    if (sz != 1 && IS_ODD(addr)) throw Error(VAERROR_ADDR_UNALIGNED);
 
     {   SUSPENDED
 
@@ -232,7 +232,7 @@ void
 MemoryDebugger::load(fs::path& path, u32 addr)
 {
     std::ifstream stream(path, std::ifstream::binary);
-    if (!stream.is_open()) throw Error(ERROR_FILE_NOT_FOUND, path);
+    if (!stream.is_open()) throw Error(VAERROR_FILE_NOT_FOUND, path);
 
     load(stream, addr);
 }
@@ -251,7 +251,7 @@ void
 MemoryDebugger::save(fs::path& path, u32 addr, isize count)
 {
     std::ofstream stream(path, std::ifstream::binary);
-    if (!stream.is_open()) throw Error(ERROR_FILE_CANT_CREATE, path);
+    if (!stream.is_open()) throw Error(VAERROR_FILE_CANT_CREATE, path);
 
     save(stream, addr, count);
 }
@@ -369,16 +369,16 @@ MemoryDebugger::isUnused(ChipsetReg reg) const
 u16
 MemoryDebugger::readCs(ChipsetReg reg) const
 {
-    if (isUnused(reg)) throw Error(ERROR_REG_UNUSED, ChipsetRegEnum::key(reg));
-    if (isWritable(reg)) throw Error(ERROR_REG_WRITE_ONLY, ChipsetRegEnum::key(reg));
+    if (isUnused(reg)) throw Error(VAERROR_REG_UNUSED, ChipsetRegEnum::key(reg));
+    if (isWritable(reg)) throw Error(VAERROR_REG_WRITE_ONLY, ChipsetRegEnum::key(reg));
 
     return mem.peekCustom16(u32(reg << 1));
 }
 void
 MemoryDebugger::writeCs(ChipsetReg reg, u16 value)
 {
-    if (isUnused(reg)) throw Error(ERROR_REG_UNUSED, ChipsetRegEnum::key(reg));
-    if (isReadable(reg)) throw Error(ERROR_REG_READ_ONLY, ChipsetRegEnum::key(reg));
+    if (isUnused(reg)) throw Error(VAERROR_REG_UNUSED, ChipsetRegEnum::key(reg));
+    if (isReadable(reg)) throw Error(VAERROR_REG_READ_ONLY, ChipsetRegEnum::key(reg));
 
     return mem.pokeCustom16<ACCESSOR_CPU>(u32(reg << 1), value);
 }

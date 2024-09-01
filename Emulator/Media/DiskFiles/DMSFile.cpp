@@ -45,7 +45,7 @@ DMSFile::finalizeRead()
     }
     
     if (adfData) free(adfData);
-    if (!adf) throw Error(ERROR_DMS_CANT_CREATE);
+    if (!adf) throw Error(VAERROR_DMS_CANT_CREATE);
 }
 
 }

@@ -80,13 +80,13 @@ Snapshot::Snapshot(Amiga &amiga) : Snapshot(amiga.size())
 void
 Snapshot::finalizeRead()
 {
-    if (FORCE_SNAP_TOO_OLD) throw Error(ERROR_SNAP_TOO_OLD);
-    if (FORCE_SNAP_TOO_NEW) throw Error(ERROR_SNAP_TOO_NEW);
-    if (FORCE_SNAP_IS_BETA) throw Error(ERROR_SNAP_IS_BETA);
+    if (FORCE_SNAP_TOO_OLD) throw Error(VAERROR_SNAP_TOO_OLD);
+    if (FORCE_SNAP_TOO_NEW) throw Error(VAERROR_SNAP_TOO_NEW);
+    if (FORCE_SNAP_IS_BETA) throw Error(VAERROR_SNAP_IS_BETA);
 
-    if (isTooOld()) throw Error(ERROR_SNAP_TOO_OLD);
-    if (isTooNew()) throw Error(ERROR_SNAP_TOO_NEW);
-    if (isBeta() && !betaRelease) throw Error(ERROR_SNAP_IS_BETA);
+    if (isTooOld()) throw Error(VAERROR_SNAP_TOO_OLD);
+    if (isTooNew()) throw Error(VAERROR_SNAP_TOO_NEW);
+    if (isBeta() && !betaRelease) throw Error(VAERROR_SNAP_IS_BETA);
 }
 
 std::pair <isize,isize>
