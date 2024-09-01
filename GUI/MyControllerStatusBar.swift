@@ -32,6 +32,7 @@ extension MyController {
         let tracking = emu.tracking
         let cpuinfo = emu.cpu.info
         let warp = emu.warping
+        let speedBoost = emu.get(.AMIGA_SPEED_BOOST)
 
         // Df0 - Df3
         for n in 0...3 where drv[n] != nil {
@@ -67,6 +68,10 @@ extension MyController {
         // Warp mode icon
         warpIcon.image = hourglassIcon
         
+        // Speed adjust
+        speedStepper.integerValue = speedBoost
+        speedStepper.toolTip = "\(speedBoost) %"
+
         // Visibility
         let items: [NSView: Bool] = [
             
@@ -95,7 +100,8 @@ extension MyController {
             warpIcon: running,
             activityType: running,
             activityInfo: running,
-            activityBar: running
+            activityBar: running,
+            speedStepper: running
         ]
         
         for (item, visible) in items {
@@ -292,4 +298,22 @@ extension MyController {
 
         refreshStatusBar()
     }
+
+    @IBAction func speedAction(_ sender: NSStepper!) {
+
+        // Round the value to the next number dividable by 5
+        var value = Int(round(sender.doubleValue / 5.0)) * 5
+
+        // Make sure the value is in the valid range
+        if value < 50 { value = 50 }
+        if value > 200 { value = 200 }
+
+        emu?.set(.AMIGA_SPEED_BOOST, value: value)
+    }
+
+    @IBAction func speedResetAction(_ sender: Any!) {
+
+        emu?.set(.AMIGA_SPEED_BOOST, value: 100)
+    }
+
 }

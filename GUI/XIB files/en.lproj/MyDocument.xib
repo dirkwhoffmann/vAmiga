@@ -30,6 +30,7 @@
                 <outlet property="muteIcon" destination="9cr-37-7RV" id="AhN-q7-1qK"/>
                 <outlet property="powerLED" destination="1208" id="hey-Hi-zTq"/>
                 <outlet property="serverIcon" destination="cdG-NT-T3J" id="Oxi-mf-eZE"/>
+                <outlet property="speedStepper" destination="6l7-xP-CGV" id="81R-1K-SNm"/>
                 <outlet property="toolbar" destination="1845" id="JVx-NQ-tw7"/>
                 <outlet property="trackIcon" destination="iho-fa-H5O" id="esY-x7-awJ"/>
                 <outlet property="warpIcon" destination="1052" id="QGs-ln-NvN"/>
@@ -72,6 +73,9 @@
                         <levelIndicatorCell key="cell" alignment="left" maxValue="140" criticalValue="140" id="1702">
                             <font key="font" metaFont="system"/>
                         </levelIndicatorCell>
+                        <connections>
+                            <action selector="speedResetAction:" target="-2" id="Aca-tq-ZlF"/>
+                        </connections>
                     </levelIndicator>
                     <button hidden="YES" tag="1" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D1i-Ep-fTN">
                         <rect key="frame" x="98" y="4" width="16" height="16"/>
@@ -173,7 +177,7 @@
                         </connections>
                     </customView>
                     <button tag="2" id="iho-fa-H5O" userLabel="Mute">
-                        <rect key="frame" x="560" y="3" width="20" height="20"/>
+                        <rect key="frame" x="543" y="3" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="inspectTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="izA-UN-588">
                             <behavior key="behavior" lightByContents="YES"/>
@@ -181,7 +185,7 @@
                         </buttonCell>
                     </button>
                     <button tag="2" id="cdG-NT-T3J" userLabel="Debug Mode">
-                        <rect key="frame" x="532" y="3" width="20" height="20"/>
+                        <rect key="frame" x="515" y="3" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="srvConnectTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="ePm-pT-sH6">
                             <behavior key="behavior" lightByContents="YES"/>
@@ -189,7 +193,7 @@
                         </buttonCell>
                     </button>
                     <button tag="2" id="46l-A8-v8C" userLabel="Halt">
-                        <rect key="frame" x="504" y="3" width="20" height="20"/>
+                        <rect key="frame" x="487" y="3" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="haltTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="Qoa-ac-fgt">
                             <behavior key="behavior" lightByContents="YES"/>
@@ -197,7 +201,7 @@
                         </buttonCell>
                     </button>
                     <button tag="2" id="1Ke-5u-05P" userLabel="Halt">
-                        <rect key="frame" x="476" y="3" width="20" height="20"/>
+                        <rect key="frame" x="459" y="3" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="cmdKeyTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="I2d-4O-y9r">
                             <behavior key="behavior" lightByContents="YES"/>
@@ -205,7 +209,7 @@
                         </buttonCell>
                     </button>
                     <button toolTip="Warp mode" id="1052">
-                        <rect key="frame" x="703" y="4" width="18" height="18"/>
+                        <rect key="frame" x="689" y="4" width="18" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="hourglass1Template" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="1707">
                             <behavior key="behavior" lightByContents="YES"/>
@@ -216,7 +220,7 @@
                         </connections>
                     </button>
                     <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0go-7K-IPf">
-                        <rect key="frame" x="676" y="2" width="26" height="22"/>
+                        <rect key="frame" x="662" y="2" width="26" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <popUpButtonCell key="cell" type="bevel" title="Amiga Frequency" bezelStyle="regularSquare" imagePosition="left" lineBreakMode="truncatingTail" state="on" transparent="YES" inset="2" preferredEdge="minX" selectedItem="ebX-Qd-V1U" id="fbh-jz-zm9">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -238,7 +242,7 @@
                         </connections>
                     </popUpButton>
                     <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oNV-mZ-JGc">
-                        <rect key="frame" x="615" y="8" width="64" height="11"/>
+                        <rect key="frame" x="601" y="8" width="64" height="11"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="right" title="00% CPU" id="GSz-Xi-cus">
                             <font key="font" metaFont="label" size="9"/>
@@ -247,7 +251,7 @@
                         </textFieldCell>
                     </textField>
                     <button tag="2" id="dpd-DV-6eT" userLabel="Halt">
-                        <rect key="frame" x="454" y="3" width="20" height="20"/>
+                        <rect key="frame" x="437" y="3" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="cmdKeyTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="R0x-fF-Es0">
                             <behavior key="behavior" lightByContents="YES"/>
@@ -255,13 +259,21 @@
                         </buttonCell>
                     </button>
                     <button tag="2" id="9cr-37-7RV" userLabel="Mute">
-                        <rect key="frame" x="588" y="2" width="20" height="20"/>
+                        <rect key="frame" x="571" y="2" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="muteTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="WPR-BY-tr5">
                             <behavior key="behavior" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
+                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6l7-xP-CGV">
+                        <rect key="frame" x="712" y="1" width="15" height="22"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="5" minValue="50" maxValue="200" doubleValue="100" id="eq6-ld-ajJ"/>
+                        <connections>
+                            <action selector="speedAction:" target="-2" id="IhZ-xE-IbK"/>
+                        </connections>
+                    </stepper>
                 </subviews>
             </view>
             <toolbar key="toolbar" implicitIdentifier="562FDE63-25B0-4E4E-80C7-EF6E742B5F6F" displayMode="iconAndLabel" sizeMode="regular" id="1845" customClass="MyToolbar" customModule="vAmiga" customModuleProvider="target">
@@ -328,7 +340,7 @@
                         <popUpButton key="view" tag="10" id="L2b-nG-yBo" userLabel="Port 1">
                             <rect key="frame" x="0.0" y="14" width="45" height="24"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="VD3-Wr-Ufe" id="Oxd-8A-P5o" userLabel="PopupButtonCell">
+                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="VD3-Wr-Ufe" id="Oxd-8A-P5o" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" autoenablesItems="NO" id="zHf-yH-YTM">
@@ -356,7 +368,7 @@
                         <popUpButton key="view" tag="11" id="4MP-rV-xX2" userLabel="Port 2">
                             <rect key="frame" x="0.0" y="14" width="45" height="24"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
+                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" autoenablesItems="NO" id="L3K-on-eyR">
