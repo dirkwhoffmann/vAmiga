@@ -29,12 +29,22 @@ EADFFile::isCompatible(const std::filesystem::path &path)
 }
 
 bool
+EADFFile::isCompatible(const u8 *buf, isize len)
+{
+    for (auto &header : extAdfHeaders) {
+
+        if (util::matchingBufferHeader(buf, header)) return true;
+    }
+    return false;
+}
+
+bool
 EADFFile::isCompatible(std::istream &stream)
 {
     for (auto &header : extAdfHeaders) {
+
         if (util::matchingStreamHeader(stream, header)) return true;
     }
-
     return false;
 }
 

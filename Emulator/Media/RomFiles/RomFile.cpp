@@ -72,6 +72,47 @@ RomFile::isCompatible(const std::filesystem::path &path)
 }
 
 bool
+RomFile::isCompatible(const u8 *buf, isize length)
+{
+    // Boot Roms
+    if (length == KB(8) || length == KB(16)) {
+
+        isize len = isizeof(bootRomHeaders[0]);
+        isize cnt = isizeof(bootRomHeaders) / len;
+
+        for (isize i = 0; i < cnt; i++) {
+            if (util::matchingBufferHeader(buf, bootRomHeaders[i], len)) return true;
+        }
+        return ALLOW_ALL_ROMS;
+    }
+
+    // Kickstart Roms
+    if (length == KB(256) || length == KB(512)) {
+
+        isize len = isizeof(kickRomHeaders[0]);
+        isize cnt = isizeof(kickRomHeaders) / len;
+
+        for (isize i = 0; i < cnt; i++) {
+            if (util::matchingBufferHeader(buf, kickRomHeaders[i], len)) return true;
+        }
+        return ALLOW_ALL_ROMS;
+    }
+
+    // Encrypted Kickstart Roms
+    if (length == KB(256) + 11 || length == KB(512) + 11) {
+
+        isize len = isizeof(encrRomHeaders[0]);
+        isize cnt = isizeof(encrRomHeaders) / len;
+
+        for (isize i = 0; i < cnt; i++) {
+            if (util::matchingBufferHeader(buf, encrRomHeaders[i], len)) return true;
+        }
+    }
+
+    return ALLOW_ALL_ROMS;
+}
+
+bool
 RomFile::isCompatible(std::istream &stream)
 {
     isize length = util::streamLength(stream);

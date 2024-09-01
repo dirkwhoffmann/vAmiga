@@ -23,6 +23,13 @@ STFile::isCompatible(const std::filesystem::path &path)
 }
 
 bool
+STFile::isCompatible(const u8 *buf, isize len)
+{
+    // There are no magic bytes. We can only check the buffer size
+    return len == STSIZE_35_DD;
+}
+
+bool
 STFile::isCompatible(std::istream &stream)
 {
     isize length = util::streamLength(stream);

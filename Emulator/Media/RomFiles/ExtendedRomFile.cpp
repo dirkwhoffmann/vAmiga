@@ -25,6 +25,16 @@ ExtendedRomFile::isCompatible(const std::filesystem::path &name)
 }
 
 bool
+ExtendedRomFile::isCompatible(const u8 *buf, isize len)
+{
+    if (len != KB(512)) return false;
+
+    return
+    util::matchingBufferHeader(buf, magicBytes1, sizeof(magicBytes1)) ||
+    util::matchingBufferHeader(buf, magicBytes2, sizeof(magicBytes2));
+}
+
+bool
 ExtendedRomFile::isCompatible(std::istream &stream)
 {
     if (util::streamLength(stream) != KB(512)) return false;

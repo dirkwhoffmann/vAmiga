@@ -27,6 +27,7 @@ public:
     static constexpr isize ADFSIZE_35_HD    = 1802240;  // 1760 KB
     
     static bool isCompatible(const std::filesystem::path &path);
+    static bool isCompatible(const u8 *buf, isize len);
     static bool isCompatible(std::istream &stream);
     
 private:
@@ -77,6 +78,7 @@ public:
 public:
     
     bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
+    bool isCompatibleBuffer(const u8 *buf, isize len) override { return isCompatible(buf, len); }
     bool isCompatibleStream(std::istream &stream) const override { return isCompatible(stream); }
     FileType type() const override { return FILETYPE_ADF; }
     void finalizeRead() override;

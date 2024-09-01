@@ -20,6 +20,12 @@ Folder::isCompatible(const std::filesystem::path &path)
     return util::isDirectory(path);
 }
 
+bool
+Folder::isCompatible(const u8 *buf, isize len)
+{
+    return false;
+}
+
 void
 Folder::init(const std::filesystem::path &path)
 {

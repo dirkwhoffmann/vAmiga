@@ -95,6 +95,12 @@ AmigaFile::flash(u8 *buf, isize offset) const
     flash (buf, offset, data.size);
 }
 
+bool
+AmigaFile::isCompatibleBuffer(const Buffer<u8> &buffer)
+{
+    return isCompatibleBuffer(buffer.ptr, buffer.size);
+}
+
 isize
 AmigaFile::readFromStream(std::istream &stream)
 {

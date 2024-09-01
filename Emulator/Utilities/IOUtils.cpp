@@ -164,9 +164,31 @@ matchingBufferHeader(const u8 *buffer, const u8 *header, isize len, isize offset
         if (buffer[offset + i] != header[i])
             return false;
     }
-
     return true;
 }
+
+bool 
+matchingBufferHeader(const u8 *buf, isize blen, const string &header, isize offset)
+{
+    assert(buf != nullptr);
+
+    if (isize length = isize(header.length()); length <= blen) {
+
+        for (usize i = 0; i < header.length(); i++) {
+            if (buf[offset + i] != header[i])
+                return false;
+        }
+    }
+    return true;
+}
+
+bool 
+matchingBufferHeader(const u8 *buf, const string &header, isize offset)
+{
+    auto blen = std::numeric_limits<isize>::max();
+    return matchingBufferHeader(buf, blen, header, offset);
+}
+
 
 isize
 streamLength(std::istream &stream)

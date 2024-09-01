@@ -28,6 +28,19 @@ ADFFile::isCompatible(const std::filesystem::path &path)
 }
 
 bool
+ADFFile::isCompatible(const u8 *buf, isize len)
+{
+    // Some ADFs contain an additional byte at the end. Ignore it.
+    len &= ~1;
+
+    // The size must be a multiple of the cylinder size
+    if (len % 11264) return false;
+
+    // Check some more limits
+    return len <= ADFSIZE_35_DD_84 || len == ADFSIZE_35_HD;
+}
+
+bool
 ADFFile::isCompatible(std::istream &stream)
 {
     isize length = util::streamLength(stream);

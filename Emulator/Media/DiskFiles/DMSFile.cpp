@@ -26,6 +26,12 @@ DMSFile::isCompatible(const std::filesystem::path &path)
 }
 
 bool
+DMSFile::isCompatible(const u8 *buf, isize len)
+{
+    return util::matchingBufferHeader(buf, "DMS!");
+}
+
+bool
 DMSFile::isCompatible(std::istream &stream)
 {                                                                                            
     return util::matchingStreamHeader(stream, "DMS!");

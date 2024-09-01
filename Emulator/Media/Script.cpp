@@ -24,6 +24,12 @@ Script::isCompatible(const std::filesystem::path &path)
 }
 
 bool
+Script::isCompatible(const u8 *buf, isize len)
+{
+    return true;
+}
+
+bool
 Script::isCompatible(std::istream &stream)
 {
     return true;

@@ -24,6 +24,17 @@ EXEFile::isCompatible(const std::filesystem::path &path)
 }
 
 bool
+EXEFile::isCompatible(const u8 *buf, isize len)
+{
+    u8 signature[] = { 0x00, 0x00, 0x03, 0xF3 };
+
+    // Only accept the file if it fits onto a HD disk
+    if (len > 1710000) return false;
+
+    return util::matchingBufferHeader(buf, signature, sizeof(signature));
+}
+
+bool
 EXEFile::isCompatible(std::istream &stream)
 {
     u8 signature[] = { 0x00, 0x00, 0x03, 0xF3 };

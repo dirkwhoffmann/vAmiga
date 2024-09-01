@@ -27,6 +27,7 @@ class RomFile : public AmigaFile {
 public:
 
     static bool isCompatible(const std::filesystem::path &path);
+    static bool isCompatible(const u8 *buf, isize len);
     static bool isCompatible(std::istream &stream);
 
     static bool isRomBuffer(const u8 *buf, isize len);
@@ -50,6 +51,7 @@ public:
 
     FileType type() const override { return FILETYPE_ROM; }
     bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
+    bool isCompatibleBuffer(const u8 *buf, isize len) override { return isCompatible(buf, len); }
     bool isCompatibleStream(std::istream &stream) const override { return isCompatible(stream); }
 
 

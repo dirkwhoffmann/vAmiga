@@ -47,6 +47,19 @@ Snapshot::isCompatible(const std::filesystem::path &path)
 }
 
 bool
+Snapshot::isCompatible(const u8 *buf, isize len)
+{
+    if (len < isizeof(SnapshotHeader)) return false;
+    return util::matchingBufferHeader(buf, string("VASNAP"));
+}
+
+bool
+Snapshot::isCompatible(const Buffer<u8> &buf)
+{
+    return isCompatible(buf.ptr, buf.size);
+}
+
+bool
 Snapshot::isCompatible(std::istream &stream)
 {
     const u8 magicBytes[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
