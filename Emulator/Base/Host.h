@@ -18,7 +18,7 @@ namespace vamiga {
 /* This class stores some information about the host system. The values need to
  * be set by the GUI on start and updated on-the-fly when a value changes.
  */
-class Host : public SubComponent {
+class Host final : public SubComponent {
 
     Descriptions descriptions = {{
 

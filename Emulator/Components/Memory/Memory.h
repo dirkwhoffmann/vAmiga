@@ -102,7 +102,7 @@ assert((x) >= 0xE80000 && (x) <= 0xE8FFFF);
 #define WRITE_EXT_16(x,y)   W16BE(ext + ((x) & extMask), (y))
 
 
-class Memory : public SubComponent, public Inspectable<MemInfo, MemStats> {
+class Memory final : public SubComponent, public Inspectable<MemInfo, MemStats> {
 
     Descriptions descriptions = {{
 

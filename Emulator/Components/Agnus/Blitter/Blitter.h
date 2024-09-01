@@ -30,7 +30,7 @@ namespace vamiga {
  * Level 0 and 1 invoke the FastBlitter. Level 2 invokes the SlowBlitter.
  */
 
-class Blitter : public SubComponent, public Inspectable<BlitterInfo>
+class Blitter final : public SubComponent, public Inspectable<BlitterInfo>
 {
     friend class Agnus;
 

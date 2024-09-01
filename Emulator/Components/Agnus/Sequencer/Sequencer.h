@@ -115,7 +115,7 @@ static constexpr usize UPDATE_SIG_RECORDER  = 0b001;
 static constexpr usize UPDATE_BPL_TABLE     = 0b010;
 static constexpr usize UPDATE_DAS_TABLE     = 0b100;
 
-class Sequencer : public SubComponent
+class Sequencer final : public SubComponent
 {
     Descriptions descriptions = {{
 

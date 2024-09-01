@@ -26,7 +26,7 @@ typedef union
 }
 Counter24;
 
-class TOD : public SubComponent, public Inspectable<TODInfo> {
+class TOD final : public SubComponent, public Inspectable<TODInfo> {
 
     Descriptions descriptions = {{
 

@@ -13,7 +13,7 @@
 
 namespace vamiga {
 
-class RshServer : public RemoteServer {
+class RshServer final : public RemoteServer {
 
 public:
     

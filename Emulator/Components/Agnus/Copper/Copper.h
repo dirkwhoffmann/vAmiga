@@ -19,7 +19,7 @@
 
 namespace vamiga {
 
-class Copper : public SubComponent, public Inspectable<CopperInfo>
+class Copper final : public SubComponent, public Inspectable<CopperInfo>
 {
     Descriptions descriptions = {{
 

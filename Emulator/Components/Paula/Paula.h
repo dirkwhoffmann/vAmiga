@@ -21,7 +21,7 @@
 
 namespace vamiga {
 
-class Paula : public SubComponent, public Inspectable<PaulaInfo> {
+class Paula final : public SubComponent, public Inspectable<PaulaInfo> {
 
     Descriptions descriptions = {{
 

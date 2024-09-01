@@ -14,7 +14,7 @@
 
 namespace vamiga {
 
-class SerServer : public RemoteServer {
+class SerServer final : public RemoteServer {
 
     // A ringbuffer for buffering incoming bytes
     util::SortedRingBuffer <u8, 8096> buffer;

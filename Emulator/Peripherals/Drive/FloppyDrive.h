@@ -21,7 +21,7 @@
 
 namespace vamiga {
 
-class FloppyDrive : public Drive, public Inspectable<FloppyDriveInfo> {
+class FloppyDrive final : public Drive, public Inspectable<FloppyDriveInfo> {
 
     Descriptions descriptions = {
         {

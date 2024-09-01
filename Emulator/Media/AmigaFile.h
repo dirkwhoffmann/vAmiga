@@ -94,13 +94,15 @@ public:
     // Methods from CoreObject
     //
     
+    /*
 private:
     
     void _dump(Category category, std::ostream& os) const override { }
+     */
 
-    
+
     //
-    // Accessing
+    // Methods from MediaFile
     //
     
 public:

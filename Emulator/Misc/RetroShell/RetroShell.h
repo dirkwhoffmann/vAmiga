@@ -34,7 +34,7 @@
 
 namespace vamiga {
 
-class RetroShell : public SubComponent {
+class RetroShell final : public SubComponent {
 
     friend class RshServer;
     // friend class Interpreter;

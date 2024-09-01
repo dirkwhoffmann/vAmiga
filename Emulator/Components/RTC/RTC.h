@@ -14,7 +14,7 @@
 
 namespace vamiga {
 
-class RTC : public SubComponent {
+class RTC final : public SubComponent {
 
     Descriptions descriptions = {{
 

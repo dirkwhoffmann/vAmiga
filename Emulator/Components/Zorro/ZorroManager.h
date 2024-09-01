@@ -16,7 +16,7 @@
 
 namespace vamiga {
 
-class ZorroManager : public SubComponent {
+class ZorroManager final : public SubComponent {
     
     Descriptions descriptions = {{
 

@@ -42,7 +42,7 @@ public:
     void setNeedsCheck(bool value) override;
 };
 
-class CopperDebugger: public SubComponent {
+class CopperDebugger final : public SubComponent {
 
     Descriptions descriptions = {{
 

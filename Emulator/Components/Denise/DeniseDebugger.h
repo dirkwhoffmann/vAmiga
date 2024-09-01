@@ -15,7 +15,7 @@
 
 namespace vamiga {
 
-class DeniseDebugger: public SubComponent {
+class DeniseDebugger final : public SubComponent {
 
     friend class Denise;
     

@@ -33,7 +33,7 @@ enum class GdbCmd
     fThreadInfo,
 };
 
-class GdbServer : public RemoteServer {
+class GdbServer final : public RemoteServer {
 
     // The name of the process to be debugged
     string processName;

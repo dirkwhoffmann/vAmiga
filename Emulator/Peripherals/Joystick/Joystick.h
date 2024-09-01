@@ -14,7 +14,7 @@
 
 namespace vamiga {
 
-class Joystick : public SubComponent, public Inspectable<JoystickInfo> {
+class Joystick final : public SubComponent, public Inspectable<JoystickInfo> {
 
     Descriptions descriptions = {
         {
@@ -110,6 +110,15 @@ private:
             << bulletCounter
             << nextAutofireFrame
             << nextAutofireReleaseFrame;
+
+        } else {
+
+            worker
+
+            << config.autofire
+            << config.autofireBursts
+            << config.autofireBullets
+            << config.autofireDelay;
         }
 
     } SERIALIZERS(serialize);
@@ -189,7 +198,6 @@ private:
     void stopAutofire();
 
     // Reloads the autofire magazine
-    void reload();
     void reload(isize bullets);
 };
 

@@ -42,7 +42,7 @@ namespace vamiga {
  *           -----------------------------------------------------
  */
 
-class AudioPort : public SubComponent {
+class AudioPort final : public SubComponent {
 
     friend class AudioFilter;
 

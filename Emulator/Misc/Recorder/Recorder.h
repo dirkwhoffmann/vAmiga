@@ -20,7 +20,7 @@ namespace vamiga {
 
 using util::Buffer;
 
-class Recorder : public SubComponent {
+class Recorder final : public SubComponent {
 
     Descriptions descriptions = {{
 

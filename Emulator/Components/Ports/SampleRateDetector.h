@@ -14,7 +14,7 @@
 
 namespace vamiga {
 
-class SampleRateDetector : public SubComponent {
+class SampleRateDetector final : public SubComponent {
 
     Descriptions descriptions = {{
 

@@ -15,7 +15,7 @@
 
 namespace vamiga {
 
-class RegressionTester : public SubComponent {
+class RegressionTester final : public SubComponent {
 
     Descriptions descriptions = {{
 

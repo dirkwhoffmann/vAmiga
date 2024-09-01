@@ -16,7 +16,7 @@
 
 namespace vamiga {
 
-class UART : public SubComponent, public Inspectable<UARTInfo> {
+class UART final : public SubComponent, public Inspectable<UARTInfo> {
 
     Descriptions descriptions = {{
 

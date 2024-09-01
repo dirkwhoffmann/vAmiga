@@ -315,7 +315,7 @@ protected:
     void _dump(CoreObject &component, Category category);
 };
 
-class CommandConsole : public Console
+class CommandConsole final : public Console
 {
     using Console::Console;
 
@@ -327,7 +327,7 @@ class CommandConsole : public Console
     void pressReturn(bool shift) override;
 };
 
-class DebugConsole : public Console
+class DebugConsole final : public Console
 {
     using Console::Console;
 

@@ -17,7 +17,7 @@
 namespace vamiga {
 
 template <isize nr>
-class StateMachine : public SubComponent, public Inspectable<StateMachineInfo> {
+class StateMachine final : public SubComponent, public Inspectable<StateMachineInfo> {
 
     Descriptions descriptions = {
         {

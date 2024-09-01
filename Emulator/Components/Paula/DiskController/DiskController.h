@@ -16,7 +16,7 @@
 
 namespace vamiga {
 
-class DiskController : public SubComponent, public Inspectable<DiskControllerInfo>
+class DiskController final : public SubComponent, public Inspectable<DiskControllerInfo>
 {
     Descriptions descriptions = {{
 

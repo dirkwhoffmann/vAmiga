@@ -163,19 +163,6 @@ Joystick::stopAutofire()
 }
 
 void
-Joystick::reload()
-{
-    if (config.autofire) {
-
-        reload(config.autofireBursts ? config.autofireBullets : INT_MAX);
-
-    } else {
-
-        reload(0);
-    }
-}
-
-void
 Joystick::reload(isize bullets)
 {
     bulletCounter = bullets;
@@ -260,10 +247,8 @@ Joystick::trigger(GamePadAction event)
         case RELEASE_FIRE2: button2 = false; break;
         case RELEASE_FIRE3: button3 = false; break;
 
-
         case PRESS_FIRE:
 
-            printf("bulletCounter = %ld\n", bulletCounter);
             // If autofire is enabled...
             if (config.autofire) {
 

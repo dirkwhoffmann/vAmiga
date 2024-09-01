@@ -20,7 +20,7 @@
 
 namespace vamiga {
 
-class Denise : public SubComponent, public Inspectable<DeniseInfo> {
+class Denise final : public SubComponent, public Inspectable<DeniseInfo> {
 
     friend class DeniseDebugger;
 

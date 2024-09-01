@@ -25,6 +25,18 @@
 namespace vamiga {
 
 void
+AmigaFile::init(isize len)
+{
+    data.init(len);
+}
+
+void
+AmigaFile::init(const Buffer<u8> &buffer)
+{
+    init(buffer.ptr, buffer.size);
+}
+
+void
 AmigaFile::init(const std::filesystem::path &path)
 {
     std::ifstream stream(path, std::ifstream::binary);
@@ -48,25 +60,12 @@ AmigaFile::init(std::istream &stream)
 }
 
 void
-AmigaFile::init(isize len)
-{
-    data.init(len);
-    data.clear();
-}
-
-void
 AmigaFile::init(const u8 *buf, isize len)
 {    
     assert(buf);
     std::stringstream stream;
     stream.write((const char *)buf, len);
     init(stream);
-}
-
-void
-AmigaFile::init(const Buffer<u8> &buffer)
-{
-    init(buffer.ptr, buffer.size);
 }
 
 void
@@ -107,8 +106,7 @@ AmigaFile::readFromStream(std::istream &stream)
 
     // Allocate memory
     data.init(isize(fsize));
-    data.clear();
-    
+
     // Read from stream
     stream.read((char *)data.ptr, data.size);
     finalizeRead();

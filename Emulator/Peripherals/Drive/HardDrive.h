@@ -18,7 +18,7 @@
 
 namespace vamiga {
 
-class HardDrive : public Drive, public Inspectable<HardDriveInfo> {
+class HardDrive final : public Drive, public Inspectable<HardDriveInfo> {
     
     Descriptions descriptions = {
         {

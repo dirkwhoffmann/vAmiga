@@ -153,7 +153,6 @@ public:
 
     void hardReset();
     void softReset();
-
     void stepInto();
     void stepOver();
 

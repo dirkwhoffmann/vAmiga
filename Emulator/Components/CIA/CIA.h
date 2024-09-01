@@ -654,8 +654,8 @@ public:
 // CIAA
 //
 
-class CIAA : public CIA {
-    
+class CIAA final : public CIA {
+
 public:
     
     CIAA(Amiga& ref) : CIA(ref, 0) { };
@@ -692,7 +692,7 @@ public:
 // CIAB
 //
 
-class CIAB : public CIA {
+class CIAB final : public CIA {
     
 public:
     

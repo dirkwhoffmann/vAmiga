@@ -107,7 +107,7 @@ struct TwoPoleFilter : CoreObject {
 };
 
 
-class AudioFilter : public SubComponent {
+class AudioFilter final : public SubComponent {
     
     friend class AudioPort;
 

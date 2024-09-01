@@ -18,7 +18,7 @@
 
 namespace vamiga {
 
-class DmaDebugger : public SubComponent, public Inspectable<DmaDebuggerInfo> {
+class DmaDebugger final : public SubComponent, public Inspectable<DmaDebuggerInfo> {
 
     Descriptions descriptions = {{
 

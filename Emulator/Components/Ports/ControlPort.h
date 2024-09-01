@@ -17,7 +17,7 @@
 
 namespace vamiga {
 
-class ControlPort : public SubComponent, public Inspectable<ControlPortInfo> {
+class ControlPort final : public SubComponent, public Inspectable<ControlPortInfo> {
 
     Descriptions descriptions = {
         {

@@ -17,7 +17,7 @@
 
 namespace vamiga {
 
-class Keyboard : public SubComponent {
+class Keyboard final : public SubComponent {
 
     Descriptions descriptions = {{
 

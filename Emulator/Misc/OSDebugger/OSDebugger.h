@@ -15,7 +15,7 @@
 
 namespace vamiga {
 
-class OSDebugger : public SubComponent {
+class OSDebugger final : public SubComponent {
     
     Descriptions descriptions = {{
 
