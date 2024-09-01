@@ -259,7 +259,7 @@ public:
         << config.warpMode
         << config.warpBoot
         << config.vsync
-        << config.timeLapse;
+        << config.speedBoost;
 
     } SERIALIZERS(serialize);
 

@@ -350,7 +350,7 @@ class Configuration {
         get { return amiga.get(.AMIGA_VSYNC) != 0 }
         set { amiga.set(.AMIGA_VSYNC, enable: newValue) }
     }
-    var timeLapse: Int {
+    var speedBoost: Int {
         get { return amiga.get(.AMIGA_SPEED_BOOST) }
         set { amiga.set(.AMIGA_SPEED_BOOST, value: newValue) }
     }

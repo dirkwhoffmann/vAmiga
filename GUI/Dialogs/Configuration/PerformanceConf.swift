@@ -21,11 +21,11 @@ extension ConfigurationController {
         let vsync = config.vsync
         let runAhead = config.runAhead
         prfVSync.state = config.vsync ? .on : .off
-        prfTimeLapse.integerValue = config.timeLapse
-        prfTimeLapseInfo.stringValue = "\(config.timeLapse) %"
-        prfTimeLapse.isEnabled = !vsync
-        prfTimeLapseInfo.textColor = vsync ? .tertiaryLabelColor : .labelColor
-        prfRunAheadSlider.integerValue = runAhead
+        prfSpeedBoost.integerValue = config.speedBoost
+        prfSpeedBoostInfo.stringValue = "\(config.speedBoost) %"
+        prfSpeedBoost.isEnabled = !vsync
+        prfSpeedBoostInfo.textColor = vsync ? .tertiaryLabelColor : .labelColor
+        prfRunAhead.integerValue = runAhead
         prfRunAheadInfo.stringValue = "\(runAhead) frame" + (runAhead == 1 ? "" : "s")
 
         // Collision detection
@@ -70,9 +70,9 @@ extension ConfigurationController {
         config.vsync = sender.state == .on
     }
 
-    @IBAction func prfTimeLapseAction(_ sender: NSSlider!) {
+    @IBAction func prfspeedBoostAction(_ sender: NSSlider!) {
 
-        config.timeLapse = sender.integerValue
+        config.speedBoost = sender.integerValue
     }
 
     @IBAction func prfRunAheadAction(_ sender: NSSlider!) {

@@ -171,7 +171,7 @@ Amiga::getOption(Option option) const
         case OPT_AMIGA_WARP_BOOT:       return config.warpBoot;
         case OPT_AMIGA_WARP_MODE:       return config.warpMode;
         case OPT_AMIGA_VSYNC:           return config.vsync;
-        case OPT_AMIGA_SPEED_BOOST:     return config.timeLapse;
+        case OPT_AMIGA_SPEED_BOOST:     return config.speedBoost;
         case OPT_AMIGA_SNAPSHOTS:       return config.snapshots;
         case OPT_AMIGA_SNAPSHOT_DELAY:  return config.snapshotDelay;
         case OPT_AMIGA_RUN_AHEAD:       return config.runAhead;
@@ -269,7 +269,7 @@ Amiga::setOption(Option option, i64 value)
 
         case OPT_AMIGA_SPEED_BOOST:
 
-            config.timeLapse = isize(value);
+            config.speedBoost = isize(value);
             return;
 
         case OPT_AMIGA_SNAPSHOTS:
@@ -555,14 +555,14 @@ Amiga::refreshRate() const
 
     } else {
 
-        return nativeRefreshRate() * config.timeLapse / 100.0;
+        return nativeRefreshRate() * config.speedBoost / 100.0;
     }
 }
 
 i64
 Amiga::masterClockFrequency() const
 {
-    return nativeMasterClockFrequency() * config.timeLapse / 100;
+    return nativeMasterClockFrequency() * config.speedBoost / 100;
 }
 
 void

@@ -138,10 +138,10 @@
                 <outlet property="prfLockInfo2" destination="2AS-Tr-ndZ" id="nm9-lK-KaI"/>
                 <outlet property="prfOKButton" destination="HW4-LT-rs8" id="h6H-GG-2Ya"/>
                 <outlet property="prfPowerButton" destination="Qwc-dN-z7X" id="dyR-6O-RRs"/>
+                <outlet property="prfRunAhead" destination="eeE-9P-GOA" id="2XG-4W-0Ip"/>
                 <outlet property="prfRunAheadInfo" destination="QxE-Mv-W98" id="zmi-lu-h4q"/>
-                <outlet property="prfRunAheadSlider" destination="eeE-9P-GOA" id="2XG-4W-0Ip"/>
-                <outlet property="prfTimeLapse" destination="8H2-RW-mQb" id="Krk-Il-YFn"/>
-                <outlet property="prfTimeLapseInfo" destination="6IB-5J-YHo" id="JhN-Dh-OM8"/>
+                <outlet property="prfSpeedBoost" destination="8H2-RW-mQb" id="Krk-Il-YFn"/>
+                <outlet property="prfSpeedBoostInfo" destination="6IB-5J-YHo" id="JhN-Dh-OM8"/>
                 <outlet property="prfVSync" destination="Bvy-6w-UaV" id="gp1-DG-1oM"/>
                 <outlet property="prfWarpBoot" destination="X5X-QE-QMJ" id="2Nt-AL-Ka9"/>
                 <outlet property="prfWarpMode" destination="MSH-Uz-sGW" id="tk4-Q1-WNi"/>
@@ -2096,7 +2096,7 @@ DQ
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <sliderCell key="cell" continuous="YES" state="on" alignment="left" minValue="50" maxValue="200" doubleValue="100" tickMarkPosition="above" numberOfTickMarks="4" sliderType="linear" id="E5C-ng-bB8"/>
                                             <connections>
-                                                <action selector="prfTimeLapseAction:" target="-2" id="nEi-sD-nI9"/>
+                                                <action selector="prfspeedBoostAction:" target="-2" id="nEi-sD-nI9"/>
                                             </connections>
                                         </slider>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qsk-tO-tiU">

@@ -308,13 +308,10 @@ typedef struct
     WarpMode warpMode;
 
     //! Emulator speed in percent (100 is native speed)
-    isize speedAdjust;
+    isize speedBoost;
 
     //! Vertical Synchronization
     bool vsync;
-
-    //! Emulator speed in percent (100 is native speed)
-    isize timeLapse;
 
     //! Enable auto-snapshots
     bool snapshots;
