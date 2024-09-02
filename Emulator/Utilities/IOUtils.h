@@ -61,7 +61,7 @@ bool matchingBufferHeader(const u8 *buf, isize blen, const string &header, isize
 // Handling streams
 //
 
-isize streamLength(std::istream &stream);
+[[deprecated]] isize streamLength(std::istream &stream);
 
 struct dec {
     

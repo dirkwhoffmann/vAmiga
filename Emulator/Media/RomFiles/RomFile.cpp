@@ -211,7 +211,7 @@ RomFile::decrypt()
     data.init(decrypted);
     
     // Check if we've got a valid ROM
-    if (!isRomBuffer(data.ptr, data.size)) {
+    if (!isCompatible(data.ptr, data.size)) {
         throw Error(VAERROR_INVALID_ROM_KEY);
     }
 }

@@ -50,11 +50,13 @@ ExtendedRomFile::isCompatible(std::istream &stream)
     util::matchingStreamHeader(stream, magicBytes2, sizeof(magicBytes2));
 }
 
+/*
 bool
 ExtendedRomFile::isExtendedRomFile(const std::filesystem::path &path)
 {
     std::ifstream stream(path, std::ifstream::binary);
     return stream.is_open() ? isCompatible(stream) : false;
 }
+*/
 
 }
