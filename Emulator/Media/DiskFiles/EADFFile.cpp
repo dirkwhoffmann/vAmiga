@@ -44,16 +44,6 @@ EADFFile::isCompatible(const Buffer<u8> &buf)
     return isCompatible(buf.ptr, buf.size);
 }
 
-bool
-EADFFile::isCompatible(std::istream &stream)
-{
-    for (auto &header : extAdfHeaders) {
-
-        if (util::matchingStreamHeader(stream, header)) return true;
-    }
-    return false;
-}
-
 void
 EADFFile::init(FloppyDisk &disk)
 {

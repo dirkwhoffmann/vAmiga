@@ -119,65 +119,6 @@ RomFile::isCompatible(const Buffer<u8> &buf)
 }
 
 bool
-RomFile::isCompatible(std::istream &stream)
-{
-    isize length = util::streamLength(stream);
-
-    // Boot Roms
-    if (length == KB(8) || length == KB(16)) {
-
-        isize len = isizeof(bootRomHeaders[0]);
-        isize cnt = isizeof(bootRomHeaders) / len;
-
-        for (isize i = 0; i < cnt; i++) {
-            if (util::matchingStreamHeader(stream, bootRomHeaders[i], len)) return true;
-        }
-        return ALLOW_ALL_ROMS;
-    }
-
-    // Kickstart Roms
-    if (length == KB(256) || length == KB(512)) {
-
-        isize len = isizeof(kickRomHeaders[0]);
-        isize cnt = isizeof(kickRomHeaders) / len;
-
-        for (isize i = 0; i < cnt; i++) {
-            if (util::matchingStreamHeader(stream, kickRomHeaders[i], len)) return true;
-        }
-        return ALLOW_ALL_ROMS;
-    }
-
-    // Encrypted Kickstart Roms
-    if (length == KB(256) + 11 || length == KB(512) + 11) {
-
-        isize len = isizeof(encrRomHeaders[0]);
-        isize cnt = isizeof(encrRomHeaders) / len;
-
-        for (isize i = 0; i < cnt; i++) {
-            if (util::matchingStreamHeader(stream, encrRomHeaders[i], len)) return true;
-        }
-    }
-
-    return ALLOW_ALL_ROMS;
-}
-
-bool
-RomFile::isRomBuffer(const u8 *buf, isize len)
-{
-    std::stringstream stream;
-    stream.write((const char *)buf, len);
-
-    return isCompatible(stream);
-}
-
-bool
-RomFile::isRomFile(const std::filesystem::path &path)
-{
-    std::ifstream stream(path, std::ifstream::binary);
-    return stream.is_open() ? isCompatible(stream) : false;
-}
-
-bool
 RomFile::isEncrypted()
 {
     return util::matchingBufferHeader(data.ptr, encrRomHeaders[0], sizeof(encrRomHeaders[0]));

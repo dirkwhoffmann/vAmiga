@@ -37,12 +37,6 @@ DMSFile::isCompatible(const Buffer<u8> &buf)
     return isCompatible(buf.ptr, buf.size);
 }
 
-bool
-DMSFile::isCompatible(std::istream &stream)
-{                                                                                            
-    return util::matchingStreamHeader(stream, "DMS!");
-}
-
 void
 DMSFile::finalizeRead()
 {

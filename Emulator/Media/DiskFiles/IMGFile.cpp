@@ -35,15 +35,6 @@ IMGFile::isCompatible(const Buffer<u8> &buf)
     return isCompatible(buf.ptr, buf.size);
 }
 
-bool
-IMGFile::isCompatible(std::istream &stream)
-{
-    isize length = util::streamLength(stream);
-    
-    // There are no magic bytes. We can only check the buffer size
-    return length == IMGSIZE_35_DD;
-}
-
 void
 IMGFile::init(Diameter dia, Density den)
 {

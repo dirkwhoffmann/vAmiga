@@ -130,8 +130,7 @@ public:
 protected:
     
     virtual bool isCompatiblePath(const std::filesystem::path &path) const = 0;
-    [[deprecated]] virtual bool isCompatibleStream(std::istream &stream) const = 0;
-    virtual bool isCompatibleBuffer(const u8 *buf, isize len) { return false; } // = 0;
+    virtual bool isCompatibleBuffer(const u8 *buf, isize len) = 0;
     bool isCompatibleBuffer(const Buffer<u8> &buffer);
 
     // isize readFromStream(std::istream &stream) throws override;

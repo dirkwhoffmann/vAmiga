@@ -40,17 +40,6 @@ EXEFile::isCompatible(const Buffer<u8> &buf)
     return isCompatible(buf.ptr, buf.size);
 }
 
-bool
-EXEFile::isCompatible(std::istream &stream)
-{
-    u8 signature[] = { 0x00, 0x00, 0x03, 0xF3 };
-
-    // Only accept the file if it fits onto a HD disk
-    if (util::streamLength(stream) > 1710000) return false;
-
-    return util::matchingStreamHeader(stream, signature, sizeof(signature));
-}
-
 void
 EXEFile::finalizeRead()
 {    

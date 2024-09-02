@@ -59,15 +59,6 @@ Snapshot::isCompatible(const Buffer<u8> &buf)
     return isCompatible(buf.ptr, buf.size);
 }
 
-bool
-Snapshot::isCompatible(std::istream &stream)
-{
-    const u8 magicBytes[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
-    
-    if (util::streamLength(stream) < 0x15) return false;
-    return util::matchingStreamHeader(stream, magicBytes, sizeof(magicBytes));
-}
-
 Snapshot::Snapshot(isize capacity)
 {
     u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };

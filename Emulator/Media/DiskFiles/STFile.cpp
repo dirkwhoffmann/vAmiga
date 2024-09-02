@@ -35,15 +35,6 @@ STFile::isCompatible(const Buffer<u8> &buf)
     return isCompatible(buf.ptr, buf.size);
 }
 
-bool
-STFile::isCompatible(std::istream &stream)
-{
-    isize length = util::streamLength(stream);
-
-    // There are no magic bytes. We can only check the buffer size
-    return length == STSIZE_35_DD;
-}
-
 void
 STFile::init(Diameter dia, Density den)
 {

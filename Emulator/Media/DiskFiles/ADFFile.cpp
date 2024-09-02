@@ -46,21 +46,6 @@ ADFFile::isCompatible(const Buffer<u8> &buf)
     return isCompatible(buf.ptr, buf.size);
 }
 
-bool
-ADFFile::isCompatible(std::istream &stream)
-{
-    isize length = util::streamLength(stream);
-
-    // Some ADFs contain an additional byte at the end. Ignore it.
-    length &= ~1;
-
-    // The size must be a multiple of the cylinder size
-    if (length % 11264) return false;
-
-    // Check some more limits
-    return length <= ADFSIZE_35_DD_84 || length == ADFSIZE_35_HD;
-}
-
 isize
 ADFFile::fileSize(Diameter diameter, Density density)
 {

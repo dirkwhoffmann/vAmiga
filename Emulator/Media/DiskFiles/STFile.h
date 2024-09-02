@@ -22,7 +22,6 @@ public:
     static bool isCompatible(const std::filesystem::path &path);
     static bool isCompatible(const u8 *buf, isize len);
     static bool isCompatible(const Buffer<u8> &buffer);
-    [[deprecated]] static bool isCompatible(std::istream &stream);
 
 
     //
@@ -60,7 +59,6 @@ public:
 
     bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) override { return isCompatible(buf, len); }
-    [[deprecated]] bool isCompatibleStream(std::istream &stream) const override { return isCompatible(stream); }
     FileType type() const override { return FILETYPE_IMG; }
 
 

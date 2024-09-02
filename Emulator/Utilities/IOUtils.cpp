@@ -189,20 +189,6 @@ matchingBufferHeader(const u8 *buf, const string &header, isize offset)
     return matchingBufferHeader(buf, blen, header, offset);
 }
 
-
-isize
-streamLength(std::istream &stream)
-{
-    auto cur = stream.tellg();
-    stream.seekg(0, std::ios::beg);
-    auto beg = stream.tellg();
-    stream.seekg(0, std::ios::end);
-    auto end = stream.tellg();
-    stream.seekg(cur, std::ios::beg);
-    
-    return (isize)(end - beg);
-}
-
 std::ostream &
 dec::operator()(std::ostream &os) const
 {

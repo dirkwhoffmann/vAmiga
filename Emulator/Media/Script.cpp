@@ -35,12 +35,6 @@ Script::isCompatible(const Buffer<u8> &buf)
     return isCompatible(buf.ptr, buf.size);
 }
 
-bool
-Script::isCompatible(std::istream &stream)
-{
-    return true;
-}
-
 void
 Script::execute(class Amiga &amiga)
 {
