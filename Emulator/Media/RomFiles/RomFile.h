@@ -28,6 +28,7 @@ public:
 
     static bool isCompatible(const std::filesystem::path &path);
     static bool isCompatible(const u8 *buf, isize len);
+    static bool isCompatible(const Buffer<u8> &buffer);
     static bool isCompatible(std::istream &stream);
 
     static bool isRomBuffer(const u8 *buf, isize len);
@@ -39,7 +40,6 @@ public:
     //
 
     RomFile(const std::filesystem::path &path) throws { init(path); }
-    RomFile(const std::filesystem::path &path, std::istream &stream) throws { init(path, stream); }
     RomFile(const u8 *buf, isize len) throws { init(buf, len); }
 
     const char *objectName() const override { return "ROM"; }

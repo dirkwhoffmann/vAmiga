@@ -32,6 +32,12 @@ HDFFile::isCompatible(const u8 *buf, isize len)
 }
 
 bool
+HDFFile::isCompatible(const Buffer<u8> &buf)
+{
+    return isCompatible(buf.ptr, buf.size);
+}
+
+bool
 HDFFile::isCompatible(std::istream &stream)
 {
     return true; // util::streamLength(stream) % 512 == 0;

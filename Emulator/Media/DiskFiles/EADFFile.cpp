@@ -39,6 +39,12 @@ EADFFile::isCompatible(const u8 *buf, isize len)
 }
 
 bool
+EADFFile::isCompatible(const Buffer<u8> &buf)
+{
+    return isCompatible(buf.ptr, buf.size);
+}
+
+bool
 EADFFile::isCompatible(std::istream &stream)
 {
     for (auto &header : extAdfHeaders) {

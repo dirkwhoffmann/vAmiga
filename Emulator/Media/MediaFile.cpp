@@ -29,39 +29,39 @@ namespace vamiga {
 FileType
 MediaFile::type(const fs::path &path)
 {
-    std::ifstream stream(path, std::ifstream::binary);
+    Buffer<u8> buffer(path);
 
-    if (stream.is_open()) {
+    if (!buffer.empty()) {
 
         if (Snapshot::isCompatible(path) &&
-            Snapshot::isCompatible(stream)) return FILETYPE_SNAPSHOT;
+            Snapshot::isCompatible(buffer)) return FILETYPE_SNAPSHOT;
 
         if (Script::isCompatible(path) &&
-            Script::isCompatible(stream)) return FILETYPE_SCRIPT;
+            Script::isCompatible(buffer)) return FILETYPE_SCRIPT;
 
         if (ADFFile::isCompatible(path) &&
-            ADFFile::isCompatible(stream)) return FILETYPE_ADF;
+            ADFFile::isCompatible(buffer)) return FILETYPE_ADF;
 
         if (EADFFile::isCompatible(path) &&
-            EADFFile::isCompatible(stream)) return FILETYPE_EADF;
+            EADFFile::isCompatible(buffer)) return FILETYPE_EADF;
 
         if (HDFFile::isCompatible(path) &&
-            HDFFile::isCompatible(stream)) return FILETYPE_HDF;
+            HDFFile::isCompatible(buffer)) return FILETYPE_HDF;
 
         if (IMGFile::isCompatible(path) &&
-            IMGFile::isCompatible(stream)) return FILETYPE_IMG;
+            IMGFile::isCompatible(buffer)) return FILETYPE_IMG;
 
         if (STFile::isCompatible(path) &&
-            STFile::isCompatible(stream)) return FILETYPE_ST;
+            STFile::isCompatible(buffer)) return FILETYPE_ST;
 
         if (DMSFile::isCompatible(path) &&
-            DMSFile::isCompatible(stream)) return FILETYPE_DMS;
+            DMSFile::isCompatible(buffer)) return FILETYPE_DMS;
 
         if (EXEFile::isCompatible(path) &&
-            EXEFile::isCompatible(stream)) return FILETYPE_EXE;
+            EXEFile::isCompatible(buffer)) return FILETYPE_EXE;
 
         if (RomFile::isCompatible(path) &&
-            RomFile::isCompatible(stream)) return FILETYPE_ROM;
+            RomFile::isCompatible(buffer)) return FILETYPE_ROM;
 
         if (Folder::isCompatible(path)) return FILETYPE_DIR;
     }

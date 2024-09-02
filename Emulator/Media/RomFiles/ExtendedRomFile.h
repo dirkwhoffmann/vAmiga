@@ -25,6 +25,7 @@ public:
 
     static bool isCompatible(const std::filesystem::path &path);
     static bool isCompatible(const u8 *buf, isize len);
+    static bool isCompatible(const Buffer<u8> &buffer);
     static bool isCompatible(std::istream &stream);
 
     bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }

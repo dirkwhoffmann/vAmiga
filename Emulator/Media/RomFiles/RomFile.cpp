@@ -113,6 +113,12 @@ RomFile::isCompatible(const u8 *buf, isize length)
 }
 
 bool
+RomFile::isCompatible(const Buffer<u8> &buf)
+{
+    return isCompatible(buf.ptr, buf.size);
+}
+
+bool
 RomFile::isCompatible(std::istream &stream)
 {
     isize length = util::streamLength(stream);

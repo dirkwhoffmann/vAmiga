@@ -26,6 +26,12 @@ Folder::isCompatible(const u8 *buf, isize len)
     return false;
 }
 
+bool
+Folder::isCompatible(const Buffer<u8> &buf)
+{
+    return isCompatible(buf.ptr, buf.size);
+}
+
 void
 Folder::init(const std::filesystem::path &path)
 {

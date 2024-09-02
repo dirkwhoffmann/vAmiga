@@ -21,6 +21,7 @@ public:
 
     static bool isCompatible(const std::filesystem::path &path);
     static bool isCompatible(const u8 *buf, isize len);
+    static bool isCompatible(const Buffer<u8> &buffer);
     static bool isCompatible(std::istream &stream);
 
 
@@ -33,7 +34,7 @@ public:
     using AmigaFile::init;
 
     STFile(const std::filesystem::path &path) throws { init(path); }
-    STFile(const std::filesystem::path &path, std::istream &stream) throws { init(path, stream); }
+    // STFile(const std::filesystem::path &path, std::istream &stream) throws { init(path, stream); }
     STFile(const u8 *buf, isize len) throws { init(buf, len); }
     STFile(Diameter dia, Density den) throws { init(dia, den); }
     STFile(class FloppyDisk &disk) throws { init(disk); }

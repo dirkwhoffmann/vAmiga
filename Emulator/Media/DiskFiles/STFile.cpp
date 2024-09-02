@@ -30,6 +30,12 @@ STFile::isCompatible(const u8 *buf, isize len)
 }
 
 bool
+STFile::isCompatible(const Buffer<u8> &buf)
+{
+    return isCompatible(buf.ptr, buf.size);
+}
+
+bool
 STFile::isCompatible(std::istream &stream)
 {
     isize length = util::streamLength(stream);

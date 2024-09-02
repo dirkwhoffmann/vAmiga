@@ -21,6 +21,7 @@ public:
     
     static bool isCompatible(const std::filesystem::path &path);
     static bool isCompatible(const u8 *buf, isize len);
+    static bool isCompatible(const Buffer<u8> &buffer);
     static bool isCompatible(std::istream &stream);
     
     
@@ -33,7 +34,7 @@ public:
     using AmigaFile::init;
     
     DMSFile(const std::filesystem::path &path) throws { init(path); }
-    DMSFile(const std::filesystem::path &path, std::istream &stream) throws { init(path, stream); }
+    // DMSFile(const std::filesystem::path &path, std::istream &stream) throws { init(path, stream); }
     DMSFile(const u8 *buf, isize len) throws { init(buf, len); }
     
     const char *objectName() const override { return "DMS"; }

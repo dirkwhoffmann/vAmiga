@@ -37,13 +37,29 @@ AmigaFile::init(const Buffer<u8> &buffer)
 }
 
 void
+AmigaFile::init(const string &str)
+{
+    init((const u8 *)str.c_str(), (isize)str.length());
+}
+
+void
 AmigaFile::init(const std::filesystem::path &path)
 {
+    std::ifstream stream(path, std::ios::binary);
+    if (!stream.is_open()) throw Error(VAERROR_FILE_NOT_FOUND, path);
+
+    std::ostringstream sstr(std::ios::binary);
+    sstr << stream.rdbuf();
+    init(sstr.str());
+    this->path = path;
+    
+    /*
     std::ifstream stream(path, std::ifstream::binary);
     if (!stream.is_open()) throw Error(VAERROR_FILE_NOT_FOUND, path);
     init(path, stream);
+    */
 }
-
+/*
 void
 AmigaFile::init(const std::filesystem::path &path, std::istream &stream)
 {
@@ -51,23 +67,32 @@ AmigaFile::init(const std::filesystem::path &path, std::istream &stream)
     init(stream);
     this->path = path;
 }
-
+*/
+/*
 void
 AmigaFile::init(std::istream &stream)
 {
     if (!isCompatibleStream(stream)) throw Error(VAERROR_FILE_TYPE_MISMATCH);
     readFromStream(stream);
 }
+*/
 
 void
 AmigaFile::init(const u8 *buf, isize len)
 {    
     assert(buf);
+    if (!isCompatibleBuffer(buf, len)) throw Error(VAERROR_FILE_TYPE_MISMATCH);
+    readFromBuffer(buf, len);
+
+    /*
+    assert(buf);
     std::stringstream stream;
     stream.write((const char *)buf, len);
     init(stream);
+    */
 }
 
+/*
 void
 AmigaFile::init(FILE *file)
 {
@@ -76,6 +101,7 @@ AmigaFile::init(FILE *file)
     int c; while ((c = fgetc(file)) != EOF) { stream.put((char)c); }
     init(stream);
 }
+*/
 
 AmigaFile::~AmigaFile()
 {
@@ -101,6 +127,7 @@ AmigaFile::isCompatibleBuffer(const Buffer<u8> &buffer)
     return isCompatibleBuffer(buffer.ptr, buffer.size);
 }
 
+/*
 isize
 AmigaFile::readFromStream(std::istream &stream)
 {
@@ -119,7 +146,8 @@ AmigaFile::readFromStream(std::istream &stream)
 
     return data.size;
 }
-
+*/
+/*
 isize
 AmigaFile::readFromFile(const std::filesystem::path &path)
 {
@@ -136,6 +164,7 @@ AmigaFile::readFromFile(const std::filesystem::path &path)
     
     return result;
 }
+*/
 
 isize
 AmigaFile::readFromBuffer(const u8 *buf, isize len)

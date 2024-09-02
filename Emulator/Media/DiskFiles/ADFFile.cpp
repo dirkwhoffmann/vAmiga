@@ -41,6 +41,12 @@ ADFFile::isCompatible(const u8 *buf, isize len)
 }
 
 bool
+ADFFile::isCompatible(const Buffer<u8> &buf)
+{
+    return isCompatible(buf.ptr, buf.size);
+}
+
+bool
 ADFFile::isCompatible(std::istream &stream)
 {
     isize length = util::streamLength(stream);

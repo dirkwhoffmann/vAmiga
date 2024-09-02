@@ -28,6 +28,7 @@ public:
     
     static bool isCompatible(const std::filesystem::path &path);
     static bool isCompatible(const u8 *buf, isize len);
+    static bool isCompatible(const Buffer<u8> &buffer);
     static bool isCompatible(std::istream &stream);
     
 private:
@@ -46,9 +47,9 @@ public:
     
     ADFFile() { }
     ADFFile(const std::filesystem::path &path) throws { init(path); }
-    ADFFile(const std::filesystem::path &path, std::istream &stream) throws { init(path, stream); }
+    // ADFFile(const std::filesystem::path &path, std::istream &stream) throws { init(path, stream); }
     ADFFile(const u8 *buf, isize len) throws { init(buf, len); }
-    ADFFile(FILE *file) throws { init(file); }
+    // ADFFile(FILE *file) throws { init(file); }
     ADFFile(Diameter dia, Density den) throws { init(dia, den); }
     ADFFile(const FloppyDiskDescriptor &descr) throws { init(descr); }
     ADFFile(class FloppyDisk &disk) throws { init(disk); }

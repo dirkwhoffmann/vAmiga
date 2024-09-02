@@ -35,6 +35,12 @@ ExtendedRomFile::isCompatible(const u8 *buf, isize len)
 }
 
 bool
+ExtendedRomFile::isCompatible(const Buffer<u8> &buf)
+{
+    return isCompatible(buf.ptr, buf.size);
+}
+
+bool
 ExtendedRomFile::isCompatible(std::istream &stream)
 {
     if (util::streamLength(stream) != KB(512)) return false;

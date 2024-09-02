@@ -35,6 +35,12 @@ EXEFile::isCompatible(const u8 *buf, isize len)
 }
 
 bool
+EXEFile::isCompatible(const Buffer<u8> &buf)
+{
+    return isCompatible(buf.ptr, buf.size);
+}
+
+bool
 EXEFile::isCompatible(std::istream &stream)
 {
     u8 signature[] = { 0x00, 0x00, 0x03, 0xF3 };

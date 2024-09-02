@@ -30,6 +30,12 @@ Script::isCompatible(const u8 *buf, isize len)
 }
 
 bool
+Script::isCompatible(const Buffer<u8> &buf)
+{
+    return isCompatible(buf.ptr, buf.size);
+}
+
+bool
 Script::isCompatible(std::istream &stream)
 {
     return true;
