@@ -60,6 +60,7 @@ public:
     class ZorroManager &zorro;
 
     class FloppyDrive *df[4] = { &df0, &df1, &df2, &df3 };
+    class HardDrive *hd[4] = { &hd0, &hd1, &hd2, &hd3 };
 
 public:
 

@@ -23,7 +23,7 @@ class PixelEngine final : public SubComponent {
 
         .type           = PixelEngineClass,
         .name           = "PixelEngine",
-        .description    = "Pixel Engine",
+        .description    = "Amiga Monitor",
         .shell          = "monitor"
     }};
 

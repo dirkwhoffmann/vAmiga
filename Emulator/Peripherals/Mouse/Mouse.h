@@ -49,13 +49,13 @@ class Mouse final : public SubComponent {
             .type           = MouseClass,
             .name           = "Mouse1",
             .description    = "Mouse in Port 1",
-            .shell          = "mouse 1"
+            .shell          = "mouse1"
         },
         {
             .type           = MouseClass,
             .name           = "Mouse2",
             .description    = "Mouse in Port 2",
-            .shell          = "mouse 2"
+            .shell          = "mouse2"
         }
     };
 

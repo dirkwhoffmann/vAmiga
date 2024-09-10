@@ -106,8 +106,10 @@ public:
 protected:
 
     virtual void initCommands(Command &root);
+    const char *registerComponent(CoreComponent &c);
+    const char *registerComponent(CoreComponent &c, Command &root);
 
-    void initSetters(Command &root, const CoreComponent &c);
+    [[deprecated]] void initSetters(Command &root, const CoreComponent &c);
 
 
     //
