@@ -808,6 +808,7 @@
 - (void)pressSpecialKey:(RetroShellKey)key;
 - (void)pressSpecialKey:(RetroShellKey)key shift:(BOOL)shift;
 - (void)executeScript:(MediaFileProxy *)file;
+- (void)executeString:(NSString *)string;
 
 @end
 

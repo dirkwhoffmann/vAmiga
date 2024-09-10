@@ -1609,6 +1609,11 @@ using namespace vamiga::moira;
     [self shell]->execScript(*(MediaFile *)file->obj);
 }
 
+- (void)executeString:(NSString *)str
+{
+    [self shell]->execScript(std::string([str UTF8String]));
+}
+
 @end
 
 
