@@ -51,44 +51,6 @@
 
 
 //
-// Configuration overrides
-//
-
-#define OVERRIDES { }
-/*
- { \
- { OPT_AGNUS_REVISION,   AGNUS_OCS      }, \
- { OPT_BLITTER_ACCURACY, 0              }, \
- { OPT_MEM_CHIP_RAM,     512            }, \
- { OPT_MEM_SLOW_RAM,     512            }, \
- { OPT_MEM_FAST_RAM,     0              }
-*/
-
-
-//
-// Launch settings
-//
-
-// Add pathes to ADF files to launch the emulator with preset floppy disks
-#define INITIAL_DF0 ""
-#define INITIAL_DF1 ""
-#define INITIAL_DF2 ""
-#define INITIAL_DF3 ""
-
-// Add pathes to HDF files to launch the emulator with preset hard drives
-#define INITIAL_HD0 "" // /tmp/rdb2.hdf"
-#define INITIAL_HD1 ""
-#define INITIAL_HD2 ""
-#define INITIAL_HD3 ""
-
-// Add a path to a snapshot file to launch the emulator in a preset state
-#define INITIAL_SNAPSHOT ""
-
-// Add addresses to launch the emulator with preset breakpoints
-#define INITIAL_BREAKPOINTS { }
-
-
-//
 // Video settings
 //
 

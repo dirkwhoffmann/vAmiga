@@ -322,11 +322,6 @@ public:
     // Reverts to factory settings
     void revertToFactorySettings();
 
-private:
-
-    // Overrides a config option if the corresponding debug option is enabled
-    i64 overrideOption(Option option, i64 value);
-
 
     //
     // Main API for configuring the emulator
@@ -355,9 +350,6 @@ public:
     // Returns the target component for an option
     Configurable *routeOption(Option opt, isize objid);
     const Configurable *routeOption(Option opt, isize objid) const;
-
-    // Overrides a config option if the corresponding debug option is enabled
-    i64 overrideOption(Option opt, i64 value) const;
 
 
     //

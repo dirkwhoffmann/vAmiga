@@ -61,25 +61,7 @@ FloppyDrive::operator= (const FloppyDrive& other) {
 void
 FloppyDrive::_initialize()
 {
-    string path;
 
-    if (objid == 0) path = INITIAL_DF0;
-    if (objid == 1) path = INITIAL_DF1;
-    if (objid == 2) path = INITIAL_DF2;
-    if (objid == 3) path = INITIAL_DF3;
-
-    if (path != "") {
-
-        try {
-
-            auto adf = ADFFile(path);
-            disk = std::make_unique<FloppyDisk>(adf);
-
-        } catch (...) {
-
-            warn("Cannot open ADF file %s\n", path.c_str());
-        }
-    }
 }
 
 void

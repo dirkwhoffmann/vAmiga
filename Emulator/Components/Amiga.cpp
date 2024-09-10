@@ -328,20 +328,6 @@ Amiga::revertToFactorySettings()
 }
 
 i64
-Amiga::overrideOption(Option option, i64 value)
-{
-    static std::map<Option,i64> overrides = OVERRIDES;
-
-    if (overrides.find(option) != overrides.end()) {
-
-        msg("Overriding option: %s = %lld\n", OptionEnum::key(option), value);
-        return overrides[option];
-    }
-
-    return value;
-}
-
-i64
 Amiga::get(Option opt, isize objid) const
 {
     debug(CNF_DEBUG, "get(%s, %ld)\n", OptionEnum::key(opt), objid);
@@ -354,8 +340,6 @@ Amiga::get(Option opt, isize objid) const
 void
 Amiga::check(Option opt, i64 value, const std::vector<isize> objids)
 {
-    value = overrideOption(opt, value);
-
     if (objids.empty()) {
 
         for (isize objid = 0;; objid++) {
@@ -381,8 +365,6 @@ Amiga::check(Option opt, i64 value, const std::vector<isize> objids)
 void
 Amiga::set(Option opt, i64 value, const std::vector<isize> objids)
 {
-    value = overrideOption(opt, value);
-
     if (objids.empty()) {
 
         for (isize objid = 0;; objid++) {
@@ -483,20 +465,6 @@ Amiga::routeOption(Option opt, isize objid) const
 {
     auto result = const_cast<Amiga *>(this)->routeOption(opt, objid);
     return const_cast<const Configurable *>(result);
-}
-
-i64
-Amiga::overrideOption(Option opt, i64 value) const
-{
-    static std::map<Option,i64> overrides = OVERRIDES;
-
-    if (overrides.find(opt) != overrides.end()) {
-
-        msg("Overriding option: %s = %lld\n", OptionEnum::key(opt), value);
-        return overrides[opt];
-    }
-
-    return value;
 }
 
 u64
@@ -673,23 +641,7 @@ Amiga::_powerOn()
 {
     debug(RUN_DEBUG, "_powerOn\n");
 
-    // Perform a reset
     hardReset();
-
-    // Start from a snapshot if requested
-    if (string(INITIAL_SNAPSHOT) != "") {
-
-        Snapshot snapshot(INITIAL_SNAPSHOT);
-        loadSnapshot(snapshot);
-    }
-
-    // Set initial breakpoints
-    for (auto &bp : std::vector <u32> (INITIAL_BREAKPOINTS)) {
-
-        cpu.debugger.breakpoints.setAt(bp);
-        // track = true; // TODO: FIXME
-    }
-
     msgQueue.put(MSG_POWER, 1);
 }
 
@@ -698,9 +650,7 @@ Amiga::_powerOff()
 {
     debug(RUN_DEBUG, "_powerOff\n");
 
-    // Perform a reset
     hardReset();
-
     msgQueue.put(MSG_POWER, 0);
 }
 
@@ -708,9 +658,6 @@ void
 Amiga::_run()
 {
     debug(RUN_DEBUG, "_run\n");
-
-    // Enable or disable CPU debugging
-    // track ? cpu.debugger.enableLogging() : cpu.debugger.disableLogging(); // TODO: FIXME
 
     msgQueue.put(MSG_RUN);
 }
@@ -721,7 +668,6 @@ Amiga::_pause()
     debug(RUN_DEBUG, "_pause\n");
 
     remoteManager.gdbServer.breakpointReached();
-
     msgQueue.put(MSG_PAUSE);
 }
 

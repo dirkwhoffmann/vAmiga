@@ -220,25 +220,7 @@ HardDrive::init(const std::filesystem::path &path) throws
 void
 HardDrive::_initialize()
 {
-    string path;
 
-    if (objid == 0) path = INITIAL_HD0;
-    if (objid == 1) path = INITIAL_HD1;
-    if (objid == 2) path = INITIAL_HD2;
-    if (objid == 3) path = INITIAL_HD3;
-
-    if (path != "") {
-
-        try {
-
-            auto hdf = HDFFile(path);
-            init(hdf);
-
-        } catch (...) {
-
-            warn("Cannot open HDF file %s\n", path.c_str());
-        }
-    }
 }
 
 void

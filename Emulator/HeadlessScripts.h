@@ -23,7 +23,7 @@ static const char *selfTestScript[] = {
     "",
     "# Let DiagRom launch and press the right mouse button after a while",
     "wait 15 seconds",
-    "mouse 1 press right",
+    "mouse1 press right",
     ""
     "# Let DiagRom run for some more time",
     "wait 10 seconds",
