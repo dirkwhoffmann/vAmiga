@@ -762,8 +762,6 @@ Amiga::update(CmdQueue &queue)
                 cpu.processCommand(cmd);
                 break;
 
-            case CMD_KEY_PRESS:
-            case CMD_KEY_RELEASE:
             case CMD_KEY_RELEASE_ALL:
             case CMD_KEY_TOGGLE:
 

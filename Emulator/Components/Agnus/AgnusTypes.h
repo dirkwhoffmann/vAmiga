@@ -375,9 +375,7 @@ enum_i8(EventID)
     RSH_EVENT_COUNT,
 
     // Auto typing
-    KEY_PRESS           = 1,    // DEPRECATED
-    KEY_RELEASE,                // DEPRECATED
-    KEY_AUTO_TYPE,
+    KEY_AUTO_TYPE       = 1,
     KEY_EVENT_COUNT,
 
     // Remote server manager

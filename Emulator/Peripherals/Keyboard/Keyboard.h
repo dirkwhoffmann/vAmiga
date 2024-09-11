@@ -149,27 +149,17 @@ public:
     void toggle(KeyCode keycode);
     void releaseAll();
 
-    // DEPRECATED
-    // void autoType(KeyCode keycode, Cycle duration = MSEC(100), Cycle delay = 0);
+    // Auto-types a string
+    void autoType(const string &text);
+
+    // Discards all pending key events
+    void abortAutoTyping();
     
 private:
     
     // Wake up the keyboard if it has gone idle
     void wakeUp();
     
-
-    //
-    // Auto typing
-    //
-
-public:
-
-    // Auto-types a string
-    void autoType(const string &text);
-
-    // Discards all pending key events
-    void abortAutoTyping();
-
 
     //
     // Talking to the Amiga
