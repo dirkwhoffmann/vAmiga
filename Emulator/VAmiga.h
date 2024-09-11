@@ -782,6 +782,13 @@ struct KeyboardAPI : public API {
      */
     void press(KeyCode key, double delay = 0.0, double duration = 0.0);
 
+    /** @brief  Toggles a key
+     *  @param  key         The key to toggle.
+     *  @param  delay       An optional delay in seconds until the key is toggled.
+     *  @param  duration    If specified, the key will be toggled again after the additional delay.
+     */
+    void toggle(KeyCode key, double delay = 0.0, double duration = 0.0);
+
     /** @brief  Releases a key
      *  @param  key     The key to release.
      *  @param  delay   An optional delay in seconds.

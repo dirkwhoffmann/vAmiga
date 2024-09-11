@@ -676,7 +676,6 @@ CommandConsole::initCommands(Command &root)
         });
         
         cmd = registerComponent(remoteManager.serServer, root / "server");
-
         cmd = registerComponent(remoteManager.rshServer, root / "server");
         
         root.add({"server", cmd, "start"},

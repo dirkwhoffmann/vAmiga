@@ -855,17 +855,51 @@ KeyboardAPI::isPressed(KeyCode key) const
 void
 KeyboardAPI::press(KeyCode key, double delay, double duration)
 {
-    emu->put(Cmd(CMD_KEY_PRESS, KeyCmd { .keycode = key, .delay = delay }));
+    if (delay == 0.0) {
 
+        keyboard->press(key);
+        emu->isDirty = true;
+
+    } else {
+        
+        emu->put(Cmd(CMD_KEY_PRESS, KeyCmd { .keycode = key, .delay = delay }));
+    }
     if (duration != 0.0) {
+        
         emu->put(Cmd(CMD_KEY_RELEASE, KeyCmd { .keycode = key, .delay = delay + duration }));
+    }
+}
+
+void
+KeyboardAPI::toggle(KeyCode key, double delay, double duration)
+{
+    if (delay == 0.0) {
+        
+        keyboard->toggle(key);
+        emu->isDirty = true;
+        
+    } else {
+        
+        emu->put(Cmd(CMD_KEY_TOGGLE, KeyCmd { .keycode = key, .delay = delay }));
+    }
+    if (duration != 0.0) {
+        
+        emu->put(Cmd(CMD_KEY_TOGGLE, KeyCmd { .keycode = key, .delay = delay + duration }));
     }
 }
 
 void
 KeyboardAPI::release(KeyCode key, double delay)
 {
-    emu->put(Cmd(CMD_KEY_RELEASE, KeyCmd { .keycode = key, .delay = delay }));
+    if (delay == 0.0) {
+        
+        keyboard->release(key);
+        emu->isDirty = true;
+        
+    } else {
+        
+        emu->put(Cmd(CMD_KEY_RELEASE, KeyCmd { .keycode = key, .delay = delay }));
+    }
 }
 
 void

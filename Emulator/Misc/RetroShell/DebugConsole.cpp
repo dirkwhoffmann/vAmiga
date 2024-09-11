@@ -16,7 +16,9 @@ namespace vamiga {
 void
 DebugConsole::_pause()
 {
-    retroShell.asyncExec("state");
+    *this << '\n' << '\n';
+    exec("state");
+    *this << getPrompt();
 }
 
 string

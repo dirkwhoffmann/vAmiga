@@ -523,14 +523,16 @@ Amiga::refreshRate() const
 
     } else {
 
-        return nativeRefreshRate() * config.speedBoost / 100.0;
+        auto boost = config.speedBoost ? config.speedBoost : 100;
+        return nativeRefreshRate() * boost / 100.0;
     }
 }
 
 i64
 Amiga::masterClockFrequency() const
 {
-    return nativeMasterClockFrequency() * config.speedBoost / 100;
+    auto boost = config.speedBoost ? config.speedBoost : 100;
+    return nativeMasterClockFrequency() * boost / 100;
 }
 
 void
