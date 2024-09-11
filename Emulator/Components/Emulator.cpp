@@ -255,15 +255,13 @@ Emulator::missingFrames() const
 
     // Compute the elapsed time
     auto elapsed = util::Time::now() - baseTime;
-
-    // Compute which master-clock cycle should be reached by now
-    auto targetCycle = main.masterClockFrequency() * elapsed.asMilliseconds() / 1000;
-
-    // Compute the nummer of missing cycles
-    auto diff = targetCycle - (main.agnus.clock - baseCycle);
+    
+    // Compute which frame should be reached by now
+    auto target = elapsed.asNanoseconds() * i64(main.refreshRate()) / 1000000000;
 
     // Compute the number of missing frames
-    return diff / (main.masterClockFrequency() / i64(main.refreshRate()));
+    return isize(target - frameCounter);
+
 }
 
 const FrameBuffer &
@@ -274,39 +272,6 @@ Emulator::getTexture() const
     main.videoPort.getTexture();
 
     return result;
-}
-
-/*
-u32 *
-Emulator::getDmaTexture() const
-{
-    return main.config.runAhead && isRunning() ?
-    ahead.videoPort.getDmaTexture() :
-    main.videoPort.getDmaTexture();
-}
-*/
-
-/*
-double
-Emulator::refreshRate() const
-{
-    auto config = main.getConfig();
-
-    if (config.vsync) {
-
-        return double(main.host.getOption(OPT_HOST_REFRESH_RATE));
-
-    } else {
-
-        return main.agnus.isPAL() ? 50.0 : 60.0; 
-    }
-}
-*/
-
-Cycle
-Emulator::currentCycle() const
-{
-    return main.agnus.clock;
 }
 
 void

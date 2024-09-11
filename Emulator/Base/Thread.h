@@ -46,11 +46,12 @@ protected:
 
     // Counters
     isize suspendCounter = 0;
+    isize frameCounter = 0;
     isize statsCounter = 0;
 
     // Time stamps
     util::Time baseTime;
-    Cycle baseCycle = 0;
+    // Cycle baseCycle = 0;
 
     // Clocks for measuring the CPU load
     util::Clock nonstopClock;
@@ -107,12 +108,6 @@ private:
 
     // Number of overdue time slices (used in pulsed sync mode)
     virtual isize missingFrames() const = 0;
-
-    // Target frame rate of this thread (provided by the subclass)
-    // [[deprecated]] virtual double refreshRate() const = 0;
-
-    // Target frame rate of this thread (provided by the subclass)
-    virtual Cycle currentCycle() const = 0;
 
     // The code to be executed in each iteration (implemented by the subclass)
     virtual void computeFrame() = 0;

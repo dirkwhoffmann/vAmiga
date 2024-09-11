@@ -126,11 +126,6 @@ private:
 
     void isReady() override;
 
-public:
-
-    // double refreshRate() const override;
-    Cycle currentCycle() const override;
-
 
     //
     // Managing the run-ahead instance

@@ -40,7 +40,7 @@ Thread::resync()
 {
     resyncs++;
     baseTime = util::Time::now();
-    baseCycle = currentCycle();
+    frameCounter = 0;
 }
 
 void
@@ -58,7 +58,7 @@ Thread::execute()
         try {
 
             // Execute all missing frames
-            for (isize i = 0; i < missing; i++) computeFrame();
+            for (isize i = 0; i < missing; i++, frameCounter++) computeFrame();
 
         } catch (StateChangeException &exc) {
 
