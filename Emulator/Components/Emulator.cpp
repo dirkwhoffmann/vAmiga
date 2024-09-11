@@ -139,8 +139,6 @@ Emulator::_dump(Category category, std::ostream& os) const
         os << tab("Tracking");
         os << bol(isTracking()) << std::endl;
         os << std::endl;
-        os << tab("Refresh rate");
-        os << dec(isize(refreshRate())) << " Fps" << std::endl;
     }
 }
 
@@ -150,7 +148,6 @@ Emulator::cacheInfo(EmulatorInfo &result) const
     {   SYNCHRONIZED
 
         result.state = state;
-        result.refreshRate = isize(refreshRate());
         result.powered = isPoweredOn();
         result.paused = isPaused();
         result.running = isRunning();
@@ -266,7 +263,7 @@ Emulator::missingFrames() const
     auto diff = targetCycle - (main.agnus.clock - baseCycle);
 
     // Compute the number of missing frames
-    return diff / (main.masterClockFrequency() / i64(refreshRate()));
+    return diff / (main.masterClockFrequency() / i64(main.refreshRate()));
 }
 
 const FrameBuffer &
@@ -289,6 +286,7 @@ Emulator::getDmaTexture() const
 }
 */
 
+/*
 double
 Emulator::refreshRate() const
 {
@@ -303,8 +301,9 @@ Emulator::refreshRate() const
         return main.agnus.isPAL() ? 50.0 : 60.0; 
     }
 }
+*/
 
-Cycle 
+Cycle
 Emulator::currentCycle() const
 {
     return main.agnus.clock;

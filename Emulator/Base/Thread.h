@@ -109,7 +109,7 @@ private:
     virtual isize missingFrames() const = 0;
 
     // Target frame rate of this thread (provided by the subclass)
-    virtual double refreshRate() const = 0;
+    // [[deprecated]] virtual double refreshRate() const = 0;
 
     // Target frame rate of this thread (provided by the subclass)
     virtual Cycle currentCycle() const = 0;
