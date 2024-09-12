@@ -14,14 +14,16 @@ class SnapshotDialog: DialogController {
     @IBOutlet weak var carousel: iCarousel!
     @IBOutlet weak var moveUp: NSButton!
     @IBOutlet weak var moveDown: NSButton!
-    @IBOutlet weak var restore: NSButton!
+    @IBOutlet weak var trash: NSButton!
     @IBOutlet weak var nr: NSTextField!
     @IBOutlet weak var text1: NSTextField!
     @IBOutlet weak var text2: NSTextField!
+    @IBOutlet weak var text3: NSTextField!
+    @IBOutlet weak var message: NSTextField!
     @IBOutlet weak var indicator: NSLevelIndicator!
     @IBOutlet weak var indicatorText: NSTextField!
-    @IBOutlet weak var indicatorPercentage: NSTextField!
-
+    @IBOutlet weak var revert: NSButton!
+    
     // Computed variables
     var myDocument: MyDocument { return parent.mydocument! }
     var numItems: Int { return carousel.numberOfItems }
@@ -30,6 +32,9 @@ class SnapshotDialog: DialogController {
     var lastItem: Int { return numItems - 1 }
     var empty: Bool { return numItems == 0 }
     
+    // Remembers the auto-snapshot setting
+    var takeSnapshots = false
+
     override func windowWillLoad() {
    
     }
@@ -40,51 +45,52 @@ class SnapshotDialog: DialogController {
 
         now = Date()
         
+        // Don't let the emulator take snapshots while the dialog is open
+        takeSnapshots = emu?.get(.AMIGA_SNAPSHOTS) != 0
+        emu?.set(.AMIGA_SNAPSHOTS, enable: false)
+
         updateLabels()
-        updateCapacity()
 
         self.carousel.type = iCarouselType.timeMachine
         self.carousel.isHidden = false
-        self.updateCarousel(goto: Int.max, animated: false)
+        self.updateCarousel(goto: myDocument.snapshots.count - 1, animated: false)
     }
     
     func updateLabels() {
         
         moveUp.isEnabled = currentItem >= 0 && currentItem < lastItem
         moveDown.isEnabled = currentItem > 0
-        nr.stringValue = "\(currentItem + 1) / \(numItems)"
-    
-        moveUp.isHidden = empty
-        moveDown.isHidden = empty
-        nr.isHidden = empty
-        restore.isHidden = empty
-        
+        nr.stringValue = "Snapshot \(currentItem + 1) / \(numItems)"
+
         if let snapshot = myDocument.snapshots.element(at: currentItem) {
             let takenAt = snapshot.timeStamp
-            text1.stringValue = "Taken at " + timeInfo(time: takenAt)
-            text2.stringValue = timeDiffInfo(time: takenAt)
+            let compressed = "" // snapshot.compressed ? "(Compressed)" : ""
+            text1.stringValue = "\(snapshot.size / 1024) KB " + compressed
+            text2.stringValue = "Taken at " + timeInfo(time: takenAt)
+            text3.stringValue = Date.elapsed(time: takenAt)
+            message.stringValue = ""
         } else {
-            text1.stringValue = "No snapshots available"
-            text2.stringValue = ""
+            nr.stringValue = "No snapshots taken"
+            message.stringValue = ""
         }
-        text1.isHidden = false
-        text2.isHidden = false
-    }
-      
-    func updateCapacity() {
 
         let MB = 1024 * 1024
-        let fill = Int(myDocument.snapshots.fill.rounded())
+        let fill = myDocument.snapshots.fill
         let size = myDocument.snapshots.used / MB
         let max = myDocument.snapshots.maxSize / MB
+        indicator.doubleValue = fill
+        indicatorText.stringValue = "\(size) MB / \(max) MB"
 
-        indicator.integerValue = fill
-        indicatorText.stringValue = "\(size) MB out of \(max) MB used"
-        indicatorText.isHidden = false
-        indicatorPercentage.stringValue = "\(fill)%"
-        indicatorPercentage.isHidden = false
+        text1.isHidden  = empty
+        text2.isHidden  = empty
+        text3.isHidden  = empty
+        moveUp.isHidden = empty
+        moveDown.isHidden = empty
+        nr.isHidden = false
+        trash.isHidden = empty
+        revert.isHidden = empty
     }
-
+      
     func updateCarousel(goto item: Int, animated: Bool) {
         
         carousel.reloadData()
@@ -107,7 +113,7 @@ class SnapshotDialog: DialogController {
          
          let formatter = DateFormatter()
          formatter.timeZone = TimeZone.current
-         formatter.dateFormat = "HH:mm:ss" // "yyyy-MM-dd HH:mm"
+         formatter.dateFormat = "HH:mm:ss"
          
          return formatter.string(from: date)
     }
@@ -117,70 +123,6 @@ class SnapshotDialog: DialogController {
         return timeInfo(date: Date(timeIntervalSince1970: TimeInterval(time)))
     }
     
-    func timeDiffInfo(seconds: Int) -> String {
-        
-        let secPerMin = 60
-        let secPerHour = secPerMin * 60
-        let secPerDay = secPerHour * 24
-        let secPerWeek = secPerDay * 7
-        let secPerMonth = secPerWeek * 4
-        let secPerYear = secPerWeek * 52
-        
-        if seconds == 0 {
-            return "Now"
-        }
-        if seconds < secPerMin {
-            return "\(seconds) second" + (seconds == 1 ? "" : "s") + " ago"
-        }
-        if seconds < secPerHour {
-            let m = seconds / secPerMin
-            return "\(m) minute" + (m == 1 ? "" : "s") + " ago"
-        }
-        if seconds < secPerDay {
-            let h = seconds / secPerHour
-            return "\(h) hour" + (h == 1 ? "" : "s") + " ago"
-        }
-        if seconds < secPerWeek {
-            let d = seconds / secPerDay
-            return "\(d) day" + (d == 1 ? "" : "s") + " ago"
-        }
-        if seconds < secPerMonth {
-            let w = seconds / secPerWeek
-            return "\(w) week" + (w == 1 ? "" : "s") + " ago"
-        }
-        if seconds < secPerYear {
-            let m = seconds / secPerMonth
-            return "\(m) month" + (m == 1 ? "" : "s") + " ago"
-        } else {
-            let y = seconds / secPerYear
-            return "\(y) year" + (y == 1 ? "" : "s") + " ago"
-        }
-    }
-    
-    func timeDiffInfo(interval: TimeInterval?) -> String {
-
-        return interval == nil ? "" : timeDiffInfo(seconds: Int(interval!))
-    }
-    
-    func timeDiffInfo(date: Date?) -> String {
-        
-        guard let date else {
-            return ""
-        }
-        return timeDiffInfo(interval: -date.timeIntervalSince(now))
-    }
-    
-    func timeDiffInfo(time: time_t) -> String {
-        
-        let date = Date(timeIntervalSince1970: TimeInterval(time))
-        return timeDiffInfo(date: date)
-    }
-
-    func timeDiffInfo(url: URL) -> String {
-        
-        return timeDiffInfo(date: url.modificationDate)
-    }
-
     @IBAction func selectorAction(_ sender: NSSegmentedControl!) {
                 
         updateCarousel(goto: Int.max, animated: false)
@@ -200,6 +142,12 @@ class SnapshotDialog: DialogController {
         }
     }
         
+    @IBAction func trashAction(_ sender: NSButton!) {
+
+        myDocument.snapshots.remove(at: currentItem)
+        updateCarousel()
+    }
+    
     @IBAction func revertAction(_ sender: NSButton!) {
                 
         do {
@@ -211,21 +159,26 @@ class SnapshotDialog: DialogController {
     }
 
     @IBAction override func cancelAction(_ sender: Any!) {
-        
+
+        hide()
+
+        emu?.set(.AMIGA_SNAPSHOTS, enable: takeSnapshots)
+
+        // Hide some controls
         let items: [NSView] = [
             
             nr,
             moveUp,
             moveDown,
-            restore,
+            trash,
             text1,
             text2,
+            text3,
             carousel
         ]
-
-        hide()
+        
         for item in items { item.isHidden = true }
-     }
+    }
 }
 
 //

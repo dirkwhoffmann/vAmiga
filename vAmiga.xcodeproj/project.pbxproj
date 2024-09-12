@@ -1505,22 +1505,14 @@
 			children = (
 				508FE04721EA22CC0043D0E9 /* DialogController.swift */,
 				5019605C23125E680051B669 /* Monitor.swift */,
-				509F7F1521ED141F00A530E4 /* Inspector */,
-				5099123C24BA46E10007CAB6 /* Preferences */,
-				5099123D24BA46EB0007CAB6 /* Configuration */,
-				509F41E9243B0FF700AD0FE4 /* ScreenshotDialog.swift */,
-				50B9354A243481AB000C78B8 /* SnapshotDialog.swift */,
-				501C514727C2AD8C00DF1DD5 /* DiskExporter.swift */,
-				5029C6E227CA2F66002F6CCC /* DiskInspector.swift */,
-				506B471C256396BC009FEFC3 /* VolumeInspector.swift */,
-				501C514D27C4259F00DF1DD5 /* FloppyCreator.swift */,
-				5050EC4027BE97E000394F4F /* HardDiskCreator.swift */,
-				501C513E27C0C63A00DF1DD5 /* HardDiskConfigurator.swift */,
-				50D715A227CCA84F0085C1AA /* PartitionSelector.swift */,
-				50EB8CCD2530710E0053988A /* VideoExporter.swift */,
 				501C514927C38FE500DF1DD5 /* DragImageView.swift */,
 				507727EC242F2CE3009D01DA /* iCarousel.h */,
 				507727ED242F2CE3009D01DA /* iCarousel.m */,
+				509F7F1521ED141F00A530E4 /* Inspector */,
+				5099123C24BA46E10007CAB6 /* Preferences */,
+				5099123D24BA46EB0007CAB6 /* Configuration */,
+				509731472C932F1B008D5634 /* Captures */,
+				509731482C932F71008D5634 /* Media */,
 			);
 			path = Dialogs;
 			sourceTree = "<group>";
@@ -1566,6 +1558,30 @@
 				50FCCA7A262AAAEA00398342 /* Script.cpp */,
 				5009B7F5255702C00037288E /* RomFiles */,
 				5009B7F7255702D40037288E /* DiskFiles */,
+			);
+			path = Media;
+			sourceTree = "<group>";
+		};
+		509731472C932F1B008D5634 /* Captures */ = {
+			isa = PBXGroup;
+			children = (
+				509F41E9243B0FF700AD0FE4 /* ScreenshotDialog.swift */,
+				50B9354A243481AB000C78B8 /* SnapshotDialog.swift */,
+				50EB8CCD2530710E0053988A /* VideoExporter.swift */,
+			);
+			path = Captures;
+			sourceTree = "<group>";
+		};
+		509731482C932F71008D5634 /* Media */ = {
+			isa = PBXGroup;
+			children = (
+				501C514727C2AD8C00DF1DD5 /* DiskExporter.swift */,
+				5029C6E227CA2F66002F6CCC /* DiskInspector.swift */,
+				506B471C256396BC009FEFC3 /* VolumeInspector.swift */,
+				501C514D27C4259F00DF1DD5 /* FloppyCreator.swift */,
+				5050EC4027BE97E000394F4F /* HardDiskCreator.swift */,
+				501C513E27C0C63A00DF1DD5 /* HardDiskConfigurator.swift */,
+				50D715A227CCA84F0085C1AA /* PartitionSelector.swift */,
 			);
 			path = Media;
 			sourceTree = "<group>";
@@ -2852,7 +2868,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 240701;
+				CURRENT_PROJECT_VERSION = 240912;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = NO;
@@ -2873,7 +2889,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.6.2;
+				MARKETING_VERSION = 3.0b1;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 c++20";
 				PRODUCT_BUNDLE_IDENTIFIER = dirkwhoffmann.vAmiga;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2903,7 +2919,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 240701;
+				CURRENT_PROJECT_VERSION = 240912;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = NO;
@@ -2922,7 +2938,7 @@
 				);
 				LLVM_LTO = YES_THIN;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 2.6.2;
+				MARKETING_VERSION = 3.0b1;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 c++20";
 				PRODUCT_BUNDLE_IDENTIFIER = dirkwhoffmann.vAmiga;
 				PRODUCT_NAME = "$(TARGET_NAME)";

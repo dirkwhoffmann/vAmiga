@@ -1195,7 +1195,7 @@ DebugConsole::initCommands(Command &root)
             });
         }
 
-        root.add({"?"}, { Arg::value },
+        root.add({"%"}, { Arg::value },
                  "Convert a value into different formats",
                  [this](Arguments& argv, long value) {
 
