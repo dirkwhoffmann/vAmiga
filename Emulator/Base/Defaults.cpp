@@ -27,9 +27,11 @@ Defaults::Defaults()
     setFallback(OPT_AMIGA_WARP_MODE,            WARP_NEVER);
     setFallback(OPT_AMIGA_VSYNC,                false);
     setFallback(OPT_AMIGA_SPEED_BOOST,          100);
-    setFallback(OPT_AMIGA_SNAPSHOTS,            false);
-    setFallback(OPT_AMIGA_SNAPSHOT_DELAY,       10);
     setFallback(OPT_AMIGA_RUN_AHEAD,            0);
+
+    setFallback(OPT_AMIGA_SNAP_AUTO,            false);
+    setFallback(OPT_AMIGA_SNAP_DELAY,           10);
+    setFallback(OPT_AMIGA_SNAP_COMPRESS,        true);
 
     setFallback(OPT_AGNUS_REVISION,             AGNUS_ECS_1MB);
     setFallback(OPT_AGNUS_PTR_DROPS,            true);

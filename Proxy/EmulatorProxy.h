@@ -861,6 +861,8 @@
 @property (readonly) FileType type;
 @property (readonly) u64 fnv;
 @property (readonly) NSInteger size;
+@property (readonly) BOOL compressed;
+
 @property (readonly) u8 *data;
 
 - (void)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex;

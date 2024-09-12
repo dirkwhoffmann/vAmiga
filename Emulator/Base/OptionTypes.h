@@ -30,9 +30,12 @@ enum_long(OPT)
     OPT_AMIGA_WARP_MODE,        ///< Warp activation mode
     OPT_AMIGA_VSYNC,            ///< Derive the frame rate to the VSYNC signal
     OPT_AMIGA_SPEED_BOOST,      ///< Speed adjustment in percent
-    OPT_AMIGA_SNAPSHOTS,        ///< Automatically take a snapshots
-    OPT_AMIGA_SNAPSHOT_DELAY,   ///< Delay between two snapshots in seconds
     OPT_AMIGA_RUN_AHEAD,        ///< Number of run-ahead frames
+
+    // Snapshots
+    OPT_AMIGA_SNAP_AUTO,        ///< Automatically take a snapshots
+    OPT_AMIGA_SNAP_DELAY,       ///< Delay between two snapshots in seconds
+    OPT_AMIGA_SNAP_COMPRESS,    ///< Compress snapshot data
 
     // Agnus
     OPT_AGNUS_REVISION,
@@ -203,9 +206,11 @@ struct OptionEnum : vamiga::util::Reflection<OptionEnum, Option>
             case OPT_AMIGA_WARP_MODE:           return "AMIGA.WARP_MODE";
             case OPT_AMIGA_VSYNC:               return "AMIGA.VSYNC";
             case OPT_AMIGA_SPEED_BOOST:         return "AMIGA.SPEED_BOOST";
-            case OPT_AMIGA_SNAPSHOTS:           return "AMIGA.SNAPSHOTS";
-            case OPT_AMIGA_SNAPSHOT_DELAY:      return "AMIGA.SNAPSHOT_DELAY";
             case OPT_AMIGA_RUN_AHEAD:           return "AMIGA.RUN_AHEAD";
+
+            case OPT_AMIGA_SNAP_AUTO:           return "AMIGA.SNAP_AUTO";
+            case OPT_AMIGA_SNAP_DELAY:          return "AMIGA.SNAP_DELAY";
+            case OPT_AMIGA_SNAP_COMPRESS:       return "AMIGA.SNAP_COMPRESS";
 
             case OPT_AGNUS_REVISION:            return "AGNUS.REVISION";
             case OPT_AGNUS_PTR_DROPS:           return "AGNUS.PTR_DROPS";
@@ -348,9 +353,11 @@ struct OptionEnum : vamiga::util::Reflection<OptionEnum, Option>
             case OPT_AMIGA_WARP_MODE:           return "Warp activation";
             case OPT_AMIGA_VSYNC:               return "VSYNC mode";
             case OPT_AMIGA_SPEED_BOOST:         return "Speed adjustment";
-            case OPT_AMIGA_SNAPSHOTS:           return "Automatically take snapshots";
-            case OPT_AMIGA_SNAPSHOT_DELAY:      return "Time span between two snapshots";
             case OPT_AMIGA_RUN_AHEAD:           return "Run-ahead frames";
+
+            case OPT_AMIGA_SNAP_AUTO:           return "Automatically take snapshots";
+            case OPT_AMIGA_SNAP_DELAY:          return "Time span between two snapshots";
+            case OPT_AMIGA_SNAP_COMPRESS:       return "Compress snapshot data";
 
             case OPT_AGNUS_REVISION:            return "Chip revision";
             case OPT_AGNUS_PTR_DROPS:           return "Ignore certain register writes";

@@ -46,8 +46,8 @@ class SnapshotDialog: DialogController {
         now = Date()
         
         // Don't let the emulator take snapshots while the dialog is open
-        takeSnapshots = emu?.get(.AMIGA_SNAPSHOTS) != 0
-        emu?.set(.AMIGA_SNAPSHOTS, enable: false)
+        takeSnapshots = emu?.get(.AMIGA_SNAP_AUTO) != 0
+        emu?.set(.AMIGA_SNAP_AUTO, enable: false)
 
         updateLabels()
 
@@ -64,7 +64,7 @@ class SnapshotDialog: DialogController {
 
         if let snapshot = myDocument.snapshots.element(at: currentItem) {
             let takenAt = snapshot.timeStamp
-            let compressed = "" // snapshot.compressed ? "(Compressed)" : ""
+            let compressed = snapshot.compressed ? "(Compressed)" : ""
             text1.stringValue = "\(snapshot.size / 1024) KB " + compressed
             text2.stringValue = "Taken at " + timeInfo(time: takenAt)
             text3.stringValue = Date.elapsed(time: takenAt)
@@ -162,7 +162,7 @@ class SnapshotDialog: DialogController {
 
         hide()
 
-        emu?.set(.AMIGA_SNAPSHOTS, enable: takeSnapshots)
+        emu?.set(.AMIGA_SNAP_AUTO, enable: takeSnapshots)
 
         // Hide some controls
         let items: [NSView] = [

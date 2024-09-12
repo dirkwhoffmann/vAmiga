@@ -32,14 +32,14 @@ class Preferences {
     var autoSnapshots = false {
         didSet {
             for emu in myAppDelegate.proxies {
-                emu.set(.AMIGA_SNAPSHOTS, enable: autoSnapshots)
+                emu.set(.AMIGA_SNAP_AUTO, enable: autoSnapshots)
             }
         }
     }
     var snapshotInterval = 0 {
         didSet {
             for emu in myAppDelegate.proxies {
-                emu.set(.AMIGA_SNAPSHOT_DELAY, value: snapshotInterval)
+                emu.set(.AMIGA_SNAP_DELAY, value: snapshotInterval)
             }
         }
     }

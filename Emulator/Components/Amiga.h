@@ -72,9 +72,10 @@ class Amiga final : public CoreComponent, public Inspectable<AmigaInfo> {
         OPT_AMIGA_WARP_MODE,
         OPT_AMIGA_VSYNC,
         OPT_AMIGA_SPEED_BOOST,
-        OPT_AMIGA_SNAPSHOTS,
-        OPT_AMIGA_SNAPSHOT_DELAY,
-        OPT_AMIGA_RUN_AHEAD
+        OPT_AMIGA_RUN_AHEAD,
+        OPT_AMIGA_SNAP_AUTO,
+        OPT_AMIGA_SNAP_DELAY,
+        OPT_AMIGA_SNAP_COMPRESS
     };
     
     // The current configuration

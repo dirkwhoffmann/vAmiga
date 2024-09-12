@@ -35,9 +35,11 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_AMIGA_WARP_BOOT:           return numParser(" sec");
         case OPT_AMIGA_VSYNC:               return boolParser();
         case OPT_AMIGA_SPEED_BOOST:         return numParser("%");
-        case OPT_AMIGA_SNAPSHOTS:           return boolParser();
-        case OPT_AMIGA_SNAPSHOT_DELAY:      return numParser(" sec");
         case OPT_AMIGA_RUN_AHEAD:           return numParser(" frames");
+
+        case OPT_AMIGA_SNAP_AUTO:           return boolParser();
+        case OPT_AMIGA_SNAP_DELAY:          return numParser(" sec");
+        case OPT_AMIGA_SNAP_COMPRESS:       return boolParser();
 
         case OPT_AGNUS_REVISION:            return enumParser.template operator()<AgnusRevisionEnum>();
         case OPT_AGNUS_PTR_DROPS:           return boolParser();

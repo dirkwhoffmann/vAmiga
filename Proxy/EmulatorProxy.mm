@@ -1716,6 +1716,11 @@ using namespace vamiga::moira;
     return [self file]->getSize();
 }
 
+- (BOOL)compressed
+{
+    return [self file]->isCompressed();
+}
+
 - (u8 *)data
 {
     return [self file]->getData();
