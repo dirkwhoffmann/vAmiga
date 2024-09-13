@@ -221,6 +221,7 @@ Allocator<T>::compress(isize n, isize offset)
     vec.reserve(size);
 
     auto encode = [&](T element, isize count) {
+        
         for (isize i = 0; i < std::min(count, n); i++) vec.push_back(element);
         if (count >= n) vec.push_back(T(count - n));
     };
@@ -258,12 +259,12 @@ Allocator<T>::uncompress(isize n, isize offset)
     vec.reserve(size);
 
     auto decode = [&](T element, isize count) {
+        
         for (isize i = 0; i < count; i++) vec.push_back(element);
     };
 
     // Skip everything up to the offset position
     for (isize i = 0; i < std::min(offset, size); i++) vec.push_back(ptr[i]);
-
 
     for (isize i = offset; i < size; i++) {
 
