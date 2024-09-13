@@ -43,6 +43,9 @@ struct SnapshotHeader {
     // Indicates if the snapshot contents is stored in compressed form
     bool compressed;
 
+    // Size of this snapshot when uncompressed
+    i32 rawSize;
+    
     // Preview image
     Thumbnail screenshot;
 };

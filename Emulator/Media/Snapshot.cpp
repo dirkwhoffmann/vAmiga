@@ -73,6 +73,7 @@ Snapshot::Snapshot(isize capacity)
     header->minor = SNP_MINOR;
     header->subminor = SNP_SUBMINOR;
     header->beta = SNP_BETA;
+    header->rawSize = i32(data.size);
 }
 
 Snapshot::Snapshot(Amiga &amiga) : Snapshot(amiga.size())
@@ -175,14 +176,22 @@ Snapshot::uncompress()
 {
     if (isCompressed()) {
         
+        isize expectedSize = getHeader()->rawSize;
+        
         debug(SNP_DEBUG, "Uncompressing %ld bytes...", data.size);
         
         {   auto watch = util::StopWatch(SNP_DEBUG, "");
             
-            data.uncompress(2, sizeof(SnapshotHeader));
+            data.uncompress(2, sizeof(SnapshotHeader), expectedSize);
             getHeader()->compressed = false;
         }
         debug(SNP_DEBUG, "Uncompressed size: %ld bytes (hash: 0x%x)\n", data.size, data.fnv32());
+        
+        if (getHeader()->rawSize != expectedSize) {
+         
+            warn("Snaphot size: %ld. Expected: %ld\n", data.size, expectedSize);
+            fatalError;
+        }
     }
 }
 

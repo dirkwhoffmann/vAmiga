@@ -70,7 +70,7 @@ template <class T> struct Allocator {
 
     // Compresses or uncompresses a buffer
     void compress(isize n = 2, isize offset = 0);
-    void uncompress(isize n = 2, isize offset = 0);
+    void uncompress(isize n = 2, isize offset = 0, isize expectedSize = 0);
 };
 
 template <class T> struct Buffer : public Allocator <T> {

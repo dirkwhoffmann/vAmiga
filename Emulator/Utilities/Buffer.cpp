@@ -251,12 +251,14 @@ Allocator<T>::compress(isize n, isize offset)
 }
 
 template <class T> void
-Allocator<T>::uncompress(isize n, isize offset)
+Allocator<T>::uncompress(isize n, isize offset, isize expectedSize)
 {
     T prev = 0;
     isize repetitions = 0;
     std::vector<T> vec;
-    vec.reserve(size);
+
+    // Speed up by starting with a big enough container
+    if (expectedSize) vec.reserve(expectedSize);
 
     auto decode = [&](T element, isize count) {
         
@@ -304,7 +306,7 @@ template void Allocator<T>::copy(T *buf, isize offset, isize len) const; \
 template void Allocator<T>::patch(const u8 *seq, const u8 *subst); \
 template void Allocator<T>::patch(const char *seq, const char *subst); \
 template void Allocator<T>::compress(isize, isize); \
-template void Allocator<T>::uncompress(isize, isize);
+template void Allocator<T>::uncompress(isize, isize, isize);
 
 INSTANTIATE_ALLOCATOR(u8)
 INSTANTIATE_ALLOCATOR(u32)
