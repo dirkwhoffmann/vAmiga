@@ -13,6 +13,7 @@
 #include "Option.h"
 #include "Snapshot.h"
 #include "ADFFile.h"
+#include "Chrono.h"
 #include <algorithm>
 
 namespace vamiga {

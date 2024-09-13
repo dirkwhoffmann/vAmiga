@@ -77,8 +77,14 @@ Snapshot::Snapshot(isize capacity)
 
 Snapshot::Snapshot(Amiga &amiga) : Snapshot(amiga.size())
 {
-    takeScreenshot(amiga);
-    amiga.save(getData());
+    {   util::StopWatch(SNP_DEBUG, "Taking screenshot...");
+        
+        takeScreenshot(amiga);
+    }
+    {   util::StopWatch(SNP_DEBUG, "Saving state...");
+        
+        amiga.save(getData());
+    }
 }
 
 void
@@ -154,11 +160,13 @@ Snapshot::compress()
 {
     if (!isCompressed()) {
 
-        debug(SNP_DEBUG, "Compressing %ld bytes (hash: 0x%x)...\n", data.size, data.fnv32());
+        debug(SNP_DEBUG, "Compressing %ld bytes (hash: 0x%x)...", data.size, data.fnv32());
 
-        data.compress(2, sizeof(SnapshotHeader));
-        getHeader()->compressed = true;
-
+        {   auto watch = util::StopWatch(SNP_DEBUG, "");
+            
+            data.compress(2, sizeof(SnapshotHeader));
+            getHeader()->compressed = true;
+        }
         debug(SNP_DEBUG, "Compressed size: %ld bytes\n", data.size);
     }
 }
@@ -167,11 +175,13 @@ Snapshot::uncompress()
 {
     if (isCompressed()) {
         
-        debug(SNP_DEBUG, "Uncompressing %ld bytes...\n", data.size);
+        debug(SNP_DEBUG, "Uncompressing %ld bytes...", data.size);
         
-        data.uncompress(2, sizeof(SnapshotHeader));
-        getHeader()->compressed = false;
-        
+        {   auto watch = util::StopWatch(SNP_DEBUG, "");
+            
+            data.uncompress(2, sizeof(SnapshotHeader));
+            getHeader()->compressed = false;
+        }
         debug(SNP_DEBUG, "Uncompressed size: %ld bytes (hash: 0x%x)\n", data.size, data.fnv32());
     }
 }

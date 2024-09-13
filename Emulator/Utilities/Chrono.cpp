@@ -323,15 +323,18 @@ Clock::restart()
     return result;
 }
 
-StopWatch::StopWatch(const string &description) : description(description)
+StopWatch::StopWatch(bool enable, const string &description) : enable(enable), description(description)
 {
-    clock.restart();
+    if (enable) clock.restart();
 }
 
 StopWatch::~StopWatch()
 {
-    auto elapsed = clock.stop();
-    fprintf(stderr, "%s: %f sec\n", description.c_str(), elapsed.asSeconds());
+    if (enable) {
+        
+        auto elapsed = clock.stop();
+        fprintf(stderr, "%s %1.2f sec\n", description.c_str(), elapsed.asSeconds());
+    }
 }
 
 }

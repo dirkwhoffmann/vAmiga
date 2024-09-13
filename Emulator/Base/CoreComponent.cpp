@@ -277,7 +277,7 @@ CoreComponent::load(const u8 *buffer)
             if (SNP_DEBUG) { fatalError; } else { throw Error(VAERROR_SNAP_CORRUPTED); }
         }
 
-        debug(SNP_DEBUG, "Loaded %ld bytes (expected %ld)\n", count, c->size(false));
+        debug(SNP_DEBUG >= 2, "Loaded %ld bytes (expected %ld)\n", count, c->size(false));
         result += count;
     });
 
@@ -309,7 +309,7 @@ CoreComponent::save(u8 *buffer)
             if (SNP_DEBUG) { fatalError; } else { throw Error(VAERROR_SNAP_CORRUPTED); }
         }
 
-        debug(SNP_DEBUG, "Saved %ld bytes (expected %ld)\n", count, c->size(false));
+        debug(SNP_DEBUG >= 2, "Saved %ld bytes (expected %ld)\n", count, c->size(false));
         result += count;
     });
 

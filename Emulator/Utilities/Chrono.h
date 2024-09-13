@@ -86,12 +86,14 @@ public:
 
 class StopWatch {
 
+    bool enable;
     string description;
     Clock clock;
 
 public:
     
-    StopWatch(const string &description = "");
+    StopWatch(bool enable, const string &description);
+    StopWatch(const string &description = "") : StopWatch(true, description) { }
     ~StopWatch();
 };
 
