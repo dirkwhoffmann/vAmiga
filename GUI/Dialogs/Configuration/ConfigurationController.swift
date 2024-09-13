@@ -182,11 +182,6 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var prfRunAhead: NSSlider!
     @IBOutlet weak var prfRunAheadInfo: NSTextField!
 
-    // Collision detection
-    @IBOutlet weak var prfClxSprSpr: NSButton!
-    @IBOutlet weak var prfClxSprPlf: NSButton!
-    @IBOutlet weak var prfClxPlfPlf: NSButton!
-
     // Boosters
     @IBOutlet weak var prfCiaIdleSleep: NSButton!
     @IBOutlet weak var prfFrameSkipping: NSButton!
@@ -228,6 +223,11 @@ class ConfigurationController: DialogController {
 
     // Keyboard
     @IBOutlet weak var compAccurateKeyboard: NSButton!
+
+    // Collision detection
+    @IBOutlet weak var compClxSprSpr: NSButton!
+    @IBOutlet weak var compClxSprPlf: NSButton!
+    @IBOutlet weak var compClxPlfPlf: NSButton!
 
     // Buttons
     @IBOutlet weak var compOKButton: NSButton!

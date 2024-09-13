@@ -34,6 +34,11 @@ extension ConfigurationController {
         // Keyboard
         compAccurateKeyboard.state = config.accurateKeyboard ? .on : .off
 
+        // Collision detection
+        compClxSprSpr.state = config.clxSprSpr ? .on : .off
+        compClxSprPlf.state = config.clxSprPlf ? .on : .off
+        compClxPlfPlf.state = config.clxPlfPlf ? .on : .off
+
         // Buttons
         compPowerButton.isHidden = !bootable
     }
@@ -93,6 +98,25 @@ extension ConfigurationController {
         config.accurateKeyboard = sender.state == .on
     }
 
+    //
+    // Action methods (collision detection)
+    //
+
+    @IBAction func compClxSprSprAction(_ sender: NSButton!) {
+
+        config.clxSprSpr = sender.state == .on
+    }
+
+    @IBAction func compClxSprPlfAction(_ sender: NSButton!) {
+
+        config.clxSprPlf = sender.state == .on
+    }
+
+    @IBAction func compClxPlfPlfAction(_ sender: NSButton!) {
+
+        config.clxPlfPlf = sender.state == .on
+    }
+    
     @IBAction func compPresetAction(_ sender: NSPopUpButton!) {
         
         let defaults = EmulatorProxy.defaults!
@@ -111,7 +135,9 @@ extension ConfigurationController {
         case 1:
             
             // Accurate
-            break
+            defaults.set(.DENISE_CLX_SPR_PLF, true)
+            defaults.set(.DENISE_CLX_SPR_SPR, true)
+            defaults.set(.DENISE_CLX_PLF_PLF, true)
 
         case 2:
             

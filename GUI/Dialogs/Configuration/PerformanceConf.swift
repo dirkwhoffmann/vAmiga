@@ -28,11 +28,6 @@ extension ConfigurationController {
         prfRunAhead.integerValue = runAhead
         prfRunAheadInfo.stringValue = "\(runAhead) frame" + (runAhead == 1 ? "" : "s")
 
-        // Collision detection
-        prfClxSprSpr.state = config.clxSprSpr ? .on : .off
-        prfClxSprPlf.state = config.clxSprPlf ? .on : .off
-        prfClxPlfPlf.state = config.clxPlfPlf ? .on : .off
-
         // Boosters
         prfCiaIdleSleep.state = config.ciaIdleSleep ? .on : .off
         prfFrameSkipping.state = config.frameSkipping > 0 ? .on : .off
@@ -80,24 +75,6 @@ extension ConfigurationController {
         config.runAhead = sender.integerValue
     }
 
-    //
-    // Action methods (collision detection)
-    //
-
-    @IBAction func prfClxSprSprAction(_ sender: NSButton!) {
-
-        config.clxSprSpr = sender.state == .on
-    }
-
-    @IBAction func prfClxSprPlfAction(_ sender: NSButton!) {
-
-        config.clxSprPlf = sender.state == .on
-    }
-
-    @IBAction func prfClxPlfPlfAction(_ sender: NSButton!) {
-
-        config.clxPlfPlf = sender.state == .on
-    }
 
     //
     // Action methods (performance boosters)
