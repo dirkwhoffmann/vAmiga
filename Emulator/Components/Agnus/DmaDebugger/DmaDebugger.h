@@ -73,8 +73,8 @@ public:
 
     // Beamtraps
     Beamtraps beamtraps = Beamtraps(agnus);
-    // GuardsWrapper beamtraps = GuardsWrapper(emulator, _beamtraps);
 
+    
     //
     // Initializing
     //
@@ -83,6 +83,19 @@ public:
 
     DmaDebugger(Amiga &ref);
 
+    DmaDebugger& operator= (const DmaDebugger& other) {
+        
+        CLONE_ARRAY(visualize)
+        CLONE_ARRAY(busValue)
+        CLONE_ARRAY(busOwner)
+        CLONE(pixel0)
+        CLONE(config)
+
+        std::memcpy(debugColor, other.debugColor, sizeof(debugColor));
+
+        return *this;
+    }
+    
     
     //
     // Methods from Serializable

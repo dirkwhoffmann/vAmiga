@@ -219,7 +219,8 @@ public:
         CLONE(sequencer)
         CLONE(copper)
         CLONE(blitter)
-
+        CLONE(dmaDebugger)
+        
         CLONE_ARRAY(trigger)
         CLONE_ARRAY(id)
         CLONE_ARRAY(data)

@@ -1005,7 +1005,6 @@ struct VideoPortAPI : public API {
      * and vamiga::Texture::height texels. Each texel is represented by a
      * 32 bit color value.
      */
-    // const class FrameBuffer &getTexture() const;
     const u32 *getTexture() const;
     const u32 *getTexture(isize *nr, bool *lof, bool *prevlof) const;
 
