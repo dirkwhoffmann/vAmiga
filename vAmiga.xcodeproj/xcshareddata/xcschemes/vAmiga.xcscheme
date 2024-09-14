@@ -67,7 +67,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-&quot;agnus set PTR_DROPS false&quot;"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-&quot;joshua&quot;"
