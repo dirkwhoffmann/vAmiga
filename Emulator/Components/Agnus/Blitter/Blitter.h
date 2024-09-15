@@ -530,9 +530,6 @@ private:
     // Performs a line blit operation via the FastBlitter
     void doFastLineBlit();
     
-    // Performs a line blit operation via the FastBlitter (old code)
-    void doLegacyFastLineBlit();
-    
     
     //
     //  Executing the Slow Blitter

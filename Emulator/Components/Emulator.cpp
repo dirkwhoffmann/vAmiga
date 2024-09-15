@@ -435,7 +435,6 @@ Emulator::getDebugVariable(DebugFlag flag)
         case FLAG_BLT_DEBUG:        return BLT_DEBUG;
         case FLAG_BLTTIM_DEBUG:     return BLTTIM_DEBUG;
         case FLAG_SLOW_BLT_DEBUG:   return SLOW_BLT_DEBUG;
-        case FLAG_OLD_LINE_BLIT:    return OLD_LINE_BLIT;
 
         case FLAG_BPLREG_DEBUG:     return BPLREG_DEBUG;
         case FLAG_BPLDAT_DEBUG:     return BPLDAT_DEBUG;
@@ -574,7 +573,6 @@ Emulator::setDebugVariable(DebugFlag flag, bool val)
         case FLAG_BLT_DEBUG:        BLT_DEBUG = val; break;
         case FLAG_BLTTIM_DEBUG:     BLTTIM_DEBUG = val; break;
         case FLAG_SLOW_BLT_DEBUG:   SLOW_BLT_DEBUG = val; break;
-        case FLAG_OLD_LINE_BLIT:    OLD_LINE_BLIT = val; break;
 
             // Denise
         case FLAG_BPLREG_DEBUG:     BPLREG_DEBUG = val; break;

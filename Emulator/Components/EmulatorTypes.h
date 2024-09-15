@@ -71,7 +71,6 @@ enum_long(DEBUG_FLAG)
     FLAG_BLT_DEBUG,        ///< Blitter execution
     FLAG_BLTTIM_DEBUG,     ///< Blitter Timing
     FLAG_SLOW_BLT_DEBUG,   ///< Execute micro-instructions in one chunk
-    FLAG_OLD_LINE_BLIT,    ///< Use the old line blitter implementation
 
     // Denise
     FLAG_BPLREG_DEBUG,     ///< Bitplane registers
@@ -215,7 +214,6 @@ struct DebugFlagEnum : vamiga::util::Reflection<DebugFlagEnum, DebugFlag>
             case FLAG_BLT_DEBUG:        return "BLT_DEBUG";
             case FLAG_BLTTIM_DEBUG:     return "BLTTIM_DEBUG";
             case FLAG_SLOW_BLT_DEBUG:   return "SLOW_BLT_DEBUG";
-            case FLAG_OLD_LINE_BLIT:    return "OLD_LINE_BLIT";
 
                 // Denise
             case FLAG_BPLREG_DEBUG:     return "BPLREG_DEBUG";
@@ -354,7 +352,6 @@ struct DebugFlagEnum : vamiga::util::Reflection<DebugFlagEnum, DebugFlag>
             case FLAG_BLT_DEBUG:        return "Blitter execution";
             case FLAG_BLTTIM_DEBUG:     return "Blitter Timing";
             case FLAG_SLOW_BLT_DEBUG:   return "Execute micro-instructions in one chunk";
-            case FLAG_OLD_LINE_BLIT:    return "Use the old line blitter implementation";
 
                 // Denise
             case FLAG_BPLREG_DEBUG:     return "Bitplane registers";

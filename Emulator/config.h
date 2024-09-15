@@ -149,7 +149,6 @@ extern debugflag BLT_MEM_GUARD;
 extern debugflag BLT_DEBUG;
 extern debugflag BLTTIM_DEBUG;
 extern debugflag SLOW_BLT_DEBUG;
-extern debugflag OLD_LINE_BLIT;
 
 // Denise
 extern debugflag BPLREG_DEBUG;

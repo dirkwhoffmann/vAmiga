@@ -59,7 +59,6 @@ debugflag BLT_MEM_GUARD   = 0;
 debugflag BLT_DEBUG       = 0;
 debugflag BLTTIM_DEBUG    = 0;
 debugflag SLOW_BLT_DEBUG  = 0;
-debugflag OLD_LINE_BLIT   = 0;
 
 // Denise
 debugflag BPLREG_DEBUG    = 0;
