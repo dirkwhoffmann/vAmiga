@@ -111,7 +111,7 @@ extern debugflag RUN_DEBUG;
 extern debugflag TIM_DEBUG;
 extern debugflag WARP_DEBUG;
 extern debugflag CMD_DEBUG;
-extern debugflag QUEUE_DEBUG;
+extern debugflag MSG_DEBUG;
 extern debugflag SNP_DEBUG;
 
 // Run ahead
@@ -121,7 +121,6 @@ extern debugflag RUA_ON_STEROIDS;
 
 // CPU
 extern debugflag CPU_DEBUG;
-extern debugflag CST_DEBUG;
 
 // Memory access
 extern debugflag OCSREG_DEBUG;

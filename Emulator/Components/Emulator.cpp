@@ -403,7 +403,7 @@ Emulator::getDebugVariable(DebugFlag flag)
         case FLAG_TIM_DEBUG:        return TIM_DEBUG;
         case FLAG_WARP_DEBUG:       return WARP_DEBUG;
         case FLAG_CMD_DEBUG:        return CMD_DEBUG;
-        case FLAG_QUEUE_DEBUG:      return QUEUE_DEBUG;
+        case FLAG_MSG_DEBUG:        return MSG_DEBUG;
         case FLAG_SNP_DEBUG:        return SNP_DEBUG;
 
         case FLAG_RUA_DEBUG:        return RUA_DEBUG;
@@ -411,7 +411,6 @@ Emulator::getDebugVariable(DebugFlag flag)
         case FLAG_RUA_ON_STEROIDS:  return RUA_ON_STEROIDS;
 
         case FLAG_CPU_DEBUG:        return CPU_DEBUG;
-        case FLAG_CST_DEBUG:        return CST_DEBUG;
 
         case FLAG_OCSREG_DEBUG:     return OCSREG_DEBUG;
         case FLAG_ECSREG_DEBUG:     return ECSREG_DEBUG;
@@ -535,7 +534,7 @@ Emulator::setDebugVariable(DebugFlag flag, bool val)
         case FLAG_TIM_DEBUG:        TIM_DEBUG = val; break;
         case FLAG_WARP_DEBUG:       WARP_DEBUG = val; break;
         case FLAG_CMD_DEBUG:        CMD_DEBUG = val; break;
-        case FLAG_QUEUE_DEBUG:      QUEUE_DEBUG = val; break;
+        case FLAG_MSG_DEBUG:        MSG_DEBUG = val; break;
         case FLAG_SNP_DEBUG:        SNP_DEBUG = val; break;
 
             // Run-ahead
@@ -545,7 +544,6 @@ Emulator::setDebugVariable(DebugFlag flag, bool val)
 
             // CPU
         case FLAG_CPU_DEBUG:        CPU_DEBUG = val; break;
-        case FLAG_CST_DEBUG:        CST_DEBUG = val; break;
 
             // Memory access
         case FLAG_OCSREG_DEBUG:     OCSREG_DEBUG = val; break;
