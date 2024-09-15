@@ -144,7 +144,7 @@ class Screenshot: CustomStringConvertible {
                 let url = folder!.appendingPathComponent(name)
                 return url.byAddingExtension(for: format)
             } else {
-                warn("\(name) already exists")
+                debug(.media, "\(name) already exists")
             }
         }
         

@@ -91,7 +91,7 @@ class ScreenshotDialog: DialogController {
         deleteButton.isHidden = empty
         leftButton.isHidden = empty
         rightButton.isHidden = empty
-        finderLabel.isHidden = true
+        finderLabel.isHidden = empty
         finderButton.isHidden = empty
 
         var label1 = "No screenshots available"
