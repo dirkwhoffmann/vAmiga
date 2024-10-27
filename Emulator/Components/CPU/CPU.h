@@ -20,6 +20,8 @@ namespace vamiga {
 
 class CPU : public moira::Moira, public Inspectable<CPUInfo>
 {
+    friend class Moira;
+
     Descriptions descriptions = {{
 
         .type           = CPUClass,
@@ -36,8 +38,6 @@ class CPU : public moira::Moira, public Inspectable<CPUInfo>
         OPT_CPU_OVERCLOCKING,
         OPT_CPU_RESET_VAL
     };
-
-    friend class Moira;
 
     // The current configuration
     CPUConfig config = {};
