@@ -452,7 +452,6 @@ class GamePad {
         oldEvents[usage] = events!
         
         // Trigger events
-        // for e in events! { track("event = \(e)") }
         processJoystickEvents(events: events!)
     }
     

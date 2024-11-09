@@ -731,7 +731,6 @@ Amiga::update(CmdQueue &queue)
     bool cmdConfig = false;
 
     auto dfn = [&]() -> FloppyDrive& { return *df[cmd.value]; };
-    auto cp = [&]() -> ControlPort& { return cmd.value ? controlPort2 : controlPort1; };
 
     // Process all commands
     while (queue.poll(cmd)) {
@@ -783,16 +782,18 @@ Amiga::update(CmdQueue &queue)
 
             case CMD_MOUSE_MOVE_ABS:
             case CMD_MOUSE_MOVE_REL:
-
-                cp().processCommand(cmd); break;
+            {
+                auto &port = cmd.coord.port ? controlPort2 : controlPort1;
+                port.processCommand(cmd); break;
                 break;
-
+            }
             case CMD_MOUSE_EVENT:
             case CMD_JOY_EVENT:
-
-                cp().processCommand(cmd); break;
+            {
+                auto &port = cmd.action.port ? controlPort2 : controlPort1;
+                port.processCommand(cmd); break;
                 break;
-
+            }
             case CMD_DSK_TOGGLE_WP:
             case CMD_DSK_MODIFIED:
             case CMD_DSK_UNMODIFIED:

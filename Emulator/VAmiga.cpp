@@ -811,14 +811,6 @@ SerialPortAPI::readOutgoingPrintableByte() const
 // Ports (VideoPort)
 //
 
-/*
-const class FrameBuffer &
-VideoPortAPI::getTexture() const
-{
-    return videoPort->getTexture();
-}
-*/
-
 const u32 *
 VideoPortAPI::getTexture() const
 {
