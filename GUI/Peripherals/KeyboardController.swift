@@ -81,6 +81,9 @@ class KeyboardController: NSObject {
     
     func flagsChanged(with event: NSEvent) {
 
+        // Intercept if the console is open
+        if renderer.console.isVisible { return }
+
         // Check for a mouse controlling key combination
         if parent.metal.checkForMouseKeys(with: event) { return }
 

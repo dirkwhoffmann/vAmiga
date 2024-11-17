@@ -1114,7 +1114,7 @@ FloppyDrive::insertMediaFile(class MediaFile &file, bool wp)
 {
     try {
 
-        const ADFFile &adf = dynamic_cast<const ADFFile &>(file);
+        const FloppyFile &adf = dynamic_cast<const FloppyFile &>(file);
         swapDisk(std::make_unique<FloppyDisk>(adf, wp));
 
     } catch (...) {

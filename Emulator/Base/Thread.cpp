@@ -356,29 +356,26 @@ void
 Thread::changeStateTo(ExecState requestedState)
 {
     assertLaunched();
-
+    
     if (isEmulatorThread()) {
-
+        
         // Switch immediately
         switchState(requestedState);
         assert(state == requestedState);
-
+        
     } else {
-
+        
         // Remember the requested state
         newState = requestedState;
-
+        
         // Request the change
         assert(stateChangeRequest.test() == false);
         stateChangeRequest.test_and_set();
         assert(stateChangeRequest.test() == true);
-
-        if (!isEmulatorThread()) {
-
-            // Wait until the change has been performed
-            stateChangeRequest.wait(true);
-            assert(stateChangeRequest.test() == false);
-        }
+        
+        // Wait until the change has been performed
+        stateChangeRequest.wait(true);
+        assert(stateChangeRequest.test() == false);
     }
 }
 

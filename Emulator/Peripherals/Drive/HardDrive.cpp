@@ -711,7 +711,7 @@ HardDrive::write(isize offset, isize length, u32 addr)
                 wtStream[objid].write((char *)(data.ptr + offset), length);
             }
             
-            setFlag(FLAG_PROTECTED, true);
+            setFlag(FLAG_MODIFIED, true);
         }
         
         // Inform the GUI
