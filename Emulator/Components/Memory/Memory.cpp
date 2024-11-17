@@ -318,14 +318,17 @@ Memory::operator << (SerChecker &worker)
     if (config.fastSize) {
         for (isize i = 0; i < config.fastSize; i++) worker << fast[i];
     }
-    if (romAllocator.size) {
-        for (isize i = 0; i < romAllocator.size; i++) worker << rom[i];
-    }
-    if (womAllocator.size) {
-        for (isize i = 0; i < womAllocator.size; i++) worker << wom[i];
-    }
-    if (extAllocator.size) {
-        for (isize i = 0; i < extAllocator.size; i++) worker << ext[i];
+    if (config.saveRoms) {
+
+        if (romAllocator.size) {
+            for (isize i = 0; i < romAllocator.size; i++) worker << rom[i];
+        }
+        if (womAllocator.size) {
+            for (isize i = 0; i < womAllocator.size; i++) worker << wom[i];
+        }
+        if (extAllocator.size) {
+            for (isize i = 0; i < extAllocator.size; i++) worker << ext[i];
+        }
     }
 }
 

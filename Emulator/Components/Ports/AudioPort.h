@@ -123,7 +123,7 @@ public:
         Sampler()
     };
 
-    // Output
+    // Output buffer
     AudioStream stream;
 
     // The audio filter pipeline

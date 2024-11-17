@@ -280,6 +280,7 @@ public:
         << chipMask
 
         << config.extStart
+        << config.saveRoms
         << config.slowRamDelay
         << config.slowRamMirror
         << config.bankMap
