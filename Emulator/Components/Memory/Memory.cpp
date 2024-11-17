@@ -385,10 +385,13 @@ Memory::operator << (SerReader &worker)
     if (slowSize > KB(1792)) throw Error(VAERROR_SNAP_CORRUPTED);
     if (fastSize > MB(8)) throw Error(VAERROR_SNAP_CORRUPTED);
 
-    // Allocate ROM space (only if Roms are included in the snapshot)
-    if (romSize) allocRom(romSize, false);
-    if (womSize) allocWom(womSize, false);
-    if (extSize) allocExt(extSize, false);
+    // Allocate ROM space
+    if (config.saveRoms) {
+
+        allocRom(romSize, false);
+        allocWom(womSize, false);
+        allocExt(extSize, false);
+    }
 
     // Allocate RAM space
     allocChip(chipSize, false);
