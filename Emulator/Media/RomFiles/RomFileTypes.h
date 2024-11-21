@@ -92,6 +92,8 @@ static const u32 CRC32_DIAG121                  = 0x850209CD;
 static const u32 CRC32_DIAG13                   = 0x55E2E127;
 static const u32 CRC32_LOGICA20                 = 0x8484F426;
 
+static const u32 CRC32_CPUBLTRO_F8_0_3_2        = 0x169C8FCE;
+static const u32 CRC32_CPUBLTRO_FC_0_3_2        = 0x86CB5B1B;
 
 //
 // Enumerations
@@ -102,6 +104,7 @@ enum_long(ROM_VENDOR)
     ROM_VENDOR_COMMODORE,
     ROM_VENDOR_AROS,
     ROM_VENDOR_HYPERION,
+    ROM_VENDOR_DEMO,
     ROM_VENDOR_DIAG,
     ROM_VENDOR_EMUTOS,
     ROM_VENDOR_OTHER
@@ -123,6 +126,7 @@ struct RomVendorEnum : vamiga::util::Reflection<RomVendorEnum, RomVendor> {
             case ROM_VENDOR_COMMODORE:  return "COMMODORE";
             case ROM_VENDOR_AROS:       return "AROS";
             case ROM_VENDOR_HYPERION:   return "HYPERION";
+            case ROM_VENDOR_DEMO:       return "DEMO";
             case ROM_VENDOR_DIAG:       return "DIAG";
             case ROM_VENDOR_EMUTOS:     return "EMUTOS";
             case ROM_VENDOR_OTHER:      return "OTHER";

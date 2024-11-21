@@ -45,9 +45,6 @@ SampleRateDetector::feed(isize samples)
     }
 
     count = samples;
-
-    // REMOVE ASAP
-    (void)sampleRate();
 }
 
 double 

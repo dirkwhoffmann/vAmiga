@@ -416,11 +416,18 @@ static std::vector<RomTraits> roms = {
         .model      = "",
         .vendor     = ROM_VENDOR_DIAG
     },{
-        .crc        = CRC32_LOGICA20,
-        .title      = "Logica Diagnostic",
-        .revision   = "Version 2.0",
-        .released   = "",
-        .model      = "",
-        .vendor     = ROM_VENDOR_DIAG
-    }
+        .crc        = CRC32_CPUBLTRO_F8_0_3_2,
+        .title      = "OCS CPUBLTRO",
+        .revision   = "Version 0.3.2",
+        .released   = "November 2024",
+        .model      = "512 KB",
+        .vendor     = ROM_VENDOR_DEMO
+    },{
+        .crc        = CRC32_CPUBLTRO_FC_0_3_2,
+        .title      = "OCS CPUBLTRO",
+        .revision   = "Version 0.3.2",
+        .released   = "November 2024",
+        .model      = "256 KB",
+        .vendor     = ROM_VENDOR_DEMO
+    },
 };
