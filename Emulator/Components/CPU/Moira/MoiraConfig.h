@@ -74,18 +74,6 @@
  */
 #define BUILD_INSTR_INFO_TABLE false
 
-/* Set to true to abort compilation on platforms with no long double support
- *
- * Some FPU functions make use of the "long double" type which is mapped to the
- * standard "double" type on some platforms. On those platforms, the FPU can
- * compute imprecise results, e.g., when reading a value in packed BCD format
- * from memory. In practice, the implication of this imprecision will most
- * likely be neglectable.
- *
- * Disable to allow small precision errors.
- */
-#define REQUIRE_PRECISE_FPU false
-
 /* Set to true to run Moira in a special Musashi compatibility mode.
  *
  * The compatibility mode is used by the test runner application to compare
@@ -165,7 +153,6 @@ I == FTANH || \
 I == FTENTOX || \
 I == FTWOTOX
 */
-// I == STOP || I == TAS || I == BKPT
 
 /* The following macro appear at the end of each instruction handler.
  * Moira will call 'didExecute(...)' for all listed instructions.

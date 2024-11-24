@@ -3,6 +3,16 @@
     {
       "filename" : "rom_demo.pdf",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "rom_demo_darkMode.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {

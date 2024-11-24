@@ -243,9 +243,9 @@ CoreComponent::size(bool recursive)
     *this << counter;
     isize result = counter.count;
 
-    // Add 8 bytes for the checksum
-    result += 8;
-    
+    // Add 8 bytes for the size and checksum
+    result += 16;
+
     // Add size of subcomponents if requested
     if (recursive) for (CoreComponent *c : subComponents) { result += c->size(); }
 
@@ -263,21 +263,25 @@ CoreComponent::load(const u8 *buffer)
 
         const u8 *ptr = buffer + result;
 
-        // Load the checksum for this component
+        // Load the size and checksum for this component
+        auto size = read64(ptr);
         auto hash = read64(ptr);
 
         // Load the internal state of this component
         SerReader reader(ptr); *c << reader;
 
         // Determine the number of loaded bytes
-        isize count = (isize)(reader.ptr - (buffer + result));
+        auto count = u64(reader.ptr - (buffer + result));
 
         // Check integrity
-        if (hash != c->checksum(false) || FORCE_SNAP_CORRUPTED) {
+        if (size != count || hash != c->checksum(false) || FORCE_SNAP_CORRUPTED) {
+
+            msg("Loaded %llu bytes (expected %llu)\n", count, size);
+            msg("Hash: %llx (expected %llx)\n", hash, c->checksum(false));
             if (SNP_DEBUG) { fatalError; } else { throw Error(VAERROR_SNAP_CORRUPTED); }
         }
 
-        debug(SNP_DEBUG >= 2, "Loaded %ld bytes (expected %ld)\n", count, c->size(false));
+        debug(SNP_DEBUG >= 2, "Loaded %llu bytes (expected %llu)\n", count, size);
         result += count;
     });
 
@@ -295,7 +299,8 @@ CoreComponent::save(u8 *buffer)
 
         u8 *ptr = buffer + result;
 
-        // Save the checksum for this component
+        // Save the size and the checksum for this component
+        write64(ptr, c->size(false));
         write64(ptr, c->checksum(false));
 
         // Save the internal state of this component
@@ -306,6 +311,8 @@ CoreComponent::save(u8 *buffer)
 
         // Check integrity
         if (count != c->size(false) || FORCE_SNAP_CORRUPTED) {
+
+            msg("Saved %ld bytes (expected %ld)\n", count, c->size(false));
             if (SNP_DEBUG) { fatalError; } else { throw Error(VAERROR_SNAP_CORRUPTED); }
         }
 
