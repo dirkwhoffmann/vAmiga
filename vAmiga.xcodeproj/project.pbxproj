@@ -597,6 +597,7 @@
 		5042FD7E23FFF0D200B315B2 /* StateMachineTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StateMachineTypes.h; sourceTree = "<group>"; };
 		5043F6C4221972F90047CC30 /* MyToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolbar.swift; sourceTree = "<group>"; };
 		504C48B324143AB4008ADAB3 /* AgnusDma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusDma.cpp; sourceTree = "<group>"; };
+		504E57C62D0E04EF002233D1 /* GamePadDatabase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GamePadDatabase.h; sourceTree = "<group>"; };
 		504F4D63252624BD00CF8815 /* TextureRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureRect.swift; sourceTree = "<group>"; };
 		504F9657220B2CEE005F8AB7 /* GuardTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardTableView.swift; sourceTree = "<group>"; };
 		5050EC3E27BE876F00394F4F /* HardDiskCreator.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HardDiskCreator.xib; sourceTree = "<group>"; };
@@ -2012,6 +2013,7 @@
 			isa = PBXGroup;
 			children = (
 				50EAB95926C10B8600BFA9D8 /* CMakeLists.txt */,
+				504E57C62D0E04EF002233D1 /* GamePadDatabase.h */,
 				50A61446260CF25700A01428 /* JoystickTypes.h */,
 				50D7CDC32286E968002689F0 /* Joystick.h */,
 				50D7CDC22286E968002689F0 /* Joystick.cpp */,

@@ -11,6 +11,7 @@
 #include "Joystick.h"
 #include "Amiga.h"
 #include "IOUtils.h"
+#include "GamePadDatabase.h"
 
 namespace vamiga {
 
@@ -311,6 +312,30 @@ Joystick::eofHandler()
             }
         }
     }
+}
+
+void
+Joystick::configureHID(u16 vendorID, u16 productID, u16 version)
+{
+    // Use the generic settings as fallback
+    traits = gamePads[0];
+
+    // Crawl through the database
+    for (const auto &gamePad : gamePads) {
+
+        if (gamePad.vendorID != vendorID) continue;
+        if (gamePad.productID != productID) continue;
+        if (gamePad.version != version) continue;
+
+        traits = gamePad;
+    }
+}
+
+void
+Joystick::trigger(isize page, isize usage, isize value)
+{
+    debug(PRT_DEBUG, "usagePage = %ld usage = %ld value = %ld\n", page, usage, value);
+
 }
 
 }

@@ -75,6 +75,40 @@ struct GamePadActionEnum : vamiga::util::Reflection<GamePadActionEnum, GamePadAc
 #endif
 
 
+enum_long(HID_ACTION)
+{
+    HID_A0,
+    HID_A1,
+    HID_A1_REV,
+    HID_A12,
+    HID_A2,
+    HID_A20,
+    HID_A3,
+    HID_A3_REV,
+    HID_A31,
+    HID_A4,
+    HID_A5,
+    HID_A6,
+    HID_A6_REV,
+    HID_A8,
+    HID_B0,
+    HID_B1,
+    HID_B12,
+    HID_B13,
+    HID_B14,
+    HID_B15,
+    HID_B16,
+    HID_B2,
+    HID_B3,
+    HID_B4,
+    HID_B5,
+    HID_B6,
+    HID_B7,
+    HID_B8,
+};
+typedef HID_ACTION HIDAction;
+
+
 //
 // Structures
 //
@@ -95,3 +129,20 @@ typedef struct
     isize axisY;
 }
 JoystickInfo;
+
+typedef struct {
+
+    const char *name;
+
+    int vendorID;
+    int productID;
+    int version;
+
+    HID_ACTION button1;
+    HID_ACTION button2;
+    HID_ACTION leftx;
+    HID_ACTION lefty;
+    HID_ACTION rightx;
+    HID_ACTION righty;
+}
+GamePadTraits;

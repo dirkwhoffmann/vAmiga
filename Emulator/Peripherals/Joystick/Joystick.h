@@ -44,6 +44,7 @@ class Joystick final : public SubComponent, public Inspectable<JoystickInfo> {
 
     // Current configuration
     JoystickConfig config = {};
+    GamePadTraits traits = {};
 
     // Button state
     bool button = false;
@@ -199,6 +200,19 @@ private:
 
     // Reloads the autofire magazine
     void reload(isize bullets);
+
+
+    //
+    // HID interface
+    //
+
+public:
+
+    // Informs about the connected HID device
+    void configureHID(u16 vendorID, u16 productID, u16 version);
+
+    // Processes a HID event
+    void trigger(isize page, isize usage, isize value);
 };
 
 }
