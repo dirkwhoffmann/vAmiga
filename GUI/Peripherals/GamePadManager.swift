@@ -153,6 +153,12 @@ class GamePadManager {
         
         // Bind the new device
         gamePads[slot]?.port = port
+
+        let vendor = Int(gamePads[slot]?.vendorID ?? "", radix: 10) ?? 0
+        let product = Int(gamePads[slot]?.productID ?? "", radix: 10) ?? 0
+        let version = Int(gamePads[slot]?.version ?? "", radix: 10) ?? 0
+
+        parent.emu?.controlPort1.joystick.configureHID(vendor, productID: product, version: version)
     }
 
     func name(slot: Int) -> String {

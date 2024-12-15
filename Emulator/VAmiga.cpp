@@ -1151,6 +1151,28 @@ JoystickAPI::trigger(GamePadAction event)
     emu->put(CMD_JOY_EVENT, GamePadCmd { .port = joystick->objid, .action = event });
 }
 
+void
+JoystickAPI::configureHID(u16 vendorID, u16 productID, u16 version)
+{
+    joystick->configureHID(vendorID, productID, version);
+    emu->isDirty = true;
+}
+
+void
+JoystickAPI::trigger(isize page, isize usage, isize value, u16 vendorID, u16 productID, u16 version)
+{
+    joystick->trigger(page, usage, value, vendorID, productID, version);
+    emu->isDirty = true;
+}
+
+void
+JoystickAPI::trigger(isize page, isize usage, isize value)
+{
+    // emu->put(CMD_HID_EVENT, GamePadCmd { .port = joystick->objid, ... });
+    joystick->trigger(page, usage, value);
+    emu->isDirty = true;
+}
+
 
 //
 // Mouse

@@ -49,6 +49,7 @@ extension IOHIDDevice {
     var vendorID: String { return property(key: kIOHIDVendorIDKey) ?? "" }
     var productID: String { return property(key: kIOHIDProductIDKey) ?? "" }
     var locationID: String { return property(key: kIOHIDLocationIDKey) ?? "" }
+    var versionNumberKey: String { return property(key: kIOHIDVersionNumberKey) ?? "" }
     var manufacturerKey: String { return property(key: kIOHIDManufacturerKey) ?? "" }
     var usageKey: String { return property(key: kIOHIDPrimaryUsageKey) ?? "" }
     var builtInKey: String { return property(key: kIOHIDBuiltInKey) ?? "" }

@@ -750,6 +750,12 @@ struct JoystickAPI : public API {
     /** @brief  Triggers a joystick action.
      */
     void trigger(GamePadAction event);
+
+    /** @brief  HID API (experimental)
+     */
+    void configureHID(u16 vendorID, u16 productID, u16 version);
+    void trigger(isize page, isize usage, isize value, u16 vendorID, u16 productID, u16 version);
+    void trigger(isize page, isize usage, isize value);
 };
 
 

@@ -212,6 +212,7 @@ public:
     void configureHID(u16 vendorID, u16 productID, u16 version);
 
     // Processes a HID event
+    void trigger(isize page, isize usage, isize value, u16 vendorID, u16 productID, u16 version);
     void trigger(isize page, isize usage, isize value);
 };
 

@@ -317,8 +317,7 @@ Joystick::eofHandler()
 void
 Joystick::configureHID(u16 vendorID, u16 productID, u16 version)
 {
-    // Use the generic settings as fallback
-    traits = gamePads[0];
+    debug(PRT_DEBUG, "configureHID(%d, %d, %d)\n", vendorID, productID, version);
 
     // Crawl through the database
     for (const auto &gamePad : gamePads) {
@@ -328,7 +327,24 @@ Joystick::configureHID(u16 vendorID, u16 productID, u16 version)
         if (gamePad.version != version) continue;
 
         traits = gamePad;
+
+        debug(PRT_DEBUG, "Connected %s\n", traits.name);
+        debug(PRT_DEBUG, "   vendorID = %d\n", traits.vendorID);
+        debug(PRT_DEBUG, "   productID = %d\n", traits.productID);
+        debug(PRT_DEBUG, "   version = %d\n", traits.version);
+
+        return;
     }
+
+    // Fallback to the generic setting
+    traits = gamePads[0];
+}
+
+void
+Joystick::trigger(isize page, isize usage, isize value, u16 vendorID, u16 productID, u16 version)
+{
+    debug(PRT_DEBUG, "vendorID = %ld productID = %ld version = %ld\n", vendorID, productID, version);
+    debug(PRT_DEBUG, "usagePage = %ld usage = %ld value = %ld\n", page, usage, value);
 }
 
 void

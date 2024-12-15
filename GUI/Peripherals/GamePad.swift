@@ -40,10 +40,11 @@ class GamePad {
              
     // References to other objects
     var manager: GamePadManager
+    var amiga: EmulatorProxy { return manager.parent.emu }
     var prefs: Preferences { return manager.parent.pref }
     var config: Configuration { return manager.parent.config }
     var db: DeviceDatabase { return myAppDelegate.database }
-    
+
     // The Amiga port this device is connected to (1, 2, or nil)
     var port: Int?
 
@@ -52,7 +53,8 @@ class GamePad {
     var vendorID: String { return device?.vendorID ?? "" }
     var productID: String { return device?.productID ?? "" }
     var locationID: String { return device?.locationID ?? "" }
-    
+    var version: String { return device?.versionNumberKey ?? "" }
+
     // Type of the managed device (joystick or mouse)
     var type: ControlPortDevice
     var isMouse: Bool { return type == .MOUSE }
@@ -328,7 +330,16 @@ class GamePad {
         let usage     = Int(IOHIDElementGetUsage(element))
                 
         // track("usagePage = \(usagePage) usage = \(usage) value = \(intValue)")
-        
+
+        // New code (uses experimental HID interface)
+        let cp = port == 1 ? amiga.controlPort1 : amiga.controlPort2
+        cp?.joystick.triggerPage(usagePage, usage: usage, value: intValue)
+
+
+        //
+        // Old code
+        //
+
         var events: [GamePadAction]?
         
         if usagePage == kHIDPage_Button {
