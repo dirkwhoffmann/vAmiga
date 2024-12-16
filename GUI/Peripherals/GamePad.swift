@@ -48,6 +48,9 @@ class GamePad {
     // The Amiga port this device is connected to (1, 2, or nil)
     var port: Int?
 
+    // GamePad properties (derived from database)
+    var traits: MyData = data[0]
+
     // Reference to the HID device
     var device: IOHIDDevice?
     var vendorID: String { return device?.vendorID ?? "" }
@@ -104,7 +107,15 @@ class GamePad {
         self.manager = manager
         self.device = device
         self.type = type
-        
+
+        traits = db.query(vendorID: vendorID, productID: productID, version: version)
+
+        print("Traits:")
+        print("  Name: \(traits.name)")
+        print("  vendorID: \(traits.vendorID)")
+        print("  productID: \(traits.productID)")
+        print("  version: \(traits.version)")
+
         name = db.name(vendorID: vendorID, productID: productID) ?? device?.name ?? ""
         icon = db.icon(vendorID: vendorID, productID: productID)
 
@@ -300,7 +311,16 @@ class GamePad {
             return nil
         }
     }
-    
+
+    func mapHAxisRev(value: IOHIDValue, element: IOHIDElement) -> [GamePadAction]? {
+
+        if let v = mapAnalogAxis(value: value, element: element) {
+            return v == 2 ? [.PULL_LEFT] : v == -2 ? [.PULL_RIGHT] : [.RELEASE_X]
+        } else {
+            return nil
+        }
+    }
+
     func mapVAxis(value: IOHIDValue, element: IOHIDElement) -> [GamePadAction]? {
     
         if let v = mapAnalogAxis(value: value, element: element) {
@@ -329,16 +349,7 @@ class GamePad {
         let usagePage = Int(IOHIDElementGetUsagePage(element))
         let usage     = Int(IOHIDElementGetUsage(element))
                 
-        // track("usagePage = \(usagePage) usage = \(usage) value = \(intValue)")
-
-        // New code (uses experimental HID interface)
-        let cp = port == 1 ? amiga.controlPort1 : amiga.controlPort2
-        cp?.joystick.triggerPage(usagePage, usage: usage, value: intValue)
-
-
-        //
-        // Old code
-        //
+        print("usagePage = \(usagePage) usage = \(usage) value = \(intValue)")
 
         var events: [GamePadAction]?
         
@@ -374,9 +385,63 @@ class GamePad {
         }
         
         if usagePage == kHIDPage_GenericDesktop {
-            
+
             switch usage {
-            
+
+            case kHIDUsage_GD_X: // A0
+
+                events =
+                traits.leftx == .HID_A0 || traits.rightx == .HID_A0 ? mapHAxis(value: value, element: element) :
+                traits.leftx == .HID_A0_REV || traits.rightx == .HID_A0_REV ? mapHAxisRev(value: value, element: element) :
+                traits.lefty == .HID_A0 || traits.righty == .HID_A0 ? mapVAxis(value: value, element: element) :
+                traits.lefty == .HID_A0_REV || traits.righty == .HID_A0_REV ? mapVAxisRev(value: value, element: element) :
+                mapHAxis(value: value, element: element)
+
+            case kHIDUsage_GD_Y: // A1
+
+                events =
+                traits.leftx == .HID_A1 || traits.rightx == .HID_A1 ? mapHAxis(value: value, element: element) :
+                traits.leftx == .HID_A1_REV || traits.rightx == .HID_A1_REV ? mapHAxisRev(value: value, element: element) :
+                traits.lefty == .HID_A1 || traits.righty == .HID_A1 ? mapVAxis(value: value, element: element) :
+                traits.lefty == .HID_A1_REV || traits.righty == .HID_A1_REV ? mapVAxisRev(value: value, element: element) :
+                mapHAxis(value: value, element: element)
+
+            case kHIDUsage_GD_Z: // A2
+
+                events =
+                traits.leftx == .HID_A2 || traits.rightx == .HID_A2 ? mapHAxis(value: value, element: element) :
+                traits.leftx == .HID_A2_REV || traits.rightx == .HID_A2_REV ? mapHAxisRev(value: value, element: element) :
+                traits.lefty == .HID_A2 || traits.righty == .HID_A2 ? mapVAxis(value: value, element: element) :
+                traits.lefty == .HID_A2_REV || traits.righty == .HID_A2_REV ? mapVAxisRev(value: value, element: element) :
+                mapHAxis(value: value, element: element)
+
+            case kHIDUsage_GD_Rx: // A3
+
+                events =
+                traits.leftx == .HID_A3 || traits.rightx == .HID_A3 ? mapHAxis(value: value, element: element) :
+                traits.leftx == .HID_A3_REV || traits.rightx == .HID_A3_REV ? mapHAxisRev(value: value, element: element) :
+                traits.lefty == .HID_A3 || traits.righty == .HID_A3 ? mapVAxis(value: value, element: element) :
+                traits.lefty == .HID_A3_REV || traits.righty == .HID_A3_REV ? mapVAxisRev(value: value, element: element) :
+                mapHAxis(value: value, element: element)
+
+            case kHIDUsage_GD_Ry: // A4
+
+                events =
+                traits.leftx == .HID_A4 || traits.rightx == .HID_A4 ? mapHAxis(value: value, element: element) :
+                traits.leftx == .HID_A4_REV || traits.rightx == .HID_A4_REV ? mapHAxisRev(value: value, element: element) :
+                traits.lefty == .HID_A4 || traits.righty == .HID_A4 ? mapVAxis(value: value, element: element) :
+                traits.lefty == .HID_A4_REV || traits.righty == .HID_A4_REV ? mapVAxisRev(value: value, element: element) :
+                mapHAxis(value: value, element: element)
+
+            case kHIDUsage_GD_Rz: // A5
+
+                events =
+                traits.leftx == .HID_A5 || traits.rightx == .HID_A5 ? mapHAxis(value: value, element: element) :
+                traits.leftx == .HID_A5_REV || traits.rightx == .HID_A5_REV ? mapHAxisRev(value: value, element: element) :
+                traits.lefty == .HID_A5 || traits.righty == .HID_A5 ? mapVAxis(value: value, element: element) :
+                traits.lefty == .HID_A5_REV || traits.righty == .HID_A5_REV ? mapVAxisRev(value: value, element: element) :
+                mapHAxis(value: value, element: element)
+            /*
             case kHIDUsage_GD_X where lScheme == Schemes.A0A1:   // A0
                 events = mapHAxis(value: value, element: element)
 
@@ -424,6 +489,7 @@ class GamePad {
 
             case 0x93 where hScheme == Schemes.U90U93:
                 events = intValue != 0 ? [.PULL_LEFT] : [.RELEASE_X]
+            */
 
             case kHIDUsage_GD_Hatswitch:
                 

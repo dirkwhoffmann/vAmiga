@@ -13,6 +13,78 @@
  * An object of this class is used inside the PreferencesController
  */
 
+enum HIDEvent {
+
+    case HID_A0
+    case HID_A0_REV
+    case HID_A1
+    case HID_A1_REV
+    case HID_A12
+    case HID_A2
+    case HID_A2_REV
+    case HID_A20
+    case HID_A3
+    case HID_A3_REV
+    case HID_A31
+    case HID_A4
+    case HID_A4_REV
+    case HID_A5
+    case HID_A5_REV
+    case HID_A6
+    case HID_A6_REV
+    case HID_A7
+    case HID_A8
+    case HID_B0
+    case HID_B1
+    case HID_B10
+    case HID_B11
+    case HID_B12
+    case HID_B13
+    case HID_B14
+    case HID_B15
+    case HID_B16
+    case HID_B17
+    case HID_B19
+    case HID_B2
+    case HID_B20
+    case HID_B21
+    case HID_B22
+    case HID_B23
+    case HID_B24
+    case HID_B25
+    case HID_B26
+    case HID_B27
+    case HID_B3
+    case HID_B4
+    case HID_B5
+    case HID_B6
+    case HID_B7
+    case HID_B8
+    case HID_B9
+}
+
+struct MyData {
+
+    var name = String()
+
+    var vendorID: Int
+    var productID: Int
+    var version: Int
+
+    var leftx = HIDEvent.HID_A0
+    var rightx = HIDEvent.HID_A2
+    var lefty = HIDEvent.HID_A1
+    var righty = HIDEvent.HID_A3
+    var button1 = HIDEvent.HID_B0
+    var button2 = HIDEvent.HID_B1
+}
+
+let data = [
+    MyData(name: "Generic", vendorID: 0, productID: 0, version: 0, leftx: .HID_A0, rightx: .HID_A2, lefty: .HID_A1, righty: .HID_A3, button1: .HID_B2, button2: .HID_B1),
+    MyData(name: "Competition Pro", vendorID: 1035, productID: 25907, version: 256, leftx: .HID_A0, lefty: .HID_A1, button1: .HID_B0, button2: .HID_B1)
+]
+
+
 class DeviceDatabase {
  
     // Mapping scheme ( VendorID -> (ProductID -> Dictionary) )
@@ -63,7 +135,39 @@ class DeviceDatabase {
             custom = obj
         }
     }
-    
+
+    //
+    // Querying the database
+    //
+
+    func query(vendorID: String, productID: String, version: String) -> MyData {
+
+        let vendor = Int(vendorID, radix: 10) ?? 0
+        let product = Int(productID, radix: 10) ?? 0
+        let version = Int(version, radix: 10) ?? 0
+
+        return query(vendorID: vendor, productID: product, version: version)
+    }
+
+    func query(vendorID: Int, productID: Int, version: Int) -> MyData {
+
+        for entry in data {
+
+            if entry.vendorID != vendorID { continue }
+            if entry.productID != productID { continue }
+            if entry.version != version { continue }
+
+            return entry
+        }
+
+        return data[0]
+    }
+
+
+    //
+    // Old code
+    //
+
     func save() {
         
         debug(.hid)
@@ -73,7 +177,7 @@ class DeviceDatabase {
         
         debug(.hid, "\(custom)")
     }
-    
+
     //
     // Querying the database
     //
