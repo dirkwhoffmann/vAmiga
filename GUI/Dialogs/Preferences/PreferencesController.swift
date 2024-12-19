@@ -198,7 +198,6 @@ class PreferencesController: DialogController {
         pref.saveGeneralUserDefaults()
         pref.saveControlsUserDefaults()
         pref.saveDevicesUserDefaults()
-        myAppDelegate.database.save()
         close()
     }
 }

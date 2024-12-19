@@ -38,14 +38,15 @@ struct MyData {
 class DeviceDatabase {
  
     // Mapping scheme ( VendorID -> (ProductID -> Dictionary) )
-    typealias DeviceDescription = [ String: [ String: [ String: String ] ] ]
-    
+    // typealias DeviceDescription = [ String: [ String: [ String: String ] ] ]
+
     // Known devices
-    var known: DeviceDescription = [:]
-    
+    // var known: DeviceDescription = [:]
+
     // Devices configured by the user
-    var custom: DeviceDescription = [:]
-        
+    // var custom: DeviceDescription = [:]
+
+    /*
     init() {
     
         // Setup the lookup table for all known devices
@@ -85,6 +86,7 @@ class DeviceDatabase {
             custom = obj
         }
     }
+    */
 
     //
     // Querying the database
@@ -274,143 +276,4 @@ class DeviceDatabase {
             return ([],[])
         }
     }
-
-
-    /*
-     func query(vendorID: Int, productID: Int, version: Int) -> MyData {
-
-     var bestMatch = data[0]
-
-     for entry in data {
-
-     if entry.vendorID != vendorID { continue }
-     if entry.productID != productID { continue }
-
-     bestMatch = entry
-
-     if entry.version != version { continue }
-
-     bestMatch = entry
-
-     }
-
-     return bestMatch
-     }
-     */
-
-
-    //
-    // Old code
-    //
-
-    func save() {
-        
-        debug(.hid)
-        
-        let defaults = UserDefaults.standard
-        defaults.set(custom, forKey: Keys.Dev.schemes)
-        
-        debug(.hid, "\(custom)")
-    }
-
-    //
-    // Querying the database
-    //
-
-    /*
-    func isKnown(vendorID: String, productID: String) -> Bool {
-        
-        return known[vendorID]?[productID] != nil
-    }
-    */
-    
-    func query(_ v: String, _ p: String, _ key: String) -> String? {
-        
-        if let value = custom[v]?[p]?[key] {
-            return value
-        }
-        if let value = known[v]?[p]?[key] {
-            return value
-        }
-        return nil
-    }
-
-    /*
-    func name(vendorID: String, productID: String) -> String? {
-        
-        if let value = query(vendorID, productID, "Name") {
-            return value
-        }
-        return nil
-    }
-    */
-    
-    func icon(vendorID: String, productID: String) -> NSImage? {
-    
-        if let value = query(vendorID, productID, "Image") {
-            return NSImage(named: value)
-        }
-        return nil
-    }
-
-    func left(vendorID: String, productID: String) -> Int {
-    
-        if let value = query(vendorID, productID, "L") {
-            return Int(value) ?? 0
-        }
-        return 0
-    }
-        
-    func right(vendorID: String, productID: String) -> Int {
-    
-        if let value = query(vendorID, productID, "R") {
-            return Int(value) ?? 0
-        }
-        return 0
-    }
-
-    func hatSwitch(vendorID: String, productID: String) -> Int {
-    
-        if let value = query(vendorID, productID, "H") {
-            return Int(value) ?? 0
-        }
-        return 0
-    }
-
-    //
-    // Updating the database
-    //
-
-    /*
-    func replace(_ v: String, _ p: String, _ key: String, _ value: String?) {
-        
-        // Replace key / value pair if it already exists
-        if custom[v]?[p] != nil { custom[v]![p]![key] = value; return }
-        
-        // Only proceed if there is something to set
-        if value == nil { return }
-        
-        // Add a new key / value pair
-        if custom[v] != nil {
-            custom[v]![p] = [key: value!]
-        } else {
-            custom[v] = [p: [key: value!]]
-        }
-    }
-
-    func setLeft(vendorID: String, productID: String, _ value: String?) {
-        
-        replace(vendorID, productID, "L", value)
-    }
-
-    func setRight(vendorID: String, productID: String, _ value: String?) {
-        
-        replace(vendorID, productID, "R", value)
-    }
-
-    func setHatSwitch(vendorID: String, productID: String, _ value: String?) {
-        
-        replace(vendorID, productID, "H", value)
-    }
-    */
 }

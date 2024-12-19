@@ -25,7 +25,7 @@ struct InputDevice {
 class GamePadManager {
 
     // Reference to the main controller
-    var parent: MyController!
+    var controller: MyController!
     
     // Reference to the HID manager
     var hidManager: IOHIDManager
@@ -42,7 +42,7 @@ class GamePadManager {
     
     init(parent: MyController) {
     
-        self.parent = parent
+        self.controller = parent
       
         hidManager = IOHIDManagerCreate(kCFAllocatorDefault,
                                         IOOptionBits(kIOHIDOptionsTypeNone))
@@ -50,17 +50,17 @@ class GamePadManager {
         // Add default devices
         gamePads[0] = GamePad(manager: self, type: .MOUSE)
         gamePads[0]!.name = "Mouse"
-        gamePads[0]!.setIcon(name: "devMouseTemplate")
+        gamePads[0]!.icon = NSImage(named: "devMouseTemplate")
         gamePads[0]!.keyMap = 0
         
         gamePads[1] = GamePad(manager: self, type: .JOYSTICK)
         gamePads[1]!.name = "Joystick Keyset 1"
-        gamePads[1]!.setIcon(name: "devKeys1Template")
+        gamePads[1]!.icon = NSImage(named: "devKeys1Template")
         gamePads[1]!.keyMap = 1
 
         gamePads[2] = GamePad(manager: self, type: .JOYSTICK)
         gamePads[2]!.name = "Joystick Keyset 2"
-        gamePads[2]!.setIcon(name: "devKeys2Template")
+        gamePads[2]!.icon = NSImage(named: "devKeys2Template")
         gamePads[2]!.keyMap = 2
 
         // Tell the mouse event receiver where the mouse resides
@@ -188,11 +188,11 @@ class GamePadManager {
         addDevice(slot: slot, device: device)
                 
         // Reconnect devices (assignments trigger side effects)
-        parent.config.gameDevice1 = parent.config.gameDevice1
-        parent.config.gameDevice2 = parent.config.gameDevice2
+        controller.config.gameDevice1 = controller.config.gameDevice1
+        controller.config.gameDevice2 = controller.config.gameDevice2
         
         // Inform about the changed configuration
-        parent.toolbar.validateVisibleItems()
+        controller.toolbar.validateVisibleItems()
         myAppDelegate.deviceAdded()
         
         if Int.hid != 0 { listDevices() }
@@ -206,7 +206,7 @@ class GamePadManager {
             gamePads[slot] = GamePad(manager: self, device: device, type: .MOUSE)
             
             // Inform the mouse event receiver about the new mouse
-            parent.metal.mouse2 = gamePads[slot]
+            controller.metal.mouse2 = gamePads[slot]
             
         } else {
             
@@ -239,7 +239,7 @@ class GamePadManager {
         }
 
         // Inform about the changed configuration
-        parent.toolbar.validateVisibleItems()
+        controller.toolbar.validateVisibleItems()
         myAppDelegate.deviceAdded()
 
         if Int.hid != 0 { listDevices() }

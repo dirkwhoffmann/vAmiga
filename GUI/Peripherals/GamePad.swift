@@ -17,32 +17,11 @@ import IOKit.hid
  */
 class GamePad {
 
-    // Mapping schemes
-    enum Schemes {
-
-        // Left stick
-        static let A0A1 = 0
-        static let A0A1r = 1
-        
-        // Right stick
-        static let A2A5 = 0
-        static let A2A3 = 1
-        static let A3A4 = 2
-        static let A2A5r = 3
-
-        // Hat switch
-        static let H0H7 = 0
-        static let H1H8 = 1
-        static let B4B7 = 2
-        static let B11B14 = 3
-        static let U90U93 = 4
-    }
-             
-    // References to other objects
+    // References
     var manager: GamePadManager
-    var amiga: EmulatorProxy { return manager.parent.emu }
-    var prefs: Preferences { return manager.parent.pref }
-    var config: Configuration { return manager.parent.config }
+    var amiga: EmulatorProxy { return manager.controller.emu }
+    var prefs: Preferences { return manager.controller.pref }
+    var config: Configuration { return manager.controller.config }
     var db: DeviceDatabase { return myAppDelegate.database }
 
     // The Amiga port this device is connected to (1, 2, or nil)
@@ -80,13 +59,6 @@ class GamePad {
     
     // Indicates if other components should be notified when the device is used
     var notify = false
-        
-    // Controller specific mapping schemes for the two sticks and the hat switch
-    /*
-    var lScheme = 0
-    var rScheme = 0
-    var hScheme = 0
-    */
 
     /* Rescued information from the latest invocation of the action function.
      * This information is utilized to determine whether a joystick event has
@@ -112,37 +84,10 @@ class GamePad {
 
         traits = db.query(vendorID: vendorID, productID: productID, version: version)
 
-        print("Traits:")
-        print("  Name: \(traits.name)")
-        print("  vendorID: \(traits.vendorID)")
-        print("  productID: \(traits.productID)")
-        print("  version: \(traits.version)")
-
-        // name = db.name(vendorID: vendorID, productID: productID) ?? device?.name ?? ""
         name = traits.name
-        icon = db.icon(vendorID: vendorID, productID: productID)
-
-        if icon == nil && isMouse {
-            icon = NSImage(named: "devMouseTemplate")
-        }
-        
-        // updateMappingScheme()
+        icon = NSImage(named: isMouse ? "devMouseTemplate" : "devGamepad1Template")!
     }
 
-    /*
-    func updateMappingScheme() {
-        
-        lScheme = db.left(vendorID: vendorID, productID: productID)
-        rScheme = db.right(vendorID: vendorID, productID: productID)
-        hScheme = db.hatSwitch(vendorID: vendorID, productID: productID)
-    }
-    */
-
-    func setIcon(name: String) {
-        
-        icon = NSImage(named: name)
-    }
-    
     func property(key: String) -> String? {
             
         if device != nil {
@@ -298,16 +243,17 @@ class GamePad {
         v = v * 2.0 - 1.0
         
         if v < 0 {
-            if v < -0.45 { print("MINUS"); return -2 }
+            if v < -0.45 { print("MINUS"); return -1 }
             if v > -0.35 { print("NULL"); return 0 }
         } else {
-            if v > 0.45 { print("PLUS"); return 2 }
+            if v > 0.45 { print("PLUS"); return 1 }
             if v < 0.35 { print("NULL"); return 0 }
         }
         
         return nil // Dead zone
     }
-    
+
+    /*
     func mapHAxis(value: IOHIDValue, element: IOHIDElement) -> [GamePadAction]? {
     
         if let v = mapAnalogAxis(value: value, element: element) {
@@ -343,6 +289,7 @@ class GamePad {
             return nil
         }
     }
+    */
 
     func hidInputValueAction(context: UnsafeMutableRawPointer?,
                              result: IOReturn,
@@ -359,8 +306,6 @@ class GamePad {
         var events: [GamePadAction]?
         
         if usagePage == kHIDPage_Button {
-
-            print("button = \(usage)")
 
             events = intValue != 0 ? (traits.b[usage]?.0 ?? []) : (traits.b[usage]?.1 ?? [])
             /*
@@ -394,51 +339,49 @@ class GamePad {
         
         if usagePage == kHIDPage_GenericDesktop {
 
-            print("Generic desktop: usage = \(usage) value = \(intValue) = \(kHIDUsage_GD_Y)")
-
             switch usage {
 
             case kHIDUsage_GD_X: // A0
 
                 let value = mapAnalogAxis(value: value, element: element)
-                if value == -2 { events = traits.a0.0 }
-                if value == 0 { events = traits.a0.1 }
-                if value == 2 { events = traits.a0.2 }
+                if value == -1 { events = traits.a0.0 }
+                if value == 0  { events = traits.a0.1 }
+                if value == 1  { events = traits.a0.2 }
 
             case kHIDUsage_GD_Y: // A1
 
                 let value = mapAnalogAxis(value: value, element: element)
-                if value == -2 { events = traits.a1.0 }
-                if value == 0 { events = traits.a1.1 }
-                if value == 2 { events = traits.a1.2 }
+                if value == -1 { events = traits.a1.0 }
+                if value == 0  { events = traits.a1.1 }
+                if value == 1  { events = traits.a1.2 }
 
             case kHIDUsage_GD_Z: // A2
 
                 let value = mapAnalogAxis(value: value, element: element)
-                if value == -2 { events = traits.a2.0 }
-                if value == 0 { events = traits.a2.1 }
-                if value == 2 { events = traits.a2.2 }
+                if value == -1 { events = traits.a2.0 }
+                if value == 0  { events = traits.a2.1 }
+                if value == 1  { events = traits.a2.2 }
 
             case kHIDUsage_GD_Rx: // A3
 
                 let value = mapAnalogAxis(value: value, element: element)
-                if value == -2 { events = traits.a3.0 }
-                if value == 0 { events = traits.a3.1 }
-                if value == 2 { events = traits.a3.2 }
+                if value == -1 { events = traits.a3.0 }
+                if value == 0  { events = traits.a3.1 }
+                if value == 1  { events = traits.a3.2 }
 
             case kHIDUsage_GD_Ry: // A4
 
                 let value = mapAnalogAxis(value: value, element: element)
-                if value == -2 { events = traits.a4.0 }
-                if value == 0 { events = traits.a4.1 }
-                if value == 2 { events = traits.a4.2 }
+                if value == -1 { events = traits.a4.0 }
+                if value == 0  { events = traits.a4.1 }
+                if value == 1  { events = traits.a4.2 }
 
             case kHIDUsage_GD_Rz: // A5
 
                 let value = mapAnalogAxis(value: value, element: element)
-                if value == -2 { events = traits.a5.0 }
-                if value == 0 { events = traits.a5.1 }
-                if value == 2 { events = traits.a5.2 }
+                if value == -1 { events = traits.a5.0 }
+                if value == 0  { events = traits.a5.1 }
+                if value == 1  { events = traits.a5.2 }
 
             case kHIDUsage_GD_DPadUp:
 
@@ -544,7 +487,7 @@ class GamePad {
     @discardableResult
     func processJoystickEvents(events: [GamePadAction]) -> Bool {
         
-        let amiga = manager.parent.emu!
+        let amiga = manager.controller.emu!
         
         if port == 1 { for e in events { amiga.controlPort1.joystick.trigger(e) } }
         if port == 2 { for e in events { amiga.controlPort2.joystick.trigger(e) } }
@@ -558,7 +501,7 @@ class GamePad {
     @discardableResult
     func processMouseEvents(events: [GamePadAction]) -> Bool {
         
-        let amiga = manager.parent.emu!
+        let amiga = manager.controller.emu!
         
         if port == 1 { for e in events { amiga.controlPort1.mouse.trigger(e) } }
         if port == 2 { for e in events { amiga.controlPort2.mouse.trigger(e) } }
@@ -568,7 +511,7 @@ class GamePad {
     
     func processMouseEvents(delta: NSPoint) {
         
-        let amiga = manager.parent.emu!
+        let amiga = manager.controller.emu!
 
         // Check for a shaking mouse
         amiga.controlPort1.mouse.detectShakeRel(delta)
@@ -607,7 +550,7 @@ class GamePad {
 
     func processKeyboardEvent(events: [GamePadAction]) {
 
-        let amiga = manager.parent.emu!
+        let amiga = manager.controller.emu!
         
         if isMouse {
             if port == 1 { for e in events { amiga.controlPort1.mouse.trigger(e) } }
