@@ -343,7 +343,7 @@ Joystick::configureHID(u16 vendorID, u16 productID, u16 version)
 void
 Joystick::trigger(isize page, isize usage, isize value, u16 vendorID, u16 productID, u16 version)
 {
-    debug(PRT_DEBUG, "vendorID = %ld productID = %ld version = %ld\n", vendorID, productID, version);
+    debug(PRT_DEBUG, "vendorID = %hu productID = %hu version = %hu\n", vendorID, productID, version);
     debug(PRT_DEBUG, "usagePage = %ld usage = %ld value = %ld\n", page, usage, value);
 }
 

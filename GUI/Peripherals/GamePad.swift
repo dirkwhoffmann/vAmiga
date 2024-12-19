@@ -49,7 +49,7 @@ class GamePad {
     var port: Int?
 
     // GamePad properties (derived from database)
-    var traits: MyData = data[0]
+    var traits: MyData = MyData()
 
     // Reference to the HID device
     var device: IOHIDDevice?
@@ -70,8 +70,9 @@ class GamePad {
     var icon: NSImage?
             
     // Indicates if this device is officially supported
-    var isKnown: Bool { return db.isKnown(vendorID: vendorID, productID: productID) }
-    
+    // var isKnown: Bool { return db.isKnown(vendorID: vendorID, productID: productID) }
+    var isKnown: Bool { return traits.name != "Generic" }
+
     // Keymap of the managed device (only set for keyboard emulated devices)
     var keyMap: Int?
     
@@ -116,7 +117,8 @@ class GamePad {
         print("  productID: \(traits.productID)")
         print("  version: \(traits.version)")
 
-        name = db.name(vendorID: vendorID, productID: productID) ?? device?.name ?? ""
+        // name = db.name(vendorID: vendorID, productID: productID) ?? device?.name ?? ""
+        name = traits.name
         icon = db.icon(vendorID: vendorID, productID: productID)
 
         if icon == nil && isMouse {
@@ -293,11 +295,11 @@ class GamePad {
         v = v * 2.0 - 1.0
         
         if v < 0 {
-            if v < -0.45 { return -2 }
-            if v > -0.35 { return 0 }
+            if v < -0.45 { print("MINUS"); return -2 }
+            if v > -0.35 { print("NULL"); return 0 }
         } else {
-            if v > 0.45 { return 2 }
-            if v < 0.35 { return 0 }
+            if v > 0.45 { print("PLUS"); return 2 }
+            if v < 0.35 { print("NULL"); return 0 }
         }
         
         return nil // Dead zone
@@ -354,9 +356,11 @@ class GamePad {
         var events: [GamePadAction]?
         
         if usagePage == kHIDPage_Button {
-                             
-            // track("button = \(usage)")
-            
+
+            print("button = \(usage)")
+
+            events = intValue != 0 ? (traits.b[usage]?.0 ?? []) : (traits.b[usage]?.1 ?? [])
+            /*
             switch hScheme {
             
             case Schemes.B4B7:
@@ -382,65 +386,57 @@ class GamePad {
             default:
                 events = intValue != 0 ? [.PRESS_FIRE] : [.RELEASE_FIRE]
             }
+            */
         }
         
         if usagePage == kHIDPage_GenericDesktop {
+
+            print("Generic desktop: usage = \(usage) value = \(intValue) = \(kHIDUsage_GD_Y)")
 
             switch usage {
 
             case kHIDUsage_GD_X: // A0
 
-                events =
-                traits.leftx == .HID_A0 || traits.rightx == .HID_A0 ? mapHAxis(value: value, element: element) :
-                traits.leftx == .HID_A0_REV || traits.rightx == .HID_A0_REV ? mapHAxisRev(value: value, element: element) :
-                traits.lefty == .HID_A0 || traits.righty == .HID_A0 ? mapVAxis(value: value, element: element) :
-                traits.lefty == .HID_A0_REV || traits.righty == .HID_A0_REV ? mapVAxisRev(value: value, element: element) :
-                mapHAxis(value: value, element: element)
+                let value = mapAnalogAxis(value: value, element: element)
+                if value == -2 { events = traits.a0.0 }
+                if value == 0 { events = traits.a0.1 }
+                if value == 2 { events = traits.a0.2 }
 
             case kHIDUsage_GD_Y: // A1
 
-                events =
-                traits.leftx == .HID_A1 || traits.rightx == .HID_A1 ? mapHAxis(value: value, element: element) :
-                traits.leftx == .HID_A1_REV || traits.rightx == .HID_A1_REV ? mapHAxisRev(value: value, element: element) :
-                traits.lefty == .HID_A1 || traits.righty == .HID_A1 ? mapVAxis(value: value, element: element) :
-                traits.lefty == .HID_A1_REV || traits.righty == .HID_A1_REV ? mapVAxisRev(value: value, element: element) :
-                mapHAxis(value: value, element: element)
+                let value = mapAnalogAxis(value: value, element: element)
+                if value == -2 { events = traits.a1.0 }
+                if value == 0 { events = traits.a1.1 }
+                if value == 2 { events = traits.a1.2 }
 
             case kHIDUsage_GD_Z: // A2
 
-                events =
-                traits.leftx == .HID_A2 || traits.rightx == .HID_A2 ? mapHAxis(value: value, element: element) :
-                traits.leftx == .HID_A2_REV || traits.rightx == .HID_A2_REV ? mapHAxisRev(value: value, element: element) :
-                traits.lefty == .HID_A2 || traits.righty == .HID_A2 ? mapVAxis(value: value, element: element) :
-                traits.lefty == .HID_A2_REV || traits.righty == .HID_A2_REV ? mapVAxisRev(value: value, element: element) :
-                mapHAxis(value: value, element: element)
+                let value = mapAnalogAxis(value: value, element: element)
+                if value == -2 { events = traits.a2.0 }
+                if value == 0 { events = traits.a2.1 }
+                if value == 2 { events = traits.a2.2 }
 
             case kHIDUsage_GD_Rx: // A3
 
-                events =
-                traits.leftx == .HID_A3 || traits.rightx == .HID_A3 ? mapHAxis(value: value, element: element) :
-                traits.leftx == .HID_A3_REV || traits.rightx == .HID_A3_REV ? mapHAxisRev(value: value, element: element) :
-                traits.lefty == .HID_A3 || traits.righty == .HID_A3 ? mapVAxis(value: value, element: element) :
-                traits.lefty == .HID_A3_REV || traits.righty == .HID_A3_REV ? mapVAxisRev(value: value, element: element) :
-                mapHAxis(value: value, element: element)
+                let value = mapAnalogAxis(value: value, element: element)
+                if value == -2 { events = traits.a3.0 }
+                if value == 0 { events = traits.a3.1 }
+                if value == 2 { events = traits.a3.2 }
 
             case kHIDUsage_GD_Ry: // A4
 
-                events =
-                traits.leftx == .HID_A4 || traits.rightx == .HID_A4 ? mapHAxis(value: value, element: element) :
-                traits.leftx == .HID_A4_REV || traits.rightx == .HID_A4_REV ? mapHAxisRev(value: value, element: element) :
-                traits.lefty == .HID_A4 || traits.righty == .HID_A4 ? mapVAxis(value: value, element: element) :
-                traits.lefty == .HID_A4_REV || traits.righty == .HID_A4_REV ? mapVAxisRev(value: value, element: element) :
-                mapHAxis(value: value, element: element)
+                let value = mapAnalogAxis(value: value, element: element)
+                if value == -2 { events = traits.a4.0 }
+                if value == 0 { events = traits.a4.1 }
+                if value == 2 { events = traits.a4.2 }
 
             case kHIDUsage_GD_Rz: // A5
 
-                events =
-                traits.leftx == .HID_A5 || traits.rightx == .HID_A5 ? mapHAxis(value: value, element: element) :
-                traits.leftx == .HID_A5_REV || traits.rightx == .HID_A5_REV ? mapHAxisRev(value: value, element: element) :
-                traits.lefty == .HID_A5 || traits.righty == .HID_A5 ? mapVAxis(value: value, element: element) :
-                traits.lefty == .HID_A5_REV || traits.righty == .HID_A5_REV ? mapVAxisRev(value: value, element: element) :
-                mapHAxis(value: value, element: element)
+                let value = mapAnalogAxis(value: value, element: element)
+                if value == -2 { events = traits.a5.0 }
+                if value == 0 { events = traits.a5.1 }
+                if value == 2 { events = traits.a5.2 }
+
             /*
             case kHIDUsage_GD_X where lScheme == Schemes.A0A1:   // A0
                 events = mapHAxis(value: value, element: element)

@@ -81,6 +81,8 @@
 		5042F2DD26BE57E600126C05 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5042F2DB26BE57E600126C05 /* Thread.cpp */; };
 		5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043F6C4221972F90047CC30 /* MyToolbar.swift */; };
 		504C48B424143AB4008ADAB3 /* AgnusDma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 504C48B324143AB4008ADAB3 /* AgnusDma.cpp */; };
+		504E57C82D12ACFC002233D1 /* gamecontrollerdb.txt in Resources */ = {isa = PBXBuildFile; fileRef = 504E57C72D12ACFC002233D1 /* gamecontrollerdb.txt */; };
+		504E57CC2D12B957002233D1 /* gamecontrollerdb2.txt in Resources */ = {isa = PBXBuildFile; fileRef = 504E57CB2D12B94F002233D1 /* gamecontrollerdb2.txt */; };
 		504F4D64252624BD00CF8815 /* TextureRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F4D63252624BD00CF8815 /* TextureRect.swift */; };
 		504F9658220B2CEE005F8AB7 /* GuardTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F9657220B2CEE005F8AB7 /* GuardTableView.swift */; };
 		5050EC3F27BE876F00394F4F /* HardDiskCreator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5050EC3E27BE876F00394F4F /* HardDiskCreator.xib */; };
@@ -598,6 +600,8 @@
 		5043F6C4221972F90047CC30 /* MyToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolbar.swift; sourceTree = "<group>"; };
 		504C48B324143AB4008ADAB3 /* AgnusDma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusDma.cpp; sourceTree = "<group>"; };
 		504E57C62D0E04EF002233D1 /* GamePadDatabase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GamePadDatabase.h; sourceTree = "<group>"; };
+		504E57C72D12ACFC002233D1 /* gamecontrollerdb.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = gamecontrollerdb.txt; sourceTree = "<group>"; };
+		504E57CB2D12B94F002233D1 /* gamecontrollerdb2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = gamecontrollerdb2.txt; sourceTree = "<group>"; };
 		504F4D63252624BD00CF8815 /* TextureRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureRect.swift; sourceTree = "<group>"; };
 		504F9657220B2CEE005F8AB7 /* GuardTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardTableView.swift; sourceTree = "<group>"; };
 		5050EC3E27BE876F00394F4F /* HardDiskCreator.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HardDiskCreator.xib; sourceTree = "<group>"; };
@@ -1391,7 +1395,9 @@
 		508FDE6621EA1FA40043D0E9 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				504E57CB2D12B94F002233D1 /* gamecontrollerdb2.txt */,
 				50B14C2521EB9059002E32A6 /* Credits.rtf */,
+				504E57C72D12ACFC002233D1 /* gamecontrollerdb.txt */,
 				50B14C1321EB8445002E32A6 /* sounds */,
 				508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */,
 				508FDE7221EA1FA50043D0E9 /* Info.plist */,
@@ -2192,6 +2198,7 @@
 				500A4EA024470713002A4DE1 /* disk_insert.aiff in Resources */,
 				509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */,
 				501C514627C2AA4A00DF1DD5 /* DiskExporter.xib in Resources */,
+				504E57CC2D12B957002233D1 /* gamecontrollerdb2.txt in Resources */,
 				50EB8CCA25306E8E0053988A /* VideoExporter.xib in Resources */,
 				508FDFBE21EA1FF10043D0E9 /* MyDocument.xib in Resources */,
 				508FDFC521EA1FF10043D0E9 /* A500ISO.xib in Resources */,
@@ -2213,6 +2220,7 @@
 				50EA98F929D4883500FE99B0 /* A1000ANSI.xib in Resources */,
 				500A4EAE2447364E002A4DE1 /* insert.aiff in Resources */,
 				50DD1EE22525E3E1000180F6 /* Preferences.xib in Resources */,
+				504E57C82D12ACFC002233D1 /* gamecontrollerdb.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

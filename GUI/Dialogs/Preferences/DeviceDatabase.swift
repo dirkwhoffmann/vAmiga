@@ -13,8 +13,10 @@
  * An object of this class is used inside the PreferencesController
  */
 
+/*
 enum HIDEvent {
 
+    case HID_VOID
     case HID_A0
     case HID_A0_REV
     case HID_A1
@@ -62,28 +64,27 @@ enum HIDEvent {
     case HID_B8
     case HID_B9
 }
+*/
 
 struct MyData {
 
-    var name = String()
+    var name = "Generic"
 
-    var vendorID: Int
-    var productID: Int
-    var version: Int
+    var vendorID = 0
+    var productID = 0
+    var version = 0
 
-    var leftx = HIDEvent.HID_A0
-    var rightx = HIDEvent.HID_A2
-    var lefty = HIDEvent.HID_A1
-    var righty = HIDEvent.HID_A3
-    var button1 = HIDEvent.HID_B0
-    var button2 = HIDEvent.HID_B1
+    // Button actions
+    var b: [Int: ([GamePadAction],[GamePadAction])] = [:]
+
+    // Axis actions
+    var a0: ([GamePadAction],[GamePadAction],[GamePadAction]) = ([],[],[])
+    var a1: ([GamePadAction],[GamePadAction],[GamePadAction]) = ([],[],[])
+    var a2: ([GamePadAction],[GamePadAction],[GamePadAction]) = ([],[],[])
+    var a3: ([GamePadAction],[GamePadAction],[GamePadAction]) = ([],[],[])
+    var a4: ([GamePadAction],[GamePadAction],[GamePadAction]) = ([],[],[])
+    var a5: ([GamePadAction],[GamePadAction],[GamePadAction]) = ([],[],[])
 }
-
-let data = [
-    MyData(name: "Generic", vendorID: 0, productID: 0, version: 0, leftx: .HID_A0, rightx: .HID_A2, lefty: .HID_A1, righty: .HID_A3, button1: .HID_B2, button2: .HID_B1),
-    MyData(name: "Competition Pro", vendorID: 1035, productID: 25907, version: 256, leftx: .HID_A0, lefty: .HID_A1, button1: .HID_B0, button2: .HID_B1)
-]
-
 
 class DeviceDatabase {
  
@@ -140,28 +141,189 @@ class DeviceDatabase {
     // Querying the database
     //
 
-    func query(vendorID: String, productID: String, version: String) -> MyData {
+    func seekDevice(vendorID: String?, productID: String?, version: String? = nil) -> String? {
 
-        let vendor = Int(vendorID, radix: 10) ?? 0
-        let product = Int(productID, radix: 10) ?? 0
-        let version = Int(version, radix: 10) ?? 0
-
-        return query(vendorID: vendor, productID: product, version: version)
-    }
-
-    func query(vendorID: Int, productID: Int, version: Int) -> MyData {
-
-        for entry in data {
-
-            if entry.vendorID != vendorID { continue }
-            if entry.productID != productID { continue }
-            if entry.version != version { continue }
-
-            return entry
+        func parse(_ value: String?) -> Int? {
+            return value == nil ? nil : value == "" ? 0 : Int(value!)
         }
 
-        return data[0]
+        return seekDevice(vendorID: parse(vendorID), productID: parse(productID), version: parse(version))
     }
+
+    func seekDevice(vendorID: Int?, productID: Int?, version: Int? = nil) -> String? {
+
+        print("seekDevice(\(vendorID), \(productID), \(version))")
+
+        var result: String?
+
+        if let url = Bundle.main.url(forResource: "gamecontrollerdb2", withExtension: "txt") {
+
+            do {
+
+                let fileContents = try String(contentsOf: url, encoding: .utf8)
+
+                fileContents.enumerateLines { line, _ in
+
+                    func hex(_ i: Int) -> Int {
+
+                        let start = line.index(line.startIndex, offsetBy: i)
+                        let end = line.index(start, offsetBy: 2)
+                        return Int(line[start..<end], radix: 16) ?? 0
+                    }
+
+                    if line.hasPrefix("0") && line.count > 28 {
+
+                        // print("line = \(line)")
+
+                        /* From SDL_joystick.c
+                         *
+                         * This GUID fits the standard form:
+                         * 16-bit bus
+                         * 16-bit CRC16 of the joystick name (can be zero)
+                         * 16-bit vendor ID
+                         * 16-bit zero
+                         * 16-bit product ID
+                         * 16-bit zero
+                         * 16-bit version
+                         * 8-bit driver identifier ('h' for HIDAPI, 'x' for XInput, etc.)
+                         * 8-bit driver-dependent type info
+                         */
+                        let _vendorID = hex(8) | hex(10) << 8;
+                        let _productID = hex(16) | hex(18) << 8;
+                        let _version = hex(24) | hex(26) << 8;
+
+                        if (vendorID == nil || vendorID == _vendorID) &&
+                            (productID == nil || productID == _productID) &&
+                            (version == nil || version == _version) {
+
+                            result = line
+                        }
+                    }
+                }
+
+            } catch { print("Error reading file: \(error)") }
+        }
+
+        print("result = \(result)")
+        return result
+    }
+
+    func query(vendorID: String, productID: String, version: String) -> MyData {
+
+        var result = MyData()
+
+        if let descr =
+            seekDevice(vendorID: vendorID, productID: productID, version: version) ??
+            seekDevice(vendorID: vendorID, productID: productID) ??
+            seekDevice(vendorID: 0, productID: 0) {
+
+            print("\(descr)")
+
+            let attributes = descr.split(separator: ",").map { String($0) }
+            for attr in attributes {
+
+                let pair = attr.split(separator: ":").map { String($0) }
+                if pair.count == 2 {
+
+                    let key = pair[0]
+                    let value = pair[1]
+
+                    print("key: \(pair[0]) value: \(pair[1])")
+
+                    switch (value) {
+                    case "a0": result.a0 = mapAxis(key: key)
+                    case "a1": result.a1 = mapAxis(key: key)
+                    case "a2": result.a2 = mapAxis(key: key)
+                    case "a3": result.a3 = mapAxis(key: key)
+                    case "a4": result.a4 = mapAxis(key: key)
+                    case "a5": result.a5 = mapAxis(key: key)
+                    case "a0~": result.a0 = mapAxisRev(key: key)
+                    case "a1~": result.a1 = mapAxisRev(key: key)
+                    case "a2~": result.a2 = mapAxisRev(key: key)
+                    case "a3~": result.a3 = mapAxisRev(key: key)
+                    case "a4~": result.a4 = mapAxisRev(key: key)
+                    case "a5~": result.a5 = mapAxisRev(key: key)
+                    default:
+                        break
+                    }
+
+                    if value.hasPrefix("b") {
+
+                        let secondCharacter = value[value.index(value.startIndex, offsetBy: 1)]
+                        if let index = Int(String(secondCharacter)) {
+                            result.b[index + 1] = mapButton(key: key) }
+                    }
+                }
+            }
+            // print("attributes = \(attributes)")
+        }
+
+        print("result = \(result)")
+        return result
+    }
+
+    private func mapAxis(key: String) -> ([GamePadAction],[GamePadAction],[GamePadAction]) {
+
+        switch (key) {
+
+        case "leftx": return ([.PULL_LEFT], [.RELEASE_X], [.PULL_RIGHT])
+        case "rightx": return ([.PULL_LEFT], [.RELEASE_X], [.PULL_RIGHT])
+        case "lefty": return ([.PULL_UP], [.RELEASE_Y], [.PULL_DOWN])
+        case "righty": return ([.PULL_UP], [.RELEASE_Y], [.PULL_DOWN])
+
+        default:
+            return ([],[],[])
+        }
+    }
+
+    private func mapAxisRev(key: String) -> ([GamePadAction],[GamePadAction],[GamePadAction]) {
+
+        switch (key) {
+
+        case "leftx": return ([.PULL_RIGHT], [.RELEASE_X], [.PULL_LEFT])
+        case "rightx": return ([.PULL_RIGHT], [.RELEASE_X], [.PULL_RIGHT])
+        case "lefty": return ([.PULL_DOWN], [.RELEASE_Y], [.PULL_UP])
+        case "righty": return ([.PULL_DOWN], [.RELEASE_Y], [.PULL_UP])
+
+        default:
+            return ([],[],[])
+        }
+    }
+
+    private func mapButton(key: String) -> ([GamePadAction],[GamePadAction]) {
+
+        switch (key) {
+
+        case "a": return ([.PRESS_FIRE], [.RELEASE_FIRE])
+        case "b": return ([.PRESS_FIRE], [.RELEASE_FIRE])
+
+        default:
+            return ([],[])
+        }
+    }
+
+
+    /*
+     func query(vendorID: Int, productID: Int, version: Int) -> MyData {
+
+     var bestMatch = data[0]
+
+     for entry in data {
+
+     if entry.vendorID != vendorID { continue }
+     if entry.productID != productID { continue }
+
+     bestMatch = entry
+
+     if entry.version != version { continue }
+
+     bestMatch = entry
+
+     }
+
+     return bestMatch
+     }
+     */
 
 
     //
@@ -181,12 +343,14 @@ class DeviceDatabase {
     //
     // Querying the database
     //
-    
+
+    /*
     func isKnown(vendorID: String, productID: String) -> Bool {
         
         return known[vendorID]?[productID] != nil
     }
-
+    */
+    
     func query(_ v: String, _ p: String, _ key: String) -> String? {
         
         if let value = custom[v]?[p]?[key] {
@@ -198,6 +362,7 @@ class DeviceDatabase {
         return nil
     }
 
+    /*
     func name(vendorID: String, productID: String) -> String? {
         
         if let value = query(vendorID, productID, "Name") {
@@ -205,7 +370,8 @@ class DeviceDatabase {
         }
         return nil
     }
-
+    */
+    
     func icon(vendorID: String, productID: String) -> NSImage? {
     
         if let value = query(vendorID, productID, "Image") {

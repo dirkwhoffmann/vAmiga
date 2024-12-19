@@ -1,0 +1,3 @@
+030000000b0400003365000000010000,Competition Pro,a:b0,b:b1,back:b2,leftx:a0,lefty:a1,start:b3,platform:Linux,
+030000000b0400003365000000000000,Competition Pro,a:b0,b:b1,back:b2,leftx:a0,lefty:a1,start:b3,platform:Windows,
+03000000380700001722000000000000,Speedlink Competition Pro,a:b0,b:b1,dpdown:+a1,dpleft:-a0,dpright:+a0,dpup:-a1,x:b2,y:b3,platform:Windows,
