@@ -13,59 +13,6 @@
  * An object of this class is used inside the PreferencesController
  */
 
-/*
-enum HIDEvent {
-
-    case HID_VOID
-    case HID_A0
-    case HID_A0_REV
-    case HID_A1
-    case HID_A1_REV
-    case HID_A12
-    case HID_A2
-    case HID_A2_REV
-    case HID_A20
-    case HID_A3
-    case HID_A3_REV
-    case HID_A31
-    case HID_A4
-    case HID_A4_REV
-    case HID_A5
-    case HID_A5_REV
-    case HID_A6
-    case HID_A6_REV
-    case HID_A7
-    case HID_A8
-    case HID_B0
-    case HID_B1
-    case HID_B10
-    case HID_B11
-    case HID_B12
-    case HID_B13
-    case HID_B14
-    case HID_B15
-    case HID_B16
-    case HID_B17
-    case HID_B19
-    case HID_B2
-    case HID_B20
-    case HID_B21
-    case HID_B22
-    case HID_B23
-    case HID_B24
-    case HID_B25
-    case HID_B26
-    case HID_B27
-    case HID_B3
-    case HID_B4
-    case HID_B5
-    case HID_B6
-    case HID_B7
-    case HID_B8
-    case HID_B9
-}
-*/
-
 struct MyData {
 
     var name = "Generic"
@@ -84,6 +31,8 @@ struct MyData {
     var a3: ([GamePadAction],[GamePadAction],[GamePadAction]) = ([],[],[])
     var a4: ([GamePadAction],[GamePadAction],[GamePadAction]) = ([],[],[])
     var a5: ([GamePadAction],[GamePadAction],[GamePadAction]) = ([],[],[])
+
+    var isGeneric: Bool { return vendorID == 0 && productID == 0 && version == 0 }
 }
 
 class DeviceDatabase {
@@ -141,22 +90,30 @@ class DeviceDatabase {
     // Querying the database
     //
 
-    func seekDevice(vendorID: String?, productID: String?, version: String? = nil) -> String? {
+    func seekDevice(vendorID: String, productID: String, version: String) -> String? {
 
         func parse(_ value: String?) -> Int? {
             return value == nil ? nil : value == "" ? 0 : Int(value!)
         }
 
-        return seekDevice(vendorID: parse(vendorID), productID: parse(productID), version: parse(version))
+        let vend = parse(vendorID)
+        let prod = parse(productID)
+        let vers = parse(version)
+
+        return seekDevice(file: "gamecontrollerdb2", vendorID: vend, productID: prod, version: vers) ??
+        seekDevice(file: "gamecontrollerdb", vendorID: vend, productID: prod, version: vers) ??
+        seekDevice(file: "gamecontrollerdb2", vendorID: vend, productID: prod) ??
+        seekDevice(file: "gamecontrollerdb", vendorID: vend, productID: prod) ??
+        nil
     }
 
-    func seekDevice(vendorID: Int?, productID: Int?, version: Int? = nil) -> String? {
+    func seekDevice(file: String, vendorID: Int?, productID: Int?, version: Int? = nil) -> String? {
 
         print("seekDevice(\(vendorID), \(productID), \(version))")
 
         var result: String?
 
-        if let url = Bundle.main.url(forResource: "gamecontrollerdb2", withExtension: "txt") {
+        if let url = Bundle.main.url(forResource: file, withExtension: "txt") {
 
             do {
 
@@ -212,10 +169,9 @@ class DeviceDatabase {
 
         var result = MyData()
 
-        if let descr =
-            seekDevice(vendorID: vendorID, productID: productID, version: version) ??
-            seekDevice(vendorID: vendorID, productID: productID) ??
-            seekDevice(vendorID: 0, productID: 0) {
+        if let descr = seekDevice(vendorID: vendorID, productID: productID, version: version) { // ??
+            // seekDevice(vendorID: vendorID, productID: productID) ??
+            // seekDevice(vendorID: 0, productID: 0) {
 
             print("\(descr)")
 
@@ -243,15 +199,25 @@ class DeviceDatabase {
                     case "a3~": result.a3 = mapAxisRev(key: key)
                     case "a4~": result.a4 = mapAxisRev(key: key)
                     case "a5~": result.a5 = mapAxisRev(key: key)
+                    case "b0": result.b[1] = mapButton(key: key)
+                    case "b1": result.b[2] = mapButton(key: key)
+                    case "b2": result.b[3] = mapButton(key: key)
+                    case "b3": result.b[4] = mapButton(key: key)
+                    case "b4": result.b[5] = mapButton(key: key)
+                    case "b5": result.b[6] = mapButton(key: key)
+                    case "b6": result.b[7] = mapButton(key: key)
+                    case "b7": result.b[8] = mapButton(key: key)
+                    case "b8": result.b[9] = mapButton(key: key)
+                    case "b9": result.b[10] = mapButton(key: key)
+                    case "b10": result.b[11] = mapButton(key: key)
+                    case "b11": result.b[12] = mapButton(key: key)
+                    case "b12": result.b[13] = mapButton(key: key)
+                    case "b13": result.b[14] = mapButton(key: key)
+                    case "b14": result.b[15] = mapButton(key: key)
+                    case "b15": result.b[16] = mapButton(key: key)
+                    case "b16": result.b[17] = mapButton(key: key)
                     default:
                         break
-                    }
-
-                    if value.hasPrefix("b") {
-
-                        let secondCharacter = value[value.index(value.startIndex, offsetBy: 1)]
-                        if let index = Int(String(secondCharacter)) {
-                            result.b[index + 1] = mapButton(key: key) }
                     }
                 }
             }
@@ -281,7 +247,7 @@ class DeviceDatabase {
         switch (key) {
 
         case "leftx": return ([.PULL_RIGHT], [.RELEASE_X], [.PULL_LEFT])
-        case "rightx": return ([.PULL_RIGHT], [.RELEASE_X], [.PULL_RIGHT])
+        case "rightx": return ([.PULL_RIGHT], [.RELEASE_X], [.PULL_LEFT])
         case "lefty": return ([.PULL_DOWN], [.RELEASE_Y], [.PULL_UP])
         case "righty": return ([.PULL_DOWN], [.RELEASE_Y], [.PULL_UP])
 
@@ -296,7 +262,14 @@ class DeviceDatabase {
 
         case "a": return ([.PRESS_FIRE], [.RELEASE_FIRE])
         case "b": return ([.PRESS_FIRE], [.RELEASE_FIRE])
-
+        case "leftshoulder": return ([.PRESS_FIRE], [.RELEASE_FIRE])
+        case "rightshoulder": return ([.PRESS_FIRE], [.RELEASE_FIRE])
+        case "lefttrigger": return ([.PRESS_FIRE], [.RELEASE_FIRE])
+        case "righttrigger": return ([.PRESS_FIRE], [.RELEASE_FIRE])
+        case "dpdown": return ([.PULL_DOWN], [.RELEASE_Y])
+        case "dpup": return ([.PULL_UP], [.RELEASE_Y])
+        case "dpleft": return ([.PULL_LEFT], [.RELEASE_X])
+        case "dpright": return ([.PULL_RIGHT], [.RELEASE_X])
         default:
             return ([],[])
         }
@@ -407,7 +380,8 @@ class DeviceDatabase {
     //
     // Updating the database
     //
-    
+
+    /*
     func replace(_ v: String, _ p: String, _ key: String, _ value: String?) {
         
         // Replace key / value pair if it already exists
@@ -438,4 +412,5 @@ class DeviceDatabase {
         
         replace(vendorID, productID, "H", value)
     }
+    */
 }

@@ -27,18 +27,12 @@ extension PreferencesController {
 
         // Let us notify when the device is pulled
         pad?.notify = true
-        
-        let db = myAppDelegate.database
-        let vend = property(kIOHIDVendorIDKey)
-        let prod = property(kIOHIDProductIDKey)
 
-        // track("\(db.custom)")
-        
         devManufacturer.stringValue = property(kIOHIDManufacturerKey)
         devProduct.stringValue = property(kIOHIDProductKey)
         devVersion.stringValue = property(kIOHIDVersionNumberKey)
-        devVendorID.stringValue = vend
-        devProductID.stringValue = prod
+        devVendorID.stringValue = property(kIOHIDVendorIDKey)
+        devProductID.stringValue = property(kIOHIDProductIDKey)
         devTransport.stringValue = property(kIOHIDTransportKey)
         devUsagePage.stringValue = property(kIOHIDPrimaryUsagePageKey)
         devLocationID.stringValue = property(kIOHIDLocationIDKey)
@@ -49,11 +43,13 @@ extension PreferencesController {
         } else {
             devUsage.stringValue = property(kIOHIDPrimaryUsageKey)
         }
-        
+
+        /*
         devLeftScheme.selectItem(withTag: db.left(vendorID: vend, productID: prod))
         devRightScheme.selectItem(withTag: db.right(vendorID: vend, productID: prod))
         devHatScheme.selectItem(withTag: db.hatSwitch(vendorID: vend, productID: prod))
-        
+        */
+
         if pad?.isKnown == true {
             devInfoBoxTitle.stringValue = ""
             devInfoBoxTitle.textColor = .secondaryLabelColor
@@ -109,12 +105,13 @@ extension PreferencesController {
     //
     // Action methods (Misc)
     //
-      
+
+    /*
     @IBAction func selectDeviceAction(_ sender: Any!) {
 
         refresh()
     }
-    
+
     @IBAction func devLeftAction(_ sender: NSPopUpButton!) {
         
         let selectedTag = "\(sender.selectedTag())"
@@ -153,7 +150,7 @@ extension PreferencesController {
         }
         refresh()
     }
-        
+
     @IBAction func devPresetAction(_ sender: NSPopUpButton!) {
         
         assert(sender.selectedTag() == 0)
@@ -169,4 +166,5 @@ extension PreferencesController {
         
         refresh()
     }
+    */
 }

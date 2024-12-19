@@ -1023,24 +1023,9 @@ using namespace vamiga::moira;
     return (JoystickAPI *)obj;
 }
 
-- (void)configureHID:(NSInteger)vendorID productID:(NSInteger)productID version:(NSInteger)version
-{
-    [self joystick]->configureHID(u16(vendorID), u16(productID), u16(version));
-}
-
 - (void)trigger:(GamePadAction)event
 {
     [self joystick]->trigger(event);
-}
-
-- (void)triggerPage:(NSInteger)page usage:(NSInteger)usage value:(NSInteger)value vendorID:(u16)vendorID productID:(u16)productID version:(u16)version
-{
-    [self joystick]->trigger(page, usage, value, vendorID, productID, version);
-}
-
-- (void)triggerPage:(NSInteger)page usage:(NSInteger)usage value:(NSInteger)value
-{
-    [self joystick]->trigger(page, usage, value);
 }
 
 @end

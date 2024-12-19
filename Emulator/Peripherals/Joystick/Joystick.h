@@ -200,20 +200,6 @@ private:
 
     // Reloads the autofire magazine
     void reload(isize bullets);
-
-
-    //
-    // HID interface
-    //
-
-public:
-
-    // Informs about the connected HID device
-    void configureHID(u16 vendorID, u16 productID, u16 version);
-
-    // Processes a HID event
-    void trigger(isize page, isize usage, isize value, u16 vendorID, u16 productID, u16 version);
-    void trigger(isize page, isize usage, isize value);
 };
 
 }

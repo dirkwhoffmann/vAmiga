@@ -636,10 +636,7 @@
 
 @interface JoystickProxy : CoreComponentProxy { }
 
-- (void)configureHID:(NSInteger)vendorID productID:(NSInteger)productID version:(NSInteger)version;
 - (void)trigger:(GamePadAction)event;
-- (void)triggerPage:(NSInteger)page usage:(NSInteger)usage value:(NSInteger)value;
-- (void)triggerPage:(NSInteger)page usage:(NSInteger)usage value:(NSInteger)value vendorID:(u16)vendorID productID:(u16)productID version:(u16)version;
 
 @end
 

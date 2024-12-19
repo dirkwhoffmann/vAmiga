@@ -70,8 +70,7 @@ class GamePad {
     var icon: NSImage?
             
     // Indicates if this device is officially supported
-    // var isKnown: Bool { return db.isKnown(vendorID: vendorID, productID: productID) }
-    var isKnown: Bool { return traits.name != "Generic" }
+    var isKnown: Bool { return !traits.isGeneric }
 
     // Keymap of the managed device (only set for keyboard emulated devices)
     var keyMap: Int?
@@ -83,9 +82,11 @@ class GamePad {
     var notify = false
         
     // Controller specific mapping schemes for the two sticks and the hat switch
+    /*
     var lScheme = 0
     var rScheme = 0
     var hScheme = 0
+    */
 
     /* Rescued information from the latest invocation of the action function.
      * This information is utilized to determine whether a joystick event has
@@ -125,16 +126,18 @@ class GamePad {
             icon = NSImage(named: "devMouseTemplate")
         }
         
-        updateMappingScheme()
+        // updateMappingScheme()
     }
-    
+
+    /*
     func updateMappingScheme() {
         
         lScheme = db.left(vendorID: vendorID, productID: productID)
         rScheme = db.right(vendorID: vendorID, productID: productID)
         hScheme = db.hatSwitch(vendorID: vendorID, productID: productID)
     }
-        
+    */
+
     func setIcon(name: String) {
         
         icon = NSImage(named: name)
@@ -437,6 +440,23 @@ class GamePad {
                 if value == 0 { events = traits.a5.1 }
                 if value == 2 { events = traits.a5.2 }
 
+            case kHIDUsage_GD_DPadUp:
+
+                events = intValue != 0 ? [.PULL_UP] : [.RELEASE_Y]
+
+            case kHIDUsage_GD_DPadDown:
+
+                events = intValue != 0 ? [.PULL_DOWN] : [.RELEASE_Y]
+
+            case kHIDUsage_GD_DPadRight:
+
+                events = intValue != 0 ? [.PULL_RIGHT] : [.RELEASE_X]
+
+            case kHIDUsage_GD_DPadLeft:
+
+                events = intValue != 0 ? [.PULL_LEFT] : [.RELEASE_X]
+
+
             /*
             case kHIDUsage_GD_X where lScheme == Schemes.A0A1:   // A0
                 events = mapHAxis(value: value, element: element)
@@ -490,7 +510,7 @@ class GamePad {
             case kHIDUsage_GD_Hatswitch:
                 
                 // track("kHIDUsage_GD_Hatswitch: \(intValue)")
-                let shift = hScheme == Schemes.H0H7 ? 0 : 1
+                let shift = 0 // hScheme == Schemes.H0H7 ? 0 : 1
                     
                 switch intValue - shift {
                 case 0: events = [.PULL_UP, .RELEASE_X]
