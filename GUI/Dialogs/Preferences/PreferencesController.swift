@@ -114,9 +114,12 @@ class PreferencesController: DialogController {
     @IBOutlet weak var devUniqueID: NSTextField!
 
     // Controller
+    @IBOutlet weak var devImage: NSImageView!
     @IBOutlet weak var devAction: NSTextField!
     @IBOutlet weak var devAction2: NSTextField!
     @IBOutlet weak var devHidEvent: NSTextField!
+    @IBOutlet weak var devHidMapping: NSTextField!
+    @IBOutlet weak var devHidMappingBox: NSBox!
 
     //
     // Methods

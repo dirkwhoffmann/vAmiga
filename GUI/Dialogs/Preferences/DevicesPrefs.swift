@@ -8,7 +8,9 @@
 // -----------------------------------------------------------------------------
 
 extension PreferencesController {
-    
+
+    var db: DeviceDatabase { return myAppDelegate.database }
+
     var selectedDev: GamePad? {
         if devSelector.indexOfSelectedItem == 0 {
             return parent.gamePadManager.gamePads[3]
@@ -44,6 +46,14 @@ extension PreferencesController {
             devUsage.stringValue = property(kIOHIDPrimaryUsageKey)
         }
 
+        if let mapping = pad?.db.seekDevice(vendorID: property(kIOHIDVendorIDKey),
+                                            productID: property(kIOHIDProductIDKey),
+                                            version: property(kIOHIDVersionNumberKey)) {
+
+            print("DEVICE FOUND")
+            devHidMapping.stringValue = mapping
+        }
+
         /*
         devLeftScheme.selectItem(withTag: db.left(vendorID: vend, productID: prod))
         devRightScheme.selectItem(withTag: db.right(vendorID: vend, productID: prod))
@@ -62,6 +72,8 @@ extension PreferencesController {
         }
         
         let hide = pad == nil || pad?.isMouse == true
+        devImage.isHidden = hide
+        devHidMappingBox.isHidden = hide
         devHidEvent.isHidden = hide
         devAction.isHidden = hide
         devAction2.isHidden = hide
@@ -118,51 +130,19 @@ extension PreferencesController {
     // Action methods (Misc)
     //
 
-    /*
     @IBAction func selectDeviceAction(_ sender: Any!) {
 
         refresh()
     }
 
-    @IBAction func devLeftAction(_ sender: NSPopUpButton!) {
-        
-        let selectedTag = "\(sender.selectedTag())"
-                
-        if let device = selectedDev {
-            myAppDelegate.database.setLeft(vendorID: device.vendorID,
-                                           productID: device.productID,
-                                           selectedTag)
-            device.updateMappingScheme()
-        }
+    @IBAction func devMappingAction(_ sender: NSTextField!) {
+
+        print("\(sender.stringValue)")
+        db.parse(line: sender.stringValue)
         refresh()
     }
 
-    @IBAction func devRightAction(_ sender: NSPopUpButton!) {
-        
-        let selectedTag = "\(sender.selectedTag())"
-                
-        if let device = selectedDev {
-            myAppDelegate.database.setRight(vendorID: device.vendorID,
-                                            productID: device.productID,
-                                            selectedTag)
-            device.updateMappingScheme()
-        }
-        refresh()
-    }
-
-    @IBAction func devHatSwitchAction(_ sender: NSPopUpButton!) {
-        
-        let selectedTag = "\(sender.selectedTag())"
-        
-        if let device = selectedDev {
-            myAppDelegate.database.setHatSwitch(vendorID: device.vendorID,
-                                                productID: device.productID,
-                                                selectedTag)
-            device.updateMappingScheme()
-        }
-        refresh()
-    }
-
+    /*
     @IBAction func devPresetAction(_ sender: NSPopUpButton!) {
         
         assert(sender.selectedTag() == 0)

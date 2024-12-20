@@ -52,72 +52,17 @@ class DeviceDatabase {
 
     init() {
 
-        parseFile("gamecontrollerdb")
-
-        // Setup the lookup table for all known devices
-        /*
-         known =
-         ["4":
-         ["1": [:]],                     // aJoy Retro Adapter
-         "13":
-         ["0": ["L": "1", "R": "3", "H": "4"]], // Nimbus+
-         "121":
-         ["17": ["R": "1"],              // iNNEXT Retro (SNES)
-         "6354": [:]],                  // Mayflash Magic-NS 1.2
-         "1035":
-         ["25907": [:]],                 // Competition Pro SL-6602
-         "1118":
-         ["2835": ["H": "1"],            // XBox Carbon Black
-         "746": ["H": "3"]],            // XBox One Wired Controller
-         "1133":
-         ["49250": [:]],                 // Logitech Mouse
-         "1155":
-         ["36869": [:]],                 // RetroFun! Joystick Adapter
-         "1356":
-         ["616": [:],                    // Sony DualShock 3
-         "1476": [:],                   // Sony DualShock 4
-         "2508": [:],                   // Sony Dualshock 4 (2nd Gen)
-         "3302": [:]],                  // Sony DualSense
-         "1848":
-         ["8727": [:]],                  // Competition Pro SL-650212
-         "3853":
-         ["193": ["R": "1"]],            // HORIPAD for Nintendo Switch
-         "7257":
-         ["36": [:]]                     // The C64 Joystick
-         ]
-
-         // Load the lookup table for all custom devices
-         let defaults = UserDefaults.standard
-         if let obj = defaults.object(forKey: Keys.Dev.schemes) as? DeviceDescription {
-         custom = obj
-         }
-         */
+        parse(file: "gamecontrollerdb")
     }
 
-    func parseFile(_ file: String) {
+    func parse(file: String) {
 
         if let url = Bundle.main.url(forResource: file, withExtension: "txt") {
 
             do {
 
                 let fileContents = try String(contentsOf: url, encoding: .utf8)
-
-                fileContents.enumerateLines { line, _ in
-
-                    if let range = line.range(of: ",") {
-
-                        let prefix = String(line[..<range.lowerBound])
-                        if prefix.hasPrefix("0") && prefix.count > 28 {
-
-                            var suffix = String(line[range.upperBound...])
-                            suffix.removeLast()
-
-                            if !self.database.keys.contains(prefix) || suffix.hasSuffix("Mac OS X") {
-                                self.database[prefix] = suffix
-                            }
-                        }
-                    }
-                }
+                fileContents.enumerateLines { line, _ in self.parse(line: line) }
 
             } catch { print("Error reading file: \(error)") }
         }
@@ -127,6 +72,19 @@ class DeviceDatabase {
         }
     }
 
+    func parse(line: String) {
+
+        if let range = line.range(of: ",") {
+
+            let prefix = String(line[..<range.lowerBound])
+            if prefix.hasPrefix("0") && prefix.count > 28 {
+
+                var suffix = line // String(line[range.upperBound...])
+                if let last = suffix.last, last == "," { suffix.removeLast() }
+                self.database[prefix] = suffix
+            }
+        }
+    }
 
     //
     // Querying the database
@@ -142,69 +100,53 @@ class DeviceDatabase {
         let prod = parse(productID)
         let vers = parse(version)
 
-        return seekDevice(file: "gamecontrollerdb2", vendorID: vend, productID: prod, version: vers) ??
-        seekDevice(file: "gamecontrollerdb", vendorID: vend, productID: prod, version: vers) ??
-        seekDevice(file: "gamecontrollerdb2", vendorID: vend, productID: prod) ??
-        seekDevice(file: "gamecontrollerdb", vendorID: vend, productID: prod) ??
-        nil
+        return seekDevice(vendorID: vend, productID: prod, version: vers) ??
+        seekDevice(vendorID: vend, productID: prod) ?? nil
     }
 
-    func seekDevice(file: String, vendorID: Int?, productID: Int?, version: Int? = nil) -> String? {
+    func seekDevice(vendorID: Int?, productID: Int?, version: Int? = nil) -> String? {
 
         print("seekDevice(\(vendorID), \(productID), \(version))")
 
-        var result: String?
+        // var result: String?
 
-        if let url = Bundle.main.url(forResource: file, withExtension: "txt") {
+        for (key, value) in database {
 
-            do {
+            func hex(_ i: Int) -> Int {
 
-                let fileContents = try String(contentsOf: url, encoding: .utf8)
+                let start = key.index(key.startIndex, offsetBy: i)
+                let end = key.index(start, offsetBy: 2)
+                return Int(key[start..<end], radix: 16) ?? 0
+            }
 
-                fileContents.enumerateLines { line, _ in
+            // print("line = \(line)")
 
-                    func hex(_ i: Int) -> Int {
+            /* From SDL_joystick.c
+             *
+             * This GUID fits the standard form:
+             * 16-bit bus
+             * 16-bit CRC16 of the joystick name (can be zero)
+             * 16-bit vendor ID
+             * 16-bit zero
+             * 16-bit product ID
+             * 16-bit zero
+             * 16-bit version
+             * 8-bit driver identifier ('h' for HIDAPI, 'x' for XInput, etc.)
+             * 8-bit driver-dependent type info
+             */
+            let _vendorID = hex(8) | hex(10) << 8;
+            let _productID = hex(16) | hex(18) << 8;
+            let _version = hex(24) | hex(26) << 8;
 
-                        let start = line.index(line.startIndex, offsetBy: i)
-                        let end = line.index(start, offsetBy: 2)
-                        return Int(line[start..<end], radix: 16) ?? 0
-                    }
+            if (vendorID == nil || vendorID == _vendorID) &&
+                (productID == nil || productID == _productID) &&
+                (version == nil || version == _version) {
 
-                    if line.hasPrefix("0") && line.count > 28 {
-
-                        // print("line = \(line)")
-
-                        /* From SDL_joystick.c
-                         *
-                         * This GUID fits the standard form:
-                         * 16-bit bus
-                         * 16-bit CRC16 of the joystick name (can be zero)
-                         * 16-bit vendor ID
-                         * 16-bit zero
-                         * 16-bit product ID
-                         * 16-bit zero
-                         * 16-bit version
-                         * 8-bit driver identifier ('h' for HIDAPI, 'x' for XInput, etc.)
-                         * 8-bit driver-dependent type info
-                         */
-                        let _vendorID = hex(8) | hex(10) << 8;
-                        let _productID = hex(16) | hex(18) << 8;
-                        let _version = hex(24) | hex(26) << 8;
-
-                        if (vendorID == nil || vendorID == _vendorID) &&
-                            (productID == nil || productID == _productID) &&
-                            (version == nil || version == _version) {
-
-                            result = line
-                        }
-                    }
-                }
-
-            } catch { print("Error reading file: \(error)") }
+                return value
+            }
         }
 
-        print("result = \(result)")
-        return result
+        return "Generic,a:b0,b:b1,leftx:a0,lefty:a1"
     }
 
     func query(vendorID: String, productID: String, version: String) -> MyData {
