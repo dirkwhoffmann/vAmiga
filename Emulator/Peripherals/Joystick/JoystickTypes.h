@@ -16,6 +16,18 @@
 // Enumerations
 //
 
+enum_long(HID_EVENT)
+{
+    HID_AXIS,
+    HID_BUTTON,
+    HID_DPAD_UP,
+    HID_DPAD_DOWN,
+    HID_DPAD_RIGHT,
+    HID_DPAD_LEFT,
+    HID_HATSWITCH,
+};
+typedef HID_EVENT HIDEvent;
+
 enum_long(GAME_PAD_ACTION)
 {
     PULL_UP = 0,    // Pull the joystick up
@@ -75,57 +87,6 @@ struct GamePadActionEnum : vamiga::util::Reflection<GamePadActionEnum, GamePadAc
 #endif
 
 
-enum_long(HID_ACTION)
-{
-    HID_A0,
-    HID_A0_REV,
-    HID_A1,
-    HID_A1_REV,
-    HID_A12,
-    HID_A2,
-    HID_A2_REV,
-    HID_A20,
-    HID_A3,
-    HID_A3_REV,
-    HID_A31,
-    HID_A4,
-    HID_A5,
-    HID_A5_REV,
-    HID_A6,
-    HID_A6_REV,
-    HID_A7,
-    HID_A8,
-    HID_B0,
-    HID_B1,
-    HID_B10,
-    HID_B11,
-    HID_B12,
-    HID_B13,
-    HID_B14,
-    HID_B15,
-    HID_B16,
-    HID_B17,
-    HID_B19,
-    HID_B2,
-    HID_B20,
-    HID_B21,
-    HID_B22,
-    HID_B23,
-    HID_B24,
-    HID_B25,
-    HID_B26,
-    HID_B27,
-    HID_B3,
-    HID_B4,
-    HID_B5,
-    HID_B6,
-    HID_B7,
-    HID_B8,
-    HID_B9
-};
-typedef HID_ACTION HIDAction;
-
-
 //
 // Structures
 //
@@ -146,20 +107,3 @@ typedef struct
     isize axisY;
 }
 JoystickInfo;
-
-typedef struct {
-
-    const char *name;
-
-    int vendorID;
-    int productID;
-    int version;
-
-    HID_ACTION leftx;
-    HID_ACTION rightx;
-    HID_ACTION lefty;
-    HID_ACTION righty;
-    HID_ACTION button1;
-    HID_ACTION button2;
-}
-GamePadTraits;

@@ -36,7 +36,11 @@ struct MyData {
 }
 
 class DeviceDatabase {
- 
+
+    // Parsed mapping file
+    var database: [String: String] = [:]
+
+
     // Mapping scheme ( VendorID -> (ProductID -> Dictionary) )
     // typealias DeviceDescription = [ String: [ String: [ String: String ] ] ]
 
@@ -46,47 +50,83 @@ class DeviceDatabase {
     // Devices configured by the user
     // var custom: DeviceDescription = [:]
 
-    /*
     init() {
-    
+
+        parseFile("gamecontrollerdb")
+
         // Setup the lookup table for all known devices
-        known =
-            ["4":
-                ["1": [:]],                     // aJoy Retro Adapter
-             "13":
-                ["0": ["L": "1", "R": "3", "H": "4"]], // Nimbus+
-             "121":
-                ["17": ["R": "1"],              // iNNEXT Retro (SNES)
-                 "6354": [:]],                  // Mayflash Magic-NS 1.2
-             "1035":
-                ["25907": [:]],                 // Competition Pro SL-6602
-             "1118":
-                ["2835": ["H": "1"],            // XBox Carbon Black
-                 "746": ["H": "3"]],            // XBox One Wired Controller
-             "1133":
-                ["49250": [:]],                 // Logitech Mouse
-             "1155":
-                ["36869": [:]],                 // RetroFun! Joystick Adapter
-             "1356":
-                ["616": [:],                    // Sony DualShock 3
-                 "1476": [:],                   // Sony DualShock 4
-                 "2508": [:],                   // Sony Dualshock 4 (2nd Gen)
-                 "3302": [:]],                  // Sony DualSense
-             "1848":
-                ["8727": [:]],                  // Competition Pro SL-650212
-             "3853":
-                ["193": ["R": "1"]],            // HORIPAD for Nintendo Switch
-             "7257":
-                ["36": [:]]                     // The C64 Joystick
-            ]
-        
-        // Load the lookup table for all custom devices
-        let defaults = UserDefaults.standard
-        if let obj = defaults.object(forKey: Keys.Dev.schemes) as? DeviceDescription {
-            custom = obj
+        /*
+         known =
+         ["4":
+         ["1": [:]],                     // aJoy Retro Adapter
+         "13":
+         ["0": ["L": "1", "R": "3", "H": "4"]], // Nimbus+
+         "121":
+         ["17": ["R": "1"],              // iNNEXT Retro (SNES)
+         "6354": [:]],                  // Mayflash Magic-NS 1.2
+         "1035":
+         ["25907": [:]],                 // Competition Pro SL-6602
+         "1118":
+         ["2835": ["H": "1"],            // XBox Carbon Black
+         "746": ["H": "3"]],            // XBox One Wired Controller
+         "1133":
+         ["49250": [:]],                 // Logitech Mouse
+         "1155":
+         ["36869": [:]],                 // RetroFun! Joystick Adapter
+         "1356":
+         ["616": [:],                    // Sony DualShock 3
+         "1476": [:],                   // Sony DualShock 4
+         "2508": [:],                   // Sony Dualshock 4 (2nd Gen)
+         "3302": [:]],                  // Sony DualSense
+         "1848":
+         ["8727": [:]],                  // Competition Pro SL-650212
+         "3853":
+         ["193": ["R": "1"]],            // HORIPAD for Nintendo Switch
+         "7257":
+         ["36": [:]]                     // The C64 Joystick
+         ]
+
+         // Load the lookup table for all custom devices
+         let defaults = UserDefaults.standard
+         if let obj = defaults.object(forKey: Keys.Dev.schemes) as? DeviceDescription {
+         custom = obj
+         }
+         */
+    }
+
+    func parseFile(_ file: String) {
+
+        if let url = Bundle.main.url(forResource: file, withExtension: "txt") {
+
+            do {
+
+                let fileContents = try String(contentsOf: url, encoding: .utf8)
+
+                fileContents.enumerateLines { line, _ in
+
+                    if let range = line.range(of: ",") {
+
+                        let prefix = String(line[..<range.lowerBound])
+                        if prefix.hasPrefix("0") && prefix.count > 28 {
+
+                            var suffix = String(line[range.upperBound...])
+                            suffix.removeLast()
+
+                            if !self.database.keys.contains(prefix) || suffix.hasSuffix("Mac OS X") {
+                                self.database[prefix] = suffix
+                            }
+                        }
+                    }
+                }
+
+            } catch { print("Error reading file: \(error)") }
+        }
+
+        for (key, value) in database.prefix(10) {
+            print("\(key): \(value)")
         }
     }
-    */
+
 
     //
     // Querying the database

@@ -44,7 +44,6 @@ class Joystick final : public SubComponent, public Inspectable<JoystickInfo> {
 
     // Current configuration
     JoystickConfig config = {};
-    GamePadTraits traits = {};
 
     // Button state
     bool button = false;

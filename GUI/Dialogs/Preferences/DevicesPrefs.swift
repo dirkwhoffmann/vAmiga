@@ -62,18 +62,30 @@ extension PreferencesController {
         }
         
         let hide = pad == nil || pad?.isMouse == true
-        devImage.isHidden = hide
-        devLeftText.isHidden = hide
-        devRightText.isHidden = hide
-        devHatText.isHidden = hide
-        devLeftScheme.isHidden = hide
-        devRightScheme.isHidden = hide
-        devHatScheme.isHidden = hide
-        devActivity.isHidden = hide
-        devActivity2.isHidden = hide
+        devHidEvent.isHidden = hide
+        devAction.isHidden = hide
+        devAction2.isHidden = hide
     }
 
-    func refreshDeviceEvents(events: [GamePadAction]) {
+    func refreshDeviceEvent(event: HIDEvent, nr: Int, value: Int) {
+
+        var text = ""
+
+        switch event {
+
+        case .BUTTON: text = "b\(nr) = \(value)"
+        case .AXIS: text = "a\(nr) = \(value)"
+        case .DPAD_UP: text = "DPad = Up"
+        case .DPAD_DOWN: text = "DPad = Down"
+        case .DPAD_RIGHT: text = "DPad = Right"
+        case .DPAD_LEFT: text = "DPad = Left"
+        default: text = ""
+        }
+
+        devHidEvent.stringValue = text
+    }
+
+    func refreshDeviceActions(actions: [GamePadAction]) {
             
         var activity = "", activity2 = ""
         
@@ -81,24 +93,24 @@ extension PreferencesController {
             if activity == "" { activity += str } else { activity2 += str }
         }
         
-        if events.contains(.PULL_UP) { add(" Pull Up ") }
-        if events.contains(.PULL_DOWN) { add(" Pull Down ") }
-        if events.contains(.PULL_RIGHT) { add(" Pull Right ") }
-        if events.contains(.PULL_LEFT) { add(" Pull Left ") }
-        if events.contains(.PRESS_FIRE) { add(" Press Fire ") }
-        if events.contains(.RELEASE_X) { add(" Release X Axis ") }
-        if events.contains(.RELEASE_Y) { add(" Release Y Axis ") }
-        if events.contains(.RELEASE_XY) { add(" Release Axis ") }
-        if events.contains(.RELEASE_FIRE) { add(" Release Fire ") }
+        if actions.contains(.PULL_UP) { add(" Pull Up ") }
+        if actions.contains(.PULL_DOWN) { add(" Pull Down ") }
+        if actions.contains(.PULL_RIGHT) { add(" Pull Right ") }
+        if actions.contains(.PULL_LEFT) { add(" Pull Left ") }
+        if actions.contains(.PRESS_FIRE) { add(" Press Fire ") }
+        if actions.contains(.RELEASE_X) { add(" Release X Axis ") }
+        if actions.contains(.RELEASE_Y) { add(" Release Y Axis ") }
+        if actions.contains(.RELEASE_XY) { add(" Release Axis ") }
+        if actions.contains(.RELEASE_FIRE) { add(" Release Fire ") }
      
-        devActivity.stringValue = activity
-        devActivity2.stringValue = activity2
+        devAction.stringValue = activity
+        devAction2.stringValue = activity2
     }
     
     func selectDevicesTab() {
         
-        devActivity.stringValue = ""
-        devActivity2.stringValue = ""
+        devAction.stringValue = ""
+        devAction2.stringValue = ""
         refreshDevicesTab()
     }
 

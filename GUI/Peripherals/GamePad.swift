@@ -243,11 +243,11 @@ class GamePad {
         v = v * 2.0 - 1.0
         
         if v < 0 {
-            if v < -0.45 { print("MINUS"); return -1 }
-            if v > -0.35 { print("NULL"); return 0 }
+            if v < -0.45 { return -1 }
+            if v > -0.35 { return 0 }
         } else {
-            if v > 0.45 { print("PLUS"); return 1 }
-            if v < 0.35 { print("NULL"); return 0 }
+            if v > 0.45 { return 1 }
+            if v < 0.35 { return 0 }
         }
         
         return nil // Dead zone
@@ -300,12 +300,17 @@ class GamePad {
         let intValue  = Int(IOHIDValueGetIntegerValue(value))
         let usagePage = Int(IOHIDElementGetUsagePage(element))
         let usage     = Int(IOHIDElementGetUsage(element))
-                
+
+        var hidEvent: (HIDEvent?, Int, Int) = (nil, 0, 0)
+
         print("usagePage = \(usagePage) usage = \(usage) value = \(intValue)")
 
         var events: [GamePadAction]?
         
         if usagePage == kHIDPage_Button {
+
+            // print("BUTTON: usagePage = \(usagePage) usage = \(usage) value = \(intValue)")
+            hidEvent = (.BUTTON, usage, intValue)
 
             events = intValue != 0 ? (traits.b[usage]?.0 ?? []) : (traits.b[usage]?.1 ?? [])
             /*
@@ -339,66 +344,95 @@ class GamePad {
         
         if usagePage == kHIDPage_GenericDesktop {
 
+            print("GENERIC DESKTOP: usagePage = \(usagePage) usage = \(usage) value = \(intValue)")
+
             switch usage {
 
             case kHIDUsage_GD_X: // A0
 
-                let value = mapAnalogAxis(value: value, element: element)
-                if value == -1 { events = traits.a0.0 }
-                if value == 0  { events = traits.a0.1 }
-                if value == 1  { events = traits.a0.2 }
+                if let value = mapAnalogAxis(value: value, element: element) {
+
+                    if value == -1 { events = traits.a0.0 }
+                    if value == 0  { events = traits.a0.1 }
+                    if value == 1  { events = traits.a0.2 }
+
+                    hidEvent = (.AXIS, 0, value)
+                }
 
             case kHIDUsage_GD_Y: // A1
 
-                let value = mapAnalogAxis(value: value, element: element)
-                if value == -1 { events = traits.a1.0 }
-                if value == 0  { events = traits.a1.1 }
-                if value == 1  { events = traits.a1.2 }
+                if let value = mapAnalogAxis(value: value, element: element) {
+
+                    if value == -1 { events = traits.a1.0 }
+                    if value == 0  { events = traits.a1.1 }
+                    if value == 1  { events = traits.a1.2 }
+
+                    hidEvent = (.AXIS, 1, value)
+                }
 
             case kHIDUsage_GD_Z: // A2
 
-                let value = mapAnalogAxis(value: value, element: element)
-                if value == -1 { events = traits.a2.0 }
-                if value == 0  { events = traits.a2.1 }
-                if value == 1  { events = traits.a2.2 }
+                if let value = mapAnalogAxis(value: value, element: element) {
+
+                    if value == -1 { events = traits.a2.0 }
+                    if value == 0  { events = traits.a2.1 }
+                    if value == 1  { events = traits.a2.2 }
+
+                    hidEvent = (.AXIS, 2, value)
+                }
 
             case kHIDUsage_GD_Rx: // A3
 
-                let value = mapAnalogAxis(value: value, element: element)
-                if value == -1 { events = traits.a3.0 }
-                if value == 0  { events = traits.a3.1 }
-                if value == 1  { events = traits.a3.2 }
+                if let value = mapAnalogAxis(value: value, element: element) {
+
+                    if value == -1 { events = traits.a3.0 }
+                    if value == 0  { events = traits.a3.1 }
+                    if value == 1  { events = traits.a3.2 }
+
+                    hidEvent = (.AXIS, 3, value)
+                }
 
             case kHIDUsage_GD_Ry: // A4
 
-                let value = mapAnalogAxis(value: value, element: element)
-                if value == -1 { events = traits.a4.0 }
-                if value == 0  { events = traits.a4.1 }
-                if value == 1  { events = traits.a4.2 }
+                if let value = mapAnalogAxis(value: value, element: element) {
+
+                    if value == -1 { events = traits.a4.0 }
+                    if value == 0  { events = traits.a4.1 }
+                    if value == 1  { events = traits.a4.2 }
+
+                    hidEvent = (.AXIS, 4, value)
+                }
 
             case kHIDUsage_GD_Rz: // A5
 
-                let value = mapAnalogAxis(value: value, element: element)
-                if value == -1 { events = traits.a5.0 }
-                if value == 0  { events = traits.a5.1 }
-                if value == 1  { events = traits.a5.2 }
+                if let value = mapAnalogAxis(value: value, element: element) {
+
+                    if value == -1 { events = traits.a5.0 }
+                    if value == 0  { events = traits.a5.1 }
+                    if value == 1  { events = traits.a5.2 }
+
+                    hidEvent = (.AXIS, 5, value)
+                }
 
             case kHIDUsage_GD_DPadUp:
 
+                hidEvent = (.DPAD_UP, 0, intValue)
                 events = intValue != 0 ? [.PULL_UP] : [.RELEASE_Y]
 
             case kHIDUsage_GD_DPadDown:
 
+                hidEvent = (.DPAD_DOWN, 0, intValue)
                 events = intValue != 0 ? [.PULL_DOWN] : [.RELEASE_Y]
 
             case kHIDUsage_GD_DPadRight:
 
+                hidEvent = (.DPAD_RIGHT, 0, intValue)
                 events = intValue != 0 ? [.PULL_RIGHT] : [.RELEASE_X]
 
             case kHIDUsage_GD_DPadLeft:
 
+                hidEvent = (.DPAD_LEFT, 0, intValue)
                 events = intValue != 0 ? [.PULL_LEFT] : [.RELEASE_X]
-
 
             /*
             case kHIDUsage_GD_X where lScheme == Schemes.A0A1:   // A0
@@ -452,9 +486,11 @@ class GamePad {
 
             case kHIDUsage_GD_Hatswitch:
                 
+                hidEvent = (.HATSWITCH, 0, intValue)
+
                 // track("kHIDUsage_GD_Hatswitch: \(intValue)")
                 let shift = 0 // hScheme == Schemes.H0H7 ? 0 : 1
-                    
+
                 switch intValue - shift {
                 case 0: events = [.PULL_UP, .RELEASE_X]
                 case 1: events = [.PULL_UP, .PULL_RIGHT]
@@ -471,7 +507,10 @@ class GamePad {
                 debug(.hid, "Unknown HID usage: \(usage)")
             }
         }
-        
+
+        if notify && hidEvent.0 != nil {
+            myAppDelegate.hidEvent(event: hidEvent.0!, nr: hidEvent.1, value: hidEvent.2) }
+
         // Only proceed if the event is different than the previous one
         if events == nil || oldEvents[usage] == events { return }
         oldEvents[usage] = events!

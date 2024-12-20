@@ -241,9 +241,14 @@ extension MyAppDelegate {
         prefController?.refresh()
     }
 
-    // Callen when a HID device has been pulled
+    // Callen when a HID event comes in
+    func hidEvent(event: HIDEvent, nr: Int, value: Int) {
+        prefController?.refreshDeviceEvent(event: event, nr: nr, value: value)
+    }
+
+    // Callen when a HID device triggers joystick actions
     func devicePulled(events: [GamePadAction]) {
-        prefController?.refreshDeviceEvents(events: events)
+        prefController?.refreshDeviceActions(actions: events)
     }
 }
 
