@@ -82,10 +82,15 @@ class GamePad {
         self.device = device
         self.type = type
 
-        traits = db.query(vendorID: vendorID, productID: productID, version: version)
-
         name = traits.name
         icon = NSImage(named: isMouse ? "devMouseTemplate" : "devGamepad1Template")!
+
+        updateMapping()
+    }
+
+    func updateMapping() {
+
+        traits = db.query(vendorID: vendorID, productID: productID, version: version)
     }
 
     func property(key: String) -> String? {

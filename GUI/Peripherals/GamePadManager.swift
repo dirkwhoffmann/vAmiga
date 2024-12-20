@@ -244,7 +244,14 @@ class GamePadManager {
 
         if Int.hid != 0 { listDevices() }
     }
-    
+
+    func updateHidMapping() {
+
+        // Only GamePads 3 and 4 are HID devices
+        gamePads[3]?.updateMapping()
+        gamePads[4]?.updateMapping()
+    }
+
     func listDevices() {
         
         print("Input devices:")

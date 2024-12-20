@@ -52,6 +52,12 @@ class DeviceDatabase {
 
     init() {
 
+        reset()
+    }
+
+    func reset() {
+
+        database = [:]
         parse(file: "gamecontrollerdb")
     }
 
@@ -74,14 +80,19 @@ class DeviceDatabase {
 
     func parse(line: String) {
 
-        if let range = line.range(of: ",") {
+        // Eliminate newline characters (if any)
+        var descriptor = line.replacingOccurrences(of: "\n", with: "")
 
-            let prefix = String(line[..<range.lowerBound])
+        // Eliminate unneeded commas
+        descriptor = descriptor.trimmingCharacters(in: CharacterSet(charactersIn: ","))
+
+        // Split off the GUID and fill the database
+        if let range = descriptor.range(of: ",") {
+
+            let prefix = String(descriptor[..<range.lowerBound])
             if prefix.hasPrefix("0") && prefix.count > 28 {
 
-                var suffix = line // String(line[range.upperBound...])
-                if let last = suffix.last, last == "," { suffix.removeLast() }
-                self.database[prefix] = suffix
+                self.database[prefix] = descriptor
             }
         }
     }

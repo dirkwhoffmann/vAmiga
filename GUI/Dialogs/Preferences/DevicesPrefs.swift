@@ -46,19 +46,15 @@ extension PreferencesController {
             devUsage.stringValue = property(kIOHIDPrimaryUsageKey)
         }
 
-        if let mapping = pad?.db.seekDevice(vendorID: property(kIOHIDVendorIDKey),
-                                            productID: property(kIOHIDProductIDKey),
-                                            version: property(kIOHIDVersionNumberKey)) {
+        // HID mapping
+        devHidMapping.focusRingType = .none
+        if let descriptor = pad?.db.seekDevice(vendorID: property(kIOHIDVendorIDKey),
+                                               productID: property(kIOHIDProductIDKey),
+                                               version: property(kIOHIDVersionNumberKey)) {
 
-            print("DEVICE FOUND")
-            devHidMapping.stringValue = mapping
+            let trimmed = descriptor.trimmingCharacters(in: CharacterSet(charactersIn: ","))
+            devHidMapping.string = trimmed.replacingOccurrences(of: ",", with: ",\n")
         }
-
-        /*
-        devLeftScheme.selectItem(withTag: db.left(vendorID: vend, productID: prod))
-        devRightScheme.selectItem(withTag: db.right(vendorID: vend, productID: prod))
-        devHatScheme.selectItem(withTag: db.hatSwitch(vendorID: vend, productID: prod))
-        */
 
         if pad?.isKnown == true {
             devInfoBoxTitle.stringValue = ""
@@ -73,7 +69,7 @@ extension PreferencesController {
         
         let hide = pad == nil || pad?.isMouse == true
         devImage.isHidden = hide
-        devHidMappingBox.isHidden = hide
+        // devHidMappingBox.isHidden = hide
         devHidEvent.isHidden = hide
         devAction.isHidden = hide
         devAction2.isHidden = hide
@@ -121,6 +117,7 @@ extension PreferencesController {
     
     func selectDevicesTab() {
         
+        devHidEvent.stringValue = ""
         devAction.stringValue = ""
         devAction2.stringValue = ""
         refreshDevicesTab()
@@ -135,28 +132,34 @@ extension PreferencesController {
         refresh()
     }
 
-    @IBAction func devMappingAction(_ sender: NSTextField!) {
+    @IBAction func devMappingAction(_ sender: NSTextView!) {
 
-        print("\(sender.stringValue)")
-        db.parse(line: sender.stringValue)
+        print("\(sender.string)")
+        db.parse(line: sender.string)
+        gamePadManager.updateHidMapping()
         refresh()
     }
 
-    /*
     @IBAction func devPresetAction(_ sender: NSPopUpButton!) {
         
         assert(sender.selectedTag() == 0)
-        
-        if let device = selectedDev {
-            
-            let db = myAppDelegate.database
-            db.setLeft(vendorID: device.vendorID, productID: device.productID, nil)
-            db.setRight(vendorID: device.vendorID, productID: device.productID, nil)
-            db.setHatSwitch(vendorID: device.vendorID, productID: device.productID, nil)
-            device.updateMappingScheme()
-        }
-        
+
+        myAppDelegate.database.reset()
+        gamePadManager.updateHidMapping()
         refresh()
     }
-    */
+}
+
+extension PreferencesController : NSTextViewDelegate {
+
+    func textDidChange(_ notification: Notification) {
+
+        if let textView = notification.object as? NSTextView {
+
+            print("Text changed: \(textView.string)")
+            db.parse(line: textView.string)
+            gamePadManager.updateHidMapping()
+        }
+    }
+
 }
