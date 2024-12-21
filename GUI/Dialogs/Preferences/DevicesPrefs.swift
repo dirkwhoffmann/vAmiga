@@ -132,20 +132,31 @@ extension PreferencesController {
         refresh()
     }
 
+    /*
     @IBAction func devMappingAction(_ sender: NSTextView!) {
 
         print("\(sender.string)")
-        db.parse(line: sender.string)
+
+        // Add the update device description to the 'custom' database
+        db.update(line: sender.string)
+
+        // Make the change effective
         gamePadManager.updateHidMapping()
+
         refresh()
     }
+    */
 
     @IBAction func devPresetAction(_ sender: NSPopUpButton!) {
         
         assert(sender.selectedTag() == 0)
 
+        // Reset the database
         myAppDelegate.database.reset()
+
+        // Make the change effective
         gamePadManager.updateHidMapping()
+
         refresh()
     }
 }
@@ -157,7 +168,11 @@ extension PreferencesController : NSTextViewDelegate {
         if let textView = notification.object as? NSTextView {
 
             print("Text changed: \(textView.string)")
-            db.parse(line: textView.string)
+
+            // Add the update device description to the 'custom' database
+            db.update(line: textView.string)
+
+            // Make the change effective
             gamePadManager.updateHidMapping()
         }
     }
