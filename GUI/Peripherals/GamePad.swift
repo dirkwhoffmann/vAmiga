@@ -31,7 +31,7 @@ class GamePad {
     // var traits: MyData = MyData()
 
     // HID mapping
-    var mapping: DeviceMapping?
+    var mapping: HIDMapping?
 
     // Reference to the HID device
     var device: IOHIDDevice?
@@ -39,6 +39,7 @@ class GamePad {
     var productID: String { return device?.productID ?? "" }
     var locationID: String { return device?.locationID ?? "" }
     var version: String { return device?.versionNumberKey ?? "" }
+    var guid: GUID { return device?.guid ?? GUID() }
 
     // Type of the managed device (joystick or mouse)
     var type: ControlPortDevice
@@ -52,7 +53,7 @@ class GamePad {
     var icon: NSImage?
             
     // Indicates if this device is officially supported
-    var isKnown = false
+    var isKnown: Bool { return db.hasMatch(guid: guid) }
 
     // Keymap of the managed device (only set for keyboard emulated devices)
     var keyMap: Int?
@@ -93,7 +94,10 @@ class GamePad {
 
     func updateMapping() {
 
-        mapping = db.query(vendorID: vendorID, productID: productID, version: version)
+        if device != nil {
+
+            mapping = db.query(guid: device!.guid)
+        }
     }
 
     func property(key: String) -> String? {

@@ -119,7 +119,7 @@ class PreferencesController: DialogController {
     @IBOutlet weak var devAction2: NSTextField!
     @IBOutlet weak var devHidEvent: NSTextField!
     @IBOutlet weak var devHidMapping: NSTextView!
-    // @IBOutlet weak var devHidMappingBox: NSBox!
+    @IBOutlet weak var devHidMappingScrollView: NSScrollView!
 
     //
     // Methods

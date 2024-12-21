@@ -19,6 +19,8 @@ extension PreferencesController {
         }
     }
 
+    var guid: GUID {return selectedDev?.guid ?? GUID() }
+
     func refreshDevicesTab() {
                 
         let pad = selectedDev
@@ -48,9 +50,7 @@ extension PreferencesController {
 
         // HID mapping
         devHidMapping.focusRingType = .none
-        if let descriptor = pad?.db.seekDevice(vendorID: property(kIOHIDVendorIDKey),
-                                               productID: property(kIOHIDProductIDKey),
-                                               version: property(kIOHIDVersionNumberKey)) {
+        if let descriptor = pad?.db.seek(guid: guid) {
 
             let trimmed = descriptor.trimmingCharacters(in: CharacterSet(charactersIn: ","))
             devHidMapping.string = trimmed.replacingOccurrences(of: ",", with: ",\n")
@@ -69,7 +69,7 @@ extension PreferencesController {
         
         let hide = pad == nil || pad?.isMouse == true
         devImage.isHidden = hide
-        // devHidMappingBox.isHidden = hide
+        devHidMappingScrollView.isHidden = hide
         devHidEvent.isHidden = hide
         devAction.isHidden = hide
         devAction2.isHidden = hide

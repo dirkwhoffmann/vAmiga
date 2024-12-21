@@ -35,40 +35,16 @@
  * vendor ID and product ID.
  */
 
-// Device mapping scheme (HIDEvent -> Item -> Value -> [Actions])
-typealias DeviceMapping = [ HIDEvent: [ Int: [ Int: [GamePadAction] ] ] ]
-
-/*
-struct MyData {
-
-    var name = "Generic"
-
-    var vendorID = 0
-    var productID = 0
-    var version = 0
-
-    // Button actions
-    var b: [Int: ([GamePadAction],[GamePadAction])] = [:]
-
-    // Axis actions
-    var a0: ([GamePadAction],[GamePadAction],[GamePadAction]) = ([],[],[])
-    var a1: ([GamePadAction],[GamePadAction],[GamePadAction]) = ([],[],[])
-    var a2: ([GamePadAction],[GamePadAction],[GamePadAction]) = ([],[],[])
-    var a3: ([GamePadAction],[GamePadAction],[GamePadAction]) = ([],[],[])
-    var a4: ([GamePadAction],[GamePadAction],[GamePadAction]) = ([],[],[])
-    var a5: ([GamePadAction],[GamePadAction],[GamePadAction]) = ([],[],[])
-
-    var isGeneric: Bool { return vendorID == 0 && productID == 0 && version == 0 }
-}
-*/
+// Mapping scheme: HIDEvent -> Item -> Value -> [Actions]
+typealias HIDMapping = [ HIDEvent: [ Int: [ Int: [GamePadAction] ] ] ]
 
 class DeviceDatabase {
 
     // Known devices
-    var known: [String: String] = [:]
+    var known: [GUID: String] = [:]
 
     // Devices configured by the user
-    var custom: [String: String] = [:]
+    // var custom: [String: String] = [:]
 
     //
     // Initializing
@@ -83,32 +59,32 @@ class DeviceDatabase {
 
         // Start from scratch
         known = [:]
-        custom = [:]
+        // custom = [:]
 
         // Register all known devices
-        parse(file: "gamecontrollerdb", mapping: &known)
+        parse(file: "gamecontrollerdb", withExtension: "txt")
     }
 
     //
     // Creating the database
     //
 
-    func parse(file: String, mapping: inout [String: String]) {
+    func parse(file: String, withExtension ext: String) {
 
-        if let url = Bundle.main.url(forResource: file, withExtension: "txt") {
+        if let url = Bundle.main.url(forResource: file, withExtension: ext) {
 
             do {
 
                 let fileContents = try String(contentsOf: url, encoding: .utf8)
                 for line in fileContents.split(separator: "\n") {
-                    self.parse(line: String(line), mapping: &mapping)
+                    self.parse(line: String(line))
                 }
 
             } catch { print("Error reading file: \(error)") }
         }
     }
 
-    func parse(line: String, mapping: inout [String: String]) {
+    func parse(line: String) {
 
         // Eliminate newline characters (if any)
         var descriptor = line.replacingOccurrences(of: "\n", with: "")
@@ -116,82 +92,98 @@ class DeviceDatabase {
         // Eliminate unneeded commas at both ends
         descriptor = descriptor.trimmingCharacters(in: CharacterSet(charactersIn: ","))
 
-        // Extract the GUID and create the database entry
-        if let range = descriptor.range(of: ",") {
-
-            let prefix = String(descriptor[..<range.lowerBound])
-            if prefix.hasPrefix("0") && prefix.count > 28 {
-
-                mapping[prefix] = descriptor
-            }
-        }
+        // Extract the GUID and create a mapping
+        if let guid = GUID(string: descriptor) { known[guid] = descriptor }
     }
 
     func update(line: String) {
 
-        parse(line: line, mapping: &custom)
+        parse(line: line)
     }
 
     //
     // Querying the database
     //
 
-    func seekDevice(vendorID: String, productID: String, version: String) -> String {
+    func hasMatch(guid: GUID) -> Bool {
 
-        var result: String?
+        return hasMatch(vendorID: guid.vendorID, productID: guid.productID)
+    }
+
+    func hasPerfectMatch(guid: GUID) -> Bool {
+
+        return hasMatch(vendorID: guid.vendorID, productID: guid.productID, version: guid.version)
+    }
+
+    func hasMatch(vendorID: Int, productID: Int, version: Int? = nil) -> Bool {
+
+        for (guid, _) in known {
+
+            if guid.vendorID == vendorID && guid.productID == productID {
+                if version == nil || guid.version == version { return true }
+            }
+        }
+
+        return false
+    }
+
+    func seek(guid: GUID) -> String? {
+
+        for (otherguid, result) in known {
+
+            // Compare vendorID, productID, and version
+            if !guid.match(guid: otherguid, offset: 8, length: 4) { continue }
+            if !guid.match(guid: otherguid, offset: 16, length: 4) { continue }
+            if !guid.match(guid: otherguid, offset: 24, length: 4) { continue }
+
+            return result;
+        }
+
+        for (otherguid, result) in known {
+
+            // Only compare the vendorID and productID
+            if !guid.match(guid: otherguid, offset: 8, length: 4) { continue }
+            if !guid.match(guid: otherguid, offset: 16, length: 4) { continue }
+
+            return result;
+        }
+
+        return nil
+    }
+
+    /*
+    func seekDevice(vendorID: String?, productID: String?, version: String? = nil) -> String? {
 
         func parse(_ value: String?) -> Int? {
             return value == nil ? nil : value == "" ? 0 : Int(value!)
         }
 
-        let vend = parse(vendorID)
-        let prod = parse(productID)
-        let vers = parse(version)
+        return seekDevice(vendorID: parse(vendorID),
+                          productID: parse(productID),
+                          version: parse(version),
+                          mapping: mapping)
 
-        // 1. Crawl through the custom database
-        result = seekDevice(vendorID: vend, productID: prod, version: vers, mapping: custom)
-
-        // 2. Crawl through the known devices
-        if result == nil { result = seekDevice(vendorID: vend, productID: prod, version: vers, mapping: known) }
-
-        // 3. Crawl through the known devices, ignoring the version number
-        if result == nil { result = seekDevice(vendorID: vend, productID: prod, mapping: known) }
-
-        // 4. Assign a default mapping
-        if result == nil { result = "Generic,a:b0,b:b1,leftx:a0,lefty:a1" }
-
-        return result!
     }
+    */
 
-    func seekDevice(vendorID: Int?, productID: Int?, version: Int? = nil, mapping: [String: String]) -> String? {
+    func seek(vendorID: Int?, productID: Int?, version: Int? = nil) -> String? {
 
-        print("seekDevice(\(vendorID), \(productID), \(version))")
+        print("seek(\(vendorID), \(productID), \(version))")
 
-        for (key, value) in mapping {
+        for (guid, value) in known {
 
-            func hex(_ i: Int) -> Int {
-
-                let start = key.index(key.startIndex, offsetBy: i)
-                let end = key.index(start, offsetBy: 2)
-                return Int(key[start..<end], radix: 16) ?? 0
-            }
-
-            let _vendorID = hex(8) | hex(10) << 8;
-            let _productID = hex(16) | hex(18) << 8;
-            let _version = hex(24) | hex(26) << 8;
-
-            if vendorID != nil && vendorID != _vendorID { continue }
-            if productID != nil && productID != _productID { continue }
-            if version != nil && version != _version { continue }
+            if vendorID != nil && vendorID != guid.vendorID { continue }
+            if productID != nil && productID != guid.productID { continue }
+            if version != nil && version != guid.version { continue }
 
             return value
         }
         return nil
     }
 
-    func query(vendorID: String, productID: String, version: String) -> DeviceMapping {
+    func query(guid: GUID) -> HIDMapping {
 
-        var result: DeviceMapping = [
+        var result: HIDMapping = [
 
             .AXIS: [:],
             .BUTTON: [:],
@@ -202,11 +194,16 @@ class DeviceDatabase {
             .HATSWITCH: [:]
         ]
 
-        let descriptor = seekDevice(vendorID: vendorID, productID: productID, version: version)
+        // Crawl through the database
+        var descriptor = seek(guid: guid)
+
+        // Assign a default descriptor if needed
+        if descriptor == nil { descriptor = "Generic,a:b0,b:b1,leftx:a0,lefty:a1" }
+
         print("\(descriptor)")
 
         // Iterate through all key value pairs
-        for assignment in descriptor.split(separator: ",") {
+        for assignment in descriptor!.split(separator: ",") {
 
             let pair = assignment.split(separator: ":").map { String($0) }
             if pair.count != 2 { continue }

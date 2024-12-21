@@ -46,6 +46,7 @@
                 <outlet property="devAction2" destination="VZ1-e1-hp3" id="Egv-Y2-NKP"/>
                 <outlet property="devHidEvent" destination="5Wj-hw-28o" id="TDN-bg-AVB"/>
                 <outlet property="devHidMapping" destination="lue-lV-Oit" id="b9I-AI-HIO"/>
+                <outlet property="devHidMappingScrollView" destination="H8h-C1-gQm" id="ugS-p0-FN7"/>
                 <outlet property="devImage" destination="Ljn-nh-euA" id="Wnb-BN-uD3"/>
                 <outlet property="devInfoBox" destination="Dto-Ac-z5q" id="jr1-T2-yMV"/>
                 <outlet property="devInfoBoxTitle" destination="v81-ep-HXC" id="8cl-mS-uY1"/>
