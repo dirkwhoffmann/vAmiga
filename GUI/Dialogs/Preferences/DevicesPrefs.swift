@@ -11,7 +11,7 @@ extension PreferencesController {
 
     var db: DeviceDatabase { return myAppDelegate.database }
 
-    var selectedDev: GamePad? {
+    var pad: GamePad? {
         if devSelector.indexOfSelectedItem == 0 {
             return parent.gamePadManager.gamePads[3]
         } else {
@@ -19,15 +19,10 @@ extension PreferencesController {
         }
     }
 
-    var guid: GUID {return selectedDev?.guid ?? GUID() }
+    var guid: GUID {return pad?.guid ?? GUID() }
+    func property(_ key: String) -> String { return pad?.property(key: key) ?? "-" }
 
     func refreshDevicesTab() {
-                
-        let pad = selectedDev
-
-        func property(_ key: String) -> String {
-            return pad?.property(key: key) ?? "-"
-        }
 
         // Let us notify when the device is pulled
         pad?.notify = true

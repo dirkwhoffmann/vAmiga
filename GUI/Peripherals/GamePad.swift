@@ -53,7 +53,7 @@ class GamePad {
     var icon: NSImage?
             
     // Indicates if this device is officially supported
-    var isKnown: Bool { return db.hasMatch(guid: guid) }
+    var isKnown: Bool { return db.isKnown(guid: guid) }
 
     // Keymap of the managed device (only set for keyboard emulated devices)
     var keyMap: Int?
@@ -270,26 +270,21 @@ class GamePad {
                              sender: UnsafeMutableRawPointer?,
                              value: IOHIDValue) {
         
+        var hidEvent: (HIDEvent, Int, Int)?
+
         let element   = IOHIDValueGetElement(value)
         let intValue  = Int(IOHIDValueGetIntegerValue(value))
         let usagePage = Int(IOHIDElementGetUsagePage(element))
         let usage     = Int(IOHIDElementGetUsage(element))
 
-        var hidEvent: (HIDEvent, Int, Int)?
+        // print("usagePage = \(usagePage) usage = \(usage) value = \(intValue)")
 
-        print("usagePage = \(usagePage) usage = \(usage) value = \(intValue)")
-
-        var events: [GamePadAction]?
-        
         if usagePage == kHIDPage_Button {
 
-            // print("BUTTON: usagePage = \(usagePage) usage = \(usage) value = \(intValue)")
             hidEvent = (.BUTTON, usage, intValue)
         }
         
         if usagePage == kHIDPage_GenericDesktop {
-
-            print("GENERIC DESKTOP: usagePage = \(usagePage) usage = \(usage) value = \(intValue)")
 
             switch usage {
 
@@ -374,7 +369,7 @@ class GamePad {
         if port == 1 { for e in events { amiga.controlPort1.joystick.trigger(e) } }
         if port == 2 { for e in events { amiga.controlPort2.joystick.trigger(e) } }
         
-        // Notify other components (if requested)
+        // Notify the GUI
         if notify { myAppDelegate.devicePulled(events: events) }
 
         return events != []

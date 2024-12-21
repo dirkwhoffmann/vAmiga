@@ -102,48 +102,33 @@ class DeviceDatabase {
     }
 
     //
-    // Querying the database
+    // Querying descriptors
     //
 
-    func hasMatch(guid: GUID) -> Bool {
+    func isKnown(guid: GUID, exact: Bool = false) -> Bool {
 
-        return hasMatch(vendorID: guid.vendorID, productID: guid.productID)
+        return seek(guid: guid, exact: exact) != nil
     }
 
-    func hasPerfectMatch(guid: GUID) -> Bool {
+    func seek(guid: GUID) -> String {
 
-        return hasMatch(vendorID: guid.vendorID, productID: guid.productID, version: guid.version)
+        // Search for a perfect match
+        if let result = seek(guid: guid, exact: true) { return result }
+
+        // Ignore the version number
+        if let result = seek(guid: guid, exact: false) { return result }
+
+        // Return a fallback descriptor
+        return "Generic,a:b0,b:b1,leftx:a0,lefty:a1"
     }
 
-    func hasMatch(vendorID: Int, productID: Int, version: Int? = nil) -> Bool {
-
-        for (guid, _) in known {
-
-            if guid.vendorID == vendorID && guid.productID == productID {
-                if version == nil || guid.version == version { return true }
-            }
-        }
-
-        return false
-    }
-
-    func seek(guid: GUID) -> String? {
+    private func seek(guid: GUID, exact: Bool) -> String? {
 
         for (otherguid, result) in known {
 
-            // Compare vendorID, productID, and version
             if !guid.match(guid: otherguid, offset: 8, length: 4) { continue }
             if !guid.match(guid: otherguid, offset: 16, length: 4) { continue }
-            if !guid.match(guid: otherguid, offset: 24, length: 4) { continue }
-
-            return result;
-        }
-
-        for (otherguid, result) in known {
-
-            // Only compare the vendorID and productID
-            if !guid.match(guid: otherguid, offset: 8, length: 4) { continue }
-            if !guid.match(guid: otherguid, offset: 16, length: 4) { continue }
+            if exact && !guid.match(guid: otherguid, offset: 24, length: 4) { continue }
 
             return result;
         }
@@ -151,37 +136,16 @@ class DeviceDatabase {
         return nil
     }
 
-    /*
-    func seekDevice(vendorID: String?, productID: String?, version: String? = nil) -> String? {
-
-        func parse(_ value: String?) -> Int? {
-            return value == nil ? nil : value == "" ? 0 : Int(value!)
-        }
-
-        return seekDevice(vendorID: parse(vendorID),
-                          productID: parse(productID),
-                          version: parse(version),
-                          mapping: mapping)
-
-    }
-    */
-
-    func seek(vendorID: Int?, productID: Int?, version: Int? = nil) -> String? {
-
-        print("seek(\(vendorID), \(productID), \(version))")
-
-        for (guid, value) in known {
-
-            if vendorID != nil && vendorID != guid.vendorID { continue }
-            if productID != nil && productID != guid.productID { continue }
-            if version != nil && version != guid.version { continue }
-
-            return value
-        }
-        return nil
-    }
+    //
+    // Compute mappings
+    //
 
     func query(guid: GUID) -> HIDMapping {
+
+        return query(descriptor: seek(guid: guid))
+    }
+
+    func query(descriptor: String) -> HIDMapping {
 
         var result: HIDMapping = [
 
@@ -194,55 +158,43 @@ class DeviceDatabase {
             .HATSWITCH: [:]
         ]
 
-        // Crawl through the database
-        var descriptor = seek(guid: guid)
-
-        // Assign a default descriptor if needed
-        if descriptor == nil { descriptor = "Generic,a:b0,b:b1,leftx:a0,lefty:a1" }
-
-        print("\(descriptor)")
-
         // Iterate through all key value pairs
-        for assignment in descriptor!.split(separator: ",") {
+        for assignment in descriptor.split(separator: ",") {
 
             let pair = assignment.split(separator: ":").map { String($0) }
             if pair.count != 2 { continue }
 
-            let key = pair[0]
-            let value = pair[1]
+            switch (pair[1]) {
 
-            print("key: \(pair[0]) value: \(pair[1])")
-
-            switch (value) {
-            case "a0":  result[.AXIS]![0] = mapAxis(key: key)
-            case "a1":  result[.AXIS]![1] = mapAxis(key: key)
-            case "a2":  result[.AXIS]![2] = mapAxis(key: key)
-            case "a3":  result[.AXIS]![3] = mapAxis(key: key)
-            case "a4":  result[.AXIS]![4] = mapAxis(key: key)
-            case "a5":  result[.AXIS]![5] = mapAxis(key: key)
-            case "a0~": result[.AXIS]![0] = mapAxisRev(key: key)
-            case "a1~": result[.AXIS]![1] = mapAxisRev(key: key)
-            case "a2~": result[.AXIS]![2] = mapAxisRev(key: key)
-            case "a3~": result[.AXIS]![3] = mapAxisRev(key: key)
-            case "a4~": result[.AXIS]![4] = mapAxisRev(key: key)
-            case "a5~": result[.AXIS]![5] = mapAxisRev(key: key)
-            case "b0":  result[.BUTTON]![1] = mapButton(key: key)
-            case "b1":  result[.BUTTON]![2] = mapButton(key: key)
-            case "b2":  result[.BUTTON]![3] = mapButton(key: key)
-            case "b3":  result[.BUTTON]![4] = mapButton(key: key)
-            case "b4":  result[.BUTTON]![5] = mapButton(key: key)
-            case "b5":  result[.BUTTON]![6] = mapButton(key: key)
-            case "b6":  result[.BUTTON]![7] = mapButton(key: key)
-            case "b7":  result[.BUTTON]![8] = mapButton(key: key)
-            case "b8":  result[.BUTTON]![9] = mapButton(key: key)
-            case "b9":  result[.BUTTON]![10] = mapButton(key: key)
-            case "b10": result[.BUTTON]![11] = mapButton(key: key)
-            case "b11": result[.BUTTON]![12] = mapButton(key: key)
-            case "b12": result[.BUTTON]![13] = mapButton(key: key)
-            case "b13": result[.BUTTON]![14] = mapButton(key: key)
-            case "b14": result[.BUTTON]![15] = mapButton(key: key)
-            case "b15": result[.BUTTON]![16] = mapButton(key: key)
-            case "b16": result[.BUTTON]![17] = mapButton(key: key)
+            case "a0":  result[.AXIS]![0] = mapAxis(key: pair[0])
+            case "a1":  result[.AXIS]![1] = mapAxis(key: pair[0])
+            case "a2":  result[.AXIS]![2] = mapAxis(key: pair[0])
+            case "a3":  result[.AXIS]![3] = mapAxis(key: pair[0])
+            case "a4":  result[.AXIS]![4] = mapAxis(key: pair[0])
+            case "a5":  result[.AXIS]![5] = mapAxis(key: pair[0])
+            case "a0~": result[.AXIS]![0] = mapAxisRev(key: pair[0])
+            case "a1~": result[.AXIS]![1] = mapAxisRev(key: pair[0])
+            case "a2~": result[.AXIS]![2] = mapAxisRev(key: pair[0])
+            case "a3~": result[.AXIS]![3] = mapAxisRev(key: pair[0])
+            case "a4~": result[.AXIS]![4] = mapAxisRev(key: pair[0])
+            case "a5~": result[.AXIS]![5] = mapAxisRev(key: pair[0])
+            case "b0":  result[.BUTTON]![1] = mapButton(key: pair[0])
+            case "b1":  result[.BUTTON]![2] = mapButton(key: pair[0])
+            case "b2":  result[.BUTTON]![3] = mapButton(key: pair[0])
+            case "b3":  result[.BUTTON]![4] = mapButton(key: pair[0])
+            case "b4":  result[.BUTTON]![5] = mapButton(key: pair[0])
+            case "b5":  result[.BUTTON]![6] = mapButton(key: pair[0])
+            case "b6":  result[.BUTTON]![7] = mapButton(key: pair[0])
+            case "b7":  result[.BUTTON]![8] = mapButton(key: pair[0])
+            case "b8":  result[.BUTTON]![9] = mapButton(key: pair[0])
+            case "b9":  result[.BUTTON]![10] = mapButton(key: pair[0])
+            case "b10": result[.BUTTON]![11] = mapButton(key: pair[0])
+            case "b11": result[.BUTTON]![12] = mapButton(key: pair[0])
+            case "b12": result[.BUTTON]![13] = mapButton(key: pair[0])
+            case "b13": result[.BUTTON]![14] = mapButton(key: pair[0])
+            case "b14": result[.BUTTON]![15] = mapButton(key: pair[0])
+            case "b15": result[.BUTTON]![16] = mapButton(key: pair[0])
+            case "b16": result[.BUTTON]![17] = mapButton(key: pair[0])
 
             default:
                 break
@@ -256,9 +208,10 @@ class DeviceDatabase {
 
         switch (key) {
 
-        case "leftx", "rightx": return [-1: [.PULL_LEFT], 0: [.RELEASE_X], 1: [.PULL_RIGHT]]
-        case "lefty", "righty": return [-1: [.PULL_UP], 0: [.RELEASE_Y], 1: [.PULL_DOWN]]
-
+        case "leftx", "rightx":
+            return [-1: [.PULL_LEFT], 0: [.RELEASE_X], 1: [.PULL_RIGHT]]
+        case "lefty", "righty":
+            return [-1: [.PULL_UP], 0: [.RELEASE_Y], 1: [.PULL_DOWN]]
         default:
             return [:]
         }
@@ -268,9 +221,10 @@ class DeviceDatabase {
 
         switch (key) {
 
-        case "leftx", "rightx": return [-1: [.PULL_RIGHT], 0: [.RELEASE_X], 1: [.PULL_LEFT]]
-        case "lefty", "righty": return [-1: [.PULL_DOWN], 0: [.RELEASE_Y], 1: [.PULL_UP]]
-
+        case "leftx", "rightx":
+            return [-1: [.PULL_RIGHT], 0: [.RELEASE_X], 1: [.PULL_LEFT]]
+        case "lefty", "righty":
+            return [-1: [.PULL_DOWN], 0: [.RELEASE_Y], 1: [.PULL_UP]]
         default:
             return [:]
         }
@@ -280,12 +234,16 @@ class DeviceDatabase {
 
         switch (key) {
 
-        case "a", "b", "leftshoulder", "rightshoulder": return [0: [.RELEASE_FIRE], 1: [.PRESS_FIRE]]
-        case "dpdown": return [0: [.RELEASE_Y], 1: [.PULL_DOWN]]
-        case "dpup": return [0: [.RELEASE_Y], 1: [.PULL_UP]]
-        case "dpleft": return [0: [.RELEASE_X], 1: [.PULL_LEFT]]
-        case "dpright": return [0: [.RELEASE_X], 1: [.PULL_RIGHT]]
-
+        case "a", "b", "leftshoulder", "rightshoulder":
+            return [0: [.RELEASE_FIRE], 1: [.PRESS_FIRE]]
+        case "dpdown":
+            return [0: [.RELEASE_Y], 1: [.PULL_DOWN]]
+        case "dpup":
+            return [0: [.RELEASE_Y], 1: [.PULL_UP]]
+        case "dpleft":
+            return [0: [.RELEASE_X], 1: [.PULL_LEFT]]
+        case "dpright":
+            return [0: [.RELEASE_X], 1: [.PULL_RIGHT]]
         default:
             return [:]
         }
