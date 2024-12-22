@@ -41,7 +41,7 @@ typealias HIDMapping = [ HIDEvent: [ Int: [ Int: [GamePadAction] ] ] ]
 class DeviceDatabase {
 
     // Known devices
-    var known: [GUID: String] = [:]
+    private var devices: [GUID: String] = [:]
 
     //
     // Initializing
@@ -49,27 +49,22 @@ class DeviceDatabase {
 
     init() {
 
-        known = [:]
+        devices = [:]
 
-        // Load database
+        // Load database from the user defaults storage
         if let encoded = UserDefaults.standard.data(forKey: Keys.Dev.schemes),
            let decoded = try? JSONDecoder().decode([GUID: String].self, from: encoded) {
-
-            print("Loading database from user defaults")
-            known = decoded
-            print("\(known)")
+            devices = decoded
         }
-        if known.isEmpty {
 
-            print("Loading database from file")
-            reset()
-        }
+        // If the database still empty, register all known devices
+        if devices.isEmpty { reset() }
     }
 
     func reset() {
 
         // Start from scratch
-        known = [:]
+        devices = [:]
 
         // Register all known devices
         parse(file: "gamecontrollerdb", withExtension: "txt")
@@ -79,7 +74,7 @@ class DeviceDatabase {
     // Creating the database
     //
 
-    func parse(file: String, withExtension ext: String) {
+    private func parse(file: String, withExtension ext: String) {
 
         if let url = Bundle.main.url(forResource: file, withExtension: ext) {
 
@@ -94,7 +89,7 @@ class DeviceDatabase {
         }
     }
 
-    func parse(line: String) {
+    private func parse(line: String) {
 
         // Eliminate newline characters (if any)
         var descriptor = line.replacingOccurrences(of: "\n", with: "")
@@ -103,7 +98,7 @@ class DeviceDatabase {
         descriptor = descriptor.trimmingCharacters(in: CharacterSet(charactersIn: ","))
 
         // Extract the GUID and create a mapping
-        if let guid = GUID(string: descriptor) { known[guid] = descriptor }
+        if let guid = GUID(string: descriptor) { devices[guid] = descriptor }
     }
 
     func update(line: String) {
@@ -120,12 +115,18 @@ class DeviceDatabase {
         return seek(guid: guid, exact: exact) != nil
     }
 
+    func seek(guid: GUID, withDelimiter del: String) -> String {
+
+        let result = seek(guid: guid).trimmingCharacters(in: CharacterSet(charactersIn: ","))
+        return result.replacingOccurrences(of: ",", with: del)
+    }
+
     func seek(guid: GUID) -> String {
 
         // Search for a perfect match
         if let result = seek(guid: guid, exact: true) { return result }
 
-        // Ignore the version number
+        // Search again, ignoring the version number
         if let result = seek(guid: guid, exact: false) { return result }
 
         // Return a fallback descriptor
@@ -134,10 +135,15 @@ class DeviceDatabase {
 
     private func seek(guid: GUID, exact: Bool) -> String? {
 
-        for (otherguid, result) in known {
+        for (otherguid, result) in devices {
 
+            // Compare the vendor ID
             if !guid.match(guid: otherguid, offset: 8, length: 4) { continue }
+
+            // Compare the product ID
             if !guid.match(guid: otherguid, offset: 16, length: 4) { continue }
+
+            // Compare the version if an exact match is requested
             if exact && !guid.match(guid: otherguid, offset: 24, length: 4) { continue }
 
             return result;
@@ -161,12 +167,29 @@ class DeviceDatabase {
 
             .AXIS: [:],
             .BUTTON: [:],
-            .DPAD_UP: [0:[0:[.PULL_UP], 1:[.RELEASE_Y]]],
-            .DPAD_DOWN: [0:[0:[.PULL_DOWN], 1:[.RELEASE_Y]]],
-            .DPAD_RIGHT: [0:[0:[.PULL_RIGHT], 1:[.RELEASE_X]]],
-            .DPAD_LEFT: [0:[0:[.PULL_LEFT], 1:[.RELEASE_X]]],
-            .HATSWITCH: [:]
+            .DPAD_UP: [0:[:]],
+            .DPAD_DOWN: [0:[:]],
+            .DPAD_RIGHT: [0:[:]],
+            .DPAD_LEFT: [0:[:]],
+            .HATSWITCH: [0:[:]]
         ]
+
+        // Add default values for the directional pad
+        result[.DPAD_UP]![0] = [0:[.PULL_UP], 1:[.RELEASE_Y]]
+        result[.DPAD_DOWN]![0] = [0:[.PULL_DOWN], 1:[.RELEASE_Y]]
+        result[.DPAD_RIGHT]![0] = [0:[.PULL_RIGHT], 1:[.RELEASE_X]]
+        result[.DPAD_LEFT]![0] = [0:[.PULL_LEFT], 1:[.RELEASE_X]]
+
+        // Add default values for the hat switch
+        result[.HATSWITCH]![0]![0] = [.RELEASE_XY]
+        result[.HATSWITCH]![0]![1] = [.PULL_UP]
+        result[.HATSWITCH]![0]![3] = [.PULL_UP,.PULL_RIGHT]
+        result[.HATSWITCH]![0]![2] = [.PULL_RIGHT]
+        result[.HATSWITCH]![0]![6] = [.PULL_DOWN,.PULL_RIGHT]
+        result[.HATSWITCH]![0]![4] = [.PULL_DOWN]
+        result[.HATSWITCH]![0]![12] = [.PULL_DOWN,.PULL_LEFT]
+        result[.HATSWITCH]![0]![8] = [.PULL_LEFT]
+        result[.HATSWITCH]![0]![9] = [.PULL_UP,.PULL_LEFT]
 
         // Iterate through all key value pairs
         for assignment in descriptor.split(separator: ",") {
@@ -267,7 +290,7 @@ class DeviceDatabase {
 
         debug(.hid)
 
-        if let encoded = try? JSONEncoder().encode(known) {
+        if let encoded = try? JSONEncoder().encode(devices) {
             UserDefaults.standard.set(encoded, forKey: Keys.Dev.schemes)
         }
     }

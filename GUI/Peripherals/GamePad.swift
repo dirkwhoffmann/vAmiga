@@ -265,6 +265,28 @@ class GamePad {
         return nil // Dead zone
     }
 
+    func mapHatSwitch(value: IOHIDValue, element: IOHIDElement) -> Int? {
+
+
+        let min = IOHIDElementGetLogicalMin(element)
+        let max = IOHIDElementGetLogicalMax(element)
+        let val = IOHIDValueGetIntegerValue(value)
+
+        // print("min = \(min) max = \(max) val = \(val)")
+
+        switch (val - min) {
+        case 0: return 1
+        case 1: return 1 | 2
+        case 2: return 2
+        case 3: return 2 | 4
+        case 4: return 4
+        case 5: return 4 | 8
+        case 6: return 8
+        case 7: return 8 | 1
+        default: return 0
+        }
+    }
+
     func hidInputValueAction(context: UnsafeMutableRawPointer?,
                              result: IOReturn,
                              sender: UnsafeMutableRawPointer?,
@@ -318,6 +340,11 @@ class GamePad {
                     hidEvent = (.AXIS, 5, value)
                 }
 
+            case kHIDUsage_GD_Hatswitch:
+                if let value = mapHatSwitch(value: value, element: element) {
+                    hidEvent = (.HATSWITCH, 0, value)
+                }
+
             case kHIDUsage_GD_DPadUp:
                 hidEvent = (.DPAD_UP, 0, intValue == 0 ? 0 : 1)
 
@@ -329,9 +356,6 @@ class GamePad {
 
             case kHIDUsage_GD_DPadLeft:
                 hidEvent = (.DPAD_LEFT, 0, intValue == 0 ? 0 : 1)
-
-            case kHIDUsage_GD_Hatswitch:
-                hidEvent = (.HATSWITCH, 0, intValue)
 
             default:
                 debug(.hid, "Unknown HID usage: \(usage)")

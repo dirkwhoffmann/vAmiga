@@ -9,8 +9,6 @@
 
 extension PreferencesController {
 
-    var db: DeviceDatabase { return myAppDelegate.database }
-
     var pad: GamePad? {
         if devSelector.indexOfSelectedItem == 0 {
             return parent.gamePadManager.gamePads[3]
@@ -19,14 +17,23 @@ extension PreferencesController {
         }
     }
 
+    func property(_ key: String) -> String {
+        return pad?.property(key: key) ?? "-"
+    }
+
+    var usageDescription: String {
+        return pad?.device?.usageDescription ?? property(kIOHIDPrimaryUsageKey)
+    }
+
+    var db: DeviceDatabase { return myAppDelegate.database }
     var guid: GUID {return pad?.guid ?? GUID() }
-    func property(_ key: String) -> String { return pad?.property(key: key) ?? "-" }
 
     func refreshDevicesTab() {
 
         // Let us notify when the device is pulled
         pad?.notify = true
 
+        // Device properties
         devManufacturer.stringValue = property(kIOHIDManufacturerKey)
         devProduct.stringValue = property(kIOHIDProductKey)
         devVersion.stringValue = property(kIOHIDVersionNumberKey)
@@ -36,21 +43,13 @@ extension PreferencesController {
         devUsagePage.stringValue = property(kIOHIDPrimaryUsagePageKey)
         devLocationID.stringValue = property(kIOHIDLocationIDKey)
         devUniqueID.stringValue = property(kIOHIDUniqueIDKey)
+        devUsage.stringValue = usageDescription
 
-        if let usageDescription = pad?.device?.usageDescription {
-            devUsage.stringValue = usageDescription
-        } else {
-            devUsage.stringValue = property(kIOHIDPrimaryUsageKey)
-        }
-
-        // HID mapping
+        // Controller mapping
         devHidMapping.focusRingType = .none
-        if let descriptor = pad?.db.seek(guid: guid) {
+        devHidMapping.string = pad?.db.seek(guid: guid, withDelimiter: ",\n") ?? ""
 
-            let trimmed = descriptor.trimmingCharacters(in: CharacterSet(charactersIn: ","))
-            devHidMapping.string = trimmed.replacingOccurrences(of: ",", with: ",\n")
-        }
-
+        // Information messages
         if pad?.isKnown == true {
             devInfoBoxTitle.stringValue = ""
             devInfoBoxTitle.textColor = .secondaryLabelColor
@@ -61,7 +60,8 @@ extension PreferencesController {
             devInfoBoxTitle.stringValue = "Not connected"
             devInfoBoxTitle.textColor = .secondaryLabelColor
         }
-        
+
+        // Hide some controls
         let hide = pad == nil || pad?.isMouse == true
         devImage.isHidden = hide
         devHidMappingScrollView.isHidden = hide
@@ -147,8 +147,6 @@ extension PreferencesController : NSTextViewDelegate {
 
         if let textView = notification.object as? NSTextView {
 
-            print("Text changed: \(textView.string)")
-
             // Add the update device description to the 'custom' database
             db.update(line: textView.string)
 
@@ -156,5 +154,4 @@ extension PreferencesController : NSTextViewDelegate {
             gamePadManager.updateHidMapping()
         }
     }
-
 }

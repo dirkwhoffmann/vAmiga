@@ -39,7 +39,6 @@ struct GUID: Hashable, Codable {
 
         guid = "00000000" + _vendor + "0000" + _product + "0000" + _version + "0000000000"
 
-        print("self.vendorID = \(self.vendorID) vendorID = \(vendorID)")
         assert(self.vendorID == vendorID)
         assert(self.productID == productID)
         assert(self.version == version)
