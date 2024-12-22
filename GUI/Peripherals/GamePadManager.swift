@@ -15,6 +15,8 @@ struct InputDevice {
     static let keyset2 = 2
     static let joystick1 = 3
     static let joystick2 = 4
+    static let joystick3 = 5
+    static let joystick4 = 6
 }
 
 /* An object of this class holds and manages an array of GamePad objects.
@@ -139,9 +141,9 @@ class GamePadManager {
         var nr = 0
         while !isEmpty(slot: nr) { nr += 1 }
 
-        // We support up to 5 devices
-        if nr < 5 { return nr }
-        
+        // We support up to 7 devices
+        if nr < 7 { return nr }
+
         warn("Maximum number of devices reached")
         return nil
     }
@@ -247,9 +249,7 @@ class GamePadManager {
 
     func updateHidMapping() {
 
-        // Only GamePads 3 and 4 are HID devices
-        gamePads[3]?.updateMapping()
-        gamePads[4]?.updateMapping()
+        for (_, pad) in gamePads { pad.updateMapping() }
     }
 
     func listDevices() {
@@ -269,7 +269,9 @@ class GamePadManager {
             InputDevice.keyset1,
             InputDevice.keyset2,
             InputDevice.joystick1,
-            InputDevice.joystick2
+            InputDevice.joystick2,
+            InputDevice.joystick3,
+            InputDevice.joystick4
         ]
                 
         for s in slots {

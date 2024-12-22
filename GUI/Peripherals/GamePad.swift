@@ -268,10 +268,10 @@ class GamePad {
     func mapHatSwitch(value: IOHIDValue, element: IOHIDElement) -> Int? {
 
 
-        let min = IOHIDElementGetLogicalMin(element)
-        let max = IOHIDElementGetLogicalMax(element)
         let val = IOHIDValueGetIntegerValue(value)
+        let min = IOHIDElementGetLogicalMin(element)
 
+        // let max = IOHIDElementGetLogicalMax(element)
         // print("min = \(min) max = \(max) val = \(val)")
 
         switch (val - min) {

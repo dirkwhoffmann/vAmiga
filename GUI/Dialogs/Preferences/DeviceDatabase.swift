@@ -175,10 +175,10 @@ class DeviceDatabase {
         ]
 
         // Add default values for the directional pad
-        result[.DPAD_UP]![0] = [0:[.PULL_UP], 1:[.RELEASE_Y]]
-        result[.DPAD_DOWN]![0] = [0:[.PULL_DOWN], 1:[.RELEASE_Y]]
-        result[.DPAD_RIGHT]![0] = [0:[.PULL_RIGHT], 1:[.RELEASE_X]]
-        result[.DPAD_LEFT]![0] = [0:[.PULL_LEFT], 1:[.RELEASE_X]]
+        result[.DPAD_UP]![0] = [0:[.RELEASE_Y], 1:[.PULL_UP]]
+        result[.DPAD_DOWN]![0] = [0:[.RELEASE_Y], 1:[.PULL_DOWN]]
+        result[.DPAD_RIGHT]![0] = [0:[.RELEASE_X,], 1:[.PULL_RIGHT]]
+        result[.DPAD_LEFT]![0] = [0:[.RELEASE_X,], 1:[.PULL_LEFT]]
 
         // Add default values for the hat switch
         result[.HATSWITCH]![0]![0] = [.RELEASE_XY]

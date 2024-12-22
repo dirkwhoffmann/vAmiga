@@ -9,13 +9,9 @@
 
 extension PreferencesController {
 
-    var pad: GamePad? {
-        if devSelector.indexOfSelectedItem == 0 {
-            return parent.gamePadManager.gamePads[3]
-        } else {
-            return parent.gamePadManager.gamePads[4]
-        }
-    }
+    var pad: GamePad? { return gamePadManager.gamePads[devSelector.selectedTag()] }
+    var db: DeviceDatabase { return myAppDelegate.database }
+    var guid: GUID {return pad?.guid ?? GUID() }
 
     func property(_ key: String) -> String {
         return pad?.property(key: key) ?? "-"
@@ -24,9 +20,6 @@ extension PreferencesController {
     var usageDescription: String {
         return pad?.device?.usageDescription ?? property(kIOHIDPrimaryUsageKey)
     }
-
-    var db: DeviceDatabase { return myAppDelegate.database }
-    var guid: GUID {return pad?.guid ?? GUID() }
 
     func refreshDevicesTab() {
 
@@ -82,6 +75,7 @@ extension PreferencesController {
         case .DPAD_DOWN: text = "DPad = Down"
         case .DPAD_RIGHT: text = "DPad = Right"
         case .DPAD_LEFT: text = "DPad = Left"
+        case .HATSWITCH: text = "h\(nr).\(value)"
         default: text = ""
         }
 

@@ -1109,13 +1109,15 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         </box>
                                         <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V9X-FA-6vA">
-                                            <rect key="frame" x="179" y="391" width="239" height="24"/>
+                                            <rect key="frame" x="168" y="391" width="266" height="24"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="W3f-XA-JgR">
                                                 <font key="font" metaFont="system"/>
                                                 <segments>
-                                                    <segment label="External Device 1" selected="YES"/>
-                                                    <segment label="External Device 2" tag="1"/>
+                                                    <segment label="Device 1" selected="YES" tag="3"/>
+                                                    <segment label="Device 2" tag="4"/>
+                                                    <segment label="Device 3" tag="5"/>
+                                                    <segment label="Device 4" tag="6"/>
                                                 </segments>
                                             </segmentedCell>
                                             <connections>

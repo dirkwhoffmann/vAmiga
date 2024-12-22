@@ -203,7 +203,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="646" height="496"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="3440" height="1415"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1496" height="933"/>
             <value key="minSize" type="size" width="646" height="486"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="646" height="496"/>
@@ -1597,10 +1597,16 @@ DQ
                                                         <menuItem title="Joystick Keyset 2" image="devKeys2Template" tag="2" id="q1n-uy-S88">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="USB Device" image="devGamepad1Template" tag="3" id="SSd-tY-Yc0">
+                                                        <menuItem title="USB Device 1" image="devGamepad1Template" tag="3" id="SSd-tY-Yc0">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="USB Device" image="devGamepad2Template" tag="4" id="Q9K-Fv-psl">
+                                                        <menuItem title="USB Device 2" image="devGamepad2Template" tag="4" id="Q9K-Fv-psl">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="USB Device 3" image="devGamepad2Template" tag="5" id="0zC-tM-HuV">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="USB Device 4" image="devGamepad2Template" tag="6" id="1Qp-nL-BKt">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -1652,6 +1658,12 @@ DQ
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                         <menuItem title="USB Device 2" image="devGamepad2Template" tag="4" id="lqy-6f-2Mr">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="USB Device 3" image="devGamepad2Template" tag="5" id="WYc-s8-eLC">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="USB Device 4" image="devGamepad2Template" tag="6" id="6I5-Pz-Tr4">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
