@@ -1081,6 +1081,16 @@ using namespace vamiga::moira;
     return (VideoPortAPI *)obj;
 }
 
+- (void)lockTexture
+{
+    [self port]->lockTexture();
+}
+
+- (void)unlockTexture
+{
+    [self port]->unlockTexture();
+}
+
 - (void)texture:(const u32 **)ptr nr:(NSInteger *)nr lof:(bool *)lof prevlof:(bool *)prevlof
 {
     isize inr;

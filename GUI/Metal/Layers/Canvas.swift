@@ -237,6 +237,11 @@ class Canvas: Layer {
         // Get the emulator texture
         var buffer: UnsafePointer<u32>!
         var nr = 0
+
+        // Prevent the stable texture from changing
+        amiga.videoPort.lockTexture()
+
+        // Grab the stable texture
         amiga.videoPort.texture(&buffer, nr: &nr, lof: &currLOF, prevlof: &prevLOF)
 
         // Check for duplicated or dropped frames
@@ -255,6 +260,9 @@ class Canvas: Layer {
         } else {
             sfTexture.replace(w: Int(TPP) * HPIXELS, h: VPIXELS, buffer: buffer)
         }
+
+        // Release the texture lock
+        amiga.videoPort.unlockTexture()
     }
 
     //

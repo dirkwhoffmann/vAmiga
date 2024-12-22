@@ -999,6 +999,20 @@ struct VideoPortAPI : public API {
     /// @name Retrieving video data
     /// @{
 
+    /** @brief  Locks the emulator texture
+     *
+     * This function aquires a mutex that prevents the emulator to modify the
+     * stable texture. Call this function prior to getTexture().
+     */
+    void lockTexture();
+
+    /** @brief  Unlocks the emulator texture
+     *
+     * This function releases the mutex acquired in lockTexture(). Call this
+     * function when the pointer returned by getTexture() is no longer needed.
+     */
+    void unlockTexture();
+
     /** @brief  Returns a pointer to the most recent stable texture
      *
      * The texture dimensions are given by constants vamiga::Texture::width

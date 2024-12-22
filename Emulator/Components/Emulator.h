@@ -40,6 +40,9 @@ public:
     // Incoming external events
     CmdQueue cmdQueue;
 
+    // Texture lock
+    util::Mutex textureLock;
+
 
     //
     // Methods
@@ -157,7 +160,8 @@ public:
     //
 
     const FrameBuffer &getTexture() const;
-    
+    void lockTexture() { textureLock.lock(); }
+    void unlockTexture() { textureLock.unlock(); }
 
     //
     // Command queue

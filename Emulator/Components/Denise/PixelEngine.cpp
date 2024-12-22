@@ -13,6 +13,7 @@
 #include "Colors.h"
 #include "Denise.h"
 #include "DmaDebugger.h"
+#include "Emulator.h"
 
 #include <fstream>
 
@@ -309,6 +310,8 @@ PixelEngine::stablePtr(isize row, isize col)
 void
 PixelEngine::swapBuffers()
 {
+    emulator.textureLock.lock();
+
     videoPort.buffersWillSwap();
 
     isize oldActiveBuffer = activeBuffer;
@@ -319,6 +322,8 @@ PixelEngine::swapBuffers()
     emuTexture[newActiveBuffer].prevlof = emuTexture[oldActiveBuffer].lof;
 
     activeBuffer = newActiveBuffer;
+
+    emulator.textureLock.unlock();
 }
 
 void

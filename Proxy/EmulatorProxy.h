@@ -594,6 +594,8 @@
 
 @interface VideoPortProxy : CoreComponentProxy { }
 
+- (void)lockTexture;
+- (void)unlockTexture;
 - (void)texture:(const u32 **)ptr nr:(NSInteger *)nr lof:(bool *)lof prevlof:(bool *)prevlof;
 
 @end

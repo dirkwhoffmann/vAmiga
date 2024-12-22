@@ -811,6 +811,18 @@ SerialPortAPI::readOutgoingPrintableByte() const
 // Ports (VideoPort)
 //
 
+void
+VideoPortAPI::lockTexture()
+{
+    emu->lockTexture();
+}
+
+void
+VideoPortAPI::unlockTexture()
+{
+    emu->unlockTexture();
+}
+
 const u32 *
 VideoPortAPI::getTexture() const
 {
