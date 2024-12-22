@@ -279,6 +279,7 @@ class Monitor: DialogController {
     @IBAction func monEnableAction(_ sender: NSButton!) {
     
         if sender.state == .on {
+            parent.renderer.monitors.updateColors()
             parent.renderer.monitors.open(delay: 1.0)
         } else {
             parent.renderer.monitors.close(delay: 1.0)
