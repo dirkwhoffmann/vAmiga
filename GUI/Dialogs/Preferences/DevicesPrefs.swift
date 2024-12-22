@@ -127,21 +127,6 @@ extension PreferencesController {
         refresh()
     }
 
-    /*
-    @IBAction func devMappingAction(_ sender: NSTextView!) {
-
-        print("\(sender.string)")
-
-        // Add the update device description to the 'custom' database
-        db.update(line: sender.string)
-
-        // Make the change effective
-        gamePadManager.updateHidMapping()
-
-        refresh()
-    }
-    */
-
     @IBAction func devPresetAction(_ sender: NSPopUpButton!) {
         
         assert(sender.selectedTag() == 0)

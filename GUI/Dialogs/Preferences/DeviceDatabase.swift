@@ -43,23 +43,33 @@ class DeviceDatabase {
     // Known devices
     var known: [GUID: String] = [:]
 
-    // Devices configured by the user
-    // var custom: [String: String] = [:]
-
     //
     // Initializing
     //
 
     init() {
 
-        reset()
+        known = [:]
+
+        // Load database
+        if let encoded = UserDefaults.standard.data(forKey: Keys.Dev.schemes),
+           let decoded = try? JSONDecoder().decode([GUID: String].self, from: encoded) {
+
+            print("Loading database from user defaults")
+            known = decoded
+            print("\(known)")
+        }
+        if known.isEmpty {
+
+            print("Loading database from file")
+            reset()
+        }
     }
 
     func reset() {
 
         // Start from scratch
         known = [:]
-        // custom = [:]
 
         // Register all known devices
         parse(file: "gamecontrollerdb", withExtension: "txt")
@@ -246,6 +256,19 @@ class DeviceDatabase {
             return [0: [.RELEASE_X], 1: [.PULL_RIGHT]]
         default:
             return [:]
+        }
+    }
+
+    //
+    // Misc
+    //
+
+    func save() {
+
+        debug(.hid)
+
+        if let encoded = try? JSONEncoder().encode(known) {
+            UserDefaults.standard.set(encoded, forKey: Keys.Dev.schemes)
         }
     }
 }

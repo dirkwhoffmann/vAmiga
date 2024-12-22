@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-struct GUID: Hashable {
+struct GUID: Hashable, Codable {
 
     var guid = String(repeating: "0", count: 32)
 
