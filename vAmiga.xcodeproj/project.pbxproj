@@ -107,6 +107,8 @@
 		50627FD3286EBA7300F2A835 /* FrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50627FD1286EBA7300F2A835 /* FrameBuffer.cpp */; };
 		50627FD5286EBACA00F2A835 /* FrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50627FD1286EBA7300F2A835 /* FrameBuffer.cpp */; };
 		5062DB1224370FE400ACEEE2 /* MyControllerSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */; };
+		5064051B2D19CA0D002FBC57 /* PromServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064051A2D19CA0C002FBC57 /* PromServer.cpp */; };
+		5064051C2D19CA0D002FBC57 /* PromServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064051A2D19CA0C002FBC57 /* PromServer.cpp */; };
 		506436E529C1D92D00768528 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 506436E429C1D92D00768528 /* CMakeLists.txt */; };
 		5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
 		50672CC02946100F004113F5 /* DebugConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50672CBF2946100F004113F5 /* DebugConsole.cpp */; };
@@ -643,6 +645,9 @@
 		50627FD2286EBA7300F2A835 /* FrameBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameBuffer.h; sourceTree = "<group>"; };
 		50627FD4286EBAC000F2A835 /* FrameBufferTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameBufferTypes.h; sourceTree = "<group>"; };
 		5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerSnapshots.swift; sourceTree = "<group>"; };
+		506405192D19CA05002FBC57 /* PromServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PromServer.h; sourceTree = "<group>"; };
+		5064051A2D19CA0C002FBC57 /* PromServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PromServer.cpp; sourceTree = "<group>"; };
+		506407C82D19D0A7002FBC57 /* httplib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = httplib.h; sourceTree = "<group>"; };
 		506436E229C1D84D00768528 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		506436E429C1D92D00768528 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		5064850F21EC7A1700FC4AC3 /* Memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Memory.cpp; sourceTree = "<group>"; };
@@ -1303,6 +1308,7 @@
 		506436E129C1D82500768528 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				506407C82D19D0A7002FBC57 /* httplib.h */,
 				506436E229C1D84D00768528 /* CMakeLists.txt */,
 				50F54B0B24B5D31D0078FDC9 /* xdms */,
 			);
@@ -1921,6 +1927,8 @@
 				50BF1CC7276D174200386540 /* GdbServer.h */,
 				50BF1CC6276D174200386540 /* GdbServer.cpp */,
 				50BF1CCD276DC7BB00386540 /* GdbServerCmds.cpp */,
+				506405192D19CA05002FBC57 /* PromServer.h */,
+				5064051A2D19CA0C002FBC57 /* PromServer.cpp */,
 				50E98B50275A124900AA0CB9 /* Socket.h */,
 				50E98B4F275A124900AA0CB9 /* Socket.cpp */,
 			);
@@ -2321,6 +2329,7 @@
 				50AEBED324D3D6D10037082D /* StateMachineEvents.cpp in Sources */,
 				508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */,
 				50F31C292409322F008A54D8 /* CopperPanel.swift in Sources */,
+				5064051C2D19CA0D002FBC57 /* PromServer.cpp in Sources */,
 				50B14C0D21EB3708002E32A6 /* CoreComponent.cpp in Sources */,
 				50894D822593CF4400C0499D /* HIDExtensions.swift in Sources */,
 				5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */,
@@ -2642,6 +2651,7 @@
 				50FC047C27DA12AB00C3E566 /* Checksum.cpp in Sources */,
 				50FC04B127DA199C00C3E566 /* RTC.cpp in Sources */,
 				50FC048227DA190400C3E566 /* MsgQueue.cpp in Sources */,
+				5064051B2D19CA0D002FBC57 /* PromServer.cpp in Sources */,
 				505A13222C2FE27B00FF8D2C /* VideoPort.cpp in Sources */,
 				50FC04F027DA1A4500C3E566 /* RemoteServer.cpp in Sources */,
 				50FC04D427DA19F600C3E566 /* FSBlock.cpp in Sources */,
@@ -2887,6 +2897,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2935,6 +2946,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

@@ -107,6 +107,9 @@ RemoteManager::serviceServerEvent()
     if (gdbServer.config.autoRun) {
         gdbServer.shouldRun() ? gdbServer._start() : gdbServer._stop();
     }
+    if (true) { // gdbServer.config.autoRun) {
+        promServer.shouldRun() ? promServer.start() : promServer.stop();
+    }
 
     // Schedule next event
     agnus.scheduleInc <SLOT_SRV> (SEC(0.5), SRV_LAUNCH_DAEMON);

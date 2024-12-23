@@ -8,6 +8,7 @@ SerServer.cpp
 RshServer.cpp
 GdbServer.cpp
 GdbServerCmds.cpp
+PromServer.cpp
 Socket.cpp
 
 )

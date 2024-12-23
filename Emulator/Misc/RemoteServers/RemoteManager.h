@@ -14,6 +14,7 @@
 #include "SerServer.h"
 #include "RshServer.h"
 #include "GdbServer.h"
+#include "PromServer.h"
 
 namespace vamiga {
 
@@ -36,6 +37,7 @@ public:
     SerServer serServer = SerServer(amiga, SERVER_SER);
     RshServer rshServer = RshServer(amiga, SERVER_RSH);
     GdbServer gdbServer = GdbServer(amiga, SERVER_GDB);
+    PromServer promServer = PromServer(amiga);
     
     // Convenience wrapper
     std::vector <RemoteServer *> servers = {

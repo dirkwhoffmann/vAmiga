@@ -163,7 +163,7 @@ public:
 
 protected:
 
-    // Called from disconnect(), start() and stop()
+    // Called from start(), stop(), and disconnect(), respectively
     void _start() throws;
     void _stop() throws;
     void _disconnect() throws;
