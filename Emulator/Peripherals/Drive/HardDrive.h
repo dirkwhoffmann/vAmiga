@@ -290,8 +290,6 @@ public:
     void cacheInfo(HardDriveInfo &info) const override;
 
     // Returns information about a specific partition
-    // void getPartitionInfo(isize nr) const;
-
     const PartitionDescriptor &getPartitionDescriptor(isize nr) const;
 
     // Returns the disk geometry
