@@ -36,12 +36,12 @@ public:
     // The remote servers
     SerServer serServer = SerServer(amiga, SERVER_SER);
     RshServer rshServer = RshServer(amiga, SERVER_RSH);
+    PromServer promServer = PromServer(amiga, SERVER_PROM);
     GdbServer gdbServer = GdbServer(amiga, SERVER_GDB);
-    PromServer promServer = PromServer(amiga);
-    
-    // Convenience wrapper
+
+    // Convenience access
     std::vector <RemoteServer *> servers = {
-        &serServer, &rshServer, &gdbServer
+        &serServer, &rshServer, &gdbServer, &promServer
     };
 
     

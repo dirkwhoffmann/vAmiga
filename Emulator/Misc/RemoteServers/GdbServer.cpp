@@ -131,8 +131,14 @@ GdbServer::attach(const string &name)
     this->processName = name;
     this->segList = { };
     
-    readSegList();
-    
+    if (readSegList()) {
+
+        retroShell << "Successfully attached to process '" << processName << "'\n\n";
+        retroShell << "    Data segment: " << util::hexstr <8> (dataSeg()) << "\n";
+        retroShell << "    Code segment: " << util::hexstr <8> (codeSeg()) << "\n";
+        retroShell << "     BSS segment: " << util::hexstr <8> (bssSeg()) << "\n\n";
+    }
+
     if (segList.empty()) {
 
         retroShell << "Waiting for process '" << processName << "' to launch.\n";
@@ -160,11 +166,13 @@ GdbServer::readSegList()
     // Try to find the segment list in memory
     osDebugger.read(processName, segList);
     if (segList.empty()) return false;
-    
+
+    /*
     retroShell << "Successfully attached to process '" << processName << "'\n\n";
     retroShell << "    Data segment: " << util::hexstr <8> (dataSeg()) << "\n";
     retroShell << "    Code segment: " << util::hexstr <8> (codeSeg()) << "\n";
     retroShell << "     BSS segment: " << util::hexstr <8> (bssSeg()) << "\n\n";
+    */
     return true;
 }
 

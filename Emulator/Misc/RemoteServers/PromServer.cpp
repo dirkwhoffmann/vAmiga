@@ -16,64 +16,15 @@
 namespace vamiga {
 
 void
-PromServer::start()
+PromServer::_dump(Category category, std::ostream& os) const
 {
-    if (state == SRV_STATE_OFF) {
+    using namespace util;
 
-        debug(true, "start()\n");
-
-        try {
-
-            // Start the server in a separate thread
-            serverThread = std::thread(&PromServer::startServer, this);
-
-        } catch (std::exception &err) {
-
-            debug(SRV_DEBUG, "Server thread interrupted: %s\n", err.what());
-        }
-
-        std::cout << "Started\n";
-        state = SRV_STATE_CONNECTED;
-    }
+    HttpServer::_dump(category, os);
 }
 
-void
-PromServer::startServer()
-{
-    debug(true, "startServer()\n");
-
-    // Create an HTTP server
-    httplib::Server svr;
-
-    // Define the "/metrics" endpoint where Prometheus will scrape metrics
-    svr.Get("/metrics", [this](const httplib::Request& req, httplib::Response& res) {
-
-        // Generate the metrics as a string
-        std::string metrics = generate_metrics();
-
-        // Set the response headers to indicate it's plain text
-        res.set_content(metrics, "text/plain");
-    });
-
-    // Start the server to listen on localhost, port 8080
-    std::cout << "Starting Prometheus data provider on http://localhost:8080/metrics\n";
-    svr.listen("localhost", 8080);
-}
-
-void
-PromServer::stop()
-{
-    if (state == SRV_STATE_CONNECTED) {
-
-        debug(true, "stop()");
-
-        state = SRV_STATE_OFF;
-    }
-}
-
-// Function to generate some example metrics in the Prometheus format
 string
-PromServer::generate_metrics()
+PromServer::respond(const httplib::Request& request)
 {
     auto emuStats = emulator.getStats();
 
@@ -87,6 +38,30 @@ PromServer::generate_metrics()
     "fps " + std::to_string(emuStats.fps) + "\n\n";
 
     return metrics;
+}
+
+void
+PromServer::main()
+{
+    try {
+
+        // Create the HTTP server
+        if (!srv) srv = new httplib::Server();
+
+        // Define the "/metrics" endpoint where Prometheus will scrape metrics
+        srv->Get("/metrics", [this](const httplib::Request& req, httplib::Response& res) {
+            res.set_content(respond(req), "text/plain");
+        });
+
+        // Start the server to listen on localhost
+        debug(SRV_DEBUG, "Starting Prometheus data provider\n");
+        srv->listen("localhost", (int)config.port);
+
+    } catch (std::exception &err) {
+
+        debug(SRV_DEBUG, "Server thread interrupted\n");
+        handleError(err.what());
+    }
 }
 
 }

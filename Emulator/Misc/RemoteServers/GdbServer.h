@@ -58,7 +58,7 @@ public:
 
     GdbServer& operator= (const GdbServer& other) {
 
-        RemoteServer::operator = (other);
+        SocketServer::operator = (other);
         return *this;
     }
 

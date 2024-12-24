@@ -31,6 +31,10 @@ class RemoteServer : public SubComponent {
         .description    = "Remote Shell Server",
         .shell          = "rshell"
     }, {
+        .name           = "PromServer",
+        .description    = "Prometheus Server",
+        .shell          = "prom"
+    }, {
         .name           = "GdbServer",
         .description    = "GDB Remote Server",
         .shell          = "gdb"
@@ -49,21 +53,13 @@ protected:
     // Current configuration
     ServerConfig config = {};
 
-    // Sockets
-    Socket listener;
-    Socket connection;
-
     // The server thread
     std::thread serverThread;
 
     // The current server state
     SrvState state = SRV_STATE_OFF;
     
-    // The number of sent and received packets
-    isize numSent = 0;
-    isize numReceived = 0;
 
-    
     //
     // Initializing
     //
@@ -154,16 +150,16 @@ public:
 public:
 
     // Launch the remote server
-    void start() throws;
+    virtual void start() throws;
 
     // Shuts down the remote server
-    void stop() throws;
+    virtual void stop() throws;
 
     // Disconnects the client
-    void disconnect() throws;
+    virtual void disconnect() throws = 0;
 
 protected:
-    
+
     // Switches the internal state
     void switchState(SrvState newState);
     
@@ -171,65 +167,21 @@ private:
     
     // Used by the launch daemon to determine if actions should be taken
     virtual bool shouldRun() { return true; }
-        
-    
+
+
     //
     // Running the server
     //
-    
-private:
-    
+
+protected:
+
     // The main thread function
-    void main();
-
-    // Inner loops (called from main)
-    void mainLoop() throws;
-    void sessionLoop();
-    
-    
-    //
-    // Transmitting and processing packets
-    //
-    
-public:
-    
-    // Receives or packet
-    string receive() throws;
-    
-    // Sends a packet
-    void send(const string &payload) throws;
-    void send(char payload) throws;
-    void send(int payload) throws;
-    void send(long payload) throws;
-    void send(std::stringstream &payload) throws;
-    
-    // Operator overloads
-    RemoteServer &operator<<(char payload) { send(payload); return *this; }
-    RemoteServer &operator<<(const string &payload) { send(payload); return *this; }
-    RemoteServer &operator<<(int payload) { send(payload); return *this; }
-    RemoteServer &operator<<(long payload) { send(payload); return *this; }
-    RemoteServer &operator<<(std::stringstream &payload) { send(payload); return *this; }
-
-    // Processes a package
-    void process(const string &payload) throws;
-    
-private:
+    virtual void main() throws = 0;
 
     // Reports an error to the GUI
     void handleError(const char *description);
-    
-    
-    //
-    // Subclass specific implementations
-    //
 
-private:
-    
-    virtual string doReceive() throws = 0;
-    virtual void doSend(const string &payload) throws = 0;
-    virtual void doProcess(const string &payload) throws = 0;
-    
-    
+
     //
     // Delegation methods
     //

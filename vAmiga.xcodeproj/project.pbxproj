@@ -111,6 +111,8 @@
 		5064051C2D19CA0D002FBC57 /* PromServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064051A2D19CA0C002FBC57 /* PromServer.cpp */; };
 		506407CB2D1AC45A002FBC57 /* SocketServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506407CA2D1AC455002FBC57 /* SocketServer.cpp */; };
 		506407CC2D1AC45A002FBC57 /* SocketServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506407CA2D1AC455002FBC57 /* SocketServer.cpp */; };
+		506407CF2D1AD87E002FBC57 /* HttpServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506407CE2D1AD87C002FBC57 /* HttpServer.cpp */; };
+		506407D02D1AD87E002FBC57 /* HttpServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506407CE2D1AD87C002FBC57 /* HttpServer.cpp */; };
 		506436E529C1D92D00768528 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 506436E429C1D92D00768528 /* CMakeLists.txt */; };
 		5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
 		50672CC02946100F004113F5 /* DebugConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50672CBF2946100F004113F5 /* DebugConsole.cpp */; };
@@ -652,6 +654,8 @@
 		506407C82D19D0A7002FBC57 /* httplib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = httplib.h; sourceTree = "<group>"; };
 		506407C92D1AC44D002FBC57 /* SocketServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SocketServer.h; sourceTree = "<group>"; };
 		506407CA2D1AC455002FBC57 /* SocketServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SocketServer.cpp; sourceTree = "<group>"; };
+		506407CD2D1AD86D002FBC57 /* HttpServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HttpServer.h; sourceTree = "<group>"; };
+		506407CE2D1AD87C002FBC57 /* HttpServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HttpServer.cpp; sourceTree = "<group>"; };
 		506436E229C1D84D00768528 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		506436E429C1D92D00768528 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		5064850F21EC7A1700FC4AC3 /* Memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Memory.cpp; sourceTree = "<group>"; };
@@ -1926,6 +1930,8 @@
 				50E98B53275A127F00AA0CB9 /* RemoteServer.cpp */,
 				506407C92D1AC44D002FBC57 /* SocketServer.h */,
 				506407CA2D1AC455002FBC57 /* SocketServer.cpp */,
+				506407CD2D1AD86D002FBC57 /* HttpServer.h */,
+				506407CE2D1AD87C002FBC57 /* HttpServer.cpp */,
 				505C83FC2773C9BA001F8159 /* SerServer.h */,
 				505C83FB2773C9BA001F8159 /* SerServer.cpp */,
 				50AD90592771B2770011ECCB /* RshServer.h */,
@@ -2500,6 +2506,7 @@
 				5010A78222B50B690041388B /* PortPanel.swift in Sources */,
 				509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */,
 				50F580662431D1A000E7D84D /* Screenshot.swift in Sources */,
+				506407CF2D1AD87E002FBC57 /* HttpServer.cpp in Sources */,
 				50AEBEC724D3D39D0037082D /* BlitterEvents.cpp in Sources */,
 				501C513F27C0C63A00DF1DD5 /* HardDiskConfigurator.swift in Sources */,
 				50B0AF93222531C500EE3689 /* CopperTableView.swift in Sources */,
@@ -2620,6 +2627,7 @@
 				50EFB0D12C18E01E0013B73C /* Wakeable.cpp in Sources */,
 				50FC047627DA10AD00C3E566 /* Headless.cpp in Sources */,
 				50FC049227DA196500C3E566 /* DeniseRegs.cpp in Sources */,
+				506407D02D1AD87E002FBC57 /* HttpServer.cpp in Sources */,
 				50FC04F727DA1A8F00C3E566 /* StateMachine.cpp in Sources */,
 				50FC04F527DA1A8F00C3E566 /* Sampler.cpp in Sources */,
 				50FC04AE27DA198E00C3E566 /* BlitterRegs.cpp in Sources */,

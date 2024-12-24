@@ -676,8 +676,9 @@ CommandConsole::initCommands(Command &root)
         });
         
         cmd = registerComponent(remoteManager.serServer, root / "server");
+
         cmd = registerComponent(remoteManager.rshServer, root / "server");
-        
+
         root.add({"server", cmd, "start"},
                  "Starts the retro shell server",
                  [this](Arguments& argv, long value) {
@@ -698,14 +699,30 @@ CommandConsole::initCommands(Command &root)
             
             remoteManager.rshServer.disconnect();
         });
-        
-        root.add({"server", cmd, ""},
-                 "Displays the current configuration",
+
+        cmd = registerComponent(remoteManager.promServer, root / "server");
+
+        root.add({"server", cmd, "start"},
+                 "Starts the Prometheus server",
                  [this](Arguments& argv, long value) {
-            
-            dump(remoteManager.rshServer, Category::Config);
+
+            remoteManager.promServer.start();
         });
-        
+
+        root.add({"server", cmd, "stop"},
+                 "Stops the Prometheus server",
+                 [this](Arguments& argv, long value) {
+
+            remoteManager.promServer.stop();
+        });
+
+        root.add({"server", cmd, "disconnect"},
+                 "Disconnects a client",
+                 [this](Arguments& argv, long value) {
+
+            remoteManager.promServer.disconnect();
+        });
+
         cmd = registerComponent(remoteManager.gdbServer, root / "server");
         
         root.add({"server", cmd, "attach"}, { Arg::process },
@@ -720,13 +737,6 @@ CommandConsole::initCommands(Command &root)
                  [this](Arguments& argv, long value) {
             
             remoteManager.gdbServer.detach();
-        });
-        
-        root.add({"server", cmd, ""},
-                 "Displays the current configuration",
-                 [this](Arguments& argv, long value) {
-            
-            dump(remoteManager.gdbServer, Category::Config);
         });
     }
 }

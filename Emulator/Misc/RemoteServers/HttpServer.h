@@ -9,23 +9,26 @@
 
 #pragma once
 
-#include "HttpServer.h"
+#include "RemoteServer.h"
+
+namespace httplib { class Server; class Request; }
 
 namespace vamiga {
 
-class PromServer final : public HttpServer {
+class HttpServer : public RemoteServer {
 
-public:
-
-    using HttpServer::HttpServer;
+    using RemoteServer::RemoteServer;
 
 protected:
 
-    PromServer& operator= (const PromServer& other) {
+    HttpServer& operator= (const HttpServer& other) {
 
-        HttpServer::operator = (other);
+        RemoteServer::operator = (other);
         return *this;
     }
+
+    // A simple (third-party) HTTP server
+    httplib::Server *srv = nullptr;
 
 
     //
@@ -43,15 +46,17 @@ protected:
 
 public:
 
-    void main() override;
+    virtual void disconnect() override;
 
 
     //
-    // Handling requests
+    // Running the server
     //
 
-    // Generate a response
-    string respond(const httplib::Request& request);
+private:
+
+    // The main thread function
+    // void main() override;
 };
 
 }

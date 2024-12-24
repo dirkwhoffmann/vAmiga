@@ -135,7 +135,7 @@ debugflag KEY_DEBUG       = 0;
 // Misc
 debugflag REC_DEBUG       = 0;
 debugflag SCK_DEBUG       = 0;
-debugflag SRV_DEBUG       = 0;
+debugflag SRV_DEBUG       = 1;
 debugflag GDB_DEBUG       = 0;
 
 

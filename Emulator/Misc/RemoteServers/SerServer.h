@@ -45,7 +45,7 @@ public:
 
     SerServer& operator= (const SerServer& other) {
 
-        RemoteServer::operator = (other);
+        SocketServer::operator = (other);
         return *this;
     }
 
@@ -66,6 +66,14 @@ private:
 public:
     
     bool shouldRun() override;
+
+
+    //
+    // Methods from SocketServer
+    //
+
+public:
+
     string doReceive() override;
     void doSend(const string &packet) override;
     void doProcess(const string &packet) override;

@@ -21,6 +21,7 @@ RemoteManager::RemoteManager(Amiga& ref) : SubComponent(ref)
         
         &serServer,
         &rshServer,
+        &promServer,
         &gdbServer
     };
 }

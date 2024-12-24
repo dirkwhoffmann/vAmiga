@@ -1,8 +1,202 @@
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
 //
-//  SocketServer.cpp
-//  vAmiga
+// Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
+// Licensed under the Mozilla Public License v2
 //
-//  Created by Dirk Hoffmann on 24.12.24.
-//  Copyright © 2024 Dirk Hoffmann. All rights reserved.
-//
+// See https://mozilla.org/MPL/2.0 for license information
+// -----------------------------------------------------------------------------
 
+#include "config.h"
+#include "RemoteServer.h"
+#include "Emulator.h"
+#include "CPU.h"
+#include "IOUtils.h"
+#include "Memory.h"
+#include "MemUtils.h"
+#include "MsgQueue.h"
+#include "RetroShell.h"
+
+namespace vamiga {
+
+void
+SocketServer::_dump(Category category, std::ostream& os) const
+{
+    using namespace util;
+
+    if (category == Category::State) {
+
+        RemoteServer::_dump(category, os);
+        os << tab("Received packets");
+        os << dec(numReceived) << std::endl;
+        os << tab("Transmitted packets");
+        os << dec(numSent) << std::endl;
+
+    } else {
+
+        RemoteServer::_dump(category, os);
+    }
+}
+
+void
+SocketServer::disconnect()
+{
+    SUSPENDED
+
+    debug(SRV_DEBUG, "Disconnecting...\n");
+
+    // Trigger an exception inside the server thread
+    connection.close();
+    listener.close();
+}
+
+void
+SocketServer::main()
+{
+    try {
+        
+        mainLoop();
+        
+    } catch (std::exception &err) {
+        
+        debug(SRV_DEBUG, "Server thread interrupted\n");
+        handleError(err.what());
+    }
+}
+
+void
+SocketServer::mainLoop()
+{
+    switchState(SRV_STATE_LISTENING);
+    
+    while (isListening()) {
+        
+        try {
+            
+            try {
+                
+                // Try to be a client by connecting to an existing server
+                connection.connect(config.port);
+                debug(SRV_DEBUG, "Acting as a client\n");
+                
+            } catch (...) {
+                
+                // If there is no existing server, be the server
+                debug(SRV_DEBUG, "Acting as a server\n");
+                
+                // Create a port listener
+                listener.bind(config.port);
+                listener.listen();
+                
+                // Wait for a client to connect
+                connection = listener.accept();
+            }
+            
+            // Handle the session
+            sessionLoop();
+            
+            // Close the port listener
+            listener.close();
+            
+        } catch (std::exception &err) {
+            
+            debug(SRV_DEBUG, "Main loop interrupted\n");
+            
+            // Handle error if we haven't been interrupted purposely
+            if (!isStopping()) handleError(err.what());
+        }
+    }
+    
+    switchState(SRV_STATE_OFF);
+}
+
+void
+SocketServer::sessionLoop()
+{
+    switchState(SRV_STATE_CONNECTED);
+    
+    numReceived = 0;
+    numSent = 0;
+    
+    try {
+        
+        // Receive and process packets
+        while (1) { process(receive()); }
+        
+    } catch (std::exception &err) {
+        
+        debug(SRV_DEBUG, "Session loop interrupted\n");
+        
+        // Handle error if we haven't been interrupted purposely
+        if (!isStopping()) {
+            
+            handleError(err.what());
+            switchState(SRV_STATE_LISTENING);
+        }
+    }
+    
+    numReceived = 0;
+    numSent = 0;
+    
+    connection.close();
+}
+
+string
+SocketServer::receive()
+{
+    string packet;
+
+    if (isConnected()) {
+
+        packet = doReceive();
+        msgQueue.put(MSG_SRV_RECEIVE, ++numReceived);
+    }
+
+    return packet;
+}
+
+void
+SocketServer::send(const string &packet)
+{
+    if (isConnected()) {
+
+        doSend(packet);
+        msgQueue.put(MSG_SRV_SEND, ++numSent);
+    }
+}
+
+void
+SocketServer::send(char payload)
+{
+    send(string(1, payload));
+}
+
+void
+SocketServer::send(int payload)
+{
+    send(std::to_string(payload));
+}
+
+void
+SocketServer::send(long payload)
+{
+    send(std::to_string(payload));
+}
+
+
+void
+SocketServer::send(std::stringstream &payload)
+{
+    string line;
+    while(std::getline(payload, line)) {
+        send(line + "\n");
+    }
+}
+
+void
+SocketServer::process(const string &payload)
+{
+    doProcess(payload);
+}
+
+}

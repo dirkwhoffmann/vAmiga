@@ -20,6 +20,7 @@ enum_long(SERVER_TYPE)
 {
     SERVER_SER,
     SERVER_RSH,
+    SERVER_PROM,
     SERVER_GDB
 };
 typedef SERVER_TYPE ServerType;
@@ -29,7 +30,7 @@ struct ServerTypeEnum : vamiga::util::Reflection<ServerTypeEnum, ServerType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = SERVER_GDB;
-    
+
     static const char *prefix() { return "SERVER"; }
     static const char *_key(long value)
     {
@@ -37,6 +38,7 @@ struct ServerTypeEnum : vamiga::util::Reflection<ServerTypeEnum, ServerType>
                 
             case SERVER_SER:    return "SER";
             case SERVER_RSH:    return "RSH";
+            case SERVER_PROM:   return "PROM";
             case SERVER_GDB:    return "GDB";
         }
         return "???";
