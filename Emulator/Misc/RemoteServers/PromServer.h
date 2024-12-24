@@ -35,6 +35,9 @@ class PromServer final : public SubComponent {
     // The current server state
     SrvState state = SRV_STATE_OFF;
 
+    // The server thread
+    std::thread serverThread;
+    
 public:
 
     using SubComponent::SubComponent;
@@ -97,10 +100,15 @@ public:
     void stop();
 
     // Used by the launch daemon to determine if actions should be taken
-    bool shouldRun() { return true; }
+    bool shouldRun() { return false; }
 
     // Experimental
     string generate_metrics();
+
+private:
+
+    void startServer();
+
 };
 
 }

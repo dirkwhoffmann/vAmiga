@@ -7,8 +7,11 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
+#include "config.h"
 #include "PromServer.h"
+#include "Emulator.h"
 #include "httplib.h"
+#include <thread>
 
 namespace vamiga {
 
@@ -17,26 +20,44 @@ PromServer::start()
 {
     if (state == SRV_STATE_OFF) {
 
-        debug(true, "start()");
+        debug(true, "start()\n");
 
-        // Create an HTTP server
-        httplib::Server svr;
+        try {
 
-        // Define the "/metrics" endpoint where Prometheus will scrape metrics
-        svr.Get("/metrics", [this](const httplib::Request& req, httplib::Response& res) {
-            // Generate the metrics as a string
-            std::string metrics = generate_metrics();
+            // Start the server in a separate thread
+            serverThread = std::thread(&PromServer::startServer, this);
 
-            // Set the response headers to indicate it's plain text
-            res.set_content(metrics, "text/plain");
-        });
+        } catch (std::exception &err) {
 
-        // Start the server to listen on localhost, port 8080
-        std::cout << "Starting Prometheus data provider on http://localhost:8080/metrics\n";
-        svr.listen("localhost", 8080);
+            debug(SRV_DEBUG, "Server thread interrupted: %s\n", err.what());
+        }
 
+        std::cout << "Started\n";
         state = SRV_STATE_CONNECTED;
     }
+}
+
+void
+PromServer::startServer()
+{
+    debug(true, "startServer()\n");
+
+    // Create an HTTP server
+    httplib::Server svr;
+
+    // Define the "/metrics" endpoint where Prometheus will scrape metrics
+    svr.Get("/metrics", [this](const httplib::Request& req, httplib::Response& res) {
+
+        // Generate the metrics as a string
+        std::string metrics = generate_metrics();
+
+        // Set the response headers to indicate it's plain text
+        res.set_content(metrics, "text/plain");
+    });
+
+    // Start the server to listen on localhost, port 8080
+    std::cout << "Starting Prometheus data provider on http://localhost:8080/metrics\n";
+    svr.listen("localhost", 8080);
 }
 
 void
@@ -54,15 +75,16 @@ PromServer::stop()
 string
 PromServer::generate_metrics()
 {
-    string metrics =
-    "# HELP example_metric A simple example metric\n"
-    "# TYPE example_metric counter\n"
-    "example_metric{label=\"value1\"} 42\n"
-    "example_metric{label=\"value2\"} 73\n\n"
+    auto emuStats = emulator.getStats();
 
-    "# HELP another_metric Another simple example metric\n"
-    "# TYPE another_metric gauge\n"
-    "another_metric 123.45\n";
+    string metrics =
+    "# HELP cpu_load Host CPU load\n"
+    "# TYPE cpu_load gauge\n"
+    "cpu_load " + std::to_string(emuStats.cpuLoad) + "\n\n"
+
+    "# HELP fps Frames per second\n"
+    "# TYPE fps gauge\n"
+    "fps " + std::to_string(emuStats.fps) + "\n\n";
 
     return metrics;
 }
