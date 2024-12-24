@@ -9,15 +9,15 @@
 
 #pragma once
 
-#include "RemoteServer.h"
+#include "SocketServer.h"
 
 namespace vamiga {
 
-class RshServer final : public RemoteServer {
+class RshServer final : public SocketServer {
 
 public:
     
-    using RemoteServer::RemoteServer;
+    using SocketServer::SocketServer;
 
     RshServer& operator= (const RshServer& other) {
 

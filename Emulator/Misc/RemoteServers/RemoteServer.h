@@ -70,7 +70,7 @@ protected:
     
 public:
     
-    RemoteServer(Amiga& ref, isize objid);
+    using SubComponent::SubComponent;
     ~RemoteServer() { shutDownServer(); }
     void shutDownServer();
     
@@ -112,6 +112,7 @@ private:
 
         << config.port
         << config.protocol
+        << config.autoRun
         << config.verbose;
 
     } SERIALIZERS(serialize);
@@ -153,20 +154,15 @@ public:
 public:
 
     // Launch the remote server
-    void start() throws { SUSPENDED _start(); }
-    
+    void start() throws;
+
     // Shuts down the remote server
-    void stop() throws { SUSPENDED _stop(); }
+    void stop() throws;
 
     // Disconnects the client
-    void disconnect() throws { SUSPENDED _disconnect(); }
+    void disconnect() throws;
 
 protected:
-
-    // Called from start(), stop(), and disconnect(), respectively
-    void _start() throws;
-    void _stop() throws;
-    void _disconnect() throws;
     
     // Switches the internal state
     void switchState(SrvState newState);

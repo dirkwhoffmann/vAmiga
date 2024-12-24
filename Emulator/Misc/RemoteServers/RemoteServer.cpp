@@ -19,11 +19,6 @@
 
 namespace vamiga {
 
-RemoteServer::RemoteServer(Amiga& ref, isize objid) : SubComponent(ref, objid)
-{
-
-}
-
 void
 RemoteServer::shutDownServer()
 {
@@ -140,10 +135,12 @@ RemoteServer::setOption(Option option, i64 value)
 }
 
 void
-RemoteServer::_start()
+RemoteServer::start()
 {
     if (isOff()) {
-        
+
+        SUSPENDED
+
         debug(SRV_DEBUG, "Starting server...\n");
         switchState(SRV_STATE_STARTING);
         
@@ -156,15 +153,17 @@ RemoteServer::_start()
 }
 
 void
-RemoteServer::_stop()
+RemoteServer::stop()
 {
     if (!isOff()) {
-        
+
+        SUSPENDED
+
         debug(SRV_DEBUG, "Stopping server...\n");
         switchState(SRV_STATE_STOPPING);
         
         // Interrupt the server thread
-        _disconnect();
+        disconnect();
         
         // Wait until the server thread has terminated
         if (serverThread.joinable()) serverThread.join();
@@ -174,8 +173,10 @@ RemoteServer::_stop()
 }
 
 void
-RemoteServer::_disconnect()
+RemoteServer::disconnect()
 {
+    SUSPENDED
+    
     debug(SRV_DEBUG, "Disconnecting...\n");
     
     // Trigger an exception inside the server thread

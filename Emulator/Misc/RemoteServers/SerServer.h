@@ -9,12 +9,12 @@
 
 #pragma once
 
-#include "RemoteServer.h"
+#include "SocketServer.h"
 #include "RingBuffer.h"
 
 namespace vamiga {
 
-class SerServer final : public RemoteServer {
+class SerServer final : public SocketServer {
 
     // A ringbuffer for buffering incoming bytes
     util::SortedRingBuffer <u8, 8096> buffer;
@@ -41,7 +41,7 @@ class SerServer final : public RemoteServer {
     
 public:
     
-    using RemoteServer::RemoteServer;
+    using SocketServer::SocketServer;
 
     SerServer& operator= (const SerServer& other) {
 
