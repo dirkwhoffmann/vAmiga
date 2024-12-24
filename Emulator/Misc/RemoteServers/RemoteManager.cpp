@@ -105,11 +105,11 @@ RemoteManager::serviceServerEvent()
     if (rshServer.config.autoRun) {
         rshServer.shouldRun() ? rshServer.start() : rshServer.stop();
     }
+    if (promServer.config.autoRun) {
+        promServer.shouldRun() ? promServer.start() : promServer.stop();
+    }
     if (gdbServer.config.autoRun) {
         gdbServer.shouldRun() ? gdbServer.start() : gdbServer.stop();
-    }
-    if (true) { // gdbServer.config.autoRun) {
-        promServer.shouldRun() ? promServer.start() : promServer.stop();
     }
 
     // Schedule next event

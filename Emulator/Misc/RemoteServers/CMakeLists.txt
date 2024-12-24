@@ -4,6 +4,8 @@ target_sources(vAmigaCore PRIVATE
 
 RemoteManager.cpp
 RemoteServer.cpp
+SocketServer.cpp
+HttpServer.cpp
 SerServer.cpp
 RshServer.cpp
 GdbServer.cpp

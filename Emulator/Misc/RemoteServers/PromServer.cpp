@@ -26,6 +26,8 @@ PromServer::_dump(Category category, std::ostream& os) const
 string
 PromServer::respond(const httplib::Request& request)
 {
+    switchState(SRV_STATE_CONNECTED);
+
     auto emuStats = emulator.getStats();
 
     string metrics =
