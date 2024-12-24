@@ -26,20 +26,163 @@ PromServer::_dump(Category category, std::ostream& os) const
 string
 PromServer::respond(const httplib::Request& request)
 {
-    switchState(SRV_STATE_CONNECTED);
+    std::ostringstream output;
+    
+    auto translate = [&](const string& metric,
+                         const string& help,
+                         const string& type,
+                         auto value,
+                         const std::map<string, string>& labels = {}) {
+        
+        if (!help.empty()) {
+            output << "# HELP " << metric << " " << help << "\n";
+        }
+        if (!metric.empty()) {
+            output << "# TYPE " << metric << " " << type << "\n";
+        }
+        output << metric;
+        if (!labels.empty()) {
+            output << "{";
+            bool first = true;
+            for (const auto& [key, value] : labels) {
+                if (!first) output << ",";
+                output << key << "=\"" << value << "\"";
+                first = false;
+            }
+            output << "}";
+        }
+        output << " " << value << "\n\n";
+    };
+    
+    output << std::fixed << std::setprecision(4);
+    
+    {   auto stats = emulator.getStats();
+        
+        translate("vamiga_cpu_load", "",
+                  "gauge", stats.cpuLoad,
+                  {{"component","emulator"}});
+        
+        translate("vamiga_fps", "",
+                  "gauge", stats.fps,
+                  {{"component","emulator"}});
+        
+        translate("vamiga_resyncs", "",
+                  "gauge", stats.resyncs,
+                  {{"component","emulator"}});
+    }
+    
+    {   auto stats = agnus.getStats();
+        
+        translate("vamiga_activity_copper", "",
+                  "gauge", stats.copperActivity,
+                  {{"component","agnus"}});
+        
+        translate("vamiga_activity_blitter", "",
+                  "gauge", stats.blitterActivity,
+                  {{"component","agnus"}});
+        
+        translate("vamiga_activity_disk", "",
+                  "gauge", stats.diskActivity,
+                  {{"component","agnus"}});
+        
+        translate("vamiga_activity_disk", "",
+                  "gauge", stats.diskActivity,
+                  {{"component","agnus"}});
+        
+        translate("vamiga_activity_audio", "",
+                  "gauge", stats.audioActivity,
+                  {{"component","agnus"}});
+        
+        translate("vamiga_activity_sprite", "",
+                  "gauge", stats.spriteActivity,
+                  {{"component","agnus"}});
+        
+        translate("vamiga_activity_bitplane", "",
+                  "gauge", stats.bitplaneActivity,
+                  {{"component","agnus"}});
+    }
+    
+    {   auto stats_a = ciaa.getStats();
+        auto stats_b = ciaa.getStats();
+        
+        translate("vamiga_ciaa_idle_sec", "",
+                  "gauge", stats_a.idleSince,
+                  {{"component","ciaa"}});
+        translate("vamiga_ciab_idle_sec", "",
+                  "gauge", stats_b.idleSince,
+                  {{"component","ciab"}});
+        
+        translate("vamiga_cia_idle_sec_total", "",
+                  "gauge", stats_a.idleTotal,
+                  {{"component","ciaa"}});
+        translate("vamiga_cia_idle_sec_total", "",
+                  "gauge", stats_b.idleTotal,
+                  {{"component","ciab"}});
+        
+        translate("vamiga_cia_idle_percentage", "",
+                  "gauge", stats_a.idlePercentage,
+                  {{"component","ciaa"}});
+        translate("vamiga_cia_idle_percentage", "",
+                  "gauge", stats_b.idlePercentage,
+                  {{"component","ciab"}});
+    }
+    
+    {   auto stats = mem.getStats();
 
-    auto emuStats = emulator.getStats();
+        translate("vamiga_mem_accesses", "",
+                  "gauge", stats.chipReads.accumulated,
+                  {{"component","memory"},{"location","chip_ram"},{"type","read"}});
+        translate("vamiga_mem_accesses", "",
+                  "gauge", stats.chipWrites.accumulated,
+                  {{"component","memory"},{"location","chip_ram"},{"type","write"}});
 
-    string metrics =
-    "# HELP cpu_load Host CPU load\n"
-    "# TYPE cpu_load gauge\n"
-    "cpu_load " + std::to_string(emuStats.cpuLoad) + "\n\n"
+        translate("vamiga_mem_accesses", "",
+                  "gauge", stats.slowReads.accumulated,
+                  {{"component","memory"},{"location","slow_ram"},{"type","read"}});
+        translate("vamiga_mem_accesses", "",
+                  "gauge", stats.slowWrites.accumulated,
+                  {{"component","memory"},{"location","slow_ram"},{"type","write"}});
 
-    "# HELP fps Frames per second\n"
-    "# TYPE fps gauge\n"
-    "fps " + std::to_string(emuStats.fps) + "\n\n";
+        translate("vamiga_mem_accesses", "",
+                  "gauge", stats.fastReads.accumulated,
+                  {{"component","memory"},{"location","fast_ram"},{"type","read"}});
+        translate("vamiga_mem_accesses", "",
+                  "gauge", stats.fastWrites.accumulated,
+                  {{"component","memory"},{"location","fast_ram"},{"type","write"}});
 
-    return metrics;
+        translate("vamiga_mem_accesses", "",
+                  "gauge", stats.kickReads.accumulated,
+                  {{"component","memory"},{"location","rom"},{"type","read"}});
+        translate("vamiga_mem_accesses", "",
+                  "gauge", stats.kickWrites.accumulated,
+                  {{"component","memory"},{"location","rom"},{"type","write"}});
+    }
+    
+    {   auto stats = audioPort.getStats();
+        
+        translate("vamiga_audio_buffer_exceptions", "",
+                  "gauge", stats.bufferOverflows,
+                  {{"component","audio"},{"type","overflow"}});
+        translate("vamiga_audio_buffer_exceptions", "",
+                  "gauge", stats.bufferUnderflows,
+                  {{"component","audio"},{"type","underflow"}});
+        
+        translate("vamiga_audio_samples", "",
+                  "gauge", stats.consumedSamples,
+                  {{"component","audio"},{"type","consumed"}});
+        translate("vamiga_audio_samples", "",
+                  "gauge", stats.producedSamples,
+                  {{"component","audio"},{"type","produced"}});
+        translate("vamiga_audio_samples", "",
+                  "gauge", stats.idleSamples,
+                  {{"component","audio"},{"type","idle"}});
+        
+        translate("vamiga_audio_fill_level", "",
+                  "gauge", stats.fillLevel,
+                  {{"component","audio"}});
+    }
+        
+    return output.str();
 }
 
 void
@@ -52,6 +195,8 @@ PromServer::main()
 
         // Define the "/metrics" endpoint where Prometheus will scrape metrics
         srv->Get("/metrics", [this](const httplib::Request& req, httplib::Response& res) {
+            
+            switchState(SRV_STATE_CONNECTED);
             res.set_content(respond(req), "text/plain");
         });
 

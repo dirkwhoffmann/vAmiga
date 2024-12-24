@@ -11,7 +11,7 @@
 
 #include "RemoteServer.h"
 
-namespace httplib { class Server; class Request; }
+namespace httplib { class Server; struct Request; }
 
 namespace vamiga {
 
