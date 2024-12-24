@@ -65,13 +65,6 @@ class Monitors: Layer {
         monitors.append(BarChart(device: device, name: "Sprite DMA"))
         monitors.append(BarChart(device: device, name: "Bitplane DMA"))
         
-        monitors[0].setColor(rgb: info.copperColor)
-        monitors[1].setColor(rgb: info.blitterColor)
-        monitors[2].setColor(rgb: info.diskColor)
-        monitors[3].setColor(rgb: info.audioColor)
-        monitors[4].setColor(rgb: info.spriteColor)
-        monitors[5].setColor(rgb: info.bitplaneColor)
-
         // Memory monitors
         monitors.append(BarChart(device: device, name: "CPU (Chip Ram)", splitView: true))
         monitors.append(BarChart(device: device, name: "CPU (Slow Ram)", splitView: true))
@@ -82,9 +75,23 @@ class Monitors: Layer {
         monitors.append(WaveformMonitor(device: device, audioPort: amiga.audioPort, leftChannel: true))
         monitors.append(WaveformMonitor(device: device, audioPort: amiga.audioPort, leftChannel: false))
 
+        updateColors()
         updateMonitorPositions()
     }
 
+    func updateColors() {
+        
+        // Activity monitors are colorized with the bus debuggger colors
+        let info = amiga.dmaDebugger.info
+
+        monitors[0].setColor(rgb: info.copperColor)
+        monitors[1].setColor(rgb: info.blitterColor)
+        monitors[2].setColor(rgb: info.diskColor)
+        monitors[3].setColor(rgb: info.audioColor)
+        monitors[4].setColor(rgb: info.spriteColor)
+        monitors[5].setColor(rgb: info.bitplaneColor)
+    }
+    
     func updateMonitorPositions() {
 
         let ratio = Double(renderer.size.width) / Double(renderer.size.height)
@@ -174,7 +181,7 @@ class Monitors: Layer {
     //
     
     func render(_ encoder: MTLRenderCommandEncoder) {
-
+        
         for i in 0 ..< monitors.count {
             
             if !amiga.paused { monitors[i].animate() }
