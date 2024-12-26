@@ -579,8 +579,6 @@ Memory::alloc(Allocator<u8> &allocator, isize bytes, u32 &mask, bool update)
 void
 Memory::fillRamWithInitPattern()
 {
-    assert(!isRunning());
-    
     switch (config.ramInitPattern) {
             
         case RAM_INIT_RANDOMIZED:
