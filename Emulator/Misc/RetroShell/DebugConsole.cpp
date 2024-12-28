@@ -889,18 +889,18 @@ DebugConsole::initCommands(Command &root)
         }
         {   Command::currentGroup = "Miscellaneous";
 
-            root.add({"?", "host"}, "Host machine");
+            root.add({"?", "thread"}, "Emulator thread");
 
             {
 
-                root.add({"?", "host", ""},
-                         "Display information about the host machine",
+                root.add({"?", "thread", ""},
+                         "Display information about the thread state",
                          [this](Arguments& argv, long value) {
 
-                    dump(host, Category::State);
+                    dump(emulator, Category::State);
                 });
             }
-
+            
             root.add({"?", "server"}, "Remote server");
 
             {
