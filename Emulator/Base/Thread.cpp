@@ -395,6 +395,41 @@ Thread::wakeUp()
 void
 Thread::suspend()
 {
+    debug(RUN_DEBUG, "Suspending (%ld)...\n", suspendCounter);
+    
+    if (isEmulatorThread()) {
+        
+        debug(RUN_DEBUG, "suspend() called by the emulator thread\n");
+
+    } else  if (suspendCounter++ == 0) {
+        
+        lock.lock();
+    }
+}
+
+void
+Thread::resume()
+{
+    debug(RUN_DEBUG, "Resuming (%ld)...\n", suspendCounter);
+
+    if (isEmulatorThread()) {
+        
+        debug(RUN_DEBUG, "resume() called by the emulator thread\n");
+        
+    } else if (suspendCounter <= 0) {
+        
+        fatal("resume() called with no call to suspend()\n");
+        
+    } else if (--suspendCounter == 0) {
+        
+        lock.unlock();
+    }
+}
+
+/*
+void
+Thread::suspend()
+{
     if (!isEmulatorThread()) {
 
         debug(RUN_DEBUG, "Suspending (%ld)...\n", suspendCounter);
@@ -429,5 +464,6 @@ Thread::resume()
         debug(RUN_DEBUG, "Skipping resume (%ld)...\n", suspendCounter);
     }
 }
+*/
 
 }

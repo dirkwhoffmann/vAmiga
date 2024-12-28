@@ -43,7 +43,7 @@ debugflag DMA_DEBUG       = 0;
 debugflag DDF_DEBUG       = 0;
 debugflag SEQ_DEBUG       = 0;
 debugflag SEQ_ON_STEROIDS = 0;
-debugflag NTSC_DEBUG      = 1;
+debugflag NTSC_DEBUG      = 0;
 
 // Copper
 debugflag COP_CHECKSUM    = 0;
