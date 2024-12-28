@@ -484,7 +484,7 @@ static const char *smokeTestScript[] = {
     "? df3",
     "? df3 disk",
 
-    "? host",
+    "? thread",
     "? server",
 
     "shutdown",

@@ -843,6 +843,22 @@ Amiga::computeFrame()
                 break;
             }
 
+            // Shall we stop at the end of the current line?
+            if (flags & RL::EOL_REACHED) {
+                clearFlag(RL::EOL_REACHED);
+                msgQueue.put(MSG_EOL_REACHED);
+                throw StateChangeException(STATE_PAUSED);
+                break;
+            }
+  
+            // Shall we stop at the end of the current frame?
+            if (flags & RL::EOF_REACHED) {
+                clearFlag(RL::EOF_REACHED);
+                msgQueue.put(MSG_EOF_REACHED);
+                throw StateChangeException(STATE_PAUSED);
+                break;
+            }
+
             // Did we reach a breakpoint?
             if (flags & RL::BREAKPOINT_REACHED) {
                 clearFlag(RL::BREAKPOINT_REACHED);

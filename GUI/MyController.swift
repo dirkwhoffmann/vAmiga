@@ -491,7 +491,7 @@ extension MyController {
         case .CPU_HALT:
             refreshStatusBar()
             
-        case .BEAMTRAP_REACHED:
+        case .BEAMTRAP_REACHED, .EOF_REACHED, .EOL_REACHED:
 
             inspector?.signalBeamtrap()
 
