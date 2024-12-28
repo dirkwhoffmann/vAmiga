@@ -55,21 +55,27 @@ Thread::execute()
     if (std::abs(missing) <= 5) {
 
         loadClock.go();
-        try {
 
-            // Execute all missing frames
-            for (isize i = 0; i < missing; i++, frameCounter++) computeFrame();
+        // Execute all missing frames
+        for (isize i = 0; i < missing; i++, frameCounter++) {
+            
+            lock.lock();
 
-        } catch (StateChangeException &exc) {
-
-            // Interruption
-            switchState((ExecState)exc.data);
+            // Execute a single frame
+            try { computeFrame(); } catch (StateChangeException &exc) {
+                
+                // Serve a state change request
+                switchState((ExecState)exc.data);
+            }
+            
+            lock.unlock();
         }
+        
         loadClock.stop();
 
     } else {
 
-        // The emulator got out of sync
+        // The emulator is out of sync
         if (missing > 0) {
             debug(VID_DEBUG, "Emulation is way too slow (%ld frames behind)\n", missing);
         } else {

@@ -1260,7 +1260,7 @@ Denise::hsyncHandler(isize vpos)
     updateBorderBuffer();
 
     // Check if we are below the VBLANK area
-    if (vpos >= 26 && !frameSkips) {
+    if (!agnus.inVBlankArea() && !frameSkips) {
 
         // Translate bitplane data to color register indices
         translate();

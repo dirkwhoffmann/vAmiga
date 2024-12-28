@@ -416,7 +416,7 @@ private:
 public:
 
     // Indicates if the electron beam is inside the VBLANK area
-    bool inVBlankArea(isize posv) const { return posv < 26; }
+    bool inVBlankArea(isize posv) const { return posv < (isPAL() ? 26 : 21); }
     bool inVBlankArea() const { return inVBlankArea(pos.v); }
 
     // Indicates if the current rasterline is the last line in this frame
