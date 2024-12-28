@@ -172,8 +172,7 @@ Thread::switchState(ExecState newState)
                 switch (state) {
 
                     case STATE_PAUSED:      state = STATE_OFF; _powerOff(); break;
-                    case STATE_RUNNING:
-                    case STATE_SUSPENDED:   state = STATE_PAUSED; _pause(); break;
+                    case STATE_RUNNING:     state = STATE_PAUSED; _pause(); break;
 
                     default:
                         invalid();
@@ -185,8 +184,7 @@ Thread::switchState(ExecState newState)
                 switch (state) {
 
                     case STATE_OFF:         state = STATE_PAUSED; _powerOn(); break;
-                    case STATE_RUNNING:
-                    case STATE_SUSPENDED:   state = STATE_PAUSED; _pause(); break;
+                    case STATE_RUNNING:     state = STATE_PAUSED; _pause(); break;
 
                     default:
                         invalid();
@@ -199,19 +197,6 @@ Thread::switchState(ExecState newState)
 
                     case STATE_OFF:         state = STATE_PAUSED; _powerOn(); break;
                     case STATE_PAUSED:      state = STATE_RUNNING; _run(); break;
-                    case STATE_SUSPENDED:   state = STATE_PAUSED; break;
-
-                    default:
-                        invalid();
-                }
-                break;
-
-            case STATE_SUSPENDED:
-
-                switch (state) {
-
-                    case STATE_RUNNING:     state = STATE_SUSPENDED; break;
-                    case STATE_PAUSED:      break;
 
                     default:
                         invalid();
@@ -425,45 +410,5 @@ Thread::resume()
         lock.unlock();
     }
 }
-
-/*
-void
-Thread::suspend()
-{
-    if (!isEmulatorThread()) {
-
-        debug(RUN_DEBUG, "Suspending (%ld)...\n", suspendCounter);
-
-        if (suspendCounter || isRunning()) {
-
-            suspendCounter++;
-            changeStateTo(STATE_SUSPENDED);
-        }
-
-    } else {
-
-        debug(RUN_DEBUG, "Skipping suspend (%ld)...\n", suspendCounter);
-    }
-}
-
-void
-Thread::resume()
-{
-    if (!isEmulatorThread()) {
-
-        debug(RUN_DEBUG, "Resuming (%ld)...\n", suspendCounter);
-
-        if (suspendCounter && --suspendCounter == 0) {
-
-            changeStateTo(STATE_RUNNING);
-            run();
-        }
-
-    } else {
-
-        debug(RUN_DEBUG, "Skipping resume (%ld)...\n", suspendCounter);
-    }
-}
-*/
 
 }

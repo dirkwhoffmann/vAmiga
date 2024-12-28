@@ -161,10 +161,10 @@ public:
     bool isPoweredOff() const { return state == STATE_UNINIT || state == STATE_OFF; }
     bool isPaused() const { return state == STATE_PAUSED; }
     bool isRunning() const { return state == STATE_RUNNING; }
-    bool isSuspended() const { return state == STATE_SUSPENDED; }
     bool isHalted() const { return state == STATE_HALTED; }
     bool isWarping() const { return warp != 0; }
     bool isTracking() const { return track != 0; }
+    bool isSuspended() const { return suspendCounter > 0; }
 
     void powerOn();
     void powerOff();

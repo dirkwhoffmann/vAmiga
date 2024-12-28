@@ -41,7 +41,7 @@ extension Canvas {
         let y1 = Constants.vblank_cnt
         let y2 = pal ? Constants.vpos_cnt_pal : Constants.vpos_cnt_ntsc
 
-        return CGRect(x: x1, y: y1, width: x2 - x1, height: y2 - y1)
+        return CGRect(x: x1, y: y1, width: x2 - x1, height: y2 - y1 - 1)
     }
     
     var largestVisibleNormalized: CGRect {
