@@ -1240,6 +1240,17 @@ Denise::checkP2PCollisions()
 void
 Denise::vsyncHandler()
 {
+    // Run the frame skip logic
+    if (frameSkips == 0) {
+
+        pixelEngine.swapBuffers();
+        frameSkips = emulator.isWarping() ? config.frameSkipping : 0;
+
+    } else {
+
+        frameSkips--;
+    }
+    
     hflop = true; // ???
     markBorderBufferAsDirty();
     pixelEngine.vsyncHandler();
@@ -1331,17 +1342,6 @@ Denise::eofHandler()
 
     pixelEngine.eofHandler();
     debugger.eofHandler();
-
-    // Run the frame skip logic
-    if (frameSkips == 0) {
-
-        pixelEngine.swapBuffers();
-        frameSkips = emulator.isWarping() ? config.frameSkipping : 0;
-
-    } else {
-
-        frameSkips--;
-    }
 }
 
 template void Denise::drawOdd<false>(Pixel offset);

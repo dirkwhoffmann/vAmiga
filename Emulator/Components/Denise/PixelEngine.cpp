@@ -329,7 +329,6 @@ PixelEngine::swapBuffers()
 void
 PixelEngine::vsyncHandler()
 {
-    // swapBuffers();
     dmaDebugger.vSyncHandler();
 }
 

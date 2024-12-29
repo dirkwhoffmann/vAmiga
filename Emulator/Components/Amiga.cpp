@@ -1117,14 +1117,7 @@ Amiga::processCommand(const Cmd &cmd)
 void
 Amiga::eolHandler()
 {
-    // Get the maximum number of rasterlines
-    auto lines = agnus.isPAL() ? VPOS_CNT_PAL : VPOS_CNT_NTSC;
 
-    // Check if we need to sync the thread
-    if (agnus.pos.v % (lines + 1) == 0) {
-
-        setFlag(RL::SYNC_THREAD);
-    }
 }
 
 void

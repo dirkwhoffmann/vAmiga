@@ -701,6 +701,8 @@ void
 Agnus::vsyncHandler()
 {
     denise.vsyncHandler();
+    
+    amiga.setFlag(RL::SYNC_THREAD);
 }
 
 
