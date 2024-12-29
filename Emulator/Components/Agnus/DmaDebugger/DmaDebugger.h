@@ -74,6 +74,9 @@ public:
     // Beamtraps
     Beamtraps beamtraps = Beamtraps(agnus);
 
+    bool eolTrap = false;
+    bool eofTrap = false;
+    
     
     //
     // Initializing

@@ -107,6 +107,22 @@ DebugConsole::initCommands(Command &root)
 
         root.clone("n", {"next"});
 
+        root.add({"eol"}, { }, { },
+                 "Complete the current line",
+                 [this](Arguments& argv, long value) {
+
+            dmaDebugger.eolTrap = true;
+            emulator.run();
+        });
+        
+        root.add({"eof"}, { }, { },
+                 "Complete the current frame",
+                 [this](Arguments& argv, long value) {
+
+            dmaDebugger.eofTrap = true;
+            emulator.run();
+        });
+        
         root.add({"break"},     "Manage CPU breakpoints");
 
         {

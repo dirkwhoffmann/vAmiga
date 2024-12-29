@@ -331,15 +331,18 @@ DmaDebugger::setColor(BusOwner owner, u32 rgba)
 void
 DmaDebugger::eolHandler()
 {
-    // Only proceed if DMA debugging has been turned on
-    if (!config.enabled) return;
-
-    // Copy Agnus arrays before they get deleted
-    std::memcpy(busValue, agnus.busValue, sizeof(agnus.busValue));
-    std::memcpy(busOwner, agnus.busOwner, sizeof(agnus.busOwner));
-
-    // Record some information for being picked up in the HSYNC handler
-    pixel0 = agnus.pos.pixel(0);
+    // Check if execution should be interrupted
+    if (eolTrap) { eolTrap = false; amiga.setFlag(RL::EOL_REACHED); }
+    
+    if (config.enabled) {
+        
+        // Copy Agnus arrays before they get deleted
+        std::memcpy(busValue, agnus.busValue, sizeof(agnus.busValue));
+        std::memcpy(busOwner, agnus.busOwner, sizeof(agnus.busOwner));
+        
+        // Record some information for being picked up in the HSYNC handler
+        pixel0 = agnus.pos.pixel(0);
+    }
 }
 
 void
@@ -347,16 +350,16 @@ DmaDebugger::hsyncHandler(isize vpos)
 {
     assert(agnus.pos.h == 0x12);
 
-    // Only proceed if DMA debugging has been turned on
-    if (!config.enabled) return;
-
-    // Draw first chunk (data from previous DMA line)
-    auto *ptr1 = pixelEngine.workingPtr(vpos);
-    computeOverlay(ptr1, HBLANK_MIN, HPOS_MAX, busOwner, busValue);
-
-    // Draw second chunk (data from current DMA line)
-    auto *ptr2 = ptr1 + agnus.pos.pixel(0);
-    computeOverlay(ptr2, 0, HBLANK_MIN - 1, agnus.busOwner, agnus.busValue);
+    if (config.enabled) {
+        
+        // Draw first chunk (data from previous DMA line)
+        auto *ptr1 = pixelEngine.workingPtr(vpos);
+        computeOverlay(ptr1, HBLANK_MIN, HPOS_MAX, busOwner, busValue);
+        
+        // Draw second chunk (data from current DMA line)
+        auto *ptr2 = ptr1 + agnus.pos.pixel(0);
+        computeOverlay(ptr2, 0, HBLANK_MIN - 1, agnus.busOwner, agnus.busValue);
+    }
 }
 
 void
@@ -450,7 +453,8 @@ DmaDebugger::vSyncHandler()
 void
 DmaDebugger::eofHandler()
 {
-
+    // Check if execution should be interrupted
+    if (eofTrap) { eofTrap = false; amiga.setFlag(RL::EOF_REACHED); }
 }
 
 }
