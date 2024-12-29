@@ -835,103 +835,99 @@ Amiga::computeFrame()
         // Check if special action needs to be taken
         if (flags) {
 
+            enum Action { cont, pause, leave } action = cont;
+                        
+            // Are we requested to synchronize the thread?
+            if (flags & RL::SYNC_THREAD) {
+
+                action = leave;
+            }
+
             // Did we reach a soft breakpoint?
             if (flags & RL::SOFTSTOP_REACHED) {
-                clearFlag(RL::SOFTSTOP_REACHED);
+
                 msgQueue.put(MSG_STEP);
-                throw StateChangeException(STATE_PAUSED);
-                break;
+                action = pause;
             }
 
             // Shall we stop at the end of the current line?
             if (flags & RL::EOL_REACHED) {
-                clearFlag(RL::EOL_REACHED);
+
                 msgQueue.put(MSG_EOL_REACHED);
-                throw StateChangeException(STATE_PAUSED);
-                break;
+                action = pause;
             }
   
             // Shall we stop at the end of the current frame?
             if (flags & RL::EOF_REACHED) {
-                clearFlag(RL::EOF_REACHED);
+
                 msgQueue.put(MSG_EOF_REACHED);
-                throw StateChangeException(STATE_PAUSED);
-                break;
+                action = pause;
             }
 
             // Did we reach a breakpoint?
             if (flags & RL::BREAKPOINT_REACHED) {
-                clearFlag(RL::BREAKPOINT_REACHED);
+
                 auto addr = cpu.debugger.breakpoints.hit->addr;
                 msgQueue.put(MSG_BREAKPOINT_REACHED, CpuMsg { addr, 0 });
-                throw StateChangeException(STATE_PAUSED);
-                break;
+                action = pause;
             }
 
             // Did we reach a watchpoint?
             if (flags & RL::WATCHPOINT_REACHED) {
-                clearFlag(RL::WATCHPOINT_REACHED);
+
                 auto addr = cpu.debugger.watchpoints.hit->addr;
                 msgQueue.put(MSG_WATCHPOINT_REACHED, CpuMsg { addr, 0 });
-                throw StateChangeException(STATE_PAUSED);
-                break;
+                action = pause;
             }
 
             // Did we reach a catchpoint?
             if (flags & RL::CATCHPOINT_REACHED) {
-                clearFlag(RL::CATCHPOINT_REACHED);
+
                 auto vector = u8(cpu.debugger.catchpoints.hit->addr);
                 msgQueue.put(MSG_CATCHPOINT_REACHED, CpuMsg { cpu.getPC0(), vector });
-                throw StateChangeException(STATE_PAUSED);
-                break;
+                action = pause;
             }
 
             // Did we reach a software trap?
             if (flags & RL::SWTRAP_REACHED) {
-                clearFlag(RL::SWTRAP_REACHED);
+
                 msgQueue.put(MSG_SWTRAP_REACHED, CpuMsg { cpu.getPC0(), 0 });
-                throw StateChangeException(STATE_PAUSED);
-                break;
+                action = pause;
             }
 
             // Did we reach a beam trap?
             if (flags & RL::BEAMTRAP_REACHED) {
-                clearFlag(RL::BEAMTRAP_REACHED);
+
                 msgQueue.put(MSG_BEAMTRAP_REACHED, CpuMsg { 0, 0 });
-                throw StateChangeException(STATE_PAUSED);
-                break;
+                action = pause;
             }
 
             // Did we reach a Copper breakpoint?
             if (flags & RL::COPPERBP_REACHED) {
-                clearFlag(RL::COPPERBP_REACHED);
+
                 auto addr = u8(agnus.copper.debugger.breakpoints.hit()->addr);
                 msgQueue.put(MSG_COPPERBP_REACHED, CpuMsg { addr, 0 });
-                throw StateChangeException(STATE_PAUSED);
-                break;
+                action = pause;
             }
 
             // Did we reach a Copper watchpoint?
             if (flags & RL::COPPERWP_REACHED) {
-                clearFlag(RL::COPPERWP_REACHED);
+
                 auto addr = u8(agnus.copper.debugger.watchpoints.hit()->addr);
                 msgQueue.put(MSG_COPPERWP_REACHED, CpuMsg { addr, 0 });
-                throw StateChangeException(STATE_PAUSED);
-                break;
+                action = pause;
             }
 
-            // Are we requested to terminate the run loop?
+            // Are we requested to pause the emulator?
             if (flags & RL::STOP) {
-                clearFlag(RL::STOP);
-                throw StateChangeException(STATE_PAUSED);
-                break;
-            }
 
-            // Are we requested to synchronize the thread?
-            if (flags & RL::SYNC_THREAD) {
-                clearFlag(RL::SYNC_THREAD);
-                break;
+                action = pause;
             }
+            
+            flags = 0;
+            
+            if (action == pause) { throw StateChangeException(STATE_PAUSED); }
+            if (action == leave) { break; }
         }
     }
 }
