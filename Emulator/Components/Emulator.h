@@ -153,7 +153,8 @@ public:
     void softReset();
     void stepInto();
     void stepOver();
-
+    void finishLine();
+    void finishFrame();
 
     //
     // Audio and Video

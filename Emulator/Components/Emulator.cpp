@@ -308,6 +308,20 @@ Emulator::stepOver()
 }
 
 void
+Emulator::finishLine()
+{
+    main.agnus.dmaDebugger.eolTrap = true;
+    run();
+}
+
+void
+Emulator::finishFrame()
+{
+    main.agnus.dmaDebugger.eofTrap = true;
+    run();
+}
+
+void
 Emulator::computeFrame()
 {
     auto &config = main.getConfig();

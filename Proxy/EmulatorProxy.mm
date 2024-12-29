@@ -2323,17 +2323,6 @@ using namespace vamiga::moira;
     return [self emu]->isTracking();
 }
 
-/*
-- (void)setTrackMode:(BOOL)value
-{
-    if (value) {
-        [self emu]->emu->trackOn();
-    } else {
-        [self emu]->emu->trackOff();
-    }
-}
-*/
-
 - (void)stepInto
 {
     [self emu]->stepInto();
@@ -2342,6 +2331,16 @@ using namespace vamiga::moira;
 - (void)stepOver
 {
     [self emu]->stepOver();
+}
+
+- (void)finishLine
+{
+    [self emu]->finishLine();
+}
+
+- (void)finishFrame
+{
+    [self emu]->finishFrame();
 }
 
 - (void)launch:(const void *)listener function:(Callback *)func

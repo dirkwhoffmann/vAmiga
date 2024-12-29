@@ -22,6 +22,9 @@ class Inspector: DialogController {
     @IBOutlet weak var stopAndGoButton: NSButton!
     @IBOutlet weak var stepIntoButton: NSButton!
     @IBOutlet weak var stepOverButton: NSButton!
+    @IBOutlet weak var eolButton: NSButton!
+    @IBOutlet weak var eofButton: NSButton!
+    @IBOutlet weak var timeStamp: NSTextField!
     @IBOutlet weak var message: NSTextField!
 
     // CPU panel
@@ -645,18 +648,23 @@ class Inspector: DialogController {
         
         if window?.isVisible == false { return }
 
+        let info = emu.amiga.info
+        
         if full {
         
-            if parent!.emu.running {
-                stopAndGoButton.image = NSImage(named: "pauseTemplate")
-                stepIntoButton.isEnabled = false
-                stepOverButton.isEnabled = false
-            } else {
-                stopAndGoButton.image = NSImage(named: "runTemplate")
-                stepIntoButton.isEnabled = true
-                stepOverButton.isEnabled = true
-            }
+            let running = emu.running
+            let image = running ? "pauseTemplate" : "runTemplate"
+            
+            stopAndGoButton.image = NSImage(named: image)
+            stepIntoButton.isEnabled = !running
+            stepOverButton.isEnabled = !running
+            eolButton.isEnabled = !running
+            eofButton.isEnabled = !running
+                
+            timeStamp.font = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
         }
+        
+        timeStamp.stringValue = String(format: "%d:%03d:%03d", info.frame, info.vpos, info.hpos)
         
         if let id = panel.selectedTabViewItem?.label {
 
@@ -675,6 +683,11 @@ class Inspector: DialogController {
             default: break
             }
         }
+    }
+    
+    func showMessage(_ msg: String) {
+
+        message.stringValue = msg
     }
     
     func scrollToPC() {
@@ -792,6 +805,16 @@ class Inspector: DialogController {
     @IBAction func stepOverAction(_ sender: NSButton!) {
 
         emu.stepOver()
+    }
+    
+    @IBAction func finishLineAction(_ sender: NSButton!) {
+
+        emu.finishLine()
+    }
+    
+    @IBAction func finishFrameAction(_ sender: NSButton!) {
+
+        emu.finishFrame()
     }
 }
 

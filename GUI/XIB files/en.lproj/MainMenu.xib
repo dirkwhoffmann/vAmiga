@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22690"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication"/>
@@ -264,6 +264,18 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="stepIntoAction:" target="-1" id="i9e-j1-AG9"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Finish line" id="7Tr-qM-fs7">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="finishLineAction:" target="-1" id="Q2n-aH-5yn"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Finish frame" id="cUd-8T-Pjh">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="finishFrameAction:" target="-1" id="X2x-Rb-yo6"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="Nni-8k-nVh"/>

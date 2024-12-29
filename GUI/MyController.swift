@@ -491,10 +491,15 @@ extension MyController {
         case .CPU_HALT:
             refreshStatusBar()
             
-        case .BEAMTRAP_REACHED, .EOF_REACHED, .EOL_REACHED:
-
+        case .BEAMTRAP_REACHED:
             inspector?.signalBeamtrap()
 
+        case .EOF_REACHED:
+            inspector?.showMessage("End of frame reached")
+            
+        case .EOL_REACHED:
+            inspector?.showMessage("End of line reached")
+            
         case .VIEWPORT:
             renderer.canvas.updateTextureRect(hstrt: Int(msg.viewport.hstrt),
                                               vstrt: Int(msg.viewport.vstrt),

@@ -248,6 +248,9 @@
 
 - (void)stepInto;
 - (void)stepOver;
+- (void)finishLine;
+- (void)finishFrame;
+
 
 - (NSInteger)get:(Option)opt;
 - (NSInteger)get:(Option)opt id:(NSInteger)id;

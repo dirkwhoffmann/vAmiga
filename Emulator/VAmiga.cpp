@@ -1846,6 +1846,18 @@ VAmiga::stepOver()
 }
 
 void
+VAmiga::finishLine()
+{
+    emu->finishLine();
+}
+
+void
+VAmiga::finishFrame()
+{
+    emu->finishFrame();
+}
+
+void
 VAmiga::wakeUp()
 {
     emu->wakeUp();
