@@ -99,9 +99,13 @@ static const isize HBLANK_MIN = 0x12;       // First HBLANK cycle
 static const isize HBLANK_MAX = 0x23;       // Last HBLANK cycle
 static const isize HBLANK_CNT = 0x12;       // HBLANK_MAX - HBLANK_MIN + 1
 
-static const isize VBLANK_MIN = 0x00;       // First VBLANK line
-static const isize VBLANK_MAX = 0x19;       // Last VBLANK line
-static const isize VBLANK_CNT = 0x1A;       // VBLANK_MAX - VBLANK_MIN + 1
+static const isize VBLANK_MIN_PAL = 0x00;   // First VBLANK line
+static const isize VBLANK_MAX_PAL = 0x19;   // Last VBLANK line
+static const isize VBLANK_CNT_PAL = 0x1A;   // VBLANK_MAX - VBLANK_MIN + 1
+
+static const isize VBLANK_MIN_NTSC = 0x00;  // First VBLANK line
+static const isize VBLANK_MAX_NTSC = 0x14;  // Last VBLANK line
+static const isize VBLANK_CNT_NTSC = 0x15;  // VBLANK_MAX - VBLANK_MIN + 1
 
 
 //

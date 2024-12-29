@@ -38,7 +38,7 @@ extension Canvas {
         
         let x1 = 4 * Int(TPP) * Constants.hblank_cnt
         let x2 = 4 * Int(TPP) * Constants.hpos_cnt_pal
-        let y1 = pal ? 26 : 21 // Constants.vblank_cnt
+        let y1 = pal ? Constants.vblank_cnt_pal : Constants.vblank_cnt_ntsc
         let y2 = pal ? Constants.vpos_cnt_pal : Constants.vpos_cnt_ntsc
 
         return CGRect(x: x1, y: y1, width: x2 - x1, height: y2 - y1 - 1)

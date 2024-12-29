@@ -73,9 +73,13 @@ using namespace vamiga::moira;
 + (NSInteger)hblank_min { return HBLANK_MIN; }
 + (NSInteger)hblank_max { return HBLANK_MAX; }
 
-+ (NSInteger)vblank_cnt { return VBLANK_CNT; }
-+ (NSInteger)vblank_min { return VBLANK_MIN; }
-+ (NSInteger)vblank_max { return VBLANK_MAX; }
++ (NSInteger)vblank_cnt_pal { return VBLANK_CNT_PAL; }
++ (NSInteger)vblank_min_pal { return VBLANK_MIN_PAL; }
++ (NSInteger)vblank_max_pal { return VBLANK_MAX_PAL; }
+
++ (NSInteger)vblank_cnt_ntsc { return VBLANK_CNT_NTSC; }
++ (NSInteger)vblank_min_ntsc { return VBLANK_MIN_NTSC; }
++ (NSInteger)vblank_max_ntsc { return VBLANK_MAX_NTSC; }
 
 + (NSInteger)vpos_cnt_pal { return VPOS_CNT_PAL; }
 + (NSInteger)vpos_max_pal { return VPOS_MAX_PAL; }

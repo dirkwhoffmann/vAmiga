@@ -19,7 +19,7 @@ Thumbnail::take(Amiga &amiga, isize dx, isize dy)
 {
     isize xStart = 4 * HBLANK_CNT;
     isize xEnd = 4 * HPOS_CNT_PAL;
-    isize yStart = VBLANK_CNT;
+    isize yStart = amiga.agnus.isPAL() ? VBLANK_CNT_PAL : VBLANK_CNT_NTSC;
     isize yEnd = amiga.agnus.isPAL() ? VPOS_CNT_PAL_SF : VPOS_CNT_NTSC_SF;
 
     width  = (i32)((xEnd - xStart) / dx);

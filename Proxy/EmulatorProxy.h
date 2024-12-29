@@ -103,9 +103,13 @@
 @property (class, readonly) NSInteger hblank_min;
 @property (class, readonly) NSInteger hblank_max;
 
-@property (class, readonly) NSInteger vblank_cnt;
-@property (class, readonly) NSInteger vblank_min;
-@property (class, readonly) NSInteger vblank_max;
+@property (class, readonly) NSInteger vblank_cnt_pal;
+@property (class, readonly) NSInteger vblank_min_pal;
+@property (class, readonly) NSInteger vblank_max_pal;
+
+@property (class, readonly) NSInteger vblank_cnt_ntsc;
+@property (class, readonly) NSInteger vblank_min_ntsc;
+@property (class, readonly) NSInteger vblank_max_ntsc;
 
 @property (class, readonly) NSInteger vpos_cnt_pal;
 @property (class, readonly) NSInteger vpos_max_pal;
