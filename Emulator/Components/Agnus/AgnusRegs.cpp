@@ -502,7 +502,6 @@ Agnus::setSPRxCTL(u16 value)
     lastCtlWrite[x] = u8(pos.h);
 
     // Compute the value of the vertical counter that is seen here
-    // i16 v = (i16)(pos.h < 0xDF ? pos.v : (pos.v + 1));
     i16 v = (i16)(pos.h < 0xE1 ? pos.v : (pos.v + 1));
 
     // Compute the new vertical start and stop position
