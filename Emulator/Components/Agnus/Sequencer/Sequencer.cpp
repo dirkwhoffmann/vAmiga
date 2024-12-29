@@ -46,8 +46,9 @@ Sequencer::eolHandler()
     }
 
     // Check the vertical DIW flipflop
-    if (agnus.pos.v == vstop || agnus.inLastRasterline()) {
-
+    // if (agnus.pos.v == vstop || agnus.inLastRasterline()) {
+    if (agnus.pos.v == vstop || agnus.pos.v == (agnus.isPAL() ? 312 : 262)) {
+        
         trace(SEQ_DEBUG, "eolHandler: Vertical flipflop off\n");
         ddfInitial.bpv = ddf.bpv = false;
         hsyncActions |= UPDATE_SIG_RECORDER;
@@ -71,7 +72,7 @@ Sequencer::eolHandler()
         newDmaDAS = agnus.dmacon & 0b111111;
 
         // Disable sprites outside the sprite DMA area
-        if (agnus.pos.v < (agnus.isPAL() ? 25 : 20) || agnus.pos.v >= agnus.pos.vMax()) {
+        if (agnus.pos.v < (agnus.isPAL() ? 25 : 19) || agnus.pos.v >= agnus.pos.vMax()) {
             newDmaDAS &= 0b011111;
         }
     }

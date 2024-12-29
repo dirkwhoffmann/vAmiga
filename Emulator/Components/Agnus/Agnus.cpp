@@ -586,7 +586,7 @@ Agnus::updateSpriteDMA()
     isize v = pos.v + 1;
 
     // Reset the vertical trigger coordinates in line 25 (PAL) or 20 (NTSC)
-    isize resetLine = isPAL() ? 25 : 20;
+    isize resetLine = isPAL() ? 25 : 19;
     if (v == resetLine && sprdma()) {
         for (isize i = 0; i < 8; i++) sprVStop[i] = resetLine;
         return;
