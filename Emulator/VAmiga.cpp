@@ -826,7 +826,7 @@ VideoPortAPI::unlockTexture()
 const u32 *
 VideoPortAPI::getTexture() const
 {
-    return emu->getTexture().pixels.ptr;
+    return (u32 *)emu->getTexture().pixels.ptr;
 }
 
 const u32 *
@@ -838,7 +838,7 @@ VideoPortAPI::getTexture(isize *nr, bool *lof, bool *prevlof) const
     *lof = frameBuffer.lof;
     *prevlof = frameBuffer.prevlof;
 
-    return frameBuffer.pixels.ptr;
+    return (u32 *)frameBuffer.pixels.ptr;
 }
 
 

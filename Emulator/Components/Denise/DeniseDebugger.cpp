@@ -124,7 +124,7 @@ DeniseDebugger::hsyncHandler(isize vpos)
 
         if (LINE_DEBUG == vpos) {
 
-            u32 *ptr = pixelEngine.workingPtr(vpos);
+            auto *ptr = pixelEngine.workingPtr(vpos);
 
             for (Pixel i = 0; i < HPIXELS; i++) {
                 ptr[i] = (i & 1) ? 0xFF0000FF : 0xFFFFFFFF;
