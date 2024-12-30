@@ -578,10 +578,10 @@ Agnus::serviceDASEvent(EventID id)
             busAddr[0x05] = 0;
             busAddr[pos.lol ? 0xE3 : 0xE2] = 0;
             
-            busValue[0x01] = 0;
-            busValue[0x03] = 0;
-            busValue[0x05] = 0;
-            busValue[pos.lol ? 0xE3 : 0xE2] = 0;
+            busData[0x01] = 0;
+            busData[0x03] = 0;
+            busData[0x05] = 0;
+            busData[pos.lol ? 0xE3 : 0xE2] = 0;
 
             stats.usage[BUS_REFRESH] += 4;
             break;

@@ -165,7 +165,7 @@ public:
     u32 busAddr[HPOS_CNT] = { };
     
     // Recorded data bus for all cycles in the current rasterline
-    u16 busValue[HPOS_CNT] = { };
+    u16 busData[HPOS_CNT] = { };
 
     // Remembers the last write to SPRxCTL (EXPERIMENTAL)
     u8 lastCtlWrite[8] = { };
@@ -257,9 +257,9 @@ private:
         << scrollOdd
         << scrollEven
 
-        << busValue
-        // << busAddr
         << busOwner
+        // << busAddr
+        << busData
         << lastCtlWrite
 
         << audxDR

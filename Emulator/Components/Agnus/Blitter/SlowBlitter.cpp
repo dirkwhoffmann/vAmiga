@@ -1271,7 +1271,7 @@ Blitter::fakeExec()
 
         // Record some fake data to make the DMA debugger happy
         assert(agnus.pos.h < HPOS_CNT_NTSC);
-        agnus.busValue[agnus.pos.h] = 0x8888;
+        agnus.busData[agnus.pos.h] = 0x8888;
     }
 
     if constexpr ((bool)(instr & REPEAT)) {
@@ -1478,7 +1478,7 @@ Blitter::fakeExecLine()
 
         // Record some fake data to make the DMA debugger happy
         assert(agnus.pos.h < HPOS_CNT_NTSC);
-        agnus.busValue[agnus.pos.h] = 0x8888;
+        agnus.busData[agnus.pos.h] = 0x8888;
     }
 
     if constexpr ((bool)(instr & REPEAT)) {

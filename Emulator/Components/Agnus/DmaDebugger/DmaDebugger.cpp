@@ -339,7 +339,7 @@ DmaDebugger::eolHandler()
         // Copy Agnus arrays before they get deleted
         std::memcpy(busOwner, agnus.busOwner, sizeof(agnus.busOwner));
         std::memcpy(busAddr, agnus.busAddr, sizeof(agnus.busAddr));
-        std::memcpy(busValue, agnus.busValue, sizeof(agnus.busValue));
+        std::memcpy(busData, agnus.busData, sizeof(agnus.busData));
         
         // Record some information for being picked up in the HSYNC handler
         pixel0 = agnus.pos.pixel(0);
@@ -355,11 +355,11 @@ DmaDebugger::hsyncHandler(isize vpos)
         
         // Draw first chunk (data from previous DMA line)
         auto *ptr1 = pixelEngine.workingPtr(vpos);
-        computeOverlay(ptr1, HBLANK_MIN, HPOS_MAX, busOwner, busValue);
+        computeOverlay(ptr1, HBLANK_MIN, HPOS_MAX, busOwner, busData);
         
         // Draw second chunk (data from current DMA line)
         auto *ptr2 = ptr1 + agnus.pos.pixel(0);
-        computeOverlay(ptr2, 0, HBLANK_MIN - 1, agnus.busOwner, agnus.busValue);
+        computeOverlay(ptr2, 0, HBLANK_MIN - 1, agnus.busOwner, agnus.busData);
     }
 }
 

@@ -88,7 +88,7 @@ Agnus::doDiskDmaRead()
 
     busOwner[pos.h] = BUS_DISK;
     busAddr[pos.h] = dskpt;
-    busValue[pos.h] = result;
+    busData[pos.h] = result;
     stats.usage[BUS_DISK]++;
 
     dskpt += 2;
@@ -104,7 +104,7 @@ Agnus::doAudioDmaRead()
     
     busOwner[pos.h] = owner;
     busAddr[pos.h] = audpt[channel];
-    busValue[pos.h] = result;
+    busData[pos.h] = result;
     stats.usage[owner]++;
 
     audpt[channel] += 2;
@@ -121,7 +121,7 @@ Agnus::doBitplaneDmaRead()
 
     busOwner[pos.h] = owner;
     busAddr[pos.h] = bplpt[bitplane];
-    busValue[pos.h] = result;
+    busData[pos.h] = result;
     stats.usage[owner]++;
 
     bplpt[bitplane] += 2;
@@ -138,7 +138,7 @@ Agnus::doSpriteDmaRead()
 
     busOwner[pos.h] = owner;
     busAddr[pos.h] = sprpt[channel];
-    busValue[pos.h] = result;
+    busData[pos.h] = result;
     stats.usage[owner]++;
 
     sprpt[channel] += 2;
@@ -152,7 +152,7 @@ Agnus::doCopperDmaRead(u32 addr)
 
     busOwner[pos.h] = BUS_COPPER;
     busAddr[pos.h] = addr;
-    busValue[pos.h] = result;
+    busData[pos.h] = result;
     stats.usage[BUS_COPPER]++;
 
     return result;
@@ -168,7 +168,7 @@ Agnus::doBlitterDmaRead(u32 addr)
 
     busOwner[pos.h] = BUS_BLITTER;
     busAddr[pos.h] = addr;
-    busValue[pos.h] = result;
+    busData[pos.h] = result;
     stats.usage[BUS_BLITTER]++;
 
     return result;
@@ -181,7 +181,7 @@ Agnus::doDiskDmaWrite(u16 value)
     
     busOwner[pos.h] = BUS_DISK;
     busAddr[pos.h] = dskpt;
-    busValue[pos.h] = value;
+    busData[pos.h] = value;
     stats.usage[BUS_DISK]++;
 
     dskpt += 2;
@@ -194,7 +194,7 @@ Agnus::doCopperDmaWrite(u32 addr, u16 value)
 
     busOwner[pos.h] = BUS_COPPER;
     busAddr[pos.h] = addr;
-    busValue[pos.h] = value;
+    busData[pos.h] = value;
     stats.usage[BUS_COPPER]++;
 }
 
@@ -205,7 +205,7 @@ Agnus::doBlitterDmaWrite(u32 addr, u16 value)
 
     assert(busOwner[pos.h] == BUS_BLITTER); // Bus is already allocated
     busAddr[pos.h] = addr;
-    busValue[pos.h] = value;
+    busData[pos.h] = value;
     stats.usage[BUS_BLITTER]++;
 }
 

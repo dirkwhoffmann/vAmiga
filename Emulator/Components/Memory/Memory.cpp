@@ -1102,7 +1102,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_CHIP> (u32 addr)
 
     stats.chipReads.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
-    agnus.busValue[agnus.pos.h] = dataBus;
+    agnus.busData[agnus.pos.h] = dataBus;
 
     return (u8)dataBus;
 }
@@ -1117,7 +1117,7 @@ Memory::peek16 <ACCESSOR_CPU, MEM_CHIP> (u32 addr)
 
     stats.chipReads.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
-    agnus.busValue[agnus.pos.h] = dataBus;
+    agnus.busData[agnus.pos.h] = dataBus;
     
     return dataBus;
 }
@@ -1138,7 +1138,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_SLOW> (u32 addr)
 
     stats.slowReads.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
-    agnus.busValue[agnus.pos.h] = dataBus;
+    agnus.busData[agnus.pos.h] = dataBus;
     
     return (u8)dataBus;
 }
@@ -1153,7 +1153,7 @@ Memory::peek16 <ACCESSOR_CPU, MEM_SLOW> (u32 addr)
 
     stats.slowReads.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
-    agnus.busValue[agnus.pos.h] = dataBus;
+    agnus.busData[agnus.pos.h] = dataBus;
     
     return dataBus;
 }
@@ -1275,7 +1275,7 @@ Memory::peek16 <ACCESSOR_CPU, MEM_CUSTOM> (u32 addr)
     dataBus = peekCustom16(addr);
 
     agnus.busAddr[agnus.pos.h] = addr;
-    agnus.busValue[agnus.pos.h] = dataBus;
+    agnus.busData[agnus.pos.h] = dataBus;
     
     return dataBus;
 }
@@ -1653,7 +1653,7 @@ Memory::poke8 <ACCESSOR_CPU, MEM_CHIP> (u32 addr, u8 value)
 
     stats.chipWrites.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
-    agnus.busValue[agnus.pos.h] = dataBus;
+    agnus.busData[agnus.pos.h] = dataBus;
 
     WRITE_CHIP_8(addr, value);
 }
@@ -1675,7 +1675,7 @@ Memory::poke16 <ACCESSOR_CPU, MEM_CHIP> (u32 addr, u16 value)
 
     stats.chipWrites.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
-    agnus.busValue[agnus.pos.h] = dataBus;
+    agnus.busData[agnus.pos.h] = dataBus;
 
     WRITE_CHIP_16(addr, value);
 }
@@ -1691,7 +1691,7 @@ Memory::poke8 <ACCESSOR_CPU, MEM_SLOW> (u32 addr, u8 value)
 
     stats.slowWrites.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
-    agnus.busValue[agnus.pos.h] = dataBus;
+    agnus.busData[agnus.pos.h] = dataBus;
     
     WRITE_SLOW_8(addr, value);
 }
@@ -1707,7 +1707,7 @@ Memory::poke16 <ACCESSOR_CPU, MEM_SLOW> (u32 addr, u16 value)
 
     stats.slowWrites.raw++;
     agnus.busAddr[agnus.pos.h] = addr;
-    agnus.busValue[agnus.pos.h] = dataBus;
+    agnus.busData[agnus.pos.h] = dataBus;
     
     WRITE_SLOW_16(addr, value);
 }
@@ -1774,7 +1774,7 @@ Memory::poke16 <ACCESSOR_CPU, MEM_RTC> (u32 addr, u16 value)
     dataBus = value;
     
     agnus.busAddr[agnus.pos.h] = addr;
-    agnus.busValue[agnus.pos.h] = dataBus;
+    agnus.busData[agnus.pos.h] = dataBus;
     
     pokeRTC16(addr, value);
 }
@@ -1789,7 +1789,7 @@ Memory::poke8 <ACCESSOR_CPU, MEM_CUSTOM> (u32 addr, u8 value)
     dataBus = value;
     
     agnus.busAddr[agnus.pos.h] = addr;
-    agnus.busValue[agnus.pos.h] = dataBus;
+    agnus.busData[agnus.pos.h] = dataBus;
     
     // http://eab.abime.net/showthread.php?p=1156399
     pokeCustom16<ACCESSOR_CPU>(addr & 0x1FE, HI_LO(value, value));
@@ -1805,7 +1805,7 @@ Memory::poke16 <ACCESSOR_CPU, MEM_CUSTOM> (u32 addr, u16 value)
     dataBus = value;
 
     agnus.busAddr[agnus.pos.h] = addr;
-    agnus.busValue[agnus.pos.h] = dataBus;
+    agnus.busData[agnus.pos.h] = dataBus;
     
     pokeCustom16<ACCESSOR_CPU>(addr, value);
 }

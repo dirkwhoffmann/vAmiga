@@ -60,14 +60,10 @@ class DmaDebugger final : public SubComponent, public Inspectable<DmaDebuggerInf
     // Colors used for highlighting DMA (derived from config.debugColor)
     RgbColor debugColor[BUS_COUNT][5] = {};
 
-    // A local copy of the recorded data bus (recorded in the EOL handler)
-    u16 busValue[HPOS_CNT];
-
-    // A local copy of the recorded address bus (recorded in the EOL handler)
-    u16 busAddr[HPOS_CNT];
-
-    // A local copy of the bus ownerships (recorded in the EOL handler)
+    // Local copies of the recorded bus data (recorded in the EOL handler)
     BusOwner busOwner[HPOS_CNT];
+    u16 busAddr[HPOS_CNT];
+    u16 busData[HPOS_CNT];
 
     // HSYNC handler information (recorded in the EOL handler)
     isize pixel0 = 0;
@@ -92,7 +88,7 @@ public:
     DmaDebugger& operator= (const DmaDebugger& other) {
         
         CLONE_ARRAY(visualize)
-        CLONE_ARRAY(busValue)
+        CLONE_ARRAY(busData)
         CLONE_ARRAY(busOwner)
         CLONE(pixel0)
         CLONE(config)
