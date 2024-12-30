@@ -67,6 +67,7 @@ PixelEngine::_didReset(bool hard)
 void
 PixelEngine::_didLoad()
 {
+    clearAll();
     updateRGBA();
 }
 
