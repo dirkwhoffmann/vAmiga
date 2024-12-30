@@ -311,7 +311,7 @@ PixelEngine::stablePtr(isize row, isize col)
 void
 PixelEngine::swapBuffers()
 {
-    emulator.textureLock.lock();
+    emulator.lockTexture();
 
     videoPort.buffersWillSwap();
 
@@ -324,7 +324,7 @@ PixelEngine::swapBuffers()
 
     activeBuffer = newActiveBuffer;
 
-    emulator.textureLock.unlock();
+    emulator.unlockTexture();
 }
 
 void
