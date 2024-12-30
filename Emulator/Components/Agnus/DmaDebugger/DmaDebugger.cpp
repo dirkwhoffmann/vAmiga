@@ -337,8 +337,9 @@ DmaDebugger::eolHandler()
     if (config.enabled) {
         
         // Copy Agnus arrays before they get deleted
-        std::memcpy(busValue, agnus.busValue, sizeof(agnus.busValue));
         std::memcpy(busOwner, agnus.busOwner, sizeof(agnus.busOwner));
+        std::memcpy(busAddr, agnus.busAddr, sizeof(agnus.busAddr));
+        std::memcpy(busValue, agnus.busValue, sizeof(agnus.busValue));
         
         // Record some information for being picked up in the HSYNC handler
         pixel0 = agnus.pos.pixel(0);

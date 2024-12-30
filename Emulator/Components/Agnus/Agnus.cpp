@@ -63,6 +63,7 @@ Agnus::operator= (const Agnus& other) {
     CLONE(scrollEven)
 
     CLONE_ARRAY(busValue)
+    CLONE_ARRAY(busAddr)
     CLONE_ARRAY(busOwner)
     CLONE_ARRAY(lastCtlWrite)
 

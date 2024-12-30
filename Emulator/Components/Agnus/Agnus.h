@@ -158,11 +158,14 @@ public:
 
 public:
     
-    // Recorded DMA values for all cycles in the current rasterline
-    u16 busValue[HPOS_CNT] = { };
-
-    // Recorded DMA usage for all cycles in the current rasterline
+    // Recorded bus ownership for all cycles in the current rasterline
     BusOwner busOwner[HPOS_CNT] = { };
+
+    // Recorded address bus for all cycles in the current rasterline
+    u32 busAddr[HPOS_CNT] = { };
+    
+    // Recorded data bus for all cycles in the current rasterline
+    u16 busValue[HPOS_CNT] = { };
 
     // Remembers the last write to SPRxCTL (EXPERIMENTAL)
     u8 lastCtlWrite[8] = { };
@@ -255,6 +258,7 @@ private:
         << scrollEven
 
         << busValue
+        // << busAddr
         << busOwner
         << lastCtlWrite
 

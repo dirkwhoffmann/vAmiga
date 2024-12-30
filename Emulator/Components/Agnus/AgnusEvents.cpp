@@ -573,6 +573,11 @@ Agnus::serviceDASEvent(EventID id)
             busOwner[0x05] = BUS_REFRESH;
             busOwner[pos.lol ? 0xE3 : 0xE2] = BUS_REFRESH;
 
+            busAddr[0x01] = 0;
+            busAddr[0x03] = 0;
+            busAddr[0x05] = 0;
+            busAddr[pos.lol ? 0xE3 : 0xE2] = 0;
+            
             busValue[0x01] = 0;
             busValue[0x03] = 0;
             busValue[0x05] = 0;
