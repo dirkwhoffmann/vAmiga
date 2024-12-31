@@ -620,6 +620,8 @@ class Inspector: DialogController {
 
         super.awakeFromNib()
         message.stringValue = ""
+        
+        panel.tabPosition = .none
     }
     
     deinit {
@@ -684,6 +686,15 @@ class Inspector: DialogController {
             case "Events": refreshEvents(count: count, full: full)
             default: break
             }
+        }
+    }
+    
+    func selectPanel(_ nr: Int) {
+        
+        if nr <  panel.numberOfTabViewItems {
+
+            panel.selectTabViewItem(at: nr)
+            fullRefresh()
         }
     }
     
