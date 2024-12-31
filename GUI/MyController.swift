@@ -165,7 +165,7 @@ extension MyController {
         
         config = Configuration(with: self)
         macAudio = MacAudio(with: self)
-        inspector = Inspector(with: self, nibName: "Inspector")
+        // inspector = Inspector(with: self, nibName: "Inspector")
         
         ledSlot = [ ledSlot0, ledSlot1, letSlot2, ledSlot3 ]
         cylSlot = [ cylSlot0, cylSlot1, cylSlot2, cylSlot3 ]
@@ -281,7 +281,7 @@ extension MyController {
 
         if frames % 5 == 0 {
 
-            // Animate the inspector
+            // Animate the inspectors
             if inspector?.window?.isVisible == true { inspector!.continuousRefresh() }
         }
         
@@ -367,50 +367,57 @@ extension MyController {
         var pan: Int { return Int(msg.drive.pan) }
         var acceleration: Double { return Double(msg.value == 0 ? 1 : msg.value) }
 
+        func passToInspector() {
+            
+            inspector?.processMessage(msg)
+        }
+        
         // Only proceed if the proxy object is still alive
         if emu == nil { return }
         
         switch msg.type {
                         
         case .CONFIG:
-            inspector?.fullRefresh()
+            
             monitor?.refresh()
             configurator?.refresh()
             refreshStatusBar()
-
+            passToInspector()
+            
         case .POWER:
-
+            
             if value != 0 {
 
                 renderer.canvas.open(delay: 1.5)
                 serialIn = ""
                 serialOut = ""
                 toolbar.updateToolbar()
-                inspector?.powerOn()
 
             } else {
 
                 toolbar.updateToolbar()
-                inspector?.powerOff()
             }
+            passToInspector()
 
         case .RUN:
+            
             needsSaving = true
             toolbar.updateToolbar()
-            inspector?.run()
             refreshStatusBar()
+            passToInspector()
             
         case .PAUSE:
             toolbar.updateToolbar()
-            inspector?.pause()
             refreshStatusBar()
+            passToInspector()
             
         case .STEP:
+            
             needsSaving = true
-            inspector?.step()
+            passToInspector()
             
         case .RESET:
-            inspector?.reset()
+            passToInspector()
 
         case .RSH_CLOSE:
             renderer.console.close(delay: 0.25)
@@ -463,43 +470,16 @@ extension MyController {
             activityBar.maxValue = 140.0 * acceleration // TODO: REMOVE??
             activityBar.warningValue = 77.0 * acceleration 
             activityBar.criticalValue = 105.0 * acceleration
-
-        case .COPPERBP_UPDATED, .COPPERWP_UPDATED:
-            inspector?.fullRefresh()
-
-        case .GUARD_UPDATED:
-            inspector?.fullRefresh()
-
-        case .BREAKPOINT_REACHED:
-            inspector?.signalBreakPoint(pc: pc)
             
-        case .WATCHPOINT_REACHED:
-            inspector?.signalWatchPoint(pc: pc)
-
-        case .CATCHPOINT_REACHED:
-            inspector?.signalCatchPoint(pc: pc, vector: vector)
-
-        case .SWTRAP_REACHED:
-            inspector?.signalSoftwareTrap(pc: pc)
-
-        case .COPPERBP_REACHED:
-            inspector?.signalCopperBreakpoint()
-
-        case .COPPERWP_REACHED:
-            inspector?.signalCopperWatchpoint()
+        case .COPPERBP_UPDATED, .COPPERWP_UPDATED, .GUARD_UPDATED,
+                .BREAKPOINT_REACHED, .WATCHPOINT_REACHED, .CATCHPOINT_REACHED,
+                .COPPERBP_REACHED, .COPPERWP_REACHED,
+                .SWTRAP_REACHED, .BEAMTRAP_REACHED, .EOF_REACHED, .EOL_REACHED:
+            passToInspector()
 
         case .CPU_HALT:
             refreshStatusBar()
-            
-        case .BEAMTRAP_REACHED:
-            inspector?.signalBeamtrap()
-
-        case .EOF_REACHED:
-            inspector?.showMessage("End of frame reached")
-            
-        case .EOL_REACHED:
-            inspector?.showMessage("End of line reached")
-            
+                        
         case .VIEWPORT:
             renderer.canvas.updateTextureRect(hstrt: Int(msg.viewport.hstrt),
                                               vstrt: Int(msg.viewport.vstrt),
@@ -507,7 +487,7 @@ extension MyController {
                                               vstop: Int(msg.viewport.vstop))
 
         case .MEM_LAYOUT:
-            inspector?.fullRefresh()
+            passToInspector()
             
         case .DRIVE_CONNECT:
 

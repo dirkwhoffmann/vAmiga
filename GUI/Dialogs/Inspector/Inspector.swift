@@ -685,6 +685,104 @@ class Inspector: DialogController {
         }
     }
     
+    func processMessage(_ msg: Message) {
+    
+        var pc: Int { return Int(msg.cpu.pc) }
+        var vector: Int { return Int(msg.cpu.vector) }
+        
+        switch msg.type {
+                        
+        case .CONFIG:
+            
+            fullRefresh()
+            
+        case .POWER:
+            
+            message.stringValue = ""
+            fullRefresh()
+            
+        case .RUN:
+            
+            message.stringValue = ""
+            cpuInstrView.alertAddr = nil
+            fullRefresh()
+
+        case .PAUSE:
+            
+            fullRefresh()
+            
+        case .STEP:
+            
+            message.stringValue = ""
+            cpuInstrView.alertAddr = nil
+            fullRefresh()
+            scrollToPC()
+            
+        case .RESET:
+            
+            message.stringValue = ""
+            cpuInstrView.alertAddr = nil
+            fullRefresh()
+
+        case .COPPERBP_UPDATED, .COPPERWP_UPDATED, .GUARD_UPDATED:
+            
+            fullRefresh()
+
+        case .BREAKPOINT_REACHED:
+            
+            message.stringValue = "Breakpoint reached"
+            cpuInstrView.alertAddr = nil
+            scrollToPC(pc: pc)
+            
+        case .WATCHPOINT_REACHED:
+            
+            message.stringValue = "Watchpoint reached"
+            cpuInstrView.alertAddr = pc
+            scrollToPC(pc: pc)
+
+        case .CATCHPOINT_REACHED:
+            
+            let name = emu.cpu.vectorName(vector)!
+            message.stringValue = "Catched exception vector \(vector) (\(name))"
+            cpuInstrView.alertAddr = pc
+            scrollToPC(pc: pc)
+
+        case .SWTRAP_REACHED:
+            
+            message.stringValue = "Software trap reached"
+            cpuInstrView.alertAddr = pc
+            scrollToPC(pc: pc)
+
+        case .COPPERBP_REACHED:
+            
+            message.stringValue = "Copper breakpoint reached"
+
+        case .COPPERWP_REACHED:
+            
+            message.stringValue = "Copper watchpoint reached"
+            
+        case .BEAMTRAP_REACHED:
+            
+            message.stringValue = "Beamtrap reached"
+
+        case .EOF_REACHED:
+            
+            message.stringValue = "End of frame reached"
+            
+        case .EOL_REACHED:
+            
+            message.stringValue = "End of line reached"
+            
+        case .MEM_LAYOUT:
+            
+            fullRefresh()
+            
+        default:
+            break
+        }
+    }
+    
+        
     func showMessage(_ msg: String) {
 
         message.stringValue = msg
@@ -700,89 +798,6 @@ class Inspector: DialogController {
     func scrollToPC(pc: Int) {
 
         cpuInstrView.jumpTo(addr: pc)
-    }
-
-    func powerOn() {
-    
-        message.stringValue = ""
-        fullRefresh()
-    }
-
-    func powerOff() {
-    
-        message.stringValue = ""
-        fullRefresh()
-    }
-
-    func run() {
-        
-        message.stringValue = ""
-        cpuInstrView.alertAddr = nil
-        fullRefresh()
-    }
-    
-    func pause() {
-        
-        fullRefresh()
-    }
-
-    func step() {
-                
-        message.stringValue = ""
-        cpuInstrView.alertAddr = nil
-        fullRefresh()
-        scrollToPC()
-    }
-    
-    func reset() {
-        
-        message.stringValue = ""
-        cpuInstrView.alertAddr = nil
-        fullRefresh()
-    }
-    
-    func signalBreakPoint(pc: Int) {
-            
-        message.stringValue = "Breakpoint reached"
-        cpuInstrView.alertAddr = nil
-        scrollToPC(pc: pc)
-    }
-
-    func signalWatchPoint(pc: Int) {
-    
-        message.stringValue = "Watchpoint reached"
-        cpuInstrView.alertAddr = pc
-        scrollToPC(pc: pc)
-    }
-
-    func signalCatchPoint(pc: Int, vector: Int) {
-    
-        let name = emu.cpu.vectorName(vector)!
-        message.stringValue = "Catched exception vector \(vector) (\(name))"
-        cpuInstrView.alertAddr = pc
-        scrollToPC(pc: pc)
-    }
-
-    func signalSoftwareTrap(pc: Int) {
-    
-        message.stringValue = "Software trap reached"
-        cpuInstrView.alertAddr = pc
-        scrollToPC(pc: pc)
-    }
-
-    func signalCopperBreakpoint() {
-    
-        message.stringValue = "Copper breakpoint reached"
-    }
-
-    func signalCopperWatchpoint() {
-    
-        message.stringValue = "Copper watchpoint reached"
-    }
-
-    func signalBeamtrap() {
-
-        message.stringValue = "Beamtrap reached"
     }
 
     @IBAction func refreshAction(_ sender: Any!) {
