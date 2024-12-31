@@ -50,8 +50,6 @@ class InspectorToolbar: NSToolbar {
     
     @IBAction func execAction(_ sender: NSSegmentedControl) {
         
-        print("execAction \(sender.selectedSegment)")
-        
         switch sender.selectedSegment {
             
         case 0: emu.running ? emu.pause() : try? emu.run()

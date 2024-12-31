@@ -862,40 +862,6 @@ extension Inspector {
 
 extension Inspector: NSTabViewDelegate {
 
-    /*
-    func updateInspectionTarget() {
-
-        func mask(_ types: [CType]) -> Int {
-
-            var result = 0
-            for type in types { result = result | 1 << type.rawValue }
-            return result
-        }
-        func mask(_ type: CType) -> Int { return mask([type]) }
-
-
-        if let id = panel.selectedTabViewItem?.label {
-
-            switch id {
-
-            case "CPU":     amiga.autoInspectionMask = mask([.CPUClass])
-            case "CIA":     amiga.autoInspectionMask = mask([.CIAClass])
-            case "Memory":  amiga.autoInspectionMask = mask([.MemoryClass])
-            case "Agnus":   amiga.autoInspectionMask = mask([.AgnusClass])
-            case "Copper":  amiga.autoInspectionMask = mask([.CopperClass])
-            case "Blitter": amiga.autoInspectionMask = mask([.BlitterClass])
-            case "Denise":  amiga.autoInspectionMask = mask([.DeniseClass])
-            case "Paula":   amiga.autoInspectionMask = mask([.PaulaClass])
-            case "Ports":   amiga.autoInspectionMask = mask([.PaulaClass, .ControlPortClass, .SerialPortClass])
-            case "Events":  amiga.autoInspectionMask =  mask([.AgnusClass])
-            default:        break
-            }
-            
-            fullRefresh()
-        }
-    }
-    */
-    
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
         
         fullRefresh()
