@@ -33,7 +33,7 @@ class MyController: NSWindowController, MessageReceiver {
     var emu: EmulatorProxy!
     
     // Inspector panel of this emulator instance
-    var inspector: Inspector?
+    var inspectors: [Inspector] = []
     
     // Monitor panel of this emulator instance
     var monitor: Monitor?
@@ -282,7 +282,8 @@ extension MyController {
         if frames % 5 == 0 {
 
             // Animate the inspectors
-            if inspector?.window?.isVisible == true { inspector!.continuousRefresh() }
+            for inspector in inspectors { inspector.continuousRefresh() }
+            // if inspector?.window?.isVisible == true { inspector!.continuousRefresh() }
         }
         
         // Do less times...
@@ -368,8 +369,7 @@ extension MyController {
         var acceleration: Double { return Double(msg.value == 0 ? 1 : msg.value) }
 
         func passToInspector() {
-            
-            inspector?.processMessage(msg)
+            for inspector in inspectors { inspector.processMessage(msg) }
         }
         
         // Only proceed if the proxy object is still alive

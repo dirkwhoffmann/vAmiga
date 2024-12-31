@@ -251,10 +251,18 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func inspectorAction(_ sender: Any!) {
         
-        if inspector == nil {
-            inspector = Inspector(with: self, nibName: "Inspector")
+        let count = inspectors.count
+        
+        // Only allow 8 inspectors at a time
+        if count < 8, let inspector = Inspector(with: self, nibName: "Inspector") {
+            
+            inspectors.append(inspector)
+            inspector.showWindow(self)
+
+        } else {
+         
+            NSSound.beep();
         }
-        inspector?.showWindow(self)
     }
     
     @IBAction func monitorAction(_ sender: Any!) {

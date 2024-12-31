@@ -610,8 +610,10 @@ class Inspector: DialogController {
     override func showWindow(_ sender: Any?) {
 
         super.showWindow(self)
+        
+        // Enter debug mode
         emu.trackOn()
-        updateInspectionTarget()
+        amiga.autoInspectionMask = 0xFF
     }
 
     override func awakeFromNib() {
@@ -781,13 +783,7 @@ class Inspector: DialogController {
             break
         }
     }
-    
         
-    func showMessage(_ msg: String) {
-
-        message.stringValue = msg
-    }
-    
     func scrollToPC() {
 
         if cpuInfo != nil {
@@ -839,14 +835,26 @@ extension Inspector {
 
         super.windowWillClose(notification)
 
-        // Leave debug mode
-        emu?.trackOff()
-        emu?.amiga.autoInspectionMask = 0
+        // Unregister the inspector
+        if let index = parent.inspectors.firstIndex(where: { $0 === self }) {
+            
+            // print("Removing inspector at index \(parent.inspectors.count)")
+            parent.inspectors.remove(at: index)
+        }
+
+        // Leave debug mode if no more inspectors are open
+        if parent.inspectors.isEmpty {
+            
+            // print("Leaving debug mode")
+            emu?.trackOff()
+            amiga.autoInspectionMask = 0
+        }
     }
 }
 
 extension Inspector: NSTabViewDelegate {
 
+    /*
     func updateInspectionTarget() {
 
         func mask(_ types: [CType]) -> Int {
@@ -878,11 +886,10 @@ extension Inspector: NSTabViewDelegate {
             fullRefresh()
         }
     }
+    */
     
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
         
-        if tabView === panel {
-            updateInspectionTarget()
-        }
+        fullRefresh()
     }
 }
