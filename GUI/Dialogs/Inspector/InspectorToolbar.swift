@@ -63,4 +63,9 @@ class InspectorToolbar: NSToolbar {
             fatalError()
         }
     }
+    
+    @IBAction func plusAction(_ sender: NSButton) {
+
+        inspector.parent.addInspector()
+    }
 }

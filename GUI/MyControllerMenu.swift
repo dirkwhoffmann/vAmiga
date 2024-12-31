@@ -249,8 +249,8 @@ extension MyController: NSMenuItemValidation {
         openConfiguratorAsWindow()
     }
 
-    @IBAction func inspectorAction(_ sender: Any!) {
-        
+    func addInspector() {
+    
         let count = inspectors.count
         
         // Only allow 8 inspectors at a time
@@ -262,6 +262,15 @@ extension MyController: NSMenuItemValidation {
         } else {
          
             NSSound.beep();
+        }
+    }
+    
+    @IBAction func inspectorAction(_ sender: Any!) {
+        
+        if inspectors.isEmpty {
+            addInspector()
+        } else {
+            inspectors[0].showWindow(self)
         }
     }
     
