@@ -10,13 +10,31 @@
 class InspectorToolbar: NSToolbar {
     
     @IBOutlet weak var inspector: Inspector!
-
+    @IBOutlet weak var timeStamp: NSButton!
+    @IBOutlet weak var selector: NSPopUpButton!
+    @IBOutlet weak var controlsSegCtrl: NSSegmentedControl!
+    
+    var emu: EmulatorProxy! { return inspector.parent.emu }
+    
     override func validateVisibleItems() {
 
     }
     
-    func updateToolbar() {
+    func updateToolbar(info: AmigaInfo, full: Bool) {
         
+        if full {
+            
+            let running = emu.running
+            
+            let label = running ? "Pause" : "Run"
+            let image = running ? "pauseTemplate" : "runTemplate"
+
+            controlsSegCtrl.setToolTip(label, forSegment: 0)
+            controlsSegCtrl.setImage(NSImage(named: image), forSegment: 0)
+            for i in 1...4 { controlsSegCtrl.setEnabled(!running, forSegment: i) }
+        }
+        
+        timeStamp.title = String(format: "%d:%03d:%03d", info.frame, info.vpos, info.hpos)
     }
     
     //
@@ -27,5 +45,22 @@ class InspectorToolbar: NSToolbar {
 
         print("Panel action \(sender.selectedTag())")
         inspector.selectPanel(sender.selectedTag())
+    }
+    
+    @IBAction func execAction(_ sender: NSSegmentedControl) {
+        
+        print("execAction \(sender.selectedSegment)")
+        
+        switch sender.selectedSegment {
+            
+        case 0: emu.running ? emu.pause() : try? emu.run()
+        case 1: emu.stepOver()
+        case 2: emu.stepInto()
+        case 3: emu.finishLine()
+        case 4: emu.finishFrame()
+            
+        default:
+            fatalError()
+        }
     }
 }

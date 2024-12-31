@@ -8428,14 +8428,14 @@
                     <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="qhc-rc-gW0"/>
                     <toolbarItem implicitItemIdentifier="E42DD58F-EAB7-4712-9B76-AFD35C3B0C4D" label="Inspection Target" paletteLabel="Inspection Target" title="CPU" id="BQe-nn-Lal">
                         <nil key="toolTip"/>
-                        <size key="minSize" width="107" height="30"/>
-                        <size key="maxSize" width="128" height="30"/>
+                        <size key="minSize" width="156" height="20"/>
+                        <size key="maxSize" width="164" height="36"/>
                         <popUpButton key="view" verticalHuggingPriority="750" id="b86-1a-Fn4">
-                            <rect key="frame" x="0.0" y="14" width="107" height="30"/>
+                            <rect key="frame" x="0.0" y="14" width="156" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="CPU" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="LXU-RO-3xV" id="Wsk-Xi-B1a">
+                            <popUpButtonCell key="cell" type="roundTextured" title="CPU" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="LXU-RO-3xV" id="Wsk-Xi-B1a">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="menu"/>
+                                <font key="font" metaFont="system"/>
                                 <menu key="menu" id="UAu-yL-CRS">
                                     <items>
                                         <menuItem title="CPU" state="on" id="LXU-RO-3xV"/>
@@ -8456,13 +8456,68 @@
                             </connections>
                         </popUpButton>
                     </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="30642DA1-478E-4345-B156-B79CA8994EBF" label="Progress" paletteLabel="Progress" title="Button" id="RcX-9d-hxi">
+                        <nil key="toolTip"/>
+                        <size key="minSize" width="128" height="32"/>
+                        <size key="maxSize" width="164" height="32"/>
+                        <button key="view" verticalHuggingPriority="750" id="xim-h1-DEa">
+                            <rect key="frame" x="0.0" y="14" width="128" height="32"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="H8T-uh-2pG">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                        </button>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="11582724-F9DF-4AC9-83C6-EB2C0DA79367" label="Custom View" paletteLabel="Custom View" title="Button" sizingBehavior="auto" id="vjh-tj-GEV">
+                        <nil key="toolTip"/>
+                        <button key="view" verticalHuggingPriority="750" id="nRb-gl-jJU">
+                            <rect key="frame" x="0.0" y="14" width="82" height="32"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GJZ-Oo-v24">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                        </button>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="9E5FCDBD-76CB-4FE9-95B1-EBC19E0EC53F" label="Program execution" paletteLabel="Program execution" sizingBehavior="auto" id="oDK-Im-k9b">
+                        <nil key="toolTip"/>
+                        <segmentedControl key="view" verticalHuggingPriority="750" id="NtZ-I8-0ON">
+                            <rect key="frame" x="0.0" y="14" width="186" height="23"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="momentary" id="Gb4-uH-JD3">
+                                <font key="font" metaFont="system"/>
+                                <segments>
+                                    <segment image="runTemplate" width="32"/>
+                                    <segment image="stepOverTemplate" width="32" tag="1"/>
+                                    <segment image="stepIntoTemplate" width="32" tag="2">
+                                        <nil key="label"/>
+                                    </segment>
+                                    <segment image="stepLineTemplate" width="32" tag="4">
+                                        <nil key="label"/>
+                                    </segment>
+                                    <segment image="stepFrameTemplate" width="32">
+                                        <nil key="label"/>
+                                    </segment>
+                                </segments>
+                            </segmentedCell>
+                            <connections>
+                                <action selector="execAction:" target="vj6-a4-cHH" id="wm1-cy-hrH"/>
+                            </connections>
+                        </segmentedControl>
+                    </toolbarItem>
                 </allowedToolbarItems>
                 <defaultToolbarItems>
+                    <toolbarItem reference="oDK-Im-k9b"/>
                     <toolbarItem reference="qhc-rc-gW0"/>
+                    <toolbarItem reference="RcX-9d-hxi"/>
                     <toolbarItem reference="BQe-nn-Lal"/>
                 </defaultToolbarItems>
                 <connections>
+                    <outlet property="controlsSegCtrl" destination="NtZ-I8-0ON" id="1Ki-5g-Ctq"/>
                     <outlet property="inspector" destination="-2" id="PSX-P1-3GN"/>
+                    <outlet property="selector" destination="b86-1a-Fn4" id="hlE-2j-snL"/>
+                    <outlet property="timeStamp" destination="xim-h1-DEa" id="Fvm-9e-bVX"/>
                 </connections>
             </toolbar>
             <connections>
@@ -8477,6 +8532,7 @@
         <image name="NSRemoveTemplate" width="18" height="5"/>
         <image name="NSTouchBarSearchTemplate" width="20" height="20"/>
         <image name="pauseTemplate" width="36" height="36"/>
+        <image name="runTemplate" width="177" height="177"/>
         <image name="state0Template" width="228" height="204"/>
         <image name="stepFrameTemplate" width="242" height="241"/>
         <image name="stepIntoTemplate" width="177" height="177"/>

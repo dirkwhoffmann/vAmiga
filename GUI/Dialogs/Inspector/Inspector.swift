@@ -601,6 +601,8 @@ class Inspector: DialogController {
     var uartInfo: UARTInfo!
     var isRunning = true
 
+    var toolbar: InspectorToolbar? { return window?.toolbar as? InspectorToolbar }
+    
     // Returns the number of the currently inspected sprite
     var selectedSprite: Int { return sprSelector.indexOfSelectedItem }
 
@@ -614,6 +616,8 @@ class Inspector: DialogController {
         // Enter debug mode
         emu.trackOn()
         amiga.autoInspectionMask = 0xFF
+        
+        refresh(full: true)
     }
 
     override func awakeFromNib() {
@@ -621,6 +625,7 @@ class Inspector: DialogController {
         super.awakeFromNib()
         message.stringValue = ""
         
+        // Hide the panel selector
         panel.tabPosition = .none
     }
     
@@ -668,8 +673,6 @@ class Inspector: DialogController {
             timeStamp.font = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
         }
         
-        timeStamp.stringValue = String(format: "%d:%03d:%03d", info.frame, info.vpos, info.hpos)
-        
         if let id = panel.selectedTabViewItem?.label {
 
             switch id {
@@ -687,6 +690,8 @@ class Inspector: DialogController {
             default: break
             }
         }
+        
+        toolbar?.updateToolbar(info: info, full: full)
     }
     
     func selectPanel(_ nr: Int) {

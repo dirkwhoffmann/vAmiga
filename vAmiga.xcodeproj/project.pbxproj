@@ -1639,8 +1639,8 @@
 		509F7F1521ED141F00A530E4 /* Inspector */ = {
 			isa = PBXGroup;
 			children = (
-				507C01AB2D24268600E29933 /* InspectorToolbar.swift */,
 				50DED6B02202EC3100B8195F /* Inspector.swift */,
+				507C01AB2D24268600E29933 /* InspectorToolbar.swift */,
 				509CF4CC22083F9800C500F0 /* CPUPanel.swift */,
 				508FDFEE21EA22780043D0E9 /* CIAPanel.swift */,
 				508FE00221EA227A0043D0E9 /* MemoryPanel.swift */,
