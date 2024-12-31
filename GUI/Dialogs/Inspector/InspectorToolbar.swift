@@ -32,6 +32,7 @@ class InspectorToolbar: NSToolbar {
             controlsSegCtrl.setToolTip(label, forSegment: 0)
             controlsSegCtrl.setImage(NSImage(named: image), forSegment: 0)
             for i in 1...4 { controlsSegCtrl.setEnabled(!running, forSegment: i) }
+            timeStamp.font = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
         }
         
         timeStamp.title = String(format: "%d:%03d:%03d", info.frame, info.vpos, info.hpos)

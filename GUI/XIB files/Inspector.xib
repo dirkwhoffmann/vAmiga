@@ -8351,7 +8351,7 @@
                         <size key="minSize" width="156" height="20"/>
                         <size key="maxSize" width="164" height="36"/>
                         <popUpButton key="view" verticalHuggingPriority="750" id="b86-1a-Fn4">
-                            <rect key="frame" x="0.0" y="14" width="156" height="30"/>
+                            <rect key="frame" x="0.0" y="14" width="156" height="32"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <popUpButtonCell key="cell" type="roundTextured" title="CPU" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="LXU-RO-3xV" id="Wsk-Xi-B1a">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -8378,12 +8378,12 @@
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="30642DA1-478E-4345-B156-B79CA8994EBF" label="Progress" paletteLabel="Progress" title="Button" id="RcX-9d-hxi">
                         <nil key="toolTip"/>
-                        <size key="minSize" width="128" height="32"/>
-                        <size key="maxSize" width="164" height="32"/>
+                        <size key="minSize" width="128" height="26"/>
+                        <size key="maxSize" width="164" height="34"/>
                         <button key="view" verticalHuggingPriority="750" id="xim-h1-DEa">
-                            <rect key="frame" x="0.0" y="14" width="128" height="32"/>
+                            <rect key="frame" x="0.0" y="14" width="130" height="26"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="H8T-uh-2pG">
+                            <buttonCell key="cell" type="roundTextured" title="Button" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="H8T-uh-2pG">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system"/>
                             </buttonCell>
@@ -8391,12 +8391,12 @@
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="11582724-F9DF-4AC9-83C6-EB2C0DA79367" label="New" paletteLabel="New" image="plus" catalog="system" id="vjh-tj-GEV">
                         <nil key="toolTip"/>
-                        <size key="minSize" width="48" height="32"/>
-                        <size key="maxSize" width="48" height="32"/>
-                        <button key="view" verticalHuggingPriority="750" id="nRb-gl-jJU">
-                            <rect key="frame" x="8" y="15" width="44" height="32"/>
+                        <size key="minSize" width="32" height="26"/>
+                        <size key="maxSize" width="34" height="32"/>
+                        <button key="view" id="nRb-gl-jJU">
+                            <rect key="frame" x="0.0" y="14" width="34" height="26"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <buttonCell key="cell" type="push" bezelStyle="rounded" image="plus" catalog="system" imagePosition="overlaps" alignment="center" borderStyle="border" inset="2" id="GJZ-Oo-v24">
+                            <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="plus" catalog="system" imagePosition="overlaps" alignment="center" inset="2" id="GJZ-Oo-v24">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system"/>
                             </buttonCell>
