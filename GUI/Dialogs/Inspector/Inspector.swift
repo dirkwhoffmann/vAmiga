@@ -19,12 +19,6 @@ class Inspector: DialogController {
 
     // Commons
     @IBOutlet weak var panel: NSTabView!
-    @IBOutlet weak var stopAndGoButton: NSButton!
-    @IBOutlet weak var stepIntoButton: NSButton!
-    @IBOutlet weak var stepOverButton: NSButton!
-    @IBOutlet weak var eolButton: NSButton!
-    @IBOutlet weak var eofButton: NSButton!
-    @IBOutlet weak var timeStamp: NSTextField!
     @IBOutlet weak var message: NSTextField!
 
     // CPU panel
@@ -658,20 +652,6 @@ class Inspector: DialogController {
         if window?.isVisible == false { return }
 
         let info = emu.amiga.info
-        
-        if full {
-        
-            let running = emu.running
-            let image = running ? "pauseTemplate" : "runTemplate"
-            
-            stopAndGoButton.image = NSImage(named: image)
-            stepIntoButton.isEnabled = !running
-            stepOverButton.isEnabled = !running
-            eolButton.isEnabled = !running
-            eofButton.isEnabled = !running
-                
-            timeStamp.font = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
-        }
         
         if let id = panel.selectedTabViewItem?.label {
 
