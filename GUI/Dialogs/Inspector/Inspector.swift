@@ -611,6 +611,18 @@ class Inspector: DialogController {
         emu.trackOn()
         amiga.autoInspectionMask = 0xFF
         
+        // Adjust window height to match what we see in interface builder
+        if let window = self.window {
+            
+            let contentHeight: CGFloat = 440
+            let toolbarHeight = window.frame.height - window.contentView!.frame.height
+            let totalHeight = contentHeight + toolbarHeight
+            
+            var frame = window.frame
+            frame.size.height = totalHeight
+            window.setFrame(frame, display: true)
+        }
+        
         refresh(full: true)
     }
 
