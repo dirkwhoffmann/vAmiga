@@ -173,36 +173,7 @@ Console::lastLineIsEmpty()
 void
 Console::printState()
 {
-    /*
-    std::stringstream ss;
-
-    ss << "\n";
-    cpu.dumpLogBuffer(ss, 8);
-    ss << "\n";
-    amiga.dump(Category::Current, ss);
-    ss << "\n";
-    cpu.disassembleRange(ss, cpu.getPC0(), 8);
-    ss << "\n";
-
-    *this << ss;
-    */
-    *this << stateString();
-}
-
-string
-Console::stateString() const
-{
-    std::stringstream ss;
-
-    ss << "\n";
-    cpu.dumpLogBuffer(ss, 8);
-    ss << "\n";
-    amiga.dump(Category::Current, ss);
-    ss << "\n";
-    cpu.disassembleRange(ss, cpu.getPC0(), 8);
-    ss << "\n";
-
-    return ss.str();
+    dump(amiga, Category::Trace);
 }
 
 void

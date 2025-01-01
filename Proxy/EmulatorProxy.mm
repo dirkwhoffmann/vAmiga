@@ -2150,7 +2150,9 @@ using namespace vamiga::moira;
 
 - (NSString *)stateString
 {
-    return @([self amiga]->stateString().c_str());
+    std::stringstream ss;
+    [self amiga]->amiga->dump(Category::Trace, ss);
+    return @(ss.str().c_str());
 }
 
 @end

@@ -119,9 +119,6 @@ struct AmigaAPI : public API {
      *  @param  mask A bit mask indicating the components under inspection
      */
     void setAutoInspectionMask(u64 mask);
-
-    // Experimental
-    string stateString();
     
     /// @}
 };

@@ -48,6 +48,7 @@ enum class Category
     Status,
     SwTraps,
     Tod,
+    Trace,
     Vectors,
     Volumes, 
     Watchpoints

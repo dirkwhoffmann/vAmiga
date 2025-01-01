@@ -647,6 +647,17 @@ Amiga::_dump(Category category, std::ostream& os) const
         os << ((fc & 0b001) ? '1' : '0');
         os << std::endl;
     }
+    
+    if (category == Category::Trace) {
+        
+        os << "\n";
+        cpu.dumpLogBuffer(os, 8);
+        os << "\n";
+        dump(Category::Current, os);
+        os << "\n";
+        cpu.disassembleRange(os, cpu.getPC0(), 8);
+        os << "\n";
+    }
 }
 
 void

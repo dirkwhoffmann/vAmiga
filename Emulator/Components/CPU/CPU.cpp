@@ -638,18 +638,18 @@ CPU::resyncOverclockedCpu()
 }
 
 const char *
-CPU::disassembleRecordedInstr(isize i, isize *len)
+CPU::disassembleRecordedInstr(isize i, isize *len) const
 {
     return disassembleInstr(debugger.logEntryAbs((int)i).pc0, len);
 }
 const char *
-CPU::disassembleRecordedWords(isize i, isize len)
+CPU::disassembleRecordedWords(isize i, isize len) const
 {
     return disassembleWords(debugger.logEntryAbs((int)i).pc0, len);
 }
 
 const char *
-CPU::disassembleRecordedFlags(isize i)
+CPU::disassembleRecordedFlags(isize i) const
 {
     static char result[18];
     
@@ -658,7 +658,7 @@ CPU::disassembleRecordedFlags(isize i)
 }
 
 const char *
-CPU::disassembleRecordedPC(isize i)
+CPU::disassembleRecordedPC(isize i) const
 {
     static char result[16];
 
@@ -667,7 +667,7 @@ CPU::disassembleRecordedPC(isize i)
 }
 
 const char *
-CPU::disassembleAddr(u32 addr)
+CPU::disassembleAddr(u32 addr) const
 {
     static char result[16];
 
@@ -676,7 +676,7 @@ CPU::disassembleAddr(u32 addr)
 }
 
 const char *
-CPU::disassembleWord(u16 value)
+CPU::disassembleWord(u16 value) const
 {
     static char result[16];
 
@@ -685,7 +685,7 @@ CPU::disassembleWord(u16 value)
 }
 
 const char *
-CPU::disassembleInstr(u32 addr, isize *len)
+CPU::disassembleInstr(u32 addr, isize *len) const
 {
     static char result[128];
 
@@ -696,7 +696,7 @@ CPU::disassembleInstr(u32 addr, isize *len)
 }
 
 const char *
-CPU::disassembleWords(u32 addr, isize len)
+CPU::disassembleWords(u32 addr, isize len) const
 {
     static char result[64];
 
@@ -705,25 +705,25 @@ CPU::disassembleWords(u32 addr, isize len)
 }
 
 const char *
-CPU::disassembleInstr(isize *len)
+CPU::disassembleInstr(isize *len) const
 {
     return disassembleInstr(reg.pc0, len);
 }
 
 const char *
-CPU::disassembleWords(isize len)
+CPU::disassembleWords(isize len) const
 {
     return disassembleWords(reg.pc0, len);
 }
 
 const char *
-CPU::disassemblePC()
+CPU::disassemblePC() const
 {
     return disassembleAddr(reg.pc0);
 }
 
 void
-CPU::dumpLogBuffer(std::ostream& os, isize count)
+CPU::dumpLogBuffer(std::ostream& os, isize count) const
 {
     isize numBytes = 0;
     isize num = debugger.loggedInstructions();
@@ -749,19 +749,19 @@ CPU::dumpLogBuffer(std::ostream& os, isize count)
 }
 
 void
-CPU::dumpLogBuffer(std::ostream& os)
+CPU::dumpLogBuffer(std::ostream& os) const
 {
     dumpLogBuffer(os, debugger.loggedInstructions());
 }
 
 void
-CPU::disassembleRange(std::ostream& os, u32 addr, isize count)
+CPU::disassembleRange(std::ostream& os, u32 addr, isize count) const
 {
     disassembleRange(os, std::pair<u32, u32>(addr, UINT32_MAX), count);
 }
 
 void
-CPU::disassembleRange(std::ostream& os, std::pair<u32, u32> range, isize max)
+CPU::disassembleRange(std::ostream& os, std::pair<u32, u32> range, isize max) const
 {
     u32 addr = range.first;
     isize numBytes = 0;
