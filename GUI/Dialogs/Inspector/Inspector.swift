@@ -88,6 +88,9 @@ class Inspector: DialogController {
 
     @IBOutlet weak var cpuTraceClearButton: NSButton!
 
+    // Bus panel
+    @IBOutlet weak var busLogicView: LogicView!
+
     // Memory panel
     @IBOutlet weak var memBankMap: NSPopUpButton!
     @IBOutlet weak var memSearchField: NSSearchField!
@@ -668,6 +671,7 @@ class Inspector: DialogController {
             switch id {
 
             case "CPU": refreshCPU(count: count, full: full)
+            case "Bus": refreshBus(count: count, full: full)
             case "CIA": refreshCIA(count: count, full: full)
             case "Memory": refreshMemory(count: count, full: full)
             case "Agnus": refreshAgnus(count: count, full: full)

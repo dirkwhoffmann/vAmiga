@@ -131,6 +131,9 @@
 		5078A5D52529E7FA00FCE384 /* Sampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5078A5D32529E7FA00FCE384 /* Sampler.cpp */; };
 		507957AC244AD25B007B8B8D /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507957AB244AD25B007B8B8D /* Configuration.swift */; };
 		507C01AC2D24269000E29933 /* InspectorToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507C01AB2D24268600E29933 /* InspectorToolbar.swift */; };
+		507C01AE2D25681400E29933 /* LogicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507C01AD2D25681000E29933 /* LogicView.swift */; };
+		507C01B02D25683600E29933 /* LogicViewFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507C01AF2D25683200E29933 /* LogicViewFormatter.swift */; };
+		507C01B22D256B9400E29933 /* BusPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507C01B12D256B9200E29933 /* BusPanel.swift */; };
 		507C9C4626076EF7006779B5 /* RessourceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507C9C4526076EF7006779B5 /* RessourceManager.swift */; };
 		507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507D7767228BE3EF001E97A9 /* StateMachine.cpp */; };
 		50826F7827F0B2AD005FBF3B /* DiagBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50826F7627F0B2AD005FBF3B /* DiagBoard.cpp */; };
@@ -687,6 +690,9 @@
 		5078BEA6264D6F8200EDA161 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		507957AB244AD25B007B8B8D /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		507C01AB2D24268600E29933 /* InspectorToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorToolbar.swift; sourceTree = "<group>"; };
+		507C01AD2D25681000E29933 /* LogicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogicView.swift; sourceTree = "<group>"; };
+		507C01AF2D25683200E29933 /* LogicViewFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogicViewFormatter.swift; sourceTree = "<group>"; };
+		507C01B12D256B9200E29933 /* BusPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusPanel.swift; sourceTree = "<group>"; };
 		507C9C4526076EF7006779B5 /* RessourceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RessourceManager.swift; sourceTree = "<group>"; };
 		507D7767228BE3EF001E97A9 /* StateMachine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StateMachine.cpp; sourceTree = "<group>"; };
 		507D7768228BE3EF001E97A9 /* StateMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StateMachine.h; sourceTree = "<group>"; };
@@ -1642,6 +1648,7 @@
 				50DED6B02202EC3100B8195F /* Inspector.swift */,
 				507C01AB2D24268600E29933 /* InspectorToolbar.swift */,
 				509CF4CC22083F9800C500F0 /* CPUPanel.swift */,
+				507C01B12D256B9200E29933 /* BusPanel.swift */,
 				508FDFEE21EA22780043D0E9 /* CIAPanel.swift */,
 				508FE00221EA227A0043D0E9 /* MemoryPanel.swift */,
 				507653CA2216F91E001D26E9 /* AgnusPanel.swift */,
@@ -1659,6 +1666,8 @@
 				50B0AF92222531C500EE3689 /* CopperTableView.swift */,
 				50DF2C9F2269135800795256 /* SpriteTableView.swift */,
 				502EFD0B2248ECAA00F0E118 /* EventTableView.swift */,
+				507C01AD2D25681000E29933 /* LogicView.swift */,
+				507C01AF2D25683200E29933 /* LogicViewFormatter.swift */,
 				508FDFF621EA22790043D0E9 /* MyFormatter.swift */,
 			);
 			path = Inspector;
@@ -2359,6 +2368,7 @@
 				508FE05221EA22CC0043D0E9 /* RomDropView.swift in Sources */,
 				508FDFD621EA20510043D0E9 /* DragAndDrop.swift in Sources */,
 				508FE01821EA227B0043D0E9 /* MyController.swift in Sources */,
+				507C01AE2D25681400E29933 /* LogicView.swift in Sources */,
 				50AE8B1C27833D2500991F89 /* DeniseInfo.cpp in Sources */,
 				5019605D23125E680051B669 /* Monitor.swift in Sources */,
 				5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */,
@@ -2387,6 +2397,7 @@
 				50927DAB24865F11008DF3B8 /* MoiraExceptions_cpp.h in Sources */,
 				50F54B2624B5D31D0078FDC9 /* tables.c in Sources */,
 				50DED6B12202EC3100B8195F /* Inspector.swift in Sources */,
+				507C01B02D25683600E29933 /* LogicViewFormatter.swift in Sources */,
 				508FE05121EA22CC0043D0E9 /* HardwareConf.swift in Sources */,
 				50E2BE33240D418600155AE4 /* MoiraDebugger.cpp in Sources */,
 				509F41EA243B0FF700AD0FE4 /* ScreenshotDialog.swift in Sources */,
@@ -2413,6 +2424,7 @@
 				506407CC2D1AC45A002FBC57 /* SocketServer.cpp in Sources */,
 				50E79BE9232D123000D296FB /* SubComponent.cpp in Sources */,
 				505B331F2B46D25700D3736F /* config.cpp in Sources */,
+				507C01B22D256B9400E29933 /* BusPanel.swift in Sources */,
 				50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */,
 				507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */,
 				5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */,
