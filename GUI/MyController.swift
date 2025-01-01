@@ -399,7 +399,7 @@ extension MyController {
                 serialOut = ""
             }
 
-            setInfo("")
+            clearInfo()
             passToInspector()
 
         case .RUN:
@@ -407,7 +407,7 @@ extension MyController {
             needsSaving = true
             toolbar.updateToolbar()
             refreshStatusBar()
-            setInfo("")
+            clearInfo()
             passToInspector()
             
         case .PAUSE:
@@ -418,11 +418,11 @@ extension MyController {
         case .STEP:
             
             needsSaving = true
-            setInfo("")
+            clearInfo()
             passToInspector()
             
         case .RESET:
-            setInfo("")
+            clearInfo()
             passToInspector()
 
         case .RSH_CLOSE:
@@ -480,32 +480,32 @@ extension MyController {
             passToInspector()
             
         case .BREAKPOINT_REACHED:
-            setInfo("Breakpoint reached", "Breakpoint hit at address \(pcHex).")
+            setInfo("Breakpoint reached", "Interrupted at address \(pcHex)")
             
         case .WATCHPOINT_REACHED:
-            setInfo("Watchpoint reached", "Watchpoint hit at address \(pcHex).")
+            setInfo("Watchpoint reached", "Interrupted at address \(pcHex)")
 
         case .CATCHPOINT_REACHED:
             let name = emu.cpu.vectorName(vector)!
-            setInfo("Exception vector catched", "Vector \(vector) executed (\(name)).")
+            setInfo("Exception vector catched", "Caught vector \(vector) (\(name))")
 
         case .COPPERBP_REACHED:
-            setInfo("Copper breakpoint reached", "Breakpoint hit at address \(pcHex).")
+            setInfo("Copper breakpoint reached", "Interrupted at address \(pcHex)")
 
         case .COPPERWP_REACHED:
-            setInfo("Copper watchpoint reached", "Watchpoint hit at address \(pcHex).")
+            setInfo("Copper watchpoint reached", "Interrupted at address \(pcHex)")
 
         case .SWTRAP_REACHED:
-            setInfo("Software trap reached at address \(pc)", "Trapped CPU at address \(pcHex).")
+            setInfo("Software trap reached at address \(pc)", "Interrupted at address \(pcHex)")
 
         case .BEAMTRAP_REACHED:
-            setInfo("Beamtrap reached", "Trapped beam at position \(pos).")
+            setInfo("Beamtrap reached", "Interrupted at location \(pos)")
 
         case .EOF_REACHED:
-            setInfo("End of frame reached", "Trapped beam at position \(pos).")
+            setInfo("End of frame reached", "Interrupted at location \(pos)")
 
         case .EOL_REACHED:
-            setInfo("End of line reached", "Trapped beam at position \(pos).")
+            setInfo("End of line reached", "Interrupted at location \(pos)")
 
         case .CPU_HALT:
             refreshStatusBar()
@@ -657,7 +657,7 @@ extension MyController {
         }
     }
     
-    func setInfo(_ text: String, _ text2: String = "") {
+    func setInfo(_ text: String?, _ text2: String? = nil) {
         
         info = text
         info2 = text2
@@ -666,7 +666,7 @@ extension MyController {
     
     func clearInfo() {
         
-        info = ""
-        info2 = ""
+        info = nil
+        info2 = nil
     }
 }

@@ -376,6 +376,8 @@
 - (MediaFileProxy *) takeSnapshot;
 - (void) loadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
 
+@property (readonly) NSString *stateString;
+
 @end
 
 

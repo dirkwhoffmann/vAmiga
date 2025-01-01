@@ -64,7 +64,7 @@ extension MyController {
 
         // Track icon
         trackIcon.toolTip = info
-        trackIcon.contentTintColor = info == "" ? nil : NSColor.warning
+        trackIcon.contentTintColor = info == nil ? nil : NSColor.warning
         if let image = NSImage(systemSymbolName: "waveform.badge.magnifyingglass", accessibilityDescription: nil) {
             trackIcon.image = image
         }
@@ -321,18 +321,27 @@ extension MyController {
     @IBAction func infoAction(_ sender: Any!) {
                 
         if let info = info {
-                                    
-            let alert = NSAlert()
-            
-            let amigaInfo = emu.amiga.info
-            let cpuInfo = emu.cpu.info
+                
+            // Get some auxiliary debug information from the emulator
+            let attributes = [NSAttributedString.Key.font: NSFont.monospaced(ofSize: 11, weight: .semibold)]
+            let text = NSAttributedString(string: emu.amiga.stateString!, attributes: attributes)
+            let size = CGRect(x: 0, y: 0, width: text.size().width + 16, height: text.size().height)
 
+            // Put the information into an accessory view
+            let accessory = NSTextView(frame: size)
+            accessory.textStorage?.setAttributedString(text)
+            accessory.drawsBackground = false
+            
+            // Create an alert
+            let alert = NSAlert()
             alert.messageText = info
             alert.informativeText = info2 ?? ""
             alert.alertStyle = .informational
             alert.icon = NSImage(systemSymbolName: "waveform.badge.magnifyingglass",
                                       accessibilityDescription: nil)
             alert.addButton(withTitle: "OK")
+            alert.accessoryView = accessory
+  
             alert.runModal()
         }
     }

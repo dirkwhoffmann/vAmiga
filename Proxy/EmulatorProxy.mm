@@ -2148,6 +2148,11 @@ using namespace vamiga::moira;
     catch (Error &error) { [ex save:error]; }
 }
 
+- (NSString *)stateString
+{
+    return @([self amiga]->stateString().c_str());
+}
+
 @end
 
 

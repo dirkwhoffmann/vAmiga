@@ -1967,5 +1967,11 @@ AmigaAPI::setAutoInspectionMask(u64 mask)
     amiga->setAutoInspectionMask(mask);
 }
 
+string
+AmigaAPI::stateString()
+{
+    return amiga->retroShell.debugger.stateString();
+}
+
 
 }

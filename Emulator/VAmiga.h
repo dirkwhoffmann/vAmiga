@@ -120,6 +120,9 @@ struct AmigaAPI : public API {
      */
     void setAutoInspectionMask(u64 mask);
 
+    // Experimental
+    string stateString();
+    
     /// @}
 };
 

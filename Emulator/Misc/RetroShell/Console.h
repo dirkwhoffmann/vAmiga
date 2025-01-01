@@ -196,6 +196,11 @@ protected:
     // Prints a state summary (used by the debug shell)
     void printState();
 
+public:
+    
+    // Experimental
+    string stateString() const;
+    
 
     //
     // Managing user input
