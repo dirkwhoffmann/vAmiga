@@ -36,6 +36,7 @@ enum_long(COMP_TYPE)
     DmaDebuggerClass,
     HdControllerClass,
     HostClass,
+    LogicAnalyzerClass,
     MemoryClass,
     MemoryDebuggerClass,
     OSDebuggerClass,

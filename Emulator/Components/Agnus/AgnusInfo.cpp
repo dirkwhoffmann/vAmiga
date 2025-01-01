@@ -459,6 +459,16 @@ Agnus::eventName(EventSlot slot, EventID id)
             }
             break;
 
+        case SLOT_PRO:
+
+            switch (id) {
+
+                case EVENT_NONE:    return "none";
+                case PRO_RECORD:    return "PRO_RECORD";
+                default:            return "*** INVALID ***";
+            }
+            break;
+
         case SLOT_INS:
 
             switch (id) {

@@ -53,6 +53,7 @@ extension EventSlot: CustomStringConvertible {
         case .SER:      return "Null Modem Cable"
         case .BTR:      return "Beam Traps"
         case .ALA:      return "Alarms"
+        case .PRO:      return "Logic analyzer"
         case .INS:      return "Inspector"
 
         case .COUNT:    return "???"

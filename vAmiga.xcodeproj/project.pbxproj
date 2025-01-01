@@ -134,6 +134,8 @@
 		507C01AE2D25681400E29933 /* LogicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507C01AD2D25681000E29933 /* LogicView.swift */; };
 		507C01B02D25683600E29933 /* LogicViewFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507C01AF2D25683200E29933 /* LogicViewFormatter.swift */; };
 		507C01B22D256B9400E29933 /* BusPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507C01B12D256B9200E29933 /* BusPanel.swift */; };
+		507C01BA2D25C36000E29933 /* LogicAnalyzer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507C01B32D25C04100E29933 /* LogicAnalyzer.cpp */; };
+		507C01BB2D25C36000E29933 /* LogicAnalyzer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507C01B32D25C04100E29933 /* LogicAnalyzer.cpp */; };
 		507C9C4626076EF7006779B5 /* RessourceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507C9C4526076EF7006779B5 /* RessourceManager.swift */; };
 		507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507D7767228BE3EF001E97A9 /* StateMachine.cpp */; };
 		50826F7827F0B2AD005FBF3B /* DiagBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50826F7627F0B2AD005FBF3B /* DiagBoard.cpp */; };
@@ -693,6 +695,10 @@
 		507C01AD2D25681000E29933 /* LogicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogicView.swift; sourceTree = "<group>"; };
 		507C01AF2D25683200E29933 /* LogicViewFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogicViewFormatter.swift; sourceTree = "<group>"; };
 		507C01B12D256B9200E29933 /* BusPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusPanel.swift; sourceTree = "<group>"; };
+		507C01B32D25C04100E29933 /* LogicAnalyzer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LogicAnalyzer.cpp; sourceTree = "<group>"; };
+		507C01B42D25C05700E29933 /* LogicAnalyzer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LogicAnalyzer.h; sourceTree = "<group>"; };
+		507C01B52D25C05A00E29933 /* LogicAnalyzerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LogicAnalyzerTypes.h; sourceTree = "<group>"; };
+		507C01B92D25C0B800E29933 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		507C9C4526076EF7006779B5 /* RessourceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RessourceManager.swift; sourceTree = "<group>"; };
 		507D7767228BE3EF001E97A9 /* StateMachine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StateMachine.cpp; sourceTree = "<group>"; };
 		507D7768228BE3EF001E97A9 /* StateMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StateMachine.h; sourceTree = "<group>"; };
@@ -1352,6 +1358,17 @@
 				505B801D23FE628F002407FE /* Ports */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		507C01B82D25C0AE00E29933 /* LogicAnalyzer */ = {
+			isa = PBXGroup;
+			children = (
+				507C01B92D25C0B800E29933 /* CMakeLists.txt */,
+				507C01B42D25C05700E29933 /* LogicAnalyzer.h */,
+				507C01B32D25C04100E29933 /* LogicAnalyzer.cpp */,
+				507C01B52D25C05A00E29933 /* LogicAnalyzerTypes.h */,
+			);
+			path = LogicAnalyzer;
 			sourceTree = "<group>";
 		};
 		508AC36527B7F634006AD2E7 /* Zorro */ = {
@@ -2023,6 +2040,7 @@
 			isa = PBXGroup;
 			children = (
 				501FB314275E46EC00D0A57B /* CMakeLists.txt */,
+				507C01B82D25C0AE00E29933 /* LogicAnalyzer */,
 				50AD904F2770CECD0011ECCB /* OSDebugger */,
 				50AD90502770CEDA0011ECCB /* RegressionTester */,
 				50BF1CCA276DBF2E00386540 /* RemoteServers */,
@@ -2385,6 +2403,7 @@
 				501FB312275E460100D0A57B /* OSDebugger.cpp in Sources */,
 				50FC08AF27819E2400F0C567 /* CopperInfo.cpp in Sources */,
 				50E1905C277F69B300B8DBE2 /* FFmpeg.cpp in Sources */,
+				507C01BA2D25C36000E29933 /* LogicAnalyzer.cpp in Sources */,
 				506ACE46279AC76700BA7877 /* SequencerBpl.cpp in Sources */,
 				505A133F2C3BA8A000FF8D2C /* MemoryDebugger.cpp in Sources */,
 				50300AF0258CF1F700D261E3 /* TypeExtensions.swift in Sources */,
@@ -2653,6 +2672,7 @@
 				50DA83E62C161961001209AA /* VAmiga.cpp in Sources */,
 				50FC04D027DA19F600C3E566 /* FileSystem.cpp in Sources */,
 				50EFB0CD2C18D95B0013B73C /* Inspectable.cpp in Sources */,
+				507C01BB2D25C36000E29933 /* LogicAnalyzer.cpp in Sources */,
 				50FC047727DA129800C3E566 /* Buffer.cpp in Sources */,
 				50FC049727DA196C00C3E566 /* NamedPipe.cpp in Sources */,
 				50FC04D827DA1A0000C3E566 /* RetroShell.cpp in Sources */,

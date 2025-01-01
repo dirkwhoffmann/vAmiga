@@ -18,7 +18,7 @@ DmaDebugger::DmaDebugger(Amiga &ref) : SubComponent(ref)
     
 }
 
-void 
+void
 DmaDebugger::_dump(Category category, std::ostream& os) const
 {
     auto print = [&]() {

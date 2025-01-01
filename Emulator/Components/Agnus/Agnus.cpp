@@ -515,6 +515,9 @@ Agnus::executeUntil(Cycle cycle) {
             if (isDue<SLOT_ALA>(cycle)) {
                 amiga.serviceAlarmEvent();
             }
+            if (isDue<SLOT_PRO>(cycle)) {
+                logicAnalyzer.servicePROEvent();
+            }
             if (isDue<SLOT_INS>(cycle)) {
                 agnus.serviceINSEvent();
             }

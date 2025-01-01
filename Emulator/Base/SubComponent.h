@@ -45,6 +45,7 @@ public:
     class HdController &hd3con;
     class Host &host;
     class Keyboard &keyboard;
+    class LogicAnalyzer &logicAnalyzer;
     class Memory &mem;
     class MsgQueue &msgQueue;
     class OSDebugger &osDebugger;

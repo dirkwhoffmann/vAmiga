@@ -80,6 +80,15 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_DMA_DEBUG_COLOR6:          return numParser();
         case OPT_DMA_DEBUG_COLOR7:          return numParser();
 
+        case OPT_LA_PROBE0:                 return enumParser.template operator()<ProbeEnum>();
+        case OPT_LA_PROBE1:                 return enumParser.template operator()<ProbeEnum>();
+        case OPT_LA_PROBE2:                 return enumParser.template operator()<ProbeEnum>();
+        case OPT_LA_PROBE3:                 return enumParser.template operator()<ProbeEnum>();
+        case OPT_LA_ADDR0:                  return numParser();
+        case OPT_LA_ADDR1:                  return numParser();
+        case OPT_LA_ADDR2:                  return numParser();
+        case OPT_LA_ADDR3:                  return numParser();
+
         case OPT_VID_WHITE_NOISE:           return boolParser();
             
         case OPT_CPU_REVISION:              return enumParser.template operator()<CPURevisionEnum>();

@@ -15,27 +15,16 @@ class LogicView: NSView {
     // Reference to the emulator
     var emu: EmulatorProxy? { return inspector.emu }
 
+    var lock = NSLock()
+    
     // Indicates if anything should be drawn
     var visible = true
-
-    /*
-    // The visualized rasterline
-    var line: Int { return analyzer.line }
-
-    // Beam position
-    var sof = false
-    var x: Int?
-    var y: Int?
-    */
-    
+     
     // The probed signal
-    // var probe: [Probe] = [ .ADDR_BUS, .DATA_BUS, .PHI1, .PHI2 ]
-
-    // Bit-width of the probed signals (e.g., 8 for data bus, 1 for RDY)
-    // var bitWidth: [Int] = [ 16, 8, 1, 1 ]
+    var probe: [Probe] = [ .BUS_OWNER, .ADDR_BUS, .DATA_BUS, .NONE ]
 
     // The recorded data
-    // var data = Array(repeating: Array(repeating: 0, count: 230), count: 4)
+    var data:[[Int?]] = Array(repeating: Array(repeating: 0, count: 228), count: 4)
 
     // Number formatter
     let formatter = LogicViewFormatter()
@@ -64,7 +53,6 @@ class LogicView: NSView {
 
     func update() {
 
-        updateData()
         needsDisplay = true
     }
 
@@ -72,10 +60,41 @@ class LogicView: NSView {
     // Managing the data source
     //
 
-    func updateData() {
+    func cacheData() {
 
+        lock.lock()
+        
         guard let emu = emu else { return }
 
+        let hpos = emu.amiga.info.hpos
+        
+        for c in 0...3 {
+            
+            for i in 0..<228 { data[c][i] = nil }
+                    
+            switch probe[c] {
+                
+            case .BUS_OWNER:
+                
+                for i in 0...hpos { data[c][i] = i % 8 }
+                
+            case .ADDR_BUS:
+                
+                for i in 0...hpos { data[c][i] = i }
+                
+            case .DATA_BUS:
+                
+                for i in 0...hpos { data[c][i] = i / 2 }
+                
+            case .MEMORY:
+                
+                for i in 0...hpos { data[c][i] = 42 }
+                
+            default:
+                break
+            }
+            
+        }
         /*
         if let values = emu.logicAnalyzer.getData(line) {
 
@@ -110,25 +129,49 @@ class LogicView: NSView {
             }
         }
         */
+        lock.unlock()
     }
 
-    func getData(x pos: Int, channel: Int) -> Int? {
+    func getData(cycle: Int, channel: Int) -> Int? {
 
-        return Int.random(in: 0...255)
-        
-        /*
-        if let x = x, let y = y {
-
-            return line < y || (line == y && pos < x) ? data[channel][pos] : nil
-        }
-
-        return nil
-        */
+        return cycle < 228 ? data[channel][cycle] : nil
     }
-
+    
     //
     // Drawing
     //
+
+    override func draw(_ dirtyRect: NSRect) {
+
+        lock.lock()
+        
+        super.draw(dirtyRect)
+
+        context = NSGraphicsContext.current?.cgContext
+        let dy = CGFloat(36)
+
+        clear()
+
+        
+        if !visible { return }
+
+        drawMarkers(in: NSRect(x: bounds.minX,
+                               y: bounds.maxY - dy,
+                               width: bounds.width,
+                               height: 24))
+
+        for i in 0...3 {
+
+            let rect = NSRect(x: bounds.minX,
+                              y: bounds.maxY - CGFloat(i + 2) * dy,
+                              width: bounds.width,
+                              height: 24)
+
+            drawSignalTrace(in: rect, channel: i)
+        }
+        
+        lock.unlock()
+    }
 
     func clear() {
 
@@ -177,66 +220,39 @@ class LogicView: NSView {
         drawMarkers(in: bounds)
     }
 
-    override func draw(_ dirtyRect: NSRect) {
-
-        super.draw(dirtyRect)
-
-        context = NSGraphicsContext.current?.cgContext
-        let dy = CGFloat(36)
-
-        clear()
-
-        if !visible { return }
-
-        drawMarkers(in: NSRect(x: bounds.minX,
-                               y: bounds.maxY - dy,
-                               width: bounds.width,
-                               height: 24))
-
-        for i in 0...3 {
-
-            let rect = NSRect(x: bounds.minX,
-                              y: bounds.maxY - CGFloat(i + 2) * dy,
-                              width: bounds.width,
-                              height: 24)
-
-            drawSignalTrace(in: rect, channel: i)
-        }
-    }
-
     func drawSignalTrace(in rect: NSRect, channel: Int) {
 
         let w = rect.size.width / 228
 
         var prev: Int?
-        var curr: Int? = getData(x: 0, channel: channel)
-        var next: Int? = getData(x: 1, channel: channel)
+        var curr: Int? = getData(cycle: 0, channel: channel)
+        var next: Int? = getData(cycle: 1, channel: channel)
 
         for i in 0..<228 {
-
-            if curr == nil { break }
-
+            
             let r = CGRect(x: CGFloat(i) * w,
                            y: rect.minY,
                            width: w,
                            height: rect.height)
-
+            
             drawDataSegment(in: r, v: [prev, curr, next], color: .black)
             /*
-            if bitWidth[channel] == 1 {
-                drawLineSegment(in: r, v: [prev, curr, next], color: .black)
-            } else {
-                drawDataSegment(in: r, v: [prev, curr, next], color: .black)
+             if bitWidth[channel] == 1 {
+             drawLineSegment(in: r, v: [prev, curr, next], color: .black)
+             } else {
+             drawDataSegment(in: r, v: [prev, curr, next], color: .black)
+             }
+             */
+            if curr != nil {
+                drawText(text: formatter.string(from: curr!, bitWidth: 16),
+                         in: r,
+                         font: mono,
+                         color: NSColor.labelColor)
             }
-            */
-            drawText(text: formatter.string(from: curr!, bitWidth: 16),
-                     in: r,
-                     font: mono,
-                     color: NSColor.labelColor)
-
+            
             prev = curr
             curr = next
-            next = getData(x: i+2, channel: channel)
+            next = getData(cycle: i+2, channel: channel)
         }
     }
 
@@ -310,8 +326,6 @@ class LogicView: NSView {
 
     func drawDataSegment(in rect: CGRect, v: [Int?], color: NSColor) {
 
-        if v[1] == nil { return }
-
         let path = CGMutablePath()
 
         let x1 = rect.minX
@@ -319,34 +333,44 @@ class LogicView: NSView {
         let x2 = rect.maxX
         let y2 = rect.maxY
 
-        /*           p2               p3
-         *           /-----------------\
-         *          /                   \
-         *   p1/p8 .                     . p4/p5
-         *          \                   /
-         *           \-----------------/
-         *           p7               p6
-         */
-
-        let m = 0.1 * rect.width
-        let p1 = CGPoint(x: x1, y: (v[0] == nil || v[0] == v[1]) ? y1 : rect.midY)
-        let p2 = CGPoint(x: x1 + m, y: y1)
-        let p3 = CGPoint(x: x2 - m, y: y1)
-        let p4 = CGPoint(x: x2, y: (v[2] == nil || v[1] == v[2]) ? y1 : rect.midY)
-        let p5 = CGPoint(x: x2, y: (v[2] == nil || v[1] == v[2]) ? y2 : rect.midY)
-        let p6 = CGPoint(x: x2 - m, y: y2)
-        let p7 = CGPoint(x: x1 + m, y: y2)
-        let p8 = CGPoint(x: x1, y: (v[0] == nil || v[0] == v[1]) ? y2 : rect.midY)
-
-        path.move(to: p1)
-        path.addLine(to: p2)
-        path.addLine(to: p3)
-        path.addLine(to: p4)
-        path.move(to: p5)
-        path.addLine(to: p6)
-        path.addLine(to: p7)
-        path.addLine(to: p8)
-
+        if v[1] == nil {
+            
+            let p1 = CGPoint(x: x1, y: rect.midY)
+            let p2 = CGPoint(x: x2, y: rect.midY)
+            path.move(to: p1)
+            path.addLine(to: p2)
+            
+        } else {
+            
+            /*           p2               p3
+             *           /-----------------\
+             *          /                   \
+             *   p1/p8 .                     . p4/p5
+             *          \                   /
+             *           \-----------------/
+             *           p7               p6
+             */
+            
+            let m = 0.1 * rect.width
+            let p1 = CGPoint(x: x1, y: (v[0] == nil || v[0] == v[1]) ? y1 : rect.midY)
+            let p2 = CGPoint(x: x1 + m, y: y1)
+            let p3 = CGPoint(x: x2 - m, y: y1)
+            let p4 = CGPoint(x: x2, y: (v[1] == v[2]) ? y1 : rect.midY)
+            let p5 = CGPoint(x: x2, y: (v[1] == v[2]) ? y2 : rect.midY)
+            let p6 = CGPoint(x: x2 - m, y: y2)
+            let p7 = CGPoint(x: x1 + m, y: y2)
+            let p8 = CGPoint(x: x1, y: (v[0] == nil || v[0] == v[1]) ? y2 : rect.midY)
+            
+            path.move(to: p1)
+            path.addLine(to: p2)
+            path.addLine(to: p3)
+            path.addLine(to: p4)
+            path.move(to: p5)
+            path.addLine(to: p6)
+            path.addLine(to: p7)
+            path.addLine(to: p8)
+        }
+        
         context.setLineWidth(1.5)
         context.setStrokeColor(color.cgColor)
 

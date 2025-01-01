@@ -115,6 +115,7 @@ enum_long(SLOT)
     SLOT_SER,                       // Serial remote server
     SLOT_BTR,                       // Beam traps
     SLOT_ALA,                       // Alarms (set by the GUI)
+    SLOT_PRO,                       // Probing (logic analyzer)
     SLOT_INS,                       // Handles periodic calls to inspect()
 
     SLOT_COUNT
@@ -173,6 +174,7 @@ struct EventSlotEnum : vamiga::util::Reflection<EventSlotEnum, EventSlot>
             case SLOT_BTR:   return "BTR";
             case SLOT_ALA:   return "ALA";
             case SLOT_INS:   return "INS";
+            case SLOT_PRO:   return "PRO";
             case SLOT_COUNT: return "???";
         }
         return "???";
@@ -393,6 +395,10 @@ enum_i8(EventID)
     // Alarm event slot
     ALA_TRIGGER         = 1,
     ALA_EVENT_COUNT,
+
+    // Logic analyzer slot
+    PRO_RECORD          = 1,
+    PRO_EVENT_COUNT,
 
     // Inspector slot
     INS_RECORD          = 1,

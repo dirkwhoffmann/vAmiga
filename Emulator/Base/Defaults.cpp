@@ -65,6 +65,15 @@ Defaults::Defaults()
     setFallback(OPT_DMA_DEBUG_COLOR6,           0xFFFFFF00);
     setFallback(OPT_DMA_DEBUG_COLOR7,           0xFF000000);
 
+    setFallback(OPT_LA_PROBE0,                  PROBE_NONE);
+    setFallback(OPT_LA_PROBE1,                  PROBE_NONE);
+    setFallback(OPT_LA_PROBE2,                  PROBE_NONE);
+    setFallback(OPT_LA_PROBE3,                  PROBE_NONE);
+    setFallback(OPT_LA_ADDR0,                   0);
+    setFallback(OPT_LA_ADDR1,                   0);
+    setFallback(OPT_LA_ADDR2,                   0);
+    setFallback(OPT_LA_ADDR3,                   0);
+
     setFallback(OPT_VID_WHITE_NOISE,            true);
 
     setFallback(OPT_CPU_REVISION,               CPU_68000);

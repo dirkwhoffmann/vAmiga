@@ -49,6 +49,7 @@
 #include "RomFileTypes.h"
 
 // Miscellaneous
+#include "LogicAnalyzerTypes.h"
 #include "RemoteManagerTypes.h"
 #include "RemoteServerTypes.h"
 #include "RetroShellTypes.h"

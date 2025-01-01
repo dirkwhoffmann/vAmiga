@@ -80,6 +80,17 @@ enum_long(OPT)
     OPT_DMA_DEBUG_COLOR6,
     OPT_DMA_DEBUG_COLOR7,
 
+    // Logic analyzer
+    OPT_LA_PROBE0,              ///< Probe on channel 0
+    OPT_LA_PROBE1,              ///< Probe on channel 1
+    OPT_LA_PROBE2,              ///< Probe on channel 2
+    OPT_LA_PROBE3,              ///< Probe on channel 3
+    OPT_LA_ADDR0,               ///< Address for channel 0 (memory probing)
+    OPT_LA_ADDR1,               ///< Address for channel 1 (memory probing)
+    OPT_LA_ADDR2,               ///< Address for channel 2 (memory probing)
+    OPT_LA_ADDR3,               ///< Address for channel 3 (memory probing)
+
+    ///<
     // Video port
     OPT_VID_WHITE_NOISE,        ///< Generate white-noise when switched off
     ///<
@@ -251,6 +262,15 @@ struct OptionEnum : vamiga::util::Reflection<OptionEnum, Option>
             case OPT_DMA_DEBUG_COLOR6:          return "DMA.DEBUG_COLOR6";
             case OPT_DMA_DEBUG_COLOR7:          return "DMA.DEBUG_COLOR7";
 
+            case OPT_LA_PROBE0:                 return "LA.PROBE0";
+            case OPT_LA_PROBE1:                 return "LA.PROBE1";
+            case OPT_LA_PROBE2:                 return "LA.PROBE2";
+            case OPT_LA_PROBE3:                 return "LA.PROBE3";
+            case OPT_LA_ADDR0:                  return "LA.ADDR0";
+            case OPT_LA_ADDR1:                  return "LA.ADDR1";
+            case OPT_LA_ADDR2:                  return "LA.ADDR2";
+            case OPT_LA_ADDR3:                  return "LA.ADDR3";
+                
             case OPT_VID_WHITE_NOISE:           return "VID.WHITE_NOISE";
 
             case OPT_CPU_REVISION:              return "CPU.REVISION";
@@ -398,6 +418,15 @@ struct OptionEnum : vamiga::util::Reflection<OptionEnum, Option>
             case OPT_DMA_DEBUG_COLOR6:          return "CPU color";
             case OPT_DMA_DEBUG_COLOR7:          return "Memory refresh color";
 
+            case OPT_LA_PROBE0:                 return "Probe on channel 0";
+            case OPT_LA_PROBE1:                 return "Probe on channel 1";
+            case OPT_LA_PROBE2:                 return "Probe on channel 2";
+            case OPT_LA_PROBE3:                 return "Probe on channel 3";
+            case OPT_LA_ADDR0:                  return "Channel 0 memory address";
+            case OPT_LA_ADDR1:                  return "Channel 1 memory address";
+            case OPT_LA_ADDR2:                  return "Channel 2 memory address";
+            case OPT_LA_ADDR3:                  return "Channel 3 memory address";
+                
             case OPT_VID_WHITE_NOISE:           return "White noise";
 
             case OPT_CPU_REVISION:              return "Chip revision";

@@ -37,6 +37,7 @@
 // Misc
 #include "GdbServer.h"
 #include "Host.h"
+#include "LogicAnalyzer.h"
 #include "OSDebugger.h"
 #include "RegressionTester.h"
 #include "RemoteManager.h"
@@ -136,6 +137,7 @@ public:
     MsgQueue msgQueue = MsgQueue();
 
     // Misc
+    LogicAnalyzer logicAnalyzer = LogicAnalyzer(*this);
     RetroShell retroShell = RetroShell(*this);
     RemoteManager remoteManager = RemoteManager(*this);
     OSDebugger osDebugger = OSDebugger(*this);
