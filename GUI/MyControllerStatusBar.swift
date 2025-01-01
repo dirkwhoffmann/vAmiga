@@ -92,8 +92,8 @@ extension MyController {
 
             haltIcon: cpuinfo.halt,
             trackIcon: tracking,
-            cmdLeftIcon: false, // mapLeft || mapRight,
-            cmdRightIcon: false, // mapLeft || mapRight,
+            cmdLeftIcon: false,
+            cmdRightIcon: false,
             serverIcon: true,
             muteIcon: warp || muted,
 
