@@ -71,6 +71,10 @@ class MyController: NSWindowController, MessageReceiver {
     // Indicates if a status bar is shown
     var statusBar = true
     
+    // Information message shown in the status bar
+    var info: String? = nil
+    var info2: String? = nil
+    
     // Pictograms for being used in NSMenuItems
     var smallDisk = NSImage(named: "diskTemplate")!.resize(width: 16.0, height: 16.0)
     var smallHdr = NSImage(named: "hdrTemplate")!.resize(width: 16.0, height: 16.0)
@@ -363,11 +367,13 @@ extension MyController {
         var nr: Int { return Int(msg.drive.nr) }
         var cyl: Int { return Int(msg.drive.value) }
         var pc: Int { return Int(msg.cpu.pc) }
+        var pcHex: String { return String(format: "%X", pc) }
         var vector: Int { return Int(msg.cpu.vector) }
         var volume: Int { return Int(msg.drive.volume) }
         var pan: Int { return Int(msg.drive.pan) }
         var acceleration: Double { return Double(msg.value == 0 ? 1 : msg.value) }
-
+        var pos: String { return "(\(emu.amiga.info.vpos),\(emu.amiga.info.hpos))" }
+        
         func passToInspector() {
             for inspector in inspectors { inspector.processMessage(msg) }
         }
@@ -391,12 +397,9 @@ extension MyController {
                 renderer.canvas.open(delay: 1.5)
                 serialIn = ""
                 serialOut = ""
-                toolbar.updateToolbar()
-
-            } else {
-
-                toolbar.updateToolbar()
             }
+
+            setInfo("")
             passToInspector()
 
         case .RUN:
@@ -404,6 +407,7 @@ extension MyController {
             needsSaving = true
             toolbar.updateToolbar()
             refreshStatusBar()
+            setInfo("")
             passToInspector()
             
         case .PAUSE:
@@ -414,9 +418,11 @@ extension MyController {
         case .STEP:
             
             needsSaving = true
+            setInfo("")
             passToInspector()
             
         case .RESET:
+            setInfo("")
             passToInspector()
 
         case .RSH_CLOSE:
@@ -459,7 +465,6 @@ extension MyController {
             powerLED.image = NSImage(named: "ledGrey")
                         
         case .DMA_DEBUG:
-
             msg.value != 0 ? renderer.zoomTextureOut() : renderer.zoomTextureIn()
 
         case .VIDEO_FORMAT:
@@ -471,11 +476,36 @@ extension MyController {
             activityBar.warningValue = 77.0 * acceleration 
             activityBar.criticalValue = 105.0 * acceleration
             
-        case .COPPERBP_UPDATED, .COPPERWP_UPDATED, .GUARD_UPDATED,
-                .BREAKPOINT_REACHED, .WATCHPOINT_REACHED, .CATCHPOINT_REACHED,
-                .COPPERBP_REACHED, .COPPERWP_REACHED,
-                .SWTRAP_REACHED, .BEAMTRAP_REACHED, .EOF_REACHED, .EOL_REACHED:
+        case .COPPERBP_UPDATED, .COPPERWP_UPDATED, .GUARD_UPDATED:
             passToInspector()
+            
+        case .BREAKPOINT_REACHED:
+            setInfo("Breakpoint reached", "Breakpoint hit at address \(pcHex).")
+            
+        case .WATCHPOINT_REACHED:
+            setInfo("Watchpoint reached", "Watchpoint hit at address \(pcHex).")
+
+        case .CATCHPOINT_REACHED:
+            let name = emu.cpu.vectorName(vector)!
+            setInfo("Exception vector catched", "Vector \(vector) executed (\(name)).")
+
+        case .COPPERBP_REACHED:
+            setInfo("Copper breakpoint reached", "Breakpoint hit at address \(pcHex).")
+
+        case .COPPERWP_REACHED:
+            setInfo("Copper watchpoint reached", "Watchpoint hit at address \(pcHex).")
+
+        case .SWTRAP_REACHED:
+            setInfo("Software trap reached at address \(pc)", "Trapped CPU at address \(pcHex).")
+
+        case .BEAMTRAP_REACHED:
+            setInfo("Beamtrap reached", "Trapped beam at position \(pos).")
+
+        case .EOF_REACHED:
+            setInfo("End of frame reached", "Trapped beam at position \(pos).")
+
+        case .EOL_REACHED:
+            setInfo("End of line reached", "Trapped beam at position \(pos).")
 
         case .CPU_HALT:
             refreshStatusBar()
@@ -625,5 +655,18 @@ extension MyController {
             warn("Unknown message: \(msg)")
             fatalError()
         }
+    }
+    
+    func setInfo(_ text: String, _ text2: String = "") {
+        
+        info = text
+        info2 = text2
+        refreshStatusBar()
+    }
+    
+    func clearInfo() {
+        
+        info = ""
+        info2 = ""
     }
 }

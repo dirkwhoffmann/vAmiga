@@ -62,6 +62,13 @@ extension MyController {
         cmdLeftIcon.image = cmdKeyIcon(mapLeft)
         cmdRightIcon.image = cmdKeyIcon(mapRight)
 
+        // Track icon
+        trackIcon.toolTip = info
+        trackIcon.contentTintColor = info == "" ? nil : NSColor.warning
+        if let image = NSImage(systemSymbolName: "waveform.badge.magnifyingglass", accessibilityDescription: nil) {
+            trackIcon.image = image
+        }
+ 
         // Remote server icon
         serverIcon.image = emu.remoteManager.icon
         
@@ -311,6 +318,25 @@ extension MyController {
         emu?.set(.AMIGA_SPEED_BOOST, value: value)
     }
 
+    @IBAction func infoAction(_ sender: Any!) {
+                
+        if let info = info {
+                                    
+            let alert = NSAlert()
+            
+            let amigaInfo = emu.amiga.info
+            let cpuInfo = emu.cpu.info
+
+            alert.messageText = info
+            alert.informativeText = info2 ?? ""
+            alert.alertStyle = .informational
+            alert.icon = NSImage(systemSymbolName: "waveform.badge.magnifyingglass",
+                                      accessibilityDescription: nil)
+            alert.addButton(withTitle: "OK")
+            alert.runModal()
+        }
+    }
+    
     @IBAction func speedResetAction(_ sender: Any!) {
 
         emu?.set(.AMIGA_SPEED_BOOST, value: 100)
