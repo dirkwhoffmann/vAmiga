@@ -27,8 +27,19 @@ class LogicAnalyzer final : public SubComponent {
 
     ConfigOptions options = {
 
+        OPT_LA_PROBE0,
+        OPT_LA_PROBE1,
+        OPT_LA_PROBE2,
+        OPT_LA_PROBE3,
+        OPT_LA_ADDR0,
+        OPT_LA_ADDR1,
+        OPT_LA_ADDR2,
+        OPT_LA_ADDR3
     };
 
+    // The current configuration
+    LogicAnalyzerConfig config = {};
+    
 private:
     
     //
@@ -69,9 +80,13 @@ public:
 
 public:
 
+    const LogicAnalyzerConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
+    i64 getOption(Option option) const override;
+    void checkOption(Option opt, i64 value) override;
+    void setOption(Option option, i64 value) override;
 
-
+    
     //
     // Serializing
     //
@@ -88,6 +103,9 @@ public:
     
     // Services a probe event
     void servicePROEvent();
+    
+    // Schedules the next probe event
+    void scheduleNextProEvent();
 };
 
 }
