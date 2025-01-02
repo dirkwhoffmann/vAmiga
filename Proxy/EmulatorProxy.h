@@ -38,6 +38,7 @@
 @class HdControllerProxy;
 @class JoystickProxy;
 @class KeyboardProxy;
+@class LogicAnalyzerProxy;
 @class MediaFileProxy;
 @class MemProxy;
 @class MouseProxy;
@@ -161,6 +162,7 @@
     HardDriveProxy *hd2;
     HardDriveProxy *hd3;
     KeyboardProxy *keyboard;
+    LogicAnalyzerProxy *logicAnalyzer;
     MemProxy *mem;
     PaulaProxy *paula;
     DefaultsProxy *properties;
@@ -197,6 +199,7 @@
 @property (readonly, strong) HardDriveProxy *hd2;
 @property (readonly, strong) HardDriveProxy *hd3;
 @property (readonly, strong) KeyboardProxy *keyboard;
+@property (readonly, strong) LogicAnalyzerProxy *logicAnalyzer;
 @property (readonly, strong) MemProxy *mem;
 @property (readonly, strong) PaulaProxy *paula;
 @property (readonly, strong) RemoteManagerProxy *remoteManager;
@@ -504,6 +507,17 @@
 @interface DmaDebuggerProxy : Proxy { }
 
 @property (readonly) DmaDebuggerInfo info;
+
+@end
+
+
+//
+// LogicAnalyzer
+//
+
+@interface LogicAnalyzerProxy : Proxy { }
+
+- (const NSInteger *)getData:(NSInteger)channel;
 
 @end
 

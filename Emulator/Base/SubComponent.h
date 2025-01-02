@@ -76,6 +76,7 @@ public:
 
     SubComponent(Amiga& ref, isize id = 0);
 
+    bool isRunAheadInstance() const;
     void prefix(isize level,  const char *component, isize line) const override;
 };
 

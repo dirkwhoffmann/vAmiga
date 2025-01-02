@@ -147,6 +147,15 @@ struct DmaAPI : public API {
     DmaDebuggerAPI debugger;
 };
 
+struct LogicAnalyzerAPI : public API {
+
+    class LogicAnalyzer *logicAnalyzer = nullptr;
+
+    /** @brief  Returns the component's current configuration.
+     */
+    const LogicAnalyzerConfig &getConfig() const;
+};
+
 struct BlitterAPI : public API {
 
     class Blitter *blitter = nullptr;
@@ -199,10 +208,11 @@ struct AgnusAPI : public API {
 
     class Agnus *agnus = nullptr;
 
-    DmaAPI dma;
     CopperAPI copper;
     BlitterAPI blitter;
-
+    DmaAPI dma;
+    LogicAnalyzerAPI logicAnalyzer;
+    
     /** @brief  Returns the component's current configuration.
      */
     const AgnusConfig &getConfig() const;

@@ -66,6 +66,12 @@ AmigaAPI::getCachedInfo() const
 // Components (Agnus)
 //
 
+const LogicAnalyzerConfig &
+LogicAnalyzerAPI::getConfig() const
+{
+    return logicAnalyzer->getConfig();
+}
+
 const DmaDebuggerConfig &
 DmaDebuggerAPI::getConfig() const
 {
@@ -1531,6 +1537,8 @@ VAmiga::VAmiga() {
 
     agnus.emu = emu;
     agnus.agnus = &emu->main.agnus;
+    agnus.logicAnalyzer.emu = emu;
+    agnus.logicAnalyzer.logicAnalyzer = &emu->main.logicAnalyzer;
     agnus.dma.emu = emu;
     agnus.dma.debugger.emu = emu;
     agnus.dma.debugger.dmaDebugger = &emu->main.agnus.dmaDebugger;

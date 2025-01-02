@@ -70,65 +70,20 @@ class LogicView: NSView {
         
         for c in 0...3 {
             
-            for i in 0..<228 { data[c][i] = nil }
+            if let values = emu.logicAnalyzer.getData(c) {
+                
+                for i in 0..<hpos {
                     
-            switch probe[c] {
-                
-            case .BUS_OWNER:
-                
-                for i in 0...hpos { data[c][i] = i % 8 }
-                
-            case .ADDR_BUS:
-                
-                for i in 0...hpos { data[c][i] = i }
-                
-            case .DATA_BUS:
-                
-                for i in 0...hpos { data[c][i] = i / 2 }
-                
-            case .MEMORY:
-                
-                for i in 0...hpos { data[c][i] = 42 }
-                
-            default:
-                break
-            }
-            
-        }
-        /*
-        if let values = emu.logicAnalyzer.getData(line) {
-
-            for c in 0...3 {
-
-                switch probe[c] {
-
-                case .NONE:     for i in 0..<228 { data[c][i] = 0 }
-                case .ADDR_BUS: for i in 0..<228 { data[c][i] = Int((values + i).pointee.addrBus) }
-                case .DATA_BUS: for i in 0..<228 { data[c][i] = Int((values + i).pointee.dataBus) }
-                case .STROBE:   for i in 0..<228 { data[c][i] = Int((values + i).pointee.strobe) }
-                case .PHI1:     for i in 0..<228 { data[c][i] = (values + i).pointee.phi1 ? 1 : 0 }
-                case .PHI2:     for i in 0..<228 { data[c][i] = (values + i).pointee.phi2 ? 1 : 0 }
-                case .RDY:      for i in 0..<228 { data[c][i] = (values + i).pointee.rdy ? 1 : 0 }
-                case .SEC:      for i in 0..<228 { data[c][i] = (values + i).pointee.sec ? 1 : 0 }
-                case .SECL:     for i in 0..<228 { data[c][i] = (values + i).pointee.secl ? 1 : 0 }
-                case .HMC:      for i in 0..<228 { data[c][i] = Int((values + i).pointee.hmc) }
-                case .VSYNC:    for i in 0..<228 { data[c][i] = (values + i).pointee.vsync ? 1 : 0 }
-                case .VBLANK:   for i in 0..<228 { data[c][i] = (values + i).pointee.vblank ? 1 : 0 }
-                case .HBLANK:   for i in 0..<228 { data[c][i] = (values + i).pointee.hblank ? 1 : 0 }
-                case .INTIM:    for i in 0..<228 { data[c][i] = Int((values + i).pointee.intim) }
-                default: break
+                    let value = (values + i).pointee
+                    data[c][i] = value >= 0 ? value : nil
                 }
-
-                switch probe[c] {
-
-                case .ADDR_BUS: bitWidth[c] = 16
-                case .DATA_BUS, .STROBE, .INTIM: bitWidth[c] = 8
-                case .HMC: bitWidth[c] = 4
-                default: bitWidth[c] = 1
+                for i in (hpos + 1)..<228 {
+                    
+                    data[c][i] = nil
                 }
             }
         }
-        */
+ 
         lock.unlock()
     }
 
@@ -148,8 +103,8 @@ class LogicView: NSView {
         super.draw(dirtyRect)
 
         context = NSGraphicsContext.current?.cgContext
-        let dy = CGFloat(36)
-
+        let dy = CGFloat(48)
+        let height = CGFloat(36)
         clear()
 
         
@@ -158,14 +113,14 @@ class LogicView: NSView {
         drawMarkers(in: NSRect(x: bounds.minX,
                                y: bounds.maxY - dy,
                                width: bounds.width,
-                               height: 24))
+                               height: height))
 
         for i in 0...3 {
 
             let rect = NSRect(x: bounds.minX,
                               y: bounds.maxY - CGFloat(i + 2) * dy,
                               width: bounds.width,
-                              height: 24)
+                              height: height)
 
             drawSignalTrace(in: rect, channel: i)
         }
@@ -352,14 +307,14 @@ class LogicView: NSView {
              */
             
             let m = 0.1 * rect.width
-            let p1 = CGPoint(x: x1, y: (v[0] == nil || v[0] == v[1]) ? y1 : rect.midY)
+            let p1 = CGPoint(x: x1, y: (v[0] == v[1]) ? y1 : rect.midY)
             let p2 = CGPoint(x: x1 + m, y: y1)
             let p3 = CGPoint(x: x2 - m, y: y1)
             let p4 = CGPoint(x: x2, y: (v[1] == v[2]) ? y1 : rect.midY)
             let p5 = CGPoint(x: x2, y: (v[1] == v[2]) ? y2 : rect.midY)
             let p6 = CGPoint(x: x2 - m, y: y2)
             let p7 = CGPoint(x: x1 + m, y: y2)
-            let p8 = CGPoint(x: x1, y: (v[0] == nil || v[0] == v[1]) ? y2 : rect.midY)
+            let p8 = CGPoint(x: x1, y: (v[0] == v[1]) ? y2 : rect.midY)
             
             path.move(to: p1)
             path.addLine(to: p2)

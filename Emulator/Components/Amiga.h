@@ -196,7 +196,9 @@ public:
     Amiga(class Emulator& ref, isize id);
     ~Amiga();
 
+    bool isRunAheadInstance() const { return objid == 1; }
 
+    
     //
     // Operators
     //

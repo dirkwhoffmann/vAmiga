@@ -776,6 +776,25 @@ using namespace vamiga::moira;
 
 
 //
+// Logic Analyzer
+//
+
+@implementation LogicAnalyzerProxy
+
+- (LogicAnalyzerAPI *)la
+{
+    return (LogicAnalyzerAPI *)obj;
+}
+
+- (const NSInteger *)getData:(NSInteger)channel
+{
+    return [self la]->logicAnalyzer->get(channel);
+}
+
+@end
+
+
+//
 // Denise proxy
 //
 
@@ -2188,6 +2207,7 @@ using namespace vamiga::moira;
 @synthesize hd2;
 @synthesize hd3;
 @synthesize keyboard;
+@synthesize logicAnalyzer;
 @synthesize mem;
 @synthesize paula;
 @synthesize remoteManager;
@@ -2232,6 +2252,7 @@ using namespace vamiga::moira;
     hd2 = [[HardDriveProxy alloc] initWith:&vamiga->hd2];
     hd3 = [[HardDriveProxy alloc] initWith:&vamiga->hd3];
     keyboard = [[KeyboardProxy alloc] initWith:&vamiga->keyboard];
+    logicAnalyzer = [[LogicAnalyzerProxy alloc] initWith:&vamiga->agnus.logicAnalyzer];
     mem = [[MemProxy alloc] initWith:&vamiga->mem];
     paula = [[PaulaProxy alloc] initWith:&vamiga->paula];
     retroShell = [[RetroShellProxy alloc] initWith:&vamiga->retroShell];

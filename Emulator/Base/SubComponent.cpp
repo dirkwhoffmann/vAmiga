@@ -62,6 +62,12 @@ zorro(ref.zorro)
 
 SubComponent::SubComponent(Amiga& ref, isize id) : CoreComponent(ref.emulator, id), References(ref) { };
 
+bool
+SubComponent::isRunAheadInstance() const
+{
+    return amiga.isRunAheadInstance();
+}
+
 void
 SubComponent::prefix(isize level, const char *component, isize line) const
 {

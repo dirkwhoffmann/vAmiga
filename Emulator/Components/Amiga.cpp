@@ -107,7 +107,7 @@ Amiga::prefix(isize level, const char *component, isize line) const
 
         if (level >= 2) {
 
-            if (objid == 1) fprintf(stderr, "[Run-ahead] ");
+            if (isRunAheadInstance()) fprintf(stderr, "[Run-ahead] ");
             fprintf(stderr, "%s:%ld", component, line);
         }
         if (level >= 3) {

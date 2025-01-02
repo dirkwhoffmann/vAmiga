@@ -306,20 +306,42 @@ CommandConsole::initCommands(Command &root)
         
         cmd = registerComponent(dmaDebugger);
         
-        root.add({"dmadebugger", "open"},
+        root.add({cmd, "open"},
                  "Opens the DMA debugger",
                  [this](Arguments& argv, long value) {
             
             emulator.set(OPT_DMA_DEBUG_ENABLE, true);
         });
         
-        root.add({"dmadebugger", "close"},
+        root.add({cmd, "close"},
                  "Closes the DMA debugger",
                  [this](Arguments& argv, long value) {
             
             emulator.set(OPT_DMA_DEBUG_ENABLE, false);
         });
+ 
         
+        //
+        // Logic Analyzer
+        //
+        
+        cmd = registerComponent(logicAnalyzer);
+        
+        /*
+        root.add({cmd, "open"},
+                 "Opens the DMA debugger",
+                 [this](Arguments& argv, long value) {
+            
+            emulator.set(OPT_DMA_DEBUG_ENABLE, true);
+        });
+        
+        root.add({cmd, "close"},
+                 "Closes the DMA debugger",
+                 [this](Arguments& argv, long value) {
+            
+            emulator.set(OPT_DMA_DEBUG_ENABLE, false);
+        });
+        */
         
         Command::currentGroup = "Ports";
         

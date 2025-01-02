@@ -23,7 +23,7 @@ LogicAnalyzer::LogicAnalyzer(Amiga &ref) : SubComponent(ref)
 void
 LogicAnalyzer::_didReset(bool hard)
 {
-    servicePROEvent();
+    scheduleFirstProEvent();
 }
 
 void
@@ -85,41 +85,102 @@ LogicAnalyzer::checkOption(Option opt, i64 value)
 void
 LogicAnalyzer::setOption(Option option, i64 value)
 {
+    isize c = 0;
+    bool invalidate = false;
+    
     switch (option) {
             
-        case OPT_LA_PROBE0: config.channel[0] = (Probe)value; break;
-        case OPT_LA_PROBE1: config.channel[1] = (Probe)value; break;
-        case OPT_LA_PROBE2: config.channel[2] = (Probe)value; break;
-        case OPT_LA_PROBE3: config.channel[3] = (Probe)value; break;
-        case OPT_LA_ADDR0:  config.addr[0] = (u32)value; break;
-        case OPT_LA_ADDR1:  config.addr[1] = (u32)value; break;
-        case OPT_LA_ADDR2:  config.addr[2] = (u32)value; break;
-        case OPT_LA_ADDR3:  config.addr[3] = (u32)value; break;
+        case OPT_LA_PROBE3: c++; [[fallthrough]];
+        case OPT_LA_PROBE2: c++; [[fallthrough]];
+        case OPT_LA_PROBE1: c++; [[fallthrough]];
+        case OPT_LA_PROBE0:
+
+            invalidate = config.channel[c] != (Probe)value;
+            config.channel[c] = (Probe)value;
+            break;
+            
+        case OPT_LA_ADDR3: c++; [[fallthrough]];
+        case OPT_LA_ADDR2: c++; [[fallthrough]];
+        case OPT_LA_ADDR1: c++; [[fallthrough]];
+        case OPT_LA_ADDR0:
+            
+            invalidate = config.addr[c] != (u32)value && config.channel[c] == PROBE_MEMORY;
+            config.addr[c] = (u32)value;
+            break;
 
         default:
             fatalError;
     }
 
-    scheduleNextProEvent();
+    // Wipe out prerecorded data if necessary
+    if (invalidate) std::fill_n(record[c], HPOS_CNT, -1);
+    
+    scheduleFirstProEvent();
 }
 
 void
 LogicAnalyzer::servicePROEvent()
 {
+    // Disable the logic analyzer if this is the run-ahead instance
+    if (isRunAheadInstance()) { agnus.cancel<SLOT_PRO>(); return; }
+        
+    auto hpos = agnus.pos.h;
+    
+    // Record signals
+    for (isize i = 0; i < 4; i++) {
+        
+        switch (config.channel[i]) {
+
+            case PROBE_BUS_OWNER:
+                
+                if (agnus.busOwner[hpos] != BUS_NONE) {
+                    record[i][hpos] = isize(agnus.busOwner[hpos]);
+                } else {
+                    record[i][hpos] = -1;
+                }
+                break;
+                
+            case PROBE_ADDR_BUS:
+
+                if (agnus.busOwner[hpos] != BUS_NONE) {
+                    record[i][hpos] = isize(agnus.busAddr[hpos]);
+                } else {
+                    record[i][hpos] = -1;
+                }
+                break;
+
+            case PROBE_DATA_BUS:
+
+                if (agnus.busOwner[hpos] != BUS_NONE) {
+                    record[i][hpos] = isize(agnus.busData[hpos]);
+                } else {
+                    record[i][hpos] = -1;
+                }
+                break;
+
+            case PROBE_MEMORY:
+                
+                record[i][hpos] = isize(mem.spypeek16<ACCESSOR_CPU>(config.addr[i]));
+                break;
+                
+            default:
+                break;
+        }
+    }
     
     // Schedule next event
-    agnus.scheduleImm<SLOT_PRO>(PRO_RECORD);    
+    agnus.scheduleRel<SLOT_PRO>(0, PRO_RECORD);
 }
 
 void
-LogicAnalyzer::scheduleNextProEvent()
+LogicAnalyzer::scheduleFirstProEvent()
 {
     if (config.channel[0] != PROBE_NONE ||
         config.channel[1] != PROBE_NONE ||
         config.channel[2] != PROBE_NONE ||
         config.channel[3] != PROBE_NONE) {
         
-        agnus.scheduleImm<SLOT_PRO>(PRO_RECORD);
+        agnus.scheduleRel<SLOT_PRO>(0, PRO_RECORD);
         
     } else {
         

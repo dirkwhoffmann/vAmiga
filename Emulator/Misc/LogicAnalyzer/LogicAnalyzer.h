@@ -11,7 +11,7 @@
 
 #include "LogicAnalyzerTypes.h"
 #include "SubComponent.h"
-// #include "Constants.h"
+#include "Constants.h"
 
 namespace vamiga {
 
@@ -39,6 +39,9 @@ class LogicAnalyzer final : public SubComponent {
 
     // The current configuration
     LogicAnalyzerConfig config = {};
+    
+    // Recorded signal traces
+    isize record[4][HPOS_CNT];
     
 private:
     
@@ -96,6 +99,16 @@ public:
 
     
     //
+    // Accessing recorded data
+    //
+    
+public:
+    
+    isize get(isize channel, isize nr) { return record[channel][nr]; }
+    isize *get(isize channel) { return record[channel]; }
+    
+    
+    //
     // Servicing events
     //
     
@@ -104,8 +117,8 @@ public:
     // Services a probe event
     void servicePROEvent();
     
-    // Schedules the next probe event
-    void scheduleNextProEvent();
+    // Schedules the first probing event
+    void scheduleFirstProEvent();
 };
 
 }
