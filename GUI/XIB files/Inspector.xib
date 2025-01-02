@@ -87,14 +87,25 @@
                 <outlet property="bltUseB" destination="qeq-Ur-qJz" id="F87-rr-rIK"/>
                 <outlet property="bltUseC" destination="fcY-pV-h7p" id="qhS-TR-QC7"/>
                 <outlet property="bltUseD" destination="csn-SG-puG" id="Dho-fw-o7a"/>
+                <outlet property="busAudio" destination="ZLm-zd-bx0" id="dHm-LE-4KE"/>
+                <outlet property="busBitplanes" destination="Rsp-cQ-gGZ" id="kLm-GC-TvL"/>
+                <outlet property="busBlitter" destination="oNW-DR-XDI" id="J5g-Ld-bYD"/>
+                <outlet property="busCPU" destination="Nbd-oG-2CR" id="B88-KY-3Ee"/>
+                <outlet property="busCopper" destination="tQf-hF-f9T" id="zWL-hs-jeY"/>
+                <outlet property="busDisk" destination="miC-1p-caz" id="vMI-zj-Znm"/>
+                <outlet property="busDisplayMode" destination="KgO-cc-H8e" id="BQr-Pc-HsQ"/>
+                <outlet property="busEnable" destination="kTo-Re-4xy" id="TCJ-s0-huO"/>
                 <outlet property="busLogicView" destination="6u0-z0-gfB" id="gZG-WM-eqV"/>
+                <outlet property="busOpacity" destination="zb3-gh-A7y" id="04J-oN-sm2"/>
                 <outlet property="busProbe0" destination="U2r-eq-JSs" id="3oM-dW-OCb"/>
                 <outlet property="busProbe1" destination="HQW-30-TSf" id="bhy-9v-oqT"/>
                 <outlet property="busProbe2" destination="YBo-JS-daZ" id="sga-fQ-8R3"/>
                 <outlet property="busProbe3" destination="Uik-02-puX" id="iqY-aJ-Jty"/>
                 <outlet property="busProbe4" destination="qqY-WX-0lm" id="YJf-u0-4TX"/>
                 <outlet property="busProbe5" destination="Tx4-gK-YWi" id="QIO-Se-vNr"/>
+                <outlet property="busRefresh" destination="zlN-rz-VbR" id="NyZ-ou-FAs"/>
                 <outlet property="busScrollView" destination="qI0-Om-v5R" id="qzB-QA-D6Y"/>
+                <outlet property="busSprites" destination="AH0-vl-j7m" id="rBT-0A-WY8"/>
                 <outlet property="ciaAlarmHi" destination="g4a-rb-TAd" id="LsO-a5-zkL"/>
                 <outlet property="ciaAlarmLo" destination="vQp-3y-fNZ" id="lZZ-Yq-ALh"/>
                 <outlet property="ciaAlarmMid" destination="cU8-pA-FF2" id="ajG-5f-tg3"/>
@@ -149,6 +160,14 @@
                 <outlet property="ciaTBpbout" destination="Sj9-0J-ksb" id="fCB-At-nB9"/>
                 <outlet property="ciaTBrunning" destination="umd-ag-k2T" id="8p6-CS-Gpt"/>
                 <outlet property="ciaTBtoggle" destination="vDW-uh-P6C" id="7hr-xO-JRu"/>
+                <outlet property="colAudio" destination="NnR-as-Q24" id="w6v-Yr-DHg"/>
+                <outlet property="colBitplanes" destination="729-8g-8xI" id="sxw-RW-CDj"/>
+                <outlet property="colBlitter" destination="tbY-Ql-76m" id="ny7-SZ-w71"/>
+                <outlet property="colCPU" destination="6nU-9B-6v1" id="ifw-b8-alN"/>
+                <outlet property="colCopper" destination="tfy-FC-W4z" id="Tug-EN-Cfv"/>
+                <outlet property="colDisk" destination="bFr-LT-IyZ" id="TZT-q7-W7F"/>
+                <outlet property="colRefresh" destination="z6Q-5L-mg9" id="iGk-Ct-Ted"/>
+                <outlet property="colSprites" destination="lkA-gQ-XAg" id="JQa-XM-L5E"/>
                 <outlet property="cop1INS" destination="RZ7-xl-CFU" id="pEV-ff-2Hs"/>
                 <outlet property="cop1LC" destination="zF6-PR-44X" id="KEp-Lv-dJC"/>
                 <outlet property="cop2INS" destination="dit-59-1Lb" id="6Nn-RU-f9T"/>
@@ -2619,6 +2638,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="busDisplayAction:" target="-2" id="qBy-qp-0gE"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tQf-hF-f9T">
                                                         <rect key="frame" x="26" y="307" width="118" height="14"/>
@@ -2627,6 +2649,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="busDisplayAction:" target="-2" id="dVb-fN-WrP"/>
+                                                        </connections>
                                                     </button>
                                                     <button tag="2" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="miC-1p-caz">
                                                         <rect key="frame" x="26" y="255" width="118" height="14"/>
@@ -2635,6 +2660,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="busDisplayAction:" target="-2" id="f8i-aq-5aP"/>
+                                                        </connections>
                                                     </button>
                                                     <button tag="4" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AH0-vl-j7m">
                                                         <rect key="frame" x="26" y="203" width="118" height="14"/>
@@ -2643,6 +2671,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="busDisplayAction:" target="-2" id="zVT-0A-yew"/>
+                                                        </connections>
                                                     </button>
                                                     <button tag="5" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rsp-cQ-gGZ">
                                                         <rect key="frame" x="26" y="177" width="118" height="14"/>
@@ -2651,6 +2682,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="busDisplayAction:" target="-2" id="Mtd-i0-pz4"/>
+                                                        </connections>
                                                     </button>
                                                     <button tag="7" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zlN-rz-VbR">
                                                         <rect key="frame" x="26" y="126" width="118" height="14"/>
@@ -2659,6 +2693,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="busDisplayAction:" target="-2" id="Vmv-sM-NNV"/>
+                                                        </connections>
                                                     </button>
                                                     <button tag="6" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nbd-oG-2CR">
                                                         <rect key="frame" x="26" y="151" width="118" height="14"/>
@@ -2667,6 +2704,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="busDisplayAction:" target="-2" id="q8Y-wu-dgf"/>
+                                                        </connections>
                                                     </button>
                                                     <button tag="3" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZLm-zd-bx0">
                                                         <rect key="frame" x="26" y="229" width="118" height="14"/>
@@ -2675,46 +2715,73 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="busDisplayAction:" target="-2" id="JZc-JO-KMC"/>
+                                                        </connections>
                                                     </button>
                                                     <colorWell fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="tbY-Ql-76m">
                                                         <rect key="frame" x="150" y="278" width="44" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="colorAction:" target="-2" id="5VU-jd-8Qi"/>
+                                                        </connections>
                                                     </colorWell>
                                                     <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tfy-FC-W4z">
                                                         <rect key="frame" x="150" y="304" width="44" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="colorAction:" target="-2" id="Omf-6b-Knt"/>
+                                                        </connections>
                                                     </colorWell>
                                                     <colorWell fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="bFr-LT-IyZ">
                                                         <rect key="frame" x="150" y="252" width="44" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="colorAction:" target="-2" id="oLA-IZ-Rp9"/>
+                                                        </connections>
                                                     </colorWell>
                                                     <colorWell fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="lkA-gQ-XAg">
                                                         <rect key="frame" x="150" y="200" width="44" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="colorAction:" target="-2" id="6fo-CH-bC6"/>
+                                                        </connections>
                                                     </colorWell>
                                                     <colorWell fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="729-8g-8xI">
                                                         <rect key="frame" x="150" y="174" width="44" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="colorAction:" target="-2" id="re7-0M-KeW"/>
+                                                        </connections>
                                                     </colorWell>
                                                     <colorWell fixedFrame="YES" tag="7" translatesAutoresizingMaskIntoConstraints="NO" id="z6Q-5L-mg9">
                                                         <rect key="frame" x="150" y="122" width="44" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="colorAction:" target="-2" id="WgV-p0-9Mc"/>
+                                                        </connections>
                                                     </colorWell>
                                                     <colorWell fixedFrame="YES" tag="6" translatesAutoresizingMaskIntoConstraints="NO" id="6nU-9B-6v1">
                                                         <rect key="frame" x="150" y="148" width="44" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="colorAction:" target="-2" id="gWZ-ah-Ke8"/>
+                                                        </connections>
                                                     </colorWell>
                                                     <colorWell fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="NnR-as-Q24">
                                                         <rect key="frame" x="150" y="226" width="44" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <connections>
+                                                            <action selector="colorAction:" target="-2" id="gdP-QM-W7i"/>
+                                                        </connections>
                                                     </colorWell>
                                                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KgO-cc-H8e">
                                                         <rect key="frame" x="28" y="79" width="166" height="18"/>
@@ -2730,6 +2797,9 @@
                                                                 </items>
                                                             </menu>
                                                         </popUpButtonCell>
+                                                        <connections>
+                                                            <action selector="busDisplayModeAction:" target="-2" id="5cW-DQ-pHh"/>
+                                                        </connections>
                                                     </popUpButton>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kTo-Re-4xy">
                                                         <rect key="frame" x="22" y="347" width="162" height="18"/>
@@ -2738,11 +2808,17 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="busEnableAction:" target="-2" id="1uE-Tm-csz"/>
+                                                        </connections>
                                                     </button>
                                                     <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zb3-gh-A7y">
                                                         <rect key="frame" x="28" y="42" width="168" height="24"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <sliderCell key="cell" controlSize="mini" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="3c3-IJ-FLa"/>
+                                                        <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="3c3-IJ-FLa"/>
+                                                        <connections>
+                                                            <action selector="busOpacityAction:" target="-2" id="Nfo-im-01W"/>
+                                                        </connections>
                                                     </slider>
                                                 </subviews>
                                             </view>

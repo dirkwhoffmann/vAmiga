@@ -29,13 +29,6 @@ extension Inspector {
     private func cacheBus() {
 
         busLogicView.cacheData()
-        
-        /*
-        let cia = ciaA ? emu.ciaA! : emu.ciaB!
-
-        ciaInfo = emu.paused ? cia.info : cia.cachedInfo
-        ciaStats = cia.stats
-        */
     }
  
     func initComboBox(_ box: NSComboBox) {
@@ -99,11 +92,51 @@ extension Inspector {
         }
 
         if count % 2 == 0 { busLogicView.update() }
+        
+        //
+        // DMA debugger
+        //
+        
+        let bus = emu.get(.DMA_DEBUG_ENABLE) != 0
+        let opacity = emu.get(.DMA_DEBUG_OPACITY)
+        let mode = emu.get(.DMA_DEBUG_MODE)
+        let info = emu.dmaDebugger.info
+        
+        busEnable.state = bus ? .on : .off
+        busCopper.state = info.visualizeCopper ? .on : .off
+        busBlitter.state = info.visualizeBlitter ? .on : .off
+        busDisk.state = info.visualizeDisk ? .on : .off
+        busAudio.state = info.visualizeAudio ? .on : .off
+        busSprites.state = info.visualizeSprites ? .on : .off
+        busBitplanes.state = info.visualizeBitplanes ? .on : .off
+        busCPU.state = info.visualizeCpu ? .on : .off
+        busRefresh.state = info.visualizeRefresh ? .on : .off
+        busOpacity.integerValue = opacity
+        busDisplayMode.selectItem(withTag: mode)
+        busBlitter.isEnabled = bus
+        busCopper.isEnabled = bus
+        busDisk.isEnabled = bus
+        busAudio.isEnabled = bus
+        busSprites.isEnabled = bus
+        busBitplanes.isEnabled = bus
+        busCPU.isEnabled = bus
+        busRefresh.isEnabled = bus
+        busOpacity.isEnabled = bus
+        busDisplayMode.isEnabled = bus
+        
+        colCopper.setColor(info.copperColor)
+        colBlitter.setColor(info.blitterColor)
+        colDisk.setColor(info.diskColor)
+        colAudio.setColor(info.audioColor)
+        colSprites.setColor(info.spriteColor)
+        colBitplanes.setColor(info.bitplaneColor)
+        colCPU.setColor(info.cpuColor)
+        colRefresh.setColor(info.refreshColor)
     }
     
     
     //
-    // Action methods
+    // Action methods (Logic Analyzer)
     //
     
     @IBAction func symAction(_ sender: NSButton!) {
@@ -184,5 +217,65 @@ extension Inspector {
             
             NSSound.beep()
         }
+    }
+    
+    //
+    // Action methods (DMA Debugger)
+    //
+        
+    @IBAction func colorAction(_ sender: NSColorWell!) {
+        
+        let r = Int(sender.color.redComponent * 255.0)
+        let g = Int(sender.color.greenComponent * 255.0)
+        let b = Int(sender.color.blueComponent * 255.0)
+        let rgb = (r << 24) | (g << 16) | (b << 8)
+
+        switch sender.tag {
+        case 0:  emu.set(.DMA_DEBUG_COLOR0, value: rgb)
+        case 1:  emu.set(.DMA_DEBUG_COLOR1, value: rgb)
+        case 2:  emu.set(.DMA_DEBUG_COLOR2, value: rgb)
+        case 3:  emu.set(.DMA_DEBUG_COLOR3, value: rgb)
+        case 4:  emu.set(.DMA_DEBUG_COLOR4, value: rgb)
+        case 5:  emu.set(.DMA_DEBUG_COLOR5, value: rgb)
+        case 6:  emu.set(.DMA_DEBUG_COLOR6, value: rgb)
+        case 7:  emu.set(.DMA_DEBUG_COLOR7, value: rgb)
+        default: break
+        }
+
+        fullRefresh()
+    }
+
+    @IBAction func busEnableAction(_ sender: NSButton!) {
+        
+        emu.set(.DMA_DEBUG_ENABLE, enable: sender.state == .on)
+        fullRefresh()
+    }
+    
+    @IBAction func busDisplayAction(_ sender: NSButton!) {
+        
+        switch sender.tag {
+        case 0:  emu.set(.DMA_DEBUG_CHANNEL0, enable: sender.state == .on)
+        case 1:  emu.set(.DMA_DEBUG_CHANNEL1, enable: sender.state == .on)
+        case 2:  emu.set(.DMA_DEBUG_CHANNEL2, enable: sender.state == .on)
+        case 3:  emu.set(.DMA_DEBUG_CHANNEL3, enable: sender.state == .on)
+        case 4:  emu.set(.DMA_DEBUG_CHANNEL4, enable: sender.state == .on)
+        case 5:  emu.set(.DMA_DEBUG_CHANNEL5, enable: sender.state == .on)
+        case 6:  emu.set(.DMA_DEBUG_CHANNEL6, enable: sender.state == .on)
+        case 7:  emu.set(.DMA_DEBUG_CHANNEL7, enable: sender.state == .on)
+        default: break
+        }
+        fullRefresh()
+    }
+    
+    @IBAction func busDisplayModeAction(_ sender: NSPopUpButton!) {
+        
+        emu.set(.DMA_DEBUG_MODE, value: sender.selectedTag())
+        fullRefresh()
+    }
+    
+    @IBAction func busOpacityAction(_ sender: NSSlider!) {
+
+        emu.set(.DMA_DEBUG_OPACITY, value: sender.integerValue)
+        fullRefresh()
     }
 }

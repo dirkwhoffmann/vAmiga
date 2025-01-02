@@ -99,6 +99,27 @@ class Inspector: DialogController {
     @IBOutlet weak var busProbe4: NSComboBox!
     @IBOutlet weak var busProbe5: NSComboBox!
     
+    @IBOutlet weak var busEnable: NSButton!
+    @IBOutlet weak var busCopper: NSButton!
+    @IBOutlet weak var busBlitter: NSButton!
+    @IBOutlet weak var busDisk: NSButton!
+    @IBOutlet weak var busAudio: NSButton!
+    @IBOutlet weak var busSprites: NSButton!
+    @IBOutlet weak var busBitplanes: NSButton!
+    @IBOutlet weak var busCPU: NSButton!
+    @IBOutlet weak var busRefresh: NSButton!
+    @IBOutlet weak var busOpacity: NSSlider!
+    @IBOutlet weak var busDisplayMode: NSPopUpButton!
+    
+    @IBOutlet weak var colCopper: NSColorWell!
+    @IBOutlet weak var colBlitter: NSColorWell!
+    @IBOutlet weak var colDisk: NSColorWell!
+    @IBOutlet weak var colAudio: NSColorWell!
+    @IBOutlet weak var colSprites: NSColorWell!
+    @IBOutlet weak var colBitplanes: NSColorWell!
+    @IBOutlet weak var colCPU: NSColorWell!
+    @IBOutlet weak var colRefresh: NSColorWell!
+    
     // Memory panel
     @IBOutlet weak var memBankMap: NSPopUpButton!
     @IBOutlet weak var memSearchField: NSSearchField!
