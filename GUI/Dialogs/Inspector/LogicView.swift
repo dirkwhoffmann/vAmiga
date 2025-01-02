@@ -137,12 +137,90 @@ class LogicView: NSView {
     
     func drawLabels() {
         
+        let names: [BusOwner: String] = [
+            
+                .NONE: "",
+                .CPU: "CPU",
+                .REFRESH: "REF",
+                .DISK: "DSK",
+                .AUD0: "AUD0",
+                .AUD1: "AUD1",
+                .AUD2: "AUD2",
+                .AUD3: "AUD3",
+                .BPL1: "BPL1",
+                .BPL2: "BPL2",
+                .BPL3: "BPL3",
+                .BPL4: "BPL4",
+                .BPL5: "BPL5",
+                .BPL6: "BPL6",
+                .SPRITE0: "SPR0",
+                .SPRITE1: "SPR1",
+                .SPRITE2: "SPR2",
+                .SPRITE3: "SPR3",
+                .SPRITE4: "SPR4",
+                .SPRITE5: "SPR5",
+                .SPRITE6: "SPR6",
+                .SPRITE7: "SPR7",
+                .COPPER: "COP",
+                .BLITTER: "BLT",
+                .BLOCKED: "BLK"
+        ]
+        
+        let colors: [BusOwner: NSColor] = [
+            
+            .NONE: .clear,
+            .CPU: inspector.colCPU.color,
+            .REFRESH: inspector.colRefresh.color,
+            .DISK: inspector.colDisk.color,
+            .AUD0: inspector.colAudio.color,
+            .AUD1: inspector.colAudio.color,
+            .AUD2: inspector.colAudio.color,
+            .AUD3: inspector.colAudio.color,
+            .BPL1: inspector.colBitplanes.color,
+            .BPL2: inspector.colBitplanes.color,
+            .BPL3: inspector.colBitplanes.color,
+            .BPL4: inspector.colBitplanes.color,
+            .BPL5: inspector.colBitplanes.color,
+            .BPL6: inspector.colBitplanes.color,
+            .SPRITE0: inspector.colSprites.color,
+            .SPRITE1: inspector.colSprites.color,
+            .SPRITE2: inspector.colSprites.color,
+            .SPRITE3: inspector.colSprites.color,
+            .SPRITE4: inspector.colSprites.color,
+            .SPRITE5: inspector.colSprites.color,
+            .SPRITE6: inspector.colSprites.color,
+            .SPRITE7: inspector.colSprites.color,
+            .COPPER: inspector.colCopper.color,
+            .BLITTER: inspector.colBlitter.color,
+            .BLOCKED: .red
+        ]
+        
+        let owners = emu!.logicAnalyzer.busOwners()!
+        
         for i in 0..<segments {
+            
+            let owner = (owners + i).pointee
+            let name = names[owner] ?? "???"
+            colors[owner]?.setFill()
+            /*
+            CGRect(x: CGFloat(i) * dx,
+                             y: bounds.maxY - (headerHeight / 2) - 2,
+                             width: dx,
+                             height: 4).fill()
+            */
+            CGRect(x: CGFloat(i) * dx,
+                             y: bounds.maxY - headerHeight,
+                             width: dx,
+                             height: 4).fill()
 
             drawText(text: "\(i)",
-                     in: NSRect(x: CGFloat(i) * dx, y: bounds.maxY - headerHeight, width: dx, height: headerHeight),
+                     in: NSRect(x: CGFloat(i) * dx, y: bounds.maxY - 0.5*headerHeight + 2, width: dx, height: 0.5*headerHeight - 2),
                      font: system,
-                     color: NSColor.labelColor)
+                     color: .labelColor)
+            drawText(text: "\(name)",
+                     in: NSRect(x: CGFloat(i) * dx, y: bounds.maxY - headerHeight + 4, width: dx, height: 0.5*headerHeight - 2),
+                     font: system,
+                     color: .labelColor)
         }
     }
     
@@ -163,8 +241,10 @@ class LogicView: NSView {
 
         let rect = signalRect(channel)
 
+        /*
         if (channel % 2 == 0) { NSColor.red.setFill() } else { NSColor.blue.setFill() }
         rect.fill()
+        */
         
         let probe = getProbe(channel: channel)
         var prev: Int?

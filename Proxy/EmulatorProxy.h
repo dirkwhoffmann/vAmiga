@@ -518,6 +518,7 @@
 @interface LogicAnalyzerProxy : Proxy { }
 
 - (const NSInteger *)getData:(NSInteger)channel;
+- (const BusOwner *)busOwners;
 
 @end
 

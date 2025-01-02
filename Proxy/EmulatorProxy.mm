@@ -791,6 +791,11 @@ using namespace vamiga::moira;
     return [self la]->logicAnalyzer->get(channel);
 }
 
+- (const BusOwner *)busOwners
+{
+    return [self la]->logicAnalyzer->agnus.busOwner;
+}
+
 @end
 
 
