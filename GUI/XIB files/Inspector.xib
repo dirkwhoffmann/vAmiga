@@ -87,15 +87,11 @@
                 <outlet property="bltUseB" destination="qeq-Ur-qJz" id="F87-rr-rIK"/>
                 <outlet property="bltUseC" destination="fcY-pV-h7p" id="qhS-TR-QC7"/>
                 <outlet property="bltUseD" destination="csn-SG-puG" id="Dho-fw-o7a"/>
-                <outlet property="busAddr0" destination="IJv-wd-doT" id="ToH-1D-pZ7"/>
-                <outlet property="busAddr1" destination="2P4-2a-wGB" id="sra-9Q-1Uv"/>
-                <outlet property="busAddr2" destination="FMf-Dj-47o" id="nSs-ec-bE1"/>
-                <outlet property="busAddr3" destination="yfd-77-ceI" id="e3I-qV-mG7"/>
                 <outlet property="busLogicView" destination="6u0-z0-gfB" id="gZG-WM-eqV"/>
-                <outlet property="busProbe0" destination="Yr1-9M-wdG" id="g7X-an-eS5"/>
-                <outlet property="busProbe1" destination="ywU-8o-zxX" id="GtE-IT-eIt"/>
-                <outlet property="busProbe2" destination="jml-cQ-T9m" id="eBv-zY-dH0"/>
-                <outlet property="busProbe3" destination="0Nv-TC-eeM" id="gGd-ii-aX3"/>
+                <outlet property="busProbe0" destination="U2r-eq-JSs" id="3oM-dW-OCb"/>
+                <outlet property="busProbe1" destination="HQW-30-TSf" id="bhy-9v-oqT"/>
+                <outlet property="busProbe2" destination="YBo-JS-daZ" id="sga-fQ-8R3"/>
+                <outlet property="busProbe3" destination="Uik-02-puX" id="iqY-aJ-Jty"/>
                 <outlet property="ciaAlarmHi" destination="g4a-rb-TAd" id="LsO-a5-zkL"/>
                 <outlet property="ciaAlarmLo" destination="vQp-3y-fNZ" id="lZZ-Yq-ALh"/>
                 <outlet property="ciaAlarmMid" destination="cU8-pA-FF2" id="ajG-5f-tg3"/>
@@ -2436,122 +2432,8 @@
                                                 <rect key="frame" x="4" y="5" width="602" height="384"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <popUpButton tag="1" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ywU-8o-zxX">
-                                                        <rect key="frame" x="20" y="199" width="108" height="27"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <popUpButtonCell key="cell" type="smallSquare" bezelStyle="smallSquare" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="lAJ-3d-hNn" id="hCe-Hf-Ca1">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="message"/>
-                                                            <menu key="menu" id="qLc-p0-h05">
-                                                                <items>
-                                                                    <menuItem state="on" id="lAJ-3d-hNn"/>
-                                                                </items>
-                                                            </menu>
-                                                        </popUpButtonCell>
-                                                        <connections>
-                                                            <action selector="probeAction:" target="-2" id="dT2-Ht-KoQ"/>
-                                                        </connections>
-                                                    </popUpButton>
-                                                    <popUpButton tag="2" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jml-cQ-T9m">
-                                                        <rect key="frame" x="20" y="129" width="108" height="27"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <popUpButtonCell key="cell" type="smallSquare" bezelStyle="smallSquare" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="sMv-Du-rlE" id="hAj-0C-UXE">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="message"/>
-                                                            <menu key="menu" id="jzU-By-lEg">
-                                                                <items>
-                                                                    <menuItem state="on" id="sMv-Du-rlE"/>
-                                                                </items>
-                                                            </menu>
-                                                        </popUpButtonCell>
-                                                        <connections>
-                                                            <action selector="probeAction:" target="-2" id="5jD-PQ-nDa"/>
-                                                        </connections>
-                                                    </popUpButton>
-                                                    <popUpButton tag="3" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Nv-TC-eeM">
-                                                        <rect key="frame" x="20" y="48" width="108" height="27"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <popUpButtonCell key="cell" type="smallSquare" bezelStyle="smallSquare" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="PDN-gJ-K4J" id="wIb-aj-zj1">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="message"/>
-                                                            <menu key="menu" id="eCb-9Z-VGO">
-                                                                <items>
-                                                                    <menuItem state="on" id="PDN-gJ-K4J"/>
-                                                                </items>
-                                                            </menu>
-                                                        </popUpButtonCell>
-                                                        <connections>
-                                                            <action selector="probeAction:" target="-2" id="5l1-aF-9CL"/>
-                                                        </connections>
-                                                    </popUpButton>
-                                                    <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yr1-9M-wdG">
-                                                        <rect key="frame" x="20" y="276" width="108" height="27"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <popUpButtonCell key="cell" type="smallSquare" bezelStyle="smallSquare" alignment="center" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="bm9-cm-WEm" id="kig-og-WjD">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="message"/>
-                                                            <menu key="menu" id="Fow-vf-mIm">
-                                                                <items>
-                                                                    <menuItem id="bm9-cm-WEm">
-                                                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                                                    </menuItem>
-                                                                </items>
-                                                            </menu>
-                                                        </popUpButtonCell>
-                                                        <connections>
-                                                            <action selector="probeAction:" target="-2" id="SkX-hU-e6D"/>
-                                                        </connections>
-                                                    </popUpButton>
-                                                    <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="yfd-77-ceI">
-                                                        <rect key="frame" x="32" y="20" width="96" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Qmv-TV-Vzs">
-                                                            <font key="font" usesAppearanceFont="YES"/>
-                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                        <connections>
-                                                            <action selector="addrAction:" target="-2" id="19c-jc-OwG"/>
-                                                        </connections>
-                                                    </textField>
-                                                    <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="FMf-Dj-47o">
-                                                        <rect key="frame" x="32" y="101" width="96" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="SxT-UO-nad">
-                                                            <font key="font" usesAppearanceFont="YES"/>
-                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                        <connections>
-                                                            <action selector="addrAction:" target="-2" id="PPb-cR-dV8"/>
-                                                        </connections>
-                                                    </textField>
-                                                    <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="2P4-2a-wGB">
-                                                        <rect key="frame" x="32" y="171" width="96" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Jv0-7T-aqe">
-                                                            <font key="font" usesAppearanceFont="YES"/>
-                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                        <connections>
-                                                            <action selector="addrAction:" target="-2" id="bNn-uk-2yY"/>
-                                                        </connections>
-                                                    </textField>
-                                                    <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IJv-wd-doT">
-                                                        <rect key="frame" x="32" y="248" width="96" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="cDA-Hr-Uqj">
-                                                            <font key="font" usesAppearanceFont="YES"/>
-                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </textFieldCell>
-                                                        <connections>
-                                                            <action selector="addrAction:" target="-2" id="aFb-oB-6Zy"/>
-                                                        </connections>
-                                                    </textField>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xEu-cY-lEE">
-                                                        <rect key="frame" x="19" y="344" width="42" height="16"/>
+                                                        <rect key="frame" x="513" y="19" width="42" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                         <buttonCell key="cell" type="check" title="Hex" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="9uH-C2-rhH">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2559,7 +2441,7 @@
                                                         </buttonCell>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GYQ-el-jL8">
-                                                        <rect key="frame" x="19" y="322" width="69" height="16"/>
+                                                        <rect key="frame" x="513" y="39" width="69" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                         <buttonCell key="cell" type="check" title="Symbolic" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Tve-Vl-Aax">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2567,21 +2449,21 @@
                                                         </buttonCell>
                                                     </button>
                                                     <box fixedFrame="YES" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="usD-fU-uUU">
-                                                        <rect key="frame" x="162" y="16" width="423" height="321"/>
+                                                        <rect key="frame" x="153" y="99" width="432" height="267"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <view key="contentView" id="b8x-V8-2OG">
-                                                            <rect key="frame" x="4" y="5" width="415" height="313"/>
+                                                            <rect key="frame" x="4" y="5" width="424" height="259"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qI0-Om-v5R">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="415" height="313"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="424" height="259"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                    <clipView key="contentView" id="Gms-yd-d5C">
-                                                                        <rect key="frame" x="1" y="1" width="413" height="311"/>
+                                                                    <clipView key="contentView" drawsBackground="NO" id="Gms-yd-d5C">
+                                                                        <rect key="frame" x="1" y="1" width="422" height="257"/>
                                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <subviews>
                                                                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6u0-z0-gfB" customClass="LogicView" customModule="vAmiga" customModuleProvider="target">
-                                                                                <rect key="frame" x="0.0" y="1" width="10000" height="310"/>
+                                                                                <rect key="frame" x="0.0" y="1" width="10009" height="256"/>
                                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                                 <connections>
                                                                                     <outlet property="inspector" destination="-2" id="O3e-UY-l0w"/>
@@ -2590,17 +2472,74 @@
                                                                         </subviews>
                                                                     </clipView>
                                                                     <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="gk3-Fz-tUy">
-                                                                        <rect key="frame" x="1" y="296" width="413" height="16"/>
+                                                                        <rect key="frame" x="1" y="242" width="422" height="16"/>
                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                     </scroller>
                                                                     <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="in3-ut-kVl">
-                                                                        <rect key="frame" x="398" y="1" width="16" height="311"/>
+                                                                        <rect key="frame" x="407" y="1" width="16" height="257"/>
                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                     </scroller>
                                                                 </scrollView>
                                                             </subviews>
                                                         </view>
                                                     </box>
+                                                    <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U2r-eq-JSs">
+                                                        <rect key="frame" x="19" y="283" width="132" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="6Rf-oY-wpb">
+                                                            <font key="font" metaFont="system"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </comboBoxCell>
+                                                        <connections>
+                                                            <action selector="probeAction:" target="-2" id="rpc-ar-luc"/>
+                                                        </connections>
+                                                    </comboBox>
+                                                    <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="HQW-30-TSf">
+                                                        <rect key="frame" x="19" y="235" width="132" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="Vfh-Rr-S3C">
+                                                            <font key="font" metaFont="system"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </comboBoxCell>
+                                                        <connections>
+                                                            <action selector="probeAction:" target="-2" id="Q91-3J-Ybi"/>
+                                                        </connections>
+                                                    </comboBox>
+                                                    <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="YBo-JS-daZ">
+                                                        <rect key="frame" x="19" y="187" width="132" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="zU9-2r-8FR">
+                                                            <font key="font" metaFont="system"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </comboBoxCell>
+                                                        <connections>
+                                                            <action selector="probeAction:" target="-2" id="Vas-vk-jdY"/>
+                                                        </connections>
+                                                    </comboBox>
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AJM-SP-5g5">
+                                                        <rect key="frame" x="79" y="328" width="71" height="16"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="DMA Cycle" id="0Ww-XG-C7Q">
+                                                            <font key="font" usesAppearanceFont="YES"/>
+                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                    <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="Uik-02-puX">
+                                                        <rect key="frame" x="19" y="133" width="132" height="23"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="n0C-Qx-HQl">
+                                                            <font key="font" metaFont="system"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </comboBoxCell>
+                                                        <connections>
+                                                            <action selector="probeAction:" target="-2" id="bpF-Lv-lnQ"/>
+                                                        </connections>
+                                                    </comboBox>
                                                 </subviews>
                                             </view>
                                         </box>

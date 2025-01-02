@@ -90,15 +90,15 @@ class Inspector: DialogController {
 
     // Bus panel
     @IBOutlet weak var busLogicView: LogicView!
-    @IBOutlet weak var busProbe0: NSPopUpButton!
-    @IBOutlet weak var busProbe1: NSPopUpButton!
-    @IBOutlet weak var busProbe2: NSPopUpButton!
-    @IBOutlet weak var busProbe3: NSPopUpButton!
+    @IBOutlet weak var busProbe0: NSComboBox!
+    @IBOutlet weak var busProbe1: NSComboBox!
+    @IBOutlet weak var busProbe2: NSComboBox!
+    @IBOutlet weak var busProbe3: NSComboBox!
     @IBOutlet weak var busAddr0: NSTextField!
     @IBOutlet weak var busAddr1: NSTextField!
     @IBOutlet weak var busAddr2: NSTextField!
     @IBOutlet weak var busAddr3: NSTextField!
-
+    
     // Memory panel
     @IBOutlet weak var memBankMap: NSPopUpButton!
     @IBOutlet weak var memSearchField: NSSearchField!

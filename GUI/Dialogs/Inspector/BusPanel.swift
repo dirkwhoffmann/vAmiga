@@ -8,7 +8,15 @@
 // -----------------------------------------------------------------------------
 
 extension Inspector {
+         
+    static let probes: [(String, Probe)] = [
         
+        ("Unconnected", .NONE),
+        ("Bus Usage", .BUS_OWNER),
+        ("Address Bus", .ADDR_BUS),
+        ("Data Bus", .DATA_BUS)
+    ]
+    
     private func cacheBus() {
 
         busLogicView.cacheData()
@@ -20,21 +28,37 @@ extension Inspector {
         ciaStats = cia.stats
         */
     }
+ 
+    func initComboBox(_ box: NSComboBox) {
 
-    func initPopup(button: NSPopUpButton) {
+        box.removeAllItems()
 
-        func add(_ title: String, _ probe: Probe) {
-
-            button.addItem(withTitle: title)
-            button.lastItem!.tag = probe.rawValue
+        for (title, probe) in Inspector.probes {
+            box.addItem(withObjectValue: title)
         }
+    }
 
-        button.removeAllItems()
-        add("None", .NONE)
-        add("Bus Usage", .BUS_OWNER)
-        add("Address Bus", .ADDR_BUS)
-        add("Data Bus", .DATA_BUS)
-        add("Memory", .MEMORY)
+    func refreshComboBox(_ box: NSComboBox) {
+
+        let probe: Probe? =
+        box.tag == 0 ? Probe(rawValue: emu.get(.LA_PROBE0)) :
+        box.tag == 1 ? Probe(rawValue: emu.get(.LA_PROBE1)) :
+        box.tag == 2 ? Probe(rawValue: emu.get(.LA_PROBE2)) :
+        box.tag == 3 ? Probe(rawValue: emu.get(.LA_PROBE3)) : nil
+
+        let addr: Int? =
+        box.tag == 0 ? emu.get(.LA_PROBE0) :
+        box.tag == 1 ? emu.get(.LA_PROBE1) :
+        box.tag == 2 ? emu.get(.LA_PROBE2) :
+        box.tag == 3 ? emu.get(.LA_PROBE3) : nil
+
+        if probe == .MEMORY {
+            box.stringValue = String(format: "%06X", addr!)
+        } else {
+            for (_title, _probe) in Inspector.probes {
+                if probe == _probe { box.stringValue = _title }
+            }
+        }
     }
     
     func refreshBus(count: Int = 0, full: Bool = false) {
@@ -43,27 +67,24 @@ extension Inspector {
 
         if full {
 
-            if busProbe0.numberOfItems == 1 {
-            
-                initPopup(button: busProbe0)
-                initPopup(button: busProbe1)
-                initPopup(button: busProbe2)
-                initPopup(button: busProbe3)
-            }
+            if busProbe0.numberOfItems == 0 {
 
-            // Probes
-            let probe0 = emu.get(.LA_PROBE0)
-            let probe1 = emu.get(.LA_PROBE1)
-            let probe2 = emu.get(.LA_PROBE2)
-            let probe3 = emu.get(.LA_PROBE3)
-            busProbe0.selectItem(withTag: probe0)
-            busProbe1.selectItem(withTag: probe1)
-            busProbe2.selectItem(withTag: probe2)
-            busProbe3.selectItem(withTag: probe3)
-            busAddr0.integerValue = emu.get(.LA_ADDR0)
-            busAddr1.integerValue = emu.get(.LA_ADDR1)
-            busAddr2.integerValue = emu.get(.LA_ADDR2)
-            busAddr3.integerValue = emu.get(.LA_ADDR3)
+                initComboBox(busProbe0)
+                initComboBox(busProbe1)
+                initComboBox(busProbe2)
+                initComboBox(busProbe3)
+                
+                /*
+                busLogicView.signalColor[0] = NSColor.yellow
+                busLogicView.signalColor[1] = NSColor.gray
+                busLogicView.signalColor[2] = NSColor.blue
+                busLogicView.signalColor[3] = NSColor.green
+                */
+            }
+            refreshComboBox(busProbe0)
+            refreshComboBox(busProbe1)
+            refreshComboBox(busProbe2)
+            refreshComboBox(busProbe3)
         }
 
         if count % 2 == 0 { busLogicView.update() }
@@ -73,35 +94,52 @@ extension Inspector {
     // Action methods
     //
     
-    @IBAction func probeAction(_ sender: NSPopUpButton!) {
+    @IBAction func probeAction(_ sender: NSComboBox!) {
         
         let tag = sender.selectedTag()
-        print("probeAction \(tag)")
+        let tmp = sender.stringValue
+        print("probeAction \(tag) \(tmp)")
 
-        switch sender.tag {
+        var probe: Probe?
+        var addr: Int?
         
-        case 0:  emu?.set(.LA_PROBE0, value: tag)
-        case 1:  emu?.set(.LA_PROBE1, value: tag)
-        case 2:  emu?.set(.LA_PROBE2, value: tag)
-        case 3:  emu?.set(.LA_PROBE3, value: tag)
-    
-        default: break
+        // Check if the user input supplied a keyword
+        for (_title, _probe) in Inspector.probes {
+            if sender.stringValue == _title { probe = _probe }
         }
-    }
- 
-    @IBAction func addrAction(_ sender: NSTextField!) {
 
-        let tag = sender.selectedTag()
-        print("addrAction \(tag)")
+        // Check if the user input supplied a memory address
+        if probe == nil {
+            addr = Int(sender.stringValue, radix: 16)
+            if addr != nil { probe = .MEMORY }
+        }
         
-        switch sender.tag {
+        if let addr = addr {
+            
+            switch sender.tag {
+                
+            case 0:  emu?.set(.LA_ADDR0, value: addr)
+            case 1:  emu?.set(.LA_ADDR1, value: addr)
+            case 2:  emu?.set(.LA_ADDR2, value: addr)
+            case 3:  emu?.set(.LA_ADDR3, value: addr)
+            default: break
+            }
+        }
         
-        case 0:  emu?.set(.LA_ADDR0, value: tag)
-        case 1:  emu?.set(.LA_ADDR1, value: tag)
-        case 2:  emu?.set(.LA_ADDR2, value: tag)
-        case 3:  emu?.set(.LA_ADDR3, value: tag)
-    
-        default: break
+        if let probe = probe {
+            
+            switch sender.tag {
+                
+            case 0:  emu?.set(.LA_PROBE0, value: probe.rawValue)
+            case 1:  emu?.set(.LA_PROBE1, value: probe.rawValue)
+            case 2:  emu?.set(.LA_PROBE2, value: probe.rawValue)
+            case 3:  emu?.set(.LA_PROBE3, value: probe.rawValue)
+            default: break
+            }
+            
+        } else {
+            
+            NSSound.beep()
         }
     }
 }

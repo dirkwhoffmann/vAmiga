@@ -9,6 +9,18 @@
 
 class LogicView: NSView {
 
+    // Constants
+    let segments = 228
+    let signals = 4
+    // let headerHeight = CGFloat(24)
+    let signalHeight = CGFloat(24)
+    
+    // Derived constants
+    var headerHeight: CGFloat { return bounds.height / CGFloat(signals + 1) }
+    var dx: CGFloat { return bounds.width / CGFloat(segments) }
+    var dy: CGFloat { return (bounds.height - headerHeight) / CGFloat(signals) }
+    var margin: CGFloat { return (dy - signalHeight) / 2 }
+    
     // Reference to the logic analyzer this view is embedded in
     @IBOutlet weak var inspector: Inspector!
 
@@ -35,19 +47,8 @@ class LogicView: NSView {
 
     // Fonts and colors
     let box = NSBox()
-    var signalColor = [ NSColor.white, NSColor.white, NSColor.white, NSColor.white ] {
-        didSet {
-
-            bgColor[0] = signalColor[0].adjust(brightness: 1.0, saturation: 0.2)
-            bgColor[1] = signalColor[1].adjust(brightness: 1.0, saturation: 0.2)
-            bgColor[2] = signalColor[2].adjust(brightness: 1.0, saturation: 0.2)
-            bgColor[3] = signalColor[3].adjust(brightness: 1.0, saturation: 0.2)
-
-            needsDisplay = true
-        }
-    }
-    var bgColor = [ NSColor.white, NSColor.white, NSColor.white, NSColor.white ]
-
+    
+    // var bgColor = [ NSColor.lightGray, NSColor.gray, NSColor.darkGray, NSColor.systemGray]
     let mono = NSFont.monospacedSystemFont(ofSize: 10, weight: .regular)
     let system = NSFont.systemFont(ofSize: 12)
 
@@ -56,6 +57,15 @@ class LogicView: NSView {
         needsDisplay = true
     }
 
+    func signalRect(_ nr: Int) -> CGRect {
+        
+        return CGRect(x: bounds.minX,
+                      y: bounds.maxY - headerHeight - CGFloat(nr + 1) * dy,
+                      width: bounds.width,
+                      height: dy)
+    }
+    
+    
     //
     // Managing the data source
     //
@@ -103,54 +113,25 @@ class LogicView: NSView {
         super.draw(dirtyRect)
 
         context = NSGraphicsContext.current?.cgContext
-        let dy = CGFloat(48)
-        let height = CGFloat(36)
-        clear()
-
         
-        if !visible { return }
+        NSColor.clear.setFill()
+        bounds.fill()
 
-        drawMarkers(in: NSRect(x: bounds.minX,
-                               y: bounds.maxY - dy,
-                               width: bounds.width,
-                               height: height))
-
-        for i in 0...3 {
-
-            let rect = NSRect(x: bounds.minX,
-                              y: bounds.maxY - CGFloat(i + 2) * dy,
-                              width: bounds.width,
-                              height: height)
-
-            drawSignalTrace(in: rect, channel: i)
+        if visible {
+            
+            drawHairlines()
+            drawLabels()
+            for i in 0..<signals { drawSignal(i) }
         }
         
         lock.unlock()
     }
-
-    func clear() {
-
-        box.fillColor.setFill()
-        bounds.fill()
-    }
-
-    func drawMarkers(in rect: NSRect) {
+    
+    func drawHairlines() {
 
         let path = CGMutablePath()
-        let dx = bounds.width / 228
-
-        for i in 0...3 {
-
-            let rect = NSRect(x: bounds.minX,
-                              y: bounds.maxY - CGFloat(i + 2) * 36 - 6,
-                              width: bounds.width,
-                              height: 36)
-
-            bgColor[i].setFill()
-            rect.fill()
-        }
-
-        for i in 1...227 {
+    
+        for i in 1..<segments {
 
             path.move(to: CGPoint(x: CGFloat(i) * dx, y: bounds.minY))
             path.addLine(to: CGPoint(x: CGFloat(i) * dx, y: bounds.maxY))
@@ -160,37 +141,38 @@ class LogicView: NSView {
 
         context.addPath(path)
         context.drawPath(using: .stroke)
-
-        for i in 0..<228 {
+    }
+    
+    func drawLabels() {
+        
+        for i in 0..<segments {
 
             drawText(text: "\(i)",
-                     in: NSRect(x: CGFloat(i) * dx, y: rect.minY, width: dx, height: rect.height),
+                     in: NSRect(x: CGFloat(i) * dx, y: bounds.maxY - headerHeight, width: dx, height: headerHeight),
                      font: system,
                      color: NSColor.labelColor)
         }
     }
+    
+    func drawSignal(_ channel: Int) {
 
-    func drawMarkers() {
+        let rect = signalRect(channel)
 
-        drawMarkers(in: bounds)
-    }
-
-    func drawSignalTrace(in rect: NSRect, channel: Int) {
-
-        let w = rect.size.width / 228
-
+        // if (channel % 2 == 0) { NSColor.red.setFill() } else { NSColor.blue.setFill() }
+        // rect.fill()
+        
         var prev: Int?
         var curr: Int? = getData(cycle: 0, channel: channel)
         var next: Int? = getData(cycle: 1, channel: channel)
 
-        for i in 0..<228 {
+        for i in 0..<segments {
             
-            let r = CGRect(x: CGFloat(i) * w,
-                           y: rect.minY,
-                           width: w,
-                           height: rect.height)
+            let r = CGRect(x: CGFloat(i) * dx,
+                           y: rect.minY + margin,
+                           width: dx,
+                           height: rect.height - 2 * margin)
             
-            drawDataSegment(in: r, v: [prev, curr, next], color: .black)
+            drawDataSegment(in: r, v: [prev, curr, next], color: .labelColor)
             /*
              if bitWidth[channel] == 1 {
              drawLineSegment(in: r, v: [prev, curr, next], color: .black)
@@ -202,7 +184,7 @@ class LogicView: NSView {
                 drawText(text: formatter.string(from: curr!, bitWidth: 16),
                          in: r,
                          font: mono,
-                         color: NSColor.labelColor)
+                         color: .labelColor)
             }
             
             prev = curr
@@ -234,16 +216,7 @@ class LogicView: NSView {
         // Restore the graphics state
         context?.restoreGState()
     }
-
-    var rectangle: CGRect {
-
-        let margin = CGFloat(10)
-        let width = bounds.size.width - 2 * margin
-        let height = bounds.size.height - 2 * margin
-        let rect = CGRect(x: margin, y: margin, width: width, height: height)
-        return rect
-    }
-
+    
     func drawLineSegment(in rect: CGRect, v: [Int?], color: NSColor) {
 
         if v[1] == nil { return }

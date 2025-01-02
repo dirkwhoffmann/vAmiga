@@ -21,7 +21,7 @@ OptionParser::create(Option opt, i64 arg)
     auto enumParser = [&]<typename T>() { return std::unique_ptr<EnumParser<T>>(new EnumParser<T>(opt, arg)); };
     auto boolParser = [&]() { return std::unique_ptr<BoolParser>(new BoolParser(opt, arg)); };
     auto numParser  = [&](string unit = "") { return std::unique_ptr<NumParser>(new NumParser(opt, arg, unit)); };
-    // auto hexParser  = [&](string unit = "") { return std::unique_ptr<HexParser>(new HexParser(opt, arg, unit)); };
+    auto hexParser  = [&](string unit = "") { return std::unique_ptr<HexParser>(new HexParser(opt, arg, unit)); };
 
     switch (opt) {
 
@@ -84,10 +84,10 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_LA_PROBE1:                 return enumParser.template operator()<ProbeEnum>();
         case OPT_LA_PROBE2:                 return enumParser.template operator()<ProbeEnum>();
         case OPT_LA_PROBE3:                 return enumParser.template operator()<ProbeEnum>();
-        case OPT_LA_ADDR0:                  return numParser();
-        case OPT_LA_ADDR1:                  return numParser();
-        case OPT_LA_ADDR2:                  return numParser();
-        case OPT_LA_ADDR3:                  return numParser();
+        case OPT_LA_ADDR0:                  return hexParser();
+        case OPT_LA_ADDR1:                  return hexParser();
+        case OPT_LA_ADDR2:                  return hexParser();
+        case OPT_LA_ADDR3:                  return hexParser();
 
         case OPT_VID_WHITE_NOISE:           return boolParser();
             
