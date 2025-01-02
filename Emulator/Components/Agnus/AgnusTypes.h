@@ -553,3 +553,27 @@ typedef struct
     double bitplaneActivity;
 }
 AgnusStats;
+
+
+//
+// Private data types
+//
+
+#ifdef __cplusplus
+
+/* Event flags
+ *
+ * The event flags are utilized to trigger special actions inside the
+ * serviceRegEvent()
+ */
+
+typedef u32 EventFlags;
+
+namespace EVFL
+{
+constexpr u32 EOL                = (1 << 0);
+constexpr u32 HSYNC              = (1 << 1);
+constexpr u32 PROBE              = (1 << 2);
+};
+
+#endif

@@ -31,17 +31,21 @@ class LogicAnalyzer final : public SubComponent {
         OPT_LA_PROBE1,
         OPT_LA_PROBE2,
         OPT_LA_PROBE3,
+        OPT_LA_PROBE4,
+        OPT_LA_PROBE5,
         OPT_LA_ADDR0,
         OPT_LA_ADDR1,
         OPT_LA_ADDR2,
-        OPT_LA_ADDR3
+        OPT_LA_ADDR3,
+        OPT_LA_ADDR4,
+        OPT_LA_ADDR5
     };
 
     // The current configuration
     LogicAnalyzerConfig config = {};
     
     // Recorded signal traces
-    isize record[4][HPOS_CNT];
+    isize record[6][HPOS_CNT];
     
 private:
     
@@ -75,8 +79,9 @@ private:
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
+    void _pause() override;
 
-
+    
     //
     // Methods from Configurable
     //
@@ -99,7 +104,22 @@ public:
 
     
     //
-    // Accessing recorded data
+    // Recording
+    //
+    
+    
+public:
+    
+    // Indicates if the logic analyzer is active
+    bool recording() const;
+    
+    // Records data for all configured channels
+    void recordSignals();
+    void recordSignals(isize hpos);
+    
+    
+    //
+    // Accessing
     //
     
 public:
@@ -109,7 +129,7 @@ public:
     
     
     //
-    // Servicing events
+    // Servicing events (DEPRECATED)
     //
     
 public:

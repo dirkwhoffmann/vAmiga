@@ -32,6 +32,7 @@ static constexpr usize DRAW_ODD =  0b001;
 static constexpr usize DRAW_EVEN = 0b010;
 static constexpr usize DRAW_BOTH = 0b011;
 
+
 class Agnus : public SubComponent, public Inspectable<AgnusInfo, AgnusStats> {
 
     Descriptions descriptions = {{
@@ -85,9 +86,9 @@ public:
     // Pending register changes
     RegChangeRecorder<8> changeRecorder;
 
-    // An optional sync event to be processed in serviceRegEvent()
-    EventID syncEvent = EVENT_NONE;
-
+    // Optional events to be processed in serviceRegEvent()
+    // EventID syncEvent = EVENT_NONE;
+    EventFlags syncEvent = 0;
     
     //
     // Counters

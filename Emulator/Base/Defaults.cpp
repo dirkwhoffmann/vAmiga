@@ -69,10 +69,14 @@ Defaults::Defaults()
     setFallback(OPT_LA_PROBE1,                  PROBE_NONE);
     setFallback(OPT_LA_PROBE2,                  PROBE_NONE);
     setFallback(OPT_LA_PROBE3,                  PROBE_NONE);
+    setFallback(OPT_LA_PROBE4,                  PROBE_NONE);
+    setFallback(OPT_LA_PROBE5,                  PROBE_NONE);
     setFallback(OPT_LA_ADDR0,                   0);
     setFallback(OPT_LA_ADDR1,                   0);
     setFallback(OPT_LA_ADDR2,                   0);
     setFallback(OPT_LA_ADDR3,                   0);
+    setFallback(OPT_LA_ADDR4,                   0);
+    setFallback(OPT_LA_ADDR5,                   0);
 
     setFallback(OPT_VID_WHITE_NOISE,            true);
 

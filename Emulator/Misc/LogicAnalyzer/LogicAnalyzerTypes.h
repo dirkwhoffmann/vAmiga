@@ -55,9 +55,9 @@ struct ProbeEnum : vamiga::util::Reflection<ProbeEnum, Probe>
 typedef struct
 {
     // The logic analyzer channels
-    Probe channel[4];
+    Probe channel[6];
     
     // Probe address (in case of memory probing)
-    u32 addr[4];
+    u32 addr[6];
 }
 LogicAnalyzerConfig;

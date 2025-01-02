@@ -11,8 +11,7 @@ class LogicView: NSView {
 
     // Constants
     let segments = 228
-    let signals = 4
-    // let headerHeight = CGFloat(24)
+    let signals = 6
     let signalHeight = CGFloat(24)
     
     // Derived constants
@@ -26,31 +25,24 @@ class LogicView: NSView {
 
     // Reference to the emulator
     var emu: EmulatorProxy? { return inspector.emu }
-
-    var lock = NSLock()
     
     // Indicates if anything should be drawn
     var visible = true
      
-    // The probed signal
-    var probe: [Probe] = [ .BUS_OWNER, .ADDR_BUS, .DATA_BUS, .NONE ]
-
     // The recorded data
-    var data:[[Int?]] = Array(repeating: Array(repeating: 0, count: 228), count: 4)
+    var data:[[Int?]] = Array(repeating: Array(repeating: 0, count: 228), count: 6)
 
     // Number formatter
     let formatter = LogicViewFormatter()
 
     // The graphics context used for drawing
     var context: CGContext!
-    var gradient: [CGGradient?] = [nil, nil, nil, nil]
 
-    // Fonts and colors
-    let box = NSBox()
-    
-    // var bgColor = [ NSColor.lightGray, NSColor.gray, NSColor.darkGray, NSColor.systemGray]
+    // Fonts
     let mono = NSFont.monospacedSystemFont(ofSize: 10, weight: .regular)
     let system = NSFont.systemFont(ofSize: 12)
+
+    var lock = NSLock()
 
     func update() {
 
@@ -78,7 +70,7 @@ class LogicView: NSView {
 
         let hpos = emu.amiga.info.hpos
         
-        for c in 0...3 {
+        for c in 0..<signals {
             
             if let values = emu.logicAnalyzer.getData(c) {
                 
@@ -87,7 +79,7 @@ class LogicView: NSView {
                     let value = (values + i).pointee
                     data[c][i] = value >= 0 ? value : nil
                 }
-                for i in (hpos + 1)..<228 {
+                for i in (hpos + 1)..<segments {
                     
                     data[c][i] = nil
                 }
@@ -99,7 +91,7 @@ class LogicView: NSView {
 
     func getData(cycle: Int, channel: Int) -> Int? {
 
-        return cycle < 228 ? data[channel][cycle] : nil
+        return cycle < segments ? data[channel][cycle] : nil
     }
     
     //
@@ -154,13 +146,27 @@ class LogicView: NSView {
         }
     }
     
+    func getProbe(channel: Int) -> Probe {
+        
+        switch channel {
+        case 0: return Probe(rawValue: emu!.get(.LA_PROBE0)) ?? .NONE
+        case 1: return Probe(rawValue: emu!.get(.LA_PROBE1)) ?? .NONE
+        case 2: return Probe(rawValue: emu!.get(.LA_PROBE2)) ?? .NONE
+        case 3: return Probe(rawValue: emu!.get(.LA_PROBE3)) ?? .NONE
+        case 4: return Probe(rawValue: emu!.get(.LA_PROBE4)) ?? .NONE
+        case 5: return Probe(rawValue: emu!.get(.LA_PROBE5)) ?? .NONE
+        default:
+            fatalError()
+        }
+    }
     func drawSignal(_ channel: Int) {
 
         let rect = signalRect(channel)
 
-        // if (channel % 2 == 0) { NSColor.red.setFill() } else { NSColor.blue.setFill() }
-        // rect.fill()
+        if (channel % 2 == 0) { NSColor.red.setFill() } else { NSColor.blue.setFill() }
+        rect.fill()
         
+        let probe = getProbe(channel: channel)
         var prev: Int?
         var curr: Int? = getData(cycle: 0, channel: channel)
         var next: Int? = getData(cycle: 1, channel: channel)
@@ -181,7 +187,7 @@ class LogicView: NSView {
              }
              */
             if curr != nil {
-                drawText(text: formatter.string(from: curr!, bitWidth: 16),
+                drawText(text: formatter.string(from: curr!, probe: probe),
                          in: r,
                          font: mono,
                          color: .labelColor)

@@ -185,13 +185,14 @@ Agnus::serviceREGEvent(Cycle until)
 
     if (syncEvent) {
 
+        // Call the logic analyzer of requested
+        if (syncEvent & EVFL::PROBE) { logicAnalyzer.recordSignals(pos.h - 1); }
+
         // Call the EOL handler if requested
-        if (syncEvent == DAS_EOL) eolHandler();
+        if (syncEvent & EVFL::EOL) { eolHandler(); syncEvent &= ~EVFL::EOL; }
 
         // Call the HSYNC handler if requested
-        if (syncEvent == DAS_HSYNC) hsyncHandler();
-
-        syncEvent = EVENT_NONE;
+        if (syncEvent & EVFL::HSYNC) { hsyncHandler(); syncEvent &= ~EVFL::HSYNC; }
     }
 
     // Iterate through all recorded register changes
@@ -617,8 +618,7 @@ Agnus::serviceDASEvent(EventID id)
              * that the the HSYNC handler is executed before any other
              * operation is performed in this cycle.
              */
-            syncEvent = DAS_HSYNC;
-            // recordRegisterChange(DMA_CYCLES(1), REG_NONE, 0);
+            syncEvent |= EVFL::HSYNC;
             scheduleRel <SLOT_REG> (DMA_CYCLES(1), REG_CHANGE);
 
             if (audxDR[2]) {
@@ -742,7 +742,7 @@ Agnus::serviceDASEvent(EventID id)
                  * that the the EOL handler is executed before any other
                  * operation is performed in this cycle.
                  */
-                syncEvent = id;
+                syncEvent |= EVFL::EOL;
                 scheduleRel <SLOT_REG> (DMA_CYCLES(1), REG_CHANGE);
             }
             break;
