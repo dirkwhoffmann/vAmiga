@@ -163,8 +163,6 @@ LogicAnalyzer::recordSignals(isize hpos)
     
     auto hprev = agnus.pos.hPrev();
     
-    trace(true, "LogicAnalyzer::recordSignals\n");
-    
     assert(hpos >= 0 && hpos < HPOS_CNT);
     
     // Only proceed if this is the main instance

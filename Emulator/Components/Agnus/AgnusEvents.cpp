@@ -156,7 +156,8 @@ Agnus::scheduleNextREGEvent()
     Cycle next = changeRecorder.trigger();
 
     // Schedule a register change event for that cycle
-    if (next < trigger[SLOT_REG]) scheduleAbs<SLOT_REG>(next, REG_CHANGE);
+    // if (next < trigger[SLOT_REG]) scheduleAbs<SLOT_REG>(next, REG_CHANGE);
+    scheduleAbs<SLOT_REG>(next, REG_CHANGE);
 }
 
 void
@@ -297,12 +298,16 @@ Agnus::serviceREGEvent(Cycle until)
 
     if (syncEvent) {
         
-        // Call the logic analyzer of requested
+        // Let the logic analyzer probe all observed signals
         if (syncEvent & EVFL::PROBE) { logicAnalyzer.recordSignals(pos.h); }
+
+        // Keep the event scheduled to reenter the function in the next cycle
+        
+    } else {
+        
+        // Schedule next event
+        scheduleNextREGEvent();
     }
-    
-    // Schedule next event
-    scheduleNextREGEvent();
 }
 
 #define LO_NONE(x)      { serviceBPLEventLores<x>(); }
