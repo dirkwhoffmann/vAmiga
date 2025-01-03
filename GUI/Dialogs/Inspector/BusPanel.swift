@@ -20,6 +20,8 @@ extension Inspector {
     
     static let presets: [(String?, (Probe, Int?))] = [
         
+        ("None",     (.NONE,   nil)),
+        (nil, (.NONE, 0)),
         ("DMACONR",  (.MEMORY, 0xDFF002)),
         ("VPOSR",    (.MEMORY, 0xDFF004)),
         ("VHPOSR",   (.MEMORY, 0xDFF006)),
@@ -46,7 +48,7 @@ extension Inspector {
         busLogicView.cacheData()
     }
  
-    func initProbeSelector(_ nr: Int, _ popup: NSComboButton) {
+    func initProbeSelector(_ channel: Int, _ popup: NSComboButton) {
 
         let menu = NSMenu()
         
@@ -55,7 +57,7 @@ extension Inspector {
 
             if let name = name {
                 let item = NSMenuItem(title: name, action: #selector(busProbeAction(_ :)), keyEquivalent: "")
-                item.tag = 128 * nr + index
+                item.tag = 128 * channel + index
                 menu.addItem(item)
             } else {
                 menu.addItem(NSMenuItem.separator())
@@ -69,6 +71,7 @@ extension Inspector {
         text.refusesFirstResponder = true
         text.action = #selector(busAddrAction(_ :))
         text.target = self
+        text.tag = channel
         view.addSubview(text)
 
         // Add the address field
@@ -95,7 +98,6 @@ extension Inspector {
         popup.tag == 2 ? emu.get(.LA_ADDR2) :
         popup.tag == 3 ? emu.get(.LA_ADDR3) : nil
         
-        print("probe = \(probe) addr = \(addr)")
         switch probe {
         case .NONE:     popup.title = "Connect..."
         case .MEMORY:   popup.title = String(format: "%06X", addr ?? 0)
@@ -229,45 +231,9 @@ extension Inspector {
         zoom = sender.doubleValue
     }
     
-    @IBAction func customProbeAction(_ sender: NSPopUpButton!) {
+    @IBAction func comboButtonAction(_ sender: NSComboButton!) {
         
-        print("Hallo")
     }
-    
-    /*
-    @IBAction func probeAction(_ sender: NSComboBox!) {
-        
-        let tag = sender.selectedTag()
-        print("probeAction \(tag) \(sender.stringValue)")
-
-        var addr: Int?
-        
-        // Check if the user input supplied a symbolic name
-        for (name, address) in Inspector.registers {
-            if sender.stringValue == name { addr = address }
-        }
-
-        // Check if the user input supplied a memory address
-        if addr == nil { addr = Int(sender.stringValue, radix: 16) }
-        
-        if let addr = addr {
-            
-            let probe = Probe.MEMORY.rawValue
-            
-            switch sender.tag {
-            case 0:  emu?.set(.LA_PROBE0, value: probe); emu?.set(.LA_ADDR0, value: addr)
-            case 1:  emu?.set(.LA_PROBE1, value: probe); emu?.set(.LA_ADDR1, value: addr)
-            case 2:  emu?.set(.LA_PROBE2, value: probe); emu?.set(.LA_ADDR2, value: addr)
-            case 3:  emu?.set(.LA_PROBE3, value: probe); emu?.set(.LA_ADDR3, value: addr)
-            default: break
-            }
-            
-        } else {
-            
-            NSSound.beep()
-        }
-    }
-    */
     
     @IBAction func busProbeAction(_ sender: NSMenuItem!) {
         
@@ -276,9 +242,7 @@ extension Inspector {
         
         let probe = Inspector.presets[index].1.0.rawValue
         let addr = Inspector.presets[index].1.1
-        
-        print("busProbeAction \(channel) \(index) \(probe) \(addr)")
-        
+                
         switch channel {
         case 0:  emu?.set(.LA_PROBE0, value: probe);
         case 1:  emu?.set(.LA_PROBE1, value: probe);

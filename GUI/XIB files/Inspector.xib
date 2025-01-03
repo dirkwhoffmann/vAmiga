@@ -2572,6 +2572,9 @@
                                                         <rect key="frame" x="17" y="197" width="134" height="24"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <menu key="menu" id="4e0-jp-8xz"/>
+                                                        <connections>
+                                                            <action selector="comboButtonAction:" target="-2" id="Hcf-Es-Swo"/>
+                                                        </connections>
                                                     </comboButton>
                                                     <comboButton verticalHuggingPriority="750" fixedFrame="YES" tag="1" baseWritingDirection="leftToRight" alignment="center" title="Button" imageScaling="proportionallyDown" translatesAutoresizingMaskIntoConstraints="NO" id="XdO-r2-jt5">
                                                         <rect key="frame" x="17" y="152" width="134" height="24"/>
@@ -2583,16 +2586,25 @@
                                                                 </menuItem>
                                                             </items>
                                                         </menu>
+                                                        <connections>
+                                                            <action selector="comboButtonAction:" target="-2" id="v0D-Pe-ZtR"/>
+                                                        </connections>
                                                     </comboButton>
                                                     <comboButton verticalHuggingPriority="750" fixedFrame="YES" tag="2" baseWritingDirection="leftToRight" alignment="center" title="Button" imageScaling="proportionallyDown" translatesAutoresizingMaskIntoConstraints="NO" id="lOF-sh-4L5">
                                                         <rect key="frame" x="17" y="108" width="133" height="24"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <menu key="menu" id="ZOy-jm-r2X"/>
+                                                        <connections>
+                                                            <action selector="comboButtonAction:" target="-2" id="XqL-IJ-yJs"/>
+                                                        </connections>
                                                     </comboButton>
                                                     <comboButton verticalHuggingPriority="750" fixedFrame="YES" tag="3" baseWritingDirection="leftToRight" alignment="center" title="Button" imageScaling="proportionallyDown" translatesAutoresizingMaskIntoConstraints="NO" id="H95-bG-twm">
                                                         <rect key="frame" x="17" y="65" width="134" height="24"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <menu key="menu" id="8d8-1r-igm"/>
+                                                        <connections>
+                                                            <action selector="comboButtonAction:" target="-2" id="6Nr-ZX-00J"/>
+                                                        </connections>
                                                     </comboButton>
                                                 </subviews>
                                             </view>
