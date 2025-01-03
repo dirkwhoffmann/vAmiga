@@ -109,13 +109,15 @@ public:
     
     
 public:
-    
-    // Indicates if the logic analyzer is active
-    bool recording() const;
-    
+        
     // Records data for all configured channels
     void recordSignals();
     void recordSignals(isize hpos);
+    
+private:
+    
+    // Enable or disables the logic analyzer based on the current config
+    void checkEnable();
     
     
     //
@@ -126,19 +128,6 @@ public:
     
     isize get(isize channel, isize nr) { return record[channel][nr]; }
     isize *get(isize channel) { return record[channel]; }
-    
-    
-    //
-    // Servicing events (DEPRECATED)
-    //
-    
-public:
-    
-    // Services a probe event
-    void servicePROEvent();
-    
-    // Schedules the first probing event
-    void scheduleFirstProEvent();
 };
 
 }

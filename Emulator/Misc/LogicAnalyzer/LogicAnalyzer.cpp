@@ -22,7 +22,7 @@ LogicAnalyzer::_pause()
 void
 LogicAnalyzer::_didReset(bool hard)
 {
-    scheduleFirstProEvent();
+    checkEnable();
 }
 
 void
@@ -125,20 +125,23 @@ LogicAnalyzer::setOption(Option option, i64 value)
 
     // Wipe out prerecorded data if necessary
     if (invalidate) std::fill_n(record[c], HPOS_CNT, -1);
-    
-    scheduleFirstProEvent();
+ 
+    // Enable or disable the logic analyzer
+    checkEnable();
 }
 
-bool
-LogicAnalyzer::recording() const
+void
+LogicAnalyzer::checkEnable()
 {
-    return
+    bool enable =
     config.channel[0] != PROBE_NONE ||
     config.channel[1] != PROBE_NONE ||
     config.channel[2] != PROBE_NONE ||
     config.channel[3] != PROBE_NONE ||
     config.channel[4] != PROBE_NONE ||
     config.channel[5] != PROBE_NONE ;
+    
+    enable ? agnus.syncEvent |= EVFL::PROBE : agnus.syncEvent &= ~EVFL::PROBE;
 }
 
 void
@@ -209,85 +212,6 @@ LogicAnalyzer::recordSignals(isize hpos)
                 break;
         }
     }
-}
-
-void
-LogicAnalyzer::servicePROEvent()
-{
-    /*
-    // Disable the logic analyzer if this is the run-ahead instance
-    if (isRunAheadInstance()) { agnus.cancel<SLOT_PRO>(); return; }
-        
-    auto hpos = agnus.pos.h;
-    
-    // Record signals
-    for (isize i = 0; i < 6; i++) {
-        
-        switch (config.channel[i]) {
-
-            case PROBE_BUS_OWNER:
-                
-                if (agnus.busOwner[hpos] != BUS_NONE) {
-                    record[i][hpos] = isize(agnus.busOwner[hpos]);
-                } else {
-                    record[i][hpos] = -1;
-                }
-                break;
-                
-            case PROBE_ADDR_BUS:
-
-                if (agnus.busOwner[hpos] != BUS_NONE) {
-                    record[i][hpos] = isize(agnus.busAddr[hpos]);
-                } else {
-                    record[i][hpos] = -1;
-                }
-                break;
-
-            case PROBE_DATA_BUS:
-
-                if (agnus.busOwner[hpos] != BUS_NONE) {
-                    record[i][hpos] = isize(agnus.busData[hpos]);
-                } else {
-                    record[i][hpos] = -1;
-                }
-                break;
-
-            case PROBE_MEMORY:
-                
-                record[i][hpos] = isize(mem.spypeek16<ACCESSOR_CPU>(config.addr[i]));
-                break;
-                
-            default:
-                break;
-        }
-    }
-    
-    // Schedule next event
-    agnus.scheduleRel<SLOT_PRO>(0, PRO_RECORD);
-    */
-}
-
-void
-LogicAnalyzer::scheduleFirstProEvent()
-{
-    if (recording()) {
-        agnus.syncEvent |= EVFL::PROBE;
-    } else {
-        agnus.syncEvent &= ~EVFL::PROBE;
-    }
-    
-
-    /*
-    for (isize i = 0; i < 6; i++) {
-        
-        if (config.channel[i] != PROBE_NONE) {
-            agnus.scheduleRel<SLOT_PRO>(0, PRO_RECORD);
-            return;
-        }
-    }
-    
-    agnus.cancel<SLOT_PRO>();
-    */
 }
 
 }
