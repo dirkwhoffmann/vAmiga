@@ -18,46 +18,92 @@ extension Inspector {
         }
     }
     
-    static let registers: [(String, Int)] = [
+    static let presets: [(String?, (Probe, Int?))] = [
         
-        ("DMACONR", 0xDFF002),
-        ("VPOSR", 0xDFF004),
-        ("VHPOSR", 0xDFF006),
-        ("DSKDATR", 0xDFF008),
-        ("JOY0DAT", 0xDFF00A),
-        ("JOY1DAT", 0xDFF00C),
-        ("CLXDAT", 0xDFF00E),
-        ("ADKCONR", 0xDFF010),
-        ("POT0DAT", 0xDFF012),
-        ("POT1DAT", 0xDFF014),
-        ("POTGOR", 0xDFF016),
-        ("SERDATR", 0xDFF018),
-        ("DSKBYTR", 0xDFF01A),
-        ("INTENAR", 0xDFF01C),
-        ("INTREQR", 0xDFF01E),
-        ("DENISEID", 0xDFF07C)
+        ("DMACONR",  (.MEMORY, 0xDFF002)),
+        ("VPOSR",    (.MEMORY, 0xDFF004)),
+        ("VHPOSR",   (.MEMORY, 0xDFF006)),
+        ("DSKDATR",  (.MEMORY, 0xDFF008)),
+        ("JOY0DAT",  (.MEMORY, 0xDFF00A)),
+        ("JOY1DAT",  (.MEMORY, 0xDFF00C)),
+        ("CLXDAT",   (.MEMORY, 0xDFF00E)),
+        ("ADKCONR",  (.MEMORY, 0xDFF010)),
+        ("POT0DAT",  (.MEMORY, 0xDFF012)),
+        ("POT1DAT",  (.MEMORY, 0xDFF014)),
+        ("POTGOR",   (.MEMORY, 0xDFF016)),
+        ("SERDATR",  (.MEMORY, 0xDFF018)),
+        ("DSKBYTR",  (.MEMORY, 0xDFF01A)),
+        ("INTENAR",  (.MEMORY, 0xDFF01C)),
+        ("INTREQR",  (.MEMORY, 0xDFF01E)),
+        ("DENISEID", (.MEMORY, 0xDFF07C)),
+        (nil, (.NONE, 0)),
+        ("IPL",      (.IPL,    nil)),
+        (nil, (.NONE, 0))
     ]
-    
-    /*
-    static let probeLabels: [(String, Probe)] = [
-        
-    ]
-    */
-    
+         
     private func cacheBus() {
 
         busLogicView.cacheData()
     }
  
-    func initComboBox(_ box: NSComboBox) {
+    func initProbeSelector(_ nr: Int, _ popup: NSComboButton) {
 
-        box.removeAllItems()
+        let menu = NSMenu()
+        
+        // Add presets
+        for (index, (name, _)) in Inspector.presets.enumerated() {
 
-        for (name, _) in Inspector.registers {
-            box.addItem(withObjectValue: name)
+            if let name = name {
+                let item = NSMenuItem(title: name, action: #selector(busProbeAction(_ :)), keyEquivalent: "")
+                item.tag = 128 * nr + index
+                menu.addItem(item)
+            } else {
+                menu.addItem(NSMenuItem.separator())
+            }
         }
+
+        // Create a custom view with an embedded text field
+        let view = NSView(frame: NSRect(x: 0, y: 0, width: 128+12+12, height: 24+4+4))
+        let text = NSTextField(frame: NSRect(x: 12, y: 4, width: 128, height: 24))
+        text.placeholderString = "Enter address"
+        text.refusesFirstResponder = true
+        text.action = #selector(busAddrAction(_ :))
+        text.target = self
+        view.addSubview(text)
+
+        // Add the address field
+        let menuItem = NSMenuItem()
+        menuItem.view = view
+        menu.addItem(menuItem)
+        
+        popup.menu = menu
+        print("isEnabled = \(popup.isEnabled)")
+        popup.isEnabled = true
     }
 
+    func refreshProbeSelector(_ popup: NSComboButton) {
+    
+        let probe: Probe? =
+        popup.tag == 0 ? Probe(rawValue: emu.get(.LA_PROBE0)) :
+        popup.tag == 1 ? Probe(rawValue: emu.get(.LA_PROBE1)) :
+        popup.tag == 2 ? Probe(rawValue: emu.get(.LA_PROBE2)) :
+        popup.tag == 3 ? Probe(rawValue: emu.get(.LA_PROBE3)) : nil
+
+        let addr: Int? =
+        popup.tag == 0 ? emu.get(.LA_ADDR0) :
+        popup.tag == 1 ? emu.get(.LA_ADDR1) :
+        popup.tag == 2 ? emu.get(.LA_ADDR2) :
+        popup.tag == 3 ? emu.get(.LA_ADDR3) : nil
+        
+        print("probe = \(probe) addr = \(addr)")
+        switch probe {
+        case .NONE:     popup.title = "Connect..."
+        case .MEMORY:   popup.title = String(format: "%06X", addr ?? 0)
+        case .IPL:      popup.title = "IPL"
+        default:        popup.title = "???"
+        }
+    }
+        
     func refreshComboBox(_ box: NSComboBox) {
 
         let probe: Probe? =
@@ -85,18 +131,18 @@ extension Inspector {
         
         if full {
 
-            if busProbe0.numberOfItems == 0 {
+            if busProbe0.menu.items.isEmpty {
 
-                initComboBox(busProbe0)
-                initComboBox(busProbe1)
-                initComboBox(busProbe2)
-                initComboBox(busProbe3)
+                initProbeSelector(0, busProbe0)
+                initProbeSelector(1, busProbe1)
+                initProbeSelector(2, busProbe2)
+                initProbeSelector(3, busProbe3)
             }
-            
-            refreshComboBox(busProbe0)
-            refreshComboBox(busProbe1)
-            refreshComboBox(busProbe2)
-            refreshComboBox(busProbe3)
+
+            refreshProbeSelector(busProbe0)
+            refreshProbeSelector(busProbe1)
+            refreshProbeSelector(busProbe2)
+            refreshProbeSelector(busProbe3)
         }
 
         if count % 2 == 0 { busLogicView.update() }
@@ -183,6 +229,12 @@ extension Inspector {
         zoom = sender.doubleValue
     }
     
+    @IBAction func customProbeAction(_ sender: NSPopUpButton!) {
+        
+        print("Hallo")
+    }
+    
+    /*
     @IBAction func probeAction(_ sender: NSComboBox!) {
         
         let tag = sender.selectedTag()
@@ -200,6 +252,59 @@ extension Inspector {
         
         if let addr = addr {
             
+            let probe = Probe.MEMORY.rawValue
+            
+            switch sender.tag {
+            case 0:  emu?.set(.LA_PROBE0, value: probe); emu?.set(.LA_ADDR0, value: addr)
+            case 1:  emu?.set(.LA_PROBE1, value: probe); emu?.set(.LA_ADDR1, value: addr)
+            case 2:  emu?.set(.LA_PROBE2, value: probe); emu?.set(.LA_ADDR2, value: addr)
+            case 3:  emu?.set(.LA_PROBE3, value: probe); emu?.set(.LA_ADDR3, value: addr)
+            default: break
+            }
+            
+        } else {
+            
+            NSSound.beep()
+        }
+    }
+    */
+    
+    @IBAction func busProbeAction(_ sender: NSMenuItem!) {
+        
+        let channel = sender.tag / 128
+        let index = sender.tag % 128
+        
+        let probe = Inspector.presets[index].1.0.rawValue
+        let addr = Inspector.presets[index].1.1
+        
+        print("busProbeAction \(channel) \(index) \(probe) \(addr)")
+        
+        switch channel {
+        case 0:  emu?.set(.LA_PROBE0, value: probe);
+        case 1:  emu?.set(.LA_PROBE1, value: probe);
+        case 2:  emu?.set(.LA_PROBE2, value: probe);
+        case 3:  emu?.set(.LA_PROBE3, value: probe);
+        default: break
+        }
+        
+        if let addr = addr {
+            
+            switch channel {
+            case 0:  emu?.set(.LA_ADDR0, value: addr)
+            case 1:  emu?.set(.LA_ADDR1, value: addr)
+            case 2:  emu?.set(.LA_ADDR2, value: addr)
+            case 3:  emu?.set(.LA_ADDR3, value: addr)
+            default: break
+            }
+        }
+    }
+    
+    @IBAction func busAddrAction(_ sender: NSTextField!) {
+        
+        print("value = \(sender.stringValue) tag = \(sender.tag) ")
+        
+        if let addr = Int(sender.stringValue, radix: 16) {
+                    
             let probe = Probe.MEMORY.rawValue
             
             switch sender.tag {

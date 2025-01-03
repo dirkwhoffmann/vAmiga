@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
+        <capability name="Combo buttons" minToolsVersion="14.0" minSystemVersion="13.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -98,10 +99,10 @@
                 <outlet property="busHex" destination="xEu-cY-lEE" id="Wmn-0O-bgS"/>
                 <outlet property="busLogicView" destination="6u0-z0-gfB" id="gZG-WM-eqV"/>
                 <outlet property="busOpacity" destination="zb3-gh-A7y" id="04J-oN-sm2"/>
-                <outlet property="busProbe0" destination="U2r-eq-JSs" id="3oM-dW-OCb"/>
-                <outlet property="busProbe1" destination="HQW-30-TSf" id="bhy-9v-oqT"/>
-                <outlet property="busProbe2" destination="YBo-JS-daZ" id="sga-fQ-8R3"/>
-                <outlet property="busProbe3" destination="Uik-02-puX" id="iqY-aJ-Jty"/>
+                <outlet property="busProbe0" destination="ZI7-j8-idY" id="WqE-x1-SMx"/>
+                <outlet property="busProbe1" destination="XdO-r2-jt5" id="NKy-T7-S6r"/>
+                <outlet property="busProbe2" destination="lOF-sh-4L5" id="9vO-vW-MjU"/>
+                <outlet property="busProbe3" destination="H95-bG-twm" id="eDx-RE-6gV"/>
                 <outlet property="busRefresh" destination="zlN-rz-VbR" id="NyZ-ou-FAs"/>
                 <outlet property="busScrollView" destination="qI0-Om-v5R" id="qzB-QA-D6Y"/>
                 <outlet property="busSprites" destination="AH0-vl-j7m" id="rBT-0A-WY8"/>
@@ -1921,7 +1922,7 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <clipView key="contentView" drawsBackground="NO" id="858-OJ-L3r">
                                                 <rect key="frame" x="1" y="1" width="658" height="239"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="WPj-Ua-UtF" id="WbL-UR-zTx" customClass="MemTableView" customModule="vAmiga" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="658" height="214"/>
@@ -2385,7 +2386,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                                             <clipView key="contentView" drawsBackground="NO" id="jJo-Pz-BlY">
                                                 <rect key="frame" x="1" y="1" width="158" height="239"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="15" headerView="lgi-Sv-OLV" id="RzZ-Zx-t06" customClass="BankTableView" customModule="vAmiga" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="158" height="214"/>
@@ -2511,54 +2512,6 @@
                                                             </subviews>
                                                         </view>
                                                     </box>
-                                                    <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U2r-eq-JSs">
-                                                        <rect key="frame" x="19" y="196" width="132" height="23"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="6Rf-oY-wpb">
-                                                            <font key="font" metaFont="system"/>
-                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </comboBoxCell>
-                                                        <connections>
-                                                            <action selector="probeAction:" target="-2" id="rpc-ar-luc"/>
-                                                        </connections>
-                                                    </comboBox>
-                                                    <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="HQW-30-TSf">
-                                                        <rect key="frame" x="19" y="152" width="132" height="23"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="Vfh-Rr-S3C">
-                                                            <font key="font" metaFont="system"/>
-                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </comboBoxCell>
-                                                        <connections>
-                                                            <action selector="probeAction:" target="-2" id="Q91-3J-Ybi"/>
-                                                        </connections>
-                                                    </comboBox>
-                                                    <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="YBo-JS-daZ">
-                                                        <rect key="frame" x="19" y="108" width="132" height="23"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="zU9-2r-8FR">
-                                                            <font key="font" metaFont="system"/>
-                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </comboBoxCell>
-                                                        <connections>
-                                                            <action selector="probeAction:" target="-2" id="Vas-vk-jdY"/>
-                                                        </connections>
-                                                    </comboBox>
-                                                    <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="Uik-02-puX">
-                                                        <rect key="frame" x="19" y="65" width="132" height="23"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="n0C-Qx-HQl">
-                                                            <font key="font" metaFont="system"/>
-                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </comboBoxCell>
-                                                        <connections>
-                                                            <action selector="probeAction:" target="-2" id="bpF-Lv-lnQ"/>
-                                                        </connections>
-                                                    </comboBox>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AJM-SP-5g5">
                                                         <rect key="frame" x="79" y="330" width="71" height="16"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -2615,6 +2568,32 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
+                                                    <comboButton verticalHuggingPriority="750" fixedFrame="YES" baseWritingDirection="leftToRight" alignment="center" title="Button" imageScaling="proportionallyDown" translatesAutoresizingMaskIntoConstraints="NO" id="ZI7-j8-idY">
+                                                        <rect key="frame" x="17" y="197" width="134" height="24"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <menu key="menu" id="4e0-jp-8xz"/>
+                                                    </comboButton>
+                                                    <comboButton verticalHuggingPriority="750" fixedFrame="YES" tag="1" baseWritingDirection="leftToRight" alignment="center" title="Button" imageScaling="proportionallyDown" translatesAutoresizingMaskIntoConstraints="NO" id="XdO-r2-jt5">
+                                                        <rect key="frame" x="17" y="152" width="134" height="24"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <menu key="menu" id="Mkb-QX-jtx">
+                                                            <items>
+                                                                <menuItem title="Item" id="o8i-H1-T6I">
+                                                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                                                </menuItem>
+                                                            </items>
+                                                        </menu>
+                                                    </comboButton>
+                                                    <comboButton verticalHuggingPriority="750" fixedFrame="YES" tag="2" baseWritingDirection="leftToRight" alignment="center" title="Button" imageScaling="proportionallyDown" translatesAutoresizingMaskIntoConstraints="NO" id="lOF-sh-4L5">
+                                                        <rect key="frame" x="17" y="108" width="133" height="24"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <menu key="menu" id="ZOy-jm-r2X"/>
+                                                    </comboButton>
+                                                    <comboButton verticalHuggingPriority="750" fixedFrame="YES" tag="3" baseWritingDirection="leftToRight" alignment="center" title="Button" imageScaling="proportionallyDown" translatesAutoresizingMaskIntoConstraints="NO" id="H95-bG-twm">
+                                                        <rect key="frame" x="17" y="65" width="134" height="24"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <menu key="menu" id="8d8-1r-igm"/>
+                                                    </comboButton>
                                                 </subviews>
                                             </view>
                                         </box>
@@ -4585,7 +4564,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" drawsBackground="NO" id="TcC-cK-PaI">
                                                             <rect key="frame" x="1" y="1" width="263" height="294"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="1" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="e4D-rb-dVX" id="rUL-h6-KIi" customClass="CopperTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="263" height="269"/>
@@ -4803,7 +4782,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" drawsBackground="NO" id="Iub-PI-2OK">
                                                             <rect key="frame" x="1" y="1" width="263" height="294"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="1" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="3lS-Vw-4CO" id="iUk-4w-IRN" customClass="CopperTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="263" height="266"/>
@@ -4920,7 +4899,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" drawsBackground="NO" id="bWY-Qj-Xho">
                                                             <rect key="frame" x="1" y="1" width="200" height="196"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="nnj-UC-MGH" id="AAD-cN-qUT" customClass="CopperBreakTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="200" height="168"/>
@@ -5982,7 +5961,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="1aG-KS-uL3">
                                                             <rect key="frame" x="1" y="1" width="309" height="288"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="2" allowsExpansionToolTips="YES" tableStyle="fullWidth" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" id="s6H-id-bwp" customClass="SpriteTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="309" height="288"/>
@@ -8213,7 +8192,7 @@
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="QrR-nh-kxQ">
                                                                                 <rect key="frame" x="0.0" y="0.0" width="502" height="221"/>
-                                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                                <autoresizingMask key="autoresizingMask"/>
                                                                                 <subviews>
                                                                                     <textView editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="mjy-kd-clj">
                                                                                         <rect key="frame" x="0.0" y="0.0" width="502" height="221"/>
@@ -8429,7 +8408,7 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <clipView key="contentView" drawsBackground="NO" id="pnp-LT-l5r">
                                                 <rect key="frame" x="1" y="1" width="832" height="313"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="1" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="oWx-2a-T42" id="HR6-To-4IS" userLabel="Primary Events" customClass="EventTableView" customModule="vAmiga" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="832" height="288"/>

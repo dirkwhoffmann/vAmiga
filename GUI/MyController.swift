@@ -384,7 +384,7 @@ extension MyController {
         switch msg.type {
                         
         case .CONFIG:
-            print("COMNFIG")
+
             monitor?.refresh()
             configurator?.refresh()
             refreshStatusBar()
