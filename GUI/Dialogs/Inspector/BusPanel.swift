@@ -18,15 +18,31 @@ extension Inspector {
         }
     }
     
+    static let registers: [(String, Int)] = [
+        
+        ("DMACONR", 0xDFF002),
+        ("VPOSR", 0xDFF004),
+        ("VHPOSR", 0xDFF006),
+        ("DSKDATR", 0xDFF008),
+        ("JOY0DAT", 0xDFF00A),
+        ("JOY1DAT", 0xDFF00C),
+        ("CLXDAT", 0xDFF00E),
+        ("ADKCONR", 0xDFF010),
+        ("POT0DAT", 0xDFF012),
+        ("POT1DAT", 0xDFF014),
+        ("POTGOR", 0xDFF016),
+        ("SERDATR", 0xDFF018),
+        ("DSKBYTR", 0xDFF01A),
+        ("INTENAR", 0xDFF01C),
+        ("INTREQR", 0xDFF01E),
+        ("DENISEID", 0xDFF07C)
+    ]
+    
+    /*
     static let probeLabels: [(String, Probe)] = [
         
-        /*
-        ("Select...", .NONE),
-        ("Bus Usage", .BUS_OWNER),
-        ("Address Bus", .ADDR_BUS),
-        ("Data Bus", .DATA_BUS)
-        */
     ]
+    */
     
     private func cacheBus() {
 
@@ -37,8 +53,8 @@ extension Inspector {
 
         box.removeAllItems()
 
-        for (title, _) in Inspector.probeLabels {
-            box.addItem(withObjectValue: title)
+        for (name, _) in Inspector.registers {
+            box.addItem(withObjectValue: name)
         }
     }
 
@@ -48,24 +64,18 @@ extension Inspector {
         box.tag == 0 ? Probe(rawValue: emu.get(.LA_PROBE0)) :
         box.tag == 1 ? Probe(rawValue: emu.get(.LA_PROBE1)) :
         box.tag == 2 ? Probe(rawValue: emu.get(.LA_PROBE2)) :
-        box.tag == 3 ? Probe(rawValue: emu.get(.LA_PROBE3)) :
-        box.tag == 4 ? Probe(rawValue: emu.get(.LA_PROBE4)) :
-        box.tag == 5 ? Probe(rawValue: emu.get(.LA_PROBE5)) : nil
+        box.tag == 3 ? Probe(rawValue: emu.get(.LA_PROBE3)) : nil
 
         let addr: Int? =
         box.tag == 0 ? emu.get(.LA_ADDR0) :
         box.tag == 1 ? emu.get(.LA_ADDR1) :
         box.tag == 2 ? emu.get(.LA_ADDR2) :
-        box.tag == 3 ? emu.get(.LA_ADDR3) :
-        box.tag == 4 ? emu.get(.LA_ADDR4) :
-        box.tag == 5 ? emu.get(.LA_ADDR5) : nil
+        box.tag == 3 ? emu.get(.LA_ADDR3) : nil
 
         if probe == .MEMORY {
             box.stringValue = String(format: "%06X", addr!)
         } else {
-            for (_title, _probe) in Inspector.probeLabels {
-                if probe == _probe { box.stringValue = _title }
-            }
+            box.stringValue = "<Address>"
         }
     }
     
@@ -176,47 +186,27 @@ extension Inspector {
     @IBAction func probeAction(_ sender: NSComboBox!) {
         
         let tag = sender.selectedTag()
-        let tmp = sender.stringValue
-        print("probeAction \(tag) \(tmp)")
+        print("probeAction \(tag) \(sender.stringValue)")
 
-        var probe: Probe?
         var addr: Int?
         
-        // Check if the user input supplied a keyword
-        for (_title, _probe) in Inspector.probeLabels {
-            if sender.stringValue == _title { probe = _probe }
+        // Check if the user input supplied a symbolic name
+        for (name, address) in Inspector.registers {
+            if sender.stringValue == name { addr = address }
         }
 
         // Check if the user input supplied a memory address
-        if probe == nil {
-            addr = Int(sender.stringValue, radix: 16)
-            if addr != nil { probe = .MEMORY }
-        }
+        if addr == nil { addr = Int(sender.stringValue, radix: 16) }
         
         if let addr = addr {
             
-            switch sender.tag {
-                
-            case 0:  emu?.set(.LA_ADDR0, value: addr)
-            case 1:  emu?.set(.LA_ADDR1, value: addr)
-            case 2:  emu?.set(.LA_ADDR2, value: addr)
-            case 3:  emu?.set(.LA_ADDR3, value: addr)
-            case 4:  emu?.set(.LA_ADDR4, value: addr)
-            case 5:  emu?.set(.LA_ADDR5, value: addr)
-            default: break
-            }
-        }
-        
-        if let probe = probe {
+            let probe = Probe.MEMORY.rawValue
             
             switch sender.tag {
-                
-            case 0:  emu?.set(.LA_PROBE0, value: probe.rawValue)
-            case 1:  emu?.set(.LA_PROBE1, value: probe.rawValue)
-            case 2:  emu?.set(.LA_PROBE2, value: probe.rawValue)
-            case 3:  emu?.set(.LA_PROBE3, value: probe.rawValue)
-            case 4:  emu?.set(.LA_PROBE4, value: probe.rawValue)
-            case 5:  emu?.set(.LA_PROBE5, value: probe.rawValue)
+            case 0:  emu?.set(.LA_PROBE0, value: probe); emu?.set(.LA_ADDR0, value: addr)
+            case 1:  emu?.set(.LA_PROBE1, value: probe); emu?.set(.LA_ADDR1, value: addr)
+            case 2:  emu?.set(.LA_PROBE2, value: probe); emu?.set(.LA_ADDR2, value: addr)
+            case 3:  emu?.set(.LA_PROBE3, value: probe); emu?.set(.LA_ADDR3, value: addr)
             default: break
             }
             

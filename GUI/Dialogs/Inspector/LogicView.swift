@@ -56,14 +56,6 @@ class LogicView: NSView {
         needsDisplay = true
     }
 
-    func signalRect(_ nr: Int) -> CGRect {
-        
-        return CGRect(x: bounds.minX,
-                      y: bounds.maxY - headerHeight - CGFloat(nr + 1) * dy,
-                      width: bounds.width,
-                      height: dy)
-    }
-    
     
     //
     // Managing the data source
@@ -88,35 +80,35 @@ class LogicView: NSView {
         // Update with new data
         for i in 0..<hpos {
             
-            if (owners + i).pointee == .NONE { continue }
+            // if (owners + i).pointee == .NONE { continue }
             
             switch (owners + i).pointee {
                 
             case .CPU:      labels[i] = "CPU"; colors[i] = inspector.colCPU.color
             case .REFRESH:  labels[i] = "REF"; colors[i] = inspector.colRefresh.color
-            case .DISK:     labels[i] = "REF"; colors[i] = inspector.colDisk.color
-            case .AUD0:     labels[i] = "REF"; colors[i] = inspector.colAudio.color
-            case .AUD1:     labels[i] = "REF"; colors[i] = inspector.colAudio.color
-            case .AUD2:     labels[i] = "REF"; colors[i] = inspector.colAudio.color
-            case .AUD3:     labels[i] = "REF"; colors[i] = inspector.colAudio.color
-            case .BPL1:     labels[i] = "REF"; colors[i] = inspector.colBitplanes.color
-            case .BPL2:     labels[i] = "REF"; colors[i] = inspector.colBitplanes.color
-            case .BPL3:     labels[i] = "REF"; colors[i] = inspector.colBitplanes.color
-            case .BPL4:     labels[i] = "REF"; colors[i] = inspector.colBitplanes.color
-            case .BPL5:     labels[i] = "REF"; colors[i] = inspector.colBitplanes.color
-            case .BPL6:     labels[i] = "REF"; colors[i] = inspector.colBitplanes.color
-            case .SPRITE0:  labels[i] = "REF"; colors[i] = inspector.colSprites.color
-            case .SPRITE1:  labels[i] = "REF"; colors[i] = inspector.colSprites.color
-            case .SPRITE2:  labels[i] = "REF"; colors[i] = inspector.colSprites.color
-            case .SPRITE3:  labels[i] = "REF"; colors[i] = inspector.colSprites.color
-            case .SPRITE4:  labels[i] = "REF"; colors[i] = inspector.colSprites.color
-            case .SPRITE5:  labels[i] = "REF"; colors[i] = inspector.colSprites.color
-            case .SPRITE6:  labels[i] = "REF"; colors[i] = inspector.colSprites.color
-            case .SPRITE7:  labels[i] = "REF"; colors[i] = inspector.colSprites.color
-            case .COPPER:   labels[i] = "REF"; colors[i] = inspector.colCopper.color
-            case .BLITTER:  labels[i] = "REF"; colors[i] = inspector.colBlitter.color
-            case .BLOCKED:  labels[i] = "REF"; colors[i] = .red
-            default:        break
+            case .DISK:     labels[i] = "DSK"; colors[i] = inspector.colDisk.color
+            case .AUD0:     labels[i] = "AUD0"; colors[i] = inspector.colAudio.color
+            case .AUD1:     labels[i] = "AUD1"; colors[i] = inspector.colAudio.color
+            case .AUD2:     labels[i] = "AUD2"; colors[i] = inspector.colAudio.color
+            case .AUD3:     labels[i] = "AUD3"; colors[i] = inspector.colAudio.color
+            case .BPL1:     labels[i] = "BPL1"; colors[i] = inspector.colBitplanes.color
+            case .BPL2:     labels[i] = "BPL2"; colors[i] = inspector.colBitplanes.color
+            case .BPL3:     labels[i] = "BPL3"; colors[i] = inspector.colBitplanes.color
+            case .BPL4:     labels[i] = "BPL4"; colors[i] = inspector.colBitplanes.color
+            case .BPL5:     labels[i] = "BPL5"; colors[i] = inspector.colBitplanes.color
+            case .BPL6:     labels[i] = "BPL6"; colors[i] = inspector.colBitplanes.color
+            case .SPRITE0:  labels[i] = "SPR0"; colors[i] = inspector.colSprites.color
+            case .SPRITE1:  labels[i] = "SPR1"; colors[i] = inspector.colSprites.color
+            case .SPRITE2:  labels[i] = "SPR2"; colors[i] = inspector.colSprites.color
+            case .SPRITE3:  labels[i] = "SPR3"; colors[i] = inspector.colSprites.color
+            case .SPRITE4:  labels[i] = "SPR4"; colors[i] = inspector.colSprites.color
+            case .SPRITE5:  labels[i] = "SPR5"; colors[i] = inspector.colSprites.color
+            case .SPRITE6:  labels[i] = "SPR6"; colors[i] = inspector.colSprites.color
+            case .SPRITE7:  labels[i] = "SPR7"; colors[i] = inspector.colSprites.color
+            case .COPPER:   labels[i] = "COP"; colors[i] = inspector.colCopper.color
+            case .BLITTER:  labels[i] = "BLT"; colors[i] = inspector.colBlitter.color
+            case .BLOCKED:  labels[i] = "BLK"; colors[i] = .red
+            default:        labels[i] = "-"; colors[i] = .clear; continue
             }
             
             // The first two channel display the address and data bus
@@ -127,7 +119,7 @@ class LogicView: NSView {
         // For the remaining channels, get the data from the logic analyzer
         for c in 2..<signals {
             
-            if let values = emu.logicAnalyzer.getData(c) {
+            if let values = emu.logicAnalyzer.getData(c - 2) {
                 
                 for i in 0..<hpos {
                     
@@ -198,7 +190,7 @@ class LogicView: NSView {
             
             if let label = labels[i] {
                 
-                colors[i]!.setFill()
+                colors[i]?.setFill()
                 
                 CGRect(x: CGFloat(i) * dx, y: bounds.maxY - (headerHeight / 2) - 2, width: dx, height: 4).fill()
                 
@@ -212,18 +204,24 @@ class LogicView: NSView {
         
     func drawSignal(_ channel: Int) {
 
-        let rect = signalRect(channel)
         let bits = bitWidth[channel]
         var prev: Int?
         var curr: Int? = data[channel][0]
         var next: Int? = data[channel][1]
         
+        // Compute the signal rect
+        let sigrect = CGRect(x: bounds.minX,
+                             y: bounds.maxY - headerHeight - CGFloat(channel + 1) * dy,
+                             width: bounds.width,
+                             height: dy)
+        
         for i in 0..<segments {
             
+            // Compute the rect for a single slot inside the signal rect
             let r = CGRect(x: CGFloat(i) * dx,
-                           y: rect.minY + margin,
+                           y: sigrect.minY + margin,
                            width: dx,
-                           height: rect.height - 2 * margin)
+                           height: sigrect.height - 2 * margin)
             
             if bits == 1 {
                 drawLineSegment(in: r, v: [prev, curr, next], color: .labelColor)
