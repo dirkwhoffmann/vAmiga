@@ -96,8 +96,7 @@ class Inspector: DialogController {
     @IBOutlet weak var busProbe1: NSComboBox!
     @IBOutlet weak var busProbe2: NSComboBox!
     @IBOutlet weak var busProbe3: NSComboBox!
-    @IBOutlet weak var busProbe4: NSComboBox!
-    @IBOutlet weak var busProbe5: NSComboBox!
+    
     @IBOutlet weak var busHex: NSButton!
     @IBOutlet weak var busSymbolic: NSButton!
 
@@ -751,6 +750,7 @@ class Inspector: DialogController {
         case .PAUSE:
             
             fullRefresh()
+            scrollToHPos()
             
         case .STEP:
             

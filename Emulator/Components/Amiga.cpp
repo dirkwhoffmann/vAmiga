@@ -839,9 +839,6 @@ Amiga::update(CmdQueue &queue)
 void
 Amiga::computeFrame()
 {
-    // Clear pending flags
-    flags = 0;
-    
     while (1) {
 
         // Emulate the next CPU instruction
@@ -938,11 +935,11 @@ Amiga::computeFrame()
 
                 action = pause;
             }
-                        
-            if (action == pause) { throw StateChangeException(STATE_PAUSED); }
-            if (action == leave) { break; }
             
             flags = 0;
+            
+            if (action == pause) { throw StateChangeException(STATE_PAUSED); }
+            if (action == leave) { break; }
         }
     }
 }

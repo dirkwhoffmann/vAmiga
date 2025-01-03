@@ -323,7 +323,10 @@ extension MyController {
         if let info = info {
                 
             // Get some auxiliary debug information from the emulator
-            let attributes = [NSAttributedString.Key.font: NSFont.monospaced(ofSize: 11, weight: .semibold)]
+            let attributes: [NSAttributedString.Key: Any] = [
+                .font: NSFont.monospaced(ofSize: 11, weight: .semibold),
+                .foregroundColor: NSColor.labelColor
+            ]
             let text = NSAttributedString(string: emu.amiga.stateString!, attributes: attributes)
             let size = CGRect(x: 0, y: 0, width: text.size().width + 16, height: text.size().height)
 
@@ -331,6 +334,7 @@ extension MyController {
             let accessory = NSTextView(frame: size)
             accessory.textStorage?.setAttributedString(text)
             accessory.drawsBackground = false
+            accessory.isEditable = false
             
             // Create an alert
             let alert = NSAlert()

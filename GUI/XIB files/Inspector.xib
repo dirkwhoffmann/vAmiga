@@ -102,8 +102,6 @@
                 <outlet property="busProbe1" destination="HQW-30-TSf" id="bhy-9v-oqT"/>
                 <outlet property="busProbe2" destination="YBo-JS-daZ" id="sga-fQ-8R3"/>
                 <outlet property="busProbe3" destination="Uik-02-puX" id="iqY-aJ-Jty"/>
-                <outlet property="busProbe4" destination="qqY-WX-0lm" id="YJf-u0-4TX"/>
-                <outlet property="busProbe5" destination="Tx4-gK-YWi" id="QIO-Se-vNr"/>
                 <outlet property="busRefresh" destination="zlN-rz-VbR" id="NyZ-ou-FAs"/>
                 <outlet property="busScrollView" destination="qI0-Om-v5R" id="qzB-QA-D6Y"/>
                 <outlet property="busSprites" destination="AH0-vl-j7m" id="rBT-0A-WY8"/>
@@ -2467,6 +2465,17 @@
                                                             <action selector="hexAction:" target="-2" id="Aek-uV-o7p"/>
                                                         </connections>
                                                     </button>
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GYQ-el-jL8">
+                                                        <rect key="frame" x="457" y="19" width="69" height="16"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                        <buttonCell key="cell" type="check" title="Symbolic" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Tve-Vl-Aax">
+                                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="symAction:" target="-2" id="43w-he-UZT"/>
+                                                        </connections>
+                                                    </button>
                                                     <box fixedFrame="YES" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="usD-fU-uUU">
                                                         <rect key="frame" x="153" y="50" width="432" height="315"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -2503,7 +2512,7 @@
                                                         </view>
                                                     </box>
                                                     <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U2r-eq-JSs">
-                                                        <rect key="frame" x="19" y="283" width="132" height="23"/>
+                                                        <rect key="frame" x="19" y="196" width="132" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="6Rf-oY-wpb">
                                                             <font key="font" metaFont="system"/>
@@ -2515,7 +2524,7 @@
                                                         </connections>
                                                     </comboBox>
                                                     <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="HQW-30-TSf">
-                                                        <rect key="frame" x="19" y="239" width="132" height="23"/>
+                                                        <rect key="frame" x="19" y="152" width="132" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="Vfh-Rr-S3C">
                                                             <font key="font" metaFont="system"/>
@@ -2527,7 +2536,7 @@
                                                         </connections>
                                                     </comboBox>
                                                     <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="YBo-JS-daZ">
-                                                        <rect key="frame" x="19" y="195" width="132" height="23"/>
+                                                        <rect key="frame" x="19" y="108" width="132" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="zU9-2r-8FR">
                                                             <font key="font" metaFont="system"/>
@@ -2539,7 +2548,7 @@
                                                         </connections>
                                                     </comboBox>
                                                     <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="Uik-02-puX">
-                                                        <rect key="frame" x="19" y="152" width="132" height="23"/>
+                                                        <rect key="frame" x="19" y="65" width="132" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="n0C-Qx-HQl">
                                                             <font key="font" metaFont="system"/>
@@ -2548,30 +2557,6 @@
                                                         </comboBoxCell>
                                                         <connections>
                                                             <action selector="probeAction:" target="-2" id="bpF-Lv-lnQ"/>
-                                                        </connections>
-                                                    </comboBox>
-                                                    <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="qqY-WX-0lm">
-                                                        <rect key="frame" x="19" y="109" width="132" height="23"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="8qj-sV-QrA">
-                                                            <font key="font" metaFont="system"/>
-                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </comboBoxCell>
-                                                        <connections>
-                                                            <action selector="probeAction:" target="-2" id="UA8-gE-kPn"/>
-                                                        </connections>
-                                                    </comboBox>
-                                                    <comboBox focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="Tx4-gK-YWi">
-                                                        <rect key="frame" x="19" y="65" width="132" height="23"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="oK8-qW-2re">
-                                                            <font key="font" metaFont="system"/>
-                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        </comboBoxCell>
-                                                        <connections>
-                                                            <action selector="probeAction:" target="-2" id="aVc-b3-zVZ"/>
                                                         </connections>
                                                     </comboBox>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AJM-SP-5g5">
@@ -2583,10 +2568,19 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KBk-29-gAH">
+                                                        <rect key="frame" x="70" y="287" width="80" height="16"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Address Bus" id="ZGe-ah-IVW">
+                                                            <font key="font" usesAppearanceFont="YES"/>
+                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
                                                     <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XFb-Le-t3W">
                                                         <rect key="frame" x="213" y="15" width="168" height="24"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" minValue="1" maxValue="50" doubleValue="25" tickMarkPosition="above" sliderType="linear" id="bgd-y0-bRq">
+                                                        <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" minValue="1" maxValue="50" doubleValue="30" tickMarkPosition="above" sliderType="linear" id="bgd-y0-bRq">
                                                             <font key="font" size="12" name="Helvetica"/>
                                                         </sliderCell>
                                                         <connections>
@@ -2612,17 +2606,15 @@
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <imageCell key="cell" controlSize="small" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="minus" catalog="system" id="uCe-gf-5OL"/>
                                                     </imageView>
-                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GYQ-el-jL8">
-                                                        <rect key="frame" x="457" y="19" width="69" height="16"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                                        <buttonCell key="cell" type="check" title="Symbolic" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Tve-Vl-Aax">
-                                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                            <font key="font" metaFont="smallSystem"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="symAction:" target="-2" id="43w-he-UZT"/>
-                                                        </connections>
-                                                    </button>
+                                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WUd-ja-ho8">
+                                                        <rect key="frame" x="91" y="243" width="59" height="16"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Data Bus" id="iJc-P1-dCX">
+                                                            <font key="font" usesAppearanceFont="YES"/>
+                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
                                                 </subviews>
                                             </view>
                                         </box>

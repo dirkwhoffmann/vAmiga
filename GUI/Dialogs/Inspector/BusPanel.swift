@@ -79,16 +79,12 @@ extension Inspector {
                 initComboBox(busProbe1)
                 initComboBox(busProbe2)
                 initComboBox(busProbe3)
-                initComboBox(busProbe4)
-                initComboBox(busProbe5)
             }
             
             refreshComboBox(busProbe0)
             refreshComboBox(busProbe1)
             refreshComboBox(busProbe2)
             refreshComboBox(busProbe3)
-            refreshComboBox(busProbe4)
-            refreshComboBox(busProbe5)
         }
 
         if count % 2 == 0 { busLogicView.update() }
@@ -134,6 +130,15 @@ extension Inspector {
         colRefresh.setColor(info.refreshColor)
     }
     
+    func scrollToHPos() {
+        
+        let pos = (busLogicView.bounds.width / CGFloat(228)) * CGFloat(emu.amiga.info.hpos + 1)
+        let newx = pos - (busScrollView.bounds.width / 2)
+        NSAnimationContext.runAnimationGroup({ context in
+            context.duration = 0.5
+            busScrollView.contentView.animator().setBoundsOrigin(NSPoint(x: newx, y: 0))
+        }, completionHandler: nil)
+    }
     
     //
     // Action methods (Logic Analyzer)
