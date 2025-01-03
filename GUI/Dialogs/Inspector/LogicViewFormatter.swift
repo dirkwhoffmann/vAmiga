@@ -38,6 +38,7 @@ class LogicViewFormatter {
         }
     }
     
+    /*
     func string(from value: Int, probe: Probe) -> String {
 
         switch probe {
@@ -81,4 +82,5 @@ class LogicViewFormatter {
             return String(value)
         }
     }
+    */
 }

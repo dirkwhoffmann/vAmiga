@@ -20,7 +20,7 @@ extension Inspector {
     
     static let probeLabels: [(String, Probe)] = [
         
-        ("Unconnected", .NONE),
+        ("Select...", .NONE),
         ("Bus Usage", .BUS_OWNER),
         ("Address Bus", .ADDR_BUS),
         ("Data Bus", .DATA_BUS)
@@ -51,12 +51,12 @@ extension Inspector {
         box.tag == 5 ? Probe(rawValue: emu.get(.LA_PROBE5)) : nil
 
         let addr: Int? =
-        box.tag == 0 ? emu.get(.LA_PROBE0) :
-        box.tag == 1 ? emu.get(.LA_PROBE1) :
-        box.tag == 2 ? emu.get(.LA_PROBE2) :
-        box.tag == 3 ? emu.get(.LA_PROBE3) :
-        box.tag == 4 ? emu.get(.LA_PROBE4) :
-        box.tag == 5 ? emu.get(.LA_PROBE5) : nil
+        box.tag == 0 ? emu.get(.LA_ADDR0) :
+        box.tag == 1 ? emu.get(.LA_ADDR1) :
+        box.tag == 2 ? emu.get(.LA_ADDR2) :
+        box.tag == 3 ? emu.get(.LA_ADDR3) :
+        box.tag == 4 ? emu.get(.LA_ADDR4) :
+        box.tag == 5 ? emu.get(.LA_ADDR5) : nil
 
         if probe == .MEMORY {
             box.stringValue = String(format: "%06X", addr!)

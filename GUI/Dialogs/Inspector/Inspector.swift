@@ -98,7 +98,9 @@ class Inspector: DialogController {
     @IBOutlet weak var busProbe3: NSComboBox!
     @IBOutlet weak var busProbe4: NSComboBox!
     @IBOutlet weak var busProbe5: NSComboBox!
-    
+    @IBOutlet weak var busHex: NSButton!
+    @IBOutlet weak var busSymbolic: NSButton!
+
     @IBOutlet weak var busEnable: NSButton!
     @IBOutlet weak var busCopper: NSButton!
     @IBOutlet weak var busBlitter: NSButton!

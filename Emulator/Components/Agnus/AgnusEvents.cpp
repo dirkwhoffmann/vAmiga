@@ -185,9 +185,6 @@ Agnus::serviceREGEvent(Cycle until)
 
     if (syncEvent) {
 
-        // Call the logic analyzer of requested
-        if (syncEvent & EVFL::PROBE) { logicAnalyzer.recordSignals(pos.h - 1); }
-
         // Call the EOL handler if requested
         if (syncEvent & EVFL::EOL) { eolHandler(); syncEvent &= ~EVFL::EOL; }
 
@@ -298,6 +295,12 @@ Agnus::serviceREGEvent(Cycle until)
         }
     }
 
+    if (syncEvent) {
+        
+        // Call the logic analyzer of requested
+        if (syncEvent & EVFL::PROBE) { logicAnalyzer.recordSignals(pos.h); }
+    }
+    
     // Schedule next event
     scheduleNextREGEvent();
 }

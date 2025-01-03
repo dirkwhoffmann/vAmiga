@@ -150,6 +150,21 @@ LogicAnalyzer::recordSignals()
 void
 LogicAnalyzer::recordSignals(isize hpos)
 {
+    /* This function is called at the beginning of each DMA cycle, just after
+     * register change recorder has updated all registers. Hence, when reading
+     * from memory at this point, we get the same value the CPU would get when
+     * reading the same memory location. This is the value we want to see
+     * when probing memory contents.
+     * However, when probing the address or data bus, we see the value from
+     * the previous cycle as nothing has been put on the buses, yet.
+     */
+    
+    assert(hpos == agnus.pos.h);
+    
+    auto hprev = agnus.pos.hPrev();
+    
+    trace(true, "LogicAnalyzer::recordSignals\n");
+    
     assert(hpos >= 0 && hpos < HPOS_CNT);
     
     // Only proceed if this is the main instance
@@ -162,28 +177,28 @@ LogicAnalyzer::recordSignals(isize hpos)
 
             case PROBE_BUS_OWNER:
                 
-                if (agnus.busOwner[hpos] != BUS_NONE) {
-                    record[i][hpos] = isize(agnus.busOwner[hpos]);
+                if (agnus.busOwner[hprev] != BUS_NONE) {
+                    record[i][hprev] = isize(agnus.busOwner[hprev]);
                 } else {
-                    record[i][hpos] = -1;
+                    record[i][hprev] = -1;
                 }
                 break;
                 
             case PROBE_ADDR_BUS:
 
-                if (agnus.busOwner[hpos] != BUS_NONE) {
-                    record[i][hpos] = isize(agnus.busAddr[hpos]);
+                if (agnus.busOwner[hprev] != BUS_NONE) {
+                    record[i][hprev] = isize(agnus.busAddr[hprev]);
                 } else {
-                    record[i][hpos] = -1;
+                    record[i][hprev] = -1;
                 }
                 break;
 
             case PROBE_DATA_BUS:
 
-                if (agnus.busOwner[hpos] != BUS_NONE) {
-                    record[i][hpos] = isize(agnus.busData[hpos]);
+                if (agnus.busOwner[hprev] != BUS_NONE) {
+                    record[i][hprev] = isize(agnus.busData[hprev]);
                 } else {
-                    record[i][hpos] = -1;
+                    record[i][hprev] = -1;
                 }
                 break;
 

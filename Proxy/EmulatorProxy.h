@@ -519,6 +519,8 @@
 
 - (const NSInteger *)getData:(NSInteger)channel;
 - (const BusOwner *)busOwners;
+- (const u32 *)addrBus;
+- (const u16 *)dataBus;
 
 @end
 

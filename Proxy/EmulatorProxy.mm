@@ -796,6 +796,16 @@ using namespace vamiga::moira;
     return [self la]->logicAnalyzer->agnus.busOwner;
 }
 
+- (const u32 *)addrBus
+{
+    return [self la]->logicAnalyzer->agnus.busAddr;
+}
+
+- (const u16 *)dataBus
+{
+    return [self la]->logicAnalyzer->agnus.busData;
+}
+
 @end
 
 

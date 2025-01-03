@@ -68,9 +68,28 @@ class LogicView: NSView {
         
         guard let emu = emu else { return }
 
-        let hpos = emu.amiga.info.hpos
-        
+        // Start from scratch
         for c in 0..<signals {
+            for i in 0..<segments {
+                data[c][i] = nil
+            }
+        }
+        
+        let hpos = emu.amiga.info.hpos
+        let owners = emu.logicAnalyzer.busOwners()!
+        let addrBus = emu.logicAnalyzer.addrBus()!
+        let dataBus = emu.logicAnalyzer.dataBus()!
+
+        // The first two channel display the address and data bus
+        for i in 0..<hpos {
+            if (owners + i).pointee != .NONE {
+                data[0][i] = Int((addrBus + i).pointee)
+                data[1][i] = Int((dataBus + i).pointee)
+            }
+        }
+        
+        // Get the data for the other channels from the logic analyzer
+        for c in 2..<signals {
             
             if let values = emu.logicAnalyzer.getData(c) {
                 
@@ -78,10 +97,6 @@ class LogicView: NSView {
                     
                     let value = (values + i).pointee
                     data[c][i] = value >= 0 ? value : nil
-                }
-                for i in (hpos + 1)..<segments {
-                    
-                    data[c][i] = nil
                 }
             }
         }
@@ -101,9 +116,8 @@ class LogicView: NSView {
     override func draw(_ dirtyRect: NSRect) {
 
         lock.lock()
-        
+                
         super.draw(dirtyRect)
-
         context = NSGraphicsContext.current?.cgContext
         
         NSColor.clear.setFill()
@@ -129,7 +143,8 @@ class LogicView: NSView {
             path.addLine(to: CGPoint(x: CGFloat(i) * dx, y: bounds.maxY))
         }
         context.setLineWidth(0.5)
-        context.setStrokeColor(NSColor.secondaryLabelColor.cgColor)
+        // context.setStrokeColor(NSColor.secondaryLabelColor.cgColor)
+        context.setStrokeColor(NSColor.tertiaryLabelColor.cgColor)
 
         context.addPath(path)
         context.drawPath(using: .stroke)
@@ -137,6 +152,9 @@ class LogicView: NSView {
     
     func drawLabels() {
         
+        formatter.hex = inspector.busHex.state == .on
+        formatter.symbolic = inspector.busSymbolic.state == .on
+
         let names: [BusOwner: String] = [
             
                 .NONE: "",
@@ -202,23 +220,24 @@ class LogicView: NSView {
             let owner = (owners + i).pointee
             let name = names[owner] ?? "???"
             colors[owner]?.setFill()
+            
+            
+            CGRect(x: CGFloat(i) * dx,
+                   y: bounds.maxY - (headerHeight / 2) - 2,
+                   width: dx,
+                   height: 4).fill()
             /*
             CGRect(x: CGFloat(i) * dx,
-                             y: bounds.maxY - (headerHeight / 2) - 2,
-                             width: dx,
-                             height: 4).fill()
+                   y: bounds.maxY - headerHeight,
+                   width: dx,
+                   height: 4).fill()
             */
-            CGRect(x: CGFloat(i) * dx,
-                             y: bounds.maxY - headerHeight,
-                             width: dx,
-                             height: 4).fill()
-
             drawText(text: "\(i)",
-                     in: NSRect(x: CGFloat(i) * dx, y: bounds.maxY - 0.5*headerHeight + 2, width: dx, height: 0.5*headerHeight - 2),
+                     in: NSRect(x: CGFloat(i) * dx, y: bounds.maxY - 0.5 * headerHeight + 2, width: dx, height: 0.5 * headerHeight - 2),
                      font: system,
                      color: .labelColor)
             drawText(text: "\(name)",
-                     in: NSRect(x: CGFloat(i) * dx, y: bounds.maxY - headerHeight + 4, width: dx, height: 0.5*headerHeight - 2),
+                     in: NSRect(x: CGFloat(i) * dx, y: bounds.maxY - headerHeight, width: dx, height: 0.5 * headerHeight - 2),
                      font: system,
                      color: .labelColor)
         }
@@ -267,7 +286,7 @@ class LogicView: NSView {
              }
              */
             if curr != nil {
-                drawText(text: formatter.string(from: curr!, probe: probe),
+                drawText(text: formatter.string(from: curr!, bitWidth: channel == 0 ? 24 : 16),
                          in: r,
                          font: mono,
                          color: .labelColor)
