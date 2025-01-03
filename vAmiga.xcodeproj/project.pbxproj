@@ -1364,9 +1364,9 @@
 			isa = PBXGroup;
 			children = (
 				507C01B92D25C0B800E29933 /* CMakeLists.txt */,
+				507C01B52D25C05A00E29933 /* LogicAnalyzerTypes.h */,
 				507C01B42D25C05700E29933 /* LogicAnalyzer.h */,
 				507C01B32D25C04100E29933 /* LogicAnalyzer.cpp */,
-				507C01B52D25C05A00E29933 /* LogicAnalyzerTypes.h */,
 			);
 			path = LogicAnalyzer;
 			sourceTree = "<group>";

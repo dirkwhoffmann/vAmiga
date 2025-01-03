@@ -85,14 +85,10 @@ enum_long(OPT)
     OPT_LA_PROBE1,              ///< Probe on channel 1
     OPT_LA_PROBE2,              ///< Probe on channel 2
     OPT_LA_PROBE3,              ///< Probe on channel 3
-    OPT_LA_PROBE4,              ///< Probe on channel 4
-    OPT_LA_PROBE5,              ///< Probe on channel 5
     OPT_LA_ADDR0,               ///< Address for channel 0 (memory probing)
     OPT_LA_ADDR1,               ///< Address for channel 1 (memory probing)
     OPT_LA_ADDR2,               ///< Address for channel 2 (memory probing)
     OPT_LA_ADDR3,               ///< Address for channel 3 (memory probing)
-    OPT_LA_ADDR4,               ///< Address for channel 3 (memory probing)
-    OPT_LA_ADDR5,               ///< Address for channel 3 (memory probing)
 
     ///<
     // Video port
@@ -270,14 +266,10 @@ struct OptionEnum : vamiga::util::Reflection<OptionEnum, Option>
             case OPT_LA_PROBE1:                 return "LA.PROBE1";
             case OPT_LA_PROBE2:                 return "LA.PROBE2";
             case OPT_LA_PROBE3:                 return "LA.PROBE3";
-            case OPT_LA_PROBE4:                 return "LA.PROBE4";
-            case OPT_LA_PROBE5:                 return "LA.PROBE5";
             case OPT_LA_ADDR0:                  return "LA.ADDR0";
             case OPT_LA_ADDR1:                  return "LA.ADDR1";
             case OPT_LA_ADDR2:                  return "LA.ADDR2";
             case OPT_LA_ADDR3:                  return "LA.ADDR3";
-            case OPT_LA_ADDR4:                  return "LA.ADDR4";
-            case OPT_LA_ADDR5:                  return "LA.ADDR5";
 
             case OPT_VID_WHITE_NOISE:           return "VID.WHITE_NOISE";
 
@@ -430,14 +422,10 @@ struct OptionEnum : vamiga::util::Reflection<OptionEnum, Option>
             case OPT_LA_PROBE1:                 return "Probe on channel 1";
             case OPT_LA_PROBE2:                 return "Probe on channel 2";
             case OPT_LA_PROBE3:                 return "Probe on channel 3";
-            case OPT_LA_PROBE4:                 return "Probe on channel 4";
-            case OPT_LA_PROBE5:                 return "Probe on channel 5";
             case OPT_LA_ADDR0:                  return "Channel 0 memory address";
             case OPT_LA_ADDR1:                  return "Channel 1 memory address";
             case OPT_LA_ADDR2:                  return "Channel 2 memory address";
             case OPT_LA_ADDR3:                  return "Channel 3 memory address";
-            case OPT_LA_ADDR4:                  return "Channel 4 memory address";
-            case OPT_LA_ADDR5:                  return "Channel 5 memory address";
 
             case OPT_VID_WHITE_NOISE:           return "White noise";
 

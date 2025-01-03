@@ -298,7 +298,7 @@ Agnus::serviceREGEvent(Cycle until)
     if (syncEvent) {
         
         // Let the logic analyzer probe all observed signals
-        if (syncEvent & EVFL::PROBE) { logicAnalyzer.recordSignals(pos.h); }
+        if (syncEvent & EVFL::PROBE) { logicAnalyzer.recordSignals(); }
 
         // Keep the event scheduled to reenter the function in the next cycle
         

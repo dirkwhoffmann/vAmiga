@@ -84,14 +84,10 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_LA_PROBE1:                 return enumParser.template operator()<ProbeEnum>();
         case OPT_LA_PROBE2:                 return enumParser.template operator()<ProbeEnum>();
         case OPT_LA_PROBE3:                 return enumParser.template operator()<ProbeEnum>();
-        case OPT_LA_PROBE4:                 return enumParser.template operator()<ProbeEnum>();
-        case OPT_LA_PROBE5:                 return enumParser.template operator()<ProbeEnum>();
         case OPT_LA_ADDR0:                  return hexParser();
         case OPT_LA_ADDR1:                  return hexParser();
         case OPT_LA_ADDR2:                  return hexParser();
         case OPT_LA_ADDR3:                  return hexParser();
-        case OPT_LA_ADDR4:                  return hexParser();
-        case OPT_LA_ADDR5:                  return hexParser();
 
         case OPT_VID_WHITE_NOISE:           return boolParser();
             

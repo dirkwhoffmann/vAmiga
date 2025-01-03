@@ -31,21 +31,17 @@ class LogicAnalyzer final : public SubComponent {
         OPT_LA_PROBE1,
         OPT_LA_PROBE2,
         OPT_LA_PROBE3,
-        OPT_LA_PROBE4,
-        OPT_LA_PROBE5,
         OPT_LA_ADDR0,
         OPT_LA_ADDR1,
         OPT_LA_ADDR2,
-        OPT_LA_ADDR3,
-        OPT_LA_ADDR4,
-        OPT_LA_ADDR5
+        OPT_LA_ADDR3
     };
 
     // The current configuration
     LogicAnalyzerConfig config = {};
     
     // Recorded signal traces
-    isize record[6][HPOS_CNT];
+    isize record[4][HPOS_CNT];
     
 private:
     
@@ -112,10 +108,15 @@ public:
         
     // Records data for all configured channels
     void recordSignals();
-    void recordSignals(isize hpos);
     
 private:
-    
+
+    // Records all signal values belonging to the current DMA cycle
+    void recordCurrent(isize hpos);
+
+    // Records all signal values belonging to the previous DMA cycle
+    void recordDelayed(isize hpos);
+
     // Enable or disables the logic analyzer based on the current config
     void checkEnable();
     

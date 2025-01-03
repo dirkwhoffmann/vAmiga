@@ -879,7 +879,8 @@ Console::registerComponent(CoreComponent &c, Command &root)
                      [this](Arguments& argv, long value) {
 
                 emulator.set(Option(HI_WORD(value)), argv[0], { LO_WORD(value) });
-
+                msgQueue.put(MSG_CONFIG);
+                
             }, HI_W_LO_W(opt, c.objid));
         }
     }

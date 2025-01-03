@@ -72,10 +72,10 @@ extension Inspector {
         box.tag == 2 ? emu.get(.LA_ADDR2) :
         box.tag == 3 ? emu.get(.LA_ADDR3) : nil
 
-        if probe == .MEMORY {
-            box.stringValue = String(format: "%06X", addr!)
-        } else {
-            box.stringValue = "<Address>"
+        switch probe {
+        case .MEMORY:   box.stringValue = String(format: "%06X", addr!)
+        case .IPL:      box.stringValue = "IPL"
+        default:        box.stringValue = ""
         }
     }
     

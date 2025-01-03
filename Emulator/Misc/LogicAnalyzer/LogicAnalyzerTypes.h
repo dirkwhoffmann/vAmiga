@@ -18,10 +18,8 @@
 enum_long(PROBE)
 {
     PROBE_NONE,
-    PROBE_BUS_OWNER,
-    PROBE_ADDR_BUS,
-    PROBE_DATA_BUS,
-    PROBE_MEMORY
+    PROBE_MEMORY,
+    PROBE_IPL
 };
 typedef PROBE Probe;
 
@@ -29,7 +27,7 @@ typedef PROBE Probe;
 struct ProbeEnum : vamiga::util::Reflection<ProbeEnum, Probe>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = PROBE_MEMORY;
+    static constexpr long maxVal = PROBE_IPL;
 
     static const char *prefix() { return "PROBE"; }
     static const char *_key(long value)
@@ -37,10 +35,8 @@ struct ProbeEnum : vamiga::util::Reflection<ProbeEnum, Probe>
         switch (value) {
                 
             case PROBE_NONE:            return "NONE";
-            case PROBE_BUS_OWNER:       return "BUS_OWNER";
-            case PROBE_ADDR_BUS:        return "ADDR_BUS";
-            case PROBE_DATA_BUS:        return "DATA_BUS";
             case PROBE_MEMORY:          return "MEMORY";
+            case PROBE_IPL:             return "IPL";
         }
         return "???";
     }
@@ -55,9 +51,9 @@ struct ProbeEnum : vamiga::util::Reflection<ProbeEnum, Probe>
 typedef struct
 {
     // The logic analyzer channels
-    Probe channel[6];
+    Probe channel[4];
     
     // Probe address (in case of memory probing)
-    u32 addr[6];
+    u32 addr[4];
 }
 LogicAnalyzerConfig;
