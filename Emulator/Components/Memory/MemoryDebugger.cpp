@@ -383,6 +383,24 @@ MemoryDebugger::writeCs(ChipsetReg reg, u16 value)
     return mem.pokeCustom16<ACCESSOR_CPU>(u32(reg << 1), value);
 }
 
+template <Accessor A> string
+MemoryDebugger::symbolize(u32 addr) const
+{
+    using namespace util;
+    
+    std::stringstream ss;
+    
+    switch (mem.getMemSrc<A>(addr)) {
+            
+        case MEM_CUSTOM:    return regName(addr);
+        case MEM_CIA:       [[fallthrough]]; // TODO
+        case MEM_RTC:       [[fallthrough]]; // TODO
+            
+        default:
+            return "";
+    }
+}
+
 void
 MemoryDebugger::convertNumeric(std::ostream& os, u8 value) const
 {
@@ -429,6 +447,8 @@ MemoryDebugger::convertNumeric(std::ostream& os, string s) const
     convertNumeric(os, u32(HI_HI_LO_LO(bytes[0], bytes[1], bytes[2], bytes[3])));
 }
 
+template string MemoryDebugger::symbolize <ACCESSOR_CPU> (u32) const;
+template string MemoryDebugger::symbolize <ACCESSOR_AGNUS> (u32) const;
 template const char *MemoryDebugger::ascDump <ACCESSOR_CPU> (u32, isize) const;
 template const char *MemoryDebugger::ascDump <ACCESSOR_AGNUS> (u32, isize) const;
 template const char *MemoryDebugger::hexDump <ACCESSOR_CPU> (u32, isize, isize) const;

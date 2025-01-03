@@ -29,8 +29,15 @@ class LogicView: NSView {
     // Indicates if anything should be drawn
     var visible = true
      
-    // The recorded data
-    var data:[[Int?]] = Array(repeating: Array(repeating: 0, count: 228), count: 6)
+    // Bit-width of the probed signals
+    var bitWidth: [Int] = [ 24, 16, 16, 16, 16, 16 ]
+    
+    // Recorded data
+    var data: [[Int?]] = Array(repeating: Array(repeating: 0, count: 228), count: 6)
+
+    // Labels and colors for each segment
+    var labels: [String?] = Array(repeating: nil, count: 228)
+    var colors: [NSColor?] = Array(repeating: nil, count: 228)
 
     // Number formatter
     let formatter = LogicViewFormatter()
@@ -67,28 +74,57 @@ class LogicView: NSView {
         lock.lock()
         
         guard let emu = emu else { return }
-
-        // Start from scratch
-        for c in 0..<signals {
-            for i in 0..<segments {
-                data[c][i] = nil
-            }
-        }
         
         let hpos = emu.amiga.info.hpos
         let owners = emu.logicAnalyzer.busOwners()!
         let addrBus = emu.logicAnalyzer.addrBus()!
         let dataBus = emu.logicAnalyzer.dataBus()!
 
-        // The first two channel display the address and data bus
+        // Start from scratch
+        for i in 0..<segments { labels[i] = nil }
+        for i in 0..<segments { colors[i] = nil }
+        for c in 0..<signals { for i in 0..<segments { data[c][i] = nil } }
+
+        // Update with new data
         for i in 0..<hpos {
-            if (owners + i).pointee != .NONE {
-                data[0][i] = Int((addrBus + i).pointee)
-                data[1][i] = Int((dataBus + i).pointee)
+            
+            if (owners + i).pointee == .NONE { continue }
+            
+            switch (owners + i).pointee {
+                
+            case .CPU:      labels[i] = "CPU"; colors[i] = inspector.colCPU.color
+            case .REFRESH:  labels[i] = "REF"; colors[i] = inspector.colRefresh.color
+            case .DISK:     labels[i] = "REF"; colors[i] = inspector.colDisk.color
+            case .AUD0:     labels[i] = "REF"; colors[i] = inspector.colAudio.color
+            case .AUD1:     labels[i] = "REF"; colors[i] = inspector.colAudio.color
+            case .AUD2:     labels[i] = "REF"; colors[i] = inspector.colAudio.color
+            case .AUD3:     labels[i] = "REF"; colors[i] = inspector.colAudio.color
+            case .BPL1:     labels[i] = "REF"; colors[i] = inspector.colBitplanes.color
+            case .BPL2:     labels[i] = "REF"; colors[i] = inspector.colBitplanes.color
+            case .BPL3:     labels[i] = "REF"; colors[i] = inspector.colBitplanes.color
+            case .BPL4:     labels[i] = "REF"; colors[i] = inspector.colBitplanes.color
+            case .BPL5:     labels[i] = "REF"; colors[i] = inspector.colBitplanes.color
+            case .BPL6:     labels[i] = "REF"; colors[i] = inspector.colBitplanes.color
+            case .SPRITE0:  labels[i] = "REF"; colors[i] = inspector.colSprites.color
+            case .SPRITE1:  labels[i] = "REF"; colors[i] = inspector.colSprites.color
+            case .SPRITE2:  labels[i] = "REF"; colors[i] = inspector.colSprites.color
+            case .SPRITE3:  labels[i] = "REF"; colors[i] = inspector.colSprites.color
+            case .SPRITE4:  labels[i] = "REF"; colors[i] = inspector.colSprites.color
+            case .SPRITE5:  labels[i] = "REF"; colors[i] = inspector.colSprites.color
+            case .SPRITE6:  labels[i] = "REF"; colors[i] = inspector.colSprites.color
+            case .SPRITE7:  labels[i] = "REF"; colors[i] = inspector.colSprites.color
+            case .COPPER:   labels[i] = "REF"; colors[i] = inspector.colCopper.color
+            case .BLITTER:  labels[i] = "REF"; colors[i] = inspector.colBlitter.color
+            case .BLOCKED:  labels[i] = "REF"; colors[i] = .red
+            default:        break
             }
+            
+            // The first two channel display the address and data bus
+            data[0][i] = Int((addrBus + i).pointee)
+            data[1][i] = Int((dataBus + i).pointee)
         }
         
-        // Get the data for the other channels from the logic analyzer
+        // For the remaining channels, get the data from the logic analyzer
         for c in 2..<signals {
             
             if let values = emu.logicAnalyzer.getData(c) {
@@ -143,9 +179,7 @@ class LogicView: NSView {
             path.addLine(to: CGPoint(x: CGFloat(i) * dx, y: bounds.maxY))
         }
         context.setLineWidth(0.5)
-        // context.setStrokeColor(NSColor.secondaryLabelColor.cgColor)
         context.setStrokeColor(NSColor.tertiaryLabelColor.cgColor)
-
         context.addPath(path)
         context.drawPath(using: .stroke)
     }
@@ -154,122 +188,36 @@ class LogicView: NSView {
         
         formatter.hex = inspector.busHex.state == .on
         formatter.symbolic = inspector.busSymbolic.state == .on
-
-        let names: [BusOwner: String] = [
-            
-                .NONE: "",
-                .CPU: "CPU",
-                .REFRESH: "REF",
-                .DISK: "DSK",
-                .AUD0: "AUD0",
-                .AUD1: "AUD1",
-                .AUD2: "AUD2",
-                .AUD3: "AUD3",
-                .BPL1: "BPL1",
-                .BPL2: "BPL2",
-                .BPL3: "BPL3",
-                .BPL4: "BPL4",
-                .BPL5: "BPL5",
-                .BPL6: "BPL6",
-                .SPRITE0: "SPR0",
-                .SPRITE1: "SPR1",
-                .SPRITE2: "SPR2",
-                .SPRITE3: "SPR3",
-                .SPRITE4: "SPR4",
-                .SPRITE5: "SPR5",
-                .SPRITE6: "SPR6",
-                .SPRITE7: "SPR7",
-                .COPPER: "COP",
-                .BLITTER: "BLT",
-                .BLOCKED: "BLK"
-        ]
-        
-        let colors: [BusOwner: NSColor] = [
-            
-            .NONE: .clear,
-            .CPU: inspector.colCPU.color,
-            .REFRESH: inspector.colRefresh.color,
-            .DISK: inspector.colDisk.color,
-            .AUD0: inspector.colAudio.color,
-            .AUD1: inspector.colAudio.color,
-            .AUD2: inspector.colAudio.color,
-            .AUD3: inspector.colAudio.color,
-            .BPL1: inspector.colBitplanes.color,
-            .BPL2: inspector.colBitplanes.color,
-            .BPL3: inspector.colBitplanes.color,
-            .BPL4: inspector.colBitplanes.color,
-            .BPL5: inspector.colBitplanes.color,
-            .BPL6: inspector.colBitplanes.color,
-            .SPRITE0: inspector.colSprites.color,
-            .SPRITE1: inspector.colSprites.color,
-            .SPRITE2: inspector.colSprites.color,
-            .SPRITE3: inspector.colSprites.color,
-            .SPRITE4: inspector.colSprites.color,
-            .SPRITE5: inspector.colSprites.color,
-            .SPRITE6: inspector.colSprites.color,
-            .SPRITE7: inspector.colSprites.color,
-            .COPPER: inspector.colCopper.color,
-            .BLITTER: inspector.colBlitter.color,
-            .BLOCKED: .red
-        ]
-        
-        let owners = emu!.logicAnalyzer.busOwners()!
         
         for i in 0..<segments {
             
-            let owner = (owners + i).pointee
-            let name = names[owner] ?? "???"
-            colors[owner]?.setFill()
-            
-            
-            CGRect(x: CGFloat(i) * dx,
-                   y: bounds.maxY - (headerHeight / 2) - 2,
-                   width: dx,
-                   height: 4).fill()
-            /*
-            CGRect(x: CGFloat(i) * dx,
-                   y: bounds.maxY - headerHeight,
-                   width: dx,
-                   height: 4).fill()
-            */
             drawText(text: "\(i)",
                      in: NSRect(x: CGFloat(i) * dx, y: bounds.maxY - 0.5 * headerHeight + 2, width: dx, height: 0.5 * headerHeight - 2),
                      font: system,
                      color: .labelColor)
-            drawText(text: "\(name)",
-                     in: NSRect(x: CGFloat(i) * dx, y: bounds.maxY - headerHeight, width: dx, height: 0.5 * headerHeight - 2),
-                     font: system,
-                     color: .labelColor)
+            
+            if let label = labels[i] {
+                
+                colors[i]!.setFill()
+                
+                CGRect(x: CGFloat(i) * dx, y: bounds.maxY - (headerHeight / 2) - 2, width: dx, height: 4).fill()
+                
+                drawText(text: label,
+                         in: NSRect(x: CGFloat(i) * dx, y: bounds.maxY - headerHeight, width: dx, height: 0.5 * headerHeight - 2),
+                         font: system,
+                         color: .labelColor)
+            }
         }
     }
-    
-    func getProbe(channel: Int) -> Probe {
         
-        switch channel {
-        case 0: return Probe(rawValue: emu!.get(.LA_PROBE0)) ?? .NONE
-        case 1: return Probe(rawValue: emu!.get(.LA_PROBE1)) ?? .NONE
-        case 2: return Probe(rawValue: emu!.get(.LA_PROBE2)) ?? .NONE
-        case 3: return Probe(rawValue: emu!.get(.LA_PROBE3)) ?? .NONE
-        case 4: return Probe(rawValue: emu!.get(.LA_PROBE4)) ?? .NONE
-        case 5: return Probe(rawValue: emu!.get(.LA_PROBE5)) ?? .NONE
-        default:
-            fatalError()
-        }
-    }
     func drawSignal(_ channel: Int) {
 
         let rect = signalRect(channel)
-
-        /*
-        if (channel % 2 == 0) { NSColor.red.setFill() } else { NSColor.blue.setFill() }
-        rect.fill()
-        */
-        
-        let probe = getProbe(channel: channel)
+        let bits = bitWidth[channel]
         var prev: Int?
-        var curr: Int? = getData(cycle: 0, channel: channel)
-        var next: Int? = getData(cycle: 1, channel: channel)
-
+        var curr: Int? = data[channel][0]
+        var next: Int? = data[channel][1]
+        
         for i in 0..<segments {
             
             let r = CGRect(x: CGFloat(i) * dx,
@@ -277,28 +225,32 @@ class LogicView: NSView {
                            width: dx,
                            height: rect.height - 2 * margin)
             
-            drawDataSegment(in: r, v: [prev, curr, next], color: .labelColor)
-            /*
-             if bitWidth[channel] == 1 {
-             drawLineSegment(in: r, v: [prev, curr, next], color: .black)
-             } else {
-             drawDataSegment(in: r, v: [prev, curr, next], color: .black)
-             }
-             */
-            if curr != nil {
-                drawText(text: formatter.string(from: curr!, bitWidth: channel == 0 ? 24 : 16),
-                         in: r,
-                         font: mono,
-                         color: .labelColor)
+            if bits == 1 {
+                drawLineSegment(in: r, v: [prev, curr, next], color: .labelColor)
+            } else {
+                drawDataSegment(in: r, v: [prev, curr, next], color: .labelColor)
+            }
+            
+            if let curr = curr {
+
+                var label = formatter.string(from: curr, bitWidth: bits)
+                
+                if channel == 0 && formatter.symbolic {
+                    if let symbolic = emu?.mem.symbolize(.CPU, addr: curr), symbolic != "" {
+                        label = symbolic
+                    }
+                }
+                
+                drawText(text: label, in: r, font: mono, color: .labelColor, partially: true)
             }
             
             prev = curr
             curr = next
-            next = getData(cycle: i+2, channel: channel)
+            next = i + 2 < segments ? data[channel][i + 2] : nil
         }
     }
 
-    func drawText(text: String, in rect: NSRect, font: NSFont, color: NSColor) {
+    func drawText(text: String, in rect: NSRect, font: NSFont, color: NSColor, partially: Bool = false) {
 
         // Save the current graphics state
         context?.saveGState()
@@ -312,9 +264,19 @@ class LogicView: NSView {
 
         // Check if the string fits into the drawing area
         if size.width <= rect.width && size.height <= rect.height {
-
-            // Draw the string
+            
+            // Draw the string centered
             let p = CGPoint(x: rect.midX - size.width / 2, y: rect.midY - size.height / 2)
+            attributedString.draw(at: p)
+
+        } else if partially {
+
+            // Add a clipping area
+            context?.addPath(CGPath(rect: rect, transform: nil))
+            context?.clip()
+
+            // Draw the string left aligned
+            let p = CGPoint(x: rect.minX, y: rect.midY - size.height / 2)
             attributedString.draw(at: p)
         }
 

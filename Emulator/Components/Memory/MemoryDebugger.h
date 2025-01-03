@@ -116,7 +116,7 @@ public:
     //
     // Handling registers
     //
-
+    
     // Returns the name of a chipset register
     static const char *regName(u32 addr);
 
@@ -129,10 +129,14 @@ public:
 
 
     //
-    // Displaying expressions (TODO: REPLACE BY GENERIC FORMAT STRING FORMATTER)
+    // Displaying expressions
     //
 
+    // Returns the symbol name of an address or an empty string if none exists
+    template <Accessor A> string symbolize(u32 addr) const;
+    
     // Displays a value in different number formats (hex, dec, bin, alpha)
+    // TODO: REPLACE BY GENERIC FORMAT STRING FORMATTER
     void convertNumeric(std::ostream& os, u8 value) const;
     void convertNumeric(std::ostream& os, u16 value) const;
     void convertNumeric(std::ostream& os, u32 value) const;

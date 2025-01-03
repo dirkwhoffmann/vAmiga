@@ -156,7 +156,6 @@ Agnus::scheduleNextREGEvent()
     Cycle next = changeRecorder.trigger();
 
     // Schedule a register change event for that cycle
-    // if (next < trigger[SLOT_REG]) scheduleAbs<SLOT_REG>(next, REG_CHANGE);
     scheduleAbs<SLOT_REG>(next, REG_CHANGE);
 }
 

@@ -411,6 +411,8 @@ DeniseAPI::getCachedInfo() const
 MemorySource 
 MemoryDebuggerAPI::getMemSrc(Accessor acc, u32 addr) const
 {
+    assert(isUserThread());
+    
     switch (acc) {
 
         case ACCESSOR_CPU:      return mem->getMemSrc<ACCESSOR_CPU>(addr);
@@ -421,9 +423,26 @@ MemoryDebuggerAPI::getMemSrc(Accessor acc, u32 addr) const
     }
 }
 
+string
+MemoryDebuggerAPI::symbolize(Accessor acc, u32 addr) const
+{
+    assert(isUserThread());
+    
+    switch (acc) {
+
+        case ACCESSOR_CPU:      return mem->debugger.symbolize<ACCESSOR_CPU>(addr);
+        case ACCESSOR_AGNUS:    return mem->debugger.symbolize<ACCESSOR_AGNUS>(addr);
+
+        default:
+            fatalError;
+    }
+}
+
 u8
 MemoryDebuggerAPI::spypeek8(Accessor acc, u32 addr) const
 {
+    assert(isUserThread());
+    
     switch (acc) {
 
         case ACCESSOR_CPU:      return mem->spypeek8<ACCESSOR_CPU>(addr);
@@ -437,6 +456,8 @@ MemoryDebuggerAPI::spypeek8(Accessor acc, u32 addr) const
 u16 
 MemoryDebuggerAPI::spypeek16(Accessor acc, u32 addr) const
 {
+    assert(isUserThread());
+    
     switch (acc) {
 
         case ACCESSOR_CPU:      return mem->spypeek16<ACCESSOR_CPU>(addr);

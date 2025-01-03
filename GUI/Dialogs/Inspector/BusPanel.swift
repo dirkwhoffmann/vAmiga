@@ -20,10 +20,12 @@ extension Inspector {
     
     static let probeLabels: [(String, Probe)] = [
         
+        /*
         ("Select...", .NONE),
         ("Bus Usage", .BUS_OWNER),
         ("Address Bus", .ADDR_BUS),
         ("Data Bus", .DATA_BUS)
+        */
     ]
     
     private func cacheBus() {

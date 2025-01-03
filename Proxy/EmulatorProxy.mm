@@ -573,19 +573,27 @@ using namespace vamiga::moira;
     }
 }
 
+- (NSString *)symbolize:(Accessor)accessor addr:(NSInteger)addr
+{
+    assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
+    
+    auto str = [self mem]->debugger.symbolize(accessor, (u32)addr);
+    return @(str.c_str());
+}
+
 - (NSString *)ascDump:(Accessor)accessor addr:(NSInteger)addr bytes:(NSInteger)bytes
 {
     assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
+    
     auto str = [self mem]->debugger.ascDump(accessor, (u32)addr, bytes);
-
     return @(str.c_str());
 }
 
 - (NSString *)hexDump:(Accessor)accessor addr: (NSInteger)addr bytes:(NSInteger)bytes
 {
     assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
+    
     auto str = [self mem]->debugger.hexDump(accessor, (u32)addr, bytes);
-
     return @(str.c_str());
 }
 
