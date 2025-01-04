@@ -7,6 +7,92 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+import SwiftUI
+import Charts
+
+struct ToyShape: Identifiable {
+    var type: String
+    var count: Double
+    var id = UUID()
+}
+
+class Test {
+    static var trigger = 1
+}
+
+class MainModel: ObservableObject {
+    @Published var answer = 42
+}
+
+struct ContentView: View {
+
+    // State variable to hold the data points
+    @State var data: [Double] = [10, 20, 30, 40, 50]
+    @State var updateTrigger: Bool = false
+    
+    @ObservedObject var mainModel: MainModel
+    
+    
+    @Environment(\.scenePhase) var scenePhase
+
+    var body: some View {
+                
+        VStack {
+            // Chart view that automatically updates when data changes
+            Chart {
+                ForEach(data, id: \.self) { value in
+                    LineMark(
+                        x: .value("Index", data.firstIndex(of: value) ?? 0),
+                        y: .value("Value", value)
+                    )
+                    .foregroundStyle(.blue)
+                }
+            }
+            // .frame(height: 300)
+            .background(Color.white)
+            // .padding()
+            .onChange(of: mainModel.answer) { newValue in
+                data = data.map { $0 + Double.random(in: -10...10) }
+            }
+            // .padding()
+            // .foregroundColor(.white)
+            // .cornerRadius(10)
+        }
+        .padding()
+    }
+}
+
+class MyChartView: NSView {
+
+    @IBOutlet weak var monitor: Monitor!
+    
+    var model = MainModel()
+    var timer: Timer?
+    var hostingView: NSHostingView<ContentView>!
+        
+    required init?(coder aDecoder: NSCoder) {
+
+        super.init(coder: aDecoder)
+        
+        hostingView = NSHostingView(rootView: ContentView( mainModel: model) ) // MyChart())
+        hostingView.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(hostingView)
+        hostingView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        hostingView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+        hostingView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        hostingView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+    }
+    
+    override func awakeFromNib() {
+        
+    }
+
+    func giveData(data: inout [Double]) {
+        data = data.map { $0 + Double.random(in: -10...10) }
+    }
+    
+}
+
 class Monitor: DialogController {
 
     // Display colors
@@ -70,6 +156,16 @@ class Monitor: DialogController {
     @IBOutlet weak var synPlayfield2: NSButton!
     @IBOutlet weak var synOpacity: NSSlider!
 
+    @IBOutlet weak var myView0: MyChartView!
+    @IBOutlet weak var myView1: MyChartView!
+    @IBOutlet weak var myView2: MyChartView!
+    @IBOutlet weak var myView3: MyChartView!
+    @IBOutlet weak var myView4: MyChartView!
+    @IBOutlet weak var myView5: MyChartView!
+    @IBOutlet weak var myView6: MyChartView!
+    @IBOutlet weak var myView7: MyChartView!
+    @IBOutlet weak var myView8: MyChartView!
+
     var layers: Int {
         get { return emu.get(.DENISE_HIDDEN_LAYERS) }
         set { emu.set(.DENISE_HIDDEN_LAYERS, value: newValue) }
@@ -83,6 +179,23 @@ class Monitor: DialogController {
 
         super.awakeFromNib()
         refresh()
+    }
+    
+    override func windowDidLoad() {
+        
+        // myView.window?.contentView = NSHostingView(rootView: vv)
+    }
+    
+    func continuousRefresh() {
+        myView0.model.answer += 1
+        myView1.model.answer += 1
+        myView2.model.answer += 1
+        myView3.model.answer += 1
+        myView4.model.answer += 1
+        myView5.model.answer += 1
+        myView6.model.answer += 1
+        myView7.model.answer += 1
+        myView8.model.answer += 1
     }
     
     func refresh() {
@@ -187,7 +300,7 @@ class Monitor: DialogController {
         synPlayfield2.isEnabled = syn
         synOpacity.isEnabled = syn
     }
-
+    
     func updateHiddenLayers() {
                         
         var mask = 0

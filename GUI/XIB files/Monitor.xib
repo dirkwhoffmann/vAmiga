@@ -43,6 +43,15 @@
                 <outlet property="monSlider" destination="cyx-oK-rWM" id="s0M-hB-A8n"/>
                 <outlet property="monSlowRam" destination="Dag-do-tER" id="XLM-zp-1LH"/>
                 <outlet property="monSprites" destination="pgP-AB-gkQ" id="byn-P8-5YX"/>
+                <outlet property="myView0" destination="chR-SO-Ixu" id="6BD-le-zo3"/>
+                <outlet property="myView1" destination="9ag-KH-xra" id="tZD-Sa-pLF"/>
+                <outlet property="myView2" destination="Kdn-Je-FTB" id="yge-f4-kIF"/>
+                <outlet property="myView3" destination="FLd-pa-pcA" id="ns6-Eq-nVM"/>
+                <outlet property="myView4" destination="tlB-NB-fyi" id="kWB-pP-o2y"/>
+                <outlet property="myView5" destination="ZFt-nr-vKg" id="Kzg-y3-K0r"/>
+                <outlet property="myView6" destination="h1b-lF-GCW" id="oMe-if-OOH"/>
+                <outlet property="myView7" destination="yXw-fh-9TC" id="Nar-pW-DHu"/>
+                <outlet property="myView8" destination="0o5-rL-LE2" id="NDt-Aq-n5J"/>
                 <outlet property="synEnable" destination="58J-p8-hWR" id="qRK-QZ-Ppf"/>
                 <outlet property="synOpacity" destination="O5R-YP-FhK" id="dxc-Na-Ram"/>
                 <outlet property="synPlayfield1" destination="9XB-lX-iVI" id="91f-W4-Rmv"/>
@@ -63,16 +72,16 @@
         <window title="Monitor" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="QvC-M9-y7g" customClass="DialogWindow" customModule="vAmiga" customModuleProvider="target">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="845" height="418"/>
+            <rect key="contentRect" x="196" y="240" width="911" height="892"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
             <value key="minSize" type="size" width="845" height="418"/>
             <value key="maxSize" type="size" width="845" height="418"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="845" height="418"/>
+                <rect key="frame" x="0.0" y="0.0" width="911" height="892"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <box fixedFrame="YES" title="Workload" translatesAutoresizingMaskIntoConstraints="NO" id="fNW-Zb-9Hi">
-                        <rect key="frame" x="290" y="57" width="265" height="341"/>
+                        <rect key="frame" x="290" y="531" width="265" height="341"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="U1f-HA-ZgP">
                             <rect key="frame" x="4" y="5" width="257" height="321"/>
@@ -262,7 +271,7 @@
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Stencils" translatesAutoresizingMaskIntoConstraints="NO" id="GYR-um-2QX">
-                        <rect key="frame" x="563" y="57" width="265" height="341"/>
+                        <rect key="frame" x="563" y="531" width="265" height="341"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="OpN-As-XuZ">
                             <rect key="frame" x="4" y="5" width="257" height="321"/>
@@ -401,7 +410,7 @@
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Bus" translatesAutoresizingMaskIntoConstraints="NO" id="tFU-vl-lut">
-                        <rect key="frame" x="17" y="57" width="265" height="341"/>
+                        <rect key="frame" x="17" y="531" width="265" height="341"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="OFv-mF-p3w">
                             <rect key="frame" x="4" y="5" width="257" height="321"/>
@@ -600,7 +609,7 @@
                         </view>
                     </box>
                     <button verticalHuggingPriority="750" id="gV8-Yr-TwS">
-                        <rect key="frame" x="771" y="13" width="59" height="32"/>
+                        <rect key="frame" x="835" y="487" width="59" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="dIY-an-yR2">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -613,12 +622,153 @@ DQ
                             <action selector="okAction:" target="-2" id="Mwe-8m-3b8"/>
                         </connections>
                     </button>
+                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="chR-SO-Ixu" customClass="MyChartView" customModule="vAmiga" customModuleProvider="target">
+                        <rect key="frame" x="20" y="381" width="259" height="129"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <connections>
+                            <outlet property="monitor" destination="-2" id="xUG-1A-SsX"/>
+                        </connections>
+                    </customView>
+                    <box fixedFrame="YES" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="y5w-Dz-oye">
+                        <rect key="frame" x="17" y="223" width="265" height="150"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <view key="contentView" id="2Fm-nH-dSo">
+                            <rect key="frame" x="4" y="5" width="257" height="130"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FLd-pa-pcA" customClass="MyChartView" customModule="vAmiga" customModuleProvider="target">
+                                    <rect key="frame" x="10" y="9" width="242" height="113"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <connections>
+                                        <outlet property="monitor" destination="-2" id="pvD-vX-D12"/>
+                                    </connections>
+                                </customView>
+                            </subviews>
+                        </view>
+                    </box>
+                    <box fixedFrame="YES" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="IoI-il-T9Q">
+                        <rect key="frame" x="290" y="223" width="265" height="150"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <view key="contentView" id="KTz-HT-N9U">
+                            <rect key="frame" x="4" y="5" width="257" height="130"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tlB-NB-fyi" customClass="MyChartView" customModule="vAmiga" customModuleProvider="target">
+                                    <rect key="frame" x="10" y="9" width="242" height="113"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <connections>
+                                        <outlet property="monitor" destination="-2" id="qPM-Y8-W1I"/>
+                                    </connections>
+                                </customView>
+                            </subviews>
+                        </view>
+                    </box>
+                    <box fixedFrame="YES" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="cdY-zR-bz5">
+                        <rect key="frame" x="572" y="369" width="265" height="150"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <view key="contentView" id="ayD-jw-JdN">
+                            <rect key="frame" x="4" y="5" width="257" height="130"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kdn-Je-FTB" customClass="MyChartView" customModule="vAmiga" customModuleProvider="target">
+                                    <rect key="frame" x="10" y="9" width="242" height="113"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <connections>
+                                        <outlet property="monitor" destination="-2" id="16o-ak-7Hk"/>
+                                    </connections>
+                                </customView>
+                            </subviews>
+                        </view>
+                    </box>
+                    <box fixedFrame="YES" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="nd8-RP-3xE">
+                        <rect key="frame" x="572" y="223" width="265" height="150"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <view key="contentView" id="Igi-PR-8TN">
+                            <rect key="frame" x="4" y="5" width="257" height="130"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZFt-nr-vKg" customClass="MyChartView" customModule="vAmiga" customModuleProvider="target">
+                                    <rect key="frame" x="10" y="9" width="242" height="113"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <connections>
+                                        <outlet property="monitor" destination="-2" id="m0w-D6-S0O"/>
+                                    </connections>
+                                </customView>
+                            </subviews>
+                        </view>
+                    </box>
+                    <box fixedFrame="YES" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="PDq-Kw-ct2">
+                        <rect key="frame" x="290" y="377" width="265" height="150"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <view key="contentView" id="a80-j2-hew">
+                            <rect key="frame" x="4" y="5" width="257" height="130"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        </view>
+                    </box>
+                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9ag-KH-xra" customClass="MyChartView" customModule="vAmiga" customModuleProvider="target">
+                        <rect key="frame" x="293" y="381" width="259" height="129"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <connections>
+                            <outlet property="monitor" destination="-2" id="BFp-Pn-MiV"/>
+                        </connections>
+                    </customView>
+                    <box fixedFrame="YES" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="VII-6b-SqA">
+                        <rect key="frame" x="17" y="69" width="265" height="150"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <view key="contentView" id="unL-qr-qlf">
+                            <rect key="frame" x="4" y="5" width="257" height="130"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h1b-lF-GCW" customClass="MyChartView" customModule="vAmiga" customModuleProvider="target">
+                                    <rect key="frame" x="10" y="9" width="242" height="113"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <connections>
+                                        <outlet property="monitor" destination="-2" id="SSW-3I-QVE"/>
+                                    </connections>
+                                </customView>
+                            </subviews>
+                        </view>
+                    </box>
+                    <box fixedFrame="YES" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="jJy-kN-z50">
+                        <rect key="frame" x="290" y="69" width="265" height="150"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <view key="contentView" id="tMn-k9-QCc">
+                            <rect key="frame" x="4" y="5" width="257" height="130"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yXw-fh-9TC" customClass="MyChartView" customModule="vAmiga" customModuleProvider="target">
+                                    <rect key="frame" x="10" y="9" width="242" height="113"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <connections>
+                                        <outlet property="monitor" destination="-2" id="jeS-dy-tuB"/>
+                                    </connections>
+                                </customView>
+                            </subviews>
+                        </view>
+                    </box>
+                    <box fixedFrame="YES" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="CeG-mU-lco">
+                        <rect key="frame" x="572" y="69" width="265" height="150"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <view key="contentView" id="D4I-C2-Th6">
+                            <rect key="frame" x="4" y="5" width="257" height="130"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0o5-rL-LE2" customClass="MyChartView" customModule="vAmiga" customModuleProvider="target">
+                                    <rect key="frame" x="10" y="9" width="242" height="113"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <connections>
+                                        <outlet property="monitor" destination="-2" id="fRG-9z-ajH"/>
+                                    </connections>
+                                </customView>
+                            </subviews>
+                        </view>
+                    </box>
                 </subviews>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="WuC-xr-fiS"/>
             </connections>
-            <point key="canvasLocation" x="102.5" y="193"/>
+            <point key="canvasLocation" x="135.5" y="430"/>
         </window>
     </objects>
 </document>

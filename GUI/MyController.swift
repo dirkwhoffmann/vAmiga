@@ -9,15 +9,6 @@
 
 import AVFoundation
 
-/*
-enum WarpMode: Int {
-    
-    case auto
-    case off
-    case on
-}
-*/
-
 protocol MessageReceiver {
     func processMessage(_ msg: Message)
 }
@@ -287,7 +278,7 @@ extension MyController {
 
             // Animate the inspectors
             for inspector in inspectors { inspector.continuousRefresh() }
-            // if inspector?.window?.isVisible == true { inspector!.continuousRefresh() }
+            if monitor?.window?.isVisible == true { monitor!.continuousRefresh() }
         }
         
         // Do less times...
