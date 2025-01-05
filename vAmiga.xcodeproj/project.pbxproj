@@ -79,6 +79,7 @@
 		5039924325B2164E0084B808 /* MyDocumentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5039924225B2164E0084B808 /* MyDocumentController.swift */; };
 		5041C6282791AF0800D3C494 /* SequencerRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5041C6272791AF0800D3C494 /* SequencerRegs.cpp */; };
 		5042F2DD26BE57E600126C05 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5042F2DB26BE57E600126C05 /* Thread.cpp */; };
+		5043154D2D2ACF47006C14FF /* WaveformPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043154C2D2ACF3E006C14FF /* WaveformPanel.swift */; };
 		5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043F6C4221972F90047CC30 /* MyToolbar.swift */; };
 		504C48B424143AB4008ADAB3 /* AgnusDma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 504C48B324143AB4008ADAB3 /* AgnusDma.cpp */; };
 		504E57C82D12ACFC002233D1 /* gamecontrollerdb.txt in Resources */ = {isa = PBXBuildFile; fileRef = 504E57C72D12ACFC002233D1 /* gamecontrollerdb.txt */; };
@@ -609,6 +610,7 @@
 		5042F2DE26BE57F700126C05 /* ThreadTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThreadTypes.h; sourceTree = "<group>"; };
 		5042FD7D23FFF08500B315B2 /* DiskControllerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskControllerTypes.h; sourceTree = "<group>"; };
 		5042FD7E23FFF0D200B315B2 /* StateMachineTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StateMachineTypes.h; sourceTree = "<group>"; };
+		5043154C2D2ACF3E006C14FF /* WaveformPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveformPanel.swift; sourceTree = "<group>"; };
 		5043F6C4221972F90047CC30 /* MyToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolbar.swift; sourceTree = "<group>"; };
 		504C48B324143AB4008ADAB3 /* AgnusDma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusDma.cpp; sourceTree = "<group>"; };
 		504E57C72D12ACFC002233D1 /* gamecontrollerdb.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = gamecontrollerdb.txt; sourceTree = "<group>"; };
@@ -1547,6 +1549,7 @@
 		508FE03921EA22CC0043D0E9 /* Dialogs */ = {
 			isa = PBXGroup;
 			children = (
+				5043154C2D2ACF3E006C14FF /* WaveformPanel.swift */,
 				506C71E12D2A0C04007CBD93 /* DashboardPanel.swift */,
 				508FE04721EA22CC0043D0E9 /* DialogController.swift */,
 				5019605C23125E680051B669 /* Monitor.swift */,
@@ -2459,6 +2462,7 @@
 				50826F7827F0B2AD005FBF3B /* DiagBoard.cpp in Sources */,
 				507957AC244AD25B007B8B8D /* Configuration.swift in Sources */,
 				50F54B3024B5D31D0078FDC9 /* u_quick.c in Sources */,
+				5043154D2D2ACF47006C14FF /* WaveformPanel.swift in Sources */,
 				50DD33CC2756113300AE18B4 /* pfile.c in Sources */,
 				50950ED822881B7A0073F755 /* ZorroManager.cpp in Sources */,
 				50B70CAD252CE0BF006B5191 /* AudioPort.cpp in Sources */,

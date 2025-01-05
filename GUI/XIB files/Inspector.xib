@@ -2489,7 +2489,7 @@
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <clipView key="contentView" drawsBackground="NO" id="Gms-yd-d5C">
                                                                         <rect key="frame" x="1" y="1" width="422" height="305"/>
-                                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                        <autoresizingMask key="autoresizingMask"/>
                                                                         <subviews>
                                                                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6u0-z0-gfB" customClass="LogicView" customModule="vAmiga" customModuleProvider="target">
                                                                                 <rect key="frame" x="0.0" y="1" width="9999" height="304"/>

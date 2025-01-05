@@ -198,7 +198,7 @@ AudioStream::draw(u32 *buffer, isize width, isize height, float highest,
 
     // Clear buffer
     for (isize i = 0; i < width * height; i++) {
-        buffer[i] = color & 0xFFFFFF;
+        buffer[i] = 0; // color & 0xFFFFFF;
     }
 
     // Draw waveform

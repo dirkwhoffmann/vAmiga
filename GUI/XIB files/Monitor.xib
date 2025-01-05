@@ -8,45 +8,10 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="Monitor" customModule="vAmiga" customModuleProvider="target">
             <connections>
-                <outlet property="busAudio" destination="tH6-Qz-2vM" id="EXA-9R-gaz"/>
-                <outlet property="busBitplanes" destination="aBe-LN-1U8" id="YE5-NN-8pa"/>
-                <outlet property="busBlitter" destination="hEP-2e-3Pp" id="PWH-sh-Pb3"/>
-                <outlet property="busCPU" destination="NjS-Dh-zwM" id="xb6-Tc-UfE"/>
-                <outlet property="busCopper" destination="Fe6-63-hw4" id="DG8-Nv-mVr"/>
-                <outlet property="busDisk" destination="EwH-KM-q5F" id="fAP-bg-3Ta"/>
-                <outlet property="busDisplayMode" destination="a3k-Q7-WnU" id="Cfa-cn-Qv2"/>
-                <outlet property="busEnable" destination="XWB-Yx-Hv9" id="pTt-pL-Yjp"/>
-                <outlet property="busOpacity" destination="eXa-kX-Dbj" id="ADu-k0-FLN"/>
-                <outlet property="busRefresh" destination="Bvl-1G-kRW" id="llx-3J-u3T"/>
-                <outlet property="busSprites" destination="35B-nh-qDw" id="9WF-TV-UCG"/>
-                <outlet property="colAudio" destination="Qmo-sh-R9h" id="t2k-u6-57D"/>
-                <outlet property="colBitplanes" destination="zfI-w1-a5x" id="cOl-rC-0hU"/>
-                <outlet property="colBlitter" destination="qMO-5l-D1C" id="YTs-m1-RFS"/>
-                <outlet property="colCPU" destination="Yez-xg-rKe" id="ZVZ-qR-g5k"/>
-                <outlet property="colCopper" destination="imV-oP-CIT" id="5rf-1l-MUk"/>
-                <outlet property="colDisk" destination="0fA-A2-D4M" id="egR-aL-Q9Q"/>
-                <outlet property="colRefresh" destination="Cxi-sG-pnt" id="4tI-bi-xGY"/>
-                <outlet property="colSprites" destination="5e7-hl-3ag" id="1wn-ZT-3xp"/>
-                <outlet property="monAudio" destination="kyy-Pa-cLS" id="AZz-CE-Cop"/>
-                <outlet property="monBitplanes" destination="Cf1-Ob-LnZ" id="2Qg-9P-lpl"/>
-                <outlet property="monBlitter" destination="Dhp-Pr-Lug" id="wnQ-V7-MHa"/>
-                <outlet property="monChipRam" destination="EGK-nz-ZP8" id="Qpa-sl-kY3"/>
-                <outlet property="monCopper" destination="84K-Ze-s8R" id="Mbv-ed-pFP"/>
-                <outlet property="monDisk" destination="Rqk-gS-j5d" id="AM1-EO-OEe"/>
-                <outlet property="monEnable" destination="s8F-em-msz" id="bRy-jU-yHT"/>
-                <outlet property="monFastRam" destination="OOK-iJ-gL1" id="5dH-9h-dYl"/>
-                <outlet property="monKickRom" destination="kmY-JW-Q4i" id="K5W-R2-xg8"/>
-                <outlet property="monLayout" destination="3FF-ec-heM" id="pqe-g9-gwG"/>
-                <outlet property="monLeftWave" destination="Cfn-f1-lFY" id="uDA-LR-StP"/>
-                <outlet property="monOpacity" destination="7Ip-Jf-uVb" id="Sg0-To-zGp"/>
-                <outlet property="monRightWave" destination="Cml-je-RMN" id="DgT-Gz-RXh"/>
-                <outlet property="monSlider" destination="cyx-oK-rWM" id="s0M-hB-A8n"/>
-                <outlet property="monSlowRam" destination="Dag-do-tER" id="XLM-zp-1LH"/>
-                <outlet property="monSprites" destination="pgP-AB-gkQ" id="byn-P8-5YX"/>
                 <outlet property="myView0" destination="hrF-tt-Ldb" id="Hy5-t4-OLn"/>
                 <outlet property="myView1" destination="9ag-KH-xra" id="Sai-Oj-o4R"/>
-                <outlet property="myView10" destination="TnL-co-BOf" id="tTD-Y0-Wli"/>
-                <outlet property="myView11" destination="1OB-IP-LvD" id="nGH-nM-hUX"/>
+                <outlet property="myView10" destination="6C6-Hb-Taa" id="jhH-bU-ImH"/>
+                <outlet property="myView11" destination="gUQ-BT-cKG" id="pCV-GL-DO4"/>
                 <outlet property="myView2" destination="9DQ-2T-zZe" id="Cm6-j8-iVP"/>
                 <outlet property="myView3" destination="ezU-cJ-1D2" id="Vrh-gN-Efj"/>
                 <outlet property="myView4" destination="jkQ-cd-VqH" id="M0a-qg-dVF"/>
@@ -55,578 +20,24 @@
                 <outlet property="myView7" destination="u01-p5-lDv" id="Ezk-zD-Bnh"/>
                 <outlet property="myView8" destination="heS-vN-nEa" id="KKX-mA-RDV"/>
                 <outlet property="myView9" destination="mme-U9-iHh" id="m4s-HB-95V"/>
-                <outlet property="synEnable" destination="58J-p8-hWR" id="qRK-QZ-Ppf"/>
-                <outlet property="synOpacity" destination="O5R-YP-FhK" id="dxc-Na-Ram"/>
-                <outlet property="synPlayfield1" destination="9XB-lX-iVI" id="91f-W4-Rmv"/>
-                <outlet property="synPlayfield2" destination="jlE-Wg-qGD" id="gE9-pF-pxc"/>
-                <outlet property="synSprite0" destination="JsV-5m-bhP" id="ziT-aV-43y"/>
-                <outlet property="synSprite1" destination="KGa-0i-zAV" id="ziT-P5-TcZ"/>
-                <outlet property="synSprite2" destination="PTf-zA-X1w" id="iDz-Z0-TqG"/>
-                <outlet property="synSprite3" destination="DxW-nO-l5v" id="60i-X9-4Ni"/>
-                <outlet property="synSprite4" destination="qCA-gJ-4Gk" id="0Ov-D8-RFu"/>
-                <outlet property="synSprite5" destination="Br5-L7-4kX" id="MDr-Nh-KJF"/>
-                <outlet property="synSprite6" destination="n7H-di-f23" id="TW3-oI-1h7"/>
-                <outlet property="synSprite7" destination="uls-Vg-ney" id="k7W-7Y-ELo"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="2PK-Sz-B50"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="Monitor" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="QvC-M9-y7g" customClass="DialogWindow" customModule="vAmiga" customModuleProvider="target">
+        <window title="Dashboard" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="QvC-M9-y7g" customClass="DialogWindow" customModule="vAmiga" customModuleProvider="target">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="868" height="892"/>
+            <rect key="contentRect" x="196" y="240" width="868" height="446"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
             <value key="minSize" type="size" width="868" height="418"/>
             <value key="maxSize" type="size" width="868" height="418"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="868" height="892"/>
+                <rect key="frame" x="0.0" y="0.0" width="868" height="446"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <box fixedFrame="YES" title="Workload" translatesAutoresizingMaskIntoConstraints="NO" id="fNW-Zb-9Hi">
-                        <rect key="frame" x="290" y="531" width="265" height="341"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <view key="contentView" id="U1f-HA-ZgP">
-                            <rect key="frame" x="4" y="5" width="257" height="321"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <subviews>
-                                <button tag="1" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dhp-Pr-Lug">
-                                    <rect key="frame" x="51" y="219" width="94" height="14"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Blitter DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="lCg-rw-clK">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="monDisplayAction:" target="-2" id="sbI-lF-Ekh"/>
-                                    </connections>
-                                </button>
-                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="84K-Ze-s8R">
-                                    <rect key="frame" x="51" y="245" width="94" height="14"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Copper DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="S3l-ne-Uuc">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="monDisplayAction:" target="-2" id="qAu-51-V4g"/>
-                                    </connections>
-                                </button>
-                                <button tag="2" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rqk-gS-j5d">
-                                    <rect key="frame" x="51" y="193" width="94" height="14"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Disk DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="jYu-xf-dQJ">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="monDisplayAction:" target="-2" id="LZo-4m-4JV"/>
-                                    </connections>
-                                </button>
-                                <button tag="4" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pgP-AB-gkQ">
-                                    <rect key="frame" x="51" y="141" width="94" height="14"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Sprite DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="JL2-oL-6K0">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="monDisplayAction:" target="-2" id="3bF-wk-xxJ"/>
-                                    </connections>
-                                </button>
-                                <button tag="5" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cf1-Ob-LnZ">
-                                    <rect key="frame" x="51" y="115" width="94" height="14"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Bitplane DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="aXz-bk-eH9">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="monDisplayAction:" target="-2" id="0Wh-5Z-U1N"/>
-                                    </connections>
-                                </button>
-                                <button tag="3" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kyy-Pa-cLS">
-                                    <rect key="frame" x="51" y="167" width="94" height="14"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Audio DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="7HR-Ho-DcK">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="monDisplayAction:" target="-2" id="jcp-ve-NYg"/>
-                                    </connections>
-                                </button>
-                                <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Ip-Jf-uVb">
-                                    <rect key="frame" x="21" y="65" width="13" height="195"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" minValue="20" maxValue="100" doubleValue="60" tickMarkPosition="right" sliderType="linear" id="4Fx-wk-HlD"/>
-                                    <connections>
-                                        <action selector="monOpacityAction:" target="-2" id="vZc-AU-YPg"/>
-                                    </connections>
-                                </slider>
-                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s8F-em-msz">
-                                    <rect key="frame" x="18" y="285" width="160" height="18"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Show activity monitors" bezelStyle="regularSquare" imagePosition="left" inset="2" id="1ud-rn-NBQ">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="system"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="monEnableAction:" target="-2" id="x34-2T-YSq"/>
-                                    </connections>
-                                </button>
-                                <button tag="6" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EGK-nz-ZP8">
-                                    <rect key="frame" x="160" y="245" width="88" height="14"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Chip Ram" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="rYa-LC-H9t">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="monDisplayAction:" target="-2" id="Wuw-N2-MXI"/>
-                                    </connections>
-                                </button>
-                                <button tag="7" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dag-do-tER">
-                                    <rect key="frame" x="160" y="219" width="88" height="14"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Slow Ram" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="2TU-Cp-Efl">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="monDisplayAction:" target="-2" id="YzK-Kt-cAL"/>
-                                    </connections>
-                                </button>
-                                <button tag="8" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OOK-iJ-gL1">
-                                    <rect key="frame" x="160" y="193" width="83" height="14"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Fast Ram" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="SPV-vm-GYy">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="monDisplayAction:" target="-2" id="1bM-L9-bDc"/>
-                                    </connections>
-                                </button>
-                                <button tag="9" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kmY-JW-Q4i">
-                                    <rect key="frame" x="160" y="167" width="88" height="14"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Rom" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="XD1-kM-Q0g">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="monDisplayAction:" target="-2" id="aQx-Cb-PUD"/>
-                                    </connections>
-                                </button>
-                                <button tag="10" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cfn-f1-lFY">
-                                    <rect key="frame" x="52" y="64" width="105" height="18"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Left audio" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Jnl-iZ-FV9">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="monDisplayAction:" target="-2" id="6N8-Z0-HVG"/>
-                                    </connections>
-                                </button>
-                                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3FF-ec-heM">
-                                    <rect key="frame" x="54" y="23" width="166" height="18"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <popUpButtonCell key="cell" type="roundRect" title="Top and bottom" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="YdS-RD-RdJ" id="76j-Bf-Gob">
-                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="cellTitle"/>
-                                        <menu key="menu" id="7pd-Ta-cse">
-                                            <items>
-                                                <menuItem title="Top and bottom" state="on" id="YdS-RD-RdJ"/>
-                                                <menuItem title="Top" tag="1" id="enA-hX-HEo"/>
-                                                <menuItem title="Bottom" tag="2" id="ruc-Ky-h1m"/>
-                                                <menuItem title="Left and right" tag="3" id="dLs-1B-UZU"/>
-                                                <menuItem title="Left" tag="4" id="i5Q-Od-Zhu"/>
-                                                <menuItem title="Right" tag="5" id="OEk-9z-e0B"/>
-                                            </items>
-                                        </menu>
-                                    </popUpButtonCell>
-                                    <connections>
-                                        <action selector="monLayoutAction:" target="-2" id="fLZ-5T-qma"/>
-                                    </connections>
-                                </popUpButton>
-                                <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cyx-oK-rWM">
-                                    <rect key="frame" x="228" y="23" width="18" height="20"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="80" sliderType="circular" id="HHb-lZ-2NI"/>
-                                    <connections>
-                                        <action selector="monRotationAction:" target="-2" id="WLR-sP-dif"/>
-                                    </connections>
-                                </slider>
-                                <button tag="11" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cml-je-RMN">
-                                    <rect key="frame" x="160" y="64" width="88" height="18"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Right audio" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="xtT-fa-k8T">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="monDisplayAction:" target="-2" id="7Cn-Qr-5fX"/>
-                                    </connections>
-                                </button>
-                            </subviews>
-                        </view>
-                    </box>
-                    <box fixedFrame="YES" title="Stencils" translatesAutoresizingMaskIntoConstraints="NO" id="GYR-um-2QX">
-                        <rect key="frame" x="563" y="531" width="265" height="341"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <view key="contentView" id="OpN-As-XuZ">
-                            <rect key="frame" x="4" y="5" width="257" height="321"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <subviews>
-                                <button tag="1" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PTf-zA-X1w">
-                                    <rect key="frame" x="49" y="193" width="79" height="18"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Sprite 2" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="BAZ-Xw-PhB">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="synAction:" target="-2" id="I4E-C8-x1O"/>
-                                    </connections>
-                                </button>
-                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JsV-5m-bhP">
-                                    <rect key="frame" x="49" y="245" width="79" height="18"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Sprite 0" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="IXT-uN-WlM">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="synAction:" target="-2" id="R0V-HG-TT0"/>
-                                    </connections>
-                                </button>
-                                <button tag="2" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qCA-gJ-4Gk">
-                                    <rect key="frame" x="49" y="141" width="79" height="18"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Sprite 4" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="qVQ-Cg-0cL">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="synAction:" target="-2" id="phx-BD-oF5"/>
-                                    </connections>
-                                </button>
-                                <button tag="4" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KGa-0i-zAV">
-                                    <rect key="frame" x="49" y="219" width="79" height="18"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Sprite 1" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="tX8-ij-08v">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="synAction:" target="-2" id="QxJ-8T-vbP"/>
-                                    </connections>
-                                </button>
-                                <button tag="5" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DxW-nO-l5v">
-                                    <rect key="frame" x="49" y="167" width="79" height="18"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Sprite 3" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="uiy-Mh-wp2">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="synAction:" target="-2" id="ypf-xg-Du1"/>
-                                    </connections>
-                                </button>
-                                <button tag="5" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uls-Vg-ney">
-                                    <rect key="frame" x="49" y="64" width="79" height="18"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Sprite 7" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="lsB-FM-gYN">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="synAction:" target="-2" id="xDY-eo-CyK"/>
-                                    </connections>
-                                </button>
-                                <button tag="5" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Br5-L7-4kX">
-                                    <rect key="frame" x="49" y="115" width="79" height="18"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Sprite 5" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="GI9-ff-EUT">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="synAction:" target="-2" id="DY5-nZ-mEA"/>
-                                    </connections>
-                                </button>
-                                <button tag="3" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n7H-di-f23">
-                                    <rect key="frame" x="49" y="89" width="79" height="18"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Sprite 6" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="NO8-xz-ccC">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="synAction:" target="-2" id="OWc-47-UJS"/>
-                                    </connections>
-                                </button>
-                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="58J-p8-hWR">
-                                    <rect key="frame" x="18" y="285" width="106" height="18"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Cut out layers" bezelStyle="regularSquare" imagePosition="left" inset="2" id="hMc-93-sur">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="system"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="synAction:" target="-2" id="w9T-u7-pda"/>
-                                    </connections>
-                                </button>
-                                <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O5R-YP-FhK">
-                                    <rect key="frame" x="19" y="65" width="13" height="195"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="255" doubleValue="128" tickMarkPosition="right" sliderType="linear" id="xIK-z7-2dX"/>
-                                    <connections>
-                                        <action selector="synOpacityAction:" target="-2" id="GMr-nf-YiY"/>
-                                    </connections>
-                                </slider>
-                                <button tag="6" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9XB-lX-iVI">
-                                    <rect key="frame" x="131" y="245" width="88" height="18"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Playfield 1" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="P96-h6-guO">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="synAction:" target="-2" id="S2A-vB-TnD"/>
-                                    </connections>
-                                </button>
-                                <button tag="6" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jlE-Wg-qGD">
-                                    <rect key="frame" x="131" y="219" width="88" height="18"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Playfield 2" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="AYP-jc-4Xf">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="synAction:" target="-2" id="wRQ-Ov-yQc"/>
-                                    </connections>
-                                </button>
-                            </subviews>
-                        </view>
-                    </box>
-                    <box fixedFrame="YES" title="Bus" translatesAutoresizingMaskIntoConstraints="NO" id="tFU-vl-lut">
-                        <rect key="frame" x="17" y="531" width="265" height="341"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <view key="contentView" id="OFv-mF-p3w">
-                            <rect key="frame" x="4" y="5" width="257" height="321"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <subviews>
-                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XWB-Yx-Hv9">
-                                    <rect key="frame" x="18" y="285" width="162" height="18"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Visualize bus accesses" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="8ae-og-qzD">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="system"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="busEnableAction:" target="-2" id="gJL-sh-v9X"/>
-                                    </connections>
-                                </button>
-                                <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eXa-kX-Dbj">
-                                    <rect key="frame" x="21" y="65" width="13" height="195"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <sliderCell key="cell" controlSize="small" continuous="YES" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="right" sliderType="linear" id="tDF-yb-ROU"/>
-                                    <connections>
-                                        <action selector="busOpacityAction:" target="-2" id="XRa-8Q-nt7"/>
-                                    </connections>
-                                </slider>
-                                <button tag="1" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hEP-2e-3Pp">
-                                    <rect key="frame" x="52" y="219" width="118" height="14"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Blitter DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="8ur-ER-mj0">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="busDisplayAction:" target="-2" id="ITl-HY-MZi"/>
-                                    </connections>
-                                </button>
-                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fe6-63-hw4">
-                                    <rect key="frame" x="52" y="245" width="118" height="14"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Copper DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="N8l-Oh-SHH">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="busDisplayAction:" target="-2" id="oDc-4o-8Tq"/>
-                                    </connections>
-                                </button>
-                                <button tag="2" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EwH-KM-q5F">
-                                    <rect key="frame" x="52" y="193" width="118" height="14"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Disk DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="mJC-Z6-m4Y">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="busDisplayAction:" target="-2" id="nAZ-Fl-THV"/>
-                                    </connections>
-                                </button>
-                                <button tag="4" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="35B-nh-qDw">
-                                    <rect key="frame" x="52" y="141" width="118" height="14"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Sprite DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="uRr-ai-Lyy">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="busDisplayAction:" target="-2" id="9b2-HJ-Fsv"/>
-                                    </connections>
-                                </button>
-                                <button tag="5" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aBe-LN-1U8">
-                                    <rect key="frame" x="52" y="115" width="118" height="14"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Bitplane DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="NUC-e9-R3J">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="busDisplayAction:" target="-2" id="t24-UW-CxE"/>
-                                    </connections>
-                                </button>
-                                <button tag="7" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Bvl-1G-kRW">
-                                    <rect key="frame" x="52" y="64" width="118" height="14"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Refresh Cycles" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="z8C-ey-1jZ">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="busDisplayAction:" target="-2" id="SAN-7M-BnW"/>
-                                    </connections>
-                                </button>
-                                <button tag="6" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NjS-Dh-zwM">
-                                    <rect key="frame" x="52" y="89" width="118" height="14"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="CPU " bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="VXF-0n-EaT">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="busDisplayAction:" target="-2" id="fLY-oH-wHp"/>
-                                    </connections>
-                                </button>
-                                <button tag="3" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tH6-Qz-2vM">
-                                    <rect key="frame" x="52" y="167" width="118" height="14"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Audio DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Zav-Cc-mE8">
-                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="message" size="11"/>
-                                    </buttonCell>
-                                    <connections>
-                                        <action selector="busDisplayAction:" target="-2" id="CjH-7r-gIh"/>
-                                    </connections>
-                                </button>
-                                <colorWell fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="qMO-5l-D1C">
-                                    <rect key="frame" x="176" y="216" width="44" height="23"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    <connections>
-                                        <action selector="colorAction:" target="-2" id="spc-yf-7Mw"/>
-                                    </connections>
-                                </colorWell>
-                                <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="imV-oP-CIT">
-                                    <rect key="frame" x="176" y="242" width="44" height="23"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    <connections>
-                                        <action selector="colorAction:" target="-2" id="Ono-tw-NNe"/>
-                                    </connections>
-                                </colorWell>
-                                <colorWell fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="0fA-A2-D4M">
-                                    <rect key="frame" x="176" y="190" width="44" height="23"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    <connections>
-                                        <action selector="colorAction:" target="-2" id="jOb-AU-pyI"/>
-                                    </connections>
-                                </colorWell>
-                                <colorWell fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="5e7-hl-3ag">
-                                    <rect key="frame" x="176" y="138" width="44" height="23"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    <connections>
-                                        <action selector="colorAction:" target="-2" id="H1p-QO-N5b"/>
-                                    </connections>
-                                </colorWell>
-                                <colorWell fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="zfI-w1-a5x">
-                                    <rect key="frame" x="176" y="112" width="44" height="23"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    <connections>
-                                        <action selector="colorAction:" target="-2" id="1PG-Ep-fFF"/>
-                                    </connections>
-                                </colorWell>
-                                <colorWell fixedFrame="YES" tag="7" translatesAutoresizingMaskIntoConstraints="NO" id="Cxi-sG-pnt">
-                                    <rect key="frame" x="176" y="60" width="44" height="23"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    <connections>
-                                        <action selector="colorAction:" target="-2" id="TMm-Jk-oGh"/>
-                                    </connections>
-                                </colorWell>
-                                <colorWell fixedFrame="YES" tag="6" translatesAutoresizingMaskIntoConstraints="NO" id="Yez-xg-rKe">
-                                    <rect key="frame" x="176" y="86" width="44" height="23"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    <connections>
-                                        <action selector="colorAction:" target="-2" id="FQf-AK-fRS"/>
-                                    </connections>
-                                </colorWell>
-                                <colorWell fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="Qmo-sh-R9h">
-                                    <rect key="frame" x="176" y="164" width="44" height="23"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    <connections>
-                                        <action selector="colorAction:" target="-2" id="ZLZ-ly-rUO"/>
-                                    </connections>
-                                </colorWell>
-                                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a3k-Q7-WnU">
-                                    <rect key="frame" x="54" y="17" width="166" height="18"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <popUpButtonCell key="cell" type="roundRect" title="Modulate foreground" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="sMF-QY-alm" id="A9n-8m-mpL">
-                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                        <font key="font" metaFont="cellTitle"/>
-                                        <menu key="menu" id="mQR-V0-Kwr">
-                                            <items>
-                                                <menuItem title="Modulate foreground" state="on" id="sMF-QY-alm"/>
-                                                <menuItem title="Modulate background" tag="1" id="Adz-dS-jE3"/>
-                                                <menuItem title="Mix layers" tag="2" id="H23-pJ-sG5"/>
-                                            </items>
-                                        </menu>
-                                    </popUpButtonCell>
-                                    <connections>
-                                        <action selector="busDisplayModeAction:" target="-2" id="5zf-CJ-co7"/>
-                                    </connections>
-                                </popUpButton>
-                            </subviews>
-                        </view>
-                    </box>
-                    <button verticalHuggingPriority="750" id="gV8-Yr-TwS">
-                        <rect key="frame" x="793" y="487" width="59" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="dIY-an-yR2">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                            <string key="keyEquivalent" base64-UTF8="YES">
-DQ
-</string>
-                        </buttonCell>
-                        <connections>
-                            <action selector="okAction:" target="-2" id="Mwe-8m-3b8"/>
-                        </connections>
-                    </button>
                     <box fixedFrame="YES" title="Slow Ram" translatesAutoresizingMaskIntoConstraints="NO" id="PDq-Kw-ct2">
-                        <rect key="frame" x="229" y="340" width="200" height="133"/>
+                        <rect key="frame" x="229" y="292" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="a80-j2-hew">
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
@@ -643,7 +54,7 @@ DQ
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Chip Ram" translatesAutoresizingMaskIntoConstraints="NO" id="4Zz-qZ-J98">
-                        <rect key="frame" x="17" y="340" width="200" height="133"/>
+                        <rect key="frame" x="17" y="292" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="qle-rq-nVS">
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
@@ -660,7 +71,7 @@ DQ
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Fast Ram" translatesAutoresizingMaskIntoConstraints="NO" id="bxF-PZ-oOX">
-                        <rect key="frame" x="440" y="340" width="200" height="133"/>
+                        <rect key="frame" x="440" y="292" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="0lr-uk-UmZ">
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
@@ -677,7 +88,7 @@ DQ
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Rom" translatesAutoresizingMaskIntoConstraints="NO" id="Tqb-xp-i8d">
-                        <rect key="frame" x="651" y="341" width="200" height="133"/>
+                        <rect key="frame" x="651" y="293" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="uzR-rs-5Rm">
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
@@ -694,7 +105,7 @@ DQ
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Blitter DMA" translatesAutoresizingMaskIntoConstraints="NO" id="DfC-OX-Lih">
-                        <rect key="frame" x="229" y="196" width="200" height="133"/>
+                        <rect key="frame" x="229" y="154" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="ujt-T8-9N0">
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
@@ -711,7 +122,7 @@ DQ
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Copper DMA" translatesAutoresizingMaskIntoConstraints="NO" id="hYr-NE-wnp">
-                        <rect key="frame" x="17" y="196" width="200" height="133"/>
+                        <rect key="frame" x="17" y="154" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="Qc4-cp-5TT">
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
@@ -728,7 +139,7 @@ DQ
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Disk DMA" translatesAutoresizingMaskIntoConstraints="NO" id="scG-f9-9EO">
-                        <rect key="frame" x="440" y="196" width="200" height="133"/>
+                        <rect key="frame" x="440" y="154" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="w5T-JU-c1l">
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
@@ -745,7 +156,7 @@ DQ
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Audio DMA" translatesAutoresizingMaskIntoConstraints="NO" id="2qQ-Ue-Sdl">
-                        <rect key="frame" x="651" y="197" width="200" height="133"/>
+                        <rect key="frame" x="651" y="155" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="8hK-If-Qix">
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
@@ -762,7 +173,7 @@ DQ
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Bitplane DMA" translatesAutoresizingMaskIntoConstraints="NO" id="b3J-VJ-XDI">
-                        <rect key="frame" x="229" y="45" width="200" height="133"/>
+                        <rect key="frame" x="229" y="16" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="LSQ-9a-vFf">
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
@@ -779,7 +190,7 @@ DQ
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Sprite DMA" translatesAutoresizingMaskIntoConstraints="NO" id="p6u-S6-fVB">
-                        <rect key="frame" x="17" y="45" width="200" height="133"/>
+                        <rect key="frame" x="17" y="16" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="hva-HS-HX4">
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
@@ -796,36 +207,38 @@ DQ
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Left Audio" translatesAutoresizingMaskIntoConstraints="NO" id="a8s-EC-PQA">
-                        <rect key="frame" x="440" y="45" width="200" height="133"/>
+                        <rect key="frame" x="440" y="16" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="d31-M6-NVo">
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TnL-co-BOf" customClass="TimeSeries" customModule="vAmiga" customModuleProvider="target">
+                                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6C6-Hb-Taa" customClass="WaveformPanel" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="monitorTemplate" id="e6p-es-Qf9"/>
                                     <connections>
-                                        <outlet property="monitor" destination="-2" id="T21-rp-jOV"/>
+                                        <outlet property="monitor" destination="-2" id="Cwu-WK-AQT"/>
                                     </connections>
-                                </customView>
+                                </imageView>
                             </subviews>
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Right Audio" translatesAutoresizingMaskIntoConstraints="NO" id="IcT-Gd-UT2">
-                        <rect key="frame" x="651" y="46" width="200" height="133"/>
+                        <rect key="frame" x="651" y="17" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="c4D-zl-PZT">
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1OB-IP-LvD" customClass="TimeSeries" customModule="vAmiga" customModuleProvider="target">
+                                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="gUQ-BT-cKG" customClass="WaveformPanel" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="monitorTemplate" id="976-WQ-esw"/>
                                     <connections>
-                                        <outlet property="monitor" destination="-2" id="1Db-6c-dY8"/>
+                                        <outlet property="monitor" destination="-2" id="BT4-61-3li"/>
                                     </connections>
-                                </customView>
+                                </imageView>
                             </subviews>
                         </view>
                     </box>
@@ -834,7 +247,10 @@ DQ
             <connections>
                 <outlet property="delegate" destination="-2" id="WuC-xr-fiS"/>
             </connections>
-            <point key="canvasLocation" x="135" y="430"/>
+            <point key="canvasLocation" x="135" y="207"/>
         </window>
     </objects>
+    <resources>
+        <image name="monitorTemplate" width="36" height="36"/>
+    </resources>
 </document>

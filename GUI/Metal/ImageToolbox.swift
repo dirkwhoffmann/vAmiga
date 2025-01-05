@@ -15,10 +15,10 @@ public extension CGImage {
     
     static func bitmapInfo() -> CGBitmapInfo {
         
-        let noAlpha = CGImageAlphaInfo.noneSkipLast.rawValue
+        let alpha = CGImageAlphaInfo.premultipliedLast.rawValue
         let bigEn32 = CGBitmapInfo.byteOrder32Big.rawValue
     
-        return CGBitmapInfo(rawValue: noAlpha | bigEn32)
+        return CGBitmapInfo(rawValue: alpha | bigEn32)
     }
     
     static func dataProvider(data: UnsafeMutableRawPointer, size: CGSize) -> CGDataProvider? {
@@ -39,6 +39,7 @@ public extension CGImage {
     
     // Creates a CGImage from a raw data stream in 32 bit big endian format
     static func make(data: UnsafeMutableRawPointer, size: CGSize) -> CGImage? {
+        
         
         let w = Int(size.width)
         let h = Int(size.height)
