@@ -632,7 +632,7 @@ DQ
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9ag-KH-xra" customClass="MyChartView" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9ag-KH-xra" customClass="DoubleTimeSeries" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <connections>
@@ -649,7 +649,7 @@ DQ
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hrF-tt-Ldb" customClass="MyChartView" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hrF-tt-Ldb" customClass="DoubleTimeSeries" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <connections>
@@ -666,7 +666,7 @@ DQ
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9DQ-2T-zZe" customClass="MyChartView" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9DQ-2T-zZe" customClass="DoubleTimeSeries" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <connections>
@@ -683,7 +683,7 @@ DQ
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ezU-cJ-1D2" customClass="MyChartView" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ezU-cJ-1D2" customClass="DoubleTimeSeries" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <connections>
@@ -700,7 +700,7 @@ DQ
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dlz-zU-pc5" customClass="MyChartView" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dlz-zU-pc5" customClass="TimeSeries" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <connections>
@@ -717,7 +717,7 @@ DQ
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jkQ-cd-VqH" customClass="MyChartView" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jkQ-cd-VqH" customClass="TimeSeries" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <connections>
@@ -734,7 +734,7 @@ DQ
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="STY-lz-6g1" customClass="MyChartView" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="STY-lz-6g1" customClass="TimeSeries" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <connections>
@@ -751,7 +751,7 @@ DQ
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u01-p5-lDv" customClass="MyChartView" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u01-p5-lDv" customClass="TimeSeries" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <connections>
@@ -768,7 +768,7 @@ DQ
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mme-U9-iHh" customClass="MyChartView" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mme-U9-iHh" customClass="TimeSeries" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <connections>
@@ -785,7 +785,7 @@ DQ
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="heS-vN-nEa" customClass="MyChartView" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="heS-vN-nEa" customClass="TimeSeries" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <connections>
@@ -802,7 +802,7 @@ DQ
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TnL-co-BOf" customClass="MyChartView" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TnL-co-BOf" customClass="TimeSeries" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <connections>
@@ -819,7 +819,7 @@ DQ
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1OB-IP-LvD" customClass="MyChartView" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1OB-IP-LvD" customClass="TimeSeries" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <connections>

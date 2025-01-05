@@ -70,18 +70,18 @@ class Monitor: DialogController {
     @IBOutlet weak var synPlayfield2: NSButton!
     @IBOutlet weak var synOpacity: NSSlider!
 
-    @IBOutlet weak var myView0: MyChartView!
-    @IBOutlet weak var myView1: MyChartView!
-    @IBOutlet weak var myView2: MyChartView!
-    @IBOutlet weak var myView3: MyChartView!
-    @IBOutlet weak var myView4: MyChartView!
-    @IBOutlet weak var myView5: MyChartView!
-    @IBOutlet weak var myView6: MyChartView!
-    @IBOutlet weak var myView7: MyChartView!
-    @IBOutlet weak var myView8: MyChartView!
-    @IBOutlet weak var myView9: MyChartView!
-    @IBOutlet weak var myView10: MyChartView!
-    @IBOutlet weak var myView11: MyChartView!
+    @IBOutlet weak var myView0: DoubleTimeSeries!
+    @IBOutlet weak var myView1: DoubleTimeSeries!
+    @IBOutlet weak var myView2: DoubleTimeSeries!
+    @IBOutlet weak var myView3: DoubleTimeSeries!
+    @IBOutlet weak var myView4: TimeSeries!
+    @IBOutlet weak var myView5: TimeSeries!
+    @IBOutlet weak var myView6: TimeSeries!
+    @IBOutlet weak var myView7: TimeSeries!
+    @IBOutlet weak var myView8: TimeSeries!
+    @IBOutlet weak var myView9: TimeSeries!
+    @IBOutlet weak var myView10: TimeSeries!
+    @IBOutlet weak var myView11: TimeSeries!
 
     var layers: Int {
         get { return emu.get(.DENISE_HIDDEN_LAYERS) }
@@ -107,14 +107,12 @@ class Monitor: DialogController {
                 
         // DMA monitors
         let dma = emu.agnus.stats
-//        myView4.add(value: log(1.0 + 19 * Double(dma.copperActivity) / (313 * 120)) / log(20))
-//        myView5.add(value: log(1.0 + 19 * Double(dma.blitterActivity) / (313 * 120)) / log(20))
-        myView4.model.addLog(value: Double(dma.copperActivity) / (313 * 120))
-        myView5.model.addLog(value: Double(dma.blitterActivity) / (313 * 120))
-        myView6.add(value: Double(dma.diskActivity) / (313 * 3))
-        myView7.add(value: Double(dma.audioActivity) / (313 * 4))
-        myView8.add(value: Double(dma.spriteActivity) / (313 * 16))
-        myView9.add(value: Double(dma.bitplaneActivity) / 39330)
+        myView4.model.add(Double(dma.copperActivity) / (313 * 120))
+        myView5.model.add(Double(dma.blitterActivity) / (313 * 120))
+        myView6.model.add(Double(dma.diskActivity) / (313 * 3))
+        myView7.model.add(Double(dma.audioActivity) / (313 * 4))
+        myView8.model.add(Double(dma.spriteActivity) / (313 * 16))
+        myView9.model.add(Double(dma.bitplaneActivity) / 39330)
         
         // Memory monitors
         let mem = emu.mem.stats
@@ -129,10 +127,10 @@ class Monitor: DialogController {
         let kickR = Double(mem.kickReads.accumulated) / max
         let kickW = Double(mem.kickWrites.accumulated) / max
         
-        myView0.add(value: chipR)
-        myView1.add(value: slowR)
-        myView2.add(value: fastR)
-        myView3.add(value: kickR)
+        myView0.model.add(chipR, chipW)
+        myView1.model.add(slowR, slowW)
+        myView2.model.add(fastR, fastW)
+        myView3.model.add(kickR, kickW)
     
         // Audio monitors
         // myView10.add(value: 0)
