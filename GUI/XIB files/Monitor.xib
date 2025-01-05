@@ -625,7 +625,7 @@ DQ
                             <action selector="okAction:" target="-2" id="Mwe-8m-3b8"/>
                         </connections>
                     </button>
-                    <box fixedFrame="YES" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="PDq-Kw-ct2">
+                    <box fixedFrame="YES" title="Slow Ram" translatesAutoresizingMaskIntoConstraints="NO" id="PDq-Kw-ct2">
                         <rect key="frame" x="229" y="340" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="a80-j2-hew">
@@ -642,7 +642,7 @@ DQ
                             </subviews>
                         </view>
                     </box>
-                    <box fixedFrame="YES" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="4Zz-qZ-J98">
+                    <box fixedFrame="YES" title="Chip Ram" translatesAutoresizingMaskIntoConstraints="NO" id="4Zz-qZ-J98">
                         <rect key="frame" x="17" y="340" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="qle-rq-nVS">
@@ -659,7 +659,7 @@ DQ
                             </subviews>
                         </view>
                     </box>
-                    <box fixedFrame="YES" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="bxF-PZ-oOX">
+                    <box fixedFrame="YES" title="Fast Ram" translatesAutoresizingMaskIntoConstraints="NO" id="bxF-PZ-oOX">
                         <rect key="frame" x="440" y="340" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="0lr-uk-UmZ">
@@ -676,7 +676,7 @@ DQ
                             </subviews>
                         </view>
                     </box>
-                    <box fixedFrame="YES" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="Tqb-xp-i8d">
+                    <box fixedFrame="YES" title="Rom" translatesAutoresizingMaskIntoConstraints="NO" id="Tqb-xp-i8d">
                         <rect key="frame" x="651" y="341" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="uzR-rs-5Rm">
@@ -693,7 +693,7 @@ DQ
                             </subviews>
                         </view>
                     </box>
-                    <box fixedFrame="YES" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="DfC-OX-Lih">
+                    <box fixedFrame="YES" title="Blitter DMA" translatesAutoresizingMaskIntoConstraints="NO" id="DfC-OX-Lih">
                         <rect key="frame" x="229" y="196" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="ujt-T8-9N0">
@@ -710,7 +710,7 @@ DQ
                             </subviews>
                         </view>
                     </box>
-                    <box fixedFrame="YES" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="hYr-NE-wnp">
+                    <box fixedFrame="YES" title="Copper DMA" translatesAutoresizingMaskIntoConstraints="NO" id="hYr-NE-wnp">
                         <rect key="frame" x="17" y="196" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="Qc4-cp-5TT">
@@ -727,7 +727,7 @@ DQ
                             </subviews>
                         </view>
                     </box>
-                    <box fixedFrame="YES" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="scG-f9-9EO">
+                    <box fixedFrame="YES" title="Disk DMA" translatesAutoresizingMaskIntoConstraints="NO" id="scG-f9-9EO">
                         <rect key="frame" x="440" y="196" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="w5T-JU-c1l">
@@ -744,7 +744,7 @@ DQ
                             </subviews>
                         </view>
                     </box>
-                    <box fixedFrame="YES" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="2qQ-Ue-Sdl">
+                    <box fixedFrame="YES" title="Audio DMA" translatesAutoresizingMaskIntoConstraints="NO" id="2qQ-Ue-Sdl">
                         <rect key="frame" x="651" y="197" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="8hK-If-Qix">
@@ -761,7 +761,7 @@ DQ
                             </subviews>
                         </view>
                     </box>
-                    <box fixedFrame="YES" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="b3J-VJ-XDI">
+                    <box fixedFrame="YES" title="Bitplane DMA" translatesAutoresizingMaskIntoConstraints="NO" id="b3J-VJ-XDI">
                         <rect key="frame" x="229" y="45" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="LSQ-9a-vFf">
@@ -778,7 +778,7 @@ DQ
                             </subviews>
                         </view>
                     </box>
-                    <box fixedFrame="YES" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="p6u-S6-fVB">
+                    <box fixedFrame="YES" title="Sprite DMA" translatesAutoresizingMaskIntoConstraints="NO" id="p6u-S6-fVB">
                         <rect key="frame" x="17" y="45" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="hva-HS-HX4">
@@ -795,7 +795,7 @@ DQ
                             </subviews>
                         </view>
                     </box>
-                    <box fixedFrame="YES" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="a8s-EC-PQA">
+                    <box fixedFrame="YES" title="Left Audio" translatesAutoresizingMaskIntoConstraints="NO" id="a8s-EC-PQA">
                         <rect key="frame" x="440" y="45" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="d31-M6-NVo">
@@ -812,7 +812,7 @@ DQ
                             </subviews>
                         </view>
                     </box>
-                    <box fixedFrame="YES" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="IcT-Gd-UT2">
+                    <box fixedFrame="YES" title="Right Audio" translatesAutoresizingMaskIntoConstraints="NO" id="IcT-Gd-UT2">
                         <rect key="frame" x="651" y="46" width="200" height="133"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="c4D-zl-PZT">

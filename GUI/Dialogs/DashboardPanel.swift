@@ -16,18 +16,17 @@ struct DataPoint: Identifiable {
     var series: Int
     var timestamp: Date
     var value: Double
-    var value2: Double
 }
 
 class DataSource: ObservableObject {
     
     @Published var update = false
-
+    
     static let maxTimeSpan = 5.0
-   
+    
     // The data to visualize
     var data: [DataPoint] = []
-
+    
     // Appearance
     var fgColor: Color = .red
     var bgColor: Color = .white
@@ -50,7 +49,7 @@ class DataSource: ObservableObject {
             }
         }
     }
-                
+    
     // Base color
     var color: NSColor = .red {
         
@@ -68,27 +67,35 @@ class DataSource: ObservableObject {
         return last.timestamp.timeIntervalSince(first.timestamp)
     }
     
-    func add(_ value1: Double, _ value2: Double = 0) {
+    func add(_ value1: Double?, _ value2: Double? = nil) {
         
         add(value1, value2, timestamp: Date.now)
     }
     
-    private func add(_ value1: Double, _ value2: Double, timestamp: Date) {
-
-        // Add data point
-        let scaled1 = logScale ? log(1.0 + (19 * value1)) / log(20) : value1
-        let scaled2 = logScale ? log(1.0 + (19 * value1)) / log(20) : value2
-        data.append(DataPoint(series: 0, timestamp: timestamp, value: scaled1, value2: scaled2))
-        data.append(DataPoint(series: 1, timestamp: timestamp, value: scaled2, value2: scaled1))
-
+    private func add(_ value1: Double?, _ value2: Double?, timestamp: Date) {
+        
+        var scaled1 = value1
+        var scaled2 = value2
+        if scaled1 != nil && logScale { scaled1 = log(1.0 + (19 * value1!)) / log(20) }
+        if scaled2 != nil && logScale { scaled2 = log(1.0 + (19 * value2!)) / log(20) }
+        
+        if let scaled1 = scaled1 {
+            data.append(DataPoint(series: 1, timestamp: timestamp, value: scaled1))
+        }
+        if let scaled2 = scaled2 {
+            data.append(DataPoint(series: 2, timestamp: timestamp, value: scaled2))
+        }
+        if let scaled1 = scaled1, let scaled2 = scaled2 {
+            data.append(DataPoint(series: 3, timestamp: timestamp, value: scaled1 + scaled2))
+        }
+        
         // Delete outdated data
         while timeSpan > DataSource.maxTimeSpan { data.removeFirst() }
-
+        
         // Force the view to update
         update.toggle()
     }
 }
-
 
 //
 // Time series (one value per timestamp)
@@ -103,31 +110,35 @@ class TimeSeries: NSView {
         
         @ObservedObject var model: DataSource
         
-        private var areaBackground: Gradient {
-            return Gradient(colors: [model.fgColor, model.fgColor.opacity(0.1)])
-        }
         private var background: Gradient {
             return Gradient(colors: [model.bgColor.opacity(0.5), .clear])
         }
+        private var gradient: Gradient {
+            return Gradient(colors: [model.fgColor, model.fgColor.opacity(0.1)])
+        }
+        private var lineColor: Color {
+            return model.fgColor
+        }
+        private var lineWidth: Double {
+            return 1.0
+        }
         
         var body: some View {
-                                
-            let data = model.data
-            
-            Chart(data) { dataPoint in
+                            
+            Chart(model.data.filter { $0.series == 1 }) { dataPoint in
                             
                 AreaMark(
                     x: .value("Time", dataPoint.timestamp),
                     y: .value("Value", dataPoint.value)
                 )
                 .interpolationMethod(.catmullRom)
-                .foregroundStyle(areaBackground)
+                .foregroundStyle(gradient)
                 LineMark(
                     x: .value("Time", dataPoint.timestamp),
                     y: .value("Value", dataPoint.value)
                 )
-                .lineStyle(StrokeStyle(lineWidth: 2))
-                .foregroundStyle(model.fgColor)
+                .lineStyle(StrokeStyle(lineWidth: lineWidth))
+                .foregroundStyle(lineColor)
             }
             .chartXScale(domain: Date() - 5...Date())
             .chartXAxis(.hidden)
@@ -170,24 +181,24 @@ class DoubleTimeSeries: NSView {
         
         @ObservedObject var model: DataSource
         
-        private var areaBackground: Gradient {
-            return Gradient(colors: [model.fgColor, model.fgColor.opacity(0.1)])
-        }
         private var background: Gradient {
             return Gradient(colors: [model.bgColor.opacity(0.5), .clear])
         }
-                
         private var gradients: KeyValuePairs<Int, Gradient> {
-            return [ 0: Gradient(colors: [Color.green, Color.clear]),
-                     1: Gradient(colors: [Color.red, Color.clear])]
+            return [ 1: Gradient(colors: [Color(red: 0.6, green: 0.0, blue: 0.0), Color.clear]),
+                     2: Gradient(colors: [Color(red: 0.0, green: 0.6, blue: 0.0), Color.clear])]
         }
-            
+        private var lineColor: Color {
+            return Color(nsColor: .green)
+        }
+        private var lineWidth: Double {
+            return 1.0
+        }
+
         var body: some View {
-            
-            let data = model.data
-            
+                        
             Chart {
-                ForEach(data, id: \.id) { dataPoint in
+                ForEach(model.data.filter { $0.series != 3 }, id: \.id) { dataPoint in
                     AreaMark(
                         x: .value("Time", dataPoint.timestamp),
                         y: .value("Value", dataPoint.value),
@@ -195,15 +206,15 @@ class DoubleTimeSeries: NSView {
                     )
                     .foregroundStyle(by: .value("Series", dataPoint.series))
                 }
-                
-                ForEach(data.filter { $0.series == 0 }, id: \.id) { dataPoint in
+                                
+                ForEach(model.data.filter { $0.series == 3 }, id: \.id) { dataPoint in
                     LineMark(
                         x: .value("Time", dataPoint.timestamp),
-                        y: .value("Value", dataPoint.value + dataPoint.value2),
+                        y: .value("Value", dataPoint.value),
                         series: .value("Series", dataPoint.series)
                     )
-                    .foregroundStyle(.gray) // Line color (black)
-                    .lineStyle(StrokeStyle(lineWidth: 2))
+                    .foregroundStyle(lineColor)
+                    .lineStyle(StrokeStyle(lineWidth: lineWidth))
                 }
             }
             .chartXScale(domain: Date() - 5...Date())

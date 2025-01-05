@@ -127,10 +127,10 @@ class Monitor: DialogController {
         let kickR = Double(mem.kickReads.accumulated) / max
         let kickW = Double(mem.kickWrites.accumulated) / max
         
-        myView0.model.add(chipR, chipW)
-        myView1.model.add(slowR, slowW)
-        myView2.model.add(fastR, fastW)
-        myView3.model.add(kickR, kickW)
+        myView0.model.add(chipW, chipR)
+        myView1.model.add(slowW, slowR)
+        myView2.model.add(fastW, fastR)
+        myView3.model.add(kickW, kickR)
     
         // Audio monitors
         // myView10.add(value: 0)
