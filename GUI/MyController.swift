@@ -26,8 +26,8 @@ class MyController: NSWindowController, MessageReceiver {
     // Inspector panel of this emulator instance
     var inspectors: [Inspector] = []
     
-    // Monitor panel of this emulator instance
-    var monitor: Monitor?
+    // Dashboard of this emulator instance
+    var dashboard: Dashboard?
 
     // Configuration panel of this emulator instance
     var configurator: ConfigurationController?
@@ -278,7 +278,7 @@ extension MyController {
 
             // Animate the inspectors
             for inspector in inspectors { inspector.continuousRefresh() }
-            if monitor?.window?.isVisible == true { monitor!.continuousRefresh() }
+            if dashboard?.window?.isVisible == true { dashboard!.continuousRefresh() }
         }
         
         // Do less times...
@@ -376,7 +376,7 @@ extension MyController {
                         
         case .CONFIG:
 
-            monitor?.refresh()
+            dashboard?.refresh()
             configurator?.refresh()
             refreshStatusBar()
             passToInspector()

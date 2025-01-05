@@ -27,7 +27,7 @@
 		5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DD1321F3625200BC14BA /* Keyboard.cpp */; };
 		50157EED28257B7C000E9DDD /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50157EEC28257B7C000E9DDD /* Config.swift */; };
 		5019605B231257270051B669 /* Monitor.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5019605A231257270051B669 /* Monitor.xib */; };
-		5019605D23125E680051B669 /* Monitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5019605C23125E680051B669 /* Monitor.swift */; };
+		5019605D23125E680051B669 /* Dashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5019605C23125E680051B669 /* Dashboard.swift */; };
 		5019B1F0254B292D00A7AB95 /* EXEFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5019B1EE254B292D00A7AB95 /* EXEFile.cpp */; };
 		501A9937243A07A100D269B2 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501A9936243A07A100D269B2 /* Storage.swift */; };
 		501B00152C629A0500749664 /* Beamtraps.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B00132C629A0500749664 /* Beamtraps.cpp */; };
@@ -529,7 +529,7 @@
 		5014DD1421F3625200BC14BA /* Keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Keyboard.h; sourceTree = "<group>"; };
 		50157EEC28257B7C000E9DDD /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		5019605A231257270051B669 /* Monitor.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Monitor.xib; sourceTree = "<group>"; };
-		5019605C23125E680051B669 /* Monitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monitor.swift; sourceTree = "<group>"; };
+		5019605C23125E680051B669 /* Dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.swift; sourceTree = "<group>"; };
 		5019B1EE254B292D00A7AB95 /* EXEFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EXEFile.cpp; sourceTree = "<group>"; };
 		5019B1EF254B292D00A7AB95 /* EXEFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EXEFile.h; sourceTree = "<group>"; };
 		501A9936243A07A100D269B2 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
@@ -1552,7 +1552,7 @@
 				5043154C2D2ACF3E006C14FF /* WaveformPanel.swift */,
 				506C71E12D2A0C04007CBD93 /* DashboardPanel.swift */,
 				508FE04721EA22CC0043D0E9 /* DialogController.swift */,
-				5019605C23125E680051B669 /* Monitor.swift */,
+				5019605C23125E680051B669 /* Dashboard.swift */,
 				501C514927C38FE500DF1DD5 /* DragImageView.swift */,
 				507727EC242F2CE3009D01DA /* iCarousel.h */,
 				507727ED242F2CE3009D01DA /* iCarousel.m */,
@@ -2395,7 +2395,7 @@
 				508FE01821EA227B0043D0E9 /* MyController.swift in Sources */,
 				507C01AE2D25681400E29933 /* LogicView.swift in Sources */,
 				50AE8B1C27833D2500991F89 /* DeniseInfo.cpp in Sources */,
-				5019605D23125E680051B669 /* Monitor.swift in Sources */,
+				5019605D23125E680051B669 /* Dashboard.swift in Sources */,
 				5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */,
 				50C9A6352C6A747F00007A12 /* SampleRateDetector.cpp in Sources */,
 				50AEBEDA24D3D78F0037082D /* DiskControllerEvents.cpp in Sources */,

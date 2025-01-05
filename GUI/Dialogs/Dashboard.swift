@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class Monitor: DialogController {
+class Dashboard: DialogController {
 
     // Panels
     @IBOutlet weak var myView0: DoubleTimeSeries!

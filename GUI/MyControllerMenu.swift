@@ -276,10 +276,10 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func monitorAction(_ sender: Any!) {
         
-        if monitor == nil {
-            monitor = Monitor(with: self, nibName: "Monitor")
+        if dashboard == nil {
+            dashboard = Dashboard(with: self, nibName: "Monitor")
         }
-        monitor?.showWindow(self)
+        dashboard?.showWindow(self)
     }
 
     @IBAction func consoleAction(_ sender: Any!) {

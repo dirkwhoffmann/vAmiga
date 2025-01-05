@@ -9,7 +9,7 @@
 
 class WaveformPanel: NSImageView {
 
-    @IBOutlet weak var monitor: Monitor!
+    @IBOutlet weak var monitor: Dashboard!
 
     var audioPort: AudioPortProxy { return monitor.emu.audioPort }
 
@@ -40,8 +40,6 @@ class WaveformPanel: NSImageView {
 
         let w = visibleRect.width
         let h = visibleRect.height
-
-        print("awakeFromNib: w = \(w) h = \(h)")
         
         size = NSSize(width: w, height: h)
         buffer = UnsafeMutablePointer<UInt32>.allocate(capacity: wordCount)

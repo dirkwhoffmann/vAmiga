@@ -6,7 +6,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="Monitor" customModule="vAmiga" customModuleProvider="target">
+        <customObject id="-2" userLabel="File's Owner" customClass="Dashboard" customModule="vAmiga" customModuleProvider="target">
             <connections>
                 <outlet property="myView0" destination="hrF-tt-Ldb" id="Hy5-t4-OLn"/>
                 <outlet property="myView1" destination="9ag-KH-xra" id="Sai-Oj-o4R"/>
