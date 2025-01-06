@@ -8,18 +8,18 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="Dashboard" customModule="vAmiga" customModuleProvider="target">
             <connections>
-                <outlet property="myView0" destination="hrF-tt-Ldb" id="Hy5-t4-OLn"/>
-                <outlet property="myView1" destination="9ag-KH-xra" id="Sai-Oj-o4R"/>
+                <outlet property="audioDmaPanel" destination="u01-p5-lDv" id="Ezk-zD-Bnh"/>
+                <outlet property="bitplaneDmaPanel" destination="mme-U9-iHh" id="HWI-ua-4ab"/>
+                <outlet property="blitterDmaPanel" destination="dlz-zU-pc5" id="Mhf-bu-ljP"/>
+                <outlet property="chipRamPanel" destination="hrF-tt-Ldb" id="Hy5-t4-OLn"/>
+                <outlet property="copperDmaPanel" destination="jkQ-cd-VqH" id="thG-ZQ-XCl"/>
+                <outlet property="diskDmaPanel" destination="STY-lz-6g1" id="438-yb-AzV"/>
+                <outlet property="fastRamPanel" destination="9DQ-2T-zZe" id="Cm6-j8-iVP"/>
                 <outlet property="myView10" destination="6C6-Hb-Taa" id="jhH-bU-ImH"/>
                 <outlet property="myView11" destination="gUQ-BT-cKG" id="pCV-GL-DO4"/>
-                <outlet property="myView2" destination="9DQ-2T-zZe" id="Cm6-j8-iVP"/>
-                <outlet property="myView3" destination="ezU-cJ-1D2" id="Vrh-gN-Efj"/>
-                <outlet property="myView4" destination="jkQ-cd-VqH" id="M0a-qg-dVF"/>
-                <outlet property="myView5" destination="dlz-zU-pc5" id="Mhf-bu-ljP"/>
-                <outlet property="myView6" destination="STY-lz-6g1" id="438-yb-AzV"/>
-                <outlet property="myView7" destination="u01-p5-lDv" id="Ezk-zD-Bnh"/>
-                <outlet property="myView8" destination="heS-vN-nEa" id="KKX-mA-RDV"/>
-                <outlet property="myView9" destination="mme-U9-iHh" id="m4s-HB-95V"/>
+                <outlet property="romPanel" destination="ezU-cJ-1D2" id="Vrh-gN-Efj"/>
+                <outlet property="slowRamPanel" destination="9ag-KH-xra" id="Sai-Oj-o4R"/>
+                <outlet property="spriteDmaPanel" destination="heS-vN-nEa" id="m3e-bs-bwJ"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="2PK-Sz-B50"/>
             </connections>
         </customObject>
@@ -43,12 +43,9 @@
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9ag-KH-xra" customClass="DoubleTimeSeries" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9ag-KH-xra" customClass="SlowRamPanel" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <connections>
-                                        <outlet property="monitor" destination="-2" id="BFp-Pn-MiV"/>
-                                    </connections>
                                 </customView>
                             </subviews>
                         </view>
@@ -60,12 +57,9 @@
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hrF-tt-Ldb" customClass="DoubleTimeSeries" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hrF-tt-Ldb" customClass="ChipRamPanel" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <connections>
-                                        <outlet property="monitor" destination="-2" id="0XR-pW-AfJ"/>
-                                    </connections>
                                 </customView>
                             </subviews>
                         </view>
@@ -77,12 +71,9 @@
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9DQ-2T-zZe" customClass="DoubleTimeSeries" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9DQ-2T-zZe" customClass="FastRamPanel" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <connections>
-                                        <outlet property="monitor" destination="-2" id="Whd-So-ebn"/>
-                                    </connections>
                                 </customView>
                             </subviews>
                         </view>
@@ -94,12 +85,9 @@
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ezU-cJ-1D2" customClass="DoubleTimeSeries" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ezU-cJ-1D2" customClass="RomPanel" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <connections>
-                                        <outlet property="monitor" destination="-2" id="DeZ-Nw-Zg3"/>
-                                    </connections>
                                 </customView>
                             </subviews>
                         </view>
@@ -111,12 +99,9 @@
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dlz-zU-pc5" customClass="TimeSeries" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dlz-zU-pc5" customClass="BlitterDmaPanel" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <connections>
-                                        <outlet property="monitor" destination="-2" id="Vgo-B9-ge5"/>
-                                    </connections>
                                 </customView>
                             </subviews>
                         </view>
@@ -128,12 +113,9 @@
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jkQ-cd-VqH" customClass="TimeSeries" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jkQ-cd-VqH" customClass="CopperDmaPanel" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <connections>
-                                        <outlet property="monitor" destination="-2" id="mtU-qo-OL3"/>
-                                    </connections>
                                 </customView>
                             </subviews>
                         </view>
@@ -145,12 +127,9 @@
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="STY-lz-6g1" customClass="TimeSeries" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="STY-lz-6g1" customClass="DiskDmaPanel" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <connections>
-                                        <outlet property="monitor" destination="-2" id="yW7-wf-Dby"/>
-                                    </connections>
                                 </customView>
                             </subviews>
                         </view>
@@ -162,12 +141,9 @@
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u01-p5-lDv" customClass="TimeSeries" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u01-p5-lDv" customClass="AudioDmaPanel" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <connections>
-                                        <outlet property="monitor" destination="-2" id="RIl-hR-Urr"/>
-                                    </connections>
                                 </customView>
                             </subviews>
                         </view>
@@ -179,7 +155,7 @@
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mme-U9-iHh" customClass="TimeSeries" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mme-U9-iHh" customClass="BitplaneDmaPanel" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <connections>
@@ -196,7 +172,7 @@
                             <rect key="frame" x="4" y="5" width="192" height="113"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="heS-vN-nEa" customClass="TimeSeries" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="heS-vN-nEa" customClass="SpriteDmaPanel" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="192" height="113"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <connections>

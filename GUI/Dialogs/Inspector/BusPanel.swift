@@ -80,7 +80,6 @@ extension Inspector {
         menu.addItem(menuItem)
         
         popup.menu = menu
-        // popup.isEnabled = true
     }
 
     func refreshProbeSelector(_ popup: NSComboButton) {
