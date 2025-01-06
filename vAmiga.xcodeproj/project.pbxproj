@@ -1250,6 +1250,16 @@
 			path = Agnus;
 			sourceTree = "<group>";
 		};
+		5043154E2D2AE311006C14FF /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				5043154C2D2ACF3E006C14FF /* WaveformPanel.swift */,
+				506C71E12D2A0C04007CBD93 /* DashboardPanel.swift */,
+				5019605C23125E680051B669 /* Dashboard.swift */,
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
 		5056506925440FDE00A79D27 /* FileSystems */ = {
 			isa = PBXGroup;
 			children = (
@@ -1549,13 +1559,11 @@
 		508FE03921EA22CC0043D0E9 /* Dialogs */ = {
 			isa = PBXGroup;
 			children = (
-				5043154C2D2ACF3E006C14FF /* WaveformPanel.swift */,
-				506C71E12D2A0C04007CBD93 /* DashboardPanel.swift */,
 				508FE04721EA22CC0043D0E9 /* DialogController.swift */,
-				5019605C23125E680051B669 /* Dashboard.swift */,
 				501C514927C38FE500DF1DD5 /* DragImageView.swift */,
 				507727EC242F2CE3009D01DA /* iCarousel.h */,
 				507727ED242F2CE3009D01DA /* iCarousel.m */,
+				5043154E2D2AE311006C14FF /* Dashboard */,
 				509F7F1521ED141F00A530E4 /* Inspector */,
 				5099123C24BA46E10007CAB6 /* Preferences */,
 				5099123D24BA46EB0007CAB6 /* Configuration */,
