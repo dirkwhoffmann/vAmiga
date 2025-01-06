@@ -134,10 +134,10 @@
                                     <action selector="inspectorAction:" target="-1" id="cTd-gU-VFK"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Monitor..." id="BgY-MS-366" userLabel="Monitor...">
+                            <menuItem title="Dashboard..." id="BgY-MS-366" userLabel="Monitor...">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="monitorAction:" target="-1" id="hps-FK-7Yl"/>
+                                    <action selector="dashboardAction:" target="-1" id="hps-FK-7Yl"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Console..." keyEquivalent="^" id="x3U-7k-jeR">

@@ -26,7 +26,7 @@
 		501429D92445F12B00FBDC90 /* TextureToolbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501429D82445F12B00FBDC90 /* TextureToolbox.swift */; };
 		5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DD1321F3625200BC14BA /* Keyboard.cpp */; };
 		50157EED28257B7C000E9DDD /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50157EEC28257B7C000E9DDD /* Config.swift */; };
-		5019605B231257270051B669 /* Monitor.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5019605A231257270051B669 /* Monitor.xib */; };
+		5019605B231257270051B669 /* Dashboard.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5019605A231257270051B669 /* Dashboard.xib */; };
 		5019605D23125E680051B669 /* Dashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5019605C23125E680051B669 /* Dashboard.swift */; };
 		5019B1F0254B292D00A7AB95 /* EXEFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5019B1EE254B292D00A7AB95 /* EXEFile.cpp */; };
 		501A9937243A07A100D269B2 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501A9936243A07A100D269B2 /* Storage.swift */; };
@@ -528,7 +528,7 @@
 		5014DD1321F3625200BC14BA /* Keyboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Keyboard.cpp; sourceTree = "<group>"; };
 		5014DD1421F3625200BC14BA /* Keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Keyboard.h; sourceTree = "<group>"; };
 		50157EEC28257B7C000E9DDD /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
-		5019605A231257270051B669 /* Monitor.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Monitor.xib; sourceTree = "<group>"; };
+		5019605A231257270051B669 /* Dashboard.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Dashboard.xib; sourceTree = "<group>"; };
 		5019605C23125E680051B669 /* Dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.swift; sourceTree = "<group>"; };
 		5019B1EE254B292D00A7AB95 /* EXEFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EXEFile.cpp; sourceTree = "<group>"; };
 		5019B1EF254B292D00A7AB95 /* EXEFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EXEFile.h; sourceTree = "<group>"; };
@@ -1479,7 +1479,7 @@
 				50DD1EE12525E3E1000180F6 /* Preferences.xib */,
 				500217B72449CF7000E1A096 /* Configuration.xib */,
 				50DED6AE2202EBA200B8195F /* Inspector.xib */,
-				5019605A231257270051B669 /* Monitor.xib */,
+				5019605A231257270051B669 /* Dashboard.xib */,
 				50B9354824347EF9000C78B8 /* SnapshotDialog.xib */,
 				509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */,
 				501C514527C2AA4A00DF1DD5 /* DiskExporter.xib */,
@@ -2249,7 +2249,7 @@
 				50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */,
 				50D715A127CCA5AA0085C1AA /* PartitionSelector.xib in Resources */,
 				50B14C1F21EB8445002E32A6 /* drive_click.aiff in Resources */,
-				5019605B231257270051B669 /* Monitor.xib in Resources */,
+				5019605B231257270051B669 /* Dashboard.xib in Resources */,
 				500A4EA824472B4F002A4DE1 /* door_open.aiff in Resources */,
 				50FF747327D3BBFE00B6EA01 /* hdr_click.aiff in Resources */,
 				506B47182562E06A009FEFC3 /* VolumeInspector.xib in Resources */,

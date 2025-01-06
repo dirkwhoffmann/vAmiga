@@ -49,7 +49,7 @@ class Dashboard: DialogController {
         
         // Memory monitors
         let mem = emu.mem.stats
-        let max = Double((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 2)
+        let max = Double((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 4)
         let chipR = Double(mem.chipReads.accumulated) / max
         let chipW = Double(mem.chipWrites.accumulated) / max
         let slowR = Double(mem.slowReads.accumulated) / max
@@ -58,10 +58,10 @@ class Dashboard: DialogController {
         let fastW = Double(mem.fastWrites.accumulated) / max
         let kickR = Double(mem.kickReads.accumulated) / max
         let kickW = Double(mem.kickWrites.accumulated) / max
-        chipRamPanel.model.add(chipW, chipR)
-        slowRamPanel.model.add(slowW, slowR)
-        fastRamPanel.model.add(fastW, fastR)
-        romPanel.model.add(kickW, kickR)
+        chipRamPanel.model.add(chipR, chipW)
+        slowRamPanel.model.add(slowR, slowW)
+        fastRamPanel.model.add(fastR, fastW)
+        romPanel.model.add(kickR, kickW)
     
         // Audio monitors
         myView10.update()
@@ -73,11 +73,28 @@ class Dashboard: DialogController {
         let info = emu.dmaDebugger.info
         
         // Colors
-        copperDmaPanel.model.color = NSColor(info.copperColor)
-        blitterDmaPanel.model.color = NSColor(info.blitterColor)
-        diskDmaPanel.model.color = NSColor(info.diskColor)
-        audioDmaPanel.model.color = NSColor(info.audioColor)
-        spriteDmaPanel.model.color = NSColor(info.spriteColor)
-        bitplaneDmaPanel.model.color = NSColor(info.bitplaneColor)
+        let memColor = NSColor.white
+        chipRamPanel.model.themeColor = memColor
+        chipRamPanel.model.graph1Color = NSColor.init(r: 0x33, g: 0x99, b: 0xFF)
+        chipRamPanel.model.graph2Color = NSColor.init(r: 0xFF, g: 0x33, b: 0x99)
+        
+        slowRamPanel.model.themeColor = memColor
+        slowRamPanel.model.graph1Color = NSColor.init(r: 0x33, g: 0x99, b: 0xFF)
+        slowRamPanel.model.graph2Color = NSColor.init(r: 0xFF, g: 0x33, b: 0x99)
+        
+        fastRamPanel.model.themeColor = memColor
+        fastRamPanel.model.graph1Color = NSColor.init(r: 0x33, g: 0x99, b: 0xFF)
+        fastRamPanel.model.graph2Color = NSColor.init(r: 0xFF, g: 0x33, b: 0x99)
+        
+        romPanel.model.themeColor = memColor
+        romPanel.model.graph1Color = NSColor.init(r: 0x33, g: 0x99, b: 0xFF)
+        romPanel.model.graph2Color = NSColor.init(r: 0xFF, g: 0x33, b: 0x99)
+
+        copperDmaPanel.model.themeColor = NSColor(info.copperColor)
+        blitterDmaPanel.model.themeColor = NSColor(info.blitterColor)
+        diskDmaPanel.model.themeColor = NSColor(info.diskColor)
+        audioDmaPanel.model.themeColor = NSColor(info.audioColor)
+        spriteDmaPanel.model.themeColor = NSColor(info.spriteColor)
+        bitplaneDmaPanel.model.themeColor = NSColor(info.bitplaneColor)
     }
 }

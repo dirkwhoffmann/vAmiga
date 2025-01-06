@@ -24,40 +24,36 @@ class DataSource: ObservableObject {
     
     static let maxTimeSpan = 5.0
     
-    // The data to visualize
+    // Visualized data
     var data: [DataPoint] = []
     
-    // Appearance
+    // Title and sub title
     var heading = ""
     var subHeading = ""
-    var fgColor: Color = .red
-    var bgColor: Color = .white
-    var gridLines = [0.0, 0.25, 0.5, 0.75, 1.0]
-    var lines: Int { return logScale ? 10 : 5 }
     
-    // Scaling type
+    // Colors
+    var themeColor: NSColor = .white
+    var graph1Color: NSColor?
+    var graph2Color: NSColor?
+
+    // Grid lines
+    var gridLines = [0.0, 0.25, 0.5, 0.75, 1.0]
+    
+    // Scaling
+    var scale = 1.0
     var logScale: Bool = false {
         
         didSet {
             if (logScale) {
                 gridLines = []
-                for i in 0 ... lines {
-                    var y = Double(i) / Double(lines)
+                for i in 0...10 {
+                    var y = Double(i) / Double(10)
                     if logScale { y = log(1.0 + 19.0 * y) / log(20) }
                     gridLines.append(y)
                 }
             } else {
                 gridLines = [0.0, 0.25, 0.5, 0.75, 1.0]
             }
-        }
-    }
-    
-    // Base color
-    var color: NSColor = .red {
-        
-        didSet {
-            bgColor = Color(nsColor: color.adjust(brightness: 1.0, saturation: 0.5))
-            fgColor = Color(nsColor: color)
         }
     }
     
@@ -76,20 +72,19 @@ class DataSource: ObservableObject {
     
     private func add(_ value1: Double?, _ value2: Double?, timestamp: Date) {
         
-        var scaled1 = value1
-        var scaled2 = value2
-        if scaled1 != nil && logScale { scaled1 = log(1.0 + (19 * value1!)) / log(20) }
-        if scaled2 != nil && logScale { scaled2 = log(1.0 + (19 * value2!)) / log(20) }
+        var scaled1 = (value1 ?? 0) * scale
+        if logScale { scaled1 = log(1.0 + (19 * scaled1)) / log(20) }
+
+        var scaled2 = (value2 ?? 0) * scale
+        if logScale { scaled2 = log(1.0 + (19 * scaled2)) / log(20) }
         
-        if let scaled1 = scaled1 {
+        if value1 != nil {
             data.append(DataPoint(series: 1, timestamp: timestamp, value: scaled1))
         }
-        if let scaled2 = scaled2 {
+        if value2 != nil {
             data.append(DataPoint(series: 2, timestamp: timestamp, value: scaled2))
         }
-        if let scaled1 = scaled1, let scaled2 = scaled2 {
-            data.append(DataPoint(series: 3, timestamp: timestamp, value: scaled1 + scaled2))
-        }
+        data.append(DataPoint(series: 3, timestamp: timestamp, value: scaled1 + scaled2))
         
         // Delete outdated data
         while timeSpan > DataSource.maxTimeSpan { data.removeFirst() }
@@ -103,6 +98,9 @@ class DataSource: ObservableObject {
 // Single time series (one value per timestamp)
 //
 
+// DEPRECATED
+
+/*
 class TimeSeries: NSView {
     
     var model = DataSource()
@@ -208,12 +206,13 @@ class TimeSeries: NSView {
 
     }
 }
+*/
 
 //
-// Double time series (two values per timestamp)
+// Time series view
 //
 
-class DoubleTimeSeries: NSView {
+class TimeSeries: NSView {
     
     var model = DataSource()
     var host: NSHostingView<ContentView>!
@@ -228,16 +227,24 @@ class DoubleTimeSeries: NSView {
         private var subHeading: String {
             return model.subHeading
         }
+        private var themeColor: Color {
+            return Color(nsColor: model.themeColor)
+        }
+        private var graph1Color: Color {
+            return Color(nsColor: (model.graph1Color != nil) ? model.graph1Color! : model.themeColor)
+        }
+        private var graph2Color: Color {
+            return Color(nsColor: (model.graph2Color != nil) ? model.graph2Color! : model.themeColor)
+        }
         private var background: Gradient {
-            // return Gradient(colors: [model.bgColor.opacity(0.5), .clear])
             return Gradient(colors: [Color.black, Color.black])
         }
         private var gradients: KeyValuePairs<Int, Gradient> {
-            return [ 1: Gradient(colors: [Color(red: 0.6, green: 0.0, blue: 0.0), Color.clear]),
-                     2: Gradient(colors: [Color(red: 0.0, green: 0.0, blue: 0.6), Color.clear])]
+            return [ 1: Gradient(colors: [graph1Color.opacity(0.75), graph1Color.opacity(0.25)]),
+                     2: Gradient(colors: [graph2Color.opacity(0.75), graph2Color.opacity(0.25)])]
         }
         private var lineColor: Color {
-            return Color(nsColor: .blue)
+            return Color(nsColor: model.themeColor)
         }
         private var gridLineColor: Color {
             return Color.white.opacity(0.6)
@@ -254,8 +261,8 @@ class DoubleTimeSeries: NSView {
                     Text(heading)
                         .font(.system(size: 14))
                         .fontWeight(.bold)
-                        .foregroundColor(Color.white)
-                        .padding(.bottom, 0.5)
+                        .foregroundColor(themeColor.opacity(1.0))
+                        .padding(.bottom, 1)
                     Text(subHeading)
                         .font(.system(size: 8))
                         .fontWeight(.regular)
@@ -279,20 +286,26 @@ class DoubleTimeSeries: NSView {
                             y: .value("Value", dataPoint.value),
                             series: .value("Series", dataPoint.series)
                         )
+                        .interpolationMethod(.catmullRom)
                         .foregroundStyle(lineColor)
                         .lineStyle(StrokeStyle(lineWidth: lineWidth))
+                        .symbol {
+                            Circle()
+                                .fill(Color.white.opacity(0.8))
+                                .frame(width: 2)
+                        }
                     }
                 }
                 .chartXScale(domain: Date() - 5...Date())
                 .chartXAxis(.hidden)
-                .chartYScale(domain: 0...0.75)
+                .chartYScale(domain: 0...1.0)
                 .chartYAxis {
                     AxisMarks(values: model.gridLines) {
                         AxisGridLine()
                             .foregroundStyle(gridLineColor)
                     }
                 }
-                .padding(EdgeInsets(top: 10.0, leading: 10.0, bottom: 10.0, trailing: 10.0))
+                .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 15.0, trailing: 15.0))
                 .chartLegend(.hidden)
                 .chartForegroundStyleScale(gradients)
             }
@@ -320,7 +333,7 @@ class DoubleTimeSeries: NSView {
 // Custom panels
 //
 
-class ChipRamPanel: DoubleTimeSeries {
+class ChipRamPanel: TimeSeries {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
         
@@ -330,7 +343,7 @@ class ChipRamPanel: DoubleTimeSeries {
     }
 }
 
-class SlowRamPanel: DoubleTimeSeries {
+class SlowRamPanel: TimeSeries {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
         
@@ -340,7 +353,7 @@ class SlowRamPanel: DoubleTimeSeries {
     }
 }
 
-class FastRamPanel: DoubleTimeSeries {
+class FastRamPanel: TimeSeries {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
         
@@ -350,7 +363,7 @@ class FastRamPanel: DoubleTimeSeries {
     }
 }
 
-class RomPanel: DoubleTimeSeries {
+class RomPanel: TimeSeries {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
         
