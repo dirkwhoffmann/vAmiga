@@ -22,7 +22,7 @@ class DataSource: ObservableObject {
     
     @Published var update = false
     
-    static let maxTimeSpan = 5.0
+    static let maxTimeSpan: Double = 5
     
     // Visualized data
     var data: [DataPoint] = []
@@ -72,141 +72,32 @@ class DataSource: ObservableObject {
     
     private func add(_ value1: Double?, _ value2: Double?, timestamp: Date) {
         
+        // Scale incoming values
         var scaled1 = (value1 ?? 0) * scale
         if logScale { scaled1 = log(1.0 + (19 * scaled1)) / log(20) }
-
         var scaled2 = (value2 ?? 0) * scale
         if logScale { scaled2 = log(1.0 + (19 * scaled2)) / log(20) }
         
-        if value1 != nil {
-            data.append(DataPoint(series: 1, timestamp: timestamp, value: scaled1))
-        }
+        // Add the first provided value to time series 2
         if value2 != nil {
             data.append(DataPoint(series: 2, timestamp: timestamp, value: scaled2))
         }
+
+        // Add the first provided value to time series 1
+        if value1 != nil {
+            data.append(DataPoint(series: 1, timestamp: timestamp, value: scaled1))
+        }
+                
+        // Sum up both values in time series 3 (used for drawing the line)
         data.append(DataPoint(series: 3, timestamp: timestamp, value: scaled1 + scaled2))
         
         // Delete outdated data
         while timeSpan > DataSource.maxTimeSpan { data.removeFirst() }
         
-        // Force the view to update
+        // Update the view
         update.toggle()
     }
 }
-
-//
-// Single time series (one value per timestamp)
-//
-
-// DEPRECATED
-
-/*
-class TimeSeries: NSView {
-    
-    var model = DataSource()
-    var host: NSHostingView<ContentView>!
-    
-    struct ContentView: View {
-        
-        @ObservedObject var model: DataSource
-        
-        private var heading: String {
-            return model.heading
-        }
-        private var subHeading: String {
-            return model.subHeading
-        }
-        private var background: Gradient {
-            // return Gradient(colors: [model.bgColor.opacity(0.5), .clear])
-            return Gradient(colors: [Color.black, Color.black])
-        }
-        private var gradient: Gradient {
-            return Gradient(colors: [model.fgColor.opacity(0.75), model.fgColor.opacity(0.25)])
-        }
-        private var lineColor: Color {
-            return model.fgColor
-        }
-        private var gridLineColor: Color {
-            return Color.white.opacity(0.6)
-        }
-        private var lineWidth: Double {
-            return 0.75
-        }
-        
-        var body: some View {
-            
-            VStack(alignment: .leading) {
-
-                VStack(alignment: .leading) {
-                    Text(heading)
-                        .font(.system(size: 14))
-                        .fontWeight(.bold)
-                        .foregroundColor(model.fgColor)
-                        .padding(.bottom, 0.5)
-                    Text(subHeading)
-                        .font(.system(size: 8))
-                        .fontWeight(.regular)
-                        .foregroundColor(Color.gray)
-                }
-                .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
-                
-                Chart(model.data.filter { $0.series == 1 }) { dataPoint in
-                    
-                    AreaMark(
-                        x: .value("Time", dataPoint.timestamp),
-                        y: .value("Value", dataPoint.value)
-                    )
-                    .interpolationMethod(.catmullRom)
-                    .foregroundStyle(gradient)
-                    LineMark(
-                        x: .value("Time", dataPoint.timestamp),
-                        y: .value("Value", dataPoint.value)
-                    )
-                    .interpolationMethod(.catmullRom)
-                    .foregroundStyle(lineColor)
-                    .lineStyle(StrokeStyle(lineWidth: lineWidth))
-                    .symbol {
-                        Circle()
-                            .fill(Color.white.opacity(0.8))
-                            .frame(width: 2)
-                    }
-                    
-                }
-                .chartXScale(domain: Date() - 5...Date())
-                .chartXAxis(.hidden)
-                .chartYScale(domain: 0.0...1.0)
-                .chartYAxis {
-                    AxisMarks(values: model.gridLines) {
-                        AxisGridLine()
-                            .foregroundStyle(gridLineColor)
-                    }
-                }
-                .padding([.horizontal, .bottom], 15)
-                
-                .chartLegend(.hidden)
-                // .cornerRadius(10) // Rounded corners
-            }
-            .background(background)
-            .cornerRadius(10)
-        }
-    }
-        
-    required init?(coder aDecoder: NSCoder) {
-
-        super.init(coder: aDecoder)
-        
-        host = NSHostingView(rootView: ContentView( model: model))
-        self.addSubview(host)
-
-        host.translatesAutoresizingMaskIntoConstraints = false
-        host.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-        host.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-        host.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        host.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-
-    }
-}
-*/
 
 //
 // Time series view
@@ -244,13 +135,18 @@ class TimeSeries: NSView {
                      2: Gradient(colors: [graph2Color.opacity(0.75), graph2Color.opacity(0.25)])]
         }
         private var lineColor: Color {
-            return Color(nsColor: model.themeColor)
+            
+            if #available(macOS 15.0, *) {
+                return graph1Color.mix(with: .white, by: 0.25)
+            } else {
+                return graph1Color
+            }
         }
         private var gridLineColor: Color {
             return Color.white.opacity(0.6)
         }
         private var lineWidth: Double {
-            return 0.75
+            return 1.25 // 0.75
         }
 
         var body: some View {
@@ -289,14 +185,22 @@ class TimeSeries: NSView {
                         .interpolationMethod(.catmullRom)
                         .foregroundStyle(lineColor)
                         .lineStyle(StrokeStyle(lineWidth: lineWidth))
+                        /*
                         .symbol {
-                            Circle()
-                                .fill(Color.white.opacity(0.8))
-                                .frame(width: 2)
+                            if #available(macOS 15.0, *) {
+                                Circle()
+                                    .fill(graph1Color.mix(with: .white, by: 0.5))
+                                    .frame(width: 2)
+                            } else {
+                                Circle()
+                                    .fill(graph1Color)
+                                    .frame(width: 2)
+                            }
                         }
+                        */
                     }
                 }
-                .chartXScale(domain: Date() - 5...Date())
+                .chartXScale(domain: Date() - DataSource.maxTimeSpan...Date())
                 .chartXAxis(.hidden)
                 .chartYScale(domain: 0...1.0)
                 .chartYAxis {

@@ -278,12 +278,15 @@ extension MyController {
 
             // Animate the inspectors
             for inspector in inspectors { inspector.continuousRefresh() }
+
+            // Animate the dashboard
             if dashboard?.window?.isVisible == true { dashboard!.continuousRefresh() }
+
         }
         
         // Do less times...
         if frames % 16 == 0 {
-            
+
             updateSpeedometer()
             updateMonitoringPanels()
         }
