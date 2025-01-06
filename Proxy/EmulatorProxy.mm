@@ -573,12 +573,10 @@ using namespace vamiga::moira;
     }
 }
 
-- (NSString *)symbolize:(Accessor)accessor addr:(NSInteger)addr
+- (NSString *)regName:(NSInteger)addr
 {
-    assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
-    
-    auto str = [self mem]->debugger.symbolize(accessor, (u32)addr);
-    return @(str.c_str());
+    auto cstr = MemoryDebugger::regName((u32)addr);
+    return @(cstr);
 }
 
 - (NSString *)ascDump:(Accessor)accessor addr:(NSInteger)addr bytes:(NSInteger)bytes

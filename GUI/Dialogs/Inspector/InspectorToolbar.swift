@@ -44,7 +44,6 @@ class InspectorToolbar: NSToolbar {
     
     @IBAction func panelAction(_ sender: NSPopUpButton) {
 
-        print("Panel action \(sender.selectedTag())")
         inspector.selectPanel(sender.selectedTag())
     }
     

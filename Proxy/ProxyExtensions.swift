@@ -9,10 +9,6 @@
 
 import Darwin
 
-//
-// Factory extensions
-//
-
 extension AmigaProxy {
 
     func loadSnapshot(_ proxy: MediaFileProxy) throws {
@@ -250,10 +246,6 @@ extension MakeWithFileSystem {
     }
 }
 
-//
-// Exception passing
-//
-
 extension EmulatorProxy {
 
     func isReady() throws {
@@ -341,6 +333,26 @@ extension MemProxy {
         let exception = ExceptionWrapper()
         saveExt(url, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
+    }
+    
+    func symbolize(addr: Int, accessor: Accessor = .CPU) -> String? {
+        
+        switch memSrc(accessor, addr: addr) {
+            
+        case .NONE:                     return "-"
+        case .CHIP, .CHIP_MIRROR:       return "CHIP"
+        case .SLOW, .SLOW_MIRROR:       return "SLOW"
+        case .FAST:                     return "FAST"
+        case .CIA, .CIA_MIRROR:         return "CIA"
+        case .RTC:                      return "RTC"
+        case .CUSTOM, .CUSTOM_MIRROR:   return regName(addr)
+        case .AUTOCONF:                 return "ACONF"
+        case .ZOR:                      return "ZORRO"
+        case .ROM, .ROM_MIRROR:         return "ROM"
+        case .WOM:                      return "WOM"
+        case .EXT:                      return "ROM"
+        default:                        return nil
+        }
     }
 }
 

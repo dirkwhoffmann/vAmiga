@@ -117,6 +117,8 @@ public:
     // Handling registers
     //
     
+public:
+    
     // Returns the name of a chipset register
     static const char *regName(u32 addr);
 
@@ -132,9 +134,8 @@ public:
     // Displaying expressions
     //
 
-    // Returns the symbol name of an address or an empty string if none exists
-    template <Accessor A> string symbolize(u32 addr) const;
-    
+public:
+        
     // Displays a value in different number formats (hex, dec, bin, alpha)
     // TODO: REPLACE BY GENERIC FORMAT STRING FORMATTER
     void convertNumeric(std::ostream& os, u8 value) const;

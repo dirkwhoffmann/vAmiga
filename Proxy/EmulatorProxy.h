@@ -430,7 +430,7 @@
 - (MemorySource)memSrc:(Accessor)accessor addr:(NSInteger)addr;
 - (NSInteger)spypeek16:(Accessor)accessor addr:(NSInteger)addr;
 
-- (NSString *)symbolize:(Accessor)accessor addr:(NSInteger)addr;
+- (NSString *)regName:(NSInteger)addr;
 - (NSString *)ascDump:(Accessor)accessor addr:(NSInteger)addr bytes:(NSInteger)bytes;
 - (NSString *)hexDump:(Accessor)accessor addr:(NSInteger)addr bytes:(NSInteger)bytes;
 

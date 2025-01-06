@@ -418,11 +418,6 @@ struct MemoryDebuggerAPI : public API {
     /**  @brief  Returns the memory source for a given address
      */
     MemorySource getMemSrc(Accessor acc, u32 addr) const;
-
-    /**  @brief   Translates an address into a symbol name
-     *   @details If no symbol name exists, an empty string is returned.
-     */
-    string symbolize(Accessor acc, u32 addr) const;
     
     /** @brief  Reads a value from memory without causing side effects.
      */

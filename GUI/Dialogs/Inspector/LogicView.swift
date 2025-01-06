@@ -234,7 +234,7 @@ class LogicView: NSView {
                 var label = formatter.string(from: curr, bitWidth: bits)
                 
                 if channel == 0 && formatter.symbolic {
-                    if let symbolic = emu?.mem.symbolize(.CPU, addr: curr), symbolic != "" {
+                    if let symbolic = emu?.mem.symbolize(addr: curr) {
                         label = symbolic
                     }
                 }
