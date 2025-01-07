@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+import SwiftUI
+
 struct DataPoint: Identifiable {
     
     var id = UUID()
@@ -25,37 +27,45 @@ class DashboardDataProvider: ObservableObject {
     var data: [DataPoint] = []
     
     // Valid value range
-    var range: ClosedRange = 0.0...1.0
+    var range: ClosedRange = 0.0...1.0 { didSet { updateGridLines() } }
     
     // Title and sub title
     var heading = ""
     var subHeading = ""
     
-    // Colors
-    var themeColor: NSColor = .white
-    var graph1Color: NSColor?
-    var graph2Color: NSColor?
-
-    // Grid lines
-    var gridLines: [Double] = [0.0, 0.25, 0.5, 0.75, 1.0]
-        
-    // Scaling
-    var logScale = false {
-        
+    // Colors and gradients
+    var themeColor: NSColor = .white {
         didSet {
-            if (logScale) {
-                gridLines = Array(repeating: 0.0, count: 8)
-                for i in 0..<gridLines.count {
-                    var y = Double(i) / (Double(gridLines.count) - 1)
-                    if logScale { y = log(1.0 + 19.0 * y) / log(20) }
-                    gridLines[i] = y
-                }
-            } else {
-                gridLines = [0.0, 0.25, 0.5, 0.75, 1.0]
-            }
+            lineColor = themeColor // .adjust(brightness: 1.0, saturation: 0.5)
         }
     }
+    var graph1Color: NSColor?
+    var graph2Color: NSColor?
+    var lineColor = NSColor.white
+
+    // Grid lines
+    var gridLines: [Double] = []
+        
+    // Scaling
+    var logScale = false { didSet { updateGridLines() } }
+ 
+    func updateGridLines() {
+        
+        if (logScale) {
             
+            gridLines = Array(repeating: 0.0, count: 7)
+            for i in 0..<gridLines.count {
+                var y = Double(i) / (Double(gridLines.count) - 1)
+                if logScale { y = log(1.0 + 19.0 * y) / log(20) }
+                gridLines[i] = y * range.upperBound
+            }
+            
+        } else {
+            gridLines = [0.0, 0.25, 0.5, 0.75, 1.0].map { $0 * range.upperBound }
+        }
+        // gridLines = gridLines.map { $0 * range.upperBound }
+    }
+    
     var timeSpan: TimeInterval {
         
         guard let first = data.first else { return 0.0 }
@@ -81,27 +91,25 @@ class DashboardDataProvider: ObservableObject {
     private func add(_ value1: Double?, _ value2: Double?, timestamp: Date) {
         
         // Clamp
-        let clamped1 = value1 == nil ? 0 : min(value1!, max(value1!, range.lowerBound), range.upperBound)
-        let clamped2 = value2 == nil ? 0 : min(value2!, max(value2!, range.lowerBound), range.upperBound)
+        var v1 = value1 == nil ? 0 : min(value1!, max(value1!, range.lowerBound), range.upperBound)
+        var v2 = value2 == nil ? 0 : min(value2!, max(value2!, range.lowerBound), range.upperBound)
 
-        // Normalize
-        var scaled1 = clamped1 / (range.upperBound - range.lowerBound)
-        if logScale { scaled1 = log(1.0 + (19 * scaled1)) / log(20) }
-        var scaled2 = clamped2 / (range.upperBound - range.lowerBound)
-        if logScale { scaled2 = log(1.0 + (19 * scaled2)) / log(20) }
-        
-        // Add the first provided value to time series 2
-        if value2 != nil {
-            data.append(DataPoint(series: 2, timestamp: timestamp, value: scaled2))
+        // Scale
+        if logScale {
+            v1 =  log(1.0 + (19 * v1 / range.upperBound)) / log(20) * range.upperBound
+            v2 =  log(1.0 + (19 * v2 / range.upperBound)) / log(20) * range.upperBound
         }
-
-        // Add the first provided value to time series 1
+        
+        // Record values
+        if value2 != nil {
+            data.append(DataPoint(series: 2, timestamp: timestamp, value: v2))
+        }
         if value1 != nil {
-            data.append(DataPoint(series: 1, timestamp: timestamp, value: scaled1))
+            data.append(DataPoint(series: 1, timestamp: timestamp, value: v1))
         }
                 
-        // Sum up both values in time series 3 (used for drawing the line)
-        data.append(DataPoint(series: 3, timestamp: timestamp, value: scaled1 + scaled2))
+        // Record the sum (used for drawing the line)
+        data.append(DataPoint(series: 3, timestamp: timestamp, value: v1 + v2))
         
         // Delete outdated data
         while timeSpan > DashboardDataProvider.maxTimeSpan { data.removeFirst() }

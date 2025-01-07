@@ -22,9 +22,14 @@ class DashboardPanel: NSView {
 
         model.heading = title
         model.subHeading = subtitle
-        model.range = range
         model.logScale = logScale
+        model.range = range
     }
+    
+    var gridLineColor: Color {
+        return Color.white.opacity(0.6)
+    }
+
 }
 
 class TimeLinePanel: DashboardPanel {
@@ -35,15 +40,6 @@ class TimeLinePanel: DashboardPanel {
         
         @ObservedObject var model: DashboardDataProvider
         
-        private var heading: String {
-            return model.heading
-        }
-        private var subHeading: String {
-            return model.subHeading
-        }
-        private var themeColor: Color {
-            return Color(nsColor: model.themeColor)
-        }
         private var graph1Color: Color {
             return Color(nsColor: (model.graph1Color != nil) ? model.graph1Color! : model.themeColor)
         }
@@ -57,32 +53,18 @@ class TimeLinePanel: DashboardPanel {
             return [ 1: Gradient(colors: [graph1Color.opacity(0.75), graph1Color.opacity(0.25)]),
                      2: Gradient(colors: [graph2Color.opacity(0.75), graph2Color.opacity(0.25)])]
         }
-        private var lineColor: Color {
-            
-            if #available(macOS 15.0, *) {
-                return graph1Color.mix(with: .white, by: 0.25)
-            } else {
-                return graph1Color
-            }
-        }
-        private var gridLineColor: Color {
-            return Color.white.opacity(0.6)
-        }
-        private var lineWidth: Double {
-            return 1.25 // 0.75
-        }
 
         var body: some View {
             
             VStack(alignment: .leading) {
                 
                 VStack(alignment: .leading) {
-                    Text(heading)
+                    Text(model.heading)
                         .font(.system(size: 14))
                         .fontWeight(.bold)
-                        .foregroundColor(themeColor.opacity(1.0))
+                        .foregroundColor(Color(model.themeColor))
                         .padding(.bottom, 1)
-                    Text(subHeading)
+                    Text(model.subHeading)
                         .font(.system(size: 8))
                         .fontWeight(.regular)
                         .foregroundColor(Color.gray)
@@ -106,8 +88,8 @@ class TimeLinePanel: DashboardPanel {
                             series: .value("Series", dataPoint.series)
                         )
                         .interpolationMethod(.catmullRom)
-                        .foregroundStyle(lineColor)
-                        .lineStyle(StrokeStyle(lineWidth: lineWidth))
+                        .foregroundStyle(Color(nsColor: model.lineColor))
+                        .lineStyle(StrokeStyle(lineWidth: 1.25))
                         /*
                         .symbol {
                             if #available(macOS 15.0, *) {
@@ -125,11 +107,11 @@ class TimeLinePanel: DashboardPanel {
                 }
                 .chartXScale(domain: Date() - DashboardDataProvider.maxTimeSpan...Date())
                 .chartXAxis(.hidden)
-                .chartYScale(domain: 0...1.0)
+                .chartYScale(domain: model.range)
                 .chartYAxis {
                     AxisMarks(values: model.gridLines) {
                         AxisGridLine()
-                            .foregroundStyle(gridLineColor)
+                            .foregroundStyle(Color.white.opacity(0.6))
                     }
                 }
                 .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 15.0, trailing: 15.0))
@@ -168,15 +150,7 @@ class GaugePanel: DashboardPanel {
     struct ContentView: View {
         
         @ObservedObject var model: DashboardDataProvider
-        
-        /*
-        private var heading: String {
-            return "Heading II" // model.heading
-        }
-        private var subHeading: String {
-            return "Subheading" // model.subHeading
-        }
-        */
+        var panel: DashboardPanel
         
         private var themeColor: Color {
             return Color(nsColor: model.themeColor)
@@ -223,7 +197,7 @@ class GaugePanel: DashboardPanel {
                             Spacer()
                             if #available(macOS 14.0, *) {
                                 
-                                Gauge(value: model.latest(), in: 0.0...1.0) {
+                                Gauge(value: model.latest(), in: model.range) {
                                     Text("")
                                 } currentValueLabel: {
                                     Text(String(format: "%.2f", model.latest()))
@@ -274,7 +248,7 @@ class GaugePanel: DashboardPanel {
         
         super.init(coder: aDecoder)
 
-        host = NSHostingView(rootView: ContentView( model: model))
+        host = NSHostingView(rootView: ContentView(model: model, panel: self))
         self.addSubview(host)
 
         host.translatesAutoresizingMaskIntoConstraints = false
@@ -371,10 +345,7 @@ class DiskDmaPanel: TimeLinePanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        
-        configure(title: "Disk",
-                  subtitle: "DMA Accesses",
-                  range: 0...(313 * 3))
+        configure(title: "Disk", subtitle: "DMA Accesses", range: 0...(313 * 3))
     }
 }
 
@@ -383,10 +354,7 @@ class AudioDmaPanel: TimeLinePanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        
-        configure(title: "Audio",
-                  subtitle: "DMA Accesses",
-                  range: 0...(313 * 4))
+        configure(title: "Audio", subtitle: "DMA Accesses", range: 0...(313 * 4))
     }
 }
 
@@ -395,10 +363,7 @@ class SpriteDmaPanel: TimeLinePanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        
-        configure(title: "Sprite",
-                  subtitle: "DMA Accesses",
-                  range: 0...(313 * 16))
+        configure(title: "Sprite", subtitle: "DMA Accesses", range: 0...(313 * 16))
     }
 }
 
@@ -407,10 +372,7 @@ class BitplaneDmaPanel: TimeLinePanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        
-        configure(title: "Sprite",
-                  subtitle: "DMA Accesses",
-                  range: 0...39330)
+        configure(title: "Bitplane", subtitle: "DMA Accesses", range: 0...39330)
     }
 }
 
