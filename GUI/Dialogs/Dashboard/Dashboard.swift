@@ -36,18 +36,31 @@ class Dashboard: DialogController {
         // Remove later...
         parent.renderer.monitors.updateColors()
         parent.renderer.monitors.open(delay: 1.0)
+        
+        let max = Double((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 4)
+        chipRamPanel.configure(range: 0...max)
+        slowRamPanel.configure(range: 0...max)
+        fastRamPanel.configure(range: 0...max)
+        romPanel.configure(range: 0...max)
+
+        copperDmaPanel.configure(range: 0...(313 * 120), logScale: true)
+        blitterDmaPanel.configure(range: 0...(313 * 120), logScale: true)
+        diskDmaPanel.configure(range: 0...(313 * 3))
+        audioDmaPanel.configure(range: 0...(313 * 4))
+        spriteDmaPanel.configure(range: 0...(313 * 16))
+        bitplaneDmaPanel.configure(range: 0...39330)
     }
     
     func continuousRefresh() {
                 
         // DMA monitors
         let dma = emu.agnus.stats
-        let copperDma = Double(dma.copperActivity) / (313 * 120)
-        let blitterDma = Double(dma.blitterActivity) / (313 * 120)
-        let diskDma = Double(dma.diskActivity) / (313 * 3)
-        let audioDma = Double(dma.audioActivity) / (313 * 4)
-        let spriteDma = Double(dma.spriteActivity) / (313 * 16)
-        let bitplaneDma = Double(dma.bitplaneActivity) / 39330
+        let copperDma = Double(dma.copperActivity)
+        let blitterDma = Double(dma.blitterActivity)
+        let diskDma = Double(dma.diskActivity)
+        let audioDma = Double(dma.audioActivity)
+        let spriteDma = Double(dma.spriteActivity)
+        let bitplaneDma = Double(dma.bitplaneActivity)
         
         copperDmaPanel.model.add(copperDma)
         blitterDmaPanel.model.add(blitterDma)
@@ -58,15 +71,14 @@ class Dashboard: DialogController {
         
         // Memory monitors
         let mem = emu.mem.stats
-        let max = Double((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 4)
-        let chipR = Double(mem.chipReads.accumulated) / max
-        let chipW = Double(mem.chipWrites.accumulated) / max
-        let slowR = Double(mem.slowReads.accumulated) / max
-        let slowW = Double(mem.slowWrites.accumulated) / max
-        let fastR = Double(mem.fastReads.accumulated) / max
-        let fastW = Double(mem.fastWrites.accumulated) / max
-        let kickR = Double(mem.kickReads.accumulated) / max
-        let kickW = Double(mem.kickWrites.accumulated) / max
+        let chipR = Double(mem.chipReads.accumulated)
+        let chipW = Double(mem.chipWrites.accumulated)
+        let slowR = Double(mem.slowReads.accumulated)
+        let slowW = Double(mem.slowWrites.accumulated)
+        let fastR = Double(mem.fastReads.accumulated)
+        let fastW = Double(mem.fastWrites.accumulated)
+        let kickR = Double(mem.kickReads.accumulated)
+        let kickW = Double(mem.kickWrites.accumulated)
         chipRamPanel.model.add(chipR, chipW)
         slowRamPanel.model.add(slowR, slowW)
         fastRamPanel.model.add(fastR, fastW)
@@ -74,7 +86,7 @@ class Dashboard: DialogController {
     
         // Experimental
         let stats = emu.stats
-        activityPanel.model.add(series: 1, value: stats.cpuLoad + Double.random(in: -0.01...0.01))
+        activityPanel.model.add(stats.cpuLoad + Double.random(in: -0.01...0.01))
         
         // Audio monitors
         myView10.update()

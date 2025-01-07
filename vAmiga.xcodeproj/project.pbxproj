@@ -280,6 +280,7 @@
 		50DA83E22C160DCA001209AA /* Emulator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50DA83DF2C160DCA001209AA /* Emulator.cpp */; };
 		50DA83E52C161961001209AA /* VAmiga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50DA83E32C161961001209AA /* VAmiga.cpp */; };
 		50DA83E62C161961001209AA /* VAmiga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50DA83E32C161961001209AA /* VAmiga.cpp */; };
+		50DAED232D2D17660044B922 /* DashboardDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DAED222D2D175E0044B922 /* DashboardDataProvider.swift */; };
 		50DD1EE22525E3E1000180F6 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DD1EE12525E3E1000180F6 /* Preferences.xib */; };
 		50DD33CC2756113300AE18B4 /* pfile.c in Sources */ = {isa = PBXBuildFile; fileRef = 50DD33CB27560EE600AE18B4 /* pfile.c */; };
 		50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DED6AE2202EBA200B8195F /* Inspector.xib */; };
@@ -948,6 +949,7 @@
 		50DA83E02C160DCA001209AA /* Emulator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Emulator.h; sourceTree = "<group>"; };
 		50DA83E32C161961001209AA /* VAmiga.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VAmiga.cpp; sourceTree = "<group>"; };
 		50DA83E72C1619E0001209AA /* VAmigaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VAmigaTypes.h; sourceTree = "<group>"; };
+		50DAED222D2D175E0044B922 /* DashboardDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardDataProvider.swift; sourceTree = "<group>"; };
 		50DD1EE12525E3E1000180F6 /* Preferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
 		50DD33CB27560EE600AE18B4 /* pfile.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = pfile.c; sourceTree = "<group>"; };
 		50DED6AE2202EBA200B8195F /* Inspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Inspector.xib; sourceTree = "<group>"; };
@@ -1253,9 +1255,10 @@
 		5043154E2D2AE311006C14FF /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
+				5019605C23125E680051B669 /* Dashboard.swift */,
+				50DAED222D2D175E0044B922 /* DashboardDataProvider.swift */,
 				5043154C2D2ACF3E006C14FF /* WaveformPanel.swift */,
 				506C71E12D2A0C04007CBD93 /* DashboardPanel.swift */,
-				5019605C23125E680051B669 /* Dashboard.swift */,
 			);
 			path = Dashboard;
 			sourceTree = "<group>";
@@ -2470,6 +2473,7 @@
 				50826F7827F0B2AD005FBF3B /* DiagBoard.cpp in Sources */,
 				507957AC244AD25B007B8B8D /* Configuration.swift in Sources */,
 				50F54B3024B5D31D0078FDC9 /* u_quick.c in Sources */,
+				50DAED232D2D17660044B922 /* DashboardDataProvider.swift in Sources */,
 				5043154D2D2ACF47006C14FF /* WaveformPanel.swift in Sources */,
 				50DD33CC2756113300AE18B4 /* pfile.c in Sources */,
 				50950ED822881B7A0073F755 /* ZorroManager.cpp in Sources */,

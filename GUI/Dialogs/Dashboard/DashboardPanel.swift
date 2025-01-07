@@ -10,126 +10,18 @@
 import SwiftUI
 import Charts
 
-struct DataPoint: Identifiable {
-    
-    var id = UUID()
-    var series: Int
-    var timestamp: Date
-    var value: Double
-}
-
-class DataSource: ObservableObject {
-    
-    @Published var update = false
-    
-    static let maxTimeSpan: Double = 5
-    
-    // Visualized data
-    var data: [DataPoint] = []
-    
-    // Title and sub title
-    var heading = ""
-    var subHeading = ""
-    
-    // Colors
-    var themeColor: NSColor = .white
-    var graph1Color: NSColor?
-    var graph2Color: NSColor?
-
-    // Grid lines
-    var gridLines = [0.0, 0.25, 0.5, 0.75, 1.0]
-    
-    // Scaling
-    var scale = 1.0
-    var logScale: Bool = false {
-        
-        didSet {
-            if (logScale) {
-                gridLines = []
-                for i in 0...10 {
-                    var y = Double(i) / Double(10)
-                    if logScale { y = log(1.0 + 19.0 * y) / log(20) }
-                    gridLines.append(y)
-                }
-            } else {
-                gridLines = [0.0, 0.25, 0.5, 0.75, 1.0]
-            }
-        }
-    }
-        
-    var timeSpan: TimeInterval {
-        
-        guard let first = data.first else { return 0.0 }
-        guard let last = data.last else { return 0.0 }
-        
-        return last.timestamp.timeIntervalSince(first.timestamp)
-    }
-    
-    func add(series: Int, value: Double) {
-        
-        data = []
-        data.append(DataPoint(series: 0, timestamp: Date.now, value: value))
-                
-        // Update the view
-        update.toggle()
-    }
-    
-    func add(_ value1: Double?, _ value2: Double? = nil) {
-        
-        add(value1, value2, timestamp: Date.now)
-    }
-    
-    private func add(_ value1: Double?, _ value2: Double?, timestamp: Date) {
-        
-        // Scale incoming values
-        var scaled1 = (value1 ?? 0) * scale
-        if logScale { scaled1 = log(1.0 + (19 * scaled1)) / log(20) }
-        var scaled2 = (value2 ?? 0) * scale
-        if logScale { scaled2 = log(1.0 + (19 * scaled2)) / log(20) }
-        
-        // Add the first provided value to time series 2
-        if value2 != nil {
-            data.append(DataPoint(series: 2, timestamp: timestamp, value: scaled2))
-        }
-
-        // Add the first provided value to time series 1
-        if value1 != nil {
-            data.append(DataPoint(series: 1, timestamp: timestamp, value: scaled1))
-        }
-                
-        // Sum up both values in time series 3 (used for drawing the line)
-        data.append(DataPoint(series: 3, timestamp: timestamp, value: scaled1 + scaled2))
-        
-        // Delete outdated data
-        while timeSpan > DataSource.maxTimeSpan { data.removeFirst() }
-        
-        // Update the view
-        update.toggle()
-    }
-    
-    // Experimental
-    func val() -> Double {
-        
-        if data.isEmpty {
-            return 0.0
-        } else {
-            return data[0].value
-        }
-    }
-}
-
 //
 // Time series view
 //
 
 class TimeSeries: NSView {
     
-    var model = DataSource()
+    var model = DashboardDataProvider()
     var host: NSHostingView<ContentView>!
-
+    
     struct ContentView: View {
         
-        @ObservedObject var model: DataSource
+        @ObservedObject var model: DashboardDataProvider
         
         private var heading: String {
             return model.heading
@@ -219,7 +111,7 @@ class TimeSeries: NSView {
                         */
                     }
                 }
-                .chartXScale(domain: Date() - DataSource.maxTimeSpan...Date())
+                .chartXScale(domain: Date() - DashboardDataProvider.maxTimeSpan...Date())
                 .chartXAxis(.hidden)
                 .chartYScale(domain: 0...1.0)
                 .chartYAxis {
@@ -250,6 +142,12 @@ class TimeSeries: NSView {
         host.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         host.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
     }
+    
+    func configure(range: ClosedRange<Double>, logScale: Bool = false) {
+                
+        model.range = range
+        model.logScale = logScale
+    }
 }
 
 //
@@ -258,12 +156,12 @@ class TimeSeries: NSView {
 
 class ActivityBars: NSView {
     
-    var model = DataSource()
+    var model = DashboardDataProvider()
     var host: NSHostingView<ContentView>!
 
     struct ContentView: View {
         
-        @ObservedObject var model: DataSource
+        @ObservedObject var model: DashboardDataProvider
         
         private var heading: String {
             return "Heading II" // model.heading
@@ -316,10 +214,10 @@ class ActivityBars: NSView {
                             Spacer()
                             if #available(macOS 14.0, *) {
                                 
-                                Gauge(value: model.val(), in: 0.0...1.0) {
+                                Gauge(value: model.latest(), in: 0.0...1.0) {
                                     Text("")
                                 } currentValueLabel: {
-                                    Text(String(format: "%.2f", model.val()))
+                                    Text(String(format: "%.2f", model.latest()))
                                     //                                Text(Double(model.val()), format: .number)
                                 }
                                 .gaugeStyle(.accessoryCircular)
