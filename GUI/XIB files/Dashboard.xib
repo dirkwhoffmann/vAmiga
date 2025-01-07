@@ -8,6 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="Dashboard" customModule="vAmiga" customModuleProvider="target">
             <connections>
+                <outlet property="activityPanel" destination="hYV-wm-QHh" id="IBb-p9-bxT"/>
                 <outlet property="audioDmaPanel" destination="u01-p5-lDv" id="Ezk-zD-Bnh"/>
                 <outlet property="bitplaneDmaPanel" destination="mme-U9-iHh" id="HWI-ua-4ab"/>
                 <outlet property="blitterDmaPanel" destination="dlz-zU-pc5" id="Mhf-bu-ljP"/>
@@ -28,16 +29,16 @@
         <window title="Dashboard" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="QvC-M9-y7g" customClass="DialogWindow" customModule="vAmiga" customModuleProvider="target">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="868" height="446"/>
+            <rect key="contentRect" x="196" y="240" width="868" height="844"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
             <value key="minSize" type="size" width="868" height="418"/>
             <value key="maxSize" type="size" width="868" height="418"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="868" height="446"/>
+                <rect key="frame" x="0.0" y="0.0" width="868" height="844"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <box fixedFrame="YES" title="Slow Ram" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="PDq-Kw-ct2">
-                        <rect key="frame" x="229" y="292" width="200" height="135"/>
+                        <rect key="frame" x="229" y="690" width="200" height="135"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="a80-j2-hew">
                             <rect key="frame" x="4" y="5" width="192" height="127"/>
@@ -51,7 +52,7 @@
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Chip Ram" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="4Zz-qZ-J98">
-                        <rect key="frame" x="17" y="292" width="200" height="135"/>
+                        <rect key="frame" x="17" y="690" width="200" height="135"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="qle-rq-nVS">
                             <rect key="frame" x="4" y="5" width="192" height="127"/>
@@ -65,7 +66,7 @@
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Fast Ram" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="bxF-PZ-oOX">
-                        <rect key="frame" x="440" y="292" width="200" height="135"/>
+                        <rect key="frame" x="440" y="690" width="200" height="135"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="0lr-uk-UmZ">
                             <rect key="frame" x="4" y="5" width="192" height="127"/>
@@ -79,7 +80,7 @@
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Rom" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="Tqb-xp-i8d">
-                        <rect key="frame" x="651" y="293" width="200" height="135"/>
+                        <rect key="frame" x="651" y="691" width="200" height="135"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="uzR-rs-5Rm">
                             <rect key="frame" x="4" y="5" width="192" height="127"/>
@@ -93,7 +94,7 @@
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Blitter DMA" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="DfC-OX-Lih">
-                        <rect key="frame" x="229" y="154" width="200" height="135"/>
+                        <rect key="frame" x="229" y="552" width="200" height="135"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="ujt-T8-9N0">
                             <rect key="frame" x="4" y="5" width="192" height="127"/>
@@ -107,7 +108,7 @@
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Copper DMA" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="hYr-NE-wnp">
-                        <rect key="frame" x="17" y="154" width="200" height="135"/>
+                        <rect key="frame" x="17" y="552" width="200" height="135"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="Qc4-cp-5TT">
                             <rect key="frame" x="4" y="5" width="192" height="127"/>
@@ -121,7 +122,7 @@
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Disk DMA" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="scG-f9-9EO">
-                        <rect key="frame" x="440" y="154" width="200" height="135"/>
+                        <rect key="frame" x="440" y="552" width="200" height="135"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="w5T-JU-c1l">
                             <rect key="frame" x="4" y="5" width="192" height="127"/>
@@ -135,7 +136,7 @@
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Audio DMA" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="2qQ-Ue-Sdl">
-                        <rect key="frame" x="651" y="155" width="200" height="135"/>
+                        <rect key="frame" x="651" y="553" width="200" height="135"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="8hK-If-Qix">
                             <rect key="frame" x="4" y="5" width="192" height="127"/>
@@ -149,7 +150,7 @@
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Bitplane DMA" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="b3J-VJ-XDI">
-                        <rect key="frame" x="229" y="16" width="200" height="135"/>
+                        <rect key="frame" x="229" y="414" width="200" height="135"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="LSQ-9a-vFf">
                             <rect key="frame" x="4" y="5" width="192" height="127"/>
@@ -166,7 +167,7 @@
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Sprite DMA" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="p6u-S6-fVB">
-                        <rect key="frame" x="17" y="16" width="200" height="135"/>
+                        <rect key="frame" x="17" y="414" width="200" height="135"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="hva-HS-HX4">
                             <rect key="frame" x="4" y="5" width="192" height="127"/>
@@ -183,7 +184,7 @@
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Left Audio" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="a8s-EC-PQA">
-                        <rect key="frame" x="440" y="16" width="200" height="135"/>
+                        <rect key="frame" x="440" y="414" width="200" height="135"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="d31-M6-NVo">
                             <rect key="frame" x="4" y="5" width="192" height="127"/>
@@ -201,7 +202,7 @@
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Right Audio" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="IcT-Gd-UT2">
-                        <rect key="frame" x="651" y="17" width="200" height="135"/>
+                        <rect key="frame" x="651" y="415" width="200" height="135"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="c4D-zl-PZT">
                             <rect key="frame" x="4" y="5" width="192" height="127"/>
@@ -218,12 +219,29 @@
                             </subviews>
                         </view>
                     </box>
+                    <box fixedFrame="YES" title="Activity" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="ikB-Nh-tiH">
+                        <rect key="frame" x="17" y="277" width="200" height="135"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <view key="contentView" id="sef-bV-I7B">
+                            <rect key="frame" x="4" y="5" width="192" height="127"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hYV-wm-QHh" customClass="ActivityBars" customModule="vAmiga" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="0.0" width="192" height="127"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <connections>
+                                        <outlet property="monitor" destination="-2" id="nUC-xH-Ebx"/>
+                                    </connections>
+                                </customView>
+                            </subviews>
+                        </view>
+                    </box>
                 </subviews>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="WuC-xr-fiS"/>
             </connections>
-            <point key="canvasLocation" x="135" y="207"/>
+            <point key="canvasLocation" x="135" y="406"/>
         </window>
     </objects>
     <resources>

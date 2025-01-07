@@ -56,13 +56,22 @@ class DataSource: ObservableObject {
             }
         }
     }
-    
+        
     var timeSpan: TimeInterval {
         
         guard let first = data.first else { return 0.0 }
         guard let last = data.last else { return 0.0 }
         
         return last.timestamp.timeIntervalSince(first.timestamp)
+    }
+    
+    func add(series: Int, value: Double) {
+        
+        data = []
+        data.append(DataPoint(series: 0, timestamp: Date.now, value: value))
+                
+        // Update the view
+        update.toggle()
     }
     
     func add(_ value1: Double?, _ value2: Double? = nil) {
@@ -96,6 +105,16 @@ class DataSource: ObservableObject {
         
         // Update the view
         update.toggle()
+    }
+    
+    // Experimental
+    func val() -> Double {
+        
+        if data.isEmpty {
+            return 0.0
+        } else {
+            return data[0].value
+        }
     }
 }
 
@@ -230,6 +249,138 @@ class TimeSeries: NSView {
         host.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
         host.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         host.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+    }
+}
+
+//
+// Pie chart view
+//
+
+class ActivityBars: NSView {
+    
+    var model = DataSource()
+    var host: NSHostingView<ContentView>!
+
+    struct ContentView: View {
+        
+        @ObservedObject var model: DataSource
+        
+        private var heading: String {
+            return "Heading II" // model.heading
+        }
+        private var subHeading: String {
+            return "Subheading" // model.subHeading
+        }
+        private var themeColor: Color {
+            return Color(nsColor: model.themeColor)
+        }
+        private var graph1Color: Color {
+            return Color(nsColor: (model.graph1Color != nil) ? model.graph1Color! : model.themeColor)
+        }
+        private var graph2Color: Color {
+            return Color(nsColor: (model.graph2Color != nil) ? model.graph2Color! : model.themeColor)
+        }
+        private var background: Gradient {
+            return Gradient(colors: [Color.black, Color.black])
+        }
+        private var gradients: KeyValuePairs<Int, Gradient> {
+            return [ 1: Gradient(colors: [graph1Color.opacity(0.75), graph1Color.opacity(0.25)]),
+                     2: Gradient(colors: [graph2Color.opacity(0.75), graph2Color.opacity(0.25)])]
+        }
+        private var lineColor: Color {
+            
+            if #available(macOS 15.0, *) {
+                return graph1Color.mix(with: .white, by: 0.25)
+            } else {
+                return graph1Color
+            }
+        }
+        private var gridLineColor: Color {
+            return Color.white.opacity(0.6)
+        }
+        private var lineWidth: Double {
+            return 1.25 // 0.75
+        }
+
+        let gradient = Gradient(colors: [.green, .yellow, .orange, .red])
+        
+        var body: some View {
+            
+            GeometryReader { geometry in
+                
+                ZStack() {
+                
+                    // Gauge
+                    VStack {
+                        HStack {
+                            Spacer()
+                            if #available(macOS 14.0, *) {
+                                
+                                Gauge(value: model.val(), in: 0.0...1.0) {
+                                    Text("")
+                                } currentValueLabel: {
+                                    Text(String(format: "%.2f", model.val()))
+                                    //                                Text(Double(model.val()), format: .number)
+                                }
+                                .gaugeStyle(.accessoryCircular)
+                                .tint(gradient)
+                                .scaleEffect(1.4)
+                                .frame(width: 100, height: 100)
+                                // .padding(0)
+                                // .background(.green)
+                                
+                            } else { }
+                        }
+                    }
+                    
+                    VStack {
+                        HStack {
+                            VStack(alignment: .leading) {
+                                
+                                Text(heading)
+                                    .font(.system(size: 14))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(themeColor.opacity(1.0))
+                                    .padding(.bottom, 1)
+                                Text(subHeading)
+                                    .font(.system(size: 8))
+                                    .fontWeight(.regular)
+                                    .foregroundColor(Color.gray)
+                                    .padding(.bottom, 1)
+                            }
+                            Spacer()
+                        }
+                        Spacer()
+                    }
+
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
+            .background(background)
+            .cornerRadius(10)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+    }
+        
+    required init?(coder aDecoder: NSCoder) {
+        
+        super.init(coder: aDecoder)
+
+        model.heading = "Activity"
+        model.heading = "Running"
+
+        host = NSHostingView(rootView: ContentView( model: model))
+        self.addSubview(host)
+
+        host.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            host.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            host.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            host.topAnchor.constraint(equalTo: self.topAnchor),
+            host.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
+         
     }
 }
 

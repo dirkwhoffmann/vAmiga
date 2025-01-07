@@ -23,6 +23,8 @@ class Dashboard: DialogController {
     @IBOutlet weak var myView10: WaveformPanel!
     @IBOutlet weak var myView11: WaveformPanel!
     
+    @IBOutlet weak var activityPanel: ActivityBars!
+    
     override func awakeFromNib() {
 
         super.awakeFromNib()
@@ -40,12 +42,19 @@ class Dashboard: DialogController {
                 
         // DMA monitors
         let dma = emu.agnus.stats
-        copperDmaPanel.model.add(Double(dma.copperActivity) / (313 * 120))
-        blitterDmaPanel.model.add(Double(dma.blitterActivity) / (313 * 120))
-        diskDmaPanel.model.add(Double(dma.diskActivity) / (313 * 3))
-        audioDmaPanel.model.add(Double(dma.audioActivity) / (313 * 4))
-        spriteDmaPanel.model.add(Double(dma.spriteActivity) / (313 * 16))
-        bitplaneDmaPanel.model.add(Double(dma.bitplaneActivity) / 39330)
+        let copperDma = Double(dma.copperActivity) / (313 * 120)
+        let blitterDma = Double(dma.blitterActivity) / (313 * 120)
+        let diskDma = Double(dma.diskActivity) / (313 * 3)
+        let audioDma = Double(dma.audioActivity) / (313 * 4)
+        let spriteDma = Double(dma.spriteActivity) / (313 * 16)
+        let bitplaneDma = Double(dma.bitplaneActivity) / 39330
+        
+        copperDmaPanel.model.add(copperDma)
+        blitterDmaPanel.model.add(blitterDma)
+        diskDmaPanel.model.add(diskDma)
+        audioDmaPanel.model.add(audioDma)
+        spriteDmaPanel.model.add(spriteDma)
+        bitplaneDmaPanel.model.add(bitplaneDma)
         
         // Memory monitors
         let mem = emu.mem.stats
@@ -63,9 +72,15 @@ class Dashboard: DialogController {
         fastRamPanel.model.add(fastR, fastW)
         romPanel.model.add(kickR, kickW)
     
+        // Experimental
+        let stats = emu.stats
+        activityPanel.model.add(series: 1, value: stats.cpuLoad + Double.random(in: -0.01...0.01))
+        
         // Audio monitors
         myView10.update()
         myView11.update()
+        
+        
     }
     
     func refresh() {
