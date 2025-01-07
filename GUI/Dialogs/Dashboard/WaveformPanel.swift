@@ -24,7 +24,7 @@ class WaveformPanel: NSImageView {
     // var maxAmp: Float = 0.001
 
     // Foreground color
-    var color = UInt32(0x88888888)
+    var color = UInt32(0xFF888888)
 
     required init?(coder decoder: NSCoder) {
 

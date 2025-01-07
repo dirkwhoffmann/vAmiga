@@ -90,16 +90,14 @@ class Dashboard: DialogController {
         amigaMhz.model.add(parent.speedometer.mhz)
         
         // CIAs
-        ciaAPanel.model.add(emu.ciaA.stats.idlePercentage)
-        ciaBPanel.model.add(emu.ciaB.stats.idlePercentage)
+        ciaAPanel.model.add(1.0 - emu.ciaA.stats.idlePercentage)
+        ciaBPanel.model.add(1.0 - emu.ciaB.stats.idlePercentage)
 
         // Audio
         audioBufferPanel.model.add(emu.audioPort.stats.fillLevel)
         
         waveformPanelL.update()
         waveformPanelR.update()
-        
-        
     }
     
     func refresh() {
@@ -107,24 +105,6 @@ class Dashboard: DialogController {
         let info = emu.dmaDebugger.info
         
         // Colors
-        /*
-        let memColor = NSColor.white
-        chipRamPanel.themeColor = memColor
-        chipRamPanel.graph1Color = NSColor.init(r: 0x33, g: 0x99, b: 0xFF)
-        chipRamPanel.graph2Color = NSColor.init(r: 0xFF, g: 0x33, b: 0x99)
-        
-        slowRamPanel.model.themeColor = memColor
-        slowRamPanel.model.graph1Color = NSColor.init(r: 0x33, g: 0x99, b: 0xFF)
-        slowRamPanel.model.graph2Color = NSColor.init(r: 0xFF, g: 0x33, b: 0x99)
-        
-        fastRamPanel.model.themeColor = memColor
-        fastRamPanel.model.graph1Color = NSColor.init(r: 0x33, g: 0x99, b: 0xFF)
-        fastRamPanel.model.graph2Color = NSColor.init(r: 0xFF, g: 0x33, b: 0x99)
-        
-        romPanel.model.themeColor = memColor
-        romPanel.model.graph1Color = NSColor.init(r: 0x33, g: 0x99, b: 0xFF)
-        romPanel.model.graph2Color = NSColor.init(r: 0xFF, g: 0x33, b: 0x99)
-        */
         copperDmaPanel.themeColor = NSColor(info.copperColor)
         blitterDmaPanel.themeColor = NSColor(info.blitterColor)
         diskDmaPanel.themeColor = NSColor(info.diskColor)

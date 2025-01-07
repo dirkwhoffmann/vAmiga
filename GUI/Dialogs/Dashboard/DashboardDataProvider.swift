@@ -29,6 +29,9 @@ class DashboardDataProvider: ObservableObject {
     // Valid value range
     var range: ClosedRange = 0.0...1.0 { didSet { updateGridLines() } }
     
+    // Unit
+    var unit = ""
+        
     // Grid lines
     var gridLines: [Double] = []
         

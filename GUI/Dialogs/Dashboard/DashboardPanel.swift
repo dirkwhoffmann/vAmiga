@@ -10,7 +10,6 @@
 import SwiftUI
 import Charts
 
-
 //
 // SwiftUI Views
 //
@@ -54,7 +53,8 @@ struct TimeSeriesView: View {
                         series: .value("Series", dataPoint.series)
                     )
                     
-                    .interpolationMethod(.catmullRom)
+                    // .interpolationMethod(.catmullRom)
+                    .interpolationMethod(.cardinal)
                     .foregroundStyle(panel.lineColor)
                     .lineStyle(StrokeStyle(lineWidth: 1.25))
                     /*
@@ -95,9 +95,7 @@ struct GaugeView: View {
     
     @ObservedObject var model: DashboardDataProvider
     var panel: DashboardPanel
-    
-    let gradient = Gradient(colors: [.green, .yellow, .orange, .red])
-    
+        
     var body: some View {
         
         GeometryReader { geometry in
@@ -119,13 +117,12 @@ struct GaugeView: View {
                 if #available(macOS 14.0, *) {
                     
                     Gauge(value: model.latest(), in: model.range) {
-                        Text("")
+                        Text(model.unit)
                     } currentValueLabel: {
-                        Text(String(format: "%.2f", model.latest()))
-                        //                                Text(Double(model.val()), format: .number)
+                        Text(panel.latest())
                     }
                     .gaugeStyle(.accessoryCircular)
-                    .tint(gradient)
+                    .tint(panel.gaugeGradient)
                     .scaleEffect(1.25)
                     .padding(EdgeInsets(top: 3.0, leading: 0.0, bottom: 0.0, trailing: 0.0))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -156,23 +153,28 @@ class DashboardPanel: NSView {
     // Colors and gradients
     var graph1Color = Color(NSColor.init(r: 0x33, g: 0x99, b: 0xFF))
     var graph2Color = Color(NSColor.init(r: 0xFF, g: 0x33, b: 0x99))
-    var lineColor = Color.gray
-    var headingColor = Color.white
-    var subheadingColor = Color.gray
+    var lineColor = Color(NSColor.labelColor)
+    var headingColor = Color(NSColor.secondaryLabelColor)
+    var subheadingColor = Color(NSColor.secondaryLabelColor)
     
     var themeColor: NSColor = .white {
         didSet {
-            lineColor = Color(themeColor).opacity(0.6)
+            // lineColor = Color(themeColor).opacity(0.6)
             graph1Color = Color(themeColor)
             graph2Color = Color(themeColor)
-            headingColor = Color(themeColor)
+            // headingColor = Color(themeColor)
         }
     }
     
-    func configure(title: String, subtitle: String, range: ClosedRange<Double> = 0...1, logScale: Bool = false) {
+    func configure(title: String,
+                   subtitle: String,
+                   range: ClosedRange<Double> = 0...1,
+                   unit: String = "",
+                   logScale: Bool = false) {
         
         heading = title
         subHeading = subtitle
+        model.unit = unit
         model.logScale = logScale
         model.range = range
     }
@@ -183,8 +185,12 @@ class DashboardPanel: NSView {
         return [ 1: Gradient(colors: [graph1Color.opacity(0.75), graph1Color.opacity(0.25)]),
                  2: Gradient(colors: [graph2Color.opacity(0.75), graph2Color.opacity(0.25)])]
     }
+    var gaugeGradient: Gradient {
+        return Gradient(colors: [.green, .yellow, .orange, .red])
+    }
+
     var gridLineColor: Color {
-        return Color.white.opacity(0.6)
+        return Color(NSColor.labelColor).opacity(0.6)
     }
     var padding: EdgeInsets {
         return EdgeInsets(top: 4.0, leading: 4.0, bottom: 4.0, trailing: 4.0)
@@ -202,6 +208,10 @@ class DashboardPanel: NSView {
         host2 = NSHostingView(rootView: GaugeView(model: model, panel: self))
 
         switchStyle()
+    }
+    
+    func latest() -> String {
+        return String(Int(model.latest().rounded()))
     }
     
     override func mouseDown(with event: NSEvent) {
@@ -352,7 +362,12 @@ class CpuLoadPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        configure(title: "Host CPU", subtitle: "Load", range: 0...1.0)
+        configure(title: "Host CPU", subtitle: "Load", range: 0...1.0, unit: "%")
+        switchStyle()
+    }
+    
+    override func latest() -> String {
+        return String(Int(model.latest() * 100))
     }
 }
 
@@ -361,7 +376,12 @@ class GpuFpsPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        configure(title: "Host GPU", subtitle: "Refresh Rate", range: 0...120)
+        configure(title: "Host GPU", subtitle: "Refresh Rate", range: 0...120, unit: "%")
+        switchStyle()
+    }
+    
+    override var gaugeGradient: Gradient {
+        return Gradient(colors: [.red, .orange, .yellow, .green, .yellow, .orange, .red])
     }
 }
 
@@ -370,7 +390,16 @@ class AmigaFrequencyPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        configure(title: "Amiga", subtitle: "CPU Frequency", range: 0...14)
+        configure(title: "Amiga", subtitle: "CPU Frequency", range: 0...14, unit: "Mhz")
+        switchStyle()
+    }
+    
+    override var gaugeGradient: Gradient {
+        return Gradient(colors: [.red, .orange, .yellow, .green, .yellow, .orange, .red])
+    }
+    
+    override func latest() -> String {
+        return String(format: "%.2f", model.latest())
     }
 }
 
@@ -379,7 +408,12 @@ class AmigaFpsPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        configure(title: "Amiga", subtitle: "Refresh Rate", range: 0...120)
+        configure(title: "Amiga", subtitle: "Refresh Rate", range: 0...120, unit: "Fps")
+        switchStyle()
+    }
+    
+    override var gaugeGradient: Gradient {
+        return Gradient(colors: [.red, .orange, .yellow, .green, .yellow, .orange, .red])
     }
 }
 
@@ -388,7 +422,12 @@ class CIAAPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        configure(title: "CIA A", subtitle: "Awakeness")
+        configure(title: "CIA A", subtitle: "Awakeness", unit: "%")
+        switchStyle()
+    }
+    
+    override func latest() -> String {
+        return String(Int(model.latest() * 100))
     }
 }
 
@@ -397,7 +436,12 @@ class CIABPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        configure(title: "CIA B", subtitle: "Awakeness")
+        configure(title: "CIA B", subtitle: "Awakeness", unit: "%")
+        switchStyle()
+    }
+    
+    override func latest() -> String {
+        return String(Int(model.latest() * 100))
     }
 }
 
@@ -406,6 +450,14 @@ class AudioFillLevelPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        configure(title: "Audio Buffer", subtitle: "Fill Level")
+        configure(title: "Audio Buffer", subtitle: "Fill Level", unit: "%")
+        switchStyle()
+    }
+    
+    override func latest() -> String {
+        return String(Int(model.latest() * 100))
+    }
+    override var gaugeGradient: Gradient {
+        return Gradient(colors: [.red, .orange, .yellow, .green, .yellow, .orange, .red])
     }
 }
