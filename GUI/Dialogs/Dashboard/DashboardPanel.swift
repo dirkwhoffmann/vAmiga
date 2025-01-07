@@ -35,7 +35,6 @@ struct TimeSeriesView: View {
                     .fontWeight(.regular)
                     .foregroundColor(panel.subheadingColor)
             }
-            .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
             
             Chart {
                 
@@ -82,13 +81,13 @@ struct TimeSeriesView: View {
                         .foregroundStyle(panel.gridLineColor)
                 }
             }
-            .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 15.0, trailing: 15.0))
             .chartLegend(.hidden)
             .chartForegroundStyleScale(panel.gradients)
         }
         // .background(panel.background)
         .cornerRadius(10)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(panel.padding)
     }
 }
 
@@ -116,7 +115,6 @@ struct GaugeView: View {
                         .fontWeight(.regular)
                         .foregroundColor(panel.subheadingColor)
                 }
-                // .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
 
                 if #available(macOS 14.0, *) {
                     
@@ -136,7 +134,7 @@ struct GaugeView: View {
                 } else { }
             }
         }
-        .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
+        .padding(panel.padding)
         // .background(panel.background)
         .cornerRadius(10)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -148,9 +146,9 @@ struct GaugeView: View {
 //
 
 class DashboardPanel: NSView {
-
+    
     var model = DashboardDataProvider()
-
+    
     // Title and sub title
     var heading = ""
     var subHeading = ""
@@ -161,7 +159,7 @@ class DashboardPanel: NSView {
     var lineColor = Color.gray
     var headingColor = Color.white
     var subheadingColor = Color.gray
-
+    
     var themeColor: NSColor = .white {
         didSet {
             lineColor = Color(themeColor).opacity(0.6)
@@ -170,9 +168,9 @@ class DashboardPanel: NSView {
             headingColor = Color(themeColor)
         }
     }
-
+    
     func configure(title: String, subtitle: String, range: ClosedRange<Double> = 0...1, logScale: Bool = false) {
-
+        
         heading = title
         subHeading = subtitle
         model.logScale = logScale
@@ -188,7 +186,10 @@ class DashboardPanel: NSView {
     var gridLineColor: Color {
         return Color.white.opacity(0.6)
     }
-    
+    var padding: EdgeInsets {
+        return EdgeInsets(top: 4.0, leading: 4.0, bottom: 4.0, trailing: 4.0)
+    }
+
     var host1: NSHostingView<TimeSeriesView>!
     var host2: NSHostingView<GaugeView>!
     var subview: NSView? { return subviews.isEmpty ? nil : subviews[0] }
