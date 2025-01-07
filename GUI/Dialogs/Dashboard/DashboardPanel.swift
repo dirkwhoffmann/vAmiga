@@ -15,7 +15,7 @@ import Charts
 // SwiftUI Views
 //
 
-struct TimeSeriesContentView: View {
+struct TimeSeriesView: View {
     
     @ObservedObject var model: DashboardDataProvider
     var panel: DashboardPanel!
@@ -86,104 +86,58 @@ struct TimeSeriesContentView: View {
             .chartLegend(.hidden)
             .chartForegroundStyleScale(panel.gradients)
         }
-        .background(panel.background)
+        // .background(panel.background)
         .cornerRadius(10)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
-struct GaugeContentView: View {
+struct GaugeView: View {
     
     @ObservedObject var model: DashboardDataProvider
     var panel: DashboardPanel
     
-    private var themeColor: Color {
-        return Color(nsColor: panel.themeColor)
-    }
-    private var graph1Color: Color {
-        return panel.graph1Color
-    }
-    private var graph2Color: Color {
-        return panel.graph2Color
-    }
-    private var background: Gradient {
-        return Gradient(colors: [Color.black, Color.black])
-    }
-    private var gradients: KeyValuePairs<Int, Gradient> {
-        return [ 1: Gradient(colors: [graph1Color.opacity(0.75), graph1Color.opacity(0.25)]),
-                 2: Gradient(colors: [graph2Color.opacity(0.75), graph2Color.opacity(0.25)])]
-    }
-    private var lineColor: Color {
-        
-        if #available(macOS 15.0, *) {
-            return graph1Color.mix(with: .white, by: 0.25)
-        } else {
-            return graph1Color
-        }
-    }
-    private var gridLineColor: Color {
-        return Color.white.opacity(0.6)
-    }
-    private var lineWidth: Double {
-        return 1.25 // 0.75
-    }
-
     let gradient = Gradient(colors: [.green, .yellow, .orange, .red])
     
     var body: some View {
         
         GeometryReader { geometry in
-            
-            ZStack() {
-            
-                // Gauge
-                VStack {
-                    HStack {
-                        Spacer()
-                        if #available(macOS 14.0, *) {
-                            
-                            Gauge(value: model.latest(), in: model.range) {
-                                Text("")
-                            } currentValueLabel: {
-                                Text(String(format: "%.2f", model.latest()))
-                                //                                Text(Double(model.val()), format: .number)
-                            }
-                            .gaugeStyle(.accessoryCircular)
-                            .tint(gradient)
-                            .scaleEffect(1.4)
-                            .frame(width: 100, height: 100)
-                            // .padding(0)
-                            // .background(.green)
-                            
-                        } else { }
-                    }
-                }
+           
+            VStack(alignment: .leading) {
                 
-                VStack {
-                    HStack {
-                        VStack(alignment: .leading) {
-                            
-                            Text(panel.heading)
-                                .font(.system(size: 14))
-                                .fontWeight(.bold)
-                                .foregroundColor(themeColor.opacity(1.0))
-                                .padding(.bottom, 1)
-                            Text(panel.subHeading)
-                                .font(.system(size: 8))
-                                .fontWeight(.regular)
-                                .foregroundColor(Color.gray)
-                                .padding(.bottom, 1)
-                        }
-                        Spacer()
-                    }
-                    Spacer()
+                VStack(alignment: .leading) {
+                    Text(panel.heading)
+                        .font(.system(size: 14))
+                        .fontWeight(.bold)
+                        .foregroundColor(panel.headingColor)
+                        .padding(.bottom, 1)
+                    Text(panel.subHeading)
+                        .font(.system(size: 8))
+                        .fontWeight(.regular)
+                        .foregroundColor(panel.subheadingColor)
                 }
+                // .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
 
+                if #available(macOS 14.0, *) {
+                    
+                    Gauge(value: model.latest(), in: model.range) {
+                        Text("")
+                    } currentValueLabel: {
+                        Text(String(format: "%.2f", model.latest()))
+                        //                                Text(Double(model.val()), format: .number)
+                    }
+                    .gaugeStyle(.accessoryCircular)
+                    .tint(gradient)
+                    .scaleEffect(1.25)
+                    .padding(EdgeInsets(top: 3.0, leading: 0.0, bottom: 0.0, trailing: 0.0))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    // .background(.green)
+                    
+                } else { }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
-        .background(background)
+        // .background(panel.background)
         .cornerRadius(10)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
@@ -235,16 +189,16 @@ class DashboardPanel: NSView {
         return Color.white.opacity(0.6)
     }
     
-    var host1: NSHostingView<TimeSeriesContentView>!
-    var host2: NSHostingView<GaugeContentView>!
+    var host1: NSHostingView<TimeSeriesView>!
+    var host2: NSHostingView<GaugeView>!
     var subview: NSView? { return subviews.isEmpty ? nil : subviews[0] }
     
     required init?(coder aDecoder: NSCoder) {
 
         super.init(coder: aDecoder)
 
-        host1 = NSHostingView(rootView: TimeSeriesContentView(model: model, panel: self))
-        host2 = NSHostingView(rootView: GaugeContentView(model: model, panel: self))
+        host1 = NSHostingView(rootView: TimeSeriesView(model: model, panel: self))
+        host2 = NSHostingView(rootView: GaugeView(model: model, panel: self))
 
         switchStyle()
     }

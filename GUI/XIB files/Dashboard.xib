@@ -35,63 +35,63 @@
         <window title="Dashboard" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="QvC-M9-y7g" customClass="DialogWindow" customModule="vAmiga" customModuleProvider="target">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="196" y="240" width="719" height="720"/>
+            <rect key="contentRect" x="196" y="240" width="600" height="740"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="719" height="720"/>
+                <rect key="frame" x="0.0" y="0.0" width="600" height="740"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <box fixedFrame="YES" title="Chip Ram" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="4Zz-qZ-J98">
-                        <rect key="frame" x="17" y="565" width="170" height="137"/>
+                        <rect key="frame" x="17" y="585" width="140" height="140"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="qle-rq-nVS">
-                            <rect key="frame" x="4" y="5" width="162" height="129"/>
+                            <rect key="frame" x="4" y="5" width="132" height="132"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hrF-tt-Ldb" customClass="ChipRamPanel" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="162" height="129"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="132" height="132"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
                             </subviews>
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Copper DMA" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="hYr-NE-wnp">
-                        <rect key="frame" x="17" y="427" width="170" height="136"/>
+                        <rect key="frame" x="17" y="443" width="140" height="140"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="Qc4-cp-5TT">
-                            <rect key="frame" x="4" y="5" width="162" height="128"/>
+                            <rect key="frame" x="4" y="5" width="132" height="132"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jkQ-cd-VqH" customClass="CopperDmaPanel" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="163" height="128"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="133" height="132"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
                             </subviews>
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Sprite DMA" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="p6u-S6-fVB">
-                        <rect key="frame" x="189" y="290" width="170" height="135"/>
+                        <rect key="frame" x="159" y="301" width="140" height="140"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="hva-HS-HX4">
-                            <rect key="frame" x="4" y="5" width="162" height="127"/>
+                            <rect key="frame" x="4" y="5" width="132" height="132"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="heS-vN-nEa" customClass="SpriteDmaPanel" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="162" height="127"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="132" height="132"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
                             </subviews>
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Left Audio" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="a8s-EC-PQA">
-                        <rect key="frame" x="17" y="16" width="255" height="135"/>
+                        <rect key="frame" x="17" y="16" width="208" height="140"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="d31-M6-NVo">
-                            <rect key="frame" x="4" y="5" width="247" height="127"/>
+                            <rect key="frame" x="4" y="5" width="200" height="132"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6C6-Hb-Taa" customClass="WaveformPanel" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="247" height="127"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="200" height="132"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="monitorTemplate" id="e6p-es-Qf9"/>
                                     <connections>
@@ -102,210 +102,210 @@
                         </view>
                     </box>
                     <box fixedFrame="YES" title="CPU Load" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="ikB-Nh-tiH">
-                        <rect key="frame" x="17" y="153" width="170" height="135"/>
+                        <rect key="frame" x="17" y="159" width="140" height="140"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="sef-bV-I7B">
-                            <rect key="frame" x="4" y="5" width="162" height="127"/>
+                            <rect key="frame" x="4" y="5" width="132" height="132"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hYV-wm-QHh" customClass="CpuLoadPanel" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="162" height="127"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="132" height="132"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
                             </subviews>
                         </view>
                     </box>
                     <box fixedFrame="YES" title="GPU Refresh Rate" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="AdG-Df-GVu">
-                        <rect key="frame" x="189" y="153" width="170" height="135"/>
+                        <rect key="frame" x="159" y="159" width="140" height="140"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="osM-iV-UeO">
-                            <rect key="frame" x="4" y="5" width="162" height="127"/>
+                            <rect key="frame" x="4" y="5" width="132" height="132"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UMa-dX-5TN" customClass="GpuFpsPanel" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="162" height="127"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="132" height="132"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
                             </subviews>
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Amiga Fps" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="r6M-V4-yjP">
-                        <rect key="frame" x="361" y="153" width="170" height="135"/>
+                        <rect key="frame" x="301" y="159" width="140" height="140"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="rOF-9F-6CJ">
-                            <rect key="frame" x="4" y="5" width="162" height="127"/>
+                            <rect key="frame" x="4" y="5" width="132" height="132"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qof-n1-MbW" customClass="AmigaFpsPanel" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="162" height="127"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="132" height="132"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
                             </subviews>
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Amiga Frequency" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="pDC-eV-oik">
-                        <rect key="frame" x="533" y="153" width="170" height="135"/>
+                        <rect key="frame" x="443" y="159" width="140" height="140"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="Syd-nk-AB1">
-                            <rect key="frame" x="4" y="5" width="162" height="127"/>
+                            <rect key="frame" x="4" y="5" width="132" height="132"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mZc-p7-d5G" customClass="AmigaFrequencyPanel" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="162" height="127"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="132" height="132"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
                             </subviews>
                         </view>
                     </box>
                     <box fixedFrame="YES" title="CIA A" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="yph-iD-UeF">
-                        <rect key="frame" x="533" y="428" width="170" height="135"/>
+                        <rect key="frame" x="443" y="443" width="140" height="140"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="5su-uE-xSO">
-                            <rect key="frame" x="4" y="5" width="162" height="127"/>
+                            <rect key="frame" x="4" y="5" width="132" height="132"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CMB-xg-3sH" customClass="CIAAPanel" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="162" height="127"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="132" height="132"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
                             </subviews>
                         </view>
                     </box>
                     <box fixedFrame="YES" title="CIA B" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="6Mo-zD-EAc">
-                        <rect key="frame" x="533" y="291" width="170" height="135"/>
+                        <rect key="frame" x="443" y="301" width="140" height="140"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="zm5-73-men">
-                            <rect key="frame" x="4" y="5" width="162" height="127"/>
+                            <rect key="frame" x="4" y="5" width="132" height="132"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VYp-eC-TLK" customClass="CIABPanel" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="162" height="127"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="132" height="132"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
                             </subviews>
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Audio Fill Level" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="HWF-Of-7FJ">
-                        <rect key="frame" x="274" y="16" width="170" height="135"/>
+                        <rect key="frame" x="227" y="17" width="140" height="140"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="AGR-et-trb">
-                            <rect key="frame" x="4" y="5" width="162" height="127"/>
+                            <rect key="frame" x="4" y="5" width="132" height="132"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NuE-6p-7i8" customClass="AudioFillLevelPanel" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="162" height="127"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="132" height="132"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
                             </subviews>
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Disk DMA" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="scG-f9-9EO">
-                        <rect key="frame" x="361" y="428" width="170" height="135"/>
+                        <rect key="frame" x="301" y="443" width="140" height="140"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="w5T-JU-c1l">
-                            <rect key="frame" x="4" y="5" width="162" height="127"/>
+                            <rect key="frame" x="4" y="5" width="132" height="132"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="STY-lz-6g1" customClass="DiskDmaPanel" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="162" height="127"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="132" height="132"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
                             </subviews>
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Blitter DMA" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="DfC-OX-Lih">
-                        <rect key="frame" x="189" y="428" width="170" height="135"/>
+                        <rect key="frame" x="159" y="443" width="140" height="140"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="ujt-T8-9N0">
-                            <rect key="frame" x="4" y="5" width="162" height="127"/>
+                            <rect key="frame" x="4" y="5" width="132" height="132"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dlz-zU-pc5" customClass="BlitterDmaPanel" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="162" height="127"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="132" height="132"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
                             </subviews>
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Bitplane DMA" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="b3J-VJ-XDI">
-                        <rect key="frame" x="361" y="290" width="170" height="135"/>
+                        <rect key="frame" x="301" y="301" width="140" height="140"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="LSQ-9a-vFf">
-                            <rect key="frame" x="4" y="5" width="162" height="127"/>
+                            <rect key="frame" x="4" y="5" width="132" height="132"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mme-U9-iHh" customClass="BitplaneDmaPanel" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="162" height="127"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="132" height="132"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
                             </subviews>
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Audio DMA" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="2qQ-Ue-Sdl">
-                        <rect key="frame" x="17" y="290" width="170" height="135"/>
+                        <rect key="frame" x="17" y="301" width="140" height="140"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="8hK-If-Qix">
-                            <rect key="frame" x="4" y="5" width="162" height="127"/>
+                            <rect key="frame" x="4" y="5" width="132" height="132"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u01-p5-lDv" customClass="AudioDmaPanel" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="162" height="127"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="132" height="132"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
                             </subviews>
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Rom" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="Tqb-xp-i8d">
-                        <rect key="frame" x="533" y="566" width="169" height="135"/>
+                        <rect key="frame" x="443" y="585" width="140" height="140"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="uzR-rs-5Rm">
-                            <rect key="frame" x="4" y="5" width="161" height="127"/>
+                            <rect key="frame" x="4" y="5" width="132" height="132"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ezU-cJ-1D2" customClass="RomPanel" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="163" height="127"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="134" height="132"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
                             </subviews>
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Fast Ram" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="bxF-PZ-oOX">
-                        <rect key="frame" x="361" y="566" width="170" height="135"/>
+                        <rect key="frame" x="301" y="585" width="140" height="140"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="0lr-uk-UmZ">
-                            <rect key="frame" x="4" y="5" width="162" height="127"/>
+                            <rect key="frame" x="4" y="5" width="132" height="132"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9DQ-2T-zZe" customClass="FastRamPanel" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="162" height="127"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="132" height="132"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
                             </subviews>
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Slow Ram" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="PDq-Kw-ct2">
-                        <rect key="frame" x="189" y="566" width="170" height="135"/>
+                        <rect key="frame" x="159" y="585" width="140" height="140"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="a80-j2-hew">
-                            <rect key="frame" x="4" y="5" width="162" height="127"/>
+                            <rect key="frame" x="4" y="5" width="132" height="132"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9ag-KH-xra" customClass="SlowRamPanel" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="162" height="127"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="132" height="132"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
                             </subviews>
                         </view>
                     </box>
                     <box fixedFrame="YES" title="Right Audio" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="IcT-Gd-UT2">
-                        <rect key="frame" x="446" y="16" width="256" height="135"/>
+                        <rect key="frame" x="369" y="17" width="214" height="140"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="c4D-zl-PZT">
-                            <rect key="frame" x="4" y="5" width="248" height="127"/>
+                            <rect key="frame" x="4" y="5" width="206" height="132"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="gUQ-BT-cKG" customClass="WaveformPanel" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="248" height="127"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="206" height="132"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="monitorTemplate" id="976-WQ-esw"/>
                                     <connections>
@@ -320,7 +320,7 @@
             <connections>
                 <outlet property="delegate" destination="-2" id="WuC-xr-fiS"/>
             </connections>
-            <point key="canvasLocation" x="60.5" y="344"/>
+            <point key="canvasLocation" x="1" y="354"/>
         </window>
     </objects>
     <resources>
