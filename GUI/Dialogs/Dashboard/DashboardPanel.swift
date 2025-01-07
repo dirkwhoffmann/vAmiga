@@ -10,52 +10,10 @@
 import SwiftUI
 import Charts
 
+
 //
-// Time series view
+// SwiftUI Views
 //
-
-class DashboardPanel: NSView {
-
-    var model = DashboardDataProvider()
-
-    // Title and sub title
-    var heading = ""
-    var subHeading = ""
-    
-    // Colors and gradients
-    var graph1Color = Color(NSColor.init(r: 0x33, g: 0x99, b: 0xFF))
-    var graph2Color = Color(NSColor.init(r: 0xFF, g: 0x33, b: 0x99))
-    var lineColor = Color.gray
-    var headingColor = Color.white
-    var subheadingColor = Color.gray
-
-    var themeColor: NSColor = .white {
-        didSet {
-            lineColor = Color(themeColor).opacity(0.6)
-            graph1Color = Color(themeColor)
-            graph2Color = Color(themeColor)
-            headingColor = Color(themeColor)
-        }
-    }
-
-    func configure(title: String, subtitle: String, range: ClosedRange<Double> = 0...1, logScale: Bool = false) {
-
-        heading = title
-        subHeading = subtitle
-        model.logScale = logScale
-        model.range = range
-    }
-    var background: Gradient {
-        return Gradient(colors: [Color.black, Color.black])
-    }
-    var gradients: KeyValuePairs<Int, Gradient> {
-        return [ 1: Gradient(colors: [graph1Color.opacity(0.75), graph1Color.opacity(0.25)]),
-                 2: Gradient(colors: [graph2Color.opacity(0.75), graph2Color.opacity(0.25)])]
-    }
-    var gridLineColor: Color {
-        return Color.white.opacity(0.6)
-    }
-}
 
 struct TimeSeriesContentView: View {
     
@@ -133,29 +91,6 @@ struct TimeSeriesContentView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
-
-class TimeLinePanel: DashboardPanel {
-    
-    var host: NSHostingView<TimeSeriesContentView>!
-    
-    required init?(coder aDecoder: NSCoder) {
-        
-        super.init(coder: aDecoder)
-        
-        host = NSHostingView(rootView: TimeSeriesContentView( model: model, panel: self))
-        self.addSubview(host)
-        
-        host.translatesAutoresizingMaskIntoConstraints = false
-        host.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-        host.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
-        host.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        host.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-    }
-}
-
-//
-// Gauge view
-//
 
 struct GaugeContentView: View {
     
@@ -254,11 +189,65 @@ struct GaugeContentView: View {
     }
 }
 
-class GaugePanel: DashboardPanel {
+//
+// Wrapper NSView
+//
+
+class DashboardPanel: NSView {
+
+    var model = DashboardDataProvider()
+
+    // Title and sub title
+    var heading = ""
+    var subHeading = ""
+    
+    // Colors and gradients
+    var graph1Color = Color(NSColor.init(r: 0x33, g: 0x99, b: 0xFF))
+    var graph2Color = Color(NSColor.init(r: 0xFF, g: 0x33, b: 0x99))
+    var lineColor = Color.gray
+    var headingColor = Color.white
+    var subheadingColor = Color.gray
+
+    var themeColor: NSColor = .white {
+        didSet {
+            lineColor = Color(themeColor).opacity(0.6)
+            graph1Color = Color(themeColor)
+            graph2Color = Color(themeColor)
+            headingColor = Color(themeColor)
+        }
+    }
+
+    func configure(title: String, subtitle: String, range: ClosedRange<Double> = 0...1, logScale: Bool = false) {
+
+        heading = title
+        subHeading = subtitle
+        model.logScale = logScale
+        model.range = range
+    }
+    var background: Gradient {
+        return Gradient(colors: [Color.black, Color.black])
+    }
+    var gradients: KeyValuePairs<Int, Gradient> {
+        return [ 1: Gradient(colors: [graph1Color.opacity(0.75), graph1Color.opacity(0.25)]),
+                 2: Gradient(colors: [graph2Color.opacity(0.75), graph2Color.opacity(0.25)])]
+    }
+    var gridLineColor: Color {
+        return Color.white.opacity(0.6)
+    }
     
     var host1: NSHostingView<TimeSeriesContentView>!
     var host2: NSHostingView<GaugeContentView>!
     var subview: NSView? { return subviews.isEmpty ? nil : subviews[0] }
+    
+    required init?(coder aDecoder: NSCoder) {
+
+        super.init(coder: aDecoder)
+
+        host1 = NSHostingView(rootView: TimeSeriesContentView(model: model, panel: self))
+        host2 = NSHostingView(rootView: GaugeContentView(model: model, panel: self))
+
+        switchStyle()
+    }
     
     override func mouseDown(with event: NSEvent) {
         
@@ -287,23 +276,13 @@ class GaugePanel: DashboardPanel {
             ])
         }
     }
-    
-    required init?(coder aDecoder: NSCoder) {
-
-        super.init(coder: aDecoder)
-
-        host1 = NSHostingView(rootView: TimeSeriesContentView(model: model, panel: self))
-        host2 = NSHostingView(rootView: GaugeContentView(model: model, panel: self))
-
-        switchStyle()
-    }
 }
 
 //
 // Custom panels
 //
 
-class ChipRamPanel: TimeLinePanel {
+class ChipRamPanel: DashboardPanel {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
        
@@ -315,7 +294,7 @@ class ChipRamPanel: TimeLinePanel {
     }
 }
 
-class SlowRamPanel: TimeLinePanel {
+class SlowRamPanel: DashboardPanel {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
         
@@ -327,7 +306,7 @@ class SlowRamPanel: TimeLinePanel {
     }
 }
 
-class FastRamPanel: TimeLinePanel {
+class FastRamPanel: DashboardPanel {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
         
@@ -336,11 +315,10 @@ class FastRamPanel: TimeLinePanel {
         configure(title: "Fast Ram",
                   subtitle: "Memory Accesses",
                   range: 0...Double((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 4))
-        
     }
 }
 
-class RomPanel: TimeLinePanel {
+class RomPanel: DashboardPanel {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
         
@@ -352,7 +330,7 @@ class RomPanel: TimeLinePanel {
     }
 }
 
-class CopperDmaPanel: TimeLinePanel {
+class CopperDmaPanel: DashboardPanel {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
         
@@ -365,7 +343,7 @@ class CopperDmaPanel: TimeLinePanel {
     }
 }
 
-class BlitterDmaPanel: TimeLinePanel {
+class BlitterDmaPanel: DashboardPanel {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
         
@@ -378,7 +356,7 @@ class BlitterDmaPanel: TimeLinePanel {
     }
 }
 
-class DiskDmaPanel: TimeLinePanel {
+class DiskDmaPanel: DashboardPanel {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
         
@@ -387,7 +365,7 @@ class DiskDmaPanel: TimeLinePanel {
     }
 }
 
-class AudioDmaPanel: TimeLinePanel {
+class AudioDmaPanel: DashboardPanel {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
         
@@ -396,7 +374,7 @@ class AudioDmaPanel: TimeLinePanel {
     }
 }
 
-class SpriteDmaPanel: TimeLinePanel {
+class SpriteDmaPanel: DashboardPanel {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
         
@@ -405,7 +383,7 @@ class SpriteDmaPanel: TimeLinePanel {
     }
 }
 
-class BitplaneDmaPanel: TimeLinePanel {
+class BitplaneDmaPanel: DashboardPanel {
     
     @MainActor required init?(coder aDecoder: NSCoder) {
         
@@ -414,7 +392,7 @@ class BitplaneDmaPanel: TimeLinePanel {
     }
 }
 
-class CpuLoadPanel: GaugePanel {
+class CpuLoadPanel: DashboardPanel {
     
     @MainActor required init?(coder aDecoder: NSCoder) {
         
@@ -423,7 +401,7 @@ class CpuLoadPanel: GaugePanel {
     }
 }
 
-class GpuFpsPanel: GaugePanel {
+class GpuFpsPanel: DashboardPanel {
     
     @MainActor required init?(coder aDecoder: NSCoder) {
         
@@ -432,7 +410,7 @@ class GpuFpsPanel: GaugePanel {
     }
 }
 
-class AmigaFrequencyPanel: GaugePanel {
+class AmigaFrequencyPanel: DashboardPanel {
     
     @MainActor required init?(coder aDecoder: NSCoder) {
         
@@ -441,7 +419,7 @@ class AmigaFrequencyPanel: GaugePanel {
     }
 }
 
-class AmigaFpsPanel: GaugePanel {
+class AmigaFpsPanel: DashboardPanel {
     
     @MainActor required init?(coder aDecoder: NSCoder) {
         
@@ -450,7 +428,7 @@ class AmigaFpsPanel: GaugePanel {
     }
 }
 
-class CIAAPanel: GaugePanel {
+class CIAAPanel: DashboardPanel {
     
     @MainActor required init?(coder aDecoder: NSCoder) {
         
@@ -459,7 +437,7 @@ class CIAAPanel: GaugePanel {
     }
 }
 
-class CIABPanel: GaugePanel {
+class CIABPanel: DashboardPanel {
     
     @MainActor required init?(coder aDecoder: NSCoder) {
         
@@ -468,7 +446,7 @@ class CIABPanel: GaugePanel {
     }
 }
 
-class AudioFillLevelPanel: GaugePanel {
+class AudioFillLevelPanel: DashboardPanel {
     
     @MainActor required init?(coder aDecoder: NSCoder) {
         

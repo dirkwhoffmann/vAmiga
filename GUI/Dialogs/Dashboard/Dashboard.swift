@@ -9,28 +9,28 @@
 
 class Dashboard: DialogController {
 
-    @IBOutlet weak var chipRamPanel: ChipRamPanel!
-    @IBOutlet weak var slowRamPanel: SlowRamPanel!
-    @IBOutlet weak var fastRamPanel: FastRamPanel!
-    @IBOutlet weak var romPanel: RomPanel!
+    @IBOutlet weak var chipRamPanel: DashboardPanel!
+    @IBOutlet weak var slowRamPanel: DashboardPanel!
+    @IBOutlet weak var fastRamPanel: DashboardPanel!
+    @IBOutlet weak var romPanel: DashboardPanel!
     
-    @IBOutlet weak var copperDmaPanel: CopperDmaPanel!
-    @IBOutlet weak var blitterDmaPanel: BlitterDmaPanel!
-    @IBOutlet weak var diskDmaPanel: TimeLinePanel!
-    @IBOutlet weak var audioDmaPanel: TimeLinePanel!
-    @IBOutlet weak var spriteDmaPanel: TimeLinePanel!
-    @IBOutlet weak var bitplaneDmaPanel: TimeLinePanel!
+    @IBOutlet weak var copperDmaPanel: DashboardPanel!
+    @IBOutlet weak var blitterDmaPanel: DashboardPanel!
+    @IBOutlet weak var diskDmaPanel: DashboardPanel!
+    @IBOutlet weak var audioDmaPanel: DashboardPanel!
+    @IBOutlet weak var spriteDmaPanel: DashboardPanel!
+    @IBOutlet weak var bitplaneDmaPanel: DashboardPanel!
     
-    @IBOutlet weak var hostLoad: GaugePanel!
-    @IBOutlet weak var hostFps: GaugePanel!
+    @IBOutlet weak var hostLoad: DashboardPanel!
+    @IBOutlet weak var hostFps: DashboardPanel!
 
-    @IBOutlet weak var amigaMhz: GaugePanel!
-    @IBOutlet weak var amigaFps: GaugePanel!
+    @IBOutlet weak var amigaMhz: DashboardPanel!
+    @IBOutlet weak var amigaFps: DashboardPanel!
 
-    @IBOutlet weak var ciaAPanel: GaugePanel!
-    @IBOutlet weak var ciaBPanel: GaugePanel!
+    @IBOutlet weak var ciaAPanel: DashboardPanel!
+    @IBOutlet weak var ciaBPanel: DashboardPanel!
 
-    @IBOutlet weak var audioBufferPanel: GaugePanel!
+    @IBOutlet weak var audioBufferPanel: DashboardPanel!
     @IBOutlet weak var waveformPanelL: WaveformPanel!
     @IBOutlet weak var waveformPanelR: WaveformPanel!
 
