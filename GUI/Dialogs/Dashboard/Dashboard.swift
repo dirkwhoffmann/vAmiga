@@ -9,22 +9,31 @@
 
 class Dashboard: DialogController {
 
-    // Panels
     @IBOutlet weak var chipRamPanel: ChipRamPanel!
     @IBOutlet weak var slowRamPanel: SlowRamPanel!
     @IBOutlet weak var fastRamPanel: FastRamPanel!
     @IBOutlet weak var romPanel: RomPanel!
+    
     @IBOutlet weak var copperDmaPanel: CopperDmaPanel!
     @IBOutlet weak var blitterDmaPanel: BlitterDmaPanel!
-    @IBOutlet weak var diskDmaPanel: TimeSeries!
-    @IBOutlet weak var audioDmaPanel: TimeSeries!
-    @IBOutlet weak var spriteDmaPanel: TimeSeries!
-    @IBOutlet weak var bitplaneDmaPanel: TimeSeries!
-    @IBOutlet weak var myView10: WaveformPanel!
-    @IBOutlet weak var myView11: WaveformPanel!
+    @IBOutlet weak var diskDmaPanel: TimeLinePanel!
+    @IBOutlet weak var audioDmaPanel: TimeLinePanel!
+    @IBOutlet weak var spriteDmaPanel: TimeLinePanel!
+    @IBOutlet weak var bitplaneDmaPanel: TimeLinePanel!
     
-    @IBOutlet weak var activityPanel: ActivityBars!
-    
+    @IBOutlet weak var hostLoad: GaugePanel!
+    @IBOutlet weak var hostFps: GaugePanel!
+
+    @IBOutlet weak var amigaMhz: GaugePanel!
+    @IBOutlet weak var amigaFps: GaugePanel!
+
+    @IBOutlet weak var ciaAPanel: GaugePanel!
+    @IBOutlet weak var ciaBPanel: GaugePanel!
+
+    @IBOutlet weak var audioBufferPanel: GaugePanel!
+    @IBOutlet weak var waveformPanelL: WaveformPanel!
+    @IBOutlet weak var waveformPanelR: WaveformPanel!
+
     override func awakeFromNib() {
 
         super.awakeFromNib()
@@ -36,19 +45,6 @@ class Dashboard: DialogController {
         // Remove later...
         parent.renderer.monitors.updateColors()
         parent.renderer.monitors.open(delay: 1.0)
-        
-        let max = Double((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 4)
-        chipRamPanel.configure(range: 0...max)
-        slowRamPanel.configure(range: 0...max)
-        fastRamPanel.configure(range: 0...max)
-        romPanel.configure(range: 0...max)
-
-        copperDmaPanel.configure(range: 0...(313 * 120), logScale: true)
-        blitterDmaPanel.configure(range: 0...(313 * 120), logScale: true)
-        diskDmaPanel.configure(range: 0...(313 * 3))
-        audioDmaPanel.configure(range: 0...(313 * 4))
-        spriteDmaPanel.configure(range: 0...(313 * 16))
-        bitplaneDmaPanel.configure(range: 0...39330)
     }
     
     func continuousRefresh() {
@@ -84,13 +80,24 @@ class Dashboard: DialogController {
         fastRamPanel.model.add(fastR, fastW)
         romPanel.model.add(kickR, kickW)
     
-        // Experimental
+        // Host
         let stats = emu.stats
-        activityPanel.model.add(stats.cpuLoad + Double.random(in: -0.01...0.01))
+        hostLoad.model.add(stats.cpuLoad)
+        hostFps.model.add(parent.speedometer.gpuFps)
+
+        // Amiga
+        amigaFps.model.add(parent.speedometer.emuFps)
+        amigaMhz.model.add(parent.speedometer.mhz)
         
-        // Audio monitors
-        myView10.update()
-        myView11.update()
+        // CIAs
+        ciaAPanel.model.add(emu.ciaA.stats.idlePercentage)
+        ciaBPanel.model.add(emu.ciaB.stats.idlePercentage)
+
+        // Audio
+        audioBufferPanel.model.add(emu.audioPort.stats.fillLevel)
+        
+        waveformPanelL.update()
+        waveformPanelR.update()
         
         
     }

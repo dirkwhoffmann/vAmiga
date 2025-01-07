@@ -14,9 +14,21 @@ import Charts
 // Time series view
 //
 
-class TimeSeries: NSView {
-    
+class DashboardPanel: NSView {
+
     var model = DashboardDataProvider()
+
+    func configure(title: String, subtitle: String, range: ClosedRange<Double> = 0...1, logScale: Bool = false) {
+
+        model.heading = title
+        model.subHeading = subtitle
+        model.range = range
+        model.logScale = logScale
+    }
+}
+
+class TimeLinePanel: DashboardPanel {
+    
     var host: NSHostingView<ContentView>!
     
     struct ContentView: View {
@@ -126,6 +138,7 @@ class TimeSeries: NSView {
             }
             .background(background)
             .cornerRadius(10)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
     
@@ -142,33 +155,29 @@ class TimeSeries: NSView {
         host.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         host.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
     }
-    
-    func configure(range: ClosedRange<Double>, logScale: Bool = false) {
-                
-        model.range = range
-        model.logScale = logScale
-    }
 }
 
 //
-// Pie chart view
+// Gauge view
 //
 
-class ActivityBars: NSView {
+class GaugePanel: DashboardPanel {
     
-    var model = DashboardDataProvider()
     var host: NSHostingView<ContentView>!
 
     struct ContentView: View {
         
         @ObservedObject var model: DashboardDataProvider
         
+        /*
         private var heading: String {
             return "Heading II" // model.heading
         }
         private var subHeading: String {
             return "Subheading" // model.subHeading
         }
+        */
+        
         private var themeColor: Color {
             return Color(nsColor: model.themeColor)
         }
@@ -235,12 +244,12 @@ class ActivityBars: NSView {
                         HStack {
                             VStack(alignment: .leading) {
                                 
-                                Text(heading)
+                                Text(model.heading)
                                     .font(.system(size: 14))
                                     .fontWeight(.bold)
                                     .foregroundColor(themeColor.opacity(1.0))
                                     .padding(.bottom, 1)
-                                Text(subHeading)
+                                Text(model.subHeading)
                                     .font(.system(size: 8))
                                     .fontWeight(.regular)
                                     .foregroundColor(Color.gray)
@@ -265,9 +274,6 @@ class ActivityBars: NSView {
         
         super.init(coder: aDecoder)
 
-        model.heading = "Activity"
-        model.heading = "Running"
-
         host = NSHostingView(rootView: ContentView( model: model))
         self.addSubview(host)
 
@@ -278,7 +284,6 @@ class ActivityBars: NSView {
             host.topAnchor.constraint(equalTo: self.topAnchor),
             host.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
-         
     }
 }
 
@@ -286,104 +291,188 @@ class ActivityBars: NSView {
 // Custom panels
 //
 
-class ChipRamPanel: TimeSeries {
+class ChipRamPanel: TimeLinePanel {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
-        
+       
         super.init(coder: aDecoder)
-        model.heading = "Chip Ram"
-        model.subHeading = "Memory Accesses"
+        
+        configure(title: "Chip Ram",
+                  subtitle: "Memory Accesses",
+                  range: 0...Double((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 4))
     }
 }
 
-class SlowRamPanel: TimeSeries {
+class SlowRamPanel: TimeLinePanel {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        model.heading = "Slow Ram"
-        model.subHeading = "Memory Accesses"
+        
+        configure(title: "Slow Ram",
+                  subtitle: "Memory Accesses",
+                  range: 0...Double((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 4))
     }
 }
 
-class FastRamPanel: TimeSeries {
+class FastRamPanel: TimeLinePanel {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        model.heading = "Fast Ram"
-        model.subHeading = "Memory Accesses"
+        
+        configure(title: "Fast Ram",
+                  subtitle: "Memory Accesses",
+                  range: 0...Double((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 4))
+        
     }
 }
 
-class RomPanel: TimeSeries {
+class RomPanel: TimeLinePanel {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        model.heading = "Kickstart Rom"
-        model.subHeading = "Memory Accesses"
+        
+        configure(title: "Kickstart Rom",
+                  subtitle: "Memory Accesses",
+                  range: 0...Double((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 4))
     }
 }
 
-class CopperDmaPanel: TimeSeries {
+class CopperDmaPanel: TimeLinePanel {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        model.heading = "Copper"
-        model.subHeading = "DMA Accesses"
-        model.logScale = true
+        
+        configure(title: "Copper",
+                  subtitle: "DMA Accesses",
+                  range: 0...(313 * 120),
+                  logScale: true)
     }
 }
 
-class BlitterDmaPanel: TimeSeries {
+class BlitterDmaPanel: TimeLinePanel {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        model.heading = "Blitter"
-        model.subHeading = "DMA Accesses"
-        model.logScale = true
+        
+        configure(title: "Blitter",
+                  subtitle: "DMA Accesses",
+                  range: 0...(313 * 120),
+                  logScale: true)
     }
 }
 
-class DiskDmaPanel: TimeSeries {
+class DiskDmaPanel: TimeLinePanel {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        model.heading = "Disk"
-        model.subHeading = "DMA Accesses"
+        
+        configure(title: "Disk",
+                  subtitle: "DMA Accesses",
+                  range: 0...(313 * 3))
     }
 }
 
-class AudioDmaPanel: TimeSeries {
+class AudioDmaPanel: TimeLinePanel {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        model.heading = "Audio"
-        model.subHeading = "DMA Accesses"
+        
+        configure(title: "Audio",
+                  subtitle: "DMA Accesses",
+                  range: 0...(313 * 4))
     }
 }
 
-class SpriteDmaPanel: TimeSeries {
+class SpriteDmaPanel: TimeLinePanel {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        model.heading = "Sprite"
-        model.subHeading = "DMA Accesses"
+        
+        configure(title: "Sprite",
+                  subtitle: "DMA Accesses",
+                  range: 0...(313 * 16))
     }
 }
 
-class BitplaneDmaPanel: TimeSeries {
-
+class BitplaneDmaPanel: TimeLinePanel {
+    
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        model.heading = "Bitplane"
-        model.subHeading = "DMA Accesses"
+        
+        configure(title: "Sprite",
+                  subtitle: "DMA Accesses",
+                  range: 0...39330)
+    }
+}
+
+class CpuLoadPanel: GaugePanel {
+    
+    @MainActor required init?(coder aDecoder: NSCoder) {
+        
+        super.init(coder: aDecoder)
+        configure(title: "Host CPU", subtitle: "Load", range: 0...1.0)
+    }
+}
+
+class GpuFpsPanel: GaugePanel {
+    
+    @MainActor required init?(coder aDecoder: NSCoder) {
+        
+        super.init(coder: aDecoder)
+        configure(title: "Host GPU", subtitle: "Refresh Rate", range: 0...120)
+    }
+}
+
+class AmigaFrequencyPanel: GaugePanel {
+    
+    @MainActor required init?(coder aDecoder: NSCoder) {
+        
+        super.init(coder: aDecoder)
+        configure(title: "Amiga", subtitle: "CPU Frequency", range: 0...14)
+    }
+}
+
+class AmigaFpsPanel: GaugePanel {
+    
+    @MainActor required init?(coder aDecoder: NSCoder) {
+        
+        super.init(coder: aDecoder)
+        configure(title: "Amiga", subtitle: "Refresh Rate", range: 0...120)
+    }
+}
+
+class CIAAPanel: GaugePanel {
+    
+    @MainActor required init?(coder aDecoder: NSCoder) {
+        
+        super.init(coder: aDecoder)
+        configure(title: "CIA A", subtitle: "Awakeness")
+    }
+}
+
+class CIABPanel: GaugePanel {
+    
+    @MainActor required init?(coder aDecoder: NSCoder) {
+        
+        super.init(coder: aDecoder)
+        configure(title: "CIA B", subtitle: "Awakeness")
+    }
+}
+
+class AudioFillLevelPanel: GaugePanel {
+    
+    @MainActor required init?(coder aDecoder: NSCoder) {
+        
+        super.init(coder: aDecoder)
+        configure(title: "Audio Buffer", subtitle: "Fill Level")
     }
 }
