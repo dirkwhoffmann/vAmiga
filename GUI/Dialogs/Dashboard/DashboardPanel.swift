@@ -18,18 +18,43 @@ class DashboardPanel: NSView {
 
     var model = DashboardDataProvider()
 
+    // Title and sub title
+    var heading = ""
+    var subHeading = ""
+    
+    // Colors and gradients
+    var graph1Color = Color(NSColor.init(r: 0x33, g: 0x99, b: 0xFF))
+    var graph2Color = Color(NSColor.init(r: 0xFF, g: 0x33, b: 0x99))
+    var lineColor = Color.gray
+    var headingColor = Color.white
+    var subheadingColor = Color.gray
+
+    var themeColor: NSColor = .white {
+        didSet {
+            lineColor = Color(themeColor).opacity(0.6)
+            graph1Color = Color(themeColor)
+            graph2Color = Color(themeColor)
+            headingColor = Color(themeColor)
+        }
+    }
+
     func configure(title: String, subtitle: String, range: ClosedRange<Double> = 0...1, logScale: Bool = false) {
 
-        model.heading = title
-        model.subHeading = subtitle
+        heading = title
+        subHeading = subtitle
         model.logScale = logScale
         model.range = range
     }
-    
+    var background: Gradient {
+        return Gradient(colors: [Color.black, Color.black])
+    }
+    var gradients: KeyValuePairs<Int, Gradient> {
+        return [ 1: Gradient(colors: [graph1Color.opacity(0.75), graph1Color.opacity(0.25)]),
+                 2: Gradient(colors: [graph2Color.opacity(0.75), graph2Color.opacity(0.25)])]
+    }
     var gridLineColor: Color {
         return Color.white.opacity(0.6)
     }
-
 }
 
 class TimeLinePanel: DashboardPanel {
@@ -39,39 +64,27 @@ class TimeLinePanel: DashboardPanel {
     struct ContentView: View {
         
         @ObservedObject var model: DashboardDataProvider
+        var panel: DashboardPanel!
         
-        private var graph1Color: Color {
-            return Color(nsColor: (model.graph1Color != nil) ? model.graph1Color! : model.themeColor)
-        }
-        private var graph2Color: Color {
-            return Color(nsColor: (model.graph2Color != nil) ? model.graph2Color! : model.themeColor)
-        }
-        private var background: Gradient {
-            return Gradient(colors: [Color.black, Color.black])
-        }
-        private var gradients: KeyValuePairs<Int, Gradient> {
-            return [ 1: Gradient(colors: [graph1Color.opacity(0.75), graph1Color.opacity(0.25)]),
-                     2: Gradient(colors: [graph2Color.opacity(0.75), graph2Color.opacity(0.25)])]
-        }
-
         var body: some View {
             
             VStack(alignment: .leading) {
                 
                 VStack(alignment: .leading) {
-                    Text(model.heading)
+                    Text(panel.heading)
                         .font(.system(size: 14))
                         .fontWeight(.bold)
-                        .foregroundColor(Color(model.themeColor))
+                        .foregroundColor(panel.headingColor)
                         .padding(.bottom, 1)
-                    Text(model.subHeading)
+                    Text(panel.subHeading)
                         .font(.system(size: 8))
                         .fontWeight(.regular)
-                        .foregroundColor(Color.gray)
+                        .foregroundColor(panel.subheadingColor)
                 }
                 .padding(EdgeInsets(top: 10, leading: 15, bottom: 5, trailing: 15))
                 
                 Chart {
+                    
                     ForEach(model.data.filter { $0.series != 3 }, id: \.id) { dataPoint in
                         AreaMark(
                             x: .value("Time", dataPoint.timestamp),
@@ -87,8 +100,9 @@ class TimeLinePanel: DashboardPanel {
                             y: .value("Value", dataPoint.value),
                             series: .value("Series", dataPoint.series)
                         )
+                        
                         .interpolationMethod(.catmullRom)
-                        .foregroundStyle(Color(nsColor: model.lineColor))
+                        .foregroundStyle(panel.lineColor)
                         .lineStyle(StrokeStyle(lineWidth: 1.25))
                         /*
                         .symbol {
@@ -111,14 +125,14 @@ class TimeLinePanel: DashboardPanel {
                 .chartYAxis {
                     AxisMarks(values: model.gridLines) {
                         AxisGridLine()
-                            .foregroundStyle(Color.white.opacity(0.6))
+                            .foregroundStyle(panel.gridLineColor)
                     }
                 }
                 .padding(EdgeInsets(top: 0.0, leading: 15.0, bottom: 15.0, trailing: 15.0))
                 .chartLegend(.hidden)
-                .chartForegroundStyleScale(gradients)
+                .chartForegroundStyleScale(panel.gradients)
             }
-            .background(background)
+            .background(panel.background)
             .cornerRadius(10)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
@@ -128,7 +142,7 @@ class TimeLinePanel: DashboardPanel {
         
         super.init(coder: aDecoder)
         
-        host = NSHostingView(rootView: ContentView( model: model))
+        host = NSHostingView(rootView: ContentView( model: model, panel: self))
         self.addSubview(host)
         
         host.translatesAutoresizingMaskIntoConstraints = false
@@ -153,13 +167,13 @@ class GaugePanel: DashboardPanel {
         var panel: DashboardPanel
         
         private var themeColor: Color {
-            return Color(nsColor: model.themeColor)
+            return Color(nsColor: panel.themeColor)
         }
         private var graph1Color: Color {
-            return Color(nsColor: (model.graph1Color != nil) ? model.graph1Color! : model.themeColor)
+            return panel.graph1Color
         }
         private var graph2Color: Color {
-            return Color(nsColor: (model.graph2Color != nil) ? model.graph2Color! : model.themeColor)
+            return panel.graph2Color
         }
         private var background: Gradient {
             return Gradient(colors: [Color.black, Color.black])
@@ -218,12 +232,12 @@ class GaugePanel: DashboardPanel {
                         HStack {
                             VStack(alignment: .leading) {
                                 
-                                Text(model.heading)
+                                Text(panel.heading)
                                     .font(.system(size: 14))
                                     .fontWeight(.bold)
                                     .foregroundColor(themeColor.opacity(1.0))
                                     .padding(.bottom, 1)
-                                Text(model.subHeading)
+                                Text(panel.subHeading)
                                     .font(.system(size: 8))
                                     .fontWeight(.regular)
                                     .foregroundColor(Color.gray)

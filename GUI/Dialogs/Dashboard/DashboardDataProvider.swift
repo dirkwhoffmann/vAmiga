@@ -29,20 +29,6 @@ class DashboardDataProvider: ObservableObject {
     // Valid value range
     var range: ClosedRange = 0.0...1.0 { didSet { updateGridLines() } }
     
-    // Title and sub title
-    var heading = ""
-    var subHeading = ""
-    
-    // Colors and gradients
-    var themeColor: NSColor = .white {
-        didSet {
-            lineColor = themeColor // .adjust(brightness: 1.0, saturation: 0.5)
-        }
-    }
-    var graph1Color: NSColor?
-    var graph2Color: NSColor?
-    var lineColor = NSColor.white
-
     // Grid lines
     var gridLines: [Double] = []
         
