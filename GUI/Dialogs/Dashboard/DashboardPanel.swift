@@ -55,7 +55,7 @@ struct TimeSeriesView: View {
                     
                     .interpolationMethod(.catmullRom)
                     .foregroundStyle(panel.lineColor)
-                    .lineStyle(StrokeStyle(lineWidth: 1))
+                    .lineStyle(StrokeStyle(lineWidth: 1.5))
                     /*
                     .symbol {
                         if #available(macOS 15.0, *) {
@@ -152,7 +152,7 @@ class DashboardPanel: NSView {
     // Colors and gradients
     var graph1Color = Color(NSColor.init(r: 0x33, g: 0x99, b: 0xFF))
     var graph2Color = Color(NSColor.init(r: 0xFF, g: 0x33, b: 0x99))
-    var lineColor = Color(NSColor.labelColor)
+    var lineColor = Color(NSColor.labelColor).opacity(0.5)
     var headingColor = Color(NSColor.secondaryLabelColor)
     var subheadingColor = Color(NSColor.secondaryLabelColor)
     
@@ -194,7 +194,7 @@ class DashboardPanel: NSView {
     }
 
     var gridLineColor: Color {
-        return Color(NSColor.labelColor).opacity(0.6)
+        return Color(NSColor.labelColor).opacity(0.2)
     }
     var padding: EdgeInsets {
         // return EdgeInsets(top: 4.0, leading: 4.0, bottom: 4.0, trailing: 4.0)
