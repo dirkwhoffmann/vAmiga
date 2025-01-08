@@ -13,6 +13,10 @@ extension MyController: NSWindowDelegate {
         
     public func windowDidBecomeMain(_ notification: Notification) {
         
+        debug(.lifetime)
+        
+        initialize()
+        
         guard let window = notification.object as? NSWindow else { return }
         
         // Inform the application delegate

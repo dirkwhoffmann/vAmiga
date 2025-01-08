@@ -127,6 +127,8 @@ class MyController: NSWindowController, MessageReceiver {
     var drvLED: [NSButton?] = Array(repeating: nil, count: 8)
     var drvCyl: [NSTextField?] = Array(repeating: nil, count: 8)
     var drvIcon: [NSButton?] = Array(repeating: nil, count: 8)
+    
+    var initialized = false
 }
 
 extension MyController {
@@ -160,7 +162,6 @@ extension MyController {
         
         config = Configuration(with: self)
         macAudio = MacAudio(with: self)
-        // inspector = Inspector(with: self, nibName: "Inspector")
         
         ledSlot = [ ledSlot0, ledSlot1, letSlot2, ledSlot3 ]
         cylSlot = [ cylSlot0, cylSlot1, cylSlot2, cylSlot3 ]
@@ -170,6 +171,12 @@ extension MyController {
     override open func windowDidLoad() {
         
         debug(.lifetime)
+        initialize()
+    }
+    
+    func initialize() {
+        
+        if initialized { return }
         
         // Create keyboard controller
         keyboard = KeyboardController(parent: self)
@@ -225,6 +232,8 @@ extension MyController {
         
         // Update status bar
         refreshStatusBar()
+        
+        initialized = true
     }
     
     func configureWindow() {
