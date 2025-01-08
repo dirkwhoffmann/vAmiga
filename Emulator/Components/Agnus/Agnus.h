@@ -87,7 +87,6 @@ public:
     RegChangeRecorder<8> changeRecorder;
 
     // Optional events to be processed in serviceRegEvent()
-    // EventID syncEvent = EVENT_NONE;
     EventFlags syncEvent = 0;
     
     //
