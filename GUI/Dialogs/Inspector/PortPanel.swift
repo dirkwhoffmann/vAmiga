@@ -7,11 +7,11 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-let serDatFont = NSFontManager.shared.font(withFamily: "Courier New",
-                                           traits: .boldFontMask,
-                                           weight: 0, size: 10)
-
 extension Inspector {
+    
+    static let serDatFont = NSFontManager.shared.font(withFamily: "Courier New",
+                                                      traits: .boldFontMask,
+                                                      weight: 0, size: 10)
 
     private func cachePorts() {
 
@@ -120,7 +120,7 @@ extension Inspector {
             if poSerialIn.string.count != serialInSize {
                 poSerialIn.string = parent!.serialIn
                 poSerialIn.scrollToEndOfDocument(nil)
-                poSerialIn.font = serDatFont
+                poSerialIn.font = Inspector.serDatFont
             }
 
             let serialOutSize = parent!.serialOut.count
@@ -134,7 +134,7 @@ extension Inspector {
             if poSerialOut.string.count != serialOutSize {
                 poSerialOut.string = parent!.serialOut
                 poSerialOut.scrollToEndOfDocument(nil)
-                poSerialOut.font = serDatFont
+                poSerialOut.font = Inspector.serDatFont
             }
         }
     }

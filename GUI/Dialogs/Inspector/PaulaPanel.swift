@@ -7,13 +7,13 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-let image0 = NSImage(named: "state0Template")!
-let image1 = NSImage(named: "state1Template")!
-let image2 = NSImage(named: "state2Template")!
-let image3 = NSImage(named: "state3Template")!
-let image5 = NSImage(named: "state5Template")!
-
 extension Inspector {
+
+    static let image0 = NSImage(named: "state0Template")!
+    static let image1 = NSImage(named: "state1Template")!
+    static let image2 = NSImage(named: "state2Template")!
+    static let image3 = NSImage(named: "state3Template")!
+    static let image5 = NSImage(named: "state5Template")!
 
     private func cachePaula() {
 
@@ -185,11 +185,11 @@ extension Inspector {
 
             // Assign the correct image
             switch displayState {
-            case 0:  button.image = image0
-            case 1:  button.image = image1
-            case 2:  button.image = image2
-            case 3:  button.image = image3
-            case 5:  button.image = image5
+            case 0:  button.image = Inspector.image0
+            case 1:  button.image = Inspector.image1
+            case 2:  button.image = Inspector.image2
+            case 3:  button.image = Inspector.image3
+            case 5:  button.image = Inspector.image5
             default: button.image = nil
             }
         }

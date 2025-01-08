@@ -58,7 +58,7 @@ class MyApplication: NSApplication {
     }
 }
 
-@NSApplicationMain
+@main
 @objc public class MyAppDelegate: NSObject, NSApplicationDelegate {
     
     @IBOutlet weak var df0Menu: NSMenuItem!
