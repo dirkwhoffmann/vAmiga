@@ -30,29 +30,29 @@ extension Inspector {
         cachePaula()
 
         if full {
-            let elements = [ paulaIntena: fmt16,
-                             paulaIntreq: fmt16,
-                             dskDsklen: fmt16,
-                             dskDskbytr: fmt16,
-                             dskAdkconHi: fmt8,
-                             dskDsksync: fmt16,
+            let elements = [ paulaIntena: Inspector.fmt16,
+                             paulaIntreq: Inspector.fmt16,
+                               dskDsklen: Inspector.fmt16,
+                              dskDskbytr: Inspector.fmt16,
+                             dskAdkconHi: Inspector.fmt8,
+                              dskDsksync: Inspector.fmt16,
 
-                             audioLen0: fmt16,
-                             audioPer0: fmt16,
-                             audioVol0: fmt16,
-                             audioDat0: fmt16,
-                             audioLen1: fmt16,
-                             audioPer1: fmt16,
-                             audioVol1: fmt16,
-                             audioDat1: fmt16,
-                             audioLen2: fmt16,
-                             audioPer2: fmt16,
-                             audioVol2: fmt16,
-                             audioDat2: fmt16,
-                             audioLen3: fmt16,
-                             audioPer3: fmt16,
-                             audioVol3: fmt16,
-                             audioDat3: fmt16
+                               audioLen0: Inspector.fmt16,
+                               audioPer0: Inspector.fmt16,
+                               audioVol0: Inspector.fmt16,
+                               audioDat0: Inspector.fmt16,
+                               audioLen1: Inspector.fmt16,
+                               audioPer1: Inspector.fmt16,
+                               audioVol1: Inspector.fmt16,
+                               audioDat1: Inspector.fmt16,
+                               audioLen2: Inspector.fmt16,
+                               audioPer2: Inspector.fmt16,
+                               audioVol2: Inspector.fmt16,
+                               audioDat2: Inspector.fmt16,
+                               audioLen3: Inspector.fmt16,
+                               audioPer3: Inspector.fmt16,
+                               audioVol3: Inspector.fmt16,
+                               audioDat3: Inspector.fmt16
             ]
 
             for (c, f) in elements { assignFormatter(f, c!) }

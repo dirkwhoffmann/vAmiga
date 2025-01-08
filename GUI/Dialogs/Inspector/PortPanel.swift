@@ -39,17 +39,17 @@ extension Inspector {
         cachePorts()
         
         if full {
-            let elements = [  poPOTGO: fmt16,
-                             poPOTGOR: fmt16,
-                            po0JOYDAT: fmt16,
-                            po0POTDAT: fmt16,
-                            po1JOYDAT: fmt16,
-                            po1POTDAT: fmt16,
-                             poSERPER: fmt16,
-                           poRecShift: fmt16,
-                          poRecBuffer: fmt16,
-                         poTransShift: fmt16,
-                        poTransBuffer: fmt16
+            let elements = [  poPOTGO: Inspector.fmt16,
+                             poPOTGOR: Inspector.fmt16,
+                            po0JOYDAT: Inspector.fmt16,
+                            po0POTDAT: Inspector.fmt16,
+                            po1JOYDAT: Inspector.fmt16,
+                            po1POTDAT: Inspector.fmt16,
+                             poSERPER: Inspector.fmt16,
+                           poRecShift: Inspector.fmt16,
+                          poRecBuffer: Inspector.fmt16,
+                         poTransShift: Inspector.fmt16,
+                        poTransBuffer: Inspector.fmt16
             ]
 
             for (c, f) in elements { assignFormatter(f, c!) }
