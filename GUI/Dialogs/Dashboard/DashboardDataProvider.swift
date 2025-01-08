@@ -52,7 +52,6 @@ class DashboardDataProvider: ObservableObject {
         } else {
             gridLines = [0.0, 0.25, 0.5, 0.75, 1.0].map { $0 * range.upperBound }
         }
-        // gridLines = gridLines.map { $0 * range.upperBound }
     }
     
     var timeSpan: TimeInterval {

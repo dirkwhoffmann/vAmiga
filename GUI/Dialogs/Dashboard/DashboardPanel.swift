@@ -30,7 +30,7 @@ struct TimeSeriesView: View {
                     .foregroundColor(panel.headingColor)
                     .padding(.bottom, 1)
                 Text(panel.subHeading)
-                    .font(.system(size: 8))
+                    .font(.system(size: 9))
                     .fontWeight(.regular)
                     .foregroundColor(panel.subheadingColor)
             }
@@ -53,19 +53,18 @@ struct TimeSeriesView: View {
                         series: .value("Series", dataPoint.series)
                     )
                     
-                    // .interpolationMethod(.catmullRom)
-                    .interpolationMethod(.cardinal)
+                    .interpolationMethod(.catmullRom)
                     .foregroundStyle(panel.lineColor)
-                    .lineStyle(StrokeStyle(lineWidth: 1.25))
+                    .lineStyle(StrokeStyle(lineWidth: 1))
                     /*
                     .symbol {
                         if #available(macOS 15.0, *) {
                             Circle()
-                                .fill(graph1Color.mix(with: .white, by: 0.5))
-                                .frame(width: 2)
+                                .fill(panel.graph1Color.mix(with: .white, by: 0.5))
+                                .frame(width: 4)
                         } else {
                             Circle()
-                                .fill(graph1Color)
+                                .fill(panel.graph1Color)
                                 .frame(width: 2)
                         }
                     }
@@ -84,10 +83,10 @@ struct TimeSeriesView: View {
             .chartLegend(.hidden)
             .chartForegroundStyleScale(panel.gradients)
         }
-        // .background(panel.background)
+        .padding(panel.padding)
+        .background(panel.background)
         .cornerRadius(10)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding(panel.padding)
     }
 }
 
@@ -109,7 +108,7 @@ struct GaugeView: View {
                         .foregroundColor(panel.headingColor)
                         .padding(.bottom, 1)
                     Text(panel.subHeading)
-                        .font(.system(size: 8))
+                        .font(.system(size: 9))
                         .fontWeight(.regular)
                         .foregroundColor(panel.subheadingColor)
                 }
@@ -132,7 +131,7 @@ struct GaugeView: View {
             }
         }
         .padding(panel.padding)
-        // .background(panel.background)
+        .background(panel.background)
         .cornerRadius(10)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
@@ -179,7 +178,12 @@ class DashboardPanel: NSView {
         model.range = range
     }
     var background: Gradient {
-        return Gradient(colors: [Color.black, Color.black])
+        if #available(macOS 14.0, *) {
+            return Gradient(colors: [Color(NSColor.controlBackgroundColor),
+                                     Color(window!.backgroundColor)])
+        } else {
+            return Gradient(colors: [Color.clear, Color.clear])
+        }
     }
     var gradients: KeyValuePairs<Int, Gradient> {
         return [ 1: Gradient(colors: [graph1Color.opacity(0.75), graph1Color.opacity(0.25)]),
@@ -193,7 +197,8 @@ class DashboardPanel: NSView {
         return Color(NSColor.labelColor).opacity(0.6)
     }
     var padding: EdgeInsets {
-        return EdgeInsets(top: 4.0, leading: 4.0, bottom: 4.0, trailing: 4.0)
+        // return EdgeInsets(top: 4.0, leading: 4.0, bottom: 4.0, trailing: 4.0)
+        return EdgeInsets(top: 8.0, leading: 8.0, bottom: 0.0, trailing: 8.0)
     }
 
     var host1: NSHostingView<TimeSeriesView>!
