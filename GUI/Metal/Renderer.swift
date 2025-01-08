@@ -77,15 +77,6 @@ class Renderer: NSObject, MTKViewDelegate {
     // Indicates if an animation is in progress
     var animates = 0
         
-    // Geometry animation parameters
-    var angleX = AnimatedFloat(0.0)
-    var angleY = AnimatedFloat(0.0)
-    var angleZ = AnimatedFloat(0.0)
-    
-    var shiftX = AnimatedFloat(0.0)
-    var shiftY = AnimatedFloat(0.0)
-    var shiftZ = AnimatedFloat(0.0)
-     
     // Color animation parameters
     var white = AnimatedFloat(0.0)
     

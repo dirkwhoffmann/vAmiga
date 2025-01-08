@@ -11,9 +11,8 @@ import simd
 
 struct AnimationType {
     
-    static let geometry = 1
-    static let color = 2
-    static let texture = 4
+    static let color = 1
+    static let texture = 2
 }
 
 struct AnimatedFloat {
@@ -63,28 +62,6 @@ extension Renderer {
     
     func animate() {
                 
-        // Geometry animations
-        if (animates & AnimationType.geometry) != 0 {
-                        
-            angleX.move()
-            angleY.move()
-            angleZ.move()
-            var cont = angleX.animates || angleY.animates || angleZ.animates
-                    
-            shiftX.move()
-            shiftY.move()
-            shiftZ.move()
-            cont = cont || shiftX.animates || shiftY.animates || shiftZ.animates
-            
-            // Check if animation has terminated
-            if !cont {
-                animates -= AnimationType.geometry
-                angleX.set(0)
-                angleY.set(0)
-                angleZ.set(0)
-            }
-        }
-        
         // Color animations
         if (animates & AnimationType.color) != 0 {
 
@@ -169,85 +146,6 @@ extension Renderer {
         cutoutY2.steps = steps
 
         animates |= AnimationType.texture
-    }
-
-    //
-    // Geometry animations
-    //
-
-    func zoomIn(steps: Int = 30) {
-
-        shiftZ.current = 0.025
-        shiftZ.target = 0.0
-        angleX.target = 0.0
-        angleY.target = 0.0
-        angleZ.target = 0.0
-
-        shiftZ.steps = steps
-        angleX.steps = steps
-        angleY.steps = steps
-        angleZ.steps = steps
-
-        animates |= AnimationType.geometry
-    }
-
-    func zoomOut(steps: Int = 30) {
-
-        shiftZ.target = 0.025
-        angleX.target = 0.0
-        angleY.target = 0.0
-        angleZ.target = 0.0
-
-        shiftZ.steps = steps
-        angleX.steps = steps
-        angleY.steps = steps
-        angleZ.steps = steps
-
-        animates |= AnimationType.geometry
-    }
-
-    func rotate(x: Float = 0.0, y: Float = 0.0, z: Float = 0.0) {
-
-        angleX.target = x
-        angleY.target = y
-        angleZ.target = z
-
-        let steps = 60
-        angleX.steps = steps
-        angleY.steps = steps
-        angleZ.steps = steps
-
-        animates |= AnimationType.geometry
-    }
-
-    func rotateRight() { rotate(y: -90) }
-    func rotateLeft() { rotate(y: 90) }
-    func rotateDown() { rotate(x: 90) }
-    func rotateUp() { rotate(x: -90) }
-
-    func scroll(steps: Int = 120) {
-
-        shiftY.current = -1.5
-        shiftY.target = 0
-        angleX.target = 0.0
-        angleY.target = 0.0
-        angleZ.target = 0.0
-
-        shiftY.steps = steps
-        angleX.steps = steps
-        angleY.steps = steps
-        angleZ.steps = steps
-
-        animates |= AnimationType.geometry
-    }
-
-    func snapToFront() {
-
-        shiftZ.current = -0.05
-        shiftZ.target = 0
-        shiftZ.steps = 10
-
-        animates |= AnimationType.geometry
     }
     
     //
