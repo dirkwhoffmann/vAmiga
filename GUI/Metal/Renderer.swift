@@ -57,7 +57,6 @@ class Renderer: NSObject, MTKViewDelegate {
     var canvas: Canvas! = nil
     var console: Console! = nil
     var dropZone: DropZone! = nil
-    var monitors: Monitors! = nil
 
     //
     // Ressources
@@ -162,7 +161,6 @@ class Renderer: NSObject, MTKViewDelegate {
 
         // Rebuild matrices
         buildMatrices2D()
-        buildMatrices3D()
 
         // Rebuild depth buffer
         ressourceManager.buildDepthBuffer()
@@ -223,7 +221,6 @@ class Renderer: NSObject, MTKViewDelegate {
         dropZone.update(frames: frames)
         console.update(frames: frames)
         canvas.update(frames: frames)
-        monitors.update(frames: frames)
         parent.update(frames: frames)
 
         measureFps(frames: frames)
@@ -287,7 +284,6 @@ class Renderer: NSObject, MTKViewDelegate {
             // Render the scene
             if canvas.isTransparent { splashScreen.render(encoder) }
             if canvas.isVisible { canvas.render(encoder) }
-            if monitors.isVisible { monitors.render(encoder) }
             encoder.endEncoding()
 
             // Commit the command buffer

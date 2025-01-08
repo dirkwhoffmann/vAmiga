@@ -102,7 +102,6 @@ extension MyController: NSWindowDelegate {
     public func windowDidEnterFullScreen(_ notification: Notification) {
 
         debug(.lifetime)
-        renderer.monitors.updateMonitorPositions()
     }
     
     public func windowWillExitFullScreen(_ notification: Notification) {
@@ -115,7 +114,6 @@ extension MyController: NSWindowDelegate {
     public func windowDidExitFullScreen(_ notification: Notification) {
 
         debug(.lifetime)
-        renderer.monitors.updateMonitorPositions()
     }
     
     public func window(_ window: NSWindow, willUseFullScreenPresentationOptions proposedOptions: NSApplication.PresentationOptions = []) -> NSApplication.PresentationOptions {

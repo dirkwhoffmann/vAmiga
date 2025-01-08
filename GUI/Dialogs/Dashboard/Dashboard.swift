@@ -42,9 +42,6 @@ class Dashboard: DialogController {
     
     override func windowDidLoad() {
         
-        // Remove later...
-        parent.renderer.monitors.updateColors()
-        parent.renderer.monitors.open(delay: 1.0)
     }
     
     func continuousRefresh() {

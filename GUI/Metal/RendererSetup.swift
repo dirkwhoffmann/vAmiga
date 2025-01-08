@@ -90,7 +90,6 @@ extension Renderer {
         canvas = Canvas(renderer: self)
         console = Console(renderer: self)
         dropZone = DropZone(renderer: self)
-        monitors = Monitors(renderer: self)
     }
         
     func buildPipeline() {
@@ -172,43 +171,6 @@ extension Renderer {
         let mvp = Renderer.scalingMatrix(xs: xs, ys: 1.0, zs: 1.0)
 
         canvas.vertexUniforms2D.mvp = mvp
-        monitors.vertexUniforms2D.mvp = mvp
-    }
-
-    func buildMatrices3D() {
-
-        let xAngle = -angleX.current / 180.0 * .pi
-        let yAngle = angleY.current / 180.0 * .pi
-        let zAngle = angleZ.current / 180.0 * .pi
-
-        let xShift = -shiftX.current
-        let yShift = -shiftY.current
-        let zShift = shiftZ.current
-
-        let aspect = Float(size.width) / Float(size.height)
-        
-        let view = matrix_identity_float4x4
-        let proj = Renderer.perspectiveMatrix(fovY: Float(65.0 * (.pi / 180.0)),
-                                              aspect: aspect,
-                                              nearZ: 0.1,
-                                              farZ: 100.0)
-
-        let transEye = Renderer.translationMatrix(x: xShift,
-                                                  y: yShift,
-                                                  z: zShift + 1.393 - 0.16)
-
-        let transRotX = Renderer.translationMatrix(x: 0.0,
-                                                   y: 0.0,
-                                                   z: 0.16)
-
-        let rotX = Renderer.rotationMatrix(radians: xAngle, x: 0.5, y: 0.0, z: 0.0)
-        let rotY = Renderer.rotationMatrix(radians: yAngle, x: 0.0, y: 0.5, z: 0.0)
-        let rotZ = Renderer.rotationMatrix(radians: zAngle, x: 0.0, y: 0.0, z: 0.5)
-
-        let model = transEye * rotX * transRotX * rotY * rotZ
-        let mvp = proj * view * model
-        
-        monitors.vertexUniforms3D.mvp = mvp
     }
 
     //

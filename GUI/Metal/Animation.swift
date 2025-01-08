@@ -83,8 +83,6 @@ extension Renderer {
                 angleY.set(0)
                 angleZ.set(0)
             }
-        
-            buildMatrices3D()
         }
         
         // Color animations

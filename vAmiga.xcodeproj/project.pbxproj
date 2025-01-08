@@ -262,7 +262,6 @@
 		50C8C44A2607396200F4E012 /* Layer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C4492607396200F4E012 /* Layer.swift */; };
 		50C8C44F260740AC00F4E012 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C44E260740AC00F4E012 /* SplashScreen.swift */; };
 		50C8C452260747EA00F4E012 /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C451260747EA00F4E012 /* Canvas.swift */; };
-		50C8C4552607524400F4E012 /* Monitors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C4542607524400F4E012 /* Monitors.swift */; };
 		50C9A6352C6A747F00007A12 /* SampleRateDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C9A6332C6A747F00007A12 /* SampleRateDetector.cpp */; };
 		50C9A6362C6A747F00007A12 /* SampleRateDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C9A6332C6A747F00007A12 /* SampleRateDetector.cpp */; };
 		50CC209727ECCD6D00AEA010 /* OSDescriptors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50CC209527ECCD6D00AEA010 /* OSDescriptors.cpp */; };
@@ -483,7 +482,6 @@
 		50FC08B127819E4100F0C567 /* BlitterInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC08B027819E4100F0C567 /* BlitterInfo.cpp */; };
 		50FCCA7C262AAAEA00398342 /* Script.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FCCA7A262AAAEA00398342 /* Script.cpp */; };
 		50FF747327D3BBFE00B6EA01 /* hdr_click.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50FF747227D3BBFE00B6EA01 /* hdr_click.aiff */; };
-		50FFA7D02440CB0300BEBA6B /* ActivityMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FFA7CF2440CB0300BEBA6B /* ActivityMonitor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -902,7 +900,6 @@
 		50C8C4492607396200F4E012 /* Layer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layer.swift; sourceTree = "<group>"; };
 		50C8C44E260740AC00F4E012 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
 		50C8C451260747EA00F4E012 /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
-		50C8C4542607524400F4E012 /* Monitors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monitors.swift; sourceTree = "<group>"; };
 		50C9A6332C6A747F00007A12 /* SampleRateDetector.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SampleRateDetector.cpp; sourceTree = "<group>"; };
 		50C9A6342C6A747F00007A12 /* SampleRateDetector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SampleRateDetector.h; sourceTree = "<group>"; };
 		50CA602E260E02B700C4A22C /* Reflection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reflection.h; sourceTree = "<group>"; };
@@ -1081,7 +1078,6 @@
 		50FCCA7A262AAAEA00398342 /* Script.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Script.cpp; sourceTree = "<group>"; };
 		50FCCA7B262AAAEA00398342 /* Script.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Script.h; sourceTree = "<group>"; };
 		50FF747227D3BBFE00B6EA01 /* hdr_click.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = hdr_click.aiff; sourceTree = "<group>"; };
-		50FFA7CF2440CB0300BEBA6B /* ActivityMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityMonitor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2001,8 +1997,6 @@
 				50C8C451260747EA00F4E012 /* Canvas.swift */,
 				5026EDBE2608DC8E00D90CE1 /* Console.swift */,
 				505CEF5D26BD12430078FF52 /* DropZone.swift */,
-				50C8C4542607524400F4E012 /* Monitors.swift */,
-				50FFA7CF2440CB0300BEBA6B /* ActivityMonitor.swift */,
 			);
 			path = Layers;
 			sourceTree = "<group>";
@@ -2304,7 +2298,6 @@
 				508FE01021EA227B0043D0E9 /* Speedometer.swift in Sources */,
 				502023ED27B6BE7200820DB6 /* RamExpansion.cpp in Sources */,
 				507215A925EAB4AC00787591 /* Chrono.cpp in Sources */,
-				50FFA7D02440CB0300BEBA6B /* ActivityMonitor.swift in Sources */,
 				50EFB0BA2C1811C90013B73C /* Configurable.cpp in Sources */,
 				50BF1CCE276DC7BB00386540 /* GdbServerCmds.cpp in Sources */,
 				509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */,
@@ -2342,7 +2335,6 @@
 				500C7170255EE2AC00DDEEB2 /* Concurrency.cpp in Sources */,
 				50A61463260DB7F900A01428 /* Parser.cpp in Sources */,
 				502B303828469CF600673377 /* Beam.cpp in Sources */,
-				50C8C4552607524400F4E012 /* Monitors.swift in Sources */,
 				501A9937243A07A100D269B2 /* Storage.swift in Sources */,
 				509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */,
 				5023519024485BBF00F6C088 /* Preferences.swift in Sources */,

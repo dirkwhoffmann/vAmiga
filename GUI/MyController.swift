@@ -288,7 +288,6 @@ extension MyController {
         if frames % 16 == 0 {
 
             updateSpeedometer()
-            updateMonitoringPanels()
         }
         
         // Do lesser times...
@@ -303,58 +302,6 @@ extension MyController {
         }
     }
 
-    func addValue(_ nr: Int, _ v: Float) {
-        if let monitor = renderer.monitors.monitors[nr] as? BarChart {
-            monitor.addValue(v)
-        }
-    }
-    
-    func addValues(_ nr: Int, _ v1: Float, _ v2: Float) {
-        if let monitor = renderer.monitors.monitors[nr] as? BarChart {
-            monitor.addValues(v1, v2)
-        }
-    }
-    
-    func updateMonitoringPanels() {
-        
-        if !renderer.monitors.isVisible { return }
-        
-        // DMA monitors
-        let dma = emu.agnus.stats
-        let copDMA = Float(dma.copperActivity) / (313 * 120)
-        let bltDMA = Float(dma.blitterActivity) / (313 * 120)
-        let dskDMA = Float(dma.diskActivity) / (313 * 3)
-        let audDMA = Float(dma.audioActivity) / (313 * 4)
-        let sprDMA = Float(dma.spriteActivity) / (313 * 16)
-        let bplDMA = Float(dma.bitplaneActivity) / 39330
-        
-        addValue(Monitors.Monitor.copper, copDMA)
-        addValue(Monitors.Monitor.blitter, bltDMA)
-        addValue(Monitors.Monitor.disk, dskDMA)
-        addValue(Monitors.Monitor.audio, audDMA)
-        addValue(Monitors.Monitor.sprite, sprDMA)
-        addValue(Monitors.Monitor.bitplane, bplDMA)
-        
-        // Memory monitors
-        let mem = emu.mem.stats
-
-        // let max = Float((HPOS_CNT_PAL * VPOS_CNT) / 2)
-        let max = Float((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 2)
-        let chipR = Float(mem.chipReads.accumulated) / max
-        let chipW = Float(mem.chipWrites.accumulated) / max
-        let slowR = Float(mem.slowReads.accumulated) / max
-        let slowW = Float(mem.slowWrites.accumulated) / max
-        let fastR = Float(mem.fastReads.accumulated) / max
-        let fastW = Float(mem.fastWrites.accumulated) / max
-        let kickR = Float(mem.kickReads.accumulated) / max
-        let kickW = Float(mem.kickWrites.accumulated) / max
-        
-        addValues(Monitors.Monitor.chipRam, chipR, chipW)
-        addValues(Monitors.Monitor.slowRam, slowR, slowW)
-        addValues(Monitors.Monitor.fastRam, fastR, fastW)
-        addValues(Monitors.Monitor.kickRom, kickR, kickW)
-    }
-    
     func processMessage(_ msg: Message) {
 
         var value: Int { return Int(msg.value) }
