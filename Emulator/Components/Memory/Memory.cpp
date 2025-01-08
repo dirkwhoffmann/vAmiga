@@ -68,7 +68,6 @@ Memory::_dump(Category category, std::ostream& os) const
         os << util::hex(dataBus) << std::endl;
         os << util::tab("Wom is locked");
         os << util::bol(womIsLocked) << std::endl;
-
     }
     
     if (category == Category::BankMap) {
@@ -479,36 +478,36 @@ Memory::_isReady() const
     }
 }
 
-void 
-Memory::cacheStats(MemStats &result) const
+void
+Memory::updateStats()
 {
     const double w = 0.5;
     
-    result.chipReads.accumulated =
+    stats.chipReads.accumulated =
     w * stats.chipReads.accumulated + (1.0 - w) * stats.chipReads.raw;
-    result.chipWrites.accumulated =
+    stats.chipWrites.accumulated =
     w * stats.chipWrites.accumulated + (1.0 - w) * stats.chipWrites.raw;
-    result.slowReads.accumulated =
+    stats.slowReads.accumulated =
     w * stats.slowReads.accumulated + (1.0 - w) * stats.slowReads.raw;
-    result.slowWrites.accumulated =
+    stats.slowWrites.accumulated =
     w * stats.slowWrites.accumulated + (1.0 - w) * stats.slowWrites.raw;
-    result.fastReads.accumulated =
+    stats.fastReads.accumulated =
     w * stats.fastReads.accumulated + (1.0 - w) * stats.fastReads.raw;
-    result.fastWrites.accumulated =
+    stats.fastWrites.accumulated =
     w * stats.fastWrites.accumulated + (1.0 - w) * stats.fastWrites.raw;
-    result.kickReads.accumulated =
+    stats.kickReads.accumulated =
     w * stats.kickReads.accumulated + (1.0 - w) * stats.kickReads.raw;
-    result.kickWrites.accumulated =
+    stats.kickWrites.accumulated =
     w * stats.kickWrites.accumulated + (1.0 - w) * stats.kickWrites.raw;
 
-    result.chipReads.raw = 0;
-    result.chipWrites.raw = 0;
-    result.slowReads.raw = 0;
-    result.slowWrites.raw = 0;
-    result.fastReads.raw = 0;
-    result.fastWrites.raw = 0;
-    result.kickReads.raw = 0;
-    result.kickWrites.raw = 0;
+    stats.chipReads.raw = 0;
+    stats.chipWrites.raw = 0;
+    stats.slowReads.raw = 0;
+    stats.slowWrites.raw = 0;
+    stats.fastReads.raw = 0;
+    stats.fastWrites.raw = 0;
+    stats.kickReads.raw = 0;
+    stats.kickWrites.raw = 0;
 }
 
 void
@@ -2814,7 +2813,7 @@ void
 Memory::eofHandler()
 {
     // Update statistics
-    (void)getStats();
+    updateStats();
 }
 
 std::vector <u32>

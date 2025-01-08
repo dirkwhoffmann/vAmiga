@@ -316,8 +316,12 @@ private:
 public:
 
     void cacheInfo(MemInfo &result) const override;
-    void cacheStats(MemStats &result) const override;
+    // void cacheStats(MemStats &result) const override;
 
+private:
+    
+    void updateStats();
+    
 
     //
     // Methods from Configurable

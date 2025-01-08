@@ -255,7 +255,7 @@ class ChipRamPanel: DashboardPanel {
         
         configure(title: "Chip Ram",
                   subtitle: "Memory Accesses",
-                  range: 0...Double((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 4))
+                  range: 0...Double((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 2))
     }
 }
 
@@ -267,7 +267,7 @@ class SlowRamPanel: DashboardPanel {
         
         configure(title: "Slow Ram",
                   subtitle: "Memory Accesses",
-                  range: 0...Double((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 4))
+                  range: 0...Double((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 2))
     }
 }
 
@@ -279,7 +279,7 @@ class FastRamPanel: DashboardPanel {
         
         configure(title: "Fast Ram",
                   subtitle: "Memory Accesses",
-                  range: 0...Double((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 4))
+                  range: 0...Double((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 2))
     }
 }
 
@@ -291,7 +291,7 @@ class RomPanel: DashboardPanel {
         
         configure(title: "Kickstart Rom",
                   subtitle: "Memory Accesses",
-                  range: 0...Double((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 4))
+                  range: 0...Double((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 2))
     }
 }
 
@@ -301,8 +301,8 @@ class CopperDmaPanel: DashboardPanel {
         
         super.init(coder: aDecoder)
         
-        configure(title: "Copper",
-                  subtitle: "DMA Accesses",
+        configure(title: "Copper DMA",
+                  subtitle: "Memory Accesses",
                   range: 0...(313 * 120),
                   logScale: true)
     }
@@ -314,8 +314,8 @@ class BlitterDmaPanel: DashboardPanel {
         
         super.init(coder: aDecoder)
         
-        configure(title: "Blitter",
-                  subtitle: "DMA Accesses",
+        configure(title: "Blitter DMA",
+                  subtitle: "Memory Accesses",
                   range: 0...(313 * 120),
                   logScale: true)
     }
@@ -326,7 +326,7 @@ class DiskDmaPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        configure(title: "Disk", subtitle: "DMA Accesses", range: 0...(313 * 3))
+        configure(title: "Disk DMA", subtitle: "Memory Accesses", range: 0...(313 * 3))
     }
 }
 
@@ -335,7 +335,7 @@ class AudioDmaPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        configure(title: "Audio", subtitle: "DMA Accesses", range: 0...(313 * 4))
+        configure(title: "Audio DMA", subtitle: "Memory Accesses", range: 0...(313 * 4))
     }
 }
 
@@ -344,7 +344,7 @@ class SpriteDmaPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        configure(title: "Sprite", subtitle: "DMA Accesses", range: 0...(313 * 16))
+        configure(title: "Sprite DMA", subtitle: "Memory Accesses", range: 0...(313 * 16))
     }
 }
 
@@ -353,7 +353,7 @@ class BitplaneDmaPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        configure(title: "Bitplane", subtitle: "DMA Accesses", range: 0...39330)
+        configure(title: "Bitplane DMA", subtitle: "Memory Accesses", range: 0...39330)
     }
 }
 
@@ -362,7 +362,7 @@ class CpuLoadPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        configure(title: "Host CPU", subtitle: "Load", range: 0...1.0, unit: "%")
+        configure(title: "Host", subtitle: "CPU Load", range: 0...1.0, unit: "%")
         switchStyle()
     }
     
@@ -376,7 +376,7 @@ class GpuFpsPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        configure(title: "Host GPU", subtitle: "Refresh Rate", range: 0...120, unit: "%")
+        configure(title: "Host", subtitle: "Refresh Rate", range: 0...120, unit: "Fps")
         switchStyle()
     }
     
@@ -422,12 +422,12 @@ class CIAAPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        configure(title: "CIA A", subtitle: "Awakeness", unit: "%")
+        configure(title: "CIA A", subtitle: "Activity", unit: "%")
         switchStyle()
     }
     
     override func latest() -> String {
-        return String(Int(model.latest() * 100))
+        return String(format: "%.2f", model.latest() * 100) // String(Int(model.latest() * 100))
     }
 }
 
@@ -436,12 +436,12 @@ class CIABPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        configure(title: "CIA B", subtitle: "Awakeness", unit: "%")
+        configure(title: "CIA B", subtitle: "Activity", unit: "%")
         switchStyle()
     }
     
     override func latest() -> String {
-        return String(Int(model.latest() * 100))
+        return String(format: "%.2f", model.latest() * 100) // String(Int(model.latest() * 100))
     }
 }
 
