@@ -28,7 +28,6 @@ enum_long(KB_STATE)
 };
 typedef KB_STATE KeyboardState;
 
-#ifdef __cplusplus
 struct KeyboardStateEnum : util::Reflection<KeyboardStateEnum, KeyboardState>
 {
     static constexpr long minVal = 0;
@@ -48,7 +47,7 @@ struct KeyboardStateEnum : util::Reflection<KeyboardStateEnum, KeyboardState>
         return "???";
     }
 };
-#endif
+
 
 //
 // Structures

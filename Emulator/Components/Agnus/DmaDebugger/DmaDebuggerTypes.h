@@ -27,7 +27,6 @@ enum_long(DMA_DISPLAY_MODE)
 };
 typedef DMA_DISPLAY_MODE DmaDisplayMode;
 
-#ifdef __cplusplus
 struct DmaDisplayModeEnum : util::Reflection<DmaDisplayModeEnum, DmaDisplayMode>
 {
     static constexpr long minVal = 0;
@@ -45,7 +44,6 @@ struct DmaDisplayModeEnum : util::Reflection<DmaDisplayModeEnum, DmaDisplayMode>
         return "???";
     }
 };
-#endif
 
 enum_long(DMA_CHANNEL)
 {
@@ -62,7 +60,6 @@ enum_long(DMA_CHANNEL)
 };
 typedef DMA_CHANNEL DmaChannel;
 
-#ifdef __cplusplus
 struct DmaChannelEnum : util::Reflection<DmaChannelEnum, DmaChannel>
 {
     static constexpr long minVal = 0;
@@ -86,7 +83,6 @@ struct DmaChannelEnum : util::Reflection<DmaChannelEnum, DmaChannel>
         return "???";
     }
 };
-#endif
 
 
 //

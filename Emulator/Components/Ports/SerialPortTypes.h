@@ -28,7 +28,6 @@ enum_long(SPD)
 };
 typedef SPD SerialPortDevice;
 
-#ifdef __cplusplus
 struct SerialPortDeviceEnum : util::Reflection<SerialPortDeviceEnum, SerialPortDevice>
 {
     static constexpr long minVal = 0;
@@ -48,7 +47,7 @@ struct SerialPortDeviceEnum : util::Reflection<SerialPortDeviceEnum, SerialPortD
         return "???";
     }
 };
-#endif
+
 
 //
 // Structures

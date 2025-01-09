@@ -26,7 +26,6 @@ enum_long(FLAG_DISK)
 };
 typedef FLAG_DISK DiskFlags;
 
-#ifdef __cplusplus
 struct DiskFlagsEnum : util::Reflection<DiskFlagsEnum, DiskFlags>
 {
     static constexpr long minVal = 1;
@@ -43,7 +42,6 @@ struct DiskFlagsEnum : util::Reflection<DiskFlagsEnum, DiskFlags>
         return "???";
     }
 };
-#endif
 
 
 //

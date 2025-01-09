@@ -27,7 +27,6 @@ enum_long(DRIVE_TYPE)
 };
 typedef DRIVE_TYPE FloppyDriveType;
 
-#ifdef __cplusplus
 struct FloppyDriveTypeEnum : util::Reflection<FloppyDriveTypeEnum, FloppyDriveType>
 {
     static constexpr long minVal = 0;
@@ -45,7 +44,6 @@ struct FloppyDriveTypeEnum : util::Reflection<FloppyDriveTypeEnum, FloppyDriveTy
         return "???";
     }
 };
-#endif
 
 enum_long(DRIVE_MECHANICS)
 {
@@ -54,7 +52,6 @@ enum_long(DRIVE_MECHANICS)
 };
 typedef DRIVE_MECHANICS DriveMechanics;
 
-#ifdef __cplusplus
 struct DriveMechanicsEnum : util::Reflection<DriveMechanicsEnum, DriveMechanics>
 {
     static constexpr long minVal = 0;
@@ -71,7 +68,6 @@ struct DriveMechanicsEnum : util::Reflection<DriveMechanicsEnum, DriveMechanics>
         return "???";
     }
 };
-#endif
 
 
 //

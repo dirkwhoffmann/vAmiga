@@ -26,7 +26,6 @@ enum_long(SMP_METHOD)
 };
 typedef SMP_METHOD SamplingMethod;
 
-#ifdef __cplusplus
 struct SamplingMethodEnum : util::Reflection<SamplingMethodEnum, SamplingMethod>
 {
     static constexpr long minVal = 0;
@@ -44,6 +43,5 @@ struct SamplingMethodEnum : util::Reflection<SamplingMethodEnum, SamplingMethod>
         return "???";
     }
 };
-#endif
 
 }

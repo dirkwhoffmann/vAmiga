@@ -54,7 +54,6 @@ enum_long(GAME_PAD_ACTION)
 };
 typedef GAME_PAD_ACTION GamePadAction;
 
-#ifdef __cplusplus
 struct GamePadActionEnum : util::Reflection<GamePadActionEnum, GamePadAction>
 {
     static constexpr long minVal = 0;
@@ -86,7 +85,6 @@ struct GamePadActionEnum : util::Reflection<GamePadActionEnum, GamePadAction>
         return "???";
     }
 };
-#endif
 
 
 //

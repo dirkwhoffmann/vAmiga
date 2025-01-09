@@ -18,8 +18,6 @@ namespace vamiga {
 // Constants
 //
 
-#ifdef __cplusplus
-
 // Constants from exec/errors.h
 constexpr i8    IOERR_OPENFAIL      = -1;
 constexpr i8    IOERR_ABORTED       = -2;
@@ -37,7 +35,6 @@ constexpr u32   IO_LENGTH           = 0x24;
 constexpr u32   IO_DATA             = 0x28;
 constexpr u32   IO_OFFSET           = 0x2C;
 
-#endif
 
 //
 // Enumerations
@@ -76,7 +73,6 @@ enum_long(IO_CMD)
 };
 typedef IO_CMD IoCommand;
 
-#ifdef __cplusplus
 struct IoCommandEnum : util::Reflection<IoCommandEnum, IoCommand>
 {
     static constexpr long minVal = 0;
@@ -117,7 +113,6 @@ struct IoCommandEnum : util::Reflection<IoCommandEnum, IoCommand>
         return "???";
     }
 };
-#endif
 
 enum_long(HDC_STATE)
 {
@@ -127,7 +122,6 @@ enum_long(HDC_STATE)
 };
 typedef HDC_STATE HdcState;
 
-#ifdef __cplusplus
 struct HdcStateEnum : util::Reflection<HdcStateEnum, HdcState>
 {
     static constexpr long minVal = 0;
@@ -145,7 +139,6 @@ struct HdcStateEnum : util::Reflection<HdcStateEnum, HdcState>
         return "???";
     }
 };
-#endif
 
 
 //

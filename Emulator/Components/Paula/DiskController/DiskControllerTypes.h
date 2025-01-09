@@ -30,7 +30,6 @@ enum_long(DRIVE_DMA_STATE)
 };
 typedef DRIVE_DMA_STATE DriveState;
 
-#ifdef __cplusplus
 struct DriveStateEnum : util::Reflection<DriveStateEnum, DriveState>
 {
     static constexpr long minVal = 0;
@@ -56,7 +55,7 @@ struct DriveStateEnum : util::Reflection<DriveStateEnum, DriveState>
         return "???";
     }
 };
-#endif
+
 
 //
 // Structures

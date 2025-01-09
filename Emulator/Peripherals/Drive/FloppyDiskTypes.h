@@ -27,7 +27,6 @@ enum_long(DIAMETER)
 };
 typedef DIAMETER Diameter;
 
-#ifdef __cplusplus
 struct DiameterEnum : util::Reflection<DiameterEnum, Diameter>
 {
     static constexpr long minVal = 0;
@@ -44,7 +43,6 @@ struct DiameterEnum : util::Reflection<DiameterEnum, Diameter>
         return "???";
     }
 };
-#endif
 
 enum_long(DENSITY)
 {
@@ -54,7 +52,6 @@ enum_long(DENSITY)
 };
 typedef DENSITY Density;
 
-#ifdef __cplusplus
 struct DensityEnum : util::Reflection<DensityEnum, Density>
 {
     static constexpr long minVal = 0;
@@ -72,7 +69,6 @@ struct DensityEnum : util::Reflection<DensityEnum, Density>
         return "???";
     }
 };
-#endif
 
 
 //

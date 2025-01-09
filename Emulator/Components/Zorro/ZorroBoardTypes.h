@@ -45,7 +45,6 @@ enum_long(BOARD_STATE)
 };
 typedef BOARD_STATE BoardState;
 
-#ifdef __cplusplus
 struct BoardStateEnum : util::Reflection<BoardStateEnum, BoardState>
 {
     static constexpr long minVal = 0;
@@ -63,6 +62,5 @@ struct BoardStateEnum : util::Reflection<BoardStateEnum, BoardState>
         return "???";
     }
 };
-#endif
 
 }

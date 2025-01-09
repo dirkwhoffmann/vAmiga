@@ -27,7 +27,6 @@ enum_long(SERVER_TYPE)
 };
 typedef SERVER_TYPE ServerType;
 
-#ifdef __cplusplus
 struct ServerTypeEnum : util::Reflection<ServerTypeEnum, ServerType>
 {
     static constexpr long minVal = 0;
@@ -46,7 +45,6 @@ struct ServerTypeEnum : util::Reflection<ServerTypeEnum, ServerType>
         return "???";
     }
 };
-#endif
 
 
 //

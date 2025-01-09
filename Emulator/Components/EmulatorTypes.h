@@ -152,7 +152,6 @@ enum_long(DEBUG_FLAG)
 };
 typedef DEBUG_FLAG DebugFlag;
 
-#ifdef __cplusplus
 struct DebugFlagEnum : util::Reflection<DebugFlagEnum, DebugFlag>
 {
     static constexpr long minVal = 0;
@@ -432,7 +431,6 @@ struct DebugFlagEnum : util::Reflection<DebugFlagEnum, DebugFlag>
         return "???";
     }
 };
-#endif
 
 //
 // Structures

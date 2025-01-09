@@ -30,7 +30,6 @@ enum_long(PALETTE)
 };
 typedef PALETTE Palette;
 
-#ifdef __cplusplus
 struct PaletteEnum : util::Reflection<PaletteEnum, Palette>
 {
     static constexpr long minVal = 0;
@@ -51,7 +50,7 @@ struct PaletteEnum : util::Reflection<PaletteEnum, Palette>
         return "???";
     }
 };
-#endif
+
 
 //
 // Structures

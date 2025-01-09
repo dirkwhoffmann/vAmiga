@@ -40,7 +40,6 @@ enum_long(MEM_SOURCE)
 };
 typedef MEM_SOURCE MemorySource;
 
-#ifdef __cplusplus
 struct MemorySourceEnum : util::Reflection<MemorySourceEnum, MemorySource>
 {
     static constexpr long minVal = 0;
@@ -72,7 +71,6 @@ struct MemorySourceEnum : util::Reflection<MemorySourceEnum, MemorySource>
         return "???";
     }
 };
-#endif
 
 enum_long(ACCESSOR_TYPE)
 {
@@ -81,7 +79,6 @@ enum_long(ACCESSOR_TYPE)
 };
 typedef ACCESSOR_TYPE Accessor;
 
-#ifdef __cplusplus
 struct AccessorEnum : util::Reflection<AccessorEnum, Accessor>
 {
     static constexpr long minVal = 0;
@@ -98,7 +95,6 @@ struct AccessorEnum : util::Reflection<AccessorEnum, Accessor>
         return "???";
     }
 };
-#endif
 
 enum_long(BANK_MAP)
 {
@@ -109,7 +105,6 @@ enum_long(BANK_MAP)
 };
 typedef BANK_MAP BankMap;
 
-#ifdef __cplusplus
 struct BankMapEnum : util::Reflection<BankMapEnum, BankMap>
 {
     static constexpr long minVal = 0;
@@ -128,7 +123,6 @@ struct BankMapEnum : util::Reflection<BankMapEnum, BankMap>
         return "???";
     }
 };
-#endif
 
 enum_long(RAM_INIT_PATTERN)
 {
@@ -138,7 +132,6 @@ enum_long(RAM_INIT_PATTERN)
 };
 typedef RAM_INIT_PATTERN RamInitPattern;
 
-#ifdef __cplusplus
 struct RamInitPatternEnum : util::Reflection<RamInitPatternEnum, RamInitPattern>
 {
     static constexpr long minVal = 0;
@@ -156,7 +149,6 @@ struct RamInitPatternEnum : util::Reflection<RamInitPatternEnum, RamInitPattern>
         return "???";
     }
 };
-#endif
 
 enum_long(UNMAPPED_MEMORY)
 {
@@ -166,7 +158,6 @@ enum_long(UNMAPPED_MEMORY)
 };
 typedef UNMAPPED_MEMORY UnmappedMemory;
 
-#ifdef __cplusplus
 struct UnmappedMemoryEnum : util::Reflection<UnmappedMemoryEnum, UnmappedMemory>
 {
     static constexpr long minVal = 0;
@@ -184,7 +175,7 @@ struct UnmappedMemoryEnum : util::Reflection<UnmappedMemoryEnum, UnmappedMemory>
         return "???";
     }
 };
-#endif
+
 
 //
 // Structures

@@ -29,7 +29,6 @@ enum_long(SRV_STATE)
 };
 typedef SRV_STATE SrvState;
 
-#ifdef __cplusplus
 struct SrvStateEnum : util::Reflection<SrvStateEnum, SrvState>
 {
     static constexpr long minVal = 0;
@@ -50,7 +49,6 @@ struct SrvStateEnum : util::Reflection<SrvStateEnum, SrvState>
         return "???";
     }
 };
-#endif
 
 enum_long(SRVPROT)
 {
@@ -58,7 +56,6 @@ enum_long(SRVPROT)
 };
 typedef SRVPROT ServerProtocol;
 
-#ifdef __cplusplus
 struct ServerProtocolEnum : util::Reflection<ServerProtocolEnum, ServerProtocol>
 {
     static constexpr long minVal = 0;
@@ -74,7 +71,7 @@ struct ServerProtocolEnum : util::Reflection<ServerProtocolEnum, ServerProtocol>
         return "???";
     }
 };
-#endif
+
 
 //
 // Structures

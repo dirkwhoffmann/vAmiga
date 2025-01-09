@@ -198,7 +198,6 @@ enum_long(OPT)
 };
 typedef OPT Option;
 
-#ifdef __cplusplus
 struct OptionEnum : util::Reflection<OptionEnum, Option>
 {
     static constexpr long minVal = 0;
@@ -517,6 +516,5 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
         return "???";
     }
 };
-#endif
 
 }

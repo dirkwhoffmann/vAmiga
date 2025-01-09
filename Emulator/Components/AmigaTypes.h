@@ -26,7 +26,6 @@ enum_long(VIDEO_FORMAT)
 };
 typedef VIDEO_FORMAT VideoFormat;
 
-#ifdef __cplusplus
 struct VideoFormatEnum : util::Reflection<VideoFormatEnum, VideoFormat>
 {
     static constexpr long minVal = 0;
@@ -43,7 +42,6 @@ struct VideoFormatEnum : util::Reflection<VideoFormatEnum, VideoFormat>
         return "???";
     }
 };
-#endif
 
 enum_long(RESOLUTION)
 {
@@ -53,7 +51,6 @@ enum_long(RESOLUTION)
 };
 typedef RESOLUTION Resolution;
 
-#ifdef __cplusplus
 struct ResolutionEnum : util::Reflection<ResolutionEnum, Resolution>
 {
     static constexpr long minVal = 0;
@@ -71,7 +68,6 @@ struct ResolutionEnum : util::Reflection<ResolutionEnum, Resolution>
         return "???";
     }
 };
-#endif
 
 enum_long(WARP_MODE)
 {
@@ -81,7 +77,6 @@ enum_long(WARP_MODE)
 };
 typedef WARP_MODE WarpMode;
 
-#ifdef __cplusplus
 struct WarpModeEnum : util::Reflection<WarpModeEnum, WarpMode>
 {
     static constexpr long minVal = 0;
@@ -99,7 +94,6 @@ struct WarpModeEnum : util::Reflection<WarpModeEnum, WarpMode>
         return "???";
     }
 };
-#endif
 
 enum_long(CONFIG_SCHEME)
 {
@@ -110,7 +104,6 @@ enum_long(CONFIG_SCHEME)
 };
 typedef CONFIG_SCHEME ConfigScheme;
 
-#ifdef __cplusplus
 struct ConfigSchemeEnum : util::Reflection<ConfigSchemeEnum, ConfigScheme>
 {
     static constexpr long minVal = 0;
@@ -129,7 +122,6 @@ struct ConfigSchemeEnum : util::Reflection<ConfigSchemeEnum, ConfigScheme>
         return "???";
     }
 };
-#endif
 
 enum_long(REG_CHIPSET)
 {
@@ -188,7 +180,6 @@ enum_long(REG_CHIPSET)
 };
 typedef REG_CHIPSET ChipsetReg;
 
-#ifdef __cplusplus
 static_assert(REG_NO_OP == (0x1FE >> 1));
 struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
 {
@@ -291,7 +282,6 @@ struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
         return isValid(value) ? name[value] : "???";
     }
 };
-#endif
 
 
 //
@@ -346,8 +336,6 @@ AmigaInfo;
 // Private data types
 //
 
-#ifdef __cplusplus
-
 typedef u32 RunLoopFlags;
 
 namespace RL
@@ -367,7 +355,5 @@ constexpr u32 AUTO_SNAPSHOT      = (1 << 11);
 constexpr u32 USER_SNAPSHOT      = (1 << 12);
 constexpr u32 SYNC_THREAD        = (1 << 13);
 };
-
-#endif
 
 }

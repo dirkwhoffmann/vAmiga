@@ -30,7 +30,6 @@ enum_long(FILTER_TYPE)
 };
 typedef FILTER_TYPE FilterType;
 
-#ifdef __cplusplus
 struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType>
 {
     static constexpr long minVal = 0;
@@ -52,7 +51,6 @@ struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType>
         return "???";
     }
 };
-#endif
 
 
 //

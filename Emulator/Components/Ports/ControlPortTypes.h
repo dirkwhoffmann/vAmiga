@@ -26,7 +26,6 @@ enum_long(CPD)
 };
 typedef CPD ControlPortDevice;
 
-#ifdef __cplusplus
 struct ControlPortDeviceEnum : util::Reflection<ControlPortDeviceEnum, ControlPortDevice>
 {
     static constexpr long minVal = 0;
@@ -44,7 +43,7 @@ struct ControlPortDeviceEnum : util::Reflection<ControlPortDeviceEnum, ControlPo
         return "???";
     }
 };
-#endif
+
 
 //
 // Structures

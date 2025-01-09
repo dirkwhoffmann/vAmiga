@@ -9,8 +9,6 @@
 
 #pragma once
 
-#ifdef __cplusplus
-
 #include "BasicTypes.h"
 #include <functional>
 #include <vector>
@@ -120,5 +118,3 @@ template <class T, typename E> struct Reflection {
 };
 
 }
-
-#endif

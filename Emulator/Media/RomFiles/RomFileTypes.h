@@ -112,7 +112,6 @@ enum_long(ROM_VENDOR)
 };
 typedef ROM_VENDOR RomVendor;
 
-#ifdef __cplusplus
 struct RomVendorEnum : util::Reflection<RomVendorEnum, RomVendor> {
     
     static constexpr long minVal = 0;
@@ -135,7 +134,6 @@ struct RomVendorEnum : util::Reflection<RomVendorEnum, RomVendor> {
         return "???";
     }
 };
-#endif
 
 
 //

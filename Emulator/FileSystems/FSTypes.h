@@ -28,7 +28,6 @@ enum_long(FS_VOLUME_TYPE)
 };
 typedef FS_VOLUME_TYPE FSVolumeType;
 
-#ifdef __cplusplus
 struct FSVolumeTypeEnum : util::Reflection<FSVolumeTypeEnum, FSVolumeType>
 {
     static constexpr long minVal = 0;
@@ -52,7 +51,6 @@ struct FSVolumeTypeEnum : util::Reflection<FSVolumeTypeEnum, FSVolumeType>
         return "???";
     }
 };
-#endif
 
 inline bool isOFSVolumeType(long value)
 {
@@ -94,7 +92,6 @@ enum_long(FS_BLOCK_TYPE)
 };
 typedef FS_BLOCK_TYPE FSBlockType;
 
-#ifdef __cplusplus
 struct FSBlockTypeEnum : util::Reflection<FSBlockTypeEnum, FSBlockType>
 {
     static constexpr long minVal = 0;
@@ -120,7 +117,6 @@ struct FSBlockTypeEnum : util::Reflection<FSBlockTypeEnum, FSBlockType>
         return "???";
     }
 };
-#endif
 
 enum_long(FSI_TYPE)
 {
@@ -166,7 +162,6 @@ enum_long(FSI_TYPE)
 };
 typedef FSI_TYPE FSItemType;
 
-#ifdef __cplusplus
 struct FSItemTypeEnum : util::Reflection<FSItemTypeEnum, FSItemType>
 {
     static constexpr long minVal = 0;
@@ -220,7 +215,7 @@ struct FSItemTypeEnum : util::Reflection<FSItemTypeEnum, FSItemType>
         return "???";
     }
 };
-#endif
+
 
 //
 // Structures

@@ -50,7 +50,6 @@ enum_long(AGNUS_REVISION)
 };
 typedef AGNUS_REVISION AgnusRevision;
 
-#ifdef __cplusplus
 struct AgnusRevisionEnum : util::Reflection<AgnusRevisionEnum, AgnusRevision>
 {
     static constexpr long minVal = 0;
@@ -69,7 +68,6 @@ struct AgnusRevisionEnum : util::Reflection<AgnusRevisionEnum, AgnusRevision>
         return "???";
     }
 };
-#endif
 
 enum_long(SLOT)
 {
@@ -122,7 +120,6 @@ enum_long(SLOT)
 };
 typedef SLOT EventSlot;
 
-#ifdef __cplusplus
 struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
 {
     static constexpr long minVal = 0;
@@ -179,7 +176,6 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
         return "???";
     }
 };
-#endif
 
 enum_i8(EventID)
 {
@@ -423,7 +419,6 @@ enum_long(SPR_DMA_STATE)
 };
 typedef SPR_DMA_STATE SprDMAState;
 
-#ifdef __cplusplus
 struct SprDmaStateEnum : util::Reflection<SprDmaStateEnum, SprDMAState>
 {
     static constexpr long minVal = 0;
@@ -440,7 +435,6 @@ struct SprDmaStateEnum : util::Reflection<SprDmaStateEnum, SprDMAState>
         return "???";
     }
 };
-#endif
 
 
 //
@@ -554,8 +548,6 @@ AgnusStats;
 // Private data types
 //
 
-#ifdef __cplusplus
-
 /* Event flags
  *
  * The event flags are utilized to trigger special actions inside the
@@ -570,7 +562,5 @@ constexpr u32 EOL                = (1 << 0);
 constexpr u32 HSYNC              = (1 << 1);
 constexpr u32 PROBE              = (1 << 2);
 };
-
-#endif
 
 }

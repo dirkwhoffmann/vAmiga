@@ -131,7 +131,6 @@ enum_long(MSG_TYPE)
 };
 typedef MSG_TYPE MsgType;
 
-#ifdef __cplusplus
 struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
 {
     static constexpr long minVal = 0;
@@ -234,7 +233,6 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
         return "???";
     }
 };
-#endif
 
 
 //

@@ -25,7 +25,6 @@ enum_long(PROBE)
 };
 typedef PROBE Probe;
 
-#ifdef __cplusplus
 struct ProbeEnum : util::Reflection<ProbeEnum, Probe>
 {
     static constexpr long minVal = 0;
@@ -43,7 +42,6 @@ struct ProbeEnum : util::Reflection<ProbeEnum, Probe>
         return "???";
     }
 };
-#endif
 
 
 //

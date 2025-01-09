@@ -25,7 +25,6 @@ enum_long(HDR_TYPE)
 };
 typedef HDR_TYPE HardDriveType;
 
-#ifdef __cplusplus
 struct HardDriveTypeEnum : util::Reflection<HardDriveTypeEnum, HardDriveType>
 {
     static constexpr long minVal = 0;
@@ -41,7 +40,6 @@ struct HardDriveTypeEnum : util::Reflection<HardDriveTypeEnum, HardDriveType>
         return "???";
     }
 };
-#endif
 
 enum_long(HDR_STATE)
 {
@@ -51,7 +49,6 @@ enum_long(HDR_STATE)
 };
 typedef HDR_STATE HardDriveState;
 
-#ifdef __cplusplus
 struct HardDriveStateEnum : util::Reflection<HardDriveStateEnum, HardDriveState>
 {
     static constexpr long minVal = 0;
@@ -69,7 +66,6 @@ struct HardDriveStateEnum : util::Reflection<HardDriveStateEnum, HardDriveState>
         return "???";
     }
 };
-#endif
 
 
 //

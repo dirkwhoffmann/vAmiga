@@ -25,7 +25,6 @@ enum_long(FRAME_TYPE)
 };
 typedef FRAME_TYPE FrameType;
 
-#ifdef __cplusplus
 struct FrameTypeEnum : util::Reflection<FrameTypeEnum, FrameType>
 {
     static constexpr long minVal = 0;
@@ -46,6 +45,5 @@ struct FrameTypeEnum : util::Reflection<FrameTypeEnum, FrameType>
         return "???";
     }
 };
-#endif
 
 }

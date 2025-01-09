@@ -11,7 +11,6 @@
 
 #include "Types.h"
 
-#ifdef __cplusplus
 namespace vamiga {
 
 //
@@ -158,4 +157,3 @@ static const u16 AUD0EN =   0x0001;
 static const u16 AUDEN  =   0x000F;
 
 }
-#endif

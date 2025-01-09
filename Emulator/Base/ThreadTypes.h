@@ -29,7 +29,6 @@ enum_long(EXEC_STATE)
 };
 typedef EXEC_STATE ExecState;
 
-#ifdef __cplusplus
 struct ExecStateEnum : util::Reflection<ExecStateEnum, ExecState>
 {
     static constexpr long minVal = 0;
@@ -49,6 +48,5 @@ struct ExecStateEnum : util::Reflection<ExecStateEnum, ExecState>
         return "???";
     }
 };
-#endif
 
 }

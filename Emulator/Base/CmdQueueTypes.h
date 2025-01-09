@@ -78,7 +78,6 @@ enum_long(CMD_TYPE)
 };
 typedef CMD_TYPE CmdType;
 
-#ifdef __cplusplus
 struct CmdTypeEnum : util::Reflection<CmdTypeEnum, CmdType> {
     
     static constexpr long minVal = 0;
@@ -136,7 +135,7 @@ struct CmdTypeEnum : util::Reflection<CmdTypeEnum, CmdType> {
         return "???";
     }
 };
-#endif
+
 
 //
 // Structures
@@ -208,9 +207,7 @@ struct Cmd
          ShellCmd shell;
          */
     };
-    
-#ifdef __cplusplus
-    
+        
     Cmd() { }
     Cmd(CmdType type, i64 v1 = 0, i64 v2 = 0) : type(type), value(v1), value2(v2) { }
     Cmd(CmdType type, void *s, i64 v1 = 0, i64 v2 = 0) : type(type), sender(s), value(v1), value2(v2) { }
@@ -222,7 +219,6 @@ struct Cmd
     /*
      Cmd(CmdType type, const ShellCmd &cmd) : type(type), shell(cmd) { }
      */
-#endif
 };
 
 }

@@ -26,7 +26,6 @@ enum_long(DENISE_REV)
 };
 typedef DENISE_REV DeniseRevision;
 
-#ifdef __cplusplus
 struct DeniseRevisionEnum : util::Reflection<DeniseRevisionEnum, DeniseRevision>
 {
     static constexpr long minVal = 0;
@@ -43,7 +42,6 @@ struct DeniseRevisionEnum : util::Reflection<DeniseRevisionEnum, DeniseRevision>
         return "???";
     }
 };
-#endif
 
 
 //

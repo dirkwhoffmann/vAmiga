@@ -26,7 +26,6 @@ enum_long(RTC_REVISION)
 };
 typedef RTC_REVISION RTCRevision;
 
-#ifdef __cplusplus
 struct RTCRevisionEnum : util::Reflection<RTCRevisionEnum, RTCRevision>
 {
     static constexpr long minVal = 0;
@@ -44,7 +43,6 @@ struct RTCRevisionEnum : util::Reflection<RTCRevisionEnum, RTCRevision>
         return "???";
     }
 };
-#endif
 
 
 //

@@ -36,7 +36,6 @@ enum_long(FILETYPE)
 };
 typedef FILETYPE FileType;
 
-#ifdef __cplusplus
 struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType>
 {
     static constexpr long minVal = 0;
@@ -64,7 +63,6 @@ struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType>
         return "???";
     }
 };
-#endif
 
 
 //

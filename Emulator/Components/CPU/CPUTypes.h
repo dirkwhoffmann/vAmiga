@@ -11,10 +11,7 @@
 
 #include "Types.h"
 #include "Reflection.h"
-
-#ifdef __cplusplus
 #include "RingBuffer.h"
-#endif
 
 namespace vamiga {
 
@@ -33,7 +30,6 @@ enum_long(CPU_REVISION)
 };
 typedef CPU_REVISION CPURevision;
 
-#ifdef __cplusplus
 struct CPURevisionEnum : util::Reflection<CPURevisionEnum, CPURevision>
 {
     static constexpr long minVal = 0;
@@ -51,7 +47,6 @@ struct CPURevisionEnum : util::Reflection<CPURevisionEnum, CPURevision>
         return "???";
     }
 };
-#endif
 
 enum_long(DASM_REVISION)
 {
@@ -67,7 +62,6 @@ enum_long(DASM_REVISION)
 };
 typedef DASM_REVISION DasmRevision;
 
-#ifdef __cplusplus
 struct DasmRevisionEnum : util::Reflection<DasmRevisionEnum, DasmRevision>
 {
     static constexpr long minVal = 0;
@@ -91,7 +85,6 @@ struct DasmRevisionEnum : util::Reflection<DasmRevisionEnum, DasmRevision>
         return "???";
     }
 };
-#endif
 
 enum_long(DASM_SYNTAX)
 {
@@ -103,7 +96,6 @@ enum_long(DASM_SYNTAX)
 };
 typedef DASM_SYNTAX DasmSyntax;
 
-#ifdef __cplusplus
 struct DasmSyntaxEnum : util::Reflection<DasmSyntaxEnum, DasmSyntax>
 {
     static constexpr long minVal = 0;
@@ -123,7 +115,6 @@ struct DasmSyntaxEnum : util::Reflection<DasmSyntaxEnum, DasmSyntax>
         return "???";
     }
 };
-#endif
 
 enum_long(GUARD_TYPE)
 {
@@ -133,7 +124,6 @@ enum_long(GUARD_TYPE)
 };
 typedef GUARD_TYPE GuardType;
 
-#ifdef __cplusplus
 struct GuardTypeEnum : util::Reflection<GuardTypeEnum, GuardType>
 {
     static constexpr long minVal = 0;
@@ -151,7 +141,6 @@ struct GuardTypeEnum : util::Reflection<GuardTypeEnum, GuardType>
         return "???";
     }
 };
-#endif
 
 
 //

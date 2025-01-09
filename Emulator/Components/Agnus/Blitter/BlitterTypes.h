@@ -17,8 +17,6 @@ namespace vamiga {
 // Bit masks
 //
 
-#ifdef __cplusplus
-
 // BLTCON0 (area mode)
 constexpr u16 BLTCON0_ASH     = 0xF000;
 constexpr u16 BLTCON0_USEA    = 0x0800;
@@ -47,7 +45,6 @@ constexpr u16 BLTCON1_SUL     = 0x0008;
 constexpr u16 BLTCON1_AUL     = 0x0004;
 constexpr u16 BLTCON1_SING    = 0x0002;
 
-#endif
 
 //
 // Structures

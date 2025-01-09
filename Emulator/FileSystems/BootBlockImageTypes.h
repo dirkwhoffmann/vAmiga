@@ -26,7 +26,6 @@ enum_long(BB_TYPE)
 };
 typedef BB_TYPE BootBlockType;
 
-#ifdef __cplusplus
 struct BootBlockTypeEnum : util::Reflection<BootBlockTypeEnum, BootBlockType>
 {
     static constexpr long minVal = 0;
@@ -44,7 +43,6 @@ struct BootBlockTypeEnum : util::Reflection<BootBlockTypeEnum, BootBlockType>
         return "???";
     }
 };
-#endif
 
 enum_long(BB_ID)
 {
@@ -56,7 +54,6 @@ enum_long(BB_ID)
 };
 typedef BB_ID BootBlockId;
 
-#ifdef __cplusplus
 struct BootBlockIdEnum : util::Reflection<BootBlockIdEnum, BootBlockId>
 {
     static constexpr long minVal = 0;
@@ -76,6 +73,5 @@ struct BootBlockIdEnum : util::Reflection<BootBlockIdEnum, BootBlockId>
         return "???";
     }
 };
-#endif
 
 }
