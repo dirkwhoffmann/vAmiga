@@ -11,6 +11,8 @@
 
 #include "Types.h"
 
+namespace vamiga {
+
 //
 // Bit masks
 //
@@ -99,3 +101,5 @@ typedef struct
     bool storeToDest;
 }
 BlitterInfo;
+
+}

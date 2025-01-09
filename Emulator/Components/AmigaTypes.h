@@ -13,6 +13,8 @@
 #include "Reflection.h"
 #include "ThreadTypes.h"
 
+namespace vamiga {
+
 //
 // Enumerations
 //
@@ -25,16 +27,16 @@ enum_long(VIDEO_FORMAT)
 typedef VIDEO_FORMAT VideoFormat;
 
 #ifdef __cplusplus
-struct VideoFormatEnum : vamiga::util::Reflection<VideoFormatEnum, VideoFormat>
+struct VideoFormatEnum : util::Reflection<VideoFormatEnum, VideoFormat>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = FORMAT_NTSC;
-
+    
     static const char *prefix() { return "FORMAT"; }
     static const char *_key(long value)
     {
         switch (value) {
-
+                
             case FORMAT_PAL:   return "PAL";
             case FORMAT_NTSC:  return "NTSC";
         }
@@ -52,16 +54,16 @@ enum_long(RESOLUTION)
 typedef RESOLUTION Resolution;
 
 #ifdef __cplusplus
-struct ResolutionEnum : vamiga::util::Reflection<ResolutionEnum, Resolution>
+struct ResolutionEnum : util::Reflection<ResolutionEnum, Resolution>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = SHRES;
-
+    
     static const char *prefix() { return ""; }
     static const char *_key(long value)
     {
         switch (value) {
-
+                
             case LORES:          return "LORES";
             case HIRES:          return "HIRES";
             case SHRES:          return "SHRES";
@@ -80,16 +82,16 @@ enum_long(WARP_MODE)
 typedef WARP_MODE WarpMode;
 
 #ifdef __cplusplus
-struct WarpModeEnum : vamiga::util::Reflection<WarpModeEnum, WarpMode>
+struct WarpModeEnum : util::Reflection<WarpModeEnum, WarpMode>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = WARP_ALWAYS;
-
+    
     static const char *prefix() { return "WARP"; }
     static const char *_key(long value)
     {
         switch (value) {
-
+                
             case WARP_AUTO:     return "WARP_AUTO";
             case WARP_NEVER:    return "WARP_NEVER";
             case WARP_ALWAYS:   return "WARP_ALWAYS";
@@ -109,11 +111,11 @@ enum_long(CONFIG_SCHEME)
 typedef CONFIG_SCHEME ConfigScheme;
 
 #ifdef __cplusplus
-struct ConfigSchemeEnum : vamiga::util::Reflection<ConfigSchemeEnum, ConfigScheme>
+struct ConfigSchemeEnum : util::Reflection<ConfigSchemeEnum, ConfigScheme>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = CONFIG_A500_PLUS_1MB;
-
+    
     static const char *prefix() { return "CONFIG"; }
     static const char *_key(long value)
     {
@@ -188,16 +190,16 @@ typedef REG_CHIPSET ChipsetReg;
 
 #ifdef __cplusplus
 static_assert(REG_NO_OP == (0x1FE >> 1));
-struct ChipsetRegEnum : vamiga::util::Reflection<ChipsetRegEnum, ChipsetReg>
+struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = REG_NO_OP;
-
+    
     static const char *prefix() { return "REG"; }
     static const char *_key(long value)
     {
         static const char *name[] = {
-
+            
             "BLTDDAT",        "DMACONR",        "VPOSR",
             "VHPOSR",         "DSKDATR",        "JOY0DAT",
             "JOY1DAT",        "CLXDAT",         "ADKCONR",
@@ -285,7 +287,7 @@ struct ChipsetRegEnum : vamiga::util::Reflection<ChipsetRegEnum, ChipsetReg>
             "unused",         "unused",         "FMODE (AGA)",
             "NO-OP"
         };
-
+        
         return isValid(value) ? name[value] : "???";
     }
 };
@@ -300,25 +302,25 @@ typedef struct
 {
     //! Machine type (PAL or NTSC)
     VideoFormat type;
-
+    
     //! After a reset, the emulator runs in warp mode for this amout of seconds
     isize warpBoot;
-
+    
     //! Warp mode
     WarpMode warpMode;
-
+    
     //! Emulator speed in percent (100 is native speed)
     isize speedBoost;
-
+    
     //! Vertical Synchronization
     bool vsync;
-
+    
     //! Number of run-ahead frames (0 = run-ahead is disabled)
     isize runAhead;
-
+    
     //! Enable auto-snapshots
     bool snapshots;
-
+    
     //! Delay between two auto-snapshots in seconds
     isize snapshotDelay;
     
@@ -367,3 +369,5 @@ constexpr u32 SYNC_THREAD        = (1 << 13);
 };
 
 #endif
+
+}

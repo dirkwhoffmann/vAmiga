@@ -12,6 +12,8 @@
 #include "Types.h"
 #include "Reflection.h"
 
+namespace vamiga {
+
 enum_i8(BUS_OWNER)
 {
     BUS_NONE,
@@ -45,11 +47,11 @@ enum_i8(BUS_OWNER)
 typedef BUS_OWNER BusOwner;
 
 #ifdef __cplusplus
-struct BusOwnerEnum : vamiga::util::Reflection<BusOwnerEnum, BusOwner>
+struct BusOwnerEnum : util::Reflection<BusOwnerEnum, BusOwner>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = BUS_COUNT - 1;
-
+    
     static const char *prefix() { return "BUS"; }
     static const char *_key(long value)
     {
@@ -86,3 +88,5 @@ struct BusOwnerEnum : vamiga::util::Reflection<BusOwnerEnum, BusOwner>
     }
 };
 #endif
+
+}

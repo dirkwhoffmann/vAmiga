@@ -11,6 +11,8 @@
 
 #include "BasicTypes.h"
 
+namespace vamiga {
+
 //
 // Structures
 //
@@ -22,3 +24,5 @@ typedef struct
     isize ignore;
 }
 GuardInfo;
+
+}

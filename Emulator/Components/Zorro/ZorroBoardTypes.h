@@ -12,6 +12,8 @@
 #include "Types.h"
 #include "Reflection.h"
 
+namespace vamiga {
+
 //
 // Constants
 //
@@ -44,7 +46,7 @@ enum_long(BOARD_STATE)
 typedef BOARD_STATE BoardState;
 
 #ifdef __cplusplus
-struct BoardStateEnum : vamiga::util::Reflection<BoardStateEnum, BoardState>
+struct BoardStateEnum : util::Reflection<BoardStateEnum, BoardState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = STATE_SHUTUP;
@@ -53,7 +55,7 @@ struct BoardStateEnum : vamiga::util::Reflection<BoardStateEnum, BoardState>
     static const char *_key(long value)
     {
         switch (value) {
-
+                
             case STATE_AUTOCONF:    return "AUTOCONF";
             case STATE_ACTIVE:      return "ACTIVE";
             case STATE_SHUTUP:      return "SHUTUP";
@@ -62,3 +64,5 @@ struct BoardStateEnum : vamiga::util::Reflection<BoardStateEnum, BoardState>
     }
 };
 #endif
+
+}

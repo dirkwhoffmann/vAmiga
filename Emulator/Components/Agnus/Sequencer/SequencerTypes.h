@@ -10,9 +10,6 @@
 #pragma once
 
 #include "Types.h"
-
-#ifdef __cplusplus
-
 #include "Serializable.h"
 
 namespace vamiga {
@@ -106,5 +103,3 @@ struct DDFState : Serializable
 };
 
 }
-
-#endif

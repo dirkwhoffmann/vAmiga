@@ -12,6 +12,8 @@
 #include "Types.h"
 #include "Reflection.h"
 
+namespace vamiga {
+
 //
 // Enumerations
 //
@@ -35,16 +37,16 @@ enum_long(FILETYPE)
 typedef FILETYPE FileType;
 
 #ifdef __cplusplus
-struct FileTypeEnum : vamiga::util::Reflection<FileTypeEnum, FileType>
+struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = FILETYPE_EXTENDED_ROM;
-
+    
     static const char *prefix() { return "FILETYPE"; }
     static const char *_key(long value)
     {
         switch (value) {
-
+                
             case FILETYPE_UNKNOWN:      return "UNKNOWN";
             case FILETYPE_SNAPSHOT:     return "SNAPSHOT";
             case FILETYPE_SCRIPT:       return "SCRIPT";
@@ -88,3 +90,5 @@ typedef struct
     bool hasRDB;
 }
 HDFInfo;
+
+}

@@ -13,7 +13,7 @@
 #include "ThreadTypes.h"
 #include "AmigaTypes.h"
 
-// namespace vamiga {
+namespace vamiga {
 
 //
 // Enumerations
@@ -153,7 +153,7 @@ enum_long(DEBUG_FLAG)
 typedef DEBUG_FLAG DebugFlag;
 
 #ifdef __cplusplus
-struct DebugFlagEnum : vamiga::util::Reflection<DebugFlagEnum, DebugFlag>
+struct DebugFlagEnum : util::Reflection<DebugFlagEnum, DebugFlag>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = FLAG_GDB_DEBUG;
@@ -460,4 +460,4 @@ typedef struct
 }
 EmulatorStats;
 
-// }
+}

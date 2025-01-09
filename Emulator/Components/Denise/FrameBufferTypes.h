@@ -11,6 +11,8 @@
 
 #include "BasicTypes.h"
 
+namespace vamiga {
+
 /* The Texel datatype is utilized to access single texture elements. Each
  * texture element represents an Amiga hires pixel. On the emulator side, the
  * Texel types either maps to u32 or u64. In the u32 case, a Texel holds a
@@ -36,3 +38,4 @@ typedef u64 Texel;
 
 #endif
 
+}

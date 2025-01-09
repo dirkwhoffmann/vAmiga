@@ -11,6 +11,8 @@
 #include "Types.h"
 #include "Reflection.h"
 
+namespace vamiga {
+
 //
 // Enumerations
 //
@@ -24,11 +26,11 @@ enum_long(PROBE)
 typedef PROBE Probe;
 
 #ifdef __cplusplus
-struct ProbeEnum : vamiga::util::Reflection<ProbeEnum, Probe>
+struct ProbeEnum : util::Reflection<ProbeEnum, Probe>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = PROBE_IPL;
-
+    
     static const char *prefix() { return "PROBE"; }
     static const char *_key(long value)
     {
@@ -57,3 +59,5 @@ typedef struct
     u32 addr[4];
 }
 LogicAnalyzerConfig;
+
+}

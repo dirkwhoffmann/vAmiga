@@ -16,6 +16,8 @@
 // Enumerations
 //
 
+namespace vamiga {
+
 enum_long(SMP_METHOD)
 {
     SMP_NONE,
@@ -25,11 +27,11 @@ enum_long(SMP_METHOD)
 typedef SMP_METHOD SamplingMethod;
 
 #ifdef __cplusplus
-struct SamplingMethodEnum : vamiga::util::Reflection<SamplingMethodEnum, SamplingMethod>
+struct SamplingMethodEnum : util::Reflection<SamplingMethodEnum, SamplingMethod>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = SMP_LINEAR;
-
+    
     static const char *prefix() { return "SMP"; }
     static const char *_key(long value)
     {
@@ -43,3 +45,5 @@ struct SamplingMethodEnum : vamiga::util::Reflection<SamplingMethodEnum, Samplin
     }
 };
 #endif
+
+}

@@ -12,6 +12,8 @@
 #include "Types.h"
 #include "Reflection.h"
 
+namespace vamiga {
+
 //
 // Enumerations
 //
@@ -19,17 +21,17 @@
 enum_long(DRIVE_DMA_STATE)
 {
     DRIVE_DMA_OFF,     // Drive is idle
-
+    
     DRIVE_DMA_WAIT,    // Drive is waiting for the sync word
     DRIVE_DMA_READ,    // Drive is reading
-
+    
     DRIVE_DMA_WRITE,   // Drive is writing
     DRIVE_DMA_FLUSH,   // Drive is finishing up the write process
 };
 typedef DRIVE_DMA_STATE DriveState;
 
 #ifdef __cplusplus
-struct DriveStateEnum : vamiga::util::Reflection<DriveStateEnum, DriveState>
+struct DriveStateEnum : util::Reflection<DriveStateEnum, DriveState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = DRIVE_DMA_FLUSH;
@@ -44,10 +46,10 @@ struct DriveStateEnum : vamiga::util::Reflection<DriveStateEnum, DriveState>
         switch (value) {
                 
             case DRIVE_DMA_OFF:    return "OFF";
-
+                
             case DRIVE_DMA_WAIT:   return "WAIT";
             case DRIVE_DMA_READ:   return "READ";
-
+                
             case DRIVE_DMA_WRITE:  return "WRITE";
             case DRIVE_DMA_FLUSH:  return "FLUSH";
         }
@@ -69,7 +71,7 @@ typedef struct
      * the exact value of the acceleration factor has no meaning.
      */
     i32 speed;
-
+    
     bool lockDskSync;
     bool autoDskSync;
 }
@@ -90,10 +92,12 @@ typedef struct
     DriveState state;
     i32 fifo[6];
     u8 fifoCount;
-
+    
     u16 dsklen;
     u16 dskbytr;
     u16 dsksync;
     u8 prb;
 }
 DiskControllerInfo;
+
+}

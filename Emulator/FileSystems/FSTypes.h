@@ -12,6 +12,8 @@
 #include "Types.h"
 #include "Reflection.h"
 
+namespace vamiga {
+
 enum_long(FS_VOLUME_TYPE)
 {
     FS_OFS      = 0,    // Original File System
@@ -27,11 +29,11 @@ enum_long(FS_VOLUME_TYPE)
 typedef FS_VOLUME_TYPE FSVolumeType;
 
 #ifdef __cplusplus
-struct FSVolumeTypeEnum : vamiga::util::Reflection<FSVolumeTypeEnum, FSVolumeType>
+struct FSVolumeTypeEnum : util::Reflection<FSVolumeTypeEnum, FSVolumeType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = FS_NODOS;
-
+    
     static const char *prefix() { return "FS"; }
     static const char *_key(long value)
     {
@@ -55,7 +57,7 @@ struct FSVolumeTypeEnum : vamiga::util::Reflection<FSVolumeTypeEnum, FSVolumeTyp
 inline bool isOFSVolumeType(long value)
 {
     switch (value) {
-
+            
         case FS_OFS:
         case FS_OFS_INTL:
         case FS_OFS_DC:
@@ -67,7 +69,7 @@ inline bool isOFSVolumeType(long value)
 inline bool isFFSVolumeType(long value)
 {
     switch (value) {
-
+            
         case FS_FFS:
         case FS_FFS_INTL:
         case FS_FFS_DC:
@@ -93,11 +95,11 @@ enum_long(FS_BLOCK_TYPE)
 typedef FS_BLOCK_TYPE FSBlockType;
 
 #ifdef __cplusplus
-struct FSBlockTypeEnum : vamiga::util::Reflection<FSBlockTypeEnum, FSBlockType>
+struct FSBlockTypeEnum : util::Reflection<FSBlockTypeEnum, FSBlockType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = FS_DATA_BLOCK_FFS;
-
+    
     static const char *prefix() { return "FS"; }
     static const char *_key(long value)
     {
@@ -165,7 +167,7 @@ enum_long(FSI_TYPE)
 typedef FSI_TYPE FSItemType;
 
 #ifdef __cplusplus
-struct FSItemTypeEnum : vamiga::util::Reflection<FSItemTypeEnum, FSItemType>
+struct FSItemTypeEnum : util::Reflection<FSItemTypeEnum, FSItemType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = FSI_BITMAP;
@@ -238,10 +240,11 @@ typedef struct
     FSVolumeType dos;
     bool ofs;
     bool ffs;
-
+    
     isize blocks;
     isize bytes;
     isize bsize;
 }
 FSTraits;
 
+}

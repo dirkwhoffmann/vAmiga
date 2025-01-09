@@ -15,6 +15,8 @@
 #include "UARTTypes.h"
 #include "Reflection.h"
 
+namespace vamiga {
+
 //
 // Enumerations
 //
@@ -39,11 +41,11 @@ enum_long(INT_SOURCE)
 typedef INT_SOURCE IrqSource;
 
 #ifdef __cplusplus
-struct IrqSourceEnum : vamiga::util::Reflection<IrqSourceEnum, IrqSource>
+struct IrqSourceEnum : util::Reflection<IrqSourceEnum, IrqSource>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = INT_EXTER;
-
+    
     static const char *prefix() { return "INT"; }
     static const char *_key(long value)
     {
@@ -80,3 +82,5 @@ typedef struct
     u16 adkcon;
 }
 PaulaInfo;
+
+}

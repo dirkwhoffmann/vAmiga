@@ -11,7 +11,7 @@
 
 #include "BasicTypes.h"
 
-// namespace vamiga {
+namespace vamiga {
 
 //
 // Structures
@@ -36,4 +36,4 @@ typedef struct
 }
 VideoPortStats;
 
-// }
+}

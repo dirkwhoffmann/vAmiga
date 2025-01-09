@@ -11,6 +11,8 @@
 
 #include "Types.h"
 
+namespace vamiga {
+
 //
 // Structures
 //
@@ -31,3 +33,5 @@ typedef struct
     u16   cop2ins;
 }
 CopperInfo;
+
+}

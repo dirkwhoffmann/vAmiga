@@ -13,6 +13,8 @@
 #include "MediaFileTypes.h"
 #include "Reflection.h"
 
+namespace vamiga {
+
 //
 // Enumerations
 //
@@ -25,16 +27,16 @@ enum_long(FLAG_DISK)
 typedef FLAG_DISK DiskFlags;
 
 #ifdef __cplusplus
-struct DiskFlagsEnum : vamiga::util::Reflection<DiskFlagsEnum, DiskFlags>
+struct DiskFlagsEnum : util::Reflection<DiskFlagsEnum, DiskFlags>
 {
     static constexpr long minVal = 1;
     static constexpr long maxVal = FLAG_MODIFIED;
-
+    
     static const char *prefix() { return "FLAG"; }
     static const char *_key(long value)
     {
         switch (value) {
-
+                
             case FLAG_PROTECTED:    return "PROTECTED";
             case FLAG_MODIFIED:     return "MODIFIED";
         }
@@ -55,3 +57,5 @@ typedef struct
     isize offset;
 }
 DriveHead;
+
+}

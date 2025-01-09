@@ -12,6 +12,8 @@
 #include "Types.h"
 #include "Reflection.h"
 
+namespace vamiga {
+
 /* Memory source identifiers. The identifiers are used in the mem source lookup
  * table to specify the source and target of a peek or poke operation,
  * respectively.
@@ -39,11 +41,11 @@ enum_long(MEM_SOURCE)
 typedef MEM_SOURCE MemorySource;
 
 #ifdef __cplusplus
-struct MemorySourceEnum : vamiga::util::Reflection<MemorySourceEnum, MemorySource>
+struct MemorySourceEnum : util::Reflection<MemorySourceEnum, MemorySource>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = MEM_EXT;
-
+    
     static const char *prefix() { return "MEM"; }
     static const char *_key(long value)
     {
@@ -80,11 +82,11 @@ enum_long(ACCESSOR_TYPE)
 typedef ACCESSOR_TYPE Accessor;
 
 #ifdef __cplusplus
-struct AccessorEnum : vamiga::util::Reflection<AccessorEnum, Accessor>
+struct AccessorEnum : util::Reflection<AccessorEnum, Accessor>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = ACCESSOR_AGNUS;
-
+    
     static const char *prefix() { return "ACCESSOR"; }
     static const char *_key(long value)
     {
@@ -108,11 +110,11 @@ enum_long(BANK_MAP)
 typedef BANK_MAP BankMap;
 
 #ifdef __cplusplus
-struct BankMapEnum : vamiga::util::Reflection<BankMapEnum, BankMap>
+struct BankMapEnum : util::Reflection<BankMapEnum, BankMap>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = BANK_MAP_A2000B;
-
+    
     static const char *prefix() { return "BANK_MAP"; }
     static const char *_key(long value)
     {
@@ -137,11 +139,11 @@ enum_long(RAM_INIT_PATTERN)
 typedef RAM_INIT_PATTERN RamInitPattern;
 
 #ifdef __cplusplus
-struct RamInitPatternEnum : vamiga::util::Reflection<RamInitPatternEnum, RamInitPattern>
+struct RamInitPatternEnum : util::Reflection<RamInitPatternEnum, RamInitPattern>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = RAM_INIT_RANDOMIZED;
-
+    
     static const char *prefix() { return "RAM_INIT"; }
     static const char *_key(long value)
     {
@@ -165,11 +167,11 @@ enum_long(UNMAPPED_MEMORY)
 typedef UNMAPPED_MEMORY UnmappedMemory;
 
 #ifdef __cplusplus
-struct UnmappedMemoryEnum : vamiga::util::Reflection<UnmappedMemoryEnum, UnmappedMemory>
+struct UnmappedMemoryEnum : util::Reflection<UnmappedMemoryEnum, UnmappedMemory>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = UNMAPPED_ALL_ONES;
-
+    
     static const char *prefix() { return "UNMAPPED"; }
     static const char *_key(long value)
     {
@@ -194,24 +196,24 @@ typedef struct
     i32 chipSize;
     i32 slowSize;
     i32 fastSize;
-
+    
     // ROM size in bytes
     i32 romSize;
     i32 womSize;
     i32 extSize;
-
+    
     // First memory page where the extended ROM is blended it
     u32 extStart;
-
+    
     // Indicates if snapshots should contain Roms
     bool saveRoms;
     
     // Indicates if slow Ram accesses need a free bus
     bool slowRamDelay;
-
+    
     // Special ECS feature
     bool slowRamMirror;
-
+    
     // Memory layout
     BankMap bankMap;
     
@@ -231,12 +233,12 @@ typedef struct
     bool hasBootRom;
     bool hasKickRom;
     bool womLock;
-
+    
     u32 romMask;
     u32 womMask;
     u32 extMask;
     u32 chipMask;
-
+    
     MemorySource cpuMemSrc[256];
     MemorySource agnusMemSrc[256];
 }
@@ -254,3 +256,5 @@ typedef struct
     struct { isize raw; double accumulated; } kickWrites;
 }
 MemStats;
+
+}

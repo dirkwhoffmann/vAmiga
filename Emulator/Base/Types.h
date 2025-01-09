@@ -15,6 +15,8 @@
 // Type aliases
 //
 
+// namespace vamiga {
+
 typedef i64 Cycle;            // Master cycle units
 typedef i64 CPUCycle;         // CPU cycle units
 typedef i64 CIACycle;         // CIA cycle units
@@ -34,3 +36,5 @@ typedef u8 KeyCode;
 
 // File Systems
 typedef u32 Block;
+
+// }

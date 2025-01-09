@@ -11,6 +11,8 @@
 
 #include "Types.h"
 
+namespace vamiga {
+
 //
 // Structures
 //
@@ -22,3 +24,5 @@ typedef struct
     isize velocity;
 }
 MouseConfig;
+
+}

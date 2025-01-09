@@ -11,6 +11,7 @@
 
 #include "Types.h"
 
+namespace vamiga {
 
 //
 // Enumerations
@@ -19,7 +20,7 @@
 enum_long(COMP_TYPE)
 {
     GenericClass,
-
+    
     // Internal components
     AgnusClass,
     AmigaClass,
@@ -52,14 +53,14 @@ enum_long(COMP_TYPE)
     UARTClass,
     ZorroBoardClass,
     ZorroManagerClass,
-
+    
     // Ports
     AudipPortClass,
     ControlPortClass,
     SerialPortClass,
     VideoPortClass,
     SampleRateDetectorClass,
-
+    
     // Peripherals
     FloppyDriveClass,
     HardDriveClass,
@@ -69,3 +70,5 @@ enum_long(COMP_TYPE)
     PaddleClass
 };
 typedef COMP_TYPE CType;
+
+}

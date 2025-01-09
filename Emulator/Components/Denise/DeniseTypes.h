@@ -13,6 +13,7 @@
 #include "Reflection.h"
 #include "PixelEngineTypes.h"
 
+namespace vamiga {
 
 //
 // Enumerations
@@ -26,11 +27,11 @@ enum_long(DENISE_REV)
 typedef DENISE_REV DeniseRevision;
 
 #ifdef __cplusplus
-struct DeniseRevisionEnum : vamiga::util::Reflection<DeniseRevisionEnum, DeniseRevision>
-{    
+struct DeniseRevisionEnum : util::Reflection<DeniseRevisionEnum, DeniseRevision>
+{
     static constexpr long minVal = 0;
     static constexpr long maxVal = DENISE_ECS;
-
+    
     static const char *prefix() { return "DENISE"; }
     static const char *_key(long value)
     {
@@ -53,16 +54,16 @@ typedef struct
 {
     // Emulated chip model
     DeniseRevision revision;
-
+    
     // Informs the GUI about viewport changes
     bool viewportTracking;
-
+    
     // Number of frames to be skipped in warp mode
     isize frameSkipping;
-
+    
     // Hides certain bitplanes
     u8 hiddenBitplanes;
-
+    
     // Hides certain sprites
     u8 hiddenSprites;
     
@@ -74,10 +75,10 @@ typedef struct
     
     // Checks for sprite-sprite collisions
     bool clxSprSpr;
-
+    
     // Checks for sprite-playfield collisions
     bool clxSprPlf;
-
+    
     // Checks for playfield-playfield collisions
     bool clxPlfPlf;
 }
@@ -87,7 +88,7 @@ typedef struct
 {
     // Number of lines the sprite was armed
     isize height;
-
+    
     // Extracted information from SPRxPOS and SPRxCTL
     isize hstrt;
     isize vstrt;
@@ -96,7 +97,7 @@ typedef struct
     
     // Upper 16 color registers (at the time the observed sprite starts)
     u16 colors[16];
-
+    
     // Latched sprite data
     const u64 *data;
 }
@@ -115,23 +116,25 @@ ViewPortInfo;
 typedef struct
 {
     bool ecs;
-
+    
     u16 bplcon0;
     u16 bplcon1;
     u16 bplcon2;
     i16 bpu;
     u16 bpldat[6];
-
+    
     u16 diwstrt;
     u16 diwstop;
     ViewPortInfo viewport;
- 
+    
     u16 joydat[2];
     u16 clxdat;
-
+    
     u16 colorReg[32];
     u32 color[32];
-
+    
     SpriteInfo sprite[8];
 }
 DeniseInfo;
+
+}

@@ -12,6 +12,8 @@
 #include "Types.h"
 #include "Reflection.h"
 
+namespace vamiga {
+
 enum_long(FRAME_TYPE)
 {
     FRAME_PAL_LF,       // PAL long frame
@@ -24,16 +26,16 @@ enum_long(FRAME_TYPE)
 typedef FRAME_TYPE FrameType;
 
 #ifdef __cplusplus
-struct FrameTypeEnum : vamiga::util::Reflection<FrameTypeEnum, FrameType>
+struct FrameTypeEnum : util::Reflection<FrameTypeEnum, FrameType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = FRAME_NTSC_SF_SL;
-
+    
     static const char *prefix() { return "FRAME"; }
     static const char *_key(long value)
     {
         switch (value) {
-
+                
             case FRAME_PAL_LF:      return "PAL_LF";
             case FRAME_PAL_SF:      return "PAL_SF";
             case FRAME_NTSC_LF_LL:  return "NTSC_LF_LL";
@@ -45,3 +47,5 @@ struct FrameTypeEnum : vamiga::util::Reflection<FrameTypeEnum, FrameType>
     }
 };
 #endif
+
+}

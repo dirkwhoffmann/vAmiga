@@ -13,6 +13,8 @@
 #include "Reflection.h"
 #include "BusTypes.h"
 
+namespace vamiga {
+
 //
 // Enumerations
 //
@@ -26,11 +28,11 @@ enum_long(DMA_DISPLAY_MODE)
 typedef DMA_DISPLAY_MODE DmaDisplayMode;
 
 #ifdef __cplusplus
-struct DmaDisplayModeEnum : vamiga::util::Reflection<DmaDisplayModeEnum, DmaDisplayMode>
+struct DmaDisplayModeEnum : util::Reflection<DmaDisplayModeEnum, DmaDisplayMode>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = DMA_DISPLAY_MODE_ODD_EVEN_LAYERS;
-
+    
     static const char *prefix() { return "DMA_DISPLAY_MODE"; }
     static const char *_key(long value)
     {
@@ -61,11 +63,11 @@ enum_long(DMA_CHANNEL)
 typedef DMA_CHANNEL DmaChannel;
 
 #ifdef __cplusplus
-struct DmaChannelEnum : vamiga::util::Reflection<DmaChannelEnum, DmaChannel>
+struct DmaChannelEnum : util::Reflection<DmaChannelEnum, DmaChannel>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = DMA_CHANNEL_COUNT - 1;
-
+    
     static const char *prefix() { return "DMA_CHANNEL"; }
     static const char *_key(long value)
     {
@@ -95,16 +97,16 @@ typedef struct
 {
     // Global enable switch
     bool enabled;
-
+    
     // Individual enable switch for each DMA channel
     bool visualize[DMA_CHANNEL_COUNT];
-
+    
     // Color palette
     u32 debugColor[DMA_CHANNEL_COUNT];
-
+    
     // Display mode
     DmaDisplayMode displayMode;
-
+    
     // Opacity
     isize opacity;
 }
@@ -131,3 +133,5 @@ typedef struct
     double refreshColor[3];
 }
 DmaDebuggerInfo;
+
+}

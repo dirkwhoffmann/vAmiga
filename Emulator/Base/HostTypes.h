@@ -9,6 +9,8 @@
 
 #pragma once
 
+namespace vamiga {
+
 //
 // Structures
 //
@@ -17,12 +19,14 @@ typedef struct
 {
     // Refresh rate of the host display
     isize refreshRate;
-
+    
     // Audio sample rate of the host computer
     isize sampleRate;
-
+    
     // Framebuffer dimensions
     isize frameBufferWidth;
     isize frameBufferHeight;
 }
 HostConfig;
+
+}

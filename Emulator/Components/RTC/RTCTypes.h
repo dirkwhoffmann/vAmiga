@@ -12,6 +12,8 @@
 #include "Types.h"
 #include "Reflection.h"
 
+namespace vamiga {
+
 //
 // Enumerations
 //
@@ -25,11 +27,11 @@ enum_long(RTC_REVISION)
 typedef RTC_REVISION RTCRevision;
 
 #ifdef __cplusplus
-struct RTCRevisionEnum : vamiga::util::Reflection<RTCRevisionEnum, RTCRevision>
+struct RTCRevisionEnum : util::Reflection<RTCRevisionEnum, RTCRevision>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = RTC_RICOH;
-
+    
     static const char *prefix() { return "RTC"; }
     static const char *_key(long value)
     {
@@ -54,3 +56,5 @@ typedef struct
     RTCRevision model;
 }
 RTCConfig;
+
+}

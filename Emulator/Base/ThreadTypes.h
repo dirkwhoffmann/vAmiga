@@ -12,6 +12,8 @@
 #include "Types.h"
 #include "Reflection.h"
 
+namespace vamiga {
+
 //
 // Enumerations
 //
@@ -28,16 +30,16 @@ enum_long(EXEC_STATE)
 typedef EXEC_STATE ExecState;
 
 #ifdef __cplusplus
-struct ExecStateEnum : vamiga::util::Reflection<ExecStateEnum, ExecState>
+struct ExecStateEnum : util::Reflection<ExecStateEnum, ExecState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = STATE_HALTED;
-
+    
     static const char *prefix() { return "STATE"; }
     static const char *_key(long value)
     {
         switch (value) {
-
+                
             case STATE_UNINIT:       return "UNINIT";
             case STATE_OFF:          return "OFF";
             case STATE_PAUSED:       return "PAUSED";
@@ -48,3 +50,5 @@ struct ExecStateEnum : vamiga::util::Reflection<ExecStateEnum, ExecState>
     }
 };
 #endif
+
+}

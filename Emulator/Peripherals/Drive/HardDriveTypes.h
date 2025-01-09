@@ -10,11 +10,10 @@
 #pragma once
 
 #include "DriveTypes.h"
-
-#ifdef __cplusplus
 #include "DriveDescriptors.h"
 #include <vector>
-#endif
+
+namespace vamiga {
 
 //
 // Enumerations
@@ -27,11 +26,11 @@ enum_long(HDR_TYPE)
 typedef HDR_TYPE HardDriveType;
 
 #ifdef __cplusplus
-struct HardDriveTypeEnum : vamiga::util::Reflection<HardDriveTypeEnum, HardDriveType>
+struct HardDriveTypeEnum : util::Reflection<HardDriveTypeEnum, HardDriveType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = HDR_GENERIC;
-
+    
     static const char *prefix() { return "HDR"; }
     static const char *_key(long value)
     {
@@ -53,7 +52,7 @@ enum_long(HDR_STATE)
 typedef HDR_STATE HardDriveState;
 
 #ifdef __cplusplus
-struct HardDriveStateEnum : vamiga::util::Reflection<HardDriveStateEnum, HardDriveState>
+struct HardDriveStateEnum : util::Reflection<HardDriveStateEnum, HardDriveState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = HDR_STATE_WRITING;
@@ -90,7 +89,7 @@ typedef struct
 {
     // Object information
     isize nr;
-
+    
     // Product information
     const char *diskVendor;
     const char *diskProduct;
@@ -98,13 +97,13 @@ typedef struct
     const char *controllerVendor;
     const char *controllerProduct;
     const char *controllerRevision;
-
+    
     // Physical layout
     isize cylinders;
     isize heads;
     isize sectors;
     isize bsize;
-
+    
     // Derived values
     isize tracks;
     isize blocks;
@@ -141,13 +140,15 @@ typedef struct
     
     // Logical layout (partitions)
     isize partitions;
-
+    
     // Flags
     bool writeProtected;
     bool modified;
-
+    
     // State
     HardDriveState state;
     DriveHead head;
 }
 HardDriveInfo;
+
+}

@@ -12,6 +12,8 @@
 #include "Types.h"
 #include "Reflection.h"
 
+namespace vamiga {
+
 //
 // Enumerations
 //
@@ -26,11 +28,11 @@ enum_long(SERVER_TYPE)
 typedef SERVER_TYPE ServerType;
 
 #ifdef __cplusplus
-struct ServerTypeEnum : vamiga::util::Reflection<ServerTypeEnum, ServerType>
+struct ServerTypeEnum : util::Reflection<ServerTypeEnum, ServerType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = SERVER_GDB;
-
+    
     static const char *prefix() { return "SERVER"; }
     static const char *_key(long value)
     {
@@ -59,3 +61,5 @@ typedef struct
     isize numErroneous;
 }
 RemoteManagerInfo;
+
+}

@@ -131,7 +131,10 @@ extension ConfigurationController {
 
             switch UInt32(item.tag) {
 
-            case CRC32_AROS_54705, CRC32_AROS_55696, CRC32_DIAG121, CRC32_DIAG13, CRC32_EMUTOS13:
+            case vamiga.CRC32_AROS_54705, vamiga.CRC32_AROS_55696,
+                vamiga.CRC32_DIAG121, vamiga.CRC32_DIAG13,
+                vamiga.CRC32_EMUTOS13:
+                
                 item.isEnabled = true
 
             default:
@@ -176,19 +179,19 @@ extension ConfigurationController {
         let crc32 = sender.selectedTag()
 
         switch UInt32(crc32) {
-        case CRC32_AROS_54705: // Taken from UAE
+        case vamiga.CRC32_AROS_54705: // Taken from UAE
             installAros(rom: "aros-svn54705-rom", ext: "aros-svn54705-ext")
 
-        case CRC32_AROS_55696: // Taken from SAE
+        case vamiga.CRC32_AROS_55696: // Taken from SAE
             installAros(rom: "aros-svn55696-rom", ext: "aros-svn55696-ext")
 
-        case CRC32_EMUTOS13:
+        case vamiga.CRC32_EMUTOS13:
             install(rom: "emutos-13")
 
-        case CRC32_DIAG121:
+        case vamiga.CRC32_DIAG121:
             install(rom: "diagrom-121")
 
-        case CRC32_DIAG13:
+        case vamiga.CRC32_DIAG13:
             install(rom: "diagrom-13")
 
         default:
@@ -214,17 +217,17 @@ extension ConfigurationController {
 
     func installAros() {
 
-        installAros(crc32: CRC32_AROS_55696)
+        installAros(crc32: vamiga.CRC32_AROS_55696)
     }
 
     func installAros(crc32: UInt32) {
 
         switch crc32 {
 
-        case CRC32_AROS_54705: // Taken from UAE
+        case vamiga.CRC32_AROS_54705: // Taken from UAE
             installAros(rom: "aros-svn54705-rom", ext: "aros-svn54705-ext")
 
-        case CRC32_AROS_55696: // Taken from SAE
+        case vamiga.CRC32_AROS_55696: // Taken from SAE
             installAros(rom: "aros-svn55696-rom", ext: "aros-svn55696-ext")
 
         default:

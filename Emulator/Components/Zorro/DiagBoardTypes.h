@@ -12,6 +12,8 @@
 #include "Types.h"
 #include "Reflection.h"
 
+namespace vamiga {
+
 //
 // Structures
 //
@@ -21,3 +23,5 @@ typedef struct
     bool enabled;
 }
 DiagBoardConfig;
+
+}

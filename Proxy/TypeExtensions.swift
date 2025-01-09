@@ -7,6 +7,56 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+typealias Accessor = vamiga.Accessor
+typealias AmigaInfo = vamiga.AmigaInfo
+typealias AgnusInfo = vamiga.AgnusInfo
+typealias AgnusRevision = vamiga.AgnusRevision
+typealias AgnusStats = vamiga.AgnusStats
+typealias BankMap = vamiga.BankMap
+typealias BlitterInfo = vamiga.BlitterInfo
+typealias BootBlockId = vamiga.BootBlockId
+typealias CIAInfo = vamiga.CIAInfo
+typealias CIARevision = vamiga.CIARevision
+typealias CIAStats = vamiga.CIAStats
+typealias ControlPortDevice = vamiga.ControlPortDevice
+typealias ControlPortInfo = vamiga.ControlPortInfo
+typealias CopperInfo = vamiga.CopperInfo
+typealias CPUInfo = vamiga.CPUInfo
+typealias CPURevision = vamiga.CPURevision
+typealias DeniseInfo = vamiga.DeniseInfo
+typealias DeniseRevision = vamiga.DeniseRevision
+typealias DiskControllerInfo = vamiga.DiskControllerInfo
+typealias ErrorCode = vamiga.ErrorCode
+typealias EventSlot = vamiga.EventSlot
+typealias EventSlotInfo = vamiga.EventSlotInfo
+typealias FileType = vamiga.FileType
+typealias FloppyDriveInfo = vamiga.FloppyDriveInfo
+typealias FloppyDriveType = vamiga.FloppyDriveType
+typealias FSBlockType = vamiga.FSBlockType
+typealias FSErrorReport = vamiga.FSErrorReport
+typealias FSItemType = vamiga.FSItemType
+typealias FSVolumeType = vamiga.FSVolumeType
+typealias GamePadAction = vamiga.GamePadAction
+typealias HardDriveInfo = vamiga.HardDriveInfo
+typealias HIDEvent = vamiga.HIDEvent
+typealias MemorySource = vamiga.MemorySource
+typealias MemInfo = vamiga.MemInfo
+typealias MemStats = vamiga.MemStats
+typealias Message = vamiga.Message
+typealias Option = vamiga.Option
+typealias PaulaInfo = vamiga.PaulaInfo
+typealias Probe = vamiga.Probe
+typealias RomTraits = vamiga.RomTraits
+typealias RTCRevision = vamiga.RTCRevision
+typealias SerialPortDevice = vamiga.SerialPortDevice
+typealias SerialPortInfo = vamiga.SerialPortInfo
+typealias ServerType = vamiga.ServerType
+typealias SpriteInfo = vamiga.SpriteInfo
+typealias StateMachineInfo = vamiga.StateMachineInfo
+typealias UARTInfo = vamiga.UARTInfo
+typealias VideoFormat = vamiga.VideoFormat
+typealias WarpMode = vamiga.WarpMode
+
 extension EventSlot: CustomStringConvertible {
 
     public var description: String {

@@ -617,7 +617,6 @@
 		504F9657220B2CEE005F8AB7 /* GuardTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardTableView.swift; sourceTree = "<group>"; };
 		5050EC3E27BE876F00394F4F /* HardDiskCreator.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HardDiskCreator.xib; sourceTree = "<group>"; };
 		5050EC4027BE97E000394F4F /* HardDiskCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardDiskCreator.swift; sourceTree = "<group>"; };
-		5051922722B61C1B0012C4BB /* AmigaFileTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaFileTypes.h; sourceTree = "<group>"; };
 		5051922822B61C8A0012C4BB /* CPUTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPUTypes.h; sourceTree = "<group>"; };
 		5051922922B61CEC0012C4BB /* CIATypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CIATypes.h; sourceTree = "<group>"; };
 		5051922A22B61DAA0012C4BB /* MemoryTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MemoryTypes.h; sourceTree = "<group>"; };
@@ -1604,7 +1603,6 @@
 				50985ABD2C418D370079CFC5 /* MediaFileTypes.h */,
 				50985ABA2C418D190079CFC5 /* MediaFile.h */,
 				50985AB92C418D190079CFC5 /* MediaFile.cpp */,
-				5051922722B61C1B0012C4BB /* AmigaFileTypes.h */,
 				508FE06421EA318D0043D0E9 /* AmigaFile.h */,
 				508FE06321EA318D0043D0E9 /* AmigaFile.cpp */,
 				50384C8521FC6B66006E7748 /* Snapshot.h */,

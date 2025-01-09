@@ -12,6 +12,7 @@
 #include "Types.h"
 #include "Reflection.h"
 
+namespace vamiga {
 
 //
 // Constants
@@ -112,17 +113,17 @@ enum_long(ROM_VENDOR)
 typedef ROM_VENDOR RomVendor;
 
 #ifdef __cplusplus
-struct RomVendorEnum : vamiga::util::Reflection<RomVendorEnum, RomVendor> {
-
+struct RomVendorEnum : util::Reflection<RomVendorEnum, RomVendor> {
+    
     static constexpr long minVal = 0;
     static constexpr long maxVal = ROM_VENDOR_OTHER;
     static bool isValid(auto value) { return value >= minVal && value <= maxVal; }
-
+    
     static const char *prefix() { return "ROM_VENDOR"; }
     static const char *_key(long value)
     {
         switch (value) {
-
+                
             case ROM_VENDOR_COMMODORE:  return "COMMODORE";
             case ROM_VENDOR_AROS:       return "AROS";
             case ROM_VENDOR_HYPERION:   return "HYPERION";
@@ -142,17 +143,19 @@ struct RomVendorEnum : vamiga::util::Reflection<RomVendorEnum, RomVendor> {
 //
 
 typedef struct {
-
+    
     u32 crc;
-
+    
     const char *title;
     const char *revision;
     const char *released;
     const char *model;
-
+    
     RomVendor vendor;
     bool boot;
     bool patched;
     bool relocated;
 }
 RomTraits;
+
+}

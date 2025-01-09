@@ -11,6 +11,8 @@
 
 #include "Types.h"
 
+namespace vamiga {
+
 typedef struct
 {
     u16 serper;
@@ -21,3 +23,5 @@ typedef struct
     u16 transmitShiftReg;
 }
 UARTInfo;
+
+}

@@ -13,6 +13,8 @@
 #include "FloppyDiskTypes.h"
 #include "BootBlockImageTypes.h"
 
+namespace vamiga {
+
 //
 // Enumerations
 //
@@ -26,11 +28,11 @@ enum_long(DRIVE_TYPE)
 typedef DRIVE_TYPE FloppyDriveType;
 
 #ifdef __cplusplus
-struct FloppyDriveTypeEnum : vamiga::util::Reflection<FloppyDriveTypeEnum, FloppyDriveType>
+struct FloppyDriveTypeEnum : util::Reflection<FloppyDriveTypeEnum, FloppyDriveType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = DRIVE_DD_525;
-
+    
     static const char *prefix() { return "DRIVE"; }
     static const char *_key(long value)
     {
@@ -53,16 +55,16 @@ enum_long(DRIVE_MECHANICS)
 typedef DRIVE_MECHANICS DriveMechanics;
 
 #ifdef __cplusplus
-struct DriveMechanicsEnum : vamiga::util::Reflection<DriveMechanicsEnum, DriveMechanics>
+struct DriveMechanicsEnum : util::Reflection<DriveMechanicsEnum, DriveMechanics>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = MECHANICS_A1010;
-
+    
     static const char *prefix() { return "DMECHANICS"; }
     static const char *_key(long value)
     {
         switch (value) {
-
+                
             case MECHANICS_NONE:    return "NONE";
             case MECHANICS_A1010:   return "A1010";
         }
@@ -83,17 +85,17 @@ typedef struct
     
     // Drive model
     FloppyDriveType type;
-
+    
     // Drive mechanics
     DriveMechanics mechanics;
-
+    
     /* Revolutions per minute. A standard Amiga drive rotates with 300 rpm.
      * Rotation speed can be measured with AmigaTestKit which analyzes the
      * delay between consecutive index pulses. 300 rpm corresponds to an index
      * pulse delay of 200 ms.
      */
     isize rpm;
-
+    
     // Delay between ejecting an old disk and inserting a new one
     Cycle diskSwapDelay;
     
@@ -121,3 +123,4 @@ typedef struct
 }
 FloppyDriveInfo;
 
+}

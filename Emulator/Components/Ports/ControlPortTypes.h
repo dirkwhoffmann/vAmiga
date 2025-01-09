@@ -12,6 +12,7 @@
 #include "Types.h"
 #include "Reflection.h"
 
+namespace vamiga {
 
 //
 // Enumerations
@@ -26,7 +27,7 @@ enum_long(CPD)
 typedef CPD ControlPortDevice;
 
 #ifdef __cplusplus
-struct ControlPortDeviceEnum : vamiga::util::Reflection<ControlPortDeviceEnum, ControlPortDevice>
+struct ControlPortDeviceEnum : util::Reflection<ControlPortDeviceEnum, ControlPortDevice>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = CPD_JOYSTICK;
@@ -61,3 +62,5 @@ typedef struct
     u16 potdat;
 }
 ControlPortInfo;
+
+}

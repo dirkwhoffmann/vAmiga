@@ -13,6 +13,8 @@
 #include "AudioFilterTypes.h"
 #include "SamplerTypes.h"
 
+namespace vamiga {
+
 //
 // Structures
 //
@@ -45,3 +47,5 @@ typedef struct
     double fillLevel;
 }
 AudioPortStats;
+
+}

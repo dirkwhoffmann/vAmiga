@@ -12,6 +12,8 @@
 #include "Types.h"
 #include "Reflection.h"
 
+namespace vamiga {
+
 //
 // Enumerations
 //
@@ -29,11 +31,11 @@ enum_long(FILTER_TYPE)
 typedef FILTER_TYPE FilterType;
 
 #ifdef __cplusplus
-struct FilterTypeEnum : vamiga::util::Reflection<FilterTypeEnum, FilterType>
+struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = FILTER_HIGH;
-
+    
     static const char *prefix() { return "FILTER"; }
     static const char *_key(long value)
     {
@@ -63,3 +65,5 @@ typedef struct
     FilterType filterType;
 }
 AudioFilterConfig;
+
+}

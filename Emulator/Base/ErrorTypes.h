@@ -12,28 +12,30 @@
 #include "Types.h"
 #include "Reflection.h"
 
+namespace vamiga {
+
 enum_long(VAERROR_CODE)
 {
     VAERROR_OK,                   ///< No error
     VAERROR_UNKNOWN,              ///< Unclassified error condition
-
+    
     // Emulator state
     VAERROR_LAUNCH,               ///< Launch error
     VAERROR_POWERED_OFF,          ///< The emulator is powered off
     VAERROR_POWERED_ON,           ///< The emulator is powered on
     VAERROR_DEBUG_OFF,
     VAERROR_RUNNING,              ///< The emulator is running
-
+    
     // Configuration
     VAERROR_OPT_UNSUPPORTED,      ///< Unsupported configuration option
     VAERROR_OPT_INV_ARG,          ///< Invalid argument
     VAERROR_OPT_INV_ID,           ///< Invalid component id
     VAERROR_OPT_LOCKED,           ///< The option is temporarily locked
-
+    
     // Property storage
     VAERROR_INVALID_KEY,          ///< Invalid property key
     VAERROR_SYNTAX,               ///< Syntax error
-
+    
     // CPU
     VAERROR_CPU_UNSUPPORTED,      ///< Unsupported CPU model
     VAERROR_GUARD_NOT_FOUND,      ///< Guard is not set
@@ -45,10 +47,10 @@ enum_long(VAERROR_CODE)
     VAERROR_CP_NOT_FOUND,         ///< Catchpoint is not set (DEPRECATED)
     VAERROR_CP_ALREADY_SET,       ///< Catchpoint is already set (DEPRECATED)
     // VAERROR_CP_CANT_CATCH,
-
+    
     // Memory
     VAERROR_OUT_OF_MEMORY,        ///< Out of memory
-
+    
     // General
     VAERROR_DIR_NOT_FOUND,        ///< Directory does not exist
     VAERROR_DIR_ACCESS_DENIED,    ///< File access denied
@@ -63,12 +65,12 @@ enum_long(VAERROR_CODE)
     VAERROR_FILE_CANT_READ,       ///< Can't read from file
     VAERROR_FILE_CANT_WRITE,      ///< Can't write to file
     VAERROR_FILE_CANT_CREATE,     ///< Can't create file
-
+    
     // Ram
     VAERROR_CHIP_RAM_MISSING,
     VAERROR_CHIP_RAM_LIMIT,
     VAERROR_AROS_RAM_LIMIT,
-
+    
     // Rom
     VAERROR_ROM_MISSING,
     VAERROR_AROS_NO_EXTROM,
@@ -99,16 +101,16 @@ enum_long(VAERROR_CODE)
     VAERROR_HDR_CORRUPTED_FSH,
     VAERROR_HDR_CORRUPTED_LSEG,
     VAERROR_HDR_UNSUPPORTED,
-
+    
     // Hard drive controller
     VAERROR_HDC_INIT,
-
+    
     // Snapshots
     VAERROR_SNAP_TOO_OLD,         ///< Snapshot was created with an older version
     VAERROR_SNAP_TOO_NEW,         ///< Snapshot was created with a later version
     VAERROR_SNAP_IS_BETA,         ///< Snapshot was created with a beta release
     VAERROR_SNAP_CORRUPTED,       ///< Snapshot data is corrupted
-
+    
     // Media files
     VAERROR_DMS_CANT_CREATE,
     VAERROR_EXT_FACTOR5,
@@ -121,13 +123,13 @@ enum_long(VAERROR_CODE)
     
     // Recorder
     VAERROR_REC_LAUNCH,
-
+    
     // Debugger
     VAERROR_REG_READ_ONLY,
     VAERROR_REG_WRITE_ONLY,
     VAERROR_REG_UNUSED,
     VAERROR_ADDR_UNALIGNED,
-
+    
     // OS Debugger
     VAERROR_OSDB,
     VAERROR_HUNK_BAD_COOKIE,
@@ -135,7 +137,7 @@ enum_long(VAERROR_CODE)
     VAERROR_HUNK_NO_SECTIONS,
     VAERROR_HUNK_UNSUPPORTED,
     VAERROR_HUNK_CORRUPTED,
-
+    
     // Remote servers
     VAERROR_SOCK_CANT_CREATE,
     VAERROR_SOCK_CANT_CONNECT,
@@ -151,14 +153,14 @@ enum_long(VAERROR_CODE)
     VAERROR_SERVER_RUNNING,
     VAERROR_SERVER_NOT_RUNNING,
     VAERROR_SERVER_NO_CLIENT,
-
+    
     // GDB server
     VAERROR_GDB_NO_ACK,
     VAERROR_GDB_INVALID_FORMAT,
     VAERROR_GDB_INVALID_CHECKSUM,
     VAERROR_GDB_UNRECOGNIZED_CMD,
     VAERROR_GDB_UNSUPPORTED_CMD,
-
+    
     // File system
     VAERROR_FS_UNKNOWN,
     VAERROR_FS_UNSUPPORTED,
@@ -168,7 +170,7 @@ enum_long(VAERROR_CODE)
     VAERROR_FS_WRONG_DOS_TYPE,
     VAERROR_FS_HAS_CYCLES,
     VAERROR_FS_CORRUPTED,
-
+    
     // File system (import errors)
     VAERROR_FS_OUT_OF_SPACE,
     
@@ -176,7 +178,7 @@ enum_long(VAERROR_CODE)
     VAERROR_FS_DIR_NOT_EMPTY,
     VAERROR_FS_CANNOT_CREATE_DIR,
     VAERROR_FS_CANNOT_CREATE_FILE,
-
+    
     // File system (block errors)
     VAERROR_FS_INVALID_BLOCK_TYPE,
     VAERROR_FS_EXPECTED_VALUE,
@@ -201,7 +203,7 @@ enum_long(VAERROR_CODE)
 typedef VAERROR_CODE ErrorCode;
 
 #ifdef __cplusplus
-struct ErrorCodeEnum : vamiga::util::Reflection<ErrorCodeEnum, ErrorCode>
+struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = VAERROR_FS_INVALID_HASHTABLE_SIZE;
@@ -219,7 +221,7 @@ struct ErrorCodeEnum : vamiga::util::Reflection<ErrorCodeEnum, ErrorCode>
             case VAERROR_POWERED_ON:                  return "POWERED_ON";
             case VAERROR_DEBUG_OFF:                   return "DEBUG_OFF";
             case VAERROR_RUNNING:                     return "RUNNING";
-
+                
             case VAERROR_OPT_UNSUPPORTED:             return "OPT_UNSUPPORTED";
             case VAERROR_OPT_INV_ARG:                 return "OPT_INV_ARG";
             case VAERROR_OPT_INV_ID:                  return "OPT_INV_ID";
@@ -237,10 +239,10 @@ struct ErrorCodeEnum : vamiga::util::Reflection<ErrorCodeEnum, ErrorCode>
             case VAERROR_WP_ALREADY_SET:              return "WP_ALREADY_SET";
             case VAERROR_CP_NOT_FOUND:                return "CP_NOT_FOUND";
             case VAERROR_CP_ALREADY_SET:              return "CP_ALREADY_SET";
-            // case VAERROR_CP_CANT_CATCH:               return "CP_CANT_CATCH";
-
+                // case VAERROR_CP_CANT_CATCH:               return "CP_CANT_CATCH";
+                
             case VAERROR_OUT_OF_MEMORY:               return "OUT_OF_MEMORY";
-
+                
             case VAERROR_DIR_NOT_FOUND:               return "DIR_NOT_FOUND";
             case VAERROR_DIR_ACCESS_DENIED:           return "DIR_ACCESS_DENIED";
             case VAERROR_DIR_CANT_CREATE:             return "DIR_CANT_CREATE";
@@ -258,13 +260,13 @@ struct ErrorCodeEnum : vamiga::util::Reflection<ErrorCodeEnum, ErrorCode>
             case VAERROR_CHIP_RAM_MISSING:            return "CHIP_RAM_MISSING";
             case VAERROR_CHIP_RAM_LIMIT:              return "CHIP_RAM_LIMIT";
             case VAERROR_AROS_RAM_LIMIT:              return "AROS_RAM_LIMIT";
-
+                
             case VAERROR_ROM_MISSING:                 return "ROM_MISSING";
             case VAERROR_AROS_NO_EXTROM:              return "AROS_NO_EXTROM";
-
+                
             case VAERROR_WT_BLOCKED:                  return "WT_BLOCKED";
             case VAERROR_WT:                          return "WT";
-
+                
             case VAERROR_DISK_MISSING:                return "DISK_MISSING";
             case VAERROR_DISK_INCOMPATIBLE:           return "DISK_INCOMPATIBLE";
             case VAERROR_DISK_INVALID_DIAMETER:       return "DISK_INVALID_DIAMETER";
@@ -287,11 +289,11 @@ struct ErrorCodeEnum : vamiga::util::Reflection<ErrorCodeEnum, ErrorCode>
             case VAERROR_HDR_UNSUPPORTED:             return "HDR_UNSUPPORTED";
                 
             case VAERROR_HDC_INIT:                    return "HDC_INIT";
-
+                
             case VAERROR_SNAP_TOO_OLD:                return "SNAP_TOO_OLD";
             case VAERROR_SNAP_TOO_NEW:                return "SNAP_TOO_NEW";
             case VAERROR_SNAP_IS_BETA:                return "SNAP_IS_BETA";
-
+                
             case VAERROR_DMS_CANT_CREATE:             return "DMS_CANT_CREATE";
             case VAERROR_EXT_FACTOR5:                 return "EXT_UNSUPPORTED";
             case VAERROR_EXT_INCOMPATIBLE:            return "EXT_INCOMPATIBLE";
@@ -301,19 +303,19 @@ struct ErrorCodeEnum : vamiga::util::Reflection<ErrorCodeEnum, ErrorCode>
             case VAERROR_INVALID_ROM_KEY:             return "INVALID_ROM_KEY";
                 
             case VAERROR_REC_LAUNCH:                  return "REC_LAUNCH";
-
+                
             case VAERROR_REG_READ_ONLY:               return "REG_READ_ONLY";
             case VAERROR_REG_WRITE_ONLY:              return "REG_WRITE_ONLY";
             case VAERROR_REG_UNUSED:                  return "REG_UNUSED";
             case VAERROR_ADDR_UNALIGNED:              return "ADDR_UNALIGNED";
-
+                
             case VAERROR_OSDB:                        return "OSDB";
             case VAERROR_HUNK_BAD_COOKIE:             return "HUNK_BAD_COOKIE";
             case VAERROR_HUNK_BAD_HEADER:             return "HUNK_BAD_HEADER";
             case VAERROR_HUNK_NO_SECTIONS:            return "HUNK_NO_SECTIONS";
             case VAERROR_HUNK_UNSUPPORTED:            return "HUNK_UNSUPPORTED";
             case VAERROR_HUNK_CORRUPTED:              return "HUNK_CORRUPTED";
-
+                
             case VAERROR_SOCK_CANT_CREATE:            return "SOCK_CANT_CREATE";
             case VAERROR_SOCK_CANT_CONNECT:           return "SOCK_CANT_CONNECT";
             case VAERROR_SOCK_CANT_BIND:              return "SOCK_CANT_BIND";
@@ -334,7 +336,7 @@ struct ErrorCodeEnum : vamiga::util::Reflection<ErrorCodeEnum, ErrorCode>
             case VAERROR_GDB_INVALID_CHECKSUM:        return "GDB_INVALID_CHECKSUM";
             case VAERROR_GDB_UNRECOGNIZED_CMD:        return "GDB_UNRECOGNIZED_CMD";
             case VAERROR_GDB_UNSUPPORTED_CMD:         return "GDB_UNSUPPORTED_CMD";
-
+                
             case VAERROR_FS_UNKNOWN:                  return "FS_UNKNOWN";
             case VAERROR_FS_UNSUPPORTED:              return "FS_UNSUPPORTED";
             case VAERROR_FS_UNFORMATTED:              return "FS_UNFORMATTED";
@@ -343,13 +345,13 @@ struct ErrorCodeEnum : vamiga::util::Reflection<ErrorCodeEnum, ErrorCode>
             case VAERROR_FS_WRONG_DOS_TYPE:           return "FS_WRONG_DOS_TYPE";
             case VAERROR_FS_HAS_CYCLES:               return "FS_HAS_CYCLES";
             case VAERROR_FS_CORRUPTED:                return "FS_CORRUPTED";
-
+                
             case VAERROR_FS_OUT_OF_SPACE:             return "FS_OUT_OF_SPACE";
                 
             case VAERROR_FS_DIR_NOT_EMPTY:            return "FS_DIR_NOT_EMPTY";
             case VAERROR_FS_CANNOT_CREATE_DIR:        return "FS_CANNOT_CREATE_DIR";
             case VAERROR_FS_CANNOT_CREATE_FILE:       return "FS_CANNOT_CREATE_FILE";
-
+                
             case VAERROR_FS_INVALID_BLOCK_TYPE:       return "FS_INVALID_BLOCK_TYPE";
             case VAERROR_FS_EXPECTED_VALUE:           return "FS_EXPECTED_VALUE";
             case VAERROR_FS_EXPECTED_SMALLER_VALUE:   return "FS_EXPECTED_SMALLER_VALUE";
@@ -374,3 +376,5 @@ struct ErrorCodeEnum : vamiga::util::Reflection<ErrorCodeEnum, ErrorCode>
     }
 };
 #endif
+
+}
