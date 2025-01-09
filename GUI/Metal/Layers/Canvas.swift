@@ -235,7 +235,7 @@ class Canvas: Layer {
         precondition(sfTexture != nil)
 
         // Get the emulator texture
-        var buffer: UnsafePointer<u32>!
+        var buffer: UnsafePointer<UInt32>!
         var nr = 0
 
         // Prevent the stable texture from changing

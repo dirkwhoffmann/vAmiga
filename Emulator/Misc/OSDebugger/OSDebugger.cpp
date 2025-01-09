@@ -13,9 +13,9 @@
 #include "Memory.h"
 #include <sstream>
 
-using namespace os;
-
 namespace vamiga {
+
+using namespace os;
 
 string
 OSDebugger::dosTypeStr(u32 type)

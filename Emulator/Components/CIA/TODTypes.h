@@ -11,6 +11,7 @@
 
 #include "Types.h"
 
+namespace vamiga {
 //
 // Structures
 //
@@ -22,3 +23,5 @@ typedef struct
     u32 alarm;
 }
 TODInfo;
+
+}

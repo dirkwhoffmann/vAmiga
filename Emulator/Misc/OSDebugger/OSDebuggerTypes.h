@@ -13,7 +13,7 @@
 #include "Reflection.h"
 #include <vector>
 
-namespace os {
+namespace vamiga::os {
 
 #define APTR(x) (u32)(x)
 #define BPTR(x) (u32)(4*(x))

@@ -46,7 +46,7 @@ namespace vamiga { namespace fs = std::filesystem; }
 // Integers
 //
 
-// namespace vamiga {
+namespace vamiga {
 
 // Signed integers
 typedef signed char        i8;
@@ -62,7 +62,7 @@ typedef unsigned int       u32;
 typedef unsigned long long u64;
 typedef unsigned long      usize;
 
-// }
+}
 
 //
 // Optionals
