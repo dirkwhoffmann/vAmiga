@@ -14,7 +14,6 @@
 #import <Cocoa/Cocoa.h>
 #import <MetalKit/MetalKit.h>
 
-
 //
 // Forward declarations
 //
@@ -51,6 +50,63 @@
 @class SerialPortProxy;
 @class VideoPortProxy;
 
+//
+// Constants
+//
+
+typedef struct {
+    
+    struct {
+        
+        struct {
+            NSInteger CLK;
+            NSInteger DMA;
+            NSInteger CPU;
+        } FREQUENCY;
+        
+        struct {
+            NSInteger CNT_LF;
+            NSInteger CNT_SF;
+            NSInteger CNT;
+            NSInteger MAX_LF;
+            NSInteger MAX_SF;
+            NSInteger MAX;
+        } VPOS;
+        
+        struct {
+            NSInteger CNT_LL;
+            NSInteger CNT_SL;
+            NSInteger CNT;
+            NSInteger MAX_LL;
+            NSInteger MAX_SL;
+            NSInteger MAX;
+        } HPOS;
+        
+        struct {
+            NSInteger MIN;
+            NSInteger MAX;
+            NSInteger CNT;
+        } VBLANK;
+    } PAL, NTSC;
+    
+    struct {
+        NSInteger CNT;
+        NSInteger MAX;
+    } VPOS;
+    
+    struct {
+        NSInteger CNT;
+        NSInteger MAX;
+    } HPOS;
+    
+    struct {
+        NSInteger CNT;
+        NSInteger MAX;
+    } HBLANK;
+    
+} VAmigaConstants;
+
+extern const VAmigaConstants VAMIGA;
 
 //
 // Exception wrapper

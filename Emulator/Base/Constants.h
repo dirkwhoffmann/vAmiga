@@ -21,16 +21,16 @@ namespace vamiga
 //
 
 // Clock rate of the master clock in Hz
-static const isize CLK_FREQUENCY_PAL =  28375160;               // 28.375160 MHz
+static const isize CLK_FREQUENCY_PAL  =  28375160;              // 28.375160 MHz
 static const isize CLK_FREQUENCY_NTSC = 28636360;               // 28.636360 MHz
 
 // Clock rate of the CPU in Hz
-static const isize CPU_FREQUENY_PAL =  CLK_FREQUENCY_PAL / 4;   //  7.093790 MHz
-static const isize CPU_FREQUENY_NTSC = CLK_FREQUENCY_NTSC / 4;  //  7.159090 MHz
+static const isize CPU_FREQUENCY_PAL  =  CLK_FREQUENCY_PAL / 4; //  7.093790 MHz
+static const isize CPU_FREQUENCY_NTSC = CLK_FREQUENCY_NTSC / 4; //  7.159090 MHz
 
 // Clock rate of the DMA bus in Hz
-static const isize DMA_FREQUENY_PAL =  CLK_FREQUENCY_PAL / 8;   //  3.546895 MHz
-static const isize DMA_FREQUENY_NTSC = CLK_FREQUENCY_NTSC / 8;  //  3.579545 MHz
+static const isize DMA_FREQUENCY_PAL  =  CLK_FREQUENCY_PAL / 8; //  3.546895 MHz
+static const isize DMA_FREQUENCY_NTSC = CLK_FREQUENCY_NTSC / 8; //  3.579545 MHz
 
 
 //
@@ -70,8 +70,8 @@ static const isize HPOS_MAX_NTSC_SL =   226;
 static const isize HPOS_CNT_NTSC =      HPOS_CNT_NTSC_LL;
 static const isize HPOS_MAX_NTSC =      HPOS_MAX_NTSC_LL;
 
-static const isize HPOS_MAX =           HPOS_MAX_NTSC_LL;
 static const isize HPOS_CNT =           HPOS_CNT_NTSC_LL;
+static const isize HPOS_MAX =           HPOS_MAX_NTSC_LL;
 
 
 /* Screen buffer dimensions
