@@ -12,7 +12,6 @@
 #import "VAmiga.h"
 #import "Emulator.h"
 #import "MutableFileSystem.h"
-#import "vAmiga-Swift.h"
 
 using namespace vamiga;
 using namespace vamiga::moira;

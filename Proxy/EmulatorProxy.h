@@ -14,6 +14,8 @@
 #import <Cocoa/Cocoa.h>
 #import <MetalKit/MetalKit.h>
 
+using namespace vamiga;
+
 //
 // Forward declarations
 //
@@ -158,51 +160,6 @@ extern const VAmigaConstants VAMIGA;
 
 @end
 
-
-//
-// Constants
-//
-
-/*
-@interface Constants : NSObject {
-
-}
-
-@property (class, readonly) NSInteger hpixels;
-@property (class, readonly) NSInteger vpixels;
-
-@property (class, readonly) NSInteger hblank_cnt;
-@property (class, readonly) NSInteger hblank_min;
-@property (class, readonly) NSInteger hblank_max;
-
-@property (class, readonly) NSInteger vblank_cnt_pal;
-@property (class, readonly) NSInteger vblank_min_pal;
-@property (class, readonly) NSInteger vblank_max_pal;
-
-@property (class, readonly) NSInteger vblank_cnt_ntsc;
-@property (class, readonly) NSInteger vblank_min_ntsc;
-@property (class, readonly) NSInteger vblank_max_ntsc;
-
-@property (class, readonly) NSInteger vpos_cnt_pal;
-@property (class, readonly) NSInteger vpos_max_pal;
-
-@property (class, readonly) NSInteger vpos_cnt_ntsc;
-@property (class, readonly) NSInteger vpos_max_ntsc;
-
-@property (class, readonly) NSInteger vpos_cnt;
-@property (class, readonly) NSInteger vpos_max;
-
-@property (class, readonly) NSInteger hpos_cnt_pal;
-@property (class, readonly) NSInteger hpos_max_pal;
-
-@property (class, readonly) NSInteger hpos_cnt_ntsc;
-@property (class, readonly) NSInteger hpos_max_ntsc;
-
-@property (class, readonly) NSInteger hpos_max;
-@property (class, readonly) NSInteger hpos_cnt;
-
-@end
-*/
 
 //
 // Emulator
