@@ -24,7 +24,7 @@ namespace vamiga {
  * preserve the timing information.
  */
 
-struct Sampler : util::SortedRingBuffer <i16, VPOS_CNT * HPOS_CNT_PAL> {
+struct Sampler : util::SortedRingBuffer <i16, VPOS_CNT * HPOS_CNT> {
     
     // Initializes the ring buffer with a single dummy element
     void reset();

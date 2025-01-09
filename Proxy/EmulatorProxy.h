@@ -100,8 +100,9 @@ typedef struct {
     } HPOS;
     
     struct {
-        NSInteger CNT;
+        NSInteger MIN;
         NSInteger MAX;
+        NSInteger CNT;
     } HBLANK;
     
     NSInteger VPIXELS;
@@ -162,6 +163,7 @@ extern const VAmigaConstants VAMIGA;
 // Constants
 //
 
+/*
 @interface Constants : NSObject {
 
 }
@@ -200,7 +202,7 @@ extern const VAmigaConstants VAMIGA;
 @property (class, readonly) NSInteger hpos_cnt;
 
 @end
-
+*/
 
 //
 // Emulator

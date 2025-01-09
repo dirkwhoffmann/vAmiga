@@ -29,7 +29,7 @@ Sequencer::initSigRecorder()
     sigRecorder.insert(ddfstrt, SIG_BPHSTART);
     sigRecorder.insert(ddfstop, SIG_BPHSTOP);
     sigRecorder.insert(0xD8, SIG_RHW);
-    sigRecorder.insert(HPOS_CNT_NTSC, SIG_DONE);
+    sigRecorder.insert(NTSC::HPOS_CNT, SIG_DONE);
 
     sigRecorder.modified = false;
 }
@@ -238,7 +238,7 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
         }
 
         // Superimpose drawing flags
-        isize jj = j >= 1 ? j : HPOS_CNT_PAL + j;
+        isize jj = j >= 1 ? j : PAL::HPOS_CNT + j;
 
         if ((jj & mask) == (agnus.scrollOdd & mask))  id = (EventID)(id | 1);
         if ((jj & mask) == (agnus.scrollEven & mask)) id = (EventID)(id | 2);

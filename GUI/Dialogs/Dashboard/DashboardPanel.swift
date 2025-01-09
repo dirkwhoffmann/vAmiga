@@ -260,7 +260,7 @@ class ChipRamPanel: DashboardPanel {
         
         configure(title: "Chip Ram",
                   subtitle: "Memory Accesses",
-                  range: 0...Double((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 2))
+                  range: 0...Double((VAMIGA.PAL.HPOS.CNT * VAMIGA.VPOS.CNT) / 2))
     }
 }
 
@@ -272,7 +272,7 @@ class SlowRamPanel: DashboardPanel {
         
         configure(title: "Slow Ram",
                   subtitle: "Memory Accesses",
-                  range: 0...Double((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 2))
+                  range: 0...Double((VAMIGA.PAL.HPOS.CNT * VAMIGA.VPOS.CNT) / 2))
     }
 }
 
@@ -284,7 +284,7 @@ class FastRamPanel: DashboardPanel {
         
         configure(title: "Fast Ram",
                   subtitle: "Memory Accesses",
-                  range: 0...Double((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 2))
+                  range: 0...Double((VAMIGA.PAL.HPOS.CNT * VAMIGA.VPOS.CNT) / 2))
     }
 }
 
@@ -296,7 +296,7 @@ class RomPanel: DashboardPanel {
         
         configure(title: "Kickstart Rom",
                   subtitle: "Memory Accesses",
-                  range: 0...Double((Constants.hpos_cnt_pal * Constants.vpos_cnt) / 2))
+                  range: 0...Double((VAMIGA.PAL.HPOS.CNT * VAMIGA.VPOS.CNT) / 2))
     }
 }
 

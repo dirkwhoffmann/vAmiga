@@ -173,7 +173,7 @@ Paula::pokePOTGO(u16 value)
         potCntY1 = 0;
 
         // Schedule the first DISCHARGE event
-        agnus.schedulePos<SLOT_POT>(agnus.pos.v, HPOS_MAX_PAL, POT_DISCHARGE, 8);
+        agnus.schedulePos<SLOT_POT>(agnus.pos.v, PAL::HPOS_MAX, POT_DISCHARGE, 8);
     }
 }
 

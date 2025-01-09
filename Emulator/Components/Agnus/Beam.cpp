@@ -24,7 +24,7 @@ Beam::operator+=(isize i)
 
     while (i > 0) {
 
-        cycles = i < HPOS_MAX_PAL ? i : HPOS_MAX_PAL;
+        cycles = i < PAL::HPOS_MAX ? i : PAL::HPOS_MAX;
         i -= cycles;
         h += cycles;
 
@@ -65,7 +65,7 @@ Beam::operator-=(isize i)
 
     while (i > 0) {
 
-        cycles = i < HPOS_MAX_PAL ? i : HPOS_MAX_PAL;
+        cycles = i < PAL::HPOS_MAX ? i : PAL::HPOS_MAX;
         i -= cycles;
         h -= cycles;
 
@@ -106,14 +106,14 @@ Beam::diff(isize v2, isize h2) const
     // over to the next frame.
     if (b.v == v2 && h2 < b.h) {
 
-        b = b + HPOS_CNT_PAL;
-        result += HPOS_CNT_PAL;
+        b = b + PAL::HPOS_CNT;
+        result += PAL::HPOS_CNT;
     }
 
     while (b.v != v2) {
 
-        b = b + HPOS_CNT_PAL;
-        result += HPOS_CNT_PAL;
+        b = b + PAL::HPOS_CNT;
+        result += PAL::HPOS_CNT;
 
         if (result > threshold) {
 
@@ -183,20 +183,20 @@ Beam::cyclesPerFrame(FrameType type)
     switch (type) {
 
         case FRAME_PAL_LF:
-            return VPOS_CNT_PAL_LF * HPOS_CNT_PAL;
+            return PAL::VPOS_CNT_LF * PAL::HPOS_CNT;
 
         case FRAME_PAL_SF:
-            return VPOS_CNT_PAL_SF * HPOS_CNT_PAL;
+            return PAL::VPOS_CNT_SF * PAL::HPOS_CNT;
 
         case FRAME_NTSC_LF_LL:
-            return 132 * HPOS_CNT_NTSC_LL + 131 * HPOS_CNT_NTSC_SL;
+            return 132 * NTSC::HPOS_CNT_LL + 131 * NTSC::HPOS_CNT_SL;
 
         case FRAME_NTSC_LF_SL:
-            return 132 * HPOS_CNT_NTSC_SL + 131 * HPOS_CNT_NTSC_LL;
+            return 132 * NTSC::HPOS_CNT_SL + 131 * NTSC::HPOS_CNT_LL;
 
         case FRAME_NTSC_SF_LL:
         case FRAME_NTSC_SF_SL:
-            return 131 * HPOS_CNT_NTSC_SL + 131 * HPOS_CNT_NTSC_LL;
+            return 131 * NTSC::HPOS_CNT_SL + 131 * NTSC::HPOS_CNT_LL;
 
         default:
             fatalError;
@@ -282,7 +282,7 @@ Beam::switchMode(VideoFormat format)
             type = FORMAT_PAL;
             lol = false;
             lolToggle = false;
-            vLatched = VPOS_MAX_PAL_LF;
+            vLatched = PAL::VPOS_MAX_LF;
             break;
 
         case FORMAT_NTSC:
@@ -290,7 +290,7 @@ Beam::switchMode(VideoFormat format)
             type = FORMAT_NTSC;
             lol = false;
             lolToggle = true;
-            vLatched = VPOS_MAX_NTSC_LF;
+            vLatched = NTSC::VPOS_MAX_LF;
             break;
 
         default:

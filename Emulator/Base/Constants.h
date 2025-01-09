@@ -44,35 +44,42 @@ static const isize DMA_FREQUENCY = CLK_FREQUENCY / 8;   //  3.579545 MHz
  * Horizontal coordinates are measured in DMA cycles
  */
 
-static const isize VPOS_CNT_PAL_LF =    313;
-static const isize VPOS_CNT_PAL_SF =    312;
-static const isize VPOS_MAX_PAL_LF =    312;
-static const isize VPOS_MAX_PAL_SF =    311;
-static const isize VPOS_CNT_PAL =       VPOS_CNT_PAL_LF;
-static const isize VPOS_MAX_PAL =       VPOS_MAX_PAL_LF;
+namespace PAL {
 
-static const isize VPOS_CNT_NTSC_LF =   263;
-static const isize VPOS_CNT_NTSC_SF =   262;
-static const isize VPOS_MAX_NTSC_LF =   262;
-static const isize VPOS_MAX_NTSC_SF =   261;
-static const isize VPOS_CNT_NTSC =      VPOS_CNT_NTSC_LF;
-static const isize VPOS_MAX_NTSC =      VPOS_MAX_NTSC_LF;
+static const isize HPOS_CNT =       227;
+static const isize HPOS_MAX =       226;
 
-static const isize VPOS_CNT =           VPOS_CNT_PAL;
-static const isize VPOS_MAX =           VPOS_MAX_PAL;
+static const isize VPOS_CNT_LF =    313;
+static const isize VPOS_CNT_SF =    312;
+static const isize VPOS_MAX_LF =    312;
+static const isize VPOS_MAX_SF =    311;
+static const isize VPOS_CNT =       VPOS_CNT_LF;
+static const isize VPOS_MAX =       VPOS_MAX_LF;
 
-static const isize HPOS_CNT_PAL =       227;
-static const isize HPOS_MAX_PAL =       226;
+}
 
-static const isize HPOS_CNT_NTSC_LL =   228;
-static const isize HPOS_CNT_NTSC_SL =   227;
-static const isize HPOS_MAX_NTSC_LL =   227;
-static const isize HPOS_MAX_NTSC_SL =   226;
-static const isize HPOS_CNT_NTSC =      HPOS_CNT_NTSC_LL;
-static const isize HPOS_MAX_NTSC =      HPOS_MAX_NTSC_LL;
+namespace NTSC {
 
-static const isize HPOS_CNT =           HPOS_CNT_NTSC_LL;
-static const isize HPOS_MAX =           HPOS_MAX_NTSC_LL;
+static const isize VPOS_CNT_LF =   263;
+static const isize VPOS_CNT_SF =   262;
+static const isize VPOS_MAX_LF =   262;
+static const isize VPOS_MAX_SF =   261;
+static const isize VPOS_CNT =      VPOS_CNT_LF;
+static const isize VPOS_MAX =      VPOS_MAX_LF;
+
+static const isize HPOS_CNT_LL =   228;
+static const isize HPOS_CNT_SL =   227;
+static const isize HPOS_MAX_LL =   227;
+static const isize HPOS_MAX_SL =   226;
+static const isize HPOS_CNT =      HPOS_CNT_LL;
+static const isize HPOS_MAX =      HPOS_MAX_LL;
+
+}
+
+static const isize VPOS_CNT =           PAL::VPOS_CNT;
+static const isize VPOS_MAX =           PAL::VPOS_MAX;
+static const isize HPOS_CNT =           NTSC::HPOS_CNT_LL;
+static const isize HPOS_MAX =           NTSC::HPOS_MAX_LL;
 
 
 /* Screen buffer dimensions
@@ -96,17 +103,25 @@ static const isize PIXELS =     VPIXELS * HPIXELS;
  * screen.
  */
 
-static const isize HBLANK_MIN = 0x12;       // First HBLANK cycle
-static const isize HBLANK_MAX = 0x23;       // Last HBLANK cycle
-static const isize HBLANK_CNT = 0x12;       // HBLANK_MAX - HBLANK_MIN + 1
+static const isize HBLANK_MIN = 0x12;   // First HBLANK cycle
+static const isize HBLANK_MAX = 0x23;   // Last HBLANK cycle
+static const isize HBLANK_CNT = 0x12;   // HBLANK_MAX - HBLANK_MIN + 1
 
-static const isize VBLANK_MIN_PAL = 0x00;   // First VBLANK line
-static const isize VBLANK_MAX_PAL = 0x19;   // Last VBLANK line
-static const isize VBLANK_CNT_PAL = 0x1A;   // VBLANK_MAX - VBLANK_MIN + 1
+namespace PAL {
 
-static const isize VBLANK_MIN_NTSC = 0x00;  // First VBLANK line
-static const isize VBLANK_MAX_NTSC = 0x13;  // Last VBLANK line
-static const isize VBLANK_CNT_NTSC = 0x14;  // VBLANK_MAX - VBLANK_MIN + 1
+static const isize VBLANK_MIN = 0x00;   // First VBLANK line
+static const isize VBLANK_MAX = 0x19;   // Last VBLANK line
+static const isize VBLANK_CNT = 0x1A;   // VBLANK_MAX - VBLANK_MIN + 1
+
+}
+
+namespace NTSC {
+
+static const isize VBLANK_MIN = 0x00;   // First VBLANK line
+static const isize VBLANK_MAX = 0x13;   // Last VBLANK line
+static const isize VBLANK_CNT = 0x14;   // VBLANK_MAX - VBLANK_MIN + 1
+
+}
 
 
 //

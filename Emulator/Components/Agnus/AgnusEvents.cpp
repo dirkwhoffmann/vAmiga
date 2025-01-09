@@ -736,7 +736,7 @@ Agnus::serviceDASEvent(EventID id)
 
             assert(pos.h == HPOS_MAX_PAL || pos.h == HPOS_MAX_NTSC);
 
-            if (pos.h == HPOS_MAX_PAL && pos.lol) {
+            if (pos.h == PAL::HPOS_MAX && pos.lol) {
 
                 // Run for an additional cycle (long line)
                 break;

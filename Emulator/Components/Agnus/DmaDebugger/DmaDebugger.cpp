@@ -441,7 +441,7 @@ DmaDebugger::vSyncHandler()
     if (!config.enabled) return;
 
     // Clear old data in the VBLANK area of the next frame
-    auto cnt = agnus.isPAL() ? VBLANK_CNT_PAL : VBLANK_CNT_NTSC;
+    auto cnt = agnus.isPAL() ? PAL::VBLANK_CNT : NTSC::VBLANK_CNT;
     for (isize row = 0; row < cnt; row++) {
 
         auto *ptr = denise.pixelEngine.workingPtr(row);

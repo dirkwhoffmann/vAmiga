@@ -18,9 +18,9 @@ void
 Thumbnail::take(Amiga &amiga, isize dx, isize dy)
 {
     isize xStart = 4 * HBLANK_CNT;
-    isize xEnd = 4 * HPOS_CNT_PAL;
-    isize yStart = amiga.agnus.isPAL() ? VBLANK_CNT_PAL : VBLANK_CNT_NTSC;
-    isize yEnd = amiga.agnus.isPAL() ? VPOS_CNT_PAL_SF : VPOS_CNT_NTSC_SF;
+    isize xEnd = 4 * PAL::HPOS_CNT;
+    isize yStart = amiga.agnus.isPAL() ? PAL::VBLANK_CNT : NTSC::VBLANK_CNT;
+    isize yEnd = amiga.agnus.isPAL() ? PAL::VPOS_CNT_SF : NTSC::VPOS_CNT_SF;
 
     width  = (i32)((xEnd - xStart) / dx);
     height = (i32)((yEnd - yStart) / dy);

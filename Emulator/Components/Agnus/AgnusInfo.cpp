@@ -549,9 +549,9 @@ Agnus::_dump(Category category, std::ostream& os) const
     
     if (category == Category::Bus) {
         
-        for (isize i = 0; i < HPOS_CNT_NTSC; i++) {
+        for (isize i = 0; i < NTSC::HPOS_CNT; i++) {
             
-            isize cycle = (i / 6) + (i % 6) * ((HPOS_CNT_NTSC + 1) / 6);
+            isize cycle = (i / 6) + (i % 6) * ((NTSC::HPOS_CNT + 1) / 6);
             
             string key = std::to_string(cycle) + ":";
             os << std::left << std::setw(5) << key;

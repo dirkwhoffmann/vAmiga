@@ -719,11 +719,11 @@ Agnus::eofHandler()
     assert(denise.lace() == pos.lofToggle);
 
     // Run the screen recorder
-    denise.screenRecorder.vsyncHandler(clock - 50 * DMA_CYCLES(HPOS_CNT_PAL));
+    denise.screenRecorder.vsyncHandler(clock - 50 * DMA_CYCLES(PAL::HPOS_CNT));
     denise.eofHandler();
 
     // Synthesize sound samples
-    paula.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT_PAL)); // MOVE TO Paula::eofHandler
+    paula.executeUntil(clock - 50 * DMA_CYCLES(PAL::HPOS_CNT)); // MOVE TO Paula::eofHandler
 
     scheduleStrobe0Event();
 
