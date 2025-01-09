@@ -156,7 +156,7 @@ public:
     Cycle pulseWidth() const { return DMA_CYCLES((serper & 0x7FFF) + 1); }
 
     // Returns the baud rate
-    isize baudRate() const { return CLK_FREQUENCY_PAL / (isize)pulseWidth(); }
+    isize baudRate() const { return PAL::CLK_FREQUENCY / (isize)pulseWidth(); }
     
 private:
 

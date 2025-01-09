@@ -331,7 +331,7 @@ public:
 
     bool isOCS() const;
     bool isECS() const;
-    bool isPAL() const { return pos.type == PAL; }
+    bool isPAL() const { return pos.type == FORMAT_PAL; }
     bool isNTSC() const { return !isPAL(); }
 
     // Returns the chip identification bits of this Agnus (show up in VPOSR)

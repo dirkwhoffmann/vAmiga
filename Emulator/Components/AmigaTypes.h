@@ -19,8 +19,8 @@
 
 enum_long(VIDEO_FORMAT)
 {
-    PAL,
-    NTSC
+    FORMAT_PAL,
+    FORMAT_NTSC
 };
 typedef VIDEO_FORMAT VideoFormat;
 
@@ -28,15 +28,15 @@ typedef VIDEO_FORMAT VideoFormat;
 struct VideoFormatEnum : vamiga::util::Reflection<VideoFormatEnum, VideoFormat>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = NTSC;
+    static constexpr long maxVal = FORMAT_NTSC;
 
-    static const char *prefix() { return ""; }
+    static const char *prefix() { return "FORMAT"; }
     static const char *_key(long value)
     {
         switch (value) {
 
-            case PAL:   return "PAL";
-            case NTSC:  return "NTSC";
+            case FORMAT_PAL:   return "PAL";
+            case FORMAT_NTSC:  return "NTSC";
         }
         return "???";
     }

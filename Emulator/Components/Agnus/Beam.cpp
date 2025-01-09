@@ -131,7 +131,7 @@ FrameType
 Beam::predictFrameType() const
 {
     // PAL
-    if (type == PAL) {
+    if (type == FORMAT_PAL) {
         return lof ? FRAME_PAL_LF : FRAME_PAL_SF;
     }
 
@@ -277,17 +277,17 @@ Beam::switchMode(VideoFormat format)
 {
     switch (format) {
 
-        case PAL:
+        case FORMAT_PAL:
 
-            type = PAL;
+            type = FORMAT_PAL;
             lol = false;
             lolToggle = false;
             vLatched = VPOS_MAX_PAL_LF;
             break;
 
-        case NTSC:
+        case FORMAT_NTSC:
 
-            type = NTSC;
+            type = FORMAT_NTSC;
             lol = false;
             lolToggle = true;
             vLatched = VPOS_MAX_NTSC_LF;

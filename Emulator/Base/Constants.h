@@ -15,21 +15,24 @@
 namespace vamiga {
 
 //
-// Frequencies
+// Frequencies in Hz (master clock, CPU, DMA)
 //
 
-// Clock rate of the master clock in Hz
-static const isize CLK_FREQUENCY_PAL  =  28375160;              // 28.375160 MHz
-static const isize CLK_FREQUENCY_NTSC = 28636360;               // 28.636360 MHz
+namespace PAL {
 
-// Clock rate of the CPU in Hz
-static const isize CPU_FREQUENCY_PAL  =  CLK_FREQUENCY_PAL / 4; //  7.093790 MHz
-static const isize CPU_FREQUENCY_NTSC = CLK_FREQUENCY_NTSC / 4; //  7.159090 MHz
+static const isize CLK_FREQUENCY = 28375160;          // 28.375160 MHz
+static const isize CPU_FREQUENCY = CLK_FREQUENCY / 4; //  7.093790 MHz
+static const isize DMA_FREQUENCY = CLK_FREQUENCY / 8; //  3.546895 MHz
 
-// Clock rate of the DMA bus in Hz
-static const isize DMA_FREQUENCY_PAL  =  CLK_FREQUENCY_PAL / 8; //  3.546895 MHz
-static const isize DMA_FREQUENCY_NTSC = CLK_FREQUENCY_NTSC / 8; //  3.579545 MHz
+}
 
+namespace NTSC {
+
+static const isize CLK_FREQUENCY = 28636360;            // 28.636360 MHz
+static const isize CPU_FREQUENCY = CLK_FREQUENCY / 4;   //  7.159090 MHz
+static const isize DMA_FREQUENCY = CLK_FREQUENCY / 8;   //  3.579545 MHz
+
+}
 
 //
 // Screen parameters

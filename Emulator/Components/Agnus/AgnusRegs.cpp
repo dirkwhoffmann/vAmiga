@@ -539,11 +539,11 @@ Agnus::pokeBEAMCON0(u16 value)
     // 12: VARVBEN       8: VARHSYEN    4: VARCSYEN     0: HSYTRUE
 
     // PAL
-    amiga.setOption(OPT_AMIGA_VIDEO_FORMAT, GET_BIT(value, 5) ? PAL : NTSC);
+    amiga.setOption(OPT_AMIGA_VIDEO_FORMAT, GET_BIT(value, 5) ? FORMAT_PAL : FORMAT_NTSC);
 
     // LOLDIS
     bool loldis = GET_BIT(value, 11);
-    if (pos.type == NTSC) pos.lolToggle = !loldis;
+    if (pos.type == FORMAT_NTSC) pos.lolToggle = !loldis;
 }
 
 template <Accessor s> void

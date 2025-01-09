@@ -425,7 +425,7 @@ Amiga::set(ConfigScheme scheme)
                 set(OPT_CPU_REVISION, CPU_68000);
                 set(OPT_AGNUS_REVISION, AGNUS_OCS_OLD);
                 set(OPT_DENISE_REVISION, DENISE_OCS);
-                set(OPT_AMIGA_VIDEO_FORMAT, PAL);
+                set(OPT_AMIGA_VIDEO_FORMAT, FORMAT_PAL);
                 set(OPT_MEM_CHIP_RAM, 512);
                 set(OPT_MEM_SLOW_RAM, 512);
                 break;
@@ -435,7 +435,7 @@ Amiga::set(ConfigScheme scheme)
                 set(OPT_CPU_REVISION, CPU_68000);
                 set(OPT_AGNUS_REVISION, AGNUS_OCS);
                 set(OPT_DENISE_REVISION, DENISE_OCS);
-                set(OPT_AMIGA_VIDEO_FORMAT, PAL);
+                set(OPT_AMIGA_VIDEO_FORMAT, FORMAT_PAL);
                 set(OPT_MEM_CHIP_RAM, 512);
                 set(OPT_MEM_SLOW_RAM, 512);
                 break;
@@ -445,7 +445,7 @@ Amiga::set(ConfigScheme scheme)
                 set(OPT_CPU_REVISION, CPU_68000);
                 set(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
                 set(OPT_DENISE_REVISION, DENISE_OCS);
-                set(OPT_AMIGA_VIDEO_FORMAT, PAL);
+                set(OPT_AMIGA_VIDEO_FORMAT, FORMAT_PAL);
                 set(OPT_MEM_CHIP_RAM, 512);
                 set(OPT_MEM_SLOW_RAM, 512);
                 break;
@@ -455,7 +455,7 @@ Amiga::set(ConfigScheme scheme)
                 set(OPT_CPU_REVISION, CPU_68000);
                 set(OPT_AGNUS_REVISION, AGNUS_ECS_2MB);
                 set(OPT_DENISE_REVISION, DENISE_ECS);
-                set(OPT_AMIGA_VIDEO_FORMAT, PAL);
+                set(OPT_AMIGA_VIDEO_FORMAT, FORMAT_PAL);
                 set(OPT_MEM_CHIP_RAM, 512);
                 set(OPT_MEM_SLOW_RAM, 512);
                 break;
@@ -505,8 +505,8 @@ Amiga::nativeRefreshRate() const
 {
     switch (config.type) {
 
-        case PAL:   return 50.0;
-        case NTSC:  return 60.0;
+        case FORMAT_PAL:   return 50.0;
+        case FORMAT_NTSC:  return 60.0;
 
         default:
             fatalError;
@@ -518,8 +518,8 @@ Amiga::nativeMasterClockFrequency() const
 {
     switch (config.type) {
 
-        case PAL:   return CLK_FREQUENCY_PAL;
-        case NTSC:  return CLK_FREQUENCY_NTSC;
+        case FORMAT_PAL:   return PAL::CLK_FREQUENCY;
+        case FORMAT_NTSC:  return NTSC::CLK_FREQUENCY;
 
         default:
             fatalError;
@@ -1070,7 +1070,7 @@ Amiga::loadSnapshot(const Snapshot &snap)
 
     // Inform the GUI
     msgQueue.put(MSG_SNAPSHOT_RESTORED);
-    msgQueue.put(MSG_VIDEO_FORMAT, agnus.isPAL() ? PAL : NTSC);
+    msgQueue.put(MSG_VIDEO_FORMAT, agnus.isPAL() ? FORMAT_PAL : FORMAT_NTSC);
 }
 
 /*
