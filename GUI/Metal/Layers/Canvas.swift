@@ -253,9 +253,9 @@ class Canvas: Layer {
 
         // Update the GPU texture
         if currLOF {
-            lfTexture.replace(w: Int(TPP) * HPIXELS, h: VPIXELS, buffer: buffer)
+            lfTexture.replace(w: Int(TPP) * VAMIGA.HPIXELS, h: VAMIGA.VPIXELS, buffer: buffer)
         } else {
-            sfTexture.replace(w: Int(TPP) * HPIXELS, h: VPIXELS, buffer: buffer)
+            sfTexture.replace(w: Int(TPP) * VAMIGA.HPIXELS, h: VAMIGA.VPIXELS, buffer: buffer)
         }
 
         // Release the texture lock

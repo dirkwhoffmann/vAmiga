@@ -104,6 +104,19 @@ typedef struct {
         NSInteger MAX;
     } HBLANK;
     
+    NSInteger VPIXELS;
+    NSInteger HPIXELS;
+    NSInteger PIXELS;
+    
+    struct {
+        NSInteger C_MIN;
+        NSInteger C_MAX;
+        NSInteger H_MIN;
+        NSInteger H_MAX;
+        NSInteger S_MIN;
+        NSInteger S_MAX;
+    } HDR;
+    
 } VAmigaConstants;
 
 extern const VAmigaConstants VAMIGA;

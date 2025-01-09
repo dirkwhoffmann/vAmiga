@@ -70,7 +70,18 @@ const VAmigaConstants VAMIGA = {
     .HPOS.CNT = HPOS_CNT,
 
     .HBLANK.MAX = HBLANK_MAX,
-    .HBLANK.CNT = HBLANK_CNT
+    .HBLANK.CNT = HBLANK_CNT,
+    
+    .HPIXELS = HPIXELS,
+    .VPIXELS = VPIXELS,
+    .PIXELS = PIXELS,
+    
+    .HDR.C_MIN = HDR_C_MIN,
+    .HDR.C_MAX = HDR_C_MAX,
+    .HDR.H_MIN = HDR_H_MIN,
+    .HDR.H_MAX = HDR_H_MAX,
+    .HDR.S_MIN = HDR_S_MIN,
+    .HDR.S_MAX = HDR_S_MAX,
 };
 
 @implementation ExceptionWrapper
