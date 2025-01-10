@@ -7,13 +7,16 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class MyWindowController: NSWindowController {
+class DashboardWindowController: NSWindowController {
     
+    var toolbar: DashboardToolbar? { return window?.toolbar as? DashboardToolbar }
+
     override func windowDidLoad() {
         
         super.windowDidLoad()
         
-        window?.title = "Window from Storyboard"
+        // Connect toolbar to the view controller
+        toolbar!.dashboard = contentViewController! as? MyViewController
     }
     
     @IBAction func buttonAction(_ sender: NSButton!) {
@@ -32,7 +35,7 @@ class MyViewController: NSViewController {
     
     @IBOutlet weak var myButton: NSButton!
     @IBOutlet weak var containerView: NSView!
-        
+            
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -45,11 +48,11 @@ class MyViewController: NSViewController {
         print("MyViewController: Button pressed")
     }
     
-    @IBAction func switchToFirstView(_ sender: NSButton) {
+    @IBAction func switchToOverview(_ sender: Any) {
         switchToViewController(identifier: "ViewController1")
     }
     
-    @IBAction func switchToSecondView(_ sender: NSButton) {
+    @IBAction func switchToSingleton(_ sender: Any) {
         switchToViewController(identifier: "ViewController2")
     }
     
@@ -73,12 +76,18 @@ class MyViewController: NSViewController {
             containerView.addSubview(newViewController.view)
             
             // Match the new view's frame to the container
+            /*
             newViewController.view.frame = containerView.bounds
             newViewController.view.autoresizingMask = [.width, .height]
+             */
             
+             newViewController.view.layoutSubtreeIfNeeded()
+             containerView.frame.size = newViewController.view.frame.size
+            
+            if let window = view.window {
+                window.setContentSize(containerView.frame.size)
+            }
         }
-        // Update the current view controller
-        // currentViewController = newViewController
     }
 }
 

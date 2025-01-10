@@ -88,6 +88,7 @@
 		504FC7C92D31292200F0B733 /* NewDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504FC7C82D31291C00F0B733 /* NewDashboard.swift */; };
 		504FC7CF2D312B4200F0B733 /* NewDashboard.xib in Resources */ = {isa = PBXBuildFile; fileRef = 504FC7CE2D312B4200F0B733 /* NewDashboard.xib */; };
 		504FC7D52D314F2E00F0B733 /* StoryDashboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504FC7D42D314F2E00F0B733 /* StoryDashboard.storyboard */; };
+		504FC7D72D31887900F0B733 /* DashboardToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504FC7D62D31887300F0B733 /* DashboardToolbar.swift */; };
 		5050EC3F27BE876F00394F4F /* HardDiskCreator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5050EC3E27BE876F00394F4F /* HardDiskCreator.xib */; };
 		5050EC4127BE97E000394F4F /* HardDiskCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5050EC4027BE97E000394F4F /* HardDiskCreator.swift */; };
 		5054DB6827FE98B100DAF784 /* MyControllerMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5054DB6727FE98B100DAF784 /* MyControllerMedia.swift */; };
@@ -621,6 +622,7 @@
 		504FC7C82D31291C00F0B733 /* NewDashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDashboard.swift; sourceTree = "<group>"; };
 		504FC7CE2D312B4200F0B733 /* NewDashboard.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewDashboard.xib; sourceTree = "<group>"; };
 		504FC7D42D314F2E00F0B733 /* StoryDashboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = StoryDashboard.storyboard; sourceTree = "<group>"; };
+		504FC7D62D31887300F0B733 /* DashboardToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardToolbar.swift; sourceTree = "<group>"; };
 		5050EC3E27BE876F00394F4F /* HardDiskCreator.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HardDiskCreator.xib; sourceTree = "<group>"; };
 		5050EC4027BE97E000394F4F /* HardDiskCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardDiskCreator.swift; sourceTree = "<group>"; };
 		5051922822B61C8A0012C4BB /* CPUTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPUTypes.h; sourceTree = "<group>"; };
@@ -1256,6 +1258,7 @@
 		5043154E2D2AE311006C14FF /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
+				504FC7D62D31887300F0B733 /* DashboardToolbar.swift */,
 				504FC7C82D31291C00F0B733 /* NewDashboard.swift */,
 				5019605C23125E680051B669 /* Dashboard.swift */,
 				50DAED222D2D175E0044B922 /* DashboardDataProvider.swift */,
@@ -2414,6 +2417,7 @@
 				50E98B51275A124900AA0CB9 /* Socket.cpp in Sources */,
 				50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */,
 				50AE6EE124D9407F000AA367 /* BlitterRegs.cpp in Sources */,
+				504FC7D72D31887900F0B733 /* DashboardToolbar.swift in Sources */,
 				501B821D2262FFB200042871 /* RTC.cpp in Sources */,
 				50EFB0C82C18D72C0013B73C /* Dumpable.cpp in Sources */,
 				50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */,

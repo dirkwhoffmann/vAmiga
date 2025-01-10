@@ -9,8 +9,8 @@
         <!--Window Controller-->
         <scene sceneID="fch-Jy-1N7">
             <objects>
-                <windowController storyboardIdentifier="MyWindowController" id="oKP-AG-CVR" customClass="MyWindowController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
-                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="cOb-Qz-LX3">
+                <windowController storyboardIdentifier="MyWindowController" id="oKP-AG-CVR" customClass="DashboardWindowController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
+                    <window key="window" title="Dashboard" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="cOb-Qz-LX3">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="255" y="323" width="480" height="270"/>
@@ -19,6 +19,60 @@
                             <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </view>
+                        <toolbar key="toolbar" implicitIdentifier="495832AF-A306-4967-8931-3A98736F7B7C" autosavesConfiguration="NO" showsBaselineSeparator="NO" displayMode="iconOnly" sizeMode="regular" id="xpG-72-std" customClass="DashboardToolbar" customModule="vAmiga" customModuleProvider="target">
+                            <allowedToolbarItems>
+                                <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="bEy-Sz-ypm"/>
+                                <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="RU3-iw-7IT"/>
+                                <toolbarItem implicitItemIdentifier="CDD6543D-37FF-4330-AED2-6CC02568E5F9" label="New" paletteLabel="New" image="plus" catalog="system" sizingBehavior="auto" id="4em-tq-DVv">
+                                    <nil key="toolTip"/>
+                                    <button key="view" id="cjS-NC-Uzq">
+                                        <rect key="frame" x="8" y="14" width="16" height="15"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="plus" catalog="system" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="uh9-oC-9Pr">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="plusAction:" target="xpG-72-std" id="cb5-zN-RvZ"/>
+                                        </connections>
+                                    </button>
+                                </toolbarItem>
+                                <toolbarItem implicitItemIdentifier="72413866-AEA7-4785-8EA3-35C7D6E5EAD4" label="Inspection Target" paletteLabel="Inspection Target" title="Overview" sizingBehavior="auto" id="XDt-Ik-EN3">
+                                    <nil key="toolTip"/>
+                                    <popUpButton key="view" verticalHuggingPriority="750" id="mdW-B3-74Y">
+                                        <rect key="frame" x="0.0" y="14" width="122" height="25"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <popUpButtonCell key="cell" type="roundTextured" title="Overview" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="iPR-ER-viP" id="J7u-d6-nR4">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="message"/>
+                                            <menu key="menu" id="vF9-8N-bYE">
+                                                <items>
+                                                    <menuItem title="Overview" state="on" id="iPR-ER-viP"/>
+                                                    <menuItem isSeparatorItem="YES" id="pTC-f1-Qan"/>
+                                                    <menuItem title="Chip RAM" tag="1" id="R0W-I6-a4K"/>
+                                                    <menuItem title="Slow RAM" tag="2" id="UNY-ET-Gpc"/>
+                                                    <menuItem title="Fast RAM" tag="3" id="KCn-E2-s6x"/>
+                                                    <menuItem title="Kickstart ROM" tag="4" id="74f-gN-6kb"/>
+                                                    <menuItem title="Blitter DMA" tag="5" id="C7X-pd-eb3"/>
+                                                    <menuItem title="Copper DMA" tag="6" id="Jmc-5r-YAa"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                        <connections>
+                                            <action selector="panelAction:" target="xpG-72-std" id="qiH-du-MdK"/>
+                                        </connections>
+                                    </popUpButton>
+                                </toolbarItem>
+                            </allowedToolbarItems>
+                            <defaultToolbarItems>
+                                <toolbarItem reference="RU3-iw-7IT"/>
+                                <toolbarItem reference="XDt-Ik-EN3"/>
+                                <toolbarItem reference="4em-tq-DVv"/>
+                            </defaultToolbarItems>
+                            <connections>
+                                <outlet property="selector" destination="mdW-B3-74Y" id="iz0-Nj-BSs"/>
+                            </connections>
+                        </toolbar>
                         <connections>
                             <outlet property="delegate" destination="oKP-AG-CVR" id="TzC-Rt-DV7"/>
                         </connections>
@@ -40,7 +94,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <containerView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CSo-tk-DA5" customClass="MyContainerView" customModule="vAmiga" customModuleProvider="target">
-                                <rect key="frame" x="128" y="60" width="225" height="150"/>
+                                <rect key="frame" x="-5" y="0.0" width="485" height="210"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <connections>
                                     <segue destination="pT1-JZ-eaD" kind="embed" id="GJz-KX-OYF"/>
@@ -54,7 +108,7 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="switchToFirstView:" target="AbY-Wc-TCn" id="oBl-Ve-sKx"/>
+                                    <action selector="switchToOverview:" target="AbY-Wc-TCn" id="oBl-Ve-sKx"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BLl-0j-4vp">
@@ -65,7 +119,7 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="switchToSecondView:" target="AbY-Wc-TCn" id="PjL-LP-chi"/>
+                                    <action selector="switchToSingleton:" target="AbY-Wc-TCn" id="PjL-LP-chi"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -108,11 +162,11 @@
             <objects>
                 <viewController storyboardIdentifier="ViewController2" id="icn-N1-upp" sceneMemberID="viewController">
                     <view key="view" id="v7i-p7-K1I">
-                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <rect key="frame" x="0.0" y="0.0" width="692" height="502"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nO9-n9-Lbj">
-                                <rect key="frame" x="196" y="161" width="45" height="16"/>
+                                <rect key="frame" x="196" y="363" width="45" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="View 2" id="EzN-CI-Clj">
                                     <font key="font" usesAppearanceFont="YES"/>
@@ -125,7 +179,10 @@
                 </viewController>
                 <customObject id="hLd-LT-esQ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1680" y="305"/>
+            <point key="canvasLocation" x="1801" y="406"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="plus" catalog="system" width="14" height="13"/>
+    </resources>
 </document>
