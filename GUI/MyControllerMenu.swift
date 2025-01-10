@@ -179,7 +179,7 @@ extension MyController: NSMenuItemValidation {
         let openPanel = NSOpenPanel()
 
         // Power off the emulator if the user doesn't object
-        if !askToPowerOff() { return }
+        // if !askToPowerOff() { return }
 
         // Show file panel
         openPanel.allowsMultipleSelection = false
@@ -187,7 +187,7 @@ extension MyController: NSMenuItemValidation {
         openPanel.canCreateDirectories = false
         openPanel.canChooseFiles = true
         openPanel.prompt = "Import"
-        openPanel.allowedFileTypes = ["ini"]
+        openPanel.allowedContentTypes = [.ini]
         openPanel.beginSheetModal(for: window!, completionHandler: { result in
 
             if result == .OK, let url = openPanel.url {
@@ -560,7 +560,7 @@ extension MyController: NSMenuItemValidation {
         openPanel.canCreateDirectories = false
         openPanel.canChooseFiles = true
         openPanel.prompt = "Insert"
-        openPanel.allowedFileTypes = ["adf", "img", "ima", "dms", "exe", "adz", "zip", "gz"]
+        openPanel.allowedContentTypes = [.adf, .img, .dms, .exe, .adz, .zip, .gzip ]
         openPanel.beginSheetModal(for: window!, completionHandler: { result in
 
             if result == .OK, let url = openPanel.url {
@@ -707,7 +707,7 @@ extension MyController: NSMenuItemValidation {
         openPanel.canCreateDirectories = false
         openPanel.canChooseFiles = true
         openPanel.prompt = "Attach"
-        openPanel.allowedFileTypes = ["hdf", "hdz", "zip", "gz"]
+        openPanel.allowedContentTypes = [ .hdf, .hdz, .zip, .gzip ]
         openPanel.beginSheetModal(for: window!, completionHandler: { result in
             
             if result == .OK, let url = openPanel.url {

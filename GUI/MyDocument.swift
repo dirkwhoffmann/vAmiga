@@ -7,6 +7,21 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+import UniformTypeIdentifiers
+
+extension UTType {
+
+    static let adf = UTType("de.dirkwhoffmann.retro.adf")!
+    static let adz = UTType("de.dirkwhoffmann.retro.adf")!
+    static let dms = UTType("de.dirkwhoffmann.retro.dms")!
+    static let exe = UTType("de.dirkwhoffmann.retro.exe")!
+    static let hdf = UTType("de.dirkwhoffmann.retro.hdf")!
+    static let hdz = UTType("de.dirkwhoffmann.retro.hdz")!
+    static let img = UTType("de.dirkwhoffmann.retro.img")!
+    static let ini = UTType("de.dirkwhoffmann.retro.ini")!
+    static let vamiga = UTType("de.dirkwhoffmann.retro.vamiga")!
+}
+
 class MyDocument: NSDocument {
 
     var pref: Preferences { return myAppDelegate.pref }
