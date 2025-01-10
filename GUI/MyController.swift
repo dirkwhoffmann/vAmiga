@@ -28,7 +28,9 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Dashboard of this emulator instance
     var dashboard: Dashboard?
-
+    var myWinController: NSWindowController?
+    var myStoryboard: NSStoryboard?
+    
     // Configuration panel of this emulator instance
     var configurator: ConfigurationController?
     

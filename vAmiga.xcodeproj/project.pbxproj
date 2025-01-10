@@ -85,6 +85,9 @@
 		504E57C82D12ACFC002233D1 /* gamecontrollerdb.txt in Resources */ = {isa = PBXBuildFile; fileRef = 504E57C72D12ACFC002233D1 /* gamecontrollerdb.txt */; };
 		504F4D64252624BD00CF8815 /* TextureRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F4D63252624BD00CF8815 /* TextureRect.swift */; };
 		504F9658220B2CEE005F8AB7 /* GuardTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F9657220B2CEE005F8AB7 /* GuardTableView.swift */; };
+		504FC7C92D31292200F0B733 /* NewDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504FC7C82D31291C00F0B733 /* NewDashboard.swift */; };
+		504FC7CF2D312B4200F0B733 /* NewDashboard.xib in Resources */ = {isa = PBXBuildFile; fileRef = 504FC7CE2D312B4200F0B733 /* NewDashboard.xib */; };
+		504FC7D52D314F2E00F0B733 /* StoryDashboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504FC7D42D314F2E00F0B733 /* StoryDashboard.storyboard */; };
 		5050EC3F27BE876F00394F4F /* HardDiskCreator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5050EC3E27BE876F00394F4F /* HardDiskCreator.xib */; };
 		5050EC4127BE97E000394F4F /* HardDiskCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5050EC4027BE97E000394F4F /* HardDiskCreator.swift */; };
 		5054DB6827FE98B100DAF784 /* MyControllerMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5054DB6727FE98B100DAF784 /* MyControllerMedia.swift */; };
@@ -615,6 +618,9 @@
 		504E57C72D12ACFC002233D1 /* gamecontrollerdb.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = gamecontrollerdb.txt; sourceTree = "<group>"; };
 		504F4D63252624BD00CF8815 /* TextureRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureRect.swift; sourceTree = "<group>"; };
 		504F9657220B2CEE005F8AB7 /* GuardTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardTableView.swift; sourceTree = "<group>"; };
+		504FC7C82D31291C00F0B733 /* NewDashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDashboard.swift; sourceTree = "<group>"; };
+		504FC7CE2D312B4200F0B733 /* NewDashboard.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewDashboard.xib; sourceTree = "<group>"; };
+		504FC7D42D314F2E00F0B733 /* StoryDashboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = StoryDashboard.storyboard; sourceTree = "<group>"; };
 		5050EC3E27BE876F00394F4F /* HardDiskCreator.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HardDiskCreator.xib; sourceTree = "<group>"; };
 		5050EC4027BE97E000394F4F /* HardDiskCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardDiskCreator.swift; sourceTree = "<group>"; };
 		5051922822B61C8A0012C4BB /* CPUTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPUTypes.h; sourceTree = "<group>"; };
@@ -1250,6 +1256,7 @@
 		5043154E2D2AE311006C14FF /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
+				504FC7C82D31291C00F0B733 /* NewDashboard.swift */,
 				5019605C23125E680051B669 /* Dashboard.swift */,
 				50DAED222D2D175E0044B922 /* DashboardDataProvider.swift */,
 				5043154C2D2ACF3E006C14FF /* WaveformPanel.swift */,
@@ -1492,6 +1499,8 @@
 				5050EC3E27BE876F00394F4F /* HardDiskCreator.xib */,
 				501C513A27C0084200DF1DD5 /* HardDiskConfigurator.xib */,
 				50D715A027CCA5AA0085C1AA /* PartitionSelector.xib */,
+				504FC7CE2D312B4200F0B733 /* NewDashboard.xib */,
+				504FC7D42D314F2E00F0B733 /* StoryDashboard.storyboard */,
 			);
 			path = "XIB files";
 			sourceTree = "<group>";
@@ -2243,6 +2252,7 @@
 				5050EC3F27BE876F00394F4F /* HardDiskCreator.xib in Resources */,
 				50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */,
 				50D715A127CCA5AA0085C1AA /* PartitionSelector.xib in Resources */,
+				504FC7D52D314F2E00F0B733 /* StoryDashboard.storyboard in Resources */,
 				50B14C1F21EB8445002E32A6 /* drive_click.aiff in Resources */,
 				5019605B231257270051B669 /* Dashboard.xib in Resources */,
 				500A4EA824472B4F002A4DE1 /* door_open.aiff in Resources */,
@@ -2256,6 +2266,7 @@
 				508FDFBE21EA1FF10043D0E9 /* MyDocument.xib in Resources */,
 				508FDFC521EA1FF10043D0E9 /* A500ISO.xib in Resources */,
 				50D263CE21F6378100FA167F /* A1000ISO.xib in Resources */,
+				504FC7CF2D312B4200F0B733 /* NewDashboard.xib in Resources */,
 				506436E529C1D92D00768528 /* CMakeLists.txt in Resources */,
 				50B14C2021EB8445002E32A6 /* drive_head.aiff in Resources */,
 				50AD904B276E104E0011ECCB /* TextStorage.h in Resources */,
@@ -2411,6 +2422,7 @@
 				501FB312275E460100D0A57B /* OSDebugger.cpp in Sources */,
 				50FC08AF27819E2400F0C567 /* CopperInfo.cpp in Sources */,
 				50E1905C277F69B300B8DBE2 /* FFmpeg.cpp in Sources */,
+				504FC7C92D31292200F0B733 /* NewDashboard.swift in Sources */,
 				507C01BA2D25C36000E29933 /* LogicAnalyzer.cpp in Sources */,
 				506ACE46279AC76700BA7877 /* SequencerBpl.cpp in Sources */,
 				505A133F2C3BA8A000FF8D2C /* MemoryDebugger.cpp in Sources */,

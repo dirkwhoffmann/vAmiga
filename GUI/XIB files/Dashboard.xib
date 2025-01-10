@@ -309,7 +309,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="monitorTemplate" id="976-WQ-esw"/>
                                     <connections>
-                                        <outlet property="monitor" destination="-2" id="BT4-61-3li"/>
+                                        <outlet property="monitor" destination="-2" id="RCC-Um-nJQ"/>
                                     </connections>
                                 </imageView>
                             </subviews>

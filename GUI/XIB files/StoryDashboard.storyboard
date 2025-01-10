@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Window Controller-->
+        <scene sceneID="fch-Jy-1N7">
+            <objects>
+                <windowController storyboardIdentifier="MyWindowController" id="oKP-AG-CVR" customClass="MyWindowController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
+                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="cOb-Qz-LX3">
+                        <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+                        <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+                        <rect key="contentRect" x="255" y="323" width="480" height="270"/>
+                        <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
+                        <view key="contentView" id="7AO-b0-d0q">
+                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                        </view>
+                        <connections>
+                            <outlet property="delegate" destination="oKP-AG-CVR" id="TzC-Rt-DV7"/>
+                        </connections>
+                    </window>
+                    <connections>
+                        <segue destination="AbY-Wc-TCn" kind="relationship" relationship="window.shadowedContentViewController" id="57K-uM-i25"/>
+                    </connections>
+                </windowController>
+                <customObject id="ocs-j0-iWy" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="586" y="-100"/>
+        </scene>
+        <!--My View Controller-->
+        <scene sceneID="LZb-0N-aNo">
+            <objects>
+                <viewController id="AbY-Wc-TCn" customClass="MyViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="naj-L4-BtD">
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <containerView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CSo-tk-DA5" customClass="MyContainerView" customModule="vAmiga" customModuleProvider="target">
+                                <rect key="frame" x="128" y="60" width="225" height="150"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <connections>
+                                    <segue destination="pT1-JZ-eaD" kind="embed" id="GJz-KX-OYF"/>
+                                </connections>
+                            </containerView>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WVp-eu-Jd8">
+                                <rect key="frame" x="121" y="231" width="75" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="r7s-M9-IO8">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="switchToFirstView:" target="AbY-Wc-TCn" id="oBl-Ve-sKx"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BLl-0j-4vp">
+                                <rect key="frame" x="203" y="231" width="75" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="a67-3A-jYP">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="switchToSecondView:" target="AbY-Wc-TCn" id="PjL-LP-chi"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                    </view>
+                    <connections>
+                        <outlet property="containerView" destination="CSo-tk-DA5" id="PPm-74-Zhc"/>
+                        <outlet property="myButton" destination="WVp-eu-Jd8" id="DwU-5U-uwR"/>
+                    </connections>
+                </viewController>
+                <customObject id="Vlg-aC-bif" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1293" y="-131"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="i3Q-21-dKV">
+            <objects>
+                <viewController storyboardIdentifier="ViewController1" id="pT1-JZ-eaD" sceneMemberID="viewController">
+                    <view key="view" id="wOB-CA-ofV">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uLG-4h-aA8">
+                                <rect key="frame" x="177" y="151" width="114" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Holla, die Waldfee" id="fyK-b1-raz">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                </viewController>
+                <customObject id="8hC-Qu-u4C" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1160" y="305"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="OtT-1L-4wC">
+            <objects>
+                <viewController storyboardIdentifier="ViewController2" id="icn-N1-upp" sceneMemberID="viewController">
+                    <view key="view" id="v7i-p7-K1I">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nO9-n9-Lbj">
+                                <rect key="frame" x="196" y="161" width="45" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="View 2" id="EzN-CI-Clj">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                </viewController>
+                <customObject id="hLd-LT-esQ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1680" y="305"/>
+        </scene>
+    </scenes>
+</document>
