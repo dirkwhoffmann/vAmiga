@@ -11,7 +11,7 @@ class WaveformPanel: NSImageView {
 
     @IBOutlet weak var monitor: Dashboard!
 
-    var audioPort: AudioPortProxy { return monitor.emu.audioPort }
+    var audioPort: AudioPortProxy? { return nil } //  monitor.emu.audioPort }
 
     // Waveform size
     var size: NSSize!
@@ -53,9 +53,9 @@ class WaveformPanel: NSImageView {
     override func draw(_ dirtyRect: NSRect) {
 
         if tag == 0 {
-            audioPort.drawWaveformL(buffer, size: size, color: color)
+            audioPort?.drawWaveformL(buffer, size: size, color: color)
         } else {
-            audioPort.drawWaveformR(buffer, size: size, color: color)
+            audioPort?.drawWaveformR(buffer, size: size, color: color)
         }
         
         image = NSImage.make(data: buffer, rect: CGSize(width: size.width, height: size.height))

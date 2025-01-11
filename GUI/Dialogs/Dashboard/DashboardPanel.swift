@@ -141,10 +141,25 @@ struct GaugeView: View {
 // Wrapper NSView
 //
 
+enum PanelType: Int {
+    
+    case Combined       = 0
+    case ChipRam        = 1
+    case SlowRam        = 2
+    case FastRam        = 3
+    case Rom            = 4
+    case CopperDma      = 5
+    case BlitterDma     = 6
+    case DiskDma        = 7
+    case AudioDma       = 8
+    case SpriteDma      = 9
+    case BitplaneDma    = 10
+}
+
 class DashboardPanel: NSView {
     
     var model = DashboardDataProvider()
-    
+        
     // Title and sub title
     var heading = ""
     var subHeading = ""
@@ -189,10 +204,13 @@ class DashboardPanel: NSView {
         return [ 1: Gradient(colors: [graph1Color.opacity(0.75), graph1Color.opacity(0.25)]),
                  2: Gradient(colors: [graph2Color.opacity(0.75), graph2Color.opacity(0.25)])]
     }
+    /*
     var gaugeGradient: Gradient {
         return Gradient(colors: [.green, .yellow, .orange, .red])
     }
-
+    */
+    var gaugeGradient: Gradient = Gradient(colors: [.green, .yellow, .orange, .red])
+    
     var gridLineColor: Color {
         return Color(NSColor.labelColor).opacity(0.2)
     }
@@ -211,14 +229,20 @@ class DashboardPanel: NSView {
 
         host1 = NSHostingView(rootView: TimeSeriesView(model: model, panel: self))
         host2 = NSHostingView(rootView: GaugeView(model: model, panel: self))
-
         switchStyle()
     }
     
-    func latest() -> String {
-        return String(Int(model.latest().rounded()))
+    required override init(frame frameRect: NSRect) {
+
+        super.init(frame: frameRect)
+        
+        host1 = NSHostingView(rootView: TimeSeriesView(model: model, panel: self))
+        host2 = NSHostingView(rootView: GaugeView(model: model, panel: self))
+        switchStyle()
     }
-    
+        
+    var latest: () -> String = { "" }
+
     override func mouseDown(with event: NSEvent) {
         
         switchStyle()
@@ -255,12 +279,24 @@ class DashboardPanel: NSView {
 class ChipRamPanel: DashboardPanel {
 
     @MainActor required init?(coder aDecoder: NSCoder) {
-       
+        
         super.init(coder: aDecoder)
+        setup()
+    }
+    
+    @MainActor required init(frame frameRect: NSRect) {
+        
+        super.init(frame: frameRect)
+        setup()
+    }
+    
+    func setup() {
         
         configure(title: "Chip Ram",
                   subtitle: "Memory Accesses",
                   range: 0...Double((VAMIGA.PAL.HPOS.CNT * VAMIGA.VPOS.CNT) / 2))
+        
+        latest = { String(Int(self.model.latest().rounded())) }
     }
 }
 
@@ -269,10 +305,22 @@ class SlowRamPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
+        setup()
+    }
+    
+    @MainActor required init(frame frameRect: NSRect) {
+        
+        super.init(frame: frameRect)
+        setup()
+    }
+    
+    func setup() {
         
         configure(title: "Slow Ram",
                   subtitle: "Memory Accesses",
                   range: 0...Double((VAMIGA.PAL.HPOS.CNT * VAMIGA.VPOS.CNT) / 2))
+
+        latest = { String(Int(self.model.latest().rounded())) }
     }
 }
 
@@ -281,10 +329,22 @@ class FastRamPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
+        setup()
+    }
+    
+    @MainActor required init(frame frameRect: NSRect) {
+        
+        super.init(frame: frameRect)
+        setup()
+    }
+    
+    func setup() {
         
         configure(title: "Fast Ram",
                   subtitle: "Memory Accesses",
                   range: 0...Double((VAMIGA.PAL.HPOS.CNT * VAMIGA.VPOS.CNT) / 2))
+
+        latest = { String(Int(self.model.latest().rounded())) }
     }
 }
 
@@ -293,10 +353,22 @@ class RomPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
+        setup()
+    }
+    
+    @MainActor required init(frame frameRect: NSRect) {
+        
+        super.init(frame: frameRect)
+        setup()
+    }
+    
+    func setup() {
         
         configure(title: "Kickstart Rom",
                   subtitle: "Memory Accesses",
                   range: 0...Double((VAMIGA.PAL.HPOS.CNT * VAMIGA.VPOS.CNT) / 2))
+
+        latest = { String(Int(self.model.latest().rounded())) }
     }
 }
 
@@ -305,11 +377,23 @@ class CopperDmaPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
+        setup()
+    }
+    
+    @MainActor required init(frame frameRect: NSRect) {
+        
+        super.init(frame: frameRect)
+        setup()
+    }
+    
+    func setup() {
         
         configure(title: "Copper DMA",
                   subtitle: "Memory Accesses",
                   range: 0...(313 * 120),
                   logScale: true)
+
+        latest = { String(Int(self.model.latest().rounded())) }
     }
 }
 
@@ -318,11 +402,23 @@ class BlitterDmaPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
+        setup()
+    }
+    
+    @MainActor required init(frame frameRect: NSRect) {
+        
+        super.init(frame: frameRect)
+        setup()
+    }
+    
+    func setup() {
         
         configure(title: "Blitter DMA",
                   subtitle: "Memory Accesses",
                   range: 0...(313 * 120),
                   logScale: true)
+        
+        latest = { String(Int(self.model.latest().rounded())) }
     }
 }
 
@@ -331,7 +427,20 @@ class DiskDmaPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
+        setup()
+    }
+    
+    @MainActor required init(frame frameRect: NSRect) {
+        
+        super.init(frame: frameRect)
+        setup()
+    }
+    
+    func setup() {
+        
         configure(title: "Disk DMA", subtitle: "Memory Accesses", range: 0...(313 * 3))
+
+        latest = { String(Int(self.model.latest().rounded())) }
     }
 }
 
@@ -340,7 +449,20 @@ class AudioDmaPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
+        setup()
+    }
+    
+    @MainActor required init(frame frameRect: NSRect) {
+        
+        super.init(frame: frameRect)
+        setup()
+    }
+    
+    func setup() {
+        
         configure(title: "Audio DMA", subtitle: "Memory Accesses", range: 0...(313 * 4))
+
+        latest = { String(Int(self.model.latest().rounded())) }
     }
 }
 
@@ -349,7 +471,20 @@ class SpriteDmaPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
+        setup()
+    }
+    
+    @MainActor required init(frame frameRect: NSRect) {
+        
+        super.init(frame: frameRect)
+        setup()
+    }
+    
+    func setup() {
+        
         configure(title: "Sprite DMA", subtitle: "Memory Accesses", range: 0...(313 * 16))
+
+        latest = { String(Int(self.model.latest().rounded())) }
     }
 }
 
@@ -358,7 +493,20 @@ class BitplaneDmaPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
+        setup()
+    }
+    
+    @MainActor required init(frame frameRect: NSRect) {
+        
+        super.init(frame: frameRect)
+        setup()
+    }
+    
+    func setup() {
+        
         configure(title: "Bitplane DMA", subtitle: "Memory Accesses", range: 0...39330)
+
+        latest = { String(Int(self.model.latest().rounded())) }
     }
 }
 
@@ -367,12 +515,21 @@ class CpuLoadPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        configure(title: "Host", subtitle: "CPU Load", range: 0...1.0, unit: "%")
-        switchStyle()
+        setup()
     }
     
-    override func latest() -> String {
-        return String(Int(model.latest() * 100))
+    @MainActor required init(frame frameRect: NSRect) {
+        
+        super.init(frame: frameRect)
+        setup()
+    }
+    
+    func setup() {
+        
+        configure(title: "Host", subtitle: "CPU Load", range: 0...1.0, unit: "%")
+        switchStyle()
+
+        latest = { String(Int(self.model.latest().rounded() * 100)) }
     }
 }
 
@@ -381,13 +538,24 @@ class GpuFpsPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        configure(title: "Host", subtitle: "Refresh Rate", range: 0...120, unit: "Fps")
-        switchStyle()
+        setup()
     }
     
-    override var gaugeGradient: Gradient {
-        return Gradient(colors: [.red, .orange, .yellow, .green, .yellow, .orange, .red])
+    @MainActor required init(frame frameRect: NSRect) {
+        
+        super.init(frame: frameRect)
+        setup()
     }
+    
+    func setup() {
+        
+        configure(title: "Host", subtitle: "Refresh Rate", range: 0...120, unit: "Fps")
+        switchStyle()
+
+        gaugeGradient = Gradient(colors: [.red, .orange, .yellow, .green, .yellow, .orange, .red])
+        latest = { String(Int(self.model.latest().rounded())) }
+    }
+    
 }
 
 class AmigaFrequencyPanel: DashboardPanel {
@@ -395,16 +563,23 @@ class AmigaFrequencyPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
+        setup()
+    }
+    
+    @MainActor required init(frame frameRect: NSRect) {
+        
+        super.init(frame: frameRect)
+        setup()
+    }
+    
+    func setup() {
+        
         configure(title: "Amiga", subtitle: "CPU Frequency", range: 0...14, unit: "Mhz")
         switchStyle()
-    }
-    
-    override var gaugeGradient: Gradient {
-        return Gradient(colors: [.red, .orange, .yellow, .green, .yellow, .orange, .red])
-    }
-    
-    override func latest() -> String {
-        return String(format: "%.2f", model.latest())
+
+        gaugeGradient = Gradient(colors: [.red, .orange, .yellow, .green, .yellow, .orange, .red])
+
+        latest = { String(format: "%.2f", self.model.latest()) }
     }
 }
 
@@ -413,13 +588,24 @@ class AmigaFpsPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        configure(title: "Amiga", subtitle: "Refresh Rate", range: 0...120, unit: "Fps")
-        switchStyle()
+        setup()
     }
     
-    override var gaugeGradient: Gradient {
-        return Gradient(colors: [.red, .orange, .yellow, .green, .yellow, .orange, .red])
+    @MainActor required init(frame frameRect: NSRect) {
+        
+        super.init(frame: frameRect)
+        setup()
     }
+    
+    func setup() {
+        
+        configure(title: "Amiga", subtitle: "Refresh Rate", range: 0...120, unit: "Fps")
+        switchStyle()
+
+        gaugeGradient = Gradient(colors: [.red, .orange, .yellow, .green, .yellow, .orange, .red])
+        latest = { String(Int(self.model.latest().rounded())) }
+    }
+    
 }
 
 class CIAAPanel: DashboardPanel {
@@ -427,12 +613,21 @@ class CIAAPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        configure(title: "CIA A", subtitle: "Activity", unit: "%")
-        switchStyle()
+        setup()
     }
     
-    override func latest() -> String {
-        return String(format: "%.2f", model.latest() * 100) // String(Int(model.latest() * 100))
+    @MainActor required init(frame frameRect: NSRect) {
+        
+        super.init(frame: frameRect)
+        setup()
+    }
+    
+    func setup() {
+        
+        configure(title: "CIA A", subtitle: "Activity", unit: "%")
+        switchStyle()
+
+        latest = { String(format: "%.2f", self.model.latest() * 100) }
     }
 }
 
@@ -441,13 +636,22 @@ class CIABPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        configure(title: "CIA B", subtitle: "Activity", unit: "%")
-        switchStyle()
+        setup()
     }
     
-    override func latest() -> String {
-        return String(format: "%.2f", model.latest() * 100) // String(Int(model.latest() * 100))
+    @MainActor required init(frame frameRect: NSRect) {
+        
+        super.init(frame: frameRect)
+        setup()
     }
+    
+    func setup() {
+        
+        configure(title: "CIA B", subtitle: "Activity", unit: "%")
+        switchStyle()
+        
+        latest = { String(format: "%.2f", self.model.latest() * 100) }
+    }    
 }
 
 class AudioFillLevelPanel: DashboardPanel {
@@ -455,14 +659,22 @@ class AudioFillLevelPanel: DashboardPanel {
     @MainActor required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
-        configure(title: "Audio Buffer", subtitle: "Fill Level", unit: "%")
-        switchStyle()
+        setup()
     }
     
-    override func latest() -> String {
-        return String(Int(model.latest() * 100))
+    @MainActor required init(frame frameRect: NSRect) {
+        
+        super.init(frame: frameRect)
+        setup()
     }
-    override var gaugeGradient: Gradient {
-        return Gradient(colors: [.red, .orange, .yellow, .green, .yellow, .orange, .red])
+    
+    func setup() {
+        
+        configure(title: "Audio Buffer", subtitle: "Fill Level", unit: "%")
+        switchStyle()
+
+        gaugeGradient = Gradient(colors: [.red, .orange, .yellow, .green, .yellow, .orange, .red])
+
+        latest = { String(Int(self.model.latest() * 100)) }
     }
 }

@@ -9,7 +9,7 @@
 
 class DashboardToolbar: NSToolbar {
     
-    @IBOutlet weak var dashboard: MyViewController!
+    @IBOutlet weak var dashboard: DashboardViewController!
     @IBOutlet weak var selector: NSPopUpButton!
     
     // var emu: EmulatorProxy! { return inspector.parent.emu }
@@ -36,13 +36,7 @@ class DashboardToolbar: NSToolbar {
     }
 
     @IBAction func panelAction(_ sender: NSPopUpButton) {
-
-        print("panelAction \(sender.selectedTag())")
         
-        if (sender.selectedTag() == 0) {
-            dashboard.switchToOverview(self)
-        } else {
-            dashboard.switchToSingleton(self)
-        }
+        dashboard.type = PanelType(rawValue: sender.selectedTag())!
     }
 }
