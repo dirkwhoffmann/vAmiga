@@ -53,8 +53,8 @@ class WaveformPanel: NSImageView {
 
     override var intrinsicContentSize: NSSize {
         
-        // Keep the size fixed to the current bounds
-        return bounds.size
+        // Let the image scale with the ImageView
+        return .zero
     }
     
     override func draw(_ dirtyRect: NSRect) {

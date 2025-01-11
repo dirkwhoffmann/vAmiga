@@ -72,6 +72,9 @@ class NewDashboard: DialogController {
             
             // Connect the toolbar
             toolbar!.dashboard = viewController
+            window!.toolbarStyle = .unified
+            window!.titleVisibility = .hidden
+            window!.titlebarAppearsTransparent = true
             
             // Switch to the default panel
             viewController.type = .Combined
