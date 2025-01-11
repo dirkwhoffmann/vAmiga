@@ -141,29 +141,6 @@ struct GaugeView: View {
 // Wrapper NSView
 //
 
-enum PanelType: Int {
-    
-    case Combined       = 0
-    case ChipRam        = 1
-    case SlowRam        = 2
-    case FastRam        = 3
-    case Rom            = 4
-    case CopperDma      = 5
-    case BlitterDma     = 6
-    case DiskDma        = 7
-    case AudioDma       = 8
-    case SpriteDma      = 9
-    case BitplaneDma    = 10
-    case CIAA           = 11
-    case CIAB           = 12
-    case HostLoad       = 13
-    case HostFps        = 14
-    case AmigaMhz       = 15
-    case AmigaFps       = 16
-    case WaveformL      = 17
-    case WaveformR      = 18
-}
-
 class DashboardPanel: NSView {
     
     var model = DashboardDataProvider()

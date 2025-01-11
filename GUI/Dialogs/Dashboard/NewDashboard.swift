@@ -9,6 +9,29 @@
 
 import SwiftUI
 
+enum PanelType: Int {
+    
+    case Combined       = 0
+    case ChipRam        = 1
+    case SlowRam        = 2
+    case FastRam        = 3
+    case Rom            = 4
+    case CopperDma      = 5
+    case BlitterDma     = 6
+    case DiskDma        = 7
+    case AudioDma       = 8
+    case SpriteDma      = 9
+    case BitplaneDma    = 10
+    case CIAA           = 11
+    case CIAB           = 12
+    case AmigaMhz       = 13
+    case AmigaFps       = 14
+    case HostLoad       = 15
+    case HostFps        = 16
+    case WaveformL      = 17
+    case WaveformR      = 18
+}
+
 class OverviewController : NSViewController {
     
     @IBOutlet weak var chipRamBox: NSBox!
@@ -194,6 +217,7 @@ class DashboardViewController: NSViewController {
                 add(amigaMhzPanel, to: controller.amigaMhzBox)
                 add(amigaFpsPanel, to: controller.amigaFpsBox)
                 add(fillLevelPanel, to: controller.fillLevelBox)
+
                 add(waveformLPanel, to: controller.waveformLBox)
                 add(waveformRPanel, to: controller.waveformRBox)
             }

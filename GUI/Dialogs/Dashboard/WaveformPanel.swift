@@ -14,8 +14,8 @@ class WaveformPanel: NSImageView {
     var audioPort: AudioPortProxy? //  { return nil } //  monitor.emu.audioPort }
 
     // Waveform size
-    var size: NSSize!
-    var wordCount: Int { return Int(size.width) * Int(size.height) }
+    var imageSize: NSSize!
+    var wordCount: Int { return Int(imageSize.width) * Int(imageSize.height) }
 
     // Waveform buffer
     var buffer: UnsafeMutablePointer<UInt32>!
@@ -37,16 +37,13 @@ class WaveformPanel: NSImageView {
         super.init(frame: frameRect)
         setup()
     }
-
+    
     func setup() {
-        
-        // let w = visibleRect.width
-        // let h = visibleRect.height
-                
-        size = NSSize(width: 300, height: 150)
+                        
+        imageSize = NSSize(width: 300, height: 100)
         buffer = UnsafeMutablePointer<UInt32>.allocate(capacity: wordCount)
-        
         imageScaling = .scaleAxesIndependently
+        
     }
 
     func update() {
@@ -54,15 +51,21 @@ class WaveformPanel: NSImageView {
         needsDisplay = true
     }
 
+    override var intrinsicContentSize: NSSize {
+        
+        // Keep the size fixed to the current bounds
+        return bounds.size
+    }
+    
     override func draw(_ dirtyRect: NSRect) {
 
         if tag == 0 {
-            audioPort?.drawWaveformL(buffer, size: size, color: color)
+            audioPort?.drawWaveformL(buffer, size: imageSize, color: color)
         } else {
-            audioPort?.drawWaveformR(buffer, size: size, color: color)
+            audioPort?.drawWaveformR(buffer, size: imageSize, color: color)
         }
-        
-        image = NSImage.make(data: buffer, rect: CGSize(width: size.width, height: size.height))
+                
+        image = NSImage.make(data: buffer, rect: CGSize(width: imageSize.width, height: imageSize.height))
         super.draw(dirtyRect)
     }
 }
