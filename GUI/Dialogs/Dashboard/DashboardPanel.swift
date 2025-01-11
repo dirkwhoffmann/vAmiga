@@ -154,6 +154,14 @@ enum PanelType: Int {
     case AudioDma       = 8
     case SpriteDma      = 9
     case BitplaneDma    = 10
+    case CIAA           = 11
+    case CIAB           = 12
+    case HostLoad       = 13
+    case HostFps        = 14
+    case AmigaMhz       = 15
+    case AmigaFps       = 16
+    case WaveformL      = 17
+    case WaveformR      = 18
 }
 
 class DashboardPanel: NSView {
@@ -214,10 +222,12 @@ class DashboardPanel: NSView {
     var gridLineColor: Color {
         return Color(NSColor.labelColor).opacity(0.2)
     }
+    /*
     var padding: EdgeInsets {
-        // return EdgeInsets(top: 4.0, leading: 4.0, bottom: 4.0, trailing: 4.0)
         return EdgeInsets(top: 8.0, leading: 8.0, bottom: 0.0, trailing: 8.0)
     }
+    */
+    var padding = EdgeInsets(top: 8.0, leading: 8.0, bottom: 0.0, trailing: 8.0)
 
     var host1: NSHostingView<TimeSeriesView>!
     var host2: NSHostingView<GaugeView>!
@@ -510,7 +520,7 @@ class BitplaneDmaPanel: DashboardPanel {
     }
 }
 
-class CpuLoadPanel: DashboardPanel {
+class HostLoadPanel: DashboardPanel {
     
     @MainActor required init?(coder aDecoder: NSCoder) {
         
@@ -533,7 +543,7 @@ class CpuLoadPanel: DashboardPanel {
     }
 }
 
-class GpuFpsPanel: DashboardPanel {
+class HostFpsPanel: DashboardPanel {
     
     @MainActor required init?(coder aDecoder: NSCoder) {
         
@@ -558,7 +568,7 @@ class GpuFpsPanel: DashboardPanel {
     
 }
 
-class AmigaFrequencyPanel: DashboardPanel {
+class AmigaMhzPanel: DashboardPanel {
     
     @MainActor required init?(coder aDecoder: NSCoder) {
         

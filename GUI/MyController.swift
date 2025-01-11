@@ -28,8 +28,7 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Dashboard of this emulator instance
     var dashboard: Dashboard?
-    var myWinController: NSWindowController?
-    var myStoryboard: NSStoryboard?
+    var newDashboard: NewDashboard? //  NSWindowController?
     
     // Configuration panel of this emulator instance
     var configurator: ConfigurationController?
@@ -292,6 +291,7 @@ extension MyController {
 
             // Animate the dashboard
             if dashboard?.window?.isVisible == true { dashboard!.continuousRefresh() }
+            if newDashboard?.window?.isVisible == true { newDashboard!.continuousRefresh() }
 
         }
         

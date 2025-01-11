@@ -108,7 +108,7 @@
                             <rect key="frame" x="4" y="5" width="132" height="132"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hYV-wm-QHh" customClass="CpuLoadPanel" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hYV-wm-QHh" customClass="HostLoadPanel" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="132" height="132"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
@@ -122,7 +122,7 @@
                             <rect key="frame" x="4" y="5" width="132" height="132"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UMa-dX-5TN" customClass="GpuFpsPanel" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UMa-dX-5TN" customClass="HostFpsPanel" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="132" height="132"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>
@@ -150,7 +150,7 @@
                             <rect key="frame" x="4" y="5" width="132" height="132"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mZc-p7-d5G" customClass="AmigaFrequencyPanel" customModule="vAmiga" customModuleProvider="target">
+                                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mZc-p7-d5G" customClass="AmigaMhzPanel" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="132" height="132"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </customView>

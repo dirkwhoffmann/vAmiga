@@ -11,7 +11,7 @@ class WaveformPanel: NSImageView {
 
     @IBOutlet weak var monitor: Dashboard!
 
-    var audioPort: AudioPortProxy? { return nil } //  monitor.emu.audioPort }
+    var audioPort: AudioPortProxy? //  { return nil } //  monitor.emu.audioPort }
 
     // Waveform size
     var size: NSSize!
@@ -29,20 +29,24 @@ class WaveformPanel: NSImageView {
     required init?(coder decoder: NSCoder) {
 
         super.init(coder: decoder)
+        setup()
     }
 
     required override init(frame frameRect: NSRect) {
         
         super.init(frame: frameRect)
+        setup()
     }
 
-    override func awakeFromNib() {
-
-        let w = visibleRect.width
-        let h = visibleRect.height
+    func setup() {
         
-        size = NSSize(width: w, height: h)
+        // let w = visibleRect.width
+        // let h = visibleRect.height
+                
+        size = NSSize(width: 300, height: 150)
         buffer = UnsafeMutablePointer<UInt32>.allocate(capacity: wordCount)
+        
+        imageScaling = .scaleAxesIndependently
     }
 
     func update() {
