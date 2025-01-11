@@ -54,6 +54,10 @@
                                                     <menuItem isSeparatorItem="YES" id="1el-8n-Khg"/>
                                                     <menuItem title="Host CPU Load" image="waveform.badge.magnifyingglass" catalog="system" tag="15" id="Gnc-BM-DEP"/>
                                                     <menuItem title="Host Refresh Rate" image="waveform.badge.magnifyingglass" catalog="system" tag="16" id="7yL-Zl-2OC"/>
+                                                    <menuItem isSeparatorItem="YES" id="hEA-8q-ZqT"/>
+                                                    <menuItem title="Audio Buffer Fill Level" image="waveform.badge.magnifyingglass" catalog="system" tag="17" id="bhU-AF-leY"/>
+                                                    <menuItem title="Left Waveform" image="waveform.badge.magnifyingglass" catalog="system" tag="18" id="woa-11-tQE"/>
+                                                    <menuItem title="Right Waveform" image="waveform.badge.magnifyingglass" catalog="system" tag="19" id="Wma-J3-2Sz"/>
                                                 </items>
                                             </menu>
                                         </popUpButtonCell>
@@ -62,10 +66,8 @@
                                         </connections>
                                     </popUpButton>
                                 </toolbarItem>
-                                <toolbarItem implicitItemIdentifier="B16D04D1-67DC-41D7-B957-2F21759322A3" label="New" paletteLabel="New" image="plus" catalog="system" id="NcX-8E-iVw">
+                                <toolbarItem implicitItemIdentifier="B16D04D1-67DC-41D7-B957-2F21759322A3" label="New" paletteLabel="New" image="plus" catalog="system" sizingBehavior="auto" id="NcX-8E-iVw">
                                     <nil key="toolTip"/>
-                                    <size key="minSize" width="32" height="26"/>
-                                    <size key="maxSize" width="34" height="32"/>
                                     <button key="view" id="MDv-68-vO5">
                                         <rect key="frame" x="0.0" y="14" width="34" height="26"/>
                                         <autoresizingMask key="autoresizingMask"/>

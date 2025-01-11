@@ -28,8 +28,9 @@ enum PanelType: Int {
     case AmigaFps       = 14
     case HostLoad       = 15
     case HostFps        = 16
-    case WaveformL      = 17
-    case WaveformR      = 18
+    case AudioFillLevel = 17
+    case WaveformL      = 18
+    case WaveformR      = 19
 }
 
 class OverviewController : NSViewController {
@@ -117,6 +118,9 @@ class DashboardViewController: NSViewController {
     
     var type: PanelType? { didSet { switchToPanel(type: type) } }
     
+    var multiPanelController: NSViewController!
+    var singlePanelController: NSViewController!
+    
     let chipRamPanel = ChipRamPanel(frame: NSRect.zero)
     let slowRamPanel = SlowRamPanel(frame: NSRect.zero)
     let fastRamPanel = FastRamPanel(frame: NSRect.zero)
@@ -150,6 +154,13 @@ class DashboardViewController: NSViewController {
         super.viewDidLoad()
         waveformLPanel.tag = 0
         waveformLPanel.tag = 1
+        
+        // Get the storyboard from the resources bundle
+        let storyboard = NSStoryboard(name: "StoryDashboard", bundle: nil)
+
+        // Load the view controllers from the storyboard
+        multiPanelController = storyboard.instantiateController(withIdentifier: "ViewController1") as? NSViewController
+        singlePanelController = storyboard.instantiateController(withIdentifier: "ViewController2") as? NSViewController
     }
     
     func update(windowSize: CGSize) {
@@ -199,7 +210,7 @@ class DashboardViewController: NSViewController {
             
         case .Combined:
             
-            switchToViewController(identifier: "ViewController1", frameRect: proposedSize[0])
+            switchToViewController(controller: multiPanelController, frameRect: proposedSize[0])
             
             if let controller = children.first as? OverviewController {
                 
@@ -220,13 +231,12 @@ class DashboardViewController: NSViewController {
                 add(amigaMhzPanel, to: controller.amigaMhzBox)
                 add(amigaFpsPanel, to: controller.amigaFpsBox)
                 add(fillLevelPanel, to: controller.fillLevelBox)
-
                 add(waveformLPanel, to: controller.waveformLBox)
                 add(waveformRPanel, to: controller.waveformRBox)
             }
         default:
             
-            switchToViewController(identifier: "ViewController2", frameRect: proposedSize[1])
+            switchToViewController(controller: singlePanelController, frameRect: proposedSize[1])
             
             if let view = children.first?.view {
 
@@ -248,8 +258,9 @@ class DashboardViewController: NSViewController {
                 case .HostFps: add(hostFpsPanel, to: view)
                 case .AmigaMhz: add(amigaMhzPanel, to: view)
                 case .AmigaFps: add(amigaFpsPanel, to: view)
-                case .WaveformL: break // add(waveformLPanel, to: view)
-                case .WaveformR: break // add(waveformRPanel, to: view)
+                case .AudioFillLevel: add(fillLevelPanel, to: view)
+                case .WaveformL: add(waveformLPanel, to: view)
+                case .WaveformR: add(waveformRPanel, to: view)
                 
                 default:
                     fatalError()
@@ -258,51 +269,33 @@ class DashboardViewController: NSViewController {
         }
     }
     
-    private func switchToViewController(identifier: String, frameRect: NSRect) {
-                            
-        // Get the storyboard from the resources bundle
-        let storyboard = NSStoryboard(name: "StoryDashboard", bundle: nil)
-
-        // Load the new view controller from the storyboard
-        if let newController = storyboard.instantiateController(withIdentifier: identifier) as? NSViewController {
-            
-            if let currentController = children.first  {
-                
-                // Remove the current view controller and its view
-                currentController.view.removeFromSuperview()
-                currentController.removeFromParent()
-                
-                // Add the new view controller and its view
-                let newView = newController.view
-                addChild(newController)
-                containerView.addSubview(newView)
-                
-                // Adjust the window size to the new panel type
-                adjustSize()
-            }
-        }
-    }
-    
-    func adjustSize() {
+    private func switchToViewController(controller newController: NSViewController, frameRect: NSRect) {
         
-        // Get the current view controller
-        guard let controller = children.first else { return }
-                
-        // Resize the window
-        view.frame = proposedSize(for: type)
-        view.window?.setContentSize(view.frame.size)
-        controller.view.frame = containerView.bounds
-        controller.view.autoresizingMask = [.width, .height]
-
-
-        // Make the new view span the entire area
-        controller.view.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            controller.view.topAnchor.constraint(equalTo: containerView.topAnchor),
-            controller.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            controller.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            controller.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
-        ])
+        if let currentController = children.first  {
+            
+            // Remove the current view controller and its view
+            currentController.view.removeFromSuperview()
+            currentController.removeFromParent()
+                        
+            // Add the new view controller and its view
+            let newView = newController.view
+            addChild(newController)
+            containerView.addSubview(newView)
+            
+            // Resize the window
+            view.window?.setContentSize(newView.frame.size)
+            newController.view.frame = containerView.bounds
+            newController.view.autoresizingMask = [.width, .height]
+            
+            // Make the new view span the entire area
+            newController.view.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                newController.view.topAnchor.constraint(equalTo: containerView.topAnchor),
+                newController.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
+                newController.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                newController.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
+            ])
+        }
     }
     
     func continuousRefresh() {

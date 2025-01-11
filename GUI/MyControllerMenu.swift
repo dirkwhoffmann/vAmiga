@@ -277,18 +277,21 @@ extension MyController: NSMenuItemValidation {
     @IBAction func dashboardAction(_ sender: Any!) {
         
         
+        // REMOVE
         if dashboard == nil {
             
-            print("Creating Dashboard...")
             dashboard = Dashboard(with: self, nibName: "Dashboard")
+        }
+        dashboard?.showWindow(self)
 
+        if newDashboard == nil {
+            
+            print("Creating Dashboard...")
             let myStoryboard = NSStoryboard(name: "StoryDashboard", bundle: nil)
             newDashboard = myStoryboard.instantiateController(withIdentifier: "MyWindowController") as? NewDashboard
             newDashboard!.setController(self)
         }
-        dashboard?.showWindow(self)
-                
-        newDashboard!.showWindow(self)
+        newDashboard?.showWindow(self)
     }
 
     @IBAction func consoleAction(_ sender: Any!) {
