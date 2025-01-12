@@ -72,8 +72,8 @@ struct AgnusRevisionEnum : util::Reflection<AgnusRevisionEnum, AgnusRevision>
     {
         switch (value) {
                 
-            case AGNUS_OCS_OLD:  return "Amiga 100 Agnus";
-            case AGNUS_OCS:      return "OCS Agnus";
+            case AGNUS_OCS_OLD:  return "Amiga 1000";
+            case AGNUS_OCS:      return "Amiga 500, Amiga 2000";
             case AGNUS_ECS_1MB:  return "Fat Agnus";
             case AGNUS_ECS_2MB:  return "Fatter Agnus";
         }

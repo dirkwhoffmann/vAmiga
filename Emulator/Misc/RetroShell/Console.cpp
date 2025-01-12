@@ -858,10 +858,10 @@ Console::registerComponent(CoreComponent &c, Command &root)
     // Register a command with the proper name
     root.add({cmd}, c.description());
 
-    // If this component has options...
+    // CHeck if this component has options
     if (auto &options = c.getOptions(); !options.empty()) {
 
-        // ...register a command for querying the current configuration
+        // Register a command for querying the current configuration
         root.add({cmd, ""},
                  "Display the current configuration",
                  [this, &c](Arguments& argv, long value) {
@@ -869,22 +869,36 @@ Console::registerComponent(CoreComponent &c, Command &root)
             retroShell.commander.dump(c, Category::Config);
         });
 
-        // ...register a setter for all config options
+        // Register a setter for every option
         root.add({cmd, "set"}, "Configure the component");
         for (auto &opt : options) {
 
-            auto pp = OptionParser::pairs(opt);
+            // Get the key value pairs
+            auto pairs = OptionParser::pairs(opt);
             
-            if (!pp.empty()) {
+            if (pairs.empty()) {
+                
+                // The argument is not an enum. Register a single setter
+                root.add({cmd, "set", OptionEnum::key(opt)},
+                         {OptionParser::argList(opt)},
+                         OptionEnum::help(opt),
+                         [this](Arguments& argv, long value) {
+                    
+                    emulator.set(Option(HI_WORD(value)), argv[0], { LO_WORD(value) });
+                    msgQueue.put(MSG_CONFIG);
+                    
+                }, HI_W_LO_W(opt, c.objid));
 
+            } else {
+                
+                // Register a setter for every enum
                 root.add({cmd, "set", OptionEnum::key(opt)},
                          {OptionParser::argList(opt)},
                          OptionEnum::help(opt));
-                         
-                for (const auto& [first, second] : pp) {
                 
-                    auto help = OptionParser::help(opt, second);
+                for (const auto& [first, second] : pairs) {
                     
+                    auto help = OptionParser::help(opt, second);
                     root.add({cmd, "set", OptionEnum::key(opt), first },
                              {},
                              help.empty() ? "Set to " + first : help,
@@ -895,18 +909,6 @@ Console::registerComponent(CoreComponent &c, Command &root)
                         
                     }, opt << 16 | second << 8 | c.objid);
                 }
-                
-            } else {
-                
-                root.add({cmd, "set", OptionEnum::key(opt)},
-                         {OptionParser::argList(opt)},
-                         OptionEnum::help(opt),
-                         [this](Arguments& argv, long value) {
-                    
-                    emulator.set(Option(HI_WORD(value)), argv[0], { LO_WORD(value) });
-                    msgQueue.put(MSG_CONFIG);
-                    
-                }, HI_W_LO_W(opt, c.objid));
             }
         }
     }
