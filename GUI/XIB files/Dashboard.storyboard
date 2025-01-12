@@ -321,13 +321,13 @@
             <objects>
                 <viewController storyboardIdentifier="ViewController2" id="icn-N1-upp" sceneMemberID="viewController">
                     <view key="view" id="v7i-p7-K1I">
-                        <rect key="frame" x="0.0" y="0.0" width="473" height="312"/>
+                        <rect key="frame" x="0.0" y="0.0" width="200" height="160"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     </view>
                 </viewController>
                 <customObject id="hLd-LT-esQ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1691.5" y="311"/>
+            <point key="canvasLocation" x="1572" y="228"/>
         </scene>
     </scenes>
     <resources>

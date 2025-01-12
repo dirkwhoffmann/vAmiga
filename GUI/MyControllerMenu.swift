@@ -274,14 +274,13 @@ extension MyController: NSMenuItemValidation {
         }
     }
     
-    func addDashboard() {
+    func addDashboard(type: PanelType = .Combined) {
     
         let count = dashboards.count
         
         // Allow 24 dashboards at a time
         if count < 24 {
             
-            print("Creating new Dashboard...")
             let myStoryboard = NSStoryboard(name: "Dashboard", bundle: nil)
             
             if let newDashboard = myStoryboard.instantiateController(withIdentifier: "MyWindowController") as? Dashboard {
@@ -289,6 +288,7 @@ extension MyController: NSMenuItemValidation {
                 dashboards.append(newDashboard)
                 newDashboard.setController(self)
                 newDashboard.showWindow(self)
+                newDashboard.viewController?.type = type
                 return
             }
         }

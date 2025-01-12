@@ -14,7 +14,7 @@ class DashboardToolbar: NSToolbar {
     @IBOutlet weak var selectorItem: NSToolbarItem!
     
     override func validateVisibleItems() {
-
+        
         // When the popup button is in shrinked state, macOS crashes when
         // it is selected. To prevent this from happening, we disable the
         // popup button when it is no longer visible.
@@ -34,7 +34,12 @@ class DashboardToolbar: NSToolbar {
     
     @IBAction func plusAction(_ sender: NSButton) {
 
-        dashboard.myController?.addDashboard()
+        var next = PanelType.Combined
+        if let type = dashboard.type?.rawValue {
+            next = PanelType(rawValue: type + 1) ?? PanelType.Combined
+        }
+        
+        dashboard.myController?.addDashboard(type: next)
     }
 
     @IBAction func panelAction(_ sender: NSPopUpButton) {

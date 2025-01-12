@@ -79,6 +79,7 @@
 		5042F2DD26BE57E600126C05 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5042F2DB26BE57E600126C05 /* Thread.cpp */; };
 		5043154D2D2ACF47006C14FF /* WaveformPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043154C2D2ACF3E006C14FF /* WaveformPanel.swift */; };
 		5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043F6C4221972F90047CC30 /* MyToolbar.swift */; };
+		5045D55D2D33C73000596D1E /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5045D55C2D33C72C00596D1E /* DashboardViewController.swift */; };
 		504C48B424143AB4008ADAB3 /* AgnusDma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 504C48B324143AB4008ADAB3 /* AgnusDma.cpp */; };
 		504E57C82D12ACFC002233D1 /* gamecontrollerdb.txt in Resources */ = {isa = PBXBuildFile; fileRef = 504E57C72D12ACFC002233D1 /* gamecontrollerdb.txt */; };
 		504F4D64252624BD00CF8815 /* TextureRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F4D63252624BD00CF8815 /* TextureRect.swift */; };
@@ -610,6 +611,7 @@
 		5042FD7E23FFF0D200B315B2 /* StateMachineTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StateMachineTypes.h; sourceTree = "<group>"; };
 		5043154C2D2ACF3E006C14FF /* WaveformPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveformPanel.swift; sourceTree = "<group>"; };
 		5043F6C4221972F90047CC30 /* MyToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolbar.swift; sourceTree = "<group>"; };
+		5045D55C2D33C72C00596D1E /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		504C48B324143AB4008ADAB3 /* AgnusDma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusDma.cpp; sourceTree = "<group>"; };
 		504E57C72D12ACFC002233D1 /* gamecontrollerdb.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = gamecontrollerdb.txt; sourceTree = "<group>"; };
 		504F4D63252624BD00CF8815 /* TextureRect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureRect.swift; sourceTree = "<group>"; };
@@ -1254,6 +1256,7 @@
 			children = (
 				504FC7C82D31291C00F0B733 /* Dashboard.swift */,
 				504FC7D62D31887300F0B733 /* DashboardToolbar.swift */,
+				5045D55C2D33C72C00596D1E /* DashboardViewController.swift */,
 				50DAED222D2D175E0044B922 /* DashboardDataProvider.swift */,
 				5043154C2D2ACF3E006C14FF /* WaveformPanel.swift */,
 				506C71E12D2A0C04007CBD93 /* DashboardPanel.swift */,
@@ -2372,6 +2375,7 @@
 				50D715A327CCA84F0085C1AA /* PartitionSelector.swift in Sources */,
 				509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */,
 				508FDFD921EA20510043D0E9 /* MetalViewEvents.swift in Sources */,
+				5045D55D2D33C73000596D1E /* DashboardViewController.swift in Sources */,
 				50E1D2C626CCF942001FE199 /* FontExtensions.swift in Sources */,
 				50E1D2C426CCF8C9001FE199 /* FileExtensions.swift in Sources */,
 				50D375DF222C7C6B0040987C /* Blitter.cpp in Sources */,
