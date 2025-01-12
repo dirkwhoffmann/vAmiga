@@ -22,19 +22,14 @@
 namespace vamiga {
 
 //
-// Macros and constants
+// Constants
 //
 
-// Checks the category of an event slot
-#define isPrimarySlot(s) ((s) <= SLOT_SEC)
-#define isSecondarySlot(s) ((s) > SLOT_SEC && (s) <= SLOT_TER)
-#define isTertiarySlot(s) ((s) > SLOT_TER)
-
 // Time stamp used for messages that never trigger
-#define NEVER INT64_MAX
+static constexpr i64 NEVER = INT64_MAX;
 
 // Inspection interval in seconds (interval between INS_xxx events)
-static const double inspectionInterval = 0.1;
+static constexpr double inspectionInterval = 0.1;
 
 
 //
@@ -131,6 +126,10 @@ enum_long(SLOT)
     SLOT_COUNT
 };
 typedef SLOT EventSlot;
+
+constexpr bool isPrimarySlot(long s) { return s <= SLOT_SEC; }
+constexpr bool isSecondarySlot(long s) { return s > SLOT_SEC && s <= SLOT_TER; }
+constexpr bool isTertiarySlot(long s) { return s > SLOT_TER; }
 
 struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
 {
