@@ -415,8 +415,14 @@ Console::autoComplete(const string& userInput)
     // Recreate the command string
     for (const auto &it : tokens) { result += (result == "" ? "" : " ") + it; }
 
-    // Add a space if the command has been fully completed
-    if (!tokens.empty() && getRoot().seek(tokens)) result += " ";
+    // Add a space if the command has been fully completed ...
+    if (auto cmd = getRoot().seek(tokens); cmd != nullptr && !tokens.empty()) {
+        
+        // ... and there are additional subcommands or arguments
+        if (cmd->subCommands.size() > 0 ||
+            cmd->requiredArgs.size() > 0 ||
+            cmd->optionalArgs.size()) { result += " "; }
+    }
 
     return result;
 }
