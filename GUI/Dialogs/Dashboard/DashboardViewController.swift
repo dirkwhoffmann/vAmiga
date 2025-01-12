@@ -113,9 +113,10 @@ class DashboardViewController: NSViewController {
             // Add padding to the SwiftUI view
             if let panel = subView as? DashboardPanel {
                 if parentView is NSBox {
-                    panel.padding = SwiftUICore.EdgeInsets(top: 8.0, leading: 8.0, bottom: 0.0, trailing: 8.0)
+                    panel.padding = SwiftUICore.EdgeInsets(top: 4.0, leading: 4.0, bottom: 0.0, trailing: 4.0)
                 } else {
-                    panel.padding = SwiftUICore.EdgeInsets(top: 20.0, leading: 20.0, bottom: 20.0, trailing: 20.0)
+                    // panel.padding = SwiftUICore.EdgeInsets(top: 20.0, leading: 20.0, bottom: 20.0, trailing: 20.0)
+                    panel.padding = SwiftUICore.EdgeInsets(top: 0.0, leading: 20.0, bottom: 20.0, trailing: 20.0)
                 }
             }
 
@@ -137,6 +138,7 @@ class DashboardViewController: NSViewController {
             
         case .Combined:
             
+            view.window?.minSize = .zero
             switchToViewController(controller: multiPanelController)
             view.window?.minSize = NSSize(width: 400, height: 600)
             
@@ -164,6 +166,7 @@ class DashboardViewController: NSViewController {
             }
         default:
             
+            view.window?.minSize = .zero
             switchToViewController(controller: singlePanelController)
             view.window?.minSize = NSSize(width: 200, height: 160)
 
