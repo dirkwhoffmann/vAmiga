@@ -43,6 +43,10 @@ struct FloppyDriveTypeEnum : util::Reflection<FloppyDriveTypeEnum, FloppyDriveTy
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 enum_long(DRIVE_MECHANICS)
@@ -66,6 +70,10 @@ struct DriveMechanicsEnum : util::Reflection<DriveMechanicsEnum, DriveMechanics>
             case MECHANICS_A1010:   return "A1010";
         }
         return "???";
+    }
+    static const char *help(long value)
+    {
+        return "";
     }
 };
 

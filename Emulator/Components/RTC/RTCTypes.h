@@ -42,6 +42,10 @@ struct RTCRevisionEnum : util::Reflection<RTCRevisionEnum, RTCRevision>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 

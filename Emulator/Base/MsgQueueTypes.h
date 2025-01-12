@@ -232,6 +232,11 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
         }
         return "???";
     }
+    
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 

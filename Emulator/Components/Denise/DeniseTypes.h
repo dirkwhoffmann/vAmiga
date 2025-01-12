@@ -41,6 +41,10 @@ struct DeniseRevisionEnum : util::Reflection<DeniseRevisionEnum, DeniseRevision>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 

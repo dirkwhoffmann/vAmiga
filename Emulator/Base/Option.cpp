@@ -185,6 +185,12 @@ OptionParser::parse(Option opt, const string &arg)
     return create(opt)->parse(arg);
 }
 
+std::vector<std::pair<string, long>>
+OptionParser::pairs(Option opt)
+{
+    return create(opt)->pairs();
+}
+
 string
 OptionParser::asPlainString(Option opt, i64 arg)
 {
@@ -207,6 +213,12 @@ string
 OptionParser::argList(Option opt)
 {
     return create(opt)->argList();
+}
+
+string
+OptionParser::help(Option opt, isize item)
+{
+    return create(opt)->help(item);
 }
 
 string

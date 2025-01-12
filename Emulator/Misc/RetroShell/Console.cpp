@@ -873,15 +873,41 @@ Console::registerComponent(CoreComponent &c, Command &root)
         root.add({cmd, "set"}, "Configure the component");
         for (auto &opt : options) {
 
-            root.add({cmd, "set", OptionEnum::key(opt)},
-                     {OptionParser::argList(opt)},
-                     OptionEnum::help(opt),
-                     [this](Arguments& argv, long value) {
+            auto pp = OptionParser::pairs(opt);
+            
+            if (!pp.empty()) {
 
-                emulator.set(Option(HI_WORD(value)), argv[0], { LO_WORD(value) });
-                msgQueue.put(MSG_CONFIG);
+                root.add({cmd, "set", OptionEnum::key(opt)},
+                         {OptionParser::argList(opt)},
+                         OptionEnum::help(opt));
+                         
+                for (const auto& [first, second] : pp) {
                 
-            }, HI_W_LO_W(opt, c.objid));
+                    auto help = OptionParser::help(opt, second);
+                    
+                    root.add({cmd, "set", OptionEnum::key(opt), first },
+                             {},
+                             help.empty() ? "Set to " + first : help,
+                             [this](Arguments& argv, long value) {
+                        
+                        emulator.set(Option(HI_WORD(value)), BYTE1(value), { BYTE0(value) });
+                        msgQueue.put(MSG_CONFIG);
+                        
+                    }, opt << 16 | second << 8 | c.objid);
+                }
+                
+            } else {
+                
+                root.add({cmd, "set", OptionEnum::key(opt)},
+                         {OptionParser::argList(opt)},
+                         OptionEnum::help(opt),
+                         [this](Arguments& argv, long value) {
+                    
+                    emulator.set(Option(HI_WORD(value)), argv[0], { LO_WORD(value) });
+                    msgQueue.put(MSG_CONFIG);
+                    
+                }, HI_W_LO_W(opt, c.objid));
+            }
         }
     }
 

@@ -70,6 +70,10 @@ struct MemorySourceEnum : util::Reflection<MemorySourceEnum, MemorySource>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 enum_long(ACCESSOR_TYPE)
@@ -93,6 +97,10 @@ struct AccessorEnum : util::Reflection<AccessorEnum, Accessor>
             case ACCESSOR_AGNUS:  return "AGNUS";
         }
         return "???";
+    }
+    static const char *help(long value)
+    {
+        return "";
     }
 };
 
@@ -122,6 +130,10 @@ struct BankMapEnum : util::Reflection<BankMapEnum, BankMap>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 enum_long(RAM_INIT_PATTERN)
@@ -148,6 +160,10 @@ struct RamInitPatternEnum : util::Reflection<RamInitPatternEnum, RamInitPattern>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 enum_long(UNMAPPED_MEMORY)
@@ -173,6 +189,10 @@ struct UnmappedMemoryEnum : util::Reflection<UnmappedMemoryEnum, UnmappedMemory>
             case UNMAPPED_ALL_ONES:    return "ALL_ONES";
         }
         return "???";
+    }
+    static const char *help(long value)
+    {
+        return "";
     }
 };
 

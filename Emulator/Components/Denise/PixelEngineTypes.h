@@ -49,6 +49,10 @@ struct PaletteEnum : util::Reflection<PaletteEnum, Palette>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 

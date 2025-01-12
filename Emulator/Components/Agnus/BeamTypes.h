@@ -44,6 +44,10 @@ struct FrameTypeEnum : util::Reflection<FrameTypeEnum, FrameType>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 }

@@ -46,6 +46,10 @@ struct CPURevisionEnum : util::Reflection<CPURevisionEnum, CPURevision>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 enum_long(DASM_REVISION)
@@ -84,6 +88,10 @@ struct DasmRevisionEnum : util::Reflection<DasmRevisionEnum, DasmRevision>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 enum_long(DASM_SYNTAX)
@@ -114,6 +122,10 @@ struct DasmSyntaxEnum : util::Reflection<DasmSyntaxEnum, DasmSyntax>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 enum_long(GUARD_TYPE)
@@ -139,6 +151,10 @@ struct GuardTypeEnum : util::Reflection<GuardTypeEnum, GuardType>
             case GUARD_CATCHPOINT:  return "CATCHPOINT";
         }
         return "???";
+    }
+    static const char *help(long value)
+    {
+        return "";
     }
 };
 

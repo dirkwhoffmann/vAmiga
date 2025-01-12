@@ -41,6 +41,10 @@ struct VideoFormatEnum : util::Reflection<VideoFormatEnum, VideoFormat>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 enum_long(RESOLUTION)
@@ -67,6 +71,10 @@ struct ResolutionEnum : util::Reflection<ResolutionEnum, Resolution>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 enum_long(WARP_MODE)
@@ -92,6 +100,10 @@ struct WarpModeEnum : util::Reflection<WarpModeEnum, WarpMode>
             case WARP_ALWAYS:   return "WARP_ALWAYS";
         }
         return "???";
+    }
+    static const char *help(long value)
+    {
+        return "";
     }
 };
 
@@ -120,6 +132,10 @@ struct ConfigSchemeEnum : util::Reflection<ConfigSchemeEnum, ConfigScheme>
             case CONFIG_A500_PLUS_1MB:  return "A500_PLUS_1MB";
         }
         return "???";
+    }
+    static const char *help(long value)
+    {
+        return "";
     }
 };
 
@@ -280,6 +296,10 @@ struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
         };
         
         return isValid(value) ? name[value] : "???";
+    }
+    static const char *help(long value)
+    {
+        return "";
     }
 };
 

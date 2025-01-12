@@ -47,6 +47,11 @@ struct ExecStateEnum : util::Reflection<ExecStateEnum, ExecState>
         }
         return "???";
     }
+    
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 }

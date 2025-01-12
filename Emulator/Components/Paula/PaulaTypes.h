@@ -67,6 +67,10 @@ struct IrqSourceEnum : util::Reflection<IrqSourceEnum, IrqSource>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 

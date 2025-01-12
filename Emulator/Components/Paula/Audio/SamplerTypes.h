@@ -42,6 +42,10 @@ struct SamplingMethodEnum : util::Reflection<SamplingMethodEnum, SamplingMethod>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 }

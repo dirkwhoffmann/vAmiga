@@ -50,6 +50,10 @@ struct FSVolumeTypeEnum : util::Reflection<FSVolumeTypeEnum, FSVolumeType>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 inline bool isOFSVolumeType(long value)
@@ -115,6 +119,10 @@ struct FSBlockTypeEnum : util::Reflection<FSBlockTypeEnum, FSBlockType>
             case FS_DATA_BLOCK_FFS:    return "DATA_BLOCK_FFS";
         }
         return "???";
+    }
+    static const char *help(long value)
+    {
+        return "";
     }
 };
 

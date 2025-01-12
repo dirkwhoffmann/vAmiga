@@ -84,6 +84,10 @@ struct GamePadActionEnum : util::Reflection<GamePadActionEnum, GamePadAction>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 

@@ -60,6 +60,10 @@ struct RetroShellKeyEnum : util::Reflection<RetroShellKeyEnum, RetroShellKey>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 }

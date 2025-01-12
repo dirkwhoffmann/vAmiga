@@ -54,6 +54,10 @@ struct DriveStateEnum : util::Reflection<DriveStateEnum, DriveState>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 

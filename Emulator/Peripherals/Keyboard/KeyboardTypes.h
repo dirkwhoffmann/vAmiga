@@ -46,6 +46,10 @@ struct KeyboardStateEnum : util::Reflection<KeyboardStateEnum, KeyboardState>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 

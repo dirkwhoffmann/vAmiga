@@ -42,6 +42,10 @@ struct DiameterEnum : util::Reflection<DiameterEnum, Diameter>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 enum_long(DENSITY)
@@ -67,6 +71,10 @@ struct DensityEnum : util::Reflection<DensityEnum, Density>
             case DENSITY_HD:     return "HD";
         }
         return "???";
+    }
+    static const char *help(long value)
+    {
+        return "";
     }
 };
 

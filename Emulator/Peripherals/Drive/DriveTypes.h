@@ -41,6 +41,10 @@ struct DiskFlagsEnum : util::Reflection<DiskFlagsEnum, DiskFlags>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 

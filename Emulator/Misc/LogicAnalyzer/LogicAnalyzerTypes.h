@@ -41,6 +41,10 @@ struct ProbeEnum : util::Reflection<ProbeEnum, Probe>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 

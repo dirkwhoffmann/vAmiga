@@ -50,6 +50,10 @@ struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 

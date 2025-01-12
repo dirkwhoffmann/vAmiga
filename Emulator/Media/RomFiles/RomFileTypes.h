@@ -133,6 +133,10 @@ struct RomVendorEnum : util::Reflection<RomVendorEnum, RomVendor> {
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 

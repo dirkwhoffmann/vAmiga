@@ -85,6 +85,10 @@ struct BusOwnerEnum : util::Reflection<BusOwnerEnum, BusOwner>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 }

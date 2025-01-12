@@ -134,6 +134,11 @@ struct CmdTypeEnum : util::Reflection<CmdTypeEnum, CmdType> {
         }
         return "???";
     }
+    
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 

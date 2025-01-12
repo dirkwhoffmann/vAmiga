@@ -62,6 +62,10 @@ struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 

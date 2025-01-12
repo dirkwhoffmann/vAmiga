@@ -112,6 +112,10 @@ struct IoCommandEnum : util::Reflection<IoCommandEnum, IoCommand>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 enum_long(HDC_STATE)
@@ -137,6 +141,10 @@ struct HdcStateEnum : util::Reflection<HdcStateEnum, HdcState>
             case HDC_READY:         return "READY";
         }
         return "???";
+    }
+    static const char *help(long value)
+    {
+        return "";
     }
 };
 

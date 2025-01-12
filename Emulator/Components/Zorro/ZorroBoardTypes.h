@@ -61,6 +61,10 @@ struct BoardStateEnum : util::Reflection<BoardStateEnum, BoardState>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 }

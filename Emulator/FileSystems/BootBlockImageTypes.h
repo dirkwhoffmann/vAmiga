@@ -42,6 +42,10 @@ struct BootBlockTypeEnum : util::Reflection<BootBlockTypeEnum, BootBlockType>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 enum_long(BB_ID)
@@ -71,6 +75,10 @@ struct BootBlockIdEnum : util::Reflection<BootBlockIdEnum, BootBlockId>
             case BB_BYTE_BANDIT:  return "BYTE_BANDIT";
         }
         return "???";
+    }
+    static const char *help(long value)
+    {
+        return "";
     }
 };
 

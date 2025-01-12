@@ -39,6 +39,10 @@ struct HardDriveTypeEnum : util::Reflection<HardDriveTypeEnum, HardDriveType>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 enum_long(HDR_STATE)
@@ -64,6 +68,10 @@ struct HardDriveStateEnum : util::Reflection<HardDriveStateEnum, HardDriveState>
             case HDR_STATE_WRITING:   return "WRITING";
         }
         return "???";
+    }
+    static const char *help(long value)
+    {
+        return "";
     }
 };
 

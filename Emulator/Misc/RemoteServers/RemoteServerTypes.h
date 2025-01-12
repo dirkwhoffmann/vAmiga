@@ -48,6 +48,10 @@ struct SrvStateEnum : util::Reflection<SrvStateEnum, SrvState>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 enum_long(SRVPROT)
@@ -69,6 +73,10 @@ struct ServerProtocolEnum : util::Reflection<ServerProtocolEnum, ServerProtocol>
             case SRVPROT_DEFAULT:   return "DEFAULT";
         }
         return "???";
+    }
+    static const char *help(long value)
+    {
+        return "";
     }
 };
 

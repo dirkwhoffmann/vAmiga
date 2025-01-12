@@ -67,6 +67,18 @@ struct AgnusRevisionEnum : util::Reflection<AgnusRevisionEnum, AgnusRevision>
         }
         return "???";
     }
+    
+    static const char *help(long value)
+    {
+        switch (value) {
+                
+            case AGNUS_OCS_OLD:  return "Amiga 100 Agnus";
+            case AGNUS_OCS:      return "OCS Agnus";
+            case AGNUS_ECS_1MB:  return "Fat Agnus";
+            case AGNUS_ECS_2MB:  return "Fatter Agnus";
+        }
+        return "???";
+    }
 };
 
 enum_long(SLOT)
@@ -174,6 +186,10 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
             case SLOT_COUNT: return "???";
         }
         return "???";
+    }
+    static const char *help(long value)
+    {
+        return "";
     }
 };
 
@@ -433,6 +449,10 @@ struct SprDmaStateEnum : util::Reflection<SprDmaStateEnum, SprDMAState>
             case SPR_DMA_ACTIVE: return "ACTIVE";
         }
         return "???";
+    }
+    static const char *help(long value)
+    {
+        return "";
     }
 };
 

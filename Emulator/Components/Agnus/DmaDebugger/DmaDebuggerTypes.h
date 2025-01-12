@@ -43,6 +43,10 @@ struct DmaDisplayModeEnum : util::Reflection<DmaDisplayModeEnum, DmaDisplayMode>
         }
         return "???";
     }
+    static const char *help(long value)
+    {
+        return "";
+    }
 };
 
 enum_long(DMA_CHANNEL)
@@ -81,6 +85,10 @@ struct DmaChannelEnum : util::Reflection<DmaChannelEnum, DmaChannel>
             case DMA_CHANNEL_COUNT:     return "???";
         }
         return "???";
+    }
+    static const char *help(long value)
+    {
+        return "";
     }
 };
 
