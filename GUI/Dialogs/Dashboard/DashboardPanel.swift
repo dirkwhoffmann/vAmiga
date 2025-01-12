@@ -520,10 +520,10 @@ class HostLoadPanel: DashboardPanel {
     
     func setup() {
         
-        configure(title: "Host", subtitle: "CPU Load", range: 0...1.0, unit: "%")
+        configure(title: "Host", subtitle: "CPU Load", unit: "%")
         switchStyle()
 
-        latest = { String(Int(self.model.latest().rounded() * 100)) }
+        latest = { String(Int(self.model.latest() * 100)) }
     }
 }
 

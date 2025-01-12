@@ -116,7 +116,7 @@ class DashboardViewController: NSViewController {
                     panel.padding = SwiftUICore.EdgeInsets(top: 4.0, leading: 4.0, bottom: 0.0, trailing: 4.0)
                 } else {
                     // panel.padding = SwiftUICore.EdgeInsets(top: 20.0, leading: 20.0, bottom: 20.0, trailing: 20.0)
-                    panel.padding = SwiftUICore.EdgeInsets(top: 0.0, leading: 20.0, bottom: 20.0, trailing: 20.0)
+                    panel.padding = SwiftUICore.EdgeInsets(top: 8.0, leading: 8.0, bottom: 8.0, trailing: 8.0)
                 }
             }
 
@@ -172,6 +172,9 @@ class DashboardViewController: NSViewController {
 
             if let view = children.first?.view {
 
+                // Remove the old view
+                for oldView in view.subviews { oldView.removeFromSuperview() }
+                
                 switch type {
                     
                 case .ChipRam: add(chipRamPanel, to: view)
