@@ -282,9 +282,9 @@ extension MyController: NSMenuItemValidation {
         if count < 24 {
             
             print("Creating new Dashboard...")
-            let myStoryboard = NSStoryboard(name: "StoryDashboard", bundle: nil)
+            let myStoryboard = NSStoryboard(name: "Dashboard", bundle: nil)
             
-            if let newDashboard = myStoryboard.instantiateController(withIdentifier: "MyWindowController") as? NewDashboard {
+            if let newDashboard = myStoryboard.instantiateController(withIdentifier: "MyWindowController") as? Dashboard {
                 
                 dashboards.append(newDashboard)
                 newDashboard.setController(self)

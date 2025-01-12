@@ -143,7 +143,7 @@ struct GaugeView: View {
 class DashboardPanel: NSView {
     
     var model = DashboardDataProvider()
-        
+    
     // Title and sub title
     var heading = ""
     var subHeading = ""
@@ -189,53 +189,61 @@ class DashboardPanel: NSView {
                  2: Gradient(colors: [graph2Color.opacity(0.75), graph2Color.opacity(0.25)])]
     }
     /*
-    var gaugeGradient: Gradient {
-        return Gradient(colors: [.green, .yellow, .orange, .red])
-    }
-    */
+     var gaugeGradient: Gradient {
+     return Gradient(colors: [.green, .yellow, .orange, .red])
+     }
+     */
     var gaugeGradient: Gradient = Gradient(colors: [.green, .yellow, .orange, .red])
     
     var gridLineColor: Color {
         return Color(NSColor.labelColor).opacity(0.2)
     }
     /*
-    var padding: EdgeInsets {
-        return EdgeInsets(top: 8.0, leading: 8.0, bottom: 0.0, trailing: 8.0)
-    }
-    */
+     var padding: EdgeInsets {
+     return EdgeInsets(top: 8.0, leading: 8.0, bottom: 0.0, trailing: 8.0)
+     }
+     */
     var padding = EdgeInsets(top: 8.0, leading: 8.0, bottom: 0.0, trailing: 8.0)
-
+    
     var host1: NSHostingView<TimeSeriesView>!
     var host2: NSHostingView<GaugeView>!
     var subview: NSView? { return subviews.isEmpty ? nil : subviews[0] }
     
     required init?(coder aDecoder: NSCoder) {
-
+        
         super.init(coder: aDecoder)
-
+        
         host1 = NSHostingView(rootView: TimeSeriesView(model: model, panel: self))
         host2 = NSHostingView(rootView: GaugeView(model: model, panel: self))
         switchStyle()
     }
     
     required override init(frame frameRect: NSRect) {
-
+        
         super.init(frame: frameRect)
         
         host1 = NSHostingView(rootView: TimeSeriesView(model: model, panel: self))
         host2 = NSHostingView(rootView: GaugeView(model: model, panel: self))
         switchStyle()
     }
-        
+    
     var latest: () -> String = { "" }
-
+    
     override func mouseDown(with event: NSEvent) {
         
         switchStyle()
     }
     
     func switchStyle() {
-                    
+        
+        if subview == host1 {
+            
+            if #available(macOS 14.0, *) { } else {
+                // Prevent switching to the (not existing) gauge element
+                return
+            }
+        }
+        
         if subview == host1 {
             subview!.removeFromSuperview()
             addSubview(host2)

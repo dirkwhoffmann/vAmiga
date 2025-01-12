@@ -56,7 +56,7 @@ class OverviewController : NSViewController {
     @IBOutlet weak var waveformRBox: NSBox!
 }
 
-class NewDashboard: DialogController {
+class Dashboard: DialogController {
     
     var toolbar: DashboardToolbar? { return window?.toolbar as? DashboardToolbar }
     
@@ -165,7 +165,7 @@ class DashboardViewController: NSViewController {
         super.viewDidLoad()
    
         // Get the storyboard from the resources bundle
-        let storyboard = NSStoryboard(name: "StoryDashboard", bundle: nil)
+        let storyboard = NSStoryboard(name: "Dashboard", bundle: nil)
 
         // Load the view controllers from the storyboard
         multiPanelController = storyboard.instantiateController(withIdentifier: "ViewController1") as? NSViewController

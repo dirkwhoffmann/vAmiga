@@ -9,7 +9,7 @@
         <!--Window Controller-->
         <scene sceneID="fch-Jy-1N7">
             <objects>
-                <windowController storyboardIdentifier="MyWindowController" id="oKP-AG-CVR" customClass="NewDashboard" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
+                <windowController storyboardIdentifier="MyWindowController" id="oKP-AG-CVR" customClass="Dashboard" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
                     <window key="window" title="Dashboard" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="cOb-Qz-LX3">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
