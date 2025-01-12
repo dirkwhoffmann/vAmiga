@@ -23,12 +23,9 @@ class MyController: NSWindowController, MessageReceiver {
     // Amiga proxy (bridge between the Swift frontend and the C++ backend)
     var emu: EmulatorProxy!
     
-    // Inspector panel of this emulator instance
+    // Auxiliary windows of this emulator instance
     var inspectors: [Inspector] = []
-    
-    // Dashboard of this emulator instance
-    var dashboard: Dashboard?
-    var newDashboard: NewDashboard? //  NSWindowController?
+    var dashboards: [NewDashboard] = []
     
     // Configuration panel of this emulator instance
     var configurator: ConfigurationController?
@@ -289,10 +286,8 @@ extension MyController {
             // Animate the inspectors
             for inspector in inspectors { inspector.continuousRefresh() }
 
-            // Animate the dashboard
-            if dashboard?.window?.isVisible == true { dashboard!.continuousRefresh() }
-            if newDashboard?.window?.isVisible == true { newDashboard!.continuousRefresh() }
-
+            // Animate the dashboards
+            for dashboard in dashboards { dashboard.continuousRefresh() }
         }
         
         // Do less times...
@@ -329,6 +324,9 @@ extension MyController {
         func passToInspector() {
             for inspector in inspectors { inspector.processMessage(msg) }
         }
+        func passToDashboard() {
+            for dashboard in dashboards { dashboard.processMessage(msg) }
+        }
         
         // Only proceed if the proxy object is still alive
         if emu == nil { return }
@@ -337,11 +335,11 @@ extension MyController {
                         
         case .CONFIG:
 
-            dashboard?.refresh()
             configurator?.refresh()
             refreshStatusBar()
             passToInspector()
-            
+            passToDashboard()
+
         case .POWER:
             
             if value != 0 {

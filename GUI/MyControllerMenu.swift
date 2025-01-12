@@ -253,7 +253,7 @@ extension MyController: NSMenuItemValidation {
     
         let count = inspectors.count
         
-        // Only allow 8 inspectors at a time
+        // Allow 8 inspectors at a time
         if count < 8, let inspector = Inspector(with: self, nibName: "Inspector") {
             
             inspectors.append(inspector)
@@ -274,24 +274,35 @@ extension MyController: NSMenuItemValidation {
         }
     }
     
+    func addDashboard() {
+    
+        let count = dashboards.count
+        
+        // Allow 24 dashboards at a time
+        if count < 24 {
+            
+            print("Creating new Dashboard...")
+            let myStoryboard = NSStoryboard(name: "StoryDashboard", bundle: nil)
+            
+            if let newDashboard = myStoryboard.instantiateController(withIdentifier: "MyWindowController") as? NewDashboard {
+                
+                dashboards.append(newDashboard)
+                newDashboard.setController(self)
+                newDashboard.showWindow(self)
+                return
+            }
+        }
+
+        NSSound.beep();
+    }
+    
     @IBAction func dashboardAction(_ sender: Any!) {
         
-        
-        // REMOVE
-        if dashboard == nil {
-            
-            dashboard = Dashboard(with: self, nibName: "Dashboard")
+        if dashboards.isEmpty {
+            addDashboard()
+        } else {
+            dashboards[0].showWindow(self)
         }
-        dashboard?.showWindow(self)
-
-        if newDashboard == nil {
-            
-            print("Creating Dashboard...")
-            let myStoryboard = NSStoryboard(name: "StoryDashboard", bundle: nil)
-            newDashboard = myStoryboard.instantiateController(withIdentifier: "MyWindowController") as? NewDashboard
-            newDashboard!.setController(self)
-        }
-        newDashboard?.showWindow(self)
     }
 
     @IBAction func consoleAction(_ sender: Any!) {

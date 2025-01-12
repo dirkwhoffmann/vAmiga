@@ -72,11 +72,27 @@ class NewDashboard: DialogController {
             // Connect the toolbar
             toolbar!.dashboard = viewController
             window!.toolbarStyle = .unified
-            // window!.titleVisibility = .hidden
-            // window!.titlebarAppearsTransparent = true
+            window!.titlebarAppearsTransparent = true
             
             // Switch to the default panel
             viewController.type = .Combined
+        }
+    }
+    
+    override func windowWillClose(_ notification: Notification) {
+
+        super.windowWillClose(notification)
+
+        // Unregister the dashboard
+        if let index = parent.dashboards.firstIndex(where: { $0 === self }) {
+            
+            print("Removing dashboard at index \(index)")
+            parent.dashboards.remove(at: index)
+        }
+
+        if parent.inspectors.isEmpty {
+            
+            print("All dashboards closed")
         }
     }
     
@@ -94,7 +110,7 @@ class NewDashboard: DialogController {
     
     func windowDidResize(_ notification: Notification) {
         
-        guard let window = notification.object as? NSWindow else { return }
+        // guard let window = notification.object as? NSWindow else { return }
         // print("New size: \(window.frame.size)")
 
         if let viewController = contentViewController as? DashboardViewController {
@@ -105,6 +121,10 @@ class NewDashboard: DialogController {
     func continuousRefresh() {
       
         (contentViewController as! DashboardViewController).continuousRefresh()
+    }
+    
+    func processMessage(_ msg: Message) {
+     
     }
 }
 

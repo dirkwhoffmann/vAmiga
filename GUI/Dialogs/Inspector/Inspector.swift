@@ -851,7 +851,7 @@ extension Inspector {
         // Unregister the inspector
         if let index = parent.inspectors.firstIndex(where: { $0 === self }) {
             
-            // print("Removing inspector at index \(parent.inspectors.count)")
+            // print("Removing inspector at index \(index)")
             parent.inspectors.remove(at: index)
         }
 

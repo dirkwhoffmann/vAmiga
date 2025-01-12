@@ -9,9 +9,7 @@
 
 class WaveformPanel: NSImageView {
 
-    @IBOutlet weak var monitor: Dashboard!
-
-    var audioPort: AudioPortProxy? //  { return nil } //  monitor.emu.audioPort }
+    var audioPort: AudioPortProxy?
 
     // Waveform size
     var imageSize: NSSize!

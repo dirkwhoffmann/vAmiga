@@ -13,8 +13,6 @@ class DashboardToolbar: NSToolbar {
     @IBOutlet weak var selector: NSPopUpButton!
     @IBOutlet weak var selectorItem: NSToolbarItem!
     
-    // var emu: EmulatorProxy! { return inspector.parent.emu }
-    
     override func validateVisibleItems() {
 
         // When the popup button is in shrinked state, macOS crashes when
@@ -36,8 +34,7 @@ class DashboardToolbar: NSToolbar {
     
     @IBAction func plusAction(_ sender: NSButton) {
 
-        print("plusAction")
-        // inspector.parent.addInspector()
+        dashboard.myController?.addDashboard()
     }
 
     @IBAction func panelAction(_ sender: NSPopUpButton) {
