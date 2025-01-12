@@ -38,6 +38,12 @@ class WaveformPanel: NSImageView {
         setup()
     }
     
+    convenience init(frame frameRect: NSRect, channel: Int) {
+
+        self.init(frame: frameRect)
+        self.tag = channel
+    }
+
     func setup() {
                         
         imageSize = NSSize(width: 300, height: 100)

@@ -64,8 +64,6 @@ class NewDashboard: DialogController {
         
         super.windowDidLoad()
         
-        print("windowDidLoad")
-        
         // Register as delegate
         window?.delegate = self
         
@@ -74,8 +72,8 @@ class NewDashboard: DialogController {
             // Connect the toolbar
             toolbar!.dashboard = viewController
             window!.toolbarStyle = .unified
-            window!.titleVisibility = .hidden
-            window!.titlebarAppearsTransparent = true
+            // window!.titleVisibility = .hidden
+            // window!.titlebarAppearsTransparent = true
             
             // Switch to the default panel
             viewController.type = .Combined
@@ -97,9 +95,10 @@ class NewDashboard: DialogController {
     func windowDidResize(_ notification: Notification) {
         
         guard let window = notification.object as? NSWindow else { return }
+        // print("New size: \(window.frame.size)")
 
         if let viewController = contentViewController as? DashboardViewController {
-            viewController.update(windowSize: window.frame.size)
+            viewController.windowDidResize(notification)
         }
     }
     
@@ -132,29 +131,19 @@ class DashboardViewController: NSViewController {
     let spriteDmaPanel = SpriteDmaPanel(frame: NSRect.zero)
     let bitplaneDmaPanel = BitplaneDmaPanel(frame: NSRect.zero)
     let ciaAPanel = CIAAPanel(frame: NSRect.zero)
-    let ciaBPanel = CIAAPanel(frame: NSRect.zero)
-    let hostLoadPanel = HostLoadPanel(frame: NSRect.zero)
-    let hostFpsPanel = HostFpsPanel(frame: NSRect.zero)
+    let ciaBPanel = CIABPanel(frame: NSRect.zero)
     let amigaFpsPanel = AmigaFpsPanel(frame: NSRect.zero)
     let amigaMhzPanel = AmigaMhzPanel(frame: NSRect.zero)
+    let hostLoadPanel = HostLoadPanel(frame: NSRect.zero)
+    let hostFpsPanel = HostFpsPanel(frame: NSRect.zero)
     let fillLevelPanel = AudioFillLevelPanel(frame: NSRect.zero)
-    let waveformLPanel = WaveformPanel(frame: NSRect.zero)
-    let waveformRPanel = WaveformPanel(frame: NSRect.zero)
-
-    var proposedSize: [NSRect] = [ NSRect(x: 0, y: 0, width: 600, height: 740),
-                                   NSRect(x: 0, y: 0, width: 450, height: 240) ]
-        
-    func proposedSize(for type: PanelType?) -> NSRect {
-        
-        return type == .Combined ? proposedSize[0] : proposedSize[1]
-    }
+    let waveformLPanel = WaveformPanel(frame: NSRect.zero, channel: 0)
+    let waveformRPanel = WaveformPanel(frame: NSRect.zero, channel: 1)
     
     override func viewDidLoad() {
 
         super.viewDidLoad()
-        waveformLPanel.tag = 0
-        waveformLPanel.tag = 1
-        
+   
         // Get the storyboard from the resources bundle
         let storyboard = NSStoryboard(name: "StoryDashboard", bundle: nil)
 
@@ -163,24 +152,14 @@ class DashboardViewController: NSViewController {
         singlePanelController = storyboard.instantiateController(withIdentifier: "ViewController2") as? NSViewController
     }
     
-    func update(windowSize: CGSize) {
-        
-        print("update(windowSize: \(windowSize)")
-
-        guard let type = type else { return }
-        
-        if type == .Combined {
-            proposedSize[0] = NSRect(origin: .zero, size: windowSize)
-        } else {
-            proposedSize[1] = NSRect(origin: .zero, size: windowSize)
-        }
+    func windowDidResize(_ notification: Notification) {
+    
     }
     
     func switchToPanel(type: PanelType?) {
         
         guard let type = type else { return }
         
-        print("switch to panel \(type)")
         func add(_ subView: NSView, to parentView: NSView) {
             
             // Add padding to the SwiftUI view
@@ -210,7 +189,8 @@ class DashboardViewController: NSViewController {
             
         case .Combined:
             
-            switchToViewController(controller: multiPanelController, frameRect: proposedSize[0])
+            switchToViewController(controller: multiPanelController)
+            view.window?.minSize = NSSize(width: 400, height: 600)
             
             if let controller = children.first as? OverviewController {
                 
@@ -226,18 +206,19 @@ class DashboardViewController: NSViewController {
                 add(bitplaneDmaPanel, to: controller.bitplaneDmaBox)
                 add(ciaAPanel, to: controller.ciaABox)
                 add(ciaBPanel, to: controller.ciaBBox)
-                add(hostLoadPanel, to: controller.hostLoadBox)
-                add(hostFpsPanel, to: controller.hostFpsBox)
                 add(amigaMhzPanel, to: controller.amigaMhzBox)
                 add(amigaFpsPanel, to: controller.amigaFpsBox)
+                add(hostLoadPanel, to: controller.hostLoadBox)
+                add(hostFpsPanel, to: controller.hostFpsBox)
                 add(fillLevelPanel, to: controller.fillLevelBox)
                 add(waveformLPanel, to: controller.waveformLBox)
                 add(waveformRPanel, to: controller.waveformRBox)
             }
         default:
             
-            switchToViewController(controller: singlePanelController, frameRect: proposedSize[1])
-            
+            switchToViewController(controller: singlePanelController)
+            view.window?.minSize = NSSize(width: 200, height: 160)
+
             if let view = children.first?.view {
 
                 switch type {
@@ -252,12 +233,12 @@ class DashboardViewController: NSViewController {
                 case .AudioDma: add(audioDmaPanel, to: view)
                 case .SpriteDma: add(spriteDmaPanel, to: view)
                 case .BitplaneDma: add(bitplaneDmaPanel, to: view)
-                case .CIAA: add(bitplaneDmaPanel, to: view)
-                case .CIAB: add(bitplaneDmaPanel, to: view)
-                case .HostLoad: add(hostLoadPanel, to: view)
-                case .HostFps: add(hostFpsPanel, to: view)
+                case .CIAA: add(ciaAPanel, to: view)
+                case .CIAB: add(ciaBPanel, to: view)
                 case .AmigaMhz: add(amigaMhzPanel, to: view)
                 case .AmigaFps: add(amigaFpsPanel, to: view)
+                case .HostLoad: add(hostLoadPanel, to: view)
+                case .HostFps: add(hostFpsPanel, to: view)
                 case .AudioFillLevel: add(fillLevelPanel, to: view)
                 case .WaveformL: add(waveformLPanel, to: view)
                 case .WaveformR: add(waveformRPanel, to: view)
@@ -269,7 +250,7 @@ class DashboardViewController: NSViewController {
         }
     }
     
-    private func switchToViewController(controller newController: NSViewController, frameRect: NSRect) {
+    private func switchToViewController(controller newController: NSViewController) {
         
         if let currentController = children.first  {
             

@@ -11,11 +11,16 @@ class DashboardToolbar: NSToolbar {
     
     @IBOutlet weak var dashboard: DashboardViewController!
     @IBOutlet weak var selector: NSPopUpButton!
+    @IBOutlet weak var selectorItem: NSToolbarItem!
     
     // var emu: EmulatorProxy! { return inspector.parent.emu }
     
     override func validateVisibleItems() {
 
+        // When the popup button is in shrinked state, macOS crashes when
+        // it is selected. To prevent this from happening, we disable the
+        // popup button when it is no longer visible.
+        selector.isEnabled = selectorItem.isVisible
     }
     
     func updateToolbar(full: Bool) {

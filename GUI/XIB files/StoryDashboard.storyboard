@@ -62,7 +62,7 @@
                                             </menu>
                                         </popUpButtonCell>
                                         <connections>
-                                            <action selector="panelAction:" target="xpG-72-std" id="qiH-du-MdK"/>
+                                            <action selector="panelAction:" target="xpG-72-std" id="AaG-vl-P52"/>
                                         </connections>
                                     </popUpButton>
                                 </toolbarItem>
@@ -88,6 +88,7 @@
                             </defaultToolbarItems>
                             <connections>
                                 <outlet property="selector" destination="mdW-B3-74Y" id="iz0-Nj-BSs"/>
+                                <outlet property="selectorItem" destination="XDt-Ik-EN3" id="8hf-W7-pug"/>
                             </connections>
                         </toolbar>
                         <connections>

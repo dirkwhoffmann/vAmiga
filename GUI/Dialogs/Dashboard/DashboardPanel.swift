@@ -97,23 +97,23 @@ struct GaugeView: View {
         
     var body: some View {
         
-        GeometryReader { geometry in
-           
+        VStack(alignment: .leading) {
+            
             VStack(alignment: .leading) {
+                Text(panel.heading)
+                    .font(.system(size: 14))
+                    .fontWeight(.bold)
+                    .foregroundColor(panel.headingColor)
+                    .padding(.bottom, 1)
+                Text(panel.subHeading)
+                    .font(.system(size: 9))
+                    .fontWeight(.regular)
+                    .foregroundColor(panel.subheadingColor)
+            }
+            
+            if #available(macOS 14.0, *) {
                 
-                VStack(alignment: .leading) {
-                    Text(panel.heading)
-                        .font(.system(size: 14))
-                        .fontWeight(.bold)
-                        .foregroundColor(panel.headingColor)
-                        .padding(.bottom, 1)
-                    Text(panel.subHeading)
-                        .font(.system(size: 9))
-                        .fontWeight(.regular)
-                        .foregroundColor(panel.subheadingColor)
-                }
-
-                if #available(macOS 14.0, *) {
+                GeometryReader { geometry in
                     
                     Gauge(value: model.latest(), in: model.range) {
                         Text(model.unit)
@@ -122,13 +122,12 @@ struct GaugeView: View {
                     }
                     .gaugeStyle(.accessoryCircular)
                     .tint(panel.gaugeGradient)
-                    .scaleEffect(1.25)
+                    .scaleEffect(min(geometry.size.width, geometry.size.height) / 65)
                     .padding(EdgeInsets(top: 3.0, leading: 0.0, bottom: 0.0, trailing: 0.0))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     // .background(.green)
-                    
-                } else { }
-            }
+                }
+            } else { }
         }
         .padding(panel.padding)
         .background(panel.background)
