@@ -87,7 +87,36 @@ struct BusOwnerEnum : util::Reflection<BusOwnerEnum, BusOwner>
     }
     static const char *help(long value)
     {
-        return "";
+        switch (value) {
+                
+            case BUS_NONE:     return "Free bus";
+            case BUS_CPU:      return "CPU access";
+            case BUS_REFRESH:  return "Memory refresh cycle";
+            case BUS_DISK:     return "Disk DMA access";
+            case BUS_AUD0:     return "Andio channel 0 DMA access";
+            case BUS_AUD1:     return "Andio channel 1 DMA access";
+            case BUS_AUD2:     return "Andio channel 2 DMA access";
+            case BUS_AUD3:     return "Andio channel 3 DMA access";
+            case BUS_BPL1:     return "Bitplane 1 DMA access";
+            case BUS_BPL2:     return "Bitplane 2 DMA access";
+            case BUS_BPL3:     return "Bitplane 3 DMA access";
+            case BUS_BPL4:     return "Bitplane 4 DMA access";
+            case BUS_BPL5:     return "Bitplane 5 DMA access";
+            case BUS_BPL6:     return "Bitplane 6 DMA access";
+            case BUS_SPRITE0:  return "Sprite 0 DMA access";
+            case BUS_SPRITE1:  return "Sprite 1 DMA access";
+            case BUS_SPRITE2:  return "Sprite 2 DMA access";
+            case BUS_SPRITE3:  return "Sprite 3 DMA access";
+            case BUS_SPRITE4:  return "Sprite 4 DMA access";
+            case BUS_SPRITE5:  return "Sprite 5 DMA access";
+            case BUS_SPRITE6:  return "Sprite 6 DMA access";
+            case BUS_SPRITE7:  return "Sprite 7 DMA access";
+            case BUS_COPPER:   return "Copper DMA access";
+            case BUS_BLITTER:  return "Blitter DMA access";
+            case BUS_BLOCKED:  return "Blocked bus";
+            case BUS_COUNT:    return "";
+        }
+        return "???";
     }
 };
 

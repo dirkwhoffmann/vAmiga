@@ -188,7 +188,52 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
     }
     static const char *help(long value)
     {
-        return "";
+        switch (value) {
+                
+            case SLOT_REG:   return "Registers";
+            case SLOT_CIAA:  return "CIA A";
+            case SLOT_CIAB:  return "CIA B";
+            case SLOT_BPL:   return "Bitplane DMA";
+            case SLOT_DAS:   return "Other DMA";
+            case SLOT_COP:   return "Copper";
+            case SLOT_BLT:   return "Blitter";
+            case SLOT_SEC:   return "Next Secondary Event";
+                
+            case SLOT_CH0:   return "Audio Channel 0";
+            case SLOT_CH1:   return "Audio Channel 1";
+            case SLOT_CH2:   return "Audio Channel 2";
+            case SLOT_CH3:   return "Audio Channel 3";
+            case SLOT_DSK:   return "Disk Controller";
+            case SLOT_VBL:   return "Vertical Blank";
+            case SLOT_IRQ:   return "Interrupts";
+            case SLOT_IPL:   return "IPL";
+            case SLOT_KBD:   return "Keyboard";
+            case SLOT_TXD:   return "UART Out";
+            case SLOT_RXD:   return "UART In";
+            case SLOT_POT:   return "Potentiometer";
+            case SLOT_TER:   return "Next Tertiary Event";
+                
+            case SLOT_DC0:   return "Disk Change Df0";
+            case SLOT_DC1:   return "Disk Change Df1";
+            case SLOT_DC2:   return "Disk Change Df2";
+            case SLOT_DC3:   return "Disk Change Df3";
+            case SLOT_HD0:   return "Hard Drive Hd0";
+            case SLOT_HD1:   return "Hard Drive Hd1";
+            case SLOT_HD2:   return "Hard Drive Hd2";
+            case SLOT_HD3:   return "Hard Drive Hd3";
+            case SLOT_MSE1:  return "Port 1 Mouse";
+            case SLOT_MSE2:  return "Port 2 Mouse";
+            case SLOT_SNP:   return "Snapshots";
+            case SLOT_RSH:   return "Retro Shell";
+            case SLOT_KEY:   return "Auto Typing";
+            case SLOT_SRV:   return "Server Daemon";
+            case SLOT_SER:   return "Null Modem Cable";
+            case SLOT_BTR:   return "Beam Traps";
+            case SLOT_ALA:   return "Alarms";
+            case SLOT_INS:   return "Inspector";
+            case SLOT_COUNT: return "";
+        }
+        return "???";
     }
 };
 

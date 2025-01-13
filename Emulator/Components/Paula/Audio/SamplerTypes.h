@@ -44,7 +44,13 @@ struct SamplingMethodEnum : util::Reflection<SamplingMethodEnum, SamplingMethod>
     }
     static const char *help(long value)
     {
-        return "";
+        switch (value) {
+                
+            case SMP_NONE:     return "Latest sample";
+            case SMP_NEAREST:  return "Nearest neighbor";
+            case SMP_LINEAR:   return "Linear interpolation";
+        }
+        return "???";
     }
 };
 

@@ -43,7 +43,12 @@ struct VideoFormatEnum : util::Reflection<VideoFormatEnum, VideoFormat>
     }
     static const char *help(long value)
     {
-        return "";
+        switch (value) {
+                
+            case FORMAT_PAL:   return "PAL Video Format";
+            case FORMAT_NTSC:  return "NTSC Video Format";
+        }
+        return "???";
     }
 };
 
@@ -73,7 +78,13 @@ struct ResolutionEnum : util::Reflection<ResolutionEnum, Resolution>
     }
     static const char *help(long value)
     {
-        return "";
+        switch (value) {
+                
+            case LORES:          return "Lores Graphics";
+            case HIRES:          return "Hires Graphics";
+            case SHRES:          return "Super-Hires Graphics";
+        }
+        return "???";
     }
 };
 
@@ -135,7 +146,14 @@ struct ConfigSchemeEnum : util::Reflection<ConfigSchemeEnum, ConfigScheme>
     }
     static const char *help(long value)
     {
-        return "";
+        switch (value) {
+                
+            case CONFIG_A1000_OCS_1MB:  return "Amiga 1000, OCS Chipset, 1MB RAM";
+            case CONFIG_A500_OCS_1MB:   return "Amiga 500, OCS Chipset, 1MB RAM";
+            case CONFIG_A500_ECS_1MB:   return "Amiga 500, ECS Chipset, 1MB RAM";
+            case CONFIG_A500_PLUS_1MB:  return "Amiga 500+, ECS Chipset, 1MB RAM";
+        }
+        return "???";
     }
 };
 

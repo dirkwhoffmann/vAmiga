@@ -43,7 +43,12 @@ struct DeniseRevisionEnum : util::Reflection<DeniseRevisionEnum, DeniseRevision>
     }
     static const char *help(long value)
     {
-        return "";
+        switch (value) {
+                
+            case DENISE_OCS:          return "MOS 8362R8";
+            case DENISE_ECS:          return "MOS 8373 (Super Denise)";
+        }
+        return "???";
     }
 };
 

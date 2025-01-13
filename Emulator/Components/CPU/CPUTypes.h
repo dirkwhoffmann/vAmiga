@@ -48,7 +48,13 @@ struct CPURevisionEnum : util::Reflection<CPURevisionEnum, CPURevision>
     }
     static const char *help(long value)
     {
-        return "";
+        switch (value) {
+                
+            case CPU_68000:     return "Motorola 68000 CPU";
+            case CPU_68010:     return "Motorola 68010 CPU";
+            case CPU_68EC020:   return "Motorola 68EC020 CPU";
+        }
+        return "???";
     }
 };
 
@@ -90,7 +96,19 @@ struct DasmRevisionEnum : util::Reflection<DasmRevisionEnum, DasmRevision>
     }
     static const char *help(long value)
     {
-        return "";
+        switch (value) {
+                
+            case DASM_68000:    return "Motorola 68000 instruction set";
+            case DASM_68010:    return "Motorola 68010 instruction set";
+            case DASM_68EC020:  return "Motorola 68EC020 instruction set";
+            case DASM_68020:    return "Motorola 68020 instruction set";
+            case DASM_68EC030:  return "Motorola 68EC030 instruction set";
+            case DASM_68030:    return "Motorola 68030 instruction set";
+            case DASM_68EC040:  return "Motorola 68EC040 instruction set";
+            case DASM_68LC040:  return "Motorola 68LC040 instruction set";
+            case DASM_68040:    return "Motorola 68040 instruction set";
+        }
+        return "???";
     }
 };
 
@@ -124,7 +142,15 @@ struct DasmSyntaxEnum : util::Reflection<DasmSyntaxEnum, DasmSyntax>
     }
     static const char *help(long value)
     {
-        return "";
+        switch (value) {
+                
+            case DASM_SYNTAX_MOIRA:      return "Default style";
+            case DASM_SYNTAX_MOIRA_MIT:  return "Moira MIT style";
+            case DASM_SYNTAX_GNU:        return "GNU style";
+            case DASM_SYNTAX_GNU_MIT:    return "GNU MIT style";
+            case DASM_SYNTAX_MUSASHI:    return "Musashi style";
+        }
+        return "???";
     }
 };
 
@@ -187,7 +213,13 @@ struct GuardTypeEnum : util::Reflection<GuardTypeEnum, GuardType>
     }
     static const char *help(long value)
     {
-        return "";
+        switch (value) {
+                
+            case GUARD_BREAKPOINT:  return "Breakpoint";
+            case GUARD_WATCHPOINT:  return "Watchpoint";
+            case GUARD_CATCHPOINT:  return "Catchpoint";
+        }
+        return "???";
     }
 };
 

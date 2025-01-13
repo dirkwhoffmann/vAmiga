@@ -84,6 +84,11 @@ const VAmigaConstants VAMIGA = {
     .HDR.S_MAX = HDR_S_MAX,
 };
 
+NSString *EventSlotName(NSInteger slot)
+{
+    return @(EventSlotEnum::help(slot));
+}
+ 
 @implementation ExceptionWrapper
 
 @synthesize errorCode;
@@ -125,50 +130,6 @@ const VAmigaConstants VAMIGA = {
 }
 
 @end
-
-
-//
-// Constants
-//
-
-/*
-@implementation Constants
-
-+ (NSInteger)hpixels { return HPIXELS; }
-+ (NSInteger)vpixels { return VPIXELS; }
-
-+ (NSInteger)hblank_cnt { return HBLANK_CNT; }
-+ (NSInteger)hblank_min { return HBLANK_MIN; }
-+ (NSInteger)hblank_max { return HBLANK_MAX; }
-
-+ (NSInteger)vblank_cnt_pal { return VBLANK_CNT_PAL; }
-+ (NSInteger)vblank_min_pal { return VBLANK_MIN_PAL; }
-+ (NSInteger)vblank_max_pal { return VBLANK_MAX_PAL; }
-
-+ (NSInteger)vblank_cnt_ntsc { return VBLANK_CNT_NTSC; }
-+ (NSInteger)vblank_min_ntsc { return VBLANK_MIN_NTSC; }
-+ (NSInteger)vblank_max_ntsc { return VBLANK_MAX_NTSC; }
-
-+ (NSInteger)vpos_cnt_pal { return VPOS_CNT_PAL; }
-+ (NSInteger)vpos_max_pal { return VPOS_MAX_PAL; }
-
-+ (NSInteger)vpos_cnt_ntsc { return VPOS_CNT_NTSC; }
-+ (NSInteger)vpos_max_ntsc { return VPOS_MAX_NTSC; }
-
-+ (NSInteger)vpos_cnt { return VPOS_CNT; }
-+ (NSInteger)vpos_max { return VPOS_MAX; }
-
-+ (NSInteger)hpos_cnt_pal { return HPOS_CNT_PAL; }
-+ (NSInteger)hpos_max_pal { return HPOS_MAX_PAL; }
-
-+ (NSInteger)hpos_cnt_ntsc { return HPOS_CNT_NTSC; }
-+ (NSInteger)hpos_max_ntsc { return HPOS_MAX_NTSC; }
-
-+ (NSInteger)hpos_max { return HPOS_MAX; }
-+ (NSInteger)hpos_cnt { return HPOS_CNT; }
-
-@end
-*/
 
 //
 // CoreComponent proxy

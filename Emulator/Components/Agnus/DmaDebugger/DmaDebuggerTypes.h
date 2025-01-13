@@ -45,7 +45,13 @@ struct DmaDisplayModeEnum : util::Reflection<DmaDisplayModeEnum, DmaDisplayMode>
     }
     static const char *help(long value)
     {
-        return "";
+        switch (value) {
+                
+            case DMA_DISPLAY_MODE_FG_LAYER:        return "Foreground layer";
+            case DMA_DISPLAY_MODE_BG_LAYER:        return "Background layer";
+            case DMA_DISPLAY_MODE_ODD_EVEN_LAYERS: return "Mixed layers";
+        }
+        return "???";
     }
 };
 
@@ -88,7 +94,19 @@ struct DmaChannelEnum : util::Reflection<DmaChannelEnum, DmaChannel>
     }
     static const char *help(long value)
     {
-        return "";
+        switch (value) {
+                
+            case DMA_CHANNEL_COPPER:    return "Copper DMA";
+            case DMA_CHANNEL_BLITTER:   return "Blitter DMA";
+            case DMA_CHANNEL_DISK:      return "Disk DMA";
+            case DMA_CHANNEL_AUDIO:     return "Audio DMA";
+            case DMA_CHANNEL_SPRITE:    return "Sprite DMA";
+            case DMA_CHANNEL_BITPLANE:  return "Bitplane DMA";
+            case DMA_CHANNEL_CPU:       return "CPU access";
+            case DMA_CHANNEL_REFRESH:   return "Refresh cycle";
+            case DMA_CHANNEL_COUNT:     return "";
+        }
+        return "???";
     }
 };
 

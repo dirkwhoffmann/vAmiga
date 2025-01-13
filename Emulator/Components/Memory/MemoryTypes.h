@@ -72,7 +72,27 @@ struct MemorySourceEnum : util::Reflection<MemorySourceEnum, MemorySource>
     }
     static const char *help(long value)
     {
-        return "";
+        switch (value) {
+                
+            case MEM_NONE:           return "Unmapped";
+            case MEM_CHIP:           return "Chip RAM";
+            case MEM_CHIP_MIRROR:    return "Chip RAM mirror";
+            case MEM_SLOW:           return "Slow RAM";
+            case MEM_SLOW_MIRROR:    return "Slow RAM mirror";
+            case MEM_FAST:           return "Fast RAM";
+            case MEM_CIA:            return "CIA";
+            case MEM_CIA_MIRROR:     return "CIA mirror";
+            case MEM_RTC:            return "Real-time clock";
+            case MEM_CUSTOM:         return "Custom chips";
+            case MEM_CUSTOM_MIRROR:  return "Custom chips mirror";
+            case MEM_AUTOCONF:       return "Auto config";
+            case MEM_ZOR:            return "Zorro boards";
+            case MEM_ROM:            return "Kickstart ROM";
+            case MEM_ROM_MIRROR:     return "Kickstart ROM mirror";
+            case MEM_WOM:            return "Write-only memory";
+            case MEM_EXT:            return "Extension ROM";
+        }
+        return "???";
     }
 };
 

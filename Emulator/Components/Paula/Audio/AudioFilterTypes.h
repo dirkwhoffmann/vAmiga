@@ -52,7 +52,17 @@ struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType>
     }
     static const char *help(long value)
     {
-        return "";
+        switch (value) {
+                
+            case FILTER_NONE:       return "No audio filter";
+            case FILTER_A500:       return "Amiga 500 filter pipeline";
+            case FILTER_A1000:      return "Amiga 1000 filter pipeline";
+            case FILTER_A1200:      return "Amiga 1200 filter pipeline";
+            case FILTER_LOW:        return "Low-pass filter only";
+            case FILTER_LED:        return "LED filter only. Ignore the LED state";
+            case FILTER_HIGH:       return "High-pass filter only";
+        }
+        return "???";
     }
 };
 

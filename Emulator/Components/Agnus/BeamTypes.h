@@ -46,7 +46,16 @@ struct FrameTypeEnum : util::Reflection<FrameTypeEnum, FrameType>
     }
     static const char *help(long value)
     {
-        return "";
+        switch (value) {
+                
+            case FRAME_PAL_LF:      return "PAL long frame";
+            case FRAME_PAL_SF:      return "PAL short frame";
+            case FRAME_NTSC_LF_LL:  return "NTSC long frame, long line";
+            case FRAME_NTSC_LF_SL:  return "NTSC long frame, short line";
+            case FRAME_NTSC_SF_LL:  return "NTSC short frame, long line";
+            case FRAME_NTSC_SF_SL:  return "NTSC short frame, short line";
+        }
+        return "???";
     }
 };
 

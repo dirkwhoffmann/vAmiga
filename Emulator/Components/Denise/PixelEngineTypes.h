@@ -51,7 +51,16 @@ struct PaletteEnum : util::Reflection<PaletteEnum, Palette>
     }
     static const char *help(long value)
     {
-        return "";
+        switch (value) {
+                
+            case PALETTE_COLOR:        return "Color palette";
+            case PALETTE_BLACK_WHITE:  return "Black and white palette";
+            case PALETTE_PAPER_WHITE:  return "Paper white palette";
+            case PALETTE_GREEN:        return "Green palette";
+            case PALETTE_AMBER:        return "Amber palette";
+            case PALETTE_SEPIA:        return "Sepia palette";
+        }
+        return "???";
     }
 };
 

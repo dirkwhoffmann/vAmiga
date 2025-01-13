@@ -44,7 +44,12 @@ struct CIARevisionEnum : util::Reflection<CIARevisionEnum, CIARevision>
     }
     static const char *help(long value)
     {
-        return "";
+        switch (value) {
+                
+            case CIA_MOS_8520_DIP:   return "MOS 8520 DIP package";
+            case CIA_MOS_8520_PLCC:  return "MOS_8520 PLCC package";
+        }
+        return "???";
     }
 };
 
