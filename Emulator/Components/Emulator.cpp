@@ -9,7 +9,6 @@
 
 #include "config.h"
 #include "Emulator.h"
-// #include "Option.h"
 #include "Amiga.h"
 #include "Types.h"
 #include "CmdQueue.h"

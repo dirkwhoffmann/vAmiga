@@ -128,6 +128,39 @@ struct DasmSyntaxEnum : util::Reflection<DasmSyntaxEnum, DasmSyntax>
     }
 };
 
+enum_long(DASM_NUMBERS)
+{
+    DASM_NUMBERS_HEX,
+    DASM_NUMBERS_DEC,
+};
+typedef DASM_NUMBERS DasmNumbers;
+
+struct DasmNumbersEnum : util::Reflection<DasmNumbersEnum, DasmNumbers>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = DASM_NUMBERS_DEC;
+    
+    static const char *prefix() { return "DASM_NUMBERS"; }
+    static const char *_key(long value)
+    {
+        switch (value) {
+                
+            case DASM_NUMBERS_HEX:  return "HEX";
+            case DASM_NUMBERS_DEC:  return "DEC";
+        }
+        return "???";
+    }
+    static const char *help(long value)
+    {
+        switch (value) {
+                
+            case DASM_NUMBERS_HEX:  return "Hexadecimal number format";
+            case DASM_NUMBERS_DEC:  return "Decimal number format";
+        }
+        return "???";
+    }
+};
+
 enum_long(GUARD_TYPE)
 {
     GUARD_BREAKPOINT,
@@ -168,6 +201,7 @@ typedef struct
     CPURevision revision;
     DasmRevision dasmRevision;
     DasmSyntax dasmSyntax;
+    DasmNumbers dasmNumbers;
     isize overclocking;
     u32 regResetVal;
 }

@@ -8818,9 +8818,36 @@
                             </connections>
                         </segmentedControl>
                     </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="91F77C6D-D1CC-44C6-8153-1604263D1002" label="Number Format" paletteLabel="Number Format" image="number" catalog="system" sizingBehavior="auto" id="png-HS-ni6">
+                        <nil key="toolTip"/>
+                        <button key="view" verticalHuggingPriority="750" id="uxZ-Nb-GvD">
+                            <rect key="frame" x="37" y="14" width="17" height="15"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="number" catalog="system" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="wQZ-3u-2lj">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <action selector="hexAction:" target="vj6-a4-cHH" id="cJt-Zn-ejy"/>
+                            </connections>
+                        </button>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="28F4B455-F695-4374-8DEF-89F96DAD80A4" label="Custom View" paletteLabel="Custom View" title="$" sizingBehavior="auto" id="41T-UV-Vrk">
+                        <nil key="toolTip"/>
+                        <button key="view" verticalHuggingPriority="750" id="Y7r-dx-Qmh">
+                            <rect key="frame" x="0.0" y="14" width="82" height="32"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <buttonCell key="cell" type="push" title="$" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="r0I-Mf-vSo">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                        </button>
+                    </toolbarItem>
                 </allowedToolbarItems>
                 <defaultToolbarItems>
                     <toolbarItem reference="RcX-9d-hxi"/>
+                    <toolbarItem reference="png-HS-ni6"/>
+                    <toolbarItem reference="41T-UV-Vrk"/>
                     <toolbarItem reference="qhc-rc-gW0"/>
                     <toolbarItem reference="oDK-Im-k9b"/>
                     <toolbarItem reference="qhc-rc-gW0"/>
@@ -8846,6 +8873,7 @@
         <image name="NSRemoveTemplate" width="18" height="5"/>
         <image name="NSTouchBarSearchTemplate" width="20" height="20"/>
         <image name="minus" catalog="system" width="14" height="4"/>
+        <image name="number" catalog="system" width="15" height="15"/>
         <image name="plus" catalog="system" width="14" height="13"/>
         <image name="runTemplate" width="177" height="177"/>
         <image name="state0Template" width="228" height="204"/>

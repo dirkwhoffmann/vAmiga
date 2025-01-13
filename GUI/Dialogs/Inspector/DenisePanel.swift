@@ -29,12 +29,12 @@ extension Inspector {
 
         if full {
 
-            let elements = [ deniseBPLCON0: Inspector.fmt16,
-                             deniseBPLCON1: Inspector.fmt16,
-                             deniseBPLCON2: Inspector.fmt16,
-                             deniseDIWSTRT: Inspector.fmt16,
-                             deniseDIWSTOP: Inspector.fmt16,
-                              deniseCLXDAT: Inspector.fmt16
+            let elements = [ deniseBPLCON0: fmt16,
+                             deniseBPLCON1: fmt16,
+                             deniseBPLCON2: fmt16,
+                             deniseDIWSTRT: fmt16,
+                             deniseDIWSTOP: fmt16,
+                              deniseCLXDAT: fmt16
             ]
             for (c, f) in elements { assignFormatter(f, c!) }
         }

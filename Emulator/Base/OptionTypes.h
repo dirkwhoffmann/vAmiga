@@ -101,6 +101,7 @@ enum_long(OPT)
     OPT_CPU_REVISION,
     OPT_CPU_DASM_REVISION,
     OPT_CPU_DASM_SYNTAX,
+    OPT_CPU_DASM_NUMBERS,
     OPT_CPU_OVERCLOCKING,
     OPT_CPU_RESET_VAL,
     
@@ -277,6 +278,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_CPU_REVISION:              return "CPU.REVISION";
             case OPT_CPU_DASM_REVISION:         return "CPU.DASM_REVISION";
             case OPT_CPU_DASM_SYNTAX:           return "CPU.DASM_SYNTAX";
+            case OPT_CPU_DASM_NUMBERS:          return "CPU.DASM_NUMBERS";
             case OPT_CPU_OVERCLOCKING:          return "CPU.OVERCLOCKING";
             case OPT_CPU_RESET_VAL:             return "CPU.RESET_VAL";
                 
@@ -433,6 +435,7 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
             case OPT_CPU_REVISION:              return "Chip revision";
             case OPT_CPU_DASM_REVISION:         return "Chip revision (disassembler)";
             case OPT_CPU_DASM_SYNTAX:           return "Disassembler syntax";
+            case OPT_CPU_DASM_NUMBERS:          return "Disassembler number format";
             case OPT_CPU_OVERCLOCKING:          return "Overclocking factor";
             case OPT_CPU_RESET_VAL:             return "Register reset value";
                 

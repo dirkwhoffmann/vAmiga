@@ -19,31 +19,31 @@ extension Inspector {
         cacheCPU()
 
         if full {
-            let elements = [ cpuPC: Inspector.fmt32,
+            let elements = [ cpuPC: fmt32,
 
-                            cpuIRD: Inspector.fmt16,
-                            cpuIRC: Inspector.fmt16,
+                            cpuIRD: fmt16,
+                            cpuIRC: fmt16,
 
-                            cpuISP: Inspector.fmt32,
-                            cpuMSP: Inspector.fmt32,
-                            cpuUSP: Inspector.fmt32,
+                            cpuISP: fmt32,
+                            cpuMSP: fmt32,
+                            cpuUSP: fmt32,
 
-                            cpuVBR: Inspector.fmt32,
+                            cpuVBR: fmt32,
 
-                            cpuSFC: Inspector.fmt4,
-                            cpuDFC: Inspector.fmt4,
-                           cpuCACR: Inspector.fmt32,
-                           cpuCAAR: Inspector.fmt32,
+                            cpuSFC: fmt4,
+                            cpuDFC: fmt4,
+                           cpuCACR: fmt32,
+                           cpuCAAR: fmt32,
 
-                             cpuD0: Inspector.fmt32, cpuD1: Inspector.fmt32,
-                             cpuD2: Inspector.fmt32, cpuD3: Inspector.fmt32,
-                             cpuD4: Inspector.fmt32, cpuD5: Inspector.fmt32,
-                             cpuD6: Inspector.fmt32, cpuD7: Inspector.fmt32,
+                             cpuD0: fmt32, cpuD1: fmt32,
+                             cpuD2: fmt32, cpuD3: fmt32,
+                             cpuD4: fmt32, cpuD5: fmt32,
+                             cpuD6: fmt32, cpuD7: fmt32,
 
-                             cpuA0: Inspector.fmt32, cpuA1: Inspector.fmt32,
-                             cpuA2: Inspector.fmt32, cpuA3: Inspector.fmt32,
-                             cpuA4: Inspector.fmt32, cpuA5: Inspector.fmt32,
-                             cpuA6: Inspector.fmt32, cpuA7: Inspector.fmt32
+                             cpuA0: fmt32, cpuA1: fmt32,
+                             cpuA2: fmt32, cpuA3: fmt32,
+                             cpuA4: fmt32, cpuA5: fmt32,
+                             cpuA6: fmt32, cpuA7: fmt32
             ]
 
             for (c, f) in elements { assignFormatter(f, c!) }

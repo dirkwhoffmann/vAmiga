@@ -64,15 +64,15 @@ class MemTableView: NSTableView {
 
         if full {
             let columnFormatters = [
-                "addr": Inspector.fmt24,
-                "0": Inspector.fmt16,
-                "2": Inspector.fmt16,
-                "4": Inspector.fmt16,
-                "6": Inspector.fmt16,
-                "8": Inspector.fmt16,
-                "A": Inspector.fmt16,
-                "C": Inspector.fmt16,
-                "E": Inspector.fmt16
+                "addr": inspector.fmt24,
+                "0": inspector.fmt16,
+                "2": inspector.fmt16,
+                "4": inspector.fmt16,
+                "6": inspector.fmt16,
+                "8": inspector.fmt16,
+                "A": inspector.fmt16,
+                "C": inspector.fmt16,
+                "E": inspector.fmt16
             ]
 
             for (column, formatter) in columnFormatters {

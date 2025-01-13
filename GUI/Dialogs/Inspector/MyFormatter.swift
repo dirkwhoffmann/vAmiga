@@ -9,10 +9,10 @@
 
 class MyFormatter: Formatter {
     
-    var radix: Int
-    var minValue: Int
-    var maxValue: Int
-    var format: String
+    var radix = 0 { didSet { updateFormatString() } }
+    var minValue = 0
+    var maxValue = 0
+    var format = ""
     
     func toBinary(value: Int, digits: Int) -> String {
         
@@ -28,12 +28,33 @@ class MyFormatter: Formatter {
     
     init(radix: Int, min: Int, max: Int) {
 
+        super.init()
+
         self.radix = radix
         self.minValue = min
         self.maxValue = max
         
+        updateFormatString()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func updateFormatString() {
+    
         if radix == 10 {
 
+            format =
+                (maxValue < 0x10) ? "%02u" :
+                (maxValue < 0x100) ? "%03u" :
+                (maxValue < 0x1000) ? "%04u" :
+                (maxValue < 0x10000) ? "%05u" :
+                (maxValue < 0x100000) ? "%07u" :
+                (maxValue < 0x1000000) ? "%08u" :
+                (maxValue < 0x10000000) ? "%09u" :
+                (maxValue < 0x100000000) ? "%010u" : "???"
+            /*
             format =
                 (maxValue < 10) ? "%01d" :
                 (maxValue < 100) ? "%02d" :
@@ -43,7 +64,7 @@ class MyFormatter: Formatter {
                 (maxValue < 1000000) ? "%06d" :
                 (maxValue < 10000000) ? "%07d" :
                 (maxValue < 100000000) ? "%08d" : "???"
-
+             */
         } else {
             
             format =
@@ -56,12 +77,6 @@ class MyFormatter: Formatter {
                 (maxValue < 0x10000000) ? "%07X" :
                 (maxValue < 0x100000000) ? "%08X" : "???"
         }
-  
-        super.init()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     override func isPartialStringValid(_ partialString: String, newEditingString newString: AutoreleasingUnsafeMutablePointer<NSString?>?, errorDescription error: AutoreleasingUnsafeMutablePointer<NSString?>?) -> Bool {

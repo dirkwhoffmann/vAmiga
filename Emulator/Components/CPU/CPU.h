@@ -35,6 +35,7 @@ class CPU : public moira::Moira, public Inspectable<CPUInfo>
         OPT_CPU_REVISION,
         OPT_CPU_DASM_REVISION,
         OPT_CPU_DASM_SYNTAX,
+        OPT_CPU_DASM_NUMBERS,
         OPT_CPU_OVERCLOCKING,
         OPT_CPU_RESET_VAL
     };

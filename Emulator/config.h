@@ -14,16 +14,16 @@
 //
 
 // Version number
-#define VER_MAJOR 3
-#define VER_MINOR 1
-#define VER_SUBMINOR 1
-#define VER_BETA 0
+static constexpr int VER_MAJOR      = 3;
+static constexpr int VER_MINOR      = 1;
+static constexpr int VER_SUBMINOR   = 1;
+static constexpr int VER_BETA       = 0;
 
 // Snapshot version number
-#define SNP_MAJOR 3
-#define SNP_MINOR 1
-#define SNP_SUBMINOR 0
-#define SNP_BETA 0
+static constexpr int SNP_MAJOR      = 3;
+static constexpr int SNP_MINOR      = 1;
+static constexpr int SNP_SUBMINOR   = 0;
+static constexpr int SNP_BETA       = 0;
 
 // Uncomment this setting in a release build
 #define RELEASEBUILD
@@ -66,8 +66,8 @@
 // Execution settings
 //
 
-static const int DIAG_BOARD      = 0; // Plug in the diagnose board
-static const int ALLOW_ALL_ROMS  = 0; // Disable the magic bytes check
+static constexpr int DIAG_BOARD     = 0; // Plug in the diagnose board
+static constexpr int ALLOW_ALL_ROMS = 0; // Disable the magic bytes check
 
 
 //
@@ -78,25 +78,25 @@ static const int ALLOW_ALL_ROMS  = 0; // Disable the magic bytes check
 #ifndef NDEBUG
 #define NDEBUG
 #endif
-static const bool releaseBuild = 1;
-static const bool debugBuild = 0;
+static constexpr bool releaseBuild = 1;
+static constexpr bool debugBuild = 0;
 typedef const int debugflag;
 #else
-static const bool releaseBuild = 0;
-static const bool debugBuild = 1;
+static constexpr bool releaseBuild = 0;
+static constexpr bool debugBuild = 1;
 typedef int debugflag;
 #endif
 
 #if VER_BETA == 0
-static const bool betaRelease = 0;
+static constexpr bool betaRelease = 0;
 #else
-static const bool betaRelease = 1;
+static constexpr bool betaRelease = 1;
 #endif
 
 #ifdef __EMSCRIPTEN__
-static const bool emscripten = 1;
+static constexpr bool emscripten = 1;
 #else
-static const bool emscripten = 0;
+static constexpr bool emscripten = 0;
 #endif
 
 // General

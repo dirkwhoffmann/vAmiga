@@ -94,6 +94,7 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_CPU_REVISION:              return enumParser.template operator()<CPURevisionEnum>();
         case OPT_CPU_DASM_REVISION:         return enumParser.template operator()<DasmRevisionEnum>();
         case OPT_CPU_DASM_SYNTAX:           return enumParser.template operator()<DasmSyntaxEnum>();
+        case OPT_CPU_DASM_NUMBERS:          return enumParser.template operator()<DasmNumbersEnum>();
         case OPT_CPU_OVERCLOCKING:          return numParser("x");
         case OPT_CPU_RESET_VAL:             return numParser();
 

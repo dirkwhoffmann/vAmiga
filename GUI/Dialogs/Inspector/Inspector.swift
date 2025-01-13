@@ -9,14 +9,14 @@
 
 class Inspector: DialogController {
 
-    static let fmt4  = MyFormatter(radix: 16, min: 0, max: 0xF)
-    static let fmt8  = MyFormatter(radix: 16, min: 0, max: 0xFF)
-    static let fmt16 = MyFormatter(radix: 16, min: 0, max: 0xFFFF)
-    static let fmt24 = MyFormatter(radix: 16, min: 0, max: 0xFFFFFF)
-    static let fmt32 = MyFormatter(radix: 16, min: 0, max: 0xFFFFFFFF)
-    static let fmt8b = MyFormatter(radix: 2, min: 0, max: 0xFF)
-    static let fmt16b = MyFormatter(radix: 2, min: 0, max: 0xFFFF)
-
+    let fmt4  = MyFormatter(radix: 16, min: 0, max: 0xF)
+    let fmt8  = MyFormatter(radix: 16, min: 0, max: 0xFF)
+    let fmt16 = MyFormatter(radix: 16, min: 0, max: 0xFFFF)
+    let fmt24 = MyFormatter(radix: 16, min: 0, max: 0xFFFFFF)
+    let fmt32 = MyFormatter(radix: 16, min: 0, max: 0xFFFFFFFF)
+    let fmt8b = MyFormatter(radix: 2, min: 0, max: 0xFF)
+    let fmt16b = MyFormatter(radix: 2, min: 0, max: 0xFFFF)
+    
     // Commons
     @IBOutlet weak var panel: NSTabView!
 
@@ -148,7 +148,18 @@ class Inspector: DialogController {
     var displayedBank = 0
     var displayedBankType = MemorySource.CHIP
     var searchAddress = -1
-
+    
+    var hex = true {
+        didSet {
+            fmt4.radix = hex ? 16 : 10
+            fmt8.radix = hex ? 16 : 10
+            fmt16.radix = hex ? 16 : 10
+            fmt24.radix = hex ? 16 : 10
+            fmt32.radix = hex ? 16 : 10
+            fullRefresh()
+        }
+    }
+    
     // CIA panel
     @IBOutlet weak var ciaSelector: NSSegmentedControl!
     

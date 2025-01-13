@@ -79,6 +79,7 @@ Defaults::Defaults()
     setFallback(OPT_CPU_REVISION,               CPU_68000);
     setFallback(OPT_CPU_DASM_REVISION,          CPU_68000);
     setFallback(OPT_CPU_DASM_SYNTAX,            DASM_SYNTAX_MOIRA);
+    setFallback(OPT_CPU_DASM_NUMBERS,           DASM_NUMBERS_HEX);
     setFallback(OPT_CPU_OVERCLOCKING,           0);
     setFallback(OPT_CPU_RESET_VAL,              0);
 

@@ -291,6 +291,7 @@ CPU::getOption(Option option) const
         case OPT_CPU_REVISION:      return (long)config.revision;
         case OPT_CPU_DASM_REVISION: return (long)config.dasmRevision;
         case OPT_CPU_DASM_SYNTAX:   return (long)config.dasmSyntax;
+        case OPT_CPU_DASM_NUMBERS:  return (long)config.dasmNumbers;
         case OPT_CPU_OVERCLOCKING:  return (long)config.overclocking;
         case OPT_CPU_RESET_VAL:     return (long)config.regResetVal;
 
@@ -322,6 +323,13 @@ CPU::checkOption(Option opt, i64 value)
 
             if (!DasmSyntaxEnum::isValid(value)) {
                 throw Error(VAERROR_OPT_INV_ARG, DasmSyntaxEnum::keyList());
+            }
+            return;
+
+        case OPT_CPU_DASM_NUMBERS:
+
+            if (!DasmNumbersEnum::isValid(value)) {
+                throw Error(VAERROR_OPT_INV_ARG, DasmNumbersEnum::keyList());
             }
             return;
 
@@ -360,6 +368,30 @@ CPU::setOption(Option option, i64 value)
 
             config.dasmSyntax = DasmSyntax(value);
             setDasmSyntax(syntax(config.dasmSyntax));
+            return;
+
+        case OPT_CPU_DASM_NUMBERS:
+
+            config.dasmNumbers = DasmNumbers(value);
+            
+            if (config.dasmNumbers == DASM_NUMBERS_HEX) {
+                
+                setDasmNumberFormat(moira::DasmNumberFormat {
+                    .prefix = "$",
+                    .radix = 16,
+                    .upperCase = false,
+                    .plainZero = false
+                });
+
+            } else {
+                
+                setDasmNumberFormat(moira::DasmNumberFormat {
+                    .prefix = "",
+                    .radix = 10,
+                    .upperCase = false,
+                    .plainZero = true
+                });
+            }
             return;
 
         case OPT_CPU_OVERCLOCKING:

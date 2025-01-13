@@ -23,11 +23,11 @@ extension Inspector {
 
         if full {
             
-            let elements = [ cop1LC: Inspector.fmt24,
-                             cop2LC: Inspector.fmt24,
-                            cop1INS: Inspector.fmt16,
-                            cop2INS: Inspector.fmt16,
-                              copPC: Inspector.fmt24
+            let elements = [ cop1LC: fmt24,
+                             cop2LC: fmt24,
+                            cop1INS: fmt16,
+                            cop2INS: fmt16,
+                              copPC: fmt24
             ]
             for (c, f) in elements { assignFormatter(f, c!) }
         }
