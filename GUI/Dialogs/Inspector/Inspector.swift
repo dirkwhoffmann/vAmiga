@@ -149,6 +149,16 @@ class Inspector: DialogController {
     var displayedBankType = MemorySource.CHIP
     var searchAddress = -1
     
+    var padding = true {
+        didSet {
+            fmt4.padding = padding
+            fmt8.padding = padding
+            fmt16.padding = padding
+            fmt24.padding = padding
+            fmt32.padding = padding
+            fullRefresh()
+        }
+    }
     var hex = true {
         didSet {
             fmt4.radix = hex ? 16 : 10

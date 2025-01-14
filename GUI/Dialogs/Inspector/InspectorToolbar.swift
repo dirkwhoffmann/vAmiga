@@ -12,8 +12,9 @@ class InspectorToolbar: NSToolbar {
     @IBOutlet weak var inspector: Inspector!
     @IBOutlet weak var timeStamp: NSButton!
     @IBOutlet weak var selector: NSPopUpButton!
-    @IBOutlet weak var controlsSegCtrl: NSSegmentedControl!
-    
+    @IBOutlet weak var formatSegCtrl: NSSegmentedControl!
+    @IBOutlet weak var execSegCtrl: NSSegmentedControl!
+
     var emu: EmulatorProxy! { return inspector.parent.emu }
     
     override func validateVisibleItems() {
@@ -29,9 +30,9 @@ class InspectorToolbar: NSToolbar {
             let label = running ? "Pause" : "Run"
             let image = running ? "pauseTemplate" : "runTemplate"
 
-            controlsSegCtrl.setToolTip(label, forSegment: 0)
-            controlsSegCtrl.setImage(NSImage(named: image), forSegment: 0)
-            for i in 1...4 { controlsSegCtrl.setEnabled(!running, forSegment: i) }
+            execSegCtrl.setToolTip(label, forSegment: 0)
+            execSegCtrl.setImage(NSImage(named: image), forSegment: 0)
+            for i in 1...4 { execSegCtrl.setEnabled(!running, forSegment: i) }
             timeStamp.font = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
         }
         
@@ -47,6 +48,23 @@ class InspectorToolbar: NSToolbar {
         inspector.selectPanel(sender.selectedTag())
     }
     
+    @IBAction func formatAction(_ sender: NSSegmentedControl) {
+        
+        switch sender.selectedSegment {
+            
+        case 0:
+            
+            inspector.hex = formatSegCtrl.isSelected(forSegment: 0)
+
+        case 1:
+
+            inspector.padding = formatSegCtrl.isSelected(forSegment: 1)
+
+        default:
+            fatalError()
+        }
+    }
+
     @IBAction func execAction(_ sender: NSSegmentedControl) {
         
         switch sender.selectedSegment {

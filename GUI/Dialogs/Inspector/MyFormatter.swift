@@ -10,6 +10,7 @@
 class MyFormatter: Formatter {
     
     var radix = 0 { didSet { updateFormatString() } }
+    var padding = true { didSet { updateFormatString() } }
     var minValue = 0
     var maxValue = 0
     var format = ""
@@ -43,39 +44,57 @@ class MyFormatter: Formatter {
     
     func updateFormatString() {
     
-        if radix == 10 {
-
-            format =
-                (maxValue < 0x10) ? "%2u" :
-                (maxValue < 0x100) ? "%3u" :
-                (maxValue < 0x1000) ? "%4u" :
-                (maxValue < 0x10000) ? "%5u" :
-                (maxValue < 0x100000) ? "%7u" :
-                (maxValue < 0x1000000) ? "%8u" :
-                (maxValue < 0x10000000) ? "%9u" :
-                (maxValue < 0x100000000) ? "%10u" : "???"
-            /*
-            format =
-                (maxValue < 10) ? "%01d" :
-                (maxValue < 100) ? "%02d" :
-                (maxValue < 1000) ? "%03d" :
-                (maxValue < 10000) ? "%04d" :
-                (maxValue < 100000) ? "%05d" :
-                (maxValue < 1000000) ? "%06d" :
-                (maxValue < 10000000) ? "%07d" :
-                (maxValue < 100000000) ? "%08d" : "???"
-             */
-        } else {
+        if radix == 10 && padding == false {
             
             format =
-                (maxValue < 0x10) ? "%01X" :
-                (maxValue < 0x100) ? "%02X" :
-                (maxValue < 0x1000) ? "%03X" :
-                (maxValue < 0x10000) ? "%04X" :
-                (maxValue < 0x100000) ? "%05X" :
-                (maxValue < 0x1000000) ? "%06X" :
-                (maxValue < 0x10000000) ? "%07X" :
-                (maxValue < 0x100000000) ? "%08X" : "???"
+            (maxValue < 0x10) ? "%2u" :
+            (maxValue < 0x100) ? "%3u" :
+            (maxValue < 0x1000) ? "%4u" :
+            (maxValue < 0x10000) ? "%5u" :
+            (maxValue < 0x100000) ? "%7u" :
+            (maxValue < 0x1000000) ? "%8u" :
+            (maxValue < 0x10000000) ? "%9u" :
+            (maxValue < 0x100000000) ? "%10u" : "???"
+            
+        } else if radix == 10 && padding == true {
+            
+            format =
+            (maxValue < 0x10) ? "%02u" :
+            (maxValue < 0x100) ? "%03u" :
+            (maxValue < 0x1000) ? "%04u" :
+            (maxValue < 0x10000) ? "%05u" :
+            (maxValue < 0x100000) ? "%07u" :
+            (maxValue < 0x1000000) ? "%08u" :
+            (maxValue < 0x10000000) ? "%09u" :
+            (maxValue < 0x100000000) ? "%010u" : "???"
+
+        } else if radix == 16 && padding == false {
+            
+            format =
+            (maxValue < 0x10) ? "%1X" :
+            (maxValue < 0x100) ? "%2X" :
+            (maxValue < 0x1000) ? "%3X" :
+            (maxValue < 0x10000) ? "%4X" :
+            (maxValue < 0x100000) ? "%5X" :
+            (maxValue < 0x1000000) ? "%6X" :
+            (maxValue < 0x10000000) ? "%7X" :
+            (maxValue < 0x100000000) ? "%8X" : "???"
+
+        } else if radix == 16 && padding == true {
+            
+            format =
+            (maxValue < 0x10) ? "%01X" :
+            (maxValue < 0x100) ? "%02X" :
+            (maxValue < 0x1000) ? "%03X" :
+            (maxValue < 0x10000) ? "%04X" :
+            (maxValue < 0x100000) ? "%05X" :
+            (maxValue < 0x1000000) ? "%06X" :
+            (maxValue < 0x10000000) ? "%07X" :
+            (maxValue < 0x100000000) ? "%08X" : "???"
+            
+        } else {
+            
+            format = "Invalid"
         }
     }
     
