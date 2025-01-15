@@ -7,12 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-extension NSPasteboard.PasteboardType {
-
-    static let compatibleFileURL =
-    NSPasteboard.PasteboardType(kUTTypeFileURL as String)
-}
-
 public extension MetalView {
 
     func setupDragAndDrop() {
@@ -22,7 +16,7 @@ public extension MetalView {
 
     func acceptedTypes() -> [NSPasteboard.PasteboardType] {
 
-        return [.compatibleFileURL, .string, .fileContents]
+        return [.fileURL, .string, .fileContents]
     }
 
     override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
@@ -44,7 +38,8 @@ public extension MetalView {
         case .fileContents:
             return NSDragOperation.copy
             
-        case .compatibleFileURL:
+        case .fileURL:
+            
             if let url = NSURL.init(from: pasteBoard) as URL? {
             
                 // Unpack the file if it is compressed
@@ -92,7 +87,7 @@ public extension MetalView {
             case .string:
                 return performStringDrag(sender)
                 
-            case .compatibleFileURL:
+            case .fileURL:
                 return performUrlDrag(sender)
                 
             default:
