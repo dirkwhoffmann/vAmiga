@@ -246,10 +246,6 @@ class Inspector: DialogController {
     @IBOutlet weak var ciaSDR: NSTextField!
     @IBOutlet weak var ciaSSR: NSTextField!
     
-    @IBOutlet weak var ciaIdleCycles: NSTextField!
-    @IBOutlet weak var ciaIdleLevelText: NSTextField!
-    @IBOutlet weak var ciaIdleLevel: NSLevelIndicator!
-    
     // Agnus panel
     @IBOutlet weak var dmaVPOS: NSTextField!
     @IBOutlet weak var dmaHPOS: NSTextField!

@@ -132,11 +132,6 @@ extension Inspector {
 
         ciaSDR.intValue = Int32(ciaInfo.sdr)
         ciaSSR.intValue = Int32(ciaInfo.ssr)
-
-        let idlePercentage = Int(ciaStats.idlePercentage * 100)
-        ciaIdleCycles.stringValue = "\(ciaStats.idleSince) cycles"
-        ciaIdleLevel.integerValue = idlePercentage
-        ciaIdleLevelText.stringValue = "\(idlePercentage) %"
     }
 
     @IBAction func selectCIAAction(_ sender: Any!) {
