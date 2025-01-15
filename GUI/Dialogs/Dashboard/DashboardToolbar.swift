@@ -17,6 +17,9 @@ class DashboardToolbar: NSToolbar {
         
         // Disable shrinked popup buttons to prevent macOS from crashing
         selectorPopup.isEnabled = selectorPopupItem.isVisible
+        
+        // Update controls
+        selectorPopup.selectItem(withTag: dashboard.type?.rawValue ?? 0)
     }
     
     func updateToolbar(full: Bool) {
@@ -24,6 +27,8 @@ class DashboardToolbar: NSToolbar {
         if full {
             
         }
+        
+        
     }
     
     //

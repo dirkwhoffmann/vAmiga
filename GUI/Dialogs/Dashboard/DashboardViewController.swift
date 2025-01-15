@@ -63,7 +63,11 @@ class DashboardViewController: NSViewController {
     var emu: EmulatorProxy?
     var myController: MyController?
     
-    var type: PanelType? { didSet { switchToPanel(type: type) } }
+    var type: PanelType? {
+        didSet {
+            switchToPanel(type: type)
+        }
+    }
     
     var multiPanelController: NSViewController!
     var singlePanelController: NSViewController!
