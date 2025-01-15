@@ -11,11 +11,49 @@ class Inspector: DialogController {
 
     let fmt4  = MyFormatter(radix: 16, min: 0, max: 0xF)
     let fmt8  = MyFormatter(radix: 16, min: 0, max: 0xFF)
+    let fmt9  = MyFormatter(radix: 16, min: 0, max: 0x1FF)
     let fmt16 = MyFormatter(radix: 16, min: 0, max: 0xFFFF)
     let fmt24 = MyFormatter(radix: 16, min: 0, max: 0xFFFFFF)
     let fmt32 = MyFormatter(radix: 16, min: 0, max: 0xFFFFFFFF)
     let fmt8b = MyFormatter(radix: 2, min: 0, max: 0xFF)
     let fmt16b = MyFormatter(radix: 2, min: 0, max: 0xFFFF)
+    
+    var format = 0 {
+        didSet {
+            switch format {
+            case 0: hex = true; padding = false
+            case 1: hex = true; padding = true
+            case 2: hex = false; padding = false
+            case 3: hex = false; padding = true
+            default:
+                fatalError()
+            }
+        }
+    }
+    var hex = true {
+        didSet {
+            fmt4.radix = hex ? 16 : 10
+            fmt8.radix = hex ? 16 : 10
+            fmt9.radix = hex ? 16 : 10
+            fmt16.radix = hex ? 16 : 10
+            fmt24.radix = hex ? 16 : 10
+            fmt32.radix = hex ? 16 : 10
+            emu.set(.CPU_DASM_NUMBERS,
+                    value: (hex ? DasmNumbers.HEX : DasmNumbers.DEC).rawValue)
+            fullRefresh()
+        }
+    }
+    var padding = false {
+        didSet {
+            fmt4.padding = padding
+            fmt9.padding = padding
+            fmt8.padding = padding
+            fmt16.padding = padding
+            fmt24.padding = padding
+            fmt32.padding = padding
+            fullRefresh()
+        }
+    }
     
     // Commons
     @IBOutlet weak var panel: NSTabView!
@@ -97,7 +135,6 @@ class Inspector: DialogController {
     @IBOutlet weak var busProbe2: NSComboButton!
     @IBOutlet weak var busProbe3: NSComboButton!
 
-    @IBOutlet weak var busHex: NSButton!
     @IBOutlet weak var busSymbolic: NSButton!
 
     @IBOutlet weak var busEnable: NSButton!
@@ -148,27 +185,6 @@ class Inspector: DialogController {
     var displayedBank = 0
     var displayedBankType = MemorySource.CHIP
     var searchAddress = -1
-    
-    var padding = true {
-        didSet {
-            fmt4.padding = padding
-            fmt8.padding = padding
-            fmt16.padding = padding
-            fmt24.padding = padding
-            fmt32.padding = padding
-            fullRefresh()
-        }
-    }
-    var hex = true {
-        didSet {
-            fmt4.radix = hex ? 16 : 10
-            fmt8.radix = hex ? 16 : 10
-            fmt16.radix = hex ? 16 : 10
-            fmt24.radix = hex ? 16 : 10
-            fmt32.radix = hex ? 16 : 10
-            fullRefresh()
-        }
-    }
     
     // CIA panel
     @IBOutlet weak var ciaSelector: NSSegmentedControl!
@@ -696,6 +712,7 @@ class Inspector: DialogController {
         
         control.abortEditing()
         control.formatter = formatter
+        control.alignment = .right
         control.needsDisplay = true
     }
     
@@ -717,6 +734,8 @@ class Inspector: DialogController {
 
         let info = emu.amiga.info
         
+        refreshAgnus(count: count, full: full)
+        
         if let id = panel.selectedTabViewItem?.label {
 
             switch id {
@@ -725,7 +744,7 @@ class Inspector: DialogController {
             case "Bus": refreshBus(count: count, full: full)
             case "CIA": refreshCIA(count: count, full: full)
             case "Memory": refreshMemory(count: count, full: full)
-            case "Agnus": refreshAgnus(count: count, full: full)
+            case "Agnus": break
             case "Copper": refreshCopper(count: count, full: full)
             case "Blitter": refreshBlitter(count: count, full: full)
             case "Denise": refreshDenise(count: count, full: full)

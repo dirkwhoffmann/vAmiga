@@ -10,7 +10,7 @@
 class MyFormatter: Formatter {
     
     var radix = 0 { didSet { updateFormatString() } }
-    var padding = true { didSet { updateFormatString() } }
+    var padding = false { didSet { updateFormatString() } }
     var minValue = 0
     var maxValue = 0
     var format = ""

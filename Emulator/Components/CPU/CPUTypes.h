@@ -157,7 +157,7 @@ struct DasmSyntaxEnum : util::Reflection<DasmSyntaxEnum, DasmSyntax>
 enum_long(DASM_NUMBERS)
 {
     DASM_NUMBERS_HEX,
-    DASM_NUMBERS_DEC,
+    DASM_NUMBERS_DEC
 };
 typedef DASM_NUMBERS DasmNumbers;
 
@@ -171,8 +171,8 @@ struct DasmNumbersEnum : util::Reflection<DasmNumbersEnum, DasmNumbers>
     {
         switch (value) {
                 
-            case DASM_NUMBERS_HEX:  return "HEX";
-            case DASM_NUMBERS_DEC:  return "DEC";
+            case DASM_NUMBERS_HEX:      return "HEX";
+            case DASM_NUMBERS_DEC:      return "DEC";
         }
         return "???";
     }
@@ -180,8 +180,8 @@ struct DasmNumbersEnum : util::Reflection<DasmNumbersEnum, DasmNumbers>
     {
         switch (value) {
                 
-            case DASM_NUMBERS_HEX:  return "Hexadecimal number format";
-            case DASM_NUMBERS_DEC:  return "Decimal number format";
+            case DASM_NUMBERS_HEX:      return "Hexadecimal numbers";
+            case DASM_NUMBERS_DEC:      return "Decimal numbers";
         }
         return "???";
     }

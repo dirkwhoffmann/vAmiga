@@ -34,7 +34,10 @@ extension Inspector {
                              deniseBPLCON2: fmt16,
                              deniseDIWSTRT: fmt16,
                              deniseDIWSTOP: fmt16,
-                              deniseCLXDAT: fmt16
+                              deniseCLXDAT: fmt16,
+                                 sprHStart: fmt16,
+                                 sprVStart: fmt16,
+                                  sprVStop: fmt16
             ]
             for (c, f) in elements { assignFormatter(f, c!) }
         }

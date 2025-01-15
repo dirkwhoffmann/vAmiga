@@ -178,12 +178,12 @@ class LogicView: NSView {
     
     func drawLabels() {
         
-        formatter.hex = inspector.busHex.state == .on
+        formatter.hex = inspector.hex
         formatter.symbolic = inspector.busSymbolic.state == .on
         
         for i in 0..<segments {
             
-            drawText(text: "\(i)",
+            drawText(text: inspector.fmt8.string(for: i) ?? "?",
                      in: NSRect(x: CGFloat(i) * dx, y: bounds.maxY - 0.5 * headerHeight + 2, width: dx, height: 0.5 * headerHeight - 2),
                      font: system,
                      color: .labelColor)

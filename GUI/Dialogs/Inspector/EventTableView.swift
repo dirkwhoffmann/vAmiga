@@ -72,13 +72,13 @@ extension EventTableView: NSTableViewDataSource {
             }
         case "vpos":
             if willTrigger {
-                return info.vpos
+                return String(format: inspector.hex ? "%x" : "%d", info.vpos)
             } else {
                 return ""
             }
         case "hpos":
             if willTrigger {
-                return info.hpos
+                return String(format: inspector.hex ? "%x" : "%d", info.hpos)
             } else {
                 return ""
             }

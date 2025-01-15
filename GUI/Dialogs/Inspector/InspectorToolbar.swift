@@ -23,6 +23,10 @@ class InspectorToolbar: NSToolbar {
     
     func updateToolbar(info: AmigaInfo, full: Bool) {
         
+        let frame = inspector.agnusInfo.frame
+        let vpos = inspector.agnusInfo.vpos
+        let hpos = inspector.agnusInfo.hpos
+        
         if full {
             
             let running = emu.running
@@ -36,7 +40,13 @@ class InspectorToolbar: NSToolbar {
             timeStamp.font = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
         }
         
-        timeStamp.title = String(format: "%d:%03d:%03d", info.frame, info.vpos, info.hpos)
+        var format = ""
+        if inspector.hex {
+            format = inspector.padding ? "%X:%03X:%03X" : "%X:%X:%X"
+        } else {
+            format = inspector.padding ? "%d:%03d:%03d" : "%d:%d:%d"
+        }
+        timeStamp.title = String(format: format, frame, vpos, hpos)
     }
     
     //
@@ -47,22 +57,10 @@ class InspectorToolbar: NSToolbar {
 
         inspector.selectPanel(sender.selectedTag())
     }
-    
-    @IBAction func formatAction(_ sender: NSSegmentedControl) {
-        
-        switch sender.selectedSegment {
-            
-        case 0:
-            
-            inspector.hex = formatSegCtrl.isSelected(forSegment: 0)
+ 
+    @IBAction func formatAction(_ sender: NSPopUpButton) {
 
-        case 1:
-
-            inspector.padding = formatSegCtrl.isSelected(forSegment: 1)
-
-        default:
-            fatalError()
-        }
+        inspector.format = sender.selectedTag()
     }
 
     @IBAction func execAction(_ sender: NSSegmentedControl) {

@@ -374,26 +374,30 @@ CPU::setOption(Option option, i64 value)
 
             config.dasmNumbers = DasmNumbers(value);
             
-            if (config.dasmNumbers == DASM_NUMBERS_HEX) {
-                
-                setDasmNumberFormat(moira::DasmNumberFormat {
-                    .prefix = "$",
-                    .radix = 16,
-                    .upperCase = false,
-                    .plainZero = false
-                });
+            switch (config.dasmNumbers) {
+                    
+                case DASM_NUMBERS_HEX:
+                    
+                    setDasmNumberFormat(moira::DasmNumberFormat {
+                        .prefix = "$",
+                        .radix = 16,
+                        .upperCase = false,
+                        .plainZero = false
+                    });
+                    return;
+                    
+                case DASM_NUMBERS_DEC:
+                    
+                    setDasmNumberFormat(moira::DasmNumberFormat {
+                        .prefix = "",
+                        .radix = 10,
+                        .upperCase = false,
+                        .plainZero = false
+                    });
+                    return;
 
-            } else {
-                
-                setDasmNumberFormat(moira::DasmNumberFormat {
-                    .prefix = "",
-                    .radix = 10,
-                    .upperCase = false,
-                    .plainZero = true
-                });
             }
-            return;
-
+            
         case OPT_CPU_OVERCLOCKING:
 
             config.overclocking = isize(value);
