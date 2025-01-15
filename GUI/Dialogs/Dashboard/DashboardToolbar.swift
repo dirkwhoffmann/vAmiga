@@ -10,15 +10,13 @@
 class DashboardToolbar: NSToolbar {
     
     @IBOutlet weak var dashboard: DashboardViewController!
-    @IBOutlet weak var selector: NSPopUpButton!
-    @IBOutlet weak var selectorItem: NSToolbarItem!
-    
+    @IBOutlet weak var selectorPopup: NSPopUpButton!
+    @IBOutlet weak var selectorPopupItem: NSToolbarItem!
+
     override func validateVisibleItems() {
         
-        // When the popup button is in shrinked state, macOS crashes when
-        // it is selected. To prevent this from happening, we disable the
-        // popup button when it is no longer visible.
-        selector.isEnabled = selectorItem.isVisible
+        // Disable shrinked popup buttons to prevent macOS from crashing
+        selectorPopup.isEnabled = selectorPopupItem.isVisible
     }
     
     func updateToolbar(full: Bool) {
@@ -42,8 +40,10 @@ class DashboardToolbar: NSToolbar {
         dashboard.myController?.addDashboard(type: next)
     }
 
-    @IBAction func panelAction(_ sender: NSPopUpButton) {
+    @IBAction func panelAction(_ sender: Any) {
         
-        dashboard.type = PanelType(rawValue: sender.selectedTag())!
+        if let popup = sender as? NSPopUpButton {
+            dashboard.type = PanelType(rawValue: popup.selectedTag())!
+        }
     }
 }

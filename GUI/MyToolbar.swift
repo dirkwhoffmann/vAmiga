@@ -14,6 +14,8 @@ class MyToolbar: NSToolbar {
     @IBOutlet weak var parent: MyController!
     @IBOutlet weak var controlPort1: NSPopUpButton!
     @IBOutlet weak var controlPort2: NSPopUpButton!
+    @IBOutlet weak var controlPort1Item: NSToolbarItem!
+    @IBOutlet weak var controlPort2Item: NSToolbarItem!
     @IBOutlet weak var keyboardButton: NSToolbarItem!
     @IBOutlet weak var snapshotSegCtrl: NSSegmentedControl!
     @IBOutlet weak var controlsSegCtrl: NSSegmentedControl!
@@ -29,7 +31,7 @@ class MyToolbar: NSToolbar {
         parent.gamePadManager.refresh(popup: controlPort1)
         parent.gamePadManager.refresh(popup: controlPort2)
         controlPort1.selectItem(withTag: parent.config.gameDevice1)
-        controlPort2.selectItem(withTag: parent.config.gameDevice2)
+        controlPort2.selectItem(withTag: parent.config.gameDevice2)        
     }
     
     func updateToolbar() {
@@ -94,14 +96,18 @@ class MyToolbar: NSToolbar {
         }
     }
 
-    @IBAction func port1Action(_ sender: NSPopUpButton) {
+    @IBAction func port1Action(_ sender: Any) {
         
-        parent.config.gameDevice1 = sender.selectedTag()
+        if let popup = sender as? NSPopUpButton {
+            parent.config.gameDevice1 = popup.selectedTag()
+        }
     }
  
-    @IBAction func port2Action(_ sender: NSPopUpButton) {
+    @IBAction func port2Action(_ sender: Any) {
         
-        parent.config.gameDevice2 = sender.selectedTag()
+        if let popup = sender as? NSPopUpButton {
+            parent.config.gameDevice2 = popup.selectedTag()
+        }
     }
             
     @IBAction func keyboardAction(_ sender: Any!) {

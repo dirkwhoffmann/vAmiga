@@ -524,7 +524,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="868" height="440"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="3440" height="1415"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
             <value key="minSize" type="size" width="868" height="440"/>
             <value key="maxSize" type="size" width="868" height="920"/>
             <view key="contentView" id="EiT-Mj-1SZ">
@@ -8744,8 +8744,8 @@
                     <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="qhc-rc-gW0"/>
                     <toolbarItem implicitItemIdentifier="E42DD58F-EAB7-4712-9B76-AFD35C3B0C4D" label="Inspection Target" paletteLabel="Inspection Target" title="CPU" id="BQe-nn-Lal">
                         <nil key="toolTip"/>
-                        <size key="minSize" width="156" height="20"/>
-                        <size key="maxSize" width="164" height="36"/>
+                        <size key="minSize" width="156" height="32"/>
+                        <size key="maxSize" width="156" height="32"/>
                         <popUpButton key="view" verticalHuggingPriority="750" id="b86-1a-Fn4">
                             <rect key="frame" x="0.0" y="14" width="156" height="32"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -8775,8 +8775,8 @@
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="30642DA1-478E-4345-B156-B79CA8994EBF" label="Progress" paletteLabel="Progress" title="Button" id="RcX-9d-hxi">
                         <nil key="toolTip"/>
-                        <size key="minSize" width="128" height="26"/>
-                        <size key="maxSize" width="164" height="34"/>
+                        <size key="minSize" width="130" height="26"/>
+                        <size key="maxSize" width="130" height="26"/>
                         <button key="view" verticalHuggingPriority="750" id="xim-h1-DEa">
                             <rect key="frame" x="0.0" y="14" width="130" height="26"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -8786,10 +8786,8 @@
                             </buttonCell>
                         </button>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="11582724-F9DF-4AC9-83C6-EB2C0DA79367" label="New" paletteLabel="New" image="plus" catalog="system" id="vjh-tj-GEV">
+                    <toolbarItem implicitItemIdentifier="11582724-F9DF-4AC9-83C6-EB2C0DA79367" label="New" paletteLabel="New" image="plus" catalog="system" sizingBehavior="auto" id="vjh-tj-GEV">
                         <nil key="toolTip"/>
-                        <size key="minSize" width="32" height="26"/>
-                        <size key="maxSize" width="34" height="32"/>
                         <button key="view" id="nRb-gl-jJU">
                             <rect key="frame" x="0.0" y="14" width="34" height="26"/>
                             <autoresizingMask key="autoresizingMask"/>
@@ -8840,8 +8838,11 @@
                 </defaultToolbarItems>
                 <connections>
                     <outlet property="execSegCtrl" destination="NtZ-I8-0ON" id="1Ki-5g-Ctq"/>
+                    <outlet property="formatPopup" destination="Iv8-xh-GD1" id="HTL-Q4-8jh"/>
+                    <outlet property="formatToolbarItem" destination="B0D-DL-Uz5" id="uH4-aY-Ltu"/>
                     <outlet property="inspector" destination="-2" id="PSX-P1-3GN"/>
-                    <outlet property="selector" destination="b86-1a-Fn4" id="hlE-2j-snL"/>
+                    <outlet property="selectorPopup" destination="b86-1a-Fn4" id="hlE-2j-snL"/>
+                    <outlet property="selectorToolbarItem" destination="BQe-nn-Lal" id="pty-cY-xvi"/>
                     <outlet property="timeStamp" destination="xim-h1-DEa" id="Fvm-9e-bVX"/>
                 </connections>
             </toolbar>

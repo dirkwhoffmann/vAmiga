@@ -11,14 +11,19 @@ class InspectorToolbar: NSToolbar {
     
     @IBOutlet weak var inspector: Inspector!
     @IBOutlet weak var timeStamp: NSButton!
-    @IBOutlet weak var selector: NSPopUpButton!
-    @IBOutlet weak var formatSegCtrl: NSSegmentedControl!
     @IBOutlet weak var execSegCtrl: NSSegmentedControl!
+    @IBOutlet weak var selectorPopup: NSPopUpButton!
+    @IBOutlet weak var selectorToolbarItem: NSToolbarItem!
+    @IBOutlet weak var formatPopup: NSPopUpButton!
+    @IBOutlet weak var formatToolbarItem: NSToolbarItem!
 
     var emu: EmulatorProxy! { return inspector.parent.emu }
     
     override func validateVisibleItems() {
 
+        // Disable shrinked popup buttons to prevent macOS from crashing
+        selectorPopup.isEnabled = selectorToolbarItem.isVisible
+        formatPopup.isEnabled = formatToolbarItem.isVisible
     }
     
     func updateToolbar(info: AmigaInfo, full: Bool) {
@@ -53,14 +58,18 @@ class InspectorToolbar: NSToolbar {
     // Action methods
     //
     
-    @IBAction func panelAction(_ sender: NSPopUpButton) {
+    @IBAction func panelAction(_ sender: Any) {
 
-        inspector.selectPanel(sender.selectedTag())
+        if let popup = sender as? NSPopUpButton {
+            inspector.selectPanel(popup.selectedTag())
+        }
     }
  
-    @IBAction func formatAction(_ sender: NSPopUpButton) {
+    @IBAction func formatAction(_ sender: Any) {
 
-        inspector.format = sender.selectedTag()
+        if let popup = sender as? NSPopUpButton {
+            inspector.format = popup.selectedTag()
+        }
     }
 
     @IBAction func execAction(_ sender: NSSegmentedControl) {

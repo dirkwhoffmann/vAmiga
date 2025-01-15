@@ -1483,6 +1483,7 @@
 				50DD1EE12525E3E1000180F6 /* Preferences.xib */,
 				500217B72449CF7000E1A096 /* Configuration.xib */,
 				50DED6AE2202EBA200B8195F /* Inspector.xib */,
+				504FC7D42D314F2E00F0B733 /* Dashboard.storyboard */,
 				50B9354824347EF9000C78B8 /* SnapshotDialog.xib */,
 				509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */,
 				501C514527C2AA4A00DF1DD5 /* DiskExporter.xib */,
@@ -1497,7 +1498,6 @@
 				5050EC3E27BE876F00394F4F /* HardDiskCreator.xib */,
 				501C513A27C0084200DF1DD5 /* HardDiskConfigurator.xib */,
 				50D715A027CCA5AA0085C1AA /* PartitionSelector.xib */,
-				504FC7D42D314F2E00F0B733 /* Dashboard.storyboard */,
 			);
 			path = "XIB files";
 			sourceTree = "<group>";

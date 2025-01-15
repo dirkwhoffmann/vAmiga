@@ -69,7 +69,7 @@
                                 <toolbarItem implicitItemIdentifier="B16D04D1-67DC-41D7-B957-2F21759322A3" label="New" paletteLabel="New" image="plus" catalog="system" sizingBehavior="auto" id="NcX-8E-iVw">
                                     <nil key="toolTip"/>
                                     <button key="view" id="MDv-68-vO5">
-                                        <rect key="frame" x="0.0" y="14" width="34" height="26"/>
+                                        <rect key="frame" x="8" y="14.5" width="14.5" height="13"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="plus" catalog="system" imagePosition="overlaps" alignment="center" inset="2" id="zVF-fc-kFE">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -87,8 +87,8 @@
                                 <toolbarItem reference="NcX-8E-iVw"/>
                             </defaultToolbarItems>
                             <connections>
-                                <outlet property="selector" destination="mdW-B3-74Y" id="iz0-Nj-BSs"/>
-                                <outlet property="selectorItem" destination="XDt-Ik-EN3" id="8hf-W7-pug"/>
+                                <outlet property="selectorPopup" destination="mdW-B3-74Y" id="iz0-Nj-BSs"/>
+                                <outlet property="selectorPopupItem" destination="XDt-Ik-EN3" id="8hf-W7-pug"/>
                             </connections>
                         </toolbar>
                         <connections>
