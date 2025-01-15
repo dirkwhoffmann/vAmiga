@@ -57,11 +57,11 @@ class Dashboard: DialogController {
     
     func windowDidResize(_ notification: Notification) {
 
-        guard let window = notification.object as? NSWindow else { return }
-        print("New size: \(window.frame.size)")
-
-        window.titleVisibility = window.frame.size.width < 300 ? .hidden : .visible
-
+        if let window = notification.object as? NSWindow {
+            
+            // print("New size: \(window.frame.size)")
+            window.titleVisibility = window.frame.size.width < 300 ? .hidden : .visible
+        }
         viewController?.windowDidResize(notification)
     }
     

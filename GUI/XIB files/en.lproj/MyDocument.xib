@@ -42,7 +42,7 @@
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" animationBehavior="default" tabbingMode="preferred" toolbarStyle="expanded" id="5" userLabel="Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <rect key="contentRect" x="0.0" y="0.0" width="800" height="626"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="3440" height="1415"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
             <value key="minSize" type="size" width="400" height="314"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="800" height="626"/>
@@ -367,6 +367,7 @@
                                     </items>
                                 </menu>
                             </popUpButtonCell>
+                            <color key="contentTintColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                             <connections>
                                 <action selector="port1Action:" target="1845" id="P9O-Oa-i61"/>
                             </connections>
@@ -377,7 +378,7 @@
                         <popUpButton key="view" tag="11" id="4MP-rV-xX2" userLabel="Port 2">
                             <rect key="frame" x="0.0" y="14" width="49" height="24"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
+                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="message"/>
                                 <menu key="menu" autoenablesItems="NO" id="L3K-on-eyR">
@@ -401,6 +402,7 @@
                                     </items>
                                 </menu>
                             </popUpButtonCell>
+                            <color key="contentTintColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                             <connections>
                                 <action selector="port2Action:" target="1845" id="rTJ-wk-Gs9"/>
                             </connections>

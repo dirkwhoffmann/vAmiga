@@ -31,7 +31,7 @@ class MyToolbar: NSToolbar {
         parent.gamePadManager.refresh(popup: controlPort1)
         parent.gamePadManager.refresh(popup: controlPort2)
         controlPort1.selectItem(withTag: parent.config.gameDevice1)
-        controlPort2.selectItem(withTag: parent.config.gameDevice2)        
+        controlPort2.selectItem(withTag: parent.config.gameDevice2)
     }
     
     func updateToolbar() {

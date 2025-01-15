@@ -22,15 +22,6 @@ class DashboardToolbar: NSToolbar {
         selectorPopup.selectItem(withTag: dashboard.type?.rawValue ?? 0)
     }
     
-    func updateToolbar(full: Bool) {
-        
-        if full {
-            
-        }
-        
-        
-    }
-    
     //
     // Action methods
     //
