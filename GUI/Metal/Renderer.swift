@@ -11,10 +11,11 @@ import Metal
 
 enum ScreenshotSource: Int {
         
-    case visible = 0
-    case visibleUpscaled = 1
-    case entire = 2
-    case entireUpscaled = 3
+    case emulatorVisible = 0
+    case emulatorEntire = 1
+    case upscaledVisible = 2
+    case upscaledEntire = 3
+    case framebuffer = 4
 }
 
 class Renderer: NSObject, MTKViewDelegate {

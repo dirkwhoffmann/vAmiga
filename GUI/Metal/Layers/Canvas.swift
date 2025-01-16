@@ -182,17 +182,20 @@ class Canvas: Layer {
 
         switch source {
             
-        case .entire:
-            return screenshot(texture: mergeTexture, rect: largestVisibleNormalized)
-            
-        case .entireUpscaled:
-            return screenshot(texture: upscaledTexture, rect: largestVisibleNormalized)
-            
-        case .visible:
+        case .emulatorVisible:
             return screenshot(texture: mergeTexture, rect: visibleNormalized)
             
-        case .visibleUpscaled:
+        case .emulatorEntire:
+            return screenshot(texture: mergeTexture, rect: largestVisibleNormalized)
+
+        case .upscaledVisible:
             return screenshot(texture: upscaledTexture, rect: visibleNormalized)
+            
+        case .upscaledEntire:
+            return screenshot(texture: upscaledTexture, rect: largestVisibleNormalized)
+
+        case .framebuffer:
+            return blitFramebuffer(rect: visibleNormalized)
         }
     }
 
@@ -212,6 +215,44 @@ class Canvas: Layer {
         blitEncoder.endEncoding()
         commandBuffer.commit()
         commandBuffer.waitUntilCompleted()
+    }
+
+    func blitFramebuffer(rect: CGRect) -> NSImage? {
+
+        if let drawable = renderer.metalLayer.nextDrawable() {
+            
+            let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba8Unorm,
+                                                                             width: drawable.texture.width,
+                                                                             height: drawable.texture.height,
+                                                                             mipmapped: false)
+            textureDescriptor.usage = [.shaderRead, .shaderWrite]
+            let texture = device.makeTexture(descriptor: textureDescriptor)!
+            
+            let queue = renderer.device.makeCommandQueue()!
+            let commandBuffer = queue.makeCommandBuffer()!
+            let blitEncoder = commandBuffer.makeBlitCommandEncoder()!
+            blitEncoder.copy(from: drawable.texture,
+                             sourceSlice: 0,
+                             sourceLevel: 0,
+                             sourceOrigin: MTLOrigin(x: 0, y: 0, z: 0),
+                             sourceSize: MTLSize(width: drawable.texture.width,
+                                                 height: drawable.texture.height,
+                                                 depth: 1),
+                             to: texture,
+                             destinationSlice: 0,
+                             destinationLevel: 0,
+                             destinationOrigin: MTLOrigin(x: 0, y: 0, z: 0))
+            blitEncoder.endEncoding()
+            commandBuffer.commit()
+            commandBuffer.waitUntilCompleted()
+                        
+            let alpha = CGImageAlphaInfo.premultipliedFirst.rawValue
+            let leEn32 = CGBitmapInfo.byteOrder32Little.rawValue
+            let bitmapInfo =  CGBitmapInfo(rawValue: alpha | leEn32)
+            
+            return NSImage.make(texture: texture, rect: rect, bitmapInfo: bitmapInfo)
+        }
+        return nil
     }
 
     //

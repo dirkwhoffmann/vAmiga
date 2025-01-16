@@ -13,7 +13,7 @@
 
 public extension CGImage {
     
-    static func bitmapInfo() -> CGBitmapInfo {
+    static func defaultBitmapInfo() -> CGBitmapInfo {
         
         let alpha = CGImageAlphaInfo.premultipliedLast.rawValue
         let bigEn32 = CGBitmapInfo.byteOrder32Big.rawValue
@@ -37,8 +37,8 @@ public extension CGImage {
                               releaseData: dealloc)
     }
     
-    // Creates a CGImage from a raw data stream in 32 bit big endian format
-    static func make(data: UnsafeMutableRawPointer, size: CGSize) -> CGImage? {
+    // Creates a CGImage from a raw data stream
+    static func make(data: UnsafeMutableRawPointer, size: CGSize, bitmapInfo: CGBitmapInfo? = nil) -> CGImage? {
         
         
         let w = Int(size.width)
@@ -49,7 +49,7 @@ public extension CGImage {
                        bitsPerPixel: 32,
                        bytesPerRow: 4 * w,
                        space: CGColorSpaceCreateDeviceRGB(),
-                       bitmapInfo: bitmapInfo(),
+                       bitmapInfo: bitmapInfo ?? defaultBitmapInfo(),
                        provider: dataProvider(data: data, size: size)!,
                        decode: nil,
                        shouldInterpolate: false,
@@ -57,11 +57,9 @@ public extension CGImage {
     }
     
     // Creates a CGImage from a MTLTexture
-    static func make(texture: MTLTexture, rect: CGRect) -> CGImage? {
+    static func make(texture: MTLTexture, rect: CGRect, bitmapInfo: CGBitmapInfo? = nil) -> CGImage? {
         
         // Compute texture cutout
-        //   (x,y) : upper left corner
-        //   (w,h) : width and height
         let x = Int(CGFloat(texture.width) * rect.minX)
         let y = Int(CGFloat(texture.height) * rect.minY)
         let w = Int(CGFloat(texture.width) * rect.width)
@@ -74,7 +72,7 @@ public extension CGImage {
                          from: MTLRegionMake2D(x, y, w, h),
                          mipmapLevel: 0)
         
-        return make(data: data, size: CGSize(width: w, height: h))
+        return make(data: data, size: CGSize(width: w, height: h), bitmapInfo: bitmapInfo)
     }
 }
 
@@ -193,9 +191,9 @@ public extension NSImage {
         unlockFocus()
     }
 
-    static func make(texture: MTLTexture, rect: CGRect) -> NSImage? {
+    static func make(texture: MTLTexture, rect: CGRect, bitmapInfo: CGBitmapInfo? = nil) -> NSImage? {
         
-        guard let cgImage = CGImage.make(texture: texture, rect: rect) else {
+        guard let cgImage = CGImage.make(texture: texture, rect: rect, bitmapInfo: bitmapInfo) else {
             warn("Failed to create CGImage.")
             return nil
         }
@@ -204,9 +202,9 @@ public extension NSImage {
         return NSImage(cgImage: cgImage, size: size)
     }
 
-    static func make(data: UnsafeMutableRawPointer, rect: CGSize) -> NSImage? {
+    static func make(data: UnsafeMutableRawPointer, rect: CGSize, bitmapInfo: CGBitmapInfo? = nil) -> NSImage? {
         
-        guard let cgImage = CGImage.make(data: data, size: rect) else {
+        guard let cgImage = CGImage.make(data: data, size: rect, bitmapInfo: bitmapInfo) else {
             warn("Failed to create CGImage")
             return nil
         }
@@ -445,31 +443,6 @@ extension Renderer {
     //
     // Image handling
     //
-
-    /*
-    func screenshot(texture: MTLTexture) -> NSImage? {
-
-        // Use the blitter to copy the texture data back from the GPU
-        let queue = texture.device.makeCommandQueue()!
-        let commandBuffer = queue.makeCommandBuffer()!
-        let blitEncoder = commandBuffer.makeBlitCommandEncoder()!
-        blitEncoder.synchronize(texture: texture, slice: 0, level: 0)
-        blitEncoder.endEncoding()
-        commandBuffer.commit()
-        commandBuffer.waitUntilCompleted()
-        
-        return NSImage.make(texture: texture, rect: textureRect)
-    }
-    
-    func screenshot(afterUpscaling: Bool = true) -> NSImage? {
-        
-        if afterUpscaling {
-            return screenshot(texture: canvas.upscaledTexture)
-        } else {
-            return screenshot(texture: canvas.mergeTexture)
-        }
-    }
-    */
     
     func createBackgroundTexture() -> MTLTexture? {
 

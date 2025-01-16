@@ -225,21 +225,24 @@
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hst-Cn-3YK">
                                             <rect key="frame" x="88" y="368" width="198" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Visible Texture" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="Izq-aZ-EjX" id="oFh-wS-8JF">
+                                            <popUpButtonCell key="cell" type="push" title="Emulator Texture (Visible)" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="Izq-aZ-EjX" id="oFh-wS-8JF">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="message"/>
                                                 <menu key="menu" title="OtherViews" autoenablesItems="NO" id="4lg-86-m8h">
                                                     <items>
-                                                        <menuItem title="Visible Texture" state="on" id="Izq-aZ-EjX">
+                                                        <menuItem title="Emulator Texture (Visible)" state="on" id="Izq-aZ-EjX">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Visible Texture (upscaled)" tag="1" id="uIQ-Vh-4OI">
+                                                        <menuItem title="Emulator Texture (Entire)" tag="1" id="uIQ-Vh-4OI">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Entire Texture" tag="2" id="sfC-eT-3oc">
+                                                        <menuItem title="Upscaled Texture (Visible)" tag="2" keyEquivalent="U" id="sfC-eT-3oc">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Entire Texture (upscaled)" tag="3" id="liY-R1-e1q">
+                                                        <menuItem title="Upscaled Texture (Entire)" tag="3" id="liY-R1-e1q">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Framebuffer" tag="4" id="LjM-aU-onP">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
