@@ -15,8 +15,8 @@
 
 // Version number
 static constexpr int VER_MAJOR      = 3;
-static constexpr int VER_MINOR      = 1;
-static constexpr int VER_SUBMINOR   = 1;
+static constexpr int VER_MINOR      = 2;
+static constexpr int VER_SUBMINOR   = 0;
 static constexpr int VER_BETA       = 0;
 
 // Snapshot version number

@@ -165,7 +165,7 @@ Sequencer::computeBplEventsSlow(const SigRecorder &sr, DDFState &state)
         auto signal = sigRecorder.elements[i];
         isize trigger = (isize)sigRecorder.keys[i];
         
-        assert(trigger <= HPOS_CNT_NTSC);
+        assert(trigger <= HPOS_CNT);
         
         // Emulate the display logic up to the next signal change
         computeBplEvents <ecs> (cycle, trigger, state);

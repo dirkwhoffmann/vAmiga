@@ -667,7 +667,7 @@ Agnus::updateSpriteDMA()
 void
 Agnus::eolHandler()
 {
-    assert(pos.h == HPOS_CNT_PAL || pos.h == HPOS_CNT_NTSC);
+    assert(pos.h == PAL::HPOS_CNT || pos.h == NTSC::HPOS_CNT);
 
     // Pass control to the DMA debugger
     dmaDebugger.eolHandler();

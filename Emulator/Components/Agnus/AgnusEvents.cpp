@@ -97,7 +97,7 @@ Agnus::scheduleFirstBplEvent()
 void
 Agnus::scheduleNextBplEvent(isize hpos)
 {
-    assert(hpos >= 0 && hpos < HPOS_CNT_NTSC);
+    assert(hpos >= 0 && hpos < HPOS_CNT);
 
     u8 next = sequencer.nextBplEvent[hpos];
     scheduleRel<SLOT_BPL>(DMA_CYCLES(next - pos.h), sequencer.bplEvent[next]);
@@ -106,7 +106,7 @@ Agnus::scheduleNextBplEvent(isize hpos)
 void
 Agnus::scheduleBplEventForCycle(isize hpos)
 {
-    assert(hpos >= pos.h && hpos < HPOS_CNT_NTSC);
+    assert(hpos >= pos.h && hpos < HPOS_CNT);
 
     if (sequencer.bplEvent[hpos] != EVENT_NONE) {
         scheduleRel<SLOT_BPL>(DMA_CYCLES(hpos - pos.h), sequencer.bplEvent[hpos]);
@@ -188,8 +188,8 @@ Agnus::scheduleStrobe2Event()
 void
 Agnus::serviceREGEvent(Cycle until)
 {
-    assert(pos.type != PAL || pos.h <= HPOS_CNT_PAL);
-    assert(pos.type == PAL || pos.h <= HPOS_CNT_NTSC);
+    assert(pos.type != FORMAT_PAL || pos.h <= PAL::HPOS_CNT);
+    assert(pos.type != FORMAT_NTSC || pos.h <= NTSC::HPOS_CNT);
 
     if (syncEvent) {
 
@@ -734,7 +734,7 @@ Agnus::serviceDASEvent(EventID id)
 
         case DAS_EOL:
 
-            assert(pos.h == HPOS_MAX_PAL || pos.h == HPOS_MAX_NTSC);
+            assert(pos.h == PAL::HPOS_MAX || pos.h == NTSC::HPOS_MAX);
 
             if (pos.h == PAL::HPOS_MAX && pos.lol) {
 
