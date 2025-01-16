@@ -195,7 +195,7 @@ class Canvas: Layer {
             return screenshot(texture: upscaledTexture, rect: largestVisibleNormalized)
 
         case .framebuffer:
-            return blitFramebuffer(rect: visibleNormalized)
+            return framebuffer
         }
     }
 
@@ -217,42 +217,46 @@ class Canvas: Layer {
         commandBuffer.waitUntilCompleted()
     }
 
-    func blitFramebuffer(rect: CGRect) -> NSImage? {
+    var framebuffer: NSImage? {
+        
+        guard let drawable = renderer.metalLayer.nextDrawable() else { return nil }
+        
+        // Create target texture
+        let texture = device.makeTexture(size: drawable.texture.size, usage: [.shaderRead, .shaderWrite])!
+        
+        // Copy the framebuffer into the texture
+        blitFramebuffer(texture: texture)
+        
+        // Convert the texture into an NSImage
+        let alpha = CGImageAlphaInfo.premultipliedFirst.rawValue
+        let leEn32 = CGBitmapInfo.byteOrder32Little.rawValue
+        let bitmapInfo =  CGBitmapInfo(rawValue: alpha | leEn32)
+        
+        return NSImage.make(texture: texture, bitmapInfo: bitmapInfo)
+    }
 
-        if let drawable = renderer.metalLayer.nextDrawable() {
-            
-            let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .rgba8Unorm,
-                                                                             width: drawable.texture.width,
-                                                                             height: drawable.texture.height,
-                                                                             mipmapped: false)
-            textureDescriptor.usage = [.shaderRead, .shaderWrite]
-            let texture = device.makeTexture(descriptor: textureDescriptor)!
-            
-            let queue = renderer.device.makeCommandQueue()!
-            let commandBuffer = queue.makeCommandBuffer()!
-            let blitEncoder = commandBuffer.makeBlitCommandEncoder()!
-            blitEncoder.copy(from: drawable.texture,
-                             sourceSlice: 0,
-                             sourceLevel: 0,
-                             sourceOrigin: MTLOrigin(x: 0, y: 0, z: 0),
-                             sourceSize: MTLSize(width: drawable.texture.width,
-                                                 height: drawable.texture.height,
-                                                 depth: 1),
-                             to: texture,
-                             destinationSlice: 0,
-                             destinationLevel: 0,
-                             destinationOrigin: MTLOrigin(x: 0, y: 0, z: 0))
-            blitEncoder.endEncoding()
-            commandBuffer.commit()
-            commandBuffer.waitUntilCompleted()
-                        
-            let alpha = CGImageAlphaInfo.premultipliedFirst.rawValue
-            let leEn32 = CGBitmapInfo.byteOrder32Little.rawValue
-            let bitmapInfo =  CGBitmapInfo(rawValue: alpha | leEn32)
-            
-            return NSImage.make(texture: texture, rect: rect, bitmapInfo: bitmapInfo)
-        }
-        return nil
+    func blitFramebuffer(texture: MTLTexture) {
+
+        guard let drawable = renderer.metalLayer.nextDrawable() else { return }
+        
+        // Use the blitter to copy the framebuffer back from the GPU
+        let queue = renderer.device.makeCommandQueue()!
+        let commandBuffer = queue.makeCommandBuffer()!
+        let blitEncoder = commandBuffer.makeBlitCommandEncoder()!
+        blitEncoder.copy(from: drawable.texture,
+                         sourceSlice: 0,
+                         sourceLevel: 0,
+                         sourceOrigin: MTLOrigin(x: 0, y: 0, z: 0),
+                         sourceSize: MTLSize(width: texture.width,
+                                             height: texture.height,
+                                             depth: 1),
+                         to: texture,
+                         destinationSlice: 0,
+                         destinationLevel: 0,
+                         destinationOrigin: MTLOrigin(x: 0, y: 0, z: 0))
+        blitEncoder.endEncoding()
+        commandBuffer.commit()
+        commandBuffer.waitUntilCompleted()
     }
 
     //

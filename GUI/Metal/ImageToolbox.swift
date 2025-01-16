@@ -191,7 +191,7 @@ public extension NSImage {
         unlockFocus()
     }
 
-    static func make(texture: MTLTexture, rect: CGRect, bitmapInfo: CGBitmapInfo? = nil) -> NSImage? {
+    static func make(texture: MTLTexture, rect: CGRect =  CGRect(x: 0, y: 0, width: 1.0, height: 1.0), bitmapInfo: CGBitmapInfo? = nil) -> NSImage? {
         
         guard let cgImage = CGImage.make(texture: texture, rect: rect, bitmapInfo: bitmapInfo) else {
             warn("Failed to create CGImage.")

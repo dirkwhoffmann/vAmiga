@@ -236,7 +236,7 @@
                                                         <menuItem title="Emulator Texture (Entire)" tag="1" id="uIQ-Vh-4OI">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Upscaled Texture (Visible)" tag="2" keyEquivalent="U" id="sfC-eT-3oc">
+                                                        <menuItem title="Upscaled Texture (Visible)" tag="2" id="sfC-eT-3oc">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                         <menuItem title="Upscaled Texture (Entire)" tag="3" id="liY-R1-e1q">
