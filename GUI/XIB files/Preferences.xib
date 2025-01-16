@@ -87,7 +87,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="646" height="495"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1496" height="933"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="3440" height="1415"/>
             <value key="minSize" type="size" width="646" height="495"/>
             <value key="maxSize" type="size" width="646" height="495"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
@@ -233,13 +233,13 @@
                                                         <menuItem title="Visible Texture" state="on" id="Izq-aZ-EjX">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Visible Texture (Upscaled)" tag="1" id="uIQ-Vh-4OI">
+                                                        <menuItem title="Visible Texture (upscaled)" tag="1" id="uIQ-Vh-4OI">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                         <menuItem title="Entire Texture" tag="2" id="sfC-eT-3oc">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Entire Texture (Upscaled)" tag="3" id="liY-R1-e1q">
+                                                        <menuItem title="Entire Texture (upscaled)" tag="3" id="liY-R1-e1q">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -1375,27 +1375,27 @@
                                             <rect key="frame" x="305" y="79" width="278" height="149"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <clipView key="contentView" drawsBackground="NO" id="ZbA-Ci-i6F">
-                                                <rect key="frame" x="0.0" y="0.0" width="263" height="149"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="278" height="149"/>
+                                                <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="lue-lV-Oit">
-                                                        <rect key="frame" x="0.0" y="0.0" width="263" height="149"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="278" height="149"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        <size key="minSize" width="263" height="149"/>
-                                                        <size key="maxSize" width="263" height="10000000"/>
+                                                        <size key="minSize" width="278" height="149"/>
+                                                        <size key="maxSize" width="278" height="10000000"/>
                                                         <connections>
                                                             <outlet property="delegate" destination="-2" id="sDV-l9-oMY"/>
                                                         </connections>
                                                     </textView>
                                                 </subviews>
                                             </clipView>
-                                            <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="Byk-18-gFQ">
+                                            <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Byk-18-gFQ">
                                                 <rect key="frame" x="-100" y="-100" width="225" height="15"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
-                                            <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="8Eo-NY-Mg1">
+                                            <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="8Eo-NY-Mg1">
                                                 <rect key="frame" x="263" y="0.0" width="15" height="149"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>

@@ -346,6 +346,8 @@ class Canvas: Layer {
                            source: finalTexture,
                            target: upscaledTexture)
             finalTexture = upscaledTexture
+        } else {
+            upscaledTexture = finalTexture
         }
 
         // Blur the upscaled texture

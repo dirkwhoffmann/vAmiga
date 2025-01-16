@@ -137,14 +137,14 @@ extension ConfigurationController {
 
     @IBAction func vidHZoomAction(_ sender: NSSlider!) {
 
-        let value = sender.floatValue / 1000
-        config.hZoom = value
+        config.hZoom = sender.floatValue / 1000
+        refresh()
     }
 
     @IBAction func vidVZoomAction(_ sender: NSSlider!) {
 
-        let value = sender.floatValue / 1000
-        config.vZoom = value
+        config.vZoom = sender.floatValue / 1000
+        refresh()
     }
 
     @IBAction func vidCenterAction(_ sender: NSPopUpButton) {
@@ -155,14 +155,14 @@ extension ConfigurationController {
 
     @IBAction func vidHCenterAction(_ sender: NSSlider!) {
 
-        let value = sender.floatValue / 1000
-        config.hCenter = value
+        config.hCenter = sender.floatValue / 1000
+        refresh()
     }
 
     @IBAction func vidVCenterAction(_ sender: NSSlider!) {
 
-        let value = sender.floatValue / 1000
-        config.vCenter = value
+        config.vCenter = sender.floatValue / 1000
+        refresh()
     }
 
     //
@@ -172,91 +172,109 @@ extension ConfigurationController {
     @IBAction func vidEnhancerAction(_ sender: NSPopUpButton!) {
         
         config.enhancer = sender.selectedTag()
+        refresh()
     }
     
     @IBAction func vidUpscalerAction(_ sender: NSPopUpButton!) {
 
         config.upscaler = sender.selectedTag()
+        refresh()
     }
     
     @IBAction func vidBlurAction(_ sender: NSPopUpButton!) {
         
         config.blur = sender.selectedTag()
+        refresh()
     }
     
     @IBAction func vidBlurRadiusAction(_ sender: NSSlider!) {
         
         config.blurRadius = sender.floatValue
+        refresh()
     }
     
     @IBAction func vidBloomAction(_ sender: NSPopUpButton!) {
         
         config.bloom = sender.selectedTag()
+        refresh()
     }
     
     @IBAction func vidBloomRadiusAction(_ sender: NSSlider!) {
         
         config.bloomRadius = sender.floatValue
+        refresh()
     }
 
     @IBAction func vidBloomBrightnessAction(_ sender: NSSlider!) {
         
         config.bloomBrightness = sender.floatValue
+        refresh()
     }
     
     @IBAction func vidBloomWeightAction(_ sender: NSSlider!) {
         
         config.bloomWeight = sender.floatValue
+        refresh()
     }
 
     @IBAction func vidFlickerAction(_ sender: NSPopUpButton!) {
 
         config.flicker = sender.selectedTag()
+        refresh()
     }
 
     @IBAction func vidFlickerWeightAction(_ sender: NSSlider!) {
 
         config.flickerWeight = sender.floatValue
+        refresh()
     }
     
     @IBAction func vidDotMaskAction(_ sender: NSPopUpButton!) {
         
         config.dotMask = sender.selectedTag()
+        refresh()
     }
     
     @IBAction func vidDotMaskBrightnessAction(_ sender: NSSlider!) {
         
         config.dotMaskBrightness = sender.floatValue
+        refresh()
     }
     
     @IBAction func vidScanlinesAction(_ sender: NSPopUpButton!) {
         
         config.scanlines = sender.selectedTag()
+        refresh()
     }
 
     @IBAction func vidScanlineBrightnessAction(_ sender: NSSlider!) {
         
         config.scanlineBrightness = sender.floatValue
+        refresh()
     }
     
     @IBAction func vidScanlineWeightAction(_ sender: NSSlider!) {
         
         config.scanlineWeight = sender.floatValue
+        refresh()
     }
     
     @IBAction func vidDisalignmentAction(_ sender: NSPopUpButton!) {
         
         config.disalignment = sender.selectedTag()
+        refresh()
     }
 
     @IBAction func vidDisalignmentHAction(_ sender: NSSlider!) {
         
         config.disalignmentH = sender.floatValue
+        refresh()
     }
     
     @IBAction func vidDisalignmentVAction(_ sender: NSSlider!) {
 
         config.disalignmentV = sender.floatValue
+        refresh()
     }
 
     //

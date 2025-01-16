@@ -521,7 +521,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="868" height="440"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="3440" height="1415"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
             <value key="minSize" type="size" width="868" height="440"/>
             <value key="maxSize" type="size" width="868" height="920"/>
             <view key="contentView" id="EiT-Mj-1SZ">
@@ -2474,7 +2474,7 @@
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <clipView key="contentView" drawsBackground="NO" id="Gms-yd-d5C">
                                                                         <rect key="frame" x="1" y="1" width="422" height="305"/>
-                                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                        <autoresizingMask key="autoresizingMask"/>
                                                                         <subviews>
                                                                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6u0-z0-gfB" customClass="LogicView" customModule="vAmiga" customModuleProvider="target">
                                                                                 <rect key="frame" x="0.0" y="1" width="9999" height="304"/>
@@ -5907,7 +5907,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="1aG-KS-uL3">
                                                             <rect key="frame" x="1" y="1" width="309" height="288"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="2" allowsExpansionToolTips="YES" tableStyle="fullWidth" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" id="s6H-id-bwp" customClass="SpriteTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="309" height="288"/>
@@ -8668,11 +8668,11 @@
                     <toolbarItem implicitItemIdentifier="734485CB-4D20-4467-B031-F50B2814FCB3" label="Display Format" paletteLabel="Display Format" image="NSListViewTemplate" title="Hexadecimal" sizingBehavior="auto" id="B0D-DL-Uz5">
                         <nil key="toolTip"/>
                         <popUpButton key="view" verticalHuggingPriority="750" id="Iv8-xh-GD1">
-                            <rect key="frame" x="17" y="14" width="53" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <rect key="frame" x="18" y="14" width="51" height="25"/>
+                            <autoresizingMask key="autoresizingMask"/>
                             <popUpButtonCell key="cell" type="roundTextured" title="Hexadecimal" bezelStyle="texturedRounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="ZeO-O1-JPI" id="AKj-Sb-MMp">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="menu"/>
+                                <font key="font" metaFont="message"/>
                                 <menu key="menu" id="w4W-Gq-w1r">
                                     <items>
                                         <menuItem title="Hexadecimal" state="on" image="NSListViewTemplate" id="ZeO-O1-JPI"/>
@@ -8735,7 +8735,7 @@
                     <toolbarItem implicitItemIdentifier="11582724-F9DF-4AC9-83C6-EB2C0DA79367" label="New" paletteLabel="New" image="plus" catalog="system" sizingBehavior="auto" id="vjh-tj-GEV">
                         <nil key="toolTip"/>
                         <button key="view" id="nRb-gl-jJU">
-                            <rect key="frame" x="0.0" y="14" width="34" height="26"/>
+                            <rect key="frame" x="8" y="14.5" width="14.5" height="13"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="plus" catalog="system" imagePosition="overlaps" alignment="center" inset="2" id="GJZ-Oo-v24">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
