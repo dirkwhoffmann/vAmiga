@@ -194,6 +194,8 @@ float
 AudioStream::draw(u32 *buffer, isize width, isize height, float highest,
                   std::function<float(float x)> data, u32 color) const
 {
+    SYNCHRONIZED
+    
     float newHighestAmplitude = 0.001f;
 
     // Clear buffer

@@ -38,8 +38,8 @@ public:
     static MediaFile *make(const fs::path &path, FileType type);
     static MediaFile *make(const u8 *buf, isize len, FileType type);
     static MediaFile *make(class MutableFileSystem &fs, FileType type);
-    static MediaFile *make(struct FloppyDriveAPI &drive, FileType type);
-    static MediaFile *make(struct HardDriveAPI &drive, FileType type);
+    static MediaFile *make(class FloppyDriveAPI &drive, FileType type);
+    static MediaFile *make(class HardDriveAPI &drive, FileType type);
 
 
     //

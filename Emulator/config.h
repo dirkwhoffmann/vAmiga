@@ -74,10 +74,9 @@ static constexpr int ALLOW_ALL_ROMS = 0; // Disable the magic bytes check
 // Debug settings
 //
 
-#ifdef RELEASEBUILD
-#ifndef NDEBUG
-#define NDEBUG
-#endif
+static constexpr bool betaRelease = VER_BETA == 0;
+
+#ifdef NDEBUG
 static constexpr bool releaseBuild = 1;
 static constexpr bool debugBuild = 0;
 typedef const int debugflag;
@@ -85,12 +84,6 @@ typedef const int debugflag;
 static constexpr bool releaseBuild = 0;
 static constexpr bool debugBuild = 1;
 typedef int debugflag;
-#endif
-
-#if VER_BETA == 0
-static constexpr bool betaRelease = 0;
-#else
-static constexpr bool betaRelease = 1;
 #endif
 
 #ifdef __EMSCRIPTEN__
