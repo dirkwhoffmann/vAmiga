@@ -150,8 +150,8 @@ Thread::runLoop()
 void
 Thread::switchState(ExecState newState)
 {
-    assert(isEmulatorThread());
-
+    assert(isEmulatorThread() || isSuspended());
+    
     auto invalid = [&]() {
 
         assert(false);
@@ -244,7 +244,7 @@ Thread::powerOff()
 
 void
 Thread::run()
-{
+{    
     debug(RUN_DEBUG, "run()\n");
 
     if (!isRunning()) {
@@ -275,11 +275,13 @@ Thread::halt()
         debug(RUN_DEBUG, "Switching to HALT state...\n");
         changeStateTo(STATE_HALTED);
 
+        /*
         debug(RUN_DEBUG, "Waiting for the emulator thread to terminate...\n");
         join();
 
         debug(RUN_DEBUG, "Emulator is halted.\n");
         assert(state == STATE_HALTED);
+        */
     }
 }
 
@@ -356,6 +358,13 @@ Thread::changeStateTo(ExecState requestedState)
         
     } else {
         
+        assert(isSuspended());
+
+        // Switch immediately
+        switchState(requestedState);
+        assert(state == requestedState);
+        
+        /*
         // Remember the requested state
         newState = requestedState;
         
@@ -367,6 +376,7 @@ Thread::changeStateTo(ExecState requestedState)
         // Wait until the change has been performed
         stateChangeRequest.wait(true);
         assert(stateChangeRequest.test() == false);
+        */
     }
 }
 

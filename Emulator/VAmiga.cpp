@@ -1805,6 +1805,8 @@ VAmiga::isReady() const
 void
 VAmiga::powerOn()
 {
+    SUSPEND_RESUME
+    
     emu->Thread::powerOn();
     emu->isDirty = true;
 }
@@ -1812,6 +1814,8 @@ VAmiga::powerOn()
 void
 VAmiga::powerOff()
 {
+    SUSPEND_RESUME
+    
     emu->Thread::powerOff();
     emu->isDirty = true;
 }
@@ -1819,6 +1823,8 @@ VAmiga::powerOff()
 void
 VAmiga::run()
 {
+    SUSPEND_RESUME
+    
     emu->run();
     emu->isDirty = true;
 }
@@ -1826,6 +1832,8 @@ VAmiga::run()
 void
 VAmiga::pause()
 {
+    SUSPEND_RESUME
+    
     emu->pause();
     emu->isDirty = true;
 }
@@ -1833,6 +1841,8 @@ VAmiga::pause()
 void 
 VAmiga::hardReset()
 {
+    SUSPEND_RESUME
+    
     emu->hardReset();
     emu->isDirty = true;
 }
@@ -1840,6 +1850,8 @@ VAmiga::hardReset()
 void
 VAmiga::softReset()
 {
+    SUSPEND_RESUME
+    
     emu->softReset();
     emu->isDirty = true;
 }
@@ -1847,8 +1859,11 @@ VAmiga::softReset()
 void
 VAmiga::halt()
 {
-    emu->halt();
-    emu->isDirty = true;
+    // Signal the emulator to halt
+    { SUSPEND_RESUME emu->halt(); }
+    
+    // Wait for the thread to terminate
+    emu->join();
 }
 
 void

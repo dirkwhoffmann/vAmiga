@@ -26,7 +26,7 @@ static constexpr int SNP_SUBMINOR   = 0;
 static constexpr int SNP_BETA       = 0;
 
 // Uncomment this setting in a release build
-#define RELEASEBUILD
+// #define RELEASEBUILD
 
 
 //
