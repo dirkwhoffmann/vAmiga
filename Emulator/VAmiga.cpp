@@ -19,7 +19,12 @@ DefaultsAPI VAmiga::defaults(&Emulator::defaults);
 struct SuspendResume {
 
     const API *api;
-    SuspendResume(const API *api) : api(api) { api->suspend(); }
+    
+    SuspendResume(const API *api) : api(api) {
+        
+        assert(!api->emu->isEmulatorThread());
+        api->suspend();
+    }
     ~SuspendResume() { api->resume(); }
 };
 
@@ -39,12 +44,6 @@ void
 API::resume() const
 {
     emu->resume();
-}
-
-bool
-API::isUserThread() const
-{
-    return !emu->isEmulatorThread();
 }
 
 
@@ -455,8 +454,6 @@ DeniseAPI::getCachedInfo() const
 MemorySource 
 MemoryDebuggerAPI::getMemSrc(Accessor acc, u32 addr) const
 {
-    assert(isUserThread());
-    
     switch (acc) {
 
         case ACCESSOR_CPU:      return mem->getMemSrc<ACCESSOR_CPU>(addr);
@@ -470,8 +467,6 @@ MemoryDebuggerAPI::getMemSrc(Accessor acc, u32 addr) const
 u8
 MemoryDebuggerAPI::spypeek8(Accessor acc, u32 addr) const
 {
-    assert(isUserThread());
-    
     switch (acc) {
 
         case ACCESSOR_CPU:      return mem->spypeek8<ACCESSOR_CPU>(addr);
@@ -485,8 +480,6 @@ MemoryDebuggerAPI::spypeek8(Accessor acc, u32 addr) const
 u16 
 MemoryDebuggerAPI::spypeek16(Accessor acc, u32 addr) const
 {
-    assert(isUserThread());
-    
     switch (acc) {
 
         case ACCESSOR_CPU:      return mem->spypeek16<ACCESSOR_CPU>(addr);
@@ -500,8 +493,6 @@ MemoryDebuggerAPI::spypeek16(Accessor acc, u32 addr) const
 string
 MemoryDebuggerAPI::ascDump(Accessor acc, u32 addr, isize bytes) const
 {
-    assert(isUserThread());
-
     switch (acc) {
 
         case ACCESSOR_CPU:      return mem->debugger.ascDump<ACCESSOR_CPU>(addr, bytes);
@@ -515,8 +506,6 @@ MemoryDebuggerAPI::ascDump(Accessor acc, u32 addr, isize bytes) const
 string
 MemoryDebuggerAPI::hexDump(Accessor acc, u32 addr, isize bytes, isize sz) const
 {
-    assert(isUserThread());
-
     switch (acc) {
 
         case ACCESSOR_CPU:      return mem->debugger.hexDump<ACCESSOR_CPU>(addr, bytes, sz);
@@ -530,8 +519,6 @@ MemoryDebuggerAPI::hexDump(Accessor acc, u32 addr, isize bytes, isize sz) const
 string
 MemoryDebuggerAPI::memDump(Accessor acc, u32 addr, isize bytes, isize sz) const
 {
-    assert(isUserThread());
-
     switch (acc) {
 
         case ACCESSOR_CPU:      return mem->debugger.memDump<ACCESSOR_CPU>(addr, bytes, sz);
@@ -545,28 +532,24 @@ MemoryDebuggerAPI::memDump(Accessor acc, u32 addr, isize bytes, isize sz) const
 const MemConfig &
 MemoryAPI::getConfig() const
 {
-    assert(isUserThread());
     return mem->getConfig();
 }
 
 const MemInfo &
 MemoryAPI::getInfo() const
 {
-    assert(isUserThread());
     return mem->getInfo();
 }
 
 const MemInfo &
 MemoryAPI::getCachedInfo() const
 {
-    assert(isUserThread());
     return mem->getCachedInfo();
 }
 
 const MemStats &
 MemoryAPI::getStats() const
 {
-    assert(isUserThread());
     return mem->getStats();
 }
 
@@ -1041,17 +1024,6 @@ FloppyDriveAPI::insertMedia(MediaFile &file, bool wp)
     drive->insertMediaFile(file, wp);
     emu->isDirty = true;
 }
-
-/*
-void
-FloppyDriveAPI::insertFileSystem(const class MutableFileSystem &fs, bool wp);
-{
-
-    // NOT IMPLEMENTED YET
-    assert(false);
-    // drive->insertFileSystem(device, wp);
-}
-*/
 
 void
 FloppyDriveAPI::ejectDisk()
@@ -1938,7 +1910,6 @@ VAmiga::wakeUp()
 void
 VAmiga::launch(const void *listener, Callback *func)
 {
-    assert(isUserThread());
     emu->launch(listener, func);
 }
 
@@ -1951,21 +1922,18 @@ VAmiga::isLaunched() const
 i64
 VAmiga::get(Option option) const
 {
-    assert(isUserThread());
     return emu->get(option);
 }
 
 i64
 VAmiga::get(Option option, long id) const
 {
-    assert(isUserThread());
     return emu->get(option, id);
 }
 
 void
 VAmiga::set(ConfigScheme model)
 {
-    assert(isUserThread());
     emu->set(model);
     emu->isDirty = true;
 }
@@ -1973,8 +1941,6 @@ VAmiga::set(ConfigScheme model)
 void
 VAmiga::set(Option opt, i64 value) throws
 {
-    assert(isUserThread());
-
     emu->check(opt, value);
     put(CMD_CONFIG_ALL, ConfigCmd { .option = opt, .value = value });
     emu->isDirty = true;
@@ -1983,8 +1949,6 @@ VAmiga::set(Option opt, i64 value) throws
 void
 VAmiga::set(Option opt, i64 value, long id)
 {
-    assert(isUserThread());
-
     emu->check(opt, value, { id });
     put(CMD_CONFIG, ConfigCmd { .option = opt, .value = value, .id = id });
     emu->isDirty = true;
@@ -1993,7 +1957,6 @@ VAmiga::set(Option opt, i64 value, long id)
 void
 VAmiga::exportConfig(const fs::path &path, bool diff) const
 {
-    assert(isUserThread());
     emu->main.exportConfig(path, diff);
 }
 

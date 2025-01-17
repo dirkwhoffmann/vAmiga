@@ -35,10 +35,6 @@ public:
 
     void suspend() const;
     void resume() const;
-    
-protected:
-
-    bool isUserThread() const;
 };
 
 //
