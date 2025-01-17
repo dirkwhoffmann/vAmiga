@@ -22,14 +22,13 @@ struct SuspendResume {
     
     SuspendResume(const API *api) : api(api) {
         
-        assert(!api->emu || !api->emu->isEmulatorThread());
+        assert(!api->emu || api->emu->isUserThread());
         api->suspend();
     }
     ~SuspendResume() { api->resume(); }
 };
 
-// #define SUSPEND_RESUME printf("Line %d\n", __LINE__); SuspendResume _sr(this);
-#define SUSPEND_RESUME SuspendResume _sr(this);
+#define SUSPENDED SuspendResume _sr(this);
 
 //
 // API
@@ -55,28 +54,28 @@ API::resume() const
 const AmigaConfig &
 AmigaAPI::getConfig() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return amiga->getConfig();
 }
 
 const AmigaInfo &
 AmigaAPI::getInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return amiga->getInfo();
 }
 
 const AmigaInfo &
 AmigaAPI::getCachedInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return amiga->getCachedInfo();
 }
 
 void
 AmigaAPI::dump(Category category, std::ostream& os) const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     amiga->dump(category, os);
 }
 
@@ -88,77 +87,77 @@ AmigaAPI::dump(Category category, std::ostream& os) const
 const LogicAnalyzerConfig &
 LogicAnalyzerAPI::getConfig() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return logicAnalyzer->getConfig();
 }
 
 const LogicAnalyzerInfo &
 LogicAnalyzerAPI::getInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return logicAnalyzer->getInfo();
 }
 
 const LogicAnalyzerInfo &
 LogicAnalyzerAPI::getCachedInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return logicAnalyzer->getCachedInfo();
 }
 
 const DmaDebuggerConfig &
 DmaDebuggerAPI::getConfig() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return dmaDebugger->getConfig();
 }
 
 const DmaDebuggerInfo &
 DmaDebuggerAPI::getInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return dmaDebugger->getInfo();
 }
 
 const DmaDebuggerInfo &
 DmaDebuggerAPI::getCachedInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return dmaDebugger->getCachedInfo();
 }
 
 const AgnusConfig &
 AgnusAPI::getConfig() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return agnus->getConfig();
 }
 
 const AgnusInfo &
 AgnusAPI::getInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return agnus->getInfo();
 }
 
 const AgnusInfo &
 AgnusAPI::getCachedInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return agnus->getCachedInfo();
 }
 
 const AgnusStats &
 AgnusAPI::getStats() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return agnus->getStats();
 }
 
 const AgnusTraits
 AgnusAPI::getTraits() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return agnus->getTraits();
 }
 
@@ -170,14 +169,14 @@ AgnusAPI::getTraits() const
 const BlitterInfo &
 BlitterAPI::getInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return blitter->getInfo();
 }
 
 const BlitterInfo &
 BlitterAPI::getCachedInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return blitter->getCachedInfo();
 }
 
@@ -189,28 +188,28 @@ BlitterAPI::getCachedInfo() const
 const CIAConfig &
 CIAAPI::getConfig() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return cia->getConfig();
 }
 
 const CIAInfo &
 CIAAPI::getInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return cia->getInfo();
 }
 
 const CIAInfo &
 CIAAPI::getCachedInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return cia->getCachedInfo();
 }
 
 CIAStats
 CIAAPI::getStats() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return cia->getStats();
 }
 
@@ -222,35 +221,35 @@ CIAAPI::getStats() const
 const CopperInfo &
 CopperAPI::getInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return copper->getInfo();
 }
 
 const CopperInfo &
 CopperAPI::getCachedInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return copper->getCachedInfo();
 }
 
 string 
 CopperAPI::disassemble(isize list, isize offset, bool symbolic) const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return copper->debugger.disassemble(list, offset, symbolic);
 }
 
 string
 CopperAPI::disassemble(u32 addr, bool symbolic) const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return copper->debugger.disassemble(addr, symbolic);
 }
 
 bool 
 CopperAPI::isIllegalInstr(u32 addr) const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return copper->isIllegalInstr(addr);
 }
 
@@ -262,203 +261,203 @@ CopperAPI::isIllegalInstr(u32 addr) const
 isize 
 GuardsAPI::elements() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return guards->elements();
 }
 
 std::optional<GuardInfo>
 GuardsAPI::guardNr(long nr) const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return guards->guardNr(nr);
 }
 
 std::optional<GuardInfo>
 GuardsAPI::guardAt(u32 target) const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return guards->guardAt(target);
 }
 
 void
 GuardsAPI::setAt(u32 target, isize ignores)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->put(Cmd(CMD_GUARD_SET_AT, (void *)guards, target, ignores));
 }
 
 void 
 GuardsAPI::moveTo(isize nr, u32 newTarget)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->put(Cmd(CMD_GUARD_MOVE_NR, (void *)guards, nr, newTarget));
 }
 
 void 
 GuardsAPI::remove(isize nr)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->put(Cmd(CMD_GUARD_REMOVE_NR, (void *)guards, nr));
 }
 
 void 
 GuardsAPI::removeAt(u32 target)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->put(Cmd(CMD_GUARD_REMOVE_AT, (void *)guards, target));
 }
 
 void 
 GuardsAPI::removeAll()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->put(Cmd(CMD_GUARD_REMOVE_ALL, (void *)guards));
 }
 
 void 
 GuardsAPI::enable(isize nr)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->put(Cmd(CMD_GUARD_ENABLE_NR, (void *)guards, nr));
 }
 
 void 
 GuardsAPI::enableAt(u32 target)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->put(Cmd(CMD_GUARD_ENABLE_AT, (void *)guards, target));
 }
 
 void 
 GuardsAPI::enableAll()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->put(Cmd(CMD_GUARD_ENABLE_ALL, (void *)guards));
 }
 
 void 
 GuardsAPI::disable(isize nr)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->put(Cmd(CMD_GUARD_DISABLE_NR, (void *)guards, nr));
 }
 
 void 
 GuardsAPI::disableAt(u32 target)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->put(Cmd(CMD_GUARD_DISABLE_AT, (void *)guards, target));
 }
 
 void 
 GuardsAPI::disableAll()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->put(Cmd(CMD_GUARD_DISABLE_ALL));
 }
 
 void 
 GuardsAPI::toggle(isize nr)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     guards->toggle(nr);
 }
 
 isize
 CPUDebuggerAPI::loggedInstructions() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return cpu->debugger.loggedInstructions();
 }
 
 void
 CPUDebuggerAPI::clearLog()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return cpu->debugger.clearLog();
 }
 
 const char *
 CPUDebuggerAPI::disassembleRecordedInstr(isize i, isize *len)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return cpu->disassembleRecordedInstr(i, len);
 }
 
 const char *
 CPUDebuggerAPI::disassembleRecordedWords(isize i, isize len)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return cpu->disassembleRecordedWords(i, len);
 }
 
 const char *
 CPUDebuggerAPI::disassembleRecordedFlags(isize i)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return cpu->disassembleRecordedFlags(i);
 }
 
 const char *
 CPUDebuggerAPI::disassembleRecordedPC(isize i)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return cpu->disassembleRecordedPC(i);
 }
 
 const char *
 CPUDebuggerAPI::disassembleWord(u16 value)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return cpu->disassembleWord(value);
 }
 
 const char *
 CPUDebuggerAPI::disassembleAddr(u32 addr)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return cpu->disassembleAddr(addr);
 }
 
 const char *
 CPUDebuggerAPI::disassembleInstr(u32 addr, isize *len)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return cpu->disassembleInstr(addr, len);
 }
 
 const char *
 CPUDebuggerAPI::disassembleWords(u32 addr, isize len)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return cpu->disassembleWords(addr, len);
 }
 
 string
 CPUDebuggerAPI::vectorName(isize i)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return cpu->debugger.vectorName(u8(i));
 }
 
 const CPUConfig &
 CPUAPI::getConfig() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return cpu->getConfig();
 }
 
 const CPUInfo &
 CPUAPI::getInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return cpu->getInfo();
 }
 
 const CPUInfo &
 CPUAPI::getCachedInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return cpu->getCachedInfo();
 }
 
@@ -470,21 +469,21 @@ CPUAPI::getCachedInfo() const
 const DeniseConfig &
 DeniseAPI::getConfig() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return denise->getConfig();
 }
 
 const DeniseInfo &
 DeniseAPI::getInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return denise->getInfo();
 }
 
 const DeniseInfo &
 DeniseAPI::getCachedInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return denise->getCachedInfo();
 }
 
@@ -496,7 +495,7 @@ DeniseAPI::getCachedInfo() const
 MemorySource 
 MemoryDebuggerAPI::getMemSrc(Accessor acc, u32 addr) const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     
     switch (acc) {
 
@@ -511,7 +510,7 @@ MemoryDebuggerAPI::getMemSrc(Accessor acc, u32 addr) const
 u8
 MemoryDebuggerAPI::spypeek8(Accessor acc, u32 addr) const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     
     switch (acc) {
 
@@ -526,7 +525,7 @@ MemoryDebuggerAPI::spypeek8(Accessor acc, u32 addr) const
 u16 
 MemoryDebuggerAPI::spypeek16(Accessor acc, u32 addr) const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     
     switch (acc) {
 
@@ -541,7 +540,7 @@ MemoryDebuggerAPI::spypeek16(Accessor acc, u32 addr) const
 string
 MemoryDebuggerAPI::ascDump(Accessor acc, u32 addr, isize bytes) const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     
     switch (acc) {
 
@@ -556,7 +555,7 @@ MemoryDebuggerAPI::ascDump(Accessor acc, u32 addr, isize bytes) const
 string
 MemoryDebuggerAPI::hexDump(Accessor acc, u32 addr, isize bytes, isize sz) const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     
     switch (acc) {
 
@@ -571,7 +570,7 @@ MemoryDebuggerAPI::hexDump(Accessor acc, u32 addr, isize bytes, isize sz) const
 string
 MemoryDebuggerAPI::memDump(Accessor acc, u32 addr, isize bytes, isize sz) const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     
     switch (acc) {
 
@@ -586,56 +585,56 @@ MemoryDebuggerAPI::memDump(Accessor acc, u32 addr, isize bytes, isize sz) const
 const MemConfig &
 MemoryAPI::getConfig() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return mem->getConfig();
 }
 
 const MemInfo &
 MemoryAPI::getInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return mem->getInfo();
 }
 
 const MemInfo &
 MemoryAPI::getCachedInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return mem->getCachedInfo();
 }
 
 const MemStats &
 MemoryAPI::getStats() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return mem->getStats();
 }
 
 const RomTraits &
 MemoryAPI::getRomTraits() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return mem->getRomTraits();
 }
 
 const RomTraits &
 MemoryAPI::getWomTraits() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return mem->getWomTraits();
 }
 
 const RomTraits &
 MemoryAPI::getExtTraits() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return mem->getExtTraits();
 }
 
 void 
 MemoryAPI::loadRom(const fs::path &path)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     mem->loadRom(path);
     emu->isDirty = true;
 }
@@ -643,7 +642,7 @@ MemoryAPI::loadRom(const fs::path &path)
 void
 MemoryAPI::loadExt(const fs::path &path)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     mem->loadExt(path);
     emu->isDirty = true;
 }
@@ -651,7 +650,7 @@ MemoryAPI::loadExt(const fs::path &path)
 void
 MemoryAPI::loadRom(MediaFile &file)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     mem->loadRom(file);
     emu->isDirty = true;
 }
@@ -659,7 +658,7 @@ MemoryAPI::loadRom(MediaFile &file)
 void
 MemoryAPI::loadExt(MediaFile &file)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     mem->loadExt(file);
     emu->isDirty = true;
 }
@@ -667,7 +666,7 @@ MemoryAPI::loadExt(MediaFile &file)
 void
 MemoryAPI::loadRom(const u8 *buf, isize len)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     mem->loadRom(buf, len);
     emu->isDirty = true;
 }
@@ -675,7 +674,7 @@ MemoryAPI::loadRom(const u8 *buf, isize len)
 void
 MemoryAPI::loadExt(const u8 *buf, isize len)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     mem->loadExt(buf, len);
     emu->isDirty = true;
 }
@@ -683,28 +682,28 @@ MemoryAPI::loadExt(const u8 *buf, isize len)
 void 
 MemoryAPI::saveRom(const std::filesystem::path &path)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     mem->saveRom(path);
 }
 
 void 
 MemoryAPI::saveWom(const std::filesystem::path &path)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     mem->saveWom(path);
 }
 
 void 
 MemoryAPI::saveExt(const std::filesystem::path &path)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     mem->saveExt(path);
 }
 
 void
 MemoryAPI::deleteRom()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     mem->deleteRom();
     emu->isDirty = true;
 }
@@ -712,7 +711,7 @@ MemoryAPI::deleteRom()
 void 
 MemoryAPI::deleteWom()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     mem->deleteWom();
     emu->isDirty = true;
 }
@@ -720,7 +719,7 @@ MemoryAPI::deleteWom()
 void 
 MemoryAPI::deleteExt()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     mem->deleteExt();
     emu->isDirty = true;
 }
@@ -733,7 +732,7 @@ MemoryAPI::deleteExt()
 const StateMachineInfo &
 AudioChannelAPI::getInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     
     switch (channel) {
 
@@ -747,7 +746,7 @@ AudioChannelAPI::getInfo() const
 const StateMachineInfo &
 AudioChannelAPI::getCachedInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     
     switch (channel) {
 
@@ -761,49 +760,49 @@ AudioChannelAPI::getCachedInfo() const
 const DiskControllerConfig &
 DiskControllerAPI::getConfig() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return diskController->getConfig();
 }
 
 const DiskControllerInfo &
 DiskControllerAPI::getInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return diskController->getInfo();
 }
 
 const DiskControllerInfo &
 DiskControllerAPI::getCachedInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return diskController->getCachedInfo();
 }
 
 const UARTInfo &
 UARTAPI::getInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return uart->getInfo();
 }
 
 const UARTInfo &
 UARTAPI::getCachedInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return uart->getCachedInfo();
 }
 
 const PaulaInfo &
 PaulaAPI::getInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return paula->getInfo();
 }
 
 const PaulaInfo &
 PaulaAPI::getCachedInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return paula->getCachedInfo();
 }
 
@@ -815,14 +814,14 @@ PaulaAPI::getCachedInfo() const
 const RTCConfig &
 RTCAPI::getConfig() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return rtc->getConfig();
 }
 
 void
 RTCAPI::update()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     rtc->update();
     emu->isDirty = true;
 }
@@ -840,14 +839,14 @@ RTCAPI::update()
 const AudioPortConfig &
 AudioPortAPI::getConfig() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return port->getConfig();
 }
 
 const AudioPortStats &
 AudioPortAPI::getStats() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return port->getStats();
 }
 
@@ -872,14 +871,14 @@ AudioPortAPI::copyInterleaved(float *buffer, isize n)
 void 
 AudioPortAPI::drawL(u32 *buffer, isize width, isize height, u32 color) const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     port->stream.drawL(buffer, width, height, color);
 }
 
 void
 AudioPortAPI::drawR(u32 *buffer, isize width, isize height, u32 color) const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     port->stream.drawR(buffer, width, height, color);
 }
 
@@ -891,14 +890,14 @@ AudioPortAPI::drawR(u32 *buffer, isize width, isize height, u32 color) const
 const ControlPortInfo &
 ControlPortAPI::getInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return controlPort->getInfo();
 }
 
 const ControlPortInfo &
 ControlPortAPI::getCachedInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return controlPort->getCachedInfo();
 }
 
@@ -910,35 +909,35 @@ ControlPortAPI::getCachedInfo() const
 const SerialPortConfig &
 SerialPortAPI::getConfig() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return serialPort->getConfig();
 }
 
 const SerialPortInfo &
 SerialPortAPI::getInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return serialPort->getInfo();
 }
 
 const SerialPortInfo &
 SerialPortAPI::getCachedInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return serialPort->getCachedInfo();
 }
 
 int 
 SerialPortAPI::readIncomingPrintableByte() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return serialPort->readIncomingPrintableByte();
 }
 
 int 
 SerialPortAPI::readOutgoingPrintableByte() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return serialPort->readOutgoingPrintableByte();
 }
 
@@ -1057,7 +1056,7 @@ void KeyboardAPI::autoType(const string &text)
 
 void KeyboardAPI::abortAutoTyping()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     keyboard->abortAutoTyping();
 }
 
@@ -1069,42 +1068,42 @@ void KeyboardAPI::abortAutoTyping()
 const FloppyDriveConfig &
 FloppyDriveAPI::getConfig() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return drive->getConfig();
 }
 
 const FloppyDriveInfo &
 FloppyDriveAPI::getInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return drive->getInfo();
 }
 
 const FloppyDriveInfo &
 FloppyDriveAPI::getCachedInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return drive->getCachedInfo();
 }
 
 FloppyDisk &
 FloppyDriveAPI::getDisk()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return *(drive->disk);
 }
 
 bool
 FloppyDriveAPI::getFlag(DiskFlags mask) const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return drive->getFlag(mask);
 }
 
 void
 FloppyDriveAPI::setFlag(DiskFlags mask, bool value)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     drive->setFlag(mask, value);
     emu->isDirty = true;
 }
@@ -1112,14 +1111,14 @@ FloppyDriveAPI::setFlag(DiskFlags mask, bool value)
 bool 
 FloppyDriveAPI::isInsertable(Diameter t, Density d) const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return drive->isInsertable(t, d);
 }
 
 void
 FloppyDriveAPI::insertBlankDisk(FSVolumeType fstype, BootBlockId bb, string name)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     drive->insertNew(fstype, bb, name);
     emu->isDirty = true;
 }
@@ -1127,7 +1126,7 @@ FloppyDriveAPI::insertBlankDisk(FSVolumeType fstype, BootBlockId bb, string name
 void
 FloppyDriveAPI::insertMedia(MediaFile &file, bool wp)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     drive->insertMediaFile(file, wp);
     emu->isDirty = true;
 }
@@ -1135,21 +1134,21 @@ FloppyDriveAPI::insertMedia(MediaFile &file, bool wp)
 void
 FloppyDriveAPI::ejectDisk()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     drive->ejectDisk();
 }
 
 class MediaFile *
 FloppyDriveAPI::exportDisk(FileType type)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return drive->exportDisk(type);
 }
 
 string
 FloppyDriveAPI::readTrackBits(isize track)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return drive->readTrackBits(track);
 }
 
@@ -1161,91 +1160,91 @@ FloppyDriveAPI::readTrackBits(isize track)
 class HardDrive &
 HardDriveAPI::getDrive()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return *drive;
 }
 
 const HardDriveConfig &
 HardDriveAPI::getConfig() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return drive->getConfig();
 }
 
 const HardDriveInfo &
 HardDriveAPI::getInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return drive->getInfo();
 }
 
 const HardDriveInfo &
 HardDriveAPI::getCachedInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return drive->getCachedInfo();
 }
 
 const HardDriveTraits &
 HardDriveAPI::getTraits() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return drive->getTraits();
 }
 
 const PartitionTraits &
 HardDriveAPI::getPartitionTraits(isize nr) const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return drive->getPartitionTraits(nr);
 }
 
 bool
 HardDriveAPI::getFlag(DiskFlags mask)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return drive->getFlag(mask);
 }
 
 void
 HardDriveAPI::setFlag(DiskFlags mask, bool value)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     drive->setFlag(mask, value);
 }
 
 std::vector<std::tuple<isize,isize,isize>>
 HardDriveAPI::geometries(isize numBlocks)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return GeometryDescriptor::driveGeometries(numBlocks);
 }
 
 void 
 HardDriveAPI::changeGeometry(isize c, isize h, isize s, isize b)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return drive->changeGeometry(c, h, s, b);
 }
 
 void
 HardDriveAPI::attach(const std::filesystem::path &path)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     drive->init(path.string());
 }
 
 void 
 HardDriveAPI::attach(const MediaFile &file)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     drive->init(file);
 }
 
 void
 HardDriveAPI::attach(isize c, isize h, isize s, isize b)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     auto geometry = GeometryDescriptor(c, h, s, b);
     drive->init(geometry);
 }
@@ -1253,21 +1252,21 @@ HardDriveAPI::attach(isize c, isize h, isize s, isize b)
 void 
 HardDriveAPI::format(FSVolumeType fs, const string &name)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     drive->format(fs, name);
 }
 
 void 
 HardDriveAPI::writeToFile(std::filesystem::path path)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     drive->writeToFile(path);
 }
 
 MediaFile *
 HardDriveAPI::createHDF()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return new HDFFile(*drive);
 }
 
@@ -1279,21 +1278,21 @@ HardDriveAPI::createHDF()
 const HdcInfo &
 HdControllerAPI::getInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return controller->getInfo();
 }
 
 const HdcInfo &
 HdControllerAPI::getCachedInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return controller->getCachedInfo();
 }
 
 const HdcStats &
 HdControllerAPI::getStats() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return controller->getStats();
 }
 
@@ -1305,21 +1304,21 @@ HdControllerAPI::getStats() const
 const JoystickInfo &
 JoystickAPI::getInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return joystick->getInfo();
 }
 
 const JoystickInfo &
 JoystickAPI::getCachedInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return joystick->getCachedInfo();
 }
 
 void 
 JoystickAPI::trigger(GamePadAction event)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->put(CMD_JOY_EVENT, GamePadCmd { .port = joystick->objid, .action = event });
 }
 
@@ -1331,35 +1330,35 @@ JoystickAPI::trigger(GamePadAction event)
 bool 
 MouseAPI::detectShakeXY(double x, double y)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return mouse->detectShakeXY(x, y);
 }
 
 bool 
 MouseAPI::detectShakeDxDy(double dx, double dy)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return mouse->detectShakeDxDy(dx, dy);
 }
 
 void 
 MouseAPI::setXY(double x, double y)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->put(Cmd(CMD_MOUSE_MOVE_ABS, CoordCmd { .port = mouse->objid, .x = x, .y = y }));
 }
 
 void 
 MouseAPI::setDxDy(double dx, double dy)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->put(Cmd(CMD_MOUSE_MOVE_REL, CoordCmd { .port = mouse->objid, .x = dx, .y = dy }));
 }
 
 void 
 MouseAPI::trigger(GamePadAction action)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->put(Cmd(CMD_MOUSE_EVENT, GamePadCmd { .port = mouse->objid, .action = action }));
 }
 
@@ -1549,36 +1548,36 @@ RecorderAPI::getCachedInfo() const
 }
 */
 
-double RecorderAPI::getDuration() const { SUSPEND_RESUME return recorder->getDuration().asSeconds(); }
-isize RecorderAPI::getFrameRate() const { SUSPEND_RESUME return recorder->getFrameRate(); }
-isize RecorderAPI::getBitRate() const { SUSPEND_RESUME return recorder->getBitRate(); }
-isize RecorderAPI::getSampleRate() const { SUSPEND_RESUME return recorder->getSampleRate(); }
-bool RecorderAPI::isRecording() const { SUSPEND_RESUME return recorder->isRecording(); }
+double RecorderAPI::getDuration() const { SUSPENDED return recorder->getDuration().asSeconds(); }
+isize RecorderAPI::getFrameRate() const { SUSPENDED return recorder->getFrameRate(); }
+isize RecorderAPI::getBitRate() const { SUSPENDED return recorder->getBitRate(); }
+isize RecorderAPI::getSampleRate() const { SUSPENDED return recorder->getSampleRate(); }
+bool RecorderAPI::isRecording() const { SUSPENDED return recorder->isRecording(); }
 
 const std::vector<std::filesystem::path> &
 RecorderAPI::paths() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return FFmpeg::paths;
 }
 
 bool 
 RecorderAPI::hasFFmpeg() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return FFmpeg::available();
 }
 
 const fs::path
 RecorderAPI::getExecPath() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return FFmpeg::getExecPath();
 }
 
 void RecorderAPI::setExecPath(const std::filesystem::path &path)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     FFmpeg::setExecPath(path);
 }
 
@@ -1587,21 +1586,21 @@ RecorderAPI::startRecording(isize x1, isize y1, isize x2, isize y2,
                             isize bitRate,
                             isize aspectX, isize aspectY)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     recorder->startRecording(x1, y1, x2, y2, bitRate, aspectX, aspectY);
 }
 
 void
 RecorderAPI::stopRecording()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     recorder->stopRecording();
 }
 
 bool
 RecorderAPI::exportAs(const std::filesystem::path &path)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return recorder->exportAs(path);
 }
 
@@ -1613,14 +1612,14 @@ RecorderAPI::exportAs(const std::filesystem::path &path)
 const RemoteManagerInfo &
 RemoteManagerAPI::getInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return remoteManager->getInfo();
 }
 
 const RemoteManagerInfo &
 RemoteManagerAPI::getCachedInfo() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return remoteManager->getCachedInfo();
 }
 
@@ -1631,70 +1630,70 @@ RemoteManagerAPI::getCachedInfo() const
 const char *
 RetroShellAPI::text()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return retroShell->text();
 }
 
 isize
 RetroShellAPI::cursorRel()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return retroShell->cursorRel();
 }
 
 void
 RetroShellAPI::press(RetroShellKey key, bool shift)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     retroShell->press(key, shift);
 }
 
 void
 RetroShellAPI::press(char c)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     retroShell->press(c);
 }
 
 void
 RetroShellAPI::press(const string &s)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     retroShell->press(s);
 }
 
 void
 RetroShellAPI::execScript(std::stringstream &ss)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     retroShell->asyncExecScript(ss);
 }
 
 void
 RetroShellAPI::execScript(const std::ifstream &fs)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     retroShell->asyncExecScript(fs);
 }
 
 void
 RetroShellAPI::execScript(const string &contents)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     retroShell->asyncExecScript(contents);
 }
 
 void
 RetroShellAPI::execScript(const MediaFile &file)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     retroShell->asyncExecScript(file);
 }
 
 void
 RetroShellAPI::setStream(std::ostream &os)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     retroShell->setStream(os);
 }
 
@@ -1933,7 +1932,7 @@ VAmiga::isReady() const
 void
 VAmiga::powerOn()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     
     emu->Thread::powerOn();
     emu->isDirty = true;
@@ -1942,7 +1941,7 @@ VAmiga::powerOn()
 void
 VAmiga::powerOff()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     
     emu->Thread::powerOff();
     emu->isDirty = true;
@@ -1951,7 +1950,7 @@ VAmiga::powerOff()
 void
 VAmiga::run()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     
     emu->run();
     emu->isDirty = true;
@@ -1960,7 +1959,7 @@ VAmiga::run()
 void
 VAmiga::pause()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     
     emu->pause();
     emu->isDirty = true;
@@ -1969,7 +1968,7 @@ VAmiga::pause()
 void 
 VAmiga::hardReset()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     
     emu->hardReset();
     emu->isDirty = true;
@@ -1978,7 +1977,7 @@ VAmiga::hardReset()
 void
 VAmiga::softReset()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     
     emu->softReset();
     emu->isDirty = true;
@@ -1987,7 +1986,7 @@ VAmiga::softReset()
 void
 VAmiga::halt()
 {
-    {   SUSPEND_RESUME
+    {   SUSPENDED
         
         // Signal the emulator to halt
         emu->halt();
@@ -2012,56 +2011,56 @@ VAmiga::resume() const
 void
 VAmiga::warpOn(isize source)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->warpOn(source);
 }
 
 void
 VAmiga::warpOff(isize source)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->warpOff(source);
 }
 
 void
 VAmiga::trackOn(isize source)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->trackOn(source);
 }
 
 void
 VAmiga::trackOff(isize source)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->trackOff(source);
 }
 
 void
 VAmiga::stepInto()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->stepInto();
 }
 
 void
 VAmiga::stepOver()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->stepOver();
 }
 
 void
 VAmiga::finishLine()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->finishLine();
 }
 
 void
 VAmiga::finishFrame()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->finishFrame();
 }
 
@@ -2086,21 +2085,21 @@ VAmiga::isLaunched() const
 i64
 VAmiga::get(Option option) const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return emu->get(option);
 }
 
 i64
 VAmiga::get(Option option, long id) const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return emu->get(option, id);
 }
 
 void
 VAmiga::set(ConfigScheme model)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->set(model);
     emu->isDirty = true;
 }
@@ -2108,7 +2107,7 @@ VAmiga::set(ConfigScheme model)
 void
 VAmiga::set(Option opt, i64 value) throws
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->check(opt, value);
     put(CMD_CONFIG_ALL, ConfigCmd { .option = opt, .value = value });
     emu->isDirty = true;
@@ -2117,7 +2116,7 @@ VAmiga::set(Option opt, i64 value) throws
 void
 VAmiga::set(Option opt, i64 value, long id)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->check(opt, value, { id });
     put(CMD_CONFIG, ConfigCmd { .option = opt, .value = value, .id = id });
     emu->isDirty = true;
@@ -2126,14 +2125,14 @@ VAmiga::set(Option opt, i64 value, long id)
 void
 VAmiga::exportConfig(const fs::path &path, bool diff) const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->main.exportConfig(path, diff);
 }
 
 void
 VAmiga::exportConfig(std::ostream& stream, bool diff) const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     emu->main.exportConfig(stream, diff);
 }
 
@@ -2151,14 +2150,14 @@ VAmiga::put(const Cmd &cmd)
 MediaFile *
 AmigaAPI::takeSnapshot()
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return amiga->takeSnapshot();
 }
 
 void 
 AmigaAPI::loadSnapshot(const MediaFile &snapshot)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     amiga->loadSnapshot(snapshot);
     emu->isDirty = true;
 }
@@ -2166,14 +2165,14 @@ AmigaAPI::loadSnapshot(const MediaFile &snapshot)
 u64
 AmigaAPI::getAutoInspectionMask() const
 {
-    SUSPEND_RESUME
+    SUSPENDED
     return amiga->getAutoInspectionMask();
 }
 
 void
 AmigaAPI::setAutoInspectionMask(u64 mask)
 {
-    SUSPEND_RESUME
+    SUSPENDED
     amiga->setAutoInspectionMask(mask);
 }
 

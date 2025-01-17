@@ -739,8 +739,6 @@ Console::dump(CoreObject &component, std::vector <Category> categories)
 void
 Console::_dump(CoreObject &component, Category category)
 {
-    // assert(isEmulatorThread());
-
     std::stringstream ss;
 
     switch (category) {

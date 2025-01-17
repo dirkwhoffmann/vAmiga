@@ -343,12 +343,9 @@ void
 Thread::suspend() const
 {
     debug(RUN_DEBUG, "Suspending (%ld)...\n", suspendCounter);
-        
-    if (isEmulatorThread()) {
-        
-        debug(RUN_DEBUG, "suspend() called by the emulator thread\n");
+    assert(isUserThread());
 
-    } else if (suspendCounter++ == 0) {
+    if (suspendCounter++ == 0) {
         
         suspensionLock.lock();
         lock.lock();
@@ -359,12 +356,9 @@ void
 Thread::resume() const
 {
     debug(RUN_DEBUG, "Resuming (%ld)...\n", suspendCounter);
+    assert(isUserThread());
 
-    if (isEmulatorThread()) {
-        
-        debug(RUN_DEBUG, "resume() called by the emulator thread\n");
-        
-    } else if (suspendCounter <= 0) {
+    if (suspendCounter <= 0) {
         
         fatal("resume() called with no call to suspend()\n");
         
