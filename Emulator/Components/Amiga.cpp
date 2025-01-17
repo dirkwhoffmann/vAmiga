@@ -556,14 +556,6 @@ Amiga::_dump(Category category, std::ostream& os) const
 
     if (category == Category::State) {
 
-        os << tab("Power");
-        os << bol(isPoweredOn()) << std::endl;
-        os << tab("Running");
-        os << bol(isRunning()) << std::endl;
-        os << tab("Suspended");
-        os << bol(isSuspended()) << std::endl;
-        os << std::endl;
-
         os << tab("Refresh rate");
         os << dec(isize(refreshRate())) << " Fps" << std::endl;
         os << tab("Native master clock");

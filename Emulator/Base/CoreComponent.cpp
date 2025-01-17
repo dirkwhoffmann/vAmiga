@@ -92,7 +92,7 @@ CoreComponent::isHalted() const
 {
     return emulator.isHalted();
 }
-
+/*
 bool
 CoreComponent::isSuspended() const
 {
@@ -110,6 +110,7 @@ CoreComponent::resume() const
 {
     return emulator.resume();
 }
+*/
 
 void
 CoreComponent::isReady() const

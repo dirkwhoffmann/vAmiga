@@ -34,7 +34,7 @@ struct Description {
 typedef std::vector<Description> Descriptions;
 
 class CoreComponent : 
-public CoreObject, public Serializable, public Suspendable, public Synchronizable, public Configurable {
+public CoreObject, public Serializable, public Synchronizable, public Configurable {
 
 public:
     
@@ -101,10 +101,11 @@ public:
     //
 
     // Suspends or resumes the emulator thread
+    /*
     bool isSuspended() const override;
     void suspend() const override;
     void resume() const override;
-
+     */
 
     //
     // Configuring

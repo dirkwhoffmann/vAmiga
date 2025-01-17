@@ -1903,7 +1903,7 @@ VAmiga::isRunning() const
 bool
 VAmiga::isSuspended() const
 {
-    return emu->main.isSuspended();
+    return emu->isSuspended();
 }
 
 bool
