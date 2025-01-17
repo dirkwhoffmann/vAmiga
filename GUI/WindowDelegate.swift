@@ -15,7 +15,7 @@ extension MyController: NSWindowDelegate {
         
         debug(.lifetime)
         
-        initialize()
+        commonInit()
         
         guard let window = notification.object as? NSWindow else { return }
         

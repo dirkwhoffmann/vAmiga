@@ -72,20 +72,22 @@ class VirtualKeyboardController: DialogController {
         return keyboard
     }
 
-    func showSheet() {
+    func showAsSheet() {
 
-        autoClose = true
         super.showAsSheet()
+        autoClose = true
     }
 
-    func showWindow() {
+    override func showAsWindow() {
         
+        super.showAsWindow()
         autoClose = false
-        super.showWindow(self)
     }
     
     override func windowDidLoad() {
                 
+        super.windowDidLoad()
+        
         // Setup key references
         for tag in 0 ... 127 {
             keyView[tag] = window!.contentView!.viewWithTag(tag) as? NSButton

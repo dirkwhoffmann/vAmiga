@@ -347,11 +347,19 @@ class ConfigurationController: DialogController {
 
     override func awakeFromNib() {
 
+        debug(.lifetime)
+        
         super.awakeFromNib()
         awakeVideoPrefsFromNib()
         refreshRomSelector()
     }
 
+    override func windowDidLoad() {
+
+        debug(.lifetime)
+        super.windowDidLoad()
+    }
+    
     override func dialogWillShow() {
 
         super.dialogWillShow()

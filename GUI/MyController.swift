@@ -126,7 +126,7 @@ class MyController: NSWindowController, MessageReceiver {
     var drvCyl: [NSTextField?] = Array(repeating: nil, count: 8)
     var drvIcon: [NSButton?] = Array(repeating: nil, count: 8)
     
-    var initialized = false
+    var initialized: Bool { return mydocument != nil }
 }
 
 extension MyController {
@@ -151,10 +151,16 @@ extension MyController {
     //
     // Initializing
     //
-    
-    override open func awakeFromNib() {
+        
+    override open func windowDidLoad() {
         
         debug(.lifetime)
+        commonInit()
+    }
+    
+    func commonInit() {
+        
+        if initialized { return }
         
         mydocument = document as? MyDocument
         
@@ -164,18 +170,7 @@ extension MyController {
         ledSlot = [ ledSlot0, ledSlot1, letSlot2, ledSlot3 ]
         cylSlot = [ cylSlot0, cylSlot1, cylSlot2, cylSlot3 ]
         iconSlot = [ iconSlot0, iconSlot1, iconSlot2, iconSlot3 ]
-    }
-    
-    override open func windowDidLoad() {
-        
-        debug(.lifetime)
-        initialize()
-    }
-    
-    func initialize() {
-        
-        if initialized { return }
-        
+
         // Create keyboard controller
         keyboard = KeyboardController(parent: self)
         assert(keyboard != nil, "Failed to create keyboard controller")
@@ -230,8 +225,6 @@ extension MyController {
         
         // Update status bar
         refreshStatusBar()
-        
-        initialized = true
     }
     
     func configureWindow() {

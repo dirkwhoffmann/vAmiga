@@ -20,10 +20,10 @@ class DialogWindow: NSWindow {
 
 protocol DialogControllerDelegate: AnyObject {
     
-    // Called before beginSheet() is called
+    // Called before showWindow() or beginSheet() is called
     func dialogWillShow()
 
-    // Called after beginSheet() has beed called
+    // Called after showWindow() or beginSheet() has beed called
     func dialogDidShow()
 
     // Called after the completion handler has been executed
@@ -44,9 +44,6 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     // References to all open dialogs (to make ARC happy)
     static var active: [DialogController] = []
     
-    // Remembers whether awakeFromNib has been called
-    var awake = false
-
     // Lock that is kept during the lifetime of the dialog
     var lock = NSLock()
 
@@ -73,11 +70,12 @@ class DialogController: NSWindowController, DialogControllerDelegate {
         debug(.lifetime, "Unregister: \(DialogController.active)")
     }
 
-    override func awakeFromNib() {
-    
-        awake = true
-        window?.delegate = self
-        dialogWillShow()
+    override func windowDidLoad() {
+        
+        debug(.lifetime)
+
+        super.windowDidLoad()
+        self.window?.delegate = self
     }
     
     func dialogWillShow() {
@@ -97,20 +95,24 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     
     func showAsWindow() {
 
+        debug(.lifetime)
+        
         sheet = false
         register()
-
-        if awake { dialogWillShow() }
+        loadWindow()
+        dialogWillShow()
         showWindow(self)
         dialogDidShow()
     }
 
     func showAsSheet(completionHandler handler:(() -> Void)? = nil) {
 
+        debug(.lifetime)
+        
         sheet = true
         register()
-
-        if awake { dialogWillShow() }
+        loadWindow()
+        dialogWillShow()
         parent.window?.beginSheet(window!, completionHandler: { result in handler?() })
         dialogDidShow()
     }
@@ -150,6 +152,11 @@ class DialogController: NSWindowController, DialogControllerDelegate {
 }
 
 extension DialogController: NSWindowDelegate {
+
+    func windowDidBecomeKey(_ notification: Notification) {
+
+        debug(.lifetime)
+    }
 
     func windowWillClose(_ notification: Notification) {
 

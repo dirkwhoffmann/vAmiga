@@ -507,7 +507,7 @@ extension MyController: NSMenuItemValidation {
         } else {
             debug(.lifetime, "Opeining virtual keyboard as a window")
         }
-        virtualKeyboard?.showWindow()
+        virtualKeyboard?.showAsWindow()
     }
 
     @IBAction func mapLeftCmdKeyAction(_ sender: NSMenuItem!) {

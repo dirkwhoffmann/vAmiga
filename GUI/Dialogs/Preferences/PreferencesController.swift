@@ -216,8 +216,9 @@ extension PreferencesController {
         cleanup()
     }
     
-    func windowDidBecomeKey(_ notification: Notification) {
+    override func windowDidBecomeKey(_ notification: Notification) {
         
+        super.windowDidBecomeKey(notification)
         select()
     }
 }

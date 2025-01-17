@@ -121,15 +121,6 @@ public:
 
     // Informs the video port about a buffer swap
     void buffersWillSwap();
-
-    // Returns a pointer to the stable DMA debugger texture
-    // u32 *getDmaTexture() const;
-
-    // Returns a pointer to a white-noise texture
-    // u32 *getNoiseTexture() const;
-
-    // Returns a pointer to a solid blank texture
-    // u32 *getBlankTexture() const;
 };
 
 }

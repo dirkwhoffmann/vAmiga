@@ -2323,13 +2323,11 @@ NSString *EventSlotName(NSInteger slot)
 
 - (void)dealloc
 {
-    NSLog(@"dealloc");
+    
 }
 
 - (void)kill
-{
-    NSLog(@"kill");
-    
+{    
     assert([self emu] != NULL);
     delete [self emu];
     obj = NULL;

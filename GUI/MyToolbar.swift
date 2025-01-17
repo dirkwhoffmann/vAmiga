@@ -116,7 +116,7 @@ class MyToolbar: NSToolbar {
             parent.virtualKeyboard = VirtualKeyboardController.make(parent: parent)
         }
         if parent.virtualKeyboard?.window?.isVisible == false {
-            parent.virtualKeyboard?.showSheet()
+            parent.virtualKeyboard?.showAsSheet()
         }
     }
     
