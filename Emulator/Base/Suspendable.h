@@ -37,6 +37,4 @@ struct AutoResume {
     ~AutoResume() { s->resume(); }
 };
 
-#define SUSPENDED AutoResume _ar(this);
-
 }

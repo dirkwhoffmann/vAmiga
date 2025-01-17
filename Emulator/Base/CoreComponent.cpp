@@ -155,18 +155,15 @@ void
 CoreComponent::reset(bool hard)
 {
     SerResetter resetter(hard);
-
-    {   SUSPENDED
-
-        // Call the pre-reset delegate
-        postorderWalk([hard](CoreComponent *c) { c->_willReset(hard); });
-
-        // Revert to a clean state
-        postorderWalk([&resetter](CoreComponent *c) { *c << resetter; });
-
-        // Call the post-reset delegate
-        postorderWalk([hard](CoreComponent *c) { c->_didReset(hard); });
-    }
+    
+    // Call the pre-reset delegate
+    postorderWalk([hard](CoreComponent *c) { c->_willReset(hard); });
+    
+    // Revert to a clean state
+    postorderWalk([&resetter](CoreComponent *c) { *c << resetter; });
+    
+    // Call the post-reset delegate
+    postorderWalk([hard](CoreComponent *c) { c->_didReset(hard); });
 }
 
 void
@@ -255,8 +252,6 @@ CoreComponent::size(bool recursive)
 isize
 CoreComponent::load(const u8 *buffer)
 {
-    assert(!isRunning());
-
     isize result = 0;
 
     postorderWalk([this, buffer, &result](CoreComponent *c) {

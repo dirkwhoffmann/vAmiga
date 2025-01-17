@@ -96,8 +96,6 @@ SerServer::processIncomingByte(u8 byte)
 void
 SerServer::didConnect()
 {
-    SUSPENDED
-
     // Start a new sessing
     skippedTransmissions = 0;
     receivedBytes = 0;
@@ -113,8 +111,6 @@ SerServer::didConnect()
 void
 SerServer::didDisconnect()
 {
-    SUSPENDED
-
     // Stop scheduling messages
     agnus.cancel <SLOT_SER> ();
 }

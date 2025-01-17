@@ -833,10 +833,7 @@ CPU::disassembleRange(std::ostream& os, std::pair<u32, u32> range, isize max) co
 void
 CPU::jump(u32 addr)
 {
-    {   SUSPENDED
-        
-        debugger.jump(addr);
-    }
+    debugger.jump(addr);
 }
 
 void

@@ -41,8 +41,6 @@ SocketServer::_dump(Category category, std::ostream& os) const
 void
 SocketServer::disconnect()
 {
-    SUSPENDED
-
     debug(SRV_DEBUG, "Disconnecting...\n");
 
     // Trigger an exception inside the server thread

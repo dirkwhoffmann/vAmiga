@@ -33,8 +33,6 @@ HttpServer::_dump(Category category, std::ostream& os) const
 void
 HttpServer::disconnect()
 {
-    SUSPENDED
-
     debug(SRV_DEBUG, "Disconnecting...\n");
     if (srv) srv->stop();
 }

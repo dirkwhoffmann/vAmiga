@@ -126,8 +126,6 @@ GdbServer::reply(const string &payload)
 bool
 GdbServer::attach(const string &name)
 {
-    SUSPENDED
-    
     this->processName = name;
     this->segList = { };
     

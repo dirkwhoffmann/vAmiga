@@ -414,19 +414,16 @@ DebugConsole::initCommands(Command &root)
             auto src = parseNum(argv[0]);
             auto dst = parseNum(argv[1]);
             auto cnt = parseNum(argv[2]) * value;
-
-            {   SUSPENDED
-
-                if (src < dst) {
-
-                    for (isize i = cnt - 1; i >= 0; i--)
-                        mem.poke8<ACCESSOR_CPU>(u32(dst + i), mem.spypeek8<ACCESSOR_CPU>(u32(src + i)));
-
-                } else {
-
-                    for (isize i = 0; i <= cnt - 1; i++)
-                        mem.poke8<ACCESSOR_CPU>(u32(dst + i), mem.spypeek8<ACCESSOR_CPU>(u32(src + i)));
-                }
+            
+            if (src < dst) {
+                
+                for (isize i = cnt - 1; i >= 0; i--)
+                    mem.poke8<ACCESSOR_CPU>(u32(dst + i), mem.spypeek8<ACCESSOR_CPU>(u32(src + i)));
+                
+            } else {
+                
+                for (isize i = 0; i <= cnt - 1; i++)
+                    mem.poke8<ACCESSOR_CPU>(u32(dst + i), mem.spypeek8<ACCESSOR_CPU>(u32(src + i)));
             }
         }, 1);
 
@@ -437,25 +434,22 @@ DebugConsole::initCommands(Command &root)
         root.add({"f"}, { Arg::sequence }, { Arg::address },
                  std::pair<string, string>("f[.b|.w|.l]", "Find a sequence in memory"),
                  [this](Arguments& argv, long value) {
-
-            {   SUSPENDED
-
-                auto pattern = parseSeq(argv[0]);
-                auto addr = u32(parseNum(argv, 1, mem.debugger.current));
-                auto found = mem.debugger.memSearch(pattern, addr, value == 1 ? 1 : 2);
-
-                if (found >= 0) {
-
-                    std::stringstream ss;
-                    mem.debugger.memDump<ACCESSOR_CPU>(ss, u32(found), 1, value);
-                    retroShell << ss;
-
-                } else {
-
-                    std::stringstream ss;
-                    ss << "Not found";
-                    retroShell << ss;
-                }
+            
+            auto pattern = parseSeq(argv[0]);
+            auto addr = u32(parseNum(argv, 1, mem.debugger.current));
+            auto found = mem.debugger.memSearch(pattern, addr, value == 1 ? 1 : 2);
+            
+            if (found >= 0) {
+                
+                std::stringstream ss;
+                mem.debugger.memDump<ACCESSOR_CPU>(ss, u32(found), 1, value);
+                retroShell << ss;
+                
+            } else {
+                
+                std::stringstream ss;
+                ss << "Not found";
+                retroShell << ss;
             }
         }, 1);
 
@@ -471,15 +465,12 @@ DebugConsole::initCommands(Command &root)
         root.add({"e"}, { Arg::address, Arg::count }, { Arg::value },
                  std::pair<string, string>("e[.b|.w|.l]", "Erase memory"),
                  [this](Arguments& argv, long value) {
-
-            {   SUSPENDED
-
-                auto addr = parseAddr(argv[0]);
-                auto count = parseNum(argv[1]);
-                auto val = u32(parseNum(argv, 2, 0));
-
-                mem.debugger.write(addr, val, value, count);
-            }
+            
+            auto addr = parseAddr(argv[0]);
+            auto count = parseNum(argv[1]);
+            auto val = u32(parseNum(argv, 2, 0));
+            
+            mem.debugger.write(addr, val, value, count);
         }, 1);
 
         root.clone("e.b", {"e"}, "", 1);

@@ -180,8 +180,6 @@ Keyboard::wakeUp()
 void
 Keyboard::autoType(const string &text)
 {
-    SUSPENDED
-
     debug(KEY_DEBUG, "autoType(%s)\n", text.c_str());
     fatalError;
     /*

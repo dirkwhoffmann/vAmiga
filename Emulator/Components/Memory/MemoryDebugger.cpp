@@ -157,28 +157,22 @@ u32
 MemoryDebugger::read(u32 addr, isize sz)
 {
     u32 result;
-
-    printf("sz = %ld addr = %d\n", sz, addr);
-
+    
     // Check alignment
     if (sz != 1 && IS_ODD(addr)) throw Error(VAERROR_ADDR_UNALIGNED);
-
-    {   SUSPENDED
-
-        switch (sz) {
-
-            case 1: result = mem.spypeek8  <ACCESSOR_CPU> (addr); break;
-            case 2: result = mem.spypeek16 <ACCESSOR_CPU> (addr); break;
-            case 4: result = mem.spypeek32 <ACCESSOR_CPU> (addr); break;
-
-            default:
-                fatalError;
-        }
-
-        current = u32(addr + sz);
+    
+    switch (sz) {
+            
+        case 1: result = mem.spypeek8  <ACCESSOR_CPU> (addr); break;
+        case 2: result = mem.spypeek16 <ACCESSOR_CPU> (addr); break;
+        case 4: result = mem.spypeek32 <ACCESSOR_CPU> (addr); break;
+            
+        default:
+            fatalError;
     }
-
-    printf("result = %d\n", result);
+    
+    current = u32(addr + sz);
+    
     return result;
 }
 
@@ -187,33 +181,30 @@ MemoryDebugger::write(u32 addr, u32 val, isize sz, isize repeats)
 {
     // Check alignment
     if (sz != 1 && IS_ODD(addr)) throw Error(VAERROR_ADDR_UNALIGNED);
-
-    {   SUSPENDED
-
-        for (isize i = 0, a = addr; i < repeats && a <= 0xFFFFFF; i++, a += sz) {
-
-            switch (sz) {
-
-                case 1:
-                    mem.poke8  <ACCESSOR_CPU> (u32(a), u8(val));
-                    break;
-
-                case 2:
-                    mem.poke16 <ACCESSOR_CPU> (u32(a), u16(val));
-                    break;
-
-                case 4:
-                    mem.poke16 <ACCESSOR_CPU> (u32(a), HI_WORD(val));
-                    mem.poke16 <ACCESSOR_CPU> (u32(a + 2), LO_WORD(val));
-                    break;
-
-                default:
-                    fatalError;
-            }
+    
+    for (isize i = 0, a = addr; i < repeats && a <= 0xFFFFFF; i++, a += sz) {
+        
+        switch (sz) {
+                
+            case 1:
+                mem.poke8  <ACCESSOR_CPU> (u32(a), u8(val));
+                break;
+                
+            case 2:
+                mem.poke16 <ACCESSOR_CPU> (u32(a), u16(val));
+                break;
+                
+            case 4:
+                mem.poke16 <ACCESSOR_CPU> (u32(a), HI_WORD(val));
+                mem.poke16 <ACCESSOR_CPU> (u32(a + 2), LO_WORD(val));
+                break;
+                
+            default:
+                fatalError;
         }
-
-        current = u32(addr + sz * repeats);
     }
+    
+    current = u32(addr + sz * repeats);
 }
 
 void 

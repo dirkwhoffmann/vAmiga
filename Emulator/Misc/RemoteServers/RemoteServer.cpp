@@ -135,8 +135,6 @@ RemoteServer::start()
 {
     if (isOff()) {
 
-        SUSPENDED
-
         debug(SRV_DEBUG, "Starting server...\n");
         switchState(SRV_STATE_STARTING);
         
@@ -152,8 +150,6 @@ void
 RemoteServer::stop()
 {
     if (!isOff()) {
-
-        SUSPENDED
 
         debug(SRV_DEBUG, "Stopping server...\n");
         switchState(SRV_STATE_STOPPING);

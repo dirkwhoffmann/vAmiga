@@ -89,26 +89,23 @@ RegressionTester::dumpTexture(Amiga &amiga, std::ostream& os)
     auto checkerboard = [&](isize y, isize x) {
         return ((y >> 3) & 1) == ((x >> 3) & 1) ? (char *)&grey2 : (char *)&grey4;
     };
-
-    {   SUSPENDED
+    
+    Texel *ptr = amiga.denise.pixelEngine.stablePtr() - 4 * HBLANK_MIN;
+    char *cptr;
+    
+    for (isize y = Y1; y < Y2; y++) {
         
-        Texel *ptr = amiga.denise.pixelEngine.stablePtr() - 4 * HBLANK_MIN;
-        char *cptr;
-
-        for (isize y = Y1; y < Y2; y++) {
+        for (isize x = X1; x < X2; x++) {
             
-            for (isize x = X1; x < X2; x++) {
-
-                if (y >= y1 && y < y2 && x >= x1 && x < x2) {
-                    cptr = (char *)(ptr + y * HPIXELS + x);
-                } else {
-                    cptr = checkerboard(y, x);
-                }
-
-                os.write(cptr + 0, 1);
-                os.write(cptr + 1, 1);
-                os.write(cptr + 2, 1);
+            if (y >= y1 && y < y2 && x >= x1 && x < x2) {
+                cptr = (char *)(ptr + y * HPIXELS + x);
+            } else {
+                cptr = checkerboard(y, x);
             }
+            
+            os.write(cptr + 0, 1);
+            os.write(cptr + 1, 1);
+            os.write(cptr + 2, 1);
         }
     }
 }

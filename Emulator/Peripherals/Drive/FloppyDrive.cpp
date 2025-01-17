@@ -933,14 +933,11 @@ FloppyDrive::ejectDisk(Cycle delay)
 {
     debug(DSK_DEBUG, "ejectDisk <%ld> (%lld)\n", s, delay);
     
-    {   SUSPENDED
-
-        // Schedule an ejection event
-        agnus.scheduleRel <s> (delay, DCH_EJECT);
-
-        // If there is no delay, service the event immediately
-        if (delay == 0) serviceDiskChangeEvent <s> ();
-    }
+    // Schedule an ejection event
+    agnus.scheduleRel <s> (delay, DCH_EJECT);
+    
+    // If there is no delay, service the event immediately
+    if (delay == 0) serviceDiskChangeEvent <s> ();
 }
 
 void
@@ -977,58 +974,52 @@ FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
 
     // Only proceed if the provided disk is compatible with this drive
     if (!isInsertable(*disk)) throw Error(VAERROR_DISK_INCOMPATIBLE);
-
-    {   SUSPENDED
-        
-        // Get ownership of the disk
-        diskToInsert = std::move(disk);
-
-        // Schedule an insertion event
-        agnus.scheduleRel <s> (delay, DCH_INSERT);
-
-        // If there is no delay, service the event immediately
-        if (delay == 0) serviceDiskChangeEvent <s> ();
-    }
+    
+    // Get ownership of the disk
+    diskToInsert = std::move(disk);
+    
+    // Schedule an insertion event
+    agnus.scheduleRel <s> (delay, DCH_INSERT);
+    
+    // If there is no delay, service the event immediately
+    if (delay == 0) serviceDiskChangeEvent <s> ();
 }
 
 void
 FloppyDrive::catchFile(const std::filesystem::path &path)
 {
-    {   SUSPENDED
-        
-        // Extract the file system
-        auto fs = MutableFileSystem(*this);
-        
-        // Seek file
-        auto file = fs.seekFile(path.string());
-        if (file == nullptr) throw Error(VAERROR_FILE_NOT_FOUND);
-        
-        // Extract file
-        Buffer<u8> buffer;
-        file->writeData(buffer);
-        
-        // Parse hunks
-        auto descr = ProgramUnitDescriptor(buffer);
-        
-        // Seek the code section and read the first instruction word
-        auto offset = descr.seek(HUNK_CODE);
-        if (!offset) throw Error(VAERROR_HUNK_CORRUPTED);
-        u16 instr = HI_LO(buffer[*offset + 8], buffer[*offset + 9]);
-        
-        // Replace the first instruction word by a software trap
-        auto trap = cpu.debugger.swTraps.create(instr);
-        buffer[*offset + 8] = HI_BYTE(trap);
-        buffer[*offset + 9] = LO_BYTE(trap);
-        
-        // Write the modification back to the file system
-        file->overwriteData(buffer);
-        
-        // Convert the modified file system back to a disk
-        auto adf = ADFFile(fs);
-        
-        // Replace the old disk
-        swapDisk(std::make_unique<FloppyDisk>(adf));
-    }
+    // Extract the file system
+    auto fs = MutableFileSystem(*this);
+    
+    // Seek file
+    auto file = fs.seekFile(path.string());
+    if (file == nullptr) throw Error(VAERROR_FILE_NOT_FOUND);
+    
+    // Extract file
+    Buffer<u8> buffer;
+    file->writeData(buffer);
+    
+    // Parse hunks
+    auto descr = ProgramUnitDescriptor(buffer);
+    
+    // Seek the code section and read the first instruction word
+    auto offset = descr.seek(HUNK_CODE);
+    if (!offset) throw Error(VAERROR_HUNK_CORRUPTED);
+    u16 instr = HI_LO(buffer[*offset + 8], buffer[*offset + 9]);
+    
+    // Replace the first instruction word by a software trap
+    auto trap = cpu.debugger.swTraps.create(instr);
+    buffer[*offset + 8] = HI_BYTE(trap);
+    buffer[*offset + 9] = LO_BYTE(trap);
+    
+    // Write the modification back to the file system
+    file->overwriteData(buffer);
+    
+    // Convert the modified file system back to a disk
+    auto adf = ADFFile(fs);
+    
+    // Replace the old disk
+    swapDisk(std::make_unique<FloppyDisk>(adf));
 }
 
 void
@@ -1073,26 +1064,23 @@ FloppyDrive::swapDisk(std::unique_ptr<FloppyDisk> disk)
     
     // Only proceed if the provided disk is compatible with this drive
     if (!isInsertable(*disk)) throw Error(VAERROR_DISK_INCOMPATIBLE);
-
+    
     // Determine delay (in pause mode, we insert immediately)
     auto delay = isRunning() ? config.diskSwapDelay : 0;
-
-    {   SUSPENDED
-
-        if (hasDisk()) {
-
-            // Eject the old disk first
-            ejectDisk();
-
-        } else {
-
-            // Insert the new disk immediately
-            delay = 0;
-        }
-
-        // Insert the new disk with a delay
-        insertDisk(std::move(disk), delay);
+    
+    if (hasDisk()) {
+        
+        // Eject the old disk first
+        ejectDisk();
+        
+    } else {
+        
+        // Insert the new disk immediately
+        delay = 0;
     }
+    
+    // Insert the new disk with a delay
+    insertDisk(std::move(disk), delay);
 }
 
 void

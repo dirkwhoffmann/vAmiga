@@ -318,14 +318,11 @@ DiagBoard::processLoadSeg(u32 ptr1, u32 ptr2, bool bstr)
 void
 DiagBoard::catchTask(const string &name)
 {
-    {   SUSPENDED
-        
-        if (!diagBoard.pluggedIn()) {
-            throw Error(VAERROR_OSDB, "Diagnose board is not plugged in.");
-        }
-        if (std::find(targets.begin(), targets.end(), name) == targets.end()) {
-            targets.push_back(name);
-        }
+    if (!diagBoard.pluggedIn()) {
+        throw Error(VAERROR_OSDB, "Diagnose board is not plugged in.");
+    }
+    if (std::find(targets.begin(), targets.end(), name) == targets.end()) {
+        targets.push_back(name);
     }
 }
 

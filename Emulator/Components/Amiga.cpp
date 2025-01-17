@@ -415,54 +415,51 @@ void
 Amiga::set(ConfigScheme scheme)
 {
     assert_enum(ConfigScheme, scheme);
-
-    {   SUSPENDED
-
-        switch(scheme) {
-
-            case CONFIG_A1000_OCS_1MB:
-
-                set(OPT_CPU_REVISION, CPU_68000);
-                set(OPT_AGNUS_REVISION, AGNUS_OCS_OLD);
-                set(OPT_DENISE_REVISION, DENISE_OCS);
-                set(OPT_AMIGA_VIDEO_FORMAT, FORMAT_PAL);
-                set(OPT_MEM_CHIP_RAM, 512);
-                set(OPT_MEM_SLOW_RAM, 512);
-                break;
-
-            case CONFIG_A500_OCS_1MB:
-
-                set(OPT_CPU_REVISION, CPU_68000);
-                set(OPT_AGNUS_REVISION, AGNUS_OCS);
-                set(OPT_DENISE_REVISION, DENISE_OCS);
-                set(OPT_AMIGA_VIDEO_FORMAT, FORMAT_PAL);
-                set(OPT_MEM_CHIP_RAM, 512);
-                set(OPT_MEM_SLOW_RAM, 512);
-                break;
-
-            case CONFIG_A500_ECS_1MB:
-
-                set(OPT_CPU_REVISION, CPU_68000);
-                set(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
-                set(OPT_DENISE_REVISION, DENISE_OCS);
-                set(OPT_AMIGA_VIDEO_FORMAT, FORMAT_PAL);
-                set(OPT_MEM_CHIP_RAM, 512);
-                set(OPT_MEM_SLOW_RAM, 512);
-                break;
-
-            case CONFIG_A500_PLUS_1MB:
-
-                set(OPT_CPU_REVISION, CPU_68000);
-                set(OPT_AGNUS_REVISION, AGNUS_ECS_2MB);
-                set(OPT_DENISE_REVISION, DENISE_ECS);
-                set(OPT_AMIGA_VIDEO_FORMAT, FORMAT_PAL);
-                set(OPT_MEM_CHIP_RAM, 512);
-                set(OPT_MEM_SLOW_RAM, 512);
-                break;
-
-            default:
-                fatalError;
-        }
+    
+    switch(scheme) {
+            
+        case CONFIG_A1000_OCS_1MB:
+            
+            set(OPT_CPU_REVISION, CPU_68000);
+            set(OPT_AGNUS_REVISION, AGNUS_OCS_OLD);
+            set(OPT_DENISE_REVISION, DENISE_OCS);
+            set(OPT_AMIGA_VIDEO_FORMAT, FORMAT_PAL);
+            set(OPT_MEM_CHIP_RAM, 512);
+            set(OPT_MEM_SLOW_RAM, 512);
+            break;
+            
+        case CONFIG_A500_OCS_1MB:
+            
+            set(OPT_CPU_REVISION, CPU_68000);
+            set(OPT_AGNUS_REVISION, AGNUS_OCS);
+            set(OPT_DENISE_REVISION, DENISE_OCS);
+            set(OPT_AMIGA_VIDEO_FORMAT, FORMAT_PAL);
+            set(OPT_MEM_CHIP_RAM, 512);
+            set(OPT_MEM_SLOW_RAM, 512);
+            break;
+            
+        case CONFIG_A500_ECS_1MB:
+            
+            set(OPT_CPU_REVISION, CPU_68000);
+            set(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
+            set(OPT_DENISE_REVISION, DENISE_OCS);
+            set(OPT_AMIGA_VIDEO_FORMAT, FORMAT_PAL);
+            set(OPT_MEM_CHIP_RAM, 512);
+            set(OPT_MEM_SLOW_RAM, 512);
+            break;
+            
+        case CONFIG_A500_PLUS_1MB:
+            
+            set(OPT_CPU_REVISION, CPU_68000);
+            set(OPT_AGNUS_REVISION, AGNUS_ECS_2MB);
+            set(OPT_DENISE_REVISION, DENISE_ECS);
+            set(OPT_AMIGA_VIDEO_FORMAT, FORMAT_PAL);
+            set(OPT_MEM_CHIP_RAM, 512);
+            set(OPT_MEM_SLOW_RAM, 512);
+            break;
+            
+        default:
+            fatalError;
     }
 }
 
@@ -990,7 +987,7 @@ Amiga::takeSnapshot()
     Snapshot *result;
     
     // Take the snapshot
-    { SUSPENDED result = new Snapshot(*this); }
+   result = new Snapshot(*this);
     
     // Compress the snapshot if requested
     if (config.compressSnapshots) result->compress();
@@ -1044,62 +1041,31 @@ Amiga::loadSnapshot(const Snapshot &snap)
 {
     // Make a copy so we can modify the snapshot
     Snapshot snapshot(snap);
-
+    
     // Uncompress the snapshot
     snapshot.uncompress();
     
-    {   SUSPENDED
-
-        try {
-
-            // Restore the saved state
-            load(snapshot.getData());
-
-        } catch (Error &error) {
-
-            /* If we reach this point, the emulator has been put into an
-             * inconsistent state due to corrupted snapshot data. We cannot
-             * continue emulation, because it would likely crash the
-             * application. Because we cannot revert to the old state either,
-             * we perform a hard reset to eliminate the inconsistency.
-             */
-            hardReset();
-            throw error;
-        }
+    try {
+        
+        // Restore the saved state
+        load(snapshot.getData());
+        
+    } catch (Error &error) {
+        
+        /* If we reach this point, the emulator has been put into an
+         * inconsistent state due to corrupted snapshot data. We cannot
+         * continue emulation, because it would likely crash the
+         * application. Because we cannot revert to the old state either,
+         * we perform a hard reset to eliminate the inconsistency.
+         */
+        hardReset();
+        throw error;
     }
-
+    
     // Inform the GUI
     msgQueue.put(MSG_SNAPSHOT_RESTORED);
     msgQueue.put(MSG_VIDEO_FORMAT, agnus.isPAL() ? FORMAT_PAL : FORMAT_NTSC);
 }
-
-/*
-void
-Amiga::takeAutoSnapshot()
-{
-    if (autoSnapshot) {
-
-        warn("Old auto-snapshot still present. Ignoring request.\n");
-        return;
-    }
-
-    autoSnapshot = new Snapshot(*this);
-    msgQueue.put(MSG_AUTO_SNAPSHOT_TAKEN);
-}
-
-void
-Amiga::takeUserSnapshot()
-{
-    if (userSnapshot) {
-
-        warn("Old user-snapshot still present. Ignoring request.\n");
-        return;
-    }
-
-    userSnapshot = new Snapshot(*this);
-    msgQueue.put(MSG_USER_SNAPSHOT_TAKEN);
-}
-*/
 
 void
 Amiga::processCommand(const Cmd &cmd)
@@ -1135,21 +1101,15 @@ Amiga::eolHandler()
 void
 Amiga::setAlarmAbs(Cycle trigger, i64 payload)
 {
-    {   SUSPENDED
-
-        alarms.push_back(Alarm { trigger, payload });
-        scheduleNextAlarm();
-    }
+    alarms.push_back(Alarm { trigger, payload });
+    scheduleNextAlarm();
 }
 
 void
 Amiga::setAlarmRel(Cycle trigger, i64 payload)
 {
-    {   SUSPENDED
-
-        alarms.push_back(Alarm { agnus.clock + trigger, payload });
-        scheduleNextAlarm();
-    }
+    alarms.push_back(Alarm { agnus.clock + trigger, payload });
+    scheduleNextAlarm();
 }
 
 void

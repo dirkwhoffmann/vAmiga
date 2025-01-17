@@ -287,8 +287,6 @@ Thread::warpOn(isize source)
 
     if (!GET_BIT(warp, source)) {
 
-        SUSPENDED
-
         auto old = warp;
         SET_BIT(warp, source);
         if (!!old != !!warp) _warpOn();
@@ -301,8 +299,6 @@ Thread::warpOff(isize source)
     assert(source < 7);
 
     if (GET_BIT(warp, source)) {
-
-        SUSPENDED
 
         auto old = warp;
         CLR_BIT(warp, source);
@@ -317,8 +313,6 @@ Thread::trackOn(isize source)
 
     if (!GET_BIT(track, source)) {
 
-        SUSPENDED
-
         auto old = track;
         SET_BIT(track, source);
         if (!!old != !!track) _trackOn();
@@ -331,8 +325,6 @@ Thread::trackOff(isize source)
     assert(source < 7);
 
     if (GET_BIT(track, source)) {
-
-        SUSPENDED
 
         auto old = track;
         CLR_BIT(track, source);

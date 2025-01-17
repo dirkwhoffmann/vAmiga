@@ -276,19 +276,13 @@ Emulator::getTexture() const
 void
 Emulator::hardReset()
 {
-    {   SUSPENDED
-
-        main.hardReset();
-    }
+    main.hardReset();
 }
 
 void 
 Emulator::softReset()
 {
-    {   SUSPENDED
-
-        main.softReset();
-    }
+    main.softReset();
 }
 
 void 
