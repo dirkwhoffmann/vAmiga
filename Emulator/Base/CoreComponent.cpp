@@ -92,25 +92,6 @@ CoreComponent::isHalted() const
 {
     return emulator.isHalted();
 }
-/*
-bool
-CoreComponent::isSuspended() const
-{
-    return emulator.isSuspended();
-}
-
-void
-CoreComponent::suspend() const
-{
-    return emulator.suspend();
-}
-
-void
-CoreComponent::resume() const
-{
-    return emulator.resume();
-}
-*/
 
 void
 CoreComponent::isReady() const

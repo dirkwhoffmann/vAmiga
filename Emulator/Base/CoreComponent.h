@@ -15,7 +15,6 @@
 #include "Inspectable.h"
 #include "Synchronizable.h"
 #include "Configurable.h"
-#include "Suspendable.h"
 #include "Serializable.h"
 #include "Concurrency.h"
 #include <vector>
@@ -95,17 +94,6 @@ public:
     // Computes a checksum
     u64 checksum(bool recursive);
 
-
-    //
-    // Suspending and Resuming
-    //
-
-    // Suspends or resumes the emulator thread
-    /*
-    bool isSuspended() const override;
-    void suspend() const override;
-    void resume() const override;
-     */
 
     //
     // Configuring

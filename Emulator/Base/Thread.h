@@ -12,6 +12,7 @@
 #include "ThreadTypes.h"
 #include "CoreComponent.h"
 #include "Chrono.h"
+// #include "Suspendable.h"
 #include "Wakeable.h"
 
 namespace vamiga {
@@ -28,7 +29,7 @@ typedef util::Exception StateChangeException;
  *  the basic functionality to manage the execution state. It provides functions
  *  to launch the emulator thread, to query it's current state, and to switch
  *  to another state. */
-class Thread : public CoreObject, public Suspendable, public Wakeable {
+class Thread : public CoreObject, public Wakeable {
 
 protected:
 
@@ -148,17 +149,17 @@ public:
 
     /** Returns the current suspension state.
      */
-    bool isSuspended() const override { return suspendCounter > 0; }
+    bool isSuspended() const { return suspendCounter > 0; }
 
     /** Suspends the thread.
      *  The thread is temporarily suspended
      */
-    void suspend() const override;
+    void suspend() const;
 
     /** Resumes the thread.
      *  The thread is put back in running state
      */
-    void resume() const override;
+    void resume() const;
 
     bool isInitialized() const { return state != STATE_UNINIT; }
     bool isPoweredOn() const { return state != STATE_UNINIT && state != STATE_OFF; }
