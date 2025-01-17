@@ -1666,10 +1666,7 @@ VAmiga::VAmiga() {
     hd3.drive = &emu->main.hd3;
     hd3.controller.emu = emu;
     hd3.controller.controller = &emu->main.hd3con;
-
-    host.emu = emu;
-    host.host = &emu->main.host;
-
+    
     keyboard.emu = emu;
     keyboard.keyboard = &emu->main.keyboard;
 

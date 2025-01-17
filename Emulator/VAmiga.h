@@ -24,7 +24,7 @@ namespace moira { class Guards; class Debugger; }
 // Base class for all APIs
 //
 
-class API : public Dumpable {
+class API {
 
 public:
 
@@ -35,10 +35,6 @@ public:
 
     void suspend() const;
     void resume() const;
-
-    virtual void _dump(Category category, std::ostream& ss) const { };
-   
-    // void dump(Category category) const;
     
 protected:
 
@@ -52,7 +48,6 @@ protected:
 class AmigaAPI : public API {
 
     friend class VAmiga;
-    
     class Amiga *amiga = nullptr;
     
 public:
@@ -147,7 +142,6 @@ public:
 class DmaDebuggerAPI : public API {
 
     friend class VAmiga;
-    
     class DmaDebugger *dmaDebugger = nullptr;
 
 public:
@@ -165,7 +159,6 @@ public:
 class LogicAnalyzerAPI : public API {
 
     friend class VAmiga;
-    
     class LogicAnalyzer *logicAnalyzer = nullptr;
 
 public:
@@ -183,7 +176,6 @@ public:
 class BlitterAPI : public API {
 
     friend class VAmiga;
-    
     class Blitter *blitter = nullptr;
 
 public:
@@ -198,9 +190,12 @@ public:
     const BlitterInfo &getCachedInfo() const;
 };
 
-struct CopperAPI : public API {
+class CopperAPI : public API {
 
+    friend class VAmiga;
     class Copper *copper = nullptr;
+
+public:
 
     /** @brief  Returns the component's current state.
      */
@@ -232,10 +227,13 @@ struct CopperAPI : public API {
     bool isIllegalInstr(u32 addr) const;
 };
 
-struct AgnusAPI : public API {
+class AgnusAPI : public API {
 
+    friend class VAmiga;
     class Agnus *agnus = nullptr;
 
+public:
+    
     CopperAPI copper;
     BlitterAPI blitter;
     DmaDebuggerAPI dmaDebugger;
@@ -264,10 +262,13 @@ struct AgnusAPI : public API {
 // CIA
 //
 
-struct CIAAPI : public API {
+class CIAAPI : public API {
 
+    friend class VAmiga;
     class CIA *cia = nullptr;
 
+public:
+    
     /** @brief  Returns the component's current configuration.
      */
     const CIAConfig &getConfig() const;
@@ -287,10 +288,13 @@ struct CIAAPI : public API {
 // CPU
 //
 
-struct GuardsAPI : public API {
+class GuardsAPI : public API {
 
+    friend class VAmiga;
     class GuardList *guards = nullptr;
 
+public:
+    
     /** @brief  Returns the number of guards in the guard list.
      */
     isize elements() const;
@@ -366,9 +370,12 @@ struct GuardsAPI : public API {
 
 };
 
-struct CPUDebuggerAPI : public API {
+class CPUDebuggerAPI : public API {
 
+    friend class VAmiga;
     class CPU *cpu = nullptr;
+
+public:
 
     /** @brief  Returns the number of instructions in the record buffer.
      *  @note   The record buffer is only filled in track mode. To save
@@ -399,9 +406,12 @@ struct CPUDebuggerAPI : public API {
     string vectorName(isize i);
 };
 
-struct CPUAPI : public API {
+class CPUAPI : public API {
 
+    friend class VAmiga;
     class CPU *cpu = nullptr;
+
+public:
 
     CPUDebuggerAPI debugger;
     GuardsAPI breakpoints;
@@ -417,10 +427,13 @@ struct CPUAPI : public API {
     const CPUInfo &getCachedInfo() const;
 };
 
-struct DeniseAPI : public API {
+class DeniseAPI : public API {
 
+    friend class VAmiga;
     class Denise *denise = nullptr;
 
+public:
+    
     /** @brief  Returns the component's current configuration.
      */
     const DeniseConfig &getConfig() const;
@@ -436,10 +449,13 @@ struct DeniseAPI : public API {
 // Memory
 //
 
-struct MemoryDebuggerAPI : public API {
+class MemoryDebuggerAPI : public API {
 
+    friend class VAmiga;
     class Memory *mem = nullptr;
 
+public:
+    
     /// @name Debugging memory
     /// @{
 
@@ -461,10 +477,13 @@ struct MemoryDebuggerAPI : public API {
     /// @}
 };
 
-struct MemoryAPI : public API {
+class MemoryAPI : public API {
 
+    friend class VAmiga;
     class Memory *mem = nullptr;
 
+public:
+    
     MemoryDebuggerAPI debugger;
 
     /// @name Analying the component
@@ -528,11 +547,14 @@ struct MemoryAPI : public API {
 // Paula
 //
 
-struct AudioChannelAPI : public API {
+class AudioChannelAPI : public API {
 
+    friend class VAmiga;
     class Paula *paula = nullptr;
     isize channel = 0;
 
+public:
+    
     AudioChannelAPI(isize channel) : API(), channel(channel) { }
 
     /** @brief  Returns the component's current state.
@@ -541,10 +563,13 @@ struct AudioChannelAPI : public API {
     const StateMachineInfo &getCachedInfo() const;
 };
 
-struct DiskControllerAPI : public API {
+class DiskControllerAPI : public API {
 
+    friend class VAmiga;
     class DiskController *diskController = nullptr;
 
+public:
+    
     /** @brief  Returns the component's current configuration.
      */
     const DiskControllerConfig &getConfig() const;
@@ -555,20 +580,26 @@ struct DiskControllerAPI : public API {
     const DiskControllerInfo &getCachedInfo() const;
 };
 
-struct UARTAPI : public API {
+class UARTAPI : public API {
 
+    friend class VAmiga;
     class UART *uart = nullptr;
 
+public:
+    
     /** @brief  Returns the component's current state.
      */
     const UARTInfo &getInfo() const;
     const UARTInfo &getCachedInfo() const;
 };
 
-struct PaulaAPI : public API {
+class PaulaAPI : public API {
 
+    friend class VAmiga;
     class Paula *paula = nullptr;
 
+public:
+    
     AudioChannelAPI audioChannel0 = AudioChannelAPI(0);
     AudioChannelAPI audioChannel1 = AudioChannelAPI(1);
     AudioChannelAPI audioChannel2 = AudioChannelAPI(2);
@@ -586,10 +617,13 @@ struct PaulaAPI : public API {
     const PaulaInfo &getCachedInfo() const;
 };
 
-struct RTCAPI : public API {
+class RTCAPI : public API {
 
+    friend class VAmiga;
     class RTC *rtc = nullptr;
 
+public:
+    
     /** @brief  Returns the component's current configuration.
      */
     const RTCConfig &getConfig() const;
@@ -610,10 +644,13 @@ struct RTCAPI : public API {
 // Peripherals (FloppyDrive)
 //
 
-struct FloppyDriveAPI : public API {
+class FloppyDriveAPI : public API {
 
+    friend class VAmiga;
     class FloppyDrive *drive = nullptr;
 
+public:
+    
     /** @brief  Returns the component's current configuration.
      */
     const FloppyDriveConfig &getConfig() const;
@@ -676,10 +713,13 @@ struct FloppyDriveAPI : public API {
 // Peripherals (HardDrive)
 //
 
-struct HdControllerAPI : public API {
+class HdControllerAPI : public API {
 
+    friend class VAmiga;
     class HdController *controller = nullptr;
 
+public:
+    
     /** @brief  Provides details about the controller
      */
     // const HdcTraits &getTraits() const;
@@ -694,10 +734,13 @@ struct HdControllerAPI : public API {
     const HdcStats &getStats() const;
 };
 
-struct HardDriveAPI : public API {
+class HardDriveAPI : public API {
 
+    friend class VAmiga;
     class HardDrive *drive = nullptr;
 
+public:
+    
     HdControllerAPI controller;
 
     /** @brief  Getter for the raw disk object
@@ -772,10 +815,13 @@ struct HardDriveAPI : public API {
 // Peripherals (Joystick)
 //
 
-struct JoystickAPI : public API {
+class JoystickAPI : public API {
 
+    friend class VAmiga;
     class Joystick *joystick = nullptr;
 
+public:
+    
     /** @brief  Returns the component's current configuration.
      */
     const JoystickConfig &getConfig() const;
@@ -795,10 +841,13 @@ struct JoystickAPI : public API {
 // Peripherals (Keyboard)
 //
 
-struct KeyboardAPI : public API {
+class KeyboardAPI : public API {
 
+    friend class VAmiga;
     class Keyboard *keyboard = nullptr;
 
+public:
+    
     /** @brief  Returns the component's current configuration.
      */
     const KeyboardConfig &getConfig() const;
@@ -852,10 +901,13 @@ struct KeyboardAPI : public API {
 // Peripherals (Mouse)
 //
 
-struct MouseAPI : public API {
+class MouseAPI : public API {
 
+    friend class VAmiga;
     class Mouse *mouse = nullptr;
 
+public:
+    
     /** @brief  Returns the component's current configuration.
      */
     const MouseConfig &getConfig() const;
@@ -917,10 +969,13 @@ struct MouseAPI : public API {
 // Ports (AudioPort)
 //
 
-struct AudioPortAPI : public API {
+class AudioPortAPI : public API {
 
+    friend class VAmiga;
     class AudioPort *port = nullptr;
 
+public:
+    
     /** @brief  Returns the component's current configuration.
      */
     const AudioPortConfig &getConfig() const;
@@ -980,10 +1035,13 @@ struct AudioPortAPI : public API {
 // Ports (ControlPort)
 //
 
-struct ControlPortAPI : public API {
+class ControlPortAPI : public API {
 
+    friend class VAmiga;
     class ControlPort *controlPort = nullptr;
 
+public:
+    
     JoystickAPI joystick;
     MouseAPI mouse;
 
@@ -998,10 +1056,13 @@ struct ControlPortAPI : public API {
 // Ports (SerialPort)
 //
 
-struct SerialPortAPI : public API {
+class SerialPortAPI : public API {
 
+    friend class VAmiga;
     class SerialPort *serialPort = nullptr;
 
+public:
+    
     /** @brief  Returns the component's current configuration.
      */
     const SerialPortConfig &getConfig() const;
@@ -1020,10 +1081,13 @@ struct SerialPortAPI : public API {
 // Ports (VideoPort)
 //
 
-struct VideoPortAPI : public API {
+class VideoPortAPI : public API {
 
+    friend class VAmiga;
     class VideoPort *videoPort = nullptr;
 
+public:
+    
     /** @brief  Returns the component's current configuration.
      */
     const VideoPortConfig &getConfig() const;
@@ -1073,10 +1137,13 @@ struct VideoPortAPI : public API {
 // Misc (Debugger)
 //
 
-struct DebuggerAPI : public API {
+class DebuggerAPI : public API {
 
+    friend class VAmiga;
     class Debugger *debugger = nullptr;
 
+public:
+    
     /** @brief  Returns a string representations for a portion of memory.
      */
     /*
@@ -1115,10 +1182,13 @@ struct DebuggerAPI : public API {
  *    storing shader-relevant parameters that are irrelevant to the emulation
  *    core.
  */
-struct DefaultsAPI : public API {
+class DefaultsAPI : public API {
 
+    friend class VAmiga;
     class Defaults *defaults = nullptr;
 
+public:
+    
     DefaultsAPI(Defaults *defaults) : defaults(defaults) { }
 
     ///
@@ -1310,12 +1380,6 @@ struct DefaultsAPI : public API {
     /// @}
 };
 
-struct HostAPI : public API {
-
-    class Host *host = nullptr;
-
-};
-
 
 //
 // Misc (RetroShell)
@@ -1323,10 +1387,13 @@ struct HostAPI : public API {
 
 /** RetroShell Public API
  */
-struct RetroShellAPI : public API {
+class RetroShellAPI : public API {
 
+    friend class VAmiga;
     class RetroShell *retroShell = nullptr;
 
+public:
+    
     /// @name Querying the console
     /// @{
     ///
@@ -1400,10 +1467,13 @@ struct RetroShellAPI : public API {
 // Misc (Recorder)
 //
 
-struct RecorderAPI : public API {
+class RecorderAPI : public API {
 
+    friend class VAmiga;
     class Recorder *recorder = nullptr;
 
+public:
+    
     /** @brief  Returns the component's configuration.
      */
     // const RecorderConfig &getConfig() const;
@@ -1460,10 +1530,13 @@ struct RecorderAPI : public API {
 // Misc (RemoteManager)
 //
 
-struct RemoteManagerAPI : public API {
+class RemoteManagerAPI : public API {
 
+    friend class VAmiga;
     class RemoteManager *remoteManager = nullptr;
 
+public:
+    
     /// @name Analyzing the emulator
     /// @{
 
@@ -1511,7 +1584,6 @@ public:
     KeyboardAPI keyboard;
 
     // Misc
-    HostAPI host;
     RecorderAPI recorder;
     RemoteManagerAPI remoteManager;
     RetroShellAPI retroShell;
