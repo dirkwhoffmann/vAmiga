@@ -42,6 +42,7 @@ protected:
 
     // Synchronization mutex
     mutable util::ReentrantMutex lock;
+    mutable util::ReentrantMutex suspensionLock;
     
     // Warp state and track state
     u8 warp = 0;

@@ -56,12 +56,11 @@ Thread::execute()
 
     if (std::abs(missing) <= 5) {
 
+        lock.lock();
         loadClock.go();
 
         // Execute all missing frames
         for (isize i = 0; i < missing; i++, frameCounter++) {
-            
-            lock.lock();
 
             // Execute a single frame
             try { computeFrame(); } catch (StateChangeException &exc) {
@@ -69,11 +68,10 @@ Thread::execute()
                 // Serve a state change request
                 switchState((ExecState)exc.data);
             }
-            
-            lock.unlock();
         }
         
         loadClock.stop();
+        lock.unlock();
 
     } else {
 
@@ -91,9 +89,13 @@ Thread::execute()
 void
 Thread::sleep()
 {
-    // Don't sleep if the emulator is running in warp mode
-    if (warp && isRunning()) return;
-
+    // Don't sleep if the emulator is running in warp mode and no suspension is pending
+    if (warp && isRunning() && suspensionLock.tryLock()) {
+        
+        suspensionLock.unlock();
+        return;
+    }
+    
     // Set a timeout to prevent the thread from stalling
     auto timeout = util::Time::milliseconds(50);
 
@@ -349,13 +351,14 @@ void
 Thread::suspend() const
 {
     debug(RUN_DEBUG, "Suspending (%ld)...\n", suspendCounter);
-    
+        
     if (isEmulatorThread()) {
         
         debug(RUN_DEBUG, "suspend() called by the emulator thread\n");
 
-    } else  if (suspendCounter++ == 0) {
+    } else if (suspendCounter++ == 0) {
         
+        suspensionLock.lock();
         lock.lock();
     }
 }
@@ -375,6 +378,7 @@ Thread::resume() const
         
     } else if (--suspendCounter == 0) {
         
+        suspensionLock.unlock();
         lock.unlock();
     }
 }

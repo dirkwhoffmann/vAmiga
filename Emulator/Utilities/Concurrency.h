@@ -18,11 +18,12 @@ namespace vamiga::util {
 class Mutex
 {
     std::mutex mutex;
-
+    
 public:
-        
+    
     void lock() { mutex.lock(); }
     void unlock() { mutex.unlock(); }
+    bool tryLock() { return mutex.try_lock(); }
 };
 
 class ReentrantMutex
@@ -33,6 +34,7 @@ public:
         
     void lock() { mutex.lock(); }
     void unlock() { mutex.unlock(); }
+    bool tryLock() { return mutex.try_lock(); }
 };
 
 class AutoMutex
