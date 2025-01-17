@@ -145,6 +145,10 @@ private:
 
 public:
 
+    /** Returns the current suspension state.
+     */
+    bool isSuspended() const override { return suspendCounter > 0; }
+
     /** Suspends the thread.
      *  The thread is temporarily suspended
      */
@@ -163,7 +167,6 @@ public:
     bool isHalted() const { return state == STATE_HALTED; }
     bool isWarping() const { return warp != 0; }
     bool isTracking() const { return track != 0; }
-    bool isSuspended() const { return suspendCounter > 0; }
 
     void powerOn();
     void powerOff();

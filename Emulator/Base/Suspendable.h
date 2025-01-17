@@ -20,6 +20,9 @@ public:
     Suspendable() { }
     virtual ~Suspendable() = default;
 
+    // Informs about the current state
+    virtual bool isSuspended() const = 0;
+    
     // Suspends the thread
     virtual void suspend() const = 0;
 

@@ -88,15 +88,15 @@ CoreComponent::isRunning() const
 }
 
 bool
-CoreComponent::isSuspended() const
-{
-    return emulator.isSuspended();
-}
-
-bool
 CoreComponent::isHalted() const
 {
     return emulator.isHalted();
+}
+
+bool
+CoreComponent::isSuspended() const
+{
+    return emulator.isSuspended();
 }
 
 void

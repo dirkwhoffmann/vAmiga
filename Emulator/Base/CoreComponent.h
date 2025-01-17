@@ -87,7 +87,6 @@ public:
     virtual bool isPoweredOn() const;
     virtual bool isPaused() const;
     virtual bool isRunning() const;
-    virtual bool isSuspended() const;
     virtual bool isHalted() const;
 
     // Throws an exception if the emulator is not ready to power on
@@ -102,6 +101,7 @@ public:
     //
 
     // Suspends or resumes the emulator thread
+    bool isSuspended() const override;
     void suspend() const override;
     void resume() const override;
 
