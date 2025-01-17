@@ -75,7 +75,8 @@ Emulator::initialize()
     ahead = main;
 
     // Switch state
-    state = newState = STATE_OFF;
+    state = STATE_OFF;
+    
     assert(isInitialized());
 }
 

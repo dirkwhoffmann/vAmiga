@@ -25,6 +25,7 @@ Thread::launch()
     assert(isLaunched());
 }
 
+/*
 void
 Thread::assertLaunched()
 {
@@ -34,6 +35,7 @@ Thread::assertLaunched()
                                         "Missing call to launch()."));
     }
 }
+*/
 
 void
 Thread::resync()
@@ -131,14 +133,6 @@ Thread::runLoop()
         // Compute missing frames
         execute();
 
-        // Are we requested to change state?
-        if (stateChangeRequest.test()) {
-
-            switchState(newState);
-            stateChangeRequest.clear();
-            stateChangeRequest.notify_one();
-        }
-
         // Synchronize timing
         sleep();
 
@@ -154,7 +148,6 @@ Thread::switchState(ExecState newState)
     
     auto invalid = [&]() {
 
-        assert(false);
         fatal("Invalid state transition: %s -> %s\n",
               ExecStateEnum::key(state), ExecStateEnum::key(newState));
     };
@@ -348,36 +341,14 @@ Thread::trackOff(isize source)
 void
 Thread::changeStateTo(ExecState requestedState)
 {
-    assertLaunched();
-    
-    if (isEmulatorThread()) {
-        
-        // Switch immediately
-        switchState(requestedState);
-        assert(state == requestedState);
-        
-    } else {
-        
-        assert(isSuspended());
+    if (!isLaunched()) {
 
-        // Switch immediately
-        switchState(requestedState);
-        assert(state == requestedState);
-        
-        /*
-        // Remember the requested state
-        newState = requestedState;
-        
-        // Request the change
-        assert(stateChangeRequest.test() == false);
-        stateChangeRequest.test_and_set();
-        assert(stateChangeRequest.test() == true);
-        
-        // Wait until the change has been performed
-        stateChangeRequest.wait(true);
-        assert(stateChangeRequest.test() == false);
-        */
+        throw std::runtime_error(string("The emulator thread hasn't been lauchend yet. "
+                                        "Missing call to launch()."));
     }
+
+    switchState(requestedState);
+    assert(state == requestedState);
 }
 
 void

@@ -37,8 +37,8 @@ protected:
     
     // The current thread state and a change request
     ExecState state = STATE_UNINIT;
-    ExecState newState = STATE_UNINIT;
-    std::atomic_flag stateChangeRequest {};
+    // ExecState newState = STATE_UNINIT;
+    // std::atomic_flag stateChangeRequest {};
 
     // Synchronization mutex
     mutable util::ReentrantMutex lock;
@@ -88,7 +88,7 @@ protected:
     void launch();
 
     // Sanity check
-    void assertLaunched();
+    // void assertLaunched();
 
 
     //

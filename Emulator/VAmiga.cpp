@@ -1859,8 +1859,11 @@ VAmiga::softReset()
 void
 VAmiga::halt()
 {
-    // Signal the emulator to halt
-    { SUSPEND_RESUME emu->halt(); }
+    {   SUSPEND_RESUME
+        
+        // Signal the emulator to halt
+        emu->halt();
+    }
     
     // Wait for the thread to terminate
     emu->join();
