@@ -145,7 +145,7 @@ void
 Thread::switchState(ExecState newState)
 {
     assert(isEmulatorThread() || isSuspended());
-    
+        
     auto invalid = [&]() {
 
         fatal("Invalid state transition: %s -> %s\n",
@@ -155,6 +155,12 @@ Thread::switchState(ExecState newState)
     debug(RUN_DEBUG,
           "switchState: %s -> %s\n",
           ExecStateEnum::key(state), ExecStateEnum::key(newState));
+
+    if (!isLaunched()) {
+
+        throw std::runtime_error(string("The emulator thread hasn't been lauchend yet. "
+                                        "Missing call to launch()."));
+    }
 
     while (state != newState) {
 
@@ -211,6 +217,7 @@ Thread::switchState(ExecState newState)
     }
 
     debug(RUN_DEBUG, "switchState: %s\n", ExecStateEnum::key(state));
+    assert(state == newState);
 }
 
 void
@@ -220,7 +227,7 @@ Thread::powerOn()
 
     if (isPoweredOff()) {
 
-        changeStateTo(STATE_PAUSED);
+        switchState(STATE_PAUSED);
     }
 }
 
@@ -231,7 +238,7 @@ Thread::powerOff()
 
     if (!isPoweredOff()) {
 
-        changeStateTo(STATE_OFF);
+        switchState(STATE_OFF);
     }
 }
 
@@ -245,7 +252,7 @@ Thread::run()
         // Throw an exception if the emulator is not ready to run
         isReady();
 
-        changeStateTo(STATE_RUNNING);
+        switchState(STATE_RUNNING);
     }
 }
 
@@ -256,25 +263,18 @@ Thread::pause()
 
     if (isRunning()) {
 
-        changeStateTo(STATE_PAUSED);
+        switchState(STATE_PAUSED);
     }
 }
 
 void
 Thread::halt()
 {
+    debug(RUN_DEBUG, "halt()\n");
+
     if (state != STATE_UNINIT && state != STATE_HALTED) {
 
-        debug(RUN_DEBUG, "Switching to HALT state...\n");
-        changeStateTo(STATE_HALTED);
-
-        /*
-        debug(RUN_DEBUG, "Waiting for the emulator thread to terminate...\n");
-        join();
-
-        debug(RUN_DEBUG, "Emulator is halted.\n");
-        assert(state == STATE_HALTED);
-        */
+        switchState(STATE_HALTED);
     }
 }
 
@@ -336,19 +336,6 @@ Thread::trackOff(isize source)
         CLR_BIT(track, source);
         if (!!old != !!track) _trackOff();
     }
-}
-
-void
-Thread::changeStateTo(ExecState requestedState)
-{
-    if (!isLaunched()) {
-
-        throw std::runtime_error(string("The emulator thread hasn't been lauchend yet. "
-                                        "Missing call to launch()."));
-    }
-
-    switchState(requestedState);
-    assert(state == requestedState);
 }
 
 void

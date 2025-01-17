@@ -192,9 +192,6 @@ public:
 
 private:
 
-    // Initiates a state change
-    void changeStateTo(ExecState requestedState);
-
     // Returns if the emulator is ready to runs, throws an exception otherwise
     virtual void isReady() throws = 0;
 
