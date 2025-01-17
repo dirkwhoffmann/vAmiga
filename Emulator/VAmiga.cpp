@@ -16,18 +16,27 @@ namespace vamiga {
 
 DefaultsAPI VAmiga::defaults(&Emulator::defaults);
 
+struct SuspendResume {
+
+    const API *api;
+    SuspendResume(const API *api) : api(api) { api->suspend(); }
+    ~SuspendResume() { api->resume(); }
+};
+
+#define SUSPEND_RESUME SuspendResume _sr(this);
+
 //
 // API
 //
 
 void
-API::suspend()
+API::suspend() const
 {
     emu->suspend();
 }
 
 void
-API::resume()
+API::resume() const
 {
     emu->resume();
 }
@@ -61,6 +70,12 @@ AmigaAPI::getCachedInfo() const
     return amiga->getCachedInfo();
 }
 
+void
+AmigaAPI::dump(Category category, std::ostream& os) const
+{
+    SUSPEND_RESUME amiga->dump(category, os);
+}
+
 
 //
 // Components (Agnus)
@@ -70,6 +85,18 @@ const LogicAnalyzerConfig &
 LogicAnalyzerAPI::getConfig() const
 {
     return logicAnalyzer->getConfig();
+}
+
+const LogicAnalyzerInfo &
+LogicAnalyzerAPI::getInfo() const
+{
+    return logicAnalyzer->getInfo();
+}
+
+const LogicAnalyzerInfo &
+LogicAnalyzerAPI::getCachedInfo() const
+{
+    return logicAnalyzer->getCachedInfo();
 }
 
 const DmaDebuggerConfig &
@@ -186,18 +213,24 @@ CopperAPI::getCachedInfo() const
 string 
 CopperAPI::disassemble(isize list, isize offset, bool symbolic) const
 {
+    SUSPEND_RESUME
+
     return copper->debugger.disassemble(list, offset, symbolic);
 }
 
 string
 CopperAPI::disassemble(u32 addr, bool symbolic) const
 {
+    SUSPEND_RESUME
+
     return copper->debugger.disassemble(addr, symbolic);
 }
 
 bool 
 CopperAPI::isIllegalInstr(u32 addr) const
 {
+    SUSPEND_RESUME
+
     return copper->isIllegalInstr(addr);
 }
 
@@ -281,13 +314,13 @@ GuardsAPI::disable(isize nr)
 void 
 GuardsAPI::disableAt(u32 target)
 {
-    guards->disableAt(target);
+    emu->put(Cmd(CMD_GUARD_DISABLE_AT, (void *)guards, target));
 }
 
 void 
 GuardsAPI::disableAll()
 {
-    guards->disableAll();
+    emu->put(Cmd(CMD_GUARD_DISABLE_ALL));
 }
 
 void 
@@ -299,66 +332,77 @@ GuardsAPI::toggle(isize nr)
 isize
 CPUDebuggerAPI::loggedInstructions() const
 {
+    SUSPEND_RESUME
     return cpu->debugger.loggedInstructions();
 }
 
 void
 CPUDebuggerAPI::clearLog()
 {
+    SUSPEND_RESUME
     return cpu->debugger.clearLog();
 }
 
 const char *
 CPUDebuggerAPI::disassembleRecordedInstr(isize i, isize *len)
 {
+    SUSPEND_RESUME
     return cpu->disassembleRecordedInstr(i, len);
 }
 
 const char *
 CPUDebuggerAPI::disassembleRecordedWords(isize i, isize len)
 {
+    SUSPEND_RESUME
     return cpu->disassembleRecordedWords(i, len);
 }
 
 const char *
 CPUDebuggerAPI::disassembleRecordedFlags(isize i)
 {
+    SUSPEND_RESUME
     return cpu->disassembleRecordedFlags(i);
 }
 
 const char *
 CPUDebuggerAPI::disassembleRecordedPC(isize i)
 {
+    SUSPEND_RESUME
     return cpu->disassembleRecordedPC(i);
 }
 
 const char *
 CPUDebuggerAPI::disassembleWord(u16 value)
 {
+    SUSPEND_RESUME
     return cpu->disassembleWord(value);
 }
 
 const char *
 CPUDebuggerAPI::disassembleAddr(u32 addr)
 {
+    SUSPEND_RESUME
     return cpu->disassembleAddr(addr);
 }
 
 const char *
 CPUDebuggerAPI::disassembleInstr(u32 addr, isize *len)
 {
+    SUSPEND_RESUME
     return cpu->disassembleInstr(addr, len);
 }
 
 const char *
 CPUDebuggerAPI::disassembleWords(u32 addr, isize len)
 {
+    SUSPEND_RESUME
     return cpu->disassembleWords(addr, len);
 }
 
 string
 CPUDebuggerAPI::vectorName(isize i)
 {
+    SUSPEND_RESUME
     return cpu->debugger.vectorName(u8(i));
 }
 
@@ -1545,9 +1589,8 @@ VAmiga::VAmiga() {
     agnus.agnus = &emu->main.agnus;
     agnus.logicAnalyzer.emu = emu;
     agnus.logicAnalyzer.logicAnalyzer = &emu->main.logicAnalyzer;
-    agnus.dma.emu = emu;
-    agnus.dma.debugger.emu = emu;
-    agnus.dma.debugger.dmaDebugger = &emu->main.agnus.dmaDebugger;
+    agnus.dmaDebugger.emu = emu;
+    agnus.dmaDebugger.dmaDebugger = &emu->main.agnus.dmaDebugger;
     agnus.copper.emu = emu;
     agnus.copper.copper = &emu->main.agnus.copper;
     agnus.blitter.emu = emu;
@@ -1812,13 +1855,13 @@ VAmiga::halt()
 }
 
 void
-VAmiga::suspend()
+VAmiga::suspend() const
 {
     emu->suspend();
 }
 
 void
-VAmiga::resume()
+VAmiga::resume() const
 {
     emu->resume();
 }

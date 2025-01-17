@@ -100,13 +100,13 @@ CoreComponent::isHalted() const
 }
 
 void
-CoreComponent::suspend()
+CoreComponent::suspend() const
 {
     return emulator.suspend();
 }
 
 void
-CoreComponent::resume()
+CoreComponent::resume() const
 {
     return emulator.resume();
 }

@@ -15,7 +15,7 @@
 
 namespace vamiga {
 
-class LogicAnalyzer final : public SubComponent {
+class LogicAnalyzer final : public SubComponent, public Inspectable<LogicAnalyzerInfo> {
     
     Descriptions descriptions = {{
 
@@ -77,6 +77,15 @@ public:
     const Descriptions &getDescriptions() const override { return descriptions; }
     void _pause() override;
 
+    
+    //
+    // Methods from Inspectable
+    //
+
+public:
+
+    void cacheInfo(LogicAnalyzerInfo &result) const override;
+    
     
     //
     // Methods from Configurable

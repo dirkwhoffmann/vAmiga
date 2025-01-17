@@ -68,10 +68,11 @@ class LogicView: NSView {
         guard let emu = emu else { return }
         
         let hpos = emu.amiga.info.hpos
-        let owners = emu.logicAnalyzer.busOwners()!
-        let addrBus = emu.logicAnalyzer.addrBus()!
-        let dataBus = emu.logicAnalyzer.dataBus()!
-
+        let laInfo = emu.logicAnalyzer.info
+        let owners = laInfo.busOwner!
+        let addrBus = laInfo.addrBus!
+        let dataBus = laInfo.dataBus!
+        let channels = [ laInfo.channel.0, laInfo.channel.1, laInfo.channel.2, laInfo.channel.3 ]
         // Start from scratch
         for i in 0..<segments { labels[i] = nil }
         for i in 0..<segments { colors[i] = nil }
@@ -119,7 +120,7 @@ class LogicView: NSView {
         // For the remaining channels, get the data from the logic analyzer
         for c in 2..<signals {
             
-            if let values = emu.logicAnalyzer.getData(c - 2) {
+            if let values = channels[c - 2] {
                 
                 for i in 0..<hpos {
                     

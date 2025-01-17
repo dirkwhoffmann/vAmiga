@@ -41,20 +41,19 @@ protected:
     std::atomic_flag stateChangeRequest {};
 
     // Synchronization mutex
-    util::ReentrantMutex lock;
+    mutable util::ReentrantMutex lock;
     
     // Warp state and track state
     u8 warp = 0;
     u8 track = 0;
 
     // Counters
-    isize suspendCounter = 0;
+    mutable isize suspendCounter = 0;
     isize frameCounter = 0;
     isize statsCounter = 0;
 
     // Time stamps
     util::Time baseTime;
-    // Cycle baseCycle = 0;
 
     // Clocks for measuring the CPU load
     util::Clock nonstopClock;
@@ -149,12 +148,12 @@ public:
     /** Suspends the thread.
      *  The thread is temporarily suspended
      */
-    void suspend() override;
+    void suspend() const override;
 
     /** Resumes the thread.
      *  The thread is put back in running state
      */
-    void resume() override;
+    void resume() const override;
 
     bool isInitialized() const { return state != STATE_UNINIT; }
     bool isPoweredOn() const { return state != STATE_UNINIT && state != STATE_OFF; }

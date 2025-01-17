@@ -821,24 +821,9 @@ NSString *EventSlotName(NSInteger slot)
     return (LogicAnalyzerAPI *)obj;
 }
 
-- (const NSInteger *)getData:(NSInteger)channel
+- (LogicAnalyzerInfo)info
 {
-    return [self la]->logicAnalyzer->get(channel);
-}
-
-- (const BusOwner *)busOwners
-{
-    return [self la]->logicAnalyzer->agnus.busOwner;
-}
-
-- (const u32 *)addrBus
-{
-    return [self la]->logicAnalyzer->agnus.busAddr;
-}
-
-- (const u16 *)dataBus
-{
-    return [self la]->logicAnalyzer->agnus.busData;
+    return [self la]->getInfo();
 }
 
 @end
@@ -2220,7 +2205,7 @@ NSString *EventSlotName(NSInteger slot)
 - (NSString *)stateString
 {
     std::stringstream ss;
-    [self amiga]->amiga->dump(Category::Trace, ss);
+    [self amiga]->dump(Category::Trace, ss);
     return @(ss.str().c_str());
 }
 
@@ -2292,7 +2277,7 @@ NSString *EventSlotName(NSInteger slot)
     cpu = [[CPUProxy alloc] initWith:&vamiga->cpu];
     denise = [[DeniseProxy alloc] initWith:&vamiga->denise];
     diskController = [[DiskControllerProxy alloc] initWith:&vamiga->paula.diskController];
-    dmaDebugger = [[DmaDebuggerProxy alloc] initWith:&vamiga->agnus.dma.debugger];
+    dmaDebugger = [[DmaDebuggerProxy alloc] initWith:&vamiga->agnus.dmaDebugger];
     df0 = [[FloppyDriveProxy alloc] initWith:&vamiga->df0];
     df1 = [[FloppyDriveProxy alloc] initWith:&vamiga->df1];
     df2 = [[FloppyDriveProxy alloc] initWith:&vamiga->df2];

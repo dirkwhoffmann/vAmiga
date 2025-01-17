@@ -548,10 +548,7 @@ NSString *EventSlotName(NSInteger slot);
 
 @interface LogicAnalyzerProxy : Proxy { }
 
-- (const NSInteger *)getData:(NSInteger)channel;
-- (const BusOwner *)busOwners;
-- (const u32 *)addrBus;
-- (const u16 *)dataBus;
+@property (readonly) LogicAnalyzerInfo info;
 
 @end
 

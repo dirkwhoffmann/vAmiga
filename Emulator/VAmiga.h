@@ -10,6 +10,7 @@
 #pragma once
 
 #include "VAmigaTypes.h"
+#include "Dumpable.h"
 #include "Error.h"
 #include "MediaFile.h"
 #include <filesystem>
@@ -23,7 +24,7 @@ namespace moira { class Guards; class Debugger; }
 // Base class for all APIs
 //
 
-class API {
+class API : public Dumpable {
 
 public:
 
@@ -32,9 +33,13 @@ public:
     API() { }
     API(Emulator *emu) : emu(emu) { }
 
-    void suspend();
-    void resume();
+    void suspend() const;
+    void resume() const;
 
+    virtual void _dump(Category category, std::ostream& ss) const { };
+   
+    // void dump(Category category) const;
+    
 protected:
 
     bool isUserThread() const;
@@ -44,10 +49,14 @@ protected:
 // Components
 //
 
-struct AmigaAPI : public API {
+class AmigaAPI : public API {
 
+    friend class VAmiga;
+    
     class Amiga *amiga = nullptr;
-
+    
+public:
+    
     /// @name Analyzing the emulator
     /// @{
 
@@ -59,7 +68,14 @@ struct AmigaAPI : public API {
      */
     const AmigaInfo &getInfo() const;
     const AmigaInfo &getCachedInfo() const;
-
+    
+    /** @brief  Prints debug information about the component
+     *
+     *  @param  category    Debug information category
+     *  @param  os Output stream
+     */
+    void dump(Category category, std::ostream& os) const;
+    
     /// @}
     /// @name Resetting the Amiga
     /// @{
@@ -128,10 +144,14 @@ struct AmigaAPI : public API {
 // Agnus
 //
 
-struct DmaDebuggerAPI : public API {
+class DmaDebuggerAPI : public API {
 
+    friend class VAmiga;
+    
     class DmaDebugger *dmaDebugger = nullptr;
 
+public:
+    
     /** @brief  Returns the component's current configuration.
      */
     const DmaDebuggerConfig &getConfig() const;
@@ -142,24 +162,32 @@ struct DmaDebuggerAPI : public API {
     const DmaDebuggerInfo &getCachedInfo() const;
 };
 
-struct DmaAPI : public API {
+class LogicAnalyzerAPI : public API {
 
-    DmaDebuggerAPI debugger;
-};
-
-struct LogicAnalyzerAPI : public API {
-
+    friend class VAmiga;
+    
     class LogicAnalyzer *logicAnalyzer = nullptr;
 
+public:
+    
     /** @brief  Returns the component's current configuration.
      */
     const LogicAnalyzerConfig &getConfig() const;
+    
+    /** @brief  Returns the component's current state.
+     */
+    const LogicAnalyzerInfo &getInfo() const;
+    const LogicAnalyzerInfo &getCachedInfo() const;
 };
 
-struct BlitterAPI : public API {
+class BlitterAPI : public API {
 
+    friend class VAmiga;
+    
     class Blitter *blitter = nullptr;
 
+public:
+    
     /** @brief  Returns the component's current configuration.
      */
     const BlitterConfig &getConfig() const;
@@ -210,7 +238,7 @@ struct AgnusAPI : public API {
 
     CopperAPI copper;
     BlitterAPI blitter;
-    DmaAPI dma;
+    DmaDebuggerAPI dmaDebugger;
     LogicAnalyzerAPI logicAnalyzer;
     
     /** @brief  Returns the component's current configuration.
@@ -1628,14 +1656,14 @@ public:
      *  See the \ref vc64::Suspendable "Suspendable" class for a detailes
      *  description of the suspend-resume machanism.
      */
-    void suspend();
+    void suspend() const;
 
     /** @brief   Suspends the emulator thread
      *
      *  See the \ref vc64::Suspendable "Suspendable" class for a detailes
      *  description of the suspend-resume machanism.
      */
-    void resume();
+    void resume() const;
 
     /** @brief  Enables warp mode.
      */

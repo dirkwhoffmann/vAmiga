@@ -9,6 +9,7 @@
 #pragma once
 
 #include "Types.h"
+#include "BusTypes.h"
 #include "Reflection.h"
 
 namespace vamiga {
@@ -61,5 +62,15 @@ typedef struct
     u32 addr[4];
 }
 LogicAnalyzerConfig;
+
+typedef struct
+{
+
+    const BusOwner *busOwner;
+    const u32 *addrBus;
+    const u16 *dataBus;
+    const isize *channel[4];
+}
+LogicAnalyzerInfo;
 
 }

@@ -378,7 +378,7 @@ Thread::wakeUp()
 }
 
 void
-Thread::suspend()
+Thread::suspend() const
 {
     debug(RUN_DEBUG, "Suspending (%ld)...\n", suspendCounter);
     
@@ -393,7 +393,7 @@ Thread::suspend()
 }
 
 void
-Thread::resume()
+Thread::resume() const
 {
     debug(RUN_DEBUG, "Resuming (%ld)...\n", suspendCounter);
 
