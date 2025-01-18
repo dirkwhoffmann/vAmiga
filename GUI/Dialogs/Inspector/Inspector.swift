@@ -668,10 +668,11 @@ class Inspector: DialogController {
     // Used to determine the items to be refreshed
     private var refreshCnt = 0
 
-    override func showWindow(_ sender: Any?) {
-
-        super.showWindow(self)
+    override func dialogWillShow() {
         
+        // Hide the panel selector
+        panel.tabPosition = .none
+   
         // Enter debug mode
         emu.trackOn()
         amiga.autoInspectionMask = 0xFF
@@ -691,14 +692,6 @@ class Inspector: DialogController {
         refresh(full: true)
     }
 
-    override func awakeFromNib() {
-
-        super.awakeFromNib()
-        
-        // Hide the panel selector
-        panel.tabPosition = .none
-    }
-    
     deinit {
         debug(.lifetime)
     }

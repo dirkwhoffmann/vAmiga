@@ -257,7 +257,7 @@ extension MyController: NSMenuItemValidation {
         if count < 8, let inspector = Inspector(with: self, nibName: "Inspector") {
             
             inspectors.append(inspector)
-            inspector.showWindow(self)
+            inspector.showAsWindow()
 
         } else {
          
@@ -270,7 +270,7 @@ extension MyController: NSMenuItemValidation {
         if inspectors.isEmpty {
             addInspector()
         } else {
-            inspectors[0].showWindow(self)
+            inspectors[0].showAsWindow()
         }
     }
     
