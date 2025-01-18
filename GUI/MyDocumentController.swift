@@ -9,6 +9,7 @@
 
 import Foundation
 
+@MainActor
 class MyDocumentController: NSDocumentController {
     
     @MainActor

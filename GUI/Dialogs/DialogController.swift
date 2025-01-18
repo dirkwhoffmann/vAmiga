@@ -36,6 +36,7 @@ protocol DialogControllerDelegate: AnyObject {
  * and a reference to the parents proxy object. It also provides some wrappers
  * around showing and hiding the window.
  */
+// @MainActor
 class DialogController: NSWindowController, DialogControllerDelegate {
 
     var parent: MyController!

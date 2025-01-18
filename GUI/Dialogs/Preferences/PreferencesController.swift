@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+// @MainActor
 class PreferencesController: DialogController {
 
     var pref: Preferences { return parent.pref }

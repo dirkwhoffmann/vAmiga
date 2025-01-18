@@ -287,6 +287,7 @@ class GamePad {
         }
     }
 
+    @MainActor
     func hidInputValueAction(context: UnsafeMutableRawPointer?,
                              result: IOReturn,
                              sender: UnsafeMutableRawPointer?,
@@ -385,7 +386,7 @@ class GamePad {
     // Emulate events on the Amiga side
     //
     
-    @discardableResult
+    @MainActor @discardableResult
     func processJoystickEvents(events: [GamePadAction]) -> Bool {
         
         let amiga = manager.controller.emu!
@@ -399,7 +400,7 @@ class GamePad {
         return events != []
     }
     
-    @discardableResult
+    @MainActor @discardableResult
     func processMouseEvents(events: [GamePadAction]) -> Bool {
         
         let amiga = manager.controller.emu!

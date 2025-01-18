@@ -239,6 +239,7 @@ extension UserDefaults {
 
 extension DefaultsProxy {
     
+    @MainActor
     func registerUserDefaults() {
         
         debug(.defaults, "Registering user defaults")
@@ -258,6 +259,7 @@ extension DefaultsProxy {
 
 extension Preferences {
 
+    @MainActor
     func applyUserDefaults() {
         
         debug(.defaults, "Applying user defaults")
@@ -270,7 +272,7 @@ extension Preferences {
 
 extension Configuration {
         
-    @MainActor 
+    @MainActor
     func applyUserDefaults() {
     
         debug(.defaults)
@@ -385,6 +387,7 @@ extension DefaultsProxy {
 
 extension Preferences {
 
+    @MainActor
     func saveGeneralUserDefaults() {
         
         debug(.defaults)
@@ -414,6 +417,7 @@ extension Preferences {
         defaults.save()
     }
     
+    @MainActor
     func applyGeneralUserDefaults() {
         
         debug(.defaults)
@@ -548,6 +552,7 @@ extension DefaultsProxy {
 
 extension Preferences {
 
+    @MainActor
     func saveControlsUserDefaults() {
     
         debug(.defaults)
@@ -574,6 +579,7 @@ extension Preferences {
         defaults.save()
     }
     
+    @MainActor
     func applyControlsUserDefaults() {
            
         debug(.defaults)
@@ -624,6 +630,7 @@ extension DefaultsProxy {
 
 extension Preferences {
 
+    @MainActor
     func saveDevicesUserDefaults() {
     
         debug(.defaults)
@@ -632,6 +639,7 @@ extension Preferences {
         defaults.save()
     }
     
+    @MainActor
     func applyDevicesUserDefaults() {
            
         debug(.defaults)
@@ -644,6 +652,7 @@ extension Preferences {
 
 extension Configuration {
 
+    @MainActor
     func saveRomUserDefaults() throws {
 
         debug(.defaults)

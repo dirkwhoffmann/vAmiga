@@ -9,6 +9,7 @@
 
 import CoreGraphics
 
+@MainActor
 extension MyController: NSWindowDelegate {
         
     public func windowDidBecomeMain(_ notification: Notification) {

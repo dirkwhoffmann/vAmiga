@@ -29,14 +29,14 @@ class Preferences {
     //
       
     // Snapshots
-    var autoSnapshots = false {
+    @MainActor var autoSnapshots = false {
         didSet {
             for emu in myAppDelegate.proxies {
                 emu.set(.AMIGA_SNAP_AUTO, enable: autoSnapshots)
             }
         }
     }
-    var snapshotInterval = 0 {
+    @MainActor var snapshotInterval = 0 {
         didSet {
             for emu in myAppDelegate.proxies {
                 emu.set(.AMIGA_SNAP_DELAY, value: snapshotInterval)
@@ -45,7 +45,7 @@ class Preferences {
     }
 
     // Snapshots
-    var snapshotStorage = 0 {
+    @MainActor var snapshotStorage = 0 {
         didSet { for c in myAppDelegate.controllers {
             c.mydocument.snapshots.maxSize = snapshotStorage * 1024 * 1024 }
         }
@@ -60,7 +60,7 @@ class Preferences {
     }
 
     // Screen captures
-    var ffmpegPath = "" {
+    @MainActor var ffmpegPath = "" {
         didSet {
             for proxy in myAppDelegate.proxies {
                 proxy.recorder.path = ffmpegPath
@@ -111,28 +111,28 @@ class Preferences {
 
     // Joystick
     var disconnectJoyKeys: Bool!
-    var autofire: Bool! {
+    @MainActor var autofire: Bool! {
         didSet {
             for amiga in myAppDelegate.proxies {
                 amiga.set(.JOY_AUTOFIRE, enable: autofire)
             }
         }
     }
-    var autofireBursts: Bool! {
+    @MainActor var autofireBursts: Bool! {
         didSet {
             for amiga in myAppDelegate.proxies {
                 amiga.set(.JOY_AUTOFIRE_BURSTS, enable: autofireBursts)
             }
         }
     }
-    var autofireBullets: Int! {
+    @MainActor var autofireBullets: Int! {
         didSet {
             for amiga in myAppDelegate.proxies {
                 amiga.set(.JOY_AUTOFIRE_BULLETS, value: autofireBullets)
             }
         }
     }
-    var autofireFrequency: Int! {
+    @MainActor var autofireFrequency: Int! {
         didSet {
             autofireFrequency = autofireFrequency.clamped(4, 50)
             for amiga in myAppDelegate.proxies {

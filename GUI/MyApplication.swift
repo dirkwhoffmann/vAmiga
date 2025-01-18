@@ -200,6 +200,7 @@ class MyApplication: NSApplication {
 // Personal delegation methods
 //
 
+@MainActor
 extension MyAppDelegate {
     
     var documents: [MyDocument] {
@@ -215,6 +216,7 @@ extension MyAppDelegate {
         return documents.map({ $0.emu })
     }
     
+    @MainActor
     func windowDidBecomeMain(_ window: NSWindow) {
         
         for c in controllers {

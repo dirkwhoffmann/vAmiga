@@ -43,6 +43,7 @@ class GamePadManager {
     // Initializing
     //
     
+    @MainActor
     init(parent: MyController) {
     
         self.controller = parent
@@ -171,6 +172,7 @@ class GamePadManager {
     //
     
     // Matching callback (invoked when a matching HID device is plugged in)
+    @MainActor
     func hidDeviceAdded(context: UnsafeMutableRawPointer?,
                         result: IOReturn,
                         sender: UnsafeMutableRawPointer?,
@@ -227,6 +229,7 @@ class GamePadManager {
         }
     }
     
+    @MainActor
     func hidDeviceRemoved(context: UnsafeMutableRawPointer?,
                           result: IOReturn,
                           sender: UnsafeMutableRawPointer?,
@@ -263,6 +266,7 @@ class GamePadManager {
         }
     }
     
+    @MainActor
     func refresh(popup: NSPopUpButton, hide: Bool = false) {
         
         let slots = [
