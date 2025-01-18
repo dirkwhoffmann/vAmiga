@@ -270,6 +270,7 @@ extension Preferences {
 
 extension Configuration {
         
+    @MainActor 
     func applyUserDefaults() {
     
         debug(.defaults)
@@ -1412,6 +1413,7 @@ extension DefaultsProxy {
 
 extension Configuration {
 
+    @MainActor
     func saveVideoUserDefaults() {
         
         debug(.defaults)
@@ -1424,7 +1426,8 @@ extension Configuration {
 
         amiga.resume()
     }
-         
+    
+    @MainActor
     func saveColorUserDefaults() {
 
         debug(.defaults)
@@ -1442,6 +1445,7 @@ extension Configuration {
         amiga.resume()
     }
     
+    @MainActor
     func saveGeometryUserDefaults() {
 
         debug(.defaults)
@@ -1461,6 +1465,7 @@ extension Configuration {
         amiga.resume()
     }
   
+    @MainActor
     func saveShaderUserDefaults() {
 
         debug(.defaults)
@@ -1492,6 +1497,7 @@ extension Configuration {
         amiga.resume()
     }
     
+    @MainActor
     func applyVideoUserDefaults() {
         
         debug(.defaults)
@@ -1501,6 +1507,7 @@ extension Configuration {
         applyShaderUserDefaults()
     }
     
+    @MainActor
     func applyColorUserDefaults() {
     
         debug(.defaults)
@@ -1516,6 +1523,7 @@ extension Configuration {
         amiga.resume()
     }
 
+    @MainActor
     func applyGeometryUserDefaults() {
     
         debug(.defaults)
@@ -1533,6 +1541,7 @@ extension Configuration {
         amiga.resume()
     }
 
+    @MainActor
     func applyShaderUserDefaults() {
     
         debug(.defaults)

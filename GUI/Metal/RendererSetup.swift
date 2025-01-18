@@ -85,6 +85,7 @@ extension Renderer {
         ressourceManager = RessourceManager(view: view, device: device, renderer: self)
     }
     
+    @MainActor
     func buildLayers() {
         
         splashScreen = SplashScreen(renderer: self)
@@ -93,6 +94,7 @@ extension Renderer {
         dropZone = DropZone(renderer: self)
     }
         
+    @MainActor
     func buildPipeline() {
 
         // Read vertex shader from library
@@ -149,6 +151,7 @@ extension Renderer {
         metalAssert(pipeline != nil, "Failed to create the GPU pipeline.")
     }
 
+    @MainActor
     func buildVertexBuffers() {
 
         splashScreen.buildVertexBuffers()

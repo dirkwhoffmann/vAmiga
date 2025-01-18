@@ -163,6 +163,7 @@ class Renderer: NSObject, MTKViewDelegate {
         ressourceManager.buildDepthBuffer()
     }
 
+    @MainActor
     var recordingRect: CGRect {
 
         var result: CGRect
