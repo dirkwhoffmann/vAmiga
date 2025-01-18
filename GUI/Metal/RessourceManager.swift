@@ -62,6 +62,7 @@ class RessourceManager {
     // Initializing
     //
     
+    @MainActor
     init(view: MTKView, device: MTLDevice, renderer: Renderer) {
         
         debug(.lifetime)
@@ -183,6 +184,7 @@ class RessourceManager {
         }
     }
 
+    @MainActor
     internal func buildKernels() {
     
         let mc = (TextureSize.merged.width, TextureSize.merged.height)

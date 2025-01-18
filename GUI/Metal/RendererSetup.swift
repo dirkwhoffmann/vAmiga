@@ -32,6 +32,7 @@ extension Renderer {
         reshape()
     }
 
+    @MainActor
     internal func buildMetal() {
 
         // Command queue
@@ -48,6 +49,7 @@ extension Renderer {
         metalLayer.frame = metalLayer.frame
     }
     
+    @MainActor
     func buildDescriptors() {
         
         // Render pass descriptor
@@ -60,6 +62,7 @@ extension Renderer {
         descriptor.depthAttachment.storeAction = MTLStoreAction.dontCare
     }
     
+    @MainActor
     func buildShaders() {
         
         shaderOptions = ShaderOptions(
