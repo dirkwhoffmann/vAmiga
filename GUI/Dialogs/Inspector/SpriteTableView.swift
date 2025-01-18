@@ -12,21 +12,20 @@ class SpriteTableView: NSTableView {
     @IBOutlet weak var inspector: Inspector!
     var deniseInfo: DeniseInfo { return inspector.deniseInfo }
     var spriteInfo: SpriteInfo { return inspector.spriteInfo }
-
-    var amiga: EmulatorProxy!
-
     var spriteDat = [UInt64](repeating: 0, count: VAMIGA.VPOS.CNT)
     var spriteCol = [NSColor](repeating: NSColor.white, count: 16)
     var spriteLines = 0
 
-    override func awakeFromNib() {
+    override init(frame frameRect: NSRect) { super.init(frame: frameRect); commonInit() }
+    required init?(coder: NSCoder) { super.init(coder: coder); commonInit() }
+    
+    func commonInit() {
 
-        amiga = inspector.emu
         delegate = self
         dataSource = self
         target = self
     }
-
+        
     private func cache() {
 
         spriteCol[0] = NSColor(amigaRGB: spriteInfo.colors.0)

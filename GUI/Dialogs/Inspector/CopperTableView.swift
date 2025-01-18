@@ -38,7 +38,10 @@ class CopperTableView: NSTableView {
     var illegalInRow: [Int: Bool] = [:]
     var rowForAddr: [Int: Int] = [:]
     
-    override func awakeFromNib() {
+    override init(frame frameRect: NSRect) { super.init(frame: frameRect); commonInit() }
+    required init?(coder: NSCoder) { super.init(coder: coder); commonInit() }
+    
+    func commonInit() {
 
         delegate = self
         dataSource = self
@@ -47,7 +50,7 @@ class CopperTableView: NSTableView {
         doubleAction = #selector(doubleClickAction(_:))
         action = #selector(clickAction(_:))
     }
-    
+        
     private func cache(list nr: Int, symbolic: Bool) {
 
         assert(nr == 1 || nr == 2)

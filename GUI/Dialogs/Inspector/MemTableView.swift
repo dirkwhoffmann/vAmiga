@@ -21,15 +21,16 @@ class MemTableView: NSTableView {
     var asciiInRow: [Int: String] = [:]
     var dataInAddr: [Int: Int] = [:]
     
-    override func awakeFromNib() {
+    override init(frame frameRect: NSRect) { super.init(frame: frameRect); commonInit() }
+    required init?(coder: NSCoder) { super.init(coder: coder); commonInit() }
+    
+    func commonInit() {
 
         delegate = self
         dataSource = self
         target = self
-    
-        inspector.jumpTo(addr: 0)
     }
-
+        
     private func cache() {
 
         addrInRow = [:]

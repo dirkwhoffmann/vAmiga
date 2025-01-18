@@ -21,6 +21,14 @@ class InspectorToolbar: NSToolbar {
     
     override func validateVisibleItems() {
 
+        // Update icons
+        let running = emu.running
+        let label = running ? "Pause" : "Run"
+        let image = running ? "pauseTemplate" : "runTemplate"
+        execSegCtrl.setToolTip(label, forSegment: 0)
+        execSegCtrl.setImage(NSImage(named: image), forSegment: 0)
+        for i in 1...4 { execSegCtrl.setEnabled(!running, forSegment: i) }
+        
         // Disable shrinked popup buttons to prevent macOS from crashing
         selectorPopup.isEnabled = selectorToolbarItem.isVisible
         formatPopup.isEnabled = formatToolbarItem.isVisible
@@ -33,15 +41,7 @@ class InspectorToolbar: NSToolbar {
         let hpos = inspector.agnusInfo.hpos
         
         if full {
-            
-            let running = emu.running
-            
-            let label = running ? "Pause" : "Run"
-            let image = running ? "pauseTemplate" : "runTemplate"
-
-            execSegCtrl.setToolTip(label, forSegment: 0)
-            execSegCtrl.setImage(NSImage(named: image), forSegment: 0)
-            for i in 1...4 { execSegCtrl.setEnabled(!running, forSegment: i) }
+                    
             timeStamp.font = NSFont.monospacedSystemFont(ofSize: 12, weight: .regular)
         }
         

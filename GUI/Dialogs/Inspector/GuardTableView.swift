@@ -17,7 +17,10 @@ class GuardTableView: NSTableView {
     var addrCache: [Int: Int] = [:]
     var numRows = 0
 
-    override func awakeFromNib() {
+    override init(frame frameRect: NSRect) { super.init(frame: frameRect); commonInit() }
+    required init?(coder: NSCoder) { super.init(coder: coder); commonInit() }
+    
+    func commonInit() {
 
         delegate = self
         dataSource = self
@@ -25,7 +28,7 @@ class GuardTableView: NSTableView {
 
         action = #selector(clickAction(_:))
     }
-
+    
     func cache() { }
     func click(row: Int, col: Int) { }
     func edit(row: Int, addr: Int) { }

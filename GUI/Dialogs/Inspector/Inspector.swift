@@ -689,9 +689,14 @@ class Inspector: DialogController {
             window.setFrame(frame, display: true)
         }
         
+        jumpTo(addr: 0)
+    }
+    
+    override func dialogDidShow() {
+        
         refresh(full: true)
     }
-
+    
     deinit {
         debug(.lifetime)
     }
