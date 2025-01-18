@@ -30,9 +30,6 @@ class MyDocument: NSDocument {
     var parent: MyController { return windowControllers.first as! MyController }
     var console: Console { return parent.renderer.console }
 
-    // Optional media URL provided on app launch
-    var launchUrl: URL?
-
     // Gateway to the core emulator
     var emu: EmulatorProxy!
 
@@ -121,25 +118,11 @@ class MyDocument: NSDocument {
     // Loading
     //
     
+    
     nonisolated
     override open func read(from url: URL, ofType typeName: String) throws {
              
         debug(.media)
-
-        launchUrl = url
-        
-        /*
-        let types: [FileType] =
-        [ .SNAPSHOT, .SCRIPT, .ADF, .EADF, .HDF, .IMG, .ST, .DMS, .EXE, .DIR ]
-
-        do {
-            try addMedia(url: url, allowedTypes: types)
-            
-        } catch let error as VAError {
-            
-            throw NSError(error: error)
-        }
-        */
     }
     
     @MainActor
@@ -159,29 +142,7 @@ class MyDocument: NSDocument {
     //
     // Saving
     //
-    
-    /*
-    nonisolated
-    override func write(to url: URL, ofType typeName: String) throws {
-            
-        debug(.media)
-        
-        if typeName == "vAmiga" {
-
-            if let snapshot = emu.amiga.takeSnapshot() {
-
-                do {
-                    try snapshot.writeToFile(url: url)
-
-                } catch let error as VAError {
-                    
-                    throw NSError(error: error)
-                }
-            }
-        }
-    }
-    */
-    
+  
     @MainActor
     override func save(to url: URL, ofType typeName: String, for saveOperation: NSDocument.SaveOperationType) async throws {
             
@@ -206,6 +167,7 @@ class MyDocument: NSDocument {
     // Handling media files
     //
 
+    @MainActor
     func addMedia(url: URL,
                   allowedTypes types: [FileType] = FileType.all,
                   df: Int = 0,
@@ -235,6 +197,7 @@ class MyDocument: NSDocument {
         try addMedia(proxy: file, df: df, hd: hd, force: force)
     }
     
+    @MainActor
     func addMedia(proxy: MediaFileProxy,
                   df: Int = 0,
                   hd: Int = 0,
@@ -265,6 +228,7 @@ class MyDocument: NSDocument {
         }
     }
 
+    @MainActor
     func processSnapshotFile(_ proxy: MediaFileProxy, force: Bool = false) throws {
 
         try emu.amiga.loadSnapshot(proxy)
@@ -276,6 +240,7 @@ class MyDocument: NSDocument {
     // Exporting disks
     //
     
+    @MainActor
     func export(drive nr: Int, to url: URL) throws {
                         
         var df: MediaFileProxy?
@@ -296,6 +261,7 @@ class MyDocument: NSDocument {
         debug(.media, "Disk exported successfully")
     }
 
+    @MainActor
     func export(hardDrive nr: Int, to url: URL) throws {
         
         let hdn = emu.hd(nr)!
@@ -317,6 +283,7 @@ class MyDocument: NSDocument {
         debug(.media, "Hard Drive exported successfully")
     }
 
+    @MainActor
     func export(fileProxy: MediaFileProxy, to url: URL) throws {
 
         debug(.media, "Exporting to \(url)")

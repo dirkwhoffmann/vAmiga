@@ -217,7 +217,11 @@ extension MyController {
         }
 
         // Add media file (if provided on startup)
-        if let url = mydocument.launchUrl { try? mydocument.addMedia(url: url) }
+        if let fileUrl = document?.fileURL, let url = fileUrl {
+            
+            debug(.media, "Launch URL = \(url)")
+            try? mydocument.addMedia(url: url)
+        }
 
         // Create speed monitor
         speedometer = Speedometer()

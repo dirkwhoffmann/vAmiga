@@ -11,6 +11,7 @@ import Foundation
 
 class MyDocumentController: NSDocumentController {
     
+    @MainActor
     override func makeDocument(withContentsOf url: URL,
                                ofType typeName: String) throws -> NSDocument {
         
@@ -23,7 +24,6 @@ class MyDocumentController: NSDocumentController {
             
             if let mydoc = doc as? MyDocument {
                 
-                mydoc.launchUrl = url
                 return mydoc
             }
         }
