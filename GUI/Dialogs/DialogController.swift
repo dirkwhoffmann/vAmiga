@@ -144,7 +144,7 @@ class DialogController: NSWindowController, DialogControllerDelegate {
 
     func join() {
 
-        debug(.shutdown, "Wait until window is closed...")
+        debug(.shutdown, "Wait until the window is closed...")
 
         lock.lock()
         lock.unlock()

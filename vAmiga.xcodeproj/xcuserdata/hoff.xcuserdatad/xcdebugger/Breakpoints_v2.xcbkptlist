@@ -223,8 +223,8 @@
             filePath = "Emulator/VAmiga.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1932"
-            endingLineNumber = "1932"
+            startingLineNumber = "2094"
+            endingLineNumber = "2094"
             landmarkName = "VAmiga::warpOn(source)"
             landmarkType = "7">
          </BreakpointContent>
