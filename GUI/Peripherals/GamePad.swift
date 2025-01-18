@@ -22,7 +22,7 @@ class GamePad {
     @MainActor var amiga: EmulatorProxy { return manager.controller.emu }
     @MainActor var prefs: Preferences { return manager.controller.pref }
     @MainActor var config: Configuration { return manager.controller.config }
-    var db: DeviceDatabase { return myAppDelegate.database }
+    @MainActor var db: DeviceDatabase { return myAppDelegate.database }
 
     // The Amiga port this device is connected to (1, 2, or nil)
     var port: Int?
@@ -53,7 +53,7 @@ class GamePad {
     var icon: NSImage?
             
     // Indicates if this device is officially supported
-    var isKnown: Bool { return db.isKnown(guid: guid) }
+    @MainActor var isKnown: Bool { return db.isKnown(guid: guid) }
 
     // Keymap of the managed device (only set for keyboard emulated devices)
     var keyMap: Int?

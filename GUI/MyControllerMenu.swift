@@ -485,7 +485,8 @@ extension MyController: NSMenuItemValidation {
     // Action methods (View menu)
     //
     
-    @IBAction func toggleStatusBarAction(_ sender: Any!) {
+    @IBAction
+    func toggleStatusBarAction(_ sender: Any!) {
         
         undoManager?.registerUndo(withTarget: self) { targetSelf in
             targetSelf.toggleStatusBarAction(sender)
@@ -547,6 +548,14 @@ extension MyController: NSMenuItemValidation {
     
     func type(keyCode: Int, completion: (() -> Void)? = nil) {
         
+        Task { @MainActor in
+
+            self.emu.keyboard.press(keyCode)
+            usleep(useconds_t(20000))
+            self.emu.keyboard.release(keyCode)
+            completion?()
+        }
+        /*
         DispatchQueue.global().async {
             
             self.emu.keyboard.press(keyCode)
@@ -554,6 +563,7 @@ extension MyController: NSMenuItemValidation {
             self.emu.keyboard.release(keyCode)
             completion?()
         }
+        */
     }
     
     //

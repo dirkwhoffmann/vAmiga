@@ -42,10 +42,10 @@ public func warn(_ msg: String = "",
 // Errors
 //
 
-class VAError: Error {
+final class VAError: Error {
     
-    var errorCode: ErrorCode
-    var what: String
+    let errorCode: ErrorCode
+    let what: String
 
     init(_ exception: ExceptionWrapper) {
 
