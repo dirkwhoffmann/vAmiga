@@ -203,6 +203,7 @@ class GamePadManager {
         if Int.hid != 0 { listDevices() }
     }
     
+    @MainActor
     func addDevice(slot: Int, device: IOHIDDevice) {
         
         if device.isMouse {
@@ -251,11 +252,13 @@ class GamePadManager {
         if Int.hid != 0 { listDevices() }
     }
 
+    @MainActor
     func updateHidMapping() {
 
         for (_, pad) in gamePads { pad.updateMapping() }
     }
 
+    @MainActor
     func listDevices() {
         
         print("Input devices:")

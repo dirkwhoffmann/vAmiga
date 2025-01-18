@@ -19,9 +19,9 @@ class GamePad {
 
     // References
     var manager: GamePadManager
-    var amiga: EmulatorProxy { return manager.controller.emu }
-    var prefs: Preferences { return manager.controller.pref }
-    var config: Configuration { return manager.controller.config }
+    @MainActor var amiga: EmulatorProxy { return manager.controller.emu }
+    @MainActor var prefs: Preferences { return manager.controller.pref }
+    @MainActor var config: Configuration { return manager.controller.config }
     var db: DeviceDatabase { return myAppDelegate.database }
 
     // The Amiga port this device is connected to (1, 2, or nil)
@@ -71,6 +71,7 @@ class GamePad {
     var oldEvents: [Int: [GamePadAction]] = [:]
     
     // Receivers for HID events
+    @MainActor
     let inputValueCallback: IOHIDValueCallback = {
         inContext, inResult, inSender, value in
         let this: GamePad = unsafeBitCast(inContext, to: GamePad.self)
@@ -80,6 +81,7 @@ class GamePad {
                                  value: value)
     }
     
+    @MainActor
     init(manager: GamePadManager, device: IOHIDDevice? = nil, type: ControlPortDevice) {
                 
         self.manager = manager
@@ -92,6 +94,7 @@ class GamePad {
         updateMapping()
     }
 
+    @MainActor
     func updateMapping() {
 
         if device != nil {
@@ -100,6 +103,7 @@ class GamePad {
         }
     }
 
+    @MainActor
     func property(key: String) -> String? {
             
         if device != nil {
@@ -110,6 +114,7 @@ class GamePad {
         return nil
     }
     
+    @MainActor
     func dump() {
         
         print(name != "" ? "\(name) " : "Placeholder device ", terminator: "")
@@ -126,6 +131,7 @@ class GamePad {
     //
 
     // Binds a key to a gamepad action
+    @MainActor
     func bind(key: MacKey, action: GamePadAction) {
 
         guard let n = keyMap else { return }
@@ -137,6 +143,7 @@ class GamePad {
     }
 
     // Removes a key binding to the specified gampad action (if any)
+    @MainActor
     func unbind(action: GamePadAction) {
         
         guard let n = keyMap else { return }
@@ -147,6 +154,7 @@ class GamePad {
      }
 
     // Translates a key press event to a list of gamepad actions
+    @MainActor
     func keyDownEvents(_ macKey: MacKey) -> [GamePadAction] {
         
         guard let n = keyMap, let direction = prefs.keyMaps[n][macKey] else { return [] }
@@ -193,6 +201,7 @@ class GamePad {
     }
         
     // Handles a key release event
+    @MainActor
     func keyUpEvents(_ macKey: MacKey) -> [GamePadAction] {
         
         guard let n = keyMap, let direction = prefs.keyMaps[n][macKey] else { return [] }
@@ -411,6 +420,7 @@ class GamePad {
         return events != []
     }
     
+    @MainActor
     func processMouseEvents(delta: NSPoint) {
         
         let amiga = manager.controller.emu!
@@ -422,6 +432,7 @@ class GamePad {
         if port == 2 { amiga.controlPort2.mouse.setDxDy(delta) }
     }
     
+    @MainActor
     func processKeyDownEvent(macKey: MacKey) -> Bool {
 
         // Only proceed if a keymap is present
@@ -436,6 +447,7 @@ class GamePad {
          return true
     }
 
+    @MainActor
     func processKeyUpEvent(macKey: MacKey) -> Bool {
         
         // Only proceed if a keymap is present
@@ -450,6 +462,7 @@ class GamePad {
         return true
     }
 
+    @MainActor
     func processKeyboardEvent(events: [GamePadAction]) {
 
         let amiga = manager.controller.emu!
