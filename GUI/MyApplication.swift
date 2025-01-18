@@ -9,7 +9,7 @@
 
 import Cocoa
 
-@objc(MyApplication)
+@objc(MyApplication) @MainActor
 class MyApplication: NSApplication {
 
     /* Set this variable to true to take away the control of the Command key

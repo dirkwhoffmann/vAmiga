@@ -9,6 +9,7 @@
 
 import AppKit
 
+@MainActor
 public extension MetalView {
 
     //
