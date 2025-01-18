@@ -34,10 +34,6 @@ class SnapshotDialog: DialogController {
     
     // Remembers the auto-snapshot setting
     var takeSnapshots = false
-
-    override func windowWillLoad() {
-   
-    }
     
     override func dialogDidShow() {
 

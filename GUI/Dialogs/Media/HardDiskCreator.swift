@@ -77,9 +77,9 @@ class HardDiskCreator: DialogController {
         super.showAsSheet()
     }
             
-    override public func awakeFromNib() {
+    override func dialogWillShow() {
         
-        super.awakeFromNib()
+        super.dialogWillShow()
                 
         // Configure elements
         cylinderStepper.maxValue = .greatestFiniteMagnitude

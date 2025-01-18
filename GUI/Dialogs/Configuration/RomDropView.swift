@@ -26,11 +26,14 @@ class DropView: NSImageView {
 
     var oldImage: NSImage?
     
-    override func awakeFromNib() {
+    override init(frame frameRect: NSRect) { super.init(frame: frameRect); commonInit() }
+    required init?(coder: NSCoder) { super.init(coder: coder); commonInit() }
+    
+    func commonInit() {
 
         registerForDraggedTypes([NSPasteboard.PasteboardType.fileURL])
     }
-
+    
     func acceptDragSource(url: URL) -> Bool { return false }
 
     override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {

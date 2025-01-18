@@ -68,6 +68,7 @@ class ScreenshotDialog: DialogController {
     override func dialogDidShow() {
 
         super.dialogDidShow()
+        
         now = Date()
         updateLabels()
         

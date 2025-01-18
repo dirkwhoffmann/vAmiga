@@ -41,9 +41,9 @@ class FloppyCreator: DialogController {
         super.showAsSheet()
     }
             
-    override public func awakeFromNib() {
+    override func dialogWillShow() {
         
-        super.awakeFromNib()
+        super.dialogWillShow()
         
         let type = emu.get(.DRIVE_TYPE, drive: nr)
         switch FloppyDriveType(rawValue: type) {

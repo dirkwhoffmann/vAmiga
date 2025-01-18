@@ -9,7 +9,7 @@
 
 extension ConfigurationController {
     
-    func awakeVideoPrefsFromNib() {
+    func initVideoTab() {
 
         // Check for available enhancers
         let enhancers = parent.renderer.ressourceManager.enhancerGallery

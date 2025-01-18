@@ -144,16 +144,13 @@ class DiskExporter: DialogController {
         if vol != nil { addItem("Folder", tag: Format.vol) }
     }
         
-    override public func awakeFromNib() {
+    override func dialogWillShow() {
 
-        super.awakeFromNib()
+        super.dialogWillShow()
+        
         updatePartitionPopup()
         updateFormatPopup()
         update()
-    }
-
-    override func windowDidLoad() {
-                    
     }
         
     func update() {

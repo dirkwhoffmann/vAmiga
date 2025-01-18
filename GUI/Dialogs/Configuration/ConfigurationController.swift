@@ -344,25 +344,14 @@ class ConfigurationController: DialogController {
         firstTab = tab
         showAsSheet()
     }
-
-    override func awakeFromNib() {
-
-        debug(.lifetime)
-        
-        super.awakeFromNib()
-        awakeVideoPrefsFromNib()
-        refreshRomSelector()
-    }
-
-    override func windowDidLoad() {
-
-        debug(.lifetime)
-        super.windowDidLoad()
-    }
     
     override func dialogWillShow() {
 
         super.dialogWillShow()
+
+        initVideoTab()
+        refreshRomSelector()
+        
         if firstTab != "" { prefTabView?.selectTabViewItem(withIdentifier: firstTab) }
         refresh()
     }

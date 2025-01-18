@@ -670,6 +670,8 @@ class Inspector: DialogController {
 
     override func dialogWillShow() {
         
+        super.dialogWillShow()
+        
         // Hide the panel selector
         panel.tabPosition = .none
    
@@ -694,6 +696,7 @@ class Inspector: DialogController {
     
     override func dialogDidShow() {
         
+        super.dialogDidShow()
         refresh(full: true)
     }
     

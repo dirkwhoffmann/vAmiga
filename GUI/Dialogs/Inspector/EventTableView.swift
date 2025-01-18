@@ -10,21 +10,22 @@
 class EventTableView: NSTableView {
 
     @IBOutlet weak var inspector: Inspector!
-    var amiga: EmulatorProxy!
 
     var slotInfo = [EventSlotInfo?](repeating: nil, count: EventSlot.COUNT.rawValue)
 
-    override func awakeFromNib() {
+    override init(frame frameRect: NSRect) { super.init(frame: frameRect); commonInit() }
+    required init?(coder: NSCoder) { super.init(coder: coder); commonInit() }
+    
+    func commonInit() {
 
-        amiga = inspector.emu
         delegate = self
         dataSource = self
         target = self
     }
-
+    
     private func cache() {
         for row in 0 ..< EventSlot.COUNT.rawValue {
-            slotInfo[row] = amiga.agnus.cachedSlotInfo(row)
+            slotInfo[row] = inspector.emu.agnus.cachedSlotInfo(row)
         }
     }
 

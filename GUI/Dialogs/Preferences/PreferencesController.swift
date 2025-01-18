@@ -131,9 +131,9 @@ class PreferencesController: DialogController {
         showAsSheet()
     }
 
-    override func awakeFromNib() {
+    override func dialogWillShow() {
 
-        super.awakeFromNib()
+        super.dialogWillShow()
         
         if let id = firstTab { tabView?.selectTabViewItem(withIdentifier: id) }
         refresh()

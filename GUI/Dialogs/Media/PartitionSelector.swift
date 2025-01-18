@@ -30,9 +30,9 @@ class PartitionSelector: DialogController {
         super.showAsSheet(completionHandler: completionHandler)
     }
             
-    override public func awakeFromNib() {
+    override func dialogWillShow() {
         
-        super.awakeFromNib()
+        super.dialogWillShow()
         
         partitionPopup.removeAllItems()
         
