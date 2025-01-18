@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 class DiskExporter: DialogController {
 
     enum Format {
@@ -423,8 +424,10 @@ class DiskExporter: DialogController {
 // Protocols
 //
 
+@MainActor
 extension DiskExporter: NSFilePromiseProviderDelegate {
    
+    @MainActor
     func filePromiseProvider(_ filePromiseProvider: NSFilePromiseProvider, fileNameForType fileType: String) -> String {
         
         var name: String
@@ -444,6 +447,7 @@ extension DiskExporter: NSFilePromiseProviderDelegate {
         return name
     }
     
+    @MainActor
     func filePromiseProvider(_ filePromiseProvider: NSFilePromiseProvider, writePromiseTo url: URL, completionHandler: @escaping (Error?) -> Void) {
         
         export(url: url)
