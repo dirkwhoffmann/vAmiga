@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 extension Inspector {
 
     var symbolic1: Bool { return copList1Format.selectedSegment == 1 }

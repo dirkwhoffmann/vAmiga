@@ -17,6 +17,7 @@ struct DataPoint: Identifiable {
     var value: Double
 }
 
+@MainActor
 class DashboardDataProvider: ObservableObject {
     
     @Published var update = false

@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 class TraceTableView: NSTableView {
 
     @IBOutlet weak var inspector: Inspector!

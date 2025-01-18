@@ -92,6 +92,7 @@ class DashboardViewController: NSViewController {
     let waveformLPanel = WaveformPanel(frame: NSRect.zero, channel: 0)
     let waveformRPanel = WaveformPanel(frame: NSRect.zero, channel: 1)
     
+    @MainActor
     override func viewDidLoad() {
 
         super.viewDidLoad()
@@ -104,10 +105,12 @@ class DashboardViewController: NSViewController {
         singlePanelController = storyboard.instantiateController(withIdentifier: "ViewController2") as? NSViewController
     }
     
+    @MainActor
     func windowDidResize(_ notification: Notification) {
     
     }
     
+    @MainActor
     private func switchToPanel(type: PanelType?) {
         
         guard let type = type else { return }
@@ -208,6 +211,7 @@ class DashboardViewController: NSViewController {
         }
     }
     
+    @MainActor
     private func switchToViewController(controller newController: NSViewController) {
         
         if let currentController = children.first  {
@@ -237,6 +241,7 @@ class DashboardViewController: NSViewController {
         }
     }
     
+    @MainActor
     func continuousRefresh() {
 
         guard let emu = emu else { return }

@@ -24,24 +24,28 @@ class WaveformPanel: NSImageView {
     // Foreground color
     var color = UInt32(0xFF888888)
 
+    @MainActor
     required init?(coder decoder: NSCoder) {
 
         super.init(coder: decoder)
         setup()
     }
 
+    @MainActor
     required override init(frame frameRect: NSRect) {
         
         super.init(frame: frameRect)
         setup()
     }
     
+    @MainActor
     convenience init(frame frameRect: NSRect, channel: Int) {
 
         self.init(frame: frameRect)
         self.tag = channel
     }
 
+    @MainActor
     func setup() {
                         
         imageSize = NSSize(width: 300, height: 100)
@@ -50,17 +54,20 @@ class WaveformPanel: NSImageView {
         
     }
 
+    @MainActor
     func update() {
 
         needsDisplay = true
     }
 
+    @MainActor
     override var intrinsicContentSize: NSSize {
         
         // Let the image scale with the ImageView
         return .zero
     }
     
+    @MainActor
     override func draw(_ dirtyRect: NSRect) {
 
         if tag == 0 {

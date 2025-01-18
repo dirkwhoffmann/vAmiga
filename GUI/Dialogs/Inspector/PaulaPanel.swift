@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 extension Inspector {
 
     static let image0 = NSImage(named: "state0Template")!

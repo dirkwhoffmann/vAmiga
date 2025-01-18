@@ -27,20 +27,23 @@ extension Inspector {
         static let auto = NSColor(r: 0xFF, g: 0x66, b: 0xB2, a: 0xFF)
     }
 
+    var accessor: Accessor {
+        return memBankMap.selectedTag() == 0 ? .CPU : .AGNUS
+    }
+    
+    @MainActor
     private func cacheMem() {
 
         memInfo = emu.paused ? emu.mem.info : emu.mem.cachedInfo
     }
 
-    var accessor: Accessor {
-        return memBankMap.selectedTag() == 0 ? .CPU : .AGNUS
-    }
-    
-    func memSrc(bank: Int) -> MemorySource {  
+    @MainActor
+    func memSrc(bank: Int) -> MemorySource {
 
         return parent.emu.mem.memSrc(accessor, addr: bank << 16)
     }
     
+    @MainActor
     var memLayoutImage: NSImage? {
 
         // Create image representation in memory
@@ -111,6 +114,7 @@ extension Inspector {
         // return image
     }
 
+    @MainActor
     private func refreshMemoryLayout() {
 
         let config = emu.mem.config
@@ -142,6 +146,7 @@ extension Inspector {
         memExtText.stringValue = String(format: "%d KB", extKB)
     }
 
+    @MainActor
     func refreshMemory(count: Int = 0, full: Bool = false) {
 
         cacheMem()
@@ -152,6 +157,7 @@ extension Inspector {
         memBankTableView.refresh(count: count, full: full)
     }
 
+    @MainActor
     func jumpTo(addr: Int) {
         
         if addr >= 0 && addr <= 0xFFFFFF {
@@ -164,6 +170,7 @@ extension Inspector {
         }
     }
     
+    @MainActor
     func jumpTo(source: MemorySource) {
 
         for bank in 0...255 {
@@ -175,6 +182,7 @@ extension Inspector {
         }
     }
 
+    @MainActor
     func jumpTo(bank nr: Int) {
         
         if nr >= 0 && nr <= 0xFF {
@@ -189,67 +197,84 @@ extension Inspector {
         }
     }
 
-    @IBAction func memSliderAction(_ sender: NSSlider!) {
+    //
+    // Action methods
+    //
+    
+    @IBAction
+    func memSliderAction(_ sender: NSSlider!) {
 
         jumpTo(bank: sender.integerValue)
     }
 
-    @IBAction func memChipAction(_ sender: NSButton!) {
+    @IBAction
+    func memChipAction(_ sender: NSButton!) {
 
         jumpTo(source: .CHIP)
     }
 
-    @IBAction func memFastRamAction(_ sender: NSButton!) {
+    @IBAction
+    func memFastRamAction(_ sender: NSButton!) {
 
         jumpTo(source: .FAST)
     }
     
-    @IBAction func memSlowRamAction(_ sender: NSButton!) {
+    @IBAction
+    func memSlowRamAction(_ sender: NSButton!) {
 
         jumpTo(source: .SLOW)
     }
 
-    @IBAction func memRomAction(_ sender: NSButton!) {
+    @IBAction
+    func memRomAction(_ sender: NSButton!) {
 
         jumpTo(source: .ROM)
     }
 
-    @IBAction func memWomAction(_ sender: NSButton!) {
+    @IBAction
+    func memWomAction(_ sender: NSButton!) {
 
         jumpTo(source: .WOM)
     }
 
-    @IBAction func memExtAction(_ sender: NSButton!) {
+    @IBAction
+    func memExtAction(_ sender: NSButton!) {
 
         jumpTo(source: .EXT)
     }
 
-    @IBAction func memCIAAction(_ sender: NSButton!) {
+    @IBAction
+    func memCIAAction(_ sender: NSButton!) {
 
         jumpTo(source: .CIA)
     }
  
-    @IBAction func memRTCAction(_ sender: NSButton!) {
+    @IBAction
+    func memRTCAction(_ sender: NSButton!) {
 
         jumpTo(source: .RTC)
     }
 
-    @IBAction func memOCSAction(_ sender: NSButton!) {
+    @IBAction
+    func memOCSAction(_ sender: NSButton!) {
 
         jumpTo(source: .CUSTOM)
     }
 
-    @IBAction func memAutoConfAction(_ sender: NSButton!) {
+    @IBAction
+    func memAutoConfAction(_ sender: NSButton!) {
 
         jumpTo(source: .AUTOCONF)
     }
 
-    @IBAction func memBankMapAction(_ sender: NSPopUpButton!) {
+    @IBAction
+    func memBankMapAction(_ sender: NSPopUpButton!) {
 
         fullRefresh()
     }
 
-    @IBAction func memSearchAction(_ sender: NSTextField!) {
+    @IBAction
+    func memSearchAction(_ sender: NSTextField!) {
 
         let input = sender.stringValue
         if let addr = Int(input, radix: 16), input != "" {

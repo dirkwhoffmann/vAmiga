@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 extension Inspector {
     
     static let serDatFont = NSFontManager.shared.font(withFamily: "Courier New",

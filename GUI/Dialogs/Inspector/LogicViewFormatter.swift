@@ -9,6 +9,7 @@
 
 // import Cocoa
 
+@MainActor
 class LogicViewFormatter {
 
     var hex = false
