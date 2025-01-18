@@ -254,5 +254,5 @@ extension MyAppDelegate {
     }
 }
 
-var myApp: MyApplication { return NSApp as! MyApplication }
-var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
+@MainActor var myApp: MyApplication { return NSApp as! MyApplication }
+@MainActor var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }

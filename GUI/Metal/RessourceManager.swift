@@ -116,6 +116,7 @@ class RessourceManager {
         samplerNearest = device.makeSamplerState(descriptor: descriptor)
     }
 
+    @MainActor
     internal func buildDotMasks() {
         
         let brightness = renderer.shaderOptions.dotMaskBrightness

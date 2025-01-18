@@ -480,6 +480,7 @@ extension RecorderProxy {
 // Other extensions
 //
 
+@MainActor
 public extension EmulatorProxy {
     
     func df(_ nr: Int) -> FloppyDriveProxy? {

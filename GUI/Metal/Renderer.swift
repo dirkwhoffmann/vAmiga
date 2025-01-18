@@ -18,7 +18,7 @@ enum ScreenshotSource: Int {
     case framebuffer = 4
 }
 
-// @MainActor
+@MainActor
 class Renderer: NSObject, MTKViewDelegate {
     
     let view: MTKView

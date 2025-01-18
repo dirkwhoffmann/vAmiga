@@ -182,7 +182,7 @@ class ScreenshotDialog: DialogController {
 // iCarousel data source and delegate
 //
 
-extension ScreenshotDialog: iCarouselDataSource, iCarouselDelegate {
+extension ScreenshotDialog: @preconcurrency iCarouselDataSource, @preconcurrency iCarouselDelegate {
     
     func numberOfItems(in carousel: iCarousel) -> Int {
                 

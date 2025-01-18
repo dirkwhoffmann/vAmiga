@@ -251,7 +251,8 @@ public class MacAudio: NSObject {
         if volume == 0.0 { return }
 
         // Play sound if a free player is available
-        queue.async {
+        Task { @MainActor in
+        // queue.async {
 
             for player in self.audioPlayers[name]! where !player.isPlaying {
 
