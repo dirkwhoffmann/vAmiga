@@ -10,7 +10,7 @@
 import AVFoundation
 
 protocol MessageReceiver {
-    func processMessage(_ msg: Message)
+    @MainActor func processMessage(_ msg: Message)
 }
 
 class MyController: NSWindowController, MessageReceiver {
@@ -308,6 +308,7 @@ extension MyController {
         }
     }
 
+    // @MainActor
     func processMessage(_ msg: Message) {
 
         var value: Int { return Int(msg.value) }

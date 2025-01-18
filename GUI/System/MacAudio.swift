@@ -9,6 +9,7 @@
 
 import AVFoundation
 
+@MainActor
 public class MacAudio: NSObject {
     
     struct Sounds {
