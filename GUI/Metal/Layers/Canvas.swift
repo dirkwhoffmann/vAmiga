@@ -178,6 +178,7 @@ class Canvas: Layer {
     // Taking screenshots
     //
     
+    @MainActor
     func screenshot(source: ScreenshotSource) -> NSImage? {
 
         switch source {
@@ -217,6 +218,7 @@ class Canvas: Layer {
         commandBuffer.waitUntilCompleted()
     }
 
+    @MainActor
     var framebuffer: NSImage? {
         
         guard let drawable = renderer.metalLayer.nextDrawable() else { return nil }
@@ -263,6 +265,7 @@ class Canvas: Layer {
     // Updating
     //
     
+    @MainActor
     override func update(frames: Int64) {
             
         super.update(frames: frames)
@@ -274,6 +277,7 @@ class Canvas: Layer {
         amiga.wakeUp()
     }
 
+    @MainActor
     func updateTexture() {
 
         precondition(lfTexture != nil)
@@ -311,6 +315,7 @@ class Canvas: Layer {
     // Rendering
     //
     
+    @MainActor
     func makeCommandBuffer(buffer: MTLCommandBuffer) {
 
         func applyGauss(_ texture: inout MTLTexture, radius: Float) {
@@ -413,6 +418,7 @@ class Canvas: Layer {
         }
     }
     
+    @MainActor
     func setupFragmentShader(encoder: MTLRenderCommandEncoder) {
         
         // Setup textures
@@ -443,6 +449,7 @@ class Canvas: Layer {
                                  index: 1)
     }
 
+    @MainActor
     func render(_ encoder: MTLRenderCommandEncoder) {
         
         // Configure the vertex shader

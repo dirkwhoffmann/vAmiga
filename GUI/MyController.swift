@@ -152,12 +152,14 @@ extension MyController {
     // Initializing
     //
         
+    @MainActor
     override open func windowDidLoad() {
         
         debug(.lifetime)
         commonInit()
     }
     
+    @MainActor
     func commonInit() {
         
         if initialized { return }
@@ -272,6 +274,7 @@ extension MyController {
     // Timer and message processing
     //
     
+    @MainActor
     func update(frames: Int64) {
 
         if frames % 5 == 0 {

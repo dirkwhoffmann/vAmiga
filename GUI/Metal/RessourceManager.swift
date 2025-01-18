@@ -76,6 +76,7 @@ class RessourceManager {
         selectDotMask(0)
     }
     
+    @MainActor
     func buildDepthBuffer() {
 
         let width = Int(renderer.size.width)

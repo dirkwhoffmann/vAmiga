@@ -340,6 +340,7 @@ extension MyController: NSMenuItemValidation {
         snapshotBrowser?.showAsSheet()
     }
     
+    @MainActor
     @IBAction func takeScreenshotAction(_ sender: Any!) {
 
         // Determine screenshot format

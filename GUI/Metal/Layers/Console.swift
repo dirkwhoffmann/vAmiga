@@ -45,6 +45,7 @@ class Console: Layer {
         resize()
     }
 
+    @MainActor
     override func update(frames: Int64) {
 
         super.update(frames: frames)

@@ -54,6 +54,7 @@ class Layer: NSObject {
     // Performing continuous tasks
     //
     
+    @MainActor
     func update(frames: Int64) {
         
         if alpha.animates {

@@ -19,6 +19,7 @@ struct TextureSize {
 
 extension Renderer {
 
+    @MainActor
     func setup() {
 
         buildMetal()
@@ -154,6 +155,7 @@ extension Renderer {
         canvas.buildVertexBuffers()
     }
     
+    @MainActor
     func buildMatrices2D() {
 
         let aspect = Float(size.width) / Float(size.height)
