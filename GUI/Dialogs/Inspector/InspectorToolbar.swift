@@ -19,6 +19,7 @@ class InspectorToolbar: NSToolbar {
 
     var emu: EmulatorProxy! { return inspector.parent.emu }
     
+    @MainActor
     override func validateVisibleItems() {
 
         // Update icons
@@ -34,6 +35,7 @@ class InspectorToolbar: NSToolbar {
         formatPopup.isEnabled = formatToolbarItem.isVisible
     }
     
+    @MainActor
     func updateToolbar(info: AmigaInfo, full: Bool) {
         
         let frame = inspector.agnusInfo.frame
@@ -58,21 +60,24 @@ class InspectorToolbar: NSToolbar {
     // Action methods
     //
     
-    @IBAction func panelAction(_ sender: Any) {
+    @IBAction
+    func panelAction(_ sender: Any) {
 
         if let popup = sender as? NSPopUpButton {
             inspector.selectPanel(popup.selectedTag())
         }
     }
  
-    @IBAction func formatAction(_ sender: Any) {
+    @IBAction
+    func formatAction(_ sender: Any) {
 
         if let popup = sender as? NSPopUpButton {
             inspector.format = popup.selectedTag()
         }
     }
 
-    @IBAction func execAction(_ sender: NSSegmentedControl) {
+    @IBAction
+    func execAction(_ sender: NSSegmentedControl) {
         
         switch sender.selectedSegment {
             
@@ -87,12 +92,14 @@ class InspectorToolbar: NSToolbar {
         }
     }
     
-    @IBAction func plusAction(_ sender: NSButton) {
+    @IBAction
+    func plusAction(_ sender: NSButton) {
 
         inspector.parent.addInspector()
     }
     
-    @IBAction func hexAction(_ sender: NSButton) {
+    @IBAction
+    func hexAction(_ sender: NSButton) {
         
         if sender.state == .on {
             

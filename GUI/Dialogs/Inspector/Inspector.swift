@@ -668,6 +668,11 @@ class Inspector: DialogController {
     // Used to determine the items to be refreshed
     private var refreshCnt = 0
 
+    deinit {
+        debug(.lifetime)
+    }
+    
+    @MainActor
     override func dialogWillShow() {
         
         super.dialogWillShow()
@@ -694,17 +699,14 @@ class Inspector: DialogController {
         jumpTo(addr: 0)
     }
     
+    @MainActor
     override func dialogDidShow() {
         
         super.dialogDidShow()
         refresh(full: true)
     }
     
-    deinit {
-        debug(.lifetime)
-    }
-    
-    // Assigns a number formatter to a control
+    @MainActor
     func assignFormatter(_ formatter: Formatter, _ control: NSControl) {
         
         control.abortEditing()
@@ -713,18 +715,21 @@ class Inspector: DialogController {
         control.needsDisplay = true
     }
     
+    @MainActor
     func fullRefresh() {
 
         refresh(full: true)
     }
     
+    @MainActor
     func continuousRefresh() {
         
         if isRunning { refresh(count: refreshCnt) }
         isRunning = emu.running
         refreshCnt += 1
     }
-    
+   
+    @MainActor
     private func refresh(count: Int = 0, full: Bool = false) {
         
         if window?.isVisible == false { return }
@@ -755,6 +760,7 @@ class Inspector: DialogController {
         toolbar?.updateToolbar(info: info, full: full)
     }
     
+    @MainActor
     func selectPanel(_ nr: Int) {
         
         if nr <  panel.numberOfTabViewItems {
@@ -764,6 +770,7 @@ class Inspector: DialogController {
         }
     }
     
+    @MainActor
     func processMessage(_ msg: Message) {
     
         var pc: Int { return Int(msg.cpu.pc) }
@@ -834,6 +841,7 @@ class Inspector: DialogController {
         }
     }
         
+    @MainActor
     func scrollToPC() {
 
         if cpuInfo != nil {
@@ -841,39 +849,46 @@ class Inspector: DialogController {
         }
     }
 
+    @MainActor
     func scrollToPC(pc: Int) {
 
         cpuInstrView.jumpTo(addr: pc)
     }
 
-    @IBAction func refreshAction(_ sender: Any!) {
+    @IBAction
+    func refreshAction(_ sender: Any!) {
         
         fullRefresh()
     }
     
-    @IBAction func stopAndGoAction(_ sender: NSButton!) {
+    @IBAction
+    func stopAndGoAction(_ sender: NSButton!) {
 
         if let emu = emu {
             if emu.running { emu.pause() } else { try? emu.run() }
         }
     }
 
-    @IBAction func stepIntoAction(_ sender: NSButton!) {
+    @IBAction
+    func stepIntoAction(_ sender: NSButton!) {
 
         emu.stepInto()
     }
     
-    @IBAction func stepOverAction(_ sender: NSButton!) {
+    @IBAction
+    func stepOverAction(_ sender: NSButton!) {
 
         emu.stepOver()
     }
     
-    @IBAction func finishLineAction(_ sender: NSButton!) {
+    @IBAction
+    func finishLineAction(_ sender: NSButton!) {
 
         emu.finishLine()
     }
     
-    @IBAction func finishFrameAction(_ sender: NSButton!) {
+    @IBAction
+    func finishFrameAction(_ sender: NSButton!) {
 
         emu.finishFrame()
     }
@@ -881,6 +896,7 @@ class Inspector: DialogController {
 
 extension Inspector {
     
+    @MainActor
     override func windowWillClose(_ notification: Notification) {
 
         super.windowWillClose(notification)
@@ -904,6 +920,7 @@ extension Inspector {
 
 extension Inspector: NSTabViewDelegate {
 
+    @MainActor
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
         
         fullRefresh()

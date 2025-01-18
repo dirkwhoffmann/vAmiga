@@ -10,6 +10,7 @@
 class DialogWindow: NSWindow {
 
     // Delegation method for ESC and Cmd+
+    @MainActor
     override func cancelOperation(_ sender: Any?) {
                       
         if let controller = delegate as? DialogController {
@@ -21,13 +22,13 @@ class DialogWindow: NSWindow {
 protocol DialogControllerDelegate: AnyObject {
     
     // Called before showWindow() or beginSheet() is called
-    func dialogWillShow()
+    @MainActor func dialogWillShow()
 
     // Called after showWindow() or beginSheet() has beed called
-    func dialogDidShow()
+    @MainActor func dialogDidShow()
 
     // Called after the completion handler has been executed
-    func cleanup()
+    @MainActor func cleanup()
 }
 
 /* Base class for all auxiliary windows. The class extends NSWindowController
@@ -50,6 +51,7 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     // Indicates if this dialog is displayed as a sheet
     var sheet = false
 
+    @MainActor
     convenience init?(with controller: MyController, nibName: NSNib.Name) {
     
         self.init(windowNibName: nibName)
@@ -58,18 +60,21 @@ class DialogController: NSWindowController, DialogControllerDelegate {
         parent = controller
     }
 
+    @MainActor
     func register() {
         
         DialogController.active.append(self)
         debug(.lifetime, "Register: \(DialogController.active)")
     }
     
+    @MainActor
     func unregister() {
         
         DialogController.active = DialogController.active.filter {$0 != self}
         debug(.lifetime, "Unregister: \(DialogController.active)")
     }
 
+    @MainActor
     override func windowDidLoad() {
         
         debug(.lifetime)
@@ -78,21 +83,25 @@ class DialogController: NSWindowController, DialogControllerDelegate {
         self.window?.delegate = self
     }
     
+    @MainActor
     func dialogWillShow() {
 
         debug(.lifetime)
     }
     
+    @MainActor
     func dialogDidShow() {
 
         debug(.lifetime)
     }
     
+    @MainActor
     func cleanup() {
 
         debug(.lifetime)
     }
     
+    @MainActor
     func showAsWindow() {
 
         debug(.lifetime)
@@ -105,6 +114,7 @@ class DialogController: NSWindowController, DialogControllerDelegate {
         dialogDidShow()
     }
 
+    @MainActor
     func showAsSheet(completionHandler handler:(() -> Void)? = nil) {
 
         debug(.lifetime)
@@ -117,6 +127,7 @@ class DialogController: NSWindowController, DialogControllerDelegate {
         dialogDidShow()
     }
 
+    @MainActor
     func hide() {
 
         cleanup()
@@ -132,16 +143,7 @@ class DialogController: NSWindowController, DialogControllerDelegate {
         unregister()
     }
 
-    @IBAction func okAction(_ sender: Any!) {
-        
-        hide()
-    }
-    
-    @IBAction func cancelAction(_ sender: Any!) {
-        
-        hide()
-    }
-
+    @MainActor
     func join() {
 
         debug(.shutdown, "Wait until the window is closed...")
@@ -149,15 +151,28 @@ class DialogController: NSWindowController, DialogControllerDelegate {
         lock.lock()
         lock.unlock()
     }
+    
+    @IBAction
+    func okAction(_ sender: Any!) {
+        
+        hide()
+    }
+    @IBAction
+    func cancelAction(_ sender: Any!) {
+        
+        hide()
+    }
 }
 
 extension DialogController: NSWindowDelegate {
 
+    @MainActor
     func windowDidBecomeKey(_ notification: Notification) {
 
         debug(.lifetime)
     }
 
+    @MainActor
     func windowWillClose(_ notification: Notification) {
 
         unregister()

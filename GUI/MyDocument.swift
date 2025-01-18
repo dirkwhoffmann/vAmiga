@@ -43,6 +43,7 @@ class MyDocument: NSDocument {
     // Initializing
     //
     
+    @MainActor
     override init() {
         
         debug(.lifetime)
@@ -67,6 +68,7 @@ class MyDocument: NSDocument {
         emu = EmulatorProxy()
     }
  
+    @MainActor
     override open func makeWindowControllers() {
                 
         debug(.lifetime)
@@ -80,6 +82,7 @@ class MyDocument: NSDocument {
     // Creating file proxys
     //
 
+    @MainActor
     func createMediaFileProxy(from url: URL, allowedTypes: [FileType]) throws -> MediaFileProxy {
 
         debug(.media, "Reading file \(url.lastPathComponent)")
@@ -118,6 +121,7 @@ class MyDocument: NSDocument {
     // Loading
     //
     
+    nonisolated
     override open func read(from url: URL, ofType typeName: String) throws {
              
         debug(.media)
@@ -138,6 +142,7 @@ class MyDocument: NSDocument {
         */
     }
     
+    @MainActor
     override open func revert(toContentsOf url: URL, ofType typeName: String) throws {
         
         debug(.media)
@@ -155,6 +160,8 @@ class MyDocument: NSDocument {
     // Saving
     //
     
+    /*
+    nonisolated
     override func write(to url: URL, ofType typeName: String) throws {
             
         debug(.media)
@@ -173,7 +180,28 @@ class MyDocument: NSDocument {
             }
         }
     }
+    */
+    
+    @MainActor
+    override func save(to url: URL, ofType typeName: String, for saveOperation: NSDocument.SaveOperationType) async throws {
+            
+        debug(.media)
+        
+        if typeName == "vAmiga" {
 
+            if let snapshot = emu.amiga.takeSnapshot() {
+
+                do {
+                    try snapshot.writeToFile(url: url)
+
+                } catch let error as VAError {
+                    
+                    throw NSError(error: error)
+                }
+            }
+        }
+    }
+    
     //
     // Handling media files
     //
