@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 class MyToolbar: NSToolbar {
     
     var amiga: EmulatorProxy { return parent.emu }
@@ -58,7 +59,8 @@ class MyToolbar: NSToolbar {
     // Action methods
     //
     
-    @IBAction func inspectAction(_ sender: NSSegmentedControl) {
+    @IBAction
+    func inspectAction(_ sender: NSSegmentedControl) {
 
         switch sender.selectedSegment {
 
@@ -71,7 +73,8 @@ class MyToolbar: NSToolbar {
         }
     }
     
-    @IBAction func snapshotAction(_ sender: NSSegmentedControl) {
+    @IBAction
+    func snapshotAction(_ sender: NSSegmentedControl) {
         
         switch sender.selectedSegment {
             
@@ -84,7 +87,8 @@ class MyToolbar: NSToolbar {
         }
     }
     
-    @IBAction func screenshotAction(_ sender: NSSegmentedControl) {
+    @IBAction
+    func screenshotAction(_ sender: NSSegmentedControl) {
                 
         switch sender.selectedSegment {
             
@@ -96,21 +100,24 @@ class MyToolbar: NSToolbar {
         }
     }
 
-    @IBAction func port1Action(_ sender: Any) {
+    @IBAction
+    func port1Action(_ sender: Any) {
         
         if let popup = sender as? NSPopUpButton {
             parent.config.gameDevice1 = popup.selectedTag()
         }
     }
  
-    @IBAction func port2Action(_ sender: Any) {
+    @IBAction
+    func port2Action(_ sender: Any) {
         
         if let popup = sender as? NSPopUpButton {
             parent.config.gameDevice2 = popup.selectedTag()
         }
     }
             
-    @IBAction func keyboardAction(_ sender: Any!) {
+    @IBAction
+    func keyboardAction(_ sender: Any!) {
         
         if parent.virtualKeyboard == nil {
             parent.virtualKeyboard = VirtualKeyboardController.make(parent: parent)
@@ -120,7 +127,8 @@ class MyToolbar: NSToolbar {
         }
     }
     
-    @IBAction func preferencesAction(_ sender: NSSegmentedControl) {
+    @IBAction
+    func preferencesAction(_ sender: NSSegmentedControl) {
 
         switch sender.selectedSegment {
 
@@ -132,7 +140,8 @@ class MyToolbar: NSToolbar {
         }
     }
 
-    @IBAction func controlsAction(_ sender: NSSegmentedControl) {
+    @IBAction
+    func controlsAction(_ sender: NSSegmentedControl) {
 
         switch sender.selectedSegment {
 

@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 extension Canvas {
     
     var texW: CGFloat { return CGFloat(TextureSize.original.width) }

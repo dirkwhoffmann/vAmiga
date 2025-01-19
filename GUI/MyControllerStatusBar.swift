@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 extension MyController {
 
     func cmdKeyIcon(_ state: Bool) -> NSImage? {
@@ -282,7 +283,8 @@ extension MyController {
     // Action methods
     //
 
-    @IBAction func activityTypeAction(_ sender: NSPopUpButton!) {
+    @IBAction
+    func activityTypeAction(_ sender: NSPopUpButton!) {
         
         var min, max, warn, crit: Double
         
@@ -306,7 +308,8 @@ extension MyController {
         refreshStatusBar()
     }
 
-    @IBAction func speedAction(_ sender: NSStepper!) {
+    @IBAction
+    func speedAction(_ sender: NSStepper!) {
 
         // Round the value to the next number dividable by 5
         var value = Int(round(sender.doubleValue / 5.0)) * 5
@@ -318,7 +321,8 @@ extension MyController {
         emu?.set(.AMIGA_SPEED_BOOST, value: value)
     }
 
-    @IBAction func infoAction(_ sender: Any!) {
+    @IBAction
+    func infoAction(_ sender: Any!) {
                 
         if let info = info {
                 
@@ -350,7 +354,8 @@ extension MyController {
         }
     }
     
-    @IBAction func speedResetAction(_ sender: Any!) {
+    @IBAction
+    func speedResetAction(_ sender: Any!) {
 
         emu?.set(.AMIGA_SPEED_BOOST, value: 100)
     }

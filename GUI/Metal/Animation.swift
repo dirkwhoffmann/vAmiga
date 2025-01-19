@@ -58,9 +58,9 @@ struct AnimatedFloat {
     }
 }
 
+@MainActor
 extension Renderer {
     
-    @MainActor
     func animate() {
                 
         // Color animations
@@ -103,7 +103,6 @@ extension Renderer {
     // Texture animations
     //
 
-    @MainActor
     func zoomTextureIn(steps: Int = 30) {
 
         let current = canvas.textureRect
@@ -127,7 +126,6 @@ extension Renderer {
         animates |= AnimationType.texture
     }
 
-    @MainActor
     func zoomTextureOut(steps: Int = 30) {
         
         let current = canvas.textureRect
@@ -155,7 +153,6 @@ extension Renderer {
     // Color animation
     //
     
-    @MainActor
     func flash(steps: Int = 20) {
                 
         white.current = 1.0
@@ -165,7 +162,6 @@ extension Renderer {
         animates |= AnimationType.color
     }
 
-    @MainActor 
     func blend(steps: Int = 20) {
 
         canvas.alpha.current = 0

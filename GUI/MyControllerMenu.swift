@@ -341,7 +341,6 @@ extension MyController: NSMenuItemValidation {
         snapshotBrowser?.showAsSheet()
     }
     
-    @MainActor
     @IBAction func takeScreenshotAction(_ sender: Any!) {
 
         // Determine screenshot format
@@ -551,15 +550,6 @@ extension MyController: NSMenuItemValidation {
             self.emu.keyboard.release(keyCode)
             completion?()
         }
-        /*
-        DispatchQueue.global().async {
-            
-            self.emu.keyboard.press(keyCode)
-            usleep(useconds_t(20000))
-            self.emu.keyboard.release(keyCode)
-            completion?()
-        }
-        */
     }
     
     //

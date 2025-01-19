@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 extension MyDocument {
 
     func insert(df n: Int, file: MediaFileProxy, force: Bool = false) throws {

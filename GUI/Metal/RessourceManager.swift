@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 class RessourceManager {
     
     let device: MTLDevice
@@ -62,7 +63,6 @@ class RessourceManager {
     // Initializing
     //
     
-    @MainActor
     init(view: MTKView, device: MTLDevice, renderer: Renderer) {
         
         debug(.lifetime)
@@ -77,7 +77,6 @@ class RessourceManager {
         selectDotMask(0)
     }
     
-    @MainActor
     func buildDepthBuffer() {
 
         let width = Int(renderer.size.width)
@@ -116,7 +115,6 @@ class RessourceManager {
         samplerNearest = device.makeSamplerState(descriptor: descriptor)
     }
 
-    @MainActor
     internal func buildDotMasks() {
         
         let brightness = renderer.shaderOptions.dotMaskBrightness
@@ -185,7 +183,6 @@ class RessourceManager {
         }
     }
 
-    @MainActor
     internal func buildKernels() {
     
         let mc = (TextureSize.merged.width, TextureSize.merged.height)

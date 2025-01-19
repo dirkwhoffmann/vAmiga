@@ -34,28 +34,27 @@ class Layer: NSObject {
     // Querying the visual state
     //
         
-    @MainActor var isVisible: Bool { return alpha.current > 0.0 }
-    @MainActor var isOpaque: Bool { return alpha.current == 1.0 }
-    @MainActor var isTransparent: Bool { return alpha.current < 1.0 }
-    @MainActor var isAnimating: Bool { return alpha.animates }
-    @MainActor var isFadingIn: Bool { return alpha.target > alpha.current }
-    @MainActor var isFadingOut: Bool { return alpha.target < alpha.current }
+    var isVisible: Bool { return alpha.current > 0.0 }
+    var isOpaque: Bool { return alpha.current == 1.0 }
+    var isTransparent: Bool { return alpha.current < 1.0 }
+    var isAnimating: Bool { return alpha.animates }
+    var isFadingIn: Bool { return alpha.target > alpha.current }
+    var isFadingOut: Bool { return alpha.target < alpha.current }
         
     //
     // Opening and closing
     //
     
-    @MainActor func open(delay: Double) { alpha.steps = Int(60 * delay); open(); }
-    @MainActor func close(delay: Double) { alpha.steps = Int(60 * delay); close(); }
-    @MainActor func open() { alpha.target = 1.0 }
-    @MainActor func close() { alpha.target = 0.0 }
-    @MainActor func toggle() { isVisible ? close() : open(); }
+    func open(delay: Double) { alpha.steps = Int(60 * delay); open(); }
+    func close(delay: Double) { alpha.steps = Int(60 * delay); close(); }
+    func open() { alpha.target = 1.0 }
+    func close() { alpha.target = 0.0 }
+    func toggle() { isVisible ? close() : open(); }
 
     //
     // Performing continuous tasks
     //
     
-    @MainActor
     func update(frames: Int64) {
         
         if alpha.animates {
@@ -69,7 +68,7 @@ class Layer: NSObject {
         }
     }
     
-    @MainActor func alphaDidChange() { }
-    @MainActor func layerDidOpen() { }
-    @MainActor func layerDidClose() { }
+    func alphaDidChange() { }
+    func layerDidOpen() { }
+    func layerDidClose() { }
 }

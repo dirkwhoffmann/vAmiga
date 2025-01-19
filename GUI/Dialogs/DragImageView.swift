@@ -11,13 +11,13 @@ import Foundation
 
 import Cocoa
 
+@MainActor
 class DragImageView: NSImageView, NSDraggingSource {
 
     @IBOutlet weak var exporter: NSFilePromiseProviderDelegate!
     
     var mouseDownEvent: NSEvent?
 
-    @MainActor
     override init(frame frameRect: NSRect) {
         
         debug(.events)
@@ -26,7 +26,6 @@ class DragImageView: NSImageView, NSDraggingSource {
         isEditable = true
     }
 
-    @MainActor
     required init?(coder: NSCoder) {
 
         debug(.events)
@@ -35,7 +34,6 @@ class DragImageView: NSImageView, NSDraggingSource {
         isEditable = true
     }
 
-    @MainActor
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
     }
@@ -44,21 +42,18 @@ class DragImageView: NSImageView, NSDraggingSource {
     // Dragging source
     //
 
-    @MainActor
     func draggingSession(_: NSDraggingSession,
                          sourceOperationMaskFor _: NSDraggingContext) -> NSDragOperation {
         
         return NSDragOperation.copy
     }
 
-    @MainActor
     func draggingSession(_: NSDraggingSession,
                          endedAt _: NSPoint, operation: NSDragOperation) {
 
         if operation == .delete { image = nil }
     }
 
-    @MainActor
     override func mouseDown(with theEvent: NSEvent) {
         
         debug(.events)

@@ -9,6 +9,7 @@
 
 import Foundation
 
+@MainActor
 class DropZone: Layer {
 
     let controller: MyController
@@ -81,7 +82,6 @@ class DropZone: Layer {
         return NSImage(named: name)!
     }
 
-    @MainActor
     func open(type: FileType, delay: Double) {
 
         self.type = type
@@ -112,7 +112,6 @@ class DropZone: Layer {
         resize()
     }
     
-    @MainActor
     override func update(frames: Int64) {
         
         super.update(frames: frames)
@@ -181,7 +180,6 @@ class DropZone: Layer {
         resize()
     }
     
-    @MainActor
     override func layerDidClose() {
         
         guard let url = metal.dropUrl else { return }

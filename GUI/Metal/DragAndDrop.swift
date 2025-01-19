@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 public extension MetalView {
 
     func acceptedTypes() -> [NSPasteboard.PasteboardType] {

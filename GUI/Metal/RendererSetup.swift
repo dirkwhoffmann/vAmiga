@@ -17,9 +17,9 @@ struct TextureSize {
     static let upscaled = MTLSizeMake(2 * VAMIGA.HPIXELS, 4 * VAMIGA.VPIXELS, 0)
 }
 
+@MainActor
 extension Renderer {
 
-    @MainActor
     func setup() {
 
         buildMetal()
@@ -32,7 +32,6 @@ extension Renderer {
         reshape()
     }
 
-    @MainActor
     internal func buildMetal() {
 
         // Command queue
@@ -48,8 +47,7 @@ extension Renderer {
         metalLayer.framebufferOnly = true
         metalLayer.frame = metalLayer.frame
     }
-    
-    @MainActor
+
     func buildDescriptors() {
         
         // Render pass descriptor
@@ -62,7 +60,6 @@ extension Renderer {
         descriptor.depthAttachment.storeAction = MTLStoreAction.dontCare
     }
     
-    @MainActor
     func buildShaders() {
         
         shaderOptions = ShaderOptions(
@@ -88,7 +85,6 @@ extension Renderer {
         ressourceManager = RessourceManager(view: view, device: device, renderer: self)
     }
     
-    @MainActor
     func buildLayers() {
         
         splashScreen = SplashScreen(renderer: self)
@@ -97,7 +93,6 @@ extension Renderer {
         dropZone = DropZone(renderer: self)
     }
         
-    @MainActor
     func buildPipeline() {
 
         // Read vertex shader from library
@@ -154,14 +149,12 @@ extension Renderer {
         metalAssert(pipeline != nil, "Failed to create the GPU pipeline.")
     }
 
-    @MainActor
     func buildVertexBuffers() {
 
         splashScreen.buildVertexBuffers()
         canvas.buildVertexBuffers()
     }
     
-    @MainActor
     func buildMatrices2D() {
 
         let aspect = Float(size.width) / Float(size.height)

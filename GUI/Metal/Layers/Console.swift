@@ -10,6 +10,7 @@
 import Foundation
 import Carbon.HIToolbox
 
+@MainActor
 class Console: Layer {
  
     let controller: MyController
@@ -45,7 +46,6 @@ class Console: Layer {
         resize()
     }
 
-    @MainActor
     override func update(frames: Int64) {
 
         super.update(frames: frames)
@@ -102,7 +102,6 @@ class Console: Layer {
         }
     }
     
-    // @MainActor
     func resize() {
                 
         let size = controller.metal.frame.size
@@ -113,7 +112,6 @@ class Console: Layer {
         scrollView.frame.origin = CGPoint(x: origin.x, y: origin.y)
     }
     
-    @MainActor
     func keyDown(with event: NSEvent) {
         
         let macKey = MacKey(event: event)
@@ -147,12 +145,10 @@ class Console: Layer {
         isDirty = true
     }
     
-    @MainActor
     func keyUp(with event: NSEvent) {
         
     }
     
-    @MainActor
     func runScript(script: MediaFileProxy) {
 
         open()

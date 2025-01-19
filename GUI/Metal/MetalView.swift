@@ -9,6 +9,7 @@
 
 import MetalKit
 
+@MainActor
 public class MetalView: MTKView {
     
     @IBOutlet weak var parent: MyController!
