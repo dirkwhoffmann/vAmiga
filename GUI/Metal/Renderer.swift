@@ -245,29 +245,26 @@ class Renderer: NSObject, MTKViewDelegate {
         frames += 1
         update(frames: frames)
 
+        // Wait for the next frame
         semaphore.wait()
 
-        if let drawable = metalLayer.nextDrawable() {
+        // Get drawable
+        guard let drawable = metalLayer.nextDrawable() else { semaphore.signal(); return }
 
-            // Create the command buffer
-            let buffer = makeCommandBuffer()
-            
-            // Create the command encoder
-            guard let encoder = makeCommandEncoder(drawable, buffer) else {
-
-                semaphore.signal()
-                return
-            }
-
-            // Render the scene
-            if canvas.isTransparent { splashScreen.render(encoder) }
-            if canvas.isVisible { canvas.render(encoder) }
-            encoder.endEncoding()
-
-            // Commit the command buffer
-            buffer.addCompletedHandler { _ in self.semaphore.signal() }
-            buffer.present(drawable)
-            buffer.commit()
-        }
+        // Create the command buffer
+        let buffer = makeCommandBuffer()
+        
+        // Create the command encoder
+        guard let encoder = makeCommandEncoder(drawable, buffer) else { semaphore.signal(); return }
+        
+        // Render the scene
+        if canvas.isTransparent { splashScreen.render(encoder) }
+        if canvas.isVisible { canvas.render(encoder) }
+        encoder.endEncoding()
+        
+        // Commit the command buffer
+        buffer.addCompletedHandler { _ in self.semaphore.signal() }
+        buffer.present(drawable)
+        buffer.commit()
     }
 }

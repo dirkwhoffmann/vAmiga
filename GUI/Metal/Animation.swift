@@ -19,8 +19,8 @@ struct AnimatedFloat {
 
     var current: Float
     var delta = Float(0.0)
-    var steps = 1 { didSet { delta = (target - current) / Float(steps) } }
-    var target: Float { didSet { delta = (target - current) / Float(steps) } }
+    var steps = 1 { didSet { delta = (target - current) / Float(steps == 0 ? 1 : steps) }}
+    var target: Float { didSet { delta = (target - current) / Float(steps == 0 ? 1 : steps) }}
     var animates: Bool { return current != target }
     var clamped: Float { return current < 0.0 ? 0.0 : current > 1.0 ? 1.0 : current }
     

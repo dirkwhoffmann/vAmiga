@@ -341,7 +341,11 @@ extension MyController {
             
             if value != 0 {
 
-                renderer.canvas.open(delay: 1.5)
+                if let fileUrl = document?.fileURL, let url = fileUrl {
+                    renderer.canvas.open(delay: 0)
+                } else {
+                    renderer.canvas.open(delay: 1.5)
+                }
                 serialIn = ""
                 serialOut = ""
             }
@@ -563,7 +567,7 @@ extension MyController {
             mydocument.snapshots.append(proxy, size: proxy.size)
 
         case .SNAPSHOT_RESTORED:
-            renderer.flash(steps: 60)
+            renderer.flash(steps: 40)
             hideOrShowDriveMenus()
             assignSlots()
             refreshStatusBar()
