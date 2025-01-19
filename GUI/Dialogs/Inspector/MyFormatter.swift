@@ -7,7 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-@MainActor
 class MyFormatter: Formatter {
     
     var radix = 0 { didSet { updateFormatString() } }

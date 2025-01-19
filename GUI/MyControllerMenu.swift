@@ -488,10 +488,6 @@ extension MyController: NSMenuItemValidation {
     @IBAction
     func toggleStatusBarAction(_ sender: Any!) {
         
-        undoManager?.registerUndo(withTarget: self) { targetSelf in
-            targetSelf.toggleStatusBarAction(sender)
-        }
-        
         showStatusBar(!statusBar)
     }
     

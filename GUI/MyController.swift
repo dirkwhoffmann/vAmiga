@@ -131,9 +131,6 @@ class MyController: NSWindowController, MessageReceiver {
 
 extension MyController {
     
-    // Provides the undo manager
-    override open var undoManager: UndoManager? { return metal.undoManager }
-    
     // Indicates if the emulator needs saving
     var needsSaving: Bool {
         get {

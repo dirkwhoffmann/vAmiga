@@ -447,10 +447,9 @@ extension DiskExporter: NSFilePromiseProviderDelegate {
         return name
     }
     
-    @MainActor
     func filePromiseProvider(_ filePromiseProvider: NSFilePromiseProvider, writePromiseTo url: URL, completionHandler: @escaping (Error?) -> Void) {
         
-        export(url: url)
+        Task { @MainActor in export(url: url) }
         completionHandler(nil)
     }
 }
