@@ -66,6 +66,7 @@
                 <outlet property="genAspectY" destination="y59-M7-CLq" id="ZHF-fU-wfz"/>
                 <outlet property="genAutoSnapshots" destination="MFK-L1-DDN" id="10A-rx-2Ys"/>
                 <outlet property="genBitRate" destination="dvV-xI-xMu" id="VzN-es-NOD"/>
+                <outlet property="genBitRateText" destination="SJl-vF-JBM" id="xtV-G5-8lx"/>
                 <outlet property="genCloseWithoutAskingButton" destination="Ny3-gZ-d6m" id="fJO-m0-h8z"/>
                 <outlet property="genDetachWithoutAskingButton" destination="ZxV-dQ-8cA" id="2gW-wc-mmJ"/>
                 <outlet property="genEjectWithoutAskingButton" destination="U1B-Lg-BCh" id="aA2-mn-aQv"/>
@@ -87,7 +88,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="646" height="495"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="3440" height="1415"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
             <value key="minSize" type="size" width="646" height="495"/>
             <value key="maxSize" type="size" width="646" height="495"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">

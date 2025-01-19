@@ -46,6 +46,7 @@ extension PreferencesController {
         genAspectY.integerValue = pref.aspectY
         genSource.isEnabled = hasFFmpeg
         genBitRate.isEnabled = hasFFmpeg
+        genBitRateText.textColor = hasFFmpeg ? .labelColor : .disabledControlTextColor
         genAspectX.isEnabled = hasFFmpeg
         genAspectY.isEnabled = hasFFmpeg
         

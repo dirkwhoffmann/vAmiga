@@ -12,7 +12,6 @@
 #include "ThreadTypes.h"
 #include "CoreComponent.h"
 #include "Chrono.h"
-// #include "Suspendable.h"
 #include "Wakeable.h"
 
 namespace vamiga {

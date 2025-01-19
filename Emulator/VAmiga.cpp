@@ -50,7 +50,7 @@ struct SuspendResume {
 };
 
 #define VAMIGA_SUSPEND SuspendResume _sr(this);
-// #define SUSPENDED printf("%d: SUSPEND\n", __LINE__); SuspendResume _sr(this);
+// #define VAMIGA_SUSPENDED printf("%d: SUSPEND\n", __LINE__); SuspendResume _sr(this);
 
 #define VAMIGA_SYNCHRONIZE(obj) util::AutoMutex _am(obj->mutex);
 

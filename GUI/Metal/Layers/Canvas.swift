@@ -226,7 +226,7 @@ class Canvas: Layer {
         let texture = device.makeTexture(size: drawable.texture.size, usage: [.shaderRead, .shaderWrite])!
         
         // Copy the framebuffer into the texture
-        blitFramebuffer(texture: texture)
+        blitFramebuffer(texture: texture, drawable: drawable)
         
         // Convert the texture into an NSImage
         let alpha = CGImageAlphaInfo.premultipliedFirst.rawValue
@@ -236,9 +236,7 @@ class Canvas: Layer {
         return NSImage.make(texture: texture, bitmapInfo: bitmapInfo)
     }
 
-    func blitFramebuffer(texture: MTLTexture) {
-
-        guard let drawable = renderer.metalLayer.nextDrawable() else { return }
+    func blitFramebuffer(texture: MTLTexture, drawable: CAMetalDrawable) {
         
         // Use the blitter to copy the framebuffer back from the GPU
         let queue = renderer.device.makeCommandQueue()!

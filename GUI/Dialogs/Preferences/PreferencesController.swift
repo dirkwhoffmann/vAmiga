@@ -35,7 +35,8 @@ class PreferencesController: DialogController {
     @IBOutlet weak var genAspectX: NSTextField!
     @IBOutlet weak var genAspectY: NSTextField!
     @IBOutlet weak var genBitRate: NSComboBox!
-    
+    @IBOutlet weak var genBitRateText: NSTextField!
+
     // Fullscreen
     @IBOutlet weak var genAspectRatioButton: NSButton!
     @IBOutlet weak var genExitOnEscButton: NSButton!
