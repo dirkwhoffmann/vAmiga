@@ -24,7 +24,7 @@ struct InputDevice {
  * by default and represent a mouse and two keyboard emulated joysticks.
  * All remaining gamepads are added dynamically when HID devices are connected.
  */
-// @MainActor
+@MainActor
 class GamePadManager {
 
     // Reference to the main controller
@@ -43,7 +43,6 @@ class GamePadManager {
     // Initializing
     //
     
-    @MainActor
     init(parent: MyController) {
     
         self.controller = parent
@@ -172,7 +171,6 @@ class GamePadManager {
     //
     
     // Matching callback (invoked when a matching HID device is plugged in)
-    @MainActor
     func hidDeviceAdded(context: UnsafeMutableRawPointer?,
                         result: IOReturn,
                         sender: UnsafeMutableRawPointer?,
@@ -203,7 +201,6 @@ class GamePadManager {
         if Int.hid != 0 { listDevices() }
     }
     
-    @MainActor
     func addDevice(slot: Int, device: IOHIDDevice) {
         
         if device.isMouse {
@@ -230,7 +227,6 @@ class GamePadManager {
         }
     }
     
-    @MainActor
     func hidDeviceRemoved(context: UnsafeMutableRawPointer?,
                           result: IOReturn,
                           sender: UnsafeMutableRawPointer?,
@@ -252,13 +248,11 @@ class GamePadManager {
         if Int.hid != 0 { listDevices() }
     }
 
-    @MainActor
     func updateHidMapping() {
 
         for (_, pad) in gamePads { pad.updateMapping() }
     }
 
-    @MainActor
     func listDevices() {
         
         print("Input devices:")
@@ -269,7 +263,6 @@ class GamePadManager {
         }
     }
     
-    @MainActor
     func refresh(popup: NSPopUpButton, hide: Bool = false) {
         
         let slots = [

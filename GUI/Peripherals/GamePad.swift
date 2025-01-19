@@ -15,21 +15,18 @@ import IOKit.hid
  * for HID events. In the latter case, it translates keyboard events to
  * GamePadAction events by utilizing a key map.
  */
-// @MainActor
+@MainActor
 class GamePad {
 
     // References
     var manager: GamePadManager
-    @MainActor var amiga: EmulatorProxy { return manager.controller.emu }
-    @MainActor var prefs: Preferences { return manager.controller.pref }
-    @MainActor var config: Configuration { return manager.controller.config }
-    @MainActor var db: DeviceDatabase { return myAppDelegate.database }
+    var amiga: EmulatorProxy { return manager.controller.emu }
+    var prefs: Preferences { return manager.controller.pref }
+    var config: Configuration { return manager.controller.config }
+    var db: DeviceDatabase { return myAppDelegate.database }
 
     // The Amiga port this device is connected to (1, 2, or nil)
     var port: Int?
-
-    // GamePad properties (derived from database)
-    // var traits: MyData = MyData()
 
     // HID mapping
     var mapping: HIDMapping?
@@ -54,7 +51,7 @@ class GamePad {
     var icon: NSImage?
             
     // Indicates if this device is officially supported
-    @MainActor var isKnown: Bool { return db.isKnown(guid: guid) }
+    var isKnown: Bool { return db.isKnown(guid: guid) }
 
     // Keymap of the managed device (only set for keyboard emulated devices)
     var keyMap: Int?
@@ -72,7 +69,6 @@ class GamePad {
     var oldEvents: [Int: [GamePadAction]] = [:]
     
     // Receivers for HID events
-    @MainActor
     let inputValueCallback: IOHIDValueCallback = {
         inContext, inResult, inSender, value in
         let this: GamePad = unsafeBitCast(inContext, to: GamePad.self)
@@ -82,7 +78,6 @@ class GamePad {
                                  value: value)
     }
     
-    @MainActor
     init(manager: GamePadManager, device: IOHIDDevice? = nil, type: ControlPortDevice) {
                 
         self.manager = manager
@@ -95,7 +90,6 @@ class GamePad {
         updateMapping()
     }
 
-    @MainActor
     func updateMapping() {
 
         if device != nil {
@@ -104,7 +98,6 @@ class GamePad {
         }
     }
 
-    @MainActor
     func property(key: String) -> String? {
             
         if device != nil {
@@ -115,7 +108,6 @@ class GamePad {
         return nil
     }
     
-    @MainActor
     func dump() {
         
         print(name != "" ? "\(name) " : "Placeholder device ", terminator: "")
@@ -132,7 +124,6 @@ class GamePad {
     //
 
     // Binds a key to a gamepad action
-    @MainActor
     func bind(key: MacKey, action: GamePadAction) {
 
         guard let n = keyMap else { return }
@@ -144,7 +135,6 @@ class GamePad {
     }
 
     // Removes a key binding to the specified gampad action (if any)
-    @MainActor
     func unbind(action: GamePadAction) {
         
         guard let n = keyMap else { return }
@@ -155,7 +145,6 @@ class GamePad {
      }
 
     // Translates a key press event to a list of gamepad actions
-    @MainActor
     func keyDownEvents(_ macKey: MacKey) -> [GamePadAction] {
         
         guard let n = keyMap, let direction = prefs.keyMaps[n][macKey] else { return [] }
@@ -202,7 +191,6 @@ class GamePad {
     }
         
     // Handles a key release event
-    @MainActor
     func keyUpEvents(_ macKey: MacKey) -> [GamePadAction] {
         
         guard let n = keyMap, let direction = prefs.keyMaps[n][macKey] else { return [] }
@@ -297,7 +285,6 @@ class GamePad {
         }
     }
 
-    @MainActor
     func hidInputValueAction(context: UnsafeMutableRawPointer?,
                              result: IOReturn,
                              sender: UnsafeMutableRawPointer?,
@@ -396,7 +383,7 @@ class GamePad {
     // Emulate events on the Amiga side
     //
     
-    @MainActor @discardableResult
+    @discardableResult
     func processJoystickEvents(events: [GamePadAction]) -> Bool {
         
         let amiga = manager.controller.emu!
@@ -410,7 +397,7 @@ class GamePad {
         return events != []
     }
     
-    @MainActor @discardableResult
+    @discardableResult
     func processMouseEvents(events: [GamePadAction]) -> Bool {
         
         let amiga = manager.controller.emu!
@@ -421,7 +408,6 @@ class GamePad {
         return events != []
     }
     
-    @MainActor
     func processMouseEvents(delta: NSPoint) {
         
         let amiga = manager.controller.emu!
@@ -433,7 +419,6 @@ class GamePad {
         if port == 2 { amiga.controlPort2.mouse.setDxDy(delta) }
     }
     
-    @MainActor
     func processKeyDownEvent(macKey: MacKey) -> Bool {
 
         // Only proceed if a keymap is present
@@ -448,7 +433,6 @@ class GamePad {
          return true
     }
 
-    @MainActor
     func processKeyUpEvent(macKey: MacKey) -> Bool {
         
         // Only proceed if a keymap is present
@@ -463,7 +447,6 @@ class GamePad {
         return true
     }
 
-    @MainActor
     func processKeyboardEvent(events: [GamePadAction]) {
 
         let amiga = manager.controller.emu!

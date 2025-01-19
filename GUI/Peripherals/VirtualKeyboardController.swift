@@ -29,10 +29,12 @@ enum KBLayout: Int, Codable {
     case italian
 }
 
+@MainActor
 class VirtualKeyboardWindow: DialogWindow {
  
 }
 
+@MainActor
 class VirtualKeyboardController: DialogController {
 
     // Array holding a reference to the view of each key
