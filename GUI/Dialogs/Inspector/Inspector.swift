@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 class Inspector: DialogController {
 
     let fmt4  = MyFormatter(radix: 16, min: 0, max: 0xF)
@@ -672,7 +673,6 @@ class Inspector: DialogController {
         debug(.lifetime)
     }
     
-    @MainActor
     override func dialogWillShow() {
         
         super.dialogWillShow()
@@ -699,14 +699,12 @@ class Inspector: DialogController {
         jumpTo(addr: 0)
     }
     
-    @MainActor
     override func dialogDidShow() {
         
         super.dialogDidShow()
         refresh(full: true)
     }
     
-    @MainActor
     func assignFormatter(_ formatter: Formatter, _ control: NSControl) {
         
         control.abortEditing()
@@ -715,13 +713,11 @@ class Inspector: DialogController {
         control.needsDisplay = true
     }
     
-    @MainActor
     func fullRefresh() {
 
         refresh(full: true)
     }
     
-    @MainActor
     func continuousRefresh() {
         
         if isRunning { refresh(count: refreshCnt) }
@@ -729,7 +725,6 @@ class Inspector: DialogController {
         refreshCnt += 1
     }
    
-    @MainActor
     private func refresh(count: Int = 0, full: Bool = false) {
         
         if window?.isVisible == false { return }
@@ -760,7 +755,6 @@ class Inspector: DialogController {
         toolbar?.updateToolbar(info: info, full: full)
     }
     
-    @MainActor
     func selectPanel(_ nr: Int) {
         
         if nr <  panel.numberOfTabViewItems {
@@ -770,7 +764,6 @@ class Inspector: DialogController {
         }
     }
     
-    @MainActor
     func processMessage(_ msg: Message) {
     
         var pc: Int { return Int(msg.cpu.pc) }
@@ -841,7 +834,6 @@ class Inspector: DialogController {
         }
     }
         
-    @MainActor
     func scrollToPC() {
 
         if cpuInfo != nil {
@@ -849,7 +841,6 @@ class Inspector: DialogController {
         }
     }
 
-    @MainActor
     func scrollToPC(pc: Int) {
 
         cpuInstrView.jumpTo(addr: pc)
@@ -894,9 +885,9 @@ class Inspector: DialogController {
     }
 }
 
+@MainActor
 extension Inspector {
     
-    @MainActor
     override func windowWillClose(_ notification: Notification) {
 
         super.windowWillClose(notification)
@@ -918,9 +909,9 @@ extension Inspector {
     }
 }
 
+@MainActor
 extension Inspector: NSTabViewDelegate {
 
-    @MainActor
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
         
         fullRefresh()

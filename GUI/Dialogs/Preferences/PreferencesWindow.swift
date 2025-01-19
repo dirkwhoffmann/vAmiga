@@ -9,6 +9,7 @@
 
 import Carbon.HIToolbox
 
+@MainActor
 class PreferencesWindow: DialogWindow {
     
     override func keyDown(with event: NSEvent) {

@@ -22,6 +22,7 @@ public enum CaptureSource: Int {
     case entire = 1
 }
 
+@MainActor
 class Preferences {
     
     //
@@ -29,14 +30,14 @@ class Preferences {
     //
       
     // Snapshots
-    @MainActor var autoSnapshots = false {
+    var autoSnapshots = false {
         didSet {
             for emu in myAppDelegate.proxies {
                 emu.set(.AMIGA_SNAP_AUTO, enable: autoSnapshots)
             }
         }
     }
-    @MainActor var snapshotInterval = 0 {
+    var snapshotInterval = 0 {
         didSet {
             for emu in myAppDelegate.proxies {
                 emu.set(.AMIGA_SNAP_DELAY, value: snapshotInterval)
@@ -45,7 +46,7 @@ class Preferences {
     }
 
     // Snapshots
-    @MainActor var snapshotStorage = 0 {
+    var snapshotStorage = 0 {
         didSet { for c in myAppDelegate.controllers {
             c.mydocument.snapshots.maxSize = snapshotStorage * 1024 * 1024 }
         }
@@ -60,7 +61,7 @@ class Preferences {
     }
 
     // Screen captures
-    @MainActor var ffmpegPath = "" {
+    var ffmpegPath = "" {
         didSet {
             for proxy in myAppDelegate.proxies {
                 proxy.recorder.path = ffmpegPath
@@ -111,28 +112,28 @@ class Preferences {
 
     // Joystick
     var disconnectJoyKeys: Bool!
-    @MainActor var autofire: Bool! {
+    var autofire: Bool! {
         didSet {
             for amiga in myAppDelegate.proxies {
                 amiga.set(.JOY_AUTOFIRE, enable: autofire)
             }
         }
     }
-    @MainActor var autofireBursts: Bool! {
+    var autofireBursts: Bool! {
         didSet {
             for amiga in myAppDelegate.proxies {
                 amiga.set(.JOY_AUTOFIRE_BURSTS, enable: autofireBursts)
             }
         }
     }
-    @MainActor var autofireBullets: Int! {
+    var autofireBullets: Int! {
         didSet {
             for amiga in myAppDelegate.proxies {
                 amiga.set(.JOY_AUTOFIRE_BULLETS, value: autofireBullets)
             }
         }
     }
-    @MainActor var autofireFrequency: Int! {
+    var autofireFrequency: Int! {
         didSet {
             autofireFrequency = autofireFrequency.clamped(4, 50)
             for amiga in myAppDelegate.proxies {

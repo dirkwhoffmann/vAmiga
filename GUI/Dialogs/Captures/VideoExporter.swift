@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 class VideoExporter: DialogController {
 
     @IBOutlet weak var text: NSTextField!

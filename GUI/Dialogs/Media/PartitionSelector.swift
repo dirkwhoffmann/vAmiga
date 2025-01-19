@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 class PartitionSelector: DialogController {
         
     @IBOutlet weak var partitionPopup: NSPopUpButton!

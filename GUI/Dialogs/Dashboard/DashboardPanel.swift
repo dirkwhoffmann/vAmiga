@@ -14,6 +14,7 @@ import Charts
 // SwiftUI Views
 //
 
+@MainActor
 struct TimeSeriesView: View {
     
     @ObservedObject var model: DashboardDataProvider
@@ -164,7 +165,6 @@ class DashboardPanel: NSView {
         }
     }
     
-    @MainActor
     func configure(title: String,
                    subtitle: String,
                    range: ClosedRange<Double> = 0...1,
@@ -214,7 +214,6 @@ class DashboardPanel: NSView {
     
     var latest: () -> String = { "" }
 
-    @MainActor
     required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
@@ -224,7 +223,6 @@ class DashboardPanel: NSView {
         switchStyle()
     }
     
-    @MainActor
     required override init(frame frameRect: NSRect) {
         
         super.init(frame: frameRect)
@@ -234,13 +232,11 @@ class DashboardPanel: NSView {
         switchStyle()
     }
         
-    @MainActor
     override func mouseDown(with event: NSEvent) {
         
         switchStyle()
     }
     
-    @MainActor
     func switchStyle() {
         
         if subview == host1 {

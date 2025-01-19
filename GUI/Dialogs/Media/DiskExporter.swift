@@ -427,7 +427,6 @@ class DiskExporter: DialogController {
 @MainActor
 extension DiskExporter: NSFilePromiseProviderDelegate {
    
-    @MainActor
     func filePromiseProvider(_ filePromiseProvider: NSFilePromiseProvider, fileNameForType fileType: String) -> String {
         
         var name: String

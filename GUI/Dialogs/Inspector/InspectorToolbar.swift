@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 class InspectorToolbar: NSToolbar {
     
     @IBOutlet weak var inspector: Inspector!
@@ -19,7 +20,6 @@ class InspectorToolbar: NSToolbar {
 
     var emu: EmulatorProxy! { return inspector.parent.emu }
     
-    @MainActor
     override func validateVisibleItems() {
 
         // Update icons
@@ -35,7 +35,6 @@ class InspectorToolbar: NSToolbar {
         formatPopup.isEnabled = formatToolbarItem.isVisible
     }
     
-    @MainActor
     func updateToolbar(info: AmigaInfo, full: Bool) {
         
         let frame = inspector.agnusInfo.frame

@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 extension Inspector {
     
     private var selectedCia: Int { return ciaSelector.indexOfSelectedItem }

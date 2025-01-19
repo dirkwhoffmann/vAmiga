@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 class DiskInspector: DialogController {
         
     @IBOutlet weak var icon: NSImageView!
@@ -381,6 +382,7 @@ class DiskInspector: DialogController {
 // Extensions
 //
 
+@MainActor
 extension DiskInspector: NSTableViewDataSource {
     
     func columnNr(_ column: NSTableColumn?) -> Int? {
@@ -412,6 +414,7 @@ extension DiskInspector: NSTableViewDataSource {
     }
 }
 
+@MainActor
 extension DiskInspector: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {

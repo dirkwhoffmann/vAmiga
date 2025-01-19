@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 extension PreferencesController {
 
     var pad: GamePad? { return gamePadManager.gamePads[devSelector.selectedTag()] }

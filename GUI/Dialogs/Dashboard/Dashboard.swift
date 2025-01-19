@@ -7,12 +7,12 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 class Dashboard: DialogController {
     
     var toolbar: DashboardToolbar? { return window?.toolbar as? DashboardToolbar }
     var viewController: DashboardViewController? { return contentViewController as? DashboardViewController }
 
-    @MainActor
     override func windowDidLoad() {
         
         super.windowDidLoad()
@@ -32,7 +32,6 @@ class Dashboard: DialogController {
         }
     }
     
-    @MainActor
     override func windowWillClose(_ notification: Notification) {
 
         super.windowWillClose(notification)
@@ -45,7 +44,6 @@ class Dashboard: DialogController {
         }
     }
     
-    @MainActor
     func setController(_ controller: MyController) {
         
         parent = controller
@@ -58,7 +56,6 @@ class Dashboard: DialogController {
         }
     }
     
-    @MainActor
     func windowDidResize(_ notification: Notification) {
 
         if let window = notification.object as? NSWindow {
@@ -69,13 +66,11 @@ class Dashboard: DialogController {
         viewController?.windowDidResize(notification)
     }
     
-    @MainActor
     func continuousRefresh() {
       
         viewController?.continuousRefresh()
     }
     
-    @MainActor
     func processMessage(_ msg: Message) {
      
     }

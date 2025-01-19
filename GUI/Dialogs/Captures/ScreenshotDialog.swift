@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 class ScreenshotDialog: DialogController {
     
     var now: Date!
@@ -182,6 +183,7 @@ class ScreenshotDialog: DialogController {
 // iCarousel data source and delegate
 //
 
+@MainActor
 extension ScreenshotDialog: @preconcurrency iCarouselDataSource, @preconcurrency iCarouselDelegate {
     
     func numberOfItems(in carousel: iCarousel) -> Int {

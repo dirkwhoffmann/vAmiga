@@ -7,8 +7,9 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-import Darwin
+// import Darwin
 
+@MainActor
 class VolumeInspector: DialogController {
         
     @IBOutlet weak var icon: NSImageView!
@@ -439,6 +440,7 @@ class VolumeInspector: DialogController {
     }
 }
 
+@MainActor
 extension VolumeInspector: NSTableViewDataSource {
     
     func columnNr(_ column: NSTableColumn?) -> Int? {
@@ -473,6 +475,7 @@ extension VolumeInspector: NSTableViewDataSource {
     }
 }
 
+@MainActor
 extension VolumeInspector: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
@@ -502,6 +505,7 @@ extension VolumeInspector: NSTableViewDelegate {
     }
 }
 
+@MainActor
 extension VolumeInspector: NSTabViewDelegate {
     
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {

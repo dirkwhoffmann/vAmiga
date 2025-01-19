@@ -7,15 +7,14 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 extension Inspector {
 
-    @MainActor
     private func cacheCPU() {
 
         cpuInfo = emu.paused ? emu.cpu.info : emu.cpu.cachedInfo
     }
 
-    @MainActor
     func refreshCPU(count: Int = 0, full: Bool = false) {
 
         cacheCPU()

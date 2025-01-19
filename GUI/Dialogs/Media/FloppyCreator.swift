@@ -7,8 +7,9 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-import Darwin
+// import Darwin
 
+@MainActor
 class FloppyCreator: DialogController {
         
     @IBOutlet weak var diskIcon: NSImageView!

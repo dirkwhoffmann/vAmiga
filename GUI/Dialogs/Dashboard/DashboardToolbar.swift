@@ -7,13 +7,13 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 class DashboardToolbar: NSToolbar {
     
     @IBOutlet weak var dashboard: DashboardViewController!
     @IBOutlet weak var selectorPopup: NSPopUpButton!
     @IBOutlet weak var selectorPopupItem: NSToolbarItem!
 
-    @MainActor
     override func validateVisibleItems() {
         
         // Disable shrinked popup buttons to prevent macOS from crashing

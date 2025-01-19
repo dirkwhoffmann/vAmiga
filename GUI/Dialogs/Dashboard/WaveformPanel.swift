@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+@MainActor
 class WaveformPanel: NSImageView {
 
     var audioPort: AudioPortProxy?
@@ -24,29 +25,25 @@ class WaveformPanel: NSImageView {
     // Foreground color
     var color = UInt32(0xFF888888)
 
-    @MainActor
     required init?(coder decoder: NSCoder) {
 
         super.init(coder: decoder)
-        setup()
+        commonInit()
     }
 
-    @MainActor
     required override init(frame frameRect: NSRect) {
         
         super.init(frame: frameRect)
-        setup()
+        commonInit()
     }
     
-    @MainActor
     convenience init(frame frameRect: NSRect, channel: Int) {
 
         self.init(frame: frameRect)
         self.tag = channel
     }
 
-    @MainActor
-    func setup() {
+    func commonInit() {
                         
         imageSize = NSSize(width: 300, height: 100)
         buffer = UnsafeMutablePointer<UInt32>.allocate(capacity: wordCount)
@@ -54,20 +51,17 @@ class WaveformPanel: NSImageView {
         
     }
 
-    @MainActor
     func update() {
 
         needsDisplay = true
     }
 
-    @MainActor
     override var intrinsicContentSize: NSSize {
         
         // Let the image scale with the ImageView
         return .zero
     }
     
-    @MainActor
     override func draw(_ dirtyRect: NSRect) {
 
         if tag == 0 {

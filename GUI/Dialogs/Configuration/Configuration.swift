@@ -533,22 +533,22 @@ class Configuration {
         get { return amiga.get(.MON_SATURATION) }
         set { amiga.set(.MON_SATURATION, value: newValue) }
     }
-    @MainActor var zoom: Int = 0 {
+    var zoom: Int = 0 {
         didSet { renderer.canvas.updateTextureRect() }
     }
-    @MainActor var hZoom: Float = 0 {
+    var hZoom: Float = 0 {
         didSet { renderer.canvas.updateTextureRect() }
     }
-    @MainActor var vZoom: Float = 0 {
+    var vZoom: Float = 0 {
         didSet { renderer.canvas.updateTextureRect() }
     }
-    @MainActor var center: Int = 0 {
+    var center: Int = 0 {
         didSet { renderer.canvas.updateTextureRect() }
     }
-    @MainActor var hCenter: Float = 0 {
+    var hCenter: Float = 0 {
         didSet { renderer.canvas.updateTextureRect() }
     }
-    @MainActor var vCenter: Float = 0 {
+    var vCenter: Float = 0 {
         didSet { renderer.canvas.updateTextureRect() }
     }
     var enhancer: Int = 0 {
