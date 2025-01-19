@@ -13,6 +13,7 @@ import Carbon.HIToolbox
 // Proxy extensions
 //
 
+@MainActor
 extension DefaultsProxy {
 
     func resetSearchPaths() {
@@ -201,6 +202,7 @@ extension DefaultsProxy {
 // Paths
 //
 
+@MainActor
 extension UserDefaults {
     
     static func romUrl(name: String) -> URL? {
@@ -237,9 +239,9 @@ extension UserDefaults {
 // User defaults (all)
 //
 
+@MainActor
 extension DefaultsProxy {
     
-    @MainActor
     func registerUserDefaults() {
         
         debug(.defaults, "Registering user defaults")
@@ -257,9 +259,9 @@ extension DefaultsProxy {
     }
 }
 
+@MainActor
 extension Preferences {
 
-    @MainActor
     func applyUserDefaults() {
         
         debug(.defaults, "Applying user defaults")
@@ -270,9 +272,9 @@ extension Preferences {
     }
 }
 
+@MainActor
 extension Configuration {
         
-    @MainActor
     func applyUserDefaults() {
     
         debug(.defaults)
@@ -322,6 +324,7 @@ struct Keys {
     }
 }
 
+@MainActor
 extension DefaultsProxy {
     
     func registerGeneralUserDefaults() {
@@ -385,9 +388,9 @@ extension DefaultsProxy {
     }
 }
 
+@MainActor
 extension Preferences {
 
-    @MainActor
     func saveGeneralUserDefaults() {
         
         debug(.defaults)
@@ -417,7 +420,6 @@ extension Preferences {
         defaults.save()
     }
     
-    @MainActor
     func applyGeneralUserDefaults() {
         
         debug(.defaults)
@@ -450,6 +452,7 @@ extension Preferences {
 // User defaults (Controls)
 //
 
+@MainActor
 extension Keys {
     
     struct Con {
@@ -477,6 +480,7 @@ extension Keys {
     }
 }
 
+@MainActor
 extension DefaultsProxy {
     
     func registerControlsUserDefaults() {
@@ -550,9 +554,9 @@ extension DefaultsProxy {
     }
 }
 
+@MainActor
 extension Preferences {
 
-    @MainActor
     func saveControlsUserDefaults() {
     
         debug(.defaults)
@@ -579,7 +583,6 @@ extension Preferences {
         defaults.save()
     }
     
-    @MainActor
     func applyControlsUserDefaults() {
            
         debug(.defaults)
@@ -609,6 +612,7 @@ extension Preferences {
 // User defaults (Devices)
 //
 
+@MainActor
 extension Keys {
     
     struct Dev {
@@ -617,6 +621,7 @@ extension Keys {
     }
 }
 
+@MainActor
 extension DefaultsProxy {
     
     func registerDevicesUserDefaults() {
@@ -628,9 +633,9 @@ extension DefaultsProxy {
     }
 }
 
+@MainActor
 extension Preferences {
 
-    @MainActor
     func saveDevicesUserDefaults() {
     
         debug(.defaults)
@@ -639,7 +644,6 @@ extension Preferences {
         defaults.save()
     }
     
-    @MainActor
     func applyDevicesUserDefaults() {
            
         debug(.defaults)
@@ -650,9 +654,9 @@ extension Preferences {
 // User Defaults (Roms)
 //
 
+@MainActor
 extension Configuration {
 
-    @MainActor
     func saveRomUserDefaults() throws {
 
         debug(.defaults)
@@ -697,6 +701,7 @@ extension Configuration {
 // User defaults (Hardware)
 //
 
+@MainActor
 extension DefaultsProxy {
 
     func registerHardwareUserDefaults() {
@@ -712,6 +717,7 @@ extension DefaultsProxy {
     }
 }
 
+@MainActor
 extension Configuration {
 
     func applyHardwareUserDefaults() {
@@ -731,6 +737,7 @@ extension Configuration {
 // User defaults (Hardware::Chipset)
 //
 
+@MainActor
 extension DefaultsProxy {
     
     func registerChipsetUserDefaults() {
@@ -753,6 +760,7 @@ extension DefaultsProxy {
     }
 }
 
+@MainActor
 extension Configuration {
 
     func applyChipsetUserDefaults() {
@@ -797,6 +805,7 @@ extension Configuration {
 // User defaults (Hardware::Memory)
 //
 
+@MainActor
 extension DefaultsProxy {
     
     func registerMemoryUserDefaults() {
@@ -820,6 +829,7 @@ extension DefaultsProxy {
     }
 }
 
+@MainActor
 extension Configuration {
 
     func saveMemoryUserDefaults() {
@@ -866,6 +876,7 @@ extension Configuration {
 // User defaults (Peripherals)
 //
 
+@MainActor
 extension Keys {
     
     struct Per {
@@ -876,6 +887,7 @@ extension Keys {
     }
 }
 
+@MainActor
 extension DefaultsProxy {
     
     func registerPeripheralsUserDefaults() {
@@ -907,6 +919,7 @@ extension DefaultsProxy {
     }
 }
  
+@MainActor
 extension Configuration {
 
     func savePeripheralsUserDefaults() {
@@ -1008,6 +1021,7 @@ extension Configuration {
 // User defaults (Performance)
 //
 
+@MainActor
 extension DefaultsProxy {
 
     func registerPerformanceUserDefaults() {
@@ -1034,6 +1048,7 @@ extension DefaultsProxy {
     }
 }
 
+@MainActor
 extension Configuration {
 
     func applyPerformanceUserDefaults() {
@@ -1080,6 +1095,7 @@ extension Configuration {
 // User defaults (Compatibility)
 //
 
+@MainActor
 extension DefaultsProxy {
     
     func registerCompatibilityUserDefaults() {
@@ -1106,6 +1122,7 @@ extension DefaultsProxy {
     }
 }
 
+@MainActor
 extension Configuration {
 
     func saveCompatibilityUserDefaults() {
@@ -1158,6 +1175,7 @@ extension Configuration {
 // User defaults (Audio)
 //
 
+@MainActor
 extension DefaultsProxy {
     
     func registerAudioUserDefaults() {
@@ -1191,6 +1209,7 @@ extension DefaultsProxy {
     }
 }
 
+@MainActor
 extension Configuration {
     
     func saveAudioUserDefaults() {
@@ -1273,6 +1292,7 @@ extension Configuration {
 // User defaults (Video)
 //
 
+@MainActor
 extension Keys {
     
     struct Vid {
@@ -1307,6 +1327,7 @@ extension Keys {
     }
 }
 
+@MainActor
 extension DefaultsProxy {
     
     func registerVideoUserDefaults() {
@@ -1420,9 +1441,9 @@ extension DefaultsProxy {
     }
 }
 
+@MainActor
 extension Configuration {
 
-    @MainActor
     func saveVideoUserDefaults() {
         
         debug(.defaults)
@@ -1436,7 +1457,6 @@ extension Configuration {
         amiga.resume()
     }
     
-    @MainActor
     func saveColorUserDefaults() {
 
         debug(.defaults)
@@ -1454,7 +1474,6 @@ extension Configuration {
         amiga.resume()
     }
     
-    @MainActor
     func saveGeometryUserDefaults() {
 
         debug(.defaults)
@@ -1474,7 +1493,6 @@ extension Configuration {
         amiga.resume()
     }
   
-    @MainActor
     func saveShaderUserDefaults() {
 
         debug(.defaults)
@@ -1506,7 +1524,6 @@ extension Configuration {
         amiga.resume()
     }
     
-    @MainActor
     func applyVideoUserDefaults() {
         
         debug(.defaults)
@@ -1516,7 +1533,6 @@ extension Configuration {
         applyShaderUserDefaults()
     }
     
-    @MainActor
     func applyColorUserDefaults() {
     
         debug(.defaults)
@@ -1532,7 +1548,6 @@ extension Configuration {
         amiga.resume()
     }
 
-    @MainActor
     func applyGeometryUserDefaults() {
     
         debug(.defaults)
@@ -1550,7 +1565,6 @@ extension Configuration {
         amiga.resume()
     }
 
-    @MainActor
     func applyShaderUserDefaults() {
     
         debug(.defaults)

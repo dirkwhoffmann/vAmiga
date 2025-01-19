@@ -9,7 +9,7 @@
 
 import Cocoa
 
-@objc(MyApplication) @MainActor
+@MainActor @objc(MyApplication)
 class MyApplication: NSApplication {
 
     /* Set this variable to true to take away the control of the Command key
@@ -216,7 +216,6 @@ extension MyAppDelegate {
         return documents.map({ $0.emu })
     }
     
-    @MainActor
     func windowDidBecomeMain(_ window: NSWindow) {
         
         for c in controllers {

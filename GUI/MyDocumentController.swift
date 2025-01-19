@@ -12,7 +12,6 @@ import Foundation
 @MainActor
 class MyDocumentController: NSDocumentController {
     
-    @MainActor
     override func makeDocument(withContentsOf url: URL,
                                ofType typeName: String) throws -> NSDocument {
         

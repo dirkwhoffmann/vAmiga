@@ -22,6 +22,7 @@ extension UTType {
     static let vamiga = UTType("de.dirkwhoffmann.retro.vamiga")!
 }
 
+@MainActor
 class MyDocument: NSDocument {
 
     var pref: Preferences { return myAppDelegate.pref }
@@ -39,8 +40,7 @@ class MyDocument: NSDocument {
     //
     // Initializing
     //
-    
-    @MainActor
+
     override init() {
         
         debug(.lifetime)
@@ -65,7 +65,6 @@ class MyDocument: NSDocument {
         emu = EmulatorProxy()
     }
  
-    @MainActor
     override open func makeWindowControllers() {
                 
         debug(.lifetime)
@@ -79,7 +78,6 @@ class MyDocument: NSDocument {
     // Creating file proxys
     //
 
-    @MainActor
     func createMediaFileProxy(from url: URL, allowedTypes: [FileType]) throws -> MediaFileProxy {
 
         debug(.media, "Reading file \(url.lastPathComponent)")
@@ -119,13 +117,12 @@ class MyDocument: NSDocument {
     //
     
     
-    nonisolated
+    // nonisolated
     override open func read(from url: URL, ofType typeName: String) throws {
              
         debug(.media)
     }
     
-    @MainActor
     override open func revert(toContentsOf url: URL, ofType typeName: String) throws {
         
         debug(.media)
@@ -143,7 +140,6 @@ class MyDocument: NSDocument {
     // Saving
     //
   
-    @MainActor
     override func save(to url: URL, ofType typeName: String, for saveOperation: NSDocument.SaveOperationType) async throws {
             
         debug(.media)
@@ -167,7 +163,6 @@ class MyDocument: NSDocument {
     // Handling media files
     //
 
-    @MainActor
     func addMedia(url: URL,
                   allowedTypes types: [FileType] = FileType.all,
                   df: Int = 0,
@@ -197,7 +192,6 @@ class MyDocument: NSDocument {
         try addMedia(proxy: file, df: df, hd: hd, force: force)
     }
     
-    @MainActor
     func addMedia(proxy: MediaFileProxy,
                   df: Int = 0,
                   hd: Int = 0,
@@ -228,7 +222,6 @@ class MyDocument: NSDocument {
         }
     }
 
-    @MainActor
     func processSnapshotFile(_ proxy: MediaFileProxy, force: Bool = false) throws {
 
         try emu.amiga.loadSnapshot(proxy)
@@ -240,7 +233,6 @@ class MyDocument: NSDocument {
     // Exporting disks
     //
     
-    @MainActor
     func export(drive nr: Int, to url: URL) throws {
                         
         var df: MediaFileProxy?
@@ -261,7 +253,6 @@ class MyDocument: NSDocument {
         debug(.media, "Disk exported successfully")
     }
 
-    @MainActor
     func export(hardDrive nr: Int, to url: URL) throws {
         
         let hdn = emu.hd(nr)!
@@ -283,7 +274,6 @@ class MyDocument: NSDocument {
         debug(.media, "Hard Drive exported successfully")
     }
 
-    @MainActor
     func export(fileProxy: MediaFileProxy, to url: URL) throws {
 
         debug(.media, "Exporting to \(url)")

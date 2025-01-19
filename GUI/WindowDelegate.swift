@@ -56,7 +56,6 @@ extension MyController: NSWindowDelegate {
         }
     }
 
-    @MainActor
     public func windowWillClose(_ notification: Notification) {
         
         debug(.lifetime)

@@ -95,7 +95,6 @@ class Renderer: NSObject, MTKViewDelegate {
     // Initializing
     //
 
-    @MainActor
     init(view: MTKView, device: MTLDevice, controller: MyController) {
         
         self.view = view
@@ -106,28 +105,10 @@ class Renderer: NSObject, MTKViewDelegate {
         
         self.view.device = device
         self.view.delegate = self
-
-        /*
-        let screens = NSScreen.screens
-        if #available(macOS 12.0, *) {
-
-            for screen in screens {
-
-                let fps = screen.maximumFramesPerSecond
-                let min = 1.0 / screen.minimumRefreshInterval
-                let max = 1.0 / screen.maximumRefreshInterval
-                let name = screen.localizedName
-                print("\(name):  Min = \(min) Hz, Max = \(max) Hz maxfps = \(fps)")
-            }
-        }
-
-        view.preferredFramesPerSecond = 60
-        */
         
         setup()
     }
     
-    @MainActor
     func halt() {
 
         // Wait until the current frame has been completed
@@ -138,7 +119,6 @@ class Renderer: NSObject, MTKViewDelegate {
     // Managing layout
     //
 
-    @MainActor
     var size: CGSize {
 
         let frameSize = view.frame.size
@@ -148,13 +128,11 @@ class Renderer: NSObject, MTKViewDelegate {
                       height: frameSize.height * scale)
     }
     
-    @MainActor
     func reshape() {
 
         reshape(withSize: size)
     }
-
-    @MainActor
+    
     func reshape(withSize size: CGSize) {
 
         // Rebuild matrices
@@ -164,7 +142,6 @@ class Renderer: NSObject, MTKViewDelegate {
         ressourceManager.buildDepthBuffer()
     }
 
-    @MainActor
     var recordingRect: CGRect {
 
         var result: CGRect
@@ -186,7 +163,6 @@ class Renderer: NSObject, MTKViewDelegate {
     //  Drawing
     //
 
-    @MainActor
     func makeCommandBuffer() -> MTLCommandBuffer {
     
         let commandBuffer = queue.makeCommandBuffer()!
@@ -194,8 +170,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         return commandBuffer
     }
-    
-    @MainActor
+
     func makeCommandEncoder(_ drawable: CAMetalDrawable, _ buffer: MTLCommandBuffer) -> MTLRenderCommandEncoder? {
         
         // Update the render pass descriptor
@@ -214,7 +189,6 @@ class Renderer: NSObject, MTKViewDelegate {
     // Updating
     //
     
-    @MainActor
     func update(frames: Int64) {
                          
         if animates != 0 { animate() }
@@ -228,7 +202,6 @@ class Renderer: NSObject, MTKViewDelegate {
         measureFps(frames: frames)
     }
 
-    @MainActor
     func measureFps(frames: Int64) {
 
         let interval = Int64(32)
@@ -258,7 +231,6 @@ class Renderer: NSObject, MTKViewDelegate {
     // Methods from MTKViewDelegate
     //
 
-    @MainActor
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
 
         amiga.set(.HOST_FRAMEBUF_WIDTH, value: Int(size.width))
@@ -266,7 +238,6 @@ class Renderer: NSObject, MTKViewDelegate {
         reshape(withSize: size)
     }
     
-    @MainActor
     func draw(in view: MTKView) {
         
         MainActor.assertIsolated("Not isolated!!")

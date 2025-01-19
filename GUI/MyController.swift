@@ -9,10 +9,13 @@
 
 import AVFoundation
 
+@MainActor 
 protocol MessageReceiver {
-    @MainActor func processMessage(_ msg: Message)
+    
+    func processMessage(_ msg: Message)
 }
 
+@MainActor
 class MyController: NSWindowController, MessageReceiver {
     
     var pref: Preferences { return myAppDelegate.pref }
@@ -149,14 +152,12 @@ extension MyController {
     // Initializing
     //
         
-    @MainActor
     override open func windowDidLoad() {
         
         debug(.lifetime)
         commonInit()
     }
     
-    @MainActor
     func commonInit() {
         
         if initialized { return }
@@ -273,7 +274,6 @@ extension MyController {
     // Timer and message processing
     //
     
-    @MainActor
     func update(frames: Int64) {
 
         if frames % 5 == 0 {
@@ -303,8 +303,9 @@ extension MyController {
         }
     }
 
-    // @MainActor
     func processMessage(_ msg: Message) {
+        
+        MainActor.assertIsolated()
         
         var value: Int { return Int(msg.value) }
         var nr: Int { return Int(msg.drive.nr) }
@@ -324,8 +325,6 @@ extension MyController {
             for dashboard in dashboards { dashboard.processMessage(msg) }
         }
         
-        MainActor.assertIsolated()
-    
         // Only proceed if the proxy object is still alive
         if emu == nil { return }
         
