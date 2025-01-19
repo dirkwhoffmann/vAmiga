@@ -265,9 +265,7 @@ extension MyController {
             let myself = Unmanaged<MyController>.fromOpaque(ptr!).takeUnretainedValue()
 
             // Process message in the main thread
-            DispatchQueue.main.async {
-                myself.processMessage(msg)
-            }
+            Task { @MainActor in myself.processMessage(msg) }
         }
     }
 
@@ -307,7 +305,7 @@ extension MyController {
 
     // @MainActor
     func processMessage(_ msg: Message) {
-
+        
         var value: Int { return Int(msg.value) }
         var nr: Int { return Int(msg.drive.nr) }
         var cyl: Int { return Int(msg.drive.value) }
@@ -326,6 +324,8 @@ extension MyController {
             for dashboard in dashboards { dashboard.processMessage(msg) }
         }
         
+        MainActor.assertIsolated()
+    
         // Only proceed if the proxy object is still alive
         if emu == nil { return }
         
