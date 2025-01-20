@@ -28,9 +28,9 @@ RTC::getOption(Option option) const
 }
 
 void
-RTC::checkOption(Option opt, i64 value)
+RTC::checkOption(Option option, i64 value)
 {
-    switch (opt) {
+    switch (option) {
 
         case OPT_RTC_MODEL:
 

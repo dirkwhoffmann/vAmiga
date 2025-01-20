@@ -1474,7 +1474,7 @@ public:
     
     /** @brief  Returns the component's configuration.
      */
-    // const RecorderConfig &getConfig() const;
+    const RecorderConfig &getConfig() const;
 
     /** @brief  Returns the component's current state.
      */
@@ -1494,9 +1494,11 @@ public:
 
     // INTEGRATE INTO RecorderInfo, RecorderConfig
     double getDuration() const;
+    /*
     isize getFrameRate() const;
     isize getBitRate() const;
     isize getSampleRate() const;
+    */
     bool isRecording() const;
 
     /** @brief  Starts the recorder.

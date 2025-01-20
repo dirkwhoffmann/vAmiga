@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "RecorderTypes.h"
 #include "SubComponent.h"
 #include "Buffer.h"
 #include "Chrono.h"
@@ -35,6 +36,10 @@ class Recorder final : public SubComponent {
 
     };
 
+    // The current configuration
+    RecorderConfig config = {};
+    
+    
     //
     // Subcomponents
     //
@@ -75,9 +80,9 @@ class Recorder final : public SubComponent {
     //
     
     // Frame rate, Bit rate, Sample rate
-    isize frameRate = 0;
-    isize bitRate = 0;
-    isize sampleRate = 0;
+    // isize frameRate = 0;
+    // isize bitRate = 0;
+    // isize sampleRate = 0;
 
     // Sound samples per frame
     isize samplesPerFrame = 0;
@@ -147,9 +152,12 @@ private:
     //
 
 public:
-
+    
+    const RecorderConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
-
+    i64 getOption(Option option) const override;
+    void checkOption(Option opt, i64 value) override;
+    void setOption(Option option, i64 value) override;
 
     //
     // Querying locations and flags
@@ -174,9 +182,6 @@ public:
 public:
     
     util::Time getDuration() const;
-    isize getFrameRate() const { return frameRate; }
-    isize getBitRate() const { return bitRate; }
-    isize getSampleRate() const { return sampleRate; }
 
     
     //

@@ -704,6 +704,7 @@
 		507C01B52D25C05A00E29933 /* LogicAnalyzerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LogicAnalyzerTypes.h; sourceTree = "<group>"; };
 		507C01B92D25C0B800E29933 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		507C9C4526076EF7006779B5 /* RessourceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RessourceManager.swift; sourceTree = "<group>"; };
+		507CF2362D3E8C6F00C08846 /* RecorderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RecorderTypes.h; sourceTree = "<group>"; };
 		507D7767228BE3EF001E97A9 /* StateMachine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StateMachine.cpp; sourceTree = "<group>"; };
 		507D7768228BE3EF001E97A9 /* StateMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StateMachine.h; sourceTree = "<group>"; };
 		507D9062284BEBCE0079E72A /* BeamTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BeamTypes.h; sourceTree = "<group>"; };
@@ -2003,12 +2004,13 @@
 			isa = PBXGroup;
 			children = (
 				50E19058277F695C00B8DBE2 /* CMakeLists.txt */,
+				507CF2362D3E8C6F00C08846 /* RecorderTypes.h */,
+				50912FFC2525B7AD0049805B /* Recorder.h */,
+				50912FFB2525B7AD0049805B /* Recorder.cpp */,
 				50E1905E277F69CA00B8DBE2 /* NamedPipe.h */,
 				50E1905D277F69CA00B8DBE2 /* NamedPipe.cpp */,
 				50E1905B277F69B300B8DBE2 /* FFmpeg.h */,
 				50E1905A277F69B300B8DBE2 /* FFmpeg.cpp */,
-				50912FFC2525B7AD0049805B /* Recorder.h */,
-				50912FFB2525B7AD0049805B /* Recorder.cpp */,
 			);
 			path = Recorder;
 			sourceTree = "<group>";

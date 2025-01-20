@@ -576,14 +576,17 @@ NSString *EventSlotName(NSInteger slot);
 
 @interface RecorderProxy : Proxy { }
 
+@property (readonly) RecorderConfig config;
 @property NSString *path;
 - (NSString *)findFFmpeg:(NSInteger)nr;
 @property (readonly) BOOL hasFFmpeg;
 @property (readonly) BOOL recording;
 @property (readonly) double duration;
+/*
 @property (readonly) NSInteger frameRate;
 @property (readonly) NSInteger bitRate;
 @property (readonly) NSInteger sampleRate;
+*/
 
 - (void)startRecording:(NSRect)rect
                bitRate:(NSInteger)rate

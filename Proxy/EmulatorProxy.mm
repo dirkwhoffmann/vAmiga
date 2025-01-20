@@ -874,6 +874,11 @@ NSString *EventSlotName(NSInteger slot)
     return (RecorderAPI *)obj;
 }
 
+- (RecorderConfig)config
+{
+    return [self recorder]->getConfig();
+}
+
 - (NSString *)path
 {
     auto path = [self recorder]->getExecPath(); // FFmpeg::getExecPath();
@@ -915,6 +920,7 @@ NSString *EventSlotName(NSInteger slot)
     return [self recorder]->getDuration();
 }
 
+/*
 - (NSInteger)frameRate
 {
     return [self recorder]->getFrameRate();
@@ -929,6 +935,7 @@ NSString *EventSlotName(NSInteger slot)
 {
     return [self recorder]->getSampleRate();
 }
+*/
 
 - (void)startRecording:(NSRect)rect
                bitRate:(NSInteger)rate

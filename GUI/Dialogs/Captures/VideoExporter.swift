@@ -56,14 +56,16 @@ class VideoExporter: DialogController {
         debug(.exec, "Export to \(path)")
         if emu.recorder.export(as: path.absoluteString) {
                         
+            let config = emu.recorder.config
+            
             text.stringValue = "MPEG-4 Video Stream"
             icon.isHidden = false
             exportButton.isHidden = false
             sizeOnDisk.stringValue = path.fileSizeString
             duration.stringValue = String(format: "%.1f sec", emu.recorder.duration)
-            frameRate.stringValue = "\(emu.recorder.frameRate) Hz"
-            bitRate.stringValue = "\(emu.recorder.bitRate) kHz"
-            sampleRate.stringValue = "\(emu.recorder.sampleRate) Hz"
+            frameRate.stringValue = "\(config.frameRate) Hz"
+            bitRate.stringValue = "\(config.bitRate) kHz"
+            sampleRate.stringValue = "\(config.sampleRate) Hz"
 
         } else {
             

@@ -43,6 +43,58 @@ Recorder::_dump(Category category, std::ostream& os) const
     }
 }
 
+i64
+Recorder::getOption(Option option) const
+{
+    switch (option) {
+            
+        // case OPT_RTC_MODEL:  return (long)config.model;
+
+        default:
+            fatalError;
+    }
+}
+
+void
+Recorder::checkOption(Option option, i64 value)
+{
+    switch (option) {
+
+            /*
+        case OPT_RTC_MODEL:
+
+            if (!isPoweredOff()) {
+                throw Error(VAERROR_OPT_LOCKED);
+            }
+            if (!RTCRevisionEnum::isValid(value)) {
+                throw Error(VAERROR_OPT_INV_ARG, RTCRevisionEnum::keyList());
+            }
+            return;
+             */
+            
+        default:
+            throw(VAERROR_OPT_UNSUPPORTED);
+    }
+}
+
+void
+Recorder::setOption(Option option, i64 value)
+{
+    switch (option) {
+            
+            /*
+        case OPT_RTC_MODEL:
+
+            config.model = (RTCRevision)value;
+            mem.updateMemSrcTables();
+            return;
+             */
+            
+        default:
+            fatalError;
+    }
+}
+
 string
 Recorder::videoPipePath()
 {
@@ -117,10 +169,10 @@ Recorder::startRecording(isize x1, isize y1, isize x2, isize y2,
     debug(REC_DEBUG, "Recorded area: (%ld,%ld) - (%ld,%ld)\n", x1, y1, x2, y2);
     
     // Set the bit rate, frame rate, and sample rate
-    this->bitRate = bitRate;
-    frameRate = 50;
-    sampleRate = 44100;
-    samplesPerFrame = sampleRate / frameRate;
+    config.bitRate = bitRate;
+    config.frameRate = 50;
+    config.sampleRate = 44100;
+    samplesPerFrame = config.sampleRate / config.frameRate;
     
     // Create temporary buffers
     debug(REC_DEBUG, "Creating buffers...\n");
@@ -144,7 +196,7 @@ Recorder::startRecording(isize x1, isize y1, isize x2, isize y2,
     cmd1 += " -f:v rawvideo -pixel_format rgba";
     
     // Frame rate
-    cmd1 += " -r " + std::to_string(frameRate);
+    cmd1 += " -r " + std::to_string(config.frameRate);
     
     // Frame size (width x height)
     cmd1 += " -s:v " + std::to_string(x2 - x1) + "x" + std::to_string(y2 - y1);
@@ -180,7 +232,7 @@ Recorder::startRecording(isize x1, isize y1, isize x2, isize y2,
     cmd2 += " -f:a f32le -ac 2";
     
     // Sampling rate
-    cmd2 += " -sample_rate " + std::to_string(sampleRate);
+    cmd2 += " -sample_rate " + std::to_string(config.sampleRate);
     
     // Input source (named pipe)
     cmd2 += " -i " + audioPipePath();

@@ -50,6 +50,7 @@
 
 // Miscellaneous
 #include "LogicAnalyzerTypes.h"
+#include "RecorderTypes.h"
 #include "RemoteManagerTypes.h"
 #include "RemoteServerTypes.h"
 #include "RetroShellTypes.h"

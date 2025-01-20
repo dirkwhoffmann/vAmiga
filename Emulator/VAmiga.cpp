@@ -1593,7 +1593,6 @@ DefaultsAPI::remove(Option option, std::vector <isize> objids)
 // RecorderAPI
 //
 
-/*
 const RecorderConfig &
 RecorderAPI::getConfig() const
 {
@@ -1601,6 +1600,7 @@ RecorderAPI::getConfig() const
     return recorder->getConfig();
 }
 
+/*
 const RecorderInfo &
 RecorderAPI::getInfo() const
 {
@@ -1617,9 +1617,11 @@ RecorderAPI::getCachedInfo() const
 */
 
 double RecorderAPI::getDuration() const { VAMIGA_PUBLIC VAMIGA_SUSPEND return recorder->getDuration().asSeconds(); }
+/*
 isize RecorderAPI::getFrameRate() const { VAMIGA_PUBLIC VAMIGA_SUSPEND return recorder->getFrameRate(); }
 isize RecorderAPI::getBitRate() const { VAMIGA_PUBLIC VAMIGA_SUSPEND return recorder->getBitRate(); }
 isize RecorderAPI::getSampleRate() const { VAMIGA_PUBLIC VAMIGA_SUSPEND return recorder->getSampleRate(); }
+*/
 bool RecorderAPI::isRecording() const { VAMIGA_PUBLIC VAMIGA_SUSPEND return recorder->isRecording(); }
 
 const std::vector<std::filesystem::path> &
