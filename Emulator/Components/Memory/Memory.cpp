@@ -440,20 +440,23 @@ Memory::operator << (SerWriter &worker)
 void
 Memory::cacheInfo(MemInfo &result) const
 {
-    result.hasRom = hasRom();
-    result.hasWom = hasWom();
-    result.hasExt = hasExt();
-    result.hasBootRom = hasBootRom();
-    result.hasKickRom = hasKickRom();
-    result.womLock = womIsLocked;
-
-    result.romMask = romMask;
-    result.womMask = womMask;
-    result.extMask = extMask;
-    result.chipMask = chipMask;
-
-    for (isize i = 0; i < 256; i++) result.cpuMemSrc[i] = cpuMemSrc[i];
-    for (isize i = 0; i < 256; i++) result.agnusMemSrc[i] = agnusMemSrc[i];
+    {   SYNCHRONIZED
+        
+        result.hasRom = hasRom();
+        result.hasWom = hasWom();
+        result.hasExt = hasExt();
+        result.hasBootRom = hasBootRom();
+        result.hasKickRom = hasKickRom();
+        result.womLock = womIsLocked;
+        
+        result.romMask = romMask;
+        result.womMask = womMask;
+        result.extMask = extMask;
+        result.chipMask = chipMask;
+        
+        for (isize i = 0; i < 256; i++) result.cpuMemSrc[i] = cpuMemSrc[i];
+        for (isize i = 0; i < 256; i++) result.agnusMemSrc[i] = agnusMemSrc[i];
+    }
 }
 
 void

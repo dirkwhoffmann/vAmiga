@@ -29,6 +29,18 @@ MsgQueue::setListener(const void *listener, Callback *callback)
     }
 }
 
+bool
+MsgQueue::get(Message &msg)
+{
+    {   SYNCHRONIZED
+
+        if (queue.isEmpty()) return false;
+
+        msg = queue.read();
+        return true;
+    }
+}
+
 void
 MsgQueue::put(const Message &msg)
 {
@@ -95,18 +107,6 @@ void
 MsgQueue::put(MsgType type, SnapshotMsg payload)
 {
     put( Message { .type = type, .snapshot = payload } );
-}
-
-bool
-MsgQueue::get(Message &msg)
-{
-    {   SYNCHRONIZED
-
-        if (queue.isEmpty()) return false;
-
-        msg = queue.read();
-        return true;
-    }
 }
 
 }

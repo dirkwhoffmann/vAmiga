@@ -191,19 +191,22 @@ Defaults::Defaults()
 void
 Defaults::_dump(Category category, std::ostream& os) const
 {
-    for (const auto &it: fallbacks) {
+    {   SYNCHRONIZED
         
-        const string key = it.first;
-
-        if (values.contains(key)) {
-
-            os << util::tab(key);
-            os << values.at(key) << std::endl;
+        for (const auto &it: fallbacks) {
             
-        } else {
+            const string key = it.first;
             
-            os << util::tab(key);
-            os << fallbacks.at(key) << " (Default)" << std::endl;
+            if (values.contains(key)) {
+                
+                os << util::tab(key);
+                os << values.at(key) << std::endl;
+                
+            } else {
+                
+                os << util::tab(key);
+                os << fallbacks.at(key) << " (Default)" << std::endl;
+            }
         }
     }
 }
@@ -233,13 +236,13 @@ Defaults::load(std::ifstream &stream)
 void
 Defaults::load(std::stringstream &stream)
 {
-    isize line = 0;
-    isize accepted = 0;
-    isize skipped = 0;
-    string input;
-    string section;
-    
     {   SYNCHRONIZED
+        
+        isize line = 0;
+        isize accepted = 0;
+        isize skipped = 0;
+        string input;
+        string section;
         
         debug(DEF_DEBUG, "Loading user defaults from string stream...\n");
         
@@ -273,14 +276,14 @@ Defaults::load(std::stringstream &stream)
                 // Remove white spaces
                 util::trim(key);
                 util::trim(value);
-
+                
                 // Assemble the key
                 auto delimiter = section.empty() ? "" : ".";
                 key = section + delimiter + key;
                 
                 // Check if the key is a known key
                 if (!fallbacks.contains(key)) {
-
+                    
                     warn("Ignoring invalid key %s\n", key.c_str());
                     skipped++;
                     continue;
@@ -294,7 +297,7 @@ Defaults::load(std::stringstream &stream)
             
             throw Error(VAERROR_SYNTAX, line);
         }
-
+        
         if (accepted || skipped) {
             debug(DEF_DEBUG, "%ld keys accepted, %ld ignored\n", accepted, skipped);
         }
@@ -373,10 +376,13 @@ Defaults::save(std::stringstream &stream)
 string
 Defaults::getRaw(const string &key) const
 {
-    if (values.contains(key)) return values.at(key);
-    if (fallbacks.contains(key)) return fallbacks.at(key);
-
-    throw Error(VAERROR_INVALID_KEY, key);
+    {   SYNCHRONIZED
+        
+        if (values.contains(key)) return values.at(key);
+        if (fallbacks.contains(key)) return fallbacks.at(key);
+        
+        throw Error(VAERROR_INVALID_KEY, key);
+    }
 }
 
 i64
@@ -411,9 +417,12 @@ Defaults::get(Option option, isize nr) const
 string
 Defaults::getFallbackRaw(const string &key) const
 {
-    if (fallbacks.contains(key)) return fallbacks.at(key);
-
-    throw Error(VAERROR_INVALID_KEY, key);
+    {   SYNCHRONIZED
+        
+        if (fallbacks.contains(key)) return fallbacks.at(key);
+        
+        throw Error(VAERROR_INVALID_KEY, key);
+    }
 }
 
 i64
@@ -532,7 +541,10 @@ Defaults::setFallback(Option option, i64 value, std::vector <isize> objids)
 void
 Defaults::remove()
 {
-    SYNCHRONIZED values.clear();
+    {   SYNCHRONIZED
+        
+        values.clear();
+    }
 }
 
 void

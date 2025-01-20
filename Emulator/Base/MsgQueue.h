@@ -58,6 +58,9 @@ public:
 
     // Disables the message queue
     void disable() { enabled = false; }
+    
+    // Reads a message
+    bool get(Message &msg);
 
     // Sends a message
     void put(const Message &msg);
@@ -68,9 +71,6 @@ public:
     void put(MsgType type, ScriptMsg payload);
     void put(MsgType type, ViewportMsg payload);
     void put(MsgType type, SnapshotMsg payload);
-
-    // Reads a message
-    bool get(Message &msg);
 };
 
 }

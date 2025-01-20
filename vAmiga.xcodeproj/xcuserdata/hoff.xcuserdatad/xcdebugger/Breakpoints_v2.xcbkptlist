@@ -225,8 +225,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2102"
             endingLineNumber = "2102"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "VAmiga::warpOn(source)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

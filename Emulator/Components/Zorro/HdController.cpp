@@ -48,9 +48,12 @@ HdController::_dump(Category category, std::ostream& os) const
 void 
 HdController::cacheInfo(HdcInfo &result) const
 {
-    result.nr = objid;
-    result.pluggedIn = pluggedIn();
-    result.state = getHdcState();
+    {   SYNCHRONIZED
+        
+        result.nr = objid;
+        result.pluggedIn = pluggedIn();
+        result.state = getHdcState();
+    }
 }
 
 void 

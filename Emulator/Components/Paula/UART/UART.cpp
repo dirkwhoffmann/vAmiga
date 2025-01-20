@@ -28,14 +28,15 @@ UART::_didReset(bool hard)
 void
 UART::cacheInfo(UARTInfo &info) const
 {
-    SYNCHRONIZED
-    
-    info.serper = serper;
-    info.baudRate = baudRate();
-    info.receiveBuffer = receiveBuffer;
-    info.receiveShiftReg = receiveShiftReg;
-    info.transmitBuffer = transmitBuffer;
-    info.transmitShiftReg = transmitShiftReg;
+    {   SYNCHRONIZED
+        
+        info.serper = serper;
+        info.baudRate = baudRate();
+        info.receiveBuffer = receiveBuffer;
+        info.receiveShiftReg = receiveShiftReg;
+        info.transmitBuffer = transmitBuffer;
+        info.transmitShiftReg = transmitShiftReg;
+    }
 }
 
 void

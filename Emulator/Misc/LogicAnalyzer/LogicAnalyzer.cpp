@@ -39,11 +39,15 @@ LogicAnalyzer::_dump(Category category, std::ostream& os) const
 void
 LogicAnalyzer::cacheInfo(LogicAnalyzerInfo &info) const
 {
-    info.busOwner = agnus.busOwner;
-    info.addrBus = agnus.busAddr;
-    info.dataBus = agnus.busData;
-    for (isize i = 0; i < 4; i++) {
-        info.channel[i] = record[i];
+    {   SYNCHRONIZED
+        
+        info.busOwner = agnus.busOwner;
+        info.addrBus = agnus.busAddr;
+        info.dataBus = agnus.busData;
+        
+        for (isize i = 0; i < 4; i++) {
+            info.channel[i] = record[i];
+        }
     }
 }
 
