@@ -46,14 +46,7 @@ public:
 
     const char *objectName() const override { return "MsgQueue"; }
 
-
-    //
-    // Methods from Configurable
-    //
     
-    // const ConfigOptions &getOptions() const override { return options; }
-
-
     //
     // Managing the queue
     //

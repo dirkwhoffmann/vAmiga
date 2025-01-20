@@ -2209,6 +2209,11 @@ NSString *EventSlotName(NSInteger slot)
     return @(ss.str().c_str());
 }
 
+- (BOOL)getMessage:(Message *)msg
+{
+    return [self amiga]->getMsg(*msg);
+}
+
 @end
 
 
@@ -2406,6 +2411,11 @@ NSString *EventSlotName(NSInteger slot)
 - (void)finishFrame
 {
     [self emu]->finishFrame();
+}
+
+- (void)launch
+{
+    [self emu]->launch();
 }
 
 - (void)launch:(const void *)listener function:(Callback *)func

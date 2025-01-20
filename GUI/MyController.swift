@@ -256,17 +256,24 @@ extension MyController {
             script = script + arg.dropFirst() + "\n"
         }
         emu?.retroShell.execute(script)
-        
-        // Convert 'self' to a void pointer
-        let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
 
-        emu.launch(myself) { (ptr, msg: Message) in
-
-            // Convert void pointer back to 'self'
-            let myself = Unmanaged<MyController>.fromOpaque(ptr!).takeUnretainedValue()
-
-            // Process message in the main thread
-            Task { @MainActor in myself.processMessage(msg) }
+        if BuildSettings.msgCallback {
+            
+            // Convert 'self' to a void pointer
+            let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
+            
+            emu.launch(myself) { (ptr, msg: Message) in
+                
+                // Convert void pointer back to 'self'
+                let myself = Unmanaged<MyController>.fromOpaque(ptr!).takeUnretainedValue()
+                
+                // Process message in the main thread
+                Task { @MainActor in myself.processMessage(msg) }
+            }
+            
+        } else {
+            
+            emu.launch()
         }
     }
 
@@ -305,6 +312,11 @@ extension MyController {
 
     func processMessage(_ msg: Message) {
         
+        // process(message: msg)
+    }
+    
+    func process(message msg: Message) {
+            
         MainActor.assertIsolated()
         
         var value: Int { return Int(msg.value) }

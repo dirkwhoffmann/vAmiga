@@ -2266,4 +2266,11 @@ AmigaAPI::setAutoInspectionMask(u64 mask)
     amiga->setAutoInspectionMask(mask);
 }
 
+bool
+AmigaAPI::getMsg(Message &msg)
+{
+    VAMIGA_PUBLIC
+    return amiga->msgQueue.get(msg);
+}
+
 }

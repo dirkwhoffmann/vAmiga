@@ -128,6 +128,8 @@ public:
     void setAutoInspectionMask(u64 mask);
     
     /// @}
+    
+    bool getMsg(Message &msg);
 };
 
 
@@ -1550,11 +1552,11 @@ public:
 //
 
 class VAmiga : public API {
-
+    
 public:
-
+    
     static DefaultsAPI defaults;
-
+    
     // Components
     AmigaAPI amiga;
     AgnusAPI agnus;
@@ -1564,7 +1566,7 @@ public:
     MemoryAPI mem;
     PaulaAPI paula;
     RTCAPI rtc;
-
+    
     // Ports
     AudioPortAPI audioPort;
     VideoPortAPI videoPort;
@@ -1573,98 +1575,98 @@ public:
     GuardsAPI copperBreakpoints;
     DebuggerAPI debugger;
     SerialPortAPI serialPort;
-
+    
     // Peripherals
     FloppyDriveAPI df0, df1, df2, df3;
     HardDriveAPI hd0, hd1, hd2, hd3;
     KeyboardAPI keyboard;
-
+    
     // Misc
     RecorderAPI recorder;
     RemoteManagerAPI remoteManager;
     RetroShellAPI retroShell;
-
-
+    
+    
     //
     // Static methods
     //
-
+    
     /** @brief  Returns a version string for this release.
      */
     static string version();
-
+    
     /** @brief  Returns a build-number string for this release.
      */
     static string build();
-
+    
     
     //
     // Initializing
     //
-
+    
     VAmiga();
     ~VAmiga();
-
+    
     /// @name Analyzing the emulator
     /// @{
-
+    
     /** @brief  Returns the component's current state.
      */
     const EmulatorInfo &getInfo() const;
     const EmulatorInfo &getCachedInfo() const;
-
+    
     /** @brief  Returns statistical information about the components.
      */
     const EmulatorStats &getStats() const;
-
+    
     /// @}
     /// @name Querying the emulator state
     /// @{
-
+    
     /** @brief  Returns true iff the emulator if the emulator is powered on.
      */
     bool isPoweredOn() const;
-
+    
     /** @brief  Returns true iff the emulator if the emulator is powered off.
      */
     bool isPoweredOff() const;
-
+    
     /** @brief  Returns true iff the emulator is in paused state.
      */
     bool isPaused() const;
-
+    
     /** @brief  Returns true iff the emulator is running.
      */
     bool isRunning() const;
-
+    
     /** @brief  Returns true iff the emulator has been suspended.
      */
     bool isSuspended() const;
-
+    
     /** @brief  Returns true iff the emulator has shut down.
      */
     bool isHalted() const;
-
+    
     /** @brief  Returns true iff warp mode is active.
      */
     bool isWarping() const;
-
+    
     /** @brief  Returns true iff the emulator runs in track mode.
      */
     bool isTracking() const;
-
+    
     /** @brief  Checks if the emulator is runnable.
      *  The function checks if the necessary ROMs are installed to lauch the
      *  emulator. On success, the functions returns. Otherwise, an exception
      *  is thrown.
      */
     void isReady() const;
-
-
+    
+    
     /// @}
     /// @name Controlling the emulator state
     /// @{
-
+    
     /** @brief  Switches the emulator on
      *
      *  Powering on the emulator changes the interal state to #STATE\_PAUSED,
@@ -1672,14 +1674,14 @@ public:
      *  Calling this function on an already powered-on emulator has no effect.
      *  */
     void powerOn();
-
+    
     /** @brief  Switches the emulator off
      *
      *  Powering off the emulator changes the interal state of #STATE\_OFF.
      *  Calling this function on an already powered-off emulator has no effect.
      */
     void powerOff();
-
+    
     /** @brief  Starts emulation
      *
      *  Running the emulator changes the internal state to #STATE\_RUNNING,
@@ -1689,7 +1691,7 @@ public:
      *  emulator, an implicit call to powerOn() will be performed.
      */
     void run();
-
+    
     /** @brief   Pauses emulation
      *
      * Pausing the emulator changes the interal state from #STATE\_RUNNING
@@ -1697,20 +1699,20 @@ public:
      * enteres a frozes state where no more frames are computed.
      */
     void pause();
-
+    
     /** @brief   Performs a hard reset
      *
      *  A hard reset affects all components. The effect is similar to
      *  switching power off and on.
      */
     void hardReset();
-
+    
     /** @brief   Performs a soft reset
      *
      *  A soft reset is similar to executing the CPU's reset instruction.
      */
     void softReset();
-
+    
     /** @brief   Terminates the emulator thread
      *
      *  Halting the emulator changes the internal state to #STATE\_HALTED.
@@ -1718,42 +1720,42 @@ public:
      *  normal operation.
      */
     void halt();
-
+    
     /** @brief   Suspends the emulator thread
      *
      *  See the \ref vc64::Suspendable "Suspendable" class for a detailes
      *  description of the suspend-resume machanism.
      */
     void suspend() const;
-
+    
     /** @brief   Suspends the emulator thread
      *
      *  See the \ref vc64::Suspendable "Suspendable" class for a detailes
      *  description of the suspend-resume machanism.
      */
     void resume() const;
-
+    
     /** @brief  Enables warp mode.
      */
     void warpOn(isize source = 0);
-
+    
     /** @brief  Disables warp mode.
      */
     void warpOff(isize source = 0);
-
+    
     /** @brief  Enables track mode.
      */
     void trackOn(isize source = 0);
-
+    
     /** @brief  Disables track mode.
      */
     void trackOff(isize source = 0);
-
+    
     
     /// @}
     /// @name Single-stepping
     /// @{
-
+    
     /** @brief  Steps a single instruction
      *
      *  If the emulator is paused, calling this functions steps the CPU for
@@ -1762,7 +1764,7 @@ public:
      *  stepping.
      */
     void stepInto();
-
+    
     /** @brief  Steps over the current instruction
      *
      *  If the emulator is paused, calling this functions runs the emulator
@@ -1783,24 +1785,24 @@ public:
      *  location.
      */
     void stepOver();
-
+    
     /** @brief  Fnishes the current rasterline
      *
      *  Calling this functions runs the CPU until the end of the current rasterline.
      */
     void finishLine();
-
+    
     /** @brief  Fnishes the current frame
      *
      *  Calling this functions runs the CPU until the end of the current frame.
      */
     void finishFrame();
-
-
+    
+    
     /// @}
     /// @name Synchronizing the emulator thread
     /// @{
-
+    
     /** @brief  Sends a wakeup signal to the emulator thread.
      *
      *  To compute frames at the proper pace, the emulator core expects the GUI
@@ -1810,12 +1812,12 @@ public:
      *  current texture has been handed over to the GPU.
      */
     void wakeUp();
-
-
+    
+    
     /// @}
     /// @name Configuring the emulator
     /// @{
-
+    
     /** @brief  Launches the emulator thread.
      *
      *  This function must be called in the initialization procedure of the
@@ -1830,12 +1832,12 @@ public:
      *  function on that object.
      *  @param  func        The callback function.
      */
-    void launch(const void *listener, Callback *func);
-
+    void launch(const void *listener = nullptr, Callback *func = nullptr);
+    
     /** @brief  Returns true if the emulator has been launched.
      */
     bool isLaunched() const;
-
+    
     /** @brief  Queries a configuration option.
      *
      *  This is the main function to query a configuration option.
@@ -1847,7 +1849,7 @@ public:
      *  must not be called.
      */
     i64 get(Option option) const;
-
+    
     /** @brief  Queries a configuration option.
      *
      *  This is the main function to query a configuration option.
@@ -1859,13 +1861,13 @@ public:
      *  an additional parameter to uniquely determine the configured component.
      */
     i64 get(Option option, long id) const throws;
-
+    
     /** Configures the emulator to match a specific Amiga model
      *
      *  @param model    The Amiga model to emulate
      */
     void set(ConfigScheme model);
-
+    
     /** @brief  Configures a component.
      *
      *  This is the main function to set an configuration option.
@@ -1877,7 +1879,7 @@ public:
      *  components, all components are configured with the specified value.
      */
     void set(Option opt, i64 value) throws;
-
+    
     /** @brief  Configures a component.
      *
      *  This is the main function to set an configuration option.
@@ -1890,8 +1892,8 @@ public:
      *  an additional parameter to uniquely determine the configured component.
      */
     void set(Option opt, i64 value, long id) throws;
-
-
+    
+    
     /** @brief  Exports the current configuration.
      *
      *  The current configuration is exported in form of a RetroShell script.
@@ -1904,12 +1906,12 @@ public:
      */
     void exportConfig(const std::filesystem::path &path, bool diff = false) const;
     void exportConfig(std::ostream& stream, bool diff = false) const;
-
-
+    
+    
     /// @}
     /// @name Using the command queue
     /// @{
-
+    
     /** @brief  Feeds a command into the command queue.
      */
     void put(const Cmd &cmd);
@@ -1919,7 +1921,7 @@ public:
     void put(CmdType type, GamePadCmd payload)  { put(Cmd(type, payload)); }
     void put(CmdType type, CoordCmd payload)  { put(Cmd(type, payload)); }
     void put(CmdType type, AlarmCmd payload)  { put(Cmd(type, payload)); }
-
+    
     /// @}
 };
 

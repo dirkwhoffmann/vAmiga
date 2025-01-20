@@ -8,6 +8,19 @@
 // -----------------------------------------------------------------------------
 
 //
+// Build settings
+//
+
+struct BuildSettings {
+
+    // Determines how the GUI interacts with the emulator's message system.
+    // If true, the GUI registers a callback function in the emulator core
+    // to process messages as they arrive. If false, the GUI polls messages
+    // from the queue during each update cycle.
+    static let msgCallback = false
+}
+
+//
 // Debug settings
 //
 

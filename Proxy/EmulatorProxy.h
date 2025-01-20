@@ -260,6 +260,7 @@ NSString *EventSlotName(NSInteger slot);
 @property (readonly) BOOL warping;
 @property (readonly) BOOL tracking;
 
+- (void)launch;
 - (void)launch:(const void *)listener function:(Callback *)func;
 - (void)wakeUp;
 
@@ -410,6 +411,8 @@ NSString *EventSlotName(NSInteger slot);
 - (void) loadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
 
 @property (readonly) NSString *stateString;
+
+- (BOOL) getMessage:(Message *)msg;
 
 @end
 

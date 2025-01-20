@@ -193,6 +193,15 @@ class Renderer: NSObject, MTKViewDelegate {
                          
         if animates != 0 { animate() }
 
+        if !BuildSettings.msgCallback {
+            
+            // Process all pending messages
+            var msg = Message()
+            while amiga.amiga.getMessage(&msg) {
+                parent.process(message: msg)
+            }
+        }
+        
         splashScreen.update(frames: frames)
         dropZone.update(frames: frames)
         console.update(frames: frames)
