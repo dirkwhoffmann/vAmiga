@@ -12,7 +12,7 @@ import AVFoundation
 @MainActor 
 protocol MessageReceiver {
     
-    func processMessage(_ msg: Message)
+    func process(message: Message)
 }
 
 @MainActor
@@ -268,7 +268,7 @@ extension MyController {
                 let myself = Unmanaged<MyController>.fromOpaque(ptr!).takeUnretainedValue()
                 
                 // Process message in the main thread
-                Task { @MainActor in myself.processMessage(msg) }
+                Task { @MainActor in myself.process(message: msg) }
             }
             
         } else {
@@ -308,11 +308,6 @@ extension MyController {
                 NSCursor.setHiddenUntilMouseMoves(true)
             }
         }
-    }
-
-    func processMessage(_ msg: Message) {
-        
-        // process(message: msg)
     }
     
     func process(message msg: Message) {
