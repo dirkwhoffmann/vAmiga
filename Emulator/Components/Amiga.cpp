@@ -968,16 +968,14 @@ Amiga::cacheInfo(AmigaInfo &result) const
 void
 Amiga::setFlag(u32 flag)
 {
-    SYNCHRONIZED
-
+    assert(isEmulatorThread());
     flags |= flag;
 }
 
 void
 Amiga::clearFlag(u32 flag)
 {
-    SYNCHRONIZED
-
+    assert(isEmulatorThread());
     flags &= ~flag;
 }
 

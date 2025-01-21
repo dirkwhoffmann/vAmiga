@@ -53,6 +53,9 @@ Emulator::launch(const void *listener, Callback *func)
     
     // Launch the emulator thread
     Thread::launch();
+    
+    // Schedule a hard reset
+    put(CMD_HARD_RESET);
 }
 
 void
@@ -67,10 +70,7 @@ Emulator::initialize()
     
     // Setup the default configuration
     main.resetConfig();
-    
-    // Perform a hard reset
-    main.hardReset();
-    
+        
     // Get the runahead instance up-to-date
     ahead = main;
     

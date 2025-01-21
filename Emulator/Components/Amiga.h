@@ -406,27 +406,7 @@ public:
 
     // Convenience wrappers
     void signalStop() { setFlag(RL::STOP); }
-    // void signalAutoSnapshot() { setFlag(RL::AUTO_SNAPSHOT); }
-    // void signalUserSnapshot() { setFlag(RL::USER_SNAPSHOT); }
-
-#if 0
-    // Runs or pauses the emulator
-    void stopAndGo();
-
-    /* Executes a single instruction. This function is used for single-stepping
-     * through the code inside the debugger. It starts the execution thread and
-     * terminates it after the next instruction has been executed.
-     */
-    void stepInto();
-
-    /* Runs the emulator until the instruction following the current one is
-     * reached. This function is used for single-stepping through the code
-     * inside the debugger. It sets a soft breakpoint to PC+n where n is the
-     * length bytes of the current instruction and starts the emulator thread.
-     */
-    void stepOver();
-#endif
-
+ 
 
     //
     // Handling snapshots
