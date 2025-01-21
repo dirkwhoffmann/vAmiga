@@ -661,7 +661,7 @@ public:
     /** @brief  Getter for the raw disk object
      *  @return A pointer to the disk object or nullptr if no disk is present.
      */
-    class FloppyDisk &getDisk();
+    class FloppyDisk &getDisk() const;
 
     /** @brief Queries a disk flag
      */
@@ -771,7 +771,7 @@ public:
      *  The function takes a number of blocks and returns all common
      *  cyclinder/heads/sectors combinations that match the given size.
      */
-    std::vector<std::tuple<isize,isize,isize>> geometries(isize numBlocks);
+    std::vector<std::tuple<isize,isize,isize>> geometries(isize numBlocks) const;
 
     /** @brief Changes the drives geometry.
      *  @param c    Cylinders

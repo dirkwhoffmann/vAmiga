@@ -304,6 +304,7 @@ Emulator::stepOver()
 void
 Emulator::finishLine()
 {
+    if (isRunning()) return;
     main.agnus.dmaDebugger.eolTrap = true;
     run();
 }
@@ -311,6 +312,7 @@ Emulator::finishLine()
 void
 Emulator::finishFrame()
 {
+    if (isRunning()) return;
     main.agnus.dmaDebugger.eofTrap = true;
     run();
 }
