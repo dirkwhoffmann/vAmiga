@@ -59,15 +59,19 @@ Thread::execute()
         lock.lock();
         loadClock.go();
 
-        // Execute all missing frames
-        for (isize i = 0; i < missing; i++, frameCounter++) {
-
-            // Execute a single frame
-            try { computeFrame(); } catch (StateChangeException &exc) {
+        try {
+            
+            // Execute all missing frames
+            for (isize i = 0; i < missing; i++, frameCounter++) {
                 
-                // Serve a state change request
-                switchState((ExecState)exc.data);
+                // Execute a single frame
+                computeFrame();
             }
+            
+        } catch (StateChangeException &exc) {
+            
+            // Serve a state change request
+            switchState((ExecState)exc.data);
         }
         
         loadClock.stop();
