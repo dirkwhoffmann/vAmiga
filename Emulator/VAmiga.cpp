@@ -29,12 +29,6 @@ namespace vamiga {
  *     before the function body is executed. The emulator can suspend
  *     only after the current frame has been completed. Thus, calling
  *     an API function with this annotation may cause a noticable lag.
- *
- *   VAMIGA_SYNCHRONIZE:
- *
- *     The macro locks a component prior to calling a function, thus
- *     eliminating race-conditions with functions that acquire the
- *     same lock internally.
  */
 
 #define VAMIGA_PUBLIC assert(!emu || emu->isUserThread());
@@ -52,7 +46,6 @@ struct SuspendResume {
 #define VAMIGA_SUSPEND SuspendResume _sr(this);
 // #define VAMIGA_SUSPENDED printf("%d: SUSPEND\n", __LINE__); SuspendResume _sr(this);
 
-#define VAMIGA_SYNCHRONIZE(obj) util::AutoMutex _am(obj->mutex);
 
 //
 // API
@@ -959,14 +952,14 @@ SerialPortAPI::getCachedInfo() const
 int 
 SerialPortAPI::readIncomingPrintableByte() const
 {
-    VAMIGA_PUBLIC VAMIGA_SYNCHRONIZE(serialPort)
+    VAMIGA_PUBLIC
     return serialPort->readIncomingPrintableByte();
 }
 
 int 
 SerialPortAPI::readOutgoingPrintableByte() const
 {
-    VAMIGA_PUBLIC VAMIGA_SYNCHRONIZE(serialPort)
+    VAMIGA_PUBLIC
     return serialPort->readOutgoingPrintableByte();
 }
 

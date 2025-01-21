@@ -112,14 +112,15 @@ CopperDebugger::startOfCopperList(isize nr) const
 {
     assert(nr == 1 || nr == 2);
 
-    SYNCHRONIZED
-    
-    u32 result = 0;
-    
-    if (nr == 1 && current1) result = current1->start;
-    if (nr == 2 && current2) result = current2->start;
-    
-    return result;
+    {   SYNCHRONIZED
+        
+        u32 result = 0;
+        
+        if (nr == 1 && current1) result = current1->start;
+        if (nr == 2 && current2) result = current2->start;
+        
+        return result;
+    }
 }
 
 u32
@@ -127,57 +128,60 @@ CopperDebugger::endOfCopperList(isize nr) const
 {
     assert(nr == 1 || nr == 2);
 
-    SYNCHRONIZED
-
-    u32 result = 0;
-
-    if (nr == 1 && current1) result = current1->end;
-    if (nr == 2 && current2) result = current2->end;
-    
-    return result;
+    {   SYNCHRONIZED
+        
+        u32 result = 0;
+        
+        if (nr == 1 && current1) result = current1->end;
+        if (nr == 2 && current2) result = current2->end;
+        
+        return result;
+    }
 }
 
 void
 CopperDebugger::advanced()
 {
-    SYNCHRONIZED
-    
-    auto addr = copper.coppc;
-    auto nr = copper.copList;
-    assert(nr == 1 || nr == 2);
-    
-    // Adjust the end address if the Copper went beyond
-    if (nr == 1 && current1 && current1->end < addr) {
-        current1->end = addr;
-    }
-    if (nr == 2 && current2 && current2->end < addr) {
-        current2->end = addr;
+    {   SYNCHRONIZED
+        
+        auto addr = copper.coppc;
+        auto nr = copper.copList;
+        assert(nr == 1 || nr == 2);
+        
+        // Adjust the end address if the Copper went beyond
+        if (nr == 1 && current1 && current1->end < addr) {
+            current1->end = addr;
+        }
+        if (nr == 2 && current2 && current2->end < addr) {
+            current2->end = addr;
+        }
     }
 }
 
 void
 CopperDebugger::jumped()
 {
-    SYNCHRONIZED
-    
-    auto addr = copper.coppc;
-    auto nr = copper.copList;
-    assert(nr == 1 || nr == 2);
-    
-    // Lookup Copper list in cache
-    auto list = cache.find(addr);
-    
-    // Create a new list if it was not found
-    if (list == cache.end()) {
-        cache.insert(std::make_pair(addr, CopperList { addr, addr }));
-        list = cache.find(addr);
-    }
-    
-    // Switch to the new list
-    if (nr == 1) {
-        current1 = &list->second;
-    } else {
-        current2 = &list->second;
+    {   SYNCHRONIZED
+        
+        auto addr = copper.coppc;
+        auto nr = copper.copList;
+        assert(nr == 1 || nr == 2);
+        
+        // Lookup Copper list in cache
+        auto list = cache.find(addr);
+        
+        // Create a new list if it was not found
+        if (list == cache.end()) {
+            cache.insert(std::make_pair(addr, CopperList { addr, addr }));
+            list = cache.find(addr);
+        }
+        
+        // Switch to the new list
+        if (nr == 1) {
+            current1 = &list->second;
+        } else {
+            current2 = &list->second;
+        }
     }
 }
 

@@ -82,17 +82,18 @@ RetroShell::asyncExec(const string &command, bool append)
 void
 RetroShell::asyncExecScript(std::stringstream &ss)
 {
-    SYNCHRONIZED
-
-    std::string line;
-    isize nr = 1;
-
-    while (std::getline(ss, line)) {
-
-        commands.push_back({ nr++, line });
+    {   SYNCHRONIZED
+        
+        std::string line;
+        isize nr = 1;
+        
+        while (std::getline(ss, line)) {
+            
+            commands.push_back({ nr++, line });
+        }
+        
+        emulator.put(Cmd(CMD_RSH_EXECUTE));
     }
-
-    emulator.put(Cmd(CMD_RSH_EXECUTE));
 }
 
 void
@@ -146,36 +147,37 @@ RetroShell::abortScript()
 void
 RetroShell::exec()
 {
-    SYNCHRONIZED
-
-    // Only proceed if there is anything to process
-    if (commands.empty()) return;
-
-    std::pair<isize, string> cmd;
-
-    try {
-
-        while (!commands.empty()) {
-
-            cmd = commands.front();
-            commands.erase(commands.begin());
-            exec(cmd);
+    {   SYNCHRONIZED
+        
+        // Only proceed if there is anything to process
+        if (commands.empty()) return;
+        
+        std::pair<isize, string> cmd;
+        
+        try {
+            
+            while (!commands.empty()) {
+                
+                cmd = commands.front();
+                commands.erase(commands.begin());
+                exec(cmd);
+            }
+            
+        } catch (ScriptInterruption &) {
+            
+            msgQueue.put(MSG_RSH_WAIT);
+            
+        } catch (...) {
+            
+            // Remove all remaining commands
+            commands = { };
+            
+            msgQueue.put(MSG_RSH_ERROR);
         }
-
-    } catch (ScriptInterruption &) {
-
-        msgQueue.put(MSG_RSH_WAIT);
-
-    } catch (...) {
-
-        // Remove all remaining commands
-        commands = { };
-
-        msgQueue.put(MSG_RSH_ERROR);
+        
+        // Print prompt
+        if (current->lastLineIsEmpty()) *this << current->getPrompt();
     }
-
-    // Print prompt
-    if (current->lastLineIsEmpty()) *this << current->getPrompt();
 }
 
 void

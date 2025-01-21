@@ -89,20 +89,17 @@ ControlPort::_dump(Category category, std::ostream& os) const
 void
 ControlPort::updateMouseXY(i64 x, i64 y)
 {
-    {   SYNCHRONIZED
-        
-        // Compute the delta movement
-        i64 dx = x - mouseX;
-        i64 dy = y - mouseY;
-        
-        // Store the mouse position
-        mouseX = x;
-        mouseY = y;
-        
-        // Update the mouse position counters
-        mouseCounterX += dx;
-        mouseCounterY += dy;
-    }
+    // Compute the delta movement
+    i64 dx = x - mouseX;
+    i64 dy = y - mouseY;
+    
+    // Store the mouse position
+    mouseX = x;
+    mouseY = y;
+    
+    // Update the mouse position counters
+    mouseCounterX += dx;
+    mouseCounterY += dy;
 }
 
 u16

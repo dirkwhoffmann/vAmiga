@@ -113,8 +113,10 @@ DeniseDebugger::updateDiwV(isize vstrt, isize vstop)
 SpriteInfo
 DeniseDebugger::getSpriteInfo(isize nr)
 {
-    SYNCHRONIZED
-    return latchedSpriteInfo[nr];
+    {   SYNCHRONIZED
+        
+        return latchedSpriteInfo[nr];
+    }
 }
 
 void
