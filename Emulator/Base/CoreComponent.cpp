@@ -58,6 +58,18 @@ CoreComponent::checksum(bool recursive)
 }
 
 bool
+CoreComponent::isEmulatorThread() const
+{
+    return emulator.isEmulatorThread();
+}
+
+bool
+CoreComponent::isUserThread() const
+{
+    return emulator.isUserThread();
+}
+
+bool
 CoreComponent::isInitialized() const
 {
     return emulator.isInitialized();

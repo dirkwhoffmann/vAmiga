@@ -28,7 +28,13 @@ enum_long(CMD_TYPE)
     // Emulator
     CMD_CONFIG,                 ///< Configure the emulator
     CMD_CONFIG_ALL,             ///< Configure the emulator
-    
+    CMD_HARD_RESET,             ///< Perform a hard reset
+    CMD_SOFT_RESET,             ///< Perform a soft reset
+    CMD_POWER_ON,               ///< Switch power on
+    CMD_POWER_OFF,              ///< Switch power off
+    CMD_RUN,                    ///< Start emulation
+    CMD_PAUSE,                  ///< Pause emulation
+
     // Amiga
     CMD_ALARM_ABS,              ///< Schedule an alarm (absolute cycle)
     CMD_ALARM_REL,              ///< Schedule an alarm (relative cycle)
@@ -93,6 +99,12 @@ struct CmdTypeEnum : util::Reflection<CmdTypeEnum, CmdType> {
                 
             case CMD_CONFIG:                return "CONFIG";
             case CMD_CONFIG_ALL:            return "CONFIG_ALL";
+            case CMD_HARD_RESET:            return "HARD_RESET";
+            case CMD_SOFT_RESET:            return "SOFT_RESET";
+            case CMD_POWER_ON:              return "POWER_ON";
+            case CMD_POWER_OFF:             return "POWER_OFF";
+            case CMD_RUN:                   return "RUN";
+            case CMD_PAUSE:                 return "PAUSE";
                 
             case CMD_ALARM_ABS:             return "ALARM_ABS";
             case CMD_ALARM_REL:             return "ALARM_REL";

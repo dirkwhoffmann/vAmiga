@@ -94,7 +94,11 @@ public:
     // Computes a checksum
     u64 checksum(bool recursive);
 
+    // Performs sanity checks
+    bool isEmulatorThread() const;
+    bool isUserThread() const;
 
+    
     //
     // Configuring
     //

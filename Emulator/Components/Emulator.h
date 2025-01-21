@@ -57,7 +57,7 @@ public:
     void launch(const void *listener, Callback *func);
 
     // Initializes all components
-    void initialize();
+    void initialize() override;
 
 
     //

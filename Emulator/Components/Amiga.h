@@ -406,8 +406,8 @@ public:
 
     // Convenience wrappers
     void signalStop() { setFlag(RL::STOP); }
-    void signalAutoSnapshot() { setFlag(RL::AUTO_SNAPSHOT); }
-    void signalUserSnapshot() { setFlag(RL::USER_SNAPSHOT); }
+    // void signalAutoSnapshot() { setFlag(RL::AUTO_SNAPSHOT); }
+    // void signalUserSnapshot() { setFlag(RL::USER_SNAPSHOT); }
 
 #if 0
     // Runs or pauses the emulator

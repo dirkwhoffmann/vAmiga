@@ -107,6 +107,9 @@ public:
 
 private:
 
+    // Initializes the emulator (implemented by the subclass)
+    virtual void initialize() = 0;
+
     // Updates the emulator state (implemented by the subclass)
     virtual void update() = 0;
 

@@ -191,8 +191,8 @@
             filePath = "Emulator/Components/Amiga.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "817"
-            endingLineNumber = "817"
+            startingLineNumber = "823"
+            endingLineNumber = "823"
             landmarkName = "Amiga::update(queue)"
             landmarkType = "7">
          </BreakpointContent>

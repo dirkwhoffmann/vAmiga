@@ -753,7 +753,13 @@ Amiga::update(CmdQueue &queue)
             case CMD_ALARM_ABS:
             case CMD_ALARM_REL:
             case CMD_INSPECTION_TARGET:
-
+            case CMD_HARD_RESET:
+            case CMD_SOFT_RESET:
+            case CMD_POWER_ON:
+            case CMD_POWER_OFF:
+            case CMD_RUN:
+            case CMD_PAUSE:
+                
                 processCommand(cmd);
                 break;
 
@@ -1079,6 +1085,36 @@ Amiga::processCommand(const Cmd &cmd)
             setAutoInspectionMask(cmd.value);
             break;
 
+        case CMD_HARD_RESET:
+            
+            emulator.hardReset();
+            break;
+            
+        case CMD_SOFT_RESET:
+            
+            emulator.softReset();
+            break;
+            
+        case CMD_POWER_ON:
+            
+            emulator.powerOn();
+            break;
+            
+        case CMD_POWER_OFF:
+            
+            emulator.powerOff();
+            break;
+            
+        case CMD_RUN:
+            
+            emulator.run();
+            break;
+            
+        case CMD_PAUSE:
+            
+            emulator.pause();
+            break;
+            
         default:
             fatalError;
     }
