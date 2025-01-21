@@ -2199,8 +2199,15 @@ NSString *EventSlotName(NSInteger slot)
 
 - (MediaFileProxy *)takeSnapshot
 {
-    MediaFile *file = [self amiga]->takeSnapshot();
-    return [MediaFileProxy make:file];
+    try {
+        
+        MediaFile *file = [self amiga]->takeSnapshot();
+        return [MediaFileProxy make:file];
+        
+    } catch (Error &error) {
+        
+        return nil;
+    }
 }
 
 - (void)loadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex

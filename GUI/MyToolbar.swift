@@ -28,6 +28,9 @@ class MyToolbar: NSToolbar {
         let view = keyboardButton.view as? NSButton
         view?.isEnabled = !visible
 
+        // Disable the snapshot revert button if no snapshots have been taken
+        snapshotSegCtrl.setEnabled(parent.snapshotCount > 0, forSegment: 1)
+
         // Update input devices
         parent.gamePadManager.refresh(popup: controlPort1)
         parent.gamePadManager.refresh(popup: controlPort2)

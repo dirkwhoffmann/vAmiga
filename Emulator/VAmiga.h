@@ -76,13 +76,13 @@ public:
      *  A hard reset affects all components. The effect is similar to
      *  switching power off and on.
      */
-    void hardReset();
+    // void hardReset();
 
     /** @brief  Performs a hard reset
      *
      *  A soft reset emulates the execution of the CPU's reset instruction.
      */
-    void softReset();
+    // void softReset();
 
     /// @}
     /// @name Handling snapshots

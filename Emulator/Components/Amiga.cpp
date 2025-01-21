@@ -759,6 +759,8 @@ Amiga::update(CmdQueue &queue)
             case CMD_POWER_OFF:
             case CMD_RUN:
             case CMD_PAUSE:
+            case CMD_WARP_ON:
+            case CMD_WARP_OFF:
                 
                 processCommand(cmd);
                 break;
@@ -1023,6 +1025,10 @@ Amiga::scheduleNextSnpEvent()
 void 
 Amiga::loadSnapshot(const MediaFile &file)
 {
+    const Snapshot &snapshot = dynamic_cast<const Snapshot &>(file);
+    loadSnapshot(snapshot);
+    
+    /*
     try {
 
         const Snapshot &snapshot = dynamic_cast<const Snapshot &>(file);
@@ -1032,6 +1038,7 @@ Amiga::loadSnapshot(const MediaFile &file)
 
         throw Error(VAERROR_FILE_TYPE_MISMATCH);
     }
+    */
 }
 
 void
@@ -1043,23 +1050,9 @@ Amiga::loadSnapshot(const Snapshot &snap)
     // Uncompress the snapshot
     snapshot.uncompress();
     
-    try {
+    // Restore the saved state (may throw)
+    load(snapshot.getData());
         
-        // Restore the saved state
-        load(snapshot.getData());
-        
-    } catch (Error &error) {
-        
-        /* If we reach this point, the emulator has been put into an
-         * inconsistent state due to corrupted snapshot data. We cannot
-         * continue emulation, because it would likely crash the
-         * application. Because we cannot revert to the old state either,
-         * we perform a hard reset to eliminate the inconsistency.
-         */
-        hardReset();
-        throw error;
-    }
-    
     // Inform the GUI
     msgQueue.put(MSG_SNAPSHOT_RESTORED);
     msgQueue.put(MSG_VIDEO_FORMAT, agnus.isPAL() ? FORMAT_PAL : FORMAT_NTSC);
@@ -1115,6 +1108,22 @@ Amiga::processCommand(const Cmd &cmd)
             emulator.pause();
             break;
             
+        case CMD_WARP_ON:
+            
+            if (cmd.value == 0) {
+                throw std::runtime_error("Source 0 is reserved for implementing config.warpMode.");
+            }
+            emulator.warpOn(cmd.value);
+            break;
+            
+        case CMD_WARP_OFF:
+
+            if (cmd.value == 0) {
+                throw std::runtime_error("Source 0 is reserved for implementing config.warpMode.");
+            }
+            emulator.warpOff(cmd.value);
+            break;
+
         default:
             fatalError;
     }

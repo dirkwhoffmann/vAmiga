@@ -34,6 +34,8 @@ enum_long(CMD_TYPE)
     CMD_POWER_OFF,              ///< Switch power off
     CMD_RUN,                    ///< Start emulation
     CMD_PAUSE,                  ///< Pause emulation
+    CMD_WARP_ON,                ///< Switch on warp mode
+    CMD_WARP_OFF,               ///< Switch off warp mode
 
     // Amiga
     CMD_ALARM_ABS,              ///< Schedule an alarm (absolute cycle)
@@ -105,7 +107,9 @@ struct CmdTypeEnum : util::Reflection<CmdTypeEnum, CmdType> {
             case CMD_POWER_OFF:             return "POWER_OFF";
             case CMD_RUN:                   return "RUN";
             case CMD_PAUSE:                 return "PAUSE";
-                
+            case CMD_WARP_ON:               return "WARP_ON";
+            case CMD_WARP_OFF:              return "WARP_OFF";
+
             case CMD_ALARM_ABS:             return "ALARM_ABS";
             case CMD_ALARM_REL:             return "ALARM_REL";
             case CMD_INSPECTION_TARGET:     return "INSPECTION_TARGET";

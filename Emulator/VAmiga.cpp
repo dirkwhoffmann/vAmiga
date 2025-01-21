@@ -2087,15 +2087,15 @@ VAmiga::resume() const
 void
 VAmiga::warpOn(isize source)
 {
-    VAMIGA_PUBLIC VAMIGA_SUSPEND
-    emu->warpOn(source);
+    VAMIGA_PUBLIC
+    emu->put(CMD_WARP_ON, source);
 }
 
 void
 VAmiga::warpOff(isize source)
 {
-    VAMIGA_PUBLIC VAMIGA_SUSPEND
-    emu->warpOff(source);
+    VAMIGA_PUBLIC
+    emu->put(CMD_WARP_OFF, source);
 }
 
 void
@@ -2238,8 +2238,25 @@ void
 AmigaAPI::loadSnapshot(const MediaFile &snapshot)
 {
     VAMIGA_PUBLIC VAMIGA_SUSPEND
-    amiga->loadSnapshot(snapshot);
+    
     emu->isDirty = true;
+    
+    try {
+        
+        // Restore the saved state
+        amiga->loadSnapshot(snapshot);
+        
+    } catch (Error &error) {
+        
+        /* If we reach this point, the emulator has been put into an
+         * inconsistent state due to corrupted snapshot data. We cannot
+         * continue emulation, because it would likely crash the
+         * application. Because we cannot revert to the old state either,
+         * we perform a hard reset to eliminate the inconsistency.
+         */
+        emu->hardReset();
+        throw;
+    }
 }
     
 u64
