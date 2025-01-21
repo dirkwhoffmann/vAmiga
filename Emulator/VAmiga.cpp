@@ -2015,55 +2015,43 @@ VAmiga::isReady() const
 void
 VAmiga::powerOn()
 {
-    VAMIGA_PUBLIC VAMIGA_SUSPEND
-    
-    emu->Thread::powerOn();
-    emu->isDirty = true;
+    VAMIGA_PUBLIC
+    emu->put(CMD_POWER_ON);
 }
 
 void
 VAmiga::powerOff()
 {
-    VAMIGA_PUBLIC VAMIGA_SUSPEND
-    
-    emu->Thread::powerOff();
-    emu->isDirty = true;
+    VAMIGA_PUBLIC
+    emu->put(CMD_POWER_OFF);
 }
 
 void
 VAmiga::run()
 {
-    VAMIGA_PUBLIC VAMIGA_SUSPEND
-    
-    emu->run();
-    emu->isDirty = true;
+    VAMIGA_PUBLIC
+    emu->put(CMD_RUN);
 }
 
 void
 VAmiga::pause()
 {
-    VAMIGA_PUBLIC VAMIGA_SUSPEND
-    
-    emu->pause();
-    emu->isDirty = true;
+    VAMIGA_PUBLIC
+    emu->put(CMD_PAUSE);
 }
 
 void 
 VAmiga::hardReset()
 {
-    VAMIGA_PUBLIC VAMIGA_SUSPEND
-    
-    emu->hardReset();
-    emu->isDirty = true;
+    VAMIGA_PUBLIC
+    emu->put(CMD_HARD_RESET);
 }
 
 void
 VAmiga::softReset()
 {
-    VAMIGA_PUBLIC VAMIGA_SUSPEND
-    
-    emu->softReset();
-    emu->isDirty = true;
+    VAMIGA_PUBLIC
+    emu->put(CMD_SOFT_RESET);
 }
 
 void
