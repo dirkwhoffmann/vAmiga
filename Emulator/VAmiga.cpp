@@ -1011,6 +1011,20 @@ VideoPortAPI::getTexture(isize *nr, bool *lof, bool *prevlof) const
 // Peripherals (Keyboard)
 //
 
+const KeyboardInfo &
+KeyboardAPI::getInfo() const
+{
+    VAMIGA_PUBLIC
+    return keyboard->getInfo();
+}
+
+const KeyboardInfo &
+KeyboardAPI::getCachedInfo() const
+{
+    VAMIGA_PUBLIC
+    return keyboard->getCachedInfo();
+}
+
 bool
 KeyboardAPI::isPressed(KeyCode key) const
 {
@@ -1078,17 +1092,10 @@ KeyboardAPI::releaseAll()
     emu->put(Cmd(CMD_KEY_RELEASE_ALL));
 }
 
-/*
-void KeyboardAPI::autoType(const string &text)
-{
-    keyboard->autoType(text);
-}
-*/
-
-void KeyboardAPI::abortAutoTyping()
+void KeyboardAPI::abortTyping()
 {
     VAMIGA_PUBLIC
-    keyboard->abortAutoTyping();
+    keyboard->abortTyping();
 }
 
 

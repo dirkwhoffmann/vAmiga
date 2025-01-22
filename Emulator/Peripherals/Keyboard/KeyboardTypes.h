@@ -63,4 +63,11 @@ typedef struct
 }
 KeyboardConfig;
 
+typedef struct
+{
+    KeyboardState state;
+    u8 shiftReg;
+    
+} KeyboardInfo;
+
 }

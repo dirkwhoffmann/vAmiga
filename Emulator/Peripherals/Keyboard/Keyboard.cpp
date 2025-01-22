@@ -15,6 +15,16 @@
 namespace vamiga {
 
 void
+Keyboard::cacheInfo(KeyboardInfo &result) const
+{
+    {   SYNCHRONIZED
+        
+        result.state = state;
+        result.shiftReg = shiftReg;
+    }
+}
+
+void
 Keyboard::_didReset(bool hard)
 {    
     std::memset(keyDown, 0, sizeof(keyDown));
@@ -158,14 +168,6 @@ Keyboard::releaseAll()
     }
 }
 
-/*
-void
-Keyboard::autoType(KeyCode keycode, Cycle duration, Cycle delay)
-{
-    agnus.scheduleRel<SLOT_KEY>(delay, KEY_PRESS, duration << 8 | keycode);
-}
-*/
-
 void
 Keyboard::wakeUp()
 {
@@ -178,42 +180,9 @@ Keyboard::wakeUp()
 }
 
 void
-Keyboard::autoType(const string &text)
+Keyboard::abortTyping()
 {
-    debug(KEY_DEBUG, "autoType(%s)\n", text.c_str());
-    fatalError;
-    /*
-    auto trigger = agnus.clock;
-
-    for (char const &c: text) {
-
-        auto keys = C64Key::translate(c);
-
-        if (pending.free() > isize(2 * keys.size())) {
-
-            // Schedule key presses
-            for (C64Key &k : keys) {
-                pending.insert(trigger, Cmd(CMD_KEY_PRESS, KeyCmd { .keycode = u8(k.nr) }));
-            }
-
-            trigger += C64::msec(30);
-
-            // Schedule key releases
-            for (C64Key &k : keys) {
-                pending.insert(trigger, Cmd(CMD_KEY_RELEASE, KeyCmd { .keycode = u8(k.nr) }));
-            }
-            trigger += C64::msec(30);
-        }
-    }
-
-    if (!c64.hasEvent<SLOT_KEY>()) c64.scheduleImm<SLOT_KEY>(KEY_AUTO_TYPE);
-    */
-}
-
-void
-Keyboard::abortAutoTyping()
-{
-    debug(KEY_DEBUG, "abortAutoTyping()\n");
+    debug(KEY_DEBUG, "abortTyping()\n");
 
     {   SYNCHRONIZED
 

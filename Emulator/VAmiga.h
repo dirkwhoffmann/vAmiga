@@ -66,23 +66,6 @@ public:
      *  @param  os Output stream
      */
     void dump(Category category, std::ostream& os) const;
-    
-    /// @}
-    /// @name Resetting the Amiga
-    /// @{
-
-    /** @brief  Performs a hard reset
-     *
-     *  A hard reset affects all components. The effect is similar to
-     *  switching power off and on.
-     */
-    // void hardReset();
-
-    /** @brief  Performs a hard reset
-     *
-     *  A soft reset emulates the execution of the CPU's reset instruction.
-     */
-    // void softReset();
 
     /// @}
     /// @name Handling snapshots
@@ -852,8 +835,8 @@ public:
 
     /** @brief  Returns the component's current state.
      */
-    // const KeyboardInfo &getInfo() const;
-    // const KeyboardInfo &getCachedInfo() const;
+    const KeyboardInfo &getInfo() const;
+    const KeyboardInfo &getCachedInfo() const;
 
     /** @brief  Checks if a key is currently pressed.
      *  @param  key     The key to check.
@@ -884,14 +867,9 @@ public:
      */
     void releaseAll();
 
-    /** @brief  Uses the auto-typing daemon to type a string.
-     *  @param  text    The text to type.
+    /** @brief  Deletes all pending keyboard events
      */
-    // void autoType(const string &text);
-
-    /** @brief  Aborts any active auto-typing activity.
-     */
-    void abortAutoTyping();
+    void abortTyping();
 };
 
 

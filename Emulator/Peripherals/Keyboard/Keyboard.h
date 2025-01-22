@@ -17,7 +17,7 @@
 
 namespace vamiga {
 
-class Keyboard final : public SubComponent {
+class Keyboard final : public SubComponent, public Inspectable<KeyboardInfo> {
 
     Descriptions descriptions = {{
 
@@ -120,6 +120,15 @@ public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
 
+    
+    //
+    // Methods from Inspectable
+    //
+
+public:
+
+    void cacheInfo(KeyboardInfo &result) const override;
+    
 
     //
     // Methods from Configurable
@@ -153,7 +162,7 @@ public:
     void autoType(const string &text);
 
     // Discards all pending key events
-    void abortAutoTyping();
+    void abortTyping();
     
 private:
     
