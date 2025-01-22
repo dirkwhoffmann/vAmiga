@@ -43,14 +43,15 @@ Thumbnail::take(Amiga &amiga, isize dx, isize dy)
 bool
 Snapshot::isCompatible(const std::filesystem::path &path)
 {
-    return true;
+    auto suffix = util::uppercased(path.extension().string());
+    return suffix == ".VAMIGA" && util::matchingFileHeader(path, "VASNAP");
 }
 
 bool
 Snapshot::isCompatible(const u8 *buf, isize len)
 {
     if (len < isizeof(SnapshotHeader)) return false;
-    return util::matchingBufferHeader(buf, string("VASNAP"));
+    return util::matchingBufferHeader(buf, "VASNAP");
 }
 
 bool

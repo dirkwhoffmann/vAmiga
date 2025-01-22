@@ -29,42 +29,17 @@ namespace vamiga {
 FileType
 MediaFile::type(const fs::path &path)
 {
-    Buffer<u8> buffer(path);
-
-    if (!buffer.empty()) {
-
-        if (Snapshot::isCompatible(path) &&
-            Snapshot::isCompatible(buffer)) return FILETYPE_SNAPSHOT;
-
-        if (Script::isCompatible(path) &&
-            Script::isCompatible(buffer)) return FILETYPE_SCRIPT;
-
-        if (ADFFile::isCompatible(path) &&
-            ADFFile::isCompatible(buffer)) return FILETYPE_ADF;
-
-        if (EADFFile::isCompatible(path) &&
-            EADFFile::isCompatible(buffer)) return FILETYPE_EADF;
-
-        if (HDFFile::isCompatible(path) &&
-            HDFFile::isCompatible(buffer)) return FILETYPE_HDF;
-
-        if (IMGFile::isCompatible(path) &&
-            IMGFile::isCompatible(buffer)) return FILETYPE_IMG;
-
-        if (STFile::isCompatible(path) &&
-            STFile::isCompatible(buffer)) return FILETYPE_ST;
-
-        if (DMSFile::isCompatible(path) &&
-            DMSFile::isCompatible(buffer)) return FILETYPE_DMS;
-
-        if (EXEFile::isCompatible(path) &&
-            EXEFile::isCompatible(buffer)) return FILETYPE_EXE;
-
-        if (RomFile::isCompatible(path) &&
-            RomFile::isCompatible(buffer)) return FILETYPE_ROM;
-
-        if (Folder::isCompatible(path)) return FILETYPE_DIR;
-    }
+    if (Snapshot::isCompatible(path)) return FILETYPE_SNAPSHOT;
+    if (Script::isCompatible(path))   return FILETYPE_SCRIPT;
+    if (ADFFile::isCompatible(path))  return FILETYPE_ADF;
+    if (EADFFile::isCompatible(path)) return FILETYPE_EADF;
+    if (HDFFile::isCompatible(path))  return FILETYPE_HDF;
+    if (IMGFile::isCompatible(path))  return FILETYPE_IMG;
+    if (STFile::isCompatible(path))   return FILETYPE_ST;
+    if (DMSFile::isCompatible(path))  return FILETYPE_DMS;
+    if (EXEFile::isCompatible(path))  return FILETYPE_EXE;
+    if (RomFile::isCompatible(path))  return FILETYPE_ROM;
+    if (Folder::isCompatible(path))   return FILETYPE_DIR;
 
     return FILETYPE_UNKNOWN;
 }

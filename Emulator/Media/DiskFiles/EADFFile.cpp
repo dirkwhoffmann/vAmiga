@@ -25,7 +25,11 @@ const std::vector<string> EADFFile::extAdfHeaders =
 bool
 EADFFile::isCompatible(const std::filesystem::path &path)
 {
-    return true;
+    for (auto &header : extAdfHeaders) {
+
+        if (util::matchingFileHeader(path, header)) return true;
+    }
+    return false;
 }
 
 bool

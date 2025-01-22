@@ -72,7 +72,16 @@ const u8 RomFile::encrRomHeaders[1][11] = {
 bool
 RomFile::isCompatible(const std::filesystem::path &path)
 {
-    return true;
+    auto size = util::getSizeOfFile(path);
+    
+    if (size == KB(8) || size == KB(16) ||              // BOOT ROMs
+        size == KB(256) || size == KB(512) ||           // Kickstart ROMs
+        size == KB(256) + 11 || size == KB(512) + 11) { // Encrypted ROMs
+        return false;
+    }
+        
+    Buffer<u8> buffer(path);
+    return isCompatible(buffer);
 }
 
 bool

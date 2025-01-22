@@ -49,7 +49,9 @@ isize numDirectoryItems(const fs::path &path);
 std::vector<fs::path> files(const fs::path &path, const string &suffix = "");
 std::vector<fs::path> files(const fs::path &path, std::vector <string> &suffixes);
 
-// Checks the header signature (magic bytes) of a stream or buffer
+// Checks the header signature (magic bytes) of a file, stream, or buffer
+bool matchingFileHeader(const std::filesystem::path &path, const u8 *header, isize len, isize offset = 0);
+bool matchingFileHeader(const std::filesystem::path &path, const string &header, isize offset = 0);
 bool matchingStreamHeader(std::istream &is, const u8 *header, isize len, isize offset = 0);
 bool matchingStreamHeader(std::istream &is, const string &header, isize offset = 0);
 bool matchingBufferHeader(const u8 *buffer, const u8 *header, isize len, isize offset = 0);

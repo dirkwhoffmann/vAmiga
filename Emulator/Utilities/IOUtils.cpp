@@ -131,6 +131,20 @@ files(const fs::path &path, std::vector <string> &suffixes)
 }
 
 bool
+matchingFileHeader(const std::filesystem::path &path, const u8 *header, isize len, isize offset)
+{
+    std::ifstream file(path, std::ios::binary);
+    return file.is_open() ? matchingStreamHeader(file, header, len, offset) : false;
+}
+
+bool
+matchingFileHeader(const std::filesystem::path &path, const string &header, isize offset)
+{
+    std::ifstream file(path, std::ios::binary);
+    return file.is_open() ? matchingStreamHeader(file, header, offset) : false;
+}
+
+bool
 matchingStreamHeader(std::istream &is, const u8 *header, isize len, isize offset)
 {
     assert(header != nullptr);
