@@ -2056,12 +2056,8 @@ VAmiga::softReset()
 void
 VAmiga::halt()
 {
-    {   VAMIGA_PUBLIC_SUSPEND
-        
-        // Signal the emulator to halt
-        emu->halt();
-        
-    }   // Leave suspended state
+    // Signal the emulator to halt
+    emu->put(CMD_HALT);
     
     // Wait for the thread to terminate
     emu->join();

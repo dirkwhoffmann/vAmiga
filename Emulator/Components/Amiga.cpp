@@ -761,7 +761,8 @@ Amiga::update(CmdQueue &queue)
             case CMD_PAUSE:
             case CMD_WARP_ON:
             case CMD_WARP_OFF:
-                
+            case CMD_HALT:
+
                 processCommand(cmd);
                 break;
 
@@ -1120,6 +1121,11 @@ Amiga::processCommand(const Cmd &cmd)
                 throw std::runtime_error("Source 0 is reserved for implementing config.warpMode.");
             }
             emulator.warpOff(cmd.value);
+            break;
+
+        case CMD_HALT:
+
+            emulator.halt();
             break;
 
         default:
