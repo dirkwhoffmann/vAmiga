@@ -78,9 +78,9 @@ template <class T> struct Allocator {
     void uncompress(isize n, isize offset, isize uncompressedSize);
     isize uncompressedSize(isize n = 2, isize offset = 0);
 
-    // Deprecated
-    void compress_old(isize n = 2, isize offset = 0);
-    void uncompress_old(isize n = 2, isize offset = 0, isize expectedSize = 0);
+    // Old code
+    [[deprecated]] void compress_old(isize n = 2, isize offset = 0);
+    [[deprecated]] void uncompress_old(isize n = 2, isize offset = 0, isize expectedSize = 0);
 };
 
 template <class T> struct Buffer : public Allocator <T> {

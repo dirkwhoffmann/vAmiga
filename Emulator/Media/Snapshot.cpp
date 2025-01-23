@@ -162,25 +162,25 @@ Snapshot::compress()
 {
     if (!isCompressed()) {
 
-        auto snap2 = *this;
+        auto snap2 = *this; // REMOVE AFTER TESTING
         
-        debug(SNP_DEBUG, "Compressing %ld bytes (hash: 0x%x)...", data.size, data.fnv32());
+        debug(SNP_DEBUG, "Compressing %ld bytes (hash: %x)...", data.size, data.fnv32());
 
         {   auto watch = util::StopWatch(SNP_DEBUG, "");
             
-            data.compress(2, sizeof(SnapshotHeader));
+            data.compress_old(2, sizeof(SnapshotHeader));
             getHeader()->compressed = true;
         }
-        debug(SNP_DEBUG, "Compressed size: %ld bytes (hash: 0x%x)\n", data.size, data.fnv32());
+        debug(SNP_DEBUG, "Compressed size: %ld bytes (hash: %x)\n", data.size, data.fnv32());
         
-        debug(SNP_DEBUG, "Compressing %ld bytes (OLD) (hash: 0x%x)...", snap2.data.size, snap2.data.fnv32());
+        debug(SNP_DEBUG, "OLD: Compressing %ld bytes (hash: %x)...", snap2.data.size, snap2.data.fnv32());
 
         {   auto watch = util::StopWatch(SNP_DEBUG, "");
             
-            snap2.data.compress_old(2, sizeof(SnapshotHeader));
+            snap2.data.compress(2, sizeof(SnapshotHeader));
             snap2.getHeader()->compressed = true;
         }
-        debug(SNP_DEBUG, "Compressed size (OLD): %ld bytes (hash: 0x%x)\n", snap2.data.size, snap2.data.fnv32());
+        debug(SNP_DEBUG, "OLD: Compressed size: %ld bytes (hash: %x)\n", snap2.data.size, snap2.data.fnv32());
     }
 }
 void
@@ -188,22 +188,36 @@ Snapshot::uncompress()
 {
     if (isCompressed()) {
         
+        auto snap2 = *this;
+
         isize expectedSize = getHeader()->rawSize;
         
-        debug(SNP_DEBUG, "Uncompressing %ld bytes...", data.size);
+        debug(SNP_DEBUG, "Uncompressing %ld bytes (hash: %x)...", data.size, data.fnv32());
         
         {   auto watch = util::StopWatch(SNP_DEBUG, "");
             
-            data.uncompress(2, sizeof(SnapshotHeader), expectedSize);
+            data.uncompress(2, sizeof(SnapshotHeader));
             getHeader()->compressed = false;
         }
-        debug(SNP_DEBUG, "Uncompressed size: %ld bytes (hash: 0x%x)\n", data.size, data.fnv32());
-        
+        debug(SNP_DEBUG, "Uncompressed size: %ld bytes (hash: %x)\n", data.size, data.fnv32());
+
         if (getHeader()->rawSize != expectedSize) {
          
             warn("Snaphot size: %ld. Expected: %ld\n", data.size, expectedSize);
             fatalError;
         }
+        
+        //
+        // REMOVE AFTER TESTING
+        //
+        debug(SNP_DEBUG, "OLD: Uncompressing %ld bytes (hash: %x)...", snap2.data.size, snap2.data.fnv32());
+        
+        {   auto watch = util::StopWatch(SNP_DEBUG, "");
+            
+            snap2.data.uncompress_old(2, sizeof(SnapshotHeader), expectedSize);
+            snap2.getHeader()->compressed = false;
+        }
+        debug(SNP_DEBUG, "OLD: Uncompressed size: %ld bytes (hash: %x)\n", data.size, snap2.data.fnv32());
     }
 }
 

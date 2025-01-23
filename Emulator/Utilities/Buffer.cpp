@@ -221,34 +221,38 @@ Allocator<T>::compress(isize n, isize offset, isize compressedSize)
     T prev = 0;
     isize repetitions = 0;
  
-    // Make a copy of the original buffer
-    Buffer<T> buf(ptr, size);
-    
-    // Resize the buffer to the target size
-    resize(compressedSize);
-    
+    // Create the target buffer
+    Buffer<T> buf(compressedSize);
+        
     isize j = std::min(offset, size);
     auto encode = [&](T element, isize count) {
         
-        for (isize k = 0; k < std::min(count, n); k++) ptr[j++] = element;
-        if (count >= n) ptr[j++] = T(count - n);
+        for (isize k = 0; k < std::min(count, n); k++) buf[j++] = element;
+        if (count >= n) buf[j++] = T(count - n);
     };
     
+    // Copy the elements before the offset position one by one
+    for (isize k = 0; k < std::min(offset, size); k++) buf[k] = ptr[k];
+    
     // Perform run-length encoding
-    for (isize i = offset; i < buf.size; i++) {
+    for (isize i = offset; i < size; i++) {
         
-        if (buf[i] == prev && repetitions < maxChunkSize) {
+        if (ptr[i] == prev && repetitions < maxChunkSize) {
             
             repetitions++;
             
         } else {
             
             encode(prev, repetitions);
-            prev = buf[i];
+            prev = ptr[i];
             repetitions = 1;
         }
     }
     encode(prev, repetitions);
+    
+    // Swap buffers
+    std::swap(ptr, buf.ptr);
+    std::swap(size, buf.size);
 }
 
 template <class T> isize
@@ -324,9 +328,9 @@ Allocator<T>::uncompress(isize n, isize offset, isize uncompressedSize)
     Buffer<T> compressed(ptr, size);
     
     // Resize the buffer to the target size
-    resize(uncompressedSize);
+    alloc(uncompressedSize);
     
-    // Copy elements one by one up to the offset position
+    // Copy the elements before the offset position one by one
     for (isize k = 0; k < std::min(offset, compressed.size); k++) ptr[k] = compressed[k];
     
     // Decode the rest
@@ -376,34 +380,31 @@ Allocator<T>::uncompress_old(isize n, isize offset, isize expectedSize)
     
     std::vector<T> vec;
     
-    { util::StopWatch watch("OLD CODE");
+    prev = 0;
+    repetitions = 0;
+    
+    
+    // Speed up by starting with a big enough container
+    if (expectedSize) vec.reserve(expectedSize);
+    
+    auto decode_old = [&](T element, isize count) {
         
-        prev = 0;
-        repetitions = 0;
+        for (isize i = 0; i < count; i++) vec.push_back(element);
+    };
+    
+    // Skip everything up to the offset position
+    for (isize i = 0; i < std::min(offset, size); i++) vec.push_back(ptr[i]);
+    
+    for (isize i = offset; i < size; i++) {
         
+        vec.push_back(ptr[i]);
+        repetitions = prev != ptr[i] ? 1 : repetitions + 1;
+        prev = ptr[i];
         
-        // Speed up by starting with a big enough container
-        if (expectedSize) vec.reserve(expectedSize);
-        
-        auto decode_old = [&](T element, isize count) {
+        if (repetitions == n && i < size - 1) {
             
-            for (isize i = 0; i < count; i++) vec.push_back(element);
-        };
-        
-        // Skip everything up to the offset position
-        for (isize i = 0; i < std::min(offset, size); i++) vec.push_back(ptr[i]);
-        
-        for (isize i = offset; i < size; i++) {
-            
-            vec.push_back(ptr[i]);
-            repetitions = prev != ptr[i] ? 1 : repetitions + 1;
-            prev = ptr[i];
-            
-            if (repetitions == n && i < size - 1) {
-                
-                decode_old(prev, isize(ptr[++i]));
-                repetitions = 0;
-            }
+            decode_old(prev, isize(ptr[++i]));
+            repetitions = 0;
         }
     }
     
