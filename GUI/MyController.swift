@@ -348,7 +348,7 @@ extension MyController {
             
             if value != 0 {
 
-                if let fileUrl = document?.fileURL, let url = fileUrl {
+                if let fileUrl = document?.fileURL, let _ = fileUrl {
                     renderer.canvas.open(delay: 0)
                 } else {
                     renderer.canvas.open(delay: 1.5)

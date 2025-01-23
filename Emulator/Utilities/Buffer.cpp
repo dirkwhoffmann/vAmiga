@@ -11,7 +11,6 @@
 #include "Buffer.h"
 #include "IOUtils.h"
 #include "MemUtils.h"
-#include "Chrono.h"
 #include <fstream>
 
 namespace vamiga::util {
@@ -22,7 +21,7 @@ Allocator<T>::operator= (const Allocator<T>& other)
     // Reallocate buffer if needed
     if (size != other.size) alloc(other.size);
     assert(size == other.size);
-    
+
     // Copy buffer
     if (size) memcpy(ptr, other.ptr, size);
     return *this;
@@ -214,200 +213,74 @@ Allocator<T>::patch(const char *seq, const char *subst)
 }
 
 template <class T> void
-Allocator<T>::compress(isize n, isize offset, isize compressedSize)
-{
-    const auto maxChunkSize = isize(std::numeric_limits<T>::max());
-    
-    T prev = 0;
-    isize repetitions = 0;
- 
-    // Create the target buffer
-    Buffer<T> buf(compressedSize);
-        
-    isize j = std::min(offset, size);
-    auto encode = [&](T element, isize count) {
-        
-        for (isize k = 0; k < std::min(count, n); k++) buf[j++] = element;
-        if (count >= n) buf[j++] = T(count - n);
-    };
-    
-    // Copy the elements before the offset position one by one
-    for (isize k = 0; k < std::min(offset, size); k++) buf[k] = ptr[k];
-    
-    // Perform run-length encoding
-    for (isize i = offset; i < size; i++) {
-        
-        if (ptr[i] == prev && repetitions < maxChunkSize) {
-            
-            repetitions++;
-            
-        } else {
-            
-            encode(prev, repetitions);
-            prev = ptr[i];
-            repetitions = 1;
-        }
-    }
-    encode(prev, repetitions);
-    
-    // Swap buffers
-    std::swap(ptr, buf.ptr);
-    std::swap(size, buf.size);
-}
-
-template <class T> isize
-Allocator<T>::compressedSize(isize n, isize offset)
-{
-    const auto maxChunkSize = isize(std::numeric_limits<T>::max());
-
-    T prev = 0;
-    isize repetitions = 0;
-    isize count = std::min(offset, size);
-    
-    for (isize i = offset; i < size; i++) {
-        
-        if (ptr[i] == prev && repetitions < maxChunkSize) {
-            
-            repetitions++;
-            
-        } else {
-            
-            count += std::min(repetitions, n) + (repetitions >= n ? 1 : 0);
-            prev = ptr[i];
-            repetitions = 1;
-        }
-    }
-    return count + std::min(repetitions, n) + (repetitions >= n ? 1 : 0);
-}
-
-template <class T> void
-Allocator<T>::compress_old(isize n, isize offset)
+Allocator<T>::compress(isize n, isize offset)
 {
     T prev = 0;
     isize repetitions = 0;
     std::vector<T> vec;
     vec.reserve(size);
-    
+
     auto encode = [&](T element, isize count) {
         
         for (isize i = 0; i < std::min(count, n); i++) vec.push_back(element);
         if (count >= n) vec.push_back(T(count - n));
     };
-    
+
     // Skip everything up to the offset position
     for (isize i = 0; i < std::min(offset, size); i++) vec.push_back(ptr[i]);
-    
+
     // Perform run-length encoding
     auto maxChunkSize = isize(std::numeric_limits<T>::max());
     for (isize i = offset; i < size; i++) {
-        
+
         if (ptr[i] == prev && repetitions < maxChunkSize) {
-            
+
             repetitions++;
-            
+
         } else {
-            
+
             encode(prev, repetitions);
             prev = ptr[i];
             repetitions = 1;
         }
     }
     encode(prev, repetitions);
-    
+
     // Replace old data
     init(vec);
 }
 
 template <class T> void
-Allocator<T>::uncompress(isize n, isize offset, isize uncompressedSize)
+Allocator<T>::uncompress(isize n, isize offset, isize expectedSize)
 {
     T prev = 0;
     isize repetitions = 0;
-    
-    // Make a copy of the original buffer
-    Buffer<T> compressed(ptr, size);
-    
-    // Resize the buffer to the target size
-    alloc(uncompressedSize);
-    
-    // Copy the elements before the offset position one by one
-    for (isize k = 0; k < std::min(offset, compressed.size); k++) ptr[k] = compressed[k];
-    
-    // Decode the rest
-    for (isize i = offset, j = offset; i < compressed.size; i++) {
-
-        ptr[j++] = compressed[i];
-        repetitions = prev != compressed[i] ? 1 : repetitions + 1;
-        prev = compressed[i];
-        
-        // 'n' matching symbols in a row indicate that a run-length follows
-        if (repetitions == n && i < compressed.size - 1) {
-            
-            auto missing = isize(compressed[++i]);
-            for (isize k = 0; k < missing; k++) ptr[j++] = prev;
-            repetitions = 0;
-        }
-    }
-}
-
-template <class T> isize
-Allocator<T>::uncompressedSize(isize n, isize offset)
-{
-    T prev = 0;
-    isize repetitions = 0;
-    isize count = std::min(offset, size);
-    
-    for (isize i = offset; i < size; i++) {
-        
-        count++;
-        repetitions = prev != ptr[i] ? 1 : repetitions + 1;
-        prev = ptr[i];
-        
-        if (repetitions == n && i < size - 1) {
-            
-            count += isize(ptr[++i]);
-            repetitions = 0;
-        }
-    }
-    return count;
-}
-
-template <class T> void
-Allocator<T>::uncompress_old(isize n, isize offset, isize expectedSize)
-{
-    T prev = 0;
-    isize repetitions = 0;
-    
     std::vector<T> vec;
-    
-    prev = 0;
-    repetitions = 0;
-    
-    
+
     // Speed up by starting with a big enough container
     if (expectedSize) vec.reserve(expectedSize);
-    
-    auto decode_old = [&](T element, isize count) {
+
+    auto decode = [&](T element, isize count) {
         
         for (isize i = 0; i < count; i++) vec.push_back(element);
     };
-    
+
     // Skip everything up to the offset position
     for (isize i = 0; i < std::min(offset, size); i++) vec.push_back(ptr[i]);
-    
+
     for (isize i = offset; i < size; i++) {
-        
+
         vec.push_back(ptr[i]);
         repetitions = prev != ptr[i] ? 1 : repetitions + 1;
         prev = ptr[i];
-        
+
         if (repetitions == n && i < size - 1) {
-            
-            decode_old(prev, isize(ptr[++i]));
+
+            decode(prev, isize(ptr[++i]));
             repetitions = 0;
         }
     }
-    
+
     // Replace old data
     init(vec);
 }
@@ -433,11 +306,7 @@ template void Allocator<T>::copy(T *buf, isize offset, isize len) const; \
 template void Allocator<T>::patch(const u8 *seq, const u8 *subst); \
 template void Allocator<T>::patch(const char *seq, const char *subst); \
 template void Allocator<T>::compress(isize, isize); \
-template void Allocator<T>::compress_old(isize, isize); \
-template isize Allocator<T>::compressedSize(isize, isize); \
-template void Allocator<T>::uncompress(isize, isize, isize); \
-template isize Allocator<T>::uncompressedSize(isize, isize); \
-template void Allocator<T>::uncompress_old(isize, isize, isize);
+template void Allocator<T>::uncompress(isize, isize, isize);
 
 INSTANTIATE_ALLOCATOR(u8)
 INSTANTIATE_ALLOCATOR(u32)
