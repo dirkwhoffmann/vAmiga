@@ -162,6 +162,8 @@ Snapshot::compress()
 {
     if (!isCompressed()) {
 
+        auto snap2 = *this;
+        
         debug(SNP_DEBUG, "Compressing %ld bytes (hash: 0x%x)...", data.size, data.fnv32());
 
         {   auto watch = util::StopWatch(SNP_DEBUG, "");
@@ -169,7 +171,16 @@ Snapshot::compress()
             data.compress(2, sizeof(SnapshotHeader));
             getHeader()->compressed = true;
         }
-        debug(SNP_DEBUG, "Compressed size: %ld bytes\n", data.size);
+        debug(SNP_DEBUG, "Compressed size: %ld bytes (hash: 0x%x)\n", data.size, data.fnv32());
+        
+        debug(SNP_DEBUG, "Compressing %ld bytes (OLD) (hash: 0x%x)...", snap2.data.size, snap2.data.fnv32());
+
+        {   auto watch = util::StopWatch(SNP_DEBUG, "");
+            
+            snap2.data.compress_old(2, sizeof(SnapshotHeader));
+            snap2.getHeader()->compressed = true;
+        }
+        debug(SNP_DEBUG, "Compressed size (OLD): %ld bytes (hash: 0x%x)\n", snap2.data.size, snap2.data.fnv32());
     }
 }
 void

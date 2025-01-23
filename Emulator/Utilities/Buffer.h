@@ -45,7 +45,7 @@ template <class T> struct Allocator {
     void init(const std::vector<T> &vector);
     void init(const fs::path &path);
     void init(const fs::path &path, const string &name);
-
+    
     // Resizes an existing buffer
     void resize(isize elements);
     void resize(isize elements, T pad);
@@ -67,10 +67,20 @@ template <class T> struct Allocator {
     u64 fnv64() const { return ptr ? util::fnv64((u8 *)ptr, bytesize()) : 0; }
     u16 crc16() const { return ptr ? util::crc16((u8 *)ptr, bytesize()) : 0; }
     u32 crc32() const { return ptr ? util::crc32((u8 *)ptr, bytesize()) : 0; }
+    
+    // Compresses the buffer
+    void compress(isize n = 2, isize offset = 0) { compress(n, offset, compressedSize(n, offset)); }
+    void compress(isize n, isize offset, isize compressedSize);
+    isize compressedSize(isize n = 2, isize offset = 0);
+    
+    // Uncompresses the buffer
+    void uncompress(isize n = 2, isize offset = 0) { uncompress(n, offset, uncompressedSize(n, offset)); }
+    void uncompress(isize n, isize offset, isize uncompressedSize);
+    isize uncompressedSize(isize n = 2, isize offset = 0);
 
-    // Compresses or uncompresses a buffer
-    void compress(isize n = 2, isize offset = 0);
-    void uncompress(isize n = 2, isize offset = 0, isize expectedSize = 0);
+    // Deprecated
+    void compress_old(isize n = 2, isize offset = 0);
+    void uncompress_old(isize n = 2, isize offset = 0, isize expectedSize = 0);
 };
 
 template <class T> struct Buffer : public Allocator <T> {
