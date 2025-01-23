@@ -215,25 +215,60 @@ Allocator<T>::patch(const char *seq, const char *subst)
 template <class T> void
 Allocator<T>::compress(isize n, isize offset)
 {
+    /* This function performs a run-length encoding according to the following
+     * scheme:
+     *
+     * k < n:   AA ... AA B   ->   AA ... AA B
+     *          <-- k -->          <-- k -->
+     *
+     * k >= n:  AA ... AA B   ->   AA ... AA [max] ... [max] [l] B
+     *          <-- k -->          <-- n --> <--- sum = k-n --->
+     *
+     *                             with max = std::numeric_limits<T>::max()
+     *
+     * Note: For k = n, the second case implies:
+     *
+     *          AA ... AA B   ->   AA ... AA [0] B
+     *          <-- n -->          <-- n -->
+     *
+     * In this case, compression has a negative effect. Examples:
+     *
+     *      ABBCCCDDDDEEEEE   ->   ABB0CC1DD2EE3
+     *         AABBCCDDEEFF   ->   AA0BB0CC0DD0EE0FF0
+     */
+
+    const auto max = isize(std::numeric_limits<T>::max());
     T prev = 0;
     isize repetitions = 0;
+
     std::vector<T> vec;
     vec.reserve(size);
 
     auto encode = [&](T element, isize count) {
         
-        for (isize i = 0; i < std::min(count, n); i++) vec.push_back(element);
-        if (count >= n) vec.push_back(T(count - n));
+        // Encode up to n symbols in plain text
+        for (isize k = 0; k < std::min(n, count); k++) vec.push_back(element);
+        
+        count -= n;
+        
+        // Append the run length sequence
+        while (count >= 0) {
+            
+            auto runlength = std::min(count, max);
+            vec.push_back(T(runlength));
+            count -= runlength;
+            
+            if (runlength != max) break;
+        }
     };
 
     // Skip everything up to the offset position
-    for (isize i = 0; i < std::min(offset, size); i++) vec.push_back(ptr[i]);
-
+    vec.insert(vec.end(), ptr, ptr + std::min(offset, size));
+    
     // Perform run-length encoding
-    auto maxChunkSize = isize(std::numeric_limits<T>::max());
     for (isize i = offset; i < size; i++) {
 
-        if (ptr[i] == prev && repetitions < maxChunkSize) {
+        if (ptr[i] == prev) {
 
             repetitions++;
 
@@ -253,6 +288,7 @@ Allocator<T>::compress(isize n, isize offset)
 template <class T> void
 Allocator<T>::uncompress(isize n, isize offset, isize expectedSize)
 {
+    const auto max = isize(std::numeric_limits<T>::max());
     T prev = 0;
     isize repetitions = 0;
     std::vector<T> vec;
@@ -260,23 +296,23 @@ Allocator<T>::uncompress(isize n, isize offset, isize expectedSize)
     // Speed up by starting with a big enough container
     if (expectedSize) vec.reserve(expectedSize);
 
-    auto decode = [&](T element, isize count) {
-        
-        for (isize i = 0; i < count; i++) vec.push_back(element);
-    };
-
     // Skip everything up to the offset position
-    for (isize i = 0; i < std::min(offset, size); i++) vec.push_back(ptr[i]);
-
+    vec.insert(vec.end(), ptr, ptr + std::min(offset, size));
+    
     for (isize i = offset; i < size; i++) {
 
         vec.push_back(ptr[i]);
         repetitions = prev != ptr[i] ? 1 : repetitions + 1;
         prev = ptr[i];
 
-        if (repetitions == n && i < size - 1) {
+        if (repetitions == n) {
 
-            decode(prev, isize(ptr[++i]));
+            while (i < size - 1) {
+                
+                auto runlength = isize(ptr[++i]);
+                vec.insert(vec.end(), runlength, prev);
+                if (runlength != max) break;
+            }
             repetitions = 0;
         }
     }
