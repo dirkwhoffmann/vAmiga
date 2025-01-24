@@ -177,10 +177,10 @@ Paula::pokePOTGO(u16 value)
     }
 }
 
-template void Paula::pokeINTREQ<ACCESSOR_CPU>(u16 value);
-template void Paula::pokeINTREQ<ACCESSOR_AGNUS>(u16 value);
-template void Paula::pokeINTENA<ACCESSOR_CPU>(u16 value);
-template void Paula::pokeINTENA<ACCESSOR_AGNUS>(u16 value);
+template void Paula::pokeINTREQ<Accessor::CPU>(u16 value);
+template void Paula::pokeINTREQ<Accessor::AGNUS>(u16 value);
+template void Paula::pokeINTENA<Accessor::CPU>(u16 value);
+template void Paula::pokeINTENA<Accessor::AGNUS>(u16 value);
 template u16 Paula::peekPOTxDAT<0>() const;
 template u16 Paula::peekPOTxDAT<1>() const;
 

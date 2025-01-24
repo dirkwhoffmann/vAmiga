@@ -183,9 +183,9 @@ Sequencer::setDIWHIGH(u16 value)
     denise.debugger.updateDiwV(vstrt, vstop);
 }
 
-template void Sequencer::pokeDDFSTRT<ACCESSOR_CPU>(u16 value);
-template void Sequencer::pokeDDFSTRT<ACCESSOR_AGNUS>(u16 value);
-template void Sequencer::pokeDDFSTOP<ACCESSOR_CPU>(u16 value);
-template void Sequencer::pokeDDFSTOP<ACCESSOR_AGNUS>(u16 value);
+template void Sequencer::pokeDDFSTRT<Accessor::CPU>(u16 value);
+template void Sequencer::pokeDDFSTRT<Accessor::AGNUS>(u16 value);
+template void Sequencer::pokeDDFSTOP<Accessor::CPU>(u16 value);
+template void Sequencer::pokeDDFSTOP<Accessor::AGNUS>(u16 value);
 
 }

@@ -580,25 +580,25 @@ NSString *EventSlotName(NSInteger slot)
     catch (Error &error) { [ex save:error]; }
 }
 
-- (MemorySource)memSrc:(Accessor)accessor addr:(NSInteger)addr
+- (MemSrc)memSrc:(Accessor)accessor addr:(NSInteger)addr
 {
-    assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
+    assert(accessor == Accessor::CPU || accessor == Accessor::AGNUS);
     
-    if (accessor == ACCESSOR_CPU) {
-        return [self mem]->debugger.getMemSrc(ACCESSOR_CPU, (u32)addr);
+    if (accessor == Accessor::CPU) {
+        return [self mem]->debugger.getMemSrc(Accessor::CPU, (u32)addr);
     } else {
-        return [self mem]->debugger.getMemSrc(ACCESSOR_AGNUS, (u32)addr);
+        return [self mem]->debugger.getMemSrc(Accessor::AGNUS, (u32)addr);
     }
 }
 
 - (NSInteger)spypeek16:(Accessor)accessor addr:(NSInteger)addr
 {
-    assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
+    assert(accessor == Accessor::CPU || accessor == Accessor::AGNUS);
     
-    if (accessor == ACCESSOR_CPU) {
-        return [self mem]->debugger.spypeek16(ACCESSOR_CPU, (u32)addr);
+    if (accessor == Accessor::CPU) {
+        return [self mem]->debugger.spypeek16(Accessor::CPU, (u32)addr);
     } else {
-        return [self mem]->debugger.spypeek16(ACCESSOR_AGNUS, (u32)addr);
+        return [self mem]->debugger.spypeek16(Accessor::AGNUS, (u32)addr);
     }
 }
 
@@ -610,7 +610,7 @@ NSString *EventSlotName(NSInteger slot)
 
 - (NSString *)ascDump:(Accessor)accessor addr:(NSInteger)addr bytes:(NSInteger)bytes
 {
-    assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
+    assert(accessor == Accessor::CPU || accessor == Accessor::AGNUS);
     
     auto str = [self mem]->debugger.ascDump(accessor, (u32)addr, bytes);
     return @(str.c_str());
@@ -618,7 +618,7 @@ NSString *EventSlotName(NSInteger slot)
 
 - (NSString *)hexDump:(Accessor)accessor addr: (NSInteger)addr bytes:(NSInteger)bytes
 {
-    assert(accessor == ACCESSOR_CPU || accessor == ACCESSOR_AGNUS);
+    assert(accessor == Accessor::CPU || accessor == Accessor::AGNUS);
     
     auto str = [self mem]->debugger.hexDump(accessor, (u32)addr, bytes);
     return @(str.c_str());

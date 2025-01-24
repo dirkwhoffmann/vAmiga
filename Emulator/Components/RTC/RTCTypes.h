@@ -40,9 +40,9 @@ struct RTCRevisionEnum : util::Reflection<RTCRevisionEnum, RTCRevision>
     static constexpr auto maxVal = (long)RTCRevision::RICOH;
     
     static const char *prefix() { return "RTC"; }
-    static const char *_key(long value)
+    static const char *_key(RTCRevision value)
     {
-        switch (RTCRevision(value)) {
+        switch (value) {
                 
             case RTCRevision::NONE:   return "NONE";
             case RTCRevision::OKI:    return "OKI";
@@ -50,9 +50,9 @@ struct RTCRevisionEnum : util::Reflection<RTCRevisionEnum, RTCRevision>
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(RTCRevision value)
     {
-        switch (RTCRevision(value)) {
+        switch (value) {
                 
             case RTCRevision::NONE:   return "No real-time clock";
             case RTCRevision::OKI:    return "MSM6242B";

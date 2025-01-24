@@ -233,8 +233,8 @@ CopperDebugger::disassemble(u32 addr, bool symbolic) const
         
     } else {
         
-        auto word1 = mem.spypeek16 <ACCESSOR_AGNUS> (addr);
-        auto word2 = mem.spypeek16 <ACCESSOR_AGNUS> (addr + 2);
+        auto word1 = mem.spypeek16 <Accessor::AGNUS> (addr);
+        auto word2 = mem.spypeek16 <Accessor::AGNUS> (addr + 2);
         
         auto hex1 = util::hexstr <4> (word1);
         auto hex2 = util::hexstr <4> (word2);

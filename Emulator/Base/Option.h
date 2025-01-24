@@ -105,7 +105,7 @@ class EnumParser : public OptionParser {
     virtual string asString() override { return T::key(E(arg)); }
     virtual string keyList() override { return T::keyList(); }
     virtual string argList() override { return T::argList(); }
-    virtual string help(isize item) override { return T::help(item); }
+    virtual string help(isize item) override { return T::help(E(item)); }
 };
 
 }

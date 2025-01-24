@@ -108,21 +108,21 @@ void Blitter::doFastCopyBlit()
 
             // Fetch A
             if (useA) {
-                anew = mem.peek16 <ACCESSOR_AGNUS> (apt);
+                anew = mem.peek16 <Accessor::AGNUS> (apt);
                 trace(BLT_DEBUG, "    A = %X <- %X\n", anew, apt);
                 apt = U32_ADD(apt, incr);
             }
 
             // Fetch B
             if (useB) {
-                bnew = mem.peek16 <ACCESSOR_AGNUS> (bpt);
+                bnew = mem.peek16 <Accessor::AGNUS> (bpt);
                 trace(BLT_DEBUG, "    B = %X <- %X\n", bnew, bpt);
                 bpt = U32_ADD(bpt, incr);
             }
 
             // Fetch C
             if (useC) {
-                chold = mem.peek16 <ACCESSOR_AGNUS> (cpt);
+                chold = mem.peek16 <Accessor::AGNUS> (cpt);
                 trace(BLT_DEBUG, "    C = %X <- %X\n", chold, cpt);
                 cpt = U32_ADD(cpt, incr);
             }
@@ -148,7 +148,7 @@ void Blitter::doFastCopyBlit()
 
             // Write D
             if (useD) {
-                mem.poke16 <ACCESSOR_AGNUS> (dpt, dhold);
+                mem.poke16 <Accessor::AGNUS> (dpt, dhold);
 
                 if (BLT_CHECKSUM) {
                     check1 = util::fnvIt32(check1, dhold);
@@ -256,13 +256,13 @@ Blitter::doFastLineBlit()
         
         // Fetch B
         if (useB) {
-            bnew = mem.peek16 <ACCESSOR_AGNUS> (bltbpt);
+            bnew = mem.peek16 <Accessor::AGNUS> (bltbpt);
             U32_INC(bltbpt, bltbmod);
         }
         
         // Fetch C
         if (useC) {
-            chold = mem.peek16 <ACCESSOR_AGNUS> (bltcpt);
+            chold = mem.peek16 <Accessor::AGNUS> (bltcpt);
         }
         
         // Run the barrel shifters
@@ -284,7 +284,7 @@ Blitter::doFastLineBlit()
         // Write D
         if (writeEnable) {
 
-            mem.poke16 <ACCESSOR_AGNUS> (bltdpt, dhold);
+            mem.poke16 <Accessor::AGNUS> (bltdpt, dhold);
             
             if (BLT_CHECKSUM) {
                 check1 = util::fnvIt32(check1, dhold);

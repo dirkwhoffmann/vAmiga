@@ -84,7 +84,7 @@ Agnus::allocateBus()
 u16
 Agnus::doDiskDmaRead()
 {
-    u16 result = mem.peek16 <ACCESSOR_AGNUS> (dskpt);
+    u16 result = mem.peek16 <Accessor::AGNUS> (dskpt);
 
     busOwner[pos.h] = BUS_DISK;
     busAddr[pos.h] = dskpt;
@@ -100,7 +100,7 @@ Agnus::doAudioDmaRead()
 {
     constexpr BusOwner owner = BusOwner(BUS_AUD0 + channel);
     
-    u16 result = mem.peek16 <ACCESSOR_AGNUS> (audpt[channel]);
+    u16 result = mem.peek16 <Accessor::AGNUS> (audpt[channel]);
     
     busOwner[pos.h] = owner;
     busAddr[pos.h] = audpt[channel];
@@ -117,7 +117,7 @@ Agnus::doBitplaneDmaRead()
     assert(bitplane >= 0 && bitplane <= 5);
     constexpr BusOwner owner = BusOwner(BUS_BPL1 + bitplane);
     
-    u16 result = mem.peek16 <ACCESSOR_AGNUS> (bplpt[bitplane]);
+    u16 result = mem.peek16 <Accessor::AGNUS> (bplpt[bitplane]);
 
     busOwner[pos.h] = owner;
     busAddr[pos.h] = bplpt[bitplane];
@@ -134,7 +134,7 @@ Agnus::doSpriteDmaRead()
     assert(channel >= 0 && channel <= 7);
     constexpr BusOwner owner = BusOwner(BUS_SPRITE0 + channel);
 
-    u16 result = mem.peek16 <ACCESSOR_AGNUS> (sprpt[channel]);
+    u16 result = mem.peek16 <Accessor::AGNUS> (sprpt[channel]);
 
     busOwner[pos.h] = owner;
     busAddr[pos.h] = sprpt[channel];
@@ -148,7 +148,7 @@ Agnus::doSpriteDmaRead()
 u16
 Agnus::doCopperDmaRead(u32 addr)
 {
-    u16 result = mem.peek16 <ACCESSOR_AGNUS> (addr);
+    u16 result = mem.peek16 <Accessor::AGNUS> (addr);
 
     busOwner[pos.h] = BUS_COPPER;
     busAddr[pos.h] = addr;
@@ -164,7 +164,7 @@ Agnus::doBlitterDmaRead(u32 addr)
     // Assure that the Blitter owns the bus when this function is called
     assert(busOwner[pos.h] == BUS_BLITTER);
 
-    u16 result = mem.peek16 <ACCESSOR_AGNUS> (addr);
+    u16 result = mem.peek16 <Accessor::AGNUS> (addr);
 
     busOwner[pos.h] = BUS_BLITTER;
     busAddr[pos.h] = addr;
@@ -177,7 +177,7 @@ Agnus::doBlitterDmaRead(u32 addr)
 void
 Agnus::doDiskDmaWrite(u16 value)
 {
-    mem.poke16 <ACCESSOR_AGNUS> (dskpt, value);
+    mem.poke16 <Accessor::AGNUS> (dskpt, value);
     
     busOwner[pos.h] = BUS_DISK;
     busAddr[pos.h] = dskpt;
@@ -190,7 +190,7 @@ Agnus::doDiskDmaWrite(u16 value)
 void
 Agnus::doCopperDmaWrite(u32 addr, u16 value)
 {
-    mem.pokeCustom16<ACCESSOR_AGNUS>(addr, value);
+    mem.pokeCustom16<Accessor::AGNUS>(addr, value);
 
     busOwner[pos.h] = BUS_COPPER;
     busAddr[pos.h] = addr;
@@ -201,7 +201,7 @@ Agnus::doCopperDmaWrite(u32 addr, u16 value)
 void
 Agnus::doBlitterDmaWrite(u32 addr, u16 value)
 {
-    mem.poke16 <ACCESSOR_AGNUS> (addr, value);
+    mem.poke16 <Accessor::AGNUS> (addr, value);
 
     assert(busOwner[pos.h] == BUS_BLITTER); // Bus is already allocated
     busAddr[pos.h] = addr;

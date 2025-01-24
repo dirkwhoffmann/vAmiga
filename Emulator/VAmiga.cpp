@@ -510,15 +510,15 @@ DeniseAPI::getCachedInfo() const
 // Components (Memory)
 //
 
-MemorySource 
+MemSrc 
 MemoryDebuggerAPI::getMemSrc(Accessor acc, u32 addr) const
 {
     VAMIGA_PUBLIC
     
     switch (acc) {
 
-        case ACCESSOR_CPU:      return mem->getMemSrc<ACCESSOR_CPU>(addr);
-        case ACCESSOR_AGNUS:    return mem->getMemSrc<ACCESSOR_AGNUS>(addr);
+        case Accessor::CPU:      return mem->getMemSrc<Accessor::CPU>(addr);
+        case Accessor::AGNUS:    return mem->getMemSrc<Accessor::AGNUS>(addr);
 
         default:
             fatalError;
@@ -532,8 +532,8 @@ MemoryDebuggerAPI::spypeek8(Accessor acc, u32 addr) const
     
     switch (acc) {
 
-        case ACCESSOR_CPU:      return mem->spypeek8<ACCESSOR_CPU>(addr);
-        case ACCESSOR_AGNUS:    return mem->spypeek8<ACCESSOR_AGNUS>(addr);
+        case Accessor::CPU:      return mem->spypeek8<Accessor::CPU>(addr);
+        case Accessor::AGNUS:    return mem->spypeek8<Accessor::AGNUS>(addr);
 
         default:
             fatalError;
@@ -547,8 +547,8 @@ MemoryDebuggerAPI::spypeek16(Accessor acc, u32 addr) const
     
     switch (acc) {
 
-        case ACCESSOR_CPU:      return mem->spypeek16<ACCESSOR_CPU>(addr);
-        case ACCESSOR_AGNUS:    return mem->spypeek16<ACCESSOR_AGNUS>(addr);
+        case Accessor::CPU:      return mem->spypeek16<Accessor::CPU>(addr);
+        case Accessor::AGNUS:    return mem->spypeek16<Accessor::AGNUS>(addr);
 
         default:
             fatalError;
@@ -562,8 +562,8 @@ MemoryDebuggerAPI::ascDump(Accessor acc, u32 addr, isize bytes) const
     
     switch (acc) {
 
-        case ACCESSOR_CPU:      return mem->debugger.ascDump<ACCESSOR_CPU>(addr, bytes);
-        case ACCESSOR_AGNUS:    return mem->debugger.ascDump<ACCESSOR_AGNUS>(addr, bytes);
+        case Accessor::CPU:      return mem->debugger.ascDump<Accessor::CPU>(addr, bytes);
+        case Accessor::AGNUS:    return mem->debugger.ascDump<Accessor::AGNUS>(addr, bytes);
 
         default:
             fatalError;
@@ -577,8 +577,8 @@ MemoryDebuggerAPI::hexDump(Accessor acc, u32 addr, isize bytes, isize sz) const
     
     switch (acc) {
 
-        case ACCESSOR_CPU:      return mem->debugger.hexDump<ACCESSOR_CPU>(addr, bytes, sz);
-        case ACCESSOR_AGNUS:    return mem->debugger.hexDump<ACCESSOR_AGNUS>(addr, bytes, sz);
+        case Accessor::CPU:      return mem->debugger.hexDump<Accessor::CPU>(addr, bytes, sz);
+        case Accessor::AGNUS:    return mem->debugger.hexDump<Accessor::AGNUS>(addr, bytes, sz);
 
         default:
             fatalError;
@@ -592,8 +592,8 @@ MemoryDebuggerAPI::memDump(Accessor acc, u32 addr, isize bytes, isize sz) const
     
     switch (acc) {
 
-        case ACCESSOR_CPU:      return mem->debugger.memDump<ACCESSOR_CPU>(addr, bytes, sz);
-        case ACCESSOR_AGNUS:    return mem->debugger.memDump<ACCESSOR_AGNUS>(addr, bytes, sz);
+        case Accessor::CPU:      return mem->debugger.memDump<Accessor::CPU>(addr, bytes, sz);
+        case Accessor::AGNUS:    return mem->debugger.memDump<Accessor::AGNUS>(addr, bytes, sz);
 
         default:
             fatalError;

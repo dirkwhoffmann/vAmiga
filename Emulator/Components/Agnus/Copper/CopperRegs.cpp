@@ -30,12 +30,12 @@ Copper::pokeCOPJMP1()
 {
     trace(COPREG_DEBUG, "pokeCOPJMP1: Jumping to %X\n", cop1lc);
 
-    if constexpr (s == ACCESSOR_AGNUS) {
+    if constexpr (s == Accessor::AGNUS) {
 
         fatalError;
 
     }
-    if constexpr (s == ACCESSOR_CPU) {
+    if constexpr (s == Accessor::CPU) {
 
         if (agnus.blitter.isActive()) {
             xfiles("pokeCOPJMP1: Blitter is running\n");
@@ -49,12 +49,12 @@ Copper::pokeCOPJMP2()
 {
     trace(COPREG_DEBUG, "pokeCOPJMP2(): Jumping to %X\n", cop2lc);
 
-    if constexpr (s == ACCESSOR_AGNUS) {
+    if constexpr (s == Accessor::AGNUS) {
 
         fatalError;
 
     }
-    if constexpr (s == ACCESSOR_CPU) {
+    if constexpr (s == Accessor::CPU) {
 
         if (agnus.blitter.isActive()) {
             xfiles("pokeCOPJMP2: Blitter is running\n");
@@ -153,9 +153,9 @@ Copper::pokeNOOP(u16 value)
     trace(COPREG_DEBUG, "pokeNOOP(%04X)\n", value);
 }
 
-template void Copper::pokeCOPJMP1<ACCESSOR_CPU>();
-template void Copper::pokeCOPJMP1<ACCESSOR_AGNUS>();
-template void Copper::pokeCOPJMP2<ACCESSOR_CPU>();
-template void Copper::pokeCOPJMP2<ACCESSOR_AGNUS>();
+template void Copper::pokeCOPJMP1<Accessor::CPU>();
+template void Copper::pokeCOPJMP1<Accessor::AGNUS>();
+template void Copper::pokeCOPJMP2<Accessor::CPU>();
+template void Copper::pokeCOPJMP2<Accessor::AGNUS>();
 
 }

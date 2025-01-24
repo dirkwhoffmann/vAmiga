@@ -186,7 +186,7 @@ LogicAnalyzer::recordCurrent(isize hpos)
 
             case PROBE_MEMORY:
                 
-                record[i][hpos] = isize(mem.spypeek16<ACCESSOR_CPU>(config.addr[i]));
+                record[i][hpos] = isize(mem.spypeek16<Accessor::CPU>(config.addr[i]));
                 break;
                 
             default:

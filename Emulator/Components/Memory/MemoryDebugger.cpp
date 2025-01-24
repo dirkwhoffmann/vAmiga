@@ -136,7 +136,7 @@ MemoryDebugger::memSearch(const string &pattern, u32 addr, isize align)
             for (isize j = 0;; j++) {
 
                 // Get a byte from memory
-                auto val = mem.spypeek8 <ACCESSOR_CPU>(u32(i + j));
+                auto val = mem.spypeek8 <Accessor::CPU>(u32(i + j));
 
                 // Stop searching if we find a mismatch
                 if (val != u8(pattern[j])) break;
@@ -163,9 +163,9 @@ MemoryDebugger::read(u32 addr, isize sz)
     
     switch (sz) {
             
-        case 1: result = mem.spypeek8  <ACCESSOR_CPU> (addr); break;
-        case 2: result = mem.spypeek16 <ACCESSOR_CPU> (addr); break;
-        case 4: result = mem.spypeek32 <ACCESSOR_CPU> (addr); break;
+        case 1: result = mem.spypeek8  <Accessor::CPU> (addr); break;
+        case 2: result = mem.spypeek16 <Accessor::CPU> (addr); break;
+        case 4: result = mem.spypeek32 <Accessor::CPU> (addr); break;
             
         default:
             fatalError;
@@ -187,16 +187,16 @@ MemoryDebugger::write(u32 addr, u32 val, isize sz, isize repeats)
         switch (sz) {
                 
             case 1:
-                mem.poke8  <ACCESSOR_CPU> (u32(a), u8(val));
+                mem.poke8  <Accessor::CPU> (u32(a), u8(val));
                 break;
                 
             case 2:
-                mem.poke16 <ACCESSOR_CPU> (u32(a), u16(val));
+                mem.poke16 <Accessor::CPU> (u32(a), u16(val));
                 break;
                 
             case 4:
-                mem.poke16 <ACCESSOR_CPU> (u32(a), HI_WORD(val));
-                mem.poke16 <ACCESSOR_CPU> (u32(a + 2), LO_WORD(val));
+                mem.poke16 <Accessor::CPU> (u32(a), HI_WORD(val));
+                mem.poke16 <Accessor::CPU> (u32(a + 2), LO_WORD(val));
                 break;
                 
             default:
@@ -233,7 +233,7 @@ MemoryDebugger::save(std::ostream& os, u32 addr, isize count)
 {
     for (isize i = 0; i < count; i++) {
 
-        auto val = mem.peek8 <ACCESSOR_CPU> (u32(addr + i));
+        auto val = mem.peek8 <Accessor::CPU> (u32(addr + i));
         os.put(val);
     }
 }
@@ -371,7 +371,7 @@ MemoryDebugger::writeCs(ChipsetReg reg, u16 value)
     if (isUnused(reg)) throw Error(VAERROR_REG_UNUSED, ChipsetRegEnum::key(reg));
     if (isReadable(reg)) throw Error(VAERROR_REG_READ_ONLY, ChipsetRegEnum::key(reg));
 
-    return mem.pokeCustom16<ACCESSOR_CPU>(u32(reg << 1), value);
+    return mem.pokeCustom16<Accessor::CPU>(u32(reg << 1), value);
 }
 
 void
@@ -420,17 +420,17 @@ MemoryDebugger::convertNumeric(std::ostream& os, string s) const
     convertNumeric(os, u32(HI_HI_LO_LO(bytes[0], bytes[1], bytes[2], bytes[3])));
 }
 
-template const char *MemoryDebugger::ascDump <ACCESSOR_CPU> (u32, isize) const;
-template const char *MemoryDebugger::ascDump <ACCESSOR_AGNUS> (u32, isize) const;
-template const char *MemoryDebugger::hexDump <ACCESSOR_CPU> (u32, isize, isize) const;
-template const char *MemoryDebugger::hexDump <ACCESSOR_AGNUS> (u32, isize, isize) const;
-template const char *MemoryDebugger::memDump <ACCESSOR_CPU> (u32, isize, isize) const;
-template const char *MemoryDebugger::memDump <ACCESSOR_AGNUS> (u32, isize, isize) const;
-template void MemoryDebugger::ascDump <ACCESSOR_CPU> (std::ostream&, u32, isize);
-template void MemoryDebugger::ascDump <ACCESSOR_AGNUS> (std::ostream&, u32, isize);
-template void MemoryDebugger::hexDump <ACCESSOR_CPU> (std::ostream&, u32, isize, isize);
-template void MemoryDebugger::hexDump <ACCESSOR_AGNUS> (std::ostream&, u32, isize, isize);
-template void MemoryDebugger::memDump <ACCESSOR_CPU> (std::ostream&, u32, isize, isize);
-template void MemoryDebugger::memDump <ACCESSOR_AGNUS> (std::ostream&, u32, isize, isize);
+template const char *MemoryDebugger::ascDump <Accessor::CPU> (u32, isize) const;
+template const char *MemoryDebugger::ascDump <Accessor::AGNUS> (u32, isize) const;
+template const char *MemoryDebugger::hexDump <Accessor::CPU> (u32, isize, isize) const;
+template const char *MemoryDebugger::hexDump <Accessor::AGNUS> (u32, isize, isize) const;
+template const char *MemoryDebugger::memDump <Accessor::CPU> (u32, isize, isize) const;
+template const char *MemoryDebugger::memDump <Accessor::AGNUS> (u32, isize, isize) const;
+template void MemoryDebugger::ascDump <Accessor::CPU> (std::ostream&, u32, isize);
+template void MemoryDebugger::ascDump <Accessor::AGNUS> (std::ostream&, u32, isize);
+template void MemoryDebugger::hexDump <Accessor::CPU> (std::ostream&, u32, isize, isize);
+template void MemoryDebugger::hexDump <Accessor::AGNUS> (std::ostream&, u32, isize, isize);
+template void MemoryDebugger::memDump <Accessor::CPU> (std::ostream&, u32, isize, isize);
+template void MemoryDebugger::memDump <Accessor::AGNUS> (std::ostream&, u32, isize, isize);
 
 }

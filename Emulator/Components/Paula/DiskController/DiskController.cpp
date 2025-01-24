@@ -532,7 +532,7 @@ DiskController::performTurboRead(FloppyDrive *drive)
             check1 = util::fnvIt32(check1, word);
             check2 = util::fnvIt32(check2, agnus.dskpt & agnus.ptrMask);
         }
-        mem.poke16 <ACCESSOR_AGNUS> (agnus.dskpt, word);
+        mem.poke16 <Accessor::AGNUS> (agnus.dskpt, word);
         agnus.dskpt += 2;
     }
     
@@ -552,7 +552,7 @@ DiskController::performTurboWrite(FloppyDrive *drive)
     for (isize i = 0; i < (dsklen & 0x3FFF); i++) {
         
         // Read word from memory
-        u16 word = mem.peek16 <ACCESSOR_AGNUS> (agnus.dskpt);
+        u16 word = mem.peek16 <Accessor::AGNUS> (agnus.dskpt);
         
         if (DSK_CHECKSUM) {
             

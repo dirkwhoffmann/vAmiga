@@ -558,7 +558,7 @@ Agnus::executeFirstSpriteCycle()
             if (sprdma()) {
 
                 auto value = doSpriteDmaRead<nr>();
-                agnus.pokeSPRxPOS<nr, ACCESSOR_AGNUS>(value);
+                agnus.pokeSPRxPOS<nr, Accessor::AGNUS>(value);
                 denise.pokeSPRxPOS<nr>(value);
 
             } else {
@@ -600,7 +600,7 @@ Agnus::executeSecondSpriteCycle()
                 
                 // Read in the next control word (CTL part)
                 auto value = doSpriteDmaRead<nr>();
-                agnus.pokeSPRxCTL<nr, ACCESSOR_AGNUS>(value);
+                agnus.pokeSPRxCTL<nr, Accessor::AGNUS>(value);
                 denise.pokeSPRxCTL<nr>(value);
                 
             } else {

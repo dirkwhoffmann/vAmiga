@@ -460,7 +460,7 @@ NSString *EventSlotName(NSInteger slot);
 - (void)saveWom:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)saveExt:(NSURL *)url exception:(ExceptionWrapper *)ex;
 
-- (MemorySource)memSrc:(Accessor)accessor addr:(NSInteger)addr;
+- (MemSrc)memSrc:(Accessor)accessor addr:(NSInteger)addr;
 - (NSInteger)spypeek16:(Accessor)accessor addr:(NSInteger)addr;
 
 - (NSString *)regName:(NSInteger)addr;

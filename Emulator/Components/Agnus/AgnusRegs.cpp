@@ -720,8 +720,8 @@ Agnus::dropWrite(BusOwner owner)
 //
 
 #define DECLARE(x) \
-DECLAREA(x,ACCESSOR_CPU) \
-DECLAREA(x,ACCESSOR_AGNUS)
+DECLAREA(x,Accessor::CPU) \
+DECLAREA(x,Accessor::AGNUS)
 
 #define DECLAREA(x,y) \
 template void Agnus::x<y>(u16 value);

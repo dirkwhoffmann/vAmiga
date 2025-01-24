@@ -208,8 +208,8 @@ public:
      * Agnus, respectively.
      * See also: updateMemSrcTables()
      */
-    MemorySource cpuMemSrc[256];
-    MemorySource agnusMemSrc[256];
+    MemSrc cpuMemSrc[256];
+    MemSrc agnusMemSrc[256];
 
     // The last value on the data bus
     u16 dataBus;
@@ -452,7 +452,7 @@ public:
 public:
 
     // Returns the memory source for a given address
-    template <Accessor A> MemorySource getMemSrc(u32 addr);
+    template <Accessor A> MemSrc getMemSrc(u32 addr);
     
     // Updates both memory source lookup tables
     void updateMemSrcTables();
@@ -481,11 +481,11 @@ private:
     
 public:
 
-    template <Accessor acc, MemorySource src> u8 peek8(u32 addr);
-    template <Accessor acc, MemorySource src> u16 peek16(u32 addr);
-    template <Accessor acc, MemorySource src> u8 spypeek8(u32 addr) const;
-    template <Accessor acc, MemorySource src> u16 spypeek16(u32 addr) const;
-    template <Accessor acc, MemorySource src> u32 spypeek32(u32 addr) const;
+    template <Accessor acc, MemSrc src> u8 peek8(u32 addr);
+    template <Accessor acc, MemSrc src> u16 peek16(u32 addr);
+    template <Accessor acc, MemSrc src> u8 spypeek8(u32 addr) const;
+    template <Accessor acc, MemSrc src> u16 spypeek16(u32 addr) const;
+    template <Accessor acc, MemSrc src> u32 spypeek32(u32 addr) const;
     template <Accessor acc> u8 peek8(u32 addr);
     template <Accessor acc> u16 peek16(u32 addr);
     template <Accessor acc> u8 spypeek8(u32 addr) const;
@@ -493,8 +493,8 @@ public:
     template <Accessor acc> u32 spypeek32(u32 addr) const;
     template <Accessor acc> void spypeek(u32 addr, isize len, u8 *buf) const;
 
-    template <Accessor acc, MemorySource src> void poke8(u32 addr, u8 value);
-    template <Accessor acc, MemorySource src> void poke16(u32 addr, u16 value);
+    template <Accessor acc, MemSrc src> void poke8(u32 addr, u8 value);
+    template <Accessor acc, MemSrc src> void poke16(u32 addr, u16 value);
     template <Accessor acc> void poke8(u32 addr, u8 value);
     template <Accessor acc> void poke16(u32 addr, u16 value);
     
@@ -541,7 +541,7 @@ public:
     //
     
     // Modifies Ram or Rom without causing side effects
-    template <MemorySource src> void patch(u32 addr, u8 value);
+    template <MemSrc src> void patch(u32 addr, u8 value);
     void patch(u32 addr, u8 value);
     void patch(u32 addr, u16 value);
     void patch(u32 addr, u32 value);

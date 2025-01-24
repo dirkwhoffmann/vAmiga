@@ -702,7 +702,7 @@ HardDrive::write(isize offset, isize length, u32 addr)
         if (!getFlag(FLAG_PROTECTED)) {
 
             // Perform the write operation
-            mem.spypeek <ACCESSOR_CPU> (addr, length, data.ptr + offset);
+            mem.spypeek <Accessor::CPU> (addr, length, data.ptr + offset);
             
             // Handle write-through mode
             if (config.writeThrough) {

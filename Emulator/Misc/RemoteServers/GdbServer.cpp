@@ -229,7 +229,7 @@ GdbServer::readRegister(isize nr)
 string
 GdbServer::readMemory(isize addr)
 {
-    auto byte = mem.spypeek8 <ACCESSOR_CPU> ((u32)addr);
+    auto byte = mem.spypeek8 <Accessor::CPU> ((u32)addr);
     return util::hexstr <2> (byte);
 }
 

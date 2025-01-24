@@ -97,7 +97,7 @@ DiagBoard::updateMemSrcTables()
     if (baseAddr == 0) return;
     
     // Map in this device
-    mem.cpuMemSrc[firstPage()] = MemorySource::ZOR;
+    mem.cpuMemSrc[firstPage()] = MemSrc::ZOR;
 }
 
 u8
@@ -292,7 +292,7 @@ DiagBoard::processLoadSeg(u32 ptr1, u32 ptr2, bool bstr)
         // Read task name
         string name;
         if (bstr) {
-            auto length = (isize)mem.spypeek8 <ACCESSOR_CPU> (4 * ptr1);
+            auto length = (isize)mem.spypeek8 <Accessor::CPU> (4 * ptr1);
             debug(DBD_DEBUG, "Length = %ld\n", length);
             osDebugger.read(4 * ptr1 + 1, name, length);
         } else {

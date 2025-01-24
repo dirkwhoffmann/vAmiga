@@ -157,7 +157,7 @@ HdController::updateMemSrcTables()
     if (baseAddr == 0) return;
     
     // Map in this device
-    mem.cpuMemSrc[firstPage()] = MemorySource::ZOR;
+    mem.cpuMemSrc[firstPage()] = MemSrc::ZOR;
 }
 
 bool
@@ -349,7 +349,7 @@ HdController::processCmd(u32 ptr)
     
     if (HDR_DEBUG) {
 
-        [[maybe_unused]] auto unit = mem.spypeek32 <ACCESSOR_CPU> (stdReq.io_Unit + 0x2A);
+        [[maybe_unused]] auto unit = mem.spypeek32 <Accessor::CPU> (stdReq.io_Unit + 0x2A);
         [[maybe_unused]] auto blck = offset / 512;
         
         debug(HDR_DEBUG, "%d.%ld: %s\n", unit, blck, IoCommandEnum::key(cmd));
@@ -452,7 +452,7 @@ HdController::processInit(u32 ptr)
     constexpr u16 devn_bootflags    = 0x54;  // boot flags (not part of DOS packet)
     constexpr u16 devn_segList      = 0x58;  // filesystem segment list (not part of DOS packet)
     
-    u32 unit = mem.spypeek32 <ACCESSOR_CPU> (ptr + devn_unit);
+    u32 unit = mem.spypeek32 <Accessor::CPU> (ptr + devn_unit);
     
     if (unit < drive.ptable.size()) {
 
@@ -465,7 +465,7 @@ HdController::processInit(u32 ptr)
         char dosName[5];
         assignDosName(unit, dosName);
 
-        u32 name_ptr = mem.spypeek32 <ACCESSOR_CPU> (ptr + devn_dosName);
+        u32 name_ptr = mem.spypeek32 <Accessor::CPU> (ptr + devn_dosName);
         for (isize i = 0; i < isizeof(dosName); i++) {
             mem.patch(u32(name_ptr + i), u8(dosName[i]));
         }
@@ -571,7 +571,7 @@ HdController::processInfoReq(u32 ptr)
     try {
 
         // Read driver number
-        u16 num = mem.spypeek16 <ACCESSOR_CPU> (ptr + fsinfo_num);
+        u16 num = mem.spypeek16 <Accessor::CPU> (ptr + fsinfo_num);
         debug(HDR_DEBUG, "Requested info for driver %d\n", num);
 
         if (num >= drive.drivers.size()) {
@@ -616,7 +616,7 @@ HdController::processInitSeg(u32 ptr)
     try {
         
         // Read driver number
-        u32 num = mem.spypeek32 <ACCESSOR_CPU> (ptr + fsinitseg_num);
+        u32 num = mem.spypeek32 <Accessor::CPU> (ptr + fsinitseg_num);
         debug(HDR_DEBUG, "Processing driver %d\n", num);
 
         if (num >= drive.drivers.size()) {
@@ -639,7 +639,7 @@ HdController::processInitSeg(u32 ptr)
         for (isize i = 0; i < numHunks; i++) {
             
             auto segPtrAddr = u32(ptr + fsinitseg_hunk + 4 * i);
-            auto segPtr = mem.spypeek32 <ACCESSOR_CPU> (segPtrAddr);
+            auto segPtr = mem.spypeek32 <Accessor::CPU> (segPtrAddr);
             
             if (segPtr == 0) {
                 throw Error(VAERROR_HDC_INIT, "Memory allocation failed inside AmigaOS");
@@ -682,7 +682,7 @@ HdController::processInitSeg(u32 ptr)
                     for (auto &offset : s.relocations) {
                         
                         auto addr = segPtrs[i] + 8 + offset;
-                        auto value = mem.spypeek32 <ACCESSOR_CPU> (addr);
+                        auto value = mem.spypeek32 <Accessor::CPU> (addr);
                         debug(HDR_DEBUG, "%x: %x -> %x\n",
                               addr, value, value + segPtrs[s.target] + 8)
                         mem.patch(addr, value + segPtrs[s.target] + 8);

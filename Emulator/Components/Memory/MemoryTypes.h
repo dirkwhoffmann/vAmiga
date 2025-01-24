@@ -18,7 +18,7 @@ namespace vamiga {
  * table to specify the source and target of a peek or poke operation,
  * respectively.
  */
-enum class MemorySource : long
+enum class MemSrc : long
 {
     NONE,
     CHIP,
@@ -39,87 +39,86 @@ enum class MemorySource : long
     EXT
 };
 
-struct MemorySourceEnum : util::Reflection<MemorySourceEnum, MemorySource>
+struct MemSrcEnum : util::Reflection<MemSrcEnum, MemSrc>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = (long)MemorySource::EXT;
+    static constexpr long maxVal = (long)MemSrc::EXT;
     
     // static const char *prefix() { return "MEM"; }
-    static const char *_key(long value) { return _key(MemorySource(value)); }
-    static const char *_key(MemorySource value)
+    static const char *_key(long value) { return _key(MemSrc(value)); }
+    static const char *_key(MemSrc value)
     {
         switch (value) {
                 
-            case MemorySource::NONE:           return "NONE";
-            case MemorySource::CHIP:           return "CHIP";
-            case MemorySource::CHIP_MIRROR:    return "CHIP_MIRROR";
-            case MemorySource::SLOW:           return "SLOW";
-            case MemorySource::SLOW_MIRROR:    return "SLOW_MIRROR";
-            case MemorySource::FAST:           return "FAST";
-            case MemorySource::CIA:            return "CIA";
-            case MemorySource::CIA_MIRROR:     return "CIA_MIRROR";
-            case MemorySource::RTC:            return "RTC";
-            case MemorySource::CUSTOM:         return "CUSTOM";
-            case MemorySource::CUSTOM_MIRROR:  return "CUSTOM_MIRROR";
-            case MemorySource::AUTOCONF:       return "AUTOCONF";
-            case MemorySource::ZOR:            return "ZOR";
-            case MemorySource::ROM:            return "ROM";
-            case MemorySource::ROM_MIRROR:     return "ROM_MIRROR";
-            case MemorySource::WOM:            return "WOM";
-            case MemorySource::EXT:            return "EXT";
+            case MemSrc::NONE:           return "NONE";
+            case MemSrc::CHIP:           return "CHIP";
+            case MemSrc::CHIP_MIRROR:    return "CHIP_MIRROR";
+            case MemSrc::SLOW:           return "SLOW";
+            case MemSrc::SLOW_MIRROR:    return "SLOW_MIRROR";
+            case MemSrc::FAST:           return "FAST";
+            case MemSrc::CIA:            return "CIA";
+            case MemSrc::CIA_MIRROR:     return "CIA_MIRROR";
+            case MemSrc::RTC:            return "RTC";
+            case MemSrc::CUSTOM:         return "CUSTOM";
+            case MemSrc::CUSTOM_MIRROR:  return "CUSTOM_MIRROR";
+            case MemSrc::AUTOCONF:       return "AUTOCONF";
+            case MemSrc::ZOR:            return "ZOR";
+            case MemSrc::ROM:            return "ROM";
+            case MemSrc::ROM_MIRROR:     return "ROM_MIRROR";
+            case MemSrc::WOM:            return "WOM";
+            case MemSrc::EXT:            return "EXT";
         }
         return "???";
     }
-    static const char *help(long value) { return help(MemorySource(value)); }
-    static const char *help(MemorySource value)
+    static const char *help(long value) { return help(MemSrc(value)); }
+    static const char *help(MemSrc value)
     {
         switch (value) {
                 
-            case MemorySource::NONE:           return "Unmapped";
-            case MemorySource::CHIP:           return "Chip RAM";
-            case MemorySource::CHIP_MIRROR:    return "Chip RAM mirror";
-            case MemorySource::SLOW:           return "Slow RAM";
-            case MemorySource::SLOW_MIRROR:    return "Slow RAM mirror";
-            case MemorySource::FAST:           return "Fast RAM";
-            case MemorySource::CIA:            return "CIA";
-            case MemorySource::CIA_MIRROR:     return "CIA mirror";
-            case MemorySource::RTC:            return "Real-time clock";
-            case MemorySource::CUSTOM:         return "Custom chips";
-            case MemorySource::CUSTOM_MIRROR:  return "Custom chips mirror";
-            case MemorySource::AUTOCONF:       return "Auto config";
-            case MemorySource::ZOR:            return "Zorro boards";
-            case MemorySource::ROM:            return "Kickstart ROM";
-            case MemorySource::ROM_MIRROR:     return "Kickstart ROM mirror";
-            case MemorySource::WOM:            return "Write-only memory";
-            case MemorySource::EXT:            return "Extension ROM";
+            case MemSrc::NONE:           return "Unmapped";
+            case MemSrc::CHIP:           return "Chip RAM";
+            case MemSrc::CHIP_MIRROR:    return "Chip RAM mirror";
+            case MemSrc::SLOW:           return "Slow RAM";
+            case MemSrc::SLOW_MIRROR:    return "Slow RAM mirror";
+            case MemSrc::FAST:           return "Fast RAM";
+            case MemSrc::CIA:            return "CIA";
+            case MemSrc::CIA_MIRROR:     return "CIA mirror";
+            case MemSrc::RTC:            return "Real-time clock";
+            case MemSrc::CUSTOM:         return "Custom chips";
+            case MemSrc::CUSTOM_MIRROR:  return "Custom chips mirror";
+            case MemSrc::AUTOCONF:       return "Auto config";
+            case MemSrc::ZOR:            return "Zorro boards";
+            case MemSrc::ROM:            return "Kickstart ROM";
+            case MemSrc::ROM_MIRROR:     return "Kickstart ROM mirror";
+            case MemSrc::WOM:            return "Write-only memory";
+            case MemSrc::EXT:            return "Extension ROM";
         }
         return "???";
     }
 };
 
-enum_long(ACCESSOR_TYPE)
+enum class Accessor : long
 {
-    ACCESSOR_CPU,
-    ACCESSOR_AGNUS
+    CPU,
+    AGNUS
 };
-typedef ACCESSOR_TYPE Accessor;
 
 struct AccessorEnum : util::Reflection<AccessorEnum, Accessor>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = ACCESSOR_AGNUS;
+    static constexpr long maxVal = long(Accessor::AGNUS);
     
     static const char *prefix() { return "ACCESSOR"; }
-    static const char *_key(long value)
+    static const char *_key(Accessor value)
     {
         switch (value) {
                 
-            case ACCESSOR_CPU:    return "CPU";
-            case ACCESSOR_AGNUS:  return "AGNUS";
+            case Accessor::CPU:    return "CPU";
+            case Accessor::AGNUS:  return "AGNUS";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(Accessor value)
     {
         return "";
     }
@@ -278,8 +277,8 @@ typedef struct
     u32 extMask;
     u32 chipMask;
     
-    MemorySource cpuMemSrc[256];
-    MemorySource agnusMemSrc[256];
+    MemSrc cpuMemSrc[256];
+    MemSrc agnusMemSrc[256];
 }
 MemInfo;
 

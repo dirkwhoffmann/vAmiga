@@ -68,19 +68,19 @@ Moira::sync(int cycles)
 u8
 Moira::read8(u32 addr) const
 {
-    return mem.peek8<ACCESSOR_CPU>(addr);
+    return mem.peek8<Accessor::CPU>(addr);
 }
 
 u16
 Moira::read16(u32 addr) const
 {
-    return mem.peek16<ACCESSOR_CPU>(addr);
+    return mem.peek16<Accessor::CPU>(addr);
 }
 
 u16
 Moira::read16Dasm(u32 addr) const
 {
-    auto result = mem.spypeek16<ACCESSOR_CPU>(addr);
+    auto result = mem.spypeek16<Accessor::CPU>(addr);
     
     // For LINE-A instructions, check if the opcode is a software trap
     if (Debugger::isLineAInstr(result)) result = debugger.swTraps.resolve(result);
@@ -100,7 +100,7 @@ Moira::write8(u32 addr, u8 val) const
     if (XFILES) {
         if (addr - reg.pc < 5) xfiles("write8 close to PC %x\n", reg.pc);
     }
-    mem.poke8 <ACCESSOR_CPU> (addr, val);
+    mem.poke8 <Accessor::CPU> (addr, val);
 }
 
 void
@@ -109,7 +109,7 @@ Moira::write16(u32 addr, u16 val) const
     if (XFILES) {
         if (addr - reg.pc < 5) xfiles("write16 close to PC %x\n", reg.pc);
     }
-    mem.poke16 <ACCESSOR_CPU> (addr, val);
+    mem.poke16 <Accessor::CPU> (addr, val);
 }
 
 u16

@@ -54,7 +54,7 @@ RamExpansion::updateMemSrcTables()
 
     for (isize i = firstPage; i < firstPage + numPages; i++) {
 
-        mem.cpuMemSrc[i] = MemorySource::FAST;
+        mem.cpuMemSrc[i] = MemSrc::FAST;
     }
 }
 

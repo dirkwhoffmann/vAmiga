@@ -17,19 +17,19 @@ namespace vamiga {
 void
 OSDebugger::read(u32 addr, u8 *result) const
 {
-    *result = mem.spypeek8 <ACCESSOR_CPU> (addr);
+    *result = mem.spypeek8 <Accessor::CPU> (addr);
 }
 
 void
 OSDebugger::read(u32 addr, u16 *result) const
 {
-    *result = mem.spypeek16 <ACCESSOR_CPU> (addr);
+    *result = mem.spypeek16 <Accessor::CPU> (addr);
 }
 
 void
 OSDebugger::read(u32 addr, u32 *result) const
 {
-    *result = mem.spypeek32 <ACCESSOR_CPU> (addr);
+    *result = mem.spypeek32 <Accessor::CPU> (addr);
 }
 
 void
@@ -45,7 +45,7 @@ OSDebugger::read(u32 addr, string &result, isize limit) const
     
     for (isize i = 0; i < limit; i++, addr++) {
 
-        auto c = (char)mem.spypeek8 <ACCESSOR_CPU> (addr);
+        auto c = (char)mem.spypeek8 <Accessor::CPU> (addr);
         
         if (c == 0 || c == '\r' || c == '\n') break;
         if (isprint(c)) result += c;
@@ -62,7 +62,7 @@ OSDebugger::getExecBase() const
 {
     os::ExecBase result;
     
-    read(mem.spypeek32 <ACCESSOR_CPU> (4), &result);
+    read(mem.spypeek32 <Accessor::CPU> (4), &result);
     checkExecBase(result);
     
     return result;
@@ -536,9 +536,9 @@ OSDebugger::read(const os::Process &pr, os::SegList &result) const
 
     } else if (isValidPtr(BPTR(pr.pr_SegList))) {
         
-        auto size = mem.spypeek32 <ACCESSOR_CPU> (BPTR(pr.pr_SegList));
+        auto size = mem.spypeek32 <Accessor::CPU> (BPTR(pr.pr_SegList));
         if (size >= 3) {
-            auto addr = mem.spypeek32 <ACCESSOR_CPU> (BPTR(pr.pr_SegList) + 12);
+            auto addr = mem.spypeek32 <Accessor::CPU> (BPTR(pr.pr_SegList) + 12);
             read(BPTR(addr), result);
         }
     }
@@ -549,8 +549,8 @@ OSDebugger::read(u32 addr, os::SegList &result) const
 {
     for (isize i = 0; isValidPtr(addr) && i < 128; i++) {
         
-        auto size = mem.spypeek32 <ACCESSOR_CPU> (addr - 4) - 8;
-        auto next = mem.spypeek32 <ACCESSOR_CPU> (addr);
+        auto size = mem.spypeek32 <Accessor::CPU> (addr - 4) - 8;
+        auto next = mem.spypeek32 <Accessor::CPU> (addr);
         auto data = addr + 4;
         
         result.push_back(std::make_pair(data, size));

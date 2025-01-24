@@ -365,7 +365,7 @@ OSDebugger::dumpTask(std::ostream& s, const os::Task &task, bool verbose)
     if (verbose) {
         
         // auto sp = task.tc_SPReg + 70; // + kickstart_version >= 37 ? 74 : 70;
-        // auto pc = mem.spypeek32 <ACCESSOR_CPU> (sp);
+        // auto pc = mem.spypeek32 <Accessor::CPU> (sp);
         
         auto stackSize = task.tc_SPUpper - task.tc_SPLower;
         

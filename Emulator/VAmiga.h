@@ -442,7 +442,7 @@ public:
 
     /**  @brief  Returns the memory source for a given address
      */
-    MemorySource getMemSrc(Accessor acc, u32 addr) const;
+    MemSrc getMemSrc(Accessor acc, u32 addr) const;
     
     /** @brief  Reads a value from memory without causing side effects.
      */

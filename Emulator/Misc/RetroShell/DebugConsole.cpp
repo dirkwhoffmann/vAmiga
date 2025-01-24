@@ -367,7 +367,7 @@ DebugConsole::initCommands(Command &root)
                  [this](Arguments& argv, long value) {
 
             std::stringstream ss;
-            mem.debugger.ascDump<ACCESSOR_CPU>(ss, parseAddr(argv, 0, mem.debugger.current), 16);
+            mem.debugger.ascDump<Accessor::CPU>(ss, parseAddr(argv, 0, mem.debugger.current), 16);
             retroShell << '\n' << ss << '\n';
         });
 
@@ -376,7 +376,7 @@ DebugConsole::initCommands(Command &root)
                  [this](Arguments& argv, long value) {
 
             std::stringstream ss;
-            mem.debugger.memDump<ACCESSOR_CPU>(ss, parseAddr(argv, 0, mem.debugger.current), 16, value);
+            mem.debugger.memDump<Accessor::CPU>(ss, parseAddr(argv, 0, mem.debugger.current), 16, value);
             retroShell << '\n' << ss << '\n';
         }, 2);
 
@@ -418,12 +418,12 @@ DebugConsole::initCommands(Command &root)
             if (src < dst) {
                 
                 for (isize i = cnt - 1; i >= 0; i--)
-                    mem.poke8<ACCESSOR_CPU>(u32(dst + i), mem.spypeek8<ACCESSOR_CPU>(u32(src + i)));
+                    mem.poke8<Accessor::CPU>(u32(dst + i), mem.spypeek8<Accessor::CPU>(u32(src + i)));
                 
             } else {
                 
                 for (isize i = 0; i <= cnt - 1; i++)
-                    mem.poke8<ACCESSOR_CPU>(u32(dst + i), mem.spypeek8<ACCESSOR_CPU>(u32(src + i)));
+                    mem.poke8<Accessor::CPU>(u32(dst + i), mem.spypeek8<Accessor::CPU>(u32(src + i)));
             }
         }, 1);
 
@@ -442,7 +442,7 @@ DebugConsole::initCommands(Command &root)
             if (found >= 0) {
                 
                 std::stringstream ss;
-                mem.debugger.memDump<ACCESSOR_CPU>(ss, u32(found), 1, value);
+                mem.debugger.memDump<Accessor::CPU>(ss, u32(found), 1, value);
                 retroShell << ss;
                 
             } else {

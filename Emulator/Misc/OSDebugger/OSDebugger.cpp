@@ -443,7 +443,7 @@ OSDebugger::checkExecBase(const os::ExecBase &execBase) const
     // Check if words in the range [0x22 ; 0x52] sum up to 0xFFFF
     u16 checksum = 0;
     for (u32 offset = 0x22; offset <= 0x52; offset += 2) {
-        checksum += mem.spypeek16 <ACCESSOR_CPU> (execBase.addr + offset);
+        checksum += mem.spypeek16 <Accessor::CPU> (execBase.addr + offset);
     }
     if (!(checksum == 0xFFFF)) {
         throw Error(VAERROR_OSDB, "ExecBase: Checksum mismatch");
@@ -461,7 +461,7 @@ OSDebugger::checkExecBase(const os::ExecBase &execBase) const
         auto src1 =mem.cpuMemSrc[bank - 1];
         auto src2 =mem.cpuMemSrc[bank];
         
-        if (!(src1 == MemorySource::CHIP && src2 != MemorySource::CHIP)) {
+        if (!(src1 == MemSrc::CHIP && src2 != MemSrc::CHIP)) {
             throw Error(VAERROR_OSDB, "ExecBase: MaxLocMem doesn't match bank map");
         }
     }
@@ -478,7 +478,7 @@ OSDebugger::checkExecBase(const os::ExecBase &execBase) const
         auto src1 =mem.cpuMemSrc[bank - 1];
         auto src2 =mem.cpuMemSrc[bank];
         
-        if (!(src1 == MemorySource::SLOW && src2 != MemorySource::SLOW)) {
+        if (!(src1 == MemSrc::SLOW && src2 != MemSrc::SLOW)) {
             throw Error(VAERROR_OSDB, "ExecBase: MaxExtMem doesn't match bank map");
         }
     }
