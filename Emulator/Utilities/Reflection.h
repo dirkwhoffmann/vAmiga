@@ -43,6 +43,9 @@ namespace vamiga::util {
 
 template <class T, typename E> struct Reflection {
 
+    // Remove later?!
+    static constexpr E cast(long value) { return E(value); }
+    
     // Checks whether this enum is a bit fiels rather than a standard enum
     static constexpr bool isBitField() { return T::minVal == 1; }
 
@@ -50,10 +53,10 @@ template <class T, typename E> struct Reflection {
     static constexpr bool isValid(auto value) { return long(value) >= T::minVal && long(value) <= T::maxVal; }
 
     // Returns the key as a C string, including the section prefix
-    static const char *fullKey(isize value) { return T::_key(value); }
+    static const char *fullKey(E value) { return T::_key((long)value); }
 
     // Returns the key as a C string, excluding the section prefix
-    static const char *key(isize value, bool withPrefix = false) {
+    static const char *key(E value, bool withPrefix = false) {
 
         auto *p = fullKey(value);
         
@@ -62,7 +65,7 @@ template <class T, typename E> struct Reflection {
         }
         return p;
     }
-    
+        
     // Returns a textual representation for a bit mask
     static const char *mask(isize mask, bool withPrefix = false) {
 
@@ -73,7 +76,7 @@ template <class T, typename E> struct Reflection {
             
             for (isize i = T::minVal; i <= T::maxVal; i *= 2) {
                 if (mask & i) {
-                    result += (result.empty() ? "" : " | ") + string(key((E)i, withPrefix));
+                    result += (result.empty() ? "" : " | ") + string(key(E(i), withPrefix));
                 }
             }
             
@@ -81,7 +84,7 @@ template <class T, typename E> struct Reflection {
             
             for (isize i = T::minVal; i <= T::maxVal; i++) {
                 if (mask & (1 << i)) {
-                    result += (result.empty() ? "" : " | ") + string(key((E)i, withPrefix));
+                    result += (result.empty() ? "" : " | ") + string(key(E(i), withPrefix));
                 }
             }
         }
@@ -90,21 +93,21 @@ template <class T, typename E> struct Reflection {
     }
 
     // Collects all key / value pairs
-    static std::vector <std::pair<string,long>>
+    static std::vector < std::pair<string,long> >
     pairs(bool withPrefix = false, std::function<bool(E)> filter = [](E){ return true; }) {
 
-        std::vector <std::pair<string,long>> result;
+        std::vector < std::pair<string,long> > result;
 
         if (isBitField()) {
 
-            for (isize i = T::minVal; i <= T::maxVal; i *= 2) {
-                if (filter(E(i))) result.push_back(std::make_pair(key(i, withPrefix), i));
+            for (long i = T::minVal; i <= T::maxVal; i *= 2) {
+                if (filter(E(i))) result.push_back(std::make_pair(key(E(i), withPrefix), i));
             }
 
         } else {
 
-            for (isize i = T::minVal; i <= T::maxVal; i++) {
-                if (filter(E(i))) result.push_back(std::make_pair(key(i, withPrefix), i));
+            for (long i = T::minVal; i <= T::maxVal; i++) {
+                if (filter(E(i))) result.push_back(std::make_pair(key(E(i), withPrefix), i));
             }
         }
 

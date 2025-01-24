@@ -95,14 +95,14 @@ public:
     virtual string argList() override { return "<value>"; }
 };
 
-template <typename T>
+template <class T, typename E>
 class EnumParser : public OptionParser {
 
     using OptionParser::OptionParser;
 
     virtual i64 parse(const string &s) override { return (arg = util::parseEnum<T>(s)); }
-    virtual std::vector <std::pair<string,long>> pairs() override { return T::pairs(); }
-    virtual string asString() override { return T::key(isize(arg)); }
+    std::vector <std::pair<string,long>> pairs() override { return T::pairs(); }
+    virtual string asString() override { return T::key(E(arg)); }
     virtual string keyList() override { return T::keyList(); }
     virtual string argList() override { return T::argList(); }
     virtual string help(isize item) override { return T::help(item); }

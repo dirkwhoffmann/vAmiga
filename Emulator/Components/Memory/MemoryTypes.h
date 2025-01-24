@@ -18,79 +18,80 @@ namespace vamiga {
  * table to specify the source and target of a peek or poke operation,
  * respectively.
  */
-enum_long(MEM_SOURCE)
+enum class MemorySource : long
 {
-    MEM_NONE,
-    MEM_CHIP,
-    MEM_CHIP_MIRROR,
-    MEM_SLOW,
-    MEM_SLOW_MIRROR,
-    MEM_FAST,
-    MEM_CIA,
-    MEM_CIA_MIRROR,
-    MEM_RTC,
-    MEM_CUSTOM,
-    MEM_CUSTOM_MIRROR,
-    MEM_AUTOCONF,
-    MEM_ZOR,
-    MEM_ROM,
-    MEM_ROM_MIRROR,
-    MEM_WOM,
-    MEM_EXT
+    NONE,
+    CHIP,
+    CHIP_MIRROR,
+    SLOW,
+    SLOW_MIRROR,
+    FAST,
+    CIA,
+    CIA_MIRROR,
+    RTC,
+    CUSTOM,
+    CUSTOM_MIRROR,
+    AUTOCONF,
+    ZOR,
+    ROM,
+    ROM_MIRROR,
+    WOM,
+    EXT
 };
-typedef MEM_SOURCE MemorySource;
 
 struct MemorySourceEnum : util::Reflection<MemorySourceEnum, MemorySource>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = MEM_EXT;
+    static constexpr long maxVal = (long)MemorySource::EXT;
     
-    static const char *prefix() { return "MEM"; }
-    static const char *_key(long value)
+    // static const char *prefix() { return "MEM"; }
+    static const char *_key(long value) { return _key(MemorySource(value)); }
+    static const char *_key(MemorySource value)
     {
         switch (value) {
                 
-            case MEM_NONE:           return "NONE";
-            case MEM_CHIP:           return "CHIP";
-            case MEM_CHIP_MIRROR:    return "CHIP_MIRROR";
-            case MEM_SLOW:           return "SLOW";
-            case MEM_SLOW_MIRROR:    return "SLOW_MIRROR";
-            case MEM_FAST:           return "FAST";
-            case MEM_CIA:            return "CIA";
-            case MEM_CIA_MIRROR:     return "CIA_MIRROR";
-            case MEM_RTC:            return "RTC";
-            case MEM_CUSTOM:         return "CUSTOM";
-            case MEM_CUSTOM_MIRROR:  return "CUSTOM_MIRROR";
-            case MEM_AUTOCONF:       return "AUTOCONF";
-            case MEM_ZOR:            return "ZOR";
-            case MEM_ROM:            return "ROM";
-            case MEM_ROM_MIRROR:     return "ROM_MIRROR";
-            case MEM_WOM:            return "WOM";
-            case MEM_EXT:            return "EXT";
+            case MemorySource::NONE:           return "NONE";
+            case MemorySource::CHIP:           return "CHIP";
+            case MemorySource::CHIP_MIRROR:    return "CHIP_MIRROR";
+            case MemorySource::SLOW:           return "SLOW";
+            case MemorySource::SLOW_MIRROR:    return "SLOW_MIRROR";
+            case MemorySource::FAST:           return "FAST";
+            case MemorySource::CIA:            return "CIA";
+            case MemorySource::CIA_MIRROR:     return "CIA_MIRROR";
+            case MemorySource::RTC:            return "RTC";
+            case MemorySource::CUSTOM:         return "CUSTOM";
+            case MemorySource::CUSTOM_MIRROR:  return "CUSTOM_MIRROR";
+            case MemorySource::AUTOCONF:       return "AUTOCONF";
+            case MemorySource::ZOR:            return "ZOR";
+            case MemorySource::ROM:            return "ROM";
+            case MemorySource::ROM_MIRROR:     return "ROM_MIRROR";
+            case MemorySource::WOM:            return "WOM";
+            case MemorySource::EXT:            return "EXT";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(long value) { return help(MemorySource(value)); }
+    static const char *help(MemorySource value)
     {
         switch (value) {
                 
-            case MEM_NONE:           return "Unmapped";
-            case MEM_CHIP:           return "Chip RAM";
-            case MEM_CHIP_MIRROR:    return "Chip RAM mirror";
-            case MEM_SLOW:           return "Slow RAM";
-            case MEM_SLOW_MIRROR:    return "Slow RAM mirror";
-            case MEM_FAST:           return "Fast RAM";
-            case MEM_CIA:            return "CIA";
-            case MEM_CIA_MIRROR:     return "CIA mirror";
-            case MEM_RTC:            return "Real-time clock";
-            case MEM_CUSTOM:         return "Custom chips";
-            case MEM_CUSTOM_MIRROR:  return "Custom chips mirror";
-            case MEM_AUTOCONF:       return "Auto config";
-            case MEM_ZOR:            return "Zorro boards";
-            case MEM_ROM:            return "Kickstart ROM";
-            case MEM_ROM_MIRROR:     return "Kickstart ROM mirror";
-            case MEM_WOM:            return "Write-only memory";
-            case MEM_EXT:            return "Extension ROM";
+            case MemorySource::NONE:           return "Unmapped";
+            case MemorySource::CHIP:           return "Chip RAM";
+            case MemorySource::CHIP_MIRROR:    return "Chip RAM mirror";
+            case MemorySource::SLOW:           return "Slow RAM";
+            case MemorySource::SLOW_MIRROR:    return "Slow RAM mirror";
+            case MemorySource::FAST:           return "Fast RAM";
+            case MemorySource::CIA:            return "CIA";
+            case MemorySource::CIA_MIRROR:     return "CIA mirror";
+            case MemorySource::RTC:            return "Real-time clock";
+            case MemorySource::CUSTOM:         return "Custom chips";
+            case MemorySource::CUSTOM_MIRROR:  return "Custom chips mirror";
+            case MemorySource::AUTOCONF:       return "Auto config";
+            case MemorySource::ZOR:            return "Zorro boards";
+            case MemorySource::ROM:            return "Kickstart ROM";
+            case MemorySource::ROM_MIRROR:     return "Kickstart ROM mirror";
+            case MemorySource::WOM:            return "Write-only memory";
+            case MemorySource::EXT:            return "Extension ROM";
         }
         return "???";
     }
@@ -152,7 +153,14 @@ struct BankMapEnum : util::Reflection<BankMapEnum, BankMap>
     }
     static const char *help(long value)
     {
-        return "";
+        switch (value) {
+                
+            case BANK_MAP_A500:    return "Amiga 500 memory layout";
+            case BANK_MAP_A1000:   return "Amiga 1000 memory layout";
+            case BANK_MAP_A2000A:  return "Amiga 2000A memory layout";
+            case BANK_MAP_A2000B:  return "Amiga 2000B memory layout";
+        }
+        return "???";
     }
 };
 

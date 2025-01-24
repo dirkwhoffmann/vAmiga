@@ -97,7 +97,7 @@ DiagBoard::updateMemSrcTables()
     if (baseAddr == 0) return;
     
     // Map in this device
-    mem.cpuMemSrc[firstPage()] = MEM_ZOR;
+    mem.cpuMemSrc[firstPage()] = MemorySource::ZOR;
 }
 
 u8

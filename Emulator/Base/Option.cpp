@@ -18,7 +18,7 @@ namespace vamiga {
 std::unique_ptr<OptionParser>
 OptionParser::create(Option opt, i64 arg)
 {
-    auto enumParser = [&]<typename T>() { return std::unique_ptr<EnumParser<T>>(new EnumParser<T>(opt, arg)); };
+    auto enumParser = [&]<class T, typename E>() { return std::unique_ptr<EnumParser<T,E>>(new EnumParser<T,E>(opt, arg)); };
     auto boolParser = [&]() { return std::unique_ptr<BoolParser>(new BoolParser(opt, arg)); };
     auto numParser  = [&](string unit = "") { return std::unique_ptr<NumParser>(new NumParser(opt, arg, unit)); };
     auto hexParser  = [&](string unit = "") { return std::unique_ptr<HexParser>(new HexParser(opt, arg, unit)); };
@@ -30,8 +30,8 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_HOST_FRAMEBUF_WIDTH:       return numParser(" pixels");
         case OPT_HOST_FRAMEBUF_HEIGHT:      return numParser(" pixels");
 
-        case OPT_AMIGA_VIDEO_FORMAT:        return enumParser.template operator()<VideoFormatEnum>();
-        case OPT_AMIGA_WARP_MODE:           return enumParser.template operator()<WarpModeEnum>();
+        case OPT_AMIGA_VIDEO_FORMAT:        return enumParser.template operator()<VideoFormatEnum,VideoFormat>();
+        case OPT_AMIGA_WARP_MODE:           return enumParser.template operator()<WarpModeEnum,WarpMode>();
         case OPT_AMIGA_WARP_BOOT:           return numParser(" sec");
         case OPT_AMIGA_VSYNC:               return boolParser();
         case OPT_AMIGA_SPEED_BOOST:         return numParser("%");
@@ -41,10 +41,10 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_AMIGA_SNAP_DELAY:          return numParser(" sec");
         case OPT_AMIGA_SNAP_COMPRESS:       return boolParser();
 
-        case OPT_AGNUS_REVISION:            return enumParser.template operator()<AgnusRevisionEnum>();
+        case OPT_AGNUS_REVISION:            return enumParser.template operator()<AgnusRevisionEnum,AgnusRevision>();
         case OPT_AGNUS_PTR_DROPS:           return boolParser();
 
-        case OPT_DENISE_REVISION:           return enumParser.template operator()<DeniseRevisionEnum>();
+        case OPT_DENISE_REVISION:           return enumParser.template operator()<DeniseRevisionEnum,DeniseRevision>();
         case OPT_DENISE_VIEWPORT_TRACKING:  return boolParser();
         case OPT_DENISE_FRAME_SKIPPING:     return boolParser();
         case OPT_DENISE_HIDDEN_BITPLANES:   return numParser();
@@ -55,13 +55,13 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_DENISE_CLX_SPR_PLF:        return boolParser();
         case OPT_DENISE_CLX_PLF_PLF:        return boolParser();
 
-        case OPT_MON_PALETTE:               return enumParser.template operator()<PaletteEnum>();
+        case OPT_MON_PALETTE:               return enumParser.template operator()<PaletteEnum,Palette>();
         case OPT_MON_BRIGHTNESS:            return numParser("%");
         case OPT_MON_CONTRAST:              return numParser("%");
         case OPT_MON_SATURATION:            return numParser("%");
 
         case OPT_DMA_DEBUG_ENABLE:          return boolParser();
-        case OPT_DMA_DEBUG_MODE:            return enumParser.template operator()<DmaDisplayModeEnum>();
+        case OPT_DMA_DEBUG_MODE:            return enumParser.template operator()<DmaDisplayModeEnum,DmaDisplayMode>();
         case OPT_DMA_DEBUG_OPACITY:         return numParser("%");
         case OPT_DMA_DEBUG_CHANNEL0:        return boolParser();
         case OPT_DMA_DEBUG_CHANNEL1:        return boolParser();
@@ -80,10 +80,10 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_DMA_DEBUG_COLOR6:          return numParser();
         case OPT_DMA_DEBUG_COLOR7:          return numParser();
 
-        case OPT_LA_PROBE0:                 return enumParser.template operator()<ProbeEnum>();
-        case OPT_LA_PROBE1:                 return enumParser.template operator()<ProbeEnum>();
-        case OPT_LA_PROBE2:                 return enumParser.template operator()<ProbeEnum>();
-        case OPT_LA_PROBE3:                 return enumParser.template operator()<ProbeEnum>();
+        case OPT_LA_PROBE0:                 return enumParser.template operator()<ProbeEnum,Probe>();
+        case OPT_LA_PROBE1:                 return enumParser.template operator()<ProbeEnum,Probe>();
+        case OPT_LA_PROBE2:                 return enumParser.template operator()<ProbeEnum,Probe>();
+        case OPT_LA_PROBE3:                 return enumParser.template operator()<ProbeEnum,Probe>();
         case OPT_LA_ADDR0:                  return hexParser();
         case OPT_LA_ADDR1:                  return hexParser();
         case OPT_LA_ADDR2:                  return hexParser();
@@ -91,14 +91,14 @@ OptionParser::create(Option opt, i64 arg)
 
         case OPT_VID_WHITE_NOISE:           return boolParser();
             
-        case OPT_CPU_REVISION:              return enumParser.template operator()<CPURevisionEnum>();
-        case OPT_CPU_DASM_REVISION:         return enumParser.template operator()<DasmRevisionEnum>();
-        case OPT_CPU_DASM_SYNTAX:           return enumParser.template operator()<DasmSyntaxEnum>();
-        case OPT_CPU_DASM_NUMBERS:          return enumParser.template operator()<DasmNumbersEnum>();
+        case OPT_CPU_REVISION:              return enumParser.template operator()<CPURevisionEnum,CPURevision>();
+        case OPT_CPU_DASM_REVISION:         return enumParser.template operator()<DasmRevisionEnum,DasmRevision>();
+        case OPT_CPU_DASM_SYNTAX:           return enumParser.template operator()<DasmSyntaxEnum,DasmSyntax>();
+        case OPT_CPU_DASM_NUMBERS:          return enumParser.template operator()<DasmNumbersEnum,DasmNumbers>();
         case OPT_CPU_OVERCLOCKING:          return numParser("x");
         case OPT_CPU_RESET_VAL:             return numParser();
 
-        case OPT_RTC_MODEL:                 return enumParser.template operator()<RTCRevisionEnum>();
+        case OPT_RTC_MODEL:                 return enumParser.template operator()<RTCRevisionEnum,RTCRevision>();
 
         case OPT_MEM_CHIP_RAM:              return numParser();
         case OPT_MEM_SLOW_RAM:              return numParser();
@@ -107,17 +107,17 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_MEM_SAVE_ROMS:             return boolParser();
         case OPT_MEM_SLOW_RAM_DELAY:        return boolParser();
         case OPT_MEM_SLOW_RAM_MIRROR:       return boolParser();
-        case OPT_MEM_BANKMAP:               return enumParser.template operator()<BankMapEnum>();
-        case OPT_MEM_UNMAPPING_TYPE:        return enumParser.template operator()<UnmappedMemoryEnum>();
-        case OPT_MEM_RAM_INIT_PATTERN:      return enumParser.template operator()<RamInitPatternEnum>();
+        case OPT_MEM_BANKMAP:               return enumParser.template operator()<BankMapEnum,BankMap>();
+        case OPT_MEM_UNMAPPING_TYPE:        return enumParser.template operator()<UnmappedMemoryEnum,UnmappedMemory>();
+        case OPT_MEM_RAM_INIT_PATTERN:      return enumParser.template operator()<RamInitPatternEnum,RamInitPattern>();
 
         case OPT_DC_SPEED:                  return numParser();
         case OPT_DC_LOCK_DSKSYNC:           return boolParser();
         case OPT_DC_AUTO_DSKSYNC:           return boolParser();
 
         case OPT_DRIVE_CONNECT:             return boolParser();
-        case OPT_DRIVE_TYPE:                return enumParser.template operator()<FloppyDriveTypeEnum>();
-        case OPT_DRIVE_MECHANICS:           return enumParser.template operator()<DriveMechanicsEnum>();
+        case OPT_DRIVE_TYPE:                return enumParser.template operator()<FloppyDriveTypeEnum,FloppyDriveType>();
+        case OPT_DRIVE_MECHANICS:           return enumParser.template operator()<DriveMechanicsEnum,DriveMechanics>();
         case OPT_DRIVE_RPM:                 return numParser();
         case OPT_DRIVE_SWAP_DELAY:          return numParser();
         case OPT_DRIVE_PAN:                 return numParser();
@@ -128,17 +128,17 @@ OptionParser::create(Option opt, i64 arg)
 
         case OPT_HDC_CONNECT:               return boolParser();
 
-        case OPT_HDR_TYPE:                  return enumParser.template operator()<HardDriveTypeEnum>();
+        case OPT_HDR_TYPE:                  return enumParser.template operator()<HardDriveTypeEnum,HardDriveType>();
         case OPT_HDR_WRITE_THROUGH:         return boolParser();
         case OPT_HDR_PAN:                   return numParser();
         case OPT_HDR_STEP_VOLUME:           return numParser("%");
 
-        case OPT_SER_DEVICE:                return enumParser.template operator()<SerialPortDeviceEnum>();
+        case OPT_SER_DEVICE:                return enumParser.template operator()<SerialPortDeviceEnum,SerialPortDevice>();
         case OPT_SER_VERBOSE:               return boolParser();
 
         case OPT_BLITTER_ACCURACY:          return numParser();
 
-        case OPT_CIA_REVISION:              return enumParser.template operator()<CIARevisionEnum>();
+        case OPT_CIA_REVISION:              return enumParser.template operator()<CIARevisionEnum,CIARevision>();
         case OPT_CIA_TODBUG:                return boolParser();
         case OPT_CIA_ECLOCK_SYNCING:        return boolParser();
         case OPT_CIA_IDLE_SLEEP:            return boolParser();
@@ -154,8 +154,8 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_JOY_AUTOFIRE_BULLETS:      return numParser();
         case OPT_JOY_AUTOFIRE_DELAY:        return numParser();
 
-        case OPT_AUD_SAMPLING_METHOD:       return enumParser.template operator()<SamplingMethodEnum>();
-        case OPT_AUD_FILTER_TYPE:           return enumParser.template operator()<FilterTypeEnum>();
+        case OPT_AUD_SAMPLING_METHOD:       return enumParser.template operator()<SamplingMethodEnum,SamplingMethod>();
+        case OPT_AUD_FILTER_TYPE:           return enumParser.template operator()<FilterTypeEnum,FilterType>();
         case OPT_AUD_PAN0:                  return numParser();
         case OPT_AUD_PAN1:                  return numParser();
         case OPT_AUD_PAN2:                  return numParser();
@@ -171,7 +171,7 @@ OptionParser::create(Option opt, i64 arg)
         case OPT_DIAG_BOARD:                return boolParser();
 
         case OPT_SRV_PORT:                  return numParser();
-        case OPT_SRV_PROTOCOL:              return enumParser.template operator()<ServerProtocolEnum>();
+        case OPT_SRV_PROTOCOL:              return enumParser.template operator()<ServerProtocolEnum,ServerProtocol>();
         case OPT_SRV_AUTORUN:               return boolParser();
         case OPT_SRV_VERBOSE:               return boolParser();
 

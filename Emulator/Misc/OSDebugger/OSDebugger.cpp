@@ -461,7 +461,7 @@ OSDebugger::checkExecBase(const os::ExecBase &execBase) const
         auto src1 =mem.cpuMemSrc[bank - 1];
         auto src2 =mem.cpuMemSrc[bank];
         
-        if (!(src1 == MEM_CHIP && src2 != MEM_CHIP)) {
+        if (!(src1 == MemorySource::CHIP && src2 != MemorySource::CHIP)) {
             throw Error(VAERROR_OSDB, "ExecBase: MaxLocMem doesn't match bank map");
         }
     }
@@ -478,7 +478,7 @@ OSDebugger::checkExecBase(const os::ExecBase &execBase) const
         auto src1 =mem.cpuMemSrc[bank - 1];
         auto src2 =mem.cpuMemSrc[bank];
         
-        if (!(src1 == MEM_SLOW && src2 != MEM_SLOW)) {
+        if (!(src1 == MemorySource::SLOW && src2 != MemorySource::SLOW)) {
             throw Error(VAERROR_OSDB, "ExecBase: MaxExtMem doesn't match bank map");
         }
     }

@@ -847,9 +847,9 @@ Memory::updateMemSrcTables()
 void
 Memory::updateCpuMemSrcTable()
 {
-    MemorySource mem_rom = rom ? MEM_ROM : MEM_NONE;
-    MemorySource mem_wom = wom ? MEM_WOM : mem_rom;
-    MemorySource mem_rom_mirror = rom ? MEM_ROM_MIRROR : MEM_NONE;
+    MemorySource mem_rom = rom ? MemorySource::ROM : MemorySource::NONE;
+    MemorySource mem_wom = wom ? MemorySource::WOM : mem_rom;
+    MemorySource mem_rom_mirror = rom ? MemorySource::ROM_MIRROR : MemorySource::NONE;
 
     assert(config.chipSize % 0x10000 == 0);
     assert(config.slowSize % 0x10000 == 0);
@@ -863,45 +863,45 @@ Memory::updateCpuMemSrcTable()
 
     // Start from scratch
     for (isize i = 0x00; i <= 0xFF; i++) {
-        cpuMemSrc[i] = MEM_NONE;
+        cpuMemSrc[i] = MemorySource::NONE;
     }
     
     // Chip Ram
     if (chipRamPages) {
         for (isize i = 0x00; i < chipRamPages; i++) {
-            cpuMemSrc[i] = MEM_CHIP;
+            cpuMemSrc[i] = MemorySource::CHIP;
         }
         for (isize i = chipRamPages; i <= 0x1F; i++) {
-            cpuMemSrc[i] = MEM_CHIP_MIRROR;
+            cpuMemSrc[i] = MemorySource::CHIP_MIRROR;
         }
     }
 
     // CIAs
     for (isize i = 0xA0; i <= 0xBE; i++) {
-        cpuMemSrc[i] = MEM_CIA_MIRROR;
+        cpuMemSrc[i] = MemorySource::CIA_MIRROR;
     }
-    cpuMemSrc[0xBF] = MEM_CIA;
+    cpuMemSrc[0xBF] = MemorySource::CIA;
     
     // Slow Ram
     for (isize i = 0xC0; i <= 0xD7; i++) {
-        cpuMemSrc[i] = (i - 0xC0) < slowRamPages ? MEM_SLOW : MEM_CUSTOM_MIRROR;
+        cpuMemSrc[i] = (i - 0xC0) < slowRamPages ? MemorySource::SLOW : MemorySource::CUSTOM_MIRROR;
     }
     
     // Real-time clock (older Amigas)
     for (isize i = 0xD8; i <= 0xDB; i++) {
-        cpuMemSrc[i] = old ? MEM_RTC : MEM_CUSTOM;
+        cpuMemSrc[i] = old ? MemorySource::RTC : MemorySource::CUSTOM;
     }
 
     // Real-time clock (newer Amigas)
-    cpuMemSrc[0xDC] = old ? MEM_CUSTOM : MEM_RTC;
+    cpuMemSrc[0xDC] = old ? MemorySource::CUSTOM : MemorySource::RTC;
     
     
     // Reserved
-    cpuMemSrc[0xDD] = MEM_NONE;
+    cpuMemSrc[0xDD] = MemorySource::NONE;
 
     // Custom chip set
     for (isize i = 0xDE; i <= 0xDF; i++) {
-        cpuMemSrc[i] = MEM_CUSTOM;
+        cpuMemSrc[i] = MemorySource::CUSTOM;
     }
     
     // Kickstart mirror, unmapped, or Extended Rom
@@ -912,20 +912,20 @@ Memory::updateCpuMemSrcTable()
     }
     if (ext && config.extStart == 0xE0) {
         for (isize i = 0xE0; i <= 0xE7; i++) {
-            cpuMemSrc[i] = MEM_EXT;
+            cpuMemSrc[i] = MemorySource::EXT;
         }
     }
 
     // Auto-config (Zorro II)
-    cpuMemSrc[0xE8] = MEM_AUTOCONF;
+    cpuMemSrc[0xE8] = MemorySource::AUTOCONF;
     for (isize i = 0xE9; i <= 0xEF; i++) {
-        assert(cpuMemSrc[i] == MEM_NONE);
+        assert(cpuMemSrc[i] == MemorySource::NONE);
     }
     
     // Unmapped or Extended Rom
     if (ext && config.extStart == 0xF0) {
         for (isize i = 0xF0; i <= 0xF7; i++) {
-            cpuMemSrc[i] = MEM_EXT;
+            cpuMemSrc[i] = MemorySource::EXT;
         }
     }
 
@@ -942,7 +942,7 @@ Memory::updateCpuMemSrcTable()
 
     // Blend in Rom in lower memory area if the overlay line (OVL) is high
     if (ovl) {
-        for (isize i = 0; i < 8 && cpuMemSrc[0xF8 + i] != MEM_NONE; i++)
+        for (isize i = 0; i < 8 && cpuMemSrc[0xF8 + i] != MemorySource::NONE; i++)
             cpuMemSrc[i] = cpuMemSrc[0xF8 + i];
     }
 
@@ -959,18 +959,18 @@ Memory::updateAgnusMemSrcTable()
     
     // Start from scratch
     for (isize i = 0x00; i <= 0xFF; i++) {
-        agnusMemSrc[i] = MEM_NONE;
+        agnusMemSrc[i] = MemorySource::NONE;
     }
     
     // Chip Ram banks
     for (isize i = 0x0; i < banks; i++) {
-        agnusMemSrc[i] = MEM_CHIP;
+        agnusMemSrc[i] = MemorySource::CHIP;
     }
     
     // Slow Ram mirror
     if (slowRamIsMirroredIn()) {
         for (isize i = 0x8; i <= 0xF; i++) {
-            agnusMemSrc[i] = MEM_SLOW_MIRROR;
+            agnusMemSrc[i] = MemorySource::SLOW_MIRROR;
         }
     }
 }
@@ -998,7 +998,7 @@ Memory::inChipRam(u32 addr)
     if (addr > 0xFFFFFF) return false;
 
     auto memSrc = cpuMemSrc[addr >> 16];
-    return memSrc == MEM_CHIP || memSrc == MEM_CHIP_MIRROR;
+    return memSrc == MemorySource::CHIP || memSrc == MemorySource::CHIP_MIRROR;
 }
 
 bool
@@ -1007,7 +1007,7 @@ Memory::inSlowRam(u32 addr)
     if (addr > 0xFFFFFF) return false;
 
     auto memSrc = cpuMemSrc[addr >> 16];
-    return memSrc == MEM_SLOW;
+    return memSrc == MemorySource::SLOW;
 }
 
 bool
@@ -1016,7 +1016,7 @@ Memory::inFastRam(u32 addr)
     if (addr > 0xFFFFFF) return false;
 
     auto memSrc = cpuMemSrc[addr >> 16];
-    return memSrc == MEM_FAST;
+    return memSrc == MemorySource::FAST;
 }
 
 bool
@@ -1033,10 +1033,10 @@ Memory::inRom(u32 addr)
     auto memSrc = cpuMemSrc[addr >> 16];
     
     return
-    memSrc == MEM_ROM ||
-    memSrc == MEM_ROM_MIRROR ||
-    memSrc == MEM_WOM ||
-    memSrc == MEM_EXT;
+    memSrc == MemorySource::ROM ||
+    memSrc == MemorySource::ROM_MIRROR ||
+    memSrc == MemorySource::WOM ||
+    memSrc == MemorySource::EXT;
 }
 
 bool 
@@ -1044,7 +1044,7 @@ Memory::isUnmapped(u32 addr)
 {
     if (addr > 0xFFFFFF) return true;
 
-    return cpuMemSrc[addr >> 16] == MEM_NONE;
+    return cpuMemSrc[addr >> 16] == MemorySource::NONE;
 }
 
 
@@ -1053,7 +1053,7 @@ Memory::isUnmapped(u32 addr)
 //
 
 template<> u16
-Memory::spypeek16 <ACCESSOR_CPU, MEM_NONE> (u32 addr) const
+Memory::spypeek16 <ACCESSOR_CPU, MemorySource::NONE> (u32 addr) const
 {
     switch (config.unmappingType) {
             
@@ -1083,19 +1083,19 @@ Memory::spypeek32(u32 addr) const
 }
 
 template<> u8
-Memory::peek8 <ACCESSOR_CPU, MEM_NONE> (u32 addr)
+Memory::peek8 <ACCESSOR_CPU, MemorySource::NONE> (u32 addr)
 {
-    return (u8)(spypeek16 <ACCESSOR_CPU, MEM_NONE> (addr));
+    return (u8)(spypeek16 <ACCESSOR_CPU, MemorySource::NONE> (addr));
 }
 
 template<> u16
-Memory::peek16 <ACCESSOR_CPU, MEM_NONE> (u32 addr)
+Memory::peek16 <ACCESSOR_CPU, MemorySource::NONE> (u32 addr)
 {
-    return spypeek16 <ACCESSOR_CPU, MEM_NONE> (addr);
+    return spypeek16 <ACCESSOR_CPU, MemorySource::NONE> (addr);
 }
 
 template<> u8
-Memory::peek8 <ACCESSOR_CPU, MEM_CHIP> (u32 addr)
+Memory::peek8 <ACCESSOR_CPU, MemorySource::CHIP> (u32 addr)
 {
     ASSERT_CHIP_ADDR(addr);
     agnus.executeUntilBusIsFree();
@@ -1110,7 +1110,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_CHIP> (u32 addr)
 }
 
 template<> u16
-Memory::peek16 <ACCESSOR_CPU, MEM_CHIP> (u32 addr)
+Memory::peek16 <ACCESSOR_CPU, MemorySource::CHIP> (u32 addr)
 {
     ASSERT_CHIP_ADDR(addr);
     agnus.executeUntilBusIsFree();
@@ -1125,13 +1125,13 @@ Memory::peek16 <ACCESSOR_CPU, MEM_CHIP> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <ACCESSOR_CPU, MEM_CHIP> (u32 addr) const
+Memory::spypeek16 <ACCESSOR_CPU, MemorySource::CHIP> (u32 addr) const
 {
     return READ_CHIP_16(addr);
 }
 
 template<> u8
-Memory::peek8 <ACCESSOR_CPU, MEM_SLOW> (u32 addr)
+Memory::peek8 <ACCESSOR_CPU, MemorySource::SLOW> (u32 addr)
 {
     ASSERT_SLOW_ADDR(addr);
     agnus.executeUntilBusIsFree();
@@ -1146,7 +1146,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_SLOW> (u32 addr)
 }
 
 template<> u16
-Memory::peek16 <ACCESSOR_CPU, MEM_SLOW> (u32 addr)
+Memory::peek16 <ACCESSOR_CPU, MemorySource::SLOW> (u32 addr)
 {
     ASSERT_SLOW_ADDR(addr);
     agnus.executeUntilBusIsFree();
@@ -1161,13 +1161,13 @@ Memory::peek16 <ACCESSOR_CPU, MEM_SLOW> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <ACCESSOR_CPU, MEM_SLOW> (u32 addr) const
+Memory::spypeek16 <ACCESSOR_CPU, MemorySource::SLOW> (u32 addr) const
 {
     return READ_SLOW_16(addr);
 }
 
 template<> u8
-Memory::peek8 <ACCESSOR_CPU, MEM_FAST> (u32 addr)
+Memory::peek8 <ACCESSOR_CPU, MemorySource::FAST> (u32 addr)
 {
     ASSERT_FAST_ADDR(addr);
     
@@ -1176,7 +1176,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_FAST> (u32 addr)
 }
 
 template<> u16
-Memory::peek16 <ACCESSOR_CPU, MEM_FAST> (u32 addr)
+Memory::peek16 <ACCESSOR_CPU, MemorySource::FAST> (u32 addr)
 {
     if (!((addr - FAST_RAM_STRT) < (u32)config.fastSize)) {
         printf("addr = %x (start: %x size: %x)\n", addr, FAST_RAM_STRT, (u32)config.fastSize);
@@ -1189,13 +1189,13 @@ Memory::peek16 <ACCESSOR_CPU, MEM_FAST> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <ACCESSOR_CPU, MEM_FAST> (u32 addr) const
+Memory::spypeek16 <ACCESSOR_CPU, MemorySource::FAST> (u32 addr) const
 {
     return READ_FAST_16(addr);
 }
 
 template<> u8
-Memory::peek8 <ACCESSOR_CPU, MEM_CIA> (u32 addr)
+Memory::peek8 <ACCESSOR_CPU, MemorySource::CIA> (u32 addr)
 {
     ASSERT_CIA_ADDR(addr);
     
@@ -1206,7 +1206,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_CIA> (u32 addr)
 }
 
 template<> u16
-Memory::peek16 <ACCESSOR_CPU, MEM_CIA> (u32 addr)
+Memory::peek16 <ACCESSOR_CPU, MemorySource::CIA> (u32 addr)
 {
     ASSERT_CIA_ADDR(addr);
     xfiles("CIA: Reading a WORD from %x\n", addr);
@@ -1218,13 +1218,13 @@ Memory::peek16 <ACCESSOR_CPU, MEM_CIA> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <ACCESSOR_CPU, MEM_CIA> (u32 addr) const
+Memory::spypeek16 <ACCESSOR_CPU, MemorySource::CIA> (u32 addr) const
 {
     return spypeekCIA16(addr);
 }
 
 template<> u8
-Memory::peek8 <ACCESSOR_CPU, MEM_RTC> (u32 addr)
+Memory::peek8 <ACCESSOR_CPU, MemorySource::RTC> (u32 addr)
 {
     ASSERT_RTC_ADDR(addr);
     
@@ -1235,7 +1235,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_RTC> (u32 addr)
 }
 
 template<> u16
-Memory::peek16 <ACCESSOR_CPU, MEM_RTC> (u32 addr)
+Memory::peek16 <ACCESSOR_CPU, MemorySource::RTC> (u32 addr)
 {
     ASSERT_RTC_ADDR(addr);
     
@@ -1246,14 +1246,14 @@ Memory::peek16 <ACCESSOR_CPU, MEM_RTC> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <ACCESSOR_CPU, MEM_RTC> (u32 addr) const
+Memory::spypeek16 <ACCESSOR_CPU, MemorySource::RTC> (u32 addr) const
 {
     ASSERT_RTC_ADDR(addr);
     return peekRTC16(addr);
 }
 
 template<> u8
-Memory::peek8 <ACCESSOR_CPU, MEM_CUSTOM> (u32 addr)
+Memory::peek8 <ACCESSOR_CPU, MemorySource::CUSTOM> (u32 addr)
 {
     ASSERT_CUSTOM_ADDR(addr);
 
@@ -1268,7 +1268,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_CUSTOM> (u32 addr)
 }
 
 template<> u16
-Memory::peek16 <ACCESSOR_CPU, MEM_CUSTOM> (u32 addr)
+Memory::peek16 <ACCESSOR_CPU, MemorySource::CUSTOM> (u32 addr)
 {
     ASSERT_CUSTOM_ADDR(addr);
     
@@ -1283,13 +1283,13 @@ Memory::peek16 <ACCESSOR_CPU, MEM_CUSTOM> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <ACCESSOR_CPU, MEM_CUSTOM> (u32 addr) const
+Memory::spypeek16 <ACCESSOR_CPU, MemorySource::CUSTOM> (u32 addr) const
 {
     return spypeekCustom16(addr);
 }
 
 template<> u8
-Memory::peek8 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr)
+Memory::peek8 <ACCESSOR_CPU, MemorySource::AUTOCONF> (u32 addr)
 {
     ASSERT_AUTO_ADDR(addr);
     
@@ -1306,7 +1306,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr)
 }
 
 template<> u16
-Memory::peek16 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr)
+Memory::peek16 <ACCESSOR_CPU, MemorySource::AUTOCONF> (u32 addr)
 {
     ASSERT_AUTO_ADDR(addr);
 
@@ -1318,7 +1318,7 @@ Memory::peek16 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr) const
+Memory::spypeek16 <ACCESSOR_CPU, MemorySource::AUTOCONF> (u32 addr) const
 {
     auto hi = zorro.spypeekACF(addr);
     auto lo = zorro.spypeekACF(addr + 1);
@@ -1327,27 +1327,27 @@ Memory::spypeek16 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr) const
 }
 
 template<> u8
-Memory::peek8 <ACCESSOR_CPU, MEM_ZOR> (u32 addr)
+Memory::peek8 <ACCESSOR_CPU, MemorySource::ZOR> (u32 addr)
 {
     dataBus = u16(zorro.peek8(addr));
     return u8(dataBus);
 }
 
 template<> u16
-Memory::peek16 <ACCESSOR_CPU, MEM_ZOR> (u32 addr)
+Memory::peek16 <ACCESSOR_CPU, MemorySource::ZOR> (u32 addr)
 {
     dataBus = u16(zorro.peek16(addr));
     return dataBus;
 }
 
 template<> u16
-Memory::spypeek16 <ACCESSOR_CPU, MEM_ZOR> (u32 addr) const
+Memory::spypeek16 <ACCESSOR_CPU, MemorySource::ZOR> (u32 addr) const
 {
     return zorro.spypeek16(addr);
 }
 
 template<> u8
-Memory::peek8 <ACCESSOR_CPU, MEM_ROM> (u32 addr)
+Memory::peek8 <ACCESSOR_CPU, MemorySource::ROM> (u32 addr)
 {
     ASSERT_ROM_ADDR(addr);
     
@@ -1356,7 +1356,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_ROM> (u32 addr)
 }
 
 template<> u16
-Memory::peek16 <ACCESSOR_CPU, MEM_ROM> (u32 addr)
+Memory::peek16 <ACCESSOR_CPU, MemorySource::ROM> (u32 addr)
 {
     ASSERT_ROM_ADDR(addr);
     
@@ -1365,13 +1365,13 @@ Memory::peek16 <ACCESSOR_CPU, MEM_ROM> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <ACCESSOR_CPU, MEM_ROM> (u32 addr) const
+Memory::spypeek16 <ACCESSOR_CPU, MemorySource::ROM> (u32 addr) const
 {
     return READ_ROM_16(addr);
 }
 
 template<> u8
-Memory::peek8 <ACCESSOR_CPU, MEM_WOM> (u32 addr)
+Memory::peek8 <ACCESSOR_CPU, MemorySource::WOM> (u32 addr)
 {
     ASSERT_WOM_ADDR(addr);
     
@@ -1380,7 +1380,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_WOM> (u32 addr)
 }
 
 template<> u16
-Memory::peek16 <ACCESSOR_CPU, MEM_WOM> (u32 addr)
+Memory::peek16 <ACCESSOR_CPU, MemorySource::WOM> (u32 addr)
 {
     ASSERT_WOM_ADDR(addr);
     
@@ -1389,13 +1389,13 @@ Memory::peek16 <ACCESSOR_CPU, MEM_WOM> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <ACCESSOR_CPU, MEM_WOM> (u32 addr) const
+Memory::spypeek16 <ACCESSOR_CPU, MemorySource::WOM> (u32 addr) const
 {
     return READ_WOM_16(addr);
 }
 
 template<> u8
-Memory::peek8 <ACCESSOR_CPU, MEM_EXT> (u32 addr)
+Memory::peek8 <ACCESSOR_CPU, MemorySource::EXT> (u32 addr)
 {
     ASSERT_EXT_ADDR(addr);
     
@@ -1404,7 +1404,7 @@ Memory::peek8 <ACCESSOR_CPU, MEM_EXT> (u32 addr)
 }
 
 template<> u16
-Memory::peek16 <ACCESSOR_CPU, MEM_EXT> (u32 addr)
+Memory::peek16 <ACCESSOR_CPU, MemorySource::EXT> (u32 addr)
 {
     ASSERT_EXT_ADDR(addr);
     
@@ -1413,7 +1413,7 @@ Memory::peek16 <ACCESSOR_CPU, MEM_EXT> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <ACCESSOR_CPU, MEM_EXT> (u32 addr) const
+Memory::spypeek16 <ACCESSOR_CPU, MemorySource::EXT> (u32 addr) const
 {
     return READ_EXT_16(addr);
 }
@@ -1425,22 +1425,22 @@ Memory::peek8 <ACCESSOR_CPU> (u32 addr)
     
     switch (cpuMemSrc[addr >> 16]) {
             
-        case MEM_NONE:          return peek8 <ACCESSOR_CPU, MEM_NONE>     (addr);
-        case MEM_CHIP:          return peek8 <ACCESSOR_CPU, MEM_CHIP>     (addr);
-        case MEM_CHIP_MIRROR:   return peek8 <ACCESSOR_CPU, MEM_CHIP>     (addr);
-        case MEM_SLOW:          return peek8 <ACCESSOR_CPU, MEM_SLOW>     (addr);
-        case MEM_FAST:          return peek8 <ACCESSOR_CPU, MEM_FAST>     (addr);
-        case MEM_CIA:           return peek8 <ACCESSOR_CPU, MEM_CIA>      (addr);
-        case MEM_CIA_MIRROR:    return peek8 <ACCESSOR_CPU, MEM_CIA>      (addr);
-        case MEM_RTC:           return peek8 <ACCESSOR_CPU, MEM_RTC>      (addr);
-        case MEM_CUSTOM:        return peek8 <ACCESSOR_CPU, MEM_CUSTOM>   (addr);
-        case MEM_CUSTOM_MIRROR: return peek8 <ACCESSOR_CPU, MEM_CUSTOM>   (addr);
-        case MEM_AUTOCONF:      return peek8 <ACCESSOR_CPU, MEM_AUTOCONF> (addr);
-        case MEM_ZOR:           return peek8 <ACCESSOR_CPU, MEM_ZOR>      (addr);
-        case MEM_ROM:           return peek8 <ACCESSOR_CPU, MEM_ROM>      (addr);
-        case MEM_ROM_MIRROR:    return peek8 <ACCESSOR_CPU, MEM_ROM>      (addr);
-        case MEM_WOM:           return peek8 <ACCESSOR_CPU, MEM_WOM>      (addr);
-        case MEM_EXT:           return peek8 <ACCESSOR_CPU, MEM_EXT>      (addr);
+        case MemorySource::NONE:          return peek8 <ACCESSOR_CPU, MemorySource::NONE>     (addr);
+        case MemorySource::CHIP:          return peek8 <ACCESSOR_CPU, MemorySource::CHIP>     (addr);
+        case MemorySource::CHIP_MIRROR:   return peek8 <ACCESSOR_CPU, MemorySource::CHIP>     (addr);
+        case MemorySource::SLOW:          return peek8 <ACCESSOR_CPU, MemorySource::SLOW>     (addr);
+        case MemorySource::FAST:          return peek8 <ACCESSOR_CPU, MemorySource::FAST>     (addr);
+        case MemorySource::CIA:           return peek8 <ACCESSOR_CPU, MemorySource::CIA>      (addr);
+        case MemorySource::CIA_MIRROR:    return peek8 <ACCESSOR_CPU, MemorySource::CIA>      (addr);
+        case MemorySource::RTC:           return peek8 <ACCESSOR_CPU, MemorySource::RTC>      (addr);
+        case MemorySource::CUSTOM:        return peek8 <ACCESSOR_CPU, MemorySource::CUSTOM>   (addr);
+        case MemorySource::CUSTOM_MIRROR: return peek8 <ACCESSOR_CPU, MemorySource::CUSTOM>   (addr);
+        case MemorySource::AUTOCONF:      return peek8 <ACCESSOR_CPU, MemorySource::AUTOCONF> (addr);
+        case MemorySource::ZOR:           return peek8 <ACCESSOR_CPU, MemorySource::ZOR>      (addr);
+        case MemorySource::ROM:           return peek8 <ACCESSOR_CPU, MemorySource::ROM>      (addr);
+        case MemorySource::ROM_MIRROR:    return peek8 <ACCESSOR_CPU, MemorySource::ROM>      (addr);
+        case MemorySource::WOM:           return peek8 <ACCESSOR_CPU, MemorySource::WOM>      (addr);
+        case MemorySource::EXT:           return peek8 <ACCESSOR_CPU, MemorySource::EXT>      (addr);
 
         default:
             fatalError;
@@ -1454,22 +1454,22 @@ Memory::peek16 <ACCESSOR_CPU> (u32 addr)
 
     switch (cpuMemSrc[addr >> 16]) {
             
-        case MEM_NONE:          return peek16 <ACCESSOR_CPU, MEM_NONE>     (addr);
-        case MEM_CHIP:          return peek16 <ACCESSOR_CPU, MEM_CHIP>     (addr);
-        case MEM_CHIP_MIRROR:   return peek16 <ACCESSOR_CPU, MEM_CHIP>     (addr);
-        case MEM_SLOW:          return peek16 <ACCESSOR_CPU, MEM_SLOW>     (addr);
-        case MEM_FAST:          return peek16 <ACCESSOR_CPU, MEM_FAST>     (addr);
-        case MEM_CIA:           return peek16 <ACCESSOR_CPU, MEM_CIA>      (addr);
-        case MEM_CIA_MIRROR:    return peek16 <ACCESSOR_CPU, MEM_CIA>      (addr);
-        case MEM_RTC:           return peek16 <ACCESSOR_CPU, MEM_RTC>      (addr);
-        case MEM_CUSTOM:        return peek16 <ACCESSOR_CPU, MEM_CUSTOM>   (addr);
-        case MEM_CUSTOM_MIRROR: return peek16 <ACCESSOR_CPU, MEM_CUSTOM>   (addr);
-        case MEM_AUTOCONF:      return peek16 <ACCESSOR_CPU, MEM_AUTOCONF> (addr);
-        case MEM_ZOR:           return peek16 <ACCESSOR_CPU, MEM_ZOR>      (addr);
-        case MEM_ROM:           return peek16 <ACCESSOR_CPU, MEM_ROM>      (addr);
-        case MEM_ROM_MIRROR:    return peek16 <ACCESSOR_CPU, MEM_ROM>      (addr);
-        case MEM_WOM:           return peek16 <ACCESSOR_CPU, MEM_WOM>      (addr);
-        case MEM_EXT:           return peek16 <ACCESSOR_CPU, MEM_EXT>      (addr);
+        case MemorySource::NONE:          return peek16 <ACCESSOR_CPU, MemorySource::NONE>     (addr);
+        case MemorySource::CHIP:          return peek16 <ACCESSOR_CPU, MemorySource::CHIP>     (addr);
+        case MemorySource::CHIP_MIRROR:   return peek16 <ACCESSOR_CPU, MemorySource::CHIP>     (addr);
+        case MemorySource::SLOW:          return peek16 <ACCESSOR_CPU, MemorySource::SLOW>     (addr);
+        case MemorySource::FAST:          return peek16 <ACCESSOR_CPU, MemorySource::FAST>     (addr);
+        case MemorySource::CIA:           return peek16 <ACCESSOR_CPU, MemorySource::CIA>      (addr);
+        case MemorySource::CIA_MIRROR:    return peek16 <ACCESSOR_CPU, MemorySource::CIA>      (addr);
+        case MemorySource::RTC:           return peek16 <ACCESSOR_CPU, MemorySource::RTC>      (addr);
+        case MemorySource::CUSTOM:        return peek16 <ACCESSOR_CPU, MemorySource::CUSTOM>   (addr);
+        case MemorySource::CUSTOM_MIRROR: return peek16 <ACCESSOR_CPU, MemorySource::CUSTOM>   (addr);
+        case MemorySource::AUTOCONF:      return peek16 <ACCESSOR_CPU, MemorySource::AUTOCONF> (addr);
+        case MemorySource::ZOR:           return peek16 <ACCESSOR_CPU, MemorySource::ZOR>      (addr);
+        case MemorySource::ROM:           return peek16 <ACCESSOR_CPU, MemorySource::ROM>      (addr);
+        case MemorySource::ROM_MIRROR:    return peek16 <ACCESSOR_CPU, MemorySource::ROM>      (addr);
+        case MemorySource::WOM:           return peek16 <ACCESSOR_CPU, MemorySource::WOM>      (addr);
+        case MemorySource::EXT:           return peek16 <ACCESSOR_CPU, MemorySource::EXT>      (addr);
 
         default:
             fatalError;
@@ -1483,22 +1483,22 @@ Memory::spypeek16 <ACCESSOR_CPU> (u32 addr) const
 
     switch (cpuMemSrc[addr >> 16]) {
             
-        case MEM_NONE:          return spypeek16 <ACCESSOR_CPU, MEM_NONE>     (addr);
-        case MEM_CHIP:          return spypeek16 <ACCESSOR_CPU, MEM_CHIP>     (addr);
-        case MEM_CHIP_MIRROR:   return spypeek16 <ACCESSOR_CPU, MEM_CHIP>     (addr);
-        case MEM_SLOW:          return spypeek16 <ACCESSOR_CPU, MEM_SLOW>     (addr);
-        case MEM_FAST:          return spypeek16 <ACCESSOR_CPU, MEM_FAST>     (addr);
-        case MEM_CIA:           return spypeek16 <ACCESSOR_CPU, MEM_CIA>      (addr);
-        case MEM_CIA_MIRROR:    return spypeek16 <ACCESSOR_CPU, MEM_CIA>      (addr);
-        case MEM_RTC:           return spypeek16 <ACCESSOR_CPU, MEM_RTC>      (addr);
-        case MEM_CUSTOM:        return spypeek16 <ACCESSOR_CPU, MEM_CUSTOM>   (addr);
-        case MEM_CUSTOM_MIRROR: return spypeek16 <ACCESSOR_CPU, MEM_CUSTOM>   (addr);
-        case MEM_AUTOCONF:      return spypeek16 <ACCESSOR_CPU, MEM_AUTOCONF> (addr);
-        case MEM_ZOR:           return spypeek16 <ACCESSOR_CPU, MEM_ZOR>      (addr);
-        case MEM_ROM:           return spypeek16 <ACCESSOR_CPU, MEM_ROM>      (addr);
-        case MEM_ROM_MIRROR:    return spypeek16 <ACCESSOR_CPU, MEM_ROM>      (addr);
-        case MEM_WOM:           return spypeek16 <ACCESSOR_CPU, MEM_WOM>      (addr);
-        case MEM_EXT:           return spypeek16 <ACCESSOR_CPU, MEM_EXT>      (addr);
+        case MemorySource::NONE:          return spypeek16 <ACCESSOR_CPU, MemorySource::NONE>     (addr);
+        case MemorySource::CHIP:          return spypeek16 <ACCESSOR_CPU, MemorySource::CHIP>     (addr);
+        case MemorySource::CHIP_MIRROR:   return spypeek16 <ACCESSOR_CPU, MemorySource::CHIP>     (addr);
+        case MemorySource::SLOW:          return spypeek16 <ACCESSOR_CPU, MemorySource::SLOW>     (addr);
+        case MemorySource::FAST:          return spypeek16 <ACCESSOR_CPU, MemorySource::FAST>     (addr);
+        case MemorySource::CIA:           return spypeek16 <ACCESSOR_CPU, MemorySource::CIA>      (addr);
+        case MemorySource::CIA_MIRROR:    return spypeek16 <ACCESSOR_CPU, MemorySource::CIA>      (addr);
+        case MemorySource::RTC:           return spypeek16 <ACCESSOR_CPU, MemorySource::RTC>      (addr);
+        case MemorySource::CUSTOM:        return spypeek16 <ACCESSOR_CPU, MemorySource::CUSTOM>   (addr);
+        case MemorySource::CUSTOM_MIRROR: return spypeek16 <ACCESSOR_CPU, MemorySource::CUSTOM>   (addr);
+        case MemorySource::AUTOCONF:      return spypeek16 <ACCESSOR_CPU, MemorySource::AUTOCONF> (addr);
+        case MemorySource::ZOR:           return spypeek16 <ACCESSOR_CPU, MemorySource::ZOR>      (addr);
+        case MemorySource::ROM:           return spypeek16 <ACCESSOR_CPU, MemorySource::ROM>      (addr);
+        case MemorySource::ROM_MIRROR:    return spypeek16 <ACCESSOR_CPU, MemorySource::ROM>      (addr);
+        case MemorySource::WOM:           return spypeek16 <ACCESSOR_CPU, MemorySource::WOM>      (addr);
+        case MemorySource::EXT:           return spypeek16 <ACCESSOR_CPU, MemorySource::EXT>      (addr);
 
         default:
             fatalError;
@@ -1537,21 +1537,21 @@ Memory::spypeek <ACCESSOR_CPU> (u32 addr, isize len, u8 *buf) const
 //
 
 template<> u16
-Memory::peek16 <ACCESSOR_AGNUS, MEM_NONE> (u32 addr)
+Memory::peek16 <ACCESSOR_AGNUS, MemorySource::NONE> (u32 addr)
 {
     assert((addr & agnus.ptrMask) == addr);
     xfiles("Agnus reads from unmapped RAM\n");
-    return peek16 <ACCESSOR_CPU, MEM_NONE> (addr);
+    return peek16 <ACCESSOR_CPU, MemorySource::NONE> (addr);
 }
 
 template<> u16
-Memory::spypeek16 <ACCESSOR_AGNUS, MEM_NONE> (u32 addr) const
+Memory::spypeek16 <ACCESSOR_AGNUS, MemorySource::NONE> (u32 addr) const
 {
-    return spypeek16 <ACCESSOR_CPU, MEM_NONE> (addr);
+    return spypeek16 <ACCESSOR_CPU, MemorySource::NONE> (addr);
 }
 
 template<> u16
-Memory::peek16 <ACCESSOR_AGNUS, MEM_CHIP> (u32 addr)
+Memory::peek16 <ACCESSOR_AGNUS, MemorySource::CHIP> (u32 addr)
 {
     assert((addr & agnus.ptrMask) == addr);
     dataBus = READ_CHIP_16(addr);
@@ -1559,14 +1559,14 @@ Memory::peek16 <ACCESSOR_AGNUS, MEM_CHIP> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <ACCESSOR_AGNUS, MEM_CHIP> (u32 addr) const
+Memory::spypeek16 <ACCESSOR_AGNUS, MemorySource::CHIP> (u32 addr) const
 {
     assert((addr & agnus.ptrMask) == addr);
     return READ_CHIP_16(addr);
 }
 
 template<> u16
-Memory::peek16 <ACCESSOR_AGNUS, MEM_SLOW> (u32 addr)
+Memory::peek16 <ACCESSOR_AGNUS, MemorySource::SLOW> (u32 addr)
 {
     xfiles("Agnus reads from Slow RAM mirror at %x\n", addr);
 
@@ -1575,7 +1575,7 @@ Memory::peek16 <ACCESSOR_AGNUS, MEM_SLOW> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <ACCESSOR_AGNUS, MEM_SLOW> (u32 addr) const
+Memory::spypeek16 <ACCESSOR_AGNUS, MemorySource::SLOW> (u32 addr) const
 {
     return READ_SLOW_16(SLOW_RAM_STRT + (addr & 0x7FFFF));
 }
@@ -1587,9 +1587,9 @@ Memory::peek16 <ACCESSOR_AGNUS> (u32 addr)
 
     switch (agnusMemSrc[addr >> 16]) {
             
-        case MEM_NONE:        return peek16 <ACCESSOR_AGNUS, MEM_NONE> (addr);
-        case MEM_CHIP:        return peek16 <ACCESSOR_AGNUS, MEM_CHIP> (addr);
-        case MEM_SLOW_MIRROR: return peek16 <ACCESSOR_AGNUS, MEM_SLOW> (addr);
+        case MemorySource::NONE:        return peek16 <ACCESSOR_AGNUS, MemorySource::NONE> (addr);
+        case MemorySource::CHIP:        return peek16 <ACCESSOR_AGNUS, MemorySource::CHIP> (addr);
+        case MemorySource::SLOW_MIRROR: return peek16 <ACCESSOR_AGNUS, MemorySource::SLOW> (addr);
             
         default:
             fatalError;
@@ -1603,9 +1603,9 @@ Memory::spypeek16 <ACCESSOR_AGNUS> (u32 addr) const
     
     switch (agnusMemSrc[addr >> 16]) {
             
-        case MEM_NONE:        return spypeek16 <ACCESSOR_AGNUS, MEM_NONE> (addr);
-        case MEM_CHIP:        return spypeek16 <ACCESSOR_AGNUS, MEM_CHIP> (addr);
-        case MEM_SLOW_MIRROR: return spypeek16 <ACCESSOR_AGNUS, MEM_SLOW> (addr);
+        case MemorySource::NONE:        return spypeek16 <ACCESSOR_AGNUS, MemorySource::NONE> (addr);
+        case MemorySource::CHIP:        return spypeek16 <ACCESSOR_AGNUS, MemorySource::CHIP> (addr);
+        case MemorySource::SLOW_MIRROR: return spypeek16 <ACCESSOR_AGNUS, MemorySource::SLOW> (addr);
             
         default:
             fatalError;
@@ -1625,21 +1625,21 @@ Memory::spypeek8 <ACCESSOR_AGNUS> (u32 addr) const
 //
 
 template <> void
-Memory::poke8 <ACCESSOR_CPU, MEM_NONE> (u32 addr, u8 value)
+Memory::poke8 <ACCESSOR_CPU, MemorySource::NONE> (u32 addr, u8 value)
 {
     trace(MEM_DEBUG, "poke8(%x [NONE], %x)\n", addr, value);
     dataBus = value;
 }
 
 template <> void
-Memory::poke16 <ACCESSOR_CPU, MEM_NONE> (u32 addr, u16 value)
+Memory::poke16 <ACCESSOR_CPU, MemorySource::NONE> (u32 addr, u16 value)
 {
     trace(MEM_DEBUG, "poke16 <CPU> (%x [NONE], %x)\n", addr, value);
     dataBus = value;
 }
 
 template <> void
-Memory::poke8 <ACCESSOR_CPU, MEM_CHIP> (u32 addr, u8 value)
+Memory::poke8 <ACCESSOR_CPU, MemorySource::CHIP> (u32 addr, u8 value)
 {
     ASSERT_CHIP_ADDR(addr);
     
@@ -1661,7 +1661,7 @@ Memory::poke8 <ACCESSOR_CPU, MEM_CHIP> (u32 addr, u8 value)
 }
 
 template <> void
-Memory::poke16 <ACCESSOR_CPU, MEM_CHIP> (u32 addr, u16 value)
+Memory::poke16 <ACCESSOR_CPU, MemorySource::CHIP> (u32 addr, u16 value)
 {
     ASSERT_CHIP_ADDR(addr);
     
@@ -1683,7 +1683,7 @@ Memory::poke16 <ACCESSOR_CPU, MEM_CHIP> (u32 addr, u16 value)
 }
 
 template <> void
-Memory::poke8 <ACCESSOR_CPU, MEM_SLOW> (u32 addr, u8 value)
+Memory::poke8 <ACCESSOR_CPU, MemorySource::SLOW> (u32 addr, u8 value)
 {
     ASSERT_SLOW_ADDR(addr);
     
@@ -1699,7 +1699,7 @@ Memory::poke8 <ACCESSOR_CPU, MEM_SLOW> (u32 addr, u8 value)
 }
 
 template <> void
-Memory::poke16 <ACCESSOR_CPU, MEM_SLOW> (u32 addr, u16 value)
+Memory::poke16 <ACCESSOR_CPU, MemorySource::SLOW> (u32 addr, u16 value)
 {
     ASSERT_SLOW_ADDR(addr);
     
@@ -1715,7 +1715,7 @@ Memory::poke16 <ACCESSOR_CPU, MEM_SLOW> (u32 addr, u16 value)
 }
 
 template <> void
-Memory::poke8 <ACCESSOR_CPU, MEM_FAST> (u32 addr, u8 value)
+Memory::poke8 <ACCESSOR_CPU, MemorySource::FAST> (u32 addr, u8 value)
 {
     ASSERT_FAST_ADDR(addr);
     
@@ -1724,7 +1724,7 @@ Memory::poke8 <ACCESSOR_CPU, MEM_FAST> (u32 addr, u8 value)
 }
 
 template <> void
-Memory::poke16 <ACCESSOR_CPU, MEM_FAST> (u32 addr, u16 value)
+Memory::poke16 <ACCESSOR_CPU, MemorySource::FAST> (u32 addr, u16 value)
 {
     ASSERT_FAST_ADDR(addr);
     
@@ -1733,7 +1733,7 @@ Memory::poke16 <ACCESSOR_CPU, MEM_FAST> (u32 addr, u16 value)
 }
 
 template <> void
-Memory::poke8 <ACCESSOR_CPU, MEM_CIA> (u32 addr, u8 value)
+Memory::poke8 <ACCESSOR_CPU, MemorySource::CIA> (u32 addr, u8 value)
 {
     ASSERT_CIA_ADDR(addr);
 
@@ -1744,7 +1744,7 @@ Memory::poke8 <ACCESSOR_CPU, MEM_CIA> (u32 addr, u8 value)
 }
 
 template <> void
-Memory::poke16 <ACCESSOR_CPU, MEM_CIA> (u32 addr, u16 value)
+Memory::poke16 <ACCESSOR_CPU, MemorySource::CIA> (u32 addr, u16 value)
 {
     ASSERT_CIA_ADDR(addr);
     xfiles("CIA: Writing a WORD into %x\n", addr);
@@ -1756,7 +1756,7 @@ Memory::poke16 <ACCESSOR_CPU, MEM_CIA> (u32 addr, u16 value)
 }
 
 template <> void
-Memory::poke8 <ACCESSOR_CPU, MEM_RTC> (u32 addr, u8 value)
+Memory::poke8 <ACCESSOR_CPU, MemorySource::RTC> (u32 addr, u8 value)
 {
     ASSERT_RTC_ADDR(addr);
     
@@ -1767,7 +1767,7 @@ Memory::poke8 <ACCESSOR_CPU, MEM_RTC> (u32 addr, u8 value)
 }
 
 template <> void
-Memory::poke16 <ACCESSOR_CPU, MEM_RTC> (u32 addr, u16 value)
+Memory::poke16 <ACCESSOR_CPU, MemorySource::RTC> (u32 addr, u16 value)
 {
     ASSERT_RTC_ADDR(addr);
     
@@ -1782,7 +1782,7 @@ Memory::poke16 <ACCESSOR_CPU, MEM_RTC> (u32 addr, u16 value)
 }
 
 template <> void
-Memory::poke8 <ACCESSOR_CPU, MEM_CUSTOM> (u32 addr, u8 value)
+Memory::poke8 <ACCESSOR_CPU, MemorySource::CUSTOM> (u32 addr, u8 value)
 {
     ASSERT_CUSTOM_ADDR(addr);
     
@@ -1798,7 +1798,7 @@ Memory::poke8 <ACCESSOR_CPU, MEM_CUSTOM> (u32 addr, u8 value)
 }
 
 template <> void
-Memory::poke16 <ACCESSOR_CPU, MEM_CUSTOM> (u32 addr, u16 value)
+Memory::poke16 <ACCESSOR_CPU, MemorySource::CUSTOM> (u32 addr, u16 value)
 {
     ASSERT_CUSTOM_ADDR(addr);
 
@@ -1813,7 +1813,7 @@ Memory::poke16 <ACCESSOR_CPU, MEM_CUSTOM> (u32 addr, u16 value)
 }
 
 template <> void
-Memory::poke8 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr, u8 value)
+Memory::poke8 <ACCESSOR_CPU, MemorySource::AUTOCONF> (u32 addr, u8 value)
 {
     ASSERT_AUTO_ADDR(addr);
 
@@ -1822,7 +1822,7 @@ Memory::poke8 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr, u8 value)
 }
 
 template <> void
-Memory::poke16 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr, u16 value)
+Memory::poke16 <ACCESSOR_CPU, MemorySource::AUTOCONF> (u32 addr, u16 value)
 {
     ASSERT_AUTO_ADDR(addr);
     
@@ -1832,21 +1832,21 @@ Memory::poke16 <ACCESSOR_CPU, MEM_AUTOCONF> (u32 addr, u16 value)
 }
 
 template <> void
-Memory::poke8 <ACCESSOR_CPU, MEM_ZOR> (u32 addr, u8 value)
+Memory::poke8 <ACCESSOR_CPU, MemorySource::ZOR> (u32 addr, u8 value)
 {
     dataBus = value;
     zorro.poke8(addr, value);
 }
 
 template <> void
-Memory::poke16 <ACCESSOR_CPU, MEM_ZOR> (u32 addr, u16 value)
+Memory::poke16 <ACCESSOR_CPU, MemorySource::ZOR> (u32 addr, u16 value)
 {
     dataBus = value;
     zorro.poke16(addr, value);
 }
 
 template <> void
-Memory::poke8 <ACCESSOR_CPU, MEM_ROM> (u32 addr, u8 value)
+Memory::poke8 <ACCESSOR_CPU, MemorySource::ROM> (u32 addr, u8 value)
 {
     ASSERT_ROM_ADDR(addr);
     
@@ -1861,13 +1861,13 @@ Memory::poke8 <ACCESSOR_CPU, MEM_ROM> (u32 addr, u8 value)
 }
 
 template <> void
-Memory::poke16 <ACCESSOR_CPU, MEM_ROM> (u32 addr, u16 value)
+Memory::poke16 <ACCESSOR_CPU, MemorySource::ROM> (u32 addr, u16 value)
 {
-    poke8 <ACCESSOR_CPU, MEM_ROM> (addr, (u8)value);
+    poke8 <ACCESSOR_CPU, MemorySource::ROM> (addr, (u8)value);
 }
 
 template <> void
-Memory::poke8 <ACCESSOR_CPU, MEM_WOM> (u32 addr, u8 value)
+Memory::poke8 <ACCESSOR_CPU, MemorySource::WOM> (u32 addr, u8 value)
 {
     ASSERT_WOM_ADDR(addr);
     
@@ -1876,7 +1876,7 @@ Memory::poke8 <ACCESSOR_CPU, MEM_WOM> (u32 addr, u8 value)
 }
 
 template <> void
-Memory::poke16 <ACCESSOR_CPU, MEM_WOM> (u32 addr, u16 value)
+Memory::poke16 <ACCESSOR_CPU, MemorySource::WOM> (u32 addr, u16 value)
 {
     ASSERT_WOM_ADDR(addr);
 
@@ -1885,14 +1885,14 @@ Memory::poke16 <ACCESSOR_CPU, MEM_WOM> (u32 addr, u16 value)
 }
 
 template <> void
-Memory::poke8 <ACCESSOR_CPU, MEM_EXT> (u32 addr, u8 value)
+Memory::poke8 <ACCESSOR_CPU, MemorySource::EXT> (u32 addr, u8 value)
 {
     ASSERT_EXT_ADDR(addr);
     stats.kickWrites.raw++;
 }
 
 template <> void
-Memory::poke16 <ACCESSOR_CPU, MEM_EXT> (u32 addr, u16 value)
+Memory::poke16 <ACCESSOR_CPU, MemorySource::EXT> (u32 addr, u16 value)
 {
     ASSERT_EXT_ADDR(addr);
     stats.kickWrites.raw++;
@@ -1905,22 +1905,22 @@ Memory::poke8 <ACCESSOR_CPU> (u32 addr, u8 value)
     
     switch (cpuMemSrc[addr >> 16]) {
             
-        case MEM_NONE:          poke8 <ACCESSOR_CPU, MEM_NONE>     (addr, value); return;
-        case MEM_CHIP:          poke8 <ACCESSOR_CPU, MEM_CHIP>     (addr, value); return;
-        case MEM_CHIP_MIRROR:   poke8 <ACCESSOR_CPU, MEM_CHIP>     (addr, value); return;
-        case MEM_SLOW:          poke8 <ACCESSOR_CPU, MEM_SLOW>     (addr, value); return;
-        case MEM_FAST:          poke8 <ACCESSOR_CPU, MEM_FAST>     (addr, value); return;
-        case MEM_CIA:           poke8 <ACCESSOR_CPU, MEM_CIA>      (addr, value); return;
-        case MEM_CIA_MIRROR:    poke8 <ACCESSOR_CPU, MEM_CIA>      (addr, value); return;
-        case MEM_RTC:           poke8 <ACCESSOR_CPU, MEM_RTC>      (addr, value); return;
-        case MEM_CUSTOM:        poke8 <ACCESSOR_CPU, MEM_CUSTOM>   (addr, value); return;
-        case MEM_CUSTOM_MIRROR: poke8 <ACCESSOR_CPU, MEM_CUSTOM>   (addr, value); return;
-        case MEM_AUTOCONF:      poke8 <ACCESSOR_CPU, MEM_AUTOCONF> (addr, value); return;
-        case MEM_ZOR:           poke8 <ACCESSOR_CPU, MEM_ZOR>      (addr, value); return;
-        case MEM_ROM:           poke8 <ACCESSOR_CPU, MEM_ROM>      (addr, value); return;
-        case MEM_ROM_MIRROR:    poke8 <ACCESSOR_CPU, MEM_ROM>      (addr, value); return;
-        case MEM_WOM:           poke8 <ACCESSOR_CPU, MEM_WOM>      (addr, value); return;
-        case MEM_EXT:           poke8 <ACCESSOR_CPU, MEM_EXT>      (addr, value); return;
+        case MemorySource::NONE:          poke8 <ACCESSOR_CPU, MemorySource::NONE>     (addr, value); return;
+        case MemorySource::CHIP:          poke8 <ACCESSOR_CPU, MemorySource::CHIP>     (addr, value); return;
+        case MemorySource::CHIP_MIRROR:   poke8 <ACCESSOR_CPU, MemorySource::CHIP>     (addr, value); return;
+        case MemorySource::SLOW:          poke8 <ACCESSOR_CPU, MemorySource::SLOW>     (addr, value); return;
+        case MemorySource::FAST:          poke8 <ACCESSOR_CPU, MemorySource::FAST>     (addr, value); return;
+        case MemorySource::CIA:           poke8 <ACCESSOR_CPU, MemorySource::CIA>      (addr, value); return;
+        case MemorySource::CIA_MIRROR:    poke8 <ACCESSOR_CPU, MemorySource::CIA>      (addr, value); return;
+        case MemorySource::RTC:           poke8 <ACCESSOR_CPU, MemorySource::RTC>      (addr, value); return;
+        case MemorySource::CUSTOM:        poke8 <ACCESSOR_CPU, MemorySource::CUSTOM>   (addr, value); return;
+        case MemorySource::CUSTOM_MIRROR: poke8 <ACCESSOR_CPU, MemorySource::CUSTOM>   (addr, value); return;
+        case MemorySource::AUTOCONF:      poke8 <ACCESSOR_CPU, MemorySource::AUTOCONF> (addr, value); return;
+        case MemorySource::ZOR:           poke8 <ACCESSOR_CPU, MemorySource::ZOR>      (addr, value); return;
+        case MemorySource::ROM:           poke8 <ACCESSOR_CPU, MemorySource::ROM>      (addr, value); return;
+        case MemorySource::ROM_MIRROR:    poke8 <ACCESSOR_CPU, MemorySource::ROM>      (addr, value); return;
+        case MemorySource::WOM:           poke8 <ACCESSOR_CPU, MemorySource::WOM>      (addr, value); return;
+        case MemorySource::EXT:           poke8 <ACCESSOR_CPU, MemorySource::EXT>      (addr, value); return;
 
         default:
             fatalError;
@@ -1934,22 +1934,22 @@ Memory::poke16 <ACCESSOR_CPU> (u32 addr, u16 value)
     
     switch (cpuMemSrc[addr >> 16]) {
             
-        case MEM_NONE:          poke16 <ACCESSOR_CPU, MEM_NONE>     (addr, value); return;
-        case MEM_CHIP:          poke16 <ACCESSOR_CPU, MEM_CHIP>     (addr, value); return;
-        case MEM_CHIP_MIRROR:   poke16 <ACCESSOR_CPU, MEM_CHIP>     (addr, value); return;
-        case MEM_SLOW:          poke16 <ACCESSOR_CPU, MEM_SLOW>     (addr, value); return;
-        case MEM_FAST:          poke16 <ACCESSOR_CPU, MEM_FAST>     (addr, value); return;
-        case MEM_CIA:           poke16 <ACCESSOR_CPU, MEM_CIA>      (addr, value); return;
-        case MEM_CIA_MIRROR:    poke16 <ACCESSOR_CPU, MEM_CIA>      (addr, value); return;
-        case MEM_RTC:           poke16 <ACCESSOR_CPU, MEM_RTC>      (addr, value); return;
-        case MEM_CUSTOM:        poke16 <ACCESSOR_CPU, MEM_CUSTOM>   (addr, value); return;
-        case MEM_CUSTOM_MIRROR: poke16 <ACCESSOR_CPU, MEM_CUSTOM>   (addr, value); return;
-        case MEM_AUTOCONF:      poke16 <ACCESSOR_CPU, MEM_AUTOCONF> (addr, value); return;
-        case MEM_ZOR:           poke16 <ACCESSOR_CPU, MEM_ZOR>      (addr, value); return;
-        case MEM_ROM:           poke16 <ACCESSOR_CPU, MEM_ROM>      (addr, value); return;
-        case MEM_ROM_MIRROR:    poke16 <ACCESSOR_CPU, MEM_ROM>      (addr, value); return;
-        case MEM_WOM:           poke16 <ACCESSOR_CPU, MEM_WOM>      (addr, value); return;
-        case MEM_EXT:           poke16 <ACCESSOR_CPU, MEM_EXT>      (addr, value); return;
+        case MemorySource::NONE:          poke16 <ACCESSOR_CPU, MemorySource::NONE>     (addr, value); return;
+        case MemorySource::CHIP:          poke16 <ACCESSOR_CPU, MemorySource::CHIP>     (addr, value); return;
+        case MemorySource::CHIP_MIRROR:   poke16 <ACCESSOR_CPU, MemorySource::CHIP>     (addr, value); return;
+        case MemorySource::SLOW:          poke16 <ACCESSOR_CPU, MemorySource::SLOW>     (addr, value); return;
+        case MemorySource::FAST:          poke16 <ACCESSOR_CPU, MemorySource::FAST>     (addr, value); return;
+        case MemorySource::CIA:           poke16 <ACCESSOR_CPU, MemorySource::CIA>      (addr, value); return;
+        case MemorySource::CIA_MIRROR:    poke16 <ACCESSOR_CPU, MemorySource::CIA>      (addr, value); return;
+        case MemorySource::RTC:           poke16 <ACCESSOR_CPU, MemorySource::RTC>      (addr, value); return;
+        case MemorySource::CUSTOM:        poke16 <ACCESSOR_CPU, MemorySource::CUSTOM>   (addr, value); return;
+        case MemorySource::CUSTOM_MIRROR: poke16 <ACCESSOR_CPU, MemorySource::CUSTOM>   (addr, value); return;
+        case MemorySource::AUTOCONF:      poke16 <ACCESSOR_CPU, MemorySource::AUTOCONF> (addr, value); return;
+        case MemorySource::ZOR:           poke16 <ACCESSOR_CPU, MemorySource::ZOR>      (addr, value); return;
+        case MemorySource::ROM:           poke16 <ACCESSOR_CPU, MemorySource::ROM>      (addr, value); return;
+        case MemorySource::ROM_MIRROR:    poke16 <ACCESSOR_CPU, MemorySource::ROM>      (addr, value); return;
+        case MemorySource::WOM:           poke16 <ACCESSOR_CPU, MemorySource::WOM>      (addr, value); return;
+        case MemorySource::EXT:           poke16 <ACCESSOR_CPU, MemorySource::EXT>      (addr, value); return;
 
         default:
             fatalError;
@@ -1961,14 +1961,14 @@ Memory::poke16 <ACCESSOR_CPU> (u32 addr, u16 value)
 //
 
 template <> void
-Memory::poke16 <ACCESSOR_AGNUS, MEM_NONE> (u32 addr, u16 value)
+Memory::poke16 <ACCESSOR_AGNUS, MemorySource::NONE> (u32 addr, u16 value)
 {
     trace(MEM_DEBUG, "poke16 <AGNUS> (%x [NONE], %x)\n", addr, value);
     dataBus = value;
 }
 
 template <> void
-Memory::poke16 <ACCESSOR_AGNUS, MEM_CHIP> (u32 addr, u16 value)
+Memory::poke16 <ACCESSOR_AGNUS, MemorySource::CHIP> (u32 addr, u16 value)
 {
     assert((addr & agnus.ptrMask) == addr);
 
@@ -1977,7 +1977,7 @@ Memory::poke16 <ACCESSOR_AGNUS, MEM_CHIP> (u32 addr, u16 value)
 }
 
 template <> void
-Memory::poke16 <ACCESSOR_AGNUS, MEM_SLOW> (u32 addr, u16 value)
+Memory::poke16 <ACCESSOR_AGNUS, MemorySource::SLOW> (u32 addr, u16 value)
 {
     xfiles("Agnus writes to Slow RAM mirror at %x\n", addr);
 
@@ -1992,9 +1992,9 @@ Memory::poke16 <ACCESSOR_AGNUS> (u32 addr, u16 value)
     
     switch (agnusMemSrc[addr >> 16]) {
             
-        case MEM_NONE:          poke16 <ACCESSOR_AGNUS, MEM_NONE> (addr, value); return;
-        case MEM_CHIP:          poke16 <ACCESSOR_AGNUS, MEM_CHIP> (addr, value); return;
-        case MEM_SLOW_MIRROR:   poke16 <ACCESSOR_AGNUS, MEM_SLOW> (addr, value); return;
+        case MemorySource::NONE:          poke16 <ACCESSOR_AGNUS, MemorySource::NONE> (addr, value); return;
+        case MemorySource::CHIP:          poke16 <ACCESSOR_AGNUS, MemorySource::CHIP> (addr, value); return;
+        case MemorySource::SLOW_MIRROR:   poke16 <ACCESSOR_AGNUS, MemorySource::SLOW> (addr, value); return;
             
         default:
             fatalError;
@@ -2722,42 +2722,42 @@ Memory::pokeCustom16(u32 addr, u16 value)
 }
 
 template <> void
-Memory::patch <MEM_CHIP> (u32 addr, u8 value)
+Memory::patch <MemorySource::CHIP> (u32 addr, u8 value)
 {
     ASSERT_CHIP_ADDR(addr);
     WRITE_CHIP_8(addr, value);
 }
 
 template <> void
-Memory::patch <MEM_SLOW> (u32 addr, u8 value)
+Memory::patch <MemorySource::SLOW> (u32 addr, u8 value)
 {
     ASSERT_SLOW_ADDR(addr);
     WRITE_SLOW_8(addr, value);
 }
 
 template <> void
-Memory::patch <MEM_FAST> (u32 addr, u8 value)
+Memory::patch <MemorySource::FAST> (u32 addr, u8 value)
 {
     ASSERT_FAST_ADDR(addr);
     WRITE_FAST_8(addr, value);
 }
 
 template <> void
-Memory::patch <MEM_ROM> (u32 addr, u8 value)
+Memory::patch <MemorySource::ROM> (u32 addr, u8 value)
 {
     ASSERT_ROM_ADDR(addr);
     WRITE_ROM_8(addr, value);
 }
 
 template <> void
-Memory::patch <MEM_WOM> (u32 addr, u8 value)
+Memory::patch <MemorySource::WOM> (u32 addr, u8 value)
 {
     ASSERT_WOM_ADDR(addr);
     WRITE_WOM_8(addr, value);
 }
 
 template <> void
-Memory::patch <MEM_EXT> (u32 addr, u8 value)
+Memory::patch <MemorySource::EXT> (u32 addr, u8 value)
 {
     ASSERT_EXT_ADDR(addr);
     WRITE_EXT_8(addr, value);
@@ -2770,14 +2770,14 @@ Memory::patch(u32 addr, u8 value)
     
     switch (cpuMemSrc[addr >> 16]) {
             
-        case MEM_CHIP:          patch <MEM_CHIP>     (addr, value); return;
-        case MEM_CHIP_MIRROR:   patch <MEM_CHIP>     (addr, value); return;
-        case MEM_SLOW:          patch <MEM_SLOW>     (addr, value); return;
-        case MEM_FAST:          patch <MEM_FAST>     (addr, value); return;
-        case MEM_ROM:           patch <MEM_ROM>      (addr, value); return;
-        case MEM_ROM_MIRROR:    patch <MEM_ROM>      (addr, value); return;
-        case MEM_WOM:           patch <MEM_WOM>      (addr, value); return;
-        case MEM_EXT:           patch <MEM_EXT>      (addr, value); return;
+        case MemorySource::CHIP:          patch <MemorySource::CHIP>     (addr, value); return;
+        case MemorySource::CHIP_MIRROR:   patch <MemorySource::CHIP>     (addr, value); return;
+        case MemorySource::SLOW:          patch <MemorySource::SLOW>     (addr, value); return;
+        case MemorySource::FAST:          patch <MemorySource::FAST>     (addr, value); return;
+        case MemorySource::ROM:           patch <MemorySource::ROM>      (addr, value); return;
+        case MemorySource::ROM_MIRROR:    patch <MemorySource::ROM>      (addr, value); return;
+        case MemorySource::WOM:           patch <MemorySource::WOM>      (addr, value); return;
+        case MemorySource::EXT:           patch <MemorySource::EXT>      (addr, value); return;
             
         default:
             break;
@@ -2828,7 +2828,7 @@ Memory::search(u64 pattern, isize bytes)
     for (isize bank = 0; bank < 256; bank++) {
         
         // Only proceed if this memory bank is mapped
-        if (cpuMemSrc[bank] == MEM_NONE) continue;
+        if (cpuMemSrc[bank] == MemorySource::NONE) continue;
 
         auto lo = (u32)(bank << 16);
         auto hi = lo + 0xFFFF;
