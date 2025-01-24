@@ -83,7 +83,7 @@ Defaults::Defaults()
     setFallback(OPT_CPU_OVERCLOCKING,           0);
     setFallback(OPT_CPU_RESET_VAL,              0);
 
-    setFallback(OPT_RTC_MODEL,                  (long)RTCRevision::OKI);
+    setFallback(OPT_RTC_MODEL,                  (i64)RTCRevision::OKI);
 
     setFallback(OPT_MEM_CHIP_RAM,               512);
     setFallback(OPT_MEM_SLOW_RAM,               512);
@@ -92,9 +92,9 @@ Defaults::Defaults()
     setFallback(OPT_MEM_SAVE_ROMS,              true);
     setFallback(OPT_MEM_SLOW_RAM_DELAY,         true);
     setFallback(OPT_MEM_SLOW_RAM_MIRROR,        true);
-    setFallback(OPT_MEM_BANKMAP,                BANK_MAP_A500);
-    setFallback(OPT_MEM_UNMAPPING_TYPE,         RAM_INIT_ALL_ZEROES);
-    setFallback(OPT_MEM_RAM_INIT_PATTERN,       UNMAPPED_FLOATING);
+    setFallback(OPT_MEM_BANKMAP,                (i64)BankMap::A500);
+    setFallback(OPT_MEM_UNMAPPING_TYPE,         (i64)RamInitPattern::ALL_ZEROES);
+    setFallback(OPT_MEM_RAM_INIT_PATTERN,       (i64)UnmappedMemory::FLOATING);
 
     setFallback(OPT_DC_SPEED,                   1);
     setFallback(OPT_DC_LOCK_DSKSYNC,            false);

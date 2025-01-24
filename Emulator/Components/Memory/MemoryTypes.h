@@ -124,102 +124,111 @@ struct AccessorEnum : util::Reflection<AccessorEnum, Accessor>
     }
 };
 
-enum_long(BANK_MAP)
+enum class BankMap : long
 {
-    BANK_MAP_A500,
-    BANK_MAP_A1000,
-    BANK_MAP_A2000A,
-    BANK_MAP_A2000B
+    A500,
+    A1000,
+    A2000A,
+    A2000B
 };
-typedef BANK_MAP BankMap;
 
 struct BankMapEnum : util::Reflection<BankMapEnum, BankMap>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = BANK_MAP_A2000B;
+    static constexpr long maxVal = long(BankMap::A2000B);
     
     static const char *prefix() { return "BANK_MAP"; }
-    static const char *_key(long value)
+    static const char *_key(BankMap value)
     {
         switch (value) {
                 
-            case BANK_MAP_A500:    return "A500";
-            case BANK_MAP_A1000:   return "A1000";
-            case BANK_MAP_A2000A:  return "A2000A";
-            case BANK_MAP_A2000B:  return "A2000B";
+            case BankMap::A500:    return "A500";
+            case BankMap::A1000:   return "A1000";
+            case BankMap::A2000A:  return "A2000A";
+            case BankMap::A2000B:  return "A2000B";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(BankMap value)
     {
         switch (value) {
                 
-            case BANK_MAP_A500:    return "Amiga 500 memory layout";
-            case BANK_MAP_A1000:   return "Amiga 1000 memory layout";
-            case BANK_MAP_A2000A:  return "Amiga 2000A memory layout";
-            case BANK_MAP_A2000B:  return "Amiga 2000B memory layout";
+            case BankMap::A500:    return "Amiga 500 memory layout";
+            case BankMap::A1000:   return "Amiga 1000 memory layout";
+            case BankMap::A2000A:  return "Amiga 2000A memory layout";
+            case BankMap::A2000B:  return "Amiga 2000B memory layout";
         }
         return "???";
     }
 };
 
-enum_long(RAM_INIT_PATTERN)
+enum class RamInitPattern
 {
-    RAM_INIT_ALL_ZEROES,
-    RAM_INIT_ALL_ONES,
-    RAM_INIT_RANDOMIZED
+    ALL_ZEROES,
+    ALL_ONES,
+    RANDOMIZED
 };
-typedef RAM_INIT_PATTERN RamInitPattern;
 
 struct RamInitPatternEnum : util::Reflection<RamInitPatternEnum, RamInitPattern>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = RAM_INIT_RANDOMIZED;
+    static constexpr long maxVal = long(RamInitPattern::RANDOMIZED);
     
-    static const char *prefix() { return "RAM_INIT"; }
-    static const char *_key(long value)
+    // static const char *prefix() { return "RAM_INIT"; }
+    static const char *_key(RamInitPattern value)
     {
         switch (value) {
                 
-            case RAM_INIT_ALL_ZEROES:  return "ALL_ZEROES";
-            case RAM_INIT_ALL_ONES:    return "ALL_ONES";
-            case RAM_INIT_RANDOMIZED:  return "RANDOMIZED";
+            case RamInitPattern::ALL_ZEROES:    return "ALL_ZEROES";
+            case RamInitPattern::ALL_ONES:      return "ALL_ONES";
+            case RamInitPattern::RANDOMIZED:    return "RANDOMIZED";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(RamInitPattern value)
     {
-        return "";
+        switch (value) {
+                
+            case RamInitPattern::ALL_ZEROES:    return "All bits set to 0";
+            case RamInitPattern::ALL_ONES:      return "All bits set to 1";
+            case RamInitPattern::RANDOMIZED:    return "Random bit patterns";
+        }
+        return "???";
     }
 };
 
-enum_long(UNMAPPED_MEMORY)
+enum class UnmappedMemory
 {
-    UNMAPPED_FLOATING,
-    UNMAPPED_ALL_ZEROES,
-    UNMAPPED_ALL_ONES
+    FLOATING,
+    ALL_ZEROES,
+    ALL_ONES
 };
-typedef UNMAPPED_MEMORY UnmappedMemory;
 
 struct UnmappedMemoryEnum : util::Reflection<UnmappedMemoryEnum, UnmappedMemory>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = UNMAPPED_ALL_ONES;
+    static constexpr long maxVal = long(UnmappedMemory::ALL_ONES);
     
-    static const char *prefix() { return "UNMAPPED"; }
-    static const char *_key(long value)
+    // static const char *prefix() { return "UNMAPPED"; }
+    static const char *_key(UnmappedMemory value)
     {
         switch (value) {
                 
-            case UNMAPPED_FLOATING:    return "FLOATING";
-            case UNMAPPED_ALL_ZEROES:  return "ALL_ZEROES";
-            case UNMAPPED_ALL_ONES:    return "ALL_ONES";
+            case UnmappedMemory::FLOATING:      return "FLOATING";
+            case UnmappedMemory::ALL_ZEROES:    return "ALL_ZEROES";
+            case UnmappedMemory::ALL_ONES:      return "ALL_ONES";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(UnmappedMemory value)
     {
-        return "";
+        switch (value) {
+                
+            case UnmappedMemory::FLOATING:      return "Folating bus";
+            case UnmappedMemory::ALL_ZEROES:    return "All bits read as 0";
+            case UnmappedMemory::ALL_ONES:      return "All bits read as 1";
+        }
+        return "???";
     }
 };
 

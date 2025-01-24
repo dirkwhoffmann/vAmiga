@@ -127,9 +127,9 @@ Memory::getOption(Option option) const
         case OPT_MEM_SAVE_ROMS:         return config.saveRoms;
         case OPT_MEM_SLOW_RAM_DELAY:    return config.slowRamDelay;
         case OPT_MEM_SLOW_RAM_MIRROR:   return config.slowRamMirror;
-        case OPT_MEM_BANKMAP:           return config.bankMap;
-        case OPT_MEM_UNMAPPING_TYPE:    return config.unmappingType;
-        case OPT_MEM_RAM_INIT_PATTERN:  return config.ramInitPattern;
+        case OPT_MEM_BANKMAP:           return (i64)config.bankMap;
+        case OPT_MEM_UNMAPPING_TYPE:    return (i64)config.unmappingType;
+        case OPT_MEM_RAM_INIT_PATTERN:  return (i64)config.ramInitPattern;
 
         default:
             fatalError;
@@ -582,29 +582,29 @@ void
 Memory::fillRamWithInitPattern()
 {
     switch (config.ramInitPattern) {
-            
-        case RAM_INIT_RANDOMIZED:
-
-            srand(0);
-            if (chip) for (isize i = 0; i < config.chipSize; i++) chip[i] = (u8)rand();
-            if (slow) for (isize i = 0; i < config.slowSize; i++) slow[i] = (u8)rand();
-            if (fast) for (isize i = 0; i < config.fastSize; i++) fast[i] = (u8)rand();
-            break;
-            
-        case RAM_INIT_ALL_ZEROES:
+                        
+        case RamInitPattern::ALL_ZEROES:
 
             if (chip) std::memset(chip, 0x00, config.chipSize);
             if (slow) std::memset(slow, 0x00, config.slowSize);
             if (fast) std::memset(fast, 0x00, config.fastSize);
             break;
             
-        case RAM_INIT_ALL_ONES:
+        case RamInitPattern::ALL_ONES:
             
             if (chip) std::memset(chip, 0xFF, config.chipSize);
             if (slow) std::memset(slow, 0xFF, config.slowSize);
             if (fast) std::memset(fast, 0xFF, config.fastSize);
             break;
             
+        case RamInitPattern::RANDOMIZED:
+
+            srand(0);
+            if (chip) for (isize i = 0; i < config.chipSize; i++) chip[i] = (u8)rand();
+            if (slow) for (isize i = 0; i < config.slowSize; i++) slow[i] = (u8)rand();
+            if (fast) for (isize i = 0; i < config.fastSize; i++) fast[i] = (u8)rand();
+            break;
+
         default:
             break;
     }
@@ -859,7 +859,7 @@ Memory::updateCpuMemSrcTable()
     isize slowRamPages = config.slowSize / 0x10000;
     
     bool ovl = ciaa.getPA() & 1;
-    bool old = config.bankMap == BANK_MAP_A1000 || config.bankMap == BANK_MAP_A2000A;
+    bool old = config.bankMap == BankMap::A1000 || config.bankMap == BankMap::A2000A;
 
     // Start from scratch
     for (isize i = 0x00; i <= 0xFF; i++) {
@@ -905,7 +905,7 @@ Memory::updateCpuMemSrcTable()
     }
     
     // Kickstart mirror, unmapped, or Extended Rom
-    if (config.bankMap != BANK_MAP_A1000) {
+    if (config.bankMap != BankMap::A1000) {
         for (isize i = 0xE0; i <= 0xE7; i++) {
             cpuMemSrc[i] = mem_rom_mirror;
         }
@@ -1057,9 +1057,9 @@ Memory::spypeek16 <Accessor::CPU, MemSrc::NONE> (u32 addr) const
 {
     switch (config.unmappingType) {
             
-        case UNMAPPED_FLOATING:   return dataBus;
-        case UNMAPPED_ALL_ONES:   return 0xFFFF;
-        case UNMAPPED_ALL_ZEROES: return 0x0000;
+        case UnmappedMemory::FLOATING:   return dataBus;
+        case UnmappedMemory::ALL_ONES:   return 0xFFFF;
+        case UnmappedMemory::ALL_ZEROES: return 0x0000;
 
         default:
             fatalError;
