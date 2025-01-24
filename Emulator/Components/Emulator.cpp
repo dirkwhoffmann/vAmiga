@@ -55,7 +55,7 @@ Emulator::launch(const void *listener, Callback *func)
     Thread::launch();
     
     // Schedule a hard reset
-    put(CMD_HARD_RESET);
+    put(CmdType::HARD_RESET);
 }
 
 void

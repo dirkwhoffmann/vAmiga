@@ -377,10 +377,10 @@ Keyboard::processCommand(const Cmd &cmd)
 
         switch (cmd.type) {
 
-            case CMD_KEY_PRESS:         press(cmd.key.keycode); break;
-            case CMD_KEY_RELEASE:       release(cmd.key.keycode); break;
-            case CMD_KEY_RELEASE_ALL:   releaseAll(); break;
-            case CMD_KEY_TOGGLE:        toggle(cmd.key.keycode); break;
+            case CmdType::KEY_PRESS:         press(cmd.key.keycode); break;
+            case CmdType::KEY_RELEASE:       release(cmd.key.keycode); break;
+            case CmdType::KEY_RELEASE_ALL:   releaseAll(); break;
+            case CmdType::KEY_TOGGLE:        toggle(cmd.key.keycode); break;
 
             default:
                 fatalError;

@@ -1163,9 +1163,9 @@ FloppyDrive::processCommand(const Cmd &cmd)
 
     switch (cmd.type) {
 
-        case CMD_DSK_TOGGLE_WP:     toggleWriteProtection(); break;
-        case CMD_DSK_MODIFIED:      markDiskAsModified(); break;
-        case CMD_DSK_UNMODIFIED:    markDiskAsUnmodified(); break;
+        case CmdType::DSK_TOGGLE_WP:     toggleWriteProtection(); break;
+        case CmdType::DSK_MODIFIED:      markDiskAsModified(); break;
+        case CmdType::DSK_UNMODIFIED:    markDiskAsUnmodified(); break;
 
         default:
             fatalError;

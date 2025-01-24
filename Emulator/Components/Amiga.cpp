@@ -738,86 +738,86 @@ Amiga::update(CmdQueue &queue)
 
         switch (cmd.type) {
 
-            case CMD_CONFIG:
+            case CmdType::CONFIG:
 
                 cmdConfig = true;
                 set(cmd.config.option, cmd.config.value, { cmd.config.id });
                 break;
 
-            case CMD_CONFIG_ALL:
+            case CmdType::CONFIG_ALL:
 
                 cmdConfig = true;
                 set(cmd.config.option, cmd.config.value, { });
                 break;
 
-            case CMD_ALARM_ABS:
-            case CMD_ALARM_REL:
-            case CMD_INSPECTION_TARGET:
-            case CMD_HARD_RESET:
-            case CMD_SOFT_RESET:
-            case CMD_POWER_ON:
-            case CMD_POWER_OFF:
-            case CMD_RUN:
-            case CMD_PAUSE:
-            case CMD_WARP_ON:
-            case CMD_WARP_OFF:
-            case CMD_HALT:
+            case CmdType::ALARM_ABS:
+            case CmdType::ALARM_REL:
+            case CmdType::INSPECTION_TARGET:
+            case CmdType::HARD_RESET:
+            case CmdType::SOFT_RESET:
+            case CmdType::POWER_ON:
+            case CmdType::POWER_OFF:
+            case CmdType::RUN:
+            case CmdType::PAUSE:
+            case CmdType::WARP_ON:
+            case CmdType::WARP_OFF:
+            case CmdType::HALT:
 
                 processCommand(cmd);
                 break;
 
-            case CMD_GUARD_SET_AT:
-            case CMD_GUARD_MOVE_NR:
-            case CMD_GUARD_IGNORE_NR:
-            case CMD_GUARD_REMOVE_NR:
-            case CMD_GUARD_REMOVE_AT:
-            case CMD_GUARD_REMOVE_ALL:
-            case CMD_GUARD_ENABLE_NR:
-            case CMD_GUARD_ENABLE_AT:
-            case CMD_GUARD_ENABLE_ALL:
-            case CMD_GUARD_DISABLE_NR:
-            case CMD_GUARD_DISABLE_AT:
-            case CMD_GUARD_DISABLE_ALL:
+            case CmdType::GUARD_SET_AT:
+            case CmdType::GUARD_MOVE_NR:
+            case CmdType::GUARD_IGNORE_NR:
+            case CmdType::GUARD_REMOVE_NR:
+            case CmdType::GUARD_REMOVE_AT:
+            case CmdType::GUARD_REMOVE_ALL:
+            case CmdType::GUARD_ENABLE_NR:
+            case CmdType::GUARD_ENABLE_AT:
+            case CmdType::GUARD_ENABLE_ALL:
+            case CmdType::GUARD_DISABLE_NR:
+            case CmdType::GUARD_DISABLE_AT:
+            case CmdType::GUARD_DISABLE_ALL:
 
                 cpu.processCommand(cmd);
                 break;
 
-            case CMD_KEY_PRESS:
-            case CMD_KEY_RELEASE:
-            case CMD_KEY_RELEASE_ALL:
-            case CMD_KEY_TOGGLE:
+            case CmdType::KEY_PRESS:
+            case CmdType::KEY_RELEASE:
+            case CmdType::KEY_RELEASE_ALL:
+            case CmdType::KEY_TOGGLE:
 
                 keyboard.processCommand(cmd);
                 break;
 
-            case CMD_MOUSE_MOVE_ABS:
-            case CMD_MOUSE_MOVE_REL:
+            case CmdType::MOUSE_MOVE_ABS:
+            case CmdType::MOUSE_MOVE_REL:
             {
                 auto &port = cmd.coord.port ? controlPort2 : controlPort1;
                 port.processCommand(cmd); break;
                 break;
             }
-            case CMD_MOUSE_EVENT:
-            case CMD_JOY_EVENT:
+            case CmdType::MOUSE_EVENT:
+            case CmdType::JOY_EVENT:
             {
                 auto &port = cmd.action.port ? controlPort2 : controlPort1;
                 port.processCommand(cmd); break;
                 break;
             }
-            case CMD_DSK_TOGGLE_WP:
-            case CMD_DSK_MODIFIED:
-            case CMD_DSK_UNMODIFIED:
+            case CmdType::DSK_TOGGLE_WP:
+            case CmdType::DSK_MODIFIED:
+            case CmdType::DSK_UNMODIFIED:
 
                 dfn().processCommand(cmd);
                 break;
 
                 
-            case CMD_RSH_EXECUTE:
+            case CmdType::RSH_EXECUTE:
 
                 retroShell.exec();
                 break;
 
-            case CMD_FOCUS:
+            case CmdType::FOCUS:
 
                 cmd.value ? focus() : unfocus();
                 break;
@@ -1062,52 +1062,52 @@ Amiga::processCommand(const Cmd &cmd)
 {
     switch (cmd.type) {
 
-        case CMD_ALARM_ABS:
+        case CmdType::ALARM_ABS:
 
             setAlarmAbs(cmd.alarm.cycle, cmd.alarm.value);
             break;
 
-        case CMD_ALARM_REL:
+        case CmdType::ALARM_REL:
 
             setAlarmRel(cmd.alarm.cycle, cmd.alarm.value);
             break;
 
-        case CMD_INSPECTION_TARGET:
+        case CmdType::INSPECTION_TARGET:
 
             setAutoInspectionMask(cmd.value);
             break;
 
-        case CMD_HARD_RESET:
+        case CmdType::HARD_RESET:
             
             emulator.hardReset();
             break;
             
-        case CMD_SOFT_RESET:
+        case CmdType::SOFT_RESET:
             
             emulator.softReset();
             break;
             
-        case CMD_POWER_ON:
+        case CmdType::POWER_ON:
             
             emulator.powerOn();
             break;
             
-        case CMD_POWER_OFF:
+        case CmdType::POWER_OFF:
             
             emulator.powerOff();
             break;
             
-        case CMD_RUN:
+        case CmdType::RUN:
             
             emulator.run();
             break;
             
-        case CMD_PAUSE:
+        case CmdType::PAUSE:
             
             emulator.pause();
             break;
             
-        case CMD_WARP_ON:
+        case CmdType::WARP_ON:
             
             if (cmd.value == 0) {
                 throw std::runtime_error("Source 0 is reserved for implementing config.warpMode.");
@@ -1115,7 +1115,7 @@ Amiga::processCommand(const Cmd &cmd)
             emulator.warpOn(cmd.value);
             break;
             
-        case CMD_WARP_OFF:
+        case CmdType::WARP_OFF:
 
             if (cmd.value == 0) {
                 throw std::runtime_error("Source 0 is reserved for implementing config.warpMode.");
@@ -1123,7 +1123,7 @@ Amiga::processCommand(const Cmd &cmd)
             emulator.warpOff(cmd.value);
             break;
 
-        case CMD_HALT:
+        case CmdType::HALT:
 
             emulator.halt();
             break;

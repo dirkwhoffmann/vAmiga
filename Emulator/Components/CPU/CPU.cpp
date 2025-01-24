@@ -845,18 +845,18 @@ CPU::processCommand(const Cmd &cmd)
 
     switch (cmd.type) {
 
-        case CMD_GUARD_SET_AT:      guards->setAt(addr); break;
-        case CMD_GUARD_REMOVE_NR:   guards->remove(nr); break;
-        case CMD_GUARD_MOVE_NR:     guards->moveTo(nr, u32(cmd.value2)); break;
-        case CMD_GUARD_IGNORE_NR:   guards->ignore(nr, long(cmd.value2)); break;
-        case CMD_GUARD_REMOVE_AT:   guards->removeAt(addr); break;
-        case CMD_GUARD_REMOVE_ALL:  guards->removeAll(); break;
-        case CMD_GUARD_ENABLE_NR:   guards->enable(nr); break;
-        case CMD_GUARD_ENABLE_AT:   guards->enableAt(addr); break;
-        case CMD_GUARD_ENABLE_ALL:  guards->enableAll(); break;
-        case CMD_GUARD_DISABLE_NR:  guards->disable(nr); break;
-        case CMD_GUARD_DISABLE_AT:  guards->disableAt(addr); break;
-        case CMD_GUARD_DISABLE_ALL: guards->disableAll(); break;
+        case CmdType::GUARD_SET_AT:      guards->setAt(addr); break;
+        case CmdType::GUARD_REMOVE_NR:   guards->remove(nr); break;
+        case CmdType::GUARD_MOVE_NR:     guards->moveTo(nr, u32(cmd.value2)); break;
+        case CmdType::GUARD_IGNORE_NR:   guards->ignore(nr, long(cmd.value2)); break;
+        case CmdType::GUARD_REMOVE_AT:   guards->removeAt(addr); break;
+        case CmdType::GUARD_REMOVE_ALL:  guards->removeAll(); break;
+        case CmdType::GUARD_ENABLE_NR:   guards->enable(nr); break;
+        case CmdType::GUARD_ENABLE_AT:   guards->enableAt(addr); break;
+        case CmdType::GUARD_ENABLE_ALL:  guards->enableAll(); break;
+        case CmdType::GUARD_DISABLE_NR:  guards->disable(nr); break;
+        case CmdType::GUARD_DISABLE_AT:  guards->disableAt(addr); break;
+        case CmdType::GUARD_DISABLE_ALL: guards->disableAll(); break;
             
         default:
             fatalError;
