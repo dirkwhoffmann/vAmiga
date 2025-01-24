@@ -20,21 +20,20 @@ namespace vamiga {
 
 enum class RecState : long
 {
-    WAIT = 0,
-    PREPARE = 1,
-    RECORD = 2,
-    FINALIZE = 3,
-    ABORT = 4
+    WAIT,
+    PREPARE,
+    RECORD,
+    FINALIZE,
+    ABORT
 };
 // typedef REC_STATE RecorderState;
 
-/*
 struct RecStateEnum : util::Reflection<RecStateEnum, RecState>
 {
-    static constexpr long minVal = 0;
-    static constexpr long maxVal = RecState::ABORT;
+    static constexpr RecState minVal = RecState(0);
+    static constexpr RecState maxVal = RecState::ABORT;
     
-    static const char *prefix() { return "REC"; }
+    static const char *prefix() { return "RECSTATE"; }
     static const char *_key(RecState value)
     {
         switch (value) {
@@ -52,7 +51,7 @@ struct RecStateEnum : util::Reflection<RecStateEnum, RecState>
         return "";
     }
 };
-*/
+
 
 //
 // Structures

@@ -20,15 +20,21 @@
  *
  * The interface distinguishes two enumeration types:
  *
- * - Standard enumerations
+ *   - Standard enumerations
  *
- *   The enumeration members must be numbered 0, 1, 2, etc. Each member of the
- *   enumeration is treated as a stand-alone option.
+ *     The enumeration members must be numbered 0, 1, 2, etc. Each member of
+ *     the enumeration is treated as a stand-alone option.
  *
- * - Bit field enumerations
+ *   - Bit field enumerations
  *
- *   The enumeration members must be numbered 1, 2, 4, etc. Each member of the
- *   enumeration is treated as flag of a combined bit field.
+ *     The enumeration members must be numbered 1, 2, 4, etc. Each member of
+ *     the enumeration is treated as flag of a combined bit field.
+ *
+ * Some enums label their key with a prefix. E.g., the key OPT_CPU_OVERCLOCKING
+ * is labeled "CPU.OVERCLOCKING". Function fullKey() always the label with the
+ * prefix included. Other functions such as key() provide an additional
+ * parameter that decides whether to key label should be return with or without
+ * the prefix.
  */
 
 namespace vamiga::util {
@@ -43,33 +49,40 @@ template <class T, typename E> struct Reflection {
     // Checks if the provides value is inside the valid range
     static constexpr bool isValid(auto value) { return long(value) >= T::minVal && long(value) <= T::maxVal; }
 
-    // Returns the key as a C string (including the section prefix)
-    static const char *rawkey(isize value) { return T::_key((E)value); }
+    // Returns the key as a C string, including the section prefix
+    static const char *fullKey(isize value) { return T::_key((E)value); }
 
-    // Returns the key as a C string (excluding the section prefix)
-    static const char *key(isize value) {
+    // Returns the key as a C string, excluding the section prefix
+    static const char *key(isize value, bool withPrefix = false) {
 
-        auto *p = rawkey(value);
-        for (isize i = 0; p[i]; i++) if (p[i] == '.') return p + i + 1;
+        auto *p = fullKey(value);
+        
+        if (!withPrefix) {
+            for (isize i = 0; p[i]; i++) if (p[i] == '.') return p + i + 1;
+        }
         return p;
     }
     
     // Returns a textual representation for a bit mask
-    static const char *mask(isize mask) {
+    static const char *mask(isize mask, bool withPrefix = false) {
 
         static string result;
         result = "";
-
+        
         if (isBitField()) {
-
+            
             for (isize i = T::minVal; i <= T::maxVal; i *= 2) {
-                if (mask & i) result += (result.empty() ? "" : " | ") + string(T::_key((E)i));
+                if (mask & i) {
+                    result += (result.empty() ? "" : " | ") + string(key((E)i, withPrefix));
+                }
             }
-
+            
         } else {
-
+            
             for (isize i = T::minVal; i <= T::maxVal; i++) {
-                if (mask & (1 << i)) result += (result.empty() ? "" : " | ") + string(T::_key((E)i));
+                if (mask & (1 << i)) {
+                    result += (result.empty() ? "" : " | ") + string(key((E)i, withPrefix));
+                }
             }
         }
 
@@ -78,20 +91,20 @@ template <class T, typename E> struct Reflection {
 
     // Collects all key / value pairs
     static std::vector <std::pair<string,long>>
-    pairs(std::function<bool(E)> filter = [](E){ return true; }) {
+    pairs(bool withPrefix = false, std::function<bool(E)> filter = [](E){ return true; }) {
 
         std::vector <std::pair<string,long>> result;
 
         if (isBitField()) {
 
             for (isize i = T::minVal; i <= T::maxVal; i *= 2) {
-                if (filter(E(i))) result.push_back(std::make_pair(key(i), i));
+                if (filter(E(i))) result.push_back(std::make_pair(key(i, withPrefix), i));
             }
 
         } else {
 
             for (isize i = T::minVal; i <= T::maxVal; i++) {
-                if (filter(E(i))) result.push_back(std::make_pair(key(i), i));
+                if (filter(E(i))) result.push_back(std::make_pair(key(i, withPrefix), i));
             }
         }
 
@@ -99,11 +112,12 @@ template <class T, typename E> struct Reflection {
     }
 
     // Returns all keys in form of a textual list representation
-    static string keyList(std::function<bool(E)> filter = [](E){ return true; }, const string &delim = ", ") {
+    static string
+    keyList(bool withPrefix = false, std::function<bool(E)> filter = [](E){ return true; }, const string &delim = ", ") {
 
         string result;
 
-        for (const auto &pair : pairs(filter)) {
+        for (const auto &pair : pairs(withPrefix, filter)) {
             result += (result.empty() ? "" : delim) + pair.first;
         }
 
@@ -111,9 +125,9 @@ template <class T, typename E> struct Reflection {
     }
 
     // Convenience wrapper
-    static string argList(std::function<bool(E)> filter = [](E){ return true; }) {
+    static string argList(bool withPrefix = false, std::function<bool(E)> filter = [](E){ return true; }) {
 
-        return "{ " + keyList(filter, " | ") + " }";
+        return "{ " + keyList(withPrefix, filter, " | ") + " }";
     }
 };
 
