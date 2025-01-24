@@ -134,7 +134,7 @@ ZorroBoard::pokeACF8(u32 addr, u8 value)
             baseAddr |= (value & 0xF0) << 16;
 
             // Activate the board
-            state = STATE_ACTIVE;
+            state = BoardState::ACTIVE;
             
             // Update the memory map
             mem.updateMemSrcTables();
@@ -160,13 +160,13 @@ ZorroBoard::mappedIn(u32 addr)
 void
 ZorroBoard::activate()
 {
-    state = STATE_ACTIVE;
+    state = BoardState::ACTIVE;
 }
 
 void
 ZorroBoard::shutup()
 {
-    state = STATE_SHUTUP;
+    state = BoardState::SHUTUP;
 }
 
 }

@@ -45,31 +45,30 @@ struct HardDriveTypeEnum : util::Reflection<HardDriveTypeEnum, HardDriveType>
     }
 };
 
-enum_long(HDR_STATE)
+enum class HardDriveState
 {
-    HDR_STATE_IDLE,
-    HDR_STATE_READING,
-    HDR_STATE_WRITING
+    IDLE,
+    READING,
+    WRITING
 };
-typedef HDR_STATE HardDriveState;
 
 struct HardDriveStateEnum : util::Reflection<HardDriveStateEnum, HardDriveState>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = HDR_STATE_WRITING;
+    static constexpr long maxVal = long(HardDriveState::WRITING);
     
     static const char *prefix() { return "HDR_STATE"; }
-    static const char *_key(long value)
+    static const char *_key(HardDriveState value)
     {
         switch (value) {
                 
-            case HDR_STATE_IDLE:      return "IDLE";
-            case HDR_STATE_READING:   return "READING";
-            case HDR_STATE_WRITING:   return "WRITING";
+            case HardDriveState::IDLE:      return "IDLE";
+            case HardDriveState::READING:   return "READING";
+            case HardDriveState::WRITING:   return "WRITING";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(HardDriveState value)
     {
         return "";
     }

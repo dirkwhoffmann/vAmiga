@@ -27,7 +27,7 @@ RamExpansion::_didReset(bool hard)
     if (hard) {
 
         // Enter autoconfig state, if FastRam should be emulated
-        state = mem.fastRamSize() ? STATE_AUTOCONF : STATE_SHUTUP;
+        state = mem.fastRamSize() ? BoardState::AUTOCONF : BoardState::SHUTUP;
     }
 }
 

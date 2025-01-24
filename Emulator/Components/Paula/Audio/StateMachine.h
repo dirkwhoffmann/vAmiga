@@ -21,25 +21,25 @@ class StateMachine final : public SubComponent, public Inspectable<StateMachineI
 
     Descriptions descriptions = {
         {
-            .type           = StateMachineClass,
+            .type           = CType::StateMachineClass,
             .name           = "StateMachine1",
             .description    = "Audio State Machine 1",
             .shell          = ""
         },
         {
-            .type           = StateMachineClass,
+            .type           = CType::StateMachineClass,
             .name           = "StateMachine2",
             .description    = "Audio State Machine 2",
             .shell          = ""
         },
         {
-            .type           = StateMachineClass,
+            .type           = CType::StateMachineClass,
             .name           = "StateMachine3",
             .description    = "Audio State Machine 3",
             .shell          = ""
         },
         {
-            .type           = StateMachineClass,
+            .type           = CType::StateMachineClass,
             .name           = "StateMachine4",
             .description    = "Audio State Machine 4",
             .shell          = ""

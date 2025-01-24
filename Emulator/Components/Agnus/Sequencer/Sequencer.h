@@ -119,7 +119,7 @@ class Sequencer final : public SubComponent
 {
     Descriptions descriptions = {{
 
-        .type           = SequencerClass,
+        .type           = CType::SequencerClass,
         .name           = "Sequencer",
         .description    = "Agnus Sequencer",
         .shell          = ""

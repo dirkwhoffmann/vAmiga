@@ -65,7 +65,7 @@ SocketServer::main()
 void
 SocketServer::mainLoop()
 {
-    switchState(SRV_STATE_LISTENING);
+    switchState(SrvState::LISTENING);
     
     while (isListening()) {
         
@@ -105,13 +105,13 @@ SocketServer::mainLoop()
         }
     }
     
-    switchState(SRV_STATE_OFF);
+    switchState(SrvState::OFF);
 }
 
 void
 SocketServer::sessionLoop()
 {
-    switchState(SRV_STATE_CONNECTED);
+    switchState(SrvState::CONNECTED);
     
     numReceived = 0;
     numSent = 0;
@@ -129,7 +129,7 @@ SocketServer::sessionLoop()
         if (!isStopping()) {
             
             handleError(err.what());
-            switchState(SRV_STATE_LISTENING);
+            switchState(SrvState::LISTENING);
         }
     }
     

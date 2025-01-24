@@ -36,7 +36,7 @@ DiagBoard::_didReset(bool hard)
         mem.patchExpansionLib();
 
         // Set initial state
-        state = pluggedIn() ? STATE_AUTOCONF : STATE_SHUTUP;
+        state = pluggedIn() ? BoardState::AUTOCONF : BoardState::SHUTUP;
     }
 }
 

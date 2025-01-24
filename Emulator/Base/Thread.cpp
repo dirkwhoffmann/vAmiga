@@ -131,7 +131,7 @@ Thread::runLoop()
 {
     baseTime = util::Time::now();
 
-    while (state != STATE_HALTED) {
+    while (state != ExecState::HALTED) {
 
         // Prepare for the next frame
         update();
@@ -172,53 +172,56 @@ Thread::switchState(ExecState newState)
 
         switch (newState) {
 
-            case STATE_OFF:
+            case ExecState::OFF:
 
                 switch (state) {
 
-                    case STATE_PAUSED:      state = STATE_OFF; _powerOff(); break;
-                    case STATE_RUNNING:     state = STATE_PAUSED; _pause(); break;
+                    case ExecState::PAUSED:      state = ExecState::OFF; _powerOff(); break;
+                    case ExecState::RUNNING:     state = ExecState::PAUSED; _pause(); break;
 
                     default:
                         invalid();
                 }
                 break;
 
-            case STATE_PAUSED:
+            case ExecState::PAUSED:
 
                 switch (state) {
 
-                    case STATE_OFF:         state = STATE_PAUSED; _powerOn(); break;
-                    case STATE_RUNNING:     state = STATE_PAUSED; _pause(); break;
+                    case ExecState::OFF:         state = ExecState::PAUSED; _powerOn(); break;
+                    case ExecState::RUNNING:     state = ExecState::PAUSED; _pause(); break;
 
                     default:
                         invalid();
                 }
                 break;
 
-            case STATE_RUNNING:
+            case ExecState::RUNNING:
 
                 switch (state) {
 
-                    case STATE_OFF:         state = STATE_PAUSED; _powerOn(); break;
-                    case STATE_PAUSED:      state = STATE_RUNNING; _run(); break;
+                    case ExecState::OFF:         state = ExecState::PAUSED; _powerOn(); break;
+                    case ExecState::PAUSED:      state = ExecState::RUNNING; _run(); break;
 
                     default:
                         invalid();
                 }
                 break;
 
-            case STATE_HALTED:
+            case ExecState::HALTED:
 
                 switch (state) {
 
-                    case STATE_OFF:     state = STATE_HALTED; _halt(); break;
-                    case STATE_PAUSED:  state = STATE_OFF; _powerOff(); break;
-                    case STATE_RUNNING: state = STATE_PAUSED; _pause(); break;
+                    case ExecState::OFF:     state = ExecState::HALTED; _halt(); break;
+                    case ExecState::PAUSED:  state = ExecState::OFF; _powerOff(); break;
+                    case ExecState::RUNNING: state = ExecState::PAUSED; _pause(); break;
 
                     default:
                         invalid();
                 }
+                
+            case ExecState::UNINIT:
+                fatalError;
         }
     }
 
@@ -233,7 +236,7 @@ Thread::powerOn()
 
     if (isPoweredOff()) {
 
-        switchState(STATE_PAUSED);
+        switchState(ExecState::PAUSED);
     }
 }
 
@@ -244,7 +247,7 @@ Thread::powerOff()
 
     if (!isPoweredOff()) {
 
-        switchState(STATE_OFF);
+        switchState(ExecState::OFF);
     }
 }
 
@@ -258,7 +261,7 @@ Thread::run()
         // Throw an exception if the emulator is not ready to run
         isReady();
 
-        switchState(STATE_RUNNING);
+        switchState(ExecState::RUNNING);
     }
 }
 
@@ -269,7 +272,7 @@ Thread::pause()
 
     if (isRunning()) {
 
-        switchState(STATE_PAUSED);
+        switchState(ExecState::PAUSED);
     }
 }
 
@@ -278,9 +281,9 @@ Thread::halt()
 {
     debug(RUN_DEBUG, "halt()\n");
 
-    if (state != STATE_UNINIT && state != STATE_HALTED) {
+    if (state != ExecState::UNINIT && state != ExecState::HALTED) {
 
-        switchState(STATE_HALTED);
+        switchState(ExecState::HALTED);
     }
 }
 

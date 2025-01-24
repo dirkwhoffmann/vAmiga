@@ -25,7 +25,7 @@ class Paula final : public SubComponent, public Inspectable<PaulaInfo> {
 
     Descriptions descriptions = {{
 
-        .type           = PaulaClass,
+        .type           = CType::PaulaClass,
         .name           = "Paula",
         .description    = "Audio, Interrupts, Disk Control",
         .shell          = "paula"

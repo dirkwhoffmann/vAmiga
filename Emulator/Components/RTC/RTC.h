@@ -18,7 +18,7 @@ class RTC final : public SubComponent {
 
     Descriptions descriptions = {{
 
-        .type           = RTCClass,
+        .type           = CType::RTCClass,
         .name           = "RTC",
         .description    = "Real-time Clock",
         .shell          = "rtc"

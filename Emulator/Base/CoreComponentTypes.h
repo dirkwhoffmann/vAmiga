@@ -17,7 +17,7 @@ namespace vamiga {
 // Enumerations
 //
 
-enum_long(COMP_TYPE)
+enum class CType
 {
     GenericClass,
     
@@ -69,6 +69,5 @@ enum_long(COMP_TYPE)
     MouseClass,
     PaddleClass
 };
-typedef COMP_TYPE CType;
 
 }

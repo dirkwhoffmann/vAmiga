@@ -196,7 +196,7 @@ PromServer::main()
         // Define the "/metrics" endpoint where Prometheus will scrape metrics
         srv->Get("/metrics", [this](const httplib::Request& req, httplib::Response& res) {
             
-            switchState(SRV_STATE_CONNECTED);
+            switchState(SrvState::CONNECTED);
             res.set_content(respond(req), "text/plain");
         });
 

@@ -26,7 +26,7 @@ class Denise final : public SubComponent, public Inspectable<DeniseInfo> {
 
     Descriptions descriptions = {{
 
-        .type           = DeniseClass,
+        .type           = CType::DeniseClass,
         .name           = "Denise",
         .description    = "Graphics",
         .shell          = "denise"

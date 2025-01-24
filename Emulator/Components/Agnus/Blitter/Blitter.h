@@ -36,7 +36,7 @@ class Blitter final : public SubComponent, public Inspectable<BlitterInfo>
 
     Descriptions descriptions = {{
 
-        .type           = BlitterClass,
+        .type           = CType::BlitterClass,
         .name           = "Blitter",
         .description    = "Blitter",
         .shell          = "blitter"

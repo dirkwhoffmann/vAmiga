@@ -22,25 +22,25 @@ class HardDrive final : public Drive, public Inspectable<HardDriveInfo> {
     
     Descriptions descriptions = {
         {
-            .type           = HardDriveClass,
+            .type           = CType::HardDriveClass,
             .name           = "HardDrive0",
             .description    = "Hard Drive 0",
             .shell          = "hd0"
         },
         {
-            .type           = HardDriveClass,
+            .type           = CType::HardDriveClass,
             .name           = "HardDrive1",
             .description    = "Hard Drive 1",
             .shell          = "hd1"
         },
         {
-            .type           = HardDriveClass,
+            .type           = CType::HardDriveClass,
             .name           = "HardDrive2",
             .description    = "Hard Drive 2",
             .shell          = "hd2"
         },
         {
-            .type           = HardDriveClass,
+            .type           = CType::HardDriveClass,
             .name           = "HardDrive3",
             .description    = "Hard Drive 3",
             .shell          = "hd3"
@@ -91,7 +91,7 @@ class HardDrive final : public Drive, public Inspectable<HardDriveInfo> {
     DriveHead head;
 
     // Current drive state
-    HardDriveState state = HDR_IDLE;
+    HardDriveState state = HardDriveState::IDLE;
     
     // Disk state flags
     DiskFlags flags = 0;

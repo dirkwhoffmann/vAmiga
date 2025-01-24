@@ -22,7 +22,7 @@ class DmaDebugger final : public SubComponent, public Inspectable<DmaDebuggerInf
     
     Descriptions descriptions = {{
         
-        .type           = DmaDebuggerClass,
+        .type           = CType::DmaDebuggerClass,
         .name           = "DmaDebugger",
         .description    = "DMA Debugger",
         .shell          = "dmadebugger"

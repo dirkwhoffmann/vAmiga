@@ -22,13 +22,13 @@ class CIA : public SubComponent, public Inspectable<CIAInfo, CIAStats> {
 
     Descriptions descriptions = {
         {
-            .type           = CIAClass,
+            .type           = CType::CIAClass,
             .name           = "CIAA",
             .description    = "Complex Interface Adapter A",
             .shell          = "ciaa"
         },
         {
-            .type           = CIAClass,
+            .type           = CType::CIAClass,
             .name           = "CIAB",
             .description    = "Complex Interface Adapter B",
             .shell          = "ciab"

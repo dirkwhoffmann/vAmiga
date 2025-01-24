@@ -53,13 +53,13 @@ class Amiga final : public CoreComponent, public Inspectable<AmigaInfo> {
 
     Descriptions descriptions = {
         {
-            .type           = AmigaClass,
+            .type           = CType::AmigaClass,
             .name           = "Amiga",
             .description    = "Commodore Amiga",
             .shell          = "amiga"
         },
         {
-            .type           = AmigaClass,
+            .type           = CType::AmigaClass,
             .name           = "Amiga",
             .description    = "Commodore Amiga",
             .shell          = ""

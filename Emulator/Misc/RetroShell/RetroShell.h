@@ -41,7 +41,7 @@ class RetroShell final : public SubComponent {
 
     Descriptions descriptions = {{
 
-        .type           = RetroShellClass,
+        .type           = CType::RetroShellClass,
         .name           = "RetroShell",
         .description    = "Retro Shell",
         .shell          = ""

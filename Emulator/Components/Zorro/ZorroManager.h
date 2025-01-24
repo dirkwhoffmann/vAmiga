@@ -20,7 +20,7 @@ class ZorroManager final : public SubComponent {
     
     Descriptions descriptions = {{
 
-        .type           = ZorroManagerClass,
+        .type           = CType::ZorroManagerClass,
         .name           = "ZorroManager",
         .description    = "Zorro Manager",
         .shell          = "zorro"

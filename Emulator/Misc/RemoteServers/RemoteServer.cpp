@@ -136,7 +136,7 @@ RemoteServer::start()
     if (isOff()) {
 
         debug(SRV_DEBUG, "Starting server...\n");
-        switchState(SRV_STATE_STARTING);
+        switchState(SrvState::STARTING);
         
         // Make sure we continue with a terminated server thread
         if (serverThread.joinable()) serverThread.join();
@@ -152,7 +152,7 @@ RemoteServer::stop()
     if (!isOff()) {
 
         debug(SRV_DEBUG, "Stopping server...\n");
-        switchState(SRV_STATE_STOPPING);
+        switchState(SrvState::STOPPING);
         
         // Interrupt the server thread
         disconnect();
@@ -160,7 +160,7 @@ RemoteServer::stop()
         // Wait until the server thread has terminated
         if (serverThread.joinable()) serverThread.join();
         
-        switchState(SRV_STATE_OFF);
+        switchState(SrvState::OFF);
     }
 }
 
@@ -187,30 +187,30 @@ RemoteServer::switchState(SrvState newState)
         didSwitch(oldState, newState);
         
         // Inform the GUI
-        msgQueue.put(MSG_SRV_STATE, newState);
+        msgQueue.put(MSG_SRV_STATE, (i64)newState);
     }
 }
 
 void
 RemoteServer::handleError(const char *description)
 {
-    switchState(SRV_STATE_ERROR);
+    switchState(SrvState::ERROR);
     retroShell << "Server Error: " << string(description) << '\n';
 }
 
 void
 RemoteServer::didSwitch(SrvState from, SrvState to)
 {
-    if (from == SRV_STATE_STARTING && to == SRV_STATE_LISTENING) {
+    if (from == SrvState::STARTING && to == SrvState::LISTENING) {
         didStart();
     }
-    if (to == SRV_STATE_OFF) {
+    if (to == SrvState::OFF) {
         didStop();
     }
-    if (to == SRV_STATE_CONNECTED) {
+    if (to == SrvState::CONNECTED) {
         didConnect();
     }
-    if (from == SRV_STATE_CONNECTED) {
+    if (from == SrvState::CONNECTED) {
         didDisconnect();
     }
 }

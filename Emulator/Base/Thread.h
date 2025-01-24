@@ -36,8 +36,8 @@ protected:
     std::thread thread;
     
     // The current thread state and a change request
-    ExecState state = STATE_UNINIT;
-    // ExecState newState = STATE_UNINIT;
+    ExecState state = ExecState::UNINIT;
+    // ExecState newState = ExecState::UNINIT;
     // std::atomic_flag stateChangeRequest {};
 
     // Synchronization mutex
@@ -164,12 +164,12 @@ public:
      */
     void resume() const;
 
-    bool isInitialized() const { return state != STATE_UNINIT; }
-    bool isPoweredOn() const { return state != STATE_UNINIT && state != STATE_OFF; }
-    bool isPoweredOff() const { return state == STATE_UNINIT || state == STATE_OFF; }
-    bool isPaused() const { return state == STATE_PAUSED; }
-    bool isRunning() const { return state == STATE_RUNNING; }
-    bool isHalted() const { return state == STATE_HALTED; }
+    bool isInitialized() const { return state != ExecState::UNINIT; }
+    bool isPoweredOn() const { return state != ExecState::UNINIT && state != ExecState::OFF; }
+    bool isPoweredOff() const { return state == ExecState::UNINIT || state == ExecState::OFF; }
+    bool isPaused() const { return state == ExecState::PAUSED; }
+    bool isRunning() const { return state == ExecState::RUNNING; }
+    bool isHalted() const { return state == ExecState::HALTED; }
     bool isWarping() const { return warp != 0; }
     bool isTracking() const { return track != 0; }
 

@@ -37,31 +37,30 @@ namespace vamiga {
 // Enumerations
 //
 
-enum_long(BOARD_STATE)
+enum class BoardState
 {
-    STATE_AUTOCONF,
-    STATE_ACTIVE,
-    STATE_SHUTUP
+    AUTOCONF,
+    ACTIVE,
+    SHUTUP
 };
-typedef BOARD_STATE BoardState;
 
 struct BoardStateEnum : util::Reflection<BoardStateEnum, BoardState>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = STATE_SHUTUP;
+    static constexpr long maxVal = long(BoardState::SHUTUP);
     
     static const char *prefix() { return "STATE"; }
-    static const char *_key(long value)
+    static const char *_key(BoardState value)
     {
         switch (value) {
                 
-            case STATE_AUTOCONF:    return "AUTOCONF";
-            case STATE_ACTIVE:      return "ACTIVE";
-            case STATE_SHUTUP:      return "SHUTUP";
+            case BoardState::AUTOCONF:    return "AUTOCONF";
+            case BoardState::ACTIVE:      return "ACTIVE";
+            case BoardState::SHUTUP:      return "SHUTUP";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(BoardState value)
     {
         return "";
     }

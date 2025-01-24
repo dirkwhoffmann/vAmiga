@@ -20,7 +20,7 @@ class DiskController final : public SubComponent, public Inspectable<DiskControl
 {
     Descriptions descriptions = {{
 
-        .type           = DiskControllerClass,
+        .type           = CType::DiskControllerClass,
         .name           = "DiskController",
         .description    = "Disk Controller",
         .shell          = "dc"

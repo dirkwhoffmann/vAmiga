@@ -18,7 +18,7 @@ class SampleRateDetector final : public SubComponent {
 
     Descriptions descriptions = {{
 
-        .type           = SampleRateDetectorClass,
+        .type           = CType::SampleRateDetectorClass,
         .name           = "SampleRateDetector",
         .description    = "Sample rate detector",
         .shell          = ""

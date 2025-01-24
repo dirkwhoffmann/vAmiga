@@ -19,7 +19,7 @@ class LogicAnalyzer final : public SubComponent, public Inspectable<LogicAnalyze
     
     Descriptions descriptions = {{
 
-        .type           = LogicAnalyzerClass,
+        .type           = CType::LogicAnalyzerClass,
         .name           = "LogicAnalyzer",
         .description    = "Logic Analyzer",
         .shell          = "logicanalyzer"

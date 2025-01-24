@@ -666,7 +666,7 @@ HardDrive::read(isize offset, isize length, u32 addr)
     
     if (!error) {
 
-        state = HDR_STATE_READING;
+        state = HardDriveState::READING;
 
         // Move the drive head to the specified location
         moveHead(offset / geometry.bsize);
@@ -694,7 +694,7 @@ HardDrive::write(isize offset, isize length, u32 addr)
     
     if (!error) {
 
-        state = HDR_STATE_WRITING;
+        state = HardDriveState::WRITING;
 
         // Move the drive head to the specified location
         moveHead(offset / geometry.bsize);
@@ -835,7 +835,7 @@ template <EventSlot s> void
 HardDrive::serviceHdrEvent()
 {
     agnus.cancel <s> ();
-    state = HDR_STATE_IDLE;
+    state = HardDriveState::IDLE;
     msgQueue.put(MSG_HDR_IDLE, objid);
 }
 

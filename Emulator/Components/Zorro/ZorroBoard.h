@@ -20,7 +20,7 @@ protected:
     
     Descriptions descriptions = {{
 
-        .type           = ZorroBoardClass,
+        .type           = CType::ZorroBoardClass,
         .name           = "ZorroBoard",
         .description    = "Zorro Board",
         .shell          = ""
@@ -38,7 +38,7 @@ protected:
     u32 baseAddr = 0;
     
     // Current state
-    BoardState state = STATE_AUTOCONF;
+    BoardState state = BoardState::AUTOCONF;
     
     
     //

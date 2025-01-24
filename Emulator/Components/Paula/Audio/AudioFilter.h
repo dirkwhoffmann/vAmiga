@@ -114,13 +114,13 @@ class AudioFilter final : public SubComponent {
     Descriptions descriptions = {
 
         {
-            .type           = AudioFilterClass,
+            .type           = CType::AudioFilterClass,
             .name           = "AudioFilter",
             .description    = "Audio Filter",
             .shell          = "filter"
         },
         {
-            .type           = AudioFilterClass,
+            .type           = CType::AudioFilterClass,
             .name           = "RecAudioFilter",
             .description    = "Audio Filter (Recorder)",
             .shell          = ""

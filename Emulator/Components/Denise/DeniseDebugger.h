@@ -21,7 +21,7 @@ class DeniseDebugger final : public SubComponent {
     
     Descriptions descriptions = {{
 
-        .type           = DeniseDebuggerClass,
+        .type           = CType::DeniseDebuggerClass,
         .name           = "DeniseDebugger",
         .description    = "Denise Debugger",
         .shell          = ""

@@ -21,7 +21,7 @@ class PixelEngine final : public SubComponent {
 
     Descriptions descriptions = {{
 
-        .type           = PixelEngineClass,
+        .type           = CType::PixelEngineClass,
         .name           = "PixelEngine",
         .description    = "Amiga Monitor",
         .shell          = "monitor"
