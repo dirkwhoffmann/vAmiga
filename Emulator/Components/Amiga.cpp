@@ -161,7 +161,7 @@ Amiga::_didReset(bool hard)
     flags = 0;
 
     // Inform the GUI
-    if (hard) msgQueue.put(MSG_RESET);
+    if (hard) msgQueue.put(MsgType::RESET);
 }
 
 i64
@@ -656,7 +656,7 @@ Amiga::_powerOn()
     debug(RUN_DEBUG, "_powerOn\n");
 
     hardReset();
-    msgQueue.put(MSG_POWER, 1);
+    msgQueue.put(MsgType::POWER, 1);
 }
 
 void
@@ -665,7 +665,7 @@ Amiga::_powerOff()
     debug(RUN_DEBUG, "_powerOff\n");
 
     hardReset();
-    msgQueue.put(MSG_POWER, 0);
+    msgQueue.put(MsgType::POWER, 0);
 }
 
 void
@@ -673,7 +673,7 @@ Amiga::_run()
 {
     debug(RUN_DEBUG, "_run\n");
 
-    msgQueue.put(MSG_RUN);
+    msgQueue.put(MsgType::RUN);
 }
 
 void
@@ -682,7 +682,7 @@ Amiga::_pause()
     debug(RUN_DEBUG, "_pause\n");
 
     remoteManager.gdbServer.breakpointReached();
-    msgQueue.put(MSG_PAUSE);
+    msgQueue.put(MsgType::PAUSE);
 }
 
 void
@@ -690,7 +690,7 @@ Amiga::_halt()
 {
     debug(RUN_DEBUG, "_halt\n");
 
-    msgQueue.put(MSG_SHUTDOWN);
+    msgQueue.put(MsgType::SHUTDOWN);
 }
 
 void
@@ -698,7 +698,7 @@ Amiga::_warpOn()
 {
     debug(RUN_DEBUG, "_warpOn\n");
 
-    msgQueue.put(MSG_WARP, 1);
+    msgQueue.put(MsgType::WARP, 1);
 }
 
 void
@@ -706,7 +706,7 @@ Amiga::_warpOff()
 {
     debug(RUN_DEBUG, "_warpOff\n");
 
-    msgQueue.put(MSG_WARP, 0);
+    msgQueue.put(MsgType::WARP, 0);
 }
 
 void
@@ -714,7 +714,7 @@ Amiga::_trackOn()
 {
     debug(RUN_DEBUG, "_trackOn\n");
 
-    msgQueue.put(MSG_TRACK, 1);
+    msgQueue.put(MsgType::TRACK, 1);
 }
 
 void
@@ -722,7 +722,7 @@ Amiga::_trackOff()
 {
     debug(RUN_DEBUG, "_trackOff\n");
 
-    msgQueue.put(MSG_TRACK, 0);
+    msgQueue.put(MsgType::TRACK, 0);
 }
 
 void 
@@ -828,10 +828,10 @@ Amiga::update(CmdQueue &queue)
     }
 
     // Inform the GUI about a changed machine configuration
-    if (cmdConfig) { msgQueue.put(MSG_CONFIG); }
+    if (cmdConfig) { msgQueue.put(MsgType::CONFIG); }
 
     // Inform the GUI about new RetroShell content
-    if (retroShell.isDirty) { retroShell.isDirty = false; msgQueue.put(MSG_RSH_UPDATE); }
+    if (retroShell.isDirty) { retroShell.isDirty = false; msgQueue.put(MsgType::RSH_UPDATE); }
 }
 
 void
@@ -856,21 +856,21 @@ Amiga::computeFrame()
             // Did we reach a soft breakpoint?
             if (flags & RL::SOFTSTOP_REACHED) {
 
-                msgQueue.put(MSG_STEP);
+                msgQueue.put(MsgType::STEP);
                 action = pause;
             }
 
             // Shall we stop at the end of the current line?
             if (flags & RL::EOL_REACHED) {
 
-                msgQueue.put(MSG_EOL_REACHED);
+                msgQueue.put(MsgType::EOL_REACHED);
                 action = pause;
             }
   
             // Shall we stop at the end of the current frame?
             if (flags & RL::EOF_REACHED) {
 
-                msgQueue.put(MSG_EOF_REACHED);
+                msgQueue.put(MsgType::EOF_REACHED);
                 action = pause;
             }
 
@@ -878,7 +878,7 @@ Amiga::computeFrame()
             if (flags & RL::BREAKPOINT_REACHED) {
 
                 auto addr = cpu.debugger.breakpoints.hit->addr;
-                msgQueue.put(MSG_BREAKPOINT_REACHED, CpuMsg { addr, 0 });
+                msgQueue.put(MsgType::BREAKPOINT_REACHED, CpuMsg { addr, 0 });
                 action = pause;
             }
 
@@ -886,7 +886,7 @@ Amiga::computeFrame()
             if (flags & RL::WATCHPOINT_REACHED) {
 
                 auto addr = cpu.debugger.watchpoints.hit->addr;
-                msgQueue.put(MSG_WATCHPOINT_REACHED, CpuMsg { addr, 0 });
+                msgQueue.put(MsgType::WATCHPOINT_REACHED, CpuMsg { addr, 0 });
                 action = pause;
             }
 
@@ -894,21 +894,21 @@ Amiga::computeFrame()
             if (flags & RL::CATCHPOINT_REACHED) {
 
                 auto vector = u8(cpu.debugger.catchpoints.hit->addr);
-                msgQueue.put(MSG_CATCHPOINT_REACHED, CpuMsg { cpu.getPC0(), vector });
+                msgQueue.put(MsgType::CATCHPOINT_REACHED, CpuMsg { cpu.getPC0(), vector });
                 action = pause;
             }
 
             // Did we reach a software trap?
             if (flags & RL::SWTRAP_REACHED) {
 
-                msgQueue.put(MSG_SWTRAP_REACHED, CpuMsg { cpu.getPC0(), 0 });
+                msgQueue.put(MsgType::SWTRAP_REACHED, CpuMsg { cpu.getPC0(), 0 });
                 action = pause;
             }
 
             // Did we reach a beam trap?
             if (flags & RL::BEAMTRAP_REACHED) {
 
-                msgQueue.put(MSG_BEAMTRAP_REACHED, CpuMsg { 0, 0 });
+                msgQueue.put(MsgType::BEAMTRAP_REACHED, CpuMsg { 0, 0 });
                 action = pause;
             }
 
@@ -916,7 +916,7 @@ Amiga::computeFrame()
             if (flags & RL::COPPERBP_REACHED) {
 
                 auto addr = u8(agnus.copper.debugger.breakpoints.hit()->addr);
-                msgQueue.put(MSG_COPPERBP_REACHED, CpuMsg { addr, 0 });
+                msgQueue.put(MsgType::COPPERBP_REACHED, CpuMsg { addr, 0 });
                 action = pause;
             }
 
@@ -924,7 +924,7 @@ Amiga::computeFrame()
             if (flags & RL::COPPERWP_REACHED) {
 
                 auto addr = u8(agnus.copper.debugger.watchpoints.hit()->addr);
-                msgQueue.put(MSG_COPPERWP_REACHED, CpuMsg { addr, 0 });
+                msgQueue.put(MsgType::COPPERWP_REACHED, CpuMsg { addr, 0 });
                 action = pause;
             }
 
@@ -1001,7 +1001,7 @@ Amiga::serviceSnpEvent(EventID eventId)
     if (objid == 0) {
 
         // Take snapshot and hand it over to GUI
-        msgQueue.put(MSG_SNAPSHOT_TAKEN, SnapshotMsg { .snapshot = new Snapshot(*this) } );
+        msgQueue.put(MsgType::SNAPSHOT_TAKEN, SnapshotMsg { .snapshot = new Snapshot(*this) } );
     }
 
     // Schedule the next event
@@ -1053,8 +1053,8 @@ Amiga::loadSnapshot(const Snapshot &snap)
     load(snapshot.getData());
         
     // Inform the GUI
-    msgQueue.put(MSG_SNAPSHOT_RESTORED);
-    msgQueue.put(MSG_VIDEO_FORMAT, agnus.isPAL() ? FORMAT_PAL : FORMAT_NTSC);
+    msgQueue.put(MsgType::SNAPSHOT_RESTORED);
+    msgQueue.put(MsgType::VIDEO_FORMAT, agnus.isPAL() ? FORMAT_PAL : FORMAT_NTSC);
 }
 
 void
@@ -1159,7 +1159,7 @@ Amiga::serviceAlarmEvent()
     for (auto it = alarms.begin(); it != alarms.end(); ) {
 
         if (it->trigger <= agnus.clock) {
-            msgQueue.put(MSG_ALARM, it->payload);
+            msgQueue.put(MsgType::ALARM, it->payload);
             it = alarms.erase(it);
         } else {
             it++;

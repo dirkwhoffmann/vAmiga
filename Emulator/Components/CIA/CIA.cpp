@@ -782,13 +782,13 @@ CIA::idleSince() const
 void
 CIAA::_powerOn()
 {
-    msgQueue.put(MSG_POWER_LED_DIM);
+    msgQueue.put(MsgType::POWER_LED_DIM);
 }
 
 void
 CIAA::_powerOff()
 {
-    msgQueue.put(MSG_POWER_LED_OFF);
+    msgQueue.put(MsgType::POWER_LED_OFF);
 }
 
 void 
@@ -832,7 +832,7 @@ CIAA::updatePA()
     
     // Check the LED bit
     if ((oldpa ^ pa) & 0b00000010) {
-        msgQueue.put((pa & 0b00000010) ? MSG_POWER_LED_DIM : MSG_POWER_LED_ON);
+        msgQueue.put((pa & 0b00000010) ? MsgType::POWER_LED_DIM : MsgType::POWER_LED_ON);
     }
 
     // Check the OVL bit which controls the Kickstart ROM overlay

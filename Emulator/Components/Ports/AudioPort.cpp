@@ -332,7 +332,7 @@ AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
     bool muted = isMuted();
 
     // Send the MUTE message if needed
-    if (muted != wasMuted) { msgQueue.put(MSG_MUTE, wasMuted = muted); }
+    if (muted != wasMuted) { msgQueue.put(MsgType::MUTE, wasMuted = muted); }
 
     stream.mutex.lock();
 

@@ -174,13 +174,13 @@ Headless::process(Message msg)
 
     switch (msg.type) {
             
-        case MSG_RSH_ERROR:
+        case MsgType::RSH_ERROR:
 
             returnCode = 1;
             wakeUp();
             break;
 
-        case MSG_ABORT:
+        case MsgType::ABORT:
 
             wakeUp();
             break;

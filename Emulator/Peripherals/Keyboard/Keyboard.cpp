@@ -132,7 +132,7 @@ Keyboard::press(KeyCode keycode)
         
         // Check for reset key combination (CTRL + Amiga Left + Amiga Right)
         if (keyDown[0x63] && keyDown[0x66] && keyDown[0x67]) {
-            msgQueue.put(MSG_CTRL_AMIGA_AMIGA);
+            msgQueue.put(MsgType::CTRL_AMIGA_AMIGA);
         }
     }
 }

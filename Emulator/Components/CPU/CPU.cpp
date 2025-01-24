@@ -208,7 +208,7 @@ Moira::cpuDidReset()
 void
 Moira::cpuDidHalt()
 {
-    msgQueue.put(MSG_CPU_HALT);
+    msgQueue.put(MsgType::CPU_HALT);
 }
 
 void
@@ -401,7 +401,7 @@ CPU::setOption(Option option, i64 value)
         case Option::CPU_OVERCLOCKING:
 
             config.overclocking = isize(value);
-            msgQueue.put(MSG_OVERCLOCKING, config.overclocking);
+            msgQueue.put(MsgType::OVERCLOCKING, config.overclocking);
             return;
 
         case Option::CPU_RESET_VAL:

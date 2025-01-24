@@ -190,13 +190,13 @@ DiskController::setState(DriveState oldState, DriveState newState)
             
         case DRIVE_DMA_WRITE:
             
-            msgQueue.put(MSG_DRIVE_WRITE, selected);
+            msgQueue.put(MsgType::DRIVE_WRITE, selected);
             break;
             
         default:
             
             if (oldState == DRIVE_DMA_WRITE)
-                msgQueue.put(MSG_DRIVE_READ, selected);
+                msgQueue.put(MsgType::DRIVE_READ, selected);
     }
 }
 

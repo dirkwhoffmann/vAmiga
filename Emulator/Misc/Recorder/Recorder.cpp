@@ -362,7 +362,7 @@ Recorder::prepare()
     state = RecorderState::record;
     audioClock = 0;
     recStart = util::Time::now();
-    msgQueue.put(MSG_RECORDING_STARTED);
+    msgQueue.put(MsgType::RECORDING_STARTED);
 }
 
 void
@@ -452,7 +452,7 @@ Recorder::finalize()
     recStop = util::Time::now();
     debug(REC_DEBUG, "finalize() done\n");
 
-    msgQueue.put(MSG_RECORDING_STOPPED);
+    msgQueue.put(MsgType::RECORDING_STOPPED);
 }
 
 void
@@ -461,7 +461,7 @@ Recorder::abort()
     debug(REC_DEBUG, "abort()\n");
 
     finalize();
-    msgQueue.put(MSG_RECORDING_ABORTED);
+    msgQueue.put(MsgType::RECORDING_ABORTED);
 }
 
 }

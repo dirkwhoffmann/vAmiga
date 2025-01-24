@@ -793,7 +793,7 @@ Console::initCommands(Command &root)
                  "Hide the console window",
                  [this](Arguments& argv, long value) {
 
-            msgQueue.put(MSG_RSH_CLOSE);
+            msgQueue.put(MsgType::RSH_CLOSE);
         });
 
         root.add({"help"}, { }, {Arg::command},
@@ -841,7 +841,7 @@ Console::initCommands(Command &root)
                  "Terminates the application",
                  [this](Arguments& argv, long value) {
 
-            msgQueue.put(MSG_ABORT, 0);
+            msgQueue.put(MsgType::ABORT, 0);
         });
     }
 }
@@ -889,7 +889,7 @@ Console::registerComponent(CoreComponent &c, Command &root)
                          [this](Arguments& argv, long value) {
                     
                     emulator.set(Option(HI_WORD(value)), argv[0], { LO_WORD(value) });
-                    msgQueue.put(MSG_CONFIG);
+                    msgQueue.put(MsgType::CONFIG);
                     
                 }, HI_W_LO_W(u16(opt), c.objid));
 
@@ -909,7 +909,7 @@ Console::registerComponent(CoreComponent &c, Command &root)
                              [this](Arguments& argv, long value) {
                         
                         emulator.set(Option(HI_WORD(value)), BYTE1(value), { BYTE0(value) });
-                        msgQueue.put(MSG_CONFIG);
+                        msgQueue.put(MsgType::CONFIG);
                         
                     }, u16(opt) << 16 | second << 8 | c.objid);
                 }
