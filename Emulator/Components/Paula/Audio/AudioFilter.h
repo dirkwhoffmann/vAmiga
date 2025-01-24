@@ -26,7 +26,7 @@
  * The A1200 differs from this scheme. It has no low-pass filter and uses
  * a different cutoff frequency for the high-pass filter.
  *
- * vAmiga supports the following filter types (OPT_FILTER_TYPE):
+ * vAmiga supports the following filter types (Option::FILTER_TYPE):
  *
  *     FILTER_NONE:     No filter is applied.
  *     FILTER_A500:     Runs all three filter stages, except stage 2 if the
@@ -129,7 +129,7 @@ class AudioFilter final : public SubComponent {
 
     ConfigOptions options = {
 
-        OPT_AUD_FILTER_TYPE
+        Option::AUD_FILTER_TYPE
     };
 
     // Reference to the audio port this device belongs to

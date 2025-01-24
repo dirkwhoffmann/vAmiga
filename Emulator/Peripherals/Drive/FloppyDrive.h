@@ -52,16 +52,16 @@ class FloppyDrive final : public Drive, public Inspectable<FloppyDriveInfo> {
 
     ConfigOptions options = {
 
-        OPT_DRIVE_CONNECT,
-        OPT_DRIVE_TYPE,
-        OPT_DRIVE_MECHANICS,
-        OPT_DRIVE_RPM,
-        OPT_DRIVE_SWAP_DELAY,
-        OPT_DRIVE_PAN,
-        OPT_DRIVE_STEP_VOLUME,
-        OPT_DRIVE_POLL_VOLUME,
-        OPT_DRIVE_INSERT_VOLUME,
-        OPT_DRIVE_EJECT_VOLUME
+        Option::DRIVE_CONNECT,
+        Option::DRIVE_TYPE,
+        Option::DRIVE_MECHANICS,
+        Option::DRIVE_RPM,
+        Option::DRIVE_SWAP_DELAY,
+        Option::DRIVE_PAN,
+        Option::DRIVE_STEP_VOLUME,
+        Option::DRIVE_POLL_VOLUME,
+        Option::DRIVE_INSERT_VOLUME,
+        Option::DRIVE_EJECT_VOLUME
     };
 
     friend class DiskController;

@@ -63,18 +63,18 @@ class AudioPort final : public SubComponent {
 
     ConfigOptions options = {
 
-        OPT_AUD_SAMPLING_METHOD,
-        OPT_AUD_PAN0,
-        OPT_AUD_PAN1,
-        OPT_AUD_PAN2,
-        OPT_AUD_PAN3,
-        OPT_AUD_VOL0,
-        OPT_AUD_VOL1,
-        OPT_AUD_VOL2,
-        OPT_AUD_VOL3,
-        OPT_AUD_VOLL,
-        OPT_AUD_VOLR,
-        OPT_AUD_FASTPATH
+        Option::AUD_SAMPLING_METHOD,
+        Option::AUD_PAN0,
+        Option::AUD_PAN1,
+        Option::AUD_PAN2,
+        Option::AUD_PAN3,
+        Option::AUD_VOL0,
+        Option::AUD_VOL1,
+        Option::AUD_VOL2,
+        Option::AUD_VOL3,
+        Option::AUD_VOLL,
+        Option::AUD_VOLR,
+        Option::AUD_FASTPATH
     };
 
     friend class Paula;

@@ -14,7 +14,7 @@
 
 namespace vamiga {
 
-enum class ErrorCode
+enum class ErrorCode : long
 {
     OK,                   ///< No error
     UNKNOWN,              ///< Unclassified error condition

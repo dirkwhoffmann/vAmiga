@@ -114,16 +114,16 @@ class Memory final : public SubComponent, public Inspectable<MemInfo, MemStats> 
 
     ConfigOptions options = {
 
-        OPT_MEM_CHIP_RAM,
-        OPT_MEM_SLOW_RAM,
-        OPT_MEM_FAST_RAM,
-        OPT_MEM_EXT_START,
-        OPT_MEM_SAVE_ROMS,
-        OPT_MEM_SLOW_RAM_DELAY,
-        OPT_MEM_SLOW_RAM_MIRROR,
-        OPT_MEM_BANKMAP,
-        OPT_MEM_UNMAPPING_TYPE,
-        OPT_MEM_RAM_INIT_PATTERN
+        Option::MEM_CHIP_RAM,
+        Option::MEM_SLOW_RAM,
+        Option::MEM_FAST_RAM,
+        Option::MEM_EXT_START,
+        Option::MEM_SAVE_ROMS,
+        Option::MEM_SLOW_RAM_DELAY,
+        Option::MEM_SLOW_RAM_MIRROR,
+        Option::MEM_BANKMAP,
+        Option::MEM_UNMAPPING_TYPE,
+        Option::MEM_RAM_INIT_PATTERN
     };
 
     // Current configuration

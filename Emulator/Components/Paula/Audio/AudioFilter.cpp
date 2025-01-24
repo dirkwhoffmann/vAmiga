@@ -190,7 +190,7 @@ AudioFilter::getOption(Option option) const
 {
     switch (option) {
 
-        case OPT_AUD_FILTER_TYPE:       return config.filterType;
+        case Option::AUD_FILTER_TYPE:       return config.filterType;
 
         default:
             fatalError;
@@ -202,7 +202,7 @@ AudioFilter::checkOption(Option opt, i64 value)
 {
     switch (opt) {
 
-        case OPT_AUD_FILTER_TYPE:
+        case Option::AUD_FILTER_TYPE:
 
             if (!FilterTypeEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, FilterTypeEnum::keyList());
@@ -219,7 +219,7 @@ AudioFilter::setOption(Option option, i64 value)
 {
     switch (option) {
 
-        case OPT_AUD_FILTER_TYPE:
+        case Option::AUD_FILTER_TYPE:
 
             config.filterType = (FilterType)value;
             setup(port.sampleRate);

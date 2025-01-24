@@ -68,15 +68,15 @@ class Amiga final : public CoreComponent, public Inspectable<AmigaInfo> {
 
     ConfigOptions options = {
 
-        OPT_AMIGA_VIDEO_FORMAT,
-        OPT_AMIGA_WARP_BOOT,
-        OPT_AMIGA_WARP_MODE,
-        OPT_AMIGA_VSYNC,
-        OPT_AMIGA_SPEED_BOOST,
-        OPT_AMIGA_RUN_AHEAD,
-        OPT_AMIGA_SNAP_AUTO,
-        OPT_AMIGA_SNAP_DELAY,
-        OPT_AMIGA_SNAP_COMPRESS
+        Option::AMIGA_VIDEO_FORMAT,
+        Option::AMIGA_WARP_BOOT,
+        Option::AMIGA_WARP_MODE,
+        Option::AMIGA_VSYNC,
+        Option::AMIGA_SPEED_BOOST,
+        Option::AMIGA_RUN_AHEAD,
+        Option::AMIGA_SNAP_AUTO,
+        Option::AMIGA_SNAP_DELAY,
+        Option::AMIGA_SNAP_COMPRESS
     };
     
     // The current configuration

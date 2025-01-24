@@ -47,7 +47,7 @@ class HdController : public ZorroBoard, public Inspectable<HdcInfo, HdcStats> {
 
     ConfigOptions options = {
 
-        OPT_HDC_CONNECT
+        Option::HDC_CONNECT
     };
 
     // The hard drive this controller is connected to

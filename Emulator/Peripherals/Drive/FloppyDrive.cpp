@@ -75,16 +75,16 @@ FloppyDrive::getOption(Option option) const
 {
     switch (option) {
             
-        case OPT_DRIVE_CONNECT:         return (i64)config.connected;
-        case OPT_DRIVE_TYPE:            return (i64)config.type;
-        case OPT_DRIVE_MECHANICS:       return (i64)config.mechanics;
-        case OPT_DRIVE_RPM:             return (i64)config.rpm;
-        case OPT_DRIVE_SWAP_DELAY:      return (i64)config.diskSwapDelay;
-        case OPT_DRIVE_PAN:             return (i64)config.pan;
-        case OPT_DRIVE_STEP_VOLUME:     return (i64)config.stepVolume;
-        case OPT_DRIVE_POLL_VOLUME:     return (i64)config.pollVolume;
-        case OPT_DRIVE_INSERT_VOLUME:   return (i64)config.insertVolume;
-        case OPT_DRIVE_EJECT_VOLUME:    return (i64)config.ejectVolume;
+        case Option::DRIVE_CONNECT:         return (i64)config.connected;
+        case Option::DRIVE_TYPE:            return (i64)config.type;
+        case Option::DRIVE_MECHANICS:       return (i64)config.mechanics;
+        case Option::DRIVE_RPM:             return (i64)config.rpm;
+        case Option::DRIVE_SWAP_DELAY:      return (i64)config.diskSwapDelay;
+        case Option::DRIVE_PAN:             return (i64)config.pan;
+        case Option::DRIVE_STEP_VOLUME:     return (i64)config.stepVolume;
+        case Option::DRIVE_POLL_VOLUME:     return (i64)config.pollVolume;
+        case Option::DRIVE_INSERT_VOLUME:   return (i64)config.insertVolume;
+        case Option::DRIVE_EJECT_VOLUME:    return (i64)config.ejectVolume;
 
         default:
             fatalError;
@@ -96,11 +96,11 @@ FloppyDrive::checkOption(Option opt, i64 value)
 {
     switch (opt) {
 
-        case OPT_DRIVE_CONNECT:
+        case Option::DRIVE_CONNECT:
 
             return;
 
-        case OPT_DRIVE_TYPE:
+        case Option::DRIVE_TYPE:
 
             if (!FloppyDriveTypeEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, FloppyDriveTypeEnum::keyList());
@@ -110,20 +110,20 @@ FloppyDrive::checkOption(Option opt, i64 value)
             }
             return;
 
-        case OPT_DRIVE_MECHANICS:
+        case Option::DRIVE_MECHANICS:
 
             if (!DriveMechanicsEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, DriveMechanicsEnum::keyList());
             }
             return;
 
-        case OPT_DRIVE_RPM:
-        case OPT_DRIVE_SWAP_DELAY:
-        case OPT_DRIVE_PAN:
-        case OPT_DRIVE_STEP_VOLUME:
-        case OPT_DRIVE_POLL_VOLUME:
-        case OPT_DRIVE_EJECT_VOLUME:
-        case OPT_DRIVE_INSERT_VOLUME:
+        case Option::DRIVE_RPM:
+        case Option::DRIVE_SWAP_DELAY:
+        case Option::DRIVE_PAN:
+        case Option::DRIVE_STEP_VOLUME:
+        case Option::DRIVE_POLL_VOLUME:
+        case Option::DRIVE_EJECT_VOLUME:
+        case Option::DRIVE_INSERT_VOLUME:
 
             return;
 
@@ -137,7 +137,7 @@ FloppyDrive::setOption(Option option, i64 value)
 {
     switch (option) {
 
-        case OPT_DRIVE_CONNECT:
+        case Option::DRIVE_CONNECT:
 
             // We don't allow the internal drive to be disconnected
             if (objid == 0 && value == false) return;
@@ -149,47 +149,47 @@ FloppyDrive::setOption(Option option, i64 value)
             msgQueue.put(MSG_DRIVE_CONNECT, DriveMsg { i16(objid), i16(value), 0, 0 } );
             break;
 
-        case OPT_DRIVE_TYPE:
+        case Option::DRIVE_TYPE:
 
             config.type = (FloppyDriveType)value;
             break;
 
-        case OPT_DRIVE_MECHANICS:
+        case Option::DRIVE_MECHANICS:
 
             config.mechanics = (DriveMechanics)value;
             break;
 
-        case OPT_DRIVE_RPM:
+        case Option::DRIVE_RPM:
 
             config.rpm = (isize)value;
             break;
 
-        case OPT_DRIVE_SWAP_DELAY:
+        case Option::DRIVE_SWAP_DELAY:
 
             config.diskSwapDelay = (Cycle)value;
             break;
 
-        case OPT_DRIVE_PAN:
+        case Option::DRIVE_PAN:
 
             config.pan = (i16)value;
             break;
 
-        case OPT_DRIVE_STEP_VOLUME:
+        case Option::DRIVE_STEP_VOLUME:
 
             config.stepVolume = (u8)value;
             break;
 
-        case OPT_DRIVE_POLL_VOLUME:
+        case Option::DRIVE_POLL_VOLUME:
 
             config.pollVolume = (u8)value;
             break;
 
-        case OPT_DRIVE_EJECT_VOLUME:
+        case Option::DRIVE_EJECT_VOLUME:
 
             config.ejectVolume = (u8)value;
             break;
 
-        case OPT_DRIVE_INSERT_VOLUME:
+        case Option::DRIVE_INSERT_VOLUME:
 
             config.insertVolume = (u8)value;
             break;

@@ -27,14 +27,14 @@ class LogicAnalyzer final : public SubComponent, public Inspectable<LogicAnalyze
 
     ConfigOptions options = {
 
-        OPT_LA_PROBE0,
-        OPT_LA_PROBE1,
-        OPT_LA_PROBE2,
-        OPT_LA_PROBE3,
-        OPT_LA_ADDR0,
-        OPT_LA_ADDR1,
-        OPT_LA_ADDR2,
-        OPT_LA_ADDR3
+        Option::LA_PROBE0,
+        Option::LA_PROBE1,
+        Option::LA_PROBE2,
+        Option::LA_PROBE3,
+        Option::LA_ADDR0,
+        Option::LA_ADDR1,
+        Option::LA_ADDR2,
+        Option::LA_ADDR3
     };
 
     // The current configuration

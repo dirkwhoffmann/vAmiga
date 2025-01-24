@@ -891,7 +891,7 @@ Console::registerComponent(CoreComponent &c, Command &root)
                     emulator.set(Option(HI_WORD(value)), argv[0], { LO_WORD(value) });
                     msgQueue.put(MSG_CONFIG);
                     
-                }, HI_W_LO_W(opt, c.objid));
+                }, HI_W_LO_W(u16(opt), c.objid));
 
             } else {
                 
@@ -911,7 +911,7 @@ Console::registerComponent(CoreComponent &c, Command &root)
                         emulator.set(Option(HI_WORD(value)), BYTE1(value), { BYTE0(value) });
                         msgQueue.put(MSG_CONFIG);
                         
-                    }, opt << 16 | second << 8 | c.objid);
+                    }, u16(opt) << 16 | second << 8 | c.objid);
                 }
             }
         }
@@ -937,7 +937,7 @@ Console::initSetters(Command &root, const CoreComponent &c)
 
                     emulator.set(Option(HI_WORD(value)), argv[0], { LO_WORD(value) });
 
-                }, HI_W_LO_W(opt, c.objid));
+                }, HI_W_LO_W(u16(opt), c.objid));
             }
         }
     }

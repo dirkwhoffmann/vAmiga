@@ -29,7 +29,7 @@ class Keyboard final : public SubComponent, public Inspectable<KeyboardInfo> {
 
     ConfigOptions options = {
 
-        OPT_KBD_ACCURACY
+        Option::KBD_ACCURACY
     };
 
     // Current configuration

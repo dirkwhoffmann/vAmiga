@@ -30,7 +30,7 @@
  *     The enumeration members must be numbered 1, 2, 4, etc. Each member of
  *     the enumeration is treated as flag of a combined bit field.
  *
- * Some enums label their key with a prefix. E.g., the key OPT_CPU_OVERCLOCKING
+ * Some enums label their key with a prefix. E.g., the key Option::CPU_OVERCLOCKING
  * is labeled "CPU.OVERCLOCKING". Function fullKey() always the label with the
  * prefix included. Other functions such as key() provide an additional
  * parameter that decides whether to key label should be return with or without

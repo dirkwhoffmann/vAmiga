@@ -37,10 +37,10 @@ class CIA : public SubComponent, public Inspectable<CIAInfo, CIAStats> {
 
     ConfigOptions options = {
 
-        OPT_CIA_REVISION,
-        OPT_CIA_TODBUG,
-        OPT_CIA_ECLOCK_SYNCING,
-        OPT_CIA_IDLE_SLEEP
+        Option::CIA_REVISION,
+        Option::CIA_TODBUG,
+        Option::CIA_ECLOCK_SYNCING,
+        Option::CIA_IDLE_SLEEP
     };
 
 protected:

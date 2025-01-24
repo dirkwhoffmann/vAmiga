@@ -45,8 +45,8 @@ class Agnus : public SubComponent, public Inspectable<AgnusInfo, AgnusStats> {
 
     ConfigOptions options = {
 
-        OPT_AGNUS_REVISION,
-        OPT_AGNUS_PTR_DROPS
+        Option::AGNUS_REVISION,
+        Option::AGNUS_PTR_DROPS
     };
 
     // Current configuration

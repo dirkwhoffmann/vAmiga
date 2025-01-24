@@ -75,10 +75,10 @@ CIA::getOption(Option option) const
 {
     switch (option) {
             
-        case OPT_CIA_REVISION:          return config.revision;
-        case OPT_CIA_TODBUG:            return config.todBug;
-        case OPT_CIA_ECLOCK_SYNCING:    return config.eClockSyncing;
-        case OPT_CIA_IDLE_SLEEP:        return config.idleSleep;
+        case Option::CIA_REVISION:          return config.revision;
+        case Option::CIA_TODBUG:            return config.todBug;
+        case Option::CIA_ECLOCK_SYNCING:    return config.eClockSyncing;
+        case Option::CIA_IDLE_SLEEP:        return config.idleSleep;
 
         default:
             fatalError;
@@ -90,16 +90,16 @@ CIA::checkOption(Option opt, i64 value)
 {
     switch (opt) {
 
-        case OPT_CIA_REVISION:
+        case Option::CIA_REVISION:
 
             if (!CIARevisionEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, CIARevisionEnum::keyList());
             }
             return;
 
-        case OPT_CIA_TODBUG:
-        case OPT_CIA_ECLOCK_SYNCING:
-        case OPT_CIA_IDLE_SLEEP:
+        case Option::CIA_TODBUG:
+        case Option::CIA_ECLOCK_SYNCING:
+        case Option::CIA_IDLE_SLEEP:
 
             return;
 
@@ -113,22 +113,22 @@ CIA::setOption(Option option, i64 value)
 {
     switch (option) {
             
-        case OPT_CIA_REVISION:
+        case Option::CIA_REVISION:
 
             config.revision = (CIARevision)value;
             return;
 
-        case OPT_CIA_TODBUG:
+        case Option::CIA_TODBUG:
 
             config.todBug = value;
             return;
             
-        case OPT_CIA_ECLOCK_SYNCING:
+        case Option::CIA_ECLOCK_SYNCING:
             
             config.eClockSyncing = value;
             return;
             
-        case OPT_CIA_IDLE_SLEEP:
+        case Option::CIA_IDLE_SLEEP:
 
             config.idleSleep = value;
             return;

@@ -43,7 +43,7 @@ SerServer::_dump(Category category, std::ostream& os) const
 bool
 SerServer::shouldRun()
 {
-    return serialPort.getOption(OPT_SER_DEVICE) == SPD_NULLMODEM;
+    return serialPort.getOption(Option::SER_DEVICE) == SPD_NULLMODEM;
 }
 
 string

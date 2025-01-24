@@ -32,12 +32,12 @@ class CPU : public moira::Moira, public Inspectable<CPUInfo>
 
     ConfigOptions options = {
 
-        OPT_CPU_REVISION,
-        OPT_CPU_DASM_REVISION,
-        OPT_CPU_DASM_SYNTAX,
-        OPT_CPU_DASM_NUMBERS,
-        OPT_CPU_OVERCLOCKING,
-        OPT_CPU_RESET_VAL
+        Option::CPU_REVISION,
+        Option::CPU_DASM_REVISION,
+        Option::CPU_DASM_SYNTAX,
+        Option::CPU_DASM_NUMBERS,
+        Option::CPU_OVERCLOCKING,
+        Option::CPU_RESET_VAL
     };
 
     // The current configuration

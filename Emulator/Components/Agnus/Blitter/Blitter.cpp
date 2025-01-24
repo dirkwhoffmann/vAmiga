@@ -76,7 +76,7 @@ Blitter::getOption(Option option) const
 {
     switch (option) {
             
-        case OPT_BLITTER_ACCURACY: return config.accuracy;
+        case Option::BLITTER_ACCURACY: return config.accuracy;
 
         default:
             fatalError;
@@ -88,7 +88,7 @@ Blitter::checkOption(Option opt, i64 value)
 {
     switch (opt) {
 
-        case OPT_BLITTER_ACCURACY:
+        case Option::BLITTER_ACCURACY:
 
             if (value < 0 || value > 2) {
                 throw Error(ErrorCode::OPT_INV_ARG, "0, 1, 2");
@@ -105,7 +105,7 @@ Blitter::setOption(Option option, i64 value)
 {
     switch (option) {
             
-        case OPT_BLITTER_ACCURACY:
+        case Option::BLITTER_ACCURACY:
 
             config.accuracy = (isize)value;
             return;

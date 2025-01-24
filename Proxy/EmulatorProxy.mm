@@ -2018,14 +2018,14 @@ NSString *EventSlotName(NSInteger slot)
 - (void)enableWriteThrough:(ExceptionWrapper *)ex
 {
     auto id = [self drive]->getInfo().nr;
-    try { return [self drive]->emu->set(OPT_HDR_WRITE_THROUGH, true, { id }); }
+    try { return [self drive]->emu->set(Option::HDR_WRITE_THROUGH, true, { id }); }
     catch (Error &error) { [ex save:error]; }
 }
 
 - (void)disableWriteThrough
 {
     auto id = [self drive]->getInfo().nr;
-    [self drive]->emu->set(OPT_HDR_WRITE_THROUGH, false, { id });
+    [self drive]->emu->set(Option::HDR_WRITE_THROUGH, false, { id });
 }
 
 @end

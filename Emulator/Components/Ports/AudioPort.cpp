@@ -150,18 +150,18 @@ AudioPort::getOption(Option option) const
 {
     switch (option) {
             
-        case OPT_AUD_SAMPLING_METHOD:   return config.samplingMethod;
-        case OPT_AUD_PAN0:              return config.pan[0];
-        case OPT_AUD_PAN1:              return config.pan[1];
-        case OPT_AUD_PAN2:              return config.pan[2];
-        case OPT_AUD_PAN3:              return config.pan[3];
-        case OPT_AUD_VOL0:              return config.vol[0];
-        case OPT_AUD_VOL1:              return config.vol[1];
-        case OPT_AUD_VOL2:              return config.vol[2];
-        case OPT_AUD_VOL3:              return config.vol[3];
-        case OPT_AUD_VOLL:              return config.volL;
-        case OPT_AUD_VOLR:              return config.volR;
-        case OPT_AUD_FASTPATH:          return config.idleFastPath;
+        case Option::AUD_SAMPLING_METHOD:   return config.samplingMethod;
+        case Option::AUD_PAN0:              return config.pan[0];
+        case Option::AUD_PAN1:              return config.pan[1];
+        case Option::AUD_PAN2:              return config.pan[2];
+        case Option::AUD_PAN3:              return config.pan[3];
+        case Option::AUD_VOL0:              return config.vol[0];
+        case Option::AUD_VOL1:              return config.vol[1];
+        case Option::AUD_VOL2:              return config.vol[2];
+        case Option::AUD_VOL3:              return config.vol[3];
+        case Option::AUD_VOLL:              return config.volL;
+        case Option::AUD_VOLR:              return config.volR;
+        case Option::AUD_FASTPATH:          return config.idleFastPath;
 
         default:
             fatalError;
@@ -173,24 +173,24 @@ AudioPort::checkOption(Option opt, i64 value)
 {
     switch (opt) {
 
-        case OPT_AUD_SAMPLING_METHOD:
+        case Option::AUD_SAMPLING_METHOD:
 
             if (!SamplingMethodEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, SamplingMethodEnum::keyList());
             }
             return;
 
-        case OPT_AUD_PAN0:
-        case OPT_AUD_PAN1:
-        case OPT_AUD_PAN2:
-        case OPT_AUD_PAN3:
-        case OPT_AUD_VOL0:
-        case OPT_AUD_VOL1:
-        case OPT_AUD_VOL2:
-        case OPT_AUD_VOL3:
-        case OPT_AUD_VOLL:
-        case OPT_AUD_VOLR:
-        case OPT_AUD_FASTPATH:
+        case Option::AUD_PAN0:
+        case Option::AUD_PAN1:
+        case Option::AUD_PAN2:
+        case Option::AUD_PAN3:
+        case Option::AUD_VOL0:
+        case Option::AUD_VOL1:
+        case Option::AUD_VOL2:
+        case Option::AUD_VOL3:
+        case Option::AUD_VOLL:
+        case Option::AUD_VOLR:
+        case Option::AUD_FASTPATH:
 
             return;
 
@@ -206,43 +206,43 @@ AudioPort::setOption(Option option, i64 value)
 
     switch (option) {
             
-        case OPT_AUD_SAMPLING_METHOD:
+        case Option::AUD_SAMPLING_METHOD:
                         
             config.samplingMethod = (SamplingMethod)value;
             return;
             
-        case OPT_AUD_VOL3: channel++;
-        case OPT_AUD_VOL2: channel++;
-        case OPT_AUD_VOL1: channel++;
-        case OPT_AUD_VOL0:
+        case Option::AUD_VOL3: channel++;
+        case Option::AUD_VOL2: channel++;
+        case Option::AUD_VOL1: channel++;
+        case Option::AUD_VOL0:
 
             config.vol[channel] = std::clamp(value, 0LL, 100LL);
             vol[channel] = float(pow(config.vol[channel] / 100.0, 1.4) * 0.000025);
             if (emscripten) vol[channel] *= 0.15f;
             return;
 
-        case OPT_AUD_VOLL:
+        case Option::AUD_VOLL:
             
             config.volL = std::clamp(value, 0LL, 100LL);
             volL = float(pow(value / 50.0, 1.4));
             return;
 
-        case OPT_AUD_VOLR:
+        case Option::AUD_VOLR:
 
             config.volR = std::clamp(value, 0LL, 100LL);
             volR = float(pow(value / 50.0, 1.4));
             return;
 
-        case OPT_AUD_PAN3: channel++;
-        case OPT_AUD_PAN2: channel++;
-        case OPT_AUD_PAN1: channel++;
-        case OPT_AUD_PAN0:
+        case Option::AUD_PAN3: channel++;
+        case Option::AUD_PAN2: channel++;
+        case Option::AUD_PAN1: channel++;
+        case Option::AUD_PAN0:
 
             config.pan[channel] = value;
             pan[channel] = float(0.5 * (sin(config.pan[channel] * M_PI / 200.0) + 1));
             return;
 
-        case OPT_AUD_FASTPATH:
+        case Option::AUD_FASTPATH:
 
             config.idleFastPath = (bool)value;
             return;

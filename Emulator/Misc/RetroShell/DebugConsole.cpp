@@ -1161,7 +1161,7 @@ DebugConsole::initCommands(Command &root)
                      "Attach or detach the debug expansion board",
                      [this](Arguments& argv, long value) {
 
-                diagBoard.setOption(OPT_DIAG_BOARD, parseBool(argv[0]));
+                diagBoard.setOption(Option::DIAG_BOARD, parseBool(argv[0]));
             });
         }
     }

@@ -35,8 +35,8 @@ class SerialPort final : public SubComponent, public Inspectable<SerialPortInfo>
 
     ConfigOptions options = {
 
-        OPT_SER_DEVICE,
-        OPT_SER_VERBOSE
+        Option::SER_DEVICE,
+        Option::SER_VERBOSE
     };
 
     friend class UART;

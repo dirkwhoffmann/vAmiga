@@ -34,16 +34,16 @@ class Denise final : public SubComponent, public Inspectable<DeniseInfo> {
 
     ConfigOptions options = {
 
-        OPT_DENISE_REVISION,
-        OPT_DENISE_VIEWPORT_TRACKING,
-        OPT_DENISE_FRAME_SKIPPING,
-        OPT_DENISE_HIDDEN_BITPLANES,
-        OPT_DENISE_HIDDEN_SPRITES,
-        OPT_DENISE_HIDDEN_LAYERS,
-        OPT_DENISE_HIDDEN_LAYER_ALPHA,
-        OPT_DENISE_CLX_SPR_SPR,
-        OPT_DENISE_CLX_SPR_PLF,
-        OPT_DENISE_CLX_PLF_PLF
+        Option::DENISE_REVISION,
+        Option::DENISE_VIEWPORT_TRACKING,
+        Option::DENISE_FRAME_SKIPPING,
+        Option::DENISE_HIDDEN_BITPLANES,
+        Option::DENISE_HIDDEN_SPRITES,
+        Option::DENISE_HIDDEN_LAYERS,
+        Option::DENISE_HIDDEN_LAYER_ALPHA,
+        Option::DENISE_CLX_SPR_SPR,
+        Option::DENISE_CLX_SPR_PLF,
+        Option::DENISE_CLX_PLF_PLF
     };
 
     // Current configuration

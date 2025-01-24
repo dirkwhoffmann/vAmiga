@@ -49,10 +49,10 @@ class HardDrive final : public Drive, public Inspectable<HardDriveInfo> {
 
     ConfigOptions options = {
 
-        OPT_HDR_TYPE,
-        OPT_HDR_WRITE_THROUGH, 
-        OPT_HDR_PAN,
-        OPT_HDR_STEP_VOLUME
+        Option::HDR_TYPE,
+        Option::HDR_WRITE_THROUGH, 
+        Option::HDR_PAN,
+        Option::HDR_STEP_VOLUME
     };
     
     friend class HDFFile;

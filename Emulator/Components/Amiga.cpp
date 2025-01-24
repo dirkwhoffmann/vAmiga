@@ -169,15 +169,15 @@ Amiga::getOption(Option option) const
 {
     switch (option) {
 
-        case OPT_AMIGA_VIDEO_FORMAT:    return config.type;
-        case OPT_AMIGA_WARP_BOOT:       return config.warpBoot;
-        case OPT_AMIGA_WARP_MODE:       return config.warpMode;
-        case OPT_AMIGA_VSYNC:           return config.vsync;
-        case OPT_AMIGA_SPEED_BOOST:     return config.speedBoost;
-        case OPT_AMIGA_RUN_AHEAD:       return config.runAhead;
-        case OPT_AMIGA_SNAP_AUTO:       return config.snapshots;
-        case OPT_AMIGA_SNAP_DELAY:      return config.snapshotDelay;
-        case OPT_AMIGA_SNAP_COMPRESS:   return config.compressSnapshots;
+        case Option::AMIGA_VIDEO_FORMAT:    return config.type;
+        case Option::AMIGA_WARP_BOOT:       return config.warpBoot;
+        case Option::AMIGA_WARP_MODE:       return config.warpMode;
+        case Option::AMIGA_VSYNC:           return config.vsync;
+        case Option::AMIGA_SPEED_BOOST:     return config.speedBoost;
+        case Option::AMIGA_RUN_AHEAD:       return config.runAhead;
+        case Option::AMIGA_SNAP_AUTO:       return config.snapshots;
+        case Option::AMIGA_SNAP_DELAY:      return config.snapshotDelay;
+        case Option::AMIGA_SNAP_COMPRESS:   return config.compressSnapshots;
 
         default:
             fatalError;
@@ -189,54 +189,54 @@ Amiga::checkOption(Option opt, i64 value)
 {
     switch (opt) {
 
-        case OPT_AMIGA_VIDEO_FORMAT:
+        case Option::AMIGA_VIDEO_FORMAT:
 
             if (!VideoFormatEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, VideoFormatEnum::keyList());
             }
             return;
 
-        case OPT_AMIGA_WARP_BOOT:
+        case Option::AMIGA_WARP_BOOT:
 
             return;
 
-        case OPT_AMIGA_WARP_MODE:
+        case Option::AMIGA_WARP_MODE:
 
             if (!WarpModeEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, WarpModeEnum::keyList());
             }
             return;
 
-        case OPT_AMIGA_VSYNC:
+        case Option::AMIGA_VSYNC:
 
             return;
 
-        case OPT_AMIGA_SPEED_BOOST:
+        case Option::AMIGA_SPEED_BOOST:
 
             if (value < 50 || value > 200) {
                 throw Error(ErrorCode::OPT_INV_ARG, "50...200");
             }
             return;
 
-        case OPT_AMIGA_RUN_AHEAD:
+        case Option::AMIGA_RUN_AHEAD:
 
             if (value < 0 || value > 12) {
                 throw Error(ErrorCode::OPT_INV_ARG, "0...12");
             }
             return;
 
-        case OPT_AMIGA_SNAP_AUTO:
+        case Option::AMIGA_SNAP_AUTO:
 
             return;
 
-        case OPT_AMIGA_SNAP_DELAY:
+        case Option::AMIGA_SNAP_DELAY:
 
             if (value < 10 || value > 3600) {
                 throw Error(ErrorCode::OPT_INV_ARG, "10...3600");
             }
             return;
 
-        case OPT_AMIGA_SNAP_COMPRESS:
+        case Option::AMIGA_SNAP_COMPRESS:
 
             return;
             
@@ -250,7 +250,7 @@ Amiga::setOption(Option option, i64 value)
 {
     switch (option) {
 
-        case OPT_AMIGA_VIDEO_FORMAT:
+        case Option::AMIGA_VIDEO_FORMAT:
 
             if (value != config.type) {
 
@@ -259,44 +259,44 @@ Amiga::setOption(Option option, i64 value)
             }
             return;
 
-        case OPT_AMIGA_WARP_BOOT:
+        case Option::AMIGA_WARP_BOOT:
 
             config.warpBoot = isize(value);
             return;
 
-        case OPT_AMIGA_WARP_MODE:
+        case Option::AMIGA_WARP_MODE:
 
             config.warpMode = WarpMode(value);
             return;
 
-        case OPT_AMIGA_VSYNC:
+        case Option::AMIGA_VSYNC:
 
             config.vsync = bool(value);
             return;
 
-        case OPT_AMIGA_SPEED_BOOST:
+        case Option::AMIGA_SPEED_BOOST:
 
             config.speedBoost = isize(value);
             return;
 
-        case OPT_AMIGA_RUN_AHEAD:
+        case Option::AMIGA_RUN_AHEAD:
 
             config.runAhead = isize(value);
             return;
 
-        case OPT_AMIGA_SNAP_AUTO:
+        case Option::AMIGA_SNAP_AUTO:
 
             config.snapshots = bool(value);
             scheduleNextSnpEvent();
             return;
 
-        case OPT_AMIGA_SNAP_DELAY:
+        case Option::AMIGA_SNAP_DELAY:
 
             config.snapshotDelay = isize(value);
             scheduleNextSnpEvent();
             return;
 
-        case OPT_AMIGA_SNAP_COMPRESS:
+        case Option::AMIGA_SNAP_COMPRESS:
 
             config.compressSnapshots = bool(value);
             return;
@@ -420,42 +420,42 @@ Amiga::set(ConfigScheme scheme)
             
         case CONFIG_A1000_OCS_1MB:
             
-            set(OPT_CPU_REVISION, CPU_68000);
-            set(OPT_AGNUS_REVISION, AGNUS_OCS_OLD);
-            set(OPT_DENISE_REVISION, DENISE_OCS);
-            set(OPT_AMIGA_VIDEO_FORMAT, FORMAT_PAL);
-            set(OPT_MEM_CHIP_RAM, 512);
-            set(OPT_MEM_SLOW_RAM, 512);
+            set(Option::CPU_REVISION, CPU_68000);
+            set(Option::AGNUS_REVISION, AGNUS_OCS_OLD);
+            set(Option::DENISE_REVISION, DENISE_OCS);
+            set(Option::AMIGA_VIDEO_FORMAT, FORMAT_PAL);
+            set(Option::MEM_CHIP_RAM, 512);
+            set(Option::MEM_SLOW_RAM, 512);
             break;
             
         case CONFIG_A500_OCS_1MB:
             
-            set(OPT_CPU_REVISION, CPU_68000);
-            set(OPT_AGNUS_REVISION, AGNUS_OCS);
-            set(OPT_DENISE_REVISION, DENISE_OCS);
-            set(OPT_AMIGA_VIDEO_FORMAT, FORMAT_PAL);
-            set(OPT_MEM_CHIP_RAM, 512);
-            set(OPT_MEM_SLOW_RAM, 512);
+            set(Option::CPU_REVISION, CPU_68000);
+            set(Option::AGNUS_REVISION, AGNUS_OCS);
+            set(Option::DENISE_REVISION, DENISE_OCS);
+            set(Option::AMIGA_VIDEO_FORMAT, FORMAT_PAL);
+            set(Option::MEM_CHIP_RAM, 512);
+            set(Option::MEM_SLOW_RAM, 512);
             break;
             
         case CONFIG_A500_ECS_1MB:
             
-            set(OPT_CPU_REVISION, CPU_68000);
-            set(OPT_AGNUS_REVISION, AGNUS_ECS_1MB);
-            set(OPT_DENISE_REVISION, DENISE_OCS);
-            set(OPT_AMIGA_VIDEO_FORMAT, FORMAT_PAL);
-            set(OPT_MEM_CHIP_RAM, 512);
-            set(OPT_MEM_SLOW_RAM, 512);
+            set(Option::CPU_REVISION, CPU_68000);
+            set(Option::AGNUS_REVISION, AGNUS_ECS_1MB);
+            set(Option::DENISE_REVISION, DENISE_OCS);
+            set(Option::AMIGA_VIDEO_FORMAT, FORMAT_PAL);
+            set(Option::MEM_CHIP_RAM, 512);
+            set(Option::MEM_SLOW_RAM, 512);
             break;
             
         case CONFIG_A500_PLUS_1MB:
             
-            set(OPT_CPU_REVISION, CPU_68000);
-            set(OPT_AGNUS_REVISION, AGNUS_ECS_2MB);
-            set(OPT_DENISE_REVISION, DENISE_ECS);
-            set(OPT_AMIGA_VIDEO_FORMAT, FORMAT_PAL);
-            set(OPT_MEM_CHIP_RAM, 512);
-            set(OPT_MEM_SLOW_RAM, 512);
+            set(Option::CPU_REVISION, CPU_68000);
+            set(Option::AGNUS_REVISION, AGNUS_ECS_2MB);
+            set(Option::DENISE_REVISION, DENISE_ECS);
+            set(Option::AMIGA_VIDEO_FORMAT, FORMAT_PAL);
+            set(Option::MEM_CHIP_RAM, 512);
+            set(Option::MEM_SLOW_RAM, 512);
             break;
             
         default:
@@ -528,7 +528,7 @@ Amiga::refreshRate() const
 {
     if (config.vsync) {
 
-        return double(host.getOption(OPT_HOST_REFRESH_RATE));
+        return double(host.getOption(Option::HOST_REFRESH_RATE));
 
     } else {
 
@@ -1011,8 +1011,8 @@ Amiga::serviceSnpEvent(EventID eventId)
 void
 Amiga::scheduleNextSnpEvent()
 {
-    auto snapshots = emulator.get(OPT_AMIGA_SNAP_AUTO);
-    auto delay = emulator.get(OPT_AMIGA_SNAP_DELAY);
+    auto snapshots = emulator.get(Option::AMIGA_SNAP_AUTO);
+    auto delay = emulator.get(Option::AMIGA_SNAP_DELAY);
 
     if (snapshots) {
         agnus.scheduleRel<SLOT_SNP>(SEC(double(delay)), SNP_TAKE);

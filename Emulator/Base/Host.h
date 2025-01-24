@@ -31,10 +31,10 @@ class Host final : public SubComponent {
 
     ConfigOptions options = {
 
-        OPT_HOST_REFRESH_RATE,
-        OPT_HOST_SAMPLE_RATE,
-        OPT_HOST_FRAMEBUF_WIDTH,
-        OPT_HOST_FRAMEBUF_HEIGHT
+        Option::HOST_REFRESH_RATE,
+        Option::HOST_SAMPLE_RATE,
+        Option::HOST_FRAMEBUF_WIDTH,
+        Option::HOST_FRAMEBUF_HEIGHT
     };
 
     // Current configuration

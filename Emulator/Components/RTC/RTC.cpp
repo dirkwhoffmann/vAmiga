@@ -20,7 +20,7 @@ RTC::getOption(Option option) const
 {
     switch (option) {
             
-        case OPT_RTC_MODEL:  return (long)config.model;
+        case Option::RTC_MODEL:  return (long)config.model;
 
         default:
             fatalError;
@@ -32,7 +32,7 @@ RTC::checkOption(Option option, i64 value)
 {
     switch (option) {
 
-        case OPT_RTC_MODEL:
+        case Option::RTC_MODEL:
 
             if (!isPoweredOff()) {
                 throw Error(ErrorCode::OPT_LOCKED);
@@ -52,7 +52,7 @@ RTC::setOption(Option option, i64 value)
 {
     switch (option) {
             
-        case OPT_RTC_MODEL:
+        case Option::RTC_MODEL:
 
             config.model = (RTCRevision)value;
             mem.updateMemSrcTables();

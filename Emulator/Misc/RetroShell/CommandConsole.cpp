@@ -310,14 +310,14 @@ CommandConsole::initCommands(Command &root)
                  "Opens the DMA debugger",
                  [this](Arguments& argv, long value) {
             
-            emulator.set(OPT_DMA_DEBUG_ENABLE, true);
+            emulator.set(Option::DMA_DEBUG_ENABLE, true);
         });
         
         root.add({cmd, "close"},
                  "Closes the DMA debugger",
                  [this](Arguments& argv, long value) {
             
-            emulator.set(OPT_DMA_DEBUG_ENABLE, false);
+            emulator.set(Option::DMA_DEBUG_ENABLE, false);
         });
  
         
@@ -332,14 +332,14 @@ CommandConsole::initCommands(Command &root)
                  "Opens the DMA debugger",
                  [this](Arguments& argv, long value) {
             
-            emulator.set(OPT_DMA_DEBUG_ENABLE, true);
+            emulator.set(Option::DMA_DEBUG_ENABLE, true);
         });
         
         root.add({cmd, "close"},
                  "Closes the DMA debugger",
                  [this](Arguments& argv, long value) {
             
-            emulator.set(OPT_DMA_DEBUG_ENABLE, false);
+            emulator.set(Option::DMA_DEBUG_ENABLE, false);
         });
         */
         
@@ -549,7 +549,7 @@ CommandConsole::initCommands(Command &root)
                          "Connects the drive",
                          [this](Arguments& argv, long value) {
                     
-                    emulator.set(OPT_DRIVE_CONNECT, true, { value });
+                    emulator.set(Option::DRIVE_CONNECT, true, { value });
                     
                 }, i);
                 
@@ -557,7 +557,7 @@ CommandConsole::initCommands(Command &root)
                          "Disconnects the drive",
                          [this](Arguments& argv, long value) {
                     
-                    emulator.set(OPT_DRIVE_CONNECT, false, { value });
+                    emulator.set(Option::DRIVE_CONNECT, false, { value });
                     
                 }, i);
             }
@@ -616,7 +616,7 @@ CommandConsole::initCommands(Command &root)
                          "Connects the hard drive",
                          [this](Arguments& argv, long value) {
                     
-                    emulator.set(OPT_HDC_CONNECT, true, {value});
+                    emulator.set(Option::HDC_CONNECT, true, {value});
                     
                 }, i);
                 
@@ -624,7 +624,7 @@ CommandConsole::initCommands(Command &root)
                          "Disconnects the hard drive",
                          [this](Arguments& argv, long value) {
                     
-                    emulator.set(OPT_HDC_CONNECT, false, {value});
+                    emulator.set(Option::HDC_CONNECT, false, {value});
                     
                 }, i);
                 

@@ -25,9 +25,9 @@ Mouse::getOption(Option option) const
 {
     switch (option) {
 
-        case OPT_MOUSE_PULLUP_RESISTORS:    return config.pullUpResistors;
-        case OPT_MOUSE_SHAKE_DETECTION:     return config.shakeDetection;
-        case OPT_MOUSE_VELOCITY:            return config.velocity;
+        case Option::MOUSE_PULLUP_RESISTORS:    return config.pullUpResistors;
+        case Option::MOUSE_SHAKE_DETECTION:     return config.shakeDetection;
+        case Option::MOUSE_VELOCITY:            return config.velocity;
 
         default:
             fatalError;
@@ -39,12 +39,12 @@ Mouse::checkOption(Option opt, i64 value)
 {
     switch (opt) {
 
-        case OPT_MOUSE_PULLUP_RESISTORS:
-        case OPT_MOUSE_SHAKE_DETECTION:
+        case Option::MOUSE_PULLUP_RESISTORS:
+        case Option::MOUSE_SHAKE_DETECTION:
 
             return;
 
-        case OPT_MOUSE_VELOCITY:
+        case Option::MOUSE_VELOCITY:
 
             if (value < 0 || value > 255) {
                 throw Error(ErrorCode::OPT_INV_ARG, "0...255");
@@ -61,17 +61,17 @@ Mouse::setOption(Option option, i64 value)
 {
     switch (option) {
             
-        case OPT_MOUSE_PULLUP_RESISTORS:
+        case Option::MOUSE_PULLUP_RESISTORS:
             
             config.pullUpResistors = value;
             return;
 
-        case OPT_MOUSE_SHAKE_DETECTION:
+        case Option::MOUSE_SHAKE_DETECTION:
             
             config.shakeDetection = value;
             return;
             
-        case OPT_MOUSE_VELOCITY:
+        case Option::MOUSE_VELOCITY:
             
             config.velocity = (isize)value;
             updateScalingFactors();

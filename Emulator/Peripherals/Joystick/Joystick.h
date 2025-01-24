@@ -33,10 +33,10 @@ class Joystick final : public SubComponent, public Inspectable<JoystickInfo> {
 
     ConfigOptions options = {
 
-        OPT_JOY_AUTOFIRE,
-        OPT_JOY_AUTOFIRE_BURSTS,
-        OPT_JOY_AUTOFIRE_BULLETS,
-        OPT_JOY_AUTOFIRE_DELAY
+        Option::JOY_AUTOFIRE,
+        Option::JOY_AUTOFIRE_BURSTS,
+        Option::JOY_AUTOFIRE_BULLETS,
+        Option::JOY_AUTOFIRE_DELAY
     };
 
     // Reference to control port this device belongs to

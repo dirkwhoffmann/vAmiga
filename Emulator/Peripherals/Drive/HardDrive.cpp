@@ -237,10 +237,10 @@ HardDrive::getOption(Option option) const
 {
     switch (option) {
             
-        case OPT_HDR_TYPE:          return (long)config.type;
-        case OPT_HDR_WRITE_THROUGH: return (long)config.writeThrough;
-        case OPT_HDR_PAN:           return (long)config.pan;
-        case OPT_HDR_STEP_VOLUME:   return (long)config.stepVolume;
+        case Option::HDR_TYPE:          return (long)config.type;
+        case Option::HDR_WRITE_THROUGH: return (long)config.writeThrough;
+        case Option::HDR_PAN:           return (long)config.pan;
+        case Option::HDR_STEP_VOLUME:   return (long)config.stepVolume;
 
         default:
             fatalError;
@@ -252,19 +252,19 @@ HardDrive::checkOption(Option opt, i64 value)
 {
     switch (opt) {
 
-        case OPT_HDR_TYPE:
+        case Option::HDR_TYPE:
 
             if (!HardDriveTypeEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, HardDriveTypeEnum::keyList());
             }
             return;
 
-        case OPT_HDR_WRITE_THROUGH:
+        case Option::HDR_WRITE_THROUGH:
 
             return;
 
-        case OPT_HDR_PAN:
-        case OPT_HDR_STEP_VOLUME:
+        case Option::HDR_PAN:
+        case Option::HDR_STEP_VOLUME:
             
             return;
 
@@ -278,7 +278,7 @@ HardDrive::setOption(Option option, i64 value)
 {
     switch (option) {
 
-        case OPT_HDR_TYPE:
+        case Option::HDR_TYPE:
             
             if (!HardDriveTypeEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, HardDriveTypeEnum::keyList());
@@ -286,17 +286,17 @@ HardDrive::setOption(Option option, i64 value)
             config.type = (HardDriveType)value;
             return;
 
-        case OPT_HDR_WRITE_THROUGH:
+        case Option::HDR_WRITE_THROUGH:
 
             value ? enableWriteThrough() : disableWriteThrough();
             return;
 
-        case OPT_HDR_PAN:
+        case Option::HDR_PAN:
 
             config.pan = (i16)value;
             return;
 
-        case OPT_HDR_STEP_VOLUME:
+        case Option::HDR_STEP_VOLUME:
 
             config.stepVolume = (u8)value;
             return;
@@ -487,7 +487,7 @@ HardDrive::_dump(Category category, std::ostream& os) const
 bool
 HardDrive::isConnected() const
 {
-    return amiga.hdcon[objid]->getOption(OPT_HDC_CONNECT);
+    return amiga.hdcon[objid]->getOption(Option::HDC_CONNECT);
 }
 
 bool

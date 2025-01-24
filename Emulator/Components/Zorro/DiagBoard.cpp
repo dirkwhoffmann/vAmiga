@@ -45,7 +45,7 @@ DiagBoard::getOption(Option option) const
 {
     switch (option) {
             
-        case OPT_DIAG_BOARD: return config.enabled;
+        case Option::DIAG_BOARD: return config.enabled;
 
         default:
             fatalError;
@@ -57,7 +57,7 @@ DiagBoard::checkOption(Option opt, i64 value)
 {
     switch (opt) {
 
-        case OPT_DIAG_BOARD:
+        case Option::DIAG_BOARD:
 
             if (!isPoweredOff()) {
                 throw Error(ErrorCode::OPT_LOCKED);
@@ -74,7 +74,7 @@ DiagBoard::setOption(Option option, i64 value)
 {
     switch (option) {
             
-        case OPT_DIAG_BOARD:
+        case Option::DIAG_BOARD:
 
             config.enabled = value;
             return;

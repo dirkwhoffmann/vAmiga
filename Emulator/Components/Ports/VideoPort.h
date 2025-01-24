@@ -27,7 +27,7 @@ class VideoPort final : public SubComponent, public Inspectable<VideoPortInfo, V
 
     ConfigOptions options = {
 
-        OPT_VID_WHITE_NOISE
+        Option::VID_WHITE_NOISE
     };
 
     // Current configuration

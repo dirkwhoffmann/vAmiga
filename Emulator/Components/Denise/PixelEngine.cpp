@@ -82,10 +82,10 @@ PixelEngine::getOption(Option option) const
 {
     switch (option) {
             
-        case OPT_MON_PALETTE:     return config.palette;
-        case OPT_MON_BRIGHTNESS:  return config.brightness;
-        case OPT_MON_CONTRAST:    return config.contrast;
-        case OPT_MON_SATURATION:  return config.saturation;
+        case Option::MON_PALETTE:     return config.palette;
+        case Option::MON_BRIGHTNESS:  return config.brightness;
+        case Option::MON_CONTRAST:    return config.contrast;
+        case Option::MON_SATURATION:  return config.saturation;
 
         default:
             fatalError;
@@ -97,28 +97,28 @@ PixelEngine::checkOption(Option opt, i64 value)
 {
     switch (opt) {
 
-        case OPT_MON_PALETTE:
+        case Option::MON_PALETTE:
 
             if (!PaletteEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, PaletteEnum::keyList());
             }
             return;
 
-        case OPT_MON_BRIGHTNESS:
+        case Option::MON_BRIGHTNESS:
 
             if (value < 0 || value > 100) {
                 throw Error(ErrorCode::OPT_INV_ARG, "0...100");
             }
             return;
 
-        case OPT_MON_CONTRAST:
+        case Option::MON_CONTRAST:
 
             if (value < 0 || value > 100) {
                 throw Error(ErrorCode::OPT_INV_ARG, "0...100");
             }
             return;
 
-        case OPT_MON_SATURATION:
+        case Option::MON_SATURATION:
 
             if (value < 0 || value > 100) {
                 throw Error(ErrorCode::OPT_INV_ARG, "0...100");
@@ -135,25 +135,25 @@ PixelEngine::setOption(Option option, i64 value)
 {
     switch (option) {
             
-        case OPT_MON_PALETTE:
+        case Option::MON_PALETTE:
 
             config.palette = (Palette)value;
             updateRGBA();
             return;
 
-        case OPT_MON_BRIGHTNESS:
+        case Option::MON_BRIGHTNESS:
 
             config.brightness = (isize)value;
             updateRGBA();
             return;
             
-        case OPT_MON_CONTRAST:
+        case Option::MON_CONTRAST:
 
             config.contrast = (isize)value;
             updateRGBA();
             return;
 
-        case OPT_MON_SATURATION:
+        case Option::MON_SATURATION:
 
             config.saturation = (isize)value;
             updateRGBA();

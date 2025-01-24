@@ -19,8 +19,8 @@ SerialPort::getOption(Option option) const
 {
     switch (option) {
             
-        case OPT_SER_DEVICE:    return (i64)config.device;
-        case OPT_SER_VERBOSE:   return (i64)config.verbose;
+        case Option::SER_DEVICE:    return (i64)config.device;
+        case Option::SER_VERBOSE:   return (i64)config.verbose;
 
         default:
             fatalError;
@@ -32,14 +32,14 @@ SerialPort::checkOption(Option opt, i64 value)
 {
     switch (opt) {
 
-        case OPT_SER_DEVICE:
+        case Option::SER_DEVICE:
 
             if (!SerialPortDeviceEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, SerialPortDeviceEnum::keyList());
             }
             return;
 
-        case OPT_SER_VERBOSE:
+        case Option::SER_VERBOSE:
 
             return;
 
@@ -53,7 +53,7 @@ SerialPort::setOption(Option option, i64 value)
 {
     switch (option) {
             
-        case OPT_SER_DEVICE:
+        case Option::SER_DEVICE:
             
             if (!SerialPortDeviceEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, SerialPortDeviceEnum::keyList());
@@ -62,7 +62,7 @@ SerialPort::setOption(Option option, i64 value)
             config.device = (SerialPortDevice)value;
             return;
 
-        case OPT_SER_VERBOSE:
+        case Option::SER_VERBOSE:
 
             config.verbose = bool(value);
             return;

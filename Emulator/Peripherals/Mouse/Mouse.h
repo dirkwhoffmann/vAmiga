@@ -61,9 +61,9 @@ class Mouse final : public SubComponent {
 
     ConfigOptions options = {
 
-        OPT_MOUSE_PULLUP_RESISTORS,
-        OPT_MOUSE_SHAKE_DETECTION,
-        OPT_MOUSE_VELOCITY
+        Option::MOUSE_PULLUP_RESISTORS,
+        Option::MOUSE_SHAKE_DETECTION,
+        Option::MOUSE_VELOCITY
     };
 
     // Reference to the control port this device belongs to

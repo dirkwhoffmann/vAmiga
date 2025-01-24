@@ -59,7 +59,7 @@ VideoPort::getOption(Option option) const
 {
     switch (option) {
 
-        case OPT_VID_WHITE_NOISE:   return config.whiteNoise;
+        case Option::VID_WHITE_NOISE:   return config.whiteNoise;
 
         default:
             fatalError;
@@ -71,7 +71,7 @@ VideoPort::checkOption(Option opt, i64 value)
 {
     switch (opt) {
 
-        case OPT_VID_WHITE_NOISE:
+        case Option::VID_WHITE_NOISE:
 
             return;
 
@@ -87,7 +87,7 @@ VideoPort::setOption(Option opt, i64 value)
 
     switch (opt) {
 
-        case OPT_VID_WHITE_NOISE:
+        case Option::VID_WHITE_NOISE:
 
             config.whiteNoise = (bool)value;
             return;

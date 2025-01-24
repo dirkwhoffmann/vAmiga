@@ -42,10 +42,10 @@ class RemoteServer : public SubComponent {
 
     ConfigOptions options = {
 
-        OPT_SRV_PORT,
-        OPT_SRV_PROTOCOL,
-        OPT_SRV_AUTORUN,
-        OPT_SRV_VERBOSE
+        Option::SRV_PORT,
+        Option::SRV_PROTOCOL,
+        Option::SRV_AUTORUN,
+        Option::SRV_VERBOSE
     };
 
 protected:

@@ -44,7 +44,7 @@ class Blitter final : public SubComponent, public Inspectable<BlitterInfo>
 
     ConfigOptions options = {
 
-        OPT_BLITTER_ACCURACY
+        Option::BLITTER_ACCURACY
     };
 
     // Current configuration

@@ -288,12 +288,12 @@ CPU::getOption(Option option) const
 {
     switch (option) {
 
-        case OPT_CPU_REVISION:      return (long)config.revision;
-        case OPT_CPU_DASM_REVISION: return (long)config.dasmRevision;
-        case OPT_CPU_DASM_SYNTAX:   return (long)config.dasmSyntax;
-        case OPT_CPU_DASM_NUMBERS:  return (long)config.dasmNumbers;
-        case OPT_CPU_OVERCLOCKING:  return (long)config.overclocking;
-        case OPT_CPU_RESET_VAL:     return (long)config.regResetVal;
+        case Option::CPU_REVISION:      return (long)config.revision;
+        case Option::CPU_DASM_REVISION: return (long)config.dasmRevision;
+        case Option::CPU_DASM_SYNTAX:   return (long)config.dasmSyntax;
+        case Option::CPU_DASM_NUMBERS:  return (long)config.dasmNumbers;
+        case Option::CPU_OVERCLOCKING:  return (long)config.overclocking;
+        case Option::CPU_RESET_VAL:     return (long)config.regResetVal;
 
         default:
             fatalError;
@@ -305,36 +305,36 @@ CPU::checkOption(Option opt, i64 value)
 {
     switch (opt) {
 
-        case OPT_CPU_REVISION:
+        case Option::CPU_REVISION:
 
             if (!CPURevisionEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, CPURevisionEnum::keyList());
             }
             return;
 
-        case OPT_CPU_DASM_REVISION:
+        case Option::CPU_DASM_REVISION:
 
             if (!DasmRevisionEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, DasmRevisionEnum::keyList());
             }
             return;
 
-        case OPT_CPU_DASM_SYNTAX:
+        case Option::CPU_DASM_SYNTAX:
 
             if (!DasmSyntaxEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, DasmSyntaxEnum::keyList());
             }
             return;
 
-        case OPT_CPU_DASM_NUMBERS:
+        case Option::CPU_DASM_NUMBERS:
 
             if (!DasmNumbersEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, DasmNumbersEnum::keyList());
             }
             return;
 
-        case OPT_CPU_OVERCLOCKING:
-        case OPT_CPU_RESET_VAL:
+        case Option::CPU_OVERCLOCKING:
+        case Option::CPU_RESET_VAL:
 
             return;
 
@@ -352,25 +352,25 @@ CPU::setOption(Option option, i64 value)
 
     switch (option) {
 
-        case OPT_CPU_REVISION:
+        case Option::CPU_REVISION:
 
             config.revision = CPURevision(value);
             setModel(cpuModel(config.revision), dasmModel(config.dasmRevision));
             return;
 
-        case OPT_CPU_DASM_REVISION:
+        case Option::CPU_DASM_REVISION:
 
             config.dasmRevision = DasmRevision(value);
             setModel(cpuModel(config.revision), dasmModel(config.dasmRevision));
             return;
 
-        case OPT_CPU_DASM_SYNTAX:
+        case Option::CPU_DASM_SYNTAX:
 
             config.dasmSyntax = DasmSyntax(value);
             setDasmSyntax(syntax(config.dasmSyntax));
             return;
 
-        case OPT_CPU_DASM_NUMBERS:
+        case Option::CPU_DASM_NUMBERS:
 
             config.dasmNumbers = DasmNumbers(value);
             
@@ -398,13 +398,13 @@ CPU::setOption(Option option, i64 value)
 
             }
             
-        case OPT_CPU_OVERCLOCKING:
+        case Option::CPU_OVERCLOCKING:
 
             config.overclocking = isize(value);
             msgQueue.put(MSG_OVERCLOCKING, config.overclocking);
             return;
 
-        case OPT_CPU_RESET_VAL:
+        case Option::CPU_RESET_VAL:
 
             config.regResetVal = u32(value);
             return;

@@ -19,10 +19,10 @@ Host::getOption(Option option) const
 {
     switch (option) {
 
-        case OPT_HOST_REFRESH_RATE:     return i64(config.refreshRate);
-        case OPT_HOST_SAMPLE_RATE:      return i64(config.sampleRate);
-        case OPT_HOST_FRAMEBUF_WIDTH:   return i64(config.frameBufferWidth);
-        case OPT_HOST_FRAMEBUF_HEIGHT:  return i64(config.frameBufferHeight);
+        case Option::HOST_REFRESH_RATE:     return i64(config.refreshRate);
+        case Option::HOST_SAMPLE_RATE:      return i64(config.sampleRate);
+        case Option::HOST_FRAMEBUF_WIDTH:   return i64(config.frameBufferWidth);
+        case Option::HOST_FRAMEBUF_HEIGHT:  return i64(config.frameBufferHeight);
 
         default:
             fatalError;
@@ -34,10 +34,10 @@ Host::checkOption(Option opt, i64 value)
 {
     switch (opt) {
 
-        case OPT_HOST_REFRESH_RATE:
-        case OPT_HOST_SAMPLE_RATE:
-        case OPT_HOST_FRAMEBUF_WIDTH:
-        case OPT_HOST_FRAMEBUF_HEIGHT:
+        case Option::HOST_REFRESH_RATE:
+        case Option::HOST_SAMPLE_RATE:
+        case Option::HOST_FRAMEBUF_WIDTH:
+        case Option::HOST_FRAMEBUF_HEIGHT:
             
             return;
 
@@ -51,23 +51,23 @@ Host::setOption(Option opt, i64 value)
 {
     switch (opt) {
 
-        case OPT_HOST_REFRESH_RATE:
+        case Option::HOST_REFRESH_RATE:
 
             config.refreshRate = isize(value);
             return;
 
-        case OPT_HOST_SAMPLE_RATE:
+        case Option::HOST_SAMPLE_RATE:
 
             config.sampleRate = isize(value);
             audioPort.setSampleRate(double(value));
             return;
 
-        case OPT_HOST_FRAMEBUF_WIDTH:
+        case Option::HOST_FRAMEBUF_WIDTH:
 
             config.frameBufferWidth = isize(value);
             return;
 
-        case OPT_HOST_FRAMEBUF_HEIGHT:
+        case Option::HOST_FRAMEBUF_HEIGHT:
 
             config.frameBufferHeight = isize(value);
             return;

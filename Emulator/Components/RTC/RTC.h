@@ -26,7 +26,7 @@ class RTC final : public SubComponent {
 
     ConfigOptions options = {
 
-        OPT_RTC_MODEL
+        Option::RTC_MODEL
     };
     
     // The current configuration
