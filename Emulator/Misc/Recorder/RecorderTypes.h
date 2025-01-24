@@ -18,7 +18,41 @@ namespace vamiga {
 // Enumerations
 //
 
+enum class RecState : long
+{
+    WAIT = 0,
+    PREPARE = 1,
+    RECORD = 2,
+    FINALIZE = 3,
+    ABORT = 4
+};
+// typedef REC_STATE RecorderState;
 
+/*
+struct RecStateEnum : util::Reflection<RecStateEnum, RecState>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = RecState::ABORT;
+    
+    static const char *prefix() { return "REC"; }
+    static const char *_key(RecState value)
+    {
+        switch (value) {
+                
+            case RecState::WAIT:      return "WAIT";
+            case RecState::PREPARE:   return "PREPARE";
+            case RecState::RECORD:    return "RECORD";
+            case RecState::FINALIZE:  return "FINALIZE";
+            case RecState::ABORT:     return "ABORT";
+        }
+        return "???";
+    }
+    static const char *help(long value)
+    {
+        return "";
+    }
+};
+*/
 
 //
 // Structures
@@ -30,10 +64,15 @@ typedef struct
     isize frameRate;
     isize bitRate;
     isize sampleRate;
-    
-    // Recorded texture area
-    struct { isize x1; isize y1; isize x2; isize y2; } cutout;
 }
 RecorderConfig;
+
+/*
+typedef struct
+{
+    RecState state;
+}
+RecorderInfo;
+*/
 
 }

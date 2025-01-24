@@ -66,10 +66,10 @@ class Recorder final : public SubComponent {
     //
     
     // All possible recorder states
-    enum class State { wait, prepare, record, finalize, abort };
+    enum class RecorderState { wait, prepare, record, finalize, abort };
 
     // The current recorder state
-    State state = State::wait;
+    RecorderState state = RecorderState::wait;
     
     // Audio has been recorded up to this cycle
     Cycle audioClock = 0;
@@ -191,7 +191,7 @@ public:
 public:
 
     // Checks whether the screen is currently recorded
-    bool isRecording() const { return state != State::wait; }
+    bool isRecording() const { return state != RecorderState::wait; }
 
     // Starts the screen recorder
     void startRecording(isize x1, isize y1, isize x2, isize y2,

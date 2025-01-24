@@ -44,6 +44,6 @@ struct Exception : public std::exception {
  *  @note   It is used in favor of classic throw lists since the latter causes
  *          the compiler to embed unwanted runtime checks in the code.
  */
-#define throws noexcept(false)
+// #define throws noexcept(false)
 
 }

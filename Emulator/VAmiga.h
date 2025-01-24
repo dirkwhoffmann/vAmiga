@@ -1338,20 +1338,20 @@ public:
      *  @param  key     The key of the key-value pair.
      *  @throw  VC64Error (#VAERROR_INVALID_KEY)
      */
-    void remove(const string &key) throws;
+    void remove(const string &key);
 
     /** @brief  Deletes a key-value pair
      *  @param  option  The option's name forms the key.
      *  @throw  VC64Error (#VAERROR_INVALID_KEY)
      */
-    void remove(Option option) throws;
+    void remove(Option option);
 
     /** @brief  Deletes multiple key-value pairs.
      *  @param  option  The option's name forms the prefix of the keys.
      *  @param  objids  The keys are parameterized by adding the vector values as suffixes.
      *  @throw  VC64Error (#VAERROR_INVALID_KEY)
      */
-    void remove(Option option, std::vector <isize> objids) throws;
+    void remove(Option option, std::vector <isize> objids);
 
     /// @}
 };
@@ -1490,7 +1490,7 @@ public:
      */
     void startRecording(isize x1, isize y1, isize x2, isize y2,
                         isize bitRate,
-                        isize aspectX, isize aspectY) throws;
+                        isize aspectX, isize aspectY);
 
     /** @brief  Interrupts a recording in progress.
      */
@@ -1840,7 +1840,7 @@ public:
      *  @note This function must only be called for those options that require
      *  an additional parameter to uniquely determine the configured component.
      */
-    i64 get(Option option, long id) const throws;
+    i64 get(Option option, long id) const;
     
     /** Configures the emulator to match a specific Amiga model
      *
@@ -1858,7 +1858,7 @@ public:
      *  @note If this function is called for an options that applies to multiple
      *  components, all components are configured with the specified value.
      */
-    void set(Option opt, i64 value) throws;
+    void set(Option opt, i64 value);
     
     /** @brief  Configures a component.
      *
@@ -1871,7 +1871,7 @@ public:
      *  @note This function must only be called for those options that require
      *  an additional parameter to uniquely determine the configured component.
      */
-    void set(Option opt, i64 value, long id) throws;
+    void set(Option opt, i64 value, long id);
     
     
     /** @brief  Exports the current configuration.

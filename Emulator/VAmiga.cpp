@@ -2177,7 +2177,7 @@ VAmiga::set(ConfigScheme model)
 }
 
 void
-VAmiga::set(Option opt, i64 value) throws
+VAmiga::set(Option opt, i64 value)
 {
     VAMIGA_PUBLIC
     emu->check(opt, value);

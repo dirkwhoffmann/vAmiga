@@ -705,6 +705,7 @@
 		507C01B92D25C0B800E29933 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		507C9C4526076EF7006779B5 /* RessourceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RessourceManager.swift; sourceTree = "<group>"; };
 		507CF2362D3E8C6F00C08846 /* RecorderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RecorderTypes.h; sourceTree = "<group>"; };
+		507CF2372D43825A00C08846 /* Annotations.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Annotations.h; sourceTree = "<group>"; };
 		507D7767228BE3EF001E97A9 /* StateMachine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StateMachine.cpp; sourceTree = "<group>"; };
 		507D7768228BE3EF001E97A9 /* StateMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StateMachine.h; sourceTree = "<group>"; };
 		507D9062284BEBCE0079E72A /* BeamTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BeamTypes.h; sourceTree = "<group>"; };
@@ -1885,6 +1886,7 @@
 			isa = PBXGroup;
 			children = (
 				5078BEA6264D6F8200EDA161 /* CMakeLists.txt */,
+				507CF2372D43825A00C08846 /* Annotations.h */,
 				50C8C42C2605D51A00F4E012 /* BasicTypes.h */,
 				50104E8525ECD0EF0047A9AA /* Macros.h */,
 				50CA602E260E02B700C4A22C /* Reflection.h */,
