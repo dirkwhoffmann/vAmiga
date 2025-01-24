@@ -15,18 +15,15 @@
 
 // Version number
 static constexpr int VER_MAJOR      = 3;
-static constexpr int VER_MINOR      = 2;
+static constexpr int VER_MINOR      = 3;
 static constexpr int VER_SUBMINOR   = 0;
-static constexpr int VER_BETA       = 0;
+static constexpr int VER_BETA       = 1;
 
 // Snapshot version number
 static constexpr int SNP_MAJOR      = 3;
-static constexpr int SNP_MINOR      = 1;
+static constexpr int SNP_MINOR      = 3;
 static constexpr int SNP_SUBMINOR   = 0;
-static constexpr int SNP_BETA       = 0;
-
-// Uncomment this setting in a release build
-// #define RELEASEBUILD
+static constexpr int SNP_BETA       = 1;
 
 
 //
@@ -34,19 +31,13 @@ static constexpr int SNP_BETA       = 0;
 //
 
 #if defined(__clang__)
-
-#define alwaysinline __attribute__((always_inline))
-#pragma GCC diagnostic ignored "-Wgnu-anonymous-struct"
-#pragma GCC diagnostic ignored "-Wnested-anon-types"
-
+    #define alwaysinline __attribute__((always_inline))
 #elif defined(__GNUC__) || defined(__GNUG__)
-
-#define alwaysinline __attribute__((always_inline))
-
+    #define alwaysinline __attribute__((always_inline))
 #elif defined(_MSC_VER)
-
-#define alwaysinline __forceinline
-
+    #define alwaysinline __forceinline
+#elif
+    #define alwaysinline inline
 #endif
 
 

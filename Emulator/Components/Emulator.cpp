@@ -394,7 +394,7 @@ Emulator::isReady()
 int
 Emulator::getDebugVariable(DebugFlag flag)
 {
-#ifdef RELEASEBUILD
+#ifdef NDEBUG
     
     throw Error(VAERROR_OPT_UNSUPPORTED, "Debug variables are only accessible in debug builds.");
     
