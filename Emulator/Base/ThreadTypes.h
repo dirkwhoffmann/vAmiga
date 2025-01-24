@@ -19,7 +19,7 @@ namespace vamiga {
 //
 
 /// Execution state
-enum class ExecState
+enum class ExecState : long
 {
     UNINIT,       ///< Not yet initialized
     OFF,          ///< Powered off

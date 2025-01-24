@@ -169,9 +169,9 @@ Amiga::getOption(Option option) const
 {
     switch (option) {
 
-        case Option::AMIGA_VIDEO_FORMAT:    return config.type;
+        case Option::AMIGA_VIDEO_FORMAT:    return (i64)config.type;
         case Option::AMIGA_WARP_BOOT:       return config.warpBoot;
-        case Option::AMIGA_WARP_MODE:       return config.warpMode;
+        case Option::AMIGA_WARP_MODE:       return (i64)config.warpMode;
         case Option::AMIGA_VSYNC:           return config.vsync;
         case Option::AMIGA_SPEED_BOOST:     return config.speedBoost;
         case Option::AMIGA_RUN_AHEAD:       return config.runAhead;
@@ -252,7 +252,7 @@ Amiga::setOption(Option option, i64 value)
 
         case Option::AMIGA_VIDEO_FORMAT:
 
-            if (value != config.type) {
+            if (VideoFormat(value) != config.type) {
 
                 config.type = VideoFormat(value);
                 agnus.setVideoFormat(config.type);
@@ -418,42 +418,42 @@ Amiga::set(ConfigScheme scheme)
     
     switch(scheme) {
             
-        case CONFIG_A1000_OCS_1MB:
+        case ConfigScheme::A1000_OCS_1MB:
             
             set(Option::CPU_REVISION, CPU_68000);
             set(Option::AGNUS_REVISION, AGNUS_OCS_OLD);
             set(Option::DENISE_REVISION, DENISE_OCS);
-            set(Option::AMIGA_VIDEO_FORMAT, FORMAT_PAL);
+            set(Option::AMIGA_VIDEO_FORMAT, (i64)VideoFormat::PAL);
             set(Option::MEM_CHIP_RAM, 512);
             set(Option::MEM_SLOW_RAM, 512);
             break;
             
-        case CONFIG_A500_OCS_1MB:
+        case ConfigScheme::A500_OCS_1MB:
             
             set(Option::CPU_REVISION, CPU_68000);
             set(Option::AGNUS_REVISION, AGNUS_OCS);
             set(Option::DENISE_REVISION, DENISE_OCS);
-            set(Option::AMIGA_VIDEO_FORMAT, FORMAT_PAL);
+            set(Option::AMIGA_VIDEO_FORMAT, (i64)VideoFormat::PAL);
             set(Option::MEM_CHIP_RAM, 512);
             set(Option::MEM_SLOW_RAM, 512);
             break;
             
-        case CONFIG_A500_ECS_1MB:
+        case ConfigScheme::A500_ECS_1MB:
             
             set(Option::CPU_REVISION, CPU_68000);
             set(Option::AGNUS_REVISION, AGNUS_ECS_1MB);
             set(Option::DENISE_REVISION, DENISE_OCS);
-            set(Option::AMIGA_VIDEO_FORMAT, FORMAT_PAL);
+            set(Option::AMIGA_VIDEO_FORMAT, (i64)VideoFormat::PAL);
             set(Option::MEM_CHIP_RAM, 512);
             set(Option::MEM_SLOW_RAM, 512);
             break;
             
-        case CONFIG_A500_PLUS_1MB:
+        case ConfigScheme::A500_PLUS_1MB:
             
             set(Option::CPU_REVISION, CPU_68000);
             set(Option::AGNUS_REVISION, AGNUS_ECS_2MB);
             set(Option::DENISE_REVISION, DENISE_ECS);
-            set(Option::AMIGA_VIDEO_FORMAT, FORMAT_PAL);
+            set(Option::AMIGA_VIDEO_FORMAT, (i64)VideoFormat::PAL);
             set(Option::MEM_CHIP_RAM, 512);
             set(Option::MEM_SLOW_RAM, 512);
             break;
@@ -502,8 +502,8 @@ Amiga::nativeRefreshRate() const
 {
     switch (config.type) {
 
-        case FORMAT_PAL:   return 50.0;
-        case FORMAT_NTSC:  return 60.0;
+        case VideoFormat::PAL:   return 50.0;
+        case VideoFormat::NTSC:  return 60.0;
 
         default:
             fatalError;
@@ -515,8 +515,8 @@ Amiga::nativeMasterClockFrequency() const
 {
     switch (config.type) {
 
-        case FORMAT_PAL:   return PAL::CLK_FREQUENCY;
-        case FORMAT_NTSC:  return NTSC::CLK_FREQUENCY;
+        case VideoFormat::PAL:   return PAL::CLK_FREQUENCY;
+        case VideoFormat::NTSC:  return NTSC::CLK_FREQUENCY;
 
         default:
             fatalError;
@@ -1054,7 +1054,7 @@ Amiga::loadSnapshot(const Snapshot &snap)
         
     // Inform the GUI
     msgQueue.put(MsgType::SNAPSHOT_RESTORED);
-    msgQueue.put(MsgType::VIDEO_FORMAT, agnus.isPAL() ? FORMAT_PAL : FORMAT_NTSC);
+    msgQueue.put(MsgType::VIDEO_FORMAT, agnus.isPAL() ? (i64)VideoFormat::PAL : (i64)VideoFormat::NTSC);
 }
 
 void

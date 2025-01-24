@@ -204,7 +204,7 @@ Agnus::setVideoFormat(VideoFormat newFormat)
     denise.pixelEngine.clearAll();
 
     // Inform the GUI
-    msgQueue.put(MsgType::VIDEO_FORMAT, newFormat);
+    msgQueue.put(MsgType::VIDEO_FORMAT, (i64)newFormat);
 }
 
 AgnusTraits 
@@ -261,11 +261,11 @@ Resolution
 Agnus::resolution(u16 v)
 {
     if (GET_BIT(v,6) && isECS()) {
-        return SHRES;
+        return Resolution::SHRES;
     } else if (GET_BIT(v,15)) {
-        return HIRES;
+        return Resolution::HIRES;
     } else {
-        return LORES;
+        return Resolution::LORES;
     }
 }
 
@@ -750,7 +750,7 @@ Agnus::hsyncHandler()
     dmaDebugger.hsyncHandler(vpos);
 
     // Encode a LORES marker in the first HBLANK pixel
-    REPLACE_BIT(*pixelEngine.workingPtr(vpos), 28, res != LORES);
+    REPLACE_BIT(*pixelEngine.workingPtr(vpos), 28, res != Resolution::LORES);
 
     // Call the vsyncHandler once we've finished a frame
     if (pos.v == 0) vsyncHandler();

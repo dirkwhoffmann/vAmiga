@@ -37,7 +37,7 @@ namespace vamiga {
 // Enumerations
 //
 
-enum class BoardState
+enum class BoardState : long
 {
     AUTOCONF,
     ACTIVE,

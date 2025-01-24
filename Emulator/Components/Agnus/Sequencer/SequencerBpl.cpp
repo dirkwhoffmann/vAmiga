@@ -97,7 +97,7 @@ Sequencer::computeBplEventsFast(const SigRecorder &sr, DDFState &state)
     auto even = agnus.scrollEven;
     switch (agnus.resolution(state.bplcon0)) {
 
-        case LORES:
+        case Resolution::LORES:
 
             odd &= 0b111;
             even &= 0b111;
@@ -110,7 +110,7 @@ Sequencer::computeBplEventsFast(const SigRecorder &sr, DDFState &state)
             }
             break;
 
-        case HIRES:
+        case Resolution::HIRES:
 
             odd &= 0b11;
             even &= 0b11;
@@ -123,7 +123,7 @@ Sequencer::computeBplEventsFast(const SigRecorder &sr, DDFState &state)
             }
             break;
 
-        case SHRES:
+        case Resolution::SHRES:
 
             odd &= 0b11;
             even &= 0b11;
@@ -187,9 +187,9 @@ Sequencer::computeBplEvents(isize strt, isize stop, DDFState &state)
 
     switch (agnus.resolution(state.bplcon0)) {
 
-        case LORES: mask = 0b111; break;
-        case HIRES: mask = 0b011; break;
-        case SHRES: mask = 0b001; break;
+        case Resolution::LORES: mask = 0b111; break;
+        case Resolution::HIRES: mask = 0b011; break;
+        case Resolution::SHRES: mask = 0b001; break;
 
         default:
             fatalError;
@@ -468,7 +468,7 @@ Sequencer::computeFetchUnit(u16 bplcon0)
 
     switch (agnus.resolution(bplcon0)) {
 
-        case LORES:
+        case Resolution::LORES:
 
             switch (bpu) {
 
@@ -483,7 +483,7 @@ Sequencer::computeFetchUnit(u16 bplcon0)
             }
             break;
 
-        case HIRES:
+        case Resolution::HIRES:
 
             switch (bpu) {
 
@@ -498,7 +498,7 @@ Sequencer::computeFetchUnit(u16 bplcon0)
             }
             break;
 
-        case SHRES:
+        case Resolution::SHRES:
 
             switch (bpu) {
 

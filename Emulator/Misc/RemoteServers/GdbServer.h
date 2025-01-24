@@ -14,7 +14,7 @@
 
 namespace vamiga {
 
-enum class GdbCmd
+enum class GdbCmd : long
 {
     Attached,
     C,

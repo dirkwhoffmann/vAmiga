@@ -257,7 +257,7 @@ Denise::drawOdd(Pixel offset)
 
         switch (mode) {
 
-            case LORES:
+            case Resolution::LORES:
 
                 // Synthesize two lores pixels
                 assert(pixel + 1 < isizeof(dBuffer));
@@ -267,7 +267,7 @@ Denise::drawOdd(Pixel offset)
                 pixel++;
                 break;
 
-            case HIRES:
+            case Resolution::HIRES:
 
                 // Synthesize one hires pixel
                 assert(pixel < isizeof(dBuffer));
@@ -275,7 +275,7 @@ Denise::drawOdd(Pixel offset)
                 pixel++;
                 break;
 
-            case SHRES:
+            case Resolution::SHRES:
 
                 // Synthesize a superHires pixel
                 assert(pixel < isizeof(dBuffer));
@@ -322,7 +322,7 @@ Denise::drawEven(Pixel offset)
 
         switch (mode) {
 
-            case LORES:
+            case Resolution::LORES:
 
                 // Synthesize s lores pixel
                 assert(pixel + 1 < isizeof(dBuffer));
@@ -332,7 +332,7 @@ Denise::drawEven(Pixel offset)
                 pixel++;
                 break;
 
-            case HIRES:
+            case Resolution::HIRES:
 
                 // Synthesize a hires pixel
                 assert(pixel < isizeof(dBuffer));
@@ -340,7 +340,7 @@ Denise::drawEven(Pixel offset)
                 pixel++;
                 break;
 
-            case SHRES:
+            case Resolution::SHRES:
 
                 // Synthesize a superHires pixel
                 assert(pixel < isizeof(dBuffer));
@@ -394,7 +394,7 @@ Denise::drawBoth(Pixel offset)
 
         switch (mode) {
 
-            case LORES:
+            case Resolution::LORES:
 
                 // Synthesize s lores pixel
                 assert(pixel + 1 < isizeof(dBuffer));
@@ -404,7 +404,7 @@ Denise::drawBoth(Pixel offset)
                 pixel++;
                 break;
 
-            case HIRES:
+            case Resolution::HIRES:
 
                 // Synthesize a hires pixel
                 assert(pixel < isizeof(dBuffer));
@@ -412,7 +412,7 @@ Denise::drawBoth(Pixel offset)
                 pixel++;
                 break;
 
-            case SHRES:
+            case Resolution::SHRES:
 
                 // Synthesize a superHires pixel
                 assert(pixel < isizeof(dBuffer));
@@ -439,7 +439,7 @@ Denise::drawLoresOdd()
     if (armedOdd) {
 
         updateShiftRegistersOdd();
-        drawOdd <LORES> (pixelOffsetOdd);
+        drawOdd <Resolution::LORES> (pixelOffsetOdd);
         armedOdd = false;
     }
 }
@@ -450,7 +450,7 @@ Denise::drawLoresEven()
     if (armedEven) {
         
         updateShiftRegistersEven();
-        drawEven <LORES> (pixelOffsetEven);
+        drawEven <Resolution::LORES> (pixelOffsetEven);
         armedEven = false;
     }
 }
@@ -468,7 +468,7 @@ Denise::drawHiresOdd()
     if (armedOdd) {
 
         updateShiftRegistersOdd();
-        drawOdd <HIRES> (pixelOffsetOdd);
+        drawOdd <Resolution::HIRES> (pixelOffsetOdd);
         armedOdd = false;
     }
 }
@@ -479,7 +479,7 @@ Denise::drawHiresEven()
     if (armedEven) {
 
         updateShiftRegistersEven();
-        drawEven <HIRES> (pixelOffsetEven);
+        drawEven <Resolution::HIRES> (pixelOffsetEven);
         armedEven = false;
     }
 }
@@ -497,7 +497,7 @@ Denise::drawShresOdd()
     if (armedOdd) {
 
         updateShiftRegistersOdd();
-        drawOdd <SHRES> (pixelOffsetOdd);
+        drawOdd <Resolution::SHRES> (pixelOffsetOdd);
         armedOdd = false;
     }
 }
@@ -508,7 +508,7 @@ Denise::drawShresEven()
     if (armedEven) {
 
         updateShiftRegistersEven();
-        drawEven <SHRES> (pixelOffsetEven);
+        drawEven <Resolution::SHRES> (pixelOffsetEven);
         armedEven = false;
     }
 }
@@ -699,7 +699,7 @@ Denise::translateDPF(Pixel from, Pixel to, PFState &state)
 void
 Denise::drawSprites()
 {
-    res == SHRES ? drawSprites<SHRES>() : drawSprites<LORES>();
+    res == Resolution::SHRES ? drawSprites<Resolution::SHRES>() : drawSprites<Resolution::LORES>();
 }
 
 template <Resolution R> void
@@ -733,7 +733,7 @@ Denise::drawSpritePair()
 {
     constexpr isize sprite1 = 2 * pair;
     constexpr isize sprite2 = 2 * pair + 1;
-    constexpr Pixel hposMask = R == SHRES ? ~0 : ~1;
+    constexpr Pixel hposMask = R == Resolution::SHRES ? ~0 : ~1;
 
     Pixel strt = 0;
     Pixel strt1 = sprhppos[sprite1] & hposMask;
@@ -897,7 +897,7 @@ Denise::drawSpritePair(Pixel hstrt, Pixel hstop, Pixel strt1, Pixel strt2)
     bool armed2 = GET_BIT(armed, sprite2);
 
     bool attached = GET_BIT(sprctl[sprite2], 7);
-    Pixel offset = R == SHRES ? 1 : 2;
+    Pixel offset = R == Resolution::SHRES ? 1 : 2;
 
     for (Pixel hpos = hstrt; hpos < hstop; hpos += offset) {
 
@@ -961,7 +961,7 @@ Denise::drawSpritePixel(Pixel hpos)
         u16 z = Z_SP[x];
         u8 base = 16 + 2 * (x & 6);
 
-        if constexpr (R == SHRES) {
+        if constexpr (R == Resolution::SHRES) {
 
             if (z > zBuffer[hpos]) mBuffer[hpos] = base | col;
             zBuffer[hpos] |= z;
@@ -1344,11 +1344,12 @@ Denise::eofHandler()
     debugger.eofHandler();
 }
 
+/*
 template void Denise::drawOdd<false>(Pixel offset);
 template void Denise::drawOdd<true>(Pixel offset);
 template void Denise::drawEven<false>(Pixel offset);
 template void Denise::drawEven<true>(Pixel offset);
-
+*/
 template void Denise::translateDPF<true>(Pixel from, Pixel to, PFState &state);
 template void Denise::translateDPF<false>(Pixel from, Pixel to, PFState &state);
 

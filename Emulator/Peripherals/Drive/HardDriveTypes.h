@@ -45,7 +45,7 @@ struct HardDriveTypeEnum : util::Reflection<HardDriveTypeEnum, HardDriveType>
     }
 };
 
-enum class HardDriveState
+enum class HardDriveState : long
 {
     IDLE,
     READING,

@@ -131,7 +131,7 @@ FrameType
 Beam::predictFrameType() const
 {
     // PAL
-    if (type == FORMAT_PAL) {
+    if (type == VideoFormat::PAL) {
         return lof ? FRAME_PAL_LF : FRAME_PAL_SF;
     }
 
@@ -206,7 +206,7 @@ Beam::cyclesPerFrame(FrameType type)
 isize
 Beam::cyclesPerFrame() const
 {
-    return cyclesPerFrame(type);
+    return cyclesPerFrame(predictFrameType());
 }
 
 isize
@@ -226,7 +226,7 @@ Beam::cyclesPerFrames(isize count, FrameType type, bool toggle)
 isize
 Beam::cyclesPerFrames(isize count) const
 {
-    return cyclesPerFrames(count, type, lofToggle);
+    return cyclesPerFrames(count, predictFrameType(), lofToggle);
 }
 
 Pixel
@@ -277,17 +277,17 @@ Beam::switchMode(VideoFormat format)
 {
     switch (format) {
 
-        case FORMAT_PAL:
+        case VideoFormat::PAL:
 
-            type = FORMAT_PAL;
+            type = VideoFormat::PAL;
             lol = false;
             lolToggle = false;
             vLatched = PAL::VPOS_MAX_LF;
             break;
 
-        case FORMAT_NTSC:
+        case VideoFormat::NTSC:
 
-            type = FORMAT_NTSC;
+            type = VideoFormat::NTSC;
             lol = false;
             lolToggle = true;
             vLatched = NTSC::VPOS_MAX_LF;

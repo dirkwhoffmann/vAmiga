@@ -145,7 +145,7 @@ public:
     //
 
     // Bitplane resolution (derived from bplcon0)
-    Resolution res = 0;
+    Resolution res = Resolution::LORES;
 
     // Bitplane offsets (derived from bplcon1)
     i8 scrollOdd = 0;
@@ -331,7 +331,7 @@ public:
 
     bool isOCS() const;
     bool isECS() const;
-    bool isPAL() const { return pos.type == FORMAT_PAL; }
+    bool isPAL() const { return pos.type == VideoFormat::PAL; }
     bool isNTSC() const { return !isPAL(); }
 
     // Returns the chip identification bits of this Agnus (show up in VPOSR)
@@ -385,9 +385,9 @@ public:
     Resolution resolution(u16 v);
 
     // Queries the currently set bitmap resolution
-    bool lores() { return res == LORES; }
-    bool hires() { return res == HIRES; }
-    bool shres() { return res == SHRES; }
+    bool lores() { return res == Resolution::LORES; }
+    bool hires() { return res == Resolution::HIRES; }
+    bool shres() { return res == Resolution::SHRES; }
 
     // Returns the external synchronization bit from BPLCON0
     static bool ersy(u16 value) { return GET_BIT(value, 1); }

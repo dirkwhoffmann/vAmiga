@@ -17,7 +17,7 @@ namespace vamiga {
 // Enumerations
 //
 
-enum class CType
+enum class CType : long
 {
     GenericClass,
     

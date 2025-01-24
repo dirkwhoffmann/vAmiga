@@ -150,7 +150,7 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     u16 newBpuBits = (newValue >> 12) & 0b111;
     
     // Report a suspicious BPU value
-    if (newBpuBits > ((res == LORES) ? 6 : (res == HIRES) ? 4 : 2)) {
+    if (newBpuBits > ((res == Resolution::LORES) ? 6 : (res == Resolution::HIRES) ? 4 : 2)) {
         xfiles("BPLCON0: BPU set to irregular value %d\n", newBpuBits);
     }
 }
@@ -349,11 +349,11 @@ Resolution
 Denise::resolution(u16 v)
 {
     if (GET_BIT(v,6) && isECS()) {
-        return SHRES;
+        return Resolution::SHRES;
     } else if (GET_BIT(v,15)) {
-        return HIRES;
+        return Resolution::HIRES;
     } else {
-        return LORES;
+        return Resolution::LORES;
     }
 }
 

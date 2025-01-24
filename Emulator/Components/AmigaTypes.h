@@ -19,139 +19,135 @@ namespace vamiga {
 // Enumerations
 //
 
-enum_long(VIDEO_FORMAT)
+enum class VideoFormat : long
 {
-    FORMAT_PAL,
-    FORMAT_NTSC
+    PAL,
+    NTSC
 };
-typedef VIDEO_FORMAT VideoFormat;
 
 struct VideoFormatEnum : util::Reflection<VideoFormatEnum, VideoFormat>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = FORMAT_NTSC;
+    static constexpr long maxVal = long(VideoFormat::NTSC);
     
     static const char *prefix() { return "FORMAT"; }
-    static const char *_key(long value)
+    static const char *_key(VideoFormat value)
     {
         switch (value) {
                 
-            case FORMAT_PAL:   return "PAL";
-            case FORMAT_NTSC:  return "NTSC";
+            case VideoFormat::PAL:   return "PAL";
+            case VideoFormat::NTSC:  return "NTSC";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(VideoFormat value)
     {
         switch (value) {
                 
-            case FORMAT_PAL:   return "PAL Video Format";
-            case FORMAT_NTSC:  return "NTSC Video Format";
+            case VideoFormat::PAL:   return "PAL Video Format";
+            case VideoFormat::NTSC:  return "NTSC Video Format";
         }
         return "???";
     }
 };
 
-enum_long(RESOLUTION)
+enum class Resolution : long
 {
     LORES,      // Lores mode
     HIRES,      // Hires mode
     SHRES       // SuperHires mode (ECS only)
 };
-typedef RESOLUTION Resolution;
 
 struct ResolutionEnum : util::Reflection<ResolutionEnum, Resolution>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = SHRES;
+    static constexpr long maxVal = long(Resolution::SHRES);
     
     static const char *prefix() { return ""; }
-    static const char *_key(long value)
+    static const char *_key(Resolution value)
     {
         switch (value) {
                 
-            case LORES:          return "LORES";
-            case HIRES:          return "HIRES";
-            case SHRES:          return "SHRES";
+            case Resolution::LORES:          return "LORES";
+            case Resolution::HIRES:          return "HIRES";
+            case Resolution::SHRES:          return "SHRES";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(Resolution value)
     {
         switch (value) {
                 
-            case LORES:          return "Lores Graphics";
-            case HIRES:          return "Hires Graphics";
-            case SHRES:          return "Super-Hires Graphics";
+            case Resolution::LORES:          return "Lores Graphics";
+            case Resolution::HIRES:          return "Hires Graphics";
+            case Resolution::SHRES:          return "Super-Hires Graphics";
         }
         return "???";
     }
 };
 
-enum_long(WARP_MODE)
+enum class WarpMode : long
 {
-    WARP_AUTO,
-    WARP_NEVER,
-    WARP_ALWAYS
+    AUTO,
+    NEVER,
+    ALWAYS
 };
-typedef WARP_MODE WarpMode;
 
 struct WarpModeEnum : util::Reflection<WarpModeEnum, WarpMode>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = WARP_ALWAYS;
+    static constexpr long maxVal = long(WarpMode::ALWAYS);
     
     static const char *prefix() { return "WARP"; }
-    static const char *_key(long value)
+    static const char *_key(WarpMode value)
     {
         switch (value) {
                 
-            case WARP_AUTO:     return "WARP_AUTO";
-            case WARP_NEVER:    return "WARP_NEVER";
-            case WARP_ALWAYS:   return "WARP_ALWAYS";
+            case WarpMode::AUTO:     return "AUTO";
+            case WarpMode::NEVER:    return "NEVER";
+            case WarpMode::ALWAYS:   return "ALWAYS";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(WarpMode value)
     {
         return "";
     }
 };
 
-enum_long(CONFIG_SCHEME)
+enum class ConfigScheme : long
 {
-    CONFIG_A1000_OCS_1MB,
-    CONFIG_A500_OCS_1MB,
-    CONFIG_A500_ECS_1MB,
-    CONFIG_A500_PLUS_1MB
+    A1000_OCS_1MB,
+    A500_OCS_1MB,
+    A500_ECS_1MB,
+    A500_PLUS_1MB
 };
-typedef CONFIG_SCHEME ConfigScheme;
 
 struct ConfigSchemeEnum : util::Reflection<ConfigSchemeEnum, ConfigScheme>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = CONFIG_A500_PLUS_1MB;
+    static constexpr long maxVal = long(ConfigScheme::A500_PLUS_1MB);
     
     static const char *prefix() { return "CONFIG"; }
-    static const char *_key(long value)
+    static const char *_key(ConfigScheme value)
     {
         switch (value) {
                 
-            case CONFIG_A1000_OCS_1MB:  return "A1000_OCS_1MB";
-            case CONFIG_A500_OCS_1MB:   return "A500_OCS_1MB";
-            case CONFIG_A500_ECS_1MB:   return "A500_ECS_1MB";
-            case CONFIG_A500_PLUS_1MB:  return "A500_PLUS_1MB";
+            case ConfigScheme::A1000_OCS_1MB:  return "A1000_OCS_1MB";
+            case ConfigScheme::A500_OCS_1MB:   return "A500_OCS_1MB";
+            case ConfigScheme::A500_ECS_1MB:   return "A500_ECS_1MB";
+            case ConfigScheme::A500_PLUS_1MB:  return "A500_PLUS_1MB";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(ConfigScheme value)
     {
         switch (value) {
                 
-            case CONFIG_A1000_OCS_1MB:  return "Amiga 1000, OCS Chipset, 1MB RAM";
-            case CONFIG_A500_OCS_1MB:   return "Amiga 500, OCS Chipset, 1MB RAM";
-            case CONFIG_A500_ECS_1MB:   return "Amiga 500, ECS Chipset, 1MB RAM";
-            case CONFIG_A500_PLUS_1MB:  return "Amiga 500+, ECS Chipset, 1MB RAM";
+            case ConfigScheme::A1000_OCS_1MB:  return "Amiga 1000, OCS Chipset, 1MB RAM";
+            case ConfigScheme::A500_OCS_1MB:   return "Amiga 500, OCS Chipset, 1MB RAM";
+            case ConfigScheme::A500_ECS_1MB:   return "Amiga 500, ECS Chipset, 1MB RAM";
+            case ConfigScheme::A500_PLUS_1MB:  return "Amiga 500+, ECS Chipset, 1MB RAM";
         }
         return "???";
     }

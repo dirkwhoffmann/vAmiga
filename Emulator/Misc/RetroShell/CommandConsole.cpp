@@ -81,7 +81,7 @@ CommandConsole::initCommands(Command &root)
                      "Initializes the test environment",
                      [this](Arguments& argv, long value) {
                 
-                auto scheme = parseEnum<ConfigSchemeEnum>(argv[0]);
+                auto scheme = ConfigScheme(parseEnum<ConfigSchemeEnum>(argv[0]));
                 auto rom = argv.size() > 1 ? argv[1] : "";
                 auto ext = argv.size() > 2 ? argv[2] : "";
                 
@@ -167,7 +167,7 @@ CommandConsole::initCommands(Command &root)
                  "Initializes the Amiga with a predefined scheme",
                  [this](Arguments& argv, long value) {
             
-            auto scheme = parseEnum <ConfigSchemeEnum> (argv[0]);
+            auto scheme = ConfigScheme(parseEnum <ConfigSchemeEnum> (argv[0]));
             
             // Don't call this function from within RetroShell. It'll call
             // initialize() which will reinitialize RetroShell while it is running.

@@ -188,8 +188,8 @@ Agnus::scheduleStrobe2Event()
 void
 Agnus::serviceREGEvent(Cycle until)
 {
-    assert(pos.type != FORMAT_PAL || pos.h <= PAL::HPOS_CNT);
-    assert(pos.type != FORMAT_NTSC || pos.h <= NTSC::HPOS_CNT);
+    assert(pos.type != VideoFormat::PAL || pos.h <= PAL::HPOS_CNT);
+    assert(pos.type != VideoFormat::NTSC || pos.h <= NTSC::HPOS_CNT);
 
     if (syncEvent) {
 
@@ -351,25 +351,25 @@ Agnus::serviceBPLEvent(EventID id)
         case EVENT_NONE | DRAW_ODD:
 
             switch (res) {
-                case LORES: denise.drawLoresOdd(); break;
-                case HIRES: denise.drawHiresOdd(); break;
-                case SHRES: denise.drawShresOdd(); break;
+                case Resolution::LORES: denise.drawLoresOdd(); break;
+                case Resolution::HIRES: denise.drawHiresOdd(); break;
+                case Resolution::SHRES: denise.drawShresOdd(); break;
             }
             break;
 
         case EVENT_NONE | DRAW_EVEN:
             switch (res) {
-                case LORES: denise.drawLoresEven(); break;
-                case HIRES: denise.drawHiresEven(); break;
-                case SHRES: denise.drawShresEven(); break;
+                case Resolution::LORES: denise.drawLoresEven(); break;
+                case Resolution::HIRES: denise.drawHiresEven(); break;
+                case Resolution::SHRES: denise.drawShresEven(); break;
             }
             break;
 
         case EVENT_NONE | DRAW_BOTH:
             switch (res) {
-                case LORES: denise.drawLoresBoth(); break;
-                case HIRES: denise.drawHiresBoth(); break;
-                case SHRES: denise.drawShresBoth(); break;
+                case Resolution::LORES: denise.drawLoresBoth(); break;
+                case Resolution::HIRES: denise.drawHiresBoth(); break;
+                case Resolution::SHRES: denise.drawShresBoth(); break;
             }
             break;
 

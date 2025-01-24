@@ -13,7 +13,7 @@
 
 namespace vamiga {
 
-enum class Category
+enum class Category : long
 {
     BankMap, 
     Beam,

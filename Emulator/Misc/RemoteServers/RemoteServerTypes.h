@@ -18,7 +18,7 @@ namespace vamiga {
 // Enumerations
 //
 
-enum class SrvState
+enum class SrvState : long
 {
     OFF,        // The server is inactive
     STARTING,   // The server is starting up

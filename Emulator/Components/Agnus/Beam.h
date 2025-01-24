@@ -78,8 +78,8 @@ public:
 
     isize hCnt() const { return lol ? 228 : 227; }
     isize hMax() const { return lol ? 227 : 226; }
-    isize vCnt() const { return type == FORMAT_PAL ? vCntPal() : vCntNtsc(); }
-    isize vMax() const { return type == FORMAT_PAL ? vMaxPal() : vMaxNtsc(); }
+    isize vCnt() const { return type == VideoFormat::PAL ? vCntPal() : vCntNtsc(); }
+    isize vMax() const { return type == VideoFormat::PAL ? vMaxPal() : vMaxNtsc(); }
     isize vMaxPal() const { return lof ? 312 : 311; }
     isize vMaxNtsc() const { return lof ? 262 : 261; }
     isize vCntPal() const { return lof ? 313 : 312; }
