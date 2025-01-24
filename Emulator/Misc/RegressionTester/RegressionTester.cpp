@@ -20,10 +20,10 @@ void
 RegressionTester::prepare(ConfigScheme scheme, string rom, string ext)
 {
     // Only proceed if the /tmp folder exisits
-    if (!util::fileExists("/tmp")) throw Error(VAERROR_DIR_NOT_FOUND, "/tmp");
+    if (!util::fileExists("/tmp")) throw Error(ErrorCode::DIR_NOT_FOUND, "/tmp");
 
     // Check if we've got write permissions
-    if (host.tmp() != "/tmp") throw Error(VAERROR_DIR_ACCESS_DENIED, "/tmp");
+    if (host.tmp() != "/tmp") throw Error(ErrorCode::DIR_ACCESS_DENIED, "/tmp");
     
     // Initialize the emulator according to the specified scheme
     emulator.powerOff();

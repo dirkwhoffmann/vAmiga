@@ -159,7 +159,7 @@ MediaFile::getDiskInfo() const
 
     } catch (...) {
 
-        throw Error(VAERROR_FILE_TYPE_MISMATCH);
+        throw Error(ErrorCode::FILE_TYPE_MISMATCH);
     }
 }
 
@@ -183,7 +183,7 @@ MediaFile::getFloppyDiskInfo() const
 
     } catch (...) {
 
-        throw Error(VAERROR_FILE_TYPE_MISMATCH);
+        throw Error(ErrorCode::FILE_TYPE_MISMATCH);
     }
 }
 
@@ -204,7 +204,7 @@ MediaFile::getHDFInfo() const
 
     } catch (...) {
 
-        throw Error(VAERROR_FILE_TYPE_MISMATCH);
+        throw Error(ErrorCode::FILE_TYPE_MISMATCH);
     }
 }
 

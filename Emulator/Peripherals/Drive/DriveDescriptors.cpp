@@ -128,22 +128,22 @@ GeometryDescriptor::checkCompatibility() const
         return;
     }
     if (cylinders == 0 || FORCE_HDR_UNKNOWN_GEOMETRY) {
-        throw Error(VAERROR_HDR_UNKNOWN_GEOMETRY);
+        throw Error(ErrorCode::HDR_UNKNOWN_GEOMETRY);
     }
     if (numBytes() > MB(504) || FORCE_HDR_TOO_LARGE) {
-        throw Error(VAERROR_HDR_TOO_LARGE);
+        throw Error(ErrorCode::HDR_TOO_LARGE);
     }
     if ((cylinders < cMin && heads > 1) || cylinders > cMax || FORCE_HDR_UNSUPPORTED_C) {
-        throw Error(VAERROR_HDR_UNSUPPORTED_CYL_COUNT, cylinders);
+        throw Error(ErrorCode::HDR_UNSUPPORTED_CYL_COUNT, cylinders);
     }
     if (heads < hMin || heads > hMax || FORCE_HDR_UNSUPPORTED_H) {
-        throw Error(VAERROR_HDR_UNSUPPORTED_HEAD_COUNT, heads);
+        throw Error(ErrorCode::HDR_UNSUPPORTED_HEAD_COUNT, heads);
     }
     if (sectors < sMin || sectors > sMax || FORCE_HDR_UNSUPPORTED_S) {
-        throw Error(VAERROR_HDR_UNSUPPORTED_SEC_COUNT, sectors);
+        throw Error(ErrorCode::HDR_UNSUPPORTED_SEC_COUNT, sectors);
     }
     if (bsize != 512 || FORCE_HDR_UNSUPPORTED_B) {
-        throw Error(VAERROR_HDR_UNSUPPORTED_BSIZE);
+        throw Error(ErrorCode::HDR_UNSUPPORTED_BSIZE);
     }
 }
 
@@ -208,13 +208,13 @@ void PartitionDescriptor::checkCompatibility(const GeometryDescriptor &geo) cons
     auto bsize = 4 * sizeBlock;
     
     if (bsize != 512) {
-        throw Error(VAERROR_HDR_UNSUPPORTED_BSIZE, std::to_string(bsize));
+        throw Error(ErrorCode::HDR_UNSUPPORTED_BSIZE, std::to_string(bsize));
     }
     if (lowCyl > highCyl) {
-        throw Error(VAERROR_HDR_CORRUPTED_PTABLE);
+        throw Error(ErrorCode::HDR_CORRUPTED_PTABLE);
     }
     if (isize(highCyl) >= geo.cylinders) {
-        throw Error(VAERROR_HDR_CORRUPTED_PTABLE);
+        throw Error(ErrorCode::HDR_CORRUPTED_PTABLE);
     }
 }
 

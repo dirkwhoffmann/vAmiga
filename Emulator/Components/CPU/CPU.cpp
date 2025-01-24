@@ -308,28 +308,28 @@ CPU::checkOption(Option opt, i64 value)
         case OPT_CPU_REVISION:
 
             if (!CPURevisionEnum::isValid(value)) {
-                throw Error(VAERROR_OPT_INV_ARG, CPURevisionEnum::keyList());
+                throw Error(ErrorCode::OPT_INV_ARG, CPURevisionEnum::keyList());
             }
             return;
 
         case OPT_CPU_DASM_REVISION:
 
             if (!DasmRevisionEnum::isValid(value)) {
-                throw Error(VAERROR_OPT_INV_ARG, DasmRevisionEnum::keyList());
+                throw Error(ErrorCode::OPT_INV_ARG, DasmRevisionEnum::keyList());
             }
             return;
 
         case OPT_CPU_DASM_SYNTAX:
 
             if (!DasmSyntaxEnum::isValid(value)) {
-                throw Error(VAERROR_OPT_INV_ARG, DasmSyntaxEnum::keyList());
+                throw Error(ErrorCode::OPT_INV_ARG, DasmSyntaxEnum::keyList());
             }
             return;
 
         case OPT_CPU_DASM_NUMBERS:
 
             if (!DasmNumbersEnum::isValid(value)) {
-                throw Error(VAERROR_OPT_INV_ARG, DasmNumbersEnum::keyList());
+                throw Error(ErrorCode::OPT_INV_ARG, DasmNumbersEnum::keyList());
             }
             return;
 
@@ -339,7 +339,7 @@ CPU::checkOption(Option opt, i64 value)
             return;
 
         default:
-            throw(VAERROR_OPT_UNSUPPORTED);
+            throw(ErrorCode::OPT_UNSUPPORTED);
     }
 }
 

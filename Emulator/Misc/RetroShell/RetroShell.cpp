@@ -127,7 +127,7 @@ RetroShell::asyncExecScript(const MediaFile &file)
 
         default:
 
-            throw Error(VAERROR_FILE_TYPE_MISMATCH);
+            throw Error(ErrorCode::FILE_TYPE_MISMATCH);
     }
 }
 

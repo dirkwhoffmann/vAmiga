@@ -98,7 +98,7 @@ DmaDebugger::checkOption(Option opt, i64 value)
         case OPT_DMA_DEBUG_MODE:
 
             if (!DmaDisplayModeEnum::isValid(value)) {
-                throw Error(VAERROR_OPT_INV_ARG, DmaDisplayModeEnum::keyList());
+                throw Error(ErrorCode::OPT_INV_ARG, DmaDisplayModeEnum::keyList());
             }
             return;
             
@@ -123,7 +123,7 @@ DmaDebugger::checkOption(Option opt, i64 value)
             return;
 
         default:
-            throw(VAERROR_OPT_UNSUPPORTED);
+            throw(ErrorCode::OPT_UNSUPPORTED);
     }
 }
 

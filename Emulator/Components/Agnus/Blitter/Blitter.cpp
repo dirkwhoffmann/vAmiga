@@ -91,12 +91,12 @@ Blitter::checkOption(Option opt, i64 value)
         case OPT_BLITTER_ACCURACY:
 
             if (value < 0 || value > 2) {
-                throw Error(VAERROR_OPT_INV_ARG, "0, 1, 2");
+                throw Error(ErrorCode::OPT_INV_ARG, "0, 1, 2");
             }
             return;
 
         default:
-            throw(VAERROR_OPT_UNSUPPORTED);
+            throw(ErrorCode::OPT_UNSUPPORTED);
     }
 }
 

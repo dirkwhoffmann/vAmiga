@@ -38,7 +38,7 @@ Folder::init(const std::filesystem::path &path)
     debug(FS_DEBUG, "make(%s)\n", path.string().c_str());
 
     // Only proceed if the provided filename points to a directory
-    if (!isCompatiblePath(path)) throw Error(VAERROR_FILE_TYPE_MISMATCH);
+    if (!isCompatiblePath(path)) throw Error(ErrorCode::FILE_TYPE_MISMATCH);
 
     // Create a file system and import the directory
     MutableFileSystem volume(FS_OFS, path.c_str());

@@ -59,7 +59,7 @@ void
 HDFFile::init(const std::filesystem::path &path)
 {
     // Check size
-    if (isOversized(util::getSizeOfFile(path))) throw Error(VAERROR_HDR_TOO_LARGE);
+    if (isOversized(util::getSizeOfFile(path))) throw Error(ErrorCode::HDR_TOO_LARGE);
     
     AmigaFile::init(path);
 }
@@ -68,7 +68,7 @@ void
 HDFFile::init(const u8 *buf, isize len)
 {
     // Check size
-    if (isOversized(len)) throw Error(VAERROR_HDR_TOO_LARGE);
+    if (isOversized(len)) throw Error(ErrorCode::HDR_TOO_LARGE);
 
     AmigaFile::init(buf, len);
 }
@@ -203,10 +203,10 @@ HDFFile::getDriverDescriptor(isize driver) const
             auto lsegBlock = seekBlock(lsegRef);
             
             if (!lsegBlock || strcmp((const char *)lsegBlock, "LSEG")) {
-                throw Error(VAERROR_HDR_CORRUPTED_LSEG);
+                throw Error(ErrorCode::HDR_CORRUPTED_LSEG);
             }
             if (i >= 1024) {
-                throw Error(VAERROR_HDR_CORRUPTED_LSEG);
+                throw Error(ErrorCode::HDR_CORRUPTED_LSEG);
             }
             
             result.blocks.push_back(lsegRef);
