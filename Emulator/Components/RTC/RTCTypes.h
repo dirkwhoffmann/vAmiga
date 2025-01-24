@@ -18,6 +18,7 @@ namespace vamiga {
 // Enumerations
 //
 
+/*
 enum_long(RTC_REVISION)
 {
     RTC_NONE,
@@ -25,26 +26,39 @@ enum_long(RTC_REVISION)
     RTC_RICOH
 };
 typedef RTC_REVISION RTCRevision;
+*/
+enum class RTCRevision : long
+{
+    NONE,
+    OKI,
+    RICOH
+};
 
 struct RTCRevisionEnum : util::Reflection<RTCRevisionEnum, RTCRevision>
 {
-    static constexpr long minVal = 0;
-    static constexpr long maxVal = RTC_RICOH;
+    static constexpr auto minVal = (long)RTCRevision::NONE;
+    static constexpr auto maxVal = (long)RTCRevision::RICOH;
     
     static const char *prefix() { return "RTC"; }
     static const char *_key(long value)
     {
-        switch (value) {
+        switch (RTCRevision(value)) {
                 
-            case RTC_NONE:   return "NONE";
-            case RTC_OKI:    return "OKI";
-            case RTC_RICOH:  return "RICOH";
+            case RTCRevision::NONE:   return "NONE";
+            case RTCRevision::OKI:    return "OKI";
+            case RTCRevision::RICOH:  return "RICOH";
         }
         return "???";
     }
     static const char *help(long value)
     {
-        return "";
+        switch (RTCRevision(value)) {
+                
+            case RTCRevision::NONE:   return "No real-time clock";
+            case RTCRevision::OKI:    return "MSM6242B";
+            case RTCRevision::RICOH:  return "RP5C01A";
+        }
+        return "???";
     }
 };
 

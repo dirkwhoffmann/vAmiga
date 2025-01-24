@@ -72,14 +72,14 @@ RTC::operator << (SerResetter &worker)
 
         switch (config.model) {
 
-            case RTC_RICOH:
+            case RTCRevision::RICOH:
 
                 reg[0][0xD] = 0b1000;
                 reg[0][0xE] = 0b0000;
                 reg[0][0xF] = 0b0000;
                 break;
 
-            case RTC_OKI:
+            case RTCRevision::OKI:
 
                 reg[0][0xD] = 0b0001;
                 reg[0][0xE] = 0b0000;
@@ -174,7 +174,7 @@ u8
 RTC::spypeek(isize nr) const
 {
     assert(nr < 16);
-    assert(config.model != RTC_NONE);
+    assert(config.model != RTCRevision::NONE);
     
     u8 result;
     
@@ -201,7 +201,7 @@ RTC::poke(isize nr, u8 value)
     trace(RTC_DEBUG, "poke(%ld, $%02X) [bank %ld]\n", nr, value, bank());
 
     // Ony proceed if a real-time clock is installed
-    if (config.model == RTC_NONE) return;
+    if (config.model == RTCRevision::NONE) return;
 
     switch (nr) {
             
@@ -227,7 +227,7 @@ RTC::time2registers()
     auto t = util::Time::local(rtcTime);
     
     // Write the registers
-    config.model == RTC_RICOH ? time2registersRicoh(&t) : time2registersOki(&t);
+    config.model == RTCRevision::RICOH ? time2registersRicoh(&t) : time2registersOki(&t);
 }
 
 void
@@ -301,7 +301,7 @@ RTC::registers2time()
     tm t = { };
     
     // Read the registers
-    config.model == RTC_RICOH ? registers2timeRicoh(&t) : registers2timeOki(&t);
+    config.model == RTCRevision::RICOH ? registers2timeRicoh(&t) : registers2timeOki(&t);
 
     // Convert the tm struct to a time_t value
     time_t rtcTime = mktime(&t);

@@ -83,7 +83,7 @@ Defaults::Defaults()
     setFallback(OPT_CPU_OVERCLOCKING,           0);
     setFallback(OPT_CPU_RESET_VAL,              0);
 
-    setFallback(OPT_RTC_MODEL,                  RTC_OKI);
+    setFallback(OPT_RTC_MODEL,                  (long)RTCRevision::OKI);
 
     setFallback(OPT_MEM_CHIP_RAM,               512);
     setFallback(OPT_MEM_SLOW_RAM,               512);

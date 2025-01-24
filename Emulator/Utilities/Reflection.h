@@ -50,7 +50,7 @@ template <class T, typename E> struct Reflection {
     static constexpr bool isValid(auto value) { return long(value) >= T::minVal && long(value) <= T::maxVal; }
 
     // Returns the key as a C string, including the section prefix
-    static const char *fullKey(isize value) { return T::_key((E)value); }
+    static const char *fullKey(isize value) { return T::_key(value); }
 
     // Returns the key as a C string, excluding the section prefix
     static const char *key(isize value, bool withPrefix = false) {

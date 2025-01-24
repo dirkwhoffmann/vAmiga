@@ -2136,7 +2136,7 @@ Memory::peekRTC8(u32 addr) const
     /* Addr: 0000 0001 0010 0011 0100 0101 0110 0111 1000 1001 1010 1011
      * Reg:        00        00        11        11        22        22
      */
-    if (rtc.getConfig().model == RTC_NONE) {
+    if (rtc.getConfig().model == RTCRevision::NONE) {
         return 0x40; // This is the value I've seen on my A500
     } else {
         return rtc.peek((addr >> 2) & 0b1111);

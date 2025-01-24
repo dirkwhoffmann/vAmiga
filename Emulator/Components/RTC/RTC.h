@@ -172,8 +172,8 @@ private:
 
     // Reads one of the three control registers
     u8 peekD() const { return reg[0][0xD]; };
-    u8 peekE() const { return config.model == RTC_RICOH ? 0 : reg[0][0xE]; }
-    u8 peekF() const { return config.model == RTC_RICOH ? 0 : reg[0][0xF]; }
+    u8 peekE() const { return config.model == RTCRevision::RICOH ? 0 : reg[0][0xE]; }
+    u8 peekF() const { return config.model == RTCRevision::RICOH ? 0 : reg[0][0xF]; }
 
     // Writes one of the three control registers
     void pokeD(u8 value) { reg[0][0xD] = value; }
@@ -184,7 +184,7 @@ private:
      * four register banks. A bank is selected by by bits 0 and 1 in control
      * register D. The OKI clock has a single bank, only.
      */
-    isize bank() const { return config.model == RTC_RICOH ? (reg[0][0xD] & 0b11) : 0; }
+    isize bank() const { return config.model == RTCRevision::RICOH ? (reg[0][0xD] & 0b11) : 0; }
     
     /* Converts the register value to the internally stored time-stamp. This
      * function has to be called *before* a RTC register is *read*.
