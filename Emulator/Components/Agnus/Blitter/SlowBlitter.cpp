@@ -1001,7 +1001,7 @@ Blitter::beginSlowCopyBlit()
         agnus.setBLS(false);
         
         while (agnus.hasEvent<SLOT_BLT>()) {
-            agnus.busOwner[agnus.pos.h] = BUS_NONE;
+            agnus.busOwner[agnus.pos.h] = BusOwner::NONE;
             serviceEvent();
         }
         
@@ -1058,7 +1058,7 @@ Blitter::beginSlowLineBlit()
         agnus.setBLS(false);
         
         while (agnus.hasEvent<SLOT_BLT>()) {
-            agnus.busOwner[agnus.pos.h] = BUS_NONE;
+            agnus.busOwner[agnus.pos.h] = BusOwner::NONE;
             serviceEvent();
         }
         
@@ -1090,10 +1090,10 @@ Blitter::exec()
     }
     
     // Allocate the bus if needed
-    if (bus && !agnus.allocateBus<BUS_BLITTER>()) return;
+    if (bus && !agnus.allocateBus<BusOwner::BLITTER>()) return;
 
     // Check if the Blitter needs a free bus to continue
-    if (busidle && !agnus.busIsFree<BUS_BLITTER>()) return;
+    if (busidle && !agnus.busIsFree<BusOwner::BLITTER>()) return;
 
     bltpc++;
 
@@ -1260,10 +1260,10 @@ Blitter::fakeExec()
     }
 
     // Allocate the bus if needed
-    if (bus && !agnus.allocateBus<BUS_BLITTER>()) return;
+    if (bus && !agnus.allocateBus<BusOwner::BLITTER>()) return;
 
     // Check if the Blitter needs a free bus to continue
-    if (busidle && !agnus.busIsFree<BUS_BLITTER>()) return;
+    if (busidle && !agnus.busIsFree<BusOwner::BLITTER>()) return;
 
     bltpc++;
 
@@ -1353,10 +1353,10 @@ Blitter::execLine()
     }
     
     // Allocate the bus if needed
-    if (bus && !agnus.allocateBus<BUS_BLITTER>()) return;
+    if (bus && !agnus.allocateBus<BusOwner::BLITTER>()) return;
 
     // Check if the Blitter needs a free bus to continue
-    if (busidle && !agnus.busIsFree<BUS_BLITTER>()) return;
+    if (busidle && !agnus.busIsFree<BusOwner::BLITTER>()) return;
 
     bltpc++;
 
@@ -1467,10 +1467,10 @@ Blitter::fakeExecLine()
     }
     
     // Allocate the bus if needed
-    if (bus && !agnus.allocateBus<BUS_BLITTER>()) return;
+    if (bus && !agnus.allocateBus<BusOwner::BLITTER>()) return;
 
     // Check if the Blitter needs a free bus to continue
-    if (busidle && !agnus.busIsFree<BUS_BLITTER>()) return;
+    if (busidle && !agnus.busIsFree<BusOwner::BLITTER>()) return;
 
     bltpc++;
 

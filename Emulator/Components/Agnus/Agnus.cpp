@@ -343,7 +343,7 @@ Agnus::executeUntilBusIsFree()
     cpu.slowCycles = 1;
     
     // Check if the bus is blocked
-    if (busOwner[pos.h] != BUS_NONE) {
+    if (busOwner[pos.h] != BusOwner::NONE) {
 
         // This variable counts the number of DMA cycles the CPU will be suspended
         DMACycle delay = 0;
@@ -354,7 +354,7 @@ Agnus::executeUntilBusIsFree()
             execute();
             if (++delay == 2) bls = true;
 
-        } while (busOwner[pos.h] != BUS_NONE);
+        } while (busOwner[pos.h] != BusOwner::NONE);
 
         // Clear the BLS line (Blitter slow down)
         bls = false;
@@ -364,7 +364,7 @@ Agnus::executeUntilBusIsFree()
     }
 
     // Assign bus to the CPU
-    busOwner[pos.h] = BUS_CPU;
+    busOwner[pos.h] = BusOwner::CPU;
 }
 
 void
@@ -563,7 +563,7 @@ Agnus::executeFirstSpriteCycle()
 
             } else {
 
-                busOwner[pos.h] = BUS_BLOCKED;
+                busOwner[pos.h] = BusOwner::BLOCKED;
             }
         }
 
@@ -579,7 +579,7 @@ Agnus::executeFirstSpriteCycle()
                 
             } else {
 
-                busOwner[pos.h] = BUS_BLOCKED;
+                busOwner[pos.h] = BusOwner::BLOCKED;
             }
         }
     }
@@ -605,7 +605,7 @@ Agnus::executeSecondSpriteCycle()
                 
             } else {
 
-                busOwner[pos.h] = BUS_BLOCKED;
+                busOwner[pos.h] = BusOwner::BLOCKED;
             }
         }
 
@@ -621,7 +621,7 @@ Agnus::executeSecondSpriteCycle()
                 
             } else {
 
-                busOwner[pos.h] = BUS_BLOCKED;
+                busOwner[pos.h] = BusOwner::BLOCKED;
             }
         }
     }
@@ -701,7 +701,7 @@ Agnus::eolHandler()
     denise.eolHandler();
 
     // Clear the bus usage table
-    for (isize i = 0; i < HPOS_CNT; i++) busOwner[i] = BUS_NONE;
+    for (isize i = 0; i < HPOS_CNT; i++) busOwner[i] = BusOwner::NONE;
 
     // Clear other variables
     for (isize i = 0; i < 8; i++) lastCtlWrite[i] = 0xFF;

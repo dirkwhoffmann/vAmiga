@@ -562,7 +562,7 @@ Agnus::setDSKPTH(u16 value)
     trace(DSKREG_DEBUG, "setDSKPTH(%04x)\n", value);
 
     // Check if the register is blocked due to ongoing DMA
-    if (dropWrite(BUS_DISK)) return;
+    if (dropWrite(BusOwner::DISK)) return;
     
     // Perform the write
     dskpt = REPLACE_HI_WORD(dskpt, value);
@@ -587,7 +587,7 @@ Agnus::setDSKPTL(u16 value)
     trace(DSKREG_DEBUG, "setDSKPTL(%04x)\n", value);
 
     // Check if the register is blocked due to ongoing DMA
-    if (dropWrite(BUS_DISK)) return;
+    if (dropWrite(BusOwner::DISK)) return;
     
     // Perform the write
     dskpt = REPLACE_LO_WORD(dskpt, value & 0xFFFE);
@@ -624,7 +624,7 @@ Agnus::setBPLxPTH(u16 value)
     trace(BPLREG_DEBUG, "setBPL%dPTH(%X)\n", x, value);
 
     // Check if the register is blocked due to ongoing DMA
-    if (dropWrite(BUS_BPL1 + x - 1)) return;
+    if (dropWrite(BusOwner(BUS_BPL1 + x - 1))) return;
     
     // Perform the write
     bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], value);
@@ -649,7 +649,7 @@ Agnus::setBPLxPTL(u16 value)
     trace(BPLREG_DEBUG, "setBPL%dPTL(%X)\n", x, value);
 
     // Check if the register is blocked due to ongoing DMA
-    if (dropWrite(BUS_BPL1 + x - 1)) return;
+    if (dropWrite(BusOwner(BUS_BPL1 + x - 1))) return;
     
     // Perform the write
     bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], value & 0xFFFE);
@@ -670,7 +670,7 @@ Agnus::setSPRxPTH(u16 value)
     trace(SPRREG_DEBUG, "setSPR%dPTH(%04x)\n", x, value);
     
     // Check if the register is blocked due to ongoing DMA
-    if (dropWrite(BUS_SPRITE0 + x)) return;
+    if (dropWrite(BusOwner(BUS_SPRITE0 + x))) return;
     
     // Perform the write
     sprpt[x] = REPLACE_HI_WORD(sprpt[x], value);
@@ -695,7 +695,7 @@ Agnus::setSPRxPTL(u16 value)
     trace(SPRREG_DEBUG, "setSPR%dPTH(%04x)\n", x, value);
     
     // Check if the register is blocked due to ongoing DMA
-    if (dropWrite(BUS_SPRITE0 + x)) return;
+    if (dropWrite(BusOwner(BUS_SPRITE0 + x))) return;
     
     // Perform the write
     sprpt[x] = REPLACE_LO_WORD(sprpt[x], value & 0xFFFE);
@@ -709,7 +709,7 @@ Agnus::dropWrite(BusOwner owner)
      */
     if (config.ptrDrops && pos.h >= 1 && busOwner[pos.h - 1] == owner) {
         
-        xfiles("Dropping pointer register write (%d)\n", owner);
+        xfiles("Dropping pointer register write (%s)\n", BusOwnerEnum::key(owner));
         return true;
     }
     

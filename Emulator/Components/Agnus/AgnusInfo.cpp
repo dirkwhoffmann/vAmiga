@@ -45,7 +45,7 @@ Agnus::eventName(EventSlot slot, EventID id)
 
         case SLOT_BPL:
 
-            switch (id) {
+            switch (isize(id)) {
                 case EVENT_NONE:                return "none";
                 case DRAW_ODD:                  return "BPL [O]";
                 case DRAW_EVEN:                 return "BPL [E]";

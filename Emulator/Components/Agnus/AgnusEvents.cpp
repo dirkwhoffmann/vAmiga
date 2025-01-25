@@ -155,7 +155,7 @@ Agnus::scheduleNextREGEvent()
     if (syncEvent) {
         
         // Schedule an event for the next cycle as there are pending events
-        scheduleImm <SLOT_REG> (DMA_CYCLES(1), REG_CHANGE);
+        scheduleRel <SLOT_REG> (DMA_CYCLES(1), REG_CHANGE);
         
     } else {
         
@@ -163,7 +163,7 @@ Agnus::scheduleNextREGEvent()
         Cycle next = changeRecorder.trigger();
         
         // Schedule a register change event for that cycle
-        scheduleAbs<SLOT_REG>(next, REG_CHANGE);
+        scheduleAbs <SLOT_REG> (next, REG_CHANGE);
     }
 }
 
@@ -342,7 +342,7 @@ Agnus::serviceREGEvent(Cycle until)
 void
 Agnus::serviceBPLEvent(EventID id)
 {
-    switch (id) {
+    switch (isize(id)) {
 
         case EVENT_NONE:
             assert(pos.h == HPOS_MAX);
@@ -576,10 +576,10 @@ Agnus::serviceDASEvent(EventID id)
 
         case DAS_REFRESH:
 
-            busOwner[0x01] = BUS_REFRESH;
-            busOwner[0x03] = BUS_REFRESH;
-            busOwner[0x05] = BUS_REFRESH;
-            busOwner[pos.lol ? 0xE3 : 0xE2] = BUS_REFRESH;
+            busOwner[0x01] = BusOwner::REFRESH;
+            busOwner[0x03] = BusOwner::REFRESH;
+            busOwner[0x05] = BusOwner::REFRESH;
+            busOwner[pos.lol ? 0xE3 : 0xE2] = BusOwner::REFRESH;
 
             busAddr[0x01] = 0;
             busAddr[0x03] = 0;

@@ -36,8 +36,8 @@ Blitter::serviceEvent(EventID id)
             }
 
             // Only proceed if the bus is free
-            if (!agnus.busIsFree<BUS_BLITTER>()) {
-                trace(BLTTIM_DEBUG, "BLT_STRT1: Blocked by %d\n", agnus.busOwner[agnus.pos.h]);
+            if (!agnus.busIsFree<BusOwner::BLITTER>()) {
+                trace(BLTTIM_DEBUG, "BLT_STRT1: Blocked by %s\n", BusOwnerEnum::key(agnus.busOwner[agnus.pos.h]));
                 break;
             }
 
@@ -48,8 +48,8 @@ Blitter::serviceEvent(EventID id)
         case BLT_STRT2:
 
             // Only proceed if the bus is a free
-            if (!agnus.busIsFree<BUS_BLITTER>()) {
-                trace(BLTTIM_DEBUG, "BLT_STRT2: Blocked by %d\n", agnus.busOwner[agnus.pos.h]);
+            if (!agnus.busIsFree<BusOwner::BLITTER>()) {
+                trace(BLTTIM_DEBUG, "BLT_STRT2: Blocked by %s\n", BusOwnerEnum::key(agnus.busOwner[agnus.pos.h]));
                 break;
             }
 

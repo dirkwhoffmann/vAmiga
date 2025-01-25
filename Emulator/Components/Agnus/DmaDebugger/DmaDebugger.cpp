@@ -214,64 +214,64 @@ DmaDebugger::setOption(Option option, i64 value)
         case Option::DMA_DEBUG_COLOR0:
 
             config.debugColor[0] = u32(value);
-            setColor(BUS_COPPER, (u32)value);
+            setColor(BusOwner::COPPER, (u32)value);
             return;
 
         case Option::DMA_DEBUG_COLOR1:
 
             config.debugColor[1] = u32(value);
-            setColor(BUS_BLITTER, (u32)value);
+            setColor(BusOwner::BLITTER, (u32)value);
             return;
 
         case Option::DMA_DEBUG_COLOR2:
 
             config.debugColor[2] = u32(value);
-            setColor(BUS_DISK, (u32)value);
+            setColor(BusOwner::DISK, (u32)value);
             return;
 
         case Option::DMA_DEBUG_COLOR3:
 
             config.debugColor[3] = u32(value);
-            setColor(BUS_AUD0, (u32)value);
-            setColor(BUS_AUD1, (u32)value);
-            setColor(BUS_AUD2, (u32)value);
-            setColor(BUS_AUD3, (u32)value);
+            setColor(BusOwner::AUD0, (u32)value);
+            setColor(BusOwner::AUD1, (u32)value);
+            setColor(BusOwner::AUD2, (u32)value);
+            setColor(BusOwner::AUD3, (u32)value);
             return;
 
         case Option::DMA_DEBUG_COLOR4:
 
             config.debugColor[4] = u32(value);
-            setColor(BUS_SPRITE0, (u32)value);
-            setColor(BUS_SPRITE1, (u32)value);
-            setColor(BUS_SPRITE2, (u32)value);
-            setColor(BUS_SPRITE3, (u32)value);
-            setColor(BUS_SPRITE4, (u32)value);
-            setColor(BUS_SPRITE5, (u32)value);
-            setColor(BUS_SPRITE6, (u32)value);
-            setColor(BUS_SPRITE7, (u32)value);
+            setColor(BusOwner::SPRITE0, (u32)value);
+            setColor(BusOwner::SPRITE1, (u32)value);
+            setColor(BusOwner::SPRITE2, (u32)value);
+            setColor(BusOwner::SPRITE3, (u32)value);
+            setColor(BusOwner::SPRITE4, (u32)value);
+            setColor(BusOwner::SPRITE5, (u32)value);
+            setColor(BusOwner::SPRITE6, (u32)value);
+            setColor(BusOwner::SPRITE7, (u32)value);
             return;
 
         case Option::DMA_DEBUG_COLOR5:
 
             config.debugColor[5] = u32(value);
-            setColor(BUS_BPL1, (u32)value);
-            setColor(BUS_BPL2, (u32)value);
-            setColor(BUS_BPL3, (u32)value);
-            setColor(BUS_BPL4, (u32)value);
-            setColor(BUS_BPL5, (u32)value);
-            setColor(BUS_BPL6, (u32)value);
+            setColor(BusOwner::BPL1, (u32)value);
+            setColor(BusOwner::BPL2, (u32)value);
+            setColor(BusOwner::BPL3, (u32)value);
+            setColor(BusOwner::BPL4, (u32)value);
+            setColor(BusOwner::BPL5, (u32)value);
+            setColor(BusOwner::BPL6, (u32)value);
             return;
 
         case Option::DMA_DEBUG_COLOR6:
 
             config.debugColor[6] = u32(value);
-            setColor(BUS_CPU, (u32)value);
+            setColor(BusOwner::CPU, (u32)value);
             return;
 
         case Option::DMA_DEBUG_COLOR7:
 
             config.debugColor[7] = u32(value);
-            setColor(BUS_REFRESH, (u32)value);
+            setColor(BusOwner::REFRESH, (u32)value);
             return;
             
         default:
@@ -322,10 +322,10 @@ DmaDebugger::setColor(BusOwner owner, u32 rgba)
 
     // Compute the color variants used for drawing
     RgbColor color = RgbColor(rgba);
-    debugColor[owner][0] = color.shade(0.3);
-    debugColor[owner][1] = color.shade(0.1);
-    debugColor[owner][2] = color.tint(0.1);
-    debugColor[owner][3] = color.tint(0.3);
+    debugColor[isize(owner)][0] = color.shade(0.3);
+    debugColor[isize(owner)][1] = color.shade(0.1);
+    debugColor[isize(owner)][2] = color.tint(0.1);
+    debugColor[isize(owner)][3] = color.tint(0.3);
 }
 
 void
@@ -397,7 +397,7 @@ DmaDebugger::computeOverlay(Texel *ptr, isize first, isize last, BusOwner *own, 
 
     for (isize i = first; i <= last; i++, ptr += 4) {
 
-        BusOwner owner = own[i];
+        auto owner = isize(own[i]);
         // u32 *ptr32 = (u32 *)ptr;
 
         // Handle the easy case first: No foreground pixels

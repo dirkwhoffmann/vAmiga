@@ -33,7 +33,7 @@ Copper::serviceEvent(EventID id)
             trace(COP_DEBUG, "COP_REQ_DMA\n");
             
             // Wait for the next possible DMA cycle
-            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
+            if (!agnus.busIsFree<BusOwner::COPPER>()) { reschedule(); break; }
 
             // Don't wake up in an odd cycle
             if (IS_ODD(agnus.pos.h)) { reschedule(); break; }
@@ -47,7 +47,7 @@ Copper::serviceEvent(EventID id)
             trace(COP_DEBUG, "COP_WAKEUP\n");
             
             // Wait for the next possible DMA cycle
-            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
+            if (!agnus.busIsFree<BusOwner::COPPER>()) { reschedule(); break; }
             
             // Don't wake up in an odd cycle
             if (IS_ODD(agnus.pos.h)) { reschedule(); break; }
@@ -77,7 +77,7 @@ Copper::serviceEvent(EventID id)
             }
             
             // Wait for the next possible DMA cycle
-            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
+            if (!agnus.busIsFree<BusOwner::COPPER>()) { reschedule(); break; }
             
             // Don't wake up in an odd cycle
             if (IS_ODD(agnus.pos.h)) { reschedule(); break; }
@@ -91,7 +91,7 @@ Copper::serviceEvent(EventID id)
             trace(COP_DEBUG, "COP_FETCH\n");
 
             // Wait for the next possible DMA cycle
-            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
+            if (!agnus.busIsFree<BusOwner::COPPER>()) { reschedule(); break; }
 
             if (isSkipCmd()) {
                 
@@ -128,7 +128,7 @@ Copper::serviceEvent(EventID id)
             trace(COP_DEBUG, "COP_MOVE\n");
 
             // Wait for the next possible DMA cycle
-            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
+            if (!agnus.busIsFree<BusOwner::COPPER>()) { reschedule(); break; }
 
             // Load the second instruction word
             cop2ins = agnus.doCopperDmaRead(coppc);
@@ -174,7 +174,7 @@ Copper::serviceEvent(EventID id)
             trace(COP_DEBUG, "COP_WAIT_OR_SKIP\n");
             
             // Wait for the next possible DMA cycle
-            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
+            if (!agnus.busIsFree<BusOwner::COPPER>()) { reschedule(); break; }
 
             // Load the second instruction word
             cop2ins = agnus.doCopperDmaRead(coppc);
@@ -191,7 +191,7 @@ Copper::serviceEvent(EventID id)
             trace(COP_DEBUG, "COP_WAIT1\n");
 
             // Wait for the next possible DMA cycle
-            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
+            if (!agnus.busIsFree<BusOwner::COPPER>()) { reschedule(); break; }
 
             // Schedule next state
             schedule(COP_WAIT2);
@@ -211,7 +211,7 @@ Copper::serviceEvent(EventID id)
             }
             
             // Wait for the next possible DMA cycle
-            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
+            if (!agnus.busIsFree<BusOwner::COPPER>()) { reschedule(); break; }
 
             // Schedule a wakeup event at the target position
             scheduleWaitWakeup(getBFD());
@@ -222,8 +222,8 @@ Copper::serviceEvent(EventID id)
             trace(COP_DEBUG, "COP_WAIT_BLIT\n");
             
             // Wait for the next free cycle
-            if (agnus.busOwner[agnus.pos.h] != BUS_NONE &&
-                agnus.busOwner[agnus.pos.h] != BUS_BLITTER) {
+            if (agnus.busOwner[agnus.pos.h] != BusOwner::NONE &&
+                agnus.busOwner[agnus.pos.h] != BusOwner::BLITTER) {
                 // debug("COP_WAIT_BLIT delay\n");
                 reschedule(); break;
             }
@@ -237,7 +237,7 @@ Copper::serviceEvent(EventID id)
             trace(COP_DEBUG, "COP_SKIP1\n");
 
             // Wait for the next possible DMA cycle
-            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
+            if (!agnus.busIsFree<BusOwner::COPPER>()) { reschedule(); break; }
 
             // Schedule next state
             schedule(COP_SKIP2);
@@ -248,7 +248,7 @@ Copper::serviceEvent(EventID id)
             trace(COP_DEBUG, "COP_SKIP2\n");
 
             // Wait for the next possible DMA cycle
-            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
+            if (!agnus.busIsFree<BusOwner::COPPER>()) { reschedule(); break; }
 
             // Continue with the next command
             schedule(COP_FETCH);
@@ -257,7 +257,7 @@ Copper::serviceEvent(EventID id)
         case COP_JMP1:
 
             // The bus is not needed in this cycle, but still allocated
-            (void)agnus.allocateBus<BUS_COPPER>();
+            (void)agnus.allocateBus<BusOwner::COPPER>();
 
             // In cycle $E0, Copper continues with the next state in $E1 (?!)
             if (agnus.pos.h == 0xE0) {
@@ -270,7 +270,7 @@ Copper::serviceEvent(EventID id)
         case COP_JMP2:
 
             // Wait for the next possible DMA cycle
-            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
+            if (!agnus.busIsFree<BusOwner::COPPER>()) { reschedule(); break; }
 
             switchToCopperList((isize)agnus.data[SLOT_COP]);
             schedule(COP_FETCH);
@@ -280,7 +280,7 @@ Copper::serviceEvent(EventID id)
             
             // Allocate the bus
             // TODO: FIND OUT IF THE BUS IS REALLY ALLOCATED IN THIS STATE
-            if (agnus.copdma() && !agnus.allocateBus<BUS_COPPER>()) { reschedule(); break; }
+            if (agnus.copdma() && !agnus.allocateBus<BusOwner::COPPER>()) { reschedule(); break; }
 
             switchToCopperList(1);
             activeInThisFrame = agnus.copdma();

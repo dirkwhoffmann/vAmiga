@@ -27,7 +27,7 @@ namespace vamiga {
  * lores mode starting at 0x28, the tables look like this:
  *
  *     bplEvent[0x00] = EVENT_NONE   dasEvent[0x00] = EVENT_NONE
- *     bplEvent[0x01] = EVENT_NONE   dasEvent[0x01] = BUS_REFRESH
+ *     bplEvent[0x01] = EVENT_NONE   dasEvent[0x01] = BusOwner::REFRESH
  *         ...                           ...
  *     bplEvent[0x28] = EVENT_NONE   dasEvent[0x28] = EVENT_NONE
  *     bplEvent[0x29] = BPL_L4       dasEvent[0x29] = DAS_S5_1
@@ -38,7 +38,7 @@ namespace vamiga {
  *     bplEvent[0x2E] = BPL_L5       dasEvent[0x2E] = EVENT_NONE
  *     bplEvent[0x2F] = BPL_L1       dasEvent[0x2F] = DAS_S6_2
  *         ...                           ...
- *     bplEvent[0xE2] = EVENT_NONE   dasEvent[0xE2] = BUS_REFRESH
+ *     bplEvent[0xE2] = EVENT_NONE   dasEvent[0xE2] = BusOwner::REFRESH
  *     bplEvent[0xE3] = EVENT_NONE   dasEvent[0xE3] = EVENT_NONE
  *
  * All events in the BPL_SLOT can be superimposed by two drawing flags (bit 0
