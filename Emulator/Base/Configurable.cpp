@@ -70,10 +70,13 @@ Configurable::dumpConfig(std::ostream& os) const
         auto name = OptionEnum::key(opt);
         auto help = OptionEnum::help(opt);
         auto arg  = OptionParser::asString(opt, getOption(opt));
+        auto arghelp = OptionParser::help(opt, getOption(opt));
 
         os << tab(name);
         os << std::setw(16) << std::left << std::setfill(' ') << arg;
-        os <<help << std::endl;
+        os << help;
+        if (arghelp != "") os << " (" << arghelp << ")";
+        os << std::endl;
     }
 }
 
