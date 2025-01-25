@@ -12,7 +12,7 @@ class EventTableView: NSTableView {
 
     @IBOutlet weak var inspector: Inspector!
 
-    var slotInfo = [EventSlotInfo?](repeating: nil, count: EventSlot.COUNT.rawValue)
+    var slotInfo = [EventSlotInfo?](repeating: nil, count: EventSlotEnum.count())
 
     override init(frame frameRect: NSRect) { super.init(frame: frameRect); commonInit() }
     required init?(coder: NSCoder) { super.init(coder: coder); commonInit() }
@@ -25,7 +25,7 @@ class EventTableView: NSTableView {
     }
     
     private func cache() {
-        for row in 0 ..< EventSlot.COUNT.rawValue {
+        for row in 0 ..< EventSlotEnum.count() {
             slotInfo[row] = inspector.emu.agnus.cachedSlotInfo(row)
         }
     }
@@ -41,7 +41,7 @@ extension EventTableView: NSTableViewDataSource {
     
     func numberOfRows(in tableView: NSTableView) -> Int {
 
-        return EventSlot.COUNT.rawValue
+        return EventSlotEnum.count()
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {

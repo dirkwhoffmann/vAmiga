@@ -30,6 +30,7 @@ typealias DeniseRevision = vamiga.DeniseRevision
 typealias DiskControllerInfo = vamiga.DiskControllerInfo
 typealias ErrorCode = vamiga.ErrorCode
 typealias EventSlot = vamiga.EventSlot
+typealias EventSlotEnum = vamiga.EventSlotEnum
 typealias EventSlotInfo = vamiga.EventSlotInfo
 typealias FileType = vamiga.FileType
 typealias FloppyDriveInfo = vamiga.FloppyDriveInfo

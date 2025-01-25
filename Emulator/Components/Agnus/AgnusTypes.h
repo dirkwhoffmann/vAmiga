@@ -74,7 +74,7 @@ struct AgnusRevisionEnum : util::Reflection<AgnusRevisionEnum, AgnusRevision>
     }
 };
 
-enum_long(SLOT)
+enum EventSlot : long
 {
     // Primary slots
     SLOT_REG,                       // Register changes
@@ -123,7 +123,6 @@ enum_long(SLOT)
     
     SLOT_COUNT
 };
-typedef SLOT EventSlot;
 
 constexpr bool isPrimarySlot(long s) { return s <= SLOT_SEC; }
 constexpr bool isSecondarySlot(long s) { return s > SLOT_SEC && s <= SLOT_TER; }
@@ -133,6 +132,8 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = SLOT_COUNT - 1;
+    
+    static long count() { return maxVal; }
     
     static const char *_key(long value)
     {

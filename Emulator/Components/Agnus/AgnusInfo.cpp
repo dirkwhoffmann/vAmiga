@@ -660,9 +660,9 @@ Agnus::cacheInfo(AgnusInfo &info) const
         info.eventInfo.vpos = agnus.pos.v;
         info.eventInfo.hpos = agnus.pos.h;
         
-        for (EventSlot i = 0; i < SLOT_COUNT; i++) {
+        for (isize i = 0; i < SLOT_COUNT; i++) {
             
-            info.slotInfo[i].slot = i;
+            info.slotInfo[i].slot = EventSlot(i);
             info.slotInfo[i].eventId = id[i];
             info.slotInfo[i].trigger = trigger[i];
             info.slotInfo[i].triggerRel = trigger[i] - agnus.clock;

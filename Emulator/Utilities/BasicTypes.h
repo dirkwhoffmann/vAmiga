@@ -81,7 +81,7 @@ namespace vamiga { namespace fs = std::filesystem; }
 typedef enum __attribute__((enum_extensibility(open))) _name : _type _name; \
 enum _name : _type
 
-#define enum_long(_name) enum_generic(_name, long)
+// #define enum_long(_name) enum_generic(_name, long)
 #define enum_i8(_name) enum_generic(_name, i8)
 
 #else
@@ -91,7 +91,7 @@ enum _name : _type
 typedef _type _name; \
 enum : _type
 
-#define enum_long(_name) enum_generic(_name, long)
+// #define enum_long(_name) enum_generic(_name, long)
 #define enum_i8(_name) enum_generic(_name, i8)
 
 #endif

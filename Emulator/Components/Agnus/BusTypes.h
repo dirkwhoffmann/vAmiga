@@ -15,6 +15,7 @@
 namespace vamiga {
 
 enum_i8(BUS_OWNER)
+// enum BusOwner : i8
 {
     BUS_NONE,
     BUS_CPU,
