@@ -42,7 +42,7 @@ class ControlPort final : public SubComponent, public Inspectable<ControlPortInf
 private:
 
     // The connected device
-    ControlPortDevice device = CPD_NONE;
+    ControlPortDevice device = ControlPortDevice::NONE;
 
     // The two mouse position counters
     i64 mouseCounterX = 0;

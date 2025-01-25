@@ -36,11 +36,11 @@ Defaults::Defaults()
     setFallback(Option::AGNUS_REVISION,             (i64)AgnusRevision::ECS_1MB);
     setFallback(Option::AGNUS_PTR_DROPS,            true);
     
-    setFallback(Option::DENISE_REVISION,            DENISE_OCS);
+    setFallback(Option::DENISE_REVISION,            (i64)DeniseRevision::OCS);
     setFallback(Option::DENISE_VIEWPORT_TRACKING,   true);
     setFallback(Option::DENISE_FRAME_SKIPPING,      16);
 
-    setFallback(Option::MON_PALETTE,                PALETTE_COLOR);
+    setFallback(Option::MON_PALETTE,                (i64)Palette::COLOR);
     setFallback(Option::MON_BRIGHTNESS,             50);
     setFallback(Option::MON_CONTRAST,               100);
     setFallback(Option::MON_SATURATION,             50);
@@ -120,7 +120,7 @@ Defaults::Defaults()
     setFallback(Option::HDR_PAN,                    100,                    { 1, 3 });
     setFallback(Option::HDR_STEP_VOLUME,            50,                     { 0, 1, 2, 3 });
 
-    setFallback(Option::SER_DEVICE,                 SPD_NONE);
+    setFallback(Option::SER_DEVICE,                 (i64)SerialPortDevice::NONE);
     setFallback(Option::SER_VERBOSE,                0);
 
     setFallback(Option::DENISE_HIDDEN_BITPLANES,    0);

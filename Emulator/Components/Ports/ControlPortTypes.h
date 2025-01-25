@@ -18,33 +18,38 @@ namespace vamiga {
 // Enumerations
 //
 
-enum_long(CPD)
+enum class ControlPortDevice
 {
-    CPD_NONE,
-    CPD_MOUSE,
-    CPD_JOYSTICK
+    NONE,
+    MOUSE,
+    JOYSTICK
 };
-typedef CPD ControlPortDevice;
 
 struct ControlPortDeviceEnum : util::Reflection<ControlPortDeviceEnum, ControlPortDevice>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = CPD_JOYSTICK;
+    static constexpr long maxVal = long(ControlPortDevice::JOYSTICK);
     
     static const char *prefix() { return "CPD"; }
-    static const char *_key(long value)
+    static const char *_key(ControlPortDevice value)
     {
         switch (value) {
                 
-            case CPD_NONE:      return "NONE";
-            case CPD_MOUSE:     return "MOUSE";
-            case CPD_JOYSTICK:  return "JOYSTICK";
+            case ControlPortDevice::NONE:      return "NONE";
+            case ControlPortDevice::MOUSE:     return "MOUSE";
+            case ControlPortDevice::JOYSTICK:  return "JOYSTICK";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(ControlPortDevice value)
     {
-        return "";
+        switch (value) {
+                
+            case ControlPortDevice::NONE:      return "No device";
+            case ControlPortDevice::MOUSE:     return "Amiga Mouse";
+            case ControlPortDevice::JOYSTICK:  return "Joystick";
+        }
+        return "???";
     }
 };
 

@@ -19,46 +19,45 @@ namespace vamiga {
 // Enumerations
 //
 
-enum_long(PALETTE)
+enum class Palette
 {
-    PALETTE_COLOR,
-    PALETTE_BLACK_WHITE,
-    PALETTE_PAPER_WHITE,
-    PALETTE_GREEN,
-    PALETTE_AMBER,
-    PALETTE_SEPIA
+    COLOR,
+    BLACK_WHITE,
+    PAPER_WHITE,
+    GREEN,
+    AMBER,
+    SEPIA
 };
-typedef PALETTE Palette;
 
 struct PaletteEnum : util::Reflection<PaletteEnum, Palette>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = PALETTE_SEPIA;
+    static constexpr long maxVal = long(Palette::SEPIA);
     
     static const char *prefix() { return "PALETTE"; }
-    static const char *_key(long value)
+    static const char *_key(Palette value)
     {
         switch (value) {
                 
-            case PALETTE_COLOR:        return "COLOR";
-            case PALETTE_BLACK_WHITE:  return "BLACK_WHITE";
-            case PALETTE_PAPER_WHITE:  return "PAPER_WHITE";
-            case PALETTE_GREEN:        return "GREEN";
-            case PALETTE_AMBER:        return "AMBER";
-            case PALETTE_SEPIA:        return "SEPIA";
+            case Palette::COLOR:        return "COLOR";
+            case Palette::BLACK_WHITE:  return "BLACK_WHITE";
+            case Palette::PAPER_WHITE:  return "PAPER_WHITE";
+            case Palette::GREEN:        return "GREEN";
+            case Palette::AMBER:        return "AMBER";
+            case Palette::SEPIA:        return "SEPIA";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(Palette value)
     {
         switch (value) {
                 
-            case PALETTE_COLOR:        return "Color palette";
-            case PALETTE_BLACK_WHITE:  return "Black and white palette";
-            case PALETTE_PAPER_WHITE:  return "Paper white palette";
-            case PALETTE_GREEN:        return "Green palette";
-            case PALETTE_AMBER:        return "Amber palette";
-            case PALETTE_SEPIA:        return "Sepia palette";
+            case Palette::COLOR:        return "Color palette";
+            case Palette::BLACK_WHITE:  return "Black and white palette";
+            case Palette::PAPER_WHITE:  return "Paper white palette";
+            case Palette::GREEN:        return "Green palette";
+            case Palette::AMBER:        return "Amber palette";
+            case Palette::SEPIA:        return "Sepia palette";
         }
         return "???";
     }

@@ -37,7 +37,7 @@ Console::operator<<(char value)
     storage << value;
     remoteManager.rshServer << value;
 
-    if (serialPort.getConfig().device == SPD_COMMANDER) {
+    if (serialPort.getConfig().device == SerialPortDevice::COMMANDER) {
 
         serialPort << value;
     }
@@ -51,7 +51,7 @@ Console::operator<<(const string& value)
     storage << value;
     remoteManager.rshServer << value;
 
-    if (serialPort.getConfig().device == SPD_COMMANDER) {
+    if (serialPort.getConfig().device == SerialPortDevice::COMMANDER) {
 
         serialPort << value;
     }

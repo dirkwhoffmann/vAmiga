@@ -19,34 +19,33 @@ namespace vamiga {
 // Enumerations
 //
 
-enum_long(DENISE_REV)
+enum class DeniseRevision : long
 {
-    DENISE_OCS,           // Revision 8362R8
-    DENISE_ECS            // Revision 8373      (only partially supported)
+    OCS,           // Revision 8362R8
+    ECS            // Revision 8373      (only partially supported)
 };
-typedef DENISE_REV DeniseRevision;
 
 struct DeniseRevisionEnum : util::Reflection<DeniseRevisionEnum, DeniseRevision>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = DENISE_ECS;
+    static constexpr long maxVal = long(DeniseRevision::ECS);
     
     static const char *prefix() { return "DENISE"; }
-    static const char *_key(long value)
+    static const char *_key(DeniseRevision value)
     {
         switch (value) {
                 
-            case DENISE_OCS:          return "OCS";
-            case DENISE_ECS:          return "ECS";
+            case DeniseRevision::OCS:          return "OCS";
+            case DeniseRevision::ECS:          return "ECS";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(DeniseRevision value)
     {
         switch (value) {
                 
-            case DENISE_OCS:          return "MOS 8362R8";
-            case DENISE_ECS:          return "MOS 8373 (Super Denise)";
+            case DeniseRevision::OCS:          return "MOS 8362R8";
+            case DeniseRevision::ECS:          return "MOS 8373 (Super Denise)";
         }
         return "???";
     }

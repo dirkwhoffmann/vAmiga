@@ -40,7 +40,7 @@ Denise::getOption(Option option) const
 {
     switch (option) {
             
-        case Option::DENISE_REVISION:           return config.revision;
+        case Option::DENISE_REVISION:           return (i64)config.revision;
         case Option::DENISE_VIEWPORT_TRACKING:  return config.viewportTracking;
         case Option::DENISE_FRAME_SKIPPING:     return config.frameSkipping;
         case Option::DENISE_HIDDEN_BITPLANES:   return config.hiddenBitplanes;
@@ -1008,7 +1008,7 @@ Denise::drawAttachedSpritePixelPair(Pixel hpos)
 void
 Denise::updateBorderColor()
 {
-    if (config.revision != DENISE_OCS && ecsena() && brdrblnk()) {
+    if (config.revision != DeniseRevision::OCS && ecsena() && brdrblnk()) {
         borderColor = 64; // Pure black
     } else {
         borderColor = 0;  // Background color

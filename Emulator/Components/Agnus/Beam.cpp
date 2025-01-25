@@ -98,7 +98,7 @@ isize
 Beam::diff(isize v2, isize h2) const
 {
     isize result = 0;
-    isize threshold = 2 * cyclesPerFrame(FRAME_PAL_LF);
+    isize threshold = 2 * cyclesPerFrame(FrameType::PAL_LF);
 
     auto b = *this;
 
@@ -132,14 +132,14 @@ Beam::predictFrameType() const
 {
     // PAL
     if (type == VideoFormat::PAL) {
-        return lof ? FRAME_PAL_LF : FRAME_PAL_SF;
+        return lof ? FrameType::PAL_LF : FrameType::PAL_SF;
     }
 
     // NTSC
     if (IS_EVEN(v) && lol) {
-        return lof ? FRAME_NTSC_LF_LL : FRAME_NTSC_SF_LL;
+        return lof ? FrameType::NTSC_LF_LL : FrameType::NTSC_SF_LL;
     } else {
-        return lof ? FRAME_NTSC_LF_SL : FRAME_NTSC_SF_SL;
+        return lof ? FrameType::NTSC_LF_SL : FrameType::NTSC_SF_SL;
     }
 }
 
@@ -148,23 +148,23 @@ Beam::predictNextFrameType(FrameType type, bool toggle)
 {
     switch (type) {
 
-        case FRAME_PAL_LF:
-            return toggle ? FRAME_PAL_SF : FRAME_PAL_LF;
+        case FrameType::PAL_LF:
+            return toggle ? FrameType::PAL_SF : FrameType::PAL_LF;
 
-        case FRAME_PAL_SF:
-            return toggle ? FRAME_PAL_LF : FRAME_PAL_SF;
+        case FrameType::PAL_SF:
+            return toggle ? FrameType::PAL_LF : FrameType::PAL_SF;
 
-        case FRAME_NTSC_LF_LL:
-            return toggle ? FRAME_NTSC_SF_SL : FRAME_NTSC_LF_SL;
+        case FrameType::NTSC_LF_LL:
+            return toggle ? FrameType::NTSC_SF_SL : FrameType::NTSC_LF_SL;
 
-        case FRAME_NTSC_LF_SL:
-            return toggle ? FRAME_NTSC_SF_LL : FRAME_NTSC_LF_LL;
+        case FrameType::NTSC_LF_SL:
+            return toggle ? FrameType::NTSC_SF_LL : FrameType::NTSC_LF_LL;
 
-        case FRAME_NTSC_SF_LL:
-            return toggle ? FRAME_NTSC_LF_LL : FRAME_NTSC_SF_LL;
+        case FrameType::NTSC_SF_LL:
+            return toggle ? FrameType::NTSC_LF_LL : FrameType::NTSC_SF_LL;
 
-        case FRAME_NTSC_SF_SL:
-            return toggle ? FRAME_NTSC_LF_SL : FRAME_NTSC_SF_SL;
+        case FrameType::NTSC_SF_SL:
+            return toggle ? FrameType::NTSC_LF_SL : FrameType::NTSC_SF_SL;
 
         default:
             fatalError;
@@ -182,20 +182,20 @@ Beam::cyclesPerFrame(FrameType type)
 {
     switch (type) {
 
-        case FRAME_PAL_LF:
+        case FrameType::PAL_LF:
             return PAL::VPOS_CNT_LF * PAL::HPOS_CNT;
 
-        case FRAME_PAL_SF:
+        case FrameType::PAL_SF:
             return PAL::VPOS_CNT_SF * PAL::HPOS_CNT;
 
-        case FRAME_NTSC_LF_LL:
+        case FrameType::NTSC_LF_LL:
             return 132 * NTSC::HPOS_CNT_LL + 131 * NTSC::HPOS_CNT_SL;
 
-        case FRAME_NTSC_LF_SL:
+        case FrameType::NTSC_LF_SL:
             return 132 * NTSC::HPOS_CNT_SL + 131 * NTSC::HPOS_CNT_LL;
 
-        case FRAME_NTSC_SF_LL:
-        case FRAME_NTSC_SF_SL:
+        case FrameType::NTSC_SF_LL:
+        case FrameType::NTSC_SF_SL:
             return 131 * NTSC::HPOS_CNT_SL + 131 * NTSC::HPOS_CNT_LL;
 
         default:

@@ -287,7 +287,7 @@ Joystick::trigger(GamePadAction event)
         default:
             break;
     }
-    port.setDevice(CPD_JOYSTICK);
+    port.setDevice(ControlPortDevice::JOYSTICK);
 }
 
 void

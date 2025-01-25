@@ -14,46 +14,45 @@
 
 namespace vamiga {
 
-enum_long(FRAME_TYPE)
+enum class FrameType
 {
-    FRAME_PAL_LF,       // PAL long frame
-    FRAME_PAL_SF,       // PAL short frame
-    FRAME_NTSC_LF_LL,   // NTSC long frame starting with a long line
-    FRAME_NTSC_LF_SL,   // NTSC long frame starting with a short line
-    FRAME_NTSC_SF_LL,   // NTSC short frame starting with a long line
-    FRAME_NTSC_SF_SL    // NTSC short frame starting with a short line
+    PAL_LF,       // PAL long frame
+    PAL_SF,       // PAL short frame
+    NTSC_LF_LL,   // NTSC long frame starting with a long line
+    NTSC_LF_SL,   // NTSC long frame starting with a short line
+    NTSC_SF_LL,   // NTSC short frame starting with a long line
+    NTSC_SF_SL    // NTSC short frame starting with a short line
 };
-typedef FRAME_TYPE FrameType;
 
 struct FrameTypeEnum : util::Reflection<FrameTypeEnum, FrameType>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = FRAME_NTSC_SF_SL;
+    static constexpr long maxVal = long(FrameType::NTSC_SF_SL);
     
     static const char *prefix() { return "FRAME"; }
-    static const char *_key(long value)
+    static const char *_key(FrameType value)
     {
         switch (value) {
                 
-            case FRAME_PAL_LF:      return "PAL_LF";
-            case FRAME_PAL_SF:      return "PAL_SF";
-            case FRAME_NTSC_LF_LL:  return "NTSC_LF_LL";
-            case FRAME_NTSC_LF_SL:  return "NTSC_LF_SL";
-            case FRAME_NTSC_SF_LL:  return "NTSC_SF_LL";
-            case FRAME_NTSC_SF_SL:  return "NTSC_SF_SL";
+            case FrameType::PAL_LF:      return "PAL_LF";
+            case FrameType::PAL_SF:      return "PAL_SF";
+            case FrameType::NTSC_LF_LL:  return "NTSC_LF_LL";
+            case FrameType::NTSC_LF_SL:  return "NTSC_LF_SL";
+            case FrameType::NTSC_SF_LL:  return "NTSC_SF_LL";
+            case FrameType::NTSC_SF_SL:  return "NTSC_SF_SL";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(FrameType value)
     {
         switch (value) {
                 
-            case FRAME_PAL_LF:      return "PAL long frame";
-            case FRAME_PAL_SF:      return "PAL short frame";
-            case FRAME_NTSC_LF_LL:  return "NTSC long frame, long line";
-            case FRAME_NTSC_LF_SL:  return "NTSC long frame, short line";
-            case FRAME_NTSC_SF_LL:  return "NTSC short frame, long line";
-            case FRAME_NTSC_SF_SL:  return "NTSC short frame, short line";
+            case FrameType::PAL_LF:      return "PAL long frame";
+            case FrameType::PAL_SF:      return "PAL short frame";
+            case FrameType::NTSC_LF_LL:  return "NTSC long frame, long line";
+            case FrameType::NTSC_LF_SL:  return "NTSC long frame, short line";
+            case FrameType::NTSC_SF_LL:  return "NTSC short frame, long line";
+            case FrameType::NTSC_SF_SL:  return "NTSC short frame, short line";
         }
         return "???";
     }

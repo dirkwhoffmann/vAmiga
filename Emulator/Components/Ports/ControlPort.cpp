@@ -109,10 +109,10 @@ ControlPort::joydat() const
     u16 xxxxxx__xxxxxx__ = HI_LO(mouseCounterY & 0xFC, mouseCounterX & 0xFC);
     u16 ______xx______xx = 0;
 
-    if (device == CPD_MOUSE) {
+    if (device == ControlPortDevice::MOUSE) {
         ______xx______xx = HI_LO(mouseCounterY & 0x03, mouseCounterX & 0x03);
     }
-    if (device == CPD_JOYSTICK) {
+    if (device == ControlPortDevice::JOYSTICK) {
         ______xx______xx = joystick.joydat();
     }
     return xxxxxx__xxxxxx__ | ______xx______xx;
@@ -136,8 +136,8 @@ ControlPort::changePotgo(u16 &potgo) const
 {
     switch (device) {
 
-        case CPD_MOUSE:     mouse.changePotgo(potgo); break;
-        case CPD_JOYSTICK:  joystick.changePotgo(potgo); break;
+        case ControlPortDevice::MOUSE:     mouse.changePotgo(potgo); break;
+        case ControlPortDevice::JOYSTICK:  joystick.changePotgo(potgo); break;
 
         default:
             break;
@@ -149,8 +149,8 @@ ControlPort::changePra(u8 &pra) const
 {
     switch (device) {
 
-        case CPD_MOUSE:     mouse.changePra(pra); break;
-        case CPD_JOYSTICK:  joystick.changePra(pra); break;
+        case ControlPortDevice::MOUSE:     mouse.changePra(pra); break;
+        case ControlPortDevice::JOYSTICK:  joystick.changePra(pra); break;
 
         default:
             break;

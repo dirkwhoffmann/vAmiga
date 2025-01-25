@@ -18,37 +18,44 @@ namespace vamiga {
 // Enumerations
 //
 
-enum_long(SPD)
+enum class SerialPortDevice
 {
-    SPD_NONE,
-    SPD_NULLMODEM,
-    SPD_LOOPBACK,
-    SPD_RETROSHELL,
-    SPD_COMMANDER
+    NONE,
+    NULLMODEM,
+    LOOPBACK,
+    RETROSHELL,
+    COMMANDER
 };
-typedef SPD SerialPortDevice;
 
 struct SerialPortDeviceEnum : util::Reflection<SerialPortDeviceEnum, SerialPortDevice>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = SPD_COMMANDER;
+    static constexpr long maxVal = long(SerialPortDevice::COMMANDER);
     
     static const char *prefix() { return "SPD"; }
-    static const char *_key(long value)
+    static const char *_key(SerialPortDevice value)
     {
         switch (value) {
                 
-            case SPD_NONE:          return "NONE";
-            case SPD_NULLMODEM:     return "NULLMODEM";
-            case SPD_LOOPBACK:      return "LOOPBACK";
-            case SPD_RETROSHELL:    return "RETROSHELL";
-            case SPD_COMMANDER:     return "COMMANDER";
+            case SerialPortDevice::NONE:          return "NONE";
+            case SerialPortDevice::NULLMODEM:     return "NULLMODEM";
+            case SerialPortDevice::LOOPBACK:      return "LOOPBACK";
+            case SerialPortDevice::RETROSHELL:    return "RETROSHELL";
+            case SerialPortDevice::COMMANDER:     return "COMMANDER";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(SerialPortDevice value)
     {
-        return "";
+        switch (value) {
+                
+            case SerialPortDevice::NONE:          return "No device";
+            case SerialPortDevice::NULLMODEM:     return "Nullmodem cable";
+            case SerialPortDevice::LOOPBACK:      return "Loopback cable";
+            case SerialPortDevice::RETROSHELL:    return "RetroShell monitor";
+            case SerialPortDevice::COMMANDER:     return "RetroShell commander";
+        }
+        return "???";
     }
 };
 

@@ -82,10 +82,10 @@ PixelEngine::getOption(Option option) const
 {
     switch (option) {
             
-        case Option::MON_PALETTE:     return config.palette;
-        case Option::MON_BRIGHTNESS:  return config.brightness;
-        case Option::MON_CONTRAST:    return config.contrast;
-        case Option::MON_SATURATION:  return config.saturation;
+        case Option::MON_PALETTE:     return (i64)config.palette;
+        case Option::MON_BRIGHTNESS:  return (i64)config.brightness;
+        case Option::MON_CONTRAST:    return (i64)config.contrast;
+        case Option::MON_SATURATION:  return (i64)config.saturation;
 
         default:
             fatalError;
@@ -229,33 +229,33 @@ PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
     // Translate to monochrome if applicable
     switch(config.palette) {
 
-        case PALETTE_BLACK_WHITE:
+        case Palette::BLACK_WHITE:
             u = 0.0;
             v = 0.0;
             break;
 
-        case PALETTE_PAPER_WHITE:
+        case Palette::PAPER_WHITE:
             u = -128.0 + 120.0;
             v = -128.0 + 133.0;
             break;
 
-        case PALETTE_GREEN:
+        case Palette::GREEN:
             u = -128.0 + 29.0;
             v = -128.0 + 64.0;
             break;
 
-        case PALETTE_AMBER:
+        case Palette::AMBER:
             u = -128.0 + 24.0;
             v = -128.0 + 178.0;
             break;
 
-        case PALETTE_SEPIA:
+        case Palette::SEPIA:
             u = -128.0 + 97.0;
             v = -128.0 + 154.0;
             break;
 
         default:
-            assert(config.palette == PALETTE_COLOR);
+            assert(config.palette == Palette::COLOR);
     }
 
     // Convert YUV to RGB

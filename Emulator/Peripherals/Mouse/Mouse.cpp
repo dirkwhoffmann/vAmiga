@@ -217,7 +217,7 @@ Mouse::setXY(double x, double y)
     targetX = x * scaleX;
     targetY = y * scaleY;
     
-    port.setDevice(CPD_MOUSE);
+    port.setDevice(ControlPortDevice::MOUSE);
     port.updateMouseXY((i64)targetX, (i64)targetY);
 }
 
@@ -229,7 +229,7 @@ Mouse::setDxDy(double dx, double dy)
     targetX += dx * scaleX;
     targetY += dy * scaleY;
     
-    port.setDevice(CPD_MOUSE);
+    port.setDevice(ControlPortDevice::MOUSE);
     port.updateMouseXY((i64)targetX, (i64)targetY);
 }
 
@@ -239,7 +239,7 @@ Mouse::setLeftButton(bool value)
     trace(PRT_DEBUG, "setLeftButton(%d)\n", value);
     
     leftButton = value;
-    port.setDevice(CPD_MOUSE);
+    port.setDevice(ControlPortDevice::MOUSE);
 }
 
 void
@@ -248,7 +248,7 @@ Mouse::setMiddleButton(bool value)
     trace(PRT_DEBUG, "setMiddleButton(%d)\n", value);
 
     middleButton = value;
-    port.setDevice(CPD_MOUSE);
+    port.setDevice(ControlPortDevice::MOUSE);
 }
 
 void
@@ -257,7 +257,7 @@ Mouse::setRightButton(bool value)
     trace(PRT_DEBUG, "setRightButton(%d)\n", value);
     
     rightButton = value;
-    port.setDevice(CPD_MOUSE);
+    port.setDevice(ControlPortDevice::MOUSE);
 }
 
 void

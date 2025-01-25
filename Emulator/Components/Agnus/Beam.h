@@ -138,7 +138,7 @@ public:
     FrameType predictFrameType() const;
 
     // Predicts the type of the next frame
-    static isize predictNextFrameType(FrameType type, bool toggle);
+    static FrameType predictNextFrameType(FrameType type, bool toggle);
     FrameType predictNextFrameType() const;
 
     // Returns the number of DMA cycles executed in a single frame

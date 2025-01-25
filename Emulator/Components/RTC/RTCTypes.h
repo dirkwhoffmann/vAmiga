@@ -18,15 +18,6 @@ namespace vamiga {
 // Enumerations
 //
 
-/*
-enum_long(RTC_REVISION)
-{
-    RTC_NONE,
-    RTC_OKI,
-    RTC_RICOH
-};
-typedef RTC_REVISION RTCRevision;
-*/
 enum class RTCRevision : long
 {
     NONE,
