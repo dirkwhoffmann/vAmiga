@@ -18,35 +18,41 @@ namespace vamiga {
 // Enumerations
 //
 
-enum_long(SERVER_TYPE)
+enum class ServerType : long
 {
-    SERVER_SER,
-    SERVER_RSH,
-    SERVER_PROM,
-    SERVER_GDB
+    SER,
+    RSH,
+    PROM,
+    GDB
 };
-typedef SERVER_TYPE ServerType;
 
 struct ServerTypeEnum : util::Reflection<ServerTypeEnum, ServerType>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = SERVER_GDB;
+    static constexpr long maxVal = long(ServerType::GDB);
     
     static const char *prefix() { return "SERVER"; }
-    static const char *_key(long value)
+    static const char *_key(ServerType value)
     {
         switch (value) {
                 
-            case SERVER_SER:    return "SER";
-            case SERVER_RSH:    return "RSH";
-            case SERVER_PROM:   return "PROM";
-            case SERVER_GDB:    return "GDB";
+            case ServerType::SER:    return "SER";
+            case ServerType::RSH:    return "RSH";
+            case ServerType::PROM:   return "PROM";
+            case ServerType::GDB:    return "GDB";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(ServerType value)
     {
-        return "";
+        switch (value) {
+                
+            case ServerType::SER:    return "Serial port server";
+            case ServerType::RSH:    return "Remote shell server";
+            case ServerType::PROM:   return "Prometheus server";
+            case ServerType::GDB:    return "Debug server";
+        }
+        return "???";
     }
 };
 

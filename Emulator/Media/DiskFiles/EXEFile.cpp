@@ -51,7 +51,7 @@ EXEFile::finalizeRead()
     volume.setName(FSName("Disk"));
     
     // Make the volume bootable
-    volume.makeBootable(BB_AMIGADOS_13);
+    volume.makeBootable(BootBlockId::AMIGADOS_13);
     
     // Add the executable
     FSBlock *file = volume.createFile("file", data.ptr, data.size);

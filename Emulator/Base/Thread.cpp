@@ -219,6 +219,7 @@ Thread::switchState(ExecState newState)
                     default:
                         invalid();
                 }
+                break;
                 
             case ExecState::UNINIT:
                 fatalError;

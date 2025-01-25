@@ -18,65 +18,63 @@ namespace vamiga {
 // Enumerations
 //
 
-enum_long(BB_TYPE)
+enum class BootBlockType
 {
-    BB_STANDARD,
-    BB_VIRUS,
-    BB_CUSTOM
+    STANDARD,
+    VIRUS,
+    CUSTOM
 };
-typedef BB_TYPE BootBlockType;
 
 struct BootBlockTypeEnum : util::Reflection<BootBlockTypeEnum, BootBlockType>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = BB_CUSTOM;
+    static constexpr long maxVal = long(BootBlockType::CUSTOM);
     
     static const char *prefix() { return "BB"; }
-    static const char *_key(long value)
+    static const char *_key(BootBlockType value)
     {
         switch (value) {
                 
-            case BB_STANDARD:  return "STANDARD";
-            case BB_VIRUS:     return "VIRUS";
-            case BB_CUSTOM:    return "CUSTOM";
+            case BootBlockType::STANDARD:  return "STANDARD";
+            case BootBlockType::VIRUS:     return "VIRUS";
+            case BootBlockType::CUSTOM:    return "CUSTOM";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(BootBlockType value)
     {
         return "";
     }
 };
 
-enum_long(BB_ID)
+enum class BootBlockId
 {
-    BB_NONE,
-    BB_AMIGADOS_13,
-    BB_AMIGADOS_20,
-    BB_SCA,
-    BB_BYTE_BANDIT
+    NONE,
+    AMIGADOS_13,
+    AMIGADOS_20,
+    SCA,
+    BYTE_BANDIT
 };
-typedef BB_ID BootBlockId;
 
 struct BootBlockIdEnum : util::Reflection<BootBlockIdEnum, BootBlockId>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = BB_BYTE_BANDIT;
+    static constexpr long maxVal = long(BootBlockId::BYTE_BANDIT);
     
     static const char *prefix() { return "BB"; }
-    static const char *_key(long value)
+    static const char *_key(BootBlockId value)
     {
         switch (value) {
                 
-            case BB_NONE:         return "NONE";
-            case BB_AMIGADOS_13:  return "AMIGADOS_13";
-            case BB_AMIGADOS_20:  return "AMIGADOS_20";
-            case BB_SCA:          return "SCA";
-            case BB_BYTE_BANDIT:  return "BYTE_BANDIT";
+            case BootBlockId::NONE:         return "NONE";
+            case BootBlockId::AMIGADOS_13:  return "AMIGADOS_13";
+            case BootBlockId::AMIGADOS_20:  return "AMIGADOS_20";
+            case BootBlockId::SCA:          return "SCA";
+            case BootBlockId::BYTE_BANDIT:  return "BYTE_BANDIT";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(BootBlockId value)
     {
         return "";
     }

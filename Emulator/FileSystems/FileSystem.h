@@ -136,7 +136,7 @@ public:
     // Analyzes the boot block
     string getBootBlockName() const;
     BootBlockType bootBlockType() const;
-    bool hasVirus() const { return bootBlockType() == BB_VIRUS; }
+    bool hasVirus() const { return bootBlockType() == BootBlockType::VIRUS; }
 
     
     //

@@ -32,7 +32,7 @@ class BootBlockImage {
 public:
     
     // Result of the data inspection
-    BootBlockType type = BB_CUSTOM;
+    BootBlockType type = BootBlockType::CUSTOM;
     const char *name = "Custom boot block";
     
     // Constructors

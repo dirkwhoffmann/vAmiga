@@ -350,9 +350,9 @@ MutableFileSystem::killVirus()
     assert(blocks[0]->type == FS_BOOT_BLOCK);
     assert(blocks[1]->type == FS_BOOT_BLOCK);
 
-    auto id = isOFS() ? BB_AMIGADOS_13 : isFFS() ? BB_AMIGADOS_20 : BB_NONE;
+    auto id = isOFS() ? BootBlockId::AMIGADOS_13 : isFFS() ? BootBlockId::AMIGADOS_20 : BootBlockId::NONE;
 
-    if (id != BB_NONE) {
+    if (id != BootBlockId::NONE) {
         blocks[0]->writeBootBlock(id, 0);
         blocks[1]->writeBootBlock(id, 1);
     } else {

@@ -118,7 +118,7 @@ LogicAnalyzer::setOption(Option option, i64 value)
         case Option::LA_ADDR1: c++; [[fallthrough]];
         case Option::LA_ADDR0:
             
-            invalidate = config.addr[c] != (u32)value && config.channel[c] == PROBE_MEMORY;
+            invalidate = config.addr[c] != (u32)value && config.channel[c] == Probe::MEMORY;
             config.addr[c] = (u32)value;
             break;
 
@@ -137,10 +137,10 @@ void
 LogicAnalyzer::checkEnable()
 {
     bool enable =
-    config.channel[0] != PROBE_NONE ||
-    config.channel[1] != PROBE_NONE ||
-    config.channel[2] != PROBE_NONE ||
-    config.channel[3] != PROBE_NONE ;
+    config.channel[0] != Probe::NONE ||
+    config.channel[1] != Probe::NONE ||
+    config.channel[2] != Probe::NONE ||
+    config.channel[3] != Probe::NONE ;
     
     enable ? agnus.syncEvent |= EVFL::PROBE : agnus.syncEvent &= ~EVFL::PROBE;
 }
@@ -184,7 +184,7 @@ LogicAnalyzer::recordCurrent(isize hpos)
         
         switch (config.channel[i]) {
 
-            case PROBE_MEMORY:
+            case Probe::MEMORY:
                 
                 record[i][hpos] = isize(mem.spypeek16<Accessor::CPU>(config.addr[i]));
                 break;
@@ -202,7 +202,7 @@ LogicAnalyzer::recordDelayed(isize hpos)
         
         switch (config.channel[i]) {
                 
-            case PROBE_IPL:
+            case Probe::IPL:
 
                 record[i][hpos] = cpu.getIPL();
                 break;

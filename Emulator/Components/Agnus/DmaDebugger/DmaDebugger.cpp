@@ -60,7 +60,7 @@ DmaDebugger::getOption(Option option) const
     switch (option) {
             
         case Option::DMA_DEBUG_ENABLE:      return config.enabled;
-        case Option::DMA_DEBUG_MODE:        return config.displayMode;
+        case Option::DMA_DEBUG_MODE:        return (i64)config.displayMode;
         case Option::DMA_DEBUG_OPACITY:     return config.opacity;
 
         case Option::DMA_DEBUG_CHANNEL0:    return config.visualize[0];
@@ -372,19 +372,19 @@ DmaDebugger::computeOverlay(Texel *ptr, isize first, isize last, BusOwner *own, 
 
     switch (config.displayMode) {
 
-        case DMA_DISPLAY_MODE_FG_LAYER:
+        case DmaDisplayMode::FG_LAYER:
 
             bgWeight = 0.0;
             fgWeight = 1.0 - opacity;
             break;
 
-        case DMA_DISPLAY_MODE_BG_LAYER:
+        case DmaDisplayMode::BG_LAYER:
 
             bgWeight = 1.0 - opacity;
             fgWeight = 0.0;
             break;
 
-        case DMA_DISPLAY_MODE_ODD_EVEN_LAYERS:
+        case DmaDisplayMode::ODD_EVEN_LAYERS:
 
             bgWeight = opacity;
             fgWeight = 1.0 - opacity;

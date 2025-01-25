@@ -19,27 +19,26 @@ namespace vamiga {
 // Enumerations
 //
 
-enum_long(HDR_TYPE)
+enum class HardDriveType : long
 {
-    HDR_GENERIC
+    GENERIC
 };
-typedef HDR_TYPE HardDriveType;
 
 struct HardDriveTypeEnum : util::Reflection<HardDriveTypeEnum, HardDriveType>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = HDR_GENERIC;
+    static constexpr long maxVal = long(HardDriveType::GENERIC);
     
     static const char *prefix() { return "HDR"; }
-    static const char *_key(long value)
+    static const char *_key(HardDriveType value)
     {
         switch (value) {
                 
-            case HDR_GENERIC:   return "GENERIC";
+            case HardDriveType::GENERIC:   return "GENERIC";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(HardDriveType value)
     {
         return "";
     }

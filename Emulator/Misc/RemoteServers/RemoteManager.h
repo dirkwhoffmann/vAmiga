@@ -34,10 +34,10 @@ class RemoteManager final : public SubComponent, public Inspectable<RemoteManage
 public:
     
     // The remote servers
-    SerServer serServer = SerServer(amiga, SERVER_SER);
-    RshServer rshServer = RshServer(amiga, SERVER_RSH);
-    PromServer promServer = PromServer(amiga, SERVER_PROM);
-    GdbServer gdbServer = GdbServer(amiga, SERVER_GDB);
+    SerServer serServer = SerServer(amiga, isize(ServerType::SER));
+    RshServer rshServer = RshServer(amiga, isize(ServerType::RSH));
+    PromServer promServer = PromServer(amiga, isize(ServerType::PROM));
+    GdbServer gdbServer = GdbServer(amiga, isize(ServerType::GDB));
 
     // Convenience access
     std::vector <RemoteServer *> servers = {

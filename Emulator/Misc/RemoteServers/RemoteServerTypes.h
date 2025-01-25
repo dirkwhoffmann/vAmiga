@@ -53,27 +53,26 @@ struct SrvStateEnum : util::Reflection<SrvStateEnum, SrvState>
     }
 };
 
-enum_long(SRVPROT)
+enum class ServerProtocol
 {
-    SRVPROT_DEFAULT
+    DEFAULT
 };
-typedef SRVPROT ServerProtocol;
 
 struct ServerProtocolEnum : util::Reflection<ServerProtocolEnum, ServerProtocol>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = SRVPROT_DEFAULT;
+    static constexpr long maxVal = long(ServerProtocol::DEFAULT);
     
     static const char *prefix() { return "SRVPROT"; }
-    static const char *_key(long value)
+    static const char *_key(ServerProtocol value)
     {
         switch (value) {
                 
-            case SRVPROT_DEFAULT:   return "DEFAULT";
+            case ServerProtocol::DEFAULT:   return "DEFAULT";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(ServerProtocol value)
     {
         return "";
     }

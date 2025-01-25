@@ -46,7 +46,7 @@ Defaults::Defaults()
     setFallback(Option::MON_SATURATION,             50);
 
     setFallback(Option::DMA_DEBUG_ENABLE,           false);
-    setFallback(Option::DMA_DEBUG_MODE,             DMA_DISPLAY_MODE_FG_LAYER);
+    setFallback(Option::DMA_DEBUG_MODE,             (i64)DmaDisplayMode::FG_LAYER);
     setFallback(Option::DMA_DEBUG_OPACITY,          50);
     setFallback(Option::DMA_DEBUG_CHANNEL0,         true);
     setFallback(Option::DMA_DEBUG_CHANNEL1,         true);
@@ -65,10 +65,10 @@ Defaults::Defaults()
     setFallback(Option::DMA_DEBUG_COLOR6,           0xFFFFFF00);
     setFallback(Option::DMA_DEBUG_COLOR7,           0xFF000000);
 
-    setFallback(Option::LA_PROBE0,                  PROBE_NONE);
-    setFallback(Option::LA_PROBE1,                  PROBE_NONE);
-    setFallback(Option::LA_PROBE2,                  PROBE_NONE);
-    setFallback(Option::LA_PROBE3,                  PROBE_NONE);
+    setFallback(Option::LA_PROBE0,                  (i64)Probe::NONE);
+    setFallback(Option::LA_PROBE1,                  (i64)Probe::NONE);
+    setFallback(Option::LA_PROBE2,                  (i64)Probe::NONE);
+    setFallback(Option::LA_PROBE3,                  (i64)Probe::NONE);
     setFallback(Option::LA_ADDR0,                   0);
     setFallback(Option::LA_ADDR1,                   0);
     setFallback(Option::LA_ADDR2,                   0);
@@ -114,7 +114,7 @@ Defaults::Defaults()
     setFallback(Option::DRIVE_EJECT_VOLUME,         50,                     { 0, 1, 2, 3 });
     setFallback(Option::HDC_CONNECT,                true,                   { 0 });
     setFallback(Option::HDC_CONNECT,                false,                  { 1, 2, 3 });
-    setFallback(Option::HDR_TYPE,                   HDR_GENERIC,            { 0, 1, 2, 3 });
+    setFallback(Option::HDR_TYPE,                   (i64)HardDriveType::GENERIC, { 0, 1, 2, 3 });
     setFallback(Option::HDR_WRITE_THROUGH,          false,                  { 0, 1, 2, 3 });
     setFallback(Option::HDR_PAN,                    300,                    { 0, 2 });
     setFallback(Option::HDR_PAN,                    100,                    { 1, 3 });
@@ -163,22 +163,22 @@ Defaults::Defaults()
     setFallback(Option::AUD_FASTPATH,               true);
     setFallback(Option::DIAG_BOARD,                 false);
 
-    setFallback(Option::SRV_PORT,                   8080,                   { SERVER_SER });
-    setFallback(Option::SRV_PROTOCOL,               SRVPROT_DEFAULT,        { SERVER_SER });
-    setFallback(Option::SRV_AUTORUN,                false,                  { SERVER_SER });
-    setFallback(Option::SRV_VERBOSE,                true,                   { SERVER_SER });
-    setFallback(Option::SRV_PORT,                   8081,                   { SERVER_RSH });
-    setFallback(Option::SRV_PROTOCOL,               SRVPROT_DEFAULT,        { SERVER_RSH });
-    setFallback(Option::SRV_AUTORUN,                false,                  { SERVER_RSH });
-    setFallback(Option::SRV_VERBOSE,                true,                   { SERVER_RSH });
-    setFallback(Option::SRV_PORT,                   8082,                   { SERVER_PROM });
-    setFallback(Option::SRV_PROTOCOL,               SRVPROT_DEFAULT,        { SERVER_PROM });
-    setFallback(Option::SRV_AUTORUN,                false,                  { SERVER_PROM });
-    setFallback(Option::SRV_VERBOSE,                true,                   { SERVER_PROM });
-    setFallback(Option::SRV_PORT,                   8083,                   { SERVER_GDB });
-    setFallback(Option::SRV_PROTOCOL,               SRVPROT_DEFAULT,        { SERVER_GDB });
-    setFallback(Option::SRV_AUTORUN,                false,                  { SERVER_GDB });
-    setFallback(Option::SRV_VERBOSE,                true,                   { SERVER_GDB });
+    setFallback(Option::SRV_PORT,                   8080,                   { (i64)ServerType::SER });
+    setFallback(Option::SRV_PROTOCOL,               (i64)ServerProtocol::DEFAULT, { (i64)ServerType::SER });
+    setFallback(Option::SRV_AUTORUN,                false,                  { (i64)ServerType::SER });
+    setFallback(Option::SRV_VERBOSE,                true,                   { (i64)ServerType::SER });
+    setFallback(Option::SRV_PORT,                   8081,                   { (i64)ServerType::RSH });
+    setFallback(Option::SRV_PROTOCOL,               (i64)ServerProtocol::DEFAULT, { (i64)ServerType::RSH });
+    setFallback(Option::SRV_AUTORUN,                false,                  { (i64)ServerType::RSH });
+    setFallback(Option::SRV_VERBOSE,                true,                   { (i64)ServerType::RSH });
+    setFallback(Option::SRV_PORT,                   8082,                   { (i64)ServerType::PROM });
+    setFallback(Option::SRV_PROTOCOL,               (i64)ServerProtocol::DEFAULT, { (i64)ServerType::PROM });
+    setFallback(Option::SRV_AUTORUN,                false,                  { (i64)ServerType::PROM });
+    setFallback(Option::SRV_VERBOSE,                true,                   { (i64)ServerType::PROM });
+    setFallback(Option::SRV_PORT,                   8083,                   { (i64)ServerType::GDB });
+    setFallback(Option::SRV_PROTOCOL,               (i64)ServerProtocol::DEFAULT, { (i64)ServerType::GDB });
+    setFallback(Option::SRV_AUTORUN,                false,                  { (i64)ServerType::GDB });
+    setFallback(Option::SRV_VERBOSE,                true,                   { (i64)ServerType::GDB });
 
     setFallback("ROM_PATH",                     "");
     setFallback("EXT_PATH",                     "");

@@ -44,7 +44,7 @@ Folder::init(const std::filesystem::path &path)
     MutableFileSystem volume(FS_OFS, path.c_str());
     
     // Make the volume bootable
-    volume.makeBootable(BB_AMIGADOS_13);
+    volume.makeBootable(BootBlockId::AMIGADOS_13);
     
     // Check the file system for errors
     volume.dump(Category::State);

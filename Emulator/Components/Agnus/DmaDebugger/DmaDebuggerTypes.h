@@ -19,37 +19,36 @@ namespace vamiga {
 // Enumerations
 //
 
-enum_long(DMA_DISPLAY_MODE)
+enum class DmaDisplayMode
 {
-    DMA_DISPLAY_MODE_FG_LAYER,
-    DMA_DISPLAY_MODE_BG_LAYER,
-    DMA_DISPLAY_MODE_ODD_EVEN_LAYERS
+    FG_LAYER,
+    BG_LAYER,
+    ODD_EVEN_LAYERS
 };
-typedef DMA_DISPLAY_MODE DmaDisplayMode;
 
 struct DmaDisplayModeEnum : util::Reflection<DmaDisplayModeEnum, DmaDisplayMode>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = DMA_DISPLAY_MODE_ODD_EVEN_LAYERS;
+    static constexpr long maxVal = long(DmaDisplayMode::ODD_EVEN_LAYERS);
     
     static const char *prefix() { return "DMA_DISPLAY_MODE"; }
-    static const char *_key(long value)
+    static const char *_key(DmaDisplayMode value)
     {
         switch (value) {
                 
-            case DMA_DISPLAY_MODE_FG_LAYER:        return "FG_LAYER";
-            case DMA_DISPLAY_MODE_BG_LAYER:        return "BG_LAYER";
-            case DMA_DISPLAY_MODE_ODD_EVEN_LAYERS: return "ODD_EVEN_LAYERS";
+            case DmaDisplayMode::FG_LAYER:        return "FG_LAYER";
+            case DmaDisplayMode::BG_LAYER:        return "BG_LAYER";
+            case DmaDisplayMode::ODD_EVEN_LAYERS: return "ODD_EVEN_LAYERS";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(DmaDisplayMode value)
     {
         switch (value) {
                 
-            case DMA_DISPLAY_MODE_FG_LAYER:        return "Foreground layer";
-            case DMA_DISPLAY_MODE_BG_LAYER:        return "Background layer";
-            case DMA_DISPLAY_MODE_ODD_EVEN_LAYERS: return "Mixed layers";
+            case DmaDisplayMode::FG_LAYER:        return "Foreground layer";
+            case DmaDisplayMode::BG_LAYER:        return "Background layer";
+            case DmaDisplayMode::ODD_EVEN_LAYERS: return "Mixed layers";
         }
         return "???";
     }

@@ -220,14 +220,14 @@ const u8 bbandit_virus_bb[] = {
 //
 
 #define VIRUS(n,x1,v1,x2,v2,x3,v3,x4,v4,x5,v5,x6,v6,x7,v7) \
-{ n, { x1,v1,x2,v2,x3,v3,x4,v4,x5,v5,x6,v6,x7,v7 } , nullptr, 0, BB_VIRUS }
+{ n, { x1,v1,x2,v2,x3,v3,x4,v4,x5,v5,x6,v6,x7,v7 } , nullptr, 0, BootBlockType::VIRUS }
 
 const BBRecord bbRecord[] = {
 
     {
         "No Boot Block",
         { 6,0,7,0,8,0,9,0,10,0,11,0,12,0 },
-        nullptr, 0, BB_STANDARD
+        nullptr, 0, BootBlockType::STANDARD
     },
 
     //
@@ -237,12 +237,12 @@ const BBRecord bbRecord[] = {
     {
         "AmigaDOS Standard Bootblock 1.3",
         { 12,0x43, 13,0xfa, 14,0x00, 15,0x18, 16,0x4e, 17,0xae, 18,0xff },
-        os13_bb, sizeof(os13_bb), BB_STANDARD
+        os13_bb, sizeof(os13_bb), BootBlockType::STANDARD
     },
     {
         "AmigaDOS Standard Bootblock 2.0",
         { 12,0x43, 13,0xfa, 14,0x00, 15,0x3e, 16,0x70, 17,0x25, 18,0x4e },
-        os20_bb, sizeof(os20_bb), BB_STANDARD
+        os20_bb, sizeof(os20_bb), BootBlockType::STANDARD
     },
     
     //
@@ -252,12 +252,12 @@ const BBRecord bbRecord[] = {
     {
         "SCA Virus",
         { 800,101,822,97,900,115,841,71,217,231,9,72,435,7 },
-        sca_virus_bb, sizeof(sca_virus_bb), BB_VIRUS
+        sca_virus_bb, sizeof(sca_virus_bb), BootBlockType::VIRUS
     },
     {
         "Byte Bandit 1 Virus",
         { 18,114,25,66,32,66,35,100,335,252,513,196,639,188 },
-        bbandit_virus_bb, sizeof(bbandit_virus_bb), BB_VIRUS
+        bbandit_virus_bb, sizeof(bbandit_virus_bb), BootBlockType::VIRUS
     },
 
     //
@@ -1126,7 +1126,7 @@ BootBlockImage::BootBlockImage(const u8 *buf1, const u8 *buf2)
     // Try to find a match in the data base
     for (i = 0; i < isizeof(bbRecord) / isizeof(BBRecord); i++) {
         
-        if (bbRecord[i].type == BB_STANDARD && bbRecord[i].image) {
+        if (bbRecord[i].type == BootBlockType::STANDARD && bbRecord[i].image) {
             
             // For standard boot blocks, we require a perfect match
             if (std::memcmp(data, bbRecord[i].image, bbRecord[i].size) == 0) {
@@ -1183,10 +1183,10 @@ BootBlockImage::BootBlockImage(BootBlockId bootBlockID)
     
     switch (bootBlockID) {
             
-        case BB_AMIGADOS_13: name = "AmigaDOS Standard Bootblock 1.3"; break;
-        case BB_AMIGADOS_20: name = "AmigaDOS Standard Bootblock 2.0"; break;
-        case BB_SCA:         name = "SCA Virus";                       break;
-        case BB_BYTE_BANDIT: name = "Byte Bandit 1 Virus";             break;
+        case BootBlockId::AMIGADOS_13: name = "AmigaDOS Standard Bootblock 1.3"; break;
+        case BootBlockId::AMIGADOS_20: name = "AmigaDOS Standard Bootblock 2.0"; break;
+        case BootBlockId::SCA:         name = "SCA Virus";                       break;
+        case BootBlockId::BYTE_BANDIT: name = "Byte Bandit 1 Virus";             break;
         default:             name = "";                                break;
     }
     

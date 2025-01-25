@@ -54,9 +54,9 @@ public:
     bool isHD() { return getDensity() == DENSITY_HD; }
 
     // Analyzes the boot block
-    virtual BootBlockType bootBlockType() const { return BB_STANDARD; }
+    virtual BootBlockType bootBlockType() const { return BootBlockType::STANDARD; }
     virtual const char *bootBlockName() const { return ""; }
-    bool hasVirus() const { return bootBlockType() == BB_VIRUS; }
+    bool hasVirus() const { return bootBlockType() == BootBlockType::VIRUS; }
 
 
     //

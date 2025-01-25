@@ -61,10 +61,10 @@ RemoteServer::getOption(Option option) const
 {
     switch (option) {
             
-        case Option::SRV_PORT: return config.port;
-        case Option::SRV_PROTOCOL: return config.protocol;
-        case Option::SRV_AUTORUN: return config.autoRun;
-        case Option::SRV_VERBOSE: return config.verbose;
+        case Option::SRV_PORT:      return config.port;
+        case Option::SRV_PROTOCOL:  return (i64)config.protocol;
+        case Option::SRV_AUTORUN:   return config.autoRun;
+        case Option::SRV_VERBOSE:   return config.verbose;
 
         default:
             fatalError;

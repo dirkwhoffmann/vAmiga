@@ -1361,7 +1361,7 @@ FSBlock::writeBootBlock(BootBlockId id, isize page)
     
     debug(FS_DEBUG, "writeBootBlock(%s, %ld)\n", BootBlockIdEnum::key(id), page);
     
-    if (id != BB_NONE) {
+    if (id != BootBlockId::NONE) {
         
         // Read boot block image from the database
         auto image = BootBlockImage(id);

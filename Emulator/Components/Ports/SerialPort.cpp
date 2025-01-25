@@ -317,7 +317,7 @@ SerialPort::dumpByte(int byte)
 
             case '\n':
 
-                retroShell.press(RSKEY_RETURN);
+                retroShell.press(RetroShellKey::RETURN);
                 break;
 
             default:

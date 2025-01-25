@@ -18,31 +18,29 @@ namespace vamiga {
 // Enumerations
 //
 
-enum_long(PROBE)
+enum class Probe : long
 {
-    PROBE_NONE,
-    PROBE_MEMORY,
-    PROBE_IPL
+    NONE,
+    MEMORY,
+    IPL
 };
-typedef PROBE Probe;
 
 struct ProbeEnum : util::Reflection<ProbeEnum, Probe>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = PROBE_IPL;
+    static constexpr long maxVal = long(Probe::IPL);
     
-    static const char *prefix() { return "PROBE"; }
-    static const char *_key(long value)
+    static const char *_key(Probe value)
     {
         switch (value) {
                 
-            case PROBE_NONE:            return "NONE";
-            case PROBE_MEMORY:          return "MEMORY";
-            case PROBE_IPL:             return "IPL";
+            case Probe::NONE:            return "NONE";
+            case Probe::MEMORY:          return "MEMORY";
+            case Probe::IPL:             return "IPL";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(Probe value)
     {
         return "";
     }
