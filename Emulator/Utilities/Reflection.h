@@ -44,18 +44,8 @@ namespace vamiga::util {
 template <class T, typename E> struct Reflection {
     
     // Experimental
-    static constexpr E cast(long value) { return E(value); }
-    
-    // Returns all enum elements as a vector
-    static constexpr std::vector<E> elements() {
+    // static constexpr E cast(long value) { return E(value); }
         
-        assert(!isBitField());
-        
-        std::vector<E> result;
-        for (auto i = T::minVal; i < T::maxVal; i++) result.push_back(E(i));
-        return result;
-    }
-    
     // Checks whether this enum is a bit fiels rather than a standard enum
     static constexpr bool isBitField() { return T::minVal == 1; }
 
@@ -77,30 +67,25 @@ template <class T, typename E> struct Reflection {
     }
     // static const char *key(u32 value) { return key(E(value)); }
     
-    // Returns a textual representation for a bit mask
-    static const char *mask(isize mask, bool withPrefix = false) {
-
-        static string result;
-        result = "";
+    // Collects all elements
+    static constexpr std::vector<E> elements(std::function<bool(E)> filter = [](E){ return true; }) {
+        
+        std::vector<E> result;
         
         if (isBitField()) {
             
-            for (isize i = T::minVal; i <= T::maxVal; i *= 2) {
-                if (mask & i) {
-                    result += (result.empty() ? "" : " | ") + string(key(E(i), withPrefix));
-                }
+            for (long i = T::minVal; i <= T::maxVal; i *= 2) {
+                if (filter(E(i))) result.push_back(E(i));
             }
             
         } else {
             
-            for (isize i = T::minVal; i <= T::maxVal; i++) {
-                if (mask & (1 << i)) {
-                    result += (result.empty() ? "" : " | ") + string(key(E(i), withPrefix));
-                }
+            for (auto i = T::minVal; i < T::maxVal; i++) {
+                if (filter(E(i))) result.push_back(E(i));
             }
         }
-
-        return result.c_str();
+        
+        return result;
     }
 
     // Collects all key / value pairs
@@ -142,6 +127,32 @@ template <class T, typename E> struct Reflection {
     static string argList(bool withPrefix = false, std::function<bool(E)> filter = [](E){ return true; }) {
 
         return "{ " + keyList(withPrefix, filter, " | ") + " }";
+    }
+    
+    // Returns a textual representation for a bit mask
+    static const char *mask(isize mask, bool withPrefix = false) {
+
+        static string result;
+        result = "";
+        
+        if (isBitField()) {
+            
+            for (isize i = T::minVal; i <= T::maxVal; i *= 2) {
+                if (mask & i) {
+                    result += (result.empty() ? "" : " | ") + string(key(E(i), withPrefix));
+                }
+            }
+            
+        } else {
+            
+            for (isize i = T::minVal; i <= T::maxVal; i++) {
+                if (mask & (1 << i)) {
+                    result += (result.empty() ? "" : " | ") + string(key(E(i), withPrefix));
+                }
+            }
+        }
+
+        return result.c_str();
     }
 };
 
