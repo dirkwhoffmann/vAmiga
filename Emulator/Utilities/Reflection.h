@@ -49,17 +49,15 @@ template <class T, typename E> struct Reflection {
     static constexpr E first = E(T::minVal);
     static constexpr E last = E(T::maxVal);
 
-    static constexpr std::vector<E> collect() {
+    // Returns all enum elements as a vector
+    static constexpr std::vector<E> elements() {
+        
+        assert(!isBitField());
+        
         std::vector<E> result;
-        for (auto i = T::minVal; i < T::maxVal; i++) {
-            result.push_back(E(i));
-        }
+        for (auto i = T::minVal; i < T::maxVal; i++) result.push_back(E(i));
         return result;
     }
-    
-    /*
-    static constexpr std::vector<E> elements = collect();
-    */
     
     // Checks whether this enum is a bit fiels rather than a standard enum
     static constexpr bool isBitField() { return T::minVal == 1; }

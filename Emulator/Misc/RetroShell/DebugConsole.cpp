@@ -1184,7 +1184,7 @@ DebugConsole::initCommands(Command &root)
         if (debugBuild) {
 
             // for (isize i = DebugFlagEnum::minVal; i < DebugFlagEnum::maxVal; i++) {
-            for (auto i : DebugFlagEnum::collect()) {
+            for (auto i : DebugFlagEnum::elements()) {
 
                 root.add({"debug", DebugFlagEnum::key(i)}, { Arg::boolean },
                          DebugFlagEnum::help(i),
