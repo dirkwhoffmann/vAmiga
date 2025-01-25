@@ -47,7 +47,7 @@ EXEFile::finalizeRead()
     bool hd = data.size > 853000;
 
     // Create a new file system
-    MutableFileSystem volume(INCH_35, hd ? DENSITY_HD : DENSITY_DD, FS_OFS);
+    MutableFileSystem volume(INCH_35, hd ? DENSITY_HD : DENSITY_DD, FSVolumeType::OFS);
     volume.setName(FSName("Disk"));
     
     // Make the volume bootable

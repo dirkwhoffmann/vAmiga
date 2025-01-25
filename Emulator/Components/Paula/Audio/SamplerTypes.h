@@ -30,7 +30,6 @@ struct SamplingMethodEnum : util::Reflection<SamplingMethodEnum, SamplingMethod>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(SamplingMethod::LINEAR);
     
-    static const char *prefix() { return "SMP"; }
     static const char *_key(SamplingMethod value)
     {
         switch (value) {

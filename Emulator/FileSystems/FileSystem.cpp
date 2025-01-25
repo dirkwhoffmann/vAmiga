@@ -89,7 +89,7 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
     layout.checkCompatibility();
     
     // Only proceed if the volume is formatted
-    if (layout.dos == FS_NODOS) throw Error(ErrorCode::FS_UNFORMATTED);
+    if (layout.dos == FSVolumeType::NODOS) throw Error(ErrorCode::FS_UNFORMATTED);
 
     // Copy layout parameters
     dos         = layout.dos;
@@ -148,7 +148,7 @@ FileSystem::_dump(Category category, std::ostream& os) const
         auto free = freeBlocks();
         auto fill = (isize)(100.0 * used / total);
         
-        os << "DOS" << dec(dos);
+        os << "DOS" << dec(isize(dos));
         os << "   ";
         os << std::setw(6) << std::left << std::setfill(' ') << total;
         os << " (x ";
@@ -196,7 +196,7 @@ FileSystem::_dump(Category category, std::ostream& os) const
         
         for (isize i = 0; i < numBlocks(); i++)  {
             
-            if (blocks[i]->type == FS_EMPTY_BLOCK) continue;
+            if (blocks[i]->type == FSBlockType::EMPTY_BLOCK) continue;
             
             msg("\nBlock %ld (%d):", i, blocks[i]->nr);
             msg(" %s\n", FSBlockTypeEnum::key(blocks[i]->type));
@@ -260,13 +260,13 @@ FileSystem::bootBlockType() const
 FSBlockType
 FileSystem::blockType(Block nr) const
 {
-    return blockPtr(nr) ? blocks[nr]->type : FS_UNKNOWN_BLOCK;
+    return blockPtr(nr) ? blocks[nr]->type : FSBlockType::UNKNOWN_BLOCK;
 }
 
 FSItemType
 FileSystem::itemType(Block nr, isize pos) const
 {
-    return blockPtr(nr) ? blocks[nr]->itemType(pos) : FSI_UNUSED;
+    return blockPtr(nr) ? blocks[nr]->itemType(pos) : FSItemType::UNUSED;
 }
 
 FSBlock *
@@ -278,7 +278,7 @@ FileSystem::blockPtr(Block nr) const
 FSBlock *
 FileSystem::bootBlockPtr(Block nr) const
 {
-    if (nr < blocks.size() && blocks[nr]->type == FS_BOOT_BLOCK) {
+    if (nr < blocks.size() && blocks[nr]->type == FSBlockType::BOOT_BLOCK) {
         return blocks[nr];
     }
     return nullptr;
@@ -287,7 +287,7 @@ FileSystem::bootBlockPtr(Block nr) const
 FSBlock *
 FileSystem::rootBlockPtr(Block nr) const
 {
-    if (nr < blocks.size() && blocks[nr]->type == FS_ROOT_BLOCK) {
+    if (nr < blocks.size() && blocks[nr]->type == FSBlockType::ROOT_BLOCK) {
         return blocks[nr];
     }
     return nullptr;
@@ -296,7 +296,7 @@ FileSystem::rootBlockPtr(Block nr) const
 FSBlock *
 FileSystem::bitmapBlockPtr(Block nr) const
 {
-    if (nr < blocks.size() && blocks[nr]->type == FS_BITMAP_BLOCK) {
+    if (nr < blocks.size() && blocks[nr]->type == FSBlockType::BITMAP_BLOCK) {
         return blocks[nr];
     }
     return nullptr;
@@ -305,7 +305,7 @@ FileSystem::bitmapBlockPtr(Block nr) const
 FSBlock *
 FileSystem::bitmapExtBlockPtr(Block nr) const
 {
-    if (nr < blocks.size() && blocks[nr]->type == FS_BITMAP_EXT_BLOCK) {
+    if (nr < blocks.size() && blocks[nr]->type == FSBlockType::BITMAP_EXT_BLOCK) {
         return blocks[nr];
     }
     return nullptr;
@@ -314,7 +314,7 @@ FileSystem::bitmapExtBlockPtr(Block nr) const
 FSBlock *
 FileSystem::userDirBlockPtr(Block nr) const
 {
-    if (nr < blocks.size() && blocks[nr]->type == FS_USERDIR_BLOCK) {
+    if (nr < blocks.size() && blocks[nr]->type == FSBlockType::USERDIR_BLOCK) {
         return blocks[nr];
     }
     return nullptr;
@@ -323,7 +323,7 @@ FileSystem::userDirBlockPtr(Block nr) const
 FSBlock *
 FileSystem::fileHeaderBlockPtr(Block nr) const
 {
-    if (nr < blocks.size() && blocks[nr]->type == FS_FILEHEADER_BLOCK) {
+    if (nr < blocks.size() && blocks[nr]->type == FSBlockType::FILEHEADER_BLOCK) {
         return blocks[nr];
     }
     return nullptr;
@@ -332,7 +332,7 @@ FileSystem::fileHeaderBlockPtr(Block nr) const
 FSBlock *
 FileSystem::fileListBlockPtr(Block nr) const
 {
-    if (nr < blocks.size() && blocks[nr]->type == FS_FILELIST_BLOCK) {
+    if (nr < blocks.size() && blocks[nr]->type == FSBlockType::FILELIST_BLOCK) {
         return blocks[nr];
     }
     return nullptr;
@@ -341,9 +341,9 @@ FileSystem::fileListBlockPtr(Block nr) const
 FSBlock *
 FileSystem::dataBlockPtr(Block nr) const
 {
-    FSBlockType t = nr < blocks.size() ? blocks[nr]->type : FS_UNKNOWN_BLOCK;
+    FSBlockType t = nr < blocks.size() ? blocks[nr]->type : FSBlockType::UNKNOWN_BLOCK;
 
-    if (t == FS_DATA_BLOCK_OFS || t == FS_DATA_BLOCK_FFS) {
+    if (t == FSBlockType::DATA_BLOCK_OFS || t == FSBlockType::DATA_BLOCK_FFS) {
         return blocks[nr];
     }
     return nullptr;
@@ -352,9 +352,9 @@ FileSystem::dataBlockPtr(Block nr) const
 FSBlock *
 FileSystem::hashableBlockPtr(Block nr) const
 {
-    FSBlockType t = nr < blocks.size() ? blocks[nr]->type : FS_UNKNOWN_BLOCK;
+    FSBlockType t = nr < blocks.size() ? blocks[nr]->type : FSBlockType::UNKNOWN_BLOCK;
     
-    if (t == FS_USERDIR_BLOCK || t == FS_FILEHEADER_BLOCK) {
+    if (t == FSBlockType::USERDIR_BLOCK || t == FSBlockType::FILEHEADER_BLOCK) {
         return blocks[nr];
     }
     return nullptr;
@@ -454,7 +454,7 @@ FileSystem::currentDirBlock()
     FSBlock *cdb = blockPtr(cd);
     
     if (cdb) {
-        if (cdb->type == FS_ROOT_BLOCK || cdb->type == FS_USERDIR_BLOCK) {
+        if (cdb->type == FSBlockType::ROOT_BLOCK || cdb->type == FSBlockType::USERDIR_BLOCK) {
             return cdb;
         }
     }
@@ -672,11 +672,11 @@ FileSystem::check(bool strict) const
     for (isize i = 0; i < numBlocks(); i++) {
 
         FSBlock *block = blocks[i];
-        if (block->type == FS_EMPTY_BLOCK && !isFree(Block(i))) {
+        if (block->type == FSBlockType::EMPTY_BLOCK && !isFree(Block(i))) {
             result.bitmapErrors++;
             debug(FS_DEBUG, "Empty block %ld is marked as allocated\n", i);
         }
-        if (block->type != FS_EMPTY_BLOCK && isFree(Block(i))) {
+        if (block->type != FSBlockType::EMPTY_BLOCK && isFree(Block(i))) {
             result.bitmapErrors++;
             debug(FS_DEBUG, "Non-empty block %ld is marked as free\n", i);
         }
@@ -729,16 +729,16 @@ FileSystem::checkBlockType(Block nr, FSBlockType type, FSBlockType altType) cons
         
         switch (t) {
                 
-            case FS_EMPTY_BLOCK:      return ErrorCode::FS_PTR_TO_EMPTY_BLOCK;
-            case FS_BOOT_BLOCK:       return ErrorCode::FS_PTR_TO_BOOT_BLOCK;
-            case FS_ROOT_BLOCK:       return ErrorCode::FS_PTR_TO_ROOT_BLOCK;
-            case FS_BITMAP_BLOCK:     return ErrorCode::FS_PTR_TO_BITMAP_BLOCK;
-            case FS_BITMAP_EXT_BLOCK: return ErrorCode::FS_PTR_TO_BITMAP_EXT_BLOCK;
-            case FS_USERDIR_BLOCK:    return ErrorCode::FS_PTR_TO_USERDIR_BLOCK;
-            case FS_FILEHEADER_BLOCK: return ErrorCode::FS_PTR_TO_FILEHEADER_BLOCK;
-            case FS_FILELIST_BLOCK:   return ErrorCode::FS_PTR_TO_FILELIST_BLOCK;
-            case FS_DATA_BLOCK_OFS:   return ErrorCode::FS_PTR_TO_DATA_BLOCK;
-            case FS_DATA_BLOCK_FFS:   return ErrorCode::FS_PTR_TO_DATA_BLOCK;
+            case FSBlockType::EMPTY_BLOCK:      return ErrorCode::FS_PTR_TO_EMPTY_BLOCK;
+            case FSBlockType::BOOT_BLOCK:       return ErrorCode::FS_PTR_TO_BOOT_BLOCK;
+            case FSBlockType::ROOT_BLOCK:       return ErrorCode::FS_PTR_TO_ROOT_BLOCK;
+            case FSBlockType::BITMAP_BLOCK:     return ErrorCode::FS_PTR_TO_BITMAP_BLOCK;
+            case FSBlockType::BITMAP_EXT_BLOCK: return ErrorCode::FS_PTR_TO_BITMAP_EXT_BLOCK;
+            case FSBlockType::USERDIR_BLOCK:    return ErrorCode::FS_PTR_TO_USERDIR_BLOCK;
+            case FSBlockType::FILEHEADER_BLOCK: return ErrorCode::FS_PTR_TO_FILEHEADER_BLOCK;
+            case FSBlockType::FILELIST_BLOCK:   return ErrorCode::FS_PTR_TO_FILELIST_BLOCK;
+            case FSBlockType::DATA_BLOCK_OFS:   return ErrorCode::FS_PTR_TO_DATA_BLOCK;
+            case FSBlockType::DATA_BLOCK_FFS:   return ErrorCode::FS_PTR_TO_DATA_BLOCK;
             default:                  return ErrorCode::FS_PTR_TO_UNKNOWN_BLOCK;
         }
     }
@@ -800,33 +800,33 @@ FileSystem::predictBlockType(Block nr, const u8 *buffer)
     assert(buffer != nullptr);
     
     // Is it a boot block?
-    if (nr == 0 || nr == 1) return FS_BOOT_BLOCK;
+    if (nr == 0 || nr == 1) return FSBlockType::BOOT_BLOCK;
     
     // Is it a bitmap block?
     if (std::find(bmBlocks.begin(), bmBlocks.end(), nr) != bmBlocks.end())
-        return FS_BITMAP_BLOCK;
+        return FSBlockType::BITMAP_BLOCK;
     
     // is it a bitmap extension block?
     if (std::find(bmExtBlocks.begin(), bmExtBlocks.end(), nr) != bmExtBlocks.end())
-        return FS_BITMAP_EXT_BLOCK;
+        return FSBlockType::BITMAP_EXT_BLOCK;
 
     // For all other blocks, check the type and subtype fields
     u32 type = FSBlock::read32(buffer);
     u32 subtype = FSBlock::read32(buffer + bsize - 4);
 
-    if (type == 2  && subtype == 1)       return FS_ROOT_BLOCK;
-    if (type == 2  && subtype == 2)       return FS_USERDIR_BLOCK;
-    if (type == 2  && subtype == (u32)-3) return FS_FILEHEADER_BLOCK;
-    if (type == 16 && subtype == (u32)-3) return FS_FILELIST_BLOCK;
+    if (type == 2  && subtype == 1)       return FSBlockType::ROOT_BLOCK;
+    if (type == 2  && subtype == 2)       return FSBlockType::USERDIR_BLOCK;
+    if (type == 2  && subtype == (u32)-3) return FSBlockType::FILEHEADER_BLOCK;
+    if (type == 16 && subtype == (u32)-3) return FSBlockType::FILELIST_BLOCK;
 
     // Check if this block is a data block
     if (isOFS()) {
-        if (type == 8) return FS_DATA_BLOCK_OFS;
+        if (type == 8) return FSBlockType::DATA_BLOCK_OFS;
     } else {
-        for (isize i = 0; i < bsize; i++) if (buffer[i]) return FS_DATA_BLOCK_FFS;
+        for (isize i = 0; i < bsize; i++) if (buffer[i]) return FSBlockType::DATA_BLOCK_FFS;
     }
     
-    return FS_EMPTY_BLOCK;
+    return FSBlockType::EMPTY_BLOCK;
 }
 
 FSBlockType
@@ -842,26 +842,26 @@ FileSystem::getDisplayType(isize column)
     if (column == 0) {
 
         // Start from scratch
-        for (isize i = 0; i < width; i++) cache[i] = FS_UNKNOWN_BLOCK;
+        for (isize i = 0; i < width; i++) cache[i] = FSBlockType::UNKNOWN_BLOCK;
         
         // Setup block priorities
         i8 pri[12];
-        pri[FS_UNKNOWN_BLOCK]      = 0;
-        pri[FS_EMPTY_BLOCK]        = 1;
-        pri[FS_BOOT_BLOCK]         = 8;
-        pri[FS_ROOT_BLOCK]         = 9;
-        pri[FS_BITMAP_BLOCK]       = 7;
-        pri[FS_BITMAP_EXT_BLOCK]   = 6;
-        pri[FS_USERDIR_BLOCK]      = 5;
-        pri[FS_FILEHEADER_BLOCK]   = 4;
-        pri[FS_FILELIST_BLOCK]     = 3;
-        pri[FS_DATA_BLOCK_OFS]     = 2;
-        pri[FS_DATA_BLOCK_FFS]     = 2;
+        pri[isize(FSBlockType::UNKNOWN_BLOCK)]      = 0;
+        pri[isize(FSBlockType::EMPTY_BLOCK)]        = 1;
+        pri[isize(FSBlockType::BOOT_BLOCK)]         = 8;
+        pri[isize(FSBlockType::ROOT_BLOCK)]         = 9;
+        pri[isize(FSBlockType::BITMAP_BLOCK)]       = 7;
+        pri[isize(FSBlockType::BITMAP_EXT_BLOCK)]   = 6;
+        pri[isize(FSBlockType::USERDIR_BLOCK)]      = 5;
+        pri[isize(FSBlockType::FILEHEADER_BLOCK)]   = 4;
+        pri[isize(FSBlockType::FILELIST_BLOCK)]     = 3;
+        pri[isize(FSBlockType::DATA_BLOCK_OFS)]     = 2;
+        pri[isize(FSBlockType::DATA_BLOCK_FFS)]     = 2;
         
         for (isize i = 0; i < numBlocks(); i++) {
 
             auto pos = i * (width - 1) / (numBlocks() - 1);
-            if (pri[cache[pos]] < pri[blocks[i]->type]) {
+            if (pri[isize(cache[pos])] < pri[isize(blocks[i]->type)]) {
                 cache[pos] = blocks[i]->type;
             }
         }
@@ -869,7 +869,7 @@ FileSystem::getDisplayType(isize column)
         // Fill gaps
         for (isize pos = 1; pos < width; pos++) {
             
-            if (cache[pos] == FS_UNKNOWN_BLOCK) {
+            if (cache[pos] == FSBlockType::UNKNOWN_BLOCK) {
                 cache[pos] = cache[pos - 1];
             }
         }
@@ -878,7 +878,7 @@ FileSystem::getDisplayType(isize column)
     return cache[column];
 }
 
-FSBlockType
+isize
 FileSystem::diagnoseImageSlice(isize column)
 {
     static constexpr isize width = 1760;
@@ -899,9 +899,9 @@ FileSystem::diagnoseImageSlice(isize column)
             auto pos = i * width / (numBlocks() - 1);
             if (blocks[i]->corrupted) {
                 cache[pos] = 2;
-            } else if (blocks[i]->type == FS_UNKNOWN_BLOCK) {
+            } else if (blocks[i]->type == FSBlockType::UNKNOWN_BLOCK) {
                 cache[pos] = 0;
-            } else if (blocks[i]->type == FS_EMPTY_BLOCK) {
+            } else if (blocks[i]->type == FSBlockType::EMPTY_BLOCK) {
                 cache[pos] = 0;
             } else {
                 cache[pos] = 1;

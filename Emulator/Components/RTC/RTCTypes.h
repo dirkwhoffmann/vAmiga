@@ -30,7 +30,6 @@ struct RTCRevisionEnum : util::Reflection<RTCRevisionEnum, RTCRevision>
     static constexpr auto minVal = (long)RTCRevision::NONE;
     static constexpr auto maxVal = (long)RTCRevision::RICOH;
     
-    static const char *prefix() { return "RTC"; }
     static const char *_key(RTCRevision value)
     {
         switch (value) {

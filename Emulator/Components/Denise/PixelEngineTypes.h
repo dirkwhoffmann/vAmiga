@@ -34,7 +34,6 @@ struct PaletteEnum : util::Reflection<PaletteEnum, Palette>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Palette::SEPIA);
     
-    static const char *prefix() { return "PALETTE"; }
     static const char *_key(Palette value)
     {
         switch (value) {

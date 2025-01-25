@@ -32,7 +32,6 @@ struct DiameterEnum : util::Reflection<DiameterEnum, Diameter>
     static constexpr long minVal = 0;
     static constexpr long maxVal = INCH_525;
     
-    static const char *prefix() { return ""; }
     static const char *_key(long value)
     {
         switch (value) {
@@ -61,7 +60,6 @@ struct DensityEnum : util::Reflection<DensityEnum, Density>
     static constexpr long minVal = 0;
     static constexpr long maxVal = DENSITY_HD;
     
-    static const char *prefix() { return "DENSITY"; }
     static const char *_key(long value)
     {
         switch (value) {

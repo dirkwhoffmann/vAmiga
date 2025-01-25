@@ -44,7 +44,6 @@ struct MemSrcEnum : util::Reflection<MemSrcEnum, MemSrc>
     static constexpr long minVal = 0;
     static constexpr long maxVal = (long)MemSrc::EXT;
     
-    // static const char *prefix() { return "MEM"; }
     static const char *_key(long value) { return _key(MemSrc(value)); }
     static const char *_key(MemSrc value)
     {
@@ -108,7 +107,6 @@ struct AccessorEnum : util::Reflection<AccessorEnum, Accessor>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Accessor::AGNUS);
     
-    static const char *prefix() { return "ACCESSOR"; }
     static const char *_key(Accessor value)
     {
         switch (value) {
@@ -137,7 +135,6 @@ struct BankMapEnum : util::Reflection<BankMapEnum, BankMap>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(BankMap::A2000B);
     
-    static const char *prefix() { return "BANK_MAP"; }
     static const char *_key(BankMap value)
     {
         switch (value) {
@@ -174,7 +171,6 @@ struct RamInitPatternEnum : util::Reflection<RamInitPatternEnum, RamInitPattern>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(RamInitPattern::RANDOMIZED);
     
-    // static const char *prefix() { return "RAM_INIT"; }
     static const char *_key(RamInitPattern value)
     {
         switch (value) {
@@ -209,7 +205,6 @@ struct UnmappedMemoryEnum : util::Reflection<UnmappedMemoryEnum, UnmappedMemory>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(UnmappedMemory::ALL_ONES);
     
-    // static const char *prefix() { return "UNMAPPED"; }
     static const char *_key(UnmappedMemory value)
     {
         switch (value) {

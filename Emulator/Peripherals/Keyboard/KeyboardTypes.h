@@ -33,7 +33,6 @@ struct KeyboardStateEnum : util::Reflection<KeyboardStateEnum, KeyboardState>
     static constexpr long minVal = 0;
     static constexpr long maxVal = KB_SEND;
     
-    static const char *prefix() { return "KB"; }
     static const char *_key(long value)
     {
         switch (value) {

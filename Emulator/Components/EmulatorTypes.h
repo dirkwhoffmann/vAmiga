@@ -156,7 +156,6 @@ struct DebugFlagEnum : util::Reflection<DebugFlagEnum, DebugFlag>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(DebugFlag::GDB_DEBUG);
 
-    static const char *prefix() { return "FLAG"; }
     static const char *_key(DebugFlag value)
     {
         switch (value) {

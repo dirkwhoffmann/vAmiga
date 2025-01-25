@@ -49,7 +49,6 @@ struct BoardStateEnum : util::Reflection<BoardStateEnum, BoardState>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(BoardState::SHUTUP);
     
-    static const char *prefix() { return "STATE"; }
     static const char *_key(BoardState value)
     {
         switch (value) {

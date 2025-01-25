@@ -34,7 +34,6 @@ struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(FilterType::HIGH);
     
-    static const char *prefix() { return "FILTER"; }
     static const char *_key(FilterType value)
     {
         switch (value) {

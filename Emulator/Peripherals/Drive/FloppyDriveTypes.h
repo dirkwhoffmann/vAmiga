@@ -32,7 +32,6 @@ struct FloppyDriveTypeEnum : util::Reflection<FloppyDriveTypeEnum, FloppyDriveTy
     static constexpr long minVal = 0;
     static constexpr long maxVal = DRIVE_DD_525;
     
-    static const char *prefix() { return "DRIVE"; }
     static const char *_key(long value)
     {
         switch (value) {
@@ -61,7 +60,6 @@ struct DriveMechanicsEnum : util::Reflection<DriveMechanicsEnum, DriveMechanics>
     static constexpr long minVal = 0;
     static constexpr long maxVal = MECHANICS_A1010;
     
-    static const char *prefix() { return "DMECHANICS"; }
     static const char *_key(long value)
     {
         switch (value) {

@@ -30,7 +30,6 @@ struct ControlPortDeviceEnum : util::Reflection<ControlPortDeviceEnum, ControlPo
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(ControlPortDevice::JOYSTICK);
     
-    static const char *prefix() { return "CPD"; }
     static const char *_key(ControlPortDevice value)
     {
         switch (value) {

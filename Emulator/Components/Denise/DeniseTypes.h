@@ -30,7 +30,6 @@ struct DeniseRevisionEnum : util::Reflection<DeniseRevisionEnum, DeniseRevision>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(DeniseRevision::ECS);
     
-    static const char *prefix() { return "DENISE"; }
     static const char *_key(DeniseRevision value)
     {
         switch (value) {

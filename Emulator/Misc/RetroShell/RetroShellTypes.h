@@ -39,7 +39,6 @@ struct RetroShellKeyEnum : util::Reflection<RetroShellKeyEnum, RetroShellKey>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(RetroShellKey::CR);
     
-    static const char *prefix() { return "RSKEY"; }
     static const char *_key(RetroShellKey value)
     {
         switch (value) {

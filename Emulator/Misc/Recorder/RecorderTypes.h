@@ -33,7 +33,6 @@ struct RecStateEnum : util::Reflection<RecStateEnum, RecState>
     static constexpr RecState minVal = RecState(0);
     static constexpr RecState maxVal = RecState::ABORT;
     
-    static const char *prefix() { return "RECSTATE"; }
     static const char *_key(RecState value)
     {
         switch (value) {

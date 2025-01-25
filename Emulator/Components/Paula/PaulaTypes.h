@@ -44,7 +44,6 @@ struct IrqSourceEnum : util::Reflection<IrqSourceEnum, IrqSource>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(IrqSource::EXTER);
     
-    static const char *prefix() { return "INT"; }
     static const char *_key(IrqSource value)
     {
         switch (value) {

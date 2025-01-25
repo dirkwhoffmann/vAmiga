@@ -33,7 +33,6 @@ struct SrvStateEnum : util::Reflection<SrvStateEnum, SrvState>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(SrvState::ERROR);
     
-    static const char *prefix() { return "SRV"; }
     static const char *_key(SrvState value)
     {
         switch (value) {
@@ -63,7 +62,6 @@ struct ServerProtocolEnum : util::Reflection<ServerProtocolEnum, ServerProtocol>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(ServerProtocol::DEFAULT);
     
-    static const char *prefix() { return "SRVPROT"; }
     static const char *_key(ServerProtocol value)
     {
         switch (value) {

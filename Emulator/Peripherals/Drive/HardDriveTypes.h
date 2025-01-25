@@ -29,7 +29,6 @@ struct HardDriveTypeEnum : util::Reflection<HardDriveTypeEnum, HardDriveType>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(HardDriveType::GENERIC);
     
-    static const char *prefix() { return "HDR"; }
     static const char *_key(HardDriveType value)
     {
         switch (value) {
@@ -56,7 +55,6 @@ struct HardDriveStateEnum : util::Reflection<HardDriveStateEnum, HardDriveState>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(HardDriveState::WRITING);
     
-    static const char *prefix() { return "HDR_STATE"; }
     static const char *_key(HardDriveState value)
     {
         switch (value) {

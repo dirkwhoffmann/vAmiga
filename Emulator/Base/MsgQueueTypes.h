@@ -135,7 +135,6 @@ struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(MsgType::ALARM);
     
-    // static const char *prefix() { return "MSG"; }
     static const char *_key(MsgType value)
     {
         switch (value) {

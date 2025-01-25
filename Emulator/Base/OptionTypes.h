@@ -203,7 +203,6 @@ struct OptionEnum : util::Reflection<OptionEnum, Option>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Option::SRV_VERBOSE);
     
-    static const char *prefix() { return "OPT"; }
     static const char *_key(Option value)
     {
         switch (value) {

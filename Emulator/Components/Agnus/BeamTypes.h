@@ -29,7 +29,6 @@ struct FrameTypeEnum : util::Reflection<FrameTypeEnum, FrameType>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(FrameType::NTSC_SF_SL);
     
-    static const char *prefix() { return "FRAME"; }
     static const char *_key(FrameType value)
     {
         switch (value) {

@@ -27,7 +27,7 @@ struct FSBlock : CoreObject {
     class FileSystem &device;
 
     // The type of this block
-    FSBlockType type = FS_UNKNOWN_BLOCK;
+    FSBlockType type = FSBlockType::UNKNOWN_BLOCK;
 
     // The sector number of this block
     Block nr;
@@ -352,37 +352,37 @@ if (!device.block(value)) return ErrorCode::FS_EXPECTED_REF; }
 if (value != nr) return ErrorCode::FS_EXPECTED_SELFREF; }
 
 #define EXPECT_FILEHEADER_REF { \
-if (ErrorCode e = device.checkBlockType(value, FS_FILEHEADER_BLOCK); e != ErrorCode::OK) return e; }
+if (ErrorCode e = device.checkBlockType(value, FSBlockType::FILEHEADER_BLOCK); e != ErrorCode::OK) return e; }
 
 #define EXPECT_HASH_REF { \
-if (ErrorCode e = device.checkBlockType(value, FS_FILEHEADER_BLOCK, FS_USERDIR_BLOCK); e != ErrorCode::OK) return e; }
+if (ErrorCode e = device.checkBlockType(value, FSBlockType::FILEHEADER_BLOCK, FSBlockType::USERDIR_BLOCK); e != ErrorCode::OK) return e; }
 
 #define EXPECT_OPTIONAL_HASH_REF { \
 if (value) { EXPECT_HASH_REF } }
 
 #define EXPECT_PARENT_DIR_REF { \
-if (ErrorCode e = device.checkBlockType(value, FS_ROOT_BLOCK, FS_USERDIR_BLOCK); e != ErrorCode::OK) return e; }
+if (ErrorCode e = device.checkBlockType(value, FSBlockType::ROOT_BLOCK, FSBlockType::USERDIR_BLOCK); e != ErrorCode::OK) return e; }
 
 #define EXPECT_FILELIST_REF { \
-if (ErrorCode e = device.checkBlockType(value, FS_FILELIST_BLOCK); e != ErrorCode::OK) return e; }
+if (ErrorCode e = device.checkBlockType(value, FSBlockType::FILELIST_BLOCK); e != ErrorCode::OK) return e; }
 
 #define EXPECT_OPTIONAL_FILELIST_REF { \
 if (value) { EXPECT_FILELIST_REF } }
 
 #define EXPECT_BITMAP_REF { \
-if (ErrorCode e = device.checkBlockType(value, FS_BITMAP_BLOCK); e != ErrorCode::OK) return e; }
+if (ErrorCode e = device.checkBlockType(value, FSBlockType::BITMAP_BLOCK); e != ErrorCode::OK) return e; }
 
 #define EXPECT_OPTIONAL_BITMAP_REF { \
 if (value) { EXPECT_BITMAP_REF } }
 
 #define EXPECT_BITMAP_EXT_REF { \
-if (ErrorCode e = device.checkBlockType(value, FS_BITMAP_EXT_BLOCK); e != ErrorCode::OK) return e; }
+if (ErrorCode e = device.checkBlockType(value, FSBlockType::BITMAP_EXT_BLOCK); e != ErrorCode::OK) return e; }
 
 #define EXPECT_OPTIONAL_BITMAP_EXT_REF { \
 if (value) { EXPECT_BITMAP_EXT_REF } }
 
 #define EXPECT_DATABLOCK_REF { \
-if (ErrorCode e = device.checkBlockType(value, FS_DATA_BLOCK_OFS, FS_DATA_BLOCK_FFS); e != ErrorCode::OK) return e; }
+if (ErrorCode e = device.checkBlockType(value, FSBlockType::DATA_BLOCK_OFS, FSBlockType::DATA_BLOCK_FFS); e != ErrorCode::OK) return e; }
 
 #define EXPECT_OPTIONAL_DATABLOCK_REF { \
 if (value) { EXPECT_DATABLOCK_REF } }

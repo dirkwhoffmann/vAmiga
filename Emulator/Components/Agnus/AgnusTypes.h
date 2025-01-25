@@ -49,7 +49,6 @@ struct AgnusRevisionEnum : util::Reflection<AgnusRevisionEnum, AgnusRevision>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(AgnusRevision::ECS_2MB);
     
-    static const char *prefix() { return "AGNUS"; }
     static const char *_key(AgnusRevision value)
     {
         switch (value) {
@@ -135,7 +134,6 @@ struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
     static constexpr long minVal = 0;
     static constexpr long maxVal = SLOT_COUNT - 1;
     
-    static const char *prefix() { return "SLOT"; }
     static const char *_key(long value)
     {
         switch (value) {
@@ -483,7 +481,6 @@ struct SprDmaStateEnum : util::Reflection<SprDmaStateEnum, SprDMAState>
     static constexpr long minVal = 0;
     static constexpr long maxVal = SPR_DMA_ACTIVE;
     
-    static const char *prefix() { return "SPR_DMA"; }
     static const char *_key(long value)
     {
         switch (value) {

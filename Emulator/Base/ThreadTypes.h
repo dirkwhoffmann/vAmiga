@@ -33,7 +33,6 @@ struct ExecStateEnum : util::Reflection<ExecStateEnum, ExecState>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(ExecState::HALTED);
     
-    static const char *prefix() { return "STATE"; }
     static const char *_key(ExecState value)
     {
         switch (value) {

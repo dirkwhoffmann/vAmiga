@@ -45,7 +45,7 @@ protected:
      FSTraits traits;
 
     // File system version
-    FSVolumeType dos = FS_NODOS;
+    FSVolumeType dos = FSVolumeType::NODOS;
     
     // Block storage
     std::vector<BlockPtr> blocks;

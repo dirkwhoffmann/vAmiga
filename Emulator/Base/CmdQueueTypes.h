@@ -92,7 +92,6 @@ struct CmdTypeEnum : util::Reflection<CmdTypeEnum, CmdType> {
     static constexpr long maxVal = long(CmdType::FOCUS);
     static bool isValid(auto value) { return value >= minVal && value <= maxVal; }
     
-    static const char *prefix() { return "CMD"; }
     static const char *_key(CmdType value)
     {
         switch (value) {

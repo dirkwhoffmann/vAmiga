@@ -253,7 +253,7 @@ HDFFile::getFileSystemDescriptor(isize nr) const
     result.dos = dos(first);
 
     // Only proceed if the hard drive is formatted
-    if (dos(first) == FS_NODOS) return result;
+    if (dos(first) == FSVolumeType::NODOS) return result;
     
     // Determine the location of the root block
     i64 highKey = result.numBlocks - 1;
@@ -460,34 +460,13 @@ HDFFile::dos(isize blockNr) const
     if (auto block = seekBlock(blockNr); block) {
         
         if (strncmp((const char *)block, "DOS", 3) || block[3] > 7) {
-            return FS_NODOS;
+            return FSVolumeType::NODOS;
         }
         return (FSVolumeType)block[3];
     }
     
-    return FS_NODOS;
+    return FSVolumeType::NODOS;
 }
-
-/*
-void
-HDFFile::readDriver(isize nr, Buffer<u8> &driver)
-{
-    assert(usize(nr) < drivers.size());
-    
-    auto &segList = drivers[nr].blocks;
-    auto bytesPerBlock = bsize() - 20;
-
-    driver.init(isize(segList.size()) * bytesPerBlock);
-    
-    isize offset = 0;
-    for (auto &seg : segList) {
-
-        assert(seekBlock(seg));
-        memcpy(driver.ptr + offset, seekBlock(seg) + 20, bytesPerBlock);
-        offset += bytesPerBlock;
-    }
-}
-*/
 
 isize
 HDFFile::writePartitionToFile(const std::filesystem::path &path, isize nr)

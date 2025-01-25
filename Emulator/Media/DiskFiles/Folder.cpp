@@ -41,7 +41,7 @@ Folder::init(const std::filesystem::path &path)
     if (!isCompatiblePath(path)) throw Error(ErrorCode::FILE_TYPE_MISMATCH);
 
     // Create a file system and import the directory
-    MutableFileSystem volume(FS_OFS, path.c_str());
+    MutableFileSystem volume(FSVolumeType::OFS, path.c_str());
     
     // Make the volume bootable
     volume.makeBootable(BootBlockId::AMIGADOS_13);

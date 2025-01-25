@@ -32,7 +32,6 @@ struct SerialPortDeviceEnum : util::Reflection<SerialPortDeviceEnum, SerialPortD
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(SerialPortDevice::COMMANDER);
     
-    static const char *prefix() { return "SPD"; }
     static const char *_key(SerialPortDevice value)
     {
         switch (value) {

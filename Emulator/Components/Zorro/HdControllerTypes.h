@@ -77,7 +77,6 @@ struct IoCommandEnum : util::Reflection<IoCommandEnum, IoCommand>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(IoCommand::TD_LASTCOMM);
     
-    static const char *prefix() { return "CMD"; }
     static const char *_key(IoCommand value)
     {
         switch (value) {
@@ -129,7 +128,6 @@ struct HdcStateEnum : util::Reflection<HdcStateEnum, HdcState>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(HdcState::READY);
     
-    static const char *prefix() { return "HDC"; }
     static const char *_key(HdcState value)
     {
         switch (value) {

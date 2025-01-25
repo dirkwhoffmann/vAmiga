@@ -186,7 +186,7 @@ FSVolumeType
 ADFFile::getDos() const
 {
     if (strncmp((const char *)data.ptr, "DOS", 3) || data[3] > 7) {
-        return FS_NODOS;
+        return FSVolumeType::NODOS;
     }
 
     return (FSVolumeType)data[3];
@@ -195,7 +195,7 @@ ADFFile::getDos() const
 void
 ADFFile::setDos(FSVolumeType dos)
 {
-    if (dos == FS_NODOS) {
+    if (dos == FSVolumeType::NODOS) {
         std::memset(data.ptr, 0, 4);
     } else {
         std::memcpy(data.ptr, "DOS", 3);
@@ -286,7 +286,7 @@ ADFFile::formatDisk(FSVolumeType fs, BootBlockId id, string name)
           "Formatting disk (%ld, %s)\n", numBlocks(), FSVolumeTypeEnum::key(fs));
 
     // Only proceed if a file system is given
-    if (fs == FS_NODOS) return;
+    if (fs == FSVolumeType::NODOS) return;
     
     // Get a device descriptor for this ADF
     auto descriptor = getFileSystemDescriptor();

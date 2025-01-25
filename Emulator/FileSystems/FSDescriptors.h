@@ -39,7 +39,7 @@ struct FileSystemDescriptor {
     isize numReserved = 0;
 
     // File system type
-    FSVolumeType dos = FS_NODOS;
+    FSVolumeType dos = FSVolumeType::NODOS;
 
     // Location of the root block
     Block rootBlock = 0;

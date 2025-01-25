@@ -335,7 +335,7 @@ HardDrive::connect()
         
         debug(WT_DEBUG, "Creating default disk...\n");
         init(MB(10));
-        format(FS_OFS, defaultName());
+        format(FSVolumeType::OFS, defaultName());
         bootable = false;
     }
 }
@@ -618,7 +618,7 @@ HardDrive::format(FSVolumeType fsType, string name)
     // Only proceed if a disk is present
     if (!data.ptr) return;
 
-    if (fsType != FS_NODOS) {
+    if (fsType != FSVolumeType::NODOS) {
         
         // Create a device descriptor matching this drive
         auto layout = FileSystemDescriptor(geometry, fsType);

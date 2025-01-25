@@ -69,7 +69,7 @@ MutableFileSystem::init(Diameter dia, Density den, FSVolumeType dos)
 void
 MutableFileSystem::init(Diameter dia, Density den, const std::filesystem::path &path)
 {
-    init(dia, den, FS_OFS);
+    init(dia, den, FSVolumeType::OFS);
     
     // Try to import directory
     importDirectory(path);
@@ -112,25 +112,25 @@ MutableFileSystem::format(string name)
     for (isize i = 0; i < numBlocks(); i++) assert(blocks[i] == nullptr);
 
     // Create boot blocks
-    blocks[0] = new FSBlock(*this, 0, FS_BOOT_BLOCK);
-    blocks[1] = new FSBlock(*this, 1, FS_BOOT_BLOCK);
+    blocks[0] = new FSBlock(*this, 0, FSBlockType::BOOT_BLOCK);
+    blocks[1] = new FSBlock(*this, 1, FSBlockType::BOOT_BLOCK);
 
     // Create the root block
     assert(rootBlock != 0);
-    FSBlock *rb = new FSBlock(*this, rootBlock, FS_ROOT_BLOCK);
+    FSBlock *rb = new FSBlock(*this, rootBlock, FSBlockType::ROOT_BLOCK);
     blocks[rootBlock] = rb;
     
     // Create bitmap blocks
     for (auto& ref : bmBlocks) {
         
-        blocks[ref] = new FSBlock(*this, ref, FS_BITMAP_BLOCK);
+        blocks[ref] = new FSBlock(*this, ref, FSBlockType::BITMAP_BLOCK);
     }
     
     // Add bitmap extension blocks
     FSBlock *pred = rb;
     for (auto& ref : bmExtBlocks) {
         
-        blocks[ref] = new FSBlock(*this, ref, FS_BITMAP_EXT_BLOCK);
+        blocks[ref] = new FSBlock(*this, ref, FSBlockType::BITMAP_EXT_BLOCK);
         pred->setNextBmExtBlockRef(ref);
         pred = blocks[ref];
     }
@@ -142,7 +142,7 @@ MutableFileSystem::format(string name)
     for (isize i = 0; i < numBlocks(); i++) {
         
         if (blocks[i] == nullptr) {
-            blocks[i] = new FSBlock(*this, Block(i), FS_EMPTY_BLOCK);
+            blocks[i] = new FSBlock(*this, Block(i), FSBlockType::EMPTY_BLOCK);
             markAsFree(Block(i));
         }
     }
@@ -220,7 +220,7 @@ MutableFileSystem::allocateBlockAbove(Block nr)
     
     for (isize i = nr + 1; i < numBlocks(); i++) {
         
-        if (blocks[i]->type == FS_EMPTY_BLOCK) {
+        if (blocks[i]->type == FSBlockType::EMPTY_BLOCK) {
             
             markAsAllocated(Block(i));
             return (Block(i));
@@ -236,7 +236,7 @@ MutableFileSystem::allocateBlockBelow(Block nr)
 
     for (i64 i = (i64)nr - 1; i >= 0; i--) {
         
-        if (blocks[i]->type == FS_EMPTY_BLOCK) {
+        if (blocks[i]->type == FSBlockType::EMPTY_BLOCK) {
             
             markAsAllocated(Block(i));
             return (Block(i));
@@ -252,7 +252,7 @@ MutableFileSystem::deallocateBlock(Block nr)
     assert(blocks[nr]);
     
     delete blocks[nr];
-    blocks[nr] = new FSBlock(*this, nr, FS_EMPTY_BLOCK);
+    blocks[nr] = new FSBlock(*this, nr, FSBlockType::EMPTY_BLOCK);
     markAsFree(nr);
 }
 
@@ -265,7 +265,7 @@ MutableFileSystem::addFileListBlock(Block head, Block prev)
     Block nr = allocateBlock();
     if (!nr) return 0;
     
-    blocks[nr] = new FSBlock(*this, nr, FS_FILELIST_BLOCK);
+    blocks[nr] = new FSBlock(*this, nr, FSBlockType::FILELIST_BLOCK);
     blocks[nr]->setFileHeaderRef(head);
     prevBlock->setNextListBlockRef(nr);
     
@@ -283,9 +283,9 @@ MutableFileSystem::addDataBlock(isize count, Block head, Block prev)
 
     FSBlock *newBlock;
     if (isOFS()) {
-        newBlock = new FSBlock(*this, nr, FS_DATA_BLOCK_OFS);
+        newBlock = new FSBlock(*this, nr, FSBlockType::DATA_BLOCK_OFS);
     } else {
-        newBlock = new FSBlock(*this, nr, FS_DATA_BLOCK_FFS);
+        newBlock = new FSBlock(*this, nr, FSBlockType::DATA_BLOCK_FFS);
     }
     
     blocks[nr] = newBlock;
@@ -303,7 +303,7 @@ MutableFileSystem::newUserDirBlock(const string &name)
     
     if (Block nr = allocateBlock()) {
 
-        block = new FSBlock(*this, nr, FS_USERDIR_BLOCK);
+        block = new FSBlock(*this, nr, FSBlockType::USERDIR_BLOCK);
         block->setName(FSName(name));
         blocks[nr] = block;
     }
@@ -318,7 +318,7 @@ MutableFileSystem::newFileHeaderBlock(const string &name)
     
     if (Block nr = allocateBlock()) {
 
-        block = new FSBlock(*this, nr, FS_FILEHEADER_BLOCK);
+        block = new FSBlock(*this, nr, FSBlockType::FILEHEADER_BLOCK);
         block->setName(FSName(name));
         blocks[nr] = block;
     }
@@ -337,8 +337,8 @@ MutableFileSystem::updateChecksums()
 void
 MutableFileSystem::makeBootable(BootBlockId id)
 {
-    assert(blocks[0]->type == FS_BOOT_BLOCK);
-    assert(blocks[1]->type == FS_BOOT_BLOCK);
+    assert(blocks[0]->type == FSBlockType::BOOT_BLOCK);
+    assert(blocks[1]->type == FSBlockType::BOOT_BLOCK);
 
     blocks[0]->writeBootBlock(id, 0);
     blocks[1]->writeBootBlock(id, 1);
@@ -347,8 +347,8 @@ MutableFileSystem::makeBootable(BootBlockId id)
 void
 MutableFileSystem::killVirus()
 {
-    assert(blocks[0]->type == FS_BOOT_BLOCK);
-    assert(blocks[1]->type == FS_BOOT_BLOCK);
+    assert(blocks[0]->type == FSBlockType::BOOT_BLOCK);
+    assert(blocks[1]->type == FSBlockType::BOOT_BLOCK);
 
     auto id = isOFS() ? BootBlockId::AMIGADOS_13 : isFFS() ? BootBlockId::AMIGADOS_20 : BootBlockId::NONE;
 
@@ -405,7 +405,7 @@ MutableFileSystem::createFile(const string &name, const u8 *buf, isize size)
     FSBlock *block = createFile(name);
     
     if (block) {
-        assert(block->type == FS_FILEHEADER_BLOCK);
+        assert(block->type == FSBlockType::FILEHEADER_BLOCK);
         addData(*block, buf, size);
     }
     
@@ -452,7 +452,7 @@ MutableFileSystem::addData(FSBlock &block, const u8 *buffer, isize size)
     
     switch (block.type) {
             
-        case FS_FILEHEADER_BLOCK:
+        case FSBlockType::FILEHEADER_BLOCK:
         {
             assert(block.getFileSize() == 0);
 
@@ -495,7 +495,7 @@ MutableFileSystem::addData(FSBlock &block, const u8 *buffer, isize size)
 
             return block.getFileSize();
         }
-        case FS_DATA_BLOCK_OFS:
+        case FSBlockType::DATA_BLOCK_OFS:
         {
             isize count = std::min(bsize - 24, size);
 
@@ -504,7 +504,7 @@ MutableFileSystem::addData(FSBlock &block, const u8 *buffer, isize size)
             
             return count;
         }
-        case FS_DATA_BLOCK_FFS:
+        case FSBlockType::DATA_BLOCK_FFS:
         {
             isize count = std::min(bsize, size);
             
@@ -531,7 +531,7 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
     if (numBytes() != size) throw Error(ErrorCode::FS_WRONG_CAPACITY);
 
     // Only proceed if all partitions contain a valid file system
-    if (dos == FS_NODOS) throw Error(ErrorCode::FS_UNSUPPORTED);
+    if (dos == FSVolumeType::NODOS) throw Error(ErrorCode::FS_UNSUPPORTED);
 
     // Import all blocks
     for (isize i = 0; i < numBlocks(); i++) {

@@ -41,7 +41,6 @@ struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType>
     static constexpr long minVal = 0;
     static constexpr long maxVal = FILETYPE_EXTENDED_ROM;
     
-    static const char *prefix() { return "FILETYPE"; }
     static const char *_key(long value)
     {
         switch (value) {

@@ -77,7 +77,7 @@ public:
     // Methods from FloppyFile
     //
 
-    FSVolumeType getDos() const override { return FS_NODOS; }
+    FSVolumeType getDos() const override { return FSVolumeType::NODOS; }
     void setDos(FSVolumeType dos) override { };
     Diameter getDiameter() const override { return INCH_35; }
     Density getDensity() const override { return DENSITY_DD; }

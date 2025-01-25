@@ -30,7 +30,6 @@ struct VideoFormatEnum : util::Reflection<VideoFormatEnum, VideoFormat>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(VideoFormat::NTSC);
     
-    static const char *prefix() { return "FORMAT"; }
     static const char *_key(VideoFormat value)
     {
         switch (value) {
@@ -63,7 +62,6 @@ struct ResolutionEnum : util::Reflection<ResolutionEnum, Resolution>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Resolution::SHRES);
     
-    static const char *prefix() { return ""; }
     static const char *_key(Resolution value)
     {
         switch (value) {
@@ -98,7 +96,6 @@ struct WarpModeEnum : util::Reflection<WarpModeEnum, WarpMode>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(WarpMode::ALWAYS);
     
-    static const char *prefix() { return "WARP"; }
     static const char *_key(WarpMode value)
     {
         switch (value) {
@@ -128,7 +125,6 @@ struct ConfigSchemeEnum : util::Reflection<ConfigSchemeEnum, ConfigScheme>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(ConfigScheme::A500_PLUS_1MB);
     
-    static const char *prefix() { return "CONFIG"; }
     static const char *_key(ConfigScheme value)
     {
         switch (value) {
@@ -215,7 +211,6 @@ struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(ChipsetReg::NO_OP);
     
-    static const char *prefix() { return "REG"; }
     static const char *_key(ChipsetReg value)
     {
         static const char *name[] = {

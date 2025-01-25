@@ -31,7 +31,6 @@ struct CIARevisionEnum : util::Reflection<CIARevisionEnum, CIARevision>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(CIARevision::MOS_8520_PLCC);
     
-    static const char *prefix() { return "CIA"; }
     static const char *_key(CIARevision value)
     {
         switch (value) {
@@ -77,8 +76,6 @@ struct CIARegEnum : util::Reflection<CIARegEnum, CIAReg>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(CIAReg::CRB);
     
-    // static const char *prefix() { return "CIAREG"; }
-    // static const char *key(u32 value) { return CIARegEnum::key(CIAReg(value)); }
     static const char *_key(CIAReg value)
     {
         switch (value) {

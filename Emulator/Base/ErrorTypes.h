@@ -205,7 +205,6 @@ struct ErrorCodeEnum : util::Reflection<ErrorCodeEnum, ErrorCode>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(ErrorCode::FS_INVALID_HASHTABLE_SIZE);
     
-    static const char *prefix() { return "ERROR"; }
     static const char *_key(ErrorCode value)
     {
         switch (value) {

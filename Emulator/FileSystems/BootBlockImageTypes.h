@@ -30,7 +30,6 @@ struct BootBlockTypeEnum : util::Reflection<BootBlockTypeEnum, BootBlockType>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(BootBlockType::CUSTOM);
     
-    static const char *prefix() { return "BB"; }
     static const char *_key(BootBlockType value)
     {
         switch (value) {
@@ -61,7 +60,6 @@ struct BootBlockIdEnum : util::Reflection<BootBlockIdEnum, BootBlockId>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(BootBlockId::BYTE_BANDIT);
     
-    static const char *prefix() { return "BB"; }
     static const char *_key(BootBlockId value)
     {
         switch (value) {

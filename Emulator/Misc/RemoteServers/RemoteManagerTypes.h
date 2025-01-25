@@ -31,7 +31,6 @@ struct ServerTypeEnum : util::Reflection<ServerTypeEnum, ServerType>
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(ServerType::GDB);
     
-    static const char *prefix() { return "SERVER"; }
     static const char *_key(ServerType value)
     {
         switch (value) {

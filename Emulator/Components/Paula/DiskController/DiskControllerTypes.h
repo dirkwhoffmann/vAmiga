@@ -34,12 +34,7 @@ struct DriveStateEnum : util::Reflection<DriveStateEnum, DriveState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = DRIVE_DMA_FLUSH;
-    
-    static const char *prefix()
-    {
-        return "DRIVE_DMA";
-    }
-    
+        
     static const char *_key(long value)
     {
         switch (value) {
