@@ -46,8 +46,8 @@ template <class T, typename E> struct Reflection {
     // Experimental
     static constexpr E cast(long value) { return E(value); }
     
-    static constexpr E first = E(T::minVal);
-    static constexpr E last = E(T::maxVal);
+    // static constexpr E first = E(T::minVal);
+    // static constexpr E last = E(T::maxVal);
 
     // Returns all enum elements as a vector
     static constexpr std::vector<E> elements() {

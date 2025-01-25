@@ -26,7 +26,7 @@ Keyboard::serviceKeyboardEvent(EventID id)
             trace(KBD_DEBUG, "KBD_TIMEOUT\n");
 
             // A timeout has occured. Try to resynchronize with the Amiga.
-            state = KB_SYNC;
+            state = KeyboardState::SYNC;
             execute();
             break;
             

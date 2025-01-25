@@ -19,59 +19,62 @@ namespace vamiga {
 // Enumerations
 //
 
-enum_long(DRIVE_TYPE)
+enum class FloppyDriveType : long
 {
-    DRIVE_DD_35,
-    DRIVE_HD_35,
-    DRIVE_DD_525
+    DD_35,
+    HD_35,
+    DD_525
 };
-typedef DRIVE_TYPE FloppyDriveType;
 
 struct FloppyDriveTypeEnum : util::Reflection<FloppyDriveTypeEnum, FloppyDriveType>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = DRIVE_DD_525;
+    static constexpr long maxVal = long(FloppyDriveType::DD_525);
     
-    static const char *_key(long value)
+    static const char *_key(FloppyDriveType value)
     {
         switch (value) {
                 
-            case DRIVE_DD_35:   return "DD_35";
-            case DRIVE_HD_35:   return "HD_35";
-            case DRIVE_DD_525:  return "DD_525";
+            case FloppyDriveType::DD_35:   return "DD_35";
+            case FloppyDriveType::HD_35:   return "HD_35";
+            case FloppyDriveType::DD_525:  return "DD_525";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(FloppyDriveType value)
     {
         return "";
     }
 };
 
-enum_long(DRIVE_MECHANICS)
+enum class DriveMechanics
 {
-    MECHANICS_NONE,
-    MECHANICS_A1010
+    NONE,
+    A1010
 };
-typedef DRIVE_MECHANICS DriveMechanics;
 
 struct DriveMechanicsEnum : util::Reflection<DriveMechanicsEnum, DriveMechanics>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = MECHANICS_A1010;
+    static constexpr long maxVal = long(DriveMechanics::A1010);
     
-    static const char *_key(long value)
+    static const char *_key(DriveMechanics value)
     {
         switch (value) {
                 
-            case MECHANICS_NONE:    return "NONE";
-            case MECHANICS_A1010:   return "A1010";
+            case DriveMechanics::NONE:    return "NONE";
+            case DriveMechanics::A1010:   return "A1010";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(DriveMechanics value)
     {
-        return "";
+        switch (value) {
+                
+            case DriveMechanics::NONE:    return "No mechanical delays";
+            case DriveMechanics::A1010:   return "Commodore Floppy drive";
+        }
+        return "???";
     }
 };
 

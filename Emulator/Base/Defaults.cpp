@@ -102,8 +102,8 @@ Defaults::Defaults()
 
     setFallback(Option::DRIVE_CONNECT,              true,                   { 0 });
     setFallback(Option::DRIVE_CONNECT,              false,                  { 1, 2, 3 });
-    setFallback(Option::DRIVE_TYPE,                 DRIVE_DD_35,            { 0, 1, 2, 3 });
-    setFallback(Option::DRIVE_MECHANICS,            MECHANICS_A1010,        { 0, 1, 2, 3 });
+    setFallback(Option::DRIVE_TYPE,                 (i64)FloppyDriveType::DD_35, { 0, 1, 2, 3 });
+    setFallback(Option::DRIVE_MECHANICS,            (i64)DriveMechanics::A1010, { 0, 1, 2, 3 });
     setFallback(Option::DRIVE_RPM,                  300,                    { 0, 1, 2, 3 });
     setFallback(Option::DRIVE_SWAP_DELAY,           SEC(1.8),               { 0, 1, 2, 3 });
     setFallback(Option::DRIVE_PAN,                  100,                    { 0, 2 });

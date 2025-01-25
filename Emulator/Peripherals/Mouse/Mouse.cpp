@@ -269,12 +269,12 @@ Mouse::trigger(GamePadAction event)
 
     switch (event) {
 
-        case PRESS_LEFT: setLeftButton(true); break;
-        case RELEASE_LEFT: setLeftButton(false); break;
-        case PRESS_MIDDLE: setMiddleButton(true); break;
-        case RELEASE_MIDDLE: setMiddleButton(false); break;
-        case PRESS_RIGHT: setRightButton(true); break;
-        case RELEASE_RIGHT: setRightButton(false); break;
+        case GamePadAction::PRESS_LEFT: setLeftButton(true); break;
+        case GamePadAction::RELEASE_LEFT: setLeftButton(false); break;
+        case GamePadAction::PRESS_MIDDLE: setMiddleButton(true); break;
+        case GamePadAction::RELEASE_MIDDLE: setMiddleButton(false); break;
+        case GamePadAction::PRESS_RIGHT: setRightButton(true); break;
+        case GamePadAction::RELEASE_RIGHT: setRightButton(false); break;
         default: break;
     }
 }

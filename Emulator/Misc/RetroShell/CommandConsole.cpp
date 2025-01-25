@@ -403,9 +403,9 @@ CommandConsole::initCommands(Command &root)
                 
                 switch (nr) {
                         
-                    case 1: port.joystick.trigger(PRESS_FIRE); break;
-                    case 2: port.joystick.trigger(PRESS_FIRE2); break;
-                    case 3: port.joystick.trigger(PRESS_FIRE3); break;
+                    case 1: port.joystick.trigger(GamePadAction::PRESS_FIRE); break;
+                    case 2: port.joystick.trigger(GamePadAction::PRESS_FIRE2); break;
+                    case 3: port.joystick.trigger(GamePadAction::PRESS_FIRE3); break;
                         
                     default:
                         throw Error(ErrorCode::OPT_INV_ARG, "1...3");
@@ -422,9 +422,9 @@ CommandConsole::initCommands(Command &root)
                 
                 switch (nr) {
                         
-                    case 1: port.joystick.trigger(RELEASE_FIRE); break;
-                    case 2: port.joystick.trigger(RELEASE_FIRE2); break;
-                    case 3: port.joystick.trigger(RELEASE_FIRE3); break;
+                    case 1: port.joystick.trigger(GamePadAction::RELEASE_FIRE); break;
+                    case 2: port.joystick.trigger(GamePadAction::RELEASE_FIRE2); break;
+                    case 3: port.joystick.trigger(GamePadAction::RELEASE_FIRE3); break;
                         
                     default:
                         throw Error(ErrorCode::OPT_INV_ARG, "1...3");
@@ -440,7 +440,7 @@ CommandConsole::initCommands(Command &root)
                      [this](Arguments& argv, long value) {
                 
                 auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-                port.joystick.trigger(PULL_LEFT);
+                port.joystick.trigger(GamePadAction::PULL_LEFT);
                 
             }, i);
             
@@ -449,7 +449,7 @@ CommandConsole::initCommands(Command &root)
                      [this](Arguments& argv, long value) {
                 
                 auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-                port.joystick.trigger(PULL_RIGHT);
+                port.joystick.trigger(GamePadAction::PULL_RIGHT);
                 
             }, i);
             
@@ -458,7 +458,7 @@ CommandConsole::initCommands(Command &root)
                      [this](Arguments& argv, long value) {
                 
                 auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-                port.joystick.trigger(PULL_UP);
+                port.joystick.trigger(GamePadAction::PULL_UP);
                 
             }, i);
             
@@ -467,7 +467,7 @@ CommandConsole::initCommands(Command &root)
                      [this](Arguments& argv, long value) {
                 
                 auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-                port.joystick.trigger(PULL_DOWN);
+                port.joystick.trigger(GamePadAction::PULL_DOWN);
                 
             }, i);
             
@@ -479,7 +479,7 @@ CommandConsole::initCommands(Command &root)
                      [this](Arguments& argv, long value) {
                 
                 auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-                port.joystick.trigger(RELEASE_X);
+                port.joystick.trigger(GamePadAction::RELEASE_X);
                 
             }, i);
             
@@ -488,7 +488,7 @@ CommandConsole::initCommands(Command &root)
                      [this](Arguments& argv, long value) {
                 
                 auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-                port.joystick.trigger(RELEASE_Y);
+                port.joystick.trigger(GamePadAction::RELEASE_Y);
                 
             }, i);
         }

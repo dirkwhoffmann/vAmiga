@@ -168,7 +168,7 @@ EADFFile::getDos() const
 Diameter
 EADFFile::getDiameter() const
 {
-    return INCH_35;
+    return Diameter::INCH_35;
 }
 
 Density
@@ -180,7 +180,7 @@ EADFFile::getDensity() const
         bitsInLargestTrack = std::max(bitsInLargestTrack, usedBitsForTrack(i));
     }
     
-    return bitsInLargestTrack < 16000 * 8 ? DENSITY_DD : DENSITY_HD;
+    return bitsInLargestTrack < 16000 * 8 ? Density::DD : Density::HD;
 }
 
 void

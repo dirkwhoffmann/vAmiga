@@ -88,10 +88,10 @@ void
 MutableFileSystem::init(FSVolumeType type, const std::filesystem::path &path)
 {
     // Try to fit the directory into files system with DD disk capacity
-    try { init(INCH_35, DENSITY_DD, path); return; } catch (...) { };
+    try { init(Diameter::INCH_35, Density::DD, path); return; } catch (...) { };
 
     // Try to fit the directory into files system with HD disk capacity
-    init(INCH_35, DENSITY_HD, path);
+    init(Diameter::INCH_35, Density::HD, path);
 }
 
 void

@@ -20,59 +20,68 @@ namespace vamiga {
 // Enumerations
 //
 
-enum_long(DIAMETER)
+enum class Diameter : long
 {
     INCH_35,
     INCH_525
 };
-typedef DIAMETER Diameter;
 
 struct DiameterEnum : util::Reflection<DiameterEnum, Diameter>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = INCH_525;
+    static constexpr long maxVal = long(Diameter::INCH_525);
     
-    static const char *_key(long value)
+    static const char *_key(Diameter value)
     {
         switch (value) {
                 
-            case INCH_35:     return "INCH_35";
-            case INCH_525:    return "INCH_525";
+            case Diameter::INCH_35:     return "INCH_35";
+            case Diameter::INCH_525:    return "INCH_525";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(Diameter value)
     {
-        return "";
+        switch (value) {
+                
+            case Diameter::INCH_35:     return "3.5\" floppy disk";
+            case Diameter::INCH_525:    return "5.25\" floppy disk";
+        }
+        return "???";
     }
 };
 
-enum_long(DENSITY)
+enum class Density
 {
-    DENSITY_SD,
-    DENSITY_DD,
-    DENSITY_HD
+    SD,
+    DD,
+    HD
 };
-typedef DENSITY Density;
 
 struct DensityEnum : util::Reflection<DensityEnum, Density>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = DENSITY_HD;
+    static constexpr long maxVal = long(Density::HD);
     
-    static const char *_key(long value)
+    static const char *_key(Density value)
     {
         switch (value) {
                 
-            case DENSITY_SD:     return "SD";
-            case DENSITY_DD:     return "DD";
-            case DENSITY_HD:     return "HD";
+            case Density::SD:     return "SD";
+            case Density::DD:     return "DD";
+            case Density::HD:     return "HD";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(Density value)
     {
-        return "";
+        switch (value) {
+                
+            case Density::SD:     return "Single Density";
+            case Density::DD:     return "Double Density";
+            case Density::HD:     return "High Density";
+        }
+        return "???";
     }
 };
 

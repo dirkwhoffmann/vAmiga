@@ -25,13 +25,13 @@ enum class SrvState : long
     LISTENING,  // The server is waiting for a client to connect
     CONNECTED,  // The server is connected to a client
     STOPPING,   // The server is shutting down
-    ERROR       // The server is in an error state
+    INVALID     // The server is in an error state
 };
 
 struct SrvStateEnum : util::Reflection<SrvStateEnum, SrvState>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(SrvState::ERROR);
+    static constexpr long maxVal = long(SrvState::INVALID);
     
     static const char *_key(SrvState value)
     {
@@ -42,7 +42,7 @@ struct SrvStateEnum : util::Reflection<SrvStateEnum, SrvState>
             case SrvState::LISTENING:   return "LISTENING";
             case SrvState::CONNECTED:   return "CONNECTED";
             case SrvState::STOPPING:    return "STOPPING";
-            case SrvState::ERROR:       return "ERROR";
+            case SrvState::INVALID:     return "INVALID";
         }
         return "???";
     }

@@ -176,9 +176,9 @@ public:
     Diameter getDiameter() const { return diameter; }
     Density getDensity() const { return density; }
     
-    isize numCyls() const { return diameter == INCH_525 ? 42 : 84; }
+    isize numCyls() const { return diameter == Diameter::INCH_525 ? 42 : 84; }
     isize numHeads() const { return 2; }
-    isize numTracks() const { return diameter == INCH_525 ? 84 : 168; }
+    isize numTracks() const { return diameter == Diameter::INCH_525 ? 84 : 168; }
     
     bool isWriteProtected() const { return flags & long(DiskFlags::PROTECTED); }
     void setWriteProtection(bool value) { value ? flags |= long(DiskFlags::PROTECTED) : flags &= ~long(DiskFlags::PROTECTED); }

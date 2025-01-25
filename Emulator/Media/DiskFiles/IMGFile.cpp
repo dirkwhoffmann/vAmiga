@@ -39,7 +39,7 @@ void
 IMGFile::init(Diameter dia, Density den)
 {
     // We only support 3.5"DD disks at the moment
-    if (dia == INCH_35 && den == DENSITY_DD) {
+    if (dia == Diameter::INCH_35 && den == Density::DD) {
 
         data.init(9 * 160 * 512);
 
@@ -52,7 +52,7 @@ IMGFile::init(Diameter dia, Density den)
 void
 IMGFile::init(FloppyDisk &disk)
 {
-    init(INCH_35, DENSITY_DD);
+    init(Diameter::INCH_35, Density::DD);
     decodeDisk(disk);
 }
 

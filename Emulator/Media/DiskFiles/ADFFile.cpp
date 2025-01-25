@@ -52,10 +52,10 @@ ADFFile::fileSize(Diameter diameter, Density density)
     assert_enum(Diameter, diameter);
     assert_enum(Density, density);
 
-    if (diameter != INCH_35) throw Error(ErrorCode::DISK_INVALID_DIAMETER);
+    if (diameter != Diameter::INCH_35) throw Error(ErrorCode::DISK_INVALID_DIAMETER);
     
-    if (density == DENSITY_DD) return ADFSIZE_35_DD;
-    if (density == DENSITY_HD) return ADFSIZE_35_HD;
+    if (density == Density::DD) return ADFSIZE_35_DD;
+    if (density == Density::HD) return ADFSIZE_35_HD;
 
     throw Error(ErrorCode::DISK_INVALID_DENSITY);
 }
@@ -72,11 +72,11 @@ ADFFile::init(Diameter diameter, Density density)
 void
 ADFFile::init(const FloppyDiskDescriptor &descr)
 {
-    if (descr.diameter != INCH_35) throw Error(ErrorCode::DISK_INVALID_DIAMETER);
+    if (descr.diameter != Diameter::INCH_35) throw Error(ErrorCode::DISK_INVALID_DIAMETER);
 
     switch (descr.density) {
 
-        case DENSITY_DD:
+        case Density::DD:
 
             switch (descr.cylinders) {
 
@@ -91,7 +91,7 @@ ADFFile::init(const FloppyDiskDescriptor &descr)
             }
             break;
 
-        case DENSITY_HD:
+        case Density::HD:
 
             init(ADFSIZE_35_HD);
             break;
@@ -125,11 +125,11 @@ ADFFile::init(MutableFileSystem &volume)
     switch (volume.numBlocks()) {
             
         case 2 * 880:
-            init(INCH_35, DENSITY_DD);
+            init(Diameter::INCH_35, Density::DD);
             break;
             
         case 4 * 880:
-            init(INCH_35, DENSITY_HD);
+            init(Diameter::INCH_35, Density::HD);
             break;
             
         default:
@@ -174,8 +174,8 @@ ADFFile::numSectors() const
 {
     switch (getDensity()) {
             
-        case DENSITY_DD: return 11;
-        case DENSITY_HD: return 22;
+        case Density::DD: return 11;
+        case Density::HD: return 22;
             
         default:
             fatalError;
@@ -206,13 +206,13 @@ ADFFile::setDos(FSVolumeType dos)
 Diameter
 ADFFile::getDiameter() const
 {
-    return INCH_35;
+    return Diameter::INCH_35;
 }
 
 Density
 ADFFile::getDensity() const
 {
-    return (data.size & ~1) == ADFSIZE_35_HD ? DENSITY_HD : DENSITY_DD;
+    return (data.size & ~1) == ADFSIZE_35_HD ? Density::HD : Density::DD;
 }
 
 FileSystemDescriptor

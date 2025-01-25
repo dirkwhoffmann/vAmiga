@@ -105,7 +105,7 @@ FloppyDrive::checkOption(Option opt, i64 value)
             if (!FloppyDriveTypeEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, FloppyDriveTypeEnum::keyList());
             }
-            if (value != DRIVE_DD_35 && value != DRIVE_HD_35) {
+            if (value != i64(FloppyDriveType::DD_35) && value != i64(FloppyDriveType::HD_35)) {
                 throw Error(ErrorCode::OPT_UNSUPPORTED);
             }
             return;
@@ -330,8 +330,13 @@ FloppyDrive::operator << (SerCounter &worker)
 
     if (hasDisk()) {
 
-        // Add the disk type and disk state
-        worker << disk->getDiameter() << disk->getDensity();
+        // Write the disk type
+        auto diameter = disk->getDiameter();
+        auto density = disk->getDensity();
+
+        // Write the disk's state
+        worker << diameter << density;
+        
         disk->serialize(worker);
     }
 }
@@ -369,8 +374,10 @@ FloppyDrive::operator << (SerWriter &worker)
     if (hasDisk()) {
 
         // Write the disk type
-        worker << disk->getDiameter() << disk->getDensity();
-
+        auto diameter = disk->getDiameter();
+        auto density = disk->getDensity();
+        worker << diameter << density;
+        
         // Write the disk's state
         disk->serialize(worker);
     }
@@ -450,14 +457,14 @@ FloppyDrive::getDriveId() const
         
         switch(config.type) {
                 
-            case DRIVE_DD_35:
+            case FloppyDriveType::DD_35:
                 return 0xFFFFFFFF;
                 
-            case DRIVE_HD_35:
-                if (disk && disk->getDensity() == DENSITY_HD) return 0xAAAAAAAA;
+            case FloppyDriveType::HD_35:
+                if (disk && disk->getDensity() == Density::HD) return 0xAAAAAAAA;
                 return 0xFFFFFFFF;
                 
-            case DRIVE_DD_525:
+            case FloppyDriveType::DD_525:
                 return 0x55555555;
                 
             default:
@@ -486,8 +493,8 @@ FloppyDrive::getStartDelay() const
 {
     switch (config.mechanics) {
 
-        case MECHANICS_NONE:    return 0;
-        case MECHANICS_A1010:   return MSEC(380);
+        case DriveMechanics::NONE:    return 0;
+        case DriveMechanics::A1010:   return MSEC(380);
 
         default:
             fatalError;
@@ -499,8 +506,8 @@ FloppyDrive::getStopDelay() const
 {
     switch (config.mechanics) {
 
-        case MECHANICS_NONE:    return 0;
-        case MECHANICS_A1010:   return MSEC(80);
+        case DriveMechanics::NONE:    return 0;
+        case DriveMechanics::A1010:   return MSEC(80);
 
         default:
             fatalError;
@@ -512,8 +519,8 @@ FloppyDrive::getStepPulseDelay() const
 {
     switch (config.mechanics) {
 
-        case MECHANICS_NONE:    return 0;
-        case MECHANICS_A1010:   return USEC(40);
+        case DriveMechanics::NONE:    return 0;
+        case DriveMechanics::A1010:   return USEC(40);
 
         default:
             fatalError;
@@ -525,8 +532,8 @@ FloppyDrive::getRevStepPulseDelay() const
 {
     switch (config.mechanics) {
 
-        case MECHANICS_NONE:    return 0;
-        case MECHANICS_A1010:   return USEC(40);
+        case DriveMechanics::NONE:    return 0;
+        case DriveMechanics::A1010:   return USEC(40);
 
         default:
             fatalError;
@@ -538,8 +545,8 @@ FloppyDrive::getTrackToTrackDelay() const
 {
     switch (config.mechanics) {
 
-        case MECHANICS_NONE:    return 0;
-        case MECHANICS_A1010:   return MSEC(3);
+        case DriveMechanics::NONE:    return 0;
+        case DriveMechanics::A1010:   return MSEC(3);
 
         default:
             fatalError;
@@ -551,8 +558,8 @@ FloppyDrive::getHeadSettleTime() const
 {
     switch (config.mechanics) {
 
-        case MECHANICS_NONE:    return 0;
-        case MECHANICS_A1010:   return MSEC(9);
+        case DriveMechanics::NONE:    return 0;
+        case DriveMechanics::A1010:   return MSEC(9);
 
         default:
             fatalError;
@@ -902,14 +909,14 @@ FloppyDrive::isInsertable(Diameter t, Density d) const
     
     switch (config.type) {
             
-        case DRIVE_DD_35:
-            return t == INCH_35 && d == DENSITY_DD;
+        case FloppyDriveType::DD_35:
+            return t == Diameter::INCH_35 && d == Density::DD;
             
-        case DRIVE_HD_35:
-            return t == INCH_35;
+        case FloppyDriveType::HD_35:
+            return t == Diameter::INCH_35;
             
-        case DRIVE_DD_525:
-            return t == INCH_525 && d == DENSITY_DD;
+        case FloppyDriveType::DD_525:
+            return t == Diameter::INCH_525 && d == Density::DD;
 
         default:
             fatalError;
@@ -1045,9 +1052,9 @@ FloppyDrive::insertNew(FSVolumeType fs, BootBlockId bb, string name)
     // Create a suitable ADF for this drive
     switch (config.type) {
             
-        case DRIVE_DD_35: adf.init(INCH_35, DENSITY_DD); break;
-        case DRIVE_HD_35: adf.init(INCH_35, DENSITY_HD); break;
-        case DRIVE_DD_525: adf.init(INCH_525, DENSITY_SD); break;
+        case FloppyDriveType::DD_35: adf.init(Diameter::INCH_35, Density::DD); break;
+        case FloppyDriveType::HD_35: adf.init(Diameter::INCH_35, Density::HD); break;
+        case FloppyDriveType::DD_525: adf.init(Diameter::INCH_525, Density::SD); break;
     }
     
     // Add a file system

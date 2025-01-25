@@ -140,7 +140,7 @@ public:
     bool isListening() const { return state == SrvState::LISTENING; }
     bool isConnected() const { return state == SrvState::CONNECTED; }
     bool isStopping() const { return state == SrvState::STOPPING; }
-    bool isErroneous() const { return state == SrvState::ERROR; }
+    bool isErroneous() const { return state == SrvState::INVALID; }
 
     
     //

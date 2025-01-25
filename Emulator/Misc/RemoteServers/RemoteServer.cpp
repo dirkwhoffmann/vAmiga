@@ -194,7 +194,7 @@ RemoteServer::switchState(SrvState newState)
 void
 RemoteServer::handleError(const char *description)
 {
-    switchState(SrvState::ERROR);
+    switchState(SrvState::INVALID);
     retroShell << "Server Error: " << string(description) << '\n';
 }
 

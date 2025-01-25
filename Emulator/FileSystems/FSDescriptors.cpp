@@ -138,7 +138,7 @@ GeometryDescriptor::GeometryDescriptor(isize size)
 
 GeometryDescriptor::GeometryDescriptor(Diameter type, Density density)
 {
-    if (type == INCH_525 && density == DENSITY_DD) {
+    if (type == Diameter::INCH_525 && density == Density::DD) {
         
         cylinders = 40;
         heads = 2;
@@ -146,7 +146,7 @@ GeometryDescriptor::GeometryDescriptor(Diameter type, Density density)
         bsize = 512;
         return;
     }
-    if (type == INCH_35 && density == DENSITY_DD) {
+    if (type == Diameter::INCH_35 && density == Density::DD) {
         
         cylinders = 80;
         heads = 2;
@@ -154,7 +154,7 @@ GeometryDescriptor::GeometryDescriptor(Diameter type, Density density)
         bsize = 512;
         return;
     }
-    if (type == INCH_35 && density == DENSITY_HD) {
+    if (type == Diameter::INCH_35 && density == Density::HD) {
         
         cylinders = 80;
         heads = 2;

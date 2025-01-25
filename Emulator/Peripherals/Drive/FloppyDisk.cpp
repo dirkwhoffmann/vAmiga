@@ -21,9 +21,9 @@ FloppyDisk::init(Diameter dia, Density den, bool wp)
     
     u32 trackLength = 0;
     
-    if (dia == INCH_35  && den == DENSITY_DD) trackLength = 12668;
-    if (dia == INCH_35  && den == DENSITY_HD) trackLength = 24636;
-    if (dia == INCH_525 && den == DENSITY_DD) trackLength = 12668;
+    if (dia == Diameter::INCH_35  && den == Density::DD) trackLength = 12668;
+    if (dia == Diameter::INCH_35  && den == Density::HD) trackLength = 24636;
+    if (dia == Diameter::INCH_525 && den == Density::DD) trackLength = 12668;
     
     if (trackLength == 0 || FORCE_DISK_INVALID_LAYOUT) {
         throw Error(ErrorCode::DISK_INVALID_LAYOUT);
@@ -220,7 +220,7 @@ FloppyDisk::clearDisk()
     /* In order to make some copy protected game titles work, we smuggle in
      * some magic values. E.g., Crunch factory expects 0x44A2 on cylinder 80.
      */
-    if (diameter == INCH_35 && density == DENSITY_DD) {
+    if (diameter == Diameter::INCH_35 && density == Density::DD) {
         
         for (isize t = 0; t < numTracks(); t++) {
             data.track[t][0] = 0x44;

@@ -18,34 +18,33 @@ namespace vamiga {
 // Enumerations
 //
 
-enum_long(KB_STATE)
+enum class KeyboardState
 {
-    KB_SELFTEST,
-    KB_SYNC,
-    KB_STRM_ON,
-    KB_STRM_OFF,
-    KB_SEND
+    SELFTEST,
+    SYNC,
+    STRM_ON,
+    STRM_OFF,
+    SEND
 };
-typedef KB_STATE KeyboardState;
 
 struct KeyboardStateEnum : util::Reflection<KeyboardStateEnum, KeyboardState>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = KB_SEND;
+    static constexpr long maxVal = long(KeyboardState::SEND);
     
-    static const char *_key(long value)
+    static const char *_key(KeyboardState value)
     {
         switch (value) {
                 
-            case KB_SELFTEST:  return "SELFTEST";
-            case KB_SYNC:      return "SYNC";
-            case KB_STRM_ON:   return "STRM_ON";
-            case KB_STRM_OFF:  return "STRM_OFF";
-            case KB_SEND:      return "SEND";
+            case KeyboardState::SELFTEST:  return "SELFTEST";
+            case KeyboardState::SYNC:      return "SYNC";
+            case KeyboardState::STRM_ON:   return "STRM_ON";
+            case KeyboardState::STRM_OFF:  return "STRM_OFF";
+            case KeyboardState::SEND:      return "SEND";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(KeyboardState value)
     {
         return "";
     }
