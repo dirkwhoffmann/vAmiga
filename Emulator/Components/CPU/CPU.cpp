@@ -376,7 +376,7 @@ CPU::setOption(Option option, i64 value)
             
             switch (config.dasmNumbers) {
                     
-                case DASM_NUMBERS_HEX:
+                case DasmNumbers::HEX:
                     
                     setDasmNumberFormat(moira::DasmNumberFormat {
                         .prefix = "$",
@@ -386,7 +386,7 @@ CPU::setOption(Option option, i64 value)
                     });
                     return;
                     
-                case DASM_NUMBERS_DEC:
+                case DasmNumbers::DEC:
                     
                     setDasmNumberFormat(moira::DasmNumberFormat {
                         .prefix = "",

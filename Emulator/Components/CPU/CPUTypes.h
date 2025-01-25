@@ -22,42 +22,41 @@ namespace vamiga {
 // Enumerations
 //
 
-enum_long(CPU_REVISION)
+enum class CPURevision : long
 {
     CPU_68000,
     CPU_68010,
     CPU_68EC020
 };
-typedef CPU_REVISION CPURevision;
 
 struct CPURevisionEnum : util::Reflection<CPURevisionEnum, CPURevision>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = CPU_68EC020;
+    static constexpr long maxVal = long(CPURevision::CPU_68EC020);
     
-    static const char *_key(long value)
+    static const char *_key(CPURevision value)
     {
         switch (value) {
                 
-            case CPU_68000:     return "68000";
-            case CPU_68010:     return "68010";
-            case CPU_68EC020:   return "68EC020";
+            case CPURevision::CPU_68000:     return "68000";
+            case CPURevision::CPU_68010:     return "68010";
+            case CPURevision::CPU_68EC020:   return "68EC020";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(CPURevision value)
     {
         switch (value) {
                 
-            case CPU_68000:     return "Motorola 68000 CPU";
-            case CPU_68010:     return "Motorola 68010 CPU";
-            case CPU_68EC020:   return "Motorola 68EC020 CPU";
+            case CPURevision::CPU_68000:     return "Motorola 68000 CPU";
+            case CPURevision::CPU_68010:     return "Motorola 68010 CPU";
+            case CPURevision::CPU_68EC020:   return "Motorola 68EC020 CPU";
         }
         return "???";
     }
 };
 
-enum_long(DASM_REVISION)
+enum class DasmRevision : long
 {
     DASM_68000,
     DASM_68010,
@@ -69,150 +68,146 @@ enum_long(DASM_REVISION)
     DASM_68LC040,
     DASM_68040
 };
-typedef DASM_REVISION DasmRevision;
 
 struct DasmRevisionEnum : util::Reflection<DasmRevisionEnum, DasmRevision>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = DASM_68040;
+    static constexpr long maxVal = long(DasmRevision::DASM_68040);
     
-    static const char *_key(long value)
+    static const char *_key(DasmRevision value)
     {
         switch (value) {
                 
-            case DASM_68000:    return "68000";
-            case DASM_68010:    return "68010";
-            case DASM_68EC020:  return "68EC020";
-            case DASM_68020:    return "68020";
-            case DASM_68EC030:  return "68EC030";
-            case DASM_68030:    return "68030";
-            case DASM_68EC040:  return "68EC040";
-            case DASM_68LC040:  return "68LC040";
-            case DASM_68040:    return "68040";
+            case DasmRevision::DASM_68000:    return "68000";
+            case DasmRevision::DASM_68010:    return "68010";
+            case DasmRevision::DASM_68EC020:  return "68EC020";
+            case DasmRevision::DASM_68020:    return "68020";
+            case DasmRevision::DASM_68EC030:  return "68EC030";
+            case DasmRevision::DASM_68030:    return "68030";
+            case DasmRevision::DASM_68EC040:  return "68EC040";
+            case DasmRevision::DASM_68LC040:  return "68LC040";
+            case DasmRevision::DASM_68040:    return "68040";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(DasmRevision value)
     {
         switch (value) {
                 
-            case DASM_68000:    return "Motorola 68000 instruction set";
-            case DASM_68010:    return "Motorola 68010 instruction set";
-            case DASM_68EC020:  return "Motorola 68EC020 instruction set";
-            case DASM_68020:    return "Motorola 68020 instruction set";
-            case DASM_68EC030:  return "Motorola 68EC030 instruction set";
-            case DASM_68030:    return "Motorola 68030 instruction set";
-            case DASM_68EC040:  return "Motorola 68EC040 instruction set";
-            case DASM_68LC040:  return "Motorola 68LC040 instruction set";
-            case DASM_68040:    return "Motorola 68040 instruction set";
+            case DasmRevision::DASM_68000:    return "Motorola 68000 instruction set";
+            case DasmRevision::DASM_68010:    return "Motorola 68010 instruction set";
+            case DasmRevision::DASM_68EC020:  return "Motorola 68EC020 instruction set";
+            case DasmRevision::DASM_68020:    return "Motorola 68020 instruction set";
+            case DasmRevision::DASM_68EC030:  return "Motorola 68EC030 instruction set";
+            case DasmRevision::DASM_68030:    return "Motorola 68030 instruction set";
+            case DasmRevision::DASM_68EC040:  return "Motorola 68EC040 instruction set";
+            case DasmRevision::DASM_68LC040:  return "Motorola 68LC040 instruction set";
+            case DasmRevision::DASM_68040:    return "Motorola 68040 instruction set";
         }
         return "???";
     }
 };
 
-enum_long(DASM_SYNTAX)
+enum class DasmSyntax : long
 {
-    DASM_SYNTAX_MOIRA,
-    DASM_SYNTAX_MOIRA_MIT,
-    DASM_SYNTAX_GNU,
-    DASM_SYNTAX_GNU_MIT,
-    DASM_SYNTAX_MUSASHI
+    MOIRA,
+    MOIRA_MIT,
+    GNU,
+    GNU_MIT,
+    MUSASHI
 };
-typedef DASM_SYNTAX DasmSyntax;
 
 struct DasmSyntaxEnum : util::Reflection<DasmSyntaxEnum, DasmSyntax>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = DASM_SYNTAX_MUSASHI;
+    static constexpr long maxVal = long(DasmSyntax::MUSASHI);
     
-    static const char *_key(long value)
+    static const char *_key(DasmSyntax value)
     {
         switch (value) {
                 
-            case DASM_SYNTAX_MOIRA:      return "MOIRA";
-            case DASM_SYNTAX_MOIRA_MIT:  return "MOIRA_MIT";
-            case DASM_SYNTAX_GNU:        return "GNU";
-            case DASM_SYNTAX_GNU_MIT:    return "GNU_MIT";
-            case DASM_SYNTAX_MUSASHI:    return "MUSASHI";
+            case DasmSyntax::MOIRA:      return "MOIRA";
+            case DasmSyntax::MOIRA_MIT:  return "MOIRA_MIT";
+            case DasmSyntax::GNU:        return "GNU";
+            case DasmSyntax::GNU_MIT:    return "GNU_MIT";
+            case DasmSyntax::MUSASHI:    return "MUSASHI";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(DasmSyntax value)
     {
         switch (value) {
                 
-            case DASM_SYNTAX_MOIRA:      return "Default style";
-            case DASM_SYNTAX_MOIRA_MIT:  return "Moira MIT style";
-            case DASM_SYNTAX_GNU:        return "GNU style";
-            case DASM_SYNTAX_GNU_MIT:    return "GNU MIT style";
-            case DASM_SYNTAX_MUSASHI:    return "Musashi style";
+            case DasmSyntax::MOIRA:      return "Default style";
+            case DasmSyntax::MOIRA_MIT:  return "Moira MIT style";
+            case DasmSyntax::GNU:        return "GNU style";
+            case DasmSyntax::GNU_MIT:    return "GNU MIT style";
+            case DasmSyntax::MUSASHI:    return "Musashi style";
         }
         return "???";
     }
 };
 
-enum_long(DASM_NUMBERS)
+enum class DasmNumbers : long
 {
-    DASM_NUMBERS_HEX,
-    DASM_NUMBERS_DEC
+    HEX,
+    DEC
 };
-typedef DASM_NUMBERS DasmNumbers;
 
 struct DasmNumbersEnum : util::Reflection<DasmNumbersEnum, DasmNumbers>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = DASM_NUMBERS_DEC;
+    static constexpr long maxVal = long(DasmNumbers::DEC);
     
-    static const char *_key(long value)
+    static const char *_key(DasmNumbers value)
     {
         switch (value) {
                 
-            case DASM_NUMBERS_HEX:      return "HEX";
-            case DASM_NUMBERS_DEC:      return "DEC";
+            case DasmNumbers::HEX:      return "HEX";
+            case DasmNumbers::DEC:      return "DEC";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(DasmNumbers value)
     {
         switch (value) {
                 
-            case DASM_NUMBERS_HEX:      return "Hexadecimal numbers";
-            case DASM_NUMBERS_DEC:      return "Decimal numbers";
+            case DasmNumbers::HEX:      return "Hexadecimal numbers";
+            case DasmNumbers::DEC:      return "Decimal numbers";
         }
         return "???";
     }
 };
 
-enum_long(GUARD_TYPE)
+enum class GuardType : long
 {
-    GUARD_BREAKPOINT,
-    GUARD_WATCHPOINT,
-    GUARD_CATCHPOINT,
+    BREAKPOINT,
+    WATCHPOINT,
+    CATCHPOINT,
 };
-typedef GUARD_TYPE GuardType;
 
 struct GuardTypeEnum : util::Reflection<GuardTypeEnum, GuardType>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = GUARD_CATCHPOINT;
+    static constexpr long maxVal = long(GuardType::CATCHPOINT);
     
-    static const char *_key(long value)
+    static const char *_key(GuardType value)
     {
         switch (value) {
                 
-            case GUARD_BREAKPOINT:  return "BREAKPOINT";
-            case GUARD_WATCHPOINT:  return "WATCHPOINT";
-            case GUARD_CATCHPOINT:  return "CATCHPOINT";
+            case GuardType::BREAKPOINT:  return "BREAKPOINT";
+            case GuardType::WATCHPOINT:  return "WATCHPOINT";
+            case GuardType::CATCHPOINT:  return "CATCHPOINT";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(GuardType value)
     {
         switch (value) {
                 
-            case GUARD_BREAKPOINT:  return "Breakpoint";
-            case GUARD_WATCHPOINT:  return "Watchpoint";
-            case GUARD_CATCHPOINT:  return "Catchpoint";
+            case GuardType::BREAKPOINT:  return "Breakpoint";
+            case GuardType::WATCHPOINT:  return "Watchpoint";
+            case GuardType::CATCHPOINT:  return "Catchpoint";
         }
         return "???";
     }
