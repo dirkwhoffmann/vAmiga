@@ -89,7 +89,7 @@ Emulator::_dump(Category category, std::ostream& os) const
         
         for (isize i = DebugFlagEnum::minVal; i < DebugFlagEnum::maxVal; i++) {
             
-            os << tab(DebugFlagEnum::key(i));
+            os << tab(DebugFlagEnum::key(DebugFlag(i)));
             os << dec(getDebugVariable(DebugFlag(i))) << std::endl;
         }
     }
@@ -402,115 +402,115 @@ Emulator::getDebugVariable(DebugFlag flag)
     
     switch (flag) {
             
-        case FLAG_XFILES:           return XFILES;
-        case FLAG_CNF_DEBUG:        return CNF_DEBUG;
-        case FLAG_OBJ_DEBUG:        return OBJ_DEBUG;
-        case FLAG_DEF_DEBUG:        return DEF_DEBUG;
-        case FLAG_MIMIC_UAE:        return MIMIC_UAE;
+        case DebugFlag::XFILES:           return XFILES;
+        case DebugFlag::CNF_DEBUG:        return CNF_DEBUG;
+        case DebugFlag::OBJ_DEBUG:        return OBJ_DEBUG;
+        case DebugFlag::DEF_DEBUG:        return DEF_DEBUG;
+        case DebugFlag::MIMIC_UAE:        return MIMIC_UAE;
             
-        case FLAG_RUN_DEBUG:        return RUN_DEBUG;
-        case FLAG_TIM_DEBUG:        return TIM_DEBUG;
-        case FLAG_WARP_DEBUG:       return WARP_DEBUG;
-        case FLAG_CMD_DEBUG:        return CMD_DEBUG;
-        case FLAG_MSG_DEBUG:        return MSG_DEBUG;
-        case FLAG_SNP_DEBUG:        return SNP_DEBUG;
+        case DebugFlag::RUN_DEBUG:        return RUN_DEBUG;
+        case DebugFlag::TIM_DEBUG:        return TIM_DEBUG;
+        case DebugFlag::WARP_DEBUG:       return WARP_DEBUG;
+        case DebugFlag::CMD_DEBUG:        return CMD_DEBUG;
+        case DebugFlag::MSG_DEBUG:        return MSG_DEBUG;
+        case DebugFlag::SNP_DEBUG:        return SNP_DEBUG;
             
-        case FLAG_RUA_DEBUG:        return RUA_DEBUG;
-        case FLAG_RUA_CHECKSUM:     return RUA_CHECKSUM;
-        case FLAG_RUA_ON_STEROIDS:  return RUA_ON_STEROIDS;
+        case DebugFlag::RUA_DEBUG:        return RUA_DEBUG;
+        case DebugFlag::RUA_CHECKSUM:     return RUA_CHECKSUM;
+        case DebugFlag::RUA_ON_STEROIDS:  return RUA_ON_STEROIDS;
             
-        case FLAG_CPU_DEBUG:        return CPU_DEBUG;
+        case DebugFlag::CPU_DEBUG:        return CPU_DEBUG;
             
-        case FLAG_OCSREG_DEBUG:     return OCSREG_DEBUG;
-        case FLAG_ECSREG_DEBUG:     return ECSREG_DEBUG;
-        case FLAG_INVREG_DEBUG:     return INVREG_DEBUG;
-        case FLAG_MEM_DEBUG:        return MEM_DEBUG;
+        case DebugFlag::OCSREG_DEBUG:     return OCSREG_DEBUG;
+        case DebugFlag::ECSREG_DEBUG:     return ECSREG_DEBUG;
+        case DebugFlag::INVREG_DEBUG:     return INVREG_DEBUG;
+        case DebugFlag::MEM_DEBUG:        return MEM_DEBUG;
             
-        case FLAG_DMA_DEBUG:        return DMA_DEBUG;
-        case FLAG_DDF_DEBUG:        return DDF_DEBUG;
-        case FLAG_SEQ_DEBUG:        return SEQ_DEBUG;
-        case FLAG_SEQ_ON_STEROIDS:  return SEQ_ON_STEROIDS;
-        case FLAG_NTSC_DEBUG:       return NTSC_DEBUG;
+        case DebugFlag::DMA_DEBUG:        return DMA_DEBUG;
+        case DebugFlag::DDF_DEBUG:        return DDF_DEBUG;
+        case DebugFlag::SEQ_DEBUG:        return SEQ_DEBUG;
+        case DebugFlag::SEQ_ON_STEROIDS:  return SEQ_ON_STEROIDS;
+        case DebugFlag::NTSC_DEBUG:       return NTSC_DEBUG;
             
-        case FLAG_COP_CHECKSUM:     return COP_CHECKSUM;
-        case FLAG_COPREG_DEBUG:     return COPREG_DEBUG;
-        case FLAG_COP_DEBUG:        return COP_DEBUG;
+        case DebugFlag::COP_CHECKSUM:     return COP_CHECKSUM;
+        case DebugFlag::COPREG_DEBUG:     return COPREG_DEBUG;
+        case DebugFlag::COP_DEBUG:        return COP_DEBUG;
             
-        case FLAG_BLT_CHECKSUM:     return BLT_CHECKSUM;
-        case FLAG_BLTREG_DEBUG:     return BLTREG_DEBUG;
-        case FLAG_BLT_REG_GUARD:    return BLT_REG_GUARD;
-        case FLAG_BLT_MEM_GUARD:    return BLT_MEM_GUARD;
-        case FLAG_BLT_DEBUG:        return BLT_DEBUG;
-        case FLAG_BLTTIM_DEBUG:     return BLTTIM_DEBUG;
-        case FLAG_SLOW_BLT_DEBUG:   return SLOW_BLT_DEBUG;
+        case DebugFlag::BLT_CHECKSUM:     return BLT_CHECKSUM;
+        case DebugFlag::BLTREG_DEBUG:     return BLTREG_DEBUG;
+        case DebugFlag::BLT_REG_GUARD:    return BLT_REG_GUARD;
+        case DebugFlag::BLT_MEM_GUARD:    return BLT_MEM_GUARD;
+        case DebugFlag::BLT_DEBUG:        return BLT_DEBUG;
+        case DebugFlag::BLTTIM_DEBUG:     return BLTTIM_DEBUG;
+        case DebugFlag::SLOW_BLT_DEBUG:   return SLOW_BLT_DEBUG;
             
-        case FLAG_BPLREG_DEBUG:     return BPLREG_DEBUG;
-        case FLAG_BPLDAT_DEBUG:     return BPLDAT_DEBUG;
-        case FLAG_BPLMOD_DEBUG:     return BPLMOD_DEBUG;
-        case FLAG_SPRREG_DEBUG:     return SPRREG_DEBUG;
-        case FLAG_COLREG_DEBUG:     return COLREG_DEBUG;
-        case FLAG_CLXREG_DEBUG:     return CLXREG_DEBUG;
-        case FLAG_BPL_ON_STEROIDS:  return BPL_ON_STEROIDS;
-        case FLAG_DIW_DEBUG:        return DIW_DEBUG;
-        case FLAG_SPR_DEBUG:        return SPR_DEBUG;
-        case FLAG_CLX_DEBUG:        return CLX_DEBUG;
-        case FLAG_BORDER_DEBUG:     return BORDER_DEBUG;
-        case FLAG_LINE_DEBUG:       return LINE_DEBUG;
+        case DebugFlag::BPLREG_DEBUG:     return BPLREG_DEBUG;
+        case DebugFlag::BPLDAT_DEBUG:     return BPLDAT_DEBUG;
+        case DebugFlag::BPLMOD_DEBUG:     return BPLMOD_DEBUG;
+        case DebugFlag::SPRREG_DEBUG:     return SPRREG_DEBUG;
+        case DebugFlag::COLREG_DEBUG:     return COLREG_DEBUG;
+        case DebugFlag::CLXREG_DEBUG:     return CLXREG_DEBUG;
+        case DebugFlag::BPL_ON_STEROIDS:  return BPL_ON_STEROIDS;
+        case DebugFlag::DIW_DEBUG:        return DIW_DEBUG;
+        case DebugFlag::SPR_DEBUG:        return SPR_DEBUG;
+        case DebugFlag::CLX_DEBUG:        return CLX_DEBUG;
+        case DebugFlag::BORDER_DEBUG:     return BORDER_DEBUG;
+        case DebugFlag::LINE_DEBUG:       return LINE_DEBUG;
             
-        case FLAG_INTREG_DEBUG:     return INTREG_DEBUG;
-        case FLAG_INT_DEBUG:        return INT_DEBUG;
+        case DebugFlag::INTREG_DEBUG:     return INTREG_DEBUG;
+        case DebugFlag::INT_DEBUG:        return INT_DEBUG;
             
-        case FLAG_CIAREG_DEBUG:     return CIAREG_DEBUG;
-        case FLAG_CIASER_DEBUG:     return CIASER_DEBUG;
-        case FLAG_CIA_DEBUG:        return CIA_DEBUG;
-        case FLAG_TOD_DEBUG:        return TOD_DEBUG;
+        case DebugFlag::CIAREG_DEBUG:     return CIAREG_DEBUG;
+        case DebugFlag::CIASER_DEBUG:     return CIASER_DEBUG;
+        case DebugFlag::CIA_DEBUG:        return CIA_DEBUG;
+        case DebugFlag::TOD_DEBUG:        return TOD_DEBUG;
             
-        case FLAG_ALIGN_HEAD:       return ALIGN_HEAD;
-        case FLAG_DSK_CHECKSUM:     return DSK_CHECKSUM;
-        case FLAG_DSKREG_DEBUG:     return DSKREG_DEBUG;
-        case FLAG_DSK_DEBUG:        return DSK_DEBUG;
-        case FLAG_MFM_DEBUG:        return MFM_DEBUG;
-        case FLAG_FS_DEBUG:         return FS_DEBUG;
+        case DebugFlag::ALIGN_HEAD:       return ALIGN_HEAD;
+        case DebugFlag::DSK_CHECKSUM:     return DSK_CHECKSUM;
+        case DebugFlag::DSKREG_DEBUG:     return DSKREG_DEBUG;
+        case DebugFlag::DSK_DEBUG:        return DSK_DEBUG;
+        case DebugFlag::MFM_DEBUG:        return MFM_DEBUG;
+        case DebugFlag::FS_DEBUG:         return FS_DEBUG;
             
-        case FLAG_HDR_ACCEPT_ALL:   return HDR_ACCEPT_ALL;
-        case FLAG_HDR_FS_LOAD_ALL:  return HDR_FS_LOAD_ALL;
-        case FLAG_WT_DEBUG:         return WT_DEBUG;
+        case DebugFlag::HDR_ACCEPT_ALL:   return HDR_ACCEPT_ALL;
+        case DebugFlag::HDR_FS_LOAD_ALL:  return HDR_FS_LOAD_ALL;
+        case DebugFlag::WT_DEBUG:         return WT_DEBUG;
             
-        case FLAG_AUDREG_DEBUG:     return AUDREG_DEBUG;
-        case FLAG_AUD_DEBUG:        return AUD_DEBUG;
-        case FLAG_AUDBUF_DEBUG:     return AUDBUF_DEBUG;
-        case FLAG_AUDVOL_DEBUG:     return AUDVOL_DEBUG;
-        case FLAG_DISABLE_AUDIRQ:   return DISABLE_AUDIRQ;
+        case DebugFlag::AUDREG_DEBUG:     return AUDREG_DEBUG;
+        case DebugFlag::AUD_DEBUG:        return AUD_DEBUG;
+        case DebugFlag::AUDBUF_DEBUG:     return AUDBUF_DEBUG;
+        case DebugFlag::AUDVOL_DEBUG:     return AUDVOL_DEBUG;
+        case DebugFlag::DISABLE_AUDIRQ:   return DISABLE_AUDIRQ;
             
-        case FLAG_POSREG_DEBUG:     return POSREG_DEBUG;
-        case FLAG_JOYREG_DEBUG:     return JOYREG_DEBUG;
-        case FLAG_POTREG_DEBUG:     return POTREG_DEBUG;
-        case FLAG_VID_DEBUG:        return VID_DEBUG;
-        case FLAG_PRT_DEBUG:        return PRT_DEBUG;
-        case FLAG_SER_DEBUG:        return SER_DEBUG;
-        case FLAG_POT_DEBUG:        return POT_DEBUG;
-        case FLAG_HOLD_MOUSE_L:     return HOLD_MOUSE_L;
-        case FLAG_HOLD_MOUSE_M:     return HOLD_MOUSE_M;
-        case FLAG_HOLD_MOUSE_R:     return HOLD_MOUSE_R;
+        case DebugFlag::POSREG_DEBUG:     return POSREG_DEBUG;
+        case DebugFlag::JOYREG_DEBUG:     return JOYREG_DEBUG;
+        case DebugFlag::POTREG_DEBUG:     return POTREG_DEBUG;
+        case DebugFlag::VID_DEBUG:        return VID_DEBUG;
+        case DebugFlag::PRT_DEBUG:        return PRT_DEBUG;
+        case DebugFlag::SER_DEBUG:        return SER_DEBUG;
+        case DebugFlag::POT_DEBUG:        return POT_DEBUG;
+        case DebugFlag::HOLD_MOUSE_L:     return HOLD_MOUSE_L;
+        case DebugFlag::HOLD_MOUSE_M:     return HOLD_MOUSE_M;
+        case DebugFlag::HOLD_MOUSE_R:     return HOLD_MOUSE_R;
             
-        case FLAG_ZOR_DEBUG:        return ZOR_DEBUG;
-        case FLAG_ACF_DEBUG:        return ACF_DEBUG;
-        case FLAG_FAS_DEBUG:        return FAS_DEBUG;
-        case FLAG_HDR_DEBUG:        return HDR_DEBUG;
-        case FLAG_DBD_DEBUG:        return DBD_DEBUG;
+        case DebugFlag::ZOR_DEBUG:        return ZOR_DEBUG;
+        case DebugFlag::ACF_DEBUG:        return ACF_DEBUG;
+        case DebugFlag::FAS_DEBUG:        return FAS_DEBUG;
+        case DebugFlag::HDR_DEBUG:        return HDR_DEBUG;
+        case DebugFlag::DBD_DEBUG:        return DBD_DEBUG;
             
-        case FLAG_ADF_DEBUG:        return ADF_DEBUG;
-        case FLAG_DMS_DEBUG:        return DMS_DEBUG;
-        case FLAG_IMG_DEBUG:        return IMG_DEBUG;
+        case DebugFlag::ADF_DEBUG:        return ADF_DEBUG;
+        case DebugFlag::DMS_DEBUG:        return DMS_DEBUG;
+        case DebugFlag::IMG_DEBUG:        return IMG_DEBUG;
             
-        case FLAG_RTC_DEBUG:        return RTC_DEBUG;
-        case FLAG_KBD_DEBUG:        return KBD_DEBUG;
-        case FLAG_KEY_DEBUG:        return KEY_DEBUG;
+        case DebugFlag::RTC_DEBUG:        return RTC_DEBUG;
+        case DebugFlag::KBD_DEBUG:        return KBD_DEBUG;
+        case DebugFlag::KEY_DEBUG:        return KEY_DEBUG;
             
-        case FLAG_REC_DEBUG:        return REC_DEBUG;
-        case FLAG_SCK_DEBUG:        return SCK_DEBUG;
-        case FLAG_SRV_DEBUG:        return SRV_DEBUG;
-        case FLAG_GDB_DEBUG:        return GDB_DEBUG;
+        case DebugFlag::REC_DEBUG:        return REC_DEBUG;
+        case DebugFlag::SCK_DEBUG:        return SCK_DEBUG;
+        case DebugFlag::SRV_DEBUG:        return SRV_DEBUG;
+        case DebugFlag::GDB_DEBUG:        return GDB_DEBUG;
             
         default:
             throw Error(ErrorCode::OPT_UNSUPPORTED,
@@ -532,133 +532,133 @@ Emulator::setDebugVariable(DebugFlag flag, bool val)
     switch (flag) {
             
             // General
-        case FLAG_XFILES:           XFILES = val; break;
-        case FLAG_CNF_DEBUG:        CNF_DEBUG = val; break;
-        case FLAG_OBJ_DEBUG:        OBJ_DEBUG = val; break;
-        case FLAG_DEF_DEBUG:        DEF_DEBUG = val; break;
-        case FLAG_MIMIC_UAE:        MIMIC_UAE = val; break;
+        case DebugFlag::XFILES:           XFILES = val; break;
+        case DebugFlag::CNF_DEBUG:        CNF_DEBUG = val; break;
+        case DebugFlag::OBJ_DEBUG:        OBJ_DEBUG = val; break;
+        case DebugFlag::DEF_DEBUG:        DEF_DEBUG = val; break;
+        case DebugFlag::MIMIC_UAE:        MIMIC_UAE = val; break;
             
             // Runloop
-        case FLAG_RUN_DEBUG:        RUN_DEBUG = val; break;
-        case FLAG_TIM_DEBUG:        TIM_DEBUG = val; break;
-        case FLAG_WARP_DEBUG:       WARP_DEBUG = val; break;
-        case FLAG_CMD_DEBUG:        CMD_DEBUG = val; break;
-        case FLAG_MSG_DEBUG:        MSG_DEBUG = val; break;
-        case FLAG_SNP_DEBUG:        SNP_DEBUG = val; break;
+        case DebugFlag::RUN_DEBUG:        RUN_DEBUG = val; break;
+        case DebugFlag::TIM_DEBUG:        TIM_DEBUG = val; break;
+        case DebugFlag::WARP_DEBUG:       WARP_DEBUG = val; break;
+        case DebugFlag::CMD_DEBUG:        CMD_DEBUG = val; break;
+        case DebugFlag::MSG_DEBUG:        MSG_DEBUG = val; break;
+        case DebugFlag::SNP_DEBUG:        SNP_DEBUG = val; break;
             
             // Run-ahead
-        case FLAG_RUA_DEBUG:        RUA_DEBUG = val; break;
-        case FLAG_RUA_CHECKSUM:     RUA_CHECKSUM = val; break;
-        case FLAG_RUA_ON_STEROIDS:  RUA_ON_STEROIDS = val; break;
+        case DebugFlag::RUA_DEBUG:        RUA_DEBUG = val; break;
+        case DebugFlag::RUA_CHECKSUM:     RUA_CHECKSUM = val; break;
+        case DebugFlag::RUA_ON_STEROIDS:  RUA_ON_STEROIDS = val; break;
             
             // CPU
-        case FLAG_CPU_DEBUG:        CPU_DEBUG = val; break;
+        case DebugFlag::CPU_DEBUG:        CPU_DEBUG = val; break;
             
             // Memory access
-        case FLAG_OCSREG_DEBUG:     OCSREG_DEBUG = val; break;
-        case FLAG_ECSREG_DEBUG:     ECSREG_DEBUG = val; break;
-        case FLAG_INVREG_DEBUG:     INVREG_DEBUG = val; break;
-        case FLAG_MEM_DEBUG:        MEM_DEBUG = val; break;
+        case DebugFlag::OCSREG_DEBUG:     OCSREG_DEBUG = val; break;
+        case DebugFlag::ECSREG_DEBUG:     ECSREG_DEBUG = val; break;
+        case DebugFlag::INVREG_DEBUG:     INVREG_DEBUG = val; break;
+        case DebugFlag::MEM_DEBUG:        MEM_DEBUG = val; break;
             
             // Agnus
-        case FLAG_DMA_DEBUG:        DMA_DEBUG = val; break;
-        case FLAG_DDF_DEBUG:        DDF_DEBUG = val; break;
-        case FLAG_SEQ_DEBUG:        SEQ_DEBUG = val; break;
-        case FLAG_SEQ_ON_STEROIDS:  SEQ_ON_STEROIDS = val; break;
-        case FLAG_NTSC_DEBUG:       NTSC_DEBUG = val; break;
+        case DebugFlag::DMA_DEBUG:        DMA_DEBUG = val; break;
+        case DebugFlag::DDF_DEBUG:        DDF_DEBUG = val; break;
+        case DebugFlag::SEQ_DEBUG:        SEQ_DEBUG = val; break;
+        case DebugFlag::SEQ_ON_STEROIDS:  SEQ_ON_STEROIDS = val; break;
+        case DebugFlag::NTSC_DEBUG:       NTSC_DEBUG = val; break;
             
             // Copper
-        case FLAG_COP_CHECKSUM:     COP_CHECKSUM = val; break;
-        case FLAG_COPREG_DEBUG:     COPREG_DEBUG = val; break;
-        case FLAG_COP_DEBUG:        COP_DEBUG = val; break;
+        case DebugFlag::COP_CHECKSUM:     COP_CHECKSUM = val; break;
+        case DebugFlag::COPREG_DEBUG:     COPREG_DEBUG = val; break;
+        case DebugFlag::COP_DEBUG:        COP_DEBUG = val; break;
             
             // Blitter
-        case FLAG_BLT_CHECKSUM:     BLT_CHECKSUM = val; break;
-        case FLAG_BLTREG_DEBUG:     BLTREG_DEBUG = val; break;
-        case FLAG_BLT_REG_GUARD:    BLT_REG_GUARD = val; break;
-        case FLAG_BLT_MEM_GUARD:    BLT_MEM_GUARD = val; break;
-        case FLAG_BLT_DEBUG:        BLT_DEBUG = val; break;
-        case FLAG_BLTTIM_DEBUG:     BLTTIM_DEBUG = val; break;
-        case FLAG_SLOW_BLT_DEBUG:   SLOW_BLT_DEBUG = val; break;
+        case DebugFlag::BLT_CHECKSUM:     BLT_CHECKSUM = val; break;
+        case DebugFlag::BLTREG_DEBUG:     BLTREG_DEBUG = val; break;
+        case DebugFlag::BLT_REG_GUARD:    BLT_REG_GUARD = val; break;
+        case DebugFlag::BLT_MEM_GUARD:    BLT_MEM_GUARD = val; break;
+        case DebugFlag::BLT_DEBUG:        BLT_DEBUG = val; break;
+        case DebugFlag::BLTTIM_DEBUG:     BLTTIM_DEBUG = val; break;
+        case DebugFlag::SLOW_BLT_DEBUG:   SLOW_BLT_DEBUG = val; break;
             
             // Denise
-        case FLAG_BPLREG_DEBUG:     BPLREG_DEBUG = val; break;
-        case FLAG_BPLDAT_DEBUG:     BPLDAT_DEBUG = val; break;
-        case FLAG_BPLMOD_DEBUG:     BPLMOD_DEBUG = val; break;
-        case FLAG_SPRREG_DEBUG:     SPRREG_DEBUG = val; break;
-        case FLAG_COLREG_DEBUG:     COLREG_DEBUG = val; break;
-        case FLAG_CLXREG_DEBUG:     CLXREG_DEBUG = val; break;
-        case FLAG_BPL_ON_STEROIDS:  BPL_ON_STEROIDS = val; break;
-        case FLAG_DIW_DEBUG:        DIW_DEBUG = val; break;
-        case FLAG_SPR_DEBUG:        SPR_DEBUG = val; break;
-        case FLAG_CLX_DEBUG:        CLX_DEBUG = val; break;
-        case FLAG_BORDER_DEBUG:     BORDER_DEBUG = val; break;
-        case FLAG_LINE_DEBUG:       LINE_DEBUG = val; break;
+        case DebugFlag::BPLREG_DEBUG:     BPLREG_DEBUG = val; break;
+        case DebugFlag::BPLDAT_DEBUG:     BPLDAT_DEBUG = val; break;
+        case DebugFlag::BPLMOD_DEBUG:     BPLMOD_DEBUG = val; break;
+        case DebugFlag::SPRREG_DEBUG:     SPRREG_DEBUG = val; break;
+        case DebugFlag::COLREG_DEBUG:     COLREG_DEBUG = val; break;
+        case DebugFlag::CLXREG_DEBUG:     CLXREG_DEBUG = val; break;
+        case DebugFlag::BPL_ON_STEROIDS:  BPL_ON_STEROIDS = val; break;
+        case DebugFlag::DIW_DEBUG:        DIW_DEBUG = val; break;
+        case DebugFlag::SPR_DEBUG:        SPR_DEBUG = val; break;
+        case DebugFlag::CLX_DEBUG:        CLX_DEBUG = val; break;
+        case DebugFlag::BORDER_DEBUG:     BORDER_DEBUG = val; break;
+        case DebugFlag::LINE_DEBUG:       LINE_DEBUG = val; break;
             
             // Paula
-        case FLAG_INTREG_DEBUG:     INTREG_DEBUG = val; break;
-        case FLAG_INT_DEBUG:        INT_DEBUG = val; break;
+        case DebugFlag::INTREG_DEBUG:     INTREG_DEBUG = val; break;
+        case DebugFlag::INT_DEBUG:        INT_DEBUG = val; break;
             
             // CIAs
-        case FLAG_CIAREG_DEBUG:     CIAREG_DEBUG = val; break;
-        case FLAG_CIASER_DEBUG:     CIASER_DEBUG = val; break;
-        case FLAG_CIA_DEBUG:        CIA_DEBUG = val; break;
-        case FLAG_TOD_DEBUG:        TOD_DEBUG = val; break;
+        case DebugFlag::CIAREG_DEBUG:     CIAREG_DEBUG = val; break;
+        case DebugFlag::CIASER_DEBUG:     CIASER_DEBUG = val; break;
+        case DebugFlag::CIA_DEBUG:        CIA_DEBUG = val; break;
+        case DebugFlag::TOD_DEBUG:        TOD_DEBUG = val; break;
             
             // Floppy Drives
-        case FLAG_ALIGN_HEAD:       ALIGN_HEAD = val; break;
-        case FLAG_DSK_CHECKSUM:     DSK_CHECKSUM = val; break;
-        case FLAG_DSKREG_DEBUG:     DSKREG_DEBUG = val; break;
-        case FLAG_DSK_DEBUG:        DSK_DEBUG = val; break;
-        case FLAG_MFM_DEBUG:        MFM_DEBUG = val; break;
-        case FLAG_FS_DEBUG:         FS_DEBUG = val; break;
+        case DebugFlag::ALIGN_HEAD:       ALIGN_HEAD = val; break;
+        case DebugFlag::DSK_CHECKSUM:     DSK_CHECKSUM = val; break;
+        case DebugFlag::DSKREG_DEBUG:     DSKREG_DEBUG = val; break;
+        case DebugFlag::DSK_DEBUG:        DSK_DEBUG = val; break;
+        case DebugFlag::MFM_DEBUG:        MFM_DEBUG = val; break;
+        case DebugFlag::FS_DEBUG:         FS_DEBUG = val; break;
             
             // Hard Drives
-        case FLAG_HDR_ACCEPT_ALL:   HDR_ACCEPT_ALL = val; break;
-        case FLAG_HDR_FS_LOAD_ALL:  HDR_FS_LOAD_ALL = val; break;
-        case FLAG_WT_DEBUG:         WT_DEBUG = val; break;
+        case DebugFlag::HDR_ACCEPT_ALL:   HDR_ACCEPT_ALL = val; break;
+        case DebugFlag::HDR_FS_LOAD_ALL:  HDR_FS_LOAD_ALL = val; break;
+        case DebugFlag::WT_DEBUG:         WT_DEBUG = val; break;
             
             // Audio
-        case FLAG_AUDREG_DEBUG:     AUDREG_DEBUG = val; break;
-        case FLAG_AUD_DEBUG:        AUD_DEBUG = val; break;
-        case FLAG_AUDBUF_DEBUG:     AUDBUF_DEBUG = val; break;
-        case FLAG_AUDVOL_DEBUG:     AUDVOL_DEBUG = val; break;
-        case FLAG_DISABLE_AUDIRQ:   DISABLE_AUDIRQ = val; break;
+        case DebugFlag::AUDREG_DEBUG:     AUDREG_DEBUG = val; break;
+        case DebugFlag::AUD_DEBUG:        AUD_DEBUG = val; break;
+        case DebugFlag::AUDBUF_DEBUG:     AUDBUF_DEBUG = val; break;
+        case DebugFlag::AUDVOL_DEBUG:     AUDVOL_DEBUG = val; break;
+        case DebugFlag::DISABLE_AUDIRQ:   DISABLE_AUDIRQ = val; break;
             
             // Ports
-        case FLAG_POSREG_DEBUG:     POSREG_DEBUG = val; break;
-        case FLAG_JOYREG_DEBUG:     JOYREG_DEBUG = val; break;
-        case FLAG_POTREG_DEBUG:     POTREG_DEBUG = val; break;
-        case FLAG_VID_DEBUG:        VID_DEBUG = val; break;
-        case FLAG_PRT_DEBUG:        PRT_DEBUG = val; break;
-        case FLAG_SER_DEBUG:        SER_DEBUG = val; break;
-        case FLAG_POT_DEBUG:        POT_DEBUG = val; break;
-        case FLAG_HOLD_MOUSE_L:     HOLD_MOUSE_L = val; break;
-        case FLAG_HOLD_MOUSE_M:     HOLD_MOUSE_M = val; break;
-        case FLAG_HOLD_MOUSE_R:     HOLD_MOUSE_R = val; break;
+        case DebugFlag::POSREG_DEBUG:     POSREG_DEBUG = val; break;
+        case DebugFlag::JOYREG_DEBUG:     JOYREG_DEBUG = val; break;
+        case DebugFlag::POTREG_DEBUG:     POTREG_DEBUG = val; break;
+        case DebugFlag::VID_DEBUG:        VID_DEBUG = val; break;
+        case DebugFlag::PRT_DEBUG:        PRT_DEBUG = val; break;
+        case DebugFlag::SER_DEBUG:        SER_DEBUG = val; break;
+        case DebugFlag::POT_DEBUG:        POT_DEBUG = val; break;
+        case DebugFlag::HOLD_MOUSE_L:     HOLD_MOUSE_L = val; break;
+        case DebugFlag::HOLD_MOUSE_M:     HOLD_MOUSE_M = val; break;
+        case DebugFlag::HOLD_MOUSE_R:     HOLD_MOUSE_R = val; break;
             
             // Expansion boards
-        case FLAG_ZOR_DEBUG:        ZOR_DEBUG = val; break;
-        case FLAG_ACF_DEBUG:        ACF_DEBUG = val; break;
-        case FLAG_FAS_DEBUG:        FAS_DEBUG = val; break;
-        case FLAG_HDR_DEBUG:        HDR_DEBUG = val; break;
-        case FLAG_DBD_DEBUG:        DBD_DEBUG = val; break;
+        case DebugFlag::ZOR_DEBUG:        ZOR_DEBUG = val; break;
+        case DebugFlag::ACF_DEBUG:        ACF_DEBUG = val; break;
+        case DebugFlag::FAS_DEBUG:        FAS_DEBUG = val; break;
+        case DebugFlag::HDR_DEBUG:        HDR_DEBUG = val; break;
+        case DebugFlag::DBD_DEBUG:        DBD_DEBUG = val; break;
             
             // Media types
-        case FLAG_ADF_DEBUG:        ADF_DEBUG = val; break;
-        case FLAG_DMS_DEBUG:        DMS_DEBUG = val; break;
-        case FLAG_IMG_DEBUG:        IMG_DEBUG = val; break;
+        case DebugFlag::ADF_DEBUG:        ADF_DEBUG = val; break;
+        case DebugFlag::DMS_DEBUG:        DMS_DEBUG = val; break;
+        case DebugFlag::IMG_DEBUG:        IMG_DEBUG = val; break;
             
             // Other components
-        case FLAG_RTC_DEBUG:        RTC_DEBUG = val; break;
-        case FLAG_KBD_DEBUG:        KBD_DEBUG = val; break;
-        case FLAG_KEY_DEBUG:        KEY_DEBUG = val; break;
+        case DebugFlag::RTC_DEBUG:        RTC_DEBUG = val; break;
+        case DebugFlag::KBD_DEBUG:        KBD_DEBUG = val; break;
+        case DebugFlag::KEY_DEBUG:        KEY_DEBUG = val; break;
             
             // Misc
-        case FLAG_REC_DEBUG:        REC_DEBUG = val; break;
-        case FLAG_SCK_DEBUG:        SCK_DEBUG = val; break;
-        case FLAG_SRV_DEBUG:        SRV_DEBUG = val; break;
-        case FLAG_GDB_DEBUG:        GDB_DEBUG = val; break;
+        case DebugFlag::REC_DEBUG:        REC_DEBUG = val; break;
+        case DebugFlag::SCK_DEBUG:        SCK_DEBUG = val; break;
+        case DebugFlag::SRV_DEBUG:        SRV_DEBUG = val; break;
+        case DebugFlag::GDB_DEBUG:        GDB_DEBUG = val; break;
             
         default:
             throw Error(ErrorCode::OPT_UNSUPPORTED,

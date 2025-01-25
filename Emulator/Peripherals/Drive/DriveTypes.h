@@ -19,31 +19,34 @@ namespace vamiga {
 // Enumerations
 //
 
-enum_long(FLAG_DISK)
+enum class DiskFlags
 {
-    FLAG_PROTECTED  = 1,
-    FLAG_MODIFIED   = 2
+    PROTECTED  = 1,
+    MODIFIED   = 2
 };
-typedef FLAG_DISK DiskFlags;
 
 struct DiskFlagsEnum : util::Reflection<DiskFlagsEnum, DiskFlags>
 {
     static constexpr long minVal = 1;
-    static constexpr long maxVal = FLAG_MODIFIED;
+    static constexpr long maxVal = long(DiskFlags::MODIFIED);
     
-    static const char *prefix() { return "FLAG"; }
-    static const char *_key(long value)
+    static const char *_key(DiskFlags value)
     {
         switch (value) {
                 
-            case FLAG_PROTECTED:    return "PROTECTED";
-            case FLAG_MODIFIED:     return "MODIFIED";
+            case DiskFlags::PROTECTED:    return "PROTECTED";
+            case DiskFlags::MODIFIED:     return "MODIFIED";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(DiskFlags value)
     {
-        return "";
+        switch (value) {
+                
+            case DiskFlags::PROTECTED:    return "Write protected disk";
+            case DiskFlags::MODIFIED:     return "Modified disk contents";
+        }
+        return "???";
     }
 };
 

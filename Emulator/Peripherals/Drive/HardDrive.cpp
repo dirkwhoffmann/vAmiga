@@ -86,7 +86,7 @@ HardDrive::init()
     ptable.clear();
     drivers.clear();
     head = {};
-    setFlag(FLAG_MODIFIED, FORCE_HDR_MODIFIED);
+    setFlag(DiskFlags::MODIFIED, FORCE_HDR_MODIFIED);
 }
 
 void
@@ -226,7 +226,7 @@ HardDrive::_initialize()
 void
 HardDrive::_didReset(bool hard)
 {
-    if (FORCE_HDR_MODIFIED) { setFlag(FLAG_MODIFIED, true); }
+    if (FORCE_HDR_MODIFIED) { setFlag(DiskFlags::MODIFIED, true); }
 
     // Mark all blocks as dirty
     dirty.clear(true);
@@ -385,8 +385,8 @@ HardDrive::cacheInfo(HardDriveInfo &info) const
         info.partitions = numPartitions();
 
         // Flags
-        info.writeProtected = getFlag(FLAG_PROTECTED);
-        info.modified = getFlag(FLAG_MODIFIED);
+        info.writeProtected = getFlag(DiskFlags::PROTECTED);
+        info.modified = getFlag(DiskFlags::MODIFIED);
 
         // State
         info.state = state;
@@ -499,36 +499,36 @@ HardDrive::hasDisk() const
 bool 
 HardDrive::getFlag(DiskFlags mask) const
 {
-    return (flags & mask) == mask;
+    return (flags & long(mask)) == long(mask);
 }
 
 void 
 HardDrive::setFlag(DiskFlags mask, bool value)
 {
-    value ? flags |= mask : flags &= ~mask;
+    value ? flags |= long(mask) : flags &= ~long(mask);
 }
 
 bool
 HardDrive::hasModifiedDisk() const
 {
-    return hasDisk() ? getFlag(FLAG_MODIFIED) : false;
+    return hasDisk() ? getFlag(DiskFlags::MODIFIED) : false;
 }
 
 bool
 HardDrive::hasProtectedDisk() const
 {
-    return hasDisk() && getFlag(FLAG_PROTECTED);
+    return hasDisk() && getFlag(DiskFlags::PROTECTED);
 }
 
 void
 HardDrive::setModificationFlag(bool value)
 {
-    if (hasDisk()) setFlag(FLAG_MODIFIED, value);
+    if (hasDisk()) setFlag(DiskFlags::MODIFIED, value);
 }
 void
 HardDrive::setProtectionFlag(bool value)
 {
-    if (hasDisk()) setFlag(FLAG_PROTECTED, value);
+    if (hasDisk()) setFlag(DiskFlags::PROTECTED, value);
 }
 
 void
@@ -699,7 +699,7 @@ HardDrive::write(isize offset, isize length, u32 addr)
         // Move the drive head to the specified location
         moveHead(offset / geometry.bsize);
 
-        if (!getFlag(FLAG_PROTECTED)) {
+        if (!getFlag(DiskFlags::PROTECTED)) {
 
             // Perform the write operation
             mem.spypeek <Accessor::CPU> (addr, length, data.ptr + offset);
@@ -711,7 +711,7 @@ HardDrive::write(isize offset, isize length, u32 addr)
                 wtStream[objid].write((char *)(data.ptr + offset), length);
             }
             
-            setFlag(FLAG_MODIFIED, true);
+            setFlag(DiskFlags::MODIFIED, true);
         }
         
         // Inform the GUI

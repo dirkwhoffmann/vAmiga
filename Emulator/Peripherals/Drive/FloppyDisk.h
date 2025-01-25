@@ -84,7 +84,7 @@ private:
     } length;
 
     // Disk state
-    DiskFlags flags = 0;
+    long flags = 0;
     
     
     //
@@ -180,14 +180,14 @@ public:
     isize numHeads() const { return 2; }
     isize numTracks() const { return diameter == INCH_525 ? 84 : 168; }
     
-    bool isWriteProtected() const { return flags & FLAG_PROTECTED; }
-    void setWriteProtection(bool value) { value ? flags |= FLAG_PROTECTED : flags &= ~FLAG_PROTECTED; }
+    bool isWriteProtected() const { return flags & long(DiskFlags::PROTECTED); }
+    void setWriteProtection(bool value) { value ? flags |= long(DiskFlags::PROTECTED) : flags &= ~long(DiskFlags::PROTECTED); }
 
-    bool isModified() const { return flags & FLAG_MODIFIED; }
-    void setModified(bool value) { value ? flags |= FLAG_MODIFIED : flags &= ~FLAG_MODIFIED; }
+    bool isModified() const { return flags & long(DiskFlags::MODIFIED); }
+    void setModified(bool value) { value ? flags |= long(DiskFlags::MODIFIED) : flags &= ~long(DiskFlags::MODIFIED); }
 
-    bool getFlag(DiskFlags mask) { return (flags & mask) == mask; }
-    void setFlag(DiskFlags mask, bool value) { value ? flags |= mask : flags &= ~mask; }
+    bool getFlag(DiskFlags mask) { return (flags & long(mask)) == long(mask); }
+    void setFlag(DiskFlags mask, bool value) { value ? flags |= long(mask) : flags &= ~long(mask); }
     void setFlag(DiskFlags flag) { setFlag(flag, true); }
     void clearFlag(DiskFlags flag) { setFlag(flag, false); }
 

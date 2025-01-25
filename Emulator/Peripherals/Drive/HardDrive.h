@@ -94,7 +94,7 @@ class HardDrive final : public Drive, public Inspectable<HardDriveInfo> {
     HardDriveState state = HardDriveState::IDLE;
     
     // Disk state flags
-    DiskFlags flags = 0;
+    long flags = 0;
     optional <bool> bootable;
 
     
@@ -305,8 +305,8 @@ public:
     HardDriveState getState() const { return state; }
     
     // Gets or sets the 'modification' flag
-    bool isModified() const { return flags & FLAG_MODIFIED; }
-    void setModified(bool value) { value ? flags |= FLAG_MODIFIED : flags &= ~FLAG_MODIFIED; }
+    bool isModified() const { return flags & long(DiskFlags::MODIFIED); }
+    void setModified(bool value) { value ? flags |= long(DiskFlags::MODIFIED) : flags &= ~long(DiskFlags::MODIFIED); }
 
     // Returns the current controller state
     HdcState getHdcState() const;

@@ -1183,7 +1183,8 @@ DebugConsole::initCommands(Command &root)
 
         if (debugBuild) {
 
-            for (isize i = DebugFlagEnum::minVal; i < DebugFlagEnum::maxVal; i++) {
+            // for (isize i = DebugFlagEnum::minVal; i < DebugFlagEnum::maxVal; i++) {
+            for (auto i : DebugFlagEnum::collect()) {
 
                 root.add({"debug", DebugFlagEnum::key(i)}, { Arg::boolean },
                          DebugFlagEnum::help(i),
@@ -1191,7 +1192,7 @@ DebugConsole::initCommands(Command &root)
 
                     Emulator::setDebugVariable(DebugFlag(value), int(util::parseNum(argv[0])));
 
-                }, i);
+                }, long(i));
             }
 
             root.add({"debug", "verbosity"}, { Arg::value },

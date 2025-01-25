@@ -42,9 +42,24 @@ namespace vamiga::util {
 #define assert_enum(e,v) assert(e##Enum::isValid(v))
 
 template <class T, typename E> struct Reflection {
-
-    // Remove later?!
+    
+    // Experimental
     static constexpr E cast(long value) { return E(value); }
+    
+    static constexpr E first = E(T::minVal);
+    static constexpr E last = E(T::maxVal);
+
+    static constexpr std::vector<E> collect() {
+        std::vector<E> result;
+        for (auto i = T::minVal; i < T::maxVal; i++) {
+            result.push_back(E(i));
+        }
+        return result;
+    }
+    
+    /*
+    static constexpr std::vector<E> elements = collect();
+    */
     
     // Checks whether this enum is a bit fiels rather than a standard enum
     static constexpr bool isBitField() { return T::minVal == 1; }

@@ -19,7 +19,7 @@ Drive::toggleWriteProtection()
     if (!hasDisk()) return;
     
     // Toggle the protection flag
-    setFlag(FLAG_PROTECTED, !getFlag(FLAG_PROTECTED));
+    setFlag(DiskFlags::PROTECTED, !getFlag(DiskFlags::PROTECTED));
 }
 
 }
