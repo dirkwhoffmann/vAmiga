@@ -42,10 +42,7 @@ namespace vamiga::util {
 #define assert_enum(e,v) assert(e##Enum::isValid(v))
 
 template <class T, typename E> struct Reflection {
-    
-    // Experimental
-    // static constexpr E cast(long value) { return E(value); }
-        
+            
     // Checks whether this enum is a bit fiels rather than a standard enum
     static constexpr bool isBitField() { return T::minVal == 1; }
 
@@ -65,24 +62,14 @@ template <class T, typename E> struct Reflection {
         }
         return p;
     }
-    // static const char *key(u32 value) { return key(E(value)); }
     
     // Collects all elements
     static constexpr std::vector<E> elements(std::function<bool(E)> filter = [](E){ return true; }) {
         
         std::vector<E> result;
         
-        if (isBitField()) {
-            
-            for (long i = T::minVal; i <= T::maxVal; i *= 2) {
-                if (filter(E(i))) result.push_back(E(i));
-            }
-            
-        } else {
-            
-            for (auto i = T::minVal; i < T::maxVal; i++) {
-                if (filter(E(i))) result.push_back(E(i));
-            }
+        for (long i = T::minVal; i <= T::maxVal; i += isBitField() ? i : 1) {
+            if (filter(E(i))) result.push_back(E(i));
         }
         
         return result;
@@ -94,19 +81,10 @@ template <class T, typename E> struct Reflection {
 
         std::vector < std::pair<string,long> > result;
 
-        if (isBitField()) {
-
-            for (long i = T::minVal; i <= T::maxVal; i *= 2) {
-                if (filter(E(i))) result.push_back(std::make_pair(key(E(i), withPrefix), i));
-            }
-
-        } else {
-
-            for (long i = T::minVal; i <= T::maxVal; i++) {
-                if (filter(E(i))) result.push_back(std::make_pair(key(E(i), withPrefix), i));
-            }
+        for (long i = T::minVal; i <= T::maxVal; i += isBitField() ? i : 1) {
+            if (filter(E(i))) result.push_back(std::make_pair(key(E(i), withPrefix), i));
         }
-
+        
         return result;
     }
 
@@ -134,24 +112,13 @@ template <class T, typename E> struct Reflection {
 
         static string result;
         result = "";
-        
-        if (isBitField()) {
-            
-            for (isize i = T::minVal; i <= T::maxVal; i *= 2) {
-                if (mask & i) {
-                    result += (result.empty() ? "" : " | ") + string(key(E(i), withPrefix));
-                }
-            }
-            
-        } else {
-            
-            for (isize i = T::minVal; i <= T::maxVal; i++) {
-                if (mask & (1 << i)) {
-                    result += (result.empty() ? "" : " | ") + string(key(E(i), withPrefix));
-                }
+    
+        for (isize i = T::minVal; i <= T::maxVal; i += isBitField() ? i : 1) {
+            if (mask & (isBitField() ? i : 1 << i)) {
+                result += (result.empty() ? "" : " | ") + string(key(E(i), withPrefix));
             }
         }
-
+        
         return result.c_str();
     }
 };
