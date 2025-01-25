@@ -37,10 +37,11 @@ HdController::_dump(Category category, std::ostream& os) const
     
     if (category == Category::Stats) {
         
-        for (isize i = 0; IoCommandEnum::isValid(i); i++) {
+        // for (isize i = 0; IoCommandEnum::isValid(i); i++) {
+        for (const auto &i : IoCommandEnum::elements()) {
             
             os << tab(IoCommandEnum::key(i));
-            os << stats.cmdCount[i] << std::endl;
+            os << stats.cmdCount[long(i)] << std::endl;
         }
     }
 }
@@ -199,7 +200,7 @@ HdController::isCompatible() const
 void
 HdController::resetHdcState()
 {
-    hdcState = HDC_UNDETECTED;
+    hdcState = HdcState::UNDETECTED;
     msgQueue.put(MsgType::HDC_STATE, HdcMsg { i16(objid), hdcState });
 }
 
@@ -356,45 +357,45 @@ HdController::processCmd(u32 ptr)
     }
     
     // Update the usage profile
-    if (IoCommandEnum::isValid(cmd)) stats.cmdCount[cmd]++;
+    if (IoCommandEnum::isValid(cmd)) stats.cmdCount[long(cmd)]++;
     
     switch (cmd) {
             
-        case CMD_READ:
+        case IoCommand::READ:
 
-            if (offset) changeHdcState(HDC_READY);
+            if (offset) changeHdcState(HdcState::READY);
             
             error = drive.read(offset, length, addr);
             actual = u32(length);
             break;
 
-        case CMD_WRITE:
-        case CMD_TD_FORMAT:
+        case IoCommand::WRITE:
+        case IoCommand::TD_FORMAT:
 
             error = drive.write(offset, length, addr);
             actual = u32(length);
             break;
 
-        case CMD_RESET:
-        case CMD_UPDATE:
-        case CMD_CLEAR:
-        case CMD_STOP:
-        case CMD_START:
-        case CMD_FLUSH:
-        case CMD_TD_MOTOR:
-        case CMD_TD_SEEK:
-        case CMD_TD_REMOVE:
-        case CMD_TD_CHANGENUM:
-        case CMD_TD_CHANGESTATE:
-        case CMD_TD_PROTSTATUS:
-        case CMD_TD_ADDCHANGEINT:
-        case CMD_TD_REMCHANGEINT:
+        case IoCommand::RESET:
+        case IoCommand::UPDATE:
+        case IoCommand::CLEAR:
+        case IoCommand::STOP:
+        case IoCommand::START:
+        case IoCommand::FLUSH:
+        case IoCommand::TD_MOTOR:
+        case IoCommand::TD_SEEK:
+        case IoCommand::TD_REMOVE:
+        case IoCommand::TD_CHANGENUM:
+        case IoCommand::TD_CHANGESTATE:
+        case IoCommand::TD_PROTSTATUS:
+        case IoCommand::TD_ADDCHANGEINT:
+        case IoCommand::TD_REMCHANGEINT:
             
             break;
             
         default:
             
-            debug(HDR_DEBUG, "Unsupported cmd: %ld (%s)\n", cmd, IoCommandEnum::key(cmd));
+            debug(HDR_DEBUG, "Unsupported cmd: %ld (%s)\n", long(cmd), IoCommandEnum::key(cmd));
             error = u8(IOERR_NOCMD);
     }
     
@@ -457,7 +458,7 @@ HdController::processInit(u32 ptr)
     if (unit < drive.ptable.size()) {
 
         debug(HDR_DEBUG, "Initializing partition %d\n", unit);
-        changeHdcState(HDC_INITIALIZING);
+        changeHdcState(HdcState::INITIALIZING);
         
         // Collect hard drive information
         auto &geometry = drive.geometry;

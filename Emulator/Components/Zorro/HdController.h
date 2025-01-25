@@ -57,7 +57,7 @@ class HdController : public ZorroBoard, public Inspectable<HdcInfo, HdcStats> {
     HdcConfig config = {};
     
     // The current controller state
-    HdcState hdcState = HDC_UNDETECTED;
+    HdcState hdcState = HdcState::UNDETECTED;
     
     // Rom code
     Buffer<u8> rom;

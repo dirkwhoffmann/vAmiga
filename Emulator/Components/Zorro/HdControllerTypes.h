@@ -40,109 +40,107 @@ constexpr u32   IO_OFFSET           = 0x2C;
 // Enumerations
 //
 
-enum_long(IO_CMD)
+enum class IoCommand
 {
     // Standard commands
-    CMD_INVALID,            // 0
-    CMD_RESET,              // 1
-    CMD_READ,               // 2
-    CMD_WRITE,              // 3
-    CMD_UPDATE,             // 4
-    CMD_CLEAR,              // 5
-    CMD_STOP,               // 6
-    CMD_START,              // 7
-    CMD_FLUSH,              // 8
+    INVALID,            // 0
+    RESET,              // 1
+    READ,               // 2
+    WRITE,              // 3
+    UPDATE,             // 4
+    CLEAR,              // 5
+    STOP,               // 6
+    START,              // 7
+    FLUSH,              // 8
     
     // Nonstandard commands
-    CMD_TD_MOTOR,           // 9
-    CMD_TD_SEEK,            // 10
-    CMD_TD_FORMAT,          // 11
-    CMD_TD_REMOVE,          // 12
-    CMD_TD_CHANGENUM,       // 13
-    CMD_TD_CHANGESTATE,     // 14
-    CMD_TD_PROTSTATUS,      // 15
-    CMD_TD_RAWREAD,         // 16
-    CMD_TD_RAWWRITE,        // 17
-    CMD_TD_GETDRIVETYPE,    // 18
-    CMD_TD_GETNUMTRACKS,    // 19
-    CMD_TD_ADDCHANGEINT,    // 20
-    CMD_TD_REMCHANGEINT,    // 21
-    CMD_TD_GETGEOMETRY,     // 22
-    CMD_TD_EJECT,           // 23
-    CMD_TD_LASTCOMM         // 24
+    TD_MOTOR,           // 9
+    TD_SEEK,            // 10
+    TD_FORMAT,          // 11
+    TD_REMOVE,          // 12
+    TD_CHANGENUM,       // 13
+    TD_CHANGESTATE,     // 14
+    TD_PROTSTATUS,      // 15
+    TD_RAWREAD,         // 16
+    TD_RAWWRITE,        // 17
+    TD_GETDRIVETYPE,    // 18
+    TD_GETNUMTRACKS,    // 19
+    TD_ADDCHANGEINT,    // 20
+    TD_REMCHANGEINT,    // 21
+    TD_GETGEOMETRY,     // 22
+    TD_EJECT,           // 23
+    TD_LASTCOMM         // 24
 };
-typedef IO_CMD IoCommand;
 
 struct IoCommandEnum : util::Reflection<IoCommandEnum, IoCommand>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = CMD_TD_LASTCOMM;
+    static constexpr long maxVal = long(IoCommand::TD_LASTCOMM);
     
     static const char *prefix() { return "CMD"; }
-    static const char *_key(long value)
+    static const char *_key(IoCommand value)
     {
         switch (value) {
                 
-            case CMD_INVALID:           return "INVALID";
-            case CMD_RESET:             return "RESET";
-            case CMD_READ:              return "READ";
-            case CMD_WRITE:             return "WRITE";
-            case CMD_UPDATE:            return "UPDATE";
-            case CMD_CLEAR:             return "CLEAR";
-            case CMD_STOP:              return "STOP";
-            case CMD_START:             return "START";
-            case CMD_FLUSH:             return "FLUSH";
+            case IoCommand::INVALID:           return "INVALID";
+            case IoCommand::RESET:             return "RESET";
+            case IoCommand::READ:              return "READ";
+            case IoCommand::WRITE:             return "WRITE";
+            case IoCommand::UPDATE:            return "UPDATE";
+            case IoCommand::CLEAR:             return "CLEAR";
+            case IoCommand::STOP:              return "STOP";
+            case IoCommand::START:             return "START";
+            case IoCommand::FLUSH:             return "FLUSH";
                 
-            case CMD_TD_MOTOR:          return "TD_MOTOR";
-            case CMD_TD_SEEK:           return "TD_SEEK";
-            case CMD_TD_FORMAT:         return "TD_FORMAT";
-            case CMD_TD_REMOVE:         return "TD_REMOVE";
-            case CMD_TD_CHANGENUM:      return "TD_CHANGENUM";
-            case CMD_TD_CHANGESTATE:    return "TD_CHANGESTATE";
-            case CMD_TD_PROTSTATUS:     return "TD_PROTSTATUS";
-            case CMD_TD_RAWREAD:        return "TD_RAWREAD";
-            case CMD_TD_RAWWRITE:       return "TD_RAWWRITE";
-            case CMD_TD_GETDRIVETYPE:   return "TD_GETDRIVETYPE";
-            case CMD_TD_GETNUMTRACKS:   return "TD_GETNUMTRACKS";
-            case CMD_TD_ADDCHANGEINT:   return "TD_ADDCHANGEINT";
-            case CMD_TD_REMCHANGEINT:   return "TD_REMCHANGEINT";
-            case CMD_TD_GETGEOMETRY:    return "TD_GETGEOMETRY";
-            case CMD_TD_EJECT:          return "TD_EJECT";
-            case CMD_TD_LASTCOMM:       return "TD_LASTCOMM";
+            case IoCommand::TD_MOTOR:          return "TD_MOTOR";
+            case IoCommand::TD_SEEK:           return "TD_SEEK";
+            case IoCommand::TD_FORMAT:         return "TD_FORMAT";
+            case IoCommand::TD_REMOVE:         return "TD_REMOVE";
+            case IoCommand::TD_CHANGENUM:      return "TD_CHANGENUM";
+            case IoCommand::TD_CHANGESTATE:    return "TD_CHANGESTATE";
+            case IoCommand::TD_PROTSTATUS:     return "TD_PROTSTATUS";
+            case IoCommand::TD_RAWREAD:        return "TD_RAWREAD";
+            case IoCommand::TD_RAWWRITE:       return "TD_RAWWRITE";
+            case IoCommand::TD_GETDRIVETYPE:   return "TD_GETDRIVETYPE";
+            case IoCommand::TD_GETNUMTRACKS:   return "TD_GETNUMTRACKS";
+            case IoCommand::TD_ADDCHANGEINT:   return "TD_ADDCHANGEINT";
+            case IoCommand::TD_REMCHANGEINT:   return "TD_REMCHANGEINT";
+            case IoCommand::TD_GETGEOMETRY:    return "TD_GETGEOMETRY";
+            case IoCommand::TD_EJECT:          return "TD_EJECT";
+            case IoCommand::TD_LASTCOMM:       return "TD_LASTCOMM";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(IoCommand value)
     {
         return "";
     }
 };
 
-enum_long(HDC_STATE)
+enum class HdcState
 {
-    HDC_UNDETECTED,     // The controller waits to be detected by the OS
-    HDC_INITIALIZING,   // The controller has been detected
-    HDC_READY           // The controller is fully operational
+    UNDETECTED,     // The controller waits to be detected by the OS
+    INITIALIZING,   // The controller has been detected
+    READY           // The controller is fully operational
 };
-typedef HDC_STATE HdcState;
 
 struct HdcStateEnum : util::Reflection<HdcStateEnum, HdcState>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = HDC_READY;
+    static constexpr long maxVal = long(HdcState::READY);
     
     static const char *prefix() { return "HDC"; }
-    static const char *_key(long value)
+    static const char *_key(HdcState value)
     {
         switch (value) {
                 
-            case HDC_UNDETECTED:    return "UNDETECTED";
-            case HDC_INITIALIZING:  return "INITIALIZING";
-            case HDC_READY:         return "READY";
+            case HdcState::UNDETECTED:    return "UNDETECTED";
+            case HdcState::INITIALIZING:  return "INITIALIZING";
+            case HdcState::READY:         return "READY";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(HdcState value)
     {
         return "";
     }
