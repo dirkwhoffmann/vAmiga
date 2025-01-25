@@ -1056,13 +1056,13 @@ Denise::updateBorderBuffer()
 
                 switch (r.addr) {
 
-                    case REG_DIWSTRT:
+                    case u32(ChipsetReg::DIWSTRT):
 
                         hstrt = r.value;
                         trace(DIW_DEBUG, "hstrt -> %ld (%lx)\n", hstrt, hstrt);
                         break;
 
-                    case REG_DIWSTOP:
+                    case u32(ChipsetReg::DIWSTOP):
 
                         hstop = r.value;
                         trace(DIW_DEBUG, "hstop -> %ld (%lx)\n", hstop, hstop);

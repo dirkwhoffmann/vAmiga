@@ -60,7 +60,7 @@ Denise::setHSTRT(isize val)
     trace(DIW_DEBUG, "setHSTRT(%lx)\n", val);
 
     // Record register change
-    diwChanges.insert(agnus.pos.pixel(), RegChange { REG_DIWSTRT, (u16)val });
+    diwChanges.insert(agnus.pos.pixel(), RegChange { u32(ChipsetReg::DIWSTRT), (u16)val });
     markBorderBufferAsDirty();
 }
 
@@ -70,8 +70,8 @@ Denise::setHSTOP(isize val)
     trace(DIW_DEBUG, "setHSTOP(%lx)\n", val);
 
     // Record register change
-    diwChanges.insert(agnus.pos.pixel(), RegChange { REG_DIWSTOP, (u16)val });
-    markBorderBufferAsDirty();    
+    diwChanges.insert(agnus.pos.pixel(), RegChange { u32(ChipsetReg::DIWSTOP), (u16)val });
+    markBorderBufferAsDirty();
 }
 
 u16
