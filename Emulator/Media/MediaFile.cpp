@@ -29,19 +29,19 @@ namespace vamiga {
 FileType
 MediaFile::type(const fs::path &path)
 {
-    if (Snapshot::isCompatible(path)) return FILETYPE_SNAPSHOT;
-    if (Script::isCompatible(path))   return FILETYPE_SCRIPT;
-    if (ADFFile::isCompatible(path))  return FILETYPE_ADF;
-    if (EADFFile::isCompatible(path)) return FILETYPE_EADF;
-    if (HDFFile::isCompatible(path))  return FILETYPE_HDF;
-    if (IMGFile::isCompatible(path))  return FILETYPE_IMG;
-    if (STFile::isCompatible(path))   return FILETYPE_ST;
-    if (DMSFile::isCompatible(path))  return FILETYPE_DMS;
-    if (EXEFile::isCompatible(path))  return FILETYPE_EXE;
-    if (RomFile::isCompatible(path))  return FILETYPE_ROM;
-    if (Folder::isCompatible(path))   return FILETYPE_DIR;
+    if (Snapshot::isCompatible(path)) return FileType::SNAPSHOT;
+    if (Script::isCompatible(path))   return FileType::SCRIPT;
+    if (ADFFile::isCompatible(path))  return FileType::ADF;
+    if (EADFFile::isCompatible(path)) return FileType::EADF;
+    if (HDFFile::isCompatible(path))  return FileType::HDF;
+    if (IMGFile::isCompatible(path))  return FileType::IMG;
+    if (STFile::isCompatible(path))   return FileType::ST;
+    if (DMSFile::isCompatible(path))  return FileType::DMS;
+    if (EXEFile::isCompatible(path))  return FileType::EXE;
+    if (RomFile::isCompatible(path))  return FileType::ROM;
+    if (Folder::isCompatible(path))   return FileType::DIR;
 
-    return FILETYPE_UNKNOWN;
+    return FileType::UNKNOWN;
 }
 
 MediaFile *
@@ -55,17 +55,17 @@ MediaFile::make(const fs::path &path, FileType type)
 {
     switch (type) {
 
-        case FILETYPE_SNAPSHOT:     return new Snapshot(path);
-        case FILETYPE_SCRIPT:       return new Script(path);
-        case FILETYPE_ADF:          return new ADFFile(path);
-        case FILETYPE_EADF:         return new EADFFile(path);
-        case FILETYPE_HDF:          return new HDFFile(path);
-        case FILETYPE_IMG:          return new IMGFile(path);
-        case FILETYPE_ST:           return new STFile(path);
-        case FILETYPE_DMS:          return new DMSFile(path);
-        case FILETYPE_EXE:          return new EXEFile(path);
-        case FILETYPE_ROM:          return new RomFile(path);
-        case FILETYPE_EXTENDED_ROM: return new ExtendedRomFile(path);
+        case FileType::SNAPSHOT:     return new Snapshot(path);
+        case FileType::SCRIPT:       return new Script(path);
+        case FileType::ADF:          return new ADFFile(path);
+        case FileType::EADF:         return new EADFFile(path);
+        case FileType::HDF:          return new HDFFile(path);
+        case FileType::IMG:          return new IMGFile(path);
+        case FileType::ST:           return new STFile(path);
+        case FileType::DMS:          return new DMSFile(path);
+        case FileType::EXE:          return new EXEFile(path);
+        case FileType::ROM:          return new RomFile(path);
+        case FileType::EXTENDED_ROM: return new ExtendedRomFile(path);
 
         default:
             return nullptr;
@@ -77,17 +77,17 @@ MediaFile::make(const u8 *buf, isize len, FileType type)
 {
     switch (type) {
 
-        case FILETYPE_SNAPSHOT:     return new Snapshot(buf, len);
-        case FILETYPE_SCRIPT:       return new Script(buf, len);
-        case FILETYPE_ADF:          return new ADFFile(buf, len);
-        case FILETYPE_EADF:         return new EADFFile(buf, len);
-        case FILETYPE_HDF:          return new HDFFile(buf, len);
-        case FILETYPE_IMG:          return new IMGFile(buf, len);
-        case FILETYPE_ST:           return new STFile(buf, len);
-        case FILETYPE_DMS:          return new DMSFile(buf, len);
-        case FILETYPE_EXE:          return new EXEFile(buf, len);
-        case FILETYPE_ROM:          return new RomFile(buf, len);
-        case FILETYPE_EXTENDED_ROM: return new ExtendedRomFile(buf, len);
+        case FileType::SNAPSHOT:     return new Snapshot(buf, len);
+        case FileType::SCRIPT:       return new Script(buf, len);
+        case FileType::ADF:          return new ADFFile(buf, len);
+        case FileType::EADF:         return new EADFFile(buf, len);
+        case FileType::HDF:          return new HDFFile(buf, len);
+        case FileType::IMG:          return new IMGFile(buf, len);
+        case FileType::ST:           return new STFile(buf, len);
+        case FileType::DMS:          return new DMSFile(buf, len);
+        case FileType::EXE:          return new EXEFile(buf, len);
+        case FileType::ROM:          return new RomFile(buf, len);
+        case FileType::EXTENDED_ROM: return new ExtendedRomFile(buf, len);
 
         default:
             return nullptr;
@@ -99,7 +99,7 @@ MediaFile::make(class MutableFileSystem &fs, FileType type)
 {
     switch (type) {
 
-        case FILETYPE_ADF:        return new ADFFile(fs);
+        case FileType::ADF:        return new ADFFile(fs);
 
         default:
             return nullptr;
@@ -111,9 +111,9 @@ MediaFile::make(FloppyDriveAPI &drive, FileType type)
 {
     switch (type) {
 
-        case FILETYPE_ADF:      return new ADFFile(drive.getDisk());
-        case FILETYPE_EADF:     return new EADFFile(drive.getDisk());
-        case FILETYPE_IMG:      return new IMGFile(drive.getDisk());
+        case FileType::ADF:      return new ADFFile(drive.getDisk());
+        case FileType::EADF:     return new EADFFile(drive.getDisk());
+        case FileType::IMG:      return new IMGFile(drive.getDisk());
 
         default:
             return nullptr;
@@ -125,7 +125,7 @@ MediaFile::make(HardDriveAPI &drive, FileType type)
 {
     switch (type) {
 
-        case FILETYPE_HDF:      return new HDFFile(drive.getDrive());
+        case FileType::HDF:      return new HDFFile(drive.getDrive());
 
         default:
             return nullptr;

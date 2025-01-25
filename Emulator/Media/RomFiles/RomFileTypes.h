@@ -100,39 +100,38 @@ static const u32 CRC32_CPUBLTRO_FC_0_3_2        = 0x86CB5B1B;
 // Enumerations
 //
 
-enum_long(ROM_VENDOR)
+enum class RomVendor
 {
-    ROM_VENDOR_COMMODORE,
-    ROM_VENDOR_AROS,
-    ROM_VENDOR_HYPERION,
-    ROM_VENDOR_DEMO,
-    ROM_VENDOR_DIAG,
-    ROM_VENDOR_EMUTOS,
-    ROM_VENDOR_OTHER
+    COMMODORE,
+    AROS,
+    HYPERION,
+    DEMO,
+    DIAG,
+    EMUTOS,
+    OTHER
 };
-typedef ROM_VENDOR RomVendor;
 
 struct RomVendorEnum : util::Reflection<RomVendorEnum, RomVendor> {
     
     static constexpr long minVal = 0;
-    static constexpr long maxVal = ROM_VENDOR_OTHER;
+    static constexpr long maxVal = long(RomVendor::OTHER);
     static bool isValid(auto value) { return value >= minVal && value <= maxVal; }
     
-    static const char *_key(long value)
+    static const char *_key(RomVendor value)
     {
         switch (value) {
                 
-            case ROM_VENDOR_COMMODORE:  return "COMMODORE";
-            case ROM_VENDOR_AROS:       return "AROS";
-            case ROM_VENDOR_HYPERION:   return "HYPERION";
-            case ROM_VENDOR_DEMO:       return "DEMO";
-            case ROM_VENDOR_DIAG:       return "DIAG";
-            case ROM_VENDOR_EMUTOS:     return "EMUTOS";
-            case ROM_VENDOR_OTHER:      return "OTHER";
+            case RomVendor::COMMODORE:  return "COMMODORE";
+            case RomVendor::AROS:       return "AROS";
+            case RomVendor::HYPERION:   return "HYPERION";
+            case RomVendor::DEMO:       return "DEMO";
+            case RomVendor::DIAG:       return "DIAG";
+            case RomVendor::EMUTOS:     return "EMUTOS";
+            case RomVendor::OTHER:      return "OTHER";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(RomVendor value)
     {
         return "";
     }

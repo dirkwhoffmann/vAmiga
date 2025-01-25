@@ -35,11 +35,11 @@ FloppyFile::make(const std::filesystem::path &path)
 
     switch (type(path)) {
 
-        case FILETYPE_ADF:  result = new ADFFile(buffer.ptr, buffer.size); break;
-        case FILETYPE_IMG:  result = new IMGFile(buffer.ptr, buffer.size); break;
-        case FILETYPE_DMS:  result = new DMSFile(buffer.ptr, buffer.size); break;
-        case FILETYPE_EXE:  result = new EXEFile(buffer.ptr, buffer.size); break;
-        case FILETYPE_DIR:  result = new Folder(path);
+        case FileType::ADF:  result = new ADFFile(buffer.ptr, buffer.size); break;
+        case FileType::IMG:  result = new IMGFile(buffer.ptr, buffer.size); break;
+        case FileType::DMS:  result = new DMSFile(buffer.ptr, buffer.size); break;
+        case FileType::EXE:  result = new EXEFile(buffer.ptr, buffer.size); break;
+        case FileType::DIR:  result = new Folder(path);
 
         default:
             throw Error(ErrorCode::FILE_TYPE_MISMATCH);
@@ -54,11 +54,11 @@ FloppyFile::make(const std::filesystem::path &path)
     
     switch (type(path)) {
             
-        case FILETYPE_ADF:  return new ADFFile(path, stream);
-        case FILETYPE_IMG:  return new IMGFile(path, stream);
-        case FILETYPE_DMS:  return new DMSFile(path, stream);
-        case FILETYPE_EXE:  return new EXEFile(path, stream);
-        case FILETYPE_DIR:  return new Folder(path);
+        case FileType::ADF:  return new ADFFile(path, stream);
+        case FileType::IMG:  return new IMGFile(path, stream);
+        case FileType::DMS:  return new DMSFile(path, stream);
+        case FileType::EXE:  return new EXEFile(path, stream);
+        case FileType::DIR:  return new Folder(path);
 
         default:
             break;

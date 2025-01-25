@@ -956,9 +956,9 @@ FloppyDrive::exportDisk(FileType type)
 {
     switch (type) {
 
-        case FILETYPE_ADF:      return new ADFFile(*this);
-        case FILETYPE_EADF:     return new EADFFile(*this);
-        case FILETYPE_IMG:      return new IMGFile(*this);
+        case FileType::ADF:      return new ADFFile(*this);
+        case FileType::EADF:     return new EADFFile(*this);
+        case FileType::IMG:      return new IMGFile(*this);
 
         default:
             throw Error(ErrorCode::FILE_TYPE_UNSUPPORTED);

@@ -45,7 +45,7 @@ public:
     
 public:
     
-    FileType type() const override { return FILETYPE_SCRIPT; }
+    FileType type() const override { return FileType::SCRIPT; }
 
     
     //

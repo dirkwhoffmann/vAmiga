@@ -48,7 +48,7 @@ struct FSVolumeTypeEnum : util::Reflection<FSVolumeTypeEnum, FSVolumeType>
         }
         return "???";
     }
-    static const char *FSVolumeType(long value)
+    static const char *help(FSVolumeType value)
     {
         return "";
     }

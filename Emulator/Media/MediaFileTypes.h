@@ -18,52 +18,67 @@ namespace vamiga {
 // Enumerations
 //
 
-enum_long(FILETYPE)
+enum class FileType : long
 {
-    FILETYPE_UNKNOWN,
-    FILETYPE_SNAPSHOT,
-    FILETYPE_SCRIPT,
-    FILETYPE_ADF,
-    FILETYPE_EADF,
-    FILETYPE_HDF,
-    FILETYPE_IMG,
-    FILETYPE_ST,
-    FILETYPE_DMS,
-    FILETYPE_EXE,
-    FILETYPE_DIR,
-    FILETYPE_ROM,
-    FILETYPE_EXTENDED_ROM
+    UNKNOWN,
+    SNAPSHOT,
+    SCRIPT,
+    ADF,
+    EADF,
+    HDF,
+    IMG,
+    ST,
+    DMS,
+    EXE,
+    DIR,
+    ROM,
+    EXTENDED_ROM
 };
-typedef FILETYPE FileType;
 
 struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = FILETYPE_EXTENDED_ROM;
+    static constexpr long maxVal = long(FileType::EXTENDED_ROM);
     
-    static const char *_key(long value)
+    static const char *_key(FileType value)
     {
         switch (value) {
                 
-            case FILETYPE_UNKNOWN:      return "UNKNOWN";
-            case FILETYPE_SNAPSHOT:     return "SNAPSHOT";
-            case FILETYPE_SCRIPT:       return "SCRIPT";
-            case FILETYPE_ADF:          return "ADF";
-            case FILETYPE_EADF:         return "EADF";
-            case FILETYPE_HDF:          return "HDF";
-            case FILETYPE_IMG:          return "IMG";
-            case FILETYPE_ST:           return "ST";
-            case FILETYPE_DMS:          return "DMS";
-            case FILETYPE_EXE:          return "EXE";
-            case FILETYPE_DIR:          return "DIR";
-            case FILETYPE_ROM:          return "ROM";
-            case FILETYPE_EXTENDED_ROM: return "EXTENDED_ROM";
+            case FileType::UNKNOWN:      return "UNKNOWN";
+            case FileType::SNAPSHOT:     return "SNAPSHOT";
+            case FileType::SCRIPT:       return "SCRIPT";
+            case FileType::ADF:          return "ADF";
+            case FileType::EADF:         return "EADF";
+            case FileType::HDF:          return "HDF";
+            case FileType::IMG:          return "IMG";
+            case FileType::ST:           return "ST";
+            case FileType::DMS:          return "DMS";
+            case FileType::EXE:          return "EXE";
+            case FileType::DIR:          return "DIR";
+            case FileType::ROM:          return "ROM";
+            case FileType::EXTENDED_ROM: return "EXTENDED_ROM";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(FileType value)
     {
-        return "";
+        switch (value) {
+                
+            case FileType::UNKNOWN:      return "Unknown";
+            case FileType::SNAPSHOT:     return "Snapshot";
+            case FileType::SCRIPT:       return "RetroShell Script";
+            case FileType::ADF:          return "Amiga Disk File";
+            case FileType::EADF:         return "Extended Amiga Disk File";
+            case FileType::HDF:          return "Hard Disk File";
+            case FileType::IMG:          return "PC Disk Image";
+            case FileType::ST:           return "AtariST Disk Image";
+            case FileType::DMS:          return "Disk Masher System";
+            case FileType::EXE:          return "Amiga Executable";
+            case FileType::DIR:          return "Directory";
+            case FileType::ROM:          return "Kickstart ROM";
+            case FileType::EXTENDED_ROM: return "Extended Kickstart ROM";
+        }
+        return "???";
     }
 };
 

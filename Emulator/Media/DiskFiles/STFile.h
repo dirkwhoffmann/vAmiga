@@ -59,7 +59,7 @@ public:
 
     bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) override { return isCompatible(buf, len); }
-    FileType type() const override { return FILETYPE_IMG; }
+    FileType type() const override { return FileType::IMG; }
 
 
     //

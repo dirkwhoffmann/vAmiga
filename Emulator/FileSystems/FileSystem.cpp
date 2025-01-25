@@ -29,8 +29,8 @@ FileSystem::init(const MediaFile &file, isize part) throws
 {
     switch (file.type()) {
 
-        case FILETYPE_ADF:  init(dynamic_cast<const ADFFile &>(file)); break;
-        case FILETYPE_HDF:  init(dynamic_cast<const HDFFile &>(file), part); break;
+        case FileType::ADF:  init(dynamic_cast<const ADFFile &>(file)); break;
+        case FileType::HDF:  init(dynamic_cast<const HDFFile &>(file), part); break;
 
         default:
             throw Error(ErrorCode::FILE_TYPE_UNSUPPORTED);

@@ -199,238 +199,238 @@ static std::vector<RomTraits> roms = {
         .revision   = "Rev 46.143",
         .released   = "September 2018",
         .model      = "A500, A600, A1000",
-        .vendor     = ROM_VENDOR_HYPERION
+        .vendor     = RomVendor::HYPERION
     },{
         .crc        = CRC32_HYP314_46_143_A1200,
         .title      = "Kickstart 3.1.4 (Hyperion)",
         .revision   = "Rev 46.143",
         .released   = "September 2018",
         .model      = "A1200",
-        .vendor     = ROM_VENDOR_HYPERION
+        .vendor     = RomVendor::HYPERION
     },{
         .crc        = CRC32_HYP314_46_143_A2000,
         .title      = "Kickstart 3.1.4 (Hyperion)",
         .revision   = "Rev 46.143",
         .released   = "September 2018",
         .model      = "A2000",
-        .vendor     = ROM_VENDOR_HYPERION
+        .vendor     = RomVendor::HYPERION
     },{
         .crc        = CRC32_HYP314_46_143_A3000,
         .title      = "Kickstart 3.1.4 (Hyperion)",
         .revision   = "Rev 46.143",
         .released   = "September 2018",
         .model      = "A3000",
-        .vendor     = ROM_VENDOR_HYPERION
+        .vendor     = RomVendor::HYPERION
     },{
         .crc        = CRC32_HYP314_46_143_A4000,
         .title      = "Kickstart 3.1.4 (Hyperion)",
         .revision   = "Rev 46.143",
         .released   = "September 2018",
         .model      = "A4000",
-        .vendor     = ROM_VENDOR_HYPERION
+        .vendor     = RomVendor::HYPERION
     },{
         .crc        = CRC32_HYP314_46_143_A4000T,
         .title      = "Kickstart 3.1.4 (Hyperion)",
         .revision   = "Rev 46.143",
         .released   = "May 2021",
         .model      = "A4000T",
-        .vendor     = ROM_VENDOR_HYPERION
+        .vendor     = RomVendor::HYPERION
     },{
         .crc        = CRC32_HYP320_47_96_A500,
         .title      = "Kickstart 3.2 (Hyperion)",
         .revision   = "Rev 47.96",
         .released   = "May 2021",
         .model      = "A500, A600, A1000, A2000, CDTV",
-        .vendor     = ROM_VENDOR_HYPERION
+        .vendor     = RomVendor::HYPERION
     },{
         .crc        = CRC32_HYP320_47_96_A1200,
         .title      = "Kickstart 3.2 (Hyperion)",
         .revision   = "Rev 47.96",
         .released   = "May 2021",
         .model      = "A1200",
-        .vendor     = ROM_VENDOR_HYPERION
+        .vendor     = RomVendor::HYPERION
     },{
         .crc        = CRC32_HYP320_47_96_A3000,
         .title      = "Kickstart 3.2 (Hyperion)",
         .revision   = "Rev 47.96",
         .released   = "May 2021",
         .model      = "A3000",
-        .vendor     = ROM_VENDOR_HYPERION
+        .vendor     = RomVendor::HYPERION
     },{
         .crc        = CRC32_HYP320_47_96_A4000,
         .title      = "Kickstart 3.2 (Hyperion)",
         .revision   = "Rev 47.96",
         .released   = "May 2021",
         .model      = "A4000",
-        .vendor     = ROM_VENDOR_HYPERION
+        .vendor     = RomVendor::HYPERION
     },{
         .crc        = CRC32_HYP320_47_96_A4000T,
         .title      = "Kickstart 3.2 (Hyperion)",
         .revision   = "Rev 47.96",
         .released   = "May 2021",
         .model      = "A4000T",
-        .vendor     = ROM_VENDOR_HYPERION
+        .vendor     = RomVendor::HYPERION
     },{
         .crc        = CRC32_HYP321_47_102_A500,
         .title      = "Kickstart 3.2.1 (Hyperion)",
         .revision   = "Rev 47.102",
         .released   = "December 2021",
         .model      = "A500, A600, A1000, A2000, CDTV",
-        .vendor     = ROM_VENDOR_HYPERION
+        .vendor     = RomVendor::HYPERION
     },{
         .crc        = CRC32_HYP321_47_102_A1200,
         .title      = "Kickstart 3.2.1 (Hyperion)",
         .revision   = "Rev 47.102",
         .released   = "December 2021",
         .model      = "A1200",
-        .vendor     = ROM_VENDOR_HYPERION
+        .vendor     = RomVendor::HYPERION
     },{
         .crc        = CRC32_HYP321_47_102_A3000,
         .title      = "Kickstart 3.2.1 (Hyperion)",
         .revision   = "Rev 47.102",
         .released   = "December 2021",
         .model      = "A3000",
-        .vendor     = ROM_VENDOR_HYPERION
+        .vendor     = RomVendor::HYPERION
     },{
         .crc        = CRC32_HYP321_47_102_A4000,
         .title      = "Kickstart 3.2.1 (Hyperion)",
         .revision   = "Rev 47.102",
         .released   = "December 2021",
         .model      = "A4000",
-        .vendor     = ROM_VENDOR_HYPERION
+        .vendor     = RomVendor::HYPERION
     },{
         .crc        = CRC32_HYP321_47_102_A4000T,
         .title      = "Kickstart 3.2.1 (Hyperion)",
         .revision   = "Rev 47.102",
         .released   = "December 2021",
         .model      = "A4000T",
-        .vendor     = ROM_VENDOR_HYPERION
+        .vendor     = RomVendor::HYPERION
     },{
         .crc        = CRC32_HYP322_47_111_A500,
         .title      = "Kickstart 3.2.2 (Hyperion)",
         .revision   = "Rev 47.111",
         .released   = "March 2023",
         .model      = "A500, A600, A1000, A2000, CDTV",
-        .vendor     = ROM_VENDOR_HYPERION
+        .vendor     = RomVendor::HYPERION
     },{
         .crc        = CRC32_HYP322_47_111_A1200,
         .title      = "Kickstart 3.2.2 (Hyperion)",
         .revision   = "Rev 47.111",
         .released   = "March 2023",
         .model      = "A1200",
-        .vendor     = ROM_VENDOR_HYPERION
+        .vendor     = RomVendor::HYPERION
     },{
         .crc        = CRC32_HYP322_47_111_A3000,
         .title      = "Kickstart 3.2.2 (Hyperion)",
         .revision   = "Rev 47.111",
         .released   = "March 2023",
         .model      = "A3000",
-        .vendor     = ROM_VENDOR_HYPERION
+        .vendor     = RomVendor::HYPERION
     },{
         .crc        = CRC32_HYP322_47_111_A4000,
         .title      = "Kickstart 3.2.2 (Hyperion)",
         .revision   = "Rev 47.111",
         .released   = "March 2023",
         .model      = "A4000",
-        .vendor     = ROM_VENDOR_HYPERION
+        .vendor     = RomVendor::HYPERION
     },{
         .crc        = CRC32_HYP322_47_111_A4000T,
         .title      = "Kickstart 3.2.2 (Hyperion)",
         .revision   = "Rev 47.111",
         .released   = "March 2023",
         .model      = "A4000T",
-        .vendor     = ROM_VENDOR_HYPERION
+        .vendor     = RomVendor::HYPERION
     },{
         .crc        = CRC32_AROS_54705,
         .title      = "AROS Kickstart replacement",
         .revision   = "SVN 54705",
         .released   = "May 2017",
         .model      = "UAE version",
-        .vendor     = ROM_VENDOR_AROS
+        .vendor     = RomVendor::AROS
     },{
         .crc        = CRC32_AROS_54705_EXT,
         .title      = "AROS Kickstart extension",
         .revision   = "SVN 54705",
         .released   = "May 2017",
         .model      = "UAE version",
-        .vendor     = ROM_VENDOR_AROS
+        .vendor     = RomVendor::AROS
     },{
         .crc        = CRC32_AROS_55696,
         .title      = "AROS Kickstart replacement",
         .revision   = "SVN 55696",
         .released   = "February 2019",
         .model      = "SAE version",
-        .vendor     = ROM_VENDOR_AROS
+        .vendor     = RomVendor::AROS
     },{
         .crc        = CRC32_AROS_55696_EXT,
         .title      = "AROS Kickstart extension",
         .revision   = "SVN 55696",
         .released   = "February 2019",
         .model      = "SAE version",
-        .vendor     = ROM_VENDOR_AROS
+        .vendor     = RomVendor::AROS
     },{
         .crc        = CRC32_AROS_1ED13DE6E3,
         .title      = "AROS Kickstart replacement",
         .revision   = "Version 1ed13de6e3",
         .released   = "September 2021",
         .model      = "",
-        .vendor     = ROM_VENDOR_AROS
+        .vendor     = RomVendor::AROS
     },{
         .crc        = CRC32_AROS_1ED13DE6E3_EXT,
         .title      = "AROS Kickstart extension",
         .revision   = "Version 1ed13de6e3",
         .released   = "September 2021",
         .model      = "",
-        .vendor     = ROM_VENDOR_AROS
+        .vendor     = RomVendor::AROS
     },{
         .crc        = CRC32_EMUTOS13,
         .title      = "EmuTOS Kickstart replacement",
         .revision   = "Version 1.3",
         .released   = "March 2024",
         .model      = "",
-        .vendor     = ROM_VENDOR_EMUTOS
+        .vendor     = RomVendor::EMUTOS
     },{
         .crc        = CRC32_DIAG11,
         .title      = "Amiga DiagROM",
         .revision   = "Version 1.1",
         .released   = "October 2018",
         .model      = "",
-        .vendor     = ROM_VENDOR_DIAG
+        .vendor     = RomVendor::DIAG
     },{
         .crc        = CRC32_DIAG12,
         .title      = "Amiga DiagROM",
         .revision   = "Version 1.2",
         .released   = "August 2019",
         .model      = "",
-        .vendor     = ROM_VENDOR_DIAG
+        .vendor     = RomVendor::DIAG
     },{
         .crc        = CRC32_DIAG121,
         .title      = "Amiga DiagROM",
         .revision   = "Version 1.2.1",
         .released   = "July 2020",
         .model      = "",
-        .vendor     = ROM_VENDOR_DIAG
+        .vendor     = RomVendor::DIAG
     },{
         .crc        = CRC32_DIAG13,
         .title      = "Amiga DiagROM",
         .revision   = "Version 1.3",
         .released   = "April 2023",
         .model      = "",
-        .vendor     = ROM_VENDOR_DIAG
+        .vendor     = RomVendor::DIAG
     },{
         .crc        = CRC32_CPUBLTRO_F8_0_3_2,
         .title      = "OCS CPUBLTRO",
         .revision   = "Version 0.3.2",
         .released   = "November 2024",
         .model      = "512 KB",
-        .vendor     = ROM_VENDOR_DEMO
+        .vendor     = RomVendor::DEMO
     },{
         .crc        = CRC32_CPUBLTRO_FC_0_3_2,
         .title      = "OCS CPUBLTRO",
         .revision   = "Version 0.3.2",
         .released   = "November 2024",
         .model      = "256 KB",
-        .vendor     = ROM_VENDOR_DEMO
+        .vendor     = RomVendor::DEMO
     },
 };
 

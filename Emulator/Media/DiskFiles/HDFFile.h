@@ -66,7 +66,7 @@ public:
     
 public:
     
-    FileType type() const override { return FILETYPE_HDF; }
+    FileType type() const override { return FileType::HDF; }
     
 
     //

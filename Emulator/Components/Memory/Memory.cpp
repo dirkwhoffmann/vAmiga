@@ -465,7 +465,7 @@ Memory::_isReady() const
     auto traits = getRomTraits();
 
     bool hasRom = traits.crc != 0;
-    bool hasAros = traits.vendor == ROM_VENDOR_AROS;
+    bool hasAros = traits.vendor == RomVendor::AROS;
 
     if (!hasRom || FORCE_ROM_MISSING) {
         throw Error(ErrorCode::ROM_MISSING);
@@ -625,7 +625,7 @@ Memory::getRomTraits(u32 crc)
         .revision = "",
         .released = "",
         .model = "",
-        .vendor = ROM_VENDOR_OTHER
+        .vendor = RomVendor::OTHER
     };
 
     return fallback;
@@ -670,9 +670,8 @@ Memory::loadRom(MediaFile &file)
 
         auto &romFile = dynamic_cast<RomFile &>(file);
 
-        if (romFile.type())
-            // Decrypt Rom
-            romFile.decrypt();
+        // Decrypt Rom
+        if (romFile.isEncrypted()) romFile.decrypt();
 
         // Allocate memory
         allocRom((i32)romFile.data.size);

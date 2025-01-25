@@ -48,7 +48,7 @@ public:
     // Methods from AmigaFile
     //
 
-    FileType type() const override { return FILETYPE_EXTENDED_ROM; }
+    FileType type() const override { return FileType::EXTENDED_ROM; }
 };
 
 }

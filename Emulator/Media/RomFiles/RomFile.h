@@ -45,7 +45,7 @@ public:
     // Methods from AmigaFile
     //
 
-    FileType type() const override { return FILETYPE_ROM; }
+    FileType type() const override { return FileType::ROM; }
     bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) override { return isCompatible(buf, len); }
 

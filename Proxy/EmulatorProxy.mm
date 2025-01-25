@@ -507,7 +507,7 @@ NSString *EventSlotName(NSInteger slot)
 
 - (BOOL)isRom:(NSURL *)url
 {
-    return MediaFile::type([url fileSystemRepresentation]) == FILETYPE_ROM;
+    return MediaFile::type([url fileSystemRepresentation]) == FileType::ROM;
 }
 
 - (void)loadRom:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
@@ -538,7 +538,7 @@ NSString *EventSlotName(NSInteger slot)
 
 - (BOOL)isExt:(NSURL *)url
 {
-    return MediaFile::type([url fileSystemRepresentation]) == FILETYPE_EXTENDED_ROM;
+    return MediaFile::type([url fileSystemRepresentation]) == FileType::EXTENDED_ROM;
 }
 
 - (void)loadExt:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
