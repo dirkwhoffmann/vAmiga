@@ -106,10 +106,10 @@ StateMachine<nr>::AUDxIR() const
 {
     if (DISABLE_AUDIRQ) return;
     
-    if constexpr (nr == 0) { paula.scheduleIrqRel(INT_AUD0, DMA_CYCLES(1)); }
-    if constexpr (nr == 1) { paula.scheduleIrqRel(INT_AUD1, DMA_CYCLES(1)); }
-    if constexpr (nr == 2) { paula.scheduleIrqRel(INT_AUD2, DMA_CYCLES(1)); }
-    if constexpr (nr == 3) { paula.scheduleIrqRel(INT_AUD3, DMA_CYCLES(1)); }
+    if constexpr (nr == 0) { paula.scheduleIrqRel(IrqSource::AUD0, DMA_CYCLES(1)); }
+    if constexpr (nr == 1) { paula.scheduleIrqRel(IrqSource::AUD1, DMA_CYCLES(1)); }
+    if constexpr (nr == 2) { paula.scheduleIrqRel(IrqSource::AUD2, DMA_CYCLES(1)); }
+    if constexpr (nr == 3) { paula.scheduleIrqRel(IrqSource::AUD3, DMA_CYCLES(1)); }
 }
 
 template <isize nr> void

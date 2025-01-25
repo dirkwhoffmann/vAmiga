@@ -150,7 +150,7 @@ AudioPort::getOption(Option option) const
 {
     switch (option) {
             
-        case Option::AUD_SAMPLING_METHOD:   return config.samplingMethod;
+        case Option::AUD_SAMPLING_METHOD:   return (i64)config.samplingMethod;
         case Option::AUD_PAN0:              return config.pan[0];
         case Option::AUD_PAN1:              return config.pan[1];
         case Option::AUD_PAN2:              return config.pan[2];
@@ -365,9 +365,9 @@ AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
     // Take the slow path
     switch (config.samplingMethod) {
 
-        case SMP_NONE:      synthesize<SMP_NONE>(clock, count, cyclesPerSample); break;
-        case SMP_NEAREST:   synthesize<SMP_NEAREST>(clock, count, cyclesPerSample); break;
-        case SMP_LINEAR:    synthesize<SMP_LINEAR>(clock, count, cyclesPerSample); break;
+        case SamplingMethod::NONE:      synthesize<SamplingMethod::NONE>(clock, count, cyclesPerSample); break;
+        case SamplingMethod::NEAREST:   synthesize<SamplingMethod::NEAREST>(clock, count, cyclesPerSample); break;
+        case SamplingMethod::LINEAR:    synthesize<SamplingMethod::LINEAR>(clock, count, cyclesPerSample); break;
 
         default:
             fatalError;

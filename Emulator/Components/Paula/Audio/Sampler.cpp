@@ -55,17 +55,17 @@ Sampler::interpolate(Cycle clock)
     assert(clock >= keys[r1] && clock < keys[r2]);
 
     // Interpolate between position r1 and r2
-    if constexpr (method == SMP_NONE) {
+    if constexpr (method == SamplingMethod::NONE) {
 
         return elements[r1];
     }
     
-    if constexpr (method == SMP_NEAREST) {
+    if constexpr (method == SamplingMethod::NEAREST) {
         
         return ((clock - keys[r1]) < (keys[r2] - clock)) ? elements[r1] : elements[r2];
     }
     
-    if constexpr (method == SMP_LINEAR) {
+    if constexpr (method == SamplingMethod::LINEAR) {
 
         double dx = (double)(keys[r2] - keys[r1]);
         double dy = (double)(elements[r2] - elements[r1]);
@@ -75,8 +75,8 @@ Sampler::interpolate(Cycle clock)
     }
 }
 
-template i16 Sampler::interpolate<SMP_NONE>(Cycle clock);
-template i16 Sampler::interpolate<SMP_NEAREST>(Cycle clock);
-template i16 Sampler::interpolate<SMP_LINEAR>(Cycle clock);
+template i16 Sampler::interpolate<SamplingMethod::NONE>(Cycle clock);
+template i16 Sampler::interpolate<SamplingMethod::NEAREST>(Cycle clock);
+template i16 Sampler::interpolate<SamplingMethod::LINEAR>(Cycle clock);
 
 }

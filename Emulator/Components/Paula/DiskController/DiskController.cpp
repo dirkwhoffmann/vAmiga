@@ -306,7 +306,7 @@ DiskController::readBit(bool bit)
 
         // Trigger a word SYNC interrupt
         trace(DSK_DEBUG, "SYNC IRQ (dsklen = %d)\n", dsklen);
-        paula.raiseIrq(INT_DSKSYN);
+        paula.raiseIrq(IrqSource::DSKSYN);
 
         // Enable DMA if the controller was waiting for it
         if (state == DRIVE_DMA_WAIT) {
@@ -396,7 +396,7 @@ DiskController::performDMARead(FloppyDrive *drive, u32 remaining)
         // Finish up if this was the last word to transfer
         if ((--dsklen & 0x3FFF) == 0) {
             
-            paula.raiseIrq(INT_DSKBLK);
+            paula.raiseIrq(IrqSource::DSKBLK);
             setState(DRIVE_DMA_OFF);
             
             debug(DSK_CHECKSUM,
@@ -443,7 +443,7 @@ DiskController::performDMAWrite(FloppyDrive *drive, u32 remaining)
         // Finish up if this was the last word to transfer
         if ((--dsklen & 0x3FFF) == 0) {
             
-            paula.raiseIrq(INT_DSKBLK);
+            paula.raiseIrq(IrqSource::DSKBLK);
             
             /* The timing-accurate approach: Set state to DRIVE_DMA_FLUSH.
              * The event handler recognises this state and switched to
@@ -498,7 +498,7 @@ DiskController::performTurboDMA(FloppyDrive *drive)
         case DRIVE_DMA_READ:
             
             if (drive) performTurboRead(drive);
-            if (drive) paula.raiseIrq(INT_DSKSYN);
+            if (drive) paula.raiseIrq(IrqSource::DSKSYN);
             break;
             
         case DRIVE_DMA_WRITE:
@@ -512,7 +512,7 @@ DiskController::performTurboDMA(FloppyDrive *drive)
     
     // Trigger disk interrupt with some delay
     Cycle delay = MIMIC_UAE ? 2 * PAL::HPOS_CNT - agnus.pos.h + 30 : 512;
-    paula.scheduleIrqRel(INT_DSKBLK, DMA_CYCLES(delay));
+    paula.scheduleIrqRel(IrqSource::DSKBLK, DMA_CYCLES(delay));
     
     setState(DRIVE_DMA_OFF);
 }

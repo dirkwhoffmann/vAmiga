@@ -169,7 +169,7 @@ UART::copyToTransmitShiftRegister()
 
     // Trigger a TBE interrupt
     trace(SER_DEBUG, "Triggering TBE interrupt\n");
-    paula.scheduleIrqRel(INT_TBE, DMA_CYCLES(2));
+    paula.scheduleIrqRel(IrqSource::TBE, DMA_CYCLES(2));
 }
 
 void
@@ -189,7 +189,7 @@ UART::copyFromReceiveShiftRegister()
 
     // Trigger the RBF interrupt (Read Buffer Full)
     trace(SER_DEBUG, "Triggering RBF interrupt\n");
-    paula.raiseIrq(INT_RBF);
+    paula.raiseIrq(IrqSource::RBF);
 }
 
 void

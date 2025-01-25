@@ -795,7 +795,7 @@ void
 CIAA::pullDownInterruptLine()
 {
     trace(CIA_DEBUG, "Pulling down IRQ line\n");
-    paula.raiseIrq(INT_PORTS);
+    paula.raiseIrq(IrqSource::PORTS);
 }
 
 void 
@@ -954,7 +954,7 @@ void
 CIAB::pullDownInterruptLine()
 {
     trace(CIA_DEBUG, "Pulling down IRQ line\n");
-    paula.raiseIrq(INT_EXTER);
+    paula.raiseIrq(IrqSource::EXTER);
 }
 
 void 

@@ -522,7 +522,7 @@ Agnus::serviceVBLEvent(EventID id)
             assert(!isPAL() || pos.h == 0);
             
             // Trigger the vertical blank interrupt
-            paula.raiseIrq(INT_VERTB);
+            paula.raiseIrq(IrqSource::VERTB);
             
             // Schedule next event
             scheduleStrobe1Event();

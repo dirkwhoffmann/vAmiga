@@ -54,7 +54,7 @@ Blitter::beginFastCopyBlit()
 
     // Terminate immediately
     clearBusyFlag();
-    paula.raiseIrq(INT_BLIT);
+    paula.raiseIrq(IrqSource::BLIT);
     endBlit();
 }
 
@@ -69,7 +69,7 @@ Blitter::beginFastLineBlit()
 
     // Terminate immediately
     clearBusyFlag();
-    paula.raiseIrq(INT_BLIT);
+    paula.raiseIrq(IrqSource::BLIT);
     endBlit();
 }
 

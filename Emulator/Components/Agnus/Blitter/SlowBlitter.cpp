@@ -1084,7 +1084,7 @@ Blitter::exec()
     // Trigger Blitter interrupt if this is the termination cycle
     if constexpr ((bool)(instr & BLTDONE)) {
         if (!birq) {
-            paula.scheduleIrqRel(INT_BLIT, DMA_CYCLES(1));
+            paula.scheduleIrqRel(IrqSource::BLIT, DMA_CYCLES(1));
             birq = true;
         }
     }
@@ -1254,7 +1254,7 @@ Blitter::fakeExec()
     // Trigger Blitter interrupt if this is the termination cycle
     if constexpr ((bool)(instr & BLTDONE)) {
         if (!birq) {
-            paula.scheduleIrqRel(INT_BLIT, DMA_CYCLES(1));
+            paula.scheduleIrqRel(IrqSource::BLIT, DMA_CYCLES(1));
             birq = true;
         }
     }
@@ -1347,7 +1347,7 @@ Blitter::execLine()
     // Trigger Blitter interrupt if this is the termination cycle
     if constexpr ((bool)(instr & BLTDONE)) {
         if (!birq) {
-            paula.scheduleIrqRel(INT_BLIT, DMA_CYCLES(1));
+            paula.scheduleIrqRel(IrqSource::BLIT, DMA_CYCLES(1));
             birq = true;
         }
     }
@@ -1461,7 +1461,7 @@ Blitter::fakeExecLine()
     // Trigger Blitter interrupt if this is the termination cycle
     if constexpr ((bool)(instr & BLTDONE)) {
         if (!birq) {
-            paula.scheduleIrqRel(INT_BLIT, DMA_CYCLES(1));
+            paula.scheduleIrqRel(IrqSource::BLIT, DMA_CYCLES(1));
             birq = true;
         }
     }

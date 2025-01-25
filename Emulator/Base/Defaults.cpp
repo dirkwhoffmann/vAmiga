@@ -148,7 +148,7 @@ Defaults::Defaults()
     setFallback(Option::JOY_AUTOFIRE_BURSTS,        false,                  { 0, 1} );
     setFallback(Option::JOY_AUTOFIRE_BULLETS,       3,                      { 0, 1} );
     setFallback(Option::JOY_AUTOFIRE_DELAY,         5,                      { 0, 1} );
-    setFallback(Option::AUD_SAMPLING_METHOD,        SMP_NONE);
+    setFallback(Option::AUD_SAMPLING_METHOD,        (i64)SamplingMethod::NONE);
     setFallback(Option::AUD_FILTER_TYPE,            (i64)FilterType::A500);
     setFallback(Option::AUD_PAN0,                   50);
     setFallback(Option::AUD_PAN1,                   350);

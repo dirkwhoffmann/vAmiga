@@ -65,7 +65,7 @@ DiskController::setDSKLEN(u16 oldValue, u16 newValue)
         }
 
         // Only proceed if there are bytes to process
-        if ((dsklen & 0x3FFF) == 0) { paula.raiseIrq(INT_DSKBLK); return; }
+        if ((dsklen & 0x3FFF) == 0) { paula.raiseIrq(IrqSource::DSKBLK); return; }
 
         // In debug mode, reset head position to generate reproducable results
         if (ALIGN_HEAD) if (drive) drive->head.offset = 0;

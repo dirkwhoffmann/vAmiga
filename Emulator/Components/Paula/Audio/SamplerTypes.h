@@ -18,37 +18,36 @@
 
 namespace vamiga {
 
-enum_long(SMP_METHOD)
+enum class SamplingMethod
 {
-    SMP_NONE,
-    SMP_NEAREST,
-    SMP_LINEAR
+    NONE,
+    NEAREST,
+    LINEAR
 };
-typedef SMP_METHOD SamplingMethod;
 
 struct SamplingMethodEnum : util::Reflection<SamplingMethodEnum, SamplingMethod>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = SMP_LINEAR;
+    static constexpr long maxVal = long(SamplingMethod::LINEAR);
     
     static const char *prefix() { return "SMP"; }
-    static const char *_key(long value)
+    static const char *_key(SamplingMethod value)
     {
         switch (value) {
                 
-            case SMP_NONE:     return "NONE";
-            case SMP_NEAREST:  return "NEAREST";
-            case SMP_LINEAR:   return "LINEAR";
+            case SamplingMethod::NONE:     return "NONE";
+            case SamplingMethod::NEAREST:  return "NEAREST";
+            case SamplingMethod::LINEAR:   return "LINEAR";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(SamplingMethod value)
     {
         switch (value) {
                 
-            case SMP_NONE:     return "Latest sample";
-            case SMP_NEAREST:  return "Nearest neighbor";
-            case SMP_LINEAR:   return "Linear interpolation";
+            case SamplingMethod::NONE:     return "Latest sample";
+            case SamplingMethod::NEAREST:  return "Nearest neighbor";
+            case SamplingMethod::LINEAR:   return "Linear interpolation";
         }
         return "???";
     }

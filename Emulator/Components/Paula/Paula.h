@@ -228,7 +228,7 @@ public:
 public:
     
     // Signals an interrupt in INTREQ
-    void raiseIrq(IrqSource src) { setINTREQ(true, (u16)(1 << src)); }
+    void raiseIrq(IrqSource src) { setINTREQ(true, u16(1 << isize(src))); }
     
     // Schedules an interrupt
     void scheduleIrqAbs(IrqSource src, Cycle trigger);
