@@ -797,7 +797,7 @@ Amiga::update(CmdQueue &queue)
                 port.processCommand(cmd); break;
                 break;
             }
-            case CmdType::MOUSE_EVENT:
+            case CmdType::MOUSE_BUTTON:
             case CmdType::JOY_EVENT:
             {
                 auto &port = cmd.action.port ? controlPort2 : controlPort1;

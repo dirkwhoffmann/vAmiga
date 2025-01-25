@@ -53,55 +53,53 @@ struct DmaDisplayModeEnum : util::Reflection<DmaDisplayModeEnum, DmaDisplayMode>
     }
 };
 
-enum_long(DMA_CHANNEL)
+enum class DmaChannel
 {
-    DMA_CHANNEL_COPPER,
-    DMA_CHANNEL_BLITTER,
-    DMA_CHANNEL_DISK,
-    DMA_CHANNEL_AUDIO,
-    DMA_CHANNEL_SPRITE,
-    DMA_CHANNEL_BITPLANE,
-    DMA_CHANNEL_CPU,
-    DMA_CHANNEL_REFRESH,
-    
-    DMA_CHANNEL_COUNT,
+    COPPER,
+    BLITTER,
+    DISK,
+    AUDIO,
+    SPRITE,
+    BITPLANE,
+    CPU,
+    REFRESH,
+    COUNT
 };
-typedef DMA_CHANNEL DmaChannel;
 
 struct DmaChannelEnum : util::Reflection<DmaChannelEnum, DmaChannel>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = DMA_CHANNEL_COUNT - 1;
+    static constexpr long maxVal = long(DmaChannel::REFRESH);
     
-    static const char *_key(long value)
+    static const char *_key(DmaChannel value)
     {
         switch (value) {
                 
-            case DMA_CHANNEL_COPPER:    return "COPPER";
-            case DMA_CHANNEL_BLITTER:   return "BLITTER";
-            case DMA_CHANNEL_DISK:      return "DISK";
-            case DMA_CHANNEL_AUDIO:     return "AUDIO";
-            case DMA_CHANNEL_SPRITE:    return "SPRITE";
-            case DMA_CHANNEL_BITPLANE:  return "BITPLANE";
-            case DMA_CHANNEL_CPU:       return "CPU";
-            case DMA_CHANNEL_REFRESH:   return "REFRESH";
-            case DMA_CHANNEL_COUNT:     return "???";
+            case DmaChannel::COPPER:    return "COPPER";
+            case DmaChannel::BLITTER:   return "BLITTER";
+            case DmaChannel::DISK:      return "DISK";
+            case DmaChannel::AUDIO:     return "AUDIO";
+            case DmaChannel::SPRITE:    return "SPRITE";
+            case DmaChannel::BITPLANE:  return "BITPLANE";
+            case DmaChannel::CPU:       return "CPU";
+            case DmaChannel::REFRESH:   return "REFRESH";
+            case DmaChannel::COUNT:     return "???";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(DmaChannel value)
     {
         switch (value) {
                 
-            case DMA_CHANNEL_COPPER:    return "Copper DMA";
-            case DMA_CHANNEL_BLITTER:   return "Blitter DMA";
-            case DMA_CHANNEL_DISK:      return "Disk DMA";
-            case DMA_CHANNEL_AUDIO:     return "Audio DMA";
-            case DMA_CHANNEL_SPRITE:    return "Sprite DMA";
-            case DMA_CHANNEL_BITPLANE:  return "Bitplane DMA";
-            case DMA_CHANNEL_CPU:       return "CPU access";
-            case DMA_CHANNEL_REFRESH:   return "Refresh cycle";
-            case DMA_CHANNEL_COUNT:     return "";
+            case DmaChannel::COPPER:    return "Copper DMA";
+            case DmaChannel::BLITTER:   return "Blitter DMA";
+            case DmaChannel::DISK:      return "Disk DMA";
+            case DmaChannel::AUDIO:     return "Audio DMA";
+            case DmaChannel::SPRITE:    return "Sprite DMA";
+            case DmaChannel::BITPLANE:  return "Bitplane DMA";
+            case DmaChannel::CPU:       return "CPU access";
+            case DmaChannel::REFRESH:   return "Refresh cycle";
+            case DmaChannel::COUNT:     return "";
         }
         return "???";
     }
@@ -118,10 +116,10 @@ typedef struct
     bool enabled;
     
     // Individual enable switch for each DMA channel
-    bool visualize[DMA_CHANNEL_COUNT];
+    bool visualize[isize(DmaChannel::COUNT)];
     
     // Color palette
-    u32 debugColor[DMA_CHANNEL_COUNT];
+    u32 debugColor[isize(DmaChannel::COUNT)];
     
     // Display mode
     DmaDisplayMode displayMode;

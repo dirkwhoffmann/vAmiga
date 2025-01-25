@@ -1397,7 +1397,7 @@ void
 MouseAPI::trigger(GamePadAction action)
 {
     VAMIGA_PUBLIC
-    emu->put(Cmd(CmdType::MOUSE_EVENT, GamePadCmd { .port = mouse->objid, .action = action }));
+    emu->put(Cmd(CmdType::MOUSE_BUTTON, GamePadCmd { .port = mouse->objid, .action = action }));
 }
 
 

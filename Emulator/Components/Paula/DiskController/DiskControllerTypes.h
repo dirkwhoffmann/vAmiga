@@ -18,40 +18,49 @@ namespace vamiga {
 // Enumerations
 //
 
-enum_long(DRIVE_DMA_STATE)
+enum class DriveDmaState
 {
-    DRIVE_DMA_OFF,     // Drive is idle
+    OFF,     // Drive is idle
     
-    DRIVE_DMA_WAIT,    // Drive is waiting for the sync word
-    DRIVE_DMA_READ,    // Drive is reading
+    WAIT,    // Drive is waiting for the sync word
+    READ,    // Drive is reading
     
-    DRIVE_DMA_WRITE,   // Drive is writing
-    DRIVE_DMA_FLUSH,   // Drive is finishing up the write process
+    WRITE,   // Drive is writing
+    FLUSH,   // Drive is finishing up the write process
 };
-typedef DRIVE_DMA_STATE DriveState;
 
-struct DriveStateEnum : util::Reflection<DriveStateEnum, DriveState>
+struct DriveStateEnum : util::Reflection<DriveStateEnum, DriveDmaState>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = DRIVE_DMA_FLUSH;
+    static constexpr long maxVal = long(DriveDmaState::FLUSH);
         
-    static const char *_key(long value)
+    static const char *_key(DriveDmaState value)
     {
         switch (value) {
                 
-            case DRIVE_DMA_OFF:    return "OFF";
+            case DriveDmaState::OFF:    return "OFF";
                 
-            case DRIVE_DMA_WAIT:   return "WAIT";
-            case DRIVE_DMA_READ:   return "READ";
+            case DriveDmaState::WAIT:   return "WAIT";
+            case DriveDmaState::READ:   return "READ";
                 
-            case DRIVE_DMA_WRITE:  return "WRITE";
-            case DRIVE_DMA_FLUSH:  return "FLUSH";
+            case DriveDmaState::WRITE:  return "WRITE";
+            case DriveDmaState::FLUSH:  return "FLUSH";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(DriveDmaState value)
     {
-        return "";
+        switch (value) {
+                
+            case DriveDmaState::OFF:    return "Inactive";
+                
+            case DriveDmaState::WAIT:   return "Waiting";
+            case DriveDmaState::READ:   return "Reading";
+                
+            case DriveDmaState::WRITE:  return "Writing";
+            case DriveDmaState::FLUSH:  return "Flushing";
+        }
+        return "???";
     }
 };
 
@@ -87,7 +96,7 @@ inline bool isValidDriveSpeed(isize speed)
 typedef struct
 {
     isize selectedDrive;
-    DriveState state;
+    DriveDmaState state;
     i32 fifo[6];
     u8 fifoCount;
     

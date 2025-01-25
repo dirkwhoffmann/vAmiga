@@ -271,7 +271,7 @@ CoreComponent::load(const u8 *buffer)
         }
 
         debug(SNP_DEBUG >= 2, "Loaded %llu bytes (expected %llu)\n", count, size);
-        result += count;
+        result += isize(count);
     });
 
     postorderWalk([](CoreComponent *c) { c->_didLoad(); });

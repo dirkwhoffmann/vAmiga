@@ -284,23 +284,23 @@ DmaDebugger::cacheInfo(DmaDebuggerInfo &result) const
 {
     {   SYNCHRONIZED
         
-        result.visualizeCopper = config.visualize[DMA_CHANNEL_COPPER];
-        result.visualizeBlitter = config.visualize[DMA_CHANNEL_BLITTER];
-        result.visualizeDisk = config.visualize[DMA_CHANNEL_DISK];
-        result.visualizeAudio = config.visualize[DMA_CHANNEL_AUDIO];
-        result.visualizeSprites = config.visualize[DMA_CHANNEL_SPRITE];
-        result.visualizeBitplanes = config.visualize[DMA_CHANNEL_BITPLANE];
-        result.visualizeCpu = config.visualize[DMA_CHANNEL_CPU];
-        result.visualizeRefresh = config.visualize[DMA_CHANNEL_REFRESH];
+        result.visualizeCopper = config.visualize[isize(DmaChannel::COPPER)];
+        result.visualizeBlitter = config.visualize[isize(DmaChannel::BLITTER)];
+        result.visualizeDisk = config.visualize[isize(DmaChannel::DISK)];
+        result.visualizeAudio = config.visualize[isize(DmaChannel::AUDIO)];
+        result.visualizeSprites = config.visualize[isize(DmaChannel::SPRITE)];
+        result.visualizeBitplanes = config.visualize[isize(DmaChannel::BITPLANE)];
+        result.visualizeCpu = config.visualize[isize(DmaChannel::CPU)];
+        result.visualizeRefresh = config.visualize[isize(DmaChannel::REFRESH)];
         
-        getColor(DMA_CHANNEL_COPPER, result.copperColor);
-        getColor(DMA_CHANNEL_BLITTER, result.blitterColor);
-        getColor(DMA_CHANNEL_DISK, result.diskColor);
-        getColor(DMA_CHANNEL_AUDIO, result.audioColor);
-        getColor(DMA_CHANNEL_SPRITE, result.spriteColor);
-        getColor(DMA_CHANNEL_BITPLANE, result.bitplaneColor);
-        getColor(DMA_CHANNEL_CPU, result.cpuColor);
-        getColor(DMA_CHANNEL_REFRESH, result.refreshColor);
+        getColor(DmaChannel::COPPER, result.copperColor);
+        getColor(DmaChannel::BLITTER, result.blitterColor);
+        getColor(DmaChannel::DISK, result.diskColor);
+        getColor(DmaChannel::AUDIO, result.audioColor);
+        getColor(DmaChannel::SPRITE, result.spriteColor);
+        getColor(DmaChannel::BITPLANE, result.bitplaneColor);
+        getColor(DmaChannel::CPU, result.cpuColor);
+        getColor(DmaChannel::REFRESH, result.refreshColor);
     }
 }
 
@@ -309,7 +309,7 @@ DmaDebugger::getColor(DmaChannel channel, double *rgb) const
 {
     assert_enum(DmaChannel, channel);
     
-    RgbColor color = RgbColor(config.debugColor[channel]);
+    RgbColor color = RgbColor(config.debugColor[isize(channel)]);
     rgb[0] = color.r;
     rgb[1] = color.g;
     rgb[2] = color.b;

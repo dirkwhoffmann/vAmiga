@@ -40,7 +40,7 @@ class DiskController final : public SubComponent, public Inspectable<DiskControl
     isize selected = -1;
 
     // The current drive state (off, read, or write)
-    DriveState state;
+    DriveDmaState state;
 
     // Timestamp of the latest DSKSYNC match
     Cycle syncCycle;
@@ -231,13 +231,13 @@ public:
     bool spinning() const;
     
     // Returns the current drive state
-    DriveState getState() const { return state; }
+    DriveDmaState getState() const { return state; }
     
 private:
     
     // Changes the current drive state
-    void setState(DriveState s);
-    void setState(DriveState oldState, DriveState newState);
+    void setState(DriveDmaState s);
+    void setState(DriveDmaState oldState, DriveDmaState newState);
 
     
     //

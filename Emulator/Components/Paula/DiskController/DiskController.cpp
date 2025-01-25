@@ -168,13 +168,13 @@ DiskController::spinning() const
 }
 
 void
-DiskController::setState(DriveState newState)
+DiskController::setState(DriveDmaState newState)
 {
     if (state != newState) setState(state, newState);
 }
 
 void
-DiskController::setState(DriveState oldState, DriveState newState)
+DiskController::setState(DriveDmaState oldState, DriveDmaState newState)
 {
     trace(DSK_DEBUG, "%s -> %s\n",
           DriveStateEnum::key(oldState), DriveStateEnum::key(newState));
@@ -183,19 +183,19 @@ DiskController::setState(DriveState oldState, DriveState newState)
     
     switch (state) {
             
-        case DRIVE_DMA_OFF:
+        case DriveDmaState::OFF:
             
             dsklen = 0;
             break;
             
-        case DRIVE_DMA_WRITE:
+        case DriveDmaState::WRITE:
             
             msgQueue.put(MsgType::DRIVE_WRITE, selected);
             break;
             
         default:
             
-            if (oldState == DRIVE_DMA_WRITE)
+            if (oldState == DriveDmaState::WRITE)
                 msgQueue.put(MsgType::DRIVE_READ, selected);
     }
 }
@@ -252,15 +252,15 @@ DiskController::transferByte()
 {
     switch (state) {
             
-        case DRIVE_DMA_OFF:
-        case DRIVE_DMA_WAIT:
-        case DRIVE_DMA_READ:
+        case DriveDmaState::OFF:
+        case DriveDmaState::WAIT:
+        case DriveDmaState::READ:
 
             readByte();
             break;
 
-        case DRIVE_DMA_WRITE:
-        case DRIVE_DMA_FLUSH:
+        case DriveDmaState::WRITE:
+        case DriveDmaState::FLUSH:
 
             writeByte();
             break;
@@ -309,11 +309,11 @@ DiskController::readBit(bool bit)
         paula.raiseIrq(IrqSource::DSKSYN);
 
         // Enable DMA if the controller was waiting for it
-        if (state == DRIVE_DMA_WAIT) {
+        if (state == DriveDmaState::WAIT) {
 
             dataRegCount = 0;
             clearFifo();
-            setState(DRIVE_DMA_READ);
+            setState(DriveDmaState::READ);
         }
 
         // Reset the watchdog counter
@@ -329,7 +329,7 @@ DiskController::writeByte()
     if (fifoIsEmpty()) {
 
         // Switch off DMA if the last byte has been flushed out
-        if (state == DRIVE_DMA_FLUSH) setState(DRIVE_DMA_OFF);
+        if (state == DriveDmaState::FLUSH) setState(DriveDmaState::OFF);
 
     } else {
 
@@ -350,7 +350,7 @@ DiskController::performDMA()
     if ((dsklen & 0x3FFF) == 0) return;
     
     // Only proceed if DMA is enabled
-    if (state != DRIVE_DMA_READ && state != DRIVE_DMA_WRITE) return;
+    if (state != DriveDmaState::READ && state != DriveDmaState::WRITE) return;
     
     // How many words shall we read in?
     u32 count = drive ? config.speed : 1;
@@ -358,12 +358,12 @@ DiskController::performDMA()
     // Perform DMA
     switch (state) {
             
-        case DRIVE_DMA_READ:
+        case DriveDmaState::READ:
             
             performDMARead(drive, count);
             break;
             
-        case DRIVE_DMA_WRITE:
+        case DriveDmaState::WRITE:
             
             performDMAWrite(drive, count);
             break;
@@ -397,7 +397,7 @@ DiskController::performDMARead(FloppyDrive *drive, u32 remaining)
         if ((--dsklen & 0x3FFF) == 0) {
             
             paula.raiseIrq(IrqSource::DSKBLK);
-            setState(DRIVE_DMA_OFF);
+            setState(DriveDmaState::OFF);
             
             debug(DSK_CHECKSUM,
                   "read: cnt = %llu check1 = %x check2 = %x\n", checkcnt, check1, check2);
@@ -462,7 +462,7 @@ DiskController::performDMAWrite(FloppyDrive *drive, u32 remaining)
                 u8 value = readFifo();
                 if (drive) drive->writeByteAndRotate(value);
             }
-            setState(DRIVE_DMA_OFF);
+            setState(DriveDmaState::OFF);
             
             debug(DSK_CHECKSUM, "write: cnt = %llu ", checkcnt);
             debug(DSK_CHECKSUM, "check1 = %x check2 = %x\n", check1, check2);
@@ -490,18 +490,18 @@ DiskController::performTurboDMA(FloppyDrive *drive)
     // Perform action depending on DMA state
     switch (state) {
             
-        case DRIVE_DMA_WAIT:
+        case DriveDmaState::WAIT:
             
             drive->findSyncMark();
             [[fallthrough]];
             
-        case DRIVE_DMA_READ:
+        case DriveDmaState::READ:
             
             if (drive) performTurboRead(drive);
             if (drive) paula.raiseIrq(IrqSource::DSKSYN);
             break;
             
-        case DRIVE_DMA_WRITE:
+        case DriveDmaState::WRITE:
             
             if (drive) performTurboWrite(drive);
             break;
@@ -514,7 +514,7 @@ DiskController::performTurboDMA(FloppyDrive *drive)
     Cycle delay = MIMIC_UAE ? 2 * PAL::HPOS_CNT - agnus.pos.h + 30 : 512;
     paula.scheduleIrqRel(IrqSource::DSKBLK, DMA_CYCLES(delay));
     
-    setState(DRIVE_DMA_OFF);
+    setState(DriveDmaState::OFF);
 }
 
 void

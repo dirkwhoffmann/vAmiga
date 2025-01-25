@@ -53,15 +53,15 @@ DiskController::setDSKLEN(u16 oldValue, u16 newValue)
     // Disable DMA if bit 15 (DMAEN) is zero
     if (!(newValue & 0x8000)) {
 
-        setState(DRIVE_DMA_OFF);
+        setState(DriveDmaState::OFF);
         clearFifo();
     }
     
     // Enable DMA if bit 15 (DMAEN) has been written twice
     if (oldValue & newValue & 0x8000) {
 
-        if (state != DRIVE_DMA_OFF) {
-            xfiles("DSKLEN: Written in DMA state %ld\n", state);
+        if (state != DriveDmaState::OFF) {
+            xfiles("DSKLEN: Written in DMA state %ld\n", isize(state));
         }
 
         // Only proceed if there are bytes to process
@@ -73,7 +73,7 @@ DiskController::setDSKLEN(u16 oldValue, u16 newValue)
         // Check if the WRITE bit (bit 14) also has been written twice
         if (oldValue & newValue & 0x4000) {
             
-            setState(DRIVE_DMA_WRITE);
+            setState(DriveDmaState::WRITE);
             clearFifo();
             
         } else {
@@ -82,13 +82,13 @@ DiskController::setDSKLEN(u16 oldValue, u16 newValue)
             if (GET_BIT(paula.adkcon, 10)) {
                 
                 // Wait with reading until a sync mark has been found
-                setState(DRIVE_DMA_WAIT);
+                setState(DriveDmaState::WAIT);
                 clearFifo();
                 
             } else {
                 
                 // Start reading immediately
-                setState(DRIVE_DMA_READ);
+                setState(DriveDmaState::READ);
                 clearFifo();
             }
         }
@@ -131,7 +131,7 @@ DiskController::computeDSKBYTR() const
     u16 result = incoming;
 
     // DMAON
-    if (agnus.dskdma() && state != DRIVE_DMA_OFF) SET_BIT(result, 14);
+    if (agnus.dskdma() && state != DriveDmaState::OFF) SET_BIT(result, 14);
 
     // DSKWRITE
     if (dsklen & 0x4000) SET_BIT(result, 13);

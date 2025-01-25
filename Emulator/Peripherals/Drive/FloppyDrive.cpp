@@ -485,7 +485,7 @@ FloppyDrive::idMode() const
 bool
 FloppyDrive::isWriting() const
 {
-    return motor && isSelected() && diskController.getState() == DRIVE_DMA_WRITE;
+    return motor && isSelected() && diskController.getState() == DriveDmaState::WRITE;
 }
 
 Cycle
