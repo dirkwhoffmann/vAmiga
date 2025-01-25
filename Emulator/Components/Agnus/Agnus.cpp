@@ -127,7 +127,7 @@ Agnus::getOption(Option option) const
 {
     switch (option) {
 
-        case Option::AGNUS_REVISION:        return config.revision;
+        case Option::AGNUS_REVISION:        return (i64)config.revision;
         case Option::AGNUS_PTR_DROPS:       return config.ptrDrops;
             
         default:
@@ -166,12 +166,12 @@ Agnus::setOption(Option option, i64 value)
 
         case Option::AGNUS_REVISION:
 
-            switch (config.revision = (AgnusRevision)value) {
+            switch (config.revision = AgnusRevision(value)) {
                     
-                case AGNUS_OCS_OLD:
-                case AGNUS_OCS:     ptrMask = 0x07FFFF; break;
-                case AGNUS_ECS_1MB: ptrMask = 0x0FFFFF; break;
-                case AGNUS_ECS_2MB: ptrMask = 0x1FFFFF; break;
+                case AgnusRevision::OCS_OLD:
+                case AgnusRevision::OCS:     ptrMask = 0x07FFFF; break;
+                case AgnusRevision::ECS_1MB: ptrMask = 0x0FFFFF; break;
+                case AgnusRevision::ECS_2MB: ptrMask = 0x1FFFFF; break;
 
                 default:
                     fatalError;
@@ -226,13 +226,13 @@ Agnus::getTraits() const
 bool
 Agnus::isOCS() const
 {
-    return config.revision == AGNUS_OCS_OLD || config.revision == AGNUS_OCS;
+    return config.revision == AgnusRevision::OCS_OLD || config.revision == AgnusRevision::OCS;
 }
 
 bool
 Agnus::isECS() const
 {
-    return config.revision == AGNUS_ECS_1MB || config.revision == AGNUS_ECS_2MB;
+    return config.revision == AgnusRevision::ECS_1MB || config.revision == AgnusRevision::ECS_2MB;
 }
 
 u16
@@ -240,8 +240,8 @@ Agnus::idBits() const
 {
     switch (config.revision) {
             
-        case AGNUS_ECS_2MB: return 0x2000; // TODO: CHECK ON REAL MACHINE
-        case AGNUS_ECS_1MB: return 0x2000;
+        case AgnusRevision::ECS_2MB: return 0x2000; // TODO: CHECK ON REAL MACHINE
+        case AgnusRevision::ECS_1MB: return 0x2000;
         default:            return 0x0000;
     }
 }
@@ -251,8 +251,8 @@ Agnus::chipRamLimit() const
 {
     switch (config.revision) {
 
-        case AGNUS_ECS_2MB: return 2048;
-        case AGNUS_ECS_1MB: return 1024;
+        case AgnusRevision::ECS_2MB: return 2048;
+        case AgnusRevision::ECS_1MB: return 1024;
         default:            return 512;
     }
 }

@@ -341,7 +341,7 @@ public:
     isize chipRamLimit() const;
 
     // Returns the line in which the VERTB interrupt is triggered
-    isize vStrobeLine() const { return config.revision == AGNUS_OCS_OLD ? 1 : 0; }
+    isize vStrobeLine() const { return config.revision == AgnusRevision::OCS_OLD ? 1 : 0; }
     
     // Returns a bitmask indicating the used bits in DDFSTRT / DDFSTOP
     u16 ddfMask() const { return isOCS() ? 0xFC : 0xFE; }

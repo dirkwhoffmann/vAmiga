@@ -75,7 +75,7 @@ CIA::getOption(Option option) const
 {
     switch (option) {
             
-        case Option::CIA_REVISION:          return config.revision;
+        case Option::CIA_REVISION:          return (i64)config.revision;
         case Option::CIA_TODBUG:            return config.todBug;
         case Option::CIA_ECLOCK_SYNCING:    return config.eClockSyncing;
         case Option::CIA_IDLE_SLEEP:        return config.idleSleep;
@@ -853,7 +853,7 @@ u8 CIAA::computePA() const
     controlPort2.changePra(result);
     
     // PLCC CIAs always return the PRA contents for output bits
-    if (config.revision == CIA_MOS_8520_PLCC)
+    if (config.revision == CIARevision::MOS_8520_PLCC)
         result = (result & ~ddra) | (pra & ddra);
 
     return result;
@@ -913,7 +913,7 @@ CIAA::computePB() const
         REPLACE_BIT(result, 7, pb67TimerOut & (1 << 7));
 
     // PLCC CIAs always return the PRB contents for output bits
-    if (config.revision == CIA_MOS_8520_PLCC)
+    if (config.revision == CIARevision::MOS_8520_PLCC)
         result = (result & ~ddrb) | (prb & ddrb);
 
     return result;
@@ -1031,7 +1031,7 @@ CIAB::computePA() const
     u8 result = (internal & ddra) | (external & ~ddra);
     
     // PLCC CIAs always return the PRA contents for output bits
-    if (config.revision == CIA_MOS_8520_PLCC)
+    if (config.revision == CIARevision::MOS_8520_PLCC)
         result = (result & ~ddra) | (pra & ddra);
     
     return result;
@@ -1098,7 +1098,7 @@ CIAB::computePB() const
     u8 result = (internal & ddrb) | (external & ~ddrb);
     
     // PLCC CIAs always return the PRB contents for output bits
-    if (config.revision == CIA_MOS_8520_PLCC)
+    if (config.revision == CIARevision::MOS_8520_PLCC)
         result = (result & ~ddrb) | (prb & ddrb);
     
     return result;

@@ -421,7 +421,7 @@ Amiga::set(ConfigScheme scheme)
         case ConfigScheme::A1000_OCS_1MB:
             
             set(Option::CPU_REVISION, CPU_68000);
-            set(Option::AGNUS_REVISION, AGNUS_OCS_OLD);
+            set(Option::AGNUS_REVISION, (i64)AgnusRevision::OCS_OLD);
             set(Option::DENISE_REVISION, DENISE_OCS);
             set(Option::AMIGA_VIDEO_FORMAT, (i64)VideoFormat::PAL);
             set(Option::MEM_CHIP_RAM, 512);
@@ -431,7 +431,7 @@ Amiga::set(ConfigScheme scheme)
         case ConfigScheme::A500_OCS_1MB:
             
             set(Option::CPU_REVISION, CPU_68000);
-            set(Option::AGNUS_REVISION, AGNUS_OCS);
+            set(Option::AGNUS_REVISION, (i64)AgnusRevision::OCS);
             set(Option::DENISE_REVISION, DENISE_OCS);
             set(Option::AMIGA_VIDEO_FORMAT, (i64)VideoFormat::PAL);
             set(Option::MEM_CHIP_RAM, 512);
@@ -441,7 +441,7 @@ Amiga::set(ConfigScheme scheme)
         case ConfigScheme::A500_ECS_1MB:
             
             set(Option::CPU_REVISION, CPU_68000);
-            set(Option::AGNUS_REVISION, AGNUS_ECS_1MB);
+            set(Option::AGNUS_REVISION, (i64)AgnusRevision::ECS_1MB);
             set(Option::DENISE_REVISION, DENISE_OCS);
             set(Option::AMIGA_VIDEO_FORMAT, (i64)VideoFormat::PAL);
             set(Option::MEM_CHIP_RAM, 512);
@@ -451,7 +451,7 @@ Amiga::set(ConfigScheme scheme)
         case ConfigScheme::A500_PLUS_1MB:
             
             set(Option::CPU_REVISION, CPU_68000);
-            set(Option::AGNUS_REVISION, AGNUS_ECS_2MB);
+            set(Option::AGNUS_REVISION, (i64)AgnusRevision::ECS_2MB);
             set(Option::DENISE_REVISION, DENISE_ECS);
             set(Option::AMIGA_VIDEO_FORMAT, (i64)VideoFormat::PAL);
             set(Option::MEM_CHIP_RAM, 512);

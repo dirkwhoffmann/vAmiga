@@ -36,41 +36,40 @@ static constexpr double inspectionInterval = 0.1;
 // Enumerations
 //
 
-enum_long(AGNUS_REVISION)
+enum class AgnusRevision : long
 {
-    AGNUS_OCS_OLD,          // Revision 8367 (A1000, A2000A)
-    AGNUS_OCS,              // Revision 8371 (A500, A2000B)
-    AGNUS_ECS_1MB,          // Revision 8372 (A500, A2000B)
-    AGNUS_ECS_2MB           // Revision 8375 (A500+, A600)
+    OCS_OLD,          // Revision 8367 (A1000, A2000A)
+    OCS,              // Revision 8371 (A500, A2000B)
+    ECS_1MB,          // Revision 8372 (A500, A2000B)
+    ECS_2MB           // Revision 8375 (A500+, A600)
 };
-typedef AGNUS_REVISION AgnusRevision;
 
 struct AgnusRevisionEnum : util::Reflection<AgnusRevisionEnum, AgnusRevision>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = AGNUS_ECS_2MB;
+    static constexpr long maxVal = long(AgnusRevision::ECS_2MB);
     
     static const char *prefix() { return "AGNUS"; }
-    static const char *_key(long value)
+    static const char *_key(AgnusRevision value)
     {
         switch (value) {
                 
-            case AGNUS_OCS_OLD:  return "OCS_OLD";
-            case AGNUS_OCS:      return "OCS";
-            case AGNUS_ECS_1MB:  return "ECS_1MB";
-            case AGNUS_ECS_2MB:  return "ECS_2MB";
+            case AgnusRevision::OCS_OLD:  return "OCS_OLD";
+            case AgnusRevision::OCS:      return "OCS";
+            case AgnusRevision::ECS_1MB:  return "ECS_1MB";
+            case AgnusRevision::ECS_2MB:  return "ECS_2MB";
         }
         return "???";
     }
     
-    static const char *help(long value)
+    static const char *help(AgnusRevision value)
     {
         switch (value) {
                 
-            case AGNUS_OCS_OLD:  return "Amiga 1000";
-            case AGNUS_OCS:      return "Amiga 500, Amiga 2000";
-            case AGNUS_ECS_1MB:  return "Fat Agnus";
-            case AGNUS_ECS_2MB:  return "Fatter Agnus";
+            case AgnusRevision::OCS_OLD:  return "Amiga 1000";
+            case AgnusRevision::OCS:      return "Amiga 500, Amiga 2000";
+            case AgnusRevision::ECS_1MB:  return "Fat Agnus";
+            case AgnusRevision::ECS_2MB:  return "Fatter Agnus";
         }
         return "???";
     }

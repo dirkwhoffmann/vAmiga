@@ -18,49 +18,48 @@ namespace vamiga {
 // Enumerations
 //
 
-enum_long(FILTER_TYPE)
+enum class FilterType : long
 {
-    FILTER_NONE,
-    FILTER_A500,
-    FILTER_A1000,
-    FILTER_A1200,
-    FILTER_LOW,
-    FILTER_LED,
-    FILTER_HIGH
+    NONE,
+    A500,
+    A1000,
+    A1200,
+    LOW,
+    LED,
+    HIGH
 };
-typedef FILTER_TYPE FilterType;
 
 struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = FILTER_HIGH;
+    static constexpr long maxVal = long(FilterType::HIGH);
     
     static const char *prefix() { return "FILTER"; }
-    static const char *_key(long value)
+    static const char *_key(FilterType value)
     {
         switch (value) {
                 
-            case FILTER_NONE:       return "NONE";
-            case FILTER_A500:       return "A500";
-            case FILTER_A1000:      return "A1000";
-            case FILTER_A1200:      return "A1200";
-            case FILTER_LOW:        return "LOW";
-            case FILTER_LED:        return "LED";
-            case FILTER_HIGH:       return "HIGH";
+            case FilterType::NONE:       return "NONE";
+            case FilterType::A500:       return "A500";
+            case FilterType::A1000:      return "A1000";
+            case FilterType::A1200:      return "A1200";
+            case FilterType::LOW:        return "LOW";
+            case FilterType::LED:        return "LED";
+            case FilterType::HIGH:       return "HIGH";
         }
         return "???";
     }
-    static const char *help(long value)
+    static const char *help(FilterType value)
     {
         switch (value) {
                 
-            case FILTER_NONE:       return "No audio filter";
-            case FILTER_A500:       return "Amiga 500 filter pipeline";
-            case FILTER_A1000:      return "Amiga 1000 filter pipeline";
-            case FILTER_A1200:      return "Amiga 1200 filter pipeline";
-            case FILTER_LOW:        return "Low-pass filter only";
-            case FILTER_LED:        return "LED filter only. Ignore the LED state";
-            case FILTER_HIGH:       return "High-pass filter only";
+            case FilterType::NONE:       return "No audio filter";
+            case FilterType::A500:       return "Amiga 500 filter pipeline";
+            case FilterType::A1000:      return "Amiga 1000 filter pipeline";
+            case FilterType::A1200:      return "Amiga 1200 filter pipeline";
+            case FilterType::LOW:        return "Low-pass filter only";
+            case FilterType::LED:        return "LED filter only. Ignore the LED state";
+            case FilterType::HIGH:       return "High-pass filter only";
         }
         return "???";
     }

@@ -65,7 +65,8 @@ template <class T, typename E> struct Reflection {
         }
         return p;
     }
-        
+    // static const char *key(u32 value) { return key(E(value)); }
+    
     // Returns a textual representation for a bit mask
     static const char *mask(isize mask, bool withPrefix = false) {
 

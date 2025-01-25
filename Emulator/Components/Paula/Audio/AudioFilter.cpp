@@ -190,7 +190,7 @@ AudioFilter::getOption(Option option) const
 {
     switch (option) {
 
-        case Option::AUD_FILTER_TYPE:       return config.filterType;
+        case Option::AUD_FILTER_TYPE:       return (i64)config.filterType;
 
         default:
             fatalError;
@@ -257,7 +257,7 @@ void
 AudioFilter::setupHiFilter(double sampleRate)
 {
     hiFilter.clear();
-    if (config.filterType == FILTER_A1200) {
+    if (config.filterType == FilterType::A1200) {
         hiFilter.setup(sampleRate, 1360.0, 2.2e-5);
     } else {
         hiFilter.setup(sampleRate, 1390.0, 2.233e-5);
@@ -269,9 +269,9 @@ AudioFilter::loFilterEnabled() const
 {
     switch (config.filterType) {
 
-        case FILTER_A500:
-        case FILTER_A1000:
-        case FILTER_LOW:        return true;
+        case FilterType::A500:
+        case FilterType::A1000:
+        case FilterType::LOW:   return true;
         default:                return false;
     }
 }
@@ -281,10 +281,10 @@ AudioFilter::ledFilterEnabled() const
 {
     switch (config.filterType) {
 
-        case FILTER_A500:
-        case FILTER_A1200:      return ciaa.powerLED();
-        case FILTER_A1000:
-        case FILTER_LED:        return true;
+        case FilterType::A500:
+        case FilterType::A1200: return ciaa.powerLED();
+        case FilterType::A1000:
+        case FilterType::LED:   return true;
         default:                return false;
     }
 }
@@ -294,10 +294,10 @@ AudioFilter::hiFilterEnabled() const
 {
     switch (config.filterType) {
 
-        case FILTER_A500:
-        case FILTER_A1000:
-        case FILTER_A1200:
-        case FILTER_HIGH:       return true;
+        case FilterType::A500:
+        case FilterType::A1000:
+        case FilterType::A1200:
+        case FilterType::HIGH:  return true;
         default:                return false;
     }
 }

@@ -135,7 +135,7 @@ CIA::peek(u16 addr)
             fatalError;
     }
     
-    trace(CIAREG_DEBUG, "Peek(%d [%s]) = %02x\n", addr, CIARegEnum::key(addr), result);
+    trace(CIAREG_DEBUG, "Peek(%d [%s]) = %02x\n", addr, CIARegEnum::key(CIAReg(addr)), result);
     
     return result;
 }
@@ -209,7 +209,7 @@ CIA::spypeek(u16 addr) const
 void
 CIA::poke(u16 addr, u8 value)
 {
-    trace(CIAREG_DEBUG, "Poke(%d [%s], %02x)\n", addr, CIARegEnum::key(addr), value);
+    trace(CIAREG_DEBUG, "Poke(%d [%s], %02x)\n", addr, CIARegEnum::key(CIAReg(addr)), value);
     
     wakeUp();
     

@@ -33,7 +33,7 @@ Defaults::Defaults()
     setFallback(Option::AMIGA_SNAP_DELAY,           10);
     setFallback(Option::AMIGA_SNAP_COMPRESS,        true);
 
-    setFallback(Option::AGNUS_REVISION,             AGNUS_ECS_1MB);
+    setFallback(Option::AGNUS_REVISION,             (i64)AgnusRevision::ECS_1MB);
     setFallback(Option::AGNUS_PTR_DROPS,            true);
     
     setFallback(Option::DENISE_REVISION,            DENISE_OCS);
@@ -133,7 +133,7 @@ Defaults::Defaults()
 
     setFallback(Option::BLITTER_ACCURACY,           2);
 
-    setFallback(Option::CIA_REVISION,               CIA_MOS_8520_DIP,       { 0, 1} );
+    setFallback(Option::CIA_REVISION,               (i64)CIARevision::MOS_8520_DIP, { 0, 1} );
     setFallback(Option::CIA_TODBUG,                 true,                   { 0, 1} );
     setFallback(Option::CIA_ECLOCK_SYNCING,         true,                   { 0, 1} );
     setFallback(Option::CIA_IDLE_SLEEP,             true,                   { 0, 1} );
@@ -149,7 +149,7 @@ Defaults::Defaults()
     setFallback(Option::JOY_AUTOFIRE_BULLETS,       3,                      { 0, 1} );
     setFallback(Option::JOY_AUTOFIRE_DELAY,         5,                      { 0, 1} );
     setFallback(Option::AUD_SAMPLING_METHOD,        SMP_NONE);
-    setFallback(Option::AUD_FILTER_TYPE,            FILTER_A500);
+    setFallback(Option::AUD_FILTER_TYPE,            (i64)FilterType::A500);
     setFallback(Option::AUD_PAN0,                   50);
     setFallback(Option::AUD_PAN1,                   350);
     setFallback(Option::AUD_PAN2,                   350);
