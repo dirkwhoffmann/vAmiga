@@ -184,11 +184,6 @@ public:
         << accessor;
 
     } SERIALIZERS(serialize);
-
-
-    RegChange() : addr(0), value(0), accessor(Accessor(0)) { }
-    RegChange(u32 a, u16 v) : addr(a), value(v), accessor(Accessor(0)) { }
-    RegChange(u32 a, u16 v, Accessor ac) : addr(a), value(v), accessor(ac) { }
 };
 
 template <isize capacity>

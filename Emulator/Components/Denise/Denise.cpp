@@ -547,7 +547,7 @@ Denise::translate()
     bool hamLine = state.ham;
 
     // Add a dummy register change to ensure we draw until the line ends
-    conChanges.insert(sizeof(dBuffer), RegChange { SET_NONE, 0 });
+    conChanges.insert(sizeof(dBuffer), RegChange { .addr = SET_NONE, .value = 0 });
 
     // Iterate over all recorded register changes
     for (isize i = 0, end = conChanges.end(); i < end; i++) {
