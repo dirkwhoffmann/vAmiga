@@ -547,7 +547,7 @@ Denise::translate()
     bool hamLine = state.ham;
 
     // Add a dummy register change to ensure we draw until the line ends
-    conChanges.insert(sizeof(dBuffer), RegChange { .addr = SET_NONE, .value = 0 });
+    conChanges.insert(sizeof(dBuffer), RegChange { .addr = 0, .value = 0 });
 
     // Iterate over all recorded register changes
     for (isize i = 0, end = conChanges.end(); i < end; i++) {
@@ -566,15 +566,14 @@ Denise::translate()
         // Apply the register change
         switch (change.addr) {
 
-            case SET_BPLCON0:
+            case u32(ChipsetReg::BPLCON0):
                 
-                assert(change.accessor == Accessor::DENISE);
                 dual = dbplf(bplcon0);
                 state.ham = ham(change.value);
                 hamLine |= state.ham;
                 break;
 
-            case SET_BPLCON2:
+            case u32(ChipsetReg::BPLCON2):
                 
                 state.prio = pf2pri(change.value);
                 state.zpf1 = zPF1(change.value);
@@ -583,7 +582,7 @@ Denise::translate()
 
             default:
                 
-                assert(change.addr == SET_NONE);
+                assert(change.addr == 0);
                 break;
         }
     }

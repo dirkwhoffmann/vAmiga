@@ -130,7 +130,7 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
 
     // Record the register change
     i64 pixel = std::max(agnus.pos.pixel() - 4, (isize)0);
-    conChanges.insert(pixel, RegChange { .addr = SET_BPLCON0, .value = newValue, .accessor = Accessor::DENISE });
+    conChanges.insert(pixel, RegChange { .addr = u32(ChipsetReg::BPLCON0), .value = newValue });
     
     // Check if the HAM bit or the SHRES bit have changed
     if ((ham(oldValue) ^ ham(newValue)) || (shres(oldValue) ^ shres(newValue))) {
@@ -195,7 +195,7 @@ Denise::setBPLCON2(u16 newValue)
     
     // Record the register change
     i64 pixel = agnus.pos.pixel() + 4;
-    conChanges.insert(pixel, RegChange { .addr = SET_BPLCON2, .value = newValue });
+    conChanges.insert(pixel, RegChange { .addr = u32(ChipsetReg::BPLCON2), .value = newValue });
 }
 
 template <Accessor s> void
