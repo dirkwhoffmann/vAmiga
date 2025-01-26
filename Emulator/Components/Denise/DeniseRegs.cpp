@@ -120,7 +120,7 @@ Denise::pokeBPLCON0(u16 value)
 {
     trace(BPLREG_DEBUG, "pokeBPLCON0(%X)\n", value);
 
-    agnus.recordRegisterChange(DMA_CYCLES(1), SET_BPLCON0, value, Accessor::DENISE);
+    agnus.recordRegisterChange(DMA_CYCLES(1), ChipsetReg::BPLCON0, value, Accessor::DENISE);
 }
 
 void
@@ -161,7 +161,7 @@ Denise::pokeBPLCON1(u16 value)
     trace(BPLREG_DEBUG, "pokeBPLCON1(%X)\n", value);
 
     // Record the register change
-    agnus.recordRegisterChange(DMA_CYCLES(1), SET_BPLCON1, value, Accessor::DENISE);
+    agnus.recordRegisterChange(DMA_CYCLES(1), ChipsetReg::BPLCON1, value, Accessor::DENISE);
 }
 
 void
@@ -180,7 +180,7 @@ Denise::pokeBPLCON2(u16 value)
 {
     trace(BPLREG_DEBUG, "pokeBPLCON2(%X)\n", value);
 
-    agnus.recordRegisterChange(DMA_CYCLES(1), SET_BPLCON2, value);
+    agnus.recordRegisterChange(DMA_CYCLES(1), ChipsetReg::BPLCON2, value);
 }
 
 void
@@ -203,7 +203,7 @@ Denise::pokeBPLCON3(u16 value)
 {
     trace(BPLREG_DEBUG, "pokeBPLCON3(%X)\n", value);
 
-    agnus.recordRegisterChange(DMA_CYCLES(1), SET_BPLCON3, value);
+    agnus.recordRegisterChange(DMA_CYCLES(1), ChipsetReg::BPLCON3, value);
 }
 
 void
@@ -286,7 +286,8 @@ Denise::pokeSPRxPOS(u16 value)
 
     // Record the register change
     i64 pos = agnus.pos.pixel() + 6;
-    sprChanges[x/2].insert(pos, RegChange { .addr = SET_SPR0POS + x, .value = value } );
+    constexpr auto reg = ChipsetReg(isize(ChipsetReg::SPR0POS) + 4 * x);
+    sprChanges[x/2].insert(pos, RegChange { .addr = (u32)reg, .value = value } );
 }
 
 template <isize x> void
@@ -300,7 +301,8 @@ Denise::pokeSPRxCTL(u16 value)
 
     // Record the register change
     i64 pos = agnus.pos.pixel() + 6;
-    sprChanges[x/2].insert(pos, RegChange { .addr = SET_SPR0CTL + x, .value = value } );
+    constexpr auto reg = ChipsetReg(isize(ChipsetReg::SPR0CTL) + 4 * x);
+    sprChanges[x/2].insert(pos, RegChange { .addr = u32(reg), .value = value } );
 }
 
 template <isize x> void
@@ -317,7 +319,8 @@ Denise::pokeSPRxDATA(u16 value)
 
     // Record the register change
     i64 pos = agnus.pos.pixel() + 4;
-    sprChanges[x/2].insert(pos, RegChange { .addr = SET_SPR0DATA + x, .value = value } );
+    constexpr auto reg = ChipsetReg(isize(ChipsetReg::SPR0DATA) + 4 * x);
+    sprChanges[x/2].insert(pos, RegChange { .addr = u32(reg), .value = value } );
 }
 
 template <isize x> void
@@ -331,7 +334,8 @@ Denise::pokeSPRxDATB(u16 value)
 
     // Record the register change
     i64 pos = agnus.pos.pixel() + 4;
-    sprChanges[x/2].insert(pos, RegChange { .addr = SET_SPR0DATB + x, .value = value });
+    constexpr auto reg = ChipsetReg(isize(ChipsetReg::SPR0DATB) + 4 * x);
+    sprChanges[x/2].insert(pos, RegChange { .addr = u32(reg), .value = value });
 }
 
 template <isize xx, Accessor s> void
@@ -339,9 +343,8 @@ Denise::pokeCOLORxx(u16 value)
 {
     trace(COLREG_DEBUG, "pokeCOLOR%02ld(%X)\n", xx, value);
 
-    constexpr u32 reg = 0x180 + 2*xx;
-
     // Record the color change
+    constexpr u32 reg = 0x180 + 2*xx;
     pixelEngine.colChanges.insert(agnus.pos.pixel(), RegChange { .addr = reg, .value = value } );
 }
 

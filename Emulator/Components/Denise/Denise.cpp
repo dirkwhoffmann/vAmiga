@@ -754,48 +754,48 @@ Denise::drawSpritePair()
             // Apply the recorded register change
             switch (change.addr) {
                     
-                case SET_SPR0DATA + sprite1:
+                case u32(ChipsetReg::SPR0DATA) + 4 * sprite1:
                     
                     sprdata[sprite1] = change.value;
                     SET_BIT(armed, sprite1);
                     break;
                     
-                case SET_SPR0DATA + sprite2:
+                case u32(ChipsetReg::SPR0DATA) + 4 * sprite2:
                     
                     sprdata[sprite2] = change.value;
                     SET_BIT(armed, sprite2);
                     break;
                     
-                case SET_SPR0DATB + sprite1:
+                case u32(ChipsetReg::SPR0DATB) + 4 * sprite1:
                     
                     sprdatb[sprite1] = change.value;
                     break;
                     
-                case SET_SPR0DATB + sprite2:
+                case u32(ChipsetReg::SPR0DATB) + 4 * sprite2:
                     
                     sprdatb[sprite2] = change.value;
                     break;
 
-                case SET_SPR0POS + sprite1:
+                case u32(ChipsetReg::SPR0POS) + 4 * sprite1:
 
                     setSPRxPOS(sprite1, change.value);
                     strt1 = sprhppos[sprite1] & hposMask;
                     break;
                     
-                case SET_SPR0POS + sprite2:
+                case u32(ChipsetReg::SPR0POS) + 4 * sprite2:
                     
                     setSPRxPOS(sprite2, change.value);
                     strt2 = sprhppos[sprite2] & hposMask;
                     break;
                     
-                case SET_SPR0CTL + sprite1:
+                case u32(ChipsetReg::SPR0CTL) + 4 * sprite1:
 
                     setSPRxCTL(sprite1, change.value);
                     strt1 = sprhppos[sprite1] & hposMask;
                     CLR_BIT(armed, sprite1);
                     break;
                     
-                case SET_SPR0CTL + sprite2:
+                case u32(ChipsetReg::SPR0CTL) + 4 * sprite2:
 
                     setSPRxCTL(sprite2, change.value);
                     strt2 = sprhppos[sprite2] & hposMask;
@@ -819,7 +819,7 @@ Denise::replaySpriteRegChanges()
 {
     constexpr isize sprite1 = 2 * pair;
     constexpr isize sprite2 = 2 * pair + 1;
-
+    
     for (isize i = 0, end = sprChanges[pair].end(); i < end; i++) {
         
         RegChange &change = sprChanges[pair].elements[i];
@@ -827,45 +827,45 @@ Denise::replaySpriteRegChanges()
         // Apply the recorded register change
         switch (change.addr) {
                 
-            case SET_SPR0DATA + sprite1:
+            case u32(ChipsetReg::SPR0DATA) + 4 * sprite1:
                 
                 sprdata[sprite1] = change.value;
                 break;
                 
-            case SET_SPR0DATA + sprite2:
+            case u32(ChipsetReg::SPR0DATA) + 4 * sprite2:
                 
                 sprdata[sprite2] = change.value;
                 break;
                 
-            case SET_SPR0DATB + sprite1:
+            case u32(ChipsetReg::SPR0DATB) + 4 * sprite1:
                 
                 sprdatb[sprite1] = change.value;
                 break;
                 
-            case SET_SPR0DATB + sprite2:
+            case u32(ChipsetReg::SPR0DATB) + 4 * sprite2:
                 
                 sprdatb[sprite2] = change.value;
                 break;
                 
-            case SET_SPR0POS + sprite1:
+            case u32(ChipsetReg::SPR0POS) + 4 * sprite1:
 
                 setSPRxPOS(sprite1, change.value);
                 assert(sprpos[sprite1] == change.value);
                 break;
                 
-            case SET_SPR0POS + sprite2:
+            case u32(ChipsetReg::SPR0POS) + 4 * sprite2:
 
                 setSPRxPOS(sprite2, change.value);
                 assert(sprpos[sprite2] == change.value);
                 break;
                 
-            case SET_SPR0CTL + sprite1:
+            case u32(ChipsetReg::SPR0CTL) + 4 * sprite1:
 
                 setSPRxCTL(sprite1, change.value);
                 assert(sprctl[sprite1] == change.value);
                 break;
                 
-            case SET_SPR0CTL + sprite2:
+            case u32(ChipsetReg::SPR0CTL) + 4 * sprite2:
 
                 setSPRxCTL(sprite2, change.value);
                 assert(sprctl[sprite2] == change.value);

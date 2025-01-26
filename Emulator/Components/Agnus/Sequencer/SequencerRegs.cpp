@@ -25,7 +25,7 @@ Sequencer::pokeDDFSTRT(u16 value)
     value &= agnus.ddfMask();
     
     // Schedule the write cycle
-    agnus.recordRegisterChange(DMA_CYCLES(4), SET_DDFSTRT, value);
+    agnus.recordRegisterChange(DMA_CYCLES(4), ChipsetReg::DDFSTRT, value);
 }
 
 void
@@ -77,7 +77,7 @@ Sequencer::pokeDDFSTOP(u16 value)
     value &= agnus.ddfMask();
     
     // Schedule the write cycle
-    agnus.recordRegisterChange(DMA_CYCLES(4), SET_DDFSTOP, value);
+    agnus.recordRegisterChange(DMA_CYCLES(4), ChipsetReg::DDFSTOP, value);
 }
 
 void

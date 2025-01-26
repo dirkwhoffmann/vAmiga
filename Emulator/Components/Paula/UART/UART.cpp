@@ -113,7 +113,7 @@ UART::pokeSERDAT(u16 value)
     // DMA_CYCLES(1) + (bitcount(value) + 1) * pulseWidth() cycles
 
     // Schedule the write cycle
-    agnus.recordRegisterChange(DMA_CYCLES(1), SET_SERDAT, value);
+    agnus.recordRegisterChange(DMA_CYCLES(1), ChipsetReg::SERDAT, value);
 }
 
 void

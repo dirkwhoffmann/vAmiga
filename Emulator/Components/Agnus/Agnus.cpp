@@ -388,10 +388,10 @@ Agnus::recordRegisterChange(Cycle delay, RegChange regChange)
 }
 
 void
-Agnus::recordRegisterChange(Cycle delay, u32 addr, u16 value, Accessor acc)
+Agnus::recordRegisterChange(Cycle delay, ChipsetReg reg, u16 value, Accessor acc)
 {
     // Record the new register value
-    changeRecorder.insert(clock + delay, RegChange { .addr = addr, .value = value, .accessor = acc } );
+    changeRecorder.insert(clock + delay, RegChange { .addr = u32(reg), .value = value, .accessor = acc } );
 
     // Schedule the register change
     scheduleNextREGEvent();
