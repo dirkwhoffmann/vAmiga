@@ -174,7 +174,7 @@ private:
             << config.pullUpResistors;
         }
 
-    } SERIALIZERS(serialize);
+    } SERIALIZERS(serialize, override);
 
 public:
 

@@ -105,7 +105,7 @@ public:
     
 private:
     
-    template <class T> void serialize(T& worker) { } SERIALIZERS(serialize);
+    template <class T> void serialize(T& worker) { } SERIALIZERS(serialize, override);
  
     
     //

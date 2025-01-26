@@ -181,7 +181,7 @@ private:
 
         << config.filterType;
 
-    } SERIALIZERS(serialize);
+    } SERIALIZERS(serialize, override);
     
 public:
 

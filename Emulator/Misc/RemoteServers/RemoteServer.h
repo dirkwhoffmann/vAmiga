@@ -111,7 +111,7 @@ private:
         << config.autoRun
         << config.verbose;
 
-    } SERIALIZERS(serialize);
+    } SERIALIZERS(serialize, override);
 
     void _didLoad() override;
 

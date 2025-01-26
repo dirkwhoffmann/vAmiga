@@ -19,15 +19,15 @@
 
 namespace vamiga {
 
-class FastSerializable {
+struct Serializable {
     
 };
 
-class Serializable {
+class SerializableClass {
 
 public:
     
-    virtual ~Serializable() = default;
+    virtual ~SerializableClass() = default;
 
     // Serializers (to be implemented by the subclass)
     virtual void operator << (class SerCounter &worker) = 0;
@@ -249,8 +249,8 @@ public:
         v << *this;
         return *this;
     }
-
-    template <std::derived_from<FastSerializable> T>
+    
+    template <std::derived_from<SerializableClass> T>
     SerCounter& operator<<(T &v)
     {
         v << *this;
@@ -382,8 +382,8 @@ public:
         v << *this;
         return *this;
     }
-
-    template <std::derived_from<FastSerializable> T>
+    
+    template <std::derived_from<SerializableClass> T>
     SerChecker& operator<<(T &v)
     {
         v << *this;
@@ -536,8 +536,8 @@ public:
         v << *this;
         return *this;
     }
-
-    template <std::derived_from<FastSerializable> T>
+    
+    template <std::derived_from<SerializableClass> T>
     SerReader& operator<<(T &v)
     {
         v << *this;
@@ -682,8 +682,8 @@ public:
         v << *this;
         return *this;
     }
-
-    template <std::derived_from<FastSerializable> T>
+    
+    template <std::derived_from<SerializableClass> T>
     SerWriter& operator<<(T &v)
     {
         v << *this;
@@ -812,8 +812,8 @@ public:
         v << *this;
         return *this;
     }
-
-    template <std::derived_from<FastSerializable> T>
+    
+    template <std::derived_from<SerializableClass> T>
     SerResetter& operator<<(T &v)
     {
         v << *this;
@@ -830,19 +830,12 @@ template <> inline bool isHardResetter(SerResetter &worker) { return worker.isHa
 
 }
 
-#define SERIALIZERS(fn) \
-void operator << (SerChecker &worker) override { fn(worker); } \
-void operator << (SerCounter &worker) override { fn(worker); } \
-void operator << (SerResetter &worker) override { fn(worker); } \
-void operator << (SerReader &worker) override { fn(worker); } \
-void operator << (SerWriter &worker) override { fn(worker); }
-
-#define FAST_SERIALIZERS(fn) \
-void operator << (SerChecker &worker) { fn(worker); } \
-void operator << (SerCounter &worker) { fn(worker); } \
-void operator << (SerResetter &worker) { fn(worker); } \
-void operator << (SerReader &worker) { fn(worker); } \
-void operator << (SerWriter &worker) { fn(worker); }
+#define SERIALIZERS(fn, ...) \
+void operator << (SerChecker &worker) __VA_ARGS__ { fn(worker); } \
+void operator << (SerCounter &worker) __VA_ARGS__ { fn(worker); } \
+void operator << (SerResetter &worker) __VA_ARGS__ { fn(worker); } \
+void operator << (SerReader &worker) __VA_ARGS__ { fn(worker); } \
+void operator << (SerWriter &worker) __VA_ARGS__ { fn(worker); }
 
 #define CLONE(x) x = other.x;
 #define CLONE_ARRAY(x) std::copy(std::begin(other.x), std::end(other.x), std::begin(x));

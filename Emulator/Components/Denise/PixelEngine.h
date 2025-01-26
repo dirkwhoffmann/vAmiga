@@ -138,7 +138,7 @@ private:
         << hamMode
         << shresMode;
 
-    } SERIALIZERS(serialize);
+    } SERIALIZERS(serialize, override);
 
 
     //

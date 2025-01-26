@@ -75,7 +75,7 @@ public:
 
         << config.whiteNoise;
 
-    } SERIALIZERS(serialize);
+    } SERIALIZERS(serialize, override);
 
 
     //

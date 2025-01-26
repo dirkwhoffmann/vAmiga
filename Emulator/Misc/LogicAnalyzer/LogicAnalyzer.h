@@ -104,7 +104,7 @@ public:
     // Serializing
     //
     
-    template <class T> void serialize(T& worker) { } SERIALIZERS(serialize);
+    template <class T> void serialize(T& worker) { } SERIALIZERS(serialize, override);
     void _didReset(bool hard) override;
 
     

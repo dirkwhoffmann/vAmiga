@@ -57,7 +57,7 @@ private:
         << baseAddr
         << state;
 
-    } SERIALIZERS(serialize);
+    } SERIALIZERS(serialize, override);
 
     void _didReset(bool hard) override;
     

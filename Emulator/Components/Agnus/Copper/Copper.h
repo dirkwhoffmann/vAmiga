@@ -142,7 +142,7 @@ private:
         << coppc0
         << activeInThisFrame;
    
-    } SERIALIZERS(serialize);
+    } SERIALIZERS(serialize, override);
 
 public:
 

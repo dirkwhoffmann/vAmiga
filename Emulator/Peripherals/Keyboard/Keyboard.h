@@ -112,7 +112,7 @@ private:
 
         << config.accurate;
 
-    } SERIALIZERS(serialize);
+    } SERIALIZERS(serialize, override);
 
     void _didReset(bool hard) override;
     

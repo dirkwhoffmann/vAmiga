@@ -99,7 +99,7 @@ private:
         << ovrun
         << recCnt;
 
-    } SERIALIZERS(serialize);
+    } SERIALIZERS(serialize, override);
 
 
     //

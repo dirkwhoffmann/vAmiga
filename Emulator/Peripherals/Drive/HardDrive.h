@@ -223,7 +223,7 @@ private:
         << flags
         << bootable;
 
-    } SERIALIZERS(serialize);
+    } SERIALIZERS(serialize, override);
 
     void _didReset(bool hard) override;
     void _didLoad() override;
