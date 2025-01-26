@@ -120,7 +120,7 @@ Denise::pokeBPLCON0(u16 value)
 {
     trace(BPLREG_DEBUG, "pokeBPLCON0(%X)\n", value);
 
-    agnus.recordRegisterChange(DMA_CYCLES(1), SET_BPLCON0_DENISE, value);
+    agnus.recordRegisterChange(DMA_CYCLES(1), SET_BPLCON0, value, Accessor::DENISE);
 }
 
 void
@@ -130,11 +130,11 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
 
     // Record the register change
     i64 pixel = std::max(agnus.pos.pixel() - 4, (isize)0);
-    conChanges.insert(pixel, RegChange { .addr = SET_BPLCON0_DENISE, .value = newValue });
+    conChanges.insert(pixel, RegChange { .addr = SET_BPLCON0, .value = newValue, .accessor = Accessor::DENISE });
     
     // Check if the HAM bit or the SHRES bit have changed
     if ((ham(oldValue) ^ ham(newValue)) || (shres(oldValue) ^ shres(newValue))) {
-        pixelEngine.colChanges.insert(pixel, RegChange { .addr = 0x100, .value = newValue } );
+        pixelEngine.colChanges.insert(pixel, RegChange { .addr = 0x100, .value = newValue, .accessor = Accessor::DENISE } );
     }
 
     // Update value
@@ -161,7 +161,7 @@ Denise::pokeBPLCON1(u16 value)
     trace(BPLREG_DEBUG, "pokeBPLCON1(%X)\n", value);
 
     // Record the register change
-    agnus.recordRegisterChange(DMA_CYCLES(1), SET_BPLCON1_DENISE, value);
+    agnus.recordRegisterChange(DMA_CYCLES(1), SET_BPLCON1, value, Accessor::DENISE);
 }
 
 void

@@ -220,23 +220,52 @@ Agnus::serviceREGEvent(Cycle until)
                 
             case SET_INTREQ: paula.setINTREQ(change.value); break;
             case SET_INTENA: paula.setINTENA(change.value); break;
-                
+
+                /*
             case SET_BPLCON0_AGNUS: setBPLCON0(bplcon0, change.value); break;
             case SET_BPLCON0_DENISE: denise.setBPLCON0(bplcon0, change.value); break;
             case SET_BPLCON1_AGNUS: setBPLCON1(bplcon1, change.value); break;
             case SET_BPLCON1_DENISE: denise.setBPLCON1(bplcon1, change.value); break;
+                 */
+            case SET_BPLCON0:
+                assert(change.accessor == Accessor::AGNUS || change.accessor == Accessor::DENISE);
+                change.accessor == Accessor::AGNUS ?
+                setBPLCON0(bplcon0, change.value) : denise.setBPLCON0(bplcon0, change.value);
+                break;
+            case SET_BPLCON1:
+                assert(change.accessor == Accessor::AGNUS || change.accessor == Accessor::DENISE);
+                change.accessor == Accessor::AGNUS ?
+                setBPLCON1(bplcon1, change.value) : denise.setBPLCON1(bplcon1, change.value);
+                break;
+                break;
             case SET_BPLCON2: denise.setBPLCON2(change.value); break;
             case SET_BPLCON3: denise.setBPLCON3(change.value); break;
                 
             case SET_DMACON: setDMACON(dmacon, change.value); break;
-                
+
+                /*
             case SET_DIWSTRT_AGNUS: sequencer.setDIWSTRT(change.value); break;
             case SET_DIWSTRT_DENISE: denise.setDIWSTRT(change.value); break;
             case SET_DIWSTOP_AGNUS: sequencer.setDIWSTOP(change.value); break;
             case SET_DIWSTOP_DENISE: denise.setDIWSTOP(change.value); break;
             case SET_DIWHIGH_AGNUS: sequencer.setDIWHIGH(change.value); break;
             case SET_DIWHIGH_DENISE: denise.setDIWHIGH(change.value); break;
-
+                 */
+            case SET_DIWSTRT:
+                assert(change.accessor == Accessor::AGNUS || change.accessor == Accessor::DENISE);
+                change.accessor == Accessor::AGNUS ?
+                sequencer.setDIWSTRT(change.value) : denise.setDIWSTRT(change.value);
+                break;
+            case SET_DIWSTOP:
+                assert(change.accessor == Accessor::AGNUS || change.accessor == Accessor::DENISE);
+                change.accessor == Accessor::AGNUS ?
+                sequencer.setDIWSTOP(change.value) : denise.setDIWSTOP(change.value);
+                break;
+            case SET_DIWHIGH:
+                assert(change.accessor == Accessor::AGNUS || change.accessor == Accessor::DENISE);
+                change.accessor == Accessor::AGNUS ?
+                sequencer.setDIWHIGH(change.value) : denise.setDIWHIGH(change.value);
+                break;
             case SET_DDFSTRT: sequencer.setDDFSTRT(change.value); break;
             case SET_DDFSTOP: sequencer.setDDFSTOP(change.value); break;
                 

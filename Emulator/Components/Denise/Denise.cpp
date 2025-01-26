@@ -566,8 +566,9 @@ Denise::translate()
         // Apply the register change
         switch (change.addr) {
 
-            case SET_BPLCON0_DENISE:
+            case SET_BPLCON0:
                 
+                assert(change.accessor == Accessor::DENISE);
                 dual = dbplf(bplcon0);
                 state.ham = ham(change.value);
                 hamLine |= state.ham;

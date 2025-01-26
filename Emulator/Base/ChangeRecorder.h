@@ -53,6 +53,7 @@ enum RegChangeID : i32
     SET_INTREQ,
     SET_INTENA,
     
+    /*
     SET_BPLCON0_AGNUS,
     SET_BPLCON0_DENISE,
     SET_BPLCON1_AGNUS,
@@ -69,21 +70,20 @@ enum RegChangeID : i32
     SET_DIWHIGH_DENISE,
     SET_DDFSTRT,
     SET_DDFSTOP,
+    */
     
-    /*
-     SET_BPLCON0,
-     SET_BPLCON1,
-     SET_BPLCON2,
-     SET_BPLCON3,
-     SET_DMACON,
+    SET_BPLCON0,
+    SET_BPLCON1,
+    SET_BPLCON2,
+    SET_BPLCON3,
+    SET_DMACON,
+    
+    SET_DIWSTRT,
+    SET_DIWSTOP,
+    SET_DIWHIGH,
+    SET_DDFSTRT,
+    SET_DDFSTOP,
      
-     SET_DIWSTRT,
-     SET_DIWSTOP,
-     SET_DIWHIGH,
-     SET_DDFSTRT,
-     SET_DDFSTOP,
-     */
-    
     SET_BPL1MOD,
     SET_BPL2MOD,
     
