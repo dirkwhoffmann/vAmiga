@@ -387,7 +387,7 @@ PixelEngine::colorize(isize line)
     AmigaColor hold = color[0];
 
     // Add a dummy register change to ensure we draw until the line end
-    colChanges.insert(HPIXELS, RegChange { .addr = SET_NONE, .value = 0 } );
+    colChanges.insert(HPIXELS, RegChange { .addr = 0, .value = 0 } );
 
     // Iterate over all recorded register changes
     for (isize i = 0, end = colChanges.end(); i < end; i++) {
