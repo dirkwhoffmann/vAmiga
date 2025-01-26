@@ -99,20 +99,22 @@ struct MemSrcEnum : util::Reflection<MemSrcEnum, MemSrc>
 enum class Accessor : long
 {
     CPU,
-    AGNUS
+    AGNUS,
+    DENISE
 };
 
 struct AccessorEnum : util::Reflection<AccessorEnum, Accessor>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(Accessor::AGNUS);
+    static constexpr long maxVal = long(Accessor::DENISE);
     
     static const char *_key(Accessor value)
     {
         switch (value) {
                 
-            case Accessor::CPU:    return "CPU";
-            case Accessor::AGNUS:  return "AGNUS";
+            case Accessor::CPU:     return "CPU";
+            case Accessor::AGNUS:   return "AGNUS";
+            case Accessor::DENISE:  return "DENISE";
         }
         return "???";
     }
