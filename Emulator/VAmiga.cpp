@@ -2247,7 +2247,7 @@ AmigaAPI::loadSnapshot(const MediaFile &snapshot)
          * application. Because we cannot revert to the old state either,
          * we perform a hard reset to eliminate the inconsistency.
          */
-        emu->hardReset();
+        emu->put(CmdType::HARD_RESET);
         throw;
     }
 }

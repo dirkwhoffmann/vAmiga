@@ -65,7 +65,7 @@ static constexpr int ALLOW_ALL_ROMS = 0; // Disable the magic bytes check
 // Debug settings
 //
 
-static constexpr bool betaRelease = VER_BETA == 0;
+static constexpr bool betaRelease = VER_BETA != 0;
 
 #ifdef NDEBUG
 static constexpr bool releaseBuild = 1;
