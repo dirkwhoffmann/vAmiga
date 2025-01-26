@@ -414,6 +414,7 @@ public:
     void executeUntilBusIsFreeForCIA();
 
     // Schedules a register to change its value
+    void recordRegisterChange(Cycle delay, RegChange regChange);
     void recordRegisterChange(Cycle delay, u32 addr, u16 value, Accessor acc = Accessor::CPU);
 
 private:

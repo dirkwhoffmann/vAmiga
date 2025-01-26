@@ -96,7 +96,7 @@ struct MemSrcEnum : util::Reflection<MemSrcEnum, MemSrc>
     }
 };
 
-enum class Accessor : long
+enum class Accessor : i8
 {
     CPU,
     AGNUS,

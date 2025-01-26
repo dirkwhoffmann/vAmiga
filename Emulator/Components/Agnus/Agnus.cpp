@@ -378,10 +378,20 @@ Agnus::executeUntilBusIsFreeForCIA()
 }
 
 void
+Agnus::recordRegisterChange(Cycle delay, RegChange regChange)
+{
+    // Record the new register value
+    changeRecorder.insert(clock + delay, regChange);
+
+    // Schedule the register change
+    scheduleNextREGEvent();
+}
+
+void
 Agnus::recordRegisterChange(Cycle delay, u32 addr, u16 value, Accessor acc)
 {
     // Record the new register value
-    changeRecorder.insert(clock + delay, RegChange { addr, value, (u16)acc } );
+    changeRecorder.insert(clock + delay, RegChange { addr, value, acc } );
 
     // Schedule the register change
     scheduleNextREGEvent();

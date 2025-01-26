@@ -14,6 +14,7 @@
 #include "Serializable.h"
 #include "AgnusTypes.h"
 #include "AmigaTypes.h"
+#include "MemoryTypes.h"
 #include <functional>
 
 namespace vamiga {
@@ -68,6 +69,20 @@ enum RegChangeID : i32
     SET_DIWHIGH_DENISE,
     SET_DDFSTRT,
     SET_DDFSTOP,
+    
+    /*
+     SET_BPLCON0,
+     SET_BPLCON1,
+     SET_BPLCON2,
+     SET_BPLCON3,
+     SET_DMACON,
+     
+     SET_DIWSTRT,
+     SET_DIWSTOP,
+     SET_DIWHIGH,
+     SET_DDFSTRT,
+     SET_DDFSTOP,
+     */
     
     SET_BPL1MOD,
     SET_BPL2MOD,
@@ -150,7 +165,7 @@ struct RegChange : Serializable
 {
     u32 addr;
     u16 value;
-    u16 accessor;
+    Accessor accessor;
 
 
     //
@@ -171,9 +186,9 @@ public:
     } SERIALIZERS(serialize);
 
 
-    RegChange() : addr(0), value(0), accessor(0) { }
-    RegChange(u32 a, u16 v) : addr(a), value(v), accessor(0) { }
-    RegChange(u32 a, u16 v, u16 ac) : addr(a), value(v), accessor(ac) { }
+    RegChange() : addr(0), value(0), accessor(Accessor(0)) { }
+    RegChange(u32 a, u16 v) : addr(a), value(v), accessor(Accessor(0)) { }
+    RegChange(u32 a, u16 v, Accessor ac) : addr(a), value(v), accessor(ac) { }
 };
 
 template <isize capacity>
