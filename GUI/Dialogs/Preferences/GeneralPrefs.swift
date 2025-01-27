@@ -33,11 +33,19 @@ extension PreferencesController {
         genSnapshotInterval.isEnabled = pref.autoSnapshots
 
         // Screenshots
+        let framebuffer = pref.screenshotSource == .framebuffer
+        let custom = pref.screenshotCutout == .custom
         genScreenshotFormatPopup.selectItem(withTag: pref.screenshotFormatIntValue)
         genScreenshotSourcePopup.selectItem(withTag: pref.screenshotSourceIntValue)
         genScreenshotCutoutPopup.selectItem(withTag: pref.screenshotCutoutIntValue)
+        genScreenshotCutoutPopup.isHidden = framebuffer
+        genScreenshotCutoutText.isHidden = framebuffer
         genScreenshotWidth.integerValue = pref.screenshotWidth
+        genScreenshotWidth.isHidden = !custom || framebuffer
+        genScreenshotWidthText.isHidden = !custom || framebuffer
         genScreenshotHeight.integerValue = pref.screenshotHeight
+        genScreenshotHeight.isHidden = !custom || framebuffer
+        genScreenshotHeightText.isHidden = !custom || framebuffer
 
         // Screen captures
         let hasFFmpeg = emu.recorder.hasFFmpeg

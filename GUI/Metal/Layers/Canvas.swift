@@ -183,6 +183,9 @@ class Canvas: Layer {
 
         print("screenshot(source: \(source), cutout: \(cutout), width: \(width), height: \(height)")
         
+        // Handle the framebuffer option first
+        if source == .framebuffer { return framebuffer }
+        
         var texture: MTLTexture
         var mtlreg: MTLRegion
         var x1 = Int(0)
@@ -192,11 +195,9 @@ class Canvas: Layer {
         
         // Analyze the emulator texture
         amiga.videoPort.innerArea(&x1, x2: &x2, y1: &y1, y2: &y2)
-        print("x1 = \(x1) y1 = \(y1) x2 = \(x2) y2 = \(y2) ")
-        x1 *= 2
-        y1 *= 4
-        x2 *= 2
-        y2 *= 4
+
+        // Scale to texture coordinates
+        x1 *= 2; x2 *= 2; y1 *= 4; y2 *= 4
         
         func region(width: Int, height: Int) -> MTLRegion {
         
@@ -233,7 +234,7 @@ class Canvas: Layer {
         switch source {
         case .emulator: texture = mergeTexture
         case .upscaler: texture = upscaledTexture
-        case .framebuffer: texture = upscaledTexture // TODO
+        case .framebuffer: fatalError()
         }
         
         switch cutout {

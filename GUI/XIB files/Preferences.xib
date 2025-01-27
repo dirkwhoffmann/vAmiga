@@ -74,10 +74,13 @@
                 <outlet property="genFFmpegPath" destination="dkp-QI-Uit" id="xbr-Zl-PTm"/>
                 <outlet property="genPauseInBackground" destination="0hK-zR-osA" id="dMZ-Ub-2WW"/>
                 <outlet property="genScreenshotCutoutPopup" destination="JAc-zc-UhP" id="Xov-yD-zlb"/>
+                <outlet property="genScreenshotCutoutText" destination="UqY-wx-uVW" id="E3K-TM-OuM"/>
                 <outlet property="genScreenshotFormatPopup" destination="Oag-9U-PiB" id="vXa-lo-gbh"/>
                 <outlet property="genScreenshotHeight" destination="18K-wO-xhs" id="gQv-xD-erg"/>
+                <outlet property="genScreenshotHeightText" destination="OLQ-42-0Ni" id="coM-AT-UHE"/>
                 <outlet property="genScreenshotSourcePopup" destination="hst-Cn-3YK" id="AC6-OU-KhY"/>
                 <outlet property="genScreenshotWidth" destination="RSQ-cb-IR2" id="CTm-EU-y2J"/>
+                <outlet property="genScreenshotWidthText" destination="ErW-DA-ERc" id="tQb-dm-v9c"/>
                 <outlet property="genSnapshotInterval" destination="egB-7t-Fk5" id="P9U-zN-XIN"/>
                 <outlet property="genSnapshotStorage" destination="TEJ-iP-2NK" id="qHB-tQ-u9D"/>
                 <outlet property="genSource" destination="etB-PX-kNT" id="su3-W4-hKt"/>
