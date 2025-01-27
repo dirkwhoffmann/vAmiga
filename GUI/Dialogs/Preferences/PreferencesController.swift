@@ -26,8 +26,11 @@ class PreferencesController: DialogController {
     @IBOutlet weak var genSnapshotStorage: NSTextField!
 
     // Screenshots
+    @IBOutlet weak var genScreenshotFormatPopup: NSPopUpButton!
     @IBOutlet weak var genScreenshotSourcePopup: NSPopUpButton!
-    @IBOutlet weak var genScreenshotTargetPopup: NSPopUpButton!
+    @IBOutlet weak var genScreenshotCutoutPopup: NSPopUpButton!
+    @IBOutlet weak var genScreenshotWidth: NSTextField!
+    @IBOutlet weak var genScreenshotHeight: NSTextField!
 
     // Screen captures
     @IBOutlet weak var genFFmpegPath: NSComboBox!

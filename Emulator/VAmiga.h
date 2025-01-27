@@ -1100,7 +1100,10 @@ public:
     const u32 *getTexture() const;
     const u32 *getTexture(isize *nr, bool *lof, bool *prevlof) const;
 
-
+    /** @brief Experimental
+     */
+    void findInnerArea(isize &x1, isize &x2, isize &y1, isize &y2) const;
+    void findInnerAreaNormalized(double &x1, double &x2, double &y1, double &y2) const;
 };
 
 

@@ -250,7 +250,7 @@ CopperAPI::getCachedInfo() const
     return copper->getCachedInfo();
 }
 
-string 
+string
 CopperAPI::disassemble(isize list, isize offset, bool symbolic) const
 {
     VAMIGA_PUBLIC_SUSPEND
@@ -264,7 +264,7 @@ CopperAPI::disassemble(u32 addr, bool symbolic) const
     return copper->debugger.disassemble(addr, symbolic);
 }
 
-bool 
+bool
 CopperAPI::isIllegalInstr(u32 addr) const
 {
     VAMIGA_PUBLIC_SUSPEND
@@ -276,7 +276,7 @@ CopperAPI::isIllegalInstr(u32 addr) const
 // Components (CPU)
 //
 
-isize 
+isize
 GuardsAPI::elements() const
 {
     VAMIGA_PUBLIC
@@ -304,77 +304,77 @@ GuardsAPI::setAt(u32 target, isize ignores)
     emu->put(Cmd(CmdType::GUARD_SET_AT, (void *)guards, target, ignores));
 }
 
-void 
+void
 GuardsAPI::moveTo(isize nr, u32 newTarget)
 {
     VAMIGA_PUBLIC_SUSPEND
     emu->put(Cmd(CmdType::GUARD_MOVE_NR, (void *)guards, nr, newTarget));
 }
 
-void 
+void
 GuardsAPI::remove(isize nr)
 {
     VAMIGA_PUBLIC_SUSPEND
     emu->put(Cmd(CmdType::GUARD_REMOVE_NR, (void *)guards, nr));
 }
 
-void 
+void
 GuardsAPI::removeAt(u32 target)
 {
     VAMIGA_PUBLIC_SUSPEND
     emu->put(Cmd(CmdType::GUARD_REMOVE_AT, (void *)guards, target));
 }
 
-void 
+void
 GuardsAPI::removeAll()
 {
     VAMIGA_PUBLIC_SUSPEND
     emu->put(Cmd(CmdType::GUARD_REMOVE_ALL, (void *)guards));
 }
 
-void 
+void
 GuardsAPI::enable(isize nr)
 {
     VAMIGA_PUBLIC_SUSPEND
     emu->put(Cmd(CmdType::GUARD_ENABLE_NR, (void *)guards, nr));
 }
 
-void 
+void
 GuardsAPI::enableAt(u32 target)
 {
     VAMIGA_PUBLIC_SUSPEND
     emu->put(Cmd(CmdType::GUARD_ENABLE_AT, (void *)guards, target));
 }
 
-void 
+void
 GuardsAPI::enableAll()
 {
     VAMIGA_PUBLIC_SUSPEND
     emu->put(Cmd(CmdType::GUARD_ENABLE_ALL, (void *)guards));
 }
 
-void 
+void
 GuardsAPI::disable(isize nr)
 {
     VAMIGA_PUBLIC_SUSPEND
     emu->put(Cmd(CmdType::GUARD_DISABLE_NR, (void *)guards, nr));
 }
 
-void 
+void
 GuardsAPI::disableAt(u32 target)
 {
     VAMIGA_PUBLIC_SUSPEND
     emu->put(Cmd(CmdType::GUARD_DISABLE_AT, (void *)guards, target));
 }
 
-void 
+void
 GuardsAPI::disableAll()
 {
     VAMIGA_PUBLIC_SUSPEND
     emu->put(Cmd(CmdType::GUARD_DISABLE_ALL));
 }
 
-void 
+void
 GuardsAPI::toggle(isize nr)
 {
     VAMIGA_PUBLIC_SUSPEND
@@ -510,16 +510,16 @@ DeniseAPI::getCachedInfo() const
 // Components (Memory)
 //
 
-MemSrc 
+MemSrc
 MemoryDebuggerAPI::getMemSrc(Accessor acc, u32 addr) const
 {
     VAMIGA_PUBLIC
     
     switch (acc) {
-
+            
         case Accessor::CPU:      return mem->getMemSrc<Accessor::CPU>(addr);
         case Accessor::AGNUS:    return mem->getMemSrc<Accessor::AGNUS>(addr);
-
+            
         default:
             fatalError;
     }
@@ -531,25 +531,25 @@ MemoryDebuggerAPI::spypeek8(Accessor acc, u32 addr) const
     VAMIGA_PUBLIC
     
     switch (acc) {
-
+            
         case Accessor::CPU:      return mem->spypeek8<Accessor::CPU>(addr);
         case Accessor::AGNUS:    return mem->spypeek8<Accessor::AGNUS>(addr);
-
+            
         default:
             fatalError;
     }
 }
 
-u16 
+u16
 MemoryDebuggerAPI::spypeek16(Accessor acc, u32 addr) const
 {
     VAMIGA_PUBLIC
     
     switch (acc) {
-
+            
         case Accessor::CPU:      return mem->spypeek16<Accessor::CPU>(addr);
         case Accessor::AGNUS:    return mem->spypeek16<Accessor::AGNUS>(addr);
-
+            
         default:
             fatalError;
     }
@@ -561,10 +561,10 @@ MemoryDebuggerAPI::ascDump(Accessor acc, u32 addr, isize bytes) const
     VAMIGA_PUBLIC
     
     switch (acc) {
-
+            
         case Accessor::CPU:      return mem->debugger.ascDump<Accessor::CPU>(addr, bytes);
         case Accessor::AGNUS:    return mem->debugger.ascDump<Accessor::AGNUS>(addr, bytes);
-
+            
         default:
             fatalError;
     }
@@ -576,10 +576,10 @@ MemoryDebuggerAPI::hexDump(Accessor acc, u32 addr, isize bytes, isize sz) const
     VAMIGA_PUBLIC
     
     switch (acc) {
-
+            
         case Accessor::CPU:      return mem->debugger.hexDump<Accessor::CPU>(addr, bytes, sz);
         case Accessor::AGNUS:    return mem->debugger.hexDump<Accessor::AGNUS>(addr, bytes, sz);
-
+            
         default:
             fatalError;
     }
@@ -591,10 +591,10 @@ MemoryDebuggerAPI::memDump(Accessor acc, u32 addr, isize bytes, isize sz) const
     VAMIGA_PUBLIC
     
     switch (acc) {
-
+            
         case Accessor::CPU:      return mem->debugger.memDump<Accessor::CPU>(addr, bytes, sz);
         case Accessor::AGNUS:    return mem->debugger.memDump<Accessor::AGNUS>(addr, bytes, sz);
-
+            
         default:
             fatalError;
     }
@@ -649,7 +649,7 @@ MemoryAPI::getExtTraits() const
     return mem->getExtTraits();
 }
 
-void 
+void
 MemoryAPI::loadRom(const fs::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND
@@ -697,21 +697,21 @@ MemoryAPI::loadExt(const u8 *buf, isize len)
     emu->isDirty = true;
 }
 
-void 
+void
 MemoryAPI::saveRom(const std::filesystem::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND
     mem->saveRom(path);
 }
 
-void 
+void
 MemoryAPI::saveWom(const std::filesystem::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND
     mem->saveWom(path);
 }
 
-void 
+void
 MemoryAPI::saveExt(const std::filesystem::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND
@@ -726,7 +726,7 @@ MemoryAPI::deleteRom()
     emu->isDirty = true;
 }
 
-void 
+void
 MemoryAPI::deleteWom()
 {
     VAMIGA_PUBLIC_SUSPEND
@@ -734,7 +734,7 @@ MemoryAPI::deleteWom()
     emu->isDirty = true;
 }
 
-void 
+void
 MemoryAPI::deleteExt()
 {
     VAMIGA_PUBLIC_SUSPEND
@@ -753,7 +753,7 @@ AudioChannelAPI::getInfo() const
     VAMIGA_PUBLIC
     
     switch (channel) {
-
+            
         case 0:     return paula->channel0.getInfo();
         case 1:     return paula->channel1.getInfo();
         case 2:     return paula->channel2.getInfo();
@@ -767,7 +767,7 @@ AudioChannelAPI::getCachedInfo() const
     VAMIGA_PUBLIC
     
     switch (channel) {
-
+            
         case 0:     return paula->channel0.getCachedInfo();
         case 1:     return paula->channel1.getCachedInfo();
         case 2:     return paula->channel2.getCachedInfo();
@@ -889,7 +889,7 @@ AudioPortAPI::copyInterleaved(float *buffer, isize n)
     return port->copyInterleaved(buffer, n);
 }
 
-void 
+void
 AudioPortAPI::drawL(u32 *buffer, isize width, isize height, u32 color) const
 {
     VAMIGA_PUBLIC
@@ -948,14 +948,14 @@ SerialPortAPI::getCachedInfo() const
     return serialPort->getCachedInfo();
 }
 
-int 
+int
 SerialPortAPI::readIncomingPrintableByte() const
 {
     VAMIGA_PUBLIC
     return serialPort->readIncomingPrintableByte();
 }
 
-int 
+int
 SerialPortAPI::readOutgoingPrintableByte() const
 {
     VAMIGA_PUBLIC
@@ -994,14 +994,27 @@ VideoPortAPI::getTexture(isize *nr, bool *lof, bool *prevlof) const
     VAMIGA_PUBLIC
     
     auto &frameBuffer = emu->getTexture();
-
+    
     *nr = isize(frameBuffer.nr);
     *lof = frameBuffer.lof;
     *prevlof = frameBuffer.prevlof;
-
+    
     return (u32 *)frameBuffer.pixels.ptr;
 }
 
+void
+VideoPortAPI::findInnerArea(isize &x1, isize &x2, isize &y1, isize &y2) const
+{
+    VAMIGA_PUBLIC_SUSPEND
+    videoPort->findInnerArea(x1, x2, y1, y2);
+}
+
+void
+VideoPortAPI::findInnerAreaNormalized(double &x1, double &x2, double &y1, double &y2) const
+{
+    VAMIGA_PUBLIC_SUSPEND
+    videoPort->findInnerAreaNormalized(x1, x2, y1, y2);
+}
 
 //
 // Peripherals

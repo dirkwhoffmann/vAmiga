@@ -302,9 +302,12 @@ struct Keys {
         static let autoSnapshotInterval   = "General.ScreenshotInterval"
 
         // Screenshots
+        static let screenshotFormat       = "General.ScreenshotFormat"
         static let screenshotSource       = "General.ScreenshotSource"
-        static let screenshotTarget       = "General.ScreenshotTarget"
-                
+        static let screenshotCutout       = "General.ScreenshotCutout"
+        static let screenshotWidth        = "General.ScreenshotWidth"
+        static let screenshotHeight       = "General.ScreenshotHeight"
+
         // Screen captures
         static let ffmpegPath             = "General.ffmpegPath"
         static let captureSource          = "General.Source"
@@ -337,9 +340,12 @@ extension DefaultsProxy {
         register(Keys.Gen.autoSnapshotInterval, 20)
         
         // Screenshots
+        register(Keys.Gen.screenshotFormat, NSBitmapImageRep.FileType.png.rawValue)
         register(Keys.Gen.screenshotSource, 0)
-        register(Keys.Gen.screenshotTarget, NSBitmapImageRep.FileType.png.rawValue)
-        
+        register(Keys.Gen.screenshotCutout, 0)
+        register(Keys.Gen.screenshotWidth, 320)
+        register(Keys.Gen.screenshotHeight, 200)
+
         // Captures
         register(Keys.Gen.ffmpegPath, "")
         register(Keys.Gen.captureSource, 0)
@@ -366,9 +372,12 @@ extension DefaultsProxy {
                      Keys.Gen.autoSnapshots,
                      Keys.Gen.autoSnapshotInterval,
                      
+                     Keys.Gen.screenshotFormat,
                      Keys.Gen.screenshotSource,
-                     Keys.Gen.screenshotTarget,
-                     
+                     Keys.Gen.screenshotCutout,
+                     Keys.Gen.screenshotWidth,
+                     Keys.Gen.screenshotHeight,
+
                      Keys.Gen.ffmpegPath,
                      Keys.Gen.captureSource,
                      Keys.Gen.bitRate,
@@ -400,9 +409,12 @@ extension Preferences {
         defaults.set(Keys.Gen.autoSnapshots, autoSnapshots)
         defaults.set(Keys.Gen.autoSnapshotInterval, snapshotInterval)
         
-        defaults.set(Keys.Gen.screenshotSource, screenshotSource)
-        defaults.set(Keys.Gen.screenshotTarget, screenshotTargetIntValue)
-        
+        defaults.set(Keys.Gen.screenshotFormat, screenshotFormatIntValue)
+        defaults.set(Keys.Gen.screenshotSource, screenshotSourceIntValue)
+        defaults.set(Keys.Gen.screenshotCutout, screenshotCutoutIntValue)
+        defaults.set(Keys.Gen.screenshotWidth, screenshotWidth)
+        defaults.set(Keys.Gen.screenshotHeight, screenshotHeight)
+
         defaults.set(Keys.Gen.ffmpegPath, ffmpegPath)
         defaults.set(Keys.Gen.captureSource, captureSourceIntValue)
         defaults.set(Keys.Gen.bitRate, bitRate)
@@ -429,9 +441,12 @@ extension Preferences {
         autoSnapshots = defaults.bool(Keys.Gen.autoSnapshots)
         snapshotInterval = defaults.int(Keys.Gen.autoSnapshotInterval)
         
-        screenshotSource = defaults.int(Keys.Gen.screenshotSource)
-        screenshotTargetIntValue = defaults.int(Keys.Gen.screenshotTarget)
-        
+        screenshotFormatIntValue = defaults.int(Keys.Gen.screenshotFormat)
+        screenshotSourceIntValue = defaults.int(Keys.Gen.screenshotSource)
+        screenshotCutoutIntValue = defaults.int(Keys.Gen.screenshotCutout)
+        screenshotWidth = defaults.int(Keys.Gen.screenshotWidth)
+        screenshotHeight = defaults.int(Keys.Gen.screenshotHeight)
+
         ffmpegPath = defaults.string(Keys.Gen.ffmpegPath)
         captureSourceIntValue = defaults.int(Keys.Gen.captureSource)
         bitRate = defaults.int(Keys.Gen.bitRate)

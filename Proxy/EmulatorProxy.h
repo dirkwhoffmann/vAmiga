@@ -657,6 +657,8 @@ NSString *EventSlotName(NSInteger slot);
 - (void)lockTexture;
 - (void)unlockTexture;
 - (void)texture:(const u32 **)ptr nr:(NSInteger *)nr lof:(bool *)lof prevlof:(bool *)prevlof;
+- (void)innerArea:(NSInteger *)x1 x2:(NSInteger *)x2 y1:(NSInteger *)y1 y2:(NSInteger *)y2;
+- (void)innerAreaNormalized:(double *)x1 x2:(double *)x2 y1:(double *)y1 y2:(double *)y2;
 
 @end
 

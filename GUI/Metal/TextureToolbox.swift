@@ -204,6 +204,95 @@ extension MTLTexture {
         let region = MTLRegionMake2D(0, 0, w, h)
         replace(region: region, buffer: buffer)
     }
+    
+    func blitTextureToBuffer(device: MTLDevice, texture: MTLTexture) -> MTLBuffer? {
+        
+        let textureWidth = texture.width
+        let textureHeight = texture.height
+        let pixelFormat = texture.pixelFormat
+
+        // Ensure the pixel format is compatible
+        guard pixelFormat == .rgba8Unorm else {
+            print("Unsupported pixel format: \(pixelFormat)")
+            return nil
+        }
+
+        let bytesPerPixel = 4
+        let bytesPerRow = textureWidth * bytesPerPixel
+        let bufferSize = bytesPerRow * textureHeight
+
+        // Create a buffer on the GPU
+        guard let buffer = device.makeBuffer(length: bufferSize, options: .storageModeShared) else {
+            print("Failed to create buffer")
+            return nil
+        }
+
+        // Create a command queue and command buffer
+        guard let commandQueue = device.makeCommandQueue(),
+              let commandBuffer = commandQueue.makeCommandBuffer(),
+              let blitEncoder = commandBuffer.makeBlitCommandEncoder() else {
+            print("Failed to create Metal objects")
+            return nil
+        }
+
+        // Copy texture data into the buffer
+        blitEncoder.copy(from: texture,
+                         sourceSlice: 0,
+                         sourceLevel: 0,
+                         sourceOrigin: MTLOrigin(x: 0, y: 0, z: 0),
+                         sourceSize: MTLSize(width: textureWidth, height: textureHeight, depth: 1),
+                         to: buffer,
+                         destinationOffset: 0,
+                         destinationBytesPerRow: bytesPerRow,
+                         destinationBytesPerImage: bytesPerRow * textureHeight)
+
+        blitEncoder.endEncoding()
+        commandBuffer.commit()
+        commandBuffer.waitUntilCompleted()
+
+        return buffer
+    }
+    
+    // MOVE TO CUSTOM CODE. TOO SPECIALIZED
+    /*
+    func innerArea(device: MTLDevice) -> CGRect {
+    
+        guard let buffer = blitTextureToBuffer(device: device, texture: self) else {
+
+            print("Failed to access texture data");
+            return CGRect.zero
+        }
+
+        let w = width
+        let h = height
+        let p = buffer.contents().bindMemory(to: Int32.self, capacity: w * h)
+        
+        let first = p[2 * width + 2]
+
+        func empty(row: Int) -> Bool {
+            print("first = \(first)")
+            for x in 0..<w { if p[row * w + x] != first { print("diff = \(p[row * w + x])"); return false } }
+            return true
+        }
+ 
+        func empty(col: Int) -> Bool {
+            for y in 0..<h { if p[y * w + col] != first { return false } }
+            return true
+        }
+        
+        var x1 = 2
+        var x2 = width - 2
+        var y1 = 2
+        var y2 = height - 2
+        
+        while x2 > 0 && empty(col: x2) { x2 -= 1 }
+        while x1 < x2 && empty(col: x1) { x1 += 1 }
+        while y2 > 0 && empty(row: y2) { y2 -= 1 }
+        while y1 < y2 && empty(row: y1) { y1 += 1 }
+
+        return CGRect.init(x: x1, y: y1, width: x2 - x1, height: y2 - y1)
+    }
+    */
 }
 
 //

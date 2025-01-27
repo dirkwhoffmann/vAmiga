@@ -179,25 +179,71 @@ class Canvas: Layer {
     // Taking screenshots
     //
     
-    func screenshot(source: ScreenshotSource) -> NSImage? {
+    func screenshot(source: ScreenshotSource, cutout: ScreenshotCutout, width: Int, height: Int) -> NSImage? {
 
-        switch source {
-            
-        case .emulatorVisible:
-            return screenshot(texture: mergeTexture, rect: visibleNormalized)
-            
-        case .emulatorEntire:
-            return screenshot(texture: mergeTexture, rect: largestVisibleNormalized)
+        print("screenshot(source: \(source), cutout: \(cutout), width: \(width), height: \(height)")
+        
+        var texture: MTLTexture
+        var mtlreg: MTLRegion
+        var x1 = Int(0)
+        var x2 = Int(0)
+        var y1 = Int(0)
+        var y2 = Int(0)
+        
+        // Analyze the emulator texture
+        amiga.videoPort.innerArea(&x1, x2: &x2, y1: &y1, y2: &y2)
+        print("x1 = \(x1) y1 = \(y1) x2 = \(x2) y2 = \(y2) ")
+        x1 *= 2
+        y1 *= 4
+        x2 *= 2
+        y2 *= 4
+        
+        func region(width: Int, height: Int) -> MTLRegion {
+        
+            // Compute the center coordinate
+            let cx = Int((x1 + x2) / 2)
+            let cy = Int((y1 + y2) / 2)
 
-        case .upscaledVisible:
-            return screenshot(texture: upscaledTexture, rect: visibleNormalized)
-            
-        case .upscaledEntire:
-            return screenshot(texture: upscaledTexture, rect: largestVisibleNormalized)
-
-        case .framebuffer:
-            return framebuffer
+            // Assemble the region
+            let origin = MTLOrigin(x: cx - width / 2, y: cy - height / 2, z: 0)
+            let size = MTLSize(width: width, height: height, depth: 1)
+            return MTLRegion(origin: origin, size: size)
         }
+
+        func region(cgRect rect: CGRect) -> MTLRegion {
+        
+            // Compute scaling factors
+            let w = CGFloat(texture.width)
+            let h = CGFloat(texture.height)
+
+            // Assemble the region
+            let origin = MTLOrigin(x: Int(rect.minX * w), y: Int(rect.minY * h), z: 0)
+            let size = MTLSize(width: Int(rect.width * w), height: Int(rect.height * h), depth: 1)
+            return MTLRegion(origin: origin, size: size)
+        }
+        
+        func region(x1: Int, x2: Int, y1: Int, y2: Int) -> MTLRegion {
+        
+            // Assemble the region
+            let origin = MTLOrigin(x: x1, y: y1, z: 0)
+            let size = MTLSize(width: x2 - x1, height: y2 - y1, depth: 1)
+            return MTLRegion(origin: origin, size: size)
+        }
+        
+        switch source {
+        case .emulator: texture = mergeTexture
+        case .upscaler: texture = upscaledTexture
+        case .framebuffer: texture = upscaledTexture // TODO
+        }
+        
+        switch cutout {
+        case .visible: mtlreg = region(cgRect: visibleNormalized)
+        case .entire: mtlreg = region(cgRect: largestVisibleNormalized)
+        case .automatic: mtlreg = region(x1: x1, x2: x2, y1: y1, y2: y2)
+        case .custom: mtlreg = region(width: width, height: height)
+        }
+             
+        return screenshot(texture: texture, region: mtlreg)
     }
 
     func screenshot(texture: MTLTexture, rect: CGRect) -> NSImage? {
@@ -206,6 +252,13 @@ class Canvas: Layer {
         return NSImage.make(texture: texture, rect: rect)
     }
 
+    func screenshot(texture: MTLTexture, region: MTLRegion) -> NSImage? {
+
+        blitTexture(texture: texture)
+        return NSImage.make(texture: texture, region: region)
+    }
+
+    // TODO: Move to TextureToolbox
     func blitTexture(texture: MTLTexture) {
 
         // Use the blitter to copy the texture data back from the GPU
@@ -218,6 +271,7 @@ class Canvas: Layer {
         commandBuffer.waitUntilCompleted()
     }
 
+    // TODO: Move to TextureToolbox?
     var framebuffer: NSImage? {
         
         guard let drawable = renderer.metalLayer.nextDrawable() else { return nil }

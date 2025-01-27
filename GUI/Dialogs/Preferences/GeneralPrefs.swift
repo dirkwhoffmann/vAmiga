@@ -33,9 +33,12 @@ extension PreferencesController {
         genSnapshotInterval.isEnabled = pref.autoSnapshots
 
         // Screenshots
-        genScreenshotSourcePopup.selectItem(withTag: pref.screenshotSource)
-        genScreenshotTargetPopup.selectItem(withTag: pref.screenshotTargetIntValue)
-                
+        genScreenshotFormatPopup.selectItem(withTag: pref.screenshotFormatIntValue)
+        genScreenshotSourcePopup.selectItem(withTag: pref.screenshotSourceIntValue)
+        genScreenshotCutoutPopup.selectItem(withTag: pref.screenshotCutoutIntValue)
+        genScreenshotWidth.integerValue = pref.screenshotWidth
+        genScreenshotHeight.integerValue = pref.screenshotHeight
+
         // Screen captures
         let hasFFmpeg = emu.recorder.hasFFmpeg
         genFFmpegPath.stringValue = emu.recorder.path
@@ -98,13 +101,31 @@ extension PreferencesController {
 
     @IBAction func genScreenshotSourceAction(_ sender: NSPopUpButton!) {
         
-        pref.screenshotSource = sender.selectedTag()
+        pref.screenshotSourceIntValue = sender.selectedTag()
         refresh()
     }
     
-    @IBAction func genScreenshotTargetAction(_ sender: NSPopUpButton!) {
+    @IBAction func genScreenshotFormatAction(_ sender: NSPopUpButton!) {
         
-        pref.screenshotTargetIntValue = sender.selectedTag()
+        pref.screenshotFormatIntValue = sender.selectedTag()
+        refresh()
+    }
+
+    @IBAction func genScreenshotCutoutAction(_ sender: NSPopUpButton!) {
+        
+        pref.screenshotCutoutIntValue = sender.selectedTag()
+        refresh()
+    }
+
+    @IBAction func genScreenshotWidthAction(_ sender: NSTextField!) {
+        
+        pref.aspectX = sender.integerValue
+        refresh()
+    }
+
+    @IBAction func genScreenshotHeightAction(_ sender: NSTextField!) {
+        
+        pref.aspectY = sender.integerValue
         refresh()
     }
 

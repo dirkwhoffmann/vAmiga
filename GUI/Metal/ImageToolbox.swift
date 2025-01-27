@@ -56,6 +56,21 @@ public extension CGImage {
                        intent: CGColorRenderingIntent.defaultIntent)
     }
     
+    static func make(texture: MTLTexture, region: MTLRegion, bitmapInfo: CGBitmapInfo? = nil) -> CGImage? {
+                
+        let w = region.size.width
+        let h = region.size.height
+        
+        // Get texture data as a byte stream
+        guard let data = malloc(4 * w * h) else { return nil; }
+        texture.getBytes(data,
+                         bytesPerRow: 4 * region.size.width,
+                         from: region, // MTLRegionMake2D(x, y, w, h),
+                         mipmapLevel: 0)
+        
+        return make(data: data, size: CGSize(width: w, height: h), bitmapInfo: bitmapInfo)
+    }
+    
     // Creates a CGImage from a MTLTexture
     static func make(texture: MTLTexture, rect: CGRect, bitmapInfo: CGBitmapInfo? = nil) -> CGImage? {
         
@@ -65,6 +80,8 @@ public extension CGImage {
         let w = Int(CGFloat(texture.width) * rect.width)
         let h = Int(CGFloat(texture.height) * rect.height)
         
+        return make(texture: texture, region: MTLRegionMake2D(x, y, w, h), bitmapInfo: bitmapInfo)
+        /*
         // Get texture data as a byte stream
         guard let data = malloc(4 * w * h) else { return nil; }
         texture.getBytes(data,
@@ -73,6 +90,7 @@ public extension CGImage {
                          mipmapLevel: 0)
         
         return make(data: data, size: CGSize(width: w, height: h), bitmapInfo: bitmapInfo)
+        */
     }
 }
 
@@ -191,7 +209,7 @@ public extension NSImage {
         unlockFocus()
     }
 
-    static func make(texture: MTLTexture, rect: CGRect =  CGRect(x: 0, y: 0, width: 1.0, height: 1.0), bitmapInfo: CGBitmapInfo? = nil) -> NSImage? {
+    static func make(texture: MTLTexture, rect: CGRect = CGRect(x: 0, y: 0, width: 1.0, height: 1.0), bitmapInfo: CGBitmapInfo? = nil) -> NSImage? {
         
         guard let cgImage = CGImage.make(texture: texture, rect: rect, bitmapInfo: bitmapInfo) else {
             warn("Failed to create CGImage.")
@@ -202,6 +220,17 @@ public extension NSImage {
         return NSImage(cgImage: cgImage, size: size)
     }
 
+    static func make(texture: MTLTexture, region: MTLRegion, bitmapInfo: CGBitmapInfo? = nil) -> NSImage? {
+        
+        guard let cgImage = CGImage.make(texture: texture, region: region, bitmapInfo: bitmapInfo) else {
+            warn("Failed to create CGImage.")
+            return nil
+        }
+        
+        let size = NSSize(width: cgImage.width, height: cgImage.height)
+        return NSImage(cgImage: cgImage, size: size)
+    }
+    
     static func make(data: UnsafeMutableRawPointer, rect: CGSize, bitmapInfo: CGBitmapInfo? = nil) -> NSImage? {
         
         guard let cgImage = CGImage.make(data: data, size: rect, bitmapInfo: bitmapInfo) else {

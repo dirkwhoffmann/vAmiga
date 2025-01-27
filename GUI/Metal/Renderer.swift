@@ -11,11 +11,17 @@ import Metal
 
 enum ScreenshotSource: Int {
         
-    case emulatorVisible = 0
-    case emulatorEntire = 1
-    case upscaledVisible = 2
-    case upscaledEntire = 3
-    case framebuffer = 4
+    case emulator = 0
+    case upscaler = 1
+    case framebuffer = 2
+}
+
+enum ScreenshotCutout: Int {
+        
+    case visible = 0
+    case entire = 1
+    case automatic = 2
+    case custom = 3
 }
 
 @MainActor

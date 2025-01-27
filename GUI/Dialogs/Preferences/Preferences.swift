@@ -53,11 +53,36 @@ class Preferences {
     }
 
     // Screenshots
-    var screenshotSource = 0
-    var screenshotTarget = NSBitmapImageRep.FileType.png
-    var screenshotTargetIntValue: Int {
-        get { return Int(screenshotTarget.rawValue) }
-        set { screenshotTarget = NSBitmapImageRep.FileType(rawValue: UInt(newValue))! }
+    var screenshotFormat = NSBitmapImageRep.FileType.png
+    var screenshotFormatIntValue: Int {
+        get { return Int(screenshotFormat.rawValue) }
+        set { screenshotFormat = NSBitmapImageRep.FileType(rawValue: UInt(newValue)) ?? screenshotFormat }
+    }
+
+    var screenshotSource = ScreenshotSource.emulator
+    var screenshotSourceIntValue: Int {
+        get { return Int(screenshotSource.rawValue) }
+        set { screenshotSource = ScreenshotSource(rawValue: newValue) ?? screenshotSource }
+    }
+
+    var screenshotCutout = ScreenshotCutout.visible
+    var screenshotCutoutIntValue: Int {
+        get { return Int(screenshotCutout.rawValue) }
+        set { screenshotCutout = ScreenshotCutout(rawValue: newValue) ?? screenshotCutout }
+    }
+
+    var screenshotWidth = 320 {
+        didSet {
+            if screenshotWidth < 0 { screenshotWidth = 0 }
+            if screenshotWidth > vamiga.HPIXELS { screenshotWidth = vamiga.HPIXELS }
+        }
+    }
+
+    var screenshotHeight = 200 {
+        didSet {
+            if screenshotHeight < 0 { screenshotHeight = 0 }
+            if screenshotHeight > vamiga.VPIXELS { screenshotHeight = vamiga.VPIXELS }
+        }
     }
 
     // Screen captures
