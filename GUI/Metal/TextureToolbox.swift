@@ -205,6 +205,18 @@ extension MTLTexture {
         replace(region: region, buffer: buffer)
     }
     
+    func blit() {
+
+        // Use the blitter to copy the texture data back from the GPU
+        let queue = device.makeCommandQueue()!
+        let commandBuffer = queue.makeCommandBuffer()!
+        let blitEncoder = commandBuffer.makeBlitCommandEncoder()!
+        blitEncoder.synchronize(texture: self, slice: 0, level: 0)
+        blitEncoder.endEncoding()
+        commandBuffer.commit()
+        commandBuffer.waitUntilCompleted()
+    }
+
     func blitTextureToBuffer(device: MTLDevice, texture: MTLTexture) -> MTLBuffer? {
         
         let textureWidth = texture.width

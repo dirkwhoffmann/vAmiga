@@ -157,16 +157,14 @@ VideoPort::findInnerArea(isize &x1, isize &x2, isize &y1, isize &y2) const
     x2 = 4 * PAL::HPOS_MAX;
     y1 = agnus.isPAL() ? PAL::VBLANK_CNT : NTSC::VBLANK_CNT;
     y2 = agnus.isPAL() ? PAL::VPOS_CNT_SF : NTSC::VPOS_CNT_SF;
-    printf("Start box: (%ld,%ld) - (%ld,%ld)\n", x1, y1, x2, y2);
     
-    // Get a border pixel as reference
+    // Get a reference pixel from the border
     auto border = buffer.pixels[y1 * HPIXELS + x1];
     
     // Shrink the box as much as possible
     auto emptyRow = [&](isize row) {
         
         for (isize x = x1; x < x2; x++) {
-            // printf("[%x] ", buffer.pixels[row * HPIXELS + x]);
             if (buffer.pixels[row * HPIXELS + x] != border) { return false; }
         }
         return true;
@@ -182,8 +180,10 @@ VideoPort::findInnerArea(isize &x1, isize &x2, isize &y1, isize &y2) const
     while (x1 < x2 && emptyCol(x1)) { x1 += 1; }
     while (y2 > 0  && emptyRow(y2)) { y2 -= 1; }
     while (y1 < y2 && emptyRow(y1)) { y1 += 1; }
-    
-    printf("Shrinked box: (%ld,%ld) - (%ld,%ld)\n", x1, y1, x2, y2);
+    // printf("Shrinked box: (%ld,%ld) - (%ld,%ld)\n", x1, y1, x2, y2);
+
+    // Return a zero rect if the box is invalid
+    if (x2 <= x1 || y2 <= y1) { x1 = x2 = y1 = y2 = 0; }
 }
 
 void
