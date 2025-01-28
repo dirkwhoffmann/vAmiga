@@ -58,8 +58,8 @@ extension Inspector {
             cpuDasmRev2.selectItem(withTag: dasmRev)
 
             let rev = CPURevision(rawValue: emu.get(.CPU_REVISION))
-            let below10 = rev == ._68000
-            let below20 = rev == ._68000 || rev == ._68010
+            let below10 = rev == .M68000
+            let below20 = rev == .M68000 || rev == .M68010
             cpuMSP.isHidden = below20
             cpuVBR.isHidden = below10
             cpuSFC.isHidden = below10

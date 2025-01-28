@@ -31,7 +31,7 @@ OptionParser::create(Option opt, i64 arg)
         case Option::HOST_FRAMEBUF_HEIGHT:      return numParser(" pixels");
 
         case Option::AMIGA_VIDEO_FORMAT:        return enumParser.template operator()<TVEnum,TV>();
-        case Option::AMIGA_WARP_MODE:           return enumParser.template operator()<WarpModeEnum,WarpMode>();
+        case Option::AMIGA_WARP_MODE:           return enumParser.template operator()<WarpEnum,Warp>();
         case Option::AMIGA_WARP_BOOT:           return numParser(" sec");
         case Option::AMIGA_VSYNC:               return boolParser();
         case Option::AMIGA_SPEED_BOOST:         return numParser("%");
@@ -91,7 +91,7 @@ OptionParser::create(Option opt, i64 arg)
 
         case Option::VID_WHITE_NOISE:           return boolParser();
             
-        case Option::CPU_REVISION:              return enumParser.template operator()<CPURevisionEnum,CPURevision>();
+        case Option::CPU_REVISION:              return enumParser.template operator()<CPURevEnum,CPURev>();
         case Option::CPU_DASM_REVISION:         return enumParser.template operator()<DasmRevisionEnum,DasmRevision>();
         case Option::CPU_DASM_SYNTAX:           return enumParser.template operator()<DasmSyntaxEnum,DasmSyntax>();
         case Option::CPU_DASM_NUMBERS:          return enumParser.template operator()<DasmNumbersEnum,DasmNumbers>();

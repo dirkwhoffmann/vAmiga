@@ -48,7 +48,7 @@ MsgQueue::put(const Message &msg)
 
         SYNCHRONIZED
 
-        debug(MSG_DEBUG, "%s [%llx]\n", MsgTypeEnum::key(msg.type), msg.value);
+        debug(MSG_DEBUG, "%s [%llx]\n", MsgEnum::key(msg.type), msg.value);
 
         if (listener) {
 
@@ -61,7 +61,7 @@ MsgQueue::put(const Message &msg)
             if (!queue.isFull()) {
                 queue.write(msg);
             } else {
-                warn("Message lost: %s [%llx]\n", MsgTypeEnum::key(msg.type), msg.value);
+                warn("Message lost: %s [%llx]\n", MsgEnum::key(msg.type), msg.value);
             }
         }
     }

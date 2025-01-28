@@ -22,35 +22,35 @@ namespace vamiga {
 // Enumerations
 //
 
-enum class CPURevision : long
+enum class CPURev : long
 {
-    CPU_68000,
-    CPU_68010,
-    CPU_68EC020
+    M68000,
+    M68010,
+    M68EC020
 };
 
-struct CPURevisionEnum : util::Reflection<CPURevisionEnum, CPURevision>
+struct CPURevEnum : util::Reflection<CPURevEnum, CPURev>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(CPURevision::CPU_68EC020);
+    static constexpr long maxVal = long(CPURev::M68EC020);
     
-    static const char *_key(CPURevision value)
+    static const char *_key(CPURev value)
     {
         switch (value) {
                 
-            case CPURevision::CPU_68000:     return "68000";
-            case CPURevision::CPU_68010:     return "68010";
-            case CPURevision::CPU_68EC020:   return "68EC020";
+            case CPURev::M68000:     return "68000";
+            case CPURev::M68010:     return "68010";
+            case CPURev::M68EC020:   return "68EC020";
         }
         return "???";
     }
-    static const char *help(CPURevision value)
+    static const char *help(CPURev value)
     {
         switch (value) {
                 
-            case CPURevision::CPU_68000:     return "Motorola 68000 CPU";
-            case CPURevision::CPU_68010:     return "Motorola 68010 CPU";
-            case CPURevision::CPU_68EC020:   return "Motorola 68EC020 CPU";
+            case CPURev::M68000:     return "Motorola 68000 CPU";
+            case CPURev::M68010:     return "Motorola 68010 CPU";
+            case CPURev::M68EC020:   return "Motorola 68EC020 CPU";
         }
         return "???";
     }
@@ -220,7 +220,7 @@ struct GuardTypeEnum : util::Reflection<GuardTypeEnum, GuardType>
 
 typedef struct
 {
-    CPURevision revision;
+    CPURev revision;
     DasmRevision dasmRevision;
     DasmSyntax dasmSyntax;
     DasmNumbers dasmNumbers;

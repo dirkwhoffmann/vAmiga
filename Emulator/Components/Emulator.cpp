@@ -236,9 +236,9 @@ Emulator::shouldWarp() const
     
     switch (config.warpMode) {
             
-        case WarpMode::AUTO:     return main.paula.diskController.spinning();
-        case WarpMode::NEVER:    return false;
-        case WarpMode::ALWAYS:   return true;
+        case Warp::AUTO:     return main.paula.diskController.spinning();
+        case Warp::NEVER:    return false;
+        case Warp::ALWAYS:   return true;
             
         default:
             fatalError;

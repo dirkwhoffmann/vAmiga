@@ -167,20 +167,20 @@ Headless::process(Message msg)
 
     if (messages) {
         
-        std::cout << MsgTypeEnum::key(msg.type);
+        std::cout << MsgEnum::key(msg.type);
         std::cout << "(" << msg.value << ")";
         std::cout << std::endl;
     }
 
     switch (msg.type) {
             
-        case MsgType::RSH_ERROR:
+        case Msg::RSH_ERROR:
 
             returnCode = 1;
             wakeUp();
             break;
 
-        case MsgType::ABORT:
+        case Msg::ABORT:
 
             wakeUp();
             break;

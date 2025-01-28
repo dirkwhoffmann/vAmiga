@@ -84,29 +84,29 @@ struct ResolutionEnum : util::Reflection<ResolutionEnum, Resolution>
     }
 };
 
-enum class WarpMode : long
+enum class Warp : long
 {
     AUTO,
     NEVER,
     ALWAYS
 };
 
-struct WarpModeEnum : util::Reflection<WarpModeEnum, WarpMode>
+struct WarpEnum : util::Reflection<WarpEnum, Warp>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(WarpMode::ALWAYS);
+    static constexpr long maxVal = long(Warp::ALWAYS);
     
-    static const char *_key(WarpMode value)
+    static const char *_key(Warp value)
     {
         switch (value) {
                 
-            case WarpMode::AUTO:     return "AUTO";
-            case WarpMode::NEVER:    return "NEVER";
-            case WarpMode::ALWAYS:   return "ALWAYS";
+            case Warp::AUTO:     return "AUTO";
+            case Warp::NEVER:    return "NEVER";
+            case Warp::ALWAYS:   return "ALWAYS";
         }
         return "???";
     }
-    static const char *help(WarpMode value)
+    static const char *help(Warp value)
     {
         return "";
     }
@@ -325,7 +325,7 @@ typedef struct
     isize warpBoot;
     
     //! Warp mode
-    WarpMode warpMode;
+    Warp warpMode;
     
     //! Emulator speed in percent (100 is native speed)
     isize speedBoost;

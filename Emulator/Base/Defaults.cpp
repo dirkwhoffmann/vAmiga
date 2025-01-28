@@ -24,7 +24,7 @@ Defaults::Defaults()
     
     setFallback(Option::AMIGA_VIDEO_FORMAT,         (i64)TV::PAL);
     setFallback(Option::AMIGA_WARP_BOOT,            0);
-    setFallback(Option::AMIGA_WARP_MODE,            (i64)WarpMode::NEVER);
+    setFallback(Option::AMIGA_WARP_MODE,            (i64)Warp::NEVER);
     setFallback(Option::AMIGA_VSYNC,                false);
     setFallback(Option::AMIGA_SPEED_BOOST,          100);
     setFallback(Option::AMIGA_RUN_AHEAD,            0);
@@ -76,8 +76,8 @@ Defaults::Defaults()
 
     setFallback(Option::VID_WHITE_NOISE,            true);
 
-    setFallback(Option::CPU_REVISION,               (i64)CPURevision::CPU_68000);
-    setFallback(Option::CPU_DASM_REVISION,          (i64)CPURevision::CPU_68000);
+    setFallback(Option::CPU_REVISION,               (i64)CPURev::M68000);
+    setFallback(Option::CPU_DASM_REVISION,          (i64)CPURev::M68000);
     setFallback(Option::CPU_DASM_SYNTAX,            (i64)DasmSyntax::MOIRA);
     setFallback(Option::CPU_DASM_NUMBERS,           (i64)DasmNumbers::HEX);
     setFallback(Option::CPU_OVERCLOCKING,           0);

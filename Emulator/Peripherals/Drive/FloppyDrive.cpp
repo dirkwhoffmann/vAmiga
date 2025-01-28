@@ -1136,7 +1136,7 @@ FloppyDrive::serviceDiskChangeEvent()
             msgQueue.put(Msg::DISK_EJECT,
                          DriveMsg { i16(objid), 0, config.ejectVolume, config.pan });
             /*
-            msgQueue.put(MsgType::DISK_EJECT,
+            msgQueue.put(Msg::DISK_EJECT,
                          i16(objid), 0, config.ejectVolume, config.pan);
              */
         }

@@ -22,7 +22,7 @@ typealias ControlPortDevice = vamiga.ControlPortDevice
 typealias ControlPortInfo = vamiga.ControlPortInfo
 typealias CopperInfo = vamiga.CopperInfo
 typealias CPUInfo = vamiga.CPUInfo
-typealias CPURevision = vamiga.CPURevision
+typealias CPURevision = vamiga.CPURev
 typealias DasmNumbers = vamiga.DasmNumbers
 typealias DasmSyntax = vamiga.DasmSyntax
 typealias DeniseInfo = vamiga.DeniseInfo
@@ -58,7 +58,7 @@ typealias SpriteInfo = vamiga.SpriteInfo
 typealias StateMachineInfo = vamiga.StateMachineInfo
 typealias UARTInfo = vamiga.UARTInfo
 typealias VideoFormat = vamiga.TV
-typealias WarpMode = vamiga.WarpMode
+typealias WarpMode = vamiga.Warp
 
 extension EventSlot: CustomStringConvertible {
 

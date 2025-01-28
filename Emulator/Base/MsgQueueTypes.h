@@ -130,7 +130,7 @@ enum class Msg : long
     ALARM
 };
 
-struct MsgTypeEnum : util::Reflection<MsgTypeEnum, Msg>
+struct MsgEnum : util::Reflection<MsgEnum, Msg>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Msg::ALARM);

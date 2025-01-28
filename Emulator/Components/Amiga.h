@@ -444,7 +444,7 @@ public:
 
     /* Alarms are scheduled notifications set by the client (GUI). Once the
      * trigger cycle of an alarm has been reached, the emulator sends a
-     * MsgType::ALARM to the client.
+     * Msg::ALARM to the client.
      */
     void setAlarmAbs(Cycle trigger, i64 payload);
     void setAlarmRel(Cycle trigger, i64 payload);
