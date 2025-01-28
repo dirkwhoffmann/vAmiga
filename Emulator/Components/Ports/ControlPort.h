@@ -21,13 +21,13 @@ class ControlPort final : public SubComponent, public Inspectable<ControlPortInf
 
     Descriptions descriptions = {
         {
-            .type           = CType::ControlPortClass,
+            .type           = Class::ControlPort,
             .name           = "ControlPort1",
             .description    = "Control Port 1",
             .shell          = "port1"
         },
         {
-            .type           = CType::ControlPortClass,
+            .type           = Class::ControlPort,
             .name           = "ControlPort2",
             .description    = "Control Port 2",
             .shell          = "port2"

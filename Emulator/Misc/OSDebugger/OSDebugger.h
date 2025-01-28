@@ -19,7 +19,7 @@ class OSDebugger final : public SubComponent {
     
     Descriptions descriptions = {{
 
-        .type           = CType::OSDebuggerClass,
+        .type           = Class::OSDebugger,
         .name           = "OSDebugger",
         .description    = "Operating System Debugger",
         .shell          = "os"

@@ -19,7 +19,7 @@ class VideoPort final : public SubComponent, public Inspectable<VideoPortInfo, V
 
     Descriptions descriptions = {{
 
-        .type           = CType::VideoPortClass,
+        .type           = Class::VideoPort,
         .name           = "Video",
         .description    = "Video Port",
         .shell          = "video"

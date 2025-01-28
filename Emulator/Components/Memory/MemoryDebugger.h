@@ -18,7 +18,7 @@ class MemoryDebugger final : public SubComponent
 {
     Descriptions descriptions = {{
 
-        .type           = CType::MemoryDebuggerClass,
+        .type           = Class::MemoryDebugger,
         .name           = "MemoryDebugger",
         .description    = "Memory Debugger",
         .shell          = ""

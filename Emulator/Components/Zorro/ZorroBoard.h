@@ -20,7 +20,7 @@ protected:
     
     Descriptions descriptions = {{
 
-        .type           = CType::ZorroBoardClass,
+        .type           = Class::ZorroBoard,
         .name           = "ZorroBoard",
         .description    = "Zorro Board",
         .shell          = ""

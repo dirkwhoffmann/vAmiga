@@ -21,7 +21,7 @@ class Keyboard final : public SubComponent, public Inspectable<KeyboardInfo> {
 
     Descriptions descriptions = {{
 
-        .type           = CType::KeyboardClass,
+        .type           = Class::Keyboard,
         .name           = "Keyboard",
         .description    = "Keyboard",
         .shell          = "keyboard"

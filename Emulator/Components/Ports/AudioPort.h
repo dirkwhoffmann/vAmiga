@@ -48,13 +48,13 @@ class AudioPort final : public SubComponent {
 
     Descriptions descriptions = {
         {
-            .type           = CType::AudipPortClass,
+            .type           = Class::AudipPort,
             .name           = "AudioPort",
             .description    = "Audio Port",
             .shell          = "audio"
         },
         {
-            .type           = CType::AudipPortClass,
+            .type           = Class::AudipPort,
             .name           = "RecAudioPort",
             .description    = "Audio Port (Recorder)",
             .shell          = ""

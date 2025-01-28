@@ -20,7 +20,7 @@ class UART final : public SubComponent, public Inspectable<UARTInfo> {
 
     Descriptions descriptions = {{
 
-        .type           = CType::UARTClass,
+        .type           = Class::UART,
         .name           = "UART",
         .description    = "Universal Asynchronous Receiver Transmitter",
         .shell          = "uart"

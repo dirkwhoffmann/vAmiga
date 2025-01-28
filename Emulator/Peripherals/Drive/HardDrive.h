@@ -22,25 +22,25 @@ class HardDrive final : public Drive, public Inspectable<HardDriveInfo> {
     
     Descriptions descriptions = {
         {
-            .type           = CType::HardDriveClass,
+            .type           = Class::HardDrive,
             .name           = "HardDrive0",
             .description    = "Hard Drive 0",
             .shell          = "hd0"
         },
         {
-            .type           = CType::HardDriveClass,
+            .type           = Class::HardDrive,
             .name           = "HardDrive1",
             .description    = "Hard Drive 1",
             .shell          = "hd1"
         },
         {
-            .type           = CType::HardDriveClass,
+            .type           = Class::HardDrive,
             .name           = "HardDrive2",
             .description    = "Hard Drive 2",
             .shell          = "hd2"
         },
         {
-            .type           = CType::HardDriveClass,
+            .type           = Class::HardDrive,
             .name           = "HardDrive3",
             .description    = "Hard Drive 3",
             .shell          = "hd3"

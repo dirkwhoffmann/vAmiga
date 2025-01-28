@@ -22,7 +22,7 @@ class Host final : public SubComponent {
 
     Descriptions descriptions = {{
 
-        .type           = CType::HostClass,
+        .type           = Class::Host,
         .name           = "Host",
         .description    = "Host Computer",
         .shell          = "host"

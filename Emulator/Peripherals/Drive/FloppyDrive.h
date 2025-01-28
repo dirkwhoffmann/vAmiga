@@ -25,25 +25,25 @@ class FloppyDrive final : public Drive, public Inspectable<FloppyDriveInfo> {
 
     Descriptions descriptions = {
         {
-            .type           = CType::FloppyDriveClass,
+            .type           = Class::FloppyDrive,
             .name           = "FloppyDrive0",
             .description    = "Floppy Drive 0",
             .shell          = "df0"
         },
         {
-            .type           = CType::FloppyDriveClass,
+            .type           = Class::FloppyDrive,
             .name           = "FloppyDrive1",
             .description    = "Floppy Drive 1",
             .shell          = "df1"
         },
         {
-            .type           = CType::FloppyDriveClass,
+            .type           = Class::FloppyDrive,
             .name           = "FloppyDrive2",
             .description    = "Floppy Drive 2",
             .shell          = "df2"
         },
         {
-            .type           = CType::FloppyDriveClass,
+            .type           = Class::FloppyDrive,
             .name           = "FloppyDrive3",
             .description    = "Floppy Drive 3",
             .shell          = "df3"

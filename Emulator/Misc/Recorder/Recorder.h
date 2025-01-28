@@ -25,7 +25,7 @@ class Recorder final : public SubComponent {
 
     Descriptions descriptions = {{
 
-        .type           = CType::RecorderClass,
+        .type           = Class::Recorder,
         .name           = "Recorder",
         .description    = "Video Recorder",
         .shell          = ""

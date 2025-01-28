@@ -46,7 +46,7 @@ class CopperDebugger final : public SubComponent {
 
     Descriptions descriptions = {{
 
-        .type           = CType::CopperDebuggerClass,
+        .type           = Class::CopperDebugger,
         .name           = "cdebugger",
         .description    = "Copper Debugger",
         .shell          = ""

@@ -106,7 +106,7 @@ class Memory final : public SubComponent, public Inspectable<MemInfo, MemStats> 
 
     Descriptions descriptions = {{
 
-        .type           = CType::MemoryClass,
+        .type           = Class::Memory,
         .name           = "Memory",
         .description    = "Memory",
         .shell          = "mem"

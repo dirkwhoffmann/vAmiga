@@ -19,7 +19,7 @@ class RegressionTester final : public SubComponent {
 
     Descriptions descriptions = {{
 
-        .type           = CType::RegressionTesterClass,
+        .type           = Class::RegressionTester,
         .name           = "Regression",
         .description    = "Regression Tester",
         .shell          = "regression"

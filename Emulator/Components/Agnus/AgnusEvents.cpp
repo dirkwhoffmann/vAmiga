@@ -780,18 +780,18 @@ Agnus::serviceINSEvent()
     u64 mask = data[SLOT_INS];
 
     // Analyze bit mask
-    if (mask & 1LL << long(CType::AgnusClass))           { agnus.record(); }
-    if (mask & 1LL << long(CType::AmigaClass))           { amiga.record(); }
-    if (mask & 1LL << long(CType::BlitterClass))         { blitter.record(); }
-    if (mask & 1LL << long(CType::CopperClass))          { copper.record(); }
-    if (mask & 1LL << long(CType::CIAClass))             { ciaa.record(); ciab.record(); }
-    if (mask & 1LL << long(CType::CPUClass))             { cpu.record(); }
-    if (mask & 1LL << long(CType::DeniseClass))          { denise.record(); }
-    if (mask & 1LL << long(CType::MemoryClass))          { mem.record(); }
-    if (mask & 1LL << long(CType::PaulaClass))           { paula.record(); }
-    if (mask & 1LL << long(CType::UARTClass))            { uart.record(); }
-    if (mask & 1LL << long(CType::ControlPortClass))     { controlPort1.record(); controlPort2.record(); }
-    if (mask & 1LL << long(CType::SerialPortClass))      { serialPort.record(); }
+    if (mask & 1LL << long(Class::Agnus))           { agnus.record(); }
+    if (mask & 1LL << long(Class::Amiga))           { amiga.record(); }
+    if (mask & 1LL << long(Class::Blitter))         { blitter.record(); }
+    if (mask & 1LL << long(Class::Copper))          { copper.record(); }
+    if (mask & 1LL << long(Class::CIA))             { ciaa.record(); ciab.record(); }
+    if (mask & 1LL << long(Class::CPU))             { cpu.record(); }
+    if (mask & 1LL << long(Class::Denise))          { denise.record(); }
+    if (mask & 1LL << long(Class::Memory))          { mem.record(); }
+    if (mask & 1LL << long(Class::Paula))           { paula.record(); }
+    if (mask & 1LL << long(Class::UART))            { uart.record(); }
+    if (mask & 1LL << long(Class::ControlPort))     { controlPort1.record(); controlPort2.record(); }
+    if (mask & 1LL << long(Class::SerialPort))      { serialPort.record(); }
 
     // Reschedule the event
     rescheduleRel<SLOT_INS>((Cycle)(inspectionInterval * 28000007));

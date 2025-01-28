@@ -37,7 +37,7 @@ class Agnus : public SubComponent, public Inspectable<AgnusInfo, AgnusStats> {
 
     Descriptions descriptions = {{
 
-        .type           = CType::AgnusClass,
+        .type           = Class::Agnus,
         .name           = "Agnus",
         .description    = "DMA Controller",
         .shell          = "agnus"
