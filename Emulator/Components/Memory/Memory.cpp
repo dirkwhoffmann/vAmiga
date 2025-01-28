@@ -664,7 +664,7 @@ Memory::extFingerprint() const
 void
 Memory::loadRom(MediaFile &file)
 {
-    // if (amiga.isPoweredOn()) throw Error(ErrorCode::POWERED_ON);
+    // if (amiga.isPoweredOn()) throw VAException(VAError::POWERED_ON);
 
     try {
 

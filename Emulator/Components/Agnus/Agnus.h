@@ -199,7 +199,7 @@ public:
     isize sprVStop[8] = { };
 
     // The current DMA states of all 8 sprites
-    SprDMAState sprDmaState[8] = { };
+    bool sprDmaEnabled[8] = { };
 
     
     //
@@ -268,7 +268,7 @@ private:
 
         << sprVStrt
         << sprVStop
-        << sprDmaState;
+        << sprDmaEnabled;
 
         if (isSoftResetter(worker)) return;
 

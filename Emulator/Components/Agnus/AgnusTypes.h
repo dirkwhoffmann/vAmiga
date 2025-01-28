@@ -470,32 +470,6 @@ static inline bool isBplxEvent(EventID id, int x)
     }
 }
 
-enum class SprDMAState
-{
-    IDLE,
-    ACTIVE
-};
-
-struct SprDmaStateEnum : util::Reflection<SprDmaStateEnum, SprDMAState>
-{
-    static constexpr long minVal = 0;
-    static constexpr long maxVal = long(SprDMAState::ACTIVE);
-    
-    static const char *_key(SprDMAState value)
-    {
-        switch (value) {
-                
-            case SprDMAState::IDLE:   return "IDLE";
-            case SprDMAState::ACTIVE: return "ACTIVE";
-        }
-        return "???";
-    }
-    static const char *help(SprDMAState value)
-    {
-        return "";
-    }
-};
-
 
 //
 // Structures

@@ -73,7 +73,7 @@ Agnus::operator= (const Agnus& other) {
 
     CLONE_ARRAY(sprVStrt)
     CLONE_ARRAY(sprVStop)
-    CLONE_ARRAY(sprDmaState)
+    CLONE_ARRAY(sprDmaEnabled)
 
     CLONE(clock)
 
@@ -560,7 +560,7 @@ Agnus::executeFirstSpriteCycle()
 
     if (pos.v == sprVStop[nr]) {
 
-        sprDmaState[nr] = SprDMAState::IDLE;
+        sprDmaEnabled[nr] = false;
 
         if (!spriteCycleIsBlocked()) {
 
@@ -577,7 +577,7 @@ Agnus::executeFirstSpriteCycle()
             }
         }
 
-    } else if (sprDmaState[nr] == SprDMAState::ACTIVE) {
+    } else if (sprDmaEnabled[nr]) {
 
         if (!spriteCycleIsBlocked()) {
 
@@ -602,7 +602,7 @@ Agnus::executeSecondSpriteCycle()
 
     if (pos.v == sprVStop[nr]) {
 
-        sprDmaState[nr] = SprDMAState::IDLE;
+        sprDmaEnabled[nr] = false;
 
         if (!spriteCycleIsBlocked()) {
 
@@ -619,7 +619,7 @@ Agnus::executeSecondSpriteCycle()
             }
         }
 
-    } else if (sprDmaState[nr] == SprDMAState::ACTIVE) {
+    } else if (sprDmaEnabled[nr]) {
 
         if (!spriteCycleIsBlocked()) {
 
@@ -663,14 +663,14 @@ Agnus::updateSpriteDMA()
 
     // Disable DMA in the last rasterline
     if (v == pos.vMax()) {
-        for (isize i = 0; i < 8; i++) sprDmaState[i] = SprDMAState::IDLE;
+        for (isize i = 0; i < 8; i++) sprDmaEnabled[i] = false;
         return;
     }
 
     // Update the DMA status for all sprites
     for (isize i = 0; i < 8; i++) {
-        if (v == sprVStrt[i]) sprDmaState[i] = SprDMAState::ACTIVE;
-        if (v == sprVStop[i]) sprDmaState[i] = SprDMAState::IDLE;
+        if (v == sprVStrt[i]) sprDmaEnabled[i] = true;
+        if (v == sprVStop[i]) sprDmaEnabled[i] = false;
     }
 }
 
