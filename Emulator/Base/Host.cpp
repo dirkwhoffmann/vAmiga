@@ -42,7 +42,7 @@ Host::checkOption(Opt opt, i64 value)
             return;
 
         default:
-            throw(ErrorCode::OPT_UNSUPPORTED);
+            throw(VAError::OPT_UNSUPPORTED);
     }
 }
 
@@ -111,7 +111,7 @@ Host::tmp() const
 
             if (!logfile.is_open()) {
 
-                throw Error(ErrorCode::DIR_NOT_FOUND);
+                throw VAException(VAError::DIR_NOT_FOUND);
             }
         }
 

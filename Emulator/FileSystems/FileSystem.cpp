@@ -33,7 +33,7 @@ FileSystem::init(const MediaFile &file, isize part) throws
         case FileType::HDF:  init(dynamic_cast<const HDFFile &>(file), part); break;
 
         default:
-            throw Error(ErrorCode::FILE_TYPE_UNSUPPORTED);
+            throw VAException(VAError::FILE_TYPE_UNSUPPORTED);
     }
 }
 
@@ -89,7 +89,7 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
     layout.checkCompatibility();
     
     // Only proceed if the volume is formatted
-    if (layout.dos == FSVolumeType::NODOS) throw Error(ErrorCode::FS_UNFORMATTED);
+    if (layout.dos == FSVolumeType::NODOS) throw VAException(VAError::FS_UNFORMATTED);
 
     // Copy layout parameters
     dos         = layout.dos;
@@ -605,7 +605,7 @@ FileSystem::collectRefsWithSameHashValue(Block nr,
     for (FSBlock *b = hashableBlockPtr(nr); b; b = b->getNextHashBlock()) {
 
         // Only proceed if we haven't seen this block yet
-        if (visited.find(b->nr) != visited.end()) throw Error(ErrorCode::FS_HAS_CYCLES);
+        if (visited.find(b->nr) != visited.end()) throw VAException(VAError::FS_HAS_CYCLES);
 
         visited.insert(b->nr);
         refs.push(b->nr);
@@ -708,19 +708,19 @@ FileSystem::check(bool strict) const
     return result;
 }
 
-ErrorCode
+VAError
 FileSystem::check(Block nr, isize pos, u8 *expected, bool strict) const
 {
     return blocks[nr]->check(pos, expected, strict);
 }
 
-ErrorCode
+VAError
 FileSystem::checkBlockType(Block nr, FSBlockType type) const
 {
     return checkBlockType(nr, type, type);
 }
 
-ErrorCode
+VAError
 FileSystem::checkBlockType(Block nr, FSBlockType type, FSBlockType altType) const
 {
     FSBlockType t = blockType(nr);
@@ -729,21 +729,21 @@ FileSystem::checkBlockType(Block nr, FSBlockType type, FSBlockType altType) cons
         
         switch (t) {
                 
-            case FSBlockType::EMPTY_BLOCK:      return ErrorCode::FS_PTR_TO_EMPTY_BLOCK;
-            case FSBlockType::BOOT_BLOCK:       return ErrorCode::FS_PTR_TO_BOOT_BLOCK;
-            case FSBlockType::ROOT_BLOCK:       return ErrorCode::FS_PTR_TO_ROOT_BLOCK;
-            case FSBlockType::BITMAP_BLOCK:     return ErrorCode::FS_PTR_TO_BITMAP_BLOCK;
-            case FSBlockType::BITMAP_EXT_BLOCK: return ErrorCode::FS_PTR_TO_BITMAP_EXT_BLOCK;
-            case FSBlockType::USERDIR_BLOCK:    return ErrorCode::FS_PTR_TO_USERDIR_BLOCK;
-            case FSBlockType::FILEHEADER_BLOCK: return ErrorCode::FS_PTR_TO_FILEHEADER_BLOCK;
-            case FSBlockType::FILELIST_BLOCK:   return ErrorCode::FS_PTR_TO_FILELIST_BLOCK;
-            case FSBlockType::DATA_BLOCK_OFS:   return ErrorCode::FS_PTR_TO_DATA_BLOCK;
-            case FSBlockType::DATA_BLOCK_FFS:   return ErrorCode::FS_PTR_TO_DATA_BLOCK;
-            default:                  return ErrorCode::FS_PTR_TO_UNKNOWN_BLOCK;
+            case FSBlockType::EMPTY_BLOCK:      return VAError::FS_PTR_TO_EMPTY_BLOCK;
+            case FSBlockType::BOOT_BLOCK:       return VAError::FS_PTR_TO_BOOT_BLOCK;
+            case FSBlockType::ROOT_BLOCK:       return VAError::FS_PTR_TO_ROOT_BLOCK;
+            case FSBlockType::BITMAP_BLOCK:     return VAError::FS_PTR_TO_BITMAP_BLOCK;
+            case FSBlockType::BITMAP_EXT_BLOCK: return VAError::FS_PTR_TO_BITMAP_EXT_BLOCK;
+            case FSBlockType::USERDIR_BLOCK:    return VAError::FS_PTR_TO_USERDIR_BLOCK;
+            case FSBlockType::FILEHEADER_BLOCK: return VAError::FS_PTR_TO_FILEHEADER_BLOCK;
+            case FSBlockType::FILELIST_BLOCK:   return VAError::FS_PTR_TO_FILELIST_BLOCK;
+            case FSBlockType::DATA_BLOCK_OFS:   return VAError::FS_PTR_TO_DATA_BLOCK;
+            case FSBlockType::DATA_BLOCK_FFS:   return VAError::FS_PTR_TO_DATA_BLOCK;
+            default:                  return VAError::FS_PTR_TO_UNKNOWN_BLOCK;
         }
     }
 
-    return ErrorCode::OK;
+    return VAError::OK;
 }
 
 isize

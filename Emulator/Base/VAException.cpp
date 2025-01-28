@@ -14,115 +14,109 @@
 
 namespace vamiga {
 
-Error::Error(ErrorCode code, const string &s)
+VAException::VAException(VAError code, const string &s)
 {
     data = i64(code);
     
     switch (code) {
             
-        case ErrorCode::OK:
+        case VAError::OK:
             fatalError;
             break;
             
-        case ErrorCode::POWERED_OFF:
+        case VAError::POWERED_OFF:
             description = "The emulator is powered off.";
             break;
 
-        case ErrorCode::POWERED_ON:
+        case VAError::POWERED_ON:
             description = "The emulator is powered on.";
             break;
 
-        case ErrorCode::DEBUG_OFF:
+        case VAError::DEBUG_OFF:
             description = "Debug mode is switched off.";
             break;
 
-        case ErrorCode::RUNNING:
+        case VAError::RUNNING:
             description = "The emulator is running.";
             break;
 
-        case ErrorCode::OPT_UNSUPPORTED:
+        case VAError::OPT_UNSUPPORTED:
             description = s == "" ? "This option is not supported yet." : s;
             break;
             
-        case ErrorCode::OPT_INV_ARG:
+        case VAError::OPT_INV_ARG:
             description = "Invalid argument. Expected: " + s;
             break;
 
-        case ErrorCode::OPT_INV_ID:
+        case VAError::OPT_INV_ID:
             description = "Invalid component ID. Expected: " + s;
             break;
 
-        case ErrorCode::OPT_LOCKED:
+        case VAError::OPT_LOCKED:
             description = "This option is locked because the Amiga is powered on.";
             break;
 
-        case ErrorCode::INVALID_KEY:
+        case VAError::INVALID_KEY:
             description = "Invalid key: " + s + ".";
             break;
             
-        case ErrorCode::SYNTAX:
+        case VAError::SYNTAX:
             description = "Syntax error in line " + s + ".";
             break;
 
-        case ErrorCode::CPU_UNSUPPORTED:
+        case VAError::CPU_UNSUPPORTED:
             description = "CPU revision is not supported yet.";
             break;
 
-        case ErrorCode::GUARD_NOT_FOUND:
+        case VAError::GUARD_NOT_FOUND:
             description = "Entry " + s + " not found.";
             break;
 
-        case ErrorCode::GUARD_ALREADY_SET:
+        case VAError::GUARD_ALREADY_SET:
             description = "Target " + s + " is already observed.";
             break;
 
-        case ErrorCode::BP_NOT_FOUND:
+        case VAError::BP_NOT_FOUND:
             description = "Breakpoint " + s + " not found.";
             break;
             
-        case ErrorCode::BP_ALREADY_SET:
+        case VAError::BP_ALREADY_SET:
             description = "A breakpoint at " + s + " is already set.";
             break;
             
-        case ErrorCode::WP_NOT_FOUND:
+        case VAError::WP_NOT_FOUND:
             description = "Watchpoint " + s + " not found.";
             break;
 
-        case ErrorCode::WP_ALREADY_SET:
+        case VAError::WP_ALREADY_SET:
             description = "A watchpoint at " + s + " is already set.";
             break;
 
-        case ErrorCode::CP_NOT_FOUND:
+        case VAError::CP_NOT_FOUND:
             description = "Catchpoint " + s + " not found.";
             break;
 
-        case ErrorCode::CP_ALREADY_SET:
+        case VAError::CP_ALREADY_SET:
             description = "This catchpoint is already set.";
             break;
 
-        /*
-        case ErrorCode::CP_CANT_CATCH:
-            description = "Exception vector " + s + " cannot be catched.";
-            break;
-        */
-
-        case ErrorCode::DIR_NOT_FOUND:
+        case VAError::DIR_NOT_FOUND:
             description = "Folder \"" + s + "\" not found.";
             break;
 
-        case ErrorCode::DIR_ACCESS_DENIED:
+        case VAError::DIR_ACCESS_DENIED:
             description = "Unable to access folder \"" + s + "\". Permission denied.";
             break;
 
-        case ErrorCode::FILE_NOT_FOUND:
+        case VAError::FILE_NOT_FOUND:
             description = "File \"" + s + "\" not found.";
             break;
 
-        case ErrorCode::FILE_EXISTS:
+        case VAError::FILE_EXISTS:
             description = "File \"" + s + "\" already exists.";
             break;
 
-        case ErrorCode::FILE_IS_DIRECTORY:
+        case VAError::FILE_IS_DIRECTORY:
             if (s.empty()) {
                 description = "The selected file is a directory.";
             } else {
@@ -130,95 +124,95 @@ Error::Error(ErrorCode code, const string &s)
             }
             break;
 
-        case ErrorCode::FILE_ACCESS_DENIED:
+        case VAError::FILE_ACCESS_DENIED:
             description = "Unable to access file \"" + s + "\". Permission denied.";
             break;
 
-        case ErrorCode::FILE_TYPE_MISMATCH:
+        case VAError::FILE_TYPE_MISMATCH:
             description = "The file content and the file type do not match.";
             break;
             
-        case ErrorCode::FILE_CANT_READ:
+        case VAError::FILE_CANT_READ:
             description = "Failed to read from file \"" + s + "\".";
             break;
             
-        case ErrorCode::FILE_CANT_WRITE:
+        case VAError::FILE_CANT_WRITE:
             description = "Failed to write to file \"" + s + "\".";
             break;
             
-        case ErrorCode::FILE_CANT_CREATE:
+        case VAError::FILE_CANT_CREATE:
             description = "Failed to create file \"" + s + "\".";
             break;
             
-        case ErrorCode::OUT_OF_MEMORY:
+        case VAError::OUT_OF_MEMORY:
             description = "Out of memory.";
             break;
             
-        case ErrorCode::CHIP_RAM_MISSING:
+        case VAError::CHIP_RAM_MISSING:
             description = "No Chip RAM installed.";
             break;
             
-        case ErrorCode::CHIP_RAM_LIMIT:
+        case VAError::CHIP_RAM_LIMIT:
             description = "The selected Agnus revision is not able to address";
             description += " the selected amount of Chip RAM.";
             break;
 
-        case ErrorCode::AROS_RAM_LIMIT:
+        case VAError::AROS_RAM_LIMIT:
             description = "The Aros Kickstart requires at least 1 MB of memory.";
             break;
 
-        case ErrorCode::ROM_MISSING:
+        case VAError::ROM_MISSING:
             description = "No Rom installed.";
             break;
             
-        case ErrorCode::AROS_NO_EXTROM:
+        case VAError::AROS_NO_EXTROM:
             description = "No Extension Rom installed.";
             break;
 
-        case ErrorCode::WT_BLOCKED:
+        case VAError::WT_BLOCKED:
             description = "The storage file for the selected hard drive is";
             description += " being used by another emulator instance. It cannot ";
             description += " be shared among multiple emulator instances.";
             break;
 
-        case ErrorCode::WT:
+        case VAError::WT:
             description = "Write through: " + s;
             break;
 
-        case ErrorCode::DISK_MISSING:
+        case VAError::DISK_MISSING:
             description = "No disk in drive.";
             break;
             
-        case ErrorCode::DISK_INCOMPATIBLE:
+        case VAError::DISK_INCOMPATIBLE:
             description = "This disk is not compatible with the selected drive.";
             break;
             
-        case ErrorCode::DISK_INVALID_DIAMETER:
+        case VAError::DISK_INVALID_DIAMETER:
             description = "Invalid disk diameter.";
             break;
 
-        case ErrorCode::DISK_INVALID_DENSITY:
+        case VAError::DISK_INVALID_DENSITY:
             description = "Invalid disk density.";
             break;
 
-        case ErrorCode::DISK_INVALID_LAYOUT:
+        case VAError::DISK_INVALID_LAYOUT:
             description = "The disk density and disk diameter do not match.";
             break;
 
-        case ErrorCode::DISK_WRONG_SECTOR_COUNT:
+        case VAError::DISK_WRONG_SECTOR_COUNT:
             description = "Unable to decode the MFM bit stream (wrong sector count).";
             break;
             
-        case ErrorCode::DISK_INVALID_SECTOR_NUMBER:
+        case VAError::DISK_INVALID_SECTOR_NUMBER:
             description = "Unable to decode the MFM bit stream (invalid sector number).";
             break;
 
-        case ErrorCode::HDR_TOO_LARGE:
+        case VAError::HDR_TOO_LARGE:
             description = "vAmiga supports hard drives with a maximum capacity of ";
             description += "504 MB.";
             break;
 
-        case ErrorCode::HDR_UNSUPPORTED_CYL_COUNT:
+        case VAError::HDR_UNSUPPORTED_CYL_COUNT:
             description = "The geometry of this drive is not supported. ";
             description += "vAmiga supports hard drives with ";
             description += "at least " + std::to_string(HDR_C_MIN) + " and ";
@@ -226,7 +220,7 @@ Error::Error(ErrorCode code, const string &s)
             description += "This drive has " + s + " cylinders.";
             break;
             
-        case ErrorCode::HDR_UNSUPPORTED_HEAD_COUNT:
+        case VAError::HDR_UNSUPPORTED_HEAD_COUNT:
             description = "The geometry of this drive is not supported. ";
             description += "vAmiga supports hard drives with ";
             description += "at least " + std::to_string(HDR_H_MIN) + " and ";
@@ -234,7 +228,7 @@ Error::Error(ErrorCode code, const string &s)
             description += "The drive has " + s + " heads.";
             break;
 
-        case ErrorCode::HDR_UNSUPPORTED_SEC_COUNT:
+        case VAError::HDR_UNSUPPORTED_SEC_COUNT:
             description = "The geometry of this drive is not supported. ";
             description += "vAmiga only supports hard drives with ";
             description += "at least " + std::to_string(HDR_S_MIN) + " and ";
@@ -242,184 +236,184 @@ Error::Error(ErrorCode code, const string &s)
             description += "The drive stores " + s + " sectors per track.";
             break;
 
-        case ErrorCode::HDR_UNSUPPORTED_BSIZE:
+        case VAError::HDR_UNSUPPORTED_BSIZE:
             description = "The geometry of this drive is not supported. ";
             description += "vAmiga only supports hard drives with a ";
             description += "block size of 512 bytes. ";
             description += "The drive stores " + s + " bytes per block.";
             break;
 
-        case ErrorCode::HDR_UNKNOWN_GEOMETRY:
+        case VAError::HDR_UNKNOWN_GEOMETRY:
             description = "vAmiga failed to derive to geometry of this drive.";
             break;
 
-        case ErrorCode::HDR_UNMATCHED_GEOMETRY:
+        case VAError::HDR_UNMATCHED_GEOMETRY:
             description = "The drive geometry doesn't match the hard drive capacity.";
             break;
 
-        case ErrorCode::HDR_UNPARTITIONED:
+        case VAError::HDR_UNPARTITIONED:
             description = "The hard drive has no partitions.";
             break;
 
-        case ErrorCode::HDR_CORRUPTED_PTABLE:
+        case VAError::HDR_CORRUPTED_PTABLE:
             description = "Invalid partition table.";
             break;
 
-        case ErrorCode::HDR_CORRUPTED_FSH:
+        case VAError::HDR_CORRUPTED_FSH:
             description = "Invalid file system header block.";
             break;
 
-        case ErrorCode::HDR_UNSUPPORTED:
+        case VAError::HDR_UNSUPPORTED:
             description = "The hard drive is encoded in an unknown or unsupported format.";
             break;
 
-        case ErrorCode::HDC_INIT:
+        case VAError::HDC_INIT:
             description = "Failed to initialize hard drive: " + s;
             break;
 
-        case ErrorCode::SNAP_TOO_OLD:
+        case VAError::SNAP_TOO_OLD:
             description = "The snapshot was created with an older version of vAmiga";
             description += " and is incompatible with this release.";
             break;
 
-        case ErrorCode::SNAP_TOO_NEW:
+        case VAError::SNAP_TOO_NEW:
             description = "The snapshot was created with a newer version of vAmiga";
             description += " and is incompatible with this release.";
             break;
 
-        case ErrorCode::SNAP_IS_BETA:
+        case VAError::SNAP_IS_BETA:
             description = "The snapshot was created with a beta version of vAmiga";
             description += " and is incompatible with this release.";
             break;
 
-        case ErrorCode::SNAP_CORRUPTED:
+        case VAError::SNAP_CORRUPTED:
             description = "The snapshot data is corrupted and has put the";
             description += " emulator into an inconsistent state.";
             break;
 
-        case ErrorCode::DMS_CANT_CREATE:
+        case VAError::DMS_CANT_CREATE:
             description = "Failed to extract the DMS archive.";
             break;
 
-        case ErrorCode::EXT_FACTOR5:
+        case VAError::EXT_FACTOR5:
             description = "The file is encoded in an outdated format that was";
             description += " introduced by Factor 5 to distribute Turrican images.";
             description += " The format has no relevance today and is not supported";
             description += " by the emulator.";
             break;
 
-        case ErrorCode::EXT_INCOMPATIBLE:
+        case VAError::EXT_INCOMPATIBLE:
             description = "This file utilizes encoding features of the extended ";
             description += " ADF format that are not supported by the emulator yet.";
             break;
 
-        case ErrorCode::EXT_CORRUPTED:
+        case VAError::EXT_CORRUPTED:
             description = "The disk encoder failed to extract the disk due to ";
             description += " corrupted or inconsistend file data.";
             break;
             
-        case ErrorCode::MISSING_ROM_KEY:
+        case VAError::MISSING_ROM_KEY:
             description = "No \"rom.key\" file found.";
             break;
 
-        case ErrorCode::INVALID_ROM_KEY:
+        case VAError::INVALID_ROM_KEY:
             description = "Invalid Rom key.";
             break;
 
-        case ErrorCode::REC_LAUNCH:
+        case VAError::REC_LAUNCH:
             description = s;
             break;
 
-        case ErrorCode::REG_READ_ONLY:
+        case VAError::REG_READ_ONLY:
             description = s + " is a read-only register";
             break;
 
-        case ErrorCode::REG_WRITE_ONLY:
+        case VAError::REG_WRITE_ONLY:
             description = s + " is a write-only register";
             break;
 
-        case ErrorCode::REG_UNUSED:
+        case VAError::REG_UNUSED:
             description = "Register " + s + " is unused";
             break;
 
-        case ErrorCode::ADDR_UNALIGNED:
+        case VAError::ADDR_UNALIGNED:
             description = "Address not aligned";
             break;
 
-        case ErrorCode::OSDB:
+        case VAError::OSDB:
             description = "OS Debugger: " + s;
             break;
             
-        case ErrorCode::HUNK_BAD_COOKIE:
+        case VAError::HUNK_BAD_COOKIE:
             description = "Invalid magic cookie.";
             break;
 
-        case ErrorCode::HUNK_BAD_HEADER:
+        case VAError::HUNK_BAD_HEADER:
             description = "Bad header.";
             break;
 
-        case ErrorCode::HUNK_NO_SECTIONS:
+        case VAError::HUNK_NO_SECTIONS:
             description = "No hunks found.";
             break;
 
-        case ErrorCode::HUNK_UNSUPPORTED:
+        case VAError::HUNK_UNSUPPORTED:
             description = "Unsupported hunk: " + s;
             break;
 
-        case ErrorCode::HUNK_CORRUPTED:
+        case VAError::HUNK_CORRUPTED:
             description = "Corrupted hunk structure.";
             break;
 
-        case ErrorCode::FS_UNSUPPORTED:
+        case VAError::FS_UNSUPPORTED:
             description = "Unsupported file system.";
             break;
 
-        case ErrorCode::FS_UNFORMATTED:
+        case VAError::FS_UNFORMATTED:
             description = "Unformatted device.";
             break;
 
-        case ErrorCode::FS_WRONG_BSIZE:
+        case VAError::FS_WRONG_BSIZE:
             description = "Invalid block size.";
             break;
 
-        case ErrorCode::FS_WRONG_DOS_TYPE:
+        case VAError::FS_WRONG_DOS_TYPE:
             description = "Wrong DOS type.";
             break;
 
-        case ErrorCode::FS_WRONG_CAPACITY:
+        case VAError::FS_WRONG_CAPACITY:
             description = "Wrong file system capacity.";
             break;
 
-        case ErrorCode::FS_HAS_CYCLES:
+        case VAError::FS_HAS_CYCLES:
             description = "Cyclic reference chain detected.";
             break;
 
-        case ErrorCode::FS_CORRUPTED:
+        case VAError::FS_CORRUPTED:
             description = "Corrupted file system.";
             break;
 
-        case ErrorCode::FS_DIR_NOT_EMPTY:
+        case VAError::FS_DIR_NOT_EMPTY:
             description = "Directory is not empty.";
             break;
 
-        case ErrorCode::FS_CANNOT_CREATE_DIR:
+        case VAError::FS_CANNOT_CREATE_DIR:
             description = "Unable to create directory.";
             break;
 
-        case ErrorCode::FS_CANNOT_CREATE_FILE:
+        case VAError::FS_CANNOT_CREATE_FILE:
             description = "Unable to create file.";
             break;
 
         default:
             description =
             "Error code " + std::to_string(data) +
-            " (" + ErrorCodeEnum::key((ErrorCode)data) + ").";
+            " (" + VAErrorEnum::key((VAError)data) + ").";
             break;
     }
 }
 
 const char *
-Error::what() const throw()
+VAException::what() const throw()
 {
     return description.c_str();
 }

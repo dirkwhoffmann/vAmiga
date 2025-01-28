@@ -139,7 +139,7 @@ DebugConsole::initCommands(RetroShellCmd &root)
                      [this](Arguments& argv, long value) {
 
                 auto addr = parseAddr(argv[0]);
-                if (IS_ODD(addr)) throw Error(ErrorCode::ADDR_UNALIGNED);
+                if (IS_ODD(addr)) throw VAException(VAError::ADDR_UNALIGNED);
                 cpu.breakpoints.setAt(addr, parseNum(argv, 1, 0));
             });
 
@@ -208,7 +208,7 @@ DebugConsole::initCommands(RetroShellCmd &root)
                      [this](Arguments& argv, long value) {
 
                 auto nr = parseNum(argv[0]);
-                if (nr < 0 || nr > 255) throw Error(ErrorCode::OPT_INV_ARG, "0...255");
+                if (nr < 0 || nr > 255) throw VAException(VAError::OPT_INV_ARG, "0...255");
                 cpu.catchpoints.setAt(u32(nr), parseNum(argv, 1, 0));
             });
 
@@ -217,7 +217,7 @@ DebugConsole::initCommands(RetroShellCmd &root)
                      [this](Arguments& argv, long value) {
 
                 auto nr = parseNum(argv[0]);
-                if (nr < 1 || nr > 7) throw Error(ErrorCode::OPT_INV_ARG, "1...7");
+                if (nr < 1 || nr > 7) throw VAException(VAError::OPT_INV_ARG, "1...7");
                 cpu.catchpoints.setAt(u32(nr + 24), parseNum(argv, 1, 0));
             });
 
@@ -226,7 +226,7 @@ DebugConsole::initCommands(RetroShellCmd &root)
                      [this](Arguments& argv, long value) {
 
                 auto nr = parseNum(argv[0]);
-                if (nr < 0 || nr > 15) throw Error(ErrorCode::OPT_INV_ARG, "0...15");
+                if (nr < 0 || nr > 15) throw VAException(VAError::OPT_INV_ARG, "0...15");
                 cpu.catchpoints.setAt(u32(nr + 32), parseNum(argv, 1, 0));
             });
 
@@ -261,7 +261,7 @@ DebugConsole::initCommands(RetroShellCmd &root)
                      [this](Arguments& argv, long value) {
 
                 auto addr = parseAddr(argv[0]);
-                if (IS_ODD(addr)) throw Error(ErrorCode::ADDR_UNALIGNED);
+                if (IS_ODD(addr)) throw VAException(VAError::ADDR_UNALIGNED);
                 copper.debugger.breakpoints.setAt(addr, parseNum(argv, 1, 0));
             });
 
@@ -296,7 +296,7 @@ DebugConsole::initCommands(RetroShellCmd &root)
                      [this](Arguments& argv, long value) {
 
                 auto addr = parseAddr(argv[0]);
-                if (IS_ODD(addr)) throw Error(ErrorCode::ADDR_UNALIGNED);
+                if (IS_ODD(addr)) throw VAException(VAError::ADDR_UNALIGNED);
                 copper.debugger.watchpoints.setAt(addr, parseNum(argv, 1, 0));
             });
 
@@ -631,7 +631,7 @@ DebugConsole::initCommands(RetroShellCmd &root)
                         case 2: dump(amiga.agnus.copper, Category::List2); break;
 
                         default:
-                            throw Error(ErrorCode::OPT_INV_ARG, "1 or 2");
+                            throw VAException(VAError::OPT_INV_ARG, "1 or 2");
                     }
                 });
             }

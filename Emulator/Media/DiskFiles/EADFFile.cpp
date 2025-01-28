@@ -69,7 +69,7 @@ EADFFile::init(FloppyDisk &disk)
 void
 EADFFile::init(FloppyDrive &drive)
 {
-    if (drive.disk == nullptr) throw Error(ErrorCode::DISK_MISSING);
+    if (drive.disk == nullptr) throw VAException(VAError::DISK_MISSING);
     init(*drive.disk);
 }
 
@@ -99,19 +99,19 @@ EADFFile::finalizeRead()
     if (std::strcmp((char *)data.ptr, "UAE-1ADF") != 0) {
         
         warn("Only UAE-1ADF files are supported\n");
-        throw Error(ErrorCode::EXT_FACTOR5);
+        throw VAException(VAError::EXT_FACTOR5);
     }
     
     if (numTracks < 160 || numTracks > 168) {
 
         warn("Invalid number of tracks\n");
-        throw Error(ErrorCode::EXT_CORRUPTED);
+        throw VAException(VAError::EXT_CORRUPTED);
     }
 
     if (data.size < proposedHeaderSize() || data.size != proposedFileSize()) {
         
         warn("File size mismatch\n");
-        throw Error(ErrorCode::EXT_CORRUPTED);
+        throw VAException(VAError::EXT_CORRUPTED);
     }
 
     for (isize i = 0; i < numTracks; i++) {
@@ -119,7 +119,7 @@ EADFFile::finalizeRead()
         if (typeOfTrack(i) != 0 && typeOfTrack(i) != 1) {
             
             warn("Unsupported track format\n");
-            throw Error(ErrorCode::EXT_INCOMPATIBLE);
+            throw VAException(VAError::EXT_INCOMPATIBLE);
         }
 
         if (typeOfTrack(i) == 0) {
@@ -127,20 +127,20 @@ EADFFile::finalizeRead()
             if (usedBitsForTrack(i) != 11 * 512 * 8) {
 
                 warn("Unsupported standard track size\n");
-                throw Error(ErrorCode::EXT_CORRUPTED);
+                throw VAException(VAError::EXT_CORRUPTED);
             }
         }
 
         if (usedBitsForTrack(i) > availableBytesForTrack(i) * 8) {
             
             warn("Corrupted length information\n");
-            throw Error(ErrorCode::EXT_CORRUPTED);
+            throw VAException(VAError::EXT_CORRUPTED);
         }
 
         if (usedBitsForTrack(i) % 8) {
             
             warn("Track length is not a multiple of 8\n");
-            throw Error(ErrorCode::EXT_INCOMPATIBLE);
+            throw VAException(VAError::EXT_INCOMPATIBLE);
         }
     }
     

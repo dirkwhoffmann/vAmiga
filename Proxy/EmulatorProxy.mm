@@ -98,15 +98,15 @@ NSString *EventSlotName(NSInteger slot)
 
     if (self = [super init]) {
         
-        errorCode = ErrorCode::OK;
+        errorCode = VAError::OK;
         what = @"";
     }
     return self;
 }
 
-- (void)save:(const Error &)exception
+- (void)save:(const VAException &)exception
 {
-    errorCode = ErrorCode(exception.data);
+    errorCode = VAError(exception.data);
     what = @(exception.what());
 }
 
@@ -153,13 +153,13 @@ NSString *EventSlotName(NSInteger slot)
 - (void)load:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self props]->load([url fileSystemRepresentation]); }
-    catch (Error &error) { [ex save:error]; }
+    catch (VAException &error) { [ex save:error]; }
 }
 
 - (void)save:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self props]->save([url fileSystemRepresentation]); }
-    catch (Error &error) { [ex save:error]; }
+    catch (VAException &error) { [ex save:error]; }
 }
 
 - (void)register:(NSString *)key value:(NSString *)value
@@ -513,7 +513,7 @@ NSString *EventSlotName(NSInteger slot)
 - (void)loadRom:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->loadRom(*(MediaFile *)proxy->obj); }
-    catch (Error &error) { [ex save:error]; }
+    catch (VAException &error) { [ex save:error]; }
 }
 
 - (void)loadRomFromBuffer:(NSData *)data exception:(ExceptionWrapper *)ex
@@ -522,13 +522,13 @@ NSString *EventSlotName(NSInteger slot)
     const u8 *bytes = (const u8 *)[data bytes];
     
     try { return [self mem]->loadRom(bytes, [data length]); }
-    catch (Error &error) { [ex save:error]; }
+    catch (VAException &error) { [ex save:error]; }
 }
 
 - (void)loadRomFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->loadRom([url fileSystemRepresentation]); }
-    catch (Error &error) { [ex save:error]; }
+    catch (VAException &error) { [ex save:error]; }
 }
 
 - (void)deleteExt
@@ -544,7 +544,7 @@ NSString *EventSlotName(NSInteger slot)
 - (void)loadExt:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->loadExt(*(MediaFile *)proxy->obj); }
-    catch (Error &error) { [ex save:error]; }
+    catch (VAException &error) { [ex save:error]; }
 }
 
 - (void)loadExtFromBuffer:(NSData *)data exception:(ExceptionWrapper *)ex
@@ -553,31 +553,31 @@ NSString *EventSlotName(NSInteger slot)
     const u8 *bytes = (const u8 *)[data bytes];
     
     try { return [self mem]->loadExt(bytes, [data length]); }
-    catch (Error &error) { [ex save:error]; }
+    catch (VAException &error) { [ex save:error]; }
 }
 
 - (void)loadExtFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->loadExt([url fileSystemRepresentation]); }
-    catch (Error &error) { [ex save:error]; }
+    catch (VAException &error) { [ex save:error]; }
 }
 
 - (void)saveRom:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->saveRom([url fileSystemRepresentation]); }
-    catch (Error &error) { [ex save:error]; }
+    catch (VAException &error) { [ex save:error]; }
 }
 
 - (void)saveWom:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->saveWom([url fileSystemRepresentation]); }
-    catch (Error &error) { [ex save:error]; }
+    catch (VAException &error) { [ex save:error]; }
 }
 
 - (void)saveExt:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self mem]->saveExt([url fileSystemRepresentation]); }
-    catch (Error &error) { [ex save:error]; }
+    catch (VAException &error) { [ex save:error]; }
 }
 
 - (MemSrc)memSrc:(Accessor)accessor addr:(NSInteger)addr
@@ -949,7 +949,7 @@ NSString *EventSlotName(NSInteger slot)
     auto y2 = isize(y1 + (int)rect.size.height);
     
     try { return [self recorder]->startRecording(x1, y1, x2, y2, rate, aspectX, aspectY); }
-    catch (Error &error) { [ex save:error]; }
+    catch (VAException &error) { [ex save:error]; }
 }
 
 - (void)stopRecording
@@ -1355,13 +1355,13 @@ NSString *EventSlotName(NSInteger slot)
 - (void)insertBlankDisk:(FSVolumeType)fs bootBlock:(BootBlockId)bb name:(NSString *)name exception:(ExceptionWrapper *)ex
 {
     try { return [self drive]->insertBlankDisk(fs, bb, [name UTF8String]); }
-    catch (Error &error) { [ex save:error]; }
+    catch (VAException &error) { [ex save:error]; }
 }
 
 - (void)insertMedia:(MediaFileProxy *)proxy protected:(BOOL)wp exception:(ExceptionWrapper *)ex
 {
     try { [self drive]->insertMedia(*(MediaFile *)proxy->obj, wp); }
-    catch (Error &error) { [ex save:error]; }
+    catch (VAException &error) { [ex save:error]; }
 }
 
 - (void)eject
@@ -1372,7 +1372,7 @@ NSString *EventSlotName(NSInteger slot)
 - (MediaFileProxy *)exportDisk:(FileType)type exception:(ExceptionWrapper *)ex
 {
     try { return [MediaFileProxy make:[self drive]->exportDisk(type)]; }
-    catch (Error &error) { [ex save:error]; }
+    catch (VAException &error) { [ex save:error]; }
     return nil;
 }
 
@@ -1434,7 +1434,7 @@ NSString *EventSlotName(NSInteger slot)
         auto dev = new MutableFileSystem(*file);
         return [self make:dev];
 
-    }  catch (Error &error) {
+    }  catch (VAException &error) {
 
         [ex save:error];
         return nil;
@@ -1449,7 +1449,7 @@ NSString *EventSlotName(NSInteger slot)
         auto dev = new MutableFileSystem(*file, nr);
         return [self make:dev];
 
-    }  catch (Error &error) {
+    }  catch (VAException &error) {
 
         [ex save:error];
         return nil;
@@ -1557,7 +1557,7 @@ NSString *EventSlotName(NSInteger slot)
     return [self fs]->check(strict);
 }
 
-- (ErrorCode)check:(NSInteger)nr
+- (VAError)check:(NSInteger)nr
                pos:(NSInteger)pos
           expected:(unsigned char *)exp
             strict:(BOOL)strict
@@ -1603,7 +1603,7 @@ NSString *EventSlotName(NSInteger slot)
 - (void)export:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self fs]->exportDirectory(string([path fileSystemRepresentation])); }
-    catch (Error &error) { [ex save:error]; }
+    catch (VAException &error) { [ex save:error]; }
 }
 
 - (FSBlockType)getDisplayType:(NSInteger)column
@@ -1739,7 +1739,7 @@ NSString *EventSlotName(NSInteger slot)
                    exception:(ExceptionWrapper *)ex
 {
     try { return [self make: MediaFile::make([path fileSystemRepresentation])]; }
-    catch (Error &error) { [ex save:error]; return nil; }
+    catch (VAException &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithFile:(NSString *)path
@@ -1747,7 +1747,7 @@ NSString *EventSlotName(NSInteger slot)
                    exception:(ExceptionWrapper *)ex
 {
     try { return [self make: MediaFile::make([path fileSystemRepresentation], type)]; }
-    catch (Error &error) { [ex save:error]; return nil; }
+    catch (VAException &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithBuffer:(const void *)buf length:(NSInteger)len
@@ -1755,7 +1755,7 @@ NSString *EventSlotName(NSInteger slot)
                      exception:(ExceptionWrapper *)ex
 {
     try { return [self make: MediaFile::make((u8 *)buf, len, type)]; }
-    catch (Error &error) { [ex save:error]; return nil; }
+    catch (VAException &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithAmiga:(EmulatorProxy *)proxy
@@ -1770,7 +1770,7 @@ NSString *EventSlotName(NSInteger slot)
 {
     auto drive = (FloppyDriveAPI *)proxy->obj;
     try { return [self make: MediaFile::make(*drive, type)]; }
-    catch (Error &error) { [ex save:error]; return nil; }
+    catch (VAException &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithHardDrive:(HardDriveProxy *)proxy
@@ -1779,7 +1779,7 @@ NSString *EventSlotName(NSInteger slot)
 {
     auto drive = (HardDriveAPI *)proxy->obj;
     try { return [self make: MediaFile::make(*drive, type)]; }
-    catch (Error &error) { [ex save:error]; return nil; }
+    catch (VAException &error) { [ex save:error]; return nil; }
 }
 
 + (instancetype)makeWithFileSystem:(FileSystemProxy *)proxy
@@ -1788,7 +1788,7 @@ NSString *EventSlotName(NSInteger slot)
 {
     auto fs = (MutableFileSystem *)proxy->obj;
     try { return [self make: MediaFile::make(*fs, type)]; }
-    catch (Error &error) { [ex save:error]; return nil; }
+    catch (VAException &error) { [ex save:error]; return nil; }
 }
 
 - (FileType)type
@@ -1826,13 +1826,13 @@ NSString *EventSlotName(NSInteger slot)
 - (void)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { [self file]->writeToFile(string([path fileSystemRepresentation])); }
-    catch (Error &err) { [ex save:err]; }
+    catch (VAException &err) { [ex save:err]; }
 }
 
 - (void)writeToFile:(NSString *)path partition:(NSInteger)part exception:(ExceptionWrapper *)ex
 {
     try { [self file]->writePartitionToFile(string([path fileSystemRepresentation]), part); }
-    catch (Error &err) { [ex save:err]; }
+    catch (VAException &err) { [ex save:err]; }
 }
 
 - (NSImage *)previewImage
@@ -1968,7 +1968,7 @@ NSString *EventSlotName(NSInteger slot)
 {
     try {
         [self drive]->attach([url fileSystemRepresentation]);
-    }  catch (Error &error) {
+    }  catch (VAException &error) {
         [ex save:error];
     }
 }
@@ -1977,7 +1977,7 @@ NSString *EventSlotName(NSInteger slot)
 {
     try {
         [self drive]->attach(*(MediaFile *)proxy->obj);
-    }  catch (Error &error) {
+    }  catch (VAException &error) {
         [ex save:error];
     }
 }
@@ -1987,7 +1987,7 @@ NSString *EventSlotName(NSInteger slot)
 {
     try {
         [self drive]->attach(c, h, s, b);
-    }  catch (Error &error) {
+    }  catch (VAException &error) {
         [ex save:error];
     }
 }
@@ -1998,7 +1998,7 @@ NSString *EventSlotName(NSInteger slot)
 
     try {
         [self drive]->format(fs, str);
-    }  catch (Error &error) {
+    }  catch (VAException &error) {
         [ex save:error];
     }
 }
@@ -2007,7 +2007,7 @@ NSString *EventSlotName(NSInteger slot)
 {
     try {
         [self drive]->changeGeometry(c, h, s, b);
-    }  catch (Error &error) {
+    }  catch (VAException &error) {
         [ex save:error];
     }
 }
@@ -2034,14 +2034,14 @@ NSString *EventSlotName(NSInteger slot)
 - (void)writeToFile:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { return [self drive]->writeToFile([url fileSystemRepresentation]); }
-    catch (Error &error) { [ex save:error]; }
+    catch (VAException &error) { [ex save:error]; }
 }
 
 - (void)enableWriteThrough:(ExceptionWrapper *)ex
 {
     auto id = [self drive]->getInfo().nr;
     try { return [self drive]->emu->set(Opt::HDR_WRITE_THROUGH, true, { id }); }
-    catch (Error &error) { [ex save:error]; }
+    catch (VAException &error) { [ex save:error]; }
 }
 
 - (void)disableWriteThrough
@@ -2103,7 +2103,7 @@ NSString *EventSlotName(NSInteger slot)
 - (NSInteger)writeToFile:(NSString *)path exception:(ExceptionWrapper *)ex
 {
     try { return [self file]->writeToFile([path fileSystemRepresentation]); }
-    catch (Error &error) { [ex save:error]; return 0; }
+    catch (VAException &error) { [ex save:error]; return 0; }
 }
 
 - (void)dealloc
@@ -2226,7 +2226,7 @@ NSString *EventSlotName(NSInteger slot)
         MediaFile *file = [self amiga]->takeSnapshot();
         return [MediaFileProxy make:file];
         
-    } catch (Error &error) {
+    } catch (VAException &error) {
         
         return nil;
     }
@@ -2235,7 +2235,7 @@ NSString *EventSlotName(NSInteger slot)
 - (void)loadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try { [self amiga]->loadSnapshot(*[proxy file]); }
-    catch (Error &error) { [ex save:error]; }
+    catch (VAException &error) { [ex save:error]; }
 }
 
 - (NSString *)stateString
@@ -2479,7 +2479,7 @@ NSString *EventSlotName(NSInteger slot)
     try {
         [self emu]->set(opt, val);
         return true;
-    } catch (Error &exception) {
+    } catch (VAException &exception) {
         return false;
     }
 }
@@ -2489,7 +2489,7 @@ NSString *EventSlotName(NSInteger slot)
     try {
         [self emu]->set(opt, val ? 1 : 0);
         return true;
-    } catch (Error &exception) {
+    } catch (VAException &exception) {
         return false;
     }
 }
@@ -2499,7 +2499,7 @@ NSString *EventSlotName(NSInteger slot)
     try {
         [self emu]->set(opt, val, id);
         return true;
-    } catch (Error &exception) {
+    } catch (VAException &exception) {
         return false;
     }
 }
@@ -2509,7 +2509,7 @@ NSString *EventSlotName(NSInteger slot)
     try {
         [self emu]->set(opt, val ? 1 : 0, id);
         return true;
-    } catch (Error &exception) {
+    } catch (VAException &exception) {
         return false;
     }
 }
@@ -2519,7 +2519,7 @@ NSString *EventSlotName(NSInteger slot)
     try {
         [self emu]->set(opt, val, (long)id);
         return true;
-    } catch (Error &exception) {
+    } catch (VAException &exception) {
         return false;
     }
 }
@@ -2529,7 +2529,7 @@ NSString *EventSlotName(NSInteger slot)
     try {
         [self emu]->set(opt, val ? 1 : 0, (long)id);
         return true;
-    } catch (Error &exception) {
+    } catch (VAException &exception) {
         return false;
     }
 }
@@ -2547,7 +2547,7 @@ NSString *EventSlotName(NSInteger slot)
 - (void)isReady:(ExceptionWrapper *)ex
 {
     try { [self emu]->isReady(); }
-    catch (Error &error) { [ex save:error]; }
+    catch (VAException &error) { [ex save:error]; }
 }
 
 - (void)powerOn
@@ -2563,7 +2563,7 @@ NSString *EventSlotName(NSInteger slot)
 - (void)run:(ExceptionWrapper *)ex
 {
     try { [self emu]->run(); }
-    catch (Error &error) { [ex save:error]; }
+    catch (VAException &error) { [ex save:error]; }
 }
 
 - (void)pause
@@ -2634,7 +2634,7 @@ NSString *EventSlotName(NSInteger slot)
 - (void)exportConfig:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try { [self emu]->exportConfig([url fileSystemRepresentation]); }
-    catch (Error &error) { [ex save:error]; }
+    catch (VAException &error) { [ex save:error]; }
 }
 
 - (void)put:(Cmd)type

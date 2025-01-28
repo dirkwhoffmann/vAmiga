@@ -27,21 +27,6 @@ static constexpr int SNP_BETA       = 1;
 
 
 //
-// Build settings
-//
-
-#if defined(__clang__)
-    #define alwaysinline __attribute__((always_inline))
-#elif defined(__GNUC__) || defined(__GNUG__)
-    #define alwaysinline __attribute__((always_inline))
-#elif defined(_MSC_VER)
-    #define alwaysinline __forceinline
-#elif
-    #define alwaysinline inline
-#endif
-
-
-//
 // Video settings
 //
 

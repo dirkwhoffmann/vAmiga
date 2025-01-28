@@ -24,13 +24,13 @@ FloppyFile::make(const std::filesystem::path &path)
     FloppyFile *result = nullptr;
 
     if (!std::filesystem::exists(path)) {
-        throw Error(ErrorCode::FILE_NOT_FOUND, path);
+        throw VAException(VAError::FILE_NOT_FOUND, path);
     }
 
     Buffer<u8> buffer(path);
     
     if (buffer.empty()) {
-        throw Error(ErrorCode::FILE_CANT_READ, path);
+        throw VAException(VAError::FILE_CANT_READ, path);
     }
 
     switch (type(path)) {
@@ -42,7 +42,7 @@ FloppyFile::make(const std::filesystem::path &path)
         case FileType::DIR:  result = new Folder(path);
 
         default:
-            throw Error(ErrorCode::FILE_TYPE_MISMATCH);
+            throw VAException(VAError::FILE_TYPE_MISMATCH);
     }
 
     result->path = path;
@@ -50,7 +50,7 @@ FloppyFile::make(const std::filesystem::path &path)
 
     /*
     std::ifstream stream(path, std::ifstream::binary);
-    if (!stream.is_open()) throw Error(ErrorCode::FILE_NOT_FOUND, path);
+    if (!stream.is_open()) throw Error(VAError::FILE_NOT_FOUND, path);
     
     switch (type(path)) {
             
@@ -64,7 +64,7 @@ FloppyFile::make(const std::filesystem::path &path)
             break;
     }
 
-    throw Error(ErrorCode::FILE_TYPE_MISMATCH);
+    throw Error(VAError::FILE_TYPE_MISMATCH);
     */
 }
 

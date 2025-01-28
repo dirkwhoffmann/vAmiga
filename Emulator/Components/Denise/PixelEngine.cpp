@@ -100,33 +100,33 @@ PixelEngine::checkOption(Opt opt, i64 value)
         case Opt::MON_PALETTE:
 
             if (!PaletteEnum::isValid(value)) {
-                throw Error(ErrorCode::OPT_INV_ARG, PaletteEnum::keyList());
+                throw VAException(VAError::OPT_INV_ARG, PaletteEnum::keyList());
             }
             return;
 
         case Opt::MON_BRIGHTNESS:
 
             if (value < 0 || value > 100) {
-                throw Error(ErrorCode::OPT_INV_ARG, "0...100");
+                throw VAException(VAError::OPT_INV_ARG, "0...100");
             }
             return;
 
         case Opt::MON_CONTRAST:
 
             if (value < 0 || value > 100) {
-                throw Error(ErrorCode::OPT_INV_ARG, "0...100");
+                throw VAException(VAError::OPT_INV_ARG, "0...100");
             }
             return;
 
         case Opt::MON_SATURATION:
 
             if (value < 0 || value > 100) {
-                throw Error(ErrorCode::OPT_INV_ARG, "0...100");
+                throw VAException(VAError::OPT_INV_ARG, "0...100");
             }
             return;
 
         default:
-            throw(ErrorCode::OPT_UNSUPPORTED);
+            throw(VAError::OPT_UNSUPPORTED);
     }
 }
 

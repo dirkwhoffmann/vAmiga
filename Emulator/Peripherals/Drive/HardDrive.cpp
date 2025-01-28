@@ -135,7 +135,7 @@ HardDrive::init(const MediaFile &file)
 
     } catch (...) {
 
-        throw Error(ErrorCode::FILE_TYPE_MISMATCH);
+        throw VAException(VAError::FILE_TYPE_MISMATCH);
     }
 }
 
@@ -255,7 +255,7 @@ HardDrive::checkOption(Opt opt, i64 value)
         case Opt::HDR_TYPE:
 
             if (!HardDriveTypeEnum::isValid(value)) {
-                throw Error(ErrorCode::OPT_INV_ARG, HardDriveTypeEnum::keyList());
+                throw VAException(VAError::OPT_INV_ARG, HardDriveTypeEnum::keyList());
             }
             return;
 
@@ -269,7 +269,7 @@ HardDrive::checkOption(Opt opt, i64 value)
             return;
 
         default:
-            throw(ErrorCode::OPT_UNSUPPORTED);
+            throw(VAError::OPT_UNSUPPORTED);
     }
 }
 
@@ -281,7 +281,7 @@ HardDrive::setOption(Opt option, i64 value)
         case Opt::HDR_TYPE:
             
             if (!HardDriveTypeEnum::isValid(value)) {
-                throw Error(ErrorCode::OPT_INV_ARG, HardDriveTypeEnum::keyList());
+                throw VAException(VAError::OPT_INV_ARG, HardDriveTypeEnum::keyList());
             }
             config.type = (HardDriveType)value;
             return;
@@ -324,7 +324,7 @@ HardDrive::connect()
 
             debug(WT_DEBUG, "Success\n");
 
-        } catch (Error &e) {
+        } catch (VAException &e) {
 
             warn("%s\n", e.what());
         }
@@ -571,12 +571,12 @@ HardDrive::saveWriteThroughImage()
     
     // Only proceed if a storage file is given
     if (path.empty()) {
-        throw Error(ErrorCode::WT, "No storage path specified");
+        throw VAException(VAError::WT, "No storage path specified");
     }
     
     // Only proceed if no other emulator instance is using the storage file
     if (wtStream[objid].is_open()) {
-        throw Error(ErrorCode::WT_BLOCKED);
+        throw VAException(VAError::WT_BLOCKED);
     }
     
     // Delete the old storage file
@@ -585,13 +585,13 @@ HardDrive::saveWriteThroughImage()
     // Recreate the storage file with the contents of this disk
     writeToFile(path);
     if (!util::fileExists(path)) {
-        throw Error(ErrorCode::WT, "Can't create storage file");
+        throw VAException(VAError::WT, "Can't create storage file");
     }
 
     // Open file
     wtStream[objid].open(path, std::ios::binary | std::ios::in | std::ios::out);
     if (!wtStream[objid].is_open()) {
-        throw Error(ErrorCode::WT, "Can't open storage file");
+        throw VAException(VAError::WT, "Can't open storage file");
     }
 }
 
@@ -652,7 +652,7 @@ HardDrive::changeGeometry(const GeometryDescriptor &geometry)
 
     } else {
         
-        throw Error(ErrorCode::HDR_UNMATCHED_GEOMETRY);
+        throw VAException(VAError::HDR_UNMATCHED_GEOMETRY);
     }
 }
 

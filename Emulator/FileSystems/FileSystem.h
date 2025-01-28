@@ -227,14 +227,14 @@ public:
     FSErrorReport check(bool strict) const;
 
     // Checks a single byte in a certain block
-    ErrorCode check(Block nr, isize pos, u8 *expected, bool strict) const;
+    VAError check(Block nr, isize pos, u8 *expected, bool strict) const;
 
     // Checks if the block with the given number is part of the volume
     bool isBlockNumber(isize nr) const { return nr >= 0 && nr < numBlocks(); }
 
     // Checks if the type of a block matches one of the provides types
-    ErrorCode checkBlockType(Block nr, FSBlockType type) const;
-    ErrorCode checkBlockType(Block nr, FSBlockType type, FSBlockType altType) const;
+    VAError checkBlockType(Block nr, FSBlockType type) const;
+    VAError checkBlockType(Block nr, FSBlockType type, FSBlockType altType) const;
 
     // Checks if a certain block is corrupted
     bool isCorrupted(Block nr) { return getCorrupted(nr) != 0; }

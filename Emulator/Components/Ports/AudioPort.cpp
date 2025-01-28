@@ -176,7 +176,7 @@ AudioPort::checkOption(Opt opt, i64 value)
         case Opt::AUD_SAMPLING_METHOD:
 
             if (!SamplingMethodEnum::isValid(value)) {
-                throw Error(ErrorCode::OPT_INV_ARG, SamplingMethodEnum::keyList());
+                throw VAException(VAError::OPT_INV_ARG, SamplingMethodEnum::keyList());
             }
             return;
 
@@ -195,7 +195,7 @@ AudioPort::checkOption(Opt opt, i64 value)
             return;
 
         default:
-            throw(ErrorCode::OPT_UNSUPPORTED);
+            throw(VAError::OPT_UNSUPPORTED);
     }
 }
 

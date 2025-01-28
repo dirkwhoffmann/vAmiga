@@ -226,7 +226,7 @@
 		50AE6EE324D9B08C000AA367 /* PaulaRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE224D9B08C000AA367 /* PaulaRegs.cpp */; };
 		50AE6EE524D9B210000AA367 /* DeniseRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE424D9B210000AA367 /* DeniseRegs.cpp */; };
 		50AE6EE724D9B2C7000AA367 /* StateMachineRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE624D9B2C7000AA367 /* StateMachineRegs.cpp */; };
-		50AE6F8525D71FBE0004AFBC /* Error.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6F8425D71FBE0004AFBC /* Error.cpp */; };
+		50AE6F8525D71FBE0004AFBC /* VAException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6F8425D71FBE0004AFBC /* VAException.cpp */; };
 		50AE8B1C27833D2500991F89 /* DeniseInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE8B1B27833D2500991F89 /* DeniseInfo.cpp */; };
 		50AEBEC724D3D39D0037082D /* BlitterEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBEC624D3D39D0037082D /* BlitterEvents.cpp */; };
 		50AEBECC24D3D4540037082D /* CopperEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBECB24D3D4540037082D /* CopperEvents.cpp */; };
@@ -358,7 +358,7 @@
 		50FC048227DA190400C3E566 /* MsgQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF521EA1FBC0043D0E9 /* MsgQueue.cpp */; };
 		50FC048327DA190400C3E566 /* CoreObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0521EB218E002E32A6 /* CoreObject.cpp */; };
 		50FC048427DA190400C3E566 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5042F2DB26BE57E600126C05 /* Thread.cpp */; };
-		50FC048527DA190400C3E566 /* Error.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6F8425D71FBE0004AFBC /* Error.cpp */; };
+		50FC048527DA190400C3E566 /* VAException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6F8425D71FBE0004AFBC /* VAException.cpp */; };
 		50FC048627DA194200C3E566 /* MoiraDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE29240D418500155AE4 /* MoiraDebugger.cpp */; };
 		50FC048727DA194200C3E566 /* CPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508E7F932206CDBD00F7D88C /* CPU.cpp */; };
 		50FC048827DA194200C3E566 /* Moira.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE37240D41EE00155AE4 /* Moira.cpp */; };
@@ -846,7 +846,7 @@
 		50AE6EE224D9B08C000AA367 /* PaulaRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PaulaRegs.cpp; sourceTree = "<group>"; };
 		50AE6EE424D9B210000AA367 /* DeniseRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DeniseRegs.cpp; sourceTree = "<group>"; };
 		50AE6EE624D9B2C7000AA367 /* StateMachineRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StateMachineRegs.cpp; sourceTree = "<group>"; };
-		50AE6F8425D71FBE0004AFBC /* Error.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Error.cpp; sourceTree = "<group>"; };
+		50AE6F8425D71FBE0004AFBC /* VAException.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VAException.cpp; sourceTree = "<group>"; };
 		50AE8B1B27833D2500991F89 /* DeniseInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DeniseInfo.cpp; sourceTree = "<group>"; };
 		50AEBEC624D3D39D0037082D /* BlitterEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlitterEvents.cpp; sourceTree = "<group>"; };
 		50AEBECA24D3D40C0037082D /* CopperTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CopperTypes.h; sourceTree = "<group>"; };
@@ -1156,7 +1156,7 @@
 				5082D83A21EF891200CF7692 /* Constants.h */,
 				50A6145A260D14FE00A01428 /* ErrorTypes.h */,
 				5039924625B219FC0084B808 /* Error.h */,
-				50AE6F8425D71FBE0004AFBC /* Error.cpp */,
+				50AE6F8425D71FBE0004AFBC /* VAException.cpp */,
 				507215B025EAF62B00787591 /* Aliases.h */,
 				50EFB0C02C1812F50013B73C /* OptionTypes.h */,
 				50EFB0BD2C1812E20013B73C /* Option.h */,
@@ -2461,7 +2461,7 @@
 				507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */,
 				5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */,
 				50FC08AD27819CD100F0C567 /* AgnusInfo.cpp in Sources */,
-				50AE6F8525D71FBE0004AFBC /* Error.cpp in Sources */,
+				50AE6F8525D71FBE0004AFBC /* VAException.cpp in Sources */,
 				501B00152C629A0500749664 /* Beamtraps.cpp in Sources */,
 				50672CC02946100F004113F5 /* DebugConsole.cpp in Sources */,
 				5057E4C5243DF10A004005EB /* Primitives.swift in Sources */,
@@ -2643,7 +2643,7 @@
 				50CC209827ECCD6D00AEA010 /* OSDescriptors.cpp in Sources */,
 				50FC04FE27DA1AAB00C3E566 /* UART.cpp in Sources */,
 				50FC048E27DA195D00C3E566 /* PaulaRegs.cpp in Sources */,
-				50FC048527DA190400C3E566 /* Error.cpp in Sources */,
+				50FC048527DA190400C3E566 /* VAException.cpp in Sources */,
 				50FC048727DA194200C3E566 /* CPU.cpp in Sources */,
 				50FC04D327DA19F600C3E566 /* FSObjects.cpp in Sources */,
 				50627FD5286EBACA00F2A835 /* FrameBuffer.cpp in Sources */,

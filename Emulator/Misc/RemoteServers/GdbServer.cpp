@@ -80,7 +80,7 @@ GdbServer::doProcess(const string &payload)
         
         process(latestCmd);
         
-    } catch (Error &err) {
+    } catch (VAException &err) {
         
         auto msg = "GDB server error: " + string(err.what());
         debug(SRV_DEBUG, "%s\n", msg.c_str());

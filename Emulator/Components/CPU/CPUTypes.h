@@ -15,7 +15,7 @@
 
 namespace vamiga {
 
-#define CPUINFO_INSTR_COUNT 256
+// #define CPUINFO_INSTR_COUNT 256
 
 
 //

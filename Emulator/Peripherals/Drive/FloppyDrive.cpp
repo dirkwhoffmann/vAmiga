@@ -103,17 +103,17 @@ FloppyDrive::checkOption(Opt opt, i64 value)
         case Opt::DRIVE_TYPE:
 
             if (!FloppyDriveTypeEnum::isValid(value)) {
-                throw Error(ErrorCode::OPT_INV_ARG, FloppyDriveTypeEnum::keyList());
+                throw VAException(VAError::OPT_INV_ARG, FloppyDriveTypeEnum::keyList());
             }
             if (value != i64(FloppyDriveType::DD_35) && value != i64(FloppyDriveType::HD_35)) {
-                throw Error(ErrorCode::OPT_UNSUPPORTED);
+                throw VAException(VAError::OPT_UNSUPPORTED);
             }
             return;
 
         case Opt::DRIVE_MECHANICS:
 
             if (!DriveMechanicsEnum::isValid(value)) {
-                throw Error(ErrorCode::OPT_INV_ARG, DriveMechanicsEnum::keyList());
+                throw VAException(VAError::OPT_INV_ARG, DriveMechanicsEnum::keyList());
             }
             return;
 
@@ -128,7 +128,7 @@ FloppyDrive::checkOption(Opt opt, i64 value)
             return;
 
         default:
-            throw(ErrorCode::OPT_UNSUPPORTED);
+            throw(VAError::OPT_UNSUPPORTED);
     }
 }
 
@@ -968,7 +968,7 @@ FloppyDrive::exportDisk(FileType type)
         case FileType::IMG:      return new IMGFile(*this);
 
         default:
-            throw Error(ErrorCode::FILE_TYPE_UNSUPPORTED);
+            throw VAException(VAError::FILE_TYPE_UNSUPPORTED);
     }
 }
 
@@ -980,7 +980,7 @@ FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
     debug(DSK_DEBUG, "insertDisk <%ld> (%lld)\n", s, delay);
 
     // Only proceed if the provided disk is compatible with this drive
-    if (!isInsertable(*disk)) throw Error(ErrorCode::DISK_INCOMPATIBLE);
+    if (!isInsertable(*disk)) throw VAException(VAError::DISK_INCOMPATIBLE);
     
     // Get ownership of the disk
     diskToInsert = std::move(disk);
@@ -1000,7 +1000,7 @@ FloppyDrive::catchFile(const std::filesystem::path &path)
     
     // Seek file
     auto file = fs.seekFile(path.string());
-    if (file == nullptr) throw Error(ErrorCode::FILE_NOT_FOUND);
+    if (file == nullptr) throw VAException(VAError::FILE_NOT_FOUND);
     
     // Extract file
     Buffer<u8> buffer;
@@ -1011,7 +1011,7 @@ FloppyDrive::catchFile(const std::filesystem::path &path)
     
     // Seek the code section and read the first instruction word
     auto offset = descr.seek(HUNK_CODE);
-    if (!offset) throw Error(ErrorCode::HUNK_CORRUPTED);
+    if (!offset) throw VAException(VAError::HUNK_CORRUPTED);
     u16 instr = HI_LO(buffer[*offset + 8], buffer[*offset + 9]);
     
     // Replace the first instruction word by a software trap
@@ -1070,7 +1070,7 @@ FloppyDrive::swapDisk(std::unique_ptr<FloppyDisk> disk)
     debug(DSK_DEBUG, "swapDisk()\n");
     
     // Only proceed if the provided disk is compatible with this drive
-    if (!isInsertable(*disk)) throw Error(ErrorCode::DISK_INCOMPATIBLE);
+    if (!isInsertable(*disk)) throw VAException(VAError::DISK_INCOMPATIBLE);
     
     // Determine delay (in pause mode, we insert immediately)
     auto delay = isRunning() ? config.diskSwapDelay : 0;
@@ -1114,7 +1114,7 @@ FloppyDrive::insertMediaFile(class MediaFile &file, bool wp)
 
     } catch (...) {
 
-        throw Error(ErrorCode::FILE_TYPE_MISMATCH);
+        throw VAException(VAError::FILE_TYPE_MISMATCH);
     }
 }
 

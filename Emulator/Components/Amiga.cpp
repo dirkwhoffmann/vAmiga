@@ -192,7 +192,7 @@ Amiga::checkOption(Opt opt, i64 value)
         case Opt::AMIGA_VIDEO_FORMAT:
 
             if (!TVEnum::isValid(value)) {
-                throw Error(ErrorCode::OPT_INV_ARG, TVEnum::keyList());
+                throw VAException(VAError::OPT_INV_ARG, TVEnum::keyList());
             }
             return;
 
@@ -203,7 +203,7 @@ Amiga::checkOption(Opt opt, i64 value)
         case Opt::AMIGA_WARP_MODE:
 
             if (!WarpEnum::isValid(value)) {
-                throw Error(ErrorCode::OPT_INV_ARG, WarpEnum::keyList());
+                throw VAException(VAError::OPT_INV_ARG, WarpEnum::keyList());
             }
             return;
 
@@ -214,14 +214,14 @@ Amiga::checkOption(Opt opt, i64 value)
         case Opt::AMIGA_SPEED_BOOST:
 
             if (value < 50 || value > 200) {
-                throw Error(ErrorCode::OPT_INV_ARG, "50...200");
+                throw VAException(VAError::OPT_INV_ARG, "50...200");
             }
             return;
 
         case Opt::AMIGA_RUN_AHEAD:
 
             if (value < 0 || value > 12) {
-                throw Error(ErrorCode::OPT_INV_ARG, "0...12");
+                throw VAException(VAError::OPT_INV_ARG, "0...12");
             }
             return;
 
@@ -232,7 +232,7 @@ Amiga::checkOption(Opt opt, i64 value)
         case Opt::AMIGA_SNAP_DELAY:
 
             if (value < 10 || value > 3600) {
-                throw Error(ErrorCode::OPT_INV_ARG, "10...3600");
+                throw VAException(VAError::OPT_INV_ARG, "10...3600");
             }
             return;
 
@@ -241,7 +241,7 @@ Amiga::checkOption(Opt opt, i64 value)
             return;
             
         default:
-            throw Error(ErrorCode::OPT_UNSUPPORTED);
+            throw VAException(VAError::OPT_UNSUPPORTED);
     }
 }
 
@@ -312,7 +312,7 @@ Amiga::exportConfig(const fs::path &path, bool diff) const
     auto fs = std::ofstream(path, std::ofstream::binary);
 
     if (!fs.is_open()) {
-        throw Error(ErrorCode::FILE_CANT_WRITE);
+        throw VAException(VAError::FILE_CANT_WRITE);
     }
 
     exportConfig(fs, diff);
@@ -345,7 +345,7 @@ Amiga::get(Opt opt, isize objid) const
     debug(CNF_DEBUG, "get(%s, %ld)\n", OptEnum::key(opt), objid);
 
     auto target = routeOption(opt, objid);
-    if (target == nullptr) throw Error(ErrorCode::OPT_INV_ID);
+    if (target == nullptr) throw VAException(VAError::OPT_INV_ID);
     return target->getOption(opt);
 }
 
@@ -368,7 +368,7 @@ Amiga::check(Opt opt, i64 value, const std::vector<isize> objids)
         debug(CNF_DEBUG, "check(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
 
         auto target = routeOption(opt, objid);
-        if (target == nullptr) throw Error(ErrorCode::OPT_INV_ID);
+        if (target == nullptr) throw VAException(VAError::OPT_INV_ID);
 
         target->checkOption(opt, value);
     }
@@ -393,7 +393,7 @@ Amiga::set(Opt opt, i64 value, const std::vector<isize> objids)
         debug(CNF_DEBUG, "set(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
 
         auto target = routeOption(opt, objid);
-        if (target == nullptr) throw Error(ErrorCode::OPT_INV_ID);
+        if (target == nullptr) throw VAException(VAError::OPT_INV_ID);
 
         target->setOption(opt, value);
     }
@@ -1026,18 +1026,6 @@ Amiga::loadSnapshot(const MediaFile &file)
 {
     const Snapshot &snapshot = dynamic_cast<const Snapshot &>(file);
     loadSnapshot(snapshot);
-    
-    /*
-    try {
-
-        const Snapshot &snapshot = dynamic_cast<const Snapshot &>(file);
-        loadSnapshot(snapshot);
-
-    } catch (...) {
-
-        throw Error(ErrorCode::FILE_TYPE_MISMATCH);
-    }
-    */
 }
 
 void

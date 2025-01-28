@@ -81,7 +81,7 @@ LogicAnalyzer::checkOption(Opt opt, i64 value)
         case Opt::LA_PROBE3:
 
             if (!ProbeEnum::isValid(value)) {
-                throw Error(ErrorCode::OPT_INV_ARG, ProbeEnum::keyList());
+                throw VAException(VAError::OPT_INV_ARG, ProbeEnum::keyList());
             }
             
         case Opt::LA_ADDR0:
@@ -92,7 +92,7 @@ LogicAnalyzer::checkOption(Opt opt, i64 value)
             return;
 
         default:
-            throw(ErrorCode::OPT_UNSUPPORTED);
+            throw(VAError::OPT_UNSUPPORTED);
     }
 }
 

@@ -64,16 +64,16 @@ Recorder::checkOption(Opt option, i64 value)
         case Option::RTC_MODEL:
 
             if (!isPoweredOff()) {
-                throw Error(ErrorCode::OPT_LOCKED);
+                throw Error(VAError::OPT_LOCKED);
             }
             if (!RTCRevisionEnum::isValid(value)) {
-                throw Error(ErrorCode::OPT_INV_ARG, RTCRevisionEnum::keyList());
+                throw Error(VAError::OPT_INV_ARG, RTCRevisionEnum::keyList());
             }
             return;
              */
             
         default:
-            throw(ErrorCode::OPT_UNSUPPORTED);
+            throw(VAError::OPT_UNSUPPORTED);
     }
 }
 
@@ -138,17 +138,17 @@ Recorder::startRecording(isize x1, isize y1, isize x2, isize y2,
           x1, y1, x2, y2, bitRate, aspectX, aspectY);
     
     if (isRecording()) {
-        throw Error(ErrorCode::REC_LAUNCH, "Recording in progress.");
+        throw VAException(VAError::REC_LAUNCH, "Recording in progress.");
     }
     
     // Create pipes
     debug(REC_DEBUG, "Creating pipes...\n");
     
     if (!videoPipe.create(videoPipePath())) {
-        throw Error(ErrorCode::REC_LAUNCH, "Failed to create the video encoder pipe.");
+        throw VAException(VAError::REC_LAUNCH, "Failed to create the video encoder pipe.");
     }
     if (!audioPipe.create(audioPipePath())) {
-        throw Error(ErrorCode::REC_LAUNCH, "Failed to create the video encoder pipe.");
+        throw VAException(VAError::REC_LAUNCH, "Failed to create the video encoder pipe.");
     }
     
     debug(REC_DEBUG, "Pipes created\n");
@@ -255,7 +255,7 @@ Recorder::startRecording(isize x1, isize y1, isize x2, isize y2,
     debug(REC_DEBUG, "%s\n", cmd1.c_str());
     
     if (!videoFFmpeg.launch(cmd1)) {
-        throw Error(ErrorCode::REC_LAUNCH, "Unable to launch the FFmpeg video encoder.");
+        throw VAException(VAError::REC_LAUNCH, "Unable to launch the FFmpeg video encoder.");
     }
     
     // Launch the audio encoder
@@ -263,21 +263,21 @@ Recorder::startRecording(isize x1, isize y1, isize x2, isize y2,
     debug(REC_DEBUG, "%s\n", cmd2.c_str());
     
     if (!audioFFmpeg.launch(cmd2)) {
-        throw Error(ErrorCode::REC_LAUNCH, "Unable to launch the FFmpeg audio encoder.");
+        throw VAException(VAError::REC_LAUNCH, "Unable to launch the FFmpeg audio encoder.");
     }
     
     // Open the video pipe
     debug(REC_DEBUG, "Opening video pipe\n");
     
     if (!videoPipe.open()) {
-        throw Error(ErrorCode::REC_LAUNCH, "Unable to open the video pipe.");
+        throw VAException(VAError::REC_LAUNCH, "Unable to open the video pipe.");
     }
     
     // Open the audio pipe
     debug(REC_DEBUG, "Opening audio pipe\n");
     
     if (!audioPipe.open()) {
-        throw Error(ErrorCode::REC_LAUNCH, "Unable to launch the audio pipe.");
+        throw VAException(VAError::REC_LAUNCH, "Unable to launch the audio pipe.");
     }
     
     debug(REC_DEBUG, "Success\n");

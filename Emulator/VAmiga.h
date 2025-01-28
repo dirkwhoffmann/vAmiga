@@ -1175,23 +1175,23 @@ public:
     /// @name Loading and saving the key-value storage
 
     /** @brief  Loads a storage file from disk
-     *  @throw  VC64Error (#ErrorCode::FILE_NOT_FOUND)
-     *  @throw  VC64Error (#ErrorCode::SYNTAX)
+     *  @throw  VC64Error (#VAError::FILE_NOT_FOUND)
+     *  @throw  VC64Error (#VAError::SYNTAX)
      */
     void load(const std::filesystem::path &path);
 
     /** @brief  Loads a storage file from a stream
-     *  @throw  VC64Error (#ErrorCode::SYNTAX)
+     *  @throw  VC64Error (#VAError::SYNTAX)
      */
     void load(std::ifstream &stream);
 
     /** @brief  Loads a storage file from a string stream
-     *  @throw  VC64Error (#ErrorCode::SYNTAX)
+     *  @throw  VC64Error (#VAError::SYNTAX)
      */
     void load(std::stringstream &stream);
 
     /** @brief  Saves a storage file to disk
-     *  @throw  VC64Error (#ErrorCode::FILE_CANT_WRITE)
+     *  @throw  VC64Error (#VAError::FILE_CANT_WRITE)
      */
     void save(const std::filesystem::path &path);
 
@@ -1260,14 +1260,14 @@ public:
     /** @brief  Writes a key-value pair into the user storage.
      *  @param  key     The key, given as a string.
      *  @param  value   The value, given as a string.
-     *  @throw  VC64Error (#ErrorCode::INVALID_KEY)
+     *  @throw  VC64Error (#VAError::INVALID_KEY)
      */
     void set(const string &key, const string &value);
 
     /** @brief  Writes a key-value pair into the user storage.
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value, given as a string.
-     *  @throw  VC64Error (#ErrorCode::INVALID_KEY)
+     *  @throw  VC64Error (#VAError::INVALID_KEY)
      */
     void set(Opt opt, const string &value);
 
@@ -1275,14 +1275,14 @@ public:
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value for all pairs, given as a string.
      *  @param  objids  The keys are parameterized by adding the vector values as suffixes.
-     *  @throw  VC64Error (#ErrorCode::INVALID_KEY)
+     *  @throw  VC64Error (#VAError::INVALID_KEY)
      */
     void set(Opt opt, const string &value, std::vector<isize> objids);
 
     /** @brief  Writes a key-value pair into the user storage.
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value, given as an integer.
-     *  @throw  VC64Error (#ErrorCode::INVALID_KEY)
+     *  @throw  VC64Error (#VAError::INVALID_KEY)
      */
     void set(Opt opt, i64 value);
 
@@ -1290,7 +1290,7 @@ public:
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value for all pairs, given as an integer.
      *  @param  objids  The keys are parameterized by adding the vector values as suffixes.
-     *  @throw  VC64Error (#ErrorCode::INVALID_KEY)
+     *  @throw  VC64Error (#VAError::INVALID_KEY)
      */
     void set(Opt opt, i64 value, std::vector<isize> objids);
 
@@ -1303,7 +1303,7 @@ public:
     /** @brief  Writes a key-value pair into the fallback storage.
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value, given as an integer.
-     *  @throw  VC64Error (#ErrorCode::INVALID_KEY)
+     *  @throw  VC64Error (#VAError::INVALID_KEY)
      */
     void setFallback(Opt opt, const string &value);
 
@@ -1317,7 +1317,7 @@ public:
     /** @brief  Writes a key-value pair into the fallback storage.
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value, given as an integer.
-     *  @throw  VC64Error (#ErrorCode::INVALID_KEY)
+     *  @throw  VC64Error (#VAError::INVALID_KEY)
      */
     void setFallback(Opt opt, i64 value);
 
@@ -1339,20 +1339,20 @@ public:
 
     /** @brief  Deletes a key-value pair
      *  @param  key     The key of the key-value pair.
-     *  @throw  VC64Error (#ErrorCode::INVALID_KEY)
+     *  @throw  VC64Error (#VAError::INVALID_KEY)
      */
     void remove(const string &key);
 
     /** @brief  Deletes a key-value pair
      *  @param  option  The option's name forms the key.
-     *  @throw  VC64Error (#ErrorCode::INVALID_KEY)
+     *  @throw  VC64Error (#VAError::INVALID_KEY)
      */
     void remove(Opt option);
 
     /** @brief  Deletes multiple key-value pairs.
      *  @param  option  The option's name forms the prefix of the keys.
      *  @param  objids  The keys are parameterized by adding the vector values as suffixes.
-     *  @throw  VC64Error (#ErrorCode::INVALID_KEY)
+     *  @throw  VC64Error (#VAError::INVALID_KEY)
      */
     void remove(Opt option, std::vector <isize> objids);
 

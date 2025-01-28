@@ -100,7 +100,7 @@ FSBlock::make(FileSystem &ref, Block nr, FSBlockType type)
             return new FSBlock(ref, nr, type);
             
         default:
-            throw Error(ErrorCode::FS_INVALID_BLOCK_TYPE);
+            throw VAException(VAError::FS_INVALID_BLOCK_TYPE);
     }
 }
 
@@ -332,23 +332,23 @@ FSBlock::subtypeID() const
 isize
 FSBlock::check(bool strict) const
 {
-    ErrorCode error;
+    VAError error;
     isize count = 0;
     u8 expected;
     
     for (isize i = 0; i < bsize(); i++) {
         
-        if ((error = check(i, &expected, strict)) != ErrorCode::OK) {
+        if ((error = check(i, &expected, strict)) != VAError::OK) {
             count++;
             debug(FS_DEBUG, "Block %d [%ld.%ld]: %s\n", nr, i / 4, i % 4,
-                  ErrorCodeEnum::key(error));
+                  VAErrorEnum::key(error));
         }
     }
     
     return count;
 }
 
-ErrorCode
+VAError
 FSBlock::check(isize byte, u8 *expected, bool strict) const
 {
     switch (type) {
@@ -463,10 +463,10 @@ FSBlock::check(isize byte, u8 *expected, bool strict) const
             if (word <= -51 && value) EXPECT_DATABLOCK_REF;
             if (word == -51) {
                 if (value == 0 && getNumDataBlockRefs() > 0) {
-                    return ErrorCode::FS_EXPECTED_REF;
+                    return VAError::FS_EXPECTED_REF;
                 }
                 if (value != 0 && getNumDataBlockRefs() == 0) {
-                    return ErrorCode::FS_EXPECTED_NO_REF;
+                    return VAError::FS_EXPECTED_NO_REF;
                 }
             }
             break;
@@ -500,10 +500,10 @@ FSBlock::check(isize byte, u8 *expected, bool strict) const
             if (word <= -51 && value) EXPECT_DATABLOCK_REF;
             if (word == -51) {
                 if (value == 0 && getNumDataBlockRefs() > 0) {
-                    return ErrorCode::FS_EXPECTED_REF;
+                    return VAError::FS_EXPECTED_REF;
                 }
                 if (value != 0 && getNumDataBlockRefs() == 0) {
-                    return ErrorCode::FS_EXPECTED_NO_REF;
+                    return VAError::FS_EXPECTED_NO_REF;
                 }
             }
             break;
@@ -538,7 +538,7 @@ FSBlock::check(isize byte, u8 *expected, bool strict) const
             break;
     }
     
-    return ErrorCode::OK;
+    return VAError::OK;
 }
 
 u8 *
@@ -784,7 +784,7 @@ FSBlock::exportBlock(u8 *dst, isize size)
     }
 }
 
-ErrorCode
+VAError
 FSBlock::exportBlock(const fs::path &path)
 {
     switch (type) {
@@ -793,32 +793,32 @@ FSBlock::exportBlock(const fs::path &path)
         case FSBlockType::FILEHEADER_BLOCK: return exportFileHeaderBlock(path);
             
         default:
-            return ErrorCode::OK;
+            return VAError::OK;
     }
 }
 
-ErrorCode
+VAError
 FSBlock::exportUserDirBlock(const fs::path &path)
 {
     auto name = path / device.getPath(this);
     
     if (!util::createDirectory(name.string())) {
-        return ErrorCode::FS_CANNOT_CREATE_DIR;
+        return VAError::FS_CANNOT_CREATE_DIR;
     }
 
-    return ErrorCode::OK;
+    return VAError::OK;
 }
 
-ErrorCode
+VAError
 FSBlock::exportFileHeaderBlock(const fs::path &path)
 {
     auto filename = path / device.getPath(this);
     
     std::ofstream file(filename.string(), std::ofstream::binary);
-    if (!file.is_open()) return ErrorCode::FS_CANNOT_CREATE_FILE;
+    if (!file.is_open()) return VAError::FS_CANNOT_CREATE_FILE;
     
     writeData(file);
-    return ErrorCode::OK;
+    return VAError::OK;
 }
 
 FSName

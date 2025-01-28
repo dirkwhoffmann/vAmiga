@@ -74,7 +74,7 @@ void Socket::create()
         // Create a new socket
         socket = ::socket(AF_INET, SOCK_STREAM, 0);
         if (socket == INVALID_SOCKET) {
-            throw Error(ErrorCode::SOCK_CANT_CREATE);
+            throw VAException(VAError::SOCK_CANT_CREATE);
         }
         
         // Set options
@@ -85,7 +85,7 @@ void Socket::create()
                                   (const char *)&opt,
                                   sizeof(opt));
         if (success < 0) {
-            throw Error(ErrorCode::SOCK_CANT_CREATE);
+            throw VAException(VAError::SOCK_CANT_CREATE);
         }
         
         debug(SCK_DEBUG, "Created new socket %lld\n", (i64)socket);
@@ -104,7 +104,7 @@ Socket::connect(u16 port)
     address.sin_port = util::bigEndian(port);
     
     if (::connect(socket, (struct sockaddr *)&address, sizeof(address)) < 0) {
-        throw Error(ErrorCode::SOCK_CANT_CONNECT);
+        throw VAException(VAError::SOCK_CANT_CONNECT);
     }
 }
 
@@ -120,7 +120,7 @@ Socket::bind(u16 port)
     address.sin_port = util::bigEndian(port);
     
     if (::bind(socket, (struct sockaddr *)&address, sizeof(address)) < 0) {
-        throw Error(ErrorCode::SOCK_CANT_BIND);
+        throw VAException(VAError::SOCK_CANT_BIND);
     }
 }
 
@@ -128,7 +128,7 @@ void
 Socket::listen()
 {
     if (::listen(socket, 3) < 0) {
-        throw Error(ErrorCode::SOCK_CANT_LISTEN);
+        throw VAException(VAError::SOCK_CANT_LISTEN);
     }
 }
 
@@ -140,7 +140,7 @@ Socket::accept()
     auto s = ::accept(socket, (struct sockaddr *)&address, &addrlen);
 
     if (s == INVALID_SOCKET) {
-        throw Error(ErrorCode::SOCK_CANT_ACCEPT);
+        throw VAException(VAError::SOCK_CANT_ACCEPT);
     }
     
     return Socket(s);
@@ -157,14 +157,14 @@ Socket::recv()
         return result;
     }
     
-    throw Error(ErrorCode::SOCK_CANT_RECEIVE);
+    throw VAException(VAError::SOCK_CANT_RECEIVE);
 }
 
 void
 Socket::send(u8 value)
 {
     if (::send(socket, (const char *)&value, 1, 0) < 1) {
-        throw Error(ErrorCode::SOCK_CANT_SEND);
+        throw VAException(VAError::SOCK_CANT_SEND);
     }
 }
 
@@ -172,7 +172,7 @@ void
 Socket::send(const string &s)
 {
     if (::send(socket, s.c_str(), (int)s.length(), 0) < 0) {
-        throw Error(ErrorCode::SOCK_CANT_SEND);
+        throw VAException(VAError::SOCK_CANT_SEND);
     }
 }
 

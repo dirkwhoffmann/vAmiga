@@ -15,13 +15,13 @@
 
 namespace vamiga {
 
-struct Error : public util::Exception
+struct VAException : public util::Exception
 {
-    Error(ErrorCode code, const string &s);
-    Error(ErrorCode code, const char *s) : Error(code, string(s)) { };
-    Error(ErrorCode code, const std::filesystem::path &path) : Error(code, path.string()) { };
-    Error(ErrorCode code, long v) : Error(code, std::to_string(v)) { };
-    Error(ErrorCode code) : Error(code, "") { }
+    VAException(VAError code, const string &s);
+    VAException(VAError code, const char *s) : VAException(code, string(s)) { };
+    VAException(VAError code, const std::filesystem::path &path) : VAException(code, path.string()) { };
+    VAException(VAError code, long v) : VAException(code, std::to_string(v)) { };
+    VAException(VAError code) : VAException(code, "") { }
     
     const char *what() const throw() override;
 };
