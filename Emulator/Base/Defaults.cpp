@@ -76,8 +76,8 @@ Defaults::Defaults()
 
     setFallback(Option::VID_WHITE_NOISE,            true);
 
-    setFallback(Option::CPU_REVISION,               (i64)CPURev::M68000);
-    setFallback(Option::CPU_DASM_REVISION,          (i64)CPURev::M68000);
+    setFallback(Option::CPU_REVISION,               (i64)CPURev::CPU_68000);
+    setFallback(Option::CPU_DASM_REVISION,          (i64)CPURev::CPU_68000);
     setFallback(Option::CPU_DASM_SYNTAX,            (i64)DasmSyntax::MOIRA);
     setFallback(Option::CPU_DASM_NUMBERS,           (i64)DasmNumbers::HEX);
     setFallback(Option::CPU_OVERCLOCKING,           0);

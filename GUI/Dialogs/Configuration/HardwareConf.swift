@@ -50,15 +50,15 @@ extension ConfigurationController {
         csCpuSpeed.selectItem(withTag: config.cpuSpeed)
         switch CPURevision(rawValue: config.cpuRev) {
 
-        case .M68000:
+        case ._68000:
             csCpuInfo1.stringValue = "Motorola MC68000"
             csCpuInfo2.stringValue = "Original Amigas"
 
-        case .M68010:
+        case ._68010:
             csCpuInfo1.stringValue = "Motorola MC68010"
             csCpuInfo2.stringValue = ""
 
-        case .M68EC020:
+        case ._68EC020:
             csCpuInfo1.stringValue = "Motorola 68EC020"
             csCpuInfo2.stringValue = "A1200, A2500"
 

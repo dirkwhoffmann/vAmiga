@@ -314,8 +314,8 @@ CPU::checkOption(Option opt, i64 value)
 
         case Option::CPU_DASM_REVISION:
 
-            if (!DasmRevisionEnum::isValid(value)) {
-                throw Error(ErrorCode::OPT_INV_ARG, DasmRevisionEnum::keyList());
+            if (!DasmRevEnum::isValid(value)) {
+                throw Error(ErrorCode::OPT_INV_ARG, DasmRevEnum::keyList());
             }
             return;
 
@@ -347,7 +347,7 @@ void
 CPU::setOption(Option option, i64 value)
 {
     auto cpuModel = [&](CPURev rev) { return moira::Model(rev); };
-    auto dasmModel = [&](DasmRevision rev) { return moira::Model(rev); };
+    auto dasmModel = [&](DasmRev rev) { return moira::Model(rev); };
     auto syntax = [&](DasmSyntax rev) { return moira::DasmSyntax(rev); };
 
     switch (option) {
@@ -360,7 +360,7 @@ CPU::setOption(Option option, i64 value)
 
         case Option::CPU_DASM_REVISION:
 
-            config.dasmRevision = DasmRevision(value);
+            config.dasmRevision = DasmRev(value);
             setModel(cpuModel(config.revision), dasmModel(config.dasmRevision));
             return;
 

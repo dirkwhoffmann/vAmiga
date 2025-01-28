@@ -24,23 +24,23 @@ namespace vamiga {
 
 enum class CPURev : long
 {
-    M68000,
-    M68010,
-    M68EC020
+    CPU_68000,
+    CPU_68010,
+    CPU_68EC020
 };
 
 struct CPURevEnum : util::Reflection<CPURevEnum, CPURev>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(CPURev::M68EC020);
+    static constexpr long maxVal = long(CPURev::CPU_68EC020);
     
     static const char *_key(CPURev value)
     {
         switch (value) {
                 
-            case CPURev::M68000:     return "68000";
-            case CPURev::M68010:     return "68010";
-            case CPURev::M68EC020:   return "68EC020";
+            case CPURev::CPU_68000:     return "68000";
+            case CPURev::CPU_68010:     return "68010";
+            case CPURev::CPU_68EC020:   return "68EC020";
         }
         return "???";
     }
@@ -48,15 +48,15 @@ struct CPURevEnum : util::Reflection<CPURevEnum, CPURev>
     {
         switch (value) {
                 
-            case CPURev::M68000:     return "Motorola 68000 CPU";
-            case CPURev::M68010:     return "Motorola 68010 CPU";
-            case CPURev::M68EC020:   return "Motorola 68EC020 CPU";
+            case CPURev::CPU_68000:     return "Motorola 68000 CPU";
+            case CPURev::CPU_68010:     return "Motorola 68010 CPU";
+            case CPURev::CPU_68EC020:   return "Motorola 68EC020 CPU";
         }
         return "???";
     }
 };
 
-enum class DasmRevision : long
+enum class DasmRev : long
 {
     DASM_68000,
     DASM_68010,
@@ -69,40 +69,40 @@ enum class DasmRevision : long
     DASM_68040
 };
 
-struct DasmRevisionEnum : util::Reflection<DasmRevisionEnum, DasmRevision>
+struct DasmRevEnum : util::Reflection<DasmRevEnum, DasmRev>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(DasmRevision::DASM_68040);
+    static constexpr long maxVal = long(DasmRev::DASM_68040);
     
-    static const char *_key(DasmRevision value)
+    static const char *_key(DasmRev value)
     {
         switch (value) {
                 
-            case DasmRevision::DASM_68000:    return "68000";
-            case DasmRevision::DASM_68010:    return "68010";
-            case DasmRevision::DASM_68EC020:  return "68EC020";
-            case DasmRevision::DASM_68020:    return "68020";
-            case DasmRevision::DASM_68EC030:  return "68EC030";
-            case DasmRevision::DASM_68030:    return "68030";
-            case DasmRevision::DASM_68EC040:  return "68EC040";
-            case DasmRevision::DASM_68LC040:  return "68LC040";
-            case DasmRevision::DASM_68040:    return "68040";
+            case DasmRev::DASM_68000:    return "68000";
+            case DasmRev::DASM_68010:    return "68010";
+            case DasmRev::DASM_68EC020:  return "68EC020";
+            case DasmRev::DASM_68020:    return "68020";
+            case DasmRev::DASM_68EC030:  return "68EC030";
+            case DasmRev::DASM_68030:    return "68030";
+            case DasmRev::DASM_68EC040:  return "68EC040";
+            case DasmRev::DASM_68LC040:  return "68LC040";
+            case DasmRev::DASM_68040:    return "68040";
         }
         return "???";
     }
-    static const char *help(DasmRevision value)
+    static const char *help(DasmRev value)
     {
         switch (value) {
                 
-            case DasmRevision::DASM_68000:    return "Motorola 68000 instruction set";
-            case DasmRevision::DASM_68010:    return "Motorola 68010 instruction set";
-            case DasmRevision::DASM_68EC020:  return "Motorola 68EC020 instruction set";
-            case DasmRevision::DASM_68020:    return "Motorola 68020 instruction set";
-            case DasmRevision::DASM_68EC030:  return "Motorola 68EC030 instruction set";
-            case DasmRevision::DASM_68030:    return "Motorola 68030 instruction set";
-            case DasmRevision::DASM_68EC040:  return "Motorola 68EC040 instruction set";
-            case DasmRevision::DASM_68LC040:  return "Motorola 68LC040 instruction set";
-            case DasmRevision::DASM_68040:    return "Motorola 68040 instruction set";
+            case DasmRev::DASM_68000:    return "Motorola 68000 instruction set";
+            case DasmRev::DASM_68010:    return "Motorola 68010 instruction set";
+            case DasmRev::DASM_68EC020:  return "Motorola 68EC020 instruction set";
+            case DasmRev::DASM_68020:    return "Motorola 68020 instruction set";
+            case DasmRev::DASM_68EC030:  return "Motorola 68EC030 instruction set";
+            case DasmRev::DASM_68030:    return "Motorola 68030 instruction set";
+            case DasmRev::DASM_68EC040:  return "Motorola 68EC040 instruction set";
+            case DasmRev::DASM_68LC040:  return "Motorola 68LC040 instruction set";
+            case DasmRev::DASM_68040:    return "Motorola 68040 instruction set";
         }
         return "???";
     }
@@ -221,7 +221,7 @@ struct GuardTypeEnum : util::Reflection<GuardTypeEnum, GuardType>
 typedef struct
 {
     CPURev revision;
-    DasmRevision dasmRevision;
+    DasmRev dasmRevision;
     DasmSyntax dasmSyntax;
     DasmNumbers dasmNumbers;
     isize overclocking;

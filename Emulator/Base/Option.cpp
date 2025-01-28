@@ -92,7 +92,7 @@ OptionParser::create(Option opt, i64 arg)
         case Option::VID_WHITE_NOISE:           return boolParser();
             
         case Option::CPU_REVISION:              return enumParser.template operator()<CPURevEnum,CPURev>();
-        case Option::CPU_DASM_REVISION:         return enumParser.template operator()<DasmRevisionEnum,DasmRevision>();
+        case Option::CPU_DASM_REVISION:         return enumParser.template operator()<DasmRevEnum,DasmRev>();
         case Option::CPU_DASM_SYNTAX:           return enumParser.template operator()<DasmSyntaxEnum,DasmSyntax>();
         case Option::CPU_DASM_NUMBERS:          return enumParser.template operator()<DasmNumbersEnum,DasmNumbers>();
         case Option::CPU_OVERCLOCKING:          return numParser("x");
