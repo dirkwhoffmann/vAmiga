@@ -21,7 +21,7 @@ namespace vamiga {
 //
 
 /// Emulator command
-enum class CmdType : long
+enum class Cmd : long
 {
     NONE,                   ///< None
     
@@ -86,72 +86,72 @@ enum class CmdType : long
     FOCUS                   ///< The emulator windows got or lost focus
 };
 
-struct CmdTypeEnum : util::Reflection<CmdTypeEnum, CmdType> {
+struct CmdTypeEnum : util::Reflection<CmdTypeEnum, Cmd> {
     
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(CmdType::FOCUS);
+    static constexpr long maxVal = long(Cmd::FOCUS);
     static bool isValid(auto value) { return value >= minVal && value <= maxVal; }
     
-    static const char *_key(CmdType value)
+    static const char *_key(Cmd value)
     {
         switch (value) {
                 
-            case CmdType::NONE:                  return "NONE";
+            case Cmd::NONE:                  return "NONE";
                 
-            case CmdType::CONFIG:                return "CONFIG";
-            case CmdType::CONFIG_ALL:            return "CONFIG_ALL";
-            case CmdType::HARD_RESET:            return "HARD_RESET";
-            case CmdType::SOFT_RESET:            return "SOFT_RESET";
-            case CmdType::POWER_ON:              return "POWER_ON";
-            case CmdType::POWER_OFF:             return "POWER_OFF";
-            case CmdType::RUN:                   return "RUN";
-            case CmdType::PAUSE:                 return "PAUSE";
-            case CmdType::WARP_ON:               return "WARP_ON";
-            case CmdType::WARP_OFF:              return "WARP_OFF";
-            case CmdType::HALT:                  return "HALT";
+            case Cmd::CONFIG:                return "CONFIG";
+            case Cmd::CONFIG_ALL:            return "CONFIG_ALL";
+            case Cmd::HARD_RESET:            return "HARD_RESET";
+            case Cmd::SOFT_RESET:            return "SOFT_RESET";
+            case Cmd::POWER_ON:              return "POWER_ON";
+            case Cmd::POWER_OFF:             return "POWER_OFF";
+            case Cmd::RUN:                   return "RUN";
+            case Cmd::PAUSE:                 return "PAUSE";
+            case Cmd::WARP_ON:               return "WARP_ON";
+            case Cmd::WARP_OFF:              return "WARP_OFF";
+            case Cmd::HALT:                  return "HALT";
 
-            case CmdType::ALARM_ABS:             return "ALARM_ABS";
-            case CmdType::ALARM_REL:             return "ALARM_REL";
-            case CmdType::INSPECTION_TARGET:     return "INSPECTION_TARGET";
+            case Cmd::ALARM_ABS:             return "ALARM_ABS";
+            case Cmd::ALARM_REL:             return "ALARM_REL";
+            case Cmd::INSPECTION_TARGET:     return "INSPECTION_TARGET";
                 
-            case CmdType::GUARD_SET_AT:          return "GUARD_SET_AT";
-            case CmdType::GUARD_MOVE_NR:         return "GUARD_MOVE_TO";
-            case CmdType::GUARD_IGNORE_NR:       return "GUARD_IGNORE_NR";
-            case CmdType::GUARD_REMOVE_NR:       return "GUARD_REMOVE_NR";
-            case CmdType::GUARD_REMOVE_AT:       return "GUARD_REMOVE_AT";
-            case CmdType::GUARD_REMOVE_ALL:      return "GUARD_REMOVE_ALL";
-            case CmdType::GUARD_ENABLE_NR:       return "GUARD_ENABLE_NR";
-            case CmdType::GUARD_ENABLE_AT:       return "GUARD_ENABLE_AT";
-            case CmdType::GUARD_ENABLE_ALL:      return "GUARD_ENABLE_ALL";
-            case CmdType::GUARD_DISABLE_NR:      return "GUARD_DISABLE_NR";
-            case CmdType::GUARD_DISABLE_AT:      return "GUARD_DISABLE_AT";
-            case CmdType::GUARD_DISABLE_ALL:     return "GUARD_DISABLE_ALL";
+            case Cmd::GUARD_SET_AT:          return "GUARD_SET_AT";
+            case Cmd::GUARD_MOVE_NR:         return "GUARD_MOVE_TO";
+            case Cmd::GUARD_IGNORE_NR:       return "GUARD_IGNORE_NR";
+            case Cmd::GUARD_REMOVE_NR:       return "GUARD_REMOVE_NR";
+            case Cmd::GUARD_REMOVE_AT:       return "GUARD_REMOVE_AT";
+            case Cmd::GUARD_REMOVE_ALL:      return "GUARD_REMOVE_ALL";
+            case Cmd::GUARD_ENABLE_NR:       return "GUARD_ENABLE_NR";
+            case Cmd::GUARD_ENABLE_AT:       return "GUARD_ENABLE_AT";
+            case Cmd::GUARD_ENABLE_ALL:      return "GUARD_ENABLE_ALL";
+            case Cmd::GUARD_DISABLE_NR:      return "GUARD_DISABLE_NR";
+            case Cmd::GUARD_DISABLE_AT:      return "GUARD_DISABLE_AT";
+            case Cmd::GUARD_DISABLE_ALL:     return "GUARD_DISABLE_ALL";
                 
-            case CmdType::KEY_PRESS:             return "KEY_PRESS";
-            case CmdType::KEY_RELEASE:           return "KEY_RELEASE";
-            case CmdType::KEY_RELEASE_ALL:       return "KEY_RELEASE_ALL";
-            case CmdType::KEY_TOGGLE:            return "KEY_TOGGLE";
+            case Cmd::KEY_PRESS:             return "KEY_PRESS";
+            case Cmd::KEY_RELEASE:           return "KEY_RELEASE";
+            case Cmd::KEY_RELEASE_ALL:       return "KEY_RELEASE_ALL";
+            case Cmd::KEY_TOGGLE:            return "KEY_TOGGLE";
                 
-            case CmdType::MOUSE_MOVE_ABS:        return "MOUSE_MOVE_ABS";
-            case CmdType::MOUSE_MOVE_REL:        return "MOUSE_MOVE_REL";
-            case CmdType::MOUSE_BUTTON:          return "MOUSE_BUTTON";
+            case Cmd::MOUSE_MOVE_ABS:        return "MOUSE_MOVE_ABS";
+            case Cmd::MOUSE_MOVE_REL:        return "MOUSE_MOVE_REL";
+            case Cmd::MOUSE_BUTTON:          return "MOUSE_BUTTON";
                 
-            case CmdType::JOY_EVENT:             return "JOY_EVENT";
+            case Cmd::JOY_EVENT:             return "JOY_EVENT";
                 
-            case CmdType::DSK_TOGGLE_WP:         return "DSK_TOGGLE_WP";
-            case CmdType::DSK_MODIFIED:          return "DSK_MODIFIED";
-            case CmdType::DSK_UNMODIFIED:        return "DSK_UNMODIFIED";
+            case Cmd::DSK_TOGGLE_WP:         return "DSK_TOGGLE_WP";
+            case Cmd::DSK_MODIFIED:          return "DSK_MODIFIED";
+            case Cmd::DSK_UNMODIFIED:        return "DSK_UNMODIFIED";
                 
-            case CmdType::RSH_EXECUTE:           return "RSH_EXECUTE";
+            case Cmd::RSH_EXECUTE:           return "RSH_EXECUTE";
                 
-            case CmdType::FUNC:                  return "FUNC";
-            case CmdType::FOCUS:                 return "FOCUS";
+            case Cmd::FUNC:                  return "FUNC";
+            case Cmd::FOCUS:                 return "FOCUS";
                 
         }
         return "???";
     }
     
-    static const char *help(CmdType value)
+    static const char *help(Cmd value)
     {
         return "";
     }
@@ -210,7 +210,7 @@ AlarmCommand;
 struct Command
 {
     // Header
-    CmdType type;
+    Cmd type;
     
     // Sender
     void *sender;
@@ -227,13 +227,13 @@ struct Command
     };
         
     Command() { }
-    Command(CmdType type, i64 v1 = 0, i64 v2 = 0) : type(type), value(v1), value2(v2) { }
-    Command(CmdType type, void *s, i64 v1 = 0, i64 v2 = 0) : type(type), sender(s), value(v1), value2(v2) { }
-    Command(CmdType type, const ConfigCommand &cmd) : type(type), config(cmd) { }
-    Command(CmdType type, const KeyCommand &cmd) : type(type), key(cmd) { }
-    Command(CmdType type, const GamePadCommand &cmd) : type(type), action(cmd) { }
-    Command(CmdType type, const CoordCommand &cmd) : type(type), coord(cmd) { }
-    Command(CmdType type, const AlarmCommand &cmd) : type(type), alarm(cmd) { }
+    Command(Cmd type, i64 v1 = 0, i64 v2 = 0) : type(type), value(v1), value2(v2) { }
+    Command(Cmd type, void *s, i64 v1 = 0, i64 v2 = 0) : type(type), sender(s), value(v1), value2(v2) { }
+    Command(Cmd type, const ConfigCommand &cmd) : type(type), config(cmd) { }
+    Command(Cmd type, const KeyCommand &cmd) : type(type), key(cmd) { }
+    Command(Cmd type, const GamePadCommand &cmd) : type(type), action(cmd) { }
+    Command(Cmd type, const CoordCommand &cmd) : type(type), coord(cmd) { }
+    Command(Cmd type, const AlarmCommand &cmd) : type(type), alarm(cmd) { }
 };
 
 }

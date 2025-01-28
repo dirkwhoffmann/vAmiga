@@ -49,7 +49,7 @@ GuardList::setAt(u32 target, isize ignores)
     if (guards.isSetAt(target)) throw Error(ErrorCode::GUARD_ALREADY_SET, target);
     guards.setAt(target, ignores);
     update();
-    emu.main.msgQueue.put(MsgType::GUARD_UPDATED);
+    emu.main.msgQueue.put(Msg::GUARD_UPDATED);
 }
 
 void
@@ -58,7 +58,7 @@ GuardList::moveTo(isize nr, u32 newTarget)
     if (!guards.guardNr(nr)) throw Error(ErrorCode::GUARD_NOT_FOUND, nr);
     guards.replace(nr, newTarget);
     update();
-    emu.main.msgQueue.put(MsgType::GUARD_UPDATED);
+    emu.main.msgQueue.put(Msg::GUARD_UPDATED);
 }
 
 void
@@ -67,7 +67,7 @@ GuardList::ignore(long nr, long count)
     if (!guards.guardNr(nr)) throw Error(ErrorCode::GUARD_NOT_FOUND, nr);
     guards.ignore(nr, count);
     update();
-    emu.main.msgQueue.put(MsgType::GUARD_UPDATED);
+    emu.main.msgQueue.put(Msg::GUARD_UPDATED);
 }
 
 void
@@ -76,7 +76,7 @@ GuardList::remove(isize nr)
     if (!guards.isSet(nr)) throw Error(ErrorCode::GUARD_NOT_FOUND, nr);
     guards.remove(nr);
     update();
-    emu.main.msgQueue.put(MsgType::GUARD_UPDATED);
+    emu.main.msgQueue.put(Msg::GUARD_UPDATED);
 }
 
 void
@@ -85,7 +85,7 @@ GuardList::removeAt(u32 target)
     if (!guards.isSetAt(target)) throw Error(ErrorCode::GUARD_NOT_FOUND, target);
     guards.removeAt(target);
     update();
-    emu.main.msgQueue.put(MsgType::GUARD_UPDATED);
+    emu.main.msgQueue.put(Msg::GUARD_UPDATED);
 }
 
 void
@@ -93,7 +93,7 @@ GuardList::removeAll()
 {
     guards.removeAll();
     update();
-    emu.main.msgQueue.put(MsgType::GUARD_UPDATED);
+    emu.main.msgQueue.put(Msg::GUARD_UPDATED);
 }
 
 void
@@ -102,7 +102,7 @@ GuardList::enable(isize nr)
     if (!guards.isSet(nr)) throw Error(ErrorCode::GUARD_NOT_FOUND, nr);
     guards.enable(nr);
     update();
-    emu.main.msgQueue.put(MsgType::GUARD_UPDATED);
+    emu.main.msgQueue.put(Msg::GUARD_UPDATED);
 }
 
 void
@@ -111,7 +111,7 @@ GuardList::enableAt(u32 target)
     if (!guards.isSetAt(target)) throw Error(ErrorCode::GUARD_NOT_FOUND, target);
     guards.enableAt(target);
     update();
-    emu.main.msgQueue.put(MsgType::GUARD_UPDATED);
+    emu.main.msgQueue.put(Msg::GUARD_UPDATED);
 }
 
 void
@@ -119,7 +119,7 @@ GuardList::enableAll()
 {
     guards.enableAll();
     update();
-    emu.main.msgQueue.put(MsgType::GUARD_UPDATED);
+    emu.main.msgQueue.put(Msg::GUARD_UPDATED);
 }
 
 void
@@ -128,7 +128,7 @@ GuardList::disable(isize nr)
     if (!guards.isSet(nr)) throw Error(ErrorCode::GUARD_NOT_FOUND, nr);
     guards.disable(nr);
     update();
-    emu.main.msgQueue.put(MsgType::GUARD_UPDATED);
+    emu.main.msgQueue.put(Msg::GUARD_UPDATED);
 }
 
 void
@@ -137,7 +137,7 @@ GuardList::disableAt(u32 target)
     if (!guards.isSetAt(target)) throw Error(ErrorCode::GUARD_NOT_FOUND, target);
     guards.disableAt(target);
     update();
-    emu.main.msgQueue.put(MsgType::GUARD_UPDATED);
+    emu.main.msgQueue.put(Msg::GUARD_UPDATED);
 }
 
 void
@@ -145,7 +145,7 @@ GuardList::disableAll()
 {
     guards.disableAll();
     update();
-    emu.main.msgQueue.put(MsgType::GUARD_UPDATED);
+    emu.main.msgQueue.put(Msg::GUARD_UPDATED);
 }
 
 void

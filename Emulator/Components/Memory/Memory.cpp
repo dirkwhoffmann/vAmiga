@@ -948,7 +948,7 @@ Memory::updateCpuMemSrcTable()
     // Expansion boards
     zorro.updateMemSrcTables();
 
-    msgQueue.put(MsgType::MEM_LAYOUT);
+    msgQueue.put(Msg::MEM_LAYOUT);
 }
 
 void

@@ -129,13 +129,13 @@ HdController::setOption(Option option, i64 value)
 
                     config.connected = true;
                     drive.connect();
-                    msgQueue.put(MsgType::HDC_CONNECT, DriveMsg { i16(objid), true, 0, 0 } );
+                    msgQueue.put(Msg::HDC_CONNECT, DriveMsg { i16(objid), true, 0, 0 } );
 
                 } else {
 
                     config.connected = false;
                     drive.disconnect();
-                    msgQueue.put(MsgType::HDC_CONNECT, DriveMsg { i16(objid), false, 0, 0 } );
+                    msgQueue.put(Msg::HDC_CONNECT, DriveMsg { i16(objid), false, 0, 0 } );
                 }
             }
             return;
@@ -201,7 +201,7 @@ void
 HdController::resetHdcState()
 {
     hdcState = HdcState::UNDETECTED;
-    msgQueue.put(MsgType::HDC_STATE, HdcMsg { i16(objid), hdcState });
+    msgQueue.put(Msg::HDC_STATE, HdcMsg { i16(objid), hdcState });
 }
 
 void
@@ -212,7 +212,7 @@ HdController::changeHdcState(HdcState newState)
         debug(HDR_DEBUG, "Changing state to %s\n", HdcStateEnum::key(newState));
         
         hdcState = newState;
-        msgQueue.put(MsgType::HDC_STATE, HdcMsg { i16(objid), hdcState });
+        msgQueue.put(Msg::HDC_STATE, HdcMsg { i16(objid), hdcState });
     }
 }
 

@@ -146,7 +146,7 @@ FloppyDrive::setOption(Option option, i64 value)
             config.connected = value;
 
             // Inform the GUI
-            msgQueue.put(MsgType::DRIVE_CONNECT, DriveMsg { i16(objid), i16(value), 0, 0 } );
+            msgQueue.put(Msg::DRIVE_CONNECT, DriveMsg { i16(objid), i16(value), 0, 0 } );
             break;
 
         case Option::DRIVE_TYPE:
@@ -433,12 +433,12 @@ FloppyDrive::setProtectionFlag(bool value)
         if (value && !disk->isWriteProtected()) {
             
             disk->setWriteProtection(true);
-            msgQueue.put(MsgType::DISK_PROTECTED, true);
+            msgQueue.put(Msg::DISK_PROTECTED, true);
         }
         if (!value && disk->isWriteProtected()) {
             
             disk->setWriteProtection(false);
-            msgQueue.put(MsgType::DISK_PROTECTED, false);
+            msgQueue.put(Msg::DISK_PROTECTED, false);
         }
     }
 }
@@ -637,8 +637,8 @@ FloppyDrive::setMotor(bool value)
     idCount = 0;
     
     // Inform the GUI
-    msgQueue.put(MsgType::DRIVE_LED, DriveMsg { i16(objid), value, 0, 0 });
-    msgQueue.put(MsgType::DRIVE_MOTOR, DriveMsg { i16(objid), value, 0, 0 });
+    msgQueue.put(Msg::DRIVE_LED, DriveMsg { i16(objid), value, 0, 0 });
+    msgQueue.put(Msg::DRIVE_MOTOR, DriveMsg { i16(objid), value, 0, 0 });
 
     debug(DSK_DEBUG, "Motor %s [%d]\n", motor ? "on" : "off", idCount);
 }
@@ -849,13 +849,13 @@ FloppyDrive::step(isize dir)
     // Notify the GUI
     if (pollsForDisk()) {
         
-        msgQueue.put(MsgType::DRIVE_POLL, DriveMsg {
+        msgQueue.put(Msg::DRIVE_POLL, DriveMsg {
             i16(objid), i16(head.cylinder), config.pollVolume, config.pan
         });
         
     } else {
 
-        msgQueue.put(MsgType::DRIVE_STEP, DriveMsg {
+        msgQueue.put(Msg::DRIVE_STEP, DriveMsg {
             i16(objid), i16(head.cylinder), config.stepVolume, config.pan
         });
     }
@@ -1133,7 +1133,7 @@ FloppyDrive::serviceDiskChangeEvent()
             disk = nullptr;
             
             // Notify the GUI
-            msgQueue.put(MsgType::DISK_EJECT,
+            msgQueue.put(Msg::DISK_EJECT,
                          DriveMsg { i16(objid), 0, config.ejectVolume, config.pan });
             /*
             msgQueue.put(MsgType::DISK_EJECT,
@@ -1154,7 +1154,7 @@ FloppyDrive::serviceDiskChangeEvent()
             head.offset = 0;
             
             // Notify the GUI
-            msgQueue.put(MsgType::DISK_INSERT, DriveMsg {
+            msgQueue.put(Msg::DISK_INSERT, DriveMsg {
                 i16(objid), 0, config.insertVolume, config.pan
             });
         }
@@ -1170,9 +1170,9 @@ FloppyDrive::processCommand(const Command &cmd)
 
     switch (cmd.type) {
 
-        case CmdType::DSK_TOGGLE_WP:     toggleWriteProtection(); break;
-        case CmdType::DSK_MODIFIED:      markDiskAsModified(); break;
-        case CmdType::DSK_UNMODIFIED:    markDiskAsUnmodified(); break;
+        case Cmd::DSK_TOGGLE_WP:     toggleWriteProtection(); break;
+        case Cmd::DSK_MODIFIED:      markDiskAsModified(); break;
+        case Cmd::DSK_UNMODIFIED:    markDiskAsUnmodified(); break;
 
         default:
             fatalError;

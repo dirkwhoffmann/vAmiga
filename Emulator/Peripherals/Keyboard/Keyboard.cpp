@@ -132,7 +132,7 @@ Keyboard::press(KeyCode keycode)
         
         // Check for reset key combination (CTRL + Amiga Left + Amiga Right)
         if (keyDown[0x63] && keyDown[0x66] && keyDown[0x67]) {
-            msgQueue.put(MsgType::CTRL_AMIGA_AMIGA);
+            msgQueue.put(Msg::CTRL_AMIGA_AMIGA);
         }
     }
 }
@@ -377,10 +377,10 @@ Keyboard::processCommand(const Command &cmd)
 
         switch (cmd.type) {
 
-            case CmdType::KEY_PRESS:         press(cmd.key.keycode); break;
-            case CmdType::KEY_RELEASE:       release(cmd.key.keycode); break;
-            case CmdType::KEY_RELEASE_ALL:   releaseAll(); break;
-            case CmdType::KEY_TOGGLE:        toggle(cmd.key.keycode); break;
+            case Cmd::KEY_PRESS:         press(cmd.key.keycode); break;
+            case Cmd::KEY_RELEASE:       release(cmd.key.keycode); break;
+            case Cmd::KEY_RELEASE_ALL:   releaseAll(); break;
+            case Cmd::KEY_TOGGLE:        toggle(cmd.key.keycode); break;
 
             default:
                 fatalError;

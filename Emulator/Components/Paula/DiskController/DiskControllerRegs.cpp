@@ -203,7 +203,7 @@ DiskController::PRBdidChange(u8 oldValue, u8 newValue)
         }
 
         // Inform the GUI
-        msgQueue.put(MsgType::DRIVE_SELECT, selected);
+        msgQueue.put(Msg::DRIVE_SELECT, selected);
     }
 }
 

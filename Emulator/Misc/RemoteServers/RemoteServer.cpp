@@ -187,7 +187,7 @@ RemoteServer::switchState(SrvState newState)
         didSwitch(oldState, newState);
         
         // Inform the GUI
-        msgQueue.put(MsgType::SRV_STATE, (i64)newState);
+        msgQueue.put(Msg::SRV_STATE, (i64)newState);
     }
 }
 

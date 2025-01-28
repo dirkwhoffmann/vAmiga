@@ -204,7 +204,7 @@ Agnus::setVideoFormat(VideoFormat newFormat)
     denise.pixelEngine.clearAll();
 
     // Inform the GUI
-    msgQueue.put(MsgType::VIDEO_FORMAT, (i64)newFormat);
+    msgQueue.put(Msg::VIDEO_FORMAT, (i64)newFormat);
 }
 
 AgnusTraits 

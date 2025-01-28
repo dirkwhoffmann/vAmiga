@@ -135,7 +135,7 @@ DmaDebugger::setOption(Option option, i64 value)
         case Option::DMA_DEBUG_ENABLE:
 
             config.enabled = value;
-            msgQueue.put(MsgType::DMA_DEBUG, value);
+            msgQueue.put(Msg::DMA_DEBUG, value);
             return;
             
         case Option::DMA_DEBUG_MODE:

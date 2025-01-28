@@ -19,7 +19,7 @@ namespace vamiga {
 // Enumerations
 //
 
-enum class MsgType : long
+enum class Msg : long
 {
     NONE = 0,
     
@@ -130,108 +130,108 @@ enum class MsgType : long
     ALARM
 };
 
-struct MsgTypeEnum : util::Reflection<MsgTypeEnum, MsgType>
+struct MsgTypeEnum : util::Reflection<MsgTypeEnum, Msg>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(MsgType::ALARM);
+    static constexpr long maxVal = long(Msg::ALARM);
     
-    static const char *_key(MsgType value)
+    static const char *_key(Msg value)
     {
         switch (value) {
                 
-            case MsgType::NONE:                  return "NONE";
+            case Msg::NONE:                  return "NONE";
                 
-            case MsgType::CONFIG:                return "CONFIG";
-            case MsgType::POWER:                 return "POWER";
-            case MsgType::RUN:                   return "RUN";
-            case MsgType::PAUSE:                 return "PAUSE";
-            case MsgType::STEP:                  return "STEP";
-            case MsgType::RESET:                 return "RESET";
-            case MsgType::SHUTDOWN:              return "SHUTDOWN";
-            case MsgType::ABORT:                 return "ABORT";
-            case MsgType::WARP:                  return "WARP";
-            case MsgType::TRACK:                 return "TRACK";
-            case MsgType::MUTE:                  return "MUTE";
-            case MsgType::POWER_LED_ON:          return "POWER_LED_ON";
-            case MsgType::POWER_LED_DIM:         return "POWER_LED_DIM";
-            case MsgType::POWER_LED_OFF:         return "POWER_LED_OFF";
+            case Msg::CONFIG:                return "CONFIG";
+            case Msg::POWER:                 return "POWER";
+            case Msg::RUN:                   return "RUN";
+            case Msg::PAUSE:                 return "PAUSE";
+            case Msg::STEP:                  return "STEP";
+            case Msg::RESET:                 return "RESET";
+            case Msg::SHUTDOWN:              return "SHUTDOWN";
+            case Msg::ABORT:                 return "ABORT";
+            case Msg::WARP:                  return "WARP";
+            case Msg::TRACK:                 return "TRACK";
+            case Msg::MUTE:                  return "MUTE";
+            case Msg::POWER_LED_ON:          return "POWER_LED_ON";
+            case Msg::POWER_LED_DIM:         return "POWER_LED_DIM";
+            case Msg::POWER_LED_OFF:         return "POWER_LED_OFF";
                 
-            case MsgType::RSH_CLOSE:             return "RSH_CLOSE";
-            case MsgType::RSH_UPDATE:            return "RSH_UPDATE";
-            case MsgType::RSH_DEBUGGER:          return "RSH_DEBUGGER";
-            case MsgType::RSH_WAIT:              return "RSH_WAIT";
-            case MsgType::RSH_ERROR:             return "RSH_ERROR";
+            case Msg::RSH_CLOSE:             return "RSH_CLOSE";
+            case Msg::RSH_UPDATE:            return "RSH_UPDATE";
+            case Msg::RSH_DEBUGGER:          return "RSH_DEBUGGER";
+            case Msg::RSH_WAIT:              return "RSH_WAIT";
+            case Msg::RSH_ERROR:             return "RSH_ERROR";
                 
-            case MsgType::VIDEO_FORMAT:          return "VIDEO_FORMAT";
+            case Msg::VIDEO_FORMAT:          return "VIDEO_FORMAT";
                 
-            case MsgType::OVERCLOCKING:          return "OVERCLOCKING";
-            case MsgType::GUARD_UPDATED:         return "GUARD_UPDATED";
-            case MsgType::BREAKPOINT_REACHED:    return "BREAKPOINT_REACHED";
-            case MsgType::WATCHPOINT_REACHED:    return "WATCHPOINT_REACHED";
-            case MsgType::CATCHPOINT_REACHED:    return "CATCHPOINT_REACHED";
-            case MsgType::SWTRAP_REACHED:        return "SWTRAP_REACHED";
-            case MsgType::CPU_HALT:              return "CPU_HALT";
+            case Msg::OVERCLOCKING:          return "OVERCLOCKING";
+            case Msg::GUARD_UPDATED:         return "GUARD_UPDATED";
+            case Msg::BREAKPOINT_REACHED:    return "BREAKPOINT_REACHED";
+            case Msg::WATCHPOINT_REACHED:    return "WATCHPOINT_REACHED";
+            case Msg::CATCHPOINT_REACHED:    return "CATCHPOINT_REACHED";
+            case Msg::SWTRAP_REACHED:        return "SWTRAP_REACHED";
+            case Msg::CPU_HALT:              return "CPU_HALT";
                 
-            case MsgType::EOL_REACHED:           return "EOL_REACHED";
-            case MsgType::EOF_REACHED:           return "EOF_REACHED";
-            case MsgType::BEAMTRAP_REACHED:      return "BEAMTRAP_REACHED";
-            case MsgType::BEAMTRAP_UPDATED:      return "BEAMTRAP_UPDATED";
+            case Msg::EOL_REACHED:           return "EOL_REACHED";
+            case Msg::EOF_REACHED:           return "EOF_REACHED";
+            case Msg::BEAMTRAP_REACHED:      return "BEAMTRAP_REACHED";
+            case Msg::BEAMTRAP_UPDATED:      return "BEAMTRAP_UPDATED";
                 
-            case MsgType::COPPERBP_REACHED:      return "COPPERBP_REACHED";
-            case MsgType::COPPERBP_UPDATED:      return "COPPERBP_UPDATED";
-            case MsgType::COPPERWP_REACHED:      return "COPPERWP_REACHED";
-            case MsgType::COPPERWP_UPDATED:      return "COPPERWP_UPDATED";
+            case Msg::COPPERBP_REACHED:      return "COPPERBP_REACHED";
+            case Msg::COPPERBP_UPDATED:      return "COPPERBP_UPDATED";
+            case Msg::COPPERWP_REACHED:      return "COPPERWP_REACHED";
+            case Msg::COPPERWP_UPDATED:      return "COPPERWP_UPDATED";
                 
-            case MsgType::VIEWPORT:              return "VIEWPORT";
+            case Msg::VIEWPORT:              return "VIEWPORT";
                 
-            case MsgType::MEM_LAYOUT:            return "MEM_LAYOUT";
+            case Msg::MEM_LAYOUT:            return "MEM_LAYOUT";
                 
-            case MsgType::DRIVE_CONNECT:         return "DRIVE_CONNECT";
-            case MsgType::DRIVE_SELECT:          return "DRIVE_SELECT";
-            case MsgType::DRIVE_READ:            return "DRIVE_READ";
-            case MsgType::DRIVE_WRITE:           return "DRIVE_WRITE";
-            case MsgType::DRIVE_LED:             return "DRIVE_LED";
-            case MsgType::DRIVE_MOTOR:           return "DRIVE_MOTOR";
-            case MsgType::DRIVE_STEP:            return "DRIVE_STEP";
-            case MsgType::DRIVE_POLL:            return "DRIVE_POLL";
-            case MsgType::DISK_INSERT:           return "DISK_INSERT";
-            case MsgType::DISK_EJECT:            return "DISK_EJECT";
-            case MsgType::DISK_PROTECTED:        return "DISK_PROTECTED";
+            case Msg::DRIVE_CONNECT:         return "DRIVE_CONNECT";
+            case Msg::DRIVE_SELECT:          return "DRIVE_SELECT";
+            case Msg::DRIVE_READ:            return "DRIVE_READ";
+            case Msg::DRIVE_WRITE:           return "DRIVE_WRITE";
+            case Msg::DRIVE_LED:             return "DRIVE_LED";
+            case Msg::DRIVE_MOTOR:           return "DRIVE_MOTOR";
+            case Msg::DRIVE_STEP:            return "DRIVE_STEP";
+            case Msg::DRIVE_POLL:            return "DRIVE_POLL";
+            case Msg::DISK_INSERT:           return "DISK_INSERT";
+            case Msg::DISK_EJECT:            return "DISK_EJECT";
+            case Msg::DISK_PROTECTED:        return "DISK_PROTECTED";
                 
-            case MsgType::HDC_CONNECT:           return "HDC_CONNECT";
-            case MsgType::HDC_STATE:             return "HDC_STATE";
+            case Msg::HDC_CONNECT:           return "HDC_CONNECT";
+            case Msg::HDC_STATE:             return "HDC_STATE";
                 
-            case MsgType::HDR_STEP:              return "HDR_STEP";
-            case MsgType::HDR_READ:              return "HDR_READ";
-            case MsgType::HDR_WRITE:             return "HDR_WRITE";
-            case MsgType::HDR_IDLE:              return "HDR_IDLE";
+            case Msg::HDR_STEP:              return "HDR_STEP";
+            case Msg::HDR_READ:              return "HDR_READ";
+            case Msg::HDR_WRITE:             return "HDR_WRITE";
+            case Msg::HDR_IDLE:              return "HDR_IDLE";
                 
-            case MsgType::CTRL_AMIGA_AMIGA:      return "CTRL_AMIGA_AMIGA";
+            case Msg::CTRL_AMIGA_AMIGA:      return "CTRL_AMIGA_AMIGA";
                 
-            case MsgType::SHAKING:               return "SHAKING";
+            case Msg::SHAKING:               return "SHAKING";
                 
-            case MsgType::SER_IN:                return "SER_IN";
-            case MsgType::SER_OUT:               return "SER_OUT";
+            case Msg::SER_IN:                return "SER_IN";
+            case Msg::SER_OUT:               return "SER_OUT";
                 
-            case MsgType::SNAPSHOT_TAKEN:        return "SNAPSHOT_TAKEN";
-            case MsgType::SNAPSHOT_RESTORED:     return "SNAPSHOT_RESTORED";
+            case Msg::SNAPSHOT_TAKEN:        return "SNAPSHOT_TAKEN";
+            case Msg::SNAPSHOT_RESTORED:     return "SNAPSHOT_RESTORED";
                 
-            case MsgType::RECORDING_STARTED:     return "RECORDING_STARTED";
-            case MsgType::RECORDING_STOPPED:     return "RECORDING_STOPPED";
-            case MsgType::RECORDING_ABORTED:     return "RECORDING_ABORTED";
+            case Msg::RECORDING_STARTED:     return "RECORDING_STARTED";
+            case Msg::RECORDING_STOPPED:     return "RECORDING_STOPPED";
+            case Msg::RECORDING_ABORTED:     return "RECORDING_ABORTED";
                 
-            case MsgType::DMA_DEBUG:             return "DMA_DEBUG";
+            case Msg::DMA_DEBUG:             return "DMA_DEBUG";
                 
-            case MsgType::SRV_STATE:             return "SRV_STATE";
-            case MsgType::SRV_RECEIVE:           return "SRV_RECEIVE";
-            case MsgType::SRV_SEND:              return "SRV_SEND";
+            case Msg::SRV_STATE:             return "SRV_STATE";
+            case Msg::SRV_RECEIVE:           return "SRV_RECEIVE";
+            case Msg::SRV_SEND:              return "SRV_SEND";
                 
-            case MsgType::ALARM:                 return "ALARM";
+            case Msg::ALARM:                 return "ALARM";
         }
         return "???";
     }
     
-    static const char *help(MsgType value)
+    static const char *help(Msg value)
     {
         return "";
     }
@@ -252,7 +252,7 @@ typedef struct { void *snapshot; } SnapshotMsg;
 typedef struct
 {
     // Header
-    MsgType type;
+    Msg type;
     
     // Payload
     union {

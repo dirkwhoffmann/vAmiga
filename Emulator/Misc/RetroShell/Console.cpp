@@ -793,7 +793,7 @@ Console::initCommands(RetroShellCmd &root)
                  "Hide the console window",
                  [this](Arguments& argv, long value) {
 
-            msgQueue.put(MsgType::RSH_CLOSE);
+            msgQueue.put(Msg::RSH_CLOSE);
         });
 
         root.add({"help"}, { }, {Arg::command},
@@ -841,7 +841,7 @@ Console::initCommands(RetroShellCmd &root)
                  "Terminates the application",
                  [this](Arguments& argv, long value) {
 
-            msgQueue.put(MsgType::ABORT, 0);
+            msgQueue.put(Msg::ABORT, 0);
         });
     }
 }
@@ -889,7 +889,7 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
                          [this](Arguments& argv, long value) {
                     
                     emulator.set(Option(HI_WORD(value)), argv[0], { LO_WORD(value) });
-                    msgQueue.put(MsgType::CONFIG);
+                    msgQueue.put(Msg::CONFIG);
                     
                 }, HI_W_LO_W(u16(opt), c.objid));
 
@@ -909,7 +909,7 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
                              [this](Arguments& argv, long value) {
                         
                         emulator.set(Option(HI_WORD(value)), BYTE1(value), { BYTE0(value) });
-                        msgQueue.put(MsgType::CONFIG);
+                        msgQueue.put(Msg::CONFIG);
                         
                     }, u16(opt) << 16 | second << 8 | c.objid);
                 }

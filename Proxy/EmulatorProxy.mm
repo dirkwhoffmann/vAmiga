@@ -2637,32 +2637,32 @@ NSString *EventSlotName(NSInteger slot)
     catch (Error &error) { [ex save:error]; }
 }
 
-- (void)put:(CmdType)type
+- (void)put:(Cmd)type
 {
     [self emu]->put(type, 0);
 }
 
-- (void)put:(CmdType)type value:(NSInteger)value
+- (void)put:(Cmd)type value:(NSInteger)value
 {
     [self emu]->put(type, value);
 }
 
-- (void)put:(CmdType)type value:(NSInteger)value value2:(NSInteger)value2
+- (void)put:(Cmd)type value:(NSInteger)value value2:(NSInteger)value2
 {
     [self emu]->put(type, value, value2);
 }
 
-- (void)put:(CmdType)type key:(KeyCommand)cmd
+- (void)put:(Cmd)type key:(KeyCommand)cmd
 {
     [self emu]->put(type, cmd);
 }
 
-- (void)put:(CmdType)type coord:(CoordCommand)cmd
+- (void)put:(Cmd)type coord:(CoordCommand)cmd
 {
     [self emu]->put(type, cmd);
 }
 
-- (void)put:(CmdType)type action:(GamePadCommand)cmd
+- (void)put:(Cmd)type action:(GamePadCommand)cmd
 {
     [self emu]->put(type, cmd);
 }

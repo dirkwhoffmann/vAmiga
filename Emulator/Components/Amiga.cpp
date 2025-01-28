@@ -161,7 +161,7 @@ Amiga::_didReset(bool hard)
     flags = 0;
 
     // Inform the GUI
-    if (hard) msgQueue.put(MsgType::RESET);
+    if (hard) msgQueue.put(Msg::RESET);
 }
 
 i64
@@ -656,7 +656,7 @@ Amiga::_powerOn()
     debug(RUN_DEBUG, "_powerOn\n");
 
     hardReset();
-    msgQueue.put(MsgType::POWER, 1);
+    msgQueue.put(Msg::POWER, 1);
 }
 
 void
@@ -665,7 +665,7 @@ Amiga::_powerOff()
     debug(RUN_DEBUG, "_powerOff\n");
 
     hardReset();
-    msgQueue.put(MsgType::POWER, 0);
+    msgQueue.put(Msg::POWER, 0);
 }
 
 void
@@ -673,7 +673,7 @@ Amiga::_run()
 {
     debug(RUN_DEBUG, "_run\n");
 
-    msgQueue.put(MsgType::RUN);
+    msgQueue.put(Msg::RUN);
 }
 
 void
@@ -682,7 +682,7 @@ Amiga::_pause()
     debug(RUN_DEBUG, "_pause\n");
 
     remoteManager.gdbServer.breakpointReached();
-    msgQueue.put(MsgType::PAUSE);
+    msgQueue.put(Msg::PAUSE);
 }
 
 void
@@ -690,7 +690,7 @@ Amiga::_halt()
 {
     debug(RUN_DEBUG, "_halt\n");
 
-    msgQueue.put(MsgType::SHUTDOWN);
+    msgQueue.put(Msg::SHUTDOWN);
 }
 
 void
@@ -698,7 +698,7 @@ Amiga::_warpOn()
 {
     debug(RUN_DEBUG, "_warpOn\n");
 
-    msgQueue.put(MsgType::WARP, 1);
+    msgQueue.put(Msg::WARP, 1);
 }
 
 void
@@ -706,7 +706,7 @@ Amiga::_warpOff()
 {
     debug(RUN_DEBUG, "_warpOff\n");
 
-    msgQueue.put(MsgType::WARP, 0);
+    msgQueue.put(Msg::WARP, 0);
 }
 
 void
@@ -714,7 +714,7 @@ Amiga::_trackOn()
 {
     debug(RUN_DEBUG, "_trackOn\n");
 
-    msgQueue.put(MsgType::TRACK, 1);
+    msgQueue.put(Msg::TRACK, 1);
 }
 
 void
@@ -722,7 +722,7 @@ Amiga::_trackOff()
 {
     debug(RUN_DEBUG, "_trackOff\n");
 
-    msgQueue.put(MsgType::TRACK, 0);
+    msgQueue.put(Msg::TRACK, 0);
 }
 
 void 
@@ -738,86 +738,86 @@ Amiga::update(CmdQueue &queue)
 
         switch (cmd.type) {
 
-            case CmdType::CONFIG:
+            case Cmd::CONFIG:
 
                 cmdConfig = true;
                 set(cmd.config.option, cmd.config.value, { cmd.config.id });
                 break;
 
-            case CmdType::CONFIG_ALL:
+            case Cmd::CONFIG_ALL:
 
                 cmdConfig = true;
                 set(cmd.config.option, cmd.config.value, { });
                 break;
 
-            case CmdType::ALARM_ABS:
-            case CmdType::ALARM_REL:
-            case CmdType::INSPECTION_TARGET:
-            case CmdType::HARD_RESET:
-            case CmdType::SOFT_RESET:
-            case CmdType::POWER_ON:
-            case CmdType::POWER_OFF:
-            case CmdType::RUN:
-            case CmdType::PAUSE:
-            case CmdType::WARP_ON:
-            case CmdType::WARP_OFF:
-            case CmdType::HALT:
+            case Cmd::ALARM_ABS:
+            case Cmd::ALARM_REL:
+            case Cmd::INSPECTION_TARGET:
+            case Cmd::HARD_RESET:
+            case Cmd::SOFT_RESET:
+            case Cmd::POWER_ON:
+            case Cmd::POWER_OFF:
+            case Cmd::RUN:
+            case Cmd::PAUSE:
+            case Cmd::WARP_ON:
+            case Cmd::WARP_OFF:
+            case Cmd::HALT:
 
                 processCommand(cmd);
                 break;
 
-            case CmdType::GUARD_SET_AT:
-            case CmdType::GUARD_MOVE_NR:
-            case CmdType::GUARD_IGNORE_NR:
-            case CmdType::GUARD_REMOVE_NR:
-            case CmdType::GUARD_REMOVE_AT:
-            case CmdType::GUARD_REMOVE_ALL:
-            case CmdType::GUARD_ENABLE_NR:
-            case CmdType::GUARD_ENABLE_AT:
-            case CmdType::GUARD_ENABLE_ALL:
-            case CmdType::GUARD_DISABLE_NR:
-            case CmdType::GUARD_DISABLE_AT:
-            case CmdType::GUARD_DISABLE_ALL:
+            case Cmd::GUARD_SET_AT:
+            case Cmd::GUARD_MOVE_NR:
+            case Cmd::GUARD_IGNORE_NR:
+            case Cmd::GUARD_REMOVE_NR:
+            case Cmd::GUARD_REMOVE_AT:
+            case Cmd::GUARD_REMOVE_ALL:
+            case Cmd::GUARD_ENABLE_NR:
+            case Cmd::GUARD_ENABLE_AT:
+            case Cmd::GUARD_ENABLE_ALL:
+            case Cmd::GUARD_DISABLE_NR:
+            case Cmd::GUARD_DISABLE_AT:
+            case Cmd::GUARD_DISABLE_ALL:
 
                 cpu.processCommand(cmd);
                 break;
 
-            case CmdType::KEY_PRESS:
-            case CmdType::KEY_RELEASE:
-            case CmdType::KEY_RELEASE_ALL:
-            case CmdType::KEY_TOGGLE:
+            case Cmd::KEY_PRESS:
+            case Cmd::KEY_RELEASE:
+            case Cmd::KEY_RELEASE_ALL:
+            case Cmd::KEY_TOGGLE:
 
                 keyboard.processCommand(cmd);
                 break;
 
-            case CmdType::MOUSE_MOVE_ABS:
-            case CmdType::MOUSE_MOVE_REL:
+            case Cmd::MOUSE_MOVE_ABS:
+            case Cmd::MOUSE_MOVE_REL:
             {
                 auto &port = cmd.coord.port ? controlPort2 : controlPort1;
                 port.processCommand(cmd); break;
                 break;
             }
-            case CmdType::MOUSE_BUTTON:
-            case CmdType::JOY_EVENT:
+            case Cmd::MOUSE_BUTTON:
+            case Cmd::JOY_EVENT:
             {
                 auto &port = cmd.action.port ? controlPort2 : controlPort1;
                 port.processCommand(cmd); break;
                 break;
             }
-            case CmdType::DSK_TOGGLE_WP:
-            case CmdType::DSK_MODIFIED:
-            case CmdType::DSK_UNMODIFIED:
+            case Cmd::DSK_TOGGLE_WP:
+            case Cmd::DSK_MODIFIED:
+            case Cmd::DSK_UNMODIFIED:
 
                 dfn().processCommand(cmd);
                 break;
 
                 
-            case CmdType::RSH_EXECUTE:
+            case Cmd::RSH_EXECUTE:
 
                 retroShell.exec();
                 break;
 
-            case CmdType::FOCUS:
+            case Cmd::FOCUS:
 
                 cmd.value ? focus() : unfocus();
                 break;
@@ -828,10 +828,10 @@ Amiga::update(CmdQueue &queue)
     }
 
     // Inform the GUI about a changed machine configuration
-    if (cmdConfig) { msgQueue.put(MsgType::CONFIG); }
+    if (cmdConfig) { msgQueue.put(Msg::CONFIG); }
 
     // Inform the GUI about new RetroShell content
-    if (retroShell.isDirty) { retroShell.isDirty = false; msgQueue.put(MsgType::RSH_UPDATE); }
+    if (retroShell.isDirty) { retroShell.isDirty = false; msgQueue.put(Msg::RSH_UPDATE); }
 }
 
 void
@@ -856,21 +856,21 @@ Amiga::computeFrame()
             // Did we reach a soft breakpoint?
             if (flags & RL::SOFTSTOP_REACHED) {
 
-                msgQueue.put(MsgType::STEP);
+                msgQueue.put(Msg::STEP);
                 action = pause;
             }
 
             // Shall we stop at the end of the current line?
             if (flags & RL::EOL_REACHED) {
 
-                msgQueue.put(MsgType::EOL_REACHED);
+                msgQueue.put(Msg::EOL_REACHED);
                 action = pause;
             }
   
             // Shall we stop at the end of the current frame?
             if (flags & RL::EOF_REACHED) {
 
-                msgQueue.put(MsgType::EOF_REACHED);
+                msgQueue.put(Msg::EOF_REACHED);
                 action = pause;
             }
 
@@ -878,7 +878,7 @@ Amiga::computeFrame()
             if (flags & RL::BREAKPOINT_REACHED) {
 
                 auto addr = cpu.debugger.breakpoints.hit->addr;
-                msgQueue.put(MsgType::BREAKPOINT_REACHED, CpuMsg { addr, 0 });
+                msgQueue.put(Msg::BREAKPOINT_REACHED, CpuMsg { addr, 0 });
                 action = pause;
             }
 
@@ -886,7 +886,7 @@ Amiga::computeFrame()
             if (flags & RL::WATCHPOINT_REACHED) {
 
                 auto addr = cpu.debugger.watchpoints.hit->addr;
-                msgQueue.put(MsgType::WATCHPOINT_REACHED, CpuMsg { addr, 0 });
+                msgQueue.put(Msg::WATCHPOINT_REACHED, CpuMsg { addr, 0 });
                 action = pause;
             }
 
@@ -894,21 +894,21 @@ Amiga::computeFrame()
             if (flags & RL::CATCHPOINT_REACHED) {
 
                 auto vector = u8(cpu.debugger.catchpoints.hit->addr);
-                msgQueue.put(MsgType::CATCHPOINT_REACHED, CpuMsg { cpu.getPC0(), vector });
+                msgQueue.put(Msg::CATCHPOINT_REACHED, CpuMsg { cpu.getPC0(), vector });
                 action = pause;
             }
 
             // Did we reach a software trap?
             if (flags & RL::SWTRAP_REACHED) {
 
-                msgQueue.put(MsgType::SWTRAP_REACHED, CpuMsg { cpu.getPC0(), 0 });
+                msgQueue.put(Msg::SWTRAP_REACHED, CpuMsg { cpu.getPC0(), 0 });
                 action = pause;
             }
 
             // Did we reach a beam trap?
             if (flags & RL::BEAMTRAP_REACHED) {
 
-                msgQueue.put(MsgType::BEAMTRAP_REACHED, CpuMsg { 0, 0 });
+                msgQueue.put(Msg::BEAMTRAP_REACHED, CpuMsg { 0, 0 });
                 action = pause;
             }
 
@@ -916,7 +916,7 @@ Amiga::computeFrame()
             if (flags & RL::COPPERBP_REACHED) {
 
                 auto addr = u8(agnus.copper.debugger.breakpoints.hit()->addr);
-                msgQueue.put(MsgType::COPPERBP_REACHED, CpuMsg { addr, 0 });
+                msgQueue.put(Msg::COPPERBP_REACHED, CpuMsg { addr, 0 });
                 action = pause;
             }
 
@@ -924,7 +924,7 @@ Amiga::computeFrame()
             if (flags & RL::COPPERWP_REACHED) {
 
                 auto addr = u8(agnus.copper.debugger.watchpoints.hit()->addr);
-                msgQueue.put(MsgType::COPPERWP_REACHED, CpuMsg { addr, 0 });
+                msgQueue.put(Msg::COPPERWP_REACHED, CpuMsg { addr, 0 });
                 action = pause;
             }
 
@@ -1001,7 +1001,7 @@ Amiga::serviceSnpEvent(EventID eventId)
     if (objid == 0) {
 
         // Take snapshot and hand it over to GUI
-        msgQueue.put(MsgType::SNAPSHOT_TAKEN, SnapshotMsg { .snapshot = new Snapshot(*this) } );
+        msgQueue.put(Msg::SNAPSHOT_TAKEN, SnapshotMsg { .snapshot = new Snapshot(*this) } );
     }
 
     // Schedule the next event
@@ -1053,8 +1053,8 @@ Amiga::loadSnapshot(const Snapshot &snap)
     load(snapshot.getData());
         
     // Inform the GUI
-    msgQueue.put(MsgType::SNAPSHOT_RESTORED);
-    msgQueue.put(MsgType::VIDEO_FORMAT, agnus.isPAL() ? (i64)VideoFormat::PAL : (i64)VideoFormat::NTSC);
+    msgQueue.put(Msg::SNAPSHOT_RESTORED);
+    msgQueue.put(Msg::VIDEO_FORMAT, agnus.isPAL() ? (i64)VideoFormat::PAL : (i64)VideoFormat::NTSC);
 }
 
 void
@@ -1062,52 +1062,52 @@ Amiga::processCommand(const Command &cmd)
 {
     switch (cmd.type) {
 
-        case CmdType::ALARM_ABS:
+        case Cmd::ALARM_ABS:
 
             setAlarmAbs(cmd.alarm.cycle, cmd.alarm.value);
             break;
 
-        case CmdType::ALARM_REL:
+        case Cmd::ALARM_REL:
 
             setAlarmRel(cmd.alarm.cycle, cmd.alarm.value);
             break;
 
-        case CmdType::INSPECTION_TARGET:
+        case Cmd::INSPECTION_TARGET:
 
             setAutoInspectionMask(cmd.value);
             break;
 
-        case CmdType::HARD_RESET:
+        case Cmd::HARD_RESET:
             
             emulator.hardReset();
             break;
             
-        case CmdType::SOFT_RESET:
+        case Cmd::SOFT_RESET:
             
             emulator.softReset();
             break;
             
-        case CmdType::POWER_ON:
+        case Cmd::POWER_ON:
             
             emulator.powerOn();
             break;
             
-        case CmdType::POWER_OFF:
+        case Cmd::POWER_OFF:
             
             emulator.powerOff();
             break;
             
-        case CmdType::RUN:
+        case Cmd::RUN:
             
             emulator.run();
             break;
             
-        case CmdType::PAUSE:
+        case Cmd::PAUSE:
             
             emulator.pause();
             break;
             
-        case CmdType::WARP_ON:
+        case Cmd::WARP_ON:
             
             if (cmd.value == 0) {
                 throw std::runtime_error("Source 0 is reserved for implementing config.warpMode.");
@@ -1115,7 +1115,7 @@ Amiga::processCommand(const Command &cmd)
             emulator.warpOn(cmd.value);
             break;
             
-        case CmdType::WARP_OFF:
+        case Cmd::WARP_OFF:
 
             if (cmd.value == 0) {
                 throw std::runtime_error("Source 0 is reserved for implementing config.warpMode.");
@@ -1123,7 +1123,7 @@ Amiga::processCommand(const Command &cmd)
             emulator.warpOff(cmd.value);
             break;
 
-        case CmdType::HALT:
+        case Cmd::HALT:
 
             emulator.halt();
             break;
@@ -1159,7 +1159,7 @@ Amiga::serviceAlarmEvent()
     for (auto it = alarms.begin(); it != alarms.end(); ) {
 
         if (it->trigger <= agnus.clock) {
-            msgQueue.put(MsgType::ALARM, it->payload);
+            msgQueue.put(Msg::ALARM, it->payload);
             it = alarms.erase(it);
         } else {
             it++;

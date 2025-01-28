@@ -172,12 +172,12 @@ public:
 
     // Feeds a command into the command queue
     void put(const Command &cmd);
-    void put(CmdType type, i64 payload = 0, i64 payload2 = 0) { put(Command(type, payload, payload2)); }
-    void put(CmdType type, ConfigCommand payload)  { put(Command(type, payload)); }
-    void put(CmdType type, KeyCommand payload)  { put(Command(type, payload)); }
-    void put(CmdType type, CoordCommand payload)  { put(Command(type, payload)); }
-    void put(CmdType type, GamePadCommand payload)  { put(Command(type, payload)); }
-    void put(CmdType type, AlarmCommand payload)  { put(Command(type, payload)); }
+    void put(Cmd type, i64 payload = 0, i64 payload2 = 0) { put(Command(type, payload, payload2)); }
+    void put(Cmd type, ConfigCommand payload)  { put(Command(type, payload)); }
+    void put(Cmd type, KeyCommand payload)  { put(Command(type, payload)); }
+    void put(Cmd type, CoordCommand payload)  { put(Command(type, payload)); }
+    void put(Cmd type, GamePadCommand payload)  { put(Command(type, payload)); }
+    void put(Cmd type, AlarmCommand payload)  { put(Command(type, payload)); }
 
 
 private:

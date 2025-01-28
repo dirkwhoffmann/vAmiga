@@ -675,7 +675,7 @@ HardDrive::read(isize offset, isize length, u32 addr)
         mem.patch(addr, data.ptr + offset, length);
 
         // Inform the GUI
-        msgQueue.put(MsgType::HDR_READ);
+        msgQueue.put(Msg::HDR_READ);
         
         // Go back to IDLE state after some time
         scheduleIdleEvent();
@@ -715,7 +715,7 @@ HardDrive::write(isize offset, isize length, u32 addr)
         }
         
         // Inform the GUI
-        msgQueue.put(MsgType::HDR_WRITE);
+        msgQueue.put(Msg::HDR_WRITE);
         
         // Go back to IDLE state after some time
         scheduleIdleEvent();
@@ -799,7 +799,7 @@ HardDrive::moveHead(isize c, isize h, isize s)
     head.offset = geometry.bsize * s;
     
     if (step) {
-        msgQueue.put(MsgType::HDR_STEP, DriveMsg {
+        msgQueue.put(Msg::HDR_STEP, DriveMsg {
             i16(objid), i16(c), config.stepVolume, config.pan
         });
     }
@@ -836,7 +836,7 @@ HardDrive::serviceHdrEvent()
 {
     agnus.cancel <s> ();
     state = HardDriveState::IDLE;
-    msgQueue.put(MsgType::HDR_IDLE, objid);
+    msgQueue.put(Msg::HDR_IDLE, objid);
 }
 
 template void HardDrive::serviceHdrEvent <SLOT_HD0> ();

@@ -77,7 +77,7 @@ RegressionTester::dumpTexture(Amiga &amiga, const string &filename)
     file.close();
 
     // Ask the GUI to quit
-    msgQueue.put(MsgType::ABORT, retValue);
+    msgQueue.put(Msg::ABORT, retValue);
 }
 
 void

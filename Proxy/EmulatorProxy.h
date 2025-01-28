@@ -301,12 +301,12 @@ NSString *EventSlotName(NSInteger slot);
 - (BOOL)set:(Option)opt drive:(NSInteger)id enable:(BOOL)val;
 - (void)exportConfig:(NSURL *)url exception:(ExceptionWrapper *)ex;
 
-- (void)put:(CmdType)cmd;
-- (void)put:(CmdType)type value:(NSInteger)value;
-- (void)put:(CmdType)type value:(NSInteger)value value2:(NSInteger)value2;
-- (void)put:(CmdType)type key:(KeyCommand)cmd;
-- (void)put:(CmdType)type action:(GamePadCommand)cmd;
-- (void)put:(CmdType)type coord:(CoordCommand)cmd;
+- (void)put:(Cmd)cmd;
+- (void)put:(Cmd)type value:(NSInteger)value;
+- (void)put:(Cmd)type value:(NSInteger)value value2:(NSInteger)value2;
+- (void)put:(Cmd)type key:(KeyCommand)cmd;
+- (void)put:(Cmd)type action:(GamePadCommand)cmd;
+- (void)put:(Cmd)type coord:(CoordCommand)cmd;
 
 @end
 

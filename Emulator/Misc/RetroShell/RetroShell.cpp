@@ -45,7 +45,7 @@ RetroShell::enterDebugger()
 
     // Enter tracking mode
     emulator.trackOn(1);
-    msgQueue.put(MsgType::RSH_DEBUGGER, true);
+    msgQueue.put(Msg::RSH_DEBUGGER, true);
     
     // Print the welcome message if entered the first time
     if (current->isEmpty()) { current->exec("welcome"); *this << current->getPrompt(); }
@@ -59,7 +59,7 @@ RetroShell::enterCommander()
 
     // Leave tracking mode
     emulator.trackOff(1);
-    msgQueue.put(MsgType::RSH_DEBUGGER, false);
+    msgQueue.put(Msg::RSH_DEBUGGER, false);
     
     // Print the welcome message if entered the first time
     if (current->isEmpty()) { current->exec("welcome"); *this << current->getPrompt(); }
@@ -76,7 +76,7 @@ RetroShell::asyncExec(const string &command, bool append)
     }
 
     // Process the command queue in the next update cycle
-    emulator.put(Command(CmdType::RSH_EXECUTE));
+    emulator.put(Command(Cmd::RSH_EXECUTE));
 }
 
 void
@@ -92,7 +92,7 @@ RetroShell::asyncExecScript(std::stringstream &ss)
             commands.push_back({ nr++, line });
         }
         
-        emulator.put(Command(CmdType::RSH_EXECUTE));
+        emulator.put(Command(Cmd::RSH_EXECUTE));
     }
 }
 
@@ -165,14 +165,14 @@ RetroShell::exec()
             
         } catch (ScriptInterruption &) {
             
-            msgQueue.put(MsgType::RSH_WAIT);
+            msgQueue.put(Msg::RSH_WAIT);
             
         } catch (...) {
             
             // Remove all remaining commands
             commands = { };
             
-            msgQueue.put(MsgType::RSH_ERROR);
+            msgQueue.put(Msg::RSH_ERROR);
         }
         
         // Print prompt
@@ -312,7 +312,7 @@ RetroShell::setStream(std::ostream &os)
 void
 RetroShell::serviceEvent()
 {
-    emulator.put(Command(CmdType::RSH_EXECUTE));
+    emulator.put(Command(Cmd::RSH_EXECUTE));
     agnus.cancel<SLOT_RSH>();
 }
 

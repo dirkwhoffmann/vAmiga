@@ -147,7 +147,7 @@ SocketServer::receive()
     if (isConnected()) {
 
         packet = doReceive();
-        msgQueue.put(MsgType::SRV_RECEIVE, ++numReceived);
+        msgQueue.put(Msg::SRV_RECEIVE, ++numReceived);
     }
 
     return packet;
@@ -159,7 +159,7 @@ SocketServer::send(const string &packet)
     if (isConnected()) {
 
         doSend(packet);
-        msgQueue.put(MsgType::SRV_SEND, ++numSent);
+        msgQueue.put(Msg::SRV_SEND, ++numSent);
     }
 }
 

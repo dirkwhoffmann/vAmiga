@@ -68,43 +68,43 @@ MsgQueue::put(const Message &msg)
 }
 
 void
-MsgQueue::put(MsgType type, i64 payload)
+MsgQueue::put(Msg type, i64 payload)
 {
     put( Message { .type = type, .value = payload } );
 }
 
 void
-MsgQueue::put(MsgType type, CpuMsg payload)
+MsgQueue::put(Msg type, CpuMsg payload)
 {
     put( Message { .type = type, .cpu = payload } );
 }
 
 void
-MsgQueue::put(MsgType type, DriveMsg payload)
+MsgQueue::put(Msg type, DriveMsg payload)
 {
     put( Message { .type = type, .drive = payload } );
 }
 
 void
-MsgQueue::put(MsgType type, HdcMsg payload)
+MsgQueue::put(Msg type, HdcMsg payload)
 {
     put( Message { .type = type, .hdc = payload } );
 }
 
 void
-MsgQueue::put(MsgType type, ScriptMsg payload)
+MsgQueue::put(Msg type, ScriptMsg payload)
 {
     put( Message { .type = type, .script = payload } );
 }
 
 void
-MsgQueue::put(MsgType type, ViewportMsg payload)
+MsgQueue::put(Msg type, ViewportMsg payload)
 {
     put( Message { .type = type, .viewport = payload } );
 }
 
 void
-MsgQueue::put(MsgType type, SnapshotMsg payload)
+MsgQueue::put(Msg type, SnapshotMsg payload)
 {
     put( Message { .type = type, .snapshot = payload } );
 }

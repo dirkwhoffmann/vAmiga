@@ -274,7 +274,7 @@ SerialPort::recordIncomingByte(int byte)
         incoming += char(byte);
 
         // Inform the GUI if the record buffer had been empty
-        if (incoming.length() == 1) msgQueue.put(MsgType::SER_IN);
+        if (incoming.length() == 1) msgQueue.put(Msg::SER_IN);
 
         // Inform RetroShell
         if (config.verbose) dumpByte(byte);
@@ -292,7 +292,7 @@ SerialPort::recordOutgoingByte(int byte)
         outgoing += char(byte);
 
         // Inform the GUI if the record buffer had been empty
-        if (outgoing.length() == 1) msgQueue.put(MsgType::SER_OUT);
+        if (outgoing.length() == 1) msgQueue.put(Msg::SER_OUT);
 
         // Inform RetroShell
         if (config.device == SerialPortDevice::RETROSHELL || config.device == SerialPortDevice::COMMANDER) dumpByte(byte);

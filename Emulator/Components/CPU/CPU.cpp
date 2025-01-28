@@ -208,7 +208,7 @@ Moira::cpuDidReset()
 void
 Moira::cpuDidHalt()
 {
-    msgQueue.put(MsgType::CPU_HALT);
+    msgQueue.put(Msg::CPU_HALT);
 }
 
 void
@@ -401,7 +401,7 @@ CPU::setOption(Option option, i64 value)
         case Option::CPU_OVERCLOCKING:
 
             config.overclocking = isize(value);
-            msgQueue.put(MsgType::OVERCLOCKING, config.overclocking);
+            msgQueue.put(Msg::OVERCLOCKING, config.overclocking);
             return;
 
         case Option::CPU_RESET_VAL:
@@ -845,18 +845,18 @@ CPU::processCommand(const Command &cmd)
 
     switch (cmd.type) {
 
-        case CmdType::GUARD_SET_AT:      guards->setAt(addr); break;
-        case CmdType::GUARD_REMOVE_NR:   guards->remove(nr); break;
-        case CmdType::GUARD_MOVE_NR:     guards->moveTo(nr, u32(cmd.value2)); break;
-        case CmdType::GUARD_IGNORE_NR:   guards->ignore(nr, long(cmd.value2)); break;
-        case CmdType::GUARD_REMOVE_AT:   guards->removeAt(addr); break;
-        case CmdType::GUARD_REMOVE_ALL:  guards->removeAll(); break;
-        case CmdType::GUARD_ENABLE_NR:   guards->enable(nr); break;
-        case CmdType::GUARD_ENABLE_AT:   guards->enableAt(addr); break;
-        case CmdType::GUARD_ENABLE_ALL:  guards->enableAll(); break;
-        case CmdType::GUARD_DISABLE_NR:  guards->disable(nr); break;
-        case CmdType::GUARD_DISABLE_AT:  guards->disableAt(addr); break;
-        case CmdType::GUARD_DISABLE_ALL: guards->disableAll(); break;
+        case Cmd::GUARD_SET_AT:      guards->setAt(addr); break;
+        case Cmd::GUARD_REMOVE_NR:   guards->remove(nr); break;
+        case Cmd::GUARD_MOVE_NR:     guards->moveTo(nr, u32(cmd.value2)); break;
+        case Cmd::GUARD_IGNORE_NR:   guards->ignore(nr, long(cmd.value2)); break;
+        case Cmd::GUARD_REMOVE_AT:   guards->removeAt(addr); break;
+        case Cmd::GUARD_REMOVE_ALL:  guards->removeAll(); break;
+        case Cmd::GUARD_ENABLE_NR:   guards->enable(nr); break;
+        case Cmd::GUARD_ENABLE_AT:   guards->enableAt(addr); break;
+        case Cmd::GUARD_ENABLE_ALL:  guards->enableAll(); break;
+        case Cmd::GUARD_DISABLE_NR:  guards->disable(nr); break;
+        case Cmd::GUARD_DISABLE_AT:  guards->disableAt(addr); break;
+        case Cmd::GUARD_DISABLE_ALL: guards->disableAll(); break;
             
         default:
             fatalError;
