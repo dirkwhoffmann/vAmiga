@@ -158,7 +158,7 @@ ControlPort::changePra(u8 &pra) const
 }
 
 void
-ControlPort::processCommand(const Cmd &cmd)
+ControlPort::processCommand(const Command &cmd)
 {
     switch (cmd.type) {
 

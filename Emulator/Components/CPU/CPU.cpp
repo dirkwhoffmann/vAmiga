@@ -837,7 +837,7 @@ CPU::jump(u32 addr)
 }
 
 void
-CPU::processCommand(const Cmd &cmd)
+CPU::processCommand(const Command &cmd)
 {
     isize nr = isize(cmd.value);
     u32 addr = u32(cmd.value);

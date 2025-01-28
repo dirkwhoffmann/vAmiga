@@ -301,77 +301,77 @@ void
 GuardsAPI::setAt(u32 target, isize ignores)
 {
     VAMIGA_PUBLIC_SUSPEND
-    emu->put(Cmd(CmdType::GUARD_SET_AT, (void *)guards, target, ignores));
+    emu->put(Command(CmdType::GUARD_SET_AT, (void *)guards, target, ignores));
 }
 
 void
 GuardsAPI::moveTo(isize nr, u32 newTarget)
 {
     VAMIGA_PUBLIC_SUSPEND
-    emu->put(Cmd(CmdType::GUARD_MOVE_NR, (void *)guards, nr, newTarget));
+    emu->put(Command(CmdType::GUARD_MOVE_NR, (void *)guards, nr, newTarget));
 }
 
 void
 GuardsAPI::remove(isize nr)
 {
     VAMIGA_PUBLIC_SUSPEND
-    emu->put(Cmd(CmdType::GUARD_REMOVE_NR, (void *)guards, nr));
+    emu->put(Command(CmdType::GUARD_REMOVE_NR, (void *)guards, nr));
 }
 
 void
 GuardsAPI::removeAt(u32 target)
 {
     VAMIGA_PUBLIC_SUSPEND
-    emu->put(Cmd(CmdType::GUARD_REMOVE_AT, (void *)guards, target));
+    emu->put(Command(CmdType::GUARD_REMOVE_AT, (void *)guards, target));
 }
 
 void
 GuardsAPI::removeAll()
 {
     VAMIGA_PUBLIC_SUSPEND
-    emu->put(Cmd(CmdType::GUARD_REMOVE_ALL, (void *)guards));
+    emu->put(Command(CmdType::GUARD_REMOVE_ALL, (void *)guards));
 }
 
 void
 GuardsAPI::enable(isize nr)
 {
     VAMIGA_PUBLIC_SUSPEND
-    emu->put(Cmd(CmdType::GUARD_ENABLE_NR, (void *)guards, nr));
+    emu->put(Command(CmdType::GUARD_ENABLE_NR, (void *)guards, nr));
 }
 
 void
 GuardsAPI::enableAt(u32 target)
 {
     VAMIGA_PUBLIC_SUSPEND
-    emu->put(Cmd(CmdType::GUARD_ENABLE_AT, (void *)guards, target));
+    emu->put(Command(CmdType::GUARD_ENABLE_AT, (void *)guards, target));
 }
 
 void
 GuardsAPI::enableAll()
 {
     VAMIGA_PUBLIC_SUSPEND
-    emu->put(Cmd(CmdType::GUARD_ENABLE_ALL, (void *)guards));
+    emu->put(Command(CmdType::GUARD_ENABLE_ALL, (void *)guards));
 }
 
 void
 GuardsAPI::disable(isize nr)
 {
     VAMIGA_PUBLIC_SUSPEND
-    emu->put(Cmd(CmdType::GUARD_DISABLE_NR, (void *)guards, nr));
+    emu->put(Command(CmdType::GUARD_DISABLE_NR, (void *)guards, nr));
 }
 
 void
 GuardsAPI::disableAt(u32 target)
 {
     VAMIGA_PUBLIC_SUSPEND
-    emu->put(Cmd(CmdType::GUARD_DISABLE_AT, (void *)guards, target));
+    emu->put(Command(CmdType::GUARD_DISABLE_AT, (void *)guards, target));
 }
 
 void
 GuardsAPI::disableAll()
 {
     VAMIGA_PUBLIC_SUSPEND
-    emu->put(Cmd(CmdType::GUARD_DISABLE_ALL));
+    emu->put(Command(CmdType::GUARD_DISABLE_ALL));
 }
 
 void
@@ -1056,11 +1056,11 @@ KeyboardAPI::press(KeyCode key, double delay, double duration)
 
     } else {
         
-        emu->put(Cmd(CmdType::KEY_PRESS, KeyCmd { .keycode = key, .delay = delay }));
+        emu->put(Command(CmdType::KEY_PRESS, KeyCommand { .keycode = key, .delay = delay }));
     }
     if (duration != 0.0) {
         
-        emu->put(Cmd(CmdType::KEY_RELEASE, KeyCmd { .keycode = key, .delay = delay + duration }));
+        emu->put(Command(CmdType::KEY_RELEASE, KeyCommand { .keycode = key, .delay = delay + duration }));
     }
 }
 
@@ -1075,11 +1075,11 @@ KeyboardAPI::toggle(KeyCode key, double delay, double duration)
         
     } else {
         
-        emu->put(Cmd(CmdType::KEY_TOGGLE, KeyCmd { .keycode = key, .delay = delay }));
+        emu->put(Command(CmdType::KEY_TOGGLE, KeyCommand { .keycode = key, .delay = delay }));
     }
     if (duration != 0.0) {
         
-        emu->put(Cmd(CmdType::KEY_TOGGLE, KeyCmd { .keycode = key, .delay = delay + duration }));
+        emu->put(Command(CmdType::KEY_TOGGLE, KeyCommand { .keycode = key, .delay = delay + duration }));
     }
 }
 
@@ -1094,7 +1094,7 @@ KeyboardAPI::release(KeyCode key, double delay)
         
     } else {
         
-        emu->put(Cmd(CmdType::KEY_RELEASE, KeyCmd { .keycode = key, .delay = delay }));
+        emu->put(Command(CmdType::KEY_RELEASE, KeyCommand { .keycode = key, .delay = delay }));
     }
 }
 
@@ -1102,7 +1102,7 @@ void
 KeyboardAPI::releaseAll()
 {
     VAMIGA_PUBLIC
-    emu->put(Cmd(CmdType::KEY_RELEASE_ALL));
+    emu->put(Command(CmdType::KEY_RELEASE_ALL));
 }
 
 void KeyboardAPI::abortTyping()
@@ -1370,7 +1370,7 @@ void
 JoystickAPI::trigger(GamePadAction event)
 {
     VAMIGA_PUBLIC
-    emu->put(CmdType::JOY_EVENT, GamePadCmd { .port = joystick->objid, .action = event });
+    emu->put(CmdType::JOY_EVENT, GamePadCommand { .port = joystick->objid, .action = event });
 }
 
 
@@ -1396,21 +1396,21 @@ void
 MouseAPI::setXY(double x, double y)
 {
     VAMIGA_PUBLIC
-    emu->put(Cmd(CmdType::MOUSE_MOVE_ABS, CoordCmd { .port = mouse->objid, .x = x, .y = y }));
+    emu->put(Command(CmdType::MOUSE_MOVE_ABS, CoordCommand { .port = mouse->objid, .x = x, .y = y }));
 }
 
 void 
 MouseAPI::setDxDy(double dx, double dy)
 {
     VAMIGA_PUBLIC
-    emu->put(Cmd(CmdType::MOUSE_MOVE_REL, CoordCmd { .port = mouse->objid, .x = dx, .y = dy }));
+    emu->put(Command(CmdType::MOUSE_MOVE_REL, CoordCommand { .port = mouse->objid, .x = dx, .y = dy }));
 }
 
 void 
 MouseAPI::trigger(GamePadAction action)
 {
     VAMIGA_PUBLIC
-    emu->put(Cmd(CmdType::MOUSE_BUTTON, GamePadCmd { .port = mouse->objid, .action = action }));
+    emu->put(Command(CmdType::MOUSE_BUTTON, GamePadCommand { .port = mouse->objid, .action = action }));
 }
 
 
@@ -2194,7 +2194,7 @@ VAmiga::set(Option opt, i64 value)
 {
     VAMIGA_PUBLIC
     emu->check(opt, value);
-    put(CmdType::CONFIG_ALL, ConfigCmd { .option = opt, .value = value });
+    put(CmdType::CONFIG_ALL, ConfigCommand { .option = opt, .value = value });
     emu->isDirty = true;
 }
 
@@ -2203,7 +2203,7 @@ VAmiga::set(Option opt, i64 value, long id)
 {
     VAMIGA_PUBLIC
     emu->check(opt, value, { id });
-    put(CmdType::CONFIG, ConfigCmd { .option = opt, .value = value, .id = id });
+    put(CmdType::CONFIG, ConfigCommand { .option = opt, .value = value, .id = id });
     emu->isDirty = true;
 }
 
@@ -2222,7 +2222,7 @@ VAmiga::exportConfig(std::ostream& stream, bool diff) const
 }
 
 void
-VAmiga::put(const Cmd &cmd)
+VAmiga::put(const Command &cmd)
 {
     VAMIGA_PUBLIC
     emu->put(cmd);

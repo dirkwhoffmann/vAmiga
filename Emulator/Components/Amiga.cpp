@@ -728,7 +728,7 @@ Amiga::_trackOff()
 void 
 Amiga::update(CmdQueue &queue)
 {
-    Cmd cmd;
+    Command cmd;
     bool cmdConfig = false;
 
     auto dfn = [&]() -> FloppyDrive& { return *df[cmd.value]; };
@@ -1058,7 +1058,7 @@ Amiga::loadSnapshot(const Snapshot &snap)
 }
 
 void
-Amiga::processCommand(const Cmd &cmd)
+Amiga::processCommand(const Command &cmd)
 {
     switch (cmd.type) {
 

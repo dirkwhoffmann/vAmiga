@@ -411,7 +411,7 @@ public:
     template <EventSlot s> void serviceDiskChangeEvent();
     
     // Processes a command from the command queue
-    void processCommand(const Cmd &cmd);
+    void processCommand(const Command &cmd);
 
 
     //

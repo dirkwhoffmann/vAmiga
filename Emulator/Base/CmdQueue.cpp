@@ -13,7 +13,7 @@
 namespace vamiga {
 
 void
-CmdQueue::put(const Cmd &cmd)
+CmdQueue::put(const Command &cmd)
 {
     {   SYNCHRONIZED
 
@@ -30,7 +30,7 @@ CmdQueue::put(const Cmd &cmd)
 }
 
 bool
-CmdQueue::poll(Cmd &cmd)
+CmdQueue::poll(Command &cmd)
 {
     if (empty) return false;
 

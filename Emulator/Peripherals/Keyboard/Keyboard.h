@@ -54,7 +54,7 @@ class Keyboard final : public SubComponent, public Inspectable<KeyboardInfo> {
     bool keyDown[128];
 
     // Delayed keyboard commands (used, e.g., for auto-typing)
-    util::SortedRingBuffer<Cmd, 1024> pending;
+    util::SortedRingBuffer<Command, 1024> pending;
 
 
     //
@@ -215,7 +215,7 @@ private:
 public:
 
     // Processes a command from the command queue
-    void processCommand(const Cmd &cmd);
+    void processCommand(const Command &cmd);
 };
 
 }

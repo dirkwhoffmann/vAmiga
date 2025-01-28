@@ -1165,7 +1165,7 @@ FloppyDrive::serviceDiskChangeEvent()
 }
 
 void
-FloppyDrive::processCommand(const Cmd &cmd)
+FloppyDrive::processCommand(const Command &cmd)
 {
 
     switch (cmd.type) {

@@ -380,8 +380,8 @@ CommandConsole::initCommands(RetroShellCmd &root)
                  [this](Arguments& argv, long value) {
             
             auto code = KeyCode(parseNum(argv[0]));
-            emulator.put(Cmd(CmdType::KEY_PRESS, KeyCmd { .keycode = code, .delay = 0.0 }));
-            emulator.put(Cmd(CmdType::KEY_RELEASE, KeyCmd { .keycode = code, .delay = 0.5 }));
+            emulator.put(Command(CmdType::KEY_PRESS, KeyCommand { .keycode = code, .delay = 0.0 }));
+            emulator.put(Command(CmdType::KEY_RELEASE, KeyCommand { .keycode = code, .delay = 0.5 }));
         });
         
         

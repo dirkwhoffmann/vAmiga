@@ -76,7 +76,7 @@ RetroShell::asyncExec(const string &command, bool append)
     }
 
     // Process the command queue in the next update cycle
-    emulator.put(Cmd(CmdType::RSH_EXECUTE));
+    emulator.put(Command(CmdType::RSH_EXECUTE));
 }
 
 void
@@ -92,7 +92,7 @@ RetroShell::asyncExecScript(std::stringstream &ss)
             commands.push_back({ nr++, line });
         }
         
-        emulator.put(Cmd(CmdType::RSH_EXECUTE));
+        emulator.put(Command(CmdType::RSH_EXECUTE));
     }
 }
 
@@ -312,7 +312,7 @@ RetroShell::setStream(std::ostream &os)
 void
 RetroShell::serviceEvent()
 {
-    emulator.put(Cmd(CmdType::RSH_EXECUTE));
+    emulator.put(Command(CmdType::RSH_EXECUTE));
     agnus.cancel<SLOT_RSH>();
 }
 

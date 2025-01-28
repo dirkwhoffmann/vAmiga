@@ -361,14 +361,14 @@ Keyboard::sendSyncPulse()
 }
 
 void
-Keyboard::processCommand(const Cmd &cmd)
+Keyboard::processCommand(const Command &cmd)
 {
     if (cmd.key.delay > 0) {
 
         trace(KEY_DEBUG, "%s: Delayed for %f sec\n", CmdTypeEnum::key(cmd.type), cmd.key.delay);
 
         pending.insert(agnus.clock + SEC(cmd.key.delay),
-                       Cmd(cmd.type, KeyCmd { .keycode = cmd.key.keycode }));
+                       Command(cmd.type, KeyCommand { .keycode = cmd.key.keycode }));
         agnus.scheduleImm<SLOT_KEY>(KEY_AUTO_TYPE);
 
     } else {

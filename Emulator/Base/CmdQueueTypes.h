@@ -168,14 +168,14 @@ typedef struct
     i64 value;
     isize id;
 }
-ConfigCmd;
+ConfigCommand;
 
 typedef struct
 {
     KeyCode keycode;
     double delay;
 }
-KeyCmd;
+KeyCommand;
 
 typedef struct
 {
@@ -183,21 +183,21 @@ typedef struct
     double x;
     double y;
 }
-CoordCmd;
+CoordCommand;
 
 typedef struct
 {
     isize port;
     GamePadAction action;
 }
-GamePadCmd;
+GamePadCommand;
 
 typedef struct
 {
     i64 cycle;
     i64 value;
 }
-AlarmCmd;
+AlarmCommand;
 
 /*
  typedef struct
@@ -207,7 +207,7 @@ AlarmCmd;
  ShellCmd;
  */
 
-struct Cmd
+struct Command
 {
     // Header
     CmdType type;
@@ -219,27 +219,21 @@ struct Cmd
     union {
         
         struct { i64 value; i64 value2; };
-        ConfigCmd config;
-        KeyCmd key;
-        GamePadCmd action;
-        CoordCmd coord;
-        AlarmCmd alarm;
-        /*
-         ShellCmd shell;
-         */
+        ConfigCommand config;
+        KeyCommand key;
+        GamePadCommand action;
+        CoordCommand coord;
+        AlarmCommand alarm;
     };
         
-    Cmd() { }
-    Cmd(CmdType type, i64 v1 = 0, i64 v2 = 0) : type(type), value(v1), value2(v2) { }
-    Cmd(CmdType type, void *s, i64 v1 = 0, i64 v2 = 0) : type(type), sender(s), value(v1), value2(v2) { }
-    Cmd(CmdType type, const ConfigCmd &cmd) : type(type), config(cmd) { }
-    Cmd(CmdType type, const KeyCmd &cmd) : type(type), key(cmd) { }
-    Cmd(CmdType type, const GamePadCmd &cmd) : type(type), action(cmd) { }
-    Cmd(CmdType type, const CoordCmd &cmd) : type(type), coord(cmd) { }
-    Cmd(CmdType type, const AlarmCmd &cmd) : type(type), alarm(cmd) { }
-    /*
-     Cmd(CmdType type, const ShellCmd &cmd) : type(type), shell(cmd) { }
-     */
+    Command() { }
+    Command(CmdType type, i64 v1 = 0, i64 v2 = 0) : type(type), value(v1), value2(v2) { }
+    Command(CmdType type, void *s, i64 v1 = 0, i64 v2 = 0) : type(type), sender(s), value(v1), value2(v2) { }
+    Command(CmdType type, const ConfigCommand &cmd) : type(type), config(cmd) { }
+    Command(CmdType type, const KeyCommand &cmd) : type(type), key(cmd) { }
+    Command(CmdType type, const GamePadCommand &cmd) : type(type), action(cmd) { }
+    Command(CmdType type, const CoordCommand &cmd) : type(type), coord(cmd) { }
+    Command(CmdType type, const AlarmCommand &cmd) : type(type), alarm(cmd) { }
 };
 
 }

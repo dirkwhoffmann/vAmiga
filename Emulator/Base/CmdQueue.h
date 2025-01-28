@@ -21,7 +21,7 @@ namespace vamiga {
 class CmdQueue final : CoreObject, Synchronizable {
 
     /// Ring buffer storing all pending commands
-    util::RingBuffer <Cmd, 128> queue;
+    util::RingBuffer <Command, 128> queue;
 
 public:
     
@@ -44,10 +44,10 @@ private:
 public:
 
     // Sends a command
-    void put(const Cmd &cmd);
+    void put(const Command &cmd);
 
     // Polls a command
-    bool poll(Cmd &cmd);
+    bool poll(Command &cmd);
 };
 
 }

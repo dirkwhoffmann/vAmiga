@@ -181,7 +181,7 @@ public:
 public:
 
     // Processes a datasette command
-    void processCommand(const struct Cmd &cmd);
+    void processCommand(const struct Command &cmd);
 };
 
 }
