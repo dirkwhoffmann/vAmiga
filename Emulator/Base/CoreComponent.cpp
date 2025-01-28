@@ -12,7 +12,7 @@
 #include "Emulator.h"
 #include "Defaults.h"
 #include "Checksum.h"
-#include "Opt.h"
+#include "Option.h"
 
 namespace vamiga {
 

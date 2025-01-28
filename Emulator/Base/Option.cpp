@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "Opt.h"
+#include "Option.h"
 #include "VAmigaTypes.h"
 #include "Error.h"
 #include "IOUtils.h"

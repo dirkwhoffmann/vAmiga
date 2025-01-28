@@ -10,7 +10,7 @@
 #include "config.h"
 #include "Amiga.h"
 #include "Emulator.h"
-#include "Opt.h"
+#include "Option.h"
 #include "Snapshot.h"
 #include "ADFFile.h"
 #include "Chrono.h"

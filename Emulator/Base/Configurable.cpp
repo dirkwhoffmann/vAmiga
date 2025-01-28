@@ -9,7 +9,7 @@
 
 #include "config.h"
 #include "Configurable.h"
-#include "Opt.h"
+#include "Option.h"
 #include "Reflection.h"
 #include "Defaults.h"
 #include "IOUtils.h"

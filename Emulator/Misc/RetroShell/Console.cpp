@@ -11,7 +11,7 @@
 #include "Console.h"
 #include "Emulator.h"
 #include "Parser.h"
-#include "Opt.h"
+#include "Option.h"
 #include <istream>
 #include <sstream>
 #include <string>

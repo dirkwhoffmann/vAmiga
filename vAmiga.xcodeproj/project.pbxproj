@@ -314,8 +314,8 @@
 		50EF2237281595B800440C4D /* DiagBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50826F7627F0B2AD005FBF3B /* DiagBoard.cpp */; };
 		50EFB0BA2C1811C90013B73C /* Configurable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0B82C1811C90013B73C /* Configurable.cpp */; };
 		50EFB0BB2C1811C90013B73C /* Configurable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0B82C1811C90013B73C /* Configurable.cpp */; };
-		50EFB0BE2C1812E20013B73C /* Opt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0BC2C1812E20013B73C /* Opt.cpp */; };
-		50EFB0BF2C1812E20013B73C /* Opt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0BC2C1812E20013B73C /* Opt.cpp */; };
+		50EFB0BE2C1812E20013B73C /* Option.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0BC2C1812E20013B73C /* Option.cpp */; };
+		50EFB0BF2C1812E20013B73C /* Option.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0BC2C1812E20013B73C /* Option.cpp */; };
 		50EFB0C82C18D72C0013B73C /* Dumpable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0C62C18D72B0013B73C /* Dumpable.cpp */; };
 		50EFB0C92C18D72C0013B73C /* Dumpable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0C62C18D72B0013B73C /* Dumpable.cpp */; };
 		50EFB0CC2C18D95B0013B73C /* Inspectable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0CA2C18D95B0013B73C /* Inspectable.cpp */; };
@@ -1014,8 +1014,8 @@
 		50ECF98522B153FB007B3DE7 /* ExtendedRomFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtendedRomFile.h; sourceTree = "<group>"; };
 		50EFB0B82C1811C90013B73C /* Configurable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Configurable.cpp; sourceTree = "<group>"; };
 		50EFB0B92C1811C90013B73C /* Configurable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Configurable.h; sourceTree = "<group>"; };
-		50EFB0BC2C1812E20013B73C /* Opt.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Opt.cpp; sourceTree = "<group>"; };
-		50EFB0BD2C1812E20013B73C /* Opt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Opt.h; sourceTree = "<group>"; };
+		50EFB0BC2C1812E20013B73C /* Option.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Option.cpp; sourceTree = "<group>"; };
+		50EFB0BD2C1812E20013B73C /* Option.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Option.h; sourceTree = "<group>"; };
 		50EFB0C02C1812F50013B73C /* OptionTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OptionTypes.h; sourceTree = "<group>"; };
 		50EFB0C12C18A73F0013B73C /* Synchronizable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Synchronizable.h; sourceTree = "<group>"; };
 		50EFB0C62C18D72B0013B73C /* Dumpable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Dumpable.cpp; sourceTree = "<group>"; };
@@ -1159,8 +1159,8 @@
 				50AE6F8425D71FBE0004AFBC /* Error.cpp */,
 				507215B025EAF62B00787591 /* Aliases.h */,
 				50EFB0C02C1812F50013B73C /* OptionTypes.h */,
-				50EFB0BD2C1812E20013B73C /* Opt.h */,
-				50EFB0BC2C1812E20013B73C /* Opt.cpp */,
+				50EFB0BD2C1812E20013B73C /* Option.h */,
+				50EFB0BC2C1812E20013B73C /* Option.cpp */,
 				50EFC7DF22E840870036A3DF /* Serializable.h */,
 				50CFF5692C259FB900A47ECC /* Serializable.cpp */,
 				50EFB0C72C18D72B0013B73C /* Dumpable.h */,
@@ -2517,7 +2517,7 @@
 				508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */,
 				50A5969824F7F9ED008632C0 /* PeripheralsConf.swift in Sources */,
 				508FE02221EA227B0043D0E9 /* MacKey.swift in Sources */,
-				50EFB0BE2C1812E20013B73C /* Opt.cpp in Sources */,
+				50EFB0BE2C1812E20013B73C /* Option.cpp in Sources */,
 				501C514E27C4259F00DF1DD5 /* FloppyCreator.swift in Sources */,
 				50F54B2E24B5D31D0078FDC9 /* u_rle.c in Sources */,
 				50F6EEBE21F4F61F0091155D /* FloppyDrive.cpp in Sources */,
@@ -2706,7 +2706,7 @@
 				50FC04B327DA199C00C3E566 /* SerialPort.cpp in Sources */,
 				50FC049E27DA197500C3E566 /* AgnusDma.cpp in Sources */,
 				50FC047F27DA12AB00C3E566 /* Parser.cpp in Sources */,
-				50EFB0BF2C1812E20013B73C /* Opt.cpp in Sources */,
+				50EFB0BF2C1812E20013B73C /* Option.cpp in Sources */,
 				50FC04E527DA1A1400C3E566 /* u_init.c in Sources */,
 				50FC049427DA196500C3E566 /* PixelEngine.cpp in Sources */,
 				50FC04CC27DA19E900C3E566 /* DMSFile.cpp in Sources */,
