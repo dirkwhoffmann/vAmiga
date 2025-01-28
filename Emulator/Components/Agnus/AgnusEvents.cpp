@@ -211,107 +211,107 @@ Agnus::serviceREGEvent(Cycle until)
 
         switch (change.addr) {
 
-            case u32(ChipsetReg::BLTSIZE): blitter.setBLTSIZE(change.value); break;
-            case u32(ChipsetReg::BLTSIZV): blitter.setBLTSIZV(change.value); break;
+            case u32(Reg::BLTSIZE): blitter.setBLTSIZE(change.value); break;
+            case u32(Reg::BLTSIZV): blitter.setBLTSIZV(change.value); break;
                 
-            case u32(ChipsetReg::BLTCON0): blitter.setBLTCON0(change.value); break;
-            case u32(ChipsetReg::BLTCON0L): blitter.setBLTCON0L(change.value); break;
-            case u32(ChipsetReg::BLTCON1): blitter.setBLTCON1(change.value); break;
+            case u32(Reg::BLTCON0): blitter.setBLTCON0(change.value); break;
+            case u32(Reg::BLTCON0L): blitter.setBLTCON0L(change.value); break;
+            case u32(Reg::BLTCON1): blitter.setBLTCON1(change.value); break;
                 
-            case u32(ChipsetReg::INTREQ): paula.setINTREQ(change.value); break;
-            case u32(ChipsetReg::INTENA): paula.setINTENA(change.value); break;
+            case u32(Reg::INTREQ): paula.setINTREQ(change.value); break;
+            case u32(Reg::INTENA): paula.setINTENA(change.value); break;
 
-            case u32(ChipsetReg::BPLCON0):
+            case u32(Reg::BPLCON0):
                 assert(change.accessor == Accessor::AGNUS || change.accessor == Accessor::DENISE);
                 change.accessor == Accessor::AGNUS ?
                 setBPLCON0(bplcon0, change.value) : denise.setBPLCON0(bplcon0, change.value);
                 break;
-            case u32(ChipsetReg::BPLCON1):
+            case u32(Reg::BPLCON1):
                 assert(change.accessor == Accessor::AGNUS || change.accessor == Accessor::DENISE);
                 change.accessor == Accessor::AGNUS ?
                 setBPLCON1(bplcon1, change.value) : denise.setBPLCON1(bplcon1, change.value);
                 break;
                 break;
-            case u32(ChipsetReg::BPLCON2): denise.setBPLCON2(change.value); break;
-            case u32(ChipsetReg::BPLCON3): denise.setBPLCON3(change.value); break;
+            case u32(Reg::BPLCON2): denise.setBPLCON2(change.value); break;
+            case u32(Reg::BPLCON3): denise.setBPLCON3(change.value); break;
                 
-            case u32(ChipsetReg::DMACON): setDMACON(dmacon, change.value); break;
+            case u32(Reg::DMACON): setDMACON(dmacon, change.value); break;
 
-            case u32(ChipsetReg::DIWSTRT):
+            case u32(Reg::DIWSTRT):
                 assert(change.accessor == Accessor::AGNUS || change.accessor == Accessor::DENISE);
                 change.accessor == Accessor::AGNUS ?
                 sequencer.setDIWSTRT(change.value) : denise.setDIWSTRT(change.value);
                 break;
-            case u32(ChipsetReg::DIWSTOP):
+            case u32(Reg::DIWSTOP):
                 assert(change.accessor == Accessor::AGNUS || change.accessor == Accessor::DENISE);
                 change.accessor == Accessor::AGNUS ?
                 sequencer.setDIWSTOP(change.value) : denise.setDIWSTOP(change.value);
                 break;
-            case u32(ChipsetReg::DIWHIGH):
+            case u32(Reg::DIWHIGH):
                 assert(change.accessor == Accessor::AGNUS || change.accessor == Accessor::DENISE);
                 change.accessor == Accessor::AGNUS ?
                 sequencer.setDIWHIGH(change.value) : denise.setDIWHIGH(change.value);
                 break;
-            case u32(ChipsetReg::DDFSTRT): sequencer.setDDFSTRT(change.value); break;
-            case u32(ChipsetReg::DDFSTOP): sequencer.setDDFSTOP(change.value); break;
+            case u32(Reg::DDFSTRT): sequencer.setDDFSTRT(change.value); break;
+            case u32(Reg::DDFSTOP): sequencer.setDDFSTOP(change.value); break;
                 
-            case u32(ChipsetReg::BPL1MOD): setBPL1MOD(change.value); break;
-            case u32(ChipsetReg::BPL2MOD): setBPL2MOD(change.value); break;
+            case u32(Reg::BPL1MOD): setBPL1MOD(change.value); break;
+            case u32(Reg::BPL2MOD): setBPL2MOD(change.value); break;
                 
-            case u32(ChipsetReg::BPL1PTH): setBPLxPTH<1>(change.value); break;
-            case u32(ChipsetReg::BPL2PTH): setBPLxPTH<2>(change.value); break;
-            case u32(ChipsetReg::BPL3PTH): setBPLxPTH<3>(change.value); break;
-            case u32(ChipsetReg::BPL4PTH): setBPLxPTH<4>(change.value); break;
-            case u32(ChipsetReg::BPL5PTH): setBPLxPTH<5>(change.value); break;
-            case u32(ChipsetReg::BPL6PTH): setBPLxPTH<6>(change.value); break;
+            case u32(Reg::BPL1PTH): setBPLxPTH<1>(change.value); break;
+            case u32(Reg::BPL2PTH): setBPLxPTH<2>(change.value); break;
+            case u32(Reg::BPL3PTH): setBPLxPTH<3>(change.value); break;
+            case u32(Reg::BPL4PTH): setBPLxPTH<4>(change.value); break;
+            case u32(Reg::BPL5PTH): setBPLxPTH<5>(change.value); break;
+            case u32(Reg::BPL6PTH): setBPLxPTH<6>(change.value); break;
 
-            case u32(ChipsetReg::BPL1PTL): setBPLxPTL<1>(change.value); break;
-            case u32(ChipsetReg::BPL2PTL): setBPLxPTL<2>(change.value); break;
-            case u32(ChipsetReg::BPL3PTL): setBPLxPTL<3>(change.value); break;
-            case u32(ChipsetReg::BPL4PTL): setBPLxPTL<4>(change.value); break;
-            case u32(ChipsetReg::BPL5PTL): setBPLxPTL<5>(change.value); break;
-            case u32(ChipsetReg::BPL6PTL): setBPLxPTL<6>(change.value); break;
+            case u32(Reg::BPL1PTL): setBPLxPTL<1>(change.value); break;
+            case u32(Reg::BPL2PTL): setBPLxPTL<2>(change.value); break;
+            case u32(Reg::BPL3PTL): setBPLxPTL<3>(change.value); break;
+            case u32(Reg::BPL4PTL): setBPLxPTL<4>(change.value); break;
+            case u32(Reg::BPL5PTL): setBPLxPTL<5>(change.value); break;
+            case u32(Reg::BPL6PTL): setBPLxPTL<6>(change.value); break;
 
-            case u32(ChipsetReg::SPR0POS): setSPRxPOS<0>(change.value); break;
-            case u32(ChipsetReg::SPR1POS): setSPRxPOS<1>(change.value); break;
-            case u32(ChipsetReg::SPR2POS): setSPRxPOS<2>(change.value); break;
-            case u32(ChipsetReg::SPR3POS): setSPRxPOS<3>(change.value); break;
-            case u32(ChipsetReg::SPR4POS): setSPRxPOS<4>(change.value); break;
-            case u32(ChipsetReg::SPR5POS): setSPRxPOS<5>(change.value); break;
-            case u32(ChipsetReg::SPR6POS): setSPRxPOS<6>(change.value); break;
-            case u32(ChipsetReg::SPR7POS): setSPRxPOS<7>(change.value); break;
+            case u32(Reg::SPR0POS): setSPRxPOS<0>(change.value); break;
+            case u32(Reg::SPR1POS): setSPRxPOS<1>(change.value); break;
+            case u32(Reg::SPR2POS): setSPRxPOS<2>(change.value); break;
+            case u32(Reg::SPR3POS): setSPRxPOS<3>(change.value); break;
+            case u32(Reg::SPR4POS): setSPRxPOS<4>(change.value); break;
+            case u32(Reg::SPR5POS): setSPRxPOS<5>(change.value); break;
+            case u32(Reg::SPR6POS): setSPRxPOS<6>(change.value); break;
+            case u32(Reg::SPR7POS): setSPRxPOS<7>(change.value); break;
 
-            case u32(ChipsetReg::SPR0CTL): setSPRxCTL<0>(change.value); break;
-            case u32(ChipsetReg::SPR1CTL): setSPRxCTL<1>(change.value); break;
-            case u32(ChipsetReg::SPR2CTL): setSPRxCTL<2>(change.value); break;
-            case u32(ChipsetReg::SPR3CTL): setSPRxCTL<3>(change.value); break;
-            case u32(ChipsetReg::SPR4CTL): setSPRxCTL<4>(change.value); break;
-            case u32(ChipsetReg::SPR5CTL): setSPRxCTL<5>(change.value); break;
-            case u32(ChipsetReg::SPR6CTL): setSPRxCTL<6>(change.value); break;
-            case u32(ChipsetReg::SPR7CTL): setSPRxCTL<7>(change.value); break;
+            case u32(Reg::SPR0CTL): setSPRxCTL<0>(change.value); break;
+            case u32(Reg::SPR1CTL): setSPRxCTL<1>(change.value); break;
+            case u32(Reg::SPR2CTL): setSPRxCTL<2>(change.value); break;
+            case u32(Reg::SPR3CTL): setSPRxCTL<3>(change.value); break;
+            case u32(Reg::SPR4CTL): setSPRxCTL<4>(change.value); break;
+            case u32(Reg::SPR5CTL): setSPRxCTL<5>(change.value); break;
+            case u32(Reg::SPR6CTL): setSPRxCTL<6>(change.value); break;
+            case u32(Reg::SPR7CTL): setSPRxCTL<7>(change.value); break;
 
-            case u32(ChipsetReg::SPR0PTH): setSPRxPTH<0>(change.value); break;
-            case u32(ChipsetReg::SPR1PTH): setSPRxPTH<1>(change.value); break;
-            case u32(ChipsetReg::SPR2PTH): setSPRxPTH<2>(change.value); break;
-            case u32(ChipsetReg::SPR3PTH): setSPRxPTH<3>(change.value); break;
-            case u32(ChipsetReg::SPR4PTH): setSPRxPTH<4>(change.value); break;
-            case u32(ChipsetReg::SPR5PTH): setSPRxPTH<5>(change.value); break;
-            case u32(ChipsetReg::SPR6PTH): setSPRxPTH<6>(change.value); break;
-            case u32(ChipsetReg::SPR7PTH): setSPRxPTH<7>(change.value); break;
+            case u32(Reg::SPR0PTH): setSPRxPTH<0>(change.value); break;
+            case u32(Reg::SPR1PTH): setSPRxPTH<1>(change.value); break;
+            case u32(Reg::SPR2PTH): setSPRxPTH<2>(change.value); break;
+            case u32(Reg::SPR3PTH): setSPRxPTH<3>(change.value); break;
+            case u32(Reg::SPR4PTH): setSPRxPTH<4>(change.value); break;
+            case u32(Reg::SPR5PTH): setSPRxPTH<5>(change.value); break;
+            case u32(Reg::SPR6PTH): setSPRxPTH<6>(change.value); break;
+            case u32(Reg::SPR7PTH): setSPRxPTH<7>(change.value); break;
 
-            case u32(ChipsetReg::SPR0PTL): setSPRxPTL<0>(change.value); break;
-            case u32(ChipsetReg::SPR1PTL): setSPRxPTL<1>(change.value); break;
-            case u32(ChipsetReg::SPR2PTL): setSPRxPTL<2>(change.value); break;
-            case u32(ChipsetReg::SPR3PTL): setSPRxPTL<3>(change.value); break;
-            case u32(ChipsetReg::SPR4PTL): setSPRxPTL<4>(change.value); break;
-            case u32(ChipsetReg::SPR5PTL): setSPRxPTL<5>(change.value); break;
-            case u32(ChipsetReg::SPR6PTL): setSPRxPTL<6>(change.value); break;
-            case u32(ChipsetReg::SPR7PTL): setSPRxPTL<7>(change.value); break;
+            case u32(Reg::SPR0PTL): setSPRxPTL<0>(change.value); break;
+            case u32(Reg::SPR1PTL): setSPRxPTL<1>(change.value); break;
+            case u32(Reg::SPR2PTL): setSPRxPTL<2>(change.value); break;
+            case u32(Reg::SPR3PTL): setSPRxPTL<3>(change.value); break;
+            case u32(Reg::SPR4PTL): setSPRxPTL<4>(change.value); break;
+            case u32(Reg::SPR5PTL): setSPRxPTL<5>(change.value); break;
+            case u32(Reg::SPR6PTL): setSPRxPTL<6>(change.value); break;
+            case u32(Reg::SPR7PTL): setSPRxPTL<7>(change.value); break;
 
-            case u32(ChipsetReg::DSKPTH): setDSKPTH(change.value); break;
-            case u32(ChipsetReg::DSKPTL): setDSKPTL(change.value); break;
+            case u32(Reg::DSKPTH): setDSKPTH(change.value); break;
+            case u32(Reg::DSKPTL): setDSKPTL(change.value); break;
 
-            case u32(ChipsetReg::SERDAT): uart.setSERDAT(change.value); break;
+            case u32(Reg::SERDAT): uart.setSERDAT(change.value); break;
 
             default:
                 fatalError;

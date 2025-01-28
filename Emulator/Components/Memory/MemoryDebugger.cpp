@@ -248,18 +248,18 @@ MemoryDebugger::save(fs::path& path, u32 addr, isize count)
 }
 
 bool
-MemoryDebugger::isReadable(ChipsetReg reg) const
+MemoryDebugger::isReadable(Reg reg) const
 {
     switch (reg) {
 
-        case ChipsetReg::DMACONR:   case ChipsetReg::VPOSR:     case ChipsetReg::VHPOSR:    case ChipsetReg::DSKDATR:
-        case ChipsetReg::JOY0DAT:   case ChipsetReg::JOY1DAT:   case ChipsetReg::CLXDAT:    case ChipsetReg::ADKCONR:
-        case ChipsetReg::POT0DAT:   case ChipsetReg::POT1DAT:   case ChipsetReg::POTGOR:    case ChipsetReg::SERDATR:
-        case ChipsetReg::DSKBYTR:   case ChipsetReg::INTENAR:   case ChipsetReg::INTREQR:
+        case Reg::DMACONR:   case Reg::VPOSR:     case Reg::VHPOSR:    case Reg::DSKDATR:
+        case Reg::JOY0DAT:   case Reg::JOY1DAT:   case Reg::CLXDAT:    case Reg::ADKCONR:
+        case Reg::POT0DAT:   case Reg::POT1DAT:   case Reg::POTGOR:    case Reg::SERDATR:
+        case Reg::DSKBYTR:   case Reg::INTENAR:   case Reg::INTREQR:
 
             return true;
 
-        case ChipsetReg::DENISEID:
+        case Reg::DENISEID:
 
             return denise.isECS();
 
@@ -270,72 +270,72 @@ MemoryDebugger::isReadable(ChipsetReg reg) const
 }
 
 bool
-MemoryDebugger::isWritable(ChipsetReg reg) const
+MemoryDebugger::isWritable(Reg reg) const
 {
     switch (reg) {
 
-        case ChipsetReg::DSKPTH:    case ChipsetReg::DSKPTL:    case ChipsetReg::DSKLEN:    case ChipsetReg::DSKDAT:
-        case ChipsetReg::REFPTR:    case ChipsetReg::VPOSW:     case ChipsetReg::VHPOSW:    case ChipsetReg::COPCON:
-        case ChipsetReg::SERDAT:    case ChipsetReg::SERPER:    case ChipsetReg::POTGO:     case ChipsetReg::JOYTEST:
-        case ChipsetReg::STREQU:    case ChipsetReg::STRVBL:    case ChipsetReg::STRHOR:    case ChipsetReg::STRLONG:
-        case ChipsetReg::BLTCON0:   case ChipsetReg::BLTCON1:   case ChipsetReg::BLTAFWM:   case ChipsetReg::BLTALWM:
-        case ChipsetReg::BLTCPTH:   case ChipsetReg::BLTCPTL:   case ChipsetReg::BLTBPTH:   case ChipsetReg::BLTBPTL:
-        case ChipsetReg::BLTAPTH:   case ChipsetReg::BLTAPTL:   case ChipsetReg::BLTDPTH:   case ChipsetReg::BLTDPTL:
-        case ChipsetReg::BLTSIZE:   case ChipsetReg::BLTCMOD:   case ChipsetReg::BLTBMOD:   case ChipsetReg::BLTAMOD:
-        case ChipsetReg::BLTDMOD:   case ChipsetReg::BLTCDAT:   case ChipsetReg::BLTBDAT:   case ChipsetReg::BLTADAT:
-        case ChipsetReg::DSKSYNC:   case ChipsetReg::COP1LCH:   case ChipsetReg::COP1LCL:   case ChipsetReg::COP2LCH:
-        case ChipsetReg::COP2LCL:   case ChipsetReg::COPJMP1:   case ChipsetReg::COPJMP2:   case ChipsetReg::COPINS:
-        case ChipsetReg::DIWSTRT:   case ChipsetReg::DIWSTOP:   case ChipsetReg::DDFSTRT:   case ChipsetReg::DDFSTOP:
-        case ChipsetReg::DMACON:    case ChipsetReg::CLXCON:    case ChipsetReg::INTENA:    case ChipsetReg::INTREQ:
-        case ChipsetReg::ADKCON:    case ChipsetReg::AUD0LCH:   case ChipsetReg::AUD0LCL:   case ChipsetReg::AUD0LEN:
-        case ChipsetReg::AUD0PER:   case ChipsetReg::AUD0VOL:   case ChipsetReg::AUD0DAT:   case ChipsetReg::AUD1LCH:
-        case ChipsetReg::AUD1LCL:   case ChipsetReg::AUD1LEN:   case ChipsetReg::AUD1PER:   case ChipsetReg::AUD1VOL:
-        case ChipsetReg::AUD1DAT:   case ChipsetReg::AUD2LCH:   case ChipsetReg::AUD2LCL:   case ChipsetReg::AUD2LEN:
-        case ChipsetReg::AUD2PER:   case ChipsetReg::AUD2VOL:   case ChipsetReg::AUD2DAT:   case ChipsetReg::AUD3LCH:
-        case ChipsetReg::AUD3LCL:   case ChipsetReg::AUD3LEN:   case ChipsetReg::AUD3PER:   case ChipsetReg::AUD3VOL:
-        case ChipsetReg::AUD3DAT:   case ChipsetReg::BPL1PTH:   case ChipsetReg::BPL1PTL:   case ChipsetReg::BPL2PTH:
-        case ChipsetReg::BPL2PTL:   case ChipsetReg::BPL3PTH:   case ChipsetReg::BPL3PTL:   case ChipsetReg::BPL4PTH:
-        case ChipsetReg::BPL4PTL:   case ChipsetReg::BPL5PTH:   case ChipsetReg::BPL5PTL:   case ChipsetReg::BPL6PTH:
-        case ChipsetReg::BPL6PTL:   case ChipsetReg::BPLCON0:   case ChipsetReg::BPLCON1:   case ChipsetReg::BPLCON2:
-        case ChipsetReg::BPL1MOD:   case ChipsetReg::BPL2MOD:   case ChipsetReg::BPL1DAT:   case ChipsetReg::BPL2DAT:
-        case ChipsetReg::BPL3DAT:   case ChipsetReg::BPL4DAT:   case ChipsetReg::BPL5DAT:   case ChipsetReg::BPL6DAT:
-        case ChipsetReg::SPR0PTH:   case ChipsetReg::SPR0PTL:   case ChipsetReg::SPR1PTH:   case ChipsetReg::SPR1PTL:
-        case ChipsetReg::SPR2PTH:   case ChipsetReg::SPR2PTL:   case ChipsetReg::SPR3PTH:   case ChipsetReg::SPR3PTL:
-        case ChipsetReg::SPR4PTH:   case ChipsetReg::SPR4PTL:   case ChipsetReg::SPR5PTH:   case ChipsetReg::SPR5PTL:
-        case ChipsetReg::SPR6PTH:   case ChipsetReg::SPR6PTL:   case ChipsetReg::SPR7PTH:   case ChipsetReg::SPR7PTL:
-        case ChipsetReg::SPR0POS:   case ChipsetReg::SPR0CTL:   case ChipsetReg::SPR0DATA:  case ChipsetReg::SPR0DATB:
-        case ChipsetReg::SPR1POS:   case ChipsetReg::SPR1CTL:   case ChipsetReg::SPR1DATA:  case ChipsetReg::SPR1DATB:
-        case ChipsetReg::SPR2POS:   case ChipsetReg::SPR2CTL:   case ChipsetReg::SPR2DATA:  case ChipsetReg::SPR2DATB:
-        case ChipsetReg::SPR3POS:   case ChipsetReg::SPR3CTL:   case ChipsetReg::SPR3DATA:  case ChipsetReg::SPR3DATB:
-        case ChipsetReg::SPR4POS:   case ChipsetReg::SPR4CTL:   case ChipsetReg::SPR4DATA:  case ChipsetReg::SPR4DATB:
-        case ChipsetReg::SPR5POS:   case ChipsetReg::SPR5CTL:   case ChipsetReg::SPR5DATA:  case ChipsetReg::SPR5DATB:
-        case ChipsetReg::SPR6POS:   case ChipsetReg::SPR6CTL:   case ChipsetReg::SPR6DATA:  case ChipsetReg::SPR6DATB:
-        case ChipsetReg::SPR7POS:   case ChipsetReg::SPR7CTL:   case ChipsetReg::SPR7DATA:  case ChipsetReg::SPR7DATB:
-        case ChipsetReg::COLOR00:   case ChipsetReg::COLOR01:   case ChipsetReg::COLOR02:   case ChipsetReg::COLOR03:
-        case ChipsetReg::COLOR04:   case ChipsetReg::COLOR05:   case ChipsetReg::COLOR06:   case ChipsetReg::COLOR07:
-        case ChipsetReg::COLOR08:   case ChipsetReg::COLOR09:   case ChipsetReg::COLOR10:   case ChipsetReg::COLOR11:
-        case ChipsetReg::COLOR12:   case ChipsetReg::COLOR13:   case ChipsetReg::COLOR14:   case ChipsetReg::COLOR15:
-        case ChipsetReg::COLOR16:   case ChipsetReg::COLOR17:   case ChipsetReg::COLOR18:   case ChipsetReg::COLOR19:
-        case ChipsetReg::COLOR20:   case ChipsetReg::COLOR21:   case ChipsetReg::COLOR22:   case ChipsetReg::COLOR23:
-        case ChipsetReg::COLOR24:   case ChipsetReg::COLOR25:   case ChipsetReg::COLOR26:   case ChipsetReg::COLOR27:
-        case ChipsetReg::COLOR28:   case ChipsetReg::COLOR29:   case ChipsetReg::COLOR30:   case ChipsetReg::COLOR31:
-        case ChipsetReg::NO_OP:
+        case Reg::DSKPTH:    case Reg::DSKPTL:    case Reg::DSKLEN:    case Reg::DSKDAT:
+        case Reg::REFPTR:    case Reg::VPOSW:     case Reg::VHPOSW:    case Reg::COPCON:
+        case Reg::SERDAT:    case Reg::SERPER:    case Reg::POTGO:     case Reg::JOYTEST:
+        case Reg::STREQU:    case Reg::STRVBL:    case Reg::STRHOR:    case Reg::STRLONG:
+        case Reg::BLTCON0:   case Reg::BLTCON1:   case Reg::BLTAFWM:   case Reg::BLTALWM:
+        case Reg::BLTCPTH:   case Reg::BLTCPTL:   case Reg::BLTBPTH:   case Reg::BLTBPTL:
+        case Reg::BLTAPTH:   case Reg::BLTAPTL:   case Reg::BLTDPTH:   case Reg::BLTDPTL:
+        case Reg::BLTSIZE:   case Reg::BLTCMOD:   case Reg::BLTBMOD:   case Reg::BLTAMOD:
+        case Reg::BLTDMOD:   case Reg::BLTCDAT:   case Reg::BLTBDAT:   case Reg::BLTADAT:
+        case Reg::DSKSYNC:   case Reg::COP1LCH:   case Reg::COP1LCL:   case Reg::COP2LCH:
+        case Reg::COP2LCL:   case Reg::COPJMP1:   case Reg::COPJMP2:   case Reg::COPINS:
+        case Reg::DIWSTRT:   case Reg::DIWSTOP:   case Reg::DDFSTRT:   case Reg::DDFSTOP:
+        case Reg::DMACON:    case Reg::CLXCON:    case Reg::INTENA:    case Reg::INTREQ:
+        case Reg::ADKCON:    case Reg::AUD0LCH:   case Reg::AUD0LCL:   case Reg::AUD0LEN:
+        case Reg::AUD0PER:   case Reg::AUD0VOL:   case Reg::AUD0DAT:   case Reg::AUD1LCH:
+        case Reg::AUD1LCL:   case Reg::AUD1LEN:   case Reg::AUD1PER:   case Reg::AUD1VOL:
+        case Reg::AUD1DAT:   case Reg::AUD2LCH:   case Reg::AUD2LCL:   case Reg::AUD2LEN:
+        case Reg::AUD2PER:   case Reg::AUD2VOL:   case Reg::AUD2DAT:   case Reg::AUD3LCH:
+        case Reg::AUD3LCL:   case Reg::AUD3LEN:   case Reg::AUD3PER:   case Reg::AUD3VOL:
+        case Reg::AUD3DAT:   case Reg::BPL1PTH:   case Reg::BPL1PTL:   case Reg::BPL2PTH:
+        case Reg::BPL2PTL:   case Reg::BPL3PTH:   case Reg::BPL3PTL:   case Reg::BPL4PTH:
+        case Reg::BPL4PTL:   case Reg::BPL5PTH:   case Reg::BPL5PTL:   case Reg::BPL6PTH:
+        case Reg::BPL6PTL:   case Reg::BPLCON0:   case Reg::BPLCON1:   case Reg::BPLCON2:
+        case Reg::BPL1MOD:   case Reg::BPL2MOD:   case Reg::BPL1DAT:   case Reg::BPL2DAT:
+        case Reg::BPL3DAT:   case Reg::BPL4DAT:   case Reg::BPL5DAT:   case Reg::BPL6DAT:
+        case Reg::SPR0PTH:   case Reg::SPR0PTL:   case Reg::SPR1PTH:   case Reg::SPR1PTL:
+        case Reg::SPR2PTH:   case Reg::SPR2PTL:   case Reg::SPR3PTH:   case Reg::SPR3PTL:
+        case Reg::SPR4PTH:   case Reg::SPR4PTL:   case Reg::SPR5PTH:   case Reg::SPR5PTL:
+        case Reg::SPR6PTH:   case Reg::SPR6PTL:   case Reg::SPR7PTH:   case Reg::SPR7PTL:
+        case Reg::SPR0POS:   case Reg::SPR0CTL:   case Reg::SPR0DATA:  case Reg::SPR0DATB:
+        case Reg::SPR1POS:   case Reg::SPR1CTL:   case Reg::SPR1DATA:  case Reg::SPR1DATB:
+        case Reg::SPR2POS:   case Reg::SPR2CTL:   case Reg::SPR2DATA:  case Reg::SPR2DATB:
+        case Reg::SPR3POS:   case Reg::SPR3CTL:   case Reg::SPR3DATA:  case Reg::SPR3DATB:
+        case Reg::SPR4POS:   case Reg::SPR4CTL:   case Reg::SPR4DATA:  case Reg::SPR4DATB:
+        case Reg::SPR5POS:   case Reg::SPR5CTL:   case Reg::SPR5DATA:  case Reg::SPR5DATB:
+        case Reg::SPR6POS:   case Reg::SPR6CTL:   case Reg::SPR6DATA:  case Reg::SPR6DATB:
+        case Reg::SPR7POS:   case Reg::SPR7CTL:   case Reg::SPR7DATA:  case Reg::SPR7DATB:
+        case Reg::COLOR00:   case Reg::COLOR01:   case Reg::COLOR02:   case Reg::COLOR03:
+        case Reg::COLOR04:   case Reg::COLOR05:   case Reg::COLOR06:   case Reg::COLOR07:
+        case Reg::COLOR08:   case Reg::COLOR09:   case Reg::COLOR10:   case Reg::COLOR11:
+        case Reg::COLOR12:   case Reg::COLOR13:   case Reg::COLOR14:   case Reg::COLOR15:
+        case Reg::COLOR16:   case Reg::COLOR17:   case Reg::COLOR18:   case Reg::COLOR19:
+        case Reg::COLOR20:   case Reg::COLOR21:   case Reg::COLOR22:   case Reg::COLOR23:
+        case Reg::COLOR24:   case Reg::COLOR25:   case Reg::COLOR26:   case Reg::COLOR27:
+        case Reg::COLOR28:   case Reg::COLOR29:   case Reg::COLOR30:   case Reg::COLOR31:
+        case Reg::NO_OP:
 
             return true;
 
-        case ChipsetReg::BLTCON0L:  case ChipsetReg::BLTSIZV:   case ChipsetReg::BLTSIZH:   case ChipsetReg::SPRHDAT:
-        case ChipsetReg::BPLCON3:   case ChipsetReg::HTOTAL:    case ChipsetReg::HSSTOP:    case ChipsetReg::HBSTRT:
-        case ChipsetReg::HBSTOP:    case ChipsetReg::VTOTAL:    case ChipsetReg::VSSTOP:    case ChipsetReg::VBSTRT:
-        case ChipsetReg::VBSTOP:    case ChipsetReg::BEAMCON0:  case ChipsetReg::HSSTRT:    case ChipsetReg::VSSTRT:
-        case ChipsetReg::HCENTER:
+        case Reg::BLTCON0L:  case Reg::BLTSIZV:   case Reg::BLTSIZH:   case Reg::SPRHDAT:
+        case Reg::BPLCON3:   case Reg::HTOTAL:    case Reg::HSSTOP:    case Reg::HBSTRT:
+        case Reg::HBSTOP:    case Reg::VTOTAL:    case Reg::VSSTOP:    case Reg::VBSTRT:
+        case Reg::VBSTOP:    case Reg::BEAMCON0:  case Reg::HSSTRT:    case Reg::VSSTRT:
+        case Reg::HCENTER:
 
             return agnus.isECS();
 
-        case ChipsetReg::DENISEID:
+        case Reg::DENISEID:
 
             return denise.isECS();
 
-        case ChipsetReg::DIWHIGH:
+        case Reg::DIWHIGH:
 
             return agnus.isECS() || denise.isECS();
 
@@ -348,28 +348,28 @@ MemoryDebugger::isWritable(ChipsetReg reg) const
 const char *
 MemoryDebugger::regName(u32 addr)
 {
-    return ChipsetRegEnum::key(ChipsetReg((addr >> 1) & 0xFF));
+    return RegEnum::key(Reg((addr >> 1) & 0xFF));
 }
 
 bool
-MemoryDebugger::isUnused(ChipsetReg reg) const
+MemoryDebugger::isUnused(Reg reg) const
 {
     return !isReadable(reg) && !isWritable(reg);
 }
 
 u16
-MemoryDebugger::readCs(ChipsetReg reg) const
+MemoryDebugger::readCs(Reg reg) const
 {
-    if (isUnused(reg)) throw Error(ErrorCode::REG_UNUSED, ChipsetRegEnum::key(reg));
-    if (isWritable(reg)) throw Error(ErrorCode::REG_WRITE_ONLY, ChipsetRegEnum::key(reg));
+    if (isUnused(reg)) throw Error(ErrorCode::REG_UNUSED, RegEnum::key(reg));
+    if (isWritable(reg)) throw Error(ErrorCode::REG_WRITE_ONLY, RegEnum::key(reg));
 
     return mem.peekCustom16(u32(reg) << 1);
 }
 void
-MemoryDebugger::writeCs(ChipsetReg reg, u16 value)
+MemoryDebugger::writeCs(Reg reg, u16 value)
 {
-    if (isUnused(reg)) throw Error(ErrorCode::REG_UNUSED, ChipsetRegEnum::key(reg));
-    if (isReadable(reg)) throw Error(ErrorCode::REG_READ_ONLY, ChipsetRegEnum::key(reg));
+    if (isUnused(reg)) throw Error(ErrorCode::REG_UNUSED, RegEnum::key(reg));
+    if (isReadable(reg)) throw Error(ErrorCode::REG_READ_ONLY, RegEnum::key(reg));
 
     return mem.pokeCustom16<Accessor::CPU>(u32(reg) << 1, value);
 }

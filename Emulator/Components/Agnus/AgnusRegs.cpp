@@ -34,7 +34,7 @@ Agnus::pokeDMACON(u16 value)
     trace(DMA_DEBUG, "pokeDMACON(%04x)\n", value);
 
     // Schedule the write cycle
-    recordRegisterChange(DMA_CYCLES(2), ChipsetReg::DMACON, value);
+    recordRegisterChange(DMA_CYCLES(2), Reg::DMACON, value);
 }
 
 void
@@ -308,7 +308,7 @@ Agnus::pokeBPLCON0(u16 value)
     trace(DMA_DEBUG, "pokeBPLCON0(%04x)\n", value);
 
     if (bplcon0 != value) {
-        recordRegisterChange(DMA_CYCLES(4), ChipsetReg::BPLCON0, value, Accessor::AGNUS);
+        recordRegisterChange(DMA_CYCLES(4), Reg::BPLCON0, value, Accessor::AGNUS);
     }
 }
 
@@ -358,7 +358,7 @@ Agnus::pokeBPLCON1(u16 value)
     trace(DMA_DEBUG, "pokeBPLCON1(%04x)\n", value);
     
     if (bplcon1 != value) {
-        recordRegisterChange(DMA_CYCLES(1), ChipsetReg::BPLCON1, value, Accessor::AGNUS);
+        recordRegisterChange(DMA_CYCLES(1), Reg::BPLCON1, value, Accessor::AGNUS);
     }
 }
 
@@ -386,8 +386,8 @@ Agnus::pokeDIWSTRT(u16 value)
 {
     trace(DIW_DEBUG, "pokeDIWSTRT<%s>(%04x)\n", AccessorEnum::key(s), value);
 
-    recordRegisterChange(DMA_CYCLES(4), ChipsetReg::DIWSTRT, value, Accessor::AGNUS);
-    recordRegisterChange(DMA_CYCLES(1), ChipsetReg::DIWSTRT, value, Accessor::DENISE);
+    recordRegisterChange(DMA_CYCLES(4), Reg::DIWSTRT, value, Accessor::AGNUS);
+    recordRegisterChange(DMA_CYCLES(1), Reg::DIWSTRT, value, Accessor::DENISE);
 }
 
 template <Accessor s> void
@@ -395,8 +395,8 @@ Agnus::pokeDIWSTOP(u16 value)
 {
     trace(DIW_DEBUG, "pokeDIWSTOP<%s>(%04x)\n", AccessorEnum::key(s), value);
 
-    recordRegisterChange(DMA_CYCLES(4), ChipsetReg::DIWSTOP, value, Accessor::AGNUS);
-    recordRegisterChange(DMA_CYCLES(1), ChipsetReg::DIWSTOP, value, Accessor::DENISE);
+    recordRegisterChange(DMA_CYCLES(4), Reg::DIWSTOP, value, Accessor::AGNUS);
+    recordRegisterChange(DMA_CYCLES(1), Reg::DIWSTOP, value, Accessor::DENISE);
 }
 
 template <Accessor s> void
@@ -406,15 +406,15 @@ Agnus::pokeDIWHIGH(u16 value)
 
     value &= 0x2727;
 
-    recordRegisterChange(DMA_CYCLES(4), ChipsetReg::DIWHIGH, value, Accessor::AGNUS);
-    recordRegisterChange(DMA_CYCLES(1), ChipsetReg::DIWHIGH, value, Accessor::DENISE);
+    recordRegisterChange(DMA_CYCLES(4), Reg::DIWHIGH, value, Accessor::AGNUS);
+    recordRegisterChange(DMA_CYCLES(1), Reg::DIWHIGH, value, Accessor::DENISE);
 }
 
 void
 Agnus::pokeBPL1MOD(u16 value)
 {
     trace(BPLMOD_DEBUG, "pokeBPL1MOD(%04x)\n", value);
-    recordRegisterChange(DMA_CYCLES(2), ChipsetReg::BPL1MOD, value);
+    recordRegisterChange(DMA_CYCLES(2), Reg::BPL1MOD, value);
 }
 
 void
@@ -428,7 +428,7 @@ void
 Agnus::pokeBPL2MOD(u16 value)
 {
     trace(BPLMOD_DEBUG, "pokeBPL2MOD(%04x)\n", value);
-    recordRegisterChange(DMA_CYCLES(2), ChipsetReg::BPL2MOD, value);
+    recordRegisterChange(DMA_CYCLES(2), Reg::BPL2MOD, value);
 }
 
 void
@@ -454,7 +454,7 @@ Agnus::pokeSPRxPOS(u16 value)
         return;
     }
 
-    auto reg = ChipsetReg(int(ChipsetReg::SPR0POS) + 4 * x);
+    auto reg = Reg(int(Reg::SPR0POS) + 4 * x);
     recordRegisterChange(DMA_CYCLES(2), reg, value);
 }
 
@@ -491,7 +491,7 @@ Agnus::pokeSPRxCTL(u16 value)
         return;
     }
 
-    auto reg = ChipsetReg(int(ChipsetReg::SPR0CTL) + 4 * x);
+    auto reg = Reg(int(Reg::SPR0CTL) + 4 * x);
     recordRegisterChange(DMA_CYCLES(2), reg, value);
 }
 
@@ -555,7 +555,7 @@ Agnus::pokeDSKPTH(u16 value)
     trace(DSKREG_DEBUG, "pokeDSKPTH(%04x) [%s]\n", value, AccessorEnum::key(s));
 
     // Schedule the write cycle
-    recordRegisterChange(DMA_CYCLES(2), ChipsetReg::DSKPTH, value, s);
+    recordRegisterChange(DMA_CYCLES(2), Reg::DSKPTH, value, s);
 }
 
 void
@@ -580,7 +580,7 @@ void Agnus::pokeDSKPTL(u16 value)
     trace(DSKREG_DEBUG, "pokeDSKPTL(%04x) [%s]\n", value, AccessorEnum::key(s));
 
     // Schedule the write cycle
-    recordRegisterChange(DMA_CYCLES(2), ChipsetReg::DSKPTL, value, s);
+    recordRegisterChange(DMA_CYCLES(2), Reg::DSKPTL, value, s);
 }
 
 void
@@ -617,7 +617,7 @@ Agnus::pokeBPLxPTH(u16 value)
     trace(BPLREG_DEBUG, "pokeBPL%dPTH(%04x) [%s]\n", x, value, AccessorEnum::key(s));
     
     // Schedule the write cycle
-    auto reg = ChipsetReg(int(ChipsetReg::BPL1PTH) + 2 * (x - 1));
+    auto reg = Reg(int(Reg::BPL1PTH) + 2 * (x - 1));
     recordRegisterChange(DMA_CYCLES(2), reg, value, s);
 }
 
@@ -643,7 +643,7 @@ Agnus::pokeBPLxPTL(u16 value)
     trace(BPLREG_DEBUG, "pokeBPL%dPTL(%04x) [%s]\n", x, value, AccessorEnum::key(s));
 
     // Schedule the write cycle
-    auto reg = ChipsetReg(int(ChipsetReg::BPL1PTL) + 2 * (x - 1));
+    auto reg = Reg(int(Reg::BPL1PTL) + 2 * (x - 1));
     recordRegisterChange(DMA_CYCLES(2), reg, value, s);
 }
 
@@ -665,7 +665,7 @@ Agnus::pokeSPRxPTH(u16 value)
     trace(SPRREG_DEBUG, "pokeSPR%dPTH(%04x) [%s]\n", x, value, AccessorEnum::key(s));
 
     // Schedule the write cycle
-    auto reg = ChipsetReg(int(ChipsetReg::SPR0PTH) + 2 * x);
+    auto reg = Reg(int(Reg::SPR0PTH) + 2 * x);
     recordRegisterChange(DMA_CYCLES(2), reg, value, s);
 }
 
@@ -691,7 +691,7 @@ Agnus::pokeSPRxPTL(u16 value)
     trace(SPRREG_DEBUG, "pokeSPR%dPTL(%04x) [%s]\n", x, value, AccessorEnum::key(s));
 
     // Schedule the write cycle
-    auto reg = ChipsetReg(int(ChipsetReg::SPR0PTL) + 2 * x);
+    auto reg = Reg(int(Reg::SPR0PTL) + 2 * x);
     recordRegisterChange(DMA_CYCLES(2), reg, value, s);
 }
 

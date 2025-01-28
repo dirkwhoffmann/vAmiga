@@ -384,7 +384,7 @@ DebugConsole::initCommands(Command &root)
         root.clone("m.w",      {"m"}, 2);
         root.clone("m.l",      {"m"}, 4);
 
-        root.add({"w"}, { Arg::value }, { "{ " + Arg::address + " | " + ChipsetRegEnum::argList() + " }" },
+        root.add({"w"}, { Arg::value }, { "{ " + Arg::address + " | " + RegEnum::argList() + " }" },
                  std::pair<string, string>("w[.b|.w|.l]", "Write into a register or memory"),
                  [this](Arguments& argv, long value) {
 
@@ -393,7 +393,7 @@ DebugConsole::initCommands(Command &root)
 
             if (argv.size() > 1) {
                 try {
-                    addr = 0xDFF000 + u32(parseEnum<ChipsetRegEnum>(argv[1]) << 1);
+                    addr = 0xDFF000 + u32(parseEnum<RegEnum>(argv[1]) << 1);
                 } catch (...) {
                     addr = parseAddr(argv[1]);
                 };

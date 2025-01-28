@@ -415,7 +415,7 @@ public:
 
     // Schedules a register to change its value
     void recordRegisterChange(Cycle delay, RegChange regChange);
-    void recordRegisterChange(Cycle delay, ChipsetReg reg, u16 value, Accessor acc = Accessor::CPU);
+    void recordRegisterChange(Cycle delay, Reg reg, u16 value, Accessor acc = Accessor::CPU);
 
 private:
 

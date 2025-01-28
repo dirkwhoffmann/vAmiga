@@ -60,7 +60,7 @@ Denise::setHSTRT(isize val)
     trace(DIW_DEBUG, "setHSTRT(%lx)\n", val);
 
     // Record register change
-    diwChanges.insert(agnus.pos.pixel(), RegChange { .addr = u32(ChipsetReg::DIWSTRT), .value = (u16)val });
+    diwChanges.insert(agnus.pos.pixel(), RegChange { .addr = u32(Reg::DIWSTRT), .value = (u16)val });
     markBorderBufferAsDirty();
 }
 
@@ -70,7 +70,7 @@ Denise::setHSTOP(isize val)
     trace(DIW_DEBUG, "setHSTOP(%lx)\n", val);
 
     // Record register change
-    diwChanges.insert(agnus.pos.pixel(), RegChange { .addr = u32(ChipsetReg::DIWSTOP), .value = (u16)val });
+    diwChanges.insert(agnus.pos.pixel(), RegChange { .addr = u32(Reg::DIWSTOP), .value = (u16)val });
     markBorderBufferAsDirty();
 }
 
@@ -120,7 +120,7 @@ Denise::pokeBPLCON0(u16 value)
 {
     trace(BPLREG_DEBUG, "pokeBPLCON0(%X)\n", value);
 
-    agnus.recordRegisterChange(DMA_CYCLES(1), ChipsetReg::BPLCON0, value, Accessor::DENISE);
+    agnus.recordRegisterChange(DMA_CYCLES(1), Reg::BPLCON0, value, Accessor::DENISE);
 }
 
 void
@@ -130,7 +130,7 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
 
     // Record the register change
     i64 pixel = std::max(agnus.pos.pixel() - 4, (isize)0);
-    conChanges.insert(pixel, RegChange { .addr = u32(ChipsetReg::BPLCON0), .value = newValue });
+    conChanges.insert(pixel, RegChange { .addr = u32(Reg::BPLCON0), .value = newValue });
     
     // Check if the HAM bit or the SHRES bit have changed
     if ((ham(oldValue) ^ ham(newValue)) || (shres(oldValue) ^ shres(newValue))) {
@@ -161,7 +161,7 @@ Denise::pokeBPLCON1(u16 value)
     trace(BPLREG_DEBUG, "pokeBPLCON1(%X)\n", value);
 
     // Record the register change
-    agnus.recordRegisterChange(DMA_CYCLES(1), ChipsetReg::BPLCON1, value, Accessor::DENISE);
+    agnus.recordRegisterChange(DMA_CYCLES(1), Reg::BPLCON1, value, Accessor::DENISE);
 }
 
 void
@@ -180,7 +180,7 @@ Denise::pokeBPLCON2(u16 value)
 {
     trace(BPLREG_DEBUG, "pokeBPLCON2(%X)\n", value);
 
-    agnus.recordRegisterChange(DMA_CYCLES(1), ChipsetReg::BPLCON2, value);
+    agnus.recordRegisterChange(DMA_CYCLES(1), Reg::BPLCON2, value);
 }
 
 void
@@ -195,7 +195,7 @@ Denise::setBPLCON2(u16 newValue)
     
     // Record the register change
     i64 pixel = agnus.pos.pixel() + 4;
-    conChanges.insert(pixel, RegChange { .addr = u32(ChipsetReg::BPLCON2), .value = newValue });
+    conChanges.insert(pixel, RegChange { .addr = u32(Reg::BPLCON2), .value = newValue });
 }
 
 template <Accessor s> void
@@ -203,7 +203,7 @@ Denise::pokeBPLCON3(u16 value)
 {
     trace(BPLREG_DEBUG, "pokeBPLCON3(%X)\n", value);
 
-    agnus.recordRegisterChange(DMA_CYCLES(1), ChipsetReg::BPLCON3, value);
+    agnus.recordRegisterChange(DMA_CYCLES(1), Reg::BPLCON3, value);
 }
 
 void
@@ -286,7 +286,7 @@ Denise::pokeSPRxPOS(u16 value)
 
     // Record the register change
     i64 pos = agnus.pos.pixel() + 6;
-    constexpr auto reg = ChipsetReg(isize(ChipsetReg::SPR0POS) + 4 * x);
+    constexpr auto reg = Reg(isize(Reg::SPR0POS) + 4 * x);
     sprChanges[x/2].insert(pos, RegChange { .addr = (u32)reg, .value = value } );
 }
 
@@ -301,7 +301,7 @@ Denise::pokeSPRxCTL(u16 value)
 
     // Record the register change
     i64 pos = agnus.pos.pixel() + 6;
-    constexpr auto reg = ChipsetReg(isize(ChipsetReg::SPR0CTL) + 4 * x);
+    constexpr auto reg = Reg(isize(Reg::SPR0CTL) + 4 * x);
     sprChanges[x/2].insert(pos, RegChange { .addr = u32(reg), .value = value } );
 }
 
@@ -319,7 +319,7 @@ Denise::pokeSPRxDATA(u16 value)
 
     // Record the register change
     i64 pos = agnus.pos.pixel() + 4;
-    constexpr auto reg = ChipsetReg(isize(ChipsetReg::SPR0DATA) + 4 * x);
+    constexpr auto reg = Reg(isize(Reg::SPR0DATA) + 4 * x);
     sprChanges[x/2].insert(pos, RegChange { .addr = u32(reg), .value = value } );
 }
 
@@ -334,7 +334,7 @@ Denise::pokeSPRxDATB(u16 value)
 
     // Record the register change
     i64 pos = agnus.pos.pixel() + 4;
-    constexpr auto reg = ChipsetReg(isize(ChipsetReg::SPR0DATB) + 4 * x);
+    constexpr auto reg = Reg(isize(Reg::SPR0DATB) + 4 * x);
     sprChanges[x/2].insert(pos, RegChange { .addr = u32(reg), .value = value });
 }
 

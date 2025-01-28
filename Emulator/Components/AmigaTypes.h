@@ -149,7 +149,7 @@ struct ConfigSchemeEnum : util::Reflection<ConfigSchemeEnum, ConfigScheme>
     }
 };
 
-enum class ChipsetReg : long
+enum class Reg : long
 {
     BLTDDAT,    DMACONR,    VPOSR,      VHPOSR,     DSKDATR,
     JOY0DAT,    JOY1DAT,    CLXDAT,     ADKCONR,    POT0DAT,
@@ -205,13 +205,13 @@ enum class ChipsetReg : long
     NO_OP
 };
 
-static_assert(ChipsetReg::NO_OP == ChipsetReg(0x1FE >> 1));
-struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
+static_assert(Reg::NO_OP == Reg(0x1FE >> 1));
+struct RegEnum : util::Reflection<RegEnum, Reg>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(ChipsetReg::NO_OP);
+    static constexpr long maxVal = long(Reg::NO_OP);
     
-    static const char *_key(ChipsetReg value)
+    static const char *_key(Reg value)
     {
         static const char *name[] = {
             
@@ -305,7 +305,7 @@ struct ChipsetRegEnum : util::Reflection<ChipsetRegEnum, ChipsetReg>
         
         return isValid(value) ? name[isize(value)] : "???";
     }
-    static const char *help(ChipsetReg value)
+    static const char *help(Reg value)
     {
         return "";
     }
