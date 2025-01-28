@@ -207,7 +207,8 @@ Copper::move(u32 addr, u16 value)
               "pokeCustom16(%X [%s], %X)\n", addr, MemoryDebugger::regName(addr), value);
 
         // Color registers
-        pixelEngine.colChanges.insert(agnus.pos.pixel(), RegChange { .addr = addr, .value = value} );
+        auto reg = Reg(isize(Reg::COLOR00) + ((addr - 0x180) >> 1));
+        pixelEngine.colChanges.insert(agnus.pos.pixel(), RegChange { .addr = u32(reg), .value = value} );
         return;
     }
 

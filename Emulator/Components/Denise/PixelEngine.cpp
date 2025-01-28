@@ -352,13 +352,13 @@ PixelEngine::replayColRegChanges()
 void
 PixelEngine::applyRegisterChange(const RegChange &change)
 {
-    switch (change.addr) {
+    switch (Reg(change.addr)) {
 
-        case 0:
+        case Reg(0):
             
             break;
 
-        case 0x100: // BPLCON0
+        case Reg::BPLCON0:
 
             hamMode = Denise::ham(change.value);
             shresMode = Denise::shres(change.value);
@@ -366,8 +366,8 @@ PixelEngine::applyRegisterChange(const RegChange &change)
             
         default: // It must be a color register then
             
-            auto nr = (change.addr - 0x180) >> 1;
-            assert(nr < 32);
+            auto nr = isize(change.addr) - isize(Reg::COLOR00);
+            assert(0 <= nr && nr < 32);
 
             if (color[nr].rawValue() != change.value) {
                 setColor(nr, change.value);
@@ -387,7 +387,7 @@ PixelEngine::colorize(isize line)
     AmigaColor hold = color[0];
 
     // Add a dummy register change to ensure we draw until the line end
-    colChanges.insert(HPIXELS, RegChange { .addr = 0, .value = 0 } );
+    colChanges.insert(HPIXELS, RegChange { .addr = u32(Reg(0)), .value = 0 } );
 
     // Iterate over all recorded register changes
     for (isize i = 0, end = colChanges.end(); i < end; i++) {

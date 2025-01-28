@@ -134,7 +134,7 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     
     // Check if the HAM bit or the SHRES bit have changed
     if ((ham(oldValue) ^ ham(newValue)) || (shres(oldValue) ^ shres(newValue))) {
-        pixelEngine.colChanges.insert(pixel, RegChange { .addr = 0x100, .value = newValue, .accessor = Accessor::DENISE } );
+        pixelEngine.colChanges.insert(pixel, RegChange { .addr = u32(Reg::BPLCON0), .value = newValue, .accessor = Accessor::DENISE } );
     }
 
     // Update value
@@ -344,8 +344,8 @@ Denise::pokeCOLORxx(u16 value)
     trace(COLREG_DEBUG, "pokeCOLOR%02ld(%X)\n", xx, value);
 
     // Record the color change
-    constexpr u32 reg = 0x180 + 2*xx;
-    pixelEngine.colChanges.insert(agnus.pos.pixel(), RegChange { .addr = reg, .value = value } );
+    constexpr auto reg = Reg(isize(Reg::COLOR00) + xx);
+    pixelEngine.colChanges.insert(agnus.pos.pixel(), RegChange { .addr = u32(reg), .value = value } );
 }
 
 Resolution
