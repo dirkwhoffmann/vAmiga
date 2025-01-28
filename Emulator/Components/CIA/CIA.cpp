@@ -71,14 +71,14 @@ CIA::operator << (SerResetter &worker)
 }
 
 i64
-CIA::getOption(Option option) const
+CIA::getOption(Opt option) const
 {
     switch (option) {
             
-        case Option::CIA_REVISION:          return (i64)config.revision;
-        case Option::CIA_TODBUG:            return config.todBug;
-        case Option::CIA_ECLOCK_SYNCING:    return config.eClockSyncing;
-        case Option::CIA_IDLE_SLEEP:        return config.idleSleep;
+        case Opt::CIA_REVISION:          return (i64)config.revision;
+        case Opt::CIA_TODBUG:            return config.todBug;
+        case Opt::CIA_ECLOCK_SYNCING:    return config.eClockSyncing;
+        case Opt::CIA_IDLE_SLEEP:        return config.idleSleep;
 
         default:
             fatalError;
@@ -86,20 +86,20 @@ CIA::getOption(Option option) const
 }
 
 void
-CIA::checkOption(Option opt, i64 value)
+CIA::checkOption(Opt opt, i64 value)
 {
     switch (opt) {
 
-        case Option::CIA_REVISION:
+        case Opt::CIA_REVISION:
 
             if (!CIARevEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, CIARevEnum::keyList());
             }
             return;
 
-        case Option::CIA_TODBUG:
-        case Option::CIA_ECLOCK_SYNCING:
-        case Option::CIA_IDLE_SLEEP:
+        case Opt::CIA_TODBUG:
+        case Opt::CIA_ECLOCK_SYNCING:
+        case Opt::CIA_IDLE_SLEEP:
 
             return;
 
@@ -109,26 +109,26 @@ CIA::checkOption(Option opt, i64 value)
 }
 
 void
-CIA::setOption(Option option, i64 value)
+CIA::setOption(Opt option, i64 value)
 {
     switch (option) {
             
-        case Option::CIA_REVISION:
+        case Opt::CIA_REVISION:
 
             config.revision = (CIARev)value;
             return;
 
-        case Option::CIA_TODBUG:
+        case Opt::CIA_TODBUG:
 
             config.todBug = value;
             return;
             
-        case Option::CIA_ECLOCK_SYNCING:
+        case Opt::CIA_ECLOCK_SYNCING:
             
             config.eClockSyncing = value;
             return;
             
-        case Option::CIA_IDLE_SLEEP:
+        case Opt::CIA_IDLE_SLEEP:
 
             config.idleSleep = value;
             return;

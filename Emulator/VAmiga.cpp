@@ -1475,7 +1475,7 @@ DefaultsAPI::get(const string &key) const
 }
 
 i64
-DefaultsAPI::get(Option option, isize nr) const
+DefaultsAPI::get(Opt option, isize nr) const
 {
     VAMIGA_PUBLIC
     return defaults->get(option, nr);
@@ -1496,7 +1496,7 @@ DefaultsAPI::getFallback(const string &key) const
 }
 
 i64
-DefaultsAPI::getFallback(Option option, isize nr) const
+DefaultsAPI::getFallback(Opt option, isize nr) const
 {
     VAMIGA_PUBLIC
     return defaults->getFallback(option, nr);
@@ -1510,28 +1510,28 @@ DefaultsAPI::set(const string &key, const string &value)
 }
 
 void
-DefaultsAPI::set(Option opt, const string &value)
+DefaultsAPI::set(Opt opt, const string &value)
 {
     VAMIGA_PUBLIC
     defaults->set(opt, value);
 }
 
 void
-DefaultsAPI::set(Option opt, const string &value, std::vector<isize> objids)
+DefaultsAPI::set(Opt opt, const string &value, std::vector<isize> objids)
 {
     VAMIGA_PUBLIC
     defaults->set(opt, value, objids);
 }
 
 void
-DefaultsAPI::set(Option opt, i64 value)
+DefaultsAPI::set(Opt opt, i64 value)
 {
     VAMIGA_PUBLIC
     defaults->set(opt, value);
 }
 
 void
-DefaultsAPI::set(Option opt, i64 value, std::vector<isize> objids)
+DefaultsAPI::set(Opt opt, i64 value, std::vector<isize> objids)
 {
     VAMIGA_PUBLIC
     defaults->set(opt, value, objids);
@@ -1545,28 +1545,28 @@ DefaultsAPI::setFallback(const string &key, const string &value)
 }
 
 void
-DefaultsAPI::setFallback(Option opt, const string &value)
+DefaultsAPI::setFallback(Opt opt, const string &value)
 {
     VAMIGA_PUBLIC
     defaults->setFallback(opt, value);
 }
 
 void
-DefaultsAPI::setFallback(Option opt, const string &value, std::vector<isize> objids)
+DefaultsAPI::setFallback(Opt opt, const string &value, std::vector<isize> objids)
 {
     VAMIGA_PUBLIC
     defaults->setFallback(opt, value, objids);
 }
 
 void
-DefaultsAPI::setFallback(Option opt, i64 value)
+DefaultsAPI::setFallback(Opt opt, i64 value)
 {
     VAMIGA_PUBLIC
     defaults->setFallback(opt, value);
 }
 
 void
-DefaultsAPI::setFallback(Option opt, i64 value, std::vector<isize> objids)
+DefaultsAPI::setFallback(Opt opt, i64 value, std::vector<isize> objids)
 {
     VAMIGA_PUBLIC
     defaults->setFallback(opt, value, objids);
@@ -1587,14 +1587,14 @@ DefaultsAPI::remove(const string &key)
 }
 
 void
-DefaultsAPI::remove(Option option)
+DefaultsAPI::remove(Opt option)
 {
     VAMIGA_PUBLIC
     defaults->remove(option);
 }
 
 void
-DefaultsAPI::remove(Option option, std::vector <isize> objids)
+DefaultsAPI::remove(Opt option, std::vector <isize> objids)
 {
     VAMIGA_PUBLIC
     defaults->remove(option, objids);
@@ -2168,14 +2168,14 @@ VAmiga::isLaunched() const
 }
 
 i64
-VAmiga::get(Option option) const
+VAmiga::get(Opt option) const
 {
     VAMIGA_PUBLIC
     return emu->get(option);
 }
 
 i64
-VAmiga::get(Option option, long id) const
+VAmiga::get(Opt option, long id) const
 {
     VAMIGA_PUBLIC
     return emu->get(option, id);
@@ -2190,7 +2190,7 @@ VAmiga::set(ConfigScheme model)
 }
 
 void
-VAmiga::set(Option opt, i64 value)
+VAmiga::set(Opt opt, i64 value)
 {
     VAMIGA_PUBLIC
     emu->check(opt, value);
@@ -2199,7 +2199,7 @@ VAmiga::set(Option opt, i64 value)
 }
 
 void
-VAmiga::set(Option opt, i64 value, long id)
+VAmiga::set(Opt opt, i64 value, long id)
 {
     VAMIGA_PUBLIC
     emu->check(opt, value, { id });

@@ -45,8 +45,8 @@ class Agnus : public SubComponent, public Inspectable<AgnusInfo, AgnusStats> {
 
     ConfigOptions options = {
 
-        Option::AGNUS_REVISION,
-        Option::AGNUS_PTR_DROPS
+        Opt::AGNUS_REVISION,
+        Opt::AGNUS_PTR_DROPS
     };
 
     // Current configuration
@@ -313,9 +313,9 @@ public:
     
     const AgnusConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
-    i64 getOption(Option option) const override;
-    void checkOption(Option opt, i64 value) override;
-    void setOption(Option option, i64 value) override;
+    i64 getOption(Opt option) const override;
+    void checkOption(Opt opt, i64 value) override;
+    void setOption(Opt option, i64 value) override;
 
     void setVideoFormat(TV newFormat);
 

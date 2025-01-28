@@ -1161,7 +1161,7 @@ DebugConsole::initCommands(RetroShellCmd &root)
                      "Attach or detach the debug expansion board",
                      [this](Arguments& argv, long value) {
 
-                diagBoard.setOption(Option::DIAG_BOARD, parseBool(argv[0]));
+                diagBoard.setOption(Opt::DIAG_BOARD, parseBool(argv[0]));
             });
         }
     }

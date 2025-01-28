@@ -15,14 +15,14 @@
 namespace vamiga {
 
 i64
-Host::getOption(Option option) const
+Host::getOption(Opt option) const
 {
     switch (option) {
 
-        case Option::HOST_REFRESH_RATE:     return i64(config.refreshRate);
-        case Option::HOST_SAMPLE_RATE:      return i64(config.sampleRate);
-        case Option::HOST_FRAMEBUF_WIDTH:   return i64(config.frameBufferWidth);
-        case Option::HOST_FRAMEBUF_HEIGHT:  return i64(config.frameBufferHeight);
+        case Opt::HOST_REFRESH_RATE:     return i64(config.refreshRate);
+        case Opt::HOST_SAMPLE_RATE:      return i64(config.sampleRate);
+        case Opt::HOST_FRAMEBUF_WIDTH:   return i64(config.frameBufferWidth);
+        case Opt::HOST_FRAMEBUF_HEIGHT:  return i64(config.frameBufferHeight);
 
         default:
             fatalError;
@@ -30,14 +30,14 @@ Host::getOption(Option option) const
 }
 
 void
-Host::checkOption(Option opt, i64 value)
+Host::checkOption(Opt opt, i64 value)
 {
     switch (opt) {
 
-        case Option::HOST_REFRESH_RATE:
-        case Option::HOST_SAMPLE_RATE:
-        case Option::HOST_FRAMEBUF_WIDTH:
-        case Option::HOST_FRAMEBUF_HEIGHT:
+        case Opt::HOST_REFRESH_RATE:
+        case Opt::HOST_SAMPLE_RATE:
+        case Opt::HOST_FRAMEBUF_WIDTH:
+        case Opt::HOST_FRAMEBUF_HEIGHT:
             
             return;
 
@@ -47,27 +47,27 @@ Host::checkOption(Option opt, i64 value)
 }
 
 void
-Host::setOption(Option opt, i64 value)
+Host::setOption(Opt opt, i64 value)
 {
     switch (opt) {
 
-        case Option::HOST_REFRESH_RATE:
+        case Opt::HOST_REFRESH_RATE:
 
             config.refreshRate = isize(value);
             return;
 
-        case Option::HOST_SAMPLE_RATE:
+        case Opt::HOST_SAMPLE_RATE:
 
             config.sampleRate = isize(value);
             audioPort.setSampleRate(double(value));
             return;
 
-        case Option::HOST_FRAMEBUF_WIDTH:
+        case Opt::HOST_FRAMEBUF_WIDTH:
 
             config.frameBufferWidth = isize(value);
             return;
 
-        case Option::HOST_FRAMEBUF_HEIGHT:
+        case Opt::HOST_FRAMEBUF_HEIGHT:
 
             config.frameBufferHeight = isize(value);
             return;

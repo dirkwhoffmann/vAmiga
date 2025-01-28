@@ -34,16 +34,16 @@ class Denise final : public SubComponent, public Inspectable<DeniseInfo> {
 
     ConfigOptions options = {
 
-        Option::DENISE_REVISION,
-        Option::DENISE_VIEWPORT_TRACKING,
-        Option::DENISE_FRAME_SKIPPING,
-        Option::DENISE_HIDDEN_BITPLANES,
-        Option::DENISE_HIDDEN_SPRITES,
-        Option::DENISE_HIDDEN_LAYERS,
-        Option::DENISE_HIDDEN_LAYER_ALPHA,
-        Option::DENISE_CLX_SPR_SPR,
-        Option::DENISE_CLX_SPR_PLF,
-        Option::DENISE_CLX_PLF_PLF
+        Opt::DENISE_REVISION,
+        Opt::DENISE_VIEWPORT_TRACKING,
+        Opt::DENISE_FRAME_SKIPPING,
+        Opt::DENISE_HIDDEN_BITPLANES,
+        Opt::DENISE_HIDDEN_SPRITES,
+        Opt::DENISE_HIDDEN_LAYERS,
+        Opt::DENISE_HIDDEN_LAYER_ALPHA,
+        Opt::DENISE_CLX_SPR_SPR,
+        Opt::DENISE_CLX_SPR_PLF,
+        Opt::DENISE_CLX_PLF_PLF
     };
 
     // Current configuration
@@ -487,9 +487,9 @@ public:
     
     const DeniseConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
-    i64 getOption(Option option) const override;
-    void checkOption(Option opt, i64 value) override;
-    void setOption(Option option, i64 value) override;
+    i64 getOption(Opt option) const override;
+    void checkOption(Opt opt, i64 value) override;
+    void setOption(Opt option, i64 value) override;
     
 
     //

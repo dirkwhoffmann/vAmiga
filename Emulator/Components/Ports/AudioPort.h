@@ -63,18 +63,18 @@ class AudioPort final : public SubComponent {
 
     ConfigOptions options = {
 
-        Option::AUD_SAMPLING_METHOD,
-        Option::AUD_PAN0,
-        Option::AUD_PAN1,
-        Option::AUD_PAN2,
-        Option::AUD_PAN3,
-        Option::AUD_VOL0,
-        Option::AUD_VOL1,
-        Option::AUD_VOL2,
-        Option::AUD_VOL3,
-        Option::AUD_VOLL,
-        Option::AUD_VOLR,
-        Option::AUD_FASTPATH
+        Opt::AUD_SAMPLING_METHOD,
+        Opt::AUD_PAN0,
+        Opt::AUD_PAN1,
+        Opt::AUD_PAN2,
+        Opt::AUD_PAN3,
+        Opt::AUD_VOL0,
+        Opt::AUD_VOL1,
+        Opt::AUD_VOL2,
+        Opt::AUD_VOL3,
+        Opt::AUD_VOLL,
+        Opt::AUD_VOLR,
+        Opt::AUD_FASTPATH
     };
 
     friend class Paula;
@@ -217,9 +217,9 @@ public:
     
     const AudioPortConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
-    i64 getOption(Option option) const override;
-    void checkOption(Option opt, i64 value) override;
-    void setOption(Option option, i64 value) override;
+    i64 getOption(Opt option) const override;
+    void checkOption(Opt opt, i64 value) override;
+    void setOption(Opt option, i64 value) override;
 
     void setSampleRate(double hz);
 

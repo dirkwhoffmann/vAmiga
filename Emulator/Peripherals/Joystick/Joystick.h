@@ -33,10 +33,10 @@ class Joystick final : public SubComponent, public Inspectable<JoystickInfo> {
 
     ConfigOptions options = {
 
-        Option::JOY_AUTOFIRE,
-        Option::JOY_AUTOFIRE_BURSTS,
-        Option::JOY_AUTOFIRE_BULLETS,
-        Option::JOY_AUTOFIRE_DELAY
+        Opt::JOY_AUTOFIRE,
+        Opt::JOY_AUTOFIRE_BURSTS,
+        Opt::JOY_AUTOFIRE_BULLETS,
+        Opt::JOY_AUTOFIRE_DELAY
     };
 
     // Reference to control port this device belongs to
@@ -156,9 +156,9 @@ public:
 
     const JoystickConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
-    i64 getOption(Option option) const override;
-    void checkOption(Option opt, i64 value) override;
-    void setOption(Option option, i64 value) override;
+    i64 getOption(Opt option) const override;
+    void checkOption(Opt opt, i64 value) override;
+    void setOption(Opt option, i64 value) override;
 
 
     //

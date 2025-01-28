@@ -37,10 +37,10 @@ class CIA : public SubComponent, public Inspectable<CIAInfo, CIAStats> {
 
     ConfigOptions options = {
 
-        Option::CIA_REVISION,
-        Option::CIA_TODBUG,
-        Option::CIA_ECLOCK_SYNCING,
-        Option::CIA_IDLE_SLEEP
+        Opt::CIA_REVISION,
+        Opt::CIA_TODBUG,
+        Opt::CIA_ECLOCK_SYNCING,
+        Opt::CIA_IDLE_SLEEP
     };
 
 protected:
@@ -471,9 +471,9 @@ public:
 
     const CIAConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
-    i64 getOption(Option option) const override;
-    void checkOption(Option opt, i64 value) override;
-    void setOption(Option option, i64 value) override;
+    i64 getOption(Opt option) const override;
+    void checkOption(Opt opt, i64 value) override;
+    void setOption(Opt option, i64 value) override;
 
     
     //

@@ -29,10 +29,10 @@ class PixelEngine final : public SubComponent {
 
     ConfigOptions options = {
 
-        Option::MON_PALETTE,
-        Option::MON_BRIGHTNESS,
-        Option::MON_CONTRAST,
-        Option::MON_SATURATION
+        Opt::MON_PALETTE,
+        Opt::MON_BRIGHTNESS,
+        Opt::MON_CONTRAST,
+        Opt::MON_SATURATION
     };
 
     friend class Denise;
@@ -166,9 +166,9 @@ public:
     
     const PixelEngineConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
-    i64 getOption(Option option) const override;
-    void checkOption(Option opt, i64 value) override;
-    void setOption(Option option, i64 value) override;
+    i64 getOption(Opt option) const override;
+    void checkOption(Opt opt, i64 value) override;
+    void setOption(Opt option, i64 value) override;
 
 
     //

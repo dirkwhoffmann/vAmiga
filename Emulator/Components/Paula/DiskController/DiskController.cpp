@@ -32,13 +32,13 @@ DiskController::operator << (SerResetter &worker)
 }
 
 i64
-DiskController::getOption(Option option) const
+DiskController::getOption(Opt option) const
 {
     switch (option) {
             
-        case Option::DC_SPEED:          return config.speed;
-        case Option::DC_AUTO_DSKSYNC:   return config.autoDskSync;
-        case Option::DC_LOCK_DSKSYNC:   return config.lockDskSync;
+        case Opt::DC_SPEED:          return config.speed;
+        case Opt::DC_AUTO_DSKSYNC:   return config.autoDskSync;
+        case Opt::DC_LOCK_DSKSYNC:   return config.lockDskSync;
 
         default:
             fatalError;
@@ -46,19 +46,19 @@ DiskController::getOption(Option option) const
 }
 
 void
-DiskController::checkOption(Option opt, i64 value)
+DiskController::checkOption(Opt opt, i64 value)
 {
     switch (opt) {
 
-        case Option::DC_SPEED:
+        case Opt::DC_SPEED:
 
             if (!isValidDriveSpeed((isize)value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, "-1, 1, 2, 4, 8");
             }
             return;
 
-        case Option::DC_AUTO_DSKSYNC:
-        case Option::DC_LOCK_DSKSYNC:
+        case Opt::DC_AUTO_DSKSYNC:
+        case Opt::DC_LOCK_DSKSYNC:
 
             return;
 
@@ -68,22 +68,22 @@ DiskController::checkOption(Option opt, i64 value)
 }
 
 void
-DiskController::setOption(Option option, i64 value)
+DiskController::setOption(Opt option, i64 value)
 {
     switch (option) {
             
-        case Option::DC_SPEED:
+        case Opt::DC_SPEED:
 
             config.speed = (i32)value;
             scheduleFirstDiskEvent();
             return;
 
-        case Option::DC_AUTO_DSKSYNC:
+        case Opt::DC_AUTO_DSKSYNC:
             
             config.autoDskSync = value;
             return;
             
-        case Option::DC_LOCK_DSKSYNC:
+        case Opt::DC_LOCK_DSKSYNC:
             
             config.lockDskSync = value;
             return;

@@ -16,11 +16,11 @@
 namespace vamiga {
 
 i64
-RTC::getOption(Option option) const
+RTC::getOption(Opt option) const
 {
     switch (option) {
             
-        case Option::RTC_MODEL:  return (long)config.model;
+        case Opt::RTC_MODEL:  return (long)config.model;
 
         default:
             fatalError;
@@ -28,11 +28,11 @@ RTC::getOption(Option option) const
 }
 
 void
-RTC::checkOption(Option option, i64 value)
+RTC::checkOption(Opt option, i64 value)
 {
     switch (option) {
 
-        case Option::RTC_MODEL:
+        case Opt::RTC_MODEL:
 
             if (!isPoweredOff()) {
                 throw Error(ErrorCode::OPT_LOCKED);
@@ -48,11 +48,11 @@ RTC::checkOption(Option option, i64 value)
 }
 
 void
-RTC::setOption(Option option, i64 value)
+RTC::setOption(Opt option, i64 value)
 {
     switch (option) {
             
-        case Option::RTC_MODEL:
+        case Opt::RTC_MODEL:
 
             config.model = (RTCRevision)value;
             mem.updateMemSrcTables();

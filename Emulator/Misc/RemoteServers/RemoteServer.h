@@ -42,10 +42,10 @@ class RemoteServer : public SubComponent {
 
     ConfigOptions options = {
 
-        Option::SRV_PORT,
-        Option::SRV_PROTOCOL,
-        Option::SRV_AUTORUN,
-        Option::SRV_VERBOSE
+        Opt::SRV_PORT,
+        Opt::SRV_PROTOCOL,
+        Opt::SRV_AUTORUN,
+        Opt::SRV_VERBOSE
     };
 
 protected:
@@ -124,9 +124,9 @@ public:
 
     const ServerConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
-    i64 getOption(Option option) const override;
-    void checkOption(Option opt, i64 value) override;
-    void setOption(Option option, i64 value) override;
+    i64 getOption(Opt option) const override;
+    void checkOption(Opt opt, i64 value) override;
+    void setOption(Opt option, i64 value) override;
 
 
     //

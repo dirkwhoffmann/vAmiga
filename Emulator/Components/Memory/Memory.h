@@ -114,16 +114,16 @@ class Memory final : public SubComponent, public Inspectable<MemInfo, MemStats> 
 
     ConfigOptions options = {
 
-        Option::MEM_CHIP_RAM,
-        Option::MEM_SLOW_RAM,
-        Option::MEM_FAST_RAM,
-        Option::MEM_EXT_START,
-        Option::MEM_SAVE_ROMS,
-        Option::MEM_SLOW_RAM_DELAY,
-        Option::MEM_SLOW_RAM_MIRROR,
-        Option::MEM_BANKMAP,
-        Option::MEM_UNMAPPING_TYPE,
-        Option::MEM_RAM_INIT_PATTERN
+        Opt::MEM_CHIP_RAM,
+        Opt::MEM_SLOW_RAM,
+        Opt::MEM_FAST_RAM,
+        Opt::MEM_EXT_START,
+        Opt::MEM_SAVE_ROMS,
+        Opt::MEM_SLOW_RAM_DELAY,
+        Opt::MEM_SLOW_RAM_MIRROR,
+        Opt::MEM_BANKMAP,
+        Opt::MEM_UNMAPPING_TYPE,
+        Opt::MEM_RAM_INIT_PATTERN
     };
 
     // Current configuration
@@ -331,9 +331,9 @@ public:
     
     const MemConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
-    i64 getOption(Option option) const override;
-    void checkOption(Option opt, i64 value) override;
-    void setOption(Option option, i64 value) override;
+    i64 getOption(Opt option) const override;
+    void checkOption(Opt opt, i64 value) override;
+    void setOption(Opt option, i64 value) override;
 
     
     //

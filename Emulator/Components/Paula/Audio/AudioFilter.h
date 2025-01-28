@@ -129,7 +129,7 @@ class AudioFilter final : public SubComponent {
 
     ConfigOptions options = {
 
-        Option::AUD_FILTER_TYPE
+        Opt::AUD_FILTER_TYPE
     };
 
     // Reference to the audio port this device belongs to
@@ -205,9 +205,9 @@ public:
 
     const AudioFilterConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
-    i64 getOption(Option option) const override;
-    void checkOption(Option opt, i64 value) override;
-    void setOption(Option option, i64 value) override;
+    i64 getOption(Opt option) const override;
+    void checkOption(Opt opt, i64 value) override;
+    void setOption(Opt option, i64 value) override;
 
 private:
 

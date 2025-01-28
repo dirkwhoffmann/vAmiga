@@ -10,7 +10,7 @@
 #include "config.h"
 #include "Amiga.h"
 #include "Emulator.h"
-#include "Option.h"
+#include "Opt.h"
 #include "Snapshot.h"
 #include "ADFFile.h"
 #include "Chrono.h"
@@ -165,19 +165,19 @@ Amiga::_didReset(bool hard)
 }
 
 i64
-Amiga::getOption(Option option) const
+Amiga::getOption(Opt option) const
 {
     switch (option) {
 
-        case Option::AMIGA_VIDEO_FORMAT:    return (i64)config.type;
-        case Option::AMIGA_WARP_BOOT:       return config.warpBoot;
-        case Option::AMIGA_WARP_MODE:       return (i64)config.warpMode;
-        case Option::AMIGA_VSYNC:           return config.vsync;
-        case Option::AMIGA_SPEED_BOOST:     return config.speedBoost;
-        case Option::AMIGA_RUN_AHEAD:       return config.runAhead;
-        case Option::AMIGA_SNAP_AUTO:       return config.snapshots;
-        case Option::AMIGA_SNAP_DELAY:      return config.snapshotDelay;
-        case Option::AMIGA_SNAP_COMPRESS:   return config.compressSnapshots;
+        case Opt::AMIGA_VIDEO_FORMAT:    return (i64)config.type;
+        case Opt::AMIGA_WARP_BOOT:       return config.warpBoot;
+        case Opt::AMIGA_WARP_MODE:       return (i64)config.warpMode;
+        case Opt::AMIGA_VSYNC:           return config.vsync;
+        case Opt::AMIGA_SPEED_BOOST:     return config.speedBoost;
+        case Opt::AMIGA_RUN_AHEAD:       return config.runAhead;
+        case Opt::AMIGA_SNAP_AUTO:       return config.snapshots;
+        case Opt::AMIGA_SNAP_DELAY:      return config.snapshotDelay;
+        case Opt::AMIGA_SNAP_COMPRESS:   return config.compressSnapshots;
 
         default:
             fatalError;
@@ -185,58 +185,58 @@ Amiga::getOption(Option option) const
 }
 
 void
-Amiga::checkOption(Option opt, i64 value)
+Amiga::checkOption(Opt opt, i64 value)
 {
     switch (opt) {
 
-        case Option::AMIGA_VIDEO_FORMAT:
+        case Opt::AMIGA_VIDEO_FORMAT:
 
             if (!TVEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, TVEnum::keyList());
             }
             return;
 
-        case Option::AMIGA_WARP_BOOT:
+        case Opt::AMIGA_WARP_BOOT:
 
             return;
 
-        case Option::AMIGA_WARP_MODE:
+        case Opt::AMIGA_WARP_MODE:
 
             if (!WarpEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, WarpEnum::keyList());
             }
             return;
 
-        case Option::AMIGA_VSYNC:
+        case Opt::AMIGA_VSYNC:
 
             return;
 
-        case Option::AMIGA_SPEED_BOOST:
+        case Opt::AMIGA_SPEED_BOOST:
 
             if (value < 50 || value > 200) {
                 throw Error(ErrorCode::OPT_INV_ARG, "50...200");
             }
             return;
 
-        case Option::AMIGA_RUN_AHEAD:
+        case Opt::AMIGA_RUN_AHEAD:
 
             if (value < 0 || value > 12) {
                 throw Error(ErrorCode::OPT_INV_ARG, "0...12");
             }
             return;
 
-        case Option::AMIGA_SNAP_AUTO:
+        case Opt::AMIGA_SNAP_AUTO:
 
             return;
 
-        case Option::AMIGA_SNAP_DELAY:
+        case Opt::AMIGA_SNAP_DELAY:
 
             if (value < 10 || value > 3600) {
                 throw Error(ErrorCode::OPT_INV_ARG, "10...3600");
             }
             return;
 
-        case Option::AMIGA_SNAP_COMPRESS:
+        case Opt::AMIGA_SNAP_COMPRESS:
 
             return;
             
@@ -246,11 +246,11 @@ Amiga::checkOption(Option opt, i64 value)
 }
 
 void
-Amiga::setOption(Option option, i64 value)
+Amiga::setOption(Opt option, i64 value)
 {
     switch (option) {
 
-        case Option::AMIGA_VIDEO_FORMAT:
+        case Opt::AMIGA_VIDEO_FORMAT:
 
             if (TV(value) != config.type) {
 
@@ -259,44 +259,44 @@ Amiga::setOption(Option option, i64 value)
             }
             return;
 
-        case Option::AMIGA_WARP_BOOT:
+        case Opt::AMIGA_WARP_BOOT:
 
             config.warpBoot = isize(value);
             return;
 
-        case Option::AMIGA_WARP_MODE:
+        case Opt::AMIGA_WARP_MODE:
 
             config.warpMode = Warp(value);
             return;
 
-        case Option::AMIGA_VSYNC:
+        case Opt::AMIGA_VSYNC:
 
             config.vsync = bool(value);
             return;
 
-        case Option::AMIGA_SPEED_BOOST:
+        case Opt::AMIGA_SPEED_BOOST:
 
             config.speedBoost = isize(value);
             return;
 
-        case Option::AMIGA_RUN_AHEAD:
+        case Opt::AMIGA_RUN_AHEAD:
 
             config.runAhead = isize(value);
             return;
 
-        case Option::AMIGA_SNAP_AUTO:
+        case Opt::AMIGA_SNAP_AUTO:
 
             config.snapshots = bool(value);
             scheduleNextSnpEvent();
             return;
 
-        case Option::AMIGA_SNAP_DELAY:
+        case Opt::AMIGA_SNAP_DELAY:
 
             config.snapshotDelay = isize(value);
             scheduleNextSnpEvent();
             return;
 
-        case Option::AMIGA_SNAP_COMPRESS:
+        case Opt::AMIGA_SNAP_COMPRESS:
 
             config.compressSnapshots = bool(value);
             return;
@@ -340,9 +340,9 @@ Amiga::revertToFactorySettings()
 }
 
 i64
-Amiga::get(Option opt, isize objid) const
+Amiga::get(Opt opt, isize objid) const
 {
-    debug(CNF_DEBUG, "get(%s, %ld)\n", OptionEnum::key(opt), objid);
+    debug(CNF_DEBUG, "get(%s, %ld)\n", OptEnum::key(opt), objid);
 
     auto target = routeOption(opt, objid);
     if (target == nullptr) throw Error(ErrorCode::OPT_INV_ID);
@@ -350,7 +350,7 @@ Amiga::get(Option opt, isize objid) const
 }
 
 void
-Amiga::check(Option opt, i64 value, const std::vector<isize> objids)
+Amiga::check(Opt opt, i64 value, const std::vector<isize> objids)
 {
     if (objids.empty()) {
 
@@ -359,13 +359,13 @@ Amiga::check(Option opt, i64 value, const std::vector<isize> objids)
             auto target = routeOption(opt, objid);
             if (target == nullptr) break;
 
-            debug(CNF_DEBUG, "check(%s, %lld, %ld)\n", OptionEnum::key(opt), value, objid);
+            debug(CNF_DEBUG, "check(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
             target->checkOption(opt, value);
         }
     }
     for (auto &objid : objids) {
 
-        debug(CNF_DEBUG, "check(%s, %lld, %ld)\n", OptionEnum::key(opt), value, objid);
+        debug(CNF_DEBUG, "check(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
 
         auto target = routeOption(opt, objid);
         if (target == nullptr) throw Error(ErrorCode::OPT_INV_ID);
@@ -375,7 +375,7 @@ Amiga::check(Option opt, i64 value, const std::vector<isize> objids)
 }
 
 void
-Amiga::set(Option opt, i64 value, const std::vector<isize> objids)
+Amiga::set(Opt opt, i64 value, const std::vector<isize> objids)
 {
     if (objids.empty()) {
 
@@ -384,13 +384,13 @@ Amiga::set(Option opt, i64 value, const std::vector<isize> objids)
             auto target = routeOption(opt, objid);
             if (target == nullptr) break;
 
-            debug(CNF_DEBUG, "set(%s, %lld, %ld)\n", OptionEnum::key(opt), value, objid);
+            debug(CNF_DEBUG, "set(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
             target->setOption(opt, value);
         }
     }
     for (auto &objid : objids) {
 
-        debug(CNF_DEBUG, "set(%s, %lld, %ld)\n", OptionEnum::key(opt), value, objid);
+        debug(CNF_DEBUG, "set(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
 
         auto target = routeOption(opt, objid);
         if (target == nullptr) throw Error(ErrorCode::OPT_INV_ID);
@@ -400,7 +400,7 @@ Amiga::set(Option opt, i64 value, const std::vector<isize> objids)
 }
 
 void
-Amiga::set(Option opt, const string &value, const std::vector<isize> objids)
+Amiga::set(Opt opt, const string &value, const std::vector<isize> objids)
 {
     set(opt, OptionParser::parse(opt, value), objids);
 }
@@ -408,7 +408,7 @@ Amiga::set(Option opt, const string &value, const std::vector<isize> objids)
 void
 Amiga::set(const string &opt, const string &value, const std::vector<isize> objids)
 {
-    set(Option(util::parseEnum<OptionEnum>(opt)), value, objids);
+    set(Opt(util::parseEnum<OptEnum>(opt)), value, objids);
 }
 
 void
@@ -420,42 +420,42 @@ Amiga::set(ConfigScheme scheme)
             
         case ConfigScheme::A1000_OCS_1MB:
             
-            set(Option::CPU_REVISION, (i64)CPURev::CPU_68000);
-            set(Option::AGNUS_REVISION, (i64)AgnusRevision::OCS_OLD);
-            set(Option::DENISE_REVISION, (i64)DeniseRev::OCS);
-            set(Option::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
-            set(Option::MEM_CHIP_RAM, 512);
-            set(Option::MEM_SLOW_RAM, 512);
+            set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
+            set(Opt::AGNUS_REVISION, (i64)AgnusRevision::OCS_OLD);
+            set(Opt::DENISE_REVISION, (i64)DeniseRev::OCS);
+            set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
+            set(Opt::MEM_CHIP_RAM, 512);
+            set(Opt::MEM_SLOW_RAM, 512);
             break;
             
         case ConfigScheme::A500_OCS_1MB:
             
-            set(Option::CPU_REVISION, (i64)CPURev::CPU_68000);
-            set(Option::AGNUS_REVISION, (i64)AgnusRevision::OCS);
-            set(Option::DENISE_REVISION, (i64)DeniseRev::OCS);
-            set(Option::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
-            set(Option::MEM_CHIP_RAM, 512);
-            set(Option::MEM_SLOW_RAM, 512);
+            set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
+            set(Opt::AGNUS_REVISION, (i64)AgnusRevision::OCS);
+            set(Opt::DENISE_REVISION, (i64)DeniseRev::OCS);
+            set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
+            set(Opt::MEM_CHIP_RAM, 512);
+            set(Opt::MEM_SLOW_RAM, 512);
             break;
             
         case ConfigScheme::A500_ECS_1MB:
             
-            set(Option::CPU_REVISION, (i64)CPURev::CPU_68000);
-            set(Option::AGNUS_REVISION, (i64)AgnusRevision::ECS_1MB);
-            set(Option::DENISE_REVISION, (i64)DeniseRev::OCS);
-            set(Option::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
-            set(Option::MEM_CHIP_RAM, 512);
-            set(Option::MEM_SLOW_RAM, 512);
+            set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
+            set(Opt::AGNUS_REVISION, (i64)AgnusRevision::ECS_1MB);
+            set(Opt::DENISE_REVISION, (i64)DeniseRev::OCS);
+            set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
+            set(Opt::MEM_CHIP_RAM, 512);
+            set(Opt::MEM_SLOW_RAM, 512);
             break;
             
         case ConfigScheme::A500_PLUS_1MB:
             
-            set(Option::CPU_REVISION, (i64)CPURev::CPU_68000);
-            set(Option::AGNUS_REVISION, (i64)AgnusRevision::ECS_2MB);
-            set(Option::DENISE_REVISION, (i64)DeniseRev::ECS);
-            set(Option::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
-            set(Option::MEM_CHIP_RAM, 512);
-            set(Option::MEM_SLOW_RAM, 512);
+            set(Opt::CPU_REVISION, (i64)CPURev::CPU_68000);
+            set(Opt::AGNUS_REVISION, (i64)AgnusRevision::ECS_2MB);
+            set(Opt::DENISE_REVISION, (i64)DeniseRev::ECS);
+            set(Opt::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
+            set(Opt::MEM_CHIP_RAM, 512);
+            set(Opt::MEM_SLOW_RAM, 512);
             break;
             
         default:
@@ -464,13 +464,13 @@ Amiga::set(ConfigScheme scheme)
 }
 
 Configurable *
-Amiga::routeOption(Option opt, isize objid)
+Amiga::routeOption(Opt opt, isize objid)
 {
     return CoreComponent::routeOption(opt, objid);
 }
 
 const Configurable *
-Amiga::routeOption(Option opt, isize objid) const
+Amiga::routeOption(Opt opt, isize objid) const
 {
     auto result = const_cast<Amiga *>(this)->routeOption(opt, objid);
     return const_cast<const Configurable *>(result);
@@ -528,7 +528,7 @@ Amiga::refreshRate() const
 {
     if (config.vsync) {
 
-        return double(host.getOption(Option::HOST_REFRESH_RATE));
+        return double(host.getOption(Opt::HOST_REFRESH_RATE));
 
     } else {
 
@@ -1011,8 +1011,8 @@ Amiga::serviceSnpEvent(EventID eventId)
 void
 Amiga::scheduleNextSnpEvent()
 {
-    auto snapshots = emulator.get(Option::AMIGA_SNAP_AUTO);
-    auto delay = emulator.get(Option::AMIGA_SNAP_DELAY);
+    auto snapshots = emulator.get(Opt::AMIGA_SNAP_AUTO);
+    auto delay = emulator.get(Opt::AMIGA_SNAP_DELAY);
 
     if (snapshots) {
         agnus.scheduleRel<SLOT_SNP>(SEC(double(delay)), SNP_TAKE);

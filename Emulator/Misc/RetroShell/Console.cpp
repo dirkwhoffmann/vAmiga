@@ -11,7 +11,7 @@
 #include "Console.h"
 #include "Emulator.h"
 #include "Parser.h"
-#include "Option.h"
+#include "Opt.h"
 #include <istream>
 #include <sstream>
 #include <string>
@@ -883,12 +883,12 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
             if (pairs.empty()) {
                 
                 // The argument is not an enum. Register a single setter
-                root.add({cmd, "set", OptionEnum::key(opt)},
+                root.add({cmd, "set", OptEnum::key(opt)},
                          {OptionParser::argList(opt)},
-                         OptionEnum::help(opt),
+                         OptEnum::help(opt),
                          [this](Arguments& argv, long value) {
                     
-                    emulator.set(Option(HI_WORD(value)), argv[0], { LO_WORD(value) });
+                    emulator.set(Opt(HI_WORD(value)), argv[0], { LO_WORD(value) });
                     msgQueue.put(Msg::CONFIG);
                     
                 }, HI_W_LO_W(u16(opt), c.objid));
@@ -896,19 +896,19 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
             } else {
                 
                 // Register a setter for every enum
-                root.add({cmd, "set", OptionEnum::key(opt)},
+                root.add({cmd, "set", OptEnum::key(opt)},
                          {OptionParser::argList(opt)},
-                         OptionEnum::help(opt));
+                         OptEnum::help(opt));
                 
                 for (const auto& [first, second] : pairs) {
                     
                     auto help = OptionParser::help(opt, second);
-                    root.add({cmd, "set", OptionEnum::key(opt), first },
+                    root.add({cmd, "set", OptEnum::key(opt), first },
                              {},
                              help.empty() ? "Set to " + first : help,
                              [this](Arguments& argv, long value) {
                         
-                        emulator.set(Option(HI_WORD(value)), BYTE1(value), { BYTE0(value) });
+                        emulator.set(Opt(HI_WORD(value)), BYTE1(value), { BYTE0(value) });
                         msgQueue.put(Msg::CONFIG);
                         
                     }, u16(opt) << 16 | second << 8 | c.objid);
@@ -930,12 +930,12 @@ Console::initSetters(RetroShellCmd &root, const CoreComponent &c)
             root.add({cmd, "set"}, "Configure the component");
             for (auto &opt : options) {
 
-                root.add({cmd, "set", OptionEnum::key(opt)},
+                root.add({cmd, "set", OptEnum::key(opt)},
                          {OptionParser::argList(opt)},
-                         OptionEnum::help(opt),
+                         OptEnum::help(opt),
                          [this](Arguments& argv, long value) {
 
-                    emulator.set(Option(HI_WORD(value)), argv[0], { LO_WORD(value) });
+                    emulator.set(Opt(HI_WORD(value)), argv[0], { LO_WORD(value) });
 
                 }, HI_W_LO_W(u16(opt), c.objid));
             }

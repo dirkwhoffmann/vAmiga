@@ -49,10 +49,10 @@ class HardDrive final : public Drive, public Inspectable<HardDriveInfo> {
 
     ConfigOptions options = {
 
-        Option::HDR_TYPE,
-        Option::HDR_WRITE_THROUGH, 
-        Option::HDR_PAN,
-        Option::HDR_STEP_VOLUME
+        Opt::HDR_TYPE,
+        Opt::HDR_WRITE_THROUGH, 
+        Opt::HDR_PAN,
+        Opt::HDR_STEP_VOLUME
     };
     
     friend class HDFFile;
@@ -270,9 +270,9 @@ public:
     
     const HardDriveConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
-    i64 getOption(Option option) const override;
-    void checkOption(Option opt, i64 value) override;
-    void setOption(Option option, i64 value) override;
+    i64 getOption(Opt option) const override;
+    void checkOption(Opt opt, i64 value) override;
+    void setOption(Opt option, i64 value) override;
     
 private:
     

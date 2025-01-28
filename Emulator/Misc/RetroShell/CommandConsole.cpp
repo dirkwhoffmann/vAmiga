@@ -10,7 +10,7 @@
 #include "config.h"
 #include "Console.h"
 #include "Emulator.h"
-#include "Option.h"
+#include "Opt.h"
 
 namespace vamiga {
 
@@ -310,14 +310,14 @@ CommandConsole::initCommands(RetroShellCmd &root)
                  "Opens the DMA debugger",
                  [this](Arguments& argv, long value) {
             
-            emulator.set(Option::DMA_DEBUG_ENABLE, true);
+            emulator.set(Opt::DMA_DEBUG_ENABLE, true);
         });
         
         root.add({cmd, "close"},
                  "Closes the DMA debugger",
                  [this](Arguments& argv, long value) {
             
-            emulator.set(Option::DMA_DEBUG_ENABLE, false);
+            emulator.set(Opt::DMA_DEBUG_ENABLE, false);
         });
  
         
@@ -549,7 +549,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
                          "Connects the drive",
                          [this](Arguments& argv, long value) {
                     
-                    emulator.set(Option::DRIVE_CONNECT, true, { value });
+                    emulator.set(Opt::DRIVE_CONNECT, true, { value });
                     
                 }, i);
                 
@@ -557,7 +557,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
                          "Disconnects the drive",
                          [this](Arguments& argv, long value) {
                     
-                    emulator.set(Option::DRIVE_CONNECT, false, { value });
+                    emulator.set(Opt::DRIVE_CONNECT, false, { value });
                     
                 }, i);
             }
@@ -616,7 +616,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
                          "Connects the hard drive",
                          [this](Arguments& argv, long value) {
                     
-                    emulator.set(Option::HDC_CONNECT, true, {value});
+                    emulator.set(Opt::HDC_CONNECT, true, {value});
                     
                 }, i);
                 
@@ -624,7 +624,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
                          "Disconnects the hard drive",
                          [this](Arguments& argv, long value) {
                     
-                    emulator.set(Option::HDC_CONNECT, false, {value});
+                    emulator.set(Opt::HDC_CONNECT, false, {value});
                     
                 }, i);
                 

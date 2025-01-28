@@ -30,25 +30,25 @@ class DmaDebugger final : public SubComponent, public Inspectable<DmaDebuggerInf
     
     ConfigOptions options = {
         
-        Option::DMA_DEBUG_ENABLE,
-        Option::DMA_DEBUG_MODE,
-        Option::DMA_DEBUG_OPACITY,
-        Option::DMA_DEBUG_CHANNEL0,
-        Option::DMA_DEBUG_CHANNEL1,
-        Option::DMA_DEBUG_CHANNEL2,
-        Option::DMA_DEBUG_CHANNEL3,
-        Option::DMA_DEBUG_CHANNEL4,
-        Option::DMA_DEBUG_CHANNEL5,
-        Option::DMA_DEBUG_CHANNEL6,
-        Option::DMA_DEBUG_CHANNEL7,
-        Option::DMA_DEBUG_COLOR0,
-        Option::DMA_DEBUG_COLOR1,
-        Option::DMA_DEBUG_COLOR2,
-        Option::DMA_DEBUG_COLOR3,
-        Option::DMA_DEBUG_COLOR4,
-        Option::DMA_DEBUG_COLOR5,
-        Option::DMA_DEBUG_COLOR6,
-        Option::DMA_DEBUG_COLOR7
+        Opt::DMA_DEBUG_ENABLE,
+        Opt::DMA_DEBUG_MODE,
+        Opt::DMA_DEBUG_OPACITY,
+        Opt::DMA_DEBUG_CHANNEL0,
+        Opt::DMA_DEBUG_CHANNEL1,
+        Opt::DMA_DEBUG_CHANNEL2,
+        Opt::DMA_DEBUG_CHANNEL3,
+        Opt::DMA_DEBUG_CHANNEL4,
+        Opt::DMA_DEBUG_CHANNEL5,
+        Opt::DMA_DEBUG_CHANNEL6,
+        Opt::DMA_DEBUG_CHANNEL7,
+        Opt::DMA_DEBUG_COLOR0,
+        Opt::DMA_DEBUG_COLOR1,
+        Opt::DMA_DEBUG_COLOR2,
+        Opt::DMA_DEBUG_COLOR3,
+        Opt::DMA_DEBUG_COLOR4,
+        Opt::DMA_DEBUG_COLOR5,
+        Opt::DMA_DEBUG_COLOR6,
+        Opt::DMA_DEBUG_COLOR7
     };
     
     // Current configuration
@@ -138,9 +138,9 @@ public:
     
     const DmaDebuggerConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
-    i64 getOption(Option option) const override;
-    void checkOption(Option opt, i64 value) override;
-    void setOption(Option option, i64 value) override;
+    i64 getOption(Opt option) const override;
+    void checkOption(Opt opt, i64 value) override;
+    void setOption(Opt option, i64 value) override;
     
 private:
     

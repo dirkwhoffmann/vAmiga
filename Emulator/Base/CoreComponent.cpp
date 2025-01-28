@@ -12,7 +12,7 @@
 #include "Emulator.h"
 #include "Defaults.h"
 #include "Checksum.h"
-#include "Option.h"
+#include "Opt.h"
 
 namespace vamiga {
 
@@ -121,7 +121,7 @@ CoreComponent::resetConfig()
 }
 
 Configurable *
-CoreComponent::routeOption(Option opt, isize objid)
+CoreComponent::routeOption(Opt opt, isize objid)
 {
     if (this->objid == objid) {
         for (auto &o : getOptions()) if (o == opt) return this;
@@ -134,7 +134,7 @@ CoreComponent::routeOption(Option opt, isize objid)
 }
 
 i64
-CoreComponent::getFallback(Option opt) const
+CoreComponent::getFallback(Opt opt) const
 {
     return emulator.defaults.get(opt);
 }
@@ -382,8 +382,8 @@ CoreComponent::exportConfig(std::ostream& ss, bool diff) const
             auto currentStr = OptionParser::asPlainString(opt, current);
             auto fallbackStr = OptionParser::asPlainString(opt, fallback);
 
-            string line = cmd + " set " + OptionEnum::key(opt) + " " + currentStr;
-            string comment = diff ? fallbackStr : OptionEnum::help(opt);
+            string line = cmd + " set " + OptEnum::key(opt) + " " + currentStr;
+            string comment = diff ? fallbackStr : OptEnum::help(opt);
 
             ss << std::setw(40) << std::left << line << " # " << comment << std::endl;
         }

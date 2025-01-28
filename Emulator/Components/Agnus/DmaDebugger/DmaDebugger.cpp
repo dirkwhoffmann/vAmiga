@@ -55,31 +55,31 @@ DmaDebugger::_dump(Category category, std::ostream& os) const
 }
 
 i64
-DmaDebugger::getOption(Option option) const
+DmaDebugger::getOption(Opt option) const
 {
     switch (option) {
             
-        case Option::DMA_DEBUG_ENABLE:      return config.enabled;
-        case Option::DMA_DEBUG_MODE:        return (i64)config.displayMode;
-        case Option::DMA_DEBUG_OPACITY:     return config.opacity;
+        case Opt::DMA_DEBUG_ENABLE:      return config.enabled;
+        case Opt::DMA_DEBUG_MODE:        return (i64)config.displayMode;
+        case Opt::DMA_DEBUG_OPACITY:     return config.opacity;
 
-        case Option::DMA_DEBUG_CHANNEL0:    return config.visualize[0];
-        case Option::DMA_DEBUG_CHANNEL1:    return config.visualize[1];
-        case Option::DMA_DEBUG_CHANNEL2:    return config.visualize[2];
-        case Option::DMA_DEBUG_CHANNEL3:    return config.visualize[3];
-        case Option::DMA_DEBUG_CHANNEL4:    return config.visualize[4];
-        case Option::DMA_DEBUG_CHANNEL5:    return config.visualize[5];
-        case Option::DMA_DEBUG_CHANNEL6:    return config.visualize[6];
-        case Option::DMA_DEBUG_CHANNEL7:    return config.visualize[7];
+        case Opt::DMA_DEBUG_CHANNEL0:    return config.visualize[0];
+        case Opt::DMA_DEBUG_CHANNEL1:    return config.visualize[1];
+        case Opt::DMA_DEBUG_CHANNEL2:    return config.visualize[2];
+        case Opt::DMA_DEBUG_CHANNEL3:    return config.visualize[3];
+        case Opt::DMA_DEBUG_CHANNEL4:    return config.visualize[4];
+        case Opt::DMA_DEBUG_CHANNEL5:    return config.visualize[5];
+        case Opt::DMA_DEBUG_CHANNEL6:    return config.visualize[6];
+        case Opt::DMA_DEBUG_CHANNEL7:    return config.visualize[7];
 
-        case Option::DMA_DEBUG_COLOR0:      return config.debugColor[0];
-        case Option::DMA_DEBUG_COLOR1:      return config.debugColor[1];
-        case Option::DMA_DEBUG_COLOR2:      return config.debugColor[2];
-        case Option::DMA_DEBUG_COLOR3:      return config.debugColor[3];
-        case Option::DMA_DEBUG_COLOR4:      return config.debugColor[4];
-        case Option::DMA_DEBUG_COLOR5:      return config.debugColor[5];
-        case Option::DMA_DEBUG_COLOR6:      return config.debugColor[6];
-        case Option::DMA_DEBUG_COLOR7:      return config.debugColor[7];
+        case Opt::DMA_DEBUG_COLOR0:      return config.debugColor[0];
+        case Opt::DMA_DEBUG_COLOR1:      return config.debugColor[1];
+        case Opt::DMA_DEBUG_COLOR2:      return config.debugColor[2];
+        case Opt::DMA_DEBUG_COLOR3:      return config.debugColor[3];
+        case Opt::DMA_DEBUG_COLOR4:      return config.debugColor[4];
+        case Opt::DMA_DEBUG_COLOR5:      return config.debugColor[5];
+        case Opt::DMA_DEBUG_COLOR6:      return config.debugColor[6];
+        case Opt::DMA_DEBUG_COLOR7:      return config.debugColor[7];
 
         default:
             fatalError;
@@ -87,38 +87,38 @@ DmaDebugger::getOption(Option option) const
 }
 
 void
-DmaDebugger::checkOption(Option opt, i64 value)
+DmaDebugger::checkOption(Opt opt, i64 value)
 {
     switch (opt) {
 
-        case Option::DMA_DEBUG_ENABLE:
+        case Opt::DMA_DEBUG_ENABLE:
 
             return;
 
-        case Option::DMA_DEBUG_MODE:
+        case Opt::DMA_DEBUG_MODE:
 
             if (!DmaDisplayModeEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, DmaDisplayModeEnum::keyList());
             }
             return;
             
-        case Option::DMA_DEBUG_OPACITY:
-        case Option::DMA_DEBUG_CHANNEL0:
-        case Option::DMA_DEBUG_CHANNEL1:
-        case Option::DMA_DEBUG_CHANNEL2:
-        case Option::DMA_DEBUG_CHANNEL3:
-        case Option::DMA_DEBUG_CHANNEL4:
-        case Option::DMA_DEBUG_CHANNEL5:
-        case Option::DMA_DEBUG_CHANNEL6:
-        case Option::DMA_DEBUG_CHANNEL7:
-        case Option::DMA_DEBUG_COLOR0:
-        case Option::DMA_DEBUG_COLOR1:
-        case Option::DMA_DEBUG_COLOR2:
-        case Option::DMA_DEBUG_COLOR3:
-        case Option::DMA_DEBUG_COLOR4:
-        case Option::DMA_DEBUG_COLOR5:
-        case Option::DMA_DEBUG_COLOR6:
-        case Option::DMA_DEBUG_COLOR7:
+        case Opt::DMA_DEBUG_OPACITY:
+        case Opt::DMA_DEBUG_CHANNEL0:
+        case Opt::DMA_DEBUG_CHANNEL1:
+        case Opt::DMA_DEBUG_CHANNEL2:
+        case Opt::DMA_DEBUG_CHANNEL3:
+        case Opt::DMA_DEBUG_CHANNEL4:
+        case Opt::DMA_DEBUG_CHANNEL5:
+        case Opt::DMA_DEBUG_CHANNEL6:
+        case Opt::DMA_DEBUG_CHANNEL7:
+        case Opt::DMA_DEBUG_COLOR0:
+        case Opt::DMA_DEBUG_COLOR1:
+        case Opt::DMA_DEBUG_COLOR2:
+        case Opt::DMA_DEBUG_COLOR3:
+        case Opt::DMA_DEBUG_COLOR4:
+        case Opt::DMA_DEBUG_COLOR5:
+        case Opt::DMA_DEBUG_COLOR6:
+        case Opt::DMA_DEBUG_COLOR7:
 
             return;
 
@@ -128,45 +128,45 @@ DmaDebugger::checkOption(Option opt, i64 value)
 }
 
 void
-DmaDebugger::setOption(Option option, i64 value)
+DmaDebugger::setOption(Opt option, i64 value)
 {
     switch (option) {
 
-        case Option::DMA_DEBUG_ENABLE:
+        case Opt::DMA_DEBUG_ENABLE:
 
             config.enabled = value;
             msgQueue.put(Msg::DMA_DEBUG, value);
             return;
             
-        case Option::DMA_DEBUG_MODE:
+        case Opt::DMA_DEBUG_MODE:
             
             config.displayMode = (DmaDisplayMode)value;
             return;
 
-        case Option::DMA_DEBUG_OPACITY:
+        case Opt::DMA_DEBUG_OPACITY:
 
             config.opacity = (isize)value;
             return;
 
-        case Option::DMA_DEBUG_CHANNEL0:
+        case Opt::DMA_DEBUG_CHANNEL0:
 
             config.visualize[0] = bool(value);
             visualize[BUS_COPPER] = value;
             return;
 
-        case Option::DMA_DEBUG_CHANNEL1:
+        case Opt::DMA_DEBUG_CHANNEL1:
 
             config.visualize[1] = bool(value);
             visualize[BUS_BLITTER] = value;
             return;
 
-        case Option::DMA_DEBUG_CHANNEL2:
+        case Opt::DMA_DEBUG_CHANNEL2:
 
             config.visualize[2] = bool(value);
             visualize[BUS_DISK] = value;
             return;
 
-        case Option::DMA_DEBUG_CHANNEL3:
+        case Opt::DMA_DEBUG_CHANNEL3:
 
             config.visualize[3] = bool(value);
             visualize[BUS_AUD0] = value;
@@ -175,7 +175,7 @@ DmaDebugger::setOption(Option option, i64 value)
             visualize[BUS_AUD3] = value;
             return;
 
-        case Option::DMA_DEBUG_CHANNEL4:
+        case Opt::DMA_DEBUG_CHANNEL4:
 
             config.visualize[4] = bool(value);
             visualize[BUS_SPRITE0] = value;
@@ -188,7 +188,7 @@ DmaDebugger::setOption(Option option, i64 value)
             visualize[BUS_SPRITE7] = value;
             return;
 
-        case Option::DMA_DEBUG_CHANNEL5:
+        case Opt::DMA_DEBUG_CHANNEL5:
 
             config.visualize[5] = bool(value);
             visualize[BUS_BPL1] = value;
@@ -199,37 +199,37 @@ DmaDebugger::setOption(Option option, i64 value)
             visualize[BUS_BPL6] = value;
             return;
 
-        case Option::DMA_DEBUG_CHANNEL6:
+        case Opt::DMA_DEBUG_CHANNEL6:
 
             config.visualize[6] = bool(value);
             visualize[BUS_CPU] = value;
             return;
 
-        case Option::DMA_DEBUG_CHANNEL7:
+        case Opt::DMA_DEBUG_CHANNEL7:
 
             config.visualize[7] = bool(value);
             visualize[BUS_REFRESH] = value;
             return;
 
-        case Option::DMA_DEBUG_COLOR0:
+        case Opt::DMA_DEBUG_COLOR0:
 
             config.debugColor[0] = u32(value);
             setColor(BusOwner::COPPER, (u32)value);
             return;
 
-        case Option::DMA_DEBUG_COLOR1:
+        case Opt::DMA_DEBUG_COLOR1:
 
             config.debugColor[1] = u32(value);
             setColor(BusOwner::BLITTER, (u32)value);
             return;
 
-        case Option::DMA_DEBUG_COLOR2:
+        case Opt::DMA_DEBUG_COLOR2:
 
             config.debugColor[2] = u32(value);
             setColor(BusOwner::DISK, (u32)value);
             return;
 
-        case Option::DMA_DEBUG_COLOR3:
+        case Opt::DMA_DEBUG_COLOR3:
 
             config.debugColor[3] = u32(value);
             setColor(BusOwner::AUD0, (u32)value);
@@ -238,7 +238,7 @@ DmaDebugger::setOption(Option option, i64 value)
             setColor(BusOwner::AUD3, (u32)value);
             return;
 
-        case Option::DMA_DEBUG_COLOR4:
+        case Opt::DMA_DEBUG_COLOR4:
 
             config.debugColor[4] = u32(value);
             setColor(BusOwner::SPRITE0, (u32)value);
@@ -251,7 +251,7 @@ DmaDebugger::setOption(Option option, i64 value)
             setColor(BusOwner::SPRITE7, (u32)value);
             return;
 
-        case Option::DMA_DEBUG_COLOR5:
+        case Opt::DMA_DEBUG_COLOR5:
 
             config.debugColor[5] = u32(value);
             setColor(BusOwner::BPL1, (u32)value);
@@ -262,13 +262,13 @@ DmaDebugger::setOption(Option option, i64 value)
             setColor(BusOwner::BPL6, (u32)value);
             return;
 
-        case Option::DMA_DEBUG_COLOR6:
+        case Opt::DMA_DEBUG_COLOR6:
 
             config.debugColor[6] = u32(value);
             setColor(BusOwner::CPU, (u32)value);
             return;
 
-        case Option::DMA_DEBUG_COLOR7:
+        case Opt::DMA_DEBUG_COLOR7:
 
             config.debugColor[7] = u32(value);
             setColor(BusOwner::REFRESH, (u32)value);

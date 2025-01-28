@@ -284,16 +284,16 @@ CPU::CPU(Amiga& ref) : moira::Moira(ref)
 }
 
 i64
-CPU::getOption(Option option) const
+CPU::getOption(Opt option) const
 {
     switch (option) {
 
-        case Option::CPU_REVISION:      return (long)config.revision;
-        case Option::CPU_DASM_REVISION: return (long)config.dasmRevision;
-        case Option::CPU_DASM_SYNTAX:   return (long)config.dasmSyntax;
-        case Option::CPU_DASM_NUMBERS:  return (long)config.dasmNumbers;
-        case Option::CPU_OVERCLOCKING:  return (long)config.overclocking;
-        case Option::CPU_RESET_VAL:     return (long)config.regResetVal;
+        case Opt::CPU_REVISION:      return (long)config.revision;
+        case Opt::CPU_DASM_REVISION: return (long)config.dasmRevision;
+        case Opt::CPU_DASM_SYNTAX:   return (long)config.dasmSyntax;
+        case Opt::CPU_DASM_NUMBERS:  return (long)config.dasmNumbers;
+        case Opt::CPU_OVERCLOCKING:  return (long)config.overclocking;
+        case Opt::CPU_RESET_VAL:     return (long)config.regResetVal;
 
         default:
             fatalError;
@@ -301,40 +301,40 @@ CPU::getOption(Option option) const
 }
 
 void
-CPU::checkOption(Option opt, i64 value)
+CPU::checkOption(Opt opt, i64 value)
 {
     switch (opt) {
 
-        case Option::CPU_REVISION:
+        case Opt::CPU_REVISION:
 
             if (!CPURevEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, CPURevEnum::keyList());
             }
             return;
 
-        case Option::CPU_DASM_REVISION:
+        case Opt::CPU_DASM_REVISION:
 
             if (!DasmRevEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, DasmRevEnum::keyList());
             }
             return;
 
-        case Option::CPU_DASM_SYNTAX:
+        case Opt::CPU_DASM_SYNTAX:
 
             if (!DasmSyntaxEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, DasmSyntaxEnum::keyList());
             }
             return;
 
-        case Option::CPU_DASM_NUMBERS:
+        case Opt::CPU_DASM_NUMBERS:
 
             if (!DasmNumbersEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, DasmNumbersEnum::keyList());
             }
             return;
 
-        case Option::CPU_OVERCLOCKING:
-        case Option::CPU_RESET_VAL:
+        case Opt::CPU_OVERCLOCKING:
+        case Opt::CPU_RESET_VAL:
 
             return;
 
@@ -344,7 +344,7 @@ CPU::checkOption(Option opt, i64 value)
 }
 
 void
-CPU::setOption(Option option, i64 value)
+CPU::setOption(Opt option, i64 value)
 {
     auto cpuModel = [&](CPURev rev) { return moira::Model(rev); };
     auto dasmModel = [&](DasmRev rev) { return moira::Model(rev); };
@@ -352,25 +352,25 @@ CPU::setOption(Option option, i64 value)
 
     switch (option) {
 
-        case Option::CPU_REVISION:
+        case Opt::CPU_REVISION:
 
             config.revision = CPURev(value);
             setModel(cpuModel(config.revision), dasmModel(config.dasmRevision));
             return;
 
-        case Option::CPU_DASM_REVISION:
+        case Opt::CPU_DASM_REVISION:
 
             config.dasmRevision = DasmRev(value);
             setModel(cpuModel(config.revision), dasmModel(config.dasmRevision));
             return;
 
-        case Option::CPU_DASM_SYNTAX:
+        case Opt::CPU_DASM_SYNTAX:
 
             config.dasmSyntax = DasmSyntax(value);
             setDasmSyntax(syntax(config.dasmSyntax));
             return;
 
-        case Option::CPU_DASM_NUMBERS:
+        case Opt::CPU_DASM_NUMBERS:
 
             config.dasmNumbers = DasmNumbers(value);
             
@@ -398,13 +398,13 @@ CPU::setOption(Option option, i64 value)
 
             }
             
-        case Option::CPU_OVERCLOCKING:
+        case Opt::CPU_OVERCLOCKING:
 
             config.overclocking = isize(value);
             msgQueue.put(Msg::OVERCLOCKING, config.overclocking);
             return;
 
-        case Option::CPU_RESET_VAL:
+        case Opt::CPU_RESET_VAL:
 
             config.regResetVal = u32(value);
             return;

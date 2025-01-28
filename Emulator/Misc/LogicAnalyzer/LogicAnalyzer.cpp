@@ -52,18 +52,18 @@ LogicAnalyzer::cacheInfo(LogicAnalyzerInfo &info) const
 }
 
 i64
-LogicAnalyzer::getOption(Option option) const
+LogicAnalyzer::getOption(Opt option) const
 {
     switch (option) {
             
-        case Option::LA_PROBE0: return (i64)config.channel[0];
-        case Option::LA_PROBE1: return (i64)config.channel[1];
-        case Option::LA_PROBE2: return (i64)config.channel[2];
-        case Option::LA_PROBE3: return (i64)config.channel[3];
-        case Option::LA_ADDR0: return (i64)config.addr[0];
-        case Option::LA_ADDR1: return (i64)config.addr[1];
-        case Option::LA_ADDR2: return (i64)config.addr[2];
-        case Option::LA_ADDR3: return (i64)config.addr[3];
+        case Opt::LA_PROBE0: return (i64)config.channel[0];
+        case Opt::LA_PROBE1: return (i64)config.channel[1];
+        case Opt::LA_PROBE2: return (i64)config.channel[2];
+        case Opt::LA_PROBE3: return (i64)config.channel[3];
+        case Opt::LA_ADDR0: return (i64)config.addr[0];
+        case Opt::LA_ADDR1: return (i64)config.addr[1];
+        case Opt::LA_ADDR2: return (i64)config.addr[2];
+        case Opt::LA_ADDR3: return (i64)config.addr[3];
 
         default:
             fatalError;
@@ -71,23 +71,23 @@ LogicAnalyzer::getOption(Option option) const
 }
 
 void
-LogicAnalyzer::checkOption(Option opt, i64 value)
+LogicAnalyzer::checkOption(Opt opt, i64 value)
 {
     switch (opt) {
 
-        case Option::LA_PROBE0:
-        case Option::LA_PROBE1:
-        case Option::LA_PROBE2:
-        case Option::LA_PROBE3:
+        case Opt::LA_PROBE0:
+        case Opt::LA_PROBE1:
+        case Opt::LA_PROBE2:
+        case Opt::LA_PROBE3:
 
             if (!ProbeEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, ProbeEnum::keyList());
             }
             
-        case Option::LA_ADDR0:
-        case Option::LA_ADDR1:
-        case Option::LA_ADDR2:
-        case Option::LA_ADDR3:
+        case Opt::LA_ADDR0:
+        case Opt::LA_ADDR1:
+        case Opt::LA_ADDR2:
+        case Opt::LA_ADDR3:
 
             return;
 
@@ -97,26 +97,26 @@ LogicAnalyzer::checkOption(Option opt, i64 value)
 }
 
 void
-LogicAnalyzer::setOption(Option option, i64 value)
+LogicAnalyzer::setOption(Opt option, i64 value)
 {
     isize c = 0;
     bool invalidate = false;
     
     switch (option) {
             
-        case Option::LA_PROBE3: c++; [[fallthrough]];
-        case Option::LA_PROBE2: c++; [[fallthrough]];
-        case Option::LA_PROBE1: c++; [[fallthrough]];
-        case Option::LA_PROBE0:
+        case Opt::LA_PROBE3: c++; [[fallthrough]];
+        case Opt::LA_PROBE2: c++; [[fallthrough]];
+        case Opt::LA_PROBE1: c++; [[fallthrough]];
+        case Opt::LA_PROBE0:
 
             invalidate = config.channel[c] != (Probe)value;
             config.channel[c] = (Probe)value;
             break;
             
-        case Option::LA_ADDR3: c++; [[fallthrough]];
-        case Option::LA_ADDR2: c++; [[fallthrough]];
-        case Option::LA_ADDR1: c++; [[fallthrough]];
-        case Option::LA_ADDR0:
+        case Opt::LA_ADDR3: c++; [[fallthrough]];
+        case Opt::LA_ADDR2: c++; [[fallthrough]];
+        case Opt::LA_ADDR1: c++; [[fallthrough]];
+        case Opt::LA_ADDR0:
             
             invalidate = config.addr[c] != (u32)value && config.channel[c] == Probe::MEMORY;
             config.addr[c] = (u32)value;

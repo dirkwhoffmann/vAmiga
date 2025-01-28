@@ -44,7 +44,7 @@ Recorder::_dump(Category category, std::ostream& os) const
 }
 
 i64
-Recorder::getOption(Option option) const
+Recorder::getOption(Opt option) const
 {
     switch (option) {
             
@@ -56,7 +56,7 @@ Recorder::getOption(Option option) const
 }
 
 void
-Recorder::checkOption(Option option, i64 value)
+Recorder::checkOption(Opt option, i64 value)
 {
     switch (option) {
 
@@ -78,7 +78,7 @@ Recorder::checkOption(Option option, i64 value)
 }
 
 void
-Recorder::setOption(Option option, i64 value)
+Recorder::setOption(Opt option, i64 value)
 {
     switch (option) {
             

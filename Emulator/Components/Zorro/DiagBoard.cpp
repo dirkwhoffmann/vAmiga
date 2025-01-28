@@ -41,11 +41,11 @@ DiagBoard::_didReset(bool hard)
 }
 
 i64
-DiagBoard::getOption(Option option) const
+DiagBoard::getOption(Opt option) const
 {
     switch (option) {
             
-        case Option::DIAG_BOARD: return config.enabled;
+        case Opt::DIAG_BOARD: return config.enabled;
 
         default:
             fatalError;
@@ -53,11 +53,11 @@ DiagBoard::getOption(Option option) const
 }
 
 void
-DiagBoard::checkOption(Option opt, i64 value)
+DiagBoard::checkOption(Opt opt, i64 value)
 {
     switch (opt) {
 
-        case Option::DIAG_BOARD:
+        case Opt::DIAG_BOARD:
 
             if (!isPoweredOff()) {
                 throw Error(ErrorCode::OPT_LOCKED);
@@ -70,11 +70,11 @@ DiagBoard::checkOption(Option opt, i64 value)
 }
 
 void
-DiagBoard::setOption(Option option, i64 value)
+DiagBoard::setOption(Opt option, i64 value)
 {
     switch (option) {
             
-        case Option::DIAG_BOARD:
+        case Opt::DIAG_BOARD:
 
             config.enabled = value;
             return;

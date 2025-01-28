@@ -15,12 +15,12 @@
 namespace vamiga {
 
 i64
-SerialPort::getOption(Option option) const
+SerialPort::getOption(Opt option) const
 {
     switch (option) {
             
-        case Option::SER_DEVICE:    return (i64)config.device;
-        case Option::SER_VERBOSE:   return (i64)config.verbose;
+        case Opt::SER_DEVICE:    return (i64)config.device;
+        case Opt::SER_VERBOSE:   return (i64)config.verbose;
 
         default:
             fatalError;
@@ -28,18 +28,18 @@ SerialPort::getOption(Option option) const
 }
 
 void
-SerialPort::checkOption(Option opt, i64 value)
+SerialPort::checkOption(Opt opt, i64 value)
 {
     switch (opt) {
 
-        case Option::SER_DEVICE:
+        case Opt::SER_DEVICE:
 
             if (!SerialPortDeviceEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, SerialPortDeviceEnum::keyList());
             }
             return;
 
-        case Option::SER_VERBOSE:
+        case Opt::SER_VERBOSE:
 
             return;
 
@@ -49,11 +49,11 @@ SerialPort::checkOption(Option opt, i64 value)
 }
 
 void
-SerialPort::setOption(Option option, i64 value)
+SerialPort::setOption(Opt option, i64 value)
 {
     switch (option) {
             
-        case Option::SER_DEVICE:
+        case Opt::SER_DEVICE:
             
             if (!SerialPortDeviceEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, SerialPortDeviceEnum::keyList());
@@ -62,7 +62,7 @@ SerialPort::setOption(Option option, i64 value)
             config.device = (SerialPortDevice)value;
             return;
 
-        case Option::SER_VERBOSE:
+        case Opt::SER_VERBOSE:
 
             config.verbose = bool(value);
             return;

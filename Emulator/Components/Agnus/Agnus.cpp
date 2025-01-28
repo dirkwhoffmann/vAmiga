@@ -123,12 +123,12 @@ Agnus::operator << (SerResetter &worker)
 }
 
 i64
-Agnus::getOption(Option option) const
+Agnus::getOption(Opt option) const
 {
     switch (option) {
 
-        case Option::AGNUS_REVISION:        return (i64)config.revision;
-        case Option::AGNUS_PTR_DROPS:       return config.ptrDrops;
+        case Opt::AGNUS_REVISION:        return (i64)config.revision;
+        case Opt::AGNUS_PTR_DROPS:       return config.ptrDrops;
             
         default:
             fatalError;
@@ -136,11 +136,11 @@ Agnus::getOption(Option option) const
 }
 
 void
-Agnus::checkOption(Option opt, i64 value)
+Agnus::checkOption(Opt opt, i64 value)
 {
     switch (opt) {
 
-        case Option::AGNUS_REVISION:
+        case Opt::AGNUS_REVISION:
 
             if (!isPoweredOff()) {
                 throw Error(ErrorCode::OPT_LOCKED);
@@ -150,7 +150,7 @@ Agnus::checkOption(Option opt, i64 value)
             }
             return;
 
-        case Option::AGNUS_PTR_DROPS:
+        case Opt::AGNUS_PTR_DROPS:
 
             return;
 
@@ -160,11 +160,11 @@ Agnus::checkOption(Option opt, i64 value)
 }
 
 void
-Agnus::setOption(Option option, i64 value)
+Agnus::setOption(Opt option, i64 value)
 {
     switch (option) {
 
-        case Option::AGNUS_REVISION:
+        case Opt::AGNUS_REVISION:
 
             switch (config.revision = AgnusRevision(value)) {
                     
@@ -179,7 +179,7 @@ Agnus::setOption(Option option, i64 value)
             mem.updateMemSrcTables();
             return;
             
-        case Option::AGNUS_PTR_DROPS:
+        case Opt::AGNUS_PTR_DROPS:
 
             config.ptrDrops = value;
             return;

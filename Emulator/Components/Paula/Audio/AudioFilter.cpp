@@ -186,11 +186,11 @@ AudioFilter::_dump(Category category, std::ostream& os) const
 }
 
 i64
-AudioFilter::getOption(Option option) const
+AudioFilter::getOption(Opt option) const
 {
     switch (option) {
 
-        case Option::AUD_FILTER_TYPE:       return (i64)config.filterType;
+        case Opt::AUD_FILTER_TYPE:       return (i64)config.filterType;
 
         default:
             fatalError;
@@ -198,11 +198,11 @@ AudioFilter::getOption(Option option) const
 }
 
 void
-AudioFilter::checkOption(Option opt, i64 value)
+AudioFilter::checkOption(Opt opt, i64 value)
 {
     switch (opt) {
 
-        case Option::AUD_FILTER_TYPE:
+        case Opt::AUD_FILTER_TYPE:
 
             if (!FilterTypeEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, FilterTypeEnum::keyList());
@@ -215,11 +215,11 @@ AudioFilter::checkOption(Option opt, i64 value)
 }
 
 void
-AudioFilter::setOption(Option option, i64 value)
+AudioFilter::setOption(Opt option, i64 value)
 {
     switch (option) {
 
-        case Option::AUD_FILTER_TYPE:
+        case Opt::AUD_FILTER_TYPE:
 
             config.filterType = (FilterType)value;
             setup(port.sampleRate);

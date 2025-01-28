@@ -31,14 +31,14 @@ Joystick::cacheInfo(JoystickInfo &result) const
 }
 
 i64
-Joystick::getOption(Option option) const
+Joystick::getOption(Opt option) const
 {
     switch (option) {
 
-        case Option::JOY_AUTOFIRE:            return (i64)config.autofire;
-        case Option::JOY_AUTOFIRE_BURSTS:     return (i64)config.autofireBursts;
-        case Option::JOY_AUTOFIRE_BULLETS:    return (i64)config.autofireBullets;
-        case Option::JOY_AUTOFIRE_DELAY:      return (i64)config.autofireDelay;
+        case Opt::JOY_AUTOFIRE:            return (i64)config.autofire;
+        case Opt::JOY_AUTOFIRE_BURSTS:     return (i64)config.autofireBursts;
+        case Opt::JOY_AUTOFIRE_BULLETS:    return (i64)config.autofireBullets;
+        case Opt::JOY_AUTOFIRE_DELAY:      return (i64)config.autofireDelay;
 
         default:
             fatalError;
@@ -46,14 +46,14 @@ Joystick::getOption(Option option) const
 }
 
 void
-Joystick::checkOption(Option opt, i64 value)
+Joystick::checkOption(Opt opt, i64 value)
 {
     switch (opt) {
 
-        case Option::JOY_AUTOFIRE:
-        case Option::JOY_AUTOFIRE_BURSTS:
-        case Option::JOY_AUTOFIRE_BULLETS:
-        case Option::JOY_AUTOFIRE_DELAY:
+        case Opt::JOY_AUTOFIRE:
+        case Opt::JOY_AUTOFIRE_BURSTS:
+        case Opt::JOY_AUTOFIRE_BULLETS:
+        case Opt::JOY_AUTOFIRE_DELAY:
 
             return;
 
@@ -63,26 +63,26 @@ Joystick::checkOption(Option opt, i64 value)
 }
 
 void
-Joystick::setOption(Option option, i64 value)
+Joystick::setOption(Opt option, i64 value)
 {
     switch (option) {
 
-        case Option::JOY_AUTOFIRE:
+        case Opt::JOY_AUTOFIRE:
 
             config.autofire = bool(value);
             return;
 
-        case Option::JOY_AUTOFIRE_BURSTS:
+        case Opt::JOY_AUTOFIRE_BURSTS:
 
             config.autofireBursts = bool(value);
             return;
 
-        case Option::JOY_AUTOFIRE_BULLETS:
+        case Opt::JOY_AUTOFIRE_BULLETS:
 
             config.autofireBullets = isize(value);
             return;
 
-        case Option::JOY_AUTOFIRE_DELAY:
+        case Opt::JOY_AUTOFIRE_DELAY:
 
             config.autofireDelay = isize(value);
             return;

@@ -52,16 +52,16 @@ class FloppyDrive final : public Drive, public Inspectable<FloppyDriveInfo> {
 
     ConfigOptions options = {
 
-        Option::DRIVE_CONNECT,
-        Option::DRIVE_TYPE,
-        Option::DRIVE_MECHANICS,
-        Option::DRIVE_RPM,
-        Option::DRIVE_SWAP_DELAY,
-        Option::DRIVE_PAN,
-        Option::DRIVE_STEP_VOLUME,
-        Option::DRIVE_POLL_VOLUME,
-        Option::DRIVE_INSERT_VOLUME,
-        Option::DRIVE_EJECT_VOLUME
+        Opt::DRIVE_CONNECT,
+        Opt::DRIVE_TYPE,
+        Opt::DRIVE_MECHANICS,
+        Opt::DRIVE_RPM,
+        Opt::DRIVE_SWAP_DELAY,
+        Opt::DRIVE_PAN,
+        Opt::DRIVE_STEP_VOLUME,
+        Opt::DRIVE_POLL_VOLUME,
+        Opt::DRIVE_INSERT_VOLUME,
+        Opt::DRIVE_EJECT_VOLUME
     };
 
     friend class DiskController;
@@ -233,9 +233,9 @@ public:
     
     const FloppyDriveConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
-    i64 getOption(Option option) const override;
-    void checkOption(Option opt, i64 value) override;
-    void setOption(Option option, i64 value) override;
+    i64 getOption(Opt option) const override;
+    void checkOption(Opt opt, i64 value) override;
+    void setOption(Opt option, i64 value) override;
     
     const std::filesystem::path &getSearchPath() const { return searchPath; }
     void setSearchPath(const std::filesystem::path &path) { searchPath = path; }

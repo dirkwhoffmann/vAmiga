@@ -33,11 +33,11 @@ Keyboard::_didReset(bool hard)
 }
 
 i64
-Keyboard::getOption(Option option) const
+Keyboard::getOption(Opt option) const
 {
     switch (option) {
             
-        case Option::KBD_ACCURACY:  return config.accurate;
+        case Opt::KBD_ACCURACY:  return config.accurate;
 
         default:
             fatalError;
@@ -45,11 +45,11 @@ Keyboard::getOption(Option option) const
 }
 
 void
-Keyboard::checkOption(Option opt, i64 value)
+Keyboard::checkOption(Opt opt, i64 value)
 {
     switch (opt) {
 
-        case Option::KBD_ACCURACY:
+        case Opt::KBD_ACCURACY:
 
             return;
 
@@ -59,11 +59,11 @@ Keyboard::checkOption(Option opt, i64 value)
 }
 
 void
-Keyboard::setOption(Option option, i64 value)
+Keyboard::setOption(Opt option, i64 value)
 {
     switch (option) {
             
-        case Option::KBD_ACCURACY:
+        case Opt::KBD_ACCURACY:
             
             config.accurate = value;
             return;

@@ -31,10 +31,10 @@ class Host final : public SubComponent {
 
     ConfigOptions options = {
 
-        Option::HOST_REFRESH_RATE,
-        Option::HOST_SAMPLE_RATE,
-        Option::HOST_FRAMEBUF_WIDTH,
-        Option::HOST_FRAMEBUF_HEIGHT
+        Opt::HOST_REFRESH_RATE,
+        Opt::HOST_SAMPLE_RATE,
+        Opt::HOST_FRAMEBUF_WIDTH,
+        Opt::HOST_FRAMEBUF_HEIGHT
     };
 
     // Current configuration
@@ -87,9 +87,9 @@ public:
 
     const HostConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
-    i64 getOption(Option opt) const override;
-    void checkOption(Option opt, i64 value) override;
-    void setOption(Option opt, i64 value) override;
+    i64 getOption(Opt opt) const override;
+    void checkOption(Opt opt, i64 value) override;
+    void setOption(Opt opt, i64 value) override;
 
 
     //

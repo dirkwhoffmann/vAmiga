@@ -26,7 +26,7 @@ class RTC final : public SubComponent {
 
     ConfigOptions options = {
 
-        Option::RTC_MODEL
+        Opt::RTC_MODEL
     };
     
     // The current configuration
@@ -134,9 +134,9 @@ public:
     
     const RTCConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
-    i64 getOption(Option option) const override;
-    void checkOption(Option option, i64 value) override;
-    void setOption(Option option, i64 value) override;
+    i64 getOption(Opt option) const override;
+    void checkOption(Opt option, i64 value) override;
+    void setOption(Opt option, i64 value) override;
 
     
     //

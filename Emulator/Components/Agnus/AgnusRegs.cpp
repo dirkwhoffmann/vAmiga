@@ -542,7 +542,7 @@ Agnus::pokeBEAMCON0(u16 value)
 
     // PAL
     auto format = GET_BIT(value, 5) ? TV::PAL : TV::NTSC;
-    amiga.setOption(Option::AMIGA_VIDEO_FORMAT, (i64)format);
+    amiga.setOption(Opt::AMIGA_VIDEO_FORMAT, (i64)format);
 
     // LOLDIS
     bool loldis = GET_BIT(value, 11);

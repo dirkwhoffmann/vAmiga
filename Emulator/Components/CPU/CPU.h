@@ -32,12 +32,12 @@ class CPU : public moira::Moira, public Inspectable<CPUInfo>
 
     ConfigOptions options = {
 
-        Option::CPU_REVISION,
-        Option::CPU_DASM_REVISION,
-        Option::CPU_DASM_SYNTAX,
-        Option::CPU_DASM_NUMBERS,
-        Option::CPU_OVERCLOCKING,
-        Option::CPU_RESET_VAL
+        Opt::CPU_REVISION,
+        Opt::CPU_DASM_REVISION,
+        Opt::CPU_DASM_SYNTAX,
+        Opt::CPU_DASM_NUMBERS,
+        Opt::CPU_OVERCLOCKING,
+        Opt::CPU_RESET_VAL
     };
 
     // The current configuration
@@ -225,9 +225,9 @@ public:
     
     const CPUConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
-    i64 getOption(Option opt) const override;
-    void checkOption(Option opt, i64 value) override;
-    void setOption(Option opt, i64 value) override;
+    i64 getOption(Opt opt) const override;
+    void checkOption(Opt opt, i64 value) override;
+    void setOption(Opt opt, i64 value) override;
 
 
     //

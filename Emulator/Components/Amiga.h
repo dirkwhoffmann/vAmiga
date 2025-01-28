@@ -68,15 +68,15 @@ class Amiga final : public CoreComponent, public Inspectable<AmigaInfo> {
 
     ConfigOptions options = {
 
-        Option::AMIGA_VIDEO_FORMAT,
-        Option::AMIGA_WARP_BOOT,
-        Option::AMIGA_WARP_MODE,
-        Option::AMIGA_VSYNC,
-        Option::AMIGA_SPEED_BOOST,
-        Option::AMIGA_RUN_AHEAD,
-        Option::AMIGA_SNAP_AUTO,
-        Option::AMIGA_SNAP_DELAY,
-        Option::AMIGA_SNAP_COMPRESS
+        Opt::AMIGA_VIDEO_FORMAT,
+        Opt::AMIGA_WARP_BOOT,
+        Opt::AMIGA_WARP_MODE,
+        Opt::AMIGA_VSYNC,
+        Opt::AMIGA_SPEED_BOOST,
+        Opt::AMIGA_RUN_AHEAD,
+        Opt::AMIGA_SNAP_AUTO,
+        Opt::AMIGA_SNAP_DELAY,
+        Opt::AMIGA_SNAP_COMPRESS
     };
     
     // The current configuration
@@ -316,9 +316,9 @@ public:
     const AmigaConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
 
-    i64 getOption(Option option) const override;
-    void checkOption(Option opt, i64 value) override;
-    void setOption(Option option, i64 value) override;
+    i64 getOption(Opt option) const override;
+    void checkOption(Opt opt, i64 value) override;
+    void setOption(Opt option, i64 value) override;
 
     // Exports the current configuration to a script file
     void exportConfig(const fs::path &path, bool diff = false) const;
@@ -335,16 +335,16 @@ public:
 public:
 
     // Queries an option
-    i64 get(Option opt, isize id = 0) const throws;
+    i64 get(Opt opt, isize id = 0) const throws;
 
     // Checks an option
-    void check(Option opt, i64 value, const std::vector<isize> objids = { }) throws;
+    void check(Opt opt, i64 value, const std::vector<isize> objids = { }) throws;
 
     // Sets an option
-    void set(Option opt, i64 value, const std::vector<isize> objids = { }) throws;
+    void set(Opt opt, i64 value, const std::vector<isize> objids = { }) throws;
 
     // Convenience wrappers
-    void set(Option opt, const string &value, const std::vector<isize> objids = { }) throws;
+    void set(Opt opt, const string &value, const std::vector<isize> objids = { }) throws;
     void set(const string &opt, const string &value, const std::vector<isize> objids = { }) throws;
 
     // Configures the emulator to match a specific Amiga model
@@ -353,8 +353,8 @@ public:
 public:
 
     // Returns the target component for an option
-    Configurable *routeOption(Option opt, isize objid);
-    const Configurable *routeOption(Option opt, isize objid) const;
+    Configurable *routeOption(Opt opt, isize objid);
+    const Configurable *routeOption(Opt opt, isize objid) const;
 
 
     //

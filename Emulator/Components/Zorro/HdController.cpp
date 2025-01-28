@@ -88,11 +88,11 @@ HdController::_didReset(bool hard)
 }
 
 i64
-HdController::getOption(Option option) const
+HdController::getOption(Opt option) const
 {
     switch (option) {
             
-        case Option::HDC_CONNECT:       return (long)config.connected;
+        case Opt::HDC_CONNECT:       return (long)config.connected;
 
         default:
             fatalError;
@@ -100,11 +100,11 @@ HdController::getOption(Option option) const
 }
 
 void
-HdController::checkOption(Option opt, i64 value)
+HdController::checkOption(Opt opt, i64 value)
 {
     switch (opt) {
 
-        case Option::HDC_CONNECT:
+        case Opt::HDC_CONNECT:
 
             if (!isPoweredOff()) {
                 throw Error(ErrorCode::OPT_LOCKED);
@@ -117,11 +117,11 @@ HdController::checkOption(Option opt, i64 value)
 }
 
 void
-HdController::setOption(Option option, i64 value)
+HdController::setOption(Opt option, i64 value)
 {
     switch (option) {
 
-        case Option::HDC_CONNECT:
+        case Opt::HDC_CONNECT:
 
             if (bool(value) != config.connected) {
 

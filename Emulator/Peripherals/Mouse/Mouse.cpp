@@ -21,13 +21,13 @@ Mouse::Mouse(Amiga& ref, ControlPort& pref) : SubComponent(ref, pref.objid), por
 }
 
 i64
-Mouse::getOption(Option option) const
+Mouse::getOption(Opt option) const
 {
     switch (option) {
 
-        case Option::MOUSE_PULLUP_RESISTORS:    return config.pullUpResistors;
-        case Option::MOUSE_SHAKE_DETECTION:     return config.shakeDetection;
-        case Option::MOUSE_VELOCITY:            return config.velocity;
+        case Opt::MOUSE_PULLUP_RESISTORS:    return config.pullUpResistors;
+        case Opt::MOUSE_SHAKE_DETECTION:     return config.shakeDetection;
+        case Opt::MOUSE_VELOCITY:            return config.velocity;
 
         default:
             fatalError;
@@ -35,16 +35,16 @@ Mouse::getOption(Option option) const
 }
 
 void
-Mouse::checkOption(Option opt, i64 value)
+Mouse::checkOption(Opt opt, i64 value)
 {
     switch (opt) {
 
-        case Option::MOUSE_PULLUP_RESISTORS:
-        case Option::MOUSE_SHAKE_DETECTION:
+        case Opt::MOUSE_PULLUP_RESISTORS:
+        case Opt::MOUSE_SHAKE_DETECTION:
 
             return;
 
-        case Option::MOUSE_VELOCITY:
+        case Opt::MOUSE_VELOCITY:
 
             if (value < 0 || value > 255) {
                 throw Error(ErrorCode::OPT_INV_ARG, "0...255");
@@ -57,21 +57,21 @@ Mouse::checkOption(Option opt, i64 value)
 }
 
 void
-Mouse::setOption(Option option, i64 value)
+Mouse::setOption(Opt option, i64 value)
 {
     switch (option) {
             
-        case Option::MOUSE_PULLUP_RESISTORS:
+        case Opt::MOUSE_PULLUP_RESISTORS:
             
             config.pullUpResistors = value;
             return;
 
-        case Option::MOUSE_SHAKE_DETECTION:
+        case Opt::MOUSE_SHAKE_DETECTION:
             
             config.shakeDetection = value;
             return;
             
-        case Option::MOUSE_VELOCITY:
+        case Opt::MOUSE_VELOCITY:
             
             config.velocity = (isize)value;
             updateScalingFactors();

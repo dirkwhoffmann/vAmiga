@@ -36,20 +36,20 @@ Denise::_didReset(bool hard)
 }
 
 i64
-Denise::getOption(Option option) const
+Denise::getOption(Opt option) const
 {
     switch (option) {
             
-        case Option::DENISE_REVISION:           return (i64)config.revision;
-        case Option::DENISE_VIEWPORT_TRACKING:  return config.viewportTracking;
-        case Option::DENISE_FRAME_SKIPPING:     return config.frameSkipping;
-        case Option::DENISE_HIDDEN_BITPLANES:   return config.hiddenBitplanes;
-        case Option::DENISE_HIDDEN_SPRITES:     return config.hiddenSprites;
-        case Option::DENISE_HIDDEN_LAYERS:      return config.hiddenLayers;
-        case Option::DENISE_HIDDEN_LAYER_ALPHA: return config.hiddenLayerAlpha;
-        case Option::DENISE_CLX_SPR_SPR:        return config.clxSprSpr;
-        case Option::DENISE_CLX_SPR_PLF:        return config.clxSprPlf;
-        case Option::DENISE_CLX_PLF_PLF:        return config.clxPlfPlf;
+        case Opt::DENISE_REVISION:           return (i64)config.revision;
+        case Opt::DENISE_VIEWPORT_TRACKING:  return config.viewportTracking;
+        case Opt::DENISE_FRAME_SKIPPING:     return config.frameSkipping;
+        case Opt::DENISE_HIDDEN_BITPLANES:   return config.hiddenBitplanes;
+        case Opt::DENISE_HIDDEN_SPRITES:     return config.hiddenSprites;
+        case Opt::DENISE_HIDDEN_LAYERS:      return config.hiddenLayers;
+        case Opt::DENISE_HIDDEN_LAYER_ALPHA: return config.hiddenLayerAlpha;
+        case Opt::DENISE_CLX_SPR_SPR:        return config.clxSprSpr;
+        case Opt::DENISE_CLX_SPR_PLF:        return config.clxSprPlf;
+        case Opt::DENISE_CLX_PLF_PLF:        return config.clxPlfPlf;
             
         default:
             fatalError;
@@ -57,26 +57,26 @@ Denise::getOption(Option option) const
 }
 
 void
-Denise::checkOption(Option opt, i64 value)
+Denise::checkOption(Opt opt, i64 value)
 {
     switch (opt) {
 
-        case Option::DENISE_REVISION:
+        case Opt::DENISE_REVISION:
 
             if (!DeniseRevEnum::isValid(value)) {
                 throw Error(ErrorCode::OPT_INV_ARG, DeniseRevEnum::keyList());
             }
             return;
 
-        case Option::DENISE_VIEWPORT_TRACKING:
-        case Option::DENISE_FRAME_SKIPPING:
-        case Option::DENISE_HIDDEN_BITPLANES:
-        case Option::DENISE_HIDDEN_SPRITES:
-        case Option::DENISE_HIDDEN_LAYERS:
-        case Option::DENISE_HIDDEN_LAYER_ALPHA:
-        case Option::DENISE_CLX_SPR_SPR:
-        case Option::DENISE_CLX_SPR_PLF:
-        case Option::DENISE_CLX_PLF_PLF:
+        case Opt::DENISE_VIEWPORT_TRACKING:
+        case Opt::DENISE_FRAME_SKIPPING:
+        case Opt::DENISE_HIDDEN_BITPLANES:
+        case Opt::DENISE_HIDDEN_SPRITES:
+        case Opt::DENISE_HIDDEN_LAYERS:
+        case Opt::DENISE_HIDDEN_LAYER_ALPHA:
+        case Opt::DENISE_CLX_SPR_SPR:
+        case Opt::DENISE_CLX_SPR_PLF:
+        case Opt::DENISE_CLX_PLF_PLF:
 
             return;
 
@@ -86,57 +86,57 @@ Denise::checkOption(Option opt, i64 value)
 }
 
 void
-Denise::setOption(Option option, i64 value)
+Denise::setOption(Opt option, i64 value)
 {
     switch (option) {
             
-        case Option::DENISE_REVISION:
+        case Opt::DENISE_REVISION:
 
             config.revision = (DeniseRev)value;
             return;
 
-        case Option::DENISE_VIEWPORT_TRACKING:
+        case Opt::DENISE_VIEWPORT_TRACKING:
             
             config.viewportTracking = (bool)value;
             debugger.resetDIWTracker();
             return;
 
-        case Option::DENISE_FRAME_SKIPPING:
+        case Opt::DENISE_FRAME_SKIPPING:
 
             config.frameSkipping = (isize)value;
             return;
 
-        case Option::DENISE_HIDDEN_BITPLANES:
+        case Opt::DENISE_HIDDEN_BITPLANES:
             
             config.hiddenBitplanes = (u8)value;
             return;
 
-        case Option::DENISE_HIDDEN_SPRITES:
+        case Opt::DENISE_HIDDEN_SPRITES:
             
             config.hiddenSprites = (u8)value;
             return;
             
-        case Option::DENISE_HIDDEN_LAYERS:
+        case Opt::DENISE_HIDDEN_LAYERS:
             
             config.hiddenLayers = (u16)value;
             return;
             
-        case Option::DENISE_HIDDEN_LAYER_ALPHA:
+        case Opt::DENISE_HIDDEN_LAYER_ALPHA:
             
             config.hiddenLayerAlpha = (u8)value;
             return;
 
-        case Option::DENISE_CLX_SPR_SPR:
+        case Opt::DENISE_CLX_SPR_SPR:
             
             config.clxSprSpr = (bool)value;
             return;
             
-        case Option::DENISE_CLX_SPR_PLF:
+        case Opt::DENISE_CLX_SPR_PLF:
             
             config.clxSprPlf = (bool)value;
             return;
             
-        case Option::DENISE_CLX_PLF_PLF:
+        case Opt::DENISE_CLX_PLF_PLF:
             
             config.clxPlfPlf = (bool)value;
             return;
