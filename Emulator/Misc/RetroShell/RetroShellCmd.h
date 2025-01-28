@@ -42,7 +42,7 @@ static const std::string string     = "<string>";
 
 };
 
-struct Command {
+struct RetroShellCmd {
 
     // Used during command registration
     static string currentGroup;
@@ -66,7 +66,7 @@ struct Command {
     std::vector<string> optionalArgs;
 
     // List of subcommands
-    std::vector<Command> subCommands;
+    std::vector<RetroShellCmd> subCommands;
 
     // Command handler
     std::function<void (Arguments&, long)> callback = nullptr;
@@ -128,14 +128,14 @@ struct Command {
     isize maxArgs() const { return minArgs() + optArgs(); }
 
     // Seeks a command object inside the command object tree
-    const Command *seek(const string& token) const;
-    Command *seek(const string& token);
-    const Command *seek(const std::vector<string> &tokens) const;
-    Command *seek(const std::vector<string> &tokens);
-    Command &operator/(const string& token) { return *seek(token); }
+    const RetroShellCmd *seek(const string& token) const;
+    RetroShellCmd *seek(const string& token);
+    const RetroShellCmd *seek(const std::vector<string> &tokens) const;
+    RetroShellCmd *seek(const std::vector<string> &tokens);
+    RetroShellCmd &operator/(const string& token) { return *seek(token); }
 
     // Filters the argument list (used by auto-completion)
-    std::vector<const Command *> filterPrefix(const string& prefix) const;
+    std::vector<const RetroShellCmd *> filterPrefix(const string& prefix) const;
 
     // Automatically completes a partial token string
     string autoComplete(const string& token);

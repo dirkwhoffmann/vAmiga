@@ -203,7 +203,7 @@
 		50985ABB2C418D190079CFC5 /* MediaFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50985AB92C418D190079CFC5 /* MediaFile.cpp */; };
 		50985ABC2C418D190079CFC5 /* MediaFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50985AB92C418D190079CFC5 /* MediaFile.cpp */; };
 		5099432A29C2114C00867E8F /* Amiga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0E21EB410B002E32A6 /* Amiga.cpp */; };
-		509C365A260B1766004F160A /* Command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C3658260B1766004F160A /* Command.cpp */; };
+		509C365A260B1766004F160A /* RetroShellCmd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C3658260B1766004F160A /* RetroShellCmd.cpp */; };
 		509C365E260B177E004F160A /* Console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C365C260B177E004F160A /* Console.cpp */; };
 		509C3663260B1D95004F160A /* CommandConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C3662260B1D95004F160A /* CommandConsole.cpp */; };
 		509C66792551577D0028D497 /* Folder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C66772551577D0028D497 /* Folder.cpp */; };
@@ -438,7 +438,7 @@
 		50FC04D327DA19F600C3E566 /* FSObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056507A25459C8800A79D27 /* FSObjects.cpp */; };
 		50FC04D427DA19F600C3E566 /* FSBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50565070254573E100A79D27 /* FSBlock.cpp */; };
 		50FC04D527DA1A0000C3E566 /* CommandConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C3662260B1D95004F160A /* CommandConsole.cpp */; };
-		50FC04D627DA1A0000C3E566 /* Command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C3658260B1766004F160A /* Command.cpp */; };
+		50FC04D627DA1A0000C3E566 /* RetroShellCmd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C3658260B1766004F160A /* RetroShellCmd.cpp */; };
 		50FC04D827DA1A0000C3E566 /* RetroShell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B9C426260942D000A86C31 /* RetroShell.cpp */; };
 		50FC04D927DA1A0000C3E566 /* TextStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AD904C276E10660011ECCB /* TextStorage.cpp */; };
 		50FC04DA27DA1A0000C3E566 /* Console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C365C260B177E004F160A /* Console.cpp */; };
@@ -791,8 +791,8 @@
 		50985ABE2C4D4FAA0079CFC5 /* Types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Types.h; sourceTree = "<group>"; };
 		5099432B29C2116500867E8F /* VAmiga.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VAmiga.h; sourceTree = "<group>"; };
 		5099432C29C224BB00867E8F /* Media.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Media.h; sourceTree = "<group>"; };
-		509C3658260B1766004F160A /* Command.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Command.cpp; sourceTree = "<group>"; };
-		509C3659260B1766004F160A /* Command.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Command.h; sourceTree = "<group>"; };
+		509C3658260B1766004F160A /* RetroShellCmd.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RetroShellCmd.cpp; sourceTree = "<group>"; };
+		509C3659260B1766004F160A /* RetroShellCmd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RetroShellCmd.h; sourceTree = "<group>"; };
 		509C365C260B177E004F160A /* Console.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Console.cpp; sourceTree = "<group>"; };
 		509C365D260B177E004F160A /* Console.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Console.h; sourceTree = "<group>"; };
 		509C3662260B1D95004F160A /* CommandConsole.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CommandConsole.cpp; sourceTree = "<group>"; };
@@ -1955,8 +1955,8 @@
 				50672CBF2946100F004113F5 /* DebugConsole.cpp */,
 				50AD904A276E104E0011ECCB /* TextStorage.h */,
 				50AD904C276E10660011ECCB /* TextStorage.cpp */,
-				509C3659260B1766004F160A /* Command.h */,
-				509C3658260B1766004F160A /* Command.cpp */,
+				509C3659260B1766004F160A /* RetroShellCmd.h */,
+				509C3658260B1766004F160A /* RetroShellCmd.cpp */,
 			);
 			path = RetroShell;
 			sourceTree = "<group>";
@@ -2354,7 +2354,7 @@
 				508FDFDA21EA20510043D0E9 /* ImageToolbox.swift in Sources */,
 				508FE05521EA22CC0043D0E9 /* PreferencesWindow.swift in Sources */,
 				505554AC2264C47600CB07E0 /* Mouse.cpp in Sources */,
-				509C365A260B1766004F160A /* Command.cpp in Sources */,
+				509C365A260B1766004F160A /* RetroShellCmd.cpp in Sources */,
 				50B81E0A24E6BEA5004384C9 /* CIARegs.cpp in Sources */,
 				508FE01521EA227B0043D0E9 /* GamePad.swift in Sources */,
 				5054DB6827FE98B100DAF784 /* MyControllerMedia.swift in Sources */,
@@ -2648,7 +2648,7 @@
 				50FC04D327DA19F600C3E566 /* FSObjects.cpp in Sources */,
 				50627FD5286EBACA00F2A835 /* FrameBuffer.cpp in Sources */,
 				50FC04AD27DA198E00C3E566 /* BlitterInfo.cpp in Sources */,
-				50FC04D627DA1A0000C3E566 /* Command.cpp in Sources */,
+				50FC04D627DA1A0000C3E566 /* RetroShellCmd.cpp in Sources */,
 				50FC04E227DA1A1400C3E566 /* u_heavy.c in Sources */,
 				50FC04FD27DA1AAB00C3E566 /* UARTEvents.cpp in Sources */,
 				50FC048027DA190400C3E566 /* CoreComponent.cpp in Sources */,

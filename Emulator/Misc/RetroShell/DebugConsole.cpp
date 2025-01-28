@@ -70,7 +70,7 @@ DebugConsole::pressReturn(bool shift)
 }
 
 void
-DebugConsole::initCommands(Command &root)
+DebugConsole::initCommands(RetroShellCmd &root)
 {
     Console::initCommands(root);
 
@@ -78,7 +78,7 @@ DebugConsole::initCommands(Command &root)
     // Top-level commands
     //
 
-    {   Command::currentGroup = "Program execution";
+    {   RetroShellCmd::currentGroup = "Program execution";
 
         root.add({"goto"}, { }, { Arg::value },
                  std::pair <string, string>("g[oto]", "Goto address"),
@@ -351,7 +351,7 @@ DebugConsole::initCommands(Command &root)
         }
     }
 
-    {   Command::currentGroup = "Monitoring";
+    {   RetroShellCmd::currentGroup = "Monitoring";
 
         root.add({"d"}, { }, { Arg::address },
                  "Disassemble instructions",
@@ -480,7 +480,7 @@ DebugConsole::initCommands(Command &root)
         root.add({"?"},
                  "Inspect a component");
 
-        {   Command::currentGroup = "Components";
+        {   RetroShellCmd::currentGroup = "Components";
 
             root.add({"?", "amiga"}, "Main computer");
 
@@ -760,7 +760,7 @@ DebugConsole::initCommands(Command &root)
                 });
             }
         }
-        {   Command::currentGroup = "Peripherals";
+        {   RetroShellCmd::currentGroup = "Peripherals";
 
             root.add({"?", "keyboard"}, "Keyboard");
 
@@ -894,7 +894,7 @@ DebugConsole::initCommands(Command &root)
                 }
             }
         }
-        {   Command::currentGroup = "Miscellaneous";
+        {   RetroShellCmd::currentGroup = "Miscellaneous";
 
             root.add({"?", "thread"}, "Emulator thread");
 
@@ -1170,7 +1170,7 @@ DebugConsole::initCommands(Command &root)
     // Miscellaneous
     //
 
-    {   Command::currentGroup = "Miscellaneous";
+    {   RetroShellCmd::currentGroup = "Miscellaneous";
 
         root.add({"debug"}, "Debug variables");
 

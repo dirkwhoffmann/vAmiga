@@ -67,15 +67,15 @@ CommandConsole::pressReturn(bool shift)
 }
 
 void
-CommandConsole::initCommands(Command &root)
+CommandConsole::initCommands(RetroShellCmd &root)
 {
     Console::initCommands(root);
     
-    {   Command::currentGroup = "Regression testing";
+    {   RetroShellCmd::currentGroup = "Regression testing";
         
         root.add({"regression"}, debugBuild ? "Runs the regression tester" : "");
         
-        {   Command::currentGroup = "";
+        {   RetroShellCmd::currentGroup = "";
             
             root.add({"regression", "setup"}, { ConfigSchemeEnum::argList() }, { Arg::path, Arg::path },
                      "Initializes the test environment",
@@ -98,7 +98,7 @@ CommandConsole::initCommands(Command &root)
         
         root.add({"screenshot"}, debugBuild ? "Manages screenshots" : "");
         
-        {   Command::currentGroup = "";
+        {   RetroShellCmd::currentGroup = "";
             
             root.add({"screenshot", "set"},
                      "Configure the screenshot");
@@ -134,7 +134,7 @@ CommandConsole::initCommands(Command &root)
         }
     }
     
-    {   Command::currentGroup = "Components";
+    {   RetroShellCmd::currentGroup = "Components";
         
         //
         // Amiga
@@ -343,7 +343,7 @@ CommandConsole::initCommands(Command &root)
         });
         */
         
-        Command::currentGroup = "Ports";
+        RetroShellCmd::currentGroup = "Ports";
         
         //
         // Audio port
@@ -360,7 +360,7 @@ CommandConsole::initCommands(Command &root)
         cmd = registerComponent(videoPort);
         
         
-        Command::currentGroup = "Peripherals";
+        RetroShellCmd::currentGroup = "Peripherals";
         
         //
         // Monitor
@@ -648,7 +648,7 @@ CommandConsole::initCommands(Command &root)
         // Miscellaneous
         //
         
-        Command::currentGroup = "Miscellaneous";
+        RetroShellCmd::currentGroup = "Miscellaneous";
         
         //
         // Miscellaneous (Diff)
