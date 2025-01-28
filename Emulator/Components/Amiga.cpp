@@ -191,8 +191,8 @@ Amiga::checkOption(Option opt, i64 value)
 
         case Option::AMIGA_VIDEO_FORMAT:
 
-            if (!VideoFormatEnum::isValid(value)) {
-                throw Error(ErrorCode::OPT_INV_ARG, VideoFormatEnum::keyList());
+            if (!TVEnum::isValid(value)) {
+                throw Error(ErrorCode::OPT_INV_ARG, TVEnum::keyList());
             }
             return;
 
@@ -252,9 +252,9 @@ Amiga::setOption(Option option, i64 value)
 
         case Option::AMIGA_VIDEO_FORMAT:
 
-            if (VideoFormat(value) != config.type) {
+            if (TV(value) != config.type) {
 
-                config.type = VideoFormat(value);
+                config.type = TV(value);
                 agnus.setVideoFormat(config.type);
             }
             return;
@@ -423,7 +423,7 @@ Amiga::set(ConfigScheme scheme)
             set(Option::CPU_REVISION, (i64)CPURevision::CPU_68000);
             set(Option::AGNUS_REVISION, (i64)AgnusRevision::OCS_OLD);
             set(Option::DENISE_REVISION, (i64)DeniseRevision::OCS);
-            set(Option::AMIGA_VIDEO_FORMAT, (i64)VideoFormat::PAL);
+            set(Option::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
             set(Option::MEM_CHIP_RAM, 512);
             set(Option::MEM_SLOW_RAM, 512);
             break;
@@ -433,7 +433,7 @@ Amiga::set(ConfigScheme scheme)
             set(Option::CPU_REVISION, (i64)CPURevision::CPU_68000);
             set(Option::AGNUS_REVISION, (i64)AgnusRevision::OCS);
             set(Option::DENISE_REVISION, (i64)DeniseRevision::OCS);
-            set(Option::AMIGA_VIDEO_FORMAT, (i64)VideoFormat::PAL);
+            set(Option::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
             set(Option::MEM_CHIP_RAM, 512);
             set(Option::MEM_SLOW_RAM, 512);
             break;
@@ -443,7 +443,7 @@ Amiga::set(ConfigScheme scheme)
             set(Option::CPU_REVISION, (i64)CPURevision::CPU_68000);
             set(Option::AGNUS_REVISION, (i64)AgnusRevision::ECS_1MB);
             set(Option::DENISE_REVISION, (i64)DeniseRevision::OCS);
-            set(Option::AMIGA_VIDEO_FORMAT, (i64)VideoFormat::PAL);
+            set(Option::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
             set(Option::MEM_CHIP_RAM, 512);
             set(Option::MEM_SLOW_RAM, 512);
             break;
@@ -453,7 +453,7 @@ Amiga::set(ConfigScheme scheme)
             set(Option::CPU_REVISION, (i64)CPURevision::CPU_68000);
             set(Option::AGNUS_REVISION, (i64)AgnusRevision::ECS_2MB);
             set(Option::DENISE_REVISION, (i64)DeniseRevision::ECS);
-            set(Option::AMIGA_VIDEO_FORMAT, (i64)VideoFormat::PAL);
+            set(Option::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
             set(Option::MEM_CHIP_RAM, 512);
             set(Option::MEM_SLOW_RAM, 512);
             break;
@@ -502,8 +502,8 @@ Amiga::nativeRefreshRate() const
 {
     switch (config.type) {
 
-        case VideoFormat::PAL:   return 50.0;
-        case VideoFormat::NTSC:  return 60.0;
+        case TV::PAL:   return 50.0;
+        case TV::NTSC:  return 60.0;
 
         default:
             fatalError;
@@ -515,8 +515,8 @@ Amiga::nativeMasterClockFrequency() const
 {
     switch (config.type) {
 
-        case VideoFormat::PAL:   return PAL::CLK_FREQUENCY;
-        case VideoFormat::NTSC:  return NTSC::CLK_FREQUENCY;
+        case TV::PAL:   return PAL::CLK_FREQUENCY;
+        case TV::NTSC:  return NTSC::CLK_FREQUENCY;
 
         default:
             fatalError;
@@ -1054,7 +1054,7 @@ Amiga::loadSnapshot(const Snapshot &snap)
         
     // Inform the GUI
     msgQueue.put(Msg::SNAPSHOT_RESTORED);
-    msgQueue.put(Msg::VIDEO_FORMAT, agnus.isPAL() ? (i64)VideoFormat::PAL : (i64)VideoFormat::NTSC);
+    msgQueue.put(Msg::VIDEO_FORMAT, agnus.isPAL() ? (i64)TV::PAL : (i64)TV::NTSC);
 }
 
 void

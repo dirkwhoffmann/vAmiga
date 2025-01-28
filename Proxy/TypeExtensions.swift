@@ -57,7 +57,7 @@ typealias ServerType = vamiga.ServerType
 typealias SpriteInfo = vamiga.SpriteInfo
 typealias StateMachineInfo = vamiga.StateMachineInfo
 typealias UARTInfo = vamiga.UARTInfo
-typealias VideoFormat = vamiga.VideoFormat
+typealias VideoFormat = vamiga.TV
 typealias WarpMode = vamiga.WarpMode
 
 extension EventSlot: CustomStringConvertible {

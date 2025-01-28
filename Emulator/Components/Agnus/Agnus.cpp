@@ -190,9 +190,9 @@ Agnus::setOption(Option option, i64 value)
 }
 
 void
-Agnus::setVideoFormat(VideoFormat newFormat)
+Agnus::setVideoFormat(TV newFormat)
 {
-    trace(NTSC_DEBUG, "Video format = %s\n", VideoFormatEnum::key(newFormat));
+    trace(NTSC_DEBUG, "Video format = %s\n", TVEnum::key(newFormat));
 
     // Change the frame type
     agnus.pos.switchMode(newFormat);

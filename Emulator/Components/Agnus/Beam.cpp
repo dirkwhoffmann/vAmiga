@@ -131,7 +131,7 @@ FrameType
 Beam::predictFrameType() const
 {
     // PAL
-    if (type == VideoFormat::PAL) {
+    if (type == TV::PAL) {
         return lof ? FrameType::PAL_LF : FrameType::PAL_SF;
     }
 
@@ -273,21 +273,21 @@ Beam::eof()
 }
 
 void
-Beam::switchMode(VideoFormat format)
+Beam::switchMode(TV format)
 {
     switch (format) {
 
-        case VideoFormat::PAL:
+        case TV::PAL:
 
-            type = VideoFormat::PAL;
+            type = TV::PAL;
             lol = false;
             lolToggle = false;
             vLatched = PAL::VPOS_MAX_LF;
             break;
 
-        case VideoFormat::NTSC:
+        case TV::NTSC:
 
-            type = VideoFormat::NTSC;
+            type = TV::NTSC;
             lol = false;
             lolToggle = true;
             vLatched = NTSC::VPOS_MAX_LF;

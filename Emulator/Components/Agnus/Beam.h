@@ -38,7 +38,7 @@ struct Beam : Serializable
     bool lolToggle = false;
 
     // The type of the current line
-    VideoFormat type;
+    TV type;
 
 
     //
@@ -78,8 +78,8 @@ public:
 
     isize hCnt() const { return lol ? 228 : 227; }
     isize hMax() const { return lol ? 227 : 226; }
-    isize vCnt() const { return type == VideoFormat::PAL ? vCntPal() : vCntNtsc(); }
-    isize vMax() const { return type == VideoFormat::PAL ? vMaxPal() : vMaxNtsc(); }
+    isize vCnt() const { return type == TV::PAL ? vCntPal() : vCntNtsc(); }
+    isize vMax() const { return type == TV::PAL ? vMaxPal() : vMaxNtsc(); }
     isize vMaxPal() const { return lof ? 312 : 311; }
     isize vMaxNtsc() const { return lof ? 262 : 261; }
     isize vCntPal() const { return lof ? 313 : 312; }
@@ -170,7 +170,7 @@ public:
     void eof();
 
     // Called by Agnus when the video format is changed (PAL / NTSC)
-    void switchMode(VideoFormat format);
+    void switchMode(TV format);
 };
 
 }

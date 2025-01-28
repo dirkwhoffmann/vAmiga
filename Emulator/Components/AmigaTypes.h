@@ -19,32 +19,32 @@ namespace vamiga {
 // Enumerations
 //
 
-enum class VideoFormat : long
+enum class TV : long
 {
     PAL,
     NTSC
 };
 
-struct VideoFormatEnum : util::Reflection<VideoFormatEnum, VideoFormat>
+struct TVEnum : util::Reflection<TVEnum, TV>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(VideoFormat::NTSC);
+    static constexpr long maxVal = long(TV::NTSC);
     
-    static const char *_key(VideoFormat value)
+    static const char *_key(TV value)
     {
         switch (value) {
                 
-            case VideoFormat::PAL:   return "PAL";
-            case VideoFormat::NTSC:  return "NTSC";
+            case TV::PAL:   return "PAL";
+            case TV::NTSC:  return "NTSC";
         }
         return "???";
     }
-    static const char *help(VideoFormat value)
+    static const char *help(TV value)
     {
         switch (value) {
                 
-            case VideoFormat::PAL:   return "PAL Video Format";
-            case VideoFormat::NTSC:  return "NTSC Video Format";
+            case TV::PAL:   return "PAL Video Format";
+            case TV::NTSC:  return "NTSC Video Format";
         }
         return "???";
     }
@@ -319,7 +319,7 @@ struct RegEnum : util::Reflection<RegEnum, Reg>
 typedef struct
 {
     //! Machine type (PAL or NTSC)
-    VideoFormat type;
+    TV type;
     
     //! After a reset, the emulator runs in warp mode for this amout of seconds
     isize warpBoot;

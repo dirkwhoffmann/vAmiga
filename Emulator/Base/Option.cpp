@@ -30,7 +30,7 @@ OptionParser::create(Option opt, i64 arg)
         case Option::HOST_FRAMEBUF_WIDTH:       return numParser(" pixels");
         case Option::HOST_FRAMEBUF_HEIGHT:      return numParser(" pixels");
 
-        case Option::AMIGA_VIDEO_FORMAT:        return enumParser.template operator()<VideoFormatEnum,VideoFormat>();
+        case Option::AMIGA_VIDEO_FORMAT:        return enumParser.template operator()<TVEnum,TV>();
         case Option::AMIGA_WARP_MODE:           return enumParser.template operator()<WarpModeEnum,WarpMode>();
         case Option::AMIGA_WARP_BOOT:           return numParser(" sec");
         case Option::AMIGA_VSYNC:               return boolParser();

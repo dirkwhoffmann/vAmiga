@@ -22,7 +22,7 @@ Defaults::Defaults()
     setFallback(Option::HOST_FRAMEBUF_WIDTH,        0);
     setFallback(Option::HOST_FRAMEBUF_HEIGHT,       0);
     
-    setFallback(Option::AMIGA_VIDEO_FORMAT,         (i64)VideoFormat::PAL);
+    setFallback(Option::AMIGA_VIDEO_FORMAT,         (i64)TV::PAL);
     setFallback(Option::AMIGA_WARP_BOOT,            0);
     setFallback(Option::AMIGA_WARP_MODE,            (i64)WarpMode::NEVER);
     setFallback(Option::AMIGA_VSYNC,                false);

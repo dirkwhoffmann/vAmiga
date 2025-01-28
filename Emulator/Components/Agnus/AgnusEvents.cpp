@@ -188,8 +188,8 @@ Agnus::scheduleStrobe2Event()
 void
 Agnus::serviceREGEvent(Cycle until)
 {
-    assert(pos.type != VideoFormat::PAL || pos.h <= PAL::HPOS_CNT);
-    assert(pos.type != VideoFormat::NTSC || pos.h <= NTSC::HPOS_CNT);
+    assert(pos.type != TV::PAL || pos.h <= PAL::HPOS_CNT);
+    assert(pos.type != TV::NTSC || pos.h <= NTSC::HPOS_CNT);
 
     if (syncEvent) {
 

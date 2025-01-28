@@ -317,7 +317,7 @@ public:
     void checkOption(Option opt, i64 value) override;
     void setOption(Option option, i64 value) override;
 
-    void setVideoFormat(VideoFormat newFormat);
+    void setVideoFormat(TV newFormat);
 
 
     //
@@ -331,7 +331,7 @@ public:
 
     bool isOCS() const;
     bool isECS() const;
-    bool isPAL() const { return pos.type == VideoFormat::PAL; }
+    bool isPAL() const { return pos.type == TV::PAL; }
     bool isNTSC() const { return !isPAL(); }
 
     // Returns the chip identification bits of this Agnus (show up in VPOSR)
