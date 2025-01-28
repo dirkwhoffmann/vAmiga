@@ -42,7 +42,7 @@ namespace vamiga {
 
 struct RegChange : Serializable
 {
-    u32 addr;
+    Reg reg;
     u16 value;
     Accessor accessor;
 
@@ -58,7 +58,7 @@ public:
     {
         worker
 
-        << addr
+        << reg
         << value
         << accessor;
 
@@ -82,7 +82,7 @@ struct RegChangeRecorder : public util::SortedRingBuffer<RegChange, capacity>
     void dump() {
 
         apply([] (i64 k, RegChange &e) {
-            fprintf(stderr, "%lld: %s = %d\n", k, RegEnum::key(Reg(e.addr)), e.value);
+            fprintf(stderr, "%lld: %s = %d\n", k, RegEnum::key(e.reg), e.value);
         });
     }
 };

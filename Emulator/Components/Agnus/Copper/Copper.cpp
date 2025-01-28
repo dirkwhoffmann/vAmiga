@@ -208,7 +208,7 @@ Copper::move(u32 addr, u16 value)
 
         // Color registers
         auto reg = Reg(isize(Reg::COLOR00) + ((addr - 0x180) >> 1));
-        pixelEngine.colChanges.insert(agnus.pos.pixel(), RegChange { .addr = u32(reg), .value = value} );
+        pixelEngine.colChanges.insert(agnus.pos.pixel(), RegChange { .reg = reg, .value = value} );
         return;
     }
 

@@ -352,7 +352,7 @@ PixelEngine::replayColRegChanges()
 void
 PixelEngine::applyRegisterChange(const RegChange &change)
 {
-    switch (Reg(change.addr)) {
+    switch (change.reg) {
 
         case Reg(0):
             
@@ -366,7 +366,7 @@ PixelEngine::applyRegisterChange(const RegChange &change)
             
         default: // It must be a color register then
             
-            auto nr = isize(change.addr) - isize(Reg::COLOR00);
+            auto nr = isize(change.reg) - isize(Reg::COLOR00);
             assert(0 <= nr && nr < 32);
 
             if (color[nr].rawValue() != change.value) {
@@ -387,7 +387,7 @@ PixelEngine::colorize(isize line)
     AmigaColor hold = color[0];
 
     // Add a dummy register change to ensure we draw until the line end
-    colChanges.insert(HPIXELS, RegChange { .addr = u32(Reg(0)), .value = 0 } );
+    colChanges.insert(HPIXELS, RegChange { .reg = Reg(0), .value = 0 } );
 
     // Iterate over all recorded register changes
     for (isize i = 0, end = colChanges.end(); i < end; i++) {

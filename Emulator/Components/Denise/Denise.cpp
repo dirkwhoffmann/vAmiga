@@ -547,7 +547,7 @@ Denise::translate()
     bool hamLine = state.ham;
 
     // Add a dummy register change to ensure we draw until the line ends
-    conChanges.insert(sizeof(dBuffer), RegChange { .addr = 0, .value = 0 });
+    conChanges.insert(sizeof(dBuffer), RegChange { .reg = Reg(0), .value = 0 });
 
     // Iterate over all recorded register changes
     for (isize i = 0, end = conChanges.end(); i < end; i++) {
@@ -564,16 +564,16 @@ Denise::translate()
         pixel = trigger;
 
         // Apply the register change
-        switch (change.addr) {
+        switch (change.reg) {
 
-            case u32(Reg::BPLCON0):
+            case Reg::BPLCON0:
                 
                 dual = dbplf(bplcon0);
                 state.ham = ham(change.value);
                 hamLine |= state.ham;
                 break;
 
-            case u32(Reg::BPLCON2):
+            case Reg::BPLCON2:
                 
                 state.prio = pf2pri(change.value);
                 state.zpf1 = zPF1(change.value);
@@ -582,7 +582,7 @@ Denise::translate()
 
             default:
                 
-                assert(change.addr == 0);
+                assert(change.reg == Reg(0));
                 break;
         }
     }
@@ -752,50 +752,50 @@ Denise::drawSpritePair()
             strt = trigger;
             
             // Apply the recorded register change
-            switch (change.addr) {
+            switch (isize(change.reg)) {
                     
-                case u32(Reg::SPR0DATA) + 4 * sprite1:
+                case isize(Reg::SPR0DATA) + 4 * sprite1:
                     
                     sprdata[sprite1] = change.value;
                     SET_BIT(armed, sprite1);
                     break;
                     
-                case u32(Reg::SPR0DATA) + 4 * sprite2:
+                case isize(Reg::SPR0DATA) + 4 * sprite2:
                     
                     sprdata[sprite2] = change.value;
                     SET_BIT(armed, sprite2);
                     break;
                     
-                case u32(Reg::SPR0DATB) + 4 * sprite1:
+                case isize(Reg::SPR0DATB) + 4 * sprite1:
                     
                     sprdatb[sprite1] = change.value;
                     break;
                     
-                case u32(Reg::SPR0DATB) + 4 * sprite2:
+                case isize(Reg::SPR0DATB) + 4 * sprite2:
                     
                     sprdatb[sprite2] = change.value;
                     break;
 
-                case u32(Reg::SPR0POS) + 4 * sprite1:
+                case isize(Reg::SPR0POS) + 4 * sprite1:
 
                     setSPRxPOS(sprite1, change.value);
                     strt1 = sprhppos[sprite1] & hposMask;
                     break;
                     
-                case u32(Reg::SPR0POS) + 4 * sprite2:
+                case isize(Reg::SPR0POS) + 4 * sprite2:
                     
                     setSPRxPOS(sprite2, change.value);
                     strt2 = sprhppos[sprite2] & hposMask;
                     break;
                     
-                case u32(Reg::SPR0CTL) + 4 * sprite1:
+                case isize(Reg::SPR0CTL) + 4 * sprite1:
 
                     setSPRxCTL(sprite1, change.value);
                     strt1 = sprhppos[sprite1] & hposMask;
                     CLR_BIT(armed, sprite1);
                     break;
                     
-                case u32(Reg::SPR0CTL) + 4 * sprite2:
+                case isize(Reg::SPR0CTL) + 4 * sprite2:
 
                     setSPRxCTL(sprite2, change.value);
                     strt2 = sprhppos[sprite2] & hposMask;
@@ -825,47 +825,47 @@ Denise::replaySpriteRegChanges()
         RegChange &change = sprChanges[pair].elements[i];
         
         // Apply the recorded register change
-        switch (change.addr) {
+        switch (isize(change.reg)) {
                 
-            case u32(Reg::SPR0DATA) + 4 * sprite1:
+            case isize(Reg::SPR0DATA) + 4 * sprite1:
                 
                 sprdata[sprite1] = change.value;
                 break;
                 
-            case u32(Reg::SPR0DATA) + 4 * sprite2:
+            case isize(Reg::SPR0DATA) + 4 * sprite2:
                 
                 sprdata[sprite2] = change.value;
                 break;
                 
-            case u32(Reg::SPR0DATB) + 4 * sprite1:
+            case isize(Reg::SPR0DATB) + 4 * sprite1:
                 
                 sprdatb[sprite1] = change.value;
                 break;
                 
-            case u32(Reg::SPR0DATB) + 4 * sprite2:
+            case isize(Reg::SPR0DATB) + 4 * sprite2:
                 
                 sprdatb[sprite2] = change.value;
                 break;
                 
-            case u32(Reg::SPR0POS) + 4 * sprite1:
+            case isize(Reg::SPR0POS) + 4 * sprite1:
 
                 setSPRxPOS(sprite1, change.value);
                 assert(sprpos[sprite1] == change.value);
                 break;
                 
-            case u32(Reg::SPR0POS) + 4 * sprite2:
+            case isize(Reg::SPR0POS) + 4 * sprite2:
 
                 setSPRxPOS(sprite2, change.value);
                 assert(sprpos[sprite2] == change.value);
                 break;
                 
-            case u32(Reg::SPR0CTL) + 4 * sprite1:
+            case isize(Reg::SPR0CTL) + 4 * sprite1:
 
                 setSPRxCTL(sprite1, change.value);
                 assert(sprctl[sprite1] == change.value);
                 break;
                 
-            case u32(Reg::SPR0CTL) + 4 * sprite2:
+            case isize(Reg::SPR0CTL) + 4 * sprite2:
 
                 setSPRxCTL(sprite2, change.value);
                 assert(sprctl[sprite2] == change.value);
@@ -1054,15 +1054,15 @@ Denise::updateBorderBuffer()
                 RegChange &r = diwChanges.read();
                 trigger = diwChanges.trigger();
 
-                switch (r.addr) {
+                switch (r.reg) {
 
-                    case u32(Reg::DIWSTRT):
+                    case Reg::DIWSTRT:
 
                         hstrt = r.value;
                         trace(DIW_DEBUG, "hstrt -> %ld (%lx)\n", hstrt, hstrt);
                         break;
 
-                    case u32(Reg::DIWSTOP):
+                    case Reg::DIWSTOP:
 
                         hstop = r.value;
                         trace(DIW_DEBUG, "hstop -> %ld (%lx)\n", hstop, hstop);
