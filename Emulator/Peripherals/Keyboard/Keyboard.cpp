@@ -28,7 +28,7 @@ void
 Keyboard::_didReset(bool hard)
 {    
     std::memset(keyDown, 0, sizeof(keyDown));
-    state = KeyboardState::SELFTEST;
+    state = KbState::SELFTEST;
     execute();
 }
 
@@ -86,7 +86,7 @@ Keyboard::_dump(Category category, std::ostream& os) const
     if (category == Category::State) {
         
         os << tab("State");
-        os << KeyboardStateEnum::key(state) << std::endl;
+        os << KbStateEnum::key(state) << std::endl;
         os << tab("Shift register");
         os << hex(shiftReg) << std::endl;
         os << tab("SP LO cycle");
@@ -174,7 +174,7 @@ Keyboard::wakeUp()
     if (!agnus.hasEvent<SLOT_KBD>()) {
         
         trace(KBD_DEBUG, "Wake up\n");
-        state = KeyboardState::SEND;
+        state = KbState::SEND;
         execute();
     }
 }
@@ -237,11 +237,11 @@ Keyboard::processHandshake()
     // Switch to the next state
     switch(state) {
             
-        case KeyboardState::SELFTEST:  state = KeyboardState::STRM_ON;  break;
-        case KeyboardState::SYNC:      state = KeyboardState::STRM_ON;  break;
-        case KeyboardState::STRM_ON:   state = KeyboardState::STRM_OFF; break;
-        case KeyboardState::STRM_OFF:  state = KeyboardState::SEND;     break;
-        case KeyboardState::SEND:                                       break;
+        case KbState::SELFTEST:  state = KbState::STRM_ON;  break;
+        case KbState::SYNC:      state = KbState::STRM_ON;  break;
+        case KbState::STRM_ON:   state = KbState::STRM_OFF; break;
+        case KbState::STRM_OFF:  state = KbState::SEND;     break;
+        case KbState::SEND:                                       break;
 
         default:
             fatalError;
@@ -258,7 +258,7 @@ Keyboard::execute()
     
     switch(state) {
             
-        case KeyboardState::SELFTEST:
+        case KbState::SELFTEST:
             
             trace(KBD_DEBUG, "KB_SELFTEST\n");
             
@@ -266,13 +266,13 @@ Keyboard::execute()
             agnus.scheduleRel<SLOT_KBD>(SEC(1), KBD_TIMEOUT);
             break;
             
-        case KeyboardState::SYNC:
+        case KbState::SYNC:
             
             trace(KBD_DEBUG, "KB_SYNC\n");
             sendSyncPulse();
             break;
             
-        case KeyboardState::STRM_ON:
+        case KbState::STRM_ON:
             
             trace(KBD_DEBUG, "KB_STRM_ON\n");
             
@@ -280,7 +280,7 @@ Keyboard::execute()
             sendKeyCode(0xFD);
             break;
             
-        case KeyboardState::STRM_OFF:
+        case KbState::STRM_OFF:
             
             trace(KBD_DEBUG, "KB_STRM_OFF\n");
             
@@ -288,7 +288,7 @@ Keyboard::execute()
             sendKeyCode(0xFE);
             break;
             
-        case KeyboardState::SEND:
+        case KbState::SEND:
 
             trace(KBD_DEBUG, "KB_SEND\n");
 

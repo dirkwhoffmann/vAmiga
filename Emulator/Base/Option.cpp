@@ -44,7 +44,7 @@ OptionParser::create(Option opt, i64 arg)
         case Option::AGNUS_REVISION:            return enumParser.template operator()<AgnusRevisionEnum,AgnusRevision>();
         case Option::AGNUS_PTR_DROPS:           return boolParser();
 
-        case Option::DENISE_REVISION:           return enumParser.template operator()<DeniseRevisionEnum,DeniseRevision>();
+        case Option::DENISE_REVISION:           return enumParser.template operator()<DeniseRevEnum,DeniseRev>();
         case Option::DENISE_VIEWPORT_TRACKING:  return boolParser();
         case Option::DENISE_FRAME_SKIPPING:     return boolParser();
         case Option::DENISE_HIDDEN_BITPLANES:   return numParser();
@@ -138,7 +138,7 @@ OptionParser::create(Option opt, i64 arg)
 
         case Option::BLITTER_ACCURACY:          return numParser();
 
-        case Option::CIA_REVISION:              return enumParser.template operator()<CIARevisionEnum,CIARevision>();
+        case Option::CIA_REVISION:              return enumParser.template operator()<CIARevEnum,CIARev>();
         case Option::CIA_TODBUG:                return boolParser();
         case Option::CIA_ECLOCK_SYNCING:        return boolParser();
         case Option::CIA_IDLE_SLEEP:            return boolParser();

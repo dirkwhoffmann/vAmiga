@@ -498,8 +498,8 @@ public:
 
 public:
 
-    bool isOCS() const { return config.revision == DeniseRevision::OCS; }
-    bool isECS() const { return config.revision == DeniseRevision::ECS; }
+    bool isOCS() const { return config.revision == DeniseRev::OCS; }
+    bool isECS() const { return config.revision == DeniseRev::ECS; }
 
 
     //

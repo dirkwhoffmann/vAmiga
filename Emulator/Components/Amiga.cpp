@@ -422,7 +422,7 @@ Amiga::set(ConfigScheme scheme)
             
             set(Option::CPU_REVISION, (i64)CPURev::CPU_68000);
             set(Option::AGNUS_REVISION, (i64)AgnusRevision::OCS_OLD);
-            set(Option::DENISE_REVISION, (i64)DeniseRevision::OCS);
+            set(Option::DENISE_REVISION, (i64)DeniseRev::OCS);
             set(Option::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
             set(Option::MEM_CHIP_RAM, 512);
             set(Option::MEM_SLOW_RAM, 512);
@@ -432,7 +432,7 @@ Amiga::set(ConfigScheme scheme)
             
             set(Option::CPU_REVISION, (i64)CPURev::CPU_68000);
             set(Option::AGNUS_REVISION, (i64)AgnusRevision::OCS);
-            set(Option::DENISE_REVISION, (i64)DeniseRevision::OCS);
+            set(Option::DENISE_REVISION, (i64)DeniseRev::OCS);
             set(Option::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
             set(Option::MEM_CHIP_RAM, 512);
             set(Option::MEM_SLOW_RAM, 512);
@@ -442,7 +442,7 @@ Amiga::set(ConfigScheme scheme)
             
             set(Option::CPU_REVISION, (i64)CPURev::CPU_68000);
             set(Option::AGNUS_REVISION, (i64)AgnusRevision::ECS_1MB);
-            set(Option::DENISE_REVISION, (i64)DeniseRevision::OCS);
+            set(Option::DENISE_REVISION, (i64)DeniseRev::OCS);
             set(Option::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
             set(Option::MEM_CHIP_RAM, 512);
             set(Option::MEM_SLOW_RAM, 512);
@@ -452,7 +452,7 @@ Amiga::set(ConfigScheme scheme)
             
             set(Option::CPU_REVISION, (i64)CPURev::CPU_68000);
             set(Option::AGNUS_REVISION, (i64)AgnusRevision::ECS_2MB);
-            set(Option::DENISE_REVISION, (i64)DeniseRevision::ECS);
+            set(Option::DENISE_REVISION, (i64)DeniseRev::ECS);
             set(Option::AMIGA_VIDEO_FORMAT, (i64)TV::PAL);
             set(Option::MEM_CHIP_RAM, 512);
             set(Option::MEM_SLOW_RAM, 512);

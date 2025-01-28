@@ -92,8 +92,8 @@ CIA::checkOption(Option opt, i64 value)
 
         case Option::CIA_REVISION:
 
-            if (!CIARevisionEnum::isValid(value)) {
-                throw Error(ErrorCode::OPT_INV_ARG, CIARevisionEnum::keyList());
+            if (!CIARevEnum::isValid(value)) {
+                throw Error(ErrorCode::OPT_INV_ARG, CIARevEnum::keyList());
             }
             return;
 
@@ -115,7 +115,7 @@ CIA::setOption(Option option, i64 value)
             
         case Option::CIA_REVISION:
 
-            config.revision = (CIARevision)value;
+            config.revision = (CIARev)value;
             return;
 
         case Option::CIA_TODBUG:
@@ -853,7 +853,7 @@ u8 CIAA::computePA() const
     controlPort2.changePra(result);
     
     // PLCC CIAs always return the PRA contents for output bits
-    if (config.revision == CIARevision::MOS_8520_PLCC)
+    if (config.revision == CIARev::MOS_8520_PLCC)
         result = (result & ~ddra) | (pra & ddra);
 
     return result;
@@ -913,7 +913,7 @@ CIAA::computePB() const
         REPLACE_BIT(result, 7, pb67TimerOut & (1 << 7));
 
     // PLCC CIAs always return the PRB contents for output bits
-    if (config.revision == CIARevision::MOS_8520_PLCC)
+    if (config.revision == CIARev::MOS_8520_PLCC)
         result = (result & ~ddrb) | (prb & ddrb);
 
     return result;
@@ -1031,7 +1031,7 @@ CIAB::computePA() const
     u8 result = (internal & ddra) | (external & ~ddra);
     
     // PLCC CIAs always return the PRA contents for output bits
-    if (config.revision == CIARevision::MOS_8520_PLCC)
+    if (config.revision == CIARev::MOS_8520_PLCC)
         result = (result & ~ddra) | (pra & ddra);
     
     return result;
@@ -1098,7 +1098,7 @@ CIAB::computePB() const
     u8 result = (internal & ddrb) | (external & ~ddrb);
     
     // PLCC CIAs always return the PRB contents for output bits
-    if (config.revision == CIARevision::MOS_8520_PLCC)
+    if (config.revision == CIARev::MOS_8520_PLCC)
         result = (result & ~ddrb) | (prb & ddrb);
     
     return result;

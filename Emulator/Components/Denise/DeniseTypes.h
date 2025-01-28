@@ -19,32 +19,32 @@ namespace vamiga {
 // Enumerations
 //
 
-enum class DeniseRevision : long
+enum class DeniseRev : long
 {
     OCS,           // Revision 8362R8
     ECS            // Revision 8373      (only partially supported)
 };
 
-struct DeniseRevisionEnum : util::Reflection<DeniseRevisionEnum, DeniseRevision>
+struct DeniseRevEnum : util::Reflection<DeniseRevEnum, DeniseRev>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(DeniseRevision::ECS);
+    static constexpr long maxVal = long(DeniseRev::ECS);
     
-    static const char *_key(DeniseRevision value)
+    static const char *_key(DeniseRev value)
     {
         switch (value) {
                 
-            case DeniseRevision::OCS:          return "OCS";
-            case DeniseRevision::ECS:          return "ECS";
+            case DeniseRev::OCS:          return "OCS";
+            case DeniseRev::ECS:          return "ECS";
         }
         return "???";
     }
-    static const char *help(DeniseRevision value)
+    static const char *help(DeniseRev value)
     {
         switch (value) {
                 
-            case DeniseRevision::OCS:          return "MOS 8362R8";
-            case DeniseRevision::ECS:          return "MOS 8373 (Super Denise)";
+            case DeniseRev::OCS:          return "MOS 8362R8";
+            case DeniseRev::ECS:          return "MOS 8373 (Super Denise)";
         }
         return "???";
     }
@@ -58,7 +58,7 @@ struct DeniseRevisionEnum : util::Reflection<DeniseRevisionEnum, DeniseRevision>
 typedef struct
 {
     // Emulated chip model
-    DeniseRevision revision;
+    DeniseRev revision;
     
     // Informs the GUI about viewport changes
     bool viewportTracking;

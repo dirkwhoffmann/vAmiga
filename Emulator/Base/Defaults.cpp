@@ -36,7 +36,7 @@ Defaults::Defaults()
     setFallback(Option::AGNUS_REVISION,             (i64)AgnusRevision::ECS_1MB);
     setFallback(Option::AGNUS_PTR_DROPS,            true);
     
-    setFallback(Option::DENISE_REVISION,            (i64)DeniseRevision::OCS);
+    setFallback(Option::DENISE_REVISION,            (i64)DeniseRev::OCS);
     setFallback(Option::DENISE_VIEWPORT_TRACKING,   true);
     setFallback(Option::DENISE_FRAME_SKIPPING,      16);
 
@@ -133,7 +133,7 @@ Defaults::Defaults()
 
     setFallback(Option::BLITTER_ACCURACY,           2);
 
-    setFallback(Option::CIA_REVISION,               (i64)CIARevision::MOS_8520_DIP, { 0, 1} );
+    setFallback(Option::CIA_REVISION,               (i64)CIARev::MOS_8520_DIP, { 0, 1} );
     setFallback(Option::CIA_TODBUG,                 true,                   { 0, 1} );
     setFallback(Option::CIA_ECLOCK_SYNCING,         true,                   { 0, 1} );
     setFallback(Option::CIA_IDLE_SLEEP,             true,                   { 0, 1} );

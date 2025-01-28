@@ -36,7 +36,7 @@ class Keyboard final : public SubComponent, public Inspectable<KeyboardInfo> {
     KeyboardConfig config;
 
     // The current keyboard state
-    KeyboardState state;
+    KbState state;
     
     // Shift register storing the transmission bits
     u8 shiftReg;

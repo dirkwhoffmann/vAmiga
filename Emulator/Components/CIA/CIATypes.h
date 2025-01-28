@@ -20,32 +20,32 @@ namespace vamiga {
  *   CIA_8520_DIP  mimics option "[ ] 391078-01" in UAE (default)
  *   CIA_8520_PLCC mimics option "[X] 391078-01" in UAE (A600)
  */
-enum class CIARevision : long
+enum class CIARev : long
 {
     MOS_8520_DIP,
     MOS_8520_PLCC
 };
 
-struct CIARevisionEnum : util::Reflection<CIARevisionEnum, CIARevision>
+struct CIARevEnum : util::Reflection<CIARevEnum, CIARev>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(CIARevision::MOS_8520_PLCC);
+    static constexpr long maxVal = long(CIARev::MOS_8520_PLCC);
     
-    static const char *_key(CIARevision value)
+    static const char *_key(CIARev value)
     {
         switch (value) {
                 
-            case CIARevision::MOS_8520_DIP:   return "MOS_8520_DIP";
-            case CIARevision::MOS_8520_PLCC:  return "MOS_8520_PLCC";
+            case CIARev::MOS_8520_DIP:   return "MOS_8520_DIP";
+            case CIARev::MOS_8520_PLCC:  return "MOS_8520_PLCC";
         }
         return "???";
     }
-    static const char *help(CIARevision value)
+    static const char *help(CIARev value)
     {
         switch (value) {
                 
-            case CIARevision::MOS_8520_DIP:   return "MOS 8520 DIP package";
-            case CIARevision::MOS_8520_PLCC:  return "MOS_8520 PLCC package";
+            case CIARev::MOS_8520_DIP:   return "MOS 8520 DIP package";
+            case CIARev::MOS_8520_PLCC:  return "MOS_8520 PLCC package";
         }
         return "???";
     }
@@ -112,7 +112,7 @@ struct CIARegEnum : util::Reflection<CIARegEnum, CIAReg>
 
 typedef struct
 {
-    CIARevision revision;
+    CIARev revision;
     bool todBug;
     bool eClockSyncing;
     bool idleSleep;

@@ -18,7 +18,7 @@ namespace vamiga {
 // Enumerations
 //
 
-enum class KeyboardState
+enum class KbState
 {
     SELFTEST,
     SYNC,
@@ -27,24 +27,24 @@ enum class KeyboardState
     SEND
 };
 
-struct KeyboardStateEnum : util::Reflection<KeyboardStateEnum, KeyboardState>
+struct KbStateEnum : util::Reflection<KbStateEnum, KbState>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(KeyboardState::SEND);
+    static constexpr long maxVal = long(KbState::SEND);
     
-    static const char *_key(KeyboardState value)
+    static const char *_key(KbState value)
     {
         switch (value) {
                 
-            case KeyboardState::SELFTEST:  return "SELFTEST";
-            case KeyboardState::SYNC:      return "SYNC";
-            case KeyboardState::STRM_ON:   return "STRM_ON";
-            case KeyboardState::STRM_OFF:  return "STRM_OFF";
-            case KeyboardState::SEND:      return "SEND";
+            case KbState::SELFTEST:  return "SELFTEST";
+            case KbState::SYNC:      return "SYNC";
+            case KbState::STRM_ON:   return "STRM_ON";
+            case KbState::STRM_OFF:  return "STRM_OFF";
+            case KbState::SEND:      return "SEND";
         }
         return "???";
     }
-    static const char *help(KeyboardState value)
+    static const char *help(KbState value)
     {
         return "";
     }
@@ -63,7 +63,7 @@ KeyboardConfig;
 
 typedef struct
 {
-    KeyboardState state;
+    KbState state;
     u8 shiftReg;
     
 } KeyboardInfo;

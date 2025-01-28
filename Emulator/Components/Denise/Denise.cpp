@@ -63,8 +63,8 @@ Denise::checkOption(Option opt, i64 value)
 
         case Option::DENISE_REVISION:
 
-            if (!DeniseRevisionEnum::isValid(value)) {
-                throw Error(ErrorCode::OPT_INV_ARG, DeniseRevisionEnum::keyList());
+            if (!DeniseRevEnum::isValid(value)) {
+                throw Error(ErrorCode::OPT_INV_ARG, DeniseRevEnum::keyList());
             }
             return;
 
@@ -92,7 +92,7 @@ Denise::setOption(Option option, i64 value)
             
         case Option::DENISE_REVISION:
 
-            config.revision = (DeniseRevision)value;
+            config.revision = (DeniseRev)value;
             return;
 
         case Option::DENISE_VIEWPORT_TRACKING:
@@ -1008,7 +1008,7 @@ Denise::drawAttachedSpritePixelPair(Pixel hpos)
 void
 Denise::updateBorderColor()
 {
-    if (config.revision != DeniseRevision::OCS && ecsena() && brdrblnk()) {
+    if (config.revision != DeniseRev::OCS && ecsena() && brdrblnk()) {
         borderColor = 64; // Pure black
     } else {
         borderColor = 0;  // Background color
