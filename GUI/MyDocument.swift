@@ -13,6 +13,7 @@ extension UTType {
 
     static let workspace = UTType("de.dirkwhoffmann.retro.vamiga")!
     static let snapshot = UTType("de.dirkwhoffmann.retro.vasnap")!
+    static let retrosh = UTType("de.dirkwhoffmann.retro.retrosh")!
     static let adf = UTType("de.dirkwhoffmann.retro.adf")!
     static let adz = UTType("de.dirkwhoffmann.retro.adf")!
     static let dms = UTType("de.dirkwhoffmann.retro.dms")!
@@ -20,7 +21,6 @@ extension UTType {
     static let hdf = UTType("de.dirkwhoffmann.retro.hdf")!
     static let hdz = UTType("de.dirkwhoffmann.retro.hdz")!
     static let img = UTType("de.dirkwhoffmann.retro.img")!
-    static let ini = UTType("de.dirkwhoffmann.retro.ini")!
 }
 
 @MainActor
@@ -148,7 +148,7 @@ class MyDocument: NSDocument {
         if typeName.uppercased() == "VAMIGA" {
 
             do {
-                try emu.saveWorkspace(url: url)
+                try emu.amiga.saveWorkspace(url: url)
 
             } catch let error as VAError {
                 
@@ -244,7 +244,7 @@ class MyDocument: NSDocument {
 
         Swift.print("processWorkspaceFile \(url) force: \(force)")
 
-        try emu.loadWorkspace(url: url)
+        try emu.amiga.loadWorkspace(url: url)
     }
 
     func processSnapshotFile(_ proxy: MediaFileProxy, force: Bool = false) throws {

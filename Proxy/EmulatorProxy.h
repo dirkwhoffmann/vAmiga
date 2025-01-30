@@ -289,9 +289,6 @@ NSString *EventSlotName(NSInteger slot);
 - (void)finishLine;
 - (void)finishFrame;
 
-- (void)loadWorkspace:(NSURL *)url exception:(ExceptionWrapper *)ex;
-- (void)saveWorkspace:(NSURL *)url exception:(ExceptionWrapper *)ex;
-
 - (NSInteger)get:(Opt)opt;
 - (NSInteger)get:(Opt)opt id:(NSInteger)id;
 - (NSInteger)get:(Opt)opt drive:(NSInteger)id;
@@ -410,7 +407,13 @@ NSString *EventSlotName(NSInteger slot);
 @property NSInteger autoInspectionMask;
 
 - (MediaFileProxy *) takeSnapshot;
-- (void) loadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
+- (void)loadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
+- (void)loadSnapshotFromUrl:(NSURL *)url exception:(ExceptionWrapper *)ex;
+- (void)saveSnapshotToUrl:(NSURL *)url exception:(ExceptionWrapper *)ex;
+
+- (void)loadWorkspace:(NSURL *)url exception:(ExceptionWrapper *)ex;
+- (void)saveWorkspace:(NSURL *)url exception:(ExceptionWrapper *)ex;
+
 
 @property (readonly) NSString *stateString;
 

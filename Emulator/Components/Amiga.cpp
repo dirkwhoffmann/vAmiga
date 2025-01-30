@@ -1146,7 +1146,13 @@ Amiga::scheduleNextSnpEvent()
     }
 }
 
-void 
+void
+Amiga::loadSnapshot(const std::filesystem::path &path)
+{
+    loadSnapshot(Snapshot(path));
+}
+
+void
 Amiga::loadSnapshot(const MediaFile &file)
 {
     const Snapshot &snapshot = dynamic_cast<const Snapshot &>(file);
@@ -1168,6 +1174,12 @@ Amiga::loadSnapshot(const Snapshot &snap)
     // Inform the GUI
     msgQueue.put(Msg::SNAPSHOT_RESTORED);
     msgQueue.put(Msg::VIDEO_FORMAT, agnus.isPAL() ? (i64)TV::PAL : (i64)TV::NTSC);
+}
+
+void
+Amiga::saveSnapshot(const std::filesystem::path &path)
+{
+    Snapshot(*this).writeToFile(path);
 }
 
 void

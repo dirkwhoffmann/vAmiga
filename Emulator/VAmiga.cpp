@@ -2208,20 +2208,6 @@ VAmiga::set(Opt opt, i64 value, long id)
 }
 
 void
-VAmiga::loadWorkspace(const fs::path &path)
-{
-    VAMIGA_PUBLIC_SUSPEND
-    emu->main.loadWorkspace(path);
-}
-
-void
-VAmiga::saveWorkspace(const fs::path &path) const
-{
-    VAMIGA_PUBLIC_SUSPEND
-    emu->main.saveWorkspace(path);
-}
-
-void
 VAmiga::exportConfig(const fs::path &path, bool diff) const
 {
     VAMIGA_PUBLIC_SUSPEND
@@ -2278,7 +2264,36 @@ AmigaAPI::loadSnapshot(const MediaFile &snapshot)
         throw;
     }
 }
+ 
+void
+AmigaAPI::loadSnapshot(const std::filesystem::path &path)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    amiga->loadSnapshot(path);
+}
+
+void
+AmigaAPI::saveSnapshot(const fs::path &path) const
+{
+    VAMIGA_PUBLIC_SUSPEND
+    amiga->saveSnapshot(path);
     
+}
+
+void
+AmigaAPI::loadWorkspace(const fs::path &path)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    amiga->loadWorkspace(path);
+}
+
+void
+AmigaAPI::saveWorkspace(const fs::path &path) const
+{
+    VAMIGA_PUBLIC_SUSPEND
+    amiga->saveWorkspace(path);
+}
+
 u64
 AmigaAPI::getAutoInspectionMask() const
 {

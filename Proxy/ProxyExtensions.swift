@@ -17,6 +17,34 @@ extension AmigaProxy {
         loadSnapshot(proxy, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
+
+    func loadSnapshot(url: URL) throws {
+
+        let exception = ExceptionWrapper()
+        loadSnapshot(from: url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+
+    func saveSnapshot(url: URL) throws {
+
+        let exception = ExceptionWrapper()
+        saveSnapshot(to: url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+
+    func loadWorkspace(url: URL) throws {
+        
+        let exception = ExceptionWrapper()
+        loadWorkspace(url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+
+    func saveWorkspace(url: URL) throws {
+        
+        let exception = ExceptionWrapper()
+        saveWorkspace(url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
 }
 
 extension MediaFileProxy {
@@ -259,20 +287,6 @@ extension EmulatorProxy {
         
         let exception = ExceptionWrapper()
         run(exception)
-        if exception.errorCode != .OK { throw VAError(exception) }
-    }
-    
-    func loadWorkspace(url: URL) throws {
-        
-        let exception = ExceptionWrapper()
-        loadWorkspace(url, exception: exception)
-        if exception.errorCode != .OK { throw VAError(exception) }
-    }
-
-    func saveWorkspace(url: URL) throws {
-        
-        let exception = ExceptionWrapper()
-        saveWorkspace(url, exception: exception)
         if exception.errorCode != .OK { throw VAError(exception) }
     }
 

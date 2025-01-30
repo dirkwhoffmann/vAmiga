@@ -319,12 +319,6 @@ public:
     i64 getOption(Opt option) const override;
     void checkOption(Opt opt, i64 value) override;
     void setOption(Opt option, i64 value) override;
-
-    // Loads a setup from a file
-    void loadWorkspace(const fs::path &path);
-
-    // Saves the current setup to a file
-    void saveWorkspace(const fs::path &path);
     
     // Exports the current configuration to a script file
     void exportConfig(const fs::path &path, bool diff = false) const;
@@ -413,6 +407,17 @@ public:
     // Convenience wrappers
     void signalStop() { setFlag(RL::STOP); }
  
+    
+    //
+    // Handling workspaces
+    //
+    
+    // Loads a workspace from a file
+    void loadWorkspace(const fs::path &path);
+
+    // Saves the current workspace to a file
+    void saveWorkspace(const fs::path &path);
+
 
     //
     // Handling snapshots
@@ -423,9 +428,13 @@ public:
     // Takes a snapshot
     MediaFile *takeSnapshot();
 
-    // Loads the current state from a snapshot file
+    // Loads a snapshot from a file
+    void loadSnapshot(const std::filesystem::path &path) throws;
     void loadSnapshot(const MediaFile &file) throws;
     void loadSnapshot(const class Snapshot &snapshot) throws;
+
+    // Saves a snapshot to a file
+    void saveSnapshot(const std::filesystem::path &path) throws;
 
     // Services a snapshot event
     void serviceSnpEvent(EventID id);

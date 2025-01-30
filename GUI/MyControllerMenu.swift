@@ -188,7 +188,7 @@ extension MyController: NSMenuItemValidation {
         openPanel.canCreateDirectories = false
         openPanel.canChooseFiles = true
         openPanel.prompt = "Import"
-        openPanel.allowedContentTypes = [.ini]
+        openPanel.allowedContentTypes = [.retrosh]
         openPanel.beginSheetModal(for: window!, completionHandler: { result in
 
             if result == .OK, let url = openPanel.url {
@@ -202,6 +202,7 @@ extension MyController: NSMenuItemValidation {
         })
     }
 
+    /*
     @IBAction func exportConfigAction(_ sender: Any!) {
 
         let savePanel = NSSavePanel()
@@ -224,6 +225,7 @@ extension MyController: NSMenuItemValidation {
             }
         })
     }
+    */
 
     //
     // Action methods (Machine menu)
@@ -341,6 +343,54 @@ extension MyController: NSMenuItemValidation {
             snapshotBrowser = SnapshotDialog(with: self, nibName: "SnapshotDialog")
         }
         snapshotBrowser?.showAsSheet()
+    }
+
+    @IBAction func loadSnapshotAction(_ sender: Any!) {
+        
+        print("loadSnapshotAction")
+        
+        let openPanel = NSOpenPanel()
+        openPanel.allowsMultipleSelection = false
+        openPanel.canChooseDirectories = true
+        openPanel.canCreateDirectories = false
+        openPanel.canChooseFiles = true
+        openPanel.prompt = "Restore"
+        openPanel.allowedContentTypes = [ .snapshot ]
+        openPanel.beginSheetModal(for: window!, completionHandler: { result in
+
+            if result == .OK, let url = openPanel.url {
+                
+                do {
+                    try self.emu.amiga.loadSnapshot(url: url)
+                } catch {
+                    self.showAlert(.cantOpen(url: url), error: error, async: true)
+                }
+            }
+        })
+    }
+
+    @IBAction func saveSnapshotAction(_ sender: Any!) {
+        
+        print("saveSnapshotAction")
+        
+        let savePanel = NSSavePanel()
+        savePanel.prompt = "Export"
+        savePanel.title = "Export"
+        savePanel.nameFieldLabel = "Export As:"
+        savePanel.nameFieldStringValue = "Untitled.vasnap"
+        savePanel.canCreateDirectories = true
+        savePanel.allowedContentTypes = [ .snapshot ]
+        savePanel.beginSheetModal(for: window!, completionHandler: { result in
+
+            if result == .OK, let url = savePanel.url {
+
+                do {
+                    try self.emu.amiga.saveSnapshot(url: url)
+                } catch {
+                    self.showAlert(.cantExport(url: url), error: error, async: true)
+                }
+            }
+        })
     }
     
     @IBAction func takeScreenshotAction(_ sender: Any!) {

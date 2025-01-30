@@ -68,7 +68,7 @@ public:
     void dump(Category category, std::ostream& os) const;
 
     /// @}
-    /// @name Handling snapshots
+    /// @name Managing workspaces and snapshots
     /// @{
 
     /** @brief  Takes a snapshot
@@ -85,7 +85,20 @@ public:
      *  @param  snapshot    Reference to a snapshot.
      */
     void loadSnapshot(const MediaFile &snapshot);
-
+    void loadSnapshot(const std::filesystem::path &path);
+    
+    /** @brief  Loads a snapshot into the emulator.
+     *
+     *  @param  path    Destination path
+     */
+    void saveSnapshot(const fs::path &path) const;
+    
+    /** @brief  Experimental
+     */
+    void loadWorkspace(const fs::path &path);
+    void saveWorkspace(const fs::path &path) const;
+    
+    
     /// @}
     /// @name Auto-inspecting components
     /// @{
@@ -1875,11 +1888,6 @@ public:
      *  an additional parameter to uniquely determine the configured component.
      */
     void set(Opt opt, i64 value, long id);
-    
-    
-    /** @brief  Experimental*/
-    void loadWorkspace(const fs::path &path);
-    void saveWorkspace(const fs::path &path) const;
 
     /** @brief  Exports the current configuration.
      *

@@ -2237,6 +2237,30 @@ NSString *EventSlotName(NSInteger slot)
     catch (VAException &error) { [ex save:error]; }
 }
 
+- (void)loadSnapshotFromUrl:(NSURL *)url exception:(ExceptionWrapper *)ex
+{
+    try { [self amiga]->loadSnapshot([url fileSystemRepresentation]); }
+    catch (VAException &error) { [ex save:error]; }
+}
+
+- (void)saveSnapshotToUrl:(NSURL *)url exception:(ExceptionWrapper *)ex
+{
+    try { [self amiga]->saveSnapshot([url fileSystemRepresentation]); }
+    catch (VAException &error) { [ex save:error]; }
+}
+
+- (void)loadWorkspace:(NSURL *)url exception:(ExceptionWrapper *)ex
+{
+    try { [self amiga]->loadWorkspace([url fileSystemRepresentation]); }
+    catch (VAException &error) { [ex save:error]; }
+}
+
+- (void)saveWorkspace:(NSURL *)url exception:(ExceptionWrapper *)ex
+{
+    try { [self amiga]->saveWorkspace([url fileSystemRepresentation]); }
+    catch (VAException &error) { [ex save:error]; }
+}
+
 - (NSString *)stateString
 {
     std::stringstream ss;
@@ -2456,18 +2480,6 @@ NSString *EventSlotName(NSInteger slot)
 - (void)launch:(const void *)listener function:(Callback *)func
 {
     [self emu]->launch(listener, func);
-}
-
-- (void)loadWorkspace:(NSURL *)url exception:(ExceptionWrapper *)ex
-{
-    try { [self emu]->loadWorkspace([url fileSystemRepresentation]); }
-    catch (VAException &error) { [ex save:error]; }
-}
-
-- (void)saveWorkspace:(NSURL *)url exception:(ExceptionWrapper *)ex
-{
-    try { [self emu]->saveWorkspace([url fileSystemRepresentation]); }
-    catch (VAException &error) { [ex save:error]; }
 }
 
 - (NSInteger)get:(Opt)opt

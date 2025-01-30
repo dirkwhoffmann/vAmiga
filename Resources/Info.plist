@@ -54,7 +54,7 @@
 			<key>CFBundleTypeIconSystemGenerated</key>
 			<integer>1</integer>
 			<key>CFBundleTypeName</key>
-			<string>vamiga</string>
+			<string>VAMIGA</string>
 			<key>CFBundleTypeOSTypes</key>
 			<array>
 				<string>vAmiga</string>
@@ -63,6 +63,10 @@
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>de.dirkwhoffmann.retro.vamiga</string>
+			</array>
 			<key>LSTypeIsPackage</key>
 			<integer>0</integer>
 			<key>NSDocumentClass</key>
@@ -136,15 +140,35 @@
 			<key>CFBundleTypeIconSystemGenerated</key>
 			<integer>1</integer>
 			<key>CFBundleTypeName</key>
-			<string>INI</string>
+			<string>RETROSH</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Default</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>de.dirkwhoffmann.retro.retrosh</string>
+			</array>
 			<key>LSTypeIsPackage</key>
 			<false/>
 			<key>NSDocumentClass</key>
 			<string>$(PRODUCT_MODULE_NAME).MyDocument</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeIconSystemGenerated</key>
+			<integer>1</integer>
+			<key>CFBundleTypeName</key>
+			<string>VASNAP</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>de.dirkwhoffmann.retro.vasnap</string>
+			</array>
+			<key>NSDocumentClass</key>
+			<string>MyDocument</string>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
@@ -191,12 +215,12 @@
 				<key>UTTypeIconBackgroundName</key>
 				<string></string>
 				<key>UTTypeIconBadgeName</key>
-				<string>SnapshotIcon</string>
+				<string>vAmigaIcon</string>
 				<key>UTTypeIconText</key>
-				<string></string>
+				<string>Snapshot</string>
 			</dict>
 			<key>UTTypeIdentifier</key>
-			<string>de.dirkwhoffmann.retro.vsnap</string>
+			<string>de.dirkwhoffmann.retro.vasnap</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -208,22 +232,26 @@
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
-				<string>public.data</string>
+				<string>public.shell-script</string>
 			</array>
 			<key>UTTypeDescription</key>
 			<string>RetroShell script</string>
 			<key>UTTypeIcons</key>
 			<dict>
-				<key>UTTypeIconBadgeName</key>
+				<key>UTTypeIconBackgroundName</key>
 				<string></string>
+				<key>UTTypeIconBadgeName</key>
+				<string>vAmigaIcon</string>
+				<key>UTTypeIconText</key>
+				<string>RetroShell</string>
 			</dict>
 			<key>UTTypeIdentifier</key>
-			<string>de.dirkwhoffmann.retro.ini</string>
+			<string>de.dirkwhoffmann.retro.retrosh</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
 				<array>
-					<string>ini</string>
+					<string>retrosh</string>
 				</array>
 			</dict>
 		</dict>
@@ -241,7 +269,7 @@
 				<key>UTTypeIconBackgroundName</key>
 				<string></string>
 				<key>UTTypeIconBadgeName</key>
-				<string>WorkspaceIcon</string>
+				<string>vAmigaIcon</string>
 				<key>UTTypeIconText</key>
 				<string>Workspace</string>
 			</dict>
