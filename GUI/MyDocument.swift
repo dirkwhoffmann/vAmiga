@@ -145,7 +145,7 @@ class MyDocument: NSDocument {
         debug(.media)
         Swift.print("save \(url) ofType \(typeName)")
 
-        if typeName.uppercased() == "VAMIGA" {
+        if typeName == "de.dirkwhoffmann.retro.vamiga" {
 
             do {
                 try emu.amiga.saveWorkspace(url: url)

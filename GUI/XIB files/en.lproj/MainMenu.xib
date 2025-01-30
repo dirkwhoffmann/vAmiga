@@ -43,6 +43,26 @@
                                     <action selector="preferencesAction:" target="-1" id="x7k-IT-b56"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="l4o-aX-0h9">
+                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                            </menuItem>
+                            <menuItem title="Inspector..." keyEquivalent="" id="C9M-zP-0JY" userLabel="Inspector...">
+                                <modifierMask key="keyEquivalentModifierMask" shift="YES"/>
+                                <connections>
+                                    <action selector="inspectorAction:" target="-1" id="bFo-lj-cxL"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Dashboard..." id="Ckv-dN-xz5" userLabel="Monitor...">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="dashboardAction:" target="-1" id="Pgm-eD-MhT"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Console..." keyEquivalent="^" id="MAy-lP-T3Q">
+                                <connections>
+                                    <action selector="consoleAction:" target="-1" id="RLe-Qj-nBq"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="S4e-Lg-pAW">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
@@ -122,43 +142,18 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="aWt-rp-gig"/>
-                            <menuItem title="Configurator..." keyEquivalent="" id="Y6J-U9-htE" userLabel="Configure...">
+                            <menuItem title="Load Snapshot..." id="NWi-bo-jmi" userLabel="Browse Snapshots...">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="configureAction:" target="-1" id="63m-54-OYh"/>
+                                    <action selector="loadSnapshotAction:" target="-1" id="fyx-RT-hxT"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Inspector..." keyEquivalent="" id="jIT-6f-DxM" userLabel="Inspector...">
-                                <modifierMask key="keyEquivalentModifierMask" shift="YES"/>
-                                <connections>
-                                    <action selector="inspectorAction:" target="-1" id="cTd-gU-VFK"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Dashboard..." id="BgY-MS-366" userLabel="Monitor...">
+                            <menuItem title="Save Snapshot..." id="yVD-hA-FZO" userLabel="Browse Snapshots...">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="dashboardAction:" target="-1" id="hps-FK-7Yl"/>
+                                    <action selector="saveSnapshotAction:" target="-1" id="ULN-MC-4bh"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Console..." keyEquivalent="^" id="x3U-7k-jeR">
-                                <connections>
-                                    <action selector="consoleAction:" target="-1" id="Nx9-Xz-OIt"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="MBQ-pb-t04"/>
-                            <menuItem title="Import script..." id="TX7-U7-EG7">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="importScriptAction:" target="-1" id="epr-TO-gZp"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Restore Factory Settings" id="I7G-yt-j3x">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="factorySettingsAction:" target="-1" id="XzW-D3-2Uc"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="bDU-dO-xxe"/>
                             <menuItem title="Take Snapshot" keyEquivalent="+" id="BX4-y5-PoI" userLabel="Take Snapshot">
                                 <connections>
                                     <action selector="takeSnapshotAction:" target="-1" id="eOH-IU-76n"/>
@@ -175,16 +170,11 @@
                                     <action selector="browseSnapshotsAction:" target="-1" id="GRh-zJ-bZz"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Load Snapshot..." id="NWi-bo-jmi" userLabel="Browse Snapshots...">
+                            <menuItem isSeparatorItem="YES" id="bDU-dO-xxe"/>
+                            <menuItem title="Import script..." id="TX7-U7-EG7">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="loadSnapshotAction:" target="-1" id="fyx-RT-hxT"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Save Snapshot..." id="yVD-hA-FZO" userLabel="Browse Snapshots...">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="saveSnapshotAction:" target="-1" id="ULN-MC-4bh"/>
+                                    <action selector="importScriptAction:" target="-1" id="epr-TO-gZp"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="5uV-Cr-Apb"/>
@@ -204,6 +194,19 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="captureScreenAction:" target="-1" id="1Q3-p1-pur"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="MBQ-pb-t04"/>
+                            <menuItem title="Configure..." keyEquivalent="" id="Y6J-U9-htE" userLabel="Configure...">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="configureAction:" target="-1" id="63m-54-OYh"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Restore Factory Settings" id="I7G-yt-j3x">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="factorySettingsAction:" target="-1" id="XzW-D3-2Uc"/>
                                 </connections>
                             </menuItem>
                         </items>

@@ -349,7 +349,7 @@ Amiga::loadWorkspace(const fs::path &path)
         exec("amiga power off");
 
         // Read the config script
-        importScript(path / "config.ini");
+        importScript(path / "config.retrosh");
 
         // Load ROMs
         importRom("rom", path / "rom.bin");
@@ -378,6 +378,8 @@ Amiga::loadWorkspace(const fs::path &path)
 void
 Amiga::saveWorkspace(const fs::path &path)
 {
+    auto now = std::time(nullptr);
+
     auto exportADF = [&](FloppyDrive& drive, string file) {
         
         if (drive.hasDisk()) {
@@ -417,18 +419,19 @@ Amiga::saveWorkspace(const fs::path &path)
     exportHDF(hd2, "hd2.hdf");
     exportHDF(hd3, "hd3.hdf");
     
+    //
     // Prepare the config script
+    //
     
-    // TODO:
-    // Write into stream: amiga power off
-    // Write mem load rom etc.
-    // Write df0 insert ...
+    std::stringstream ss;
     
-    // Write script into stream
+    ss << "# Workspace setup (" << std::ctime(&now) << ")\n";
+    ss << "# Generated with vAmiga " << Amiga::build() << "\n\n";
     
-    exportConfig(path / "config.ini");
-
+    exportConfig(ss);
     
+    std::ofstream file(path / "config.retrosh");
+    file << ss.str();
 }
 
 void
@@ -443,11 +446,12 @@ Amiga::exportConfig(const fs::path &path, bool diff) const
     exportConfig(fs, diff);
 }
 
+// TODO: REMOVE
 void
 Amiga::exportConfig(std::ostream &stream, bool diff) const
 {
-    stream << "# vAmiga " << Amiga::build() << "\n";
-    stream << "\n";
+    // stream << "# vAmiga " << Amiga::build() << "\n";
+    // stream << "\n";
     // stream << "amiga power off\n";
     // stream << "\n";
     CoreComponent::exportConfig(stream, diff);
