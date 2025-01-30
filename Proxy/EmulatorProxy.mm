@@ -1796,13 +1796,6 @@ NSString *EventSlotName(NSInteger slot)
     return [self file]->type();
 }
 
-/*
-- (NSString *)name
-{
-    return @([self file]->getName().c_str());
-}
-*/
-
 - (u64)fnv
 {
     return [self file]->fnv64();
@@ -2077,6 +2070,12 @@ NSString *EventSlotName(NSInteger slot)
 - (FileType)type
 {
     return [self file]->type();
+}
+
+- (NSURL *)path
+{
+    auto nsPath = @([self file]->path.c_str());
+    return [NSURL fileURLWithPath:nsPath];
 }
 
 - (NSInteger)size

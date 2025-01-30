@@ -28,7 +28,7 @@ class MyDocumentController: NSDocumentController {
             }
         }
         
-        // For snapshot files, follow the standard procedure
+        // For workspaces, follow the standard procedure
         return try super.makeDocument(withContentsOf: url, ofType: typeName)
     }
 }

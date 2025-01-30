@@ -23,6 +23,7 @@
 #include "Snapshot.h"
 #include "RomFile.h"
 #include "STFile.h"
+#include "Workspace.h"
 
 namespace vamiga {
 
@@ -55,6 +56,7 @@ MediaFile::make(const fs::path &path, FileType type)
 {
     switch (type) {
 
+        case FileType::WORKSPACE:    return new Workspace(path);
         case FileType::SNAPSHOT:     return new Snapshot(path);
         case FileType::SCRIPT:       return new Script(path);
         case FileType::ADF:          return new ADFFile(path);
@@ -68,7 +70,7 @@ MediaFile::make(const fs::path &path, FileType type)
         case FileType::EXTENDED_ROM: return new ExtendedRomFile(path);
 
         default:
-            return nullptr;
+            throw VAException(VAError::FILE_TYPE_MISMATCH, path);
     }
 }
 

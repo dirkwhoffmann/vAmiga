@@ -46,8 +46,13 @@ void
 AmigaFile::init(const std::filesystem::path &path)
 {
     std::ifstream stream(path, std::ios::binary);
-    if (!stream.is_open()) throw VAException(VAError::FILE_NOT_FOUND, path);
-
+    
+    if (!stream.is_open()) {
+        throw VAException(VAError::FILE_NOT_FOUND, path);
+    }
+    if (!isCompatiblePath(path)) {
+        throw VAException(VAError::FILE_TYPE_MISMATCH, path);
+    }
     std::ostringstream sstr(std::ios::binary);
     sstr << stream.rdbuf();
     init(sstr.str());

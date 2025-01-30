@@ -11,6 +11,8 @@ import UniformTypeIdentifiers
 
 extension UTType {
 
+    static let workspace = UTType("de.dirkwhoffmann.retro.vamiga")!
+    static let snapshot = UTType("de.dirkwhoffmann.retro.vasnap")!
     static let adf = UTType("de.dirkwhoffmann.retro.adf")!
     static let adz = UTType("de.dirkwhoffmann.retro.adf")!
     static let dms = UTType("de.dirkwhoffmann.retro.dms")!
@@ -19,7 +21,6 @@ extension UTType {
     static let hdz = UTType("de.dirkwhoffmann.retro.hdz")!
     static let img = UTType("de.dirkwhoffmann.retro.img")!
     static let ini = UTType("de.dirkwhoffmann.retro.ini")!
-    static let vamiga = UTType("de.dirkwhoffmann.retro.vamiga")!
 }
 
 @MainActor
@@ -91,7 +92,7 @@ class MyDocument: NSDocument {
             do {
                 switch type {
 
-                case .SNAPSHOT, .SCRIPT, .ADF, .EADF, .IMG, .ST, .DMS, .EXE, .DIR, .HDF:
+                case .WORKSPACE, .SNAPSHOT, .SCRIPT, .ADF, .EADF, .IMG, .ST, .DMS, .EXE, .DIR, .HDF:
 
                     return try MediaFileProxy.make(with: newUrl, type: type)
 
@@ -117,7 +118,6 @@ class MyDocument: NSDocument {
     //
     
     
-    // nonisolated
     override open func read(from url: URL, ofType typeName: String) throws {
              
         debug(.media)
@@ -128,7 +128,7 @@ class MyDocument: NSDocument {
         debug(.media)
         
         do {
-            try addMedia(url: url, allowedTypes: [.SNAPSHOT])
+            try addMedia(url: url, allowedTypes: [.WORKSPACE])
 
         } catch let error as VAError {
 
@@ -183,15 +183,15 @@ class MyDocument: NSDocument {
                   force: Bool = false,
                   remember: Bool = true) throws {
         
+        Swift.print("allowed typed = \(types)")
         let file = try createMediaFileProxy(from: url, allowedTypes: types)
-
+        Swift.print("file type = \(file.type)")
         // Remember the URL if requested
         if remember {
 
             switch file.type {
 
-            case .SNAPSHOT:
-                // document.snapshots.append(file)
+            case .WORKSPACE, .SNAPSHOT:
                 break
 
             case .ADF, .EADF, .HDF, .EXE, .IMG, .ST:
@@ -202,15 +202,20 @@ class MyDocument: NSDocument {
             }
         }
 
-        try addMedia(proxy: file, df: df, hd: hd, force: force)
+        try addMedia(proxy: file, url: url, df: df, hd: hd, force: force)
     }
     
     func addMedia(proxy: MediaFileProxy,
+                  url: URL? = nil,
                   df: Int = 0,
                   hd: Int = 0,
                   force: Bool = false) throws {
 
         switch proxy.type {
+
+        case .WORKSPACE:
+
+            try processWorkspaceFile(url: url!)
 
         case .SNAPSHOT:
 
@@ -233,6 +238,13 @@ class MyDocument: NSDocument {
         default:
             break
         }
+    }
+
+    func processWorkspaceFile(url: URL, force: Bool = false) throws {
+
+        Swift.print("processWorkspaceFile \(url) force: \(force)")
+
+        try emu.loadWorkspace(url: url)
     }
 
     func processSnapshotFile(_ proxy: MediaFileProxy, force: Bool = false) throws {

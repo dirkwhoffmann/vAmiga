@@ -25,18 +25,13 @@ Workspace::isCompatible(const std::filesystem::path &path)
     return suffix == ".VAMIGA";
 }
 
-/*
-bool
-Workspace::isCompatible(const u8 *buf, isize len)
+void
+Workspace::init(const std::filesystem::path &path)
 {
-    return false;
+    // Only proceed if the provided filename points to a directory
+    if (!isCompatiblePath(path)) throw VAException(VAError::FILE_TYPE_MISMATCH);
+    
+    this->path = path;
 }
-
-bool
-Workspace::isCompatible(const Buffer<u8> &buf)
-{
-    return false;
-}
-*/
 
 }

@@ -74,14 +74,23 @@ RomFile::isCompatible(const std::filesystem::path &path)
 {
     auto size = util::getSizeOfFile(path);
     
-    if (size == KB(8) || size == KB(16) ||              // BOOT ROMs
-        size == KB(256) || size == KB(512) ||           // Kickstart ROMs
-        size == KB(256) + 11 || size == KB(512) + 11) { // Encrypted ROMs
-        return false;
-    }
+    const std::vector<isize> allowedSizes = {
         
-    Buffer<u8> buffer(path);
-    return isCompatible(buffer);
+        KB(8), KB(16),              // BOOT ROMs
+        KB(256), KB(512),           // Kickstart ROMs
+        KB(256) + 11, KB(512) + 11  // Encrypted ROMs
+    };
+
+    for (auto allowed: allowedSizes) {
+        
+        if (size == allowed) {
+            
+            Buffer<u8> buffer(path);
+            return isCompatible(buffer);
+        }
+    }
+    
+    return false;
 }
 
 bool

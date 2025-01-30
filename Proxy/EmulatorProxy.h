@@ -925,8 +925,8 @@ NSString *EventSlotName(NSInteger slot);
 + (instancetype)makeWithFileSystem:(FileSystemProxy *)proxy type:(FileType)t exception:(ExceptionWrapper *)ex;
 
 @property (readonly) FileType type;
-@property (readonly) u64 fnv;
 @property (readonly) NSInteger size;
+@property (readonly) u64 fnv;
 @property (readonly) BOOL compressed;
 
 @property (readonly) u8 *data;
@@ -959,6 +959,7 @@ NSString *EventSlotName(NSInteger slot);
 + (FileType) typeOfUrl:(NSURL *)url;
 
 @property (readonly) FileType type;
+@property (readonly) NSURL *path;
 @property (readonly) NSInteger size;
 @property (readonly) NSString *getSizeAsString;
 @property (readonly) u64 fnv;

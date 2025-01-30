@@ -44,7 +44,7 @@ bool
 Snapshot::isCompatible(const std::filesystem::path &path)
 {
     auto suffix = util::uppercased(path.extension().string());
-    return suffix == ".VAMIGA" && util::matchingFileHeader(path, "VASNAP");
+    return suffix == ".VASNAP" && util::matchingFileHeader(path, "VASNAP");
 }
 
 bool
