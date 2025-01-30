@@ -117,7 +117,7 @@ class AudioFilter final : public SubComponent {
             .type           = Class::AudioFilter,
             .name           = "AudioFilter",
             .description    = "Audio Filter",
-            .shell          = "filter"
+            .shell          = "audio filter"
         },
         {
             .type           = Class::AudioFilter,

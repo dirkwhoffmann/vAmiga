@@ -25,19 +25,19 @@ class RemoteServer : public SubComponent {
 
         .name           = "SerServer",
         .description    = "Serial Port Server",
-        .shell          = "serial"
+        .shell          = "server serial"
     }, {
         .name           = "RshServer",
         .description    = "Remote Shell Server",
-        .shell          = "rshell"
+        .shell          = "server rshell"
     }, {
         .name           = "PromServer",
         .description    = "Prometheus Server",
-        .shell          = "prom"
+        .shell          = "server prom"
     }, {
         .name           = "GdbServer",
         .description    = "GDB Remote Server",
-        .shell          = "gdb"
+        .shell          = "server gdb"
     }};
 
     ConfigOptions options = {

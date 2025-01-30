@@ -23,7 +23,7 @@ class DiskController final : public SubComponent, public Inspectable<DiskControl
         .type           = Class::DiskController,
         .name           = "DiskController",
         .description    = "Disk Controller",
-        .shell          = "dc"
+        .shell          = "paula dc"
     }};
 
     ConfigOptions options = {

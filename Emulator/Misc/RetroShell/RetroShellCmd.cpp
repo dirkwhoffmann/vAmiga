@@ -18,10 +18,11 @@ namespace vamiga {
 string RetroShellCmd::currentGroup;
 
 void
-RetroShellCmd::add(const std::vector<string> &tokens,
+RetroShellCmd::add(const std::vector<string> &rawtokens,
              const string &help,
              std::function<void (Arguments&, long)> func, long param)
 {
+    auto tokens = util::split(rawtokens, ' ');
     add(tokens, { }, { }, { tokens.back(), help }, func, param);
 }
 
@@ -34,11 +35,12 @@ RetroShellCmd::add(const std::vector<string> &tokens,
 }
 
 void
-RetroShellCmd::add(const std::vector<string> &tokens,
+RetroShellCmd::add(const std::vector<string> &rawtokens,
              const std::vector<string> &arguments,
              const string &help,
              std::function<void (Arguments&, long)> func, long param)
 {
+    auto tokens = util::split(rawtokens, ' ');
     add(tokens, arguments, { }, { tokens.back(), help }, func, param);
 }
 
@@ -52,12 +54,13 @@ RetroShellCmd::add(const std::vector<string> &tokens,
 }
 
 void
-RetroShellCmd::add(const std::vector<string> &tokens,
+RetroShellCmd::add(const std::vector<string> &rawtokens,
              const std::vector<string> &requiredArgs,
              const std::vector<string> &optionalArgs,
              const string &help,
              std::function<void (Arguments&, long)> func, long param)
 {
+    auto tokens = util::split(rawtokens, ' ');
     add(tokens, requiredArgs, optionalArgs, { tokens.back(), help }, func, param);
 }
 

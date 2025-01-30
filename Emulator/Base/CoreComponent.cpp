@@ -365,32 +365,36 @@ CoreComponent::exportConfig(std::ostream& ss, bool diff) const
 {
     bool first = true;
 
-    for (auto &opt: getOptions()) {
-
-        auto current = getOption(opt);
-        auto fallback = getFallback(opt);
-
-        if (!diff || current != fallback) {
-
-            if (first) {
-
-                ss << "# " << description() << std::endl << std::endl;
-                first = false;
+    if (string(shellName()) != "") {
+        
+        auto cmd = "try " + string(shellName());
+        
+        for (auto &opt: getOptions()) {
+            
+            auto current = getOption(opt);
+            auto fallback = getFallback(opt);
+            
+            if (!diff || current != fallback) {
+                
+                if (first) {
+                    
+                    ss << "# " << description() << std::endl << std::endl;
+                    first = false;
+                }
+                
+                auto currentStr = OptionParser::asPlainString(opt, current);
+                auto fallbackStr = OptionParser::asPlainString(opt, fallback);
+                
+                string line = cmd + " set " + OptEnum::key(opt) + " " + currentStr;
+                string comment = diff ? fallbackStr : OptEnum::help(opt);
+                
+                ss << std::setw(40) << std::left << line << " # " << comment << std::endl;
             }
-
-            auto cmd = "try " + string(shellName());
-            auto currentStr = OptionParser::asPlainString(opt, current);
-            auto fallbackStr = OptionParser::asPlainString(opt, fallback);
-
-            string line = cmd + " set " + OptEnum::key(opt) + " " + currentStr;
-            string comment = diff ? fallbackStr : OptEnum::help(opt);
-
-            ss << std::setw(40) << std::left << line << " # " << comment << std::endl;
         }
+        
+        if (!first) ss << std::endl;
     }
-
-    if (!first) ss << std::endl;
-
+    
     for (auto &sub: subComponents) {
 
         sub->exportConfig(ss, diff);

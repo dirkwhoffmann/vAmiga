@@ -276,7 +276,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         //
         
         cmd = registerComponent(paula);
-        cmd = registerComponent(diskController, root / cmd);
+        cmd = registerComponent(diskController);
         
         
         //
@@ -350,7 +350,8 @@ CommandConsole::initCommands(RetroShellCmd &root)
         //
         
         cmd = registerComponent(audioPort);
-        cmd = registerComponent(audioPort.filter, root / cmd);
+        cmd = registerComponent(audioPort.filter);
+        // cmd = registerComponent(audioPort.filter, root / cmd);
         
         
         //
@@ -602,33 +603,30 @@ CommandConsole::initCommands(RetroShellCmd &root)
             
             cmd = registerComponent(*hd[i]);
             
-            if (i != 4) {
+            root.add({cmd, "connect"},
+                     "Connects the hard drive",
+                     [this](Arguments& argv, long value) {
                 
-                root.add({cmd, ""},
-                         "Displays the current configuration",
-                         [this](Arguments& argv, long value) {
-                    
-                    dump(*amiga.hd[value], Category::Config);
-                    
-                }, i);
+                emulator.set(Opt::HDC_CONNECT, true, {value});
                 
-                root.add({cmd, "connect"},
-                         "Connects the hard drive",
-                         [this](Arguments& argv, long value) {
-                    
-                    emulator.set(Opt::HDC_CONNECT, true, {value});
-                    
-                }, i);
+            }, i);
+            
+            root.add({cmd, "disconnect"},
+                     "Disconnects the hard drive",
+                     [this](Arguments& argv, long value) {
                 
-                root.add({cmd, "disconnect"},
-                         "Disconnects the hard drive",
-                         [this](Arguments& argv, long value) {
-                    
-                    emulator.set(Opt::HDC_CONNECT, false, {value});
-                    
-                }, i);
+                emulator.set(Opt::HDC_CONNECT, false, {value});
                 
-            }
+            }, i);
+            
+            root.add({cmd, "attach"}, { Arg::path },
+                     "Attaches a hard drive image",
+                     [this](Arguments& argv, long value) {
+                
+                auto path = argv.front();
+                amiga.hd[value]->init(path);
+                
+            }, i);
             
             root.add({cmd, "geometry"},  { "<cylinders>", "<heads>", "<sectors>" },
                      "Changes the disk geometry",
@@ -697,64 +695,64 @@ CommandConsole::initCommands(RetroShellCmd &root)
             dump(remoteManager, Category::Status);
         });
         
-        cmd = registerComponent(remoteManager.serServer, root / "server");
+        cmd = registerComponent(remoteManager.serServer);
 
-        cmd = registerComponent(remoteManager.rshServer, root / "server");
+        cmd = registerComponent(remoteManager.rshServer);
 
-        root.add({"server", cmd, "start"},
+        root.add({cmd, "start"},
                  "Starts the retro shell server",
                  [this](Arguments& argv, long value) {
             
             remoteManager.rshServer.start();
         });
         
-        root.add({"server", cmd, "stop"},
+        root.add({cmd, "stop"},
                  "Stops the retro shell server",
                  [this](Arguments& argv, long value) {
             
             remoteManager.rshServer.stop();
         });
         
-        root.add({"server", cmd, "disconnect"},
+        root.add({cmd, "disconnect"},
                  "Disconnects a client",
                  [this](Arguments& argv, long value) {
             
             remoteManager.rshServer.disconnect();
         });
 
-        cmd = registerComponent(remoteManager.promServer, root / "server");
+        cmd = registerComponent(remoteManager.promServer);
 
-        root.add({"server", cmd, "start"},
+        root.add({cmd, "start"},
                  "Starts the Prometheus server",
                  [this](Arguments& argv, long value) {
 
             remoteManager.promServer.start();
         });
 
-        root.add({"server", cmd, "stop"},
+        root.add({cmd, "stop"},
                  "Stops the Prometheus server",
                  [this](Arguments& argv, long value) {
 
             remoteManager.promServer.stop();
         });
 
-        root.add({"server", cmd, "disconnect"},
+        root.add({cmd, "disconnect"},
                  "Disconnects a client",
                  [this](Arguments& argv, long value) {
 
             remoteManager.promServer.disconnect();
         });
 
-        cmd = registerComponent(remoteManager.gdbServer, root / "server");
+        cmd = registerComponent(remoteManager.gdbServer);
         
-        root.add({"server", cmd, "attach"}, { Arg::process },
+        root.add({cmd, "attach"}, { Arg::process },
                  "Attaches the GDB server to a process",
                  [this](Arguments& argv, long value) {
             
             remoteManager.gdbServer.attach(argv.front());
         });
         
-        root.add({"server", cmd, "detach"},
+        root.add({cmd, "detach"},
                  "Detaches the GDB server from a process",
                  [this](Arguments& argv, long value) {
             

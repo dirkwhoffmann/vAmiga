@@ -55,7 +55,7 @@ enum class Class : long
     ZorroManager,
     
     // Ports
-    AudipPort,
+    AudioPort,
     ControlPort,
     SerialPort,
     VideoPort,

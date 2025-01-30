@@ -6,6 +6,7 @@ MediaFile.cpp
 AmigaFile.cpp
 Snapshot.cpp
 Script.cpp
+Workspace.cpp
 
 )
 

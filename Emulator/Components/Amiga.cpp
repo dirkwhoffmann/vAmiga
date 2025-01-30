@@ -310,45 +310,66 @@ Amiga::setOption(Opt option, i64 value)
 void
 Amiga::loadWorkspace(const fs::path &path)
 {
+    std::stringstream ss;
+
     auto exec = [&](const string &cmd) {
         
-        retroShell.asyncExec("try " + cmd);
+        ss << "try " << cmd << "\n";
     };
-    auto importADF = [&](FloppyDrive& drive, string file) {
+    auto importScript = [&](const fs::path &path) {
         
-        exec("df0 insert " + (path / file).string());
-        // try { ADFFile adf(file); drive.insertMediaFile(adf, false); } catch (...) { }
+        if (fs::exists(path)) {
+            Script script(path); script.writeToStream(ss);
+        }
     };
-    auto importHDF = [&](HardDrive& drive, string file) {
-
-        exec("hd0 attach " + (path / file).string());
-    };
+    auto importRom = [&](const string type, const fs::path &path) {
     
+        if (fs::exists(path)) {
+            exec("mem load " + type + " " + path.string());
+        }
+    };
+    auto importADF = [&](FloppyDrive& drive, const fs::path &path) {
+    
+        if (fs::exists(path)) {
+            exec(string(drive.shellName()) + " insert " + path.string());
+        }
+    };
+    auto importHDF = [&](HardDrive& drive, const fs::path &path) {
+        
+        if (fs::exists(path)) {
+            exec(string(drive.shellName()) + " attach " + path.string());
+        }
+    };
+        
     try {
+
+        // Prepare the setup script...
         
         // Power off the Amiga
         exec("amiga power off");
-        
-        // Configure the emulator by applying the workspace script
-        Script script(path / "config.ini"); retroShell.asyncExecScript(script);
+
+        // Read the config script
+        importScript(path / "config.ini");
 
         // Load ROMs
-        exec("mem load ROM " + (path / "rom.bin").string());
-        exec("mem load WOM " + (path / "wom.bin").string());
-        exec("mem load EXT " + (path / "ext.bin").string());
+        importRom("rom", path / "rom.bin");
+        importRom("ext", path / "ext.bin");
         
         // Load media
-        importADF(df0, "df0.adf");
-        importADF(df1, "df1.adf");
-        importADF(df2, "df2.adf");
-        importADF(df3, "df3.adf");
-        importHDF(hd0, "hd0.hdf");
-        importHDF(hd1, "hd1.hdf");
-        importHDF(hd2, "hd2.hdf");
-        importHDF(hd3, "hd3.hdf");
+        importADF(df0, path / "df0.adf");
+        importADF(df1, path / "df1.adf");
+        importADF(df2, path / "df2.adf");
+        importADF(df3, path / "df3.adf");
+        importHDF(hd0, path / "hd0.hdf");
+        importHDF(hd1, path / "hd1.hdf");
+        importHDF(hd2, path / "hd2.hdf");
+        importHDF(hd3, path / "hd3.hdf");
 
         // Power on the Amiga
         exec("amiga power on");
+        
+        // Execute the setup script
+        retroShell.asyncExecScript(ss);
         
     } catch (...) { }
 
@@ -370,12 +391,15 @@ Amiga::saveWorkspace(const fs::path &path)
         }
     };
 
-    // If a file with the specified name exists, replace it by a directoy
+    // If a file with the specified name exists, delete it
     if (fs::exists(path) && !fs::is_directory(path)) fs::remove(path);
     
-    // Create the directory if it does not exist
+    // Create the directory if necessary
     if (!fs::exists(path)) fs::create_directories(path);
         
+    // Remove old files
+    for (const auto& entry : fs::directory_iterator(path)) fs::remove_all(entry.path());
+    
     // Save ROMs
     if (mem.hasRom()) mem.saveRom(path / "rom.bin");
     if (mem.hasWom()) mem.saveWom(path / "wom.bin");
@@ -424,10 +448,10 @@ Amiga::exportConfig(std::ostream &stream, bool diff) const
 {
     stream << "# vAmiga " << Amiga::build() << "\n";
     stream << "\n";
-    stream << "amiga power off\n";
-    stream << "\n";
+    // stream << "amiga power off\n";
+    // stream << "\n";
     CoreComponent::exportConfig(stream, diff);
-    stream << "amiga power on\n";
+    // stream << "amiga power on\n";
 }
 
 void
