@@ -2459,6 +2459,18 @@ NSString *EventSlotName(NSInteger slot)
     [self emu]->launch(listener, func);
 }
 
+- (void)loadWorkspace:(NSURL *)url exception:(ExceptionWrapper *)ex
+{
+    try { [self emu]->loadWorkspace([url fileSystemRepresentation]); }
+    catch (VAException &error) { [ex save:error]; }
+}
+
+- (void)saveWorkspace:(NSURL *)url exception:(ExceptionWrapper *)ex
+{
+    try { [self emu]->saveWorkspace([url fileSystemRepresentation]); }
+    catch (VAException &error) { [ex save:error]; }
+}
+
 - (NSInteger)get:(Opt)opt
 {
     return [self emu]->get(opt);

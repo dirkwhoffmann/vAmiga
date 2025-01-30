@@ -320,6 +320,12 @@ public:
     void checkOption(Opt opt, i64 value) override;
     void setOption(Opt option, i64 value) override;
 
+    // Loads a setup from a file
+    void loadWorkspace(const fs::path &path);
+
+    // Saves the current setup to a file
+    void saveWorkspace(const fs::path &path);
+    
     // Exports the current configuration to a script file
     void exportConfig(const fs::path &path, bool diff = false) const;
     void exportConfig(std::ostream& stream, bool diff = false) const;

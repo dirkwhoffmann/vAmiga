@@ -2208,6 +2208,20 @@ VAmiga::set(Opt opt, i64 value, long id)
 }
 
 void
+VAmiga::loadWorkspace(const fs::path &path)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    emu->main.loadWorkspace(path);
+}
+
+void
+VAmiga::saveWorkspace(const fs::path &path) const
+{
+    VAMIGA_PUBLIC_SUSPEND
+    emu->main.saveWorkspace(path);
+}
+
+void
 VAmiga::exportConfig(const fs::path &path, bool diff) const
 {
     VAMIGA_PUBLIC_SUSPEND

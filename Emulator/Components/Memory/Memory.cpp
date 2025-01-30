@@ -749,7 +749,7 @@ Memory::loadExt(const u8 *buf, isize len)
 }
 
 void
-Memory::saveRom(const std::filesystem::path &path)
+Memory::saveRom(const std::filesystem::path &path) const
 {
     if (rom == nullptr) throw VAException(VAError::ROM_MISSING);
 
@@ -758,7 +758,7 @@ Memory::saveRom(const std::filesystem::path &path)
 }
 
 void
-Memory::saveWom(const std::filesystem::path &path)
+Memory::saveWom(const std::filesystem::path &path) const
 {
     if (wom == nullptr) throw VAException(VAError::ROM_MISSING);
 
@@ -767,7 +767,7 @@ Memory::saveWom(const std::filesystem::path &path)
 }
 
 void
-Memory::saveExt(const std::filesystem::path &path)
+Memory::saveExt(const std::filesystem::path &path) const
 {
     if (ext == nullptr) throw VAException(VAError::ROM_MISSING);
 

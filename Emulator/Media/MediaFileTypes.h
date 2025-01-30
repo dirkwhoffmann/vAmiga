@@ -21,6 +21,7 @@ namespace vamiga {
 enum class FileType : long
 {
     UNKNOWN,
+    WORKSPACE,
     SNAPSHOT,
     SCRIPT,
     ADF,
@@ -45,6 +46,7 @@ struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType>
         switch (value) {
                 
             case FileType::UNKNOWN:      return "UNKNOWN";
+            case FileType::WORKSPACE:    return "WORKSPACE";
             case FileType::SNAPSHOT:     return "SNAPSHOT";
             case FileType::SCRIPT:       return "SCRIPT";
             case FileType::ADF:          return "ADF";
@@ -65,6 +67,7 @@ struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType>
         switch (value) {
                 
             case FileType::UNKNOWN:      return "Unknown";
+            case FileType::WORKSPACE:    return "Emulation Environment";
             case FileType::SNAPSHOT:     return "Snapshot";
             case FileType::SCRIPT:       return "RetroShell Script";
             case FileType::ADF:          return "Amiga Disk File";

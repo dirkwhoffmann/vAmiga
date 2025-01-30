@@ -262,6 +262,20 @@ extension EmulatorProxy {
         if exception.errorCode != .OK { throw VAError(exception) }
     }
     
+    func loadWorkspace(url: URL) throws {
+        
+        let exception = ExceptionWrapper()
+        loadWorkspace(url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+
+    func saveWorkspace(url: URL) throws {
+        
+        let exception = ExceptionWrapper()
+        saveWorkspace(url, exception: exception)
+        if exception.errorCode != .OK { throw VAError(exception) }
+    }
+
     func exportConfig(url: URL) throws {
 
         let exception = ExceptionWrapper()

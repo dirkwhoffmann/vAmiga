@@ -23,9 +23,6 @@ public:
     static bool isCompatible(const u8 *buf, isize len);
     static bool isCompatible(const Buffer<u8> &buffer);
     
-    bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
-    bool isCompatibleBuffer(const u8 *buf, isize len) override { return isCompatible(buf, len); }
-
     
     //
     // Initializing
@@ -46,6 +43,8 @@ public:
 public:
     
     FileType type() const override { return FileType::SCRIPT; }
+    bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
+    bool isCompatibleBuffer(const u8 *buf, isize len) override { return isCompatible(buf, len); }
 
     
     //

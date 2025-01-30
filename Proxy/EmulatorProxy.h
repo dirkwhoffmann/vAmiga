@@ -289,6 +289,8 @@ NSString *EventSlotName(NSInteger slot);
 - (void)finishLine;
 - (void)finishFrame;
 
+- (void)loadWorkspace:(NSURL *)url exception:(ExceptionWrapper *)ex;
+- (void)saveWorkspace:(NSURL *)url exception:(ExceptionWrapper *)ex;
 
 - (NSInteger)get:(Opt)opt;
 - (NSInteger)get:(Opt)opt id:(NSInteger)id;

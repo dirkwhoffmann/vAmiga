@@ -11,8 +11,9 @@
 #include "Amiga.h"
 #include "Emulator.h"
 #include "Option.h"
-#include "Snapshot.h"
-#include "ADFFile.h"
+// #include "Snapshot.h"
+// #include "ADFFile.h"
+#include "Media.h"
 #include "Chrono.h"
 #include <algorithm>
 
@@ -304,6 +305,106 @@ Amiga::setOption(Opt option, i64 value)
         default:
             fatalError;
     }
+}
+
+void
+Amiga::loadWorkspace(const fs::path &path)
+{
+    auto exec = [&](const string &cmd) {
+        
+        retroShell.asyncExec("try " + cmd);
+    };
+    auto importADF = [&](FloppyDrive& drive, string file) {
+        
+        exec("df0 insert " + (path / file).string());
+        // try { ADFFile adf(file); drive.insertMediaFile(adf, false); } catch (...) { }
+    };
+    auto importHDF = [&](HardDrive& drive, string file) {
+
+        exec("hd0 attach " + (path / file).string());
+    };
+    
+    try {
+        
+        // Power off the Amiga
+        exec("amiga power off");
+        
+        // Configure the emulator by applying the workspace script
+        Script script(path / "config.ini"); retroShell.asyncExecScript(script);
+
+        // Load ROMs
+        exec("mem load ROM " + (path / "rom.bin").string());
+        exec("mem load WOM " + (path / "wom.bin").string());
+        exec("mem load EXT " + (path / "ext.bin").string());
+        
+        // Load media
+        importADF(df0, "df0.adf");
+        importADF(df1, "df1.adf");
+        importADF(df2, "df2.adf");
+        importADF(df3, "df3.adf");
+        importHDF(hd0, "hd0.hdf");
+        importHDF(hd1, "hd1.hdf");
+        importHDF(hd2, "hd2.hdf");
+        importHDF(hd3, "hd3.hdf");
+
+        // Power on the Amiga
+        exec("amiga power on");
+        
+    } catch (...) { }
+
+}
+
+void
+Amiga::saveWorkspace(const fs::path &path)
+{
+    auto exportADF = [&](FloppyDrive& drive, string file) {
+        
+        if (drive.hasDisk()) {
+            try { ADFFile adf(drive); adf.writeToFile(path / file); } catch (...) { }
+        }
+    };
+    auto exportHDF = [&](HardDrive& drive, string file) {
+        
+        if (drive.hasDisk()) {
+            try { HDFFile hdf(drive); hdf.writeToFile(path / file); } catch (...) { }
+        }
+    };
+
+    // If a file with the specified name exists, replace it by a directoy
+    if (fs::exists(path) && !fs::is_directory(path)) fs::remove(path);
+    
+    // Create the directory if it does not exist
+    if (!fs::exists(path)) fs::create_directories(path);
+        
+    // Save ROMs
+    if (mem.hasRom()) mem.saveRom(path / "rom.bin");
+    if (mem.hasWom()) mem.saveWom(path / "wom.bin");
+    if (mem.hasExt()) mem.saveExt(path / "ext.bin");
+
+    // Save floppy disks
+    exportADF(df0, "df0.adf");
+    exportADF(df1, "df1.adf");
+    exportADF(df2, "df2.adf");
+    exportADF(df3, "df3.adf");
+
+    // Save hard disks
+    exportHDF(hd0, "hd0.hdf");
+    exportHDF(hd1, "hd1.hdf");
+    exportHDF(hd2, "hd2.hdf");
+    exportHDF(hd3, "hd3.hdf");
+    
+    // Prepare the config script
+    
+    // TODO:
+    // Write into stream: amiga power off
+    // Write mem load rom etc.
+    // Write df0 insert ...
+    
+    // Write script into stream
+    
+    exportConfig(path / "config.ini");
+
+    
 }
 
 void

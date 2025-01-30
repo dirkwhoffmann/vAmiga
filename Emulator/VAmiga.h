@@ -1877,6 +1877,10 @@ public:
     void set(Opt opt, i64 value, long id);
     
     
+    /** @brief  Experimental*/
+    void loadWorkspace(const fs::path &path);
+    void saveWorkspace(const fs::path &path) const;
+
     /** @brief  Exports the current configuration.
      *
      *  The current configuration is exported in form of a RetroShell script.

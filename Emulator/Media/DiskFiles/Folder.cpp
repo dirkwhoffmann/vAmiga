@@ -17,7 +17,10 @@ namespace vamiga {
 bool
 Folder::isCompatible(const std::filesystem::path &path)
 {
-    return util::isDirectory(path);
+    if (!util::isDirectory(path)) return false;
+    
+    auto suffix = util::uppercased(path.extension().string());
+    return suffix != ".VAMIGA";
 }
 
 bool

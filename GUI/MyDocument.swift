@@ -143,9 +143,21 @@ class MyDocument: NSDocument {
     override func save(to url: URL, ofType typeName: String, for saveOperation: NSDocument.SaveOperationType) async throws {
             
         debug(.media)
-        
-        if typeName == "vAmiga" {
+        Swift.print("save \(url) ofType \(typeName)")
 
+        if typeName.uppercased() == "VAMIGA" {
+
+            do {
+                try emu.saveWorkspace(url: url)
+
+            } catch let error as VAError {
+                
+                let what = error.what
+                Swift.print("Error: \(what)")
+                throw NSError(error: error)
+            }
+            
+            /*
             if let snapshot = emu.amiga.takeSnapshot() {
 
                 do {
@@ -156,6 +168,7 @@ class MyDocument: NSDocument {
                     throw NSError(error: error)
                 }
             }
+            */
         }
     }
     

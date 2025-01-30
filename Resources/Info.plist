@@ -50,11 +50,11 @@
 				<string>vAmiga</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>SnapshotIcon</string>
+			<string></string>
 			<key>CFBundleTypeIconSystemGenerated</key>
 			<integer>1</integer>
 			<key>CFBundleTypeName</key>
-			<string>vAmiga</string>
+			<string>vamiga</string>
 			<key>CFBundleTypeOSTypes</key>
 			<array>
 				<string>vAmiga</string>
@@ -184,18 +184,24 @@
 			</array>
 			<key>UTTypeDescription</key>
 			<string>vAmiga Snapshot</string>
+			<key>UTTypeIconFile</key>
+			<string></string>
 			<key>UTTypeIcons</key>
 			<dict>
+				<key>UTTypeIconBackgroundName</key>
+				<string></string>
 				<key>UTTypeIconBadgeName</key>
 				<string>SnapshotIcon</string>
+				<key>UTTypeIconText</key>
+				<string></string>
 			</dict>
 			<key>UTTypeIdentifier</key>
-			<string>de.dirkwhoffmann.retro.vamiga</string>
+			<string>de.dirkwhoffmann.retro.vsnap</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
 				<array>
-					<string>vamiga</string>
+					<string>vasnap</string>
 				</array>
 			</dict>
 		</dict>
@@ -221,6 +227,35 @@
 				</array>
 			</dict>
 		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>com.apple.package</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>vAmiga Workspace</string>
+			<key>UTTypeIconFile</key>
+			<string></string>
+			<key>UTTypeIcons</key>
+			<dict>
+				<key>UTTypeIconBackgroundName</key>
+				<string></string>
+				<key>UTTypeIconBadgeName</key>
+				<string>WorkspaceIcon</string>
+				<key>UTTypeIconText</key>
+				<string>Workspace</string>
+			</dict>
+			<key>UTTypeIdentifier</key>
+			<string>de.dirkwhoffmann.retro.vamiga</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>vamiga</string>
+				</array>
+			</dict>
+		</dict>
+		<dict/>
 	</array>
 	<key>UTImportedTypeDeclarations</key>
 	<array>
