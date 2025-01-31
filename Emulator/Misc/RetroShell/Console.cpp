@@ -653,7 +653,7 @@ Console::help(const RetroShellCmd& current)
         *this << it.fullName;
         (*this).tab(tab);
         *this << " : ";
-        *this << it.help.second;
+        *this << it.help;
         *this << '\n';
     }
 

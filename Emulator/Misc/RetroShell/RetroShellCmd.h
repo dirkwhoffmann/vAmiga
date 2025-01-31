@@ -44,11 +44,11 @@ static const std::string string     = "<string>";
 
 struct RetroShellCmdDescriptor {
     
-    const std::vector<string> tokens;
-    const std::vector<string> requiredArgs;
-    const std::vector<string> &optionalArgs;
-    string help;
-    string argHelp;
+    const std::vector<string> &tokens = {};
+    const std::vector<string> &requiredArgs = {};
+    const std::vector<string> &optionalArgs = {};
+    const string &helpName = "";
+    const string help = "";
     std::function<void (Arguments&, long)> func = nullptr;
     long param = 0;
 };
@@ -67,9 +67,13 @@ struct RetroShellCmd {
     // Full name of this command (e.g., "df0 eject")
     string fullName;
 
-    // Help description for this command
-    std::pair<string, string> help;
-
+    // Name of this command as displayed in help messages (e.g., "[g]oto")
+    string helpName;
+    
+    // Help description of this command (e.g., "Eject disk")
+    // std::pair<string, string> help;
+    string help;
+    
     // List of required arguments
     std::vector<string> requiredArgs;
 
@@ -95,9 +99,8 @@ struct RetroShellCmd {
 
     // Creates a new node in the command tree
     void add(const RetroShellCmdDescriptor &descriptor);
-
     
-    // Deprecated...
+    // Wrappers
     void add(const std::vector<string> &tokens,
              const string &help,
              std::function<void (Arguments&, long)> func = nullptr, long param = 0);

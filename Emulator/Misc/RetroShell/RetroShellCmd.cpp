@@ -29,7 +29,7 @@ RetroShellCmd::add(const RetroShellCmdDescriptor &descriptor)
     auto name = tokens.back();
     
     // Determine how the token is displayed in help messages
-    auto displayName = descriptor.argHelp.empty() ? name : descriptor.argHelp;
+    auto helpName = descriptor.helpName.empty() ? name : descriptor.helpName;
 
     // Traversing the command tree
     RetroShellCmd *node = seek(std::vector<string> { tokens.begin(), tokens.end() - 1 });
@@ -38,11 +38,12 @@ RetroShellCmd::add(const RetroShellCmdDescriptor &descriptor)
     // Create the instruction
     RetroShellCmd cmd;
     cmd.name = name;
-    cmd.fullName = (node->fullName.empty() ? "" : node->fullName + " ") + displayName;
+    cmd.fullName = (node->fullName.empty() ? "" : node->fullName + " ") + helpName;
+    cmd.helpName = helpName;
     cmd.groupName = currentGroup;
     cmd.requiredArgs = descriptor.requiredArgs;
     cmd.optionalArgs = descriptor.optionalArgs;
-    cmd.help = { descriptor.argHelp, descriptor.help };
+    cmd.help = descriptor.help;
     cmd.callback = descriptor.func;
     cmd.param = descriptor.param;
     cmd.hidden = descriptor.help.empty();
@@ -58,8 +59,13 @@ RetroShellCmd::add(const std::vector<string> &rawtokens,
              const string &help,
              std::function<void (Arguments&, long)> func, long param)
 {
-    auto tokens = util::split(rawtokens, ' ');
-    add(tokens, { }, { }, { tokens.back(), help }, func, param);
+    add(RetroShellCmdDescriptor {
+        
+        .tokens = rawtokens,
+        .help = help,
+        .func = func,
+        .param = param
+    });
 }
 
 void
@@ -111,8 +117,8 @@ RetroShellCmd::add(const std::vector<string> &rawtokens,
         .tokens = rawtokens,
         .requiredArgs = requiredArgs,
         .optionalArgs = optionalArgs,
+        .helpName = help.first,
         .help = help.second,
-        .argHelp = help.first,
         .func = func,
         .param = param
     });
