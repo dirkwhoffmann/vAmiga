@@ -770,10 +770,10 @@ Console::initCommands(RetroShellCmd &root)
 
         root.add({
             
-            .tokens = {"welcome"},
-            .hidden = true,
-            .help = "Prints the welcome message",
-            .func = [this](Arguments& argv, long value) {
+            .tokens         = {"welcome"},
+            .hidden         = true,
+            .help           = "Prints the welcome message",
+            .func           = [this](Arguments& argv, i64 value) {
                 
                 welcome();
             }
@@ -781,9 +781,9 @@ Console::initCommands(RetroShellCmd &root)
         
         root.add({
             
-            .tokens = {"."},
-            .help = "Enter or exit the debugger",
-            .func = [this](Arguments& argv, long value) {
+            .tokens         = {"."},
+            .help           = "Enter or exit the debugger",
+            .func           = [this](Arguments& argv, i64 value) {
                 
                 retroShell.switchConsole();
             }
@@ -791,9 +791,9 @@ Console::initCommands(RetroShellCmd &root)
         
         root.add({
             
-            .tokens = {"clear"},
-            .help = "Clear the console window",
-            .func = [this](Arguments& argv, long value) {
+            .tokens         = {"clear"},
+            .help           = "Clear the console window",
+            .func           = [this](Arguments& argv, i64 value) {
                 
                 clear();
             }
@@ -801,9 +801,9 @@ Console::initCommands(RetroShellCmd &root)
 
         root.add({
             
-            .tokens = {"close"},
-            .help = "Hide the console window",
-            .func = [this](Arguments& argv, long value) {
+            .tokens         = {"close"},
+            .help           = "Hide the console window",
+            .func           = [this](Arguments& argv, i64 value) {
                 
                 msgQueue.put(Msg::RSH_CLOSE);
             }
@@ -811,10 +811,10 @@ Console::initCommands(RetroShellCmd &root)
 
         root.add({
             
-            .tokens = {"help"},
-            .optionalArgs = {Arg::command},
-            .help = "Print usage information",
-            .func = [this](Arguments& argv, long value) {
+            .tokens         = {"help"},
+            .optionalArgs   = {Arg::command},
+            .help           = "Print usage information",
+            .func           = [this](Arguments& argv, i64 value) {
                 
                 help(argv.empty() ? "" : argv.front());
             }
@@ -822,9 +822,9 @@ Console::initCommands(RetroShellCmd &root)
 
         root.add({
             
-            .tokens = {"state"},
-            .hidden = true,
-            .func = [this](Arguments& argv, long value) {
+            .tokens         = {"state"},
+            .hidden         = true,
+            .func           = [this](Arguments& argv, i64 value) {
                 
                 printState();
             }
@@ -832,9 +832,9 @@ Console::initCommands(RetroShellCmd &root)
 
         root.add({
             
-            .tokens = {"joshua"},
-            .hidden = true,
-            .func = [this](Arguments& argv, long value) {
+            .tokens         = {"joshua"},
+            .hidden         = true,
+            .func           = [this](Arguments& argv, i64 value) {
                 
                 *this << "\nGREETINGS PROFESSOR HOFFMANN.\n";
                 *this << "THE ONLY WINNING MOVE IS NOT TO PLAY.\n";
@@ -844,10 +844,10 @@ Console::initCommands(RetroShellCmd &root)
 
         root.add({
             
-            .tokens = {"source"},
-            .requiredArgs = {Arg::path},
-            .help = "Process a command script",
-            .func = [this](Arguments& argv, long value) {
+            .tokens         = {"source"},
+            .requiredArgs   = {Arg::path},
+            .help           = "Process a command script",
+            .func           = [this](Arguments& argv, i64 value) {
                 
                 auto stream = std::ifstream(argv.front());
                 if (!stream.is_open()) throw VAException(VAError::FILE_NOT_FOUND, argv.front());
@@ -857,11 +857,11 @@ Console::initCommands(RetroShellCmd &root)
 
         root.add({
                  
-            .tokens = {"wait"},
-            .hidden = true,
-            .requiredArgs = {Arg::value, Arg::seconds},
-            .help = "Pause the execution of a command script",
-            .func = [this](Arguments& argv, long value) {
+            .tokens         = {"wait"},
+            .hidden         = true,
+            .requiredArgs   = {Arg::value, Arg::seconds},
+            .help           = "Pause the execution of a command script",
+            .func           = [this](Arguments& argv, i64 value) {
                 
                 auto seconds = parseNum(argv[0]);
                 agnus.scheduleRel<SLOT_RSH>(SEC(seconds), RSH_WAKEUP);
@@ -871,9 +871,9 @@ Console::initCommands(RetroShellCmd &root)
 
         root.add({
                  
-            .tokens = {"shutdown"},
-            .help = "Terminates the application",
-            .func = [this](Arguments& argv, long value) {
+            .tokens         = {"shutdown"},
+            .help           = "Terminates the application",
+            .func           = [this](Arguments& argv, i64 value) {
                 
                 msgQueue.put(Msg::ABORT, 0);
             }
@@ -907,9 +907,9 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
         // Register a command for querying the current configuration
         root.add({
             
-            .tokens = {cmd, ""},
-            .help = "Display the current configuration",
-            .func = [this, &c](Arguments& argv, long value) {
+            .tokens     = {cmd, ""},
+            .help       = "Display the current configuration",
+            .func       = [this, &c](Arguments& argv, i64 value) {
                 
                 retroShell.commander.dump(c, Category::Config);
             }
@@ -932,15 +932,15 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
                 // The argument is not an enum. Register a single setter
                 root.add({
                     
-                    .tokens = {cmd, "set", OptEnum::key(opt)},
-                    .requiredArgs = {OptionParser::argList(opt)},
-                    .help = OptEnum::help(opt),
-                    .func = [this](Arguments& argv, long value) {
+                    .tokens         = {cmd, "set", OptEnum::key(opt)},
+                    .requiredArgs   = {OptionParser::argList(opt)},
+                    .help           = OptEnum::help(opt),
+                    .func           = [this](Arguments& argv, i64 value) {
                         
                         emulator.set(Opt(HI_WORD(value)), argv[0], { LO_WORD(value) });
                         msgQueue.put(Msg::CONFIG);
-                    },
-                        .value = HI_W_LO_W(u16(opt), c.objid)
+                        
+                    },  .value = HI_W_LO_W(u16(opt), c.objid)
                 });
 
             } else {
@@ -948,9 +948,9 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
                 // Register a setter for every enum
                 root.add({
                     
-                    .tokens = {cmd, "set", OptEnum::key(opt)},
-                    .requiredArgs = {OptionParser::argList(opt)},
-                    .help = OptEnum::help(opt)
+                    .tokens         = {cmd, "set", OptEnum::key(opt)},
+                    .requiredArgs   = {OptionParser::argList(opt)},
+                    .help           = OptEnum::help(opt)
                 });
                 
                 for (const auto& [first, second] : pairs) {
@@ -958,14 +958,14 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
                     auto help = OptionParser::help(opt, second);
                     root.add({
                         
-                        .tokens = {cmd, "set", OptEnum::key(opt), first },
-                        .help = help.empty() ? "Set to " + first : help,
-                        .func = [this](Arguments& argv, long value) {
+                        .tokens     = {cmd, "set", OptEnum::key(opt), first },
+                        .help       = help.empty() ? "Set to " + first : help,
+                        .func       = [this](Arguments& argv, i64 value) {
                             
                             emulator.set(Opt(HI_WORD(value)), BYTE1(value), { BYTE0(value) });
                             msgQueue.put(Msg::CONFIG);
-                        },
-                            .value = u16(opt) << 16 | second << 8 | c.objid
+                            
+                        },  .value = u16(opt) << 16 | second << 8 | c.objid
                     });
                 }
             }

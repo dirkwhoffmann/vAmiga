@@ -50,7 +50,7 @@ struct RetroShellCmdDescriptor {
     const std::vector<string> &optionalArgs = {};
     const string &helpName = "";
     const string help = "";
-    std::function<void (Arguments&, long)> func = nullptr;
+    std::function<void (Arguments&, i64)> func = nullptr;
     long value = 0;
 };
     

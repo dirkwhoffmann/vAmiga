@@ -77,59 +77,94 @@ CommandConsole::initCommands(RetroShellCmd &root)
     
     RetroShellCmd::currentGroup = "Regression testing";
     
-    root.add({"regression"}, debugBuild ? "Runs the regression tester" : "");
-    
-    root.add({"regression", "setup"}, { ConfigSchemeEnum::argList() }, { Arg::path, Arg::path },
-             "Initializes the test environment",
-             [this](Arguments& argv, long value) {
+    root.add({
         
-        auto scheme = ConfigScheme(parseEnum<ConfigSchemeEnum>(argv[0]));
-        auto rom = argv.size() > 1 ? argv[1] : "";
-        auto ext = argv.size() > 2 ? argv[2] : "";
-        
-        amiga.regressionTester.prepare(scheme, rom, ext);
+        .tokens         = {"regression"},
+        .hidden         = releaseBuild,
+        .help           = "Runs the regression tester"
     });
     
-    root.add({"regression", "run"}, { Arg::path },
-             "Launches a regression test",
-             [this](Arguments& argv, long value) {
+    root.add({
         
-        amiga.regressionTester.run(argv.front());
+        .tokens         = {"regression", "setup"},
+        .requiredArgs   = { ConfigSchemeEnum::argList() },
+        .optionalArgs   = { Arg::path, Arg::path },
+        .help           = "Initializes the test environment",
+        .func           = [this](Arguments& argv, i64 value) {
+            
+            auto scheme = ConfigScheme(parseEnum<ConfigSchemeEnum>(argv[0]));
+            auto rom = argv.size() > 1 ? argv[1] : "";
+            auto ext = argv.size() > 2 ? argv[2] : "";
+            
+            amiga.regressionTester.prepare(scheme, rom, ext);
+        }
     });
     
-    root.add({"screenshot"}, debugBuild ? "Manages screenshots" : "");
-    
-    root.add({"screenshot", "set"},
-             "Configure the screenshot");
-    
-    root.add({"screenshot", "set", "filename"}, { Arg::path },
-             "Assign the screen shot filename",
-             [this](Arguments& argv, long value) {
+    root.add({
         
-        amiga.regressionTester.dumpTexturePath = argv.front();
+        .tokens         = {"regression", "run"},
+        .requiredArgs   = { Arg::path },
+        .help           = "Launches a regression test",
+        .func           = [this](Arguments& argv, i64 value) {
+            
+            amiga.regressionTester.run(argv.front());
+        }
     });
     
-    root.add({"screenshot", "set", "cutout"}, { Arg::value, Arg::value, Arg::value, Arg::value },
-             "Adjust the texture cutout",
-             [this](Arguments& argv, long value) {
+    root.add({
         
-        isize x1 = parseNum(argv[0]);
-        isize y1 = parseNum(argv[1]);
-        isize x2 = parseNum(argv[2]);
-        isize y2 = parseNum(argv[3]);
-        
-        amiga.regressionTester.x1 = x1;
-        amiga.regressionTester.y1 = y1;
-        amiga.regressionTester.x2 = x2;
-        amiga.regressionTester.y2 = y2;
+        .tokens         = {"screenshot"},
+        .hidden         = releaseBuild,
+        .help           = "Manages screenshots"
     });
     
-    root.add({"screenshot", "save"}, { Arg::path },
-             "Saves a screenshot and exits the emulator",
-             [this](Arguments& argv, long value) {
+    root.add({
         
-        amiga.regressionTester.dumpTexture(amiga, argv.front());
+        .tokens         = {"screenshot", "set"},
+        .help           = "Configure the screenshot"
     });
+    
+    root.add({
+        
+        .tokens         = {"screenshot", "set", "filename"},
+        .requiredArgs   = { Arg::path },
+        .help           = "Assign the screen shot filename",
+        .func           = [this](Arguments& argv, i64 value) {
+            
+            amiga.regressionTester.dumpTexturePath = argv.front();
+        }
+    });
+    
+    root.add({
+        
+        .tokens         = {"screenshot", "set", "cutout"},
+        .requiredArgs   = { Arg::value, Arg::value, Arg::value, Arg::value },
+        .help           = "Adjust the texture cutout",
+        .func           = [this](Arguments& argv, i64 value) {
+            
+            isize x1 = parseNum(argv[0]);
+            isize y1 = parseNum(argv[1]);
+            isize x2 = parseNum(argv[2]);
+            isize y2 = parseNum(argv[3]);
+            
+            amiga.regressionTester.x1 = x1;
+            amiga.regressionTester.y1 = y1;
+            amiga.regressionTester.x2 = x2;
+            amiga.regressionTester.y2 = y2;
+        }
+    });
+    
+    root.add({
+        
+        .tokens         = {"screenshot", "save"},
+        .requiredArgs   = { Arg::path },
+        .help           = "Saves a screenshot and exits the emulator",
+        .func           = [this](Arguments& argv, i64 value) {
+            
+            amiga.regressionTester.dumpTexture(amiga, argv.front());
+        }
+    });
+    
     
     //
     // Components
@@ -143,39 +178,49 @@ CommandConsole::initCommands(RetroShellCmd &root)
     
     auto cmd = registerComponent(amiga);
     
-    root.add({cmd, "defaults"},
-             "Displays the user defaults storage",
-             [this](Arguments& argv, long value) {
+    root.add({
         
-        dump(emulator, Category::Defaults);
+        .tokens         = {cmd, "defaults"},
+        .help           = "Displays the user defaults storage",
+        .func           = [this](Arguments& argv, i64 value) {
+            
+            dump(emulator, Category::Defaults);
+        }
     });
     
-    root.add({cmd, "power"}, { Arg::onoff },
-             "Switches the Amiga on or off",
-             [this](Arguments& argv, long value) {
+    root.add({
         
-        parseOnOff(argv[0]) ? emulator.run() : emulator.powerOff();
+        .tokens         = {cmd, "power"},
+        .requiredArgs   = { Arg::onoff },
+        .help           = "Switches the Amiga on or off",
+        .func           = [this](Arguments& argv, i64 value) {
+            
+            parseOnOff(argv[0]) ? emulator.run() : emulator.powerOff();
+        }
     });
     
-    root.add({cmd, "reset"},
-             "Performs a hard reset",
-             [this](Arguments& argv, long value) {
+    root.add({
         
-        amiga.hardReset();
+        .tokens         = {cmd, "reset"},
+        .help           = "Performs a hard reset",
+        .func           = [this](Arguments& argv, i64 value) {
+            
+            amiga.hardReset();
+        }
     });
     
-    root.add({cmd, "init"}, { ConfigSchemeEnum::argList() },
-             "Initializes the Amiga with a predefined scheme",
-             [this](Arguments& argv, long value) {
+    root.add({
         
-        auto scheme = ConfigScheme(parseEnum <ConfigSchemeEnum> (argv[0]));
-        
-        // Don't call this function from within RetroShell. It'll call
-        // initialize() which will reinitialize RetroShell while it is running.
-        // This causes a crash on gcc.
-        // amiga.revertToFactorySettings();
-        emulator.powerOff();
-        emulator.set(scheme);
+        .tokens         = {cmd, "init"},
+        .requiredArgs   = { ConfigSchemeEnum::argList() },
+        .help           = "Initializes the Amiga with a predefined scheme",
+        .func           = [this](Arguments& argv, i64 value) {
+            
+            auto scheme = ConfigScheme(parseEnum <ConfigSchemeEnum> (argv[0]));
+            
+            emulator.powerOff();
+            emulator.set(scheme);
+        }
     });
     
     
@@ -190,21 +235,21 @@ CommandConsole::initCommands(RetroShellCmd &root)
     
     root.add({cmd, "load", "rom"}, { Arg::path },
              "Installs a Kickstart Rom",
-             [this](Arguments& argv, long value) {
+             [this](Arguments& argv, i64 value) {
         
         mem.loadRom(argv.front());
     });
     
     root.add({cmd, "load", "ext"}, { Arg::path },
              "Installs an extension Rom",
-             [this](Arguments& argv, long value) {
+             [this](Arguments& argv, i64 value) {
         
         mem.loadExt(argv.front());
     });
     
     root.add({cmd, "load", "bin"}, { Arg::path, Arg::address },
              "Loads a chunk of memory",
-             [this](Arguments& argv, long value) {
+             [this](Arguments& argv, i64 value) {
         
         fs::path path(argv[0]);
         mem.debugger.load(path, parseAddr(argv[1]));
@@ -215,21 +260,21 @@ CommandConsole::initCommands(RetroShellCmd &root)
     
     root.add({cmd, "save", "rom"}, { Arg::path },
              "Saves the Kickstart Rom",
-             [this](Arguments& argv, long value) {
+             [this](Arguments& argv, i64 value) {
         
         mem.saveRom(argv[0]);
     });
     
     root.add({cmd, "save", "ext"}, { Arg::path },
              "Saves the extension Rom",
-             [this](Arguments& argv, long value) {
+             [this](Arguments& argv, i64 value) {
         
         mem.saveExt(argv[0]);
     });
     
     root.add({cmd, "save", "bin"}, { Arg::path, Arg::address, Arg::count },
              "Loads a chunk of memory",
-             [this](Arguments& argv, long value) {
+             [this](Arguments& argv, i64 value) {
         
         fs::path path(argv[0]);
         mem.debugger.save(path, parseAddr(argv[1]), parseNum(argv[2]));
@@ -295,7 +340,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
     
     root.add({cmd, "send"}, { "<text>" },
              "Sends a text to the serial port",
-             [this](Arguments& argv, long value) {
+             [this](Arguments& argv, i64 value) {
         
         amiga.serialPort << argv[0];
     });
@@ -309,14 +354,14 @@ CommandConsole::initCommands(RetroShellCmd &root)
     
     root.add({cmd, "open"},
              "Opens the DMA debugger",
-             [this](Arguments& argv, long value) {
+             [this](Arguments& argv, i64 value) {
         
         emulator.set(Opt::DMA_DEBUG_ENABLE, true);
     });
     
     root.add({cmd, "close"},
              "Closes the DMA debugger",
-             [this](Arguments& argv, long value) {
+             [this](Arguments& argv, i64 value) {
         
         emulator.set(Opt::DMA_DEBUG_ENABLE, false);
     });
@@ -369,13 +414,17 @@ CommandConsole::initCommands(RetroShellCmd &root)
     
     cmd = registerComponent(keyboard);
     
-    root.add({cmd, "press"}, { Arg::value },
-             "Sends a keycode to the keyboard",
-             [this](Arguments& argv, long value) {
+    root.add({
         
-        auto code = KeyCode(parseNum(argv[0]));
-        emulator.put(Command(Cmd::KEY_PRESS, KeyCommand { .keycode = code, .delay = 0.0 }));
-        emulator.put(Command(Cmd::KEY_RELEASE, KeyCommand { .keycode = code, .delay = 0.5 }));
+        .tokens         = {cmd, "press"},
+        .requiredArgs   = { Arg::value },
+        .help           = "Sends a keycode to the keyboard",
+        .func           = [this](Arguments& argv, i64 value) {
+            
+            auto code = KeyCode(parseNum(argv[0]));
+            emulator.put(Command(Cmd::KEY_PRESS, KeyCommand { .keycode = code, .delay = 0.0 }));
+            emulator.put(Command(Cmd::KEY_RELEASE, KeyCommand { .keycode = code, .delay = 0.5 }));
+        }
     });
     
     
@@ -385,106 +434,137 @@ CommandConsole::initCommands(RetroShellCmd &root)
     
     for (isize i = 0; i <= 1; i++) {
         
-        if (i == 0) cmd = registerComponent(controlPort1.joystick);
-        if (i == 1) cmd = registerComponent(controlPort2.joystick);
+        auto joystick =
+        (i == 0) ? cmd = registerComponent(controlPort1.joystick) :
+        (i == 1) ? cmd = registerComponent(controlPort2.joystick) : "???";
         
-        root.add({cmd, "press"}, { Arg::value },
-                 "Presses a joystick button",
-                 [this](Arguments& argv, long value) {
-            
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-            auto nr = parseNum(argv[0]);
-            
-            switch (nr) {
-                    
-                case 1: port.joystick.trigger(GamePadAction::PRESS_FIRE); break;
-                case 2: port.joystick.trigger(GamePadAction::PRESS_FIRE2); break;
-                case 3: port.joystick.trigger(GamePadAction::PRESS_FIRE3); break;
-                    
-                default:
-                    throw VAException(VAError::OPT_INV_ARG, "1...3");
-            }
-            
-        }, i);
+        root.add({
+                 
+            .tokens         = {joystick, "press"},
+            .requiredArgs   = { Arg::value },
+            .help           = "Presses a joystick button",
+            .func           = [this](Arguments& argv, i64 value) {
+                
+                auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+                auto nr = parseNum(argv[0]);
+                
+                switch (nr) {
+                        
+                    case 1: port.joystick.trigger(GamePadAction::PRESS_FIRE); break;
+                    case 2: port.joystick.trigger(GamePadAction::PRESS_FIRE2); break;
+                    case 3: port.joystick.trigger(GamePadAction::PRESS_FIRE3); break;
+                        
+                    default:
+                        throw VAException(VAError::OPT_INV_ARG, "1...3");
+                }
+            }, .value = i
+        });
         
-        root.add({cmd, "unpress"}, { Arg::value },
-                 "Releases a joystick button",
-                 [this](Arguments& argv, long value) {
+        root.add({
             
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-            auto nr = parseNum(argv[0]);
-            
-            switch (nr) {
-                    
-                case 1: port.joystick.trigger(GamePadAction::RELEASE_FIRE); break;
-                case 2: port.joystick.trigger(GamePadAction::RELEASE_FIRE2); break;
-                case 3: port.joystick.trigger(GamePadAction::RELEASE_FIRE3); break;
-                    
-                default:
-                    throw VAException(VAError::OPT_INV_ARG, "1...3");
-            }
-            
-        }, i);
+            .tokens         = {joystick, "unpress"},
+            .requiredArgs   = { Arg::value },
+            .help           = "Releases a joystick button",
+            .func           = [this](Arguments& argv, i64 value) {
+                
+                auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+                auto nr = parseNum(argv[0]);
+                
+                switch (nr) {
+                        
+                    case 1: port.joystick.trigger(GamePadAction::RELEASE_FIRE); break;
+                    case 2: port.joystick.trigger(GamePadAction::RELEASE_FIRE2); break;
+                    case 3: port.joystick.trigger(GamePadAction::RELEASE_FIRE3); break;
+                        
+                    default:
+                        throw VAException(VAError::OPT_INV_ARG, "1...3");
+                }
+            }, .value = i
+        });
         
-        root.add({cmd, "pull"},
-                 "Pulls the joystick");
+        root.add({
+            
+            .tokens         = {joystick, "pull"},
+            .help           = "Pulls the joystick"
+        });
         
-        root.add({cmd, "pull", "left"},
-                 "Pulls the joystick left",
-                 [this](Arguments& argv, long value) {
+        root.add({
             
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-            port.joystick.trigger(GamePadAction::PULL_LEFT);
-            
-        }, i);
+            .tokens         = {joystick, "pull", "left"},
+            .help           = "Pulls the joystick left",
+            .func           = [this](Arguments& argv, i64 value) {
+                
+                auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+                port.joystick.trigger(GamePadAction::PULL_LEFT);
+                
+            }, .value = i
+        });
         
-        root.add({cmd, "pull", "right"},
-                 "Pulls the joystick right",
-                 [this](Arguments& argv, long value) {
+        root.add({
             
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-            port.joystick.trigger(GamePadAction::PULL_RIGHT);
-            
-        }, i);
+            .tokens         = {joystick, "pull", "right"},
+            .help           = "Pulls the joystick right",
+            .func           = [this](Arguments& argv, i64 value) {
+                
+                auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+                port.joystick.trigger(GamePadAction::PULL_RIGHT);
+                
+            }, .value = i
+        });
         
-        root.add({cmd, "pull", "up"},
-                 "Pulls the joystick up",
-                 [this](Arguments& argv, long value) {
+        root.add({
             
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-            port.joystick.trigger(GamePadAction::PULL_UP);
-            
-        }, i);
+            .tokens         = {joystick, "pull", "up"},
+            .help           = "Pulls the joystick up",
+            .func           = [this](Arguments& argv, i64 value) {
+                
+                auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+                port.joystick.trigger(GamePadAction::PULL_UP);
+                
+            }, .value = i
+        });
         
-        root.add({cmd, "pull", "down"},
-                 "Pulls the joystick down",
-                 [this](Arguments& argv, long value) {
+        root.add({
             
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-            port.joystick.trigger(GamePadAction::PULL_DOWN);
-            
-        }, i);
+            .tokens         = {joystick, "pull", "down"},
+            .help           = "Pulls the joystick down",
+            .func           = [this](Arguments& argv, i64 value) {
+                
+                auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+                port.joystick.trigger(GamePadAction::PULL_DOWN);
+                
+            }, .value = i
+        });
         
-        root.add({cmd, "release"},
-                 "Release a joystick axis");
+        root.add({
+            
+            .tokens         = {joystick, "release"},
+            .help           = "Release a joystick axis"
+        });
         
-        root.add({cmd, "release", "x"},
-                 "Releases the x-axis",
-                 [this](Arguments& argv, long value) {
+        root.add({
             
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-            port.joystick.trigger(GamePadAction::RELEASE_X);
-            
-        }, i);
+            .tokens         = {joystick, "release", "x"},
+            .help           = "Releases the x-axis",
+            .func           = [this](Arguments& argv, i64 value) {
+                
+                auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+                port.joystick.trigger(GamePadAction::RELEASE_X);
+                
+            }, .value = i
+        });
         
-        root.add({cmd, "release", "y"},
-                 "Releases the y-axis",
-                 [this](Arguments& argv, long value) {
+        root.add({
             
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-            port.joystick.trigger(GamePadAction::RELEASE_Y);
-            
-        }, i);
+            .tokens         = {joystick, "release", "y"},
+            .help           = "Releases the y-axis",
+            .func           = [this](Arguments& argv, i64 value) {
+                
+                auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+                port.joystick.trigger(GamePadAction::RELEASE_Y);
+                
+            }, .value = i
+        });
     }
     
     
@@ -502,7 +582,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         root.add({cmd, "press", "left"},
                  "Presses the left mouse button",
-                 [this](Arguments& argv, long value) {
+                 [this](Arguments& argv, i64 value) {
             
             auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
             port.mouse.pressAndReleaseLeft();
@@ -511,7 +591,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         root.add({cmd, "press", "middle"},
                  "Presses the middle mouse button",
-                 [this](Arguments& argv, long value) {
+                 [this](Arguments& argv, i64 value) {
             
             auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
             port.mouse.pressAndReleaseMiddle();
@@ -520,7 +600,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         root.add({cmd, "press", "right"},
                  "Presses the right mouse button",
-                 [this](Arguments& argv, long value) {
+                 [this](Arguments& argv, i64 value) {
             
             auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
             port.mouse.pressAndReleaseRight();
@@ -541,7 +621,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
             
             root.add({cmd, "connect"},
                      "Connects the drive",
-                     [this](Arguments& argv, long value) {
+                     [this](Arguments& argv, i64 value) {
                 
                 emulator.set(Opt::DRIVE_CONNECT, true, { value });
                 
@@ -549,7 +629,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
             
             root.add({cmd, "disconnect"},
                      "Disconnects the drive",
-                     [this](Arguments& argv, long value) {
+                     [this](Arguments& argv, i64 value) {
                 
                 emulator.set(Opt::DRIVE_CONNECT, false, { value });
                 
@@ -558,7 +638,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         root.add({cmd, "eject"},
                  "Ejects a floppy disk",
-                 [this](Arguments& argv, long value) {
+                 [this](Arguments& argv, i64 value) {
             
             amiga.df[value]->ejectDisk();
             
@@ -566,7 +646,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         root.add({cmd, "insert"}, { Arg::path },
                  "Inserts a floppy disk",
-                 [this](Arguments& argv, long value) {
+                 [this](Arguments& argv, i64 value) {
             
             auto path = argv.front();
             amiga.df[value]->swapDisk(path);
@@ -575,7 +655,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         root.add({cmd, "searchpath"}, { Arg::path },
                  "Sets the search path for media files",
-                 [this](Arguments& argv, long value) {
+                 [this](Arguments& argv, i64 value) {
             
             string path = argv.front();
             
@@ -598,7 +678,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         root.add({cmd, "connect"},
                  "Connects the hard drive",
-                 [this](Arguments& argv, long value) {
+                 [this](Arguments& argv, i64 value) {
             
             emulator.set(Opt::HDC_CONNECT, true, {value});
             
@@ -606,7 +686,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         root.add({cmd, "disconnect"},
                  "Disconnects the hard drive",
-                 [this](Arguments& argv, long value) {
+                 [this](Arguments& argv, i64 value) {
             
             emulator.set(Opt::HDC_CONNECT, false, {value});
             
@@ -614,7 +694,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         root.add({cmd, "attach"}, { Arg::path },
                  "Attaches a hard drive image",
-                 [this](Arguments& argv, long value) {
+                 [this](Arguments& argv, i64 value) {
             
             auto path = argv.front();
             amiga.hd[value]->init(path);
@@ -623,7 +703,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         root.add({cmd, "geometry"},  { "<cylinders>", "<heads>", "<sectors>" },
                  "Changes the disk geometry",
-                 [this](Arguments& argv, long value) {
+                 [this](Arguments& argv, i64 value) {
             
             auto c = util::parseNum(argv[0]);
             auto h = util::parseNum(argv[1]);
@@ -650,7 +730,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
     
     root.add({"config", ""},
              "Displays the current configuration",
-             [this](Arguments& argv, long value) {
+             [this](Arguments& argv, i64 value) {
         
         std::stringstream ss;
         amiga.exportConfig(ss);
@@ -659,7 +739,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
     
     root.add({"config", "diff"},
              "Displays the difference to the default configuration",
-             [this](Arguments& argv, long value) {
+             [this](Arguments& argv, i64 value) {
         
         std::stringstream ss;
         amiga.exportDiff(ss);
@@ -683,7 +763,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
     
     root.add({"server", ""},
              "Displays a server status summary",
-             [this](Arguments& argv, long value) {
+             [this](Arguments& argv, i64 value) {
         
         dump(remoteManager, Category::Status);
     });
@@ -694,21 +774,21 @@ CommandConsole::initCommands(RetroShellCmd &root)
     
     root.add({cmd, "start"},
              "Starts the retro shell server",
-             [this](Arguments& argv, long value) {
+             [this](Arguments& argv, i64 value) {
         
         remoteManager.rshServer.start();
     });
     
     root.add({cmd, "stop"},
              "Stops the retro shell server",
-             [this](Arguments& argv, long value) {
+             [this](Arguments& argv, i64 value) {
         
         remoteManager.rshServer.stop();
     });
     
     root.add({cmd, "disconnect"},
              "Disconnects a client",
-             [this](Arguments& argv, long value) {
+             [this](Arguments& argv, i64 value) {
         
         remoteManager.rshServer.disconnect();
     });
@@ -717,21 +797,21 @@ CommandConsole::initCommands(RetroShellCmd &root)
     
     root.add({cmd, "start"},
              "Starts the Prometheus server",
-             [this](Arguments& argv, long value) {
+             [this](Arguments& argv, i64 value) {
         
         remoteManager.promServer.start();
     });
     
     root.add({cmd, "stop"},
              "Stops the Prometheus server",
-             [this](Arguments& argv, long value) {
+             [this](Arguments& argv, i64 value) {
         
         remoteManager.promServer.stop();
     });
     
     root.add({cmd, "disconnect"},
              "Disconnects a client",
-             [this](Arguments& argv, long value) {
+             [this](Arguments& argv, i64 value) {
         
         remoteManager.promServer.disconnect();
     });
@@ -740,14 +820,14 @@ CommandConsole::initCommands(RetroShellCmd &root)
     
     root.add({cmd, "attach"}, { Arg::process },
              "Attaches the GDB server to a process",
-             [this](Arguments& argv, long value) {
+             [this](Arguments& argv, i64 value) {
         
         remoteManager.gdbServer.attach(argv.front());
     });
     
     root.add({cmd, "detach"},
              "Detaches the GDB server from a process",
-             [this](Arguments& argv, long value) {
+             [this](Arguments& argv, i64 value) {
         
         remoteManager.gdbServer.detach();
     });
