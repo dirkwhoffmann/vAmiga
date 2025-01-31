@@ -223,7 +223,7 @@
 				<key>UTTypeIconBadgeName</key>
 				<string>vAmigaIcon</string>
 				<key>UTTypeIconText</key>
-				<string>Snapshot</string>
+				<string>SNAPSHOT</string>
 			</dict>
 			<key>UTTypeIdentifier</key>
 			<string>de.dirkwhoffmann.retro.vasnap</string>
@@ -249,7 +249,7 @@
 				<key>UTTypeIconBadgeName</key>
 				<string>vAmigaIcon</string>
 				<key>UTTypeIconText</key>
-				<string>RetroShell</string>
+				<string>RETROSHELL</string>
 			</dict>
 			<key>UTTypeIdentifier</key>
 			<string>de.dirkwhoffmann.retro.retrosh</string>
@@ -277,7 +277,7 @@
 				<key>UTTypeIconBadgeName</key>
 				<string>vAmigaIcon</string>
 				<key>UTTypeIconText</key>
-				<string>Workspace</string>
+				<string>WORKSPACE</string>
 			</dict>
 			<key>UTTypeIdentifier</key>
 			<string>de.dirkwhoffmann.retro.vamiga</string>
@@ -302,6 +302,8 @@
 			<dict>
 				<key>UTTypeIconBadgeName</key>
 				<string>ADFIcon</string>
+				<key>UTTypeIconText</key>
+				<string>ADF</string>
 			</dict>
 			<key>UTTypeIdentifier</key>
 			<string>de.dirkwhoffmann.retro.adf</string>
@@ -321,7 +323,14 @@
 			<key>UTTypeDescription</key>
 			<string>HDF files</string>
 			<key>UTTypeIcons</key>
-			<dict/>
+			<dict>
+				<key>UTTypeIconBackgroundName</key>
+				<string></string>
+				<key>UTTypeIconBadgeName</key>
+				<string>HDFIcon</string>
+				<key>UTTypeIconText</key>
+				<string>HDF</string>
+			</dict>
 			<key>UTTypeIdentifier</key>
 			<string>de.dirkwhoffmann.retro.hdf</string>
 			<key>UTTypeTagSpecification</key>
@@ -340,7 +349,12 @@
 			<key>UTTypeDescription</key>
 			<string>EXE files</string>
 			<key>UTTypeIcons</key>
-			<dict/>
+			<dict>
+				<key>UTTypeIconBadgeName</key>
+				<string>vAmigaIcon</string>
+				<key>UTTypeIconText</key>
+				<string>EXE</string>
+			</dict>
 			<key>UTTypeIdentifier</key>
 			<string>de.dirkwhoffmann.retro.exe</string>
 			<key>UTTypeTagSpecification</key>
@@ -359,7 +373,12 @@
 			<key>UTTypeDescription</key>
 			<string>DMS files</string>
 			<key>UTTypeIcons</key>
-			<dict/>
+			<dict>
+				<key>UTTypeIconBadgeName</key>
+				<string>ADFIcon</string>
+				<key>UTTypeIconText</key>
+				<string>DMS</string>
+			</dict>
 			<key>UTTypeIdentifier</key>
 			<string>de.dirkwhoffmann.retro.dms</string>
 			<key>UTTypeTagSpecification</key>
@@ -380,7 +399,12 @@
 			<key>UTTypeDescription</key>
 			<string>IMG files</string>
 			<key>UTTypeIcons</key>
-			<dict/>
+			<dict>
+				<key>UTTypeIconBadgeName</key>
+				<string>ADFIcon</string>
+				<key>UTTypeIconText</key>
+				<string>IMG</string>
+			</dict>
 			<key>UTTypeIdentifier</key>
 			<string>de.dirkwhoffmann.retro.img</string>
 			<key>UTTypeTagSpecification</key>
@@ -401,7 +425,12 @@
 			<key>UTTypeDescription</key>
 			<string>Compressed ADF files</string>
 			<key>UTTypeIcons</key>
-			<dict/>
+			<dict>
+				<key>UTTypeIconBadgeName</key>
+				<string>ADFIcon</string>
+				<key>UTTypeIconText</key>
+				<string>ADF</string>
+			</dict>
 			<key>UTTypeIdentifier</key>
 			<string>de.dirkwhoffmann.retro.adz</string>
 			<key>UTTypeTagSpecification</key>
@@ -423,7 +452,11 @@
 			<key>UTTypeIcons</key>
 			<dict>
 				<key>UTTypeIconBackgroundName</key>
+				<string></string>
+				<key>UTTypeIconBadgeName</key>
 				<string>HDFIcon</string>
+				<key>UTTypeIconText</key>
+				<string>HDF</string>
 			</dict>
 			<key>UTTypeIdentifier</key>
 			<string>de.dirkwhoffmann.retro.hdz</string>

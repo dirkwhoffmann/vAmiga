@@ -42,6 +42,17 @@ static const std::string string     = "<string>";
 
 };
 
+struct RetroShellCmdDescriptor {
+    
+    const std::vector<string> tokens;
+    const std::vector<string> requiredArgs;
+    const std::vector<string> &optionalArgs;
+    string help;
+    string argHelp;
+    std::function<void (Arguments&, long)> func = nullptr;
+    long param = 0;
+};
+    
 struct RetroShellCmd {
 
     // Used during command registration
@@ -83,6 +94,10 @@ struct RetroShellCmd {
     //
 
     // Creates a new node in the command tree
+    void add(const RetroShellCmdDescriptor &descriptor);
+
+    
+    // Deprecated...
     void add(const std::vector<string> &tokens,
              const string &help,
              std::function<void (Arguments&, long)> func = nullptr, long param = 0);

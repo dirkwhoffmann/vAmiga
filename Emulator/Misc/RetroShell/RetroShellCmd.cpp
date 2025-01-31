@@ -18,6 +18,42 @@ namespace vamiga {
 string RetroShellCmd::currentGroup;
 
 void
+RetroShellCmd::add(const RetroShellCmdDescriptor &descriptor)
+{
+    assert(!descriptor.tokens.empty());
+
+    // Cleanse the token list (convert { "aaa bbb" } into { "aaa", "bbb" }
+    auto tokens = util::split(descriptor.tokens, ' ');
+
+    // The last entry in the token list is the command name
+    auto name = tokens.back();
+    
+    // Determine how the token is displayed in help messages
+    auto displayName = descriptor.argHelp.empty() ? name : descriptor.argHelp;
+
+    // Traversing the command tree
+    RetroShellCmd *node = seek(std::vector<string> { tokens.begin(), tokens.end() - 1 });
+    assert(node != nullptr);
+    
+    // Create the instruction
+    RetroShellCmd cmd;
+    cmd.name = name;
+    cmd.fullName = (node->fullName.empty() ? "" : node->fullName + " ") + displayName;
+    cmd.groupName = currentGroup;
+    cmd.requiredArgs = descriptor.requiredArgs;
+    cmd.optionalArgs = descriptor.optionalArgs;
+    cmd.help = { descriptor.argHelp, descriptor.help };
+    cmd.callback = descriptor.func;
+    cmd.param = descriptor.param;
+    cmd.hidden = descriptor.help.empty();
+
+    if (!cmd.hidden) currentGroup = "";
+
+    // Register the instruction at the proper location
+    node->subCommands.push_back(cmd);
+}
+
+void
 RetroShellCmd::add(const std::vector<string> &rawtokens,
              const string &help,
              std::function<void (Arguments&, long)> func, long param)
@@ -71,6 +107,16 @@ RetroShellCmd::add(const std::vector<string> &rawtokens,
              std::pair<const string &, const string &> help,
              std::function<void (Arguments&, long)> func, long param)
 {
+    add(RetroShellCmdDescriptor {
+        .tokens = rawtokens,
+        .requiredArgs = requiredArgs,
+        .optionalArgs = optionalArgs,
+        .help = help.second,
+        .argHelp = help.first,
+        .func = func,
+        .param = param
+    });
+    /*
     assert(!rawtokens.empty());
 
     // Cleanse the token list (convert { "aaa bbb" } into { "aaa", "bbb" }
@@ -96,6 +142,7 @@ RetroShellCmd::add(const std::vector<string> &rawtokens,
 
     // Register the instruction
     cmd->subCommands.push_back(d);
+    */
 }
 
 void 
