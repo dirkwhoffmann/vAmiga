@@ -47,9 +47,8 @@ struct RetroShellCmdDescriptor {
     const std::vector<string> &tokens = {};
     bool hidden = false;
     const std::vector<string> &args = {};
-    const std::vector<string> &optArgs = {};
-    const string &helpName = "";
-    const string help = "";
+    const std::vector<string> &extra = {};
+    const std::vector<string> help = {};
     std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr;
     const std::vector<isize> &values = {};
 };
@@ -73,7 +72,7 @@ struct RetroShellCmd {
     
     // Help description of this command (e.g., "Eject disk")
     // std::pair<string, string> help;
-    string help;
+    std::vector<string> help;
     
     // List of required arguments
     std::vector<string> requiredArgs;
@@ -102,31 +101,31 @@ struct RetroShellCmd {
     void add(const RetroShellCmdDescriptor &descriptor);
     
     // Wrappers (DEPRECATED)
-    void add(const std::vector<string> &tokens,
+    [[deprecated]] void add(const std::vector<string> &tokens,
              const string &help,
              std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr, long param = 0);
 
-    void add(const std::vector<string> &tokens,
+    [[deprecated]] void add(const std::vector<string> &tokens,
              std::pair<const string &, const string &> help,
              std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr, long param = 0);
 
-    void add(const std::vector<string> &tokens,
+    [[deprecated]] void add(const std::vector<string> &tokens,
              const std::vector<string> &args,
              const string &help,
              std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr, long param = 0);
 
-    void add(const std::vector<string> &tokens,
+    [[deprecated]] void add(const std::vector<string> &tokens,
              const std::vector<string> &args,
              std::pair<const string &, const string &> help,
              std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr, long param = 0);
 
-    void add(const std::vector<string> &tokens,
+    [[deprecated]] void add(const std::vector<string> &tokens,
              const std::vector<string> &requiredArgs,
              const std::vector<string> &optionalArgs,
              const string &help,
              std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr, long param = 0);
 
-    void add(const std::vector<string> &tokens,
+    [[deprecated]] void add(const std::vector<string> &tokens,
              const std::vector<string> &requiredArgs,
              const std::vector<string> &optionalArgs,
              std::pair<const string &, const string &> help,
@@ -134,20 +133,8 @@ struct RetroShellCmd {
 
     void clone(const std::vector<string> &tokens,
                const string &alias,
-               const string &helpAlias,
                const std::vector<isize> &values = { });
-
-    // DEPRECATED
-    [[deprecated]] void clone(const string &alias,
-               const std::vector<string> &tokens,
-               long param = 0);
-
-    // DEPRECATED
-    [[deprecated]]void clone(const string &alias,
-               const std::vector<string> &tokens,
-               const string &help,
-               long param = 0);
-
+    
     // Returns arguments counts
     isize minArgs() const { return isize(requiredArgs.size()); }
     isize optArgs() const { return isize(optionalArgs.size()); }

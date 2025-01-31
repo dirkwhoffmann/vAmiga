@@ -28,16 +28,16 @@
 			<key>CFBundleTypeIconFile</key>
 			<string></string>
 			<key>CFBundleTypeIconSystemGenerated</key>
-			<integer>0</integer>
+			<integer>1</integer>
 			<key>CFBundleTypeName</key>
 			<string>ADF</string>
 			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
+			<string>Editor</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>de.dirkwhoffmann.retro.adf</string>
+				<string>public.retro.adf</string>
 			</array>
 			<key>NSDocumentClass</key>
 			<string>$(PRODUCT_MODULE_NAME).MyDocument</string>
@@ -50,12 +50,12 @@
 			<key>CFBundleTypeName</key>
 			<string>ADZ</string>
 			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
+			<string>Editor</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>de.dirkwhoffmann.retro.adz</string>
+				<string>public.retro.adz</string>
 			</array>
 			<key>NSDocumentClass</key>
 			<string>$(PRODUCT_MODULE_NAME).MyDocument</string>
@@ -68,12 +68,12 @@
 			<key>CFBundleTypeName</key>
 			<string>DMS</string>
 			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
+			<string>Editor</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>de.dirkwhoffmann.retro.dms</string>
+				<string>public.retro.dms</string>
 			</array>
 			<key>NSDocumentClass</key>
 			<string>$(PRODUCT_MODULE_NAME).MyDocument</string>
@@ -84,12 +84,12 @@
 			<key>CFBundleTypeName</key>
 			<string>EXE</string>
 			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
+			<string>Editor</string>
 			<key>LSHandlerRank</key>
 			<string>Default</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>de.dirkwhoffmann.retro.exe</string>
+				<string>public.retro.exe</string>
 			</array>
 			<key>NSDocumentClass</key>
 			<string>$(PRODUCT_MODULE_NAME).MyDocument</string>
@@ -98,16 +98,16 @@
 			<key>CFBundleTypeIconFile</key>
 			<string></string>
 			<key>CFBundleTypeIconSystemGenerated</key>
-			<integer>0</integer>
+			<integer>1</integer>
 			<key>CFBundleTypeName</key>
 			<string>HDF</string>
 			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
+			<string>Editor</string>
 			<key>LSHandlerRank</key>
 			<string>Owner</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>de.dirkwhoffmann.retro.hdf</string>
+				<string>public.retro.hdf</string>
 			</array>
 			<key>NSDocumentClass</key>
 			<string>$(PRODUCT_MODULE_NAME).MyDocument</string>
@@ -123,10 +123,10 @@
 			<string>Default</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>de.dirkwhoffmann.retro.hdz</string>
+				<string>public.retro.hdz</string>
 			</array>
 			<key>NSDocumentClass</key>
-			<string>MyDocument</string>
+			<string>$(PRODUCT_MODULE_NAME).MyDocument</string>
 		</dict>
 		<dict>
 			<key>CFBundleTypeIconSystemGenerated</key>
@@ -139,10 +139,10 @@
 			<string>Default</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>de.dirkwhoffmann.retro.img</string>
+				<string>public.retro.img</string>
 			</array>
 			<key>NSDocumentClass</key>
-			<string>MyDocument</string>
+			<string>$(PRODUCT_MODULE_NAME).MyDocument</string>
 		</dict>
 		<dict>
 			<key>CFBundleTypeIconSystemGenerated</key>
@@ -150,7 +150,7 @@
 			<key>CFBundleTypeName</key>
 			<string>RETROSH</string>
 			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
+			<string>Editor</string>
 			<key>LSHandlerRank</key>
 			<string>Default</string>
 			<key>LSItemContentTypes</key>
@@ -162,7 +162,7 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeIconSystemGenerated</key>
-			<integer>0</integer>
+			<integer>1</integer>
 			<key>CFBundleTypeName</key>
 			<string>VASNAP</string>
 			<key>CFBundleTypeRole</key>
@@ -174,7 +174,7 @@
 				<string>de.dirkwhoffmann.retro.vasnap</string>
 			</array>
 			<key>NSDocumentClass</key>
-			<string>MyDocument</string>
+			<string>$(PRODUCT_MODULE_NAME).MyDocument</string>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
@@ -215,16 +215,18 @@
 			<key>UTTypeDescription</key>
 			<string>ADF files</string>
 			<key>UTTypeIconFile</key>
-			<string>ADFIcon</string>
+			<string></string>
 			<key>UTTypeIcons</key>
 			<dict>
+				<key>UTTypeIconBackgroundName</key>
+				<string></string>
 				<key>UTTypeIconBadgeName</key>
 				<string>ADFIcon</string>
 				<key>UTTypeIconText</key>
 				<string>ADF</string>
 			</dict>
 			<key>UTTypeIdentifier</key>
-			<string>de.dirkwhoffmann.retro.adf</string>
+			<string>public.retro.adf</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -243,13 +245,15 @@
 			<string>Compressed ADF files</string>
 			<key>UTTypeIcons</key>
 			<dict>
+				<key>UTTypeIconBackgroundName</key>
+				<string></string>
 				<key>UTTypeIconBadgeName</key>
 				<string>ADFIcon</string>
 				<key>UTTypeIconText</key>
 				<string>ADF</string>
 			</dict>
 			<key>UTTypeIdentifier</key>
-			<string>de.dirkwhoffmann.retro.adz</string>
+			<string>public.retro.adz</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -273,7 +277,7 @@
 				<string>DMS</string>
 			</dict>
 			<key>UTTypeIdentifier</key>
-			<string>de.dirkwhoffmann.retro.dms</string>
+			<string>public.retro.dms</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -299,7 +303,7 @@
 				<string>EXE</string>
 			</dict>
 			<key>UTTypeIdentifier</key>
-			<string>de.dirkwhoffmann.retro.exe</string>
+			<string>public.retro.exe</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -322,10 +326,10 @@
 				<key>UTTypeIconBadgeName</key>
 				<string>HDFIcon</string>
 				<key>UTTypeIconText</key>
-				<string>HDF</string>
+				<string>HDFF</string>
 			</dict>
 			<key>UTTypeIdentifier</key>
-			<string>de.dirkwhoffmann.retro.hdf</string>
+			<string>public.retro.hdf</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -352,7 +356,7 @@
 				<string>HDF</string>
 			</dict>
 			<key>UTTypeIdentifier</key>
-			<string>de.dirkwhoffmann.retro.hdz</string>
+			<string>public.retro.hdz</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -376,7 +380,7 @@
 				<string>IMG</string>
 			</dict>
 			<key>UTTypeIdentifier</key>
-			<string>de.dirkwhoffmann.retro.img</string>
+			<string>public.retro.img</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
@@ -396,7 +400,7 @@
 			<key>UTTypeIcons</key>
 			<dict>
 				<key>UTTypeIconBackgroundName</key>
-				<string></string>
+				<string>IconYellow</string>
 				<key>UTTypeIconBadgeName</key>
 				<string>vAmigaIcon</string>
 				<key>UTTypeIconText</key>
@@ -424,7 +428,7 @@
 			<key>UTTypeIcons</key>
 			<dict>
 				<key>UTTypeIconBackgroundName</key>
-				<string></string>
+				<string>IconRed</string>
 				<key>UTTypeIconBadgeName</key>
 				<string>vAmigaIcon</string>
 				<key>UTTypeIconText</key>
@@ -452,7 +456,7 @@
 			<key>UTTypeIcons</key>
 			<dict>
 				<key>UTTypeIconBackgroundName</key>
-				<string></string>
+				<string>IconBlue</string>
 				<key>UTTypeIconBadgeName</key>
 				<string>vAmigaIcon</string>
 				<key>UTTypeIconText</key>
