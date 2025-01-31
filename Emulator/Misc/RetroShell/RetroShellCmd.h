@@ -50,8 +50,8 @@ struct RetroShellCmdDescriptor {
     const std::vector<string> &optArgs = {};
     const string &helpName = "";
     const string help = "";
-    std::function<void (Arguments&, i64)> func = nullptr;
-    isize value = 0;
+    std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr;
+    const std::vector<isize> &values = {};
 };
     
 struct RetroShellCmd {
@@ -85,10 +85,10 @@ struct RetroShellCmd {
     std::vector<RetroShellCmd> subCommands;
 
     // Command handler
-    std::function<void (Arguments&, long)> callback = nullptr;
+    std::function<void (Arguments&, const std::vector<isize> &)> callback = nullptr;
 
     // Additional argument passed to the command handler
-    long param = 0;
+    std::vector<isize> param;
 
     // Indicates if this command appears in help descriptions
     bool hidden = false;
@@ -104,33 +104,33 @@ struct RetroShellCmd {
     // Wrappers (DEPRECATED)
     void add(const std::vector<string> &tokens,
              const string &help,
-             std::function<void (Arguments&, long)> func = nullptr, long param = 0);
+             std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr, long param = 0);
 
     void add(const std::vector<string> &tokens,
              std::pair<const string &, const string &> help,
-             std::function<void (Arguments&, long)> func = nullptr, long param = 0);
+             std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr, long param = 0);
 
     void add(const std::vector<string> &tokens,
              const std::vector<string> &args,
              const string &help,
-             std::function<void (Arguments&, long)> func = nullptr, long param = 0);
+             std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr, long param = 0);
 
     void add(const std::vector<string> &tokens,
              const std::vector<string> &args,
              std::pair<const string &, const string &> help,
-             std::function<void (Arguments&, long)> func = nullptr, long param = 0);
+             std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr, long param = 0);
 
     void add(const std::vector<string> &tokens,
              const std::vector<string> &requiredArgs,
              const std::vector<string> &optionalArgs,
              const string &help,
-             std::function<void (Arguments&, long)> func = nullptr, long param = 0);
+             std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr, long param = 0);
 
     void add(const std::vector<string> &tokens,
              const std::vector<string> &requiredArgs,
              const std::vector<string> &optionalArgs,
              std::pair<const string &, const string &> help,
-             std::function<void (Arguments&, long)> func = nullptr, long param = 0);
+             std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr, long param = 0);
 
     void clone(const string &alias,
                const std::vector<string> &tokens,

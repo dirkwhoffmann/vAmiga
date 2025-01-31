@@ -773,7 +773,7 @@ Console::initCommands(RetroShellCmd &root)
             .tokens     = {"welcome"},
             .hidden     = true,
             .help       = "Prints the welcome message",
-            .func       = [this](Arguments& argv, isize value) {
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                 
                 welcome();
             }
@@ -783,7 +783,7 @@ Console::initCommands(RetroShellCmd &root)
             
             .tokens     = {"."},
             .help       = "Enter or exit the debugger",
-            .func       = [this](Arguments& argv, isize value) {
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                 
                 retroShell.switchConsole();
             }
@@ -793,7 +793,7 @@ Console::initCommands(RetroShellCmd &root)
             
             .tokens     = {"clear"},
             .help       = "Clear the console window",
-            .func       = [this](Arguments& argv, isize value) {
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                 
                 clear();
             }
@@ -803,7 +803,7 @@ Console::initCommands(RetroShellCmd &root)
             
             .tokens     = {"close"},
             .help       = "Hide the console window",
-            .func       = [this](Arguments& argv, isize value) {
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                 
                 msgQueue.put(Msg::RSH_CLOSE);
             }
@@ -814,7 +814,7 @@ Console::initCommands(RetroShellCmd &root)
             .tokens     = {"help"},
             .optArgs    = {Arg::command},
             .help       = "Print usage information",
-            .func       = [this](Arguments& argv, isize value) {
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                 
                 help(argv.empty() ? "" : argv.front());
             }
@@ -824,7 +824,7 @@ Console::initCommands(RetroShellCmd &root)
             
             .tokens     = {"state"},
             .hidden     = true,
-            .func       = [this](Arguments& argv, isize value) {
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                 
                 printState();
             }
@@ -834,7 +834,7 @@ Console::initCommands(RetroShellCmd &root)
             
             .tokens     = {"joshua"},
             .hidden     = true,
-            .func       = [this](Arguments& argv, isize value) {
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                 
                 *this << "\nGREETINGS PROFESSOR HOFFMANN.\n";
                 *this << "THE ONLY WINNING MOVE IS NOT TO PLAY.\n";
@@ -847,7 +847,7 @@ Console::initCommands(RetroShellCmd &root)
             .tokens     = {"source"},
             .args       = {Arg::path},
             .help       = "Process a command script",
-            .func       = [this](Arguments& argv, isize value) {
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                 
                 auto stream = std::ifstream(argv.front());
                 if (!stream.is_open()) throw VAException(VAError::FILE_NOT_FOUND, argv.front());
@@ -861,7 +861,7 @@ Console::initCommands(RetroShellCmd &root)
             .hidden     = true,
             .args       = {Arg::value, Arg::seconds},
             .help       = "Pause the execution of a command script",
-            .func       = [this](Arguments& argv, isize value) {
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                 
                 auto seconds = parseNum(argv[0]);
                 agnus.scheduleRel<SLOT_RSH>(SEC(seconds), RSH_WAKEUP);
@@ -873,7 +873,7 @@ Console::initCommands(RetroShellCmd &root)
                  
             .tokens     = {"shutdown"},
             .help       = "Terminates the application",
-            .func       = [this](Arguments& argv, isize value) {
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                 
                 msgQueue.put(Msg::ABORT, 0);
             }
@@ -909,7 +909,7 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
             
             .tokens     = {cmd, ""},
             .help       = "Display the current configuration",
-            .func       = [this, &c](Arguments& argv, i64 value) {
+            .func       = [this, &c](Arguments& argv, const std::vector<isize> &values) {
                 
                 retroShell.commander.dump(c, Category::Config);
             }
@@ -935,12 +935,12 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
                     .tokens     = {cmd, "set", OptEnum::key(opt)},
                     .args       = {OptionParser::argList(opt)},
                     .help       = OptEnum::help(opt),
-                    .func       = [this](Arguments& argv, isize value) {
+                    .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                         
-                        emulator.set(Opt(HI_WORD((u32)value)), argv[0], { LO_WORD((u32)value) });
+                        emulator.set(Opt(values[0]), argv[0], { values[1] });
                         msgQueue.put(Msg::CONFIG);
                         
-                    },  .value = isize(HI_W_LO_W(u16(opt), c.objid))
+                    }, .values = { isize(opt), c.objid }
                 });
 
             } else {
@@ -960,12 +960,12 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
                         
                         .tokens     = {cmd, "set", OptEnum::key(opt), first },
                         .help       = help.empty() ? "Set to " + first : help,
-                        .func       = [this](Arguments& argv, isize value) {
+                        .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                             
-                            emulator.set(Opt(HI_WORD(value)), BYTE1(value), { BYTE0(value) });
+                            emulator.set(Opt(values[0]), values[1], { values[2] });
                             msgQueue.put(Msg::CONFIG);
                             
-                        },  .value = isize(u16(opt) << 16 | second << 8 | c.objid)
+                        },  .values = { isize(opt), isize(second), c.objid }
                     });
                 }
             }

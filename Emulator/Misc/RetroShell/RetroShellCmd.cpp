@@ -45,7 +45,7 @@ RetroShellCmd::add(const RetroShellCmdDescriptor &descriptor)
     cmd.optionalArgs = descriptor.optArgs;
     cmd.help = descriptor.help;
     cmd.callback = descriptor.func;
-    cmd.param = descriptor.value;
+    cmd.param = descriptor.values;
     cmd.hidden = descriptor.hidden || descriptor.help.empty();
 
     if (!cmd.hidden) currentGroup = "";
@@ -57,21 +57,21 @@ RetroShellCmd::add(const RetroShellCmdDescriptor &descriptor)
 void
 RetroShellCmd::add(const std::vector<string> &tokens,
              const string &help,
-             std::function<void (Arguments&, long)> func, long param)
+             std::function<void (Arguments&, const std::vector<isize> &)> func, long param)
 {
     add(RetroShellCmdDescriptor {
         
         .tokens = tokens,
         .help = help,
         .func = func,
-        .value = param
+        .values = {param}
     });
 }
 
 void
 RetroShellCmd::add(const std::vector<string> &tokens,
              std::pair<const string &, const string &> help,
-             std::function<void (Arguments&, long)> func, long param)
+             std::function<void (Arguments&, const std::vector<isize> &)> func, long param)
 {
     add(RetroShellCmdDescriptor {
         
@@ -79,7 +79,7 @@ RetroShellCmd::add(const std::vector<string> &tokens,
         .helpName = help.first,
         .help = help.second,
         .func = func,
-        .value = param
+        .values = {param}
     });
 }
 
@@ -87,7 +87,7 @@ void
 RetroShellCmd::add(const std::vector<string> &tokens,
              const std::vector<string> &arguments,
              const string &help,
-             std::function<void (Arguments&, long)> func, long param)
+             std::function<void (Arguments&, const std::vector<isize> &)> func, long param)
 {
     add(RetroShellCmdDescriptor {
         
@@ -95,7 +95,7 @@ RetroShellCmd::add(const std::vector<string> &tokens,
         .args = arguments,
         .help = help,
         .func = func,
-        .value = param
+        .values = {param}
     });
 }
 
@@ -103,7 +103,7 @@ void
 RetroShellCmd::add(const std::vector<string> &tokens,
              const std::vector<string> &arguments,
              std::pair<const string &, const string &> help,
-             std::function<void (Arguments&, long)> func, long param)
+             std::function<void (Arguments&, const std::vector<isize> &)> func, long param)
 {
     add(RetroShellCmdDescriptor {
         
@@ -112,7 +112,7 @@ RetroShellCmd::add(const std::vector<string> &tokens,
         .helpName = help.first,
         .help = help.second,
         .func = func,
-        .value = param
+        .values = {param}
     });
 }
 
@@ -121,7 +121,7 @@ RetroShellCmd::add(const std::vector<string> &tokens,
              const std::vector<string> &requiredArgs,
              const std::vector<string> &optionalArgs,
              const string &help,
-             std::function<void (Arguments&, long)> func, long param)
+             std::function<void (Arguments&, const std::vector<isize> &)> func, long param)
 {
     add(RetroShellCmdDescriptor {
         
@@ -130,7 +130,7 @@ RetroShellCmd::add(const std::vector<string> &tokens,
         .optArgs = optionalArgs,
         .help = help,
         .func = func,
-        .value = param
+        .values = {param}
     });
 }
 
@@ -139,7 +139,7 @@ RetroShellCmd::add(const std::vector<string> &tokens,
              const std::vector<string> &requiredArgs,
              const std::vector<string> &optionalArgs,
              std::pair<const string &, const string &> help,
-             std::function<void (Arguments&, long)> func, long param)
+             std::function<void (Arguments&, const std::vector<isize> &)> func, long param)
 {
     add(RetroShellCmdDescriptor {
         .tokens = tokens,
@@ -148,7 +148,7 @@ RetroShellCmd::add(const std::vector<string> &tokens,
         .helpName = help.first,
         .help = help.second,
         .func = func,
-        .value = param
+        .values = {param}
     });
 }
 

@@ -90,7 +90,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .args       = { ConfigSchemeEnum::argList() },
         .optArgs    = { Arg::path, Arg::path },
         .help       = "Initializes the test environment",
-        .func       = [this](Arguments& argv, isize value) {
+        .func       = [this](Arguments& argv, const std::vector<isize> &values) {
             
             auto scheme = ConfigScheme(parseEnum<ConfigSchemeEnum>(argv[0]));
             auto rom = argv.size() > 1 ? argv[1] : "";
@@ -105,7 +105,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .tokens     = {"regression", "run"},
         .args       = { Arg::path },
         .help       = "Launches a regression test",
-        .func       = [this](Arguments& argv, isize value) {
+        .func       = [this](Arguments& argv, const std::vector<isize> &values) {
             
             amiga.regressionTester.run(argv.front());
         }
@@ -129,7 +129,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .tokens     = {"screenshot", "set", "filename"},
         .args       = { Arg::path },
         .help       = "Assign the screen shot filename",
-        .func       = [this](Arguments& argv, isize value) {
+        .func       = [this](Arguments& argv, const std::vector<isize> &values) {
             
             amiga.regressionTester.dumpTexturePath = argv.front();
         }
@@ -140,7 +140,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .tokens     = {"screenshot", "set", "cutout"},
         .args       = { Arg::value, Arg::value, Arg::value, Arg::value },
         .help       = "Adjust the texture cutout",
-        .func       = [this](Arguments& argv, isize value) {
+        .func       = [this](Arguments& argv, const std::vector<isize> &values) {
             
             isize x1 = parseNum(argv[0]);
             isize y1 = parseNum(argv[1]);
@@ -159,7 +159,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .tokens     = {"screenshot", "save"},
         .args       = { Arg::path },
         .help       = "Saves a screenshot and exits the emulator",
-        .func       = [this](Arguments& argv, isize value) {
+        .func       = [this](Arguments& argv, const std::vector<isize> &values) {
             
             amiga.regressionTester.dumpTexture(amiga, argv.front());
         }
@@ -182,7 +182,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         .tokens     = {cmd, "defaults"},
         .help       = "Displays the user defaults storage",
-        .func       = [this](Arguments& argv, isize value) {
+        .func       = [this](Arguments& argv, const std::vector<isize> &values) {
             
             dump(emulator, Category::Defaults);
         }
@@ -193,7 +193,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .tokens     = {cmd, "power"},
         .args       = { Arg::onoff },
         .help       = "Switches the Amiga on or off",
-        .func       = [this](Arguments& argv, isize value) {
+        .func       = [this](Arguments& argv, const std::vector<isize> &values) {
             
             parseOnOff(argv[0]) ? emulator.run() : emulator.powerOff();
         }
@@ -203,8 +203,8 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         .tokens     = {cmd, "reset"},
         .help       = "Performs a hard reset",
-        .func       = [this](Arguments& argv, isize value) {
-            
+        .func       = [this](Arguments& argv, const std::vector<isize> &values) {
+
             amiga.hardReset();
         }
     });
@@ -214,7 +214,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .tokens     = {cmd, "init"},
         .args       = { ConfigSchemeEnum::argList() },
         .help       = "Initializes the Amiga with a predefined scheme",
-        .func       = [this](Arguments& argv, isize value) {
+        .func       = [this](Arguments& argv, const std::vector<isize> &values) {
             
             auto scheme = ConfigScheme(parseEnum <ConfigSchemeEnum> (argv[0]));
             
@@ -241,7 +241,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .tokens     = {cmd, "load", "rom"},
         .args       = {Arg::path},
         .help       = "Installs a Kickstart Rom",
-        .func       = [this](Arguments& argv, isize value) {
+        .func       = [this](Arguments& argv, const std::vector<isize> &values) {
             
             mem.loadRom(argv.front());
         }
@@ -252,7 +252,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .tokens     = {cmd, "load", "ext"},
         .args       = { Arg::path },
         .help       = "Installs an extension Rom",
-        .func       = [this](Arguments& argv, isize value) {
+        .func       = [this](Arguments& argv, const std::vector<isize> &values) {
             
             mem.loadExt(argv.front());
         }
@@ -263,7 +263,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .tokens     = {cmd, "load", "bin"},
         .args       = { Arg::path, Arg::address },
         .help       = "Loads a chunk of memory",
-        .func       = [this](Arguments& argv, isize value) {
+        .func       = [this](Arguments& argv, const std::vector<isize> &values) {
             
             fs::path path(argv[0]);
             mem.debugger.load(path, parseAddr(argv[1]));
@@ -281,7 +281,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .tokens     = {cmd, "save", "rom"},
         .args       = { Arg::path },
         .help       = "Saves the Kickstart Rom",
-        .func       = [this](Arguments& argv, isize value) {
+        .func       = [this](Arguments& argv, const std::vector<isize> &values) {
             
             mem.saveRom(argv[0]);
         }
@@ -292,7 +292,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .tokens     = {cmd, "save", "ext"},
         .args       = { Arg::path },
         .help       = "Saves the extension Rom",
-        .func       = [this](Arguments& argv, isize value) {
+        .func       = [this](Arguments& argv, const std::vector<isize> &values) {
             
             mem.saveExt(argv[0]);
         }
@@ -303,7 +303,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .tokens     = {cmd, "save", "bin"},
         .args       = { Arg::path, Arg::address, Arg::count },
         .help       = "Loads a chunk of memory",
-        .func       = [this](Arguments& argv, isize value) {
+        .func       = [this](Arguments& argv, const std::vector<isize> &values) {
             
             fs::path path(argv[0]);
             mem.debugger.save(path, parseAddr(argv[1]), parseNum(argv[2]));
@@ -370,7 +370,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
     
     root.add({cmd, "send"}, { "<text>" },
              "Sends a text to the serial port",
-             [this](Arguments& argv, isize value) {
+             [this](Arguments& argv, const std::vector<isize> &values) {
         
         amiga.serialPort << argv[0];
     });
@@ -384,14 +384,14 @@ CommandConsole::initCommands(RetroShellCmd &root)
     
     root.add({cmd, "open"},
              "Opens the DMA debugger",
-             [this](Arguments& argv, isize value) {
+             [this](Arguments& argv, const std::vector<isize> &values) {
         
         emulator.set(Opt::DMA_DEBUG_ENABLE, true);
     });
     
     root.add({cmd, "close"},
              "Closes the DMA debugger",
-             [this](Arguments& argv, isize value) {
+             [this](Arguments& argv, const std::vector<isize> &values) {
         
         emulator.set(Opt::DMA_DEBUG_ENABLE, false);
     });
@@ -449,7 +449,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .tokens         = {cmd, "press"},
         .args   = { Arg::value },
         .help           = "Sends a keycode to the keyboard",
-        .func           = [this](Arguments& argv, isize value) {
+        .func           = [this](Arguments& argv, const std::vector<isize> &values) {
             
             auto code = KeyCode(parseNum(argv[0]));
             emulator.put(Command(Cmd::KEY_PRESS, KeyCommand { .keycode = code, .delay = 0.0 }));
@@ -469,12 +469,12 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         root.add({
                  
-            .tokens         = {cmd, "press"},
-            .args   = { Arg::value },
-            .help           = "Presses a joystick button",
-            .func           = [this](Arguments& argv, isize value) {
+            .tokens     = {cmd, "press"},
+            .args       = { Arg::value },
+            .help       = "Presses a joystick button",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                 
-                auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+                auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 auto nr = parseNum(argv[0]);
                 
                 switch (nr) {
@@ -486,17 +486,17 @@ CommandConsole::initCommands(RetroShellCmd &root)
                     default:
                         throw VAException(VAError::OPT_INV_ARG, "1...3");
                 }
-            }, .value = i
+            }, .values = {i}
         });
         
         root.add({
             
-            .tokens         = {cmd, "unpress"},
-            .args   = { Arg::value },
-            .help           = "Releases a joystick button",
-            .func           = [this](Arguments& argv, isize value) {
+            .tokens     = {cmd, "unpress"},
+            .args       = { Arg::value },
+            .help       = "Releases a joystick button",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                 
-                auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+                auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 auto nr = parseNum(argv[0]);
                 
                 switch (nr) {
@@ -508,91 +508,91 @@ CommandConsole::initCommands(RetroShellCmd &root)
                     default:
                         throw VAException(VAError::OPT_INV_ARG, "1...3");
                 }
-            }, .value = i
+            }, .values = {i}
         });
         
         root.add({
             
-            .tokens         = {cmd, "pull"},
-            .help           = "Pulls the joystick"
+            .tokens     = {cmd, "pull"},
+            .help       = "Pulls the joystick"
         });
         
         root.add({
             
-            .tokens         = {cmd, "pull", "left"},
-            .help           = "Pulls the joystick left",
-            .func           = [this](Arguments& argv, isize value) {
+            .tokens     = {cmd, "pull", "left"},
+            .help       = "Pulls the joystick left",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                 
-                auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+                auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.joystick.trigger(GamePadAction::PULL_LEFT);
                 
-            }, .value = i
+            }, .values = {i}
         });
         
         root.add({
             
-            .tokens         = {cmd, "pull", "right"},
-            .help           = "Pulls the joystick right",
-            .func           = [this](Arguments& argv, isize value) {
+            .tokens     = {cmd, "pull", "right"},
+            .help       = "Pulls the joystick right",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                 
-                auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+                auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.joystick.trigger(GamePadAction::PULL_RIGHT);
                 
-            }, .value = i
+            }, .values = {i}
         });
         
         root.add({
             
-            .tokens         = {cmd, "pull", "up"},
-            .help           = "Pulls the joystick up",
-            .func           = [this](Arguments& argv, isize value) {
+            .tokens     = {cmd, "pull", "up"},
+            .help       = "Pulls the joystick up",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                 
-                auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+                auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.joystick.trigger(GamePadAction::PULL_UP);
                 
-            }, .value = i
+            }, .values = {i}
         });
         
         root.add({
             
-            .tokens         = {cmd, "pull", "down"},
-            .help           = "Pulls the joystick down",
-            .func           = [this](Arguments& argv, isize value) {
+            .tokens     = {cmd, "pull", "down"},
+            .help       = "Pulls the joystick down",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                 
-                auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+                auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.joystick.trigger(GamePadAction::PULL_DOWN);
                 
-            }, .value = i
+            }, .values = {i}
         });
         
         root.add({
             
-            .tokens         = {cmd, "release"},
-            .help           = "Release a joystick axis"
+            .tokens     = {cmd, "release"},
+            .help       = "Release a joystick axis"
         });
         
         root.add({
             
-            .tokens         = {cmd, "release", "x"},
-            .help           = "Releases the x-axis",
-            .func           = [this](Arguments& argv, isize value) {
+            .tokens     = {cmd, "release", "x"},
+            .help       = "Releases the x-axis",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                 
-                auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+                auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.joystick.trigger(GamePadAction::RELEASE_X);
                 
-            }, .value = i
+            }, .values = {i}
         });
         
         root.add({
             
-            .tokens         = {cmd, "release", "y"},
-            .help           = "Releases the y-axis",
-            .func           = [this](Arguments& argv, isize value) {
+            .tokens     = {cmd, "release", "y"},
+            .help       = "Releases the y-axis",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                 
-                auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+                auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.joystick.trigger(GamePadAction::RELEASE_Y);
                 
-            }, .value = i
+            }, .values = {i}
         });
     }
     
@@ -608,44 +608,44 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         root.add({
             
-            .tokens         = {cmd, "press"},
-            .help           = "Presses a mouse button"
+            .tokens     = {cmd, "press"},
+            .help       = "Presses a mouse button"
         });
         
         root.add({
             
-            .tokens         = {cmd, "press", "left"},
-            .help           = "Presses the left mouse button",
-            .func           = [this](Arguments& argv, isize value) {
+            .tokens     = {cmd, "press", "left"},
+            .help       = "Presses the left mouse button",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                 
-                auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+                auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.mouse.pressAndReleaseLeft();
                 
-            }, .value = i
+            }, .values = {i}
         });
         
         root.add({
             
-            .tokens         = {cmd, "press", "middle"},
-            .help           = "Presses the middle mouse button",
-            .func           = [this](Arguments& argv, isize value) {
+            .tokens     = {cmd, "press", "middle"},
+            .help       = "Presses the middle mouse button",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                 
-                auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+                auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.mouse.pressAndReleaseMiddle();
                 
-            }, .value = i
+            }, .values = {i}
         });
         
         root.add({
             
-            .tokens         = {cmd, "press", "right"},
-            .help           = "Presses the right mouse button",
-            .func           = [this](Arguments& argv, isize value) {
+            .tokens     = {cmd, "press", "right"},
+            .help       = "Presses the right mouse button",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                 
-                auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+                auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.mouse.pressAndReleaseRight();
                 
-            }, .value = i
+            }, .values = {i}
         });
     }
     
@@ -662,24 +662,24 @@ CommandConsole::initCommands(RetroShellCmd &root)
             
             root.add({
                 
-                .tokens         = {cmd, "connect"},
-                .help           = "Connects the drive",
-                .func           = [this](Arguments& argv, isize value) {
+                .tokens     = {cmd, "connect"},
+                .help       = "Connects the drive",
+                .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                     
-                    emulator.set(Opt::DRIVE_CONNECT, true, { value });
+                    emulator.set(Opt::DRIVE_CONNECT, true, values);
                     
-                }, .value = i
+                }, .values = {i}
             });
             
             root.add({
                 
                 .tokens     = {cmd, "disconnect"},
                 .help       = "Disconnects the drive",
-                .func       = [this](Arguments& argv, isize value) {
+                .func       = [this](Arguments& argv, const std::vector<isize> &values) {
                     
-                    emulator.set(Opt::DRIVE_CONNECT, false, { value });
+                    emulator.set(Opt::DRIVE_CONNECT, false, values);
                     
-                }, .value = i
+                }, .values = {i}
             });
         }
         
@@ -687,63 +687,63 @@ CommandConsole::initCommands(RetroShellCmd &root)
             
             .tokens         = {cmd, "eject"},
             .help           = "Ejects a floppy disk",
-            .func           = [this](Arguments& argv, isize value) {
+            .func           = [this](Arguments& argv, const std::vector<isize> &values) {
                 
-                amiga.df[value]->ejectDisk();
+                amiga.df[values[0]]->ejectDisk();
                 
-            }, .value = i
+            }, .values = {i}
         });
         
         root.add({
             
             .tokens         = {cmd, "insert"},
-            .args   = { Arg::path },
+            .args           = { Arg::path },
             .help           = "Inserts a floppy disk",
-            .func           = [this](Arguments& argv, isize value) {
+            .func           = [this](Arguments& argv, const std::vector<isize> &values) {
                 
                 auto path = argv.front();
-                amiga.df[value]->swapDisk(path);
+                amiga.df[values[0]]->swapDisk(path);
                 
-            }, .value = i
+            }, .values = {i}
         });
         
         root.add({
             
             .tokens         = {cmd, "protect"},
             .help           = "Enables write protection",
-            .func           = [this](Arguments& argv, isize value) {
+            .func           = [this](Arguments& argv, const std::vector<isize> &values) {
                 
-                amiga.df[value]->setFlag(DiskFlags::PROTECTED, true);
+                amiga.df[values[0]]->setFlag(DiskFlags::PROTECTED, true);
                 
-            }, .value = i
+            }, .values = {i}
         });
  
         root.add({
             
             .tokens         = {cmd, "unprotect"},
             .help           = "Disables write protection",
-            .func           = [this](Arguments& argv, isize value) {
+            .func           = [this](Arguments& argv, const std::vector<isize> &values) {
                 
-                amiga.df[value]->setFlag(DiskFlags::PROTECTED, false);
+                amiga.df[values[0]]->setFlag(DiskFlags::PROTECTED, false);
                 
-            }, .value = i
+            }, .values = {i}
         });
         
         root.add({
             
             .tokens         = {cmd, "searchpath"},
-            .args   = { Arg::path },
+            .args           = { Arg::path },
             .help           = "Sets the search path for media files",
-            .func           = [this](Arguments& argv, isize value) {
+            .func           = [this](Arguments& argv, const std::vector<isize> &values) {
                 
                 string path = argv.front();
                 
-                if (value == 0 || value > 3) df0.setSearchPath(path);
-                if (value == 1 || value > 3) df1.setSearchPath(path);
-                if (value == 2 || value > 3) df2.setSearchPath(path);
-                if (value == 3 || value > 3) df3.setSearchPath(path);
+                if (values[0] == 0 || values[0] > 3) df0.setSearchPath(path);
+                if (values[0] == 1 || values[0] > 3) df1.setSearchPath(path);
+                if (values[0] == 2 || values[0] > 3) df2.setSearchPath(path);
+                if (values[0] == 3 || values[0] > 3) df3.setSearchPath(path);
                 
-            }, .value = i
+            }, .values = {i}
         });
     }
     
@@ -760,22 +760,22 @@ CommandConsole::initCommands(RetroShellCmd &root)
             
             .tokens         = {cmd, "connect"},
             .help           = "Connects the hard drive",
-            .func           = [this](Arguments& argv, isize value) {
+            .func           = [this](Arguments& argv, const std::vector<isize> &values) {
                 
-                emulator.set(Opt::HDC_CONNECT, true, {value});
+                emulator.set(Opt::HDC_CONNECT, true, values);
                 
-            }, .value = i
+            }, .values = {i}
         });
         
         root.add({
             
             .tokens         = {cmd, "disconnect"},
             .help           = "Disconnects the hard drive",
-            .func           = [this](Arguments& argv, isize value) {
+            .func           = [this](Arguments& argv, const std::vector<isize> &values) {
                 
-                emulator.set(Opt::HDC_CONNECT, false, {value});
+                emulator.set(Opt::HDC_CONNECT, false, values);
                 
-            }, .value = i
+            }, .values = {i}
         });
         
         root.add({
@@ -783,12 +783,12 @@ CommandConsole::initCommands(RetroShellCmd &root)
             .tokens         = {cmd, "attach"},
             .args   = { Arg::path },
             .help           = "Attaches a hard drive image",
-            .func           = [this](Arguments& argv, isize value) {
+            .func           = [this](Arguments& argv, const std::vector<isize> &values) {
                 
                 auto path = argv.front();
-                amiga.hd[value]->init(path);
+                amiga.hd[values[0]]->init(path);
                 
-            }, .value = i
+            }, .values = {i}
         });
         
         root.add({
@@ -796,37 +796,37 @@ CommandConsole::initCommands(RetroShellCmd &root)
             .tokens         = {cmd, "geometry"},
             .args   = { "<cylinders>", "<heads>", "<sectors>" },
             .help           = "Changes the disk geometry",
-            .func           = [this](Arguments& argv, isize value) {
+            .func           = [this](Arguments& argv, const std::vector<isize> &values) {
                 
                 auto c = util::parseNum(argv[0]);
                 auto h = util::parseNum(argv[1]);
                 auto s = util::parseNum(argv[2]);
                 
-                amiga.hd[value]->changeGeometry(c, h, s);
+                amiga.hd[values[0]]->changeGeometry(c, h, s);
                 
-            }, .value = i
+            }, .values = {i}
         });
         
         root.add({
             
             .tokens         = {cmd, "protect"},
             .help           = "Enables write protection",
-            .func           = [this](Arguments& argv, isize value) {
+            .func           = [this](Arguments& argv, const std::vector<isize> &values) {
                 
-                amiga.hd[value]->setFlag(DiskFlags::PROTECTED, true);
+                amiga.hd[values[0]]->setFlag(DiskFlags::PROTECTED, true);
                 
-            }, .value = i
+            }, .values = {i}
         });
  
         root.add({
             
             .tokens         = {cmd, "unprotect"},
             .help           = "Disables write protection",
-            .func           = [this](Arguments& argv, isize value) {
+            .func           = [this](Arguments& argv, const std::vector<isize> &values) {
                 
-                amiga.hd[value]->setFlag(DiskFlags::PROTECTED, false);
+                amiga.hd[values[0]]->setFlag(DiskFlags::PROTECTED, false);
                 
-            }, .value = i
+            }, .values = {i}
         });
     }
     
@@ -851,7 +851,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         .tokens         = {"config", ""},
         .help           = "Displays the current configuration",
-        .func           = [this](Arguments& argv, isize value) {
+        .func           = [this](Arguments& argv, const std::vector<isize> &values) {
             
             std::stringstream ss;
             amiga.exportConfig(ss);
@@ -862,7 +862,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
     root.add({
         .tokens         = {"config", "diff"},
         .help           = "Displays the difference to the default configuration",
-        .func           = [this](Arguments& argv, isize value) {
+        .func           = [this](Arguments& argv, const std::vector<isize> &values) {
             
             std::stringstream ss;
             amiga.exportDiff(ss);
@@ -893,7 +893,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         .tokens         = {"server", ""},
         .help           = "Displays a server status summary",
-        .func           = [this](Arguments& argv, isize value) {
+        .func           = [this](Arguments& argv, const std::vector<isize> &values) {
             
             dump(remoteManager, Category::Status);
         }
@@ -907,7 +907,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         .tokens         = {cmd, "start"},
         .help           = "Starts the retro shell server",
-        .func           = [this](Arguments& argv, isize value) {
+        .func           = [this](Arguments& argv, const std::vector<isize> &values) {
             
             remoteManager.rshServer.start();
         }
@@ -917,7 +917,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         .tokens         = {cmd, "stop"},
         .help           = "Stops the retro shell server",
-        .func           = [this](Arguments& argv, isize value) {
+        .func           = [this](Arguments& argv, const std::vector<isize> &values) {
             
             remoteManager.rshServer.stop();
         }
@@ -927,7 +927,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         .tokens         = {cmd, "disconnect"},
         .help           = "Disconnects a client",
-        .func           = [this](Arguments& argv, isize value) {
+        .func           = [this](Arguments& argv, const std::vector<isize> &values) {
                  
                  remoteManager.rshServer.disconnect();
              }
@@ -939,7 +939,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         .tokens         = {cmd, "start"},
         .help           = "Starts the Prometheus server",
-        .func           = [this](Arguments& argv, isize value) {
+        .func           = [this](Arguments& argv, const std::vector<isize> &values) {
             
             remoteManager.promServer.start();
         }
@@ -949,7 +949,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         .tokens         = {cmd, "stop"},
         .help           = "Stops the Prometheus server",
-        .func           = [this](Arguments& argv, isize value) {
+        .func           = [this](Arguments& argv, const std::vector<isize> &values) {
             
             remoteManager.promServer.stop();
         }
@@ -959,7 +959,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         .tokens         = {cmd, "disconnect"},
         .help           = "Disconnects a client",
-        .func           = [this](Arguments& argv, isize value) {
+        .func           = [this](Arguments& argv, const std::vector<isize> &values) {
             
             remoteManager.promServer.disconnect();
         }
@@ -972,7 +972,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .tokens         = {cmd, "attach"},
         .args   = { Arg::process },
         .help           = "Attaches the GDB server to a process",
-        .func           = [this](Arguments& argv, isize value) {
+        .func           = [this](Arguments& argv, const std::vector<isize> &values) {
             
             remoteManager.gdbServer.attach(argv.front());
         }
@@ -982,7 +982,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         .tokens         = {cmd, "detach"},
         .help           = "Detaches the GDB server from a process",
-        .func           = [this](Arguments& argv, isize value) {
+        .func           = [this](Arguments& argv, const std::vector<isize> &values) {
             
             remoteManager.gdbServer.detach();
         }
