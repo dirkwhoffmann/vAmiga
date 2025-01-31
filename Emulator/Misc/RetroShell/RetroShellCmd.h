@@ -51,6 +51,7 @@ struct RetroShellCmdDescriptor {
     const string help = "";
     std::function<void (Arguments&, long)> func = nullptr;
     long param = 0;
+    bool hidden = false;
 };
     
 struct RetroShellCmd {
@@ -100,7 +101,7 @@ struct RetroShellCmd {
     // Creates a new node in the command tree
     void add(const RetroShellCmdDescriptor &descriptor);
     
-    // Wrappers
+    // Wrappers (DEPRECATED)
     void add(const std::vector<string> &tokens,
              const string &help,
              std::function<void (Arguments&, long)> func = nullptr, long param = 0);

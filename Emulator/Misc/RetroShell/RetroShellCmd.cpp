@@ -46,7 +46,7 @@ RetroShellCmd::add(const RetroShellCmdDescriptor &descriptor)
     cmd.help = descriptor.help;
     cmd.callback = descriptor.func;
     cmd.param = descriptor.param;
-    cmd.hidden = descriptor.help.empty();
+    cmd.hidden = descriptor.hidden || descriptor.help.empty();
 
     if (!cmd.hidden) currentGroup = "";
 
@@ -55,13 +55,13 @@ RetroShellCmd::add(const RetroShellCmdDescriptor &descriptor)
 }
 
 void
-RetroShellCmd::add(const std::vector<string> &rawtokens,
+RetroShellCmd::add(const std::vector<string> &tokens,
              const string &help,
              std::function<void (Arguments&, long)> func, long param)
 {
     add(RetroShellCmdDescriptor {
         
-        .tokens = rawtokens,
+        .tokens = tokens,
         .help = help,
         .func = func,
         .param = param
@@ -73,17 +73,30 @@ RetroShellCmd::add(const std::vector<string> &tokens,
              std::pair<const string &, const string &> help,
              std::function<void (Arguments&, long)> func, long param)
 {
-    add(tokens, { }, { }, help, func, param);
+    add(RetroShellCmdDescriptor {
+        
+        .tokens = tokens,
+        .helpName = help.first,
+        .help = help.second,
+        .func = func,
+        .param = param
+    });
 }
 
 void
-RetroShellCmd::add(const std::vector<string> &rawtokens,
+RetroShellCmd::add(const std::vector<string> &tokens,
              const std::vector<string> &arguments,
              const string &help,
              std::function<void (Arguments&, long)> func, long param)
 {
-    auto tokens = util::split(rawtokens, ' ');
-    add(tokens, arguments, { }, { tokens.back(), help }, func, param);
+    add(RetroShellCmdDescriptor {
+        
+        .tokens = tokens,
+        .requiredArgs = arguments,
+        .help = help,
+        .func = func,
+        .param = param
+    });
 }
 
 void
@@ -92,29 +105,44 @@ RetroShellCmd::add(const std::vector<string> &tokens,
              std::pair<const string &, const string &> help,
              std::function<void (Arguments&, long)> func, long param)
 {
-    add(tokens, arguments, { }, help, func, param);
+    add(RetroShellCmdDescriptor {
+        
+        .tokens = tokens,
+        .requiredArgs = arguments,
+        .helpName = help.first,
+        .help = help.second,
+        .func = func,
+        .param = param
+    });
 }
 
 void
-RetroShellCmd::add(const std::vector<string> &rawtokens,
+RetroShellCmd::add(const std::vector<string> &tokens,
              const std::vector<string> &requiredArgs,
              const std::vector<string> &optionalArgs,
              const string &help,
              std::function<void (Arguments&, long)> func, long param)
 {
-    auto tokens = util::split(rawtokens, ' ');
-    add(tokens, requiredArgs, optionalArgs, { tokens.back(), help }, func, param);
+    add(RetroShellCmdDescriptor {
+        
+        .tokens = tokens,
+        .requiredArgs = requiredArgs,
+        .optionalArgs = optionalArgs,
+        .help = help,
+        .func = func,
+        .param = param
+    });
 }
 
 void
-RetroShellCmd::add(const std::vector<string> &rawtokens,
+RetroShellCmd::add(const std::vector<string> &tokens,
              const std::vector<string> &requiredArgs,
              const std::vector<string> &optionalArgs,
              std::pair<const string &, const string &> help,
              std::function<void (Arguments&, long)> func, long param)
 {
     add(RetroShellCmdDescriptor {
-        .tokens = rawtokens,
+        .tokens = tokens,
         .requiredArgs = requiredArgs,
         .optionalArgs = optionalArgs,
         .helpName = help.first,
@@ -122,33 +150,6 @@ RetroShellCmd::add(const std::vector<string> &rawtokens,
         .func = func,
         .param = param
     });
-    /*
-    assert(!rawtokens.empty());
-
-    // Cleanse the token list (convert { "aaa bbb" } into { "aaa", "bbb" }
-    auto tokens = util::split(rawtokens, ' ');
-
-    // Traverse the node tree
-    RetroShellCmd *cmd = seek(std::vector<string> { tokens.begin(), tokens.end() - 1 });
-    assert(cmd != nullptr);
-
-    // Create the instruction
-    RetroShellCmd d;
-    d.name = tokens.back();
-    d.fullName = (cmd->fullName.empty() ? "" : cmd->fullName + " ") + help.first;
-    d.groupName = currentGroup;
-    d.requiredArgs = requiredArgs;
-    d.optionalArgs = optionalArgs;
-    d.help = help;
-    d.callback = func;
-    d.param = param;
-    d.hidden = help.second.empty();
-
-    if (!d.hidden) currentGroup = "";
-
-    // Register the instruction
-    cmd->subCommands.push_back(d);
-    */
 }
 
 void 

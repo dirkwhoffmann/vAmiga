@@ -768,80 +768,115 @@ Console::initCommands(RetroShellCmd &root)
 
     {   RetroShellCmd::currentGroup = "Shell commands";
 
-        root.add({"welcome"},
-                 "", // Prints the welcome message
-                 [this](Arguments& argv, long value) {
-
-            welcome();
+        root.add({
+            
+            .tokens = {"welcome"},
+            .hidden = true,
+            .help = "Prints the welcome message",
+            .func = [this](Arguments& argv, long value) {
+                
+                welcome();
+            }
+        });
+        
+        root.add({
+            
+            .tokens = {"."},
+            .help = "Enter or exit the debugger",
+            .func = [this](Arguments& argv, long value) {
+                
+                retroShell.switchConsole();
+            }
+        });
+        
+        root.add({
+            
+            .tokens = {"clear"},
+            .help = "Clear the console window",
+            .func = [this](Arguments& argv, long value) {
+                
+                clear();
+            }
         });
 
-        root.add({"."},
-                 "Enter or exit the debugger",
-                 [this](Arguments& argv, long value) {
-
-            retroShell.switchConsole();
+        root.add({
+            
+            .tokens = {"close"},
+            .help = "Hide the console window",
+            .func = [this](Arguments& argv, long value) {
+                
+                msgQueue.put(Msg::RSH_CLOSE);
+            }
         });
 
-        root.add({"clear"},
-                 "Clear the console window",
-                 [this](Arguments& argv, long value) {
-
-            clear();
+        root.add({
+            
+            .tokens = {"help"},
+            .optionalArgs = {Arg::command},
+            .help = "Print usage information",
+            .func = [this](Arguments& argv, long value) {
+                
+                help(argv.empty() ? "" : argv.front());
+            }
         });
 
-        root.add({"close"},
-                 "Hide the console window",
-                 [this](Arguments& argv, long value) {
-
-            msgQueue.put(Msg::RSH_CLOSE);
+        root.add({
+            
+            .tokens = {"state"},
+            .hidden = true,
+            .func = [this](Arguments& argv, long value) {
+                
+                printState();
+            }
         });
 
-        root.add({"help"}, { }, {Arg::command},
-                 "Print usage information",
-                 [this](Arguments& argv, long value) {
-
-            help(argv.empty() ? "" : argv.front());
+        root.add({
+            
+            .tokens = {"joshua"},
+            .hidden = true,
+            .func = [this](Arguments& argv, long value) {
+                
+                *this << "\nGREETINGS PROFESSOR HOFFMANN.\n";
+                *this << "THE ONLY WINNING MOVE IS NOT TO PLAY.\n";
+                *this << "HOW ABOUT A NICE GAME OF CHESS?\n\n";
+            }
         });
 
-        root.add({"state"},
-                 "", // Prints the welcome message
-                 [this](Arguments& argv, long value) {
-
-            printState();
+        root.add({
+            
+            .tokens = {"source"},
+            .requiredArgs = {Arg::path},
+            .help = "Process a command script",
+            .func = [this](Arguments& argv, long value) {
+                
+                auto stream = std::ifstream(argv.front());
+                if (!stream.is_open()) throw VAException(VAError::FILE_NOT_FOUND, argv.front());
+                retroShell.asyncExecScript(stream);
+            }
         });
 
-        root.add({"joshua"},
-                 "",
-                 [this](Arguments& argv, long value) {
-
-            *this << "\nGREETINGS PROFESSOR HOFFMANN.\n";
-            *this << "THE ONLY WINNING MOVE IS NOT TO PLAY.\n";
-            *this << "HOW ABOUT A NICE GAME OF CHESS?\n\n";
+        root.add({
+                 
+            .tokens = {"wait"},
+            .hidden = true,
+            .requiredArgs = {Arg::value, Arg::seconds},
+            .help = "Pause the execution of a command script",
+            .func = [this](Arguments& argv, long value) {
+                
+                auto seconds = parseNum(argv[0]);
+                agnus.scheduleRel<SLOT_RSH>(SEC(seconds), RSH_WAKEUP);
+                throw ScriptInterruption();
+            }
         });
 
-        root.add({"source"}, {Arg::path},
-                 "Process a command script",
-                 [this](Arguments& argv, long value) {
-
-            auto stream = std::ifstream(argv.front());
-            if (!stream.is_open()) throw VAException(VAError::FILE_NOT_FOUND, argv.front());
-            retroShell.asyncExecScript(stream);
-        });
-
-        root.add({"wait"}, {Arg::value, Arg::seconds},
-                 "", // Pause the execution of a command script",
-                 [this](Arguments& argv, long value) {
-
-            auto seconds = parseNum(argv[0]);
-            agnus.scheduleRel<SLOT_RSH>(SEC(seconds), RSH_WAKEUP);
-            throw ScriptInterruption();
-        });
-
-        root.add({"shutdown"},
-                 "Terminates the application",
-                 [this](Arguments& argv, long value) {
-
-            msgQueue.put(Msg::ABORT, 0);
+        root.add({
+                 
+            .tokens = {"shutdown"},
+            .help = "Terminates the application",
+            .func = [this](Arguments& argv, long value) {
+                
+                msgQueue.put(Msg::ABORT, 0);
+            }
         });
     }
 }
