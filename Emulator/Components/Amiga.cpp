@@ -446,16 +446,26 @@ Amiga::exportConfig(const fs::path &path, bool diff) const
     exportConfig(fs, diff);
 }
 
-// TODO: REMOVE
 void
 Amiga::exportConfig(std::ostream &stream, bool diff) const
 {
-    // stream << "# vAmiga " << Amiga::build() << "\n";
-    // stream << "\n";
-    // stream << "amiga power off\n";
-    // stream << "\n";
+    // Machine config
     CoreComponent::exportConfig(stream, diff);
-    // stream << "amiga power on\n";
+    
+    // Write-protection status of floppy disks and hard drive
+    std::stringstream ss;
+    for (isize i = 0; i < 4; i++) {
+        if (df[i]->hasProtectedDisk()) ss << "df" << i << " protect\n";
+        if (df[i]->hasUnprotectedDisk()) ss << "df" << i << " unprotect\n";
+    }
+    for (isize i = 0; i < 4; i++) {
+        if (hd[i]->hasProtectedDisk()) ss << "hd" << i << " protect\n";
+        if (hd[i]->hasUnprotectedDisk()) ss << "hd" << i << " unprotect\n";
+    }
+    if (!ss.str().empty()) {
+        stream << "\n# Write protection\n\n";
+        stream << ss.str();
+    }
 }
 
 void

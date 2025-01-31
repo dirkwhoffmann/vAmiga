@@ -434,13 +434,12 @@ CommandConsole::initCommands(RetroShellCmd &root)
     
     for (isize i = 0; i <= 1; i++) {
         
-        auto joystick =
-        (i == 0) ? cmd = registerComponent(controlPort1.joystick) :
-        (i == 1) ? cmd = registerComponent(controlPort2.joystick) : "???";
+        if (i == 0) cmd = registerComponent(controlPort1.joystick);
+        if (i == 1) cmd = registerComponent(controlPort2.joystick);
         
         root.add({
                  
-            .tokens         = {joystick, "press"},
+            .tokens         = {cmd, "press"},
             .requiredArgs   = { Arg::value },
             .help           = "Presses a joystick button",
             .func           = [this](Arguments& argv, i64 value) {
@@ -462,7 +461,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         root.add({
             
-            .tokens         = {joystick, "unpress"},
+            .tokens         = {cmd, "unpress"},
             .requiredArgs   = { Arg::value },
             .help           = "Releases a joystick button",
             .func           = [this](Arguments& argv, i64 value) {
@@ -484,13 +483,13 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         root.add({
             
-            .tokens         = {joystick, "pull"},
+            .tokens         = {cmd, "pull"},
             .help           = "Pulls the joystick"
         });
         
         root.add({
             
-            .tokens         = {joystick, "pull", "left"},
+            .tokens         = {cmd, "pull", "left"},
             .help           = "Pulls the joystick left",
             .func           = [this](Arguments& argv, i64 value) {
                 
@@ -502,7 +501,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         root.add({
             
-            .tokens         = {joystick, "pull", "right"},
+            .tokens         = {cmd, "pull", "right"},
             .help           = "Pulls the joystick right",
             .func           = [this](Arguments& argv, i64 value) {
                 
@@ -514,7 +513,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         root.add({
             
-            .tokens         = {joystick, "pull", "up"},
+            .tokens         = {cmd, "pull", "up"},
             .help           = "Pulls the joystick up",
             .func           = [this](Arguments& argv, i64 value) {
                 
@@ -526,7 +525,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         root.add({
             
-            .tokens         = {joystick, "pull", "down"},
+            .tokens         = {cmd, "pull", "down"},
             .help           = "Pulls the joystick down",
             .func           = [this](Arguments& argv, i64 value) {
                 
@@ -538,13 +537,13 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         root.add({
             
-            .tokens         = {joystick, "release"},
+            .tokens         = {cmd, "release"},
             .help           = "Release a joystick axis"
         });
         
         root.add({
             
-            .tokens         = {joystick, "release", "x"},
+            .tokens         = {cmd, "release", "x"},
             .help           = "Releases the x-axis",
             .func           = [this](Arguments& argv, i64 value) {
                 
@@ -556,7 +555,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         root.add({
             
-            .tokens         = {joystick, "release", "y"},
+            .tokens         = {cmd, "release", "y"},
             .help           = "Releases the y-axis",
             .func           = [this](Arguments& argv, i64 value) {
                 
@@ -577,35 +576,47 @@ CommandConsole::initCommands(RetroShellCmd &root)
         if (i == 0) cmd = registerComponent(controlPort1.mouse);
         if (i == 1) cmd = registerComponent(controlPort2.mouse);
         
-        root.add({cmd, "press"},
-                 "Presses a mouse button");
+        root.add({
+            
+            .tokens         = {cmd, "press"},
+            .help           = "Presses a mouse button"
+        });
         
-        root.add({cmd, "press", "left"},
-                 "Presses the left mouse button",
-                 [this](Arguments& argv, i64 value) {
+        root.add({
             
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-            port.mouse.pressAndReleaseLeft();
-            
-        }, i);
+            .tokens         = {cmd, "press", "left"},
+            .help           = "Presses the left mouse button",
+            .func           = [this](Arguments& argv, i64 value) {
+                
+                auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+                port.mouse.pressAndReleaseLeft();
+                
+            }, .value = i
+        });
         
-        root.add({cmd, "press", "middle"},
-                 "Presses the middle mouse button",
-                 [this](Arguments& argv, i64 value) {
+        root.add({
             
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-            port.mouse.pressAndReleaseMiddle();
-            
-        }, i);
+            .tokens         = {cmd, "press", "middle"},
+            .help           = "Presses the middle mouse button",
+            .func           = [this](Arguments& argv, i64 value) {
+                
+                auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+                port.mouse.pressAndReleaseMiddle();
+                
+            }, .value = i
+        });
         
-        root.add({cmd, "press", "right"},
-                 "Presses the right mouse button",
-                 [this](Arguments& argv, i64 value) {
+        root.add({
             
-            auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
-            port.mouse.pressAndReleaseRight();
-            
-        }, i);
+            .tokens         = {cmd, "press", "right"},
+            .help           = "Presses the right mouse button",
+            .func           = [this](Arguments& argv, i64 value) {
+                
+                auto &port = (value == 0) ? amiga.controlPort1 : amiga.controlPort2;
+                port.mouse.pressAndReleaseRight();
+                
+            }, .value = i
+        });
     }
     
     
@@ -619,52 +630,91 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         if (i >= 1 && i <= 3) {
             
-            root.add({cmd, "connect"},
-                     "Connects the drive",
-                     [this](Arguments& argv, i64 value) {
+            root.add({
                 
-                emulator.set(Opt::DRIVE_CONNECT, true, { value });
-                
-            }, i);
+                .tokens         = {cmd, "connect"},
+                .help           = "Connects the drive",
+                .func           = [this](Arguments& argv, i64 value) {
+                    
+                    emulator.set(Opt::DRIVE_CONNECT, true, { value });
+                    
+                }, .value = i
+            });
             
-            root.add({cmd, "disconnect"},
-                     "Disconnects the drive",
-                     [this](Arguments& argv, i64 value) {
+            root.add({
                 
-                emulator.set(Opt::DRIVE_CONNECT, false, { value });
-                
-            }, i);
+                .tokens         = {cmd, "disconnect"},
+                .help           = "Disconnects the drive",
+                .func           = [this](Arguments& argv, i64 value) {
+                    
+                    emulator.set(Opt::DRIVE_CONNECT, false, { value });
+                    
+                }, .value = i
+            });
         }
         
-        root.add({cmd, "eject"},
-                 "Ejects a floppy disk",
-                 [this](Arguments& argv, i64 value) {
+        root.add({
             
-            amiga.df[value]->ejectDisk();
-            
-        }, i);
+            .tokens         = {cmd, "eject"},
+            .help           = "Ejects a floppy disk",
+            .func           = [this](Arguments& argv, i64 value) {
+                
+                amiga.df[value]->ejectDisk();
+                
+            }, .value = i
+        });
         
-        root.add({cmd, "insert"}, { Arg::path },
-                 "Inserts a floppy disk",
-                 [this](Arguments& argv, i64 value) {
+        root.add({
             
-            auto path = argv.front();
-            amiga.df[value]->swapDisk(path);
-            
-        }, i);
+            .tokens         = {cmd, "insert"},
+            .requiredArgs   = { Arg::path },
+            .help           = "Inserts a floppy disk",
+            .func           = [this](Arguments& argv, i64 value) {
+                
+                auto path = argv.front();
+                amiga.df[value]->swapDisk(path);
+                
+            }, .value = i
+        });
         
-        root.add({cmd, "searchpath"}, { Arg::path },
-                 "Sets the search path for media files",
-                 [this](Arguments& argv, i64 value) {
+        root.add({
             
-            string path = argv.front();
+            .tokens         = {cmd, "protect"},
+            .help           = "Enables write protection",
+            .func           = [this](Arguments& argv, i64 value) {
+                
+                amiga.df[value]->setFlag(DiskFlags::PROTECTED, true);
+                
+            }, .value = i
+        });
+ 
+        root.add({
             
-            if (value == 0 || value > 3) df0.setSearchPath(path);
-            if (value == 1 || value > 3) df1.setSearchPath(path);
-            if (value == 2 || value > 3) df2.setSearchPath(path);
-            if (value == 3 || value > 3) df3.setSearchPath(path);
+            .tokens         = {cmd, "unprotect"},
+            .help           = "Disables write protection",
+            .func           = [this](Arguments& argv, i64 value) {
+                
+                amiga.df[value]->setFlag(DiskFlags::PROTECTED, false);
+                
+            }, .value = i
+        });
+        
+        root.add({
             
-        }, i);
+            .tokens         = {cmd, "searchpath"},
+            .requiredArgs   = { Arg::path },
+            .help           = "Sets the search path for media files",
+            .func           = [this](Arguments& argv, i64 value) {
+                
+                string path = argv.front();
+                
+                if (value == 0 || value > 3) df0.setSearchPath(path);
+                if (value == 1 || value > 3) df1.setSearchPath(path);
+                if (value == 2 || value > 3) df2.setSearchPath(path);
+                if (value == 3 || value > 3) df3.setSearchPath(path);
+                
+            }, .value = i
+        });
     }
     
     
@@ -676,42 +726,78 @@ CommandConsole::initCommands(RetroShellCmd &root)
         
         cmd = registerComponent(*hd[i]);
         
-        root.add({cmd, "connect"},
-                 "Connects the hard drive",
-                 [this](Arguments& argv, i64 value) {
+        root.add({
             
-            emulator.set(Opt::HDC_CONNECT, true, {value});
-            
-        }, i);
+            .tokens         = {cmd, "connect"},
+            .help           = "Connects the hard drive",
+            .func           = [this](Arguments& argv, i64 value) {
+                
+                emulator.set(Opt::HDC_CONNECT, true, {value});
+                
+            }, .value = i
+        });
         
-        root.add({cmd, "disconnect"},
-                 "Disconnects the hard drive",
-                 [this](Arguments& argv, i64 value) {
+        root.add({
             
-            emulator.set(Opt::HDC_CONNECT, false, {value});
-            
-        }, i);
+            .tokens         = {cmd, "disconnect"},
+            .help           = "Disconnects the hard drive",
+            .func           = [this](Arguments& argv, i64 value) {
+                
+                emulator.set(Opt::HDC_CONNECT, false, {value});
+                
+            }, .value = i
+        });
         
-        root.add({cmd, "attach"}, { Arg::path },
-                 "Attaches a hard drive image",
-                 [this](Arguments& argv, i64 value) {
+        root.add({
             
-            auto path = argv.front();
-            amiga.hd[value]->init(path);
-            
-        }, i);
+            .tokens         = {cmd, "attach"},
+            .requiredArgs   = { Arg::path },
+            .help           = "Attaches a hard drive image",
+            .func           = [this](Arguments& argv, i64 value) {
+                
+                auto path = argv.front();
+                amiga.hd[value]->init(path);
+                
+            }, .value = i
+        });
         
-        root.add({cmd, "geometry"},  { "<cylinders>", "<heads>", "<sectors>" },
-                 "Changes the disk geometry",
-                 [this](Arguments& argv, i64 value) {
+        root.add({
             
-            auto c = util::parseNum(argv[0]);
-            auto h = util::parseNum(argv[1]);
-            auto s = util::parseNum(argv[2]);
+            .tokens         = {cmd, "geometry"},
+            .requiredArgs   = { "<cylinders>", "<heads>", "<sectors>" },
+            .help           = "Changes the disk geometry",
+            .func           = [this](Arguments& argv, i64 value) {
+                
+                auto c = util::parseNum(argv[0]);
+                auto h = util::parseNum(argv[1]);
+                auto s = util::parseNum(argv[2]);
+                
+                amiga.hd[value]->changeGeometry(c, h, s);
+                
+            }, .value = i
+        });
+        
+        root.add({
             
-            amiga.hd[value]->changeGeometry(c, h, s);
+            .tokens         = {cmd, "protect"},
+            .help           = "Enables write protection",
+            .func           = [this](Arguments& argv, i64 value) {
+                
+                amiga.hd[value]->setFlag(DiskFlags::PROTECTED, true);
+                
+            }, .value = i
+        });
+ 
+        root.add({
             
-        }, i);
+            .tokens         = {cmd, "unprotect"},
+            .help           = "Disables write protection",
+            .func           = [this](Arguments& argv, i64 value) {
+                
+                amiga.hd[value]->setFlag(DiskFlags::PROTECTED, false);
+                
+            }, .value = i
+        });
     }
     
     
