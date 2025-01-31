@@ -29,7 +29,7 @@ RetroShellCmd::add(const RetroShellCmdDescriptor &descriptor)
     auto name = tokens.back();
     
     // Determine how the token is displayed in help messages
-    auto helpName = descriptor.helpName.empty() ? name : descriptor.helpName;
+    // auto helpName = descriptor.helpName.empty() ? name : descriptor.helpName;
 
     // Traversing the command tree
     RetroShellCmd *node = seek(std::vector<string> { tokens.begin(), tokens.end() - 1 });
@@ -38,8 +38,8 @@ RetroShellCmd::add(const RetroShellCmdDescriptor &descriptor)
     // Create the instruction
     RetroShellCmd cmd;
     cmd.name = name;
-    cmd.fullName = (node->fullName.empty() ? "" : node->fullName + " ") + helpName;
-    cmd.helpName = helpName;
+    cmd.fullName = (node->fullName.empty() ? "" : node->fullName + " ") + name;
+    cmd.helpName = name;
     cmd.groupName = currentGroup;
     cmd.requiredArgs = descriptor.args;
     cmd.optionalArgs = descriptor.optArgs;
@@ -152,7 +152,39 @@ RetroShellCmd::add(const std::vector<string> &tokens,
     });
 }
 
-void 
+void
+RetroShellCmd::clone(const std::vector<string> &tokens,
+                     const string &alias,
+                     const string &helpAlias,
+                     const std::vector<isize> &values)
+{
+    assert(!tokens.empty());
+
+    // Find the command to clone
+    RetroShellCmd *cmd = seek(std::vector<string> { tokens.begin(), tokens.end() });
+    assert(cmd != nullptr);
+
+    // Replace the command name as it appears in the help descriptions
+    cmd->helpName = helpAlias;
+    
+    // Assemble the new token list
+    auto newTokens = std::vector<string> { tokens.begin(), tokens.end() - 1 };
+    newTokens.push_back(alias);
+    
+    // Create the instruction
+    add(RetroShellCmdDescriptor {
+        
+        .tokens = newTokens,
+        .hidden = true,
+        .args = cmd->requiredArgs,
+        .optArgs = cmd->optionalArgs,
+        .func = cmd->callback,
+        .values = values
+    });
+}
+
+
+void
 RetroShellCmd::clone(const string &alias,
            const std::vector<string> &tokens,
            long param)

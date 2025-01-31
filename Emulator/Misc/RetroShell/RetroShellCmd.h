@@ -132,11 +132,18 @@ struct RetroShellCmd {
              std::pair<const string &, const string &> help,
              std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr, long param = 0);
 
-    void clone(const string &alias,
+    void clone(const std::vector<string> &tokens,
+               const string &alias,
+               const string &helpAlias,
+               const std::vector<isize> &values = { });
+
+    // DEPRECATED
+    [[deprecated]] void clone(const string &alias,
                const std::vector<string> &tokens,
                long param = 0);
 
-    void clone(const string &alias,
+    // DEPRECATED
+    [[deprecated]]void clone(const string &alias,
                const std::vector<string> &tokens,
                const string &help,
                long param = 0);

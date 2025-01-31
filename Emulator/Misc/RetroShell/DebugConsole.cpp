@@ -79,276 +79,338 @@ DebugConsole::initCommands(RetroShellCmd &root)
     //
 
     {   RetroShellCmd::currentGroup = "Program execution";
-
-        root.add({"goto"}, { }, { Arg::value },
-                 std::pair <string, string>("g[oto]", "Goto address"),
-                 [this](Arguments& argv, const std::vector<isize> &values) {
-
-            argv.empty() ? emulator.run() : cpu.jump(parseAddr(argv[0]));
-        });
-
-        root.clone("g", {"goto"});
-
-        root.add({"step"}, { }, { },
-                 std::pair <string, string>("s[tep]", "Step into the next instruction"),
-                 [this](Arguments& argv, const std::vector<isize> &values) {
-
-            emulator.stepInto();
-        });
-
-        root.clone("s", {"step"});
-
-        root.add({"next"}, { }, { },
-                 std::pair <string, string>("n[next]", "Step over the next instruction"),
-                 [this](Arguments& argv, const std::vector<isize> &values) {
-
-            emulator.stepOver();
-        });
-
-        root.clone("n", {"next"});
-
-        root.add({"eol"}, { }, { },
-                 "Complete the current line",
-                 [this](Arguments& argv, const std::vector<isize> &values) {
-
-            dmaDebugger.eolTrap = true;
-            emulator.run();
+        
+        root.add({
+            
+            .tokens     = { "goto" },
+            .optArgs    = { Arg::value },
+            .helpName   = "g[oto]",
+            .help       = "Goto address",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
+                
+                argv.empty() ? emulator.run() : cpu.jump(parseAddr(argv[0]));
+            }
         });
         
-        root.add({"eof"}, { }, { },
-                 "Complete the current frame",
-                 [this](Arguments& argv, const std::vector<isize> &values) {
-
-            dmaDebugger.eofTrap = true;
-            emulator.run();
+        root.clone({"goto"}, "g", "[g]oto");
+        // root.clone("g", {"goto"});
+        
+        root.add({
+            
+            .tokens     = { "step" },
+            .helpName   = "s[tep]",
+            .help       = "Step into the next instruction",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
+                
+                emulator.stepInto();
+            }
         });
+        
+        root.clone({"step"}, "s", "[s]tep");
+        
+        root.add({
+            
+            .tokens     = { "next" },
+            .helpName   = "n[next]",
+            .help       = "Step over the next instruction",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
+                
+                emulator.stepOver();
+            }
+        });
+        
+        root.clone({"next"}, "n", "[n]ext");
+        
+        root.add({
+            
+            .tokens     = { "eol" },
+            .helpName   = "Complete the current line",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
+                
+                dmaDebugger.eolTrap = true;
+                emulator.run();
+            }
+        });
+        
+        root.add({
+            
+            .tokens     = { "eof" },
+            .help       = "Complete the current frame",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
+                
+                dmaDebugger.eofTrap = true;
+                emulator.run();
+            }
+        });
+        
+        //
+        // Breakpoints
+        //
         
         root.add({"break"},     "Manage CPU breakpoints");
-
-        {
-
-            root.add({"break", ""},
-                     "List all breakpoints",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
+        
+        root.add({
+            
+            .tokens     = { "break", "" },
+            .help       = "List all breakpoints",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
+                
                 dump(amiga.cpu, Category::Breakpoints);
-            });
-
-            root.add({"break", "at"}, { Arg::address }, { Arg::ignores },
-                     "Set a breakpoint",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
+            }
+        });
+        
+        root.add({
+            
+            .tokens     = { "break", "at" },
+            .args       = { Arg::address },
+            .optArgs    = { Arg::ignores },
+            .help       = "Set a breakpoint",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
+                
                 auto addr = parseAddr(argv[0]);
                 if (IS_ODD(addr)) throw VAException(VAError::ADDR_UNALIGNED);
                 cpu.breakpoints.setAt(addr, parseNum(argv, 1, 0));
-            });
-
-            root.add({"break", "delete"}, { Arg::nr },
-                     "Delete breakpoints",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
+            }
+        });
+        
+        root.add({
+            
+            .tokens     = { "break", "delete" },
+            .args       = { Arg::nr },
+            .help       = "Delete breakpoints",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
+                
                 cpu.breakpoints.remove(parseNum(argv[0]));
-            });
-
-            root.add({"break", "toggle"}, { Arg::nr },
-                     "Enable or disable breakpoints",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
+            }
+        });
+        
+        root.add({
+            
+            .tokens     = { "break", "toggle" },
+            .args       = { Arg::nr },
+            .help       = "Enable or disable breakpoints",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
+                
                 cpu.breakpoints.toggle(parseNum(argv[0]));
-            });
-        }
-
-        root.add({"watch"},     "Manage CPU watchpoints");
-
-        {
-
-            root.add({"watch", ""},
-                     "Lists all watchpoints",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
+            }
+        });
+        
+        //
+        // Watchpoints
+        //
+        
+        root.add({
+            
+            .tokens     = { "watch" },
+            .help       = "Manage CPU watchpoints"
+        });
+        
+        root.add({
+            
+            .tokens     = { "watch", "" },
+            .help       = "Lists all watchpoints",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
+                
                 dump(amiga.cpu, Category::Watchpoints);
-            });
-
-            root.add({"watch", "at"}, { Arg::address }, { Arg::ignores },
-                     "Set a watchpoint at the specified address",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
+            }
+        });
+        
+        root.add({
+            
+            .tokens     = { "watch", "at" },
+            .args       = { Arg::address },
+            .optArgs    = { Arg::ignores },
+            .help       = "Set a watchpoint at the specified address",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
+                
                 auto addr = parseAddr(argv[0]);
                 cpu.watchpoints.setAt(addr, parseNum(argv, 1, 0));
-            });
-
-            root.add({"watch", "delete"}, { Arg::address },
-                     "Delete a watchpoint",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
+            }
+        });
+        
+        root.add({
+            
+            .tokens     = { "watch", "delete" },
+            .args       = { Arg::address },
+            .help       = "Delete a watchpoint",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
+                
                 cpu.watchpoints.remove(parseNum(argv[0]));
-            });
-
-            root.add({"watch", "toggle"}, { Arg::address },
-                     "Enable or disable a watchpoint",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
+            }
+        });
+        
+        root.add({
+            
+            .tokens     = { "watch", "toggle" },
+            .args       = { Arg::address },
+            .help       = "Enable or disable a watchpoint",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
+                
                 cpu.watchpoints.toggle(parseNum(argv[0]));
-            });
-        }
-
+            }
+        });
+        
+        //
+        // Catchpoints
+        //
+        
         root.add({"catch"},     "Manage CPU catchpoints");
-
-        {
-
-            root.add({"catch", ""},
-                     "List all catchpoints",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                dump(amiga.cpu, Category::Catchpoints);
-            });
-
-            root.add({"catch", "vector"}, { Arg::value }, { Arg::ignores },
-                     "Catch an exception vector",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                auto nr = parseNum(argv[0]);
-                if (nr < 0 || nr > 255) throw VAException(VAError::OPT_INV_ARG, "0...255");
-                cpu.catchpoints.setAt(u32(nr), parseNum(argv, 1, 0));
-            });
-
-            root.add({"catch", "interrupt"}, { Arg::value }, { Arg::ignores },
-                     "Catch an interrupt",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                auto nr = parseNum(argv[0]);
-                if (nr < 1 || nr > 7) throw VAException(VAError::OPT_INV_ARG, "1...7");
-                cpu.catchpoints.setAt(u32(nr + 24), parseNum(argv, 1, 0));
-            });
-
-            root.add({"catch", "trap"}, { Arg::value }, { Arg::ignores },
-                     "Catch a trap instruction",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                auto nr = parseNum(argv[0]);
-                if (nr < 0 || nr > 15) throw VAException(VAError::OPT_INV_ARG, "0...15");
-                cpu.catchpoints.setAt(u32(nr + 32), parseNum(argv, 1, 0));
-            });
-
-            root.add({"catch", "delete"}, { Arg::value },
-                     "Delete a catchpoint",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                cpu.catchpoints.remove(parseNum(argv[0]));
-            });
-
-            root.add({"catch", "toggle"}, { Arg::value },
-                     "Enable or disable a catchpoint",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                cpu.catchpoints.toggle(parseNum(argv[0]));
-            });
-        }
-
+        
+        root.add({"catch", ""},
+                 "List all catchpoints",
+                 [this](Arguments& argv, const std::vector<isize> &values) {
+            
+            dump(amiga.cpu, Category::Catchpoints);
+        });
+        
+        root.add({"catch", "vector"}, { Arg::value }, { Arg::ignores },
+                 "Catch an exception vector",
+                 [this](Arguments& argv, const std::vector<isize> &values) {
+            
+            auto nr = parseNum(argv[0]);
+            if (nr < 0 || nr > 255) throw VAException(VAError::OPT_INV_ARG, "0...255");
+            cpu.catchpoints.setAt(u32(nr), parseNum(argv, 1, 0));
+        });
+        
+        root.add({"catch", "interrupt"}, { Arg::value }, { Arg::ignores },
+                 "Catch an interrupt",
+                 [this](Arguments& argv, const std::vector<isize> &values) {
+            
+            auto nr = parseNum(argv[0]);
+            if (nr < 1 || nr > 7) throw VAException(VAError::OPT_INV_ARG, "1...7");
+            cpu.catchpoints.setAt(u32(nr + 24), parseNum(argv, 1, 0));
+        });
+        
+        root.add({"catch", "trap"}, { Arg::value }, { Arg::ignores },
+                 "Catch a trap instruction",
+                 [this](Arguments& argv, const std::vector<isize> &values) {
+            
+            auto nr = parseNum(argv[0]);
+            if (nr < 0 || nr > 15) throw VAException(VAError::OPT_INV_ARG, "0...15");
+            cpu.catchpoints.setAt(u32(nr + 32), parseNum(argv, 1, 0));
+        });
+        
+        root.add({"catch", "delete"}, { Arg::value },
+                 "Delete a catchpoint",
+                 [this](Arguments& argv, const std::vector<isize> &values) {
+            
+            cpu.catchpoints.remove(parseNum(argv[0]));
+        });
+        
+        root.add({"catch", "toggle"}, { Arg::value },
+                 "Enable or disable a catchpoint",
+                 [this](Arguments& argv, const std::vector<isize> &values) {
+            
+            cpu.catchpoints.toggle(parseNum(argv[0]));
+        });
+        
+        //
+        // Copper Breakpoints
+        //
+        
         root.add({"cbreak"},    "Manage Copper breakpoints");
-
-        {
-
-            root.add({"cbreak", ""},
-                     "List all breakpoints",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                dump(copper.debugger, Category::Breakpoints);
-            });
-
-            root.add({"cbreak", "at"}, { Arg::value }, { Arg::ignores },
-                     "Set a breakpoint at the specified address",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                auto addr = parseAddr(argv[0]);
-                if (IS_ODD(addr)) throw VAException(VAError::ADDR_UNALIGNED);
-                copper.debugger.breakpoints.setAt(addr, parseNum(argv, 1, 0));
-            });
-
-            root.add({"cbreak", "delete"}, { Arg::value },
-                     "Delete a breakpoint",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                copper.debugger.breakpoints.remove(parseNum(argv[0]));
-            });
-
-            root.add({"cbreak", "toggle"}, { Arg::value },
-                     "Enable or disable a breakpoint",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                copper.debugger.breakpoints.toggle(parseNum(argv[0]));
-            });
-        }
-
+        
+        root.add({"cbreak", ""},
+                 "List all breakpoints",
+                 [this](Arguments& argv, const std::vector<isize> &values) {
+            
+            dump(copper.debugger, Category::Breakpoints);
+        });
+        
+        root.add({"cbreak", "at"}, { Arg::value }, { Arg::ignores },
+                 "Set a breakpoint at the specified address",
+                 [this](Arguments& argv, const std::vector<isize> &values) {
+            
+            auto addr = parseAddr(argv[0]);
+            if (IS_ODD(addr)) throw VAException(VAError::ADDR_UNALIGNED);
+            copper.debugger.breakpoints.setAt(addr, parseNum(argv, 1, 0));
+        });
+        
+        root.add({"cbreak", "delete"}, { Arg::value },
+                 "Delete a breakpoint",
+                 [this](Arguments& argv, const std::vector<isize> &values) {
+            
+            copper.debugger.breakpoints.remove(parseNum(argv[0]));
+        });
+        
+        root.add({"cbreak", "toggle"}, { Arg::value },
+                 "Enable or disable a breakpoint",
+                 [this](Arguments& argv, const std::vector<isize> &values) {
+            
+            copper.debugger.breakpoints.toggle(parseNum(argv[0]));
+        });
+        
+        //
+        // Copper Watchpoints
+        //
+        
         root.add({"cwatch"},    "Manage Copper watchpoints");
-
-        {
-
-            root.add({"cwatch", ""},
-                     "List all watchpoints",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                dump(copper.debugger, Category::Watchpoints);
-            });
-
-            root.add({"cwatch", "at"}, { Arg::value }, { Arg::ignores },
-                     "Set a watchpoint at the specified address",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                auto addr = parseAddr(argv[0]);
-                if (IS_ODD(addr)) throw VAException(VAError::ADDR_UNALIGNED);
-                copper.debugger.watchpoints.setAt(addr, parseNum(argv, 1, 0));
-            });
-
-            root.add({"cwatch", "delete"}, { Arg::value },
-                     "Delete a watchpoint",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                copper.debugger.watchpoints.remove(parseNum(argv[0]));
-            });
-
-            root.add({"cwatch", "toggle"}, { Arg::value },
-                     "Enable or disable a watchpoint",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                copper.debugger.watchpoints.toggle(parseNum(argv[0]));
-            });
-        }
-
+        
+        root.add({"cwatch", ""},
+                 "List all watchpoints",
+                 [this](Arguments& argv, const std::vector<isize> &values) {
+            
+            dump(copper.debugger, Category::Watchpoints);
+        });
+        
+        root.add({"cwatch", "at"}, { Arg::value }, { Arg::ignores },
+                 "Set a watchpoint at the specified address",
+                 [this](Arguments& argv, const std::vector<isize> &values) {
+            
+            auto addr = parseAddr(argv[0]);
+            if (IS_ODD(addr)) throw VAException(VAError::ADDR_UNALIGNED);
+            copper.debugger.watchpoints.setAt(addr, parseNum(argv, 1, 0));
+        });
+        
+        root.add({"cwatch", "delete"}, { Arg::value },
+                 "Delete a watchpoint",
+                 [this](Arguments& argv, const std::vector<isize> &values) {
+            
+            copper.debugger.watchpoints.remove(parseNum(argv[0]));
+        });
+        
+        root.add({"cwatch", "toggle"}, { Arg::value },
+                 "Enable or disable a watchpoint",
+                 [this](Arguments& argv, const std::vector<isize> &values) {
+            
+            copper.debugger.watchpoints.toggle(parseNum(argv[0]));
+        });
+        
+        //
+        // Beamtraps
+        //
+        
         root.add({"btrap"},    "Manage beamtraps");
-
-        {
-
-            root.add({"btrap", ""},
-                     "List all beamtraps",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                dump(agnus.dmaDebugger, Category::Beamtraps);
-            });
-
-            root.add({"btrap", "at"}, { Arg::value, Arg::value }, { Arg::ignores },
-                     "Set a beamtrap at the specified coordinate",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                auto v = parseNum(argv[0]);
-                auto h = parseNum(argv[1]);
-                agnus.dmaDebugger.beamtraps.setAt(HI_W_LO_W(v, h), parseNum(argv, 2, 0));
-            });
-
-            root.add({"btrap", "delete"}, { Arg::value },
-                     "Delete a beamtrap",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                agnus.dmaDebugger.beamtraps.remove(parseNum(argv[0]));
-            });
-
-            root.add({"btrap", "toggle"}, { Arg::value },
-                     "Enable or disable a beamtrap",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                agnus.dmaDebugger.beamtraps.toggle(parseNum(argv[0]));
-            });
-        }
+        
+        root.add({"btrap", ""},
+                 "List all beamtraps",
+                 [this](Arguments& argv, const std::vector<isize> &values) {
+            
+            dump(agnus.dmaDebugger, Category::Beamtraps);
+        });
+        
+        root.add({"btrap", "at"}, { Arg::value, Arg::value }, { Arg::ignores },
+                 "Set a beamtrap at the specified coordinate",
+                 [this](Arguments& argv, const std::vector<isize> &values) {
+            
+            auto v = parseNum(argv[0]);
+            auto h = parseNum(argv[1]);
+            agnus.dmaDebugger.beamtraps.setAt(HI_W_LO_W(v, h), parseNum(argv, 2, 0));
+        });
+        
+        root.add({"btrap", "delete"}, { Arg::value },
+                 "Delete a beamtrap",
+                 [this](Arguments& argv, const std::vector<isize> &values) {
+            
+            agnus.dmaDebugger.beamtraps.remove(parseNum(argv[0]));
+        });
+        
+        root.add({"btrap", "toggle"}, { Arg::value },
+                 "Enable or disable a beamtrap",
+                 [this](Arguments& argv, const std::vector<isize> &values) {
+            
+            agnus.dmaDebugger.beamtraps.toggle(parseNum(argv[0]));
+        });
     }
 
     {   RetroShellCmd::currentGroup = "Monitoring";
@@ -385,9 +447,11 @@ DebugConsole::initCommands(RetroShellCmd &root)
             }, .values = {2}
         });
 
-        root.clone("m.b",      {"m"}, 1);
-        root.clone("m.w",      {"m"}, 2);
-        root.clone("m.l",      {"m"}, 4);
+        root.clone({"m"}, "m.b", "m[.b|.w|.l]", { 1 });
+        root.clone({"m"}, "m.w", "m[.b|.w|.l]", { 2 });
+        root.clone({"m"}, "m.l", "m[.b|.w|.l]", { 3 });
+        // root.clone("m.w",      {"m"}, 2);
+        // root.clone("m.l",      {"m"}, 4);
 
         root.add({"w"}, { Arg::value }, { "{ " + Arg::address + " | " + RegEnum::argList() + " }" },
                  std::pair<string, string>("w[.b|.w|.l]", "Write into a register or memory"),
@@ -408,9 +472,12 @@ DebugConsole::initCommands(RetroShellCmd &root)
             mem.debugger.write(addr, u32(parseNum(argv[0])), values[0]);
         }, 2);
 
-        root.clone("w.b", {"w"}, "", 1);
-        root.clone("w.w", {"w"}, "", 2);
-        root.clone("w.l", {"w"}, "", 4);
+        root.clone({"w"}, "w.b", "w[.b|.w|.l]", { 1 });
+        root.clone({"w"}, "w.w", "w[.b|.w|.l]", { 2 });
+        root.clone({"w"}, "w.l", "w[.b|.w|.l]", { 4 });
+        // root.clone("w.b", {"w"}, "", 1);
+        // root.clone("w.w", {"w"}, "", 2);
+        // root.clone("w.l", {"w"}, "", 4);
 
         root.add({"c"}, { Arg::src, Arg::dst, Arg::count },
                  std::pair<string, string>("c[.b|.w|.l]", "Copy a chunk of memory"),
@@ -432,10 +499,14 @@ DebugConsole::initCommands(RetroShellCmd &root)
             }
         }, 1);
 
+        root.clone({"c"}, "c.b", "c[.b|.w|.l]", { 1 });
+        root.clone({"c"}, "c.w", "c[.b|.w|.l]", { 2 });
+        root.clone({"c"}, "c.l", "c[.b|.w|.l]", { 4 });
+        /*
         root.clone("c.b", {"c"}, "", 1);
         root.clone("c.w", {"c"}, "", 2);
         root.clone("c.l", {"c"}, "", 4);
-
+        */
         root.add({"f"}, { Arg::sequence }, { Arg::address },
                  std::pair<string, string>("f[.b|.w|.l]", "Find a sequence in memory"),
                  [this](Arguments& argv, const std::vector<isize> &values) {
@@ -458,14 +529,14 @@ DebugConsole::initCommands(RetroShellCmd &root)
             }
         }, 1);
 
+        root.clone({"f"}, "f.b", "f[.b|.w|.l]", { 1 });
+        root.clone({"f"}, "f.w", "f[.b|.w|.l]", { 2 });
+        root.clone({"f"}, "f.l", "f[.b|.w|.l]", { 4 });
+        /*
         root.clone("f.b", {"f"}, "", 1);
         root.clone("f.w", {"f"}, "", 2);
         root.clone("f.l", {"f"}, "", 4);
-
-
-        root.clone("c.b", {"c"}, "", 1);
-        root.clone("c.w", {"c"}, "", 2);
-        root.clone("c.l", {"c"}, "", 4);
+        */
 
         root.add({"e"}, { Arg::address, Arg::count }, { Arg::value },
                  std::pair<string, string>("e[.b|.w|.l]", "Erase memory"),
@@ -478,10 +549,14 @@ DebugConsole::initCommands(RetroShellCmd &root)
             mem.debugger.write(addr, val, values[0], count);
         }, 1);
 
+        root.clone({"e"}, "e.b", "e[.b|.w|.l]", { 1 });
+        root.clone({"e"}, "e.w", "e[.b|.w|.l]", { 2 });
+        root.clone({"e"}, "e.l", "e[.b|.w|.l]", { 4 });
+        /*
         root.clone("e.b", {"e"}, "", 1);
         root.clone("e.w", {"e"}, "", 2);
         root.clone("e.l", {"e"}, "", 4);
-
+        */
         root.add({"?"},
                  "Inspect a component");
 
@@ -1079,94 +1154,121 @@ DebugConsole::initCommands(RetroShellCmd &root)
                 retroShell << ss;
             });
 
-            root.add({"os", "devices"}, { }, {"<device>"},
-                     "List all devices",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                std::stringstream ss;
-                isize num;
-
-                if (argv.empty()) {
-                    osDebugger.dumpDevices(ss);
-                } else if (util::parseHex(argv.front(), &num)) {
-                    osDebugger.dumpDevice(ss, (u32)num);
-                } else {
-                    osDebugger.dumpDevice(ss, argv.front());
+            root.add({
+                
+                .tokens     = {"os", "devices"},
+                .optArgs    = {"<device>"},
+                .help       = "List all devices",
+                .func       = [this](Arguments& argv, const std::vector<isize> &values) {
+                    
+                    std::stringstream ss;
+                    isize num;
+                    
+                    if (argv.empty()) {
+                        osDebugger.dumpDevices(ss);
+                    } else if (util::parseHex(argv.front(), &num)) {
+                        osDebugger.dumpDevice(ss, (u32)num);
+                    } else {
+                        osDebugger.dumpDevice(ss, argv.front());
+                    }
+                    
+                    retroShell << ss;
                 }
-
-                retroShell << ss;
             });
 
-            root.add({"os", "resources"}, { }, {"<resource>"},
-                     "List all resources",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                std::stringstream ss;
-                isize num;
-
-                if (argv.empty()) {
-                    osDebugger.dumpResources(ss);
-                } else if (util::parseHex(argv.front(), &num)) {
-                    osDebugger.dumpResource(ss, (u32)num);
-                } else {
-                    osDebugger.dumpResource(ss, argv.front());
+            root.add({
+                
+                .tokens     = {"os", "resources"},
+                .optArgs    = {"<resource>"},
+                .help       = "List all resources",
+                .func       = [this](Arguments& argv, const std::vector<isize> &values) {
+                    
+                    std::stringstream ss;
+                    isize num;
+                    
+                    if (argv.empty()) {
+                        osDebugger.dumpResources(ss);
+                    } else if (util::parseHex(argv.front(), &num)) {
+                        osDebugger.dumpResource(ss, (u32)num);
+                    } else {
+                        osDebugger.dumpResource(ss, argv.front());
+                    }
+                    
+                    retroShell << ss;
                 }
-
-                retroShell << ss;
             });
 
-            root.add({"os", "tasks"}, { }, {"<task>"},
-                     "List all tasks",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                std::stringstream ss;
-                isize num;
-
-                if (argv.empty()) {
-                    osDebugger.dumpTasks(ss);
-                } else if (util::parseHex(argv.front(), &num)) {
-                    osDebugger.dumpTask(ss, (u32)num);
-                } else {
-                    osDebugger.dumpTask(ss, argv.front());
+            root.add({
+                
+                .tokens     = {"os", "tasks"},
+                .optArgs    = {"<task>"},
+                .help       = "List all tasks",
+                .func       = [this](Arguments& argv, const std::vector<isize> &values) {
+                    
+                    std::stringstream ss;
+                    isize num;
+                    
+                    if (argv.empty()) {
+                        osDebugger.dumpTasks(ss);
+                    } else if (util::parseHex(argv.front(), &num)) {
+                        osDebugger.dumpTask(ss, (u32)num);
+                    } else {
+                        osDebugger.dumpTask(ss, argv.front());
+                    }
+                    
+                    retroShell << ss;
                 }
-
-                retroShell << ss;
             });
 
-            root.add({"os", "processes"}, { }, {"<process>"},
-                     "List all processes",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                std::stringstream ss;
-                isize num;
-
-                if (argv.empty()) {
-                    osDebugger.dumpProcesses(ss);
-                } else if (util::parseHex(argv.front(), &num)) {
-                    osDebugger.dumpProcess(ss, (u32)num);
-                } else {
-                    osDebugger.dumpProcess(ss, argv.front());
+            root.add({
+                     
+                .tokens     = {"os", "processes"},
+                .optArgs    = {"<process>"},
+                .help       = "List all processes",
+                .func       = [this](Arguments& argv, const std::vector<isize> &values) {
+                    
+                    std::stringstream ss;
+                    isize num;
+                    
+                    if (argv.empty()) {
+                        osDebugger.dumpProcesses(ss);
+                    } else if (util::parseHex(argv.front(), &num)) {
+                        osDebugger.dumpProcess(ss, (u32)num);
+                    } else {
+                        osDebugger.dumpProcess(ss, argv.front());
+                    }
+                    
+                    retroShell << ss;
                 }
-
-                retroShell << ss;
             });
 
-            root.add({"os", "catch"}, {"<task>"},
-                     "Pause emulation on task launch",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                diagBoard.catchTask(argv.back());
-                retroShell << "Waiting for task '" << argv.back() << "' to start...\n";
+            root.add({
+                
+                .tokens     = {"os", "catch"},
+                .args       = {"<task>"},
+                .help       = "Pause emulation on task launch",
+                .func       = [this](Arguments& argv, const std::vector<isize> &values) {
+                    
+                    diagBoard.catchTask(argv.back());
+                    retroShell << "Waiting for task '" << argv.back() << "' to start...\n";
+                }
             });
 
-            root.add({"os", "set"},
-                     "Configure the component");
+            root.add({
+                
+                .tokens     = {"os", "set"},
+                .help       = "Configure the component"
+            });
 
-            root.add({"os", "set", "diagboard" }, { Arg::boolean },
-                     "Attach or detach the debug expansion board",
-                     [this](Arguments& argv, const std::vector<isize> &values) {
-
-                diagBoard.setOption(Opt::DIAG_BOARD, parseBool(argv[0]));
+            root.add({
+                
+                .tokens     = {"os", "set", "diagboard" },
+                .args       = { Arg::boolean },
+                .help       = "Attach or detach the debug expansion board",
+                .func       = [this](Arguments& argv, const std::vector<isize> &values) {
+                    
+                    diagBoard.setOption(Opt::DIAG_BOARD, parseBool(argv[0]));
+                }
             });
         }
     }
@@ -1179,11 +1281,14 @@ DebugConsole::initCommands(RetroShellCmd &root)
 
         root.add({"debug"}, "Debug variables");
 
-        root.add({"debug", ""}, {},
-                 "Display all debug variables",
-                 [this](Arguments& argv, const std::vector<isize> &values) {
-
-            dump(emulator, Category::Debug);
+        root.add({
+            
+            .tokens     = {"debug", ""},
+            .help       = "Display all debug variables",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
+                
+                dump(emulator, Category::Debug);
+            }
         });
         
         if (debugBuild) {
@@ -1210,19 +1315,23 @@ DebugConsole::initCommands(RetroShellCmd &root)
                 });
             }
         }
-        root.add({"%"}, { Arg::value },
-                 "Convert a value into different formats",
-                 [this](Arguments& argv, const std::vector<isize> &values) {
+        root.add({
             
-            std::stringstream ss;
-            
-            if (isNum(argv[0])) {
-                mem.debugger.convertNumeric(ss, u32(parseNum(argv[0])));
-            } else {
-                mem.debugger.convertNumeric(ss, argv.front());
+            .tokens     = {"%"},
+            .args       = { Arg::value },
+            .help       = "Convert a value into different formats",
+            .func       = [this](Arguments& argv, const std::vector<isize> &values) {
+                
+                std::stringstream ss;
+                
+                if (isNum(argv[0])) {
+                    mem.debugger.convertNumeric(ss, u32(parseNum(argv[0])));
+                } else {
+                    mem.debugger.convertNumeric(ss, argv.front());
+                }
+                
+                retroShell << '\n' << ss << '\n';
             }
-            
-            retroShell << '\n' << ss << '\n';
         });
     }
 }
