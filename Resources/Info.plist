@@ -7,40 +7,6 @@
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
-			<key>CFBundleTypeIconSystemGenerated</key>
-			<integer>1</integer>
-			<key>CFBundleTypeName</key>
-			<string>EXE</string>
-			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
-			<key>LSHandlerRank</key>
-			<string>Default</string>
-			<key>LSItemContentTypes</key>
-			<array>
-				<string>de.dirkwhoffmann.retro.exe</string>
-			</array>
-			<key>NSDocumentClass</key>
-			<string>$(PRODUCT_MODULE_NAME).MyDocument</string>
-		</dict>
-		<dict>
-			<key>CFBundleTypeIconFile</key>
-			<string></string>
-			<key>CFBundleTypeIconSystemGenerated</key>
-			<integer>0</integer>
-			<key>CFBundleTypeName</key>
-			<string>HDF</string>
-			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
-			<key>LSHandlerRank</key>
-			<string>Owner</string>
-			<key>LSItemContentTypes</key>
-			<array>
-				<string>de.dirkwhoffmann.retro.hdf</string>
-			</array>
-			<key>NSDocumentClass</key>
-			<string>$(PRODUCT_MODULE_NAME).MyDocument</string>
-		</dict>
-		<dict>
 			<key>CFBundleTypeIconFile</key>
 			<string></string>
 			<key>CFBundleTypeIconSystemGenerated</key>
@@ -116,30 +82,48 @@
 			<key>CFBundleTypeIconSystemGenerated</key>
 			<integer>1</integer>
 			<key>CFBundleTypeName</key>
-			<string>RETROSH</string>
+			<string>EXE</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Default</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>de.dirkwhoffmann.retro.retrosh</string>
+				<string>de.dirkwhoffmann.retro.exe</string>
+			</array>
+			<key>NSDocumentClass</key>
+			<string>$(PRODUCT_MODULE_NAME).MyDocument</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeIconFile</key>
+			<string></string>
+			<key>CFBundleTypeIconSystemGenerated</key>
+			<integer>0</integer>
+			<key>CFBundleTypeName</key>
+			<string>HDF</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>de.dirkwhoffmann.retro.hdf</string>
 			</array>
 			<key>NSDocumentClass</key>
 			<string>$(PRODUCT_MODULE_NAME).MyDocument</string>
 		</dict>
 		<dict>
 			<key>CFBundleTypeIconSystemGenerated</key>
-			<integer>0</integer>
+			<integer>1</integer>
 			<key>CFBundleTypeName</key>
-			<string>VASNAP</string>
+			<string>HDZ</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
 			<string>Default</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>de.dirkwhoffmann.retro.vasnap</string>
+				<string>de.dirkwhoffmann.retro.hdz</string>
 			</array>
 			<key>NSDocumentClass</key>
 			<string>MyDocument</string>
@@ -164,14 +148,30 @@
 			<key>CFBundleTypeIconSystemGenerated</key>
 			<integer>1</integer>
 			<key>CFBundleTypeName</key>
-			<string>HDZ</string>
+			<string>RETROSH</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Default</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>de.dirkwhoffmann.retro.retrosh</string>
+			</array>
+			<key>NSDocumentClass</key>
+			<string>$(PRODUCT_MODULE_NAME).MyDocument</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeIconSystemGenerated</key>
+			<integer>0</integer>
+			<key>CFBundleTypeName</key>
+			<string>VASNAP</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
 			<string>Default</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>de.dirkwhoffmann.retro.hdz</string>
+				<string>de.dirkwhoffmann.retro.vasnap</string>
 			</array>
 			<key>NSDocumentClass</key>
 			<string>MyDocument</string>
@@ -207,211 +207,211 @@
 	<string>MyApplication</string>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
-        <dict>
-            <key>UTTypeConformsTo</key>
-            <array>
-                <string>public.data</string>
-            </array>
-            <key>UTTypeDescription</key>
-            <string>ADF files</string>
-            <key>UTTypeIconFile</key>
-            <string>ADFIcon</string>
-            <key>UTTypeIcons</key>
-            <dict>
-                <key>UTTypeIconBadgeName</key>
-                <string>ADFIcon</string>
-                <key>UTTypeIconText</key>
-                <string>ADF</string>
-            </dict>
-            <key>UTTypeIdentifier</key>
-            <string>de.dirkwhoffmann.retro.adf</string>
-            <key>UTTypeTagSpecification</key>
-            <dict>
-                <key>public.filename-extension</key>
-                <array>
-                    <string>adf</string>
-                </array>
-            </dict>
-        </dict>
-        <dict>
-            <key>UTTypeConformsTo</key>
-            <array>
-                <string>public.data</string>
-                <string>public.archive</string>
-            </array>
-            <key>UTTypeDescription</key>
-            <string>Compressed ADF files</string>
-            <key>UTTypeIcons</key>
-            <dict>
-                <key>UTTypeIconBadgeName</key>
-                <string>ADFIcon</string>
-                <key>UTTypeIconText</key>
-                <string>ADF</string>
-            </dict>
-            <key>UTTypeIdentifier</key>
-            <string>de.dirkwhoffmann.retro.adz</string>
-            <key>UTTypeTagSpecification</key>
-            <dict>
-                <key>public.filename-extension</key>
-                <array>
-                    <string>adz</string>
-                </array>
-            </dict>
-        </dict>
-        <dict>
-            <key>UTTypeConformsTo</key>
-            <array>
-                <string>public.data</string>
-            </array>
-            <key>UTTypeDescription</key>
-            <string>DMS files</string>
-            <key>UTTypeIcons</key>
-            <dict>
-                <key>UTTypeIconBadgeName</key>
-                <string>ADFIcon</string>
-                <key>UTTypeIconText</key>
-                <string>DMS</string>
-            </dict>
-            <key>UTTypeIdentifier</key>
-            <string>de.dirkwhoffmann.retro.dms</string>
-            <key>UTTypeTagSpecification</key>
-            <dict>
-                <key>public.filename-extension</key>
-                <array>
-                    <string>dms</string>
-                </array>
-                <key>public.mime-type</key>
-                <array/>
-            </dict>
-        </dict>
-        <dict>
-            <key>UTTypeConformsTo</key>
-            <array>
-                <string>public.data</string>
-            </array>
-            <key>UTTypeDescription</key>
-            <string>EXE files</string>
-            <key>UTTypeIcons</key>
-            <dict>
-                <key>UTTypeIconBadgeName</key>
-                <string>vAmigaIcon</string>
-                <key>UTTypeIconText</key>
-                <string>EXE</string>
-            </dict>
-            <key>UTTypeIdentifier</key>
-            <string>de.dirkwhoffmann.retro.exe</string>
-            <key>UTTypeTagSpecification</key>
-            <dict>
-                <key>public.filename-extension</key>
-                <array>
-                    <string>exe</string>
-                </array>
-            </dict>
-        </dict>
-        <dict>
-            <key>UTTypeConformsTo</key>
-            <array>
-                <string>public.data</string>
-            </array>
-            <key>UTTypeDescription</key>
-            <string>HDF files</string>
-            <key>UTTypeIcons</key>
-            <dict>
-                <key>UTTypeIconBackgroundName</key>
-                <string></string>
-                <key>UTTypeIconBadgeName</key>
-                <string>HDFIcon</string>
-                <key>UTTypeIconText</key>
-                <string>HDF</string>
-            </dict>
-            <key>UTTypeIdentifier</key>
-            <string>de.dirkwhoffmann.retro.hdf</string>
-            <key>UTTypeTagSpecification</key>
-            <dict>
-                <key>public.filename-extension</key>
-                <array>
-                    <string>hdf</string>
-                </array>
-            </dict>
-        </dict>
-        <dict>
-            <key>UTTypeConformsTo</key>
-            <array>
-                <string>public.data</string>
-                <string>public.archive</string>
-            </array>
-            <key>UTTypeDescription</key>
-            <string>Compressed HDF files</string>
-            <key>UTTypeIcons</key>
-            <dict>
-                <key>UTTypeIconBackgroundName</key>
-                <string></string>
-                <key>UTTypeIconBadgeName</key>
-                <string>HDFIcon</string>
-                <key>UTTypeIconText</key>
-                <string>HDF</string>
-            </dict>
-            <key>UTTypeIdentifier</key>
-            <string>de.dirkwhoffmann.retro.hdz</string>
-            <key>UTTypeTagSpecification</key>
-            <dict>
-                <key>public.filename-extension</key>
-                <array>
-                    <string>hdz</string>
-                </array>
-            </dict>
-        </dict>
-        <dict>
-            <key>UTTypeConformsTo</key>
-            <array>
-                <string>public.data</string>
-            </array>
-            <key>UTTypeDescription</key>
-            <string>IMG files</string>
-            <key>UTTypeIcons</key>
-            <dict>
-                <key>UTTypeIconBadgeName</key>
-                <string>ADFIcon</string>
-                <key>UTTypeIconText</key>
-                <string>IMG</string>
-            </dict>
-            <key>UTTypeIdentifier</key>
-            <string>de.dirkwhoffmann.retro.img</string>
-            <key>UTTypeTagSpecification</key>
-            <dict>
-                <key>public.filename-extension</key>
-                <array>
-                    <string>img</string>
-                    <string>ima</string>
-                </array>
-            </dict>
-        </dict>
-        <dict>
-            <key>UTTypeConformsTo</key>
-            <array>
-                <string>public.shell-script</string>
-            </array>
-            <key>UTTypeDescription</key>
-            <string>RetroShell script</string>
-            <key>UTTypeIcons</key>
-            <dict>
-                <key>UTTypeIconBackgroundName</key>
-                <string></string>
-                <key>UTTypeIconBadgeName</key>
-                <string>vAmigaIcon</string>
-                <key>UTTypeIconText</key>
-                <string>RETROSHELL</string>
-            </dict>
-            <key>UTTypeIdentifier</key>
-            <string>de.dirkwhoffmann.retro.retrosh</string>
-            <key>UTTypeTagSpecification</key>
-            <dict>
-                <key>public.filename-extension</key>
-                <array>
-                    <string>retrosh</string>
-                </array>
-            </dict>
-        </dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>ADF files</string>
+			<key>UTTypeIconFile</key>
+			<string>ADFIcon</string>
+			<key>UTTypeIcons</key>
+			<dict>
+				<key>UTTypeIconBadgeName</key>
+				<string>ADFIcon</string>
+				<key>UTTypeIconText</key>
+				<string>ADF</string>
+			</dict>
+			<key>UTTypeIdentifier</key>
+			<string>de.dirkwhoffmann.retro.adf</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>adf</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.archive</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Compressed ADF files</string>
+			<key>UTTypeIcons</key>
+			<dict>
+				<key>UTTypeIconBadgeName</key>
+				<string>ADFIcon</string>
+				<key>UTTypeIconText</key>
+				<string>ADF</string>
+			</dict>
+			<key>UTTypeIdentifier</key>
+			<string>de.dirkwhoffmann.retro.adz</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>adz</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>DMS files</string>
+			<key>UTTypeIcons</key>
+			<dict>
+				<key>UTTypeIconBadgeName</key>
+				<string>ADFIcon</string>
+				<key>UTTypeIconText</key>
+				<string>DMS</string>
+			</dict>
+			<key>UTTypeIdentifier</key>
+			<string>de.dirkwhoffmann.retro.dms</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>dms</string>
+				</array>
+				<key>public.mime-type</key>
+				<array/>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>EXE files</string>
+			<key>UTTypeIcons</key>
+			<dict>
+				<key>UTTypeIconBadgeName</key>
+				<string>vAmigaIcon</string>
+				<key>UTTypeIconText</key>
+				<string>EXE</string>
+			</dict>
+			<key>UTTypeIdentifier</key>
+			<string>de.dirkwhoffmann.retro.exe</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>exe</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>HDF files</string>
+			<key>UTTypeIcons</key>
+			<dict>
+				<key>UTTypeIconBackgroundName</key>
+				<string></string>
+				<key>UTTypeIconBadgeName</key>
+				<string>HDFIcon</string>
+				<key>UTTypeIconText</key>
+				<string>HDF</string>
+			</dict>
+			<key>UTTypeIdentifier</key>
+			<string>de.dirkwhoffmann.retro.hdf</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>hdf</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.archive</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Compressed HDF files</string>
+			<key>UTTypeIcons</key>
+			<dict>
+				<key>UTTypeIconBackgroundName</key>
+				<string></string>
+				<key>UTTypeIconBadgeName</key>
+				<string>HDFIcon</string>
+				<key>UTTypeIconText</key>
+				<string>HDF</string>
+			</dict>
+			<key>UTTypeIdentifier</key>
+			<string>de.dirkwhoffmann.retro.hdz</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>hdz</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>IMG files</string>
+			<key>UTTypeIcons</key>
+			<dict>
+				<key>UTTypeIconBadgeName</key>
+				<string>ADFIcon</string>
+				<key>UTTypeIconText</key>
+				<string>IMG</string>
+			</dict>
+			<key>UTTypeIdentifier</key>
+			<string>de.dirkwhoffmann.retro.img</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>img</string>
+					<string>ima</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.shell-script</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>RetroShell script</string>
+			<key>UTTypeIcons</key>
+			<dict>
+				<key>UTTypeIconBackgroundName</key>
+				<string></string>
+				<key>UTTypeIconBadgeName</key>
+				<string>vAmigaIcon</string>
+				<key>UTTypeIconText</key>
+				<string>RETROSHELL</string>
+			</dict>
+			<key>UTTypeIdentifier</key>
+			<string>de.dirkwhoffmann.retro.retrosh</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>retrosh</string>
+				</array>
+			</dict>
+		</dict>
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
@@ -440,34 +440,34 @@
 				</array>
 			</dict>
 		</dict>
-        <dict>
-            <key>UTTypeConformsTo</key>
-            <array>
-                <string>com.apple.package</string>
-            </array>
-            <key>UTTypeDescription</key>
-            <string>vAmiga Workspace</string>
-            <key>UTTypeIconFile</key>
-            <string></string>
-            <key>UTTypeIcons</key>
-            <dict>
-                <key>UTTypeIconBackgroundName</key>
-                <string></string>
-                <key>UTTypeIconBadgeName</key>
-                <string>vAmigaIcon</string>
-                <key>UTTypeIconText</key>
-                <string>WORKSPACE</string>
-            </dict>
-            <key>UTTypeIdentifier</key>
-            <string>de.dirkwhoffmann.retro.vamiga</string>
-            <key>UTTypeTagSpecification</key>
-            <dict>
-                <key>public.filename-extension</key>
-                <array>
-                    <string>vamiga</string>
-                </array>
-            </dict>
-        </dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>com.apple.package</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>vAmiga Workspace</string>
+			<key>UTTypeIconFile</key>
+			<string></string>
+			<key>UTTypeIcons</key>
+			<dict>
+				<key>UTTypeIconBackgroundName</key>
+				<string></string>
+				<key>UTTypeIconBadgeName</key>
+				<string>vAmigaIcon</string>
+				<key>UTTypeIconText</key>
+				<string>WORKSPACE</string>
+			</dict>
+			<key>UTTypeIdentifier</key>
+			<string>de.dirkwhoffmann.retro.vamiga</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>vamiga</string>
+				</array>
+			</dict>
+		</dict>
 	</array>
 </dict>
 </plist>
