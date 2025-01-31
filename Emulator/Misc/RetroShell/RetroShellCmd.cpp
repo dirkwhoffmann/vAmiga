@@ -45,7 +45,7 @@ RetroShellCmd::add(const RetroShellCmdDescriptor &descriptor)
     cmd.optionalArgs = descriptor.optionalArgs;
     cmd.help = descriptor.help;
     cmd.callback = descriptor.func;
-    cmd.param = descriptor.param;
+    cmd.param = descriptor.value;
     cmd.hidden = descriptor.hidden || descriptor.help.empty();
 
     if (!cmd.hidden) currentGroup = "";
@@ -64,7 +64,7 @@ RetroShellCmd::add(const std::vector<string> &tokens,
         .tokens = tokens,
         .help = help,
         .func = func,
-        .param = param
+        .value = param
     });
 }
 
@@ -79,7 +79,7 @@ RetroShellCmd::add(const std::vector<string> &tokens,
         .helpName = help.first,
         .help = help.second,
         .func = func,
-        .param = param
+        .value = param
     });
 }
 
@@ -95,7 +95,7 @@ RetroShellCmd::add(const std::vector<string> &tokens,
         .requiredArgs = arguments,
         .help = help,
         .func = func,
-        .param = param
+        .value = param
     });
 }
 
@@ -112,7 +112,7 @@ RetroShellCmd::add(const std::vector<string> &tokens,
         .helpName = help.first,
         .help = help.second,
         .func = func,
-        .param = param
+        .value = param
     });
 }
 
@@ -130,7 +130,7 @@ RetroShellCmd::add(const std::vector<string> &tokens,
         .optionalArgs = optionalArgs,
         .help = help,
         .func = func,
-        .param = param
+        .value = param
     });
 }
 
@@ -148,7 +148,7 @@ RetroShellCmd::add(const std::vector<string> &tokens,
         .helpName = help.first,
         .help = help.second,
         .func = func,
-        .param = param
+        .value = param
     });
 }
 

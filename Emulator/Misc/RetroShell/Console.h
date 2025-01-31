@@ -109,8 +109,6 @@ protected:
     const char *registerComponent(CoreComponent &c);
     const char *registerComponent(CoreComponent &c, RetroShellCmd &root);
 
-    [[deprecated]] void initSetters(RetroShellCmd &root, const CoreComponent &c);
-
 
     //
     // Methods from Serializable

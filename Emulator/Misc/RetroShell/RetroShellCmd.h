@@ -45,13 +45,13 @@ static const std::string string     = "<string>";
 struct RetroShellCmdDescriptor {
     
     const std::vector<string> &tokens = {};
+    bool hidden = false;
     const std::vector<string> &requiredArgs = {};
     const std::vector<string> &optionalArgs = {};
     const string &helpName = "";
     const string help = "";
     std::function<void (Arguments&, long)> func = nullptr;
-    long param = 0;
-    bool hidden = false;
+    long value = 0;
 };
     
 struct RetroShellCmd {

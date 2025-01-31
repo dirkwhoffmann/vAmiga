@@ -116,14 +116,12 @@ public:
 
 public:
 
-    // virtual isize readFromStream(std::istream &stream) = 0;
-    // virtual isize readFromFile(const std::filesystem::path &path) = 0;
     virtual isize readFromBuffer(const u8 *buf, isize len) = 0;
 
-    virtual isize writeToStream(std::ostream &stream) = 0;
-    virtual isize writeToFile(const std::filesystem::path &path) = 0;
-    virtual isize writePartitionToFile(const std::filesystem::path &path, isize partition) = 0;
-    virtual isize writeToBuffer(u8 *buf) = 0;
+    virtual isize writeToStream(std::ostream &stream) const = 0;
+    virtual isize writeToFile(const std::filesystem::path &path) const = 0;
+    virtual isize writePartitionToFile(const std::filesystem::path &path, isize partition) const = 0;
+    virtual isize writeToBuffer(u8 *buf) const = 0;
 };
 
 }

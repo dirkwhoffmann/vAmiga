@@ -469,7 +469,7 @@ HDFFile::dos(isize blockNr) const
 }
 
 isize
-HDFFile::writePartitionToFile(const std::filesystem::path &path, isize nr)
+HDFFile::writePartitionToFile(const std::filesystem::path &path, isize nr) const
 {
     auto offset = partitionOffset(nr);
     auto size = partitionSize(nr);

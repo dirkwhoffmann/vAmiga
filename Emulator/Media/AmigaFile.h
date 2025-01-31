@@ -137,22 +137,21 @@ protected:
 
 public:
     
-    isize writeToStream(std::ostream &stream, isize offset, isize len) throws;
-    isize writeToFile(const std::filesystem::path &path, isize offset, isize len) throws;
-    isize writeToBuffer(u8 *buf, isize offset, isize len) throws;
-    isize writeToBuffer(Buffer<u8> &buffer, isize offset, isize len) throws;
+    isize writeToStream(std::ostream &stream, isize offset, isize len) const throws;
+    isize writeToFile(const std::filesystem::path &path, isize offset, isize len) const throws;
+    isize writeToBuffer(u8 *buf, isize offset, isize len) const throws;
+    isize writeToBuffer(Buffer<u8> &buffer, isize offset, isize len) const throws;
 
-    isize writeToStream(std::ostream &stream) throws override;
-    isize writeToFile(const std::filesystem::path &path) throws override;
-    isize writePartitionToFile(const std::filesystem::path &path, isize partition) throws override;
-    isize writeToBuffer(u8 *buf) throws override;
-    isize writeToBuffer(Buffer<u8> &buffer) throws;
+    isize writeToStream(std::ostream &stream) const throws override;
+    isize writeToFile(const std::filesystem::path &path) const throws override;
+    isize writePartitionToFile(const std::filesystem::path &path, isize partition) const throws override;
+    isize writeToBuffer(u8 *buf) const throws override;
+    isize writeToBuffer(Buffer<u8> &buffer) const throws;
 
 private:
     
     // Delegation methods
     virtual void finalizeRead() throws { };
-    virtual void finalizeWrite() throws { };
 };
 
 }

@@ -895,21 +895,33 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
     assert(cmd != nullptr);
 
     // Register a command with the proper name
-    root.add({cmd}, c.description());
+    root.add({
+        
+        .tokens = {cmd},
+        .help = c.description()
+    });
 
     // CHeck if this component has options
     if (auto &options = c.getOptions(); !options.empty()) {
 
         // Register a command for querying the current configuration
-        root.add({cmd, ""},
-                 "Display the current configuration",
-                 [this, &c](Arguments& argv, long value) {
-
-            retroShell.commander.dump(c, Category::Config);
+        root.add({
+            
+            .tokens = {cmd, ""},
+            .help = "Display the current configuration",
+            .func = [this, &c](Arguments& argv, long value) {
+                
+                retroShell.commander.dump(c, Category::Config);
+            }
         });
 
         // Register a setter for every option
-        root.add({cmd, "set"}, "Configure the component");
+        root.add({
+            
+            .tokens = {cmd, "set"},
+            .help  ="Configure the component"
+        });
+        
         for (auto &opt : options) {
 
             // Get the key value pairs
@@ -918,64 +930,49 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
             if (pairs.empty()) {
                 
                 // The argument is not an enum. Register a single setter
-                root.add({cmd, "set", OptEnum::key(opt)},
-                         {OptionParser::argList(opt)},
-                         OptEnum::help(opt),
-                         [this](Arguments& argv, long value) {
+                root.add({
                     
-                    emulator.set(Opt(HI_WORD(value)), argv[0], { LO_WORD(value) });
-                    msgQueue.put(Msg::CONFIG);
-                    
-                }, HI_W_LO_W(u16(opt), c.objid));
+                    .tokens = {cmd, "set", OptEnum::key(opt)},
+                    .requiredArgs = {OptionParser::argList(opt)},
+                    .help = OptEnum::help(opt),
+                    .func = [this](Arguments& argv, long value) {
+                        
+                        emulator.set(Opt(HI_WORD(value)), argv[0], { LO_WORD(value) });
+                        msgQueue.put(Msg::CONFIG);
+                    },
+                        .value = HI_W_LO_W(u16(opt), c.objid)
+                });
 
             } else {
                 
                 // Register a setter for every enum
-                root.add({cmd, "set", OptEnum::key(opt)},
-                         {OptionParser::argList(opt)},
-                         OptEnum::help(opt));
+                root.add({
+                    
+                    .tokens = {cmd, "set", OptEnum::key(opt)},
+                    .requiredArgs = {OptionParser::argList(opt)},
+                    .help = OptEnum::help(opt)
+                });
                 
                 for (const auto& [first, second] : pairs) {
                     
                     auto help = OptionParser::help(opt, second);
-                    root.add({cmd, "set", OptEnum::key(opt), first },
-                             {},
-                             help.empty() ? "Set to " + first : help,
-                             [this](Arguments& argv, long value) {
+                    root.add({
                         
-                        emulator.set(Opt(HI_WORD(value)), BYTE1(value), { BYTE0(value) });
-                        msgQueue.put(Msg::CONFIG);
-                        
-                    }, u16(opt) << 16 | second << 8 | c.objid);
+                        .tokens = {cmd, "set", OptEnum::key(opt), first },
+                        .help = help.empty() ? "Set to " + first : help,
+                        .func = [this](Arguments& argv, long value) {
+                            
+                            emulator.set(Opt(HI_WORD(value)), BYTE1(value), { BYTE0(value) });
+                            msgQueue.put(Msg::CONFIG);
+                        },
+                            .value = u16(opt) << 16 | second << 8 | c.objid
+                    });
                 }
             }
         }
     }
 
     return cmd;
-}
-
-void
-Console::initSetters(RetroShellCmd &root, const CoreComponent &c)
-{
-    if (auto cmd = string(c.shellName()); !cmd.empty()) {
-
-        if (auto &options = c.getOptions(); !options.empty()) {
-
-            root.add({cmd, "set"}, "Configure the component");
-            for (auto &opt : options) {
-
-                root.add({cmd, "set", OptEnum::key(opt)},
-                         {OptionParser::argList(opt)},
-                         OptEnum::help(opt),
-                         [this](Arguments& argv, long value) {
-
-                    emulator.set(Opt(HI_WORD(value)), argv[0], { LO_WORD(value) });
-
-                }, HI_W_LO_W(u16(opt), c.objid));
-            }
-        }
-    }
 }
 
 }
