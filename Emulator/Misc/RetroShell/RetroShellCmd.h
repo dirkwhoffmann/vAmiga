@@ -46,12 +46,12 @@ struct RetroShellCmdDescriptor {
     
     const std::vector<string> &tokens = {};
     bool hidden = false;
-    const std::vector<string> &requiredArgs = {};
-    const std::vector<string> &optionalArgs = {};
+    const std::vector<string> &args = {};
+    const std::vector<string> &optArgs = {};
     const string &helpName = "";
     const string help = "";
     std::function<void (Arguments&, i64)> func = nullptr;
-    long value = 0;
+    isize value = 0;
 };
     
 struct RetroShellCmd {

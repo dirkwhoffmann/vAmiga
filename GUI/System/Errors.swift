@@ -39,10 +39,10 @@ public func warn(_ msg: String = "",
 }
 
 //
-// Errors
+// Exceptions
 //
 
-final class VAError: Error {
+final class VAException: Error {
     
     let errorCode: ErrorCode
     let what: String
@@ -62,7 +62,7 @@ final class VAError: Error {
 
 extension NSError {
     
-    convenience init(error: VAError) {
+    convenience init(error: VAException) {
         
         self.init(domain: "vAmiga",
                   code: error.errorCode.rawValue,
@@ -265,7 +265,7 @@ extension MyDocument {
     func showAlert(_ failure: Failure, error: Error,
                    async: Bool = false, window: NSWindow? = nil) {
     
-        if let error = error as? VAError {
+        if let error = error as? VAException {
             showAlert(failure, what: error.what, async:
                         async, window: window)
         } else {

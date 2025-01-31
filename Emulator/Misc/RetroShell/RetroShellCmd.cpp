@@ -41,8 +41,8 @@ RetroShellCmd::add(const RetroShellCmdDescriptor &descriptor)
     cmd.fullName = (node->fullName.empty() ? "" : node->fullName + " ") + helpName;
     cmd.helpName = helpName;
     cmd.groupName = currentGroup;
-    cmd.requiredArgs = descriptor.requiredArgs;
-    cmd.optionalArgs = descriptor.optionalArgs;
+    cmd.requiredArgs = descriptor.args;
+    cmd.optionalArgs = descriptor.optArgs;
     cmd.help = descriptor.help;
     cmd.callback = descriptor.func;
     cmd.param = descriptor.value;
@@ -92,7 +92,7 @@ RetroShellCmd::add(const std::vector<string> &tokens,
     add(RetroShellCmdDescriptor {
         
         .tokens = tokens,
-        .requiredArgs = arguments,
+        .args = arguments,
         .help = help,
         .func = func,
         .value = param
@@ -108,7 +108,7 @@ RetroShellCmd::add(const std::vector<string> &tokens,
     add(RetroShellCmdDescriptor {
         
         .tokens = tokens,
-        .requiredArgs = arguments,
+        .args = arguments,
         .helpName = help.first,
         .help = help.second,
         .func = func,
@@ -126,8 +126,8 @@ RetroShellCmd::add(const std::vector<string> &tokens,
     add(RetroShellCmdDescriptor {
         
         .tokens = tokens,
-        .requiredArgs = requiredArgs,
-        .optionalArgs = optionalArgs,
+        .args = requiredArgs,
+        .optArgs = optionalArgs,
         .help = help,
         .func = func,
         .value = param
@@ -143,8 +143,8 @@ RetroShellCmd::add(const std::vector<string> &tokens,
 {
     add(RetroShellCmdDescriptor {
         .tokens = tokens,
-        .requiredArgs = requiredArgs,
-        .optionalArgs = optionalArgs,
+        .args = requiredArgs,
+        .optArgs = optionalArgs,
         .helpName = help.first,
         .help = help.second,
         .func = func,
