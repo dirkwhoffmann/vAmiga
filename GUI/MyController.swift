@@ -222,7 +222,10 @@ extension MyController {
         if let fileUrl = document?.fileURL, let url = fileUrl {
             
             debug(.media, "Launch URL = \(url)")
-            try? mydocument.addMedia(url: url)
+            
+            do { try mydocument.addMedia(url: url) } catch {
+                self.showAlert(.cantOpen(url: url), error: error, async: true)
+            }
         }
 
         // Create speed monitor

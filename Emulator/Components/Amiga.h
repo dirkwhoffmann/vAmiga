@@ -415,7 +415,7 @@ public:
 public:
     
     // Loads a workspace from a file
-    void loadWorkspace(const fs::path &path);
+    void loadWorkspace(const fs::path &path) throws;
 
     // Saves the current workspace to a file
     void saveWorkspace(const fs::path &path);

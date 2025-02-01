@@ -32,7 +32,7 @@
 			<key>CFBundleTypeName</key>
 			<string>ADF</string>
 			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
+			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Default</string>
 			<key>LSItemContentTypes</key>
@@ -50,7 +50,7 @@
 			<key>CFBundleTypeName</key>
 			<string>ADZ</string>
 			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
+			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Default</string>
 			<key>LSItemContentTypes</key>
@@ -68,7 +68,7 @@
 			<key>CFBundleTypeName</key>
 			<string>DMS</string>
 			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
+			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Default</string>
 			<key>LSItemContentTypes</key>
@@ -84,7 +84,7 @@
 			<key>CFBundleTypeName</key>
 			<string>EXE</string>
 			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
+			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Default</string>
 			<key>LSItemContentTypes</key>
@@ -102,7 +102,7 @@
 			<key>CFBundleTypeName</key>
 			<string>HDF</string>
 			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
+			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Default</string>
 			<key>LSItemContentTypes</key>
@@ -118,7 +118,7 @@
 			<key>CFBundleTypeName</key>
 			<string>HDZ</string>
 			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
+			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Default</string>
 			<key>LSItemContentTypes</key>
@@ -134,7 +134,7 @@
 			<key>CFBundleTypeName</key>
 			<string>IMG</string>
 			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
+			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Default</string>
 			<key>LSItemContentTypes</key>
@@ -150,7 +150,7 @@
 			<key>CFBundleTypeName</key>
 			<string>RETROSH</string>
 			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
+			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Default</string>
 			<key>LSItemContentTypes</key>
@@ -166,7 +166,7 @@
 			<key>CFBundleTypeName</key>
 			<string>VASNAP</string>
 			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
+			<string>Viewer</string>
 			<key>LSHandlerRank</key>
 			<string>Default</string>
 			<key>LSItemContentTypes</key>

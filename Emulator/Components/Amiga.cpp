@@ -23,11 +23,11 @@ string
 Amiga::version()
 {
     string result;
-
+    
     result = std::to_string(VER_MAJOR) + "." + std::to_string(VER_MINOR);
     if constexpr (VER_SUBMINOR > 0) result += "." + std::to_string(VER_SUBMINOR);
     if constexpr (VER_BETA > 0) result += 'b' + std::to_string(VER_BETA);
-
+    
     return result;
 }
 
@@ -35,7 +35,7 @@ string
 Amiga::build()
 {
     string db = debugBuild ? " [DEBUG BUILD]" : "";
-
+    
     return version() + db + " (" + __DATE__ + " " + __TIME__ + ")";
 }
 
@@ -55,9 +55,9 @@ Amiga::Amiga(class Emulator& ref, isize id) : CoreComponent(ref, id)
      *
      * - Memory must preceed the CPU, because it contains the CPU reset vector.
      */
-
+    
     subComponents = std::vector<CoreComponent *> {
-
+        
         &host,
         &agnus,
         &audioPort,
@@ -105,19 +105,19 @@ void
 Amiga::prefix(isize level, const char *component, isize line) const
 {
     if (level) {
-
+        
         if (level >= 2) {
-
+            
             if (isRunAheadInstance()) fprintf(stderr, "[Run-ahead] ");
             fprintf(stderr, "%s:%ld", component, line);
         }
         if (level >= 3) {
-
+            
             fprintf(stderr, " [%lld] (%3ld,%3ld)",
                     agnus.pos.frame, agnus.pos.v, agnus.pos.h);
         }
         if (level >= 4) {
-
+            
             fprintf(stderr, " %06X ", cpu.getPC0());
             if (agnus.copper.servicing) {
                 fprintf(stderr, " [%06X]", agnus.copper.getCopPC0());
@@ -125,7 +125,7 @@ Amiga::prefix(isize level, const char *component, isize line) const
             fprintf(stderr, " %2X ", cpu.getIPL());
         }
         if (level >= 5) {
-
+            
             u16 dmacon = agnus.dmacon;
             bool dmaen = dmacon & DMAEN;
             fprintf(stderr, " %c%c%c%c%c%c",
@@ -135,7 +135,7 @@ Amiga::prefix(isize level, const char *component, isize line) const
                     (dmacon & SPREN) ? (dmaen ? 'S' : 's') : '-',
                     (dmacon & DSKEN) ? (dmaen ? 'D' : 'd') : '-',
                     (dmacon & AUDEN) ? (dmaen ? 'A' : 'a') : '-');
-
+            
             fprintf(stderr, " %04X %04X", paula.intena, paula.intreq);
         }
         fprintf(stderr, " ");
@@ -157,10 +157,10 @@ Amiga::_didReset(bool hard)
 {
     // Schedule initial events
     scheduleNextSnpEvent();
-
+    
     // Clear all runloop flags
     flags = 0;
-
+    
     // Inform the GUI
     if (hard) msgQueue.put(Msg::RESET);
 }
@@ -169,7 +169,7 @@ i64
 Amiga::getOption(Opt option) const
 {
     switch (option) {
-
+            
         case Opt::AMIGA_VIDEO_FORMAT:    return (i64)config.type;
         case Opt::AMIGA_WARP_BOOT:       return config.warpBoot;
         case Opt::AMIGA_WARP_MODE:       return (i64)config.warpMode;
@@ -179,7 +179,7 @@ Amiga::getOption(Opt option) const
         case Opt::AMIGA_SNAP_AUTO:       return config.snapshots;
         case Opt::AMIGA_SNAP_DELAY:      return config.snapshotDelay;
         case Opt::AMIGA_SNAP_COMPRESS:   return config.compressSnapshots;
-
+            
         default:
             fatalError;
     }
@@ -189,56 +189,56 @@ void
 Amiga::checkOption(Opt opt, i64 value)
 {
     switch (opt) {
-
+            
         case Opt::AMIGA_VIDEO_FORMAT:
-
+            
             if (!TVEnum::isValid(value)) {
                 throw VAException(VAError::OPT_INV_ARG, TVEnum::keyList());
             }
             return;
-
+            
         case Opt::AMIGA_WARP_BOOT:
-
+            
             return;
-
+            
         case Opt::AMIGA_WARP_MODE:
-
+            
             if (!WarpEnum::isValid(value)) {
                 throw VAException(VAError::OPT_INV_ARG, WarpEnum::keyList());
             }
             return;
-
+            
         case Opt::AMIGA_VSYNC:
-
+            
             return;
-
+            
         case Opt::AMIGA_SPEED_BOOST:
-
+            
             if (value < 50 || value > 200) {
                 throw VAException(VAError::OPT_INV_ARG, "50...200");
             }
             return;
-
+            
         case Opt::AMIGA_RUN_AHEAD:
-
+            
             if (value < 0 || value > 12) {
                 throw VAException(VAError::OPT_INV_ARG, "0...12");
             }
             return;
-
+            
         case Opt::AMIGA_SNAP_AUTO:
-
+            
             return;
-
+            
         case Opt::AMIGA_SNAP_DELAY:
-
+            
             if (value < 10 || value > 3600) {
                 throw VAException(VAError::OPT_INV_ARG, "10...3600");
             }
             return;
-
+            
         case Opt::AMIGA_SNAP_COMPRESS:
-
+            
             return;
             
         default:
@@ -250,55 +250,55 @@ void
 Amiga::setOption(Opt option, i64 value)
 {
     switch (option) {
-
+            
         case Opt::AMIGA_VIDEO_FORMAT:
-
+            
             if (TV(value) != config.type) {
-
+                
                 config.type = TV(value);
                 agnus.setVideoFormat(config.type);
             }
             return;
-
+            
         case Opt::AMIGA_WARP_BOOT:
-
+            
             config.warpBoot = isize(value);
             return;
-
+            
         case Opt::AMIGA_WARP_MODE:
-
+            
             config.warpMode = Warp(value);
             return;
-
+            
         case Opt::AMIGA_VSYNC:
-
+            
             config.vsync = bool(value);
             return;
-
+            
         case Opt::AMIGA_SPEED_BOOST:
-
+            
             config.speedBoost = isize(value);
             return;
-
+            
         case Opt::AMIGA_RUN_AHEAD:
-
+            
             config.runAhead = isize(value);
             return;
-
+            
         case Opt::AMIGA_SNAP_AUTO:
-
+            
             config.snapshots = bool(value);
             scheduleNextSnpEvent();
             return;
-
+            
         case Opt::AMIGA_SNAP_DELAY:
-
+            
             config.snapshotDelay = isize(value);
             scheduleNextSnpEvent();
             return;
-
+            
         case Opt::AMIGA_SNAP_COMPRESS:
-
+            
             config.compressSnapshots = bool(value);
             return;
             
@@ -311,10 +311,10 @@ void
 Amiga::loadWorkspace(const fs::path &path)
 {
     std::stringstream ss;
-
+    
     auto exec = [&](const string &cmd) {
         
-        ss << "try " << cmd << "\n";
+        if (cmd == "\n") { ss << "\n"; } else { ss << "try " << cmd << "\n"; }
     };
     auto importScript = [&](const fs::path &path) {
         
@@ -323,13 +323,13 @@ Amiga::loadWorkspace(const fs::path &path)
         }
     };
     auto importRom = [&](const string type, const fs::path &path) {
-    
+        
         if (fs::exists(path)) {
             exec("mem load " + type + " " + path.string());
         }
     };
     auto importADF = [&](FloppyDrive& drive, const fs::path &path) {
-    
+        
         if (fs::exists(path)) {
             exec(string(drive.shellName()) + " insert " + path.string());
         }
@@ -340,39 +340,41 @@ Amiga::loadWorkspace(const fs::path &path)
             exec(string(drive.shellName()) + " attach " + path.string());
         }
     };
-        
+    
+    // Prepare the setup script...
+    
+    // Power off the amiga to make it configurable
+    exec("\n");
+    exec("workspace init");
+    exec("\n");
+
+    // Read the config script
     try {
-
-        // Prepare the setup script...
-        
-        // Power off the Amiga
-        exec("amiga power off");
-
-        // Read the config script
         importScript(path / "config.retrosh");
-
-        // Load ROMs
-        importRom("rom", path / "rom.bin");
-        importRom("ext", path / "ext.bin");
-        
-        // Load media
-        importADF(df0, path / "df0.adf");
-        importADF(df1, path / "df1.adf");
-        importADF(df2, path / "df2.adf");
-        importADF(df3, path / "df3.adf");
-        importHDF(hd0, path / "hd0.hdf");
-        importHDF(hd1, path / "hd1.hdf");
-        importHDF(hd2, path / "hd2.hdf");
-        importHDF(hd3, path / "hd3.hdf");
-
-        // Power on the Amiga
-        exec("amiga power on");
-        
-        // Execute the setup script
-        retroShell.asyncExecScript(ss);
-        
-    } catch (...) { }
-
+    } catch (VAException &exc) {
+        printf("Error: %s\n", exc.what());
+        throw;
+    }
+    // Load ROMs
+    importRom("rom", path / "rom.bin");
+    importRom("ext", path / "ext.bin");
+    
+    // Load media
+    importADF(df0, path / "df0.adf");
+    importADF(df1, path / "df1.adf");
+    importADF(df2, path / "df2.adf");
+    importADF(df3, path / "df3.adf");
+    importHDF(hd0, path / "hd0.hdf");
+    importHDF(hd1, path / "hd1.hdf");
+    importHDF(hd2, path / "hd2.hdf");
+    importHDF(hd3, path / "hd3.hdf");
+    
+    // Power on the Amiga with the new configuration
+    exec("\n");
+    exec("workspace activate");
+    
+    // Execute the setup script
+    retroShell.asyncExecScript(ss);
 }
 
 void
@@ -429,12 +431,12 @@ Amiga::saveWorkspace(const fs::path &path)
     ss << "# Workspace setup (" << std::put_time(std::localtime(&now), "%c") << ")\n";
     ss << "# Generated with vAmiga " << Amiga::build() << "\n";
     ss << "\n";
-    ss << "workspace init\n\n";
+    // ss << "workspace init\n\n";
 
     exportConfig(ss);
     
-    ss << "\n";
-    ss << "workspace activate\n";
+    // ss << "\n";
+    // ss << "workspace activate\n";
 
     std::ofstream file(path / "config.retrosh");
     file << ss.str();

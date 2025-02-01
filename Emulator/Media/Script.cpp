@@ -20,8 +20,7 @@ bool
 Script::isCompatible(const std::filesystem::path &path)
 {
     auto suffix = util::uppercased(path.extension().string());
-    printf("Script::isCompatible suffix = %s\n", suffix.c_str());
-    return suffix == ".INI";
+    return suffix == ".RETROSH";
 }
 
 bool

@@ -143,7 +143,6 @@ class MyDocument: NSDocument {
     override func save(to url: URL, ofType typeName: String, for saveOperation: NSDocument.SaveOperationType) async throws {
             
         debug(.media)
-        Swift.print("save \(url) ofType \(typeName)")
 
         if typeName == "de.dirkwhoffmann.retro.vamiga" {
 
@@ -156,19 +155,6 @@ class MyDocument: NSDocument {
                 Swift.print("Error: \(what)")
                 throw NSError(error: error)
             }
-            
-            /*
-            if let snapshot = emu.amiga.takeSnapshot() {
-
-                do {
-                    try snapshot.writeToFile(url: url)
-
-                } catch let error as VAError {
-                    
-                    throw NSError(error: error)
-                }
-            }
-            */
         }
     }
     
@@ -183,9 +169,8 @@ class MyDocument: NSDocument {
                   force: Bool = false,
                   remember: Bool = true) throws {
         
-        Swift.print("allowed typed = \(types)")
         let file = try createMediaFileProxy(from: url, allowedTypes: types)
-        Swift.print("file type = \(file.type)")
+
         // Remember the URL if requested
         if remember {
 

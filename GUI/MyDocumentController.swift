@@ -16,10 +16,12 @@ class MyDocumentController: NSDocumentController {
                                ofType typeName: String) throws -> NSDocument {
         
         debug(.lifetime)
-        
-        // For media files, attach the file to a new untitled document
-        if typeName.uppercased() != "VAMIGA" {
+        debug(.media, "url = \(url) typeName = \(typeName)")
 
+        // For media files, attach the file to a new untitled document
+        // if typeName.uppercased() != "VAMIGA" {
+        if typeName.components(separatedBy: ".").last?.lowercased() != "vamiga" {
+        
             let doc = try super.makeUntitledDocument(ofType: typeName)
             
             if let mydoc = doc as? MyDocument {
@@ -27,6 +29,8 @@ class MyDocumentController: NSDocumentController {
                 return mydoc
             }
         }
+        
+        print("Workspace")
         
         // For workspaces, follow the standard procedure
         return try super.makeDocument(withContentsOf: url, ofType: typeName)
