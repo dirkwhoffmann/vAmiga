@@ -100,37 +100,7 @@ struct RetroShellCmd {
     // Creates a new node in the command tree
     void add(const RetroShellCmdDescriptor &descriptor);
     
-    // Wrappers (DEPRECATED)
-    [[deprecated]] void add(const std::vector<string> &tokens,
-             const string &help,
-             std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr, long param = 0);
-
-    [[deprecated]] void add(const std::vector<string> &tokens,
-             std::pair<const string &, const string &> help,
-             std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr, long param = 0);
-
-    [[deprecated]] void add(const std::vector<string> &tokens,
-             const std::vector<string> &args,
-             const string &help,
-             std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr, long param = 0);
-
-    [[deprecated]] void add(const std::vector<string> &tokens,
-             const std::vector<string> &args,
-             std::pair<const string &, const string &> help,
-             std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr, long param = 0);
-
-    [[deprecated]] void add(const std::vector<string> &tokens,
-             const std::vector<string> &requiredArgs,
-             const std::vector<string> &optionalArgs,
-             const string &help,
-             std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr, long param = 0);
-
-    [[deprecated]] void add(const std::vector<string> &tokens,
-             const std::vector<string> &requiredArgs,
-             const std::vector<string> &optionalArgs,
-             std::pair<const string &, const string &> help,
-             std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr, long param = 0);
-
+    // Registers an alias name for an existing command 
     void clone(const std::vector<string> &tokens,
                const string &alias,
                const std::vector<isize> &values = { });
