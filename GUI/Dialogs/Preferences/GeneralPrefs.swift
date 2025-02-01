@@ -219,8 +219,9 @@ extension PreferencesController {
     @IBAction func genCloseWithoutAskingAction(_ sender: NSButton!) {
         
         pref.closeWithoutAsking = (sender.state == .on)
+
         for c in myAppDelegate.controllers {
-            c.needsSaving = c.emu.running
+            c.needsSaving = (sender.state == .off)
         }
         refresh()
     }

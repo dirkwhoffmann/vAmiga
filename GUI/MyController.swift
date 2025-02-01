@@ -342,16 +342,15 @@ extension MyController {
         switch msg.type {
                         
         case .CONFIG:
-
             configurator?.refresh()
             refreshStatusBar()
             passToInspector()
             passToDashboard()
+            needsSaving = true
 
         case .POWER:
-            
             if value != 0 {
-
+                
                 if let fileUrl = document?.fileURL, let _ = fileUrl {
                     renderer.canvas.open(delay: 0)
                 } else {
@@ -360,13 +359,10 @@ extension MyController {
                 serialIn = ""
                 serialOut = ""
             }
-
             clearInfo()
             passToInspector()
 
         case .RUN:
-            
-            needsSaving = true
             toolbar.updateToolbar()
             refreshStatusBar()
             clearInfo()
@@ -378,8 +374,6 @@ extension MyController {
             passToInspector()
             
         case .STEP:
-            
-            needsSaving = true
             clearInfo()
             passToInspector()
             
@@ -504,7 +498,8 @@ extension MyController {
             
         case .DRIVE_WRITE:
             refreshStatusBar(writing: true)
-            
+            needsSaving = true
+
         case .DRIVE_LED:
             refreshStatusBar()
             
@@ -522,14 +517,17 @@ extension MyController {
         case .DISK_INSERT:
             macAudio.playSound(MacAudio.Sounds.insert, volume: volume, pan: pan)
             refreshStatusBar()
-            
+            needsSaving = true
+
         case .DISK_EJECT:
             macAudio.playSound(MacAudio.Sounds.eject, volume: volume, pan: pan)
             refreshStatusBar()
+            needsSaving = true
             
         case .DISK_PROTECTED:
             refreshStatusBar()
-
+            needsSaving = true
+            
         case .HDC_CONNECT:
 
             if msg.value != 0 {
@@ -544,7 +542,8 @@ extension MyController {
                 assignSlots()
                 refreshStatusBar()
             }
-
+            needsSaving = true
+            
         case .HDC_STATE:
             refreshStatusBar()
 
@@ -552,8 +551,12 @@ extension MyController {
             macAudio.playSound(MacAudio.Sounds.move, volume: volume, pan: pan)
             refreshStatusBar()
 
-        case .HDR_IDLE, .HDR_READ, .HDR_WRITE:
+        case .HDR_IDLE, .HDR_READ:
             refreshStatusBar()
+            
+        case .HDR_WRITE:
+            refreshStatusBar()
+            needsSaving = true
             
         case .CTRL_AMIGA_AMIGA:
             resetAction(self)
@@ -576,12 +579,16 @@ extension MyController {
             let ptr = msg.snapshot.snapshot
             let proxy = MediaFileProxy.init(ptr)!
             mydocument.snapshots.append(proxy, size: proxy.size)
-
+            
         case .SNAPSHOT_RESTORED:
             renderer.flash(steps: 40)
             hideOrShowDriveMenus()
             assignSlots()
             refreshStatusBar()
+            needsSaving = true
+
+        case .WORKSPACE_SAVED, .WORKSPACE_LOADED:
+            needsSaving = false
             
         case .RECORDING_STARTED:
             window?.backgroundColor = .warning

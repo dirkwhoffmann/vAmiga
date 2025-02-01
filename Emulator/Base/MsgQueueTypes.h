@@ -113,6 +113,10 @@ enum class Msg : long
     SNAPSHOT_TAKEN,
     SNAPSHOT_RESTORED,
     
+    // Workspaces
+    WORKSPACE_LOADED,
+    WORKSPACE_SAVED,
+
     // Screen recording
     RECORDING_STARTED,
     RECORDING_STOPPED,
@@ -215,6 +219,9 @@ struct MsgEnum : util::Reflection<MsgEnum, Msg>
                 
             case Msg::SNAPSHOT_TAKEN:        return "SNAPSHOT_TAKEN";
             case Msg::SNAPSHOT_RESTORED:     return "SNAPSHOT_RESTORED";
+                
+            case Msg::WORKSPACE_LOADED:      return "WORKSPACE_LOADED";
+            case Msg::WORKSPACE_SAVED:       return "WORKSPACE_SAVED";
                 
             case Msg::RECORDING_STARTED:     return "RECORDING_STARTED";
             case Msg::RECORDING_STOPPED:     return "RECORDING_STOPPED";

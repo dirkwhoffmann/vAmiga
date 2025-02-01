@@ -72,6 +72,40 @@ CommandConsole::initCommands(RetroShellCmd &root)
     Console::initCommands(root);
     
     //
+    // Workspace management
+    //
+    
+    root.add({
+        
+        .tokens = { "workspace" },
+        .hidden = releaseBuild,
+        .help   = { "Workspace management" }
+    });
+    
+    root.add({
+        
+        .tokens = { "workspace init" },
+        .hidden = releaseBuild,
+        .help   = { "First command of a workspace script" },
+        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+            
+            amiga.initWorkspace();
+        }
+    });
+
+    root.add({
+        
+        .tokens = { "workspace activate" },
+        .hidden = releaseBuild,
+        .help   = { "Last command of a workspace script" },
+        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+            
+            amiga.activateWorkspace();
+        }
+    });
+
+    
+    //
     // Regression tester
     //
     

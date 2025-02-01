@@ -503,18 +503,12 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func stepIntoAction(_ sender: Any!) {
         
-        needsSaving = true
-        if let emu = emu {
-            emu.stepInto()
-        }
+       emu.stepInto()
     }
     
     @IBAction func stepOverAction(_ sender: Any!) {
         
-        needsSaving = true
-        if let emu = emu {
-            emu.stepOver()
-        }
+        emu.stepOver()
     }
     
     @IBAction func resetAction(_ sender: Any!) {

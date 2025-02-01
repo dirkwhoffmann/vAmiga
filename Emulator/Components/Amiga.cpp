@@ -425,13 +425,43 @@ Amiga::saveWorkspace(const fs::path &path)
     
     std::stringstream ss;
     
-    ss << "# Workspace setup (" << std::ctime(&now) << ")\n";
-    ss << "# Generated with vAmiga " << Amiga::build() << "\n\n";
-    
+    // ss << "# Workspace setup (" << std::ctime(&now) << ")\n";
+    ss << "# Workspace setup (" << std::put_time(std::localtime(&now), "%c") << ")\n";
+    ss << "# Generated with vAmiga " << Amiga::build() << "\n";
+    ss << "\n";
+    ss << "workspace init\n\n";
+
     exportConfig(ss);
     
+    ss << "\n";
+    ss << "workspace activate\n";
+
     std::ofstream file(path / "config.retrosh");
     file << ss.str();
+    
+    // Inform the GUI
+    msgQueue.put(Msg::WORKSPACE_SAVED);
+}
+
+void
+Amiga::initWorkspace()
+{
+    /* This function is called at the beginning of a workspace script */
+    
+    // Power off the Amiga to make it configurable
+    powerOff();
+}
+
+void
+Amiga::activateWorkspace()
+{
+    /* This function is called at the end of a workspace script */
+     
+    // Power on the Amiga
+    powerOn();
+    
+    // Inform the GUI
+    msgQueue.put(Msg::WORKSPACE_LOADED);
 }
 
 void

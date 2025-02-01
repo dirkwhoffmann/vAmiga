@@ -412,13 +412,19 @@ public:
     // Handling workspaces
     //
     
+public:
+    
     // Loads a workspace from a file
     void loadWorkspace(const fs::path &path);
 
     // Saves the current workspace to a file
     void saveWorkspace(const fs::path &path);
-
-
+    
+    // Called by (hidden) RetroShell 'workspace' commands
+    void initWorkspace();
+    void activateWorkspace();
+    
+    
     //
     // Handling snapshots
     //
