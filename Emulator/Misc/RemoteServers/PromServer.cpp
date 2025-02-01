@@ -44,9 +44,9 @@ PromServer::respond(const httplib::Request& request)
         if (!labels.empty()) {
             output << "{";
             bool first = true;
-            for (const auto& [key, value] : labels) {
+            for (const auto& [key,val] : labels) {
                 if (!first) output << ",";
-                output << key << "=\"" << value << "\"";
+                output << key << "=\"" << val << "\"";
                 first = false;
             }
             output << "}";

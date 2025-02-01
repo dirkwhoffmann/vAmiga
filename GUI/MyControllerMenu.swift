@@ -177,11 +177,23 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func importScriptAction(_ sender: Any!) {
 
-        let openPanel = NSOpenPanel()
-
         // Power off the emulator if the user doesn't object
         // if !askToPowerOff() { return }
 
+        myOpenPanel.configure(types: [ .retrosh ], prompt: "Import")
+        myOpenPanel.open(for: window, { result in
+            
+            if result == .OK, let url = self.myOpenPanel.url {
+
+                do {
+                    try self.mydocument.addMedia(url: url, allowedTypes: [.SCRIPT])
+                } catch {
+                    self.showAlert(.cantOpen(url: url), error: error, async: true)
+                }
+            }
+        })
+        
+        /*
         // Show file panel
         openPanel.allowsMultipleSelection = false
         openPanel.canChooseDirectories = true
@@ -200,32 +212,8 @@ extension MyController: NSMenuItemValidation {
                 }
             }
         })
+        */
     }
-
-    /*
-    @IBAction func exportConfigAction(_ sender: Any!) {
-
-        let savePanel = NSSavePanel()
-
-        // Show file panel
-        savePanel.prompt = "Export"
-        savePanel.title = "Export"
-        savePanel.nameFieldLabel = "Export As:"
-        savePanel.nameFieldStringValue = "vAmiga.ini"
-        savePanel.canCreateDirectories = true
-        savePanel.beginSheetModal(for: window!, completionHandler: { result in
-
-            if result == .OK, let url = savePanel.url {
-
-                do {
-                    try self.emu.exportConfig(url: url)
-                } catch {
-                    self.showAlert(.cantExport(url: url), error: error, async: true)
-                }
-            }
-        })
-    }
-    */
 
     //
     // Action methods (Machine menu)
@@ -349,6 +337,20 @@ extension MyController: NSMenuItemValidation {
         
         print("loadSnapshotAction")
         
+        myOpenPanel.configure(types: [ .snapshot ], prompt: "Restore")
+        myOpenPanel.open(for: window, { result in
+            
+            if result == .OK, let url = self.myOpenPanel.url {
+
+                do {
+                    try self.emu.amiga.loadSnapshot(url: url)
+                } catch {
+                    self.showAlert(.cantOpen(url: url), error: error, async: true)
+                }
+            }
+        })
+        
+        /*
         let openPanel = NSOpenPanel()
         openPanel.allowsMultipleSelection = false
         openPanel.canChooseDirectories = true
@@ -367,12 +369,32 @@ extension MyController: NSMenuItemValidation {
                 }
             }
         })
+        */
     }
 
     @IBAction func saveSnapshotAction(_ sender: Any!) {
         
         print("saveSnapshotAction")
         
+        mySavePanel.configure(types: [ .snapshot ],
+                              prompt: "Export",
+                              title: "Export",
+                              nameFieldLabel: "Export As:",
+                              nameFieldStringValue: "workspace.vasnap")
+        
+        mySavePanel.open(for: window, { result in
+            
+            if result == .OK, let url = self.mySavePanel.url {
+                
+                do {
+                    try self.emu.amiga.saveSnapshot(url: url)
+                } catch {
+                    self.showAlert(.cantExport(url: url), error: error, async: true)
+                }
+            }
+        })
+        
+        /*
         let savePanel = NSSavePanel()
         savePanel.prompt = "Export"
         savePanel.title = "Export"
@@ -391,6 +413,7 @@ extension MyController: NSMenuItemValidation {
                 }
             }
         })
+        */
     }
     
     @IBAction func takeScreenshotAction(_ sender: Any!) {
@@ -626,6 +649,23 @@ extension MyController: NSMenuItemValidation {
         // Ask the user if an unsafed disk should be replaced
         if !proceedWithUnsavedFloppyDisk(drive: drive) { return }
         
+        myOpenPanel.configure(types: [.adf, .img, .dms, .exe, .adz, .zip, .gzip ], prompt: "Insert")
+        myOpenPanel.open(for: window, { result in
+            
+            if result == .OK, let url = self.myOpenPanel.url {
+
+                do {
+                    let types: [FileType] = [ .ADF, .EADF, .DMS, .EXE, .DIR ]
+                    try self.mydocument.addMedia(url: url,
+                                                 allowedTypes: types,
+                                                 df: sender.tag)
+                } catch {
+                    self.showAlert(.cantInsert, error: error, async: true)
+                }
+            }
+        })
+        
+        /*
         // Show the OpenPanel
         let openPanel = NSOpenPanel()
         openPanel.allowsMultipleSelection = false
@@ -648,6 +688,7 @@ extension MyController: NSMenuItemValidation {
                 }
             }
         })
+        */
     }
     
     @IBAction func insertRecentDiskAction(_ sender: NSMenuItem!) {
@@ -773,6 +814,25 @@ extension MyController: NSMenuItemValidation {
         // Ask the user if an unsafed disk should be discarded
         if !proceedWithUnsavedHardDisk(drive: drive) { return }
 
+        myOpenPanel.configure(types: [ .hdf, .hdz, .zip, .gzip ], prompt: "Attach")
+        myOpenPanel.open(for: window, { result in
+            
+            if result == .OK, let url = self.myOpenPanel.url {
+
+                DispatchQueue.main.async {
+                    
+                    do {
+                        try self.mydocument.addMedia(url: url,
+                                                     allowedTypes: [ .HDF ],
+                                                     hd: sender.tag)
+                    } catch {
+                        self.showAlert(.cantAttach, error: error, async: true)
+                    }
+                }
+            }
+        })
+        
+        /*
         // Show the OpenPanel
         let openPanel = NSOpenPanel()
         openPanel.allowsMultipleSelection = false
@@ -797,6 +857,7 @@ extension MyController: NSMenuItemValidation {
                 }
             }
         })
+        */
     }
     
     @IBAction func attachRecentHdrDummyAction(_ sender: NSMenuItem!) {}

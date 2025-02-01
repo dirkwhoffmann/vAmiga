@@ -23,6 +23,10 @@ class MyController: NSWindowController, MessageReceiver {
     // Reference to the connected document
     var mydocument: MyDocument!
     
+    // File panels
+    let myOpenPanel = MyOpenPanel()
+    let mySavePanel = MySavePanel()
+    
     // Amiga proxy (bridge between the Swift frontend and the C++ backend)
     var emu: EmulatorProxy!
     

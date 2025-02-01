@@ -290,7 +290,7 @@ DebugConsole::initCommands(RetroShellCmd &root)
         .args   = { Arg::value },
         .extra  = { Arg::ignores },
         .help   = { "Catch an interrupt" },
-        [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
             auto nr = parseNum(argv[0]);
             if (nr < 1 || nr > 7) throw VAException(VAError::OPT_INV_ARG, "1...7");
@@ -304,7 +304,7 @@ DebugConsole::initCommands(RetroShellCmd &root)
         .args   = { Arg::value },
         .extra  = { Arg::ignores },
         .help   = { "Catch a trap instruction" },
-        [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
             auto nr = parseNum(argv[0]);
             if (nr < 0 || nr > 15) throw VAException(VAError::OPT_INV_ARG, "0...15");
@@ -517,7 +517,7 @@ DebugConsole::initCommands(RetroShellCmd &root)
         .tokens = { "d" },
         .extra  = { Arg::address },
         .help   = { "Disassemble instructions" },
-        [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
             std::stringstream ss;
             cpu.disassembleRange(ss, parseAddr(argv[0], cpu.getPC0()), 16);
