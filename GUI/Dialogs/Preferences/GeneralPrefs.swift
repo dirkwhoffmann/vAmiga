@@ -220,9 +220,11 @@ extension PreferencesController {
         
         pref.closeWithoutAsking = (sender.state == .on)
 
+        /*
         for c in myAppDelegate.controllers {
             c.needsSaving = (sender.state == .off)
         }
+        */
         refresh()
     }
 

@@ -126,7 +126,7 @@ Moira::willExecute(const char *func, Instr I, Mode M, Size S, u16 opcode)
         case STOP:
 
             if (!(opcode & 0x2000)) {
-                xfiles("STOP instruction (%x)\n", opcode);
+                // xfiles("STOP instruction (%x)\n", opcode);
             }
             break;
 
@@ -170,6 +170,7 @@ Moira::didExecute(const char *func, Instr I, Mode M, Size S, u16 opcode)
 void
 Moira::willExecute(ExceptionType exc, u16 vector)
 {
+    /*
     switch (exc) {
 
         case EXC_RESET:             xfiles("EXC_RESET\n");              break;
@@ -191,6 +192,7 @@ Moira::willExecute(ExceptionType exc, u16 vector)
         default:
             break;
     }
+    */
 }
 
 void

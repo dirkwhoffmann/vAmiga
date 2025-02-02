@@ -385,13 +385,21 @@ Amiga::saveWorkspace(const fs::path &path)
     auto exportADF = [&](FloppyDrive& drive, string file) {
         
         if (drive.hasDisk()) {
-            try { ADFFile adf(drive); adf.writeToFile(path / file); } catch (...) { }
+            try {
+                ADFFile adf(drive);
+                adf.writeToFile(path / file);
+                drive.markDiskAsUnmodified();
+            } catch (...) { }
         }
     };
     auto exportHDF = [&](HardDrive& drive, string file) {
         
         if (drive.hasDisk()) {
-            try { HDFFile hdf(drive); hdf.writeToFile(path / file); } catch (...) { }
+            try {
+                HDFFile hdf(drive);
+                hdf.writeToFile(path / file);
+                drive.markDiskAsUnmodified();
+            } catch (...) { }
         }
     };
 
@@ -487,12 +495,12 @@ Amiga::exportConfig(std::ostream &stream, bool diff) const
     // Write-protection status of floppy disks and hard drive
     std::stringstream ss;
     for (isize i = 0; i < 4; i++) {
-        if (df[i]->hasProtectedDisk()) ss << "df" << i << " protect\n";
-        if (df[i]->hasUnprotectedDisk()) ss << "df" << i << " unprotect\n";
+        if (df[i]->hasProtectedDisk()) ss << "try df" << i << " protect\n";
+        if (df[i]->hasUnprotectedDisk()) ss << "try df" << i << " unprotect\n";
     }
     for (isize i = 0; i < 4; i++) {
-        if (hd[i]->hasProtectedDisk()) ss << "hd" << i << " protect\n";
-        if (hd[i]->hasUnprotectedDisk()) ss << "hd" << i << " unprotect\n";
+        if (hd[i]->hasProtectedDisk()) ss << "try hd" << i << " protect\n";
+        if (hd[i]->hasUnprotectedDisk()) ss << "try hd" << i << " unprotect\n";
     }
     if (!ss.str().empty()) {
         stream << "\n# Write protection\n\n";
@@ -999,7 +1007,7 @@ Amiga::update(CmdQueue &queue)
     }
 
     // Inform the GUI about a changed machine configuration
-    if (cmdConfig) { msgQueue.put(Msg::CONFIG); }
+    if (cmdConfig) { msgQueue.put(Msg::CONFIG, isize(cmd.type)); }
 
     // Inform the GUI about new RetroShell content
     if (retroShell.isDirty) { retroShell.isDirty = false; msgQueue.put(Msg::RSH_UPDATE); }

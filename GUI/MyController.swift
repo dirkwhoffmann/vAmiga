@@ -304,6 +304,24 @@ extension MyController {
 
             updateSpeedometer()
         }
+
+        // Do less times...
+        if frames % 32 == 0 {
+        
+            if pref.closeWithoutAsking {
+                needsSaving = false
+            } else {
+                needsSaving =
+                emu.df0.getFlag(.MODIFIED) ||
+                emu.df1.getFlag(.MODIFIED) ||
+                emu.df2.getFlag(.MODIFIED) ||
+                emu.df3.getFlag(.MODIFIED) ||
+                emu.hd0.getFlag(.MODIFIED) ||
+                emu.hd1.getFlag(.MODIFIED) ||
+                emu.hd2.getFlag(.MODIFIED) ||
+                emu.hd3.getFlag(.MODIFIED)
+            }
+        }
         
         // Do lesser times...
         if frames % 256 == 0 {
@@ -349,7 +367,6 @@ extension MyController {
             refreshStatusBar()
             passToInspector()
             passToDashboard()
-            needsSaving = true
 
         case .POWER:
             if value != 0 {
@@ -501,7 +518,6 @@ extension MyController {
             
         case .DRIVE_WRITE:
             refreshStatusBar(writing: true)
-            needsSaving = true
 
         case .DRIVE_LED:
             refreshStatusBar()
@@ -520,16 +536,13 @@ extension MyController {
         case .DISK_INSERT:
             macAudio.playSound(MacAudio.Sounds.insert, volume: volume, pan: pan)
             refreshStatusBar()
-            needsSaving = true
 
         case .DISK_EJECT:
             macAudio.playSound(MacAudio.Sounds.eject, volume: volume, pan: pan)
             refreshStatusBar()
-            needsSaving = true
             
         case .DISK_PROTECTED:
             refreshStatusBar()
-            needsSaving = true
             
         case .HDC_CONNECT:
 
@@ -545,7 +558,6 @@ extension MyController {
                 assignSlots()
                 refreshStatusBar()
             }
-            needsSaving = true
             
         case .HDC_STATE:
             refreshStatusBar()
@@ -559,7 +571,6 @@ extension MyController {
             
         case .HDR_WRITE:
             refreshStatusBar()
-            needsSaving = true
             
         case .CTRL_AMIGA_AMIGA:
             resetAction(self)
@@ -588,10 +599,9 @@ extension MyController {
             hideOrShowDriveMenus()
             assignSlots()
             refreshStatusBar()
-            needsSaving = true
 
         case .WORKSPACE_SAVED, .WORKSPACE_LOADED:
-            needsSaving = false
+            break
             
         case .RECORDING_STARTED:
             window?.backgroundColor = .warning
