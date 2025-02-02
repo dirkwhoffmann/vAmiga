@@ -26,7 +26,7 @@ HardDrive::HardDrive(Amiga& ref, isize nr) : Drive(ref, nr)
 
 HardDrive::~HardDrive()
 {
-    disableWriteThrough();
+    
 }
 
 HardDrive& 
@@ -192,17 +192,7 @@ HardDrive::init(const HDFFile &hdf)
     
     // Copy over all blocks
     hdf.flash(data.ptr, 0, numBytes);
-    
-    // Replace the write-through image on disk
-    if (config.writeThrough) {
-
-        // Delete the existing image
-        disableWriteThrough();
         
-        // Recreate the image with the new disk
-        enableWriteThrough();
-    }
-    
     // Print some debug information
     debug(HDR_DEBUG, "%zu (needed) file system drivers\n", drivers.size());
     if (HDR_DEBUG) {
@@ -238,7 +228,6 @@ HardDrive::getOption(Opt option) const
     switch (option) {
             
         case Opt::HDR_TYPE:          return (long)config.type;
-        case Opt::HDR_WRITE_THROUGH: return (long)config.writeThrough;
         case Opt::HDR_PAN:           return (long)config.pan;
         case Opt::HDR_STEP_VOLUME:   return (long)config.stepVolume;
 
@@ -257,10 +246,6 @@ HardDrive::checkOption(Opt opt, i64 value)
             if (!HardDriveTypeEnum::isValid(value)) {
                 throw VAException(VAError::OPT_INV_ARG, HardDriveTypeEnum::keyList());
             }
-            return;
-
-        case Opt::HDR_WRITE_THROUGH:
-
             return;
 
         case Opt::HDR_PAN:
@@ -286,11 +271,6 @@ HardDrive::setOption(Opt option, i64 value)
             config.type = (HardDriveType)value;
             return;
 
-        case Opt::HDR_WRITE_THROUGH:
-
-            value ? enableWriteThrough() : disableWriteThrough();
-            return;
-
         case Opt::HDR_PAN:
 
             config.pan = (i16)value;
@@ -309,27 +289,6 @@ HardDrive::setOption(Opt option, i64 value)
 void
 HardDrive::connect()
 {
-    auto path = writeThroughPath();
-    
-    if (!path.empty()) {
-        
-        try {
-            
-            debug(WT_DEBUG, "Reading disk from %s...\n", path.c_str());
-            auto hdf = HDFFile(path);
-            init(hdf);
-
-            debug(WT_DEBUG, "Trying to enable write-through mode...\n");
-            enableWriteThrough();
-
-            debug(WT_DEBUG, "Success\n");
-
-        } catch (VAException &e) {
-
-            warn("%s\n", e.what());
-        }
-    }
-    
     // Attach a small default disk
     if (!hasDisk()) {
         
@@ -343,7 +302,6 @@ HardDrive::connect()
 void
 HardDrive::disconnect()
 {
-    disableWriteThrough();
     init();
 }
 
@@ -397,8 +355,6 @@ HardDrive::cacheInfo(HardDriveInfo &info) const
 void
 HardDrive::_didLoad()
 {
-    disableWriteThrough();
-
     // Mark all blocks as dirty
     dirty.clear(true);
 }
@@ -531,70 +487,6 @@ HardDrive::setProtectionFlag(bool value)
     if (hasDisk()) setFlag(DiskFlags::PROTECTED, value);
 }
 
-void
-HardDrive::enableWriteThrough()
-{
-    debug(WT_DEBUG, "enableWriteThrough()\n");
-    
-    if (!config.writeThrough) {
-
-        saveWriteThroughImage();
-
-        debug(WT_DEBUG, "Write-through mode enabled\n");
-        config.writeThrough = true;
-    }
-}
-
-void
-HardDrive::disableWriteThrough()
-{
-    if (config.writeThrough) {
-
-        // Close file
-        wtStream[objid].close();
-        
-        debug(WT_DEBUG, "Write-through mode disabled\n");
-        config.writeThrough = false;
-    }
-}
-
-string
-HardDrive::writeThroughPath()
-{
-    return Emulator::defaults.getRaw("HD" + std::to_string(objid) + "_PATH");
-}
-
-void
-HardDrive::saveWriteThroughImage()
-{
-    auto path = writeThroughPath();
-    
-    // Only proceed if a storage file is given
-    if (path.empty()) {
-        throw VAException(VAError::WT, "No storage path specified");
-    }
-    
-    // Only proceed if no other emulator instance is using the storage file
-    if (wtStream[objid].is_open()) {
-        throw VAException(VAError::WT_BLOCKED);
-    }
-    
-    // Delete the old storage file
-    fs::remove(path);
-    
-    // Recreate the storage file with the contents of this disk
-    writeToFile(path);
-    if (!util::fileExists(path)) {
-        throw VAException(VAError::WT, "Can't create storage file");
-    }
-
-    // Open file
-    wtStream[objid].open(path, std::ios::binary | std::ios::in | std::ios::out);
-    if (!wtStream[objid].is_open()) {
-        throw VAException(VAError::WT, "Can't open storage file");
-    }
-}
-
 string
 HardDrive::defaultName(isize partition) const
 {
@@ -704,13 +596,7 @@ HardDrive::write(isize offset, isize length, u32 addr)
             // Perform the write operation
             mem.spypeek <Accessor::CPU> (addr, length, data.ptr + offset);
             
-            // Handle write-through mode
-            if (config.writeThrough) {
-                
-                wtStream[objid].seekp(offset);
-                wtStream[objid].write((char *)(data.ptr + offset), length);
-            }
-            
+            // Mark disk as modified
             setFlag(DiskFlags::MODIFIED, true);
         }
         

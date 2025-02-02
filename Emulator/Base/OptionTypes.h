@@ -142,7 +142,6 @@ enum class Opt : long
     
     // Hard drives
     HDR_TYPE,
-    HDR_WRITE_THROUGH,
     HDR_PAN,
     HDR_STEP_VOLUME,
     
@@ -311,7 +310,6 @@ struct OptEnum : util::Reflection<OptEnum, Opt>
             case Opt::HDC_CONNECT:               return "HDC.CONNECT";
                 
             case Opt::HDR_TYPE:                  return "HDR.TYPE";
-            case Opt::HDR_WRITE_THROUGH:         return "HDR.WRITE_THROUGH";
             case Opt::HDR_PAN:                   return "HDR.PAN";
             case Opt::HDR_STEP_VOLUME:           return "HDR.STEP_VOLUME";
                 
@@ -468,7 +466,6 @@ struct OptEnum : util::Reflection<OptEnum, Opt>
             case Opt::HDC_CONNECT:               return "Connected";
                 
             case Opt::HDR_TYPE:                  return "Drive model";
-            case Opt::HDR_WRITE_THROUGH:         return "Keep data alive";
             case Opt::HDR_PAN:                   return "Pan";
             case Opt::HDR_STEP_VOLUME:           return "Head step volume";
                 

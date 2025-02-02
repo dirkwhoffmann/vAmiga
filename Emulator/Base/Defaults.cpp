@@ -115,7 +115,6 @@ Defaults::Defaults()
     setFallback(Opt::HDC_CONNECT,                true,                   { 0 });
     setFallback(Opt::HDC_CONNECT,                false,                  { 1, 2, 3 });
     setFallback(Opt::HDR_TYPE,                   (i64)HardDriveType::GENERIC, { 0, 1, 2, 3 });
-    setFallback(Opt::HDR_WRITE_THROUGH,          false,                  { 0, 1, 2, 3 });
     setFallback(Opt::HDR_PAN,                    300,                    { 0, 2 });
     setFallback(Opt::HDR_PAN,                    100,                    { 1, 3 });
     setFallback(Opt::HDR_STEP_VOLUME,            50,                     { 0, 1, 2, 3 });

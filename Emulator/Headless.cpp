@@ -121,7 +121,7 @@ Headless::checkArguments()
 void
 Headless::runScript(const char **script)
 {
-    auto path = std::filesystem::temp_directory_path() / "script.ini";
+    auto path = std::filesystem::temp_directory_path() / "script.retrosh";
     auto file = std::ofstream(path, std::ios::binary);
 
     for (isize i = 0; script[i] != nullptr; i++) {

@@ -115,14 +115,6 @@ extension MyController: NSMenuItemValidation {
             item.state = hdn.info.hasProtectedDisk ? .on : .off
             return hdn.info.hasDisk
 
-        case #selector(MyController.writeThroughHdrAction(_:)):
-            item.state = hdn.config.writeThrough ? .on : .off
-            return true
-
-        case #selector(MyController.writeThroughFinderAction(_:)):
-            item.isHidden = !hdn.config.writeThrough
-            return true
-
         default:
             return true
         }
@@ -956,34 +948,6 @@ extension MyController: NSMenuItemValidation {
         
         let hdn = emu.hd(sender)!
         hdn.setFlag(.PROTECTED, value: !hdn.getFlag(.PROTECTED))
-    }
-
-    @IBAction func writeThroughHdrAction(_ sender: NSMenuItem!) {
-        
-        if sender.state == .on {
-
-            emu.hd(sender)!.disableWriteThrough()
-            sender.state = .off
-
-            try? FileManager.default.removeItem(at: UserDefaults.hdUrl(sender.tag)!)
-            
-        } else {
-            
-            do {
-                try emu.hd(sender)!.enableWriteThrough()
-                sender.state = .on
-            } catch {
-                sender.state = .off
-                showAlert(.cantWriteThrough, error: error)
-            }
-        }
-    }
-    
-    @IBAction func writeThroughFinderAction(_ sender: NSMenuItem!) {
-        
-        if let url = UserDefaults.mediaUrl(name: "") {
-            NSWorkspace.shared.open(url)
-        }
     }
 
     //

@@ -2030,19 +2030,6 @@ NSString *EventSlotName(NSInteger slot)
     catch (VAException &error) { [ex save:error]; }
 }
 
-- (void)enableWriteThrough:(ExceptionWrapper *)ex
-{
-    auto id = [self drive]->getInfo().nr;
-    try { return [self drive]->emu->set(Opt::HDR_WRITE_THROUGH, true, { id }); }
-    catch (VAException &error) { [ex save:error]; }
-}
-
-- (void)disableWriteThrough
-{
-    auto id = [self drive]->getInfo().nr;
-    [self drive]->emu->set(Opt::HDR_WRITE_THROUGH, false, { id });
-}
-
 @end
 
 

@@ -79,7 +79,6 @@ struct HardDriveStateEnum : util::Reflection<HardDriveStateEnum, HardDriveState>
 typedef struct
 {
     HardDriveType type;
-    bool writeThrough;
     i16 pan;
     u8 stepVolume;
 }

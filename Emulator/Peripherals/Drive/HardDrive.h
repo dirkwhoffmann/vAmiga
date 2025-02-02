@@ -49,8 +49,7 @@ class HardDrive final : public Drive, public Inspectable<HardDriveInfo> {
 
     ConfigOptions options = {
 
-        Opt::HDR_TYPE,
-        Opt::HDR_WRITE_THROUGH, 
+        Opt::HDR_TYPE, 
         Opt::HDR_PAN,
         Opt::HDR_STEP_VOLUME
     };
@@ -367,22 +366,6 @@ public:
     // Exports the disk in HDF format
     void writeToFile(const std::filesystem::path &path) throws;
 
-    
-    //
-    // Managing write-through mode
-    //
-    
-    void enableWriteThrough() throws;
-    void disableWriteThrough();
-
-private:
-    
-    // Return the path to the write-through storage file
-    string writeThroughPath();
-    
-    // Creates or updates the write-through storage file
-    void saveWriteThroughImage() throws;
-    
     
     //
     // Scheduling and serving events

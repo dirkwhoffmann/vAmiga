@@ -804,8 +804,6 @@ NSString *EventSlotName(NSInteger slot);
 - (void)changeGeometry:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
 - (NSArray *) geometries;
 - (void)writeToFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
-- (void)enableWriteThrough:(ExceptionWrapper *)ex;
-- (void)disableWriteThrough;
 
 @end
 

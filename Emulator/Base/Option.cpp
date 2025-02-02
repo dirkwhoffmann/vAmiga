@@ -129,7 +129,6 @@ OptionParser::create(Opt opt, i64 arg)
         case Opt::HDC_CONNECT:               return boolParser();
 
         case Opt::HDR_TYPE:                  return enumParser.template operator()<HardDriveTypeEnum,HardDriveType>();
-        case Opt::HDR_WRITE_THROUGH:         return boolParser();
         case Opt::HDR_PAN:                   return numParser();
         case Opt::HDR_STEP_VOLUME:           return numParser("%");
 
