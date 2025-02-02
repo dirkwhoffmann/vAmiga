@@ -2042,6 +2042,10 @@ void
 VAmiga::run()
 {
     VAMIGA_PUBLIC
+    
+    // Throw an exception if the emulator is not ready to run
+    isReady();
+    
     emu->put(Cmd::RUN);
 }
 
