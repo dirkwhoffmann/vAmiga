@@ -30,17 +30,18 @@ namespace vamiga {
 FileType
 MediaFile::type(const fs::path &path)
 {
-    if (Snapshot::isCompatible(path)) return FileType::SNAPSHOT;
-    if (Script::isCompatible(path))   return FileType::SCRIPT;
-    if (ADFFile::isCompatible(path))  return FileType::ADF;
-    if (EADFFile::isCompatible(path)) return FileType::EADF;
-    if (HDFFile::isCompatible(path))  return FileType::HDF;
-    if (IMGFile::isCompatible(path))  return FileType::IMG;
-    if (STFile::isCompatible(path))   return FileType::ST;
-    if (DMSFile::isCompatible(path))  return FileType::DMS;
-    if (EXEFile::isCompatible(path))  return FileType::EXE;
-    if (RomFile::isCompatible(path))  return FileType::ROM;
-    if (Folder::isCompatible(path))   return FileType::DIR;
+    if (Workspace::isCompatible(path)) return FileType::WORKSPACE;
+    if (Snapshot::isCompatible(path))  return FileType::SNAPSHOT;
+    if (Script::isCompatible(path))    return FileType::SCRIPT;
+    if (ADFFile::isCompatible(path))   return FileType::ADF;
+    if (EADFFile::isCompatible(path))  return FileType::EADF;
+    if (HDFFile::isCompatible(path))   return FileType::HDF;
+    if (IMGFile::isCompatible(path))   return FileType::IMG;
+    if (STFile::isCompatible(path))    return FileType::ST;
+    if (DMSFile::isCompatible(path))   return FileType::DMS;
+    if (EXEFile::isCompatible(path))   return FileType::EXE;
+    if (RomFile::isCompatible(path))   return FileType::ROM;
+    if (Folder::isCompatible(path))    return FileType::DIR;
 
     return FileType::UNKNOWN;
 }

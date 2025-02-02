@@ -190,11 +190,7 @@ class DropZone: Layer {
                         
             switch type {
                 
-            case .SNAPSHOT:
-
-                try mydocument.addMedia(url: url, allowedTypes: [type])
-                
-            case .SCRIPT:
+            case .WORKSPACE, .SNAPSHOT, .SCRIPT:
 
                 try mydocument.addMedia(url: url, allowedTypes: [type])
 

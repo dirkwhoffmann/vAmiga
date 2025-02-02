@@ -74,7 +74,7 @@ public extension MetalView {
     
     override func prepareForDragOperation(_ sender: NSDraggingInfo) -> Bool {
         
-        debug(.dragndrop, "draggingUpdated \(sender)\n")
+        debug(.dragndrop, "prepareForDragOperation \(sender)\n")
         
         parent.renderer.dropZone.close(delay: 0.25)
         return true
@@ -82,7 +82,7 @@ public extension MetalView {
     
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
         
-        debug(.dragndrop, "draggingUpdated \(sender)\n")
+        debug(.dragndrop, "performDragOperation \(sender)\n")
         
         let pasteBoard = sender.draggingPasteboard
         
@@ -130,7 +130,7 @@ public extension MetalView {
         let type = FileType(url: dropUrl)
         switch type {
             
-        case .SNAPSHOT, .SCRIPT:
+        case .WORKSPACE, .SNAPSHOT, .SCRIPT:
             break
             
         case .ADF, .EADF, .HDF, .IMG, .ST, .DMS, .EXE, .DIR:
