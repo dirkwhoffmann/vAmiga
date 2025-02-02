@@ -22,44 +22,6 @@ namespace vamiga {
 
 using util::Buffer;
 
-/* All media files are organized in the class hierarchy displayed below. Two
- * abstract classes are involed: AmigaFile, DiskFile, and FloppyFile.
- * AmigaFile provides basic functionalities for reading and writing files,
- * streams, and buffers. DiskFile provides an abstract interface for accessing
- * files that represent hard disks and floppy disks. FloppyFile is the base
- * class of all floppy disk file formats.
- *
- *  ------------
- * | AmigaFile  |
- *  ------------
- *       |
- *       |-----------------------------------------------------------
- *       |       |           |           |           |               |
- *       |  ----------   ---------   ---------   ---------   -----------------
- *       | | Snapshot | | Script  | | HDFFile | | RomFile | | ExtendedRomFile |
- *       |  ----------   ---------   ---------   ---------   -----------------
- *       |
- *  ------------
- * |  DiskFile  |
- *  ------------
- *       |
- *       |------
- *       |      |
- *       |  ---------
- *       | | HDFFile |
- *       |  ---------
-
- *  --------------
- * |  FloppyFile  |
- *  --------------
- *       |
- *       |-----------------------------------------------------------
- *       |           |            |           |           |          |
- *   ---------   ----------   ---------   ---------   ---------   ---------
- *  | ADFFile | | EADFFile | | IMGFile | | DMSFile | | EXEFile | | Folder  |
- *   ---------   ----------   ---------   ---------   ---------   ---------
- */
-
 class AmigaFile : public CoreObject, public MediaFile {
 
 public:

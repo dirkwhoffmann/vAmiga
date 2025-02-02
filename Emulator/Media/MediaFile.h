@@ -58,9 +58,6 @@ public:
     // Returns a pointer to the file data
     virtual u8 *getData() const = 0;
 
-    // Returns the logical name of this file
-    // virtual string name() const = 0;
-
     // Returns a fingerprint (hash value) for this file
     virtual u64 fnv64() const = 0;
     virtual u32 crc32() const = 0;
@@ -79,15 +76,15 @@ public:
     virtual void compress() { }
     virtual void uncompress() { }
 
-    //
+    // Returns media information
     DiskInfo getDiskInfo() const;
     FloppyDiskInfo getFloppyDiskInfo() const;
     HDFInfo getHDFInfo() const;
 
-    //
+    // Flashes the contents of the file into a buffer
     virtual void flash(u8 *buf, isize offset, isize len) const = 0;
     virtual void flash(u8 *buf, isize offset = 0) const = 0;
-
+    
 
     //
     // Accessing raw data
@@ -95,6 +92,7 @@ public:
 
 public:
 
+    // Reads data from the file
     virtual u8 readByte(isize b, isize offset) const { return 0; }
     virtual u8 readByte(isize t, isize s, isize offset) const { return 0; }
     virtual void readSector(u8 *dst, isize b) const { }

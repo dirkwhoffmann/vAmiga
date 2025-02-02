@@ -9,17 +9,63 @@
 
 #pragma once
 
+#include "Workspace.h"
 #include "Snapshot.h"
 #include "Script.h"
-#include "DiskFiles/ADFFile.h"
+#include "RomFiles/RomFile.h"
+#include "RomFiles/ExtendedRomFile.h"
 #include "DiskFiles/DiskFile.h"
+#include "DiskFiles/HDFFile.h"
+#include "DiskFiles/FloppyFile.h"
+#include "DiskFiles/ADFFile.h"
+#include "DiskFiles/EADFFile.h"
+#include "DiskFiles/IMGFile.h"
 #include "DiskFiles/DMSFile.h"
 #include "DiskFiles/EXEFile.h"
-#include "DiskFiles/EADFFile.h"
-#include "DiskFiles/FloppyFile.h"
-#include "DiskFiles/Folder.h"
-#include "DiskFiles/HDFFile.h"
-#include "DiskFiles/IMGFile.h"
 #include "DiskFiles/STFile.h"
-#include "RomFiles/ExtendedRomFile.h"
-#include "RomFiles/RomFile.h"
+#include "DiskFiles/Folder.h"
+
+/* All media files are organized in the class hierarchy displayed below.
+ * MediaFile is a wrapper class which is referenced in the public API. Below
+ * the public API, three abstract classes are involed: AmigaFile, DiskFile,
+ * and FloppyFile. AmigaFile provides basic functionalities for reading and
+ * writing files, streams, and buffers. DiskFile provides an abstract interface
+ * for accessing files that represent hard disks and floppy disks. FloppyFile
+ * is the base class of all floppy disk file formats.
+ *
+ *  ------------
+ * | MediaFile  |     Public API
+ *  ------------
+ *         |
+ *   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ *         |
+ *  ------------
+ * | AmigaFile  |     Internal classes
+ *  ------------
+ *       |
+ *       |------------------------------------------------------------
+ *       |       |            |            |          |               |
+ *       |  -----------   ----------   --------   ---------   -----------------
+ *       | | Workspace | | Snapshot | | Script | | RomFile | | ExtendedRomFile |
+ *       |  -----------   ----------   --------   ---------   -----------------
+ *       |
+ *  ------------
+ * |  DiskFile  |
+ *  ------------
+ *       |
+ *       |------
+ *       |      |
+ *       |  ---------
+ *       | | HDFFile |
+ *       |  ---------
+ *       |
+ *  ------------
+ * | FloppyFile |
+ *  ------------
+ *       |
+ *       |-----------------------------------------------------------
+ *       |           |            |           |           |          |
+ *   ---------   ----------   ---------   ---------   ---------   --------
+ *  | ADFFile | | EADFFile | | IMGFile | | DMSFile | | EXEFile | | Folder |
+ *   ---------   ----------   ---------   ---------   ---------   --------
+ */

@@ -46,9 +46,7 @@ public:
     
     ADFFile() { }
     ADFFile(const std::filesystem::path &path) throws { init(path); }
-    // ADFFile(const std::filesystem::path &path, std::istream &stream) throws { init(path, stream); }
     ADFFile(const u8 *buf, isize len) throws { init(buf, len); }
-    // ADFFile(FILE *file) throws { init(file); }
     ADFFile(Diameter dia, Density den) throws { init(dia, den); }
     ADFFile(const FloppyDiskDescriptor &descr) throws { init(descr); }
     ADFFile(class FloppyDisk &disk) throws { init(disk); }
