@@ -27,11 +27,10 @@ extension UTType {
 class MyDocument: NSDocument {
 
     var pref: Preferences { return myAppDelegate.pref }
-    
-    // The window controller for this document
     var parent: MyController { return windowControllers.first as! MyController }
     var console: Console { return parent.renderer.console }
-
+    var canvas: Canvas { return parent.renderer.canvas }
+    
     // Gateway to the core emulator
     var emu: EmulatorProxy!
 
@@ -147,12 +146,22 @@ class MyDocument: NSDocument {
         if typeName == "de.dirkwhoffmann.retro.vamiga" {
 
             do {
+                // Save the workspace
                 try emu.amiga.saveWorkspace(url: url)
 
+                // Add a screenshot to the workspace bundle
+                if let image = canvas.screenshot(source: .emulator, cutout: .visible) {
+                
+                    // Convert to target format
+                    let data = image.representation(using: .png)
+                    
+                    // Save to file
+                    try data?.write(to: url.appendingPathComponent("preview.png"))
+                }
+                
             } catch let error as VAException {
                 
-                let what = error.what
-                Swift.print("Error: \(what)")
+                // Swift.print("Error: \(error.what)")
                 throw NSError(error: error)
             }
         }

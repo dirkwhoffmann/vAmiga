@@ -380,35 +380,21 @@ class Canvas: Layer {
 
 extension Canvas {
         
-    func screenshot(source: ScreenshotSource, cutout: ScreenshotCutout, width: Int, height: Int) -> NSImage? {
-
+    func screenshot(source: ScreenshotSource, cutout: ScreenshotCutout, width: Int? = nil, height: Int? = nil) -> NSImage? {
+        
         // print("screenshot(source: \(source), cutout: \(cutout), width: \(width), height: \(height)")
         
-        // Handle the framebuffer option first
-        if source == .framebuffer { return framebuffer }
-        
-        var texture: MTLTexture
-        var mtlreg: MTLRegion
-        
-        // Analyze the emulator texture
-        var x1 = 0, x2 = 0, y1 = 0, y2 = 0
-        amiga.videoPort.innerArea(&x1, x2: &x2, y1: &y1, y2: &y2)
-        var width = x2 - x1 + 1, height = y2 - y1 + 1
-        
-        // Scale to texture coordinates
-        x1 *= 2; x2 *= 2; width *= 2; y1 *= 4; y2 *= 4; height *= 4
-        
-        func region(width: Int, height: Int) -> MTLRegion {
-        
-            // Compute the center coordinate
-            let cx = Int((x1 + x2) / 2)
-            let cy = Int((y1 + y2) / 2)
-
-            // Assemble the region
-            let origin = MTLOrigin(x: cx - width / 2, y: cy - height / 2, z: 0)
-            let size = MTLSize(width: width, height: height, depth: 1)
-            return MTLRegion(origin: origin, size: size)
+        switch source {
+            
+        case .framebuffer: return framebuffer
+        case .emulator: return screenshot(texture: mergeTexture, cutout: cutout, width: width, height: height)
+        case .upscaler: return screenshot(texture: upscaledTexture, cutout: cutout, width: width, height: height)
         }
+    }
+    
+    func screenshot(texture: MTLTexture, cutout: ScreenshotCutout, width: Int? = nil, height: Int? = nil) -> NSImage? {
+
+        // print("screenshot(cutout: \(cutout), width: \(width), height: \(height)")
 
         func region(cgRect rect: CGRect) -> MTLRegion {
         
@@ -421,6 +407,16 @@ extension Canvas {
             let size = MTLSize(width: Int(rect.width * w), height: Int(rect.height * h), depth: 1)
             return MTLRegion(origin: origin, size: size)
         }
+
+        /*
+        func region(cx: Int, cy: Int, width: Int, height: Int) -> MTLRegion {
+        
+            // Assemble the region
+            let origin = MTLOrigin(x: cx - width / 2, y: cy - height / 2, z: 0)
+            let size = MTLSize(width: width, height: height, depth: 1)
+            return MTLRegion(origin: origin, size: size)
+        }
+        */
         
         func region(x1: Int, x2: Int, y1: Int, y2: Int) -> MTLRegion {
         
@@ -429,32 +425,65 @@ extension Canvas {
             
             // Assemble the region
             let origin = MTLOrigin(x: x1, y: y1, z: 0)
-            let size = MTLSize(width: width, height: height, depth: 1)
+            let size = MTLSize(width: x2 - x1 + 1, height: y2 - y1 + 1, depth: 1)
             return MTLRegion(origin: origin, size: size)
         }
         
-        switch source {
-        case .emulator: texture = mergeTexture
-        case .upscaler: texture = upscaledTexture
-        case .framebuffer: fatalError()
-        }
-        
         switch cutout {
-        case .visible: mtlreg = region(cgRect: visibleNormalized)
-        case .entire: mtlreg = region(cgRect: largestVisibleNormalized)
-        case .automatic: mtlreg = region(x1: x1, x2: x2, y1: y1, y2: y2)
-        case .custom: mtlreg = region(width: width, height: height)
+            
+        case .visible:
+            
+            let mtlreg = region(cgRect: visibleNormalized)
+            return screenshot(texture: texture, region: mtlreg)
+            
+        case .entire:
+            
+            let mtlreg = region(cgRect: largestVisibleNormalized)
+            return screenshot(texture: texture, region: mtlreg)
+            
+        case .automatic, .custom:
+            
+            // Find the uses area inside the emulator texture
+            var x1 = 0, x2 = 0, y1 = 0, y2 = 0
+            amiga.videoPort.innerArea(&x1, x2: &x2, y1: &y1, y2: &y2)
+
+            // Compute width and height
+            var w = x2 - x1 + 1, h = y2 - y1 + 1
+
+            // Scale to texture coordinates
+            x1 *= 2; x2 *= 2; w *= 2; y1 *= 4; y2 *= 4; h *= 4
+
+            // Compute the center
+            let cx = Int((x1 + x2) / 2)
+            let cy = Int((y1 + y2) / 2)
+                                
+            // Readjust the rectangle in custom mode
+            if cutout == .custom {
+                
+                x1 = cx - width! / 2; x2 = x1 + width!
+                y1 = cy - height! / 2; y2 = y1 + height!
+            }
+
+            // Apply minimum width and height
+            /*
+            if cutout == .custom { w = 0; h = 0 }
+            if w < width ?? 0 { x1 = cx - width! / 2; x2 = x1 + width! }
+            if h < height ?? 0 { y1 = cy - height! / 2; y2 = y1 + height! }
+            */
+            
+            let mtlreg = region(x1: x1, x2: x2, y1: y1, y2: y2)
+            return screenshot(texture: texture, region: mtlreg)
         }
-             
-        return screenshot(texture: texture, region: mtlreg)
     }
 
+    /*
     private func screenshot(texture: MTLTexture, rect: CGRect) -> NSImage? {
 
         texture.blit()
         return NSImage.make(texture: texture, rect: rect)
     }
-
+    */
+    
     private func screenshot(texture: MTLTexture, region: MTLRegion) -> NSImage? {
 
         texture.blit()
