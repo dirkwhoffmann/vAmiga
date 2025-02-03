@@ -40,7 +40,10 @@ class Host final : public SubComponent {
     // Current configuration
     HostConfig config = { };
 
-
+    // Search path prepended in makeAbsolute()
+    fs::path searchPath;
+    
+    
     //
     // Initializing
     //
@@ -93,10 +96,16 @@ public:
 
 
     //
-    // Working with temporary files and folders
+    // Working with files and folders
     //
 
 public:
+
+    // Sets the search path used in makeAbsolute
+    void setSearchPath(fs::path path);
+
+    // Sets the search path used in makeAbsolute
+    fs::path makeAbsolute(fs::path path) const;
 
     // Returns a path to a temporary folder
     fs::path tmp() const throws;

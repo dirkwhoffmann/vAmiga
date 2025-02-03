@@ -84,8 +84,29 @@ Host::_dump(Category category, std::ostream& os) const
 
     if (category == Category::Config) {
 
+        os << tab("Search path");
+        os << "\"" << searchPath << "\"" << std::endl;
+
         dumpConfig(os);
     }
+}
+
+// Sets the search path used in makeAbsolute
+void
+Host::setSearchPath(fs::path path)
+{
+    SYNCHRONIZED
+    
+    searchPath = path;
+}
+
+// Sets the search path used in makeAbsolute
+fs::path
+Host::makeAbsolute(fs::path path) const
+{
+    SYNCHRONIZED
+    
+    return path.is_absolute() ? path : searchPath / path;
 }
 
 fs::path

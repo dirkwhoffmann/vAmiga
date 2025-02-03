@@ -704,7 +704,7 @@ Memory::loadRom(MediaFile &file)
 void
 Memory::loadRom(const std::filesystem::path &path)
 {
-    RomFile file(path);
+    RomFile file(host.makeAbsolute(path));
     loadRom(file);
 }
 

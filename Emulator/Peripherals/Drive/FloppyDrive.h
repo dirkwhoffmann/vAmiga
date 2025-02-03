@@ -124,7 +124,7 @@ private:
     std::unique_ptr<FloppyDisk> diskToInsert;
     
     // Search path for disk files, one for each drive
-    std::filesystem::path searchPath;
+    // [[deprecated]] std::filesystem::path searchPath;
 
     
     //
@@ -237,9 +237,10 @@ public:
     void checkOption(Opt opt, i64 value) override;
     void setOption(Opt option, i64 value) override;
     
+    /*
     const std::filesystem::path &getSearchPath() const { return searchPath; }
     void setSearchPath(const std::filesystem::path &path) { searchPath = path; }
-
+    */
 
     //
     // Analyzing

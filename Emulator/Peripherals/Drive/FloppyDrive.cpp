@@ -226,9 +226,6 @@ FloppyDrive::_dump(Category category, std::ostream& os) const
         
         dumpConfig(os);
 
-        os << tab("Search path");
-        os << "\"" << searchPath << "\"" << std::endl;
-
         os << std::endl;
         os << tab("Start delay");
         os << dec(AS_MSEC(getStartDelay())) << " msec" << std::endl;
@@ -1099,7 +1096,7 @@ FloppyDrive::swapDisk(class FloppyFile &file)
 void
 FloppyDrive::swapDisk(const std::filesystem::path &path)
 {
-    auto location = path.is_absolute() ? path : searchPath / path;
+    auto location = host.makeAbsolute(path);
     std::unique_ptr<FloppyFile> file(FloppyFile::make(location));
     swapDisk(*file);
 }

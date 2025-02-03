@@ -774,23 +774,6 @@ CommandConsole::initCommands(RetroShellCmd &root)
                 
             }, .values = {i}
         });
-        
-        root.add({
-            
-            .tokens = { cmd, "searchpath" },
-            .args   = { Arg::path },
-            .help   = { "Sets the search path for media files" },
-            .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
-                
-                string path = argv.front();
-                
-                if (values[0] == 0 || values[0] > 3) df0.setSearchPath(path);
-                if (values[0] == 1 || values[0] > 3) df1.setSearchPath(path);
-                if (values[0] == 2 || values[0] > 3) df2.setSearchPath(path);
-                if (values[0] == 3 || values[0] > 3) df3.setSearchPath(path);
-                
-            }, .values = {i}
-        });
     }
     
     
@@ -924,6 +907,19 @@ CommandConsole::initCommands(RetroShellCmd &root)
     //
     
     cmd = registerComponent(host);
+    
+    root.add({
+        
+        .tokens = { cmd, "searchpath" },
+        .args   = { Arg::path },
+        .help   = { "Sets the search path for media files" },
+        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+            
+            string path = argv.front();
+            
+            host.setSearchPath(path);
+        }
+    });
     
     
     //

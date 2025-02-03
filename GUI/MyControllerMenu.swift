@@ -817,33 +817,6 @@ extension MyController: NSMenuItemValidation {
                 }
             }
         })
-        
-        /*
-        // Show the OpenPanel
-        let openPanel = NSOpenPanel()
-        openPanel.allowsMultipleSelection = false
-        openPanel.canChooseDirectories = true
-        openPanel.canCreateDirectories = false
-        openPanel.canChooseFiles = true
-        openPanel.prompt = "Attach"
-        openPanel.allowedContentTypes = [ .hdf, .hdz, .zip, .gzip ]
-        openPanel.beginSheetModal(for: window!, completionHandler: { result in
-            
-            if result == .OK, let url = openPanel.url {
-                
-                DispatchQueue.main.async {
-                    
-                    do {
-                        try self.mydocument.addMedia(url: url,
-                                                     allowedTypes: [ .HDF ],
-                                                     hd: sender.tag)
-                    } catch {
-                        self.showAlert(.cantAttach, error: error, async: true)
-                    }
-                }
-            }
-        })
-        */
     }
     
     @IBAction func attachRecentHdrDummyAction(_ sender: NSMenuItem!) {}

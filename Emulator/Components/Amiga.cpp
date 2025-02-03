@@ -312,67 +312,34 @@ Amiga::loadWorkspace(const fs::path &path)
 {
     std::stringstream ss;
     
-    auto exec = [&](const string &cmd) {
-        
-        if (cmd == "\n") { ss << "\n"; } else { ss << "try " << cmd << "\n"; }
-    };
-    auto importScript = [&](const fs::path &path) {
-        
-        if (fs::exists(path)) {
-            Script script(path); script.writeToStream(ss);
-        }
-    };
-    auto importRom = [&](const string type, const fs::path &path) {
-        
-        if (fs::exists(path)) {
-            exec("mem load " + type + " " + path.string());
-        }
-    };
-    auto importADF = [&](FloppyDrive& drive, const fs::path &path) {
-        
-        if (fs::exists(path)) {
-            exec(string(drive.shellName()) + " insert " + path.string());
-        }
-    };
-    auto importHDF = [&](HardDrive& drive, const fs::path &path) {
-        
-        if (fs::exists(path)) {
-            exec(string(drive.shellName()) + " attach " + path.string());
-        }
-    };
+    // Set the search path to the workspace directoy
+    host.setSearchPath(path);
     
-    // Prepare the setup script...
-    
-    // Power off the amiga to make it configurable
-    exec("\n");
-    exec("workspace init");
-    exec("\n");
-
-    // Read the config script
+    // Assemble the setup script
     try {
-        importScript(path / "config.retrosh");
+        
+        // Power off the amiga to make it configurable
+        ss << "\n";
+        ss << "try workspace init";
+        ss << "\n";
+        
+        // Read the config script
+        if (fs::exists(path / "config.retrosh")) {
+            
+            Script script(path / "config.retrosh");
+            script.writeToStream(ss);
+        }
+        
+        // Power on the Amiga with the new configuration
+        ss << "\n";
+        ss << "try workspace activate";
+        
     } catch (VAException &exc) {
+        
         printf("Error: %s\n", exc.what());
         throw;
     }
-    // Load ROMs
-    importRom("rom", path / "rom.bin");
-    importRom("ext", path / "ext.bin");
-    
-    // Load media
-    importADF(df0, path / "df0.adf");
-    importADF(df1, path / "df1.adf");
-    importADF(df2, path / "df2.adf");
-    importADF(df3, path / "df3.adf");
-    importHDF(hd0, path / "hd0.hdf");
-    importHDF(hd1, path / "hd1.hdf");
-    importHDF(hd2, path / "hd2.hdf");
-    importHDF(hd3, path / "hd3.hdf");
-    
-    // Power on the Amiga with the new configuration
-    exec("\n");
-    exec("workspace activate");
-    
+
     // Execute the setup script
     retroShell.asyncExecScript(ss);
 }
@@ -380,25 +347,33 @@ Amiga::loadWorkspace(const fs::path &path)
 void
 Amiga::saveWorkspace(const fs::path &path)
 {
-    auto now = std::time(nullptr);
+    std::stringstream ss, df, hd;
 
-    auto exportADF = [&](FloppyDrive& drive, string file) {
+    auto exportADF = [&](FloppyDrive& drive, string name, string file) {
         
         if (drive.hasDisk()) {
             try {
                 ADFFile adf(drive);
                 adf.writeToFile(path / file);
                 drive.markDiskAsUnmodified();
+                
+                df << "try " << name << " insert " << file << "\n";
+                df << "try " << name << (drive.hasProtectedDisk() ? " protect\n" : " unprotect\n");
+                
             } catch (...) { }
         }
     };
-    auto exportHDF = [&](HardDrive& drive, string file) {
+    auto exportHDF = [&](HardDrive& drive, string name, string file) {
         
         if (drive.hasDisk()) {
             try {
                 HDFFile hdf(drive);
                 hdf.writeToFile(path / file);
                 drive.markDiskAsUnmodified();
+
+                hd << "try " << name << " attach " << file << "\n";
+                hd << "try " << name << (drive.hasProtectedDisk() ? " protect\n" : " unprotect\n");
+
             } catch (...) { }
         }
     };
@@ -411,41 +386,45 @@ Amiga::saveWorkspace(const fs::path &path)
         
     // Remove old files
     for (const auto& entry : fs::directory_iterator(path)) fs::remove_all(entry.path());
-    
-    // Save ROMs
-    if (mem.hasRom()) mem.saveRom(path / "rom.bin");
-    if (mem.hasWom()) mem.saveWom(path / "wom.bin");
-    if (mem.hasExt()) mem.saveExt(path / "ext.bin");
-
-    // Save floppy disks
-    exportADF(df0, "df0.adf");
-    exportADF(df1, "df1.adf");
-    exportADF(df2, "df2.adf");
-    exportADF(df3, "df3.adf");
-
-    // Save hard disks
-    exportHDF(hd0, "hd0.hdf");
-    exportHDF(hd1, "hd1.hdf");
-    exportHDF(hd2, "hd2.hdf");
-    exportHDF(hd3, "hd3.hdf");
-    
-    //
+        
     // Prepare the config script
-    //
-    
-    std::stringstream ss;
-    
-    // ss << "# Workspace setup (" << std::ctime(&now) << ")\n";
+    auto now = std::time(nullptr);
     ss << "# Workspace setup (" << std::put_time(std::localtime(&now), "%c") << ")\n";
     ss << "# Generated with vAmiga " << Amiga::build() << "\n";
     ss << "\n";
-    // ss << "workspace init\n\n";
 
+    // Dump the current config
     exportConfig(ss);
-    
-    // ss << "\n";
-    // ss << "workspace activate\n";
 
+    // Export ROMs
+    ss << "\n# ROMs\n\n";
+    if (mem.hasRom()) { mem.saveRom(path / "rom.bin"); ss << "try mem load rom rom.bin\n"; }
+    if (mem.hasWom()) { mem.saveWom(path / "wom.bin"); ss << "try mem load wom wom.bin\n"; }
+    if (mem.hasExt()) { mem.saveExt(path / "ext.bin"); ss << "try mem load ext ext.bin\n"; }
+
+    // Export floppy disks
+    exportADF(df0, "df0", "df0.adf");
+    exportADF(df1, "df1", "df1.adf");
+    exportADF(df2, "df2", "df2.adf");
+    exportADF(df3, "df3", "df3.adf");
+    
+    if (!df.str().empty()) {
+        ss << "\n# Floppy disks\n\n";
+        ss << df.str();
+    }
+    
+    // Export hard disks
+    exportHDF(hd0, "hd0", "hd0.hdf");
+    exportHDF(hd1, "hd1", "hd1.hdf");
+    exportHDF(hd2, "hd2", "hd2.hdf");
+    exportHDF(hd3, "hd3", "hd3.hdf");
+    
+    if (!hd.str().empty()) {
+        ss << "\n# Hard drives\n\n";
+        ss << hd.str();
+    }
+
+    // Write the script into the workspace bundle
     std::ofstream file(path / "config.retrosh");
     file << ss.str();
     
@@ -493,6 +472,7 @@ Amiga::exportConfig(std::ostream &stream, bool diff) const
     CoreComponent::exportConfig(stream, diff);
     
     // Write-protection status of floppy disks and hard drive
+    /*
     std::stringstream ss;
     for (isize i = 0; i < 4; i++) {
         if (df[i]->hasProtectedDisk()) ss << "try df" << i << " protect\n";
@@ -506,6 +486,7 @@ Amiga::exportConfig(std::ostream &stream, bool diff) const
         stream << "\n# Write protection\n\n";
         stream << ss.str();
     }
+    */
 }
 
 void

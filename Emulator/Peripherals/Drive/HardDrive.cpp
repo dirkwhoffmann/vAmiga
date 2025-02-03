@@ -203,7 +203,7 @@ HardDrive::init(const HDFFile &hdf)
 void
 HardDrive::init(const std::filesystem::path &path) throws
 {
-    HDFFile hdf(path);
+    HDFFile hdf(host.makeAbsolute(path));
     init(hdf);
 }
 

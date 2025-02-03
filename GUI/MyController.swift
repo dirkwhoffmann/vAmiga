@@ -381,13 +381,14 @@ extension MyController {
             }
             clearInfo()
             passToInspector()
+            configurator?.refresh()
 
         case .RUN:
             toolbar.updateToolbar()
             refreshStatusBar()
             clearInfo()
             passToInspector()
-            
+
         case .PAUSE:
             toolbar.updateToolbar()
             refreshStatusBar()
