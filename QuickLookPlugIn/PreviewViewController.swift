@@ -79,7 +79,7 @@ class PreviewViewController: NSViewController, QLPreviewingController {
             if let chip = dict["Chip"] as? Int { add(String(chip) + " KB Chip RAM") }
             if let slow = dict["Slow"] as? Int { add(String(slow) + " KB Slow RAM") }
             if let fast = dict["Fast"] as? Int  { add(String(fast) + " KB Fast RAM") }
-            if let version = dict["Version"] as? String { build.stringValue = "Build with vAmiga " + version }
+            if let version = dict["Version"] as? String { build.stringValue = "Built with vAmiga " + version }
         } catch {
             
         }
