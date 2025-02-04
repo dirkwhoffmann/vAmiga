@@ -11,40 +11,55 @@ import Quartz
 
 class PreviewViewController: NSViewController, QLPreviewingController {
 
-    @IBOutlet weak var textField: NSTextField!
-    @IBOutlet weak var imageView: NSImageView!
+    @IBOutlet weak var preview: NSImageView!
+    @IBOutlet weak var heading: NSTextField!
+    @IBOutlet weak var item1: NSTextField!
+    @IBOutlet weak var item2: NSTextField!
+    @IBOutlet weak var item3: NSTextField!
+    @IBOutlet weak var item4: NSTextField!
+    @IBOutlet weak var item5: NSTextField!
 
+    // var dictionary: [String: Any] = [:]
+    
     override var nibName: NSNib.Name? {
+        
         return NSNib.Name("PreviewViewController")
     }
 
     override func loadView() {
-        super.loadView()
-        // Do any additional setup after loading the view.
         
-        NSLog("dirkwhoffmann: loadView()")
+        super.loadView()
     }
-
-    /*
-    func preparePreviewOfSearchableItem(identifier: String, queryString: String?) async throws {
-        // Implement this method and set QLSupportsSearchableItems to YES in the Info.plist of the extension if you support CoreSpotlight.
-
-        // Perform any setup necessary in order to prepare the view.
-        // Quick Look will display a loading spinner until this returns.
-    }
-    */
 
     func preparePreviewOfFile(at url: URL) async throws {
-        // Add the supported content types to the QLSupportedContentTypes array in the Info.plist of the extension.
 
-        // Perform any setup necessary in order to prepare the view.
+        let imgUrl = url.appendingPathComponent("preview.png")
+        let xmlUrl = url.appendingPathComponent("info.xml")
 
-        // Quick Look will display a loading spinner until this returns.
-        let newUrl = url.appendingPathComponent("preview.png")
+        do {
+            // Load dictionary
+            let data = try Data(contentsOf: xmlUrl)
+            let dictionary = try PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any] ?? [:]
+            
+            let chip = dictionary["chip"] as? String
+            let slow = dictionary["slow"] as? String
+            let fast = dictionary["fast"] as? String
+            
+            var mem = ""
+            if let chip = chip { mem += chip + "KB" }
+            if let slow = slow { mem += ", " + slow + "KB" }
+            if let fast = fast { mem += ", " + fast + "KB" }
+            
+            item1.stringValue = mem
+            
+        } catch {
+            
+        }
 
-        textField.stringValue = newUrl.relativePath
-        imageView.image = NSImage(contentsOf: url.appendingPathComponent("preview.png"))
-        NSLog("dirkwhoffmann: preparePreviewOfFile(/url))")
+        heading.stringValue = url.deletingPathExtension().lastPathComponent
+        preview.image = NSImage(contentsOf: imgUrl)
+
+
     }
 
 }

@@ -30,7 +30,7 @@ Sampler::interpolate(Cycle clock)
      *
      *     Cycle of sample at r1 <= Target cycle < Cycle of sample at r1 + 1
      *
-     * In the second step, the function interpolated between the two samples at
+     * In the second step, the function interpolates between the two samples at
      * r1 and r1 + 1 based on the requested method.
      */
 

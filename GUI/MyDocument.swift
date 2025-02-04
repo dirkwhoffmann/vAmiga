@@ -159,6 +159,22 @@ class MyDocument: NSDocument {
                     try data?.write(to: url.appendingPathComponent("preview.png"))
                 }
                 
+                // Collect some info about the emulated machine
+                var dictionary: [String: Any] = [:]
+                let chip = emu.get(.MEM_CHIP_RAM)
+                let slow = emu.get(.MEM_FAST_RAM)
+                let fast = emu.get(.MEM_SLOW_RAM)
+                dictionary["ChipRam"] = chip
+                dictionary["SlowRam"] = slow
+                dictionary["FastRam"] = fast
+                
+                do {
+                    
+                    let data = try PropertyListSerialization.data(fromPropertyList: dictionary, format: .xml, options: 0)
+                    try data.write(to: url.appendingPathComponent("info.xml"))
+                    
+                    } catch { }
+                
             } catch let error as VAException {
                 
                 // Swift.print("Error: \(error.what)")
