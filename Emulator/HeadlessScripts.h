@@ -319,7 +319,6 @@ static const char *smokeTestScript[] = {
 
     "df0",
     "df0 eject",
-    "df0 searchpath \"tmp/\"",
     "df0 set TYPE DD_35",
     "df0 set RPM 300",
     "df0 set MECHANICS NONE",
@@ -333,7 +332,6 @@ static const char *smokeTestScript[] = {
 
     "df1",
     "df1 eject",
-    "df1 searchpath \"tmp/\"",
     "df1 set CONNECT true",
     "df1 set TYPE DD_35",
     "df1 set RPM 300",

@@ -6,6 +6,7 @@
 //  Copyright © 2025 Dirk Hoffmann. All rights reserved.
 //
 
+/*
 import Cocoa
 import Quartz
 
@@ -58,3 +59,4 @@ class PreviewProvider: QLPreviewProvider, QLPreviewingController {
         return reply
     }
 }
+*/

@@ -11,6 +11,9 @@ import Quartz
 
 class PreviewViewController: NSViewController, QLPreviewingController {
 
+    @IBOutlet weak var textField: NSTextField!
+    @IBOutlet weak var imageView: NSImageView!
+
     override var nibName: NSNib.Name? {
         return NSNib.Name("PreviewViewController")
     }
@@ -37,7 +40,10 @@ class PreviewViewController: NSViewController, QLPreviewingController {
         // Perform any setup necessary in order to prepare the view.
 
         // Quick Look will display a loading spinner until this returns.
-        
+        let newUrl = url.appendingPathComponent("preview.png")
+
+        textField.stringValue = newUrl.relativePath
+        imageView.image = NSImage(contentsOf: url.appendingPathComponent("preview.png"))
         NSLog("dirkwhoffmann: preparePreviewOfFile(/url))")
     }
 
