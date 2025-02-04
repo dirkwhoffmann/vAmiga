@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>QuickLookPlugIn.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
 		<key>vAmiga.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
@@ -28,6 +33,11 @@
 			<true/>
 		</dict>
 		<key>508FDE8221EA1FA50043D0E9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>509EA5422D51EFD40001BC50</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -213,6 +213,8 @@
 		509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CC22083F9800C500F0 /* CPUPanel.swift */; };
 		509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CE220847C600C500F0 /* InstrTableView.swift */; };
 		509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4D02208487900C500F0 /* TraceTableView.swift */; };
+		509EA5452D51EFD40001BC50 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 509EA5442D51EFD40001BC50 /* Quartz.framework */; };
+		509EA5522D51EFD40001BC50 /* QuickLookPlugIn.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */; };
 		509F41EA243B0FF700AD0FE4 /* ScreenshotDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F41E9243B0FF700AD0FE4 /* ScreenshotDialog.swift */; };
 		509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* RomFile.cpp */; };
@@ -487,7 +489,28 @@
 		50FF747327D3BBFE00B6EA01 /* hdr_click.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50FF747227D3BBFE00B6EA01 /* hdr_click.aiff */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		509EA5502D51EFD40001BC50 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 508FDE5C21EA1FA40043D0E9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 509EA5422D51EFD40001BC50;
+			remoteInfo = QuickLookPlugIn;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
+		509EA5532D51EFD40001BC50 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				509EA5522D51EFD40001BC50 /* QuickLookPlugIn.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		50FC046B27DA0FA500C3E566 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -808,6 +831,8 @@
 		509CF4CE220847C600C500F0 /* InstrTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstrTableView.swift; sourceTree = "<group>"; };
 		509CF4D02208487900C500F0 /* TraceTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceTableView.swift; sourceTree = "<group>"; };
 		509D4EF4228596A900E2C252 /* PaulaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaulaTypes.h; sourceTree = "<group>"; };
+		509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuickLookPlugIn.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		509EA5442D51EFD40001BC50 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ScreenshotDialog.xib; sourceTree = "<group>"; };
 		509F41E9243B0FF700AD0FE4 /* ScreenshotDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotDialog.swift; sourceTree = "<group>"; };
 		509F7F1B21EDEA0200A530E4 /* RomFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RomFile.cpp; sourceTree = "<group>"; };
@@ -1087,6 +1112,20 @@
 		50FF747227D3BBFE00B6EA01 /* hdr_click.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = hdr_click.aiff; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		509EA5562D51EFD40001BC50 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 509EA5422D51EFD40001BC50 /* QuickLookPlugIn */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		509EA5462D51EFD40001BC50 /* QuickLookPlugIn */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (509EA5562D51EFD40001BC50 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = QuickLookPlugIn; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		508FDE6121EA1FA40043D0E9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -1098,6 +1137,14 @@
 				508FDFE321EA21550043D0E9 /* Cocoa.framework in Frameworks */,
 				508FDFE021EA214A0043D0E9 /* MetalKit.framework in Frameworks */,
 				508FDFE121EA214A0043D0E9 /* Metal.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		509EA5402D51EFD40001BC50 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				509EA5452D51EFD40001BC50 /* Quartz.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1434,6 +1481,7 @@
 				50B14C2421EB8F25002E32A6 /* Proxy */,
 				508FDFDC21EA20600043D0E9 /* GUI */,
 				508FDE6621EA1FA40043D0E9 /* Resources */,
+				509EA5462D51EFD40001BC50 /* QuickLookPlugIn */,
 				508FDE6521EA1FA40043D0E9 /* Products */,
 				508FDFDD21EA214A0043D0E9 /* Frameworks */,
 			);
@@ -1445,6 +1493,7 @@
 			children = (
 				508FDE6421EA1FA40043D0E9 /* vAmiga.app */,
 				50FC046D27DA0FA500C3E566 /* vAmigaCore */,
+				509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1559,6 +1608,7 @@
 				508FDFE221EA21550043D0E9 /* Cocoa.framework */,
 				508FDFDF21EA214A0043D0E9 /* Metal.framework */,
 				508FDFDE21EA214A0043D0E9 /* MetalKit.framework */,
+				509EA5442D51EFD40001BC50 /* Quartz.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2177,10 +2227,12 @@
 				508FDE6021EA1FA40043D0E9 /* Sources */,
 				508FDE6121EA1FA40043D0E9 /* Frameworks */,
 				508FDE6221EA1FA40043D0E9 /* Resources */,
+				509EA5532D51EFD40001BC50 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				509EA5512D51EFD40001BC50 /* PBXTargetDependency */,
 			);
 			name = vAmiga;
 			packageProductDependencies = (
@@ -2188,6 +2240,28 @@
 			productName = vAmiga;
 			productReference = 508FDE6421EA1FA40043D0E9 /* vAmiga.app */;
 			productType = "com.apple.product-type.application";
+		};
+		509EA5422D51EFD40001BC50 /* QuickLookPlugIn */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 509EA5572D51EFD40001BC50 /* Build configuration list for PBXNativeTarget "QuickLookPlugIn" */;
+			buildPhases = (
+				509EA53F2D51EFD40001BC50 /* Sources */,
+				509EA5402D51EFD40001BC50 /* Frameworks */,
+				509EA5412D51EFD40001BC50 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				509EA5462D51EFD40001BC50 /* QuickLookPlugIn */,
+			);
+			name = QuickLookPlugIn;
+			packageProductDependencies = (
+			);
+			productName = QuickLookPlugIn;
+			productReference = 509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		50FC046C27DA0FA500C3E566 /* vAmigaCore */ = {
 			isa = PBXNativeTarget;
@@ -2213,13 +2287,16 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastSwiftUpdateCheck = 1010;
+				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1540;
 				ORGANIZATIONNAME = "Dirk Hoffmann";
 				TargetAttributes = {
 					508FDE6321EA1FA40043D0E9 = {
 						CreatedOnToolsVersion = 10.1;
 						LastSwiftMigration = 1020;
+					};
+					509EA5422D51EFD40001BC50 = {
+						CreatedOnToolsVersion = 16.2;
 					};
 					50FC046C27DA0FA500C3E566 = {
 						CreatedOnToolsVersion = 13.2.1;
@@ -2243,6 +2320,7 @@
 			targets = (
 				508FDE6321EA1FA40043D0E9 /* vAmiga */,
 				50FC046C27DA0FA500C3E566 /* vAmigaCore */,
+				509EA5422D51EFD40001BC50 /* QuickLookPlugIn */,
 			);
 		};
 /* End PBXProject section */
@@ -2287,6 +2365,13 @@
 				500A4EAE2447364E002A4DE1 /* insert.aiff in Resources */,
 				50DD1EE22525E3E1000180F6 /* Preferences.xib in Resources */,
 				504E57C82D12ACFC002233D1 /* gamecontrollerdb.txt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		509EA5412D51EFD40001BC50 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2574,6 +2659,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		509EA53F2D51EFD40001BC50 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		50FC046927DA0FA500C3E566 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2745,6 +2837,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		509EA5512D51EFD40001BC50 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 509EA5422D51EFD40001BC50 /* QuickLookPlugIn */;
+			targetProxy = 509EA5502D51EFD40001BC50 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		508FDFAF21EA1FF10043D0E9 /* MyDocument.xib */ = {
@@ -2991,7 +3091,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 250116;
+				CURRENT_PROJECT_VERSION = 250204;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = NO;
@@ -3013,7 +3113,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 3.2;
+				MARKETING_VERSION = 3.3;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 c++20";
 				PRODUCT_BUNDLE_IDENTIFIER = dirkwhoffmann.vAmiga;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3043,7 +3143,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 250116;
+				CURRENT_PROJECT_VERSION = 250204;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = NO;
@@ -3063,7 +3163,7 @@
 				);
 				LLVM_LTO = YES_THIN;
 				MACOSX_DEPLOYMENT_TARGET = 13.5;
-				MARKETING_VERSION = 3.2;
+				MARKETING_VERSION = 3.3;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 c++20";
 				PRODUCT_BUNDLE_IDENTIFIER = dirkwhoffmann.vAmiga;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3076,6 +3176,73 @@
 					"-Wno-gnu-zero-variadic-macro-arguments",
 					"-Wno-nested-anon-types",
 				);
+			};
+			name = Release;
+		};
+		509EA5542D51EFD40001BC50 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = QuickLookPlugIn/QuickLookPlugIn.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 250204;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = QuickLookPlugIn/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = QuickLookPlugIn;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Dirk Hoffmann. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.1;
+				MARKETING_VERSION = 3.3;
+				PRODUCT_BUNDLE_IDENTIFIER = dirkwhoffmann.vAmiga.QuickLookPlugIn;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		509EA5552D51EFD40001BC50 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = QuickLookPlugIn/QuickLookPlugIn.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 250204;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = QuickLookPlugIn/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = QuickLookPlugIn;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2025 Dirk Hoffmann. All rights reserved.";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.1;
+				MARKETING_VERSION = 3.3;
+				PRODUCT_BUNDLE_IDENTIFIER = dirkwhoffmann.vAmiga.QuickLookPlugIn;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -3128,6 +3295,15 @@
 			buildConfigurations = (
 				508FDE8D21EA1FA50043D0E9 /* Debug */,
 				508FDE8E21EA1FA50043D0E9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		509EA5572D51EFD40001BC50 /* Build configuration list for PBXNativeTarget "QuickLookPlugIn" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				509EA5542D51EFD40001BC50 /* Debug */,
+				509EA5552D51EFD40001BC50 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
