@@ -29,6 +29,9 @@ class PreviewViewController: NSViewController, QLPreviewingController {
     override func loadView() {
         
         super.loadView()
+        
+        // Set a fixed preview size
+        preferredContentSize = CGSize(width: 700, height: 334)
     }
 
     func preparePreviewOfFile(at url: URL) async throws {
