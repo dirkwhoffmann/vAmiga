@@ -7,6 +7,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="PreviewViewController" customModule="QuickLookPlugIn" customModuleProvider="target">
             <connections>
+                <outlet property="build" destination="VbC-ze-n2i" id="VvV-sw-AJj"/>
                 <outlet property="heading" destination="ooV-lu-V9g" id="5FA-dk-waa"/>
                 <outlet property="item1" destination="7P9-mo-gl6" id="nZL-8M-QuU"/>
                 <outlet property="item2" destination="E05-At-9e0" id="Qkk-lB-LDR"/>
@@ -20,79 +21,87 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="c22-O7-iKe" userLabel="Preview View">
-            <rect key="frame" x="0.0" y="0.0" width="700" height="334"/>
+            <rect key="frame" x="0.0" y="0.0" width="800" height="400"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ooV-lu-V9g">
-                    <rect key="frame" x="444" y="283" width="307" height="31"/>
+                    <rect key="frame" x="475" y="316" width="307" height="31"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" title="Amiga 500" id="tgD-Ny-06d">
+                    <textFieldCell key="cell" lineBreakMode="clipping" title="Commodore Amiga 2000" id="tgD-Ny-06d">
                         <font key="font" textStyle="largeTitle" name=".SFNS-Regular"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VmH-W9-8To">
-                    <rect key="frame" x="444" y="197" width="110" height="16"/>
+                    <rect key="frame" x="476" y="211" width="237" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" title="512 KB Chip RAM" id="6aB-gc-poK">
-                        <font key="font" metaFont="system"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Lorem ipsum" id="6aB-gc-poK">
+                        <font key="font" metaFont="systemLight" size="16"/>
                         <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ffx-AF-tBV">
-                    <rect key="frame" x="444" y="171" width="176" height="16"/>
+                    <rect key="frame" x="476" y="184" width="237" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" title="512 KB Slow RAM Expansion" id="mAl-N8-sT5">
-                        <font key="font" metaFont="system"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Lorem ipsum" id="mAl-N8-sT5">
+                        <font key="font" metaFont="systemLight" size="16"/>
                         <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kL1-Yu-ntO">
-                    <rect key="frame" x="444" y="146" width="159" height="16"/>
+                    <rect key="frame" x="476" y="157" width="237" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" title="8MB Fast RAM Expansion" id="9GZ-qb-VH3">
-                        <font key="font" metaFont="system"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Lorem ipsum" id="9GZ-qb-VH3">
+                        <font key="font" metaFont="systemLight" size="16"/>
                         <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7P9-mo-gl6">
-                    <rect key="frame" x="444" y="249" width="82" height="16"/>
+                    <rect key="frame" x="476" y="265" width="237" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" title="OCS Chipset" id="v2x-70-gCW">
-                        <font key="font" metaFont="system"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Lorem ipsum" id="v2x-70-gCW">
+                        <font key="font" metaFont="systemLight" size="16"/>
                         <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VbC-ze-n2i">
-                    <rect key="frame" x="444" y="17" width="152" height="16"/>
+                    <rect key="frame" x="518" y="61" width="264" height="16"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" title="Created with vAmiga 3.3" id="us1-CP-2mM">
-                        <font key="font" metaFont="system"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Build with vAmiga" id="us1-CP-2mM">
+                        <font key="font" metaFont="systemThin" size="13"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="snS-RH-wHl">
-                    <rect key="frame" x="17" y="17" width="400" height="300"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" imageFrameStyle="grayBezel" id="nP9-ml-NxQ"/>
-                </imageView>
                 <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="E05-At-9e0">
-                    <rect key="frame" x="444" y="223" width="79" height="16"/>
+                    <rect key="frame" x="476" y="238" width="237" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" title="Kickstart 1.3" id="dNN-TG-BOt">
-                        <font key="font" metaFont="system"/>
+                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Lorem ipsum" id="dNN-TG-BOt">
+                        <font key="font" metaFont="systemLight" size="16"/>
                         <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fUa-Bt-tr2">
+                    <rect key="frame" x="477" y="53" width="31" height="31"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="logo" id="L8Y-a1-wJo"/>
+                </imageView>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="snS-RH-wHl">
+                    <rect key="frame" x="50" y="53" width="394" height="294"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" id="nP9-ml-NxQ"/>
+                </imageView>
             </subviews>
-            <point key="canvasLocation" x="237" y="141"/>
+            <point key="canvasLocation" x="281" y="151"/>
         </customView>
     </objects>
+    <resources>
+        <image name="logo" width="128" height="128"/>
+    </resources>
 </document>

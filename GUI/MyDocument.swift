@@ -159,21 +159,7 @@ class MyDocument: NSDocument {
                     try data?.write(to: url.appendingPathComponent("preview.png"))
                 }
                 
-                // Collect some info about the emulated machine
-                var dictionary: [String: Any] = [:]
-                let chip = emu.get(.MEM_CHIP_RAM)
-                let slow = emu.get(.MEM_FAST_RAM)
-                let fast = emu.get(.MEM_SLOW_RAM)
-                dictionary["ChipRam"] = chip
-                dictionary["SlowRam"] = slow
-                dictionary["FastRam"] = fast
-                
-                do {
-                    
-                    let data = try PropertyListSerialization.data(fromPropertyList: dictionary, format: .xml, options: 0)
-                    try data.write(to: url.appendingPathComponent("info.xml"))
-                    
-                    } catch { }
+                saveMachineDescription(to: url.appendingPathComponent("machine.plist"))
                 
             } catch let error as VAException {
                 
@@ -181,6 +167,34 @@ class MyDocument: NSDocument {
                 throw NSError(error: error)
             }
         }
+    }
+    
+    func saveMachineDescription(to url: URL) {
+        
+        var dictionary: [String: Any] = [:]
+
+        let bankMap = BankMap(rawValue: emu.get(.MEM_BANKMAP))
+        let agnusRev = AgnusRevision(rawValue: emu.get(.AGNUS_REVISION))
+        let deniseRev = DeniseRevision(rawValue: emu.get(.DENISE_REVISION))
+        let agnusType = agnusRev == .OCS || agnusRev == .OCS_OLD ? "OCS" : "ECS"
+        let deniseType = deniseRev == .OCS ? "OCS" : "ECS"
+        let model = "Commodore Amiga " + (bankMap == .A500 ? "500" : bankMap == .A1000 ? "1000" : "2000")
+        
+        // Collect some info about the emulated machine
+        dictionary["Model"] = model
+        dictionary["Kickstart"] = String(cString: emu.mem.romTraits.title)
+        dictionary["Agnus"] = agnusType
+        dictionary["Denise"] = deniseType
+        dictionary["Chip"] = emu.get(.MEM_CHIP_RAM)
+        dictionary["Slow"] = emu.get(.MEM_SLOW_RAM)
+        dictionary["Fast"] = emu.get(.MEM_FAST_RAM)
+        dictionary["Version"] = EmulatorProxy.version()
+        do {
+            
+            let data = try PropertyListSerialization.data(fromPropertyList: dictionary, format: .xml, options: 0)
+            try data.write(to: url)
+            
+        } catch { }
     }
     
     //

@@ -2357,7 +2357,7 @@ NSString *EventSlotName(NSInteger slot)
     return (VAmiga *)obj;
 }
 
-+ (DefaultsProxy *) defaults
++ (DefaultsProxy *)defaults
 {
     return [[DefaultsProxy alloc] initWith:&VAmiga::defaults];
 }
