@@ -71,17 +71,17 @@ class Preferences {
         set { screenshotCutout = ScreenshotCutout(rawValue: newValue) ?? screenshotCutout }
     }
 
-    var screenshotWidth = 320 {
+    var screenshotWidth = 1200 {
         didSet {
-            if screenshotWidth < 0 { screenshotWidth = 0 }
-            if screenshotWidth > vamiga.HPIXELS { screenshotWidth = vamiga.HPIXELS }
+            screenshotWidth = max(screenshotWidth, 0)
+            screenshotWidth = min(screenshotWidth, TextureSize.merged.width)
         }
     }
 
-    var screenshotHeight = 200 {
+    var screenshotHeight = 900 {
         didSet {
-            if screenshotHeight < 0 { screenshotHeight = 0 }
-            if screenshotHeight > vamiga.VPIXELS { screenshotHeight = vamiga.VPIXELS }
+            screenshotHeight = max(screenshotHeight, 0)
+            screenshotHeight = min(screenshotHeight, TextureSize.merged.height)
         }
     }
 

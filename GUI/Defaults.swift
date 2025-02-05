@@ -343,8 +343,8 @@ extension DefaultsProxy {
         register(Keys.Gen.screenshotFormat, NSBitmapImageRep.FileType.png.rawValue)
         register(Keys.Gen.screenshotSource, 0)
         register(Keys.Gen.screenshotCutout, 0)
-        register(Keys.Gen.screenshotWidth, 320)
-        register(Keys.Gen.screenshotHeight, 200)
+        register(Keys.Gen.screenshotWidth, 1200)
+        register(Keys.Gen.screenshotHeight, 900)
 
         // Captures
         register(Keys.Gen.ffmpegPath, "")
