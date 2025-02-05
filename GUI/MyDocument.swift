@@ -209,23 +209,7 @@ class MyDocument: NSDocument {
                   remember: Bool = true) throws {
         
         let file = try createMediaFileProxy(from: url, allowedTypes: types)
-
-        // Remember the URL if requested
-        if remember {
-
-            switch file.type {
-
-            case .WORKSPACE, .SNAPSHOT:
-                break
-
-            case .ADF, .EADF, .HDF, .EXE, .IMG, .ST:
-                myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
-
-            default:
-                break
-            }
-        }
-
+        if remember { myAppDelegate.noteNewRecentlyOpenedURL(url, type: file.type) }
         try addMedia(proxy: file, url: url, df: df, hd: hd, force: force)
     }
     

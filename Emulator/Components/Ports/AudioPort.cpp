@@ -354,10 +354,10 @@ AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
             !sampler[2].isActive() && !sampler[3].isActive()) {
 
             // Copy zeroes if nothing can be heared any more
-            auto latest = stream.isEmpty() ? SamplePair() : stream.latest();
+            auto latest = stream.isEmpty() ? SamplePair{} : stream.latest();
             if (std::abs(latest.l) + std::abs(latest.r) < 1e-8) {
                 
-                for (isize i = 0; i < count; i++) stream.write(SamplePair());
+                for (isize i = 0; i < count; i++) stream.write(SamplePair{});
                 stats.idleSamples += count;
                 stream.mutex.unlock();
                 return;

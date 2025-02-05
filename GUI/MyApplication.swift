@@ -94,10 +94,10 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
     // User activity token obtained in applicationDidFinishLaunching()
     var token: NSObjectProtocol!
     
-    // List of recently inserted floppy disks (all drives share the same list)
+    // List of recently inserted floppy disk URLs (all drives share the same list)
     var insertedFloppyDisks: [URL] = []
     
-    // List of recently exported floppy disks (one list for each drive)
+    // List of recently exported floppy disk URLs (one list for each drive)
     var exportedFloppyDisks: [[URL]] = [[URL]](repeating: [URL](), count: 4)
     
     // List of recently attached hard drive URLs
@@ -145,7 +145,8 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func getRecentlyUsedURL(_ pos: Int, from list: [URL]) -> URL? {
-        return (pos < list.count) ? list[pos] : nil
+        return list.indices.contains(pos) ? list[pos] : nil
+        // return (pos < list.count) ? list[pos] : nil
     }
     
     func noteNewRecentlyInsertedDiskURL(_ url: URL) {
@@ -193,6 +194,18 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
     
     func clearRecentlyExportedHdrURLs(hd n: Int) {
         exportedHardDrives[n] = []
+    }
+    
+    func noteNewRecentlyOpenedURL(_ url: URL, type: FileType) {
+        
+        switch type {
+            
+        case .ADF, .EADF, .EXE, .IMG, .ST: noteNewRecentlyInsertedDiskURL(url)
+        case .HDF:                         noteNewRecentlyAttachedHdrURL(url)
+            
+        default:
+            break
+        }
     }
 }
 
