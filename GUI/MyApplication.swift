@@ -121,22 +121,20 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
                                  urls: insertedFloppyDisks)
         }
     }
+    // List of export URLs  (one for each floppy drive)
     var exportedFloppyDisks0: [URL] = [] {
-        didSet { updateRecentUrlMenu(df0ExportRecent, urls: insertedFloppyDisks, nr: 0) }
+        didSet { updateRecentUrlMenu(df0ExportRecent, urls: exportedFloppyDisks0, nr: 0) }
     }
     var exportedFloppyDisks1: [URL] = [] {
-        didSet { updateRecentUrlMenu(df1ExportRecent, urls: insertedFloppyDisks, nr: 1) }
+        didSet { updateRecentUrlMenu(df1ExportRecent, urls: exportedFloppyDisks1, nr: 1) }
     }
     var exportedFloppyDisks2: [URL] = [] {
-        didSet { updateRecentUrlMenu(df2ExportRecent, urls: insertedFloppyDisks, nr: 2) }
+        didSet { updateRecentUrlMenu(df2ExportRecent, urls: exportedFloppyDisks2, nr: 2) }
     }
     var exportedFloppyDisks3: [URL] = [] {
-        didSet { updateRecentUrlMenu(df3ExportRecent, urls: insertedFloppyDisks, nr: 3) }
+        didSet { updateRecentUrlMenu(df3ExportRecent, urls: exportedFloppyDisks3, nr: 3) }
     }
-    
-    // List of recently exported floppy disk URLs (one list for each drive)
-    // var exportedFloppyDisks: [[URL]] = [[URL]](repeating: [URL](), count: 4)
-    
+        
     // List of recently attached hard drive URLs
     var attachedHardDrives: [URL] = [] {
         didSet {
@@ -144,6 +142,7 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
                                  urls: attachedHardDrives)
         }
     }
+    // List of export URLs (one for each hard drive)
     var exportedHardDrives0: [URL] = [] {
         didSet { updateRecentUrlMenu(hd0ExportRecent, urls: exportedHardDrives0, nr: 0) }
     }
@@ -156,18 +155,18 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
     var exportedHardDrives3: [URL] = [] {
         didSet { updateRecentUrlMenu(hd3ExportRecent, urls: exportedHardDrives3, nr: 3) }
     }
-    
-    // List of recently exported hard drive URLs (one list for each drive)
-    // var exportedHardDrives: [[URL]] = [[URL]](repeating: [URL](), count: 4)
-    
+        
     // Pictograms used in menu items
-    let diskMenuImage = NSImage(named: "diskTemplate")!.resize(width: 16.0, height: 16.0)
-    let hdrMenuImage = NSImage(named: "hdrTemplate")!.resize(width: 16.0, height: 16.0)
+    var diskMenuImage = NSImage(named: "diskTemplate")!.resize(width: 16.0, height: 16.0)
+    var hdrMenuImage = NSImage(named: "hdrTemplate")!.resize(width: 16.0, height: 16.0)
     
     override init() {
         
         super.init()
         pref = Preferences()
+        
+        diskMenuImage.isTemplate = true
+        hdrMenuImage.isTemplate = true
     }
     
     public func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -178,20 +177,6 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
                                                       reason: "Running vAmiga")
         
         argv = Array(CommandLine.arguments.dropFirst())
-        
-        /*
-        insertedFloppyDisks = []
-        exportedFloppyDisks0 = []
-        exportedFloppyDisks1 = []
-        exportedFloppyDisks2 = []
-        exportedFloppyDisks3 = []
-        
-        attachedHardDrives = []
-        exportedHardDrives0 = []
-        exportedHardDrives1 = []
-        exportedHardDrives2 = []
-        exportedHardDrives3 = []
-        */
     }
     
     public func applicationWillTerminate(_ aNotification: Notification) {
@@ -215,13 +200,6 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
             list.insert(url, at: 0)
         }
     }
-    
-    /*
-    @available(*, deprecated, message: "Use at() instead.")
-    func getRecentlyUsedURL(_ pos: Int, from list: [URL]) -> URL? {
-        return list.at(pos)
-    }
-    */
     
     func noteNewRecentlyInsertedDiskURL(_ url: URL) {
         noteRecentlyUsedURL(url, to: &insertedFloppyDisks, size: 10)
@@ -332,7 +310,7 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    func updateRecentUrlMenu(_ menuItem: NSMenuItem, urls: [URL], nr: Int) {
+    func updateRecentUrlMenu(_ menuItem: NSMenuItem, urls: [URL], nr: Int, clearMenu: Bool = false) {
         
         let menu = menuItem.submenu!
         menu.removeAllItems()
@@ -352,11 +330,14 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
                 item.image = isHdf ? hdrMenuImage : diskMenuImage
                 menu.addItem(item)
             }
-            
-            menu.addItem(NSMenuItem.separator())
-            menu.addItem(NSMenuItem(title: "Clear Menu",
-                                    action: #selector(MyController.clearRecentlyInsertedDisksAction(_ :)),
-                                    keyEquivalent: ""))
+
+            if clearMenu {
+                
+                menu.addItem(NSMenuItem.separator())
+                menu.addItem(NSMenuItem(title: "Clear Menu",
+                                        action: #selector(MyController.clearRecentlyInsertedDisksAction(_ :)),
+                                        keyEquivalent: ""))
+            }
         }
     }
     
@@ -364,7 +345,7 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
         
         for (index, menu) in menus.enumerated() {
      
-            updateRecentUrlMenu(menu, urls: urls, nr: index)
+            updateRecentUrlMenu(menu, urls: urls, nr: index, clearMenu: true)
         }
     }
 }

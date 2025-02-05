@@ -199,7 +199,7 @@ class DropZone: Layer {
 
             case .ADF, .EADF, .HDF, .IMG, .ST, .DMS, .EXE, .DIR:
                 
-                try mydocument.addMedia(url: url, allowedTypes: [type], df: n!, hd: n!)
+                try mydocument.addMedia(url: url, allowedTypes: [type], drive: n!)
                 
             default:
                 fatalError()

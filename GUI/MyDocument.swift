@@ -203,8 +203,7 @@ class MyDocument: NSDocument {
 
     func addMedia(url: URL,
                   allowedTypes types: [FileType] = FileType.all,
-                  df: Int = 0,
-                  hd: Int = 0,
+                  drive: Int = 0,
                   force: Bool = false,
                   remember: Bool = true) throws {
         
@@ -214,16 +213,15 @@ class MyDocument: NSDocument {
         
             let type = file.type
             myAppDelegate.noteNewRecentlyOpenedURL(url, type: type)
-            // myAppDelegate.noteNewRecentlyExportedURL(url, type: file, nr:  <#T##self: MyAppDelegate##MyAppDelegate#>)
+            myAppDelegate.noteNewRecentlyExportedURL(url, nr: drive, type: type)
         }
         
-        try addMedia(proxy: file, url: url, df: df, hd: hd, force: force)
+        try addMedia(proxy: file, url: url, drive: drive, force: force)
     }
     
     func addMedia(proxy: MediaFileProxy,
                   url: URL? = nil,
-                  df: Int = 0,
-                  hd: Int = 0,
+                  drive: Int = 0,
                   force: Bool = false) throws {
 
         switch proxy.type {
@@ -243,12 +241,12 @@ class MyDocument: NSDocument {
 
         case .HDF:
 
-            try attach(hd: hd, file: proxy, force: force)
+            try attach(hd: drive, file: proxy, force: force)
             break
 
         case .ADF, .DMS, .EXE, .EADF, .IMG, .ST:
 
-            try insert(df: df, file: proxy, force: force)
+            try insert(df: drive, file: proxy, force: force)
 
         default:
             break

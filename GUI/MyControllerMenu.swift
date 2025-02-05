@@ -619,7 +619,7 @@ extension MyController: NSMenuItemValidation {
                     let types: [FileType] = [ .ADF, .EADF, .DMS, .EXE, .DIR ]
                     try self.mydocument.addMedia(url: url,
                                                  allowedTypes: types,
-                                                 df: sender.tag)
+                                                 drive: sender.tag)
                 } catch {
                     self.showAlert(.cantInsert, error: error, async: true)
                 }
@@ -647,7 +647,7 @@ extension MyController: NSMenuItemValidation {
             do {
                 try self.mydocument.addMedia(url: url,
                                              allowedTypes: types,
-                                             df: drive)
+                                             drive: drive)
             } catch {
                 self.showAlert(.cantInsert, error: error)
             }
@@ -763,7 +763,7 @@ extension MyController: NSMenuItemValidation {
                     do {
                         try self.mydocument.addMedia(url: url,
                                                      allowedTypes: [ .HDF ],
-                                                     hd: sender.tag)
+                                                     drive: sender.tag)
                     } catch {
                         self.showAlert(.cantAttach, error: error, async: true)
                     }
@@ -775,8 +775,8 @@ extension MyController: NSMenuItemValidation {
     @IBAction func attachRecentHdrDummyAction(_ sender: NSMenuItem!) {}
     @IBAction func attachRecentHdrAction(_ sender: NSMenuItem!) {
         
-        let drive = sender.tag / 10
-        let slot  = sender.tag % 10
+        let drive = sender.tag >> 16
+        let slot  = sender.tag & 0xFF
 
         if let url = myAppDelegate.getRecentlyAttachedHdrURL(slot) {
             
@@ -784,7 +784,7 @@ extension MyController: NSMenuItemValidation {
                 let types: [FileType] = [ .ADF, .EADF, .DMS, .EXE, .DIR ]
                 try self.mydocument.addMedia(url: url,
                                              allowedTypes: types,
-                                             hd: drive)
+                                             drive: drive)
             } catch {
                 self.showAlert(.cantAttach, error: error)
             }
@@ -806,10 +806,10 @@ extension MyController: NSMenuItemValidation {
     @IBAction func exportRecentHdrDummyAction(_ sender: NSMenuItem!) {}
     @IBAction func exportRecentHdrAction(_ sender: NSMenuItem!) {
 
-        let n = sender.tag / 10
-        let slot = sender.tag % 10
+        let drive = sender.tag >> 16
+        let slot  = sender.tag & 0xFF
 
-        exportRecentAction(hd: n, slot: slot)
+        exportRecentAction(hd: drive, slot: slot)
     }
 
     func exportRecentAction(hd n: Int, slot: Int) {
