@@ -102,6 +102,6 @@
         </customView>
     </objects>
     <resources>
-        <image name="logo" width="128" height="128"/>
+        <image name="logo" width="1024" height="638"/>
     </resources>
 </document>

@@ -34,10 +34,19 @@ class PreviewViewController: NSViewController, QLPreviewingController {
         preferredContentSize = CGSize(width: 800, height: 400)
         
         // Display the image without any translucency
-        let backgroundView = NSView(frame: preview.frame)
+        let backgroundView = NSView()
         backgroundView.wantsLayer = true
         backgroundView.layer?.backgroundColor = NSColor.white.cgColor
         self.view.addSubview(backgroundView, positioned: .below, relativeTo: preview)
+
+        backgroundView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            backgroundView.topAnchor.constraint(equalTo: preview.topAnchor),
+            backgroundView.bottomAnchor.constraint(equalTo: preview.bottomAnchor),
+            backgroundView.leadingAnchor.constraint(equalTo: preview.leadingAnchor),
+            backgroundView.trailingAnchor.constraint(equalTo: preview.trailingAnchor)
+        ])
+         
     }
 
     func preparePreviewOfFile(at url: URL) async throws {
