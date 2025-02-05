@@ -290,8 +290,8 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
         
         switch type {
             
-        case .ADF, .EADF, .EXE, .IMG, .ST: noteNewRecentlyInsertedDiskURL(url)
-        case .HDF:                         noteNewRecentlyAttachedHdrURL(url)
+        case .ADF, .EADF, .DMS, .EXE, .IMG, .ST: noteNewRecentlyInsertedDiskURL(url)
+        case .HDF:                               noteNewRecentlyAttachedHdrURL(url)
             
         default:
             break
@@ -302,8 +302,8 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
         
         switch type {
             
-        case .ADF, .EADF, .EXE, .IMG, .ST: noteNewRecentlyExportedDiskURL(url, df: nr)
-        case .HDF:                         noteNewRecentlyExportedHdrURL(url, hd: nr)
+        case .ADF, .EADF, .DMS, .EXE, .IMG, .ST: noteNewRecentlyExportedDiskURL(url, df: nr)
+        case .HDF:                               noteNewRecentlyExportedHdrURL(url, hd: nr)
             
         default:
             break

@@ -254,10 +254,29 @@ class MyDocument: NSDocument {
     }
 
     func processWorkspaceFile(url: URL, force: Bool = false) throws {
-
+        
         Swift.print("processWorkspaceFile \(url) force: \(force)")
-
+        
+        // Load workspace
         try emu.amiga.loadWorkspace(url: url)
+        
+        // Scan directory for additional media files
+        let supportedTypes: [String : FileType] =
+        ["adf" : .ADF, "dms" : .DMS, "exe" : .EXE, "img" : .IMG, "hdf" : .HDF, "st" : .ST]
+        let exclude = ["df0", "df1", "df2", "df3", "hd0", "hd1", "hd2", "hd3"]
+
+        let contents = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil)
+        for file in contents {
+            
+            if !exclude.contains(url.deletingPathExtension().lastPathComponent) {
+                
+                if let type = supportedTypes[file.pathExtension.lowercased()] {
+                    
+                    // Swift.print("Found media file \(file)")
+                    myAppDelegate.noteNewRecentlyOpenedURL(file, type: type)
+                }
+            }
+        }
     }
 
     func processSnapshotFile(_ proxy: MediaFileProxy, force: Bool = false) throws {
