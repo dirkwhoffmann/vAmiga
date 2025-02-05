@@ -17,33 +17,9 @@ extension MyController: NSMenuItemValidation {
         let paused = emu.paused
         let recording = emu.recorder.recording
 
-        var driveNr: Int { return item.tag / 10 }
-        var slotNr: Int { return item.tag % 10 }
         var dfn: FloppyDriveProxy { return emu.df(item.tag)! }
         var hdn: HardDriveProxy { return emu.hd(item.tag)! }
 
-        /*
-        func validateURLlist(_ list: [URL], image: NSImage) -> Bool {
-            
-            let slot = item.tag % 10
-
-            if let url = myAppDelegate.getRecentlyUsedURL(slot, from: list) {
-                
-                item.title = url.lastPathComponent
-                item.isHidden = false
-                item.image = image
-                
-            } else {
-                
-                item.title = ""
-                item.isHidden = true
-                item.image = nil
-            }
-            
-            return true
-        }
-        */
-        
         switch item.action {
             
             // Machine menu
@@ -101,11 +77,6 @@ extension MyController: NSMenuItemValidation {
             default: fatalError()
             }
 
-            /*
-        case #selector(MyController.exportRecentDiskAction(_:)):
-            return validateURLlist(myAppDelegate.exportedFloppyDisks[driveNr],
-                                   image: smallDisk)
-            */
         case #selector(MyController.writeProtectAction(_:)):
             item.state = dfn.info.hasProtectedDisk ? .on : .off
             return dfn.info.hasDisk
@@ -123,11 +94,7 @@ extension MyController: NSMenuItemValidation {
             case 3: return !myAppDelegate.exportedHardDrives3.isEmpty
             default: fatalError()
             }
-            /*
-        case #selector(MyController.exportRecentHdrAction(_:)):
-            return validateURLlist(myAppDelegate.exportedHardDrives[driveNr],
-                                   image: smallHdr)
-             */
+
         case #selector(MyController.writeProtectHdrAction(_:)):
             item.state = hdn.info.hasProtectedDisk ? .on : .off
             return hdn.info.hasDisk
@@ -147,27 +114,6 @@ extension MyController: NSMenuItemValidation {
         myAppDelegate.hd1Menu.isHidden = !config.hd1Connected
         myAppDelegate.hd2Menu.isHidden = !config.hd2Connected
         myAppDelegate.hd3Menu.isHidden = !config.hd3Connected
-    }
-    
-    func updateRecentUrlMenu(_ menu: NSMenu, nr: Int, urls: [URL]) {
-        
-        menu.removeAllItems()
-        
-        for (index, url) in urls.enumerated() {
-            
-            let item = NSMenuItem(title:  url.lastPathComponent,
-                                  action: #selector(testAction(_ :)),
-                                  keyEquivalent: "")
-            
-            item.tag = nr << 16 | index
-            //            item.image = image
-            menu.addItem(item)
-        }
-        
-        menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Clear...",
-                                action: #selector(testAction(_ :)),
-                                keyEquivalent: ""))
     }
     
     @IBAction func testAction(_ sender: NSMenuItem!) {
@@ -631,7 +577,7 @@ extension MyController: NSMenuItemValidation {
     @IBAction func insertRecentDiskAction(_ sender: NSMenuItem!) {
                 
         let drive = sender.tag >> 16
-        let slot  = sender.tag & 0xFFFF
+        let slot = sender.tag & 0xFFFF
 
         insertRecentDiskAction(drive: drive, slot: slot)
     }
@@ -663,10 +609,10 @@ extension MyController: NSMenuItemValidation {
     @IBAction func exportRecentDiskDummyAction(_ sender: NSMenuItem!) {}
     @IBAction func exportRecentDiskAction(_ sender: NSMenuItem!) {
 
-        let n = sender.tag / 10
-        let slot = sender.tag % 10
+        let drive = sender.tag >> 16
+        let slot = sender.tag % 0xFFFF
 
-        exportRecentAction(df: n, slot: slot)
+        exportRecentAction(df: drive, slot: slot)
     }
     
     func exportRecentAction(df n: Int, slot: Int) {
@@ -776,7 +722,7 @@ extension MyController: NSMenuItemValidation {
     @IBAction func attachRecentHdrAction(_ sender: NSMenuItem!) {
         
         let drive = sender.tag >> 16
-        let slot  = sender.tag & 0xFF
+        let slot = sender.tag & 0xFFFF
 
         if let url = myAppDelegate.getRecentlyAttachedHdrURL(slot) {
             
@@ -807,7 +753,7 @@ extension MyController: NSMenuItemValidation {
     @IBAction func exportRecentHdrAction(_ sender: NSMenuItem!) {
 
         let drive = sender.tag >> 16
-        let slot  = sender.tag & 0xFF
+        let slot = sender.tag & 0xFFFF
 
         exportRecentAction(hd: drive, slot: slot)
     }
