@@ -71,7 +71,7 @@ class MyController: NSWindowController, MessageReceiver {
     var info: String? = nil
     var info2: String? = nil
     
-    // Pictograms for being used in NSMenuItems
+    // Pictograms for being used in NSMenuItems (MOVED TO AppDelegate)
     var smallDisk = NSImage(named: "diskTemplate")!.resize(width: 16.0, height: 16.0)
     var smallHdr = NSImage(named: "hdrTemplate")!.resize(width: 16.0, height: 16.0)
 
