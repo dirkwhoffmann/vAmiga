@@ -50,14 +50,7 @@ endif()
 target_include_directories(vAmigaCore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add sub directories
-add_subdirectory(Base)
-add_subdirectory(Components)
-add_subdirectory(FileSystems)
-add_subdirectory(Media)
-add_subdirectory(Misc)
-add_subdirectory(Peripherals)
-add_subdirectory(ThirdParty)
-add_subdirectory(Utilities)
+add_subdirectory(VAmiga)
 
 # Add libraries
 set(THREADS_PREFER_PTHREAD_FLAG ON)

@@ -10,11 +10,6 @@
 #pragma once
 
 #include "VAmigaTypes.h"
-#include "Dumpable.h"
-#include "Error.h"
-#include "MediaFile.h"
-#include <filesystem>
-
 
 namespace vamiga {
 
@@ -65,7 +60,7 @@ public:
      *  @param  category    Debug information category
      *  @param  os Output stream
      */
-    void dump(Category category, std::ostream& os) const;
+    void dump(enum class Category:long category, std::ostream& os) const;
 
     /// @}
     /// @name Managing workspaces and snapshots
@@ -78,7 +73,7 @@ public:
      *  @note   The function transfers the ownership to the caller. It is
      *          his responsibility of the caller to free the object.
      */
-    MediaFile *takeSnapshot();
+    class MediaFile *takeSnapshot();
 
     /** @brief  Loads a snapshot into the emulator.
      *
@@ -695,7 +690,7 @@ public:
      */
     void ejectDisk();
 
-    class MediaFile *exportDisk(FileType type);
+    MediaFile *exportDisk(FileType type);
 
     /** @brief  Creates a textual bit representation of a track's data
      */

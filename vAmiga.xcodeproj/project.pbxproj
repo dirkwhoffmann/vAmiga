@@ -724,6 +724,7 @@
 		5078A5D42529E7FA00FCE384 /* Sampler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sampler.h; sourceTree = "<group>"; };
 		5078BEA6264D6F8200EDA161 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		507957AB244AD25B007B8B8D /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
+		507A03F12D54EDDA0025D48E /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		507C01AB2D24268600E29933 /* InspectorToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorToolbar.swift; sourceTree = "<group>"; };
 		507C01AD2D25681000E29933 /* LogicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogicView.swift; sourceTree = "<group>"; };
 		507C01AF2D25683200E29933 /* LogicViewFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogicViewFormatter.swift; sourceTree = "<group>"; };
@@ -1428,6 +1429,22 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
+		507A03F02D54ED820025D48E /* VAmiga */ = {
+			isa = PBXGroup;
+			children = (
+				507A03F12D54EDDA0025D48E /* CMakeLists.txt */,
+				50B14C0421EB212E002E32A6 /* Utilities */,
+				50104E8825ECDAA30047A9AA /* Base */,
+				506436E329C1D90B00768528 /* Components */,
+				50A2953C21FF12C20046BAA0 /* Peripherals */,
+				508FE06621EA31E50043D0E9 /* Media */,
+				5056506925440FDE00A79D27 /* FileSystems */,
+				506436E129C1D82500768528 /* ThirdParty */,
+				50E98B52275A125700AA0CB9 /* Misc */,
+			);
+			path = VAmiga;
+			sourceTree = "<group>";
+		};
 		507C01B82D25C0AE00E29933 /* LogicAnalyzer */ = {
 			isa = PBXGroup;
 			children = (
@@ -1642,14 +1659,7 @@
 				50FC050027DA205D00C3E566 /* Headless.h */,
 				50FC047427DA108500C3E566 /* Headless.cpp */,
 				50EAF5282C79B9BA005AC890 /* HeadlessScripts.h */,
-				50B14C0421EB212E002E32A6 /* Utilities */,
-				50104E8825ECDAA30047A9AA /* Base */,
-				506436E329C1D90B00768528 /* Components */,
-				50A2953C21FF12C20046BAA0 /* Peripherals */,
-				508FE06621EA31E50043D0E9 /* Media */,
-				5056506925440FDE00A79D27 /* FileSystems */,
-				506436E129C1D82500768528 /* ThirdParty */,
-				50E98B52275A125700AA0CB9 /* Misc */,
+				507A03F02D54ED820025D48E /* VAmiga */,
 			);
 			path = Emulator;
 			sourceTree = "<group>";
