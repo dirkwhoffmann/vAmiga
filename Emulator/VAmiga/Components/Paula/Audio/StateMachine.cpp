@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
+#include "VAmigaConfig.h"
 #include "StateMachine.h"
 #include "Paula.h"
 #include "IOUtils.h"

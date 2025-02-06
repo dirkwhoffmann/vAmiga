@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
+#include "VAmigaConfig.h"
 #include "Emulator.h"
 #include "Amiga.h"
 #include "Types.h"

@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "config.h"
+#include "VAmigaConfig.h"
 #include "ZorroBoard.h"
 #include "IOUtils.h"
 #include "Memory.h"

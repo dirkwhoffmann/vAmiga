@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#import "config.h"
+#import "VAmigaConfig.h"
 #import "EmulatorProxy.h"
 #import "VAmiga.h"
 #import "Emulator.h"

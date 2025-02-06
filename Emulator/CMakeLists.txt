@@ -18,10 +18,10 @@ set(CMAKE_BUILD_TYPE Release)
 endif()
 
 # Add the emulator library
-add_library(vAmigaCore VAmiga.cpp config.cpp)
+add_library(vAmigaCore VAmiga.cpp VAmigaConfig.cpp)
 
 # Add the console app (vAmiga Headless)
-add_executable(vAmigaConsole Headless.cpp config.cpp)
+add_executable(vAmigaConsole Headless.cpp VAmigaConfig.cpp)
 target_link_libraries(vAmigaConsole vAmigaCore)
 
 # Specify compile options
