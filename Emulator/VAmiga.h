@@ -60,7 +60,7 @@ public:
      *  @param  category    Debug information category
      *  @param  os Output stream
      */
-    void dump(enum class Category:long category, std::ostream& os) const;
+    void dump(Category category, std::ostream& os) const;
 
     /// @}
     /// @name Managing workspaces and snapshots

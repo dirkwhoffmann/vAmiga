@@ -685,6 +685,7 @@
 		50627FD2286EBA7300F2A835 /* FrameBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameBuffer.h; sourceTree = "<group>"; };
 		50627FD4286EBAC000F2A835 /* FrameBufferTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameBufferTypes.h; sourceTree = "<group>"; };
 		5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerSnapshots.swift; sourceTree = "<group>"; };
+		5062F1942D550730004546A2 /* DumpableTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DumpableTypes.h; sourceTree = "<group>"; };
 		506405192D19CA05002FBC57 /* PromServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PromServer.h; sourceTree = "<group>"; };
 		5064051A2D19CA0C002FBC57 /* PromServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PromServer.cpp; sourceTree = "<group>"; };
 		506407C82D19D0A7002FBC57 /* httplib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = httplib.h; sourceTree = "<group>"; };
@@ -1202,7 +1203,7 @@
 			path = DiskFiles;
 			sourceTree = "<group>";
 		};
-		50104E8825ECDAA30047A9AA /* Base */ = {
+		50104E8825ECDAA30047A9AA /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
 				50CF461F2620423300BB3B95 /* CMakeLists.txt */,
@@ -1217,6 +1218,7 @@
 				50EFB0BC2C1812E20013B73C /* Option.cpp */,
 				50EFC7DF22E840870036A3DF /* Serializable.h */,
 				50CFF5692C259FB900A47ECC /* Serializable.cpp */,
+				5062F1942D550730004546A2 /* DumpableTypes.h */,
 				50EFB0C72C18D72B0013B73C /* Dumpable.h */,
 				50EFB0C62C18D72B0013B73C /* Dumpable.cpp */,
 				50EFB0CB2C18D95B0013B73C /* Inspectable.h */,
@@ -1252,7 +1254,7 @@
 				501B00182C63589500749664 /* GuardList.h */,
 				501B00172C63589500749664 /* GuardList.cpp */,
 			);
-			path = Base;
+			path = Foundation;
 			sourceTree = "<group>";
 		};
 		502F7DCF2221709700AEEC65 /* Denise */ = {
@@ -1434,7 +1436,7 @@
 				50DA83E02C160DCA001209AA /* Emulator.h */,
 				50DA83DF2C160DCA001209AA /* Emulator.cpp */,
 				50B14C0421EB212E002E32A6 /* Utilities */,
-				50104E8825ECDAA30047A9AA /* Base */,
+				50104E8825ECDAA30047A9AA /* Foundation */,
 				506436E329C1D90B00768528 /* Components */,
 				50A2953C21FF12C20046BAA0 /* Peripherals */,
 				508FE06621EA31E50043D0E9 /* Media */,

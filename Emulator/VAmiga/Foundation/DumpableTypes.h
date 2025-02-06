@@ -9,13 +9,11 @@
 
 #pragma once
 
-#include <iostream>
-
 namespace vamiga {
 
 enum class Category : long
 {
-    BankMap, 
+    BankMap,
     Beam,
     Beamtraps,
     Blocks,
@@ -33,14 +31,14 @@ enum class Category : long
     FileSystem,
     Geometry,
     Hunks,
-    List1, 
+    List1,
     List2,
     Parameters,
     Partitions,
     Properties,
     Registers,
     Sections,
-    Segments, 
+    Segments,
     Signals,
     Slots,
     State,
@@ -50,19 +48,8 @@ enum class Category : long
     Tod,
     Trace,
     Vectors,
-    Volumes, 
+    Volumes,
     Watchpoints
-};
-
-class Dumpable {
-
-public:
-
-    virtual ~Dumpable() = default;
-    virtual void _dump(Category category, std::ostream& ss) const { }
-
-    void dump(Category category, std::ostream& ss) const;
-    void dump(Category category) const;
 };
 
 }
