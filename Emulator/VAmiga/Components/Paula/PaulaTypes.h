@@ -9,9 +9,10 @@
 
 #pragma once
 
-#include "DiskControllerTypes.h"
-#include "StateMachineTypes.h"
-#include "UARTTypes.h"
+#include "VAmiga/Components/Paula/DiskController/DiskControllerTypes.h"
+#include "VAmiga/Components/Paula/Audio/StateMachineTypes.h"
+#include "VAmiga/Components/Paula/Audio/AudioFilterTypes.h"
+#include "VAmiga/Components/Paula/UART/UARTTypes.h"
 
 namespace vamiga {
 

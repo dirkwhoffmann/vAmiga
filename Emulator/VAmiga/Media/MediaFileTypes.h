@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "VAmiga/Foundation/Reflection.h"
+#include "VAmiga/Media/RomFiles/RomFileTypes.h"
 
 namespace vamiga {
 

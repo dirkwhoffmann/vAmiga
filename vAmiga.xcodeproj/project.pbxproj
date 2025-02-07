@@ -1430,7 +1430,6 @@
 				505B801C23FE626E002407FE /* Memory */,
 				50EC7A2E29C9EC1000060CAA /* RTC */,
 				508AC36527B7F634006AD2E7 /* Zorro */,
-				505B801D23FE628F002407FE /* Ports */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1445,6 +1444,7 @@
 				50B14C0421EB212E002E32A6 /* Utilities */,
 				50104E8825ECDAA30047A9AA /* Foundation */,
 				506436E329C1D90B00768528 /* Components */,
+				505B801D23FE628F002407FE /* Ports */,
 				50A2953C21FF12C20046BAA0 /* Peripherals */,
 				508FE06621EA31E50043D0E9 /* Media */,
 				5056506925440FDE00A79D27 /* FileSystems */,
