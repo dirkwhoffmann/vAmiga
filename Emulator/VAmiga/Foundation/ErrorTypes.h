@@ -14,7 +14,7 @@
 
 namespace vamiga {
 
-enum class VAError : long
+enum class CoreError : long
 {
     OK,                   ///< No error
     UNKNOWN,              ///< Unclassified error condition
@@ -200,178 +200,178 @@ enum class VAError : long
     FS_INVALID_HASHTABLE_SIZE
 };
 
-struct VAErrorEnum : util::Reflection<VAErrorEnum, VAError>
+struct CoreErrorEnum : util::Reflection<CoreErrorEnum, CoreError>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(VAError::FS_INVALID_HASHTABLE_SIZE);
+    static constexpr long maxVal = long(CoreError::FS_INVALID_HASHTABLE_SIZE);
     
-    static const char *_key(VAError value)
+    static const char *_key(CoreError value)
     {
         switch (value) {
                 
-            case VAError::OK:                          return "OK";
-            case VAError::UNKNOWN:                     return "UNKNOWN";
+            case CoreError::OK:                          return "OK";
+            case CoreError::UNKNOWN:                     return "UNKNOWN";
                 
-            case VAError::LAUNCH:                      return "LAUNCH";
-            case VAError::POWERED_OFF:                 return "POWERED_OFF";
-            case VAError::POWERED_ON:                  return "POWERED_ON";
-            case VAError::DEBUG_OFF:                   return "DEBUG_OFF";
-            case VAError::RUNNING:                     return "RUNNING";
+            case CoreError::LAUNCH:                      return "LAUNCH";
+            case CoreError::POWERED_OFF:                 return "POWERED_OFF";
+            case CoreError::POWERED_ON:                  return "POWERED_ON";
+            case CoreError::DEBUG_OFF:                   return "DEBUG_OFF";
+            case CoreError::RUNNING:                     return "RUNNING";
                 
-            case VAError::OPT_UNSUPPORTED:             return "OPT_UNSUPPORTED";
-            case VAError::OPT_INV_ARG:                 return "OPT_INV_ARG";
-            case VAError::OPT_INV_ID:                  return "OPT_INV_ID";
-            case VAError::OPT_LOCKED:                  return "OPT_LOCKED";
+            case CoreError::OPT_UNSUPPORTED:             return "OPT_UNSUPPORTED";
+            case CoreError::OPT_INV_ARG:                 return "OPT_INV_ARG";
+            case CoreError::OPT_INV_ID:                  return "OPT_INV_ID";
+            case CoreError::OPT_LOCKED:                  return "OPT_LOCKED";
                 
-            case VAError::INVALID_KEY:                 return "INVALID_KEY";
-            case VAError::SYNTAX:                      return "SYNTAX";
+            case CoreError::INVALID_KEY:                 return "INVALID_KEY";
+            case CoreError::SYNTAX:                      return "SYNTAX";
                 
-            case VAError::CPU_UNSUPPORTED:             return "CPU_UNSUPPORTED";
-            case VAError::GUARD_NOT_FOUND:             return "GUARD_NOT_FOUND";
-            case VAError::GUARD_ALREADY_SET:           return "GUARD_ALREADY_SET";
-            case VAError::BP_NOT_FOUND:                return "BP_NOT_FOUND";
-            case VAError::BP_ALREADY_SET:              return "BP_ALREADY_SET";
-            case VAError::WP_NOT_FOUND:                return "WP_NOT_FOUND";
-            case VAError::WP_ALREADY_SET:              return "WP_ALREADY_SET";
-            case VAError::CP_NOT_FOUND:                return "CP_NOT_FOUND";
-            case VAError::CP_ALREADY_SET:              return "CP_ALREADY_SET";
+            case CoreError::CPU_UNSUPPORTED:             return "CPU_UNSUPPORTED";
+            case CoreError::GUARD_NOT_FOUND:             return "GUARD_NOT_FOUND";
+            case CoreError::GUARD_ALREADY_SET:           return "GUARD_ALREADY_SET";
+            case CoreError::BP_NOT_FOUND:                return "BP_NOT_FOUND";
+            case CoreError::BP_ALREADY_SET:              return "BP_ALREADY_SET";
+            case CoreError::WP_NOT_FOUND:                return "WP_NOT_FOUND";
+            case CoreError::WP_ALREADY_SET:              return "WP_ALREADY_SET";
+            case CoreError::CP_NOT_FOUND:                return "CP_NOT_FOUND";
+            case CoreError::CP_ALREADY_SET:              return "CP_ALREADY_SET";
                 
-            case VAError::OUT_OF_MEMORY:               return "OUT_OF_MEMORY";
+            case CoreError::OUT_OF_MEMORY:               return "OUT_OF_MEMORY";
                 
-            case VAError::DIR_NOT_FOUND:               return "DIR_NOT_FOUND";
-            case VAError::DIR_ACCESS_DENIED:           return "DIR_ACCESS_DENIED";
-            case VAError::DIR_CANT_CREATE:             return "DIR_CANT_CREATE";
-            case VAError::DIR_NOT_EMPTY:               return "DIR_NOT_EMPTY";
-            case VAError::FILE_NOT_FOUND:              return "FILE_NOT_FOUND";
-            case VAError::FILE_EXISTS:                 return "FILE_EXISTS";
-            case VAError::FILE_IS_DIRECTORY:           return "FILE_IS_DIRECtORY";
-            case VAError::FILE_ACCESS_DENIED:          return "FILE_ACCESS_DENIED";
-            case VAError::FILE_TYPE_MISMATCH:          return "FILE_TYPE_MISMATCH";
-            case VAError::FILE_TYPE_UNSUPPORTED:       return "FILE_TYPE_UNSUPPORTED";
-            case VAError::FILE_CANT_READ:              return "FILE_CANT_READ";
-            case VAError::FILE_CANT_WRITE:             return "FILE_CANT_WRITE";
-            case VAError::FILE_CANT_CREATE:            return "FILE_CANT_CREATE";
+            case CoreError::DIR_NOT_FOUND:               return "DIR_NOT_FOUND";
+            case CoreError::DIR_ACCESS_DENIED:           return "DIR_ACCESS_DENIED";
+            case CoreError::DIR_CANT_CREATE:             return "DIR_CANT_CREATE";
+            case CoreError::DIR_NOT_EMPTY:               return "DIR_NOT_EMPTY";
+            case CoreError::FILE_NOT_FOUND:              return "FILE_NOT_FOUND";
+            case CoreError::FILE_EXISTS:                 return "FILE_EXISTS";
+            case CoreError::FILE_IS_DIRECTORY:           return "FILE_IS_DIRECtORY";
+            case CoreError::FILE_ACCESS_DENIED:          return "FILE_ACCESS_DENIED";
+            case CoreError::FILE_TYPE_MISMATCH:          return "FILE_TYPE_MISMATCH";
+            case CoreError::FILE_TYPE_UNSUPPORTED:       return "FILE_TYPE_UNSUPPORTED";
+            case CoreError::FILE_CANT_READ:              return "FILE_CANT_READ";
+            case CoreError::FILE_CANT_WRITE:             return "FILE_CANT_WRITE";
+            case CoreError::FILE_CANT_CREATE:            return "FILE_CANT_CREATE";
                 
-            case VAError::CHIP_RAM_MISSING:            return "CHIP_RAM_MISSING";
-            case VAError::CHIP_RAM_LIMIT:              return "CHIP_RAM_LIMIT";
-            case VAError::AROS_RAM_LIMIT:              return "AROS_RAM_LIMIT";
+            case CoreError::CHIP_RAM_MISSING:            return "CHIP_RAM_MISSING";
+            case CoreError::CHIP_RAM_LIMIT:              return "CHIP_RAM_LIMIT";
+            case CoreError::AROS_RAM_LIMIT:              return "AROS_RAM_LIMIT";
                 
-            case VAError::ROM_MISSING:                 return "ROM_MISSING";
-            case VAError::AROS_NO_EXTROM:              return "AROS_NO_EXTROM";
+            case CoreError::ROM_MISSING:                 return "ROM_MISSING";
+            case CoreError::AROS_NO_EXTROM:              return "AROS_NO_EXTROM";
                 
-            case VAError::WT_BLOCKED:                  return "WT_BLOCKED";
-            case VAError::WT:                          return "WT";
+            case CoreError::WT_BLOCKED:                  return "WT_BLOCKED";
+            case CoreError::WT:                          return "WT";
                 
-            case VAError::DISK_MISSING:                return "DISK_MISSING";
-            case VAError::DISK_INCOMPATIBLE:           return "DISK_INCOMPATIBLE";
-            case VAError::DISK_INVALID_DIAMETER:       return "DISK_INVALID_DIAMETER";
-            case VAError::DISK_INVALID_DENSITY:        return "DISK_INVALID_DENSITY";
-            case VAError::DISK_INVALID_LAYOUT:         return "DISK_INVALID_LAYOUT";
-            case VAError::DISK_WRONG_SECTOR_COUNT:     return "DISK_WRONG_SECTOR_COUNT";
-            case VAError::DISK_INVALID_SECTOR_NUMBER:  return "DISK_INVALID_SECTOR_NUMBER";
+            case CoreError::DISK_MISSING:                return "DISK_MISSING";
+            case CoreError::DISK_INCOMPATIBLE:           return "DISK_INCOMPATIBLE";
+            case CoreError::DISK_INVALID_DIAMETER:       return "DISK_INVALID_DIAMETER";
+            case CoreError::DISK_INVALID_DENSITY:        return "DISK_INVALID_DENSITY";
+            case CoreError::DISK_INVALID_LAYOUT:         return "DISK_INVALID_LAYOUT";
+            case CoreError::DISK_WRONG_SECTOR_COUNT:     return "DISK_WRONG_SECTOR_COUNT";
+            case CoreError::DISK_INVALID_SECTOR_NUMBER:  return "DISK_INVALID_SECTOR_NUMBER";
                 
-            case VAError::HDR_TOO_LARGE:               return "HDR_TOO_LARGE";
-            case VAError::HDR_UNSUPPORTED_CYL_COUNT:   return "HDR_UNSUPPORTED_CYL_COUNT";
-            case VAError::HDR_UNSUPPORTED_HEAD_COUNT:  return "HDR_UNSUPPORTED_HEAD_COUNT";
-            case VAError::HDR_UNSUPPORTED_SEC_COUNT:   return "HDR_UNSUPPORTED_SEC_COUNT";
-            case VAError::HDR_UNSUPPORTED_BSIZE:       return "HDR_UNSUPPORTED_BSIZE";
-            case VAError::HDR_UNKNOWN_GEOMETRY:        return "HDR_UNKNOWN_GEOMETRY";
-            case VAError::HDR_UNMATCHED_GEOMETRY:      return "HDR_UNMATCHED_GEOMETRY";
-            case VAError::HDR_UNPARTITIONED:           return "HDR_UNPARTITIONED";
-            case VAError::HDR_CORRUPTED_PTABLE:        return "HDR_CORRUPTED_PTABLE";
-            case VAError::HDR_CORRUPTED_FSH:           return "HDR_CORRUPTED_FSH";
-            case VAError::HDR_CORRUPTED_LSEG:          return "HDR_CORRUPTED_LSEG";
-            case VAError::HDR_UNSUPPORTED:             return "HDR_UNSUPPORTED";
+            case CoreError::HDR_TOO_LARGE:               return "HDR_TOO_LARGE";
+            case CoreError::HDR_UNSUPPORTED_CYL_COUNT:   return "HDR_UNSUPPORTED_CYL_COUNT";
+            case CoreError::HDR_UNSUPPORTED_HEAD_COUNT:  return "HDR_UNSUPPORTED_HEAD_COUNT";
+            case CoreError::HDR_UNSUPPORTED_SEC_COUNT:   return "HDR_UNSUPPORTED_SEC_COUNT";
+            case CoreError::HDR_UNSUPPORTED_BSIZE:       return "HDR_UNSUPPORTED_BSIZE";
+            case CoreError::HDR_UNKNOWN_GEOMETRY:        return "HDR_UNKNOWN_GEOMETRY";
+            case CoreError::HDR_UNMATCHED_GEOMETRY:      return "HDR_UNMATCHED_GEOMETRY";
+            case CoreError::HDR_UNPARTITIONED:           return "HDR_UNPARTITIONED";
+            case CoreError::HDR_CORRUPTED_PTABLE:        return "HDR_CORRUPTED_PTABLE";
+            case CoreError::HDR_CORRUPTED_FSH:           return "HDR_CORRUPTED_FSH";
+            case CoreError::HDR_CORRUPTED_LSEG:          return "HDR_CORRUPTED_LSEG";
+            case CoreError::HDR_UNSUPPORTED:             return "HDR_UNSUPPORTED";
                 
-            case VAError::HDC_INIT:                    return "HDC_INIT";
+            case CoreError::HDC_INIT:                    return "HDC_INIT";
                 
-            case VAError::SNAP_TOO_OLD:                return "SNAP_TOO_OLD";
-            case VAError::SNAP_TOO_NEW:                return "SNAP_TOO_NEW";
-            case VAError::SNAP_IS_BETA:                return "SNAP_IS_BETA";
-            case VAError::SNAP_CORRUPTED:              return "SNAP_CORRUPTED";
+            case CoreError::SNAP_TOO_OLD:                return "SNAP_TOO_OLD";
+            case CoreError::SNAP_TOO_NEW:                return "SNAP_TOO_NEW";
+            case CoreError::SNAP_IS_BETA:                return "SNAP_IS_BETA";
+            case CoreError::SNAP_CORRUPTED:              return "SNAP_CORRUPTED";
                 
-            case VAError::DMS_CANT_CREATE:             return "DMS_CANT_CREATE";
-            case VAError::EXT_FACTOR5:                 return "EXT_UNSUPPORTED";
-            case VAError::EXT_INCOMPATIBLE:            return "EXT_INCOMPATIBLE";
-            case VAError::EXT_CORRUPTED:               return "EXT_CORRUPTED";
+            case CoreError::DMS_CANT_CREATE:             return "DMS_CANT_CREATE";
+            case CoreError::EXT_FACTOR5:                 return "EXT_UNSUPPORTED";
+            case CoreError::EXT_INCOMPATIBLE:            return "EXT_INCOMPATIBLE";
+            case CoreError::EXT_CORRUPTED:               return "EXT_CORRUPTED";
                 
-            case VAError::MISSING_ROM_KEY:             return "MISSING_ROM_KEY";
-            case VAError::INVALID_ROM_KEY:             return "INVALID_ROM_KEY";
+            case CoreError::MISSING_ROM_KEY:             return "MISSING_ROM_KEY";
+            case CoreError::INVALID_ROM_KEY:             return "INVALID_ROM_KEY";
                 
-            case VAError::REC_LAUNCH:                  return "REC_LAUNCH";
+            case CoreError::REC_LAUNCH:                  return "REC_LAUNCH";
                 
-            case VAError::REG_READ_ONLY:               return "REG_READ_ONLY";
-            case VAError::REG_WRITE_ONLY:              return "REG_WRITE_ONLY";
-            case VAError::REG_UNUSED:                  return "REG_UNUSED";
-            case VAError::ADDR_UNALIGNED:              return "ADDR_UNALIGNED";
+            case CoreError::REG_READ_ONLY:               return "REG_READ_ONLY";
+            case CoreError::REG_WRITE_ONLY:              return "REG_WRITE_ONLY";
+            case CoreError::REG_UNUSED:                  return "REG_UNUSED";
+            case CoreError::ADDR_UNALIGNED:              return "ADDR_UNALIGNED";
                 
-            case VAError::OSDB:                        return "OSDB";
-            case VAError::HUNK_BAD_COOKIE:             return "HUNK_BAD_COOKIE";
-            case VAError::HUNK_BAD_HEADER:             return "HUNK_BAD_HEADER";
-            case VAError::HUNK_NO_SECTIONS:            return "HUNK_NO_SECTIONS";
-            case VAError::HUNK_UNSUPPORTED:            return "HUNK_UNSUPPORTED";
-            case VAError::HUNK_CORRUPTED:              return "HUNK_CORRUPTED";
+            case CoreError::OSDB:                        return "OSDB";
+            case CoreError::HUNK_BAD_COOKIE:             return "HUNK_BAD_COOKIE";
+            case CoreError::HUNK_BAD_HEADER:             return "HUNK_BAD_HEADER";
+            case CoreError::HUNK_NO_SECTIONS:            return "HUNK_NO_SECTIONS";
+            case CoreError::HUNK_UNSUPPORTED:            return "HUNK_UNSUPPORTED";
+            case CoreError::HUNK_CORRUPTED:              return "HUNK_CORRUPTED";
                 
-            case VAError::SOCK_CANT_CREATE:            return "SOCK_CANT_CREATE";
-            case VAError::SOCK_CANT_CONNECT:           return "SOCK_CANT_CONNECT";
-            case VAError::SOCK_CANT_BIND:              return "SOCK_CANT_BIND";
-            case VAError::SOCK_CANT_LISTEN:            return "SOCK_CANT_LISTEN";
-            case VAError::SOCK_CANT_ACCEPT:            return "SOCK_CANT_ACCEPT";
-            case VAError::SOCK_CANT_RECEIVE:           return "SOCK_CANT_RECEIVE";
-            case VAError::SOCK_CANT_SEND:              return "SOCK_CANT_SEND";
-            case VAError::SOCK_DISCONNECTED:           return "SOCK_DISCONNECTED";
-            case VAError::SERVER_PORT_IN_USE:          return "SERVER_PORT_IN_USE";
-            case VAError::SERVER_ON:                   return "SERVER_ON";
-            case VAError::SERVER_OFF:                  return "SERVER_OFF";
-            case VAError::SERVER_RUNNING:              return "SERVER_RUNNING";
-            case VAError::SERVER_NOT_RUNNING:          return "SERVER_NOT_RUNNING";
-            case VAError::SERVER_NO_CLIENT:            return "SERVER_NO_CLIENT";
+            case CoreError::SOCK_CANT_CREATE:            return "SOCK_CANT_CREATE";
+            case CoreError::SOCK_CANT_CONNECT:           return "SOCK_CANT_CONNECT";
+            case CoreError::SOCK_CANT_BIND:              return "SOCK_CANT_BIND";
+            case CoreError::SOCK_CANT_LISTEN:            return "SOCK_CANT_LISTEN";
+            case CoreError::SOCK_CANT_ACCEPT:            return "SOCK_CANT_ACCEPT";
+            case CoreError::SOCK_CANT_RECEIVE:           return "SOCK_CANT_RECEIVE";
+            case CoreError::SOCK_CANT_SEND:              return "SOCK_CANT_SEND";
+            case CoreError::SOCK_DISCONNECTED:           return "SOCK_DISCONNECTED";
+            case CoreError::SERVER_PORT_IN_USE:          return "SERVER_PORT_IN_USE";
+            case CoreError::SERVER_ON:                   return "SERVER_ON";
+            case CoreError::SERVER_OFF:                  return "SERVER_OFF";
+            case CoreError::SERVER_RUNNING:              return "SERVER_RUNNING";
+            case CoreError::SERVER_NOT_RUNNING:          return "SERVER_NOT_RUNNING";
+            case CoreError::SERVER_NO_CLIENT:            return "SERVER_NO_CLIENT";
                 
-            case VAError::GDB_NO_ACK:                  return "GDB_NO_ACK";
-            case VAError::GDB_INVALID_FORMAT:          return "GDB_INVALID_FORMAT";
-            case VAError::GDB_INVALID_CHECKSUM:        return "GDB_INVALID_CHECKSUM";
-            case VAError::GDB_UNRECOGNIZED_CMD:        return "GDB_UNRECOGNIZED_CMD";
-            case VAError::GDB_UNSUPPORTED_CMD:         return "GDB_UNSUPPORTED_CMD";
+            case CoreError::GDB_NO_ACK:                  return "GDB_NO_ACK";
+            case CoreError::GDB_INVALID_FORMAT:          return "GDB_INVALID_FORMAT";
+            case CoreError::GDB_INVALID_CHECKSUM:        return "GDB_INVALID_CHECKSUM";
+            case CoreError::GDB_UNRECOGNIZED_CMD:        return "GDB_UNRECOGNIZED_CMD";
+            case CoreError::GDB_UNSUPPORTED_CMD:         return "GDB_UNSUPPORTED_CMD";
                 
-            case VAError::FS_UNKNOWN:                  return "FS_UNKNOWN";
-            case VAError::FS_UNSUPPORTED:              return "FS_UNSUPPORTED";
-            case VAError::FS_UNFORMATTED:              return "FS_UNFORMATTED";
-            case VAError::FS_WRONG_BSIZE:              return "FS_WRONG_BSIZE";
-            case VAError::FS_WRONG_CAPACITY:           return "FS_WRONG_CAPACITY";
-            case VAError::FS_WRONG_DOS_TYPE:           return "FS_WRONG_DOS_TYPE";
-            case VAError::FS_HAS_CYCLES:               return "FS_HAS_CYCLES";
-            case VAError::FS_CORRUPTED:                return "FS_CORRUPTED";
+            case CoreError::FS_UNKNOWN:                  return "FS_UNKNOWN";
+            case CoreError::FS_UNSUPPORTED:              return "FS_UNSUPPORTED";
+            case CoreError::FS_UNFORMATTED:              return "FS_UNFORMATTED";
+            case CoreError::FS_WRONG_BSIZE:              return "FS_WRONG_BSIZE";
+            case CoreError::FS_WRONG_CAPACITY:           return "FS_WRONG_CAPACITY";
+            case CoreError::FS_WRONG_DOS_TYPE:           return "FS_WRONG_DOS_TYPE";
+            case CoreError::FS_HAS_CYCLES:               return "FS_HAS_CYCLES";
+            case CoreError::FS_CORRUPTED:                return "FS_CORRUPTED";
                 
-            case VAError::FS_OUT_OF_SPACE:             return "FS_OUT_OF_SPACE";
+            case CoreError::FS_OUT_OF_SPACE:             return "FS_OUT_OF_SPACE";
                 
-            case VAError::FS_DIR_NOT_EMPTY:            return "FS_DIR_NOT_EMPTY";
-            case VAError::FS_CANNOT_CREATE_DIR:        return "FS_CANNOT_CREATE_DIR";
-            case VAError::FS_CANNOT_CREATE_FILE:       return "FS_CANNOT_CREATE_FILE";
+            case CoreError::FS_DIR_NOT_EMPTY:            return "FS_DIR_NOT_EMPTY";
+            case CoreError::FS_CANNOT_CREATE_DIR:        return "FS_CANNOT_CREATE_DIR";
+            case CoreError::FS_CANNOT_CREATE_FILE:       return "FS_CANNOT_CREATE_FILE";
                 
-            case VAError::FS_INVALID_BLOCK_TYPE:       return "FS_INVALID_BLOCK_TYPE";
-            case VAError::FS_EXPECTED_VALUE:           return "FS_EXPECTED_VALUE";
-            case VAError::FS_EXPECTED_SMALLER_VALUE:   return "FS_EXPECTED_SMALLER_VALUE";
-            case VAError::FS_EXPECTED_DOS_REVISION:    return "FS_EXPECTED_DOS_REVISION";
-            case VAError::FS_EXPECTED_NO_REF:          return "FS_EXPECTED_NO_REF";
-            case VAError::FS_EXPECTED_REF:             return "FS_EXPECTED_REF";
-            case VAError::FS_EXPECTED_SELFREF:         return "FS_EXPECTED_SELFREF";
-            case VAError::FS_PTR_TO_UNKNOWN_BLOCK:     return "FS_PTR_TO_UNKNOWN_BLOCK";
-            case VAError::FS_PTR_TO_EMPTY_BLOCK:       return "FS_PTR_TO_EMPTY_BLOCK";
-            case VAError::FS_PTR_TO_BOOT_BLOCK:        return "FS_PTR_TO_BOOT_BLOCK";
-            case VAError::FS_PTR_TO_ROOT_BLOCK:        return "FS_PTR_TO_ROOT_BLOCK";
-            case VAError::FS_PTR_TO_BITMAP_BLOCK:      return "FS_PTR_TO_BITMAP_BLOCK";
-            case VAError::FS_PTR_TO_BITMAP_EXT_BLOCK:  return "FS_PTR_TO_BITMAP_EXT_BLOCK";
-            case VAError::FS_PTR_TO_USERDIR_BLOCK:     return "FS_PTR_TO_USERDIR_BLOCK";
-            case VAError::FS_PTR_TO_FILEHEADER_BLOCK:  return "FS_PTR_TO_FILEHEADER_BLOCK";
-            case VAError::FS_PTR_TO_FILELIST_BLOCK:    return "FS_PTR_TO_FILELIST_BLOCK";
-            case VAError::FS_PTR_TO_DATA_BLOCK:        return "FS_PTR_TO_DATA_BLOCK";
-            case VAError::FS_EXPECTED_DATABLOCK_NR:    return "FS_EXPECTED_DATABLOCK_NR";
-            case VAError::FS_INVALID_HASHTABLE_SIZE:   return "FS_INVALID_HASHTABLE_SIZE";
+            case CoreError::FS_INVALID_BLOCK_TYPE:       return "FS_INVALID_BLOCK_TYPE";
+            case CoreError::FS_EXPECTED_VALUE:           return "FS_EXPECTED_VALUE";
+            case CoreError::FS_EXPECTED_SMALLER_VALUE:   return "FS_EXPECTED_SMALLER_VALUE";
+            case CoreError::FS_EXPECTED_DOS_REVISION:    return "FS_EXPECTED_DOS_REVISION";
+            case CoreError::FS_EXPECTED_NO_REF:          return "FS_EXPECTED_NO_REF";
+            case CoreError::FS_EXPECTED_REF:             return "FS_EXPECTED_REF";
+            case CoreError::FS_EXPECTED_SELFREF:         return "FS_EXPECTED_SELFREF";
+            case CoreError::FS_PTR_TO_UNKNOWN_BLOCK:     return "FS_PTR_TO_UNKNOWN_BLOCK";
+            case CoreError::FS_PTR_TO_EMPTY_BLOCK:       return "FS_PTR_TO_EMPTY_BLOCK";
+            case CoreError::FS_PTR_TO_BOOT_BLOCK:        return "FS_PTR_TO_BOOT_BLOCK";
+            case CoreError::FS_PTR_TO_ROOT_BLOCK:        return "FS_PTR_TO_ROOT_BLOCK";
+            case CoreError::FS_PTR_TO_BITMAP_BLOCK:      return "FS_PTR_TO_BITMAP_BLOCK";
+            case CoreError::FS_PTR_TO_BITMAP_EXT_BLOCK:  return "FS_PTR_TO_BITMAP_EXT_BLOCK";
+            case CoreError::FS_PTR_TO_USERDIR_BLOCK:     return "FS_PTR_TO_USERDIR_BLOCK";
+            case CoreError::FS_PTR_TO_FILEHEADER_BLOCK:  return "FS_PTR_TO_FILEHEADER_BLOCK";
+            case CoreError::FS_PTR_TO_FILELIST_BLOCK:    return "FS_PTR_TO_FILELIST_BLOCK";
+            case CoreError::FS_PTR_TO_DATA_BLOCK:        return "FS_PTR_TO_DATA_BLOCK";
+            case CoreError::FS_EXPECTED_DATABLOCK_NR:    return "FS_EXPECTED_DATABLOCK_NR";
+            case CoreError::FS_INVALID_HASHTABLE_SIZE:   return "FS_INVALID_HASHTABLE_SIZE";
         }
         return "???";
     }
     
-    static const char *help(VAError value)
+    static const char *help(CoreError value)
     {
         return "";
     }

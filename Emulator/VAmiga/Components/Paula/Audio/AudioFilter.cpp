@@ -205,12 +205,12 @@ AudioFilter::checkOption(Opt opt, i64 value)
         case Opt::AUD_FILTER_TYPE:
 
             if (!FilterTypeEnum::isValid(value)) {
-                throw VAException(VAError::OPT_INV_ARG, FilterTypeEnum::keyList());
+                throw CoreException(CoreError::OPT_INV_ARG, FilterTypeEnum::keyList());
             }
             return;
 
         default:
-            throw(VAError::OPT_UNSUPPORTED);
+            throw(CoreError::OPT_UNSUPPORTED);
     }
 }
 

@@ -71,7 +71,7 @@ MediaFile::make(const fs::path &path, FileType type)
         case FileType::EXTENDED_ROM: return new ExtendedRomFile(path);
 
         default:
-            throw VAException(VAError::FILE_TYPE_MISMATCH, path);
+            throw CoreException(CoreError::FILE_TYPE_MISMATCH, path);
     }
 }
 
@@ -162,7 +162,7 @@ MediaFile::getDiskInfo() const
 
     } catch (...) {
 
-        throw VAException(VAError::FILE_TYPE_MISMATCH);
+        throw CoreException(CoreError::FILE_TYPE_MISMATCH);
     }
 }
 
@@ -186,7 +186,7 @@ MediaFile::getFloppyDiskInfo() const
 
     } catch (...) {
 
-        throw VAException(VAError::FILE_TYPE_MISMATCH);
+        throw CoreException(CoreError::FILE_TYPE_MISMATCH);
     }
 }
 
@@ -207,7 +207,7 @@ MediaFile::getHDFInfo() const
 
     } catch (...) {
 
-        throw VAException(VAError::FILE_TYPE_MISMATCH);
+        throw CoreException(CoreError::FILE_TYPE_MISMATCH);
     }
 }
 

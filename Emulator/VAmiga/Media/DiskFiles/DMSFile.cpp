@@ -51,7 +51,7 @@ DMSFile::finalizeRead()
     }
     
     if (adfData) free(adfData);
-    if (!adf) throw VAException(VAError::DMS_CANT_CREATE);
+    if (!adf) throw CoreException(CoreError::DMS_CANT_CREATE);
 }
 
 }

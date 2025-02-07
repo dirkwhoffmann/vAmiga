@@ -53,7 +53,7 @@ DiskController::checkOption(Opt opt, i64 value)
         case Opt::DC_SPEED:
 
             if (!isValidDriveSpeed((isize)value)) {
-                throw VAException(VAError::OPT_INV_ARG, "-1, 1, 2, 4, 8");
+                throw CoreException(CoreError::OPT_INV_ARG, "-1, 1, 2, 4, 8");
             }
             return;
 
@@ -63,7 +63,7 @@ DiskController::checkOption(Opt opt, i64 value)
             return;
 
         default:
-            throw(VAError::OPT_UNSUPPORTED);
+            throw(CoreError::OPT_UNSUPPORTED);
     }
 }
 

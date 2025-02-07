@@ -99,7 +99,7 @@ class MyDocument: NSDocument {
                     break
                 }
 
-            } catch let error as VAException {
+            } catch let error as CoreException {
                 if error.errorCode != .FILE_TYPE_MISMATCH {
                     throw error
                 }
@@ -107,7 +107,7 @@ class MyDocument: NSDocument {
         }
 
         // None of the allowed types matched the file
-        throw VAException(.FILE_TYPE_MISMATCH,
+        throw CoreException(.FILE_TYPE_MISMATCH,
                       "The type of this file is not known to the emulator.")
     }
 
@@ -129,7 +129,7 @@ class MyDocument: NSDocument {
         do {
             try addMedia(url: url, allowedTypes: [.WORKSPACE])
 
-        } catch let error as VAException {
+        } catch let error as CoreException {
 
             throw NSError(error: error)
         }
@@ -161,7 +161,7 @@ class MyDocument: NSDocument {
                 
                 saveMachineDescription(to: url.appendingPathComponent("machine.plist"))
                 
-            } catch let error as VAException {
+            } catch let error as CoreException {
                 
                 // Swift.print("Error: \(error.what)")
                 throw NSError(error: error)

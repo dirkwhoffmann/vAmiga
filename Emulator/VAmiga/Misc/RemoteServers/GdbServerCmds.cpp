@@ -131,7 +131,7 @@ GdbServer::process <'v', GdbCmd::Cont> (string arg)
         return;
     }
     
-    throw VAException(VAError::GDB_INVALID_FORMAT);
+    throw CoreException(CoreError::GDB_INVALID_FORMAT);
 }
 
 template <> void
@@ -161,7 +161,7 @@ GdbServer::process <'v'> (string cmd)
         return;
     }
 
-    throw VAException(VAError::GDB_UNSUPPORTED_CMD, "v");
+    throw CoreException(CoreError::GDB_UNSUPPORTED_CMD, "v");
 }
 
 template <> void
@@ -220,7 +220,7 @@ GdbServer::process <'q'> (string cmd)
         return;
     }
     
-    throw VAException(VAError::GDB_UNSUPPORTED_CMD, "q");
+    throw CoreException(CoreError::GDB_UNSUPPORTED_CMD, "q");
 }
 
 template <> void
@@ -234,7 +234,7 @@ GdbServer::process <'Q'> (string cmd)
         return;
     }
     
-    throw VAException(VAError::GDB_UNSUPPORTED_CMD, "Q");
+    throw CoreException(CoreError::GDB_UNSUPPORTED_CMD, "Q");
 }
 
 template <> void
@@ -254,7 +254,7 @@ GdbServer::process <'s'> (string cmd)
 template <> void
 GdbServer::process <'n'> (string cmd)
 {
-    throw VAException(VAError::GDB_UNSUPPORTED_CMD, "n");
+    throw CoreException(CoreError::GDB_UNSUPPORTED_CMD, "n");
 }
 
 template <> void
@@ -266,7 +266,7 @@ GdbServer::process <'H'> (string cmd)
 template <> void
 GdbServer::process <'G'> (string cmd)
 {
-    throw VAException(VAError::GDB_UNSUPPORTED_CMD, "G");
+    throw CoreException(CoreError::GDB_UNSUPPORTED_CMD, "G");
 }
 
 template <> void
@@ -291,13 +291,13 @@ GdbServer::process <'?'> (string cmd)
 template <> void
 GdbServer::process <'!'> (string cmd)
 {
-    throw VAException(VAError::GDB_UNSUPPORTED_CMD, "!");
+    throw CoreException(CoreError::GDB_UNSUPPORTED_CMD, "!");
 }
 
 template <> void
 GdbServer::process <'k'> (string cmd)
 {
-    throw VAException(VAError::GDB_UNSUPPORTED_CMD, "k");
+    throw CoreException(CoreError::GDB_UNSUPPORTED_CMD, "k");
 }
 
 template <> void
@@ -322,14 +322,14 @@ GdbServer::process <'m'> (string cmd)
 
     } else {
 
-        throw VAException(VAError::GDB_UNSUPPORTED_CMD, "m");
+        throw CoreException(CoreError::GDB_UNSUPPORTED_CMD, "m");
     }
 }
 
 template <> void
 GdbServer::process <'M'> (string cmd)
 {
-    throw VAException(VAError::GDB_UNSUPPORTED_CMD, "M");
+    throw CoreException(CoreError::GDB_UNSUPPORTED_CMD, "M");
 }
 
 template <> void
@@ -343,7 +343,7 @@ GdbServer::process <'p'> (string cmd)
 template <> void
 GdbServer::process <'P'> (string cmd)
 {
-    throw VAException(VAError::GDB_UNSUPPORTED_CMD, "P");
+    throw CoreException(CoreError::GDB_UNSUPPORTED_CMD, "P");
 }
 
 template <> void
@@ -355,7 +355,7 @@ GdbServer::process <'c'> (string cmd)
 template <> void
 GdbServer::process <'D'> (string cmd)
 {
-    throw VAException(VAError::GDB_UNSUPPORTED_CMD, "D");
+    throw CoreException(CoreError::GDB_UNSUPPORTED_CMD, "D");
 }
 
 template <> void
@@ -377,7 +377,7 @@ GdbServer::process <'Z'> (string cmd)
 
     } else {
 
-        throw VAException(VAError::GDB_INVALID_FORMAT, "Z");
+        throw CoreException(CoreError::GDB_INVALID_FORMAT, "Z");
     }
 }
 
@@ -400,7 +400,7 @@ GdbServer::process <'z'> (string cmd)
 
     } else {
 
-        throw VAException(VAError::GDB_INVALID_FORMAT, "z");
+        throw CoreException(CoreError::GDB_INVALID_FORMAT, "z");
     }
 }
 
@@ -410,7 +410,7 @@ GdbServer::process(string package)
     debug(SRV_DEBUG, "process(%s)\n", package.c_str());
     
     // Check if the previous package has been rejected
-    if (package[0] == '-') throw VAException(VAError::GDB_NO_ACK);
+    if (package[0] == '-') throw CoreException(CoreError::GDB_NO_ACK);
 
     // Strip off the acknowledgment symbol if present
     if (package[0] == '+') package.erase(0,1);
@@ -440,13 +440,13 @@ GdbServer::process(string package)
             } else {
                 
                 if (ackMode) connection.send("-");
-                throw VAException(VAError::GDB_INVALID_CHECKSUM);
+                throw CoreException(CoreError::GDB_INVALID_CHECKSUM);
             }
             
             return;
         }
         
-        throw VAException(VAError::GDB_INVALID_FORMAT);
+        throw CoreException(CoreError::GDB_INVALID_FORMAT);
     }
 }
 
@@ -476,7 +476,7 @@ GdbServer::process(char cmd, string package)
         case 'z' : process <'z'> (package); break;
             
         default:
-            throw VAException(VAError::GDB_UNRECOGNIZED_CMD, string(1, cmd));
+            throw CoreException(CoreError::GDB_UNRECOGNIZED_CMD, string(1, cmd));
     }
 }
 

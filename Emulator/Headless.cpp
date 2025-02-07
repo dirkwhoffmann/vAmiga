@@ -38,9 +38,9 @@ int main(int argc, char *argv[])
             std::cout << what << std::endl;
         }
 
-    } catch (vamiga::VAException &e) {
+    } catch (vamiga::CoreException &e) {
 
-        std::cout << "VAError: " << e.what() << std::endl;
+        std::cout << "Core Error: " << e.what() << std::endl;
 
     } catch (std::exception &e) {
 

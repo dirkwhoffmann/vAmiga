@@ -77,7 +77,7 @@ VideoPort::checkOption(Opt opt, i64 value)
             return;
 
         default:
-            throw VAException(VAError::OPT_UNSUPPORTED);
+            throw CoreException(CoreError::OPT_UNSUPPORTED);
     }
 }
 

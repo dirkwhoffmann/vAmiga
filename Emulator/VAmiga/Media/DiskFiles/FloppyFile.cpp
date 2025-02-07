@@ -24,13 +24,13 @@ FloppyFile::make(const std::filesystem::path &path)
     FloppyFile *result = nullptr;
 
     if (!std::filesystem::exists(path)) {
-        throw VAException(VAError::FILE_NOT_FOUND, path);
+        throw CoreException(CoreError::FILE_NOT_FOUND, path);
     }
 
     Buffer<u8> buffer(path);
     
     if (buffer.empty()) {
-        throw VAException(VAError::FILE_CANT_READ, path);
+        throw CoreException(CoreError::FILE_CANT_READ, path);
     }
 
     switch (type(path)) {
@@ -42,30 +42,11 @@ FloppyFile::make(const std::filesystem::path &path)
         case FileType::DIR:  result = new Folder(path);
 
         default:
-            throw VAException(VAError::FILE_TYPE_MISMATCH);
+            throw CoreException(CoreError::FILE_TYPE_MISMATCH);
     }
 
     result->path = path;
     return result;
-
-    /*
-    std::ifstream stream(path, std::ifstream::binary);
-    if (!stream.is_open()) throw Error(VAError::FILE_NOT_FOUND, path);
-    
-    switch (type(path)) {
-            
-        case FileType::ADF:  return new ADFFile(path, stream);
-        case FileType::IMG:  return new IMGFile(path, stream);
-        case FileType::DMS:  return new DMSFile(path, stream);
-        case FileType::EXE:  return new EXEFile(path, stream);
-        case FileType::DIR:  return new Folder(path);
-
-        default:
-            break;
-    }
-
-    throw Error(VAError::FILE_TYPE_MISMATCH);
-    */
 }
 
 FloppyDiskDescriptor
