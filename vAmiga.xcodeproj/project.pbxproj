@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -111,6 +111,9 @@
 		50627FD3286EBA7300F2A835 /* FrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50627FD1286EBA7300F2A835 /* FrameBuffer.cpp */; };
 		50627FD5286EBACA00F2A835 /* FrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50627FD1286EBA7300F2A835 /* FrameBuffer.cpp */; };
 		5062DB1224370FE400ACEEE2 /* MyControllerSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */; };
+		5062F1902D54F2E7004546A2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5062F18A2D54F2E7004546A2 /* Assets.xcassets */; };
+		5062F1922D54F2E7004546A2 /* PreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5062F18D2D54F2E7004546A2 /* PreviewViewController.xib */; };
+		5062F1932D54F2E7004546A2 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5062F18C2D54F2E7004546A2 /* PreviewViewController.swift */; };
 		5064051B2D19CA0D002FBC57 /* PromServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064051A2D19CA0C002FBC57 /* PromServer.cpp */; };
 		5064051C2D19CA0D002FBC57 /* PromServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064051A2D19CA0C002FBC57 /* PromServer.cpp */; };
 		506407CB2D1AC45A002FBC57 /* SocketServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506407CA2D1AC455002FBC57 /* SocketServer.cpp */; };
@@ -685,6 +688,11 @@
 		50627FD2286EBA7300F2A835 /* FrameBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameBuffer.h; sourceTree = "<group>"; };
 		50627FD4286EBAC000F2A835 /* FrameBufferTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameBufferTypes.h; sourceTree = "<group>"; };
 		5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerSnapshots.swift; sourceTree = "<group>"; };
+		5062F18A2D54F2E7004546A2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5062F18B2D54F2E7004546A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5062F18C2D54F2E7004546A2 /* PreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
+		5062F18E2D54F2E7004546A2 /* QuickLookPlugIn.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QuickLookPlugIn.entitlements; sourceTree = "<group>"; };
+		5062F18F2D54F2E7004546A2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/PreviewViewController.xib; sourceTree = "<group>"; };
 		5062F1942D550730004546A2 /* DumpableTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DumpableTypes.h; sourceTree = "<group>"; };
 		506405192D19CA05002FBC57 /* PromServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PromServer.h; sourceTree = "<group>"; };
 		5064051A2D19CA0C002FBC57 /* PromServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PromServer.cpp; sourceTree = "<group>"; };
@@ -1114,20 +1122,6 @@
 		50FF747227D3BBFE00B6EA01 /* hdr_click.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = hdr_click.aiff; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		509EA5562D51EFD40001BC50 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 509EA5422D51EFD40001BC50 /* QuickLookPlugIn */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		509EA5462D51EFD40001BC50 /* QuickLookPlugIn */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (509EA5562D51EFD40001BC50 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = QuickLookPlugIn; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
-
 /* Begin PBXFrameworksBuildPhase section */
 		508FDE6121EA1FA40043D0E9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -1398,6 +1392,18 @@
 			path = System;
 			sourceTree = "<group>";
 		};
+		5062F1952D566066004546A2 /* QuickLookPlugin */ = {
+			isa = PBXGroup;
+			children = (
+				5062F18A2D54F2E7004546A2 /* Assets.xcassets */,
+				5062F18B2D54F2E7004546A2 /* Info.plist */,
+				5062F18C2D54F2E7004546A2 /* PreviewViewController.swift */,
+				5062F18D2D54F2E7004546A2 /* PreviewViewController.xib */,
+				5062F18E2D54F2E7004546A2 /* QuickLookPlugIn.entitlements */,
+			);
+			path = QuickLookPlugin;
+			sourceTree = "<group>";
+		};
 		506436E129C1D82500768528 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
@@ -1500,7 +1506,7 @@
 				50B14C2421EB8F25002E32A6 /* Proxy */,
 				508FDFDC21EA20600043D0E9 /* GUI */,
 				508FDE6621EA1FA40043D0E9 /* Resources */,
-				509EA5462D51EFD40001BC50 /* QuickLookPlugIn */,
+				5062F1952D566066004546A2 /* QuickLookPlugin */,
 				508FDE6521EA1FA40043D0E9 /* Products */,
 				508FDFDD21EA214A0043D0E9 /* Frameworks */,
 			);
@@ -2265,9 +2271,6 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				509EA5462D51EFD40001BC50 /* QuickLookPlugIn */,
-			);
 			name = QuickLookPlugIn;
 			packageProductDependencies = (
 			);
@@ -2384,6 +2387,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5062F1902D54F2E7004546A2 /* Assets.xcassets in Resources */,
+				5062F1922D54F2E7004546A2 /* PreviewViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2675,6 +2680,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5062F1932D54F2E7004546A2 /* PreviewViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2859,6 +2865,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		5062F18D2D54F2E7004546A2 /* PreviewViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5062F18F2D54F2E7004546A2 /* Base */,
+			);
+			name = PreviewViewController.xib;
+			sourceTree = "<group>";
+		};
 		508FDFAF21EA1FF10043D0E9 /* MyDocument.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
