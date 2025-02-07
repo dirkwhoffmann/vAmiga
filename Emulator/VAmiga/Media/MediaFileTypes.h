@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
+#include "VAmiga/Foundation/Reflection.h"
 
 namespace vamiga {
 
@@ -36,7 +35,7 @@ enum class FileType : long
     EXTENDED_ROM
 };
 
-struct FileTypeEnum : util::Reflection<FileTypeEnum, FileType>
+struct FileTypeEnum : Reflection<FileTypeEnum, FileType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(FileType::EXTENDED_ROM);

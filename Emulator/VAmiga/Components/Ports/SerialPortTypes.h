@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
+#include "VAmiga/Foundation/Reflection.h"
 
 namespace vamiga {
 
@@ -27,7 +26,7 @@ enum class SerialPortDevice
     COMMANDER
 };
 
-struct SerialPortDeviceEnum : util::Reflection<SerialPortDeviceEnum, SerialPortDevice>
+struct SerialPortDeviceEnum : Reflection<SerialPortDeviceEnum, SerialPortDevice>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(SerialPortDevice::COMMANDER);

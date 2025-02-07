@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
+#include "VAmiga/Foundation/Reflection.h"
 
 namespace vamiga {
 

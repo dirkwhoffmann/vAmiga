@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
+#include "VAmiga/Foundation/Reflection.h"
 
 namespace vamiga {
 
@@ -28,7 +27,7 @@ enum class RecState : long
 };
 // typedef REC_STATE RecorderState;
 
-struct RecStateEnum : util::Reflection<RecStateEnum, RecState>
+struct RecStateEnum : Reflection<RecStateEnum, RecState>
 {
     static constexpr RecState minVal = RecState(0);
     static constexpr RecState maxVal = RecState::ABORT;

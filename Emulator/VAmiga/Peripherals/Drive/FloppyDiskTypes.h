@@ -9,8 +9,6 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
 #include "FSTypes.h"
 #include "BootBlockImageTypes.h"
 
@@ -26,7 +24,7 @@ enum class Diameter : long
     INCH_525
 };
 
-struct DiameterEnum : util::Reflection<DiameterEnum, Diameter>
+struct DiameterEnum : Reflection<DiameterEnum, Diameter>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Diameter::INCH_525);
@@ -58,7 +56,7 @@ enum class Density
     HD
 };
 
-struct DensityEnum : util::Reflection<DensityEnum, Density>
+struct DensityEnum : Reflection<DensityEnum, Density>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Density::HD);

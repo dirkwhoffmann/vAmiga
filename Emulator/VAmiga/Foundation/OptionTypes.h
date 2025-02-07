@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
+#include "VAmiga/Foundation/Reflection.h"
 
 namespace vamiga {
 
@@ -197,7 +196,7 @@ enum class Opt : long
     SRV_VERBOSE
 };
 
-struct OptEnum : util::Reflection<OptEnum, Opt>
+struct OptEnum : Reflection<OptEnum, Opt>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Opt::SRV_VERBOSE);

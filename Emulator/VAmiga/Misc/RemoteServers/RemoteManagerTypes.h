@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
+#include "VAmiga/Foundation/Reflection.h"
 
 namespace vamiga {
 
@@ -26,7 +25,7 @@ enum class ServerType : long
     GDB
 };
 
-struct ServerTypeEnum : util::Reflection<ServerTypeEnum, ServerType>
+struct ServerTypeEnum : Reflection<ServerTypeEnum, ServerType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(ServerType::GDB);

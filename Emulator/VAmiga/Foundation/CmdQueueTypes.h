@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
+// #include "VAmiga/Foundation/Types.h"
 #include "OptionTypes.h"
 #include "JoystickTypes.h"
 #include "KeyboardTypes.h"
@@ -86,7 +86,7 @@ enum class Cmd : long
     FOCUS                   ///< The emulator windows got or lost focus
 };
 
-struct CmdTypeEnum : util::Reflection<CmdTypeEnum, Cmd> {
+struct CmdTypeEnum : Reflection<CmdTypeEnum, Cmd> {
     
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Cmd::FOCUS);

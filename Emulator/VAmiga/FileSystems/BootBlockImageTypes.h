@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
+#include "VAmiga/Foundation/Reflection.h"
 
 namespace vamiga {
 
@@ -25,7 +24,7 @@ enum class BootBlockType
     CUSTOM
 };
 
-struct BootBlockTypeEnum : util::Reflection<BootBlockTypeEnum, BootBlockType>
+struct BootBlockTypeEnum : Reflection<BootBlockTypeEnum, BootBlockType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(BootBlockType::CUSTOM);
@@ -55,7 +54,7 @@ enum class BootBlockId
     BYTE_BANDIT
 };
 
-struct BootBlockIdEnum : util::Reflection<BootBlockIdEnum, BootBlockId>
+struct BootBlockIdEnum : Reflection<BootBlockIdEnum, BootBlockId>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(BootBlockId::BYTE_BANDIT);

@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
+#include "VAmiga/Foundation/Reflection.h"
 
 namespace vamiga {
 
@@ -44,7 +43,7 @@ enum class BoardState : long
     SHUTUP
 };
 
-struct BoardStateEnum : util::Reflection<BoardStateEnum, BoardState>
+struct BoardStateEnum : Reflection<BoardStateEnum, BoardState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(BoardState::SHUTUP);

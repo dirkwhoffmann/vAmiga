@@ -11,7 +11,7 @@
 
 #include "DiskControllerTypes.h"
 #include "SubComponent.h"
-#include "Reflection.h"
+#include "VAmiga/Foundation/Reflection.h"
 #include "FloppyDisk.h"
 
 namespace vamiga {

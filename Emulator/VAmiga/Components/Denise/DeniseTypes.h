@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
+//#include "VAmiga/Foundation/Reflection.h"
 #include "PixelEngineTypes.h"
 
 namespace vamiga {
@@ -25,7 +24,7 @@ enum class DeniseRev : long
     ECS            // Revision 8373      (only partially supported)
 };
 
-struct DeniseRevEnum : util::Reflection<DeniseRevEnum, DeniseRev>
+struct DeniseRevEnum : Reflection<DeniseRevEnum, DeniseRev>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(DeniseRev::ECS);

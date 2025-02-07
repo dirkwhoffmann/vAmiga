@@ -9,13 +9,9 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
-#include "RingBuffer.h"
+#include "VAmiga/Foundation/Reflection.h"
 
 namespace vamiga {
-
-// #define CPUINFO_INSTR_COUNT 256
 
 
 //
@@ -29,7 +25,7 @@ enum class CPURev : long
     CPU_68EC020
 };
 
-struct CPURevEnum : util::Reflection<CPURevEnum, CPURev>
+struct CPURevEnum : Reflection<CPURevEnum, CPURev>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(CPURev::CPU_68EC020);
@@ -69,7 +65,7 @@ enum class DasmRev : long
     DASM_68040
 };
 
-struct DasmRevEnum : util::Reflection<DasmRevEnum, DasmRev>
+struct DasmRevEnum : Reflection<DasmRevEnum, DasmRev>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(DasmRev::DASM_68040);
@@ -117,7 +113,7 @@ enum class DasmSyntax : long
     MUSASHI
 };
 
-struct DasmSyntaxEnum : util::Reflection<DasmSyntaxEnum, DasmSyntax>
+struct DasmSyntaxEnum : Reflection<DasmSyntaxEnum, DasmSyntax>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(DasmSyntax::MUSASHI);
@@ -154,7 +150,7 @@ enum class DasmNumbers : long
     DEC
 };
 
-struct DasmNumbersEnum : util::Reflection<DasmNumbersEnum, DasmNumbers>
+struct DasmNumbersEnum : Reflection<DasmNumbersEnum, DasmNumbers>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(DasmNumbers::DEC);
@@ -186,7 +182,7 @@ enum class GuardType : long
     CATCHPOINT,
 };
 
-struct GuardTypeEnum : util::Reflection<GuardTypeEnum, GuardType>
+struct GuardTypeEnum : Reflection<GuardTypeEnum, GuardType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(GuardType::CATCHPOINT);

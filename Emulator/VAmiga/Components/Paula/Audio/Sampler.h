@@ -9,11 +9,10 @@
 
 #pragma once
 
-#include "Types.h"
 #include "SamplerTypes.h"
 #include "Constants.h"
 #include "RingBuffer.h"
-#include "Reflection.h"
+#include "VAmiga/Foundation/Reflection.h"
 
 namespace vamiga {
 

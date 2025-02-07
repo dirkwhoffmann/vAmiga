@@ -14,7 +14,7 @@
 #include "Checksum.h"
 #include "IOUtils.h"
 #include "Buffer.h"
-#include "Reflection.h"
+#include "VAmiga/Foundation/Reflection.h"
 #include <sstream>
 #include <fstream>
 

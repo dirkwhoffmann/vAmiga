@@ -9,9 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
 #include "MediaFileTypes.h"
-#include "Reflection.h"
 
 namespace vamiga {
 
@@ -25,7 +23,7 @@ enum class DiskFlags
     MODIFIED   = 2
 };
 
-struct DiskFlagsEnum : util::Reflection<DiskFlagsEnum, DiskFlags>
+struct DiskFlagsEnum : Reflection<DiskFlagsEnum, DiskFlags>
 {
     static constexpr long minVal = 1;
     static constexpr long maxVal = long(DiskFlags::MODIFIED);

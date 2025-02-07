@@ -10,7 +10,6 @@
 #pragma once
 
 #include "BootBlockImageTypes.h"
-#include "Reflection.h"
 
 namespace vamiga {
 

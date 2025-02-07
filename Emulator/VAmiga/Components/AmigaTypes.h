@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
+#include "VAmiga/Foundation/Reflection.h"
 #include "ThreadTypes.h"
 
 namespace vamiga {
@@ -25,7 +24,7 @@ enum class TV : long
     NTSC
 };
 
-struct TVEnum : util::Reflection<TVEnum, TV>
+struct TVEnum : Reflection<TVEnum, TV>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(TV::NTSC);
@@ -57,7 +56,7 @@ enum class Resolution : long
     SHRES       // SuperHires mode (ECS only)
 };
 
-struct ResolutionEnum : util::Reflection<ResolutionEnum, Resolution>
+struct ResolutionEnum : Reflection<ResolutionEnum, Resolution>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Resolution::SHRES);
@@ -91,7 +90,7 @@ enum class Warp : long
     ALWAYS
 };
 
-struct WarpEnum : util::Reflection<WarpEnum, Warp>
+struct WarpEnum : Reflection<WarpEnum, Warp>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Warp::ALWAYS);
@@ -120,7 +119,7 @@ enum class ConfigScheme : long
     A500_PLUS_1MB
 };
 
-struct ConfigSchemeEnum : util::Reflection<ConfigSchemeEnum, ConfigScheme>
+struct ConfigSchemeEnum : Reflection<ConfigSchemeEnum, ConfigScheme>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(ConfigScheme::A500_PLUS_1MB);
@@ -206,7 +205,7 @@ enum class Reg : long
 };
 
 static_assert(Reg::NO_OP == Reg(0x1FE >> 1));
-struct RegEnum : util::Reflection<RegEnum, Reg>
+struct RegEnum : Reflection<RegEnum, Reg>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Reg::NO_OP);

@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
+#include "VAmiga/Foundation/Reflection.h"
 #include "TODTypes.h"
 
 namespace vamiga {
@@ -26,7 +25,7 @@ enum class CIARev : long
     MOS_8520_PLCC
 };
 
-struct CIARevEnum : util::Reflection<CIARevEnum, CIARev>
+struct CIARevEnum : Reflection<CIARevEnum, CIARev>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(CIARev::MOS_8520_PLCC);
@@ -71,7 +70,7 @@ enum class CIAReg : long
     CRB
 };
 
-struct CIARegEnum : util::Reflection<CIARegEnum, CIAReg>
+struct CIARegEnum : Reflection<CIARegEnum, CIAReg>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(CIAReg::CRB);

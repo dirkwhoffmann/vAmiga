@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
+#include "VAmiga/Foundation/Reflection.h"
 
 namespace vamiga {
 
@@ -29,7 +28,7 @@ enum class FilterType : long
     HIGH
 };
 
-struct FilterTypeEnum : util::Reflection<FilterTypeEnum, FilterType>
+struct FilterTypeEnum : Reflection<FilterTypeEnum, FilterType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(FilterType::HIGH);

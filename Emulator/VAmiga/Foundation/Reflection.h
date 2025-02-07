@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "BasicTypes.h"
+#include "Types.h"
 #include <functional>
 #include <vector>
 #include <map>
@@ -37,7 +37,7 @@
  * the prefix.
  */
 
-namespace vamiga::util {
+namespace vamiga {
 
 #define assert_enum(e,v) assert(e##Enum::isValid(v))
 

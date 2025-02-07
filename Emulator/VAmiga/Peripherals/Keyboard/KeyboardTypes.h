@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
+#include "VAmiga/Foundation/Reflection.h"
 
 namespace vamiga {
 
@@ -27,7 +26,7 @@ enum class KbState
     SEND
 };
 
-struct KbStateEnum : util::Reflection<KbStateEnum, KbState>
+struct KbStateEnum : Reflection<KbStateEnum, KbState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(KbState::SEND);

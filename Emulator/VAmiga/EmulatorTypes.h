@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include "Reflection.h"
-#include "ThreadTypes.h"
-#include "AmigaTypes.h"
+#include "VAmiga/Foundation/Reflection.h"
+#include "VAmiga/Foundation/ThreadTypes.h"
+#include "VAmiga/Components/AmigaTypes.h"
 
 namespace vamiga {
 
@@ -151,7 +151,7 @@ enum class DebugFlag
     GDB_DEBUG,        ///< GDB server
 };
 
-struct DebugFlagEnum : util::Reflection<DebugFlagEnum, DebugFlag>
+struct DebugFlagEnum : Reflection<DebugFlagEnum, DebugFlag>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(DebugFlag::GDB_DEBUG);

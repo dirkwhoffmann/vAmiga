@@ -24,7 +24,7 @@ enum class HardDriveType : long
     GENERIC
 };
 
-struct HardDriveTypeEnum : util::Reflection<HardDriveTypeEnum, HardDriveType>
+struct HardDriveTypeEnum : Reflection<HardDriveTypeEnum, HardDriveType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(HardDriveType::GENERIC);
@@ -50,7 +50,7 @@ enum class HardDriveState : long
     WRITING
 };
 
-struct HardDriveStateEnum : util::Reflection<HardDriveStateEnum, HardDriveState>
+struct HardDriveStateEnum : Reflection<HardDriveStateEnum, HardDriveState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(HardDriveState::WRITING);

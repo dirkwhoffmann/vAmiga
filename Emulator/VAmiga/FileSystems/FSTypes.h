@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
+#include "VAmiga/Foundation/Reflection.h"
 
 namespace vamiga {
 
@@ -27,7 +26,7 @@ enum class FSVolumeType : long
     NODOS
 };
 
-struct FSVolumeTypeEnum : util::Reflection<FSVolumeTypeEnum, FSVolumeType>
+struct FSVolumeTypeEnum : Reflection<FSVolumeTypeEnum, FSVolumeType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(FSVolumeType::NODOS);
@@ -93,7 +92,7 @@ enum class FSBlockType : long
     DATA_BLOCK_FFS
 };
 
-struct FSBlockTypeEnum : util::Reflection<FSBlockTypeEnum, FSBlockType>
+struct FSBlockTypeEnum : Reflection<FSBlockTypeEnum, FSBlockType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(FSBlockType::DATA_BLOCK_FFS);
@@ -165,7 +164,7 @@ enum class FSItemType
     BITMAP
 };
 
-struct FSItemTypeEnum : util::Reflection<FSItemTypeEnum, FSItemType>
+struct FSItemTypeEnum : Reflection<FSItemTypeEnum, FSItemType>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(FSItemType::BITMAP);

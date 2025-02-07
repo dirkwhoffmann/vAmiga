@@ -9,9 +9,8 @@
 
 #pragma once
 
+#include "VAmiga/Foundation/Reflection.h"
 #include "FrameBufferTypes.h"
-#include "Types.h"
-#include "Reflection.h"
 
 namespace vamiga {
 
@@ -29,7 +28,7 @@ enum class Palette
     SEPIA
 };
 
-struct PaletteEnum : util::Reflection<PaletteEnum, Palette>
+struct PaletteEnum : Reflection<PaletteEnum, Palette>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Palette::SEPIA);

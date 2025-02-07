@@ -9,8 +9,6 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
 #include "BusTypes.h"
 
 namespace vamiga {
@@ -26,7 +24,7 @@ enum class DmaDisplayMode
     ODD_EVEN_LAYERS
 };
 
-struct DmaDisplayModeEnum : util::Reflection<DmaDisplayModeEnum, DmaDisplayMode>
+struct DmaDisplayModeEnum : Reflection<DmaDisplayModeEnum, DmaDisplayMode>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(DmaDisplayMode::ODD_EVEN_LAYERS);
@@ -66,7 +64,7 @@ enum class DmaChannel
     COUNT
 };
 
-struct DmaChannelEnum : util::Reflection<DmaChannelEnum, DmaChannel>
+struct DmaChannelEnum : Reflection<DmaChannelEnum, DmaChannel>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(DmaChannel::REFRESH);

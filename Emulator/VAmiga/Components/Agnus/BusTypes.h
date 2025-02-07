@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
+#include "VAmiga/Foundation/Reflection.h"
 
 namespace vamiga {
 
@@ -72,7 +71,7 @@ static constexpr i8 BUS_BLITTER = i8(BusOwner::BLITTER);
 static constexpr i8 BUS_BLOCKED = i8(BusOwner::BLOCKED);
 static constexpr i8 BUS_COUNT = i8(BusOwner::COUNT);
 
-struct BusOwnerEnum : util::Reflection<BusOwnerEnum, BusOwner>
+struct BusOwnerEnum : Reflection<BusOwnerEnum, BusOwner>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(BusOwner::COUNT) -1;

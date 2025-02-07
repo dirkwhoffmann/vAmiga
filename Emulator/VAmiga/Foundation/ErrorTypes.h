@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
+#include "VAmiga/Foundation/Reflection.h"
 
 namespace vamiga {
 
@@ -200,7 +199,7 @@ enum class CoreError : long
     FS_INVALID_HASHTABLE_SIZE
 };
 
-struct CoreErrorEnum : util::Reflection<CoreErrorEnum, CoreError>
+struct CoreErrorEnum : Reflection<CoreErrorEnum, CoreError>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(CoreError::FS_INVALID_HASHTABLE_SIZE);

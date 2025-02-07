@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
+// #include "VAmiga/Foundation/Types.h"
+#include "VAmiga/Foundation/Reflection.h"
 #include "HdControllerTypes.h"
 
 namespace vamiga {
@@ -134,7 +134,7 @@ enum class Msg : long
     ALARM
 };
 
-struct MsgEnum : util::Reflection<MsgEnum, Msg>
+struct MsgEnum : Reflection<MsgEnum, Msg>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Msg::ALARM);

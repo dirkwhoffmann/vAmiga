@@ -8,9 +8,7 @@
 
 #pragma once
 
-#include "Types.h"
 #include "BusTypes.h"
-#include "Reflection.h"
 
 namespace vamiga {
 
@@ -25,7 +23,7 @@ enum class Probe : long
     IPL
 };
 
-struct ProbeEnum : util::Reflection<ProbeEnum, Probe>
+struct ProbeEnum : Reflection<ProbeEnum, Probe>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Probe::IPL);

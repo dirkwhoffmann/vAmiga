@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
+#include "VAmiga/Foundation/Reflection.h"
 
 //
 // Enumerations
@@ -25,7 +24,7 @@ enum class SamplingMethod
     LINEAR
 };
 
-struct SamplingMethodEnum : util::Reflection<SamplingMethodEnum, SamplingMethod>
+struct SamplingMethodEnum : Reflection<SamplingMethodEnum, SamplingMethod>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(SamplingMethod::LINEAR);

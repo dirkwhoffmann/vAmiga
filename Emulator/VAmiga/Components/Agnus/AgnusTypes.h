@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "Types.h"
 #include "AmigaTypes.h"
 #include "BeamTypes.h"
 #include "BlitterTypes.h"
@@ -17,7 +16,6 @@
 #include "CopperTypes.h"
 #include "DmaDebuggerTypes.h"
 #include "SequencerTypes.h"
-#include "Reflection.h"
 
 namespace vamiga {
 
@@ -44,7 +42,7 @@ enum class AgnusRevision : long
     ECS_2MB           // Revision 8375 (A500+, A600)
 };
 
-struct AgnusRevisionEnum : util::Reflection<AgnusRevisionEnum, AgnusRevision>
+struct AgnusRevisionEnum : Reflection<AgnusRevisionEnum, AgnusRevision>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(AgnusRevision::ECS_2MB);
@@ -128,7 +126,7 @@ constexpr bool isPrimarySlot(long s) { return s <= SLOT_SEC; }
 constexpr bool isSecondarySlot(long s) { return s > SLOT_SEC && s <= SLOT_TER; }
 constexpr bool isTertiarySlot(long s) { return s > SLOT_TER; }
 
-struct EventSlotEnum : util::Reflection<EventSlotEnum, EventSlot>
+struct EventSlotEnum : Reflection<EventSlotEnum, EventSlot>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = SLOT_COUNT - 1;

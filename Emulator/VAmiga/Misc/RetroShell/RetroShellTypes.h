@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
+#include "VAmiga/Foundation/Reflection.h"
 
 namespace vamiga {
 
@@ -34,7 +33,7 @@ enum class RetroShellKey
     CR
 };
 
-struct RetroShellKeyEnum : util::Reflection<RetroShellKeyEnum, RetroShellKey>
+struct RetroShellKeyEnum : Reflection<RetroShellKeyEnum, RetroShellKey>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(RetroShellKey::CR);

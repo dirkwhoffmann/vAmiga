@@ -9,8 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
-#include "Reflection.h"
+#include "VAmiga/Foundation/Reflection.h"
 
 namespace vamiga {
 
@@ -39,7 +38,7 @@ enum class MemSrc : long
     EXT
 };
 
-struct MemSrcEnum : util::Reflection<MemSrcEnum, MemSrc>
+struct MemSrcEnum : Reflection<MemSrcEnum, MemSrc>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = (long)MemSrc::EXT;
@@ -103,7 +102,7 @@ enum class Accessor : i8
     DENISE
 };
 
-struct AccessorEnum : util::Reflection<AccessorEnum, Accessor>
+struct AccessorEnum : Reflection<AccessorEnum, Accessor>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Accessor::DENISE);
@@ -132,7 +131,7 @@ enum class BankMap : long
     A2000B
 };
 
-struct BankMapEnum : util::Reflection<BankMapEnum, BankMap>
+struct BankMapEnum : Reflection<BankMapEnum, BankMap>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(BankMap::A2000B);
@@ -168,7 +167,7 @@ enum class RamInitPattern
     RANDOMIZED
 };
 
-struct RamInitPatternEnum : util::Reflection<RamInitPatternEnum, RamInitPattern>
+struct RamInitPatternEnum : Reflection<RamInitPatternEnum, RamInitPattern>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(RamInitPattern::RANDOMIZED);
@@ -202,7 +201,7 @@ enum class UnmappedMemory
     ALL_ONES
 };
 
-struct UnmappedMemoryEnum : util::Reflection<UnmappedMemoryEnum, UnmappedMemory>
+struct UnmappedMemoryEnum : Reflection<UnmappedMemoryEnum, UnmappedMemory>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(UnmappedMemory::ALL_ONES);

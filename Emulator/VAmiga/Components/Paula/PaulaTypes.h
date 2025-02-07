@@ -9,11 +9,10 @@
 
 #pragma once
 
-#include "Types.h"
 #include "DiskControllerTypes.h"
 #include "StateMachineTypes.h"
 #include "UARTTypes.h"
-#include "Reflection.h"
+#include "VAmiga/Foundation/Reflection.h"
 
 namespace vamiga {
 
@@ -39,7 +38,7 @@ enum class IrqSource : long
     EXTER
 };
 
-struct IrqSourceEnum : util::Reflection<IrqSourceEnum, IrqSource>
+struct IrqSourceEnum : Reflection<IrqSourceEnum, IrqSource>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(IrqSource::EXTER);
