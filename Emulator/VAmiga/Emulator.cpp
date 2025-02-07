@@ -10,7 +10,6 @@
 #include "VAmigaConfig.h"
 #include "Emulator.h"
 #include "Amiga.h"
-// #include "Types.h"
 #include "CmdQueue.h"
 #include <algorithm>
 

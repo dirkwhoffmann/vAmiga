@@ -10,7 +10,6 @@
 #include "VAmigaConfig.h"
 #include "Configurable.h"
 #include "Option.h"
-#include "VAmiga/Foundation/Reflection.h"
 #include "Defaults.h"
 #include "IOUtils.h"
 #include <algorithm>

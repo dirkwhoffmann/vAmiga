@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "VAmiga/Foundation/Reflection.h"
 #include "VAmiga/Foundation/ThreadTypes.h"
 #include "VAmiga/Components/AmigaTypes.h"
 

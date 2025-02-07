@@ -12,7 +12,6 @@
 #include "SamplerTypes.h"
 #include "Constants.h"
 #include "RingBuffer.h"
-#include "VAmiga/Foundation/Reflection.h"
 
 namespace vamiga {
 

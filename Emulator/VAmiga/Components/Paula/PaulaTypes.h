@@ -12,7 +12,6 @@
 #include "DiskControllerTypes.h"
 #include "StateMachineTypes.h"
 #include "UARTTypes.h"
-#include "VAmiga/Foundation/Reflection.h"
 
 namespace vamiga {
 

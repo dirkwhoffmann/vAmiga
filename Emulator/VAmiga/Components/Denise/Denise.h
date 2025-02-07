@@ -15,7 +15,6 @@
 #include "DeniseDebugger.h"
 #include "Memory.h"
 #include "PixelEngine.h"
-// #include "VAmiga/Foundation/Reflection.h"
 #include "Recorder.h"
 
 namespace vamiga {
