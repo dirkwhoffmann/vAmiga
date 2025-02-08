@@ -383,7 +383,8 @@ void
 CoreComponent::exportConfig(std::ostream& ss, bool diff, std::vector<Class> exclude) const
 {
     bool first = true;
-    bool skip = std::find(exclude.begin(), exclude.end(), getDescriptions()[0].type) != exclude.end();
+    auto type = getDescriptions().at(0).type;
+    bool skip = std::find(exclude.begin(), exclude.end(), type) != exclude.end();
     
     if (!skip && string(shellName()) != "") {
         

@@ -17,8 +17,9 @@
 #include "Configurable.h"
 #include "Serializable.h"
 #include "Concurrency.h"
-#include <vector>
+#include <algorithm>
 #include <functional>
+#include <vector>
 
 namespace vamiga {
 
