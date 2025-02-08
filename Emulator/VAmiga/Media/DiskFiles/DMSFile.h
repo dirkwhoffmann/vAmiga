@@ -30,7 +30,7 @@ public:
     
 public:
     
-    using AmigaFile::init;
+    using AnyFile::init;
     
     DMSFile(const std::filesystem::path &path) throws { init(path); }
     // DMSFile(const std::filesystem::path &path, std::istream &stream) throws { init(path, stream); }
@@ -40,7 +40,7 @@ public:
 
     
     //
-    // Methods from AmigaFile
+    // Methods from AnyFile
     //
     
     FileType type() const override { return FileType::DMS; }

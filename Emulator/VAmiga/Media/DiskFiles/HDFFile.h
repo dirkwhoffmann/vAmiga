@@ -61,7 +61,7 @@ public:
 
     
     //
-    // Methods from AmigaFile
+    // Methods from AnyFile
     //
     
 public:

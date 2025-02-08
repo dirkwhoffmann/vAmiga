@@ -61,7 +61,7 @@ HDFFile::init(const std::filesystem::path &path)
     // Check size
     if (isOversized(util::getSizeOfFile(path))) throw CoreException(CoreError::HDR_TOO_LARGE);
     
-    AmigaFile::init(path);
+    AnyFile::init(path);
 }
 
 void
@@ -70,13 +70,13 @@ HDFFile::init(const u8 *buf, isize len)
     // Check size
     if (isOversized(len)) throw CoreException(CoreError::HDR_TOO_LARGE);
 
-    AmigaFile::init(buf, len);
+    AnyFile::init(buf, len);
 }
 
 void
 HDFFile::init(const HardDrive &drive)
 {
-    AmigaFile::readFromBuffer(drive.data);
+    AnyFile::readFromBuffer(drive.data);
     
     // Overwrite the predicted geometry with the precise one
     geometry = drive.getGeometry();

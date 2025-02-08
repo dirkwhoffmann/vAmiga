@@ -9,7 +9,7 @@
 
 #include "VAmigaConfig.h"
 #include "DMSFile.h"
-#include "AmigaFile.h"
+#include "AnyFile.h"
 
 extern "C" {
 unsigned short extractDMS(const unsigned char *in, size_t inSize,

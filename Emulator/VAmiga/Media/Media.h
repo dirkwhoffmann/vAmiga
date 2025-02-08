@@ -27,8 +27,8 @@
 
 /* All media files are organized in the class hierarchy displayed below.
  * MediaFile is a wrapper class which is referenced in the public API. Below
- * the public API, three abstract classes are involed: AmigaFile, DiskFile,
- * and FloppyFile. AmigaFile provides basic functionalities for reading and
+ * the public API, three abstract classes are involed: AnyFile, DiskFile,
+ * and FloppyFile. AnyFile provides basic functionalities for reading and
  * writing files, streams, and buffers. DiskFile provides an abstract interface
  * for accessing files that represent hard disks and floppy disks. FloppyFile
  * is the base class of all floppy disk file formats.
@@ -40,7 +40,7 @@
  *   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  *         |
  *  ------------
- * | AmigaFile  |     Internal classes
+ * | AnyFile  |     Internal classes
  *  ------------
  *       |
  *       |------------------------------------------------------------

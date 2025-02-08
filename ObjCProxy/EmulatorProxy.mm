@@ -2034,24 +2034,24 @@ NSString *EventSlotName(NSInteger slot)
 
 
 //
-// AmigaFile proxy
+// AnyFile proxy
 //
 
-@implementation AmigaFileProxy
+@implementation AnyFileProxy
 
-- (AmigaFile *)file
+- (AnyFile *)file
 {
-    return (AmigaFile *)obj;
+    return (AnyFile *)obj;
 }
 
-+ (instancetype)make:(AmigaFile *)file
++ (instancetype)make:(AnyFile *)file
 {
     return file ? [[self alloc] initWith:file] : nil;
 }
 
 + (FileType)typeOfUrl:(NSURL *)url
 {
-    return AmigaFile::type([url fileSystemRepresentation]);
+    return AnyFile::type([url fileSystemRepresentation]);
 }
 
 - (FileType)type
@@ -2094,7 +2094,7 @@ NSString *EventSlotName(NSInteger slot)
 
 - (void)dealloc
 {
-    delete (AmigaFile *)obj;
+    delete (AnyFile *)obj;
 }
 
 @end

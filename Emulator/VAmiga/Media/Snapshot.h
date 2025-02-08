@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "AmigaFile.h"
+#include "AnyFile.h"
 #include "Constants.h"
 
 namespace vamiga {
@@ -50,7 +50,7 @@ struct SnapshotHeader {
     Thumbnail screenshot;
 };
 
-class Snapshot : public AmigaFile {
+class Snapshot : public AnyFile {
     
 public:
     
@@ -73,7 +73,7 @@ public:
     
     
     //
-    // Methods from AmigaFile
+    // Methods from AnyFile
     //
     
     FileType type() const override { return FileType::SNAPSHOT; }

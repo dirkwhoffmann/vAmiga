@@ -23,7 +23,7 @@ using namespace vamiga;
 @class AudioPortProxy;
 @class AgnusProxy;
 @class AmigaProxy;
-@class AmigaFileProxy;
+@class AnyFileProxy;
 @class BlitterProxy;
 @class CIAProxy;
 @class ControlPortProxy;
@@ -952,10 +952,10 @@ NSString *EventSlotName(NSInteger slot);
 
 
 //
-// AmigaFile
+// AnyFile
 //
 
-@interface AmigaFileProxy : Proxy { }
+@interface AnyFileProxy : Proxy { }
 
 + (FileType) typeOfUrl:(NSURL *)url;
 
@@ -975,7 +975,7 @@ NSString *EventSlotName(NSInteger slot);
 // DiskFileProxy
 //
 
-@interface DiskFileProxy : AmigaFileProxy {
+@interface DiskFileProxy : AnyFileProxy {
 }
 
 @property (readonly) NSInteger numCyls;

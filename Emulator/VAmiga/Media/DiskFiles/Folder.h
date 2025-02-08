@@ -46,7 +46,7 @@ public:
 
     
     //
-    // Methods from AmigaFile
+    // Methods from AnyFile
     //
     
     bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }

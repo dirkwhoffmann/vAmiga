@@ -30,7 +30,7 @@ public:
 
 public:
 
-    using AmigaFile::init;
+    using AnyFile::init;
 
     STFile(const std::filesystem::path &path) throws { init(path); }
     // STFile(const std::filesystem::path &path, std::istream &stream) throws { init(path, stream); }
@@ -54,7 +54,7 @@ public:
 
 
     //
-    // Methods from AmigaFile
+    // Methods from AnyFile
     //
 
     bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }

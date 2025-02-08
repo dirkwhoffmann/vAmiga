@@ -10,11 +10,11 @@
 #pragma once
 
 #include "FSTypes.h"
-#include "AmigaFile.h"
+#include "AnyFile.h"
 
 namespace vamiga {
 
-class DiskFile : public AmigaFile {
+class DiskFile : public AnyFile {
 
     //
     // Querying disk properties

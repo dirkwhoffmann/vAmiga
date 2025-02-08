@@ -21,7 +21,7 @@ namespace vamiga {
 
 using util::Buffer;
 
-class AmigaFile : public CoreObject, public MediaFile {
+class AnyFile : public CoreObject, public MediaFile {
 
 public:
     
@@ -38,7 +38,7 @@ public:
     
 public:
 
-    virtual ~AmigaFile();
+    virtual ~AnyFile();
 
     // void init(std::istream &stream) throws;
     // void init(const std::filesystem::path &path, std::istream &stream) throws;

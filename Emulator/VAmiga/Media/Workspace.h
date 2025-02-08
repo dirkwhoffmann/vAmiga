@@ -9,11 +9,11 @@
 
 #pragma once
 
-#include "AmigaFile.h"
+#include "AnyFile.h"
 
 namespace vamiga {
 
-class Workspace : public AmigaFile {
+class Workspace : public AnyFile {
     
 public:
     
@@ -44,7 +44,7 @@ public:
     
     
     //
-    // Methods from AmigaFile
+    // Methods from AnyFile
     //
     
     FileType type() const override { return FileType::WORKSPACE; }

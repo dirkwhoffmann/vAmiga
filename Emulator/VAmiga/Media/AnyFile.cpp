@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "VAmigaConfig.h"
-#include "AmigaFile.h"
+#include "AnyFile.h"
 #include "Snapshot.h"
 #include "ADFFile.h"
 #include "ExtendedRomFile.h"
@@ -25,25 +25,25 @@
 namespace vamiga {
 
 void
-AmigaFile::init(isize len)
+AnyFile::init(isize len)
 {
     data.init(len);
 }
 
 void
-AmigaFile::init(const Buffer<u8> &buffer)
+AnyFile::init(const Buffer<u8> &buffer)
 {
     init(buffer.ptr, buffer.size);
 }
 
 void
-AmigaFile::init(const string &str)
+AnyFile::init(const string &str)
 {
     init((const u8 *)str.c_str(), (isize)str.length());
 }
 
 void
-AmigaFile::init(const std::filesystem::path &path)
+AnyFile::init(const std::filesystem::path &path)
 {
     std::ifstream stream(path, std::ios::binary);
     
@@ -60,39 +60,39 @@ AmigaFile::init(const std::filesystem::path &path)
 }
 
 void
-AmigaFile::init(const u8 *buf, isize len)
+AnyFile::init(const u8 *buf, isize len)
 {    
     assert(buf);
     if (!isCompatibleBuffer(buf, len)) throw CoreException(CoreError::FILE_TYPE_MISMATCH);
     readFromBuffer(buf, len);
 }
 
-AmigaFile::~AmigaFile()
+AnyFile::~AnyFile()
 {
 
 }
 
 void
-AmigaFile::flash(u8 *buf, isize offset, isize len) const
+AnyFile::flash(u8 *buf, isize offset, isize len) const
 {
     assert(buf);
     std::memcpy(buf + offset, data.ptr, len);
 }
 
 void
-AmigaFile::flash(u8 *buf, isize offset) const
+AnyFile::flash(u8 *buf, isize offset) const
 {
     flash (buf, offset, data.size);
 }
 
 bool
-AmigaFile::isCompatibleBuffer(const Buffer<u8> &buffer)
+AnyFile::isCompatibleBuffer(const Buffer<u8> &buffer)
 {
     return isCompatibleBuffer(buffer.ptr, buffer.size);
 }
 
 isize
-AmigaFile::readFromBuffer(const u8 *buf, isize len)
+AnyFile::readFromBuffer(const u8 *buf, isize len)
 {
     assert(buf);
 
@@ -107,13 +107,13 @@ AmigaFile::readFromBuffer(const u8 *buf, isize len)
 }
 
 isize
-AmigaFile::readFromBuffer(const Buffer<u8> &buffer)
+AnyFile::readFromBuffer(const Buffer<u8> &buffer)
 {
     return readFromBuffer(buffer.ptr, buffer.size);
 }
 
 isize
-AmigaFile::writeToStream(std::ostream &stream, isize offset, isize len) const
+AnyFile::writeToStream(std::ostream &stream, isize offset, isize len) const
 {
     assert(offset >= 0 && offset < data.size);
     assert(len >= 0 && offset + len <= data.size);
@@ -124,7 +124,7 @@ AmigaFile::writeToStream(std::ostream &stream, isize offset, isize len) const
 }
 
 isize
-AmigaFile::writeToFile(const std::filesystem::path &path, isize offset, isize len) const
+AnyFile::writeToFile(const std::filesystem::path &path, isize offset, isize len) const
 {
     if (util::isDirectory(path)) {
         throw CoreException(CoreError::FILE_IS_DIRECTORY);
@@ -143,7 +143,7 @@ AmigaFile::writeToFile(const std::filesystem::path &path, isize offset, isize le
 }
 
 isize
-AmigaFile::writeToBuffer(u8 *buf, isize offset, isize len) const
+AnyFile::writeToBuffer(u8 *buf, isize offset, isize len) const
 {
     assert(buf);
     assert(offset >= 0 && offset < data.size);
@@ -155,38 +155,38 @@ AmigaFile::writeToBuffer(u8 *buf, isize offset, isize len) const
 }
 
 isize
-AmigaFile::writeToBuffer(Buffer<u8> &buffer, isize offset, isize len) const
+AnyFile::writeToBuffer(Buffer<u8> &buffer, isize offset, isize len) const
 {
     buffer.alloc(len);
     return writeToBuffer(buffer.ptr, offset, len);
 }
 
 isize
-AmigaFile::writeToStream(std::ostream &stream) const
+AnyFile::writeToStream(std::ostream &stream) const
 {
     return writeToStream(stream, 0, data.size);
 }
 
 isize
-AmigaFile::writeToFile(const std::filesystem::path &path) const
+AnyFile::writeToFile(const std::filesystem::path &path) const
 {
     return writeToFile(path, 0, data.size);
 }
 
 isize 
-AmigaFile::writePartitionToFile(const std::filesystem::path &path, isize partition) const
+AnyFile::writePartitionToFile(const std::filesystem::path &path, isize partition) const
 {
     throw CoreException(CoreError::FILE_TYPE_UNSUPPORTED);
 }
 
 isize
-AmigaFile::writeToBuffer(u8 *buf) const
+AnyFile::writeToBuffer(u8 *buf) const
 {
     return writeToBuffer(buf, 0, data.size);
 }
 
 isize
-AmigaFile::writeToBuffer(Buffer<u8> &buffer) const
+AnyFile::writeToBuffer(Buffer<u8> &buffer) const
 {
     return writeToBuffer(buffer, 0, data.size);
 }

@@ -10,11 +10,11 @@
 #pragma once
 
 #include "RomFileTypes.h"
-#include "AmigaFile.h"
+#include "AnyFile.h"
 
 namespace vamiga {
 
-class RomFile : public AmigaFile {
+class RomFile : public AnyFile {
 
     // Accepted header signatures
     static const u8 bootRomHeaders[1][8];
@@ -42,7 +42,7 @@ public:
 
 
     //
-    // Methods from AmigaFile
+    // Methods from AnyFile
     //
 
     FileType type() const override { return FileType::ROM; }

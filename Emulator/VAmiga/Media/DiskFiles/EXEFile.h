@@ -30,7 +30,7 @@ public:
     
 public:
     
-    using AmigaFile::init;
+    using AnyFile::init;
     
     EXEFile(const std::filesystem::path &path) throws { init(path); }
     EXEFile(const u8 *buf, isize len) throws { init(buf, len); }
@@ -39,7 +39,7 @@ public:
 
     
     //
-    // Methods from AmigaFile
+    // Methods from AnyFile
     //
     
     FileType type() const override { return FileType::EXE; }

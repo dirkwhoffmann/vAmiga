@@ -200,7 +200,7 @@
 		508FE05621EA22CC0043D0E9 /* PreferencesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04321EA22CC0043D0E9 /* PreferencesController.swift */; };
 		508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04621EA22CC0043D0E9 /* VirtualKeyboardController.swift */; };
 		508FE05A21EA22CC0043D0E9 /* DialogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04721EA22CC0043D0E9 /* DialogController.swift */; };
-		508FE06521EA318D0043D0E9 /* AmigaFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* AmigaFile.cpp */; };
+		508FE06521EA318D0043D0E9 /* AnyFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* AnyFile.cpp */; };
 		509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509047B5230575E6009CEC1C /* SlowBlitter.cpp */; };
 		50912FFD2525B7AD0049805B /* Recorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50912FFB2525B7AD0049805B /* Recorder.cpp */; };
 		50927DAB24865F11008DF3B8 /* MoiraExceptions_cpp.h in Sources */ = {isa = PBXBuildFile; fileRef = 50927DAA24865F11008DF3B8 /* MoiraExceptions_cpp.h */; };
@@ -427,7 +427,7 @@
 		50FC04C027DA19CE00C3E566 /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DD1321F3625200BC14BA /* Keyboard.cpp */; };
 		50FC04C127DA19DA00C3E566 /* Snapshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50384C8421FC6B66006E7748 /* Snapshot.cpp */; };
 		50FC04C227DA19DA00C3E566 /* Script.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FCCA7A262AAAEA00398342 /* Script.cpp */; };
-		50FC04C327DA19DA00C3E566 /* AmigaFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* AmigaFile.cpp */; };
+		50FC04C327DA19DA00C3E566 /* AnyFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* AnyFile.cpp */; };
 		50FC04C427DA19DE00C3E566 /* ExtendedRomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ECF98422B153FB007B3DE7 /* ExtendedRomFile.cpp */; };
 		50FC04C527DA19DE00C3E566 /* RomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* RomFile.cpp */; };
 		50FC04C627DA19E900C3E566 /* Folder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C66772551577D0028D497 /* Folder.cpp */; };
@@ -814,8 +814,8 @@
 		508FE04321EA22CC0043D0E9 /* PreferencesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesController.swift; sourceTree = "<group>"; };
 		508FE04621EA22CC0043D0E9 /* VirtualKeyboardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualKeyboardController.swift; sourceTree = "<group>"; };
 		508FE04721EA22CC0043D0E9 /* DialogController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogController.swift; sourceTree = "<group>"; };
-		508FE06321EA318D0043D0E9 /* AmigaFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaFile.cpp; sourceTree = "<group>"; };
-		508FE06421EA318D0043D0E9 /* AmigaFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmigaFile.h; sourceTree = "<group>"; };
+		508FE06321EA318D0043D0E9 /* AnyFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AnyFile.cpp; sourceTree = "<group>"; };
+		508FE06421EA318D0043D0E9 /* AnyFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnyFile.h; sourceTree = "<group>"; };
 		509047B5230575E6009CEC1C /* SlowBlitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SlowBlitter.cpp; sourceTree = "<group>"; };
 		50912FFB2525B7AD0049805B /* Recorder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Recorder.cpp; sourceTree = "<group>"; };
 		50912FFC2525B7AD0049805B /* Recorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Recorder.h; sourceTree = "<group>"; };
@@ -1681,8 +1681,8 @@
 				50985ABD2C418D370079CFC5 /* MediaFileTypes.h */,
 				50985ABA2C418D190079CFC5 /* MediaFile.h */,
 				50985AB92C418D190079CFC5 /* MediaFile.cpp */,
-				508FE06421EA318D0043D0E9 /* AmigaFile.h */,
-				508FE06321EA318D0043D0E9 /* AmigaFile.cpp */,
+				508FE06421EA318D0043D0E9 /* AnyFile.h */,
+				508FE06321EA318D0043D0E9 /* AnyFile.cpp */,
 				5068EA312D4B5BED00B44FB5 /* Workspace.h */,
 				5068EA322D4B5BF600B44FB5 /* Workspace.cpp */,
 				50384C8521FC6B66006E7748 /* Snapshot.h */,
@@ -2614,7 +2614,7 @@
 				50F54B2A24B5D31D0078FDC9 /* u_init.c in Sources */,
 				507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */,
 				5062DB1224370FE400ACEEE2 /* MyControllerSnapshots.swift in Sources */,
-				508FE06521EA318D0043D0E9 /* AmigaFile.cpp in Sources */,
+				508FE06521EA318D0043D0E9 /* AnyFile.cpp in Sources */,
 				50A64B96257A63A600442964 /* BootBlockImage.cpp in Sources */,
 				50ECF98622B153FB007B3DE7 /* ExtendedRomFile.cpp in Sources */,
 				50627FD3286EBA7300F2A835 /* FrameBuffer.cpp in Sources */,
@@ -2832,7 +2832,7 @@
 				50FC04E527DA1A1400C3E566 /* u_init.c in Sources */,
 				50FC049427DA196500C3E566 /* PixelEngine.cpp in Sources */,
 				50FC04CC27DA19E900C3E566 /* DMSFile.cpp in Sources */,
-				50FC04C327DA19DA00C3E566 /* AmigaFile.cpp in Sources */,
+				50FC04C327DA19DA00C3E566 /* AnyFile.cpp in Sources */,
 				50FC048127DA190400C3E566 /* SubComponent.cpp in Sources */,
 				50FC04CA27DA19E900C3E566 /* DiskFile.cpp in Sources */,
 				50FC048D27DA195D00C3E566 /* Paula.cpp in Sources */,

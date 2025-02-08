@@ -9,11 +9,11 @@
 
 #pragma once
 
-#include "AmigaFile.h"
+#include "AnyFile.h"
 
 namespace vamiga {
 
-class ExtendedRomFile : public AmigaFile {
+class ExtendedRomFile : public AnyFile {
 
 private:
 
@@ -45,7 +45,7 @@ public:
 
 
     //
-    // Methods from AmigaFile
+    // Methods from AnyFile
     //
 
     FileType type() const override { return FileType::EXTENDED_ROM; }

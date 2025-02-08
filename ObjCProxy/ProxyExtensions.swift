@@ -455,7 +455,7 @@ extension HardDriveProxy {
     }
 }
 
-extension AmigaFileProxy {
+extension AnyFileProxy {
     
     @discardableResult
     func writeToFile(url: URL) throws -> Int {

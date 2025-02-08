@@ -42,7 +42,7 @@ private:
     
 public:
     
-    using AmigaFile::init;
+    using AnyFile::init;
     
     ADFFile() { }
     ADFFile(const std::filesystem::path &path) throws { init(path); }
@@ -70,7 +70,7 @@ public:
 
     
     //
-    // Methods from AmigaFile
+    // Methods from AnyFile
     //
     
 public:
