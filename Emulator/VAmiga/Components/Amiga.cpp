@@ -394,7 +394,7 @@ Amiga::saveWorkspace(const fs::path &path)
     ss << "\n";
 
     // Dump the current config
-    exportConfig(ss);
+    exportConfig(ss, false, { Class::Host} );
 
     // Export ROMs
     ss << "\n# ROMs\n\n";
@@ -451,42 +451,6 @@ Amiga::activateWorkspace()
     
     // Inform the GUI
     msgQueue.put(Msg::WORKSPACE_LOADED);
-}
-
-void
-Amiga::exportConfig(const fs::path &path, bool diff) const
-{
-    auto fs = std::ofstream(path, std::ofstream::binary);
-
-    if (!fs.is_open()) {
-        throw CoreException(CoreError::FILE_CANT_WRITE);
-    }
-
-    exportConfig(fs, diff);
-}
-
-void
-Amiga::exportConfig(std::ostream &stream, bool diff) const
-{
-    // Machine config
-    CoreComponent::exportConfig(stream, diff);
-    
-    // Write-protection status of floppy disks and hard drive
-    /*
-    std::stringstream ss;
-    for (isize i = 0; i < 4; i++) {
-        if (df[i]->hasProtectedDisk()) ss << "try df" << i << " protect\n";
-        if (df[i]->hasUnprotectedDisk()) ss << "try df" << i << " unprotect\n";
-    }
-    for (isize i = 0; i < 4; i++) {
-        if (hd[i]->hasProtectedDisk()) ss << "try hd" << i << " protect\n";
-        if (hd[i]->hasUnprotectedDisk()) ss << "try hd" << i << " unprotect\n";
-    }
-    if (!ss.str().empty()) {
-        stream << "\n# Write protection\n\n";
-        stream << ss.str();
-    }
-    */
 }
 
 void

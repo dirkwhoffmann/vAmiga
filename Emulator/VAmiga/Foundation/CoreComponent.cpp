@@ -368,11 +368,24 @@ CoreComponent::diff(CoreComponent &other)
 }
 
 void
-CoreComponent::exportConfig(std::ostream& ss, bool diff) const
+CoreComponent::exportConfig(const fs::path &path, bool diff, std::vector<Class> exclude) const
+{
+    auto fs = std::ofstream(path, std::ofstream::binary);
+
+    if (!fs.is_open()) {
+        throw CoreException(CoreError::FILE_CANT_WRITE);
+    }
+
+    exportConfig(fs, diff, exclude);
+}
+
+void
+CoreComponent::exportConfig(std::ostream& ss, bool diff, std::vector<Class> exclude) const
 {
     bool first = true;
-
-    if (string(shellName()) != "") {
+    bool skip = std::find(exclude.begin(), exclude.end(), getDescriptions()[0].type) != exclude.end();
+    
+    if (!skip && string(shellName()) != "") {
         
         auto cmd = "try " + string(shellName());
         
@@ -404,8 +417,14 @@ CoreComponent::exportConfig(std::ostream& ss, bool diff) const
     
     for (auto &sub: subComponents) {
 
-        sub->exportConfig(ss, diff);
+        sub->exportConfig(ss, diff, exclude);
     }
+}
+
+void
+CoreComponent::exportDiff(std::ostream& ss, std::vector<Class> exclude) const
+{
+    exportConfig(ss, true);
 }
 
 }

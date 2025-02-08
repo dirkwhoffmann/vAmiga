@@ -400,11 +400,13 @@ CommandConsole::initCommands(RetroShellCmd &root)
     // Components (Hard-drive controller)
     //
     
+    /*
     cmd = registerComponent(hd0con);
     cmd = registerComponent(hd1con);
     cmd = registerComponent(hd2con);
     cmd = registerComponent(hd3con);
-
+    */
+    
     
     //
     // Ports
@@ -791,6 +793,11 @@ CommandConsole::initCommands(RetroShellCmd &root)
             .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
                 
                 auto path = argv.front();
+
+                // Make sure the hard-drive controller board is plugged in
+                emulator.set(Opt::HDC_CONNECT, true, values);
+
+                // Connect the drive
                 amiga.hd[values[0]]->init(path);
                 
             }, .values = {i}

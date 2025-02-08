@@ -213,11 +213,12 @@ public:
     // Compares two components and reports differences (for debugging)
     void diff(CoreComponent &other);
 
-    // Exports the current configuration to a script file
-    void exportConfig(std::ostream& ss, bool diff = false) const;
+    // Exports the current configuration in form of a script
+    void exportConfig(const fs::path &path, bool diff = false, std::vector<Class> exclude = {}) const;
+    void exportConfig(std::ostream& ss, bool diff = false, std::vector<Class> exclude = {}) const;
 
     // Exports only those options that differ from the default config
-    void exportDiff(std::ostream& ss) const { exportConfig(ss, true); }
+    void exportDiff(std::ostream& ss, std::vector<Class> exclude = {}) const;
 };
 
 }
