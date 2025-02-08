@@ -46,7 +46,7 @@ RetroShellCmd::add(const RetroShellCmdDescriptor &descriptor)
     cmd.help = descriptor.help;
     cmd.callback = descriptor.func;
     cmd.param = descriptor.values;
-    cmd.hidden = descriptor.hidden || descriptor.help.empty();
+    cmd.hidden = descriptor.hidden; //  || descriptor.help.empty();
 
     if (!cmd.hidden) currentGroup = "";
 
@@ -80,39 +80,6 @@ RetroShellCmd::clone(const std::vector<string> &tokens,
         .values = values
     });
 }
-
-
-/*
-void
-RetroShellCmd::clone(const string &alias,
-           const std::vector<string> &tokens,
-           long param)
-{
-    clone(alias, tokens, "", param);
-}
-
-void
-RetroShellCmd::clone(const string &alias, const std::vector<string> &tokens, const string &help, long param)
-{
-    assert(!tokens.empty());
-
-    // Find the command to clone
-    RetroShellCmd *cmd = seek(std::vector<string> { tokens.begin(), tokens.end() });
-    assert(cmd != nullptr);
-
-    // Assemble the new token list
-    auto newTokens = std::vector<string> { tokens.begin(), tokens.end() - 1 };
-    newTokens.push_back(alias);
-
-    // Create the instruction
-    add(newTokens, 
-        cmd->requiredArgs,
-        cmd->optionalArgs,
-        help,
-        cmd->callback,
-        param);
-}
-*/
 
 const RetroShellCmd *
 RetroShellCmd::seek(const string& token) const

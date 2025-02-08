@@ -1128,7 +1128,7 @@ DebugConsole::initCommands(RetroShellCmd &root)
         if (i == 0) {
             root.add({ .tokens = { "?", df }, .help = { "Floppy drive n", "df[n]" } });
         } else {
-            root.add({ .tokens = { "?", df }, .help = { "" } });
+            root.add({ .tokens = { "?", df } });
         }
         
         root.add({

@@ -634,7 +634,7 @@ Console::help(const RetroShellCmd& current)
     for (auto &it : current.subCommands) {
 
         // Only proceed if the command is visible
-        if (it.hidden) continue;
+        if (it.hidden || it.help.empty() || it.help[0] == "") continue;
 
         // Print the group (if present)
         if (!it.groupName.empty()) {
@@ -893,13 +893,13 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
     // Get the shell name for this component
     auto cmd = c.shellName();
     assert(cmd != nullptr);
-
+    
     // Register a command with the proper name
-    root.add({
-        
-        .tokens = { cmd },
-        .help   = { c.description() }
-    });
+    if (c.shellHelp().empty()) {
+        root.add( { .tokens = { cmd }, .help = { c.description() } } );
+    } else {
+        root.add( {.tokens = { cmd }, .help = c.shellHelp() } );
+    }
 
     // CHeck if this component has options
     if (auto &options = c.getOptions(); !options.empty()) {

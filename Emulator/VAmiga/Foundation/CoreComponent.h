@@ -28,6 +28,7 @@ struct Description {
     const char *name;               // Short name
     const char *description;        // Textual descripiton
     const char *shell;              // RetroShell access
+    std::vector<string> help;       // RetroShell custom help strings
 };
 
 typedef std::vector<Description> Descriptions;
@@ -79,6 +80,7 @@ public:
     const char *objectName() const override;
     const char *description() const override;
     const char *shellName() const;
+    const std::vector<string> &shellHelp() const;
 
     // State properties (see Thread class for details)
     virtual bool isInitialized() const;
