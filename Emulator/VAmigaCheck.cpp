@@ -9,8 +9,8 @@
 /// @file
 
 #include "VAmigaConfig.h"
-#include "Headless.h"
-#include "HeadlessScripts.h"
+#include "VAmigaCheck.h"
+#include "VAmigaCheckScripts.h"
 #include "Amiga.h"
 #include "Script.h"
 #include "DiagRom.h"
@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
         
     } catch (vamiga::SyntaxError &e) {
         
-        std::cout << "Usage: vAmigaCore [-fsdvm] [<script>]" << std::endl;
+        std::cout << "Usage: vAmigaCheck [-fsdvm] [<script>]" << std::endl;
         std::cout << std::endl;
         std::cout << "       -f or --footprint   Reports the size of certain objects" << std::endl;
         std::cout << "       -s or --smoke       Runs some smoke tests to test the build" << std::endl;

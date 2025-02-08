@@ -20,14 +20,14 @@ endif()
 # Add the emulator library
 add_library(vAmigaCore VAmiga.cpp VAmigaConfig.cpp)
 
-# Add the console app (vAmiga Headless)
-add_executable(vAmigaConsole Headless.cpp VAmigaConfig.cpp)
-target_link_libraries(vAmigaConsole vAmigaCore)
+# Add the self-test app (vAmiga vAmigaCheck)
+add_executable(vAmigaCheck VAmigaCheck.cpp VAmigaConfig.cpp)
+target_link_libraries(vAmigaCheck vAmigaCore)
 
 # Specify compile options
 target_compile_definitions(vAmigaCore PUBLIC _USE_MATH_DEFINES)
 if(WIN32)
-  target_link_libraries(vAmigaConsole ws2_32)
+  target_link_libraries(vAmigaCheck ws2_32)
 endif()
 if(MSVC)
   target_compile_options(vAmigaCore PUBLIC /W4 /bigobj /Zc:preprocessor) # /WX disabled for now
@@ -58,6 +58,6 @@ find_package(Threads REQUIRED)
 target_link_libraries(vAmigaCore xdms Threads::Threads)
 
 # Add tests
-add_test(NAME SelfTest1 COMMAND vAmigaConsole --verbose --footprint)
-add_test(NAME SelfTest2 COMMAND vAmigaConsole --verbose --smoke)
-add_test(NAME SelfTest3 COMMAND vAmigaConsole --verbose --diagnose)
+add_test(NAME SelfTest1 COMMAND vAmigaCheck --verbose --footprint)
+add_test(NAME SelfTest2 COMMAND vAmigaCheck --verbose --smoke)
+add_test(NAME SelfTest3 COMMAND vAmigaCheck --verbose --diagnose)
