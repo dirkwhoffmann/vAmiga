@@ -22,26 +22,26 @@ class HdController : public ZorroBoard, public Inspectable<HdcInfo, HdcStats> {
         {
             .type           = Class::HdController,
             .name           = "HdController0",
-            .description    = "Hard Drive Controller 0",
-            .shell          = ""
+            .description    = "Hard Drive 0 Controller",
+            .shell          = "hd0con"
         },
         {
             .type           = Class::HdController,
             .name           = "HdController1",
-            .description    = "Hard Drive Controller 1",
-            .shell          = ""
+            .description    = "Hard Drive 1 Controller",
+            .shell          = "hd1con"
         },
         {
             .type           = Class::HdController,
             .name           = "HdController2",
-            .description    = "Hard Drive Controller 2",
-            .shell          = ""
+            .description    = "Hard Drive 2 Controller",
+            .shell          = "hd2con"
         },
         {
             .type           = Class::HdController,
             .name           = "HdController3",
-            .description    = "Hard Drive Controller 3",
-            .shell          = ""
+            .description    = "Hard Drive 3 Controller",
+            .shell          = "hd3con"
         }
     };
 

@@ -156,11 +156,13 @@ HardDrive::init(const HDFFile &hdf)
     if (auto value = hdf.getControllerRevision(); value) controllerRevision = *value;
     
     // Copy geometry
+    assert(hdf.geometry == hdf.getGeometryDescriptor());
     geometry = hdf.getGeometryDescriptor(); // TODO: Replace by " = hdf.geometry" (?!)
     
     // Copy partition table
     ptable = hdf.getPartitionDescriptors();  // TODO: Replace by " = hdf.ptable" (?!)
-
+    assert(ptable.size() == hdf.getPartitionDescriptors().size());
+    
     // Copy over all needed file system drivers
     for (const auto &driver : hdf.drivers) {
 

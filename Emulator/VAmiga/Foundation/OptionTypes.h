@@ -451,7 +451,7 @@ struct OptEnum : Reflection<OptEnum, Opt>
             case Opt::DC_LOCK_DSKSYNC:           return "Ignore writes to DSKSYNC";
             case Opt::DC_AUTO_DSKSYNC:           return "Always find a sync mark";
                 
-            case Opt::DRIVE_CONNECT:             return "Connected";
+            case Opt::DRIVE_CONNECT:             return "Connection status";
             case Opt::DRIVE_TYPE:                return "Drive model";
             case Opt::DRIVE_MECHANICS:           return "Emulate drive mechanics";
             case Opt::DRIVE_RPM:                 return "Disk rotation speed";
@@ -462,7 +462,7 @@ struct OptEnum : Reflection<OptEnum, Opt>
             case Opt::DRIVE_INSERT_VOLUME:       return "Disk insertion volume";
             case Opt::DRIVE_EJECT_VOLUME:        return "Disk ejection volume";
                 
-            case Opt::HDC_CONNECT:               return "Connected";
+            case Opt::HDC_CONNECT:               return "Connection status";
                 
             case Opt::HDR_TYPE:                  return "Drive model";
             case Opt::HDR_PAN:                   return "Pan";

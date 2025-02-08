@@ -397,22 +397,14 @@ CommandConsole::initCommands(RetroShellCmd &root)
     
     
     //
-    // Components (Serial port)
+    // Components (Hard-drive controller)
     //
     
-    cmd = registerComponent(serialPort);
-    
-    root.add({
-        
-        .tokens = { cmd, "send" },
-        .args   = { "<text>" },
-        .help   = { "Sends a text to the serial port" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
-            
-            amiga.serialPort << argv[0];
-        }
-    });
-    
+    cmd = registerComponent(hd0con);
+    cmd = registerComponent(hd1con);
+    cmd = registerComponent(hd2con);
+    cmd = registerComponent(hd3con);
+
     
     //
     // Ports
@@ -434,6 +426,24 @@ CommandConsole::initCommands(RetroShellCmd &root)
     //
     
     cmd = registerComponent(videoPort);
+    
+    
+    //
+    // Ports (Serial port)
+    //
+    
+    cmd = registerComponent(serialPort);
+    
+    root.add({
+        
+        .tokens = { cmd, "send" },
+        .args   = { "<text>" },
+        .help   = { "Sends a text to the serial port" },
+        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+            
+            amiga.serialPort << argv[0];
+        }
+    });
     
     
     //
