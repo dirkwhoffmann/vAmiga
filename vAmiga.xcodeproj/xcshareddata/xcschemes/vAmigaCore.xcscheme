@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "50FC046C27DA0FA500C3E566"
-               BuildableName = "vAmigaCore"
-               BlueprintName = "vAmigaCore"
+               BuildableName = "vAmigaCheck"
+               BlueprintName = "vAmigaCheck"
                ReferencedContainer = "container:vAmiga.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,8 +45,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "50FC046C27DA0FA500C3E566"
-            BuildableName = "vAmigaCore"
-            BlueprintName = "vAmigaCore"
+            BuildableName = "vAmigaCheck"
+            BlueprintName = "vAmigaCheck"
             ReferencedContainer = "container:vAmiga.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -100,8 +100,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "50FC046C27DA0FA500C3E566"
-            BuildableName = "vAmigaCore"
-            BlueprintName = "vAmigaCore"
+            BuildableName = "vAmigaCheck"
+            BlueprintName = "vAmigaCheck"
             ReferencedContainer = "container:vAmiga.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

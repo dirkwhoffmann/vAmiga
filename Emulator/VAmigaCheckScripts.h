@@ -482,6 +482,11 @@ static const char *smokeTestScript[] = {
     "? df3",
     "? df3 disk",
 
+    "? hd0",
+    "? hd1",
+    "? hd2",
+    "? hd3",
+    
     "? thread",
     "? server",
 

@@ -1171,17 +1171,7 @@ DebugConsole::initCommands(RetroShellCmd &root)
                 dump(*amiga.hd[values[0]], Category::State );
             }, .values = {i}
         });
-        
-        root.add({
-            
-            .tokens = { "?", hd, "drive" },
-            .help   = { "Display hard drive parameters" },
-            .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
                 
-                dump(*amiga.df[values[0]], Category::Drive);
-            }, .values = {i}
-        });
-        
         root.add({
             
             .tokens = { "?", hd, "volumes" },

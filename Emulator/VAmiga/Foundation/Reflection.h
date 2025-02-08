@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Types.h"
+#include "VAmiga/Foundation/Types.h"
 #include <functional>
 #include <vector>
 #include <map>
