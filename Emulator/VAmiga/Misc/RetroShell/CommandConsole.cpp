@@ -415,40 +415,6 @@ CommandConsole::initCommands(RetroShellCmd &root)
     
     
     //
-    // Components (DMA Debugger)
-    //
-    
-    cmd = registerComponent(dmaDebugger);
-    
-    root.add({
-        
-        .tokens = { cmd, "open" },
-        .help   = { "Opens the DMA debugger" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
-            
-            emulator.set(Opt::DMA_DEBUG_ENABLE, true);
-        }
-    });
-    
-    root.add({
-        
-        .tokens = { cmd, "close" },
-        .help   = { "Closes the DMA debugger" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
-            
-            emulator.set(Opt::DMA_DEBUG_ENABLE, false);
-        }
-    });
-    
-    
-    //
-    // Components (Logic Analyzer)
-    //
-    
-    cmd = registerComponent(logicAnalyzer);
-    
-    
-    //
     // Ports
     //
     
@@ -868,7 +834,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
     
     
     //
-    // Miscellaneous (Diff)
+    // Miscellaneous (Config)
     //
     
     root.add({
@@ -900,6 +866,40 @@ CommandConsole::initCommands(RetroShellCmd &root)
             *this << ss;
         }
     });
+    
+    
+    //
+    // Miscellaneous (DMA Debugger)
+    //
+    
+    cmd = registerComponent(dmaDebugger);
+    
+    root.add({
+        
+        .tokens = { cmd, "open" },
+        .help   = { "Opens the DMA debugger" },
+        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+            
+            emulator.set(Opt::DMA_DEBUG_ENABLE, true);
+        }
+    });
+    
+    root.add({
+        
+        .tokens = { cmd, "close" },
+        .help   = { "Closes the DMA debugger" },
+        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+            
+            emulator.set(Opt::DMA_DEBUG_ENABLE, false);
+        }
+    });
+    
+    
+    //
+    // Miscellaneous (Logic Analyzer)
+    //
+    
+    cmd = registerComponent(logicAnalyzer);
     
     
     //
