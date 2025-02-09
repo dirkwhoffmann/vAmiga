@@ -46,7 +46,6 @@ HardDrive::operator= (const HardDrive& other) {
     CLONE(head)
     CLONE(state)
     CLONE(flags)
-    CLONE(bootable)
 
     if (RUA_ON_STEROIDS) {
 
@@ -297,7 +296,6 @@ HardDrive::connect()
         debug(WT_DEBUG, "Creating default disk...\n");
         init(MB(10));
         format(FSVolumeType::OFS, defaultName());
-        bootable = false;
     }
 }
 
@@ -385,12 +383,8 @@ HardDrive::_dump(Category category, std::ostream& os) const
         os << HardDriveStateEnum::key(state) << std::endl;
         os << tab("Flags");
         os << DiskFlagsEnum::mask(flags) << std::endl;
-        os << tab("Bootable");
-        if (bootable) {
-            os << bol(*bootable) << std::endl;
-        } else {
-            os << "Unknown" << std::endl;
-        }
+        os << tab("Boot block");
+        os << bol(hasBootBlock()) << std::endl;
         os << tab("Capacity");
         os << dec(cap1) << "." << dec(cap2) << " MB" << std::endl;
         geometry.dump(os);
@@ -487,6 +481,17 @@ void
 HardDrive::setProtectionFlag(bool value)
 {
     if (hasDisk()) setFlag(DiskFlags::PROTECTED, value);
+}
+
+bool
+HardDrive::hasBootBlock() const
+{
+    if (data.size > 512) {
+        for (isize i = 12; i < 512; i++) {
+            if (data[i]) return true;
+        }
+    }
+    return false;
 }
 
 string

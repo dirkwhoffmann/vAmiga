@@ -261,9 +261,9 @@ HdController::spypeek16(u32 addr) const
             return u16(drive.numDrivers());
             
         case EXPROM_SIZE + 4:
-
+            
             // Should auto boot be disabled?
-            if (df0.hasDisk() || drive.bootable == false) {
+            if (df0.hasDisk() || !drive.hasBootBlock()) {
 
                 debug(HDR_DEBUG, "Disabling auto boot\n");
                 return u16(true);

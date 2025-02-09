@@ -98,7 +98,7 @@ class HardDrive final : public Drive, public Inspectable<HardDriveInfo> {
     
     // Disk state flags
     long flags = 0;
-    optional <bool> bootable;
+    // optional <bool> bootable;
 
     
     //
@@ -223,8 +223,7 @@ private:
         << ptable
         << drivers
         << data
-        << flags
-        << bootable;
+        << flags;
 
     } SERIALIZERS(serialize, override);
 
@@ -264,6 +263,8 @@ public:
     void setModificationFlag(bool value) override;
     void setProtectionFlag(bool value) override;
 
+    bool hasBootBlock() const;
+    
     
     //
     // Methods from Configurable

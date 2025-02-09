@@ -1183,11 +1183,11 @@ BootBlockImage::BootBlockImage(BootBlockId bootBlockID)
     
     switch (bootBlockID) {
             
-        case BootBlockId::AMIGADOS_13: name = "AmigaDOS Standard Bootblock 1.3"; break;
-        case BootBlockId::AMIGADOS_20: name = "AmigaDOS Standard Bootblock 2.0"; break;
-        case BootBlockId::SCA:         name = "SCA Virus";                       break;
-        case BootBlockId::BYTE_BANDIT: name = "Byte Bandit 1 Virus";             break;
-        default:             name = "";                                break;
+        case BootBlockId::AMIGADOS_13:  name = "AmigaDOS Standard Bootblock 1.3"; break;
+        case BootBlockId::AMIGADOS_20:  name = "AmigaDOS Standard Bootblock 2.0"; break;
+        case BootBlockId::SCA:          name = "SCA Virus";                       break;
+        case BootBlockId::BYTE_BANDIT:  name = "Byte Bandit 1 Virus";             break;
+        default:                        name = "";                                break;
     }
     
     BootBlockImage bb = BootBlockImage(string(name));
