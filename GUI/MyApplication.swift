@@ -169,14 +169,17 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
         hdrMenuImage.isTemplate = true
     }
     
+    public func application(_ application: NSApplication, open urls: [URL]) {
+        
+        debug(.lifetime, "application(open urls: \(urls))")
+    }
+    
     public func applicationDidFinishLaunching(_ aNotification: Notification) {
-        
-        debug(.lifetime)
-        
-        token = ProcessInfo.processInfo.beginActivity(options: [ .userInitiated ],
-                                                      reason: "Running vAmiga")
-        
+                
+        token = ProcessInfo.processInfo.beginActivity(options: [ .userInitiated ], reason: "Running vAmiga")
         argv = Array(CommandLine.arguments.dropFirst())
+        
+        debug(.lifetime, "vAmiga launched with arguments \(argv)")
     }
     
     public func applicationWillTerminate(_ aNotification: Notification) {

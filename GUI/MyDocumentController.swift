@@ -15,20 +15,22 @@ class MyDocumentController: NSDocumentController {
     override func makeDocument(withContentsOf url: URL,
                                ofType typeName: String) throws -> NSDocument {
         
-        debug(.lifetime)
+        var doc : NSDocument!
+        
+        debug(.lifetime, "makeDocument(withContentsOf: \(url), ofType: \(typeName)")
 
-        // For media files, attach the file to a new untitled document
         if typeName.components(separatedBy: ".").last?.lowercased() != "vamiga" {
         
-            let doc = try super.makeUntitledDocument(ofType: typeName)
+            // For media files, attach the file to a new untitled document
+            doc = try super.makeUntitledDocument(ofType: typeName)
+
+        } else {
             
-            if let mydoc = doc as? MyDocument {
-                
-                return mydoc
-            }
+            // For workspaces, follow the standard procedure
+            doc = try super.makeDocument(withContentsOf: url, ofType: typeName)
         }
-        
-        // For workspaces, follow the standard procedure
-        return try super.makeDocument(withContentsOf: url, ofType: typeName)
+
+        (doc as? MyDocument)?.mediaURL = url
+        return doc
     }
 }

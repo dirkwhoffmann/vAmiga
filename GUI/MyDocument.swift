@@ -31,6 +31,9 @@ class MyDocument: NSDocument {
     var console: Console { return parent.renderer.console }
     var canvas: Canvas { return parent.renderer.canvas }
     
+    // URL of an attached media file
+    var mediaURL: URL?
+    
     // Gateway to the core emulator
     var emu: EmulatorProxy!
 
@@ -119,6 +122,7 @@ class MyDocument: NSDocument {
     
     override open func read(from url: URL, ofType typeName: String) throws {
              
+        Swift.print("read(from url: \(url.path))")
         debug(.media)
     }
     

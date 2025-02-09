@@ -63,7 +63,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "/tmp/line7.ini"
+            argument = "/tmp/test.retrosh"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument

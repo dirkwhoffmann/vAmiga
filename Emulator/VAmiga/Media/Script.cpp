@@ -20,6 +20,10 @@ bool
 Script::isCompatible(const std::filesystem::path &path)
 {
     auto suffix = util::uppercased(path.extension().string());
+
+    // For backwards compatibility with v3.x, we temporarily accept .ini, too.
+    // if (suffix == ".INI") return true;
+    
     return suffix == ".RETROSH";
 }
 

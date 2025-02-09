@@ -219,9 +219,9 @@ extension MyController {
         }
 
         // Add media file (if provided on startup)
-        if let fileUrl = document?.fileURL, let url = fileUrl {
-            
-            debug(.media, "Launch URL = \(url)")
+        if let url = mydocument.mediaURL {
+
+            debug(.media, "Media URL = \(url)")
             
             do { try mydocument.addMedia(url: url) } catch {
                 self.showAlert(.cantOpen(url: url), error: error, async: true)
