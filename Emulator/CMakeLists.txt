@@ -14,12 +14,16 @@ set(CMAKE_CXX_EXTENSIONS False)
 
 # Set the optimization level (if not specified on the command line)
 if(NOT CMAKE_BUILD_TYPE)
-set(CMAKE_BUILD_TYPE Release)
+  set(CMAKE_BUILD_TYPE Release)
 endif()
 
-# Find and link zlib
-find_package(ZLIB REQUIRED)
-message(STATUS "Found ZLIB: ${ZLIB_LIBRARIES}")
+# Find and optionally link zlib
+find_package(ZLIB QUIET)
+if(ZLIB_FOUND)
+  message(STATUS "Found ZLIB: ${ZLIB_LIBRARIES}")
+else()
+  message(STATUS "ZLIB not found. Compression support will be disabled.")
+endif()
 
 # Add the emulator library
 add_library(vAmigaCore VAmiga.cpp VAmigaConfig.cpp)
@@ -53,14 +57,20 @@ endif()
 # Add include paths
 target_include_directories(vAmigaCore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-# Add sub directories
+# Add subdirectories
 add_subdirectory(VAmiga)
 
 # Add libraries
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
-target_link_libraries(vAmigaCore xdms Threads::Threads ZLIB::ZLIB)
-target_link_libraries(vAmigaCheck)
+target_link_libraries(vAmigaCore xdms Threads::Threads)
+
+# Link zlib if available
+if(ZLIB_FOUND)
+  target_link_libraries(vAmigaCore ZLIB::ZLIB)
+  target_link_libraries(vAmigaCheck ZLIB::ZLIB)
+  target_compile_definitions(vAmigaCore PUBLIC USE_ZLIB=1)  # Optional define for conditional compilation
+endif()
 
 # Add tests
 add_test(NAME SelfTest1 COMMAND vAmigaCheck --verbose --footprint)
