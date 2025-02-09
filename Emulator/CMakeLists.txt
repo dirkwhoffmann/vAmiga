@@ -17,6 +17,10 @@ if(NOT CMAKE_BUILD_TYPE)
 set(CMAKE_BUILD_TYPE Release)
 endif()
 
+# Find and link zlib
+find_package(ZLIB REQUIRED)
+message(STATUS "Found ZLIB: ${ZLIB_LIBRARIES}")
+
 # Add the emulator library
 add_library(vAmigaCore VAmiga.cpp VAmigaConfig.cpp)
 
@@ -55,7 +59,8 @@ add_subdirectory(VAmiga)
 # Add libraries
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
-target_link_libraries(vAmigaCore xdms Threads::Threads)
+target_link_libraries(vAmigaCore xdms Threads::Threads ZLIB::ZLIB)
+target_link_libraries(vAmigaCheck)
 
 # Add tests
 add_test(NAME SelfTest1 COMMAND vAmigaCheck --verbose --footprint)
