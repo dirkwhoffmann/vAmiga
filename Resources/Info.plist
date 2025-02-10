@@ -250,7 +250,7 @@
 				<key>UTTypeIconBadgeName</key>
 				<string>ADFIcon</string>
 				<key>UTTypeIconText</key>
-				<string>ADF</string>
+				<string>ADZ</string>
 			</dict>
 			<key>UTTypeIdentifier</key>
 			<string>public.retro.adz</string>
@@ -353,7 +353,7 @@
 				<key>UTTypeIconBadgeName</key>
 				<string>HDFIcon</string>
 				<key>UTTypeIconText</key>
-				<string>HDF</string>
+				<string>HDZ</string>
 			</dict>
 			<key>UTTypeIdentifier</key>
 			<string>public.retro.hdz</string>

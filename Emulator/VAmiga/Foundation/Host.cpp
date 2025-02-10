@@ -122,7 +122,7 @@ Host::tmp() const
         base = "/tmp";
 
         // Open a file to see if we have write permissions
-        std::ofstream logfile(base / "virtualc64.log");
+        std::ofstream logfile(base / "vAmiga.log");
 
         // If /tmp is not accessible, use a different directory
         if (!logfile.is_open()) {
