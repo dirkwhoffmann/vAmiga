@@ -14,13 +14,13 @@ extension UTType {
     static let workspace = UTType("de.dirkwhoffmann.retro.vamiga")!
     static let snapshot = UTType("de.dirkwhoffmann.retro.vasnap")!
     static let retrosh = UTType("de.dirkwhoffmann.retro.retrosh")!
-    static let adf = UTType("de.dirkwhoffmann.retro.adf")!
-    static let adz = UTType("de.dirkwhoffmann.retro.adf")!
-    static let dms = UTType("de.dirkwhoffmann.retro.dms")!
-    static let exe = UTType("de.dirkwhoffmann.retro.exe")!
-    static let hdf = UTType("de.dirkwhoffmann.retro.hdf")!
-    static let hdz = UTType("de.dirkwhoffmann.retro.hdz")!
-    static let img = UTType("de.dirkwhoffmann.retro.img")!
+    static let adf = UTType("public.retro.adf")!
+    static let adz = UTType("public.retro.adz")!
+    static let dms = UTType("public.retro.dms")!
+    static let exe = UTType("public.retro.exe")!
+    static let hdf = UTType("public.retro.hdf")!
+    static let hdz = UTType("public.retro.hdz")!
+    static let img = UTType("public.retro.img")!
 }
 
 @MainActor
@@ -86,7 +86,7 @@ class MyDocument: NSDocument {
         debug(.media, "Reading file \(url.lastPathComponent)")
 
         // If the provided URL points to compressed file, decompress it first
-        let newUrl = url.unpacked(maxSize: 2048 * 1024)
+        let newUrl = url // url.unpacked(maxSize: 2048 * 1024)
 
         // Iterate through all allowed file types
         for type in allowedTypes {
@@ -94,7 +94,7 @@ class MyDocument: NSDocument {
             do {
                 switch type {
 
-                case .WORKSPACE, .SNAPSHOT, .SCRIPT, .ADF, .EADF, .IMG, .ST, .DMS, .EXE, .DIR, .HDF:
+                case .WORKSPACE, .SNAPSHOT, .SCRIPT, .ADF, .ADZ, .EADF, .IMG, .ST, .DMS, .EXE, .DIR, .HDF:
 
                     return try MediaFileProxy.make(with: newUrl, type: type)
 
@@ -248,7 +248,7 @@ class MyDocument: NSDocument {
             try attach(hd: drive, file: proxy, force: force)
             break
 
-        case .ADF, .DMS, .EXE, .EADF, .IMG, .ST:
+        case .ADF, .ADZ, .DMS, .EXE, .EADF, .IMG, .ST:
 
             try insert(df: drive, file: proxy, force: force)
 

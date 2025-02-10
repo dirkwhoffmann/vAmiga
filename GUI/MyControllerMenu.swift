@@ -556,13 +556,13 @@ extension MyController: NSMenuItemValidation {
         // Ask the user if an unsafed disk should be replaced
         if !proceedWithUnsavedFloppyDisk(drive: drive) { return }
         
-        myOpenPanel.configure(types: [.adf, .img, .dms, .exe, .adz, .zip, .gzip ], prompt: "Insert")
+        myOpenPanel.configure(types: [.adf, .adz, .img, .dms, .exe ], prompt: "Insert")
         myOpenPanel.open(for: window, { result in
             
             if result == .OK, let url = self.myOpenPanel.url {
 
                 do {
-                    let types: [FileType] = [ .ADF, .EADF, .DMS, .EXE, .DIR ]
+                    let types: [FileType] = [ .ADF, .EADF, .ADZ, .DMS, .EXE, .DIR ]
                     try self.mydocument.addMedia(url: url,
                                                  allowedTypes: types,
                                                  drive: sender.tag)

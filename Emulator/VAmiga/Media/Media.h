@@ -18,6 +18,7 @@
 #include "DiskFiles/HDFFile.h"
 #include "DiskFiles/FloppyFile.h"
 #include "DiskFiles/ADFFile.h"
+#include "DiskFiles/ADZFile.h"
 #include "DiskFiles/EADFFile.h"
 #include "DiskFiles/IMGFile.h"
 #include "DiskFiles/DMSFile.h"

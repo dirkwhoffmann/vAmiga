@@ -15,7 +15,6 @@
 #include "Host.h"
 #include "Thread.h"
 #include "CmdQueue.h"
-#include "zlib.h"
 
 namespace vamiga {
 

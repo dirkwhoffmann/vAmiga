@@ -83,8 +83,9 @@ class RomDropView: DropView {
     
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
 
-        guard let url = sender.url?.unpacked else { return false }
-        
+        // guard let url = sender.url?.unpacked else { return false }
+        guard let url = sender.url else { return false }
+
         do {
             
             let rom = try MediaFileProxy.make(with: url)
@@ -130,8 +131,9 @@ class ExtRomDropView: DropView {
     
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
         
-        guard let url = sender.url?.unpacked else { return false }
-        
+        // guard let url = sender.url?.unpacked else { return false }
+        guard let url = sender.url else { return false }
+
         do {
             
             let ext = try MediaFileProxy.make(with: url)

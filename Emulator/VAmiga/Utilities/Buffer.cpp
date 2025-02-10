@@ -11,6 +11,7 @@
 #include "Buffer.h"
 #include "IOUtils.h"
 #include "MemUtils.h"
+#include <zlib.h>
 #include <fstream>
 
 namespace vamiga::util {
@@ -321,6 +322,43 @@ Allocator<T>::uncompress(isize n, isize offset, isize expectedSize)
     init(vec);
 }
 
+template <class T> void
+Allocator<T>::ungzip()
+{
+    // constexpr size_t CHUNK_SIZE = 8192; // 8 KB buffer
+    
+    std::vector<uint8_t> decompressed;
+    decompressed.reserve(size * 2); // Initial size estimate
+    
+    z_stream strm{};
+    strm.next_in = (Bytef *)ptr;
+    strm.avail_in = (uInt)size;
+    
+    if (inflateInit2(&strm, 16 + MAX_WBITS) != Z_OK) { // 16+MAX_WBITS enables Gzip decoding
+        throw std::runtime_error("Failed to initialize zlib for Gzip decompression.");
+    }
+    
+    std::vector<uint8_t> buffer(8192);
+    int ret;
+    do {
+        strm.next_out = buffer.data();
+        strm.avail_out = static_cast<uInt>(buffer.size());
+        
+        ret = inflate(&strm, Z_NO_FLUSH);
+        if (ret == Z_STREAM_ERROR) {
+            inflateEnd(&strm);
+            throw std::runtime_error("Zlib stream error during decompression.");
+        }
+        
+        size_t bytesDecompressed = buffer.size() - strm.avail_out;
+        decompressed.insert(decompressed.end(), buffer.begin(), buffer.begin() + bytesDecompressed);
+    } while (ret != Z_STREAM_END);
+    
+    inflateEnd(&strm);
+
+    init(decompressed);
+}
+
 
 //
 // Template instantiations
@@ -351,4 +389,5 @@ INSTANTIATE_ALLOCATOR(isize)
 INSTANTIATE_ALLOCATOR(float)
 INSTANTIATE_ALLOCATOR(bool)
 
+template void Allocator<u8>::ungzip();
 }

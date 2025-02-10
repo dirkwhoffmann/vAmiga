@@ -8,22 +8,8 @@
 // -----------------------------------------------------------------------------
 
 #include "VAmigaConfig.h"
-#include "MediaFile.h"
 #include "VAmiga.h"
-#include "ADFFile.h"
-#include "DMSFile.h"
-#include "EADFFile.h"
-#include "EXEFile.h"
-#include "ExtendedRomFile.h"
-#include "FloppyFile.h"
-#include "Folder.h"
-#include "HDFFile.h"
-#include "IMGFile.h"
-#include "Script.h"
-#include "Snapshot.h"
-#include "RomFile.h"
-#include "STFile.h"
-#include "Workspace.h"
+#include "Media.h"
 
 namespace vamiga {
 
@@ -34,6 +20,7 @@ MediaFile::type(const fs::path &path)
     if (Snapshot::isCompatible(path))  return FileType::SNAPSHOT;
     if (Script::isCompatible(path))    return FileType::SCRIPT;
     if (ADFFile::isCompatible(path))   return FileType::ADF;
+    if (ADZFile::isCompatible(path))   return FileType::ADZ;
     if (EADFFile::isCompatible(path))  return FileType::EADF;
     if (HDFFile::isCompatible(path))   return FileType::HDF;
     if (IMGFile::isCompatible(path))   return FileType::IMG;
@@ -61,6 +48,7 @@ MediaFile::make(const fs::path &path, FileType type)
         case FileType::SNAPSHOT:     return new Snapshot(path);
         case FileType::SCRIPT:       return new Script(path);
         case FileType::ADF:          return new ADFFile(path);
+        case FileType::ADZ:          return new ADZFile(path);
         case FileType::EADF:         return new EADFFile(path);
         case FileType::HDF:          return new HDFFile(path);
         case FileType::IMG:          return new IMGFile(path);
@@ -83,6 +71,7 @@ MediaFile::make(const u8 *buf, isize len, FileType type)
         case FileType::SNAPSHOT:     return new Snapshot(buf, len);
         case FileType::SCRIPT:       return new Script(buf, len);
         case FileType::ADF:          return new ADFFile(buf, len);
+        case FileType::ADZ:          return new ADZFile(buf, len);
         case FileType::EADF:         return new EADFFile(buf, len);
         case FileType::HDF:          return new HDFFile(buf, len);
         case FileType::IMG:          return new IMGFile(buf, len);

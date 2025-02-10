@@ -8,41 +8,48 @@
 // -----------------------------------------------------------------------------
 
 #include "VAmigaConfig.h"
-#include "DMSFile.h"
+#include "ADZFile.h"
 // #include "AnyFile.h"
 
+/*
 extern "C" {
 unsigned short extractDMS(const unsigned char *in, size_t inSize,
                           unsigned char **out, size_t *outSize, int verbose);
 }
+*/
 
 namespace vamiga {
 
 bool
-DMSFile::isCompatible(const std::filesystem::path &path)
+ADZFile::isCompatible(const std::filesystem::path &path)
 {
     auto suffix = util::uppercased(path.extension().string());
-    return suffix == ".DMS";
+    return suffix == ".ADZ" || suffix == ".ADF.GZ";
 }
 
 bool
-DMSFile::isCompatible(const u8 *buf, isize len)
+ADZFile::isCompatible(const u8 *buf, isize len)
 {
-    return util::matchingBufferHeader(buf, "DMS!");
+    return true;
 }
 
 bool
-DMSFile::isCompatible(const Buffer<u8> &buf)
+ADZFile::isCompatible(const Buffer<u8> &buf)
 {
     return isCompatible(buf.ptr, buf.size);
 }
 
 void
-DMSFile::finalizeRead()
+ADZFile::finalizeRead()
 {
-    u8* adfData = nullptr;
-    size_t adfSize = 0;
+    printf("Old size: %ld\n", data.size);
     
+    data.ungzip();
+    
+    printf("New size: %ld\n", data.size);
+    
+    adf.init(data.ptr, data.size);
+    /*
     if (extractDMS(data.ptr, (size_t)data.size, &adfData, &adfSize, DMS_DEBUG) == 0) {
 
         if (!FORCE_DMS_CANT_CREATE) {
@@ -52,6 +59,7 @@ DMSFile::finalizeRead()
     
     if (adfData) free(adfData);
     if (!adf) throw CoreException(CoreError::DMS_CANT_CREATE);
+    */
 }
 
 }

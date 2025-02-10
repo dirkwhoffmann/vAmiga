@@ -24,6 +24,7 @@ enum class FileType : long
     SNAPSHOT,
     SCRIPT,
     ADF,
+    ADZ,
     EADF,
     HDF,
     IMG,
@@ -49,6 +50,7 @@ struct FileTypeEnum : Reflection<FileTypeEnum, FileType>
             case FileType::SNAPSHOT:     return "SNAPSHOT";
             case FileType::SCRIPT:       return "SCRIPT";
             case FileType::ADF:          return "ADF";
+            case FileType::ADZ:          return "ADZ";
             case FileType::EADF:         return "EADF";
             case FileType::HDF:          return "HDF";
             case FileType::IMG:          return "IMG";
@@ -70,6 +72,7 @@ struct FileTypeEnum : Reflection<FileTypeEnum, FileType>
             case FileType::SNAPSHOT:     return "Snapshot";
             case FileType::SCRIPT:       return "RetroShell Script";
             case FileType::ADF:          return "Amiga Disk File";
+            case FileType::ADZ:          return "Compressed Amiga Disk File";
             case FileType::EADF:         return "Extended Amiga Disk File";
             case FileType::HDF:          return "Hard Disk File";
             case FileType::IMG:          return "PC Disk Image";

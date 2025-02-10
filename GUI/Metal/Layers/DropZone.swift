@@ -88,7 +88,7 @@ class DropZone: Layer {
         
         switch type {
         
-        case .ADF, .EADF, .IMG, .ST, .DMS, .EXE, .DIR:
+        case .ADF, .ADZ, .EADF, .IMG, .ST, .DMS, .EXE, .DIR:
             enabled = [ amiga.df0.info.isConnected,
                         amiga.df1.info.isConnected,
                         amiga.df2.info.isConnected,
@@ -197,7 +197,7 @@ class DropZone: Layer {
 
                 try mydocument.addMedia(url: url, allowedTypes: [type])
 
-            case .ADF, .EADF, .HDF, .IMG, .ST, .DMS, .EXE, .DIR:
+            case .ADF, .ADZ, .EADF, .HDF, .IMG, .ST, .DMS, .EXE, .DIR:
                 
                 try mydocument.addMedia(url: url, allowedTypes: [type], drive: n!)
                 

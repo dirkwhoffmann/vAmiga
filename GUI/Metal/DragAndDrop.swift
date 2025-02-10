@@ -41,7 +41,7 @@ public extension MetalView {
             if let url = NSURL.init(from: pasteBoard) as URL? {
             
                 // Unpack the file if it is compressed
-                dropUrl = url.unpacked(maxSize: 2048 * 1024)
+                dropUrl = url // url.unpacked(maxSize: 2048 * 1024)
 
                 // Analyze the file type
                 let type = MediaFileProxy.type(of: dropUrl)
@@ -133,7 +133,7 @@ public extension MetalView {
         case .WORKSPACE, .SNAPSHOT, .SCRIPT:
             break
             
-        case .ADF, .EADF, .HDF, .IMG, .ST, .DMS, .EXE, .DIR:
+        case .ADF, .ADZ, .DIR, .DMS, .EADF, .EXE, .HDF, .IMG, .ST:
             if zone == nil { return false }
             
         default:

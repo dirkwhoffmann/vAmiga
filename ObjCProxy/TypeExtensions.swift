@@ -76,7 +76,7 @@ extension FileType {
     }
 
     static var draggable: [FileType] {
-        return [ .WORKSPACE, .SNAPSHOT, .SCRIPT, .ADF, .EADF, .HDF, .IMG, .DMS, .EXE, .DIR ]
+        return [ .WORKSPACE, .SNAPSHOT, .SCRIPT, .ADF, .ADZ, .EADF, .HDF, .IMG, .DMS, .EXE, .DIR ]
     }
 }
 

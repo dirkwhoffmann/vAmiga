@@ -129,6 +129,7 @@ extension URL {
         return dest
     }
     
+    /*
     func unpacked(maxSize: Int) -> URL {
         
         if fileSize < maxSize { return unpacked }
@@ -205,6 +206,7 @@ extension URL {
         let sorted = urls.sorted { $0.path < $1.path }
         return sorted
     }
+    */
     
     var modificationDate: Date? {
         

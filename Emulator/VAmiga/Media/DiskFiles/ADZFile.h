@@ -13,7 +13,7 @@
 
 namespace vamiga {
 
-class DMSFile : public FloppyFile {
+class ADZFile : public FloppyFile {
 
     ADFFile adf;
 
@@ -32,17 +32,17 @@ public:
     
     using AnyFile::init;
     
-    DMSFile(const std::filesystem::path &path) throws { init(path); }
-    DMSFile(const u8 *buf, isize len) throws { init(buf, len); }
+    ADZFile(const std::filesystem::path &path) throws { init(path); }
+    ADZFile(const u8 *buf, isize len) throws { init(buf, len); }
     
-    const char *objectName() const override { return "DMS"; }
+    const char *objectName() const override { return "ADZ"; }
 
     
     //
     // Methods from AnyFile
     //
     
-    FileType type() const override { return FileType::DMS; }
+    FileType type() const override { return FileType::ADZ; }
     u64 fnv64() const override { return adf.fnv64(); }
     bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) override { return isCompatible(buf, len); }
