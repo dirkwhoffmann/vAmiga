@@ -13,8 +13,9 @@ playground.xcworkspace
 # Package.resolved
 .build/
 
-# Ignore build folder
+# Ignore build folders
 build/
+vAmiga/
 
 # CocoaPods
 #
