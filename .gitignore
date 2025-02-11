@@ -13,6 +13,9 @@ playground.xcworkspace
 # Package.resolved
 .build/
 
+# Ignore build folder
+build/
+
 # CocoaPods
 #
 # We recommend against adding the Pods directory to your .gitignore. However
