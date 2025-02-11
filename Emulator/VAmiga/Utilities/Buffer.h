@@ -73,7 +73,7 @@ template <class T> struct Allocator {
     void uncompress(isize n = 2, isize offset = 0, isize expectedSize = 0);
     
     void gzip();
-    void ungzip();
+    void gunzip();
 };
 
 template <class T> struct Buffer : public Allocator <T> {

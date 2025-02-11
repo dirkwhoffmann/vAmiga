@@ -366,7 +366,7 @@ Allocator<T>::gzip()
 }
 
 template <class T> void
-Allocator<T>::ungzip()
+Allocator<T>::gunzip()
 {
     // Select gzip compression by choosing adequate window bits
     constexpr int windowBits = MAX_WBITS | 16;
@@ -468,5 +468,5 @@ INSTANTIATE_ALLOCATOR(float)
 INSTANTIATE_ALLOCATOR(bool)
 
 template void Allocator<u8>::gzip();
-template void Allocator<u8>::ungzip();
+template void Allocator<u8>::gunzip();
 }

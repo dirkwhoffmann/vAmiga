@@ -56,7 +56,7 @@ ADZFile::finalizeRead()
     debug(ADF_DEBUG, "Decompressing %ld bytes...\n", data.size);
     
     try {
-        data.ungzip();
+        data.gunzip();
     } catch (std::runtime_error &err) {
         throw CoreException(CoreError::ZLIB_ERROR, err.what());
     }

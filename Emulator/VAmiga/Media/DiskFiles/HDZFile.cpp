@@ -58,7 +58,7 @@ HDZFile::finalizeRead()
     {   util::StopWatch(SNP_DEBUG, "Uncompressing...");
         
         try {
-            data.ungzip();
+            data.gunzip();
         } catch (std::runtime_error &err) {
             throw CoreException(CoreError::ZLIB_ERROR, err.what());
         }

@@ -10,6 +10,7 @@
 #include "VAmigaConfig.h"
 #include "FloppyFile.h"
 #include "ADFFile.h"
+#include "ADZFile.h"
 #include "IMGFile.h"
 #include "DMSFile.h"
 #include "EXEFile.h"
@@ -36,13 +37,14 @@ FloppyFile::make(const std::filesystem::path &path)
     switch (type(path)) {
 
         case FileType::ADF:  result = new ADFFile(buffer.ptr, buffer.size); break;
+        case FileType::ADZ:  result = new ADZFile(buffer.ptr, buffer.size); break;
         case FileType::IMG:  result = new IMGFile(buffer.ptr, buffer.size); break;
         case FileType::DMS:  result = new DMSFile(buffer.ptr, buffer.size); break;
         case FileType::EXE:  result = new EXEFile(buffer.ptr, buffer.size); break;
         case FileType::DIR:  result = new Folder(path);
 
         default:
-            throw CoreException(CoreError::FILE_TYPE_MISMATCH);
+            throw CoreException(CoreError::FILE_TYPE_UNSUPPORTED);
     }
 
     result->path = path;

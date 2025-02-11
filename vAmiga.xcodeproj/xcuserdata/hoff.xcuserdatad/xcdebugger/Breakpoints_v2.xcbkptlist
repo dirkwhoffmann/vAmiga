@@ -261,5 +261,51 @@
             landmarkType = "21">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "21DE6584-9695-4FA5-84A4-C442BD074DE0"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Emulator/VAmiga/Peripherals/Drive/HardDrive.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "132"
+            endingLineNumber = "132"
+            landmarkName = "HardDrive::init(file)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "21DE6584-9695-4FA5-84A4-C442BD074DE0 - 996a784deade0175"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "vamiga::HardDrive::init(vamiga::MediaFile const&amp;)"
+                  moduleName = "vAmiga.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/Retro/vAmiga/Emulator/VAmiga/Peripherals/Drive/HardDrive.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "132"
+                  endingLineNumber = "132">
+               </Location>
+               <Location
+                  uuid = "21DE6584-9695-4FA5-84A4-C442BD074DE0 - 996a784deade0175"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "vamiga::HardDrive::init(vamiga::MediaFile const&amp;)"
+                  moduleName = "vAmiga.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/hoff/Retro/vAmiga/Emulator/VAmiga/Peripherals/Drive/HardDrive.cpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "132"
+                  endingLineNumber = "132">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

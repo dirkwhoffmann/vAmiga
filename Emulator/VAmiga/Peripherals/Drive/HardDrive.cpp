@@ -141,7 +141,7 @@ HardDrive::init(const MediaFile &file)
         return;
     }
     
-    throw CoreException(CoreError::FILE_TYPE_MISMATCH);
+    throw CoreException(CoreError::FILE_TYPE_UNSUPPORTED);
 }
 
 void
@@ -216,8 +216,12 @@ HardDrive::init(const HDZFile &hdz) throws
 void
 HardDrive::init(const std::filesystem::path &path) throws
 {
-    HDFFile hdf(host.makeAbsolute(path));
-    init(hdf);
+    auto fullPath = host.makeAbsolute(path);
+    
+    try { init(HDFFile(fullPath)); return; } catch(...) { }
+    try { init(HDZFile(fullPath)); return; } catch(...) { }
+
+    throw CoreException(CoreError::FILE_TYPE_UNSUPPORTED);
 }
 
 void
