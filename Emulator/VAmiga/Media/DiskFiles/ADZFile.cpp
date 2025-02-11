@@ -44,7 +44,11 @@ ADZFile::finalizeRead()
 {
     printf("Old size: %ld\n", data.size);
     
-    data.ungzip();
+    try {
+        data.ungzip();
+    } catch (std::runtime_error &err) {
+        throw CoreException(CoreError::ZLIB_ERROR, err.what());
+    }
     
     printf("New size: %ld\n", data.size);
     

@@ -49,7 +49,7 @@ enum class CoreError : long
     // Memory
     OUT_OF_MEMORY,        ///< Out of memory
     
-    // General
+    // File I/O
     DIR_NOT_FOUND,        ///< Directory does not exist
     DIR_ACCESS_DENIED,    ///< File access denied
     DIR_CANT_CREATE,      ///< Unable to create a directory
@@ -114,6 +114,7 @@ enum class CoreError : long
     EXT_FACTOR5,
     EXT_INCOMPATIBLE,
     EXT_CORRUPTED,
+    ZLIB_ERROR,
     
     // Encrypted Roms
     MISSING_ROM_KEY,
@@ -293,7 +294,8 @@ struct CoreErrorEnum : Reflection<CoreErrorEnum, CoreError>
             case CoreError::EXT_FACTOR5:                 return "EXT_UNSUPPORTED";
             case CoreError::EXT_INCOMPATIBLE:            return "EXT_INCOMPATIBLE";
             case CoreError::EXT_CORRUPTED:               return "EXT_CORRUPTED";
-                
+            case CoreError::ZLIB_ERROR:                  return "ZLIB_ERROR";
+
             case CoreError::MISSING_ROM_KEY:             return "MISSING_ROM_KEY";
             case CoreError::INVALID_ROM_KEY:             return "INVALID_ROM_KEY";
                 

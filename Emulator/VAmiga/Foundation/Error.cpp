@@ -311,6 +311,10 @@ CoreException::CoreException(CoreError code, const string &s)
             description = "The disk encoder failed to extract the disk due to ";
             description += " corrupted or inconsistend file data.";
             break;
+ 
+        case CoreError::ZLIB_ERROR:
+            description = s;
+            break;
             
         case CoreError::MISSING_ROM_KEY:
             description = "No \"rom.key\" file found.";
