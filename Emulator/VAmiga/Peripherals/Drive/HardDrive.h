@@ -13,7 +13,9 @@
 #include "Drive.h"
 #include "AgnusTypes.h"
 #include "HdControllerTypes.h"
-#include "HDFFile.h"
+// #include "HDFFile.h"
+// #include "HDZFile.h"
+#include "Buffer.h"
 #include "MemUtils.h"
 
 namespace vamiga {
@@ -85,10 +87,10 @@ class HardDrive final : public Drive, public Inspectable<HardDriveInfo> {
     std::vector <DriverDescriptor> drivers;
 
     // Disk data
-    Buffer<u8> data;
+    util::Buffer<u8> data;
     
     // Keeps track of modified blocks (to update the run-ahead instance)
-    Buffer<bool> dirty;
+    util::Buffer<bool> dirty;
 
     // Current position of the read/write head
     DriveHead head;
@@ -119,13 +121,14 @@ public:
     void init(isize size);
 
     // Creates a hard drive with the contents of a file system
-    void init(const MutableFileSystem &fs) throws;
+    void init(const class MutableFileSystem &fs) throws;
 
     // Creates a hard drive with the contents of a media file
-    void init(const MediaFile &file) throws;
+    void init(const class MediaFile &file) throws;
 
-    // Creates a hard drive with the contents of an HDF
-    void init(const HDFFile &hdf) throws;
+    // Creates a hard drive with the contents of an HDF or HDZ
+    void init(const class HDFFile &hdf) throws;
+    void init(const class HDZFile &hdz) throws;
 
     // Creates a hard drive with the contents of an HDF file
     void init(const std::filesystem::path &path) throws;
@@ -347,7 +350,7 @@ public:
     i8 write(isize offset, isize length, u32 addr);
     
     // Reads a loadable file system
-    void readDriver(isize nr, Buffer<u8> &driver);
+    void readDriver(isize nr, util::Buffer<u8> &driver);
     
 private:
 

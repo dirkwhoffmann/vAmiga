@@ -8,33 +8,33 @@
 // -----------------------------------------------------------------------------
 
 #include "VAmigaConfig.h"
-#include "ADZFile.h"
+#include "HDZFile.h"
 
 namespace vamiga {
 
 bool
-ADZFile::isCompatible(const std::filesystem::path &path)
+HDZFile::isCompatible(const std::filesystem::path &path)
 {
     auto suffix = util::uppercased(path.extension().string());
-    return suffix == ".ADZ";
+    return suffix == ".HDZ";
 }
 
 bool
-ADZFile::isCompatible(const u8 *buf, isize len)
+HDZFile::isCompatible(const u8 *buf, isize len)
 {
     return true;
 }
 
 bool
-ADZFile::isCompatible(const Buffer<u8> &buf)
+HDZFile::isCompatible(const Buffer<u8> &buf)
 {
     return isCompatible(buf.ptr, buf.size);
 }
 
 void
-ADZFile::finalizeRead()
+HDZFile::finalizeRead()
 {
-    debug(ADF_DEBUG, "Decompressing %ld bytes...\n", data.size);
+    debug(HDF_DEBUG, "Decompressing %ld bytes...\n", data.size);
     
     try {
         data.ungzip();
@@ -42,10 +42,10 @@ ADZFile::finalizeRead()
         throw CoreException(CoreError::ZLIB_ERROR, err.what());
     }
     
-    debug(ADF_DEBUG, "Restored %ld bytes.\n", data.size);
+    debug(HDF_DEBUG, "Restored %ld bytes.\n", data.size);
     
     // Initialize the ADF with the decompressed data (may throw)
-    adf.init(data.ptr, data.size);
+    hdf.init(data.ptr, data.size);
 
     // Delete the original data
     data.dealloc();

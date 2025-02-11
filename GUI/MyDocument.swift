@@ -90,11 +90,23 @@ class MyDocument: NSDocument {
 
         // Iterate through all allowed file types
         for type in allowedTypes {
+            
+            do {
+                
+                return try MediaFileProxy.make(with: newUrl, type: type)
+                
+            } catch let error as CoreException {
+               
+                if error.errorCode != .FILE_TYPE_MISMATCH { throw error }
+            }
+        }
+        /*
+        for type in allowedTypes {
 
             do {
                 switch type {
 
-                case .WORKSPACE, .SNAPSHOT, .SCRIPT, .ADF, .ADZ, .EADF, .IMG, .ST, .DMS, .EXE, .DIR, .HDF:
+                case .WORKSPACE, .SNAPSHOT, .SCRIPT, .ADF, .ADZ, .EADF, .IMG, .ST, .DMS, .EXE, .DIR, .HDF, .HDZ:
 
                     return try MediaFileProxy.make(with: newUrl, type: type)
 
@@ -108,7 +120,8 @@ class MyDocument: NSDocument {
                 }
             }
         }
-
+        */
+        
         // None of the allowed types matched the file
         throw CoreException(.FILE_TYPE_MISMATCH,
                       "The type of this file is not known to the emulator.")
@@ -243,7 +256,7 @@ class MyDocument: NSDocument {
             console.runScript(script: proxy)
             break
 
-        case .HDF:
+        case .HDF, .HDZ:
 
             try attach(hd: drive, file: proxy, force: force)
             break
@@ -266,7 +279,7 @@ class MyDocument: NSDocument {
         
         // Scan directory for additional media files
         let supportedTypes: [String : FileType] =
-        ["adf" : .ADF, "dms" : .DMS, "exe" : .EXE, "img" : .IMG, "hdf" : .HDF, "st" : .ST]
+        ["adf": .ADF, "adz": .ADZ, "dms": .DMS, "exe": .EXE, "img": .IMG, "hdf": .HDF, "hdz": .HDZ, "st": .ST]
         let exclude = ["df0", "df1", "df2", "df3", "hd0", "hd1", "hd2", "hd3"]
 
         let contents = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil)

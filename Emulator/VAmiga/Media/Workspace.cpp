@@ -9,7 +9,6 @@
 
 #include "VAmigaConfig.h"
 #include "Workspace.h"
-// #include "Amiga.h"
 #include "IOUtils.h"
 
 #include <sstream>

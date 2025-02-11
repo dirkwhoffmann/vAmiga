@@ -72,11 +72,11 @@ extension FileType {
     }
 
     static var all: [FileType] {
-        return [ .WORKSPACE, .SNAPSHOT, .SCRIPT, .ADF, .EADF, .HDF, .IMG, .DMS, .EXE, .DIR ]
+        return [ .WORKSPACE, .SNAPSHOT, .SCRIPT, .ADF, .ADZ, .EADF, .HDF, .HDZ, .IMG, .DMS, .EXE, .ST, .DIR ]
     }
 
     static var draggable: [FileType] {
-        return [ .WORKSPACE, .SNAPSHOT, .SCRIPT, .ADF, .ADZ, .EADF, .HDF, .IMG, .DMS, .EXE, .DIR ]
+        return [ .WORKSPACE, .SNAPSHOT, .SCRIPT, .ADF, .ADZ, .EADF, .HDF, .HDZ, .IMG, .DMS, .EXE, .ST, .DIR ]
     }
 }
 

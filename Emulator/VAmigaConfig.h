@@ -184,6 +184,7 @@ extern debugflag DBD_DEBUG;
 
 // Media types
 extern debugflag ADF_DEBUG;
+extern debugflag HDF_DEBUG;
 extern debugflag DMS_DEBUG;
 extern debugflag IMG_DEBUG;
 

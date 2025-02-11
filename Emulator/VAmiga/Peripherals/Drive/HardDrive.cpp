@@ -11,6 +11,8 @@
 #include "HardDrive.h"
 #include "Emulator.h"
 #include "HdControllerTypes.h"
+#include "HDFFile.h"
+#include "HDZFile.h"
 #include "IOUtils.h"
 #include "Memory.h"
 #include "MsgQueue.h"
@@ -127,15 +129,19 @@ HardDrive::init(const MutableFileSystem &fs)
 void 
 HardDrive::init(const MediaFile &file)
 {
-    try {
-
-        const HDFFile &hdf = dynamic_cast<const HDFFile &>(file);
-        init(hdf);
-
-    } catch (...) {
-
-        throw CoreException(CoreError::FILE_TYPE_MISMATCH);
+    if (const auto *hdf = dynamic_cast<const HDFFile *>(&file)) {
+        
+        init(*hdf);
+        return;
     }
+    
+    if (const auto *hdz = dynamic_cast<const HDZFile *>(&file)) {
+        
+        init(*hdz);
+        return;
+    }
+    
+    throw CoreException(CoreError::FILE_TYPE_MISMATCH);
 }
 
 void
@@ -199,6 +205,12 @@ HardDrive::init(const HDFFile &hdf)
     if (HDR_DEBUG) {
         for (auto &driver : drivers) driver.dump();
     }
+}
+
+void
+HardDrive::init(const HDZFile &hdz) throws
+{
+    init(hdz.hdf);
 }
 
 void

@@ -23,6 +23,7 @@ MediaFile::type(const fs::path &path)
     if (ADZFile::isCompatible(path))   return FileType::ADZ;
     if (EADFFile::isCompatible(path))  return FileType::EADF;
     if (HDFFile::isCompatible(path))   return FileType::HDF;
+    if (HDZFile::isCompatible(path))   return FileType::HDZ;
     if (IMGFile::isCompatible(path))   return FileType::IMG;
     if (STFile::isCompatible(path))    return FileType::ST;
     if (DMSFile::isCompatible(path))   return FileType::DMS;
@@ -51,6 +52,7 @@ MediaFile::make(const fs::path &path, FileType type)
         case FileType::ADZ:          return new ADZFile(path);
         case FileType::EADF:         return new EADFFile(path);
         case FileType::HDF:          return new HDFFile(path);
+        case FileType::HDZ:          return new HDZFile(path);
         case FileType::IMG:          return new IMGFile(path);
         case FileType::ST:           return new STFile(path);
         case FileType::DMS:          return new DMSFile(path);
@@ -74,6 +76,7 @@ MediaFile::make(const u8 *buf, isize len, FileType type)
         case FileType::ADZ:          return new ADZFile(buf, len);
         case FileType::EADF:         return new EADFFile(buf, len);
         case FileType::HDF:          return new HDFFile(buf, len);
+        case FileType::HDZ:          return new HDZFile(buf, len);
         case FileType::IMG:          return new IMGFile(buf, len);
         case FileType::ST:           return new STFile(buf, len);
         case FileType::DMS:          return new DMSFile(buf, len);

@@ -132,9 +132,11 @@ extension MediaFileProxy {
         switch type {
 
         case .ADF:  return "Amiga Floppy Disk"
+        case .ADZ:  return "Compressed Amiga Floppy Disk"
         case .EADF: return "Amiga Floppy Disk (Ext)"
         case .IMG:  return "PC Disk"
         case .HDF:  return "Amiga Hard Drive"
+        case .HDZ:  return "Compressed Amiga Hard Drive"
         default:    return ""
         }
     }
@@ -183,13 +185,13 @@ extension MediaFileProxy {
 
         switch type {
 
-        case .ADF, .EADF, .IMG:
+        case .ADF, .ADZ, .EADF, .IMG:
 
             let info = floppyDiskInfo
             name = (info.density == .HD ? "hd" : "dd") +
             (type == .IMG ? "_dos" : info.dos == .NODOS ? "_other" : "_adf")
 
-        case .HDF:
+        case .HDF, .HDZ:
 
             name = "hdf"
 

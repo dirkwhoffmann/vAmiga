@@ -134,7 +134,8 @@ enum class DebugFlag
     DBD_DEBUG,        ///< DebugBoard
 
     // Media types
-    ADF_DEBUG,        ///< ADF and extended ADF files
+    ADF_DEBUG,        ///< ADF, ADZ, and extended ADF files
+    HDF_DEBUG,        ///< HDF and HDZ files
     DMS_DEBUG,        ///< DMS files
     IMG_DEBUG,        ///< IMG files, ST files
 
@@ -274,6 +275,7 @@ struct DebugFlagEnum : Reflection<DebugFlagEnum, DebugFlag>
 
                 // Media types
             case DebugFlag::ADF_DEBUG:        return "ADF_DEBUG";
+            case DebugFlag::HDF_DEBUG:        return "HDF_DEBUG";
             case DebugFlag::DMS_DEBUG:        return "DMS_DEBUG";
             case DebugFlag::IMG_DEBUG:        return "IMG_DEBUG";
 
@@ -410,7 +412,8 @@ struct DebugFlagEnum : Reflection<DebugFlagEnum, DebugFlag>
             case DebugFlag::DBD_DEBUG:        return "DebugBoard";
 
                 // Media types
-            case DebugFlag::ADF_DEBUG:        return "ADF and extended ADF files";
+            case DebugFlag::ADF_DEBUG:        return "ADF, ADZ and extended ADF files";
+            case DebugFlag::HDF_DEBUG:        return "HDF and HDZ files";
             case DebugFlag::DMS_DEBUG:        return "DMS files";
             case DebugFlag::IMG_DEBUG:        return "IMG files, ST files";
 

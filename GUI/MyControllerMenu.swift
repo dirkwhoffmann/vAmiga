@@ -708,7 +708,7 @@ extension MyController: NSMenuItemValidation {
                     
                     do {
                         try self.mydocument.addMedia(url: url,
-                                                     allowedTypes: [ .HDF ],
+                                                     allowedTypes: [ .HDF, .HDZ ],
                                                      drive: sender.tag)
                     } catch {
                         self.showAlert(.cantAttach, error: error, async: true)

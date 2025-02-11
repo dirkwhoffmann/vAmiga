@@ -499,6 +499,7 @@ Emulator::getDebugVariable(DebugFlag flag)
         case DebugFlag::DBD_DEBUG:        return DBD_DEBUG;
             
         case DebugFlag::ADF_DEBUG:        return ADF_DEBUG;
+        case DebugFlag::HDF_DEBUG:        return HDF_DEBUG;
         case DebugFlag::DMS_DEBUG:        return DMS_DEBUG;
         case DebugFlag::IMG_DEBUG:        return IMG_DEBUG;
             
@@ -645,6 +646,7 @@ Emulator::setDebugVariable(DebugFlag flag, bool val)
             
             // Media types
         case DebugFlag::ADF_DEBUG:        ADF_DEBUG = val; break;
+        case DebugFlag::HDF_DEBUG:        HDF_DEBUG = val; break;
         case DebugFlag::DMS_DEBUG:        DMS_DEBUG = val; break;
         case DebugFlag::IMG_DEBUG:        IMG_DEBUG = val; break;
             

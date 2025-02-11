@@ -4,9 +4,11 @@ target_sources(vAmigaCore PRIVATE
 
 DiskFile.cpp
 FloppyFile.cpp
-HDFFile.cpp
 ADFFile.cpp
+ADZFile.cpp
 EADFFile.cpp
+HDFFile.cpp
+HDZFile.cpp
 IMGFile.cpp
 STFile.cpp
 DMSFile.cpp

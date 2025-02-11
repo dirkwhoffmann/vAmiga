@@ -49,6 +49,7 @@ public:
 
 public:
     
+    HDFFile() { }
     HDFFile(const std::filesystem::path &path) throws { init(path); }
     HDFFile(const u8 *buf, isize len) throws { init(buf, len); }
     HDFFile(const class HardDrive &hdn) throws { init(hdn); }

@@ -65,18 +65,22 @@ class DropZone: Layer {
 
     private func zoneImage(zone: Int) -> NSImage? {
 
+        let isHD = [.HDF, .HDZ].contains(type)
+        
         if !enabled[zone] {
-            return type == .HDF ? hdDisabled : dfDisabled
+            return isHD ? hdDisabled : dfDisabled
         } else if amiga.df(zone)!.info.hasDisk {
-            return type == .HDF ? hdInUse : dfInUse
+            return isHD ? hdInUse : dfInUse
         } else {
-            return type == .HDF ? hdEmpty : dfEmpty
+            return isHD ? hdEmpty : dfEmpty
         }
     }
 
     private func labelImage(zone: Int) -> NSImage? {
 
-        var name = "drop" + (type == .HDF ? "Hd" : "Df") + "\(zone)"
+        let isHD = [.HDF, .HDZ].contains(type)
+        
+        var name = "drop" + (isHD ? "Hd" : "Df") + "\(zone)"
         if !enabled[zone] { name += "_disabled" }
 
         return NSImage(named: name)!
@@ -94,7 +98,7 @@ class DropZone: Layer {
                         amiga.df2.info.isConnected,
                         amiga.df3.info.isConnected ]
 
-        case .HDF:
+        case .HDF, .HDZ:
             enabled = [ amiga.hd0.info.isConnected,
                         amiga.hd1.info.isConnected,
                         amiga.hd2.info.isConnected,
@@ -187,6 +191,20 @@ class DropZone: Layer {
         
         guard let url = metal.dropUrl else { return }
         guard let type = metal.dropType else { return }
+        
+        do {
+            
+            if let nr = metal.dropZone {
+                try mydocument.addMedia(url: url, allowedTypes: [type], drive: nr)
+            } else {
+                try mydocument.addMedia(url: url, allowedTypes: [type])
+            }
+            
+        } catch {
+            
+            controller.showAlert(.cantOpen(url: url), error: error, async: true)
+        }
+        /*
         let n = metal.dropZone
 
         do {
@@ -197,7 +215,7 @@ class DropZone: Layer {
 
                 try mydocument.addMedia(url: url, allowedTypes: [type])
 
-            case .ADF, .ADZ, .EADF, .HDF, .IMG, .ST, .DMS, .EXE, .DIR:
+            case .ADF, .ADZ, .EADF, .HDF, .HDZ, .IMG, .ST, .DMS, .EXE, .DIR:
                 
                 try mydocument.addMedia(url: url, allowedTypes: [type], drive: n!)
                 
@@ -209,6 +227,7 @@ class DropZone: Layer {
             
             controller.showAlert(.cantOpen(url: url), error: error, async: true)
         }
+        */
     }
     
     func updateAlpha() {

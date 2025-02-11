@@ -27,6 +27,7 @@ enum class FileType : long
     ADZ,
     EADF,
     HDF,
+    HDZ,
     IMG,
     ST,
     DMS,
@@ -53,6 +54,7 @@ struct FileTypeEnum : Reflection<FileTypeEnum, FileType>
             case FileType::ADZ:          return "ADZ";
             case FileType::EADF:         return "EADF";
             case FileType::HDF:          return "HDF";
+            case FileType::HDZ:          return "HDZ";
             case FileType::IMG:          return "IMG";
             case FileType::ST:           return "ST";
             case FileType::DMS:          return "DMS";
@@ -75,6 +77,7 @@ struct FileTypeEnum : Reflection<FileTypeEnum, FileType>
             case FileType::ADZ:          return "Compressed Amiga Disk File";
             case FileType::EADF:         return "Extended Amiga Disk File";
             case FileType::HDF:          return "Hard Disk File";
+            case FileType::HDZ:          return "Compressed Hard Disk File";
             case FileType::IMG:          return "PC Disk Image";
             case FileType::ST:           return "AtariST Disk Image";
             case FileType::DMS:          return "Disk Masher System";
