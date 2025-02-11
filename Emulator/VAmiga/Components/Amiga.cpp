@@ -179,7 +179,8 @@ Amiga::getOption(Opt option) const
         case Opt::AMIGA_SNAP_AUTO:       return config.snapshots;
         case Opt::AMIGA_SNAP_DELAY:      return config.snapshotDelay;
         case Opt::AMIGA_SNAP_COMPRESS:   return config.compressSnapshots;
-            
+        case Opt::AMIGA_WS_COMPRESS:     return config.compressWorkspaces;
+
         default:
             fatalError;
     }
@@ -238,7 +239,8 @@ Amiga::checkOption(Opt opt, i64 value)
             return;
             
         case Opt::AMIGA_SNAP_COMPRESS:
-            
+        case Opt::AMIGA_WS_COMPRESS:
+
             return;
             
         default:
@@ -301,7 +303,12 @@ Amiga::setOption(Opt option, i64 value)
             
             config.compressSnapshots = bool(value);
             return;
+
+        case Opt::AMIGA_WS_COMPRESS:
             
+            config.compressWorkspaces = bool(value);
+            return;
+
         default:
             fatalError;
     }
@@ -349,36 +356,47 @@ Amiga::saveWorkspace(const fs::path &path)
 {
     std::stringstream ss, df, hd;
 
-    auto exportADF = [&](FloppyDrive& drive, string name, string file) {
+    auto exportADF = [&](FloppyDrive& drive, string name) {
         
-        if (drive.hasDisk()) {
-            try {
-                ADFFile adf(drive);
-                adf.writeToFile(path / file);
-                drive.markDiskAsUnmodified();
+        if (!drive.hasDisk()) return;
+        
+        string file = name + (config.compressWorkspaces ? ".adz" : ".adf");
+
+        try {
+            
+            if (config.compressWorkspaces) {
                 
-                df << "try " << name << " insert " << file << "\n";
-                df << "try " << name << (drive.hasProtectedDisk() ? " protect\n" : " unprotect\n");
-                
-            } catch (...) { }
-        }
+                ADZFile(ADFFile(drive)).writeToFile(path / file);
+            } else {
+                ADFFile(drive).writeToFile(path / file);
+            }
+            drive.markDiskAsUnmodified();
+            
+            df << "try " << name << " insert " << file << "\n";
+            df << "try " << name << (drive.hasProtectedDisk() ? " protect\n" : " unprotect\n");
+            
+        } catch (...) { }
     };
-    auto exportHDF = [&](HardDrive& drive, string name, string file) {
+    
+    auto exportHDF = [&](HardDrive& drive, string name) {
         
-        if (drive.hasDisk()) {
-            try {
-                HDZFile hdf(drive);
-                hdf.writeToFile(path / file);
-                
-                HDZFile(drive).writeToFile(path / file);
-                
-                drive.markDiskAsUnmodified();
+        if (!drive.hasDisk()) return;
+        
+        string file = name + (config.compressWorkspaces ? ".hdz" : ".hdf");
+        
+        try {
 
-                hd << "try " << name << " attach " << file << "\n";
-                hd << "try " << name << (drive.hasProtectedDisk() ? " protect\n" : " unprotect\n");
-
-            } catch (...) { }
-        }
+            if (config.compressWorkspaces) {
+                HDZFile(HDFFile(drive)).writeToFile(path / file);
+            } else {
+                HDFFile(drive).writeToFile(path / file);
+            }
+            drive.markDiskAsUnmodified();
+            
+            hd << "try " << name << " attach " << file << "\n";
+            hd << "try " << name << (drive.hasProtectedDisk() ? " protect\n" : " unprotect\n");
+            
+        } catch (...) { }
     };
 
     // If a file with the specified name exists, delete it
@@ -406,10 +424,10 @@ Amiga::saveWorkspace(const fs::path &path)
     if (mem.hasExt()) { mem.saveExt(path / "ext.bin"); ss << "try mem load ext ext.bin\n"; }
 
     // Export floppy disks
-    exportADF(df0, "df0", "df0.adf");
-    exportADF(df1, "df1", "df1.adf");
-    exportADF(df2, "df2", "df2.adf");
-    exportADF(df3, "df3", "df3.adf");
+    exportADF(df0, "df0");
+    exportADF(df1, "df1");
+    exportADF(df2, "df2");
+    exportADF(df3, "df3");
     
     if (!df.str().empty()) {
         ss << "\n# Floppy disks\n\n";
@@ -417,10 +435,10 @@ Amiga::saveWorkspace(const fs::path &path)
     }
     
     // Export hard disks
-    exportHDF(hd0, "hd0", "hd0.hdf");
-    exportHDF(hd1, "hd1", "hd1.hdf");
-    exportHDF(hd2, "hd2", "hd2.hdf");
-    exportHDF(hd3, "hd3", "hd3.hdf");
+    exportHDF(hd0, "hd0");
+    exportHDF(hd1, "hd1");
+    exportHDF(hd2, "hd2");
+    exportHDF(hd3, "hd3");
     
     if (!hd.str().empty()) {
         ss << "\n# Hard drives\n\n";

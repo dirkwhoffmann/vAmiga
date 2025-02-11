@@ -12,6 +12,25 @@
 
 namespace vamiga {
 
+void
+ADZFile::init(const class ADFFile &adf) throws
+{
+    data = adf.data;
+    
+    debug(HDF_DEBUG, "Uncompressed ADF size: %ld bytes\n", data.size);
+    
+    {   util::StopWatch(HDF_DEBUG, "Compressing ADF...");
+        
+        try {
+            data.gzip();
+        } catch (std::runtime_error &err) {
+            throw CoreException(CoreError::ZLIB_ERROR, err.what());
+        }
+    }
+    
+    debug(HDF_DEBUG, "Compressed ADF size: %ld bytes.\n", data.size);
+}
+
 bool
 ADZFile::isCompatible(const std::filesystem::path &path)
 {

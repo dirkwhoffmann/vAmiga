@@ -32,15 +32,13 @@ HDZFile::isCompatible(const Buffer<u8> &buf)
 }
 
 void
-HDZFile::init(const HardDrive &drive)
+HDZFile::init(const class HDFFile &hdf) throws
 {
-    hdf.init(drive);
-
     data = hdf.data;
     
-    debug(HDF_DEBUG, "Uncompressed size: %ld bytes\n", data.size);
+    debug(HDF_DEBUG, "Uncompressed HDF size: %ld bytes\n", data.size);
 
-    {   util::StopWatch(HDF_DEBUG, "Compressing...");
+    {   util::StopWatch(HDF_DEBUG, "Compressing HDF...");
         
         try {
             data.gzip();
@@ -49,7 +47,7 @@ HDZFile::init(const HardDrive &drive)
         }
     }
     
-    debug(HDF_DEBUG, "Compressed size: %ld bytes.\n", data.size);
+    debug(HDF_DEBUG, "Compressed HDF size: %ld bytes.\n", data.size);
 }
 
 void

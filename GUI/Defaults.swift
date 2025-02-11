@@ -296,6 +296,9 @@ struct Keys {
     
     struct Gen {
                 
+        // Workspaces
+        static let workspaceCompression   = "General.WorkspaceCompression"
+
         // Snapshots
         static let snapshotStorage        = "General.SnapshotStorage"
         static let autoSnapshots          = "General.AutoSnapshots"
@@ -333,7 +336,10 @@ extension DefaultsProxy {
     func registerGeneralUserDefaults() {
         
         debug(.defaults)
-        
+
+        // Workspaces
+        register(Keys.Gen.workspaceCompression, true)
+
         // Snapshots
         register(Keys.Gen.snapshotStorage, 512)
         register(Keys.Gen.autoSnapshots, false)
@@ -368,7 +374,9 @@ extension DefaultsProxy {
         
         debug(.defaults)
         
-        let keys = [ Keys.Gen.snapshotStorage,
+        let keys = [ Keys.Gen.workspaceCompression,
+            
+                     Keys.Gen.snapshotStorage,
                      Keys.Gen.autoSnapshots,
                      Keys.Gen.autoSnapshotInterval,
                      
@@ -404,7 +412,9 @@ extension Preferences {
         
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
-        
+
+        defaults.set(Keys.Gen.workspaceCompression, workspaceCompression)
+
         defaults.set(Keys.Gen.snapshotStorage, snapshotStorage)
         defaults.set(Keys.Gen.autoSnapshots, autoSnapshots)
         defaults.set(Keys.Gen.autoSnapshotInterval, snapshotInterval)
@@ -436,6 +446,8 @@ extension Preferences {
         
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
+        
+        workspaceCompression = defaults.bool(Keys.Gen.workspaceCompression)
         
         snapshotStorage = defaults.int(Keys.Gen.snapshotStorage)
         autoSnapshots = defaults.bool(Keys.Gen.autoSnapshots)

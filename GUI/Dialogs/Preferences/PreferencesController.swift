@@ -19,7 +19,10 @@ class PreferencesController: DialogController {
     //
     // General
     //
-    
+
+    // Workspaces
+    @IBOutlet weak var genCompressWorkspaces: NSButton!
+
     // Snapshots
     @IBOutlet weak var genAutoSnapshots: NSButton!
     @IBOutlet weak var genSnapshotInterval: NSTextField!

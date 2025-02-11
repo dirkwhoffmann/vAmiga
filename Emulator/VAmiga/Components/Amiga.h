@@ -76,7 +76,8 @@ class Amiga final : public CoreComponent, public Inspectable<AmigaInfo> {
         Opt::AMIGA_RUN_AHEAD,
         Opt::AMIGA_SNAP_AUTO,
         Opt::AMIGA_SNAP_DELAY,
-        Opt::AMIGA_SNAP_COMPRESS
+        Opt::AMIGA_SNAP_COMPRESS,
+        Opt::AMIGA_WS_COMPRESS,
     };
     
     // The current configuration

@@ -34,10 +34,10 @@ public:
     
     HDZFile(const std::filesystem::path &path) throws { init(path); }
     HDZFile(const u8 *buf, isize len) throws { init(buf, len); }
-    HDZFile(const class HardDrive &hd) throws { init(hd); }
-    
-    void init(const class HardDrive &hd) throws;
-    
+    HDZFile(const class HDFFile &hdf) throws { init(hdf); }
+
+    void init(const class HDFFile &hdf) throws;
+
     const char *objectName() const override { return "HDZ"; }
 
     

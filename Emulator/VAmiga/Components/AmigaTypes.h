@@ -342,6 +342,9 @@ typedef struct
     
     //! Indicates whether snapshots should be stored in compressed form
     bool compressSnapshots;
+
+    //! Indicates whether workspace media files should be compressed
+    bool compressWorkspaces;
 }
 AmigaConfig;
 

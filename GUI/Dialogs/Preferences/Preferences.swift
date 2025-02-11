@@ -28,7 +28,16 @@ class Preferences {
     //
     // General
     //
-      
+
+    // Workspaces
+    var workspaceCompression = false {
+        didSet {
+            for emu in myAppDelegate.proxies {
+                emu.set(.AMIGA_WS_COMPRESS, enable: workspaceCompression)
+            }
+        }
+    }
+    
     // Snapshots
     var autoSnapshots = false {
         didSet {

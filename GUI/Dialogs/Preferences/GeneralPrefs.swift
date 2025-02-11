@@ -26,6 +26,9 @@ extension PreferencesController {
             }
         }
         
+        // Workspaces
+        genCompressWorkspaces.state = pref.workspaceCompression ? .on : .off
+        
         // Snapshots
         genSnapshotStorage.integerValue = pref.snapshotStorage
         genAutoSnapshots.state = pref.autoSnapshots ? .on : .off
@@ -77,6 +80,15 @@ extension PreferencesController {
         refreshGeneralTab()
     }
 
+    //
+    // Action methods (Workspaces)
+    //
+    
+    @IBAction func genCompressWorkspacesAction(_ sender: NSButton!) {
+        
+        pref.workspaceCompression = sender.state == .on
+    }
+    
     //
     // Action methods (Snapshots)
     //

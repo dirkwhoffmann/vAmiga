@@ -34,6 +34,9 @@ public:
     
     ADZFile(const std::filesystem::path &path) throws { init(path); }
     ADZFile(const u8 *buf, isize len) throws { init(buf, len); }
+    ADZFile(const class ADFFile &adf) throws { init(adf); }
+    
+    void init(const class ADFFile &adf) throws;
     
     const char *objectName() const override { return "ADZ"; }
 
