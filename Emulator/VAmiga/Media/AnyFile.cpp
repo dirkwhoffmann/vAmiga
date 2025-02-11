@@ -115,8 +115,7 @@ AnyFile::readFromBuffer(const Buffer<u8> &buffer)
 isize
 AnyFile::writeToStream(std::ostream &stream, isize offset, isize len) const
 {
-    assert(offset >= 0 && offset < data.size);
-    assert(len >= 0 && offset + len <= data.size);
+    assert(offset >= 0 && len >= 0 && offset + len <= data.size);
 
     stream.write((char *)data.ptr + offset, len);
     

@@ -72,6 +72,7 @@ template <class T> struct Allocator {
     void compress(isize n = 2, isize offset = 0);
     void uncompress(isize n = 2, isize offset = 0, isize expectedSize = 0);
     
+    void gzip();
     void ungzip();
 };
 

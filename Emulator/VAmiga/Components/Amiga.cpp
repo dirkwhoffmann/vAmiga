@@ -367,8 +367,11 @@ Amiga::saveWorkspace(const fs::path &path)
         
         if (drive.hasDisk()) {
             try {
-                HDFFile hdf(drive);
+                HDZFile hdf(drive);
                 hdf.writeToFile(path / file);
+                
+                HDZFile(drive).writeToFile(path / file);
+                
                 drive.markDiskAsUnmodified();
 
                 hd << "try " << name << " attach " << file << "\n";

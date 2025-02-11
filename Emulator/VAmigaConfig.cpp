@@ -124,7 +124,7 @@ debugflag DBD_DEBUG       = 0;
 
 // Media types
 debugflag ADF_DEBUG       = 0;
-debugflag HDF_DEBUG       = 0;
+debugflag HDF_DEBUG       = 1;
 debugflag DMS_DEBUG       = 0;
 debugflag IMG_DEBUG       = 0;
 

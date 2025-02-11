@@ -325,56 +325,117 @@ Allocator<T>::uncompress(isize n, isize offset, isize expectedSize)
     init(vec);
 }
 
+#ifdef USE_ZLIB
+
+template <class T> void
+Allocator<T>::gzip()
+{
+    // Select gzip compression by choosing adequate window bits
+    constexpr int windowBits = MAX_WBITS | 16;
+
+    // Simulate an error if requested
+    if (FORCE_ZLIB_ERROR) throw std::runtime_error("Forced zlib error.");
+        
+    // Only proceed if there is anything to zip
+    if (size == 0) return;
+    
+    // Configure the zlib stream
+    std::vector<uint8_t> compressed(2 * size);
+    z_stream zs {
+        .next_in   = (Bytef *)ptr,
+        .avail_in  = (uInt)size,
+        .next_out  = (Bytef *)compressed.data(),
+        .avail_out = (uInt)compressed.size(),
+    };
+    
+    // Initialize the zlib stream
+    if (deflateInit2(&zs, Z_DEFAULT_COMPRESSION, Z_DEFLATED, windowBits, 8, Z_DEFAULT_STRATEGY) != Z_OK) {
+        throw std::runtime_error("Failed to initialize zlib.");
+    }
+    if (auto ret = deflate(&zs, Z_FINISH); ret != Z_STREAM_END) {
+        
+        deflateEnd(&zs);
+        throw std::runtime_error("Zlib error " + std::to_string(ret));
+    }
+    
+    compressed.resize(zs.total_out);
+    deflateEnd(&zs);
+    
+    // Replace buffer contents with the compressed data
+    init(compressed);
+}
+
 template <class T> void
 Allocator<T>::ungzip()
 {
-#ifdef USE_ZLIB
-
+    // Select gzip compression by choosing adequate window bits
+    constexpr int windowBits = MAX_WBITS | 16;
+    
+    // Simulate an error if requested
+    if (FORCE_ZLIB_ERROR) throw std::runtime_error("Forced zlib error.");
+    
+    // Only proceed if there is anything to unzip
+    if (size == 0) return;
+    
+    // Configure the zlib stream
+    z_stream zs {
+        .next_in   = (Bytef *)ptr,
+        .avail_in  = (uInt)size,
+    };
+        
+    // Initialize the zlib stream
+    if (inflateInit2(&zs, windowBits) != Z_OK) {
+        throw std::runtime_error("Failed to initialize zlib.");
+    }
+    
     // Vector holding the uncompressed data
     std::vector<uint8_t> decompressed;
 
     // For speedup: Estimate the size and reserve elements
     decompressed.reserve(2 * size);
-    
-    z_stream strm{};
-    strm.next_in = (Bytef *)ptr;
-    strm.avail_in = (uInt)size;
-    
-    // Note: 16+MAX_WBITS enables Gzip decoding
-    if (inflateInit2(&strm, 16 + MAX_WBITS) != Z_OK || FORCE_ZLIB_ERROR) {
-        throw std::runtime_error("Failed to initialize zlib for gzip decompression.");
-    }
-    
+
     // Decompress in chunks
     std::vector<uint8_t> buffer(8192);
     int ret;
+    
     do {
         
-        strm.next_out = buffer.data();
-        strm.avail_out = static_cast<uInt>(buffer.size());
+        zs.next_out = buffer.data();
+        zs.avail_out = static_cast<uInt>(buffer.size());
         
-        ret = inflate(&strm, Z_NO_FLUSH);
-        if (ret == Z_STREAM_ERROR) {
-            inflateEnd(&strm);
-            throw std::runtime_error("Zlib streaming error.");
+        switch (ret = inflate(&zs, Z_NO_FLUSH)) {
+                
+            case Z_ERRNO:
+            case Z_STREAM_ERROR:
+            case Z_DATA_ERROR:
+            case Z_MEM_ERROR:
+            case Z_BUF_ERROR:
+            case Z_VERSION_ERROR:
+                
+                inflateEnd(&zs);
+                throw std::runtime_error("Zlib error " + std::to_string(ret));
+                
+            default:
+                break;
         }
         
-        size_t bytesDecompressed = buffer.size() - strm.avail_out;
+        size_t bytesDecompressed = buffer.size() - zs.avail_out;
         decompressed.insert(decompressed.end(), buffer.begin(), buffer.begin() + bytesDecompressed);
         
     } while (ret != Z_STREAM_END);
     
-    inflateEnd(&strm);
+    inflateEnd(&zs);
     
     // Replace buffer contents with the uncompressed data
     init(decompressed);
+}
 
 #else
 
-    throw std::runtime_error("No zlib support.");
+template <class T> void Allocator<T>::gzip() { throw std::runtime_error("No zlib support."); }
+template <class T> void Allocator<T>::gunzip() { throw std::runtime_error("No zlib support."); }
 
 #endif
-}
 
 
 //
@@ -406,5 +467,6 @@ INSTANTIATE_ALLOCATOR(isize)
 INSTANTIATE_ALLOCATOR(float)
 INSTANTIATE_ALLOCATOR(bool)
 
+template void Allocator<u8>::gzip();
 template void Allocator<u8>::ungzip();
 }

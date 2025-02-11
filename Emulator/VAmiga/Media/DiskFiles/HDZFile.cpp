@@ -32,17 +32,42 @@ HDZFile::isCompatible(const Buffer<u8> &buf)
 }
 
 void
-HDZFile::finalizeRead()
+HDZFile::init(const HardDrive &drive)
 {
-    debug(HDF_DEBUG, "Decompressing %ld bytes...\n", data.size);
+    hdf.init(drive);
+
+    data = hdf.data;
     
-    try {
-        data.ungzip();
-    } catch (std::runtime_error &err) {
-        throw CoreException(CoreError::ZLIB_ERROR, err.what());
+    debug(HDF_DEBUG, "Uncompressed size: %ld bytes\n", data.size);
+
+    {   util::StopWatch(HDF_DEBUG, "Compressing...");
+        
+        try {
+            data.gzip();
+        } catch (std::runtime_error &err) {
+            throw CoreException(CoreError::ZLIB_ERROR, err.what());
+        }
     }
     
-    debug(HDF_DEBUG, "Restored %ld bytes.\n", data.size);
+    debug(HDF_DEBUG, "Compressed size: %ld bytes.\n", data.size);
+}
+
+void
+HDZFile::finalizeRead()
+{
+    debug(HDF_DEBUG, "Compressed size: %ld bytes.\n", data.size);
+        
+    {   util::StopWatch(SNP_DEBUG, "Uncompressing...");
+        
+        try {
+            data.ungzip();
+        } catch (std::runtime_error &err) {
+            throw CoreException(CoreError::ZLIB_ERROR, err.what());
+        }
+    }
+    
+    debug(HDF_DEBUG, "Uncompressed size: %ld bytes\n", data.size);
+    
     
     // Initialize the ADF with the decompressed data (may throw)
     hdf.init(data.ptr, data.size);
