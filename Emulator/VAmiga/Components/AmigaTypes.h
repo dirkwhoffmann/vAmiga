@@ -17,6 +17,46 @@ namespace vamiga {
 // Enumerations
 //
 
+enum class Compressor : long
+{
+    NONE,
+    GZIP,
+    RLE2,
+    RLE3,
+    RLE4
+};
+
+struct CompressorEnum : Reflection<CompressorEnum, Compressor>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = long(Compressor::RLE4);
+    
+    static const char *_key(Compressor value)
+    {
+        switch (value) {
+                
+            case Compressor::NONE:  return "NONE";
+            case Compressor::GZIP:  return "GZIP";
+            case Compressor::RLE2:  return "RLE2";
+            case Compressor::RLE3:  return "RLE3";
+            case Compressor::RLE4:  return "RLE4";
+        }
+        return "???";
+    }
+    static const char *help(Compressor value)
+    {
+        switch (value) {
+                
+            case Compressor::NONE:  return "No compression";
+            case Compressor::GZIP:  return "Gzip compression";
+            case Compressor::RLE2:  return "Run-length encoding (2)";
+            case Compressor::RLE3:  return "Run-length encoding (3)";
+            case Compressor::RLE4:  return "Run-length encoding (4)";
+        }
+        return "???";
+    }
+};
+
 enum class TV : long
 {
     PAL,
@@ -340,8 +380,8 @@ typedef struct
     //! Delay between two auto-snapshots in seconds
     isize snapshotDelay;
     
-    //! Indicates whether snapshots should be stored in compressed form
-    bool compressSnapshots;
+    //! Selects the snapshot compression method
+    Compressor compressSnapshots;
 
     //! Indicates whether workspace media files should be compressed
     bool compressWorkspaces;

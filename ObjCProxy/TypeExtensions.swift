@@ -18,6 +18,7 @@ typealias BootBlockId = vamiga.BootBlockId
 typealias CIAInfo = vamiga.CIAInfo
 typealias CIARevision = vamiga.CIARev
 typealias CIAStats = vamiga.CIAStats
+typealias Compressor = vamiga.Compressor
 typealias ControlPortDevice = vamiga.ControlPortDevice
 typealias ControlPortInfo = vamiga.ControlPortInfo
 typealias CopperInfo = vamiga.CopperInfo
@@ -59,6 +60,21 @@ typealias StateMachineInfo = vamiga.StateMachineInfo
 typealias UARTInfo = vamiga.UARTInfo
 typealias VideoFormat = vamiga.TV
 typealias WarpMode = vamiga.Warp
+
+extension Compressor: CustomStringConvertible {
+
+    public var description: String {
+        
+        switch self {
+        case .NONE:     return ""
+        case .GZIP:     return "GZIP"
+        case .RLE2:     return "RLE2"
+        case .RLE3:     return "RLE3"
+        case .RLE4:     return "RLE4"
+        default:        fatalError()
+        }
+    }
+}
 
 extension EventSlot: CustomStringConvertible {
 

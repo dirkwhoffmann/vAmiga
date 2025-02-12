@@ -31,7 +31,7 @@ Defaults::Defaults()
 
     setFallback(Opt::AMIGA_SNAP_AUTO,            false);
     setFallback(Opt::AMIGA_SNAP_DELAY,           10);
-    setFallback(Opt::AMIGA_SNAP_COMPRESS,        true);
+    setFallback(Opt::AMIGA_SNAP_COMPRESS,        (i64)Compressor::GZIP);
     setFallback(Opt::AMIGA_WS_COMPRESS,          true);
 
     setFallback(Opt::AGNUS_REVISION,             (i64)AgnusRevision::ECS_1MB);

@@ -928,6 +928,7 @@ NSString *EventSlotName(NSInteger slot);
 @property (readonly) FileType type;
 @property (readonly) NSInteger size;
 @property (readonly) u64 fnv;
+@property (readonly) Compressor compressor;
 @property (readonly) BOOL compressed;
 
 @property (readonly) u8 *data;

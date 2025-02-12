@@ -62,9 +62,9 @@ class SnapshotDialog: DialogController {
         nr.stringValue = "Snapshot \(currentItem + 1) / \(numItems)"
 
         if let snapshot = myDocument.snapshots.element(at: currentItem) {
-
+            
             let takenAt = snapshot.timeStamp
-            let compressed = snapshot.compressed ? "(Compressed)" : ""
+            let compressed = snapshot.compressed ? "(\(snapshot.compressor))" : ""
             let sizemb = Double(snapshot.size) / Double(MB)
             let rounded = Double(Int(sizemb * 100.0)) / 100.0
             

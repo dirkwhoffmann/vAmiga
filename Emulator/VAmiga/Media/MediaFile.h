@@ -11,6 +11,7 @@
 
 #include "MediaFileTypes.h"
 #include "FloppyDiskTypes.h"
+#include "AmigaTypes.h"
 #include <sstream>
 #include <fstream>
 #include <filesystem>
@@ -72,8 +73,9 @@ public:
     virtual const u32 *previewImageData() const { return nullptr; }
 
     // Handels data compression (only implemented by snapshot files)
-    virtual bool isCompressed() const { return false; }
-    virtual void compress() { }
+    virtual Compressor compressor() const { return Compressor::NONE; }
+    virtual bool isCompressed() const { return compressor() != Compressor::NONE; }
+    virtual void compress(Compressor method) { }
     virtual void uncompress() { }
 
     // Returns media information

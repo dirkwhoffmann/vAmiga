@@ -214,118 +214,39 @@ Allocator<T>::patch(const char *seq, const char *subst)
 }
 
 template <class T> void
-Allocator<T>::compress(isize n, isize offset)
+Allocator<T>::rle(isize n, isize offset)
 {
-    /* This function performs a run-length encoding according to the following
-     * scheme:
-     *
-     * k < n:   AA ... AA B   ->   AA ... AA B
-     *          <-- k -->          <-- k -->
-     *
-     * k >= n:  AA ... AA B   ->   AA ... AA [max] ... [max] [l] B
-     *          <-- k -->          <-- n --> <--- sum = k-n --->
-     *
-     *                             with max = std::numeric_limits<T>::max()
-     *
-     * Note: For k = n, the second case implies:
-     *
-     *          AA ... AA B   ->   AA ... AA [0] B
-     *          <-- n -->          <-- n -->
-     *
-     * In this case, compression has a negative effect. Examples:
-     *
-     *      ABBCCCDDDDEEEEE   ->   ABB0CC1DD2EE3
-     *         AABBCCDDEEFF   ->   AA0BB0CC0DD0EE0FF0
-     */
-
-    const auto max = isize(std::numeric_limits<T>::max());
-    T prev = 0;
-    isize repetitions = 0;
-
-    std::vector<T> vec;
-    vec.reserve(size);
-
-    auto encode = [&](T element, isize count) {
-        
-        // Encode up to n symbols in plain text
-        for (isize k = 0; k < std::min(n, count); k++) vec.push_back(element);
-        
-        count -= n;
-        
-        // Append the run length sequence
-        while (count >= 0) {
-            
-            auto runlength = std::min(count, max);
-            vec.push_back(T(runlength));
-            count -= runlength;
-            
-            if (runlength != max) break;
-        }
-    };
-
-    // Skip everything up to the offset position
-    vec.insert(vec.end(), ptr, ptr + std::min(offset, size));
+    std::vector<u8> compressed;
     
-    // Perform run-length encoding
-    for (isize i = offset; i < size; i++) {
-
-        if (ptr[i] == prev) {
-
-            repetitions++;
-
-        } else {
-
-            encode(prev, repetitions);
-            prev = ptr[i];
-            repetitions = 1;
-        }
-    }
-    encode(prev, repetitions);
-
-    // Replace old data
-    init(vec);
+    // Skip everything up to the offset position
+    compressed.insert(compressed.end(), ptr, ptr + std::min(offset, size));
+    
+    // Run the run-length encoder
+    if (size > offset) util::rle(ptr + offset, size - offset, compressed);
+    
+    // Replace buffer contents with the compressed data
+    init(compressed);
 }
 
 template <class T> void
-Allocator<T>::uncompress(isize n, isize offset, isize expectedSize)
+Allocator<T>::unrle(isize n, isize offset, isize expectedSize)
 {
-    const auto max = isize(std::numeric_limits<T>::max());
-    T prev = 0;
-    isize repetitions = 0;
-    std::vector<T> vec;
-
-    // Speed up by starting with a big enough container
-    if (expectedSize) vec.reserve(expectedSize);
-
-    // Skip everything up to the offset position
-    vec.insert(vec.end(), ptr, ptr + std::min(offset, size));
+    std::vector<u8> uncompressed;
     
-    for (isize i = offset; i < size; i++) {
+    // Skip everything up to the offset position
+    uncompressed.insert(uncompressed.end(), ptr, ptr + std::min(offset, size));
 
-        vec.push_back(ptr[i]);
-        repetitions = prev != ptr[i] ? 1 : repetitions + 1;
-        prev = ptr[i];
-
-        if (repetitions == n) {
-
-            while (i < size - 1) {
-                
-                auto runlength = isize(ptr[++i]);
-                vec.insert(vec.end(), runlength, prev);
-                if (runlength != max) break;
-            }
-            repetitions = 0;
-        }
-    }
-
-    // Replace old data
-    init(vec);
+    // Run the run-length deconder
+    if (size > offset) util::unrle(ptr + offset, size - offset, uncompressed);
+    
+    // Replace buffer contents with the uncompressed data
+    init(uncompressed);
 }
 
 template <class T> void
 Allocator<T>::gzip(isize offset)
 {
-    std::vector<uint8_t> compressed;
+    std::vector<u8> compressed;
     
     // Skip everything up to the offset position
     compressed.insert(compressed.end(), ptr, ptr + std::min(offset, size));
@@ -335,48 +256,12 @@ Allocator<T>::gzip(isize offset)
     
     // Replace buffer contents with the compressed data
     init(compressed);
-    
-    /*
-    // Simulate an error if requested
-    if (FORCE_ZLIB_ERROR) throw std::runtime_error("Forced zlib error.");
-
-    // Select gzip compression by choosing adequate window bits
-    constexpr int windowBits = MAX_WBITS | 16;
-        
-    // Only proceed if there is anything to zip
-    if (size == 0) return;
-    
-    // Configure the zlib stream
-    std::vector<uint8_t> compressed(2 * size);
-    z_stream zs {
-        .next_in   = (Bytef *)ptr,
-        .avail_in  = (uInt)size,
-        .next_out  = (Bytef *)compressed.data(),
-        .avail_out = (uInt)compressed.size(),
-    };
-    
-    // Initialize the zlib stream
-    if (deflateInit2(&zs, Z_DEFAULT_COMPRESSION, Z_DEFLATED, windowBits, 8, Z_DEFAULT_STRATEGY) != Z_OK) {
-        throw std::runtime_error("Failed to initialize zlib.");
-    }
-    if (auto ret = deflate(&zs, Z_FINISH); ret != Z_STREAM_END) {
-        
-        deflateEnd(&zs);
-        throw std::runtime_error("Zlib error " + std::to_string(ret));
-    }
-    
-    compressed.resize(zs.total_out);
-    deflateEnd(&zs);
-    
-    // Replace buffer contents with the compressed data
-    init(compressed);
-    */
 }
 
 template <class T> void
 Allocator<T>::gunzip(isize offset, isize sizeEstimate)
 {
-    std::vector<uint8_t> uncompressed;
+    std::vector<u8> uncompressed;
     
     // Skip everything up to the offset position
     uncompressed.insert(uncompressed.end(), ptr, ptr + std::min(offset, size));
@@ -384,71 +269,8 @@ Allocator<T>::gunzip(isize offset, isize sizeEstimate)
     // Run the gunzip algorithm
     if (size > offset) util::gunzip(ptr + offset, size - offset, uncompressed);
     
-    // Replace buffer contents with the compressed data
-    init(uncompressed);
-    
-    /*
-    // Select gzip compression by choosing adequate window bits
-    constexpr int windowBits = MAX_WBITS | 16;
-    
-    // Simulate an error if requested
-    if (FORCE_ZLIB_ERROR) throw std::runtime_error("Forced zlib error.");
-    
-    // Only proceed if there is anything to unzip
-    if (size == 0) return;
-    
-    // Configure the zlib stream
-    z_stream zs {
-        .next_in   = (Bytef *)ptr,
-        .avail_in  = (uInt)size,
-    };
-        
-    // Initialize the zlib stream
-    if (inflateInit2(&zs, windowBits) != Z_OK) {
-        throw std::runtime_error("Failed to initialize zlib.");
-    }
-    
-    // Vector holding the uncompressed data
-    std::vector<uint8_t> decompressed;
-
-    // For speedup: Estimate the size and reserve elements
-    decompressed.reserve(2 * size);
-
-    // Decompress in chunks
-    std::vector<uint8_t> buffer(8192);
-    int ret;
-    
-    do {
-        
-        zs.next_out = buffer.data();
-        zs.avail_out = static_cast<uInt>(buffer.size());
-        
-        switch (ret = inflate(&zs, Z_NO_FLUSH)) {
-                
-            case Z_ERRNO:
-            case Z_STREAM_ERROR:
-            case Z_DATA_ERROR:
-            case Z_MEM_ERROR:
-            case Z_BUF_ERROR:
-            case Z_VERSION_ERROR:
-                
-                inflateEnd(&zs);
-                throw std::runtime_error("Zlib error " + std::to_string(ret));
-                
-            default:
-                break;
-        }
-        
-        size_t bytesDecompressed = buffer.size() - zs.avail_out;
-        decompressed.insert(decompressed.end(), buffer.begin(), buffer.begin() + bytesDecompressed);
-        
-    } while (ret != Z_STREAM_END);
-    
-    inflateEnd(&zs);
-    
     // Replace buffer contents with the uncompressed data
-    init(decompressed);
-    */
+    init(uncompressed);
 }
 
 //
@@ -469,9 +291,7 @@ template void Allocator<T>::resize(isize elements, T value); \
 template void Allocator<T>::clear(T value, isize offset, isize len); \
 template void Allocator<T>::copy(T *buf, isize offset, isize len) const; \
 template void Allocator<T>::patch(const u8 *seq, const u8 *subst); \
-template void Allocator<T>::patch(const char *seq, const char *subst); \
-template void Allocator<T>::compress(isize, isize); \
-template void Allocator<T>::uncompress(isize, isize, isize);
+template void Allocator<T>::patch(const char *seq, const char *subst);
 
 INSTANTIATE_ALLOCATOR(u8)
 INSTANTIATE_ALLOCATOR(u32)
@@ -480,6 +300,8 @@ INSTANTIATE_ALLOCATOR(isize)
 INSTANTIATE_ALLOCATOR(float)
 INSTANTIATE_ALLOCATOR(bool)
 
+template void Allocator<u8>::rle(isize, isize);
+template void Allocator<u8>::unrle(isize, isize, isize);
 template void Allocator<u8>::gzip(isize);
 template void Allocator<u8>::gunzip(isize, isize);
 }

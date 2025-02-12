@@ -36,7 +36,7 @@ enum class Opt : long
     // Snapshots
     AMIGA_SNAP_AUTO,        ///< Automatically take a snapshots
     AMIGA_SNAP_DELAY,       ///< Delay between two snapshots in seconds
-    AMIGA_SNAP_COMPRESS,    ///< Compress snapshot data
+    AMIGA_SNAP_COMPRESS,    ///< Snapshot compression method
 
     // Workspaces
     AMIGA_WS_COMPRESS,      ///< Workspace media file compression
@@ -377,7 +377,7 @@ struct OptEnum : Reflection<OptEnum, Opt>
             case Opt::AMIGA_RUN_AHEAD:           return "Run-ahead frames";
             case Opt::AMIGA_SNAP_AUTO:           return "Automatically take snapshots";
             case Opt::AMIGA_SNAP_DELAY:          return "Time span between two snapshots";
-            case Opt::AMIGA_SNAP_COMPRESS:       return "Compress snapshot data";
+            case Opt::AMIGA_SNAP_COMPRESS:       return "Snapshot compression method";
             case Opt::AMIGA_WS_COMPRESS:         return "Compress workspaces";
 
             case Opt::AGNUS_REVISION:            return "Chip revision";

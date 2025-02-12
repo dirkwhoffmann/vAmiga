@@ -69,8 +69,8 @@ template <class T> struct Allocator {
     u32 crc32() const { return ptr ? util::crc32((u8 *)ptr, bytesize()) : 0; }
     
     // Compresses or uncompresses a buffer
-    void compress(isize n = 2, isize offset = 0);
-    void uncompress(isize n = 2, isize offset = 0, isize expectedSize = 0);
+    void rle(isize n = 2, isize offset = 0);
+    void unrle(isize n = 2, isize offset = 0, isize expectedSize = 0);
     
     void gzip(isize offset = 0);
     void gunzip(isize offset = 0, isize sizeEstimate = 0);

@@ -89,9 +89,9 @@ Snapshot::Snapshot(Amiga &amiga) : Snapshot(amiga.size())
     }
 }
 
-Snapshot::Snapshot(Amiga &amiga, bool compress) : Snapshot(amiga)
+Snapshot::Snapshot(Amiga &amiga, Compressor compressor) : Snapshot(amiga)
 {
-    if (compress) this->compress();
+    compress(compressor);
 }
 
 void
@@ -163,17 +163,26 @@ Snapshot::takeScreenshot(Amiga &amiga)
 }
 
 void
-Snapshot::compress()
+Snapshot::compress(Compressor compressor)
 {
+    debug(SNP_DEBUG, "compress(%s)\n", CompressorEnum::key(compressor));
+
     if (!isCompressed()) {
 
         debug(SNP_DEBUG, "Compressing %ld bytes (hash: 0x%x)...", data.size, data.fnv32());
 
         {   auto watch = util::StopWatch(SNP_DEBUG, "");
             
-            data.compress(2, sizeof(SnapshotHeader));
-            // data.gzip(sizeof(SnapshotHeader));
-            getHeader()->compressed = true;
+            switch (compressor) {
+                    
+                case Compressor::NONE:  break;
+                case Compressor::GZIP:  data.gzip(sizeof(SnapshotHeader)); break;
+                case Compressor::RLE2:  data.rle(2, sizeof(SnapshotHeader)); break;
+                case Compressor::RLE3:  data.rle(3, sizeof(SnapshotHeader)); break;
+                case Compressor::RLE4:  data.rle(4, sizeof(SnapshotHeader)); break;
+            }
+            
+            getHeader()->compressor = u8(compressor);
         }
         debug(SNP_DEBUG, "Compressed size: %ld bytes\n", data.size);
     }
@@ -181,6 +190,8 @@ Snapshot::compress()
 void
 Snapshot::uncompress()
 {
+    debug(SNP_DEBUG, "uncompress(%s)\n", CompressorEnum::key(compressor()));
+
     if (isCompressed()) {
         
         isize expectedSize = getHeader()->rawSize;
@@ -188,10 +199,17 @@ Snapshot::uncompress()
         debug(SNP_DEBUG, "Uncompressing %ld bytes...", data.size);
         
         {   auto watch = util::StopWatch(SNP_DEBUG, "");
+        
+            switch (compressor()) {
+                    
+                case Compressor::NONE:  break;
+                case Compressor::GZIP:  data.gunzip(sizeof(SnapshotHeader), expectedSize); break;
+                case Compressor::RLE2:  data.unrle(2, sizeof(SnapshotHeader), expectedSize); break;
+                case Compressor::RLE3:  data.unrle(3, sizeof(SnapshotHeader), expectedSize); break;
+                case Compressor::RLE4:  data.unrle(4, sizeof(SnapshotHeader), expectedSize); break;
+            }
             
-            data.uncompress(2, sizeof(SnapshotHeader), expectedSize);
-            // data.gunzip(sizeof(SnapshotHeader), expectedSize);
-            getHeader()->compressed = false;
+            getHeader()->compressor = u8(Compressor::NONE);
         }
         debug(SNP_DEBUG, "Uncompressed size: %ld bytes (hash: 0x%x)\n", data.size, data.fnv32());
         

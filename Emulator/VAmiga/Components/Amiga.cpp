@@ -171,15 +171,15 @@ Amiga::getOption(Opt option) const
     switch (option) {
             
         case Opt::AMIGA_VIDEO_FORMAT:    return (i64)config.type;
-        case Opt::AMIGA_WARP_BOOT:       return config.warpBoot;
+        case Opt::AMIGA_WARP_BOOT:       return (i64)config.warpBoot;
         case Opt::AMIGA_WARP_MODE:       return (i64)config.warpMode;
-        case Opt::AMIGA_VSYNC:           return config.vsync;
-        case Opt::AMIGA_SPEED_BOOST:     return config.speedBoost;
-        case Opt::AMIGA_RUN_AHEAD:       return config.runAhead;
-        case Opt::AMIGA_SNAP_AUTO:       return config.snapshots;
-        case Opt::AMIGA_SNAP_DELAY:      return config.snapshotDelay;
-        case Opt::AMIGA_SNAP_COMPRESS:   return config.compressSnapshots;
-        case Opt::AMIGA_WS_COMPRESS:     return config.compressWorkspaces;
+        case Opt::AMIGA_VSYNC:           return (i64)config.vsync;
+        case Opt::AMIGA_SPEED_BOOST:     return (i64)config.speedBoost;
+        case Opt::AMIGA_RUN_AHEAD:       return (i64)config.runAhead;
+        case Opt::AMIGA_SNAP_AUTO:       return (i64)config.snapshots;
+        case Opt::AMIGA_SNAP_DELAY:      return (i64)config.snapshotDelay;
+        case Opt::AMIGA_SNAP_COMPRESS:   return (i64)config.compressSnapshots;
+        case Opt::AMIGA_WS_COMPRESS:     return (i64)config.compressWorkspaces;
 
         default:
             fatalError;
@@ -239,6 +239,12 @@ Amiga::checkOption(Opt opt, i64 value)
             return;
             
         case Opt::AMIGA_SNAP_COMPRESS:
+            
+            if (CompressorEnum::isValid(value)) {
+                throw CoreException(CoreError::OPT_INV_ARG, WarpEnum::keyList());
+            }
+            return;
+            
         case Opt::AMIGA_WS_COMPRESS:
 
             return;
@@ -301,7 +307,7 @@ Amiga::setOption(Opt option, i64 value)
             
         case Opt::AMIGA_SNAP_COMPRESS:
             
-            config.compressSnapshots = bool(value);
+            config.compressSnapshots = Compressor(value);
             return;
 
         case Opt::AMIGA_WS_COMPRESS:
@@ -1134,7 +1140,7 @@ Amiga::takeSnapshot()
    result = new Snapshot(*this);
     
     // Compress the snapshot if requested
-    if (config.compressSnapshots) result->compress();
+    result->compress(config.compressSnapshots);
     
     return result;
 }

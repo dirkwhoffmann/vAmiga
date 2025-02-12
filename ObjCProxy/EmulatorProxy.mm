@@ -1806,6 +1806,11 @@ NSString *EventSlotName(NSInteger slot)
     return [self file]->getSize();
 }
 
+- (Compressor)compressor
+{
+    return [self file]->compressor();
+}
+
 - (BOOL)compressed
 {
     return [self file]->isCompressed();

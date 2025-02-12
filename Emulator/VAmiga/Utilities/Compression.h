@@ -14,7 +14,9 @@
 
 namespace vamiga::util {
 
+void rle(u8 *uncompressed, isize len, std::vector<u8> &result, isize n = 2);
+void unrle(u8 *compressed, isize len, std::vector<u8> &result, isize n = 2);
+
 void gzip(u8 *uncompressed, isize len, std::vector<u8> &result);
 void gunzip(u8 *compressed, isize len, std::vector<u8> &result, isize sizeEstimate = 0);
-
 }

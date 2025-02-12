@@ -40,8 +40,8 @@ struct SnapshotHeader {
     u8 subminor;
     u8 beta;
 
-    // Indicates if the snapshot contents is stored in compressed form
-    bool compressed;
+    // Applied compression method
+    u8 compressor;
 
     // Size of this snapshot when uncompressed
     i32 rawSize;
@@ -68,7 +68,7 @@ public:
     Snapshot(const u8 *buf, isize len) throws { init(buf, len); }
     Snapshot(isize capacity);
     Snapshot(Amiga &amiga);
-    Snapshot(Amiga &amiga, bool compress);
+    Snapshot(Amiga &amiga, Compressor compressor);
     
     const char *objectName() const override { return "Snapshot"; }
     
@@ -115,12 +115,12 @@ public:
     //
     // Compressing
     //
-
-    // Indicates whether the snapshot is compressed
-    bool isCompressed() const override { return getHeader()->compressed; }
-
+    
+    // Returns the compression method
+    Compressor compressor() const override { return Compressor(getHeader()->compressor); }
+    
     // Compresses or uncompresses the snapshot
-    void compress() override;
+    void compress(Compressor method) override;
     void uncompress() override;
 };
 
