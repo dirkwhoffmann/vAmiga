@@ -1199,7 +1199,7 @@ Amiga::loadSnapshot(const Snapshot &snap)
 void
 Amiga::saveSnapshot(const std::filesystem::path &path)
 {
-    Snapshot(*this).writeToFile(path);
+    Snapshot(*this, config.compressSnapshots).writeToFile(path);
 }
 
 void

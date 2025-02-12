@@ -82,7 +82,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "87D2BC4B-76C1-45A4-B134-9E9B5A95DEC0"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Emulator/Agnus/Blitter/SlowBlitter.cpp"
@@ -109,7 +109,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "5F16736F-7D7A-43EC-8802-A7DD86C69203"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Emulator/Base/AmigaComponent.cpp"
@@ -137,7 +137,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "3DE81FC2-E3FF-4F75-A06A-E68785CE3B08"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Emulator/CPU/Moira/Moira.h"
@@ -185,7 +185,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "7F0EEAC3-778E-4226-8CB3-CC73E295F85F"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Emulator/Components/Emulator.cpp"
@@ -201,7 +201,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "BE41CA0A-3795-40C1-94E5-70D98DE395A5"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Emulator/Components/Emulator.cpp"
@@ -217,7 +217,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "C9C731CC-7623-4A10-836E-3C35E6377EA2"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Emulator/Misc/RemoteServers/RemoteServer.h"
@@ -233,7 +233,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "4D8F2E73-6C3C-4595-A16F-543DE122FE20"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Emulator/Headless.cpp"
@@ -249,7 +249,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "48189333-40EB-4E4E-AFE9-31CB4587A1F3"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "GUI/System/Extensions/FileExtensions.swift"
@@ -264,47 +264,17 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "21DE6584-9695-4FA5-84A4-C442BD074DE0"
-            shouldBeEnabled = "Yes"
+            uuid = "CDE299FF-8C61-4C06-8687-58C4FB2E8AF2"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Emulator/VAmiga/Peripherals/Drive/HardDrive.cpp"
+            filePath = "Emulator/VAmiga/Components/Zorro/HdController.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "132"
-            endingLineNumber = "132"
-            landmarkName = "HardDrive::init(file)"
+            startingLineNumber = "268"
+            endingLineNumber = "268"
+            landmarkName = "HdController::spypeek16(addr)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "21DE6584-9695-4FA5-84A4-C442BD074DE0 - 996a784deade0175"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "vamiga::HardDrive::init(vamiga::MediaFile const&amp;)"
-                  moduleName = "vAmiga.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/hoff/Retro/vAmiga/Emulator/VAmiga/Peripherals/Drive/HardDrive.cpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "132"
-                  endingLineNumber = "132">
-               </Location>
-               <Location
-                  uuid = "21DE6584-9695-4FA5-84A4-C442BD074DE0 - 996a784deade0175"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "vamiga::HardDrive::init(vamiga::MediaFile const&amp;)"
-                  moduleName = "vAmiga.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/hoff/Retro/vAmiga/Emulator/VAmiga/Peripherals/Drive/HardDrive.cpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "132"
-                  endingLineNumber = "132">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

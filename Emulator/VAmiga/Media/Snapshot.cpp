@@ -89,6 +89,11 @@ Snapshot::Snapshot(Amiga &amiga) : Snapshot(amiga.size())
     }
 }
 
+Snapshot::Snapshot(Amiga &amiga, bool compress) : Snapshot(amiga)
+{
+    if (compress) this->compress();
+}
+
 void
 Snapshot::finalizeRead()
 {
@@ -167,6 +172,7 @@ Snapshot::compress()
         {   auto watch = util::StopWatch(SNP_DEBUG, "");
             
             data.compress(2, sizeof(SnapshotHeader));
+            // data.gzip(sizeof(SnapshotHeader));
             getHeader()->compressed = true;
         }
         debug(SNP_DEBUG, "Compressed size: %ld bytes\n", data.size);
@@ -184,6 +190,7 @@ Snapshot::uncompress()
         {   auto watch = util::StopWatch(SNP_DEBUG, "");
             
             data.uncompress(2, sizeof(SnapshotHeader), expectedSize);
+            // data.gunzip(sizeof(SnapshotHeader), expectedSize);
             getHeader()->compressed = false;
         }
         debug(SNP_DEBUG, "Uncompressed size: %ld bytes (hash: 0x%x)\n", data.size, data.fnv32());

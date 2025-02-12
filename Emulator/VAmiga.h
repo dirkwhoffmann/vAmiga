@@ -80,7 +80,7 @@ public:
     void loadSnapshot(const MediaFile &snapshot);
     void loadSnapshot(const std::filesystem::path &path);
     
-    /** @brief  Loads a snapshot into the emulator.
+    /** @brief  Saves a snapshot to disk.
      *
      *  @param  path    Destination path
      */

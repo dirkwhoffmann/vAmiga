@@ -68,6 +68,7 @@ public:
     Snapshot(const u8 *buf, isize len) throws { init(buf, len); }
     Snapshot(isize capacity);
     Snapshot(Amiga &amiga);
+    Snapshot(Amiga &amiga, bool compress);
     
     const char *objectName() const override { return "Snapshot"; }
     

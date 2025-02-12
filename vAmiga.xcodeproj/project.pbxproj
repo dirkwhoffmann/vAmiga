@@ -25,6 +25,8 @@
 		5010A78222B50B690041388B /* PortPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5010A78122B50B690041388B /* PortPanel.swift */; };
 		5012DCE02D5B33C200233B6A /* HDZFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5012DCDF2D5B33C100233B6A /* HDZFile.cpp */; };
 		5012DCE12D5B33C200233B6A /* HDZFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5012DCDF2D5B33C100233B6A /* HDZFile.cpp */; };
+		5012DCE42D5C85CD00233B6A /* Compression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5012DCE32D5C85CB00233B6A /* Compression.cpp */; };
+		5012DCE52D5C85CD00233B6A /* Compression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5012DCE32D5C85CB00233B6A /* Compression.cpp */; };
 		501429D92445F12B00FBDC90 /* TextureToolbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501429D82445F12B00FBDC90 /* TextureToolbox.swift */; };
 		5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DD1321F3625200BC14BA /* Keyboard.cpp */; };
 		50157EED28257B7C000E9DDD /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50157EEC28257B7C000E9DDD /* Config.swift */; };
@@ -559,6 +561,8 @@
 		5010A78122B50B690041388B /* PortPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortPanel.swift; sourceTree = "<group>"; };
 		5012DCDE2D5B33BA00233B6A /* HDZFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDZFile.h; sourceTree = "<group>"; };
 		5012DCDF2D5B33C100233B6A /* HDZFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDZFile.cpp; sourceTree = "<group>"; };
+		5012DCE22D5C85C100233B6A /* Compression.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Compression.h; sourceTree = "<group>"; };
+		5012DCE32D5C85CB00233B6A /* Compression.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Compression.cpp; sourceTree = "<group>"; };
 		501429D82445F12B00FBDC90 /* TextureToolbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureToolbox.swift; sourceTree = "<group>"; };
 		5014DD1321F3625200BC14BA /* Keyboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Keyboard.cpp; sourceTree = "<group>"; };
 		5014DD1421F3625200BC14BA /* Keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Keyboard.h; sourceTree = "<group>"; };
@@ -1996,6 +2000,8 @@
 				500A0A28262305BE0019F013 /* MemUtils.cpp */,
 				50B3C44825EAFB5500651700 /* Checksum.h */,
 				50B3C44725EAFB5500651700 /* Checksum.cpp */,
+				5012DCE22D5C85C100233B6A /* Compression.h */,
+				5012DCE32D5C85CB00233B6A /* Compression.cpp */,
 				506D6AB1276C7B2D002C9711 /* StringUtils.h */,
 				506D6AB0276C7B2D002C9711 /* StringUtils.cpp */,
 				50C0B78125EC367000CDE1F2 /* IOUtils.h */,
@@ -2624,6 +2630,7 @@
 				50BE4B7424E815CA008F39C9 /* CIAEvents.cpp in Sources */,
 				507C9C4626076EF7006779B5 /* RessourceManager.swift in Sources */,
 				50FC046827DA02FD00C3E566 /* Buffer.cpp in Sources */,
+				5012DCE42D5C85CD00233B6A /* Compression.cpp in Sources */,
 				50B9354B243481AB000C78B8 /* SnapshotDialog.swift in Sources */,
 				501C514227C0CE6600DF1DD5 /* DriveDescriptors.cpp in Sources */,
 				509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */,
@@ -2814,6 +2821,7 @@
 				50FC04CE27DA19E900C3E566 /* IMGFile.cpp in Sources */,
 				502B303928469CF600673377 /* Beam.cpp in Sources */,
 				50FC04F827DA1A8F00C3E566 /* StateMachineEvents.cpp in Sources */,
+				5012DCE52D5C85CD00233B6A /* Compression.cpp in Sources */,
 				50EFB0D12C18E01E0013B73C /* Wakeable.cpp in Sources */,
 				50FC047627DA10AD00C3E566 /* VAmigaCheck.cpp in Sources */,
 				50FC049227DA196500C3E566 /* DeniseRegs.cpp in Sources */,

@@ -161,7 +161,8 @@ HDFFile::getPartitionDescriptor(isize part) const
         result = PartitionDescriptor(geo);
         
         // Make the first partition bootable if a boot block exists
-        if (hasBootBlock()) result.flags |= 1;
+//        if (hasBootBlock()) result.flags |= 1;
+        result.flags |= 1;
     }
     
     return result;

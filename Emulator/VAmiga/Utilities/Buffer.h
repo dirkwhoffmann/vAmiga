@@ -72,8 +72,13 @@ template <class T> struct Allocator {
     void compress(isize n = 2, isize offset = 0);
     void uncompress(isize n = 2, isize offset = 0, isize expectedSize = 0);
     
-    void gzip();
-    void gunzip();
+    void gzip(isize offset = 0);
+    void gunzip(isize offset = 0, isize sizeEstimate = 0);
+
+private:
+    
+    void gzip(u8 *uncompressed, isize len, std::vector<u8> &result);
+    void gunzip(u8 *compressed, isize len, std::vector<u8> &result);
 };
 
 template <class T> struct Buffer : public Allocator <T> {

@@ -11,11 +11,8 @@
 #include "Buffer.h"
 #include "IOUtils.h"
 #include "MemUtils.h"
+#include "Compression.h"
 #include <fstream>
-
-#ifdef USE_ZLIB
-#include <zlib.h>
-#endif
 
 namespace vamiga::util {
 
@@ -325,16 +322,26 @@ Allocator<T>::uncompress(isize n, isize offset, isize expectedSize)
     init(vec);
 }
 
-#ifdef USE_ZLIB
-
 template <class T> void
-Allocator<T>::gzip()
+Allocator<T>::gzip(isize offset)
 {
-    // Select gzip compression by choosing adequate window bits
-    constexpr int windowBits = MAX_WBITS | 16;
-
+    std::vector<uint8_t> compressed;
+    
+    // Skip everything up to the offset position
+    compressed.insert(compressed.end(), ptr, ptr + std::min(offset, size));
+    
+    // Run the gzip algorithm
+    if (size > offset) util::gzip(ptr + offset, size - offset, compressed);
+    
+    // Replace buffer contents with the compressed data
+    init(compressed);
+    
+    /*
     // Simulate an error if requested
     if (FORCE_ZLIB_ERROR) throw std::runtime_error("Forced zlib error.");
+
+    // Select gzip compression by choosing adequate window bits
+    constexpr int windowBits = MAX_WBITS | 16;
         
     // Only proceed if there is anything to zip
     if (size == 0) return;
@@ -363,11 +370,24 @@ Allocator<T>::gzip()
     
     // Replace buffer contents with the compressed data
     init(compressed);
+    */
 }
 
 template <class T> void
-Allocator<T>::gunzip()
+Allocator<T>::gunzip(isize offset, isize sizeEstimate)
 {
+    std::vector<uint8_t> uncompressed;
+    
+    // Skip everything up to the offset position
+    uncompressed.insert(uncompressed.end(), ptr, ptr + std::min(offset, size));
+
+    // Run the gunzip algorithm
+    if (size > offset) util::gunzip(ptr + offset, size - offset, uncompressed);
+    
+    // Replace buffer contents with the compressed data
+    init(uncompressed);
+    
+    /*
     // Select gzip compression by choosing adequate window bits
     constexpr int windowBits = MAX_WBITS | 16;
     
@@ -428,15 +448,8 @@ Allocator<T>::gunzip()
     
     // Replace buffer contents with the uncompressed data
     init(decompressed);
+    */
 }
-
-#else
-
-template <class T> void Allocator<T>::gzip() { throw std::runtime_error("No zlib support."); }
-template <class T> void Allocator<T>::gunzip() { throw std::runtime_error("No zlib support."); }
-
-#endif
-
 
 //
 // Template instantiations
@@ -467,6 +480,6 @@ INSTANTIATE_ALLOCATOR(isize)
 INSTANTIATE_ALLOCATOR(float)
 INSTANTIATE_ALLOCATOR(bool)
 
-template void Allocator<u8>::gzip();
-template void Allocator<u8>::gunzip();
+template void Allocator<u8>::gzip(isize);
+template void Allocator<u8>::gunzip(isize, isize);
 }
