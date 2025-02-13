@@ -12,57 +12,11 @@ extension PreferencesController {
     
     func refreshGeneralTab() {
         
-        // Initialize combo boxes
-        if genFFmpegPath.tag == 0 {
-            
-            genFFmpegPath.tag = 1
-            
-            for i in 0...5 {
-                if let path = emu.recorder.findFFmpeg(i) {
-                    genFFmpegPath.addItem(withObjectValue: path)
-                } else {
-                    break
-                }
-            }
-        }
-        
-        // Workspaces
-        genCompressWorkspaces.state = pref.workspaceCompression ? .on : .off
-        
         // Snapshots
         genSnapshotStorage.integerValue = pref.snapshotStorage
         genAutoSnapshots.state = pref.autoSnapshots ? .on : .off
         genSnapshotInterval.integerValue = pref.snapshotInterval
         genSnapshotInterval.isEnabled = pref.autoSnapshots
-
-        // Screenshots
-        let framebuffer = pref.screenshotSource == .framebuffer
-        let custom = pref.screenshotCutout == .custom
-        genScreenshotFormatPopup.selectItem(withTag: pref.screenshotFormatIntValue)
-        genScreenshotSourcePopup.selectItem(withTag: pref.screenshotSourceIntValue)
-        genScreenshotCutoutPopup.selectItem(withTag: pref.screenshotCutoutIntValue)
-        genScreenshotCutoutPopup.isHidden = framebuffer
-        genScreenshotCutoutText.isHidden = framebuffer
-        genScreenshotWidth.integerValue = pref.screenshotWidth
-        genScreenshotWidth.isHidden = !custom || framebuffer
-        genScreenshotWidthText.isHidden = !custom || framebuffer
-        genScreenshotHeight.integerValue = pref.screenshotHeight
-        genScreenshotHeight.isHidden = !custom || framebuffer
-        genScreenshotHeightText.isHidden = !custom || framebuffer
-
-        // Screen captures
-        let hasFFmpeg = emu.recorder.hasFFmpeg
-        genFFmpegPath.stringValue = emu.recorder.path
-        genFFmpegPath.textColor = hasFFmpeg ? .textColor : .warning
-        genSource.selectItem(withTag: pref.captureSourceIntValue)
-        genBitRate.stringValue = "\(pref.bitRate)"
-        genAspectX.integerValue = pref.aspectX
-        genAspectY.integerValue = pref.aspectY
-        genSource.isEnabled = hasFFmpeg
-        genBitRate.isEnabled = hasFFmpeg
-        genBitRateText.textColor = hasFFmpeg ? .labelColor : .disabledControlTextColor
-        genAspectX.isEnabled = hasFFmpeg
-        genAspectY.isEnabled = hasFFmpeg
         
         // Fullscreen
         genAspectRatioButton.state = pref.keepAspectRatio ? .on : .off
@@ -80,15 +34,6 @@ extension PreferencesController {
         refreshGeneralTab()
     }
 
-    //
-    // Action methods (Workspaces)
-    //
-    
-    @IBAction func genCompressWorkspacesAction(_ sender: NSButton!) {
-        
-        pref.workspaceCompression = sender.state == .on
-    }
-    
     //
     // Action methods (Snapshots)
     //
@@ -112,87 +57,6 @@ extension PreferencesController {
         if sender.integerValue > 0 {
             pref.snapshotInterval = sender.integerValue
         }
-        refresh()
-    }
-    
-    //
-    // Action methods (Screenshots)
-    //
-
-    @IBAction func genScreenshotSourceAction(_ sender: NSPopUpButton!) {
-        
-        pref.screenshotSourceIntValue = sender.selectedTag()
-        refresh()
-    }
-    
-    @IBAction func genScreenshotFormatAction(_ sender: NSPopUpButton!) {
-        
-        pref.screenshotFormatIntValue = sender.selectedTag()
-        refresh()
-    }
-
-    @IBAction func genScreenshotCutoutAction(_ sender: NSPopUpButton!) {
-        
-        pref.screenshotCutoutIntValue = sender.selectedTag()
-        refresh()
-    }
-
-    @IBAction func genScreenshotWidthAction(_ sender: NSTextField!) {
-        
-        pref.aspectX = sender.integerValue
-        refresh()
-    }
-
-    @IBAction func genScreenshotHeightAction(_ sender: NSTextField!) {
-        
-        pref.aspectY = sender.integerValue
-        refresh()
-    }
-
-    //
-    // Action methods (Screen captures)
-    //
-    
-    @IBAction func genPathAction(_ sender: NSComboBox!) {
-
-        let path = sender.stringValue
-        pref.ffmpegPath = path
-        refresh()
-        
-        // Display a warning if the recorder is inaccessible
-        let fm = FileManager.default
-        if fm.fileExists(atPath: path), !fm.isExecutableFile(atPath: path) {
-
-            parent.showAlert(.recorderSandboxed(exec: path), window: window)
-        }
-    }
-        
-    @IBAction func capSourceAction(_ sender: NSPopUpButton!) {
-        
-        pref.captureSourceIntValue = sender.selectedTag()
-        refresh()
-    }
-
-    @IBAction func genBitRateAction(_ sender: NSComboBox!) {
-        
-        var input = sender.objectValueOfSelectedItem as? Int
-        if input == nil { input = sender.integerValue }
-        
-        if let bitrate = input {
-            pref.bitRate = bitrate
-        }
-        refresh()
-    }
-
-    @IBAction func genAspectXAction(_ sender: NSTextField!) {
-        
-        pref.aspectX = sender.integerValue
-        refresh()
-    }
-
-    @IBAction func genAspectYAction(_ sender: NSTextField!) {
-        
-        pref.aspectY = sender.integerValue
         refresh()
     }
     
@@ -231,12 +95,6 @@ extension PreferencesController {
     @IBAction func genCloseWithoutAskingAction(_ sender: NSButton!) {
         
         pref.closeWithoutAsking = (sender.state == .on)
-
-        /*
-        for c in myAppDelegate.controllers {
-            c.needsSaving = (sender.state == .off)
-        }
-        */
         refresh()
     }
 

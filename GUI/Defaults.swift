@@ -247,6 +247,7 @@ extension DefaultsProxy {
         debug(.defaults, "Registering user defaults")
         
         registerGeneralUserDefaults()
+        registerCapturesUserDefaults()
         registerControlsUserDefaults()
         registerDevicesUserDefaults()
 
@@ -267,6 +268,7 @@ extension Preferences {
         debug(.defaults, "Applying user defaults")
         
         applyGeneralUserDefaults()
+        applyCapturesUserDefaults()
         applyControlsUserDefaults()
         applyDevicesUserDefaults()
     }
@@ -296,27 +298,10 @@ struct Keys {
     
     struct Gen {
                 
-        // Workspaces
-        static let workspaceCompression   = "General.WorkspaceCompression"
-
         // Snapshots
         static let snapshotStorage        = "General.SnapshotStorage"
         static let autoSnapshots          = "General.AutoSnapshots"
         static let autoSnapshotInterval   = "General.ScreenshotInterval"
-
-        // Screenshots
-        static let screenshotFormat       = "General.ScreenshotFormat"
-        static let screenshotSource       = "General.ScreenshotSource"
-        static let screenshotCutout       = "General.ScreenshotCutout"
-        static let screenshotWidth        = "General.ScreenshotWidth"
-        static let screenshotHeight       = "General.ScreenshotHeight"
-
-        // Screen captures
-        static let ffmpegPath             = "General.ffmpegPath"
-        static let captureSource          = "General.Source"
-        static let bitRate                = "General.BitRate"
-        static let aspectX                = "General.AspectX"
-        static let aspectY                = "General.AspectY"
         
         // Fullscreen
         static let keepAspectRatio        = "General.FullscreenKeepAspectRatio"
@@ -337,28 +322,11 @@ extension DefaultsProxy {
         
         debug(.defaults)
 
-        // Workspaces
-        register(Keys.Gen.workspaceCompression, true)
-
         // Snapshots
         register(Keys.Gen.snapshotStorage, 512)
         register(Keys.Gen.autoSnapshots, false)
         register(Keys.Gen.autoSnapshotInterval, 20)
-        
-        // Screenshots
-        register(Keys.Gen.screenshotFormat, NSBitmapImageRep.FileType.png.rawValue)
-        register(Keys.Gen.screenshotSource, 0)
-        register(Keys.Gen.screenshotCutout, 0)
-        register(Keys.Gen.screenshotWidth, 1200)
-        register(Keys.Gen.screenshotHeight, 900)
-
-        // Captures
-        register(Keys.Gen.ffmpegPath, "")
-        register(Keys.Gen.captureSource, 0)
-        register(Keys.Gen.bitRate, 2048)
-        register(Keys.Gen.aspectX, 768)
-        register(Keys.Gen.aspectY, 702)
-        
+                
         // Fullscreen
         register(Keys.Gen.keepAspectRatio, false)
         register(Keys.Gen.exitOnEsc, true)
@@ -374,24 +342,10 @@ extension DefaultsProxy {
         
         debug(.defaults)
         
-        let keys = [ Keys.Gen.workspaceCompression,
-            
-                     Keys.Gen.snapshotStorage,
+        let keys = [ Keys.Gen.snapshotStorage,
                      Keys.Gen.autoSnapshots,
                      Keys.Gen.autoSnapshotInterval,
-                     
-                     Keys.Gen.screenshotFormat,
-                     Keys.Gen.screenshotSource,
-                     Keys.Gen.screenshotCutout,
-                     Keys.Gen.screenshotWidth,
-                     Keys.Gen.screenshotHeight,
-
-                     Keys.Gen.ffmpegPath,
-                     Keys.Gen.captureSource,
-                     Keys.Gen.bitRate,
-                     Keys.Gen.aspectX,
-                     Keys.Gen.aspectY,
-                     
+                                          
                      Keys.Gen.keepAspectRatio,
                      Keys.Gen.exitOnEsc,
 
@@ -413,24 +367,10 @@ extension Preferences {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
 
-        defaults.set(Keys.Gen.workspaceCompression, workspaceCompression)
-
         defaults.set(Keys.Gen.snapshotStorage, snapshotStorage)
         defaults.set(Keys.Gen.autoSnapshots, autoSnapshots)
         defaults.set(Keys.Gen.autoSnapshotInterval, snapshotInterval)
-        
-        defaults.set(Keys.Gen.screenshotFormat, screenshotFormatIntValue)
-        defaults.set(Keys.Gen.screenshotSource, screenshotSourceIntValue)
-        defaults.set(Keys.Gen.screenshotCutout, screenshotCutoutIntValue)
-        defaults.set(Keys.Gen.screenshotWidth, screenshotWidth)
-        defaults.set(Keys.Gen.screenshotHeight, screenshotHeight)
-
-        defaults.set(Keys.Gen.ffmpegPath, ffmpegPath)
-        defaults.set(Keys.Gen.captureSource, captureSourceIntValue)
-        defaults.set(Keys.Gen.bitRate, bitRate)
-        defaults.set(Keys.Gen.aspectX, aspectX)
-        defaults.set(Keys.Gen.aspectY, aspectY)
-        
+                
         defaults.set(Keys.Gen.keepAspectRatio, keepAspectRatio)
         defaults.set(Keys.Gen.exitOnEsc, exitOnEsc)
 
@@ -447,24 +387,10 @@ extension Preferences {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
         
-        workspaceCompression = defaults.bool(Keys.Gen.workspaceCompression)
-        
         snapshotStorage = defaults.int(Keys.Gen.snapshotStorage)
         autoSnapshots = defaults.bool(Keys.Gen.autoSnapshots)
         snapshotInterval = defaults.int(Keys.Gen.autoSnapshotInterval)
-        
-        screenshotFormatIntValue = defaults.int(Keys.Gen.screenshotFormat)
-        screenshotSourceIntValue = defaults.int(Keys.Gen.screenshotSource)
-        screenshotCutoutIntValue = defaults.int(Keys.Gen.screenshotCutout)
-        screenshotWidth = defaults.int(Keys.Gen.screenshotWidth)
-        screenshotHeight = defaults.int(Keys.Gen.screenshotHeight)
-
-        ffmpegPath = defaults.string(Keys.Gen.ffmpegPath)
-        captureSourceIntValue = defaults.int(Keys.Gen.captureSource)
-        bitRate = defaults.int(Keys.Gen.bitRate)
-        aspectX = defaults.int(Keys.Gen.aspectX)
-        aspectY = defaults.int(Keys.Gen.aspectY)
-        
+                
         keepAspectRatio = defaults.bool(Keys.Gen.keepAspectRatio)
         exitOnEsc = defaults.bool(Keys.Gen.exitOnEsc)
 
@@ -472,6 +398,116 @@ extension Preferences {
         detachWithoutAsking = defaults.bool(Keys.Gen.detachWithoutAsking)
         closeWithoutAsking = defaults.bool(Keys.Gen.closeWithoutAsking)
         pauseInBackground = defaults.bool(Keys.Gen.pauseInBackground)
+    }
+}
+
+//
+// User defaults (Captures)
+//
+
+@MainActor
+extension Keys {
+    
+    struct Cap {
+                
+        // Screenshots
+        static let screenshotFormat       = "General.ScreenshotFormat"
+        static let screenshotSource       = "General.ScreenshotSource"
+        static let screenshotCutout       = "General.ScreenshotCutout"
+        static let screenshotWidth        = "General.ScreenshotWidth"
+        static let screenshotHeight       = "General.ScreenshotHeight"
+
+        // Videos
+        static let ffmpegPath             = "General.ffmpegPath"
+        static let captureSource          = "General.Source"
+        static let bitRate                = "General.BitRate"
+        static let aspectX                = "General.AspectX"
+        static let aspectY                = "General.AspectY"
+    }
+}
+
+@MainActor
+extension DefaultsProxy {
+    
+    func registerCapturesUserDefaults() {
+        
+        debug(.defaults)
+        
+        // Screenshots
+        register(Keys.Cap.screenshotFormat, NSBitmapImageRep.FileType.png.rawValue)
+        register(Keys.Cap.screenshotSource, 0)
+        register(Keys.Cap.screenshotCutout, 0)
+        register(Keys.Cap.screenshotWidth, 1200)
+        register(Keys.Cap.screenshotHeight, 900)
+
+        // Videos
+        register(Keys.Cap.ffmpegPath, "")
+        register(Keys.Cap.captureSource, 0)
+        register(Keys.Cap.bitRate, 2048)
+        register(Keys.Cap.aspectX, 768)
+        register(Keys.Cap.aspectY, 702)
+    }
+    
+    func removeCapturesUserDefaults() {
+        
+        debug(.defaults)
+        
+        let keys = [ Keys.Cap.screenshotFormat,
+                     Keys.Cap.screenshotSource,
+                     Keys.Cap.screenshotCutout,
+                     Keys.Cap.screenshotWidth,
+                     Keys.Cap.screenshotHeight,
+
+                     Keys.Cap.ffmpegPath,
+                     Keys.Cap.captureSource,
+                     Keys.Cap.bitRate,
+                     Keys.Cap.aspectX,
+                     Keys.Cap.aspectY,
+        ]
+        
+        for key in keys { removeKey(key) }
+    }
+}
+
+@MainActor
+extension Preferences {
+
+    func saveCapturesUserDefaults() {
+        
+        debug(.defaults)
+        let defaults = EmulatorProxy.defaults!
+        
+        defaults.set(Keys.Cap.screenshotFormat, screenshotFormatIntValue)
+        defaults.set(Keys.Cap.screenshotSource, screenshotSourceIntValue)
+        defaults.set(Keys.Cap.screenshotCutout, screenshotCutoutIntValue)
+        defaults.set(Keys.Cap.screenshotWidth, screenshotWidth)
+        defaults.set(Keys.Cap.screenshotHeight, screenshotHeight)
+
+        defaults.set(Keys.Cap.ffmpegPath, ffmpegPath)
+        defaults.set(Keys.Cap.captureSource, captureSourceIntValue)
+        defaults.set(Keys.Cap.bitRate, bitRate)
+        defaults.set(Keys.Cap.aspectX, aspectX)
+        defaults.set(Keys.Cap.aspectY, aspectY)
+                
+        defaults.save()
+    }
+    
+    func applyCapturesUserDefaults() {
+        
+        debug(.defaults)
+        let defaults = EmulatorProxy.defaults!
+                
+        screenshotFormatIntValue = defaults.int(Keys.Cap.screenshotFormat)
+        screenshotSourceIntValue = defaults.int(Keys.Cap.screenshotSource)
+        screenshotCutoutIntValue = defaults.int(Keys.Cap.screenshotCutout)
+        screenshotWidth = defaults.int(Keys.Cap.screenshotWidth)
+        screenshotHeight = defaults.int(Keys.Cap.screenshotHeight)
+
+        ffmpegPath = defaults.string(Keys.Cap.ffmpegPath)
+        captureSourceIntValue = defaults.int(Keys.Cap.captureSource)
+        bitRate = defaults.int(Keys.Cap.bitRate)
+        aspectX = defaults.int(Keys.Cap.aspectX)
+        aspectY = defaults.int(Keys.Cap.aspectY)
     }
 }
 

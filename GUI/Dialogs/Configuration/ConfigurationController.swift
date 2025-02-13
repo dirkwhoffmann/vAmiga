@@ -188,6 +188,10 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var prfFrameSkipping: NSButton!
     @IBOutlet weak var prfAudioFastPath: NSButton!
 
+    // Compression
+    @IBOutlet weak var prfWsCompressor: NSPopUpButton!
+    @IBOutlet weak var prfSnapCompressor: NSPopUpButton!
+
     // Lock
     @IBOutlet weak var prfLockImage: NSButton!
     @IBOutlet weak var prfLockInfo1: NSTextField!

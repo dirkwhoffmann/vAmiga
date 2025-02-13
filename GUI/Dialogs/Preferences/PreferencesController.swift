@@ -24,27 +24,10 @@ class PreferencesController: DialogController {
     @IBOutlet weak var genCompressWorkspaces: NSButton!
 
     // Snapshots
+    @IBOutlet weak var genSnapshotCompressor: NSPopUpButton!
     @IBOutlet weak var genAutoSnapshots: NSButton!
     @IBOutlet weak var genSnapshotInterval: NSTextField!
     @IBOutlet weak var genSnapshotStorage: NSTextField!
-
-    // Screenshots
-    @IBOutlet weak var genScreenshotFormatPopup: NSPopUpButton!
-    @IBOutlet weak var genScreenshotSourcePopup: NSPopUpButton!
-    @IBOutlet weak var genScreenshotCutoutPopup: NSPopUpButton!
-    @IBOutlet weak var genScreenshotCutoutText: NSTextField!
-    @IBOutlet weak var genScreenshotWidth: NSTextField!
-    @IBOutlet weak var genScreenshotWidthText: NSTextField!
-    @IBOutlet weak var genScreenshotHeight: NSTextField!
-    @IBOutlet weak var genScreenshotHeightText: NSTextField!
-
-    // Screen captures
-    @IBOutlet weak var genFFmpegPath: NSComboBox!
-    @IBOutlet weak var genSource: NSPopUpButton!
-    @IBOutlet weak var genAspectX: NSTextField!
-    @IBOutlet weak var genAspectY: NSTextField!
-    @IBOutlet weak var genBitRate: NSComboBox!
-    @IBOutlet weak var genBitRateText: NSTextField!
 
     // Fullscreen
     @IBOutlet weak var genAspectRatioButton: NSButton!
@@ -55,6 +38,28 @@ class PreferencesController: DialogController {
     @IBOutlet weak var genDetachWithoutAskingButton: NSButton!
     @IBOutlet weak var genCloseWithoutAskingButton: NSButton!
     @IBOutlet weak var genPauseInBackground: NSButton!
+
+    //
+    // Captures
+    //
+    
+    // Screenshots
+    @IBOutlet weak var capScreenshotFormatPopup: NSPopUpButton!
+    @IBOutlet weak var capScreenshotSourcePopup: NSPopUpButton!
+    @IBOutlet weak var capScreenshotCutoutPopup: NSPopUpButton!
+    @IBOutlet weak var capScreenshotCutoutText: NSTextField!
+    @IBOutlet weak var capScreenshotWidth: NSTextField!
+    @IBOutlet weak var capScreenshotWidthText: NSTextField!
+    @IBOutlet weak var capScreenshotHeight: NSTextField!
+    @IBOutlet weak var capScreenshotHeightText: NSTextField!
+
+    // Screen captures
+    @IBOutlet weak var capVideoFFmpegPath: NSComboBox!
+    @IBOutlet weak var capVideoSource: NSPopUpButton!
+    @IBOutlet weak var capVideoAspectX: NSTextField!
+    @IBOutlet weak var capVideoAspectY: NSTextField!
+    @IBOutlet weak var capVideoBitRate: NSComboBox!
+    @IBOutlet weak var capVideoBitRateText: NSTextField!
 
     //
     // Controls
@@ -168,6 +173,7 @@ class PreferencesController: DialogController {
             
             switch id {
             case "General": refreshGeneralTab()
+            case "Captures": refreshCapturesTab()
             case "Controls": refreshControlsTab()
             case "Devices": refreshDevicesTab()
             default: fatalError()
@@ -182,6 +188,7 @@ class PreferencesController: DialogController {
             switch id {
             case "General": selectGeneralTab()
             case "Controls": selectControlsTab()
+            case "Captures": selectCapturesTab()
             case "Devices": selectDevicesTab()
             default: fatalError()
             }
@@ -204,8 +211,10 @@ class PreferencesController: DialogController {
     @IBAction override func okAction(_ sender: Any!) {
                         
         pref.saveGeneralUserDefaults()
+        pref.saveCapturesUserDefaults()
         pref.saveControlsUserDefaults()
         pref.saveDevicesUserDefaults()
+        
         myAppDelegate.database.save()
         close()
     }

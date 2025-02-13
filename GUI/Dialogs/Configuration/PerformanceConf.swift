@@ -34,6 +34,10 @@ extension ConfigurationController {
         prfFrameSkipping.state = config.frameSkipping > 0 ? .on : .off
         prfAudioFastPath.state = config.audioFastPath ? .on : .off
 
+        // Compression
+        prfWsCompressor.selectItem(withTag: config.wsCompressor)
+        prfSnapCompressor.selectItem(withTag: config.snapCompressor)
+        
         // Lock
         prfLockImage.isHidden = poweredOff
         prfLockInfo1.isHidden = poweredOff
@@ -44,7 +48,7 @@ extension ConfigurationController {
     }
 
     //
-    // Action methods (warp)
+    // Action methods (Warp)
     //
 
     @IBAction func prfWarpModeAction(_ sender: NSPopUpButton!) {
@@ -58,7 +62,7 @@ extension ConfigurationController {
     }
     
     //
-    // Action methods (threading)
+    // Action methods (Threading)
     //
 
     @IBAction func prfVSyncAction(_ sender: NSButton!) {
@@ -78,7 +82,7 @@ extension ConfigurationController {
 
 
     //
-    // Action methods (performance boosters)
+    // Action methods (Performance Boosters)
     //
 
     @IBAction func prfCiaIdleSleepAction(_ sender: NSButton!) {
@@ -95,6 +99,24 @@ extension ConfigurationController {
 
         config.audioFastPath = sender.state == .on
     }
+
+    //
+    // Action methods (Warp)
+    //
+
+    @IBAction func prfWsCompressorAction(_ sender: NSPopUpButton!) {
+
+        config.wsCompressor = sender.selectedTag()
+    }
+
+    @IBAction func prfSnapCompressorAction(_ sender: NSPopUpButton!) {
+
+        config.snapCompressor = sender.selectedTag()
+    }
+
+    //
+    // Presets
+    //
 
     @IBAction func prfPresetAction(_ sender: NSPopUpButton!) {
 

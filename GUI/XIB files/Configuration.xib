@@ -140,11 +140,13 @@
                 <outlet property="prfPowerButton" destination="Qwc-dN-z7X" id="dyR-6O-RRs"/>
                 <outlet property="prfRunAhead" destination="eeE-9P-GOA" id="2XG-4W-0Ip"/>
                 <outlet property="prfRunAheadInfo" destination="QxE-Mv-W98" id="zmi-lu-h4q"/>
+                <outlet property="prfSnapCompressor" destination="6ta-yK-MgR" id="niI-0R-To2"/>
                 <outlet property="prfSpeedBoost" destination="8H2-RW-mQb" id="Krk-Il-YFn"/>
                 <outlet property="prfSpeedBoostInfo" destination="6IB-5J-YHo" id="JhN-Dh-OM8"/>
                 <outlet property="prfVSync" destination="Bvy-6w-UaV" id="gp1-DG-1oM"/>
                 <outlet property="prfWarpBoot" destination="X5X-QE-QMJ" id="2Nt-AL-Ka9"/>
                 <outlet property="prfWarpMode" destination="MSH-Uz-sGW" id="tk4-Q1-WNi"/>
+                <outlet property="prfWsCompressor" destination="Hst-WZ-4k3" id="Iwh-Q9-Nri"/>
                 <outlet property="romArosPopup" destination="b1E-it-StT" id="wif-eM-5JZ"/>
                 <outlet property="romDeleteButton" destination="YJW-vW-GDB" id="8dx-Bc-q9m"/>
                 <outlet property="romDropView" destination="Obf-WK-7zy" id="jaj-sU-4ca"/>
@@ -2031,7 +2033,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MSH-Uz-sGW">
-                                            <rect key="frame" x="109" y="346" width="156" height="26"/>
+                                            <rect key="frame" x="103" y="346" width="162" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="During disk activity" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="f9k-XO-Ai7" id="2n6-8b-MKB">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -2054,6 +2056,45 @@ DQ
                                                 <action selector="prfWarpModeAction:" target="-2" id="ciS-Z1-gcq"/>
                                             </connections>
                                         </popUpButton>
+                                        <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wuN-XX-gdx">
+                                            <rect key="frame" x="337" y="191" width="88" height="19"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="right" title="Workspaces:" id="ky3-mT-bvn">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lBZ-rr-dyq">
+                                            <rect key="frame" x="337" y="162" width="88" height="19"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="right" title="Snapshots:" id="lf9-Wc-YlQ">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hst-WZ-4k3">
+                                            <rect key="frame" x="428" y="187" width="144" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="Off" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="rYY-E4-AU1" id="3zn-qq-Edb">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="message"/>
+                                                <menu key="menu" title="OtherViews" autoenablesItems="NO" id="I3c-uR-JKW">
+                                                    <items>
+                                                        <menuItem title="Off" state="on" id="rYY-E4-AU1">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="ADZ / HDZ" tag="1" id="mlJ-Jm-QYM">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="prfWsCompressorAction:" target="-2" id="xEq-Le-BGn"/>
+                                            </connections>
+                                        </popUpButton>
                                         <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X5X-QE-QMJ">
                                             <rect key="frame" x="176" y="321" width="25" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -2071,6 +2112,15 @@ DQ
                                             <rect key="frame" x="16" y="232" width="114" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Threading" id="HbQ-Wj-wA3">
+                                                <font key="font" metaFont="systemBold"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KRX-69-xJ8">
+                                            <rect key="frame" x="318" y="232" width="114" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Compression" id="YRm-Oo-Qzr">
                                                 <font key="font" metaFont="systemBold"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -2181,6 +2231,30 @@ DQ
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6ta-yK-MgR">
+                                            <rect key="frame" x="428" y="157" width="144" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="Off" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="N9p-p6-i6u" id="kze-aY-Cm4">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="message"/>
+                                                <menu key="menu" title="OtherViews" autoenablesItems="NO" id="srV-lO-du8">
+                                                    <items>
+                                                        <menuItem title="Off" state="on" id="N9p-p6-i6u">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="GZIP" tag="1" id="yv4-qa-et2">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="RLE" tag="2" id="a0V-sA-Roz">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="prfSnapCompressorAction:" target="-2" id="MyR-NT-uKS"/>
+                                            </connections>
+                                        </popUpButton>
                                     </subviews>
                                 </view>
                             </tabViewItem>

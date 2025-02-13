@@ -176,10 +176,10 @@ Amiga::getOption(Opt option) const
         case Opt::AMIGA_VSYNC:           return (i64)config.vsync;
         case Opt::AMIGA_SPEED_BOOST:     return (i64)config.speedBoost;
         case Opt::AMIGA_RUN_AHEAD:       return (i64)config.runAhead;
-        case Opt::AMIGA_SNAP_AUTO:       return (i64)config.snapshots;
+        case Opt::AMIGA_SNAP_AUTO:       return (i64)config.autoSnapshots;
         case Opt::AMIGA_SNAP_DELAY:      return (i64)config.snapshotDelay;
-        case Opt::AMIGA_SNAP_COMPRESS:   return (i64)config.compressSnapshots;
-        case Opt::AMIGA_WS_COMPRESS:     return (i64)config.compressWorkspaces;
+        case Opt::AMIGA_SNAP_COMPRESSOR: return (i64)config.snapshotCompressor;
+        case Opt::AMIGA_WS_COMPRESSION:  return (i64)config.compressWorkspaces;
 
         default:
             fatalError;
@@ -238,14 +238,14 @@ Amiga::checkOption(Opt opt, i64 value)
             }
             return;
             
-        case Opt::AMIGA_SNAP_COMPRESS:
+        case Opt::AMIGA_SNAP_COMPRESSOR:
             
-            if (CompressorEnum::isValid(value)) {
-                throw CoreException(CoreError::OPT_INV_ARG, WarpEnum::keyList());
+            if (!CompressorEnum::isValid(value)) {
+                throw CoreException(CoreError::OPT_INV_ARG, CompressorEnum::keyList());
             }
             return;
             
-        case Opt::AMIGA_WS_COMPRESS:
+        case Opt::AMIGA_WS_COMPRESSION:
 
             return;
             
@@ -295,7 +295,7 @@ Amiga::setOption(Opt option, i64 value)
             
         case Opt::AMIGA_SNAP_AUTO:
             
-            config.snapshots = bool(value);
+            config.autoSnapshots = bool(value);
             scheduleNextSnpEvent();
             return;
             
@@ -305,12 +305,12 @@ Amiga::setOption(Opt option, i64 value)
             scheduleNextSnpEvent();
             return;
             
-        case Opt::AMIGA_SNAP_COMPRESS:
+        case Opt::AMIGA_SNAP_COMPRESSOR:
             
-            config.compressSnapshots = Compressor(value);
+            config.snapshotCompressor = Compressor(value);
             return;
 
-        case Opt::AMIGA_WS_COMPRESS:
+        case Opt::AMIGA_WS_COMPRESSION:
             
             config.compressWorkspaces = bool(value);
             return;
@@ -1140,7 +1140,7 @@ Amiga::takeSnapshot()
    result = new Snapshot(*this);
     
     // Compress the snapshot if requested
-    result->compress(config.compressSnapshots);
+    result->compress(config.snapshotCompressor);
     
     return result;
 }
@@ -1205,7 +1205,7 @@ Amiga::loadSnapshot(const Snapshot &snap)
 void
 Amiga::saveSnapshot(const std::filesystem::path &path)
 {
-    Snapshot(*this, config.compressSnapshots).writeToFile(path);
+    Snapshot(*this, config.snapshotCompressor).writeToFile(path);
 }
 
 void

@@ -359,6 +359,14 @@ class Configuration {
         get { return amiga.get(.AMIGA_RUN_AHEAD) }
         set { amiga.set(.AMIGA_RUN_AHEAD, value: newValue) }
     }
+    var wsCompressor: Int {
+        get { return amiga.get(.AMIGA_WS_COMPRESSION) }
+        set { amiga.set(.AMIGA_WS_COMPRESSION, value: newValue) }
+    }
+    var snapCompressor: Int {
+        get { return amiga.get(.AMIGA_SNAP_COMPRESSOR) }
+        set { amiga.set(.AMIGA_SNAP_COMPRESSOR, value: newValue) }
+    }
 
     //
     // Compatibility

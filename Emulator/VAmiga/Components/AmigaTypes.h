@@ -375,13 +375,13 @@ typedef struct
     isize runAhead;
     
     //! Enable auto-snapshots
-    bool snapshots;
+    bool autoSnapshots;
     
     //! Delay between two auto-snapshots in seconds
     isize snapshotDelay;
     
     //! Selects the snapshot compression method
-    Compressor compressSnapshots;
+    Compressor snapshotCompressor;
 
     //! Indicates whether workspace media files should be compressed
     bool compressWorkspaces;

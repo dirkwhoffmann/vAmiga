@@ -27,6 +27,7 @@
 		5012DCE12D5B33C200233B6A /* HDZFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5012DCDF2D5B33C100233B6A /* HDZFile.cpp */; };
 		5012DCE42D5C85CD00233B6A /* Compression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5012DCE32D5C85CB00233B6A /* Compression.cpp */; };
 		5012DCE52D5C85CD00233B6A /* Compression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5012DCE32D5C85CB00233B6A /* Compression.cpp */; };
+		5012DCE72D5D435800233B6A /* CapturesPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5012DCE62D5D434F00233B6A /* CapturesPrefs.swift */; };
 		501429D92445F12B00FBDC90 /* TextureToolbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501429D82445F12B00FBDC90 /* TextureToolbox.swift */; };
 		5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DD1321F3625200BC14BA /* Keyboard.cpp */; };
 		50157EED28257B7C000E9DDD /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50157EEC28257B7C000E9DDD /* Config.swift */; };
@@ -563,6 +564,7 @@
 		5012DCDF2D5B33C100233B6A /* HDZFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDZFile.cpp; sourceTree = "<group>"; };
 		5012DCE22D5C85C100233B6A /* Compression.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Compression.h; sourceTree = "<group>"; };
 		5012DCE32D5C85CB00233B6A /* Compression.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Compression.cpp; sourceTree = "<group>"; };
+		5012DCE62D5D434F00233B6A /* CapturesPrefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturesPrefs.swift; sourceTree = "<group>"; };
 		501429D82445F12B00FBDC90 /* TextureToolbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureToolbox.swift; sourceTree = "<group>"; };
 		5014DD1321F3625200BC14BA /* Keyboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Keyboard.cpp; sourceTree = "<group>"; };
 		5014DD1421F3625200BC14BA /* Keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Keyboard.h; sourceTree = "<group>"; };
@@ -1746,6 +1748,7 @@
 				508FE04221EA22CC0043D0E9 /* PreferencesWindow.swift */,
 				508FE04321EA22CC0043D0E9 /* PreferencesController.swift */,
 				508FE03C21EA22CC0043D0E9 /* GeneralPrefs.swift */,
+				5012DCE62D5D434F00233B6A /* CapturesPrefs.swift */,
 				508FE04121EA22CC0043D0E9 /* ControlsPrefs.swift */,
 				500CE875259252ED00462836 /* DevicesPrefs.swift */,
 				50001C642593230200D1FC91 /* DeviceDatabase.swift */,
@@ -2486,6 +2489,7 @@
 				504F9658220B2CEE005F8AB7 /* GuardTableView.swift in Sources */,
 				5027418F2297CACF0038E5AF /* Colors.cpp in Sources */,
 				501FB319276200A000D0A57B /* OSDebuggerDump.cpp in Sources */,
+				5012DCE72D5D435800233B6A /* CapturesPrefs.swift in Sources */,
 				5050EC4127BE97E000394F4F /* HardDiskCreator.swift in Sources */,
 				508FDFDA21EA20510043D0E9 /* ImageToolbox.swift in Sources */,
 				508FE05521EA22CC0043D0E9 /* PreferencesWindow.swift in Sources */,
