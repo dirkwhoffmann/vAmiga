@@ -13,8 +13,6 @@
 #include "Drive.h"
 #include "AgnusTypes.h"
 #include "HdControllerTypes.h"
-// #include "HDFFile.h"
-// #include "HDZFile.h"
 #include "Buffer.h"
 #include "MemUtils.h"
 

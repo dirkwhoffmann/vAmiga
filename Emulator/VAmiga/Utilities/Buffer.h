@@ -11,8 +11,8 @@
 
 #include "BasicTypes.h"
 #include "Checksum.h"
-#include <filesystem>
-#include <vector>
+// #include <filesystem>
+// #include <vector>
 
 namespace vamiga::util {
 

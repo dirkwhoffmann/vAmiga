@@ -12,7 +12,7 @@
 #include "Constants.h"
 #include "Serializable.h"
 #include "FloppyDiskTypes.h"
-#include <vector>
+// #include <vector>
 
 namespace vamiga {
 

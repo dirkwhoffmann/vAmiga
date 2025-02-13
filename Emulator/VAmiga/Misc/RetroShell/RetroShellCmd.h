@@ -11,7 +11,7 @@
 
 #include "VAmiga/Foundation/Reflection.h"
 #include <functional>
-#include <vector>
+// #include <vector>
 #include <stack>
 
 namespace vamiga {

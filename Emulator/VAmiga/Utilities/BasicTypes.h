@@ -42,7 +42,15 @@ typedef unsigned long      usize;
 
 #include <string>
 #include <cstring>
-using std::string;
+namespace vamiga { using std::string; }
+
+
+//
+// Data structures
+//
+
+#include <vector>
+namespace vamiga { using std::vector; }
 
 
 //
@@ -50,7 +58,7 @@ using std::string;
 //
 
 #include <optional>
-using std::optional;
+namespace vamiga { using std::optional; }
 
 
 //

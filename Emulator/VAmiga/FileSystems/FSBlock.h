@@ -15,7 +15,7 @@
 #include "Buffer.h"
 #include "IOUtils.h"
 #include "BootBlockImage.h"
-#include <vector>
+// #include <vector>
 
 namespace vamiga {
 

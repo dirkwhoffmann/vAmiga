@@ -13,8 +13,7 @@
 #include "FSTypes.h"
 #include "IOUtils.h"
 #include "OSDebugger.h"
-
-#include <vector>
+// #include <vector>
 #include <algorithm>
 
 namespace vamiga {

@@ -19,7 +19,7 @@
 #include "Concurrency.h"
 #include <algorithm>
 #include <functional>
-#include <vector>
+// #include <vector>
 
 namespace vamiga {
 
