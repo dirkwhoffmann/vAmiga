@@ -156,12 +156,11 @@ HDFFile::getPartitionDescriptor(isize part) const
         
         assert(part == 0);
         
-        // Add a default partition spanning the whole disk
+        // Add a default partition spanning the entire disk
         auto geo = getGeometryDescriptor();
         result = PartitionDescriptor(geo);
         
-        // Make the first partition bootable if a boot block exists
-//        if (hasBootBlock()) result.flags |= 1;
+        // Make the first partition bootable
         result.flags |= 1;
     }
     
@@ -298,17 +297,6 @@ HDFFile::getInfo() const
     HDFInfo info;
 
     return info;
-}
-
-bool
-HDFFile::hasBootBlock() const
-{
-    if (data.size > 512) {
-        for (isize i = 12; i < 512; i++) {
-            if (data[i]) return true;
-        }
-    }
-    return false;
 }
 
 bool

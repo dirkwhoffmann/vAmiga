@@ -117,9 +117,6 @@ public:
     // Returns the (predicted) geometry for this disk
     const GeometryDescriptor getGeometry() const { return geometry; }
 
-    // Returns true if this image contains a boot block
-    bool hasBootBlock() const;
-
     // Returns true if this image contains a rigid disk block
     bool hasRDB() const;
 

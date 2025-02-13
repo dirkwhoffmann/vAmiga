@@ -222,11 +222,10 @@ gunzip(u8 *compressed, isize len, std::vector<u8> &result, isize sizeEstimate)
 
 #else
 
-void
-gzip(u8 *uncompressed, isize len, std::vector<u8> &result) {
+void gzip(u8 *uncompressed, isize len, std::vector<u8> &result) {
     throw std::runtime_error("No zlib support.");
 }
-void gunzip(u8 *compressed, isize len, std::vector<u8> &result) {
+void gunzip(u8 *compressed, isize len, std::vector<u8> &result, isize sizeEstimate) {
     throw std::runtime_error("No zlib support.");
 }
 

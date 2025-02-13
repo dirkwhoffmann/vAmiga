@@ -263,8 +263,6 @@ public:
     bool hasProtectedDisk() const override;
     void setModificationFlag(bool value) override;
     void setProtectionFlag(bool value) override;
-
-    bool hasBootBlock() const;
     
     
     //

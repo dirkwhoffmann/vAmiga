@@ -101,7 +101,15 @@ HardDrive::init(const GeometryDescriptor &geometry)
     
     // Create the drive description
     this->geometry = geometry;
-    ptable.push_back(PartitionDescriptor(geometry));
+    
+    // Add a default partition spanning the entire disk
+    auto partition = PartitionDescriptor(geometry);
+    
+    // Make the partition bootable
+    partition.flags |= 1;
+    
+    // Add the descriptor to the partition table
+    ptable.push_back(partition);
 
     // Create the new drive
     data.resize(geometry.numBytes());
@@ -161,12 +169,10 @@ HardDrive::init(const HDFFile &hdf)
     if (auto value = hdf.getControllerRevision(); value) controllerRevision = *value;
     
     // Copy geometry
-    assert(hdf.geometry == hdf.getGeometryDescriptor());
-    geometry = hdf.getGeometryDescriptor(); // TODO: Replace by " = hdf.geometry" (?!)
+    geometry = hdf.geometry;
     
     // Copy partition table
-    ptable = hdf.getPartitionDescriptors();  // TODO: Replace by " = hdf.ptable" (?!)
-    assert(ptable.size() == hdf.getPartitionDescriptors().size());
+    ptable = hdf.ptable;
     
     // Copy over all needed file system drivers
     for (const auto &driver : hdf.drivers) {
@@ -399,8 +405,6 @@ HardDrive::_dump(Category category, std::ostream& os) const
         os << HardDriveStateEnum::key(state) << std::endl;
         os << tab("Flags");
         os << DiskFlagsEnum::mask(flags) << std::endl;
-        os << tab("Boot block");
-        os << bol(hasBootBlock()) << std::endl;
         os << tab("Capacity");
         os << dec(cap1) << "." << dec(cap2) << " MB" << std::endl;
         geometry.dump(os);
@@ -497,17 +501,6 @@ void
 HardDrive::setProtectionFlag(bool value)
 {
     if (hasDisk()) setFlag(DiskFlags::PROTECTED, value);
-}
-
-bool
-HardDrive::hasBootBlock() const
-{
-    if (data.size > 512) {
-        for (isize i = 12; i < 512; i++) {
-            if (data[i]) return true;
-        }
-    }
-    return false;
 }
 
 string
