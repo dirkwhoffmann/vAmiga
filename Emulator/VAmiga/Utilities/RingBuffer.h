@@ -149,7 +149,7 @@ struct SortedArray : public Array<T, capacity>
 };
 
 //
-// Variable-size Ringbuffer
+// Resizable Ringbuffer
 //
 
 template <class T> struct ResizableRingBuffer
@@ -179,6 +179,16 @@ template <class T> struct ResizableRingBuffer
         return *this;
     }
     
+    void resize(isize cap) {
+        
+        capacity = cap;
+
+        if (elements) delete[] elements;
+        elements = new T[cap]();
+        
+        clear();
+    }
+
     void clear() { r = w = 0; }
     void clear(T t) { clear(); for (isize i = 0; i < capacity; i++) elements[i] = t; }
     void align(isize offset) { w = (r + offset) % capacity; }
