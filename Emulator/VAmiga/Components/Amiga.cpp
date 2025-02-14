@@ -113,10 +113,13 @@ Amiga::prefix(isize level, const char *component, isize line) const
         }
         if (level >= 3) {
             
-            fprintf(stderr, " [%lld] (%3ld,%3ld)",
-                    agnus.pos.frame, agnus.pos.v, agnus.pos.h);
+            fprintf(stderr, " [%lld]", agnus.pos.frame);
         }
         if (level >= 4) {
+            
+            fprintf(stderr, " (%3ld,%3ld)", agnus.pos.v, agnus.pos.h);
+        }
+        if (level >= 5) {
             
             fprintf(stderr, " %06X ", cpu.getPC0());
             if (agnus.copper.servicing) {
@@ -124,7 +127,7 @@ Amiga::prefix(isize level, const char *component, isize line) const
             }
             fprintf(stderr, " %2X ", cpu.getIPL());
         }
-        if (level >= 5) {
+        if (level >= 6) {
             
             u16 dmacon = agnus.dmacon;
             bool dmaen = dmacon & DMAEN;

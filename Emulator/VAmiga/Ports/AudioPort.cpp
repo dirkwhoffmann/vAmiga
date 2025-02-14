@@ -313,15 +313,23 @@ AudioPort::synthesize(Cycle clock, Cycle target)
     // Do not synthesize anything if this is the run-ahead instance
     if (amiga.objid != 0) return;
 
-    // Determine the number of elapsed cycles per audio sample
-    double cps = double(amiga.masterClockFrequency()) / sampleRate;
+    auto rate = sampleRate;
+    
+    // Adjust sampleRate based on the current audio buffer fill level
+    rate += (0.5 - stream.fillLevel()) * 2000;
+    
+    debug(AUDBUF_DEBUG, "Sample rate adjustment: %.0f Hz (fill level: %.2f)\n",
+          rate - sampleRate, stream.fillLevel());
 
+    // Determine the number of elapsed cycles per audio sample
+    double cps = double(amiga.masterClockFrequency()) / rate;
+    
     // Determine how many samples we need to produce
     double exact = (double)(target - clock) / cps + fraction;
 
     // Extract the integer part and remember the rest
     double count; fraction = std::modf(exact, &count);
-
+    
     // Synthesize samples
     synthesize(clock, (long)count, cps);
 }

@@ -37,7 +37,8 @@ SampleRateDetector::feed(isize samples)
 
         // Measure how much time has passed since the previous call
         auto delay = delta.restart().asSeconds();
-        // trace(TIM_DEBUG, "Requested %ld samples in %f seconds (%.0f)\n", samples, delay, samples / delay);
+        
+        trace(TIM_DEBUG, "Requested %ld samples in %f seconds (%.0f)\n", samples, delay, samples / delay);
 
         // Record the measured value
         if (buffer.isFull()) (void)buffer.read();

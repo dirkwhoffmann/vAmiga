@@ -99,7 +99,7 @@ class DropZone: Layer {
                         amiga.df3.info.isConnected ]
 
         case .HDF, .HDZ:
-            enabled = [ amiga.hd0.info.isConnected,
+            enabled = [ true,
                         amiga.hd1.info.isConnected,
                         amiga.hd2.info.isConnected,
                         amiga.hd3.info.isConnected ]
