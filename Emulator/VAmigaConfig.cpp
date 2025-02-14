@@ -22,7 +22,7 @@ debugflag TIM_DEBUG       = 0;
 debugflag WARP_DEBUG      = 0;
 debugflag CMD_DEBUG       = 0;
 debugflag MSG_DEBUG       = 0;
-debugflag SNP_DEBUG       = 1;
+debugflag SNP_DEBUG       = 0;
 
 // Run ahead
 debugflag RUA_DEBUG       = 0;
@@ -124,7 +124,7 @@ debugflag DBD_DEBUG       = 0;
 
 // Media types
 debugflag ADF_DEBUG       = 0;
-debugflag HDF_DEBUG       = 1;
+debugflag HDF_DEBUG       = 0;
 debugflag DMS_DEBUG       = 0;
 debugflag IMG_DEBUG       = 0;
 
