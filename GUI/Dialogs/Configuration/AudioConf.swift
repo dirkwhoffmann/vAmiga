@@ -12,6 +12,10 @@ extension ConfigurationController {
     
     func refreshAudioTab() {
                 
+        //
+        // Mixer
+        //
+        
         // In
         audVol0.integerValue = config.vol0
         audVol1.integerValue = config.vol1
@@ -25,7 +29,6 @@ extension ConfigurationController {
         // Out
         audVolL.integerValue = config.volL
         audVolR.integerValue = config.volR
-        audSamplingMethod.selectItem(withTag: config.samplingMethod)
 
         // Drives
         audStepVolume.integerValue = config.stepVolume
@@ -44,10 +47,27 @@ extension ConfigurationController {
         // Audio filter
         audFilterType.selectItem(withTag: config.filterType)
 
-        // Buttons
+        //
+        // Sampler
+        //
+        
+        audSamplingMethod.selectItem(withTag: config.samplingMethod)
+        audASR.selectItem(withTag: config.asr)
+        audCapacity.integerValue = config.audioBufferSize
+        audCapacityText.stringValue = "\(config.audioBufferSize) samples"
+        
+
+        //
+        // Commons
+        //
+        
         audPowerButton.isHidden = !bootable
     }
 
+    //
+    // Mixer
+    //
+    
     @IBAction func audVol0Action(_ sender: NSSlider!) {
 
         config.vol0 = sender.integerValue
@@ -97,11 +117,6 @@ extension ConfigurationController {
         
         config.volR = sender.integerValue
     }
-
-    @IBAction func audSamplingMethodAction(_ sender: NSPopUpButton!) {
-        
-        config.samplingMethod = sender.selectedTag()
-    }
     
     @IBAction func audDrivePanAction(_ sender: NSSlider!) {
                                 
@@ -150,6 +165,27 @@ extension ConfigurationController {
         config.filterType = sender.selectedTag()
     }
 
+    //
+    // Sampler
+    //
+    
+    @IBAction func audSamplingMethodAction(_ sender: NSPopUpButton!) {
+        
+        config.samplingMethod = sender.selectedTag()
+    }
+    
+    @IBAction func audASRAction(_ sender: NSPopUpButton!) {
+        
+        config.asr = sender.selectedTag()
+    }
+
+    @IBAction func audCapacityAction(_ sender: NSSlider!) {
+
+        print("Value: \(sender.integerValue)")
+        
+        config.audioBufferSize = sender.integerValue
+    }
+    
     @IBAction func audPresetAction(_ sender: NSPopUpButton!) {
         
         emu.suspend()

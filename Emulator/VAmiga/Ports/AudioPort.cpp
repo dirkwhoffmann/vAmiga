@@ -339,15 +339,6 @@ AudioPort::synthesize(Cycle clock, Cycle target)
     // Do not synthesize anything if this is the run-ahead instance
     if (amiga.objid != 0) return;
 
-    /*
-    auto rate = sampleRate;
-    
-    // Adjust sampleRate based on the current audio buffer fill level
-    rate += (0.5 - stream.fillLevel()) * 2000;
-    
-    debug(AUDBUF_DEBUG, "Sample rate adjustment: %.0f Hz (fill level: %.2f)\n",
-          rate - sampleRate, stream.fillLevel());
-    */
     // Run the ASR algorithm (adaptive sample rate)
     if (config.asr) { updateSampleRateCorrection(); } else { sampleRateCorrection = 0.0; }
     
@@ -367,10 +358,16 @@ AudioPort::synthesize(Cycle clock, Cycle target)
 void
 AudioPort::updateSampleRateCorrection()
 {
-    // Compute a correction based on the current fill level
+    // Compute the difference between the ideal and the current fill level
+    auto error = (0.5 - stream.fillLevel());
+    
+    // Smooth it out
+    sampleRateError = 0.75 * sampleRateError + 0.25 * error;
+
+    // Compute a sample rate correction
     auto correction = (0.5 - stream.fillLevel()) * 2000;
 
-    // Reduce jitter
+    // Smooth it out
     sampleRateCorrection = (sampleRateCorrection * 0.75) + (correction * 0.25);
     
     debug(AUDBUF_DEBUG, "ASR correction: %.0f Hz (fill: %.2f)\n",

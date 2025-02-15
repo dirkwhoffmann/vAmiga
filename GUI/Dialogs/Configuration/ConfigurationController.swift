@@ -255,7 +255,6 @@ class ConfigurationController: DialogController {
     // Out
     @IBOutlet weak var audVolL: NSSlider!
     @IBOutlet weak var audVolR: NSSlider!
-    @IBOutlet weak var audSamplingMethod: NSPopUpButton!
 
     // Drive volumes
     @IBOutlet weak var audStepVolume: NSSlider!
@@ -273,6 +272,12 @@ class ConfigurationController: DialogController {
 
     // Filter
     @IBOutlet weak var audFilterType: NSPopUpButton!
+
+    // Mixer
+    @IBOutlet weak var audSamplingMethod: NSPopUpButton!
+    @IBOutlet weak var audASR: NSPopUpButton!
+    @IBOutlet weak var audCapacity: NSSlider!
+    @IBOutlet weak var audCapacityText: NSTextField!
 
     // Buttons
     @IBOutlet weak var audOKButton: NSButton!

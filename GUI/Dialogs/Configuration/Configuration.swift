@@ -466,10 +466,6 @@ class Configuration {
         get { return amiga.get(.AUD_VOLR) }
         set { amiga.set(.AUD_VOLR, value: newValue) }
     }
-    var samplingMethod: Int {
-        get { return amiga.get(.AUD_SAMPLING_METHOD) }
-        set { amiga.set(.AUD_SAMPLING_METHOD, value: newValue) }
-    }
     var df0Pan: Int {
         get { return amiga.get(.DRIVE_PAN, drive: 0) }
         set { amiga.set(.DRIVE_PAN, id: 0, value: newValue) }
@@ -519,6 +515,18 @@ class Configuration {
     var ejectVolume: Int {
         get { return amiga.get(.DRIVE_EJECT_VOLUME, drive: 0) }
         set { amiga.set(.DRIVE_EJECT_VOLUME, value: newValue) }
+    }
+    var samplingMethod: Int {
+        get { return amiga.get(.AUD_SAMPLING_METHOD) }
+        set { amiga.set(.AUD_SAMPLING_METHOD, value: newValue) }
+    }
+    var asr: Int {
+        get { return amiga.get(.AUD_ASR) }
+        set { amiga.set(.AUD_ASR, value: newValue) }
+    }
+    var audioBufferSize: Int {
+        get { return amiga.get(.AUD_BUFFER_SIZE) }
+        set { amiga.set(.AUD_BUFFER_SIZE, value: newValue) }
     }
 
     //

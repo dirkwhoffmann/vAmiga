@@ -91,7 +91,7 @@ class AudioPort final : public SubComponent {
     double sampleRate = 44100.0;
 
     // Variables needed to implement ASR (Adaptive Sample Rate)
-    // double sampleRateError;
+    double sampleRateError = 0.0;
     double sampleRateCorrection = 0.0;
     
     // Fraction of a sample that hadn't been generated in synthesize
