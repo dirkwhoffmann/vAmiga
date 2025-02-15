@@ -22,8 +22,8 @@ namespace vamiga {
 void
 PixelEngine::clearAll()
 {
-    emuTexture[0].clear();
-    emuTexture[1].clear();
+    // Wipe out all textures
+    for (isize i = 0; i < NUM_TEXTURES; i++) emuTexture[i].clear();
 }
 
 void
@@ -54,10 +54,11 @@ PixelEngine::_didReset(bool hard)
 {
     if (hard) {
         
-        emuTexture[0].nr = 0;
-        emuTexture[0].lof = emuTexture[0].prevlof = true;
-        emuTexture[1].nr = 0;
-        emuTexture[1].lof = emuTexture[1].prevlof = true;
+        for (isize i = 0; i < NUM_TEXTURES; i++) {
+            
+            emuTexture[i].nr = 0;
+            emuTexture[i].lof = emuTexture[i].prevlof = true;
+        }
     }
 
     activeBuffer = 0;
@@ -279,9 +280,10 @@ PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
 }
 
 const FrameBuffer &
-PixelEngine::getStableBuffer() const
+PixelEngine::getStableBuffer(isize delayedFrames) const
 {
-    return emuTexture[!activeBuffer];
+    auto nr = activeBuffer - delayedFrames - 1;
+    return emuTexture[(nr + NUM_TEXTURES) % NUM_TEXTURES];
 }
 
 FrameBuffer &
@@ -316,7 +318,7 @@ PixelEngine::swapBuffers()
     videoPort.buffersWillSwap();
 
     isize oldActiveBuffer = activeBuffer;
-    isize newActiveBuffer = !oldActiveBuffer;
+    isize newActiveBuffer = (activeBuffer + 1) % NUM_TEXTURES;
 
     emuTexture[newActiveBuffer].nr = agnus.pos.frame;
     emuTexture[newActiveBuffer].lof = agnus.pos.lof;

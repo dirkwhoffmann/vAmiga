@@ -265,11 +265,14 @@ Emulator::missingFrames() const
 const FrameBuffer &
 Emulator::getTexture() const
 {
-    auto &result = main.config.runAhead && isRunning() ?
-    ahead.videoPort.getTexture() :
-    main.videoPort.getTexture();
-    
-    return result;
+    // If paused, display the most recent texture from the main instance
+    if (!isRunning()) ahead.videoPort.getTexture();
+        
+    if (main.config.runAhead > 0) {
+        return ahead.videoPort.getTexture();
+    } else {
+        return main.videoPort.getTexture();
+    }
 }
 
 void
@@ -321,7 +324,7 @@ Emulator::computeFrame()
 {
     auto &config = main.getConfig();
     
-    if (config.runAhead) {
+    if (config.runAhead > 0) {
         
         try {
             
@@ -365,6 +368,8 @@ Emulator::cloneRunAheadInstance()
 void
 Emulator::recreateRunAheadInstance()
 {
+    assert(main.config.runAhead > 0);
+    
     auto &config = main.getConfig();
     
     // Clone the main instance

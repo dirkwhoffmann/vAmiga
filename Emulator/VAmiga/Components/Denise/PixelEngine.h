@@ -40,7 +40,6 @@ class PixelEngine final : public SubComponent {
     // Current configuration
     PixelEngineConfig config = {};
 
-public:
 
     //
     // Screen buffers
@@ -48,13 +47,15 @@ public:
 
 private:
 
-    /* The emulator utilizes double-buffering for the computed textures.
-     * At any time, one of the two buffers is the "working buffer". The other
-     * one is the "stable buffer". All drawing functions write to the working
-     * buffer and the GPU reads from the stable buffer. Once a frame has
-     * been completed, the working buffer and the stable buffer are swapped.
+    static constexpr isize NUM_TEXTURES = 2;
+    
+    /* The emulator manages textures in a ring buffer to allow access to older
+     * frames ("run-behind" feature). At any time, one texture serves as the
+     * working buffer, where all drawing functions write, while the other
+     * textures are considered stable. Once a frame is completed, the next
+     * texture in the ring becomes the new working buffer.
      */
-    FrameBuffer emuTexture[2];
+    FrameBuffer emuTexture[NUM_TEXTURES];
 
     // The currently active buffer
     isize activeBuffer = 0;
@@ -67,6 +68,8 @@ private:
     // Color management
     //
 
+private:
+    
     // Lookup table for all 4096 Amiga colors
     Texel colorSpace[4096];
 
@@ -212,7 +215,7 @@ public:
 
     // Returns the working buffer or the stable buffer
     FrameBuffer &getWorkingBuffer();
-    const FrameBuffer &getStableBuffer() const;
+    const FrameBuffer &getStableBuffer(isize delayedFrames = 0) const;
 
     // Return a pointer into the pixel storage
     Texel *workingPtr(isize row = 0, isize col = 0);
