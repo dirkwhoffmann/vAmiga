@@ -148,8 +148,7 @@ Defaults::Defaults()
     setFallback(Opt::JOY_AUTOFIRE_BURSTS,        false,                  { 0, 1} );
     setFallback(Opt::JOY_AUTOFIRE_BULLETS,       3,                      { 0, 1} );
     setFallback(Opt::JOY_AUTOFIRE_DELAY,         5,                      { 0, 1} );
-    setFallback(Opt::AUD_SAMPLING_METHOD,        (i64)SamplingMethod::NONE);
-    setFallback(Opt::AUD_FILTER_TYPE,            (i64)FilterType::A500);
+    
     setFallback(Opt::AUD_PAN0,                   50);
     setFallback(Opt::AUD_PAN1,                   350);
     setFallback(Opt::AUD_PAN2,                   350);
@@ -160,7 +159,12 @@ Defaults::Defaults()
     setFallback(Opt::AUD_VOL3,                   100);
     setFallback(Opt::AUD_VOLL,                   50);
     setFallback(Opt::AUD_VOLR,                   50);
+    setFallback(Opt::AUD_FILTER_TYPE,            (i64)FilterType::A500);
+    setFallback(Opt::AUD_BUFFER_SIZE,            (i64)8192);
+    setFallback(Opt::AUD_SAMPLING_METHOD,        (i64)SamplingMethod::NONE);
+    setFallback(Opt::AUD_ASR,                    true);
     setFallback(Opt::AUD_FASTPATH,               true);
+
     setFallback(Opt::DIAG_BOARD,                 false);
 
     setFallback(Opt::SRV_PORT,                   8080,                   { (i64)ServerType::SER });

@@ -63,7 +63,6 @@ class AudioPort final : public SubComponent {
 
     ConfigOptions options = {
 
-        Opt::AUD_SAMPLING_METHOD,
         Opt::AUD_PAN0,
         Opt::AUD_PAN1,
         Opt::AUD_PAN2,
@@ -74,20 +73,27 @@ class AudioPort final : public SubComponent {
         Opt::AUD_VOL3,
         Opt::AUD_VOLL,
         Opt::AUD_VOLR,
+        Opt::AUD_BUFFER_SIZE,
+        Opt::AUD_SAMPLING_METHOD,
+        Opt::AUD_ASR,
         Opt::AUD_FASTPATH
     };
 
     friend class Paula;
 
     // Current configuration
-    AudioPortConfig config = {};
+    AudioPortConfig config = { };
     
     // Underflow and overflow counters
-    AudioPortStats stats = {};
+    AudioPortStats stats = { };
 
     // Current sample rate
-    double sampleRate = 44100;
+    double sampleRate = 44100.0;
 
+    // Variables needed to implement ASR (Adaptive Sample Rate)
+    // double sampleRateError;
+    double sampleRateCorrection = 0.0;
+    
     // Fraction of a sample that hadn't been generated in synthesize
     double fraction = 0.0;
 
@@ -249,10 +255,10 @@ public:
     // Entry point for the core emulator
     void synthesize(Cycle clock, Cycle target);
 
-    // Returns the sample rate adjustment
-    // double getSampleRateCorrection() { return sampleRateCorrection; }
-
 private:
+    
+    // Runs the ASR algorithms (adaptive sample rate)
+    void updateSampleRateCorrection();
 
     void synthesize(Cycle clock, long count, double cyclesPerSample);
     template <SamplingMethod method>

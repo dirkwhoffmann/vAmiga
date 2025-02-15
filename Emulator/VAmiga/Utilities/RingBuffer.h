@@ -212,7 +212,7 @@ template <class T> struct ResizableRingBuffer
     
     isize begin() const { return r; }
     isize end() const { return w; }
-    isize next(isize i) { return i < capacity - 1 ? i + 1 : 0; }
+    isize next(isize i) { return i + 1 < capacity ? i + 1 : 0; }
     isize prev(isize i) { return i > 0 ? i - 1 : capacity - 1; }
     
     

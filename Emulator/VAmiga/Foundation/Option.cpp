@@ -153,8 +153,6 @@ OptionParser::create(Opt opt, i64 arg)
         case Opt::JOY_AUTOFIRE_BULLETS:      return numParser();
         case Opt::JOY_AUTOFIRE_DELAY:        return numParser();
 
-        case Opt::AUD_SAMPLING_METHOD:       return enumParser.template operator()<SamplingMethodEnum,SamplingMethod>();
-        case Opt::AUD_FILTER_TYPE:           return enumParser.template operator()<FilterTypeEnum,FilterType>();
         case Opt::AUD_PAN0:                  return numParser();
         case Opt::AUD_PAN1:                  return numParser();
         case Opt::AUD_PAN2:                  return numParser();
@@ -165,6 +163,10 @@ OptionParser::create(Opt opt, i64 arg)
         case Opt::AUD_VOL3:                  return numParser("%");
         case Opt::AUD_VOLL:                  return numParser("%");
         case Opt::AUD_VOLR:                  return numParser("%");
+        case Opt::AUD_FILTER_TYPE:           return enumParser.template operator()<FilterTypeEnum,FilterType>();
+        case Opt::AUD_BUFFER_SIZE:           return numParser(" samples");
+        case Opt::AUD_SAMPLING_METHOD:       return enumParser.template operator()<SamplingMethodEnum,SamplingMethod>();
+        case Opt::AUD_ASR:                   return boolParser();
         case Opt::AUD_FASTPATH:              return boolParser();
 
         case Opt::DIAG_BOARD:                return boolParser();

@@ -94,11 +94,9 @@ enum class Opt : long
     LA_ADDR2,               ///< Address for channel 2 (memory probing)
     LA_ADDR3,               ///< Address for channel 3 (memory probing)
     
-    ///<
     // Video port
     VID_WHITE_NOISE,        ///< Generate white-noise when switched off
-    ///<
-    ///<
+
     // CPU
     CPU_REVISION,
     CPU_DASM_REVISION,
@@ -175,8 +173,6 @@ enum class Opt : long
     JOY_AUTOFIRE_DELAY,     ///< Delay between two button events [frames]
     
     // Paula audio
-    AUD_SAMPLING_METHOD,
-    AUD_FILTER_TYPE,
     AUD_PAN0,
     AUD_PAN1,
     AUD_PAN2,
@@ -187,6 +183,10 @@ enum class Opt : long
     AUD_VOL3,
     AUD_VOLL,
     AUD_VOLR,
+    AUD_FILTER_TYPE,
+    AUD_BUFFER_SIZE,
+    AUD_SAMPLING_METHOD,
+    AUD_ASR,
     AUD_FASTPATH,
     
     // Expansion boards
@@ -336,8 +336,6 @@ struct OptEnum : Reflection<OptEnum, Opt>
             case Opt::JOY_AUTOFIRE_BULLETS:      return "JOY.AUTOFIRE_BULLETS";
             case Opt::JOY_AUTOFIRE_DELAY:        return "JOY.AUTOFIRE_DELAY";
                 
-            case Opt::AUD_SAMPLING_METHOD:       return "AUD.SAMPLING_METHOD";
-            case Opt::AUD_FILTER_TYPE:           return "AUD.FILTER_TYPE";
             case Opt::AUD_PAN0:                  return "AUD.PAN0";
             case Opt::AUD_PAN1:                  return "AUD.PAN1";
             case Opt::AUD_PAN2:                  return "AUD.PAN2";
@@ -348,6 +346,10 @@ struct OptEnum : Reflection<OptEnum, Opt>
             case Opt::AUD_VOL3:                  return "AUD.VOL3";
             case Opt::AUD_VOLL:                  return "AUD.VOLL";
             case Opt::AUD_VOLR:                  return "AUD.VOLR";
+            case Opt::AUD_FILTER_TYPE:           return "AUD.FILTER_TYPE";
+            case Opt::AUD_BUFFER_SIZE:           return "AUD_BUFFER_SIZE";
+            case Opt::AUD_SAMPLING_METHOD:       return "AUD.SAMPLING_METHOD";
+            case Opt::AUD_ASR:                   return "AUD_ASR";
             case Opt::AUD_FASTPATH:              return "AUD.FASTPATH";
                 
             case Opt::DIAG_BOARD:                return "DIAG_BOARD";
@@ -492,8 +494,6 @@ struct OptEnum : Reflection<OptEnum, Opt>
             case Opt::JOY_AUTOFIRE_BULLETS:      return "Number of bullets per burst";
             case Opt::JOY_AUTOFIRE_DELAY:        return "Autofire delay in frames";
                 
-            case Opt::AUD_SAMPLING_METHOD:       return "Sampling method";
-            case Opt::AUD_FILTER_TYPE:           return "Audio filter type";
             case Opt::AUD_PAN0:                  return "Channel 0 pan";
             case Opt::AUD_PAN1:                  return "Channel 1 pan";
             case Opt::AUD_PAN2:                  return "Channel 2 pan";
@@ -504,6 +504,10 @@ struct OptEnum : Reflection<OptEnum, Opt>
             case Opt::AUD_VOL3:                  return "Channel 3 volume";
             case Opt::AUD_VOLL:                  return "Master volume (left)";
             case Opt::AUD_VOLR:                  return "Master volume (right)";
+            case Opt::AUD_FILTER_TYPE:           return "Audio filter type";
+            case Opt::AUD_BUFFER_SIZE:           return "Audio buffer capacity";
+            case Opt::AUD_SAMPLING_METHOD:       return "Sampling method";
+            case Opt::AUD_ASR:                   return "Adaptive Sample Rate";
             case Opt::AUD_FASTPATH:              return "Boost performance";
                 
             case Opt::DIAG_BOARD:                return "Diagnose board";

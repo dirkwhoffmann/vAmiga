@@ -85,7 +85,7 @@ Host::_dump(Category category, std::ostream& os) const
     if (category == Category::Config) {
 
         os << tab("Search path");
-        os << "\"" << searchPath << "\"" << std::endl;
+        os << searchPath << std::endl;
 
         dumpConfig(os);
     }

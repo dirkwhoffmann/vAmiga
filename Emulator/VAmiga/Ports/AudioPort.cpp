@@ -47,6 +47,8 @@ AudioPort::_dump(Category category, std::ostream& os) const
         os << std::endl;
         paula.channel3.dump(category, os);
         os << std::endl;
+        os << tab("Buffer capacity");
+        os << fillLevelAsString(stream.cap()) << std::endl;
         os << tab("Fill level");
         os << fillLevelAsString(stream.fillLevel()) << std::endl;
         os << tab("Master volume left");
@@ -150,18 +152,20 @@ AudioPort::getOption(Opt option) const
 {
     switch (option) {
             
+        case Opt::AUD_PAN0:              return (i64)config.pan[0];
+        case Opt::AUD_PAN1:              return (i64)config.pan[1];
+        case Opt::AUD_PAN2:              return (i64)config.pan[2];
+        case Opt::AUD_PAN3:              return (i64)config.pan[3];
+        case Opt::AUD_VOL0:              return (i64)config.vol[0];
+        case Opt::AUD_VOL1:              return (i64)config.vol[1];
+        case Opt::AUD_VOL2:              return (i64)config.vol[2];
+        case Opt::AUD_VOL3:              return (i64)config.vol[3];
+        case Opt::AUD_VOLL:              return (i64)config.volL;
+        case Opt::AUD_VOLR:              return (i64)config.volR;
+        case Opt::AUD_BUFFER_SIZE:       return (i64)config.bufferSize;
         case Opt::AUD_SAMPLING_METHOD:   return (i64)config.samplingMethod;
-        case Opt::AUD_PAN0:              return config.pan[0];
-        case Opt::AUD_PAN1:              return config.pan[1];
-        case Opt::AUD_PAN2:              return config.pan[2];
-        case Opt::AUD_PAN3:              return config.pan[3];
-        case Opt::AUD_VOL0:              return config.vol[0];
-        case Opt::AUD_VOL1:              return config.vol[1];
-        case Opt::AUD_VOL2:              return config.vol[2];
-        case Opt::AUD_VOL3:              return config.vol[3];
-        case Opt::AUD_VOLL:              return config.volL;
-        case Opt::AUD_VOLR:              return config.volR;
-        case Opt::AUD_FASTPATH:          return config.idleFastPath;
+        case Opt::AUD_ASR:               return (i64)config.asr;
+        case Opt::AUD_FASTPATH:          return (i64)config.idleFastPath;
 
         default:
             fatalError;
@@ -173,13 +177,6 @@ AudioPort::checkOption(Opt opt, i64 value)
 {
     switch (opt) {
 
-        case Opt::AUD_SAMPLING_METHOD:
-
-            if (!SamplingMethodEnum::isValid(value)) {
-                throw CoreException(CoreError::OPT_INV_ARG, SamplingMethodEnum::keyList());
-            }
-            return;
-
         case Opt::AUD_PAN0:
         case Opt::AUD_PAN1:
         case Opt::AUD_PAN2:
@@ -190,6 +187,24 @@ AudioPort::checkOption(Opt opt, i64 value)
         case Opt::AUD_VOL3:
         case Opt::AUD_VOLL:
         case Opt::AUD_VOLR:
+
+            return;
+
+        case Opt::AUD_BUFFER_SIZE:
+
+            if (value < 512 || value > 65536) {
+                throw CoreException(CoreError::OPT_INV_ARG, "512 ... 65536");
+            }
+            return;
+            
+        case Opt::AUD_SAMPLING_METHOD:
+
+            if (!SamplingMethodEnum::isValid(value)) {
+                throw CoreException(CoreError::OPT_INV_ARG, SamplingMethodEnum::keyList());
+            }
+            return;
+            
+        case Opt::AUD_ASR:
         case Opt::AUD_FASTPATH:
 
             return;
@@ -205,12 +220,7 @@ AudioPort::setOption(Opt option, i64 value)
     isize channel = 0;
 
     switch (option) {
-            
-        case Opt::AUD_SAMPLING_METHOD:
                         
-            config.samplingMethod = (SamplingMethod)value;
-            return;
-            
         case Opt::AUD_VOL3: channel++;
         case Opt::AUD_VOL2: channel++;
         case Opt::AUD_VOL1: channel++;
@@ -240,6 +250,22 @@ AudioPort::setOption(Opt option, i64 value)
 
             config.pan[channel] = value;
             pan[channel] = float(0.5 * (sin(config.pan[channel] * M_PI / 200.0) + 1));
+            return;
+
+        case Opt::AUD_BUFFER_SIZE:
+                        
+            config.bufferSize = value;
+            // stream.resize(value);
+            return;
+            
+        case Opt::AUD_SAMPLING_METHOD:
+                        
+            config.samplingMethod = (SamplingMethod)value;
+            return;
+
+        case Opt::AUD_ASR:
+                        
+            config.asr = (bool)value;
             return;
 
         case Opt::AUD_FASTPATH:
@@ -313,6 +339,7 @@ AudioPort::synthesize(Cycle clock, Cycle target)
     // Do not synthesize anything if this is the run-ahead instance
     if (amiga.objid != 0) return;
 
+    /*
     auto rate = sampleRate;
     
     // Adjust sampleRate based on the current audio buffer fill level
@@ -320,9 +347,12 @@ AudioPort::synthesize(Cycle clock, Cycle target)
     
     debug(AUDBUF_DEBUG, "Sample rate adjustment: %.0f Hz (fill level: %.2f)\n",
           rate - sampleRate, stream.fillLevel());
-
+    */
+    // Run the ASR algorithm (adaptive sample rate)
+    if (config.asr) { updateSampleRateCorrection(); } else { sampleRateCorrection = 0.0; }
+    
     // Determine the number of elapsed cycles per audio sample
-    double cps = double(amiga.masterClockFrequency()) / rate;
+    double cps = double(amiga.masterClockFrequency()) / (sampleRate + sampleRateCorrection);
     
     // Determine how many samples we need to produce
     double exact = (double)(target - clock) / cps + fraction;
@@ -334,7 +364,20 @@ AudioPort::synthesize(Cycle clock, Cycle target)
     synthesize(clock, (long)count, cps);
 }
 
-void 
+void
+AudioPort::updateSampleRateCorrection()
+{
+    // Compute a correction based on the current fill level
+    auto correction = (0.5 - stream.fillLevel()) * 2000;
+
+    // Reduce jitter
+    sampleRateCorrection = (sampleRateCorrection * 0.75) + (correction * 0.25);
+    
+    debug(AUDBUF_DEBUG, "ASR correction: %.0f Hz (fill: %.2f)\n",
+          sampleRateCorrection, stream.fillLevel());
+}
+
+void
 AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
 {
     bool muted = isMuted();

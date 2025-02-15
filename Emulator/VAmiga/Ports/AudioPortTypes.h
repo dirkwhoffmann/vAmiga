@@ -20,9 +20,6 @@ namespace vamiga {
 
 typedef struct
 {
-    // Selects how the audio buffer is resampled to match the target frequency
-    SamplingMethod samplingMethod;
-
     // Master volume (left and right channel)
     i64 volL;
     i64 volR;
@@ -30,6 +27,15 @@ typedef struct
     // Channel volumes and pan factors
     i64 vol[4];
     i64 pan[4];
+
+    // Sample buffer capacity
+    isize bufferSize;
+
+    // Selects how the audio buffer is resampled to match the target frequency
+    SamplingMethod samplingMethod;
+
+    // Adaptive Sample Rate enable switch
+    bool asr;
 
     // Performance booster
     bool idleFastPath;
