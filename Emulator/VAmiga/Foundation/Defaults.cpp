@@ -160,7 +160,7 @@ Defaults::Defaults()
     setFallback(Opt::AUD_VOLL,                   50);
     setFallback(Opt::AUD_VOLR,                   50);
     setFallback(Opt::AUD_FILTER_TYPE,            (i64)FilterType::A500);
-    setFallback(Opt::AUD_BUFFER_SIZE,            (i64)8192);
+    setFallback(Opt::AUD_BUFFER_SIZE,            (i64)4096);
     setFallback(Opt::AUD_SAMPLING_METHOD,        (i64)SamplingMethod::NONE);
     setFallback(Opt::AUD_ASR,                    true);
     setFallback(Opt::AUD_FASTPATH,               true);

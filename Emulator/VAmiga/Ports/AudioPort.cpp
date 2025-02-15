@@ -365,7 +365,7 @@ AudioPort::updateSampleRateCorrection()
     sampleRateError = 0.75 * sampleRateError + 0.25 * error;
 
     // Compute a sample rate correction
-    auto correction = (0.5 - stream.fillLevel()) * 2000;
+    auto correction = (0.5 - stream.fillLevel()) * 4000;
 
     // Smooth it out
     sampleRateCorrection = (sampleRateCorrection * 0.75) + (correction * 0.25);
