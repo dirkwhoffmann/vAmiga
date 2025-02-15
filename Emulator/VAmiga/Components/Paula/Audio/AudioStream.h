@@ -38,7 +38,7 @@ struct SamplePair
 // AudioStream
 //
 
-class AudioStream : public CoreObject, public Synchronizable, public util::RingBuffer <SamplePair, 16384> {
+class AudioStream : public CoreObject, public Synchronizable, public util::ResizableRingBuffer<SamplePair> {
 
 public:
 
@@ -53,7 +53,13 @@ public:
     // Puts the write pointer somewhat ahead of the read pointer
     void alignWritePtr();
 
+    
+    //
+    // Initializing
+    //
+    AudioStream(isize capacity) : util::ResizableRingBuffer<SamplePair>(capacity) { }
 
+    
     //
     // Copying data
     //

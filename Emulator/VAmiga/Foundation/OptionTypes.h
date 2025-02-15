@@ -347,9 +347,9 @@ struct OptEnum : Reflection<OptEnum, Opt>
             case Opt::AUD_VOLL:                  return "AUD.VOLL";
             case Opt::AUD_VOLR:                  return "AUD.VOLR";
             case Opt::AUD_FILTER_TYPE:           return "AUD.FILTER_TYPE";
-            case Opt::AUD_BUFFER_SIZE:           return "AUD_BUFFER_SIZE";
+            case Opt::AUD_BUFFER_SIZE:           return "AUD.BUFFER_SIZE";
             case Opt::AUD_SAMPLING_METHOD:       return "AUD.SAMPLING_METHOD";
-            case Opt::AUD_ASR:                   return "AUD_ASR";
+            case Opt::AUD_ASR:                   return "AUD.ASR";
             case Opt::AUD_FASTPATH:              return "AUD.FASTPATH";
                 
             case Opt::DIAG_BOARD:                return "DIAG_BOARD";

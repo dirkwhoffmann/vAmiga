@@ -130,7 +130,7 @@ public:
     };
 
     // Output buffer
-    AudioStream stream;
+    AudioStream stream = AudioStream(4096);
 
     // The audio filter pipeline
     AudioFilter filter = AudioFilter(amiga, *this);

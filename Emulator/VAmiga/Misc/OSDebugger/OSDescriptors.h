@@ -11,7 +11,6 @@
 
 #include "CoreObject.h"
 #include "Buffer.h"
-// #include <vector>
 
 namespace vamiga {
 

@@ -13,13 +13,11 @@
 #include "StringUtils.h"
 
 #include <fcntl.h>
-// #include <filesystem>
 #include <fstream>
 #include <istream>
 #include <iostream>
 #include <sstream>
 #include <sys/stat.h>
-// #include <vector>
 
 namespace vamiga::util {
 

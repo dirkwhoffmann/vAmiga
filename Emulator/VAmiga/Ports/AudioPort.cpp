@@ -48,7 +48,7 @@ AudioPort::_dump(Category category, std::ostream& os) const
         paula.channel3.dump(category, os);
         os << std::endl;
         os << tab("Buffer capacity");
-        os << fillLevelAsString(stream.cap()) << std::endl;
+        os << stream.cap() << std::endl;
         os << tab("Fill level");
         os << fillLevelAsString(stream.fillLevel()) << std::endl;
         os << tab("Master volume left");
@@ -255,7 +255,7 @@ AudioPort::setOption(Opt option, i64 value)
         case Opt::AUD_BUFFER_SIZE:
                         
             config.bufferSize = value;
-            // stream.resize(value);
+            stream.resize(value);
             return;
             
         case Opt::AUD_SAMPLING_METHOD:
@@ -389,7 +389,7 @@ AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
 
     // Check for a buffer overflow
     if (stream.count() + count >= stream.cap()) handleBufferOverflow();
-
+    
     // Check if we can take a fast path
     if (config.idleFastPath) {
 
@@ -474,7 +474,7 @@ AudioPort::synthesize(Cycle clock, long count, double cyclesPerSample)
         assert(std::abs(r) < 1.0);
 
         // Write sample into ringbuffer
-        stream.write( SamplePair { float(l), float(r) } );
+        stream.put( SamplePair { float(l), float(r) } );
 
         cycle += cyclesPerSample;
     }

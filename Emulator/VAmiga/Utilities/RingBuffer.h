@@ -11,7 +11,6 @@
 
 #include "BasicTypes.h"
 #include <utility>
-// #include <vector>
 
 namespace vamiga::util {
 
@@ -181,12 +180,15 @@ template <class T> struct ResizableRingBuffer
     
     void resize(isize cap) {
         
-        capacity = cap;
-
-        if (elements) delete[] elements;
-        elements = new T[cap]();
-        
-        clear();
+        if (capacity != cap) {
+            
+            capacity = cap;
+            
+            if (elements) delete[] elements;
+            elements = new T[cap]();
+            
+            clear();
+        }
     }
 
     void clear() { r = w = 0; }
@@ -212,8 +214,8 @@ template <class T> struct ResizableRingBuffer
     
     isize begin() const { return r; }
     isize end() const { return w; }
-    isize next(isize i) { return i + 1 < capacity ? i + 1 : 0; }
-    isize prev(isize i) { return i > 0 ? i - 1 : capacity - 1; }
+    isize next(isize i) const { return i + 1 < capacity ? i + 1 : 0; }
+    isize prev(isize i) const { return i > 0 ? i - 1 : capacity - 1; }
     
     
     //
@@ -241,6 +243,12 @@ template <class T> struct ResizableRingBuffer
         
         elements[w] = element;
         w = next(w);
+    }
+
+    void put(T element)
+    {
+        elements[w] = element;
+        if ((w = next(w)) == r) r = next(r);
     }
     
     void skip()

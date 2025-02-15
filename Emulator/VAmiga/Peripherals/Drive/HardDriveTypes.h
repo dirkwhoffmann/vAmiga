@@ -11,7 +11,6 @@
 
 #include "DriveTypes.h"
 #include "DriveDescriptors.h"
-// #include <vector>
 
 namespace vamiga {
 
