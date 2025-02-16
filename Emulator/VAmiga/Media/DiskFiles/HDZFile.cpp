@@ -67,7 +67,6 @@ HDZFile::finalizeRead()
     
     debug(HDF_DEBUG, "Uncompressed size: %ld bytes\n", data.size);
     
-    
     // Initialize the ADF with the decompressed data (may throw)
     hdf.init(data.ptr, data.size);
 
