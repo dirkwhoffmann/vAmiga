@@ -508,7 +508,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
                     case 3: port.joystick.trigger(GamePadAction::PRESS_FIRE3); break;
                         
                     default:
-                        throw CoreException(Fault::OPT_INV_ARG, "1...3");
+                        throw CoreError(Fault::OPT_INV_ARG, "1...3");
                 }
             }, .values = {i}
         });
@@ -530,7 +530,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
                     case 3: port.joystick.trigger(GamePadAction::RELEASE_FIRE3); break;
                         
                     default:
-                        throw CoreException(Fault::OPT_INV_ARG, "1...3");
+                        throw CoreError(Fault::OPT_INV_ARG, "1...3");
                 }
             }, .values = {i}
         });

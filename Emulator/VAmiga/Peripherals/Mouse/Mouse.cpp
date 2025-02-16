@@ -47,7 +47,7 @@ Mouse::checkOption(Opt opt, i64 value)
         case Opt::MOUSE_VELOCITY:
 
             if (value < 0 || value > 255) {
-                throw CoreException(Fault::OPT_INV_ARG, "0...255");
+                throw CoreError(Fault::OPT_INV_ARG, "0...255");
             }
             return;
 

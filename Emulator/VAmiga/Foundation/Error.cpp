@@ -14,7 +14,7 @@
 
 namespace vamiga {
 
-CoreException::CoreException(Fault code, const string &s)
+CoreError::CoreError(Fault code, const string &s)
 {
     data = i64(code);
     
@@ -417,7 +417,7 @@ CoreException::CoreException(Fault code, const string &s)
 }
 
 const char *
-CoreException::what() const throw()
+CoreError::what() const throw()
 {
     return description.c_str();
 }

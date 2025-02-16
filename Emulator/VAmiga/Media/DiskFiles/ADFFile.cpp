@@ -52,12 +52,12 @@ ADFFile::fileSize(Diameter diameter, Density density)
     assert_enum(Diameter, diameter);
     assert_enum(Density, density);
 
-    if (diameter != Diameter::INCH_35) throw CoreException(Fault::DISK_INVALID_DIAMETER);
+    if (diameter != Diameter::INCH_35) throw CoreError(Fault::DISK_INVALID_DIAMETER);
     
     if (density == Density::DD) return ADFSIZE_35_DD;
     if (density == Density::HD) return ADFSIZE_35_HD;
 
-    throw CoreException(Fault::DISK_INVALID_DENSITY);
+    throw CoreError(Fault::DISK_INVALID_DENSITY);
 }
 
 void
@@ -72,7 +72,7 @@ ADFFile::init(Diameter diameter, Density density)
 void
 ADFFile::init(const FloppyDiskDescriptor &descr)
 {
-    if (descr.diameter != Diameter::INCH_35) throw CoreException(Fault::DISK_INVALID_DIAMETER);
+    if (descr.diameter != Diameter::INCH_35) throw CoreError(Fault::DISK_INVALID_DIAMETER);
 
     switch (descr.density) {
 
@@ -87,7 +87,7 @@ ADFFile::init(const FloppyDiskDescriptor &descr)
                 case 84: init(ADFSIZE_35_DD_84); break;
 
                 default:
-                    throw CoreException(Fault::DISK_INVALID_LAYOUT);
+                    throw CoreError(Fault::DISK_INVALID_LAYOUT);
             }
             break;
 
@@ -97,7 +97,7 @@ ADFFile::init(const FloppyDiskDescriptor &descr)
             break;
 
         default:
-            throw CoreException(Fault::DISK_INVALID_DENSITY);
+            throw CoreError(Fault::DISK_INVALID_DENSITY);
     }
 }
 
@@ -115,7 +115,7 @@ ADFFile::init(FloppyDisk &disk)
 void
 ADFFile::init(FloppyDrive &drive)
 {
-    if (drive.disk == nullptr) throw CoreException(Fault::DISK_MISSING);
+    if (drive.disk == nullptr) throw CoreError(Fault::DISK_MISSING);
     init(*drive.disk);
 }
 
@@ -133,7 +133,7 @@ ADFFile::init(MutableFileSystem &volume)
             break;
             
         default:
-            throw CoreException(Fault::FS_WRONG_CAPACITY);
+            throw CoreError(Fault::FS_WRONG_CAPACITY);
     }
 
     volume.exportVolume(data.ptr, data.size);
@@ -300,17 +300,17 @@ ADFFile::formatDisk(FSVolumeType fs, BootBlockId id, string name)
     volume.makeBootable(id);
     
     // Export the file system to the ADF
-    if (!volume.exportVolume(data.ptr, data.size)) throw CoreException(Fault::FS_UNKNOWN);
+    if (!volume.exportVolume(data.ptr, data.size)) throw CoreError(Fault::FS_UNKNOWN);
 }
 
 void
 ADFFile::encodeDisk(FloppyDisk &disk) const
 {
     if (disk.getDiameter() != getDiameter()) {
-        throw CoreException(Fault::DISK_INVALID_DIAMETER);
+        throw CoreError(Fault::DISK_INVALID_DIAMETER);
     }
     if (disk.getDensity() != getDensity()) {
-        throw CoreException(Fault::DISK_INVALID_DENSITY);
+        throw CoreError(Fault::DISK_INVALID_DENSITY);
     }
 
     isize tracks = numTracks();
@@ -449,10 +449,10 @@ ADFFile::decodeDisk(FloppyDisk &disk)
     debug(ADF_DEBUG, "Decoding Amiga disk with %ld tracks\n", tracks);
     
     if (disk.getDiameter() != getDiameter()) {
-        throw CoreException(Fault::DISK_INVALID_DIAMETER);
+        throw CoreError(Fault::DISK_INVALID_DIAMETER);
     }
     if (disk.getDensity() != getDensity()) {
-        throw CoreException(Fault::DISK_INVALID_DENSITY);
+        throw CoreError(Fault::DISK_INVALID_DENSITY);
     }
 
     // Make the MFM stream scannable beyond the track end
@@ -495,7 +495,7 @@ ADFFile::decodeTrack(FloppyDisk &disk, Track t)
     if (nr != sectors) {
         
         warn("Found %ld sectors, expected %ld. Aborting.\n", nr, sectors);
-        throw CoreException(Fault::DISK_WRONG_SECTOR_COUNT);
+        throw CoreError(Fault::DISK_WRONG_SECTOR_COUNT);
     }
     
     // Decode all sectors
@@ -518,7 +518,7 @@ ADFFile::decodeSector(u8 *dst, u8 *src)
     u8 sector = info[2];
     if (sector >= numSectors()) {
         warn("Invalid sector number %d. Aborting.\n", sector);
-        throw CoreException(Fault::DISK_INVALID_SECTOR_NUMBER);
+        throw CoreError(Fault::DISK_INVALID_SECTOR_NUMBER);
     }
     
     // Skip sector header

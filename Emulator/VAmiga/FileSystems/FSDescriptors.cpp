@@ -100,13 +100,13 @@ void
 FileSystemDescriptor::checkCompatibility() const
 {
     if (numBytes() > MB(504) || FORCE_FS_WRONG_CAPACITY) {
-        throw CoreException(Fault::FS_WRONG_CAPACITY);
+        throw CoreError(Fault::FS_WRONG_CAPACITY);
     }
     if (bsize != 512 || FORCE_FS_WRONG_BSIZE) {
-        throw CoreException(Fault::FS_WRONG_BSIZE);
+        throw CoreError(Fault::FS_WRONG_BSIZE);
     }
     if (!FSVolumeTypeEnum::isValid(dos) || FORCE_FS_WRONG_DOS_TYPE) {
-        throw CoreException(Fault::FS_WRONG_DOS_TYPE);
+        throw CoreError(Fault::FS_WRONG_DOS_TYPE);
     }
 }
 

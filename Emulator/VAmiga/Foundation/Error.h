@@ -15,13 +15,13 @@
 
 namespace vamiga {
 
-struct CoreException : public util::Exception
+struct CoreError : public util::Exception
 {
-    CoreException(Fault code, const string &s);
-    CoreException(Fault code, const char *s) : CoreException(code, string(s)) { };
-    CoreException(Fault code, const std::filesystem::path &path) : CoreException(code, path.string()) { };
-    CoreException(Fault code, long v) : CoreException(code, std::to_string(v)) { };
-    CoreException(Fault code) : CoreException(code, "") { }
+    CoreError(Fault code, const string &s);
+    CoreError(Fault code, const char *s) : CoreError(code, string(s)) { };
+    CoreError(Fault code, const std::filesystem::path &path) : CoreError(code, path.string()) { };
+    CoreError(Fault code, long v) : CoreError(code, std::to_string(v)) { };
+    CoreError(Fault code) : CoreError(code, "") { }
     
     const char *what() const throw() override;
 };

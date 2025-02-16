@@ -50,7 +50,7 @@ DMSFile::finalizeRead()
     }
     
     if (adfData) free(adfData);
-    if (!adf) throw CoreException(Fault::DMS_CANT_CREATE);
+    if (!adf) throw CoreError(Fault::DMS_CANT_CREATE);
 }
 
 }

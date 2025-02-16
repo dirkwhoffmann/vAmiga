@@ -101,28 +101,28 @@ PixelEngine::checkOption(Opt opt, i64 value)
         case Opt::MON_PALETTE:
 
             if (!PaletteEnum::isValid(value)) {
-                throw CoreException(Fault::OPT_INV_ARG, PaletteEnum::keyList());
+                throw CoreError(Fault::OPT_INV_ARG, PaletteEnum::keyList());
             }
             return;
 
         case Opt::MON_BRIGHTNESS:
 
             if (value < 0 || value > 100) {
-                throw CoreException(Fault::OPT_INV_ARG, "0...100");
+                throw CoreError(Fault::OPT_INV_ARG, "0...100");
             }
             return;
 
         case Opt::MON_CONTRAST:
 
             if (value < 0 || value > 100) {
-                throw CoreException(Fault::OPT_INV_ARG, "0...100");
+                throw CoreError(Fault::OPT_INV_ARG, "0...100");
             }
             return;
 
         case Opt::MON_SATURATION:
 
             if (value < 0 || value > 100) {
-                throw CoreException(Fault::OPT_INV_ARG, "0...100");
+                throw CoreError(Fault::OPT_INV_ARG, "0...100");
             }
             return;
 

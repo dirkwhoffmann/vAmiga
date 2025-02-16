@@ -95,14 +95,14 @@ class MyDocument: NSDocument {
                 
                 return try MediaFileProxy.make(with: newUrl, type: type)
                 
-            } catch let error as CoreException {
+            } catch let error as CoreError {
                
                 if error.errorCode != .FILE_TYPE_MISMATCH { throw error }
             }
         }
         
         // None of the allowed types matched the file
-        throw CoreException(.FILE_TYPE_MISMATCH,
+        throw CoreError(.FILE_TYPE_MISMATCH,
                       "The type of this file is not known to the emulator.")
     }
 
@@ -125,7 +125,7 @@ class MyDocument: NSDocument {
         do {
             try addMedia(url: url, allowedTypes: [.WORKSPACE])
 
-        } catch let error as CoreException {
+        } catch let error as CoreError {
 
             throw NSError(error: error)
         }
@@ -157,7 +157,7 @@ class MyDocument: NSDocument {
                 
                 saveMachineDescription(to: url.appendingPathComponent("machine.plist"))
                 
-            } catch let error as CoreException {
+            } catch let error as CoreError {
                 
                 // Swift.print("Error: \(error.what)")
                 throw NSError(error: error)

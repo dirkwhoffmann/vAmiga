@@ -64,7 +64,7 @@ Denise::checkOption(Opt opt, i64 value)
         case Opt::DENISE_REVISION:
 
             if (!DeniseRevEnum::isValid(value)) {
-                throw CoreException(Fault::OPT_INV_ARG, DeniseRevEnum::keyList());
+                throw CoreError(Fault::OPT_INV_ARG, DeniseRevEnum::keyList());
             }
             return;
 

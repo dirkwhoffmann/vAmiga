@@ -205,7 +205,7 @@ AudioFilter::checkOption(Opt opt, i64 value)
         case Opt::AUD_FILTER_TYPE:
 
             if (!FilterTypeEnum::isValid(value)) {
-                throw CoreException(Fault::OPT_INV_ARG, FilterTypeEnum::keyList());
+                throw CoreError(Fault::OPT_INV_ARG, FilterTypeEnum::keyList());
             }
             return;
 

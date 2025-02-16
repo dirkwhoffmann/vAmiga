@@ -25,13 +25,13 @@ FloppyFile::make(const std::filesystem::path &path)
     FloppyFile *result = nullptr;
 
     if (!std::filesystem::exists(path)) {
-        throw CoreException(Fault::FILE_NOT_FOUND, path);
+        throw CoreError(Fault::FILE_NOT_FOUND, path);
     }
 
     Buffer<u8> buffer(path);
     
     if (buffer.empty()) {
-        throw CoreException(Fault::FILE_CANT_READ, path);
+        throw CoreError(Fault::FILE_CANT_READ, path);
     }
 
     switch (type(path)) {
@@ -44,7 +44,7 @@ FloppyFile::make(const std::filesystem::path &path)
         case FileType::DIR:  result = new Folder(path);
 
         default:
-            throw CoreException(Fault::FILE_TYPE_UNSUPPORTED);
+            throw CoreError(Fault::FILE_TYPE_UNSUPPORTED);
     }
 
     result->path = path;

@@ -42,7 +42,7 @@ public func warn(_ msg: String = "",
 // Exceptions
 //
 
-final class CoreException: Error {
+final class CoreError: Error {
     
     let errorCode: ErrorCode
     let what: String
@@ -62,7 +62,7 @@ final class CoreException: Error {
 
 extension NSError {
     
-    convenience init(error: CoreException) {
+    convenience init(error: CoreError) {
         
         self.init(domain: "vAmiga",
                   code: error.errorCode.rawValue,
@@ -265,7 +265,7 @@ extension MyDocument {
     func showAlert(_ failure: Failure, error: Error,
                    async: Bool = false, window: NSWindow? = nil) {
     
-        if let error = error as? CoreException {
+        if let error = error as? CoreError {
             showAlert(failure, what: error.what, async:
                         async, window: window)
         } else {

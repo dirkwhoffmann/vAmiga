@@ -45,7 +45,7 @@ STFile::init(Diameter dia, Density den)
 
     } else {
 
-        throw CoreException(Fault::DISK_INVALID_LAYOUT);
+        throw CoreError(Fault::DISK_INVALID_LAYOUT);
     }
 }
 
@@ -78,10 +78,10 @@ void
 STFile::encodeDisk(FloppyDisk &disk) const
 {
     if (disk.getDiameter() != getDiameter()) {
-        throw CoreException(Fault::DISK_INVALID_DIAMETER);
+        throw CoreError(Fault::DISK_INVALID_DIAMETER);
     }
     if (disk.getDensity() != getDensity()) {
-        throw CoreException(Fault::DISK_INVALID_DENSITY);
+        throw CoreError(Fault::DISK_INVALID_DENSITY);
     }
 
     isize tracks = numTracks();
@@ -207,10 +207,10 @@ STFile::decodeDisk(FloppyDisk &disk)
     debug(IMG_DEBUG, "Decoding DOS disk (%ld tracks)\n", tracks);
 
     if (disk.getDiameter() != getDiameter()) {
-        throw CoreException(Fault::DISK_INVALID_DIAMETER);
+        throw CoreError(Fault::DISK_INVALID_DIAMETER);
     }
     if (disk.getDensity() != getDensity()) {
-        throw CoreException(Fault::DISK_INVALID_DENSITY);
+        throw CoreError(Fault::DISK_INVALID_DENSITY);
     }
 
     // Make the MFM stream scannable beyond the track end
@@ -264,12 +264,12 @@ STFile::decodeTrack(FloppyDisk &disk, Track t)
             cnt++;
 
         } else {
-            throw CoreException(Fault::DISK_INVALID_SECTOR_NUMBER);
+            throw CoreError(Fault::DISK_INVALID_SECTOR_NUMBER);
         }
     }
 
     if (cnt != numSectors) {
-        throw CoreException(Fault::DISK_WRONG_SECTOR_COUNT);
+        throw CoreError(Fault::DISK_WRONG_SECTOR_COUNT);
     }
 
     // Do some consistency checking

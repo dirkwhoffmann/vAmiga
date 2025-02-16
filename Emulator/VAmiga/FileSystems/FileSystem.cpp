@@ -33,7 +33,7 @@ FileSystem::init(const MediaFile &file, isize part) throws
         case FileType::HDF:  init(dynamic_cast<const HDFFile &>(file), part); break;
 
         default:
-            throw CoreException(Fault::FILE_TYPE_UNSUPPORTED);
+            throw CoreError(Fault::FILE_TYPE_UNSUPPORTED);
     }
 }
 
@@ -89,7 +89,7 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
     layout.checkCompatibility();
     
     // Only proceed if the volume is formatted
-    if (layout.dos == FSVolumeType::NODOS) throw CoreException(Fault::FS_UNFORMATTED);
+    if (layout.dos == FSVolumeType::NODOS) throw CoreError(Fault::FS_UNFORMATTED);
 
     // Copy layout parameters
     dos         = layout.dos;
@@ -605,7 +605,7 @@ FileSystem::collectRefsWithSameHashValue(Block nr,
     for (FSBlock *b = hashableBlockPtr(nr); b; b = b->getNextHashBlock()) {
 
         // Only proceed if we haven't seen this block yet
-        if (visited.find(b->nr) != visited.end()) throw CoreException(Fault::FS_HAS_CYCLES);
+        if (visited.find(b->nr) != visited.end()) throw CoreError(Fault::FS_HAS_CYCLES);
 
         visited.insert(b->nr);
         refs.push(b->nr);

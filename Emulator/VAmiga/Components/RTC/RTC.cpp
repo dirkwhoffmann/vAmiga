@@ -35,10 +35,10 @@ RTC::checkOption(Opt option, i64 value)
         case Opt::RTC_MODEL:
 
             if (!isPoweredOff()) {
-                throw CoreException(Fault::OPT_LOCKED);
+                throw CoreError(Fault::OPT_LOCKED);
             }
             if (!RTCRevisionEnum::isValid(value)) {
-                throw CoreException(Fault::OPT_INV_ARG, RTCRevisionEnum::keyList());
+                throw CoreError(Fault::OPT_INV_ARG, RTCRevisionEnum::keyList());
             }
             return;
 

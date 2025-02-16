@@ -132,7 +132,7 @@ Host::tmp() const
 
             if (!logfile.is_open()) {
 
-                throw CoreException(Fault::DIR_NOT_FOUND);
+                throw CoreError(Fault::DIR_NOT_FOUND);
             }
         }
 

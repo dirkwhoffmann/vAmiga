@@ -26,7 +26,7 @@ FloppyDisk::init(Diameter dia, Density den, bool wp)
     if (dia == Diameter::INCH_525 && den == Density::DD) trackLength = 12668;
     
     if (trackLength == 0 || FORCE_DISK_INVALID_LAYOUT) {
-        throw CoreException(Fault::DISK_INVALID_LAYOUT);
+        throw CoreError(Fault::DISK_INVALID_LAYOUT);
     }
     
     for (isize i = 0; i < 168; i++) length.track[i] = trackLength;
