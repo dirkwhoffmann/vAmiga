@@ -180,6 +180,7 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var prfVSync: NSButton!
     @IBOutlet weak var prfSpeedBoost: NSSlider!
     @IBOutlet weak var prfSpeedBoostInfo: NSTextField!
+    @IBOutlet weak var prfRunAheadLabel: NSTextField!
     @IBOutlet weak var prfRunAhead: NSSlider!
     @IBOutlet weak var prfRunAheadInfo: NSTextField!
 

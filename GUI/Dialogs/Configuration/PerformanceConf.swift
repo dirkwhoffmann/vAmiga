@@ -26,8 +26,9 @@ extension ConfigurationController {
         prfSpeedBoostInfo.stringValue = "\(config.speedBoost) %"
         prfSpeedBoost.isEnabled = !vsync
         prfSpeedBoostInfo.textColor = vsync ? .tertiaryLabelColor : .labelColor
+        prfRunAheadLabel.stringValue = runAhead >= 0 ? "Run ahead:" : "Run behind:"
         prfRunAhead.integerValue = runAhead
-        prfRunAheadInfo.stringValue = "\(runAhead) frame" + (runAhead == 1 ? "" : "s")
+        prfRunAheadInfo.stringValue = "\(abs(runAhead)) frame" + (abs(runAhead) == 1 ? "" : "s")
 
         // Boosters
         prfCiaIdleSleep.state = config.ciaIdleSleep ? .on : .off
