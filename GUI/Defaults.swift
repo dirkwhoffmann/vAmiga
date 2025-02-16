@@ -1263,12 +1263,14 @@ extension DefaultsProxy {
         remove(.AUD_VOL3)
         remove(.AUD_VOLL)
         remove(.AUD_VOLR)
-        remove(.AUD_SAMPLING_METHOD)
         remove(.DRIVE_STEP_VOLUME, [0, 1, 2, 3])
         remove(.DRIVE_POLL_VOLUME, [0, 1, 2, 3])
         remove(.DRIVE_INSERT_VOLUME, [0, 1, 2, 3])
         remove(.DRIVE_EJECT_VOLUME, [0, 1, 2, 3])
         remove(.AUD_FILTER_TYPE)
+        remove(.AUD_SAMPLING_METHOD)
+        remove(.AUD_BUFFER_SIZE)
+        remove(.AUD_ASR)
     }
 }
 
@@ -1292,7 +1294,6 @@ extension Configuration {
         defaults.set(.AUD_PAN3, pan3)
         defaults.set(.AUD_VOLL, volL)
         defaults.set(.AUD_VOLR, volR)
-        defaults.set(.AUD_SAMPLING_METHOD, samplingMethod)
         defaults.set(.DRIVE_PAN, 0, df0Pan)
         defaults.set(.DRIVE_PAN, 1, df1Pan)
         defaults.set(.DRIVE_PAN, 2, df2Pan)
@@ -1306,6 +1307,10 @@ extension Configuration {
         defaults.set(.DRIVE_INSERT_VOLUME, [0, 1, 2, 3], insertVolume)
         defaults.set(.DRIVE_EJECT_VOLUME, [0, 1, 2, 3], ejectVolume)
         defaults.set(.AUD_FILTER_TYPE, filterType)
+        defaults.set(.AUD_SAMPLING_METHOD, samplingMethod)
+        defaults.set(.AUD_BUFFER_SIZE, audioBufferSize)
+        defaults.set(.AUD_ASR, asr)
+
         defaults.save()
         
         amiga.resume()
@@ -1340,12 +1345,15 @@ extension Configuration {
 
         volL = defaults.get(.AUD_VOLL)
         volR = defaults.get(.AUD_VOLR)
-        samplingMethod = defaults.get(.AUD_SAMPLING_METHOD)
         stepVolume = defaults.get(.DRIVE_STEP_VOLUME, 0)
         pollVolume = defaults.get(.DRIVE_POLL_VOLUME, 0)
         insertVolume = defaults.get(.DRIVE_INSERT_VOLUME, 0)
         ejectVolume = defaults.get(.DRIVE_EJECT_VOLUME, 0)
         filterType = defaults.get(.AUD_FILTER_TYPE)
+        
+        samplingMethod = defaults.get(.AUD_SAMPLING_METHOD)
+        audioBufferSize = defaults.get(.AUD_BUFFER_SIZE, audioBufferSize)
+        asr = defaults.get(.AUD_ASR, asr)
 
         amiga.resume()
     }

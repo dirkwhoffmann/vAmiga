@@ -111,11 +111,11 @@ VideoPort::cacheStats(VideoPortStats &result) const
 }
 
 const FrameBuffer &
-VideoPort::getTexture() const
+VideoPort::getTexture(isize offset) const
 {
     if (isPoweredOn()) {
 
-        auto &result = denise.pixelEngine.getStableBuffer();
+        auto &result = denise.pixelEngine.getStableBuffer(offset);
         info.latestGrabbedFrame = result.nr;
         return result;
     }

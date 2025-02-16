@@ -280,9 +280,9 @@ PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
 }
 
 const FrameBuffer &
-PixelEngine::getStableBuffer(isize delayedFrames) const
+PixelEngine::getStableBuffer(isize offset) const
 {
-    auto nr = activeBuffer - delayedFrames - 1;
+    auto nr = activeBuffer + offset - 1;
     return emuTexture[(nr + NUM_TEXTURES) % NUM_TEXTURES];
 }
 

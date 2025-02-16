@@ -275,7 +275,9 @@ class ConfigurationController: DialogController {
 
     // Mixer
     @IBOutlet weak var audSamplingMethod: NSPopUpButton!
+    @IBOutlet weak var audSamplingMethodText: NSTextField!
     @IBOutlet weak var audASR: NSPopUpButton!
+    @IBOutlet weak var audASRText: NSTextField!
     @IBOutlet weak var audCapacity: NSSlider!
     @IBOutlet weak var audCapacityText: NSTextField!
 

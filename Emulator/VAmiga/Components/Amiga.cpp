@@ -225,8 +225,8 @@ Amiga::checkOption(Opt opt, i64 value)
             
         case Opt::AMIGA_RUN_AHEAD:
             
-            if (value < 0 || value > 12) {
-                throw CoreException(CoreError::OPT_INV_ARG, "0...12");
+            if (value < -7 || value > 7) {
+                throw CoreException(CoreError::OPT_INV_ARG, "-7...7");
             }
             return;
             

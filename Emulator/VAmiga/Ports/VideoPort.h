@@ -117,7 +117,7 @@ public:
 public:
 
     // Returns a pointer to the stable emulator texture
-    const class FrameBuffer &getTexture() const;
+    const class FrameBuffer &getTexture(isize offset = 0) const;
 
     // Informs the video port about a buffer swap
     void buffersWillSwap();

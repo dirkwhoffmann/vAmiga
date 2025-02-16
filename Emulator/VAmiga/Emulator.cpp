@@ -265,14 +265,21 @@ Emulator::missingFrames() const
 const FrameBuffer &
 Emulator::getTexture() const
 {
-    // If paused, display the most recent texture from the main instance
-    if (!isRunning()) ahead.videoPort.getTexture();
+    if (isRunning()) {
         
-    if (main.config.runAhead > 0) {
-        return ahead.videoPort.getTexture();
-    } else {
-        return main.videoPort.getTexture();
+        // In run-ahead mode, return the texture from the run-ahead instance
+        if (main.config.runAhead > 0) {
+            return ahead.videoPort.getTexture();
+        }
+        
+        // In run-behind mode, return a texture from the texture buffer
+        if (main.config.runAhead < 0) {
+            return main.videoPort.getTexture(main.config.runAhead);
+        }
     }
+    
+    // Return the most recent texture from the main instance
+    return main.videoPort.getTexture();
 }
 
 void

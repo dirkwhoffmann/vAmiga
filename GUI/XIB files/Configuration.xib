@@ -9,6 +9,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="ConfigurationController" customModule="vAmiga" customModuleProvider="target">
             <connections>
                 <outlet property="audASR" destination="VIH-mA-wfl" id="uXh-rE-6VV"/>
+                <outlet property="audASRText" destination="i18-pL-oWl" id="PjO-9D-ebq"/>
                 <outlet property="audCapacity" destination="o2z-kH-MtN" id="sEf-bS-DNS"/>
                 <outlet property="audCapacityText" destination="VyO-e1-Tdb" id="8wS-ar-xqo"/>
                 <outlet property="audDf0Pan" destination="udz-4C-cu0" id="SD9-qt-Qam"/>
@@ -30,6 +31,7 @@
                 <outlet property="audPollVolume" destination="nLC-0d-s8G" id="lJf-hB-Kt9"/>
                 <outlet property="audPowerButton" destination="iui-fS-mFj" id="hTi-zg-cZ8"/>
                 <outlet property="audSamplingMethod" destination="X7Q-Mc-4BE" id="s3W-2Q-uzi"/>
+                <outlet property="audSamplingMethodText" destination="SJe-eN-rXS" id="WR2-hR-FY4"/>
                 <outlet property="audStepVolume" destination="ofM-Oc-4Ev" id="HBI-5j-ERC"/>
                 <outlet property="audVol0" destination="GZ6-p3-gSo" id="tBN-no-gYb"/>
                 <outlet property="audVol1" destination="gmM-I9-4bY" id="4zG-BG-QQA"/>
@@ -2211,7 +2213,7 @@ DQ
                                         <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eeE-9P-GOA">
                                             <rect key="frame" x="104" y="127" width="107" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <sliderCell key="cell" continuous="YES" state="on" alignment="left" maxValue="12" tickMarkPosition="above" numberOfTickMarks="13" allowsTickMarkValuesOnly="YES" sliderType="linear" id="wtI-Qm-zG1"/>
+                                            <sliderCell key="cell" continuous="YES" state="on" alignment="left" minValue="-7" maxValue="7" tickMarkPosition="above" numberOfTickMarks="15" allowsTickMarkValuesOnly="YES" sliderType="linear" id="wtI-Qm-zG1"/>
                                             <connections>
                                                 <action selector="prfRunAheadAction:" target="-2" id="h7Z-Xm-w7D"/>
                                             </connections>
@@ -3391,7 +3393,7 @@ DQ
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X7Q-Mc-4BE" userLabel="System">
-                                                                <rect key="frame" x="109" y="228" width="146" height="25"/>
+                                                                <rect key="frame" x="109" y="242" width="146" height="25"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                                 <popUpButtonCell key="cell" type="push" title="Off" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Xdq-bs-35a" id="1Sn-Ru-gXY" userLabel="System">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -3411,7 +3413,7 @@ DQ
                                                                 </connections>
                                                             </popUpButton>
                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mVc-GL-1q4">
-                                                                <rect key="frame" x="21" y="234" width="85" height="17"/>
+                                                                <rect key="frame" x="21" y="248" width="85" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Interpolation:" id="xPY-SY-lsj">
                                                                     <font key="font" metaFont="system"/>
@@ -3420,7 +3422,7 @@ DQ
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bbN-fq-Gg3">
-                                                                <rect key="frame" x="43" y="104" width="62" height="17"/>
+                                                                <rect key="frame" x="43" y="20" width="62" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Capacity:" id="vxv-AJ-GrD">
                                                                     <font key="font" metaFont="system"/>
@@ -3429,7 +3431,7 @@ DQ
                                                                 </textFieldCell>
                                                             </textField>
                                                             <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VIH-mA-wfl" userLabel="System">
-                                                                <rect key="frame" x="109" y="194" width="146" height="25"/>
+                                                                <rect key="frame" x="109" y="139" width="146" height="25"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                                                 <popUpButtonCell key="cell" type="push" title="Fixed" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="xru-Sd-kFD" id="GSr-qZ-HHC" userLabel="System">
                                                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -3448,7 +3450,7 @@ DQ
                                                                 </connections>
                                                             </popUpButton>
                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wVe-rY-RjK">
-                                                                <rect key="frame" x="21" y="200" width="85" height="17"/>
+                                                                <rect key="frame" x="21" y="145" width="85" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Sample Rate:" id="eiH-hH-VEa">
                                                                     <font key="font" metaFont="system"/>
@@ -3457,7 +3459,7 @@ DQ
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UQ3-v5-Bzg">
-                                                                <rect key="frame" x="15" y="274" width="145" height="17"/>
+                                                                <rect key="frame" x="15" y="278" width="145" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Sample generation" id="6t1-oI-U6H">
                                                                     <font key="font" metaFont="systemBold"/>
@@ -3466,7 +3468,7 @@ DQ
                                                                 </textFieldCell>
                                                             </textField>
                                                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lOM-UB-slQ">
-                                                                <rect key="frame" x="14" y="137" width="145" height="17"/>
+                                                                <rect key="frame" x="14" y="53" width="145" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Audio buffer" id="HhV-Ux-SwY">
                                                                     <font key="font" metaFont="systemBold"/>
@@ -3475,7 +3477,7 @@ DQ
                                                                 </textFieldCell>
                                                             </textField>
                                                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o2z-kH-MtN">
-                                                                <rect key="frame" x="110" y="95" width="143" height="28"/>
+                                                                <rect key="frame" x="110" y="11" width="143" height="28"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                 <sliderCell key="cell" state="on" alignment="left" minValue="1024" maxValue="16384" doubleValue="4096" tickMarkPosition="above" numberOfTickMarks="10" sliderType="linear" id="F4z-uo-RLf"/>
                                                                 <connections>
@@ -3483,11 +3485,29 @@ DQ
                                                                 </connections>
                                                             </slider>
                                                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VyO-e1-Tdb">
-                                                                <rect key="frame" x="262" y="104" width="130" height="17"/>
+                                                                <rect key="frame" x="262" y="20" width="130" height="17"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="samples" id="8yz-Lq-5hg">
                                                                     <font key="font" metaFont="system"/>
                                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i18-pL-oWl">
+                                                                <rect key="frame" x="112" y="77" width="448" height="58"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <textFieldCell key="cell" controlSize="small" selectable="YES" title="Lorem ipsum dolor sit amet" id="apP-rP-Hfk">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                </textFieldCell>
+                                                            </textField>
+                                                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SJe-eN-rXS">
+                                                                <rect key="frame" x="112" y="180" width="448" height="58"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <textFieldCell key="cell" controlSize="small" selectable="YES" title="Lorem ipsum dolor sit amet" id="U7e-f3-0Y2">
+                                                                    <font key="font" metaFont="smallSystem"/>
+                                                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                 </textFieldCell>
                                                             </textField>

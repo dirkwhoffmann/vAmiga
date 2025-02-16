@@ -47,7 +47,7 @@ class PixelEngine final : public SubComponent {
 
 private:
 
-    static constexpr isize NUM_TEXTURES = 2;
+    static constexpr isize NUM_TEXTURES = 8;
     
     /* The emulator manages textures in a ring buffer to allow access to older
      * frames ("run-behind" feature). At any time, one texture serves as the
@@ -215,7 +215,7 @@ public:
 
     // Returns the working buffer or the stable buffer
     FrameBuffer &getWorkingBuffer();
-    const FrameBuffer &getStableBuffer(isize delayedFrames = 0) const;
+    const FrameBuffer &getStableBuffer(isize offset = 0) const;
 
     // Return a pointer into the pixel storage
     Texel *workingPtr(isize row = 0, isize col = 0);

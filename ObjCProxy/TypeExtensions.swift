@@ -52,6 +52,7 @@ typealias PaulaInfo = vamiga.PaulaInfo
 typealias Probe = vamiga.Probe
 typealias RomTraits = vamiga.RomTraits
 typealias RTCRevision = vamiga.RTCRevision
+typealias SamplingMethod = vamiga.SamplingMethod
 typealias SerialPortDevice = vamiga.SerialPortDevice
 typealias SerialPortInfo = vamiga.SerialPortInfo
 typealias ServerType = vamiga.ServerType
