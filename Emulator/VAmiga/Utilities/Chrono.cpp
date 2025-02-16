@@ -333,7 +333,7 @@ StopWatch::~StopWatch()
     if (enable) {
         
         auto elapsed = clock.stop();
-        fprintf(stderr, "%s %1.2f sec\n", description.c_str(), elapsed.asSeconds());
+        fprintf(stderr, "%s %1.4f sec\n", description.c_str(), elapsed.asSeconds());
     }
 }
 

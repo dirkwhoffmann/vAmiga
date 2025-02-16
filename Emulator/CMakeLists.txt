@@ -72,6 +72,9 @@ if(ZLIB_FOUND)
   target_compile_definitions(vAmigaCore PUBLIC USE_ZLIB=1)  # Optional define for conditional compilation
 endif()
 
+target_link_libraries(vAmigaCore lz4)
+target_link_libraries(vAmigaCheck lz4)
+
 # Add tests
 add_test(NAME SelfTest1 COMMAND vAmigaCheck --verbose --footprint)
 add_test(NAME SelfTest2 COMMAND vAmigaCheck --verbose --smoke)

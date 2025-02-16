@@ -23,35 +23,38 @@ enum class Compressor : long
     GZIP,
     RLE2,
     RLE3,
-    RLE4
+    RLE4,
+    LZ4
 };
 
 struct CompressorEnum : Reflection<CompressorEnum, Compressor>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(Compressor::RLE4);
-    
+    static constexpr long maxVal = long(Compressor::LZ4);
+
     static const char *_key(Compressor value)
     {
         switch (value) {
-                
+
             case Compressor::NONE:  return "NONE";
             case Compressor::GZIP:  return "GZIP";
             case Compressor::RLE2:  return "RLE2";
             case Compressor::RLE3:  return "RLE3";
             case Compressor::RLE4:  return "RLE4";
+            case Compressor::LZ4:   return "LZ4";
         }
         return "???";
     }
     static const char *help(Compressor value)
     {
         switch (value) {
-                
+
             case Compressor::NONE:  return "No compression";
             case Compressor::GZIP:  return "Gzip compression";
             case Compressor::RLE2:  return "Run-length encoding (2)";
             case Compressor::RLE3:  return "Run-length encoding (3)";
             case Compressor::RLE4:  return "Run-length encoding (4)";
+            case Compressor::LZ4:   return "LZ4 compression";
         }
         return "???";
     }
@@ -67,11 +70,11 @@ struct TVEnum : Reflection<TVEnum, TV>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(TV::NTSC);
-    
+
     static const char *_key(TV value)
     {
         switch (value) {
-                
+
             case TV::PAL:   return "PAL";
             case TV::NTSC:  return "NTSC";
         }
@@ -80,7 +83,7 @@ struct TVEnum : Reflection<TVEnum, TV>
     static const char *help(TV value)
     {
         switch (value) {
-                
+
             case TV::PAL:   return "PAL Video Format";
             case TV::NTSC:  return "NTSC Video Format";
         }
@@ -99,11 +102,11 @@ struct ResolutionEnum : Reflection<ResolutionEnum, Resolution>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Resolution::SHRES);
-    
+
     static const char *_key(Resolution value)
     {
         switch (value) {
-                
+
             case Resolution::LORES:          return "LORES";
             case Resolution::HIRES:          return "HIRES";
             case Resolution::SHRES:          return "SHRES";
@@ -113,7 +116,7 @@ struct ResolutionEnum : Reflection<ResolutionEnum, Resolution>
     static const char *help(Resolution value)
     {
         switch (value) {
-                
+
             case Resolution::LORES:          return "Lores Graphics";
             case Resolution::HIRES:          return "Hires Graphics";
             case Resolution::SHRES:          return "Super-Hires Graphics";
@@ -133,11 +136,11 @@ struct WarpEnum : Reflection<WarpEnum, Warp>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Warp::ALWAYS);
-    
+
     static const char *_key(Warp value)
     {
         switch (value) {
-                
+
             case Warp::AUTO:     return "AUTO";
             case Warp::NEVER:    return "NEVER";
             case Warp::ALWAYS:   return "ALWAYS";
@@ -162,11 +165,11 @@ struct ConfigSchemeEnum : Reflection<ConfigSchemeEnum, ConfigScheme>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(ConfigScheme::A500_PLUS_1MB);
-    
+
     static const char *_key(ConfigScheme value)
     {
         switch (value) {
-                
+
             case ConfigScheme::A1000_OCS_1MB:  return "A1000_OCS_1MB";
             case ConfigScheme::A500_OCS_1MB:   return "A500_OCS_1MB";
             case ConfigScheme::A500_ECS_1MB:   return "A500_ECS_1MB";
@@ -177,7 +180,7 @@ struct ConfigSchemeEnum : Reflection<ConfigSchemeEnum, ConfigScheme>
     static const char *help(ConfigScheme value)
     {
         switch (value) {
-                
+
             case ConfigScheme::A1000_OCS_1MB:  return "Amiga 1000, OCS Chipset, 1MB RAM";
             case ConfigScheme::A500_OCS_1MB:   return "Amiga 500, OCS Chipset, 1MB RAM";
             case ConfigScheme::A500_ECS_1MB:   return "Amiga 500, ECS Chipset, 1MB RAM";
@@ -248,11 +251,11 @@ struct RegEnum : Reflection<RegEnum, Reg>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Reg::NO_OP);
-    
+
     static const char *_key(Reg value)
     {
         static const char *name[] = {
-            
+
             "BLTDDAT",        "DMACONR",        "VPOSR",
             "VHPOSR",         "DSKDATR",        "JOY0DAT",
             "JOY1DAT",        "CLXDAT",         "ADKCONR",
@@ -340,7 +343,7 @@ struct RegEnum : Reflection<RegEnum, Reg>
             "unused",         "unused",         "FMODE (AGA)",
             "NO-OP"
         };
-        
+
         return isValid(value) ? name[isize(value)] : "???";
     }
     static const char *help(Reg value)
@@ -358,28 +361,28 @@ typedef struct
 {
     //! Machine type (PAL or NTSC)
     TV type;
-    
+
     //! After a reset, the emulator runs in warp mode for this amout of seconds
     isize warpBoot;
-    
+
     //! Warp mode
     Warp warpMode;
-    
+
     //! Emulator speed in percent (100 is native speed)
     isize speedBoost;
-    
+
     //! Vertical Synchronization
     bool vsync;
-    
+
     //! Number of run-ahead frames (0 = run-ahead is disabled)
     isize runAhead;
-    
+
     //! Enable auto-snapshots
     bool autoSnapshots;
-    
+
     //! Delay between two auto-snapshots in seconds
     isize snapshotDelay;
-    
+
     //! Selects the snapshot compression method
     Compressor snapshotCompressor;
 
