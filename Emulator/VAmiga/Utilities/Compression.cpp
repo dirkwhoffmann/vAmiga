@@ -236,23 +236,23 @@ void gunzip(u8 *compressed, isize len, std::vector<u8> &result, isize sizeEstima
 
 // Little endian encode the uncompressed size
 static inline void write_lz4_size(void *compressed_end, isize len) {
-  int32_t l32 = (int32_t) len;
-  u8 *w = (u8 *) compressed_end;
-  for (int i = 0; i < 4; ++i) {
-    *w++ = l32 & 0xff;
-    l32 >>= 8;
-  }
+    int32_t l32 = (int32_t) len;
+    u8 *w = (u8 *) compressed_end;
+    for (int i = 0; i < 4; ++i) {
+        *w++ = l32 & 0xff;
+        l32 >>= 8;
+    }
 }
 
 // Little endian decode the uncompressed size
 static inline int32_t read_lz4_size(void *compressed_end) {
-  u8 *r = (u8 *) compressed_end;
-  int32_t l32 = 0;
-  for (int i = 0; i < 4; ++i) {
-    l32 <<= 8;
-    l32 |= *--r;
-  }
-  return l32;
+    u8 *r = (u8 *) compressed_end;
+    int32_t l32 = 0;
+    for (int i = 0; i < 4; ++i) {
+        l32 <<= 8;
+        l32 |= *--r;
+    }
+    return l32;
 }
 
 void
@@ -272,7 +272,7 @@ lz4(u8 *uncompressed, isize len, std::vector<u8> &result)
     int compressed_size = LZ4_compress_default((const char *) uncompressed,
                                                compressed_data, (int) len, (int) max_size);
     if (compressed_size <= 0) {
-      throw std::runtime_error("LZ4 error: compression failure");
+        throw std::runtime_error("LZ4 error: compression failure");
     }
 
     // LE encode the uncompressed size for simplicity and robustness
@@ -290,7 +290,7 @@ unlz4(u8 *compressed, isize len, std::vector<u8> &result, isize sizeEstimate)
     if (len == 0) return;
 
     if (len < 4) {
-      throw std::runtime_error("LZ4 error: impossible length");
+        throw std::runtime_error("LZ4 error: impossible length");
     }
 
     // Remember the initial length of the result vector
@@ -303,15 +303,16 @@ unlz4(u8 *compressed, isize len, std::vector<u8> &result, isize sizeEstimate)
 
     long compressed_size = len - 4;
     int decompressed_size = LZ4_decompress_safe(
-        (const char *) compressed, decompressed_data,
-                (int) compressed_size, decompressed_len);
+                                                (const char *) compressed, decompressed_data,
+                                                (int) compressed_size, decompressed_len);
     if (decompressed_size < 0) {
-      throw std::runtime_error("LZ4 error: decompression failure");
+        throw std::runtime_error("LZ4 error: decompression failure");
     }
 
     if (decompressed_size != decompressed_len) {
-        fprintf(stderr, "Inconsistent lengths: %d vs %d\n", decompressed_size, decompressed_len);
-      throw std::runtime_error("LZ4 error: inconsistent lengths");
+        fprintf(stderr, "Inconsistent lengths: %d vs %d\n",
+                decompressed_size, decompressed_len);
+        throw std::runtime_error("LZ4 error: inconsistent lengths");
     }
 }
 

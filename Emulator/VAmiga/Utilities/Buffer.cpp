@@ -281,7 +281,7 @@ Allocator<T>::lz4(isize offset)
     // Skip everything up to the offset position
     compressed.insert(compressed.end(), ptr, ptr + std::min(offset, size));
 
-    // Run the gzip algorithm
+    // Run the LZ4 algorithm
     if (size > offset) util::lz4(ptr + offset, size - offset, compressed);
 
     // Replace buffer contents with the compressed data
@@ -296,7 +296,7 @@ Allocator<T>::unlz4(isize offset, isize sizeEstimate)
     // Skip everything up to the offset position
     uncompressed.insert(uncompressed.end(), ptr, ptr + std::min(offset, size));
 
-    // Run the gunzip algorithm
+    // Run the LZ4 algorithm
     if (size > offset) util::unlz4(ptr + offset, size - offset, uncompressed);
 
     // Replace buffer contents with the uncompressed data
