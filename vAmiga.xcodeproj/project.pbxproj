@@ -498,8 +498,8 @@
 		50FC08B127819E4100F0C567 /* BlitterInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC08B027819E4100F0C567 /* BlitterInfo.cpp */; };
 		50FCCA7C262AAAEA00398342 /* Script.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FCCA7A262AAAEA00398342 /* Script.cpp */; };
 		50FF747327D3BBFE00B6EA01 /* hdr_click.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50FF747227D3BBFE00B6EA01 /* hdr_click.aiff */; };
-		9C47C0322D6215B100E57B41 /* lz4.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C47C0312D6215B100E57B41 /* lz4.c */; };
-		9C47C0332D6215B100E57B41 /* lz4.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C47C0312D6215B100E57B41 /* lz4.c */; };
+		9C47C0322D6215B100E57B41 /* lz4.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C47C0312D6215B100E57B41 /* lz4.c */; settings = {COMPILER_FLAGS = "-w"; }; };
+		9C47C0332D6215B100E57B41 /* lz4.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C47C0312D6215B100E57B41 /* lz4.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
