@@ -34,6 +34,7 @@ HDZFile::isCompatible(const Buffer<u8> &buf)
 void
 HDZFile::init(const class HDFFile &hdf) throws
 {
+    this->hdf = hdf;
     data = hdf.data;
     
     debug(HDF_DEBUG, "Uncompressed HDF size: %ld bytes\n", data.size);
@@ -72,6 +73,24 @@ HDZFile::finalizeRead()
 
     // Delete the original data
     data.dealloc();
+}
+
+isize
+HDZFile::writePartitionToFile(const std::filesystem::path &path, isize nr) const
+{
+    auto offset = hdf.partitionOffset(nr);
+    auto size = hdf.partitionSize(nr);
+
+    // Write the partition into a buffer
+    Buffer<u8> partition;
+    hdf.writeToBuffer(partition, offset, size);
+
+    // Compress the partition
+    partition.gzip();
+    
+    // Write the compressed partition to disk
+    HDFFile hdf(partition.ptr, partition.size);
+    return hdf.writeToFile(path);
 }
 
 }

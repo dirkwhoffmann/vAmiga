@@ -94,7 +94,7 @@ MediaFile::make(class MutableFileSystem &fs, FileType type)
 {
     switch (type) {
 
-        case FileType::ADF:        return new ADFFile(fs);
+        case FileType::ADF:          return new ADFFile(fs);
 
         default:
             return nullptr;
@@ -106,9 +106,10 @@ MediaFile::make(FloppyDriveAPI &drive, FileType type)
 {
     switch (type) {
 
-        case FileType::ADF:      return new ADFFile(drive.getDisk());
-        case FileType::EADF:     return new EADFFile(drive.getDisk());
-        case FileType::IMG:      return new IMGFile(drive.getDisk());
+        case FileType::ADF:          return new ADFFile(drive.getDisk());
+        case FileType::ADZ:          return new ADZFile(drive.getDisk());
+        case FileType::EADF:         return new EADFFile(drive.getDisk());
+        case FileType::IMG:          return new IMGFile(drive.getDisk());
 
         default:
             return nullptr;
@@ -121,6 +122,7 @@ MediaFile::make(HardDriveAPI &drive, FileType type)
     switch (type) {
 
         case FileType::HDF:      return new HDFFile(drive.getDrive());
+        case FileType::HDZ:      return new HDZFile(drive.getDrive());
 
         default:
             return nullptr;

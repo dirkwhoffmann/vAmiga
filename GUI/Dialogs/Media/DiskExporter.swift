@@ -12,12 +12,14 @@ class DiskExporter: DialogController {
 
     enum Format {
         
-        static let adf = 0
-        static let hdf = 1
-        static let ext = 2
-        static let img = 3
-        static let ima = 4
-        static let vol = 5
+        static let hdf = 0
+        static let hdz = 1
+        static let adf = 2
+        static let adz = 3
+        static let ext = 4
+        static let img = 5
+        static let ima = 6
+        static let vol = 7
     }
 
     var myDocument: MyDocument { return parent.mydocument! }
@@ -48,7 +50,9 @@ class DiskExporter: DialogController {
 
     // Results of the different decoders
     var hdf: MediaFileProxy?
+    var hdz: MediaFileProxy?
     var adf: MediaFileProxy?
+    var adz: MediaFileProxy?
     var ext: MediaFileProxy?
     var img: MediaFileProxy?
     var vol: FileSystemProxy?
@@ -60,6 +64,9 @@ class DiskExporter: DialogController {
         // Run the ADF decoder
         adf = try? MediaFileProxy.make(with: dfn!, type: .ADF)
 
+        // Run the ADZ decoder
+        adz = try? MediaFileProxy.make(with: dfn!, type: .ADZ)
+        
         // Run the extended ADF decoder
         ext = try? MediaFileProxy.make(with: dfn!, type: .EADF)
 
@@ -78,6 +85,9 @@ class DiskExporter: DialogController {
 
         // Run the HDF decoder
         hdf = try? MediaFileProxy.make(with: hdn!, type: .HDF)
+
+        // Run the HDZ decoder
+        hdz = try? MediaFileProxy.make(with: hdn!, type: .HDZ)
 
         // Select the export partition
         select(partition: numPartitions == 1 ? 0 : nil)
@@ -137,11 +147,12 @@ class DiskExporter: DialogController {
         
         formatPopup.autoenablesItems = false
         formatPopup.removeAllItems()
-        if adf != nil { addItem("ADF", tag: Format.adf) }
         if hdf != nil { addItem("HDF", tag: Format.hdf) }
+        if hdz != nil { addItem("HDZ", tag: Format.hdz) }
+        if adf != nil { addItem("ADF", tag: Format.adf) }
+        if adz != nil { addItem("ADZ", tag: Format.adz) }
         if ext != nil { addItem("Extended ADF", tag: Format.ext) }
-        if img != nil { addItem("IMG", tag: Format.img) }
-        if img != nil { addItem("IMA", tag: Format.ima) }
+        if img != nil { addItem("IMG", tag: Format.img); addItem("IMA", tag: Format.ima) }
         if vol != nil { addItem("Folder", tag: Format.vol) }
     }
         
@@ -168,16 +179,19 @@ class DiskExporter: DialogController {
                     
         switch formatPopup.selectedTag() {
 
-        case Format.hdf:
+        case Format.hdf, Format.hdz:
             
-            icon.image = hdf!.icon()
+            icon.image =
+            hdf?.icon() ??
+            hdz?.icon() ?? nil
             
-        case Format.adf, Format.ext, Format.img, Format.ima:
+        case Format.adf, Format.adz, Format.ext, Format.img, Format.ima:
             
             let wp = dfn!.info.hasProtectedDisk
 
             icon.image =
             adf?.icon(protected: wp) ??
+            adz?.icon(protected: wp) ??
             img?.icon(protected: wp) ??
             ext?.icon(protected: wp) ?? nil
 
@@ -276,7 +290,9 @@ class DiskExporter: DialogController {
         switch formatPopup.selectedTag() {
 
         case Format.hdf: openExportToFilePanel(allowedTypes: ["hdf", "HDF"])
+        case Format.hdz: openExportToFilePanel(allowedTypes: ["hdz", "HDZ"])
         case Format.adf: openExportToFilePanel(allowedTypes: ["adf", "ADF"])
+        case Format.adz: openExportToFilePanel(allowedTypes: ["adz", "ADZ"])
         case Format.ext: openExportToFilePanel(allowedTypes: ["adf", "ADF"])
         case Format.img: openExportToFilePanel(allowedTypes: ["img", "IMG"])
         case Format.ima: openExportToFilePanel(allowedTypes: ["ima", "IMA"])
@@ -347,6 +363,11 @@ class DiskExporter: DialogController {
                 debug(.media, "Exporting ADF")
                 try parent.mydocument.export(fileProxy: adf!, to: url)
 
+            case Format.adz:
+                
+                debug(.media, "Exporting ADZ")
+                try parent.mydocument.export(fileProxy: adz!, to: url)
+
             case Format.ext:
                 
                 debug(.media, "Exporting Extended ADF")
@@ -396,8 +417,21 @@ class DiskExporter: DialogController {
 
                 } else {
 
-                    debug(.media, "Exporting entire HDF to \(url)")
+                    debug(.media, "Exporting entire hard disk to \(url)")
                     try hdf?.writeToFile(url: url)
+                }
+
+            case Format.hdz:
+
+                if let nr = partition {
+
+                    debug(.media, "Exporting partiton \(nr) to \(url)")
+                    try hdz?.writeToFile(url: url, partition: nr)
+
+                } else {
+
+                    debug(.media, "Exporting entire hard disk to \(url)")
+                    try hdz?.writeToFile(url: url)
                 }
 
             case Format.vol:
@@ -434,7 +468,9 @@ extension DiskExporter: NSFilePromiseProviderDelegate {
         switch formatPopup.selectedTag() {
             
         case Format.hdf: name = "Untitled.hdf"
+        case Format.hdz: name = "Untitled.hdz"
         case Format.adf: name = "Untitled.adf"
+        case Format.adz: name = "Untitled.adz"
         case Format.ext: name = "Untitled.adf"
         case Format.img: name = "Untitled.img"
         case Format.ima: name = "Untitled.ima"

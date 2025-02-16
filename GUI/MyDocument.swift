@@ -100,27 +100,6 @@ class MyDocument: NSDocument {
                 if error.errorCode != .FILE_TYPE_MISMATCH { throw error }
             }
         }
-        /*
-        for type in allowedTypes {
-
-            do {
-                switch type {
-
-                case .WORKSPACE, .SNAPSHOT, .SCRIPT, .ADF, .ADZ, .EADF, .IMG, .ST, .DMS, .EXE, .DIR, .HDF, .HDZ:
-
-                    return try MediaFileProxy.make(with: newUrl, type: type)
-
-                default:
-                    break
-                }
-
-            } catch let error as CoreException {
-                if error.errorCode != .FILE_TYPE_MISMATCH {
-                    throw error
-                }
-            }
-        }
-        */
         
         // None of the allowed types matched the file
         throw CoreException(.FILE_TYPE_MISMATCH,

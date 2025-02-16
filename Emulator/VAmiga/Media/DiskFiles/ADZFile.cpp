@@ -15,6 +15,7 @@ namespace vamiga {
 void
 ADZFile::init(const class ADFFile &adf) throws
 {
+    this->adf = adf;
     data = adf.data;
     
     debug(HDF_DEBUG, "Uncompressed ADF size: %ld bytes\n", data.size);

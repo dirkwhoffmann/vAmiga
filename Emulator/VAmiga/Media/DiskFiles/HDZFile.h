@@ -59,6 +59,15 @@ public:
     isize numCyls() const override { return hdf.numCyls(); }
     isize numHeads() const override { return hdf.numHeads(); }
     isize numSectors() const override { return hdf.numSectors(); }
+    
+    
+    //
+    // Serializing
+    //
+    
+public:
+    
+    isize writePartitionToFile(const std::filesystem::path &path, isize nr) const override;
 };
 
 }
