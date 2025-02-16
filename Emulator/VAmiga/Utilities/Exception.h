@@ -16,7 +16,7 @@ namespace vamiga::util {
 
 /** @brief  Base class for all emulator exceptions
  */
-struct Exception : public std::exception {
+struct CoreException : public std::exception {
     
     //! @brief Error code
     i64 data;
@@ -24,10 +24,10 @@ struct Exception : public std::exception {
     //! @brief Auxiliary information about the thrown errow
     string description;
     
-    Exception(i64 d, const string &s) : data(d), description(s) { }
-    Exception(i64 d) : data(d), description("") { }
-    Exception(const string &s) : data(0), description(s) { }
-    Exception() : data(0) { }
+    CoreException(i64 d, const string &s) : data(d), description(s) { }
+    CoreException(i64 d) : data(d), description("") { }
+    CoreException(const string &s) : data(0), description(s) { }
+    CoreException() : data(0) { }
     
     const char *what() const noexcept override { return description.c_str(); }
 };

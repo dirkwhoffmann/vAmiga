@@ -15,7 +15,7 @@
 
 namespace vamiga {
 
-struct CoreError : public util::Exception
+struct CoreError : public util::CoreException
 {
     CoreError(Fault code, const string &s);
     CoreError(Fault code, const char *s) : CoreError(code, string(s)) { };

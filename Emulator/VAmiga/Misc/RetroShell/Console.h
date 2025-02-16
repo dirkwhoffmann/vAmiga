@@ -27,8 +27,8 @@ struct TooManyArgumentsError : public util::ParseError {
     using ParseError::ParseError;
 };
 
-struct ScriptInterruption: util::Exception {
-    using Exception::Exception;
+struct ScriptInterruption: util::CoreException {
+    using CoreException::CoreException;
 };
 
 class Console : public SubComponent {
