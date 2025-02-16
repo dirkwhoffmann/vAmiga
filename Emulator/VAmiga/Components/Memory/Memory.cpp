@@ -144,40 +144,40 @@ Memory::checkOption(Opt opt, i64 value)
         case Opt::MEM_CHIP_RAM:
 
             if (!isPoweredOff()) {
-                throw CoreException(CoreError::OPT_LOCKED);
+                throw CoreException(Fault::OPT_LOCKED);
             }
             if (value != 256 && value != 512 && value != 1024 && value != 2048) {
-                throw CoreException(CoreError::OPT_INV_ARG, "256, 512, 1024, 2048");
+                throw CoreException(Fault::OPT_INV_ARG, "256, 512, 1024, 2048");
             }
             return;
 
         case Opt::MEM_SLOW_RAM:
 
             if (!isPoweredOff()) {
-                throw CoreException(CoreError::OPT_LOCKED);
+                throw CoreException(Fault::OPT_LOCKED);
             }
             if ((value % 256) != 0 || value > 1536) {
-                throw CoreException(CoreError::OPT_INV_ARG, "0, 256, 512, ..., 1536");
+                throw CoreException(Fault::OPT_INV_ARG, "0, 256, 512, ..., 1536");
             }
             return;
 
         case Opt::MEM_FAST_RAM:
 
             if (!isPoweredOff()) {
-                throw CoreException(CoreError::OPT_LOCKED);
+                throw CoreException(Fault::OPT_LOCKED);
             }
             if ((value % 64) != 0 || value > 8192) {
-                throw CoreException(CoreError::OPT_INV_ARG, "0, 64, 128, ..., 8192");
+                throw CoreException(Fault::OPT_INV_ARG, "0, 64, 128, ..., 8192");
             }
             return;
 
         case Opt::MEM_EXT_START:
 
             if (!isPoweredOff()) {
-                throw CoreException(CoreError::OPT_LOCKED);
+                throw CoreException(Fault::OPT_LOCKED);
             }
             if (value != 0xE0 && value != 0xF0) {
-                throw CoreException(CoreError::OPT_INV_ARG, "E0, F0");
+                throw CoreException(Fault::OPT_INV_ARG, "E0, F0");
             }
             return;
 
@@ -190,26 +190,26 @@ Memory::checkOption(Opt opt, i64 value)
         case Opt::MEM_BANKMAP:
 
             if (!BankMapEnum::isValid(value)) {
-                throw CoreException(CoreError::OPT_INV_ARG, BankMapEnum::keyList());
+                throw CoreException(Fault::OPT_INV_ARG, BankMapEnum::keyList());
             }
             return;
 
         case Opt::MEM_UNMAPPING_TYPE:
 
             if (!UnmappedMemoryEnum::isValid(value)) {
-                throw CoreException(CoreError::OPT_INV_ARG, UnmappedMemoryEnum::keyList());
+                throw CoreException(Fault::OPT_INV_ARG, UnmappedMemoryEnum::keyList());
             }
             return;
 
         case Opt::MEM_RAM_INIT_PATTERN:
 
             if (!RamInitPatternEnum::isValid(value)) {
-                throw CoreException(CoreError::OPT_INV_ARG, RamInitPatternEnum::keyList());
+                throw CoreException(Fault::OPT_INV_ARG, RamInitPatternEnum::keyList());
             }
             return;
 
         default:
-            throw(CoreError::OPT_UNSUPPORTED);
+            throw(Fault::OPT_UNSUPPORTED);
     }
 }
 
@@ -377,12 +377,12 @@ Memory::operator << (SerReader &worker)
     << fastSize;
 
     // Check the integrity of the new values before allocating memory
-    if (romSize > KB(512)) throw CoreException(CoreError::SNAP_CORRUPTED);
-    if (womSize > KB(256)) throw CoreException(CoreError::SNAP_CORRUPTED);
-    if (extSize > KB(512)) throw CoreException(CoreError::SNAP_CORRUPTED);
-    if (chipSize > MB(2)) throw CoreException(CoreError::SNAP_CORRUPTED);
-    if (slowSize > KB(1792)) throw CoreException(CoreError::SNAP_CORRUPTED);
-    if (fastSize > MB(8)) throw CoreException(CoreError::SNAP_CORRUPTED);
+    if (romSize > KB(512)) throw CoreException(Fault::SNAP_CORRUPTED);
+    if (womSize > KB(256)) throw CoreException(Fault::SNAP_CORRUPTED);
+    if (extSize > KB(512)) throw CoreException(Fault::SNAP_CORRUPTED);
+    if (chipSize > MB(2)) throw CoreException(Fault::SNAP_CORRUPTED);
+    if (slowSize > KB(1792)) throw CoreException(Fault::SNAP_CORRUPTED);
+    if (fastSize > MB(8)) throw CoreException(Fault::SNAP_CORRUPTED);
 
     // Allocate ROM space
     if (config.saveRoms) {
@@ -468,16 +468,16 @@ Memory::_isReady() const
     bool hasAros = traits.vendor == RomVendor::AROS;
 
     if (!hasRom || FORCE_ROM_MISSING) {
-        throw CoreException(CoreError::ROM_MISSING);
+        throw CoreException(Fault::ROM_MISSING);
     }
     if (!chip || FORCE_CHIP_RAM_MISSING) {
-        throw CoreException(CoreError::CHIP_RAM_MISSING);
+        throw CoreException(Fault::CHIP_RAM_MISSING);
     }
     if ((hasAros && !ext) || FORCE_AROS_NO_EXTROM) {
-        throw CoreException(CoreError::AROS_NO_EXTROM);
+        throw CoreException(Fault::AROS_NO_EXTROM);
     }
     if ((hasAros && ramSize() < MB(1)) || FORCE_AROS_RAM_LIMIT) {
-        throw CoreException(CoreError::AROS_RAM_LIMIT);
+        throw CoreException(Fault::AROS_RAM_LIMIT);
     }
 }
 
@@ -664,7 +664,7 @@ Memory::extFingerprint() const
 void
 Memory::loadRom(MediaFile &file)
 {
-    // if (amiga.isPoweredOn()) throw CoreException(CoreError::POWERED_ON);
+    // if (amiga.isPoweredOn()) throw CoreException(Fault::POWERED_ON);
 
     try {
 
@@ -697,7 +697,7 @@ Memory::loadRom(MediaFile &file)
 
     } catch (...) {
 
-        throw CoreException(CoreError::FILE_TYPE_MISMATCH);
+        throw CoreException(Fault::FILE_TYPE_MISMATCH);
     }}
 }
 
@@ -730,7 +730,7 @@ Memory::loadExt(MediaFile &file)
 
     } catch (...) {
 
-        throw CoreException(CoreError::FILE_TYPE_MISMATCH);
+        throw CoreException(Fault::FILE_TYPE_MISMATCH);
     }
 }
 
@@ -751,7 +751,7 @@ Memory::loadExt(const u8 *buf, isize len)
 void
 Memory::saveRom(const std::filesystem::path &path) const
 {
-    if (rom == nullptr) throw CoreException(CoreError::ROM_MISSING);
+    if (rom == nullptr) throw CoreException(Fault::ROM_MISSING);
 
     RomFile file(rom, config.romSize);
     file.writeToFile(path);
@@ -760,7 +760,7 @@ Memory::saveRom(const std::filesystem::path &path) const
 void
 Memory::saveWom(const std::filesystem::path &path) const
 {
-    if (wom == nullptr) throw CoreException(CoreError::ROM_MISSING);
+    if (wom == nullptr) throw CoreException(Fault::ROM_MISSING);
 
     RomFile file(wom, config.womSize);
     file.writeToFile(path);
@@ -769,7 +769,7 @@ Memory::saveWom(const std::filesystem::path &path) const
 void
 Memory::saveExt(const std::filesystem::path &path) const
 {
-    if (ext == nullptr) throw CoreException(CoreError::ROM_MISSING);
+    if (ext == nullptr) throw CoreException(Fault::ROM_MISSING);
 
     RomFile file(ext, config.extSize);
     file.writeToFile(path);

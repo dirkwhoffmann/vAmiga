@@ -28,7 +28,7 @@ void
 Workspace::init(const std::filesystem::path &path)
 {
     // Only proceed if the provided filename points to a directory
-    if (!isCompatiblePath(path)) throw CoreException(CoreError::FILE_TYPE_MISMATCH);
+    if (!isCompatiblePath(path)) throw CoreException(Fault::FILE_TYPE_MISMATCH);
     
     this->path = path;
 }

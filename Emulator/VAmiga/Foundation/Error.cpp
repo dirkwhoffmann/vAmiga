@@ -14,109 +14,109 @@
 
 namespace vamiga {
 
-CoreException::CoreException(CoreError code, const string &s)
+CoreException::CoreException(Fault code, const string &s)
 {
     data = i64(code);
     
     switch (code) {
             
-        case CoreError::OK:
+        case Fault::OK:
             fatalError;
             break;
             
-        case CoreError::POWERED_OFF:
+        case Fault::POWERED_OFF:
             description = "The emulator is powered off.";
             break;
 
-        case CoreError::POWERED_ON:
+        case Fault::POWERED_ON:
             description = "The emulator is powered on.";
             break;
 
-        case CoreError::DEBUG_OFF:
+        case Fault::DEBUG_OFF:
             description = "Debug mode is switched off.";
             break;
 
-        case CoreError::RUNNING:
+        case Fault::RUNNING:
             description = "The emulator is running.";
             break;
 
-        case CoreError::OPT_UNSUPPORTED:
+        case Fault::OPT_UNSUPPORTED:
             description = s == "" ? "This option is not supported yet." : s;
             break;
             
-        case CoreError::OPT_INV_ARG:
+        case Fault::OPT_INV_ARG:
             description = "Invalid argument. Expected: " + s;
             break;
 
-        case CoreError::OPT_INV_ID:
+        case Fault::OPT_INV_ID:
             description = "Invalid component ID. Expected: " + s;
             break;
 
-        case CoreError::OPT_LOCKED:
+        case Fault::OPT_LOCKED:
             description = "This option is locked because the Amiga is powered on.";
             break;
 
-        case CoreError::INVALID_KEY:
+        case Fault::INVALID_KEY:
             description = "Invalid key: " + s + ".";
             break;
             
-        case CoreError::SYNTAX:
+        case Fault::SYNTAX:
             description = "Syntax error in line " + s + ".";
             break;
 
-        case CoreError::CPU_UNSUPPORTED:
+        case Fault::CPU_UNSUPPORTED:
             description = "CPU revision is not supported yet.";
             break;
 
-        case CoreError::GUARD_NOT_FOUND:
+        case Fault::GUARD_NOT_FOUND:
             description = "Entry " + s + " not found.";
             break;
 
-        case CoreError::GUARD_ALREADY_SET:
+        case Fault::GUARD_ALREADY_SET:
             description = "Target " + s + " is already observed.";
             break;
 
-        case CoreError::BP_NOT_FOUND:
+        case Fault::BP_NOT_FOUND:
             description = "Breakpoint " + s + " not found.";
             break;
             
-        case CoreError::BP_ALREADY_SET:
+        case Fault::BP_ALREADY_SET:
             description = "A breakpoint at " + s + " is already set.";
             break;
             
-        case CoreError::WP_NOT_FOUND:
+        case Fault::WP_NOT_FOUND:
             description = "Watchpoint " + s + " not found.";
             break;
 
-        case CoreError::WP_ALREADY_SET:
+        case Fault::WP_ALREADY_SET:
             description = "A watchpoint at " + s + " is already set.";
             break;
 
-        case CoreError::CP_NOT_FOUND:
+        case Fault::CP_NOT_FOUND:
             description = "Catchpoint " + s + " not found.";
             break;
 
-        case CoreError::CP_ALREADY_SET:
+        case Fault::CP_ALREADY_SET:
             description = "This catchpoint is already set.";
             break;
 
-        case CoreError::DIR_NOT_FOUND:
+        case Fault::DIR_NOT_FOUND:
             description = "Folder \"" + s + "\" not found.";
             break;
 
-        case CoreError::DIR_ACCESS_DENIED:
+        case Fault::DIR_ACCESS_DENIED:
             description = "Unable to access folder \"" + s + "\". Permission denied.";
             break;
 
-        case CoreError::FILE_NOT_FOUND:
+        case Fault::FILE_NOT_FOUND:
             description = "File \"" + s + "\" not found.";
             break;
 
-        case CoreError::FILE_EXISTS:
+        case Fault::FILE_EXISTS:
             description = "File \"" + s + "\" already exists.";
             break;
 
-        case CoreError::FILE_IS_DIRECTORY:
+        case Fault::FILE_IS_DIRECTORY:
             if (s.empty()) {
                 description = "The selected file is a directory.";
             } else {
@@ -124,95 +124,95 @@ CoreException::CoreException(CoreError code, const string &s)
             }
             break;
 
-        case CoreError::FILE_ACCESS_DENIED:
+        case Fault::FILE_ACCESS_DENIED:
             description = "Unable to access file \"" + s + "\". Permission denied.";
             break;
 
-        case CoreError::FILE_TYPE_MISMATCH:
+        case Fault::FILE_TYPE_MISMATCH:
             description = "The file content and the file type do not match.";
             break;
             
-        case CoreError::FILE_CANT_READ:
+        case Fault::FILE_CANT_READ:
             description = "Failed to read from file \"" + s + "\".";
             break;
             
-        case CoreError::FILE_CANT_WRITE:
+        case Fault::FILE_CANT_WRITE:
             description = "Failed to write to file \"" + s + "\".";
             break;
             
-        case CoreError::FILE_CANT_CREATE:
+        case Fault::FILE_CANT_CREATE:
             description = "Failed to create file \"" + s + "\".";
             break;
             
-        case CoreError::OUT_OF_MEMORY:
+        case Fault::OUT_OF_MEMORY:
             description = "Out of memory.";
             break;
             
-        case CoreError::CHIP_RAM_MISSING:
+        case Fault::CHIP_RAM_MISSING:
             description = "No Chip RAM installed.";
             break;
             
-        case CoreError::CHIP_RAM_LIMIT:
+        case Fault::CHIP_RAM_LIMIT:
             description = "The selected Agnus revision is not able to address";
             description += " the selected amount of Chip RAM.";
             break;
 
-        case CoreError::AROS_RAM_LIMIT:
+        case Fault::AROS_RAM_LIMIT:
             description = "The Aros Kickstart requires at least 1 MB of memory.";
             break;
 
-        case CoreError::ROM_MISSING:
+        case Fault::ROM_MISSING:
             description = "No Rom installed.";
             break;
             
-        case CoreError::AROS_NO_EXTROM:
+        case Fault::AROS_NO_EXTROM:
             description = "No Extension Rom installed.";
             break;
 
-        case CoreError::WT_BLOCKED:
+        case Fault::WT_BLOCKED:
             description = "The storage file for the selected hard drive is";
             description += " being used by another emulator instance. It cannot ";
             description += " be shared among multiple emulator instances.";
             break;
 
-        case CoreError::WT:
+        case Fault::WT:
             description = "Write through: " + s;
             break;
 
-        case CoreError::DISK_MISSING:
+        case Fault::DISK_MISSING:
             description = "No disk in drive.";
             break;
             
-        case CoreError::DISK_INCOMPATIBLE:
+        case Fault::DISK_INCOMPATIBLE:
             description = "This disk is not compatible with the selected drive.";
             break;
             
-        case CoreError::DISK_INVALID_DIAMETER:
+        case Fault::DISK_INVALID_DIAMETER:
             description = "Invalid disk diameter.";
             break;
 
-        case CoreError::DISK_INVALID_DENSITY:
+        case Fault::DISK_INVALID_DENSITY:
             description = "Invalid disk density.";
             break;
 
-        case CoreError::DISK_INVALID_LAYOUT:
+        case Fault::DISK_INVALID_LAYOUT:
             description = "The disk density and disk diameter do not match.";
             break;
 
-        case CoreError::DISK_WRONG_SECTOR_COUNT:
+        case Fault::DISK_WRONG_SECTOR_COUNT:
             description = "Unable to decode the MFM bit stream (wrong sector count).";
             break;
             
-        case CoreError::DISK_INVALID_SECTOR_NUMBER:
+        case Fault::DISK_INVALID_SECTOR_NUMBER:
             description = "Unable to decode the MFM bit stream (invalid sector number).";
             break;
 
-        case CoreError::HDR_TOO_LARGE:
+        case Fault::HDR_TOO_LARGE:
             description = "vAmiga supports hard drives with a maximum capacity of ";
             description += "504 MB.";
             break;
 
-        case CoreError::HDR_UNSUPPORTED_CYL_COUNT:
+        case Fault::HDR_UNSUPPORTED_CYL_COUNT:
             description = "The geometry of this drive is not supported. ";
             description += "vAmiga supports hard drives with ";
             description += "at least " + std::to_string(HDR_C_MIN) + " and ";
@@ -220,7 +220,7 @@ CoreException::CoreException(CoreError code, const string &s)
             description += "This drive has " + s + " cylinders.";
             break;
             
-        case CoreError::HDR_UNSUPPORTED_HEAD_COUNT:
+        case Fault::HDR_UNSUPPORTED_HEAD_COUNT:
             description = "The geometry of this drive is not supported. ";
             description += "vAmiga supports hard drives with ";
             description += "at least " + std::to_string(HDR_H_MIN) + " and ";
@@ -228,7 +228,7 @@ CoreException::CoreException(CoreError code, const string &s)
             description += "The drive has " + s + " heads.";
             break;
 
-        case CoreError::HDR_UNSUPPORTED_SEC_COUNT:
+        case Fault::HDR_UNSUPPORTED_SEC_COUNT:
             description = "The geometry of this drive is not supported. ";
             description += "vAmiga only supports hard drives with ";
             description += "at least " + std::to_string(HDR_S_MIN) + " and ";
@@ -236,182 +236,182 @@ CoreException::CoreException(CoreError code, const string &s)
             description += "The drive stores " + s + " sectors per track.";
             break;
 
-        case CoreError::HDR_UNSUPPORTED_BSIZE:
+        case Fault::HDR_UNSUPPORTED_BSIZE:
             description = "The geometry of this drive is not supported. ";
             description += "vAmiga only supports hard drives with a ";
             description += "block size of 512 bytes. ";
             description += "The drive stores " + s + " bytes per block.";
             break;
 
-        case CoreError::HDR_UNKNOWN_GEOMETRY:
+        case Fault::HDR_UNKNOWN_GEOMETRY:
             description = "vAmiga failed to derive to geometry of this drive.";
             break;
 
-        case CoreError::HDR_UNMATCHED_GEOMETRY:
+        case Fault::HDR_UNMATCHED_GEOMETRY:
             description = "The drive geometry doesn't match the hard drive capacity.";
             break;
 
-        case CoreError::HDR_UNPARTITIONED:
+        case Fault::HDR_UNPARTITIONED:
             description = "The hard drive has no partitions.";
             break;
 
-        case CoreError::HDR_CORRUPTED_PTABLE:
+        case Fault::HDR_CORRUPTED_PTABLE:
             description = "Invalid partition table.";
             break;
 
-        case CoreError::HDR_CORRUPTED_FSH:
+        case Fault::HDR_CORRUPTED_FSH:
             description = "Invalid file system header block.";
             break;
 
-        case CoreError::HDR_UNSUPPORTED:
+        case Fault::HDR_UNSUPPORTED:
             description = "The hard drive is encoded in an unknown or unsupported format.";
             break;
 
-        case CoreError::HDC_INIT:
+        case Fault::HDC_INIT:
             description = "Failed to initialize hard drive: " + s;
             break;
 
-        case CoreError::SNAP_TOO_OLD:
+        case Fault::SNAP_TOO_OLD:
             description = "The snapshot was created with an older version of vAmiga";
             description += " and is incompatible with this release.";
             break;
 
-        case CoreError::SNAP_TOO_NEW:
+        case Fault::SNAP_TOO_NEW:
             description = "The snapshot was created with a newer version of vAmiga";
             description += " and is incompatible with this release.";
             break;
 
-        case CoreError::SNAP_IS_BETA:
+        case Fault::SNAP_IS_BETA:
             description = "The snapshot was created with a beta version of vAmiga";
             description += " and is incompatible with this release.";
             break;
 
-        case CoreError::SNAP_CORRUPTED:
+        case Fault::SNAP_CORRUPTED:
             description = "The snapshot data is corrupted and has put the";
             description += " emulator into an inconsistent state.";
             break;
 
-        case CoreError::DMS_CANT_CREATE:
+        case Fault::DMS_CANT_CREATE:
             description = "Failed to extract the DMS archive.";
             break;
 
-        case CoreError::EXT_FACTOR5:
+        case Fault::EXT_FACTOR5:
             description = "The file is encoded in an outdated format that was";
             description += " introduced by Factor 5 to distribute Turrican images.";
             description += " The format has no relevance today and is not supported";
             description += " by the emulator.";
             break;
 
-        case CoreError::EXT_INCOMPATIBLE:
+        case Fault::EXT_INCOMPATIBLE:
             description = "This file utilizes encoding features of the extended ";
             description += " ADF format that are not supported by the emulator yet.";
             break;
 
-        case CoreError::EXT_CORRUPTED:
+        case Fault::EXT_CORRUPTED:
             description = "The disk encoder failed to extract the disk due to ";
             description += " corrupted or inconsistend file data.";
             break;
  
-        case CoreError::ZLIB_ERROR:
+        case Fault::ZLIB_ERROR:
             description = s;
             break;
             
-        case CoreError::MISSING_ROM_KEY:
+        case Fault::MISSING_ROM_KEY:
             description = "No \"rom.key\" file found.";
             break;
 
-        case CoreError::INVALID_ROM_KEY:
+        case Fault::INVALID_ROM_KEY:
             description = "Invalid Rom key.";
             break;
 
-        case CoreError::REC_LAUNCH:
+        case Fault::REC_LAUNCH:
             description = s;
             break;
 
-        case CoreError::REG_READ_ONLY:
+        case Fault::REG_READ_ONLY:
             description = s + " is a read-only register";
             break;
 
-        case CoreError::REG_WRITE_ONLY:
+        case Fault::REG_WRITE_ONLY:
             description = s + " is a write-only register";
             break;
 
-        case CoreError::REG_UNUSED:
+        case Fault::REG_UNUSED:
             description = "Register " + s + " is unused";
             break;
 
-        case CoreError::ADDR_UNALIGNED:
+        case Fault::ADDR_UNALIGNED:
             description = "Address not aligned";
             break;
 
-        case CoreError::OSDB:
+        case Fault::OSDB:
             description = "OS Debugger: " + s;
             break;
             
-        case CoreError::HUNK_BAD_COOKIE:
+        case Fault::HUNK_BAD_COOKIE:
             description = "Invalid magic cookie.";
             break;
 
-        case CoreError::HUNK_BAD_HEADER:
+        case Fault::HUNK_BAD_HEADER:
             description = "Bad header.";
             break;
 
-        case CoreError::HUNK_NO_SECTIONS:
+        case Fault::HUNK_NO_SECTIONS:
             description = "No hunks found.";
             break;
 
-        case CoreError::HUNK_UNSUPPORTED:
+        case Fault::HUNK_UNSUPPORTED:
             description = "Unsupported hunk: " + s;
             break;
 
-        case CoreError::HUNK_CORRUPTED:
+        case Fault::HUNK_CORRUPTED:
             description = "Corrupted hunk structure.";
             break;
 
-        case CoreError::FS_UNSUPPORTED:
+        case Fault::FS_UNSUPPORTED:
             description = "Unsupported file system.";
             break;
 
-        case CoreError::FS_UNFORMATTED:
+        case Fault::FS_UNFORMATTED:
             description = "Unformatted device.";
             break;
 
-        case CoreError::FS_WRONG_BSIZE:
+        case Fault::FS_WRONG_BSIZE:
             description = "Invalid block size.";
             break;
 
-        case CoreError::FS_WRONG_DOS_TYPE:
+        case Fault::FS_WRONG_DOS_TYPE:
             description = "Wrong DOS type.";
             break;
 
-        case CoreError::FS_WRONG_CAPACITY:
+        case Fault::FS_WRONG_CAPACITY:
             description = "Wrong file system capacity.";
             break;
 
-        case CoreError::FS_HAS_CYCLES:
+        case Fault::FS_HAS_CYCLES:
             description = "Cyclic reference chain detected.";
             break;
 
-        case CoreError::FS_CORRUPTED:
+        case Fault::FS_CORRUPTED:
             description = "Corrupted file system.";
             break;
 
-        case CoreError::FS_DIR_NOT_EMPTY:
+        case Fault::FS_DIR_NOT_EMPTY:
             description = "Directory is not empty.";
             break;
 
-        case CoreError::FS_CANNOT_CREATE_DIR:
+        case Fault::FS_CANNOT_CREATE_DIR:
             description = "Unable to create directory.";
             break;
 
-        case CoreError::FS_CANNOT_CREATE_FILE:
+        case Fault::FS_CANNOT_CREATE_FILE:
             description = "Unable to create file.";
             break;
 
         default:
             description =
             "Error code " + std::to_string(data) +
-            " (" + CoreErrorEnum::key((CoreError)data) + ").";
+            " (" + FaultEnum::key((Fault)data) + ").";
             break;
     }
 }

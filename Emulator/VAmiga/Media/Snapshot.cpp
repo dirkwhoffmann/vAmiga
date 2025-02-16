@@ -97,13 +97,13 @@ Snapshot::Snapshot(Amiga &amiga, Compressor compressor) : Snapshot(amiga)
 void
 Snapshot::finalizeRead()
 {
-    if (FORCE_SNAP_TOO_OLD) throw CoreException(CoreError::SNAP_TOO_OLD);
-    if (FORCE_SNAP_TOO_NEW) throw CoreException(CoreError::SNAP_TOO_NEW);
-    if (FORCE_SNAP_IS_BETA) throw CoreException(CoreError::SNAP_IS_BETA);
+    if (FORCE_SNAP_TOO_OLD) throw CoreException(Fault::SNAP_TOO_OLD);
+    if (FORCE_SNAP_TOO_NEW) throw CoreException(Fault::SNAP_TOO_NEW);
+    if (FORCE_SNAP_IS_BETA) throw CoreException(Fault::SNAP_IS_BETA);
 
-    if (isTooOld()) throw CoreException(CoreError::SNAP_TOO_OLD);
-    if (isTooNew()) throw CoreException(CoreError::SNAP_TOO_NEW);
-    if (isBeta() && !betaRelease) throw CoreException(CoreError::SNAP_IS_BETA);
+    if (isTooOld()) throw CoreException(Fault::SNAP_TOO_OLD);
+    if (isTooNew()) throw CoreException(Fault::SNAP_TOO_NEW);
+    if (isBeta() && !betaRelease) throw CoreException(Fault::SNAP_IS_BETA);
 }
 
 std::pair <isize,isize>

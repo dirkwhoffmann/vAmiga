@@ -17,11 +17,11 @@ namespace vamiga {
 
 struct CoreException : public util::Exception
 {
-    CoreException(CoreError code, const string &s);
-    CoreException(CoreError code, const char *s) : CoreException(code, string(s)) { };
-    CoreException(CoreError code, const std::filesystem::path &path) : CoreException(code, path.string()) { };
-    CoreException(CoreError code, long v) : CoreException(code, std::to_string(v)) { };
-    CoreException(CoreError code) : CoreException(code, "") { }
+    CoreException(Fault code, const string &s);
+    CoreException(Fault code, const char *s) : CoreException(code, string(s)) { };
+    CoreException(Fault code, const std::filesystem::path &path) : CoreException(code, path.string()) { };
+    CoreException(Fault code, long v) : CoreException(code, std::to_string(v)) { };
+    CoreException(Fault code) : CoreException(code, "") { }
     
     const char *what() const throw() override;
 };

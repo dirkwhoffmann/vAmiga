@@ -197,7 +197,7 @@ Amiga::checkOption(Opt opt, i64 value)
         case Opt::AMIGA_VIDEO_FORMAT:
             
             if (!TVEnum::isValid(value)) {
-                throw CoreException(CoreError::OPT_INV_ARG, TVEnum::keyList());
+                throw CoreException(Fault::OPT_INV_ARG, TVEnum::keyList());
             }
             return;
             
@@ -208,7 +208,7 @@ Amiga::checkOption(Opt opt, i64 value)
         case Opt::AMIGA_WARP_MODE:
             
             if (!WarpEnum::isValid(value)) {
-                throw CoreException(CoreError::OPT_INV_ARG, WarpEnum::keyList());
+                throw CoreException(Fault::OPT_INV_ARG, WarpEnum::keyList());
             }
             return;
             
@@ -219,14 +219,14 @@ Amiga::checkOption(Opt opt, i64 value)
         case Opt::AMIGA_SPEED_BOOST:
             
             if (value < 50 || value > 200) {
-                throw CoreException(CoreError::OPT_INV_ARG, "50...200");
+                throw CoreException(Fault::OPT_INV_ARG, "50...200");
             }
             return;
             
         case Opt::AMIGA_RUN_AHEAD:
             
             if (value < -7 || value > 7) {
-                throw CoreException(CoreError::OPT_INV_ARG, "-7...7");
+                throw CoreException(Fault::OPT_INV_ARG, "-7...7");
             }
             return;
             
@@ -237,14 +237,14 @@ Amiga::checkOption(Opt opt, i64 value)
         case Opt::AMIGA_SNAP_DELAY:
             
             if (value < 10 || value > 3600) {
-                throw CoreException(CoreError::OPT_INV_ARG, "10...3600");
+                throw CoreException(Fault::OPT_INV_ARG, "10...3600");
             }
             return;
             
         case Opt::AMIGA_SNAP_COMPRESSOR:
             
             if (!CompressorEnum::isValid(value)) {
-                throw CoreException(CoreError::OPT_INV_ARG, CompressorEnum::keyList());
+                throw CoreException(Fault::OPT_INV_ARG, CompressorEnum::keyList());
             }
             return;
             
@@ -253,7 +253,7 @@ Amiga::checkOption(Opt opt, i64 value)
             return;
             
         default:
-            throw CoreException(CoreError::OPT_UNSUPPORTED);
+            throw CoreException(Fault::OPT_UNSUPPORTED);
     }
 }
 
@@ -499,7 +499,7 @@ Amiga::get(Opt opt, isize objid) const
     debug(CNF_DEBUG, "get(%s, %ld)\n", OptEnum::key(opt), objid);
 
     auto target = routeOption(opt, objid);
-    if (target == nullptr) throw CoreException(CoreError::OPT_INV_ID);
+    if (target == nullptr) throw CoreException(Fault::OPT_INV_ID);
     return target->getOption(opt);
 }
 
@@ -522,7 +522,7 @@ Amiga::check(Opt opt, i64 value, const std::vector<isize> objids)
         debug(CNF_DEBUG, "check(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
 
         auto target = routeOption(opt, objid);
-        if (target == nullptr) throw CoreException(CoreError::OPT_INV_ID);
+        if (target == nullptr) throw CoreException(Fault::OPT_INV_ID);
 
         target->checkOption(opt, value);
     }
@@ -547,7 +547,7 @@ Amiga::set(Opt opt, i64 value, const std::vector<isize> objids)
         debug(CNF_DEBUG, "set(%s, %lld, %ld)\n", OptEnum::key(opt), value, objid);
 
         auto target = routeOption(opt, objid);
-        if (target == nullptr) throw CoreException(CoreError::OPT_INV_ID);
+        if (target == nullptr) throw CoreException(Fault::OPT_INV_ID);
 
         target->setOption(opt, value);
     }

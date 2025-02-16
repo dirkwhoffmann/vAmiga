@@ -162,7 +162,7 @@ RomFile::decrypt()
 
     // Load the rom.key file
     romKey.init(romKeyPath);
-    if (romKey.empty()) throw CoreException(CoreError::MISSING_ROM_KEY);
+    if (romKey.empty()) throw CoreException(Fault::MISSING_ROM_KEY);
     
     // Decrypt
     decrypted.alloc(data.size - headerSize);
@@ -175,7 +175,7 @@ RomFile::decrypt()
     
     // Check if we've got a valid ROM
     if (!isCompatible(data.ptr, data.size)) {
-        throw CoreException(CoreError::INVALID_ROM_KEY);
+        throw CoreException(Fault::INVALID_ROM_KEY);
     }
 }
 

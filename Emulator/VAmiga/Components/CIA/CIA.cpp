@@ -93,7 +93,7 @@ CIA::checkOption(Opt opt, i64 value)
         case Opt::CIA_REVISION:
 
             if (!CIARevEnum::isValid(value)) {
-                throw CoreException(CoreError::OPT_INV_ARG, CIARevEnum::keyList());
+                throw CoreException(Fault::OPT_INV_ARG, CIARevEnum::keyList());
             }
             return;
 
@@ -104,7 +104,7 @@ CIA::checkOption(Opt opt, i64 value)
             return;
 
         default:
-            throw(CoreError::OPT_UNSUPPORTED);
+            throw(Fault::OPT_UNSUPPORTED);
     }
 }
 

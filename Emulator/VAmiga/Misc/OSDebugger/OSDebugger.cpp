@@ -432,12 +432,12 @@ OSDebugger::checkExecBase(const os::ExecBase &execBase) const
 {
     // Check if the struct resides at an even location in RAM
     if (!(IS_EVEN(execBase.addr) && mem.inRam(execBase.addr))) {
-        throw CoreException(CoreError::OSDB, "ExecBase: Invalid address");
+        throw CoreException(Fault::OSDB, "ExecBase: Invalid address");
     }
 
     // Check if ChkBase is the bitwise complement of SysBase
     if (!(execBase.ChkBase == ~execBase.addr)) {
-        throw CoreException(CoreError::OSDB, "ExecBase: Invalid ChkSum");
+        throw CoreException(Fault::OSDB, "ExecBase: Invalid ChkSum");
     }
     
     // Check if words in the range [0x22 ; 0x52] sum up to 0xFFFF
@@ -446,15 +446,15 @@ OSDebugger::checkExecBase(const os::ExecBase &execBase) const
         checksum += mem.spypeek16 <Accessor::CPU> (execBase.addr + offset);
     }
     if (!(checksum == 0xFFFF)) {
-        throw CoreException(CoreError::OSDB, "ExecBase: Checksum mismatch");
+        throw CoreException(Fault::OSDB, "ExecBase: Checksum mismatch");
     }
     
     // Check if MaxLocMem complies to the bank map
     if (execBase.MaxLocMem & 0xFF000000) {
-        throw CoreException(CoreError::OSDB, "ExecBase: MaxLocMem is too large");
+        throw CoreException(Fault::OSDB, "ExecBase: MaxLocMem is too large");
     }
     if (execBase.MaxLocMem & 0x3FFFF) {
-        throw CoreException(CoreError::OSDB, "ExecBase: MaxLocMem is not aligned");
+        throw CoreException(Fault::OSDB, "ExecBase: MaxLocMem is not aligned");
     }
     if (auto bank = execBase.MaxLocMem >> 16) {
         
@@ -462,16 +462,16 @@ OSDebugger::checkExecBase(const os::ExecBase &execBase) const
         auto src2 =mem.cpuMemSrc[bank];
         
         if (!(src1 == MemSrc::CHIP && src2 != MemSrc::CHIP)) {
-            throw CoreException(CoreError::OSDB, "ExecBase: MaxLocMem doesn't match bank map");
+            throw CoreException(Fault::OSDB, "ExecBase: MaxLocMem doesn't match bank map");
         }
     }
 
     // Check if MaxExtMem complies to the bank map
     if (execBase.MaxExtMem & 0xFF000000) {
-        throw CoreException(CoreError::OSDB, "ExecBase: MaxExtMem is too large");
+        throw CoreException(Fault::OSDB, "ExecBase: MaxExtMem is too large");
     }
     if (execBase.MaxExtMem & 0x3FFFF) {
-        throw CoreException(CoreError::OSDB, "ExecBase: MaxExtMem is not aligned");
+        throw CoreException(Fault::OSDB, "ExecBase: MaxExtMem is not aligned");
     }
     if (auto bank = execBase.MaxExtMem >> 16) {
         
@@ -479,7 +479,7 @@ OSDebugger::checkExecBase(const os::ExecBase &execBase) const
         auto src2 =mem.cpuMemSrc[bank];
         
         if (!(src1 == MemSrc::SLOW && src2 != MemSrc::SLOW)) {
-            throw CoreException(CoreError::OSDB, "ExecBase: MaxExtMem doesn't match bank map");
+            throw CoreException(Fault::OSDB, "ExecBase: MaxExtMem doesn't match bank map");
         }
     }
 }

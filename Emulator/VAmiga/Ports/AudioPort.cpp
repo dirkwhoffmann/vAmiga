@@ -193,14 +193,14 @@ AudioPort::checkOption(Opt opt, i64 value)
         case Opt::AUD_BUFFER_SIZE:
 
             if (value < 512 || value > 65536) {
-                throw CoreException(CoreError::OPT_INV_ARG, "512 ... 65536");
+                throw CoreException(Fault::OPT_INV_ARG, "512 ... 65536");
             }
             return;
             
         case Opt::AUD_SAMPLING_METHOD:
 
             if (!SamplingMethodEnum::isValid(value)) {
-                throw CoreException(CoreError::OPT_INV_ARG, SamplingMethodEnum::keyList());
+                throw CoreException(Fault::OPT_INV_ARG, SamplingMethodEnum::keyList());
             }
             return;
             
@@ -210,7 +210,7 @@ AudioPort::checkOption(Opt opt, i64 value)
             return;
 
         default:
-            throw(CoreError::OPT_UNSUPPORTED);
+            throw(Fault::OPT_UNSUPPORTED);
     }
 }
 

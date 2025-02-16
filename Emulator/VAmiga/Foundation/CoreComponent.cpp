@@ -274,7 +274,7 @@ CoreComponent::load(const u8 *buffer)
 
             msg("Loaded %llu bytes (expected %llu)\n", count, size);
             msg("Hash: %llx (expected %llx)\n", hash, c->checksum(false));
-            if (SNP_DEBUG) { fatalError; } else { throw CoreException(CoreError::SNAP_CORRUPTED); }
+            if (SNP_DEBUG) { fatalError; } else { throw CoreException(Fault::SNAP_CORRUPTED); }
         }
 
         debug(SNP_DEBUG >= 2, "Loaded %llu bytes (expected %llu)\n", count, size);
@@ -309,7 +309,7 @@ CoreComponent::save(u8 *buffer)
         if (count != c->size(false) || FORCE_SNAP_CORRUPTED) {
 
             msg("Saved %ld bytes (expected %ld)\n", count, c->size(false));
-            if (SNP_DEBUG) { fatalError; } else { throw CoreException(CoreError::SNAP_CORRUPTED); }
+            if (SNP_DEBUG) { fatalError; } else { throw CoreException(Fault::SNAP_CORRUPTED); }
         }
 
         debug(SNP_DEBUG >= 2, "Saved %ld bytes (expected %ld)\n", count, c->size(false));
@@ -373,7 +373,7 @@ CoreComponent::exportConfig(const fs::path &path, bool diff, std::vector<Class> 
     auto fs = std::ofstream(path, std::ofstream::binary);
 
     if (!fs.is_open()) {
-        throw CoreException(CoreError::FILE_CANT_WRITE);
+        throw CoreException(Fault::FILE_CANT_WRITE);
     }
 
     exportConfig(fs, diff, exclude);

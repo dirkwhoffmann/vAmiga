@@ -85,7 +85,7 @@ public:
     isize check(bool strict) const;
 
     // Checks the integrity of a certain byte in this block
-    CoreError check(isize pos, u8 *expected, bool strict) const;
+    Fault check(isize pos, u8 *expected, bool strict) const;
 
     
     //
@@ -146,12 +146,12 @@ public:
     void exportBlock(u8 *dst, isize bsize);
     
     // Exports this block to the host file system
-    CoreError exportBlock(const fs::path &path);
+    Fault exportBlock(const fs::path &path);
 
 private:
     
-    CoreError exportUserDirBlock(const fs::path &path);
-    CoreError exportFileHeaderBlock(const fs::path &path);
+    Fault exportUserDirBlock(const fs::path &path);
+    Fault exportFileHeaderBlock(const fs::path &path);
 
 
     //
@@ -323,73 +323,73 @@ typedef FSBlock* BlockPtr;
 //
 
 #define EXPECT_BYTE(exp) { \
-if (value != (exp)) { *expected = (exp); return CoreError::FS_EXPECTED_VALUE; } }
+if (value != (exp)) { *expected = (exp); return Fault::FS_EXPECTED_VALUE; } }
 
 #define EXPECT_LONGWORD(exp) { \
 if ((byte % 4) == 0 && BYTE3(value) != BYTE3((u32)exp)) \
-{ *expected = (BYTE3((u32)exp)); return CoreError::FS_EXPECTED_VALUE; } \
+{ *expected = (BYTE3((u32)exp)); return Fault::FS_EXPECTED_VALUE; } \
 if ((byte % 4) == 1 && BYTE2(value) != BYTE2((u32)exp)) \
-{ *expected = (BYTE2((u32)exp)); return CoreError::FS_EXPECTED_VALUE; } \
+{ *expected = (BYTE2((u32)exp)); return Fault::FS_EXPECTED_VALUE; } \
 if ((byte % 4) == 2 && BYTE1(value) != BYTE1((u32)exp)) \
-{ *expected = (BYTE1((u32)exp)); return CoreError::FS_EXPECTED_VALUE; } \
+{ *expected = (BYTE1((u32)exp)); return Fault::FS_EXPECTED_VALUE; } \
 if ((byte % 4) == 3 && BYTE0(value) != BYTE0((u32)exp)) \
-{ *expected = (BYTE0((u32)exp)); return CoreError::FS_EXPECTED_VALUE; } }
+{ *expected = (BYTE0((u32)exp)); return Fault::FS_EXPECTED_VALUE; } }
 
 #define EXPECT_CHECKSUM EXPECT_LONGWORD(checksum())
 
 #define EXPECT_LESS_OR_EQUAL(exp) { \
 if (value > (u32)exp) \
-{ *expected = (u8)(exp); return CoreError::FS_EXPECTED_SMALLER_VALUE; } }
+{ *expected = (u8)(exp); return Fault::FS_EXPECTED_SMALLER_VALUE; } }
 
 #define EXPECT_DOS_REVISION { \
-if (!FSVolumeTypeEnum::isValid((isize)value)) return CoreError::FS_EXPECTED_DOS_REVISION; }
+if (!FSVolumeTypeEnum::isValid((isize)value)) return Fault::FS_EXPECTED_DOS_REVISION; }
 
 #define EXPECT_REF { \
-if (!device.block(value)) return CoreError::FS_EXPECTED_REF; }
+if (!device.block(value)) return Fault::FS_EXPECTED_REF; }
 
 #define EXPECT_SELFREF { \
-if (value != nr) return CoreError::FS_EXPECTED_SELFREF; }
+if (value != nr) return Fault::FS_EXPECTED_SELFREF; }
 
 #define EXPECT_FILEHEADER_REF { \
-if (CoreError e = device.checkBlockType(value, FSBlockType::FILEHEADER_BLOCK); e != CoreError::OK) return e; }
+if (Fault e = device.checkBlockType(value, FSBlockType::FILEHEADER_BLOCK); e != Fault::OK) return e; }
 
 #define EXPECT_HASH_REF { \
-if (CoreError e = device.checkBlockType(value, FSBlockType::FILEHEADER_BLOCK, FSBlockType::USERDIR_BLOCK); e != CoreError::OK) return e; }
+if (Fault e = device.checkBlockType(value, FSBlockType::FILEHEADER_BLOCK, FSBlockType::USERDIR_BLOCK); e != Fault::OK) return e; }
 
 #define EXPECT_OPTIONAL_HASH_REF { \
 if (value) { EXPECT_HASH_REF } }
 
 #define EXPECT_PARENT_DIR_REF { \
-if (CoreError e = device.checkBlockType(value, FSBlockType::ROOT_BLOCK, FSBlockType::USERDIR_BLOCK); e != CoreError::OK) return e; }
+if (Fault e = device.checkBlockType(value, FSBlockType::ROOT_BLOCK, FSBlockType::USERDIR_BLOCK); e != Fault::OK) return e; }
 
 #define EXPECT_FILELIST_REF { \
-if (CoreError e = device.checkBlockType(value, FSBlockType::FILELIST_BLOCK); e != CoreError::OK) return e; }
+if (Fault e = device.checkBlockType(value, FSBlockType::FILELIST_BLOCK); e != Fault::OK) return e; }
 
 #define EXPECT_OPTIONAL_FILELIST_REF { \
 if (value) { EXPECT_FILELIST_REF } }
 
 #define EXPECT_BITMAP_REF { \
-if (CoreError e = device.checkBlockType(value, FSBlockType::BITMAP_BLOCK); e != CoreError::OK) return e; }
+if (Fault e = device.checkBlockType(value, FSBlockType::BITMAP_BLOCK); e != Fault::OK) return e; }
 
 #define EXPECT_OPTIONAL_BITMAP_REF { \
 if (value) { EXPECT_BITMAP_REF } }
 
 #define EXPECT_BITMAP_EXT_REF { \
-if (CoreError e = device.checkBlockType(value, FSBlockType::BITMAP_EXT_BLOCK); e != CoreError::OK) return e; }
+if (Fault e = device.checkBlockType(value, FSBlockType::BITMAP_EXT_BLOCK); e != Fault::OK) return e; }
 
 #define EXPECT_OPTIONAL_BITMAP_EXT_REF { \
 if (value) { EXPECT_BITMAP_EXT_REF } }
 
 #define EXPECT_DATABLOCK_REF { \
-if (CoreError e = device.checkBlockType(value, FSBlockType::DATA_BLOCK_OFS, FSBlockType::DATA_BLOCK_FFS); e != CoreError::OK) return e; }
+if (Fault e = device.checkBlockType(value, FSBlockType::DATA_BLOCK_OFS, FSBlockType::DATA_BLOCK_FFS); e != Fault::OK) return e; }
 
 #define EXPECT_OPTIONAL_DATABLOCK_REF { \
 if (value) { EXPECT_DATABLOCK_REF } }
 
 #define EXPECT_DATABLOCK_NUMBER { \
-if (value == 0) return CoreError::FS_EXPECTED_DATABLOCK_NR; }
+if (value == 0) return Fault::FS_EXPECTED_DATABLOCK_NR; }
 
 #define EXPECT_HASHTABLE_SIZE { \
-if (value != 72) return CoreError::FS_INVALID_HASHTABLE_SIZE; }
+if (value != 72) return Fault::FS_INVALID_HASHTABLE_SIZE; }
 
 }

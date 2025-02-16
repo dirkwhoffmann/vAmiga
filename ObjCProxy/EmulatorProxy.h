@@ -132,11 +132,11 @@ NSString *EventSlotName(NSInteger slot);
 
 @interface ExceptionWrapper : NSObject {
     
-    CoreError errorCode;
+    Fault errorCode;
     NSString *what;
 }
 
-@property CoreError errorCode;
+@property Fault errorCode;
 @property NSString *what;
 
 @end
@@ -834,7 +834,7 @@ NSString *EventSlotName(NSInteger slot);
 - (FSBlockType)blockType:(NSInteger)blockNr;
 - (FSItemType)itemType:(NSInteger)blockNr pos:(NSInteger)pos;
 - (FSErrorReport)check:(BOOL)strict;
-- (CoreError)check:(NSInteger)nr pos:(NSInteger)pos expected:(unsigned char *)exp strict:(BOOL)strict;
+- (Fault)check:(NSInteger)nr pos:(NSInteger)pos expected:(unsigned char *)exp strict:(BOOL)strict;
 - (BOOL)isCorrupted:(NSInteger)blockNr;
 - (NSInteger)getCorrupted:(NSInteger)blockNr;
 - (NSInteger)nextCorrupted:(NSInteger)blockNr;

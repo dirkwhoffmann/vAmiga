@@ -149,7 +149,7 @@ HardDrive::init(const MediaFile &file)
         return;
     }
     
-    throw CoreException(CoreError::FILE_TYPE_UNSUPPORTED);
+    throw CoreException(Fault::FILE_TYPE_UNSUPPORTED);
 }
 
 void
@@ -227,7 +227,7 @@ HardDrive::init(const std::filesystem::path &path) throws
     try { init(HDFFile(fullPath)); return; } catch(...) { }
     try { init(HDZFile(fullPath)); return; } catch(...) { }
 
-    throw CoreException(CoreError::FILE_TYPE_UNSUPPORTED);
+    throw CoreException(Fault::FILE_TYPE_UNSUPPORTED);
 }
 
 void
@@ -267,7 +267,7 @@ HardDrive::checkOption(Opt opt, i64 value)
         case Opt::HDR_TYPE:
 
             if (!HardDriveTypeEnum::isValid(value)) {
-                throw CoreException(CoreError::OPT_INV_ARG, HardDriveTypeEnum::keyList());
+                throw CoreException(Fault::OPT_INV_ARG, HardDriveTypeEnum::keyList());
             }
             return;
 
@@ -277,7 +277,7 @@ HardDrive::checkOption(Opt opt, i64 value)
             return;
 
         default:
-            throw(CoreError::OPT_UNSUPPORTED);
+            throw(Fault::OPT_UNSUPPORTED);
     }
 }
 
@@ -289,7 +289,7 @@ HardDrive::setOption(Opt option, i64 value)
         case Opt::HDR_TYPE:
             
             if (!HardDriveTypeEnum::isValid(value)) {
-                throw CoreException(CoreError::OPT_INV_ARG, HardDriveTypeEnum::keyList());
+                throw CoreException(Fault::OPT_INV_ARG, HardDriveTypeEnum::keyList());
             }
             config.type = (HardDriveType)value;
             return;
@@ -560,7 +560,7 @@ HardDrive::changeGeometry(const GeometryDescriptor &geometry)
 
     } else {
         
-        throw CoreException(CoreError::HDR_UNMATCHED_GEOMETRY);
+        throw CoreException(Fault::HDR_UNMATCHED_GEOMETRY);
     }
 }
 

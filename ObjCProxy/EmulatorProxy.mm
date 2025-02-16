@@ -98,7 +98,7 @@ NSString *EventSlotName(NSInteger slot)
 
     if (self = [super init]) {
         
-        errorCode = CoreError::OK;
+        errorCode = Fault::OK;
         what = @"";
     }
     return self;
@@ -106,7 +106,7 @@ NSString *EventSlotName(NSInteger slot)
 
 - (void)save:(const CoreException &)exception
 {
-    errorCode = CoreError(exception.data);
+    errorCode = Fault(exception.data);
     what = @(exception.what());
 }
 
@@ -1557,7 +1557,7 @@ NSString *EventSlotName(NSInteger slot)
     return [self fs]->check(strict);
 }
 
-- (CoreError)check:(NSInteger)nr
+- (Fault)check:(NSInteger)nr
                pos:(NSInteger)pos
           expected:(unsigned char *)exp
             strict:(BOOL)strict

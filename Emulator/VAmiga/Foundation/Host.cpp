@@ -42,7 +42,7 @@ Host::checkOption(Opt opt, i64 value)
             return;
 
         default:
-            throw(CoreError::OPT_UNSUPPORTED);
+            throw(Fault::OPT_UNSUPPORTED);
     }
 }
 
@@ -132,7 +132,7 @@ Host::tmp() const
 
             if (!logfile.is_open()) {
 
-                throw CoreException(CoreError::DIR_NOT_FOUND);
+                throw CoreException(Fault::DIR_NOT_FOUND);
             }
         }
 

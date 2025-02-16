@@ -156,13 +156,13 @@ public:
     
     // Exports the volume to a buffer
     bool exportVolume(u8 *dst, isize size) const;
-    bool exportVolume(u8 *dst, isize size, CoreError *error) const;
+    bool exportVolume(u8 *dst, isize size, Fault *error) const;
 
     // Exports a single block or a range of blocks
     bool exportBlock(Block nr, u8 *dst, isize size) const;
-    bool exportBlock(Block nr, u8 *dst, isize size, CoreError *error) const;
+    bool exportBlock(Block nr, u8 *dst, isize size, Fault *error) const;
     bool exportBlocks(Block first, Block last, u8 *dst, isize size) const;
-    bool exportBlocks(Block first, Block last, u8 *dst, isize size, CoreError *error) const;
+    bool exportBlocks(Block first, Block last, u8 *dst, isize size, Fault *error) const;
 
     // Exports the volume to a directory of the host file system
     void exportDirectory(const std::filesystem::path &path, bool createDir = true) const throws;
