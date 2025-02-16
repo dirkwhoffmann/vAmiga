@@ -211,7 +211,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="646" height="496"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1470" height="919"/>
             <value key="minSize" type="size" width="646" height="486"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="646" height="496"/>
@@ -2252,6 +2252,9 @@ DQ
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                         <menuItem title="RLE" tag="2" id="a0V-sA-Roz">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="LZ4" tag="5" id="Rbe-au-u7m">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>

@@ -72,6 +72,7 @@ extension Compressor: CustomStringConvertible {
         case .RLE2:     return "RLE2"
         case .RLE3:     return "RLE3"
         case .RLE4:     return "RLE4"
+        case .LZ4:      return "LZ4"
         default:        fatalError()
         }
     }

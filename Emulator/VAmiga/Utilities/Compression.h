@@ -19,4 +19,7 @@ void unrle(u8 *compressed, isize len, std::vector<u8> &result, isize n = 2);
 
 void gzip(u8 *uncompressed, isize len, std::vector<u8> &result);
 void gunzip(u8 *compressed, isize len, std::vector<u8> &result, isize sizeEstimate = 0);
+
+void lz4(u8 *uncompressed, isize len, std::vector<u8> &result);
+void unlz4(u8 *compressed, isize len, std::vector<u8> &result, isize sizeEstimate = 0);
 }

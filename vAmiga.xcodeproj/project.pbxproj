@@ -498,6 +498,8 @@
 		50FC08B127819E4100F0C567 /* BlitterInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC08B027819E4100F0C567 /* BlitterInfo.cpp */; };
 		50FCCA7C262AAAEA00398342 /* Script.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FCCA7A262AAAEA00398342 /* Script.cpp */; };
 		50FF747327D3BBFE00B6EA01 /* hdr_click.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50FF747227D3BBFE00B6EA01 /* hdr_click.aiff */; };
+		9C47C0322D6215B100E57B41 /* lz4.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C47C0312D6215B100E57B41 /* lz4.c */; };
+		9C47C0332D6215B100E57B41 /* lz4.c in Sources */ = {isa = PBXBuildFile; fileRef = 9C47C0312D6215B100E57B41 /* lz4.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1136,6 +1138,8 @@
 		50FCCA7A262AAAEA00398342 /* Script.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Script.cpp; sourceTree = "<group>"; };
 		50FCCA7B262AAAEA00398342 /* Script.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Script.h; sourceTree = "<group>"; };
 		50FF747227D3BBFE00B6EA01 /* hdr_click.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = hdr_click.aiff; sourceTree = "<group>"; };
+		9C47C0302D6215B100E57B41 /* lz4.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lz4.h; sourceTree = "<group>"; };
+		9C47C0312D6215B100E57B41 /* lz4.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lz4.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1429,6 +1433,8 @@
 		506436E129C1D82500768528 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				9C47C0302D6215B100E57B41 /* lz4.h */,
+				9C47C0312D6215B100E57B41 /* lz4.c */,
 				506407C82D19D0A7002FBC57 /* httplib.h */,
 				506436E229C1D84D00768528 /* CMakeLists.txt */,
 				50F54B0B24B5D31D0078FDC9 /* xdms */,
@@ -2628,6 +2634,7 @@
 				5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */,
 				5041C6282791AF0800D3C494 /* SequencerRegs.cpp in Sources */,
 				508FE01B21EA227B0043D0E9 /* MyDocument.swift in Sources */,
+				9C47C0332D6215B100E57B41 /* lz4.c in Sources */,
 				508FDFDB21EA20510043D0E9 /* Shaders.swift in Sources */,
 				50210B2027CB6A41001193AA /* Drive.cpp in Sources */,
 				508FE01D21EA227B0043D0E9 /* Defaults.swift in Sources */,
@@ -2758,6 +2765,7 @@
 				50EF2237281595B800440C4D /* DiagBoard.cpp in Sources */,
 				50FC04DD27DA1A1400C3E566 /* tables.c in Sources */,
 				50FC049F27DA197A00C3E566 /* SequencerBpl.cpp in Sources */,
+				9C47C0322D6215B100E57B41 /* lz4.c in Sources */,
 				50FC04BA27DA19B200C3E566 /* FloppyDisk.cpp in Sources */,
 				50FC04A927DA198E00C3E566 /* FastBlitter.cpp in Sources */,
 				50FC04B527DA19A900C3E566 /* HdController.cpp in Sources */,
@@ -3164,7 +3172,10 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
-				HEADER_SEARCH_PATHS = Emulator;
+				HEADER_SEARCH_PATHS = (
+					Emulator,
+					ThirdParty,
+				);
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3208,12 +3219,16 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_ENABLE_BUILTIN_FUNCTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = fast;
 				GCC_PREPROCESSOR_DEFINITIONS = "USE_ZLIB=1";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
-				HEADER_SEARCH_PATHS = Emulator;
+				HEADER_SEARCH_PATHS = (
+					Emulator,
+					ThirdParty,
+				);
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

@@ -21,7 +21,7 @@ Defaults::Defaults()
     setFallback(Opt::HOST_SAMPLE_RATE,           0);
     setFallback(Opt::HOST_FRAMEBUF_WIDTH,        0);
     setFallback(Opt::HOST_FRAMEBUF_HEIGHT,       0);
-    
+
     setFallback(Opt::AMIGA_VIDEO_FORMAT,         (i64)TV::PAL);
     setFallback(Opt::AMIGA_WARP_BOOT,            0);
     setFallback(Opt::AMIGA_WARP_MODE,            (i64)Warp::NEVER);
@@ -36,7 +36,7 @@ Defaults::Defaults()
 
     setFallback(Opt::AGNUS_REVISION,             (i64)AgnusRevision::ECS_1MB);
     setFallback(Opt::AGNUS_PTR_DROPS,            true);
-    
+
     setFallback(Opt::DENISE_REVISION,            (i64)DeniseRev::OCS);
     setFallback(Opt::DENISE_VIEWPORT_TRACKING,   true);
     setFallback(Opt::DENISE_FRAME_SKIPPING,      16);
@@ -148,7 +148,7 @@ Defaults::Defaults()
     setFallback(Opt::JOY_AUTOFIRE_BURSTS,        false,                  { 0, 1} );
     setFallback(Opt::JOY_AUTOFIRE_BULLETS,       3,                      { 0, 1} );
     setFallback(Opt::JOY_AUTOFIRE_DELAY,         5,                      { 0, 1} );
-    
+
     setFallback(Opt::AUD_PAN0,                   50);
     setFallback(Opt::AUD_PAN1,                   350);
     setFallback(Opt::AUD_PAN2,                   350);
@@ -196,18 +196,18 @@ void
 Defaults::_dump(Category category, std::ostream& os) const
 {
     {   SYNCHRONIZED
-        
+
         for (const auto &it: fallbacks) {
-            
+
             const string key = it.first;
-            
+
             if (values.contains(key)) {
-                
+
                 os << util::tab(key);
                 os << values.at(key) << std::endl;
-                
+
             } else {
-                
+
                 os << util::tab(key);
                 os << fallbacks.at(key) << " (Default)" << std::endl;
             }
@@ -219,11 +219,11 @@ void
 Defaults::load(const fs::path &path)
 {
     auto fs = std::ifstream(path, std::ifstream::binary);
-    
+
     if (!fs.is_open()) {
         throw CoreError(Fault::FILE_NOT_FOUND);
     }
-    
+
     debug(DEF_DEBUG, "Loading user defaults from %s...\n", path.string().c_str());
     load(fs);
 }
@@ -233,7 +233,7 @@ Defaults::load(std::ifstream &stream)
 {
     std::stringstream ss;
     ss << stream.rdbuf();
-    
+
     load(ss);
 }
 
@@ -241,58 +241,58 @@ void
 Defaults::load(std::stringstream &stream)
 {
     {   SYNCHRONIZED
-        
+
         isize line = 0;
         isize accepted = 0;
         isize skipped = 0;
         string input;
         string section;
-        
+
         debug(DEF_DEBUG, "Loading user defaults from string stream...\n");
-        
+
         while(std::getline(stream, input)) {
-            
+
             line++;
-            
+
             // Remove white spaces
             util::trim(input);
-            
+
             // Ignore empty lines
             if (input == "") continue;
-            
+
             // Ignore comments
             if (input.substr(0,1) == "#") continue;
-            
+
             // Check if this line contains a section marker
             if (input.front() == '[' && input.back() == ']') {
-                
+
                 // Extract the section name
                 section = input.substr(1, input.size() - 2);
                 continue;
             }
-            
+
             // Check if this line is a key-value pair
             if (auto pos = input.find("="); pos != std::string::npos) {
-                
+
                 auto key = input.substr(0, pos);
                 auto value = input.substr(pos + 1, std::string::npos);
-                
+
                 // Remove white spaces
                 util::trim(key);
                 util::trim(value);
-                
+
                 // Assemble the key
                 auto delimiter = section.empty() ? "" : ".";
                 key = section + delimiter + key;
-                
+
                 // Check if the key is a known key
                 if (!fallbacks.contains(key)) {
-                    
-                    warn("Ignoring invalid key %s\n", key.c_str());
+
+                    warn("Ignoring invalid key=value %s=%s\n", key.c_str(), value.c_str());
                     skipped++;
                     continue;
                 }
-                
+
                 // Add the key-value pair
                 values[key] = value;
                 accepted++;
@@ -301,7 +301,7 @@ Defaults::load(std::stringstream &stream)
             
             throw CoreError(Fault::SYNTAX, line);
         }
-        
+
         if (accepted || skipped) {
             debug(DEF_DEBUG, "%ld keys accepted, %ld ignored\n", accepted, skipped);
         }
@@ -312,11 +312,11 @@ void
 Defaults::save(const fs::path &path)
 {
     auto fs = std::ofstream(path, std::ofstream::binary);
-    
+
     if (!fs.is_open()) {
         throw CoreError(Fault::FILE_CANT_WRITE);
     }
-    
+
     save(fs);
 }
 
@@ -325,7 +325,7 @@ Defaults::save(std::ofstream &stream)
 {
     std::stringstream ss;
     save(ss);
-    
+
     stream << ss.rdbuf();
 }
 
@@ -333,7 +333,7 @@ void
 Defaults::save(std::stringstream &stream)
 {
     {   SYNCHRONIZED
-        
+
         debug(DEF_DEBUG, "Saving user defaults...\n");
 
         std::map <string, std::map <string, string>> groups;
@@ -342,7 +342,7 @@ Defaults::save(std::stringstream &stream)
         stream << "# vAmiga " << Amiga::build() << std::endl;
         stream << "# dirkwhoffmann.github.io/vAmiga" << std::endl;
         stream << std::endl;
-        
+
         // Iterate through all known keys
         for (const auto &it: fallbacks) {
 
@@ -354,9 +354,9 @@ Defaults::save(std::stringstream &stream)
 
                 // Write ungrouped keys immediately
                 stream << key << "=" << value << std::endl;
-                
+
             } else {
-                
+
                 // Save the key temporarily
                 auto prefix = key.substr(0, pos);
                 auto suffix = key.substr(pos + 1, string::npos);
@@ -381,7 +381,7 @@ string
 Defaults::getRaw(const string &key) const
 {
     {   SYNCHRONIZED
-        
+
         if (values.contains(key)) return values.at(key);
         if (fallbacks.contains(key)) return fallbacks.at(key);
         
@@ -422,7 +422,7 @@ string
 Defaults::getFallbackRaw(const string &key) const
 {
     {   SYNCHRONIZED
-        
+
         if (fallbacks.contains(key)) return fallbacks.at(key);
         
         throw CoreError(Fault::INVALID_KEY, key);
@@ -546,7 +546,7 @@ void
 Defaults::remove()
 {
     {   SYNCHRONIZED
-        
+
         values.clear();
     }
 }
