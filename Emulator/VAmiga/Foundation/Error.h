@@ -24,6 +24,7 @@ struct CoreError : public util::CoreException
     CoreError(Fault code) : CoreError(code, "") { }
     
     const char *what() const throw() override;
+    Fault fault() const { return Fault(data); }
 };
 
 }

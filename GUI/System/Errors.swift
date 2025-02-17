@@ -49,7 +49,7 @@ final class CoreError: Error {
 
     init(_ exception: ExceptionWrapper) {
 
-        self.errorCode = exception.errorCode
+        self.errorCode = exception.fault
         self.what = exception.what
     }
     

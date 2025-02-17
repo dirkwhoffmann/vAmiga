@@ -132,11 +132,11 @@ NSString *EventSlotName(NSInteger slot);
 
 @interface ExceptionWrapper : NSObject {
     
-    Fault errorCode;
+    Fault fault;
     NSString *what;
 }
 
-@property Fault errorCode;
+@property Fault fault;
 @property NSString *what;
 
 @end

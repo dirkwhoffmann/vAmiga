@@ -18,7 +18,7 @@ namespace vamiga::util {
  */
 struct CoreException : public std::exception {
     
-    //! @brief Error code
+    //! @brief Payload
     i64 data;
 
     //! @brief Auxiliary information about the thrown errow
