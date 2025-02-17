@@ -12,10 +12,9 @@
 #include "BasicTypes.h"
 #include "Checksum.h"
 #include "Compression.h"
+#include <functional>
 
 namespace vamiga::util {
-
-namespace fs = ::std::filesystem;
 
 template <class T> struct Allocator {
 
@@ -90,18 +89,12 @@ template <class T> struct Buffer : public Allocator <T> {
 
     T *ptr = nullptr;
 
-    Buffer()
-    : Allocator<T>(ptr) { };
-    Buffer(isize bytes)
-    : Allocator<T>(ptr) { this->init(bytes); }
-    Buffer(isize bytes, T value)
-    : Allocator<T>(ptr) { this->init(bytes, value); }
-    Buffer(const T *buf, isize len)
-    : Allocator<T>(ptr) { this->init(buf, len); }
-    Buffer(const fs::path &path)
-    : Allocator<T>(ptr) { this->init(path); }
-    Buffer(const fs::path &path, const string &name)
-    : Allocator<T>(ptr) { this->init(path, name); }
+    Buffer() : Allocator<T>(ptr) { };
+    Buffer(isize bytes) : Allocator<T>(ptr) { this->init(bytes); }
+    Buffer(isize bytes, T value) : Allocator<T>(ptr) { this->init(bytes, value); }
+    Buffer(const T *buf, isize len) : Allocator<T>(ptr) { this->init(buf, len); }
+    Buffer(const fs::path &path) : Allocator<T>(ptr) { this->init(path); }
+    Buffer(const fs::path &path, const string &name) : Allocator<T>(ptr) { this->init(path, name); }
 
     Buffer& operator= (const Buffer& other) { Allocator<T>::operator=(other); return *this; }
 

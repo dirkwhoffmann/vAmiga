@@ -18,8 +18,6 @@
 
 namespace vamiga {
 
-namespace fs = ::std::filesystem;
-
 class MediaFile {
 
 public:

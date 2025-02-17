@@ -15,8 +15,6 @@
 
 namespace vamiga {
 
-namespace fs = ::std::filesystem;
-
 class Defaults final : public CoreObject, public Synchronizable {
 
     // The key-value storage
