@@ -18,10 +18,10 @@ class FFmpeg {
 public:
     
     // A list of available FFmpeg executables (setup in init() )
-    static std::vector<std::filesystem::path> paths;
+    static std::vector<fs::path> paths;
 
     // Path to the selected FFmpeg executable
-    static std::filesystem::path exec;
+    static fs::path exec;
 
 #ifdef _MSC_VER
 
@@ -37,8 +37,8 @@ public:
     static void init();
 
     // Getter and setter for the FFmpeg executable path
-    static const std::filesystem::path getExecPath();
-    static void setExecPath(const std::filesystem::path &path);
+    static const fs::path getExecPath();
+    static void setExecPath(const fs::path &path);
 
     // Checks whether FFmeg is available
     static bool available();

@@ -129,7 +129,7 @@ private:
     std::unique_ptr<FloppyDisk> diskToInsert;
     
     // Search path for disk files, one for each drive
-    // [[deprecated]] std::filesystem::path searchPath;
+    // [[deprecated]] fs::path searchPath;
 
     
     //
@@ -243,8 +243,8 @@ public:
     void setOption(Opt option, i64 value) override;
     
     /*
-    const std::filesystem::path &getSearchPath() const { return searchPath; }
-    void setSearchPath(const std::filesystem::path &path) { searchPath = path; }
+    const fs::path &getSearchPath() const { return searchPath; }
+    void setSearchPath(const fs::path &path) { searchPath = path; }
     */
 
     //
@@ -386,7 +386,7 @@ public:
     // Replaces the current disk (recommended way to insert disks)
     void swapDisk(std::unique_ptr<FloppyDisk> disk) throws;
     void swapDisk(class FloppyFile &file) throws;
-    void swapDisk(const std::filesystem::path &path) throws;
+    void swapDisk(const fs::path &path) throws;
 
     // Replaces the current disk with a factory-fresh disk
     void insertNew(FSVolumeType fs, BootBlockId bb, string name) throws;
@@ -404,7 +404,7 @@ private:
 public:
     
     // Sets a catchpoint on the specified file
-    void catchFile(const std::filesystem::path &path) throws;
+    void catchFile(const fs::path &path) throws;
     
     
     //

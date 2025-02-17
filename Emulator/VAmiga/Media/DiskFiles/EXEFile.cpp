@@ -17,7 +17,7 @@
 namespace vamiga {
 
 bool
-EXEFile::isCompatible(const std::filesystem::path &path)
+EXEFile::isCompatible(const fs::path &path)
 {
     auto suffix = util::uppercased(path.extension().string());
     return suffix == ".EXE";

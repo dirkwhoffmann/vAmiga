@@ -33,7 +33,7 @@ ADZFile::init(const class ADFFile &adf) throws
 }
 
 bool
-ADZFile::isCompatible(const std::filesystem::path &path)
+ADZFile::isCompatible(const fs::path &path)
 {
     auto suffix = util::uppercased(path.extension().string());
     return suffix == ".ADZ";

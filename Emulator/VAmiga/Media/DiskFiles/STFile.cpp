@@ -16,7 +16,7 @@
 namespace vamiga {
 
 bool
-STFile::isCompatible(const std::filesystem::path &path)
+STFile::isCompatible(const fs::path &path)
 {
     auto suffix = util::uppercased(path.extension().string());
     return suffix == ".ST";

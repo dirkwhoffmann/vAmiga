@@ -20,11 +20,11 @@
 namespace vamiga {
 
 FloppyFile *
-FloppyFile::make(const std::filesystem::path &path)
+FloppyFile::make(const fs::path &path)
 {
     FloppyFile *result = nullptr;
 
-    if (!std::filesystem::exists(path)) {
+    if (!fs::exists(path)) {
         throw CoreError(Fault::FILE_NOT_FOUND, path);
     }
 

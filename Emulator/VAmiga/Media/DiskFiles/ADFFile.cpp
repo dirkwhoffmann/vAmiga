@@ -21,7 +21,7 @@
 namespace vamiga {
 
 bool
-ADFFile::isCompatible(const std::filesystem::path &path)
+ADFFile::isCompatible(const fs::path &path)
 {
     auto suffix = util::uppercased(path.extension().string());
     return suffix == ".ADF";

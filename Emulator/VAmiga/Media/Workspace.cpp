@@ -16,7 +16,7 @@
 namespace vamiga {
 
 bool
-Workspace::isCompatible(const std::filesystem::path &path)
+Workspace::isCompatible(const fs::path &path)
 {
     if (!util::isDirectory(path)) return false;
     
@@ -25,7 +25,7 @@ Workspace::isCompatible(const std::filesystem::path &path)
 }
 
 void
-Workspace::init(const std::filesystem::path &path)
+Workspace::init(const fs::path &path)
 {
     // Only proceed if the provided filename points to a directory
     if (!isCompatiblePath(path)) throw CoreError(Fault::FILE_TYPE_MISMATCH);

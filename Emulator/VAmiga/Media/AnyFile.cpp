@@ -43,7 +43,7 @@ AnyFile::init(const string &str)
 }
 
 void
-AnyFile::init(const std::filesystem::path &path)
+AnyFile::init(const fs::path &path)
 {
     std::ifstream stream(path, std::ios::binary);
     
@@ -123,7 +123,7 @@ AnyFile::writeToStream(std::ostream &stream, isize offset, isize len) const
 }
 
 isize
-AnyFile::writeToFile(const std::filesystem::path &path, isize offset, isize len) const
+AnyFile::writeToFile(const fs::path &path, isize offset, isize len) const
 {
     if (util::isDirectory(path)) {
         throw CoreError(Fault::FILE_IS_DIRECTORY);
@@ -167,13 +167,13 @@ AnyFile::writeToStream(std::ostream &stream) const
 }
 
 isize
-AnyFile::writeToFile(const std::filesystem::path &path) const
+AnyFile::writeToFile(const fs::path &path) const
 {
     return writeToFile(path, 0, data.size);
 }
 
 isize 
-AnyFile::writePartitionToFile(const std::filesystem::path &path, isize partition) const
+AnyFile::writePartitionToFile(const fs::path &path, isize partition) const
 {
     throw CoreError(Fault::FILE_TYPE_UNSUPPORTED);
 }

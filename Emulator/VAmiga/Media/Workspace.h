@@ -17,7 +17,7 @@ class Workspace : public AnyFile {
     
 public:
     
-    static bool isCompatible(const std::filesystem::path &path);
+    static bool isCompatible(const fs::path &path);
     static bool isCompatible(const u8 *buf, isize len) { return false; }
     static bool isCompatible(const Buffer<u8> &buffer) { return false; }
     static bool isCompatible(std::istream &stream) { return false; }
@@ -27,11 +27,11 @@ public:
     // Initializing
     //
     
-    Workspace(const std::filesystem::path &path) throws { init(path); }
+    Workspace(const fs::path &path) throws { init(path); }
     
 private:
     
-    void init(const std::filesystem::path &path) throws;
+    void init(const fs::path &path) throws;
     
     
     //
@@ -48,7 +48,7 @@ public:
     //
     
     FileType type() const override { return FileType::WORKSPACE; }
-    bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
+    bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) override { return isCompatible(buf, len); }
     u64 fnv64() const override { return 0; }
 };

@@ -25,7 +25,7 @@ class FloppyFile : public DiskFile {
 
 public:
 
-    static FloppyFile *make(const std::filesystem::path &path) throws;
+    static FloppyFile *make(const fs::path &path) throws;
 
 
     //

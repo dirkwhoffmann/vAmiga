@@ -23,7 +23,7 @@ const std::vector<string> EADFFile::extAdfHeaders =
 };
 
 bool
-EADFFile::isCompatible(const std::filesystem::path &path)
+EADFFile::isCompatible(const fs::path &path)
 {
     for (auto &header : extAdfHeaders) {
 

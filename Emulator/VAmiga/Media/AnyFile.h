@@ -26,7 +26,7 @@ class AnyFile : public CoreObject, public MediaFile {
 public:
     
     // Physical location of this file
-    std::filesystem::path path;
+    fs::path path;
 
     // The raw data of this file
     Buffer<u8> data;
@@ -41,12 +41,12 @@ public:
     virtual ~AnyFile();
 
     // void init(std::istream &stream) throws;
-    // void init(const std::filesystem::path &path, std::istream &stream) throws;
+    // void init(const fs::path &path, std::istream &stream) throws;
     void init(isize len) throws;
     void init(const u8 *buf, isize len) throws;
     void init(const Buffer<u8> &buffer) throws;
     void init(const string &str) throws;
-    void init(const std::filesystem::path &path) throws;
+    void init(const fs::path &path) throws;
     // void init(FILE *file) throws;
     
     explicit operator bool() const { return data.ptr != nullptr; }
@@ -90,7 +90,7 @@ public:
     
 protected:
     
-    virtual bool isCompatiblePath(const std::filesystem::path &path) const = 0;
+    virtual bool isCompatiblePath(const fs::path &path) const = 0;
     virtual bool isCompatibleBuffer(const u8 *buf, isize len) = 0;
     bool isCompatibleBuffer(const Buffer<u8> &buffer);
     isize readFromBuffer(const u8 *buf, isize len) throws override;
@@ -99,13 +99,13 @@ protected:
 public:
     
     isize writeToStream(std::ostream &stream, isize offset, isize len) const throws;
-    isize writeToFile(const std::filesystem::path &path, isize offset, isize len) const throws;
+    isize writeToFile(const fs::path &path, isize offset, isize len) const throws;
     isize writeToBuffer(u8 *buf, isize offset, isize len) const throws;
     isize writeToBuffer(Buffer<u8> &buffer, isize offset, isize len) const throws;
 
     isize writeToStream(std::ostream &stream) const throws override;
-    isize writeToFile(const std::filesystem::path &path) const throws override;
-    isize writePartitionToFile(const std::filesystem::path &path, isize partition) const throws override;
+    isize writeToFile(const fs::path &path) const throws override;
+    isize writePartitionToFile(const fs::path &path, isize partition) const throws override;
     isize writeToBuffer(u8 *buf) const throws override;
     isize writeToBuffer(Buffer<u8> &buffer) const throws;
 

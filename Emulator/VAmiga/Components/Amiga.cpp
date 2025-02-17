@@ -1176,7 +1176,7 @@ Amiga::scheduleNextSnpEvent()
 }
 
 void
-Amiga::loadSnapshot(const std::filesystem::path &path)
+Amiga::loadSnapshot(const fs::path &path)
 {
     loadSnapshot(Snapshot(path));
 }
@@ -1206,7 +1206,7 @@ Amiga::loadSnapshot(const Snapshot &snap)
 }
 
 void
-Amiga::saveSnapshot(const std::filesystem::path &path)
+Amiga::saveSnapshot(const fs::path &path)
 {
     Snapshot(*this, config.snapshotCompressor).writeToFile(path);
 }

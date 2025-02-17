@@ -702,7 +702,7 @@ Memory::loadRom(MediaFile &file)
 }
 
 void
-Memory::loadRom(const std::filesystem::path &path)
+Memory::loadRom(const fs::path &path)
 {
     RomFile file(host.makeAbsolute(path));
     loadRom(file);
@@ -735,7 +735,7 @@ Memory::loadExt(MediaFile &file)
 }
 
 void
-Memory::loadExt(const std::filesystem::path &path)
+Memory::loadExt(const fs::path &path)
 {
     ExtendedRomFile file(path);
     loadExt(file);
@@ -749,7 +749,7 @@ Memory::loadExt(const u8 *buf, isize len)
 }
 
 void
-Memory::saveRom(const std::filesystem::path &path) const
+Memory::saveRom(const fs::path &path) const
 {
     if (rom == nullptr) throw CoreError(Fault::ROM_MISSING);
 
@@ -758,7 +758,7 @@ Memory::saveRom(const std::filesystem::path &path) const
 }
 
 void
-Memory::saveWom(const std::filesystem::path &path) const
+Memory::saveWom(const fs::path &path) const
 {
     if (wom == nullptr) throw CoreError(Fault::ROM_MISSING);
 
@@ -767,7 +767,7 @@ Memory::saveWom(const std::filesystem::path &path) const
 }
 
 void
-Memory::saveExt(const std::filesystem::path &path) const
+Memory::saveExt(const fs::path &path) const
 {
     if (ext == nullptr) throw CoreError(Fault::ROM_MISSING);
 

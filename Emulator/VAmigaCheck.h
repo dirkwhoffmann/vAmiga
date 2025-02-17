@@ -50,7 +50,7 @@ private:
 
     // Runs a RetroShell script
     void runScript(const char **script);
-    void runScript(const std::filesystem::path &path);
+    void runScript(const fs::path &path);
 
     
     //

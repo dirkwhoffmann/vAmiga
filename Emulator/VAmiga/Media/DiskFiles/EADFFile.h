@@ -48,7 +48,7 @@ class EADFFile : public FloppyFile {
     
 public:
 
-    static bool isCompatible(const std::filesystem::path &path);
+    static bool isCompatible(const fs::path &path);
     static bool isCompatible(const u8 *buf, isize len);
     static bool isCompatible(const Buffer<u8> &buffer);
 
@@ -61,7 +61,7 @@ public:
 
     using AnyFile::init;
     
-    EADFFile(const std::filesystem::path &path) throws { init(path); }
+    EADFFile(const fs::path &path) throws { init(path); }
     EADFFile(const u8 *buf, isize len) throws { init(buf, len); }
     EADFFile(class FloppyDisk &disk) throws { init(disk); }
     EADFFile(class FloppyDrive &drive) throws { init(drive); }
@@ -86,7 +86,7 @@ public:
 public:
     
     FileType type() const override { return FileType::EADF; }
-    bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
+    bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) override { return isCompatible(buf, len); }
     void finalizeRead() throws override;
     

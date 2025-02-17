@@ -36,16 +36,16 @@ public:
     MutableFileSystem(isize capacity) { init(capacity); }
     MutableFileSystem(FileSystemDescriptor &layout) { init(layout); }
     MutableFileSystem(Diameter dia, Density den, FSVolumeType dos) { init(dia, den, dos); }
-    MutableFileSystem(Diameter dia, Density den, const std::filesystem::path &path) { init(dia, den, path); }
-    MutableFileSystem(FSVolumeType type, const std::filesystem::path &path) { init(type, path); }
+    MutableFileSystem(Diameter dia, Density den, const fs::path &path) { init(dia, den, path); }
+    MutableFileSystem(FSVolumeType type, const fs::path &path) { init(type, path); }
 
 private:
     
     void init(isize capacity);
     void init(FileSystemDescriptor &layout);
     void init(Diameter dia, Density den, FSVolumeType dos);
-    void init(Diameter dia, Density den, const std::filesystem::path &path);
-    void init(FSVolumeType type, const std::filesystem::path &path);
+    void init(Diameter dia, Density den, const fs::path &path);
+    void init(FSVolumeType type, const fs::path &path);
 
 
     //
@@ -151,7 +151,7 @@ public:
     void importVolume(const u8 *src, isize size) throws;
 
     // Imports a directory from the host file system
-    void importDirectory(const std::filesystem::path &path, bool recursive = true) throws;
+    void importDirectory(const fs::path &path, bool recursive = true) throws;
     void importDirectory(const fs::directory_entry &dir, bool recursive) throws;
     
     // Exports the volume to a buffer
@@ -165,7 +165,7 @@ public:
     bool exportBlocks(Block first, Block last, u8 *dst, isize size, Fault *error) const;
 
     // Exports the volume to a directory of the host file system
-    void exportDirectory(const std::filesystem::path &path, bool createDir = true) const throws;
+    void exportDirectory(const fs::path &path, bool createDir = true) const throws;
 };
 
 }

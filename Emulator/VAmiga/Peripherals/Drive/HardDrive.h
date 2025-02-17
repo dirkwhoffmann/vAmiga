@@ -129,7 +129,7 @@ public:
     void init(const class HDZFile &hdz) throws;
 
     // Creates a hard drive with the contents of an HDF file
-    void init(const std::filesystem::path &path) throws;
+    void init(const fs::path &path) throws;
 
     const HardDriveTraits &getTraits() const {
 
@@ -368,7 +368,7 @@ public:
     bool restoreDisk() throws;
 
     // Exports the disk in HDF format
-    void writeToFile(const std::filesystem::path &path) throws;
+    void writeToFile(const fs::path &path) throws;
 
     
     //

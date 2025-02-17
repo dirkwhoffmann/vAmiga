@@ -220,7 +220,7 @@ HardDrive::init(const HDZFile &hdz) throws
 }
 
 void
-HardDrive::init(const std::filesystem::path &path) throws
+HardDrive::init(const fs::path &path) throws
 {
     auto fullPath = host.makeAbsolute(path);
     
@@ -708,7 +708,7 @@ HardDrive::moveHead(isize c, isize h, isize s)
 }
 
 void
-HardDrive::writeToFile(const std::filesystem::path &path) throws
+HardDrive::writeToFile(const fs::path &path) throws
 {
     if (!path.empty()) {
 

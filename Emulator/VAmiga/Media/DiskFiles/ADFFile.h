@@ -26,7 +26,7 @@ public:
     static constexpr isize ADFSIZE_35_DD_84 = 946176;   //  924 KB (+ 4 cyls)
     static constexpr isize ADFSIZE_35_HD    = 1802240;  // 1760 KB
     
-    static bool isCompatible(const std::filesystem::path &path);
+    static bool isCompatible(const fs::path &path);
     static bool isCompatible(const u8 *buf, isize len);
     static bool isCompatible(const Buffer<u8> &buffer);
     
@@ -45,7 +45,7 @@ public:
     using AnyFile::init;
     
     ADFFile() { }
-    ADFFile(const std::filesystem::path &path) throws { init(path); }
+    ADFFile(const fs::path &path) throws { init(path); }
     ADFFile(const u8 *buf, isize len) throws { init(buf, len); }
     ADFFile(Diameter dia, Density den) throws { init(dia, den); }
     ADFFile(const FloppyDiskDescriptor &descr) throws { init(descr); }
@@ -75,7 +75,7 @@ public:
     
 public:
     
-    bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
+    bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) override { return isCompatible(buf, len); }
     FileType type() const override { return FileType::ADF; }
     void finalizeRead() override;

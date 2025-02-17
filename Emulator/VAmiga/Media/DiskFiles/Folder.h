@@ -19,7 +19,7 @@ public:
 
     ADFFile *adf = nullptr;
 
-    static bool isCompatible(const std::filesystem::path &path);
+    static bool isCompatible(const fs::path &path);
     static bool isCompatible(const u8 *buf, isize len);
     static bool isCompatible(const Buffer<u8> &buffer);
     static bool isCompatible(std::istream &stream) { return false; }
@@ -29,11 +29,11 @@ public:
     // Initializing
     //
     
-    Folder(const std::filesystem::path &path) throws { init(path); }
+    Folder(const fs::path &path) throws { init(path); }
     
 private:
     
-    void init(const std::filesystem::path &path) throws;
+    void init(const fs::path &path) throws;
     
     
     //
@@ -49,7 +49,7 @@ public:
     // Methods from AnyFile
     //
     
-    bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
+    bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) override { return isCompatible(buf, len); }
     FileType type() const override { return FileType::DIR; }
     u64 fnv64() const override { return adf->fnv64(); }

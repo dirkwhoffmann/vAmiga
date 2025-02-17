@@ -78,7 +78,7 @@ void
 Headless::parseArguments(int argc, char *argv[])
 {
     // Remember the execution path
-    keys["exec"] = std::filesystem::absolute(std::filesystem::path(argv[0])).string();
+    keys["exec"] = fs::absolute(fs::path(argv[0])).string();
 
     // Parse command line arguments
     for (isize i = 1, n = 1; i < argc; i++) {
@@ -96,8 +96,8 @@ Headless::parseArguments(int argc, char *argv[])
             throw SyntaxError("Invalid option '" + arg + "'");
         }
 
-        auto path = std::filesystem::path(arg);
-        keys["arg" + std::to_string(n++)] = std::filesystem::absolute(path).string();
+        auto path = fs::path(arg);
+        keys["arg" + std::to_string(n++)] = fs::absolute(path).string();
     }
 
     // Check for syntax errors
@@ -121,7 +121,7 @@ Headless::checkArguments()
 void
 Headless::runScript(const char **script)
 {
-    auto path = std::filesystem::temp_directory_path() / "script.retrosh";
+    auto path = fs::temp_directory_path() / "script.retrosh";
     auto file = std::ofstream(path, std::ios::binary);
 
     for (isize i = 0; script[i] != nullptr; i++) {
@@ -131,7 +131,7 @@ Headless::runScript(const char **script)
 }
 
 void
-Headless::runScript(const std::filesystem::path &path)
+Headless::runScript(const fs::path &path)
 {
     // Read the input script
     Script script(path);

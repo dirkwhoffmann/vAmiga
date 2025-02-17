@@ -16,7 +16,7 @@
 namespace vamiga {
 
 bool
-IMGFile::isCompatible(const std::filesystem::path &path)
+IMGFile::isCompatible(const fs::path &path)
 {
     auto suffix = util::uppercased(path.extension().string());
     return suffix == ".IMG";

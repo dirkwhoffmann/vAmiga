@@ -19,7 +19,7 @@ struct CoreError : public util::CoreException
 {
     CoreError(Fault code, const string &s);
     CoreError(Fault code, const char *s) : CoreError(code, string(s)) { };
-    CoreError(Fault code, const std::filesystem::path &path) : CoreError(code, path.string()) { };
+    CoreError(Fault code, const fs::path &path) : CoreError(code, path.string()) { };
     CoreError(Fault code, long v) : CoreError(code, std::to_string(v)) { };
     CoreError(Fault code) : CoreError(code, "") { }
     

@@ -17,7 +17,7 @@
 namespace vamiga {
 
 bool
-Script::isCompatible(const std::filesystem::path &path)
+Script::isCompatible(const fs::path &path)
 {
     auto suffix = util::uppercased(path.extension().string());
 

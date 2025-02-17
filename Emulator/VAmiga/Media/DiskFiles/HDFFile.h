@@ -31,13 +31,13 @@ public:
     // Included device drivers
     std::vector <DriverDescriptor> drivers;
 
-    static bool isCompatible(const std::filesystem::path &path);
+    static bool isCompatible(const fs::path &path);
     static bool isCompatible(const u8 *buf, isize len);
     static bool isCompatible(const Buffer<u8> &buffer);
     
     static bool isOversized(isize size) { return size > MB(504); }
 
-    bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
+    bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) override { return isCompatible(buf, len); }
 
     void finalizeRead() override;
@@ -50,11 +50,11 @@ public:
 public:
     
     HDFFile() { }
-    HDFFile(const std::filesystem::path &path) throws { init(path); }
+    HDFFile(const fs::path &path) throws { init(path); }
     HDFFile(const u8 *buf, isize len) throws { init(buf, len); }
     HDFFile(const class HardDrive &hd) throws { init(hd); }
 
-    void init(const std::filesystem::path &path) throws;
+    void init(const fs::path &path) throws;
     void init(const u8 *buf, isize len) throws;
     void init(const class HardDrive &hd) throws;
 
@@ -172,7 +172,7 @@ private:
     
 public:
     
-    isize writePartitionToFile(const std::filesystem::path &path, isize nr) const override;
+    isize writePartitionToFile(const fs::path &path, isize nr) const override;
 };
 
 }

@@ -19,7 +19,7 @@ class ADZFile : public FloppyFile {
 
 public:
     
-    static bool isCompatible(const std::filesystem::path &path);
+    static bool isCompatible(const fs::path &path);
     static bool isCompatible(const u8 *buf, isize len);
     static bool isCompatible(const Buffer<u8> &buffer);
     
@@ -32,7 +32,7 @@ public:
     
     using AnyFile::init;
     
-    ADZFile(const std::filesystem::path &path) throws { init(path); }
+    ADZFile(const fs::path &path) throws { init(path); }
     ADZFile(const u8 *buf, isize len) throws { init(buf, len); }
     ADZFile(const class ADFFile &adf) throws { init(adf); }
     
@@ -47,7 +47,7 @@ public:
     
     FileType type() const override { return FileType::ADZ; }
     u64 fnv64() const override { return adf.fnv64(); }
-    bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
+    bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) override { return isCompatible(buf, len); }
     void finalizeRead() throws override;
 

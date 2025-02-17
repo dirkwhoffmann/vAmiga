@@ -13,7 +13,7 @@
 namespace vamiga {
 
 bool
-HDZFile::isCompatible(const std::filesystem::path &path)
+HDZFile::isCompatible(const fs::path &path)
 {
     auto suffix = util::uppercased(path.extension().string());
     return suffix == ".HDZ";
@@ -75,7 +75,7 @@ HDZFile::finalizeRead()
 }
 
 isize
-HDZFile::writePartitionToFile(const std::filesystem::path &path, isize nr) const
+HDZFile::writePartitionToFile(const fs::path &path, isize nr) const
 {
     auto offset = hdf.partitionOffset(nr);
     auto size = hdf.partitionSize(nr);

@@ -70,7 +70,7 @@ const u8 RomFile::encrRomHeaders[1][11] = {
 };
 
 bool
-RomFile::isCompatible(const std::filesystem::path &path)
+RomFile::isCompatible(const fs::path &path)
 {
     auto size = util::getSizeOfFile(path);
     

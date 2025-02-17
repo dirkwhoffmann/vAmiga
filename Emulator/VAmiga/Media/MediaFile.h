@@ -117,8 +117,8 @@ public:
     virtual isize readFromBuffer(const u8 *buf, isize len) = 0;
 
     virtual isize writeToStream(std::ostream &stream) const = 0;
-    virtual isize writeToFile(const std::filesystem::path &path) const = 0;
-    virtual isize writePartitionToFile(const std::filesystem::path &path, isize partition) const = 0;
+    virtual isize writeToFile(const fs::path &path) const = 0;
+    virtual isize writePartitionToFile(const fs::path &path, isize partition) const = 0;
     virtual isize writeToBuffer(u8 *buf) const = 0;
 };
 

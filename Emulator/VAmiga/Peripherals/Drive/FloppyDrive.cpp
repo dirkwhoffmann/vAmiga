@@ -990,7 +990,7 @@ FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
 }
 
 void
-FloppyDrive::catchFile(const std::filesystem::path &path)
+FloppyDrive::catchFile(const fs::path &path)
 {
     // Extract the file system
     auto fs = MutableFileSystem(*this);
@@ -1094,7 +1094,7 @@ FloppyDrive::swapDisk(class FloppyFile &file)
 }
 
 void
-FloppyDrive::swapDisk(const std::filesystem::path &path)
+FloppyDrive::swapDisk(const fs::path &path)
 {
     auto location = host.makeAbsolute(path);
     std::unique_ptr<FloppyFile> file(FloppyFile::make(location));

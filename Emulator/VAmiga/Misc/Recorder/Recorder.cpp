@@ -298,7 +298,7 @@ Recorder::stopRecording()
 }
 
 bool
-Recorder::exportAs(const std::filesystem::path &path)
+Recorder::exportAs(const fs::path &path)
 {
     if (isRecording()) return false;
     

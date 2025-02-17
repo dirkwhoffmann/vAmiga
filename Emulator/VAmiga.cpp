@@ -698,21 +698,21 @@ MemoryAPI::loadExt(const u8 *buf, isize len)
 }
 
 void
-MemoryAPI::saveRom(const std::filesystem::path &path)
+MemoryAPI::saveRom(const fs::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND
     mem->saveRom(path);
 }
 
 void
-MemoryAPI::saveWom(const std::filesystem::path &path)
+MemoryAPI::saveWom(const fs::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND
     mem->saveWom(path);
 }
 
 void
-MemoryAPI::saveExt(const std::filesystem::path &path)
+MemoryAPI::saveExt(const fs::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND
     mem->saveExt(path);
@@ -1279,7 +1279,7 @@ HardDriveAPI::changeGeometry(isize c, isize h, isize s, isize b)
 }
 
 void
-HardDriveAPI::attach(const std::filesystem::path &path)
+HardDriveAPI::attach(const fs::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND
     drive->init(path.string());
@@ -1308,7 +1308,7 @@ HardDriveAPI::format(FSVolumeType fs, const string &name)
 }
 
 void 
-HardDriveAPI::writeToFile(std::filesystem::path path)
+HardDriveAPI::writeToFile(fs::path path)
 {
     VAMIGA_PUBLIC_SUSPEND
     drive->writeToFile(path);
@@ -1636,7 +1636,7 @@ isize RecorderAPI::getSampleRate() const { VAMIGA_PUBLIC VAMIGA_SUSPEND return r
 */
 bool RecorderAPI::isRecording() const { VAMIGA_PUBLIC_SUSPEND return recorder->isRecording(); }
 
-const std::vector<std::filesystem::path> &
+const std::vector<fs::path> &
 RecorderAPI::paths() const
 {
     VAMIGA_PUBLIC
@@ -1657,7 +1657,7 @@ RecorderAPI::getExecPath() const
     return FFmpeg::getExecPath();
 }
 
-void RecorderAPI::setExecPath(const std::filesystem::path &path)
+void RecorderAPI::setExecPath(const fs::path &path)
 {
     VAMIGA_PUBLIC
     FFmpeg::setExecPath(path);
@@ -1680,7 +1680,7 @@ RecorderAPI::stopRecording()
 }
 
 bool
-RecorderAPI::exportAs(const std::filesystem::path &path)
+RecorderAPI::exportAs(const fs::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND
     return recorder->exportAs(path);
@@ -2270,7 +2270,7 @@ AmigaAPI::loadSnapshot(const MediaFile &snapshot)
 }
  
 void
-AmigaAPI::loadSnapshot(const std::filesystem::path &path)
+AmigaAPI::loadSnapshot(const fs::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND
     amiga->loadSnapshot(path);

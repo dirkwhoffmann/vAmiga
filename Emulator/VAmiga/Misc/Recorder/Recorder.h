@@ -202,7 +202,7 @@ public:
     void stopRecording();
 
     // Exports the recorded video
-    bool exportAs(const std::filesystem::path &path);
+    bool exportAs(const fs::path &path);
 
     
     //

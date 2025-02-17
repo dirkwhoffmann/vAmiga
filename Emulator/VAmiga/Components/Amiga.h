@@ -432,12 +432,12 @@ public:
     MediaFile *takeSnapshot();
 
     // Loads a snapshot from a file
-    void loadSnapshot(const std::filesystem::path &path) throws;
+    void loadSnapshot(const fs::path &path) throws;
     void loadSnapshot(const MediaFile &file) throws;
     void loadSnapshot(const class Snapshot &snapshot) throws;
 
     // Saves a snapshot to a file
-    void saveSnapshot(const std::filesystem::path &path) throws;
+    void saveSnapshot(const fs::path &path) throws;
 
     // Services a snapshot event
     void serviceSnpEvent(EventID id);

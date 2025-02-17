@@ -425,18 +425,18 @@ public:
     
     // Installs a Boot Rom or Kickstart Rom
     void loadRom(class MediaFile &file) throws;
-    void loadRom(const std::filesystem::path &path) throws;
+    void loadRom(const fs::path &path) throws;
     void loadRom(const u8 *buf, isize len) throws;
     
     // Installs a Kickstart expansion Rom
     void loadExt(class MediaFile &file) throws;
-    void loadExt(const std::filesystem::path &path) throws;
+    void loadExt(const fs::path &path) throws;
     void loadExt(const u8 *buf, isize len) throws;
 
     // Saves a Rom to disk
-    void saveRom(const std::filesystem::path &path) const throws;
-    void saveWom(const std::filesystem::path &path) const throws;
-    void saveExt(const std::filesystem::path &path) const throws;
+    void saveRom(const fs::path &path) const throws;
+    void saveWom(const fs::path &path) const throws;
+    void saveExt(const fs::path &path) const throws;
 
     // Fixes two bugs in Kickstart 1.2 expansion.library
     void patchExpansionLib();

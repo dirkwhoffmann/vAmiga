@@ -19,7 +19,7 @@
 namespace vamiga {
 
 bool
-HDFFile::isCompatible(const std::filesystem::path &path)
+HDFFile::isCompatible(const fs::path &path)
 {
     auto suffix = util::uppercased(path.extension().string());
     return suffix == ".HDF";
@@ -56,7 +56,7 @@ HDFFile::finalizeRead()
 }
 
 void
-HDFFile::init(const std::filesystem::path &path)
+HDFFile::init(const fs::path &path)
 {
     // Check size
     if (isOversized(util::getSizeOfFile(path))) throw CoreError(Fault::HDR_TOO_LARGE);
@@ -469,7 +469,7 @@ HDFFile::dos(isize blockNr) const
 }
 
 isize
-HDFFile::writePartitionToFile(const std::filesystem::path &path, isize nr) const
+HDFFile::writePartitionToFile(const fs::path &path, isize nr) const
 {
     auto offset = partitionOffset(nr);
     auto size = partitionSize(nr);

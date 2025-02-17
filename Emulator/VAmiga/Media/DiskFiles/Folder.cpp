@@ -15,7 +15,7 @@
 namespace vamiga {
 
 bool
-Folder::isCompatible(const std::filesystem::path &path)
+Folder::isCompatible(const fs::path &path)
 {
     if (!util::isDirectory(path)) return false;
     
@@ -36,7 +36,7 @@ Folder::isCompatible(const Buffer<u8> &buf)
 }
 
 void
-Folder::init(const std::filesystem::path &path)
+Folder::init(const fs::path &path)
 {
     debug(FS_DEBUG, "make(%s)\n", path.string().c_str());
 

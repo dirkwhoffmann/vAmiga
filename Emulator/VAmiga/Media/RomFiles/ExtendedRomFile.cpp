@@ -19,7 +19,7 @@ const u8 ExtendedRomFile::magicBytes1[] = { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 
 const u8 ExtendedRomFile::magicBytes2[] = { 0x4E, 0x71, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x02 };
 
 bool
-ExtendedRomFile::isCompatible(const std::filesystem::path &name)
+ExtendedRomFile::isCompatible(const fs::path &name)
 {
     return true;
 }

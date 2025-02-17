@@ -54,7 +54,7 @@ class Snapshot : public AnyFile {
     
 public:
     
-    static bool isCompatible(const std::filesystem::path &path);
+    static bool isCompatible(const fs::path &path);
     static bool isCompatible(const u8 *buf, isize len);
     static bool isCompatible(const Buffer<u8> &buffer);
     
@@ -64,7 +64,7 @@ public:
     //
     
     Snapshot(const Snapshot &other) throws { init(other.data.ptr, other.data.size); }
-    Snapshot(const std::filesystem::path &path) throws { init(path); }
+    Snapshot(const fs::path &path) throws { init(path); }
     Snapshot(const u8 *buf, isize len) throws { init(buf, len); }
     Snapshot(isize capacity);
     Snapshot(Amiga &amiga);
@@ -78,7 +78,7 @@ public:
     //
     
     FileType type() const override { return FileType::SNAPSHOT; }
-    bool isCompatiblePath(const std::filesystem::path &path) const override { return isCompatible(path); }
+    bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
     bool isCompatibleBuffer(const u8 *buf, isize len) override { return isCompatible(buf, len); }
     void finalizeRead() throws override;
     
