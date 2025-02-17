@@ -22,7 +22,7 @@ Allocator<T>::operator= (const Allocator<T>& other)
     // Reallocate buffer if needed
     if (size != other.size) alloc(other.size);
     assert(size == other.size);
-
+    
     // Copy buffer
     if (size) memcpy(ptr, other.ptr, size);
     return *this;
@@ -33,19 +33,19 @@ Allocator<T>::alloc(isize elements)
 {
     assert(usize(elements) <= maxCapacity);
     assert((size == 0) == (ptr == nullptr));
-
+    
     if (size != elements) try {
-
+        
         dealloc();
-
+        
         if (elements) {
-
+            
             size = elements;
             ptr = new T[size];
         }
-
+        
     } catch (...) {
-
+        
         size = 0;
         ptr = nullptr;
     }
@@ -55,9 +55,9 @@ template <class T> void
 Allocator<T>::dealloc()
 {
     assert((size == 0) == (ptr == nullptr));
-
+    
     if (ptr) {
-
+        
         delete [] ptr;
         ptr = nullptr;
         size = 0;
@@ -68,9 +68,9 @@ template <class T> void
 Allocator<T>::init(isize elements, T value)
 {
     alloc(elements);
-
+    
     if (ptr) {
-
+        
         for (isize i = 0; i < size; i++) {
             ptr[i] = value;
         }
@@ -81,11 +81,11 @@ template <class T> void
 Allocator<T>::init(const T *buf, isize elements)
 {
     assert(buf);
-
+    
     alloc(elements);
-
+    
     if (ptr) {
-
+        
         for (isize i = 0; i < size; i++) {
             ptr[i] = buf[i];
         }
@@ -108,7 +108,7 @@ template <class T> void
 Allocator<T>::init(const std::vector<T> &vector)
 {
     isize vecsize = isize(vector.size());
-
+    
     alloc(vecsize);
     for (isize i = 0; i < vecsize; i++) ptr[i] = vector[i];
 }
@@ -118,14 +118,14 @@ Allocator<T>::init(const std::filesystem::path &path)
 {
     // Open stream in binary mode
     std::ifstream stream(path, std::ifstream::binary);
-
+    
     // Return an empty buffer if the stream could not be opened
     if (!stream) { dealloc(); return; }
-
+    
     // Read file contents into a string stream
     std::ostringstream sstr(std::ios::binary);
     sstr << stream.rdbuf();
-
+    
     // Call the proper init delegate
     init(sstr.str());
 }
@@ -140,23 +140,23 @@ template <class T> void
 Allocator<T>::resize(isize elements)
 {
     assert((size == 0) == (ptr == nullptr));
-
+    
     if (size != elements) {
-
+        
         if (elements == 0) {
-
+            
             dealloc();
-
+            
         } else try {
-
+            
             auto newPtr = new T[elements];
             copy(newPtr, 0, std::min(size, elements));
             dealloc();
             ptr = (T *)newPtr;
             size = elements;
-
+            
         } catch (...) {
-
+            
             size = 0;
             ptr = nullptr;
         }
@@ -167,7 +167,7 @@ template <class T> void
 Allocator<T>::resize(isize elements, T pad)
 {
     auto gap = elements > size ? elements - size : 0;
-
+    
     resize(elements);
     clear(pad, elements - gap, gap);
 }
@@ -177,9 +177,9 @@ Allocator<T>::clear(T value, isize offset, isize len)
 {
     assert((size == 0) == (ptr == nullptr));
     assert(offset >= 0 && len >= 0 && offset + len <= size);
-
+    
     if (ptr) {
-
+        
         for (isize i = 0; i < len; i++) {
             ptr[i + offset] = value;
         }
@@ -192,9 +192,9 @@ Allocator<T>::copy(T *buf, isize offset, isize len) const
     assert(buf);
     assert((size == 0) == (ptr == nullptr));
     assert(offset >= 0 && len >= 0 && offset + len <= size);
-
+    
     if (ptr) {
-
+        
         for (isize i = 0; i < len; i++) {
             buf[i] = ptr[i + offset];
         }
@@ -214,95 +214,34 @@ Allocator<T>::patch(const char *seq, const char *subst)
 }
 
 template <class T> void
-Allocator<T>::rle(isize n, isize offset)
+Allocator<T>::compress(std::function<void(u8 *, isize, vector<u8> &)> algo, isize offset)
 {
     std::vector<u8> compressed;
-
+    
     // Skip everything up to the offset position
     compressed.insert(compressed.end(), ptr, ptr + std::min(offset, size));
-
-    // Run the run-length encoder
-    if (size > offset) util::rle(ptr + offset, size - offset, compressed);
-
+    
+    // Run the compressor
+    if (size > offset) algo(ptr + offset, size - offset, compressed);
+    
     // Replace buffer contents with the compressed data
     init(compressed);
 }
 
 template <class T> void
-Allocator<T>::unrle(isize n, isize offset, isize expectedSize)
+Allocator<T>::uncompress(std::function<void(u8 *, isize, vector<u8> &, isize)> algo, isize offset, isize sizeEstimate)
 {
     std::vector<u8> uncompressed;
-
+    
     // Skip everything up to the offset position
     uncompressed.insert(uncompressed.end(), ptr, ptr + std::min(offset, size));
-
-    // Run the run-length deconder
-    if (size > offset) util::unrle(ptr + offset, size - offset, uncompressed);
-
+    
+    // Run the decompressor
+    if (size > offset) algo(ptr + offset, size - offset, uncompressed, sizeEstimate);
+    
     // Replace buffer contents with the uncompressed data
     init(uncompressed);
 }
-
-template <class T> void
-Allocator<T>::gzip(isize offset)
-{
-    std::vector<u8> compressed;
-
-    // Skip everything up to the offset position
-    compressed.insert(compressed.end(), ptr, ptr + std::min(offset, size));
-
-    // Run the gzip algorithm
-    if (size > offset) util::gzip(ptr + offset, size - offset, compressed);
-
-    // Replace buffer contents with the compressed data
-    init(compressed);
-}
-
-template <class T> void
-Allocator<T>::gunzip(isize offset, isize sizeEstimate)
-{
-    std::vector<u8> uncompressed;
-
-    // Skip everything up to the offset position
-    uncompressed.insert(uncompressed.end(), ptr, ptr + std::min(offset, size));
-
-    // Run the gunzip algorithm
-    if (size > offset) util::gunzip(ptr + offset, size - offset, uncompressed);
-
-    // Replace buffer contents with the uncompressed data
-    init(uncompressed);
-}
-
-template <class T> void
-Allocator<T>::lz4(isize offset)
-{
-    std::vector<u8> compressed;
-
-    // Skip everything up to the offset position
-    compressed.insert(compressed.end(), ptr, ptr + std::min(offset, size));
-
-    // Run the LZ4 algorithm
-    if (size > offset) util::lz4(ptr + offset, size - offset, compressed);
-
-    // Replace buffer contents with the compressed data
-    init(compressed);
-}
-
-template <class T> void
-Allocator<T>::unlz4(isize offset, isize sizeEstimate)
-{
-    std::vector<u8> uncompressed;
-
-    // Skip everything up to the offset position
-    uncompressed.insert(uncompressed.end(), ptr, ptr + std::min(offset, size));
-
-    // Run the LZ4 algorithm
-    if (size > offset) util::unlz4(ptr + offset, size - offset, uncompressed);
-
-    // Replace buffer contents with the uncompressed data
-    init(uncompressed);
-}
-
 
 //
 // Template instantiations
@@ -331,10 +270,7 @@ INSTANTIATE_ALLOCATOR(isize)
 INSTANTIATE_ALLOCATOR(float)
 INSTANTIATE_ALLOCATOR(bool)
 
-template void Allocator<u8>::rle(isize, isize);
-template void Allocator<u8>::unrle(isize, isize, isize);
-template void Allocator<u8>::gzip(isize);
-template void Allocator<u8>::gunzip(isize, isize);
-template void Allocator<u8>::lz4(isize);
-template void Allocator<u8>::unlz4(isize, isize);
+template void Allocator<u8>::compress(std::function<void (u8 *, isize, std::vector<u8> &)>, isize);
+template void Allocator<u8>::uncompress(std::function<void (u8 *, isize, std::vector<u8> &, isize)>, isize, isize);
+
 }

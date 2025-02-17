@@ -10,18 +10,194 @@
 #include "VAmigaConfig.h"
 #include "Compression.h"
 #include "MemUtils.h"
-
-#include <stdint.h> // TODO: REPLACE BY BasicTypes
 #include "lz4.h"
-
 #ifdef USE_ZLIB
 #include <zlib.h>
 #endif
 
 namespace vamiga::util {
 
+#ifdef USE_ZLIB
+
 void
-rle(u8 *uncompressed, isize len, std::vector<u8> &result, isize n)
+gzip(u8 *buffer, isize len, std::vector<u8> &result)
+{
+    // Simulate an error if requested
+    if (FORCE_ZLIB_ERROR) throw std::runtime_error("Forced zlib error.");
+
+    // Only proceed if there is anything to zip
+    if (len == 0) return;
+
+    // Remember the initial length of the result vector
+    auto initialLen = result.size();
+
+    // Resize the target buffer
+    result.resize(initialLen + len + len / 2 + 256);
+
+    // Configure the zlib stream
+    z_stream zs {
+
+        .next_in   = (Bytef *)buffer,
+        .avail_in  = (uInt)len,
+        .next_out  = (Bytef *)result.data() + initialLen,
+        .avail_out = (uInt)result.size(),
+    };
+
+    // Select the gzip format by choosing adequate window bits
+    constexpr int windowBits = MAX_WBITS | 16;
+
+    // Initialize the zlib stream
+    if (deflateInit2(&zs, Z_DEFAULT_COMPRESSION, Z_DEFLATED, windowBits, 8, Z_DEFAULT_STRATEGY) != Z_OK) {
+        throw std::runtime_error("Failed to initialize zlib.");
+    }
+
+    // Run the zlib decompressor
+    if (auto ret = deflate(&zs, Z_FINISH); ret != Z_STREAM_END) {
+
+        deflateEnd(&zs);
+        throw std::runtime_error("Zlib error " + std::to_string(ret));
+    }
+
+    // Reduce the target buffer to the correct size
+    result.resize(initialLen + zs.total_out);
+    deflateEnd(&zs);
+}
+
+void
+gunzip(u8 *buffer, isize len, std::vector<u8> &result, isize sizeEstimate)
+{
+    // Simulate an error if requested
+    if (FORCE_ZLIB_ERROR) throw std::runtime_error("Forced zlib error.");
+
+    // Only proceed if there is anything to unzip
+    if (len == 0) return;
+
+    // Remember the initial length of the result vector
+    auto initialLen = result.size();
+
+    // Configure the zlib stream
+    z_stream zs {
+
+        .next_in   = (Bytef *)buffer,
+        .avail_in  = (uInt)len,
+    };
+
+    // Select the gzip format by choosing adequate window bits
+    constexpr int windowBits = MAX_WBITS | 16;
+
+    // Initialize the zlib stream
+    if (inflateInit2(&zs, windowBits) != Z_OK) {
+        throw std::runtime_error("Failed to initialize zlib.");
+    }
+
+    // For speedup: Estimate the size and reserve elements
+    result.reserve(initialLen + (sizeEstimate ? sizeEstimate : 2 * len));
+
+    // Decompress in smaller chunks
+    std::vector<uint8_t> chunk(8192); int ret;
+
+    do {
+
+        zs.next_out = chunk.data();
+        zs.avail_out = static_cast<uInt>(chunk.size());
+
+        switch (ret = inflate(&zs, Z_NO_FLUSH)) {
+
+            case Z_ERRNO:
+            case Z_STREAM_ERROR:
+            case Z_DATA_ERROR:
+            case Z_MEM_ERROR:
+            case Z_BUF_ERROR:
+            case Z_VERSION_ERROR:
+
+                inflateEnd(&zs);
+                throw std::runtime_error("Zlib error " + std::to_string(ret));
+
+            default:
+                break;
+        }
+
+        auto count = chunk.size() - zs.avail_out;
+        result.insert(result.end(), chunk.begin(), chunk.begin() + count);
+
+    } while (ret != Z_STREAM_END);
+
+    inflateEnd(&zs);
+}
+
+#else
+
+void gzip(u8 *buffer, isize len, std::vector<u8> &result) {
+    throw std::runtime_error("No zlib support.");
+}
+void gunzip(u8 *buffer, isize len, std::vector<u8> &result, isize sizeEstimate) {
+    throw std::runtime_error("No zlib support.");
+}
+
+#endif
+
+void
+lz4(u8 *buffer, isize len, std::vector<u8> &result)
+{
+    // Only proceed if there is anything to compress
+    if (len == 0) return;
+
+    // Remember the initial length of the result vector
+    auto initialLen = result.size();
+
+    // Resize the target buffer
+    auto max_size = len + len / 2 + 256;
+    result.resize(initialLen + max_size);
+
+    // Run the LZ4 encoder
+    auto compressedSize = LZ4_compress_default((const char *)buffer,
+                                               (char *)result.data() + initialLen,
+                                               (int)len,
+                                               (int)max_size);
+    if (compressedSize <= 0) {
+        throw std::runtime_error("LZ4 error: compression failure");
+    }
+
+    // Append the uncompressed size
+    W32BE(result.data() + initialLen + compressedSize, len);
+    compressedSize += 4;
+
+    // Reduce the target buffer to the correct size
+    result.resize(initialLen + compressedSize);
+}
+
+void
+unlz4(u8 *buffer, isize len, std::vector<u8> &result, isize sizeEstimate)
+{
+    // Only proceed if there is anything to uncompress
+    if (len == 0) return;
+    if (len <= 3) throw std::runtime_error("LZ4 error: impossible length");
+
+    // Remember the initial length of the result vector
+    auto initialLen = result.size();
+
+    // Resize the result vector to the correct size
+    int decompressedSize = R32BE(buffer + len - 4);
+    result.resize(initialLen + decompressedSize);
+    char *decompressed = (char *) &result[initialLen];
+
+    auto compressedSize = len - 4;
+    auto size = LZ4_decompress_safe((const char *)buffer,
+                                                 (char *)decompressed,
+                                                 (int)compressedSize,
+                                                 (int)decompressedSize);
+    
+    // Perform sanity checks
+    if (size < 0) {
+        throw std::runtime_error("LZ4 error: decompression failure");
+    }
+    if (size != decompressedSize) {
+        throw std::runtime_error("LZ4 error: inconsistent lengths");
+    }
+}
+
+void
+rle(isize n, u8 *buffer, isize len, std::vector<u8> &result, isize sizeEstimate)
 {
     /* This function performs a run-length encoding according to the following
      * scheme:
@@ -50,7 +226,7 @@ rle(u8 *uncompressed, isize len, std::vector<u8> &result, isize n)
     isize repetitions = 0;
 
     // For speedup: Start with a container with a decent capacity
-    if (result.capacity() == 0) result.reserve(len);
+    if (sizeEstimate) result.reserve(sizeEstimate);
 
     auto encode = [&](u8 element, isize count) {
 
@@ -73,14 +249,14 @@ rle(u8 *uncompressed, isize len, std::vector<u8> &result, isize n)
     // Perform run-length encoding
     for (isize i = 0; i < len; i++) {
 
-        if (uncompressed[i] == prev) {
+        if (buffer[i] == prev) {
 
             repetitions++;
 
         } else {
 
             encode(prev, repetitions);
-            prev = uncompressed[i];
+            prev = buffer[i];
             repetitions = 1;
         }
     }
@@ -88,26 +264,26 @@ rle(u8 *uncompressed, isize len, std::vector<u8> &result, isize n)
 }
 
 void
-unrle(u8 *uncompressed, isize len, std::vector<u8> &result, isize n)
+unrle(isize n, u8 *buffer, isize len, std::vector<u8> &result, isize sizeEstimate)
 {
     const auto max = isize(std::numeric_limits<u8>::max());
     u8 prev = 0;
     isize repetitions = 0;
 
     // For speedup: Start with a container with a decent capacity
-    if (result.capacity() == 0) result.reserve(2 * len);
+    result.reserve(sizeEstimate ? sizeEstimate : 2 * len);
 
     for (isize i = 0; i < len; i++) {
 
-        result.push_back(uncompressed[i]);
-        repetitions = prev != uncompressed[i] ? 1 : repetitions + 1;
-        prev = uncompressed[i];
+        result.push_back(buffer[i]);
+        repetitions = prev != buffer[i] ? 1 : repetitions + 1;
+        prev = buffer[i];
 
         if (repetitions == n) {
 
             while (i < len - 1) {
 
-                auto runlength = isize(uncompressed[++i]);
+                auto runlength = isize(buffer[++i]);
                 result.insert(result.end(), runlength, prev);
                 if (runlength != max) break;
             }
@@ -116,187 +292,20 @@ unrle(u8 *uncompressed, isize len, std::vector<u8> &result, isize n)
     }
 }
 
-#ifdef USE_ZLIB
-
-void
-gzip(u8 *uncompressed, isize len, std::vector<u8> &result)
-{
-    // Simulate an error if requested
-    if (FORCE_ZLIB_ERROR) throw std::runtime_error("Forced zlib error.");
-
-    // Only proceed if there is anything to zip
-    if (len == 0) return;
-
-    // Remember the initial length of the result vector
-    auto initialLen = result.size();
-
-    // Resize the target buffer
-    result.resize(initialLen + len + len / 2 + 256);
-
-    // Configure the zlib stream
-    z_stream zs {
-
-        .next_in   = (Bytef *)uncompressed,
-        .avail_in  = (uInt)len,
-        .next_out  = (Bytef *)result.data() + initialLen,
-        .avail_out = (uInt)result.size(),
-    };
-
-    // Select the gzip format by choosing adequate window bits
-    constexpr int windowBits = MAX_WBITS | 16;
-
-    // Initialize the zlib stream
-    if (deflateInit2(&zs, Z_DEFAULT_COMPRESSION, Z_DEFLATED, windowBits, 8, Z_DEFAULT_STRATEGY) != Z_OK) {
-        throw std::runtime_error("Failed to initialize zlib.");
-    }
-
-    // Run the zlib decompressor
-    if (auto ret = deflate(&zs, Z_FINISH); ret != Z_STREAM_END) {
-
-        deflateEnd(&zs);
-        throw std::runtime_error("Zlib error " + std::to_string(ret));
-    }
-
-    // Reduce the target buffer to the correct size
-    result.resize(initialLen + zs.total_out);
-    deflateEnd(&zs);
+void rle2(u8 *buffer, isize len, std::vector<u8> &result) {
+    rle(2, buffer, len, result);
 }
 
-void
-gunzip(u8 *compressed, isize len, std::vector<u8> &result, isize sizeEstimate)
-{
-    // Simulate an error if requested
-    if (FORCE_ZLIB_ERROR) throw std::runtime_error("Forced zlib error.");
-
-    // Only proceed if there is anything to unzip
-    if (len == 0) return;
-
-    // Remember the initial length of the result vector
-    auto initialLen = result.size();
-
-    // Configure the zlib stream
-    z_stream zs {
-
-        .next_in   = (Bytef *)compressed,
-        .avail_in  = (uInt)len,
-    };
-
-    // Select the gzip format by choosing adequate window bits
-    constexpr int windowBits = MAX_WBITS | 16;
-
-    // Initialize the zlib stream
-    if (inflateInit2(&zs, windowBits) != Z_OK) {
-        throw std::runtime_error("Failed to initialize zlib.");
-    }
-
-    // For speedup: Estimate the size and reserve elements
-    result.reserve(initialLen + (sizeEstimate ? sizeEstimate : 2 * len));
-
-    // Decompress in smaller chunks
-    std::vector<uint8_t> buffer(8192); int ret;
-
-    do {
-
-        zs.next_out = buffer.data();
-        zs.avail_out = static_cast<uInt>(buffer.size());
-
-        switch (ret = inflate(&zs, Z_NO_FLUSH)) {
-
-            case Z_ERRNO:
-            case Z_STREAM_ERROR:
-            case Z_DATA_ERROR:
-            case Z_MEM_ERROR:
-            case Z_BUF_ERROR:
-            case Z_VERSION_ERROR:
-
-                inflateEnd(&zs);
-                throw std::runtime_error("Zlib error " + std::to_string(ret));
-
-            default:
-                break;
-        }
-
-        auto count = buffer.size() - zs.avail_out;
-        result.insert(result.end(), buffer.begin(), buffer.begin() + count);
-
-    } while (ret != Z_STREAM_END);
-
-    inflateEnd(&zs);
+void unrle2(u8 *buffer, isize len, std::vector<u8> &result, isize sizeEstimate) {
+    unrle(2, buffer, len, result);
 }
 
-#else
-
-void gzip(u8 *uncompressed, isize len, std::vector<u8> &result) {
-    throw std::runtime_error("No zlib support.");
-}
-void gunzip(u8 *compressed, isize len, std::vector<u8> &result, isize sizeEstimate) {
-    throw std::runtime_error("No zlib support.");
+void rle3(u8 *buffer, isize len, std::vector<u8> &result) {
+    unrle(3, buffer, len, result);
 }
 
-#endif
-
-void
-lz4(u8 *uncompressed, isize len, std::vector<u8> &result)
-{
-    // Only proceed if there is anything to compress
-    if (len == 0) return;
-
-    // Remember the initial length of the result vector
-    auto initialLen = result.size();
-
-    // Resize the target buffer
-    auto max_size = len + len / 2 + 256;
-    result.resize(initialLen + max_size);
-
-    // char *compressed_data = (char *) &result[initialLen];
-    int compressed_size = LZ4_compress_default((const char *)uncompressed,
-                                               (char *)result.data() + initialLen, // compressed_data,
-                                               (int) len, (int) max_size);
-    if (compressed_size <= 0) {
-        throw std::runtime_error("LZ4 error: compression failure");
-    }
-
-    // LE encode the uncompressed size for simplicity and robustness
-    W32BE(result.data() + initialLen + compressed_size, len);
-    compressed_size += 4;
-
-    // Reduce the target buffer to the correct size
-    result.resize(initialLen + compressed_size);
+void unrle3(u8 *buffer, isize len, std::vector<u8> &result, isize sizeEstimate) {
+    unrle(3, buffer, len, result);
 }
-
-void
-unlz4(u8 *compressed, isize len, std::vector<u8> &result, isize sizeEstimate)
-{
-    // Only proceed if there is anything to uncompress
-    if (len == 0) return;
-
-    if (len < 4) {
-        throw std::runtime_error("LZ4 error: impossible length");
-    }
-
-    // Remember the initial length of the result vector
-    auto initialLen = result.size();
-
-    int decompressed_len = R32BE(compressed + len - 4);
-    // int decompressed_len = read_lz4_size(compressed + len);
-    result.resize(initialLen + decompressed_len);
-    char *decompressed_data = (char *) &result[initialLen];
-
-
-    long compressed_size = len - 4;
-    int decompressed_size = LZ4_decompress_safe(
-                                                (const char *) compressed, decompressed_data,
-                                                (int) compressed_size, decompressed_len);
-    if (decompressed_size < 0) {
-        throw std::runtime_error("LZ4 error: decompression failure");
-    }
-
-    if (decompressed_size != decompressed_len) {
-        fprintf(stderr, "Inconsistent lengths: %d vs %d\n",
-                decompressed_size, decompressed_len);
-        throw std::runtime_error("LZ4 error: inconsistent lengths");
-    }
-}
-
 
 }
