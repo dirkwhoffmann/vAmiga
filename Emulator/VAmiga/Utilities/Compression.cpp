@@ -9,13 +9,14 @@
 
 #include "VAmigaConfig.h"
 #include "Compression.h"
+#include "MemUtils.h"
+
+#include <stdint.h> // TODO: REPLACE BY BasicTypes
+#include "lz4.h"
 
 #ifdef USE_ZLIB
 #include <zlib.h>
 #endif
-
-#include <stdint.h>
-#include "lz4.h"
 
 namespace vamiga::util {
 
@@ -137,7 +138,7 @@ gzip(u8 *uncompressed, isize len, std::vector<u8> &result)
 
         .next_in   = (Bytef *)uncompressed,
         .avail_in  = (uInt)len,
-        .next_out  = (Bytef *)(result.data()) + initialLen,
+        .next_out  = (Bytef *)result.data() + initialLen,
         .avail_out = (uInt)result.size(),
     };
 
@@ -234,49 +235,29 @@ void gunzip(u8 *compressed, isize len, std::vector<u8> &result, isize sizeEstima
 
 #endif
 
-// Little endian encode the uncompressed size
-static inline void write_lz4_size(void *compressed_end, isize len) {
-    int32_t l32 = (int32_t) len;
-    u8 *w = (u8 *) compressed_end;
-    for (int i = 0; i < 4; ++i) {
-        *w++ = l32 & 0xff;
-        l32 >>= 8;
-    }
-}
-
-// Little endian decode the uncompressed size
-static inline int32_t read_lz4_size(void *compressed_end) {
-    u8 *r = (u8 *) compressed_end;
-    int32_t l32 = 0;
-    for (int i = 0; i < 4; ++i) {
-        l32 <<= 8;
-        l32 |= *--r;
-    }
-    return l32;
-}
-
 void
 lz4(u8 *uncompressed, isize len, std::vector<u8> &result)
 {
-    // Only proceed if there is anything to zip
+    // Only proceed if there is anything to compress
     if (len == 0) return;
 
     // Remember the initial length of the result vector
     auto initialLen = result.size();
 
     // Resize the target buffer
-    size_t max_size = len + len / 2 + 256;
+    auto max_size = len + len / 2 + 256;
     result.resize(initialLen + max_size);
 
-    char *compressed_data = (char *) &result[initialLen];
-    int compressed_size = LZ4_compress_default((const char *) uncompressed,
-                                               compressed_data, (int) len, (int) max_size);
+    // char *compressed_data = (char *) &result[initialLen];
+    int compressed_size = LZ4_compress_default((const char *)uncompressed,
+                                               (char *)result.data() + initialLen, // compressed_data,
+                                               (int) len, (int) max_size);
     if (compressed_size <= 0) {
         throw std::runtime_error("LZ4 error: compression failure");
     }
 
     // LE encode the uncompressed size for simplicity and robustness
-    write_lz4_size(compressed_data + compressed_size, len);
+    W32BE(result.data() + initialLen + compressed_size, len);
     compressed_size += 4;
 
     // Reduce the target buffer to the correct size
@@ -286,7 +267,7 @@ lz4(u8 *uncompressed, isize len, std::vector<u8> &result)
 void
 unlz4(u8 *compressed, isize len, std::vector<u8> &result, isize sizeEstimate)
 {
-    // Only proceed if there is anything to unzip
+    // Only proceed if there is anything to uncompress
     if (len == 0) return;
 
     if (len < 4) {
@@ -296,7 +277,8 @@ unlz4(u8 *compressed, isize len, std::vector<u8> &result, isize sizeEstimate)
     // Remember the initial length of the result vector
     auto initialLen = result.size();
 
-    int decompressed_len = read_lz4_size(compressed + len);
+    int decompressed_len = R32BE(compressed + len - 4);
+    // int decompressed_len = read_lz4_size(compressed + len);
     result.resize(initialLen + decompressed_len);
     char *decompressed_data = (char *) &result[initialLen];
 
