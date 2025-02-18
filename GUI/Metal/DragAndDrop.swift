@@ -17,7 +17,7 @@ public extension MetalView {
 
     override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
         
-        debug(.dragndrop, "draggingEntered \(sender)\n")
+        // debug(.dragndrop, "draggingEntered \(sender)\n")
         
         dropZone = nil
         dropUrl = nil
@@ -59,7 +59,7 @@ public extension MetalView {
     
     override func draggingUpdated(_ sender: NSDraggingInfo) -> NSDragOperation {
         
-        debug(.dragndrop, "draggingUpdated \(sender)\n")
+        // debug(.dragndrop, "draggingUpdated \(sender)\n")
 
         parent.renderer.dropZone.draggingUpdated(sender)
         return NSDragOperation.copy

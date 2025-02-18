@@ -204,30 +204,6 @@ class DropZone: Layer {
             
             controller.showAlert(.cantOpen(url: url), error: error, async: true)
         }
-        /*
-        let n = metal.dropZone
-
-        do {
-                        
-            switch type {
-                
-            case .WORKSPACE, .SNAPSHOT, .SCRIPT:
-
-                try mydocument.addMedia(url: url, allowedTypes: [type])
-
-            case .ADF, .ADZ, .EADF, .HDF, .HDZ, .IMG, .ST, .DMS, .EXE, .DIR:
-                
-                try mydocument.addMedia(url: url, allowedTypes: [type], drive: n!)
-                
-            default:
-                fatalError()
-            }
-            
-        } catch {
-            
-            controller.showAlert(.cantOpen(url: url), error: error, async: true)
-        }
-        */
     }
     
     func updateAlpha() {

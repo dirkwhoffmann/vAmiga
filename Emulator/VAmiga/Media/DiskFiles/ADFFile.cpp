@@ -12,6 +12,7 @@
 #include "Amiga.h"
 #include "BootBlockImage.h"
 #include "Checksum.h"
+#include "EADFFile.h"
 #include "FloppyDisk.h"
 #include "FloppyDrive.h"
 #include "IOUtils.h"
@@ -23,8 +24,12 @@ namespace vamiga {
 bool
 ADFFile::isCompatible(const fs::path &path)
 {
+    // Check the suffix
     auto suffix = util::uppercased(path.extension().string());
-    return suffix == ".ADF";
+    if (suffix != ".ADF") return false;
+    
+    // Make sure it's not an extended ADF
+    return !EADFFile::isCompatible(path);
 }
 
 bool
