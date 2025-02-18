@@ -139,8 +139,9 @@ EADFFile::finalizeRead()
 
         if (usedBitsForTrack(i) % 8) {
             
-            warn("Track length is not a multiple of 8\n");
-            throw CoreError(Fault::EXT_INCOMPATIBLE);
+            warn("Truncating track (bit count is not a multiple of 8)\n");
+            // throw CoreError(Fault::EXT_INCOMPATIBLE);
+            W32BE(data.ptr + 12 + 12 * i + 8, usedBitsForTrack(i) & ~7);
         }
     }
     
