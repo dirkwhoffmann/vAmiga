@@ -98,7 +98,6 @@ class HardDrive final : public Drive, public Inspectable<HardDriveInfo> {
     
     // Disk state flags
     long flags = 0;
-    // optional <bool> bootable;
 
     
     //
@@ -316,6 +315,9 @@ public:
 
     // Checks whether the drive will work with the currently installed Rom
     bool isCompatible() const;
+    
+    // Checks whether the drive has a user directory block
+    bool hasUserDir() const;
     
     
     //

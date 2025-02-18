@@ -120,6 +120,9 @@ public:
     // Returns true if this image contains a rigid disk block
     bool hasRDB() const;
 
+    // Returns true if this image contains a user directory block
+    // bool hasUserDir() const;
+    
     // Returns the number of loadable file system drivers
     isize numDrivers() const { return isize(drivers.size()); }
     

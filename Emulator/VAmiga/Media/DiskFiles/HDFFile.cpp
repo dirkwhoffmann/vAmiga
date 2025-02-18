@@ -311,6 +311,26 @@ HDFFile::hasRDB() const
     return false;
 }
 
+/*
+bool
+HDFFile::hasUserDir() const
+{
+    auto bsize = getGeometry().bsize;
+    
+    // Crawl through all blocks
+    for (isize i = 0; i < data.size; i += bsize) {
+        
+        u8 *p = data.ptr + i;
+        u32 type = R32BE(p);
+        u32 subtype = R32BE(p + bsize - 4);
+
+        if (type == 2  && subtype == 2) { return true; }
+    }
+    
+    return false;
+}
+*/
+
 isize
 HDFFile::partitionSize(isize nr) const
 {

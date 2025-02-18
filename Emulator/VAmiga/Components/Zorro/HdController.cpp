@@ -479,6 +479,15 @@ HdController::processInit(u32 ptr)
             }
         }
         
+        // Experimental (don't boot from empty drives such as the default drive)
+        auto bootFlag = part.flags & 1;
+        
+        if (!drive.hasUserDir()) {
+
+            warn("Removing boot flag because the disk is empty\n");
+            bootFlag = 0;
+        }
+        
         mem.patch(ptr + devn_flags,         u32(part.flags));
         mem.patch(ptr + devn_sizeBlock,     u32(part.sizeBlock));
         mem.patch(ptr + devn_secOrg,        u32(0));
@@ -495,7 +504,7 @@ HdController::processInit(u32 ptr)
         mem.patch(ptr + devn_addMask,       u32(0xFFFFFFFE));
         mem.patch(ptr + devn_bootPrio,      u32(0));
         mem.patch(ptr + devn_dName,         u32(part.dosType));
-        mem.patch(ptr + devn_bootflags,     u32(part.flags & 1));
+        mem.patch(ptr + devn_bootflags,     u32(bootFlag)); // u32(part.flags & 1));
         mem.patch(ptr + devn_segList,       u32(segList));
         
         if ((part.dosType & 0xFFFFFFF0) != 0x444f5300) {
