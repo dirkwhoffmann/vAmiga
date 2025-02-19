@@ -559,6 +559,27 @@ FileSystem::seekRef(FSName name)
     return 0;
 }
 
+FSBlock *
+FileSystem::seekPath(const fs::path &path)
+{
+    FSBlock *block = nullptr;
+
+    changeDir("/");
+
+    for (const auto& part : path) {
+        
+        if (part == path.filename()) {
+            block = seekFile(part.string());
+        } else {
+            block = changeDir(part.string());
+        }
+        
+        if (!block) break;
+    }
+    
+    return block;
+}
+
 void
 FileSystem::collect(Block nr, std::vector<Block> &result, bool recursive) const
 {

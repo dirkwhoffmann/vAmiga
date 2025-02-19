@@ -215,7 +215,7 @@ public:
     FSBlock *seek(const string &name) { return blockPtr(seekRef(name)); }
     FSBlock *seekDir(const string &name) { return userDirBlockPtr(seekRef(name)); }
     FSBlock *seekFile(const string &name) { return fileHeaderBlockPtr(seekRef(name)); }
-    
+    FSBlock *seekPath(const fs::path &path);
     
     //
     // Integrity checking

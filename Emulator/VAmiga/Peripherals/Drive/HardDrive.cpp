@@ -10,7 +10,7 @@
 #include "VAmigaConfig.h"
 #include "HardDrive.h"
 #include "Emulator.h"
-#include "HdControllerTypes.h"
+#include "FileSystem.h"
 #include "HDFFile.h"
 #include "HDZFile.h"
 #include "IOUtils.h"
@@ -361,6 +361,26 @@ HardDrive::hasUserDir() const
         if (type == 2 && subtype == 2) { return true; }
     }
     
+    return false;
+}
+
+bool
+HardDrive::isBootable()
+{
+    try {
+        
+        if (FileSystem(*this, 0).seekPath("s/startup-sequence")) {
+
+            debug(HDR_DEBUG, "Bootable drive\n");
+            return true;
+        }
+        
+    } catch (...) {
+        
+        debug(HDR_DEBUG, "No file system found\n");
+    }
+    
+    debug(HDR_DEBUG, "Unbootable drive\n");
     return false;
 }
 

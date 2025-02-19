@@ -482,9 +482,9 @@ HdController::processInit(u32 ptr)
         // Experimental (don't boot from empty drives such as the default drive)
         auto bootFlag = part.flags & 1;
         
-        if (!drive.hasUserDir()) {
-
-            warn("Removing boot flag because the disk is empty\n");
+        if (!drive.isBootable()) {
+            
+            debug(HDR_DEBUG, "Removing boot flag\n");
             bootFlag = 0;
         }
         
