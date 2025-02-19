@@ -298,6 +298,18 @@ AudioPort::setSampleRate(double hz)
 }
 
 void
+AudioPort::cacheInfo(AudioPortInfo &result) const
+{
+    result.isMuted = isMuted();
+}
+
+void
+AudioPort::cacheStats(AudioPortStats &result) const
+{
+    stats.fillLevel = stream.fillLevel();
+}
+
+void
 AudioPort::_didLoad()
 {
     for (isize i = 0; i < 4; i++) sampler[i].reset();

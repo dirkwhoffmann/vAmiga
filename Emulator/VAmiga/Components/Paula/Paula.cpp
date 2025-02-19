@@ -163,9 +163,10 @@ Paula::interruptLevel()
 }
 
 void
-Paula::eofHandler() {
-
-    audioPort.stats.fillLevel = audioPort.stream.fillLevel();
+Paula::eofHandler()
+{
+    // Synthesize sound samples
+    executeUntil(agnus.clock - 50 * DMA_CYCLES(PAL::HPOS_CNT));
 }
 
 }

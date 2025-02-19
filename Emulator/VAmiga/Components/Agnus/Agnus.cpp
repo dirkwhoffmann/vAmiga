@@ -728,16 +728,13 @@ Agnus::eofHandler()
     assert(pos.v == 0);
     assert(denise.lace() == pos.lofToggle);
 
+    scheduleStrobe0Event();
+
     // Run the screen recorder
     denise.screenRecorder.vsyncHandler(clock - 50 * DMA_CYCLES(PAL::HPOS_CNT));
     denise.eofHandler();
 
-    // Synthesize sound samples
-    paula.executeUntil(clock - 50 * DMA_CYCLES(PAL::HPOS_CNT)); // MOVE TO Paula::eofHandler
-
-    scheduleStrobe0Event();
-
-    // Let other components do their own EOF stuff
+    // Let the other components finish the current frame
     paula.eofHandler();
     sequencer.eofHandler();
     copper.eofHandler();

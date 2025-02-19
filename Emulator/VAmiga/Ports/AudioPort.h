@@ -42,7 +42,7 @@ namespace vamiga {
  *           -----------------------------------------------------
  */
 
-class AudioPort final : public SubComponent {
+class AudioPort final : public SubComponent, public Inspectable<AudioPortInfo, AudioPortStats>  {
 
     friend class AudioFilter;
 
@@ -84,9 +84,6 @@ class AudioPort final : public SubComponent {
     // Current configuration
     AudioPortConfig config = { };
     
-    // Underflow and overflow counters
-    AudioPortStats stats = { };
-
     // Current sample rate
     double sampleRate = 44100.0;
 
@@ -174,7 +171,6 @@ private:
     template <class T>
     void serialize(T& worker)
     {
-
         if (isResetter(worker)) return;
 
         worker
@@ -229,16 +225,23 @@ public:
 
     void setSampleRate(double hz);
 
+    
+    //
+    // Methods from Inspectable
+    //
+
+public:
+
+    void cacheInfo(AudioPortInfo &result) const override;
+    void cacheStats(AudioPortStats &result) const override;
+
 
     //
     // Analyzing
     //
     
-public:
+private:
     
-    // Returns information about the gathered statistical information
-    const AudioPortStats &getStats() const { return stats; }
-
     // Returns true if the output volume is zero
     bool isMuted() const;
 

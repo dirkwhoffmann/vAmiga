@@ -20,6 +20,13 @@ namespace vamiga {
 
 typedef struct
 {
+    // Indicates whether the final volume is zero
+    bool isMuted;
+}
+AudioPortInfo;
+
+typedef struct
+{
     // Master volume (left and right channel)
     i64 volL;
     i64 volR;
