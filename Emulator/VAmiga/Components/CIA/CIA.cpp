@@ -45,9 +45,7 @@ CIA::_willReset(bool hard)
 void
 CIA::_didReset(bool hard)
 {
-    // Update the memory layout because the OVL bit may have changed
-    // TODO: Do this in Memory class only
-    mem.updateMemSrcTables();
+
 }
 
 void

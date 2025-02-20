@@ -296,7 +296,7 @@ Memory::operator << (SerResetter &worker)
 void
 Memory::_didReset(bool hard)
 {
-    // Set up the memory lookup table
+    // Rebuild the memory lookup table
     updateMemSrcTables();
 
     // Initialize statistical counters
