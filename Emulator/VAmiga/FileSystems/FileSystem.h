@@ -76,9 +76,9 @@ public:
     FileSystem() { };
     FileSystem(const MediaFile &file, isize part = 0) throws { init(file, part); }
     FileSystem(const ADFFile &adf) throws { init(adf); }
-    FileSystem(const HDFFile &hdn, isize part) throws { init(hdn, part); }
+    FileSystem(const HDFFile &hdn, isize part = 0) throws { init(hdn, part); }
     FileSystem(FloppyDrive &dfn) throws { init(dfn); }
-    FileSystem(const HardDrive &hdn, isize part) throws { init(hdn, part); }
+    FileSystem(const HardDrive &hdn, isize part = 0) throws { init(hdn, part); }
 
     virtual ~FileSystem();
     

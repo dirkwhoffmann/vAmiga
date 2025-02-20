@@ -369,7 +369,7 @@ HardDrive::isBootable()
 {
     try {
         
-        if (FileSystem(*this, 0).seekPath("s/startup-sequence")) {
+        if (FileSystem(*this).seekPath("s/startup-sequence")) {
 
             debug(HDR_DEBUG, "Bootable drive\n");
             return true;

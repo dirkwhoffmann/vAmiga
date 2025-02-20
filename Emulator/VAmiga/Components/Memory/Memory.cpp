@@ -610,7 +610,7 @@ Memory::fillRamWithInitPattern()
     }
 }
 
-RomTraits &
+const RomTraits &
 Memory::getRomTraits(u32 crc)
 {
     static RomTraits fallback;
@@ -631,19 +631,19 @@ Memory::getRomTraits(u32 crc)
     return fallback;
 }
 
-RomTraits &
+const RomTraits &
 Memory::getRomTraits() const
 {
     return getRomTraits(util::crc32(rom, config.romSize));
 }
 
-RomTraits &
+const RomTraits &
 Memory::getWomTraits() const
 {
     return getRomTraits(util::crc32(wom, config.womSize));
 }
 
-RomTraits &
+const RomTraits &
 Memory::getExtTraits() const
 {
     return getRomTraits(util::crc32(ext, config.extSize));
