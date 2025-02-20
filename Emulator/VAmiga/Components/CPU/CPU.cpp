@@ -421,6 +421,9 @@ CPU::_didReset(bool hard)
 {
     if (hard) {
 
+        // Make sure the correct memory banks are seen
+        mem.updateMemSrcTables();
+        
         // Reset the Moira core
         Moira::reset();
         

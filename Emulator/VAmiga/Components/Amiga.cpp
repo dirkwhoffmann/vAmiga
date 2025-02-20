@@ -41,21 +41,6 @@ Amiga::build()
 
 Amiga::Amiga(class Emulator& ref, isize id) : CoreComponent(ref, id)
 {
-    /* UPDATE: THE ORDER SHOULD NO LONGER BE IMPORTANT. TODO: CHECK THIS!
-     *
-     * The order of subcomponents is important here, because some components
-     * are dependend on others during initialization. I.e.,
-     *
-     * - The control ports, the serial Controller, the disk controller, and the
-     *   disk drives must preceed the CIAs, because the CIA port values depend
-     *   on these devices.
-     *
-     * - The CIAs must preceed memory, because they determine if the lower
-     *   memory banks are overlayed by Rom.
-     *
-     * - Memory must preceed the CPU, because it contains the CPU reset vector.
-     */
-    
     subComponents = std::vector<CoreComponent *> {
         
         &host,
