@@ -113,8 +113,8 @@ Defaults::Defaults()
     setFallback(Opt::DRIVE_POLL_VOLUME,          0,                      { 0, 1, 2, 3 });
     setFallback(Opt::DRIVE_INSERT_VOLUME,        50,                     { 0, 1, 2, 3 });
     setFallback(Opt::DRIVE_EJECT_VOLUME,         50,                     { 0, 1, 2, 3 });
-    // setFallback(Opt::HDC_CONNECT,                true,                   { 0 });
-    setFallback(Opt::HDC_CONNECT,                false,                  { 0, 1, 2, 3 });
+    setFallback(Opt::HDC_CONNECT,                true,                   { 0 });
+    setFallback(Opt::HDC_CONNECT,                false,                  { 1, 2, 3 });
     setFallback(Opt::HDR_TYPE,                   (i64)HardDriveType::GENERIC, { 0, 1, 2, 3 });
     setFallback(Opt::HDR_PAN,                    300,                    { 0, 2 });
     setFallback(Opt::HDR_PAN,                    100,                    { 1, 3 });
