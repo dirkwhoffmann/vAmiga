@@ -279,7 +279,6 @@ Copper::serviceEvent(EventID id)
         case COP_VBLANK:
             
             // Allocate the bus
-            // TODO: FIND OUT IF THE BUS IS REALLY ALLOCATED IN THIS STATE
             if (agnus.copdma() && !agnus.allocateBus<BusOwner::COPPER>()) { reschedule(); break; }
 
             switchToCopperList(1);
