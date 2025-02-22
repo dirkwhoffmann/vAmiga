@@ -213,10 +213,6 @@ public:
 
     // The last value on the data bus
     u16 dataBus;
-
-    // Static buffer for returning textual representations
-    // TODO: Replace by "static string str" and make it local
-    // char str[256];
     
 
     //

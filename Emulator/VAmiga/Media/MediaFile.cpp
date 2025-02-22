@@ -59,6 +59,7 @@ MediaFile::make(const fs::path &path, FileType type)
         case FileType::EXE:          return new EXEFile(path);
         case FileType::ROM:          return new RomFile(path);
         case FileType::EXTENDED_ROM: return new ExtendedRomFile(path);
+        case FileType::DIR:          return new Folder(path);
 
         default:
             throw CoreError(Fault::FILE_TYPE_MISMATCH, path);

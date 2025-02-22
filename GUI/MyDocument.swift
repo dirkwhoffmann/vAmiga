@@ -85,15 +85,12 @@ class MyDocument: NSDocument {
 
         debug(.media, "Reading file \(url.lastPathComponent)")
 
-        // If the provided URL points to compressed file, decompress it first
-        let newUrl = url // url.unpacked(maxSize: 2048 * 1024)
-
         // Iterate through all allowed file types
         for type in allowedTypes {
             
             do {
                 
-                return try MediaFileProxy.make(with: newUrl, type: type)
+                return try MediaFileProxy.make(with: url, type: type)
                 
             } catch let error as CoreError {
                
@@ -240,7 +237,7 @@ class MyDocument: NSDocument {
             try attach(hd: drive, file: proxy, force: force)
             break
 
-        case .ADF, .ADZ, .DMS, .EXE, .EADF, .IMG, .ST:
+        case .ADF, .ADZ, .DMS, .EXE, .EADF, .IMG, .ST, .DIR:
 
             try insert(df: drive, file: proxy, force: force)
 

@@ -75,7 +75,7 @@ MutableFileSystem::init(Diameter dia, Density den, const fs::path &path)
     importDirectory(path);
     
     // Assign device name
-    setName(FSName("Directory")); // TODO: Use last path component
+    setName(FSName(path.filename().string()));
 
     // Compute checksums for all blocks
     updateChecksums();

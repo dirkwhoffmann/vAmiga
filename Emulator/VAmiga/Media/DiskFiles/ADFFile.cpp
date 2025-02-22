@@ -235,8 +235,7 @@ ADFFile::getFileSystemDescriptor() const
     if (bitmap == 0 || bitmap >= (Block)numBlocks()) bitmap = root + 1;
 
     // Setup the descriptor
-    result.numBlocks = numCyls() * numHeads() * numSectors(); // TODO: REPLACE BY numBlocks()
-    assert(result.numBlocks == numBlocks());
+    result.numBlocks = numBlocks();
     result.bsize = 512;
     result.numReserved = 2;
     result.dos = getDos();
