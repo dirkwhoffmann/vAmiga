@@ -68,19 +68,8 @@ Copper::pokeCOPINS(u16 value)
 {
     trace(COPREG_DEBUG, "COPPC: %X pokeCOPINS(%04X)\n", coppc0, value);
 
-    /* COPINS is a dummy address that can be used to write the first or
-     * the second instruction register, depending on the current state.
-     */
+    // Manually writing into COPINS seems to have no noticeable effect
     xfiles("Write to COPINS (%x)\n", value);
-    
-    // TODO: The following is certainly wrong...
-    /* if (state == COP_MOVE || state == COP_WAIT_OR_SKIP) {
-     cop2ins = value;
-     } else {
-     cop1ins = value;
-     }
-     */
-    cop1ins = value;
 }
 
 void
