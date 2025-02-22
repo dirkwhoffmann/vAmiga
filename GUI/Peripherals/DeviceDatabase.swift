@@ -123,19 +123,27 @@ class DeviceDatabase {
 
     func seek(guid: GUID) -> String {
 
+        let macOS = "Mac OS X"
+        
         // Search for a perfect match
-        if let result = seek(guid: guid, exact: true) { return result }
+        if let result = seek(guid: guid, exact: true, platform: macOS) { return result }
 
         // Search again, ignoring the version number
+        if let result = seek(guid: guid, exact: false, platform: macOS) { return result }
+
+        // Search again, ignoring the platform
+        if let result = seek(guid: guid, exact: true) { return result }
+
+        // Search again, ignoring the version number and the platform
         if let result = seek(guid: guid, exact: false) { return result }
 
         // Return a fallback descriptor
         return "Generic,a:b0,b:b1,leftx:a0,lefty:a1"
     }
 
-    private func seek(guid: GUID, exact: Bool) -> String? {
+    private func seek(guid: GUID, exact: Bool, platform: String? = nil) -> String? {
 
-        for (otherguid, result) in devices {
+        for (otherguid, descriptor) in devices {
 
             // Compare the vendor ID
             if !guid.match(guid: otherguid, offset: 8, length: 4) { continue }
@@ -143,15 +151,28 @@ class DeviceDatabase {
             // Compare the product ID
             if !guid.match(guid: otherguid, offset: 16, length: 4) { continue }
 
-            // Compare the version if an exact match is requested
+            // Compare the version if requested
             if exact && !guid.match(guid: otherguid, offset: 24, length: 4) { continue }
 
-            return result;
+            // Compare the platform if requested
+            if platform != nil && platform != extract(from: descriptor, key: "platform:") { continue }
+            
+            return descriptor;
         }
 
         return nil
     }
 
+    func extract(from descriptor: String, key: String) -> String? {
+        
+        guard let range = descriptor.range(of: key) else { return nil }
+            
+        let start = descriptor.index(range.upperBound, offsetBy: 0)
+        let end = descriptor[start...].firstIndex(of: ",") ?? descriptor.endIndex
+
+        return String(descriptor[start..<end])
+    }
+    
     //
     // Compute mappings
     //

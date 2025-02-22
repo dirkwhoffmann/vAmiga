@@ -1757,7 +1757,6 @@
 				5012DCE62D5D434F00233B6A /* CapturesPrefs.swift */,
 				508FE04121EA22CC0043D0E9 /* ControlsPrefs.swift */,
 				500CE875259252ED00462836 /* DevicesPrefs.swift */,
-				50001C642593230200D1FC91 /* DeviceDatabase.swift */,
 			);
 			path = Preferences;
 			sourceTree = "<group>";
@@ -1816,6 +1815,7 @@
 				50894D812593CF4400C0499D /* HIDExtensions.swift */,
 				508FDFF121EA22780043D0E9 /* GamePad.swift */,
 				508FE00121EA227A0043D0E9 /* GamePadManager.swift */,
+				50001C642593230200D1FC91 /* DeviceDatabase.swift */,
 				508FE00021EA227A0043D0E9 /* KeyboardController.swift */,
 				508FE04621EA22CC0043D0E9 /* VirtualKeyboardController.swift */,
 				508FDFFF21EA227A0043D0E9 /* MacKey.swift */,
