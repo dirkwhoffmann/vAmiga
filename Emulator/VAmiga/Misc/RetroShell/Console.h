@@ -61,6 +61,8 @@ protected:
     // Root node of the command tree
     RetroShellCmd root;
 
+    // Memory pointer for commands accpeting default addresses
+    u32 current = 0;
 
     //
     // Text storage

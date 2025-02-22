@@ -176,13 +176,13 @@ Joystick::changePotgo(u16 &potgo) const
 
     if (button2) {
         potgo &= ~maskR;
-    } else { // if (config.pullUpResistors) {  TODO: MOVE config.pullUpResistors to Port
+    } else {
         potgo |= maskR;
     }
 
     if (button3) {
         potgo &= ~maskM;
-    } else { // if (config.pullUpResistors) {  TODO: MOVE config.pullUpResistors to Port
+    } else { 
         potgo |= maskM;
     }
 }

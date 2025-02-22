@@ -127,9 +127,6 @@ private:
 
     // A disk waiting to be inserted (if any)
     std::unique_ptr<FloppyDisk> diskToInsert;
-    
-    // Search path for disk files, one for each drive
-    // [[deprecated]] fs::path searchPath;
 
     
     //

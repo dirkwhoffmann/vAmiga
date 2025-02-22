@@ -78,9 +78,11 @@ MemoryDebugger::memDump(u32 addr, isize bytes, isize sz) const
      */
 }
 
-template <Accessor A> void
-MemoryDebugger::ascDump(std::ostream& os, u32 addr, isize lines)
+template <Accessor A> isize
+MemoryDebugger::ascDump(std::ostream& os, u32 addr, isize lines) const
 {
+    auto oldAddr = addr;
+    
     for (isize i = 0; i < lines; i++, addr += 64) {
 
         os << std::setfill('0') << std::hex << std::right << std::setw(6) << isize(addr);
@@ -88,27 +90,31 @@ MemoryDebugger::ascDump(std::ostream& os, u32 addr, isize lines)
         os << ascDump<A>(addr, 64);
         os << std::endl;
     }
-    current = addr;
+    return addr - oldAddr;
 }
 
-template <Accessor A> void
-MemoryDebugger::hexDump(std::ostream& os, u32 addr, isize lines, isize sz)
+template <Accessor A> isize
+MemoryDebugger::hexDump(std::ostream& os, u32 addr, isize lines, isize sz) const
 {
+    auto oldAddr = addr;
+    
     if (sz != 1) addr &= ~0x1;
 
     for (isize i = 0; i < lines; i++, addr += 16) {
 
         os << std::setfill('0') << std::hex << std::right << std::setw(6) << isize(addr);
         os << ":  ";
-        os << hexDump<A>(addr, 16);
+        os << hexDump<A>(addr, 16, sz);
         os << std::endl;
     }
-    current = addr;
+    return addr - oldAddr;
 }
 
-template <Accessor A> void
-MemoryDebugger::memDump(std::ostream& os, u32 addr, isize lines, isize sz)
+template <Accessor A> isize
+MemoryDebugger::memDump(std::ostream& os, u32 addr, isize lines, isize sz) const
 {
+    auto oldAddr = addr;
+    
     if (sz != 1) addr &= ~0x1;
 
     for (isize i = 0; i < lines; i++, addr += 16) {
@@ -120,7 +126,7 @@ MemoryDebugger::memDump(std::ostream& os, u32 addr, isize lines, isize sz)
         os << ascDump<A>(addr, 16);
         os << std::endl;
     }
-    current = addr;
+    return addr - oldAddr;
 }
 
 i64
@@ -142,11 +148,11 @@ MemoryDebugger::memSearch(const string &pattern, u32 addr, isize align)
                 if (val != u8(pattern[j])) break;
 
                 // Return true if all values have matched
-                if (j == length - 1) { current = i; return i; }
+                if (j == length - 1) return i;
             }
 
             // Skip unmapped memory pages
-            if (mem.isUnmapped(i)) { i = (i & 0xFFFF0000) + 0x010000; }
+            if (mem.isUnmapped(i)) i = (i & 0xFFFF0000) + 0x010000;
         }
     }
 
@@ -171,12 +177,10 @@ MemoryDebugger::read(u32 addr, isize sz)
             fatalError;
     }
     
-    current = u32(addr + sz);
-    
     return result;
 }
 
-void
+isize
 MemoryDebugger::write(u32 addr, u32 val, isize sz, isize repeats)
 {
     // Check alignment
@@ -204,7 +208,7 @@ MemoryDebugger::write(u32 addr, u32 val, isize sz, isize repeats)
         }
     }
     
-    current = u32(addr + sz * repeats);
+    return sz * repeats;
 }
 
 void 
@@ -426,11 +430,11 @@ template const char *MemoryDebugger::hexDump <Accessor::CPU> (u32, isize, isize)
 template const char *MemoryDebugger::hexDump <Accessor::AGNUS> (u32, isize, isize) const;
 template const char *MemoryDebugger::memDump <Accessor::CPU> (u32, isize, isize) const;
 template const char *MemoryDebugger::memDump <Accessor::AGNUS> (u32, isize, isize) const;
-template void MemoryDebugger::ascDump <Accessor::CPU> (std::ostream&, u32, isize);
-template void MemoryDebugger::ascDump <Accessor::AGNUS> (std::ostream&, u32, isize);
-template void MemoryDebugger::hexDump <Accessor::CPU> (std::ostream&, u32, isize, isize);
-template void MemoryDebugger::hexDump <Accessor::AGNUS> (std::ostream&, u32, isize, isize);
-template void MemoryDebugger::memDump <Accessor::CPU> (std::ostream&, u32, isize, isize);
-template void MemoryDebugger::memDump <Accessor::AGNUS> (std::ostream&, u32, isize, isize);
+template isize MemoryDebugger::ascDump <Accessor::CPU> (std::ostream&, u32, isize) const;
+template isize MemoryDebugger::ascDump <Accessor::AGNUS> (std::ostream&, u32, isize) const;
+template isize MemoryDebugger::hexDump <Accessor::CPU> (std::ostream&, u32, isize, isize) const;
+template isize MemoryDebugger::hexDump <Accessor::AGNUS> (std::ostream&, u32, isize, isize) const;
+template isize MemoryDebugger::memDump <Accessor::CPU> (std::ostream&, u32, isize, isize) const;
+template isize MemoryDebugger::memDump <Accessor::AGNUS> (std::ostream&, u32, isize, isize) const;
 
 }

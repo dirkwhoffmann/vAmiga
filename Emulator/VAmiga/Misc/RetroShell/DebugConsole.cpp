@@ -531,9 +531,11 @@ DebugConsole::initCommands(RetroShellCmd &root)
         .extra  = { Arg::address },
         .help   = { "Dump memory in ASCII" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
-            
+
+            if (argv.size() > 0) { current = parseAddr(argv[0]); }
+
             std::stringstream ss;
-            mem.debugger.ascDump<Accessor::CPU>(ss, parseAddr(argv, 0, mem.debugger.current), 16);
+            current += (u32)mem.debugger.ascDump<Accessor::CPU>(ss, current, 16);
             retroShell << '\n' << ss << '\n';
         }
     });
@@ -544,9 +546,11 @@ DebugConsole::initCommands(RetroShellCmd &root)
         .extra  = { Arg::address },
         .help   = { "Dump memory", "m[.b|.w|.l]" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
-            
+                        
+            if (argv.size() > 0) { current = parseAddr(argv[0]); }
+
             std::stringstream ss;
-            mem.debugger.memDump<Accessor::CPU>(ss, parseAddr(argv, 0, mem.debugger.current), 16, values[0]);
+            current += (u32)mem.debugger.memDump<Accessor::CPU>(ss, current, 16, values[0]);
             retroShell << '\n' << ss << '\n';
         }, .values = {2}
     });
@@ -563,19 +567,25 @@ DebugConsole::initCommands(RetroShellCmd &root)
         .help   = { "Write into a register or memory", "w[.b|.w|.l]" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
-            // Resolve address
-            u32 addr = mem.debugger.current;
+            u32 addr = current;
             
             if (argv.size() > 1) {
+                
                 try {
+                    
                     addr = 0xDFF000 + u32(parseEnum<RegEnum>(argv[1]) << 1);
+                    mem.debugger.write(addr, u32(parseNum(argv[0])), values[0]);
+                    return;
+                    
                 } catch (...) {
+                    
                     addr = parseAddr(argv[1]);
                 };
             }
             
-            // Access memory
             mem.debugger.write(addr, u32(parseNum(argv[0])), values[0]);
+            current = addr + u32(values[0]);
+            
         }, .values = {2}
     });
     
@@ -620,7 +630,7 @@ DebugConsole::initCommands(RetroShellCmd &root)
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
             auto pattern = parseSeq(argv[0]);
-            auto addr = u32(parseNum(argv, 1, mem.debugger.current));
+            auto addr = u32(parseNum(argv, 1, current));
             auto found = mem.debugger.memSearch(pattern, addr, values[0] == 1 ? 1 : 2);
             
             if (found >= 0) {
@@ -628,6 +638,7 @@ DebugConsole::initCommands(RetroShellCmd &root)
                 std::stringstream ss;
                 mem.debugger.memDump<Accessor::CPU>(ss, u32(found), 1, values[0]);
                 retroShell << ss;
+                current = u32(found);
                 
             } else {
                 

@@ -825,7 +825,7 @@ class Inspector: DialogController {
             scrollToPC(pc: pc)
 
         case .COPPERBP_REACHED, .COPPERWP_REACHED, .BEAMTRAP_REACHED,
-                .EOF_REACHED, .EOL_REACHED, .MEM_LAYOUT:
+                .EOF_REACHED, .EOL_REACHED, .MEM_LAYOUT, .RSH_UPDATE:
             
             fullRefresh()
             

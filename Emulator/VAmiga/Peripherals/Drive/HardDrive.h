@@ -315,10 +315,7 @@ public:
 
     // Checks whether the drive will work with the currently installed Rom
     bool isCompatible() const;
-    
-    // Checks whether the drive has a user directory block
-    [[deprecated]] bool hasUserDir() const;
-   
+       
     // Checks whether the drive is bootable
     bool isBootable();
     

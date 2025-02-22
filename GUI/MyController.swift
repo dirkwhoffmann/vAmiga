@@ -407,7 +407,8 @@ extension MyController {
             
         case .RSH_UPDATE:
             renderer.console.isDirty = true
-
+            passToInspector()
+            
         case .RSH_DEBUGGER:
             break
 
