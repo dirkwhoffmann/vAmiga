@@ -32,11 +32,11 @@ struct CoreException : public std::exception {
 
 struct CoreError : public CoreException
 {
-    CoreError(Fault code, const string &s);
-    CoreError(Fault code, const char *s) : CoreError(code, string(s)) { };
-    CoreError(Fault code, const fs::path &path) : CoreError(code, path.string()) { };
-    CoreError(Fault code, long v) : CoreError(code, std::to_string(v)) { };
-    CoreError(Fault code) : CoreError(code, "") { }
+    CoreError(Fault f, const string &s);
+    CoreError(Fault f, const char *s) : CoreError(f, string(s)) { };
+    CoreError(Fault f, const fs::path &p) : CoreError(f, p.string()) { };
+    CoreError(Fault f, std::integral auto v) : CoreError(f, std::to_string(v)) { };
+    CoreError(Fault f) : CoreError(f, "") { }
     
     const char *what() const throw() override;
     Fault fault() const { return Fault(data); }
