@@ -650,7 +650,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //               -------------------------------------------------
     // <ea>,Ay       | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | A | B |
     //               -------------------------------------------------
-    //                TODO
+    //                         X           X   X   X   X   X   X
 
     if constexpr (C >= C68020) {
 
@@ -671,7 +671,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //               -------------------------------------------------
     // <ea>,Ay       | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | A | B |
     //               -------------------------------------------------
-    //                TODO
+    //                         X   X   X   X   X   X   X   X   X
 
     if constexpr (C >= C68020) {
 

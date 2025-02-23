@@ -450,7 +450,7 @@ extension MyController {
 
         case .OVERCLOCKING:
             speedometer.acceleration = acceleration
-            activityBar.maxValue = 140.0 * acceleration // TODO: REMOVE??
+            activityBar.maxValue = 140.0 * acceleration
             activityBar.warningValue = 77.0 * acceleration 
             activityBar.criticalValue = 105.0 * acceleration
             

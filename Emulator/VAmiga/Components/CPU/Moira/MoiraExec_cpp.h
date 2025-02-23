@@ -4450,12 +4450,7 @@ Moira::execDivlMoira(u16 opcode, bool *divByZero)
     int dh  = _____________xxx(ext);
     int dl  = _xxx____________(ext);
 
-    try {
-        readOp<C, M, S>(src, &ea, &divisor);
-    } catch(...) {
-        // TODO: Change return type from bool to void
-        return false;
-    }
+    try { readOp<C, M, S>(src, &ea, &divisor); } catch(...) { return false; }
 
     if (ext & 0x400) {
         dividend = (u64)readD(dh) << 32 | readD(dl);
@@ -4511,7 +4506,6 @@ Moira::execDivlMoira(u16 opcode, bool *divByZero)
         }
         case 0b10:
         {
-            // auto result = divlsMusashi<Word>(dividend, divisor);
             auto result = divlsMoira<Word>(dividend, divisor);
 
             writeD(dh, result.second);

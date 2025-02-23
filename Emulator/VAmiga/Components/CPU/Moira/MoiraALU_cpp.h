@@ -811,8 +811,7 @@ Moira::divlsMoira(i64 a, u32 src)
 {
     i64 quotient, remainder;
 
-    // TODO: CLEAN THIS UP
-    if (S == Word) { a = (i64)(i32)a; }
+    if constexpr (S == Word) { a = (i64)(i32)a; }
 
     if ((u64)a == 0x8000000000000000UL && (i32)src == -1) {
 
