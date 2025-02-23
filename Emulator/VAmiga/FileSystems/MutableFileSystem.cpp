@@ -696,7 +696,7 @@ MutableFileSystem::exportDirectory(const fs::path &path, bool createDir) const
     
     // Collect all files and directories
     std::vector<Block> items;
-    collect(cd, items);
+    collect(rootBlock, items);
 
     // Export all items
     for (auto const& i : items) {

@@ -1609,49 +1609,15 @@ FSBlock::setDataBytesInBlock(u32 val)
 isize
 FSBlock::writeData(std::ostream& os)
 {
-    // TODO: REMOVE CODE DUPLICATION
-    // TODO: CALL writeData(Buffer<u8> &) and write Buffer to the stream
+    Buffer<u8> buffer;
     
-    // Only call this function for file header blocks
-    assert(type == FSBlockType::FILEHEADER_BLOCK);
+    // Write block into buffer
+    writeData(buffer);
     
-    isize bytesRemaining = getFileSize();
-    isize bytesTotal = 0;
-    isize blocksTotal = 0;
+    // Export the buffer
+    os << buffer;
     
-    // Start here and iterate through all connected file list blocks
-    FSBlock *block = this;
-    
-    while (block && blocksTotal < device.numBlocks()) {
-        
-        blocksTotal++;
-        
-        // Iterate through all data blocks references in this block
-        isize num = std::min(block->getNumDataBlockRefs(), block->getMaxDataBlockRefs());
-        for (isize i = 0; i < num; i++) {
-            
-            Block ref = block->getDataBlockRef(i);
-            if (FSBlock *dataBlock = device.dataBlockPtr(ref)) {
-
-                isize bytesWritten = dataBlock->writeData(os, bytesRemaining);
-                bytesTotal += bytesWritten;
-                bytesRemaining -= bytesWritten;
-                
-            } else {
-                
-                warn("Ignoring block %d (no data block)\n", ref);
-            }
-        }
-        
-        // Continue with the next list block
-        block = block->getNextListBlock();
-    }
-    
-    if (bytesRemaining != 0) {
-        warn("%ld remaining bytes. Expected 0.\n", bytesRemaining);
-    }
-    
-    return bytesTotal;
+    return buffer.size;
 }
 
 isize

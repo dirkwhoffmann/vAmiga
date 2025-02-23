@@ -43,7 +43,7 @@ template <class T> struct Allocator {
     void init(const std::vector<T> &vector);
     void init(const fs::path &path);
     void init(const fs::path &path, const string &name);
-
+    
     // Resizes an existing buffer
     void resize(isize elements);
     void resize(isize elements, T pad);
@@ -101,5 +101,15 @@ template <class T> struct Buffer : public Allocator <T> {
     T operator [] (isize i) const { return ptr[i]; }
     T &operator [] (isize i) { return ptr[i]; }
 };
+
+// Stream operators
+template <class T>
+std::ostream& operator<<(std::ostream& os, const Allocator<T>& buffer) {
+    
+    if (buffer.ptr && buffer.size > 0) {
+        os.write((const char *)buffer.ptr, buffer.size * sizeof(T));
+    }
+    return os;
+}
 
 }
