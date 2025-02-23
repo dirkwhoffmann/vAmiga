@@ -11,7 +11,6 @@
 
 #include "Annotations.h"
 #include "BasicTypes.h"
-#include "Exception.h"
 #include <functional>
 
 namespace vamiga::util {

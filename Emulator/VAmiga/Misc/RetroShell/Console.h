@@ -27,7 +27,7 @@ struct TooManyArgumentsError : public util::ParseError {
     using ParseError::ParseError;
 };
 
-struct ScriptInterruption: util::CoreException {
+struct ScriptInterruption: CoreException {
     using CoreException::CoreException;
 };
 

@@ -735,7 +735,6 @@
 		506D6AB1276C7B2D002C9711 /* StringUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StringUtils.h; sourceTree = "<group>"; };
 		5071B7852621F88800D6FB54 /* CopperDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperDebugger.cpp; sourceTree = "<group>"; };
 		5071B7862621F88800D6FB54 /* CopperDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CopperDebugger.h; sourceTree = "<group>"; };
-		5072159C25EA698600787591 /* Exception.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
 		5072159F25EA9AE600787591 /* Chrono.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Chrono.cpp; sourceTree = "<group>"; };
 		507215A025EA9AE600787591 /* Chrono.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Chrono.h; sourceTree = "<group>"; };
 		507215A525EA9DD900787591 /* RingBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RingBuffer.h; sourceTree = "<group>"; };
@@ -2004,7 +2003,6 @@
 				5072159F25EA9AE600787591 /* Chrono.cpp */,
 				500C716F255EE2AC00DDEEB2 /* Concurrency.h */,
 				500C716E255EE2AC00DDEEB2 /* Concurrency.cpp */,
-				5072159C25EA698600787591 /* Exception.h */,
 				500A0A29262305BE0019F013 /* MemUtils.h */,
 				500A0A28262305BE0019F013 /* MemUtils.cpp */,
 				50B3C44825EAFB5500651700 /* Checksum.h */,
