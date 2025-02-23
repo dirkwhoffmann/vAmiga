@@ -1627,7 +1627,7 @@ DebugConsole::initCommands(RetroShellCmd &root)
             std::stringstream ss;
             
             if (isNum(argv[0])) {
-                mem.debugger.convertNumeric(ss, u32(parseNum(argv[0])));
+                mem.debugger.convertNumeric(ss, (u32)parseNum(argv[0]));
             } else {
                 mem.debugger.convertNumeric(ss, argv.front());
             }

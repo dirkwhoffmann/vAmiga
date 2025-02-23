@@ -381,47 +381,70 @@ MemoryDebugger::writeCs(Reg reg, u16 value)
 void
 MemoryDebugger::convertNumeric(std::ostream& os, u8 value) const
 {
-    using namespace util;
-
-    os << std::setw(10) << std::right << std::setfill(' ') << dec(value) << " | ";
-    os << hex(value) << " | ";
-    os << bin(value) << " | ";
-    os << str(value);
+    convertNumeric<u16>(os, value, "%3d | %h | %b | %s");
 }
 
 void
 MemoryDebugger::convertNumeric(std::ostream& os, u16 value) const
 {
-    using namespace util;
-
-    os << std::setw(10) << std::right << std::setfill(' ') << dec(value) << " | ";
-    os << hex(value) << " | ";
-    os << bin(value) << " | ";
-    os << str(value);
+    convertNumeric<u16>(os, value, "%5d | %h | %b | %s");
 }
 
 void
 MemoryDebugger::convertNumeric(std::ostream& os, u32 value) const
 {
-    using namespace util;
-
-    os << std::setw(10) << std::right << std::setfill(' ') << dec(value) << " | ";
-    os << hex(value) << " | ";
-    os << bin(value) << " | ";
-    os << str(value);
+    convertNumeric<u32>(os, value, "%10d | %h | %b | %s");
 }
 
 void
 MemoryDebugger::convertNumeric(std::ostream& os, string s) const
 {
-    u8 bytes[4];
+    auto len = s.length();
 
-    bytes[0] = s.length() >= 4 ? (u8)s[s.length() - 4] : 0;
-    bytes[1] = s.length() >= 3 ? (u8)s[s.length() - 3] : 0;
-    bytes[2] = s.length() >= 2 ? (u8)s[s.length() - 2] : 0;
-    bytes[3] = s.length() >= 1 ? (u8)s[s.length() - 1] : 0;
+    u8 bytes[4];
+    bytes[0] = len >= 4 ? (u8)s[len - 4] : 0;
+    bytes[1] = len >= 3 ? (u8)s[len - 3] : 0;
+    bytes[2] = len >= 2 ? (u8)s[len - 2] : 0;
+    bytes[3] = len >= 1 ? (u8)s[len - 1] : 0;
 
     convertNumeric(os, u32(HI_HI_LO_LO(bytes[0], bytes[1], bytes[2], bytes[3])));
+}
+
+template <typename T> void
+MemoryDebugger::convertNumeric(std::ostream& os, T value, const char *fmt) const
+{
+    bool ctrl = false;
+    isize tab = 0;
+
+    for (char c = fmt[0]; c != 0; c = (++fmt)[0]) {
+
+        if (!ctrl) {
+
+            if (c == '%') { ctrl = true; tab = 0; } else { os << c; }
+            continue;
+        }
+
+        if (c >= '0' && c <= '9') {
+
+            tab = 10 * tab + (c - '0');
+            continue;
+        }
+
+        if (tab) { os << std::setw(int(tab)) << std::right << std::setfill(' '); }
+        
+        switch (c) {
+
+            case 'd': os << util::dec(value); break;
+            case 'h': os << util::hex(value); break;
+            case 'b': os << util::bin(value); break;
+            case 's': os << util::str(value); break;
+
+            default:
+                fatalError;
+        }
+
+        ctrl = false;
+    }
 }
 
 template const char *MemoryDebugger::ascDump <Accessor::CPU> (u32, isize) const;

@@ -132,11 +132,14 @@ public:
 public:
         
     // Displays a value in different number formats (hex, dec, bin, alpha)
-    // TODO: REPLACE BY GENERIC FORMAT STRING FORMATTER
     void convertNumeric(std::ostream& os, u8 value) const;
     void convertNumeric(std::ostream& os, u16 value) const;
     void convertNumeric(std::ostream& os, u32 value) const;
     void convertNumeric(std::ostream& os, string value) const;
+    
+private:
+    
+    template <typename T> void convertNumeric(std::ostream& os, T value, const char *fmt) const;
 };
 
 }
