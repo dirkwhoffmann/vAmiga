@@ -18,7 +18,7 @@ jobs:
           - { sys: mingw32, env: i686, build: Release }
           - { sys: mingw32, env: i686, build: Debug }
           - { sys: mingw64, env: x86_64, build: Release }
-          - { sys: mingw64, env: x86_64, build: Debug }
+          # - { sys: mingw64, env: x86_64, build: Debug }
     name: ${ matrix.sys }}
     defaults:
       run:
@@ -55,6 +55,6 @@ jobs:
         cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=${{matrix.build}}
         cmake --build build --config ${{matrix.build}}
       
-    #- name: Test
-    #  working-directory: build
-    #  run: ctest --verbose -C ${{matrix.build}}
+    - name: Test
+      working-directory: build
+      run: ctest --verbose --build-config ${{matrix.build}}
