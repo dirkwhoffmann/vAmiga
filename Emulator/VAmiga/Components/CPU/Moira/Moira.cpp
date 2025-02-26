@@ -39,7 +39,7 @@ Moira::Moira(Amiga &ref) : SubComponent(ref)
     instrStyle = DasmStyle {
 
         .syntax         = Syntax::MOIRA,
-        .letterCase     = DASM_MIXED_CASE,
+        .letterCase     = LetterCase::MIXED_CASE,
         .numberFormat   = { .prefix = "$", .radix = 16, .upperCase = false, .plainZero = false },
         .tab            = 8
     };
@@ -47,7 +47,7 @@ Moira::Moira(Amiga &ref) : SubComponent(ref)
     dataStyle = DasmStyle {
 
         .syntax         = Syntax::MOIRA,
-        .letterCase     = DASM_MIXED_CASE,
+        .letterCase     = LetterCase::MIXED_CASE,
         .numberFormat   = { .prefix = "", .radix = 16, .upperCase = false, .plainZero = false },
         .tab            = 1
     };
@@ -83,7 +83,7 @@ Moira::setDasmSyntax(Syntax value)
 }
 
 void
-Moira::setDasmLetterCase(DasmLetterCase value)
+Moira::setDasmLetterCase(LetterCase value)
 {
     instrStyle.letterCase = value;
 }

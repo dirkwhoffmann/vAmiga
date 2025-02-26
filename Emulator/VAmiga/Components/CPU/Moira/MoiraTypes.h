@@ -70,13 +70,12 @@ enum class Syntax
     MUSASHI,
 };
 
-typedef enum
+enum class LetterCase
 {
-    DASM_MIXED_CASE,        // Style is determined by the selected DasmSyntax
-    DASM_LOWER_CASE,        // Everything is printed in lowercase
-    DASM_UPPER_CASE         // Everything is printed in uppercase
-}
-DasmLetterCase;
+    MIXED_CASE,        // Style is determined by the selected DasmSyntax
+    LOWER_CASE,        // Everything is printed in lowercase
+    UPPER_CASE         // Everything is printed in uppercase
+};
 
 typedef enum
 {
@@ -379,7 +378,7 @@ struct DasmNumberFormat
 struct DasmStyle
 {
     Syntax syntax;
-    DasmLetterCase letterCase;
+    LetterCase letterCase;
     DasmNumberFormat numberFormat;
     int tab;
 };

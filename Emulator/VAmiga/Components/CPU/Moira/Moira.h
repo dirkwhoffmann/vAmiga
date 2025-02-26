@@ -151,7 +151,7 @@ public:
     // Configures the visual appearance of disassembled instructions
     void setDasmSyntax(Syntax value);
     void setDasmNumberFormat(DasmNumberFormat value) { setNumberFormat(instrStyle, value); }
-    void setDasmLetterCase(DasmLetterCase value);
+    void setDasmLetterCase(LetterCase value);
     void setDasmIndentation(int value) { instrStyle.tab = value; }
 
     // Configures the visual appearance of data dumps

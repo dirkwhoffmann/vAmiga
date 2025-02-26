@@ -23,18 +23,18 @@ Moira::disassemble(char *str, u32 addr) const
     // Post process disassembler output
     switch (instrStyle.letterCase) {
 
-        case DASM_MIXED_CASE:
+        case LetterCase::MIXED_CASE:
 
             break;
 
-        case DASM_LOWER_CASE:
+        case LetterCase::LOWER_CASE:
 
             for (auto p = writer.base; p < writer.ptr; p++) {
                 *p = char(std::tolower(*p));
             }
             break;
 
-        case DASM_UPPER_CASE:
+        case LetterCase::UPPER_CASE:
 
             for (auto p = writer.base; p < writer.ptr; p++) {
                 *p = char(std::toupper(*p));
