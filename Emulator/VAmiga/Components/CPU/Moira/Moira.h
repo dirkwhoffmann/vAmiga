@@ -68,7 +68,7 @@ protected:
     PrefetchQueue queue;
 
     // The interrupt mode of this CPU
-    IrqMode irqMode = IRQ_AUTO;
+    IrqMode irqMode = IrqMode::AUTO;
 
     // Current value on the IPL pins (Interrupt Priority Level)
     u8 ipl;
@@ -271,7 +271,7 @@ protected:
     virtual void write8(u32 addr, u8 val) const = 0;
     virtual void write16(u32 addr, u16 val) const = 0;
 
-    // Provides the interrupt level in IRQ_USER mode
+    // Provides the interrupt level in USER mode
     virtual u16 readIrqUserVector(u8 level) const { return 0; }
 
     // State delegates
@@ -318,7 +318,7 @@ protected:
     void write8(u32 addr, u8 val) const;
     void write16(u32 addr, u16 val) const;
 
-    // Provides the interrupt level in IRQ_USER mode
+    // Provides the interrupt level in USER mode
     u16 readIrqUserVector(u8 level) const;
 
     // State delegates

@@ -819,10 +819,10 @@ Moira::getIrqVector(u8 level) const {
 
     switch (irqMode) {
 
-        case IRQ_AUTO:          return 24 + level;
-        case IRQ_USER:          return readIrqUserVector(level) & 0xFF;
-        case IRQ_SPURIOUS:      return 24;
-        case IRQ_UNINITIALIZED: return 15;
+        case IrqMode::AUTO:          return 24 + level;
+        case IrqMode::USER:          return readIrqUserVector(level) & 0xFF;
+        case IrqMode::SPURIOUS:      return 24;
+        case IrqMode::UNINITIALIZED: return 15;
 
         default:
             fatalError;

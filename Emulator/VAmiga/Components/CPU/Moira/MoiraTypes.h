@@ -248,14 +248,13 @@ typedef enum
 }
 ExceptionType;
 
-typedef enum
+enum class IrqMode
 {
-    IRQ_AUTO,
-    IRQ_USER,
-    IRQ_SPURIOUS,
-    IRQ_UNINITIALIZED
-}
-IrqMode;
+    AUTO,
+    USER,
+    SPURIOUS,
+    UNINITIALIZED
+};
 
 typedef enum
 {
