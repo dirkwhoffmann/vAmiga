@@ -301,7 +301,7 @@ Moira::bcd(u32 op1, u32 op2)
             }
 
             // Set V flag
-            if constexpr (C != C68020) {
+            if constexpr (C != Core::C68020) {
                 reg.sr.v = ((tmp & 0x80) == 0) && ((result & 0x80) == 0x80);
             } else {
                 reg.sr.v = 0;
@@ -331,7 +331,7 @@ Moira::bcd(u32 op1, u32 op2)
             }
 
             // Set V flag
-            if constexpr (C != C68020) {
+            if constexpr (C != Core::C68020) {
                 reg.sr.v = ((tmp & 0x80) == 0x80) && ((result & 0x80) == 0);
             } else {
                 reg.sr.v = 0;
@@ -964,14 +964,14 @@ Moira::cyclesMul(u16 data) const
 {
     int mcycles = 0;
 
-    if constexpr (C == C68000 && I == MULU) {
+    if constexpr (C == Core::C68000 && I == MULU) {
 
         mcycles = 17;
         for (; data; data >>= 1) if (data & 1) mcycles++;
         mcycles *= 2;
     }
 
-    if constexpr (C == C68000 && I == MULS) {
+    if constexpr (C == Core::C68000 && I == MULS) {
 
         mcycles = 17;
         data = ((data << 1) ^ data) & 0xFFFF;
@@ -979,12 +979,12 @@ Moira::cyclesMul(u16 data) const
         mcycles *= 2;
     }
 
-    if constexpr (C == C68010 && I == MULU) {
+    if constexpr (C == Core::C68010 && I == MULU) {
 
         mcycles = 36;
     }
 
-    if constexpr (C == C68010 && I == MULS) {
+    if constexpr (C == Core::C68010 && I == MULS) {
 
         mcycles = (data & 0x8000) ? 38 : 36;
     }
@@ -997,7 +997,7 @@ Moira::cyclesDiv(u32 op1, u16 op2) const
 {
     int result = 0;
 
-    if constexpr (C == C68000 && I == DIVU) {
+    if constexpr (C == Core::C68000 && I == DIVU) {
 
         u32 dividend = op1;
         u16 divisor  = op2;
@@ -1030,7 +1030,7 @@ Moira::cyclesDiv(u32 op1, u16 op2) const
         }
     }
 
-    if constexpr (C == C68000 && I == DIVS) {
+    if constexpr (C == Core::C68000 && I == DIVS) {
 
         i32 dividend = (i32)op1;
         i16 divisor  = (i16)op2;
@@ -1058,7 +1058,7 @@ Moira::cyclesDiv(u32 op1, u16 op2) const
         }
     }
 
-    if constexpr (C == C68010 && I == DIVU) {
+    if constexpr (C == Core::C68010 && I == DIVU) {
 
         u32 dividend = op1;
         u16 divisor  = op2;
@@ -1091,7 +1091,7 @@ Moira::cyclesDiv(u32 op1, u16 op2) const
         }
     }
 
-    if constexpr (C == C68010 && I == DIVS) {
+    if constexpr (C == Core::C68010 && I == DIVS) {
 
         i32 dividend = (i32)op1;
         i16 divisor  = (i16)op2;
@@ -1116,15 +1116,15 @@ Moira::setUndefinedCHK(i32 src, i32 dst)
 {
     switch (C) {
 
-        case C68000:
-        case C68010:
+        case Core::C68000:
+        case Core::C68010:
 
             reg.sr.c = 0;
             reg.sr.z = dst == 0 ? 1 : 0;
             reg.sr.v = 0;
             break;
 
-        case C68020:
+        case Core::C68020:
 
             reg.sr.c = reg.sr.z = reg.sr.n = reg.sr.v = 0;
 
@@ -1246,15 +1246,15 @@ Moira::setUndefinedDIVU(u32 dividend, u16 divisor)
 
     switch (C) {
 
-        case C68000:
-        case C68010:
+        case Core::C68000:
+        case Core::C68010:
 
             reg.sr.c = 0;
             reg.sr.n = 1;
             reg.sr.z = 0;
             break;
 
-        case C68020:
+        case Core::C68020:
 
             if (iDividend < 0) reg.sr.n = 1;
             break;
@@ -1269,15 +1269,15 @@ Moira::setUndefinedDIVS(i32 dividend, i16 divisor)
 
     switch (C) {
 
-        case C68000:
-        case C68010:
+        case Core::C68000:
+        case Core::C68010:
 
             reg.sr.c = 0;
             reg.sr.n = 1;
             reg.sr.z = 0;
             break;
 
-        case C68020:
+        case Core::C68020:
 
             reg.sr.c = 0;
             reg.sr.n = 0;
@@ -1345,8 +1345,8 @@ Moira::setDivZeroDIVU(u32 dividend)
 {
     switch (C) {
 
-        case C68000:
-        case C68010:
+        case Core::C68000:
+        case Core::C68010:
         {
             reg.sr.n = 0;
             reg.sr.z = 0;
@@ -1356,7 +1356,7 @@ Moira::setDivZeroDIVU(u32 dividend)
             if (d == 0) reg.sr.z = 1;
             break;
         }
-        case C68020:
+        case Core::C68020:
         {
             reg.sr.n = 0;
             reg.sr.z = 0;
@@ -1375,14 +1375,14 @@ Moira::setDivZeroDIVS(u32 dividend)
 {
     switch (C) {
 
-        case C68000:
-        case C68010:
+        case Core::C68000:
+        case Core::C68010:
 
             reg.sr.n = 0;
             reg.sr.z = 1;
             break;
 
-        case C68020:
+        case Core::C68020:
 
             reg.sr.n = 0;
             reg.sr.z = 1;

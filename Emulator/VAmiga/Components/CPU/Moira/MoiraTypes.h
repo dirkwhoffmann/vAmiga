@@ -45,21 +45,21 @@ enum class Model
     M68040                  // Disassembler only
 };
 
-typedef enum
+/*
+enum class FPUModel
 {
     INTERNAL_FPU,           // Built-in FPU (in any)
     M68881,                 // Floating-point coprocessor
     M68882                  // Floating-point coprocessor
-}
-FPUModel;
+};
+*/
 
-typedef enum
+enum class Core
 {
     C68000,                 // Used by M68000
     C68010,                 // Used by M68010
     C68020                  // Used by all others
-}
-Core;
+};
 
 typedef enum
 {

@@ -16,13 +16,13 @@
 
 #if PRECISE_TIMING == true
 
-#define SYNC(x)         { if constexpr (C != C68020) sync(x); }
-#define SYNC_68000(x)   { if constexpr (C == C68000) sync(x); }
-#define SYNC_68010(x)   { if constexpr (C == C68010) sync(x); }
+#define SYNC(x)         { if constexpr (C != Core::C68020) sync(x); }
+#define SYNC_68000(x)   { if constexpr (C == Core::C68000) sync(x); }
+#define SYNC_68010(x)   { if constexpr (C == Core::C68010) sync(x); }
 
 #define CYCLES_68000(c) { }
 #define CYCLES_68010(c) { }
-#define CYCLES_68020(c) { if constexpr (C == C68020) sync((c) + cp); }
+#define CYCLES_68020(c) { if constexpr (C == Core::C68020) sync((c) + cp); }
 
 #else
 
@@ -30,9 +30,9 @@
 #define SYNC_68000(x)   { }
 #define SYNC_68010(x)   { }
 
-#define CYCLES_68000(c) { if constexpr (C == C68000) sync(c); }
-#define CYCLES_68010(c) { if constexpr (C == C68010) sync(c); }
-#define CYCLES_68020(c) { if constexpr (C == C68020) sync((c) + cp); }
+#define CYCLES_68000(c) { if constexpr (C == Core::C68000) sync(c); }
+#define CYCLES_68010(c) { if constexpr (C == Core::C68010) sync(c); }
+#define CYCLES_68020(c) { if constexpr (C == Core::C68020) sync((c) + cp); }
 
 #endif
 

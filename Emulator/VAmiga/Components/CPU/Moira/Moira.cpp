@@ -161,18 +161,18 @@ Moira::addrMask() const
 {
     switch (cpuModel) {
 
-        case Model::M68000: return addrMask<C68000>();
-        case Model::M68010: return addrMask<C68010>();
+        case Model::M68000: return addrMask<Core::C68000>();
+        case Model::M68010: return addrMask<Core::C68010>();
         
         default:
-            return addrMask<C68020>();
+            return addrMask<Core::C68020>();
     }
 }
 
 template <Core C> u32
 Moira::addrMask() const
 {
-    if constexpr (C == C68020) {
+    if constexpr (C == Core::C68020) {
 
         return cpuModel == Model::M68EC020 ? 0x00FFFFFF : 0xFFFFFFFF;
 
@@ -187,11 +187,11 @@ Moira::reset()
 {
     switch (cpuModel) {
 
-        case Model::M68000:    reset<C68000>(); break;
-        case Model::M68010:    reset<C68010>(); break;
+        case Model::M68000:    reset<Core::C68000>(); break;
+        case Model::M68010:    reset<Core::C68010>(); break;
         
         default:
-            reset<C68020>();
+            reset<Core::C68020>();
     }
 }
 
@@ -359,11 +359,11 @@ Moira::processException(const std::exception &exc)
 {
     switch (cpuModel) {
 
-        case Model::M68000: processException<C68000>(exc); break;
-        case Model::M68010: processException<C68010>(exc); break;
+        case Model::M68000: processException<Core::C68000>(exc); break;
+        case Model::M68010: processException<Core::C68010>(exc); break;
         
         default:
-            processException<C68020>(exc);
+            processException<Core::C68020>(exc);
     }
 }
 

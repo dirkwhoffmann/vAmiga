@@ -30,7 +30,7 @@ REGISTER_INFO(id,name,I,M,S) \
 
 #define CIMSloop(id,name,I,M,S) { \
 assert(loop[id] == nullptr); \
-loop[id] = EXEC_HANDLER(name,C68010,I##_LOOP,M,S); \
+loop[id] = EXEC_HANDLER(name,Core::C68010,I##_LOOP,M,S); \
 }
 
 // Registers an instruction in one of the standard instruction formats:
@@ -157,23 +157,31 @@ void
 Moira::createJumpTable(Model cpuModel, Model dasmModel)
 {
     auto core = [&](Model model) {
-        return model == Model::M68000 ? C68000 : model == Model::M68010 ? C68010 : C68020;
+        
+        switch (model) {
+                
+            case Model::M68000: return Core::C68000;
+            case Model::M68010: return Core::C68010;
+                
+            default:
+                return Core::C68020;
+        }
     };
 
     Core cpuCore = core(cpuModel);
     Core dasmCore = core(dasmModel);
 
     // Register handlers based on the dasm model
-    if (dasmCore == C68000) createJumpTable<C68000>(dasmModel, true);
-    if (dasmCore == C68010) createJumpTable<C68010>(dasmModel, true);
-    if (dasmCore == C68020) createJumpTable<C68020>(dasmModel, true);
+    if (dasmCore == Core::C68000) createJumpTable<Core::C68000>(dasmModel, true);
+    if (dasmCore == Core::C68010) createJumpTable<Core::C68010>(dasmModel, true);
+    if (dasmCore == Core::C68020) createJumpTable<Core::C68020>(dasmModel, true);
 
     // If both models differ, overwrite the exec handlers
     if (cpuModel != dasmModel) {
 
-        if (cpuCore == C68000) createJumpTable<C68000>(cpuModel, false);
-        if (cpuCore == C68010) createJumpTable<C68010>(cpuModel, false);
-        if (cpuCore == C68020) createJumpTable<C68020>(cpuModel, false);
+        if (cpuCore == Core::C68000) createJumpTable<Core::C68000>(cpuModel, false);
+        if (cpuCore == Core::C68010) createJumpTable<Core::C68010>(cpuModel, false);
+        if (cpuCore == Core::C68020) createJumpTable<Core::C68020>(cpuModel, false);
     }
 }
 
@@ -450,7 +458,7 @@ Moira::createJumpTable(Model model, bool regDasm)
         ________________(opcode | 0xF00 | i, BLE, MODE_IP, Byte, Bcc, CIMS)
     }
 
-    if constexpr (C >= C68020) {
+    if constexpr (C >= Core::C68020) {
 
         ________________(opcode | 0x0FF, BRA, MODE_IP, Long, Bra, CIMS)
         ________________(opcode | 0x2FF, BHI, MODE_IP, Long, Bcc, CIMS)
@@ -480,7 +488,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //               -------------------------------------------------
     //                 X       X           X   X   X   X
 
-    if constexpr (C >= C68020) {
+    if constexpr (C >= Core::C68020) {
 
         opcode = parse("1110 1010 11-- ----");
         __________MMMXXX(opcode, BFCHG, 0b100000000000, Long, BitFieldDn, CIMS)
@@ -510,7 +518,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //               -------------------------------------------------
     //                 X       X           X   X   X   X   X   X   X
 
-    if constexpr (C >= C68020) {
+    if constexpr (C >= Core::C68020) {
 
         opcode = parse("1110 1011 11-- ----");
         __________MMMXXX(opcode, BFEXTS, 0b100000000000, Long, BitFieldDn, CIMS)
@@ -568,7 +576,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //       Syntax: BKPT #<vector>
     //        Sizes: Unsized
 
-    if constexpr (C >= C68010) {
+    if constexpr (C >= Core::C68010) {
 
         opcode = parse("0100 1000 0100 1---");
         _____________XXX(opcode, BKPT, MODE_IP, Long, Bkpt, CIMS)
@@ -612,7 +620,7 @@ Moira::createJumpTable(Model model, bool regDasm)
         ________________(opcode | i, BSR, MODE_IP, Byte, Bsr, CIMS)
     }
 
-    if constexpr (C >= C68020) {
+    if constexpr (C >= Core::C68020) {
         ________________(opcode | 0xFF, BSR, MODE_IP, Long, Bsr, CIMS)
     }
 
@@ -652,7 +660,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //               -------------------------------------------------
     //                         X           X   X   X   X   X   X
 
-    if constexpr (C >= C68020) {
+    if constexpr (C >= Core::C68020) {
 
         if (model == Model::M68EC020 || model == Model::M68020) {
 
@@ -673,7 +681,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //               -------------------------------------------------
     //                         X   X   X   X   X   X   X   X   X
 
-    if constexpr (C >= C68020) {
+    if constexpr (C >= Core::C68020) {
 
         // CAS
         opcode = parse("0000 1010 11-- ----");
@@ -705,7 +713,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     opcode = parse("0100 ---1 10-- ----");
     ____XXX___MMMXXX(opcode, CHK, 0b101111111111, Word, Chk, CIMS)
 
-    if constexpr (C >= C68020) {
+    if constexpr (C >= Core::C68020) {
 
         opcode = parse("0100 ---1 00-- ----");
         ____XXX___MMMXXX(opcode, CHK, 0b101111111111, Long, Chk, CIMS)
@@ -722,7 +730,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //               -------------------------------------------------
     //                         X           X   X   X   X   X   X
 
-    if constexpr (C >= C68020) {
+    if constexpr (C >= Core::C68020) {
 
         opcode = parse("0000 0000 11-- ----");
         __________MMMXXX(opcode, CHK2, 0b001001111110, Byte, ChkCmp2, CIMS)
@@ -795,7 +803,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     ________SSMMMXXX(opcode, CMPI, 0b100000000000, Byte | Word | Long, CmpiRg, CIMS)
     ________SSMMMXXX(opcode, CMPI, 0b001111111000, Byte | Word | Long, CmpiEa, CIMS)
 
-    if constexpr (C >= C68010) {
+    if constexpr (C >= Core::C68010) {
 
         ________SSMMMXXX(opcode, CMPI, 0b000000000110, Byte | Word | Long, CmpiEa, CIMS)
     }
@@ -872,7 +880,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     opcode = parse("1000 ---0 11-- ----");
     ____XXX___MMMXXX(opcode, DIVU, 0b101111111111, Word, Divu, CIMS)
 
-    if constexpr (C >= C68020) {
+    if constexpr (C >= Core::C68020) {
 
         opcode = parse("0100 1100 01-- ----");
         __________MMMXXX(opcode, DIVL, 0b101111111111, Long, Divl, CIMS)
@@ -961,7 +969,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //       Syntax: EXTB Dx
     //        Sizes: Longword
 
-    if constexpr (C >= C68020) {
+    if constexpr (C >= Core::C68020) {
 
         opcode = parse("0100 1001 --00 0---");
         _____________XXX(opcode | 3 << 6, EXTB, MODE_DN, Long, Extb, CIMS)
@@ -976,7 +984,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     opcode = parse("0100 1110 0101 0---");
     _____________XXX(opcode, LINK, MODE_IP, Word, Link, CIMS)
 
-    if constexpr (C >= C68020) {
+    if constexpr (C >= Core::C68020) {
 
         opcode = parse("0100 1000 0000 1---");
         _____________XXX(opcode, LINK, MODE_IP, Long, Link, CIMS)
@@ -1144,7 +1152,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //               MOVEC Rx,Rc
     //        Sizes: Longword
 
-    if constexpr (C >= C68010) {
+    if constexpr (C >= Core::C68010) {
 
         opcode = parse("0100 1110 0111 101-");
         ________________(opcode | 0, MOVEC, MODE_IP, Long, MovecRcRx, CIMS)
@@ -1214,7 +1222,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //               -------------------------------------------------
     //                         X   X   X   X   X   X   X
 
-    if constexpr (C >= C68010) {
+    if constexpr (C >= Core::C68010) {
 
         opcode = parse("0000 1110 ---- ----");
         ________SSMMMXXX(opcode, MOVES, 0b001111111000, Byte | Word | Long, Moves, CIMS)
@@ -1231,7 +1239,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //               -------------------------------------------------
     //                 X       X   X   X   X   X   X   X
 
-    if constexpr (C >= C68010) {
+    if constexpr (C >= Core::C68010) {
 
         opcode = parse("0100 0010 11-- ----");
         __________MMMXXX(opcode, MOVEFCCR, 0b100000000000, Word, MoveCcrRg, CIMS)
@@ -1310,7 +1318,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     opcode = parse("1100 ---0 11-- ----");
     ____XXX___MMMXXX(opcode, MULU, 0b101111111111, Word, Mulu, CIMS)
 
-    if constexpr (C >= C68020) {
+    if constexpr (C >= Core::C68020) {
 
         opcode = parse("0100 1100 00-- ----");
         __________MMMXXX(opcode, MULL, 0b101111111111, Long, Mull, CIMS)
@@ -1490,7 +1498,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //               PACK DX,Dy,#<adjustment>
     //        Sizes: Unsized
 
-    if constexpr (C >= C68020) {
+    if constexpr (C >= Core::C68020) {
 
         opcode = parse("1000 ---1 0100 0---");
         ____XXX______XXX(opcode, PACK, MODE_DN, Word, PackDn, CIMS)
@@ -1528,7 +1536,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //       Syntax: RTD
     //        Sizes: Unsized
 
-    if constexpr (C >= C68010) {
+    if constexpr (C >= Core::C68010) {
 
         opcode = parse("0100 1110 0111 0100");
         ________________(opcode, RTD, MODE_IP, Long, Rtd, CIMS)
@@ -1549,7 +1557,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //       Syntax: RTM Rn
     //        Sizes: Unsized
 
-    if constexpr (C >= C68020) {
+    if constexpr (C >= Core::C68020) {
 
         if (model == Model::M68EC020 || model == Model::M68020) {
 
@@ -1775,7 +1783,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //       Syntax: TRAPcc #<vector>
     //        Sizes: Unsized
 
-    if constexpr (C >= C68020) {
+    if constexpr (C >= Core::C68020) {
 
         opcode = parse("0101 ---- 1111 1100");
         ________________(opcode | 0x000, TRAPT,  MODE_IP, Byte, Trapcc, CIMS)
@@ -1856,7 +1864,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     ________SSMMMXXX(opcode, TST, 0b101111111000, Byte | Word | Long, Tst, CIMS)
     ________SSMMMXXX(opcode, TST, 0b001110000000, Byte | Word | Long, Tst, CIMSloop)
 
-    if constexpr (C >= C68020) {
+    if constexpr (C >= Core::C68020) {
 
         ________SSMMMXXX(opcode, TST, 0b000000000111, Byte, Tst, CIMS)
         ________SSMMMXXX(opcode, TST, 0b010000000111, Word | Long, Tst, CIMS)
@@ -1878,7 +1886,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //               UNPK DX,Dy,#<adjustment>
     //        Sizes: Unsized
 
-    if constexpr (C >= C68020) {
+    if constexpr (C >= Core::C68020) {
 
         opcode = parse("1000 ---1 1000 0---");
         ____XXX______XXX(opcode, UNPK, MODE_DN, Word, UnpkDn, CIMS)
@@ -1891,7 +1899,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     // Line-F area
     //
 
-    if constexpr (C >= C68020) {
+    if constexpr (C >= Core::C68020) {
 
         //
         // Coprocessor interface

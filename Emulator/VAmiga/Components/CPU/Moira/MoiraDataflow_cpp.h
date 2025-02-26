@@ -47,7 +47,7 @@ Moira::computeEA(u32 n) {
         }
         case 6: // (d,An,Xi)
         {
-            if constexpr (C == C68020) {
+            if constexpr (C == Core::C68020) {
 
                 if (queue.irc & 0x100) {
                     result = computeEAfull<C, M, S, F>(readA(n));
@@ -96,7 +96,7 @@ Moira::computeEA(u32 n) {
         }
         case 10: // (d,PC,Xi)
         {
-            if constexpr (C == C68020) {
+            if constexpr (C == Core::C68020) {
 
                 if (queue.irc & 0x100) {
                     result = computeEAfull<C, M, S, F>(reg.pc);
@@ -519,7 +519,7 @@ Moira::pop()
 template <Core C, Size S> bool
 Moira::misaligned(u32 addr)
 {
-    if constexpr (EMULATE_ADDRESS_ERROR && C != C68020 && S != Byte) {
+    if constexpr (EMULATE_ADDRESS_ERROR && C != Core::C68020 && S != Byte) {
         return addr & 1;
     } else {
         return false;
@@ -633,7 +633,7 @@ Moira::readExt()
 template <Core C, Flags F> void
 Moira::jumpToVector(int nr)
 {
-    u32 vbr = C == C68000 ? 0 : reg.vbr;
+    u32 vbr = C == Core::C68000 ? 0 : reg.vbr;
     u32 vectorAddr = (vbr & ~0x1) + 4 * nr;
     u32 oldpc = reg.pc;
 
@@ -647,7 +647,7 @@ Moira::jumpToVector(int nr)
             
             throw DoubleFault();
             
-        } else if (C == C68000) {
+        } else if (C == Core::C68000) {
 
             throw AddressError(makeFrame<F|AE_PROG>(reg.pc, vectorAddr));
 
@@ -724,7 +724,7 @@ Moira::penaltyCycles(u16 ext) const
         6, 11, 13, 13,  0, 11, 13, 13,  0, 11, 13, 13,  0, 11, 13, 13
     };
 
-    if constexpr (C == C68020 && (M == MODE_IX || M == MODE_IXPC)) {
+    if constexpr (C == Core::C68020 && (M == MODE_IX || M == MODE_IXPC)) {
 
         if (ext & 0x100) return delay[ext & 0x3F];
     }
@@ -733,4 +733,4 @@ Moira::penaltyCycles(u16 ext) const
 }
 
 // Explicit template instantiations
-template void Moira::fullPrefetch<C68000, POLL>();
+template void Moira::fullPrefetch<Core::C68000, POLL>();

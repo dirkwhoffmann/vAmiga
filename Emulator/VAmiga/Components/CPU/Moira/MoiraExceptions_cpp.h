@@ -29,7 +29,7 @@ Moira::writeStackFrame0000(u16 sr, u32 pc, u16 nr)
 {
     switch (C) {
 
-        case C68000:
+        case Core::C68000:
 
             if constexpr (MIMIC_MUSASHI) {
 
@@ -45,8 +45,8 @@ Moira::writeStackFrame0000(u16 sr, u32 pc, u16 nr)
             }
             break;
 
-        case C68010:
-        case C68020:
+        case Core::C68010:
+        case Core::C68020:
 
             if constexpr (MIMIC_MUSASHI) {
 
@@ -69,7 +69,7 @@ Moira::writeStackFrame0000(u16 sr, u32 pc, u16 nr)
 template <Core C> void
 Moira::writeStackFrame0001(u16 sr, u32 pc, u16 nr)
 {
-    assert(C == C68020);
+    assert(C == Core::C68020);
 
     // 0001 | Vector offset
     push<C, Word>(0x1000 | nr << 2);
@@ -84,7 +84,7 @@ Moira::writeStackFrame0001(u16 sr, u32 pc, u16 nr)
 template <Core C> void
 Moira::writeStackFrame0010(u16 sr, u32 pc, u32 ia, u16 nr)
 {
-    assert(C == C68020);
+    assert(C == Core::C68020);
 
     // Instruction address
     push<C, Long>(ia);
@@ -102,7 +102,7 @@ Moira::writeStackFrame0010(u16 sr, u32 pc, u32 ia, u16 nr)
 template <Core C> void
 Moira::writeStackFrame1000(StackFrame &frame, u16 sr, u32 pc, u32 ia, u16 nr, u32 addr)
 {
-    assert(C == C68010);
+    assert(C == Core::C68010);
 
     // Internal information
     push<C, Long>(0);
@@ -282,7 +282,7 @@ Moira::execAddressError(StackFrame frame, int delay)
     if (misaligned<C>(reg.sp)) throw DoubleFault();
 
     // Write stack frame
-    if (C == C68000) {
+    if (C == Core::C68000) {
         writeStackFrameAEBE<C>(frame);
     } else {
         writeStackFrame1000<C>(frame, status, frame.pc, reg.pc0, 3, frame.addr);
@@ -301,9 +301,9 @@ Moira::execException(M68kException exc, int nr)
 {
     switch (cpuModel) {
 
-        case Model::M68000: execException<C68000>(exc, nr); break;
-        case Model::M68010: execException<C68010>(exc, nr); break;
-        default:            execException<C68020>(exc, nr); break;
+        case Model::M68000: execException<Core::C68000>(exc, nr); break;
+        case Model::M68010: execException<Core::C68010>(exc, nr); break;
+        default:            execException<Core::C68020>(exc, nr); break;
     }
 }
 
@@ -346,7 +346,7 @@ Moira::execException(M68kException exc, int nr)
             SYNC(4);
 
             // Write stack frame
-            if (C == C68010 || C == C68020) {
+            if (C == Core::C68010 || C == Core::C68020) {
                 writeStackFrame0000<C>(status, reg.pc0, vector);
             } else {
                 writeStackFrame0000<C>(status, reg.pc - 2, vector);
@@ -377,7 +377,7 @@ Moira::execException(M68kException exc, int nr)
         case M68kException::TRAPV:
 
             // Write stack frame
-            C == C68020 ?
+            C == Core::C68020 ?
             writeStackFrame0010<C>(status, reg.pc, reg.pc0, vector) :
             writeStackFrame0000<C>(status, reg.pc, vector);
 
@@ -454,11 +454,11 @@ Moira::execInterrupt(u8 level)
 {
     switch (cpuModel) {
 
-        case Model::M68000: execInterrupt<C68000>(level); break;
-        case Model::M68010: execInterrupt<C68010>(level); break;
+        case Model::M68000: execInterrupt<Core::C68000>(level); break;
+        case Model::M68010: execInterrupt<Core::C68010>(level); break;
         
         default:
-            execInterrupt<C68020>(level);
+            execInterrupt<Core::C68020>(level);
     }
 }
 
@@ -491,7 +491,7 @@ Moira::execInterrupt(u8 level)
 
     switch (C) {
 
-        case C68000:
+        case Core::C68000:
 
             SYNC(6);
             reg.sp -= 6;
@@ -505,7 +505,7 @@ Moira::execInterrupt(u8 level)
             write<C, AddrSpace::DATA, Word>(reg.sp + 2, reg.pc >> 16);
             break;
 
-        case C68010:
+        case Core::C68010:
 
             SYNC(12);
             reg.sp -= 8;
@@ -516,7 +516,7 @@ Moira::execInterrupt(u8 level)
             write<C, AddrSpace::DATA, Word>(reg.sp + 6, 4 * queue.ird);
             break;
 
-        case C68020:
+        case Core::C68020:
 
             queue.ird = getIrqVector(level);
 

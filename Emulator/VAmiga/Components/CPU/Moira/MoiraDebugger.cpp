@@ -380,7 +380,7 @@ void
 Debugger::jump(u32 addr)
 {
     moira.reg.pc = addr & ~1;
-    moira.fullPrefetch<C68000, POLL>();
+    moira.fullPrefetch<Core::C68000, POLL>();
 }
 
 }

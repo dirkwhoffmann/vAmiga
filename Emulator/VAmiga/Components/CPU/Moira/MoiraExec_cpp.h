@@ -6,9 +6,9 @@
 // -----------------------------------------------------------------------------
 
 #define AVAILABILITY(core) \
-if constexpr ((core) == C68010) { static_assert(C != C68000); } \
-if constexpr ((core) == C68020) { static_assert(C != C68000 && C != C68010); } \
-if constexpr (C == C68020) cp = 0; \
+if constexpr ((core) == Core::C68010) { static_assert(C != Core::C68000); } \
+if constexpr ((core) == Core::C68020) { static_assert(C != Core::C68000 && C != Core::C68010); } \
+if constexpr (C == Core::C68020) cp = 0; \
 if constexpr (WILL_EXECUTE) willExecute(__func__, I, M, S, opcode);
 
 #define FINALIZE \
@@ -32,7 +32,7 @@ return; }
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execLineA(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     // Check if a software trap is set for this instruction
     if (debugger.swTraps.traps.contains(opcode)) {
@@ -61,7 +61,7 @@ Moira::execLineA(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execLineF(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     execException<C>(M68kException::LINEF);
 
@@ -75,7 +75,7 @@ Moira::execLineF(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execIllegal(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     execException<C>(M68kException::ILLEGAL);
 
@@ -89,7 +89,7 @@ Moira::execIllegal(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execShiftRg(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src = ____xxx_________(opcode);
     int dst = _____________xxx(opcode);
@@ -102,7 +102,7 @@ Moira::execShiftRg(u16 opcode)
 
     writeD<S>(dst, shift<C, I, S>(cnt, readD<S>(dst)));
 
-    if constexpr (C == C68000 || C == C68010) {
+    if constexpr (C == Core::C68000 || C == Core::C68010) {
 
         CYCLES(4 + cyc);
 
@@ -122,7 +122,7 @@ Moira::execShiftRg(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execShiftIm(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src = ____xxx_________(opcode);
     int dst = _____________xxx(opcode);
@@ -134,7 +134,7 @@ Moira::execShiftIm(u16 opcode)
 
     writeD<S>(dst, shift<C, I, S>(cnt, readD<S>(dst)));
 
-    if constexpr (C == C68000 || C == C68010) {
+    if constexpr (C == Core::C68000 || C == Core::C68010) {
 
         CYCLES(4 + cyc);
 
@@ -155,7 +155,7 @@ Moira::execShiftIm(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execShiftEa(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src = _____________xxx(opcode);
 
@@ -208,7 +208,7 @@ Moira::execShiftEa(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execAbcdRg(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -229,7 +229,7 @@ Moira::execAbcdRg(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execAbcdEa(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -254,7 +254,7 @@ Moira::execAbcdEa(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execAddEaRg(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     u32 ea, data, result;
 
@@ -266,7 +266,7 @@ Moira::execAddEaRg(u16 opcode)
     result = addsub<C, I, S>(data, readD<S>(dst));
     writeD<S>(dst, result);
 
-    if constexpr (C == C68000) {
+    if constexpr (C == Core::C68000) {
 
         prefetch<C, POLL>();
         if constexpr (S == Long) SYNC(2 + (isMemMode(M) ? 0 : 2));
@@ -300,7 +300,7 @@ Moira::execAddEaRg(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execAddRgEa(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     u32 ea, data, result;
 
@@ -330,7 +330,7 @@ Moira::execAddRgEa(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execAdda(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     u32 ea, data, result;
 
@@ -343,7 +343,7 @@ Moira::execAdda(u16 opcode)
     result = (I == ADDA || I == ADDA_LOOP) ? U32_ADD(readA(dst), data) : U32_SUB(readA(dst), data);
     writeA(dst, result);
 
-    if constexpr (C == C68000) {
+    if constexpr (C == Core::C68000) {
 
         prefetch<C, POLL>();
         SYNC(2);
@@ -389,7 +389,7 @@ Moira::execAdda(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execAddiRg(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     u32 src = readI<C, S>();
     int dst = _____________xxx(opcode);
@@ -422,7 +422,7 @@ Moira::execAddiRg(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execAddiEa(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     u32 src = readI<C, S>();
     int dst = _____________xxx(opcode);
@@ -453,7 +453,7 @@ Moira::execAddiEa(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execAddqDn(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     i8  src = ____xxx_________(opcode);
     int dst = _____________xxx(opcode);
@@ -475,7 +475,7 @@ Moira::execAddqDn(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execAddqAn(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     i8  src = ____xxx_________(opcode);
     int dst = _____________xxx(opcode);
@@ -496,7 +496,7 @@ Moira::execAddqAn(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execAddqEa(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     i8  src = ____xxx_________(opcode);
     int dst = _____________xxx(opcode);
@@ -526,14 +526,14 @@ Moira::execAddqEa(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execAddxRg(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
     u32 result = addsub<C, I, S>(readD<S>(src), readD<S>(dst));
 
-    if constexpr (C == C68000) {
+    if constexpr (C == Core::C68000) {
 
         prefetch<C, POLL>();
         if constexpr (S == Long) SYNC(4);
@@ -557,7 +557,7 @@ Moira::execAddxRg(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execAddxEa(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     const u64 flags =
     (S == Word) ? AE_INC_PC : (S == Long) ? AE_INC_PC | AE_INC_A : 0;
@@ -590,13 +590,13 @@ Moira::execAddxEa(u16 opcode)
 
     u32 result = addsub<C, I, S>(data1, data2);
 
-    if constexpr (S == Long && C == C68000 && !MIMIC_MUSASHI) {
+    if constexpr (S == Long && C == Core::C68000 && !MIMIC_MUSASHI) {
 
         writeM<C, M, Word, POLL>(ea2 + 2, result & 0xFFFF);
         looping<I>() ? noPrefetch<C>() : prefetch<C>();
         writeM<C, M, Word>(ea2, result >> 16);
 
-    } else if constexpr (S == Long && C == C68010 && !MIMIC_MUSASHI) {
+    } else if constexpr (S == Long && C == Core::C68010 && !MIMIC_MUSASHI) {
 
         writeM<C, M, S>(ea2, result);
         looping<I>() ? noPrefetch<C>(S == Long ? 0 : 2) : prefetch<C, POLL>();
@@ -617,7 +617,7 @@ Moira::execAddxEa(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execAndEaRg(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -628,7 +628,7 @@ Moira::execAndEaRg(u16 opcode)
     u32 result = logic<C, I, S>(data, readD<S>(dst));
     writeD<S>(dst, result);
 
-    if constexpr (C == C68000) {
+    if constexpr (C == Core::C68000) {
 
         looping<I>() ? noPrefetch<C>() : prefetch<C, POLL>();
         if constexpr (S == Long) SYNC(isRegMode(M) || isImmMode(M) ? 4 : 2);
@@ -660,7 +660,7 @@ Moira::execAndEaRg(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execAndRgEa(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src = ____xxx_________(opcode);
     int dst = _____________xxx(opcode);
@@ -696,7 +696,7 @@ Moira::execAndRgEa(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execAndiRg(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     u32 src = readI<C, S>();
     int dst = _____________xxx(opcode);
@@ -717,7 +717,7 @@ Moira::execAndiRg(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execAndiEa(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     u32 ea, data, result;
 
@@ -751,9 +751,9 @@ Moira::execAndiEa(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execAndiccr(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
-    if constexpr (C == C68000) {
+    if constexpr (C == Core::C68000) {
 
         u32 src = readI<C, S>();
         u8  dst = getCCR();
@@ -781,7 +781,7 @@ Moira::execAndiccr(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execAndisr(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     SUPERVISOR_MODE_ONLY
 
@@ -807,7 +807,7 @@ Moira::execAndisr(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execBra(u16 opcode)
 {
-    AVAILABILITY(S == Long ? C68020 : C68000)
+    AVAILABILITY(S == Long ? Core::C68020 : Core::C68000)
 
     u32 oldpc = reg.pc;
     u32 disp = S == Byte ? (u8)opcode : queue.irc;
@@ -840,7 +840,7 @@ Moira::execBra(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execBcc(u16 opcode)
 {
-    AVAILABILITY(S == Long ? C68020 : C68000)
+    AVAILABILITY(S == Long ? Core::C68020 : Core::C68000)
 
     u32 oldpc = reg.pc;
 
@@ -874,7 +874,7 @@ Moira::execBcc(u16 opcode)
     } else {
 
         // Fall through to next instruction
-        if constexpr (C == C68000) SYNC(2);
+        if constexpr (C == Core::C68000) SYNC(2);
         if constexpr (S == Word || S == Long) readExt<C>();
         if constexpr (S == Long) readExt<C>();
         prefetch<C, POLL>();
@@ -890,7 +890,7 @@ Moira::execBcc(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execBitDxDy(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src = ____xxx_________(opcode);
     int dst = _____________xxx(opcode);
@@ -915,7 +915,7 @@ Moira::execBitDxDy(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execBitDxEa(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src = ____xxx_________(opcode);
     int dst = _____________xxx(opcode);
@@ -927,12 +927,12 @@ Moira::execBitDxEa(u16 opcode)
 
     data = bit<C, I>(data, b);
 
-    if constexpr (I == BCLR && C == C68010) { SYNC(2); }
+    if constexpr (I == BCLR && C == Core::C68010) { SYNC(2); }
 
     prefetch<C, POLL>();
     if constexpr (I != BTST) writeM<C, M, Byte>(ea, data);
 
-    [[maybe_unused]] auto c = I == BTST ? 0 : I == BCLR && C == C68010 ? 6 : 4;
+    [[maybe_unused]] auto c = I == BTST ? 0 : I == BCLR && C == Core::C68010 ? 6 : 4;
 
     //             00    10    20        00  10  20        00  10  20
     //             .b    .b    .b        .w  .w  .w        .l  .l  .l
@@ -953,7 +953,7 @@ Moira::execBitDxEa(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execBitImDy(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     u8  src = (u8)readI<C, S>();
     int dst = _____________xxx(opcode);
@@ -977,7 +977,7 @@ Moira::execBitImDy(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execBitImEa(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     u8  src = (u8)readI<C, S>();
     int dst = _____________xxx(opcode);
@@ -1010,7 +1010,7 @@ Moira::execBitImEa(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execBitFieldDn(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     u16 ext = (u16)readI<C, Word>();
 
@@ -1111,7 +1111,7 @@ Moira::execBitFieldDn(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execBitFieldEa(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     u16 ext = (u16)readI<C, Word>();
 
@@ -1287,7 +1287,7 @@ Moira::execBitFieldEa(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execBkpt(u16 opcode)
 {
-    AVAILABILITY(C68010)
+    AVAILABILITY(Core::C68010)
 
     if (MIMIC_MUSASHI) {
 
@@ -1308,7 +1308,7 @@ Moira::execBkpt(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execBsr(u16 opcode)
 {
-    AVAILABILITY(S == Long ? C68020 : C68000)
+    AVAILABILITY(S == Long ? Core::C68020 : Core::C68000)
 
     u32 oldpc = reg.pc;
     u32 disp = S == Byte ? (u8)opcode : queue.irc;
@@ -1324,7 +1324,7 @@ Moira::execBsr(u16 opcode)
 
     SYNC(2);
 
-    if (C == C68000) {
+    if (C == Core::C68000) {
 
         // Check for address errors
         if (misaligned<C>(reg.sp)) {
@@ -1374,7 +1374,7 @@ Moira::execBsr(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execCallm(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     int dst = ( _____________xxx(opcode) );
     u32 ea, data;
@@ -1399,7 +1399,7 @@ Moira::execCallm(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execCas(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     int dst = _____________xxx(opcode);
     int dc  = _____________xxx(queue.irc);
@@ -1452,7 +1452,7 @@ Moira::execCas(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execCas2(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     int dc1 = _____________xxx(queue.irc);
     int du1 = _______xxx______(queue.irc);
@@ -1521,7 +1521,7 @@ Moira::execCas2(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execChk(u16 opcode)
 {
-    AVAILABILITY(S == Long ? C68020 : C68000)
+    AVAILABILITY(S == Long ? Core::C68020 : Core::C68000)
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -1535,7 +1535,7 @@ Moira::execChk(u16 opcode)
     } catch (const AddressError &) {
 
         // Rectify the stack frame
-        if (C == C68000) {
+        if (C == Core::C68000) {
 
             SYNC(2);
             throw AddressError(makeFrame<STD_AE_FRAME>(ea));
@@ -1576,13 +1576,13 @@ Moira::execChk(u16 opcode)
 
         switch (C) {
 
-            case C68000:
-            case C68020:
+            case Core::C68000:
+            case Core::C68020:
 
                 SYNC(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 2);
                 break;
 
-            case C68010:
+            case Core::C68010:
 
                 prefetch<C, POLL>();
                 SYNC_68010(4);
@@ -1602,13 +1602,13 @@ Moira::execChk(u16 opcode)
 
         switch (C) {
 
-            case C68000:
-            case C68020:
+            case Core::C68000:
+            case Core::C68020:
 
                 SYNC(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 4);
                 break;
 
-            case C68010:
+            case Core::C68010:
 
                 prefetch<C, POLL>();
                 SYNC_68010(6);
@@ -1645,7 +1645,7 @@ Moira::execChk(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execChkCmp2(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     u32 ext = queue.irc;
     int src = _____________xxx(opcode);
@@ -1712,9 +1712,9 @@ Moira::execChkCmp2(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execClr(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
-    if constexpr (C == C68000 || C == C68020) {
+    if constexpr (C == Core::C68000 || C == Core::C68020) {
 
         int dst = _____________xxx(opcode);
 
@@ -1737,7 +1737,7 @@ Moira::execClr(u16 opcode)
         reg.sr.c = 0;
     }
 
-    if constexpr (C == C68010) {
+    if constexpr (C == Core::C68010) {
 
         int dst = _____________xxx(opcode);
 
@@ -1839,7 +1839,7 @@ Moira::execClr(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execCmp(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -1847,7 +1847,7 @@ Moira::execCmp(u16 opcode)
     u32 ea, data;
     readOp<C, M, S, STD_AE_FRAME>(src, &ea, &data);
 
-    if (C == C68000) {
+    if (C == Core::C68000) {
 
         cmp<C, S>(data, readD<S>(dst));
         prefetch<C, POLL>();
@@ -1885,7 +1885,7 @@ Moira::execCmp(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execCmpa(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -1896,7 +1896,7 @@ Moira::execCmpa(u16 opcode)
     data = SEXT<S>(data);
     cmp<C, Long>(data, readA(dst));
 
-    if constexpr (C == C68000) {
+    if constexpr (C == Core::C68000) {
 
         looping<I>() ? noPrefetch<C>() : prefetch<C, POLL>();
         SYNC(2);
@@ -1929,14 +1929,14 @@ Moira::execCmpa(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execCmpiRg(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     u32 src = readI<C, S>();
     int dst = _____________xxx(opcode);
 
     prefetch<C, POLL>();
 
-    if constexpr (S == Long && C == C68000) SYNC(2);
+    if constexpr (S == Long && C == Core::C68000) SYNC(2);
     cmp<C, S>(src, readD<S>(dst));
 
     //           00  10  20        00  10  20        00  10  20
@@ -1958,7 +1958,7 @@ Moira::execCmpiRg(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execCmpiEa(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     u32 src = readI<C, S>();
     int dst = _____________xxx(opcode);
@@ -1988,14 +1988,14 @@ Moira::execCmpiEa(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execCmpm(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
     u32 ea1, ea2, data1, data2;
 
-    if (C == C68000) {
+    if (C == Core::C68000) {
 
         readOp<C, M, S, AE_INC_PC>(src, &ea1, &data1);
         POLL_IPL;
@@ -2024,7 +2024,7 @@ Moira::execCmpm(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execCpBcc(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     execLineF<C, I, M, S>(opcode);
 
@@ -2034,7 +2034,7 @@ Moira::execCpBcc(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execCpDbcc(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     execLineF<C, I, M, S>(opcode);
 
@@ -2044,7 +2044,7 @@ Moira::execCpDbcc(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execCpGen(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     execLineF<C, I, M, S>(opcode);
 
@@ -2054,7 +2054,7 @@ Moira::execCpGen(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execCpRestore(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
     SUPERVISOR_MODE_ONLY
 
     execLineF<C, I, M, S>(opcode);
@@ -2065,7 +2065,7 @@ Moira::execCpRestore(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execCpRestoreInvalid(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     execLineF<C, I, M, S>(opcode);
 
@@ -2075,7 +2075,7 @@ Moira::execCpRestoreInvalid(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execCpSave(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
     SUPERVISOR_MODE_ONLY
 
     execLineF<C, I, M, S>(opcode);
@@ -2086,7 +2086,7 @@ Moira::execCpSave(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execCpScc(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     execLineF<C, I, M, S>(opcode);
 
@@ -2096,7 +2096,7 @@ Moira::execCpScc(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execCpTrapcc(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     execLineF<C, I, M, S>(opcode);
 
@@ -2106,7 +2106,7 @@ Moira::execCpTrapcc(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execDbcc(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     auto exec68000 = [&]() {
 
@@ -2265,9 +2265,9 @@ Moira::execDbcc(u16 opcode)
 
     switch (C) {
 
-        case C68000: exec68000(); break;
-        case C68010: looping<I>() ? execLoop() : exec68010(); break;
-        case C68020: exec68000(); break;
+        case Core::C68000: exec68000(); break;
+        case Core::C68010: looping<I>() ? execLoop() : exec68010(); break;
+        case Core::C68020: exec68000(); break;
 
         default:
             fatalError;
@@ -2279,7 +2279,7 @@ Moira::execDbcc(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execExgDxDy(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -2298,7 +2298,7 @@ Moira::execExgDxDy(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execExgAxDy(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -2317,7 +2317,7 @@ Moira::execExgAxDy(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execExgAxAy(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -2337,7 +2337,7 @@ Moira::execExgAxAy(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execExt(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int n = _____________xxx(opcode);
 
@@ -2362,7 +2362,7 @@ Moira::execExt(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execExtb(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     int n = _____________xxx(opcode);
 
@@ -2387,7 +2387,7 @@ Moira::execExtb(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execJmp(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     u32 oldpc = reg.pc;
 
@@ -2424,7 +2424,7 @@ Moira::execJmp(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execJsr(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src = _____________xxx(opcode);
     u32 ea  = computeEA<C, M, Long, SKIP_LAST_RD>(src);
@@ -2434,7 +2434,7 @@ Moira::execJsr(u16 opcode)
 
     switch (C) {
 
-        case C68000:
+        case Core::C68000:
 
             // Check for address errors
             if (isDspMode(M) && misaligned<C>(ea)) {
@@ -2525,7 +2525,7 @@ Moira::execJsr(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execLea(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
     
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -2555,7 +2555,7 @@ Moira::execLea(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execLink(u16 opcode)
 {
-    AVAILABILITY(S == Long ? C68020 : C68000)
+    AVAILABILITY(S == Long ? Core::C68020 : Core::C68000)
 
     u16 ird  = getIRD();
     u32 sp   = getSP() - 4;
@@ -2592,7 +2592,7 @@ Moira::execLink(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMove0(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     u32 ea, data;
 
@@ -2631,7 +2631,7 @@ Moira::execMove0(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMove2(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     u32 ea, data;
 
@@ -2640,7 +2640,7 @@ Moira::execMove2(u16 opcode)
 
     readOp<C, M, S, STD_AE_FRAME>(src, &ea, &data);
 
-    if constexpr (C == C68000) {
+    if constexpr (C == Core::C68000) {
 
         if constexpr (!isMemMode(M) && S == Long) {
 
@@ -2721,7 +2721,7 @@ Moira::execMove2(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMove3(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     u32 ea, data;
 
@@ -2730,7 +2730,7 @@ Moira::execMove3(u16 opcode)
 
     readOp<C, M, S, STD_AE_FRAME>(src, &ea, &data);
 
-    if constexpr (C == C68000) {
+    if constexpr (C == Core::C68000) {
 
         if constexpr (S == Long && !isMemMode(M)) {
 
@@ -2809,7 +2809,7 @@ Moira::execMove3(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMove4(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     u16 ird = getIRD();
     u32 ea, data;
@@ -2877,7 +2877,7 @@ Moira::execMove4(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMove5(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     u32 ea, data;
 
@@ -2932,7 +2932,7 @@ Moira::execMove5(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMove6(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     u32 ea, data;
 
@@ -2987,7 +2987,7 @@ Moira::execMove6(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMove7(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     u32 ea, data;
 
@@ -3025,7 +3025,7 @@ Moira::execMove7(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMove8(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     u32 ea, data;
 
@@ -3105,7 +3105,7 @@ Moira::execMove8(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMovea(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -3143,7 +3143,7 @@ Moira::execMovea(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMovecRcRx(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
     SUPERVISOR_MODE_ONLY
 
     SYNC(4);
@@ -3151,7 +3151,7 @@ Moira::execMovecRcRx(u16 opcode)
     auto arg = readI<C, Word>();
     int dst = xxxx____________(arg);
 
-    if constexpr (C == C68010) {
+    if constexpr (C == Core::C68010) {
 
         auto rc = arg & 0xFFF;
 
@@ -3161,7 +3161,7 @@ Moira::execMovecRcRx(u16 opcode)
             return;
         }
     }
-    if constexpr (C == C68020) {
+    if constexpr (C == Core::C68020) {
 
         auto rc = arg & 0xFFF;
 
@@ -3197,7 +3197,7 @@ Moira::execMovecRcRx(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMovecRxRc(u16 opcode)
 {
-    AVAILABILITY(C68010)
+    AVAILABILITY(Core::C68010)
     SUPERVISOR_MODE_ONLY
 
     SYNC(2);
@@ -3205,7 +3205,7 @@ Moira::execMovecRxRc(u16 opcode)
     auto arg = readI<C, Word>();
     int  src = xxxx____________(arg);
 
-    if constexpr (C == C68010) {
+    if constexpr (C == Core::C68010) {
 
         auto reg = arg & 0xFFF;
 
@@ -3215,7 +3215,7 @@ Moira::execMovecRxRc(u16 opcode)
             return;
         }
     }
-    if constexpr (C == C68020) {
+    if constexpr (C == Core::C68020) {
 
         auto reg = arg & 0xFFF;
 
@@ -3252,7 +3252,7 @@ Moira::execMovecRxRc(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMovemEaRg(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src  = _____________xxx(opcode);
     u16 mask = (u16)readI<C, Word>();
@@ -3303,7 +3303,7 @@ Moira::execMovemEaRg(u16 opcode)
 
     prefetch<C, POLL>();
 
-    auto c = (C == C68020 || S == Word) ? 4 * cnt : 8 * cnt;
+    auto c = (C == Core::C68020 || S == Word) ? 4 * cnt : 8 * cnt;
 
     //           00  10  20        00    10    20        00    10    20
     //           .b  .b  .b        .w    .w    .w        .l    .l    .l
@@ -3322,7 +3322,7 @@ Moira::execMovemEaRg(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMovemRgEa(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int dst  = _____________xxx(opcode);
     u16 mask = (u16)readI<C, Word>();
@@ -3349,11 +3349,11 @@ Moira::execMovemRgEa(u16 opcode)
 
             // Write register contents into memory
             ea -= S;
-            if constexpr (C == C68020 && !MIMIC_MUSASHI) writeA(dst, ea);
+            if constexpr (C == Core::C68020 && !MIMIC_MUSASHI) writeA(dst, ea);
             writeM<C, M, S, MIMIC_MUSASHI ? REVERSE : 0>(ea, reg.r[i]);
             cnt++;
         }
-        if constexpr (C != C68020 || MIMIC_MUSASHI) writeA(dst, ea);
+        if constexpr (C != Core::C68020 || MIMIC_MUSASHI) writeA(dst, ea);
 
     } else {
 
@@ -3381,7 +3381,7 @@ Moira::execMovemRgEa(u16 opcode)
     }
     prefetch<C, POLL>();
 
-    auto c = (C == C68020 || S == Word) ? 4 * cnt : 8 * cnt;
+    auto c = (C == Core::C68020 || S == Word) ? 4 * cnt : 8 * cnt;
 
     //           00  10  20        00    10    20        00    10    20
     //           .b  .b  .b        .w    .w    .w        .l    .l    .l
@@ -3398,7 +3398,7 @@ Moira::execMovemRgEa(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMovepDxEa(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src = ____xxx_________(opcode);
     int dst = _____________xxx(opcode);
@@ -3432,7 +3432,7 @@ Moira::execMovepDxEa(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMovepEaDx(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -3469,7 +3469,7 @@ Moira::execMovepEaDx(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMoveq(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     i8  src = (i8)(opcode & 0xFF);
     int dst = ____xxx_________(opcode);
@@ -3493,7 +3493,7 @@ Moira::execMoveq(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMoves(u16 opcode)
 {
-    AVAILABILITY(C68010)
+    AVAILABILITY(Core::C68010)
     SUPERVISOR_MODE_ONLY
 
     auto old = queue.irc;
@@ -3613,7 +3613,7 @@ Moira::execMoves(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMoveCcrRg(u16 opcode)
 {
-    AVAILABILITY(C68010)
+    AVAILABILITY(Core::C68010)
 
     int dst = _____________xxx(opcode);
 
@@ -3633,7 +3633,7 @@ Moira::execMoveCcrRg(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMoveCcrEa(u16 opcode)
 {
-    AVAILABILITY(C68010)
+    AVAILABILITY(Core::C68010)
 
     int dst = _____________xxx(opcode);
 
@@ -3681,7 +3681,7 @@ Moira::execMoveCcrEa(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMoveToCcr(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src = _____________xxx(opcode);
 
@@ -3714,8 +3714,8 @@ Moira::execMoveToCcr(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMoveSrRg(u16 opcode)
 {
-    AVAILABILITY(C68000)
-    if constexpr (C != C68000) SUPERVISOR_MODE_ONLY
+    AVAILABILITY(Core::C68000)
+    if constexpr (C != Core::C68000) SUPERVISOR_MODE_ONLY
 
         int dst = _____________xxx(opcode);
 
@@ -3723,7 +3723,7 @@ Moira::execMoveSrRg(u16 opcode)
     readOp<C, M, S>(dst, &ea, &data);
     prefetch<C, POLL>();
 
-    if constexpr (C == C68000) SYNC(2);
+    if constexpr (C == Core::C68000) SYNC(2);
     writeD<S>(dst, getSR());
 
     //           00  10  20        00  10  20        00  10  20
@@ -3736,12 +3736,12 @@ Moira::execMoveSrRg(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMoveSrEa(u16 opcode)
 {
-    AVAILABILITY(C68000)
-    if constexpr (C != C68000) SUPERVISOR_MODE_ONLY
+    AVAILABILITY(Core::C68000)
+    if constexpr (C != Core::C68000) SUPERVISOR_MODE_ONLY
 
         int dst = _____________xxx(opcode);
 
-    if (C == C68000) {
+    if (C == Core::C68000) {
 
         u32 ea, data;
         readOp<C, M, S, STD_AE_FRAME>(dst, &ea, &data);
@@ -3800,7 +3800,7 @@ Moira::execMoveSrEa(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMoveToSr(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     SUPERVISOR_MODE_ONLY
 
@@ -3835,12 +3835,12 @@ Moira::execMoveToSr(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMoveUspAn(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
     SUPERVISOR_MODE_ONLY
 
     int an = _____________xxx(opcode);
 
-    if constexpr (C >= C68010) SYNC(2);
+    if constexpr (C >= Core::C68010) SYNC(2);
 
     prefetch<C, POLL>();
     writeA(an, getUSP());
@@ -3855,12 +3855,12 @@ Moira::execMoveUspAn(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMoveAnUsp(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
     SUPERVISOR_MODE_ONLY
 
     int an = _____________xxx(opcode);
 
-    if constexpr (C >= C68010) SYNC(2);
+    if constexpr (C >= Core::C68010) SYNC(2);
 
     prefetch<C, POLL>();
     setUSP(readA(an));
@@ -3875,7 +3875,7 @@ Moira::execMoveAnUsp(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMuls(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     if constexpr (MIMIC_MUSASHI) {
         execMulsMusashi<C, I, M, S>(opcode);
@@ -3910,7 +3910,7 @@ Moira::execMulsMoira(u16 opcode)
 
     readOp<C, M, Word, STD_AE_FRAME>(src, &ea, &data);
 
-    if (C == C68000) {
+    if (C == Core::C68000) {
 
         prefetch<C, POLL>();
         result = muls<C>(data, readD<Word>(dst));
@@ -3950,7 +3950,7 @@ Moira::execMulsMusashi(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMulu(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     if constexpr (MIMIC_MUSASHI) {
         execMuluMusashi<C, I, M, S>(opcode);
@@ -3985,7 +3985,7 @@ Moira::execMuluMoira(u16 opcode)
 
     readOp<C, M, Word, STD_AE_FRAME>(src, &ea, &data);
 
-    if (C == C68000) {
+    if (C == Core::C68000) {
 
         prefetch<C, POLL>();
         result = mulu<C>(data, readD<Word>(dst));
@@ -4025,7 +4025,7 @@ Moira::execMuluMusashi(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMull(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     if constexpr (MIMIC_MUSASHI) {
         execMullMusashi<C, I, M, S>(opcode);
@@ -4148,7 +4148,7 @@ Moira::execMullMusashi(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execDivs(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     bool divByZero = false;
 
@@ -4195,7 +4195,7 @@ Moira::execDivsMoira(u16 opcode, bool *divByZero)
     try { readOp<C, M, Word>(src, &ea, &divisor); } catch (AddressError &exc) {
 
         // Rectify the stack frame
-        if (C == C68000) {
+        if (C == Core::C68000) {
 
             SYNC(2);
             exc.stackFrame = makeFrame<STD_AE_FRAME>(ea);
@@ -4252,7 +4252,7 @@ Moira::execDivsMusashi(u16 opcode, bool *divByZero)
 
     if (divisor == 0) {
 
-        if constexpr (C == C68000) {
+        if constexpr (C == Core::C68000) {
             SYNC(8 - (int)(clock - c));
         } else {
             SYNC(10 - (int)(clock - c));
@@ -4275,7 +4275,7 @@ Moira::execDivsMusashi(u16 opcode, bool *divByZero)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execDivu(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     bool divByZero = false;
 
@@ -4322,7 +4322,7 @@ Moira::execDivuMoira(u16 opcode, bool *divByZero)
     try { readOp<C, M, Word>(src, &ea, &divisor); } catch (AddressError &exc) {
 
         // Rectify the stack frame
-        if (C == C68000) {
+        if (C == Core::C68000) {
 
             SYNC(2);
             exc.stackFrame = makeFrame<STD_AE_FRAME>(ea);
@@ -4379,7 +4379,7 @@ Moira::execDivuMusashi(u16 opcode, bool *divByZero)
 
     // Check for division by zero
     if (divisor == 0) {
-        if constexpr (C == C68000) {
+        if constexpr (C == Core::C68000) {
             SYNC(8 - (int)(clock - c));
         } else {
             SYNC(10 - (int)(clock - c));
@@ -4402,7 +4402,7 @@ Moira::execDivuMusashi(u16 opcode, bool *divByZero)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execDivl(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     bool success;
     bool divByZero = false;
@@ -4609,7 +4609,7 @@ Moira::execDivlMusashi(u16 opcode, bool *divByZero)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execNbcdRg(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int reg = _____________xxx(opcode);
 
@@ -4627,7 +4627,7 @@ Moira::execNbcdRg(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execNbcdEa(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int reg = _____________xxx(opcode);
 
@@ -4660,7 +4660,7 @@ Moira::execNbcdEa(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execNegRg(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int dst = ( _____________xxx(opcode) );
     u32 ea, data;
@@ -4683,7 +4683,7 @@ Moira::execNegRg(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execNegEa(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int dst = ( _____________xxx(opcode) );
     u32 ea, data;
@@ -4715,7 +4715,7 @@ Moira::execNegEa(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execNop(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     prefetch<C, POLL>();
 
@@ -4729,7 +4729,7 @@ Moira::execNop(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execPackDn(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     int dx  = _____________xxx(opcode);
     int dy  = ____xxx_________(opcode);
@@ -4751,7 +4751,7 @@ Moira::execPackDn(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execPackPd(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     int ax  = _____________xxx(opcode);
     int ay  = ____xxx_________(opcode);
@@ -4798,7 +4798,7 @@ Moira::execPackPd(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execPea(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int src = _____________xxx(opcode);
 
@@ -4811,7 +4811,7 @@ Moira::execPea(u16 opcode)
 
         U32_DEC(reg.sp, S);
 
-        if (C == C68000) {
+        if (C == Core::C68000) {
 
             if (isAbsMode(M)) {
                 throw AddressError(makeFrame<AE_WRITE|AE_DATA>(reg.sp));
@@ -4837,7 +4837,7 @@ Moira::execPea(u16 opcode)
 
     if (isAbsMode(M)) {
 
-        if (C == C68000) {
+        if (C == Core::C68000) {
 
             push <C, Long> (ea);
             prefetch<C, POLL>();
@@ -4851,7 +4851,7 @@ Moira::execPea(u16 opcode)
 
     } else if (isIdxMode(M)) {
 
-        if (C == C68000) {
+        if (C == Core::C68000) {
 
             POLL_IPL;
             prefetch<C>();
@@ -4885,7 +4885,7 @@ Moira::execPea(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execReset(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     SUPERVISOR_MODE_ONLY
 
@@ -4904,7 +4904,7 @@ Moira::execReset(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execRtd(u16 opcode)
 {
-    AVAILABILITY(C68010)
+    AVAILABILITY(Core::C68010)
 
     // Check for address error
     if (misaligned<C>(reg.sp)) {
@@ -4935,7 +4935,7 @@ Moira::execRtd(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execRte(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
     SUPERVISOR_MODE_ONLY
 
     u16 newsr = 0;
@@ -4943,7 +4943,7 @@ Moira::execRte(u16 opcode)
 
     switch (C) {
 
-        case C68000:
+        case Core::C68000:
         {
             // Status register
             newsr = (u16)pop<C, Word>();
@@ -4952,7 +4952,7 @@ Moira::execRte(u16 opcode)
             newpc = pop<C, Long>();
             break;
         }
-        case C68010:
+        case Core::C68010:
         {
             u16 format = (u16)read<C, AddrSpace::DATA, Word>(reg.sp + 6);
 
@@ -5029,7 +5029,7 @@ Moira::execRte(u16 opcode)
             }
             break;
         }
-        case C68020:
+        case Core::C68020:
         {
             while (1) {
 
@@ -5172,7 +5172,7 @@ Moira::execRte(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execRtm(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     fullPrefetch<C, POLL>();
 
@@ -5184,7 +5184,7 @@ Moira::execRtm(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execRtr(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     // Check for address error
     if (misaligned<C>(reg.sp)) {
@@ -5221,7 +5221,7 @@ Moira::execRtr(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execRts(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     // Check for address error
     if (misaligned<C>(reg.sp)) {
@@ -5252,7 +5252,7 @@ Moira::execRts(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execSccRg(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int dst = ( _____________xxx(opcode) );
     u32 ea, data;
@@ -5261,7 +5261,7 @@ Moira::execSccRg(u16 opcode)
 
     data = cond<I>() ? 0xFF : 0;
     prefetch<C, POLL>();
-    if constexpr (C == C68000) { if (data) SYNC(2); }
+    if constexpr (C == Core::C68000) { if (data) SYNC(2); }
 
     writeD<S>(dst, data);
 
@@ -5275,12 +5275,12 @@ Moira::execSccRg(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execSccEa(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int dst = ( _____________xxx(opcode) );
     u32 ea, data;
 
-    if constexpr (C == C68000) {
+    if constexpr (C == Core::C68000) {
 
         readOp<C, M, Byte>(dst, &ea, &data);
 
@@ -5320,7 +5320,7 @@ Moira::execSccEa(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execStop(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     SUPERVISOR_MODE_ONLY
 
@@ -5340,7 +5340,7 @@ Moira::execStop(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execSwap(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int rg  = ( _____________xxx(opcode) );
     u32 dat = readD(rg);
@@ -5365,7 +5365,7 @@ Moira::execSwap(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execTasRg(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int dst = ( _____________xxx(opcode) );
 
@@ -5388,13 +5388,13 @@ Moira::execTasRg(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execTasEa(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int dst = ( _____________xxx(opcode) );
 
     u32 ea, data;
 
-    if (C == C68000) {
+    if (C == Core::C68000) {
 
         readOp<C, M, Byte>(dst, &ea, &data);
 
@@ -5437,7 +5437,7 @@ Moira::execTasEa(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execTrap(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int nr = ____________xxxx(opcode);
 
@@ -5454,11 +5454,11 @@ Moira::execTrap(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execTrapv(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     if (reg.sr.v) {
 
-        if (C == C68000) {
+        if (C == Core::C68000) {
             (void)read<C, AddrSpace::PROG, Word>(reg.pc + 2);
         } else {
             (void)read<C, AddrSpace::PROG, Word>(reg.pc + 2);
@@ -5485,7 +5485,7 @@ Moira::execTrapv(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execTrapcc(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     switch (opcode & 0b111) {
 
@@ -5515,7 +5515,7 @@ Moira::execTrapcc(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execTst(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int rg = _____________xxx(opcode);
 
@@ -5551,7 +5551,7 @@ Moira::execTst(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execUnlk(u16 opcode)
 {
-    AVAILABILITY(C68000)
+    AVAILABILITY(Core::C68000)
 
     int an = _____________xxx(opcode);
 
@@ -5581,7 +5581,7 @@ Moira::execUnlk(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execUnpkDn(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     int dx  = _____________xxx(opcode);
     int dy  = ____xxx_________(opcode);
@@ -5604,7 +5604,7 @@ Moira::execUnpkDn(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execUnpkPd(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     int ax = _____________xxx(opcode);
     int ay = ____xxx_________(opcode);
@@ -5641,7 +5641,7 @@ Moira::execUnpkPd(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execCinv(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     execLineF<C, I, M, S>(opcode);
 
@@ -5651,7 +5651,7 @@ Moira::execCinv(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execCpush(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     execLineF<C, I, M, S>(opcode);
 
@@ -5661,7 +5661,7 @@ Moira::execCpush(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMove16PiPi(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     execLineF<C, I, M, S>(opcode);
 
@@ -5671,7 +5671,7 @@ Moira::execMove16PiPi(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMove16PiAl(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     execLineF<C, I, M, S>(opcode);
 
@@ -5681,7 +5681,7 @@ Moira::execMove16PiAl(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMove16AlPi(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     execLineF<C, I, M, S>(opcode);
 
@@ -5691,7 +5691,7 @@ Moira::execMove16AlPi(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMove16AiAl(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     execLineF<C, I, M, S>(opcode);
 
@@ -5701,7 +5701,7 @@ Moira::execMove16AiAl(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execMove16AlAi(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
 
     execLineF<C, I, M, S>(opcode);
 

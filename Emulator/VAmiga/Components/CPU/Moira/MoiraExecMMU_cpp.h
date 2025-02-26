@@ -158,48 +158,48 @@ Moira::execPGen(u16 opcode)
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execPFlush(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
     throw std::runtime_error("Attempt to execute an unsupported 68030 instruction.");
 }
 
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execPFlusha(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
     throw std::runtime_error("Attempt to execute an unsupported 68030 instruction.");
 }
 
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execPFlush40(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
     throw std::runtime_error("Attempt to execute an unsupported 68040 instruction.");
 }
 
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execPLoad(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
     throw std::runtime_error("Attempt to execute an unsupported 68030 instruction.");
 }
 
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execPMove(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
     throw std::runtime_error("Attempt to execute an unsupported 68030 instruction.");
 }
 
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execPTest(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
     throw std::runtime_error("Attempt to execute an unsupported 68030 instruction.");
 }
 
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execPTest40(u16 opcode)
 {
-    AVAILABILITY(C68020)
+    AVAILABILITY(Core::C68020)
     throw std::runtime_error("Attempt to execute an unsupported 68040 instruction.");
 }
