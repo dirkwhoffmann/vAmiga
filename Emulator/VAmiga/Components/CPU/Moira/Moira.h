@@ -149,7 +149,7 @@ public:
     void setModel(Model model) { setModel(model, model); }
 
     // Configures the visual appearance of disassembled instructions
-    void setDasmSyntax(DasmSyntax value);
+    void setDasmSyntax(Syntax value);
     void setDasmNumberFormat(DasmNumberFormat value) { setNumberFormat(instrStyle, value); }
     void setDasmLetterCase(DasmLetterCase value);
     void setDasmIndentation(int value) { instrStyle.tab = value; }

@@ -350,7 +350,7 @@ CPU::setOption(Opt option, i64 value)
 {
     auto cpuModel = [&](CPURev rev) { return moira::Model(rev); };
     auto dasmModel = [&](DasmRev rev) { return moira::Model(rev); };
-    auto syntax = [&](DasmSyntax rev) { return moira::DasmSyntax(rev); };
+    auto syntax = [&](DasmSyntax rev) { return moira::Syntax(rev); };
 
     switch (option) {
 

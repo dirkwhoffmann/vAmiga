@@ -61,13 +61,13 @@ enum class Core
     C68020                  // Used by all others
 };
 
-enum class DasmSyntax
+enum class Syntax
 {
-    DASM_MOIRA,             // Official syntax styles
-    DASM_MOIRA_MIT,
-    DASM_GNU,               // Legacy styles (for unit testing)
-    DASM_GNU_MIT,
-    DASM_MUSASHI,
+    MOIRA,                  // Official syntax styles
+    MOIRA_MIT,
+    GNU,                    // Legacy styles (for unit testing)
+    GNU_MIT,
+    MUSASHI,
 };
 
 typedef enum
@@ -378,7 +378,7 @@ struct DasmNumberFormat
 
 struct DasmStyle
 {
-    DasmSyntax syntax;
+    Syntax syntax;
     DasmLetterCase letterCase;
     DasmNumberFormat numberFormat;
     int tab;

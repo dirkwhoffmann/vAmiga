@@ -38,7 +38,7 @@ Moira::dasmFDbcc(StrWriter &str, u32 &addr, u16 op) const
     auto cnd = ___________xxxxx (ext);
 
     // Catch illegal extension words
-    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
+    if (str.style.syntax == Syntax::GNU || str.style.syntax == Syntax::GNU_MIT) {
 
         if (!isValidExtFPU(I, M, op, ext)) {
 
@@ -182,7 +182,7 @@ template <Instr I, Mode M, Size S> void
 Moira::dasmFNop(StrWriter &str, u32 &addr, u16 op) const
 {
     str << Ins<I>{};
-    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) str << " ";
+    if (str.style.syntax == Syntax::GNU || str.style.syntax == Syntax::GNU_MIT) str << " ";
 }
 
 template <Instr I, Mode M, Size S> void
@@ -210,7 +210,7 @@ Moira::dasmFScc(StrWriter &str, u32 &addr, u16 op) const
     auto cnd = __________xxxxxx (ext);
 
     // Catch illegal extension words
-    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
+    if (str.style.syntax == Syntax::GNU || str.style.syntax == Syntax::GNU_MIT) {
 
         if (!isValidExtFPU(I, M, op, ext)) {
 
@@ -231,7 +231,7 @@ Moira::dasmFTrapcc(StrWriter &str, u32 &addr, u16 op) const
     auto cnd = __________xxxxxx (ext);
 
     // Catch illegal extension words
-    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
+    if (str.style.syntax == Syntax::GNU || str.style.syntax == Syntax::GNU_MIT) {
 
         if (!isValidExtFPU(I, M, op, ext)) {
 
@@ -459,7 +459,7 @@ Moira::dasmFMove(StrWriter &str, u32 &addr, u16 op) const
     auto fac = _________xxxxxxx (ext);
 
     // Catch illegal extension words
-    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
+    if (str.style.syntax == Syntax::GNU || str.style.syntax == Syntax::GNU_MIT) {
 
         if (!isValidExtFPU(I, M, op, ext)) {
 
@@ -566,7 +566,7 @@ Moira::dasmFMovecr(StrWriter &str, u32 &addr, u16 op) const
     auto ofs = _________xxxxxxx (ext);
 
     // Catch illegal extension words
-    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
+    if (str.style.syntax == Syntax::GNU || str.style.syntax == Syntax::GNU_MIT) {
 
         if (!isValidExtFPU(I, M, op, ext)) {
 
@@ -591,7 +591,7 @@ Moira::dasmFMovem(StrWriter &str, u32 &addr, u16 op) const
     auto lll = ___xxx__________ (ext);
 
     // Catch illegal extension words
-    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
+    if (str.style.syntax == Syntax::GNU || str.style.syntax == Syntax::GNU_MIT) {
 
         if (!isValidExtFPU(I, M, op, ext)) {
 
@@ -607,7 +607,7 @@ Moira::dasmFMovem(StrWriter &str, u32 &addr, u16 op) const
 
             if ((ext & 0x1C00) == 0) {
 
-                if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
+                if (str.style.syntax == Syntax::GNU || str.style.syntax == Syntax::GNU_MIT) {
 
                     str << "fmovel" << str.tab << Op<M, Long>(reg, addr) << Sep{};
                     return;
@@ -625,7 +625,7 @@ Moira::dasmFMovem(StrWriter &str, u32 &addr, u16 op) const
 
             if ((ext & 0x1C00) == 0) {
 
-                if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
+                if (str.style.syntax == Syntax::GNU || str.style.syntax == Syntax::GNU_MIT) {
 
                     str << Ins<FMOVE>{} << Ffmt{0} << str.tab << Sep{} << Op<M, Long>(reg, addr);
                     return;
