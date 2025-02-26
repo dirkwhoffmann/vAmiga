@@ -175,28 +175,28 @@ Size;
 
 enum class Mode
 {
-    MODE_DN,                //  0: Dn
-    MODE_AN,                //  1: An
-    MODE_AI,                //  2: (An)
-    MODE_PI,                //  3: (An)+
-    MODE_PD,                //  4: -(An)
-    MODE_DI,                //  5: (d,An)
-    MODE_IX,                //  6: (d,An,Xi)
-    MODE_AW,                //  7: (####).w
-    MODE_AL,                //  8: (####).l
-    MODE_DIPC,              //  9: (d,PC)
-    MODE_IXPC,              // 10: (d,PC,Xi)
-    MODE_IM,                // 11: ####
-    MODE_IP                 // 12: ----
+    DN,                //  0: Dn
+    AN,                //  1: An
+    AI,                //  2: (An)
+    PI,                //  3: (An)+
+    PD,                //  4: -(An)
+    DI,                //  5: (d,An)
+    IX,                //  6: (d,An,Xi)
+    AW,                //  7: (####).w
+    AL,                //  8: (####).l
+    DIPC,              //  9: (d,PC)
+    IXPC,              // 10: (d,PC,Xi)
+    IM,                // 11: ####
+    IP                 // 12: ----
 };
 
-constexpr bool isRegMode(Mode M) { return M == Mode::MODE_DN || M == Mode::MODE_AN;  }
-constexpr bool isAbsMode(Mode M) { return M == Mode::MODE_AW || M == Mode::MODE_AL;  }
-constexpr bool isIdxMode(Mode M) { return M == Mode::MODE_IX || M == Mode::MODE_IXPC; }
-constexpr bool isMemMode(Mode M) { return M >= Mode::MODE_AI && M <= Mode::MODE_IXPC; }
-constexpr bool isPrgMode(Mode M) { return M == Mode::MODE_DIPC || M == Mode::MODE_IXPC; }
-constexpr bool isDspMode(Mode M) { return M == Mode::MODE_DI || M == Mode::MODE_IX || M == Mode::MODE_DIPC || M == Mode::MODE_IXPC; }
-constexpr bool isImmMode(Mode M) { return M == Mode::MODE_IM; }
+constexpr bool isRegMode(Mode M) { return M == Mode::DN || M == Mode::AN;  }
+constexpr bool isAbsMode(Mode M) { return M == Mode::AW || M == Mode::AL;  }
+constexpr bool isIdxMode(Mode M) { return M == Mode::IX || M == Mode::IXPC; }
+constexpr bool isMemMode(Mode M) { return M >= Mode::AI && M <= Mode::IXPC; }
+constexpr bool isPrgMode(Mode M) { return M == Mode::DIPC || M == Mode::IXPC; }
+constexpr bool isDspMode(Mode M) { return M == Mode::DI || M == Mode::IX || M == Mode::DIPC || M == Mode::IXPC; }
+constexpr bool isImmMode(Mode M) { return M == Mode::IM; }
 
 /*
 constexpr bool isRegMode(Mode M) { return M == 0 || M == 1;  }

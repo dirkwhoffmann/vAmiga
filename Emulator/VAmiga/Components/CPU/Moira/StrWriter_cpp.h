@@ -720,18 +720,18 @@ StrWriter::operator<<(const Ea<M, S> &ea)
 {
     switch (M) {
 
-        case Mode::MODE_DN:   *this << Dn{ea.reg};    break;
-        case Mode::MODE_AN:   *this << An{ea.reg};    break;
-        case Mode::MODE_AI:   *this << Ai<M,S>{ea};   break;
-        case Mode::MODE_PI:   *this << Pi<M,S>{ea};   break;
-        case Mode::MODE_PD:   *this << Pd<M,S>{ea};   break;
-        case Mode::MODE_DI:   *this << Di<M,S>{ea};   break;
-        case Mode::MODE_IX:   *this << Ix<M,S>{ea};   break;
-        case Mode::MODE_AW:   *this << Aw<M,S>{ea};   break;
-        case Mode::MODE_AL:   *this << Al<M,S>{ea};   break;
-        case Mode::MODE_DIPC: *this << DiPc<M,S>{ea}; break;
-        case Mode::MODE_IXPC: *this << Ix<M,S>{ea};   break;
-        case Mode::MODE_IM:   *this << Im<M,S>{ea};   break;
+        case Mode::DN:   *this << Dn{ea.reg};    break;
+        case Mode::AN:   *this << An{ea.reg};    break;
+        case Mode::AI:   *this << Ai<M,S>{ea};   break;
+        case Mode::PI:   *this << Pi<M,S>{ea};   break;
+        case Mode::PD:   *this << Pd<M,S>{ea};   break;
+        case Mode::DI:   *this << Di<M,S>{ea};   break;
+        case Mode::IX:   *this << Ix<M,S>{ea};   break;
+        case Mode::AW:   *this << Aw<M,S>{ea};   break;
+        case Mode::AL:   *this << Al<M,S>{ea};   break;
+        case Mode::DIPC: *this << DiPc<M,S>{ea}; break;
+        case Mode::IXPC: *this << Ix<M,S>{ea};   break;
+        case Mode::IM:   *this << Im<M,S>{ea};   break;
 
         default:
             *this << "???";

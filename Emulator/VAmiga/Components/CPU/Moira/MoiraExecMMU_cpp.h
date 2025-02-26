@@ -32,7 +32,7 @@ Moira::isValidExtMMU(Instr I, Mode M, u16 op, u32 ext) const
 
             // Check EA mode
             if (mode() == 0b110) {
-                if (M != Mode::MODE_AI && M != Mode::MODE_DI && M != Mode::MODE_IX && M != Mode::MODE_AW && M != Mode::MODE_AL) {
+                if (M != Mode::AI && M != Mode::DI && M != Mode::IX && M != Mode::AW && M != Mode::AL) {
                     return false;
                 }
             }
@@ -41,7 +41,7 @@ Moira::isValidExtMMU(Instr I, Mode M, u16 op, u32 ext) const
         case PLOAD:
 
             // Check EA mode
-            if (M != Mode::MODE_AI && M != Mode::MODE_DI && M != Mode::MODE_IX && M != Mode::MODE_AW && M != Mode::MODE_AL) {
+            if (M != Mode::AI && M != Mode::DI && M != Mode::IX && M != Mode::AW && M != Mode::AL) {
                 return false;
             }
 
@@ -50,9 +50,9 @@ Moira::isValidExtMMU(Instr I, Mode M, u16 op, u32 ext) const
         case PMOVE:
 
             if ((ext & 0x200)) {
-                if (M == Mode::MODE_DIPC || M == Mode::MODE_IXPC || M == Mode::MODE_IM) return false;
+                if (M == Mode::DIPC || M == Mode::IXPC || M == Mode::IM) return false;
             }
-            if (M == Mode::MODE_IP) return false;
+            if (M == Mode::IP) return false;
 
             switch (ext >> 13 & 0b111) {
 
@@ -72,14 +72,14 @@ Moira::isValidExtMMU(Instr I, Mode M, u16 op, u32 ext) const
 
                     if ((ext & 0x300) == 0) {
                         if (preg() != 0) {
-                            if (M == Mode::MODE_PI || M == Mode::MODE_PD || M == Mode::MODE_IM || M == Mode::MODE_IP) return false;
+                            if (M == Mode::PI || M == Mode::PD || M == Mode::IM || M == Mode::IP) return false;
                         }
                     }
 
                     // Check register field (binutils accepts all M68851 registers)
                     if ((ext & 0x100) == 0) {
                         if (preg() != 0) {
-                            if (M == Mode::MODE_DN || M == Mode::MODE_AN) return false;
+                            if (M == Mode::DN || M == Mode::AN) return false;
                         }
                     }
                     return true;
@@ -102,7 +102,7 @@ Moira::isValidExtMMU(Instr I, Mode M, u16 op, u32 ext) const
             if ((fc() & 0b11000) == 0 && (fc() & 0b110) != 0) return false;
 
             // Check EA mode
-            if (M != Mode::MODE_AI && M != Mode::MODE_DI && M != Mode::MODE_IX && M != Mode::MODE_AW && M != Mode::MODE_AL) return false;
+            if (M != Mode::AI && M != Mode::DI && M != Mode::IX && M != Mode::AW && M != Mode::AL) return false;
 
             return true;
 

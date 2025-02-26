@@ -23,11 +23,11 @@ CYCLES_68020(34) \
 return; }
 
 #define STD_AE_FRAME (\
-(M == Mode::MODE_PD && S != Long) ? AE_INC_PC : \
-(M == Mode::MODE_DI)              ? AE_DEC_PC : \
-(M == Mode::MODE_IX)              ? AE_DEC_PC : \
-(M == Mode::MODE_DIPC)            ? AE_DEC_PC : \
-(M == Mode::MODE_IXPC)            ? AE_DEC_PC : 0)
+(M == Mode::PD && S != Long) ? AE_INC_PC : \
+(M == Mode::DI)              ? AE_DEC_PC : \
+(M == Mode::IX)              ? AE_DEC_PC : \
+(M == Mode::DIPC)            ? AE_DEC_PC : \
+(M == Mode::IXPC)            ? AE_DEC_PC : 0)
 
 template <Core C, Instr I, Mode M, Size S> void
 Moira::execLineA(u16 opcode)
@@ -355,13 +355,13 @@ Moira::execAdda(u16 opcode)
         POLL_IPL;
         if constexpr (S == Word || isRegMode(M) || isImmMode(M)) SYNC(2);
         if (looping<I>()) {
-            if (M == Mode::MODE_DN && S == Long) noPrefetch<C>(6);
-            else if (M == Mode::MODE_AI && S == Long) noPrefetch<C>(6);
-            else if (M == Mode::MODE_AI && S != Long) noPrefetch<C>(4);
-            else if (M == Mode::MODE_PI && S == Long) noPrefetch<C>(6);
-            else if (M == Mode::MODE_PI && S != Long) noPrefetch<C>(4);
-            else if (M == Mode::MODE_PD && S == Long) noPrefetch<C>(6);
-            else if (M == Mode::MODE_PD && S != Long) noPrefetch<C>(4);
+            if (M == Mode::DN && S == Long) noPrefetch<C>(6);
+            else if (M == Mode::AI && S == Long) noPrefetch<C>(6);
+            else if (M == Mode::AI && S != Long) noPrefetch<C>(4);
+            else if (M == Mode::PI && S == Long) noPrefetch<C>(6);
+            else if (M == Mode::PI && S != Long) noPrefetch<C>(4);
+            else if (M == Mode::PD && S == Long) noPrefetch<C>(6);
+            else if (M == Mode::PD && S != Long) noPrefetch<C>(4);
             else noPrefetch<C>();
         } else {
             prefetch<C>();
@@ -1544,7 +1544,7 @@ Moira::execChk(u16 opcode)
 
             readBuffer = (u16)readM<C, M, S>(ea & ~1);
             updateAnPI<M, S>(src);
-            if (isAbsMode(M) || M == Mode::MODE_AI || M == Mode::MODE_PI || M == Mode::MODE_PD) {
+            if (isAbsMode(M) || M == Mode::AI || M == Mode::PI || M == Mode::PD) {
 
                 SYNC(2);
                 throw AddressError(makeFrame<AE_SET_RW|AE_SET_DF>(ea));
@@ -1745,14 +1745,14 @@ Moira::execClr(u16 opcode)
 
         switch (M) {
 
-            case Mode::MODE_AI:
+            case Mode::AI:
 
                 writeOp<C, M, S, POLL | AE_INC_PC>(dst, ea, 0);
                 looping<I>() ? noPrefetch<C>() : prefetch<C>();
                 if (looping<I>()) loopModeDelay = 4;
                 break;
 
-            case Mode::MODE_PI:
+            case Mode::PI:
 
                 writeOp<C, M, S, POLL | AE_INC_PC>(dst, ea, 0);
                 updateAnPI<M, S>(dst);
@@ -1760,7 +1760,7 @@ Moira::execClr(u16 opcode)
                 if (looping<I>()) loopModeDelay = 4;
                 break;
 
-            case Mode::MODE_PD:
+            case Mode::PD:
 
                 if constexpr (S == Long) {
                     writeOp<C, M, S, REVERSE | POLL | AE_INC_PC | AE_INC_A>(dst, ea, 0);
@@ -1772,7 +1772,7 @@ Moira::execClr(u16 opcode)
                 if (looping<I>()) loopModeDelay = 4;
                 break;
 
-            case Mode::MODE_DI:
+            case Mode::DI:
 
                 reg.sr.n = 0;
                 reg.sr.z = 1;
@@ -1787,7 +1787,7 @@ Moira::execClr(u16 opcode)
                 }
                 break;
 
-            case Mode::MODE_IX:
+            case Mode::IX:
 
                 reg.sr.n = 0;
                 reg.sr.z = 1;
@@ -1803,8 +1803,8 @@ Moira::execClr(u16 opcode)
                 }
                 break;
 
-            case Mode::MODE_AW:
-            case Mode::MODE_AL:
+            case Mode::AW:
+            case Mode::AL:
 
                 prefetch<C, POLL>();
                 writeOp<C, M, S, REVERSE>(dst, ea, 0);
@@ -2459,7 +2459,7 @@ Moira::execJsr(u16 opcode)
             // Check for address errors
             if (misaligned<C>(ea) && misaligned<C>(reg.sp)) {
 
-                if (M == Mode::MODE_AI) {
+                if (M == Mode::AI) {
 
                     queue.irc = (u16)read<C, AddrSpace::PROG, Word>(ea & ~1);
                     throw AddressError(makeFrame<AE_SET_IF|AE_SET_RW>(ea));
@@ -2606,7 +2606,7 @@ Moira::execMove0(u16 opcode)
     reg.sr.v = 0;
     reg.sr.c = 0;
 
-    writeOp<C, Mode::MODE_DN, S>(dst, data);
+    writeOp<C, Mode::DN, S>(dst, data);
 
     prefetch<C, POLL>();
 
@@ -2644,7 +2644,7 @@ Moira::execMove2(u16 opcode)
 
         if constexpr (!isMemMode(M) && S == Long) {
 
-            writeOp<C, Mode::MODE_AI, S, AE_INC_PC|POLL>(dst, data);
+            writeOp<C, Mode::AI, S, AE_INC_PC|POLL>(dst, data);
 
             reg.sr.n = NBIT<S>(data);
             reg.sr.z = ZERO<S>(data);
@@ -2660,7 +2660,7 @@ Moira::execMove2(u16 opcode)
             reg.sr.v = 0;
             reg.sr.c = 0;
 
-            writeOp<C, Mode::MODE_AI, S, AE_INC_PC>(dst, data);
+            writeOp<C, Mode::AI, S, AE_INC_PC>(dst, data);
 
             reg.sr.n = NBIT<S>(data);
             reg.sr.z = ZERO<S>(data);
@@ -2674,7 +2674,7 @@ Moira::execMove2(u16 opcode)
 
             POLL_IPL;
 
-            writeOp<C, Mode::MODE_AI, S, AE_INC_PC>(dst, data);
+            writeOp<C, Mode::AI, S, AE_INC_PC>(dst, data);
 
             reg.sr.n = NBIT<S>(data);
             reg.sr.z = ZERO<S>(data);
@@ -2690,7 +2690,7 @@ Moira::execMove2(u16 opcode)
             reg.sr.v = 0;
             reg.sr.c = 0;
 
-            writeOp<C, Mode::MODE_AI, S, AE_INC_PC>(dst, data);
+            writeOp<C, Mode::AI, S, AE_INC_PC>(dst, data);
 
             reg.sr.n = NBIT<S>(data);
             reg.sr.z = ZERO<S>(data);
@@ -2734,7 +2734,7 @@ Moira::execMove3(u16 opcode)
 
         if constexpr (S == Long && !isMemMode(M)) {
 
-            writeOp<C, Mode::MODE_PI, S, AE_INC_PC|POLL>(dst, data);
+            writeOp<C, Mode::PI, S, AE_INC_PC|POLL>(dst, data);
 
             reg.sr.n = NBIT<S>(data);
             reg.sr.z = ZERO<S>(data);
@@ -2750,7 +2750,7 @@ Moira::execMove3(u16 opcode)
             reg.sr.v = 0;
             reg.sr.c = 0;
 
-            writeOp<C, Mode::MODE_PI, S, AE_INC_PC|POLL>(dst, data);
+            writeOp<C, Mode::PI, S, AE_INC_PC|POLL>(dst, data);
 
             reg.sr.n = NBIT<S>(data);
             reg.sr.z = ZERO<S>(data);
@@ -2763,7 +2763,7 @@ Moira::execMove3(u16 opcode)
         if constexpr (!isMemMode(M)) {
 
             POLL_IPL;
-            writeOp<C, Mode::MODE_PI, S, AE_INC_PC>(dst, data);
+            writeOp<C, Mode::PI, S, AE_INC_PC>(dst, data);
 
             reg.sr.n = NBIT<S>(data);
             reg.sr.z = ZERO<S>(data);
@@ -2779,7 +2779,7 @@ Moira::execMove3(u16 opcode)
             reg.sr.v = 0;
             reg.sr.c = 0;
 
-            writeOp<C, Mode::MODE_PI, S, AE_INC_PC|POLL>(dst, data);
+            writeOp<C, Mode::PI, S, AE_INC_PC|POLL>(dst, data);
             looping<I>() ? noPrefetch<C>() : prefetch<C>();
             if (looping<I>() && S == Long) loopModeDelay = 0;
 
@@ -2841,20 +2841,20 @@ Moira::execMove4(u16 opcode)
     looping<I>() ? noPrefetch<C>(2) : prefetch<C, POLL>();
     if (looping<I>() && S == Long) loopModeDelay = 0;
 
-    ea = computeEA<C, Mode::MODE_PD, S, IMPL_DEC>(dst);
+    ea = computeEA<C, Mode::PD, S, IMPL_DEC>(dst);
     writeBuffer = u16(data);
 
     // Check for address error
     if (misaligned<C, S>(ea)) {
 
-        if constexpr (S != Long) updateAn<Mode::MODE_PD, S>(dst);
+        if constexpr (S != Long) updateAn<Mode::PD, S>(dst);
         if (format == 0) { throw AddressError(makeFrame<flags0>(ea + 2, reg.pc + 2, getSR(), ird)); }
         if (format == 1) { SYNC(2); throw AddressError(makeFrame<flags1>(ea, reg.pc + 2)); }
         if (format == 2) { SYNC(2); throw AddressError(makeFrame<flags2>(ea, reg.pc + 2)); }
     }
 
-    writeM<C, Mode::MODE_PD, S, REVERSE>(ea, data);
-    updateAn<Mode::MODE_PD, S>(dst);
+    writeM<C, Mode::PD, S, REVERSE>(ea, data);
+    updateAn<Mode::PD, S>(dst);
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l
@@ -2891,7 +2891,7 @@ Moira::execMove5(u16 opcode)
         reg.sr.n = NBIT<Word>(data >> 16);
         reg.sr.z = ZERO<Word>(data >> 16) && reg.sr.z;
 
-        writeOp<C, Mode::MODE_DI, S, POLL>(dst, data);
+        writeOp<C, Mode::DI, S, POLL>(dst, data);
 
         reg.sr.n = NBIT<S>(data);
         reg.sr.z = ZERO<S>(data);
@@ -2907,7 +2907,7 @@ Moira::execMove5(u16 opcode)
         reg.sr.v = 0;
         reg.sr.c = 0;
 
-        writeOp<C, Mode::MODE_DI, S>(dst, data);
+        writeOp<C, Mode::DI, S>(dst, data);
         prefetch<C, POLL>();
     }
 
@@ -2946,7 +2946,7 @@ Moira::execMove6(u16 opcode)
         reg.sr.n = NBIT<Word>(data >> 16);
         reg.sr.z = ZERO<Word>(data >> 16) && reg.sr.z;
 
-        writeOp<C, Mode::MODE_IX, S, POLL>(dst, data);
+        writeOp<C, Mode::IX, S, POLL>(dst, data);
 
         reg.sr.n = NBIT<S>(data);
         reg.sr.z = ZERO<S>(data);
@@ -2962,7 +2962,7 @@ Moira::execMove6(u16 opcode)
         reg.sr.v = 0;
         reg.sr.c = 0;
 
-        writeOp<C, Mode::MODE_IX, S>(dst, data);
+        writeOp<C, Mode::IX, S>(dst, data);
         prefetch<C, POLL>();
     }
 
@@ -3001,7 +3001,7 @@ Moira::execMove7(u16 opcode)
     reg.sr.v = 0;
     reg.sr.c = 0;
 
-    writeOp<C, Mode::MODE_AW, S>(dst, data);
+    writeOp<C, Mode::AW, S>(dst, data);
     prefetch<C, POLL>();
 
     //           00  10  20        00  10  20        00  10  20
@@ -3067,7 +3067,7 @@ Moira::execMove8(u16 opcode)
         reg.sr.v = 0;
         reg.sr.c = 0;
 
-        writeM<C, Mode::MODE_AL, S>(ea2, data);
+        writeM<C, Mode::AL, S>(ea2, data);
         readExt<C>();
 
     } else {
@@ -3079,7 +3079,7 @@ Moira::execMove8(u16 opcode)
         reg.sr.v = 0;
         reg.sr.c = 0;
 
-        writeOp<C, Mode::MODE_AL, S>(dst, data);
+        writeOp<C, Mode::AL, S>(dst, data);
     }
 
     prefetch<C, POLL>();
@@ -3264,7 +3264,7 @@ Moira::execMovemEaRg(u16 opcode)
     if (misaligned<C, S>(ea)) {
 
         setFC<M>();
-        if constexpr (M == Mode::MODE_IX || M == Mode::MODE_IXPC) {
+        if constexpr (M == Mode::IX || M == Mode::IXPC) {
             throw AddressError(makeFrame<AE_DEC_PC|AE_SET_DF|AE_SET_RW>(ea));
         } else {
             throw AddressError(makeFrame<AE_INC_PC|AE_SET_DF|AE_SET_RW>(ea));
@@ -3510,24 +3510,24 @@ Moira::execMoves(u16 opcode)
         updateAn<M, S>(dst);
 
         // Take care of some special cases
-        if (M == Mode::MODE_PI && src == (dst | 0x8)) {
+        if (M == Mode::PI && src == (dst | 0x8)) {
 
             // MOVES An,(An)+
             value += dst == 7 ? (S == Long ? 4 : 2) : S;
         }
-        if (M == Mode::MODE_PD && src == (dst | 0x8)) {
+        if (M == Mode::PD && src == (dst | 0x8)) {
 
             // MOVES An,-(An)
             value -= dst == 7 ? (S == Long ? 4 : 2) : S;
         }
 
-        if constexpr (M == Mode::MODE_AI) SYNC(6);
-        if constexpr (M == Mode::MODE_PI) SYNC(8);
-        if constexpr (M == Mode::MODE_PD) SYNC(6);
-        if constexpr (M == Mode::MODE_DI) SYNC(4);
-        if constexpr (M == Mode::MODE_IX) SYNC(6);
-        if constexpr (M == Mode::MODE_AW) SYNC(4);
-        if constexpr (M == Mode::MODE_AL) SYNC(4);
+        if constexpr (M == Mode::AI) SYNC(6);
+        if constexpr (M == Mode::PI) SYNC(8);
+        if constexpr (M == Mode::PD) SYNC(6);
+        if constexpr (M == Mode::DI) SYNC(4);
+        if constexpr (M == Mode::IX) SYNC(6);
+        if constexpr (M == Mode::AW) SYNC(4);
+        if constexpr (M == Mode::AL) SYNC(4);
 
         // Make the DFC register visible on the FC pins
         fcSource = 2;
@@ -3573,13 +3573,13 @@ Moira::execMoves(u16 opcode)
         // Make the SFC register visible on the FC pins
         fcSource = 1;
 
-        if constexpr (M == Mode::MODE_AI) SYNC(6);
-        if constexpr (M == Mode::MODE_PI) SYNC(8);
-        if constexpr (M == Mode::MODE_PD) SYNC(6);
-        if constexpr (M == Mode::MODE_DI) SYNC(4);
-        if constexpr (M == Mode::MODE_IX) SYNC(6);
-        if constexpr (M == Mode::MODE_AW) SYNC(4);
-        if constexpr (M == Mode::MODE_AL) SYNC(4);
+        if constexpr (M == Mode::AI) SYNC(6);
+        if constexpr (M == Mode::PI) SYNC(8);
+        if constexpr (M == Mode::PD) SYNC(6);
+        if constexpr (M == Mode::DI) SYNC(4);
+        if constexpr (M == Mode::IX) SYNC(6);
+        if constexpr (M == Mode::AW) SYNC(4);
+        if constexpr (M == Mode::AL) SYNC(4);
 
         u32 data = readM<C, M, S>(ea);
 
@@ -3637,9 +3637,9 @@ Moira::execMoveCcrEa(u16 opcode)
 
     int dst = _____________xxx(opcode);
 
-    if (M == Mode::MODE_AI) SYNC(2);
-    if (M == Mode::MODE_PI) SYNC(4);
-    if (M == Mode::MODE_PD) SYNC(2);
+    if (M == Mode::AI) SYNC(2);
+    if (M == Mode::PI) SYNC(4);
+    if (M == Mode::PD) SYNC(2);
 
     auto val = getCCR();
 
@@ -3751,9 +3751,9 @@ Moira::execMoveSrEa(u16 opcode)
 
     } else {
 
-        if (M == Mode::MODE_AI) SYNC(2);
-        if (M == Mode::MODE_PI) SYNC(4);
-        if (M == Mode::MODE_PD) SYNC(2);
+        if (M == Mode::AI) SYNC(2);
+        if (M == Mode::PI) SYNC(4);
+        if (M == Mode::PD) SYNC(2);
 
         auto val = getSR();
         u32 ea = computeEA<C, M, S>(dst);
@@ -4204,7 +4204,7 @@ Moira::execDivsMoira(u16 opcode, bool *divByZero)
 
             readBuffer = (u16)readM<C, M, S>(ea & ~1);
             updateAnPI<M, S>(src);
-            if (isAbsMode(M) || M == Mode::MODE_AI || M == Mode::MODE_PI || M == Mode::MODE_PD) {
+            if (isAbsMode(M) || M == Mode::AI || M == Mode::PI || M == Mode::PD) {
                 SYNC(2);
                 exc.stackFrame = makeFrame<AE_SET_RW|AE_SET_DF>(ea);
             } else {
@@ -4333,7 +4333,7 @@ Moira::execDivuMoira(u16 opcode, bool *divByZero)
             readBuffer = (u16)readM<C, M, S>(ea & ~1);
             updateAnPI<M, S>(src);
             SYNC(2);
-            if (isAbsMode(M) || M == Mode::MODE_AI || M == Mode::MODE_PI || M == Mode::MODE_PD) {
+            if (isAbsMode(M) || M == Mode::AI || M == Mode::PI || M == Mode::PD) {
                 exc.stackFrame = makeFrame<AE_SET_RW|AE_SET_DF>(ea);
             } else {
                 exc.stackFrame = makeFrame<AE_DEC_PC|AE_SET_RW|AE_SET_DF>(ea);
@@ -4635,9 +4635,9 @@ Moira::execNbcdEa(u16 opcode)
     readOp<C, M, Byte>(reg, &ea, &data);
 
     if (looping<I>()) {
-        if (M == Mode::MODE_AI) noPrefetch<C>(4);
-        else if (M == Mode::MODE_PI) noPrefetch<C>(4);
-        else if (M == Mode::MODE_PD) noPrefetch<C>(4);
+        if (M == Mode::AI) noPrefetch<C>(4);
+        else if (M == Mode::PI) noPrefetch<C>(4);
+        else if (M == Mode::PD) noPrefetch<C>(4);
         else noPrefetch<C>(2);
     } else {
         prefetch<C, POLL>();
@@ -5294,10 +5294,10 @@ Moira::execSccEa(u16 opcode)
         ea = computeEA<C, M, S>(dst);
         updateAn<M, S>(dst);
 
-        if constexpr (M == Mode::MODE_AI) SYNC(2);
-        if constexpr (M == Mode::MODE_PI) SYNC(4);
-        if constexpr (M == Mode::MODE_PD) SYNC(2);
-        if constexpr (M == Mode::MODE_IX) SYNC(2);
+        if constexpr (M == Mode::AI) SYNC(2);
+        if constexpr (M == Mode::PI) SYNC(4);
+        if constexpr (M == Mode::PD) SYNC(2);
+        if constexpr (M == Mode::IX) SYNC(2);
 
         prefetch<C, POLL>();
         data = cond<I>() ? 0xFF : 0;
@@ -5411,10 +5411,10 @@ Moira::execTasEa(u16 opcode)
 
     } else {
 
-        if constexpr (M == Mode::MODE_AI) SYNC(2);
-        if constexpr (M == Mode::MODE_PI) SYNC(4);
-        if constexpr (M == Mode::MODE_PD) SYNC(2);
-        if constexpr (M == Mode::MODE_IX) SYNC(2);
+        if constexpr (M == Mode::AI) SYNC(2);
+        if constexpr (M == Mode::PI) SYNC(4);
+        if constexpr (M == Mode::PD) SYNC(2);
+        if constexpr (M == Mode::IX) SYNC(2);
 
         readOp<C, M, Byte>(dst, &ea, &data);
 
@@ -5565,7 +5565,7 @@ Moira::execUnlk(u16 opcode)
 
     // Update address register
     u32 ea, data;
-    readOp<C, Mode::MODE_AI, Long, AE_DATA|AE_INC_PC|POLL>(7, &ea, &data);
+    readOp<C, Mode::AI, Long, AE_DATA|AE_INC_PC|POLL>(7, &ea, &data);
     writeA(an, data);
 
     if (an != 7) reg.sp += 4;

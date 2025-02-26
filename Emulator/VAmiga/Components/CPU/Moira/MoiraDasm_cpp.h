@@ -1208,7 +1208,7 @@ template <Instr I, Mode M, Size S> void
 Moira::dasmMove2(StrWriter &str, u32 &addr, u16 op) const
 {
     auto src = Op <M,S>       ( _____________xxx(op), addr );
-    auto dst = Op <Mode::MODE_AI,S> ( ____xxx_________(op), addr );
+    auto dst = Op <Mode::AI,S> ( ____xxx_________(op), addr );
 
     str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
@@ -1217,7 +1217,7 @@ template <Instr I, Mode M, Size S> void
 Moira::dasmMove3(StrWriter &str, u32 &addr, u16 op) const
 {
     auto src = Op <M,S>       ( _____________xxx(op), addr );
-    auto dst = Op <Mode::MODE_PI,S> ( ____xxx_________(op), addr );
+    auto dst = Op <Mode::PI,S> ( ____xxx_________(op), addr );
 
     str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
@@ -1226,7 +1226,7 @@ template <Instr I, Mode M, Size S> void
 Moira::dasmMove4(StrWriter &str, u32 &addr, u16 op) const
 {
     auto src = Op <M,S>       ( _____________xxx(op), addr );
-    auto dst = Op <Mode::MODE_PD,S> ( ____xxx_________(op), addr );
+    auto dst = Op <Mode::PD,S> ( ____xxx_________(op), addr );
 
     str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
@@ -1235,7 +1235,7 @@ template <Instr I, Mode M, Size S> void
 Moira::dasmMove5(StrWriter &str, u32 &addr, u16 op) const
 {
     auto src = Op <M,S>       ( _____________xxx(op), addr );
-    auto dst = Op <Mode::MODE_DI,S> ( ____xxx_________(op), addr );
+    auto dst = Op <Mode::DI,S> ( ____xxx_________(op), addr );
 
     str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
@@ -1244,7 +1244,7 @@ template <Instr I, Mode M, Size S> void
 Moira::dasmMove6(StrWriter &str, u32 &addr, u16 op) const
 {
     auto src = Op <M,S>       ( _____________xxx(op), addr );
-    auto dst = Op <Mode::MODE_IX,S> ( ____xxx_________(op), addr );
+    auto dst = Op <Mode::IX,S> ( ____xxx_________(op), addr );
 
     str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
@@ -1253,7 +1253,7 @@ template <Instr I, Mode M, Size S> void
 Moira::dasmMove7(StrWriter &str, u32 &addr, u16 op) const
 {
     auto src = Op <M,S>       ( _____________xxx(op), addr );
-    auto dst = Op <Mode::MODE_AW,S> ( ____xxx_________(op), addr );
+    auto dst = Op <Mode::AW,S> ( ____xxx_________(op), addr );
 
     str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
@@ -1262,7 +1262,7 @@ template <Instr I, Mode M, Size S> void
 Moira::dasmMove8(StrWriter &str, u32 &addr, u16 op) const
 {
     auto src = Op <M,S>       ( _____________xxx(op), addr );
-    auto dst = Op <Mode::MODE_AL,S> ( ____xxx_________(op), addr );
+    auto dst = Op <Mode::AL,S> ( ____xxx_________(op), addr );
 
     str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 }
@@ -1321,7 +1321,7 @@ template <Instr I, Mode M, Size S> void
 Moira::dasmMovepDxEa(StrWriter &str, u32 &addr, u16 op) const
 {
     auto src = Dn             ( ____xxx_________(op)       );
-    auto dst = Op <Mode::MODE_DI,S> ( _____________xxx(op), addr );
+    auto dst = Op <Mode::DI,S> ( _____________xxx(op), addr );
 
     str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
 
@@ -1330,7 +1330,7 @@ Moira::dasmMovepDxEa(StrWriter &str, u32 &addr, u16 op) const
 template <Instr I, Mode M, Size S> void
 Moira::dasmMovepEaDx(StrWriter &str, u32 &addr, u16 op) const
 {
-    auto src = Op <Mode::MODE_DI,S> ( _____________xxx(op), addr );
+    auto src = Op <Mode::DI,S> ( _____________xxx(op), addr );
     auto dst = Dn             ( ____xxx_________(op)       );
 
     str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
@@ -1964,7 +1964,7 @@ Moira::dasmMove16PiPi(StrWriter &str, u32 &addr, u16 op) const
         return;
     }
 
-    str << Ins<I>{} << str.tab << Op<Mode::MODE_PI>(ax, addr) << Sep{} << Op<Mode::MODE_PI>(ay, addr);
+    str << Ins<I>{} << str.tab << Op<Mode::PI>(ax, addr) << Sep{} << Op<Mode::PI>(ay, addr);
     str << Av<I, M, S>{};
 }
 
@@ -1974,7 +1974,7 @@ Moira::dasmMove16PiAl(StrWriter &str, u32 &addr, u16 op) const
     auto ext = dasmIncRead<Long>(addr);
     auto ay  = _____________xxx(op);
 
-    str << Ins<I>{} << str.tab << Op<Mode::MODE_PI>(ay, addr) << Sep{} << UInt(ext);
+    str << Ins<I>{} << str.tab << Op<Mode::PI>(ay, addr) << Sep{} << UInt(ext);
     str << Av<I, M, S>{};
 }
 
@@ -1984,7 +1984,7 @@ Moira::dasmMove16AlPi(StrWriter &str, u32 &addr, u16 op) const
     auto ext = dasmIncRead<Long>(addr);
     auto ay  = _____________xxx(op);
 
-    str << Ins<I>{} << str.tab << UInt(ext) << Sep{} << Op<Mode::MODE_PI>(ay, addr);
+    str << Ins<I>{} << str.tab << UInt(ext) << Sep{} << Op<Mode::PI>(ay, addr);
     str << Av<I, M, S>{};
 }
 
@@ -1994,7 +1994,7 @@ Moira::dasmMove16AiAl(StrWriter &str, u32 &addr, u16 op) const
     auto ext = dasmIncRead<Long>(addr);
     auto ay  = _____________xxx(op);
 
-    str << Ins<I>{} << str.tab << Op<Mode::MODE_AI>(ay, addr) << Sep{} << UInt(ext);
+    str << Ins<I>{} << str.tab << Op<Mode::AI>(ay, addr) << Sep{} << UInt(ext);
     str << Av<I, M, S>{};
 }
 
@@ -2004,7 +2004,7 @@ Moira::dasmMove16AlAi(StrWriter &str, u32 &addr, u16 op) const
     auto ext = dasmIncRead<Long>(addr);
     auto ay  = _____________xxx(op);
 
-    str << Ins<I>{} << str.tab << UInt(ext) << Sep{} << Op<Mode::MODE_AI>(ay, addr);
+    str << Ins<I>{} << str.tab << UInt(ext) << Sep{} << Op<Mode::AI>(ay, addr);
     str << Av<I, M, S>{};
 }
 

@@ -808,7 +808,7 @@ Moira::setFC()
 {
     if (!EMULATE_FC)  return;
 
-    fcl = (M == Mode::MODE_DIPC || M == Mode::MODE_IXPC) ? FC_USER_PROG : FC_USER_DATA;
+    fcl = (M == Mode::DIPC || M == Mode::IXPC) ? FC_USER_PROG : FC_USER_DATA;
 }
 
 void

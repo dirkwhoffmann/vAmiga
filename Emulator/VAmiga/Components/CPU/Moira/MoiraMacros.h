@@ -47,19 +47,19 @@
 { if constexpr (M == m) { CYCLES_BWL_10(b1,w1,l1) } } \
 { if constexpr (M == m) { CYCLES_BWL_20(b2,w2,l2) } }
 
-#define CYCLES_DN(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(Mode::MODE_DN,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
-#define CYCLES_AN(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(Mode::MODE_AN,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
-#define CYCLES_AI(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(Mode::MODE_AI,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
-#define CYCLES_PI(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(Mode::MODE_PI,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
-#define CYCLES_PD(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(Mode::MODE_PD,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
-#define CYCLES_DI(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(Mode::MODE_DI,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
-#define CYCLES_IX(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(Mode::MODE_IX,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
-#define CYCLES_AW(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(Mode::MODE_AW,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
-#define CYCLES_AL(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(Mode::MODE_AL,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
-#define CYCLES_DIPC(b0,b1,b2,w0,w1,w2,l0,l1,l2)   CYCLES_MBWL(Mode::MODE_DIPC, b0,b1,b2,w0,w1,w2,l0,l1,l2)
-#define CYCLES_IXPC(b0,b1,b2,w0,w1,w2,l0,l1,l2)   CYCLES_MBWL(Mode::MODE_IXPC, b0,b1,b2,w0,w1,w2,l0,l1,l2)
-#define CYCLES_IM(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(Mode::MODE_IM,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
-#define CYCLES_IP(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(Mode::MODE_IP,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
+#define CYCLES_DN(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(Mode::DN,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
+#define CYCLES_AN(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(Mode::AN,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
+#define CYCLES_AI(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(Mode::AI,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
+#define CYCLES_PI(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(Mode::PI,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
+#define CYCLES_PD(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(Mode::PD,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
+#define CYCLES_DI(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(Mode::DI,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
+#define CYCLES_IX(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(Mode::IX,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
+#define CYCLES_AW(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(Mode::AW,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
+#define CYCLES_AL(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(Mode::AL,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
+#define CYCLES_DIPC(b0,b1,b2,w0,w1,w2,l0,l1,l2)   CYCLES_MBWL(Mode::DIPC, b0,b1,b2,w0,w1,w2,l0,l1,l2)
+#define CYCLES_IXPC(b0,b1,b2,w0,w1,w2,l0,l1,l2)   CYCLES_MBWL(Mode::IXPC, b0,b1,b2,w0,w1,w2,l0,l1,l2)
+#define CYCLES_IM(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(Mode::IM,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
+#define CYCLES_IP(b0,b1,b2,w0,w1,w2,l0,l1,l2)     CYCLES_MBWL(Mode::IP,   b0,b1,b2,w0,w1,w2,l0,l1,l2)
 
 #define POLL_IPL reg.ipl = ipl
 

@@ -208,9 +208,9 @@ Moira::readOp(int n, u32 *ea, u32 *result)
 {
     switch (M) {
 
-        case Mode::MODE_DN: *result = readD<S>(n);   break;
-        case Mode::MODE_AN: *result = readA<S>(n);   break;
-        case Mode::MODE_IM: *result = readI<C, S>(); break;
+        case Mode::DN: *result = readD<S>(n);   break;
+        case Mode::AN: *result = readA<S>(n);   break;
+        case Mode::IM: *result = readI<C, S>(); break;
 
         default:
 
@@ -233,9 +233,9 @@ Moira::writeOp(int n, u32 val)
 {
     switch (M) {
 
-        case Mode::MODE_DN: writeD<S>(n, val); break;
-        case Mode::MODE_AN: writeA<S>(n, val); break;
-        case Mode::MODE_IM: fatalError;
+        case Mode::DN: writeD<S>(n, val); break;
+        case Mode::AN: writeA<S>(n, val); break;
+        case Mode::IM: fatalError;
 
         default:
 
@@ -260,9 +260,9 @@ Moira::writeOp(int n, u32 ea, u32 val)
 {
     switch (M) {
 
-        case Mode::MODE_DN: writeD<S>(n, val); break;
-        case Mode::MODE_AN: writeA<S>(n, val); break;
-        case Mode::MODE_IM: fatalError;
+        case Mode::DN: writeD<S>(n, val); break;
+        case Mode::AN: writeA<S>(n, val); break;
+        case Mode::IM: fatalError;
 
         default:
 
@@ -724,7 +724,7 @@ Moira::penaltyCycles(u16 ext) const
         6, 11, 13, 13,  0, 11, 13, 13,  0, 11, 13, 13,  0, 11, 13, 13
     };
 
-    if constexpr (C == Core::C68020 && (M == Mode::MODE_IX || M == Mode::MODE_IXPC)) {
+    if constexpr (C == Core::C68020 && (M == Mode::IX || M == Mode::IXPC)) {
 
         if (ext & 0x100) return delay[ext & 0x3F];
     }

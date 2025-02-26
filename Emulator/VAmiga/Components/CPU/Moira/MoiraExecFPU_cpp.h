@@ -32,7 +32,7 @@ Moira::isValidExtFPU(Instr I, Mode M, u16 op, u32 ext) const
 
                 case 0b010:
 
-                    if (M == Mode::MODE_IP) break;
+                    if (M == Mode::IP) break;
                     return true;
 
                 case 0b000:
@@ -44,13 +44,13 @@ Moira::isValidExtFPU(Instr I, Mode M, u16 op, u32 ext) const
 
                     if (fmt != 0b011 && fmt != 0b111 && (ext & 0x7F)) break;
 
-                    if (M == Mode::MODE_DN) {
+                    if (M == Mode::DN) {
                         if (fmt == 0b010 || fmt == 0b011 || fmt == 0b101 || fmt == 0b111) break;
                     }
-                    if (M == Mode::MODE_AN) {
+                    if (M == Mode::AN) {
                         if (fmt == 0b011 || fmt == 0b111) break;
                     }
-                    if (M == Mode::MODE_DIPC || M == Mode::MODE_IXPC || M == Mode::MODE_IM || M == Mode::MODE_IP) {
+                    if (M == Mode::DIPC || M == Mode::IXPC || M == Mode::IM || M == Mode::IP) {
                         break;
                     } else {
                         if (fmt == 0b111 && (ext & 0xF)) break;
@@ -68,10 +68,10 @@ Moira::isValidExtFPU(Instr I, Mode M, u16 op, u32 ext) const
 
                     if (ext & 0x3FF) break;
 
-                    if (M == Mode::MODE_DN || M == Mode::MODE_AN) {
+                    if (M == Mode::DN || M == Mode::AN) {
                         if (lst != 0b000 && lst != 0b001 && lst != 0b010 && lst != 0b100) break;
                     }
-                    if (M == Mode::MODE_DIPC || M == Mode::MODE_IXPC || M == Mode::MODE_IM || M == Mode::MODE_IP) {
+                    if (M == Mode::DIPC || M == Mode::IXPC || M == Mode::IM || M == Mode::IP) {
                         break;
                     }
                     return true;
@@ -79,7 +79,7 @@ Moira::isValidExtFPU(Instr I, Mode M, u16 op, u32 ext) const
                 case 0b100:
 
                     if (ext & 0x3FF) break;
-                    if (M == Mode::MODE_IP) break;
+                    if (M == Mode::IP) break;
                     return true;
 
                 case 0b110:
@@ -88,24 +88,24 @@ Moira::isValidExtFPU(Instr I, Mode M, u16 op, u32 ext) const
                     if (ext & 0x0700) break;
                     if (mode == 3 && (ext & 0x8F)) break;
 
-                    if (M == Mode::MODE_DN || M == Mode::MODE_AN) {
+                    if (M == Mode::DN || M == Mode::AN) {
                         break;
                     }
-                    if (M == Mode::MODE_DIPC || M == Mode::MODE_IXPC || M == Mode::MODE_IM || M == Mode::MODE_IP) {
+                    if (M == Mode::DIPC || M == Mode::IXPC || M == Mode::IM || M == Mode::IP) {
                         break;
                     }
-                    if (M == Mode::MODE_AI) {
+                    if (M == Mode::AI) {
                         if (mode == 0 || mode == 1) break;
                     }
-                    if (M == Mode::MODE_PI) {
+                    if (M == Mode::PI) {
                         if (mode == 0 || mode == 1 || cod == 0b111) break;
                     }
-                    if (M == Mode::MODE_PD) {
+                    if (M == Mode::PD) {
                         if (cod == 0b110) break;
                         if (cod == 0b111 && (mode == 1) && (ext & 0x8F)) break;
                         if (cod == 0b111 && (mode == 2 || mode == 3)) break;
                     }
-                    if (M == Mode::MODE_DI || M == Mode::MODE_IX || M == Mode::MODE_AW || M == Mode::MODE_AL) {
+                    if (M == Mode::DI || M == Mode::IX || M == Mode::AW || M == Mode::AL) {
                         if (mode == 0 || mode == 1) break;
                     }
                     return true;
