@@ -330,8 +330,8 @@ protected:
     void didExecute(const char *func, Instr I, Mode M, Size S, u16 opcode);
 
     // Exception delegates
-    void willExecute(ExceptionType exc, u16 vector);
-    void didExecute(ExceptionType exc, u16 vector);
+    void willExecute(M68kException exc, u16 vector);
+    void didExecute(M68kException exc, u16 vector);
     void willInterrupt(u8 level);
     void didJumpToVector(int nr, u32 addr);
 

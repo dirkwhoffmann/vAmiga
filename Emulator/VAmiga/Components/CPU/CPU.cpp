@@ -168,7 +168,7 @@ Moira::didExecute(const char *func, Instr I, Mode M, Size S, u16 opcode)
 }
 
 void
-Moira::willExecute(ExceptionType exc, u16 vector)
+Moira::willExecute(M68kException exc, u16 vector)
 {
     /*
     switch (exc) {
@@ -196,7 +196,7 @@ Moira::willExecute(ExceptionType exc, u16 vector)
 }
 
 void
-Moira::didExecute(ExceptionType exc, u16 vector)
+Moira::didExecute(M68kException exc, u16 vector)
 {
 
 }

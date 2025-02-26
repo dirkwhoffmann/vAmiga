@@ -269,7 +269,7 @@ Moira::execute()
 
             // Process pending trace exception (if any)
             if (flags & CPU_TRACE_EXCEPTION) {
-                execException(ExceptionType::TRACE);
+                execException(M68kException::TRACE);
                 goto done;
             }
 
@@ -297,7 +297,7 @@ Moira::execute()
                 sync(4);
                 reg.pc -= 2;
                 flags &= ~CPU_IS_STOPPED;
-                execException(ExceptionType::PRIVILEGE);
+                execException(M68kException::PRIVILEGE);
                 return;
             }
 
@@ -374,7 +374,7 @@ Moira::processException(const std::exception &exc)
         auto be = dynamic_cast<const BusErrorException *>(&exc);
         if (be) {
 
-            execException(ExceptionType::BUS_ERROR);
+            execException(M68kException::BUS_ERROR);
             return;
         }
 

@@ -293,8 +293,8 @@ public:
 
     void willExecute(const char *func, moira::Instr I, moira::Mode M, moira::Size S, u16 opcode);
     void didExecute(const char *func, moira::Instr I, moira::Mode M, moira::Size S, u16 opcode);
-    void willExecute(moira::ExceptionType exc, u16 vector);
-    void didExecute(moira::ExceptionType exc, u16 vector);
+    void willExecute(moira::M68kException exc, u16 vector);
+    void didExecute(moira::M68kException exc, u16 vector);
 
 
     //

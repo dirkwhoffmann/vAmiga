@@ -656,12 +656,12 @@ Moira::jumpToVector(int nr)
             queue.irc = readBuffer = u16(reg.pc);
             writeBuffer = u16(4 * nr);
             
-            switch (ExceptionType(nr)) {
+            switch (M68kException(nr)) {
                     
-                case ExceptionType::ILLEGAL:
-                case ExceptionType::LINEA:
-                case ExceptionType::LINEF:
-                case ExceptionType::PRIVILEGE:
+                case M68kException::ILLEGAL:
+                case M68kException::LINEA:
+                case M68kException::LINEF:
+                case M68kException::PRIVILEGE:
                     
                     throw AddressError(makeFrame<F|AE_DEC_PC|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
                     

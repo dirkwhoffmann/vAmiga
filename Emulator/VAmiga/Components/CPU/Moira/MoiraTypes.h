@@ -224,7 +224,7 @@ typedef enum
 }
 Cond;
 
-enum class ExceptionType
+enum class M68kException
 {
     // Native exceptions
     RESET               = 1,

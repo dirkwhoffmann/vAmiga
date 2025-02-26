@@ -16,7 +16,7 @@ if constexpr (DID_EXECUTE) didExecute(__func__, I, M, S, opcode);
 
 #define SUPERVISOR_MODE_ONLY \
 if (!reg.sr.s) { \
-execException<C>(ExceptionType::PRIVILEGE); \
+execException<C>(M68kException::PRIVILEGE); \
 CYCLES_68000(34) \
 CYCLES_68010(38) \
 CYCLES_68020(34) \
@@ -49,7 +49,7 @@ Moira::execLineA(u16 opcode)
         return;
     }
 
-    execException<C>(ExceptionType::LINEA);
+    execException<C>(M68kException::LINEA);
 
     CYCLES_68000(34)
     CYCLES_68010(4)
@@ -63,7 +63,7 @@ Moira::execLineF(u16 opcode)
 {
     AVAILABILITY(C68000)
 
-    execException<C>(ExceptionType::LINEF);
+    execException<C>(M68kException::LINEF);
 
     CYCLES_68000(34)
     CYCLES_68010(38)
@@ -77,7 +77,7 @@ Moira::execIllegal(u16 opcode)
 {
     AVAILABILITY(C68000)
 
-    execException<C>(ExceptionType::ILLEGAL);
+    execException<C>(M68kException::ILLEGAL);
 
     CYCLES_68000(34)
     CYCLES_68010(38)
@@ -1291,11 +1291,11 @@ Moira::execBkpt(u16 opcode)
 
     if (MIMIC_MUSASHI) {
 
-        execException<C>(ExceptionType::ILLEGAL);
+        execException<C>(M68kException::ILLEGAL);
 
     } else {
 
-        execException<C>(ExceptionType::BKPT);
+        execException<C>(M68kException::BKPT);
     }
 
     //           00  10  20        00  10  20        00  10  20
@@ -1589,7 +1589,7 @@ Moira::execChk(u16 opcode)
                 break;
         }
         reg.sr.n = NBIT<S>(dy);
-        execException<C>(ExceptionType::CHK);
+        execException<C>(M68kException::CHK);
 
 
         CYCLES_68000(40)
@@ -1614,7 +1614,7 @@ Moira::execChk(u16 opcode)
                 SYNC_68010(6);
         }
         reg.sr.n = MIMIC_MUSASHI ? NBIT<S>(dy) : 1;
-        execException<C>(ExceptionType::CHK);
+        execException<C>(M68kException::CHK);
 
         CYCLES_68000(40)
         CYCLES_68010(44)
@@ -1688,7 +1688,7 @@ Moira::execChkCmp2(u16 opcode)
 
     if ((ext & 0x800) && reg.sr.c) {
 
-        execException<C>(ExceptionType::CHK);
+        execException<C>(M68kException::CHK);
         CYCLES_68020(40)
 
     } else {
@@ -4226,7 +4226,7 @@ Moira::execDivsMoira(u16 opcode, bool *divByZero)
         setDivZeroDIVS<C, S>(dividend);
 
         SYNC(8);
-        execException<C>(ExceptionType::DIVIDE_BY_ZERO);
+        execException<C>(M68kException::DIVIDE_BY_ZERO);
         *divByZero = true;
         return;
     }
@@ -4257,7 +4257,7 @@ Moira::execDivsMusashi(u16 opcode, bool *divByZero)
         } else {
             SYNC(10 - (int)(clock - c));
         }
-        execException<C>(ExceptionType::DIVIDE_BY_ZERO);
+        execException<C>(M68kException::DIVIDE_BY_ZERO);
         *divByZero = true;
         return;
     }
@@ -4354,7 +4354,7 @@ Moira::execDivuMoira(u16 opcode, bool *divByZero)
         setDivZeroDIVU<C, S>(dividend);
 
         SYNC(8);
-        execException<C>(ExceptionType::DIVIDE_BY_ZERO);
+        execException<C>(M68kException::DIVIDE_BY_ZERO);
         *divByZero = true;
         return;
     }
@@ -4384,7 +4384,7 @@ Moira::execDivuMusashi(u16 opcode, bool *divByZero)
         } else {
             SYNC(10 - (int)(clock - c));
         }
-        execException<C>(ExceptionType::DIVIDE_BY_ZERO);
+        execException<C>(M68kException::DIVIDE_BY_ZERO);
         *divByZero = true;
         return;
     }
@@ -4472,7 +4472,7 @@ Moira::execDivlMoira(u16 opcode, bool *divByZero)
             setDivZeroDIVUL<C, S>(i64(dividend));
         }
 
-        execException<C>(ExceptionType::DIVIDE_BY_ZERO);
+        execException<C>(M68kException::DIVIDE_BY_ZERO);
         *divByZero = true;
         return false;
     }
@@ -4552,7 +4552,7 @@ Moira::execDivlMusashi(u16 opcode, bool *divByZero)
 
     if (divisor == 0) {
 
-        execException<C>(ExceptionType::DIVIDE_BY_ZERO);
+        execException<C>(M68kException::DIVIDE_BY_ZERO);
         *divByZero = true;
         return false;
     }
@@ -4987,7 +4987,7 @@ Moira::execRte(u16 opcode)
                     if (version != 0) { // TODO: PUT IN CPU VERSION NUMBER (GET FROM REAL CPU)
 
                         SYNC(4);
-                        execException(ExceptionType::FORMAT_ERROR);
+                        execException(M68kException::FORMAT_ERROR);
                         return;
                     }
 
@@ -5024,7 +5024,7 @@ Moira::execRte(u16 opcode)
                     (void)read<C, AddrSpace::DATA, Long>(reg.sp + 2);
 
                     // reg.sr.c = 1; // Check test case Exceptions/StackFrame/stackframe2
-                    execException(ExceptionType::FORMAT_ERROR);
+                    execException(M68kException::FORMAT_ERROR);
                     return;
             }
             break;
@@ -5143,7 +5143,7 @@ Moira::execRte(u16 opcode)
 
                 } else {
 
-                    execException(ExceptionType::FORMAT_ERROR);
+                    execException(M68kException::FORMAT_ERROR);
                     CYCLES_68020(4)
                     return;
                 }
@@ -5442,7 +5442,7 @@ Moira::execTrap(u16 opcode)
     int nr = ____________xxxx(opcode);
 
     SYNC(4);
-    execException<C>(ExceptionType::TRAP, nr);
+    execException<C>(M68kException::TRAP, nr);
 
     //           00  10  20        00  10  20        00  10  20
     //           .b  .b  .b        .w  .w  .w        .l  .l  .l
@@ -5464,7 +5464,7 @@ Moira::execTrapv(u16 opcode)
             (void)read<C, AddrSpace::PROG, Word>(reg.pc + 2);
             SYNC(2);
         }
-        execException<C>(ExceptionType::TRAPV);
+        execException<C>(M68kException::TRAPV);
 
         //           00  10  20        00  10  20        00  10  20
         //           .b  .b  .b        .w  .w  .w        .l  .l  .l
@@ -5495,7 +5495,7 @@ Moira::execTrapcc(u16 opcode)
 
     if (cond<I>()) {
 
-        execException<C>(ExceptionType::TRAPV);
+        execException<C>(M68kException::TRAPV);
         CYCLES_68020(20);
         return;
     }
