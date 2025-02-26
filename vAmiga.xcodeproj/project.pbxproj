@@ -229,6 +229,8 @@
 		509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */; };
 		509F41EA243B0FF700AD0FE4 /* ScreenshotDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F41E9243B0FF700AD0FE4 /* ScreenshotDialog.swift */; };
 		509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* RomFile.cpp */; };
+		50A0C4422D6F6B9500848CB4 /* MEM_PROG.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A0C4412D6F6B9500848CB4 /* MEM_PROG.m */; };
+		50A0C4432D6F6B9500848CB4 /* MEM_PROG.m in Sources */ = {isa = PBXBuildFile; fileRef = 50A0C4412D6F6B9500848CB4 /* MEM_PROG.m */; };
 		50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */; };
 		50A5969824F7F9ED008632C0 /* PeripheralsConf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A5969724F7F9ED008632C0 /* PeripheralsConf.swift */; };
 		50A61463260DB7F900A01428 /* Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A61461260DB7F900A01428 /* Parser.cpp */; };
@@ -864,6 +866,7 @@
 		509F41E9243B0FF700AD0FE4 /* ScreenshotDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotDialog.swift; sourceTree = "<group>"; };
 		509F7F1B21EDEA0200A530E4 /* RomFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RomFile.cpp; sourceTree = "<group>"; };
 		509F7F1C21EDEA0200A530E4 /* RomFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RomFile.h; sourceTree = "<group>"; };
+		50A0C4412D6F6B9500848CB4 /* MEM_PROG.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MEM_PROG.m; sourceTree = "<group>"; };
 		50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ControlPort.cpp; sourceTree = "<group>"; };
 		50A2953E21FF12EF0046BAA0 /* ControlPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControlPort.h; sourceTree = "<group>"; };
 		50A493832374560D003ECD2C /* RTCTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTCTypes.h; sourceTree = "<group>"; };
@@ -2129,6 +2132,7 @@
 				50CF463D262042FC00BB3B95 /* CMakeLists.txt */,
 				50E2BE35240D41EE00155AE4 /* MoiraConfig.h */,
 				50E2BE2F240D418500155AE4 /* MoiraTypes.h */,
+				50A0C4412D6F6B9500848CB4 /* MEM_PROG.m */,
 				5034229628A6E2BE007018BB /* MoiraMacros.h */,
 				50E2BE34240D41DD00155AE4 /* Moira.h */,
 				50E2BE37240D41EE00155AE4 /* Moira.cpp */,
@@ -2623,6 +2627,7 @@
 				508FE04F21EA22CC0043D0E9 /* GeneralPrefs.swift in Sources */,
 				5042F2DD26BE57E600126C05 /* Thread.cpp in Sources */,
 				502023EA27B6BDEA00820DB6 /* ZorroBoard.cpp in Sources */,
+				50A0C4422D6F6B9500848CB4 /* MEM_PROG.m in Sources */,
 				50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */,
 				50F54B2B24B5D31D0078FDC9 /* maketbl.c in Sources */,
 				50F54B3324B5DDAF0078FDC9 /* DMSFile.cpp in Sources */,
@@ -2861,6 +2866,7 @@
 				50FC048427DA190400C3E566 /* Thread.cpp in Sources */,
 				50FC04E127DA1A1400C3E566 /* u_rle.c in Sources */,
 				50FC047927DA129F00C3E566 /* Concurrency.cpp in Sources */,
+				50A0C4432D6F6B9500848CB4 /* MEM_PROG.m in Sources */,
 				50FC04AA27DA198E00C3E566 /* SlowBlitter.cpp in Sources */,
 				50FC04B327DA199C00C3E566 /* SerialPort.cpp in Sources */,
 				50FC049E27DA197500C3E566 /* AgnusDma.cpp in Sources */,

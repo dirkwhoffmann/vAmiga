@@ -38,14 +38,10 @@ Moira::writeStackFrame0000(u16 sr, u32 pc, u16 nr)
 
             } else {
 
-                // reg.sp -= 6;
-                // write<C, MEM_DATA, Word>((reg.sp + 4) & ~1, pc & 0xFFFF);
-                // write<C, MEM_DATA, Word>((reg.sp + 0) & ~1, sr);
-                // write<C, MEM_DATA, Word>((reg.sp + 2) & ~1, pc >> 16);
                 U32_DEC(reg.sp, 6);
-                write<C, MEM_DATA, Word>(U32_ADD(reg.sp, 4) & ~1, pc & 0xFFFF);
-                write<C, MEM_DATA, Word>(U32_ADD(reg.sp, 0) & ~1, sr);
-                write<C, MEM_DATA, Word>(U32_ADD(reg.sp, 2) & ~1, pc >> 16);
+                write<C, AddrSpace::DATA, Word>(U32_ADD(reg.sp, 4) & ~1, pc & 0xFFFF);
+                write<C, AddrSpace::DATA, Word>(U32_ADD(reg.sp, 0) & ~1, sr);
+                write<C, AddrSpace::DATA, Word>(U32_ADD(reg.sp, 2) & ~1, pc >> 16);
             }
             break;
 
@@ -60,16 +56,11 @@ Moira::writeStackFrame0000(u16 sr, u32 pc, u16 nr)
 
             } else {
 
-                // reg.sp -= 8;
-                // write<C, MEM_DATA, Word>((reg.sp + 6) & ~1, 4 * nr);
-                // write<C, MEM_DATA, Word>((reg.sp + 4) & ~1, pc & 0xFFFF);
-                // write<C, MEM_DATA, Word>((reg.sp + 0) & ~1, sr);
-                // write<C, MEM_DATA, Word>((reg.sp + 2) & ~1, pc >> 16);
                 U32_DEC(reg.sp, 8);
-                write<C, MEM_DATA, Word>(U32_ADD(reg.sp, 6) & ~1, 4 * nr);
-                write<C, MEM_DATA, Word>(U32_ADD(reg.sp, 4) & ~1, pc & 0xFFFF);
-                write<C, MEM_DATA, Word>(U32_ADD(reg.sp, 0) & ~1, sr);
-                write<C, MEM_DATA, Word>(U32_ADD(reg.sp, 2) & ~1, pc >> 16);
+                write<C, AddrSpace::DATA, Word>(U32_ADD(reg.sp, 6) & ~1, 4 * nr);
+                write<C, AddrSpace::DATA, Word>(U32_ADD(reg.sp, 4) & ~1, pc & 0xFFFF);
+                write<C, AddrSpace::DATA, Word>(U32_ADD(reg.sp, 0) & ~1, sr);
+                write<C, AddrSpace::DATA, Word>(U32_ADD(reg.sp, 2) & ~1, pc >> 16);
             }
             break;
     }
@@ -505,14 +496,14 @@ Moira::execInterrupt(u8 level)
 
             SYNC(6);
             reg.sp -= 6;
-            write<C, MEM_DATA, Word>(reg.sp + 4, reg.pc & 0xFFFF);
+            write<C, AddrSpace::DATA, Word>(reg.sp + 4, reg.pc & 0xFFFF);
 
             SYNC(4);
             queue.ird = getIrqVector(level);
 
             SYNC(4);
-            write<C, MEM_DATA, Word>(reg.sp + 0, status);
-            write<C, MEM_DATA, Word>(reg.sp + 2, reg.pc >> 16);
+            write<C, AddrSpace::DATA, Word>(reg.sp + 0, status);
+            write<C, AddrSpace::DATA, Word>(reg.sp + 2, reg.pc >> 16);
             break;
 
         case C68010:
@@ -520,10 +511,10 @@ Moira::execInterrupt(u8 level)
             SYNC(12);
             reg.sp -= 8;
             queue.ird = getIrqVector(level);
-            write<C, MEM_DATA, Word>(reg.sp + 4, reg.pc & 0xFFFF);
-            write<C, MEM_DATA, Word>(reg.sp + 0, status);
-            write<C, MEM_DATA, Word>(reg.sp + 2, reg.pc >> 16);
-            write<C, MEM_DATA, Word>(reg.sp + 6, 4 * queue.ird);
+            write<C, AddrSpace::DATA, Word>(reg.sp + 4, reg.pc & 0xFFFF);
+            write<C, AddrSpace::DATA, Word>(reg.sp + 0, status);
+            write<C, AddrSpace::DATA, Word>(reg.sp + 2, reg.pc >> 16);
+            write<C, AddrSpace::DATA, Word>(reg.sp + 6, 4 * queue.ird);
             break;
 
         case C68020:

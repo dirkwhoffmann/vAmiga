@@ -353,19 +353,19 @@ template <Core C, Mode M, Size S, Flags F> u32
 Moira::readM(u32 addr)
 {
     if constexpr (isPrgMode(M)) {
-        return read<C, MEM_PROG, S, F>(addr);
+        return read<C, AddrSpace::PROG, S, F>(addr);
     } else {
-        return read<C, MEM_DATA, S, F>(addr);
+        return read<C, AddrSpace::DATA, S, F>(addr);
     }
 }
 
-template <Core C, MemSpace MS, Size S, Flags F> u32
+template <Core C, AddrSpace AS, Size S, Flags F> u32
 Moira::read(u32 addr)
 {
     u32 result;
 
     // Update function code pins
-    setFC(MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
+    setFC(AS == AddrSpace::DATA ? FC_USER_DATA : FC_USER_PROG);
     SYNC(2);
 
     // Check for address errors
@@ -408,17 +408,17 @@ template <Core C, Mode M, Size S, Flags F> void
 Moira::writeM(u32 addr, u32 val)
 {
     if constexpr (isPrgMode(M)) {
-        write<C, MEM_PROG, S, F>(addr, val);
+        write<C, AddrSpace::PROG, S, F>(addr, val);
     } else {
-        write<C, MEM_DATA, S, F>(addr, val);
+        write<C, AddrSpace::DATA, S, F>(addr, val);
     }
 }
 
-template <Core C, MemSpace MS, Size S, Flags F> void
+template <Core C, AddrSpace AS, Size S, Flags F> void
 Moira::write(u32 addr, u32 val)
 {
     // Update function code pins
-    setFC(MS == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
+    setFC(AS == AddrSpace::DATA ? FC_USER_DATA : FC_USER_PROG);
     SYNC(2);
 
     // Check for address errors
@@ -505,13 +505,13 @@ template <Core C, Size S, Flags F> void
 Moira::push(u32 val)
 {
     reg.sp -= S;
-    write<C, MEM_DATA, S, F>(reg.sp, val);
+    write<C, AddrSpace::DATA, S, F>(reg.sp, val);
 }
 
 template <Core C, Size S, Flags F> u32
 Moira::pop()
 {
-    u32 result = read<C, MEM_DATA, S, F>(reg.sp);
+    u32 result = read<C, AddrSpace::DATA, S, F>(reg.sp);
     reg.sp += S;
     return result;
 }
@@ -582,7 +582,7 @@ Moira::prefetch()
     reg.pc0 = reg.pc;
 
     queue.ird = queue.irc;
-    queue.irc = (u16)read<C, MEM_PROG, Word, F>(reg.pc + 2);
+    queue.irc = (u16)read<C, AddrSpace::PROG, Word, F>(reg.pc + 2);
     readBuffer = queue.irc;
 }
 
@@ -591,7 +591,7 @@ Moira::fullPrefetch()
 {
     assert(!misaligned<C>(reg.pc));
 
-    queue.irc = (u16)read<C, MEM_PROG, Word>(reg.pc);
+    queue.irc = (u16)read<C, AddrSpace::PROG, Word>(reg.pc);
     if (delay) SYNC(delay);
     prefetch<C, F>();
 }
@@ -612,7 +612,7 @@ Moira::readExt()
     assert(!misaligned<C>(reg.pc));
 
     reg.pc += 2;
-    queue.irc = (u16)read<C, MEM_PROG, Word>(reg.pc);
+    queue.irc = (u16)read<C, AddrSpace::PROG, Word>(reg.pc);
 }
 
 template <Core C, Size S> u32
@@ -638,7 +638,7 @@ Moira::jumpToVector(int nr)
     u32 oldpc = reg.pc;
 
     // Update the program counter
-    reg.pc = read<C, MEM_DATA, Long>(vectorAddr);
+    reg.pc = read<C, AddrSpace::DATA, Long>(vectorAddr);
 
     // Check for address error
     if (misaligned<C>(reg.pc)) {
@@ -665,7 +665,7 @@ Moira::jumpToVector(int nr)
     }
 
     // Update the prefetch queue
-    queue.irc = (u16)read<C, MEM_PROG, Word>(reg.pc);
+    queue.irc = (u16)read<C, AddrSpace::PROG, Word>(reg.pc);
     SYNC(2);
     prefetch<C, POLL>();
 

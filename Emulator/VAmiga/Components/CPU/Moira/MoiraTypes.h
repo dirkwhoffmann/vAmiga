@@ -256,12 +256,11 @@ enum class IrqMode
     UNINITIALIZED
 };
 
-typedef enum
+enum class AddrSpace
 {
-    MEM_DATA                = 1,
-    MEM_PROG                = 2
-}
-MemSpace;
+    DATA = 1,
+    PROG = 2
+};
 
 typedef enum
 {

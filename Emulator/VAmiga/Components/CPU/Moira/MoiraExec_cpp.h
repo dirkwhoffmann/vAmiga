@@ -759,7 +759,7 @@ Moira::execAndiccr(u16 opcode)
         u8  dst = getCCR();
         setCCR(u8(logic<C, I, S>(src, dst)));
         SYNC(8);
-        (void)read<C, MEM_DATA, Word>(reg.pc + 2);
+        (void)read<C, AddrSpace::DATA, Word>(reg.pc + 2);
 
     } else {
 
@@ -794,7 +794,7 @@ Moira::execAndisr(u16 opcode)
     u32 result = logic<C, I, S>(src, dst);
     setSR((u16)result);
 
-    (void)read<C, MEM_DATA, Word>(reg.pc + 2);
+    (void)read<C, AddrSpace::DATA, Word>(reg.pc + 2);
     prefetch<C, POLL>();
 
     //           00  10  20        00  10  20        00  10  20
@@ -2135,7 +2135,7 @@ Moira::execDbcc(u16 opcode)
 
             } else {
 
-                (void)read<C, MEM_PROG, Word>(reg.pc + 2);
+                (void)read<C, AddrSpace::PROG, Word>(reg.pc + 2);
                 CYCLES_68000(14);
                 CYCLES_68020(10);
 
@@ -2195,7 +2195,7 @@ Moira::execDbcc(u16 opcode)
 
             } else {
 
-                (void)read<C, MEM_PROG, Word>(reg.pc + 2);
+                (void)read<C, AddrSpace::PROG, Word>(reg.pc + 2);
                 SYNC(MIMIC_MUSASHI ? 4 : 2);
                 CYCLES_68010(8);
 
@@ -2450,7 +2450,7 @@ Moira::execJsr(u16 opcode)
             // Jump to new address
             reg.pc = ea;
 
-            queue.irc = (u16)read<C, MEM_PROG, Word>(ea);
+            queue.irc = (u16)read<C, AddrSpace::PROG, Word>(ea);
             prefetch<C, POLL>();
             break;
 
@@ -2461,7 +2461,7 @@ Moira::execJsr(u16 opcode)
 
                 if (M == MODE_AI) {
 
-                    queue.irc = (u16)read<C, MEM_PROG, Word>(ea & ~1);
+                    queue.irc = (u16)read<C, AddrSpace::PROG, Word>(ea & ~1);
                     throw AddressError(makeFrame<AE_SET_IF|AE_SET_RW>(ea));
                 }
 
@@ -2504,7 +2504,7 @@ Moira::execJsr(u16 opcode)
             // Jump to new address
             reg.pc = ea;
 
-            queue.irc = (u16)read<C, MEM_PROG, Word>(ea);
+            queue.irc = (u16)read<C, AddrSpace::PROG, Word>(ea);
             prefetch<C>();
             break;
     }
@@ -3271,7 +3271,7 @@ Moira::execMovemEaRg(u16 opcode)
         }
     }
 
-    if constexpr (S == Long) (void)read<C, MEM_DATA, Word>(ea);
+    if constexpr (S == Long) (void)read<C, AddrSpace::DATA, Word>(ea);
 
     if constexpr (M == 3) {     // (An)+
 
@@ -3299,7 +3299,7 @@ Moira::execMovemEaRg(u16 opcode)
             cnt++;
         }
     }
-    if constexpr (S == Word) (void)read<C, MEM_DATA, Word>(ea);
+    if constexpr (S == Word) (void)read<C, AddrSpace::DATA, Word>(ea);
 
     prefetch<C, POLL>();
 
@@ -3444,15 +3444,15 @@ Moira::execMovepEaDx(u16 opcode)
 
         case Long:
         {
-            dx |= read<C, MEM_DATA, Byte>(ea) << 24; ea += 2;
-            dx |= read<C, MEM_DATA, Byte>(ea) << 16; ea += 2;
+            dx |= read<C, AddrSpace::DATA, Byte>(ea) << 24; ea += 2;
+            dx |= read<C, AddrSpace::DATA, Byte>(ea) << 16; ea += 2;
             [[fallthrough]];
         }
         case Word:
         {
-            dx |= read<C, MEM_DATA, Byte>(ea) << 8; ea += 2;
+            dx |= read<C, AddrSpace::DATA, Byte>(ea) << 8; ea += 2;
             POLL_IPL;
-            dx |= read<C, MEM_DATA, Byte>(ea) << 0;
+            dx |= read<C, AddrSpace::DATA, Byte>(ea) << 0;
         }
 
     }
@@ -3691,7 +3691,7 @@ Moira::execMoveToCcr(u16 opcode)
     SYNC(4);
     setCCR((u8)data);
 
-    (void)read<C, MEM_PROG, Word>(reg.pc + 2);
+    (void)read<C, AddrSpace::PROG, Word>(reg.pc + 2);
     prefetch<C, POLL>();
 
     //           00  10  20        00  10  20        00  10  20
@@ -3812,7 +3812,7 @@ Moira::execMoveToSr(u16 opcode)
     SYNC(4);
     setSR((u16)data);
 
-    (void)read<C, MEM_PROG, Word>(reg.pc + 2);
+    (void)read<C, AddrSpace::PROG, Word>(reg.pc + 2);
     prefetch<C, POLL>();
 
     //           00  10  20        00  10  20        00  10  20
@@ -4773,12 +4773,12 @@ Moira::execPackPd(u16 opcode)
     } else {
 
         reg.a[ax]--;
-        auto data1 = read<C, MEM_DATA, Byte>(readA(ax));
+        auto data1 = read<C, AddrSpace::DATA, Byte>(readA(ax));
 
         u16 adj = (u16)readI<C, Word>();
 
         reg.a[ax]--;
-        auto data2 = read<C, MEM_DATA, Byte>(readA(ax));
+        auto data2 = read<C, AddrSpace::DATA, Byte>(readA(ax));
 
         u32 src = (data2 << 8 | data1) + adj;
         u32 dst = (src >> 4 & 0xF0) | (src & 0x0F);
@@ -4954,34 +4954,34 @@ Moira::execRte(u16 opcode)
         }
         case C68010:
         {
-            u16 format = (u16)read<C, MEM_DATA, Word>(reg.sp + 6);
+            u16 format = (u16)read<C, AddrSpace::DATA, Word>(reg.sp + 6);
 
             // Check the frame format
             switch (format >> 12) {
 
                 case 0b0000: // Short format
 
-                    newsr = (u16)read<C, MEM_DATA, Word>(reg.sp + 0);
+                    newsr = (u16)read<C, AddrSpace::DATA, Word>(reg.sp + 0);
                     if ((format & 0xFF) == 0x10) {
                         // SYNC(4); // ???? TODO: LOOKS WRONG
                     }
-                    newpc = read<C, MEM_DATA, Long>(reg.sp + 2);
+                    newpc = read<C, AddrSpace::DATA, Long>(reg.sp + 2);
                     reg.sp += 8;
 
                     break;
 
                 case 0b1000: // Long format (keep on reading)
                 {
-                    newsr = (u16)read<C, MEM_DATA, Word>(reg.sp + 0);
+                    newsr = (u16)read<C, AddrSpace::DATA, Word>(reg.sp + 0);
                     if ((format & 0xFF) == 0x10) {
                         // SYNC(4); // ???? TODO: LOOKS WRONG
                     }
-                    newpc = read<C, MEM_DATA, Long>(reg.sp + 2);
+                    newpc = read<C, AddrSpace::DATA, Long>(reg.sp + 2);
 
-                    (void)read<C, MEM_DATA, Word>(reg.sp + 8); // special status word
-                    (void)read<C, MEM_DATA, Long>(reg.sp + 10); // fault address
+                    (void)read<C, AddrSpace::DATA, Word>(reg.sp + 8); // special status word
+                    (void)read<C, AddrSpace::DATA, Long>(reg.sp + 10); // fault address
 
-                    u16 value = (u16)read<C, MEM_DATA, Word>(reg.sp + 26); // internal information, 16 words
+                    u16 value = (u16)read<C, AddrSpace::DATA, Word>(reg.sp + 26); // internal information, 16 words
                     u16 version = (value >> 10) & 0xF;
 
                     if (version != 0) { // TODO: PUT IN CPU VERSION NUMBER (GET FROM REAL CPU)
@@ -4991,22 +4991,22 @@ Moira::execRte(u16 opcode)
                         return;
                     }
 
-                    (void)read<C, MEM_DATA, Word>(reg.sp + 28); // internal information, 16 words
+                    (void)read<C, AddrSpace::DATA, Word>(reg.sp + 28); // internal information, 16 words
 
-                    (void)read<C, MEM_DATA, Word>(reg.sp + 14); // unused/reserved
-                    (void)read<C, MEM_DATA, Word>(reg.sp + 16); // data output buffer
-                    (void)read<C, MEM_DATA, Word>(reg.sp + 18); // unused/reserved
-                    (void)read<C, MEM_DATA, Word>(reg.sp + 20); // data input buffer
-                    (void)read<C, MEM_DATA, Word>(reg.sp + 22); // unused/reserved
-                    (void)read<C, MEM_DATA, Word>(reg.sp + 24); // instruction input buffer
+                    (void)read<C, AddrSpace::DATA, Word>(reg.sp + 14); // unused/reserved
+                    (void)read<C, AddrSpace::DATA, Word>(reg.sp + 16); // data output buffer
+                    (void)read<C, AddrSpace::DATA, Word>(reg.sp + 18); // unused/reserved
+                    (void)read<C, AddrSpace::DATA, Word>(reg.sp + 20); // data input buffer
+                    (void)read<C, AddrSpace::DATA, Word>(reg.sp + 22); // unused/reserved
+                    (void)read<C, AddrSpace::DATA, Word>(reg.sp + 24); // instruction input buffer
 
-                    (void)read<C, MEM_DATA, Long>(reg.sp + 34); // internal information, 16 words
-                    (void)read<C, MEM_DATA, Long>(reg.sp + 36); // internal information, 16 words
-                    (void)read<C, MEM_DATA, Long>(reg.sp + 38); // internal information, 16 words
-                    (void)read<C, MEM_DATA, Long>(reg.sp + 42); // internal information, 16 words
-                    (void)read<C, MEM_DATA, Long>(reg.sp + 46); // internal information, 16 words
-                    (void)read<C, MEM_DATA, Long>(reg.sp + 50); // internal information, 16 words
-                    (void)read<C, MEM_DATA, Long>(reg.sp + 54); // internal information, 16 words
+                    (void)read<C, AddrSpace::DATA, Long>(reg.sp + 34); // internal information, 16 words
+                    (void)read<C, AddrSpace::DATA, Long>(reg.sp + 36); // internal information, 16 words
+                    (void)read<C, AddrSpace::DATA, Long>(reg.sp + 38); // internal information, 16 words
+                    (void)read<C, AddrSpace::DATA, Long>(reg.sp + 42); // internal information, 16 words
+                    (void)read<C, AddrSpace::DATA, Long>(reg.sp + 46); // internal information, 16 words
+                    (void)read<C, AddrSpace::DATA, Long>(reg.sp + 50); // internal information, 16 words
+                    (void)read<C, AddrSpace::DATA, Long>(reg.sp + 54); // internal information, 16 words
 
                     reg.sp += 58;
                     break;
@@ -5021,7 +5021,7 @@ Moira::execRte(u16 opcode)
                     }
 
                     SYNC(4);
-                    (void)read<C, MEM_DATA, Long>(reg.sp + 2);
+                    (void)read<C, AddrSpace::DATA, Long>(reg.sp + 2);
 
                     // reg.sr.c = 1; // Check test case Exceptions/StackFrame/stackframe2
                     execException(EXC_FORMAT_ERROR);
@@ -5033,7 +5033,7 @@ Moira::execRte(u16 opcode)
         {
             while (1) {
 
-                u16 format = (u16)(read<C, MEM_DATA, Word>(reg.sp + 6) >> 12);
+                u16 format = (u16)(read<C, AddrSpace::DATA, Word>(reg.sp + 6) >> 12);
 
                 if (format == 0b000) {  // Standard frame
 
@@ -5198,7 +5198,7 @@ Moira::execRtr(u16 opcode)
 
     reg.sp += 2;
 
-    u32 newpc = read<C, MEM_DATA, Long>(reg.sp);
+    u32 newpc = read<C, AddrSpace::DATA, Long>(reg.sp);
     reg.sp += 4;
 
     setCCR((u8)newccr);
@@ -5459,9 +5459,9 @@ Moira::execTrapv(u16 opcode)
     if (reg.sr.v) {
 
         if (C == C68000) {
-            (void)read<C, MEM_PROG, Word>(reg.pc + 2);
+            (void)read<C, AddrSpace::PROG, Word>(reg.pc + 2);
         } else {
-            (void)read<C, MEM_PROG, Word>(reg.pc + 2);
+            (void)read<C, AddrSpace::PROG, Word>(reg.pc + 2);
             SYNC(2);
         }
         execException<C>(EXC_TRAPV);
@@ -5623,10 +5623,10 @@ Moira::execUnpkPd(u16 opcode)
     } else {
 
         reg.a[ay]--;
-        write<C, MEM_DATA, Byte>(readA(ay), dst & 0xFF);
+        write<C, AddrSpace::DATA, Byte>(readA(ay), dst & 0xFF);
 
         reg.a[ay]--;
-        write<C, MEM_DATA, Byte>(readA(ay), dst >> 8 & 0xFF);
+        write<C, AddrSpace::DATA, Byte>(readA(ay), dst >> 8 & 0xFF);
     }
 
     prefetch<C>();
