@@ -156,17 +156,6 @@ Instr;
 
 typedef enum
 {
-    REG_TT0,
-    REG_TT1,
-    REG_MMUSR,
-    REG_CRP,
-    REG_SRP,
-    REG_TC
-}
-RegName;
-
-typedef enum
-{
     Unsized     = 0,
     Byte        = 1,        // .b : Byte addressing
     Word        = 2,        // .w : Word addressing
@@ -260,45 +249,46 @@ enum class AddrSpace
     PROG = 2
 };
 
-typedef enum
-{
-    FLT_LONG,
-    FLT_SINGLE,
-    FLT_EXTENDED,
-    FLT_PACKED,
-    FLT_WORD,
-    FLT_DOUBLE,
-    FLT_BYTE
-}
-FltFormat;
 
-typedef enum
-{
-    FPU_PREC_EXTENDED,
-    FPU_PREC_SINGLE,
-    FPU_PREC_DOUBLE,
-    FPU_PREC_UNDEFINED
-}
-FpuPrecision;
+//
+// Floating-point types (unused)
+//
 
-typedef enum
+enum class FltFormat
 {
-    FPU_RND_NEAREST,
-    FPU_RND_ZERO,
-    FPU_RND_DOWNWARD,
-    FPU_RND_UPWARD
-}
-FpuRoundingMode;
+    LONG,
+    SINGLE,
+    EXTENDED,
+    PACKED,
+    WORD,
+    DOUBLE,
+    BYTE
+};
 
-typedef enum
+enum class FpuPrecision
 {
-    FPU_FRAME_INVALID,
-    FPU_FRAME_NULL,
-    FPU_FRAME_IDLE,
-    FPU_FRAME_UNIMP,
-    FPU_FRAME_BUSY,
-}
-FpuFrameType;
+    EXTENDED,
+    SINGLE,
+    DOUBLE,
+    UNDEFINED
+};
+
+enum class FpuRoundingMode
+{
+    NEAREST,
+    ZERO,
+    DOWNWARD,
+    UPWARD
+};
+
+enum class FpuFrameType
+{
+    INVALID,
+    NULLFRAME,
+    IDLE,
+    UNIMP,
+    BUSY
+};
 
 
 //
