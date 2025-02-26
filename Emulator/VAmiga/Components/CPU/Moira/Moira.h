@@ -59,41 +59,41 @@ public:
 protected:
 
     // Number of elapsed cycles since powerup
-    i64 clock;
+    i64 clock {};
 
     // The register set
-    Registers reg;
+    Registers reg {};
 
     // The prefetch queue
-    PrefetchQueue queue;
+    PrefetchQueue queue {};
 
     // The interrupt mode of this CPU
     IrqMode irqMode = IrqMode::AUTO;
 
     // Current value on the IPL pins (Interrupt Priority Level)
-    u8 ipl;
+    u8 ipl {};
 
     // Value on the lower two function code pins (FC1|FC0)
-    u8 fcl;
+    u8 fcl {};
 
     // Determines the source of the function code pins
-    u8 fcSource;
+    u8 fcSource {};
 
     // Remembers the vector number of the most recent exception
-    int exception;
+    int exception {};
 
     // Cycle penalty (needed for 68020+ extended addressing modes)
-    int cp;
+    int cp {};
 
     // Controls exact timing of instructions running in loop mode
     int loopModeDelay = 2;
 
     // Read and write buffers (appear in 68010 exception frames)
-    u16 readBuffer;
-    u16 writeBuffer;
+    u16 readBuffer {};
+    u16 writeBuffer {};
 
     // State flags
-    int flags;
+    int flags {};
 
 
     //

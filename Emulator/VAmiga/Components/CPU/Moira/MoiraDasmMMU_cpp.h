@@ -60,10 +60,10 @@ Moira::dasmPFlush(StrWriter &str, u32 &addr, u16 op) const
     auto fc   = ___________xxxxx (ext);
 
     // Only the MC68851 has four mask bits. The 68030 only has three.
-    if (str.style.syntax == DASM_MOIRA || str.style.syntax == DASM_MOIRA_MIT) mask &= 0b111;
+    if (str.style.syntax == DasmSyntax::DASM_MOIRA || str.style.syntax == DasmSyntax::DASM_MOIRA_MIT) mask &= 0b111;
 
     // Catch illegal extension words
-    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
 
         if (!isValidExtMMU(I, M, op, ext)) {
 
@@ -85,7 +85,7 @@ Moira::dasmPFlusha(StrWriter &str, u32 &addr, u16 op) const
     auto ext = dasmIncRead<Word>(addr);
 
     // Catch illegal extension words
-    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
 
         if (!isValidExtMMU(I, M, op, ext)) {
 
@@ -121,7 +121,7 @@ Moira::dasmPLoad(StrWriter &str, u32 &addr, u16 op) const
     auto ea  = Op <M,S> ( _____________xxx(op), addr );
 
     // Catch illegal extension words
-    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
 
         if (!isValidExtMMU(I, M, op, ext)) {
 
@@ -146,7 +146,7 @@ Moira::dasmPMove(StrWriter &str, u32 &addr, u16 op) const
     auto nr   = ___________xxx__ (ext);
 
     // Catch illegal extension words
-    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
 
         if (!isValidExtMMU(I, M, op, ext)) {
 
@@ -156,7 +156,7 @@ Moira::dasmPMove(StrWriter &str, u32 &addr, u16 op) const
         }
     }
 
-    const char *prefix = str.style.syntax == DASM_GNU_MIT || str.style.syntax == DASM_MOIRA_MIT ? "%" : "";
+    const char *prefix = str.style.syntax == DasmSyntax::DASM_GNU_MIT || str.style.syntax == DasmSyntax::DASM_MOIRA_MIT ? "%" : "";
     const char *suffix = (ext & 0x100) ? "fd" : "";
     const char *r = "";
     Size s = Size(Unsized);
@@ -230,7 +230,7 @@ Moira::dasmPTest(StrWriter &str, u32 &addr, u16 op) const
     auto fc  = ___________xxxxx (ext);
 
     // Catch illegal extension words
-    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
 
         if (!isValidExtMMU(I, M, op, ext)) {
 

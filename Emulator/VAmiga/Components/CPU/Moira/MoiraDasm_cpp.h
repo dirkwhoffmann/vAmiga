@@ -183,7 +183,7 @@ Moira::Op(u16 reg, u32 &pc) const
                 result.ow = u8(outerDispWords((u16)result.ext1));
 
                 // Compensate Musashi bug (?)
-                if (instrStyle.syntax == DASM_MUSASHI && (result.ext1 & 0x47) >= 0x44) {
+                if (instrStyle.syntax == DasmSyntax::DASM_MUSASHI && (result.ext1 & 0x47) >= 0x44) {
 
                     result.ow = 0;
                 }
@@ -214,13 +214,13 @@ Moira::dasmIllegal(StrWriter &str, u32 &addr, u16 op) const
 {
     switch (str.style.syntax) {
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+       case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             str << ".short " << Int{op};
             break;
 
-        case DASM_MUSASHI:
+        case DasmSyntax::DASM_MUSASHI:
 
             str << "dc.w " << UInt16{op} << "; ILLEGAL";
             break;
@@ -237,8 +237,8 @@ Moira::dasmLineA(StrWriter &str, u32 &addr, u16 op) const
 {
     switch (str.style.syntax) {
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+       case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             str << ".short " << Int{op};
             break;
@@ -254,8 +254,8 @@ Moira::dasmLineF(StrWriter &str, u32 &addr, u16 op) const
 {
     switch (str.style.syntax) {
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+       case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             str << ".short " << Int{op};
             break;
@@ -366,7 +366,7 @@ Moira::dasmAddqDn(StrWriter &str, u32 &addr, u16 op) const
 
     switch (str.style.syntax) {
 
-        case DASM_MUSASHI:
+        case  DasmSyntax::DASM_MUSASHI:
 
             str << Ins<I>{} << Sz<S>{} << str.tab << Imd{src} << Sep{} << Dn{dst};
             break;
@@ -387,7 +387,7 @@ Moira::dasmAddqAn(StrWriter &str, u32 &addr, u16 op) const
 
     switch (str.style.syntax) {
 
-        case DASM_MUSASHI:
+        case  DasmSyntax::DASM_MUSASHI:
 
             str << Ins<I>{} << Sz<S>{} << str.tab << Imd{src} << Sep{} << An{dst};
             break;
@@ -408,7 +408,7 @@ Moira::dasmAddqEa(StrWriter &str, u32 &addr, u16 op) const
 
     switch (str.style.syntax) {
 
-        case DASM_MUSASHI:
+        case  DasmSyntax::DASM_MUSASHI:
 
             str << Ins<I>{} << Sz<S>{} << str.tab << Imd{src} << Sep{} << dst;
             break;
@@ -461,7 +461,7 @@ Moira::dasmAndiRg(StrWriter &str, u32 &addr, u16 op) const
     auto src = dasmIncRead<S>(addr);
     auto dst = _____________xxx(op);
 
-    if (str.style.syntax == DASM_MUSASHI) {
+    if (str.style.syntax == DasmSyntax::DASM_MUSASHI) {
         str << Ins<I>{} << Sz<S>{} << str.tab << Imu<S>{src} << Sep{} << Dn{dst};
     } else {
         str << Ins<I>{} << Sz<S>{} << str.tab << Ims<S>(src) << Sep{} << Dn{dst};
@@ -474,7 +474,7 @@ Moira::dasmAndiEa(StrWriter &str, u32 &addr, u16 op) const
     auto src = dasmIncRead<S>(addr);
     auto dst = Op <M,S> ( _____________xxx(op), addr );
 
-    if (str.style.syntax == DASM_MUSASHI) {
+    if (str.style.syntax == DasmSyntax::DASM_MUSASHI) {
         str << Ins<I>{} << Sz<S>{} << str.tab << Imu<S>{src} << Sep{} << dst;
     } else {
         str << Ins<I>{} << Sz<S>{} << str.tab << Ims<S>(src) << "," << dst;
@@ -486,7 +486,7 @@ Moira::dasmAndiccr(StrWriter &str, u32 &addr, u16 op) const
 {
     auto src = dasmIncRead<S>(addr);
 
-    if (str.style.syntax == DASM_MUSASHI) {
+    if (str.style.syntax == DasmSyntax::DASM_MUSASHI) {
         str << Ins<I>{} << str.tab << Imu<S>{src} << Sep{} << Ccr{};
     } else {
         str << Ins<I>{} << Sz<S>{} << str.tab << Ims<S>(src) << Sep{} << Ccr{};
@@ -498,7 +498,7 @@ Moira::dasmAndisr(StrWriter &str, u32 &addr, u16 op) const
 {
     auto src = dasmIncRead<S>(addr);
 
-    if (str.style.syntax == DASM_MUSASHI) {
+    if (str.style.syntax == DasmSyntax::DASM_MUSASHI) {
         str << Ins<I>{} << str.tab << Imu{src} << Sep{} << Sr{};
     } else {
         str << Ins<I>{} << Sz<S>{} << str.tab << Ims<S>(src) << Sep{} << Sr{};
@@ -515,7 +515,7 @@ Moira::dasmBitFieldDn(StrWriter &str, u32 &addr, u16 op) const
     auto w   = ___________xxxxx(ext);
 
     // Catch illegal extension words
-    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
 
         if (!isValidExt(I, M, op, ext)) {
 
@@ -535,8 +535,8 @@ Moira::dasmBitFieldDn(StrWriter &str, u32 &addr, u16 op) const
 
     switch (str.style.syntax) {
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+        case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             switch (ext & 0x0820) {
 
@@ -579,13 +579,13 @@ Moira::dasmBkpt(StrWriter &str, u32 &addr, u16 op) const
 
     switch (str.style.syntax) {
 
-        case DASM_MUSASHI:
+        case  DasmSyntax::DASM_MUSASHI:
 
             str << Ins<I>{} << str.tab << Imd(nr) << Av<I, M, S>{};
             break;
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+        case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             str << Ins<I>{} << str.tab << Int(nr);
             break;
@@ -610,8 +610,8 @@ Moira::dasmCallm(StrWriter &str, u32 &addr, u16 op) const
 
     switch (str.style.syntax) {
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+        case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             str << Ins<I>{} << str.tab << Ims<Byte>(src) << Sep{} << dst;
             break;
@@ -632,7 +632,7 @@ Moira::dasmCas(StrWriter &str, u32 &addr, u16 op) const
     auto dst = Op <M,S> ( _____________xxx(op), addr );
 
     // Catch illegal extension words
-    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
 
         if (!isValidExt(I, M, op, ext)) {
 
@@ -659,7 +659,7 @@ Moira::dasmCas2(StrWriter &str, u32 &addr, u16 op) const
     auto rn2 = Rn ( (ext >> 12) & 0b1111 );
 
     // Catch illegal extension words (binutils only checks the first word)
-    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
 
         if (!isValidExt(I, M, op, u16(ext >> 16))) {
 
@@ -669,14 +669,14 @@ Moira::dasmCas2(StrWriter &str, u32 &addr, u16 op) const
         }
     }
 
-    auto fill = str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT ? ',' : ':';
+    auto fill = str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT ? ',' : ':';
 
     str << Ins<I>{} << Sz<S>{} << str.tab;
 
     switch (str.style.syntax) {
 
-        case DASM_MOIRA_MIT:
-        case DASM_GNU_MIT:
+        case DasmSyntax::DASM_MOIRA_MIT:
+        case DasmSyntax::DASM_GNU_MIT:
 
             str << dc1 << fill << dc2 << Sep{} << du1 << fill << du2 << Sep{};
             rn1.raw < 8 ? str << "@(" << rn1 << ')' : str << rn1 << '@';
@@ -700,7 +700,7 @@ Moira::dasmChk(StrWriter &str, u32 &addr, u16 op) const
     auto src = Op <M,S> ( _____________xxx(op), addr );
     auto dst = Dn       ( ____xxx_________(op)       );
 
-    if (str.style.syntax != DASM_MUSASHI && !isAvailable(dasmModel, I, M, S)) {
+    if (str.style.syntax != DasmSyntax::DASM_MUSASHI && !isAvailable(dasmModel, I, M, S)) {
 
         addr = old;
         dasmIllegal<I, M, S>(str, addr, op);
@@ -720,7 +720,7 @@ Moira::dasmChkCmp2(StrWriter &str, u32 &addr, u16 op) const
     auto dst = Rn       ( xxxx____________(ext)      );
 
     // Catch illegal extension words
-    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
 
         if (!isValidExt(I, M, op, ext)) {
             
@@ -796,7 +796,7 @@ Moira::dasmCmpm(StrWriter &str, u32 &addr, u16 op) const
 template <Instr I, Mode M, Size S> void
 Moira::dasmCpBcc(StrWriter &str, u32 &addr, u16 op) const
 {
-    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
 
         dasmIllegal<I, M, S>(str, addr, op);
         return;
@@ -818,7 +818,7 @@ Moira::dasmCpBcc(StrWriter &str, u32 &addr, u16 op) const
 template <Instr I, Mode M, Size S> void
 Moira::dasmCpDbcc(StrWriter &str, u32 &addr, u16 op) const
 {
-    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
 
         dasmIllegal<I, M, S>(str, addr, op);
         return;
@@ -844,7 +844,7 @@ Moira::dasmCpDbcc(StrWriter &str, u32 &addr, u16 op) const
 template <Instr I, Mode M, Size S> void
 Moira::dasmCpGen(StrWriter &str, u32 &addr, u16 op) const
 {
-    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
 
         dasmIllegal<I, M, S>(str, addr, op);
         return;
@@ -860,7 +860,7 @@ Moira::dasmCpGen(StrWriter &str, u32 &addr, u16 op) const
 template <Instr I, Mode M, Size S> void
 Moira::dasmCpRestore(StrWriter &str, u32 &addr, u16 op) const
 {
-    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
 
         dasmIllegal<I, M, S>(str, addr, op);
         return;
@@ -877,7 +877,7 @@ Moira::dasmCpRestore(StrWriter &str, u32 &addr, u16 op) const
 template <Instr I, Mode M, Size S> void
 Moira::dasmCpSave(StrWriter &str, u32 &addr, u16 op) const
 {
-    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
 
         dasmIllegal<I, M, S>(str, addr, op);
         return;
@@ -894,7 +894,7 @@ Moira::dasmCpSave(StrWriter &str, u32 &addr, u16 op) const
 template <Instr I, Mode M, Size S> void
 Moira::dasmCpScc(StrWriter &str, u32 &addr, u16 op) const
 {
-    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
 
         dasmIllegal<I, M, S>(str, addr, op);
         return;
@@ -914,7 +914,7 @@ Moira::dasmCpScc(StrWriter &str, u32 &addr, u16 op) const
 template <Instr I, Mode M, Size S> void
 Moira::dasmCpTrapcc(StrWriter &str, u32 &addr, u16 op) const
 {
-    if (str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT) {
+    if (str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT) {
 
         dasmIllegal<I, M, S>(str, addr, op);
         return;
@@ -1007,7 +1007,7 @@ Moira::dasmBcc(StrWriter &str, u32 &addr, u16 op) const
 
     switch (str.style.syntax) {
 
-        case DASM_MUSASHI:
+        case  DasmSyntax::DASM_MUSASHI:
 
             if (S == Byte && (u8)op == 0xFF) {
 
@@ -1018,8 +1018,8 @@ Moira::dasmBcc(StrWriter &str, u32 &addr, u16 op) const
             str << Ins<I>{} << str.tab << UInt(dst) << Av<I, M, S>{};
             break;
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+        case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             str << Ins<I>{} << Szb<S>{} << str.tab << UInt(dst);
             break;
@@ -1063,8 +1063,8 @@ Moira::dasmBitImDy(StrWriter &str, u32 &addr, u16 op) const
 
     switch (str.style.syntax) {
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+        case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             str << Ins<I>{} << str.tab << Ims<S>(src) << Sep{} << dst;
             break;
@@ -1083,8 +1083,8 @@ Moira::dasmBitImEa(StrWriter &str, u32 &addr, u16 op) const
 
     switch (str.style.syntax) {
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+        case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             str << Ins<I>{} << str.tab << Ims<S>(src) << Sep{} << dst;
             break;
@@ -1183,8 +1183,8 @@ Moira::dasmLink(StrWriter &str, u32 &addr, u16 op) const
 
     switch (str.style.syntax) {
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+        case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << Ims<S>(dsp);
             break;
@@ -1352,7 +1352,7 @@ Moira::dasmMoves(StrWriter &str, u32 &addr, u16 op) const
     auto ea = Op <M,S> ( _____________xxx(op), addr );
     auto rg = Rn ( xxxx____________(ext) );
 
-    if (str.style.syntax != DASM_MUSASHI && !isAvailable(dasmModel, I, M, S, ext)) {
+    if (str.style.syntax != DasmSyntax::DASM_MUSASHI && !isAvailable(dasmModel, I, M, S, ext)) {
 
         addr = old;
         dasmIllegal<I, M, S>(str, addr, op);
@@ -1374,7 +1374,7 @@ Moira::dasmMoveCcrRg(StrWriter &str, u32 &addr, u16 op) const
 
     switch (str.style.syntax) {
 
-        case DASM_MUSASHI:
+        case  DasmSyntax::DASM_MUSASHI:
 
             str << Ins<I>{} << str.tab << Ccr{} << Sep{} << dst << Av<I, M, S>{};
             break;
@@ -1392,7 +1392,7 @@ Moira::dasmMoveCcrEa(StrWriter &str, u32 &addr, u16 op) const
 
     switch (str.style.syntax) {
 
-        case DASM_MUSASHI:
+        case  DasmSyntax::DASM_MUSASHI:
 
             str << Ins<I>{} << str.tab << Ccr{} << Sep{} << dst << Av<I, M, S>{};
             break;
@@ -1410,13 +1410,13 @@ Moira::dasmMoveToCcr(StrWriter &str, u32 &addr, u16 op) const
 
     switch (str.style.syntax) {
 
-        case DASM_MUSASHI:
+        case  DasmSyntax::DASM_MUSASHI:
 
             str << Ins<I>{} << str.tab << Op<M, Byte>(src, addr) << Sep{} << Ccr{};
             break;
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+        case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             str << Ins<I>{} << Sz<S>{} << str.tab << Op<M, S>(src, addr) << Sep{} << Ccr{};
             break;
@@ -1434,7 +1434,7 @@ Moira::dasmMoveSrRg(StrWriter &str, u32 &addr, u16 op) const
 
     switch (str.style.syntax) {
 
-        case DASM_MUSASHI:
+        case  DasmSyntax::DASM_MUSASHI:
 
             str << Ins<I>{} << str.tab << Sr{} << Sep{} << dst;
             break;
@@ -1452,7 +1452,7 @@ Moira::dasmMoveSrEa(StrWriter &str, u32 &addr, u16 op) const
 
     switch (str.style.syntax) {
 
-        case DASM_MUSASHI:
+        case  DasmSyntax::DASM_MUSASHI:
 
             str << Ins<I>{} << str.tab << Sr{} << Sep{} << dst;
             break;
@@ -1470,7 +1470,7 @@ Moira::dasmMoveToSr(StrWriter &str, u32 &addr, u16 op) const
 
     switch (str.style.syntax) {
 
-        case DASM_MUSASHI:
+        case  DasmSyntax::DASM_MUSASHI:
 
             str << Ins<I>{} << str.tab << src << Sep{} << Sr{};
             break;
@@ -1488,8 +1488,8 @@ Moira::dasmMoveUspAn(StrWriter &str, u32 &addr, u16 op) const
 
     switch (str.style.syntax) {
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+        case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             str << Ins<I>{} << Sz<S>{} << str.tab << Usp{} << Sep{} << dst;
             break;
@@ -1507,8 +1507,8 @@ Moira::dasmMoveAnUsp(StrWriter &str, u32 &addr, u16 op) const
 
     switch (str.style.syntax) {
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+        case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             str << Ins<I>{} << Sz<S>{} << str.tab << src << Sep{} << Usp{};
             break;
@@ -1543,12 +1543,12 @@ Moira::dasmMull(StrWriter &str, u32 &addr, u16 op) const
     auto dl  = Dn       ( _xxx____________(ext)      );
     auto dh  = Dn       ( _____________xxx(ext)      );
 
-    auto fill = str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT ? "," : ":";
+    auto fill = str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT ? "," : ":";
 
     switch (str.style.syntax) {
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+        case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             // Catch illegal extension words
             if (!isValidExt(I, M, op, ext)) {
@@ -1595,12 +1595,12 @@ Moira::dasmDivl(StrWriter &str, u32 &addr, u16 op) const
     auto dl  = Dn       ( _xxx____________(ext)      );
     auto dh  = Dn       ( _____________xxx(ext)      );
 
-    auto fill = str.style.syntax == DASM_GNU || str.style.syntax == DASM_GNU_MIT ? "," : ":";
+    auto fill = str.style.syntax == DasmSyntax::DASM_GNU || str.style.syntax == DasmSyntax::DASM_GNU_MIT ? "," : ":";
 
     switch (str.style.syntax) {
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+        case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             // Catch illegal extension words
             if (!isValidExt(I, M, op, ext)) {
@@ -1623,7 +1623,7 @@ Moira::dasmDivl(StrWriter &str, u32 &addr, u16 op) const
             } else {
 
                 // DIVSL.L <ea>,Dr:Dq   (32-bit dividend)
-                if (dl.raw == dh.raw && str.style.syntax == DASM_MUSASHI) {
+                if (dl.raw == dh.raw && str.style.syntax == DasmSyntax::DASM_MUSASHI) {
                     str << Sz<S>{} << str.tab << src << Sep{} << dh;
                 } else {
                     str << "l" << Sz<S>{} << str.tab << src << Sep{} << dh << fill << dl;
@@ -1665,8 +1665,8 @@ Moira::dasmPackDn(StrWriter &str, u32 &addr, u16 op) const
 
     switch (str.style.syntax) {
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+        case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             str << Ins<I>{} << str.tab << rx << Sep{} << ry << Sep{} << Ims<S>(ext);
             break;
@@ -1817,8 +1817,8 @@ Moira::dasmTrapcc(StrWriter &str, u32 &addr, u16 op) const
 {
     switch (str.style.syntax) {
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+        case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             switch (S) {
 
@@ -1883,8 +1883,8 @@ Moira::dasmUnpkDn(StrWriter &str, u32 &addr, u16 op) const
 
     switch (str.style.syntax) {
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+        case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             str << Ins<I>{} << str.tab << rx << Sep{} << ry << Sep{} << Ims<S>(ext);
             break;

@@ -246,7 +246,7 @@ StrWriter::operator<<(Ins<I> i)
 {
     if constexpr (I == DBF) {
 
-        if (style.syntax == DASM_GNU || style.syntax == DASM_GNU_MIT) {
+        if (style.syntax == DasmSyntax::DASM_GNU || style.syntax == DasmSyntax::DASM_GNU_MIT) {
             *this << "dbf";
         } else {
             *this << "dbra";
@@ -265,9 +265,9 @@ StrWriter::operator<<(Sz<S>)
 {
     switch (style.syntax) {
 
-        case DASM_MOIRA_MIT:
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+        case DasmSyntax::DASM_MOIRA_MIT:
+       case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             *this << ((S == Byte) ? "b" : (S == Word) ? "w" : "l");
             break;
@@ -285,14 +285,14 @@ StrWriter::operator<<(Szb<S>)
 {
     switch (style.syntax) {
 
-        case DASM_MOIRA:
+        case DasmSyntax::DASM_MOIRA:
 
             *ptr++ = '.';
             [[fallthrough]];
 
-        case DASM_MOIRA_MIT:
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+        case DasmSyntax::DASM_MOIRA_MIT:
+       case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             if constexpr (S == Byte) *ptr++ = 's';
             if constexpr (S == Word) *ptr++ = 'w';
@@ -449,10 +449,12 @@ StrWriter::operator<<(Dn dn)
 {
     switch (style.syntax) {
 
-        case DASM_GNU_MIT:      *ptr++ = '%'; [[fallthrough]];
-        case DASM_GNU:          *ptr++ = 'd'; *ptr++ = '0' + (char)dn.raw; break;
-        case DASM_MOIRA_MIT:    *ptr++ = '%'; [[fallthrough]];
-        default:                *ptr++ = 'D'; *ptr++ = '0' + (char)dn.raw; break;
+        case DasmSyntax::DASM_GNU_MIT:      *ptr++ = '%'; [[fallthrough]];
+       case DasmSyntax::DASM_GNU:          *ptr++ = 'd'; *ptr++ = '0' + (char)dn.raw; break;
+        case DasmSyntax::DASM_MOIRA_MIT:    *ptr++ = '%'; [[fallthrough]];
+        
+        default:
+            *ptr++ = 'D'; *ptr++ = '0' + (char)dn.raw; break;
     }
 
     return *this;
@@ -463,20 +465,22 @@ StrWriter::operator<<(An an)
 {
     switch (style.syntax) {
 
-        case DASM_GNU_MIT:      *ptr++ = '%'; [[fallthrough]];
-        case DASM_GNU:          *ptr++ = 'a'; *ptr++ = '0' + (char)an.raw; break;
-        case DASM_MOIRA_MIT:    *ptr++ = '%'; [[fallthrough]];
-        default:                *ptr++ = 'A'; *ptr++ = '0' + (char)an.raw; break;
+        case DasmSyntax::DASM_GNU_MIT:      *ptr++ = '%'; [[fallthrough]];
+       case DasmSyntax::DASM_GNU:          *ptr++ = 'a'; *ptr++ = '0' + (char)an.raw; break;
+        case DasmSyntax::DASM_MOIRA_MIT:    *ptr++ = '%'; [[fallthrough]];
+        
+        default:
+            *ptr++ = 'A'; *ptr++ = '0' + (char)an.raw; break;
     }
 
     switch (style.syntax) {
 
-        case DASM_GNU_MIT:
+        case DasmSyntax::DASM_GNU_MIT:
 
             if (an.raw == 6) { ptr[-2] = 'f'; ptr[-1] = 'p'; }
             [[fallthrough]];
 
-        case DASM_GNU:
+       case DasmSyntax::DASM_GNU:
 
             if (an.raw == 7) { ptr[-2] = 's'; ptr[-1] = 'p'; }
             break;
@@ -500,10 +504,12 @@ StrWriter::operator<<(Ccr _)
 {
     switch (style.syntax) {
 
-        case DASM_GNU_MIT:      *ptr++ = '%'; [[fallthrough]];
-        case DASM_GNU:          *ptr++ = 'c'; *ptr++ = 'c'; *ptr++ = 'r'; break;
-        case DASM_MOIRA_MIT:    *ptr++ = '%'; [[fallthrough]];
-        default:                *ptr++ = 'C'; *ptr++ = 'C'; *ptr++ = 'R'; break;
+        case DasmSyntax::DASM_GNU_MIT:      *ptr++ = '%'; [[fallthrough]];
+       case DasmSyntax::DASM_GNU:          *ptr++ = 'c'; *ptr++ = 'c'; *ptr++ = 'r'; break;
+        case DasmSyntax::DASM_MOIRA_MIT:    *ptr++ = '%'; [[fallthrough]];
+       
+        default:
+            *ptr++ = 'C'; *ptr++ = 'C'; *ptr++ = 'R'; break;
     }
 
     return *this;
@@ -514,10 +520,12 @@ StrWriter::operator<<(Pc _)
 {
     switch (style.syntax) {
 
-        case DASM_GNU_MIT:      *ptr++ = '%'; [[fallthrough]];
-        case DASM_GNU:          *ptr++ = 'p'; *ptr++ = 'c'; break;
-        case DASM_MOIRA_MIT:    *ptr++ = '%'; [[fallthrough]];
-        default:                *ptr++ = 'P'; *ptr++ = 'C'; break;
+        case DasmSyntax::DASM_GNU_MIT:      *ptr++ = '%'; [[fallthrough]];
+       case DasmSyntax::DASM_GNU:          *ptr++ = 'p'; *ptr++ = 'c'; break;
+        case DasmSyntax::DASM_MOIRA_MIT:    *ptr++ = '%'; [[fallthrough]];
+        
+        default:
+            *ptr++ = 'P'; *ptr++ = 'C'; break;
     }
 
     return *this;
@@ -528,10 +536,12 @@ StrWriter::operator<<(Zpc _)
 {
     switch (style.syntax) {
 
-        case DASM_GNU_MIT:      *ptr++ = '%'; [[fallthrough]];
-        case DASM_GNU:          *ptr++ = 'z'; *ptr++ = 'p'; *ptr++ = 'c'; break;
-        case DASM_MOIRA_MIT:    *ptr++ = '%'; [[fallthrough]];
-        default:                *ptr++ = 'Z'; *ptr++ = 'P'; *ptr++ = 'C'; break;
+        case DasmSyntax::DASM_GNU_MIT:      *ptr++ = '%'; [[fallthrough]];
+       case DasmSyntax::DASM_GNU:          *ptr++ = 'z'; *ptr++ = 'p'; *ptr++ = 'c'; break;
+        case DasmSyntax::DASM_MOIRA_MIT:    *ptr++ = '%'; [[fallthrough]];
+        
+        default:
+            *ptr++ = 'Z'; *ptr++ = 'P'; *ptr++ = 'C'; break;
     }
 
     return *this;
@@ -542,10 +552,12 @@ StrWriter::operator<<(Sr _)
 {
     switch (style.syntax) {
 
-        case DASM_GNU_MIT:      *ptr++ = '%'; [[fallthrough]];
-        case DASM_GNU:          *ptr++ = 's'; *ptr++ = 'r'; break;
-        case DASM_MOIRA_MIT:    *ptr++ = '%'; [[fallthrough]];
-        default:                *ptr++ = 'S'; *ptr++ = 'R'; break;
+        case DasmSyntax::DASM_GNU_MIT:      *ptr++ = '%'; [[fallthrough]];
+       case DasmSyntax::DASM_GNU:          *ptr++ = 's'; *ptr++ = 'r'; break;
+        case DasmSyntax::DASM_MOIRA_MIT:    *ptr++ = '%'; [[fallthrough]];
+        
+        default:
+            *ptr++ = 'S'; *ptr++ = 'R'; break;
     }
 
     return *this;
@@ -556,10 +568,12 @@ StrWriter::operator<<(Usp _)
 {
     switch (style.syntax) {
 
-        case DASM_GNU_MIT:      *ptr++ = '%'; [[fallthrough]];
-        case DASM_GNU:          *ptr++ = 'u'; *ptr++ = 's'; *ptr++ = 'p'; break;
-        case DASM_MOIRA_MIT:    *ptr++ = '%'; [[fallthrough]];
-        default:                *ptr++ = 'U'; *ptr++ = 'S'; *ptr++ = 'P'; break;
+        case DasmSyntax::DASM_GNU_MIT:      *ptr++ = '%'; [[fallthrough]];
+       case DasmSyntax::DASM_GNU:          *ptr++ = 'u'; *ptr++ = 's'; *ptr++ = 'p'; break;
+        case DasmSyntax::DASM_MOIRA_MIT:    *ptr++ = '%'; [[fallthrough]];
+        
+        default:
+            *ptr++ = 'U'; *ptr++ = 'S'; *ptr++ = 'P'; break;
     }
 
     return *this;
@@ -569,11 +583,11 @@ StrWriter&
 StrWriter::operator<<(Cn cn)
 {
     bool valid = cn.raw <= 0x007 || (cn.raw >= 0x800 && cn.raw <= 0x807);
-    bool upper = style.syntax != DASM_GNU && style.syntax != DASM_GNU_MIT;
+    bool upper = style.syntax != DasmSyntax::DASM_GNU && style.syntax != DasmSyntax::DASM_GNU_MIT;
 
     if (valid) {
 
-        if (style.syntax == DASM_GNU_MIT || style.syntax == DASM_MOIRA_MIT) {
+        if (style.syntax == DasmSyntax::DASM_GNU_MIT || style.syntax == DasmSyntax::DASM_MOIRA_MIT) {
             *ptr++ = '%';
         }
 
@@ -601,7 +615,7 @@ StrWriter::operator<<(Cn cn)
 
     } else {
 
-        if (style.syntax == DASM_MUSASHI || style.syntax == DASM_GNU || style.syntax == DASM_GNU_MIT) {
+        if (style.syntax == DasmSyntax::DASM_MUSASHI || style.syntax == DasmSyntax::DASM_GNU || style.syntax == DasmSyntax::DASM_GNU_MIT) {
             *this << UInt(cn.raw);
         } else {
             *this << "INVALID";
@@ -649,8 +663,8 @@ StrWriter::operator<<(RegRegList l)
 {
     switch (style.syntax) {
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+       case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             l.raw ? *this << RegList{l.raw} : *this << "#0";
             break;
@@ -732,15 +746,15 @@ StrWriter::operator<<(Ai<M, S> wrapper)
 
     switch (style.syntax) {
 
-        case DASM_MOIRA:
-        case DASM_MUSASHI:
-        case DASM_GNU:
+        case DasmSyntax::DASM_MOIRA:
+        case DasmSyntax::DASM_MUSASHI:
+       case DasmSyntax::DASM_GNU:
 
             *this << "(" << An{ea.reg} << ")";
             break;
 
-        case DASM_GNU_MIT:
-        case DASM_MOIRA_MIT:
+        case DasmSyntax::DASM_GNU_MIT:
+        case DasmSyntax::DASM_MOIRA_MIT:
 
             *this << An{ea.reg} << "@";
             break;
@@ -756,15 +770,15 @@ StrWriter::operator<<(Pi<M, S> wrapper)
 
     switch (style.syntax) {
 
-        case DASM_MOIRA:
-        case DASM_MUSASHI:
-        case DASM_GNU:
+        case DasmSyntax::DASM_MOIRA:
+        case DasmSyntax::DASM_MUSASHI:
+       case DasmSyntax::DASM_GNU:
 
             *this << "(" << An{ea.reg} << ")+";
             break;
 
-        case DASM_GNU_MIT:
-        case DASM_MOIRA_MIT:
+        case DasmSyntax::DASM_GNU_MIT:
+        case DasmSyntax::DASM_MOIRA_MIT:
 
             *this << An{ea.reg} << "@+";
             break;
@@ -780,15 +794,15 @@ StrWriter::operator<<(Pd<M, S> wrapper)
 
     switch (style.syntax) {
 
-        case DASM_MOIRA:
-        case DASM_MUSASHI:
-        case DASM_GNU:
+        case DasmSyntax::DASM_MOIRA:
+        case DasmSyntax::DASM_MUSASHI:
+       case DasmSyntax::DASM_GNU:
 
             *this << "-(" << An{ea.reg} << ")";
             break;
 
-        case DASM_GNU_MIT:
-        case DASM_MOIRA_MIT:
+        case DasmSyntax::DASM_GNU_MIT:
+        case DasmSyntax::DASM_MOIRA_MIT:
 
             *this << An{ea.reg} << "@-";
             break;
@@ -804,19 +818,19 @@ StrWriter::operator<<(Di<M, S> wrapper)
 
     switch (style.syntax) {
 
-        case DASM_MOIRA:
-        case DASM_MUSASHI:
+        case DasmSyntax::DASM_MOIRA:
+        case DasmSyntax::DASM_MUSASHI:
 
             *this << "(" << Int{(i16)ea.ext1} << "," << An{ea.reg} << ")";
             return *this;
 
-        case DASM_GNU:
+       case DasmSyntax::DASM_GNU:
 
             *this << Int{(i16)ea.ext1} << "(" << An{ea.reg} << ")";
             break;
 
-        case DASM_GNU_MIT:
-        case DASM_MOIRA_MIT:
+        case DasmSyntax::DASM_GNU_MIT:
+        case DasmSyntax::DASM_MOIRA_MIT:
 
             *this << An{ea.reg} << "@(" << Int{(i16)ea.ext1} << ")";
             break;
@@ -830,13 +844,13 @@ StrWriter::operator<<(Ix<M, S> wrapper)
 {
     switch (style.syntax) {
 
-        case DASM_MUSASHI:
+        case DasmSyntax::DASM_MUSASHI:
 
             *this << IxMus<M, S>{wrapper.ea};
             break;
 
-        case DASM_GNU_MIT:
-        case DASM_MOIRA_MIT:
+        case DasmSyntax::DASM_GNU_MIT:
+        case DasmSyntax::DASM_MOIRA_MIT:
 
             *this << IxMit<M, S>{wrapper.ea};
             break;
@@ -1140,15 +1154,15 @@ StrWriter::operator<<(Aw<M, S> wrapper)
 
     switch (style.syntax) {
 
-        case DASM_MOIRA:
-        case DASM_MOIRA_MIT:
-        case DASM_MUSASHI:
+        case DasmSyntax::DASM_MOIRA:
+        case DasmSyntax::DASM_MOIRA_MIT:
+        case DasmSyntax::DASM_MUSASHI:
 
             *this << UInt(ea.ext1) << Sz<Word>{};
             break;
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+       case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             *this << UInt(ea.ext1);
             break;
@@ -1164,15 +1178,15 @@ StrWriter::operator<<(Al<M, S> wrapper)
 
     switch (style.syntax) {
 
-        case DASM_MOIRA:
-        case DASM_MOIRA_MIT:
-        case DASM_MUSASHI:
+        case DasmSyntax::DASM_MOIRA:
+        case DasmSyntax::DASM_MOIRA_MIT:
+        case DasmSyntax::DASM_MUSASHI:
 
             *this << UInt(ea.ext1) << Sz<Long>{};
             break;
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+       case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             *this << UInt(ea.ext1);
             break;
@@ -1189,22 +1203,22 @@ StrWriter::operator<<(DiPc<M, S> wrapper)
 
     switch (style.syntax) {
 
-        case DASM_MOIRA:
-        case DASM_MUSASHI:
+        case DasmSyntax::DASM_MOIRA:
+        case DasmSyntax::DASM_MUSASHI:
 
             *this << "(" << Int{(i16)ea.ext1} << ",PC)";
             resolved = U32_ADD(U32_ADD(ea.pc, (i16)ea.ext1), 2);
             StrWriter(comment, style) << "; (" << UInt(resolved) << ")" << Finish{};
             break;
 
-        case DASM_GNU:
+       case DasmSyntax::DASM_GNU:
 
             resolved = U32_ADD(U32_ADD(ea.pc, (i16)ea.ext1), 2);
             *this << UInt(resolved) << "(" << Pc{} << ")";
             break;
 
-        case DASM_MOIRA_MIT:
-        case DASM_GNU_MIT:
+        case DasmSyntax::DASM_MOIRA_MIT:
+        case DasmSyntax::DASM_GNU_MIT:
 
             resolved = U32_ADD(U32_ADD(ea.pc, (i16)ea.ext1), 2);
             *this << Pc{} << "@(" << UInt(resolved) << ")";
@@ -1221,8 +1235,8 @@ StrWriter::operator<<(Im<M, S> wrapper)
 
     switch (style.syntax) {
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+       case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             *this << Ims<S>(ea.ext1);
             break;
@@ -1243,15 +1257,15 @@ StrWriter::operator<<(Ip<M, S> wrapper)
 
     switch (style.syntax) {
 
-        case DASM_MOIRA:
-        case DASM_MUSASHI:
-        case DASM_GNU:
+        case DasmSyntax::DASM_MOIRA:
+        case DasmSyntax::DASM_MUSASHI:
+       case DasmSyntax::DASM_GNU:
 
             *this << "-(" << An{ea.reg} << ")";
             break;
 
-        case DASM_GNU_MIT:
-        case DASM_MOIRA_MIT:
+        case DasmSyntax::DASM_GNU_MIT:
+        case DasmSyntax::DASM_MOIRA_MIT:
 
             *this << An{ea.reg} << "@-";
             break;
@@ -1267,16 +1281,16 @@ StrWriter::operator<<(Scale s)
 
     switch (style.syntax) {
 
-        case DASM_MOIRA:
-        case DASM_MUSASHI:
-        case DASM_GNU:
+        case DasmSyntax::DASM_MOIRA:
+        case DasmSyntax::DASM_MUSASHI:
+       case DasmSyntax::DASM_GNU:
 
             *ptr++ = '*';
             *ptr++ = '0' + (char)(1 << s.raw);
             break;
 
-        case DASM_GNU_MIT:
-        case DASM_MOIRA_MIT:
+        case DasmSyntax::DASM_GNU_MIT:
+        case DasmSyntax::DASM_MOIRA_MIT:
 
             *ptr++ = ':';
             *ptr++ = '0' + (char)(1 << s.raw);
@@ -1316,10 +1330,12 @@ StrWriter::operator<<(Sfc _)
 {
     switch (style.syntax) {
 
-        case DASM_GNU_MIT:      *ptr++ = '%'; [[fallthrough]];
-        case DASM_GNU:          *ptr++ = 's'; *ptr++ = 'f'; *ptr++ = 'c'; break;
-        case DASM_MOIRA_MIT:    *ptr++ = '%'; [[fallthrough]];
-        default:                *ptr++ = 'S'; *ptr++ = 'F'; *ptr++ = 'C'; break;
+        case DasmSyntax::DASM_GNU_MIT:      *ptr++ = '%'; [[fallthrough]];
+       case DasmSyntax::DASM_GNU:          *ptr++ = 's'; *ptr++ = 'f'; *ptr++ = 'c'; break;
+        case DasmSyntax::DASM_MOIRA_MIT:    *ptr++ = '%'; [[fallthrough]];
+        
+        default:
+            *ptr++ = 'S'; *ptr++ = 'F'; *ptr++ = 'C'; break;
     }
 
     return *this;
@@ -1330,10 +1346,12 @@ StrWriter::operator<<(Dfc _)
 {
     switch (style.syntax) {
 
-        case DASM_GNU_MIT:      *ptr++ = '%'; [[fallthrough]];
-        case DASM_GNU:          *ptr++ = 'd'; *ptr++ = 'f'; *ptr++ = 'c'; break;
-        case DASM_MOIRA_MIT:    *ptr++ = '%'; [[fallthrough]];
-        default:                *ptr++ = 'D'; *ptr++ = 'F'; *ptr++ = 'C'; break;
+        case DasmSyntax::DASM_GNU_MIT:      *ptr++ = '%'; [[fallthrough]];
+       case DasmSyntax::DASM_GNU:          *ptr++ = 'd'; *ptr++ = 'f'; *ptr++ = 'c'; break;
+        case DasmSyntax::DASM_MOIRA_MIT:    *ptr++ = '%'; [[fallthrough]];
+        
+        default:
+            *ptr++ = 'D'; *ptr++ = 'F'; *ptr++ = 'C'; break;
     }
 
     return *this;
@@ -1344,10 +1362,12 @@ StrWriter::operator<<(Fp fp)
 {
     switch (style.syntax) {
 
-        case DASM_GNU_MIT:      *ptr++ = '%'; [[fallthrough]];
-        case DASM_GNU:          *ptr++ = 'f'; *ptr++ = 'p'; *ptr++ = '0' + (char)fp.raw; break;
-        case DASM_MOIRA_MIT:    *ptr++ = '%'; [[fallthrough]];
-        default:                *ptr++ = 'F'; *ptr++ = 'P'; *ptr++ = '0' + (char)fp.raw; break;
+        case DasmSyntax::DASM_GNU_MIT:      *ptr++ = '%'; [[fallthrough]];
+       case DasmSyntax::DASM_GNU:          *ptr++ = 'f'; *ptr++ = 'p'; *ptr++ = '0' + (char)fp.raw; break;
+        case DasmSyntax::DASM_MOIRA_MIT:    *ptr++ = '%'; [[fallthrough]];
+        
+        default:
+            *ptr++ = 'F'; *ptr++ = 'P'; *ptr++ = '0' + (char)fp.raw; break;
     }
 
     return *this;
@@ -1356,7 +1376,7 @@ StrWriter::operator<<(Fp fp)
 StrWriter&
 StrWriter::operator<<(Ffmt ffmt)
 {
-    if (style.syntax != DASM_GNU && style.syntax != DASM_GNU_MIT) *ptr++ = '.';
+    if (style.syntax != DasmSyntax::DASM_GNU && style.syntax != DasmSyntax::DASM_GNU_MIT) *ptr++ = '.';
 
     switch (ffmt.raw) {
 
@@ -1378,10 +1398,10 @@ StrWriter::operator<<(Ffmt ffmt)
 StrWriter&
 StrWriter::operator<<(Fctrl fctrl)
 {
-    const char *prefix = style.syntax == DASM_GNU_MIT || style.syntax == DASM_MOIRA_MIT ? "%" : "";
+    const char *prefix = style.syntax == DasmSyntax::DASM_GNU_MIT || style.syntax == DasmSyntax::DASM_MOIRA_MIT ? "%" : "";
     const char *delim = "";
 
-    if (fctrl.raw == 0 && style.syntax != DASM_GNU) { *this << "{}"; }
+    if (fctrl.raw == 0 && style.syntax != DasmSyntax::DASM_GNU) { *this << "{}"; }
     if (fctrl.raw & 1) { *this << delim << prefix << "fpiar"; delim = "/"; }
     if (fctrl.raw & 2) { *this << delim << prefix << "fpsr";  delim = "/"; }
     if (fctrl.raw & 4) { *this << delim << prefix << "fpcr";  delim = "/"; }
@@ -1394,8 +1414,8 @@ StrWriter::operator<<(Tab tab)
 {
     switch (style.syntax) {
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+       case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             *ptr++ = ' ';
             break;
@@ -1411,7 +1431,7 @@ StrWriter::operator<<(Tab tab)
 template <Instr I, Mode M, Size S> StrWriter&
 StrWriter::operator<<(const Av<I, M, S> &av)
 {
-    if (style.syntax == DASM_GNU || style.syntax == DASM_GNU_MIT) { return *this; }
+    if (style.syntax == DasmSyntax::DASM_GNU || style.syntax == DasmSyntax::DASM_GNU_MIT) { return *this; }
 
     switch (I) {
 
@@ -1550,15 +1570,15 @@ StrWriter::operator<<(Sep)
 
     switch (style.syntax) {
 
-        case DASM_MOIRA:
-        case DASM_MOIRA_MIT:
-        case DASM_MUSASHI:
+        case DasmSyntax::DASM_MOIRA:
+        case DasmSyntax::DASM_MOIRA_MIT:
+        case DasmSyntax::DASM_MUSASHI:
 
             *ptr++ = ' ';
             break;
 
-        case DASM_GNU:
-        case DASM_GNU_MIT:
+       case DasmSyntax::DASM_GNU:
+        case DasmSyntax::DASM_GNU_MIT:
 
             break;
     }

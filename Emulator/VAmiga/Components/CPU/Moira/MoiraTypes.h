@@ -61,15 +61,14 @@ enum class Core
     C68020                  // Used by all others
 };
 
-typedef enum
+enum class DasmSyntax
 {
     DASM_MOIRA,             // Official syntax styles
     DASM_MOIRA_MIT,
     DASM_GNU,               // Legacy styles (for unit testing)
     DASM_GNU_MIT,
     DASM_MUSASHI,
-}
-DasmSyntax;
+};
 
 typedef enum
 {
