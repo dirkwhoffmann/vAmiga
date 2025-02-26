@@ -12,7 +12,7 @@ Moira::computeEA(u32 n) {
 
     u32 result;
 
-    switch (M) {
+    switch ((int)M) {
 
         case 0:  // Dn
         case 1:  // An
@@ -208,9 +208,9 @@ Moira::readOp(int n, u32 *ea, u32 *result)
 {
     switch (M) {
 
-        case MODE_DN: *result = readD<S>(n);   break;
-        case MODE_AN: *result = readA<S>(n);   break;
-        case MODE_IM: *result = readI<C, S>(); break;
+        case Mode::MODE_DN: *result = readD<S>(n);   break;
+        case Mode::MODE_AN: *result = readA<S>(n);   break;
+        case Mode::MODE_IM: *result = readI<C, S>(); break;
 
         default:
 
@@ -233,9 +233,9 @@ Moira::writeOp(int n, u32 val)
 {
     switch (M) {
 
-        case MODE_DN: writeD<S>(n, val); break;
-        case MODE_AN: writeA<S>(n, val); break;
-        case MODE_IM: fatalError;
+        case Mode::MODE_DN: writeD<S>(n, val); break;
+        case Mode::MODE_AN: writeA<S>(n, val); break;
+        case Mode::MODE_IM: fatalError;
 
         default:
 
@@ -260,9 +260,9 @@ Moira::writeOp(int n, u32 ea, u32 val)
 {
     switch (M) {
 
-        case MODE_DN: writeD<S>(n, val); break;
-        case MODE_AN: writeA<S>(n, val); break;
-        case MODE_IM: fatalError;
+        case Mode::MODE_DN: writeD<S>(n, val); break;
+        case Mode::MODE_AN: writeA<S>(n, val); break;
+        case Mode::MODE_IM: fatalError;
 
         default:
 
@@ -276,39 +276,39 @@ Moira::writeOp(int n, u32 ea, u32 val)
 void
 Moira::updateAn(Mode M, Size S, int n)
 {
-    if (M == 3) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
-    if (M == 4) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+    if ((int)M == 3) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+    if ((int)M == 4) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
 }
 
 void
 Moira::updateAnPI(Mode M, Size S, int n)
 {
-    if (M == 3) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+    if ((int)M == 3) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
 }
 
 void
 Moira::updateAnPD(Mode M, Size S, int n)
 {
-    if (M == 4) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+    if ((int)M == 4) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
 }
 
 void
 Moira::undoAn(Mode M, Size S, int n)
 {
-    if (M == 3) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
-    if (M == 4) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+    if ((int)M == 3) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+    if ((int)M == 4) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
 }
 
 void
 Moira::undoAnPI(Mode M, Size S, int n)
 {
-    if (M == 3) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+    if ((int)M == 3) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
 }
 
 void
 Moira::undoAnPD(Mode M, Size S, int n)
 {
-    if (M == 4) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+    if ((int)M == 4) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
 }
 
 template <Mode M, Size S> void
@@ -321,13 +321,13 @@ Moira::updateAn(int n)
 template <Mode M, Size S> void
 Moira::updateAnPI(int n)
 {
-    if constexpr (M == 3) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+    if constexpr ((int)M == 3) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
 }
 
 template <Mode M, Size S> void
 Moira::updateAnPD(int n)
 {
-    if constexpr (M == 4) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+    if constexpr ((int)M == 4) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
 }
 
 template <Mode M, Size S> void
@@ -340,13 +340,13 @@ Moira::undoAn(int n)
 template <Mode M, Size S> void
 Moira::undoAnPI(int n)
 {
-    if constexpr (M == 3) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+    if constexpr ((int)M == 3) U32_DEC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
 }
 
 template <Mode M, Size S> void
 Moira::undoAnPD(int n)
 {
-    if constexpr (M == 4) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
+    if constexpr ((int)M == 4) U32_INC(reg.a[n], (n == 7 && S == Byte) ? 2 : S);
 }
 
 template <Core C, Mode M, Size S, Flags F> u32
@@ -724,7 +724,7 @@ Moira::penaltyCycles(u16 ext) const
         6, 11, 13, 13,  0, 11, 13, 13,  0, 11, 13, 13,  0, 11, 13, 13
     };
 
-    if constexpr (C == Core::C68020 && (M == MODE_IX || M == MODE_IXPC)) {
+    if constexpr (C == Core::C68020 && (M == Mode::MODE_IX || M == Mode::MODE_IXPC)) {
 
         if (ext & 0x100) return delay[ext & 0x3F];
     }

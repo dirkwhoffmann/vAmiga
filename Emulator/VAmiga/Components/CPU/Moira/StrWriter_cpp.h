@@ -720,18 +720,18 @@ StrWriter::operator<<(const Ea<M, S> &ea)
 {
     switch (M) {
 
-        case MODE_DN:   *this << Dn{ea.reg};    break;
-        case MODE_AN:   *this << An{ea.reg};    break;
-        case MODE_AI:   *this << Ai<M,S>{ea};   break;
-        case MODE_PI:   *this << Pi<M,S>{ea};   break;
-        case MODE_PD:   *this << Pd<M,S>{ea};   break;
-        case MODE_DI:   *this << Di<M,S>{ea};   break;
-        case MODE_IX:   *this << Ix<M,S>{ea};   break;
-        case MODE_AW:   *this << Aw<M,S>{ea};   break;
-        case MODE_AL:   *this << Al<M,S>{ea};   break;
-        case MODE_DIPC: *this << DiPc<M,S>{ea}; break;
-        case MODE_IXPC: *this << Ix<M,S>{ea};   break;
-        case MODE_IM:   *this << Im<M,S>{ea};   break;
+        case Mode::MODE_DN:   *this << Dn{ea.reg};    break;
+        case Mode::MODE_AN:   *this << An{ea.reg};    break;
+        case Mode::MODE_AI:   *this << Ai<M,S>{ea};   break;
+        case Mode::MODE_PI:   *this << Pi<M,S>{ea};   break;
+        case Mode::MODE_PD:   *this << Pd<M,S>{ea};   break;
+        case Mode::MODE_DI:   *this << Di<M,S>{ea};   break;
+        case Mode::MODE_IX:   *this << Ix<M,S>{ea};   break;
+        case Mode::MODE_AW:   *this << Aw<M,S>{ea};   break;
+        case Mode::MODE_AL:   *this << Al<M,S>{ea};   break;
+        case Mode::MODE_DIPC: *this << DiPc<M,S>{ea}; break;
+        case Mode::MODE_IXPC: *this << Ix<M,S>{ea};   break;
+        case Mode::MODE_IM:   *this << Im<M,S>{ea};   break;
 
         default:
             *this << "???";
@@ -866,7 +866,7 @@ StrWriter::operator<<(Ix<M, S> wrapper)
 template <Mode M, Size S> StrWriter&
 StrWriter::operator<<(IxMot<M, S> wrapper)
 {
-    assert(M == 6 || M == 10);
+    assert(M == Mode(6) || M == Mode(10));
 
     auto &ea = wrapper.ea;
 
@@ -885,7 +885,7 @@ StrWriter::operator<<(IxMot<M, S> wrapper)
         u16 disp  = ________xxxxxxxx (ea.ext1);
 
         *this << "(" << Int{(i8)disp} << ",";
-        M == 10 ? *this << Pc{} : *this << An{ea.reg};
+        M == Mode(10) ? *this << Pc{} : *this << An{ea.reg};
         *this << "," << Rn{reg} << (lw ? ".l" : ".w") << Scale{scale} << ")";
 
     } else {
@@ -909,7 +909,7 @@ StrWriter::operator<<(IxMot<M, S> wrapper)
             size == 3 ? (*this << Int{(i32)base}) : (*this << Int{(i16)base});
         };
         auto baseRegister = [&]() {
-            if constexpr (M == 10) {
+            if constexpr (M == Mode(10)) {
                 if (!bs) { *this << Sep{} << Pc{}; } else { *this << Sep{} << Zpc{}; }
             } else {
                 if (!bs) { *this << Sep{} << An{ea.reg}; }
@@ -955,7 +955,7 @@ StrWriter::operator<<(IxMot<M, S> wrapper)
 template <Mode M, Size S> StrWriter&
 StrWriter::operator<<(IxMit<M, S> wrapper)
 {
-    assert(M == 6 || M == 10);
+    assert(M == Mode(6) || M == Mode(10));
 
     auto &ea = wrapper.ea;
 
@@ -973,7 +973,7 @@ StrWriter::operator<<(IxMit<M, S> wrapper)
         u16 scale = _____xx_________ (ea.ext1);
         u16 disp  = ________xxxxxxxx (ea.ext1);
 
-        M == 10 ? *this << Pc{} : *this << An{ea.reg};
+        M == Mode(10) ? *this << Pc{} : *this << An{ea.reg};
         *this << "@(" << Int{(i8)disp};
         *this << "," << Rn{reg} << (lw ? ":l" : ":w") << Scale{scale} << ")";
 
@@ -998,7 +998,7 @@ StrWriter::operator<<(IxMit<M, S> wrapper)
             size == 3 ? (*this << Int{(i32)base}) : (*this << Int{(i16)base});
         };
         auto baseRegister = [&]() {
-            if constexpr (M == 10) {
+            if constexpr (M == Mode(10)) {
                 bs ? *this << Zpc{} : *this << Pc{};
             } else {
                 if (!bs) *this << An{ea.reg};
@@ -1047,7 +1047,7 @@ StrWriter::operator<<(IxMit<M, S> wrapper)
 template <Mode M, Size S> StrWriter&
 StrWriter::operator<<(IxMus<M, S> wrapper)
 {
-    assert(M == 6 || M == 10);
+    assert(M == Mode(6) || M == Mode(10));
 
     auto &ea = wrapper.ea;
 
@@ -1067,7 +1067,7 @@ StrWriter::operator<<(IxMus<M, S> wrapper)
 
         *this << "(";
         if (disp) *this << Int{(i8)disp} << ",";
-        M == 10 ? *this << Pc{} : *this << An{ea.reg};
+        M == Mode(10) ? *this << Pc{} : *this << An{ea.reg};
         *this << "," << Rn{reg};
         *this << (lw ? ".l" : ".w");
         *this << Scale{scale} << ")";
@@ -1114,7 +1114,7 @@ StrWriter::operator<<(IxMus<M, S> wrapper)
         if (!bs) {
 
             if (comma) *this << ",";
-            M == 10 ? *this << Pc{} : *this << An{ea.reg};
+            M == Mode(10) ? *this << Pc{} : *this << An{ea.reg};
             comma = true;
         }
         if (postindex) {
@@ -1523,7 +1523,7 @@ StrWriter::operator<<(const Av<I, M, S> &av)
             break;
 
         case TST:
-            *this << (M == 1 || M >= 9 ? "; (2+)" : "");
+            *this << (M == Mode(1) || M >= Mode(9) ? "; (2+)" : "");
             break;
 
         case CINV:

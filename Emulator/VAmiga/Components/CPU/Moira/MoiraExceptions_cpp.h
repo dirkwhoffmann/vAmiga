@@ -362,7 +362,7 @@ Moira::execException(M68kException exc, int nr)
             flags &= ~CPU_TRACE_EXCEPTION;
 
             SYNC(2);
-            (void)readM<C, MODE_DN, Word>(reg.pc);
+            (void)readM<C, Mode::MODE_DN, Word>(reg.pc);
             SYNC(2);
 
             // Write stack frame

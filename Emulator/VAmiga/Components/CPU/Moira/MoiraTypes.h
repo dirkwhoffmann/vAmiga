@@ -173,7 +173,7 @@ typedef enum
 Size;
 */
 
-typedef enum
+enum class Mode
 {
     MODE_DN,                //  0: Dn
     MODE_AN,                //  1: An
@@ -188,9 +188,17 @@ typedef enum
     MODE_IXPC,              // 10: (d,PC,Xi)
     MODE_IM,                // 11: ####
     MODE_IP                 // 12: ----
-}
-Mode;
+};
 
+constexpr bool isRegMode(Mode M) { return M == Mode::MODE_DN || M == Mode::MODE_AN;  }
+constexpr bool isAbsMode(Mode M) { return M == Mode::MODE_AW || M == Mode::MODE_AL;  }
+constexpr bool isIdxMode(Mode M) { return M == Mode::MODE_IX || M == Mode::MODE_IXPC; }
+constexpr bool isMemMode(Mode M) { return M >= Mode::MODE_AI && M <= Mode::MODE_IXPC; }
+constexpr bool isPrgMode(Mode M) { return M == Mode::MODE_DIPC || M == Mode::MODE_IXPC; }
+constexpr bool isDspMode(Mode M) { return M == Mode::MODE_DI || M == Mode::MODE_IX || M == Mode::MODE_DIPC || M == Mode::MODE_IXPC; }
+constexpr bool isImmMode(Mode M) { return M == Mode::MODE_IM; }
+
+/*
 constexpr bool isRegMode(Mode M) { return M == 0 || M == 1;  }
 constexpr bool isAbsMode(Mode M) { return M == 7 || M == 8;  }
 constexpr bool isIdxMode(Mode M) { return M == 6 || M == 10; }
@@ -198,6 +206,7 @@ constexpr bool isMemMode(Mode M) { return M >= 2 && M <= 10; }
 constexpr bool isPrgMode(Mode M) { return M == 9 || M == 10; }
 constexpr bool isDspMode(Mode M) { return M == 5 || M == 6 || M == 9 || M == 10; }
 constexpr bool isImmMode(Mode M) { return M == 11; }
+*/
 
 enum class Cond
 {

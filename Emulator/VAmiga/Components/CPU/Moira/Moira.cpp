@@ -667,7 +667,7 @@ Moira::availabilityMask(Instr I, Mode M, Size S) const
 
         case TST:
 
-            if (M == 1 || M >= 9) mask &= AV_68020_UP;
+            if (M == Mode(1) || M >= Mode(9)) mask &= AV_68020_UP;
             break;
 
         default:
@@ -808,7 +808,7 @@ Moira::setFC()
 {
     if (!EMULATE_FC)  return;
 
-    fcl = (M == MODE_DIPC || M == MODE_IXPC) ? FC_USER_PROG : FC_USER_DATA;
+    fcl = (M == Mode::MODE_DIPC || M == Mode::MODE_IXPC) ? FC_USER_PROG : FC_USER_DATA;
 }
 
 void
