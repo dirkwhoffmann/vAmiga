@@ -203,26 +203,25 @@ constexpr bool isPrgMode(Mode M) { return M == 9 || M == 10; }
 constexpr bool isDspMode(Mode M) { return M == 5 || M == 6 || M == 9 || M == 10; }
 constexpr bool isImmMode(Mode M) { return M == 11; }
 
-typedef enum
+enum class Cond
 {
-    COND_BT,                // Always true
-    COND_BF,                // Always false
-    COND_HI,                // Higher than
-    COND_LS,                // Lower or same
-    COND_CC,                // Carry clear
-    COND_CS,                // Carry set
-    COND_NE,                // Not equal
-    COND_EQ,                // Equal
-    COND_VC,                // Overflow clear
-    COND_VS,                // Overflow set
-    COND_PL,                // Plus
-    COND_MI,                // Minus
-    COND_GE,                // Greater or equal
-    COND_LT,                // Less than
-    COND_GT,                // Greater than
-    COND_LE                 // Less than
-}
-Cond;
+    BT,                // Always true
+    BF,                // Always false
+    HI,                // Higher than
+    LS,                // Lower or same
+    CC,                // Carry clear
+    CS,                // Carry set
+    NE,                // Not equal
+    EQ,                // Equal
+    VC,                // Overflow clear
+    VS,                // Overflow set
+    PL,                // Plus
+    MI,                // Minus
+    GE,                // Greater or equal
+    LT,                // Less than
+    GT,                // Greater than
+    LE                 // Less than
+};
 
 enum class M68kException
 {

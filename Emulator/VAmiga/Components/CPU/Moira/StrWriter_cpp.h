@@ -311,22 +311,22 @@ StrWriter::operator<<(Cc cc)
 {
     switch (Cond(cc.raw)) {
 
-        case COND_BT: *this << "t";   break;
-        case COND_BF: *this << "f";   break;
-        case COND_HI: *this << "hi";  break;
-        case COND_LS: *this << "ls";  break;
-        case COND_CC: *this << "cc";  break;
-        case COND_CS: *this << "cs";  break;
-        case COND_NE: *this << "ne";  break;
-        case COND_EQ: *this << "eq";  break;
-        case COND_VC: *this << "vc";  break;
-        case COND_VS: *this << "vs";  break;
-        case COND_PL: *this << "pl";  break;
-        case COND_MI: *this << "mi";  break;
-        case COND_GE: *this << "ge";  break;
-        case COND_LT: *this << "lt";  break;
-        case COND_GT: *this << "gt";  break;
-        case COND_LE: *this << "le";  break;
+        case Cond::BT: *this << "t";   break;
+        case Cond::BF: *this << "f";   break;
+        case Cond::HI: *this << "hi";  break;
+        case Cond::LS: *this << "ls";  break;
+        case Cond::CC: *this << "cc";  break;
+        case Cond::CS: *this << "cs";  break;
+        case Cond::NE: *this << "ne";  break;
+        case Cond::EQ: *this << "eq";  break;
+        case Cond::VC: *this << "vc";  break;
+        case Cond::VS: *this << "vs";  break;
+        case Cond::PL: *this << "pl";  break;
+        case Cond::MI: *this << "mi";  break;
+        case Cond::GE: *this << "ge";  break;
+        case Cond::LT: *this << "lt";  break;
+        case Cond::GT: *this << "gt";  break;
+        case Cond::LE: *this << "le";  break;
     }
     return *this;
 }

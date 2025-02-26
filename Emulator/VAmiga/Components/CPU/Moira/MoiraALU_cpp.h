@@ -67,22 +67,22 @@ Moira::evalCond() {
 
     switch (C) {
 
-        case COND_BT: return true;
-        case COND_BF: return false;
-        case COND_HI: return !reg.sr.c && !reg.sr.z;
-        case COND_LS: return reg.sr.c || reg.sr.z;
-        case COND_CC: return !reg.sr.c;
-        case COND_CS: return reg.sr.c;
-        case COND_NE: return !reg.sr.z;
-        case COND_EQ: return reg.sr.z;
-        case COND_VC: return !reg.sr.v;
-        case COND_VS: return reg.sr.v;
-        case COND_PL: return !reg.sr.n;
-        case COND_MI: return reg.sr.n;
-        case COND_GE: return reg.sr.n == reg.sr.v;
-        case COND_LT: return reg.sr.n != reg.sr.v;
-        case COND_GT: return reg.sr.n == reg.sr.v && !reg.sr.z;
-        case COND_LE: return reg.sr.n != reg.sr.v || reg.sr.z;
+        case Cond::BT: return true;
+        case Cond::BF: return false;
+        case Cond::HI: return !reg.sr.c && !reg.sr.z;
+        case Cond::LS: return reg.sr.c || reg.sr.z;
+        case Cond::CC: return !reg.sr.c;
+        case Cond::CS: return reg.sr.c;
+        case Cond::NE: return !reg.sr.z;
+        case Cond::EQ: return reg.sr.z;
+        case Cond::VC: return !reg.sr.v;
+        case Cond::VS: return reg.sr.v;
+        case Cond::PL: return !reg.sr.n;
+        case Cond::MI: return reg.sr.n;
+        case Cond::GE: return reg.sr.n == reg.sr.v;
+        case Cond::LT: return reg.sr.n != reg.sr.v;
+        case Cond::GT: return reg.sr.n == reg.sr.v && !reg.sr.z;
+        case Cond::LE: return reg.sr.n != reg.sr.v || reg.sr.z;
 
         default:
             fatalError;
@@ -94,22 +94,22 @@ Moira::cond() {
 
     switch (I) {
 
-        case BRA: case ST:  case DBT:  case DBT_LOOP:  case TRAPT:  return evalCond<COND_BT>();
-        case SF:            case DBF:  case DBF_LOOP:  case TRAPF:  return evalCond<COND_BF>();
-        case BHI: case SHI: case DBHI: case DBHI_LOOP: case TRAPHI: return evalCond<COND_HI>();
-        case BLS: case SLS: case DBLS: case DBLS_LOOP: case TRAPLS: return evalCond<COND_LS>();
-        case BCC: case SCC: case DBCC: case DBCC_LOOP: case TRAPCC: return evalCond<COND_CC>();
-        case BCS: case SCS: case DBCS: case DBCS_LOOP: case TRAPCS: return evalCond<COND_CS>();
-        case BNE: case SNE: case DBNE: case DBNE_LOOP: case TRAPNE: return evalCond<COND_NE>();
-        case BEQ: case SEQ: case DBEQ: case DBEQ_LOOP: case TRAPEQ: return evalCond<COND_EQ>();
-        case BVC: case SVC: case DBVC: case DBVC_LOOP: case TRAPVC: return evalCond<COND_VC>();
-        case BVS: case SVS: case DBVS: case DBVS_LOOP: case TRAPVS: return evalCond<COND_VS>();
-        case BPL: case SPL: case DBPL: case DBPL_LOOP: case TRAPPL: return evalCond<COND_PL>();
-        case BMI: case SMI: case DBMI: case DBMI_LOOP: case TRAPMI: return evalCond<COND_MI>();
-        case BGE: case SGE: case DBGE: case DBGE_LOOP: case TRAPGE: return evalCond<COND_GE>();
-        case BLT: case SLT: case DBLT: case DBLT_LOOP: case TRAPLT: return evalCond<COND_LT>();
-        case BGT: case SGT: case DBGT: case DBGT_LOOP: case TRAPGT: return evalCond<COND_GT>();
-        case BLE: case SLE: case DBLE: case DBLE_LOOP: case TRAPLE: return evalCond<COND_LE>();
+        case BRA: case ST:  case DBT:  case DBT_LOOP:  case TRAPT:  return evalCond<Cond::BT>();
+        case SF:            case DBF:  case DBF_LOOP:  case TRAPF:  return evalCond<Cond::BF>();
+        case BHI: case SHI: case DBHI: case DBHI_LOOP: case TRAPHI: return evalCond<Cond::HI>();
+        case BLS: case SLS: case DBLS: case DBLS_LOOP: case TRAPLS: return evalCond<Cond::LS>();
+        case BCC: case SCC: case DBCC: case DBCC_LOOP: case TRAPCC: return evalCond<Cond::CC>();
+        case BCS: case SCS: case DBCS: case DBCS_LOOP: case TRAPCS: return evalCond<Cond::CS>();
+        case BNE: case SNE: case DBNE: case DBNE_LOOP: case TRAPNE: return evalCond<Cond::NE>();
+        case BEQ: case SEQ: case DBEQ: case DBEQ_LOOP: case TRAPEQ: return evalCond<Cond::EQ>();
+        case BVC: case SVC: case DBVC: case DBVC_LOOP: case TRAPVC: return evalCond<Cond::VC>();
+        case BVS: case SVS: case DBVS: case DBVS_LOOP: case TRAPVS: return evalCond<Cond::VS>();
+        case BPL: case SPL: case DBPL: case DBPL_LOOP: case TRAPPL: return evalCond<Cond::PL>();
+        case BMI: case SMI: case DBMI: case DBMI_LOOP: case TRAPMI: return evalCond<Cond::MI>();
+        case BGE: case SGE: case DBGE: case DBGE_LOOP: case TRAPGE: return evalCond<Cond::GE>();
+        case BLT: case SLT: case DBLT: case DBLT_LOOP: case TRAPLT: return evalCond<Cond::LT>();
+        case BGT: case SGT: case DBGT: case DBGT_LOOP: case TRAPGT: return evalCond<Cond::GT>();
+        case BLE: case SLE: case DBLE: case DBLE_LOOP: case TRAPLE: return evalCond<Cond::LE>();
 
         default:
             fatalError;
