@@ -151,6 +151,15 @@ typedef enum
 }
 Instr;
 
+using Size = int;
+static constexpr int Unsized     = 0;
+static constexpr int Byte        = 1;        // .b : Byte addressing
+static constexpr int Word        = 2;        // .w : Word addressing
+static constexpr int Long        = 4;        // .l : Long word addressing
+static constexpr int Quad        = 8;        // FPU
+static constexpr int Extended    = 12;       // FPU
+
+/*
 typedef enum
 {
     Unsized     = 0,
@@ -162,6 +171,7 @@ typedef enum
     Extended    = 12        // FPU
 }
 Size;
+*/
 
 typedef enum
 {
