@@ -264,6 +264,13 @@ enum class AddrSpace
     PROG = 2
 };
 
+enum class FunctionCode : u8
+{
+    USER_DATA       = 1,
+    USER_PROG       = 2,
+    SUPERVISOR_DATA = 5,
+    SUPERVISOR_PROG = 6
+};
 
 //
 // Floating-point types (unused)
@@ -407,11 +414,14 @@ struct DasmStyle
 //
 
 // Function codes
+/*
 static constexpr u8 FC_USER_DATA        = 1;
 static constexpr u8 FC_USER_PROG        = 2;
 static constexpr u8 FC_SUPERVISOR_DATA  = 5;
 static constexpr u8 FC_SUPERVISOR_PROG  = 6;
+*/
 
+/*
 // Floating-point condition codes
 static constexpr u32 FPCC_N             = 1 << 27;
 static constexpr u32 FPCC_Z             = 1 << 26;
@@ -427,6 +437,7 @@ static constexpr u32 FPEXP_UNFL         = 1 << 11;
 static constexpr u32 FPEXP_DZ           = 1 << 10;
 static constexpr u32 FPEXP_INEX2        = 1 << 9;
 static constexpr u32 FPEXP_INEX1        = 1 << 8;
+*/
 
 // Availabilty masks
 static constexpr u16 AV_68000           = 1 << int(Model::M68000);

@@ -31,8 +31,8 @@ Moira::Moira(Amiga &ref) : SubComponent(ref)
 {
     exec = new ExecPtr[65536];
     loop = new ExecPtr[65536];
-    if (BUILD_INSTR_INFO_TABLE) info = new InstrInfo[65536];
-    if (ENABLE_DASM) dasm = new DasmPtr[65536];
+    if (MOIRA_BUILD_INSTR_INFO_TABLE) info = new InstrInfo[65536];
+    if (MOIRA_ENABLE_DASM) dasm = new DasmPtr[65536];
 
     createJumpTable(cpuModel, dasmModel);
 
@@ -205,7 +205,7 @@ Moira::reset()
     reg.sr.ipl = 7;
 
     ipl = 0;
-    fcl = 0;
+    fcl = 2;
     fcSource = 0;
 
     SYNC(16);
@@ -308,7 +308,7 @@ Moira::execute()
             }
 
             POLL_IPL;
-            sync(MIMIC_MUSASHI ? 1 : 2);
+            sync(MOIRA_MIMIC_MUSASHI ? 1 : 2);
             return;
         }
 
@@ -798,23 +798,30 @@ Moira::readFC() const
 void
 Moira::setFC(u8 value)
 {
-    if (!EMULATE_FC) return;
-
-    fcl = (u8)value;
+    if constexpr (MOIRA_EMULATE_FC) {
+        
+        fcl = (u8)value;
+    }
 }
 
 template <Mode M> void
 Moira::setFC()
 {
-    if (!EMULATE_FC)  return;
-
-    fcl = (M == Mode::DIPC || M == Mode::IXPC) ? FC_USER_PROG : FC_USER_DATA;
+    if constexpr (MOIRA_EMULATE_FC) {
+        
+        if (M == Mode::DIPC || M == Mode::IXPC) {
+            fcl = (u8)FunctionCode::USER_PROG;
+        } else {
+            fcl = (u8)FunctionCode::USER_DATA;
+        }
+    }
 }
 
 void
 Moira::setIPL(u8 val)
 {
     if (ipl != val) {
+        
         ipl = val;
         flags |= CPU_CHECK_IRQ;
     }
@@ -840,13 +847,13 @@ Moira::getIrqVector(u8 level) const {
 InstrInfo
 Moira::getInstrInfo(u16 op) const
 {
-    if constexpr (BUILD_INSTR_INFO_TABLE) {
+    if constexpr (MOIRA_BUILD_INSTR_INFO_TABLE) {
 
         return info[op];
 
     } else {
 
-        throw std::runtime_error("This feature requires BUILD_INSTR_INFO_TABLE = true\n");
+        throw std::runtime_error("This feature requires MOIRA_BUILD_INSTR_INFO_TABLE = true\n");
     }
 }
 

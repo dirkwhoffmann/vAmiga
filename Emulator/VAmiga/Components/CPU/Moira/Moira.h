@@ -68,13 +68,13 @@ protected:
     PrefetchQueue queue {};
 
     // The interrupt mode of this CPU
-    IrqMode irqMode = IrqMode::AUTO;
+    IrqMode irqMode {IrqMode::AUTO};
 
     // Current value on the IPL pins (Interrupt Priority Level)
     u8 ipl {};
 
     // Value on the lower two function code pins (FC1|FC0)
-    u8 fcl {};
+    u8 fcl {2};
 
     // Determines the source of the function code pins
     u8 fcSource {};
@@ -86,7 +86,7 @@ protected:
     int cp {};
 
     // Controls exact timing of instructions running in loop mode
-    int loopModeDelay = 2;
+    int loopModeDelay {2};
 
     // Read and write buffers (appear in 68010 exception frames)
     u16 readBuffer {};
@@ -254,7 +254,7 @@ public:
 
 protected:
 
-#if VIRTUAL_API == true
+#if MOIRA_VIRTUAL_API == true
 
     // Advances the clock
     virtual void sync(int cycles) { clock += cycles; }

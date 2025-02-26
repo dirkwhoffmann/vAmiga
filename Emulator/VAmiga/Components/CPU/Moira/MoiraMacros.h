@@ -14,7 +14,7 @@
 #endif
 #define fatalError      assert(false); unreachable
 
-#if PRECISE_TIMING == true
+#if MOIRA_PRECISE_TIMING == true
 
 #define SYNC(x)         { if constexpr (C != Core::C68020) sync(x); }
 #define SYNC_68000(x)   { if constexpr (C == Core::C68000) sync(x); }

@@ -31,7 +31,7 @@ Moira::writeStackFrame0000(u16 sr, u32 pc, u16 nr)
 
         case Core::C68000:
 
-            if constexpr (MIMIC_MUSASHI) {
+            if constexpr (MOIRA_MIMIC_MUSASHI) {
 
                 push<C, Long>(pc);
                 push<C, Word>(sr);
@@ -48,7 +48,7 @@ Moira::writeStackFrame0000(u16 sr, u32 pc, u16 nr)
         case Core::C68010:
         case Core::C68020:
 
-            if constexpr (MIMIC_MUSASHI) {
+            if constexpr (MOIRA_MIMIC_MUSASHI) {
 
                 push<C, Word>(nr << 2);
                 push<C, Long>(pc);
@@ -422,7 +422,7 @@ Moira::execException(M68kException exc, int nr)
             flags &= ~CPU_TRACE_EXCEPTION;
 
             // Write stack frame
-            if (MIMIC_MUSASHI) {
+            if (MOIRA_MIMIC_MUSASHI) {
                 writeStackFrame0000<C>(status, reg.pc, vector);
             } else {
                 writeStackFrame0000<C>(status, reg.pc - 2, vector);

@@ -365,7 +365,7 @@ Moira::read(u32 addr)
     u32 result;
 
     // Update function code pins
-    setFC(AS == AddrSpace::DATA ? FC_USER_DATA : FC_USER_PROG);
+    setFC(AS == AddrSpace::DATA ? (u8)FunctionCode::USER_DATA : (u8)FunctionCode::USER_PROG);
     SYNC(2);
 
     // Check for address errors
@@ -418,7 +418,7 @@ template <Core C, AddrSpace AS, Size S, Flags F> void
 Moira::write(u32 addr, u32 val)
 {
     // Update function code pins
-    setFC(AS == AddrSpace::DATA ? FC_USER_DATA : FC_USER_PROG);
+    setFC(AS == AddrSpace::DATA ? (u8)FunctionCode::USER_DATA : (u8)FunctionCode::USER_PROG);
     SYNC(2);
 
     // Check for address errors
@@ -519,7 +519,7 @@ Moira::pop()
 template <Core C, Size S> bool
 Moira::misaligned(u32 addr)
 {
-    if constexpr (EMULATE_ADDRESS_ERROR && C != Core::C68020 && S != Byte) {
+    if constexpr (MOIRA_EMULATE_ADDRESS_ERROR && C != Core::C68020 && S != Byte) {
         return addr & 1;
     } else {
         return false;
@@ -534,8 +534,8 @@ Moira::makeFrame(u32 addr, u32 pc, u16 sr, u16 ird)
 
     // Prepare
     if constexpr (F & AE_WRITE) read = 0;
-    if constexpr (F & AE_PROG) setFC(FC_USER_PROG);
-    if constexpr (F & AE_DATA) setFC(FC_USER_DATA);
+    if constexpr (F & AE_PROG) setFC((u8)FunctionCode::USER_PROG);
+    if constexpr (F & AE_DATA) setFC((u8)FunctionCode::USER_DATA);
 
     // Create
     frame.code = (ird & 0xFFE0) | (u16)readFC() | read;
