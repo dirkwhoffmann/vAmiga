@@ -265,7 +265,7 @@ Moira::execAddressError(StackFrame frame, int delay)
     u16 status = getSR();
 
     // Inform the delegate
-    willExecute(EXC_ADDRESS_ERROR, 3);
+    willExecute(ExceptionType::ADDRESS_ERROR, 3);
 
     // Emulate additional delay
     sync(delay);
@@ -293,7 +293,7 @@ Moira::execAddressError(StackFrame frame, int delay)
     jumpToVector<C>(3);
 
     // Inform the delegate
-    didExecute(EXC_ADDRESS_ERROR, 3);
+    didExecute(ExceptionType::ADDRESS_ERROR, 3);
 }
 
 void
@@ -310,13 +310,10 @@ Moira::execException(ExceptionType exc, int nr)
 template <Core C> void
 Moira::execException(ExceptionType exc, int nr)
 {
-    // printf("Moira::execException(%d, %d)\n", exc, nr);
-    // if (exc == 11) debugger.stepInto();
-
     u16 status = getSR();
 
     // Determine the exception vector number
-    u16 vector = (exc == EXC_TRAP) ? u16(exc + nr) : (exc == EXC_BKPT) ? 4 : u16(exc);
+    u16 vector = (exc == ExceptionType::TRAP) ? u16(exc) + u16(nr) : (exc == ExceptionType::BKPT) ? 4 : u16(exc);
 
     // Inform the delegate
     willExecute(exc, vector);
@@ -330,7 +327,7 @@ Moira::execException(ExceptionType exc, int nr)
 
     switch (exc) {
 
-        case EXC_BUS_ERROR:
+        case ExceptionType::BUS_ERROR:
 
             // Write stack frame
             writeStackFrame1011<C>(status, reg.pc, reg.pc0, 2);
@@ -339,9 +336,9 @@ Moira::execException(ExceptionType exc, int nr)
             jumpToVector<C>(2);
             break;
 
-        case EXC_ILLEGAL:
-        case EXC_LINEA:
-        case EXC_LINEF:
+        case ExceptionType::ILLEGAL:
+        case ExceptionType::LINEA:
+        case ExceptionType::LINEF:
 
             // Clear any pending trace event
             flags &= ~CPU_TRACE_EXCEPTION;
@@ -359,7 +356,7 @@ Moira::execException(ExceptionType exc, int nr)
             jumpToVector<C, AE_SET_CB3>(vector);
             break;
 
-        case EXC_BKPT:
+        case ExceptionType::BKPT:
 
             // Clear any pending trace event
             flags &= ~CPU_TRACE_EXCEPTION;
@@ -375,9 +372,9 @@ Moira::execException(ExceptionType exc, int nr)
             jumpToVector<C, AE_SET_CB3>(vector);
             break;
 
-        case EXC_DIVIDE_BY_ZERO:
-        case EXC_CHK:
-        case EXC_TRAPV:
+        case ExceptionType::DIVIDE_BY_ZERO:
+        case ExceptionType::CHK:
+        case ExceptionType::TRAPV:
 
             // Write stack frame
             C == C68020 ?
@@ -388,7 +385,7 @@ Moira::execException(ExceptionType exc, int nr)
             jumpToVector<C,AE_SET_RW|AE_SET_IF>(vector);
             break;
 
-        case EXC_PRIVILEGE:
+        case ExceptionType::PRIVILEGE:
 
             // Clear any pending trace event
             flags &= ~CPU_TRACE_EXCEPTION;
@@ -402,7 +399,7 @@ Moira::execException(ExceptionType exc, int nr)
             jumpToVector<C,AE_SET_CB3>(vector);
             break;
 
-        case EXC_TRACE:
+        case ExceptionType::TRACE:
 
             // Clear any pending trace event
             flags &= ~CPU_TRACE_EXCEPTION;
@@ -419,7 +416,7 @@ Moira::execException(ExceptionType exc, int nr)
             jumpToVector<C>(vector);
             break;
 
-        case EXC_FORMAT_ERROR:
+        case ExceptionType::FORMAT_ERROR:
 
             // Clear any pending trace event
             flags &= ~CPU_TRACE_EXCEPTION;
@@ -435,7 +432,7 @@ Moira::execException(ExceptionType exc, int nr)
             jumpToVector<C, AE_SET_CB3>(vector);
             break;
 
-        case EXC_TRAP:
+        case ExceptionType::TRAP:
 
             // Write stack frame
             writeStackFrame0000<C>(status, reg.pc, u16(vector));

@@ -224,29 +224,28 @@ typedef enum
 }
 Cond;
 
-typedef enum
+enum class ExceptionType
 {
     // Native exceptions
-    EXC_RESET               = 1,
-    EXC_BUS_ERROR           = 2,
-    EXC_ADDRESS_ERROR       = 3,
-    EXC_ILLEGAL             = 4,
-    EXC_DIVIDE_BY_ZERO      = 5,
-    EXC_CHK                 = 6,
-    EXC_TRAPV               = 7,
-    EXC_PRIVILEGE           = 8,
-    EXC_TRACE               = 9,
-    EXC_LINEA               = 10,
-    EXC_LINEF               = 11,
-    EXC_FORMAT_ERROR        = 14,
-    EXC_IRQ_UNINITIALIZED   = 15,
-    EXC_IRQ_SPURIOUS        = 24,
-    EXC_TRAP                = 32,
+    RESET               = 1,
+    BUS_ERROR           = 2,
+    ADDRESS_ERROR       = 3,
+    ILLEGAL             = 4,
+    DIVIDE_BY_ZERO      = 5,
+    CHK                 = 6,
+    TRAPV               = 7,
+    PRIVILEGE           = 8,
+    TRACE               = 9,
+    LINEA               = 10,
+    LINEF               = 11,
+    FORMAT_ERROR        = 14,
+    IRQ_UNINITIALIZED   = 15,
+    IRQ_SPURIOUS        = 24,
+    TRAP                = 32,
 
     // Exception aliases (will be mapped to a native exception)
-    EXC_BKPT
-}
-ExceptionType;
+    BKPT
+};
 
 enum class IrqMode
 {

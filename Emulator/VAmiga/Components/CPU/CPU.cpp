@@ -173,21 +173,21 @@ Moira::willExecute(ExceptionType exc, u16 vector)
     /*
     switch (exc) {
 
-        case EXC_RESET:             xfiles("EXC_RESET\n");              break;
+        case RESET:             xfiles("RESET\n");              break;
         case EXC_BUS_ERROR:         xfiles("EXC_BUS_ERROR\n");          break;
-        case EXC_ADDRESS_ERROR:     xfiles("EXC_ADDRESS_ERROR\n");      break;
-        case EXC_ILLEGAL:           xfiles("EXC_ILLEGAL\n");            break;
-        case EXC_DIVIDE_BY_ZERO:    xfiles("EXC_DIVIDE_BY_ZERO\n");     break;
-        case EXC_CHK:               xfiles("EXC_CHK\n");                break;
-        case EXC_TRAPV:             xfiles("EXC_TRAPV\n");              break;
+        case ADDRESS_ERROR:     xfiles("ADDRESS_ERROR\n");      break;
+        case ILLEGAL:           xfiles("ILLEGAL\n");            break;
+        case DIVIDE_BY_ZERO:    xfiles("DIVIDE_BY_ZERO\n");     break;
+        case CHK:               xfiles("CHK\n");                break;
+        case TRAPV:             xfiles("TRAPV\n");              break;
         case EXC_PRIVILEGE:         xfiles("EXC_PRIVILEGE\n");          break;
-        case EXC_TRACE:             xfiles("EXC_TRACE\n");              break;
-        case EXC_LINEA:             xfiles("EXC_LINEA\n");              break;
-        case EXC_LINEF:             xfiles("EXC_LINEF\n");              break;
-        case EXC_FORMAT_ERROR:      xfiles("EXC_FORMAT_ERROR\n");       break;
-        case EXC_IRQ_UNINITIALIZED: xfiles("EXC_IRQ_UNINITIALIZED\n");  break;
-        case EXC_IRQ_SPURIOUS:      xfiles("EXC_IRQ_SPURIOUS\n");       break;
-        case EXC_TRAP:              xfiles("EXC_TRAP\n");               break;
+        case TRACE:             xfiles("TRACE\n");              break;
+        case LINEA:             xfiles("LINEA\n");              break;
+        case LINEF:             xfiles("LINEF\n");              break;
+        case FORMAT_ERROR:      xfiles("FORMAT_ERROR\n");       break;
+        case IRQ_UNINITIALIZED: xfiles("IRQ_UNINITIALIZED\n");  break;
+        case IRQ_SPURIOUS:      xfiles("IRQ_SPURIOUS\n");       break;
+        case TRAP:              xfiles("TRAP\n");               break;
 
         default:
             break;

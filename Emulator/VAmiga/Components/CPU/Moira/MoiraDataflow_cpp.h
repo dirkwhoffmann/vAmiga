@@ -655,11 +655,27 @@ Moira::jumpToVector(int nr)
 
             queue.irc = readBuffer = u16(reg.pc);
             writeBuffer = u16(4 * nr);
-            if (nr == EXC_ILLEGAL || nr == EXC_LINEA || nr == EXC_LINEF || nr == EXC_PRIVILEGE) {
+            
+            switch (ExceptionType(nr)) {
+                    
+                case ExceptionType::ILLEGAL:
+                case ExceptionType::LINEA:
+                case ExceptionType::LINEF:
+                case ExceptionType::PRIVILEGE:
+                    
+                    throw AddressError(makeFrame<F|AE_DEC_PC|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
+                    
+                default:
+                    
+                    throw AddressError(makeFrame<F|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
+            }
+            /*
+            if (nr == ILLEGAL || nr == LINEA || nr == LINEF || nr == EXC_PRIVILEGE) {
                 throw AddressError(makeFrame<F|AE_DEC_PC|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
             } else {
                 throw AddressError(makeFrame<F|AE_PROG|AE_SET_RW|AE_SET_IF>(reg.pc, oldpc));
             }
+            */
         }
         return;
     }
