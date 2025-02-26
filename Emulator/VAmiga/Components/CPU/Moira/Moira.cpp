@@ -589,54 +589,54 @@ Moira::availabilityMask(Instr I) const
 
     switch (I) {
 
-        case BKPT: case MOVEC: case MOVES: case MOVEFCCR: case RTD:
+        case Instr::BKPT: case Instr::MOVEC: case Instr::MOVES: case Instr::MOVEFCCR: case Instr::RTD:
 
             return AV_68010_UP;
 
-        case CALLM: case RTM:
+        case Instr::CALLM: case Instr::RTM:
 
             return AV_68020;
 
-        case cpGEN: case cpRESTORE: case cpSAVE: case cpScc: case cpTRAPcc:
+        case Instr::cpGEN: case Instr::cpRESTORE: case Instr::cpSAVE: case Instr::cpScc: case Instr::cpTRAPcc:
 
             return AV_68020 | AV_68030;
 
-        case BFCHG: case BFCLR: case BFEXTS: case BFEXTU: case BFFFO:
-        case BFINS: case BFSET: case BFTST: case CAS: case CAS2:
-        case CHK2: case CMP2: case DIVL: case EXTB: case MULL:
-        case PACK: case TRAPCC: case TRAPCS: case TRAPEQ: case TRAPGE:
-        case TRAPGT: case TRAPHI: case TRAPLE: case TRAPLS: case TRAPLT:
-        case TRAPMI: case TRAPNE: case TRAPPL: case TRAPVC: case TRAPVS:
-        case TRAPF: case TRAPT: case UNPK:
+        case Instr::BFCHG: case Instr::BFCLR: case Instr::BFEXTS: case Instr::BFEXTU: case Instr::BFFFO:
+        case Instr::BFINS: case Instr::BFSET: case Instr::BFTST: case Instr::CAS: case Instr::CAS2:
+        case Instr::CHK2: case Instr::CMP2: case Instr::DIVL: case Instr::EXTB: case Instr::MULL:
+        case Instr::PACK: case Instr::TRAPCC: case Instr::TRAPCS: case Instr::TRAPEQ: case Instr::TRAPGE:
+        case Instr::TRAPGT: case Instr::TRAPHI: case Instr::TRAPLE: case Instr::TRAPLS: case Instr::TRAPLT:
+        case Instr::TRAPMI: case Instr::TRAPNE: case Instr::TRAPPL: case Instr::TRAPVC: case Instr::TRAPVS:
+        case Instr::TRAPF: case Instr::TRAPT: case Instr::UNPK:
 
             return AV_68020_UP;
 
-        case CINV: case CPUSH: case MOVE16:
+        case Instr::CINV: case Instr::CPUSH: case Instr::MOVE16:
 
             return AV_68040;
 
-        case PFLUSH: case PFLUSHA: case PFLUSHAN: case PFLUSHN: case PLOAD:
-        case PMOVE: case PTEST:
+        case Instr::PFLUSH: case Instr::PFLUSHA: case Instr::PFLUSHAN: case Instr::PFLUSHN: case Instr::PLOAD:
+        case Instr::PMOVE: case Instr::PTEST:
 
             return AV_MMU;
 
-        case FABS: case FADD: case FBcc: case FCMP: case FDBcc: case FDIV:
-        case FMOVE: case FMOVEM: case FMUL: case FNEG: case FNOP:
-        case FRESTORE: case FSAVE: case FScc: case FSQRT: case FSUB:
-        case FTRAPcc: case FTST:
+        case Instr::FABS: case Instr::FADD: case Instr::FBcc: case Instr::FCMP: case Instr::FDBcc: case Instr::FDIV:
+        case Instr::FMOVE: case Instr::FMOVEM: case Instr::FMUL: case Instr::FNEG: case Instr::FNOP:
+        case Instr::FRESTORE: case Instr::FSAVE: case Instr::FScc: case Instr::FSQRT: case Instr::FSUB:
+        case Instr::FTRAPcc: case Instr::FTST:
 
-        case FSABS: case FDABS: case FSADD: case FDADD: case FSDIV: case FDDIV:
-        case FSMOVE: case FDMOVE: case FSMUL: case FDMUL: case FSNEG:
-        case FDNEG: case FSSQRT: case FDSQRT: case FSSUB: case FDSUB:
+        case Instr::FSABS: case Instr::FDABS: case Instr::FSADD: case Instr::FDADD: case Instr::FSDIV: case Instr::FDDIV:
+        case Instr::FSMOVE: case Instr::FDMOVE: case Instr::FSMUL: case Instr::FDMUL: case Instr::FSNEG:
+        case Instr::FDNEG: case Instr::FSSQRT: case Instr::FDSQRT: case Instr::FSSUB: case Instr::FDSUB:
 
             return AV_FPU;
 
-        case FACOS: case FASIN: case FATAN: case FATANH: case FCOS: case FCOSH:
-        case FETOX: case FETOXM1: case FGETEXP: case FGETMAN: case FINT:
-        case FINTRZ: case FLOG10: case FLOG2: case FLOGN: case FLOGNP1:
-        case FMOD: case FMOVECR: case FREM: case FSCAL: case FSGLDIV:
-        case FSGLMUL: case FSIN: case FSINCOS: case FSINH: case FTAN:
-        case FTANH: case FTENTOX: case FTWOTOX:
+        case Instr::FACOS: case Instr::FASIN: case Instr::FATAN: case Instr::FATANH: case Instr::FCOS: case Instr::FCOSH:
+        case Instr::FETOX: case Instr::FETOXM1: case Instr::FGETEXP: case Instr::FGETMAN: case Instr::FINT:
+        case Instr::FINTRZ: case Instr::FLOG10: case Instr::FLOG2: case Instr::FLOGN: case Instr::FLOGNP1:
+        case Instr::FMOD: case Instr::FMOVECR: case Instr::FREM: case Instr::FSCAL: case Instr::FSGLDIV:
+        case Instr::FSGLMUL: case Instr::FSIN: case Instr::FSINCOS: case Instr::FSINH: case Instr::FTAN:
+        case Instr::FTANH: case Instr::FTENTOX: case Instr::FTWOTOX:
 
             return 0; // M6888x only
 
@@ -653,19 +653,19 @@ Moira::availabilityMask(Instr I, Mode M, Size S) const
 
     switch (I) {
 
-        case CMPI:
+        case Instr::CMPI:
 
             if (isPrgMode(M)) mask &= AV_68010_UP;
             break;
 
-        case CHK: case LINK: case BRA: case BHI: case BLS: case BCC: case BCS:
-        case BNE: case BEQ: case BVC: case BVS: case BPL: case BMI: case BGE:
-        case BLT: case BGT: case BLE: case BSR:
+        case Instr::CHK: case Instr::LINK: case Instr::BRA: case Instr::BHI: case Instr::BLS: case Instr::BCC: case Instr::BCS:
+        case Instr::BNE: case Instr::BEQ: case Instr::BVC: case Instr::BVS: case Instr::BPL: case Instr::BMI: case Instr::BGE:
+        case Instr::BLT: case Instr::BGT: case Instr::BLE: case Instr::BSR:
 
             if (S == Long) mask &= AV_68020_UP;
             break;
 
-        case TST:
+        case Instr::TST:
 
             if (M == Mode(1) || M >= Mode(9)) mask &= AV_68020_UP;
             break;
@@ -684,7 +684,7 @@ u16 Moira::availabilityMask(Instr I, Mode M, Size S, u16 ext) const
 
     switch (I) {
 
-        case MOVEC:
+        case Instr::MOVEC:
 
             switch (ext & 0x0FFF) {
 
@@ -710,7 +710,7 @@ u16 Moira::availabilityMask(Instr I, Mode M, Size S, u16 ext) const
             }
             break;
 
-        case MOVES:
+        case Instr::MOVES:
 
             if (ext & 0x7FF) mask = 0;
             break;
@@ -761,20 +761,20 @@ Moira::isValidExt(Instr I, Mode M, u16 op, u32 ext) const
 {
     switch (I) {
 
-        case BFCHG:     return (ext & 0xF000) == 0;
-        case BFCLR:     return (ext & 0xF000) == 0;
-        case BFEXTS:    return (ext & 0x8000) == 0;
-        case BFEXTU:    return (ext & 0x8000) == 0;
-        case BFFFO:     return (ext & 0x8000) == 0;
-        case BFINS:     return (ext & 0x8000) == 0;
-        case BFSET:     return (ext & 0xF000) == 0;
-        case BFTST:     return (ext & 0xF000) == 0;
-        case CAS:       return (ext & 0xFE38) == 0;
-        case CAS2:      return (ext & 0x0E380E38) == 0;
-        case CHK2:      return (ext & 0x07FF) == 0;
-        case CMP2:      return (ext & 0x0FFF) == 0;
-        case MULL:      return (ext & 0x83F8) == 0;
-        case DIVL:      return (ext & 0x83F8) == 0;
+        case Instr::BFCHG:     return (ext & 0xF000) == 0;
+        case Instr::BFCLR:     return (ext & 0xF000) == 0;
+        case Instr::BFEXTS:    return (ext & 0x8000) == 0;
+        case Instr::BFEXTU:    return (ext & 0x8000) == 0;
+        case Instr::BFFFO:     return (ext & 0x8000) == 0;
+        case Instr::BFINS:     return (ext & 0x8000) == 0;
+        case Instr::BFSET:     return (ext & 0xF000) == 0;
+        case Instr::BFTST:     return (ext & 0xF000) == 0;
+        case Instr::CAS:       return (ext & 0xFE38) == 0;
+        case Instr::CAS2:      return (ext & 0x0E380E38) == 0;
+        case Instr::CHK2:      return (ext & 0x07FF) == 0;
+        case Instr::CMP2:      return (ext & 0x0FFF) == 0;
+        case Instr::MULL:      return (ext & 0x83F8) == 0;
+        case Instr::DIVL:      return (ext & 0x83F8) == 0;
 
         default:
             fatalError;

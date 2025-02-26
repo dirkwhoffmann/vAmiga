@@ -194,7 +194,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     // Start with clean tables
     //
 
-    XXXXXXXXXXXXXXXX(ILLEGAL, Mode::IP, (Size)0, Illegal, CIMS)
+    XXXXXXXXXXXXXXXX(Instr::ILLEGAL, Mode::IP, (Size)0, Illegal, CIMS)
 
     for (int i = 0; i < 0x10000; i++) {
         loop[i] = nullptr;
@@ -207,10 +207,10 @@ Moira::createJumpTable(Model model, bool regDasm)
     //               1111 ---- ---- ---- (Line F instructions)
 
     opcode = parse("1010 ---- ---- ----");
-    ____XXXXXXXXXXXX(opcode, LINE_A, Mode::IP, (Size)0, LineA, CIMS)
+    ____XXXXXXXXXXXX(opcode, Instr::LINE_A, Mode::IP, (Size)0, LineA, CIMS)
 
     opcode = parse("1111 ---- ---- ----");
-    ____XXXXXXXXXXXX(opcode, LINE_F, Mode::IP, (Size)0, LineF, CIMS)
+    ____XXXXXXXXXXXX(opcode, Instr::LINE_F, Mode::IP, (Size)0, LineF, CIMS)
 
 
     // ABCD
@@ -221,12 +221,12 @@ Moira::createJumpTable(Model model, bool regDasm)
 
     // Dx,Dy
     opcode = parse("1100 ---1 0000 0---");
-    ____XXX______XXX(opcode, ABCD, Mode::DN, Byte, AbcdRg, CIMS)
+    ____XXX______XXX(opcode, Instr::ABCD, Mode::DN, Byte, AbcdRg, CIMS)
 
     // -(Ax),-(Ay)
     opcode = parse("1100 ---1 0000 1---");
-    ____XXX______XXX(opcode, ABCD, Mode::PD, Byte, AbcdEa, CIMS)
-    ____XXX______XXX(opcode, ABCD, Mode::PD, Byte, AbcdEa, CIMSloop)
+    ____XXX______XXX(opcode, Instr::ABCD, Mode::PD, Byte, AbcdEa, CIMS)
+    ____XXX______XXX(opcode, Instr::ABCD, Mode::PD, Byte, AbcdEa, CIMSloop)
 
 
     // ADD
@@ -241,10 +241,10 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X  (X)  X   X   X   X   X   X   X   X   X   X
 
     opcode = parse("1101 ---0 ---- ----");
-    ____XXX_SSMMMXXX(opcode, ADD, 0b101111111111, Byte,        AddEaRg, CIMS)
-    ____XXX_SSMMMXXX(opcode, ADD, 0b111111111111, Word | Long, AddEaRg, CIMS)
-    ____XXX_SSMMMXXX(opcode, ADD, 0b001110000000, Byte,        AddEaRg, CIMSloop)
-    ____XXX_SSMMMXXX(opcode, ADD, 0b001110000000, Word | Long, AddEaRg, CIMSloop)
+    ____XXX_SSMMMXXX(opcode, Instr::ADD, 0b101111111111, Byte,        AddEaRg, CIMS)
+    ____XXX_SSMMMXXX(opcode, Instr::ADD, 0b111111111111, Word | Long, AddEaRg, CIMS)
+    ____XXX_SSMMMXXX(opcode, Instr::ADD, 0b001110000000, Byte,        AddEaRg, CIMSloop)
+    ____XXX_SSMMMXXX(opcode, Instr::ADD, 0b001110000000, Word | Long, AddEaRg, CIMSloop)
 
 
     //               -------------------------------------------------
@@ -253,8 +253,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                         X   X   X   X   X   X   X
 
     opcode = parse("1101 ---1 ---- ----");
-    ____XXX_SSMMMXXX(opcode, ADD, 0b001111111000, Byte | Word | Long, AddRgEa, CIMS)
-    ____XXX_SSMMMXXX(opcode, ADD, 0b001110000000, Byte | Word | Long, AddRgEa, CIMSloop)
+    ____XXX_SSMMMXXX(opcode, Instr::ADD, 0b001111111000, Byte | Word | Long, AddRgEa, CIMS)
+    ____XXX_SSMMMXXX(opcode, Instr::ADD, 0b001110000000, Byte | Word | Long, AddRgEa, CIMSloop)
 
 
     // ADDA
@@ -268,8 +268,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X   X   X   X   X   X   X   X   X   X   X   X
 
     opcode = parse("1101 ---- 11-- ----");
-    ____XXXS__MMMXXX(opcode, ADDA, 0b111111111111, Word | Long, Adda, CIMS)
-    ____XXXS__MMMXXX(opcode, ADDA, 0b001110000000, Word | Long, Adda, CIMSloop)
+    ____XXXS__MMMXXX(opcode, Instr::ADDA, 0b111111111111, Word | Long, Adda, CIMS)
+    ____XXXS__MMMXXX(opcode, Instr::ADDA, 0b001110000000, Word | Long, Adda, CIMSloop)
 
 
     // ADDI
@@ -283,8 +283,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X
 
     opcode = parse("0000 0110 ---- ----");
-    ________SSMMMXXX(opcode, ADDI, 0b100000000000, Byte | Word | Long, AddiRg, CIMS)
-    ________SSMMMXXX(opcode, ADDI, 0b001111111000, Byte | Word | Long, AddiEa, CIMS)
+    ________SSMMMXXX(opcode, Instr::ADDI, 0b100000000000, Byte | Word | Long, AddiRg, CIMS)
+    ________SSMMMXXX(opcode, Instr::ADDI, 0b001111111000, Byte | Word | Long, AddiEa, CIMS)
 
 
     // ADDQ
@@ -298,9 +298,9 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X  (X)  X   X   X   X   X   X   X
 
     opcode = parse("0101 ---0 ---- ----");
-    ____XXX_SSMMMXXX(opcode, ADDQ, 0b100000000000, Byte | Word | Long, AddqDn, CIMS)
-    ____XXX_SSMMMXXX(opcode, ADDQ, 0b010000000000, Word | Long,        AddqAn, CIMS)
-    ____XXX_SSMMMXXX(opcode, ADDQ, 0b001111111000, Byte | Word | Long, AddqEa, CIMS)
+    ____XXX_SSMMMXXX(opcode, Instr::ADDQ, 0b100000000000, Byte | Word | Long, AddqDn, CIMS)
+    ____XXX_SSMMMXXX(opcode, Instr::ADDQ, 0b010000000000, Word | Long,        AddqAn, CIMS)
+    ____XXX_SSMMMXXX(opcode, Instr::ADDQ, 0b001111111000, Byte | Word | Long, AddqEa, CIMS)
 
 
     // ADDX
@@ -311,12 +311,12 @@ Moira::createJumpTable(Model model, bool regDasm)
 
     // Dx,Dy
     opcode = parse("1101 ---1 --00 0---");
-    ____XXX_SS___XXX(opcode, ADDX, Mode::DN, Byte | Word | Long, AddxRg, CIMS)
+    ____XXX_SS___XXX(opcode, Instr::ADDX, Mode::DN, Byte | Word | Long, AddxRg, CIMS)
 
     // -(Ax),-(Ay)
     opcode = parse("1101 ---1 --00 1---");
-    ____XXX_SS___XXX(opcode, ADDX, Mode::PD, Byte | Word | Long, AddxEa, CIMS)
-    ____XXX_SS___XXX(opcode, ADDX, Mode::PD, Byte | Word | Long, AddxEa, CIMSloop)
+    ____XXX_SS___XXX(opcode, Instr::ADDX, Mode::PD, Byte | Word | Long, AddxEa, CIMS)
+    ____XXX_SS___XXX(opcode, Instr::ADDX, Mode::PD, Byte | Word | Long, AddxEa, CIMSloop)
 
 
     // AND
@@ -331,8 +331,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X   X   X   X
 
     opcode = parse("1100 ---0 ---- ----");
-    ____XXX_SSMMMXXX(opcode, AND, 0b101111111111, Byte | Word | Long, AndEaRg, CIMS)
-    ____XXX_SSMMMXXX(opcode, AND, 0b001110000000, Byte | Word | Long, AndEaRg, CIMSloop)
+    ____XXX_SSMMMXXX(opcode, Instr::AND, 0b101111111111, Byte | Word | Long, AndEaRg, CIMS)
+    ____XXX_SSMMMXXX(opcode, Instr::AND, 0b001110000000, Byte | Word | Long, AndEaRg, CIMSloop)
 
 
     //               -------------------------------------------------
@@ -341,8 +341,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                         X   X   X   X   X   X   X
 
     opcode = parse("1100 ---1 ---- ----");
-    ____XXX_SSMMMXXX(opcode, AND, 0b001111111000, Byte | Word | Long, AndRgEa, CIMS)
-    ____XXX_SSMMMXXX(opcode, AND, 0b001110000000, Byte | Word | Long, AndRgEa, CIMSloop)
+    ____XXX_SSMMMXXX(opcode, Instr::AND, 0b001111111000, Byte | Word | Long, AndRgEa, CIMS)
+    ____XXX_SSMMMXXX(opcode, Instr::AND, 0b001110000000, Byte | Word | Long, AndRgEa, CIMSloop)
 
 
     // ANDI
@@ -356,8 +356,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X
 
     opcode = parse("0000 0010 ---- ----");
-    ________SSMMMXXX(opcode, ANDI, 0b100000000000, Byte | Word | Long, AndiRg, CIMS)
-    ________SSMMMXXX(opcode, ANDI, 0b001111111000, Byte | Word | Long, AndiEa, CIMS)
+    ________SSMMMXXX(opcode, Instr::ANDI, 0b100000000000, Byte | Word | Long, AndiRg, CIMS)
+    ________SSMMMXXX(opcode, Instr::ANDI, 0b001111111000, Byte | Word | Long, AndiEa, CIMS)
 
 
     // ANDI to CCR
@@ -367,7 +367,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //
 
     opcode = parse("0000 0010 0011 1100");
-    ________________(opcode, ANDICCR, Mode::IM, Byte, Andiccr, CIMS)
+    ________________(opcode, Instr::ANDICCR, Mode::IM, Byte, Andiccr, CIMS)
 
 
     // ANDI to SR
@@ -377,10 +377,10 @@ Moira::createJumpTable(Model model, bool regDasm)
     //
 
     opcode = parse("0000 0010 0111 1100");
-    ________________(opcode, ANDISR, Mode::IM, Word, Andisr, CIMS)
+    ________________(opcode, Instr::ANDISR, Mode::IM, Word, Andisr, CIMS)
 
 
-    // ASL, ASR
+    // ASL, Instr::ASR
     //
     //       Syntax: (1) ASx Dx,Dy
     //               (2) ASx #<data>,Dy
@@ -389,17 +389,17 @@ Moira::createJumpTable(Model model, bool regDasm)
 
     // Dx,Dy
     opcode = parse("1110 ---1 --10 0---");
-    ____XXX_SS___XXX(opcode, ASL, Mode::DN,  Byte | Word | Long, ShiftRg, CIMS)
+    ____XXX_SS___XXX(opcode, Instr::ASL, Mode::DN,  Byte | Word | Long, ShiftRg, CIMS)
 
     opcode = parse("1110 ---0 --10 0---");
-    ____XXX_SS___XXX(opcode, ASR, Mode::DN,  Byte | Word | Long, ShiftRg, CIMS)
+    ____XXX_SS___XXX(opcode, Instr::ASR, Mode::DN,  Byte | Word | Long, ShiftRg, CIMS)
 
     // #<data>,Dy
     opcode = parse("1110 ---1 --00 0---");
-    ____XXX_SS___XXX(opcode, ASL, Mode::IM, Byte | Word | Long, ShiftIm, CIMS)
+    ____XXX_SS___XXX(opcode, Instr::ASL, Mode::IM, Byte | Word | Long, ShiftIm, CIMS)
 
     opcode = parse("1110 ---0 --00 0---");
-    ____XXX_SS___XXX(opcode, ASR, Mode::IM, Byte | Word | Long, ShiftIm, CIMS)
+    ____XXX_SS___XXX(opcode, Instr::ASR, Mode::IM, Byte | Word | Long, ShiftIm, CIMS)
 
     //               -------------------------------------------------
     // <ea>          | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | A | B |
@@ -407,12 +407,12 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                         X   X   X   X   X   X   X
 
     opcode = parse("1110 0001 11-- ----");
-    __________MMMXXX(opcode, ASL, 0b001111111000, Word, ShiftEa, CIMS)
-    __________MMMXXX(opcode, ASL, 0b001110000000, Word, ShiftEa, CIMSloop)
+    __________MMMXXX(opcode, Instr::ASL, 0b001111111000, Word, ShiftEa, CIMS)
+    __________MMMXXX(opcode, Instr::ASL, 0b001110000000, Word, ShiftEa, CIMSloop)
 
     opcode = parse("1110 0000 11-- ----");
-    __________MMMXXX(opcode, ASR, 0b001111111000, Word, ShiftEa, CIMS)
-    __________MMMXXX(opcode, ASR, 0b001110000000, Word, ShiftEa, CIMSloop)
+    __________MMMXXX(opcode, Instr::ASR, 0b001111111000, Word, ShiftEa, CIMS)
+    __________MMMXXX(opcode, Instr::ASR, 0b001110000000, Word, ShiftEa, CIMSloop)
 
 
     // Bcc
@@ -423,58 +423,58 @@ Moira::createJumpTable(Model model, bool regDasm)
     // Dn,<label>
 
     opcode = parse("0110 ---- ---- ----");
-    ________________(opcode | 0x000, BRA, Mode::IP, Word, Bra, CIMS)
-    ________________(opcode | 0x200, BHI, Mode::IP, Word, Bcc, CIMS)
-    ________________(opcode | 0x300, BLS, Mode::IP, Word, Bcc, CIMS)
-    ________________(opcode | 0x400, BCC, Mode::IP, Word, Bcc, CIMS)
-    ________________(opcode | 0x500, BCS, Mode::IP, Word, Bcc, CIMS)
-    ________________(opcode | 0x600, BNE, Mode::IP, Word, Bcc, CIMS)
-    ________________(opcode | 0x700, BEQ, Mode::IP, Word, Bcc, CIMS)
-    ________________(opcode | 0x800, BVC, Mode::IP, Word, Bcc, CIMS)
-    ________________(opcode | 0x900, BVS, Mode::IP, Word, Bcc, CIMS)
-    ________________(opcode | 0xA00, BPL, Mode::IP, Word, Bcc, CIMS)
-    ________________(opcode | 0xB00, BMI, Mode::IP, Word, Bcc, CIMS)
-    ________________(opcode | 0xC00, BGE, Mode::IP, Word, Bcc, CIMS)
-    ________________(opcode | 0xD00, BLT, Mode::IP, Word, Bcc, CIMS)
-    ________________(opcode | 0xE00, BGT, Mode::IP, Word, Bcc, CIMS)
-    ________________(opcode | 0xF00, BLE, Mode::IP, Word, Bcc, CIMS)
+    ________________(opcode | 0x000, Instr::BRA, Mode::IP, Word, Bra, CIMS)
+    ________________(opcode | 0x200, Instr::BHI, Mode::IP, Word, Bcc, CIMS)
+    ________________(opcode | 0x300, Instr::BLS, Mode::IP, Word, Bcc, CIMS)
+    ________________(opcode | 0x400, Instr::BCC, Mode::IP, Word, Bcc, CIMS)
+    ________________(opcode | 0x500, Instr::BCS, Mode::IP, Word, Bcc, CIMS)
+    ________________(opcode | 0x600, Instr::BNE, Mode::IP, Word, Bcc, CIMS)
+    ________________(opcode | 0x700, Instr::BEQ, Mode::IP, Word, Bcc, CIMS)
+    ________________(opcode | 0x800, Instr::BVC, Mode::IP, Word, Bcc, CIMS)
+    ________________(opcode | 0x900, Instr::BVS, Mode::IP, Word, Bcc, CIMS)
+    ________________(opcode | 0xA00, Instr::BPL, Mode::IP, Word, Bcc, CIMS)
+    ________________(opcode | 0xB00, Instr::BMI, Mode::IP, Word, Bcc, CIMS)
+    ________________(opcode | 0xC00, Instr::BGE, Mode::IP, Word, Bcc, CIMS)
+    ________________(opcode | 0xD00, Instr::BLT, Mode::IP, Word, Bcc, CIMS)
+    ________________(opcode | 0xE00, Instr::BGT, Mode::IP, Word, Bcc, CIMS)
+    ________________(opcode | 0xF00, Instr::BLE, Mode::IP, Word, Bcc, CIMS)
 
     for (int i = 1; i <= 0xFF; i++) {
 
-        ________________(opcode | 0x000 | i, BRA, Mode::IP, Byte, Bra, CIMS)
-        ________________(opcode | 0x200 | i, BHI, Mode::IP, Byte, Bcc, CIMS)
-        ________________(opcode | 0x300 | i, BLS, Mode::IP, Byte, Bcc, CIMS)
-        ________________(opcode | 0x400 | i, BCC, Mode::IP, Byte, Bcc, CIMS)
-        ________________(opcode | 0x500 | i, BCS, Mode::IP, Byte, Bcc, CIMS)
-        ________________(opcode | 0x600 | i, BNE, Mode::IP, Byte, Bcc, CIMS)
-        ________________(opcode | 0x700 | i, BEQ, Mode::IP, Byte, Bcc, CIMS)
-        ________________(opcode | 0x800 | i, BVC, Mode::IP, Byte, Bcc, CIMS)
-        ________________(opcode | 0x900 | i, BVS, Mode::IP, Byte, Bcc, CIMS)
-        ________________(opcode | 0xA00 | i, BPL, Mode::IP, Byte, Bcc, CIMS)
-        ________________(opcode | 0xB00 | i, BMI, Mode::IP, Byte, Bcc, CIMS)
-        ________________(opcode | 0xC00 | i, BGE, Mode::IP, Byte, Bcc, CIMS)
-        ________________(opcode | 0xD00 | i, BLT, Mode::IP, Byte, Bcc, CIMS)
-        ________________(opcode | 0xE00 | i, BGT, Mode::IP, Byte, Bcc, CIMS)
-        ________________(opcode | 0xF00 | i, BLE, Mode::IP, Byte, Bcc, CIMS)
+        ________________(opcode | 0x000 | i, Instr::BRA, Mode::IP, Byte, Bra, CIMS)
+        ________________(opcode | 0x200 | i, Instr::BHI, Mode::IP, Byte, Bcc, CIMS)
+        ________________(opcode | 0x300 | i, Instr::BLS, Mode::IP, Byte, Bcc, CIMS)
+        ________________(opcode | 0x400 | i, Instr::BCC, Mode::IP, Byte, Bcc, CIMS)
+        ________________(opcode | 0x500 | i, Instr::BCS, Mode::IP, Byte, Bcc, CIMS)
+        ________________(opcode | 0x600 | i, Instr::BNE, Mode::IP, Byte, Bcc, CIMS)
+        ________________(opcode | 0x700 | i, Instr::BEQ, Mode::IP, Byte, Bcc, CIMS)
+        ________________(opcode | 0x800 | i, Instr::BVC, Mode::IP, Byte, Bcc, CIMS)
+        ________________(opcode | 0x900 | i, Instr::BVS, Mode::IP, Byte, Bcc, CIMS)
+        ________________(opcode | 0xA00 | i, Instr::BPL, Mode::IP, Byte, Bcc, CIMS)
+        ________________(opcode | 0xB00 | i, Instr::BMI, Mode::IP, Byte, Bcc, CIMS)
+        ________________(opcode | 0xC00 | i, Instr::BGE, Mode::IP, Byte, Bcc, CIMS)
+        ________________(opcode | 0xD00 | i, Instr::BLT, Mode::IP, Byte, Bcc, CIMS)
+        ________________(opcode | 0xE00 | i, Instr::BGT, Mode::IP, Byte, Bcc, CIMS)
+        ________________(opcode | 0xF00 | i, Instr::BLE, Mode::IP, Byte, Bcc, CIMS)
     }
 
     if constexpr (C >= Core::C68020) {
 
-        ________________(opcode | 0x0FF, BRA, Mode::IP, Long, Bra, CIMS)
-        ________________(opcode | 0x2FF, BHI, Mode::IP, Long, Bcc, CIMS)
-        ________________(opcode | 0x3FF, BLS, Mode::IP, Long, Bcc, CIMS)
-        ________________(opcode | 0x4FF, BCC, Mode::IP, Long, Bcc, CIMS)
-        ________________(opcode | 0x5FF, BCS, Mode::IP, Long, Bcc, CIMS)
-        ________________(opcode | 0x6FF, BNE, Mode::IP, Long, Bcc, CIMS)
-        ________________(opcode | 0x7FF, BEQ, Mode::IP, Long, Bcc, CIMS)
-        ________________(opcode | 0x8FF, BVC, Mode::IP, Long, Bcc, CIMS)
-        ________________(opcode | 0x9FF, BVS, Mode::IP, Long, Bcc, CIMS)
-        ________________(opcode | 0xAFF, BPL, Mode::IP, Long, Bcc, CIMS)
-        ________________(opcode | 0xBFF, BMI, Mode::IP, Long, Bcc, CIMS)
-        ________________(opcode | 0xCFF, BGE, Mode::IP, Long, Bcc, CIMS)
-        ________________(opcode | 0xDFF, BLT, Mode::IP, Long, Bcc, CIMS)
-        ________________(opcode | 0xEFF, BGT, Mode::IP, Long, Bcc, CIMS)
-        ________________(opcode | 0xFFF, BLE, Mode::IP, Long, Bcc, CIMS)
+        ________________(opcode | 0x0FF, Instr::BRA, Mode::IP, Long, Bra, CIMS)
+        ________________(opcode | 0x2FF, Instr::BHI, Mode::IP, Long, Bcc, CIMS)
+        ________________(opcode | 0x3FF, Instr::BLS, Mode::IP, Long, Bcc, CIMS)
+        ________________(opcode | 0x4FF, Instr::BCC, Mode::IP, Long, Bcc, CIMS)
+        ________________(opcode | 0x5FF, Instr::BCS, Mode::IP, Long, Bcc, CIMS)
+        ________________(opcode | 0x6FF, Instr::BNE, Mode::IP, Long, Bcc, CIMS)
+        ________________(opcode | 0x7FF, Instr::BEQ, Mode::IP, Long, Bcc, CIMS)
+        ________________(opcode | 0x8FF, Instr::BVC, Mode::IP, Long, Bcc, CIMS)
+        ________________(opcode | 0x9FF, Instr::BVS, Mode::IP, Long, Bcc, CIMS)
+        ________________(opcode | 0xAFF, Instr::BPL, Mode::IP, Long, Bcc, CIMS)
+        ________________(opcode | 0xBFF, Instr::BMI, Mode::IP, Long, Bcc, CIMS)
+        ________________(opcode | 0xCFF, Instr::BGE, Mode::IP, Long, Bcc, CIMS)
+        ________________(opcode | 0xDFF, Instr::BLT, Mode::IP, Long, Bcc, CIMS)
+        ________________(opcode | 0xEFF, Instr::BGT, Mode::IP, Long, Bcc, CIMS)
+        ________________(opcode | 0xFFF, Instr::BLE, Mode::IP, Long, Bcc, CIMS)
     }
 
 
@@ -491,24 +491,24 @@ Moira::createJumpTable(Model model, bool regDasm)
     if constexpr (C >= Core::C68020) {
 
         opcode = parse("1110 1010 11-- ----");
-        __________MMMXXX(opcode, BFCHG, 0b100000000000, Long, BitFieldDn, CIMS)
-        __________MMMXXX(opcode, BFCHG, 0b001001111000, Long, BitFieldEa, CIMS)
+        __________MMMXXX(opcode, Instr::BFCHG, 0b100000000000, Long, BitFieldDn, CIMS)
+        __________MMMXXX(opcode, Instr::BFCHG, 0b001001111000, Long, BitFieldEa, CIMS)
 
         opcode = parse("1110 1100 11-- ----");
-        __________MMMXXX(opcode, BFCLR, 0b100000000000, Long, BitFieldDn, CIMS)
-        __________MMMXXX(opcode, BFCLR, 0b001001111000, Long, BitFieldEa, CIMS)
+        __________MMMXXX(opcode, Instr::BFCLR, 0b100000000000, Long, BitFieldDn, CIMS)
+        __________MMMXXX(opcode, Instr::BFCLR, 0b001001111000, Long, BitFieldEa, CIMS)
 
         opcode = parse("1110 1111 11-- ----");
-        __________MMMXXX(opcode, BFINS, 0b100000000000, Long, BitFieldDn, CIMS)
-        __________MMMXXX(opcode, BFINS, 0b001001111000, Long, BitFieldEa, CIMS)
+        __________MMMXXX(opcode, Instr::BFINS, 0b100000000000, Long, BitFieldDn, CIMS)
+        __________MMMXXX(opcode, Instr::BFINS, 0b001001111000, Long, BitFieldEa, CIMS)
 
         opcode = parse("1110 1110 11-- ----");
-        __________MMMXXX(opcode, BFSET, 0b100000000000, Long, BitFieldDn, CIMS)
-        __________MMMXXX(opcode, BFSET, 0b001001111000, Long, BitFieldEa, CIMS)
+        __________MMMXXX(opcode, Instr::BFSET, 0b100000000000, Long, BitFieldDn, CIMS)
+        __________MMMXXX(opcode, Instr::BFSET, 0b001001111000, Long, BitFieldEa, CIMS)
     }
 
 
-    // BFEXTS, BFEXTU, BFFFO, BFTST
+    // BFEXTS, Instr::BFEXTU, Instr::BFFFO, Instr::BFTST
     //
     //       Syntax: BFxxx <ea> {offset:width}
     //         Size: Unsized
@@ -521,20 +521,20 @@ Moira::createJumpTable(Model model, bool regDasm)
     if constexpr (C >= Core::C68020) {
 
         opcode = parse("1110 1011 11-- ----");
-        __________MMMXXX(opcode, BFEXTS, 0b100000000000, Long, BitFieldDn, CIMS)
-        __________MMMXXX(opcode, BFEXTS, 0b001001111110, Long, BitFieldEa, CIMS)
+        __________MMMXXX(opcode, Instr::BFEXTS, 0b100000000000, Long, BitFieldDn, CIMS)
+        __________MMMXXX(opcode, Instr::BFEXTS, 0b001001111110, Long, BitFieldEa, CIMS)
 
         opcode = parse("1110 1001 11-- ----");
-        __________MMMXXX(opcode, BFEXTU, 0b100000000000, Long, BitFieldDn, CIMS)
-        __________MMMXXX(opcode, BFEXTU, 0b001001111110, Long, BitFieldEa, CIMS)
+        __________MMMXXX(opcode, Instr::BFEXTU, 0b100000000000, Long, BitFieldDn, CIMS)
+        __________MMMXXX(opcode, Instr::BFEXTU, 0b001001111110, Long, BitFieldEa, CIMS)
 
         opcode = parse("1110 1101 11-- ----");
-        __________MMMXXX(opcode, BFFFO, 0b100000000000, Long, BitFieldDn, CIMS)
-        __________MMMXXX(opcode, BFFFO, 0b001001111110, Long, BitFieldEa, CIMS)
+        __________MMMXXX(opcode, Instr::BFFFO, 0b100000000000, Long, BitFieldDn, CIMS)
+        __________MMMXXX(opcode, Instr::BFFFO, 0b001001111110, Long, BitFieldEa, CIMS)
 
         opcode = parse("1110 1000 11-- ----");
-        __________MMMXXX(opcode, BFTST, 0b100000000000, Long, BitFieldDn, CIMS)
-        __________MMMXXX(opcode, BFTST, 0b001001111110, Long, BitFieldEa, CIMS)
+        __________MMMXXX(opcode, Instr::BFTST, 0b100000000000, Long, BitFieldDn, CIMS)
+        __________MMMXXX(opcode, Instr::BFTST, 0b001001111110, Long, BitFieldEa, CIMS)
     }
 
 
@@ -550,12 +550,12 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X
 
     opcode = parse("0000 ---1 01-- ----");
-    ____XXX___MMMXXX(opcode, BCHG, 0b100000000000, Byte, BitDxDy, CIMS)
-    ____XXX___MMMXXX(opcode, BCHG, 0b001111111000, Byte, BitDxEa, CIMS)
+    ____XXX___MMMXXX(opcode, Instr::BCHG, 0b100000000000, Byte, BitDxDy, CIMS)
+    ____XXX___MMMXXX(opcode, Instr::BCHG, 0b001111111000, Byte, BitDxEa, CIMS)
 
     opcode = parse("0000 ---1 10-- ----");
-    ____XXX___MMMXXX(opcode, BCLR, 0b100000000000, Byte, BitDxDy, CIMS)
-    ____XXX___MMMXXX(opcode, BCLR, 0b001111111000, Byte, BitDxEa, CIMS)
+    ____XXX___MMMXXX(opcode, Instr::BCLR, 0b100000000000, Byte, BitDxDy, CIMS)
+    ____XXX___MMMXXX(opcode, Instr::BCLR, 0b001111111000, Byte, BitDxEa, CIMS)
 
     //               -------------------------------------------------
     // #<data>,<ea>  | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | A | B |
@@ -563,12 +563,12 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X
 
     opcode = parse("0000 1000 01-- ----");
-    __________MMMXXX(opcode, BCHG, 0b100000000000, Byte, BitImDy, CIMS)
-    __________MMMXXX(opcode, BCHG, 0b001111111000, Byte, BitImEa, CIMS)
+    __________MMMXXX(opcode, Instr::BCHG, 0b100000000000, Byte, BitImDy, CIMS)
+    __________MMMXXX(opcode, Instr::BCHG, 0b001111111000, Byte, BitImEa, CIMS)
 
     opcode = parse("0000 1000 10-- ----");
-    __________MMMXXX(opcode, BCLR, 0b100000000000, Byte, BitImDy, CIMS)
-    __________MMMXXX(opcode, BCLR, 0b001111111000, Byte, BitImEa, CIMS)
+    __________MMMXXX(opcode, Instr::BCLR, 0b100000000000, Byte, BitImDy, CIMS)
+    __________MMMXXX(opcode, Instr::BCLR, 0b001111111000, Byte, BitImEa, CIMS)
 
 
     // BKPT (68010+)
@@ -579,7 +579,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     if constexpr (C >= Core::C68010) {
 
         opcode = parse("0100 1000 0100 1---");
-        _____________XXX(opcode, BKPT, Mode::IP, Long, Bkpt, CIMS)
+        _____________XXX(opcode, Instr::BKPT, Mode::IP, Long, Bkpt, CIMS)
     }
 
 
@@ -595,8 +595,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X
 
     opcode = parse("0000 ---1 11-- ----");
-    ____XXX___MMMXXX(opcode, BSET, 0b100000000000, Byte, BitDxDy, CIMS)
-    ____XXX___MMMXXX(opcode, BSET, 0b001111111000, Byte, BitDxEa, CIMS)
+    ____XXX___MMMXXX(opcode, Instr::BSET, 0b100000000000, Byte, BitDxDy, CIMS)
+    ____XXX___MMMXXX(opcode, Instr::BSET, 0b001111111000, Byte, BitDxEa, CIMS)
 
     //               -------------------------------------------------
     // #<data>,<ea>  | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | A | B |
@@ -604,8 +604,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X
 
     opcode = parse("0000 1000 11-- ----");
-    __________MMMXXX(opcode, BSET, 0b100000000000, Byte, BitImDy, CIMS)
-    __________MMMXXX(opcode, BSET, 0b001111111000, Byte, BitImEa, CIMS)
+    __________MMMXXX(opcode, Instr::BSET, 0b100000000000, Byte, BitImDy, CIMS)
+    __________MMMXXX(opcode, Instr::BSET, 0b001111111000, Byte, BitImEa, CIMS)
 
 
     // BSR
@@ -614,14 +614,14 @@ Moira::createJumpTable(Model model, bool regDasm)
     //         Size: Byte, Word
 
     opcode = parse("0110 0001 ---- ----");
-    ________________(opcode, BSR, Mode::IP, Word, Bsr, CIMS)
+    ________________(opcode, Instr::BSR, Mode::IP, Word, Bsr, CIMS)
 
     for (int i = 1; i <= 0xFF; i++) {
-        ________________(opcode | i, BSR, Mode::IP, Byte, Bsr, CIMS)
+        ________________(opcode | i, Instr::BSR, Mode::IP, Byte, Bsr, CIMS)
     }
 
     if constexpr (C >= Core::C68020) {
-        ________________(opcode | 0xFF, BSR, Mode::IP, Long, Bsr, CIMS)
+        ________________(opcode | 0xFF, Instr::BSR, Mode::IP, Long, Bsr, CIMS)
     }
 
 
@@ -637,8 +637,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X   X   X   X?
 
     opcode = parse("0000 ---1 00-- ----");
-    ____XXX___MMMXXX(opcode, BTST, 0b100000000000, Byte, BitDxDy, CIMS)
-    ____XXX___MMMXXX(opcode, BTST, 0b001111111111, Byte, BitDxEa, CIMS)
+    ____XXX___MMMXXX(opcode, Instr::BTST, 0b100000000000, Byte, BitDxDy, CIMS)
+    ____XXX___MMMXXX(opcode, Instr::BTST, 0b001111111111, Byte, BitDxEa, CIMS)
 
     //               -------------------------------------------------
     // #<data>,<ea>  | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | A | B |
@@ -646,8 +646,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X   X   X
 
     opcode = parse("0000 1000 00-- ----");
-    __________MMMXXX(opcode, BTST, 0b100000000000, Byte, BitImDy, CIMS)
-    __________MMMXXX(opcode, BTST, 0b001111111110, Byte, BitImEa, CIMS)
+    __________MMMXXX(opcode, Instr::BTST, 0b100000000000, Byte, BitImDy, CIMS)
+    __________MMMXXX(opcode, Instr::BTST, 0b001111111110, Byte, BitImEa, CIMS)
 
 
     // CALLM
@@ -665,7 +665,7 @@ Moira::createJumpTable(Model model, bool regDasm)
         if (model == Model::M68EC020 || model == Model::M68020) {
 
             opcode = parse("0000 0110 11-- ----");
-            __________MMMXXX(opcode, CALLM, 0b001001111110, Long, Callm, CIMS)
+            __________MMMXXX(opcode, Instr::CALLM, 0b001001111110, Long, Callm, CIMS)
         }
     }
 
@@ -685,18 +685,18 @@ Moira::createJumpTable(Model model, bool regDasm)
 
         // CAS
         opcode = parse("0000 1010 11-- ----");
-        __________MMMXXX(opcode, CAS, 0b001111111000, Byte, Cas, CIMS)
+        __________MMMXXX(opcode, Instr::CAS, 0b001111111000, Byte, Cas, CIMS)
         opcode = parse("0000 1100 11-- ----");
-        __________MMMXXX(opcode, CAS, 0b001111111000, Word, Cas, CIMS)
+        __________MMMXXX(opcode, Instr::CAS, 0b001111111000, Word, Cas, CIMS)
         opcode = parse("0000 1110 11-- ----");
-        __________MMMXXX(opcode, CAS, 0b001111111000, Long, Cas, CIMS)
+        __________MMMXXX(opcode, Instr::CAS, 0b001111111000, Long, Cas, CIMS)
 
         // CAS2
         opcode = parse("0000 1100 1111 1100");
-        ________________(opcode, CAS2, Mode::IM, Word, Cas2, CIMS)
+        ________________(opcode, Instr::CAS2, Mode::IM, Word, Cas2, CIMS)
 
         opcode = parse("0000 1110 1111 1100");
-        ________________(opcode, CAS2, Mode::IM, Long, Cas2, CIMS)
+        ________________(opcode, Instr::CAS2, Mode::IM, Long, Cas2, CIMS)
     }
 
 
@@ -711,12 +711,12 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X   X   X   X
 
     opcode = parse("0100 ---1 10-- ----");
-    ____XXX___MMMXXX(opcode, CHK, 0b101111111111, Word, Chk, CIMS)
+    ____XXX___MMMXXX(opcode, Instr::CHK, 0b101111111111, Word, Chk, CIMS)
 
     if constexpr (C >= Core::C68020) {
 
         opcode = parse("0100 ---1 00-- ----");
-        ____XXX___MMMXXX(opcode, CHK, 0b101111111111, Long, Chk, CIMS)
+        ____XXX___MMMXXX(opcode, Instr::CHK, 0b101111111111, Long, Chk, CIMS)
     }
 
 
@@ -733,13 +733,13 @@ Moira::createJumpTable(Model model, bool regDasm)
     if constexpr (C >= Core::C68020) {
 
         opcode = parse("0000 0000 11-- ----");
-        __________MMMXXX(opcode, CHK2, 0b001001111110, Byte, ChkCmp2, CIMS)
+        __________MMMXXX(opcode, Instr::CHK2, 0b001001111110, Byte, ChkCmp2, CIMS)
 
         opcode = parse("0000 0010 11-- ----");
-        __________MMMXXX(opcode, CHK2, 0b001001111110, Word, ChkCmp2, CIMS)
+        __________MMMXXX(opcode, Instr::CHK2, 0b001001111110, Word, ChkCmp2, CIMS)
 
         opcode = parse("0000 0100 11-- ----");
-        __________MMMXXX(opcode, CHK2, 0b001001111110, Long, ChkCmp2, CIMS)
+        __________MMMXXX(opcode, Instr::CHK2, 0b001001111110, Long, ChkCmp2, CIMS)
     }
 
 
@@ -754,8 +754,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X
 
     opcode = parse("0100 0010 ---- ----");
-    ________SSMMMXXX(opcode, CLR, 0b101111111000, Byte | Word | Long, Clr, CIMS)
-    ________SSMMMXXX(opcode, CLR, 0b001110000000, Byte | Word | Long, Clr, CIMSloop)
+    ________SSMMMXXX(opcode, Instr::CLR, 0b101111111000, Byte | Word | Long, Clr, CIMS)
+    ________SSMMMXXX(opcode, Instr::CLR, 0b001110000000, Byte | Word | Long, Clr, CIMSloop)
 
 
     // CMP
@@ -769,9 +769,9 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X  (X)  X   X   X   X   X   X   X   X   X   X
 
     opcode = parse("1011 ---0 ---- ----");
-    ____XXX_SSMMMXXX(opcode, CMP, 0b101111111111, Byte,        Cmp, CIMS)
-    ____XXX_SSMMMXXX(opcode, CMP, 0b111111111111, Word | Long, Cmp, CIMS)
-    ____XXX_SSMMMXXX(opcode, CMP, 0b001110000000, Byte | Word | Long, Cmp, CIMSloop)
+    ____XXX_SSMMMXXX(opcode, Instr::CMP, 0b101111111111, Byte,        Cmp, CIMS)
+    ____XXX_SSMMMXXX(opcode, Instr::CMP, 0b111111111111, Word | Long, Cmp, CIMS)
+    ____XXX_SSMMMXXX(opcode, Instr::CMP, 0b001110000000, Byte | Word | Long, Cmp, CIMSloop)
 
 
     // CMPA
@@ -785,8 +785,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X   X   X   X   X   X   X   X   X   X   X   X
 
     opcode = parse("1011 ---- 11-- ----");
-    ____XXXS__MMMXXX(opcode, CMPA, 0b111111111111, Word | Long, Cmpa, CIMS)
-    ____XXXS__MMMXXX(opcode, CMPA, 0b001110000000, Word | Long, Cmpa, CIMSloop)
+    ____XXXS__MMMXXX(opcode, Instr::CMPA, 0b111111111111, Word | Long, Cmpa, CIMS)
+    ____XXXS__MMMXXX(opcode, Instr::CMPA, 0b001110000000, Word | Long, Cmpa, CIMSloop)
 
 
     // CMPI
@@ -800,12 +800,12 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X
 
     opcode = parse("0000 1100 ---- ----");
-    ________SSMMMXXX(opcode, CMPI, 0b100000000000, Byte | Word | Long, CmpiRg, CIMS)
-    ________SSMMMXXX(opcode, CMPI, 0b001111111000, Byte | Word | Long, CmpiEa, CIMS)
+    ________SSMMMXXX(opcode, Instr::CMPI, 0b100000000000, Byte | Word | Long, CmpiRg, CIMS)
+    ________SSMMMXXX(opcode, Instr::CMPI, 0b001111111000, Byte | Word | Long, CmpiEa, CIMS)
 
     if constexpr (C >= Core::C68010) {
 
-        ________SSMMMXXX(opcode, CMPI, 0b000000000110, Byte | Word | Long, CmpiEa, CIMS)
+        ________SSMMMXXX(opcode, Instr::CMPI, 0b000000000110, Byte | Word | Long, CmpiEa, CIMS)
     }
 
 
@@ -816,8 +816,8 @@ Moira::createJumpTable(Model model, bool regDasm)
 
     // (Ax)+,(Ay)+
     opcode = parse("1011 ---1 --00 1---");
-    ____XXX_SS___XXX(opcode, CMPM, Mode::PI, Byte | Word | Long, Cmpm, CIMS)
-    ____XXX_SS___XXX(opcode, CMPM, Mode::PI, Byte | Word | Long, Cmpm, CIMSloop)
+    ____XXX_SS___XXX(opcode, Instr::CMPM, Mode::PI, Byte | Word | Long, Cmpm, CIMS)
+    ____XXX_SS___XXX(opcode, Instr::CMPM, Mode::PI, Byte | Word | Long, Cmpm, CIMSloop)
 
 
     // DBcc
@@ -827,39 +827,39 @@ Moira::createJumpTable(Model model, bool regDasm)
 
     // Dn,<label>
     opcode = parse("0101 ---- 1100 1---");
-    _____________XXX(opcode | 0x000, DBT,  Mode::IP, Word, Dbcc, CIMS)
-    _____________XXX(opcode | 0x100, DBF,  Mode::IP, Word, Dbcc, CIMS)
-    _____________XXX(opcode | 0x200, DBHI, Mode::IP, Word, Dbcc, CIMS)
-    _____________XXX(opcode | 0x300, DBLS, Mode::IP, Word, Dbcc, CIMS)
-    _____________XXX(opcode | 0x400, DBCC, Mode::IP, Word, Dbcc, CIMS)
-    _____________XXX(opcode | 0x500, DBCS, Mode::IP, Word, Dbcc, CIMS)
-    _____________XXX(opcode | 0x600, DBNE, Mode::IP, Word, Dbcc, CIMS)
-    _____________XXX(opcode | 0x700, DBEQ, Mode::IP, Word, Dbcc, CIMS)
-    _____________XXX(opcode | 0x800, DBVC, Mode::IP, Word, Dbcc, CIMS)
-    _____________XXX(opcode | 0x900, DBVS, Mode::IP, Word, Dbcc, CIMS)
-    _____________XXX(opcode | 0xA00, DBPL, Mode::IP, Word, Dbcc, CIMS)
-    _____________XXX(opcode | 0xB00, DBMI, Mode::IP, Word, Dbcc, CIMS)
-    _____________XXX(opcode | 0xC00, DBGE, Mode::IP, Word, Dbcc, CIMS)
-    _____________XXX(opcode | 0xD00, DBLT, Mode::IP, Word, Dbcc, CIMS)
-    _____________XXX(opcode | 0xE00, DBGT, Mode::IP, Word, Dbcc, CIMS)
-    _____________XXX(opcode | 0xF00, DBLE, Mode::IP, Word, Dbcc, CIMS)
+    _____________XXX(opcode | 0x000, Instr::DBT,  Mode::IP, Word, Dbcc, CIMS)
+    _____________XXX(opcode | 0x100, Instr::DBF,  Mode::IP, Word, Dbcc, CIMS)
+    _____________XXX(opcode | 0x200, Instr::DBHI, Mode::IP, Word, Dbcc, CIMS)
+    _____________XXX(opcode | 0x300, Instr::DBLS, Mode::IP, Word, Dbcc, CIMS)
+    _____________XXX(opcode | 0x400, Instr::DBCC, Mode::IP, Word, Dbcc, CIMS)
+    _____________XXX(opcode | 0x500, Instr::DBCS, Mode::IP, Word, Dbcc, CIMS)
+    _____________XXX(opcode | 0x600, Instr::DBNE, Mode::IP, Word, Dbcc, CIMS)
+    _____________XXX(opcode | 0x700, Instr::DBEQ, Mode::IP, Word, Dbcc, CIMS)
+    _____________XXX(opcode | 0x800, Instr::DBVC, Mode::IP, Word, Dbcc, CIMS)
+    _____________XXX(opcode | 0x900, Instr::DBVS, Mode::IP, Word, Dbcc, CIMS)
+    _____________XXX(opcode | 0xA00, Instr::DBPL, Mode::IP, Word, Dbcc, CIMS)
+    _____________XXX(opcode | 0xB00, Instr::DBMI, Mode::IP, Word, Dbcc, CIMS)
+    _____________XXX(opcode | 0xC00, Instr::DBGE, Mode::IP, Word, Dbcc, CIMS)
+    _____________XXX(opcode | 0xD00, Instr::DBLT, Mode::IP, Word, Dbcc, CIMS)
+    _____________XXX(opcode | 0xE00, Instr::DBGT, Mode::IP, Word, Dbcc, CIMS)
+    _____________XXX(opcode | 0xF00, Instr::DBLE, Mode::IP, Word, Dbcc, CIMS)
 
-    _____________XXX(opcode | 0x000, DBT,  Mode::IP, Word, Dbcc, CIMSloop)
-    _____________XXX(opcode | 0x100, DBF,  Mode::IP, Word, Dbcc, CIMSloop)
-    _____________XXX(opcode | 0x200, DBHI, Mode::IP, Word, Dbcc, CIMSloop)
-    _____________XXX(opcode | 0x300, DBLS, Mode::IP, Word, Dbcc, CIMSloop)
-    _____________XXX(opcode | 0x400, DBCC, Mode::IP, Word, Dbcc, CIMSloop)
-    _____________XXX(opcode | 0x500, DBCS, Mode::IP, Word, Dbcc, CIMSloop)
-    _____________XXX(opcode | 0x600, DBNE, Mode::IP, Word, Dbcc, CIMSloop)
-    _____________XXX(opcode | 0x700, DBEQ, Mode::IP, Word, Dbcc, CIMSloop)
-    _____________XXX(opcode | 0x800, DBVC, Mode::IP, Word, Dbcc, CIMSloop)
-    _____________XXX(opcode | 0x900, DBVS, Mode::IP, Word, Dbcc, CIMSloop)
-    _____________XXX(opcode | 0xA00, DBPL, Mode::IP, Word, Dbcc, CIMSloop)
-    _____________XXX(opcode | 0xB00, DBMI, Mode::IP, Word, Dbcc, CIMSloop)
-    _____________XXX(opcode | 0xC00, DBGE, Mode::IP, Word, Dbcc, CIMSloop)
-    _____________XXX(opcode | 0xD00, DBLT, Mode::IP, Word, Dbcc, CIMSloop)
-    _____________XXX(opcode | 0xE00, DBGT, Mode::IP, Word, Dbcc, CIMSloop)
-    _____________XXX(opcode | 0xF00, DBLE, Mode::IP, Word, Dbcc, CIMSloop)
+    _____________XXX(opcode | 0x000, Instr::DBT,  Mode::IP, Word, Dbcc, CIMSloop)
+    _____________XXX(opcode | 0x100, Instr::DBF,  Mode::IP, Word, Dbcc, CIMSloop)
+    _____________XXX(opcode | 0x200, Instr::DBHI, Mode::IP, Word, Dbcc, CIMSloop)
+    _____________XXX(opcode | 0x300, Instr::DBLS, Mode::IP, Word, Dbcc, CIMSloop)
+    _____________XXX(opcode | 0x400, Instr::DBCC, Mode::IP, Word, Dbcc, CIMSloop)
+    _____________XXX(opcode | 0x500, Instr::DBCS, Mode::IP, Word, Dbcc, CIMSloop)
+    _____________XXX(opcode | 0x600, Instr::DBNE, Mode::IP, Word, Dbcc, CIMSloop)
+    _____________XXX(opcode | 0x700, Instr::DBEQ, Mode::IP, Word, Dbcc, CIMSloop)
+    _____________XXX(opcode | 0x800, Instr::DBVC, Mode::IP, Word, Dbcc, CIMSloop)
+    _____________XXX(opcode | 0x900, Instr::DBVS, Mode::IP, Word, Dbcc, CIMSloop)
+    _____________XXX(opcode | 0xA00, Instr::DBPL, Mode::IP, Word, Dbcc, CIMSloop)
+    _____________XXX(opcode | 0xB00, Instr::DBMI, Mode::IP, Word, Dbcc, CIMSloop)
+    _____________XXX(opcode | 0xC00, Instr::DBGE, Mode::IP, Word, Dbcc, CIMSloop)
+    _____________XXX(opcode | 0xD00, Instr::DBLT, Mode::IP, Word, Dbcc, CIMSloop)
+    _____________XXX(opcode | 0xE00, Instr::DBGT, Mode::IP, Word, Dbcc, CIMSloop)
+    _____________XXX(opcode | 0xF00, Instr::DBLE, Mode::IP, Word, Dbcc, CIMSloop)
 
 
     // DIVS, DIVU, DIVL
@@ -875,15 +875,15 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X   X   X   X
 
     opcode = parse("1000 ---1 11-- ----");
-    ____XXX___MMMXXX(opcode, DIVS, 0b101111111111, Word, Divs, CIMS)
+    ____XXX___MMMXXX(opcode, Instr::DIVS, 0b101111111111, Word, Divs, CIMS)
 
     opcode = parse("1000 ---0 11-- ----");
-    ____XXX___MMMXXX(opcode, DIVU, 0b101111111111, Word, Divu, CIMS)
+    ____XXX___MMMXXX(opcode, Instr::DIVU, 0b101111111111, Word, Divu, CIMS)
 
     if constexpr (C >= Core::C68020) {
 
         opcode = parse("0100 1100 01-- ----");
-        __________MMMXXX(opcode, DIVL, 0b101111111111, Long, Divl, CIMS)
+        __________MMMXXX(opcode, Instr::DIVL, 0b101111111111, Long, Divl, CIMS)
     }
 
 
@@ -898,8 +898,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X
 
     opcode = parse("1011 ---1 ---- ----");
-    ____XXX_SSMMMXXX(opcode, EOR, 0b101111111000, Byte | Word | Long, AndRgEa, CIMS)
-    ____XXX_SSMMMXXX(opcode, EOR, 0b001110000000, Byte | Word | Long, AndRgEa, CIMSloop)
+    ____XXX_SSMMMXXX(opcode, Instr::EOR, 0b101111111000, Byte | Word | Long, AndRgEa, CIMS)
+    ____XXX_SSMMMXXX(opcode, Instr::EOR, 0b001110000000, Byte | Word | Long, AndRgEa, CIMSloop)
 
 
     // EORI
@@ -913,8 +913,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X
 
     opcode = parse("0000 1010 ---- ----");
-    ________SSMMMXXX(opcode, EORI, 0b100000000000, Byte | Word | Long, AndiRg, CIMS)
-    ________SSMMMXXX(opcode, EORI, 0b001111111000, Byte | Word | Long, AndiEa, CIMS)
+    ________SSMMMXXX(opcode, Instr::EORI, 0b100000000000, Byte | Word | Long, AndiRg, CIMS)
+    ________SSMMMXXX(opcode, Instr::EORI, 0b001111111000, Byte | Word | Long, AndiEa, CIMS)
 
 
     // EORI to CCR
@@ -924,7 +924,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //
 
     opcode = parse("0000 1010 0011 1100");
-    ________________(opcode, EORICCR, Mode::IM, Byte, Andiccr, CIMS)
+    ________________(opcode, Instr::EORICCR, Mode::IM, Byte, Andiccr, CIMS)
 
 
     // EORI to SR
@@ -934,7 +934,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //
 
     opcode = parse("0000 1010 0111 1100");
-    ________________(opcode, EORISR, Mode::IM, Word, Andisr, CIMS)
+    ________________(opcode, Instr::EORISR, Mode::IM, Word, Andisr, CIMS)
 
 
     // EXG
@@ -945,13 +945,13 @@ Moira::createJumpTable(Model model, bool regDasm)
     //         Size: Longword
 
     opcode = parse("1100 ---1 0100 0---");
-    ____XXX______XXX(opcode, EXG, Mode::IP, Long, ExgDxDy, CIMS)
+    ____XXX______XXX(opcode, Instr::EXG, Mode::IP, Long, ExgDxDy, CIMS)
 
     opcode = parse("1100 ---1 1000 1---");
-    ____XXX______XXX(opcode, EXG, Mode::IP, Long, ExgAxDy, CIMS)
+    ____XXX______XXX(opcode, Instr::EXG, Mode::IP, Long, ExgAxDy, CIMS)
 
     opcode = parse("1100 ---1 0100 1---");
-    ____XXX______XXX(opcode, EXG, Mode::IP, Long, ExgAxAy, CIMS)
+    ____XXX______XXX(opcode, Instr::EXG, Mode::IP, Long, ExgAxAy, CIMS)
 
 
     // EXT
@@ -960,8 +960,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //        Sizes: Word, Longword
 
     opcode = parse("0100 1000 --00 0---");
-    _____________XXX(opcode | 2 << 6, EXT, Mode::DN, Word, Ext, CIMS)
-    _____________XXX(opcode | 3 << 6, EXT, Mode::DN, Long, Ext, CIMS)
+    _____________XXX(opcode | 2 << 6, Instr::EXT, Mode::DN, Word, Ext, CIMS)
+    _____________XXX(opcode | 3 << 6, Instr::EXT, Mode::DN, Long, Ext, CIMS)
 
 
     // EXTB
@@ -972,7 +972,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     if constexpr (C >= Core::C68020) {
 
         opcode = parse("0100 1001 --00 0---");
-        _____________XXX(opcode | 3 << 6, EXTB, Mode::DN, Long, Extb, CIMS)
+        _____________XXX(opcode | 3 << 6, Instr::EXTB, Mode::DN, Long, Extb, CIMS)
     }
 
 
@@ -982,12 +982,12 @@ Moira::createJumpTable(Model model, bool regDasm)
     //        Sizes: Word, (Longword)
 
     opcode = parse("0100 1110 0101 0---");
-    _____________XXX(opcode, LINK, Mode::IP, Word, Link, CIMS)
+    _____________XXX(opcode, Instr::LINK, Mode::IP, Word, Link, CIMS)
 
     if constexpr (C >= Core::C68020) {
 
         opcode = parse("0100 1000 0000 1---");
-        _____________XXX(opcode, LINK, Mode::IP, Long, Link, CIMS)
+        _____________XXX(opcode, Instr::LINK, Mode::IP, Long, Link, CIMS)
     }
 
 
@@ -1002,7 +1002,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                         X           X   X   X   X   X   X
 
     opcode = parse("0100 1110 11-- ----");
-    __________MMMXXX(opcode, JMP, 0b001001111110, Long, Jmp, CIMS)
+    __________MMMXXX(opcode, Instr::JMP, 0b001001111110, Long, Jmp, CIMS)
 
 
     // JSR
@@ -1016,7 +1016,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                         X           X   X   X   X   X   X
 
     opcode = parse("0100 1110 10-- ----");
-    __________MMMXXX(opcode, JSR, 0b001001111110, Long, Jsr, CIMS)
+    __________MMMXXX(opcode, Instr::JSR, 0b001001111110, Long, Jsr, CIMS)
 
 
     // LEA
@@ -1030,7 +1030,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                         X           X   X   X   X   X   X
 
     opcode = parse("0100 ---1 11-- ----");
-    ____XXX___MMMXXX(opcode, LEA, 0b001001111110, Long, Lea, CIMS)
+    ____XXX___MMMXXX(opcode, Instr::LEA, 0b001001111110, Long, Lea, CIMS)
 
 
     // LSL, LSR
@@ -1042,17 +1042,17 @@ Moira::createJumpTable(Model model, bool regDasm)
 
     // Dx,Dy
     opcode = parse("1110 ---1 --10 1---");
-    ____XXX_SS___XXX(opcode, LSL, Mode::DN, Byte | Word | Long, ShiftRg, CIMS)
+    ____XXX_SS___XXX(opcode, Instr::LSL, Mode::DN, Byte | Word | Long, ShiftRg, CIMS)
 
     opcode = parse("1110 ---0 --10 1---");
-    ____XXX_SS___XXX(opcode, LSR, Mode::DN, Byte | Word | Long, ShiftRg, CIMS)
+    ____XXX_SS___XXX(opcode, Instr::LSR, Mode::DN, Byte | Word | Long, ShiftRg, CIMS)
 
     // #<data>,Dy
     opcode = parse("1110 ---1 --00 1---");
-    ____XXX_SS___XXX(opcode, LSL, Mode::IM, Byte | Word | Long, ShiftIm, CIMS)
+    ____XXX_SS___XXX(opcode, Instr::LSL, Mode::IM, Byte | Word | Long, ShiftIm, CIMS)
 
     opcode = parse("1110 ---0 --00 1---");
-    ____XXX_SS___XXX(opcode, LSR, Mode::IM, Byte | Word | Long, ShiftIm, CIMS)
+    ____XXX_SS___XXX(opcode, Instr::LSR, Mode::IM, Byte | Word | Long, ShiftIm, CIMS)
 
     //               -------------------------------------------------
     // <ea>          | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | A | B |
@@ -1060,12 +1060,12 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                         X   X   X   X   X   X   X
 
     opcode = parse("1110 0011 11-- ----");
-    __________MMMXXX(opcode, LSL, 0b001111111000, Word, ShiftEa, CIMS)
-    __________MMMXXX(opcode, LSL, 0b001110000000, Word, ShiftEa, CIMSloop)
+    __________MMMXXX(opcode, Instr::LSL, 0b001111111000, Word, ShiftEa, CIMS)
+    __________MMMXXX(opcode, Instr::LSL, 0b001110000000, Word, ShiftEa, CIMSloop)
 
     opcode = parse("1110 0010 11-- ----");
-    __________MMMXXX(opcode, LSR, 0b001111111000, Word, ShiftEa, CIMS)
-    __________MMMXXX(opcode, LSR, 0b001110000000, Word, ShiftEa, CIMSloop)
+    __________MMMXXX(opcode, Instr::LSR, 0b001111111000, Word, ShiftEa, CIMS)
+    __________MMMXXX(opcode, Instr::LSR, 0b001110000000, Word, ShiftEa, CIMSloop)
 
 
     // MOVE
@@ -1085,49 +1085,49 @@ Moira::createJumpTable(Model model, bool regDasm)
 
     // <ea>,Dy
     opcode = parse("00-- ---0 00-- ----");
-    __SSXXX___MMMXXX(opcode, MOVE, 0b101111111111, Byte,        Move0, CIMS)
-    __SSXXX___MMMXXX(opcode, MOVE, 0b111111111111, Word | Long, Move0, CIMS)
+    __SSXXX___MMMXXX(opcode, Instr::MOVE, 0b101111111111, Byte,        Move0, CIMS)
+    __SSXXX___MMMXXX(opcode, Instr::MOVE, 0b111111111111, Word | Long, Move0, CIMS)
 
     // <ea>,(Ay)
     opcode = parse("00-- ---0 10-- ----");
-    __SSXXX___MMMXXX(opcode, MOVE, 0b101111111111, Byte,        Move2, CIMS)
-    __SSXXX___MMMXXX(opcode, MOVE, 0b111111111111, Word | Long, Move2, CIMS)
-    __SSXXX___MMMXXX(opcode, MOVE, 0b101110000000, Byte,        Move2, CIMSloop)
-    __SSXXX___MMMXXX(opcode, MOVE, 0b111110000000, Word | Long, Move2, CIMSloop)
+    __SSXXX___MMMXXX(opcode, Instr::MOVE, 0b101111111111, Byte,        Move2, CIMS)
+    __SSXXX___MMMXXX(opcode, Instr::MOVE, 0b111111111111, Word | Long, Move2, CIMS)
+    __SSXXX___MMMXXX(opcode, Instr::MOVE, 0b101110000000, Byte,        Move2, CIMSloop)
+    __SSXXX___MMMXXX(opcode, Instr::MOVE, 0b111110000000, Word | Long, Move2, CIMSloop)
 
     // <ea>,(Ay)+
     opcode = parse("00-- ---0 11-- ----");
-    __SSXXX___MMMXXX(opcode, MOVE, 0b101111111111, Byte,        Move3, CIMS)
-    __SSXXX___MMMXXX(opcode, MOVE, 0b111111111111, Word | Long, Move3, CIMS)
-    __SSXXX___MMMXXX(opcode, MOVE, 0b101110000000, Byte,        Move3, CIMSloop)
-    __SSXXX___MMMXXX(opcode, MOVE, 0b111110000000, Word | Long, Move3, CIMSloop)
+    __SSXXX___MMMXXX(opcode, Instr::MOVE, 0b101111111111, Byte,        Move3, CIMS)
+    __SSXXX___MMMXXX(opcode, Instr::MOVE, 0b111111111111, Word | Long, Move3, CIMS)
+    __SSXXX___MMMXXX(opcode, Instr::MOVE, 0b101110000000, Byte,        Move3, CIMSloop)
+    __SSXXX___MMMXXX(opcode, Instr::MOVE, 0b111110000000, Word | Long, Move3, CIMSloop)
 
     // <ea>,-(Ay)
     opcode = parse("00-- ---1 00-- ----");
-    __SSXXX___MMMXXX(opcode, MOVE, 0b101111111111, Byte,        Move4, CIMS)
-    __SSXXX___MMMXXX(opcode, MOVE, 0b111111111111, Word | Long, Move4, CIMS)
-    __SSXXX___MMMXXX(opcode, MOVE, 0b101110000000, Byte,        Move4, CIMSloop)
-    __SSXXX___MMMXXX(opcode, MOVE, 0b111110000000, Word | Long, Move4, CIMSloop)
+    __SSXXX___MMMXXX(opcode, Instr::MOVE, 0b101111111111, Byte,        Move4, CIMS)
+    __SSXXX___MMMXXX(opcode, Instr::MOVE, 0b111111111111, Word | Long, Move4, CIMS)
+    __SSXXX___MMMXXX(opcode, Instr::MOVE, 0b101110000000, Byte,        Move4, CIMSloop)
+    __SSXXX___MMMXXX(opcode, Instr::MOVE, 0b111110000000, Word | Long, Move4, CIMSloop)
 
     // <ea>,(d,Ay)
     opcode = parse("00-- ---1 01-- ----");
-    __SSXXX___MMMXXX(opcode, MOVE, 0b101111111111, Byte,        Move5, CIMS)
-    __SSXXX___MMMXXX(opcode, MOVE, 0b111111111111, Word | Long, Move5, CIMS)
+    __SSXXX___MMMXXX(opcode, Instr::MOVE, 0b101111111111, Byte,        Move5, CIMS)
+    __SSXXX___MMMXXX(opcode, Instr::MOVE, 0b111111111111, Word | Long, Move5, CIMS)
 
     // <ea>,(d,Ay,Xi)
     opcode = parse("00-- ---1 10-- ----");
-    __SSXXX___MMMXXX(opcode, MOVE, 0b101111111111, Byte,        Move6, CIMS)
-    __SSXXX___MMMXXX(opcode, MOVE, 0b111111111111, Word | Long, Move6, CIMS)
+    __SSXXX___MMMXXX(opcode, Instr::MOVE, 0b101111111111, Byte,        Move6, CIMS)
+    __SSXXX___MMMXXX(opcode, Instr::MOVE, 0b111111111111, Word | Long, Move6, CIMS)
 
     // <ea>,ABS.w
     opcode = parse("00-- 0001 11-- ----");
-    __SS______MMMXXX(opcode, MOVE, 0b101111111111, Byte,        Move7, CIMS)
-    __SS______MMMXXX(opcode, MOVE, 0b111111111111, Word | Long, Move7, CIMS)
+    __SS______MMMXXX(opcode, Instr::MOVE, 0b101111111111, Byte,        Move7, CIMS)
+    __SS______MMMXXX(opcode, Instr::MOVE, 0b111111111111, Word | Long, Move7, CIMS)
 
     // <ea>,ABS.l
     opcode = parse("00-- 0011 11-- ----");
-    __SS______MMMXXX(opcode, MOVE, 0b101111111111, Byte,        Move8, CIMS)
-    __SS______MMMXXX(opcode, MOVE, 0b111111111111, Word | Long, Move8, CIMS)
+    __SS______MMMXXX(opcode, Instr::MOVE, 0b101111111111, Byte,        Move8, CIMS)
+    __SS______MMMXXX(opcode, Instr::MOVE, 0b111111111111, Word | Long, Move8, CIMS)
 
 
     // MOVEA
@@ -1142,8 +1142,8 @@ Moira::createJumpTable(Model model, bool regDasm)
 
     opcode = parse("001- ---0 01-- ----");
 
-    ____XXX___MMMXXX(opcode | 0 << 12, MOVEA, 0b111111111111, Long, Movea, CIMS)
-    ____XXX___MMMXXX(opcode | 1 << 12, MOVEA, 0b111111111111, Word, Movea, CIMS)
+    ____XXX___MMMXXX(opcode | 0 << 12, Instr::MOVEA, 0b111111111111, Long, Movea, CIMS)
+    ____XXX___MMMXXX(opcode | 1 << 12, Instr::MOVEA, 0b111111111111, Word, Movea, CIMS)
 
 
     // MOVEC
@@ -1155,8 +1155,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     if constexpr (C >= Core::C68010) {
 
         opcode = parse("0100 1110 0111 101-");
-        ________________(opcode | 0, MOVEC, Mode::IP, Long, MovecRcRx, CIMS)
-        ________________(opcode | 1, MOVEC, Mode::IP, Long, MovecRxRc, CIMS)
+        ________________(opcode | 0, Instr::MOVEC, Mode::IP, Long, MovecRcRx, CIMS)
+        ________________(opcode | 1, Instr::MOVEC, Mode::IP, Long, MovecRxRc, CIMS)
     }
 
 
@@ -1177,12 +1177,12 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                         X       X   X   X   X   X
 
     opcode = parse("0100 1100 1--- ----");
-    __________MMMXXX(opcode | 0 << 6, MOVEM, 0b001101111110, Word, MovemEaRg, CIMS)
-    __________MMMXXX(opcode | 1 << 6, MOVEM, 0b001101111110, Long, MovemEaRg, CIMS)
+    __________MMMXXX(opcode | 0 << 6, Instr::MOVEM, 0b001101111110, Word, MovemEaRg, CIMS)
+    __________MMMXXX(opcode | 1 << 6, Instr::MOVEM, 0b001101111110, Long, MovemEaRg, CIMS)
 
     opcode = parse("0100 1000 1--- ----");
-    __________MMMXXX(opcode | 0 << 6, MOVEM, 0b001011111000, Word, MovemRgEa, CIMS)
-    __________MMMXXX(opcode | 1 << 6, MOVEM, 0b001011111000, Long, MovemRgEa, CIMS)
+    __________MMMXXX(opcode | 0 << 6, Instr::MOVEM, 0b001011111000, Word, MovemRgEa, CIMS)
+    __________MMMXXX(opcode | 1 << 6, Instr::MOVEM, 0b001011111000, Long, MovemRgEa, CIMS)
 
 
     // MOVEP
@@ -1193,13 +1193,13 @@ Moira::createJumpTable(Model model, bool regDasm)
 
     // MOVEP Dx,(d,Ay)
     opcode = parse("0000 ---1 1-00 1---");
-    ____XXX______XXX(opcode | 0 << 6, MOVEP, Mode::DI, Word, MovepDxEa, CIMS)
-    ____XXX______XXX(opcode | 1 << 6, MOVEP, Mode::DI, Long, MovepDxEa, CIMS)
+    ____XXX______XXX(opcode | 0 << 6, Instr::MOVEP, Mode::DI, Word, MovepDxEa, CIMS)
+    ____XXX______XXX(opcode | 1 << 6, Instr::MOVEP, Mode::DI, Long, MovepDxEa, CIMS)
 
     // MOVEP (d,Ay),Dx
     opcode = parse("0000 ---1 0-00 1---");
-    ____XXX______XXX(opcode | 0 << 6, MOVEP, Mode::DI, Word, MovepEaDx, CIMS)
-    ____XXX______XXX(opcode | 1 << 6, MOVEP, Mode::DI, Long, MovepEaDx, CIMS)
+    ____XXX______XXX(opcode | 0 << 6, Instr::MOVEP, Mode::DI, Word, MovepEaDx, CIMS)
+    ____XXX______XXX(opcode | 1 << 6, Instr::MOVEP, Mode::DI, Long, MovepEaDx, CIMS)
 
 
     // MOVEQ
@@ -1209,7 +1209,7 @@ Moira::createJumpTable(Model model, bool regDasm)
 
     // #<data>,Dn
     opcode = parse("0111 ---0 ---- ----");
-    ____XXX_XXXXXXXX(opcode, MOVEQ, Mode::IM, Long, Moveq, CIMS)
+    ____XXX_XXXXXXXX(opcode, Instr::MOVEQ, Mode::IM, Long, Moveq, CIMS)
 
 
     // MOVES
@@ -1225,7 +1225,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     if constexpr (C >= Core::C68010) {
 
         opcode = parse("0000 1110 ---- ----");
-        ________SSMMMXXX(opcode, MOVES, 0b001111111000, Byte | Word | Long, Moves, CIMS)
+        ________SSMMMXXX(opcode, Instr::MOVES, 0b001111111000, Byte | Word | Long, Moves, CIMS)
     }
 
 
@@ -1242,8 +1242,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     if constexpr (C >= Core::C68010) {
 
         opcode = parse("0100 0010 11-- ----");
-        __________MMMXXX(opcode, MOVEFCCR, 0b100000000000, Word, MoveCcrRg, CIMS)
-        __________MMMXXX(opcode, MOVEFCCR, 0b001111111000, Word, MoveCcrEa, CIMS)
+        __________MMMXXX(opcode, Instr::MOVEFCCR, 0b100000000000, Word, MoveCcrRg, CIMS)
+        __________MMMXXX(opcode, Instr::MOVEFCCR, 0b001111111000, Word, MoveCcrEa, CIMS)
     }
 
 
@@ -1258,7 +1258,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X   X   X   X
 
     opcode = parse("0100 0100 11-- ----");
-    __________MMMXXX(opcode, MOVETCCR, 0b101111111111, Word, MoveToCcr, CIMS)
+    __________MMMXXX(opcode, Instr::MOVETCCR, 0b101111111111, Word, MoveToCcr, CIMS)
 
 
     // MOVE from SR
@@ -1273,8 +1273,8 @@ Moira::createJumpTable(Model model, bool regDasm)
 
     opcode = parse("0100 0000 11-- ----");
 
-    __________MMMXXX(opcode, MOVEFSR, 0b100000000000, Word, MoveSrRg, CIMS)
-    __________MMMXXX(opcode, MOVEFSR, 0b001111111000, Word, MoveSrEa, CIMS)
+    __________MMMXXX(opcode, Instr::MOVEFSR, 0b100000000000, Word, MoveSrRg, CIMS)
+    __________MMMXXX(opcode, Instr::MOVEFSR, 0b001111111000, Word, MoveSrEa, CIMS)
 
 
     // MOVE to SR
@@ -1288,7 +1288,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X   X   X   X
 
     opcode = parse("0100 0110 11-- ----");
-    __________MMMXXX(opcode, MOVETSR, 0b101111111111, Word, MoveToSr, CIMS)
+    __________MMMXXX(opcode, Instr::MOVETSR, 0b101111111111, Word, MoveToSr, CIMS)
 
 
     // MOVEUSP
@@ -1298,8 +1298,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //        Sizes: Longword
 
     opcode = parse("0100 1110 0110 ----");
-    _____________XXX(opcode | 1 << 3, MOVEUSP, Mode::IP, Long, MoveUspAn, CIMS)
-    _____________XXX(opcode | 0 << 3, MOVEUSP, Mode::IP, Long, MoveAnUsp, CIMS)
+    _____________XXX(opcode | 1 << 3, Instr::MOVEUSP, Mode::IP, Long, MoveUspAn, CIMS)
+    _____________XXX(opcode | 0 << 3, Instr::MOVEUSP, Mode::IP, Long, MoveAnUsp, CIMS)
 
 
     // MULS, MULU
@@ -1313,15 +1313,15 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X   X   X   X
 
     opcode = parse("1100 ---1 11-- ----");
-    ____XXX___MMMXXX(opcode, MULS, 0b101111111111, Word, Muls, CIMS)
+    ____XXX___MMMXXX(opcode, Instr::MULS, 0b101111111111, Word, Muls, CIMS)
 
     opcode = parse("1100 ---0 11-- ----");
-    ____XXX___MMMXXX(opcode, MULU, 0b101111111111, Word, Mulu, CIMS)
+    ____XXX___MMMXXX(opcode, Instr::MULU, 0b101111111111, Word, Mulu, CIMS)
 
     if constexpr (C >= Core::C68020) {
 
         opcode = parse("0100 1100 00-- ----");
-        __________MMMXXX(opcode, MULL, 0b101111111111, Long, Mull, CIMS)
+        __________MMMXXX(opcode, Instr::MULL, 0b101111111111, Long, Mull, CIMS)
     }
 
 
@@ -1336,9 +1336,9 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X
 
     opcode = parse("0100 1000 00-- ----");
-    __________MMMXXX(opcode, NBCD, 0b100000000000, Byte, NbcdRg, CIMS)
-    __________MMMXXX(opcode, NBCD, 0b001111111000, Byte, NbcdEa, CIMS)
-    __________MMMXXX(opcode, NBCD, 0b001110000000, Byte, NbcdEa, CIMSloop)
+    __________MMMXXX(opcode, Instr::NBCD, 0b100000000000, Byte, NbcdRg, CIMS)
+    __________MMMXXX(opcode, Instr::NBCD, 0b001111111000, Byte, NbcdEa, CIMS)
+    __________MMMXXX(opcode, Instr::NBCD, 0b001110000000, Byte, NbcdEa, CIMSloop)
 
 
     // NEG, NEGX, NOT
@@ -1352,19 +1352,19 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X
 
     opcode = parse("0100 0100 ---- ----");
-    ________SSMMMXXX(opcode, NEG, 0b100000000000, Byte | Word | Long, NegRg, CIMS)
-    ________SSMMMXXX(opcode, NEG, 0b001111111000, Byte | Word | Long, NegEa, CIMS)
-    ________SSMMMXXX(opcode, NEG, 0b001110000000, Byte | Word | Long, NegEa, CIMSloop)
+    ________SSMMMXXX(opcode, Instr::NEG, 0b100000000000, Byte | Word | Long, NegRg, CIMS)
+    ________SSMMMXXX(opcode, Instr::NEG, 0b001111111000, Byte | Word | Long, NegEa, CIMS)
+    ________SSMMMXXX(opcode, Instr::NEG, 0b001110000000, Byte | Word | Long, NegEa, CIMSloop)
 
     opcode = parse("0100 0000 ---- ----");
-    ________SSMMMXXX(opcode, NEGX, 0b100000000000, Byte | Word | Long, NegRg, CIMS)
-    ________SSMMMXXX(opcode, NEGX, 0b001111111000, Byte | Word | Long, NegEa, CIMS)
-    ________SSMMMXXX(opcode, NEGX, 0b001110000000, Byte | Word | Long, NegEa, CIMSloop)
+    ________SSMMMXXX(opcode, Instr::NEGX, 0b100000000000, Byte | Word | Long, NegRg, CIMS)
+    ________SSMMMXXX(opcode, Instr::NEGX, 0b001111111000, Byte | Word | Long, NegEa, CIMS)
+    ________SSMMMXXX(opcode, Instr::NEGX, 0b001110000000, Byte | Word | Long, NegEa, CIMSloop)
 
     opcode = parse("0100 0110 ---- ----");
-    ________SSMMMXXX(opcode, NOT, 0b100000000000, Byte | Word | Long, NegRg, CIMS)
-    ________SSMMMXXX(opcode, NOT, 0b001111111000, Byte | Word | Long, NegEa, CIMS)
-    ________SSMMMXXX(opcode, NOT, 0b001110000000, Byte | Word | Long, NegEa, CIMSloop)
+    ________SSMMMXXX(opcode, Instr::NOT, 0b100000000000, Byte | Word | Long, NegRg, CIMS)
+    ________SSMMMXXX(opcode, Instr::NOT, 0b001111111000, Byte | Word | Long, NegEa, CIMS)
+    ________SSMMMXXX(opcode, Instr::NOT, 0b001110000000, Byte | Word | Long, NegEa, CIMSloop)
 
 
     // NOP
@@ -1373,7 +1373,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //        Sizes: Unsized
 
     opcode = parse("0100 1110 0111 0001");
-    ________________(opcode, NOP, Mode::IP, Long, Nop, CIMS)
+    ________________(opcode, Instr::NOP, Mode::IP, Long, Nop, CIMS)
 
 
     // OR
@@ -1388,8 +1388,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X   X   X   X
 
     opcode = parse("1000 ---0 ---- ----");
-    ____XXX_SSMMMXXX(opcode, OR, 0b101111111111, Byte | Word | Long, AndEaRg, CIMS)
-    ____XXX_SSMMMXXX(opcode, OR, 0b001110000000, Byte | Word | Long, AndEaRg, CIMSloop)
+    ____XXX_SSMMMXXX(opcode, Instr::OR, 0b101111111111, Byte | Word | Long, AndEaRg, CIMS)
+    ____XXX_SSMMMXXX(opcode, Instr::OR, 0b001110000000, Byte | Word | Long, AndEaRg, CIMSloop)
 
 
     //               -------------------------------------------------
@@ -1398,8 +1398,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X   X   X   X
 
     opcode = parse("1000 ---1 ---- ----");
-    ____XXX_SSMMMXXX(opcode, OR, 0b001111111000, Byte | Word | Long, AndRgEa, CIMS)
-    ____XXX_SSMMMXXX(opcode, OR, 0b001110000000, Byte | Word | Long, AndRgEa, CIMSloop)
+    ____XXX_SSMMMXXX(opcode, Instr::OR, 0b001111111000, Byte | Word | Long, AndRgEa, CIMS)
+    ____XXX_SSMMMXXX(opcode, Instr::OR, 0b001110000000, Byte | Word | Long, AndRgEa, CIMSloop)
 
 
     // ORI
@@ -1413,8 +1413,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X
 
     opcode = parse("0000 0000 ---- ----");
-    ________SSMMMXXX(opcode, ORI, 0b100000000000, Byte | Word | Long, AndiRg, CIMS)
-    ________SSMMMXXX(opcode, ORI, 0b001111111000, Byte | Word | Long, AndiEa, CIMS)
+    ________SSMMMXXX(opcode, Instr::ORI, 0b100000000000, Byte | Word | Long, AndiRg, CIMS)
+    ________SSMMMXXX(opcode, Instr::ORI, 0b001111111000, Byte | Word | Long, AndiEa, CIMS)
 
 
     // ORI to CCR
@@ -1424,7 +1424,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //
 
     opcode = parse("0000 0000 0011 1100");
-    ________________(opcode, ORICCR, Mode::IM, Byte, Andiccr, CIMS)
+    ________________(opcode, Instr::ORICCR, Mode::IM, Byte, Andiccr, CIMS)
 
 
     // ORI to SR
@@ -1434,7 +1434,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //
 
     opcode = parse("0000 0000 0111 1100");
-    ________________(opcode, ORISR, Mode::IM, Word, Andisr, CIMS)
+    ________________(opcode, Instr::ORISR, Mode::IM, Word, Andisr, CIMS)
 
 
     // ROL, ROR, ROXL, ROXR
@@ -1446,29 +1446,29 @@ Moira::createJumpTable(Model model, bool regDasm)
 
     // Dx,Dy
     opcode = parse("1110 ---1 --11 1---");
-    ____XXX_SS___XXX(opcode, ROL, Mode::DN, Byte | Word | Long, ShiftRg, CIMS)
+    ____XXX_SS___XXX(opcode, Instr::ROL, Mode::DN, Byte | Word | Long, ShiftRg, CIMS)
 
     opcode = parse("1110 ---0 --11 1---");
-    ____XXX_SS___XXX(opcode, ROR, Mode::DN, Byte | Word | Long, ShiftRg, CIMS)
+    ____XXX_SS___XXX(opcode, Instr::ROR, Mode::DN, Byte | Word | Long, ShiftRg, CIMS)
 
     opcode = parse("1110 ---1 --11 0---");
-    ____XXX_SS___XXX(opcode, ROXL, Mode::DN, Byte | Word | Long, ShiftRg, CIMS)
+    ____XXX_SS___XXX(opcode, Instr::ROXL, Mode::DN, Byte | Word | Long, ShiftRg, CIMS)
 
     opcode = parse("1110 ---0 --11 0---");
-    ____XXX_SS___XXX(opcode, ROXR, Mode::DN, Byte | Word | Long, ShiftRg, CIMS)
+    ____XXX_SS___XXX(opcode, Instr::ROXR, Mode::DN, Byte | Word | Long, ShiftRg, CIMS)
 
     // #<data>,Dy
     opcode = parse("1110 ---1 --01 1---");
-    ____XXX_SS___XXX(opcode, ROL, Mode::IM, Byte | Word | Long, ShiftIm, CIMS)
+    ____XXX_SS___XXX(opcode, Instr::ROL, Mode::IM, Byte | Word | Long, ShiftIm, CIMS)
 
     opcode = parse("1110 ---0 --01 1---");
-    ____XXX_SS___XXX(opcode, ROR, Mode::IM, Byte | Word | Long, ShiftIm, CIMS)
+    ____XXX_SS___XXX(opcode, Instr::ROR, Mode::IM, Byte | Word | Long, ShiftIm, CIMS)
 
     opcode = parse("1110 ---1 --01 0---");
-    ____XXX_SS___XXX(opcode, ROXL, Mode::IM, Byte | Word | Long, ShiftIm, CIMS)
+    ____XXX_SS___XXX(opcode, Instr::ROXL, Mode::IM, Byte | Word | Long, ShiftIm, CIMS)
 
     opcode = parse("1110 ---0 --01 0---");
-    ____XXX_SS___XXX(opcode, ROXR, Mode::IM, Byte | Word | Long, ShiftIm, CIMS)
+    ____XXX_SS___XXX(opcode, Instr::ROXR, Mode::IM, Byte | Word | Long, ShiftIm, CIMS)
 
     //               -------------------------------------------------
     // <ea>          | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | A | B |
@@ -1476,20 +1476,20 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                         X   X   X   X   X   X   X
 
     opcode = parse("1110 0111 11-- ----");
-    __________MMMXXX(opcode, ROL, 0b001111111000, Word, ShiftEa, CIMS)
-    __________MMMXXX(opcode, ROL, 0b001110000000, Word, ShiftEa, CIMSloop)
+    __________MMMXXX(opcode, Instr::ROL, 0b001111111000, Word, ShiftEa, CIMS)
+    __________MMMXXX(opcode, Instr::ROL, 0b001110000000, Word, ShiftEa, CIMSloop)
 
     opcode = parse("1110 0110 11-- ----");
-    __________MMMXXX(opcode, ROR, 0b001111111000, Word, ShiftEa, CIMS)
-    __________MMMXXX(opcode, ROR, 0b001110000000, Word, ShiftEa, CIMSloop)
+    __________MMMXXX(opcode, Instr::ROR, 0b001111111000, Word, ShiftEa, CIMS)
+    __________MMMXXX(opcode, Instr::ROR, 0b001110000000, Word, ShiftEa, CIMSloop)
 
     opcode = parse("1110 0101 11-- ----");
-    __________MMMXXX(opcode, ROXL, 0b001111111000, Word, ShiftEa, CIMS)
-    __________MMMXXX(opcode, ROXL, 0b001110000000, Word, ShiftEa, CIMSloop)
+    __________MMMXXX(opcode, Instr::ROXL, 0b001111111000, Word, ShiftEa, CIMS)
+    __________MMMXXX(opcode, Instr::ROXL, 0b001110000000, Word, ShiftEa, CIMSloop)
 
     opcode = parse("1110 0100 11-- ----");
-    __________MMMXXX(opcode, ROXR, 0b001111111000, Word, ShiftEa, CIMS)
-    __________MMMXXX(opcode, ROXR, 0b001110000000, Word, ShiftEa, CIMSloop)
+    __________MMMXXX(opcode, Instr::ROXR, 0b001111111000, Word, ShiftEa, CIMS)
+    __________MMMXXX(opcode, Instr::ROXR, 0b001110000000, Word, ShiftEa, CIMSloop)
 
 
     // PACK
@@ -1501,10 +1501,10 @@ Moira::createJumpTable(Model model, bool regDasm)
     if constexpr (C >= Core::C68020) {
 
         opcode = parse("1000 ---1 0100 0---");
-        ____XXX______XXX(opcode, PACK, Mode::DN, Word, PackDn, CIMS)
+        ____XXX______XXX(opcode, Instr::PACK, Mode::DN, Word, PackDn, CIMS)
 
         opcode = parse("1000 ---1 0100 1---");
-        ____XXX______XXX(opcode, PACK, Mode::PD, Word, PackPd, CIMS)
+        ____XXX______XXX(opcode, Instr::PACK, Mode::PD, Word, PackPd, CIMS)
     }
 
 
@@ -1519,7 +1519,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                         X           X   X   X   X   X   X
 
     opcode = parse("0100 1000 01-- ----");
-    __________MMMXXX(opcode, PEA, 0b001001111110, Long, Pea, CIMS)
+    __________MMMXXX(opcode, Instr::PEA, 0b001001111110, Long, Pea, CIMS)
 
 
     // RESET
@@ -1528,7 +1528,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //        Sizes: Unsized
 
     opcode = parse("0100 1110 0111 0000");
-    ________________(opcode, RESET, Mode::IP, Long, Reset, CIMS)
+    ________________(opcode, Instr::RESET, Mode::IP, Long, Reset, CIMS)
 
 
     // RTD
@@ -1539,7 +1539,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     if constexpr (C >= Core::C68010) {
 
         opcode = parse("0100 1110 0111 0100");
-        ________________(opcode, RTD, Mode::IP, Long, Rtd, CIMS)
+        ________________(opcode, Instr::RTD, Mode::IP, Long, Rtd, CIMS)
     }
 
 
@@ -1549,7 +1549,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //        Sizes: Unsized
 
     opcode = parse("0100 1110 0111 0011");
-    ________________(opcode, RTE, Mode::IP, Long, Rte, CIMS)
+    ________________(opcode, Instr::RTE, Mode::IP, Long, Rte, CIMS)
 
 
     // RTM
@@ -1562,7 +1562,7 @@ Moira::createJumpTable(Model model, bool regDasm)
         if (model == Model::M68EC020 || model == Model::M68020) {
 
             opcode = parse("0000 0110 1100 ----");
-            ____________XXXX(opcode, RTM, Mode::IP, Long, Rtm, CIMS)
+            ____________XXXX(opcode, Instr::RTM, Mode::IP, Long, Rtm, CIMS)
         }
     }
 
@@ -1573,7 +1573,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //        Sizes: Unsized
 
     opcode = parse("0100 1110 0111 0111");
-    ________________(opcode, RTR, Mode::IP, Long, Rtr, CIMS)
+    ________________(opcode, Instr::RTR, Mode::IP, Long, Rtr, CIMS)
 
 
     // RTS
@@ -1582,7 +1582,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //        Sizes: Unsized
 
     opcode = parse("0100 1110 0111 0101");
-    ________________(opcode, RTS, Mode::IP, Long, Rts, CIMS)
+    ________________(opcode, Instr::RTS, Mode::IP, Long, Rts, CIMS)
 
 
     // SBCD
@@ -1593,12 +1593,12 @@ Moira::createJumpTable(Model model, bool regDasm)
 
     // Dx,Dy
     opcode = parse("1000 ---1 0000 0---");
-    ____XXX______XXX(opcode, SBCD, Mode::DN, Byte, AbcdRg, CIMS)
+    ____XXX______XXX(opcode, Instr::SBCD, Mode::DN, Byte, AbcdRg, CIMS)
 
     // -(Ax),-(Ay)
     opcode = parse("1000 ---1 0000 1---");
-    ____XXX______XXX(opcode, SBCD, Mode::PD, Byte, AbcdEa, CIMS)
-    ____XXX______XXX(opcode, SBCD, Mode::PD, Byte, AbcdEa, CIMSloop)
+    ____XXX______XXX(opcode, Instr::SBCD, Mode::PD, Byte, AbcdEa, CIMS)
+    ____XXX______XXX(opcode, Instr::SBCD, Mode::PD, Byte, AbcdEa, CIMSloop)
 
 
     // Scc
@@ -1612,39 +1612,39 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X
 
     opcode = parse("0101 ---- 11-- ----");
-    __________MMMXXX(opcode | 0x000, ST,  0b100000000000, Byte, SccRg, CIMS)
-    __________MMMXXX(opcode | 0x100, SF,  0b100000000000, Byte, SccRg, CIMS)
-    __________MMMXXX(opcode | 0x200, SHI, 0b100000000000, Byte, SccRg, CIMS)
-    __________MMMXXX(opcode | 0x300, SLS, 0b100000000000, Byte, SccRg, CIMS)
-    __________MMMXXX(opcode | 0x400, SCC, 0b100000000000, Byte, SccRg, CIMS)
-    __________MMMXXX(opcode | 0x500, SCS, 0b100000000000, Byte, SccRg, CIMS)
-    __________MMMXXX(opcode | 0x600, SNE, 0b100000000000, Byte, SccRg, CIMS)
-    __________MMMXXX(opcode | 0x700, SEQ, 0b100000000000, Byte, SccRg, CIMS)
-    __________MMMXXX(opcode | 0x800, SVC, 0b100000000000, Byte, SccRg, CIMS)
-    __________MMMXXX(opcode | 0x900, SVS, 0b100000000000, Byte, SccRg, CIMS)
-    __________MMMXXX(opcode | 0xA00, SPL, 0b100000000000, Byte, SccRg, CIMS)
-    __________MMMXXX(opcode | 0xB00, SMI, 0b100000000000, Byte, SccRg, CIMS)
-    __________MMMXXX(opcode | 0xC00, SGE, 0b100000000000, Byte, SccRg, CIMS)
-    __________MMMXXX(opcode | 0xD00, SLT, 0b100000000000, Byte, SccRg, CIMS)
-    __________MMMXXX(opcode | 0xE00, SGT, 0b100000000000, Byte, SccRg, CIMS)
-    __________MMMXXX(opcode | 0xF00, SLE, 0b100000000000, Byte, SccRg, CIMS)
+    __________MMMXXX(opcode | 0x000, Instr::ST,  0b100000000000, Byte, SccRg, CIMS)
+    __________MMMXXX(opcode | 0x100, Instr::SF,  0b100000000000, Byte, SccRg, CIMS)
+    __________MMMXXX(opcode | 0x200, Instr::SHI, 0b100000000000, Byte, SccRg, CIMS)
+    __________MMMXXX(opcode | 0x300, Instr::SLS, 0b100000000000, Byte, SccRg, CIMS)
+    __________MMMXXX(opcode | 0x400, Instr::SCC, 0b100000000000, Byte, SccRg, CIMS)
+    __________MMMXXX(opcode | 0x500, Instr::SCS, 0b100000000000, Byte, SccRg, CIMS)
+    __________MMMXXX(opcode | 0x600, Instr::SNE, 0b100000000000, Byte, SccRg, CIMS)
+    __________MMMXXX(opcode | 0x700, Instr::SEQ, 0b100000000000, Byte, SccRg, CIMS)
+    __________MMMXXX(opcode | 0x800, Instr::SVC, 0b100000000000, Byte, SccRg, CIMS)
+    __________MMMXXX(opcode | 0x900, Instr::SVS, 0b100000000000, Byte, SccRg, CIMS)
+    __________MMMXXX(opcode | 0xA00, Instr::SPL, 0b100000000000, Byte, SccRg, CIMS)
+    __________MMMXXX(opcode | 0xB00, Instr::SMI, 0b100000000000, Byte, SccRg, CIMS)
+    __________MMMXXX(opcode | 0xC00, Instr::SGE, 0b100000000000, Byte, SccRg, CIMS)
+    __________MMMXXX(opcode | 0xD00, Instr::SLT, 0b100000000000, Byte, SccRg, CIMS)
+    __________MMMXXX(opcode | 0xE00, Instr::SGT, 0b100000000000, Byte, SccRg, CIMS)
+    __________MMMXXX(opcode | 0xF00, Instr::SLE, 0b100000000000, Byte, SccRg, CIMS)
 
-    __________MMMXXX(opcode | 0x000, ST,  0b001111111000, Byte, SccEa, CIMS)
-    __________MMMXXX(opcode | 0x100, SF,  0b001111111000, Byte, SccEa, CIMS)
-    __________MMMXXX(opcode | 0x200, SHI, 0b001111111000, Byte, SccEa, CIMS)
-    __________MMMXXX(opcode | 0x300, SLS, 0b001111111000, Byte, SccEa, CIMS)
-    __________MMMXXX(opcode | 0x400, SCC, 0b001111111000, Byte, SccEa, CIMS)
-    __________MMMXXX(opcode | 0x500, SCS, 0b001111111000, Byte, SccEa, CIMS)
-    __________MMMXXX(opcode | 0x600, SNE, 0b001111111000, Byte, SccEa, CIMS)
-    __________MMMXXX(opcode | 0x700, SEQ, 0b001111111000, Byte, SccEa, CIMS)
-    __________MMMXXX(opcode | 0x800, SVC, 0b001111111000, Byte, SccEa, CIMS)
-    __________MMMXXX(opcode | 0x900, SVS, 0b001111111000, Byte, SccEa, CIMS)
-    __________MMMXXX(opcode | 0xA00, SPL, 0b001111111000, Byte, SccEa, CIMS)
-    __________MMMXXX(opcode | 0xB00, SMI, 0b001111111000, Byte, SccEa, CIMS)
-    __________MMMXXX(opcode | 0xC00, SGE, 0b001111111000, Byte, SccEa, CIMS)
-    __________MMMXXX(opcode | 0xD00, SLT, 0b001111111000, Byte, SccEa, CIMS)
-    __________MMMXXX(opcode | 0xE00, SGT, 0b001111111000, Byte, SccEa, CIMS)
-    __________MMMXXX(opcode | 0xF00, SLE, 0b001111111000, Byte, SccEa, CIMS)
+    __________MMMXXX(opcode | 0x000, Instr::ST,  0b001111111000, Byte, SccEa, CIMS)
+    __________MMMXXX(opcode | 0x100, Instr::SF,  0b001111111000, Byte, SccEa, CIMS)
+    __________MMMXXX(opcode | 0x200, Instr::SHI, 0b001111111000, Byte, SccEa, CIMS)
+    __________MMMXXX(opcode | 0x300, Instr::SLS, 0b001111111000, Byte, SccEa, CIMS)
+    __________MMMXXX(opcode | 0x400, Instr::SCC, 0b001111111000, Byte, SccEa, CIMS)
+    __________MMMXXX(opcode | 0x500, Instr::SCS, 0b001111111000, Byte, SccEa, CIMS)
+    __________MMMXXX(opcode | 0x600, Instr::SNE, 0b001111111000, Byte, SccEa, CIMS)
+    __________MMMXXX(opcode | 0x700, Instr::SEQ, 0b001111111000, Byte, SccEa, CIMS)
+    __________MMMXXX(opcode | 0x800, Instr::SVC, 0b001111111000, Byte, SccEa, CIMS)
+    __________MMMXXX(opcode | 0x900, Instr::SVS, 0b001111111000, Byte, SccEa, CIMS)
+    __________MMMXXX(opcode | 0xA00, Instr::SPL, 0b001111111000, Byte, SccEa, CIMS)
+    __________MMMXXX(opcode | 0xB00, Instr::SMI, 0b001111111000, Byte, SccEa, CIMS)
+    __________MMMXXX(opcode | 0xC00, Instr::SGE, 0b001111111000, Byte, SccEa, CIMS)
+    __________MMMXXX(opcode | 0xD00, Instr::SLT, 0b001111111000, Byte, SccEa, CIMS)
+    __________MMMXXX(opcode | 0xE00, Instr::SGT, 0b001111111000, Byte, SccEa, CIMS)
+    __________MMMXXX(opcode | 0xF00, Instr::SLE, 0b001111111000, Byte, SccEa, CIMS)
 
     // STOP
     //
@@ -1652,7 +1652,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //        Sizes: Unsized
 
     opcode = parse("0100 1110 0111 0010");
-    ________________(opcode, STOP, Mode::IP, Word, Stop, CIMS)
+    ________________(opcode, Instr::STOP, Mode::IP, Word, Stop, CIMS)
 
 
     // SUB
@@ -1667,10 +1667,10 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X  (X)  X   X   X   X   X   X   X   X   X   X
 
     opcode = parse("1001 ---0 ---- ----");
-    ____XXX_SSMMMXXX(opcode, SUB, 0b101111111111, Byte,        AddEaRg, CIMS)
-    ____XXX_SSMMMXXX(opcode, SUB, 0b111111111111, Word | Long, AddEaRg, CIMS)
-    ____XXX_SSMMMXXX(opcode, SUB, 0b001110000000, Byte,        AddEaRg, CIMSloop)
-    ____XXX_SSMMMXXX(opcode, SUB, 0b001110000000, Word | Long, AddEaRg, CIMSloop)
+    ____XXX_SSMMMXXX(opcode, Instr::SUB, 0b101111111111, Byte,        AddEaRg, CIMS)
+    ____XXX_SSMMMXXX(opcode, Instr::SUB, 0b111111111111, Word | Long, AddEaRg, CIMS)
+    ____XXX_SSMMMXXX(opcode, Instr::SUB, 0b001110000000, Byte,        AddEaRg, CIMSloop)
+    ____XXX_SSMMMXXX(opcode, Instr::SUB, 0b001110000000, Word | Long, AddEaRg, CIMSloop)
 
 
     //               -------------------------------------------------
@@ -1679,8 +1679,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                         X   X   X   X   X   X   X
 
     opcode = parse("1001 ---1 ---- ----");
-    ____XXX_SSMMMXXX(opcode, SUB, 0b001111111000, Byte | Word | Long, AddRgEa, CIMS)
-    ____XXX_SSMMMXXX(opcode, SUB, 0b001110000000, Byte | Word | Long, AddRgEa, CIMSloop)
+    ____XXX_SSMMMXXX(opcode, Instr::SUB, 0b001111111000, Byte | Word | Long, AddRgEa, CIMS)
+    ____XXX_SSMMMXXX(opcode, Instr::SUB, 0b001110000000, Byte | Word | Long, AddRgEa, CIMSloop)
 
 
     // SUBA
@@ -1694,8 +1694,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X   X   X   X   X   X   X   X   X   X   X   X
 
     opcode = parse("1001 ---- 11-- ----");
-    ____XXXS__MMMXXX(opcode, SUBA, 0b111111111111, Word | Long, Adda, CIMS)
-    ____XXXS__MMMXXX(opcode, SUBA, 0b001110000000, Word | Long, Adda, CIMSloop)
+    ____XXXS__MMMXXX(opcode, Instr::SUBA, 0b111111111111, Word | Long, Adda, CIMS)
+    ____XXXS__MMMXXX(opcode, Instr::SUBA, 0b001110000000, Word | Long, Adda, CIMSloop)
 
 
     // SUBI
@@ -1709,8 +1709,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X
 
     opcode = parse("0000 0100 ---- ----");
-    ________SSMMMXXX(opcode, SUBI, 0b100000000000, Byte | Word | Long, AddiRg, CIMS)
-    ________SSMMMXXX(opcode, SUBI, 0b001111111000, Byte | Word | Long, AddiEa, CIMS)
+    ________SSMMMXXX(opcode, Instr::SUBI, 0b100000000000, Byte | Word | Long, AddiRg, CIMS)
+    ________SSMMMXXX(opcode, Instr::SUBI, 0b001111111000, Byte | Word | Long, AddiEa, CIMS)
 
 
     // SUBQ
@@ -1724,9 +1724,9 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X  (X)  X   X   X   X   X   X   X
 
     opcode = parse("0101 ---1 ---- ----");
-    ____XXX_SSMMMXXX(opcode, SUBQ, 0b100000000000, Byte | Word | Long, AddqDn, CIMS)
-    ____XXX_SSMMMXXX(opcode, SUBQ, 0b010000000000, Word | Long,        AddqAn, CIMS)
-    ____XXX_SSMMMXXX(opcode, SUBQ, 0b001111111000, Byte | Word | Long, AddqEa, CIMS)
+    ____XXX_SSMMMXXX(opcode, Instr::SUBQ, 0b100000000000, Byte | Word | Long, AddqDn, CIMS)
+    ____XXX_SSMMMXXX(opcode, Instr::SUBQ, 0b010000000000, Word | Long,        AddqAn, CIMS)
+    ____XXX_SSMMMXXX(opcode, Instr::SUBQ, 0b001111111000, Byte | Word | Long, AddqEa, CIMS)
 
 
     // SUBX
@@ -1737,12 +1737,12 @@ Moira::createJumpTable(Model model, bool regDasm)
 
     // Dx,Dy
     opcode = parse("1001 ---1 --00 0---");
-    ____XXX_SS___XXX(opcode, SUBX, Mode::DN, Byte | Word | Long, AddxRg, CIMS)
+    ____XXX_SS___XXX(opcode, Instr::SUBX, Mode::DN, Byte | Word | Long, AddxRg, CIMS)
 
     // -(Ax),-(Ay)
     opcode = parse("1001 ---1 --00 1---");
-    ____XXX_SS___XXX(opcode, SUBX, Mode::PD, Byte | Word | Long, AddxEa, CIMS)
-    ____XXX_SS___XXX(opcode, SUBX, Mode::PD, Byte | Word | Long, AddxEa, CIMSloop)
+    ____XXX_SS___XXX(opcode, Instr::SUBX, Mode::PD, Byte | Word | Long, AddxEa, CIMS)
+    ____XXX_SS___XXX(opcode, Instr::SUBX, Mode::PD, Byte | Word | Long, AddxEa, CIMSloop)
 
 
     // SWAP
@@ -1751,7 +1751,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //         Size: Word
 
     opcode = parse("0100 1000 0100 0---");
-    _____________XXX(opcode, SWAP, Mode::DN, Word, Swap, CIMS)
+    _____________XXX(opcode, Instr::SWAP, Mode::DN, Word, Swap, CIMS)
 
 
     // TAS
@@ -1765,8 +1765,8 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X       X   X   X   X   X   X   X
 
     opcode = parse("0100 1010 11-- ----");
-    __________MMMXXX(opcode, TAS, 0b100000000000, Byte, TasRg, CIMS)
-    __________MMMXXX(opcode, TAS, 0b001111111000, Byte, TasEa, CIMS)
+    __________MMMXXX(opcode, Instr::TAS, 0b100000000000, Byte, TasRg, CIMS)
+    __________MMMXXX(opcode, Instr::TAS, 0b001111111000, Byte, TasEa, CIMS)
 
 
     // TRAP
@@ -1775,7 +1775,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //        Sizes: Unsized
 
     opcode = parse("0100 1110 0100 ----");
-    ____________XXXX(opcode, TRAP, Mode::IP, Long, Trap, CIMS)
+    ____________XXXX(opcode, Instr::TRAP, Mode::IP, Long, Trap, CIMS)
 
 
     // TRAPcc
@@ -1786,58 +1786,58 @@ Moira::createJumpTable(Model model, bool regDasm)
     if constexpr (C >= Core::C68020) {
 
         opcode = parse("0101 ---- 1111 1100");
-        ________________(opcode | 0x000, TRAPT,  Mode::IP, Byte, Trapcc, CIMS)
-        ________________(opcode | 0x100, TRAPF,  Mode::IP, Byte, Trapcc, CIMS)
-        ________________(opcode | 0x200, TRAPHI, Mode::IP, Byte, Trapcc, CIMS)
-        ________________(opcode | 0x300, TRAPLS, Mode::IP, Byte, Trapcc, CIMS)
-        ________________(opcode | 0x400, TRAPCC, Mode::IP, Byte, Trapcc, CIMS)
-        ________________(opcode | 0x500, TRAPCS, Mode::IP, Byte, Trapcc, CIMS)
-        ________________(opcode | 0x600, TRAPNE, Mode::IP, Byte, Trapcc, CIMS)
-        ________________(opcode | 0x700, TRAPEQ, Mode::IP, Byte, Trapcc, CIMS)
-        ________________(opcode | 0x800, TRAPVC, Mode::IP, Byte, Trapcc, CIMS)
-        ________________(opcode | 0x900, TRAPVS, Mode::IP, Byte, Trapcc, CIMS)
-        ________________(opcode | 0xA00, TRAPPL, Mode::IP, Byte, Trapcc, CIMS)
-        ________________(opcode | 0xB00, TRAPMI, Mode::IP, Byte, Trapcc, CIMS)
-        ________________(opcode | 0xC00, TRAPGE, Mode::IP, Byte, Trapcc, CIMS)
-        ________________(opcode | 0xD00, TRAPLT, Mode::IP, Byte, Trapcc, CIMS)
-        ________________(opcode | 0xE00, TRAPGT, Mode::IP, Byte, Trapcc, CIMS)
-        ________________(opcode | 0xF00, TRAPLE, Mode::IP, Byte, Trapcc, CIMS)
+        ________________(opcode | 0x000, Instr::TRAPT,  Mode::IP, Byte, Trapcc, CIMS)
+        ________________(opcode | 0x100, Instr::TRAPF,  Mode::IP, Byte, Trapcc, CIMS)
+        ________________(opcode | 0x200, Instr::TRAPHI, Mode::IP, Byte, Trapcc, CIMS)
+        ________________(opcode | 0x300, Instr::TRAPLS, Mode::IP, Byte, Trapcc, CIMS)
+        ________________(opcode | 0x400, Instr::TRAPCC, Mode::IP, Byte, Trapcc, CIMS)
+        ________________(opcode | 0x500, Instr::TRAPCS, Mode::IP, Byte, Trapcc, CIMS)
+        ________________(opcode | 0x600, Instr::TRAPNE, Mode::IP, Byte, Trapcc, CIMS)
+        ________________(opcode | 0x700, Instr::TRAPEQ, Mode::IP, Byte, Trapcc, CIMS)
+        ________________(opcode | 0x800, Instr::TRAPVC, Mode::IP, Byte, Trapcc, CIMS)
+        ________________(opcode | 0x900, Instr::TRAPVS, Mode::IP, Byte, Trapcc, CIMS)
+        ________________(opcode | 0xA00, Instr::TRAPPL, Mode::IP, Byte, Trapcc, CIMS)
+        ________________(opcode | 0xB00, Instr::TRAPMI, Mode::IP, Byte, Trapcc, CIMS)
+        ________________(opcode | 0xC00, Instr::TRAPGE, Mode::IP, Byte, Trapcc, CIMS)
+        ________________(opcode | 0xD00, Instr::TRAPLT, Mode::IP, Byte, Trapcc, CIMS)
+        ________________(opcode | 0xE00, Instr::TRAPGT, Mode::IP, Byte, Trapcc, CIMS)
+        ________________(opcode | 0xF00, Instr::TRAPLE, Mode::IP, Byte, Trapcc, CIMS)
 
         opcode = parse("0101 ---- 1111 1010");
-        ________________(opcode | 0x000, TRAPT,  Mode::IP, Word, Trapcc, CIMS)
-        ________________(opcode | 0x100, TRAPF,  Mode::IP, Word, Trapcc, CIMS)
-        ________________(opcode | 0x200, TRAPHI, Mode::IP, Word, Trapcc, CIMS)
-        ________________(opcode | 0x300, TRAPLS, Mode::IP, Word, Trapcc, CIMS)
-        ________________(opcode | 0x400, TRAPCC, Mode::IP, Word, Trapcc, CIMS)
-        ________________(opcode | 0x500, TRAPCS, Mode::IP, Word, Trapcc, CIMS)
-        ________________(opcode | 0x600, TRAPNE, Mode::IP, Word, Trapcc, CIMS)
-        ________________(opcode | 0x700, TRAPEQ, Mode::IP, Word, Trapcc, CIMS)
-        ________________(opcode | 0x800, TRAPVC, Mode::IP, Word, Trapcc, CIMS)
-        ________________(opcode | 0x900, TRAPVS, Mode::IP, Word, Trapcc, CIMS)
-        ________________(opcode | 0xA00, TRAPPL, Mode::IP, Word, Trapcc, CIMS)
-        ________________(opcode | 0xB00, TRAPMI, Mode::IP, Word, Trapcc, CIMS)
-        ________________(opcode | 0xC00, TRAPGE, Mode::IP, Word, Trapcc, CIMS)
-        ________________(opcode | 0xD00, TRAPLT, Mode::IP, Word, Trapcc, CIMS)
-        ________________(opcode | 0xE00, TRAPGT, Mode::IP, Word, Trapcc, CIMS)
-        ________________(opcode | 0xF00, TRAPLE, Mode::IP, Word, Trapcc, CIMS)
+        ________________(opcode | 0x000, Instr::TRAPT,  Mode::IP, Word, Trapcc, CIMS)
+        ________________(opcode | 0x100, Instr::TRAPF,  Mode::IP, Word, Trapcc, CIMS)
+        ________________(opcode | 0x200, Instr::TRAPHI, Mode::IP, Word, Trapcc, CIMS)
+        ________________(opcode | 0x300, Instr::TRAPLS, Mode::IP, Word, Trapcc, CIMS)
+        ________________(opcode | 0x400, Instr::TRAPCC, Mode::IP, Word, Trapcc, CIMS)
+        ________________(opcode | 0x500, Instr::TRAPCS, Mode::IP, Word, Trapcc, CIMS)
+        ________________(opcode | 0x600, Instr::TRAPNE, Mode::IP, Word, Trapcc, CIMS)
+        ________________(opcode | 0x700, Instr::TRAPEQ, Mode::IP, Word, Trapcc, CIMS)
+        ________________(opcode | 0x800, Instr::TRAPVC, Mode::IP, Word, Trapcc, CIMS)
+        ________________(opcode | 0x900, Instr::TRAPVS, Mode::IP, Word, Trapcc, CIMS)
+        ________________(opcode | 0xA00, Instr::TRAPPL, Mode::IP, Word, Trapcc, CIMS)
+        ________________(opcode | 0xB00, Instr::TRAPMI, Mode::IP, Word, Trapcc, CIMS)
+        ________________(opcode | 0xC00, Instr::TRAPGE, Mode::IP, Word, Trapcc, CIMS)
+        ________________(opcode | 0xD00, Instr::TRAPLT, Mode::IP, Word, Trapcc, CIMS)
+        ________________(opcode | 0xE00, Instr::TRAPGT, Mode::IP, Word, Trapcc, CIMS)
+        ________________(opcode | 0xF00, Instr::TRAPLE, Mode::IP, Word, Trapcc, CIMS)
 
         opcode = parse("0101 ---- 1111 1011");
-        ________________(opcode | 0x000, TRAPT,  Mode::IP, Long, Trapcc, CIMS)
-        ________________(opcode | 0x100, TRAPF,  Mode::IP, Long, Trapcc, CIMS)
-        ________________(opcode | 0x200, TRAPHI, Mode::IP, Long, Trapcc, CIMS)
-        ________________(opcode | 0x300, TRAPLS, Mode::IP, Long, Trapcc, CIMS)
-        ________________(opcode | 0x400, TRAPCC, Mode::IP, Long, Trapcc, CIMS)
-        ________________(opcode | 0x500, TRAPCS, Mode::IP, Long, Trapcc, CIMS)
-        ________________(opcode | 0x600, TRAPNE, Mode::IP, Long, Trapcc, CIMS)
-        ________________(opcode | 0x700, TRAPEQ, Mode::IP, Long, Trapcc, CIMS)
-        ________________(opcode | 0x800, TRAPVC, Mode::IP, Long, Trapcc, CIMS)
-        ________________(opcode | 0x900, TRAPVS, Mode::IP, Long, Trapcc, CIMS)
-        ________________(opcode | 0xA00, TRAPPL, Mode::IP, Long, Trapcc, CIMS)
-        ________________(opcode | 0xB00, TRAPMI, Mode::IP, Long, Trapcc, CIMS)
-        ________________(opcode | 0xC00, TRAPGE, Mode::IP, Long, Trapcc, CIMS)
-        ________________(opcode | 0xD00, TRAPLT, Mode::IP, Long, Trapcc, CIMS)
-        ________________(opcode | 0xE00, TRAPGT, Mode::IP, Long, Trapcc, CIMS)
-        ________________(opcode | 0xF00, TRAPLE, Mode::IP, Long, Trapcc, CIMS)
+        ________________(opcode | 0x000, Instr::TRAPT,  Mode::IP, Long, Trapcc, CIMS)
+        ________________(opcode | 0x100, Instr::TRAPF,  Mode::IP, Long, Trapcc, CIMS)
+        ________________(opcode | 0x200, Instr::TRAPHI, Mode::IP, Long, Trapcc, CIMS)
+        ________________(opcode | 0x300, Instr::TRAPLS, Mode::IP, Long, Trapcc, CIMS)
+        ________________(opcode | 0x400, Instr::TRAPCC, Mode::IP, Long, Trapcc, CIMS)
+        ________________(opcode | 0x500, Instr::TRAPCS, Mode::IP, Long, Trapcc, CIMS)
+        ________________(opcode | 0x600, Instr::TRAPNE, Mode::IP, Long, Trapcc, CIMS)
+        ________________(opcode | 0x700, Instr::TRAPEQ, Mode::IP, Long, Trapcc, CIMS)
+        ________________(opcode | 0x800, Instr::TRAPVC, Mode::IP, Long, Trapcc, CIMS)
+        ________________(opcode | 0x900, Instr::TRAPVS, Mode::IP, Long, Trapcc, CIMS)
+        ________________(opcode | 0xA00, Instr::TRAPPL, Mode::IP, Long, Trapcc, CIMS)
+        ________________(opcode | 0xB00, Instr::TRAPMI, Mode::IP, Long, Trapcc, CIMS)
+        ________________(opcode | 0xC00, Instr::TRAPGE, Mode::IP, Long, Trapcc, CIMS)
+        ________________(opcode | 0xD00, Instr::TRAPLT, Mode::IP, Long, Trapcc, CIMS)
+        ________________(opcode | 0xE00, Instr::TRAPGT, Mode::IP, Long, Trapcc, CIMS)
+        ________________(opcode | 0xF00, Instr::TRAPLE, Mode::IP, Long, Trapcc, CIMS)
     }
 
 
@@ -1847,7 +1847,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //        Sizes: Unsized
 
     opcode = parse("0100 1110 0111 0110");
-    ________________(opcode, TRAPV, Mode::IP, Long, Trapv, CIMS)
+    ________________(opcode, Instr::TRAPV, Mode::IP, Long, Trapv, CIMS)
 
 
     // TST
@@ -1861,13 +1861,13 @@ Moira::createJumpTable(Model model, bool regDasm)
     //                 X  (X)  X   X   X   X   X   X   X  (X) (X) (X)
 
     opcode = parse("0100 1010 ---- ----");
-    ________SSMMMXXX(opcode, TST, 0b101111111000, Byte | Word | Long, Tst, CIMS)
-    ________SSMMMXXX(opcode, TST, 0b001110000000, Byte | Word | Long, Tst, CIMSloop)
+    ________SSMMMXXX(opcode, Instr::TST, 0b101111111000, Byte | Word | Long, Tst, CIMS)
+    ________SSMMMXXX(opcode, Instr::TST, 0b001110000000, Byte | Word | Long, Tst, CIMSloop)
 
     if constexpr (C >= Core::C68020) {
 
-        ________SSMMMXXX(opcode, TST, 0b000000000111, Byte, Tst, CIMS)
-        ________SSMMMXXX(opcode, TST, 0b010000000111, Word | Long, Tst, CIMS)
+        ________SSMMMXXX(opcode, Instr::TST, 0b000000000111, Byte, Tst, CIMS)
+        ________SSMMMXXX(opcode, Instr::TST, 0b010000000111, Word | Long, Tst, CIMS)
     }
 
 
@@ -1877,7 +1877,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     //        Sizes: Word
 
     opcode = parse("0100 1110 0101 1---");
-    _____________XXX(opcode, UNLK, Mode::IP, Word, Unlk, CIMS)
+    _____________XXX(opcode, Instr::UNLK, Mode::IP, Word, Unlk, CIMS)
 
 
     // UNPK
@@ -1889,10 +1889,10 @@ Moira::createJumpTable(Model model, bool regDasm)
     if constexpr (C >= Core::C68020) {
 
         opcode = parse("1000 ---1 1000 0---");
-        ____XXX______XXX(opcode, UNPK, Mode::DN, Word, UnpkDn, CIMS)
+        ____XXX______XXX(opcode, Instr::UNPK, Mode::DN, Word, UnpkDn, CIMS)
 
         opcode = parse("1000 ---1 1000 1---");
-        ____XXX______XXX(opcode, UNPK, Mode::PD, Word, UnpkPd, CIMS)
+        ____XXX______XXX(opcode, Instr::UNPK, Mode::PD, Word, UnpkPd, CIMS)
     }
 
     //
@@ -1908,28 +1908,28 @@ Moira::createJumpTable(Model model, bool regDasm)
         if (hasCPI()) {
 
             opcode = parse("1111 ---0 10-- ----");
-            ____XXX___XXXXXX(opcode, cpBcc, Mode::IP, Word, CpBcc, CIMS)
+            ____XXX___XXXXXX(opcode, Instr::cpBcc, Mode::IP, Word, CpBcc, CIMS)
 
             opcode = parse("1111 ---0 11-- ----");
-            ____XXX___XXXXXX(opcode, cpBcc, Mode::IP, Long, CpBcc, CIMS)
+            ____XXX___XXXXXX(opcode, Instr::cpBcc, Mode::IP, Long, CpBcc, CIMS)
 
             opcode = parse("1111 ---0 00-- ----");
-            ____XXX___XXXXXX(opcode, cpGEN, Mode::IP, (Size)0, CpGen, CIMS)
+            ____XXX___XXXXXX(opcode, Instr::cpGEN, Mode::IP, (Size)0, CpGen, CIMS)
 
             opcode = parse("1111 ---1 01-- ----");
-            ____XXX___MMMXXX(opcode, cpRESTORE, 0b001101111110, Word, CpRestore, CIMS)
+            ____XXX___MMMXXX(opcode, Instr::cpRESTORE, 0b001101111110, Word, CpRestore, CIMS)
 
             opcode = parse("1111 ---1 00-- ----");
-            ____XXX___MMMXXX(opcode, cpSAVE, 0b001011111000, Word, CpSave, CIMS)
+            ____XXX___MMMXXX(opcode, Instr::cpSAVE, 0b001011111000, Word, CpSave, CIMS)
 
             opcode = parse("1111 ---0 0111 1---");
-            ____XXX______XXX(opcode, cpTRAPcc, Mode::IP, Word, CpTrapcc, CIMS)
+            ____XXX______XXX(opcode, Instr::cpTRAPcc, Mode::IP, Word, CpTrapcc, CIMS)
 
             opcode = parse("1111 ---0 01-- ----");
-            ____XXX___MMMXXX(opcode, cpScc, 0b101111111000, Byte, CpScc, CIMS)
+            ____XXX___MMMXXX(opcode, Instr::cpScc, 0b101111111000, Byte, CpScc, CIMS)
 
             opcode = parse("1111 ---0 0100 1---");
-            ____XXX______XXX(opcode, cpDBcc, Mode::IP, (Size)0, CpDbcc, CIMS)
+            ____XXX______XXX(opcode, Instr::cpDBcc, Mode::IP, (Size)0, CpDbcc, CIMS)
         }
 
         
@@ -1940,20 +1940,20 @@ Moira::createJumpTable(Model model, bool regDasm)
         if (model == Model::M68030) {
 
             opcode = parse("1111 0000 00-- ----");
-            __________XXXXXX(opcode, cpGEN, Mode::IP, Unsized, PGen, CIMS)
-            __________MMMXXX(opcode, cpGEN, 0b111111111111, Unsized, PGen, CIMS)
+            __________XXXXXX(opcode, Instr::cpGEN, Mode::IP, Unsized, PGen, CIMS)
+            __________MMMXXX(opcode, Instr::cpGEN, 0b111111111111, Unsized, PGen, CIMS)
         }
 
         if (model == Model::M68040 || model == Model::M68LC040) {
 
             opcode = parse("1111 0101 000- ----");
-            ___________XXXXX(opcode, PFLUSH, Mode::AI, Unsized, PFlush40, CIMS)
+            ___________XXXXX(opcode, Instr::PFLUSH, Mode::AI, Unsized, PFlush40, CIMS)
 
             opcode = parse("1111 0101 0100 1---");
-            _____________XXX(opcode, PTEST, Mode::AI, Unsized, PTest40, CIMS)
+            _____________XXX(opcode, Instr::PTEST, Mode::AI, Unsized, PTest40, CIMS)
 
             opcode = parse("1111 0101 0110 1---");
-            _____________XXX(opcode, PTEST, Mode::AI, Unsized, PTest40, CIMS)
+            _____________XXX(opcode, Instr::PTEST, Mode::AI, Unsized, PTest40, CIMS)
         }
 
 
@@ -1970,7 +1970,7 @@ Moira::createJumpTable(Model model, bool regDasm)
 
             opcode = parse("1111 0100 --0- ----");
             for (int i = 0; i < 4; i++) {
-                ___________XXXXX(opcode | i << 6, CINV, Mode::AI, Unsized, Cinv, CIMS)
+                ___________XXXXX(opcode | i << 6, Instr::CINV, Mode::AI, Unsized, Cinv, CIMS)
             }
 
 
@@ -1980,7 +1980,7 @@ Moira::createJumpTable(Model model, bool regDasm)
 
             opcode = parse("1111 0100 --1- ----");
             for (int i = 0; i < 4; i++) {
-                ___________XXXXX(opcode | i << 6, CPUSH, Mode::AI, Unsized, Cpush, CIMS)
+                ___________XXXXX(opcode | i << 6, Instr::CPUSH, Mode::AI, Unsized, Cpush, CIMS)
             }
 
 
@@ -1989,19 +1989,19 @@ Moira::createJumpTable(Model model, bool regDasm)
             //
 
             opcode = parse("1111 0110 0010 0---");
-            _____________XXX(opcode, MOVE16, Mode::IP, Unsized, Move16PiPi, CIMS)
+            _____________XXX(opcode, Instr::MOVE16, Mode::IP, Unsized, Move16PiPi, CIMS)
 
             opcode = parse("1111 0110 0000 0---");
-            _____________XXX(opcode, MOVE16, Mode::IP, Unsized, Move16PiAl, CIMS)
+            _____________XXX(opcode, Instr::MOVE16, Mode::IP, Unsized, Move16PiAl, CIMS)
 
             opcode = parse("1111 0110 0000 1---");
-            _____________XXX(opcode, MOVE16, Mode::IP, Unsized, Move16AlPi, CIMS)
+            _____________XXX(opcode, Instr::MOVE16, Mode::IP, Unsized, Move16AlPi, CIMS)
 
             opcode = parse("1111 0110 0001 0---");
-            _____________XXX(opcode, MOVE16, Mode::IP, Unsized, Move16AiAl, CIMS)
+            _____________XXX(opcode, Instr::MOVE16, Mode::IP, Unsized, Move16AiAl, CIMS)
 
             opcode = parse("1111 0110 0001 1---");
-            _____________XXX(opcode, MOVE16, Mode::IP, Unsized, Move16AlAi, CIMS)
+            _____________XXX(opcode, Instr::MOVE16, Mode::IP, Unsized, Move16AlAi, CIMS)
         }
     }
 
@@ -2012,30 +2012,30 @@ Moira::createJumpTable(Model model, bool regDasm)
     if (model == Model::M68040) {
 
         opcode = parse("1111 0010 100- ----");
-        ___________XXXXX(opcode, FBcc, Mode::IP, Word, FBcc, CIMS)
+        ___________XXXXX(opcode, Instr::FBcc, Mode::IP, Word, FBcc, CIMS)
 
         opcode = parse("1111 0010 110- ----");
-        ___________XXXXX(opcode, FBcc, Mode::IP, Long, FBcc, CIMS)
+        ___________XXXXX(opcode, Instr::FBcc, Mode::IP, Long, FBcc, CIMS)
 
         opcode = parse("1111 0010 00-- ----");
-        __________XXXXXX(opcode, cpGEN, Mode::IP, Unsized, FGen, CIMS)
-        __________MMMXXX(opcode, cpGEN, 0b111111111111, Unsized, FGen, CIMS)
+        __________XXXXXX(opcode, Instr::cpGEN, Mode::IP, Unsized, FGen, CIMS)
+        __________MMMXXX(opcode, Instr::cpGEN, 0b111111111111, Unsized, FGen, CIMS)
 
         opcode = parse("1111 0011 01-- ----");
-        __________MMMXXX(opcode, FRESTORE, 0b001101111110, Word, FRestore, CIMS)
+        __________MMMXXX(opcode, Instr::FRESTORE, 0b001101111110, Word, FRestore, CIMS)
 
         opcode = parse("1111 0011 00-- ----");
-        __________MMMXXX(opcode, FSAVE, 0b001011111000, Word, FSave, CIMS)
+        __________MMMXXX(opcode, Instr::FSAVE, 0b001011111000, Word, FSave, CIMS)
 
         opcode = parse("1111 0010 0111 1---");
-        ________________(opcode | 0b010, FTRAPcc, Mode::IP, Word, FTrapcc, CIMS)
-        ________________(opcode | 0b011, FTRAPcc, Mode::IP, Long, FTrapcc, CIMS)
-        ________________(opcode | 0b100, FTRAPcc, Mode::IP, Unsized, FTrapcc, CIMS)
+        ________________(opcode | 0b010, Instr::FTRAPcc, Mode::IP, Word, FTrapcc, CIMS)
+        ________________(opcode | 0b011, Instr::FTRAPcc, Mode::IP, Long, FTrapcc, CIMS)
+        ________________(opcode | 0b100, Instr::FTRAPcc, Mode::IP, Unsized, FTrapcc, CIMS)
 
         opcode = parse("1111 0010 01-- ----");
-        __________MMMXXX(opcode, FScc, 0b101111111000, Byte, FScc, CIMS)
+        __________MMMXXX(opcode, Instr::FScc, 0b101111111000, Byte, FScc, CIMS)
 
         opcode = parse("1111 0010 0100 1---");
-        _____________XXX(opcode, FDBcc, Mode::IP, Word, FDbcc, CIMS)
+        _____________XXX(opcode, Instr::FDBcc, Mode::IP, Word, FDbcc, CIMS)
     }
 }

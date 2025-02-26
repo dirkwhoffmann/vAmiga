@@ -16,17 +16,17 @@ Moira::isValidExtFPU(Instr I, Mode M, u16 op, u32 ext) const
 
     switch (I) {
 
-        case FDBcc:
-        case FScc:
-        case FTRAPcc:
+        case Instr::FDBcc:
+        case Instr::FScc:
+        case Instr::FTRAPcc:
 
             return (ext & 0xFFE0) == 0;
 
-        case FMOVECR:
+        case Instr::FMOVECR:
 
             return (op & 0x3F) == 0;
 
-        case FMOVE:
+        case Instr::FMOVE:
 
             switch (cod) {
 
@@ -59,7 +59,7 @@ Moira::isValidExtFPU(Instr I, Mode M, u16 op, u32 ext) const
                     return true;
             }
 
-        case FMOVEM:
+        case Instr::FMOVEM:
 
             switch (cod) {
 

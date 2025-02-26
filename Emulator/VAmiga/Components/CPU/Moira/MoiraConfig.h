@@ -86,75 +86,75 @@
 /* The following macro appears at the beginning of each instruction handler.
  * Moira will call 'willExecute(...)' for all listed instructions.
  */
-#define WILL_EXECUTE I == STOP || I == TAS || I == BKPT
+#define WILL_EXECUTE I == Instr::STOP || I == Instr::TAS || I == Instr::BKPT
 /*
 #define WILL_EXECUTE \
-I == FABS || \
-I == FADD || \
-I == FBcc || \
-I == FCMP || \
-I == FDBcc || \
-I == FDIV || \
-I == FMOVE || \
-I == FMOVEM || \
-I == FMUL || \
-I == FNEG || \
-I == FNOP || \
-I == FRESTORE || \
-I == FSAVE || \
-I == FScc || \
-I == FSQRT || \
-I == FSUB || \
-I == FTRAPcc || \
-I == FTST || \
-I == FSABS || \
-I == FDABS || \
-I == FSADD || \
-I == FDADD || \
-I == FSDIV || \
-I == FDDIV || \
-I == FSMOVE || \
-I == FDMOVE || \
-I == FSMUL || \
-I == FDMUL || \
-I == FSNEG || \
-I == FDNEG || \
-I == FSSQRT || \
-I == FDSQRT || \
-I == FSSUB || \
-I == FDSUB || \
-I == FACOS || \
-I == FASIN || \
-I == FATAN || \
-I == FATANH || \
-I == FCOS || \
-I == FCOSH || \
-I == FETOX || \
-I == FETOXM1 || \
-I == FGETEXP || \
-I == FGETMAN || \
-I == FINT || \
-I == FINTRZ || \
-I == FLOG10 || \
-I == FLOG2 || \
-I == FLOGN || \
-I == FLOGNP1 || \
-I == FMOD || \
-I == FMOVECR || \
-I == FREM || \
-I == FSCAL || \
-I == FSGLDIV || \
-I == FSGLMUL || \
-I == FSIN || \
-I == FSINCOS || \
-I == FSINH || \
-I == FTAN || \
-I == FTANH || \
-I == FTENTOX || \
-I == FTWOTOX
+I == Instr::FABS || \
+I == Instr::FADD || \
+I == Instr::FBcc || \
+I == Instr::FCMP || \
+I == Instr::FDBcc || \
+I == Instr::FDIV || \
+I == Instr::FMOVE || \
+I == Instr::FMOVEM || \
+I == Instr::FMUL || \
+I == Instr::FNEG || \
+I == Instr::FNOP || \
+I == Instr::FRESTORE || \
+I == Instr::FSAVE || \
+I == Instr::FScc || \
+I == Instr::FSQRT || \
+I == Instr::FSUB || \
+I == Instr::FTRAPcc || \
+I == Instr::FTST || \
+I == Instr::FSABS || \
+I == Instr::FDABS || \
+I == Instr::FSADD || \
+I == Instr::FDADD || \
+I == Instr::FSDIV || \
+I == Instr::FDDIV || \
+I == Instr::FSMOVE || \
+I == Instr::FDMOVE || \
+I == Instr::FSMUL || \
+I == Instr::FDMUL || \
+I == Instr::FSNEG || \
+I == Instr::FDNEG || \
+I == Instr::FSSQRT || \
+I == Instr::FDSQRT || \
+I == Instr::FSSUB || \
+I == Instr::FDSUB || \
+I == Instr::FACOS || \
+I == Instr::FASIN || \
+I == Instr::FATAN || \
+I == Instr::FATANH || \
+I == Instr::FCOS || \
+I == Instr::FCOSH || \
+I == Instr::FETOX || \
+I == Instr::FETOXM1 || \
+I == Instr::FGETEXP || \
+I == Instr::FGETMAN || \
+I == Instr::FINT || \
+I == Instr::FINTRZ || \
+I == Instr::FLOG10 || \
+I == Instr::FLOG2 || \
+I == Instr::FLOGN || \
+I == Instr::FLOGNP1 || \
+I == Instr::FMOD || \
+I == Instr::FMOVECR || \
+I == Instr::FREM || \
+I == Instr::FSCAL || \
+I == Instr::FSGLDIV || \
+I == Instr::FSGLMUL || \
+I == Instr::FSIN || \
+I == Instr::FSINCOS || \
+I == Instr::FSINH || \
+I == Instr::FTAN || \
+I == Instr::FTANH || \
+I == Instr::FTENTOX || \
+I == Instr::FTWOTOX
 */
 
 /* The following macro appear at the end of each instruction handler.
  * Moira will call 'didExecute(...)' for all listed instructions.
  */
-#define DID_EXECUTE     I == RESET
+#define DID_EXECUTE     I == Instr::RESET

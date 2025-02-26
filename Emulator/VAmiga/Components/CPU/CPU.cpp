@@ -123,19 +123,19 @@ Moira::willExecute(const char *func, Instr I, Mode M, Size S, u16 opcode)
 {
     switch (I) {
 
-        case STOP:
+        case Instr::STOP:
 
             if (!(opcode & 0x2000)) {
                 // xfiles("STOP instruction (%x)\n", opcode);
             }
             break;
 
-        case TAS:
+        case Instr::TAS:
 
             xfiles("TAS instruction\n");
             break;
 
-        case BKPT:
+        case Instr::BKPT:
 
             xfiles("BKPT instruction\n");
             break;
@@ -156,7 +156,7 @@ Moira::didExecute(const char *func, Instr I, Mode M, Size S, u16 opcode)
 {
     switch (I) {
 
-        case RESET:
+        case Instr::RESET:
 
             xfiles("RESET instruction\n");
             amiga.softReset();

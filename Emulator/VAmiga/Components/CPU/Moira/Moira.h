@@ -469,7 +469,7 @@ private:
 
     // Checks if an instruction is a loop mode instruction
     template <Instr I>
-    constexpr bool looping() { return I >= ABCD_LOOP && I <= TST_LOOP; }
+    constexpr bool looping() { return I >= Instr::ABCD_LOOP && I <= Instr::TST_LOOP; }
 
 
     //

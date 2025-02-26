@@ -77,7 +77,7 @@ enum class LetterCase
     UPPER_CASE         // Everything is printed in uppercase
 };
 
-typedef enum
+enum class Instr
 {
     // 68000 instructions
     ABCD,       ADD,        ADDA,       ADDI,       ADDQ,       ADDX,
@@ -148,8 +148,7 @@ typedef enum
     MOVE_LOOP,  NBCD_LOOP,  NEG_LOOP,   NEGX_LOOP,  NOT_LOOP,   OR_LOOP,
     ROL_LOOP,   ROR_LOOP,   ROXL_LOOP,  ROXR_LOOP,  SBCD_LOOP,  SUB_LOOP,
     SUBA_LOOP,  SUBX_LOOP,  TST_LOOP
-}
-Instr;
+};
 
 using Size = int;
 static constexpr int Unsized     = 0;

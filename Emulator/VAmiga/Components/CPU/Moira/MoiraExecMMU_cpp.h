@@ -21,11 +21,11 @@ Moira::isValidExtMMU(Instr I, Mode M, u16 op, u32 ext) const
 
     switch (I) {
 
-        case PFLUSHA:
+        case Instr::PFLUSHA:
 
             return (op & 0xFF) == 0 && mask() == 0 && fc() == 0;
 
-        case PFLUSH:
+        case Instr::PFLUSH:
 
             // Check mode
             if (mode() != 0b100 && mode() != 0b110) return false;
@@ -38,7 +38,7 @@ Moira::isValidExtMMU(Instr I, Mode M, u16 op, u32 ext) const
             }
             return validFC();
 
-        case PLOAD:
+        case Instr::PLOAD:
 
             // Check EA mode
             if (M != Mode::AI && M != Mode::DI && M != Mode::IX && M != Mode::AW && M != Mode::AL) {
@@ -47,7 +47,7 @@ Moira::isValidExtMMU(Instr I, Mode M, u16 op, u32 ext) const
 
             return validFC();
 
-        case PMOVE:
+        case Instr::PMOVE:
 
             if ((ext & 0x200)) {
                 if (M == Mode::DIPC || M == Mode::IXPC || M == Mode::IM) return false;
@@ -93,7 +93,7 @@ Moira::isValidExtMMU(Instr I, Mode M, u16 op, u32 ext) const
             }
             break;
 
-        case PTEST:
+        case Instr::PTEST:
 
             // When A is 0, reg must be 0
             if (a() == 0 && reg() != 0) return false;
@@ -119,35 +119,35 @@ Moira::execPGen(u16 opcode)
     // PLOAD: 0010 00x0 000x xxxx
     if ((ext & 0xFDE0) == 0x2000) {
 
-        execPLoad<C, PLOAD, M, S>(opcode);
+        execPLoad<C, Instr::PLOAD, M, S>(opcode);
         return;
     }
 
     // PFLUSHA: 0010 010x xxxx xxxx
     if ((ext & 0xFE00) == 0x2400) {
 
-        execPFlusha<C, PFLUSHA, M, S>(opcode);
+        execPFlusha<C, Instr::PFLUSHA, M, S>(opcode);
         return;
     }
 
     // PFLUSH: 001x xx0x xxxx xxxx
     if ((ext & 0xE200) == 0x2000) {
 
-        execPFlush<C, PFLUSH, M, S>(opcode);
+        execPFlush<C, Instr::PFLUSH, M, S>(opcode);
         return;
     }
 
     // PTEST: 100x xxxx xxxx xxxx
     if ((ext & 0xE000) == 0x8000) {
 
-        execPTest<C, PTEST, M, S>(opcode);
+        execPTest<C, Instr::PTEST, M, S>(opcode);
         return;
     }
 
     // PMOVE: 010x xxxx 0000 0000 || 0110 00x0 0000 0000 || 000x xxxx 0000 0000
     if ((ext & 0xE0FF) == 0x4000 || (ext & 0xFDFF) == 0x6000 || (ext & 0xE0FF) == 0x0000) {
 
-        execPMove<C, PMOVE, M, S>(opcode);
+        execPMove<C, Instr::PMOVE, M, S>(opcode);
         return;
     }
 

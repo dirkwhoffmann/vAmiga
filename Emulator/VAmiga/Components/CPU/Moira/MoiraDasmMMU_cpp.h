@@ -14,35 +14,35 @@ Moira::dasmPGen(StrWriter &str, u32 &addr, u16 op) const
     // PLOAD: 0010 00x0 000x xxxx
     if ((ext & 0xFDE0) == 0x2000) {
 
-        dasmPLoad<PLOAD, M, Long>(str, addr, op);
+        dasmPLoad<Instr::PLOAD, M, Long>(str, addr, op);
         return;
     }
 
     // PFLUSHA: 0010 010x xxxx xxxx
     if ((ext & 0xFE00) == 0x2400) {
 
-        dasmPFlusha<PFLUSHA, M, Long>(str, addr, op);
+        dasmPFlusha<Instr::PFLUSHA, M, Long>(str, addr, op);
         return;
     }
 
     // PFLUSH: 001x xx0x xxxx xxxx
     if ((ext & 0xE200) == 0x2000) {
 
-        dasmPFlush<PFLUSH, M, Long>(str, addr, op);
+        dasmPFlush<Instr::PFLUSH, M, Long>(str, addr, op);
         return;
     }
 
     // PTEST: 100x xxxx xxxx xxxx
     if ((ext & 0xE000) == 0x8000) {
 
-        dasmPTest<PTEST, M, Long>(str, addr, op);
+        dasmPTest<Instr::PTEST, M, Long>(str, addr, op);
         return;
     }
 
     // PMOVE: 010x xxxx 0000 0000 || 0110 00x0 0000 0000 || 000x xxxx 0000 0000
     if ((ext & 0xE0FF) == 0x4000 || (ext & 0xFDFF) == 0x6000 || (ext & 0xE0FF) == 0x0000) {
 
-        dasmPMove<PMOVE, M, S>(str, addr, op);
+        dasmPMove<Instr::PMOVE, M, S>(str, addr, op);
         return;
     }
 
@@ -106,10 +106,10 @@ Moira::dasmPFlush40(StrWriter &str, u32 &addr, u16 op) const
 
     switch (mode) {
 
-        case 0: str << Ins<PFLUSHN>{} << str.tab << Op<M>(reg, addr); break;
-        case 1: str << Ins<PFLUSH>{} << str.tab << Op<M>(reg, addr); break;
-        case 2: str << Ins<PFLUSHAN>{}; break;
-        case 3: str << Ins<PFLUSHA>{}; break;
+        case 0: str << Ins<Instr::PFLUSHN>{} << str.tab << Op<M>(reg, addr); break;
+        case 1: str << Ins<Instr::PFLUSH>{} << str.tab << Op<M>(reg, addr); break;
+        case 2: str << Ins<Instr::PFLUSHAN>{}; break;
+        case 3: str << Ins<Instr::PFLUSHA>{}; break;
     }
 }
 

@@ -527,7 +527,7 @@ Moira::dasmBitFieldDn(StrWriter &str, u32 &addr, u16 op) const
 
     str << Ins<I>{} << str.tab;
 
-    if constexpr (I == BFINS) {
+    if constexpr (I == Instr::BFINS) {
         str << Dn ( _xxx____________(ext) ) << Sep{};
     }
 
@@ -560,7 +560,7 @@ Moira::dasmBitFieldDn(StrWriter &str, u32 &addr, u16 op) const
             }
     }
 
-    if constexpr (I == BFEXTU || I == BFEXTS || I == BFFFO) {
+    if constexpr (I == Instr::BFEXTU || I == Instr::BFEXTS || I == Instr::BFFFO) {
         str << Sep{} << Dn ( _xxx____________(ext) );
     }
     str << Av<I, M, S>{};
@@ -731,9 +731,9 @@ Moira::dasmChkCmp2(StrWriter &str, u32 &addr, u16 op) const
     }
 
     if (ext & 0x0800) {
-        str << Ins<CHK2>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
+        str << Ins<Instr::CHK2>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
     } else {
-        str << Ins<CMP2>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
+        str << Ins<Instr::CMP2>{} << Sz<S>{} << str.tab << src << Sep{} << dst;
     }
     str << Av<I, M, S>{};
 }
@@ -1561,7 +1561,7 @@ Moira::dasmMull(StrWriter &str, u32 &addr, u16 op) const
 
         default:
 
-            (ext & 1 << 11) ? str << Ins<MULS>{} : str << Ins<MULU>{};
+            (ext & 1 << 11) ? str << Ins<Instr::MULS>{} : str << Ins<Instr::MULU>{};
             str << Sz<S>{} << str.tab << src << Sep{};
             (ext & 1 << 10) ? str << dh << fill << dl : str << dl;
             str << Av<I, M, S>{};
@@ -1613,7 +1613,7 @@ Moira::dasmDivl(StrWriter &str, u32 &addr, u16 op) const
 
         default:
 
-            (ext & 1 << 11) ? str << Ins<DIVS>{} : str << Ins<DIVU>{};
+            (ext & 1 << 11) ? str << Ins<Instr::DIVS>{} : str << Ins<Instr::DIVU>{};
 
             if (ext & 1 << 10) {
 
@@ -1639,7 +1639,7 @@ Moira::dasmNbcdRg(StrWriter &str, u32 &addr, u16 op) const
 {
     auto dst = Op <M,S> ( _____________xxx(op), addr );
 
-    str << Ins<NBCD>{} << str.tab << dst;
+    str << Ins<Instr::NBCD>{} << str.tab << dst;
 }
 
 template <Instr I, Mode M, Size S> void
@@ -1647,7 +1647,7 @@ Moira::dasmNbcdEa(StrWriter &str, u32 &addr, u16 op) const
 {
     auto dst = Op <M,S> ( _____________xxx(op), addr );
 
-    str << Ins<NBCD>{} << str.tab << dst;
+    str << Ins<Instr::NBCD>{} << str.tab << dst;
 }
 
 template <Instr I, Mode M, Size S> void

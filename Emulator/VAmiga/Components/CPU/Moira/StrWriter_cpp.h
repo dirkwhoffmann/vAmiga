@@ -244,7 +244,7 @@ StrWriter::operator<<(Imd im)
 template <Instr I> StrWriter&
 StrWriter::operator<<(Ins<I> i)
 {
-    if constexpr (I == DBF) {
+    if constexpr (I == Instr::DBF) {
 
         if (style.syntax == Syntax::GNU || style.syntax == Syntax::GNU_MIT) {
             *this << "dbf";
@@ -254,7 +254,7 @@ StrWriter::operator<<(Ins<I> i)
 
     } else {
 
-        *this << mnemonics[I];
+        *this << mnemonics[(isize)I];
     }
 
     return *this;
@@ -1435,105 +1435,105 @@ StrWriter::operator<<(const Av<I, M, S> &av)
 
     switch (I) {
 
-        case BKPT:
-        case MOVES:
-        case MOVEFCCR:
-        case RTD:
+        case Instr::BKPT:
+        case Instr::MOVES:
+        case Instr::MOVEFCCR:
+        case Instr::RTD:
 
             *this << "; (1+)";
             break;
 
-        case CMPI:
+        case Instr::CMPI:
 
             *this << (isPrgMode(M) ? "; (1+)" : "");
             break;
 
-        case CALLM:
-        case RTM:
+        case Instr::CALLM:
+        case Instr::RTM:
 
             *this << "; (2)";
             break;
 
-        case cpGEN:
-        case cpRESTORE:
-        case cpSAVE:
-        case cpScc:
-        case cpTRAPcc:
+        case Instr::cpGEN:
+        case Instr::cpRESTORE:
+        case Instr::cpSAVE:
+        case Instr::cpScc:
+        case Instr::cpTRAPcc:
 
             *this << "; (2-3)";
             break;
 
-        case BFCHG:
-        case BFCLR:
-        case BFEXTS:
-        case BFEXTU:
-        case BFFFO:
-        case BFINS:
-        case BFSET:
-        case BFTST:
-        case CAS:
-        case CAS2:
-        case CHK2:
-        case CMP2:
-        case DIVL:
-        case EXTB:
-        case MULL:
-        case PACK:
-        case TRAPCC:
-        case TRAPCS:
-        case TRAPEQ:
-        case TRAPGE:
-        case TRAPGT:
-        case TRAPHI:
-        case TRAPLE:
-        case TRAPLS:
-        case TRAPLT:
-        case TRAPMI:
-        case TRAPNE:
-        case TRAPPL:
-        case TRAPVC:
-        case TRAPVS:
-        case TRAPF:
-        case TRAPT:
-        case UNPK:
+        case Instr::BFCHG:
+        case Instr::BFCLR:
+        case Instr::BFEXTS:
+        case Instr::BFEXTU:
+        case Instr::BFFFO:
+        case Instr::BFINS:
+        case Instr::BFSET:
+        case Instr::BFTST:
+        case Instr::CAS:
+        case Instr::CAS2:
+        case Instr::CHK2:
+        case Instr::CMP2:
+        case Instr::DIVL:
+        case Instr::EXTB:
+        case Instr::MULL:
+        case Instr::PACK:
+        case Instr::TRAPCC:
+        case Instr::TRAPCS:
+        case Instr::TRAPEQ:
+        case Instr::TRAPGE:
+        case Instr::TRAPGT:
+        case Instr::TRAPHI:
+        case Instr::TRAPLE:
+        case Instr::TRAPLS:
+        case Instr::TRAPLT:
+        case Instr::TRAPMI:
+        case Instr::TRAPNE:
+        case Instr::TRAPPL:
+        case Instr::TRAPVC:
+        case Instr::TRAPVS:
+        case Instr::TRAPF:
+        case Instr::TRAPT:
+        case Instr::UNPK:
 
             *this << "; (2+)";
             break;
 
-        case CHK:
-        case LINK:
-        case BRA:
-        case BHI:
-        case BLS:
-        case BCC:
-        case BCS:
-        case BNE:
-        case BEQ:
-        case BVC:
-        case BVS:
-        case BPL:
-        case BMI:
-        case BGE:
-        case BLT:
-        case BGT:
-        case BLE:
-        case BSR:
+        case Instr::CHK:
+        case Instr::LINK:
+        case Instr::BRA:
+        case Instr::BHI:
+        case Instr::BLS:
+        case Instr::BCC:
+        case Instr::BCS:
+        case Instr::BNE:
+        case Instr::BEQ:
+        case Instr::BVC:
+        case Instr::BVS:
+        case Instr::BPL:
+        case Instr::BMI:
+        case Instr::BGE:
+        case Instr::BLT:
+        case Instr::BGT:
+        case Instr::BLE:
+        case Instr::BSR:
 
             *this << (S == Long ? "; (2+)" : "");
             break;
 
-        case TST:
+        case Instr::TST:
             *this << (M == Mode(1) || M >= Mode(9) ? "; (2+)" : "");
             break;
 
-        case CINV:
-        case CPUSH:
-        case MOVE16:
+        case Instr::CINV:
+        case Instr::CPUSH:
+        case Instr::MOVE16:
 
             *this << "; (4)";
             break;
 
-        case MOVEC:
+        case Instr::MOVEC:
 
             switch (av.ext1 & 0x0FFF) {
 

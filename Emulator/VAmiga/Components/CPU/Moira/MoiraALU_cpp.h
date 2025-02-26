@@ -94,22 +94,22 @@ Moira::cond() {
 
     switch (I) {
 
-        case BRA: case ST:  case DBT:  case DBT_LOOP:  case TRAPT:  return evalCond<Cond::BT>();
-        case SF:            case DBF:  case DBF_LOOP:  case TRAPF:  return evalCond<Cond::BF>();
-        case BHI: case SHI: case DBHI: case DBHI_LOOP: case TRAPHI: return evalCond<Cond::HI>();
-        case BLS: case SLS: case DBLS: case DBLS_LOOP: case TRAPLS: return evalCond<Cond::LS>();
-        case BCC: case SCC: case DBCC: case DBCC_LOOP: case TRAPCC: return evalCond<Cond::CC>();
-        case BCS: case SCS: case DBCS: case DBCS_LOOP: case TRAPCS: return evalCond<Cond::CS>();
-        case BNE: case SNE: case DBNE: case DBNE_LOOP: case TRAPNE: return evalCond<Cond::NE>();
-        case BEQ: case SEQ: case DBEQ: case DBEQ_LOOP: case TRAPEQ: return evalCond<Cond::EQ>();
-        case BVC: case SVC: case DBVC: case DBVC_LOOP: case TRAPVC: return evalCond<Cond::VC>();
-        case BVS: case SVS: case DBVS: case DBVS_LOOP: case TRAPVS: return evalCond<Cond::VS>();
-        case BPL: case SPL: case DBPL: case DBPL_LOOP: case TRAPPL: return evalCond<Cond::PL>();
-        case BMI: case SMI: case DBMI: case DBMI_LOOP: case TRAPMI: return evalCond<Cond::MI>();
-        case BGE: case SGE: case DBGE: case DBGE_LOOP: case TRAPGE: return evalCond<Cond::GE>();
-        case BLT: case SLT: case DBLT: case DBLT_LOOP: case TRAPLT: return evalCond<Cond::LT>();
-        case BGT: case SGT: case DBGT: case DBGT_LOOP: case TRAPGT: return evalCond<Cond::GT>();
-        case BLE: case SLE: case DBLE: case DBLE_LOOP: case TRAPLE: return evalCond<Cond::LE>();
+        case Instr::BRA: case Instr::ST:  case Instr::DBT:  case Instr::DBT_LOOP:  case Instr::TRAPT:  return evalCond<Cond::BT>();
+        case Instr::SF:            case Instr::DBF:  case Instr::DBF_LOOP:  case Instr::TRAPF:  return evalCond<Cond::BF>();
+        case Instr::BHI: case Instr::SHI: case Instr::DBHI: case Instr::DBHI_LOOP: case Instr::TRAPHI: return evalCond<Cond::HI>();
+        case Instr::BLS: case Instr::SLS: case Instr::DBLS: case Instr::DBLS_LOOP: case Instr::TRAPLS: return evalCond<Cond::LS>();
+        case Instr::BCC: case Instr::SCC: case Instr::DBCC: case Instr::DBCC_LOOP: case Instr::TRAPCC: return evalCond<Cond::CC>();
+        case Instr::BCS: case Instr::SCS: case Instr::DBCS: case Instr::DBCS_LOOP: case Instr::TRAPCS: return evalCond<Cond::CS>();
+        case Instr::BNE: case Instr::SNE: case Instr::DBNE: case Instr::DBNE_LOOP: case Instr::TRAPNE: return evalCond<Cond::NE>();
+        case Instr::BEQ: case Instr::SEQ: case Instr::DBEQ: case Instr::DBEQ_LOOP: case Instr::TRAPEQ: return evalCond<Cond::EQ>();
+        case Instr::BVC: case Instr::SVC: case Instr::DBVC: case Instr::DBVC_LOOP: case Instr::TRAPVC: return evalCond<Cond::VC>();
+        case Instr::BVS: case Instr::SVS: case Instr::DBVS: case Instr::DBVS_LOOP: case Instr::TRAPVS: return evalCond<Cond::VS>();
+        case Instr::BPL: case Instr::SPL: case Instr::DBPL: case Instr::DBPL_LOOP: case Instr::TRAPPL: return evalCond<Cond::PL>();
+        case Instr::BMI: case Instr::SMI: case Instr::DBMI: case Instr::DBMI_LOOP: case Instr::TRAPMI: return evalCond<Cond::MI>();
+        case Instr::BGE: case Instr::SGE: case Instr::DBGE: case Instr::DBGE_LOOP: case Instr::TRAPGE: return evalCond<Cond::GE>();
+        case Instr::BLT: case Instr::SLT: case Instr::DBLT: case Instr::DBLT_LOOP: case Instr::TRAPLT: return evalCond<Cond::LT>();
+        case Instr::BGT: case Instr::SGT: case Instr::DBGT: case Instr::DBGT_LOOP: case Instr::TRAPGT: return evalCond<Cond::GT>();
+        case Instr::BLE: case Instr::SLE: case Instr::DBLE: case Instr::DBLE_LOOP: case Instr::TRAPLE: return evalCond<Cond::LE>();
 
         default:
             fatalError;
@@ -121,8 +121,8 @@ Moira::shift(int cnt, u64 data) {
 
     switch (I) {
 
-        case ASL:
-        case ASL_LOOP:
+        case Instr::ASL:
+        case Instr::ASL_LOOP:
         {
             bool carry = false;
             u32 changed = 0;
@@ -140,8 +140,8 @@ Moira::shift(int cnt, u64 data) {
             reg.sr.v = NBIT<S>(changed);
             break;
         }
-        case ASR:
-        case ASR_LOOP:
+        case Instr::ASR:
+        case Instr::ASR_LOOP:
         {
             bool carry = false;
             u32 changed = 0;
@@ -159,8 +159,8 @@ Moira::shift(int cnt, u64 data) {
             reg.sr.v = NBIT<S>(changed);
             break;
         }
-        case LSL:
-        case LSL_LOOP:
+        case Instr::LSL:
+        case Instr::LSL_LOOP:
         {
             bool carry = false;
 
@@ -175,8 +175,8 @@ Moira::shift(int cnt, u64 data) {
             reg.sr.v = 0;
             break;
         }
-        case LSR:
-        case LSR_LOOP:
+        case Instr::LSR:
+        case Instr::LSR_LOOP:
         {
             bool carry = false;
 
@@ -191,8 +191,8 @@ Moira::shift(int cnt, u64 data) {
             reg.sr.v = 0;
             break;
         }
-        case ROL:
-        case ROL_LOOP:
+        case Instr::ROL:
+        case Instr::ROL_LOOP:
         {
             bool carry = false;
 
@@ -206,8 +206,8 @@ Moira::shift(int cnt, u64 data) {
             reg.sr.v = 0;
             break;
         }
-        case ROR:
-        case ROR_LOOP:
+        case Instr::ROR:
+        case Instr::ROR_LOOP:
         {
             bool carry = false;
 
@@ -222,8 +222,8 @@ Moira::shift(int cnt, u64 data) {
             reg.sr.v = 0;
             break;
         }
-        case ROXL:
-        case ROXL_LOOP:
+        case Instr::ROXL:
+        case Instr::ROXL_LOOP:
         {
             bool carry = reg.sr.x;
 
@@ -239,8 +239,8 @@ Moira::shift(int cnt, u64 data) {
             reg.sr.v = 0;
             break;
         }
-        case ROXR:
-        case ROXR_LOOP:
+        case Instr::ROXR:
+        case Instr::ROXR_LOOP:
         {
             bool carry = reg.sr.x;
 
@@ -279,8 +279,8 @@ Moira::bcd(u32 op1, u32 op2)
 
     switch (I) {
 
-        case ABCD:
-        case ABCD_LOOP:
+        case Instr::ABCD:
+        case Instr::ABCD_LOOP:
         {
             // Add digits
             u16 lo = lo1 + lo2 + reg.sr.x;
@@ -309,8 +309,8 @@ Moira::bcd(u32 op1, u32 op2)
 
             break;
         }
-        case SBCD:
-        case SBCD_LOOP:
+        case Instr::SBCD:
+        case Instr::SBCD_LOOP:
         {
             // Subtract digits
             u16 lo = lo2 - lo1 - reg.sr.x;
@@ -370,8 +370,8 @@ Moira::logic(u32 op)
 
     switch (I) {
 
-        case NOT:
-        case NOT_LOOP:
+        case Instr::NOT:
+        case Instr::NOT_LOOP:
 
             result = ~op;
             reg.sr.n = NBIT<S>(result);
@@ -380,16 +380,16 @@ Moira::logic(u32 op)
             reg.sr.c = 0;
             break;
 
-        case NEG:
-        case NEG_LOOP:
+        case Instr::NEG:
+        case Instr::NEG_LOOP:
 
-            result = addsub<C, SUB, S>(op, 0);
+            result = addsub<C, Instr::SUB, S>(op, 0);
             break;
 
-        case NEGX:
-        case NEGX_LOOP:
+        case Instr::NEGX:
+        case Instr::NEGX_LOOP:
 
-            result = addsub<C, SUBX, S>(op, 0);
+            result = addsub<C, Instr::SUBX, S>(op, 0);
             break;
 
         default:
@@ -405,17 +405,17 @@ Moira::logic(u32 op1, u32 op2)
 
     switch (I) {
 
-        case AND: case ANDI: case ANDICCR: case ANDISR: case AND_LOOP:
+        case Instr::AND: case Instr::ANDI: case Instr::ANDICCR: case Instr::ANDISR: case Instr::AND_LOOP:
 
             result = op1 & op2;
             break;
 
-        case OR: case ORI: case ORICCR: case ORISR: case OR_LOOP:
+        case Instr::OR: case Instr::ORI: case Instr::ORICCR: case Instr::ORISR: case Instr::OR_LOOP:
 
             result = op1 | op2;
             break;
 
-        case EOR: case EORI: case EORICCR: case EORISR: case EOR_LOOP:
+        case Instr::EOR: case Instr::EORI: case Instr::EORICCR: case Instr::EORISR: case Instr::EOR_LOOP:
 
             result = op1 ^ op2;
             break;
@@ -436,25 +436,25 @@ Moira::bit(u32 op, u8 bit)
 {
     switch (I) {
 
-        case BCHG:
+        case Instr::BCHG:
 
             reg.sr.z = 1 ^ ((op >> bit) & 1);
             op ^= (1 << bit);
             break;
 
-        case BSET:
+        case Instr::BSET:
 
             reg.sr.z = 1 ^ ((op >> bit) & 1);
             op |= (1 << bit);
             break;
 
-        case BCLR:
+        case Instr::BCLR:
 
             reg.sr.z = 1 ^ ((op >> bit) & 1);
             op &= ~(1 << bit);
             break;
 
-        case BTST:
+        case Instr::BTST:
 
             reg.sr.z = 1 ^ ((op >> bit) & 1);
             break;
@@ -472,7 +472,7 @@ Moira::bitfield(u32 data, u32 offset, u32 width, u32 mask)
 
     switch (I) {
 
-        case BFCHG:
+        case Instr::BFCHG:
 
             result = data ^ mask;
 
@@ -482,7 +482,7 @@ Moira::bitfield(u32 data, u32 offset, u32 width, u32 mask)
             reg.sr.c = 0;
             break;
 
-        case BFCLR:
+        case Instr::BFCLR:
 
             result = data & ~mask;
 
@@ -492,7 +492,7 @@ Moira::bitfield(u32 data, u32 offset, u32 width, u32 mask)
             reg.sr.c = 0;
             break;
 
-        case BFSET:
+        case Instr::BFSET:
 
             result = data | mask;
 
@@ -502,7 +502,7 @@ Moira::bitfield(u32 data, u32 offset, u32 width, u32 mask)
             reg.sr.c = 0;
             break;
 
-        case BFEXTS:
+        case Instr::BFEXTS:
 
             result = SEXT<Long>(data) >> (32 - width);
 
@@ -512,7 +512,7 @@ Moira::bitfield(u32 data, u32 offset, u32 width, u32 mask)
             reg.sr.c = 0;
             break;
 
-        case BFEXTU:
+        case Instr::BFEXTU:
 
             result = data >> (32 - width);
 
@@ -522,7 +522,7 @@ Moira::bitfield(u32 data, u32 offset, u32 width, u32 mask)
             reg.sr.c = 0;
             break;
 
-        case BFFFO:
+        case Instr::BFFFO:
 
             reg.sr.n = NBIT<Long>(data);
             data >>= 32 - width;
@@ -536,7 +536,7 @@ Moira::bitfield(u32 data, u32 offset, u32 width, u32 mask)
             }
             break;
 
-        case BFTST:
+        case Instr::BFTST:
 
             result = 0;
 
@@ -560,10 +560,10 @@ Moira::addsub(u32 op1, u32 op2)
 
     switch (I) {
 
-        case ADD:
-        case ADD_LOOP:
-        case ADDI:
-        case ADDQ:
+        case Instr::ADD:
+        case Instr::ADD_LOOP:
+        case Instr::ADDI:
+        case Instr::ADDQ:
         {
             result = U64_ADD(op1, op2);
 
@@ -572,8 +572,8 @@ Moira::addsub(u32 op1, u32 op2)
             reg.sr.z = ZERO<S>(result);
             break;
         }
-        case ADDX:
-        case ADDX_LOOP:
+        case Instr::ADDX:
+        case Instr::ADDX_LOOP:
         {
             result = U64_ADD3(op1, op2, reg.sr.x);
 
@@ -582,10 +582,10 @@ Moira::addsub(u32 op1, u32 op2)
             if (CLIP<S>(result)) reg.sr.z = 0;
             break;
         }
-        case SUB:
-        case SUB_LOOP:
-        case SUBI:
-        case SUBQ:
+        case Instr::SUB:
+        case Instr::SUB_LOOP:
+        case Instr::SUBI:
+        case Instr::SUBQ:
         {
             result = U64_SUB(op2, op1);
 
@@ -594,8 +594,8 @@ Moira::addsub(u32 op1, u32 op2)
             reg.sr.z = ZERO<S>(result);
             break;
         }
-        case SUBX:
-        case SUBX_LOOP:
+        case Instr::SUBX:
+        case Instr::SUBX_LOOP:
         {
             result = U64_SUB3(op2, op1, reg.sr.x);
 
@@ -949,10 +949,10 @@ Moira::cyclesBit(u8 bit) const
 {
     switch (I)
     {
-        case BTST: return 2;
-        case BCLR: return MIMIC_MUSASHI ? 6 : (bit > 15 ? 6 : 4);
-        case BSET:
-        case BCHG: return MIMIC_MUSASHI ? 4 : (bit > 15 ? 4 : 2);
+        case Instr::BTST: return 2;
+        case Instr::BCLR: return MIMIC_MUSASHI ? 6 : (bit > 15 ? 6 : 4);
+        case Instr::BSET:
+        case Instr::BCHG: return MIMIC_MUSASHI ? 4 : (bit > 15 ? 4 : 2);
 
         default:
             fatalError;
@@ -964,14 +964,14 @@ Moira::cyclesMul(u16 data) const
 {
     int mcycles = 0;
 
-    if constexpr (C == Core::C68000 && I == MULU) {
+    if constexpr (C == Core::C68000 && I == Instr::MULU) {
 
         mcycles = 17;
         for (; data; data >>= 1) if (data & 1) mcycles++;
         mcycles *= 2;
     }
 
-    if constexpr (C == Core::C68000 && I == MULS) {
+    if constexpr (C == Core::C68000 && I == Instr::MULS) {
 
         mcycles = 17;
         data = ((data << 1) ^ data) & 0xFFFF;
@@ -979,12 +979,12 @@ Moira::cyclesMul(u16 data) const
         mcycles *= 2;
     }
 
-    if constexpr (C == Core::C68010 && I == MULU) {
+    if constexpr (C == Core::C68010 && I == Instr::MULU) {
 
         mcycles = 36;
     }
 
-    if constexpr (C == Core::C68010 && I == MULS) {
+    if constexpr (C == Core::C68010 && I == Instr::MULS) {
 
         mcycles = (data & 0x8000) ? 38 : 36;
     }
@@ -997,7 +997,7 @@ Moira::cyclesDiv(u32 op1, u16 op2) const
 {
     int result = 0;
 
-    if constexpr (C == Core::C68000 && I == DIVU) {
+    if constexpr (C == Core::C68000 && I == Instr::DIVU) {
 
         u32 dividend = op1;
         u16 divisor  = op2;
@@ -1030,7 +1030,7 @@ Moira::cyclesDiv(u32 op1, u16 op2) const
         }
     }
 
-    if constexpr (C == Core::C68000 && I == DIVS) {
+    if constexpr (C == Core::C68000 && I == Instr::DIVS) {
 
         i32 dividend = (i32)op1;
         i16 divisor  = (i16)op2;
@@ -1058,7 +1058,7 @@ Moira::cyclesDiv(u32 op1, u16 op2) const
         }
     }
 
-    if constexpr (C == Core::C68010 && I == DIVU) {
+    if constexpr (C == Core::C68010 && I == Instr::DIVU) {
 
         u32 dividend = op1;
         u16 divisor  = op2;
@@ -1091,7 +1091,7 @@ Moira::cyclesDiv(u32 op1, u16 op2) const
         }
     }
 
-    if constexpr (C == Core::C68010 && I == DIVS) {
+    if constexpr (C == Core::C68010 && I == Instr::DIVS) {
 
         i32 dividend = (i32)op1;
         i16 divisor  = (i16)op2;

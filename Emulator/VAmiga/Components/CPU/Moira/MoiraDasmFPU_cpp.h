@@ -15,7 +15,7 @@ Moira::dasmFBcc(StrWriter &str, u32 &addr, u16 op) const
     // Check for special FNOP opcode
     if ((op & 0x7F) == 0 && ext == 0) {
 
-        dasmFNop<FNOP, M, S>(str, addr, op);
+        dasmFNop<Instr::FNOP, M, S>(str, addr, op);
         return;
     }
 
@@ -74,7 +74,7 @@ Moira::dasmFGen(StrWriter &str, u32 &addr, u16 op) const
 
         case 0b010:
 
-            if ((ext & 0xFC00) == 0x5C00) { dasmFMovecr<FMOVECR, M, S>(str, addr, op); return; }
+            if ((ext & 0xFC00) == 0x5C00) { dasmFMovecr<Instr::FMOVECR, M, S>(str, addr, op); return; }
             [[fallthrough]];
 
         case 0b000:
@@ -84,7 +84,7 @@ Moira::dasmFGen(StrWriter &str, u32 &addr, u16 op) const
 
         case 0b011:
 
-            dasmFMove<FMOVE, M, S>(str, addr, op);
+            dasmFMove<Instr::FMOVE, M, S>(str, addr, op);
             return;
 
         case 0b101:
@@ -92,7 +92,7 @@ Moira::dasmFGen(StrWriter &str, u32 &addr, u16 op) const
         case 0b110:
         case 0b111:
 
-            dasmFMovem<FMOVEM, M, S>(str, addr, op);
+            dasmFMovem<Instr::FMOVEM, M, S>(str, addr, op);
             return;
     }
 
@@ -104,50 +104,50 @@ Moira::dasmFGen(StrWriter &str, u32 &addr, u16 op) const
 
             switch (cmd) {
 
-                case 0x01: dasmFGeneric<FINT, M, S>(str, addr, op); return;
-                case 0x02: dasmFGeneric<FSINH, M, S>(str, addr, op); return;
-                case 0x03: dasmFGeneric<FINTRZ, M, S>(str, addr, op); return;
-                case 0x04: dasmFGeneric<FSQRT, M, S>(str, addr, op); return;
-                case 0x06: dasmFGeneric<FLOGNP1, M, S>(str, addr, op); return;
-                case 0x08: dasmFGeneric<FETOXM1, M, S>(str, addr, op); return;
-                case 0x09: dasmFGeneric<FTANH, M, S>(str, addr, op); return;
-                case 0x0A: dasmFGeneric<FATAN, M, S>(str, addr, op); return;
-                case 0x0C: dasmFGeneric<FASIN, M, S>(str, addr, op); return;
-                case 0x0D: dasmFGeneric<FATANH, M, S>(str, addr, op); return;
-                case 0x0E: dasmFGeneric<FSIN, M, S>(str, addr, op); return;
-                case 0x0F: dasmFGeneric<FTAN, M, S>(str, addr, op); return;
-                case 0x10: dasmFGeneric<FETOX, M, S>(str, addr, op); return;
-                case 0x11: dasmFGeneric<FTWOTOX, M, S>(str, addr, op); return;
-                case 0x12: dasmFGeneric<FTENTOX, M, S>(str, addr, op); return;
-                case 0x14: dasmFGeneric<FLOGN, M, S>(str, addr, op); return;
-                case 0x15: dasmFGeneric<FLOG10, M, S>(str, addr, op); return;
-                case 0x16: dasmFGeneric<FLOG2, M, S>(str, addr, op); return;
-                case 0x18: dasmFGeneric<FABS, M, S>(str, addr, op); return;
-                case 0x19: dasmFGeneric<FCOSH, M, S>(str, addr, op); return;
-                case 0x1A: dasmFGeneric<FNEG, M, S>(str, addr, op); return;
-                case 0x1C: dasmFGeneric<FACOS, M, S>(str, addr, op); return;
-                case 0x1D: dasmFGeneric<FCOS, M, S>(str, addr, op); return;
-                case 0x1E: dasmFGeneric<FGETEXP, M, S>(str, addr, op); return;
-                case 0x1F: dasmFGeneric<FGETMAN, M, S>(str, addr, op); return;
-                case 0x20: dasmFGeneric<FDIV, M, S>(str, addr, op); return;
-                case 0x21: dasmFGeneric<FMOD, M, S>(str, addr, op); return;
-                case 0x22: dasmFGeneric<FADD, M, S>(str, addr, op); return;
-                case 0x23: dasmFGeneric<FMUL, M, S>(str, addr, op); return;
-                case 0x24: dasmFGeneric<FSGLDIV, M, S>(str, addr, op); return;
-                case 0x25: dasmFGeneric<FREM, M, S>(str, addr, op); return;
-                case 0x26: dasmFGeneric<FSCAL, M, S>(str, addr, op); return;
-                case 0x27: dasmFGeneric<FSGLMUL, M, S>(str, addr, op); return;
-                case 0x28: dasmFGeneric<FSUB, M, S>(str, addr, op); return;
-                case 0x30: dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
-                case 0x31: dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
-                case 0x32: dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
-                case 0x33: dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
-                case 0x34: dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
-                case 0x35: dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
-                case 0x36: dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
-                case 0x37: dasmFGeneric2<FSINCOS, M, S>(str, addr, op); return;
-                case 0x38: dasmFGeneric<FCMP, M, S>(str, addr, op); return;
-                case 0x3A: dasmFGeneric3<FTST, M, S>(str, addr, op); return;
+                case 0x01: dasmFGeneric<Instr::FINT, M, S>(str, addr, op); return;
+                case 0x02: dasmFGeneric<Instr::FSINH, M, S>(str, addr, op); return;
+                case 0x03: dasmFGeneric<Instr::FINTRZ, M, S>(str, addr, op); return;
+                case 0x04: dasmFGeneric<Instr::FSQRT, M, S>(str, addr, op); return;
+                case 0x06: dasmFGeneric<Instr::FLOGNP1, M, S>(str, addr, op); return;
+                case 0x08: dasmFGeneric<Instr::FETOXM1, M, S>(str, addr, op); return;
+                case 0x09: dasmFGeneric<Instr::FTANH, M, S>(str, addr, op); return;
+                case 0x0A: dasmFGeneric<Instr::FATAN, M, S>(str, addr, op); return;
+                case 0x0C: dasmFGeneric<Instr::FASIN, M, S>(str, addr, op); return;
+                case 0x0D: dasmFGeneric<Instr::FATANH, M, S>(str, addr, op); return;
+                case 0x0E: dasmFGeneric<Instr::FSIN, M, S>(str, addr, op); return;
+                case 0x0F: dasmFGeneric<Instr::FTAN, M, S>(str, addr, op); return;
+                case 0x10: dasmFGeneric<Instr::FETOX, M, S>(str, addr, op); return;
+                case 0x11: dasmFGeneric<Instr::FTWOTOX, M, S>(str, addr, op); return;
+                case 0x12: dasmFGeneric<Instr::FTENTOX, M, S>(str, addr, op); return;
+                case 0x14: dasmFGeneric<Instr::FLOGN, M, S>(str, addr, op); return;
+                case 0x15: dasmFGeneric<Instr::FLOG10, M, S>(str, addr, op); return;
+                case 0x16: dasmFGeneric<Instr::FLOG2, M, S>(str, addr, op); return;
+                case 0x18: dasmFGeneric<Instr::FABS, M, S>(str, addr, op); return;
+                case 0x19: dasmFGeneric<Instr::FCOSH, M, S>(str, addr, op); return;
+                case 0x1A: dasmFGeneric<Instr::FNEG, M, S>(str, addr, op); return;
+                case 0x1C: dasmFGeneric<Instr::FACOS, M, S>(str, addr, op); return;
+                case 0x1D: dasmFGeneric<Instr::FCOS, M, S>(str, addr, op); return;
+                case 0x1E: dasmFGeneric<Instr::FGETEXP, M, S>(str, addr, op); return;
+                case 0x1F: dasmFGeneric<Instr::FGETMAN, M, S>(str, addr, op); return;
+                case 0x20: dasmFGeneric<Instr::FDIV, M, S>(str, addr, op); return;
+                case 0x21: dasmFGeneric<Instr::FMOD, M, S>(str, addr, op); return;
+                case 0x22: dasmFGeneric<Instr::FADD, M, S>(str, addr, op); return;
+                case 0x23: dasmFGeneric<Instr::FMUL, M, S>(str, addr, op); return;
+                case 0x24: dasmFGeneric<Instr::FSGLDIV, M, S>(str, addr, op); return;
+                case 0x25: dasmFGeneric<Instr::FREM, M, S>(str, addr, op); return;
+                case 0x26: dasmFGeneric<Instr::FSCAL, M, S>(str, addr, op); return;
+                case 0x27: dasmFGeneric<Instr::FSGLMUL, M, S>(str, addr, op); return;
+                case 0x28: dasmFGeneric<Instr::FSUB, M, S>(str, addr, op); return;
+                case 0x30: dasmFGeneric2<Instr::FSINCOS, M, S>(str, addr, op); return;
+                case 0x31: dasmFGeneric2<Instr::FSINCOS, M, S>(str, addr, op); return;
+                case 0x32: dasmFGeneric2<Instr::FSINCOS, M, S>(str, addr, op); return;
+                case 0x33: dasmFGeneric2<Instr::FSINCOS, M, S>(str, addr, op); return;
+                case 0x34: dasmFGeneric2<Instr::FSINCOS, M, S>(str, addr, op); return;
+                case 0x35: dasmFGeneric2<Instr::FSINCOS, M, S>(str, addr, op); return;
+                case 0x36: dasmFGeneric2<Instr::FSINCOS, M, S>(str, addr, op); return;
+                case 0x37: dasmFGeneric2<Instr::FSINCOS, M, S>(str, addr, op); return;
+                case 0x38: dasmFGeneric<Instr::FCMP, M, S>(str, addr, op); return;
+                case 0x3A: dasmFGeneric3<Instr::FTST, M, S>(str, addr, op); return;
             }
 
             // 68040 only instructions
@@ -155,20 +155,20 @@ Moira::dasmFGen(StrWriter &str, u32 &addr, u16 op) const
 
                 switch (cmd) {
 
-                    case 0x41: dasmFGeneric<FSSQRT, M, S>(str, addr, op); return;
-                    case 0x45: dasmFGeneric<FDSQRT, M, S>(str, addr, op); return;
-                    case 0x58: dasmFGeneric<FSABS, M, S>(str, addr, op); return;
-                    case 0x5A: dasmFGeneric<FSNEG, M, S>(str, addr, op); return;
-                    case 0x5C: dasmFGeneric<FDABS, M, S>(str, addr, op); return;
-                    case 0x5E: dasmFGeneric<FDNEG, M, S>(str, addr, op); return;
-                    case 0x60: dasmFGeneric<FSDIV, M, S>(str, addr, op); return;
-                    case 0x62: dasmFGeneric<FSADD, M, S>(str, addr, op); return;
-                    case 0x63: dasmFGeneric<FSMUL, M, S>(str, addr, op); return;
-                    case 0x64: dasmFGeneric<FDDIV, M, S>(str, addr, op); return;
-                    case 0x66: dasmFGeneric<FDADD, M, S>(str, addr, op); return;
-                    case 0x67: dasmFGeneric<FDMUL, M, S>(str, addr, op); return;
-                    case 0x68: dasmFGeneric<FSSUB, M, S>(str, addr, op); return;
-                    case 0x6C: dasmFGeneric<FDSUB, M, S>(str, addr, op); return;
+                    case 0x41: dasmFGeneric<Instr::FSSQRT, M, S>(str, addr, op); return;
+                    case 0x45: dasmFGeneric<Instr::FDSQRT, M, S>(str, addr, op); return;
+                    case 0x58: dasmFGeneric<Instr::FSABS, M, S>(str, addr, op); return;
+                    case 0x5A: dasmFGeneric<Instr::FSNEG, M, S>(str, addr, op); return;
+                    case 0x5C: dasmFGeneric<Instr::FDABS, M, S>(str, addr, op); return;
+                    case 0x5E: dasmFGeneric<Instr::FDNEG, M, S>(str, addr, op); return;
+                    case 0x60: dasmFGeneric<Instr::FSDIV, M, S>(str, addr, op); return;
+                    case 0x62: dasmFGeneric<Instr::FSADD, M, S>(str, addr, op); return;
+                    case 0x63: dasmFGeneric<Instr::FSMUL, M, S>(str, addr, op); return;
+                    case 0x64: dasmFGeneric<Instr::FDDIV, M, S>(str, addr, op); return;
+                    case 0x66: dasmFGeneric<Instr::FDADD, M, S>(str, addr, op); return;
+                    case 0x67: dasmFGeneric<Instr::FDMUL, M, S>(str, addr, op); return;
+                    case 0x68: dasmFGeneric<Instr::FSSUB, M, S>(str, addr, op); return;
+                    case 0x6C: dasmFGeneric<Instr::FDSUB, M, S>(str, addr, op); return;
                 }
             }
 
@@ -473,8 +473,8 @@ Moira::dasmFMove(StrWriter &str, u32 &addr, u16 op) const
 
         case 0b000:
 
-            if (fac == 0x40) str << Ins<FSMOVE>{} << Ffmt{2};
-            else if (fac == 0x44) str << Ins<FDMOVE>{} << Ffmt{2};
+            if (fac == 0x40) str << Ins<Instr::FSMOVE>{} << Ffmt{2};
+            else if (fac == 0x44) str << Ins<Instr::FDMOVE>{} << Ffmt{2};
             else str << Ins<I>{} << Ffmt{2};
 
             str << str.tab << Fp(src) << Sep{} << Fp(dst);
@@ -482,8 +482,8 @@ Moira::dasmFMove(StrWriter &str, u32 &addr, u16 op) const
 
         case 0b010:
 
-            if (fac == 0x40) str << Ins<FSMOVE>{} << Ffmt{src};
-            else if (fac == 0x44) str << Ins<FDMOVE>{} << Ffmt{src};
+            if (fac == 0x40) str << Ins<Instr::FSMOVE>{} << Ffmt{src};
+            else if (fac == 0x44) str << Ins<Instr::FDMOVE>{} << Ffmt{src};
             else str << Ins<I>{} << Ffmt{src};
 
             if (M == Mode::IM) {
@@ -614,9 +614,9 @@ Moira::dasmFMovem(StrWriter &str, u32 &addr, u16 op) const
                 }
             }
             if (lll == 0 || lll == 1 || lll == 2 || lll == 4) {
-                str << Ins<FMOVE>{} << Ffmt{0} << str.tab;
+                str << Ins<Instr::FMOVE>{} << Ffmt{0} << str.tab;
             } else {
-                str << Ins<FMOVEM>{} << Ffmt{0} << str.tab;
+                str << Ins<Instr::FMOVEM>{} << Ffmt{0} << str.tab;
             }
             str << Op<M, Long>(reg, addr) << Sep{} << Fctrl{lll};
             break;
@@ -627,14 +627,14 @@ Moira::dasmFMovem(StrWriter &str, u32 &addr, u16 op) const
 
                 if (str.style.syntax == Syntax::GNU || str.style.syntax == Syntax::GNU_MIT) {
 
-                    str << Ins<FMOVE>{} << Ffmt{0} << str.tab << Sep{} << Op<M, Long>(reg, addr);
+                    str << Ins<Instr::FMOVE>{} << Ffmt{0} << str.tab << Sep{} << Op<M, Long>(reg, addr);
                     return;
                 }
             }
             if (lll == 0 || lll == 1 || lll == 2 || lll == 4) {
-                str << Ins<FMOVE>{} << Ffmt{0} << str.tab;
+                str << Ins<Instr::FMOVE>{} << Ffmt{0} << str.tab;
             } else {
-                str << Ins<FMOVEM>{} << Ffmt{0} << str.tab;
+                str << Ins<Instr::FMOVEM>{} << Ffmt{0} << str.tab;
             }
             str << Fctrl{lll} << Sep{} << Op<M, Long>(reg, addr);
             break;
