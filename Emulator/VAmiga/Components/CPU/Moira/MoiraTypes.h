@@ -32,7 +32,7 @@ typedef unsigned long long  u64;
 // Enumerations
 //
 
-typedef enum
+enum class Model
 {
     M68000,                 // Fully supported
     M68010,                 // Fully supported
@@ -43,8 +43,7 @@ typedef enum
     M68EC040,               // Disassembler only
     M68LC040,               // Disassembler only
     M68040                  // Disassembler only
-}
-Model;
+};
 
 typedef enum
 {
@@ -414,13 +413,13 @@ static constexpr u32 FPEXP_INEX2        = 1 << 9;
 static constexpr u32 FPEXP_INEX1        = 1 << 8;
 
 // Availabilty masks
-static constexpr u16 AV_68000           = 1 << M68000;
-static constexpr u16 AV_68010           = 1 << M68010;
-static constexpr u16 AV_68020           = 1 << M68EC020 | 1 << M68020;
-static constexpr u16 AV_68030           = 1 << M68EC030 | 1 << M68030;
-static constexpr u16 AV_68040           = 1 << M68EC040 | 1 << M68LC040 | 1 << M68040;
-static constexpr u16 AV_MMU             = 1 << M68030 | 1 << M68LC040 | 1 << M68040;
-static constexpr u16 AV_FPU             = 1 << M68040;
+static constexpr u16 AV_68000           = 1 << int(Model::M68000);
+static constexpr u16 AV_68010           = 1 << int(Model::M68010);
+static constexpr u16 AV_68020           = 1 << int(Model::M68EC020) | 1 << int(Model::M68020);
+static constexpr u16 AV_68030           = 1 << int(Model::M68EC030) | 1 << int(Model::M68030);
+static constexpr u16 AV_68040           = 1 << int(Model::M68EC040) | 1 << int(Model::M68LC040) | 1 << int(Model::M68040);
+static constexpr u16 AV_MMU             = 1 << int(Model::M68030) | 1 << int(Model::M68LC040) | 1 << int(Model::M68040);
+static constexpr u16 AV_FPU             = 1 << int(Model::M68040);
 static constexpr u16 AV_68030_UP        = AV_68030 | AV_68040;
 static constexpr u16 AV_68020_UP        = AV_68020 | AV_68030_UP;
 static constexpr u16 AV_68010_UP        = AV_68010 | AV_68020_UP;

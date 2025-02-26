@@ -30,10 +30,10 @@ class Moira : public SubComponent {
 protected:
 
     // Emulated CPU model
-    Model cpuModel = M68000;
+    Model cpuModel = Model::M68000;
 
     // Instruction set used by the disassembler
-    Model dasmModel = M68000;
+    Model dasmModel = Model::M68000;
 
     // Visual style for disassembled instructions
     DasmStyle instrStyle;

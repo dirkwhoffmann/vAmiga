@@ -109,7 +109,7 @@ Moira::hasCPI() const
 {
     switch (cpuModel) {
 
-        case M68EC020: case M68020: case M68EC030: case M68030:
+        case Model::M68EC020: case Model::M68020: case Model::M68EC030: case Model::M68030:
             return true;
 
         default:
@@ -122,7 +122,7 @@ Moira::hasMMU() const
 {
     switch (cpuModel) {
 
-        case M68030: case M68LC040: case M68040:
+        case Model::M68030: case Model::M68LC040: case Model::M68040:
             return true;
 
         default:
@@ -135,7 +135,7 @@ Moira::hasFPU() const
 {
     switch (cpuModel) {
 
-        case M68040:
+        case Model::M68040:
             return true;
 
         default:
@@ -148,9 +148,11 @@ Moira::cacrMask() const
 {
     switch (cpuModel) {
 
-        case M68020: case M68EC020: return 0x0003;
-        case M68030: case M68EC030: return 0x3F13;
-        default:                    return 0xFFFF;
+        case Model::M68020: case Model::M68EC020: return 0x0003;
+        case Model::M68030: case Model::M68EC030: return 0x3F13;
+        
+        default:
+            return 0xFFFF;
     }
 }
 
@@ -159,9 +161,11 @@ Moira::addrMask() const
 {
     switch (cpuModel) {
 
-        case M68000:    return addrMask<C68000>();
-        case M68010:    return addrMask<C68010>();
-        default:        return addrMask<C68020>();
+        case Model::M68000: return addrMask<C68000>();
+        case Model::M68010: return addrMask<C68010>();
+        
+        default:
+            return addrMask<C68020>();
     }
 }
 
@@ -170,7 +174,7 @@ Moira::addrMask() const
 {
     if constexpr (C == C68020) {
 
-        return cpuModel == M68EC020 ? 0x00FFFFFF : 0xFFFFFFFF;
+        return cpuModel == Model::M68EC020 ? 0x00FFFFFF : 0xFFFFFFFF;
 
     } else {
 
@@ -183,9 +187,11 @@ Moira::reset()
 {
     switch (cpuModel) {
 
-        case M68000:    reset<C68000>(); break;
-        case M68010:    reset<C68010>(); break;
-        default:        reset<C68020>(); break;
+        case Model::M68000:    reset<C68000>(); break;
+        case Model::M68010:    reset<C68010>(); break;
+        
+        default:
+            reset<C68020>();
     }
 }
 
@@ -353,9 +359,11 @@ Moira::processException(const std::exception &exc)
 {
     switch (cpuModel) {
 
-        case M68000:    processException<C68000>(exc); break;
-        case M68010:    processException<C68010>(exc); break;
-        default:        processException<C68020>(exc); break;
+        case Model::M68000: processException<C68000>(exc); break;
+        case Model::M68010: processException<C68010>(exc); break;
+        
+        default:
+            processException<C68020>(exc);
     }
 }
 
@@ -480,7 +488,7 @@ Moira::setSR(u16 val)
     setCCR(u8(val));
     setSupervisorMode(s);
 
-    if (cpuModel > M68010) {
+    if (cpuModel > Model::M68010) {
 
         bool t0 = (val >> 14) & 1;
         bool m = (val >> 12) & 1;
@@ -717,19 +725,19 @@ u16 Moira::availabilityMask(Instr I, Mode M, Size S, u16 ext) const
 bool
 Moira::isAvailable(Model model, Instr I) const
 {
-    return availabilityMask(I) & (1 << model);
+    return availabilityMask(I) & (1 << (int)model);
 }
 
 bool
 Moira::isAvailable(Model model, Instr I, Mode M, Size S) const
 {
-    return availabilityMask(I, M, S) & (1 << model);
+    return availabilityMask(I, M, S) & (1 << (int)model);
 }
 
 bool
 Moira::isAvailable(Model model, Instr I, Mode M, Size S, u16 ext) const
 {
-    return availabilityMask(I, M, S, ext) & (1 << model);
+    return availabilityMask(I, M, S, ext) & (1 << (int)model);
 }
 
 const char *

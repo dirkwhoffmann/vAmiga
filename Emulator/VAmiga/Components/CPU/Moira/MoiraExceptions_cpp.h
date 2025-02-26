@@ -301,9 +301,9 @@ Moira::execException(M68kException exc, int nr)
 {
     switch (cpuModel) {
 
-        case M68000:    execException<C68000>(exc, nr); break;
-        case M68010:    execException<C68010>(exc, nr); break;
-        default:        execException<C68020>(exc, nr); break;
+        case Model::M68000: execException<C68000>(exc, nr); break;
+        case Model::M68010: execException<C68010>(exc, nr); break;
+        default:            execException<C68020>(exc, nr); break;
     }
 }
 
@@ -454,9 +454,11 @@ Moira::execInterrupt(u8 level)
 {
     switch (cpuModel) {
 
-        case M68000:    execInterrupt<C68000>(level); break;
-        case M68010:    execInterrupt<C68010>(level); break;
-        default:        execInterrupt<C68020>(level); break;
+        case Model::M68000: execInterrupt<C68000>(level); break;
+        case Model::M68010: execInterrupt<C68010>(level); break;
+        
+        default:
+            execInterrupt<C68020>(level);
     }
 }
 

@@ -157,7 +157,7 @@ void
 Moira::createJumpTable(Model cpuModel, Model dasmModel)
 {
     auto core = [&](Model model) {
-        return model == M68000 ? C68000 : model == M68010 ? C68010 : C68020;
+        return model == Model::M68000 ? C68000 : model == Model::M68010 ? C68010 : C68020;
     };
 
     Core cpuCore = core(cpuModel);
@@ -654,7 +654,7 @@ Moira::createJumpTable(Model model, bool regDasm)
 
     if constexpr (C >= C68020) {
 
-        if (model == M68EC020 || model == M68020) {
+        if (model == Model::M68EC020 || model == Model::M68020) {
 
             opcode = parse("0000 0110 11-- ----");
             __________MMMXXX(opcode, CALLM, 0b001001111110, Long, Callm, CIMS)
@@ -1551,7 +1551,7 @@ Moira::createJumpTable(Model model, bool regDasm)
 
     if constexpr (C >= C68020) {
 
-        if (model == M68EC020 || model == M68020) {
+        if (model == Model::M68EC020 || model == Model::M68020) {
 
             opcode = parse("0000 0110 1100 ----");
             ____________XXXX(opcode, RTM, MODE_IP, Long, Rtm, CIMS)
@@ -1929,14 +1929,14 @@ Moira::createJumpTable(Model model, bool regDasm)
         // Memory management unit
         //
 
-        if (model == M68030) {
+        if (model == Model::M68030) {
 
             opcode = parse("1111 0000 00-- ----");
             __________XXXXXX(opcode, cpGEN, MODE_IP, Unsized, PGen, CIMS)
             __________MMMXXX(opcode, cpGEN, 0b111111111111, Unsized, PGen, CIMS)
         }
 
-        if (model == M68040 || model == M68LC040) {
+        if (model == Model::M68040 || model == Model::M68LC040) {
 
             opcode = parse("1111 0101 000- ----");
             ___________XXXXX(opcode, PFLUSH, MODE_AI, Unsized, PFlush40, CIMS)
@@ -1953,7 +1953,7 @@ Moira::createJumpTable(Model model, bool regDasm)
         // 68040 instructions
         //
 
-        if (model == M68040 || model == M68EC040 || model == M68LC040) {
+        if (model == Model::M68040 || model == Model::M68EC040 || model == Model::M68LC040) {
 
 
             //
@@ -2001,7 +2001,7 @@ Moira::createJumpTable(Model model, bool regDasm)
     // Floating-Point Unit
     //
 
-    if (model == M68040) {
+    if (model == Model::M68040) {
 
         opcode = parse("1111 0010 100- ----");
         ___________XXXXX(opcode, FBcc, MODE_IP, Word, FBcc, CIMS)
