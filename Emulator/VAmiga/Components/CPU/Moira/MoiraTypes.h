@@ -264,13 +264,6 @@ enum class AddrSpace
     PROG = 2
 };
 
-enum class FunctionCode : u8
-{
-    USER_DATA       = 1,
-    USER_PROG       = 2,
-    SUPERVISOR_DATA = 5,
-    SUPERVISOR_PROG = 6
-};
 
 //
 // Floating-point types (unused)
@@ -414,43 +407,29 @@ struct DasmStyle
 //
 
 // Function codes
-/*
-static constexpr u8 FC_USER_DATA        = 1;
-static constexpr u8 FC_USER_PROG        = 2;
-static constexpr u8 FC_SUPERVISOR_DATA  = 5;
-static constexpr u8 FC_SUPERVISOR_PROG  = 6;
-*/
+namespace FC {
 
-/*
-// Floating-point condition codes
-static constexpr u32 FPCC_N             = 1 << 27;
-static constexpr u32 FPCC_Z             = 1 << 26;
-static constexpr u32 FPCC_I             = 1 << 25;
-static constexpr u32 FPCC_NAN           = 1 << 24;
-
-// Floating-point exception bits
-static constexpr u32 FPEXP_BSUN         = 1 << 15;
-static constexpr u32 FPEXP_SNAN         = 1 << 14;
-static constexpr u32 FPEXP_OPERR        = 1 << 13;
-static constexpr u32 FPEXP_OVFL         = 1 << 12;
-static constexpr u32 FPEXP_UNFL         = 1 << 11;
-static constexpr u32 FPEXP_DZ           = 1 << 10;
-static constexpr u32 FPEXP_INEX2        = 1 << 9;
-static constexpr u32 FPEXP_INEX1        = 1 << 8;
-*/
+static constexpr u8 USER_DATA       = 1;
+static constexpr u8 USER_PROG       = 2;
+static constexpr u8 SUPERVISOR_DATA = 5;
+static constexpr u8 SUPERVISOR_PROG = 6;
+}
 
 // Availabilty masks
-static constexpr u16 AV_68000           = 1 << int(Model::M68000);
-static constexpr u16 AV_68010           = 1 << int(Model::M68010);
-static constexpr u16 AV_68020           = 1 << int(Model::M68EC020) | 1 << int(Model::M68020);
-static constexpr u16 AV_68030           = 1 << int(Model::M68EC030) | 1 << int(Model::M68030);
-static constexpr u16 AV_68040           = 1 << int(Model::M68EC040) | 1 << int(Model::M68LC040) | 1 << int(Model::M68040);
-static constexpr u16 AV_MMU             = 1 << int(Model::M68030) | 1 << int(Model::M68LC040) | 1 << int(Model::M68040);
-static constexpr u16 AV_FPU             = 1 << int(Model::M68040);
-static constexpr u16 AV_68030_UP        = AV_68030 | AV_68040;
-static constexpr u16 AV_68020_UP        = AV_68020 | AV_68030_UP;
-static constexpr u16 AV_68010_UP        = AV_68010 | AV_68020_UP;
-static constexpr u16 AV_68000_UP        = AV_68000 | AV_68010_UP;
+namespace AV {
+
+static constexpr u16 M68000         = 1 << int(Model::M68000);
+static constexpr u16 M68010         = 1 << int(Model::M68010);
+static constexpr u16 M68020         = 1 << int(Model::M68EC020) | 1 << int(Model::M68020);
+static constexpr u16 M68030         = 1 << int(Model::M68EC030) | 1 << int(Model::M68030);
+static constexpr u16 M68040         = 1 << int(Model::M68EC040) | 1 << int(Model::M68LC040) | 1 << int(Model::M68040);
+static constexpr u16 MMU            = 1 << int(Model::M68030) | 1 << int(Model::M68LC040) | 1 << int(Model::M68040);
+static constexpr u16 FPU            = 1 << int(Model::M68040);
+static constexpr u16 M68030_UP      = M68030 | M68040;
+static constexpr u16 M68020_UP      = M68020 | M68030_UP;
+static constexpr u16 M68010_UP      = M68010 | M68020_UP;
+static constexpr u16 M68000_UP      = M68000 | M68010_UP;
+}
 
 /* State flags
  *
@@ -530,9 +509,6 @@ static constexpr u64 AE_SET_IF      = (1 << 13);  // Set bit 13 in the special s
 
 // Timing flags
 static constexpr u64 IMPL_DEC       = (1 << 14);  // Omit 2 cycle delay in -(An) mode
-
-// FPU
-static constexpr u64 FPU_FMOVEM     = (1 << 15);  // Experimental
 
 
 //

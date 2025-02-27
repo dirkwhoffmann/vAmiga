@@ -591,15 +591,15 @@ Moira::availabilityMask(Instr I) const
 
         case Instr::BKPT: case Instr::MOVEC: case Instr::MOVES: case Instr::MOVEFCCR: case Instr::RTD:
 
-            return AV_68010_UP;
+            return AV::M68010_UP;
 
         case Instr::CALLM: case Instr::RTM:
 
-            return AV_68020;
+            return AV::M68020;
 
         case Instr::cpGEN: case Instr::cpRESTORE: case Instr::cpSAVE: case Instr::cpScc: case Instr::cpTRAPcc:
 
-            return AV_68020 | AV_68030;
+            return AV::M68020 | AV::M68030;
 
         case Instr::BFCHG: case Instr::BFCLR: case Instr::BFEXTS: case Instr::BFEXTU: case Instr::BFFFO:
         case Instr::BFINS: case Instr::BFSET: case Instr::BFTST: case Instr::CAS: case Instr::CAS2:
@@ -609,16 +609,16 @@ Moira::availabilityMask(Instr I) const
         case Instr::TRAPMI: case Instr::TRAPNE: case Instr::TRAPPL: case Instr::TRAPVC: case Instr::TRAPVS:
         case Instr::TRAPF: case Instr::TRAPT: case Instr::UNPK:
 
-            return AV_68020_UP;
+            return AV::M68020_UP;
 
         case Instr::CINV: case Instr::CPUSH: case Instr::MOVE16:
 
-            return AV_68040;
+            return AV::M68040;
 
         case Instr::PFLUSH: case Instr::PFLUSHA: case Instr::PFLUSHAN: case Instr::PFLUSHN: case Instr::PLOAD:
         case Instr::PMOVE: case Instr::PTEST:
 
-            return AV_MMU;
+            return AV::MMU;
 
         case Instr::FABS: case Instr::FADD: case Instr::FBcc: case Instr::FCMP: case Instr::FDBcc: case Instr::FDIV:
         case Instr::FMOVE: case Instr::FMOVEM: case Instr::FMUL: case Instr::FNEG: case Instr::FNOP:
@@ -629,7 +629,7 @@ Moira::availabilityMask(Instr I) const
         case Instr::FSMOVE: case Instr::FDMOVE: case Instr::FSMUL: case Instr::FDMUL: case Instr::FSNEG:
         case Instr::FDNEG: case Instr::FSSQRT: case Instr::FDSQRT: case Instr::FSSUB: case Instr::FDSUB:
 
-            return AV_FPU;
+            return AV::FPU;
 
         case Instr::FACOS: case Instr::FASIN: case Instr::FATAN: case Instr::FATANH: case Instr::FCOS: case Instr::FCOSH:
         case Instr::FETOX: case Instr::FETOXM1: case Instr::FGETEXP: case Instr::FGETMAN: case Instr::FINT:
@@ -642,7 +642,7 @@ Moira::availabilityMask(Instr I) const
 
         default:
 
-            return AV_68000_UP;
+            return AV::M68000_UP;
     }
 }
 
@@ -655,19 +655,19 @@ Moira::availabilityMask(Instr I, Mode M, Size S) const
 
         case Instr::CMPI:
 
-            if (isPrgMode(M)) mask &= AV_68010_UP;
+            if (isPrgMode(M)) mask &= AV::M68010_UP;
             break;
 
         case Instr::CHK: case Instr::LINK: case Instr::BRA: case Instr::BHI: case Instr::BLS: case Instr::BCC: case Instr::BCS:
         case Instr::BNE: case Instr::BEQ: case Instr::BVC: case Instr::BVS: case Instr::BPL: case Instr::BMI: case Instr::BGE:
         case Instr::BLT: case Instr::BGT: case Instr::BLE: case Instr::BSR:
 
-            if (S == Long) mask &= AV_68020_UP;
+            if (S == Long) mask &= AV::M68020_UP;
             break;
 
         case Instr::TST:
 
-            if (M == Mode(1) || M >= Mode(9)) mask &= AV_68020_UP;
+            if (M == Mode(1) || M >= Mode(9)) mask &= AV::M68020_UP;
             break;
 
         default:
@@ -691,11 +691,11 @@ u16 Moira::availabilityMask(Instr I, Mode M, Size S, u16 ext) const
                 case 0x000:
                 case 0x001:
                 case 0x800:
-                case 0x801: mask &= AV_68010_UP; break;
+                case 0x801: mask &= AV::M68010_UP; break;
                 case 0x002:
                 case 0x803:
-                case 0x804: mask &=  AV_68020_UP; break;
-                case 0x802: mask &=  AV_68020 | AV_68030; break;
+                case 0x804: mask &=  AV::M68020_UP; break;
+                case 0x802: mask &=  AV::M68020 | AV::M68030; break;
                 case 0x003:
                 case 0x004:
                 case 0x005:
@@ -703,7 +703,7 @@ u16 Moira::availabilityMask(Instr I, Mode M, Size S, u16 ext) const
                 case 0x007:
                 case 0x805:
                 case 0x806:
-                case 0x807: mask &= AV_68040; break;
+                case 0x807: mask &= AV::M68040; break;
 
                 default:
                     break;
@@ -745,11 +745,11 @@ Moira::availabilityString(Instr I, Mode M, Size S, u16 ext)
 {
     switch (availabilityMask(I, M, S, ext)) {
 
-        case AV_68010_UP:           return "(1+)";
-        case AV_68020:              return "(2)";
-        case AV_68020 | AV_68030:   return "(2-3)";
-        case AV_68020_UP:           return "(2+)";
-        case AV_68040:              return "(4+)";
+        case AV::M68010_UP:           return "(1+)";
+        case AV::M68020:              return "(2)";
+        case AV::M68020 | AV::M68030: return "(2-3)";
+        case AV::M68020_UP:           return "(2+)";
+        case AV::M68040:              return "(4+)";
 
         default:
             return "(?)";
@@ -809,11 +809,7 @@ Moira::setFC()
 {
     if constexpr (MOIRA_EMULATE_FC) {
         
-        if (M == Mode::DIPC || M == Mode::IXPC) {
-            fcl = (u8)FunctionCode::USER_PROG;
-        } else {
-            fcl = (u8)FunctionCode::USER_DATA;
-        }
+        fcl = (M == Mode::DIPC || M == Mode::IXPC) ? FC::USER_PROG : FC::USER_DATA;
     }
 }
 
