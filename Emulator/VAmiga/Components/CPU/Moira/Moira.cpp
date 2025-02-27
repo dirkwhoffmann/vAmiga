@@ -72,7 +72,7 @@ Moira::setModel(Model cpuModel, Model dasmModel)
         createJumpTable(cpuModel, dasmModel);
         
         reg.cacr &= cacrMask();
-        flags &= ~CPU_IS_LOOPING;
+        flags &= ~State::LOOPING;
     }
 }
 
@@ -198,7 +198,7 @@ Moira::reset()
 template <Core C> void
 Moira::reset()
 {
-    flags = CPU_CHECK_IRQ;
+    flags = State::CHECK_IRQ;
 
     reg = { };
     reg.sr.s = 1;
@@ -236,11 +236,13 @@ Moira::reset()
 void
 Moira::execute()
 {
+    using namespace State;
+    
     // Check the integrity of the IRQ flag
-    if (reg.ipl > reg.sr.ipl || reg.ipl == 7) assert(flags & CPU_CHECK_IRQ);
+    if (reg.ipl > reg.sr.ipl || reg.ipl == 7) assert(flags & State::CHECK_IRQ);
 
     // Check the integrity of the trace flag
-    assert(!!(flags & CPU_TRACE_FLAG) == reg.sr.t1);
+    assert(!!(flags & State::TRACING) == reg.sr.t1);
 
     // Check the integrity of the program counter
     assert(reg.pc0 == reg.pc);
@@ -265,28 +267,28 @@ Moira::execute()
         // Slow path: Process flags one by one
         //
 
-        if (flags & (CPU_IS_HALTED | CPU_TRACE_EXCEPTION | CPU_TRACE_FLAG)) {
+        if (flags & (HALTED | TRACE_EXC | TRACING)) {
 
             // Only continue if the CPU is not halted
-            if (flags & CPU_IS_HALTED) {
+            if (flags & HALTED) {
                 sync(2);
                 return;
             }
 
             // Process pending trace exception (if any)
-            if (flags & CPU_TRACE_EXCEPTION) {
+            if (flags & TRACE_EXC) {
                 execException(M68kException::TRACE);
                 goto done;
             }
 
             // Check if the T flag is set inside the status register
-            if ((flags & CPU_TRACE_FLAG) && !(flags & CPU_IS_STOPPED)) {
-                flags |= CPU_TRACE_EXCEPTION;
+            if ((flags & TRACING) && !(flags & STOPPED)) {
+                flags |= TRACE_EXC;
             }
         }
 
         // Process pending interrupt (if any)
-        if (flags & CPU_CHECK_IRQ) {
+        if (flags & CHECK_IRQ) {
 
             try {
                 if (checkForIrq()) goto done;
@@ -296,13 +298,13 @@ Moira::execute()
         }
 
         // If the CPU is stopped, poll the IPL lines and return
-        if (flags & CPU_IS_STOPPED) {
+        if (flags & STOPPED) {
 
             // Initiate a privilege exception if the supervisor bit is cleared
             if (!reg.sr.s) {
                 sync(4);
                 reg.pc -= 2;
-                flags &= ~CPU_IS_STOPPED;
+                flags &= ~STOPPED;
                 execException(M68kException::PRIVILEGE);
                 return;
             }
@@ -313,14 +315,14 @@ Moira::execute()
         }
 
         // If logging is enabled, record the executed instruction
-        if (flags & CPU_LOG_INSTRUCTION) {
+        if (flags & LOGGING) {
             debugger.logInstruction();
         }
 
         // Execute the instruction
         reg.pc += 2;
 
-        if (flags & CPU_IS_LOOPING) {
+        if (flags & LOOPING) {
 
             assert(loop[queue.ird]);
             (this->*loop[queue.ird])(queue.ird);
@@ -337,10 +339,10 @@ Moira::execute()
     done:
 
         // Check if a breakpoint has been reached
-        if (flags & CPU_CHECK_BP) {
+        if (flags & CHECK_BP) {
 
             // Don't break if the instruction won't be executed due to tracing
-            if (flags & CPU_TRACE_EXCEPTION) return;
+            if (flags & TRACE_EXC) return;
 
             // Check if a softstop has been reached
             if (debugger.softstopMatches(reg.pc0)) softstopReached(reg.pc0);
@@ -407,7 +409,7 @@ Moira::checkForIrq()
     if (reg.ipl > reg.sr.ipl || reg.ipl == 7) {
 
         // Exit loop mode
-        if (flags & CPU_IS_LOOPING) flags &= ~CPU_IS_LOOPING;
+        if (flags & State::LOOPING) flags &= ~State::LOOPING;
 
         // Trigger interrupt
         execInterrupt(reg.ipl);
@@ -421,7 +423,7 @@ Moira::checkForIrq()
         // external IPL or the IPL mask inside the status register keep the
         // same. If one of these variables changes, we reenable interrupt
         // checking.
-        if (reg.ipl == ipl) flags &= ~CPU_CHECK_IRQ;
+        if (reg.ipl == ipl) flags &= ~State::CHECK_IRQ;
 
         return false;
     }
@@ -431,7 +433,7 @@ void
 Moira::halt()
 {
     // Halt the CPU
-    flags |= CPU_IS_HALTED;
+    flags |= State::HALTED;
     reg.pc = reg.pc0;
 
     // Inform the delegate
@@ -482,7 +484,7 @@ Moira::setSR(u16 val)
     u8   ipl = (val >>  8) & 7;
 
     reg.sr.ipl = ipl;
-    flags |= CPU_CHECK_IRQ;
+    flags |= State::CHECK_IRQ;
     t1 ? setTraceFlag() : clearTraceFlag();
 
     setCCR(u8(val));
@@ -819,7 +821,7 @@ Moira::setIPL(u8 val)
     if (ipl != val) {
         
         ipl = val;
-        flags |= CPU_CHECK_IRQ;
+        flags |= State::CHECK_IRQ;
     }
 }
 

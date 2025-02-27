@@ -2218,7 +2218,7 @@ Moira::execDbcc(u16 opcode)
                 if (loop[queue.ird] && disp == -4) {
 
                     // Enter loop mode
-                    flags |= CPU_IS_LOOPING;
+                    flags |= State::LOOPING;
                     queue.irc = opcode;
                 }
 
@@ -2283,7 +2283,7 @@ Moira::execDbcc(u16 opcode)
                 loopModeDelay = 2;
                 reg.pc += 2;
                 fullPrefetch<C, POLL>();
-                flags &= ~CPU_IS_LOOPING;
+                flags &= ~State::LOOPING;
             }
 
         } else {
@@ -2292,7 +2292,7 @@ Moira::execDbcc(u16 opcode)
             // Fall through to next instruction
             reg.pc += 2;
             fullPrefetch<C, POLL>();
-            flags &= ~CPU_IS_LOOPING;
+            flags &= ~State::LOOPING;
         }
     };
 
@@ -5360,7 +5360,7 @@ Moira::execStop(u16 opcode)
     u16 src = (u16)readI<C, Word>();
 
     setSR(src);
-    flags |= CPU_IS_STOPPED;
+    flags |= State::STOPPED;
     reg.pc0 = reg.pc;
 
     //           00  10  20        00  10  20        00  10  20

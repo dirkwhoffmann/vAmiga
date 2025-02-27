@@ -188,9 +188,9 @@ void
 Breakpoints::setNeedsCheck(bool value)
 {
     if (value) {
-        moira.flags |= CPU_CHECK_BP;
+        moira.flags |= State::CHECK_BP;
     } else {
-        moira.flags &= ~CPU_CHECK_BP;
+        moira.flags &= ~State::CHECK_BP;
     }
 }
 
@@ -198,9 +198,9 @@ void
 Watchpoints::setNeedsCheck(bool value)
 {
     if (value) {
-        moira.flags |= CPU_CHECK_WP;
+        moira.flags |= State::CHECK_WP;
     } else {
-        moira.flags &= ~CPU_CHECK_WP;
+        moira.flags &= ~State::CHECK_WP;
     }
 }
 
@@ -208,9 +208,9 @@ void
 Catchpoints::setNeedsCheck(bool value)
 {
     if (value) {
-        moira.flags |= CPU_CHECK_CP;
+        moira.flags |= State::CHECK_CP;
     } else {
-        moira.flags &= ~CPU_CHECK_CP;
+        moira.flags &= ~State::CHECK_CP;
     }
 }
 
@@ -297,13 +297,13 @@ Debugger::catchpointMatches(u32 vectorNr)
 void
 Debugger::enableLogging()
 {
-    moira.flags |= CPU_LOG_INSTRUCTION;
+    moira.flags |= State::LOGGING;
 }
 
 void
 Debugger::disableLogging()
 {
-    moira.flags &= ~CPU_LOG_INSTRUCTION;
+    moira.flags &= ~State::LOGGING;
 }
 
 int

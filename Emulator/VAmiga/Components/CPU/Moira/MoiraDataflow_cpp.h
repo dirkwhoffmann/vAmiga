@@ -374,7 +374,7 @@ Moira::read(u32 addr)
     }
 
     // Check if a watchpoint has been reached
-    if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr, S)) {
+    if ((flags & State::CHECK_WP) && debugger.watchpointMatches(addr, S)) {
         watchpointReached(addr);
     }
 
@@ -427,7 +427,7 @@ Moira::write(u32 addr, u32 val)
     }
 
     // Check if a watchpoint has been reached
-    if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr, S)) {
+    if ((flags & State::CHECK_WP) && debugger.watchpointMatches(addr, S)) {
         watchpointReached(addr);
     }
 
@@ -599,7 +599,7 @@ Moira::fullPrefetch()
 template <Core C> void
 Moira::noPrefetch(int delay)
 {
-    assert(flags & CPU_IS_LOOPING);
+    assert(flags & State::LOOPING);
 
     reg.pc0 = reg.pc;
     std::swap(queue.irc, queue.ird);

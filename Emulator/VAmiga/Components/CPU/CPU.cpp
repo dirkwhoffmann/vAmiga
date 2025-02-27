@@ -433,7 +433,7 @@ CPU::_didReset(bool hard)
         
         // Remove all recorded instructions and set the log flag if needed
         debugger.clearLog();
-        if (emulator.isTracking()) flags |= moira::CPU_LOG_INSTRUCTION;
+        if (emulator.isTracking()) flags |= moira::State::LOGGING;
 
     } else {
         
@@ -554,17 +554,19 @@ CPU::_dump(Category category, std::ostream& os) const
 
         if (flags) {
 
+            using namespace moira::State;
+            
             os << std::endl;
-            if (flags & moira::CPU_IS_HALTED) os << util::tab("") << "CPU_IS_HALTED" << std::endl;
-            if (flags & moira::CPU_IS_STOPPED) os << util::tab("") << "CPU_IS_STOPPED" << std::endl;
-            if (flags & moira::CPU_IS_LOOPING) os << util::tab("") << "CPU_IS_LOOPING" << std::endl;
-            if (flags & moira::CPU_LOG_INSTRUCTION) os << util::tab("") << "CPU_LOG_INSTRUCTION" << std::endl;
-            if (flags & moira::CPU_CHECK_IRQ) os << util::tab("") << "CPU_CHECK_IRQ" << std::endl;
-            if (flags & moira::CPU_TRACE_EXCEPTION) os << util::tab("") << "CPU_TRACE_EXCEPTION" << std::endl;
-            if (flags & moira::CPU_TRACE_FLAG) os << util::tab("") << "CPU_TRACE_FLAG" << std::endl;
-            if (flags & moira::CPU_CHECK_BP) os << util::tab("") << "CPU_CHECK_BP" << std::endl;
-            if (flags & moira::CPU_CHECK_WP) os << util::tab("") << "CPU_CHECK_WP" << std::endl;
-            if (flags & moira::CPU_CHECK_CP) os << util::tab("") << "CPU_CHECK_CP" << std::endl;
+            if (flags & HALTED)    os << util::tab("") << "HALTED" << std::endl;
+            if (flags & STOPPED)   os << util::tab("") << "STOPPED" << std::endl;
+            if (flags & LOOPING)   os << util::tab("") << "LOOPING" << std::endl;
+            if (flags & LOGGING)   os << util::tab("") << "LOGGING" << std::endl;
+            if (flags & CHECK_IRQ) os << util::tab("") << "CHECK_IRQ" << std::endl;
+            if (flags & TRACE_EXC) os << util::tab("") << "TRACE_EXC" << std::endl;
+            if (flags & TRACING)   os << util::tab("") << "TRACING" << std::endl;
+            if (flags & CHECK_BP)  os << util::tab("") << "CHECK_BP" << std::endl;
+            if (flags & CHECK_WP)  os << util::tab("") << "CHECK_WP" << std::endl;
+            if (flags & CHECK_CP)  os << util::tab("") << "CHECK_CP" << std::endl;
             os << std::endl;
         }
 

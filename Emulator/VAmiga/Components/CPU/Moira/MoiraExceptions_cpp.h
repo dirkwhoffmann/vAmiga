@@ -275,7 +275,7 @@ Moira::execAddressError(StackFrame frame, int delay)
 
     // Disable tracing
     clearTraceFlags();
-    flags &= ~CPU_TRACE_EXCEPTION;
+    flags &= ~State::TRACE_EXC;
     SYNC(8);
 
     // A misaligned stack pointer will cause a double fault
@@ -341,7 +341,7 @@ Moira::execException(M68kException exc, int nr)
         case M68kException::LINEF:
 
             // Clear any pending trace event
-            flags &= ~CPU_TRACE_EXCEPTION;
+            flags &= ~State::TRACE_EXC;
 
             SYNC(4);
 
@@ -359,7 +359,7 @@ Moira::execException(M68kException exc, int nr)
         case M68kException::BKPT:
 
             // Clear any pending trace event
-            flags &= ~CPU_TRACE_EXCEPTION;
+            flags &= ~State::TRACE_EXC;
 
             SYNC(2);
             (void)readM<C, Mode::DN, Word>(reg.pc);
@@ -388,7 +388,7 @@ Moira::execException(M68kException exc, int nr)
         case M68kException::PRIVILEGE:
 
             // Clear any pending trace event
-            flags &= ~CPU_TRACE_EXCEPTION;
+            flags &= ~State::TRACE_EXC;
 
             SYNC(4);
 
@@ -402,10 +402,10 @@ Moira::execException(M68kException exc, int nr)
         case M68kException::TRACE:
 
             // Clear any pending trace event
-            flags &= ~CPU_TRACE_EXCEPTION;
+            flags &= ~State::TRACE_EXC;
 
             // Recover from stop state
-            flags &= ~CPU_IS_STOPPED;
+            flags &= ~State::STOPPED;
 
             SYNC(4);
 
@@ -419,7 +419,7 @@ Moira::execException(M68kException exc, int nr)
         case M68kException::FORMAT_ERROR:
 
             // Clear any pending trace event
-            flags &= ~CPU_TRACE_EXCEPTION;
+            flags &= ~State::TRACE_EXC;
 
             // Write stack frame
             if (MOIRA_MIMIC_MUSASHI) {
@@ -474,7 +474,7 @@ Moira::execInterrupt(u8 level)
     u16 status = getSR();
 
     // Recover from stop state and terminate loop mode
-    flags &= ~(CPU_IS_STOPPED | CPU_IS_LOOPING);
+    flags &= ~(State::STOPPED | State::LOOPING);
 
     // Clear the polled IPL value
     reg.ipl = 0;
@@ -487,7 +487,7 @@ Moira::execInterrupt(u8 level)
 
     // Disable tracing
     clearTraceFlags();
-    flags &= ~CPU_TRACE_EXCEPTION;
+    flags &= ~State::TRACE_EXC;
 
     switch (C) {
 

@@ -431,53 +431,45 @@ static constexpr u16 M68010_UP      = M68010 | M68020_UP;
 static constexpr u16 M68000_UP      = M68000 | M68010_UP;
 }
 
-/* State flags
- *
- * CPU_IS_HALTED:
- *     Set when the CPU is in "halted" state. This state is entered when
- *     a double fault occurs. The state is left on reset, only.
- *
- * CPU_IS_STOPPED:
- *     Set when the CPU is in "stopped" state. This state is entered when
- *     the STOP instruction has been executed. The state is left when the
- *     next interrupt occurs.
- *
- * CPU_IS_LOOPING:
- *     Set when the CPU is running in "loop mode". This mode is a 68010
- *     feature to speed up the execution of certain DBcc loops.
- *
- * CPU_LOG_INSTRUCTION:
- *     This flag is set if instruction logging is enabled. If set, the
- *     CPU records the current register contents in a log buffer.
- *
- * CPU_CHECK_IRQ:
- *     The CPU only checks for pending interrupts if this flag is set.
- *     To accelerate emulation, the CPU deletes this flag if it can assure
- *     that no interrupt can happen.
- *
- * CPU_TRACE_EXCEPTION:
- *    If this flag is set, the CPU initiates the trace exception.
- *
- * CPU_TRACE_FLAG:
- *    This flag reflects the T flag from the status register. The copy is
- *    held to accelerate emulation.
- *
- * CPU_CHECK_BP, CPU_CHECK_WP, CPU_CHECK_CP:
- *    These flags indicate whether the CPU should check for breakpoints,
- *    watchpoints, or catchpoints.
+/**
+ * @brief CPU Execution Flags
+ * @details These flags control the CPU's execution state and behavior.
  */
-static constexpr int CPU_IS_HALTED          = (1 << 8);
-static constexpr int CPU_IS_STOPPED         = (1 << 9);
-static constexpr int CPU_IS_LOOPING         = (1 << 10);
-static constexpr int CPU_LOG_INSTRUCTION    = (1 << 11);
-static constexpr int CPU_CHECK_IRQ          = (1 << 12);
-static constexpr int CPU_TRACE_EXCEPTION    = (1 << 13);
-static constexpr int CPU_TRACE_FLAG         = (1 << 14);
-static constexpr int CPU_CHECK_BP           = (1 << 15);
-static constexpr int CPU_CHECK_WP           = (1 << 16);
-static constexpr int CPU_CHECK_CP           = (1 << 17);
+namespace State {
 
-/* Execution flags
+/** CPU is in a halted state due to a double fault. Cleared only on reset. */
+static constexpr int HALTED         = (1 << 8);
+
+/** CPU is stopped after executing a STOP instruction. Cleared on the next interrupt. */
+static constexpr int STOPPED        = (1 << 9);
+
+/** CPU is in loop mode (68010 feature for optimizing DBcc loops). */
+static constexpr int LOOPING        = (1 << 10);
+
+/** Enables instruction logging, storing register states in a log buffer. */
+static constexpr int LOGGING        = (1 << 11);
+
+/** Reflects the T flag from the status register, used to speed up emulation. */
+static constexpr int TRACING        = (1 << 12);
+
+/** Triggers a trace exception when set. */
+static constexpr int TRACE_EXC      = (1 << 13);
+
+/** CPU checks for pending interrupts only if this flag is set. Cleared when no interrupt is possible. */
+static constexpr int CHECK_IRQ      = (1 << 14);
+
+/** Enables checking for breakpoints. */
+static constexpr int CHECK_BP       = (1 << 15);
+
+/** Enables checking for watchpoints. */
+static constexpr int CHECK_WP       = (1 << 16);
+
+/** Enables checking for catchpoints. */
+static constexpr int CHECK_CP       = (1 << 17);
+
+}
+
+/* Instruction Flags
  *
  * The M68k is a well organized processor that breaks down the execution of
  * an instruction to a limited number of general execution schemes. However,

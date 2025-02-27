@@ -203,7 +203,7 @@ public:
     void execute();
 
     // Returns true if the CPU is in HALT state
-    bool isHalted() const { return flags & CPU_IS_HALTED; }
+    bool isHalted() const { return flags & State::HALTED; }
 
 private:
 
@@ -423,8 +423,8 @@ public:
 
 private:
 
-    void setTraceFlag() { reg.sr.t1 = true; flags |= CPU_TRACE_FLAG; }
-    void clearTraceFlag() { reg.sr.t1 = false; flags &= ~CPU_TRACE_FLAG; }
+    void setTraceFlag() { reg.sr.t1 = true; flags |= State::TRACING; }
+    void clearTraceFlag() { reg.sr.t1 = false; flags &= ~State::TRACING; }
 
     void setTrace0Flag() { reg.sr.t0 = true; }
     void clearTrace0Flag() { reg.sr.t0 = false; }
