@@ -347,10 +347,10 @@ Moira::execute()
             if (flags & TRACE_EXC) return;
 
             // Check if a softstop has been reached
-            if (debugger.softstopMatches(reg.pc0)) softstopReached(reg.pc0);
+            if (debugger.softstopMatches(reg.pc0)) didReachSoftstop(reg.pc0);
 
             // Check if a breakpoint has been reached
-            if (debugger.breakpointMatches(reg.pc0)) breakpointReached(reg.pc0);
+            if (debugger.breakpointMatches(reg.pc0)) didReachBreakpoint(reg.pc0);
         }
     }
 

@@ -375,7 +375,7 @@ Moira::read(u32 addr)
 
     // Check if a watchpoint has been reached
     if ((flags & State::CHECK_WP) && debugger.watchpointMatches(addr, S)) {
-        watchpointReached(addr);
+        didReachWatchpoint(addr);
     }
 
     if constexpr (S == Byte) {
@@ -428,7 +428,7 @@ Moira::write(u32 addr, u32 val)
 
     // Check if a watchpoint has been reached
     if ((flags & State::CHECK_WP) && debugger.watchpointMatches(addr, S)) {
-        watchpointReached(addr);
+        didReachWatchpoint(addr);
     }
 
     if constexpr (S == Byte) {
@@ -686,7 +686,7 @@ Moira::jumpToVector(int nr)
     prefetch<C, POLL>();
 
     // Stop emulation if the exception should be catched
-    if (debugger.catchpointMatches(nr)) catchpointReached(u8(nr));
+    if (debugger.catchpointMatches(nr)) didReachCatchpoint(u8(nr));
 
     didJumpToVector(nr, reg.pc);
 }

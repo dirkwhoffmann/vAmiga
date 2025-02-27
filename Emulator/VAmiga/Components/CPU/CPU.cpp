@@ -242,31 +242,31 @@ Moira::didChangeCAAR(u32 value)
 }
 
 void
-Moira::softstopReached(u32 addr)
+Moira::didReachSoftstop(u32 addr)
 {
     amiga.setFlag(RL::SOFTSTOP_REACHED);
 }
 
 void
-Moira::breakpointReached(u32 addr)
+Moira::didReachBreakpoint(u32 addr)
 {
     amiga.setFlag(RL::BREAKPOINT_REACHED);
 }
 
 void
-Moira::watchpointReached(u32 addr)
+Moira::didReachWatchpoint(u32 addr)
 {
     amiga.setFlag(RL::WATCHPOINT_REACHED);
 }
 
 void
-Moira::catchpointReached(u8 vector)
+Moira::didReachCatchpoint(u8 vector)
 {
     amiga.setFlag(RL::CATCHPOINT_REACHED);
 }
 
 void
-Moira::softwareTrapReached(u32 addr)
+Moira::didReachSoftwareTrap(u32 addr)
 {
     amiga.setFlag(RL::SWTRAP_REACHED);
 }

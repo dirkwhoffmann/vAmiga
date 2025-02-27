@@ -45,7 +45,7 @@ Moira::execLineA(u16 opcode)
         prefetch<C>();
 
         // Inform the delegate
-        softwareTrapReached(reg.pc0);
+        didReachSoftwareTrap(reg.pc0);
         return;
     }
 

@@ -462,12 +462,12 @@ protected:
     /**
      * @brief Called when the CPU is reset.
      */
-    virtual void didReset() { }
+    virtual void cpuDidReset() { }
     
     /**
      * @brief Called when the CPU enters the HALT state.
      */
-    virtual void didHalt() { }
+    virtual void cpuDidHalt() { }
     
     //
     // Instruction delegates
@@ -548,31 +548,31 @@ protected:
      * @brief Called when a soft stop is reached.
      * @param addr The address of the stop.
      */
-    virtual void softstopReached(u32 addr) { }
+    virtual void didReachSoftstop(u32 addr) { }
     
     /**
      * @brief Called when a breakpoint is hit.
      * @param addr The address of the breakpoint.
      */
-    virtual void breakpointReached(u32 addr) { }
+    virtual void didReachBreakpoint(u32 addr) { }
     
     /**
      * @brief Called when a watchpoint is hit.
      * @param addr The address of the watchpoint.
      */
-    virtual void watchpointReached(u32 addr) { }
+    virtual void didReachWatchpoint(u32 addr) { }
     
     /**
      * @brief Called when a catchpoint is hit.
      * @param vector The exception vector associated with the catchpoint.
      */
-    virtual void catchpointReached(u8 vector) { }
+    virtual void didReachCatchpoint(u8 vector) { }
     
     /**
      * @brief Called when a software trap is hit.
      * @param addr The address of the trap.
      */
-    virtual void softwareTrapReached(u32 addr) { }
+    virtual void didReachSoftwareTrap(u32 addr) { }
     
 #else
     
@@ -724,31 +724,31 @@ protected:
      * @brief Called when a soft stop is reached.
      * @param addr The address of the stop.
      */
-    void softstopReached(u32 addr);
+    void didReachSoftstop(u32 addr);
     
     /**
      * @brief Called when a breakpoint is hit.
      * @param addr The address of the breakpoint.
      */
-    void breakpointReached(u32 addr);
+    void didReachBreakpoint(u32 addr);
     
     /**
      * @brief Called when a watchpoint is hit.
      * @param addr The address of the watchpoint.
      */
-    void watchpointReached(u32 addr);
+    void didReachWatchpoint(u32 addr);
     
     /**
      * @brief Called when a catchpoint is hit.
      * @param vector The exception vector associated with the catchpoint.
      */
-    void catchpointReached(u8 vector);
+    void didReachCatchpoint(u8 vector);
     
     /**
      * @brief Called when a software trap is hit.
      * @param addr The address of the trap.
      */
-    void softwareTrapReached(u32 addr);
+    void didReachSoftwareTrap(u32 addr);
     
 #endif
     
