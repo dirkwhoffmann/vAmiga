@@ -14,10 +14,9 @@
 namespace vamiga::moira {
 
 
-//
-// Datatypes
-//
-
+/**
+ * @brief Basic data types.
+ */
 using i8  = int8_t;
 using i16 = int16_t;             ;
 using i32 = int32_t;
@@ -28,59 +27,73 @@ using u32 = uint32_t;
 using u64 = unsigned long long;
 
 
-//
-// Aliases
-//
-
+/**
+ * @brief Address sizes for various instructions.
+ */
 using Size = int;
-static constexpr int Unsized     = 0;
-static constexpr int Byte        = 1;        // .b : Byte addressing
-static constexpr int Word        = 2;        // .w : Word addressing
-static constexpr int Long        = 4;        // .l : Long word addressing
-static constexpr int Quad        = 8;        // FPU
-static constexpr int Extended    = 12;       // FPU
+static constexpr int Unsized     = 0;  ///< No specific size.
+static constexpr int Byte        = 1;  ///< Byte addressing (.b)
+static constexpr int Word        = 2;  ///< Word addressing (.w)
+static constexpr int Long        = 4;  ///< Long word addressing (.l)
+static constexpr int Quad        = 8;  ///< Quad word (FPU)
+static constexpr int Extended    = 12; ///< Extended precision (FPU)
 
 
 //
 // Enumerations
 //
 
+/**
+ * @brief CPU model enumeration.
+ */
 enum class Model
 {
-    M68000,                 // Fully supported
-    M68010,                 // Fully supported
-    M68EC020,               // Work in progress
-    M68020,                 // Work in progress
-    M68EC030,               // Disassembler only
-    M68030,                 // Disassembler only
-    M68EC040,               // Disassembler only
-    M68LC040,               // Disassembler only
-    M68040                  // Disassembler only
+    M68000,     ///< Fully supported.
+    M68010,     ///< Fully supported.
+    M68EC020,   ///< Work in progress.
+    M68020,     ///< Work in progress.
+    M68EC030,   ///< Disassembler only.
+    M68030,     ///< Disassembler only.
+    M68EC040,   ///< Disassembler only.
+    M68LC040,   ///< Disassembler only.
+    M68040      ///< Disassembler only.
 };
 
+/**
+ * @brief Determines the execution core used by different CPU models.
+ */
 enum class Core
 {
-    C68000,                 // Used by M68000
-    C68010,                 // Used by M68010
-    C68020                  // Used by all others
+    C68000,     ///< Used by M68000.
+    C68010,     ///< Used by M68010.
+    C68020      ///< Used by all others.
 };
 
+/**
+ * @brief Syntax styles for disassembly output.
+ */
 enum class Syntax
 {
-    MOIRA,                  // Official syntax styles
+    MOIRA,      ///< Official syntax.
     MOIRA_MIT,
-    GNU,                    // Legacy styles (for unit testing)
+    GNU,        ///< Legacy styles (for testing).
     GNU_MIT,
-    MUSASHI,
+    MUSASHI
 };
 
+/**
+ * @brief Letter case preferences for disassembly output.
+ */
 enum class LetterCase
 {
-    MIXED_CASE,        // Style is determined by the selected DasmSyntax
-    LOWER_CASE,        // Everything is printed in lowercase
-    UPPER_CASE         // Everything is printed in uppercase
+    MIXED_CASE, ///< Determined by the selected syntax.
+    LOWER_CASE, ///< Everything in lowercase.
+    UPPER_CASE  ///< Everything in uppercase.
 };
 
+/**
+ * @brief Processor instructions.
+ */
 enum class Instr
 {
     // 68000 instructions
@@ -154,21 +167,24 @@ enum class Instr
     SUBA_LOOP,  SUBX_LOOP,  TST_LOOP
 };
 
+/**
+ * @brief Addressing modes.
+ */
 enum class Mode
 {
-    DN,                //  0: Dn
-    AN,                //  1: An
-    AI,                //  2: (An)
-    PI,                //  3: (An)+
-    PD,                //  4: -(An)
-    DI,                //  5: (d,An)
-    IX,                //  6: (d,An,Xi)
-    AW,                //  7: (####).w
-    AL,                //  8: (####).l
-    DIPC,              //  9: (d,PC)
-    IXPC,              // 10: (d,PC,Xi)
-    IM,                // 11: ####
-    IP                 // 12: ----
+    DN,                ///<  0: Dn, Data register direct.
+    AN,                ///<  1: An, Address register direct.
+    AI,                ///<  2: (An), Address register indirect.
+    PI,                ///<  3: (An)+, Address register indirect with post-increment.
+    PD,                ///<  4: -(An), Address register indirect with pre-decrement.
+    DI,                ///<  5: (d,An), Address register indirect with displacement.
+    IX,                ///<  6: (d,An,Xi), Address register indirect with index.
+    AW,                ///<  7: (####).w, Absolute short addressing.
+    AL,                ///<  8: (####).l, Absolute long addressing.
+    DIPC,              ///<  9: (d,PC), Program counter relative with displacement.
+    IXPC,              ///< 10: (d,PC,Xi), Program counter relative with index.
+    IM,                ///< 11: ####, Immediate value.
+    IP                 ///< 12: Implied addressing.
 };
 
 constexpr bool isRegMode(Mode M) { return M == Mode::DN || M == Mode::AN;  }
@@ -179,61 +195,71 @@ constexpr bool isPrgMode(Mode M) { return M == Mode::DIPC || M == Mode::IXPC; }
 constexpr bool isDspMode(Mode M) { return M == Mode::DI || M == Mode::IX || M == Mode::DIPC || M == Mode::IXPC; }
 constexpr bool isImmMode(Mode M) { return M == Mode::IM; }
 
+/**
+ * Condition codes used in conditional instructions.
+ */
 enum class Cond
 {
-    BT,                // Always true
-    BF,                // Always false
-    HI,                // Higher than
-    LS,                // Lower or same
-    CC,                // Carry clear
-    CS,                // Carry set
-    NE,                // Not equal
-    EQ,                // Equal
-    VC,                // Overflow clear
-    VS,                // Overflow set
-    PL,                // Plus
-    MI,                // Minus
-    GE,                // Greater or equal
-    LT,                // Less than
-    GT,                // Greater than
-    LE                 // Less than
+    BT,  ///< Always true
+    BF,  ///< Always false
+    HI,  ///< Higher than
+    LS,  ///< Lower or same
+    CC,  ///< Carry clear
+    CS,  ///< Carry set
+    NE,  ///< Not equal
+    EQ,  ///< Equal
+    VC,  ///< Overflow clear
+    VS,  ///< Overflow set
+    PL,  ///< Plus
+    MI,  ///< Minus
+    GE,  ///< Greater or equal
+    LT,  ///< Less than
+    GT,  ///< Greater than
+    LE   ///< Less than or equal
 };
 
+/**
+ * Enumeration of Motorola 68k CPU exceptions.
+ */
 enum class M68kException
 {
-    // Native exceptions
-    RESET               = 1,
-    BUS_ERROR           = 2,
-    ADDRESS_ERROR       = 3,
-    ILLEGAL             = 4,
-    DIVIDE_BY_ZERO      = 5,
-    CHK                 = 6,
-    TRAPV               = 7,
-    PRIVILEGE           = 8,
-    TRACE               = 9,
-    LINEA               = 10,
-    LINEF               = 11,
-    FORMAT_ERROR        = 14,
-    IRQ_UNINITIALIZED   = 15,
-    IRQ_SPURIOUS        = 24,
-    TRAP                = 32,
+    RESET               = 1,    ///< CPU reset exception
+    BUS_ERROR           = 2,    ///< Bus error
+    ADDRESS_ERROR       = 3,    ///< Address error
+    ILLEGAL             = 4,    ///< Illegal instruction
+    DIVIDE_BY_ZERO      = 5,    ///< Division by zero
+    CHK                 = 6,    ///< CHK instruction exception
+    TRAPV               = 7,    ///< TRAPV instruction exception
+    PRIVILEGE           = 8,    ///< Privilege violation
+    TRACE               = 9,    ///< Trace exception
+    LINEA               = 10,   ///< Line A emulator trap
+    LINEF               = 11,   ///< Line F emulator trap
+    FORMAT_ERROR        = 14,   ///< Stack frame format error
+    IRQ_UNINITIALIZED   = 15,   ///< Uninitialized interrupt request
+    IRQ_SPURIOUS        = 24,   ///< Spurious interrupt
+    TRAP                = 32,   ///< TRAP instruction exception
 
-    // Exception aliases (will be mapped to a native exception)
-    BKPT
+    BKPT                        ///< Breakpoint (maps to a native exception when triggered)
 };
 
+/**
+ * M68k interrupt modes
+ */
 enum class IrqMode
 {
-    AUTO,
-    USER,
-    SPURIOUS,
-    UNINITIALIZED
+    AUTO,           ///< Automatic IRQ handling
+    USER,           ///< User-defined IRQ handling
+    SPURIOUS,       ///< Spurious IRQ handling
+    UNINITIALIZED   ///< Uninitialized IRQ mode
 };
 
+/**
+ * Address spaces
+ */
 enum class AddrSpace
 {
-    DATA = 1,
-    PROG = 2
+    DATA = 1,       ///< Data space
+    PROG = 2        ///< Program space
 };
 
 
