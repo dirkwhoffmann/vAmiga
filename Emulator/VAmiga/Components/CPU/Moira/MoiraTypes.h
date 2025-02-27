@@ -18,14 +18,27 @@ namespace vamiga::moira {
 // Datatypes
 //
 
-typedef int8_t              i8;
-typedef int16_t             i16;
-typedef int32_t             i32;
-typedef long long           i64;
-typedef uint8_t             u8;
-typedef uint16_t            u16;
-typedef uint32_t            u32;
-typedef unsigned long long  u64;
+using i8  = int8_t;
+using i16 = int16_t;             ;
+using i32 = int32_t;
+using i64 = long long;
+using u8  = uint8_t;
+using u16 = uint16_t;
+using u32 = uint32_t;
+using u64 = unsigned long long;
+
+
+//
+// Aliases
+//
+
+using Size = int;
+static constexpr int Unsized     = 0;
+static constexpr int Byte        = 1;        // .b : Byte addressing
+static constexpr int Word        = 2;        // .w : Word addressing
+static constexpr int Long        = 4;        // .l : Long word addressing
+static constexpr int Quad        = 8;        // FPU
+static constexpr int Extended    = 12;       // FPU
 
 
 //
@@ -44,15 +57,6 @@ enum class Model
     M68LC040,               // Disassembler only
     M68040                  // Disassembler only
 };
-
-/*
-enum class FPUModel
-{
-    INTERNAL_FPU,           // Built-in FPU (in any)
-    M68881,                 // Floating-point coprocessor
-    M68882                  // Floating-point coprocessor
-};
-*/
 
 enum class Core
 {
@@ -150,28 +154,6 @@ enum class Instr
     SUBA_LOOP,  SUBX_LOOP,  TST_LOOP
 };
 
-using Size = int;
-static constexpr int Unsized     = 0;
-static constexpr int Byte        = 1;        // .b : Byte addressing
-static constexpr int Word        = 2;        // .w : Word addressing
-static constexpr int Long        = 4;        // .l : Long word addressing
-static constexpr int Quad        = 8;        // FPU
-static constexpr int Extended    = 12;       // FPU
-
-/*
-typedef enum
-{
-    Unsized     = 0,
-    Byte        = 1,        // .b : Byte addressing
-    Word        = 2,        // .w : Word addressing
-    Long        = 4,        // .l : Long word addressing
-
-    Quad        = 8,        // FPU
-    Extended    = 12        // FPU
-}
-Size;
-*/
-
 enum class Mode
 {
     DN,                //  0: Dn
@@ -196,16 +178,6 @@ constexpr bool isMemMode(Mode M) { return M >= Mode::AI && M <= Mode::IXPC; }
 constexpr bool isPrgMode(Mode M) { return M == Mode::DIPC || M == Mode::IXPC; }
 constexpr bool isDspMode(Mode M) { return M == Mode::DI || M == Mode::IX || M == Mode::DIPC || M == Mode::IXPC; }
 constexpr bool isImmMode(Mode M) { return M == Mode::IM; }
-
-/*
-constexpr bool isRegMode(Mode M) { return M == 0 || M == 1;  }
-constexpr bool isAbsMode(Mode M) { return M == 7 || M == 8;  }
-constexpr bool isIdxMode(Mode M) { return M == 6 || M == 10; }
-constexpr bool isMemMode(Mode M) { return M >= 2 && M <= 10; }
-constexpr bool isPrgMode(Mode M) { return M == 9 || M == 10; }
-constexpr bool isDspMode(Mode M) { return M == 5 || M == 6 || M == 9 || M == 10; }
-constexpr bool isImmMode(Mode M) { return M == 11; }
-*/
 
 enum class Cond
 {
@@ -269,6 +241,7 @@ enum class AddrSpace
 // Floating-point types (unused)
 //
 
+/*
 enum class FltFormat
 {
     LONG,
@@ -304,7 +277,7 @@ enum class FpuFrameType
     UNIMP,
     BUSY
 };
-
+*/
 
 //
 // Structures
@@ -509,6 +482,9 @@ static constexpr u64 IMPL_DEC       = (1 << 14);  // Omit 2 cycle delay in -(An)
 // Exceptions
 //
 
+struct IllegalInstruction : public std::exception { };
+struct DoubleFault : public std::exception { };
+
 struct AddressError : public std::exception {
 
     StackFrame stackFrame;
@@ -520,8 +496,5 @@ struct BusError : public std::exception {
     StackFrame stackFrame;
     BusError(const StackFrame frame) { stackFrame = frame; }
 };
-
-struct IllegalInstruction : public std::exception { };
-struct DoubleFault : public std::exception { };
 
 }
