@@ -479,6 +479,8 @@ static constexpr int CHECK_CP       = (1 << 9);
  */
 typedef u64 Flags;
 
+namespace Flag {
+
 // Memory access flags
 static constexpr u64 REVERSE        = (1 << 0);   // Reverse the long word access order
 static constexpr u64 SKIP_LAST_RD   = (1 << 1);   // Don't read the extension word
@@ -501,7 +503,7 @@ static constexpr u64 AE_SET_IF      = (1 << 13);  // Set bit 13 in the special s
 
 // Timing flags
 static constexpr u64 IMPL_DEC       = (1 << 14);  // Omit 2 cycle delay in -(An) mode
-
+}
 
 //
 // Exceptions

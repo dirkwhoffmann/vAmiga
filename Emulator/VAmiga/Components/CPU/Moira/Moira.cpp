@@ -19,6 +19,8 @@
 
 namespace vamiga::moira {
 
+using namespace Flag;
+
 #include "MoiraInit_cpp.h"
 #include "MoiraALU_cpp.h"
 #include "MoiraDataflow_cpp.h"
@@ -237,12 +239,12 @@ void
 Moira::execute()
 {
     using namespace State;
-    
+
     // Check the integrity of the IRQ flag
-    if (reg.ipl > reg.sr.ipl || reg.ipl == 7) assert(flags & State::CHECK_IRQ);
+    if (reg.ipl > reg.sr.ipl || reg.ipl == 7) assert(flags & CHECK_IRQ);
 
     // Check the integrity of the trace flag
-    assert(!!(flags & State::TRACING) == reg.sr.t1);
+    assert(!!(flags & TRACING) == reg.sr.t1);
 
     // Check the integrity of the program counter
     assert(reg.pc0 == reg.pc);
