@@ -438,34 +438,34 @@ static constexpr u16 M68000_UP      = M68000 | M68010_UP;
 namespace State {
 
 /** CPU is in a halted state due to a double fault. Cleared only on reset. */
-static constexpr int HALTED         = (1 << 8);
+static constexpr int HALTED         = (1 << 0);
 
 /** CPU is stopped after executing a STOP instruction. Cleared on the next interrupt. */
-static constexpr int STOPPED        = (1 << 9);
+static constexpr int STOPPED        = (1 << 1);
 
 /** CPU is in loop mode (68010 feature for optimizing DBcc loops). */
-static constexpr int LOOPING        = (1 << 10);
+static constexpr int LOOPING        = (1 << 2);
 
 /** Enables instruction logging, storing register states in a log buffer. */
-static constexpr int LOGGING        = (1 << 11);
+static constexpr int LOGGING        = (1 << 3);
 
 /** Reflects the T flag from the status register, used to speed up emulation. */
-static constexpr int TRACING        = (1 << 12);
+static constexpr int TRACING        = (1 << 4);
 
 /** Triggers a trace exception when set. */
-static constexpr int TRACE_EXC      = (1 << 13);
+static constexpr int TRACE_EXC      = (1 << 5);
 
 /** CPU checks for pending interrupts only if this flag is set. Cleared when no interrupt is possible. */
-static constexpr int CHECK_IRQ      = (1 << 14);
+static constexpr int CHECK_IRQ      = (1 << 6);
 
 /** Enables checking for breakpoints. */
-static constexpr int CHECK_BP       = (1 << 15);
+static constexpr int CHECK_BP       = (1 << 7);
 
 /** Enables checking for watchpoints. */
-static constexpr int CHECK_WP       = (1 << 16);
+static constexpr int CHECK_WP       = (1 << 8);
 
 /** Enables checking for catchpoints. */
-static constexpr int CHECK_CP       = (1 << 17);
+static constexpr int CHECK_CP       = (1 << 9);
 
 }
 
