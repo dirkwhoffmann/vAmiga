@@ -376,22 +376,19 @@ Moira::processException(const std::exception &exc)
 {
     try {
 
-        auto ae = dynamic_cast<const AddressError *>(&exc);
-        if (ae) {
+        if (auto ae = dynamic_cast<const AddressError *>(&exc); ae) {
 
             execAddressError<C>(ae->stackFrame);
             return;
         }
 
-        auto be = dynamic_cast<const BusErrorException *>(&exc);
-        if (be) {
+        if (auto be = dynamic_cast<const BusError *>(&exc); be) {
 
-            execException(M68kException::BUS_ERROR);
+            execBusError<C>(be->stackFrame);
             return;
         }
 
-        auto df = dynamic_cast<const DoubleFault *>(&exc);
-        if (df) {
+        if (auto df = dynamic_cast<const DoubleFault *>(&exc); df) {
 
             throw df;
         }

@@ -296,6 +296,43 @@ Moira::execAddressError(StackFrame frame, int delay)
     didExecute(M68kException::ADDRESS_ERROR, 3);
 }
 
+template <Core C> void
+Moira::execBusError(StackFrame frame, int delay)
+{
+    u16 status = getSR();
+
+    // Inform the delegate
+    willExecute(M68kException::BUS_ERROR, 2);
+
+    // Emulate additional delay
+    sync(delay);
+
+    // Enter supervisor mode
+    setSupervisorMode(true);
+
+    // Disable tracing
+    clearTraceFlags();
+    flags &= ~State::TRACE_EXC;
+    SYNC(8);
+
+    // A misaligned stack pointer will cause a double fault
+    if (misaligned<C>(reg.sp)) throw DoubleFault();
+
+    // Write stack frame
+    if (C == Core::C68000) {
+        writeStackFrameAEBE<C>(frame);
+    } else {
+        writeStackFrame1000<C>(frame, status, frame.pc, reg.pc0, 2, frame.addr);
+    }
+    SYNC(2);
+
+    // Jump to exception vector
+    jumpToVector<C>(2);
+
+    // Inform the delegate
+    didExecute(M68kException::BUS_ERROR, 2);
+}
+
 void
 Moira::execException(M68kException exc, int nr)
 {
