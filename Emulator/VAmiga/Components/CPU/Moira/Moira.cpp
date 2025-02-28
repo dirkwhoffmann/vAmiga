@@ -359,6 +359,18 @@ Moira::execute()
 }
 
 void
+Moira::execute(i64 cycles)
+{
+    executeUntil(clock + cycles);
+}
+
+void
+Moira::executeUntil(i64 cycle)
+{
+    while (clock < cycle) { execute(); }
+}
+
+void
 Moira::processException(const std::exception &exc)
 {
     switch (cpuModel) {

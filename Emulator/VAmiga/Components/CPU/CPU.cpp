@@ -174,13 +174,13 @@ Moira::willExecute(M68kException exc, u16 vector)
     switch (exc) {
 
         case RESET:             xfiles("RESET\n");              break;
-        case EXC_BUS_ERROR:         xfiles("EXC_BUS_ERROR\n");          break;
+        case EXC_BUS_ERROR:     xfiles("EXC_BUS_ERROR\n");      break;
         case ADDRESS_ERROR:     xfiles("ADDRESS_ERROR\n");      break;
         case ILLEGAL:           xfiles("ILLEGAL\n");            break;
         case DIVIDE_BY_ZERO:    xfiles("DIVIDE_BY_ZERO\n");     break;
         case CHK:               xfiles("CHK\n");                break;
         case TRAPV:             xfiles("TRAPV\n");              break;
-        case EXC_PRIVILEGE:         xfiles("EXC_PRIVILEGE\n");          break;
+        case EXC_PRIVILEGE:     xfiles("EXC_PRIVILEGE\n");      break;
         case TRACE:             xfiles("TRACE\n");              break;
         case LINEA:             xfiles("LINEA\n");              break;
         case LINEF:             xfiles("LINEF\n");              break;

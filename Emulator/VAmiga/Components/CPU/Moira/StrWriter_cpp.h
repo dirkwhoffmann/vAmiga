@@ -254,7 +254,7 @@ StrWriter::operator<<(Ins<I> i)
 
     } else {
 
-        *this << mnemonics[(isize)I];
+        *this << mnemonics[(int)I];
     }
 
     return *this;
