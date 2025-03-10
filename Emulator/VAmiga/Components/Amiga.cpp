@@ -352,45 +352,55 @@ Amiga::saveWorkspace(const fs::path &path)
 
     auto exportADF = [&](FloppyDrive& drive, string name) {
         
-        if (!drive.hasDisk()) return;
-        
-        string file = name + (config.compressWorkspaces ? ".adz" : ".adf");
-
-        try {
+        if (drive.hasDisk()) {
             
-            if (config.compressWorkspaces) {
+            string file = name + (config.compressWorkspaces ? ".adz" : ".adf");
+            
+            try {
                 
-                ADZFile(ADFFile(drive)).writeToFile(path / file);
-            } else {
-                ADFFile(drive).writeToFile(path / file);
-            }
-            drive.markDiskAsUnmodified();
+                if (config.compressWorkspaces) {
+                    
+                    ADZFile(ADFFile(drive)).writeToFile(path / file);
+                } else {
+                    ADFFile(drive).writeToFile(path / file);
+                }
+                drive.markDiskAsUnmodified();
+                
+                df << "try " << name << " insert " << file << "\n";
+                df << "try " << name << (drive.hasProtectedDisk() ? " protect\n" : " unprotect\n");
+                
+            } catch (...) { }
+
+        } else {
             
-            df << "try " << name << " insert " << file << "\n";
-            df << "try " << name << (drive.hasProtectedDisk() ? " protect\n" : " unprotect\n");
-            
-        } catch (...) { }
+            df << "try " << name << " eject\n";
+        }
     };
     
     auto exportHDF = [&](HardDrive& drive, string name) {
         
-        if (!drive.hasDisk()) return;
-        
-        string file = name + (config.compressWorkspaces ? ".hdz" : ".hdf");
-        
-        try {
+        if (drive.hasDisk()) {
 
-            if (config.compressWorkspaces) {
-                HDZFile(HDFFile(drive)).writeToFile(path / file);
-            } else {
-                HDFFile(drive).writeToFile(path / file);
-            }
-            drive.markDiskAsUnmodified();
+            string file = name + (config.compressWorkspaces ? ".hdz" : ".hdf");
             
-            hd << "try " << name << " attach " << file << "\n";
-            hd << "try " << name << (drive.hasProtectedDisk() ? " protect\n" : " unprotect\n");
+            try {
+                
+                if (config.compressWorkspaces) {
+                    HDZFile(HDFFile(drive)).writeToFile(path / file);
+                } else {
+                    HDFFile(drive).writeToFile(path / file);
+                }
+                drive.markDiskAsUnmodified();
+                
+                hd << "try " << name << " attach " << file << "\n";
+                hd << "try " << name << (drive.hasProtectedDisk() ? " protect\n" : " unprotect\n");
+                
+            } catch (...) { }
             
-        } catch (...) { }
+        } else {
+            
+            hd << "try " << name << " disconnect\n";
+        }
     };
 
     // If a file with the specified name exists, delete it
