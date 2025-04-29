@@ -21,6 +21,8 @@ class RemoteServer : public SubComponent {
 
     friend class RemoteManager;
 
+    using SubComponent::operator<<;
+
     Descriptions descriptions = {{
 
         .name           = "SerServer",

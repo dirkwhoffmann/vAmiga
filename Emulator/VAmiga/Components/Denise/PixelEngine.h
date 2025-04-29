@@ -98,7 +98,7 @@ private:
 public:
 
     // Color register history
-    RegChangeRecorder<128> colChanges;
+    RegChangeRecorder<256> colChanges;
 
 
     //
