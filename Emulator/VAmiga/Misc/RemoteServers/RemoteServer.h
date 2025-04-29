@@ -111,8 +111,13 @@ private:
         << config.autoRun
         << config.verbose;
 
-    } SERIALIZERS(serialize, override);
-
+    };
+    virtual void operator << (SerChecker &worker) override { serialize(worker); }
+    virtual void operator << (SerCounter &worker) override { serialize(worker); }
+    virtual void operator << (SerResetter &worker) override { serialize(worker); }
+    virtual void operator << (SerReader &worker) override { serialize(worker); }
+    virtual void operator << (SerWriter &worker) override { serialize(worker); }
+    
     void _didLoad() override;
 
 

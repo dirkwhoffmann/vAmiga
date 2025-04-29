@@ -836,5 +836,12 @@ void operator << (SerResetter &worker) __VA_ARGS__ { fn(worker); } \
 void operator << (SerReader &worker) __VA_ARGS__ { fn(worker); } \
 void operator << (SerWriter &worker) __VA_ARGS__ { fn(worker); }
 
+#define VIRTUAL_SERIALIZERS(fn, ...) \
+virtual void operator << (SerChecker &worker) __VA_ARGS__ { fn(worker); } \
+virtual void operator << (SerCounter &worker) __VA_ARGS__ { fn(worker); } \
+virtual void operator << (SerResetter &worker) __VA_ARGS__ { fn(worker); } \
+virtual void operator << (SerReader &worker) __VA_ARGS__ { fn(worker); } \
+virtual void operator << (SerWriter &worker) __VA_ARGS__ { fn(worker); }
+
 #define CLONE(x) x = other.x;
 #define CLONE_ARRAY(x) std::copy(std::begin(other.x), std::end(other.x), std::begin(x));
