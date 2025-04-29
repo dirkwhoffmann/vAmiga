@@ -13,6 +13,7 @@
 #include "Checksum.h"
 #include "Compression.h"
 #include <functional>
+#include <ostream>
 
 namespace vamiga::util {
 
