@@ -490,6 +490,7 @@ PixelEngine::colorizeHAM(Texel *dst, Pixel from, Pixel to, AmigaColor& ham)
         if (bbuf[i] != 0xFF) {
 
             dst[i] = palette[bbuf[i]];
+            ham = color[bbuf[i]];
             continue;
         }
 

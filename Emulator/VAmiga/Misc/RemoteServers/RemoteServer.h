@@ -21,8 +21,6 @@ class RemoteServer : public SubComponent {
 
     friend class RemoteManager;
 
-    using SubComponent::operator<<;
-
     Descriptions descriptions = {{
 
         .name           = "SerServer",
@@ -97,7 +95,7 @@ public:
     // Methods from CoreComponent
     //
     
-private:
+protected:
     
     void _powerOff() override;
 

@@ -83,6 +83,7 @@ public:
     void send(std::stringstream &payload) throws;
 
     // Operator overloads
+    using RemoteServer::operator<<;
     SocketServer &operator<<(char payload) { send(payload); return *this; }
     SocketServer &operator<<(const string &payload) { send(payload); return *this; }
     SocketServer &operator<<(int payload) { send(payload); return *this; }
