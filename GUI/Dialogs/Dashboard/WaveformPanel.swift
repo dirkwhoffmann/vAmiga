@@ -19,9 +19,6 @@ class WaveformPanel: NSImageView {
     // Waveform buffer
     var buffer: UnsafeMutablePointer<UInt32>!
 
-    // Remembers the highest amplitude (used for auto scaling)
-    // var maxAmp: Float = 0.001
-
     // Foreground color
     var color = UInt32(0xFF888888)
 
