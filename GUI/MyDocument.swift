@@ -270,9 +270,6 @@ class MyDocument: NSDocument {
                 }
             }
         }
-        
-        // Power up
-        // try? emu.run()
     }
 
     func processSnapshotFile(_ proxy: MediaFileProxy, force: Bool = false) throws {

@@ -204,6 +204,8 @@ class DropZone: Layer {
             
             controller.showAlert(.cantOpen(url: url), error: error, async: true)
         }
+        
+        if type == .WORKSPACE { mydocument.fileURL = url }
     }
     
     func updateAlpha() {
