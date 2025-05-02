@@ -86,10 +86,11 @@ extension ConfigurationController {
         extMapAddr.selectItem(withTag: Int(config.extStart))
 
         if romDropView.image == romUnknown {
-
             romSubtitle.stringValue = String(format:"CRC32: 0x%08X", romTraits.crc)
         }
-
+        if extDropView.image == romUnknown {
+            extSubtitle.stringValue = String(format:"CRC32: 0x%08X", extTraits.crc)
+        }
         // Hide some controls
         romDeleteButton.isHidden = !hasRom
         extDeleteButton.isHidden = !hasExt

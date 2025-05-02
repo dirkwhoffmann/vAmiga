@@ -83,6 +83,8 @@ static const u32 CRC32_AROS_55696               = 0x3F4FCC0A;
 static const u32 CRC32_AROS_55696_EXT           = 0xF2E52B07;
 static const u32 CRC32_AROS_1ED13DE6E3          = 0x4CE7C8D6;
 static const u32 CRC32_AROS_1ED13DE6E3_EXT      = 0xF2A9CDC5;
+static const u32 CRC32_AROS_20250219            = 0xA3232963;
+static const u32 CRC32_AROS_20250219_EXT        = 0x9E4253EC;
 
 static const u32 CRC32_EMUTOS13                 = 0x7123C1C1;
 
