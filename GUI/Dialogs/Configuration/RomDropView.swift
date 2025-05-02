@@ -76,9 +76,7 @@ class RomDropView: DropView {
     override func acceptDragSource(url: URL) -> Bool {
         
         if !amiga.poweredOff { return false }
-            
-        let suffix = url.pathExtension
-        return suffix == "zip" || suffix == "gz" || amiga.mem.isRom(url)
+        return amiga.mem.isRom(url)
     }
     
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
@@ -124,9 +122,7 @@ class ExtRomDropView: DropView {
     override func acceptDragSource(url: URL) -> Bool {
 
         if !amiga.poweredOff { return false }
-
-        let suffix = url.pathExtension
-        return suffix == "zip" || suffix == "gz" || amiga.mem.isExt(url)
+        return amiga.mem.isRom(url)
     }
     
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {

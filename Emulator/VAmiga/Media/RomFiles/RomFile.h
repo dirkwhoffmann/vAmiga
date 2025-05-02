@@ -18,7 +18,7 @@ class RomFile : public AnyFile {
 
     // Accepted header signatures
     static const u8 bootRomHeaders[1][8];
-    static const u8 kickRomHeaders[10][7];
+    static const u8 kickRomHeaders[11][7];
     static const u8 encrRomHeaders[1][11];
 
     // Path to the rom.key file (if needed)

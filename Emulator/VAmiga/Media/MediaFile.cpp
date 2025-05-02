@@ -58,7 +58,6 @@ MediaFile::make(const fs::path &path, FileType type)
         case FileType::DMS:          return new DMSFile(path);
         case FileType::EXE:          return new EXEFile(path);
         case FileType::ROM:          return new RomFile(path);
-        case FileType::EXTENDED_ROM: return new ExtendedRomFile(path);
         case FileType::DIR:          return new Folder(path);
 
         default:
@@ -83,7 +82,6 @@ MediaFile::make(const u8 *buf, isize len, FileType type)
         case FileType::DMS:          return new DMSFile(buf, len);
         case FileType::EXE:          return new EXEFile(buf, len);
         case FileType::ROM:          return new RomFile(buf, len);
-        case FileType::EXTENDED_ROM: return new ExtendedRomFile(buf, len);
 
         default:
             return nullptr;

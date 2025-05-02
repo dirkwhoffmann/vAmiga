@@ -456,7 +456,7 @@ NSString *EventSlotName(NSInteger slot);
 - (void)loadRomFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
 
 - (void)deleteExt;
-- (BOOL)isExt:(NSURL *)url;
+// - (BOOL)isExt:(NSURL *)url;
 - (void)loadExt:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
 - (void)loadExtFromBuffer:(NSData *)buffer exception:(ExceptionWrapper *)ex;
 - (void)loadExtFromFile:(NSURL *)url exception:(ExceptionWrapper *)ex;

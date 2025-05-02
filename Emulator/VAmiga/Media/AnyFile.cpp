@@ -11,7 +11,6 @@
 #include "AnyFile.h"
 #include "Snapshot.h"
 #include "ADFFile.h"
-#include "ExtendedRomFile.h"
 #include "EADFFile.h"
 #include "IMGFile.h"
 #include "STFile.h"

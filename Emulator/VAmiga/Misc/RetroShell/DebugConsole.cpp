@@ -1604,18 +1604,18 @@ DebugConsole::initCommands(RetroShellCmd &root)
                     
                 }, .values = { isize(i) }
             });
-            
-            root.add({
-                
-                .tokens = { "debug", "verbosity" },
-                .args   = { Arg::value },
-                .help   = { "Set the verbosity level for generated debug output" },
-                .func   = [] (Arguments& argv, const std::vector<isize> &values) {
-                    
-                    CoreObject::verbosity = isize(util::parseNum(argv[0]));
-                }
-            });
         }
+        
+        root.add({
+            
+            .tokens = { "debug", "verbosity" },
+            .args   = { Arg::value },
+            .help   = { "Set the verbosity level for generated debug output" },
+            .func   = [] (Arguments& argv, const std::vector<isize> &values) {
+                
+                CoreObject::verbosity = isize(util::parseNum(argv[0]));
+            }
+        });
     }
     root.add({
         

@@ -13,7 +13,6 @@
 #include "Snapshot.h"
 #include "Script.h"
 #include "RomFiles/RomFile.h"
-#include "RomFiles/ExtendedRomFile.h"
 #include "DiskFiles/DiskFile.h"
 #include "DiskFiles/ADFFile.h"
 #include "DiskFiles/ADZFile.h"
@@ -45,11 +44,11 @@
  * | AnyFile  |     Internal classes
  *  ------------
  *       |
- *       |------------------------------------------------------------
- *       |       |            |            |          |               |
- *       |  -----------   ----------   --------   ---------   -----------------
- *       | | Workspace | | Snapshot | | Script | | RomFile | | ExtendedRomFile |
- *       |  -----------   ----------   --------   ---------   -----------------
+ *       |--------------------------------------------
+ *       |       |            |            |          |
+ *       |  -----------   ----------   --------   ---------
+ *       | | Workspace | | Snapshot | | Script | | RomFile |
+ *       |  -----------   ----------   --------   ---------
  *       |
  *  ------------
  * |  DiskFile  |

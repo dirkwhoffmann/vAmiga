@@ -33,14 +33,13 @@ enum class FileType : long
     DMS,
     EXE,
     DIR,
-    ROM,
-    EXTENDED_ROM
+    ROM
 };
 
 struct FileTypeEnum : Reflection<FileTypeEnum, FileType>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(FileType::EXTENDED_ROM);
+    static constexpr long maxVal = long(FileType::ROM);
     
     static const char *_key(FileType value)
     {
@@ -61,7 +60,6 @@ struct FileTypeEnum : Reflection<FileTypeEnum, FileType>
             case FileType::EXE:          return "EXE";
             case FileType::DIR:          return "DIR";
             case FileType::ROM:          return "ROM";
-            case FileType::EXTENDED_ROM: return "EXTENDED_ROM";
         }
         return "???";
     }
@@ -84,7 +82,6 @@ struct FileTypeEnum : Reflection<FileTypeEnum, FileType>
             case FileType::EXE:          return "Amiga Executable";
             case FileType::DIR:          return "Directory";
             case FileType::ROM:          return "Kickstart ROM";
-            case FileType::EXTENDED_ROM: return "Extended Kickstart ROM";
         }
         return "???";
     }

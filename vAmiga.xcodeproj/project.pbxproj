@@ -325,7 +325,6 @@
 		50EAD9A0256E76A40053F9AC /* HDFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99F256E76A40053F9AC /* HDFFile.cpp */; };
 		50EB8CCA25306E8E0053988A /* VideoExporter.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50EB8CC925306E8E0053988A /* VideoExporter.xib */; };
 		50EB8CCE2530710E0053988A /* VideoExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EB8CCD2530710E0053988A /* VideoExporter.swift */; };
-		50ECF98622B153FB007B3DE7 /* ExtendedRomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ECF98422B153FB007B3DE7 /* ExtendedRomFile.cpp */; };
 		50EF2236281595AA00440C4D /* Defaults.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E5B9BD2807E65800502787 /* Defaults.cpp */; };
 		50EF2237281595B800440C4D /* DiagBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50826F7627F0B2AD005FBF3B /* DiagBoard.cpp */; };
 		50EFB0BA2C1811C90013B73C /* Configurable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0B82C1811C90013B73C /* Configurable.cpp */; };
@@ -436,7 +435,6 @@
 		50FC04C127DA19DA00C3E566 /* Snapshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50384C8421FC6B66006E7748 /* Snapshot.cpp */; };
 		50FC04C227DA19DA00C3E566 /* Script.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FCCA7A262AAAEA00398342 /* Script.cpp */; };
 		50FC04C327DA19DA00C3E566 /* AnyFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* AnyFile.cpp */; };
-		50FC04C427DA19DE00C3E566 /* ExtendedRomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ECF98422B153FB007B3DE7 /* ExtendedRomFile.cpp */; };
 		50FC04C527DA19DE00C3E566 /* RomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* RomFile.cpp */; };
 		50FC04C627DA19E900C3E566 /* Folder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C66772551577D0028D497 /* Folder.cpp */; };
 		50FC04C727DA19E900C3E566 /* EXEFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5019B1EE254B292D00A7AB95 /* EXEFile.cpp */; };
@@ -1068,8 +1066,6 @@
 		50EB8CC925306E8E0053988A /* VideoExporter.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoExporter.xib; sourceTree = "<group>"; };
 		50EB8CCD2530710E0053988A /* VideoExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoExporter.swift; sourceTree = "<group>"; };
 		50EC7A2F29C9EC3900060CAA /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
-		50ECF98422B153FB007B3DE7 /* ExtendedRomFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ExtendedRomFile.cpp; sourceTree = "<group>"; };
-		50ECF98522B153FB007B3DE7 /* ExtendedRomFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtendedRomFile.h; sourceTree = "<group>"; };
 		50EFB0B82C1811C90013B73C /* Configurable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Configurable.cpp; sourceTree = "<group>"; };
 		50EFB0B92C1811C90013B73C /* Configurable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Configurable.h; sourceTree = "<group>"; };
 		50EFB0BC2C1812E20013B73C /* Option.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Option.cpp; sourceTree = "<group>"; };
@@ -1182,8 +1178,6 @@
 				505A133B2C3704DB00FF8D2C /* RomDatabase.h */,
 				509F7F1C21EDEA0200A530E4 /* RomFile.h */,
 				509F7F1B21EDEA0200A530E4 /* RomFile.cpp */,
-				50ECF98522B153FB007B3DE7 /* ExtendedRomFile.h */,
-				50ECF98422B153FB007B3DE7 /* ExtendedRomFile.cpp */,
 				50F79C9F2C79B04A006A13A8 /* DiagRom.h */,
 			);
 			path = RomFiles;
@@ -2650,7 +2644,6 @@
 				5062DB1224370FE400ACEEE2 /* MyControllerSnapshots.swift in Sources */,
 				508FE06521EA318D0043D0E9 /* AnyFile.cpp in Sources */,
 				50A64B96257A63A600442964 /* BootBlockImage.cpp in Sources */,
-				50ECF98622B153FB007B3DE7 /* ExtendedRomFile.cpp in Sources */,
 				50627FD3286EBA7300F2A835 /* FrameBuffer.cpp in Sources */,
 				508FE05621EA22CC0043D0E9 /* PreferencesController.swift in Sources */,
 				505A215022869FF10016EA21 /* AudioFilter.cpp in Sources */,
@@ -2841,7 +2834,6 @@
 				50FC04AE27DA198E00C3E566 /* BlitterRegs.cpp in Sources */,
 				50FC04A427DA198100C3E566 /* Copper.cpp in Sources */,
 				50FC04A627DA198100C3E566 /* CopperEvents.cpp in Sources */,
-				50FC04C427DA19DE00C3E566 /* ExtendedRomFile.cpp in Sources */,
 				50DA83E62C161961001209AA /* VAmiga.cpp in Sources */,
 				50FC04D027DA19F600C3E566 /* FileSystem.cpp in Sources */,
 				50EFB0CD2C18D95B0013B73C /* Inspectable.cpp in Sources */,

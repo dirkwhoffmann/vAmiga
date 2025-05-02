@@ -536,10 +536,12 @@ NSString *EventSlotName(NSInteger slot)
     [self mem]->deleteExt();
 }
 
+/*
 - (BOOL)isExt:(NSURL *)url
 {
     return MediaFile::type([url fileSystemRepresentation]) == FileType::EXTENDED_ROM;
 }
+*/
 
 - (void)loadExt:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {

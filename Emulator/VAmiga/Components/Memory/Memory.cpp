@@ -15,7 +15,7 @@
 #include "CIA.h"
 #include "CPU.h"
 #include "Denise.h"
-#include "ExtendedRomFile.h"
+#include "RomFile.h"
 #include "MsgQueue.h"
 #include "Paula.h"
 #include "RomFile.h"
@@ -664,8 +664,6 @@ Memory::extFingerprint() const
 void
 Memory::loadRom(MediaFile &file)
 {
-    // if (amiga.isPoweredOn()) throw CoreError(Fault::POWERED_ON);
-
     try {
 
         auto &romFile = dynamic_cast<RomFile &>(file);
@@ -685,20 +683,10 @@ Memory::loadRom(MediaFile &file)
         // Remove extended Rom (if any)
         deleteExt();
 
-    } catch (...) { try {
-
-        auto &extFile = dynamic_cast<ExtendedRomFile &>(file);
-
-        // Allocate memory
-        allocExt((i32)extFile.data.size);
-
-        // Load Rom
-        extFile.flash(ext);
-
     } catch (...) {
 
         throw CoreError(Fault::FILE_TYPE_MISMATCH);
-    }}
+    }
 }
 
 void
@@ -720,7 +708,7 @@ Memory::loadExt(MediaFile &file)
 {
     try {
 
-        ExtendedRomFile &extFile = dynamic_cast<ExtendedRomFile &>(file);
+        RomFile &extFile = dynamic_cast<RomFile &>(file);
 
         // Allocate memory
         allocExt((i32)extFile.data.size);
@@ -737,14 +725,14 @@ Memory::loadExt(MediaFile &file)
 void
 Memory::loadExt(const fs::path &path)
 {
-    ExtendedRomFile file(path);
+    RomFile file(path);
     loadExt(file);
 }
 
 void
 Memory::loadExt(const u8 *buf, isize len)
 {
-    ExtendedRomFile file(buf, len);
+    RomFile file(buf, len);
     loadExt(file);
 }
 
