@@ -180,12 +180,17 @@ CIA::cacheStats(CIAStats &result) const
 {
     {   SYNCHRONIZED
 
-        auto idle = idleSince();
-        auto total = idleTotal() + idle;
+        auto total = AS_CIA_CYCLES(agnus.clock);
+        auto idle = idleTotal() + idleSince();
         
-        result.idleSince = idle;
-        result.idleTotal = total;
-        result.idlePercentage =  clock ? double(total) / double(clock + idle) : 100.0;
+        auto totalDiff = total - result.totalCycles;
+        auto idleDiff = idle - result.idleCycles;
+        
+        result.totalCycles = total;
+        result.idleCycles = idle;
+
+        // debug(true, "totalDiff: %lld idleDiff: %lld\n", totalDiff, idleDiff);
+        result.idlePercentage =  totalDiff ? double(idleDiff) / double(totalDiff) : 1.0;
     }
 }
 
@@ -694,6 +699,12 @@ CIA::executeOneCycle()
     } else {
         scheduleNextExecution();
     }
+}
+
+void
+CIA::eofHandler()
+{
+
 }
 
 void

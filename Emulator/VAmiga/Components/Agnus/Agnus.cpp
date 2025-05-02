@@ -738,6 +738,8 @@ Agnus::eofHandler()
     paula.eofHandler();
     sequencer.eofHandler();
     copper.eofHandler();
+    ciaa.eofHandler();
+    ciab.eofHandler();
     controlPort1.joystick.eofHandler();
     controlPort2.joystick.eofHandler();
     mem.eofHandler();

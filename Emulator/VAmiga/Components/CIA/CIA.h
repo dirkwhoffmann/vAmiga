@@ -622,6 +622,9 @@ public:
     // Executes the CIA for one CIA cycle
     void executeOneCycle();
     
+    // Called by Agnus at the end of each frame
+    void eofHandler();
+    
     
     //
     // Speeding up (sleep logic)
@@ -646,7 +649,7 @@ public:
     CIACycle idleSince() const;
     
     // Retruns the total number of cycles the CIA was idle
-    CIACycle idleTotal() const { return idleCycles; }
+    CIACycle idleTotal() const { return AS_CIA_CYCLES(idleCycles); }
 };
 
 

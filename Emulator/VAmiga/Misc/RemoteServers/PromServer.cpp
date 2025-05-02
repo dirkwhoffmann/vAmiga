@@ -106,17 +106,17 @@ PromServer::respond(const httplib::Request& request)
         auto stats_b = ciaa.getStats();
         
         translate("vamiga_ciaa_idle_sec", "",
-                  "gauge", stats_a.idleSince,
+                  "gauge", stats_a.idleCycles,
                   {{"component","ciaa"}});
         translate("vamiga_ciab_idle_sec", "",
-                  "gauge", stats_b.idleSince,
+                  "gauge", stats_b.idleCycles,
                   {{"component","ciab"}});
         
         translate("vamiga_cia_idle_sec_total", "",
-                  "gauge", stats_a.idleTotal,
+                  "gauge", stats_a.totalCycles,
                   {{"component","ciaa"}});
         translate("vamiga_cia_idle_sec_total", "",
-                  "gauge", stats_b.idleTotal,
+                  "gauge", stats_b.totalCycles,
                   {{"component","ciab"}});
         
         translate("vamiga_cia_idle_percentage", "",
