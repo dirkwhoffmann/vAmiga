@@ -91,7 +91,6 @@ Host::_dump(Category category, std::ostream& os) const
     }
 }
 
-// Sets the search path used in makeAbsolute
 void
 Host::setSearchPath(fs::path path)
 {
@@ -100,7 +99,6 @@ Host::setSearchPath(fs::path path)
     searchPath = path;
 }
 
-// Sets the search path used in makeAbsolute
 fs::path
 Host::makeAbsolute(fs::path path) const
 {

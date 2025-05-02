@@ -725,7 +725,7 @@ Memory::loadExt(MediaFile &file)
 void
 Memory::loadExt(const fs::path &path)
 {
-    RomFile file(path);
+    RomFile file(host.makeAbsolute(path));
     loadExt(file);
 }
 

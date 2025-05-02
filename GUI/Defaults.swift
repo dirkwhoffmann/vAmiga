@@ -887,8 +887,6 @@ extension DefaultsProxy {
         remove(.MEM_RAM_INIT_PATTERN)
         remove(.MEM_BANKMAP)
         remove(.MEM_UNMAPPING_TYPE)
-        remove(.MEM_SLOW_RAM_DELAY)
-        remove(.MEM_SLOW_RAM_MIRROR)
     }
 }
 
@@ -908,8 +906,6 @@ extension Configuration {
         defaults.set(.MEM_RAM_INIT_PATTERN, ramInitPattern)
         defaults.set(.MEM_BANKMAP, bankMap)
         defaults.set(.MEM_UNMAPPING_TYPE, unmappingType)
-        defaults.set(.MEM_SLOW_RAM_DELAY, slowRamDelay)
-        defaults.set(.MEM_SLOW_RAM_MIRROR, slowRamMirror)
         defaults.save()
         
         amiga.resume()
@@ -928,8 +924,6 @@ extension Configuration {
         ramInitPattern = defaults.get(.MEM_RAM_INIT_PATTERN)
         bankMap = defaults.get(.MEM_BANKMAP)
         unmappingType = defaults.get(.MEM_UNMAPPING_TYPE)
-        slowRamDelay = defaults.get(.MEM_SLOW_RAM_DELAY) != 0
-        slowRamMirror = defaults.get(.MEM_SLOW_RAM_MIRROR) != 0
 
         amiga.resume()
     }
@@ -1178,6 +1172,7 @@ extension DefaultsProxy {
         debug(.defaults)
         
         remove(.BLITTER_ACCURACY)
+        remove(.AGNUS_PTR_DROPS)
         remove(.CIA_TODBUG, [0, 1])
         remove(.CIA_ECLOCK_SYNCING, [0, 1])
         remove(.DC_SPEED)
@@ -1188,6 +1183,8 @@ extension DefaultsProxy {
         remove(.DENISE_CLX_PLF_PLF)
         remove(.DENISE_CLX_SPR_PLF)
         remove(.DENISE_CLX_SPR_SPR)
+        remove(.MEM_SLOW_RAM_DELAY)
+        remove(.MEM_SLOW_RAM_MIRROR)
     }
 }
 
@@ -1202,6 +1199,7 @@ extension Configuration {
         amiga.suspend()
         
         defaults.set(.BLITTER_ACCURACY, blitterAccuracy)
+        defaults.set(.AGNUS_PTR_DROPS, ptrDrops)
         defaults.set(.CIA_TODBUG, [0,1], todBug)
         defaults.set(.CIA_ECLOCK_SYNCING, [0,1], eClockSyncing)
         defaults.set(.DC_SPEED, driveSpeed)
@@ -1212,6 +1210,8 @@ extension Configuration {
         defaults.set(.DENISE_CLX_SPR_SPR, clxSprSpr)
         defaults.set(.DENISE_CLX_SPR_PLF, clxSprPlf)
         defaults.set(.DENISE_CLX_PLF_PLF, clxPlfPlf)
+        defaults.set(.MEM_SLOW_RAM_DELAY, slowRamDelay)
+        defaults.set(.MEM_SLOW_RAM_MIRROR, slowRamMirror)
         defaults.save()
         
         amiga.resume()
@@ -1225,6 +1225,7 @@ extension Configuration {
         amiga.suspend()
         
         blitterAccuracy = defaults.get(.BLITTER_ACCURACY)
+        ptrDrops = defaults.get(.AGNUS_PTR_DROPS) != 0
         todBug = defaults.get(.CIA_TODBUG) != 0
         eClockSyncing = defaults.get(.CIA_ECLOCK_SYNCING) != 0
         driveSpeed = defaults.get(.DC_SPEED)
@@ -1235,6 +1236,8 @@ extension Configuration {
         clxSprSpr = defaults.get(.DENISE_CLX_SPR_SPR) != 0
         clxSprPlf = defaults.get(.DENISE_CLX_SPR_PLF) != 0
         clxPlfPlf = defaults.get(.DENISE_CLX_PLF_PLF) != 0
+        slowRamDelay = defaults.get(.MEM_SLOW_RAM_DELAY) != 0
+        slowRamMirror = defaults.get(.MEM_SLOW_RAM_MIRROR) != 0
 
         amiga.resume()
     }
