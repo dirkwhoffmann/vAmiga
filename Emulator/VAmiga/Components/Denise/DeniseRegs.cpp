@@ -104,7 +104,7 @@ Denise::pokeJOYTEST(u16 value)
 u16
 Denise::peekDENISEID()
 {
-    u16 result = config.revision == DeniseRev::ECS ? 0xFFFC : 0xFFFF;
+    u16 result = isECS() ? 0xFFFC : 0xFFFF;
     trace(ECSREG_DEBUG, "peekDENISEID() = $%04X (%d)\n", result, result);
     return result;
 }
@@ -112,7 +112,7 @@ Denise::peekDENISEID()
 u16
 Denise::spypeekDENISEID() const
 {
-    return config.revision == DeniseRev::ECS ? 0xFFFC : 0xFFFF;
+    return isECS() ? 0xFFFC : 0xFFFF;
 }
 
 template <Accessor s> void
