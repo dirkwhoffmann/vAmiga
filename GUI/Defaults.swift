@@ -216,6 +216,11 @@ extension UserDefaults {
         return romUrl(name: String(format: "%08x", fingerprint) + ".rom")
     }
 
+    static func romUrl(crc32: UInt32) -> URL? {
+
+        return romUrl(fingerprint: Int(crc32))
+    }
+
     static func mediaUrl(name: String) -> URL? {
         
         let folder = try? URL.appSupportFolder("Media")
@@ -265,7 +270,7 @@ extension Preferences {
 
     func applyUserDefaults() {
         
-        debug(.defaults, "Applying user defaults")
+        debug(.defaults)
         
         applyGeneralUserDefaults()
         applyCapturesUserDefaults()
@@ -735,20 +740,17 @@ extension Configuration {
         
         do {
 
-            if amiga.mem.info.hasRom {
+            // Kickstart
+            url = UserDefaults.romUrl
+            if url == nil { throw CoreError(.FILE_CANT_WRITE) }
+            try? fm.removeItem(at: url!)
+            if amiga.mem.info.hasRom { try amiga.mem.saveRom(url!) }
 
-                url = UserDefaults.romUrl
-                if url == nil { throw CoreError(.FILE_CANT_WRITE) }
-                try? fm.removeItem(at: url!)
-                try amiga.mem.saveRom(url!)
-            }
-            if amiga.mem.info.hasExt {
-
-                url = UserDefaults.extUrl
-                if url == nil { throw CoreError(.FILE_CANT_WRITE) }
-                try? fm.removeItem(at: url!)
-                try amiga.mem.saveExt(url!)
-            }
+            // Kickstart extension
+            url = UserDefaults.extUrl
+            if url == nil { throw CoreError(.FILE_CANT_WRITE) }
+            try? fm.removeItem(at: url!)
+            if amiga.mem.info.hasExt { try amiga.mem.saveExt(url!) }
 
         } catch {
 

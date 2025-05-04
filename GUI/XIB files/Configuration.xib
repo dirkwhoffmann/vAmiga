@@ -550,7 +550,8 @@ DQ
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                         <menuItem isSeparatorItem="YES" id="zIK-wc-oAf"/>
-                                                        <menuItem title="Aros Kickstart Replacement SVN 54705" image="chipTemplate" tag="2631987209" id="Yyq-YL-spr"/>
+                                                        <menuItem title="Aros Kickstart Replacement Feb. 2025" image="chipTemplate" tag="2736990563" id="Yyq-YL-spr"/>
+                                                        <menuItem title="Aros Kickstart Replacement SVN 54705" image="chipTemplate" tag="2631987209" id="yPF-KG-H8h"/>
                                                         <menuItem title="Aros Kickstart Replacement SVN 55696" image="chipTemplate" tag="1062194186" id="uLi-3n-N3S"/>
                                                         <menuItem isSeparatorItem="YES" id="eoN-df-wHj"/>
                                                         <menuItem title="emuTOS 1.3" image="chipTemplate" tag="1898168769" id="1j5-LX-FNu"/>

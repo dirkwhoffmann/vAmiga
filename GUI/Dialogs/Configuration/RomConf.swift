@@ -133,7 +133,7 @@ extension ConfigurationController {
 
             switch UInt32(item.tag) {
 
-            case vamiga.CRC32_AROS_54705, vamiga.CRC32_AROS_55696,
+            case vamiga.CRC32_AROS_54705, vamiga.CRC32_AROS_55696, vamiga.CRC32_AROS_20250219,
                 vamiga.CRC32_DIAG121, vamiga.CRC32_DIAG13,
                 vamiga.CRC32_EMUTOS13:
                 
@@ -178,14 +178,11 @@ extension ConfigurationController {
 
     @IBAction func installRomAction(_ sender: NSButton!) {
 
-        let crc32 = sender.selectedTag()
+        let crc32 = UInt32(sender.selectedTag())
 
-        switch UInt32(crc32) {
-        case vamiga.CRC32_AROS_54705: // Taken from UAE
-            installAros(rom: "aros-svn54705-rom", ext: "aros-svn54705-ext")
-
-        case vamiga.CRC32_AROS_55696: // Taken from SAE
-            installAros(rom: "aros-svn55696-rom", ext: "aros-svn55696-ext")
+        switch crc32 {
+        case vamiga.CRC32_AROS_54705, vamiga.CRC32_AROS_55696, vamiga.CRC32_AROS_20250219:
+            installAros(crc32: crc32)
 
         case vamiga.CRC32_EMUTOS13:
             install(rom: "emutos-13")
@@ -197,7 +194,7 @@ extension ConfigurationController {
             install(rom: "diagrom-13")
 
         default:
-            if let url = UserDefaults.romUrl(fingerprint: crc32) {
+            if let url = UserDefaults.romUrl(crc32: crc32) {
                 try? emu.mem.loadRom(url)
             }
         }
@@ -219,18 +216,21 @@ extension ConfigurationController {
 
     func installAros() {
 
-        installAros(crc32: vamiga.CRC32_AROS_55696)
+        installAros(crc32: vamiga.CRC32_AROS_20250219)
     }
 
     func installAros(crc32: UInt32) {
 
         switch crc32 {
 
-        case vamiga.CRC32_AROS_54705: // Taken from UAE
+        case vamiga.CRC32_AROS_54705:       // Taken from UAE
             installAros(rom: "aros-svn54705-rom", ext: "aros-svn54705-ext")
 
-        case vamiga.CRC32_AROS_55696: // Taken from SAE
+        case vamiga.CRC32_AROS_55696:       // Taken from SAE
             installAros(rom: "aros-svn55696-rom", ext: "aros-svn55696-ext")
+
+        case vamiga.CRC32_AROS_20250219:    // 2025 version
+            installAros(rom: "aros-20250219-rom", ext: "aros-20250219-ext")
 
         default:
             fatalError()
