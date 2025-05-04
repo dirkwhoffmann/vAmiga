@@ -35,13 +35,21 @@ extension ConfigurationController {
     func refreshVideoTab() {
 
         let renderer = parent.renderer!
-
+        let palette = config.palette
+        let adjustable = palette != Palette.RGB.rawValue
+        
         // Colors
-        vidPalettePopUp.selectItem(withTag: config.palette)
+        vidPalettePopUp.selectItem(withTag: palette)
         vidBrightnessSlider.integerValue = config.brightness
         vidContrastSlider.integerValue = config.contrast
         vidSaturationSlider.integerValue = config.saturation
-
+        vidBrightnessSlider.isEnabled = adjustable
+        vidContrastSlider.isEnabled = adjustable
+        vidSaturationSlider.isEnabled = adjustable
+        vidBrightnessLabel.textColor = adjustable ? .labelColor : .disabledControlTextColor
+        vidContrastLabel.textColor = adjustable ? .labelColor : .disabledControlTextColor
+        vidSaturationLabel.textColor = adjustable ? .labelColor : .disabledControlTextColor
+        
         // Geometry
         vidZoom.selectItem(withTag: config.zoom)
         vidHZoom.floatValue = config.hZoom * 1000

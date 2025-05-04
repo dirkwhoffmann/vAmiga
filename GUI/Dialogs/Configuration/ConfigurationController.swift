@@ -295,6 +295,9 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var vidBrightnessSlider: NSSlider!
     @IBOutlet weak var vidContrastSlider: NSSlider!
     @IBOutlet weak var vidSaturationSlider: NSSlider!
+    @IBOutlet weak var vidBrightnessLabel: NSTextField!
+    @IBOutlet weak var vidContrastLabel: NSTextField!
+    @IBOutlet weak var vidSaturationLabel: NSTextField!
 
     // Geometry
     @IBOutlet weak var vidZoom: NSPopUpButton!

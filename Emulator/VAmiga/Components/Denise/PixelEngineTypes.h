@@ -20,6 +20,7 @@ namespace vamiga {
 enum class Palette
 {
     COLOR,
+    RGB,
     BLACK_WHITE,
     PAPER_WHITE,
     GREEN,
@@ -37,6 +38,7 @@ struct PaletteEnum : Reflection<PaletteEnum, Palette>
         switch (value) {
                 
             case Palette::COLOR:        return "COLOR";
+            case Palette::RGB:          return "RGB";
             case Palette::BLACK_WHITE:  return "BLACK_WHITE";
             case Palette::PAPER_WHITE:  return "PAPER_WHITE";
             case Palette::GREEN:        return "GREEN";
@@ -50,6 +52,7 @@ struct PaletteEnum : Reflection<PaletteEnum, Palette>
         switch (value) {
                 
             case Palette::COLOR:        return "Color palette";
+            case Palette::RGB:          return "RGB direct";
             case Palette::BLACK_WHITE:  return "Black and white palette";
             case Palette::PAPER_WHITE:  return "Paper white palette";
             case Palette::GREEN:        return "Green palette";

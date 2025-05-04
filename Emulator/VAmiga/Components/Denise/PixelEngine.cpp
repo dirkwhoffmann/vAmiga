@@ -205,6 +205,9 @@ PixelEngine::updateRGBA()
 void
 PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
 {
+    // The RGB palette does not alter anything. Return immediately
+    if (config.palette == Palette::RGB) return;
+    
     // Normalize adjustment parameters
     double brightness =  config.brightness - 50.0;
     double contrast = config.contrast / 100.0;

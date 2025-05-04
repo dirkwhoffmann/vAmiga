@@ -35,6 +35,9 @@ RegressionTester::prepare(ConfigScheme scheme, string rom, string ext)
     // Load Extension Rom (if provided)
     if (ext != "") amiga.mem.loadExt(ext.c_str());
     
+    // Choose a color palette that stays stable across releases
+    emulator.set(Opt::MON_PALETTE, (i64)Palette::RGB);
+    
     // Choose a warp source that prevents the GUI from disabling warp mode
     constexpr isize warpSource = 1;
     

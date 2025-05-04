@@ -191,8 +191,8 @@ CopperDebugger::disassemble(std::ostream& os, isize list, bool symbolic, isize m
     assert(list == 1 || list == 2);
     
     auto prog = list == 1 ? current1 : current2;
-    auto cnt  = (prog->end - prog->start) / 4;
-    u32  addr = (u32)(list == 1 ? copper.cop1lc : copper.cop2lc);
+    auto cnt  = isize(prog->end - prog->start) / 4;
+    auto addr = u32(list == 1 ? copper.cop1lc : copper.cop2lc);
     
     for (isize i = 0; i < cnt && i < maxLines; i++, addr += 4) {
         

@@ -48,6 +48,7 @@ typealias MemInfo = vamiga.MemInfo
 typealias MemStats = vamiga.MemStats
 typealias Message = vamiga.Message
 typealias Option = vamiga.Opt
+typealias Palette = vamiga.Palette
 typealias PaulaInfo = vamiga.PaulaInfo
 typealias Probe = vamiga.Probe
 typealias RomTraits = vamiga.RomTraits

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23727" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23727"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -174,8 +174,10 @@
                 <outlet property="vidBloomWeightSlider" destination="X5P-s8-sLT" id="vHx-K7-QCd"/>
                 <outlet property="vidBlurPopUp" destination="85u-7O-Nsd" id="10z-Fy-2dG"/>
                 <outlet property="vidBlurRadiusSlider" destination="2Xn-Rh-ewd" id="d0G-vF-x36"/>
+                <outlet property="vidBrightnessLabel" destination="u7P-8C-N9B" id="9Xh-80-pk4"/>
                 <outlet property="vidBrightnessSlider" destination="zzU-KL-7dh" id="yOS-Ym-ZEX"/>
                 <outlet property="vidCenter" destination="ho8-KI-Npo" id="gZ1-7f-Iwm"/>
+                <outlet property="vidContrastLabel" destination="ONC-cx-bUt" id="qoa-og-S8f"/>
                 <outlet property="vidContrastSlider" destination="Mnh-Qb-xHP" id="Vda-5U-Q3G"/>
                 <outlet property="vidDotMaskBrightnessSlider" destination="QSV-1J-MdT" id="U21-sd-6r8"/>
                 <outlet property="vidDotMaskPopUp" destination="jiu-e5-k1t" id="4FM-a3-Gpq"/>
@@ -192,6 +194,7 @@
                 <outlet property="vidOKButton" destination="WcH-gc-UkP" id="yQi-GR-rum"/>
                 <outlet property="vidPalettePopUp" destination="R2c-W1-1Vz" id="TdY-Ha-d7c"/>
                 <outlet property="vidPowerButton" destination="vrE-h3-1TF" id="VII-NJ-cQn"/>
+                <outlet property="vidSaturationLabel" destination="8Lr-0r-BTo" id="Q7Z-Yw-xX4"/>
                 <outlet property="vidSaturationSlider" destination="dOW-wJ-mRR" id="3kl-Bh-ckj"/>
                 <outlet property="vidScanlineBrightnessSlider" destination="AWg-ot-BhE" id="1qA-Id-w4m"/>
                 <outlet property="vidScanlineWeightSlider" destination="EYN-fQ-glL" id="REw-5A-5bs"/>
@@ -3673,27 +3676,30 @@ DQ
                                                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R2c-W1-1Vz">
                                                                 <rect key="frame" x="138" y="226" width="156" height="26"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                                                <popUpButtonCell key="cell" type="push" title="Standard Colors" bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="ztq-o3-fZN" id="ckD-BD-V0f">
+                                                                <popUpButtonCell key="cell" type="push" title="Color" bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" autoenablesItems="NO" selectedItem="ztq-o3-fZN" id="ckD-BD-V0f">
                                                                     <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                                     <font key="font" metaFont="message"/>
                                                                     <menu key="menu" title="OtherViews" autoenablesItems="NO" id="OaH-PU-Lei">
                                                                         <items>
-                                                                            <menuItem title="Standard Colors" state="on" id="ztq-o3-fZN">
+                                                                            <menuItem title="Color" state="on" id="ztq-o3-fZN">
                                                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                                                             </menuItem>
-                                                                            <menuItem title="Black and White" tag="1" id="fo6-m1-aWV">
+                                                                            <menuItem title="RGB Direct" tag="1" id="nsr-bQ-3XT">
                                                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                                                             </menuItem>
-                                                                            <menuItem title="Paper White" tag="2" id="5hi-Ws-jg3">
+                                                                            <menuItem title="Black and White" tag="2" id="fo6-m1-aWV">
                                                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                                                             </menuItem>
-                                                                            <menuItem title="Green" tag="3" id="GNz-Co-bPn">
+                                                                            <menuItem title="Paper White" tag="3" id="5hi-Ws-jg3">
                                                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                                                             </menuItem>
-                                                                            <menuItem title="Amber" tag="4" id="Y9p-sw-6pd">
+                                                                            <menuItem title="Green" tag="4" id="GNz-Co-bPn">
                                                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                                                             </menuItem>
-                                                                            <menuItem title="Sepia" tag="5" id="0EB-cE-krm">
+                                                                            <menuItem title="Amber" tag="5" id="Y9p-sw-6pd">
+                                                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                                                            </menuItem>
+                                                                            <menuItem title="Sepia" tag="6" id="0EB-cE-krm">
                                                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                                                             </menuItem>
                                                                         </items>
