@@ -199,7 +199,11 @@ CopperDebugger::disassemble(std::ostream& os, isize list, bool symbolic, isize m
         auto word1 = mem.spypeek16 <Accessor::AGNUS> (addr);
         auto word2 = mem.spypeek16 <Accessor::AGNUS> (addr + 2);
         
-        os << std::format("${:04X}: ${:04X} ${:04X}", addr, word1, word2);
+        os << std::uppercase << std::hex << std::setfill('0');
+        os << "$" << std::setw(4) << addr;
+        os << ": $" << std::setw(4) << word1;
+        os << " $" << std::setw(4) << word2;
+        
         if (symbolic) os << "    " << string(disassemble(1, i, true));
         os << std::endl;
     }
