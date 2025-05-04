@@ -378,7 +378,6 @@ Sequencer::processSignal <true> (u32 signal, DDFState &state)
 
             state.rhw = true;
             state.stopreq |= state.bprun;
-            // trace(1, "SIG_RHW: %d\n", state.bprun);
             break;
     }
     switch (signal & (SIG_BPHSTART | SIG_BPHSTOP | SIG_SHW | SIG_RHW)) {
@@ -400,7 +399,8 @@ Sequencer::processSignal <true> (u32 signal, DDFState &state)
             
             state.bphstop |= state.bprun;
             state.stopreq |= state.bprun;
-            state.bphstart = true;
+            // state.bphstart = true;
+            state.bphstart = state.bpv; // Likely fix for test case arosddf2 and arosddf4
             state.bprun = (state.bprun || state.shw) && state.bpv && state.bmapen;
             break;
 
@@ -416,7 +416,6 @@ Sequencer::processSignal <true> (u32 signal, DDFState &state)
         case SIG_BPHSTOP | SIG_SHW:
         case SIG_BPHSTOP | SIG_RHW:
 
-            // trace(1, "SIG_BPHSTOP\n");
             state.bphstart = false;
             state.bphstop |= state.bprun;
             state.stopreq |= state.bprun;
@@ -426,7 +425,6 @@ Sequencer::processSignal <true> (u32 signal, DDFState &state)
 
         case SIG_BMAPEN_CLR:
 
-            // trace(1, "SIG_BMAPEN_CLR\n");
             state.bmapen = false;
             state.bprun = false;
             state.cnt = 0;
