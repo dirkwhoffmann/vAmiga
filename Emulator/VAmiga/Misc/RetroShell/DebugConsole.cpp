@@ -874,14 +874,18 @@ DebugConsole::initCommands(RetroShellCmd &root)
             
             auto nr = parseNum(argv[0]);
             
+            std::stringstream ss;
+            
             switch (nr) {
                     
-                case 1: dump(amiga.agnus.copper, Category::List1); break;
-                case 2: dump(amiga.agnus.copper, Category::List2); break;
+                case 1: copper.debugger.disassemble(ss, 1, true); break;
+                case 2: copper.debugger.disassemble(ss, 2, true); break;
                     
                 default:
                     throw CoreError(Fault::OPT_INV_ARG, "1 or 2");
             }
+            
+            *this << '\n' << ss << '\n';
         }
     });
     

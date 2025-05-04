@@ -185,12 +185,32 @@ CopperDebugger::jumped()
     }
 }
 
+void
+CopperDebugger::disassemble(std::ostream& os, isize list, bool symbolic, isize maxLines) const
+{
+    assert(list == 1 || list == 2);
+    
+    auto prog = list == 1 ? current1 : current2;
+    auto cnt  = (prog->end - prog->start) / 4;
+    u32  addr = (u32)(list == 1 ? copper.cop1lc : copper.cop2lc);
+    
+    for (isize i = 0; i < cnt && i < maxLines; i++, addr += 4) {
+        
+        auto word1 = mem.spypeek16 <Accessor::AGNUS> (addr);
+        auto word2 = mem.spypeek16 <Accessor::AGNUS> (addr + 2);
+        
+        os << std::format("${:04X}: ${:04X} ${:04X}", addr, word1, word2);
+        if (symbolic) os << "    " << string(disassemble(1, i, true));
+        os << std::endl;
+    }
+}
+
 string
 CopperDebugger::disassemble(isize list, isize offset, bool symbolic) const
 {
     assert(list == 1 || list == 2);
     
-    u32 addr = (u32)((list == 1 ? copper.cop1lc : copper.cop2lc) + 2 * offset);
+    u32 addr = (u32)((list == 1 ? copper.cop1lc : copper.cop2lc) + 4 * offset);
     return string(disassemble(addr, symbolic));
 }
 

@@ -134,8 +134,11 @@ public:
     
     
     //
-    // Disassembling instructions
+    // Disassembling
     //
+        
+    // Disassembles a Copper list
+    void disassemble(std::ostream& os, isize list, bool symbolic = true, isize maxLines = 128) const;
     
     // Disassembles a single Copper command
     string disassemble(isize list, isize offset, bool symbolic) const;
