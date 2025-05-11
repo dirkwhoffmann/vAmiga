@@ -134,7 +134,7 @@ class MyDocument: NSDocument {
   
     override func save(to url: URL, ofType typeName: String, for saveOperation: NSDocument.SaveOperationType) async throws {
             
-        debug(.media)
+        debug(.media, "url = \(url)")
 
         if typeName == "de.dirkwhoffmann.retro.vamiga" {
 
@@ -152,7 +152,13 @@ class MyDocument: NSDocument {
                     try data?.write(to: url.appendingPathComponent("preview.png"))
                 }
                 
+                // Save a plist file containing the machine properties
                 saveMachineDescription(to: url.appendingPathComponent("machine.plist"))
+                
+                // Update the document's title and save status
+                self.fileURL = url
+                self.windowForSheet?.title = url.deletingPathExtension().lastPathComponent
+                self.updateChangeCount(.changeCleared)
                 
             } catch let error as CoreError {
                 
@@ -253,6 +259,11 @@ class MyDocument: NSDocument {
         // Load workspace
         try emu.amiga.loadWorkspace(url: url)
         
+        // Update the document's title and save status
+        self.fileURL = url
+        self.windowForSheet?.title = url.deletingPathExtension().lastPathComponent
+        self.updateChangeCount(.changeCleared)
+        
         // Scan directory for additional media files
         let supportedTypes: [String : FileType] =
         ["adf": .ADF, "adz": .ADZ, "dms": .DMS, "exe": .EXE, "img": .IMG, "hdf": .HDF, "hdz": .HDZ, "st": .ST]
@@ -260,12 +271,8 @@ class MyDocument: NSDocument {
 
         let contents = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil)
         for file in contents {
-            
             if !exclude.contains(url.deletingPathExtension().lastPathComponent) {
-                
                 if let type = supportedTypes[file.pathExtension.lowercased()] {
-                    
-                    // Swift.print("Found media file \(file)")
                     myAppDelegate.noteNewRecentlyOpenedURL(file, type: type)
                 }
             }
