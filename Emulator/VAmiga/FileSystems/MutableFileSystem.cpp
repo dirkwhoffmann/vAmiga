@@ -592,6 +592,7 @@ MutableFileSystem::importDirectory(const fs::directory_entry &dir, bool recursiv
 
                 changeDir(name);
                 importDirectory(entry, recursive);
+                changeDir("..");
             }
         }
 
