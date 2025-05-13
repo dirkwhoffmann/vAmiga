@@ -150,7 +150,7 @@ Thread::runLoop()
 void
 Thread::switchState(ExecState newState)
 {
-    assert(isEmulatorThread() || isSuspended());
+    assert(isEmulatorThread() || !isRunning());
         
     auto invalid = [&]() {
 

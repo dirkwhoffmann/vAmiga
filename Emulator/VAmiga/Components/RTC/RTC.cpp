@@ -104,6 +104,16 @@ RTC::_dump(Category category, std::ostream& os) const
     
     if (category == Category::State) {
         
+        os << tab("timeDiff");
+        os << dec(timeDiff) << std::endl;
+        os << tab("lastCall");
+        os << dec(lastCall) << std::endl;
+        os << tab("lastMeasure");
+        os << dec(lastMeasure) << std::endl;
+        os << tab("lastMeasuredValue");
+        os << dec(lastMeasuredValue) << std::endl;
+        os << std::endl;
+        
         for (isize i = 0; i < 16; i++) {
             os << "    " << hex((u8)i) << " : ";
             for (isize j = 0; j < 4; j++) {
@@ -120,13 +130,13 @@ RTC::getTime()
 {
     Cycle result;
     Cycle master = cpu.getMasterClock();
-
     auto timeBetweenCalls = AS_SEC(master - lastCall);
-
-    if (timeBetweenCalls > 2) {
-
-        /* If the time between two read accesses is long, we compute the result
-         * out of the host machine's current time and variable timeDiff.
+    
+    if (timeBetweenCalls > 2 || lastCall == 0) {
+        
+        /* If the time between two read accesses is long, or this function is being
+         * called for the first time, we compute the result based on the host machine's
+         * current time and the timeDiff offset.
          */
         lastMeasure = master;
         lastMeasuredValue = (i64)time(nullptr);
@@ -135,15 +145,15 @@ RTC::getTime()
     } else {
 
         /* If the time between two read accesses is short, we compute the result
-         * out of the master-clock cycles that have elapsed since the host
-         * machine's time was queried the last time. This ensures that the
-         * real-time clock behaves properly in warp mode. E.g., when the Amiga
-         * boots, Kickstart tests the real-time clock by peeking the time twice
-         * with a time delay of more than 1 second. If we simply query the host
-         * machine's time, the time difference would be less than 1 second in
-         * warp mode.
+         * based on the number of master-clock cycles that have elapsed since the
+         * host time was last queried.
+         *
+         * This ensures correct RTC behavior in warp mode.For example, during boot,
+         * Kickstart queries the RTC twice with a delay of over one second. If we
+         * always used the host machine's current time, the reported delay would be
+         * shorter than expected in warp mode.
          */
-        i64 elapsedTime = AS_SEC(master - lastMeasure);
+        auto elapsedTime = AS_SEC(master - lastMeasure);
         result = (time_t)lastMeasuredValue + (time_t)elapsedTime;
     }
     
@@ -245,7 +255,7 @@ RTC::time2registersOki(tm *t)
     reg[0][0x9] = (u8)((t->tm_mon + 1) / 10);
     reg[0][0xA] = (u8)(t->tm_year % 10);
     reg[0][0xB] = (u8)(t->tm_year / 10);
-    reg[0][0xC] = (u8)(t->tm_yday / 7);
+    reg[0][0xC] = (u8)(t->tm_wday);
     
     // Change the hour format in AM/PM mode
     if (t->tm_hour > 12 && GET_BIT(reg[0][15], 2) == 0) {

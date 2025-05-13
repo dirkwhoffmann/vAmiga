@@ -40,19 +40,19 @@ class RTC final : public SubComponent {
      * By default, this variable is 0 which means that the Amiga's real-time
      * clock is identical to the one in the host machine.
      */
-    i64 timeDiff;
+    i64 timeDiff = 0;
     
     // The RTC registers
-    u8 reg[4][16];
+    u8 reg[4][16] = {};
     
     // Time stamp of the last call to function getTime()
-    Cycle lastCall;
+    Cycle lastCall = 0;
 
     // Remembers the most recent query of the host machine's real-time clock
-    Cycle lastMeasure;
+    Cycle lastMeasure = 0;
 
     // The result of the most recent query
-    i64 lastMeasuredValue;
+    i64 lastMeasuredValue = 0;
     
     
     //
