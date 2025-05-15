@@ -87,10 +87,10 @@ MutableFileSystem::init(Diameter dia, Density den, const fs::path &path)
 void
 MutableFileSystem::init(FSVolumeType type, const fs::path &path)
 {
-    // Try to fit the directory into files system with DD disk capacity
+    // Try to fit the directory into a file system with DD disk capacity
     try { init(Diameter::INCH_35, Density::DD, path); return; } catch (...) { };
 
-    // Try to fit the directory into files system with HD disk capacity
+    // Try to fit the directory into a file system with HD disk capacity
     init(Diameter::INCH_35, Density::HD, path);
 }
 
@@ -210,6 +210,7 @@ MutableFileSystem::allocateBlock()
     if (Block nr = allocateBlockAbove(rootBlock)) return nr;
     if (Block nr = allocateBlockBelow(rootBlock)) return nr;
 
+    debug(FS_DEBUG, "No more free blocks\n");
     return 0;
 }
 

@@ -124,19 +124,7 @@ class MyFormatter: Formatter {
         switch radix {
         case 2 where maxValue == 0xFF:
             return toBinary(value: number, digits: 8)
-            
-            /*
-            let bits: [Character] = [number & 0x80 != 0 ? "1" : "0",
-                                     number & 0x40 != 0 ? "1" : "0",
-                                     number & 0x20 != 0 ? "1" : "0",
-                                     number & 0x10 != 0 ? "1" : "0",
-                                     number & 0x08 != 0 ? "1" : "0",
-                                     number & 0x04 != 0 ? "1" : "0",
-                                     number & 0x02 != 0 ? "1" : "0",
-                                     number & 0x01 != 0 ? "1" : "0"]
-            return String(bits)
-            */
-            
+                        
         case 2 where maxValue == 0xFFFF:
             return toBinary(value: number, digits: 16)
             

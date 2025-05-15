@@ -399,7 +399,6 @@ class ConfigurationController: DialogController {
     @IBAction override func okAction(_ sender: Any!) {
         
         hide()
-        // close()
     }
 
     @IBAction func powerAction(_ sender: Any!) {

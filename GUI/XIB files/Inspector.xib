@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23727" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23727"/>
         <capability name="Combo buttons" minToolsVersion="14.0" minSystemVersion="13.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -8691,7 +8691,7 @@
                     <toolbarItem implicitItemIdentifier="E42DD58F-EAB7-4712-9B76-AFD35C3B0C4D" label="Inspection Target" paletteLabel="Inspection Target" title="CPU" sizingBehavior="auto" id="BQe-nn-Lal">
                         <nil key="toolTip"/>
                         <popUpButton key="view" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="b86-1a-Fn4">
-                            <rect key="frame" x="0.0" y="14" width="156" height="25"/>
+                            <rect key="frame" x="-3" y="-4" width="156" height="25"/>
                             <popUpButtonCell key="cell" type="roundTextured" title="CPU" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="LXU-RO-3xV" id="Wsk-Xi-B1a">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="message"/>
@@ -8722,7 +8722,7 @@
                     <toolbarItem implicitItemIdentifier="30642DA1-478E-4345-B156-B79CA8994EBF" label="Progress" paletteLabel="Progress" title="00:00:00" sizingBehavior="auto" id="RcX-9d-hxi">
                         <nil key="toolTip"/>
                         <button key="view" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xim-h1-DEa">
-                            <rect key="frame" x="0.0" y="14" width="130" height="23"/>
+                            <rect key="frame" x="-1" y="-2" width="130" height="23"/>
                             <buttonCell key="cell" type="roundTextured" title="00:00:00" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="H8T-uh-2pG">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" size="12" name="PTMono-Bold"/>
@@ -8735,7 +8735,7 @@
                     <toolbarItem implicitItemIdentifier="11582724-F9DF-4AC9-83C6-EB2C0DA79367" label="New" paletteLabel="New" image="plus" catalog="system" sizingBehavior="auto" id="vjh-tj-GEV">
                         <nil key="toolTip"/>
                         <button key="view" id="nRb-gl-jJU">
-                            <rect key="frame" x="8" y="14" width="14.5" height="13"/>
+                            <rect key="frame" x="8" y="14.5" width="14.5" height="13"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="plus" catalog="system" imagePosition="overlaps" alignment="center" inset="2" id="GJZ-Oo-v24">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>

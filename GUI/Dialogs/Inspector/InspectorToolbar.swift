@@ -96,19 +96,4 @@ class InspectorToolbar: NSToolbar {
 
         inspector.parent.addInspector()
     }
-    
-    @IBAction
-    func hexAction(_ sender: NSButton) {
-        
-        if sender.state == .on {
-            
-            emu.set(.CPU_DASM_NUMBERS, value: DasmNumbers.HEX.rawValue)
-            inspector.hex = true
-            
-        } else {
-            
-            emu.set(.CPU_DASM_NUMBERS, value: DasmNumbers.DEC.rawValue)
-            inspector.hex = false
-        }
-    }
 }
