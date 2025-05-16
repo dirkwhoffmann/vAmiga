@@ -48,14 +48,13 @@ Folder::init(const fs::path &path)
     
     // Make the volume bootable
     volume.makeBootable(BootBlockId::AMIGADOS_13);
-    
-    // Check the file system for errors
-    volume.dump(Category::State);
-    volume.printDirectory(true);
-
+        
     // Check the file system for consistency
-    FSErrorReport report = volume.check(true);
-    if (report.corruptedBlocks > 0) {
+    if (FS_DEBUG) volume.dump(Category::State);
+    if (FS_DEBUG) volume.printDirectory(true);
+    
+    if (FSErrorReport report = volume.check(true); report.corruptedBlocks > 0) {
+        
         warn("Found %ld corrupted blocks\n", report.corruptedBlocks);
         if (FS_DEBUG) volume.dump(Category::Blocks);
     }

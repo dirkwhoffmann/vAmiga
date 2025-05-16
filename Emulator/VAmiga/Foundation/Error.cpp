@@ -396,6 +396,10 @@ CoreError::CoreError(Fault code, const string &s)
             description = "Corrupted file system.";
             break;
 
+        case Fault::FS_OUT_OF_SPACE:
+            description = "File system capacity exceeded.";
+            break;
+            
         case Fault::FS_DIR_NOT_EMPTY:
             description = "Directory is not empty.";
             break;

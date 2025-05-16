@@ -1105,12 +1105,12 @@ void
 FloppyDrive::insertMediaFile(class MediaFile &file, bool wp)
 {
     try {
-
+        
         const FloppyFile &adf = dynamic_cast<const FloppyFile &>(file);
         swapDisk(std::make_unique<FloppyDisk>(adf, wp));
-
-    } catch (...) {
-
+        
+    } catch (const std::bad_cast &) {
+        
         throw CoreError(Fault::FILE_TYPE_MISMATCH);
     }
 }

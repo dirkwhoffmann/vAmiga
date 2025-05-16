@@ -403,14 +403,15 @@ MutableFileSystem::createFile(const string &name, const u8 *buf, isize size)
 {
     assert(buf);
 
-    FSBlock *block = createFile(name);
-    
-    if (block) {
+    if (FSBlock *block = createFile(name); block) {
+        
         assert(block->type == FSBlockType::FILEHEADER_BLOCK);
         addData(*block, buf, size);
+        
+        return block;
     }
     
-    return block;
+    throw CoreError(Fault::FS_OUT_OF_SPACE);
 }
 
 FSBlock *
@@ -466,8 +467,9 @@ MutableFileSystem::addData(FSBlock &block, const u8 *buffer, isize size)
             debug(FS_DEBUG, "         Free blocks : %ld\n", freeBlocks());
             
             if (freeBlocks() < numDataBlocks + numListBlocks) {
-                warn("Not enough free blocks\n");
-                return 0;
+
+                debug(FS_DEBUG, "Not enough free blocks\n");
+                throw CoreError(Fault::FS_OUT_OF_SPACE);
             }
             
             for (Block ref = nr, i = 0; i < (Block)numListBlocks; i++) {
@@ -559,7 +561,7 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
     // info();
     // dump();
     // util::hexdump(blocks[0]->data, 512);
-    printDirectory(true);
+    if (FS_DEBUG) { printDirectory(true); }
 }
 
 void
