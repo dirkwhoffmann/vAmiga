@@ -42,7 +42,7 @@ class FileSystem : public CoreObject {
 protected:
 
     // File system information
-     FSTraits traits;
+    FSTraits traits;
 
     // File system version
     FSVolumeType dos = FSVolumeType::NODOS;

@@ -15,6 +15,7 @@
 #include "ADFFile.h"
 #include "EADFFile.h"
 #include "IMGFile.h"
+#include "Folder.h"
 #include "MutableFileSystem.h"
 #include "MsgQueue.h"
 #include "CmdQueue.h"
@@ -1107,6 +1108,11 @@ FloppyDrive::insertMediaFile(class MediaFile &file, bool wp)
     try {
         
         const FloppyFile &adf = dynamic_cast<const FloppyFile &>(file);
+        
+        if (dynamic_cast<const Folder *>(&file) && !isInsertable(adf)) {
+            throw CoreError(Fault::FS_DIR_TOO_LARGE);
+        }
+            
         swapDisk(std::make_unique<FloppyDisk>(adf, wp));
         
     } catch (const std::bad_cast &) {

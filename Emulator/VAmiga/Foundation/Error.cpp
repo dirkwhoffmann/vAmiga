@@ -400,6 +400,11 @@ CoreError::CoreError(Fault code, const string &s)
             description = "File system capacity exceeded.";
             break;
             
+        case Fault::FS_DIR_TOO_LARGE:
+            description = "The directory is too large.";
+            description += " The files do not fit onto a single disk.";
+            break;
+            
         case Fault::FS_DIR_NOT_EMPTY:
             description = "Directory is not empty.";
             break;
