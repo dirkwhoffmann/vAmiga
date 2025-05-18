@@ -37,7 +37,6 @@ namespace vamiga {
 class RetroShell final : public SubComponent {
 
     friend class RshServer;
-    // friend class Interpreter;
 
     Descriptions descriptions = {{
 

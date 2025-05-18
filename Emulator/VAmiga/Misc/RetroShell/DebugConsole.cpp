@@ -75,7 +75,7 @@ DebugConsole::initCommands(RetroShellCmd &root)
     Console::initCommands(root);
     
     //
-    // Top-level commands
+    // Program execution
     //
     
     RetroShellCmd::currentGroup = "Program execution";
@@ -1621,6 +1621,7 @@ DebugConsole::initCommands(RetroShellCmd &root)
             }
         });
     }
+    
     root.add({
         
         .tokens = {"%"},

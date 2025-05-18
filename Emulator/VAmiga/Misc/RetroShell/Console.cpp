@@ -901,7 +901,7 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
         root.add( {.tokens = { cmd }, .help = c.shellHelp() } );
     }
 
-    // CHeck if this component has options
+    // In case this component has options...
     if (auto &options = c.getOptions(); !options.empty()) {
 
         // Register a command for querying the current configuration

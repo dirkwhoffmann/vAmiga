@@ -70,7 +70,6 @@ struct RetroShellCmd {
     string helpName;
     
     // Help description of this command (e.g., "Eject disk")
-    // std::pair<string, string> help;
     std::vector<string> help;
     
     // List of required arguments

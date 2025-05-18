@@ -267,7 +267,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { cmd, "load" },
-        .help   = { "Load memory contents from a file" }
+        .help   = { "Loads memory contents from a file" }
     });
     
     root.add({
@@ -468,12 +468,12 @@ CommandConsole::initCommands(RetroShellCmd &root)
     
     cmd = registerComponent(keyboard);
     
-        root.add({
-            
-            .tokens = { cmd, "press" },
-            .args   = { Arg::value },
-            .help   = { "Sends a keycode to the keyboard" },
-            .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+    root.add({
+        
+        .tokens = { cmd, "press" },
+        .args   = { Arg::value },
+        .help   = { "Sends a keycode to the keyboard" },
+        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
             auto code = KeyCode(parseNum(argv[0]));
             emulator.put(Command(Cmd::KEY_PRESS, KeyCommand { .keycode = code, .delay = 0.0 }));
