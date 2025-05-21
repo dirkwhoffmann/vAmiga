@@ -248,8 +248,6 @@ class Renderer: NSObject, MTKViewDelegate {
 
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
 
-        amiga.set(.HOST_FRAMEBUF_WIDTH, value: Int(size.width))
-        amiga.set(.HOST_FRAMEBUF_HEIGHT, value: Int(size.height))
         reshape(withSize: size)
     }
     

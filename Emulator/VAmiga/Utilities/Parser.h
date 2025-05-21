@@ -69,7 +69,6 @@ template <typename Enum> long parsePartialEnum(const string& key, std::function<
     for (auto c : key) { upper += (char)std::toupper(c); }
 
     // Search all keys
-    // for (isize i = Enum::minVal; i <= Enum::maxVal; i++) {
     for (const auto &i : Enum::elements()) {
 
         if (!accept(long(i))) continue;

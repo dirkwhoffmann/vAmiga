@@ -65,7 +65,10 @@ static const char *smokeTestScript[] = {
     "amiga set VIDEO_FORMAT NTSC",
     "amiga set WARP_BOOT 0",
     "amiga set WARP_BOOT 10",
-
+    "amiga set WARP_MODE ALWAYS",
+    "amiga set WARP_MODE AUTO",
+    "amiga set WARP_MODE NEVER",
+    
     "amiga init A1000_OCS_1MB",
     "amiga init A500_OCS_1MB",
     "amiga init A500_ECS_1MB",

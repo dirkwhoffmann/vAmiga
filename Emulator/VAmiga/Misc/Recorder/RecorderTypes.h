@@ -25,12 +25,11 @@ enum class RecState : long
     FINALIZE,
     ABORT
 };
-// typedef REC_STATE RecorderState;
 
 struct RecStateEnum : Reflection<RecStateEnum, RecState>
 {
-    static constexpr RecState minVal = RecState(0);
-    static constexpr RecState maxVal = RecState::ABORT;
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = long(RecState::ABORT);
     
     static const char *_key(RecState value)
     {

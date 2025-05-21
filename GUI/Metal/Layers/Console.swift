@@ -110,6 +110,10 @@ class Console: Layer {
         
         scrollView.setFrameSize(newSize)
         scrollView.frame.origin = CGPoint(x: origin.x, y: origin.y)
+        
+        let drawableSize = controller.metal.drawableSize
+        amiga.set(.HOST_FRAMEBUF_WIDTH, value: Int(drawableSize.width))
+        amiga.set(.HOST_FRAMEBUF_HEIGHT, value: Int(drawableSize.height))
     }
     
     func keyDown(with event: NSEvent) {
