@@ -1639,7 +1639,7 @@
 				505B801E23FE6582002407FE /* System */,
 				508FDFCB21EA20510043D0E9 /* Metal */,
 				508FE03921EA22CC0043D0E9 /* Dialogs */,
-				509F7F1621ED156100A530E4 /* Peripherals */,
+				509F7F1621ED156100A530E4 /* Input */,
 				508FDFAE21EA1FF10043D0E9 /* XIB files */,
 			);
 			path = GUI;
@@ -1665,8 +1665,6 @@
 			children = (
 				508FE04721EA22CC0043D0E9 /* DialogController.swift */,
 				501C514927C38FE500DF1DD5 /* DragImageView.swift */,
-				507727EC242F2CE3009D01DA /* iCarousel.h */,
-				507727ED242F2CE3009D01DA /* iCarousel.m */,
 				5043154E2D2AE311006C14FF /* Dashboard */,
 				509F7F1521ED141F00A530E4 /* Inspector */,
 				5099123C24BA46E10007CAB6 /* Preferences */,
@@ -1722,6 +1720,8 @@
 				509F41E9243B0FF700AD0FE4 /* ScreenshotDialog.swift */,
 				50B9354A243481AB000C78B8 /* SnapshotDialog.swift */,
 				50EB8CCD2530710E0053988A /* VideoExporter.swift */,
+				507727EC242F2CE3009D01DA /* iCarousel.h */,
+				507727ED242F2CE3009D01DA /* iCarousel.m */,
 			);
 			path = Captures;
 			sourceTree = "<group>";
@@ -1802,7 +1802,7 @@
 			path = Inspector;
 			sourceTree = "<group>";
 		};
-		509F7F1621ED156100A530E4 /* Peripherals */ = {
+		509F7F1621ED156100A530E4 /* Input */ = {
 			isa = PBXGroup;
 			children = (
 				50894D812593CF4400C0499D /* HIDExtensions.swift */,
@@ -1814,7 +1814,7 @@
 				508FDFFF21EA227A0043D0E9 /* MacKey.swift */,
 				50F5F27121F1B6DF000627D1 /* AmigaKey.swift */,
 			);
-			path = Peripherals;
+			path = Input;
 			sourceTree = "<group>";
 		};
 		50A2953B21FF12170046BAA0 /* Drive */ = {

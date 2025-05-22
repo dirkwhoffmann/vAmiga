@@ -313,7 +313,7 @@ extension MyDocument {
         
         let modified = drives.filter { $0.info.hasModifiedDisk }
 
-        if modified.isEmpty || parent.pref.ejectWithoutAsking {
+        if modified.isEmpty || pref.ejectWithoutAsking {
             return true
         }
         
@@ -340,7 +340,7 @@ extension MyDocument {
         
         let modified = drives.filter { $0.info.hasModifiedDisk }
         
-        if modified.isEmpty || parent.pref.detachWithoutAsking {
+        if modified.isEmpty || pref.detachWithoutAsking {
             return true
         }
         

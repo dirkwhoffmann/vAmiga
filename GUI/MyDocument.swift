@@ -27,9 +27,9 @@ extension UTType {
 class MyDocument: NSDocument {
 
     var pref: Preferences { return myAppDelegate.pref }
-    var parent: MyController { return windowControllers.first as! MyController }
-    var console: Console { return parent.renderer.console }
-    var canvas: Canvas { return parent.renderer.canvas }
+    var controller: MyController { return windowControllers.first as! MyController }
+    var console: Console { return controller.renderer.console }
+    var canvas: Canvas { return controller.renderer.canvas }
     
     // URL of an attached media file
     var mediaURL: URL?
