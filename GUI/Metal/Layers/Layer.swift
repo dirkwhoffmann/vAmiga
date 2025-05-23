@@ -12,10 +12,11 @@ class Layer: NSObject {
     
     let renderer: Renderer
     
+    var controller: MyController { return renderer.parent }
     var ressourceManager: RessourceManager { return renderer.ressourceManager }
     var device: MTLDevice { return renderer.device }
     var view: MTKView { return renderer.view }
-    var amiga: EmulatorProxy { return renderer.parent.emu }
+    var emu: EmulatorProxy { return renderer.parent.emu }
     
     // Alpha channel of this layer
     var alpha: AnimatedFloat = AnimatedFloat(0.0)

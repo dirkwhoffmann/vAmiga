@@ -35,7 +35,7 @@ extension Canvas {
     // Returns the largest visibile texture area (excluding HBLANK and VBLANK)
     var largestVisible: CGRect {
 
-        let pal = amiga.agnus.traits.isPAL
+        let pal = emu.agnus.traits.isPAL
         
         let x1 = 4 * Int(TPP) * VAMIGA.HBLANK.CNT
         let x2 = 4 * Int(TPP) * VAMIGA.PAL.HPOS.CNT
@@ -121,7 +121,7 @@ extension Canvas {
     
     func updateTextureRect() {
 
-        if amiga.get(.DMA_DEBUG_ENABLE) != 0 {
+        if emu.get(.DMA_DEBUG_ENABLE) != 0 {
             textureRect = entireNormalized
         } else {
             textureRect = visibleNormalized

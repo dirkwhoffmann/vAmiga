@@ -11,8 +11,6 @@ import Foundation
 
 @MainActor
 class DropZone: Layer {
-
-    let controller: MyController
     
     var window: NSWindow { return controller.window! }
     var contentView: NSView { return window.contentView! }
@@ -54,9 +52,7 @@ class DropZone: Layer {
     //
     
     override init(renderer: Renderer) {
-        
-        controller = renderer.parent
-        
+                
         for i in 0...3 { zones[i].unregisterDraggedTypes() }
         for i in 0...3 { labels[i].unregisterDraggedTypes() }
         super.init(renderer: renderer)
@@ -69,7 +65,7 @@ class DropZone: Layer {
         
         if !enabled[zone] {
             return isHD ? hdDisabled : dfDisabled
-        } else if amiga.df(zone)!.info.hasDisk {
+        } else if emu.df(zone)!.info.hasDisk {
             return isHD ? hdInUse : dfInUse
         } else {
             return isHD ? hdEmpty : dfEmpty
@@ -93,16 +89,16 @@ class DropZone: Layer {
         switch type {
         
         case .ADF, .ADZ, .EADF, .IMG, .ST, .DMS, .EXE, .DIR:
-            enabled = [ amiga.df0.info.isConnected,
-                        amiga.df1.info.isConnected,
-                        amiga.df2.info.isConnected,
-                        amiga.df3.info.isConnected ]
+            enabled = [ emu.df0.info.isConnected,
+                        emu.df1.info.isConnected,
+                        emu.df2.info.isConnected,
+                        emu.df3.info.isConnected ]
 
         case .HDF, .HDZ:
             enabled = [ true,
-                        amiga.hd1.info.isConnected,
-                        amiga.hd2.info.isConnected,
-                        amiga.hd3.info.isConnected ]
+                        emu.hd1.info.isConnected,
+                        emu.hd2.info.isConnected,
+                        emu.hd3.info.isConnected ]
             
         default:
             enabled = [false, false, false, false]

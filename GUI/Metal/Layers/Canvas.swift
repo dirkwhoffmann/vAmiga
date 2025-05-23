@@ -187,7 +187,7 @@ class Canvas: Layer {
         updateTexture()
 
         // Let the emulator compute the next frame
-        amiga.wakeUp()
+        emu.wakeUp()
     }
 
     func updateTexture() {
@@ -200,10 +200,10 @@ class Canvas: Layer {
         var nr = 0
 
         // Prevent the stable texture from changing
-        amiga.videoPort.lockTexture()
+        emu.videoPort.lockTexture()
 
         // Grab the stable texture
-        amiga.videoPort.texture(&buffer, nr: &nr, lof: &currLOF, prevlof: &prevLOF)
+        emu.videoPort.texture(&buffer, nr: &nr, lof: &currLOF, prevlof: &prevLOF)
 
         // Check for duplicated or dropped frames
         if nr != prevNr + 1 {
@@ -220,7 +220,7 @@ class Canvas: Layer {
         }
 
         // Release the texture lock
-        amiga.videoPort.unlockTexture()
+        emu.videoPort.unlockTexture()
     }
 
     //
@@ -346,7 +346,7 @@ class Canvas: Layer {
         }
         
         // Setup uniforms
-        fragmentUniforms.alpha = amiga.paused ? 0.5 : alpha.current
+        fragmentUniforms.alpha = emu.paused ? 0.5 : alpha.current
         fragmentUniforms.white = renderer.white.current
         fragmentUniforms.dotMaskHeight = Int32(ressourceManager.dotMask.height)
         fragmentUniforms.dotMaskWidth = Int32(ressourceManager.dotMask.width)
@@ -445,7 +445,7 @@ extension Canvas {
             
             // Find the uses area inside the emulator texture
             var x1 = 0, x2 = 0, y1 = 0, y2 = 0
-            amiga.videoPort.innerArea(&x1, x2: &x2, y1: &y1, y2: &y2)
+            emu.videoPort.innerArea(&x1, x2: &x2, y1: &y1, y2: &y2)
 
             // Compute width and height
             var w = x2 - x1 + 1, h = y2 - y1 + 1

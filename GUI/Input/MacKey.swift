@@ -29,7 +29,6 @@ let isomac2amiga: [Int: Int] = [
     kVK_ANSI_0:              AmigaKeycode.Ansi.digit0,
     kVK_ANSI_Minus:          AmigaKeycode.Ansi.minus,
     kVK_ANSI_Equal:          AmigaKeycode.Ansi.equal,
-    // MISSING ON MAC(?!):   AmigaKeycode.ansi.backslash:
     
     kVK_ANSI_Keypad0:        AmigaKeycode.Ansi.keypad0,
     
@@ -82,7 +81,7 @@ let isomac2amiga: [Int: Int] = [
     kVK_ANSI_Keypad8:        AmigaKeycode.Ansi.keypad8,
     kVK_ANSI_Keypad9:        AmigaKeycode.Ansi.keypad9,
     
-    kVK_ANSI_Backslash:      AmigaKeycode.Iso.hashtag,
+    kVK_ANSI_Backslash:      AmigaKeycode.Ansi.backslash,
     kVK_ANSI_Grave:          AmigaKeycode.Iso.laceBrace,
     
     kVK_Space:               AmigaKeycode.space,
