@@ -35,10 +35,8 @@ protected:
     // The thread object
     std::thread thread;
     
-    // The current thread state and a change request
+    // The current thread state
     ExecState state = ExecState::UNINIT;
-    // ExecState newState = ExecState::UNINIT;
-    // std::atomic_flag stateChangeRequest {};
 
     // Synchronization mutex
     mutable util::ReentrantMutex lock;
@@ -60,7 +58,7 @@ protected:
     util::Clock nonstopClock;
     util::Clock loadClock;
 
-    // The current CPU load in percent
+    // Statistical information (CPU load, frames per second, thread resyncs)
     double cpuLoad = 0.0;
     double fps = 0.0;
     isize resyncs = 0;
@@ -113,13 +111,13 @@ private:
     // Updates the emulator state (implemented by the subclass)
     virtual void update() = 0;
 
-    // Number of overdue time slices (used in pulsed sync mode)
+    // Computes the number of overdue frames (provided by the subclass)
     virtual isize missingFrames() const = 0;
 
     // The code to be executed in each iteration (implemented by the subclass)
     virtual void computeFrame() = 0;
 
-    // Rectifies an out-of-sync condition by resetting all counters and clocks
+    // Rectifies an out-of-sync condition. Resets all counters and clocks.
     void resync();
 
     /** The thread's main entry point.
@@ -131,7 +129,7 @@ private:
     // Computes all missing frames
     void execute();
 
-    // Suspends the thread until the next time slice is due
+    // Suspends the thread till the next wakeup pulse
     void sleep();
 
 

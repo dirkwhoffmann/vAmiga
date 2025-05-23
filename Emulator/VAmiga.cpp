@@ -2073,6 +2073,8 @@ VAmiga::softReset()
 void
 VAmiga::halt()
 {
+    VAMIGA_PUBLIC
+    
     // Signal the emulator to halt
     emu->put(Cmd::HALT);
     

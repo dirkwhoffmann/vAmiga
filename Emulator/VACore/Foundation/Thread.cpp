@@ -25,18 +25,6 @@ Thread::launch()
     assert(isLaunched());
 }
 
-/*
-void
-Thread::assertLaunched()
-{
-    if (!isLaunched()) {
-
-        throw std::runtime_error(string("The emulator thread hasn't been lauchend yet. "
-                                        "Missing call to launch()."));
-    }
-}
-*/
-
 void
 Thread::resync()
 {
@@ -176,8 +164,8 @@ Thread::switchState(ExecState newState)
 
                 switch (state) {
 
-                    case ExecState::PAUSED:      state = ExecState::OFF; _powerOff(); break;
-                    case ExecState::RUNNING:     state = ExecState::PAUSED; _pause(); break;
+                    case ExecState::PAUSED:     state = ExecState::OFF; _powerOff(); break;
+                    case ExecState::RUNNING:    state = ExecState::PAUSED; _pause(); break;
 
                     default:
                         invalid();
@@ -188,8 +176,8 @@ Thread::switchState(ExecState newState)
 
                 switch (state) {
 
-                    case ExecState::OFF:         state = ExecState::PAUSED; _powerOn(); break;
-                    case ExecState::RUNNING:     state = ExecState::PAUSED; _pause(); break;
+                    case ExecState::OFF:        state = ExecState::PAUSED; _powerOn(); break;
+                    case ExecState::RUNNING:    state = ExecState::PAUSED; _pause(); break;
 
                     default:
                         invalid();
@@ -200,8 +188,8 @@ Thread::switchState(ExecState newState)
 
                 switch (state) {
 
-                    case ExecState::OFF:         state = ExecState::PAUSED; _powerOn(); break;
-                    case ExecState::PAUSED:      state = ExecState::RUNNING; _run(); break;
+                    case ExecState::OFF:        state = ExecState::PAUSED; _powerOn(); break;
+                    case ExecState::PAUSED:     state = ExecState::RUNNING; _run(); break;
 
                     default:
                         invalid();

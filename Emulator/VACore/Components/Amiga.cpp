@@ -900,9 +900,6 @@ Amiga::update(CmdQueue &queue)
                 set(cmd.config.option, cmd.config.value, { });
                 break;
 
-            case Cmd::ALARM_ABS:
-            case Cmd::ALARM_REL:
-            case Cmd::INSPECTION_TARGET:
             case Cmd::HARD_RESET:
             case Cmd::SOFT_RESET:
             case Cmd::POWER_ON:
@@ -912,6 +909,9 @@ Amiga::update(CmdQueue &queue)
             case Cmd::WARP_ON:
             case Cmd::WARP_OFF:
             case Cmd::HALT:
+            case Cmd::ALARM_ABS:
+            case Cmd::ALARM_REL:
+            case Cmd::INSPECTION_TARGET:
 
                 processCommand(cmd);
                 break;
