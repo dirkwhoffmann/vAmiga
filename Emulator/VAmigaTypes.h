@@ -10,49 +10,49 @@
 /// 
 #pragma once
 
-#include "VAmiga/EmulatorTypes.h"
+#include "VACore/EmulatorTypes.h"
 
 // Foundation
-#include "VAmiga/Foundation/Constants.h"
-#include "VAmiga/Foundation/CmdQueueTypes.h"
-#include "VAmiga/Foundation/CoreComponentTypes.h"
-#include "VAmiga/Foundation/DumpableTypes.h"
-#include "VAmiga/Foundation/ErrorTypes.h"
-#include "VAmiga/Foundation/GuardListTypes.h"
-#include "VAmiga/Foundation/MsgQueueTypes.h"
+#include "VACore/Foundation/Constants.h"
+#include "VACore/Foundation/CmdQueueTypes.h"
+#include "VACore/Foundation/CoreComponentTypes.h"
+#include "VACore/Foundation/DumpableTypes.h"
+#include "VACore/Foundation/ErrorTypes.h"
+#include "VACore/Foundation/GuardListTypes.h"
+#include "VACore/Foundation/MsgQueueTypes.h"
 
 // Components
-#include "VAmiga/Components/AmigaTypes.h"
-#include "VAmiga/Components/Agnus/AgnusTypes.h"
-#include "VAmiga/Components/CIA/CIATypes.h"
-#include "VAmiga/Components/CPU/CPUTypes.h"
-#include "VAmiga/Components/Denise/DeniseTypes.h"
-#include "VAmiga/Components/Memory/MemoryTypes.h"
-#include "VAmiga/Components/Paula/PaulaTypes.h"
-#include "VAmiga/Components/RTC/RTCTypes.h"
-#include "VAmiga/Components/Zorro/HdControllerTypes.h"
-#include "VAmiga/Components/Zorro/ZorroBoardTypes.h"
+#include "VACore/Components/AmigaTypes.h"
+#include "VACore/Components/Agnus/AgnusTypes.h"
+#include "VACore/Components/CIA/CIATypes.h"
+#include "VACore/Components/CPU/CPUTypes.h"
+#include "VACore/Components/Denise/DeniseTypes.h"
+#include "VACore/Components/Memory/MemoryTypes.h"
+#include "VACore/Components/Paula/PaulaTypes.h"
+#include "VACore/Components/RTC/RTCTypes.h"
+#include "VACore/Components/Zorro/HdControllerTypes.h"
+#include "VACore/Components/Zorro/ZorroBoardTypes.h"
 
 // Ports
-#include "VAmiga/Ports/AudioPortTypes.h"
-#include "VAmiga/Ports/ControlPortTypes.h"
-#include "VAmiga/Ports/SerialPortTypes.h"
-#include "VAmiga/Ports/VideoPortTypes.h"
+#include "VACore/Ports/AudioPortTypes.h"
+#include "VACore/Ports/ControlPortTypes.h"
+#include "VACore/Ports/SerialPortTypes.h"
+#include "VACore/Ports/VideoPortTypes.h"
 
 // Peripherals
-#include "VAmiga/Peripherals/Drive/FloppyDriveTypes.h"
-#include "VAmiga/Peripherals/Drive/HardDriveTypes.h"
-#include "VAmiga/Peripherals/Joystick/JoystickTypes.h"
-#include "VAmiga/Peripherals/Keyboard/KeyboardTypes.h"
-#include "VAmiga/Peripherals/Mouse/MouseTypes.h"
+#include "VACore/Peripherals/Drive/FloppyDriveTypes.h"
+#include "VACore/Peripherals/Drive/HardDriveTypes.h"
+#include "VACore/Peripherals/Joystick/JoystickTypes.h"
+#include "VACore/Peripherals/Keyboard/KeyboardTypes.h"
+#include "VACore/Peripherals/Mouse/MouseTypes.h"
 
 // Media
-#include "VAmiga/Media/MediaFileTypes.h"
-#include "VAmiga/FileSystems/FSTypes.h"
+#include "VACore/Media/MediaFileTypes.h"
+#include "VACore/FileSystems/FSTypes.h"
 
 // Miscellaneous
-#include "VAmiga/Misc/LogicAnalyzer/LogicAnalyzerTypes.h"
-#include "VAmiga/Misc/Recorder/RecorderTypes.h"
-#include "VAmiga/Misc/RemoteServers/RemoteManagerTypes.h"
-#include "VAmiga/Misc/RemoteServers/RemoteServerTypes.h"
-#include "VAmiga/Misc/RetroShell/RetroShellTypes.h"
+#include "VACore/Misc/LogicAnalyzer/LogicAnalyzerTypes.h"
+#include "VACore/Misc/Recorder/RecorderTypes.h"
+#include "VACore/Misc/RemoteServers/RemoteManagerTypes.h"
+#include "VACore/Misc/RemoteServers/RemoteServerTypes.h"
+#include "VACore/Misc/RetroShell/RetroShellTypes.h"

@@ -58,7 +58,7 @@ endif()
 target_include_directories(vAmigaCore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add subdirectories
-add_subdirectory(VAmiga)
+add_subdirectory(VACore)
 
 # Add libraries
 set(THREADS_PREFER_PTHREAD_FLAG ON)

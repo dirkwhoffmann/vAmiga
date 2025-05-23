@@ -1454,7 +1454,7 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
-		507A03F02D54ED820025D48E /* VAmiga */ = {
+		507A03F02D54ED820025D48E /* VACore */ = {
 			isa = PBXGroup;
 			children = (
 				507A03F12D54EDDA0025D48E /* CMakeLists.txt */,
@@ -1471,7 +1471,7 @@
 				506436E129C1D82500768528 /* ThirdParty */,
 				50E98B52275A125700AA0CB9 /* Misc */,
 			);
-			path = VAmiga;
+			path = VACore;
 			sourceTree = "<group>";
 		};
 		507C01B82D25C0AE00E29933 /* LogicAnalyzer */ = {
@@ -1687,7 +1687,7 @@
 				50FC050027DA205D00C3E566 /* VAmigaCheck.h */,
 				50FC047427DA108500C3E566 /* VAmigaCheck.cpp */,
 				50EAF5282C79B9BA005AC890 /* VAmigaCheckScripts.h */,
-				507A03F02D54ED820025D48E /* VAmiga */,
+				507A03F02D54ED820025D48E /* VACore */,
 			);
 			path = Emulator;
 			sourceTree = "<group>";
