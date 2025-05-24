@@ -239,11 +239,11 @@ public:
     void checkOption(Opt opt, i64 value) override;
     void setOption(Opt option, i64 value) override;
     
-    /*
-    const fs::path &getSearchPath() const { return searchPath; }
-    void setSearchPath(const fs::path &path) { searchPath = path; }
-    */
+    // Queries disk type parameters
+    Diameter diameter() const;
+    Density density() const;
 
+    
     //
     // Analyzing
     //
@@ -253,7 +253,7 @@ public:
     // Returns the result of the latest inspection
     void cacheInfo(FloppyDriveInfo &info) const override;
 
-    // Return the identification pattern of this drive
+    // Returns the identification pattern of this drive
     u32 getDriveId() const;
 
     // Checks whether the drive is in identification mode
@@ -261,8 +261,8 @@ public:
 
     // Checks whether a write operation is in progress
     bool isWriting() const;
-
-
+    
+    
     //
     // Querying mechanical delays
     //

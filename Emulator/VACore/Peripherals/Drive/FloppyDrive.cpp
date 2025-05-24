@@ -200,7 +200,35 @@ FloppyDrive::setOption(Opt option, i64 value)
     }
 }
 
-void 
+Diameter
+FloppyDrive::diameter() const
+{
+    switch(config.type) {
+            
+        case FloppyDriveType::DD_35:    return Diameter::INCH_35;
+        case FloppyDriveType::HD_35:    return Diameter::INCH_35;
+        case FloppyDriveType::DD_525:   return Diameter::INCH_525;
+            
+        default:
+            fatalError;
+    }
+}
+
+Density
+FloppyDrive::density() const
+{
+    switch(config.type) {
+            
+        case FloppyDriveType::DD_35:    return Density::DD;
+        case FloppyDriveType::HD_35:    return Density::HD;
+        case FloppyDriveType::DD_525:   return Density::SD;
+            
+        default:
+            fatalError;
+    }
+}
+
+void
 FloppyDrive::cacheInfo(FloppyDriveInfo &info) const
 {
     {   SYNCHRONIZED
@@ -1099,13 +1127,20 @@ FloppyDrive::swapDisk(const fs::path &path)
 {
     auto location = host.makeAbsolute(path);
 
-    if (fs::is_directory(location)) {
+    if (!fs::is_directory(location)) {
         
-        debug(FS_DEBUG, "Importing folder %s...\n", path.string().c_str());
+        std::unique_ptr<FloppyFile> file(FloppyFile::make(location));
+        swapDisk(*file);
+        return;
+    }
+        
+    try {
+
+        debug(FS_DEBUG, "Importing folder %s...\n", location.c_str());
 
         // Create a file system and import the directory
-        MutableFileSystem volume(FSVolumeType::OFS, path.c_str());
-        
+        MutableFileSystem volume(diameter(), density(), location);
+                
         // Make the volume bootable
         volume.makeBootable(BootBlockId::AMIGADOS_13);
             
@@ -1125,10 +1160,16 @@ FloppyDrive::swapDisk(const fs::path &path)
         // Insert the ADF
         swapDisk(adf);
 
-    } else {
+    }  catch (CoreError &err) {
         
-        std::unique_ptr<FloppyFile> file(FloppyFile::make(location));
-        swapDisk(*file);
+        if (err.fault() == Fault::FS_OUT_OF_SPACE) {
+            
+            err.description =
+            string("The directory is too large. ") +
+            string("The files do not fit onto a single ") +
+            DensityEnum::key(density()) + " disk.";
+        }
+        throw;
     }
 }
 
@@ -1138,11 +1179,13 @@ FloppyDrive::insertMediaFile(class MediaFile &file, bool wp)
     try {
         
         const FloppyFile &adf = dynamic_cast<const FloppyFile &>(file);
-        
+
+        /*
         if (dynamic_cast<const Folder *>(&file) && !isInsertable(adf)) {
             throw CoreError(Fault::FS_DIR_TOO_LARGE);
         }
-            
+        */
+        
         swapDisk(std::make_unique<FloppyDisk>(adf, wp));
         
     } catch (const std::bad_cast &) {
@@ -1168,10 +1211,6 @@ FloppyDrive::serviceDiskChangeEvent()
             // Notify the GUI
             msgQueue.put(Msg::DISK_EJECT,
                          DriveMsg { i16(objid), 0, config.ejectVolume, config.pan });
-            /*
-            msgQueue.put(Msg::DISK_EJECT,
-                         i16(objid), 0, config.ejectVolume, config.pan);
-             */
         }
     }
     

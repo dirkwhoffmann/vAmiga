@@ -91,11 +91,7 @@ MutableFileSystem::init(FSVolumeType type, const fs::path &path)
     try { init(Diameter::INCH_35, Density::DD, path); return; } catch (...) { };
     
     // Try to fit the directory into a file system with HD disk capacity
-    try { init(Diameter::INCH_35, Density::HD, path); } catch (CoreError &err) {
-        
-        if (err.fault() == Fault::FS_OUT_OF_SPACE) throw CoreError(Fault::FS_DIR_TOO_LARGE);
-        throw;
-    }
+    init(Diameter::INCH_35, Density::HD, path);
 }
 
 void

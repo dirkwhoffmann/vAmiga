@@ -45,7 +45,7 @@ private:
     void init(FileSystemDescriptor &layout);
     void init(Diameter dia, Density den, FSVolumeType dos);
     void init(Diameter dia, Density den, const fs::path &path);
-    void init(FSVolumeType type, const fs::path &path);
+    void init(FSVolumeType type, const fs::path &path); // [[deprecated]] 
 
 
     //

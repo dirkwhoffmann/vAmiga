@@ -172,7 +172,6 @@ enum class Fault : long
     
     // File system (import errors)
     FS_OUT_OF_SPACE,
-    FS_DIR_TOO_LARGE,
     
     // File system (export errors)
     FS_DIR_NOT_EMPTY,
@@ -345,7 +344,6 @@ struct FaultEnum : Reflection<FaultEnum, Fault>
             case Fault::FS_CORRUPTED:                return "FS_CORRUPTED";
                 
             case Fault::FS_OUT_OF_SPACE:             return "FS_OUT_OF_SPACE";
-            case Fault::FS_DIR_TOO_LARGE:            return "FS_DIR_TOO_LARGE";
                 
             case Fault::FS_DIR_NOT_EMPTY:            return "FS_DIR_NOT_EMPTY";
             case Fault::FS_CANNOT_CREATE_DIR:        return "FS_CANNOT_CREATE_DIR";
