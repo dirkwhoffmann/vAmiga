@@ -222,6 +222,9 @@ public:
     //
 
 public:
+
+    // Performs a sanity check
+    bool verify();
     
     // Checks all blocks in this volume
     FSErrorReport check(bool strict) const;

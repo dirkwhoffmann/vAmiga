@@ -682,6 +682,24 @@ FileSystem::lastHashBlockInChain(FSBlock *block)
     return nullptr;
 }
 
+bool
+FileSystem::verify()
+{
+    if (FS_DEBUG) {
+        
+        dump(Category::State);
+        printDirectory(true);
+    }
+    if (FSErrorReport report = check(true); report.corruptedBlocks > 0) {
+        
+        warn("Found %ld corrupted blocks\n", report.corruptedBlocks);
+        if (FS_DEBUG) dump(Category::Blocks);
+        return false;
+    }
+    
+    return true;
+}
+
 FSErrorReport
 FileSystem::check(bool strict) const
 {

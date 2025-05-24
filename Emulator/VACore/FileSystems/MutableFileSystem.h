@@ -34,18 +34,17 @@ public:
     using FileSystem::FileSystem;
 
     MutableFileSystem(isize capacity) { init(capacity); }
-    MutableFileSystem(FileSystemDescriptor &layout) { init(layout); }
-    MutableFileSystem(Diameter dia, Density den, FSVolumeType dos) { init(dia, den, dos); }
-    MutableFileSystem(Diameter dia, Density den, const fs::path &path) { init(dia, den, path); }
+    MutableFileSystem(FileSystemDescriptor &layout, const fs::path &path = {}) { init(layout, path); }
+    MutableFileSystem(Diameter dia, Density den, FSVolumeType dos, const fs::path &path = {}) { init(dia, den, dos, path); }
     MutableFileSystem(FSVolumeType type, const fs::path &path) { init(type, path); }
 
 private:
     
     void init(isize capacity);
-    void init(FileSystemDescriptor &layout);
+    void init(FileSystemDescriptor &layout, const fs::path &path);
     void init(Diameter dia, Density den, FSVolumeType dos);
-    void init(Diameter dia, Density den, const fs::path &path);
-    void init(FSVolumeType type, const fs::path &path); // [[deprecated]] 
+    void init(Diameter dia, Density den, FSVolumeType dos, const fs::path &path);
+    void init(FSVolumeType type, const fs::path &path); // [[deprecated]]
 
 
     //

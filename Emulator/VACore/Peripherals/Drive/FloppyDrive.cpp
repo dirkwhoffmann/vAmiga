@@ -1136,23 +1136,16 @@ FloppyDrive::swapDisk(const fs::path &path)
         
     try {
 
-        debug(FS_DEBUG, "Importing folder %s...\n", location.c_str());
+        debug(FS_DEBUG, "Importing folder %s...\n", location.string().c_str());
 
         // Create a file system and import the directory
-        MutableFileSystem volume(diameter(), density(), location);
+        MutableFileSystem volume(diameter(), density(), FSVolumeType::OFS, location);
                 
         // Make the volume bootable
         volume.makeBootable(BootBlockId::AMIGADOS_13);
-            
-        // Check the file system for consistency
-        if (FS_DEBUG) volume.dump(Category::State);
-        if (FS_DEBUG) volume.printDirectory(true);
         
-        if (FSErrorReport report = volume.check(true); report.corruptedBlocks > 0) {
-            
-            warn("Found %ld corrupted blocks\n", report.corruptedBlocks);
-            if (FS_DEBUG) volume.dump(Category::Blocks);
-        }
+        // Check file system consistency
+        volume.verify();
 
         // Convert the file system into an ADF
         ADFFile adf(volume);

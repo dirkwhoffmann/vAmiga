@@ -29,7 +29,7 @@ MutableFileSystem::init(isize capacity)
 }
 
 void
-MutableFileSystem::init(FileSystemDescriptor &layout)
+MutableFileSystem::init(FileSystemDescriptor &layout, const fs::path &path)
 {
     init((isize)layout.numBlocks);
     
@@ -54,44 +54,42 @@ MutableFileSystem::init(FileSystemDescriptor &layout)
     
     // Print some debug information
     if (FS_DEBUG) { dump(Category::State); }
+    
+    // Import files if applicable
+    if (!path.empty()) {
+        
+        // Add all files
+        importDirectory(path);
+        
+        // Assign device name
+        setName(FSName(path.filename().string()));
+
+        // Update checksums for all blocks
+        updateChecksums();
+
+        // Change to the root directory
+        changeDir("/");
+    }
 }
 
 void
-MutableFileSystem::init(Diameter dia, Density den, FSVolumeType dos)
+MutableFileSystem::init(Diameter dia, Density den, FSVolumeType dos, const fs::path &path)
 {
     // Get a device descriptor
     auto descriptor = FileSystemDescriptor(dia, den, dos);
 
     // Create the device
-    init(descriptor);
-}
-
-void
-MutableFileSystem::init(Diameter dia, Density den, const fs::path &path)
-{
-    init(dia, den, FSVolumeType::OFS);
-    
-    // Try to import directory
-    importDirectory(path);
-    
-    // Assign device name
-    setName(FSName(path.filename().string()));
-
-    // Compute checksums for all blocks
-    updateChecksums();
-
-    // Change to the root directory
-    changeDir("/");
+    init(descriptor, path);
 }
 
 void
 MutableFileSystem::init(FSVolumeType type, const fs::path &path)
 {
     // Try to fit the directory into a file system with DD disk capacity
-    try { init(Diameter::INCH_35, Density::DD, path); return; } catch (...) { };
+    try { init(Diameter::INCH_35, Density::DD, FSVolumeType::OFS, path); return; } catch (...) { };
     
     // Try to fit the directory into a file system with HD disk capacity
-    init(Diameter::INCH_35, Density::HD, path);
+    init(Diameter::INCH_35, Density::HD, FSVolumeType::OFS, path);
 }
 
 void
