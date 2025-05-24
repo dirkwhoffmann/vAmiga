@@ -20,6 +20,7 @@ extension MyDocument {
         }
     }
 
+    // DEPRECATED
     func attach(hd n: Int, file: MediaFileProxy? = nil, force: Bool = false) throws {
 
         var hdn: HardDriveProxy { return emu.hd(n)! }
@@ -45,7 +46,33 @@ extension MyDocument {
             }
         }
     }
+    
+    func attach(hd n: Int, url: URL, force: Bool = false) throws {
 
+        var hdn: HardDriveProxy { return emu.hd(n)! }
+
+        func attach() throws {
+
+            emu.set(.HDC_CONNECT, drive: n, enable: true)
+            try hdn.attach(url: url)
+        }
+
+        if force || proceedWithUnsavedHardDisk(drive: hdn) {
+
+            if emu.poweredOff {
+
+                try attach()
+
+            } else if force || askToPowerOff() {
+
+                emu.powerOff()
+                try attach()
+                emu.powerOn()
+                try emu.run()
+            }
+        }
+    }
+    
     func detach(hd n: Int, force: Bool = false) throws {
         
         var hdn: HardDriveProxy { return emu.hd(n)! }

@@ -557,6 +557,7 @@ extension MyController: NSMenuItemValidation {
         if !proceedWithUnsavedFloppyDisk(drive: drive) { return }
         
         myOpenPanel.configure(types: [.adf, .adz, .img, .dms, .exe ], prompt: "Insert")
+        myOpenPanel.panel.canChooseDirectories = true
         myOpenPanel.open(for: window, { result in
             
             if result == .OK, let url = self.myOpenPanel.url {
@@ -700,16 +701,15 @@ extension MyController: NSMenuItemValidation {
         if !proceedWithUnsavedHardDisk(drive: drive) { return }
 
         myOpenPanel.configure(types: [ .hdf, .hdz, .zip, .gzip ], prompt: "Attach")
+        myOpenPanel.panel.canChooseDirectories = true
         myOpenPanel.open(for: window, { result in
             
             if result == .OK, let url = self.myOpenPanel.url {
-
+                
                 DispatchQueue.main.async {
                     
                     do {
-                        try self.mydocument.addMedia(url: url,
-                                                     allowedTypes: [ .HDF, .HDZ ],
-                                                     drive: sender.tag)
+                        try self.mydocument.addMedia(hd: sender.tag, url: url)
                     } catch {
                         self.showAlert(.cantAttach, error: error, async: true)
                     }
