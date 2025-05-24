@@ -38,21 +38,25 @@ FileSystemDescriptor::init(isize numBlocks, FSVolumeType dos)
     this->dos = dos;
 
     // Determine the location of the root block
-    auto highKey = numBlocks - 1;
-    auto rootKey = (numReserved + highKey) / 2;
-    assert(rootKey == numBlocks / 2);
+    isize highKey = numBlocks - 1;
+    isize rootKey = (numReserved + highKey) / 2; 
     rootBlock = Block(rootKey);
+
+    assert(rootKey == numBlocks / 2);
 
     // Determine the number of required bitmap blocks
     isize bitsPerBlock = (bsize - 4) * 8;
     isize neededBlocks = (numBlocks + bitsPerBlock - 1) / bitsPerBlock;
-    
-    // TODO: CREATE BITMAP EXTENSION BLOCKS IF THE NUMBER EXCEEDS 25
-    assert(neededBlocks <= 25);
-    
-    // Add all bitmap blocks
+    isize bmKey = rootKey + 1;
+
+    // Add bitmap blocks
     for (isize i = 0; i < neededBlocks; i++) {
-        bmBlocks.push_back(Block(rootKey + 1 + i));
+        bmBlocks.push_back(Block(bmKey++));
+    }
+    
+    // Add bitmap extension blocks (the first 25 references are stored in the root block)
+    for (; neededBlocks - 25 > 0; neededBlocks -= 127) {
+        bmExtBlocks.push_back(Block(bmKey++));
     }
 }
 

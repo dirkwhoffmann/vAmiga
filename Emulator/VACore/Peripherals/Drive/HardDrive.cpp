@@ -224,12 +224,17 @@ HardDrive::init(const fs::path &path) throws
 {
     auto fullPath = host.makeAbsolute(path);
     
+    if (!fs::exists(fullPath)) {
+
+        throw CoreError(Fault::FILE_NOT_FOUND, path);
+    }
+
     if (fs::is_directory(fullPath)) {
         
         debug(HDR_DEBUG, "Importing directory...\n");
         
         // Create an empty disk // TODO: Add a config option for the default size
-        init(MB(10));
+        init(MB(136));
         
         // Format the drive // TODO: Add a config option for the default OFS
         format(FSVolumeType::OFS, "Test");

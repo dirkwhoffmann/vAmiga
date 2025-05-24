@@ -827,7 +827,7 @@ FileSystem::predictBlockType(Block nr, const u8 *buffer)
     if (std::find(bmBlocks.begin(), bmBlocks.end(), nr) != bmBlocks.end())
         return FSBlockType::BITMAP_BLOCK;
     
-    // is it a bitmap extension block?
+    // Is it a bitmap extension block?
     if (std::find(bmExtBlocks.begin(), bmExtBlocks.end(), nr) != bmExtBlocks.end())
         return FSBlockType::BITMAP_EXT_BLOCK;
 
