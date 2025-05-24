@@ -199,7 +199,8 @@ class MyDocument: NSDocument {
     //
     // Handling media files
     //
-
+    
+    @available(*, deprecated)
     func addMedia(url: URL,
                   allowedTypes types: [FileType] = FileType.all,
                   drive: Int = 0,
@@ -218,6 +219,7 @@ class MyDocument: NSDocument {
         try addMedia(proxy: file, url: url, drive: drive, force: force)
     }
     
+    @available(*, deprecated)
     func addMedia(proxy: MediaFileProxy,
                   url: URL? = nil,
                   drive: Int = 0,
@@ -241,7 +243,6 @@ class MyDocument: NSDocument {
         case .HDF, .HDZ:
 
             try attach(hd: drive, file: proxy, force: force)
-            break
 
         case .ADF, .ADZ, .DMS, .EXE, .EADF, .IMG, .ST, .DIR:
 
@@ -252,6 +253,32 @@ class MyDocument: NSDocument {
         }
     }
 
+    func addMedia(df n: Int, file: MediaFileProxy, force: Bool = false) throws {
+
+        switch file.type {
+
+        case .ADF, .ADZ, .DMS, .EXE, .EADF, .IMG, .ST, .DIR:
+
+            try insert(df: n, file: file, force: force)
+
+        default:
+            break
+        }
+    }
+    
+    func addMedia(hd n: Int, file: MediaFileProxy, force: Bool = false) throws {
+
+        switch file.type {
+
+        case .HDF, .HDZ:
+
+            try attach(hd: n, file: file, force: force)
+
+        default:
+            break
+        }
+    }
+    
     func processWorkspaceFile(url: URL, force: Bool = false) throws {
         
         Swift.print("processWorkspaceFile \(url) force: \(force)")

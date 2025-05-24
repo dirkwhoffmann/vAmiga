@@ -727,7 +727,7 @@ extension MyController: NSMenuItemValidation {
         if let url = myAppDelegate.getRecentlyAttachedHdrURL(slot) {
             
             do {
-                let types: [FileType] = [ .ADF, .EADF, .DMS, .EXE, .DIR ]
+                let types: [FileType] = [ .HDF, .HDZ ]
                 try self.mydocument.addMedia(url: url,
                                              allowedTypes: types,
                                              drive: drive)
