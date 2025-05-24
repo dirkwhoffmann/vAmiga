@@ -387,7 +387,7 @@ public:
 
     // Replaces the current disk with a factory-fresh disk
     void insertNew(FSVolumeType fs, BootBlockId bb, string name) throws;
-
+    
 private:
     
     template <EventSlot s> void ejectDisk(Cycle delay);
