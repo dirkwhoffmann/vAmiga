@@ -64,9 +64,6 @@ MutableFileSystem::init(FileSystemDescriptor &layout, const fs::path &path)
         // Assign device name
         setName(FSName(path.filename().string()));
 
-        // Update checksums for all blocks
-        updateChecksums();
-
         // Change to the root directory
         changeDir("/");
     }
@@ -570,7 +567,11 @@ MutableFileSystem::importDirectory(const fs::path &path, bool recursive)
     try { dir = fs::directory_entry(path); }
     catch (...) { throw CoreError(Fault::FILE_CANT_READ); }
     
+    // Add all files
     importDirectory(dir, recursive);
+    
+    // Rectify the checksums of all blocks
+    updateChecksums();
 }
 
 void

@@ -237,7 +237,7 @@ HardDrive::init(const fs::path &path) throws
         init(MB(136));
         
         // Format the drive // TODO: Add a config option for the default OFS
-        format(FSVolumeType::OFS, "Test");
+        format(FSVolumeType::OFS, path.filename().string());
         
         // Extract file system
         auto fs = MutableFileSystem(*this);
@@ -245,6 +245,12 @@ HardDrive::init(const fs::path &path) throws
         // Import all files
         fs.importDirectory(fullPath);
         
+        // Check file system for consistency
+        if (FS_DEBUG) fs.verify();
+        
+        // Change to the root directory
+        fs.changeDir("/");
+                
         // Copy the modified file system back
         init(fs);
         
