@@ -1183,6 +1183,15 @@ FloppyDriveAPI::insertMedia(MediaFile &file, bool wp)
 }
 
 void
+FloppyDriveAPI::insert(const fs::path &path, bool wp)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    drive->swapDisk(path);
+    if (drive->disk) drive->disk->setWriteProtection(wp);
+    emu->isDirty = true;
+}
+
+void
 FloppyDriveAPI::ejectDisk()
 {
     VAMIGA_PUBLIC_SUSPEND

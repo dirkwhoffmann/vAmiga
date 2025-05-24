@@ -563,10 +563,13 @@ extension MyController: NSMenuItemValidation {
             if result == .OK, let url = self.myOpenPanel.url {
 
                 do {
+                    try self.mydocument.addMedia(df: sender.tag, url: url)
+                    /*
                     let types: [FileType] = [ .ADF, .EADF, .ADZ, .DMS, .EXE, .DIR ]
                     try self.mydocument.addMedia(url: url,
                                                  allowedTypes: types,
                                                  drive: sender.tag)
+                    */
                 } catch {
                     self.showAlert(.cantInsert, error: error, async: true)
                 }

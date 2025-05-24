@@ -679,7 +679,8 @@ public:
      *  @param  wp      Write-protection status of the disk.
      */
     void insertMedia(MediaFile &file, bool wp);
-
+    void insert(const fs::path &path, bool wp);
+    
     /** @brief  Inserts a disk created from a file system.
      *  @param  fs      A file system wrapper object.
      *  @param  wp      Write-protection status of the disk.

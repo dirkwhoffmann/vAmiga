@@ -1366,6 +1366,12 @@ NSString *EventSlotName(NSInteger slot)
     catch (CoreError &error) { [ex save:error]; }
 }
 
+- (void)insertFile:(NSURL *)url protected:(BOOL)wp exception:(ExceptionWrapper *)ex
+{
+    try { [self drive]->insert([url fileSystemRepresentation], wp); }
+    catch (CoreError &error) { [ex save:error]; }
+}
+
 - (void)eject
 {
     [self drive]->ejectDisk();

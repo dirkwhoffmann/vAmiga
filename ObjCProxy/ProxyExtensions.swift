@@ -396,6 +396,13 @@ extension FloppyDriveProxy {
         if exception.fault != .OK { throw CoreError(exception) }
     }
 
+    func swap(url: URL) throws {
+
+        let exception = ExceptionWrapper()
+        insertFile(url, protected: false, exception: exception)
+        if exception.fault != .OK { throw CoreError(exception) }
+    }
+
     func insertNew(fileSystem: FSVolumeType, bootBlock: BootBlockId, name: String) throws {
         
         let exception = ExceptionWrapper()

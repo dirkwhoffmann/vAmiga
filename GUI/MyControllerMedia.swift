@@ -10,7 +10,8 @@
 @MainActor
 extension MyDocument {
 
-    func insert(df n: Int, file: MediaFileProxy, force: Bool = false) throws {
+    // DEPRECATED
+    func insert(df n: Int, file: MediaFileProxy, force: Bool = false, remember: Bool = true) throws {
 
         var dfn: FloppyDriveProxy { return emu.df(n)! }
 
@@ -19,7 +20,23 @@ extension MyDocument {
             try dfn.swap(file: file)
         }
     }
+    
+    func insert(df n: Int, url: URL, force: Bool = false, remember: Bool = true) throws {
 
+        var dfn: FloppyDriveProxy { return emu.df(n)! }
+
+        if force || proceedWithUnsavedFloppyDisk(drive: dfn) {
+
+            try dfn.swap(url: url)
+        }
+        
+        if remember {
+        
+            myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
+            myAppDelegate.noteNewRecentlyExportedDiskURL(url, df: n)
+        }
+    }
+    
     // DEPRECATED
     func attach(hd n: Int, file: MediaFileProxy? = nil, force: Bool = false) throws {
 
@@ -47,7 +64,7 @@ extension MyDocument {
         }
     }
     
-    func attach(hd n: Int, url: URL, force: Bool = false) throws {
+    func attach(hd n: Int, url: URL, force: Bool = false, remember: Bool = true) throws {
 
         var hdn: HardDriveProxy { return emu.hd(n)! }
 
@@ -70,6 +87,12 @@ extension MyDocument {
                 emu.powerOn()
                 try emu.run()
             }
+        }
+        
+        if remember {
+        
+            myAppDelegate.noteNewRecentlyAttachedHdrURL(url)
+            myAppDelegate.noteNewRecentlyExportedHdrURL(url, hd: n)
         }
     }
     

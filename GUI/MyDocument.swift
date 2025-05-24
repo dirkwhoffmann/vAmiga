@@ -251,38 +251,14 @@ class MyDocument: NSDocument {
         }
     }
 
-    func addMedia(df n: Int, file: MediaFileProxy, force: Bool = false) throws {
+    func addMedia(df n: Int, url: URL, force: Bool = false, remember: Bool = true) throws {
 
-        switch file.type {
-
-        case .ADF, .ADZ, .DMS, .EXE, .EADF, .IMG, .ST, .DIR:
-
-            try insert(df: n, file: file, force: force)
-
-        default:
-            break
-        }
+        try insert(df: n, url: url, force: force, remember: remember)
     }
     
     func addMedia(hd n: Int, url: URL, force: Bool = false, remember: Bool = true) throws {
-
-        let type = MediaFileProxy.type(of: url)
         
-        switch type {
-
-        case .HDF, .HDZ, .DIR:
-
-            if remember {
-            
-                myAppDelegate.noteNewRecentlyAttachedHdrURL(url)
-                myAppDelegate.noteNewRecentlyExportedHdrURL(url, hd: n)
-            }
-            
-            try attach(hd: n, url: url, force: force)
-
-        default:
-            break
-        }
+        try attach(hd: n, url: url, force: force, remember: remember)
     }
     
     func processWorkspaceFile(url: URL, force: Bool = false) throws {
