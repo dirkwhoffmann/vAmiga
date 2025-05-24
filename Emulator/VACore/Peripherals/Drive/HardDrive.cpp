@@ -224,10 +224,32 @@ HardDrive::init(const fs::path &path) throws
 {
     auto fullPath = host.makeAbsolute(path);
     
-    try { init(HDFFile(fullPath)); return; } catch(...) { }
-    try { init(HDZFile(fullPath)); return; } catch(...) { }
-
-    throw CoreError(Fault::FILE_TYPE_UNSUPPORTED);
+    if (fs::is_directory(fullPath)) {
+        
+        debug(HDR_DEBUG, "Importing directory...\n");
+        
+        // Create an empty disk // TODO: Add a config option for the default size
+        init(MB(10));
+        
+        // Format the drive // TODO: Add a config option for the default OFS
+        format(FSVolumeType::OFS, "Test");
+        
+        // Extract file system
+        auto fs = MutableFileSystem(*this);
+        
+        // Import all files
+        fs.importDirectory(fullPath);
+        
+        // Copy the modified file system back
+        init(fs);
+        
+    } else {
+        
+        try { init(HDFFile(fullPath)); return; } catch(...) { }
+        try { init(HDZFile(fullPath)); return; } catch(...) { }
+        
+        throw CoreError(Fault::FILE_TYPE_UNSUPPORTED);
+    }
 }
 
 void
