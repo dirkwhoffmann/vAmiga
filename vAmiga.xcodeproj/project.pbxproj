@@ -195,7 +195,7 @@
 		508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00021EA227A0043D0E9 /* KeyboardController.swift */; };
 		508FE02421EA227B0043D0E9 /* GamePadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00121EA227A0043D0E9 /* GamePadManager.swift */; };
 		508FE02521EA227B0043D0E9 /* MemoryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00221EA227A0043D0E9 /* MemoryPanel.swift */; };
-		508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00921EA227B0043D0E9 /* WindowDelegate.swift */; };
+		508FE02B21EA227B0043D0E9 /* MyWindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00921EA227B0043D0E9 /* MyWindowDelegate.swift */; };
 		508FE02D21EA227B0043D0E9 /* MyApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00C21EA227B0043D0E9 /* MyApplication.swift */; };
 		508FE02F21EA227B0043D0E9 /* MacAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00E21EA227B0043D0E9 /* MacAudio.swift */; };
 		508FE04E21EA22CC0043D0E9 /* RomConf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03B21EA22CC0043D0E9 /* RomConf.swift */; };
@@ -356,6 +356,7 @@
 		50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5F27121F1B6DF000627D1 /* AmigaKey.swift */; };
 		50F6EEB821F4F5C60091155D /* FloppyDisk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEB621F4F5C60091155D /* FloppyDisk.cpp */; };
 		50F6EEBE21F4F61F0091155D /* FloppyDrive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEBC21F4F61F0091155D /* FloppyDrive.cpp */; };
+		50F7D84F2DE25C1200CD6B41 /* MyMediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F7D84E2DE25C0B00CD6B41 /* MyMediaManager.swift */; };
 		50FAC7702515EBED00E47421 /* IMGFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC76E2515EBED00E47421 /* IMGFile.cpp */; };
 		50FAC77525160BBF00E47421 /* FloppyFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC77325160BBF00E47421 /* FloppyFile.cpp */; };
 		50FC046827DA02FD00C3E566 /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC046627DA02FD00C3E566 /* Buffer.cpp */; };
@@ -816,7 +817,7 @@
 		508FE00021EA227A0043D0E9 /* KeyboardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardController.swift; sourceTree = "<group>"; };
 		508FE00121EA227A0043D0E9 /* GamePadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamePadManager.swift; sourceTree = "<group>"; };
 		508FE00221EA227A0043D0E9 /* MemoryPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoryPanel.swift; sourceTree = "<group>"; };
-		508FE00921EA227B0043D0E9 /* WindowDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowDelegate.swift; sourceTree = "<group>"; };
+		508FE00921EA227B0043D0E9 /* MyWindowDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyWindowDelegate.swift; sourceTree = "<group>"; };
 		508FE00C21EA227B0043D0E9 /* MyApplication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyApplication.swift; sourceTree = "<group>"; };
 		508FE00E21EA227B0043D0E9 /* MacAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacAudio.swift; sourceTree = "<group>"; };
 		508FE03B21EA22CC0043D0E9 /* RomConf.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RomConf.swift; sourceTree = "<group>"; };
@@ -1118,6 +1119,7 @@
 		50F6EEBC21F4F61F0091155D /* FloppyDrive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FloppyDrive.cpp; sourceTree = "<group>"; };
 		50F6EEBD21F4F61F0091155D /* FloppyDrive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloppyDrive.h; sourceTree = "<group>"; };
 		50F79C9F2C79B04A006A13A8 /* DiagRom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiagRom.h; sourceTree = "<group>"; };
+		50F7D84E2DE25C0B00CD6B41 /* MyMediaManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMediaManager.swift; sourceTree = "<group>"; };
 		50FAC76E2515EBED00E47421 /* IMGFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IMGFile.cpp; sourceTree = "<group>"; };
 		50FAC76F2515EBED00E47421 /* IMGFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IMGFile.h; sourceTree = "<group>"; };
 		50FAC77325160BBF00E47421 /* FloppyFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FloppyFile.cpp; sourceTree = "<group>"; };
@@ -1628,7 +1630,7 @@
 				508FDFF921EA22790043D0E9 /* Defaults.swift */,
 				508FE00C21EA227B0043D0E9 /* MyApplication.swift */,
 				508FDFF721EA22790043D0E9 /* MyDocument.swift */,
-				508FE00921EA227B0043D0E9 /* WindowDelegate.swift */,
+				508FE00921EA227B0043D0E9 /* MyWindowDelegate.swift */,
 				5039924225B2164E0084B808 /* MyDocumentController.swift */,
 				508FDFF421EA22790043D0E9 /* MyController.swift */,
 				508FDFF521EA22790043D0E9 /* MyControllerMenu.swift */,
@@ -1636,6 +1638,7 @@
 				50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */,
 				5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */,
 				5043F6C4221972F90047CC30 /* MyToolbar.swift */,
+				50F7D84E2DE25C0B00CD6B41 /* MyMediaManager.swift */,
 				505B801E23FE6582002407FE /* System */,
 				508FDFCB21EA20510043D0E9 /* Metal */,
 				508FE03921EA22CC0043D0E9 /* Dialogs */,
@@ -2550,7 +2553,8 @@
 				50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */,
 				5031FFD3279F3D95002EF894 /* PerformanceConf.swift in Sources */,
 				5012DCE02D5B33C200233B6A /* HDZFile.cpp in Sources */,
-				508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */,
+				508FE02B21EA227B0043D0E9 /* MyWindowDelegate.swift in Sources */,
+				50F7D84F2DE25C1200CD6B41 /* MyMediaManager.swift in Sources */,
 				501FB312275E460100D0A57B /* OSDebugger.cpp in Sources */,
 				50FC08AF27819E2400F0C567 /* CopperInfo.cpp in Sources */,
 				50E1905C277F69B300B8DBE2 /* FFmpeg.cpp in Sources */,

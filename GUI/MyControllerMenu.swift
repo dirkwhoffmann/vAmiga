@@ -166,7 +166,7 @@ extension MyController: NSMenuItemValidation {
             if result == .OK, let url = self.myOpenPanel.url {
 
                 do {
-                    try self.mydocument.addMedia(url: url, allowedTypes: [.SCRIPT])
+                    try self.mm.addMedia(url: url, allowedTypes: [.SCRIPT])
                 } catch {
                     self.showAlert(.cantOpen(url: url), error: error, async: true)
                 }
@@ -563,13 +563,7 @@ extension MyController: NSMenuItemValidation {
             if result == .OK, let url = self.myOpenPanel.url {
 
                 do {
-                    try self.mydocument.addMedia(df: sender.tag, url: url)
-                    /*
-                    let types: [FileType] = [ .ADF, .EADF, .ADZ, .DMS, .EXE, .DIR ]
-                    try self.mydocument.addMedia(url: url,
-                                                 allowedTypes: types,
-                                                 drive: sender.tag)
-                    */
+                    try self.mm.addMedia(df: sender.tag, url: url)
                 } catch {
                     self.showAlert(.cantInsert, error: error, async: true)
                 }
@@ -595,9 +589,7 @@ extension MyController: NSMenuItemValidation {
         if let url = myAppDelegate.getRecentlyInsertedDiskURL(slot) {
 
             do {
-                try self.mydocument.addMedia(url: url,
-                                             allowedTypes: types,
-                                             drive: drive)
+                try self.mm.addMedia(url: url, allowedTypes: types, drive: drive)
             } catch {
                 self.showAlert(.cantInsert, error: error)
             }
@@ -712,7 +704,7 @@ extension MyController: NSMenuItemValidation {
                 DispatchQueue.main.async {
                     
                     do {
-                        try self.mydocument.addMedia(hd: sender.tag, url: url)
+                        try self.mm.addMedia(hd: sender.tag, url: url)
                     } catch {
                         self.showAlert(.cantAttach, error: error, async: true)
                     }
@@ -730,10 +722,7 @@ extension MyController: NSMenuItemValidation {
         if let url = myAppDelegate.getRecentlyAttachedHdrURL(slot) {
             
             do {
-                let types: [FileType] = [ .HDF, .HDZ ]
-                try self.mydocument.addMedia(url: url,
-                                             allowedTypes: types,
-                                             drive: drive)
+                try self.mm.addMedia(hd: drive, url: url)
             } catch {
                 self.showAlert(.cantAttach, error: error)
             }
@@ -743,11 +732,8 @@ extension MyController: NSMenuItemValidation {
     @IBAction func detachHdrAction(_ sender: NSMenuItem!) {
         
         do {
-
-            try mydocument.detach(hd: sender.tag)
-            
+            try mm.detach(hd: sender.tag)
         } catch {
-            
             showAlert(.cantDetach, error: error)
         }
     }

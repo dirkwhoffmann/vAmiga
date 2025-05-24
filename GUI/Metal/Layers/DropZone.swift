@@ -16,7 +16,8 @@ class DropZone: Layer {
     var contentView: NSView { return window.contentView! }
     var metal: MetalView { return controller.metal! }
     var mydocument: MyDocument { return controller.mydocument! }
-    
+    var mm: MediaManager { return controller.mm }
+
     var zones = [NSImageView(), NSImageView(), NSImageView(), NSImageView()]
     var labels = [NSImageView(), NSImageView(), NSImageView(), NSImageView()]
     var ul = [NSPoint(x: 0, y: 0), NSPoint(x: 0, y: 0),
@@ -191,9 +192,9 @@ class DropZone: Layer {
         do {
             
             if let nr = metal.dropZone {
-                try mydocument.addMedia(url: url, allowedTypes: [type], drive: nr)
+                try mm.addMedia(url: url, allowedTypes: [type], drive: nr)
             } else {
-                try mydocument.addMedia(url: url, allowedTypes: [type])
+                try mm.addMedia(url: url, allowedTypes: [type])
             }
             
         } catch {

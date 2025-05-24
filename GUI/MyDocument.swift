@@ -27,13 +27,19 @@ extension UTType {
 class MyDocument: NSDocument {
 
     var pref: Preferences { return myAppDelegate.pref }
+
+    // The window controller for this document
     var controller: MyController { return windowControllers.first as! MyController }
+    
     var console: Console { return controller.renderer.console }
     var canvas: Canvas { return controller.renderer.canvas }
     
-    // URL of an attached media file
+    // Optional media URL provided on app launch
     var mediaURL: URL?
     
+    // The media manager for this document
+    var mm: MediaManager!
+
     // Gateway to the core emulator
     var emu: EmulatorProxy!
 
@@ -58,6 +64,9 @@ class MyDocument: NSDocument {
             return
         }
                 
+        // Create the media manager
+        mm = MediaManager(with: self)
+
         // Register all GUI related user defaults
         EmulatorProxy.defaults.registerUserDefaults()
         
@@ -120,7 +129,7 @@ class MyDocument: NSDocument {
         debug(.media)
         
         do {
-            try addMedia(url: url, allowedTypes: [.WORKSPACE])
+            try mm.addMedia(url: url, allowedTypes: [.WORKSPACE])
 
         } catch let error as CoreError {
 
@@ -197,69 +206,8 @@ class MyDocument: NSDocument {
     }
     
     //
-    // Handling media files
+    // Handling workspaces
     //
-
-    func addMedia(url: URL,
-                  allowedTypes types: [FileType] = FileType.all,
-                  drive: Int = 0,
-                  force: Bool = false,
-                  remember: Bool = true) throws {
-        
-        let file = try createMediaFileProxy(from: url, allowedTypes: types)
-        
-        if remember {
-        
-            let type = file.type
-            myAppDelegate.noteNewRecentlyOpenedURL(url, type: type)
-            myAppDelegate.noteNewRecentlyExportedURL(url, nr: drive, type: type)
-        }
-        
-        try addMedia(proxy: file, url: url, drive: drive, force: force)
-    }
-    
-    func addMedia(proxy: MediaFileProxy,
-                  url: URL? = nil,
-                  drive: Int = 0,
-                  force: Bool = false) throws {
-
-        switch proxy.type {
-
-        case .WORKSPACE:
-
-            try processWorkspaceFile(url: url!)
-
-        case .SNAPSHOT:
-
-            try processSnapshotFile(proxy)
-
-        case .SCRIPT:
-
-            console.runScript(script: proxy)
-            break
-
-        case .HDF, .HDZ:
-
-            try attach(hd: drive, file: proxy, force: force)
-
-        case .ADF, .ADZ, .DMS, .EXE, .EADF, .IMG, .ST, .DIR:
-
-            try insert(df: drive, file: proxy, force: force)
-
-        default:
-            break
-        }
-    }
-
-    func addMedia(df n: Int, url: URL, force: Bool = false, remember: Bool = true) throws {
-
-        try insert(df: n, url: url, force: force, remember: remember)
-    }
-    
-    func addMedia(hd n: Int, url: URL, force: Bool = false, remember: Bool = true) throws {
-        
-        try attach(hd: n, url: url, force: force, remember: remember)
-    }
     
     func processWorkspaceFile(url: URL, force: Bool = false) throws {
         
@@ -288,12 +236,36 @@ class MyDocument: NSDocument {
         }
     }
 
-    func processSnapshotFile(_ proxy: MediaFileProxy, force: Bool = false) throws {
+    //
+    // Handling snapshots
+    //
 
-        try emu.amiga.loadSnapshot(proxy)
-        snapshots.append(proxy, size: proxy.size)
+    func processSnapshotFile(url: URL, force: Bool = false) throws {
+
+        let file = try createMediaFileProxy(from: url, allowedTypes: [.SNAPSHOT])
+        try processSnapshotFile(file: file, force: force)
+    }
+    
+    func processSnapshotFile(file: MediaFileProxy, force: Bool = false) throws {
+
+        try emu.amiga.loadSnapshot(file)
+        snapshots.append(file, size: file.size)
     }
 
+    //
+    // Handling scripts
+    //
+
+    func processScriptFile(url: URL, force: Bool = false) throws {
+        
+        let file = try createMediaFileProxy(from: url, allowedTypes: [.SCRIPT])
+        try processScriptFile(file: file, force: force)
+    }
+
+    func processScriptFile(file: MediaFileProxy, force: Bool = false) throws {
+        
+        console.runScript(script: file)
+    }
     
     //
     // Exporting disks

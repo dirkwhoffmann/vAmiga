@@ -30,6 +30,9 @@ class MyController: NSWindowController, MessageReceiver {
     // Amiga proxy (bridge between the Swift frontend and the C++ backend)
     var emu: EmulatorProxy!
     
+    // Media manager (handles the import and export of media files)
+    var mm: MediaManager { return mydocument.mm }
+
     // Auxiliary windows of this emulator instance
     var inspectors: [Inspector] = []
     var dashboards: [Dashboard] = []
@@ -223,7 +226,7 @@ extension MyController {
 
             debug(.media, "Media URL = \(url)")
             
-            do { try mydocument.addMedia(url: url) } catch {
+            do { try mm.addMedia(url: url) } catch {
                 self.showAlert(.cantOpen(url: url), error: error, async: true)
             }
         }

@@ -412,3 +412,30 @@ extension MyController {
         return mydocument.askToPowerOff()
     }
 }
+
+extension MediaManager {
+    
+    func proceedWithUnsavedFloppyDisk(drive: FloppyDriveProxy) -> Bool {
+        return mydocument.proceedWithUnsavedFloppyDisk(drive: drive)
+    }
+
+    func proceedWithUnsavedFloppyDisks() -> Bool {
+        return mydocument.proceedWithUnsavedFloppyDisks()
+    }
+
+    func proceedWithUnsavedHardDisk(drive: HardDriveProxy) -> Bool {
+        return mydocument.proceedWithUnsavedHardDisk(drive: drive)
+    }
+
+    func proceedWithUnsavedHardDisk(drive: Int) -> Bool {
+        return mydocument.proceedWithUnsavedHardDisk(drive: emu.hd(drive)!)
+    }
+
+    func proceedWithUnsavedHardDisks() -> Bool {
+        return mydocument.proceedWithUnsavedHardDisks()
+    }
+    
+    func askToPowerOff() -> Bool {
+        return mydocument.askToPowerOff()
+    }
+}
