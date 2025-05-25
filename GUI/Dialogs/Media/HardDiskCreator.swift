@@ -11,13 +11,15 @@
 class HardDiskCreator: DialogController {
         
     @IBOutlet weak var diskIcon: NSImageView!
-    @IBOutlet weak var urlField: NSTextField!
     
     @IBOutlet weak var capacity: NSPopUpButton!
     @IBOutlet weak var fileSystem: NSPopUpButton!
     @IBOutlet weak var nameLabel: NSTextField!
     @IBOutlet weak var nameField: NSTextField!
-    
+    @IBOutlet weak var importLabel: NSTextField!
+    @IBOutlet weak var importButton: NSButton!
+    @IBOutlet weak var urlField: NSTextField!
+
     @IBOutlet weak var cylinderText: NSTextField!
     @IBOutlet weak var headText: NSTextField!
     @IBOutlet weak var sectorText: NSTextField!
@@ -36,10 +38,12 @@ class HardDiskCreator: DialogController {
     var heads = 0
     var sectors = 0
     var bsize = 0
-        
+    var fs = FSVolumeType.NODOS
+    
     var drive: HardDriveProxy? { emu.hd(nr) }
     
     var importURL: URL?
+    let myOpenPanel = MyOpenPanel()
     
     //
     // Selecting a block
@@ -72,6 +76,12 @@ class HardDiskCreator: DialogController {
         }
     }
     
+    func setFS(_ newValue: Int) {
+        
+        fs = newValue == 0 ? .NODOS : newValue == 1 ? .OFS : .FFS
+        update()
+    }
+        
     //
     // Starting up
     //
@@ -109,31 +119,26 @@ class HardDiskCreator: DialogController {
         }
     }
     
-    func setURL(url: URL?) {
-        
-        importURL = url
-        
-        fileSystem.item(at: 0)!.isHidden = url != nil
-        if fileSystem.selectedTag() == 0 && url != nil {
-            fileSystem.selectItem(at: 1)
-        }
-        
-        update()
-    }
-    
     //
     // Updating the displayed information
     //
     
     func update() {
 
+        print("update")
         let custom = capacity.selectedTag() == 0
-        let nodos = fileSystem.selectedTag() == 0
+        let nodos = fs == .NODOS
         
+        // Remove the import URL when no file system is selected
+        if nodos { importURL = nil }
+
         // Update icon
         diskIcon.image = NSImage(named: importURL != nil ? "NSFolder" : "hdf")
         urlField.stringValue = importURL?.path ?? ""
         
+        // Update file system
+        fileSystem.selectItem(withTag: fs == .NODOS ? 0 : fs == .OFS ? 1 : 2)
+            
         // Update text fields and steppers
         cylinderField.stringValue      = String(format: "%d", cylinders)
         cylinderStepper.integerValue   = cylinders
@@ -161,7 +166,9 @@ class HardDiskCreator: DialogController {
         let controls2: [NSControl: Bool] = [
             
             nameLabel: nodos,
-            nameField: nodos
+            nameField: nodos,
+            importLabel: nodos,
+            importButton: nodos
         ]
 
         for (control, hidden) in controls2 {
@@ -188,12 +195,12 @@ class HardDiskCreator: DialogController {
     @IBAction func capacityAction(_ sender: NSPopUpButton!) {
         
         setCapacity(mb: sender.selectedTag())
-        update()
     }
 
     @IBAction func fileSystemAction(_ sender: NSPopUpButton!) {
         
-        update()
+        print("fileSystemAction")
+        setFS(sender.selectedTag())
     }
 
     @IBAction func cylinderAction(_ sender: NSTextField!) {
@@ -226,6 +233,20 @@ class HardDiskCreator: DialogController {
         setSector(sender.integerValue)
     }
     
+    @IBAction func importAction(_ sender: NSButton!) {
+        
+        myOpenPanel.configure(types: [ .directory ], prompt: "Import")
+        myOpenPanel.panel.canChooseDirectories = true
+        myOpenPanel.open(for: window, { result in
+            
+            if result == .OK, let url = self.myOpenPanel.url {
+                
+                self.importURL = url
+                self.update()
+            }
+        })
+    }
+    
     @IBAction func attachAction(_ sender: Any!) {
         
         let fs: FSVolumeType =
@@ -236,7 +257,7 @@ class HardDiskCreator: DialogController {
         
         do {
             try drive?.attach(c: cylinders, h: heads, s: sectors, b: bsize)
-            try drive?.format(fs: fs, name: name)            
+            try drive?.format(fs: fs, name: name)
             if let url = importURL { try drive?.importFiles(url: url) }
 
             hide()
@@ -285,7 +306,9 @@ class HdDropView: NSImageView {
         
         if let url = sender.url, url.hasDirectoryPath {
             
-            parent.setURL(url: url)
+            parent.importURL = url
+            if parent.fs == .NODOS { parent.fs = .OFS }
+            parent.update()
             return true
         }
         
