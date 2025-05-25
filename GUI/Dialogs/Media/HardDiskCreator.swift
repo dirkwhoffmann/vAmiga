@@ -33,7 +33,6 @@ class HardDiskCreator: DialogController {
     @IBOutlet weak var sectorStepper: NSStepper!
 
     var nr = 0
-
     var cylinders = 0
     var heads = 0
     var sectors = 0
@@ -124,8 +123,7 @@ class HardDiskCreator: DialogController {
     //
     
     func update() {
-
-        print("update")
+        
         let custom = capacity.selectedTag() == 0
         let nodos = fs == .NODOS
         
@@ -199,7 +197,6 @@ class HardDiskCreator: DialogController {
 
     @IBAction func fileSystemAction(_ sender: NSPopUpButton!) {
         
-        print("fileSystemAction")
         setFS(sender.selectedTag())
     }
 
