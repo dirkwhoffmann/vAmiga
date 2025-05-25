@@ -758,13 +758,12 @@ HardDrive::importFolder(const fs::path &path) throws
     if (fs::is_directory(fullPath)) {
         
         debug(HDR_DEBUG, "Importing directory...\n");
-        
-        // Determine the DOS type of the current disk
-        auto desc = getPartitionDescriptor(0);
-        auto dos = FSVolumeTypeEnum::fromDosType(desc.dosType);
+
+        // Retrieve some information about the first partition
+        auto traits = getPartitionTraits(0);
                 
         // Create a device descriptor matching this drive
-        FileSystemDescriptor layout(geometry, dos);
+        FileSystemDescriptor layout(geometry, traits.fsType);
         
         // Create a new file system
         auto fs = MutableFileSystem(layout);
@@ -773,7 +772,7 @@ HardDrive::importFolder(const fs::path &path) throws
         fs.importDirectory(fullPath);
         
         // Name the file system
-        fs.setName(desc.name);
+        fs.setName(traits.name);
         
         // Copy the file system back to the disk
         init(fs);

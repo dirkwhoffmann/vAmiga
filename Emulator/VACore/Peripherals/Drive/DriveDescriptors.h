@@ -126,6 +126,10 @@ struct PartitionDescriptor : Serializable {
     PartitionDescriptor() { };
     PartitionDescriptor(const GeometryDescriptor &geo);
 
+    // Computed values
+    isize numCylinders() const { return highCyl - lowCyl + 1; }
+    isize numBlocks() const { return numCylinders() * heads * sectors; }
+    
     // Prints debug information
     void dump() const;
     void dump(std::ostream& os) const;

@@ -164,10 +164,23 @@ public:
 
         auto descr = getPartitionDescriptor(nr);
         traits.nr = nr;
-        traits.name = descr.name.c_str();
+        traits.name = descr.name;
         traits.lowerCyl = descr.lowCyl;
         traits.upperCyl = descr.highCyl;
-
+        
+        switch (descr.dosType) {
+                
+            case 0x444F5300: traits.fsType = FSVolumeType::OFS; break;
+            case 0x444F5301: traits.fsType = FSVolumeType::FFS; break;
+            case 0x444F5302: traits.fsType = FSVolumeType::OFS_INTL; break;
+            case 0x444F5303: traits.fsType = FSVolumeType::FFS_INTL; break;
+            case 0x444F5304: traits.fsType = FSVolumeType::OFS_DC; break;
+            case 0x444F5305: traits.fsType = FSVolumeType::FFS_DC; break;
+            case 0x444F5306: traits.fsType = FSVolumeType::OFS_LNFS; break;
+            case 0x444F5307: traits.fsType = FSVolumeType::FFS_LNFS; break;
+            default:         traits.fsType = FSVolumeType::NODOS; break;
+        }
+        
         return traits;
     }
 

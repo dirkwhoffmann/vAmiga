@@ -28,6 +28,11 @@ FileSystemDescriptor::FileSystemDescriptor(const GeometryDescriptor &geometry, F
     init(geometry, dos);
 }
 
+FileSystemDescriptor::FileSystemDescriptor(const PartitionDescriptor &des)
+{
+    init(des);
+}
+
 
 void
 FileSystemDescriptor::init(isize numBlocks, FSVolumeType dos)
@@ -64,6 +69,13 @@ void
 FileSystemDescriptor::init(const GeometryDescriptor &geometry, FSVolumeType dos)
 {
     init(geometry.numBlocks(), dos);
+}
+
+void
+FileSystemDescriptor::init(const PartitionDescriptor &des)
+{
+
+    init(des.numBlocks(), dos);
 }
 
 void

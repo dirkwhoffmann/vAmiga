@@ -115,9 +115,10 @@ HardDriveTraits;
 typedef struct
 {
     isize nr;
-    const char *name;
+    string name;
     isize lowerCyl;
     isize upperCyl;
+    FSVolumeType fsType;
 }
 PartitionTraits;
 
