@@ -261,7 +261,7 @@ class HardDiskCreator: DialogController {
             
         } catch {
             
-            parent.showAlert(.cantAttach, error: error)
+            parent.showAlert(.cantAttach, error: error, window: window)
         }
     }
 }

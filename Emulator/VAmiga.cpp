@@ -1167,10 +1167,10 @@ FloppyDriveAPI::isInsertable(Diameter t, Density d) const
 }
 
 void
-FloppyDriveAPI::insertBlankDisk(FSVolumeType fstype, BootBlockId bb, string name)
+FloppyDriveAPI::insertBlankDisk(FSVolumeType fstype, BootBlockId bb, string name, const std::filesystem::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND
-    drive->insertNew(fstype, bb, name);
+    drive->insertNew(fstype, bb, name, path);
     emu->isDirty = true;
 }
 

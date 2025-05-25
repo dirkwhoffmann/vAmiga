@@ -80,16 +80,6 @@ MutableFileSystem::init(Diameter dia, Density den, FSVolumeType dos, const fs::p
 }
 
 void
-MutableFileSystem::init(FSVolumeType type, const fs::path &path)
-{
-    // Try to fit the directory into a file system with DD disk capacity
-    try { init(Diameter::INCH_35, Density::DD, FSVolumeType::OFS, path); return; } catch (...) { };
-    
-    // Try to fit the directory into a file system with HD disk capacity
-    init(Diameter::INCH_35, Density::HD, FSVolumeType::OFS, path);
-}
-
-void
 MutableFileSystem::format(FSVolumeType dos, string name)
 {
     this->dos = dos;

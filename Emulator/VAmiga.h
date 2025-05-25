@@ -669,10 +669,11 @@ public:
 
     /** @brief  Inserts a new disk.
      *  @param  fstype  File system format
-     *  @param  id      Boot block identifier
-     *  @param  name    Name of the disk
+     *  @param  id  Boot block identifier
+     *  @param  name  Name of the disk
+     *  @param  path Optional folder to import
      */
-    void insertBlankDisk(FSVolumeType fstype, BootBlockId id, string name);
+    void insertBlankDisk(FSVolumeType fstype, BootBlockId id, string name, const std::filesystem::path &path = {});
 
     /** @brief  Inserts a disk created from a media file.
      *  @param  file    A media file wrapper object.

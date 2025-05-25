@@ -386,16 +386,16 @@ public:
     void swapDisk(const fs::path &path) throws;
 
     // Replaces the current disk with a factory-fresh disk
-    void insertNew(FSVolumeType fs, BootBlockId bb, string name) throws;
+    void insertNew(FSVolumeType fs, BootBlockId bb, string name, const fs::path &path = {}) throws;
     
 private:
     
     template <EventSlot s> void ejectDisk(Cycle delay);
     template <EventSlot s> void insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay) throws;
 
-    
+ 
     //
-    // Handling files
+    // Debugging
     //
 
 public:

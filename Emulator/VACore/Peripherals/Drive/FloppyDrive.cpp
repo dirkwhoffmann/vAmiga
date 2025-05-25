@@ -1066,12 +1066,29 @@ FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
 }
 
 void
-FloppyDrive::insertNew(FSVolumeType fs, BootBlockId bb, string name)
+FloppyDrive::insertNew(FSVolumeType fs, BootBlockId bb, string name, const fs::path &path)
 {
     debug(DSK_DEBUG,
-          "insertNew(%s,%s, %s)\n",
-          FSVolumeTypeEnum::key(fs), BootBlockIdEnum::key(bb), name.c_str());
+          "insertNew(%s, %s, %s, %s)\n",
+          FSVolumeTypeEnum::key(fs), BootBlockIdEnum::key(bb), name.c_str(), path.string().c_str());
     
+    
+    // Create a file system and import the directory
+    MutableFileSystem volume(diameter(), density(), fs, host.makeAbsolute(path));
+            
+    // Make the volume bootable
+    volume.makeBootable(bb);
+    
+    // Check file system consistency
+    volume.verify();
+
+    // Convert the file system into an ADF
+    ADFFile adf(volume);
+    
+    // Insert the ADF
+    swapDisk(adf);
+
+    /*
     ADFFile adf;
     
     // Create a suitable ADF for this drive
@@ -1087,6 +1104,7 @@ FloppyDrive::insertNew(FSVolumeType fs, BootBlockId bb, string name)
     
     // Replace the current disk with the new one
     swapDisk(adf);
+    */
 }
 
 void
@@ -1135,22 +1153,7 @@ FloppyDrive::swapDisk(const fs::path &path)
         
     try {
 
-        debug(FS_DEBUG, "Importing folder %s...\n", location.string().c_str());
-
-        // Create a file system and import the directory
-        MutableFileSystem volume(diameter(), density(), FSVolumeType::OFS, location);
-                
-        // Make the volume bootable
-        volume.makeBootable(BootBlockId::AMIGADOS_13);
-        
-        // Check file system consistency
-        volume.verify();
-
-        // Convert the file system into an ADF
-        ADFFile adf(volume);
-        
-        // Insert the ADF
-        swapDisk(adf);
+        insertNew(FSVolumeType::OFS, BootBlockId::AMIGADOS_13, path.filename().string(), location);
 
     }  catch (CoreError &err) {
         
@@ -1170,14 +1173,7 @@ FloppyDrive::insertMediaFile(class MediaFile &file, bool wp)
 {
     try {
         
-        const FloppyFile &adf = dynamic_cast<const FloppyFile &>(file);
-
-        /*
-        if (dynamic_cast<const Folder *>(&file) && !isInsertable(adf)) {
-            throw CoreError(Fault::FS_DIR_TOO_LARGE);
-        }
-        */
-        
+        const FloppyFile &adf = dynamic_cast<const FloppyFile &>(file);        
         swapDisk(std::make_unique<FloppyDisk>(adf, wp));
         
     } catch (const std::bad_cast &) {

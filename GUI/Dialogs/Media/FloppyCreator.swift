@@ -178,8 +178,8 @@ class FloppyCreator: DialogController {
         
         do {
 
-            try drive?.insertNew(fileSystem: fs, bootBlock: bb, name: name)
-            if let url = importURL { print("TODO") } // try drive?.importFiles(url: url) }
+            let url = importURL ?? URL(string: "")!
+            try drive?.insertNew(fileSystem: fs, bootBlock: bb, name: name, url: url)
             myAppDelegate.clearRecentlyExportedDiskURLs(df: nr)
             hide()
             

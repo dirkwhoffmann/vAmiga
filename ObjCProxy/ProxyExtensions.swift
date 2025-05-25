@@ -403,10 +403,10 @@ extension FloppyDriveProxy {
         if exception.fault != .OK { throw CoreError(exception) }
     }
 
-    func insertNew(fileSystem: FSVolumeType, bootBlock: BootBlockId, name: String) throws {
+    func insertNew(fileSystem: FSVolumeType, bootBlock: BootBlockId, name: String, url: URL) throws {
         
         let exception = ExceptionWrapper()
-        insertBlankDisk(fileSystem, bootBlock: bootBlock, name: name, exception: exception)
+        insertBlankDisk(fileSystem, bootBlock: bootBlock, name: name, url: url, exception: exception)
         if exception.fault != .OK { throw CoreError(exception) }
     }
 

@@ -755,7 +755,7 @@ NSString *EventSlotName(NSInteger slot);
 - (void)setFlag:(DiskFlags)mask value:(BOOL)value;
 
 - (BOOL)isInsertable:(Diameter)type density:(Density)density;
-- (void)insertBlankDisk:(FSVolumeType)fs bootBlock:(BootBlockId)bb name:(NSString *)name exception:(ExceptionWrapper *)ex;
+- (void)insertBlankDisk:(FSVolumeType)fs bootBlock:(BootBlockId)bb name:(NSString *)name url:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)insertMedia:(MediaFileProxy *)proxy protected:(BOOL)wp exception:(ExceptionWrapper *)ex;
 - (void)insertFile:(NSURL *)url protected:(BOOL)wp exception:(ExceptionWrapper *)ex;
 - (void)eject;
