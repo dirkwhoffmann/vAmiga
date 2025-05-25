@@ -11,6 +11,8 @@
 class HardDiskCreator: DialogController {
         
     @IBOutlet weak var diskIcon: NSImageView!
+    @IBOutlet weak var urlField: NSTextField!
+    
     @IBOutlet weak var capacity: NSPopUpButton!
     @IBOutlet weak var fileSystem: NSPopUpButton!
     @IBOutlet weak var nameLabel: NSTextField!
@@ -36,6 +38,8 @@ class HardDiskCreator: DialogController {
     var bsize = 0
         
     var drive: HardDriveProxy? { emu.hd(nr) }
+    
+    var importURL: URL?
     
     //
     // Selecting a block
@@ -105,14 +109,30 @@ class HardDiskCreator: DialogController {
         }
     }
     
+    func setURL(url: URL?) {
+        
+        importURL = url
+        
+        fileSystem.item(at: 0)!.isHidden = url != nil
+        if fileSystem.selectedTag() == 0 && url != nil {
+            fileSystem.selectItem(at: 1)
+        }
+        
+        update()
+    }
+    
     //
     // Updating the displayed information
     //
     
     func update() {
-          
+
         let custom = capacity.selectedTag() == 0
         let nodos = fileSystem.selectedTag() == 0
+        
+        // Update icon
+        diskIcon.image = NSImage(named: importURL != nil ? "NSFolder" : "hdf")
+        urlField.stringValue = importURL?.path ?? ""
         
         // Update text fields and steppers
         cylinderField.stringValue      = String(format: "%d", cylinders)
@@ -216,12 +236,74 @@ class HardDiskCreator: DialogController {
         
         do {
             try drive?.attach(c: cylinders, h: heads, s: sectors, b: bsize)
-            try drive?.format(fs: fs, name: name)
+            try drive?.format(fs: fs, name: name)            
+            if let url = importURL { try drive?.importFiles(url: url) }
+
             hide()
             
         } catch {
             
             parent.showAlert(.cantAttach, error: error)
         }
+    }
+}
+
+//
+// Drop view
+//
+
+@MainActor
+class HdDropView: NSImageView {
+    
+    @IBOutlet var parent: HardDiskCreator!
+    var amiga: EmulatorProxy { return parent.emu }
+
+    var oldImage: NSImage?
+    
+    override init(frame frameRect: NSRect) { super.init(frame: frameRect); commonInit() }
+    required init?(coder: NSCoder) { super.init(coder: coder); commonInit() }
+    
+    func commonInit() {
+
+        registerForDraggedTypes([NSPasteboard.PasteboardType.fileURL])
+    }
+    
+    func acceptDragSource(url: URL) -> Bool { return false }
+
+    override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
+
+        if let url = sender.url, url.hasDirectoryPath {
+            
+            parent.diskIcon.image = NSImage(named: "NSFolder")
+            return .copy
+        }
+        
+        return NSDragOperation()
+    }
+    
+    override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
+        
+        if let url = sender.url, url.hasDirectoryPath {
+            
+            parent.setURL(url: url)
+            return true
+        }
+        
+        return false
+    }
+
+    override func draggingExited(_ sender: NSDraggingInfo?) {
+
+        parent.update()
+    }
+    
+    override func prepareForDragOperation(_ sender: NSDraggingInfo) -> Bool {
+
+        return true
+    }
+        
+    override func concludeDragOperation(_ sender: NSDraggingInfo?) {
+
+        parent.update()
     }
 }

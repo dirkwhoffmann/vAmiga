@@ -56,7 +56,7 @@ class PartitionSelector: DialogController {
     func update() {
           
         let traits = drive.partitionTraits(partition)
-        name.stringValue = String(cString: traits.name)
+        name.stringValue = String(traits.name)
         lowerCyl.integerValue = traits.lowerCyl
         upperCyl.integerValue = traits.upperCyl
         /*
