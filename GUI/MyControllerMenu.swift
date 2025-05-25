@@ -696,7 +696,6 @@ extension MyController: NSMenuItemValidation {
         if !proceedWithUnsavedHardDisk(drive: drive) { return }
 
         myOpenPanel.configure(types: [ .hdf, .hdz, .zip, .gzip ], prompt: "Attach")
-        myOpenPanel.panel.canChooseDirectories = true
         myOpenPanel.open(for: window, { result in
             
             if result == .OK, let url = self.myOpenPanel.url {

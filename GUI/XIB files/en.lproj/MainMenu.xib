@@ -710,7 +710,7 @@ CQ
                                     <action selector="attachRecentHdrDummyAction:" target="-1" id="0hy-un-XtJ"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Detach" id="Ghe-lv-eQW">
+                            <menuItem title="Detach" hidden="YES" id="Ghe-lv-eQW">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="detachHdrAction:" target="-1" id="zn5-Du-eYl"/>
@@ -789,7 +789,7 @@ CQ
                                     <action selector="attachRecentHdrDummyAction:" target="-1" id="p6v-1N-hrT"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Detach" tag="1" id="OvU-wa-0sU">
+                            <menuItem title="Detach" tag="1" hidden="YES" id="OvU-wa-0sU">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="detachHdrAction:" target="-1" id="acZ-9y-MZX"/>
@@ -868,7 +868,7 @@ CQ
                                     <action selector="attachRecentHdrDummyAction:" target="-1" id="QQA-0r-ffJ"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Detach" tag="2" id="z3R-XT-dP9">
+                            <menuItem title="Detach" tag="2" hidden="YES" id="z3R-XT-dP9">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="detachHdrAction:" target="-1" id="TZo-e0-Vac"/>
@@ -947,7 +947,7 @@ CQ
                                     <action selector="attachRecentHdrDummyAction:" target="-1" id="9bY-2s-dOJ"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Detach" tag="3" id="XId-AG-47L">
+                            <menuItem title="Detach" tag="3" hidden="YES" id="XId-AG-47L">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="detachHdrAction:" target="-1" id="IhF-od-mCM"/>

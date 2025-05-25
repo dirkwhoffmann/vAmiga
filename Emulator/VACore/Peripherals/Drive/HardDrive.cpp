@@ -130,6 +130,10 @@ HardDrive::init(const MutableFileSystem &fs)
     // Create the drive
     init(geometry);
         
+    // Update the partition table
+    ptable[0].name = fs.getName().cpp_str();
+    ptable[0].dosType = 0x444F5300 | (u32)fs.getDos();
+    
     // Copy over all blocks
     fs.exportVolume(data.ptr, geometry.numBytes());
 }
@@ -565,14 +569,14 @@ HardDrive::format(FSVolumeType fsType, string name)
         // Create a device descriptor matching this drive
         auto layout = FileSystemDescriptor(geometry, fsType);
 
-        // Create a file system
+        // Create an empty file system
         auto fs = MutableFileSystem(layout);
-
-        // Add name and bootblock
+        
+        // Name the file system
         fs.setName(name);
-
-        // Copy all blocks over
-        fs.exportVolume(data.ptr, geometry.numBytes());
+        
+        // Copy the file system over
+        init(fs);
     }
 }
 
@@ -758,7 +762,7 @@ HardDrive::importFolder(const fs::path &path) throws
         // Determine the DOS type of the current disk
         auto desc = getPartitionDescriptor(0);
         auto dos = FSVolumeTypeEnum::fromDosType(desc.dosType);
-        
+                
         // Create a device descriptor matching this drive
         FileSystemDescriptor layout(geometry, dos);
         
@@ -769,7 +773,7 @@ HardDrive::importFolder(const fs::path &path) throws
         fs.importDirectory(fullPath);
         
         // Name the file system
-        fs.setName(path.filename().string());
+        fs.setName(desc.name);
         
         // Copy the file system back to the disk
         init(fs);
