@@ -712,31 +712,6 @@ extension MyController: NSMenuItemValidation {
         })
     }
     
-    @IBAction func importHdrAction(_ sender: NSMenuItem!) {
-        
-        let drive = emu.hd(sender.tag)!
-        
-        // Ask the user if an unsafed disk should be discarded
-        if !proceedWithUnsavedHardDisk(drive: drive) { return }
-
-        myOpenPanel.configure(types: [ .directory ], prompt: "Import")
-        myOpenPanel.panel.canChooseDirectories = true
-        myOpenPanel.open(for: window, { result in
-            
-            if result == .OK, let url = self.myOpenPanel.url {
-                
-                DispatchQueue.main.async {
-                    
-                    do {
-                        try self.mm.importFolder(hd: sender.tag, url: url)
-                    } catch {
-                        self.showAlert(.cantAttach, error: error, async: true)
-                    }
-                }
-            }
-        })
-    }
-    
     @IBAction func attachRecentHdrDummyAction(_ sender: NSMenuItem!) {}
     @IBAction func attachRecentHdrAction(_ sender: NSMenuItem!) {
         

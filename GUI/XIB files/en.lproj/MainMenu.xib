@@ -717,13 +717,6 @@ CQ
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="EYo-Hq-7ZZ"/>
-                            <menuItem title="Import Files..." id="WqE-Hc-YZe" userLabel="Export disk">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="importHdrAction:" target="-1" id="0gj-Vf-KvB"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="QJ0-l7-j3h"/>
                             <menuItem title="Export..." id="d1F-Xo-RfA" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -796,13 +789,6 @@ CQ
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="7Qn-79-6BU"/>
-                            <menuItem title="Import Files..." tag="1" id="Izd-yu-jY3" userLabel="Export disk">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="importHdrAction:" target="-1" id="XCK-ac-DFP"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="IcI-Q1-pLn"/>
                             <menuItem title="Export..." tag="1" id="ZRo-28-C9R" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -875,13 +861,6 @@ CQ
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="Scb-0j-ECp"/>
-                            <menuItem title="Import Files..." tag="2" id="eRp-Jo-xsU" userLabel="Export disk">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="importHdrAction:" target="-1" id="Sea-AG-rw3"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="LcP-nu-Xi5"/>
                             <menuItem title="Export..." tag="2" id="Gzv-Ng-lcw" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
@@ -954,13 +933,6 @@ CQ
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="Qo8-fz-s1e"/>
-                            <menuItem title="Import Files..." tag="3" id="iMt-Ho-atI" userLabel="Export disk">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="importHdrAction:" target="-1" id="lP9-rX-V1y"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="IaP-sq-mSl"/>
                             <menuItem title="Export..." tag="3" id="tKi-by-2CV" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
