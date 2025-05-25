@@ -15,7 +15,6 @@
 #include "ADFFile.h"
 #include "EADFFile.h"
 #include "IMGFile.h"
-#include "Folder.h"
 #include "MutableFileSystem.h"
 #include "MsgQueue.h"
 #include "CmdQueue.h"

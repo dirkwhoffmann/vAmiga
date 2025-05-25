@@ -16,7 +16,6 @@
 #include "STFile.h"
 #include "DMSFile.h"
 #include "EXEFile.h"
-#include "Folder.h"
 #include "HDFFile.h"
 #include "RomFile.h"
 #include "Script.h"

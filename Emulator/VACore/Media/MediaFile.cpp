@@ -29,7 +29,7 @@ MediaFile::type(const fs::path &path)
     if (DMSFile::isCompatible(path))   return FileType::DMS;
     if (EXEFile::isCompatible(path))   return FileType::EXE;
     if (RomFile::isCompatible(path))   return FileType::ROM;
-    if (Folder::isCompatible(path))    return FileType::DIR;
+    if (fs::is_directory(path))        return FileType::DIR;
 
     return FileType::UNKNOWN;
 }
@@ -58,7 +58,6 @@ MediaFile::make(const fs::path &path, FileType type)
         case FileType::DMS:          return new DMSFile(path);
         case FileType::EXE:          return new EXEFile(path);
         case FileType::ROM:          return new RomFile(path);
-        case FileType::DIR:          return new Folder(path);
 
         default:
             throw CoreError(Fault::FILE_TYPE_MISMATCH, path);

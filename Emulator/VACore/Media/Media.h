@@ -24,7 +24,6 @@
 #include "DiskFiles/DMSFile.h"
 #include "DiskFiles/EXEFile.h"
 #include "DiskFiles/STFile.h"
-#include "DiskFiles/Folder.h"
 
 /* All media files are organized in the class hierarchy displayed below.
  * MediaFile is a wrapper class which is referenced in the public API. Below

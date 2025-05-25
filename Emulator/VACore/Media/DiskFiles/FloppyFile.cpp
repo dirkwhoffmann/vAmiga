@@ -14,7 +14,6 @@
 #include "IMGFile.h"
 #include "DMSFile.h"
 #include "EXEFile.h"
-#include "Folder.h"
 #include "StringUtils.h"
 
 namespace vamiga {
@@ -41,7 +40,6 @@ FloppyFile::make(const fs::path &path)
         case FileType::IMG:  result = new IMGFile(buffer.ptr, buffer.size); break;
         case FileType::DMS:  result = new DMSFile(buffer.ptr, buffer.size); break;
         case FileType::EXE:  result = new EXEFile(buffer.ptr, buffer.size); break;
-        case FileType::DIR:  result = new Folder(path);
 
         default:
             throw CoreError(Fault::FILE_TYPE_UNSUPPORTED);

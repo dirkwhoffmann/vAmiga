@@ -13,6 +13,5 @@ IMGFile.cpp
 STFile.cpp
 DMSFile.cpp
 EXEFile.cpp
-Folder.cpp
 
 )

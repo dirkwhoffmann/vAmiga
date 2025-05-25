@@ -220,7 +220,6 @@
 		509C365A260B1766004F160A /* RetroShellCmd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C3658260B1766004F160A /* RetroShellCmd.cpp */; };
 		509C365E260B177E004F160A /* Console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C365C260B177E004F160A /* Console.cpp */; };
 		509C3663260B1D95004F160A /* CommandConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C3662260B1D95004F160A /* CommandConsole.cpp */; };
-		509C66792551577D0028D497 /* Folder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C66772551577D0028D497 /* Folder.cpp */; };
 		509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CC22083F9800C500F0 /* CPUPanel.swift */; };
 		509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CE220847C600C500F0 /* InstrTableView.swift */; };
 		509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4D02208487900C500F0 /* TraceTableView.swift */; };
@@ -437,7 +436,6 @@
 		50FC04C227DA19DA00C3E566 /* Script.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FCCA7A262AAAEA00398342 /* Script.cpp */; };
 		50FC04C327DA19DA00C3E566 /* AnyFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* AnyFile.cpp */; };
 		50FC04C527DA19DE00C3E566 /* RomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* RomFile.cpp */; };
-		50FC04C627DA19E900C3E566 /* Folder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C66772551577D0028D497 /* Folder.cpp */; };
 		50FC04C727DA19E900C3E566 /* EXEFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5019B1EE254B292D00A7AB95 /* EXEFile.cpp */; };
 		50FC04C827DA19E900C3E566 /* ADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508833EC21F0D21B009890EA /* ADFFile.cpp */; };
 		50FC04C927DA19E900C3E566 /* EADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5009B7FA2557051A0037288E /* EADFFile.cpp */; };
@@ -851,8 +849,6 @@
 		509C365C260B177E004F160A /* Console.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Console.cpp; sourceTree = "<group>"; };
 		509C365D260B177E004F160A /* Console.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Console.h; sourceTree = "<group>"; };
 		509C3662260B1D95004F160A /* CommandConsole.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CommandConsole.cpp; sourceTree = "<group>"; };
-		509C66772551577D0028D497 /* Folder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Folder.cpp; sourceTree = "<group>"; };
-		509C66782551577D0028D497 /* Folder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Folder.h; sourceTree = "<group>"; };
 		509CF4CC22083F9800C500F0 /* CPUPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUPanel.swift; sourceTree = "<group>"; };
 		509CF4CE220847C600C500F0 /* InstrTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstrTableView.swift; sourceTree = "<group>"; };
 		509CF4D02208487900C500F0 /* TraceTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceTableView.swift; sourceTree = "<group>"; };
@@ -1211,8 +1207,6 @@
 				50F54B3124B5DDAF0078FDC9 /* DMSFile.cpp */,
 				5019B1EF254B292D00A7AB95 /* EXEFile.h */,
 				5019B1EE254B292D00A7AB95 /* EXEFile.cpp */,
-				509C66782551577D0028D497 /* Folder.h */,
-				509C66772551577D0028D497 /* Folder.cpp */,
 			);
 			path = DiskFiles;
 			sourceTree = "<group>";
@@ -2617,7 +2611,6 @@
 				50950ED822881B7A0073F755 /* ZorroManager.cpp in Sources */,
 				50B70CAD252CE0BF006B5191 /* AudioPort.cpp in Sources */,
 				501D686028085131000BB5E9 /* Defaults.cpp in Sources */,
-				509C66792551577D0028D497 /* Folder.cpp in Sources */,
 				508FE04F21EA22CC0043D0E9 /* GeneralPrefs.swift in Sources */,
 				5042F2DD26BE57E600126C05 /* Thread.cpp in Sources */,
 				502023EA27B6BDEA00820DB6 /* ZorroBoard.cpp in Sources */,
@@ -2756,7 +2749,6 @@
 				50FC04DE27DA1A1400C3E566 /* u_medium.c in Sources */,
 				50FC04C727DA19E900C3E566 /* EXEFile.cpp in Sources */,
 				50985ABC2C418D190079CFC5 /* MediaFile.cpp in Sources */,
-				50FC04C627DA19E900C3E566 /* Folder.cpp in Sources */,
 				50EF2237281595B800440C4D /* DiagBoard.cpp in Sources */,
 				50FC04DD27DA1A1400C3E566 /* tables.c in Sources */,
 				50FC049F27DA197A00C3E566 /* SequencerBpl.cpp in Sources */,
