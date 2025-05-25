@@ -1979,6 +1979,15 @@ NSString *EventSlotName(NSInteger slot)
     }
 }
 
+- (void)importFiles:(NSURL *)url exception:(ExceptionWrapper *)ex
+{
+    try {
+        [self drive]->importFiles([url fileSystemRepresentation]);
+    }  catch (CoreError &error) {
+        [ex save:error];
+    }
+}
+
 - (void)attach:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex
 {
     try {

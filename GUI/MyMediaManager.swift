@@ -122,6 +122,16 @@ class MediaManager {
         }
     }
     
+    func importFolder(hd n: Int, url: URL, force: Bool = false) throws {
+
+        var hdn: HardDriveProxy { return emu.hd(n)! }
+
+        if force || proceedWithUnsavedHardDisk(drive: hdn) {
+
+            try hdn.importFiles(url: url)
+        }
+    }
+    
     func detach(hd n: Int, force: Bool = false) throws {
         
         var hdn: HardDriveProxy { return emu.hd(n)! }

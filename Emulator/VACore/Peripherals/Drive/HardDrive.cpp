@@ -129,7 +129,7 @@ HardDrive::init(const MutableFileSystem &fs)
     
     // Create the drive
     init(geometry);
-    
+        
     // Copy over all blocks
     fs.exportVolume(data.ptr, geometry.numBytes());
 }
@@ -233,26 +233,7 @@ HardDrive::init(const fs::path &path) throws
         
         debug(HDR_DEBUG, "Importing directory...\n");
         
-        // Create an empty disk // TODO: Add a config option for the default size
-        init(MB(136));
-        
-        // Format the drive // TODO: Add a config option for the default OFS
-        format(FSVolumeType::OFS, path.filename().string());
-        
-        // Extract file system
-        auto fs = MutableFileSystem(*this);
-        
-        // Import all files
-        fs.importDirectory(fullPath);
-        
-        // Check file system for consistency
-        if (FS_DEBUG) fs.verify();
-        
-        // Change to the root directory
-        fs.changeDir("/");
-                
-        // Copy the modified file system back
-        init(fs);
+        importFolder(fullPath);
         
     } else {
         
@@ -757,6 +738,41 @@ HardDrive::moveHead(isize c, isize h, isize s)
         msgQueue.put(Msg::HDR_STEP, DriveMsg {
             i16(objid), i16(c), config.stepVolume, config.pan
         });
+    }
+}
+
+void
+HardDrive::importFolder(const fs::path &path) throws
+{
+    auto fullPath = host.makeAbsolute(path);
+    
+    if (!fs::exists(fullPath)) {
+
+        throw CoreError(Fault::FILE_NOT_FOUND, path);
+    }
+    
+    if (fs::is_directory(fullPath)) {
+        
+        debug(HDR_DEBUG, "Importing directory...\n");
+        
+        // Determine the DOS type of the current disk
+        auto desc = getPartitionDescriptor(0);
+        auto dos = FSVolumeTypeEnum::fromDosType(desc.dosType);
+        
+        // Create a device descriptor matching this drive
+        FileSystemDescriptor layout(geometry, dos);
+        
+        // Create a new file system
+        auto fs = MutableFileSystem(layout);
+        
+        // Import all files and name the partition
+        fs.importDirectory(fullPath);
+        
+        // Name the file system
+        fs.setName(path.filename().string());
+        
+        // Copy the file system back to the disk
+        init(fs);
     }
 }
 

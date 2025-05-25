@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23727" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23727"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication"/>
@@ -717,10 +717,17 @@ CQ
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="EYo-Hq-7ZZ"/>
-                            <menuItem title="Export..." id="WqE-Hc-YZe" userLabel="Export disk">
+                            <menuItem title="Import Files..." id="WqE-Hc-YZe" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="exportHdrAction:" target="-1" id="LxB-fH-aJt"/>
+                                    <action selector="importHdrAction:" target="-1" id="0gj-Vf-KvB"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="QJ0-l7-j3h"/>
+                            <menuItem title="Export..." id="d1F-Xo-RfA" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="exportHdrAction:" target="-1" id="hFW-6u-FNH"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Export To" id="z1v-QA-WrJ">
@@ -789,10 +796,17 @@ CQ
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="7Qn-79-6BU"/>
-                            <menuItem title="Export..." tag="1" id="Izd-yu-jY3" userLabel="Export disk">
+                            <menuItem title="Import Files..." tag="1" id="Izd-yu-jY3" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="exportHdrAction:" target="-1" id="ndo-7w-DZ7"/>
+                                    <action selector="importHdrAction:" target="-1" id="XCK-ac-DFP"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="IcI-Q1-pLn"/>
+                            <menuItem title="Export..." tag="1" id="ZRo-28-C9R" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="exportHdrAction:" target="-1" id="A8m-r4-tB2"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Export To" tag="1" id="7Wg-3m-VRk">
@@ -861,10 +875,17 @@ CQ
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="Scb-0j-ECp"/>
-                            <menuItem title="Export..." tag="2" id="eRp-Jo-xsU" userLabel="Export disk">
+                            <menuItem title="Import Files..." tag="2" id="eRp-Jo-xsU" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="exportHdrAction:" target="-1" id="h3b-L1-uJi"/>
+                                    <action selector="importHdrAction:" target="-1" id="Sea-AG-rw3"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="LcP-nu-Xi5"/>
+                            <menuItem title="Export..." tag="2" id="Gzv-Ng-lcw" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="exportHdrAction:" target="-1" id="jb3-i3-aFU"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Export To" tag="2" id="Wjq-Ug-rnk">
@@ -933,10 +954,17 @@ CQ
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="Qo8-fz-s1e"/>
-                            <menuItem title="Export..." tag="3" id="iMt-Ho-atI" userLabel="Export disk">
+                            <menuItem title="Import Files..." tag="3" id="iMt-Ho-atI" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="exportHdrAction:" target="-1" id="QyI-5M-elT"/>
+                                    <action selector="importHdrAction:" target="-1" id="lP9-rX-V1y"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="IaP-sq-mSl"/>
+                            <menuItem title="Export..." tag="3" id="tKi-by-2CV" userLabel="Export disk">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="exportHdrAction:" target="-1" id="hK6-xK-wQy"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Export To" tag="3" id="yIE-F0-g9J">

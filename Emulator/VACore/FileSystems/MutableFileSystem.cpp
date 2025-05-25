@@ -569,9 +569,15 @@ MutableFileSystem::importDirectory(const fs::path &path, bool recursive)
     
     // Add all files
     importDirectory(dir, recursive);
-    
+        
     // Rectify the checksums of all blocks
     updateChecksums();
+    
+    // Change back to the root directory
+    changeDir("/");
+    
+    // Verify the result
+    if (FS_DEBUG) verify();
 }
 
 void

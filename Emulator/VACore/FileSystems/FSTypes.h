@@ -47,9 +47,26 @@ struct FSVolumeTypeEnum : Reflection<FSVolumeTypeEnum, FSVolumeType>
         }
         return "???";
     }
+    
     static const char *help(FSVolumeType value)
     {
         return "";
+    }
+    
+    static FSVolumeType fromDosType(u32 value)
+    {
+        switch (value) {
+                
+            case 0x444F5300:    return FSVolumeType::OFS;
+            case 0x444F5301:    return FSVolumeType::FFS;
+            case 0x444F5302:    return FSVolumeType::OFS_INTL;
+            case 0x444F5303:    return FSVolumeType::FFS_INTL;
+            case 0x444F5304:    return FSVolumeType::OFS_DC;
+            case 0x444F5305:    return FSVolumeType::FFS_DC;
+            case 0x444F5306:    return FSVolumeType::OFS_LNFS;
+            case 0x444F5307:    return FSVolumeType::FFS_LNFS;
+            default:            return FSVolumeType::NODOS;
+        }
     }
 };
 
@@ -115,6 +132,7 @@ struct FSBlockTypeEnum : Reflection<FSBlockTypeEnum, FSBlockType>
         }
         return "???";
     }
+    
     static const char *help(FSBlockType value)
     {
         return "";

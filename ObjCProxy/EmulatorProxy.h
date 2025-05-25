@@ -798,9 +798,9 @@ NSString *EventSlotName(NSInteger slot);
 - (void)setFlag:(DiskFlags)mask value:(BOOL)value;
 
 - (void)attach:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
-
- - (void)attachFile:(NSURL *)path exception:(ExceptionWrapper *)ex;
 - (void)attach:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
+- (void)attachFile:(NSURL *)url exception:(ExceptionWrapper *)ex;
+- (void)importFiles:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)format:(FSVolumeType)fs name:(NSString *)name exception:(ExceptionWrapper *)ex;
 - (void)changeGeometry:(NSInteger)c h:(NSInteger)h s:(NSInteger)s b:(NSInteger)b exception:(ExceptionWrapper *)ex;
 - (NSArray *) geometries;

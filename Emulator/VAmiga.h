@@ -773,6 +773,10 @@ public:
      */
     void changeGeometry(isize c, isize h, isize s, isize b = 512);
 
+    /** @brief  Formats the hard drive
+     */
+    void format(FSVolumeType fs, const string &name);
+    
     /** @brief  Attaches a hard drive provided by an URL to a media file.
      *  @param  path    Path to the media file.
      */
@@ -791,12 +795,17 @@ public:
      */
     void attach(isize c, isize h, isize s, isize b = 512);
 
-    /** @brief  Formats the hard drive
+    /** @brief  Imports files from a folder
+     *  @note   All existing files are deleted prior to importing the folder.
      */
-    void format(FSVolumeType fs, const string &name);
-
+    void importFiles(const fs::path &path);
+    
+    /** @brief  Exports the hard drive to an HDF file on disk
+     */
     void writeToFile(fs::path path);
 
+    /** @brief  Converts the hard drive to an HDF media file
+     */
     MediaFile *createHDF();
 };
 

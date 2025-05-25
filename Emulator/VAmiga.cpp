@@ -1316,7 +1316,14 @@ HardDriveAPI::format(FSVolumeType fs, const string &name)
     drive->format(fs, name);
 }
 
-void 
+void
+HardDriveAPI::importFiles(const fs::path &path)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    drive->importFolder(path);
+}
+
+void
 HardDriveAPI::writeToFile(fs::path path)
 {
     VAMIGA_PUBLIC_SUSPEND

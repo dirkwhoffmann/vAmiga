@@ -365,9 +365,9 @@ private:
     
 public:
     
-    // Restores a disk (called on connect)
-    bool restoreDisk() throws;
-
+    // Imports files from a folder (deletes existing files)
+    void importFolder(const fs::path &path) throws;
+    
     // Exports the disk in HDF format
     void writeToFile(const fs::path &path) throws;
 

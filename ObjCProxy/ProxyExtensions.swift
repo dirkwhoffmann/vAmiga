@@ -443,6 +443,13 @@ extension HardDriveProxy {
         if exception.fault != .OK { throw CoreError(exception) }
     }
 
+    func importFiles(url: URL) throws {
+
+        let exception = ExceptionWrapper()
+        importFiles(url, exception: exception)
+        if exception.fault != .OK { throw CoreError(exception) }
+    }
+    
     func format(fs: FSVolumeType, name: String) throws {
 
         let exception = ExceptionWrapper()
