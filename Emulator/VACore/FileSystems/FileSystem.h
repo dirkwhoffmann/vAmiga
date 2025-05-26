@@ -196,7 +196,7 @@ protected:
 public:
     
     // Returns the block representing the current directory
-    FSBlock *currentDirBlock();
+    FSBlock *currentDirBlock() const;
     
     // Changes the current directory
     FSBlock *changeDir(const string &name);

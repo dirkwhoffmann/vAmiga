@@ -449,10 +449,16 @@ FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) const
 }
 
 FSBlock *
-FileSystem::currentDirBlock()
+FileSystem::currentDirBlock() const
 {
     FSBlock *cdb = blockPtr(cd);
     
+    assert(cdb != nullptr);
+    assert(cdb->type == FSBlockType::ROOT_BLOCK || cdb->type == FSBlockType::USERDIR_BLOCK);
+    
+    return cdb;
+
+    /*
     if (cdb) {
         if (cdb->type == FSBlockType::ROOT_BLOCK || cdb->type == FSBlockType::USERDIR_BLOCK) {
             return cdb;
@@ -462,33 +468,40 @@ FileSystem::currentDirBlock()
     // The block reference is invalid. Switch back to the root directory
     cd = rootBlock;
     return blockPtr(cd);
+    */
 }
 
 FSBlock *
 FileSystem::changeDir(const string &name)
 {
     FSBlock *cdb = currentDirBlock();
-
+    
     if (name == "/") {
-
+        
         // Move to top level
         cd = rootBlock;
-        return currentDirBlock();
-    }
-
-    if (name == "..") {
-
+        
+    } else if (name == "..") {
+        
         // Move one level up
         cd = cdb->getParentDirRef();
-        return currentDirBlock();
+        
+    } else if (FSBlock *subdir = seekDir(name); subdir) {
+        
+        // Move one level down
+        cd = subdir->nr;
     }
     
-    FSBlock *subdir = seekDir(name);
-    if (subdir == nullptr) return cdb;
+    if (FSBlock *result = blockPtr(cd); result) {
+        
+        // Make sure we are still at a directory block
+        if (result->type == FSBlockType::ROOT_BLOCK)    return result;
+        if (result->type == FSBlockType::USERDIR_BLOCK) return result;
+    }
     
-    // Move one level down
-    cd = subdir->nr;
-    return currentDirBlock();
+    // Switch back to the root directory, as the reference is invalid
+    cd = rootBlock;
+    return blockPtr(cd);
 }
 
 void
