@@ -210,11 +210,11 @@ public:
     string getPath() const { return getPath(currentDirBlock()); }
 
     // Seeks an item inside the current directory
-    Block seekRef(FSName name);
-    Block seekRef(const string &name) { return seekRef(FSName(name)); }
-    FSBlock *seek(const string &name) { return blockPtr(seekRef(name)); }
-    FSBlock *seekDir(const string &name) { return userDirBlockPtr(seekRef(name)); }
-    FSBlock *seekFile(const string &name) { return fileHeaderBlockPtr(seekRef(name)); }
+    Block seekRef(FSName name) const;
+    Block seekRef(const string &name) const { return seekRef(FSName(name)); }
+    FSBlock *seek(const string &name) const { return blockPtr(seekRef(name)); }
+    FSBlock *seekDir(const string &name) const { return userDirBlockPtr(seekRef(name)); }
+    FSBlock *seekFile(const string &name) const { return fileHeaderBlockPtr(seekRef(name)); }
     FSBlock *seekPath(const fs::path &path);
     
     //
@@ -224,7 +224,7 @@ public:
 public:
 
     // Performs a sanity check
-    bool verify();
+    bool verify() const;
     
     // Checks all blocks in this volume
     FSErrorReport check(bool strict) const;
@@ -240,20 +240,20 @@ public:
     Fault checkBlockType(Block nr, FSBlockType type, FSBlockType altType) const;
 
     // Checks if a certain block is corrupted
-    bool isCorrupted(Block nr) { return getCorrupted(nr) != 0; }
+    bool isCorrupted(Block nr) const { return getCorrupted(nr) != 0; }
 
     // Returns the position in the corrupted block list (0 = OK)
-    isize getCorrupted(Block nr);
+    isize getCorrupted(Block nr) const;
 
     // Returns a reference to the next or the previous corrupted block
-    Block nextCorrupted(Block nr);
-    Block prevCorrupted(Block nr);
+    Block nextCorrupted(Block nr) const;
+    Block prevCorrupted(Block nr) const;
 
     // Checks if a certain block is the n-th corrupted block
-    bool isCorrupted(Block nr, isize n);
+    bool isCorrupted(Block nr, isize n) const;
 
     // Returns a reference to the n-th corrupted block
-    Block seekCorruptedBlock(isize n);
+    Block seekCorruptedBlock(isize n) const;
     
     
     //
@@ -283,12 +283,12 @@ private:
 protected:
     
     // Returns the last element in the list of extension blocks
-    FSBlock *lastFileListBlockInChain(Block start);
-    FSBlock *lastFileListBlockInChain(FSBlock *block);
+    FSBlock *lastFileListBlockInChain(Block start) const;
+    FSBlock *lastFileListBlockInChain(FSBlock *block) const;
     
     // Returns the last element in the list of blocks with the same hash
-    FSBlock *lastHashBlockInChain(Block start);
-    FSBlock *lastHashBlockInChain(FSBlock *block);
+    FSBlock *lastHashBlockInChain(Block start) const;
+    FSBlock *lastHashBlockInChain(FSBlock *block) const;
     
 
     //
@@ -298,7 +298,7 @@ protected:
 public:
 
     // Predicts the type of a block by analyzing its number and data
-    FSBlockType predictBlockType(Block nr, const u8 *buffer);
+    FSBlockType predictBlockType(Block nr, const u8 *buffer) const;
 
     // Determines how the layout image should look like in a certain column
     FSBlockType getDisplayType(isize column);

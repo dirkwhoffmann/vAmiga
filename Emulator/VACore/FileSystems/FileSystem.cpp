@@ -546,7 +546,7 @@ FileSystem::getPath(FSBlock *block) const
 }
 
 Block
-FileSystem::seekRef(FSName name)
+FileSystem::seekRef(FSName name) const
 {
     std::set<Block> visited;
     
@@ -651,14 +651,14 @@ FileSystem::collectRefsWithSameHashValue(Block nr,
 }
 
 FSBlock *
-FileSystem::lastFileListBlockInChain(Block start)
+FileSystem::lastFileListBlockInChain(Block start) const
 {
     FSBlock *block = fileListBlockPtr(start);
     return block ? lastFileListBlockInChain(block) : nullptr;
 }
 
 FSBlock *
-FileSystem::lastFileListBlockInChain(FSBlock *block)
+FileSystem::lastFileListBlockInChain(FSBlock *block) const
 {
     std::set<Block> visited;
 
@@ -674,14 +674,14 @@ FileSystem::lastFileListBlockInChain(FSBlock *block)
 }
 
 FSBlock *
-FileSystem::lastHashBlockInChain(Block start)
+FileSystem::lastHashBlockInChain(Block start) const
 {
     FSBlock *block = hashableBlockPtr(start);
     return block ? lastHashBlockInChain(block) : nullptr;
 }
 
 FSBlock *
-FileSystem::lastHashBlockInChain(FSBlock *block)
+FileSystem::lastHashBlockInChain(FSBlock *block) const
 {
     std::set<Block> visited;
 
@@ -697,7 +697,7 @@ FileSystem::lastHashBlockInChain(FSBlock *block)
 }
 
 bool
-FileSystem::verify()
+FileSystem::verify() const
 {
     if (FS_DEBUG) {
         
@@ -800,13 +800,13 @@ FileSystem::checkBlockType(Block nr, FSBlockType type, FSBlockType altType) cons
 }
 
 isize
-FileSystem::getCorrupted(Block nr)
+FileSystem::getCorrupted(Block nr) const
 {
     return blockPtr(nr) ? blocks[nr]->corrupted : 0;
 }
 
 bool
-FileSystem::isCorrupted(Block nr, isize n)
+FileSystem::isCorrupted(Block nr, isize n) const
 {
     for (isize i = 0, cnt = 0; i < numBlocks(); i++) {
         
@@ -819,7 +819,7 @@ FileSystem::isCorrupted(Block nr, isize n)
 }
 
 Block
-FileSystem::nextCorrupted(Block nr)
+FileSystem::nextCorrupted(Block nr) const
 {
     isize i = (isize)nr;
     while (++i < numBlocks()) { if (isCorrupted((Block)i)) return (Block)i; }
@@ -827,7 +827,7 @@ FileSystem::nextCorrupted(Block nr)
 }
 
 Block
-FileSystem::prevCorrupted(Block nr)
+FileSystem::prevCorrupted(Block nr) const
 {
     isize i = (isize)nr - 1;
     while (i-- >= 0) { if (isCorrupted((Block)i)) return (Block)i; }
@@ -835,7 +835,7 @@ FileSystem::prevCorrupted(Block nr)
 }
 
 Block
-FileSystem::seekCorruptedBlock(isize n)
+FileSystem::seekCorruptedBlock(isize n) const
 {
     for (isize i = 0, cnt = 0; i < numBlocks(); i++) {
 
@@ -848,7 +848,7 @@ FileSystem::seekCorruptedBlock(isize n)
 }
 
 FSBlockType
-FileSystem::predictBlockType(Block nr, const u8 *buffer)
+FileSystem::predictBlockType(Block nr, const u8 *buffer) const
 {
     assert(buffer != nullptr);
     
