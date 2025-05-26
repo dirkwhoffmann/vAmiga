@@ -72,6 +72,9 @@ public:
     isize requiredFileListBlocks(isize fileSize) const;
     isize requiredBlocks(isize fileSize) const;
 
+    // Returns true if at least 'count' free blocks are available
+    bool allocatable(isize count) const;
+    
     // Seeks a free block and marks it as allocated
     Block allocateBlock();
 

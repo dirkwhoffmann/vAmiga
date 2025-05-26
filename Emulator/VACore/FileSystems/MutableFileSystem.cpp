@@ -192,6 +192,25 @@ MutableFileSystem::requiredBlocks(isize fileSize) const
     return 1 + numDataBlocks + numFileListBlocks;
 }
 
+bool
+MutableFileSystem::allocatable(isize count) const
+{
+    Block i = tba;
+    isize capacity = numBlocks();
+    
+    while (count > 0) {
+        
+        if (blocks[i]->type == FSBlockType::EMPTY_BLOCK) {
+            if (--count == 0) break;
+        }
+  
+        i = (i + 1) % capacity;
+        if (i == tba) return false;
+    }
+        
+    return true;
+}
+
 Block
 MutableFileSystem::allocateBlock()
 {
@@ -432,8 +451,9 @@ MutableFileSystem::addData(FSBlock &block, const u8 *buffer, isize size)
             debug(FS_DEBUG, "Required data blocks : %ld\n", numDataBlocks);
             debug(FS_DEBUG, "Required list blocks : %ld\n", numListBlocks);
             debug(FS_DEBUG, "         Free blocks : %ld\n", freeBlocks());
-            
-            if (freeBlocks() < numDataBlocks + numListBlocks) {
+
+            // Only proceed if enough free blocks are available
+            if (!allocatable(numDataBlocks + numListBlocks)) {
 
                 debug(FS_DEBUG, "Not enough free blocks\n");
                 throw CoreError(Fault::FS_OUT_OF_SPACE);

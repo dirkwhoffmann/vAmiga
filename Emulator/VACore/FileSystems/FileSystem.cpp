@@ -210,8 +210,9 @@ isize
 FileSystem::freeBlocks() const
 {
     isize result = 0;
+    isize count = numBlocks();
     
-    for (isize i = 0; i < numBlocks(); i++) {
+    for (isize i = 0; i < count; i++) {
         if (isFree((Block)i)) result++;
     }
 
