@@ -197,32 +197,32 @@ public:
     // Link to the parent directory block
     Block getParentDirRef() const;
     void setParentDirRef(Block ref);
-    struct FSBlock *getParentDirBlock();
+    struct FSBlock *getParentDirBlock() const;
     
     // Link to the file header block
     Block getFileHeaderRef() const;
     void setFileHeaderRef(Block ref);
-    FSBlock *getFileHeaderBlock();
+    FSBlock *getFileHeaderBlock() const;
 
     // Link to the next block with the same hash
     Block getNextHashRef() const;
     void setNextHashRef(Block ref);
-    struct FSBlock *getNextHashBlock();
+    struct FSBlock *getNextHashBlock() const;
 
     // Link to the next extension block
     Block getNextListBlockRef() const;
     void setNextListBlockRef(Block ref);
-    FSBlock *getNextListBlock();
+    FSBlock *getNextListBlock() const;
     
     // Link to the next bitmap extension block
     Block getNextBmExtBlockRef() const;
     void setNextBmExtBlockRef(Block ref);
-    FSBlock *getNextBmExtBlock();
+    FSBlock *getNextBmExtBlock() const;
     
     // Link to the first data block
     Block getFirstDataBlockRef() const;
     void setFirstDataBlockRef(Block ref);
-    FSBlock *getFirstDataBlock();
+    FSBlock *getFirstDataBlock() const;
 
     Block getDataBlockRef(isize nr) const;
     void setDataBlockRef(isize nr, Block ref);
@@ -230,7 +230,7 @@ public:
     // Link to the next data block
     Block getNextDataBlockRef() const;
     void setNextDataBlockRef(Block ref);
-    FSBlock *getNextDataBlock();
+    FSBlock *getNextDataBlock() const;
 
 
     //

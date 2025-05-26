@@ -202,12 +202,12 @@ public:
     FSBlock *changeDir(const string &name);
 
     // Prints a directory listing
-    void printDirectory(bool recursive) throws;
+    void printDirectory(bool recursive) const throws;
     
     // Returns the path of a file system item
-    string getPath(FSBlock *block);
-    string getPath(Block nr) { return getPath(blockPtr(nr)); }
-    string getPath() { return getPath(currentDirBlock()); }
+    string getPath(FSBlock *block) const;
+    string getPath(Block nr) const { return getPath(blockPtr(nr)); }
+    string getPath() const { return getPath(currentDirBlock()); }
 
     // Seeks an item inside the current directory
     Block seekRef(FSName name);

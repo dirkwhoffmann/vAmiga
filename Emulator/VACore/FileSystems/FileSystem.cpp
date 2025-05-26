@@ -505,7 +505,7 @@ FileSystem::changeDir(const string &name)
 }
 
 void
-FileSystem::printDirectory(bool recursive)
+FileSystem::printDirectory(bool recursive) const
 {
     std::vector<Block> items;
     collect(cd, items);
@@ -517,7 +517,7 @@ FileSystem::printDirectory(bool recursive)
 }
 
 string
-FileSystem::getPath(FSBlock *block)
+FileSystem::getPath(FSBlock *block) const
 {
     string result = "";
     std::set<Block> visited;

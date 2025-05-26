@@ -1063,7 +1063,7 @@ FSBlock::setParentDirRef(Block ref)
 }
 
 FSBlock *
-FSBlock::getParentDirBlock()
+FSBlock::getParentDirBlock() const
 {
     Block nr = getParentDirRef();
     return nr ? device.blockPtr(nr) : nullptr;
@@ -1096,7 +1096,7 @@ FSBlock::setFileHeaderRef(Block ref)
 }
 
 FSBlock *
-FSBlock::getFileHeaderBlock()
+FSBlock::getFileHeaderBlock() const
 {
     Block nr = getFileHeaderRef();
     return nr ? device.fileHeaderBlockPtr(nr) : nullptr;
@@ -1134,7 +1134,7 @@ FSBlock::setNextHashRef(Block ref)
 }
 
 FSBlock *
-FSBlock::getNextHashBlock()
+FSBlock::getNextHashBlock() const
 {
     Block nr = getNextHashRef();
     return nr ? device.blockPtr(nr) : nullptr;
@@ -1172,7 +1172,7 @@ FSBlock::setNextListBlockRef(Block ref)
 }
 
 FSBlock *
-FSBlock::getNextListBlock()
+FSBlock::getNextListBlock() const
 {
     Block nr = getNextListBlockRef();
     return nr ? device.fileListBlockPtr(nr) : nullptr;
@@ -1205,7 +1205,7 @@ FSBlock::setNextBmExtBlockRef(Block ref)
 }
 
 FSBlock *
-FSBlock::getNextBmExtBlock()
+FSBlock::getNextBmExtBlock() const
 {
     Block nr = getNextBmExtBlockRef();
     return nr ? device.bitmapExtBlockPtr(nr) : nullptr;
@@ -1243,7 +1243,7 @@ FSBlock::setFirstDataBlockRef(Block ref)
 }
 
 FSBlock *
-FSBlock::getFirstDataBlock()
+FSBlock::getFirstDataBlock() const
 {
     Block nr = getFirstDataBlockRef();
     return nr ? device.dataBlockPtr(nr) : nullptr;
@@ -1293,7 +1293,7 @@ FSBlock::setNextDataBlockRef(Block ref)
 }
 
 FSBlock *
-FSBlock::getNextDataBlock()
+FSBlock::getNextDataBlock() const
 {
     Block nr = getNextDataBlockRef();
     return nr ? device.dataBlockPtr(nr) : nullptr;

@@ -24,6 +24,9 @@ class MutableFileSystem : public FileSystem {
     friend struct FSHashTable;
     friend struct FSPartition;
 
+    // Next block to be allocated in allocBlock()
+    Block tba = 0;
+    
     
     //
     // Initializing
@@ -71,8 +74,6 @@ public:
 
     // Seeks a free block and marks it as allocated
     Block allocateBlock();
-    Block allocateBlockAbove(Block nr);
-    Block allocateBlockBelow(Block nr);
 
     // Deallocates a block
     void deallocateBlock(Block nr);

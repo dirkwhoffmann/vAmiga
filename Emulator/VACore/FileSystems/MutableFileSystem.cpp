@@ -49,6 +49,9 @@ MutableFileSystem::init(FileSystemDescriptor &layout, const fs::path &path)
     // Set the current directory to '/'
     cd = rootBlock;
     
+    // Start allocating blocks at the middle of the disk
+    tba = rootBlock;
+    
     // Do some consistency checking
     for (isize i = 0; i < numBlocks(); i++) assert(blocks[i] != nullptr);
     
@@ -192,42 +195,21 @@ MutableFileSystem::requiredBlocks(isize fileSize) const
 Block
 MutableFileSystem::allocateBlock()
 {
-    if (Block nr = allocateBlockAbove(rootBlock)) return nr;
-    if (Block nr = allocateBlockBelow(rootBlock)) return nr;
+    Block i = tba;
+    
+    do {
+        
+        if (blocks[i]->type == FSBlockType::EMPTY_BLOCK) {
+            
+            tba = (i + 1) % numBlocks();
+            markAsAllocated(Block(i));
+            return (Block(i));
+        }
+        i = (i + 1) % numBlocks();
+        
+    } while (i != tba);
 
     debug(FS_DEBUG, "No more free blocks\n");
-    return 0;
-}
-
-Block
-MutableFileSystem::allocateBlockAbove(Block nr)
-{
-    assert(isBlockNumber(nr));
-    
-    for (isize i = nr + 1; i < numBlocks(); i++) {
-        
-        if (blocks[i]->type == FSBlockType::EMPTY_BLOCK) {
-            
-            markAsAllocated(Block(i));
-            return (Block(i));
-        }
-    }
-    return 0;
-}
-
-Block
-MutableFileSystem::allocateBlockBelow(Block nr)
-{
-    assert(isBlockNumber(nr));
-
-    for (i64 i = (i64)nr - 1; i >= 0; i--) {
-        
-        if (blocks[i]->type == FSBlockType::EMPTY_BLOCK) {
-            
-            markAsAllocated(Block(i));
-            return (Block(i));
-        }
-    }
     return 0;
 }
 
