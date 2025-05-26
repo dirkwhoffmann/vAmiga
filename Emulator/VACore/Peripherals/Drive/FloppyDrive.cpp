@@ -895,18 +895,20 @@ FloppyDrive::recordCylinder(Cylinder cylinder)
 bool
 FloppyDrive::pollsForDisk() const
 {
-    /* Disk polling mode is detected by analyzing the movement history that
-     * has been recorded by recordCylinder()
-     */
-    
     // Disk polling is only performed if no disk is inserted
     if (hasDisk()) return false;
 
-    /* Head polling sequences of different Kickstart versions:
-     *
-     * Kickstart 1.2 and 1.3: 0-1-0-1-0-1-...
-     * Kickstart 2.0:         0-1-2-3-2-3-...
+    /* Head polling is detected by analyzing the movement history that
+     * has been recorded by recordCylinder(). A click is considered a polling
+     * click if the cylinder sequence follows the scheme xx-yy-xx-yy-xx-yy.
      */
+    return
+    GET_BYTE(cylinderHistory, 0) == GET_BYTE(cylinderHistory, 2) &&
+    GET_BYTE(cylinderHistory, 0) == GET_BYTE(cylinderHistory, 4) &&
+    GET_BYTE(cylinderHistory, 1) == GET_BYTE(cylinderHistory, 3) &&
+    GET_BYTE(cylinderHistory, 1) == GET_BYTE(cylinderHistory, 5) ;
+    
+    /*
     static constexpr u64 signature[4] = {
 
         // Kickstart 1.2 and 1.3
@@ -924,6 +926,7 @@ FloppyDrive::pollsForDisk() const
     }
 
     return false;
+    */
 }
 
 bool
