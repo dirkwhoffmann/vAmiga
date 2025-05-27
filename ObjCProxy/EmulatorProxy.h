@@ -848,11 +848,10 @@ NSString *EventSlotName(NSInteger slot);
 - (void)analyzeBlockUsage:(u8 *)buf length:(NSInteger)len;
 - (void)analyzeBlockAllocation:(u8 *)buf length:(NSInteger)len;
 - (void)analyzeBlockConsistency:(u8 *)buf length:(NSInteger)len;
-
-//- (FSBlockType)getDisplayType:(NSInteger)column;
-//- (NSInteger)diagnoseImageSlice:(NSInteger)column;
 - (NSInteger)nextBlockOfType:(FSBlockType)type after:(NSInteger)after;
 - (NSInteger)nextCorruptedBlock:(NSInteger)after;
+
+- (void)rectifyAllocationMap;
 
 @end
 

@@ -923,7 +923,7 @@ void
 FileSystem::analyzeBlockAllocation(u8 *buffer, isize len)
 {
     // Setup priorities
-    i8 pri[5] = { 0, 1, 2, 3, 0 };
+    i8 pri[5] = { 1, 2, 3, 4, 0 };
  
     // Start with the value representing "uninitialized"
     for (isize i = 0; i < len; i++) buffer[i] = 4;
@@ -933,7 +933,7 @@ FileSystem::analyzeBlockAllocation(u8 *buffer, isize len)
         
         auto free = isFree(Block(i));
         auto empty = blocks[i]->type == FSBlockType::EMPTY_BLOCK;
-        u8 val = (empty && !free) ? 1 : (!empty && free) ? 2 : 0;
+        u8 val = (!empty && !free) ? 1 : (empty && !free) ? 2 : (!empty && free) ? 3 : 0;
         auto pos = i * (len - 1) / (max - 1);
         if (pri[buffer[pos]] < pri[val]) buffer[pos] = val;
     }
@@ -951,7 +951,7 @@ void
 FileSystem::analyzeBlockConsistency(u8 *buffer, isize len)
 {
     // Setup priorities
-    i8 pri[4] = { 0, 1, 2, 0 };
+    i8 pri[4] = { 1, 2, 3, 0 };
  
     // Start with the value representing "uninitialized"
     for (isize i = 0; i < len; i++) buffer[i] = 4;
@@ -974,98 +974,6 @@ FileSystem::analyzeBlockConsistency(u8 *buffer, isize len)
             buffer[pos] = buffer[pos - 1];
         }
     }
-}
-
-FSBlockType
-FileSystem::getDisplayType(isize column)
-{
-    static constexpr isize width = 1760;
-    
-    assert(column >= 0 && column < width);
-    
-    static FSBlockType cache[width] = { };
-
-    // Cache values when the type of the first column is requested
-    if (column == 0) {
-
-        // Start from scratch
-        for (isize i = 0; i < width; i++) cache[i] = FSBlockType::UNKNOWN_BLOCK;
-        
-        // Setup block priorities
-        i8 pri[12];
-        pri[isize(FSBlockType::UNKNOWN_BLOCK)]      = 0;
-        pri[isize(FSBlockType::EMPTY_BLOCK)]        = 1;
-        pri[isize(FSBlockType::BOOT_BLOCK)]         = 8;
-        pri[isize(FSBlockType::ROOT_BLOCK)]         = 9;
-        pri[isize(FSBlockType::BITMAP_BLOCK)]       = 7;
-        pri[isize(FSBlockType::BITMAP_EXT_BLOCK)]   = 6;
-        pri[isize(FSBlockType::USERDIR_BLOCK)]      = 5;
-        pri[isize(FSBlockType::FILEHEADER_BLOCK)]   = 4;
-        pri[isize(FSBlockType::FILELIST_BLOCK)]     = 3;
-        pri[isize(FSBlockType::DATA_BLOCK_OFS)]     = 2;
-        pri[isize(FSBlockType::DATA_BLOCK_FFS)]     = 2;
-        
-        for (isize i = 0; i < numBlocks(); i++) {
-
-            auto pos = i * (width - 1) / (numBlocks() - 1);
-            if (pri[isize(cache[pos])] < pri[isize(blocks[i]->type)]) {
-                cache[pos] = blocks[i]->type;
-            }
-        }
-        
-        // Fill gaps
-        for (isize pos = 1; pos < width; pos++) {
-            
-            if (cache[pos] == FSBlockType::UNKNOWN_BLOCK) {
-                cache[pos] = cache[pos - 1];
-            }
-        }
-    }
-    
-    return cache[column];
-}
-
-isize
-FileSystem::diagnoseImageSlice(isize column)
-{
-    static constexpr isize width = 1760;
-    
-    assert(column >= 0 && column < width);
-    
-    static i8 cache[width] = { };
-
-    // Cache values when the type of the first column is requested
-    if (column == 0) {
-
-        // Start from scratch
-        for (isize i = 0; i < width; i++) cache[i] = -1;
-
-        // Compute values
-        for (isize i = 0; i < numBlocks(); i++) {
-
-            auto pos = i * width / (numBlocks() - 1);
-            if (blocks[i]->corrupted) {
-                cache[pos] = 2;
-            } else if (blocks[i]->type == FSBlockType::UNKNOWN_BLOCK) {
-                cache[pos] = 0;
-            } else if (blocks[i]->type == FSBlockType::EMPTY_BLOCK) {
-                cache[pos] = 0;
-            } else {
-                cache[pos] = 1;
-            }
-        }
-        
-        // Fill gaps
-        for (isize pos = 1; pos < width; pos++) {
-            
-            if (cache[pos] == -1) {
-                cache[pos] = cache[pos - 1];
-            }
-        }
-    }
-    
-    assert(cache[column] >= 0 && cache[column] <= 2);
-    return cache[column];
 }
 
 isize

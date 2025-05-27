@@ -116,6 +116,9 @@ public:
     void markAsFree(Block nr) { setAllocationBit(nr, 1); }
     void setAllocationBit(Block nr, bool value);
 
+    // Rectifies the block allocation map
+    void rectifyAllocationMap();
+
 
     //
     // Managing directories and files

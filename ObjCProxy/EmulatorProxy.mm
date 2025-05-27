@@ -1639,6 +1639,11 @@ NSString *EventSlotName(NSInteger slot)
     return [self fs]->nextCorruptedBlock(after);
 }
 
+- (void)rectifyAllocationMap
+{
+    [self fs]->rectifyAllocationMap();
+}
+
 @end
 
 

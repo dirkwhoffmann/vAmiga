@@ -35,6 +35,13 @@ class VolumeInspector: DialogController {
     @IBOutlet weak var userDirBlockButton: NSButton!
     @IBOutlet weak var dataBlockButton: NSButton!
 
+    @IBOutlet weak var allocImageButton: NSButton!
+    @IBOutlet weak var allocSlider: NSSlider!
+    @IBOutlet weak var allocGreenButton: NSButton!
+    @IBOutlet weak var allocYellowButton: NSButton!
+    @IBOutlet weak var allocRedButton: NSButton!
+    @IBOutlet weak var allocRectifyButton: NSButton!
+
     @IBOutlet weak var diagnoseImageButton: NSButton!
     @IBOutlet weak var diagnoseSlider: NSSlider!
     @IBOutlet weak var diagnoseInfo: NSTextField!
@@ -45,13 +52,14 @@ class VolumeInspector: DialogController {
 
     @IBOutlet weak var previewScrollView: NSScrollView!
     @IBOutlet weak var previewTable: NSTableView!
-    // @IBOutlet weak var blockText: NSTextField!
     @IBOutlet weak var blockField: NSTextField!
     @IBOutlet weak var blockStepper: NSStepper!
     @IBOutlet weak var strictButton: NSButton!
     @IBOutlet weak var info1: NSTextField!
     @IBOutlet weak var info2: NSTextField!
             
+    var myDocument: MyDocument { return parent.mydocument! }
+
     struct Palette {
         
         static let white = NSColor.white
@@ -66,8 +74,6 @@ class VolumeInspector: DialogController {
         static let purple = NSColor(r: 0xb2, g: 0x66, b: 0xff, a: 0xff)
         static let pink = NSColor(r: 0xff, g: 0x66, b: 0xff, a: 0xff)
     }
-
-    var myDocument: MyDocument { return parent.mydocument! }
 
     // The analyzed file system
     var vol: FileSystemProxy!
@@ -110,23 +116,32 @@ class VolumeInspector: DialogController {
                 
         return createImage(data: data, colorize: { (x: UInt8) -> NSColor in
             
-            switch FSBlockType(rawValue: Int(x))! {
-            case .UNKNOWN_BLOCK: return Palette.white
-            case .EMPTY_BLOCK: return NSColor.gray
-            case .BOOT_BLOCK: return Palette.orange
-            case .ROOT_BLOCK: return Palette.red
-            case .BITMAP_BLOCK: return Palette.purple
-            case .BITMAP_EXT_BLOCK: return Palette.pink
-            case .USERDIR_BLOCK: return Palette.yellow
-            case .FILEHEADER_BLOCK: return Palette.blue
-            case .FILELIST_BLOCK: return Palette.cyan
-            case .DATA_BLOCK_OFS: return Palette.green
-            case .DATA_BLOCK_FFS: return Palette.green
+            return palette[FSBlockType(rawValue: Int(x)) ?? .UNKNOWN_BLOCK]!
+        })
+    }
+
+    var allocImage: NSImage? {
+        
+        var data = Data(count: 1760)
+                
+        data.withUnsafeMutableBytes { ptr in
+            if let baseAddress = ptr.baseAddress {
+                vol.analyzeBlockAllocation(baseAddress, length: 1760)
+            }
+        }
+        
+        return createImage(data: data, colorize: { (x: UInt8) -> NSColor in
+            
+            switch x {
+            case 0: return Palette.gray
+            case 1: return Palette.green
+            case 2: return Palette.yellow
+            case 3: return Palette.red
             default: fatalError()
             }
         })
     }
-
+    
     var diagnoseImage: NSImage? {
         
         var data = Data(count: 1760)
@@ -148,27 +163,6 @@ class VolumeInspector: DialogController {
         })
     }
  
-    var bitmapImage: NSImage? {
-        
-        var data = Data(count: 1760)
-                
-        data.withUnsafeMutableBytes { ptr in
-            if let baseAddress = ptr.baseAddress {
-                vol.analyzeBlockAllocation(baseAddress, length: 1760)
-            }
-        }
-        
-        return createImage(data: data, colorize: { (x: UInt8) -> NSColor in
-            
-            switch x {
-            case 0: return Palette.gray
-            case 1: return Palette.green
-            case 2: return Palette.red
-            default: fatalError()
-            }
-        })
-    }
-    
     func createImage(data: Data, colorize: (UInt8) -> NSColor) -> NSImage? {
         
         // Create image representation in memory
@@ -281,6 +275,7 @@ class VolumeInspector: DialogController {
         
         // Compute images
         updateLayoutImage()
+        updateAllocImage()
         updateDiagnoseImage()
         
         update()
@@ -320,7 +315,16 @@ class VolumeInspector: DialogController {
         dataBlockButton.image = NSImage(color: palette[.DATA_BLOCK_OFS]!, size: size)
         blockImageButton.image = layoutImage
     }
-        
+
+    func updateAllocImage() {
+            
+        let size = NSSize(width: 16, height: 16)
+        allocGreenButton.image = NSImage(color: Palette.green, size: size)
+        allocYellowButton.image = NSImage(color: Palette.yellow, size: size)
+        allocRedButton.image = NSImage(color: Palette.red, size: size)
+        allocImageButton.image = allocImage
+    }
+
     func updateDiagnoseImage() {
             
         let size = NSSize(width: 16, height: 16)
@@ -459,6 +463,13 @@ class VolumeInspector: DialogController {
 
         let nextBlock = vol.nextCorruptedBlock(blockNr)
         if nextBlock != -1 { setBlock(nextBlock) }
+    }
+
+    @IBAction func rectifyAction(_ sender: NSButton!) {
+        
+        vol.rectifyAllocationMap()
+        updateAllocImage()
+        update()
     }
 
     @IBAction func strictAction(_ sender: NSButton!) {

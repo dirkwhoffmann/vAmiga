@@ -219,6 +219,7 @@ public:
     FSBlock *seekFile(const string &name) const { return fileHeaderBlockPtr(seekRef(name)); }
     FSBlock *seekPath(const fs::path &path);
     
+    
     //
     // Integrity checking
     //
@@ -309,10 +310,10 @@ public:
     void analyzeBlockConsistency(u8 *buffer, isize len);
     
     // Determines how the layout image should look like in a certain column
-    [[deprecated]] FSBlockType getDisplayType(isize column);
+    // [[deprecated]] FSBlockType getDisplayType(isize column);
 
     // Determines how the diagnose image should look like in a certain column
-    [[deprecated]] isize diagnoseImageSlice(isize column);
+    // [[deprecated]] isize diagnoseImageSlice(isize column);
 
     // Searches the block list for a block of a specific type
     isize nextBlockOfType(FSBlockType type, isize after);

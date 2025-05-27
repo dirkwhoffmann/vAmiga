@@ -358,6 +358,27 @@ MutableFileSystem::setAllocationBit(Block nr, bool value)
     }
 }
 
+void
+MutableFileSystem::rectifyAllocationMap()
+{
+    for (isize i = 0, max = numBlocks(); i < max; i++) {
+        
+        auto free = isFree(Block(i));
+        auto empty = blocks[i]->type == FSBlockType::EMPTY_BLOCK;
+
+        printf("Checking %ld (empty = %d) (free = %d)\n", i, empty, free);
+
+        if (empty && !free) {
+            printf("Freeing...\n");
+            markAsFree(Block(i));
+        }
+        if (!empty && free) {
+            printf("Allocating...\n");
+            markAsAllocated(Block(i));
+        }
+    }
+}
+    
 FSBlock *
 MutableFileSystem::createDir(const string &name)
 {
@@ -570,6 +591,14 @@ MutableFileSystem::importDirectory(const fs::path &path, bool recursive)
     
     // Verify the result
     if (FS_DEBUG) verify();
+    
+    // REMOVE ASAP (CORRUPT THE BITMAP BLOCKS FOR TESTING PURPOSES)
+    /*
+    for (isize i = 0; i < 1000; i++) {
+        auto r = Block(rand() % numBlocks());
+        (i % 2) ? markAsFree(r) : markAsAllocated(r);        
+    }
+    */
 }
 
 void
