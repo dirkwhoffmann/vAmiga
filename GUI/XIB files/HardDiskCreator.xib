@@ -152,12 +152,12 @@ DQ
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QeQ-vP-kgc">
                         <rect key="frame" x="241" y="160" width="136" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="cAR-RN-WFP" id="1EC-Rg-BJc">
+                        <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="cAR-RN-WFP" id="1EC-Rg-BJc">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="message"/>
                             <menu key="menu" id="ryc-uw-Csk">
                                 <items>
-                                    <menuItem title="None" id="cAR-RN-WFP"/>
+                                    <menuItem title="None" state="on" id="cAR-RN-WFP"/>
                                     <menuItem title="OFS" tag="1" id="frQ-Ub-EQb"/>
                                     <menuItem title="FFS" tag="2" id="AWy-VV-hQT"/>
                                 </items>

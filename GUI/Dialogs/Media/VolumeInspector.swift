@@ -160,7 +160,7 @@ class VolumeInspector: DialogController {
             case 0: return Palette.gray
             case 1: return Palette.green
             case 2: return Palette.red
-            default: fatalError()
+            default: return Palette.white
             }
         })
     }
@@ -269,6 +269,8 @@ class VolumeInspector: DialogController {
         blockStepper.maxValue = .greatestFiniteMagnitude
         blockSlider.minValue = 0
         blockSlider.maxValue = Double(vol.numBlocks - 1)
+        allocSlider.minValue = 0
+        allocSlider.maxValue = Double(vol.numBlocks - 1)
         diagnoseSlider.minValue = 0
         diagnoseSlider.maxValue = Double(vol.numBlocks - 1)
 

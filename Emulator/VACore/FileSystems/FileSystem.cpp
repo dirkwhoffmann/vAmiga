@@ -926,10 +926,10 @@ void
 FileSystem::analyzeBlockAllocation(u8 *buffer, isize len)
 {
     // Setup priorities
-    i8 pri[5] = { 1, 2, 3, 4, 0 };
+    i8 pri[4] = { 0, 1, 2, 3 };
  
-    // Start with the value representing "uninitialized"
-    for (isize i = 0; i < len; i++) buffer[i] = 4;
+    // Start from scratch
+    for (isize i = 0; i < len; i++) buffer[i] = 255;
  
     // Analyze all blocks
     for (isize i = 0, max = numBlocks(); i < max; i++) {
@@ -940,13 +940,13 @@ FileSystem::analyzeBlockAllocation(u8 *buffer, isize len)
         u8 val = (!empty && !free) ? 1 : (empty && !free) ? 2 : (!empty && free) ? 3 : 0;
         auto pos = i * (len - 1) / (max - 1);
         
-        if (pri[buffer[pos]] < pri[val]) buffer[pos] = val;
+        if (buffer[pos] == 255 || pri[buffer[pos]] < pri[val]) buffer[pos] = val;
     }
     
     // Fill gaps
     for (isize pos = 1; pos < len; pos++) {
         
-        if (buffer[pos] == 4) {
+        if (buffer[pos] == 255) {
             buffer[pos] = buffer[pos - 1];
         }
     }
@@ -956,10 +956,10 @@ void
 FileSystem::analyzeBlockConsistency(u8 *buffer, isize len)
 {
     // Setup priorities
-    i8 pri[4] = { 1, 2, 3, 0 };
+    i8 pri[3] = { 0, 1, 2 };
  
-    // Start with the value representing "uninitialized"
-    for (isize i = 0; i < len; i++) buffer[i] = 4;
+    // Start from scratch
+    for (isize i = 0; i < len; i++) buffer[i] = 255;
  
     // Analyze all blocks
     for (isize i = 0, max = numBlocks(); i < max; i++) {
@@ -970,13 +970,13 @@ FileSystem::analyzeBlockConsistency(u8 *buffer, isize len)
         u8 val = empty ? 0 : corrupted ? 2 : 1;
         auto pos = i * (len - 1) / (max - 1);
         
-        if (pri[buffer[pos]] < pri[val]) buffer[pos] = val;
+        if (buffer[pos] == 255 || pri[buffer[pos]] < pri[val]) buffer[pos] = val;
     }
     
     // Fill gaps
     for (isize pos = 1; pos < len; pos++) {
         
-        if (buffer[pos] == 4) {
+        if (buffer[pos] == 255) {
             buffer[pos] = buffer[pos - 1];
         }
     }

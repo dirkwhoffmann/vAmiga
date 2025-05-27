@@ -106,16 +106,21 @@ class HardDiskCreator: DialogController {
     
     func setCapacity(mb: Int) {
         
-        bsize = 512
-        sectors = 32
-        heads = 1
-        cylinders = (mb * 1024 * 1024) / (heads * sectors * bsize)
-
-        while cylinders > 1024 {
+        if mb > 0 {
             
-            cylinders /= 2
-            heads *= 2
+            bsize = 512
+            sectors = 32
+            heads = 1
+            cylinders = (mb * 1024 * 1024) / (heads * sectors * bsize)
+            
+            while cylinders > 1024 {
+                
+                cylinders /= 2
+                heads *= 2
+            }
         }
+
+        update()
     }
     
     //
