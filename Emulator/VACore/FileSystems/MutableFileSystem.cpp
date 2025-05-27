@@ -218,7 +218,7 @@ MutableFileSystem::allocateBlock()
     
     do {
         
-        if (blocks[i]->type == FSBlockType::EMPTY_BLOCK) {
+        if (isEmpty(i)) {
             
             tba = (i + 1) % numBlocks();
             markAsAllocated(Block(i));
@@ -364,7 +364,7 @@ MutableFileSystem::rectifyAllocationMap()
     for (isize i = 0, max = numBlocks(); i < max; i++) {
         
         auto free = isFree(Block(i));
-        auto empty = blocks[i]->type == FSBlockType::EMPTY_BLOCK;
+        auto empty = isEmpty(Block(i));
 
         printf("Checking %ld (empty = %d) (free = %d)\n", i, empty, free);
 

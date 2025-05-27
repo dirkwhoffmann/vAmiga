@@ -196,12 +196,14 @@ FileSystem::_dump(Category category, std::ostream& os) const
         
         for (isize i = 0; i < numBlocks(); i++)  {
             
-            if (blocks[i]->type == FSBlockType::EMPTY_BLOCK) continue;
-            
-            msg("\nBlock %ld (%d):", i, blocks[i]->nr);
-            msg(" %s\n", FSBlockTypeEnum::key(blocks[i]->type));
-            
-            blocks[i]->dump();
+            if (!isEmpty(Block(i))) {
+                
+                auto nr = blocks[i]->nr;
+                auto type = FSBlockTypeEnum::key(blocks[i]->type);
+                
+                msg("\nBlock %ld (%d): %s", i, nr, type);
+                blocks[i]->dump();
+            }
         }
     }
 }
@@ -724,12 +726,13 @@ FileSystem::check(bool strict) const
     // Analyze the allocation table
     for (isize i = 0; i < numBlocks(); i++) {
 
-        FSBlock *block = blocks[i];
-        if (block->type == FSBlockType::EMPTY_BLOCK && !isFree(Block(i))) {
+        if (isEmpty(Block(i)) && !isFree(Block(i))) {
+            
             result.bitmapErrors++;
             debug(FS_DEBUG, "Empty block %ld is marked as allocated\n", i);
         }
-        if (block->type != FSBlockType::EMPTY_BLOCK && isFree(Block(i))) {
+        if (!isEmpty(Block(i)) && isFree(Block(i))) {
+            
             result.bitmapErrors++;
             debug(FS_DEBUG, "Non-empty block %ld is marked as free\n", i);
         }
@@ -932,9 +935,11 @@ FileSystem::analyzeBlockAllocation(u8 *buffer, isize len)
     for (isize i = 0, max = numBlocks(); i < max; i++) {
         
         auto free = isFree(Block(i));
-        auto empty = blocks[i]->type == FSBlockType::EMPTY_BLOCK;
+        auto empty = isEmpty(Block(i));
+        
         u8 val = (!empty && !free) ? 1 : (empty && !free) ? 2 : (!empty && free) ? 3 : 0;
         auto pos = i * (len - 1) / (max - 1);
+        
         if (pri[buffer[pos]] < pri[val]) buffer[pos] = val;
     }
     
@@ -959,11 +964,12 @@ FileSystem::analyzeBlockConsistency(u8 *buffer, isize len)
     // Analyze all blocks
     for (isize i = 0, max = numBlocks(); i < max; i++) {
         
-        u8 val =
-        blocks[i]->corrupted ? 2 :
-        blocks[i]->type == FSBlockType::UNKNOWN_BLOCK ? 0 :
-        blocks[i]->type == FSBlockType::EMPTY_BLOCK ? 0 : 1;
+        auto corrupted = blocks[i]->corrupted;
+        auto empty = isEmpty(Block(i));
+        
+        u8 val = empty ? 0 : corrupted ? 2 : 1;
         auto pos = i * (len - 1) / (max - 1);
+        
         if (pri[buffer[pos]] < pri[val]) buffer[pos] = val;
     }
     

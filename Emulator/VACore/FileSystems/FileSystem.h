@@ -148,6 +148,9 @@ public:
     // Returns the type of a certain block
     FSBlockType blockType(Block nr) const;
 
+    // Checks block properties
+    bool isEmpty(Block nr) const { return blockType(nr) == FSBlockType::EMPTY_BLOCK; }
+
     // Returns the usage type of a certain byte in a certain block
     FSItemType itemType(Block nr, isize pos) const;
     
