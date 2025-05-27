@@ -844,8 +844,13 @@ NSString *EventSlotName(NSInteger slot);
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
 - (NSString *)ascii:(NSInteger)block offset:(NSInteger)offset length:(NSInteger)len;
 - (void)export:(NSString *)path exception:(ExceptionWrapper *)ex;
-- (FSBlockType)getDisplayType:(NSInteger)column;
-- (NSInteger)diagnoseImageSlice:(NSInteger)column;
+
+- (void)analyzeBlockUsage:(u8 *)buf length:(NSInteger)len;
+- (void)analyzeBlockAllocation:(u8 *)buf length:(NSInteger)len;
+- (void)analyzeBlockConsistency:(u8 *)buf length:(NSInteger)len;
+
+//- (FSBlockType)getDisplayType:(NSInteger)column;
+//- (NSInteger)diagnoseImageSlice:(NSInteger)column;
 - (NSInteger)nextBlockOfType:(FSBlockType)type after:(NSInteger)after;
 - (NSInteger)nextCorruptedBlock:(NSInteger)after;
 

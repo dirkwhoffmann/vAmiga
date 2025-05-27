@@ -100,8 +100,17 @@ class VolumeInspector: DialogController {
 
     var layoutImage: NSImage? {
         
-        return createImage(colorize: { (x: Int) -> NSColor in
-            switch vol.getDisplayType(x) {
+        var data = Data(count: 1760)
+                
+        data.withUnsafeMutableBytes { ptr in
+            if let baseAddress = ptr.baseAddress {
+                vol.analyzeBlockUsage(baseAddress, length: 1760)
+            }
+        }
+                
+        return createImage(data: data, colorize: { (x: UInt8) -> NSColor in
+            
+            switch FSBlockType(rawValue: Int(x))! {
             case .UNKNOWN_BLOCK: return Palette.white
             case .EMPTY_BLOCK: return NSColor.gray
             case .BOOT_BLOCK: return Palette.orange
@@ -120,8 +129,38 @@ class VolumeInspector: DialogController {
 
     var diagnoseImage: NSImage? {
         
-        return createImage(colorize: { (x: Int) -> NSColor in
-            switch vol.diagnoseImageSlice(x) {
+        var data = Data(count: 1760)
+                
+        data.withUnsafeMutableBytes { ptr in
+            if let baseAddress = ptr.baseAddress {
+                vol.analyzeBlockConsistency(baseAddress, length: 1760)
+            }
+        }
+        
+        return createImage(data: data, colorize: { (x: UInt8) -> NSColor in
+            
+            switch x {
+            case 0: return Palette.gray
+            case 1: return Palette.green
+            case 2: return Palette.red
+            default: fatalError()
+            }
+        })
+    }
+ 
+    var bitmapImage: NSImage? {
+        
+        var data = Data(count: 1760)
+                
+        data.withUnsafeMutableBytes { ptr in
+            if let baseAddress = ptr.baseAddress {
+                vol.analyzeBlockAllocation(baseAddress, length: 1760)
+            }
+        }
+        
+        return createImage(data: data, colorize: { (x: UInt8) -> NSColor in
+            
+            switch x {
             case 0: return Palette.gray
             case 1: return Palette.green
             case 2: return Palette.red
@@ -130,10 +169,10 @@ class VolumeInspector: DialogController {
         })
     }
     
-    func createImage(colorize: (Int) -> NSColor) -> NSImage? {
+    func createImage(data: Data, colorize: (UInt8) -> NSColor) -> NSImage? {
         
         // Create image representation in memory
-        let width = 1760
+        let width = data.count
         let height = 16
         let size = CGSize(width: width, height: height)
         let cap = Int(size.width) * Int(size.height)
@@ -144,7 +183,7 @@ class VolumeInspector: DialogController {
         for x in 0..<width {
 
             // let color = colors[vol.getDisplayType(x)]!
-            let color = colorize(x)
+            let color = colorize(data[x])
             let ciColor = CIColor(color: color)!
             
             for y in 0...height-1 {
@@ -166,7 +205,7 @@ class VolumeInspector: DialogController {
         let resizedImage = image?.resizeSharp(width: CGFloat(width), height: CGFloat(height))
         return resizedImage
     }
-    
+      
     //
     // Starting up
     //

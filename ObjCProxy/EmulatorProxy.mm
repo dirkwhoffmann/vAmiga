@@ -1614,14 +1614,19 @@ NSString *EventSlotName(NSInteger slot)
     catch (CoreError &error) { [ex save:error]; }
 }
 
-- (FSBlockType)getDisplayType:(NSInteger)column
+- (void)analyzeBlockUsage:(u8 *)buf length:(NSInteger)len
 {
-    return [self fs]->getDisplayType(column);
+    [self fs]->analyzeBlockUsage((u8 *)buf, len);
 }
 
-- (NSInteger)diagnoseImageSlice:(NSInteger)column
+- (void)analyzeBlockAllocation:(u8 *)buf length:(NSInteger)len
 {
-    return [self fs]->diagnoseImageSlice(column);
+    [self fs]->analyzeBlockAllocation((u8 *)buf, len);
+}
+
+- (void)analyzeBlockConsistency:(u8 *)buf length:(NSInteger)len
+{
+    [self fs]->analyzeBlockConsistency((u8 *)buf, len);
 }
 
 - (NSInteger)nextBlockOfType:(FSBlockType)type after:(NSInteger)after

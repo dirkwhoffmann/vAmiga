@@ -165,13 +165,15 @@ public:
     FSBlock *dataBlockPtr(Block nr) const;
     FSBlock *hashableBlockPtr(Block nr) const;
     
-    
     // Reads a single byte from a block
     u8 readByte(Block nr, isize offset) const;
 
     // Returns a portion of the block as an ASCII dump
     string ascii(Block nr, isize offset, isize len) const;
     
+    // Predicts the type of a block by analyzing its number and data
+    FSBlockType predictBlockType(Block nr, const u8 *buffer) const;
+
     
     //
     // Querying the block allocation bitmap
@@ -297,14 +299,20 @@ protected:
 
 public:
 
-    // Predicts the type of a block by analyzing its number and data
-    FSBlockType predictBlockType(Block nr, const u8 *buffer) const;
+    // Returns a block summary for creating the block usage image
+    void analyzeBlockUsage(u8 *buffer, isize len);
 
+    // Returns a usage summary for creating the block allocation image
+    void analyzeBlockAllocation(u8 *buffer, isize len);
+
+    // Returns a block summary for creating the diagnose image
+    void analyzeBlockConsistency(u8 *buffer, isize len);
+    
     // Determines how the layout image should look like in a certain column
-    FSBlockType getDisplayType(isize column);
+    [[deprecated]] FSBlockType getDisplayType(isize column);
 
     // Determines how the diagnose image should look like in a certain column
-    isize diagnoseImageSlice(isize column);
+    [[deprecated]] isize diagnoseImageSlice(isize column);
 
     // Searches the block list for a block of a specific type
     isize nextBlockOfType(FSBlockType type, isize after);

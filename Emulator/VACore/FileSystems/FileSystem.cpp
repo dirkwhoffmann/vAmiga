@@ -792,7 +792,7 @@ FileSystem::checkBlockType(Block nr, FSBlockType type, FSBlockType altType) cons
             case FSBlockType::FILELIST_BLOCK:   return Fault::FS_PTR_TO_FILELIST_BLOCK;
             case FSBlockType::DATA_BLOCK_OFS:   return Fault::FS_PTR_TO_DATA_BLOCK;
             case FSBlockType::DATA_BLOCK_FFS:   return Fault::FS_PTR_TO_DATA_BLOCK;
-            default:                  return Fault::FS_PTR_TO_UNKNOWN_BLOCK;
+            default:                            return Fault::FS_PTR_TO_UNKNOWN_BLOCK;
         }
     }
 
@@ -880,6 +880,100 @@ FileSystem::predictBlockType(Block nr, const u8 *buffer) const
     }
     
     return FSBlockType::EMPTY_BLOCK;
+}
+
+void
+FileSystem::analyzeBlockUsage(u8 *buffer, isize len)
+{
+    // Setup priorities
+    i8 pri[12];
+    pri[isize(FSBlockType::UNKNOWN_BLOCK)]      = 0;
+    pri[isize(FSBlockType::EMPTY_BLOCK)]        = 1;
+    pri[isize(FSBlockType::BOOT_BLOCK)]         = 8;
+    pri[isize(FSBlockType::ROOT_BLOCK)]         = 9;
+    pri[isize(FSBlockType::BITMAP_BLOCK)]       = 7;
+    pri[isize(FSBlockType::BITMAP_EXT_BLOCK)]   = 6;
+    pri[isize(FSBlockType::USERDIR_BLOCK)]      = 5;
+    pri[isize(FSBlockType::FILEHEADER_BLOCK)]   = 4;
+    pri[isize(FSBlockType::FILELIST_BLOCK)]     = 3;
+    pri[isize(FSBlockType::DATA_BLOCK_OFS)]     = 2;
+    pri[isize(FSBlockType::DATA_BLOCK_FFS)]     = 2;
+    
+    // Start from scratch
+    for (isize i = 0; i < len; i++) buffer[i] = 0;
+ 
+    // Analyze all blocks
+    for (isize i = 0, max = numBlocks(); i < max; i++) {
+
+        auto val = u8(blocks[i]->type);
+        auto pos = i * (len - 1) / (max - 1);
+        if (pri[buffer[pos]] < pri[val]) buffer[pos] = val;
+    }
+    
+    // Fill gaps
+    for (isize pos = 1; pos < len; pos++) {
+        
+        if (buffer[pos] == u8(FSBlockType::UNKNOWN_BLOCK)) {
+            buffer[pos] = buffer[pos - 1];
+        }
+    }
+}
+
+void
+FileSystem::analyzeBlockAllocation(u8 *buffer, isize len)
+{
+    // Setup priorities
+    i8 pri[5] = { 0, 1, 2, 3, 0 };
+ 
+    // Start with the value representing "uninitialized"
+    for (isize i = 0; i < len; i++) buffer[i] = 4;
+ 
+    // Analyze all blocks
+    for (isize i = 0, max = numBlocks(); i < max; i++) {
+        
+        auto free = isFree(Block(i));
+        auto empty = blocks[i]->type == FSBlockType::EMPTY_BLOCK;
+        u8 val = (empty && !free) ? 1 : (!empty && free) ? 2 : 0;
+        auto pos = i * (len - 1) / (max - 1);
+        if (pri[buffer[pos]] < pri[val]) buffer[pos] = val;
+    }
+    
+    // Fill gaps
+    for (isize pos = 1; pos < len; pos++) {
+        
+        if (buffer[pos] == 4) {
+            buffer[pos] = buffer[pos - 1];
+        }
+    }
+}
+
+void
+FileSystem::analyzeBlockConsistency(u8 *buffer, isize len)
+{
+    // Setup priorities
+    i8 pri[4] = { 0, 1, 2, 0 };
+ 
+    // Start with the value representing "uninitialized"
+    for (isize i = 0; i < len; i++) buffer[i] = 4;
+ 
+    // Analyze all blocks
+    for (isize i = 0, max = numBlocks(); i < max; i++) {
+        
+        u8 val =
+        blocks[i]->corrupted ? 2 :
+        blocks[i]->type == FSBlockType::UNKNOWN_BLOCK ? 0 :
+        blocks[i]->type == FSBlockType::EMPTY_BLOCK ? 0 : 1;
+        auto pos = i * (len - 1) / (max - 1);
+        if (pri[buffer[pos]] < pri[val]) buffer[pos] = val;
+    }
+    
+    // Fill gaps
+    for (isize pos = 1; pos < len; pos++) {
+        
+        if (buffer[pos] == 4) {
+            buffer[pos] = buffer[pos - 1];
+        }
+    }
 }
 
 FSBlockType
