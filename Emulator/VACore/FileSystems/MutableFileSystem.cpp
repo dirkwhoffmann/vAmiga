@@ -591,14 +591,6 @@ MutableFileSystem::importDirectory(const fs::path &path, bool recursive)
     
     // Verify the result
     if (FS_DEBUG) verify();
-    
-    // REMOVE ASAP (CORRUPT THE BITMAP BLOCKS FOR TESTING PURPOSES)
-    /*
-    for (isize i = 0; i < 1000; i++) {
-        auto r = Block(rand() % numBlocks());
-        (i % 2) ? markAsFree(r) : markAsAllocated(r);        
-    }
-    */
 }
 
 void

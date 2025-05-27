@@ -37,9 +37,11 @@ class VolumeInspector: DialogController {
 
     @IBOutlet weak var allocImageButton: NSButton!
     @IBOutlet weak var allocSlider: NSSlider!
+    @IBOutlet weak var allocInfo: NSTextField!
     @IBOutlet weak var allocGreenButton: NSButton!
     @IBOutlet weak var allocYellowButton: NSButton!
     @IBOutlet weak var allocRedButton: NSButton!
+    @IBOutlet weak var allocRectifyInfo: NSTextField!
     @IBOutlet weak var allocRectifyButton: NSButton!
 
     @IBOutlet weak var diagnoseImageButton: NSButton!
@@ -289,6 +291,7 @@ class VolumeInspector: DialogController {
           
         updateVolumeInfo()
         updateVirusInfo()
+        updateAllocInfo()
         updateDiagnoseInfo()
         
         // Update elements
@@ -361,6 +364,21 @@ class VolumeInspector: DialogController {
             virusInfo.textColor = .secondaryLabelColor
             bootblockInfo.textColor = .secondaryLabelColor
         }
+    }
+    
+    func updateAllocInfo() {
+     
+        let total = errorReport?.bitmapErrors ?? 0
+        
+        if total > 0 {
+            
+            let blocks = total == 1 ? "block" : "blocks"
+            diagnoseInfo.stringValue = "\(total) suspicious \(blocks) found"
+        }
+
+        allocInfo.isHidden = total == 0
+        allocRectifyInfo.isHidden = total == 0
+        allocRectifyButton.isHidden = total == 0
     }
     
     func updateDiagnoseInfo() {
