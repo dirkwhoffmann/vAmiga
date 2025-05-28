@@ -1528,8 +1528,35 @@ FSBlock::incNumDataBlockRefs()
     }
 }
 
-bool
+void
 FSBlock::addDataBlockRef(u32 first, u32 ref)
+{
+    assert(getNumDataBlockRefs() < getMaxDataBlockRefs());
+    
+    switch (type) {
+            
+        case FSBlockType::FILEHEADER_BLOCK:
+            
+            if (getNumDataBlockRefs() == 0) setFirstDataBlockRef(first);
+            setDataBlockRef(getNumDataBlockRefs(), ref);
+            incNumDataBlockRefs();
+            break;
+            
+        case FSBlockType::FILELIST_BLOCK:
+            
+            setFirstDataBlockRef(first);
+            setDataBlockRef(getNumDataBlockRefs(), ref);
+            incNumDataBlockRefs();
+            break;
+            
+        default:
+            
+            break;
+    }
+}
+
+bool
+FSBlock::addDataBlockRef(u32 first, u32 ref, Block *addedTo)
 {
     switch (type) {
             
@@ -1543,6 +1570,7 @@ FSBlock::addDataBlockRef(u32 first, u32 ref)
                 if (getNumDataBlockRefs() == 0) setFirstDataBlockRef(first);
                 setDataBlockRef(getNumDataBlockRefs(), ref);
                 incNumDataBlockRefs();
+                *addedTo = nr;
                 return true;
             }
             
@@ -1554,7 +1582,7 @@ FSBlock::addDataBlockRef(u32 first, u32 ref)
                 // Break the loop if we visit a block twice
                 if (visited.find(item->nr) != visited.end()) return false;
                 
-                if (item->addDataBlockRef(first, ref)) return true;
+                if (item->addDataBlockRef(first, ref, addedTo)) return true;
                 item = item->getNextListBlock();
             }
             
@@ -1569,6 +1597,7 @@ FSBlock::addDataBlockRef(u32 first, u32 ref)
                 setFirstDataBlockRef(first);
                 setDataBlockRef(getNumDataBlockRefs(), ref);
                 incNumDataBlockRefs();
+                *addedTo = nr;
                 return true;
             }
             

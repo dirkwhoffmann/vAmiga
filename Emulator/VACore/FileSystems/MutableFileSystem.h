@@ -73,8 +73,7 @@ public:
     isize requiredBlocks(isize fileSize) const;
 
     // Returns true if at least 'count' free blocks are available
-    // DEPRECATED
-    bool allocatable(isize count) const;
+    [[deprecated]] bool allocatable(isize count) const;
     
     // Seeks a free block and marks it as allocated
     Block allocateBlock();
@@ -88,8 +87,9 @@ public:
     // Adds a new block of a certain kind
     Block addFileListBlock(Block head, Block prev); // DEPRECATED
     void addFileListBlock(Block at, Block head, Block prev);
-    Block addDataBlock(isize count, Block head, Block prev);
-    
+    Block addDataBlock(isize id, Block head, Block prev); // DEPRECATED
+    void addDataBlock(Block at, isize id, Block head, Block prev);
+
     // Creates a new block of a certain kind
     FSBlock *newUserDirBlock(const string &name);
     FSBlock *newFileHeaderBlock(const string &name);
