@@ -24,8 +24,8 @@ class MutableFileSystem : public FileSystem {
     friend struct FSHashTable;
     friend struct FSPartition;
 
-    // Next block to be allocated in allocBlock()
-    Block tba = 0;
+    // Allocation pointer (used in allocBlock() to select the next block)
+    Block ap = 0;
     
     
     //
@@ -73,16 +73,21 @@ public:
     isize requiredBlocks(isize fileSize) const;
 
     // Returns true if at least 'count' free blocks are available
+    // DEPRECATED
     bool allocatable(isize count) const;
     
     // Seeks a free block and marks it as allocated
     Block allocateBlock();
 
+    // Allocates multiple blocks
+    void allocate(isize count, std::vector<Block> &result);
+    
     // Deallocates a block
     void deallocateBlock(Block nr);
 
     // Adds a new block of a certain kind
-    Block addFileListBlock(Block head, Block prev);
+    Block addFileListBlock(Block head, Block prev); // DEPRECATED
+    void addFileListBlock(Block at, Block head, Block prev);
     Block addDataBlock(isize count, Block head, Block prev);
     
     // Creates a new block of a certain kind
@@ -143,6 +148,8 @@ private:
     // Adds data bytes to a block
     isize addData(FSBlock &block, const u8 *buffer, isize size);
     
+    // Allocates all blocks needed for a file
+    void allocateFileBlocks(isize bytes, std::vector<Block> &listBlocks, std::vector<Block> &dataBlocks);
     
     //
     // Importing and exporting the volume
