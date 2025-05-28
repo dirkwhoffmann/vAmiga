@@ -29,7 +29,7 @@ struct FSBlock : CoreObject {
     FSBlockType type = FSBlockType::UNKNOWN_BLOCK;
 
     // The sector number of this block
-    Block nr;
+    Block nr = 0;
     
     // Outcome of the latest integrity check (0 = OK, n = n-th corrupted block)
     isize corrupted = 0;

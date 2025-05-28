@@ -71,6 +71,7 @@ class VolumeInspector: DialogController {
         static let orange = NSColor(r: 0xff, g: 0xb2, b: 0x66, a: 0xff)
         static let yellow = NSColor(r: 0xff, g: 0xff, b: 0x66, a: 0xff)
         static let green = NSColor(r: 0x66, g: 0xff, b: 0x66, a: 0xff)
+        static let dgreen = NSColor(r: 0x00, g: 0x66, b: 0x00, a: 0xff)
         static let cyan = NSColor(r: 0x66, g: 0xff, b: 0xff, a: 0xff)
         static let blue = NSColor(r: 0x66, g: 0xb2, b: 0xff, a: 0xff)
         static let purple = NSColor(r: 0xb2, g: 0x66, b: 0xff, a: 0xff)
@@ -101,38 +102,38 @@ class VolumeInspector: DialogController {
         .BITMAP_EXT_BLOCK: Palette.pink,
         .USERDIR_BLOCK: Palette.yellow,
         .FILEHEADER_BLOCK: Palette.blue,
-        .FILELIST_BLOCK: Palette.cyan,
+        .FILELIST_BLOCK: Palette.dgreen, //  Palette.cyan,
         .DATA_BLOCK_OFS: Palette.green,
         .DATA_BLOCK_FFS: Palette.green
     ]
 
-    var layoutImage: NSImage? {
+    func layoutImage(size: NSSize) -> NSImage? {
         
-        var data = Data(count: 1760)
+        var data = Data(count: Int(size.width))
                 
         data.withUnsafeMutableBytes { ptr in
             if let baseAddress = ptr.baseAddress {
-                vol.analyzeBlockUsage(baseAddress, length: 1760)
+                vol.analyzeBlockUsage(baseAddress, length: Int(size.width))
             }
         }
                 
-        return createImage(data: data, colorize: { (x: UInt8) -> NSColor in
+        return createImage(data: data, size: size, colorize: { (x: UInt8) -> NSColor in
             
             return palette[FSBlockType(rawValue: Int(x)) ?? .UNKNOWN_BLOCK]!
         })
     }
 
-    var allocImage: NSImage? {
+    func allocImage(size: NSSize) -> NSImage? {
         
-        var data = Data(count: 1760)
+        var data = Data(count: Int(size.width))
                 
         data.withUnsafeMutableBytes { ptr in
             if let baseAddress = ptr.baseAddress {
-                vol.analyzeBlockAllocation(baseAddress, length: 1760)
+                vol.analyzeBlockAllocation(baseAddress, length: Int(size.width))
             }
         }
         
-        return createImage(data: data, colorize: { (x: UInt8) -> NSColor in
+        return createImage(data: data, size: size, colorize: { (x: UInt8) -> NSColor in
             
             switch x {
             case 0: return Palette.gray
@@ -144,17 +145,17 @@ class VolumeInspector: DialogController {
         })
     }
     
-    var diagnoseImage: NSImage? {
+    func diagnoseImage(size: NSSize) -> NSImage? {
         
-        var data = Data(count: 1760)
+        var data = Data(count: Int(size.width))
                 
         data.withUnsafeMutableBytes { ptr in
             if let baseAddress = ptr.baseAddress {
-                vol.analyzeBlockConsistency(baseAddress, length: 1760)
+                vol.analyzeBlockConsistency(baseAddress, length: Int(size.width))
             }
         }
         
-        return createImage(data: data, colorize: { (x: UInt8) -> NSColor in
+        return createImage(data: data, size: size, colorize: { (x: UInt8) -> NSColor in
             
             switch x {
             case 0: return Palette.gray
@@ -165,13 +166,14 @@ class VolumeInspector: DialogController {
         })
     }
  
-    func createImage(data: Data, colorize: (UInt8) -> NSColor) -> NSImage? {
+    func createImage(data: Data, size: NSSize, colorize: (UInt8) -> NSColor) -> NSImage? {
+        
+        precondition(data.count == Int(size.width))
         
         // Create image representation in memory
-        let width = data.count
-        let height = 16
-        let size = CGSize(width: width, height: height)
-        let cap = Int(size.width) * Int(size.height)
+        let width = Int(size.width)
+        let height = Int(size.height)
+        let cap = width * height
         let mask = calloc(cap, MemoryLayout<UInt32>.size)!
         let ptr = mask.bindMemory(to: UInt32.self, capacity: cap)
 
@@ -318,7 +320,7 @@ class VolumeInspector: DialogController {
         fileHeaderBlockButton.image = NSImage(color: palette[.FILEHEADER_BLOCK]!, size: size)
         userDirBlockButton.image = NSImage(color: palette[.USERDIR_BLOCK]!, size: size)
         dataBlockButton.image = NSImage(color: palette[.DATA_BLOCK_OFS]!, size: size)
-        blockImageButton.image = layoutImage
+        blockImageButton.image = layoutImage(size: blockImageButton.bounds.size)
     }
 
     func updateAllocImage() {
@@ -327,7 +329,7 @@ class VolumeInspector: DialogController {
         allocGreenButton.image = NSImage(color: Palette.green, size: size)
         allocYellowButton.image = NSImage(color: Palette.yellow, size: size)
         allocRedButton.image = NSImage(color: Palette.red, size: size)
-        allocImageButton.image = allocImage
+        allocImageButton.image = allocImage(size: allocImageButton.bounds.size)
     }
 
     func updateDiagnoseImage() {
@@ -335,7 +337,7 @@ class VolumeInspector: DialogController {
         let size = NSSize(width: 16, height: 16)
         diagnosePassButton.image = NSImage(color: Palette.green, size: size)
         diagnoseFailButton.image = NSImage(color: Palette.red, size: size)
-        diagnoseImageButton.image = diagnoseImage
+        diagnoseImageButton.image = allocImage(size: diagnoseImageButton.bounds.size)
     }
     
     func updateVolumeInfo() {

@@ -187,7 +187,6 @@ MutableFileSystem::requiredBlocks(isize fileSize) const
     debug(FS_DEBUG, "Required file header blocks : %d\n",  1);
     debug(FS_DEBUG, "       Required data blocks : %ld\n", numDataBlocks);
     debug(FS_DEBUG, "  Required file list blocks : %ld\n", numFileListBlocks);
-    debug(FS_DEBUG, "                Free blocks : %ld\n", freeBlocks());
     
     return 1 + numDataBlocks + numFileListBlocks;
 }
@@ -212,7 +211,7 @@ MutableFileSystem::allocatable(isize count) const
 }
 
 Block
-MutableFileSystem::allocateBlock()
+MutableFileSystem::allocate()
 {
     Block i = ap;
     
@@ -233,7 +232,7 @@ void
 MutableFileSystem::allocate(isize count, std::vector<Block> &result)
 {
     for (isize i = 0; i < count; i++) {
-        result.push_back(allocateBlock());
+        result.push_back(allocate());
     }
 }
 
@@ -248,22 +247,6 @@ MutableFileSystem::deallocateBlock(Block nr)
     markAsFree(nr);
 }
 
-Block
-MutableFileSystem::addFileListBlock(Block head, Block prev)
-{
-    FSBlock *prevBlock = blockPtr(prev);
-    if (!prevBlock) return 0;
-    
-    Block nr = allocateBlock();
-    if (!nr) return 0;
-    
-    blocks[nr] = new FSBlock(*this, nr, FSBlockType::FILELIST_BLOCK);
-    blocks[nr]->setFileHeaderRef(head);
-    prevBlock->setNextListBlockRef(nr);
-    
-    return nr;
-}
-
 void
 MutableFileSystem::addFileListBlock(Block at, Block head, Block prev)
 {
@@ -276,30 +259,6 @@ MutableFileSystem::addFileListBlock(Block at, Block head, Block prev)
         blocks[at]->set32(4, blocks[at]->nr);
         prevBlock->setNextListBlockRef(at);
     }
-}
-
-Block
-MutableFileSystem::addDataBlock(isize id, Block head, Block prev)
-{
-    FSBlock *prevBlock = blockPtr(prev);
-    if (!prevBlock) return 0;
-
-    Block nr = allocateBlock();
-    if (!nr) return 0;
-
-    FSBlock *newBlock;
-    if (isOFS()) {
-        newBlock = new FSBlock(*this, nr, FSBlockType::DATA_BLOCK_OFS); // TODO: MEMORY LEAK
-    } else {
-        newBlock = new FSBlock(*this, nr, FSBlockType::DATA_BLOCK_FFS); // TODO: MEMORY LEAK
-    }
-    
-    blocks[nr] = newBlock;
-    newBlock->setDataBlockNr((Block)id);
-    newBlock->setFileHeaderRef(head);
-    prevBlock->setNextDataBlockRef(nr);
-    
-    return nr;
 }
 
 void
@@ -326,7 +285,7 @@ MutableFileSystem::newUserDirBlock(const string &name)
 {
     FSBlock *block = nullptr;
     
-    if (Block nr = allocateBlock()) {
+    if (Block nr = allocate()) {
 
         block = new FSBlock(*this, nr, FSBlockType::USERDIR_BLOCK);
         block->setName(FSName(name));
@@ -341,7 +300,7 @@ MutableFileSystem::newFileHeaderBlock(const string &name)
 {
     FSBlock *block = nullptr;
     
-    if (Block nr = allocateBlock()) {
+    if (Block nr = allocate()) {
 
         block = new FSBlock(*this, nr, FSBlockType::FILEHEADER_BLOCK);
         block->setName(FSName(name));
@@ -404,14 +363,10 @@ MutableFileSystem::rectifyAllocationMap()
         auto free = isFree(Block(i));
         auto empty = isEmpty(Block(i));
 
-        printf("Checking %ld (empty = %d) (free = %d)\n", i, empty, free);
-
         if (empty && !free) {
-            printf("Freeing...\n");
             markAsFree(Block(i));
         }
         if (!empty && free) {
-            printf("Allocating...\n");
             markAsAllocated(Block(i));
         }
     }
@@ -422,12 +377,15 @@ MutableFileSystem::createDir(const string &name)
 {
     FSBlock *cdb = currentDirBlock();
     FSBlock *block = newUserDirBlock(name);
-    if (block == nullptr) return nullptr;
+
+    if (block) {
+        
+        block->setParentDirRef(cdb->nr);
+        addHashRef(block->nr);
+        return block;
+    }
     
-    block->setParentDirRef(cdb->nr);
-    addHashRef(block->nr);
-    
-    return block;
+    throw CoreError(Fault::FS_OUT_OF_SPACE);
 }
 
 FSBlock *

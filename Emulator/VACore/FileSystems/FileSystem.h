@@ -304,19 +304,19 @@ protected:
 public:
 
     // Returns a block summary for creating the block usage image
-    void analyzeBlockUsage(u8 *buffer, isize len);
+    void analyzeBlockUsage(u8 *buffer, isize len) const;
 
     // Returns a usage summary for creating the block allocation image
-    void analyzeBlockAllocation(u8 *buffer, isize len);
+    void analyzeBlockAllocation(u8 *buffer, isize len) const;
 
     // Returns a block summary for creating the diagnose image
-    void analyzeBlockConsistency(u8 *buffer, isize len);
+    void analyzeBlockConsistency(u8 *buffer, isize len) const;
     
     // Searches the block list for a block of a specific type
-    isize nextBlockOfType(FSBlockType type, isize after);
+    isize nextBlockOfType(FSBlockType type, isize after) const;
 
     // Searches the block list for a corrupted block
-    isize nextCorruptedBlock(isize after);
+    isize nextCorruptedBlock(isize after) const;
 };
 
 }

@@ -24,7 +24,7 @@ class MutableFileSystem : public FileSystem {
     friend struct FSHashTable;
     friend struct FSPartition;
 
-    // Allocation pointer (used in allocBlock() to select the next block)
+    // Allocation pointer (used by the allocator to select the next block)
     Block ap = 0;
     
     
@@ -76,7 +76,7 @@ public:
     bool allocatable(isize count) const;
     
     // Seeks a free block and marks it as allocated
-    Block allocateBlock();
+    Block allocate();
 
     // Allocates multiple blocks
     void allocate(isize count, std::vector<Block> &result);
@@ -84,19 +84,19 @@ public:
     // Deallocates a block
     void deallocateBlock(Block nr);
 
+    // Updates the checksums in all blocks
+    void updateChecksums();
+
+private:
+    
     // Adds a new block of a certain kind
-    [[deprecated]] Block addFileListBlock(Block head, Block prev); // DEPRECATED
     void addFileListBlock(Block at, Block head, Block prev);
-    [[deprecated]] Block addDataBlock(isize id, Block head, Block prev); // DEPRECATED
     void addDataBlock(Block at, isize id, Block head, Block prev);
 
     // Creates a new block of a certain kind
     FSBlock *newUserDirBlock(const string &name);
     FSBlock *newFileHeaderBlock(const string &name);
-    
-    // Updates the checksums in all blocks
-    void updateChecksums();
-    
+        
     
     //
     // Modifying boot blocks

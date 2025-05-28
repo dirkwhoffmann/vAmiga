@@ -886,7 +886,7 @@ FileSystem::predictBlockType(Block nr, const u8 *buffer) const
 }
 
 void
-FileSystem::analyzeBlockUsage(u8 *buffer, isize len)
+FileSystem::analyzeBlockUsage(u8 *buffer, isize len) const
 {
     // Setup priorities
     i8 pri[12];
@@ -897,8 +897,8 @@ FileSystem::analyzeBlockUsage(u8 *buffer, isize len)
     pri[isize(FSBlockType::BITMAP_BLOCK)]       = 7;
     pri[isize(FSBlockType::BITMAP_EXT_BLOCK)]   = 6;
     pri[isize(FSBlockType::USERDIR_BLOCK)]      = 5;
-    pri[isize(FSBlockType::FILEHEADER_BLOCK)]   = 4;
-    pri[isize(FSBlockType::FILELIST_BLOCK)]     = 3;
+    pri[isize(FSBlockType::FILEHEADER_BLOCK)]   = 3;
+    pri[isize(FSBlockType::FILELIST_BLOCK)]     = 2;
     pri[isize(FSBlockType::DATA_BLOCK_OFS)]     = 2;
     pri[isize(FSBlockType::DATA_BLOCK_FFS)]     = 2;
     
@@ -906,11 +906,12 @@ FileSystem::analyzeBlockUsage(u8 *buffer, isize len)
     for (isize i = 0; i < len; i++) buffer[i] = 0;
  
     // Analyze all blocks
-    for (isize i = 0, max = numBlocks(); i < max; i++) {
+    for (isize i = 1, max = numBlocks(); i < max; i++) {
 
         auto val = u8(blocks[i]->type);
         auto pos = i * (len - 1) / (max - 1);
         if (pri[buffer[pos]] < pri[val]) buffer[pos] = val;
+        if (pri[buffer[pos]] == pri[val] && pos > 0 && buffer[pos-1] != val) buffer[pos] = val;
     }
     
     // Fill gaps
@@ -923,7 +924,7 @@ FileSystem::analyzeBlockUsage(u8 *buffer, isize len)
 }
 
 void
-FileSystem::analyzeBlockAllocation(u8 *buffer, isize len)
+FileSystem::analyzeBlockAllocation(u8 *buffer, isize len) const
 {
     // Setup priorities
     i8 pri[4] = { 0, 1, 2, 3 };
@@ -953,7 +954,7 @@ FileSystem::analyzeBlockAllocation(u8 *buffer, isize len)
 }
 
 void
-FileSystem::analyzeBlockConsistency(u8 *buffer, isize len)
+FileSystem::analyzeBlockConsistency(u8 *buffer, isize len) const
 {
     // Setup priorities
     i8 pri[3] = { 0, 1, 2 };
@@ -983,7 +984,7 @@ FileSystem::analyzeBlockConsistency(u8 *buffer, isize len)
 }
 
 isize
-FileSystem::nextBlockOfType(FSBlockType type, isize after)
+FileSystem::nextBlockOfType(FSBlockType type, isize after) const
 {
     assert(isBlockNumber(after));
 
@@ -999,7 +1000,7 @@ FileSystem::nextBlockOfType(FSBlockType type, isize after)
 }
 
 isize
-FileSystem::nextCorruptedBlock(isize after)
+FileSystem::nextCorruptedBlock(isize after) const
 {
     assert(isBlockNumber(after));
     
