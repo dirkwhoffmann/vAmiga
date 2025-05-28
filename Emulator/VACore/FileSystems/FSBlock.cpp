@@ -1537,7 +1537,7 @@ FSBlock::addDataBlockRef(u32 first, u32 ref)
             
         case FSBlockType::FILEHEADER_BLOCK:
             
-            if (getNumDataBlockRefs() == 0) setFirstDataBlockRef(first);
+            setFirstDataBlockRef(first);
             setDataBlockRef(getNumDataBlockRefs(), ref);
             incNumDataBlockRefs();
             break;

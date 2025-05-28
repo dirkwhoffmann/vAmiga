@@ -273,6 +273,7 @@ MutableFileSystem::addFileListBlock(Block at, Block head, Block prev)
         
         blocks[at] = new FSBlock(*this, at, FSBlockType::FILELIST_BLOCK); // TODO: MEMORY LEAK
         blocks[at]->setFileHeaderRef(head);
+        blocks[at]->set32(4, blocks[at]->nr);
         prevBlock->setNextListBlockRef(at);
     }
 }
@@ -434,28 +435,61 @@ MutableFileSystem::createFile(const string &name)
 {
     FSBlock *cdb = currentDirBlock();
     FSBlock *block = newFileHeaderBlock(name);
-    if (block == nullptr) return nullptr;
     
-    block->setParentDirRef(cdb->nr);
-    addHashRef(block->nr);
-
-    return block;
+    if (block) {
+        
+        block->setParentDirRef(cdb->nr);
+        addHashRef(block->nr);
+        block->set32(4, block->nr);
+        return block;
+    }
+    
+    throw CoreError(Fault::FS_OUT_OF_SPACE);
 }
 
 FSBlock *
 MutableFileSystem::createFile(const string &name, const u8 *buf, isize size)
 {
     assert(buf);
-
-    if (FSBlock *block = createFile(name); block) {
         
-        assert(block->type == FSBlockType::FILEHEADER_BLOCK);
-        addData(*block, buf, size);
-        
-        return block;
-    }
+    // Compute the number of data block references held in a file header or list block
+    const usize numRefs = ((bsize / 4) - 56);
     
-    throw CoreError(Fault::FS_OUT_OF_SPACE);
+    // Create a file header block
+    FSBlock *fhb = createFile(name);
+ 
+    // Set file size
+    fhb->setFileSize(u32(size));
+
+    // Allocate blocks
+    std::vector<Block> listBlocks;
+    std::vector<Block> dataBlocks;
+    allocateFileBlocks(size, listBlocks, dataBlocks);
+    
+    for (usize i = 0; i < listBlocks.size(); i++) {
+
+        // Add a list block
+        addFileListBlock(listBlocks[i], fhb->nr, i == 0 ? fhb->nr : listBlocks[i-1]);
+    }
+ 
+    for (usize i = 0; i < dataBlocks.size(); i++) {
+        
+        // Add a data block
+        addDataBlock(dataBlocks[i], i + 1, fhb->nr, i == 0 ? fhb->nr : dataBlocks[i-1]);
+
+        // Determine the list block managing this data block
+        FSBlock *lb = blockPtr((i < numRefs) ? fhb->nr : listBlocks[i / numRefs - 1]);
+        
+        // Link the data block
+        lb->addDataBlockRef(dataBlocks[0], dataBlocks[i]);
+                
+        // Add data bytes
+        isize written = addData(dataBlocks[i], buf, size);
+        buf += written;
+        size -= written;
+    }
+
+    return fhb;
 }
 
 FSBlock *
@@ -492,123 +526,37 @@ MutableFileSystem::addHashRef(FSBlock *newBlock)
 }
 
 isize
+MutableFileSystem::addData(Block nr, const u8 *buffer, isize size)
+{
+    FSBlock *block = blockPtr(nr);
+    return block ? addData(*block, buffer, size) : 0;
+}
+
+isize
 MutableFileSystem::addData(FSBlock &block, const u8 *buffer, isize size)
 {
-    auto nr = block.nr;
+    isize count = 0;
     
-    isize refsPerBlock = (bsize / 4) - 56;
-
     switch (block.type) {
             
-        case FSBlockType::FILEHEADER_BLOCK:
-        {
-            assert(block.getFileSize() == 0);
-
-            // Allocate blocks
-            std::vector<Block> listBlocks;
-            std::vector<Block> dataBlocks;
-            allocateFileBlocks(size, listBlocks, dataBlocks);
-            
-            // Compute the required number of blocks
-            isize numDataBlocks = requiredDataBlocks(size);
-            isize numListBlocks = requiredFileListBlocks(size);
-            
-            debug(FS_DEBUG, "Required data blocks : %ld\n", numDataBlocks);
-            debug(FS_DEBUG, "Required list blocks : %ld\n", numListBlocks);
-            debug(FS_DEBUG, "         Free blocks : %ld\n", freeBlocks());
-
-            assert((isize)listBlocks.size() == numListBlocks);
-            assert((isize)dataBlocks.size() == numDataBlocks);
-            
-            // Add all list blocks
-            
-            for (usize i = 0; i < listBlocks.size(); i++) {
-
-                // Add a new file list block
-                addFileListBlock(listBlocks[i], nr, i == 0 ? nr : listBlocks[i-1]);
-            }
-            /*
-            for (Block ref = nr, i = 0; i < (Block)numListBlocks; i++) {
-
-                // Add a new file list block
-                ref = addFileListBlock(nr, ref);
-            }
-            */
-            
-            for (usize i = 0; i < dataBlocks.size(); i++) {
-
-                if (i % 1000 == 0) printf("Importing block %lu\n", i);
-                
-                // Add a new data block
-                addDataBlock(dataBlocks[i], i + 1, nr, i == 0 ? nr : dataBlocks[i-1]);
-
-                // Determine the list block
-                auto index = i / refsPerBlock;
-                auto lb = index == 0 ? nr : listBlocks[index - 1];
-                FSBlock *lbb = blockPtr(lb);
-                assert(lbb != nullptr);
-                lbb->addDataBlockRef(dataBlocks[i], dataBlocks[i]);
-                
-                // Reference the new data block
-                /*
-                Block addedTo;
-                block.addDataBlockRef(dataBlocks[i], dataBlocks[i], &addedTo);
-                assert(lb == addedTo);
-                */
-                
-                // Add data
-                FSBlock *ptr = blockPtr(dataBlocks[i]);
-                if (ptr) {
-                    isize written = addData(*ptr, buffer, size);
-                    block.setFileSize((u32)(block.getFileSize() + written));
-                    buffer += written;
-                    size -= written;
-                }
-            }
-
-            /*
-            for (Block ref = nr, i = 1; i <= (Block)numDataBlocks; i++) {
-
-                if (i % 1000 == 0) printf("Importing block %d\n", i); 
-                // Add a new data block
-                ref = addDataBlock(i, nr, ref);
-
-                // Reference the new data block
-                block.addDataBlockRef(ref, ref);
-                
-                // Add data
-                FSBlock *ptr = blockPtr(ref);
-                if (ptr) {
-                    isize written = addData(*ptr, buffer, size);
-                    block.setFileSize((u32)(block.getFileSize() + written));
-                    buffer += written;
-                    size -= written;
-                }
-            }
-            */
-            
-            return block.getFileSize();
-        }
         case FSBlockType::DATA_BLOCK_OFS:
-        {
-            isize count = std::min(bsize - 24, size);
-
+            
+            count = std::min(bsize - 24, size);
             std::memcpy(block.data.ptr + 24, buffer, count);
             block.setDataBytesInBlock((u32)count);
-            
-            return count;
-        }
+            break;
+
         case FSBlockType::DATA_BLOCK_FFS:
-        {
-            isize count = std::min(bsize, size);
-            
+
+            count = std::min(bsize, size);
             std::memcpy(block.data.ptr, buffer, count);
-            
-            return count;
-        }
+            break;
+
         default:
-            return 0;
+            break;
     }
+    
+    return count;
 }
 
 void

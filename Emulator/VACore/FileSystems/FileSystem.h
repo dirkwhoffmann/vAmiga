@@ -312,12 +312,6 @@ public:
     // Returns a block summary for creating the diagnose image
     void analyzeBlockConsistency(u8 *buffer, isize len);
     
-    // Determines how the layout image should look like in a certain column
-    // [[deprecated]] FSBlockType getDisplayType(isize column);
-
-    // Determines how the diagnose image should look like in a certain column
-    // [[deprecated]] isize diagnoseImageSlice(isize column);
-
     // Searches the block list for a block of a specific type
     isize nextBlockOfType(FSBlockType type, isize after);
 

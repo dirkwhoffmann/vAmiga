@@ -73,7 +73,7 @@ public:
     isize requiredBlocks(isize fileSize) const;
 
     // Returns true if at least 'count' free blocks are available
-    [[deprecated]] bool allocatable(isize count) const;
+    bool allocatable(isize count) const;
     
     // Seeks a free block and marks it as allocated
     Block allocateBlock();
@@ -85,9 +85,9 @@ public:
     void deallocateBlock(Block nr);
 
     // Adds a new block of a certain kind
-    Block addFileListBlock(Block head, Block prev); // DEPRECATED
+    [[deprecated]] Block addFileListBlock(Block head, Block prev); // DEPRECATED
     void addFileListBlock(Block at, Block head, Block prev);
-    Block addDataBlock(isize id, Block head, Block prev); // DEPRECATED
+    [[deprecated]] Block addDataBlock(isize id, Block head, Block prev); // DEPRECATED
     void addDataBlock(Block at, isize id, Block head, Block prev);
 
     // Creates a new block of a certain kind
@@ -145,7 +145,8 @@ private:
     void addHashRef(Block nr);
     void addHashRef(FSBlock *block);
 
-    // Adds data bytes to a block
+    // Adds bytes to a data block
+    isize addData(Block nr, const u8 *buffer, isize size);
     isize addData(FSBlock &block, const u8 *buffer, isize size);
     
     // Allocates all blocks needed for a file
