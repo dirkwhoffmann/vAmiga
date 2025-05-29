@@ -278,7 +278,6 @@ MutableFileSystem::addFileListBlock(Block at, Block head, Block prev)
     if (prevBlock) {
         
         blocks[at]->init(FSBlockType::FILELIST_BLOCK);
-        // blocks[at] = new FSBlock(*this, at, FSBlockType::FILELIST_BLOCK); // FIXME: MEMORY LEAK
         blocks[at]->setFileHeaderRef(head);
         blocks[at]->set32(4, blocks[at]->nr);
         
@@ -299,38 +298,16 @@ MutableFileSystem::addDataBlock(Block at, isize id, Block head, Block prev)
     
         prevBlock->setNextDataBlockRef(at);
     }
-    
-    /*
-    FSBlock *newBlock;
-    if (isOFS()) {
-        newBlock = new FSBlock(*this, at, FSBlockType::DATA_BLOCK_OFS); // FIXME: MEMORY LEAK
-    } else {
-        newBlock = new FSBlock(*this, at, FSBlockType::DATA_BLOCK_FFS); // FIXME: MEMORY LEAK
-    }
-    
-    blocks[at] = newBlock;
-    newBlock->setDataBlockNr((Block)id);
-    newBlock->setFileHeaderRef(head);
-    prevBlock->setNextDataBlockRef(at);
-    */
 }
 
 FSBlock *
 MutableFileSystem::newUserDirBlock(const string &name)
 {
-    // FSBlock *block = nullptr;
-    
     if (Block nr = allocate()) {
 
         blocks[nr]->init(FSBlockType::USERDIR_BLOCK);
         blocks[nr]->setName(FSName(name));
         return blockPtr(nr);
-
-        /*
-        block = new FSBlock(*this, nr, FSBlockType::USERDIR_BLOCK); // FIXME: MEMORY LEAK
-        block->setName(FSName(name));
-        blocks[nr] = block;
-        */
     }
  
     return nullptr;
@@ -339,19 +316,11 @@ MutableFileSystem::newUserDirBlock(const string &name)
 FSBlock *
 MutableFileSystem::newFileHeaderBlock(const string &name)
 {
-    // FSBlock *block = nullptr;
-    
     if (Block nr = allocate()) {
 
         blocks[nr]->init(FSBlockType::FILEHEADER_BLOCK);
         blocks[nr]->setName(FSName(name));
         return blockPtr(nr);
-        
-        /*
-        block = new FSBlock(*this, nr, FSBlockType::FILEHEADER_BLOCK); // FIXME: MEMORY LEAK
-        block->setName(FSName(name));
-        blocks[nr] = block;
-        */
     }
     
     return nullptr;
