@@ -223,6 +223,8 @@ MutableFileSystem::allocate()
             throw CoreError(Fault::FS_OUT_OF_SPACE);
         }
     }
+    
+    blockPtr(Block(i))->type = FSBlockType::UNKNOWN_BLOCK;
     markAsAllocated(Block(i));
     ap = (i + 1) % numBlocks();
     return (Block(i));
@@ -231,9 +233,30 @@ MutableFileSystem::allocate()
 void
 MutableFileSystem::allocate(isize count, std::vector<Block> &result)
 {
-    for (isize i = 0; i < count; i++) {
-        result.push_back(allocate());
+    Block i = ap;
+    
+    // Try to find enough free blocks
+    while (count > 0) {
+        
+        if (isEmpty(i)) {
+            
+            blockPtr(Block(i))->type = FSBlockType::UNKNOWN_BLOCK;
+            result.push_back(Block(i));
+            count--;
+        }
+                
+        if ((i = (i + 1) % numBlocks()) == ap && count) {
+        
+            debug(FS_DEBUG, "No more free blocks\n");
+            throw CoreError(Fault::FS_OUT_OF_SPACE);
+        }
     }
+    
+    // Success: Mark all blocks as allocated
+    for (const auto &it : result) markAsAllocated(it);
+
+    // Advance the allocation pointer
+    ap = i;
 }
 
 void
@@ -527,6 +550,7 @@ MutableFileSystem::allocateFileBlocks(isize bytes, std::vector<Block> &listBlock
     isize refsInListBlocks      = numDataBlocks - refsInHeaderBlock;
     isize refsInLastListBlock   = refsInListBlocks % refsPerBlock;
     
+    debug(FS_DEBUG, "                   Data bytes : %ld\n", bytes);
     debug(FS_DEBUG, "         Required data blocks : %ld\n", numDataBlocks);
     debug(FS_DEBUG, "         Required list blocks : %ld\n", numListBlocks);
     debug(FS_DEBUG, "         References per block : %ld\n", refsPerBlock);
@@ -542,9 +566,11 @@ MutableFileSystem::allocateFileBlocks(isize bytes, std::vector<Block> &listBlock
         // Header block -> Data blocks -> List block -> Data blocks ... List block -> Data blocks
         allocate(refsInHeaderBlock, dataBlocks);
         for (isize i = 0; i < numListBlocks; i++) {
+            printf("List block %ld\n", i);
             allocate(1, listBlocks);
             allocate(i < numListBlocks - 1 ? refsPerBlock : refsInLastListBlock, dataBlocks);
         }
+        printf("All done\n");
     }
     
     if (isFFS()) {

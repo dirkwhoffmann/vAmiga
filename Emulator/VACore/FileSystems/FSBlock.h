@@ -291,7 +291,6 @@ public:
     // Adds a data block reference to this block
     bool addDataBlockRef(Block ref);
     void addDataBlockRef(u32 first, u32 ref);
-    [[deprecated]] bool addDataBlockRef(u32 first, u32 ref, Block *addedTo);
     
     // Gets or sets the number of data bytes stored in this block
     u32 getDataBytesInBlock() const;

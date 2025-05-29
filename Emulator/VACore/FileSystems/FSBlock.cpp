@@ -1555,60 +1555,6 @@ FSBlock::addDataBlockRef(u32 first, u32 ref)
     }
 }
 
-bool
-FSBlock::addDataBlockRef(u32 first, u32 ref, Block *addedTo)
-{
-    switch (type) {
-            
-        case FSBlockType::FILEHEADER_BLOCK:
-        {
-            std::set<Block> visited;
-            
-            // If this block has space for more references, add it here
-            if (getNumDataBlockRefs() < getMaxDataBlockRefs()) {
-                
-                if (getNumDataBlockRefs() == 0) setFirstDataBlockRef(first);
-                setDataBlockRef(getNumDataBlockRefs(), ref);
-                incNumDataBlockRefs();
-                *addedTo = nr;
-                return true;
-            }
-            
-            // Otherwise, add it to an extension block
-            FSBlock *item = getNextListBlock();
-            
-            while (item) {
-                
-                // Break the loop if we visit a block twice
-                if (visited.find(item->nr) != visited.end()) return false;
-                
-                if (item->addDataBlockRef(first, ref, addedTo)) return true;
-                item = item->getNextListBlock();
-            }
-            
-            return false;
-        }
-
-        case FSBlockType::FILELIST_BLOCK:
-        {
-            // The caller has to ensure that this block contains free slots
-            if (getNumDataBlockRefs() < getMaxDataBlockRefs()) {
-                
-                setFirstDataBlockRef(first);
-                setDataBlockRef(getNumDataBlockRefs(), ref);
-                incNumDataBlockRefs();
-                *addedTo = nr;
-                return true;
-            }
-            
-            return false;
-        }
-            
-        default:
-            return false;
-    }
-}
-
 u32
 FSBlock::getDataBytesInBlock() const
 {
