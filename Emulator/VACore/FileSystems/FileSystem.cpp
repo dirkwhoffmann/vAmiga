@@ -460,18 +460,6 @@ FileSystem::currentDirBlock() const
     assert(cdb->type == FSBlockType::ROOT_BLOCK || cdb->type == FSBlockType::USERDIR_BLOCK);
     
     return cdb;
-
-    /*
-    if (cdb) {
-        if (cdb->type == FSBlockType::ROOT_BLOCK || cdb->type == FSBlockType::USERDIR_BLOCK) {
-            return cdb;
-        }
-    }
-    
-    // The block reference is invalid. Switch back to the root directory
-    cd = rootBlock;
-    return blockPtr(cd);
-    */
 }
 
 FSBlock *

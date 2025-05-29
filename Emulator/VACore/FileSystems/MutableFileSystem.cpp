@@ -566,11 +566,9 @@ MutableFileSystem::allocateFileBlocks(isize bytes, std::vector<Block> &listBlock
         // Header block -> Data blocks -> List block -> Data blocks ... List block -> Data blocks
         allocate(refsInHeaderBlock, dataBlocks);
         for (isize i = 0; i < numListBlocks; i++) {
-            printf("List block %ld\n", i);
             allocate(1, listBlocks);
             allocate(i < numListBlocks - 1 ? refsPerBlock : refsInLastListBlock, dataBlocks);
         }
-        printf("All done\n");
     }
     
     if (isFFS()) {

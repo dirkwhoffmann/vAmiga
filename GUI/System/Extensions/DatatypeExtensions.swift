@@ -10,6 +10,23 @@
 import Carbon.HIToolbox
 
 //
+// Size
+//
+
+extension NSSize {
+    
+    /*
+    func scaled(x: CGFloat = CGFloat(1.0), y: CGFloat = CGFloat(1.0)) -> NSSize {
+        return NSSize(width: self.width * x, height: self.height * y)
+    }
+    */
+    
+    func scaled(x: Float = 1.0, y: Float = 1.0) -> NSSize {
+        return NSSize(width: self.width * CGFloat(x), height: self.height * CGFloat(y))
+    }
+}
+
+//
 // Array
 //
 

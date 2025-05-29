@@ -71,7 +71,7 @@ class VolumeInspector: DialogController {
         static let orange = NSColor(r: 0xff, g: 0xb2, b: 0x66, a: 0xff)
         static let yellow = NSColor(r: 0xff, g: 0xff, b: 0x66, a: 0xff)
         static let green = NSColor(r: 0x66, g: 0xff, b: 0x66, a: 0xff)
-        static let dgreen = NSColor(r: 0x00, g: 0x66, b: 0x00, a: 0xff)
+        static let dgreen = NSColor(r: 0x00, g: 0x99, b: 0x00, a: 0xff)
         static let cyan = NSColor(r: 0x66, g: 0xff, b: 0xff, a: 0xff)
         static let blue = NSColor(r: 0x66, g: 0xb2, b: 0xff, a: 0xff)
         static let purple = NSColor(r: 0xb2, g: 0x66, b: 0xff, a: 0xff)
@@ -302,6 +302,7 @@ class VolumeInspector: DialogController {
         blockField.stringValue         = String(format: "%d", blockNr)
         blockStepper.integerValue      = blockNr
         blockSlider.integerValue       = blockNr
+        allocSlider.integerValue       = blockNr
         diagnoseSlider.integerValue    = blockNr
         
         // Update the block view table
@@ -320,7 +321,7 @@ class VolumeInspector: DialogController {
         fileHeaderBlockButton.image = NSImage(color: palette[.FILEHEADER_BLOCK]!, size: size)
         userDirBlockButton.image = NSImage(color: palette[.USERDIR_BLOCK]!, size: size)
         dataBlockButton.image = NSImage(color: palette[.DATA_BLOCK_OFS]!, size: size)
-        blockImageButton.image = layoutImage(size: blockImageButton.bounds.size)
+        blockImageButton.image = layoutImage(size: blockImageButton.bounds.size.scaled(x: 2.0))
     }
 
     func updateAllocImage() {
