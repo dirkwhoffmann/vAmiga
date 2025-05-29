@@ -179,16 +179,18 @@ DQ
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CJv-9c-LZE">
                         <rect key="frame" x="241" y="190" width="136" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <popUpButtonCell key="cell" type="push" title="8 MB" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="8" imageScaling="proportionallyDown" inset="2" selectedItem="QY4-6v-VjW" id="Kag-U2-EcE">
+                        <popUpButtonCell key="cell" type="push" title="4 MB" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" tag="4" imageScaling="proportionallyDown" inset="2" selectedItem="QY4-6v-VjW" id="Kag-U2-EcE">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="message"/>
                             <menu key="menu" id="hwt-Fz-45w">
                                 <items>
-                                    <menuItem title="8 MB" state="on" tag="8" id="QY4-6v-VjW"/>
+                                    <menuItem title="4 MB" tag="4" id="QY4-6v-VjW"/>
+                                    <menuItem title="8 MB" state="on" tag="8" id="WYy-ZK-OoC"/>
                                     <menuItem title="16 MB" tag="16" id="UfO-ge-mbN"/>
                                     <menuItem title="32 MB" tag="32" id="4K8-7W-fFa"/>
                                     <menuItem title="64 MB" tag="64" id="RjD-3B-uTL"/>
                                     <menuItem title="128 MB" tag="128" id="cbJ-9E-Y12"/>
+                                    <menuItem title="256 MB" tag="256" id="QT9-Mm-MjH"/>
                                     <menuItem isSeparatorItem="YES" id="JCT-89-Ak1"/>
                                     <menuItem title="User defined" id="41c-9a-EUj"/>
                                 </items>

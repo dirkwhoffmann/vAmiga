@@ -99,8 +99,9 @@ class HardDiskCreator: DialogController {
         cylinderStepper.maxValue = .greatestFiniteMagnitude
         headStepper.maxValue = .greatestFiniteMagnitude
         sectorStepper.maxValue = .greatestFiniteMagnitude
-        
+        capacity.selectItem(withTag: 8)
         setCapacity(mb: capacity.selectedTag())
+
         update()
     }
     
