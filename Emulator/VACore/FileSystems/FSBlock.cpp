@@ -16,24 +16,30 @@ namespace vamiga {
 
 FSBlock::FSBlock(FileSystem &ref, Block nr, FSBlockType t) : device(ref)
 {
-    assert(t != FSBlockType::UNKNOWN_BLOCK);
-    
     this->nr = nr;
-    this->type = t;
+    init(t);
+}
+
+void
+FSBlock::init(FSBlockType t)
+{
+    type = t;
     
-    // Allocate memory if this block is not empty
-    if (type != FSBlockType::EMPTY_BLOCK) data.init(bsize(), 0);
+    if (type == FSBlockType::UNKNOWN_BLOCK) return;
+        
+    // Allocate memory
+    data.init(type == FSBlockType::EMPTY_BLOCK ? 0 : bsize(), 0);
     
     // Initialize
     switch (type) {
 
         case FSBlockType::BOOT_BLOCK:
             
-            if (nr == 0 && ref.dos != FSVolumeType::NODOS) {
+            if (nr == 0 && device.dos != FSVolumeType::NODOS) {
                 data[0] = 'D';
                 data[1] = 'O';
                 data[2] = 'S';
-                data[3] = (u8)ref.dos;
+                data[3] = (u8)device.dos;
             }
             break;
             
@@ -97,6 +103,7 @@ FSBlock::make(FileSystem &ref, Block nr, FSBlockType type)
         case FSBlockType::FILELIST_BLOCK:
         case FSBlockType::DATA_BLOCK_OFS:
         case FSBlockType::DATA_BLOCK_FFS:
+            
             return new FSBlock(ref, nr, type);
             
         default:
@@ -122,7 +129,7 @@ FSBlock::objectName() const
         case FSBlockType::DATA_BLOCK_FFS:    return "FSBlock (FFF)";
             
         default:
-            fatalError;
+            throw CoreError(Fault::FS_INVALID_BLOCK_TYPE);
     }
 }
 

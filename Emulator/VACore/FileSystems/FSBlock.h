@@ -43,6 +43,7 @@ struct FSBlock : CoreObject {
     //
     
     FSBlock(FileSystem &ref, Block nr, FSBlockType t);
+    void init(FSBlockType t);
 
     static FSBlock *make(FileSystem &ref, Block nr, FSBlockType type) throws;
 

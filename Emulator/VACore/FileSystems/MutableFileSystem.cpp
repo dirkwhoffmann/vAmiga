@@ -130,6 +130,7 @@ MutableFileSystem::format(string name)
     for (isize i = 0; i < numBlocks(); i++) {
         
         if (blocks[i] == nullptr) {
+            
             blocks[i] = new FSBlock(*this, Block(i), FSBlockType::EMPTY_BLOCK);
             markAsFree(Block(i));
         }
@@ -265,8 +266,7 @@ MutableFileSystem::deallocateBlock(Block nr)
     assert(isBlockNumber(nr));
     assert(blocks[nr]);
     
-    delete blocks[nr];
-    blocks[nr] = new FSBlock(*this, nr, FSBlockType::EMPTY_BLOCK);
+    blocks[nr]->init(FSBlockType::EMPTY_BLOCK);
     markAsFree(nr);
 }
 
@@ -277,9 +277,11 @@ MutableFileSystem::addFileListBlock(Block at, Block head, Block prev)
 
     if (prevBlock) {
         
-        blocks[at] = new FSBlock(*this, at, FSBlockType::FILELIST_BLOCK); // TODO: MEMORY LEAK
+        blocks[at]->init(FSBlockType::FILELIST_BLOCK);
+        // blocks[at] = new FSBlock(*this, at, FSBlockType::FILELIST_BLOCK); // FIXME: MEMORY LEAK
         blocks[at]->setFileHeaderRef(head);
         blocks[at]->set32(4, blocks[at]->nr);
+        
         prevBlock->setNextListBlockRef(at);
     }
 }
@@ -288,49 +290,71 @@ void
 MutableFileSystem::addDataBlock(Block at, isize id, Block head, Block prev)
 {
     FSBlock *prevBlock = blockPtr(prev);
-    if (!prevBlock) return;
 
+    if (prevBlock) {
+     
+        blocks[at]->init(isOFS() ? FSBlockType::DATA_BLOCK_OFS : FSBlockType::DATA_BLOCK_FFS);
+        blocks[at]->setDataBlockNr((Block)id);
+        blocks[at]->setFileHeaderRef(head);
+    
+        prevBlock->setNextDataBlockRef(at);
+    }
+    
+    /*
     FSBlock *newBlock;
     if (isOFS()) {
-        newBlock = new FSBlock(*this, at, FSBlockType::DATA_BLOCK_OFS); // TODO: MEMORY LEAK
+        newBlock = new FSBlock(*this, at, FSBlockType::DATA_BLOCK_OFS); // FIXME: MEMORY LEAK
     } else {
-        newBlock = new FSBlock(*this, at, FSBlockType::DATA_BLOCK_FFS); // TODO: MEMORY LEAK
+        newBlock = new FSBlock(*this, at, FSBlockType::DATA_BLOCK_FFS); // FIXME: MEMORY LEAK
     }
     
     blocks[at] = newBlock;
     newBlock->setDataBlockNr((Block)id);
     newBlock->setFileHeaderRef(head);
     prevBlock->setNextDataBlockRef(at);
+    */
 }
 
 FSBlock *
 MutableFileSystem::newUserDirBlock(const string &name)
 {
-    FSBlock *block = nullptr;
+    // FSBlock *block = nullptr;
     
     if (Block nr = allocate()) {
 
-        block = new FSBlock(*this, nr, FSBlockType::USERDIR_BLOCK);
+        blocks[nr]->init(FSBlockType::USERDIR_BLOCK);
+        blocks[nr]->setName(FSName(name));
+        return blockPtr(nr);
+
+        /*
+        block = new FSBlock(*this, nr, FSBlockType::USERDIR_BLOCK); // FIXME: MEMORY LEAK
         block->setName(FSName(name));
         blocks[nr] = block;
+        */
     }
-    
-    return block;
+ 
+    return nullptr;
 }
 
 FSBlock *
 MutableFileSystem::newFileHeaderBlock(const string &name)
 {
-    FSBlock *block = nullptr;
+    // FSBlock *block = nullptr;
     
     if (Block nr = allocate()) {
 
-        block = new FSBlock(*this, nr, FSBlockType::FILEHEADER_BLOCK);
+        blocks[nr]->init(FSBlockType::FILEHEADER_BLOCK);
+        blocks[nr]->setName(FSName(name));
+        return blockPtr(nr);
+        
+        /*
+        block = new FSBlock(*this, nr, FSBlockType::FILEHEADER_BLOCK); // FIXME: MEMORY LEAK
         block->setName(FSName(name));
         blocks[nr] = block;
+        */
     }
     
-    return block;
+    return nullptr;
 }
 
 void
