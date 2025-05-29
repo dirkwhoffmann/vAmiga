@@ -22,9 +22,77 @@ class MediaManager {
     // References to other objects
     var mydocument: MyDocument!
     var emu: EmulatorProxy! { return mydocument.emu }
+    var mm: MediaManager! { return mydocument.mm }
     var mycontroller: MyController { return mydocument.controller }
     var console: Console { return mycontroller.renderer.console }
+
+    // References to menu outlets
+    var df0OpenRecent: NSMenuItem! { return myAppDelegate.df0OpenRecent }
+    var df1OpenRecent: NSMenuItem! { return myAppDelegate.df1OpenRecent }
+    var df2OpenRecent: NSMenuItem! { return myAppDelegate.df2OpenRecent }
+    var df3OpenRecent: NSMenuItem! { return myAppDelegate.df3OpenRecent }
+
+    var df0ExportRecent: NSMenuItem! { return myAppDelegate.df0ExportRecent }
+    var df1ExportRecent: NSMenuItem! { return myAppDelegate.df1ExportRecent }
+    var df2ExportRecent: NSMenuItem! { return myAppDelegate.df2ExportRecent }
+    var df3ExportRecent: NSMenuItem! { return myAppDelegate.df3ExportRecent }
     
+    var hd0OpenRecent: NSMenuItem! { return myAppDelegate.hd0OpenRecent }
+    var hd1OpenRecent: NSMenuItem! { return myAppDelegate.hd1OpenRecent }
+    var hd2OpenRecent: NSMenuItem! { return myAppDelegate.hd2OpenRecent }
+    var hd3OpenRecent: NSMenuItem! { return myAppDelegate.hd3OpenRecent }
+
+    var hd0ExportRecent: NSMenuItem! { return myAppDelegate.hd0ExportRecent }
+    var hd1ExportRecent: NSMenuItem! { return myAppDelegate.hd1ExportRecent }
+    var hd2ExportRecent: NSMenuItem! { return myAppDelegate.hd2ExportRecent }
+    var hd3ExportRecent: NSMenuItem! { return myAppDelegate.hd3ExportRecent }
+    
+    // List of recently inserted floppy disk URLs (all drives share the same list)
+    var insertedFloppyDisks: [URL] = [] {
+        didSet {
+            updateRecentUrlMenus([df0OpenRecent, df1OpenRecent, df2OpenRecent, df3OpenRecent],
+                                 urls: insertedFloppyDisks)
+        }
+    }
+    // List of export URLs  (one for each floppy drive)
+    var exportedFloppyDisks0: [URL] = [] {
+        didSet { updateRecentUrlMenu(df0ExportRecent, urls: exportedFloppyDisks0, nr: 0) }
+    }
+    var exportedFloppyDisks1: [URL] = [] {
+        didSet { updateRecentUrlMenu(df1ExportRecent, urls: exportedFloppyDisks1, nr: 1) }
+    }
+    var exportedFloppyDisks2: [URL] = [] {
+        didSet { updateRecentUrlMenu(df2ExportRecent, urls: exportedFloppyDisks2, nr: 2) }
+    }
+    var exportedFloppyDisks3: [URL] = [] {
+        didSet { updateRecentUrlMenu(df3ExportRecent, urls: exportedFloppyDisks3, nr: 3) }
+    }
+        
+    // List of recently attached hard drive URLs
+    var attachedHardDrives: [URL] = [] {
+        didSet {
+            updateRecentUrlMenus([hd0OpenRecent, hd1OpenRecent, hd2OpenRecent, hd3OpenRecent],
+                                 urls: attachedHardDrives)
+        }
+    }
+    // List of export URLs (one for each hard drive)
+    var exportedHardDrives0: [URL] = [] {
+        didSet { updateRecentUrlMenu(hd0ExportRecent, urls: exportedHardDrives0, nr: 0) }
+    }
+    var exportedHardDrives1: [URL] = [] {
+        didSet { updateRecentUrlMenu(hd1ExportRecent, urls: exportedHardDrives1, nr: 1) }
+    }
+    var exportedHardDrives2: [URL] = [] {
+        didSet { updateRecentUrlMenu(hd2ExportRecent, urls: exportedHardDrives2, nr: 2) }
+    }
+    var exportedHardDrives3: [URL] = [] {
+        didSet { updateRecentUrlMenu(hd3ExportRecent, urls: exportedHardDrives3, nr: 3) }
+    }
+    
+    // Pictograms used in menu items
+    var diskMenuImage = NSImage(named: "diskTemplate")!.resize(width: 16.0, height: 16.0)
+    var hdrMenuImage = NSImage(named: "hdrTemplate")!.resize(width: 16.0, height: 16.0)
+
     //
     // Initializing
     //
@@ -33,8 +101,175 @@ class MediaManager {
 
         debug(.lifetime, "Creating media manager")
         self.mydocument = document
+        
+        diskMenuImage.isTemplate = true
+        hdrMenuImage.isTemplate = true
     }
     
+    //
+    // Handling lists of recently used URLs
+    //
+    
+    private func noteRecentlyUsedURL(_ url: URL, to list: inout [URL], size: Int) {
+        
+        if !list.contains(url) {
+
+            // Shorten the list if it is too large
+            if list.count == size { list.remove(at: size - 1) }
+            
+            // Add new item at the beginning
+            list.insert(url, at: 0)
+        }
+    }
+    
+    func noteNewRecentlyInsertedDiskURL(_ url: URL) {
+        noteRecentlyUsedURL(url, to: &insertedFloppyDisks, size: 10)
+    }
+    
+    func getRecentlyInsertedDiskURL(_ pos: Int) -> URL? {
+        return insertedFloppyDisks.at(pos)
+    }
+    
+    func clearRecentlyInsertedDiskURLs() {
+        insertedFloppyDisks = []
+        
+    }
+    func noteNewRecentlyExportedDiskURL(_ url: URL, df n: Int) {
+
+        switch n {
+        case 0: noteRecentlyUsedURL(url, to: &exportedFloppyDisks0, size: 1)
+        case 1: noteRecentlyUsedURL(url, to: &exportedFloppyDisks1, size: 1)
+        case 2: noteRecentlyUsedURL(url, to: &exportedFloppyDisks2, size: 1)
+        case 3: noteRecentlyUsedURL(url, to: &exportedFloppyDisks3, size: 1)
+        default: fatalError()
+        }
+    }
+    
+    func getRecentlyExportedDiskURL(_ pos: Int, df n: Int) -> URL? {
+        switch n {
+        case 0: return exportedFloppyDisks0.at(pos)
+        case 1: return exportedFloppyDisks1.at(pos)
+        case 2: return exportedFloppyDisks2.at(pos)
+        case 3: return exportedFloppyDisks3.at(pos)
+        default: fatalError()
+        }
+    }
+    
+    func clearRecentlyExportedDiskURLs(df n: Int) {
+        switch n {
+        case 0: exportedFloppyDisks0 = []
+        case 1: exportedFloppyDisks1 = []
+        case 2: exportedFloppyDisks2 = []
+        case 3: exportedFloppyDisks3 = []
+        default: fatalError()
+        }
+    }
+    
+    func noteNewRecentlyAttachedHdrURL(_ url: URL) {
+        noteRecentlyUsedURL(url, to: &attachedHardDrives, size: 10)
+    }
+    
+    func getRecentlyAttachedHdrURL(_ pos: Int) -> URL? {
+        return attachedHardDrives.at(pos)
+    }
+    
+    func clearRecentlyAttachedHdrURLs() {
+        attachedHardDrives = []
+    }
+    
+    func noteNewRecentlyExportedHdrURL(_ url: URL, hd n: Int) {
+        switch n {
+        case 0: noteRecentlyUsedURL(url, to: &exportedHardDrives0, size: 1)
+        case 1: noteRecentlyUsedURL(url, to: &exportedHardDrives1, size: 1)
+        case 2: noteRecentlyUsedURL(url, to: &exportedHardDrives2, size: 1)
+        case 3: noteRecentlyUsedURL(url, to: &exportedHardDrives3, size: 1)
+        default: fatalError()
+        }
+    }
+    
+    func getRecentlyExportedHdrURL(_ pos: Int, hd n: Int) -> URL? {
+        switch n {
+        case 0: return exportedHardDrives0.at(pos)
+        case 1: return exportedHardDrives1.at(pos)
+        case 2: return exportedHardDrives2.at(pos)
+        case 3: return exportedHardDrives3.at(pos)
+        default: fatalError()
+        }
+    }
+    
+    func clearRecentlyExportedHdrURLs(hd n: Int) {
+        switch n {
+        case 0: exportedHardDrives0 = []
+        case 1: exportedHardDrives1 = []
+        case 2: exportedHardDrives2 = []
+        case 3: exportedHardDrives3 = []
+        default: fatalError()
+        }
+    }
+    
+    func noteNewRecentlyOpenedURL(_ url: URL, type: FileType) {
+        
+        switch type {
+            
+        case .ADF, .ADZ, .EADF, .DMS, .EXE, .IMG, .ST: noteNewRecentlyInsertedDiskURL(url)
+        case .HDF, .HDZ:                               noteNewRecentlyAttachedHdrURL(url)
+            
+        default:
+            break
+        }
+    }
+
+    func noteNewRecentlyExportedURL(_ url: URL, nr: Int, type: FileType) {
+        
+        switch type {
+            
+        case .ADF, .ADZ, .EADF, .DMS, .EXE, .IMG, .ST: noteNewRecentlyExportedDiskURL(url, df: nr)
+        case .HDF, .HDZ:                               noteNewRecentlyExportedHdrURL(url, hd: nr)
+            
+        default:
+            break
+        }
+    }
+
+    func updateRecentUrlMenu(_ menuItem: NSMenuItem, urls: [URL], nr: Int, clearMenu: Bool = false) {
+        
+        let menu = menuItem.submenu!
+        menu.removeAllItems()
+        
+        if !urls.isEmpty {
+
+            for (index, url) in urls.enumerated() {
+                
+                let isHdf = url.pathExtension == "hdf" || url.pathExtension == "hdz"
+                
+                let item = NSMenuItem(title:  url.lastPathComponent,
+                                      action: #selector(MyController.insertRecentDiskAction(_ :)),
+                                      keyEquivalent: "")
+                
+                
+                item.tag = nr << 16 | index
+                item.image = isHdf ? hdrMenuImage : diskMenuImage
+                menu.addItem(item)
+            }
+
+            if clearMenu {
+                
+                menu.addItem(NSMenuItem.separator())
+                menu.addItem(NSMenuItem(title: "Clear Menu",
+                                        action: #selector(MyController.clearRecentlyInsertedDisksAction(_ :)),
+                                        keyEquivalent: ""))
+            }
+        }
+    }
+    
+    func updateRecentUrlMenus(_ menus: [NSMenuItem], urls: [URL]) {
+        
+        for (index, menu) in menus.enumerated() {
+     
+            updateRecentUrlMenu(menu, urls: urls, nr: index, clearMenu: true)
+        }
+    }
+
     //
     // Adding media files
     //
@@ -85,8 +320,8 @@ class MediaManager {
         
         if remember {
         
-            myAppDelegate.noteNewRecentlyInsertedDiskURL(url)
-            myAppDelegate.noteNewRecentlyExportedDiskURL(url, df: n)
+            mm.noteNewRecentlyInsertedDiskURL(url)
+            mm.noteNewRecentlyExportedDiskURL(url, df: n)
         }
     }
     
@@ -117,8 +352,8 @@ class MediaManager {
         
         if remember {
         
-            myAppDelegate.noteNewRecentlyAttachedHdrURL(url)
-            myAppDelegate.noteNewRecentlyExportedHdrURL(url, hd: n)
+            mm.noteNewRecentlyAttachedHdrURL(url)
+            mm.noteNewRecentlyExportedHdrURL(url, hd: n)
         }
     }
     

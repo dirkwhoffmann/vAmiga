@@ -230,7 +230,7 @@ class MyDocument: NSDocument {
         for file in contents {
             if !exclude.contains(url.deletingPathExtension().lastPathComponent) {
                 if let type = supportedTypes[file.pathExtension.lowercased()] {
-                    myAppDelegate.noteNewRecentlyOpenedURL(file, type: type)
+                    mm.noteNewRecentlyOpenedURL(file, type: type)
                 }
             }
         }
@@ -286,7 +286,7 @@ class MyDocument: NSDocument {
         
         try export(fileProxy: df!, to: url)
         emu.df(nr)!.setFlag(.MODIFIED, value: false)
-        myAppDelegate.noteNewRecentlyExportedDiskURL(url, df: nr)
+        mm.noteNewRecentlyExportedDiskURL(url, df: nr)
         
         debug(.media, "Disk exported successfully")
     }
@@ -307,7 +307,7 @@ class MyDocument: NSDocument {
         try export(fileProxy: dh!, to: url)
 
         hdn.setFlag(.MODIFIED, value: false)
-        myAppDelegate.noteNewRecentlyExportedHdrURL(url, hd: nr)
+        mm.noteNewRecentlyExportedHdrURL(url, hd: nr)
 
         debug(.media, "Hard Drive exported successfully")
     }

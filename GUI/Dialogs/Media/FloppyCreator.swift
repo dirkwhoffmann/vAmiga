@@ -179,7 +179,7 @@ class FloppyCreator: DialogController {
         do {
 
             try drive?.insertNew(fileSystem: fs, bootBlock: bb, name: name, url: importURL)
-            myAppDelegate.clearRecentlyExportedDiskURLs(df: nr)
+            mm.clearRecentlyExportedDiskURLs(df: nr)
             hide()
             
         } catch {

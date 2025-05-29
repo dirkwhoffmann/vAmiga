@@ -114,6 +114,7 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
     // User activity token obtained in applicationDidFinishLaunching()
     var token: NSObjectProtocol!
     
+    /*
     // List of recently inserted floppy disk URLs (all drives share the same list)
     var insertedFloppyDisks: [URL] = [] {
         didSet {
@@ -159,14 +160,15 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
     // Pictograms used in menu items
     var diskMenuImage = NSImage(named: "diskTemplate")!.resize(width: 16.0, height: 16.0)
     var hdrMenuImage = NSImage(named: "hdrTemplate")!.resize(width: 16.0, height: 16.0)
+    */
     
     override init() {
         
         super.init()
         pref = Preferences()
         
-        diskMenuImage.isTemplate = true
-        hdrMenuImage.isTemplate = true
+        // diskMenuImage.isTemplate = true
+        // hdrMenuImage.isTemplate = true
     }
     
     public func application(_ application: NSApplication, open urls: [URL]) {
@@ -192,6 +194,7 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
     // Handling lists of recently used URLs
     //
     
+    /*
     private func noteRecentlyUsedURL(_ url: URL, to list: inout [URL], size: Int) {
         
         if !list.contains(url) {
@@ -351,6 +354,7 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
             updateRecentUrlMenu(menu, urls: urls, nr: index, clearMenu: true)
         }
     }
+    */
 }
 
 //

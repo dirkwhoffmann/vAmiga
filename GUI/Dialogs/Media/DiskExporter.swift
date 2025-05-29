@@ -393,7 +393,7 @@ class DiskExporter: DialogController {
             }
             
             dfn!.setFlag(.MODIFIED, value: false)
-            myAppDelegate.noteNewRecentlyExportedDiskURL(url, df: dfn!.info.nr)
+            mm.noteNewRecentlyExportedDiskURL(url, df: dfn!.info.nr)
             
             hide()
 
@@ -444,7 +444,7 @@ class DiskExporter: DialogController {
             }
 
             hdn!.setFlag(.MODIFIED, value: false)
-            myAppDelegate.noteNewRecentlyExportedHdrURL(url, hd: hdn!.traits.nr)
+            mm.noteNewRecentlyExportedHdrURL(url, hd: hdn!.traits.nr)
             
             hide()
             

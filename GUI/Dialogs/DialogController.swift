@@ -43,7 +43,8 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     var parent: MyController!
     var emu: EmulatorProxy! { return parent.emu }
     var amiga: AmigaProxy { return emu.amiga }
-
+    var mm: MediaManager { return parent.mydocument.mm }
+    
     // References to all open dialogs (to make ARC happy)
     static var active: [DialogController] = []
     

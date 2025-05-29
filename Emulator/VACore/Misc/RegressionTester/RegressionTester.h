@@ -37,7 +37,7 @@ class RegressionTester final : public SubComponent {
 public:
 
     // Filename of the test image
-    string dumpTexturePath = "texture";
+    fs::path dumpTexturePath = fs::path("texture");
 
     // Pixel area which is written to the test image
     isize x1 = X1;
@@ -106,7 +106,7 @@ public:
     void prepare(ConfigScheme scheme, const fs::path &rom = {}, const fs::path &ext = {});
     
     // Runs a test case
-    void run(string adf);
+    void run(const fs::path &adf);
     
     // Creates the test image and exits the emulator
     void dumpTexture(Amiga &amiga);

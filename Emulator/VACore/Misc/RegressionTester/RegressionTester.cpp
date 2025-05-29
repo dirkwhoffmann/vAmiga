@@ -46,7 +46,7 @@ RegressionTester::prepare(ConfigScheme scheme, const fs::path &rom, const fs::pa
 }
 
 void
-RegressionTester::run(string adf)
+RegressionTester::run(const fs::path &adf)
 {
     // Insert the test disk
     df0.swapDisk(adf);
