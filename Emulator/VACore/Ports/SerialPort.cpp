@@ -89,7 +89,7 @@ SerialPort::cacheInfo(SerialPortInfo &info) const
 }
 
 void
-SerialPort::_dump(Category category, std::ostream& os) const
+SerialPort::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
     

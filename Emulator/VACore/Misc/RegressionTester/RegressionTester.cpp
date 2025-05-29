@@ -84,7 +84,7 @@ RegressionTester::dumpTexture(Amiga &amiga, const string &filename)
 }
 
 void
-RegressionTester::dumpTexture(Amiga &amiga, std::ostream& os)
+RegressionTester::dumpTexture(Amiga &amiga, std::ostream &os)
 {
     Texel grey2 = FrameBuffer::grey2;
     Texel grey4 = FrameBuffer::grey4;

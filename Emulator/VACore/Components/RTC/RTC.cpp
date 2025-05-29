@@ -93,7 +93,7 @@ RTC::operator << (SerResetter &worker)
 }
 
 void
-RTC::_dump(Category category, std::ostream& os) const
+RTC::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
     

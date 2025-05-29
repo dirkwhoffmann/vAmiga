@@ -22,7 +22,7 @@ StateMachine<nr>::StateMachine(Amiga& ref) : SubComponent(ref)
 }
 
 template <isize nr> void
-StateMachine<nr>::_dump(Category category, std::ostream& os) const
+StateMachine<nr>::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
     

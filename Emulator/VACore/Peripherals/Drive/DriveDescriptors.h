@@ -74,7 +74,7 @@ struct GeometryDescriptor : Serializable {
 
     // Prints debug information
     void dump() const;
-    void dump(std::ostream& os) const;
+    void dump(std::ostream &os) const;
 
     // Throws an exception if inconsistent or unsupported values are present
     void checkCompatibility() const;
@@ -132,7 +132,7 @@ struct PartitionDescriptor : Serializable {
     
     // Prints debug information
     void dump() const;
-    void dump(std::ostream& os) const;
+    void dump(std::ostream &os) const;
 
     // Throws an exception if inconsistent or unsupported values are present
     void checkCompatibility(const GeometryDescriptor &geo) const;
@@ -165,7 +165,7 @@ struct DriverDescriptor : Serializable {
 
     // Prints debug information
     void dump() const;
-    void dump(std::ostream& os) const;
+    void dump(std::ostream &os) const;
     
     // Throws an exception if inconsistent or unsupported values are present
     void checkCompatibility() const;

@@ -62,7 +62,7 @@ struct OnePoleFilter : CoreObject {
     double tmpR;
 
     const char *objectName() const override { return "OnePoleFilter"; }
-    void _dump(Category category, std::ostream& os) const override { };
+    void _dump(Category category, std::ostream &os) const override { };
 
     // Initializes the filter coeeficients
     void setup(double sampleRate, double R1, double C1);
@@ -93,7 +93,7 @@ struct TwoPoleFilter : CoreObject {
     double tmpR[4];
 
     const char *objectName() const override { return "TwoPoleFilter"; }
-    void _dump(Category category, std::ostream& os) const override { };
+    void _dump(Category category, std::ostream &os) const override { };
 
     // Initializes the filter coeeficients
     void setup(double sampleRate, double R1, double R2, double C1, double C2);
@@ -194,7 +194,7 @@ public:
 
 private:
 
-    void _dump(Category category, std::ostream& os) const override;
+    void _dump(Category category, std::ostream &os) const override;
     
 
     //

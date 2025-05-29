@@ -29,7 +29,7 @@ Paula::Paula(Amiga& ref) : SubComponent(ref)
 }
 
 void
-Paula::_dump(Category category, std::ostream& os) const
+Paula::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
 

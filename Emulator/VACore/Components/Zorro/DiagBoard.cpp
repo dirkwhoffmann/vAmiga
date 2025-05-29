@@ -17,7 +17,7 @@
 namespace vamiga {
 
 void
-DiagBoard::_dump(Category category, std::ostream& os) const
+DiagBoard::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
 

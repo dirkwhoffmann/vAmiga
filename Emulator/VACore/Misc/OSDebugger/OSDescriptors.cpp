@@ -83,7 +83,7 @@ HunkDescriptor::dump(Category category) const
 }
 
 void
-HunkDescriptor::dump(Category category, std::ostream& os) const
+HunkDescriptor::dump(Category category, std::ostream &os) const
 {
     using namespace util;
     
@@ -276,7 +276,7 @@ ProgramUnitDescriptor::dump(Category category) const
 }
 
 void
-ProgramUnitDescriptor::dump(Category category, std::ostream& os) const
+ProgramUnitDescriptor::dump(Category category, std::ostream &os) const
 {
     using namespace util;
 

@@ -15,7 +15,7 @@
 namespace vamiga {
 
 void
-SampleRateDetector::_dump(Category category, std::ostream& os) const
+SampleRateDetector::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
 

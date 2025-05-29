@@ -14,7 +14,7 @@
 namespace vamiga {
 
 void
-Copper::_dump(Category category, std::ostream& os) const
+Copper::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
 

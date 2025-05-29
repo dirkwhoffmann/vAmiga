@@ -93,7 +93,7 @@ Joystick::setOption(Opt option, i64 value)
 }
 
 void
-Joystick::_dump(Category category, std::ostream& os) const
+Joystick::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
 

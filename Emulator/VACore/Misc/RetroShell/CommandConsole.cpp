@@ -127,8 +127,8 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
             auto scheme = ConfigScheme(parseEnum<ConfigSchemeEnum>(argv[0]));
-            auto rom = argv.size() > 1 ? argv[1] : "";
-            auto ext = argv.size() > 2 ? argv[2] : "";
+            auto rom = argv.size() > 1 ? host.makeAbsolute(argv[1]) : "";
+            auto ext = argv.size() > 2 ? host.makeAbsolute(argv[2]) : "";
             
             amiga.regressionTester.prepare(scheme, rom, ext);
         }
@@ -141,7 +141,8 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .help   = { "Launches a regression test" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
-            amiga.regressionTester.run(argv.front());
+            auto path = host.makeAbsolute(argv.front());
+            amiga.regressionTester.run(path);
         }
     });
     
@@ -165,7 +166,8 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .help   = { "Assign the screen shot filename" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
-            amiga.regressionTester.dumpTexturePath = argv.front();
+            auto path = host.makeAbsolute(argv.front());
+            amiga.regressionTester.dumpTexturePath = path;
         }
     });
     
@@ -195,7 +197,8 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .help   = { "Saves a screenshot and exits the emulator" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
-            amiga.regressionTester.dumpTexture(amiga, argv.front());
+            auto path = host.makeAbsolute(argv.front());
+            amiga.regressionTester.dumpTexture(amiga, path);
         }
     });
     
@@ -277,7 +280,8 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .help   = { "Installs a Kickstart Rom" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
-            mem.loadRom(argv.front());
+            auto path = host.makeAbsolute(argv.front());
+            mem.loadRom(path);
         }
     });
     
@@ -288,7 +292,8 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .help   = { "Installs an extension Rom" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
-            mem.loadExt(argv.front());
+            auto path = host.makeAbsolute(argv.front());
+            mem.loadExt(path);
         }
     });
     
@@ -299,7 +304,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .help   = { "Loads a chunk of memory" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
-            fs::path path(argv[0]);
+            auto path = host.makeAbsolute(argv.front());
             mem.debugger.load(path, parseAddr(argv[1]));
         }
     });
@@ -317,7 +322,8 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .help   = { "Saves the Kickstart Rom" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
-            mem.saveRom(argv[0]);
+            auto path = host.makeAbsolute(argv.front());
+            mem.saveRom(path);
         }
     });
     
@@ -328,7 +334,8 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .help   = { "Saves the extension Rom" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
-            mem.saveExt(argv[0]);
+            auto path = host.makeAbsolute(argv.front());
+            mem.saveExt(path);
         }
     });
     
@@ -791,13 +798,12 @@ CommandConsole::initCommands(RetroShellCmd &root)
             .args   = { Arg::path },
             .help   = { "Attaches a hard drive image" },
             .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
-                
-                auto path = argv.front();
-
+                                
                 // Make sure the hard-drive controller board is plugged in
                 emulator.set(Opt::HDC_CONNECT, true, values);
 
                 // Connect the drive
+                auto path = host.makeAbsolute(argv.front());
                 amiga.hd[values[0]]->init(path);
                 
             }, .values = {i}
@@ -932,8 +938,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .help   = { "Sets the search path for media files" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
-            string path = argv.front();
-            
+            auto path = fs::path(argv.front());
             host.setSearchPath(path);
         }
     });

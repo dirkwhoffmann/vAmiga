@@ -16,7 +16,7 @@
 namespace vamiga {
 
 void
-PromServer::_dump(Category category, std::ostream& os) const
+PromServer::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
 

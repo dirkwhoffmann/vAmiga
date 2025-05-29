@@ -97,7 +97,7 @@ struct HunkDescriptor {
     //
     
     void dump(Category category) const;
-    void dump(Category category, std::ostream& os) const;
+    void dump(Category category, std::ostream &os) const;
 };
 
 struct ProgramUnitDescriptor {
@@ -133,7 +133,7 @@ struct ProgramUnitDescriptor {
     //
     
     void dump(Category category) const;
-    void dump(Category category, std::ostream& os) const;
+    void dump(Category category, std::ostream &os) const;
 };
 
 }

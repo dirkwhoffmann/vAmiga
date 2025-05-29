@@ -92,7 +92,7 @@ FileSystemDescriptor::dump() const
 }
 
 void
-FileSystemDescriptor::dump(std::ostream& os) const
+FileSystemDescriptor::dump(std::ostream &os) const
 {
     using namespace util;
     

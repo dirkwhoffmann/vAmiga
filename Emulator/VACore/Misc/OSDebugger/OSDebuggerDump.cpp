@@ -17,7 +17,7 @@
 namespace vamiga {
 
 void
-OSDebugger::dumpInfo(std::ostream& s)
+OSDebugger::dumpInfo(std::ostream &s)
 {
     using namespace util;
     auto execBase = getExecBase();
@@ -53,7 +53,7 @@ OSDebugger::dumpInfo(std::ostream& s)
 }
 
 void
-OSDebugger::dumpExecBase(std::ostream& s)
+OSDebugger::dumpExecBase(std::ostream &s)
 {
     using namespace util;
     auto execBase = getExecBase();
@@ -132,7 +132,7 @@ OSDebugger::dumpExecBase(std::ostream& s)
 }
 
 void
-OSDebugger::dumpIntVectors(std::ostream& s) 
+OSDebugger::dumpIntVectors(std::ostream &s) 
 {
     const char *name[16] = {
         
@@ -152,7 +152,7 @@ OSDebugger::dumpIntVectors(std::ostream& s)
 }
 
 void
-OSDebugger::dumpIntVector(std::ostream& s, const os::IntVector &intVec)
+OSDebugger::dumpIntVector(std::ostream &s, const os::IntVector &intVec)
 {
     os::Interrupt irq;
     read(intVec.iv_Node, &irq);
@@ -174,7 +174,7 @@ OSDebugger::dumpIntVector(std::ostream& s, const os::IntVector &intVec)
 }
 
 void
-OSDebugger::dumpLibraries(std::ostream& s)
+OSDebugger::dumpLibraries(std::ostream &s)
 {
     std::vector <os::Library> libraries;
     read(getExecBase().LibList.lh_Head, libraries);
@@ -186,7 +186,7 @@ OSDebugger::dumpLibraries(std::ostream& s)
 }
 
 void
-OSDebugger::dumpLibrary(std::ostream& s, u32 addr)
+OSDebugger::dumpLibrary(std::ostream &s, u32 addr)
 {
     os::Library library;
     
@@ -196,7 +196,7 @@ OSDebugger::dumpLibrary(std::ostream& s, u32 addr)
 }
 
 void
-OSDebugger::dumpLibrary(std::ostream& s, const string &name)
+OSDebugger::dumpLibrary(std::ostream &s, const string &name)
 {
     os::Library library;
     
@@ -206,7 +206,7 @@ OSDebugger::dumpLibrary(std::ostream& s, const string &name)
 }
 
 void
-OSDebugger::dumpLibrary(std::ostream& s, const os::Library &lib, bool verbose)
+OSDebugger::dumpLibrary(std::ostream &s, const os::Library &lib, bool verbose)
 {
     using namespace util;
     
@@ -250,7 +250,7 @@ OSDebugger::dumpLibrary(std::ostream& s, const os::Library &lib, bool verbose)
 }
 
 void
-OSDebugger::dumpDevices(std::ostream& s)
+OSDebugger::dumpDevices(std::ostream &s)
 {
     std::vector <os::Library> devices;
     read(getExecBase().DeviceList.lh_Head, devices);
@@ -261,7 +261,7 @@ OSDebugger::dumpDevices(std::ostream& s)
 }
 
 void
-OSDebugger::dumpDevice(std::ostream& s, u32 addr)
+OSDebugger::dumpDevice(std::ostream &s, u32 addr)
 {
     os::Library device;
     
@@ -271,7 +271,7 @@ OSDebugger::dumpDevice(std::ostream& s, u32 addr)
 }
 
 void
-OSDebugger::dumpDevice(std::ostream& s, const string &name)
+OSDebugger::dumpDevice(std::ostream &s, const string &name)
 {
     os::Library device;
     
@@ -281,13 +281,13 @@ OSDebugger::dumpDevice(std::ostream& s, const string &name)
 }
 
 void
-OSDebugger::dumpDevice(std::ostream& s, const os::Library &lib, bool verbose)
+OSDebugger::dumpDevice(std::ostream &s, const os::Library &lib, bool verbose)
 {
     dumpLibrary(s, lib, verbose);
 }
 
 void
-OSDebugger::dumpResources(std::ostream& s)
+OSDebugger::dumpResources(std::ostream &s)
 {
     std::vector <os::Library> resources;
     read(getExecBase().DeviceList.lh_Head, resources);
@@ -298,7 +298,7 @@ OSDebugger::dumpResources(std::ostream& s)
 }
 
 void
-OSDebugger::dumpResource(std::ostream& s, u32 addr)
+OSDebugger::dumpResource(std::ostream &s, u32 addr)
 {
     os::Library resource;
     
@@ -308,7 +308,7 @@ OSDebugger::dumpResource(std::ostream& s, u32 addr)
 }
 
 void
-OSDebugger::dumpResource(std::ostream& s, const string &name)
+OSDebugger::dumpResource(std::ostream &s, const string &name)
 {
     os::Library resource;
     
@@ -318,13 +318,13 @@ OSDebugger::dumpResource(std::ostream& s, const string &name)
 }
 
 void
-OSDebugger::dumpResource(std::ostream& s, const os::Library &lib, bool verbose)
+OSDebugger::dumpResource(std::ostream &s, const os::Library &lib, bool verbose)
 {
     dumpLibrary(s, lib, verbose);
 }
 
 void
-OSDebugger::dumpTasks(std::ostream& s)
+OSDebugger::dumpTasks(std::ostream &s)
 {
     std::vector <os::Task> tasks;
     read(tasks);
@@ -335,7 +335,7 @@ OSDebugger::dumpTasks(std::ostream& s)
 }
 
 void
-OSDebugger::dumpTask(std::ostream& s, u32 addr)
+OSDebugger::dumpTask(std::ostream &s, u32 addr)
 {
     os::Task task;
     
@@ -345,7 +345,7 @@ OSDebugger::dumpTask(std::ostream& s, u32 addr)
 }
 
 void
-OSDebugger::dumpTask(std::ostream& s, const string &name)
+OSDebugger::dumpTask(std::ostream &s, const string &name)
 {
     os::Task task;
     
@@ -355,7 +355,7 @@ OSDebugger::dumpTask(std::ostream& s, const string &name)
 }
 
 void
-OSDebugger::dumpTask(std::ostream& s, const os::Task &task, bool verbose)
+OSDebugger::dumpTask(std::ostream &s, const os::Task &task, bool verbose)
 {
     using namespace util;
     
@@ -428,7 +428,7 @@ OSDebugger::dumpTask(std::ostream& s, const os::Task &task, bool verbose)
 }
 
 void
-OSDebugger::dumpProcess(std::ostream& s, u32 addr)
+OSDebugger::dumpProcess(std::ostream &s, u32 addr)
 {
     os::Process process;
     
@@ -438,7 +438,7 @@ OSDebugger::dumpProcess(std::ostream& s, u32 addr)
 }
 
 void
-OSDebugger::dumpProcess(std::ostream& s, const string &name)
+OSDebugger::dumpProcess(std::ostream &s, const string &name)
 {
     os::Process process;
     
@@ -448,7 +448,7 @@ OSDebugger::dumpProcess(std::ostream& s, const string &name)
 }
 
 void
-OSDebugger::dumpProcesses(std::ostream& s)
+OSDebugger::dumpProcesses(std::ostream &s)
 {
     std::vector <os::Process> processes;
     read(processes);
@@ -459,7 +459,7 @@ OSDebugger::dumpProcesses(std::ostream& s)
 }
 
 void
-OSDebugger::dumpProcess(std::ostream& s, const os::Process &process, bool verbose)
+OSDebugger::dumpProcess(std::ostream &s, const os::Process &process, bool verbose)
 {
     using namespace util;
     

@@ -46,7 +46,7 @@ CopperDebugger::_didReset(bool hard)
 }
 
 void
-CopperDebugger::_dump(Category category, std::ostream& os) const
+CopperDebugger::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
 
@@ -186,7 +186,7 @@ CopperDebugger::jumped()
 }
 
 void
-CopperDebugger::disassemble(std::ostream& os, isize list, bool symbolic, isize maxLines) const
+CopperDebugger::disassemble(std::ostream &os, isize list, bool symbolic, isize maxLines) const
 {
     assert(list == 1 || list == 2);
     

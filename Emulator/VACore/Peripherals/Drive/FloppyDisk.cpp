@@ -54,7 +54,7 @@ FloppyDisk::~FloppyDisk()
 }
 
 void
-FloppyDisk::_dump(Category category, std::ostream& os) const
+FloppyDisk::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
     

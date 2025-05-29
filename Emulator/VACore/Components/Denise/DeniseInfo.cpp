@@ -53,7 +53,7 @@ Denise::cacheInfo(DeniseInfo &info) const
 }
 
 void
-Denise::_dump(Category category, std::ostream& os) const
+Denise::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
     

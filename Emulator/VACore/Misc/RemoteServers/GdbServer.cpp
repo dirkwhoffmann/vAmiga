@@ -21,7 +21,7 @@
 namespace vamiga {
 
 void
-GdbServer::_dump(Category category, std::ostream& os) const
+GdbServer::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
 

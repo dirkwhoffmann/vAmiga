@@ -849,8 +849,9 @@ Console::initCommands(RetroShellCmd &root)
             .help   = { "Process a command script" },
             .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
                 
-                auto stream = std::ifstream(argv.front());
-                if (!stream.is_open()) throw CoreError(Fault::FILE_NOT_FOUND, argv.front());
+                auto path = host.makeAbsolute(argv.front());
+                auto stream = std::ifstream(path);
+                if (!stream.is_open()) throw CoreError(Fault::FILE_NOT_FOUND, path);
                 retroShell.asyncExecScript(stream);
             }
         });

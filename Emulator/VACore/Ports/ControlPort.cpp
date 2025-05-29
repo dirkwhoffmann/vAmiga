@@ -49,7 +49,7 @@ ControlPort::cacheInfo(ControlPortInfo &info) const
 }
 
 void
-ControlPort::_dump(Category category, std::ostream& os) const
+ControlPort::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
     

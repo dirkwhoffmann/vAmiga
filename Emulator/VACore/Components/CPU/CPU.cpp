@@ -480,7 +480,7 @@ CPU::cacheInfo(CPUInfo &info) const
 }
 
 void
-CPU::_dump(Category category, std::ostream& os) const
+CPU::_dump(Category category, std::ostream &os) const
 {
     auto print = [&](const string &name, const GuardList &guards) {
 
@@ -766,7 +766,7 @@ CPU::disassemblePC() const
 }
 
 void
-CPU::dumpLogBuffer(std::ostream& os, isize count) const
+CPU::dumpLogBuffer(std::ostream &os, isize count) const
 {
     isize numBytes = 0;
     isize num = debugger.loggedInstructions();
@@ -792,19 +792,19 @@ CPU::dumpLogBuffer(std::ostream& os, isize count) const
 }
 
 void
-CPU::dumpLogBuffer(std::ostream& os) const
+CPU::dumpLogBuffer(std::ostream &os) const
 {
     dumpLogBuffer(os, debugger.loggedInstructions());
 }
 
 void
-CPU::disassembleRange(std::ostream& os, u32 addr, isize count) const
+CPU::disassembleRange(std::ostream &os, u32 addr, isize count) const
 {
     disassembleRange(os, std::pair<u32, u32>(addr, UINT32_MAX), count);
 }
 
 void
-CPU::disassembleRange(std::ostream& os, std::pair<u32, u32> range, isize max) const
+CPU::disassembleRange(std::ostream &os, std::pair<u32, u32> range, isize max) const
 {
     u32 addr = range.first;
     isize numBytes = 0;

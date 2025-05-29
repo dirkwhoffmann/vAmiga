@@ -44,7 +44,7 @@ TOD::cacheInfo(TODInfo &info) const
 }
 
 void 
-TOD::_dump(Category category, std::ostream& os) const
+TOD::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
     

@@ -28,7 +28,7 @@ AudioPort::AudioPort(Amiga& ref, isize objid) : SubComponent(ref, objid)
 }
 
 void
-AudioPort::_dump(Category category, std::ostream& os) const
+AudioPort::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
     

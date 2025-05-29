@@ -14,7 +14,7 @@
 namespace vamiga {
 
 void
-HttpServer::_dump(Category category, std::ostream& os) const
+HttpServer::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
 

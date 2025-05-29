@@ -380,7 +380,7 @@ CoreComponent::exportConfig(const fs::path &path, bool diff, std::vector<Class> 
 }
 
 void
-CoreComponent::exportConfig(std::ostream& ss, bool diff, std::vector<Class> exclude) const
+CoreComponent::exportConfig(std::ostream &ss, bool diff, std::vector<Class> exclude) const
 {
     bool first = true;
     auto type = getDescriptions().at(0).type;
@@ -423,7 +423,7 @@ CoreComponent::exportConfig(std::ostream& ss, bool diff, std::vector<Class> excl
 }
 
 void
-CoreComponent::exportDiff(std::ostream& ss, std::vector<Class> exclude) const
+CoreComponent::exportDiff(std::ostream &ss, std::vector<Class> exclude) const
 {
     exportConfig(ss, true);
 }

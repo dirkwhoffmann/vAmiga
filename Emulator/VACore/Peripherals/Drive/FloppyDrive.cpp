@@ -246,7 +246,7 @@ FloppyDrive::cacheInfo(FloppyDriveInfo &info) const
 }
 
 void
-FloppyDrive::_dump(Category category, std::ostream& os) const
+FloppyDrive::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
     
@@ -1077,7 +1077,7 @@ FloppyDrive::insertNew(FSVolumeType fs, BootBlockId bb, string name, const fs::p
     
     
     // Create a file system and import the directory
-    MutableFileSystem volume(diameter(), density(), fs, host.makeAbsolute(path));
+    MutableFileSystem volume(diameter(), density(), fs, path);
             
     // Make the volume bootable
     volume.makeBootable(bb);
@@ -1090,24 +1090,6 @@ FloppyDrive::insertNew(FSVolumeType fs, BootBlockId bb, string name, const fs::p
     
     // Insert the ADF
     swapDisk(adf);
-
-    /*
-    ADFFile adf;
-    
-    // Create a suitable ADF for this drive
-    switch (config.type) {
-            
-        case FloppyDriveType::DD_35: adf.init(Diameter::INCH_35, Density::DD); break;
-        case FloppyDriveType::HD_35: adf.init(Diameter::INCH_35, Density::HD); break;
-        case FloppyDriveType::DD_525: adf.init(Diameter::INCH_525, Density::SD); break;
-    }
-    
-    // Add a file system
-    adf.formatDisk(fs, bb, name);
-    
-    // Replace the current disk with the new one
-    swapDisk(adf);
-    */
 }
 
 void
@@ -1145,18 +1127,16 @@ FloppyDrive::swapDisk(class FloppyFile &file)
 void
 FloppyDrive::swapDisk(const fs::path &path)
 {
-    auto location = host.makeAbsolute(path);
-
-    if (!fs::is_directory(location)) {
+    if (!fs::is_directory(path)) {
         
-        std::unique_ptr<FloppyFile> file(FloppyFile::make(location));
+        std::unique_ptr<FloppyFile> file(FloppyFile::make(path));
         swapDisk(*file);
         return;
     }
         
     try {
 
-        insertNew(FSVolumeType::OFS, BootBlockId::AMIGADOS_13, path.filename().string(), location);
+        insertNew(FSVolumeType::OFS, BootBlockId::AMIGADOS_13, path.filename().string(), path);
 
     }  catch (CoreError &err) {
         

@@ -27,7 +27,7 @@ RemoteServer::shutDownServer()
 }
 
 void
-RemoteServer::_dump(Category category, std::ostream& os) const
+RemoteServer::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
 

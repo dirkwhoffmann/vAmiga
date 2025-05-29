@@ -695,7 +695,7 @@ Amiga::masterClockFrequency() const
 }
 
 void
-Amiga::_dump(Category category, std::ostream& os) const
+Amiga::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
 

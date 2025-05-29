@@ -79,7 +79,7 @@ MemoryDebugger::memDump(u32 addr, isize bytes, isize sz) const
 }
 
 template <Accessor A> isize
-MemoryDebugger::ascDump(std::ostream& os, u32 addr, isize lines) const
+MemoryDebugger::ascDump(std::ostream &os, u32 addr, isize lines) const
 {
     auto oldAddr = addr;
     
@@ -94,7 +94,7 @@ MemoryDebugger::ascDump(std::ostream& os, u32 addr, isize lines) const
 }
 
 template <Accessor A> isize
-MemoryDebugger::hexDump(std::ostream& os, u32 addr, isize lines, isize sz) const
+MemoryDebugger::hexDump(std::ostream &os, u32 addr, isize lines, isize sz) const
 {
     auto oldAddr = addr;
     
@@ -111,7 +111,7 @@ MemoryDebugger::hexDump(std::ostream& os, u32 addr, isize lines, isize sz) const
 }
 
 template <Accessor A> isize
-MemoryDebugger::memDump(std::ostream& os, u32 addr, isize lines, isize sz) const
+MemoryDebugger::memDump(std::ostream &os, u32 addr, isize lines, isize sz) const
 {
     auto oldAddr = addr;
     
@@ -212,7 +212,7 @@ MemoryDebugger::write(u32 addr, u32 val, isize sz, isize repeats)
 }
 
 void 
-MemoryDebugger::load(std::istream& is, u32 addr)
+MemoryDebugger::load(std::istream &is, u32 addr)
 {
     for (;; addr++) {
 
@@ -224,7 +224,7 @@ MemoryDebugger::load(std::istream& is, u32 addr)
 }
 
 void
-MemoryDebugger::load(fs::path& path, u32 addr)
+MemoryDebugger::load(const fs::path &path, u32 addr)
 {
     std::ifstream stream(path, std::ifstream::binary);
     if (!stream.is_open()) throw CoreError(Fault::FILE_NOT_FOUND, path);
@@ -233,7 +233,7 @@ MemoryDebugger::load(fs::path& path, u32 addr)
 }
 
 void
-MemoryDebugger::save(std::ostream& os, u32 addr, isize count)
+MemoryDebugger::save(std::ostream &os, u32 addr, isize count)
 {
     for (isize i = 0; i < count; i++) {
 
@@ -243,7 +243,7 @@ MemoryDebugger::save(std::ostream& os, u32 addr, isize count)
 }
 
 void
-MemoryDebugger::save(fs::path& path, u32 addr, isize count)
+MemoryDebugger::save(const fs::path& path, u32 addr, isize count)
 {
     std::ofstream stream(path, std::ifstream::binary);
     if (!stream.is_open()) throw CoreError(Fault::FILE_CANT_CREATE, path);
@@ -379,25 +379,25 @@ MemoryDebugger::writeCs(Reg reg, u16 value)
 }
 
 void
-MemoryDebugger::convertNumeric(std::ostream& os, u8 value) const
+MemoryDebugger::convertNumeric(std::ostream &os, u8 value) const
 {
     convertNumeric<u16>(os, value, "%3d | %h | %b | %s");
 }
 
 void
-MemoryDebugger::convertNumeric(std::ostream& os, u16 value) const
+MemoryDebugger::convertNumeric(std::ostream &os, u16 value) const
 {
     convertNumeric<u16>(os, value, "%5d | %h | %b | %s");
 }
 
 void
-MemoryDebugger::convertNumeric(std::ostream& os, u32 value) const
+MemoryDebugger::convertNumeric(std::ostream &os, u32 value) const
 {
     convertNumeric<u32>(os, value, "%10d | %h | %b | %s");
 }
 
 void
-MemoryDebugger::convertNumeric(std::ostream& os, string s) const
+MemoryDebugger::convertNumeric(std::ostream &os, string s) const
 {
     auto len = s.length();
 
@@ -411,7 +411,7 @@ MemoryDebugger::convertNumeric(std::ostream& os, string s) const
 }
 
 template <typename T> void
-MemoryDebugger::convertNumeric(std::ostream& os, T value, const char *fmt) const
+MemoryDebugger::convertNumeric(std::ostream &os, T value, const char *fmt) const
 {
     bool ctrl = false;
     isize tab = 0;

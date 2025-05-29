@@ -60,7 +60,7 @@ Configurable::resetConfig(const Defaults &defaults, isize objid)
 }
 
 void
-Configurable::dumpConfig(std::ostream& os) const
+Configurable::dumpConfig(std::ostream &os) const
 {
     using namespace util;
 

@@ -103,7 +103,7 @@ public:
 
 private:
 
-    void _dump(Category category, std::ostream& os) const override;
+    void _dump(Category category, std::ostream &os) const override;
     void _didReset(bool hard) override;
 
 
@@ -138,7 +138,7 @@ public:
     //
         
     // Disassembles a Copper list
-    void disassemble(std::ostream& os, isize list, bool symbolic = true, isize maxLines = 128) const;
+    void disassemble(std::ostream &os, isize list, bool symbolic = true, isize maxLines = 128) const;
     
     // Disassembles a single Copper command
     string disassemble(isize list, isize offset, bool symbolic) const;

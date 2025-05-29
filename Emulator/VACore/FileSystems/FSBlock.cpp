@@ -1587,7 +1587,7 @@ FSBlock::setDataBytesInBlock(u32 val)
 }
 
 isize
-FSBlock::writeData(std::ostream& os)
+FSBlock::writeData(std::ostream &os)
 {
     Buffer<u8> buffer;
     
@@ -1601,7 +1601,7 @@ FSBlock::writeData(std::ostream& os)
 }
 
 isize
-FSBlock::writeData(std::ostream& os, isize size)
+FSBlock::writeData(std::ostream &os, isize size)
 {
     isize count = std::min(dsize(), size);
     

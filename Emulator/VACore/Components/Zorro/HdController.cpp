@@ -24,7 +24,7 @@ HdController::HdController(Amiga& ref, HardDrive& hdr) : ZorroBoard(ref, hdr.obj
 }
 
 void
-HdController::_dump(Category category, std::ostream& os) const
+HdController::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
 

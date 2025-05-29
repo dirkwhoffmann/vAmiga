@@ -137,7 +137,7 @@ FileSystem::getTraits()
 }
 
 void
-FileSystem::_dump(Category category, std::ostream& os) const
+FileSystem::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
     

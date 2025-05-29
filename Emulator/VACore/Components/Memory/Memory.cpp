@@ -34,7 +34,7 @@ Memory::Memory(Amiga& ref) : SubComponent(ref)
 }
 
 void
-Memory::_dump(Category category, std::ostream& os) const
+Memory::_dump(Category category, std::ostream &os) const
 {
     if (category == Category::Config) {
         
@@ -692,7 +692,7 @@ Memory::loadRom(MediaFile &file)
 void
 Memory::loadRom(const fs::path &path)
 {
-    RomFile file(host.makeAbsolute(path));
+    RomFile file(path);
     loadRom(file);
 }
 
@@ -725,7 +725,7 @@ Memory::loadExt(MediaFile &file)
 void
 Memory::loadExt(const fs::path &path)
 {
-    RomFile file(host.makeAbsolute(path));
+    RomFile file(path);
     loadExt(file);
 }
 

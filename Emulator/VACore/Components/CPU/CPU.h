@@ -187,7 +187,7 @@ private:
 
 private:
 
-    void _dump(Category category, std::ostream& os) const override;
+    void _dump(Category category, std::ostream &os) const override;
 
 
     void _didLoad() override;
@@ -271,12 +271,12 @@ public:
     const char *disassemblePC() const;
 
     // Dumps a portion of the log buffer
-    void dumpLogBuffer(std::ostream& os, isize count) const;
-    void dumpLogBuffer(std::ostream& os) const;
+    void dumpLogBuffer(std::ostream &os, isize count) const;
+    void dumpLogBuffer(std::ostream &os) const;
 
     // Disassembles a memory range
-    void disassembleRange(std::ostream& os, u32 addr, isize count) const;
-    void disassembleRange(std::ostream& os, std::pair<u32, u32> range, isize max = 255) const;
+    void disassembleRange(std::ostream &os, u32 addr, isize count) const;
+    void disassembleRange(std::ostream &os, std::pair<u32, u32> range, isize max = 255) const;
 
 
     //

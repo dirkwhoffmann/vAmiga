@@ -19,9 +19,9 @@ class Dumpable {
 public:
 
     virtual ~Dumpable() = default;
-    virtual void _dump(Category category, std::ostream& ss) const { }
+    virtual void _dump(Category category, std::ostream &ss) const { }
 
-    void dump(Category category, std::ostream& ss) const;
+    void dump(Category category, std::ostream &ss) const;
     void dump(Category category) const;
 };
 

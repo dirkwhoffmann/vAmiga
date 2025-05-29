@@ -91,7 +91,7 @@ AmigaAPI::getCachedInfo() const
 }
 
 void
-AmigaAPI::dump(Category category, std::ostream& os) const
+AmigaAPI::dump(Category category, std::ostream &os) const
 {
     VAMIGA_PUBLIC_SUSPEND
     amiga->dump(category, os);
@@ -1324,7 +1324,7 @@ HardDriveAPI::importFiles(const fs::path &path)
 }
 
 void
-HardDriveAPI::writeToFile(fs::path path)
+HardDriveAPI::writeToFile(const fs::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND
     drive->writeToFile(path);
@@ -2237,7 +2237,7 @@ VAmiga::exportConfig(const fs::path &path, bool diff) const
 }
 
 void
-VAmiga::exportConfig(std::ostream& stream, bool diff) const
+VAmiga::exportConfig(std::ostream &stream, bool diff) const
 {
     VAMIGA_PUBLIC_SUSPEND
     emu->main.exportConfig(stream, diff);

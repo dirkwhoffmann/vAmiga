@@ -71,7 +71,7 @@ public:
     
 private:
     
-    void _dump(Category category, std::ostream& os) const override { }
+    void _dump(Category category, std::ostream &os) const override { }
 
     
     //
@@ -111,7 +111,7 @@ public:
     // Creates the test image and exits the emulator
     void dumpTexture(Amiga &amiga);
     void dumpTexture(Amiga &amiga, const string &filename);
-    void dumpTexture(Amiga &amiga, std::ostream& os);
+    void dumpTexture(Amiga &amiga, std::ostream &os);
 
     
     //

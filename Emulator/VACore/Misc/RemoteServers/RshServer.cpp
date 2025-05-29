@@ -16,7 +16,7 @@
 namespace vamiga {
 
 void
-RshServer::_dump(Category category, std::ostream& os) const
+RshServer::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
     

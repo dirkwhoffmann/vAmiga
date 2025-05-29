@@ -51,7 +51,7 @@ public:
     
 private:
     
-    void _dump(Category category, std::ostream& os) const override { }
+    void _dump(Category category, std::ostream &os) const override { }
 
     
     //
@@ -203,36 +203,36 @@ public:
 
 public:
     
-    void dumpInfo(std::ostream& s);
-    void dumpExecBase(std::ostream& s);
+    void dumpInfo(std::ostream &s);
+    void dumpExecBase(std::ostream &s);
     
-    void dumpIntVectors(std::ostream& s);
-    void dumpIntVector(std::ostream& s, const os::IntVector &intVector);
+    void dumpIntVectors(std::ostream &s);
+    void dumpIntVector(std::ostream &s, const os::IntVector &intVector);
 
-    void dumpLibraries(std::ostream& s);
-    void dumpLibrary(std::ostream& s, u32 addr);
-    void dumpLibrary(std::ostream& s, const string &name);
-    void dumpLibrary(std::ostream& s, const os::Library &lib, bool verbose);
+    void dumpLibraries(std::ostream &s);
+    void dumpLibrary(std::ostream &s, u32 addr);
+    void dumpLibrary(std::ostream &s, const string &name);
+    void dumpLibrary(std::ostream &s, const os::Library &lib, bool verbose);
 
-    void dumpDevices(std::ostream& s);
-    void dumpDevice(std::ostream& s, u32 addr);
-    void dumpDevice(std::ostream& s, const string &name);
-    void dumpDevice(std::ostream& s, const os::Library &lib, bool verbose);
+    void dumpDevices(std::ostream &s);
+    void dumpDevice(std::ostream &s, u32 addr);
+    void dumpDevice(std::ostream &s, const string &name);
+    void dumpDevice(std::ostream &s, const os::Library &lib, bool verbose);
 
-    void dumpResources(std::ostream& s);
-    void dumpResource(std::ostream& s, u32 addr);
-    void dumpResource(std::ostream& s, const string &name);
-    void dumpResource(std::ostream& s, const os::Library &lib, bool verbose);
+    void dumpResources(std::ostream &s);
+    void dumpResource(std::ostream &s, u32 addr);
+    void dumpResource(std::ostream &s, const string &name);
+    void dumpResource(std::ostream &s, const os::Library &lib, bool verbose);
 
-    void dumpTasks(std::ostream& s);
-    void dumpTask(std::ostream& s, u32 addr);
-    void dumpTask(std::ostream& s, const string &name);
-    void dumpTask(std::ostream& s, const os::Task &task, bool verbose);
+    void dumpTasks(std::ostream &s);
+    void dumpTask(std::ostream &s, u32 addr);
+    void dumpTask(std::ostream &s, const string &name);
+    void dumpTask(std::ostream &s, const os::Task &task, bool verbose);
     
-    void dumpProcesses(std::ostream& s);
-    void dumpProcess(std::ostream& s, u32 addr);
-    void dumpProcess(std::ostream& s, const string &name);
-    void dumpProcess(std::ostream& s, const os::Process &process, bool verbose);
+    void dumpProcesses(std::ostream &s);
+    void dumpProcess(std::ostream &s, u32 addr);
+    void dumpProcess(std::ostream &s, const string &name);
+    void dumpProcess(std::ostream &s, const os::Process &process, bool verbose);
 };
 
 }

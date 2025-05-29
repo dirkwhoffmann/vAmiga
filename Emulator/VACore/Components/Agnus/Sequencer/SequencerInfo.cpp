@@ -15,7 +15,7 @@
 namespace vamiga {
 
 void
-Sequencer::_dump(Category category, std::ostream& os) const
+Sequencer::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
 

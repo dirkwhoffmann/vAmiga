@@ -58,7 +58,7 @@ public:
      *  @param  category    Debug information category
      *  @param  os Output stream
      */
-    void dump(Category category, std::ostream& os) const;
+    void dump(Category category, std::ostream &os) const;
 
     /// @}
     /// @name Managing workspaces and snapshots
@@ -803,7 +803,7 @@ public:
     
     /** @brief  Exports the hard drive to an HDF file on disk
      */
-    void writeToFile(fs::path path);
+    void writeToFile(const fs::path &path);
 
     /** @brief  Converts the hard drive to an HDF media file
      */
@@ -1906,7 +1906,7 @@ public:
      *              machine configurations.
      */
     void exportConfig(const fs::path &path, bool diff = false) const;
-    void exportConfig(std::ostream& stream, bool diff = false) const;
+    void exportConfig(std::ostream &stream, bool diff = false) const;
     
     
     /// @}

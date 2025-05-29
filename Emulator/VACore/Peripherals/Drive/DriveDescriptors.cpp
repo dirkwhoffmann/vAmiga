@@ -109,7 +109,7 @@ GeometryDescriptor::dump() const
 }
 
 void
-GeometryDescriptor::dump(std::ostream& os) const
+GeometryDescriptor::dump(std::ostream &os) const
 {
     using namespace util;
     
@@ -165,7 +165,7 @@ PartitionDescriptor::dump() const
 }
 
 void
-PartitionDescriptor::dump(std::ostream& os) const
+PartitionDescriptor::dump(std::ostream &os) const
 {
     using namespace util;
     
@@ -223,7 +223,7 @@ DriverDescriptor::dump() const
 }
 
 void
-DriverDescriptor::dump(std::ostream& os) const
+DriverDescriptor::dump(std::ostream &os) const
 {
     using namespace util;
 

@@ -15,7 +15,7 @@
 namespace vamiga {
 
 void
-ZorroBoard::_dump(Category category, std::ostream& os) const
+ZorroBoard::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
     

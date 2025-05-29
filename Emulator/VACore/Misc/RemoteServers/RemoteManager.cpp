@@ -27,7 +27,7 @@ RemoteManager::RemoteManager(Amiga& ref) : SubComponent(ref)
 }
 
 void
-RemoteManager::_dump(Category category, std::ostream& os) const
+RemoteManager::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
     

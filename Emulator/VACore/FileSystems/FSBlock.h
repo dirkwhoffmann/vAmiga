@@ -55,7 +55,7 @@ struct FSBlock : CoreObject {
 protected:
     
     const char *objectName() const override;
-    void _dump(Category category, std::ostream& os) const override { }
+    void _dump(Category category, std::ostream &os) const override { }
     
     
     //
@@ -302,8 +302,8 @@ public:
     // Exporting
     //
     
-    isize writeData(std::ostream& os);
-    isize writeData(std::ostream& os, isize size);
+    isize writeData(std::ostream &os);
+    isize writeData(std::ostream &os, isize size);
     isize writeData(Buffer<u8> &buf);
     isize writeData(Buffer<u8> &buf, isize offset, isize count);
 

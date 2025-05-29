@@ -78,7 +78,7 @@ public:
 
 private:
 
-    void _dump(Category category, std::ostream& os) const override;
+    void _dump(Category category, std::ostream &os) const override;
 
 
 
@@ -102,10 +102,10 @@ public:
 public:
 
     // Sets the search path used in makeAbsolute
-    void setSearchPath(fs::path path);
+    void setSearchPath(const fs::path &path);
 
     // Sets the search path used in makeAbsolute
-    fs::path makeAbsolute(fs::path path) const;
+    fs::path makeAbsolute(const fs::path &path) const;
 
     // Returns a path to a temporary folder
     fs::path tmp() const throws;

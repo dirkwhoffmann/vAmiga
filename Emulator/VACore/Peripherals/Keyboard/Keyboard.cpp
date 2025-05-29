@@ -74,7 +74,7 @@ Keyboard::setOption(Opt option, i64 value)
 }
 
 void
-Keyboard::_dump(Category category, std::ostream& os) const
+Keyboard::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
     

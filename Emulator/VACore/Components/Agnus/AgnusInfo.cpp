@@ -475,7 +475,7 @@ Agnus::eventName(EventSlot slot, EventID id)
 }
 
 void
-Agnus::_dump(Category category, std::ostream& os) const
+Agnus::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
     

@@ -13,7 +13,7 @@
 namespace vamiga {
 
 void
-Dumpable::dump(Category category, std::ostream& ss) const
+Dumpable::dump(Category category, std::ostream &ss) const
 {
     _dump(category, ss);
 }

@@ -26,7 +26,7 @@ LogicAnalyzer::_didReset(bool hard)
 }
 
 void
-LogicAnalyzer::_dump(Category category, std::ostream& os) const
+LogicAnalyzer::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
 

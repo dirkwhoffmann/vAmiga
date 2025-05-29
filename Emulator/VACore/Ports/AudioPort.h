@@ -198,7 +198,7 @@ public:
 
 private:
 
-    void _dump(Category category, std::ostream& os) const override;
+    void _dump(Category category, std::ostream &os) const override;
     void _didLoad() override;
     void _didReset(bool hard) override;
     void _initialize() override;

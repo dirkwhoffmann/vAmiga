@@ -40,7 +40,7 @@ UART::cacheInfo(UARTInfo &info) const
 }
 
 void
-UART::_dump(Category category, std::ostream& os) const
+UART::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
     

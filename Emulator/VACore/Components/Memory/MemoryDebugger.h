@@ -62,7 +62,7 @@ public:
 
 private:
 
-    void _dump(Category category, std::ostream& os) const override { };
+    void _dump(Category category, std::ostream &os) const override { };
 
 
     //
@@ -86,9 +86,9 @@ public:
     template <Accessor A> const char *memDump(u32 addr, isize bytes, isize sz = 1) const;
 
     // Writes a memory dump into a stream. Returns the number of written bytes
-    template <Accessor A> isize ascDump(std::ostream& os, u32 addr, isize lines) const;
-    template <Accessor A> isize hexDump(std::ostream& os, u32 addr, isize lines, isize sz) const;
-    template <Accessor A> isize memDump(std::ostream& os, u32 addr, isize lines, isize sz) const;
+    template <Accessor A> isize ascDump(std::ostream &os, u32 addr, isize lines) const;
+    template <Accessor A> isize hexDump(std::ostream &os, u32 addr, isize lines, isize sz) const;
+    template <Accessor A> isize memDump(std::ostream &os, u32 addr, isize lines, isize sz) const;
 
     // Searches a number sequence in memory
     i64 memSearch(const string &pattern, u32 addr, isize align);
@@ -100,12 +100,12 @@ public:
     isize write(u32 addr, u32 val, isize sz, isize repeats = 1);
 
     // Loads a chunk of memory from a stream or file
-    void load(std::istream& is, u32 addr);
-    void load(fs::path& path, u32 addr);
+    void load(std::istream &is, u32 addr);
+    void load(const fs::path &path, u32 addr);
 
     // Saves a chunk of memory to a stream or file
-    void save(std::ostream& is, u32 addr, isize count);
-    void save(fs::path& path, u32 addr, isize count);
+    void save(std::ostream &is, u32 addr, isize count);
+    void save(const fs::path &path, u32 addr, isize count);
 
 
     //
@@ -132,14 +132,14 @@ public:
 public:
         
     // Displays a value in different number formats (hex, dec, bin, alpha)
-    void convertNumeric(std::ostream& os, u8 value) const;
-    void convertNumeric(std::ostream& os, u16 value) const;
-    void convertNumeric(std::ostream& os, u32 value) const;
-    void convertNumeric(std::ostream& os, string value) const;
+    void convertNumeric(std::ostream &os, u8 value) const;
+    void convertNumeric(std::ostream &os, u16 value) const;
+    void convertNumeric(std::ostream &os, u32 value) const;
+    void convertNumeric(std::ostream &os, string value) const;
     
 private:
     
-    template <typename T> void convertNumeric(std::ostream& os, T value, const char *fmt) const;
+    template <typename T> void convertNumeric(std::ostream &os, T value, const char *fmt) const;
 };
 
 }

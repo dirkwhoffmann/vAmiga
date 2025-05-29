@@ -105,7 +105,7 @@ template <class T> struct Buffer : public Allocator <T> {
 
 // Stream operators
 template <class T>
-std::ostream& operator<<(std::ostream& os, const Allocator<T>& buffer) {
+std::ostream &operator<<(std::ostream &os, const Allocator<T> &buffer) {
     
     if (buffer.ptr && buffer.size > 0) {
         os.write((const char *)buffer.ptr, buffer.size * sizeof(T));

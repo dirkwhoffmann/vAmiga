@@ -226,23 +226,21 @@ HardDrive::init(const HDZFile &hdz) throws
 void
 HardDrive::init(const fs::path &path) throws
 {
-    auto fullPath = host.makeAbsolute(path);
-    
-    if (!fs::exists(fullPath)) {
+    if (!fs::exists(path)) {
 
         throw CoreError(Fault::FILE_NOT_FOUND, path);
     }
 
-    if (fs::is_directory(fullPath)) {
+    if (fs::is_directory(path)) {
         
         debug(HDR_DEBUG, "Importing directory...\n");
         
-        importFolder(fullPath);
+        importFolder(path);
         
     } else {
         
-        try { init(HDFFile(fullPath)); return; } catch(...) { }
-        try { init(HDZFile(fullPath)); return; } catch(...) { }
+        try { init(HDFFile(path)); return; } catch(...) { }
+        try { init(HDZFile(path)); return; } catch(...) { }
         
         throw CoreError(Fault::FILE_TYPE_UNSUPPORTED);
     }
@@ -420,7 +418,7 @@ HardDrive::_didLoad()
 }
 
 void
-HardDrive::_dump(Category category, std::ostream& os) const
+HardDrive::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
     
@@ -748,14 +746,12 @@ HardDrive::moveHead(isize c, isize h, isize s)
 void
 HardDrive::importFolder(const fs::path &path) throws
 {
-    auto fullPath = host.makeAbsolute(path);
-    
-    if (!fs::exists(fullPath)) {
+    if (!fs::exists(path)) {
 
         throw CoreError(Fault::FILE_NOT_FOUND, path);
     }
     
-    if (fs::is_directory(fullPath)) {
+    if (fs::is_directory(path)) {
         
         debug(HDR_DEBUG, "Importing directory...\n");
 
@@ -769,7 +765,7 @@ HardDrive::importFolder(const fs::path &path) throws
         auto fs = MutableFileSystem(layout);
         
         // Import all files and name the partition
-        fs.importDirectory(fullPath);
+        fs.importDirectory(path);
         
         // Name the file system
         fs.setName(traits.name);

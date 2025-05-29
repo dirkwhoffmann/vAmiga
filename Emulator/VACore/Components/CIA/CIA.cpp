@@ -195,7 +195,7 @@ CIA::cacheStats(CIAStats &result) const
 }
 
 void
-CIA::_dump(Category category, std::ostream& os) const
+CIA::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
     

@@ -113,7 +113,7 @@ DiskController::cacheInfo(DiskControllerInfo &result) const
 }
 
 void
-DiskController::_dump(Category category, std::ostream& os) const
+DiskController::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
     

@@ -137,7 +137,7 @@ AudioFilter::AudioFilter(Amiga& amiga, AudioPort& port) : SubComponent(amiga, po
 }
 
 void
-AudioFilter::_dump(Category category, std::ostream& os) const
+AudioFilter::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
 

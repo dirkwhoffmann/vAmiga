@@ -65,7 +65,7 @@ struct FileSystemDescriptor {
     
     // Prints debug information
     void dump() const;
-    void dump(std::ostream& os) const;
+    void dump(std::ostream &os) const;
     
     // Throws an exception if the descriptor contains unsupported values
     void checkCompatibility() const;

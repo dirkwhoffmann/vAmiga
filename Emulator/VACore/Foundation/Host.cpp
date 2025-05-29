@@ -78,7 +78,7 @@ Host::setOption(Opt opt, i64 value)
 }
 
 void
-Host::_dump(Category category, std::ostream& os) const
+Host::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
 
@@ -92,7 +92,7 @@ Host::_dump(Category category, std::ostream& os) const
 }
 
 void
-Host::setSearchPath(fs::path path)
+Host::setSearchPath(const fs::path &path)
 {
     SYNCHRONIZED
     
@@ -100,7 +100,7 @@ Host::setSearchPath(fs::path path)
 }
 
 fs::path
-Host::makeAbsolute(fs::path path) const
+Host::makeAbsolute(const fs::path &path) const
 {
     SYNCHRONIZED
     

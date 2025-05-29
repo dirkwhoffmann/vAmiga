@@ -193,7 +193,7 @@ Defaults::Defaults()
 }
 
 void
-Defaults::_dump(Category category, std::ostream& os) const
+Defaults::_dump(Category category, std::ostream &os) const
 {
     {   SYNCHRONIZED
 
