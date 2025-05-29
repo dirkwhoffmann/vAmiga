@@ -1356,7 +1356,13 @@ NSString *EventSlotName(NSInteger slot)
 
 - (void)insertBlankDisk:(FSVolumeType)fs bootBlock:(BootBlockId)bb name:(NSString *)name url:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
-    try { return [self drive]->insertBlankDisk(fs, bb, [name UTF8String], [url fileSystemRepresentation]); }
+    try {
+        if (url) {
+            return [self drive]->insertBlankDisk(fs, bb, [name UTF8String], [url fileSystemRepresentation]);
+        } else {
+            return [self drive]->insertBlankDisk(fs, bb, [name UTF8String]);
+        }
+    }
     catch (CoreError &error) { [ex save:error]; }
 }
 
