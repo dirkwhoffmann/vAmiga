@@ -279,7 +279,6 @@ MutableFileSystem::addFileListBlock(Block at, Block head, Block prev)
         
         blocks[at]->init(FSBlockType::FILELIST_BLOCK);
         blocks[at]->setFileHeaderRef(head);
-        blocks[at]->set32(4, blocks[at]->nr);
         
         prevBlock->setNextListBlockRef(at);
     }
@@ -414,7 +413,6 @@ MutableFileSystem::createFile(const string &name)
         
         block->setParentDirRef(cdb->nr);
         addHashRef(block->nr);
-        block->set32(4, block->nr);
         return block;
     }
     

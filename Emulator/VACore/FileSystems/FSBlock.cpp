@@ -1239,7 +1239,6 @@ FSBlock::setFirstDataBlockRef(Block ref)
     switch (type) {
 
         case FSBlockType::FILEHEADER_BLOCK:
-        case FSBlockType::FILELIST_BLOCK:
             
             set32(4, ref);
             break;
@@ -1551,7 +1550,6 @@ FSBlock::addDataBlockRef(u32 first, u32 ref)
             
         case FSBlockType::FILELIST_BLOCK:
             
-            setFirstDataBlockRef(first);
             setDataBlockRef(getNumDataBlockRefs(), ref);
             incNumDataBlockRefs();
             break;
