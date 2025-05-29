@@ -103,14 +103,14 @@ public:
 public:
 
     // Reverts to factory settings
-    void prepare(ConfigScheme scheme, string rom = "", string ext = "");
+    void prepare(ConfigScheme scheme, const fs::path &rom = {}, const fs::path &ext = {});
     
     // Runs a test case
     void run(string adf);
     
     // Creates the test image and exits the emulator
     void dumpTexture(Amiga &amiga);
-    void dumpTexture(Amiga &amiga, const string &filename);
+    void dumpTexture(Amiga &amiga, const fs::path &filename);
     void dumpTexture(Amiga &amiga, std::ostream &os);
 
     

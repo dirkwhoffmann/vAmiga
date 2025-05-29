@@ -17,7 +17,7 @@
 namespace vamiga {
 
 void
-RegressionTester::prepare(ConfigScheme scheme, string rom, string ext)
+RegressionTester::prepare(ConfigScheme scheme, const fs::path &rom, const fs::path &ext)
 {
     // Only proceed if the /tmp folder exisits
     if (!util::fileExists("/tmp")) throw CoreError(Fault::DIR_NOT_FOUND, "/tmp");
@@ -30,10 +30,10 @@ RegressionTester::prepare(ConfigScheme scheme, string rom, string ext)
     emulator.set(scheme);
 
     // Load Kickstart Rom
-    if (rom != "") amiga.mem.loadRom(rom.c_str());
+    if (rom != "") amiga.mem.loadRom(rom);
     
     // Load Extension Rom (if provided)
-    if (ext != "") amiga.mem.loadExt(ext.c_str());
+    if (ext != "") amiga.mem.loadExt(ext);
     
     // Choose a color palette that stays stable across releases
     emulator.set(Opt::MON_PALETTE, (i64)Palette::RGB);
@@ -63,7 +63,7 @@ RegressionTester::dumpTexture(Amiga &amiga)
 }
 
 void
-RegressionTester::dumpTexture(Amiga &amiga, const string &filename)
+RegressionTester::dumpTexture(Amiga &amiga, const fs::path &path)
 {
     /* This function is used for automatic regression testing. It dumps the
      * visible portion of the texture into the /tmp directory and exits the
@@ -73,8 +73,8 @@ RegressionTester::dumpTexture(Amiga &amiga, const string &filename)
     std::ofstream file;
 
     // Open an output stream
-    file.open(("/tmp/" + filename + ".raw").c_str());
-    
+    file.open((fs::path("/tmp") / path).replace_extension(".raw"));
+        
     // Dump texture
     dumpTexture(amiga, file);
     file.close();
