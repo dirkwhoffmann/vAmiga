@@ -42,16 +42,16 @@ public:
     static constexpr Texel cb2      = grey4;    // Checkerboard color 2
 
     // Frame number
-    i64 nr;
+    i64 nr = 0;
 
     // Pixel buffer
     Buffer <Texel> pixels;
 
     // The long-frame bit of this frame
-    bool lof;
+    bool lof = false;
 
     // The long-frame bit of the previous frame
-    bool prevlof;
+    bool prevlof = false;
 
     FrameBuffer();
 
