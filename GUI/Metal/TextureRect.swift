@@ -54,8 +54,8 @@ extension Canvas {
     var visible: CGRect {
 
         // Determine zoom factors
-        var hZoom = renderer.config.hZoom
-        var vZoom = renderer.config.vZoom
+        var hZoom = Float(renderer.config.hZoom) / 100.0
+        var vZoom = Float(renderer.config.vZoom) / 100.0
 
         switch renderer.config.zoom {
 

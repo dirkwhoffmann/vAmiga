@@ -76,7 +76,7 @@ class Renderer: NSObject, MTKViewDelegate {
     // Uniforms
     //
     
-    var shaderOptions: ShaderOptions!
+    var shaderOptions = ShaderOptions.zero
 
     //
     // Animations
@@ -138,49 +138,56 @@ class Renderer: NSObject, MTKViewDelegate {
     
     func updateShaderOptions(option: Option, value: Int64)
     {
+        func map(_ value: Int64, from source: ClosedRange<Int64> = 0...100, to target: ClosedRange<Float>) -> Float {
+            
+            let clamped = min(max(value, source.lowerBound), source.upperBound)
+            let normalized = Float(clamped - source.lowerBound) / Float(source.upperBound - source.lowerBound)
+            return target.lowerBound + normalized * (target.upperBound - target.lowerBound)
+        }
+
         switch option {
             
         case .MON_ENHANCER:
-            ressourceManager.selectEnhancer(config.enhancer)
+            ressourceManager.selectEnhancer(Int(value))
         case .MON_UPSCALER:
-            ressourceManager.selectUpscaler(config.upscaler)
+            ressourceManager.selectUpscaler(Int(value))
         case .MON_BLUR:
-            shaderOptions.blur = Int32(config.blur)
+            shaderOptions.blur = Int32(value)
         case .MON_BLUR_RADIUS:
-            shaderOptions.blurRadius = Float(config.blurRadius)
+            shaderOptions.blurRadius = map(value, to: 0...5.0)
         case .MON_BLOOM:
-            shaderOptions.bloom = Int32(config.bloom)
-            ressourceManager.selectBloomFilter(config.bloom)
+            shaderOptions.bloom = Int32(value)
+            ressourceManager.selectBloomFilter(Int(value))
         case .MON_BLOOM_RADIUS:
-            shaderOptions.bloomRadius = Float(config.bloomRadius)
+            shaderOptions.bloomRadius = map(value, to: 0...5)
         case .MON_BLOOM_BRIGHTNESS:
-            shaderOptions.bloomBrightness = Float(config.bloomBrightness)
+            shaderOptions.bloomBrightness = map(value, to: 0...2)
         case .MON_BLOOM_WEIGHT:
-            shaderOptions.bloomWeight = Float(config.bloomWeight)
+            shaderOptions.bloomWeight = map(value, to: 0...3)
         case .MON_DOTMASK:
-            shaderOptions.dotMask = Int32(config.dotMask)
+            shaderOptions.dotMask = Int32(value)
             ressourceManager.buildDotMasks()
-            ressourceManager.selectDotMask(config.dotMask)
+            ressourceManager.selectDotMask(Int(value))
         case .MON_DOTMASK_BRIGHTNESS:
-            shaderOptions.dotMaskBrightness = Float(config.dotMaskBrightness)
+            shaderOptions.dotMaskBrightness = map(value, to: 0...1)
             ressourceManager.buildDotMasks()
             ressourceManager.selectDotMask(config.dotMask)
         case .MON_SCANLINES:
-            shaderOptions.scanlines = Int32(config.scanlines)
+            shaderOptions.scanlines = Int32(value)
         case .MON_SCANLINE_BRIGHTNESS:
-            shaderOptions.scanlineBrightness = Float(config.scanlineBrightness)
+            shaderOptions.scanlineBrightness = map(value, to: 0...1)
         case .MON_SCANLINE_WEIGHT:
-            shaderOptions.scanlineWeight = Float(config.scanlineWeight)
+            shaderOptions.scanlineWeight = map(value, to: 0...1)
         case .MON_DISALIGNMENT:
-            shaderOptions.disalignment = Int32(config.disalignment)
+            shaderOptions.disalignment = Int32(value)
         case .MON_DISALIGNMENT_H:
-            shaderOptions.disalignmentH = Float(value - 50) * 0.00008
+            shaderOptions.disalignmentH = map(value, to: -0.004...0.004)
         case .MON_DISALIGNMENT_V:
-            shaderOptions.disalignmentV = Float(value - 50) * 0.00008
+            shaderOptions.disalignmentV = map(value, to: -0.004...0.004)
         case .MON_FLICKER:
-            shaderOptions.flicker = Int32(config.flicker)
+            shaderOptions.flicker = Int32(value)
         case .MON_FLICKER_WEIGHT:
-            shaderOptions.flickerWeight = Float(config.flickerWeight)
+            shaderOptions.flickerWeight = map(value, to: 0...1)
         default:
             break
         }
@@ -315,7 +322,7 @@ class Renderer: NSObject, MTKViewDelegate {
     
     func processMessage(_ msg: Message) {
         
-        var option = Option(rawValue: Int(msg.value))!
+        let option = Option(rawValue: Int(msg.value))!
 
         switch msg.type {
             

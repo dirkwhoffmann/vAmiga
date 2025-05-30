@@ -64,25 +64,9 @@ extension Renderer {
     
     func buildShaders() {
         
+        /*
         shaderOptions = ShaderOptions(
-            
-            blur: 0,
-            blurRadius: 0,
-            bloom: 0,
-            bloomRadius: 0,
-            bloomBrightness: 0,
-            bloomWeight: 0,
-            flicker: 0,
-            flickerWeight: 0,
-            dotMask: 0,
-            dotMaskBrightness: 0,
-            scanlines: 0,
-            scanlineBrightness: 0,
-            scanlineWeight: 0,
-            disalignment: 0,
-            disalignmentH: 0,
-            disalignmentV: 0
-            /*
+                     
             blur: Int32(config.blur),
             blurRadius: config.blurRadius,
             bloom: Int32(config.bloom),
@@ -99,8 +83,8 @@ extension Renderer {
             disalignment: Int32(config.disalignment),
             disalignmentH: config.disalignmentH,
             disalignmentV: config.disalignmentV
-            */
         )
+        */
 
         ressourceManager = RessourceManager(view: view, device: device, renderer: self)
     }

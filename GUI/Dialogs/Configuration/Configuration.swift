@@ -31,6 +31,7 @@ class Configuration {
     }
     */
     
+    /*
     func map(_ value: Float, from: ClosedRange<Float>, to: ClosedRange<Float>) -> Float {
         
         let proportion = (value - from.lowerBound) / (from.upperBound - from.lowerBound)
@@ -46,7 +47,7 @@ class Configuration {
         
         return map(Float(value), from: 0...100, to: to)
     }
-
+    */
     
     //
     // Roms
@@ -577,24 +578,24 @@ class Configuration {
     var zoom: Int = 0 {
         didSet { renderer.canvas.updateTextureRect() }
     }
-    var hZoom: Float {
-        get { return map(amiga.get(.MON_HZOOM), to: 0...1) }
-        set { amiga.set(.MON_HZOOM, value: map(newValue, from: 0...1)) }
+    var hZoom: Int {
+        get { return amiga.get(.MON_HZOOM) }
+        set { amiga.set(.MON_HZOOM, value: newValue) }
     }
-    var vZoom: Float {
-        get { return map(amiga.get(.MON_VZOOM), to: 0...1) }
-        set { amiga.set(.MON_VZOOM, value: map(newValue, from: 0...1)) }
+    var vZoom: Int {
+        get { return amiga.get(.MON_VZOOM) }
+        set { amiga.set(.MON_VZOOM, value: newValue) }
     }
     var center: Int = 0 {
         didSet { renderer.canvas.updateTextureRect() }
     }
-    var hCenter: Float {
-        get { return map(amiga.get(.MON_HCENTER), to: 0...1) }
-        set { amiga.set(.MON_HCENTER, value: map(newValue, from: 0...1)) }
+    var hCenter: Int {
+        get { return amiga.get(.MON_HCENTER) }
+        set { amiga.set(.MON_HCENTER, value: newValue) }
     }
-    var vCenter: Float {
-        get { return map(amiga.get(.MON_VCENTER), to: 0...1) }
-        set { amiga.set(.MON_VCENTER, value: map(newValue, from: 0...1)) }
+    var vCenter: Int {
+        get { return amiga.get(.MON_VCENTER) }
+        set { amiga.set(.MON_VCENTER, value: newValue) }
     }
     var enhancer: Int {
         get { return amiga.get(.MON_ENHANCER) }
@@ -608,53 +609,53 @@ class Configuration {
         get { return amiga.get(.MON_BLUR) }
         set { amiga.set(.MON_BLUR, value: newValue) }
     }
-    var blurRadius: Float {
-        get { return map(amiga.get(.MON_BLUR_RADIUS), to: 0...5) }
-        set { amiga.set(.MON_BLUR_RADIUS, value: map(newValue, from: 0...5)) }
+    var blurRadius: Int {
+        get { return amiga.get(.MON_BLUR_RADIUS) }
+        set { amiga.set(.MON_BLUR_RADIUS, value: newValue) }
     }
     var bloom: Int {
         get { return amiga.get(.MON_BLOOM) }
         set { amiga.set(.MON_BLOOM, value: newValue) }
     }
-    var bloomRadius: Float {
-        get { return map(amiga.get(.MON_BLOOM_RADIUS), to: 0...5) }
-        set { amiga.set(.MON_BLOOM_RADIUS, value: map(newValue, from: 0...5)) }
+    var bloomRadius: Int {
+        get { return amiga.get(.MON_BLOOM_RADIUS) }
+        set { amiga.set(.MON_BLOOM_RADIUS, value: newValue) }
     }
-    var bloomBrightness: Float {
-        get { return map(amiga.get(.MON_BLOOM_BRIGHTNESS), to: 0...2) }
-        set { amiga.set(.MON_BLOOM_BRIGHTNESS, value: map(newValue, from: 0...2)) }
+    var bloomBrightness: Int {
+        get { return amiga.get(.MON_BLOOM_BRIGHTNESS) }
+        set { amiga.set(.MON_BLOOM_BRIGHTNESS, value: newValue) }
     }
-    var bloomWeight: Float {
-        get { return map(amiga.get(.MON_BLOOM_WEIGHT), to: 1...3) }
-        set { amiga.set(.MON_BLOOM_WEIGHT, value: map(newValue, from: 1...3)) }
+    var bloomWeight: Int {
+        get { return amiga.get(.MON_BLOOM_WEIGHT) }
+        set { amiga.set(.MON_BLOOM_WEIGHT, value: newValue) }
     }
     var flicker: Int {
         get { return amiga.get(.MON_FLICKER) }
         set { amiga.set(.MON_FLICKER, value: newValue) }
     }
-    var flickerWeight: Float {
-        get { return map(amiga.get(.MON_FLICKER_WEIGHT), to: 0...1) }
-        set { amiga.set(.MON_FLICKER_WEIGHT, value: map(newValue, from: 0...1)) }
+    var flickerWeight: Int {
+        get { return amiga.get(.MON_FLICKER_WEIGHT) }
+        set { amiga.set(.MON_FLICKER_WEIGHT, value: newValue) }
     }
     var dotMask: Int {
         get { return amiga.get(.MON_DOTMASK) }
         set { amiga.set(.MON_DOTMASK, value: newValue) }
     }
-    var dotMaskBrightness: Float {
-        get { return map(amiga.get(.MON_DOTMASK_BRIGHTNESS), to: 0...1) }
-        set { amiga.set(.MON_DOTMASK_BRIGHTNESS, value: map(newValue, from: 0...1)) }
+    var dotMaskBrightness: Int {
+        get { return amiga.get(.MON_DOTMASK_BRIGHTNESS) }
+        set { amiga.set(.MON_DOTMASK_BRIGHTNESS, value: newValue) }
     }
     var scanlines: Int {
         get { return amiga.get(.MON_SCANLINES) }
         set { amiga.set(.MON_SCANLINES, value: newValue) }
     }
-    var scanlineBrightness: Float {
-        get { return map(amiga.get(.MON_SCANLINE_BRIGHTNESS), to: 0...1) }
-        set { amiga.set(.MON_SCANLINE_BRIGHTNESS, value: map(newValue, from: 0...1)) }
+    var scanlineBrightness: Int {
+        get { return amiga.get(.MON_SCANLINE_BRIGHTNESS) }
+        set { amiga.set(.MON_SCANLINE_BRIGHTNESS, value: newValue) }
     }
-    var scanlineWeight: Float {
-        get { return map(amiga.get(.MON_SCANLINE_WEIGHT), to: 0...1) }
-        set { amiga.set(.MON_SCANLINE_WEIGHT, value: map(newValue, from: 0...1)) }
+    var scanlineWeight: Int {
+        get { return amiga.get(.MON_SCANLINE_WEIGHT) }
+        set { amiga.set(.MON_SCANLINE_WEIGHT, value: newValue) }
     }
     var disalignment: Int {
         get { return amiga.get(.MON_DISALIGNMENT) }

@@ -49,6 +49,29 @@ struct ShaderOptions: Codable {
     var disalignmentV: Float
 }
 
+extension ShaderOptions {
+    
+    static let zero = ShaderOptions(
+        
+        blur: 0,
+        blurRadius: 0,
+        bloom: 0,
+        bloomRadius: 0,
+        bloomBrightness: 0,
+        bloomWeight: 0,
+        flicker: 0,
+        flickerWeight: 0,
+        dotMask: 0,
+        dotMaskBrightness: 0,
+        scanlines: 0,
+        scanlineBrightness: 0,
+        scanlineWeight: 0,
+        disalignment: 0,
+        disalignmentH: 0,
+        disalignmentV: 0
+    )
+}
+
 //
 // Uniforms passed to the merge shader
 //

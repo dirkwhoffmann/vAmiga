@@ -52,15 +52,15 @@ extension ConfigurationController {
         
         // Geometry
         vidZoom.selectItem(withTag: config.zoom)
-        vidHZoom.floatValue = config.hZoom * 1000
-        vidVZoom.floatValue = config.vZoom * 1000
+        vidHZoom.integerValue = config.hZoom
+        vidVZoom.integerValue = config.vZoom
         vidHZoom.isEnabled = config.zoom == 0
         vidVZoom.isEnabled = config.zoom == 0
         vidHZoomLabel.textColor = config.zoom == 0 ? .labelColor : .disabledControlTextColor
         vidVZoomLabel.textColor = config.zoom == 0 ? .labelColor : .disabledControlTextColor
         vidCenter.selectItem(withTag: config.center)
-        vidHCenter.floatValue = config.hCenter * 1000
-        vidVCenter.floatValue = config.vCenter * 1000
+        vidHCenter.integerValue = config.hCenter
+        vidVCenter.integerValue = config.vCenter
         vidHCenter.isEnabled = config.center == 0
         vidVCenter.isEnabled = config.center == 0
         vidHCenterLabel.textColor = config.center == 0 ? .labelColor : .disabledControlTextColor
@@ -72,32 +72,32 @@ extension ConfigurationController {
 
         // Effects
         vidBlurPopUp.selectItem(withTag: Int(config.blur))
-        vidBlurRadiusSlider.floatValue = config.blurRadius
+        vidBlurRadiusSlider.integerValue = config.blurRadius
         vidBlurRadiusSlider.isEnabled = config.blur > 0
         
         vidBloomPopUp.selectItem(withTag: Int(config.bloom))
-        vidBloomRadiusSlider.floatValue = config.bloomRadius
+        vidBloomRadiusSlider.integerValue = config.bloomRadius
         vidBloomRadiusSlider.isEnabled = config.bloom > 0
-        vidBloomBrightnessSlider.floatValue = config.bloomBrightness
+        vidBloomBrightnessSlider.integerValue = config.bloomBrightness
         vidBloomBrightnessSlider.isEnabled = config.bloom > 0
-        vidBloomWeightSlider.floatValue = config.bloomWeight
+        vidBloomWeightSlider.integerValue = config.bloomWeight
         vidBloomWeightSlider.isEnabled = config.bloom > 0
 
         vidFlickerPopUp.selectItem(withTag: Int(config.flicker))
-        vidFlickerWeightSlider.floatValue = config.flickerWeight
+        vidFlickerWeightSlider.integerValue = config.flickerWeight
         vidFlickerWeightSlider.isEnabled = config.flicker > 0
 
         vidDotMaskPopUp.selectItem(withTag: Int(config.dotMask))
         for i in 0 ... 4 {
             vidDotMaskPopUp.item(at: i)?.image = renderer.ressourceManager.dotmaskImages[i]
         }
-        vidDotMaskBrightnessSlider.floatValue = config.dotMaskBrightness
+        vidDotMaskBrightnessSlider.integerValue = config.dotMaskBrightness
         vidDotMaskBrightnessSlider.isEnabled = config.dotMask > 0
         
         vidScanlinesPopUp.selectItem(withTag: Int(config.scanlines))
-        vidScanlineBrightnessSlider.floatValue = config.scanlineBrightness
+        vidScanlineBrightnessSlider.integerValue = config.scanlineBrightness
         vidScanlineBrightnessSlider.isEnabled = config.scanlines > 0
-        vidScanlineWeightSlider.floatValue = config.scanlineWeight
+        vidScanlineWeightSlider.integerValue = config.scanlineWeight
         vidScanlineWeightSlider.isEnabled = config.scanlines == 2
         
         vidMisalignmentPopUp.selectItem(withTag: Int(config.disalignment))
@@ -146,13 +146,13 @@ extension ConfigurationController {
 
     @IBAction func vidHZoomAction(_ sender: NSSlider!) {
 
-        config.hZoom = sender.floatValue / 1000
+        config.hZoom = sender.integerValue
         refresh()
     }
 
     @IBAction func vidVZoomAction(_ sender: NSSlider!) {
 
-        config.vZoom = sender.floatValue / 1000
+        config.vZoom = sender.integerValue
         refresh()
     }
 
@@ -164,13 +164,13 @@ extension ConfigurationController {
 
     @IBAction func vidHCenterAction(_ sender: NSSlider!) {
 
-        config.hCenter = sender.floatValue / 1000
+        config.hCenter = sender.integerValue
         refresh()
     }
 
     @IBAction func vidVCenterAction(_ sender: NSSlider!) {
 
-        config.vCenter = sender.floatValue / 1000
+        config.vCenter = sender.integerValue
         refresh()
     }
 
@@ -198,7 +198,7 @@ extension ConfigurationController {
     
     @IBAction func vidBlurRadiusAction(_ sender: NSSlider!) {
         
-        config.blurRadius = sender.floatValue
+        config.blurRadius = sender.integerValue
         refresh()
     }
     
@@ -210,19 +210,19 @@ extension ConfigurationController {
     
     @IBAction func vidBloomRadiusAction(_ sender: NSSlider!) {
         
-        config.bloomRadius = sender.floatValue
+        config.bloomRadius = sender.integerValue
         refresh()
     }
 
     @IBAction func vidBloomBrightnessAction(_ sender: NSSlider!) {
         
-        config.bloomBrightness = sender.floatValue
+        config.bloomBrightness = sender.integerValue
         refresh()
     }
     
     @IBAction func vidBloomWeightAction(_ sender: NSSlider!) {
         
-        config.bloomWeight = sender.floatValue
+        config.bloomWeight = sender.integerValue
         refresh()
     }
 
@@ -234,7 +234,7 @@ extension ConfigurationController {
 
     @IBAction func vidFlickerWeightAction(_ sender: NSSlider!) {
 
-        config.flickerWeight = sender.floatValue
+        config.flickerWeight = sender.integerValue
         refresh()
     }
     
@@ -246,7 +246,7 @@ extension ConfigurationController {
     
     @IBAction func vidDotMaskBrightnessAction(_ sender: NSSlider!) {
         
-        config.dotMaskBrightness = sender.floatValue
+        config.dotMaskBrightness = sender.integerValue
         refresh()
     }
     
@@ -258,13 +258,13 @@ extension ConfigurationController {
 
     @IBAction func vidScanlineBrightnessAction(_ sender: NSSlider!) {
         
-        config.scanlineBrightness = sender.floatValue
+        config.scanlineBrightness = sender.integerValue
         refresh()
     }
     
     @IBAction func vidScanlineWeightAction(_ sender: NSSlider!) {
         
-        config.scanlineWeight = sender.floatValue
+        config.scanlineWeight = sender.integerValue
         refresh()
     }
     
