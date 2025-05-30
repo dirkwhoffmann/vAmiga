@@ -47,6 +47,7 @@ public:
     class Keyboard &keyboard;
     class LogicAnalyzer &logicAnalyzer;
     class Memory &mem;
+    class Monitor &monitor;
     class MsgQueue &msgQueue;
     class OSDebugger &osDebugger;
     class Paula &paula;

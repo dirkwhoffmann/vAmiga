@@ -59,6 +59,25 @@ OptionParser::create(Opt opt, i64 arg)
         case Opt::MON_BRIGHTNESS:            return numParser("%");
         case Opt::MON_CONTRAST:              return numParser("%");
         case Opt::MON_SATURATION:            return numParser("%");
+        case Opt::MON_HCENTER:               return numParser();
+        case Opt::MON_VCENTER:               return numParser();
+        case Opt::MON_HZOOM:                 return numParser();
+        case Opt::MON_VZOOM:                 return numParser();
+        case Opt::MON_UPSCALER:              return enumParser.template operator()<UpscalerEnum,Upscaler>();
+        case Opt::MON_BLUR:                  return boolParser();
+        case Opt::MON_BLUR_RADIUS:           return numParser();
+        case Opt::MON_BLOOM:                 return boolParser();
+        case Opt::MON_BLOOM_RADIUS:          return numParser();
+        case Opt::MON_BLOOM_BRIGHTNESS:      return numParser();
+        case Opt::MON_BLOOM_WEIGHT:          return numParser();
+        case Opt::MON_DOTMASK:               return enumParser.template operator()<DotmaskEnum,Dotmask>();
+        case Opt::MON_DOTMASK_BRIGHTNESS:    return numParser();
+        case Opt::MON_SCANLINES:             return enumParser.template operator()<ScanlinesEnum,Scanlines>();
+        case Opt::MON_SCANLINE_BRIGHTNESS:   return numParser();
+        case Opt::MON_SCANLINE_WEIGHT:       return numParser();
+        case Opt::MON_DISALIGNMENT:          return boolParser();
+        case Opt::MON_DISALIGNMENT_H:        return numParser();
+        case Opt::MON_DISALIGNMENT_V:        return numParser();
 
         case Opt::DMA_DEBUG_ENABLE:          return boolParser();
         case Opt::DMA_DEBUG_MODE:            return enumParser.template operator()<DmaDisplayModeEnum,DmaDisplayMode>();

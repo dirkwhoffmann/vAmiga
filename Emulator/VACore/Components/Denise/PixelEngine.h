@@ -29,10 +29,12 @@ class PixelEngine final : public SubComponent {
 
     ConfigOptions options = {
 
+        /*
         Opt::MON_PALETTE,
         Opt::MON_BRIGHTNESS,
         Opt::MON_CONTRAST,
         Opt::MON_SATURATION
+        */
     };
 
     friend class Denise;
@@ -169,10 +171,11 @@ public:
     
     const PixelEngineConfig &getConfig() const { return config; }
     const ConfigOptions &getOptions() const override { return options; }
+    /*
     i64 getOption(Opt option) const override;
     void checkOption(Opt opt, i64 value) override;
     void setOption(Opt option, i64 value) override;
-
+    */
 
     //
     // Accessing color registers
@@ -198,11 +201,13 @@ public:
     // Using the color lookup table
     //
 
-private:
+public:
 
     // Updates the entire RGBA lookup table
     void updateRGBA();
 
+private:
+    
     // Adjusts the RGBA value according to the selected color parameters
     void adjustRGB(u8 &r, u8 &g, u8 &b);
 

@@ -66,6 +66,7 @@ enum class Class : long
     HardDrive,
     Joystick,
     Keyboard,
+    Monitor,
     Mouse,
     Paddl,
 };

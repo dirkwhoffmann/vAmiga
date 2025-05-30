@@ -10,9 +10,12 @@
 #pragma once
 
 #include "FrameBufferTypes.h"
+#include "MonitorTypes.h"
 
 namespace vamiga {
 
+/*
+ 
 //
 // Enumerations
 //
@@ -63,6 +66,7 @@ struct PaletteEnum : Reflection<PaletteEnum, Palette>
     }
 };
 
+*/
 
 //
 // Structures
@@ -70,10 +74,12 @@ struct PaletteEnum : Reflection<PaletteEnum, Palette>
 
 typedef struct
 {
+    /*
     Palette palette;
     isize brightness;
     isize contrast;
     isize saturation;
+    */
 }
 PixelEngineConfig;
 

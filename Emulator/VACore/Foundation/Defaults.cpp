@@ -45,6 +45,25 @@ Defaults::Defaults()
     setFallback(Opt::MON_BRIGHTNESS,             50);
     setFallback(Opt::MON_CONTRAST,               100);
     setFallback(Opt::MON_SATURATION,             50);
+    setFallback(Opt::MON_HCENTER,                0);
+    setFallback(Opt::MON_VCENTER,                0);
+    setFallback(Opt::MON_HZOOM,                  0);
+    setFallback(Opt::MON_VZOOM,                  46);
+    setFallback(Opt::MON_UPSCALER,               (i64)Upscaler::NONE);
+    setFallback(Opt::MON_BLUR,                   true);
+    setFallback(Opt::MON_BLUR_RADIUS,            0);
+    setFallback(Opt::MON_BLOOM,                  false);
+    setFallback(Opt::MON_BLOOM_RADIUS,           1000);
+    setFallback(Opt::MON_BLOOM_BRIGHTNESS,       400);
+    setFallback(Opt::MON_BLOOM_WEIGHT,           1210);
+    setFallback(Opt::MON_DOTMASK,                (i64)Dotmask::NONE);
+    setFallback(Opt::MON_DOTMASK_BRIGHTNESS,     700);
+    setFallback(Opt::MON_SCANLINES,              (i64)Scanlines::NONE);
+    setFallback(Opt::MON_SCANLINE_BRIGHTNESS,    550);
+    setFallback(Opt::MON_SCANLINE_WEIGHT,        110);
+    setFallback(Opt::MON_DISALIGNMENT,           0);
+    setFallback(Opt::MON_DISALIGNMENT_H,         1000);
+    setFallback(Opt::MON_DISALIGNMENT_V,         1000);
 
     setFallback(Opt::DMA_DEBUG_ENABLE,           false);
     setFallback(Opt::DMA_DEBUG_MODE,             (i64)DmaDisplayMode::FG_LAYER);

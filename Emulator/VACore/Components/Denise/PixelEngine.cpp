@@ -78,6 +78,7 @@ PixelEngine::_powerOn()
     clearAll();
 }
 
+/*
 i64
 PixelEngine::getOption(Opt option) const
 {
@@ -164,6 +165,7 @@ PixelEngine::setOption(Opt option, i64 value)
             fatalError;
     }
 }
+*/
 
 void
 PixelEngine::setColor(isize reg, u16 value)
@@ -205,13 +207,15 @@ PixelEngine::updateRGBA()
 void
 PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
 {
+    auto palette = monitor.getConfig().palette;
+
     // The RGB palette does not alter anything. Return immediately
-    if (config.palette == Palette::RGB) return;
+    if (palette == Palette::RGB) return;
     
     // Normalize adjustment parameters
-    double brightness =  config.brightness - 50.0;
-    double contrast = config.contrast / 100.0;
-    double saturation = config.saturation / 50.0;
+    double brightness =  monitor.getConfig().brightness - 50.0;
+    double contrast = monitor.getConfig().contrast / 100.0;
+    double saturation = monitor.getConfig().saturation / 50.0;
 
     // Convert RGB to YUV
     double y =  0.299 * r + 0.587 * g + 0.114 * b;
@@ -231,7 +235,7 @@ PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
     y += brightness;
 
     // Translate to monochrome if applicable
-    switch(config.palette) {
+    switch(palette) {
 
         case Palette::BLACK_WHITE:
             u = 0.0;
@@ -259,7 +263,7 @@ PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
             break;
 
         default:
-            assert(config.palette == Palette::COLOR);
+            assert(palette == Palette::COLOR);
     }
 
     // Convert YUV to RGB

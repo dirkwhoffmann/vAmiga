@@ -1486,40 +1486,31 @@ extension DefaultsProxy {
 
         debug(.defaults)
         
-        let keys = [ Keys.Vid.zoom,
-                     Keys.Vid.hZoom,
-                     Keys.Vid.vZoom,
-                     Keys.Vid.center,
-                     Keys.Vid.hCenter,
-                     Keys.Vid.vCenter ]
-
-        for key in keys { removeKey(key) }
+        remove(.MON_HCENTER)
+        remove(.MON_VCENTER)
+        remove(.MON_HZOOM)
+        remove(.MON_VZOOM)
     }
     
     func removeShaderUserDefaults() {
 
         debug(.defaults)
         
-        let keys = [ Keys.Vid.enhancer,
-                     Keys.Vid.upscaler,
-                     Keys.Vid.blur,
-                     Keys.Vid.blurRadius,
-                     Keys.Vid.bloom,
-                     Keys.Vid.bloomRadius,
-                     Keys.Vid.bloomBrightness,
-                     Keys.Vid.bloomWeight,
-                     Keys.Vid.flicker,
-                     Keys.Vid.flickerWeight,
-                     Keys.Vid.dotMask,
-                     Keys.Vid.dotMaskBrightness,
-                     Keys.Vid.scanlines,
-                     Keys.Vid.scanlineBrightness,
-                     Keys.Vid.scanlineWeight,
-                     Keys.Vid.disalignment,
-                     Keys.Vid.disalignmentH,
-                     Keys.Vid.disalignmentV ]
-        
-        for key in keys { removeKey(key) }
+        remove(.MON_UPSCALER)
+        remove(.MON_BLUR)
+        remove(.MON_BLUR_RADIUS)
+        remove(.MON_BLOOM)
+        remove(.MON_BLOOM_RADIUS)
+        remove(.MON_BLOOM_BRIGHTNESS)
+        remove(.MON_BLOOM_WEIGHT)
+        remove(.MON_DOTMASK)
+        remove(.MON_DOTMASK_BRIGHTNESS)
+        remove(.MON_SCANLINES)
+        remove(.MON_SCANLINE_BRIGHTNESS)
+        remove(.MON_SCANLINE_WEIGHT)
+        remove(.MON_DISALIGNMENT)
+        remove(.MON_DISALIGNMENT_H)
+        remove(.MON_DISALIGNMENT_V)
     }
 }
 

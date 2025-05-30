@@ -45,6 +45,7 @@
 #include "VACore/Peripherals/Joystick/JoystickTypes.h"
 #include "VACore/Peripherals/Keyboard/KeyboardTypes.h"
 #include "VACore/Peripherals/Mouse/MouseTypes.h"
+#include "VACore/Peripherals/Monitor/MonitorTypes.h"
 
 // Media
 #include "VACore/Media/MediaFileTypes.h"

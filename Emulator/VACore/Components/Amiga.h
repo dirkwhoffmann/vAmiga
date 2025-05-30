@@ -33,6 +33,7 @@
 #include "FloppyDrive.h"
 #include "HardDrive.h"
 #include "Keyboard.h"
+#include "Monitor.h"
 
 // Misc
 #include "GdbServer.h"
@@ -98,6 +99,7 @@ public:
     CIAA ciaA = CIAA(*this);
     CIAB ciaB = CIAB(*this);
     Memory mem = Memory(*this);
+    Monitor monitor = Monitor(*this);
     Agnus agnus = Agnus(*this);
     Denise denise = Denise(*this);
     Paula paula = Paula(*this);

@@ -11,8 +11,6 @@
 #include "Amiga.h"
 #include "Emulator.h"
 #include "Option.h"
-// #include "Snapshot.h"
-// #include "ADFFile.h"
 #include "Media.h"
 #include "Chrono.h"
 #include <algorithm>
@@ -54,6 +52,7 @@ Amiga::Amiga(class Emulator& ref, isize id) : CoreComponent(ref, id)
         &controlPort1,
         &controlPort2,
         &serialPort,
+        &monitor,
         &keyboard,
         &df0,
         &df1,

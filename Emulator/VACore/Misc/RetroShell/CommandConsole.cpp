@@ -466,7 +466,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
     // Peripherals (Monitor)
     //
     
-    cmd = registerComponent(pixelEngine);
+    cmd = registerComponent(monitor);
     
     
     //

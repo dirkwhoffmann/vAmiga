@@ -58,11 +58,30 @@ enum class Opt : long
     DENISE_CLX_PLF_PLF,
     
     // Monitor
-    MON_PALETTE,
-    MON_BRIGHTNESS,
-    MON_CONTRAST,
-    MON_SATURATION,
-    
+    MON_PALETTE,            ///< Color palette
+    MON_BRIGHTNESS,         ///< Brightness
+    MON_CONTRAST,           ///< Contrast
+    MON_SATURATION,         ///< Color saturation
+    MON_HCENTER,            ///< Horizontal centering
+    MON_VCENTER,            ///< Vertical centering
+    MON_HZOOM,              ///< Horizontal zoom
+    MON_VZOOM,              ///< Vertical centering
+    MON_UPSCALER,           ///< Pixel upscaler
+    MON_BLUR,               ///< Blur enable
+    MON_BLUR_RADIUS,        ///< Blur radius
+    MON_BLOOM,              ///< Bloom enable
+    MON_BLOOM_RADIUS,       ///< Bloom radius
+    MON_BLOOM_BRIGHTNESS,   ///< Bloom brightness
+    MON_BLOOM_WEIGHT,       ///< Bloom weight
+    MON_DOTMASK,            ///< Dotmask pattern
+    MON_DOTMASK_BRIGHTNESS, ///< Dotmask brightness
+    MON_SCANLINES,          ///< Scanline mode
+    MON_SCANLINE_BRIGHTNESS,///< Scanline brightness
+    MON_SCANLINE_WEIGHT,    ///< Scanline weight
+    MON_DISALIGNMENT,       ///< Cathode ray disalignment enable
+    MON_DISALIGNMENT_H,     ///< Horizontal cathode ray disalignment
+    MON_DISALIGNMENT_V,     ///< Vertical cathode ray disalignment
+
     // DMA Debugger
     DMA_DEBUG_ENABLE,
     DMA_DEBUG_MODE,
@@ -242,7 +261,26 @@ struct OptEnum : Reflection<OptEnum, Opt>
             case Opt::MON_BRIGHTNESS:            return "MON.BRIGHTNESS";
             case Opt::MON_CONTRAST:              return "MON.CONTRAST";
             case Opt::MON_SATURATION:            return "MON.SATURATION";
-                
+            case Opt::MON_HCENTER:               return "MON.HCENTER";
+            case Opt::MON_VCENTER:               return "MON.VCENTER";
+            case Opt::MON_HZOOM:                 return "MON.HZOOM";
+            case Opt::MON_VZOOM:                 return "MON.VZOOM";
+            case Opt::MON_UPSCALER:              return "MON.UPSCALER";
+            case Opt::MON_BLUR:                  return "MON.BLUR";
+            case Opt::MON_BLUR_RADIUS:           return "MON.BLUR_RADIUS";
+            case Opt::MON_BLOOM:                 return "MON.BLOOM";
+            case Opt::MON_BLOOM_RADIUS:          return "MON.BLOOM_RADIUS";
+            case Opt::MON_BLOOM_BRIGHTNESS:      return "MON.BLOOM_BRIGHTNESS";
+            case Opt::MON_BLOOM_WEIGHT:          return "MON.BLOOM_WEIGHT";
+            case Opt::MON_DOTMASK:               return "MON.DOTMASK";
+            case Opt::MON_DOTMASK_BRIGHTNESS:    return "MON.DOTMASK_BRIGHTNESS";
+            case Opt::MON_SCANLINES:             return "MON.SCANLINES";
+            case Opt::MON_SCANLINE_BRIGHTNESS:   return "MON.SCANLINE_BRIGHTNESS";
+            case Opt::MON_SCANLINE_WEIGHT:       return "MON.SCANLINE_WEIGHT";
+            case Opt::MON_DISALIGNMENT:          return "MON.DISALIGNMENT";
+            case Opt::MON_DISALIGNMENT_H:        return "MON.DISALIGNMENT_H";
+            case Opt::MON_DISALIGNMENT_V:        return "MON.DISALIGNMENT_V";
+
             case Opt::DMA_DEBUG_ENABLE:          return "DMA.DEBUG_ENABLE";
             case Opt::DMA_DEBUG_MODE:            return "DMA.DEBUG_MODE";
             case Opt::DMA_DEBUG_OPACITY:         return "DMA.DEBUG_OPACITY";
@@ -400,7 +438,26 @@ struct OptEnum : Reflection<OptEnum, Opt>
             case Opt::MON_BRIGHTNESS:            return "Monitor brightness";
             case Opt::MON_CONTRAST:              return "Monitor contrast";
             case Opt::MON_SATURATION:            return "Monitor saturation";
-                
+            case Opt::MON_HCENTER:               return "Horizontal center";
+            case Opt::MON_VCENTER:               return "Vertical center";
+            case Opt::MON_HZOOM:                 return "Horizontal zoom";
+            case Opt::MON_VZOOM:                 return "Vertical zoom";
+            case Opt::MON_UPSCALER:              return "Upscaler";
+            case Opt::MON_BLUR:                  return "Blur";
+            case Opt::MON_BLUR_RADIUS:           return "Blur radius";
+            case Opt::MON_BLOOM:                 return "Bloom";
+            case Opt::MON_BLOOM_RADIUS:          return "Bloom radius";
+            case Opt::MON_BLOOM_BRIGHTNESS:      return "Bloom brightness";
+            case Opt::MON_BLOOM_WEIGHT:          return "Bloom weight";
+            case Opt::MON_DOTMASK:               return "Dotmask";
+            case Opt::MON_DOTMASK_BRIGHTNESS:    return "Dotmask brightness";
+            case Opt::MON_SCANLINES:             return "Scanlines";
+            case Opt::MON_SCANLINE_BRIGHTNESS:   return "Scanline brightness";
+            case Opt::MON_SCANLINE_WEIGHT:       return "Scanline weight";
+            case Opt::MON_DISALIGNMENT:          return "Cathode rays disalignment";
+            case Opt::MON_DISALIGNMENT_H:        return "Horizontal cathode ray shift";
+            case Opt::MON_DISALIGNMENT_V:        return "Vertical cathode ray shift";
+
             case Opt::DMA_DEBUG_ENABLE:          return "DMA Debugger";
             case Opt::DMA_DEBUG_MODE:            return "DMA Debugger style";
             case Opt::DMA_DEBUG_OPACITY:         return "Opacity";
