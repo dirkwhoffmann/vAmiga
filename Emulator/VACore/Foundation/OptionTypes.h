@@ -62,8 +62,10 @@ enum class Opt : long
     MON_BRIGHTNESS,         ///< Brightness
     MON_CONTRAST,           ///< Contrast
     MON_SATURATION,         ///< Color saturation
+    MON_CENTER,             ///< Centering mode
     MON_HCENTER,            ///< Horizontal centering
     MON_VCENTER,            ///< Vertical centering
+    MON_ZOOM,               ///< Zoom mode
     MON_HZOOM,              ///< Horizontal zoom
     MON_VZOOM,              ///< Vertical centering
     MON_ENHANCER,           ///< Pixel upscaler
@@ -264,8 +266,10 @@ struct OptEnum : Reflection<OptEnum, Opt>
             case Opt::MON_BRIGHTNESS:            return "MON.BRIGHTNESS";
             case Opt::MON_CONTRAST:              return "MON.CONTRAST";
             case Opt::MON_SATURATION:            return "MON.SATURATION";
+            case Opt::MON_CENTER:                return "MON.CENTER";
             case Opt::MON_HCENTER:               return "MON.HCENTER";
             case Opt::MON_VCENTER:               return "MON.VCENTER";
+            case Opt::MON_ZOOM:                  return "MON.ZOOM";
             case Opt::MON_HZOOM:                 return "MON.HZOOM";
             case Opt::MON_VZOOM:                 return "MON.VZOOM";
             case Opt::MON_ENHANCER:              return "MON.ENHANCER";
@@ -444,8 +448,10 @@ struct OptEnum : Reflection<OptEnum, Opt>
             case Opt::MON_BRIGHTNESS:            return "Monitor brightness";
             case Opt::MON_CONTRAST:              return "Monitor contrast";
             case Opt::MON_SATURATION:            return "Monitor saturation";
+            case Opt::MON_CENTER:                return "Center mode";
             case Opt::MON_HCENTER:               return "Horizontal center";
             case Opt::MON_VCENTER:               return "Vertical center";
+            case Opt::MON_ZOOM:                  return "Zoom mode";
             case Opt::MON_HZOOM:                 return "Horizontal zoom";
             case Opt::MON_VZOOM:                 return "Vertical zoom";
             case Opt::MON_ENHANCER:              return "Enhancer";

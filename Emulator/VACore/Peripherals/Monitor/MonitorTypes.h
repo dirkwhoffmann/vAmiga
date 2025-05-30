@@ -63,7 +63,74 @@ struct PaletteEnum : Reflection<PaletteEnum, Palette>
     }
 };
 
-/// Pixel upscaler
+enum class Zoom
+{
+    CUSTOM,
+    NARROW,
+    WIDE,
+    EXTREME
+};
+
+struct ZoomEnum : Reflection<ZoomEnum, Zoom>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = long(Zoom::EXTREME);
+    
+    static const char *_key(Zoom value)
+    {
+        switch (value) {
+                
+            case Zoom::CUSTOM:          return "CUSTOM";
+            case Zoom::NARROW:          return "NARROW";
+            case Zoom::WIDE:            return "WIDE";
+            case Zoom::EXTREME:         return "EXTREME";
+        }
+        return "???";
+    }
+    static const char *help(Zoom value)
+    {
+        switch (value) {
+                
+            case Zoom::CUSTOM:          return "Custom zoom factors";
+            case Zoom::NARROW:          return "Narrow cutout";
+            case Zoom::WIDE:            return "Wide cutout";
+            case Zoom::EXTREME:         return "Extreme cutout";
+        }
+        return "???";
+    }
+};
+
+enum class Center
+{
+    CUSTOM,
+    AUTO,
+};
+
+struct CenterEnum : Reflection<CenterEnum, Center>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = long(Center::AUTO);
+    
+    static const char *_key(Center value)
+    {
+        switch (value) {
+                
+            case Center::CUSTOM:        return "CUSTOM";
+            case Center::AUTO:          return "AUTO";
+        }
+        return "???";
+    }
+    static const char *help(Center value)
+    {
+        switch (value) {
+                
+            case Center::CUSTOM:        return "Custom offsets";
+            case Center::AUTO:          return "Automatic screen centering";
+        }
+        return "???";
+    }
+};
+
 enum class Upscaler : long
 {
     NONE,                      ///< No upscaler
@@ -93,7 +160,6 @@ struct UpscalerEnum : Reflection<UpscalerEnum, Upscaler> {
     }
 };
 
-/// Dotmask
 enum class Dotmask : long
 {
     NONE,                       ///< No dotmask
@@ -127,7 +193,6 @@ struct DotmaskEnum : Reflection<DotmaskEnum, Dotmask> {
     }
 };
 
-/// Scanlines
 enum class Scanlines : long
 {
     NONE,                     ///< No scanlines
@@ -157,6 +222,7 @@ struct ScanlinesEnum : Reflection<ScanlinesEnum, Scanlines> {
     }
 };
 
+
 //
 // Structures
 //
@@ -170,8 +236,10 @@ typedef struct
     isize saturation;
 
     // Geometry
+    Center center;
     isize hCenter;
     isize vCenter;
+    Zoom zoom;
     isize hZoom;
     isize vZoom;
 

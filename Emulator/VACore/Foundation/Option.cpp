@@ -59,8 +59,10 @@ OptionParser::create(Opt opt, i64 arg)
         case Opt::MON_BRIGHTNESS:            return numParser("%");
         case Opt::MON_CONTRAST:              return numParser("%");
         case Opt::MON_SATURATION:            return numParser("%");
+        case Opt::MON_CENTER:                return enumParser.template operator()<CenterEnum,Center>();
         case Opt::MON_HCENTER:               return numParser();
         case Opt::MON_VCENTER:               return numParser();
+        case Opt::MON_ZOOM:                  return enumParser.template operator()<ZoomEnum,Zoom>();
         case Opt::MON_HZOOM:                 return numParser();
         case Opt::MON_VZOOM:                 return numParser();
         case Opt::MON_ENHANCER:              return enumParser.template operator()<UpscalerEnum,Upscaler>();

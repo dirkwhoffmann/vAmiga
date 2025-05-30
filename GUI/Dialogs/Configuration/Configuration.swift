@@ -575,8 +575,9 @@ class Configuration {
         get { return amiga.get(.MON_SATURATION) }
         set { amiga.set(.MON_SATURATION, value: newValue) }
     }
-    var zoom: Int = 0 {
-        didSet { renderer.canvas.updateTextureRect() }
+    var zoom: Int {
+        get { return amiga.get(.MON_ZOOM) }
+        set { amiga.set(.MON_ZOOM, value: newValue) }
     }
     var hZoom: Int {
         get { return amiga.get(.MON_HZOOM) }
@@ -586,8 +587,9 @@ class Configuration {
         get { return amiga.get(.MON_VZOOM) }
         set { amiga.set(.MON_VZOOM, value: newValue) }
     }
-    var center: Int = 0 {
-        didSet { renderer.canvas.updateTextureRect() }
+    var center: Int {
+        get { return amiga.get(.MON_CENTER) }
+        set { amiga.set(.MON_CENTER, value: newValue) }
     }
     var hCenter: Int {
         get { return amiga.get(.MON_HCENTER) }

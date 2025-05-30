@@ -23,8 +23,10 @@ Monitor::getOption(Opt option) const
         case Opt::MON_BRIGHTNESS:            return (i64)config.brightness;
         case Opt::MON_CONTRAST:              return (i64)config.contrast;
         case Opt::MON_SATURATION:            return (i64)config.saturation;
+        case Opt::MON_CENTER:                return (i64)config.center;
         case Opt::MON_HCENTER:               return (i64)config.hCenter;
         case Opt::MON_VCENTER:               return (i64)config.vCenter;
+        case Opt::MON_ZOOM:                  return (i64)config.zoom;
         case Opt::MON_HZOOM:                 return (i64)config.hZoom;
         case Opt::MON_VZOOM:                 return (i64)config.vZoom;
         case Opt::MON_ENHANCER:              return (i64)config.enhancer;
@@ -90,7 +92,21 @@ Monitor::checkOption(Opt opt, i64 value)
                 throw CoreError(Fault::OPT_INV_ARG, ScanlinesEnum::keyList());
             }
             return;
+
+        case Opt::MON_ZOOM:
             
+            if (!ZoomEnum::isValid(value)) {
+                throw CoreError(Fault::OPT_INV_ARG, ZoomEnum::keyList());
+            }
+            return;
+
+        case Opt::MON_CENTER:
+            
+            if (!CenterEnum::isValid(value)) {
+                throw CoreError(Fault::OPT_INV_ARG, CenterEnum::keyList());
+            }
+            return;
+
         case Opt::MON_BRIGHTNESS:
         case Opt::MON_CONTRAST:
         case Opt::MON_SATURATION:
@@ -153,7 +169,12 @@ Monitor::setOption(Opt opt, i64 value)
             config.saturation = isize(value);
             pixelEngine.updateRGBA();
             break;
+
+        case Opt::MON_CENTER:
             
+            config.center = Center(value);
+            break;
+
         case Opt::MON_HCENTER:
             
             config.hCenter = isize(value);
@@ -164,6 +185,11 @@ Monitor::setOption(Opt opt, i64 value)
             config.vCenter = isize(value);
             break;
             
+        case Opt::MON_ZOOM:
+            
+            config.zoom = Zoom(value);
+            break;
+
         case Opt::MON_HZOOM:
             
             config.hZoom = isize(value);

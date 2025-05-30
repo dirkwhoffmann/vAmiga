@@ -57,6 +57,10 @@ extension Canvas {
         var hZoom = Float(renderer.config.hZoom) / 100.0
         var vZoom = Float(renderer.config.vZoom) / 100.0
 
+        // Determine offsets
+        let hCenter = Float(renderer.config.hCenter) / 100.0
+        let vCenter = Float(renderer.config.vCenter) / 100.0
+
         switch renderer.config.zoom {
 
         case 1: hZoom = 1.0; vZoom = 0.27       // Narrow
@@ -107,8 +111,8 @@ extension Canvas {
 
         } else {
             
-            bw = largest.minX + CGFloat(renderer.config.hCenter) * (largest.width - width)
-            bh = largest.minY + CGFloat(renderer.config.vCenter) * (largest.height - height)
+            bw = largest.minX + CGFloat(hCenter) * (largest.width - width)
+            bh = largest.minY + CGFloat(vCenter) * (largest.height - height)
         }
                 
         return CGRect(x: bw, y: bh, width: width, height: height)

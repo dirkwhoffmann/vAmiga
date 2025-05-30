@@ -330,7 +330,7 @@ class Renderer: NSObject, MTKViewDelegate {
             
             switch option {
                 
-            case .MON_HCENTER, .MON_VCENTER, .MON_HZOOM, .MON_VZOOM:
+            case .MON_CENTER, .MON_HCENTER, .MON_VCENTER, .MON_ZOOM, .MON_HZOOM, .MON_VZOOM:
                 canvas.updateTextureRect()
 
             default:

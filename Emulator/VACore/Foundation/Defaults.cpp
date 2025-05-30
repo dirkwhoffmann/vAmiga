@@ -45,8 +45,10 @@ Defaults::Defaults()
     setFallback(Opt::MON_BRIGHTNESS,             50);
     setFallback(Opt::MON_CONTRAST,               100);
     setFallback(Opt::MON_SATURATION,             50);
+    setFallback(Opt::MON_CENTER,                 (i64)Center::AUTO);
     setFallback(Opt::MON_HCENTER,                60);
     setFallback(Opt::MON_VCENTER,                47);
+    setFallback(Opt::MON_ZOOM,                   (i64)Zoom::WIDE);
     setFallback(Opt::MON_HZOOM,                  100);
     setFallback(Opt::MON_VZOOM,                  27);
     setFallback(Opt::MON_ENHANCER,               (i64)Upscaler::NONE);

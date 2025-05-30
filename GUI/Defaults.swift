@@ -1490,8 +1490,10 @@ extension DefaultsProxy {
 
         debug(.defaults)
         
+        remove(.MON_CENTER)
         remove(.MON_HCENTER)
         remove(.MON_VCENTER)
+        remove(.MON_ZOOM)
         remove(.MON_HZOOM)
         remove(.MON_VZOOM)
     }
@@ -1561,10 +1563,10 @@ extension Configuration {
         
         amiga.suspend()
                 
-        defaults.set(Keys.Vid.zoom, zoom)
+        defaults.set(.MON_ZOOM, Int(zoom))
         defaults.set(.MON_HZOOM, Int(hZoom))
         defaults.set(.MON_VZOOM, Int(vZoom))
-        defaults.set(Keys.Vid.center, center)
+        defaults.set(.MON_CENTER, Int(center))
         defaults.set(.MON_HCENTER, Int(hCenter))
         defaults.set(.MON_VCENTER, Int(vCenter))
 
@@ -1635,10 +1637,10 @@ extension Configuration {
         
         amiga.suspend()
           
-        zoom = defaults.int(Keys.Vid.zoom)
+        zoom = defaults.get(.MON_ZOOM)
         hZoom = defaults.get(.MON_HZOOM)
         vZoom = defaults.get(.MON_VZOOM)
-        center = defaults.int(Keys.Vid.center)
+        center = defaults.get(.MON_CENTER)
         hCenter = defaults.get(.MON_HCENTER)
         vCenter = defaults.get(.MON_VCENTER)
 
