@@ -552,21 +552,41 @@ class Configuration {
     var zoom: Int = 0 {
         didSet { renderer.canvas.updateTextureRect() }
     }
+    var hZoom: Float {
+        get { return Float(amiga.get(.MON_HZOOM)) / 1000.0 }
+        set { amiga.set(.MON_HZOOM, value: Int(newValue * 1000.0)) }
+    }
+    var vZoom: Float {
+        get { return Float(amiga.get(.MON_VZOOM)) / 1000.0 }
+        set { amiga.set(.MON_VZOOM, value: Int(newValue * 1000.0)) }
+    }
+    /*
     var hZoom: Float = 0 {
         didSet { renderer.canvas.updateTextureRect() }
     }
     var vZoom: Float = 0 {
         didSet { renderer.canvas.updateTextureRect() }
     }
+    */
     var center: Int = 0 {
         didSet { renderer.canvas.updateTextureRect() }
     }
+    var hCenter: Float {
+        get { return Float(amiga.get(.MON_HCENTER)) / 1000.0 }
+        set { amiga.set(.MON_HCENTER, value: Int(newValue * 1000.0)) }
+    }
+    var vCenter: Float {
+        get { return Float(amiga.get(.MON_VCENTER)) / 1000.0 }
+        set { amiga.set(.MON_VCENTER, value: Int(newValue * 1000.0)) }
+    }
+    /*
     var hCenter: Float = 0 {
         didSet { renderer.canvas.updateTextureRect() }
     }
     var vCenter: Float = 0 {
         didSet { renderer.canvas.updateTextureRect() }
     }
+    */
     var enhancer: Int = 0 {
         didSet {
             if !ressourceManager.selectEnhancer(enhancer) { enhancer = oldValue }
@@ -577,6 +597,31 @@ class Configuration {
             if !ressourceManager.selectUpscaler(upscaler) { upscaler = oldValue }
         }
     }
+    var blur: Int {
+        get { return amiga.get(.MON_BLUR) }
+        set { amiga.set(.MON_BLUR, value: newValue) }
+    }
+    var blurRadius: Float {
+        get { return Float(amiga.get(.MON_BLUR_RADIUS)) / 1000.0 }
+        set { amiga.set(.MON_BLUR_RADIUS, value: Int(newValue * 1000.0)) }
+    }
+    var bloom: Int {
+        get { return amiga.get(.MON_BLOOM) }
+        set { amiga.set(.MON_BLOOM, value: newValue) }
+    }
+    var bloomRadius: Float {
+        get { return Float(amiga.get(.MON_BLOOM_RADIUS)) / 1000.0 }
+        set { amiga.set(.MON_BLOOM_RADIUS, value: Int(newValue * 1000.0)) }
+    }
+    var bloomBrightness: Float {
+        get { return Float(amiga.get(.MON_BLOOM_BRIGHTNESS)) / 1000.0 }
+        set { amiga.set(.MON_BLOOM_BRIGHTNESS, value: Int(newValue * 1000.0)) }
+    }
+    var bloomWeight: Float {
+        get { return Float(amiga.get(.MON_BLOOM_WEIGHT)) / 1000.0 }
+        set { amiga.set(.MON_BLOOM_WEIGHT, value: Int(newValue * 1000.0)) }
+    }
+    /*
     var blur: Int = 0 {
         didSet { renderer.shaderOptions.blur = Int32(blur) }
     }
@@ -598,12 +643,23 @@ class Configuration {
     var bloomWeight: Float = 0 {
         didSet { renderer.shaderOptions.bloomWeight = bloomWeight }
     }
+    */
     var flicker: Int = 0 {
         didSet { renderer.shaderOptions.flicker = Int32(flicker) }
     }
     var flickerWeight: Float = 0 {
         didSet { renderer.shaderOptions.flickerWeight = flickerWeight }
     }
+    var dotMask: Int {
+        get { return amiga.get(.MON_DOTMASK) }
+        set { amiga.set(.MON_DOTMASK, value: newValue) }
+    }
+    var dotMaskBrightness: Float {
+        get { return Float(amiga.get(.MON_DOTMASK_BRIGHTNESS)) / 1000.0 }
+        set { amiga.set(.MON_DOTMASK_BRIGHTNESS, value: Int(newValue * 1000.0)) }
+    }
+    
+    /*
     var dotMask: Int = 0 {
         didSet {
             renderer.shaderOptions.dotMask = Int32(dotMask)
@@ -618,6 +674,32 @@ class Configuration {
             ressourceManager.selectDotMask(dotMask)
         }
     }
+    */
+    var scanlines: Int {
+        get { return amiga.get(.MON_SCANLINES) }
+        set { amiga.set(.MON_SCANLINES, value: newValue) }
+    }
+    var scanlineBrightness: Float {
+        get { return Float(amiga.get(.MON_SCANLINE_BRIGHTNESS)) / 1000.0 }
+        set { amiga.set(.MON_SCANLINE_BRIGHTNESS, value: Int(newValue * 1000.0)) }
+    }
+    var scanlineWeight: Float {
+        get { return Float(amiga.get(.MON_SCANLINE_WEIGHT)) / 1000.0 }
+        set { amiga.set(.MON_SCANLINE_WEIGHT, value: Int(newValue * 1000.0)) }
+    }
+    var disalignment: Int {
+        get { return amiga.get(.MON_DISALIGNMENT) }
+        set { amiga.set(.MON_DISALIGNMENT, value: newValue) }
+    }
+    var disalignmentH: Float {
+        get { return Float(amiga.get(.MON_DISALIGNMENT_H)) / 1000.0 }
+        set { amiga.set(.MON_DISALIGNMENT_H, value: Int(newValue * 1000.0)) }
+    }
+    var disalignmentV: Float {
+        get { return Float(amiga.get(.MON_DISALIGNMENT_V)) / 1000.0 }
+        set { amiga.set(.MON_DISALIGNMENT_V, value: Int(newValue * 1000.0)) }
+    }
+    /*
     var scanlines: Int = 0 {
         didSet {
             renderer.shaderOptions.scanlines = Int32(scanlines)
@@ -639,6 +721,7 @@ class Configuration {
     var disalignmentV: Float = 0 {
         didSet { renderer.shaderOptions.disalignmentV = disalignmentV }
     }
-    
+    */
+
     init(with controller: MyController) { parent = controller }
 }

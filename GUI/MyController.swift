@@ -577,6 +577,9 @@ extension MyController {
         case .HDR_WRITE:
             refreshStatusBar()
             
+        case .MON_SETTING:
+            renderer.processMessage(msg)
+            
         case .CTRL_AMIGA_AMIGA:
             resetAction(self)
             

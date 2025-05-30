@@ -97,6 +97,9 @@ enum class Msg : long
     HDR_WRITE,
     HDR_IDLE,
     
+    // Monitor
+    MON_SETTING,
+    
     // Keyboard
     CTRL_AMIGA_AMIGA,
     
@@ -208,6 +211,8 @@ struct MsgEnum : Reflection<MsgEnum, Msg>
             case Msg::HDR_WRITE:             return "HDR_WRITE";
             case Msg::HDR_IDLE:              return "HDR_IDLE";
                 
+            case Msg::MON_SETTING:           return "MON_SETTING";
+
             case Msg::CTRL_AMIGA_AMIGA:      return "CTRL_AMIGA_AMIGA";
                 
             case Msg::SHAKING:               return "SHAKING";

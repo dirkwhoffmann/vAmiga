@@ -115,6 +115,45 @@ class Renderer: NSObject, MTKViewDelegate {
         setup()
     }
     
+    func updateShaderOptions()
+    {
+        shaderOptions.blur = Int32(config.blur)
+        shaderOptions.blurRadius = Float(config.blurRadius)
+        
+        shaderOptions.bloom = Int32(config.bloom)
+        shaderOptions.bloomRadius = Float(config.bloomRadius)
+        shaderOptions.bloomBrightness = Float(config.bloomBrightness)
+        shaderOptions.bloomWeight = Float(config.bloomWeight)
+
+        shaderOptions.flicker = Int32(config.flicker)
+        shaderOptions.flickerWeight = Float(config.flickerWeight)
+
+        shaderOptions.dotMask = Int32(config.dotMask)
+        shaderOptions.dotMaskBrightness = Float(config.dotMaskBrightness)
+        
+        shaderOptions.scanlines = Int32(config.scanlines)
+        shaderOptions.scanlineBrightness = Float(config.scanlineBrightness)
+        shaderOptions.scanlineWeight = Float(config.scanlineWeight)
+        
+        shaderOptions.disalignment = Int32(config.disalignment)
+        shaderOptions.disalignmentH = Float(config.disalignmentH)
+        shaderOptions.disalignmentV = Float(config.disalignmentV)
+        
+        if !ressourceManager.selectBloomFilter(config.bloom) {
+
+            print("Failed to set bloom filter \(config.bloom)")
+            shaderOptions.bloom = Int32(0)
+        }
+        if !ressourceManager.selectUpscaler(config.upscaler) {
+            
+            print("Failed to set upscaler \(config.bloom)")
+        }
+        if !ressourceManager.selectEnhancer(config.enhancer) {
+            
+            print("Failed to set enhancer \(config.bloom)")
+        }
+    }
+    
     func halt() {
 
         // Wait until the current frame has been completed
@@ -241,7 +280,29 @@ class Renderer: NSObject, MTKViewDelegate {
             }
         }
     }
+    
+    func processMessage(_ msg: Message) {
+    
+        var option: Option { return Option(rawValue: Int(msg.value))! }
+        
+        switch msg.type {
+            
+        case .MON_SETTING:
+            
+            switch option {
+                
+            case .MON_HCENTER, .MON_VCENTER, .MON_HZOOM, .MON_VZOOM:
+                canvas.updateTextureRect()
 
+            default:
+                updateShaderOptions()
+            }
+            
+        default:
+            break
+        }
+    }
+            
     //
     // Methods from MTKViewDelegate
     //

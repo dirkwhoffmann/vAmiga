@@ -10,6 +10,7 @@
 #include "VAmigaConfig.h"
 #include "Monitor.h"
 #include "PixelEngine.h"
+#include "MsgQueue.h"
 
 namespace vamiga {
 
@@ -133,124 +134,126 @@ Monitor::setOption(Opt opt, i64 value)
             
             config.palette = Palette(value);
             pixelEngine.updateRGBA();
-            return;
+            break;
             
         case Opt::MON_BRIGHTNESS:
             
             config.brightness = isize(value);
             pixelEngine.updateRGBA();
-            return;
+            break;
             
         case Opt::MON_CONTRAST:
             
             config.contrast = isize(value);
             pixelEngine.updateRGBA();
-            return;
+            break;
             
         case Opt::MON_SATURATION:
             
             config.saturation = isize(value);
             pixelEngine.updateRGBA();
-            return;
+            break;
             
         case Opt::MON_HCENTER:
             
             config.hCenter = isize(value);
-            return;
+            break;
             
         case Opt::MON_VCENTER:
             
             config.vCenter = isize(value);
-            return;
+            break;
             
         case Opt::MON_HZOOM:
             
             config.hZoom = isize(value);
-            return;
+            break;
             
         case Opt::MON_VZOOM:
             
             config.vZoom = isize(value);
-            return;
+            break;
             
         case Opt::MON_UPSCALER:
             
             config.upscaler = Upscaler(value);
-            return;
+            break;
             
         case Opt::MON_BLUR:
             
             config.blur = isize(value);
-            return;
+            break;
             
         case Opt::MON_BLUR_RADIUS:
             
             config.blurRadius = isize(value);
-            return;
+            break;
             
         case Opt::MON_BLOOM:
             
             config.bloom = isize(value);
-            return;
+            break;
             
         case Opt::MON_BLOOM_RADIUS:
             
             config.bloomRadius = isize(value);
-            return;
+            break;
             
         case Opt::MON_BLOOM_BRIGHTNESS:
             
             config.bloomBrightness = isize(value);
-            return;
+            break;
             
         case Opt::MON_BLOOM_WEIGHT:
             
             config.bloomWeight = isize(value);
-            return;
+            break;
             
         case Opt::MON_DOTMASK:
             
             config.dotmask = Dotmask(value);
-            return;
+            break;
             
         case Opt::MON_DOTMASK_BRIGHTNESS:
             
             config.dotMaskBrightness = isize(value);
-            return;
+            break;
             
         case Opt::MON_SCANLINES:
             
             config.scanlines = Scanlines(value);
-            return;
+            break;
             
         case Opt::MON_SCANLINE_BRIGHTNESS:
             
             config.scanlineBrightness = isize(value);
-            return;
+            break;
             
         case Opt::MON_SCANLINE_WEIGHT:
             
             config.scanlineWeight = isize(value);
-            return;
+            break;
             
         case Opt::MON_DISALIGNMENT:
             
             config.disalignment = isize(value);
-            return;
+            break;
             
         case Opt::MON_DISALIGNMENT_H:
             
             config.disalignmentH = isize(value);
-            return;
+            break;
             
         case Opt::MON_DISALIGNMENT_V:
             
             config.disalignmentV = isize(value);
-            return;
+            break;
             
         default:
             fatalError;
     }
+    
+    msgQueue.put(Msg::MON_SETTING, (i64)opt); 
 }
 
 void
