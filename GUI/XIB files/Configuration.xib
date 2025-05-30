@@ -4253,7 +4253,7 @@ DQ
                                                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r3n-OF-1qQ">
                                                                 <rect key="frame" x="446" y="25" width="120" height="15"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" minValue="-0.0040000000000000001" maxValue="0.0040000000000000001" doubleValue="0.002" tickMarkPosition="above" sliderType="linear" id="PGY-8u-sRl"/>
+                                                                <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="PGY-8u-sRl"/>
                                                                 <connections>
                                                                     <action selector="vidDisalignmentVAction:" target="-2" id="iEg-qA-KJ5"/>
                                                                 </connections>
@@ -4261,7 +4261,7 @@ DQ
                                                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sDl-fJ-jcz">
                                                                 <rect key="frame" x="446" y="48" width="120" height="15"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                                <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" minValue="-0.0040000000000000001" maxValue="0.0040000000000000001" doubleValue="0.002" tickMarkPosition="above" sliderType="linear" id="sJW-rF-sSY"/>
+                                                                <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="sJW-rF-sSY"/>
                                                                 <connections>
                                                                     <action selector="vidDisalignmentHAction:" target="-2" id="lLJ-qu-zeC"/>
                                                                 </connections>

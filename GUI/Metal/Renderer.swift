@@ -115,42 +115,74 @@ class Renderer: NSObject, MTKViewDelegate {
         setup()
     }
     
-    func updateShaderOptions()
+    func updateShaderOptions() {
+        
+        updateShaderOptions(option: .MON_BLUR, value: Int64(config.blur))
+        updateShaderOptions(option: .MON_BLUR_RADIUS, value: Int64(config.blurRadius))
+        updateShaderOptions(option: .MON_BLOOM, value: Int64(config.bloom))
+        updateShaderOptions(option: .MON_BLOOM_RADIUS, value: Int64(config.bloomRadius))
+        updateShaderOptions(option: .MON_BLOOM_BRIGHTNESS, value: Int64(config.bloomBrightness))
+        updateShaderOptions(option: .MON_BLOOM_WEIGHT, value: Int64(config.bloomWeight))
+        updateShaderOptions(option: .MON_FLICKER, value: Int64(config.flicker))
+        updateShaderOptions(option: .MON_FLICKER_WEIGHT, value: Int64(config.flickerWeight))
+        updateShaderOptions(option: .MON_DOTMASK, value: Int64(config.dotMask))
+        updateShaderOptions(option: .MON_DOTMASK, value: Int64(config.dotMask))
+        updateShaderOptions(option: .MON_DOTMASK_BRIGHTNESS, value: Int64(config.dotMaskBrightness))
+        updateShaderOptions(option: .MON_SCANLINES, value: Int64(config.scanlines))
+        updateShaderOptions(option: .MON_SCANLINE_BRIGHTNESS, value: Int64(config.scanlineBrightness))
+        updateShaderOptions(option: .MON_SCANLINE_WEIGHT, value: Int64(config.scanlineWeight))
+        updateShaderOptions(option: .MON_DISALIGNMENT, value: Int64(config.disalignment))
+        updateShaderOptions(option: .MON_DISALIGNMENT_H, value: Int64(config.disalignmentH))
+        updateShaderOptions(option: .MON_DISALIGNMENT_V, value: Int64(config.disalignmentV))
+    }
+    
+    func updateShaderOptions(option: Option, value: Int64)
     {
-        shaderOptions.blur = Int32(config.blur)
-        shaderOptions.blurRadius = Float(config.blurRadius)
-        
-        shaderOptions.bloom = Int32(config.bloom)
-        shaderOptions.bloomRadius = Float(config.bloomRadius)
-        shaderOptions.bloomBrightness = Float(config.bloomBrightness)
-        shaderOptions.bloomWeight = Float(config.bloomWeight)
-
-        shaderOptions.flicker = Int32(config.flicker)
-        shaderOptions.flickerWeight = Float(config.flickerWeight)
-
-        shaderOptions.dotMask = Int32(config.dotMask)
-        shaderOptions.dotMaskBrightness = Float(config.dotMaskBrightness)
-        
-        shaderOptions.scanlines = Int32(config.scanlines)
-        shaderOptions.scanlineBrightness = Float(config.scanlineBrightness)
-        shaderOptions.scanlineWeight = Float(config.scanlineWeight)
-        
-        shaderOptions.disalignment = Int32(config.disalignment)
-        shaderOptions.disalignmentH = Float(config.disalignmentH)
-        shaderOptions.disalignmentV = Float(config.disalignmentV)
-        
-        if !ressourceManager.selectBloomFilter(config.bloom) {
-
-            print("Failed to set bloom filter \(config.bloom)")
-            shaderOptions.bloom = Int32(0)
-        }
-        if !ressourceManager.selectUpscaler(config.upscaler) {
+        switch option {
             
-            print("Failed to set upscaler \(config.bloom)")
-        }
-        if !ressourceManager.selectEnhancer(config.enhancer) {
-            
-            print("Failed to set enhancer \(config.bloom)")
+        case .MON_ENHANCER:
+            ressourceManager.selectEnhancer(config.enhancer)
+        case .MON_UPSCALER:
+            ressourceManager.selectUpscaler(config.upscaler)
+        case .MON_BLUR:
+            shaderOptions.blur = Int32(config.blur)
+        case .MON_BLUR_RADIUS:
+            shaderOptions.blurRadius = Float(config.blurRadius)
+        case .MON_BLOOM:
+            shaderOptions.bloom = Int32(config.bloom)
+            ressourceManager.selectBloomFilter(config.bloom)
+        case .MON_BLOOM_RADIUS:
+            shaderOptions.bloomRadius = Float(config.bloomRadius)
+        case .MON_BLOOM_BRIGHTNESS:
+            shaderOptions.bloomBrightness = Float(config.bloomBrightness)
+        case .MON_BLOOM_WEIGHT:
+            shaderOptions.bloomWeight = Float(config.bloomWeight)
+        case .MON_DOTMASK:
+            shaderOptions.dotMask = Int32(config.dotMask)
+            ressourceManager.buildDotMasks()
+            ressourceManager.selectDotMask(config.dotMask)
+        case .MON_DOTMASK_BRIGHTNESS:
+            shaderOptions.dotMaskBrightness = Float(config.dotMaskBrightness)
+            ressourceManager.buildDotMasks()
+            ressourceManager.selectDotMask(config.dotMask)
+        case .MON_SCANLINES:
+            shaderOptions.scanlines = Int32(config.scanlines)
+        case .MON_SCANLINE_BRIGHTNESS:
+            shaderOptions.scanlineBrightness = Float(config.scanlineBrightness)
+        case .MON_SCANLINE_WEIGHT:
+            shaderOptions.scanlineWeight = Float(config.scanlineWeight)
+        case .MON_DISALIGNMENT:
+            shaderOptions.disalignment = Int32(config.disalignment)
+        case .MON_DISALIGNMENT_H:
+            shaderOptions.disalignmentH = Float(value - 50) * 0.00008
+        case .MON_DISALIGNMENT_V:
+            shaderOptions.disalignmentV = Float(value - 50) * 0.00008
+        case .MON_FLICKER:
+            shaderOptions.flicker = Int32(config.flicker)
+        case .MON_FLICKER_WEIGHT:
+            shaderOptions.flickerWeight = Float(config.flickerWeight)
+        default:
+            break
         }
     }
     
@@ -282,9 +314,9 @@ class Renderer: NSObject, MTKViewDelegate {
     }
     
     func processMessage(_ msg: Message) {
-    
-        var option: Option { return Option(rawValue: Int(msg.value))! }
         
+        var option = Option(rawValue: Int(msg.value))!
+
         switch msg.type {
             
         case .MON_SETTING:
@@ -295,7 +327,7 @@ class Renderer: NSObject, MTKViewDelegate {
                 canvas.updateTextureRect()
 
             default:
-                updateShaderOptions()
+                updateShaderOptions(option: option, value: msg.value2)
             }
             
         default:

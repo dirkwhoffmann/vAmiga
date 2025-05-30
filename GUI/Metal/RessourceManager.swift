@@ -238,39 +238,47 @@ class RessourceManager {
     // Selecting kernels
     //
     
+    @discardableResult
     func selectEnhancer(_ nr: Int) -> Bool {
         
         if nr >= 0 && nr < enhancerGallery.count && enhancerGallery[nr] != nil {
             enhancer = enhancerGallery[nr]!
             return true
         }
+        print("\(#function): Failed to select enhancer \(nr)")
         return false
     }
 
+    @discardableResult
     func selectUpscaler(_ nr: Int) -> Bool {
         
         if nr >= 0 && nr < upscalerGallery.count && upscalerGallery[nr] != nil {
             upscaler = upscalerGallery[nr]!
             return true
         }
+        print("\(#function): Failed to select upscaler \(nr)")
         return false
     }
     
+    @discardableResult
     func selectBloomFilter(_ nr: Int) -> Bool {
         
         if nr >= 0 && nr < bloomFilterGallery.count && bloomFilterGallery[nr] != nil {
             bloomFilter = bloomFilterGallery[nr]!
             return true
         }
+        print("\(#function): Failed to select bloom filter \(nr)")
         return false
     }
 
+    @discardableResult
     func selectScanlineFilter(_ nr: Int) -> Bool {
         
         if nr >= 0 && nr < scanlineFilterGallery.count && scanlineFilterGallery[nr] != nil {
             scanlineFilter = scanlineFilterGallery[nr]!
             return true
         }
+        print("\(#function): Failed to select scanline filter \(nr)")
         return false
     }
     

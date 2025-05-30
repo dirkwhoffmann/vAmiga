@@ -101,9 +101,9 @@ extension ConfigurationController {
         vidScanlineWeightSlider.isEnabled = config.scanlines == 2
         
         vidMisalignmentPopUp.selectItem(withTag: Int(config.disalignment))
-        vidMisalignmentXSlider.floatValue = config.disalignmentH
+        vidMisalignmentXSlider.integerValue = config.disalignmentH
         vidMisalignmentXSlider.isEnabled = config.disalignment > 0
-        vidMisalignmentYSlider.floatValue = config.disalignmentV
+        vidMisalignmentYSlider.integerValue = config.disalignmentV
         vidMisalignmentYSlider.isEnabled = config.disalignment > 0
   
         // Buttons
@@ -276,13 +276,13 @@ extension ConfigurationController {
 
     @IBAction func vidDisalignmentHAction(_ sender: NSSlider!) {
         
-        config.disalignmentH = sender.floatValue
+        config.disalignmentH = sender.integerValue
         refresh()
     }
     
     @IBAction func vidDisalignmentVAction(_ sender: NSSlider!) {
 
-        config.disalignmentV = sender.floatValue
+        config.disalignmentV = sender.integerValue
         refresh()
     }
 

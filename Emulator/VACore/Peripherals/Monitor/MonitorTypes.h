@@ -176,6 +176,7 @@ typedef struct
     isize vZoom;
 
     // Effects
+    Upscaler enhancer;
     Upscaler upscaler;
 
     bool blur;
@@ -196,6 +197,9 @@ typedef struct
     bool disalignment;
     isize disalignmentH;
     isize disalignmentV;
+    
+    bool flicker;
+    isize flickerWeight;
 }
 MonitorConfig;
 

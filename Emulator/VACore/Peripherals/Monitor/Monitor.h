@@ -35,6 +35,7 @@ class Monitor final : public SubComponent {
         Opt::MON_VCENTER,
         Opt::MON_HZOOM,
         Opt::MON_VZOOM,
+        Opt::MON_ENHANCER,
         Opt::MON_UPSCALER,
         Opt::MON_BLUR,
         Opt::MON_BLUR_RADIUS,
@@ -49,7 +50,9 @@ class Monitor final : public SubComponent {
         Opt::MON_SCANLINE_WEIGHT,
         Opt::MON_DISALIGNMENT,
         Opt::MON_DISALIGNMENT_H,
-        Opt::MON_DISALIGNMENT_V
+        Opt::MON_DISALIGNMENT_V,
+        Opt::MON_FLICKER,
+        Opt::MON_FLICKER_WEIGHT
     };
 
     // Current configuration

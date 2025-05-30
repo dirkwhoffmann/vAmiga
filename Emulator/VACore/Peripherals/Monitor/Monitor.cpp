@@ -27,6 +27,7 @@ Monitor::getOption(Opt option) const
         case Opt::MON_VCENTER:               return (i64)config.vCenter;
         case Opt::MON_HZOOM:                 return (i64)config.hZoom;
         case Opt::MON_VZOOM:                 return (i64)config.vZoom;
+        case Opt::MON_ENHANCER:              return (i64)config.enhancer;
         case Opt::MON_UPSCALER:              return (i64)config.upscaler;
         case Opt::MON_BLUR:                  return (i64)config.blur;
         case Opt::MON_BLUR_RADIUS:           return (i64)config.blurRadius;
@@ -42,7 +43,9 @@ Monitor::getOption(Opt option) const
         case Opt::MON_DISALIGNMENT:          return (i64)config.disalignment;
         case Opt::MON_DISALIGNMENT_H:        return (i64)config.disalignmentH;
         case Opt::MON_DISALIGNMENT_V:        return (i64)config.disalignmentV;
-            
+        case Opt::MON_FLICKER:               return (i64)config.flicker;
+        case Opt::MON_FLICKER_WEIGHT:        return (i64)config.flickerWeight;
+
         default:
             fatalError;
     }
@@ -60,36 +63,18 @@ Monitor::checkOption(Opt opt, i64 value)
             }
             return;
             
-        case Opt::MON_BRIGHTNESS:
-        case Opt::MON_CONTRAST:
-        case Opt::MON_SATURATION:
-            
-            if (value < 0 || value > 100) {
-                throw CoreError(Fault::OPT_INV_ARG, "0...100");
-            }
-            return;
-            
-        case Opt::MON_HCENTER:
-        case Opt::MON_VCENTER:
-        case Opt::MON_HZOOM:
-        case Opt::MON_VZOOM:
-            
-            return;
-            
-        case Opt::MON_UPSCALER:
+        case Opt::MON_ENHANCER:
             
             if (!UpscalerEnum::isValid(value)) {
                 throw CoreError(Fault::OPT_INV_ARG, UpscalerEnum::keyList());
             }
             return;
+
+        case Opt::MON_UPSCALER:
             
-        case Opt::MON_BLUR:
-        case Opt::MON_BLUR_RADIUS:
-        case Opt::MON_BLOOM:
-        case Opt::MON_BLOOM_RADIUS:
-        case Opt::MON_BLOOM_BRIGHTNESS:
-        case Opt::MON_BLOOM_WEIGHT:
-            
+            if (!UpscalerEnum::isValid(value)) {
+                throw CoreError(Fault::OPT_INV_ARG, UpscalerEnum::keyList());
+            }
             return;
             
         case Opt::MON_DOTMASK:
@@ -99,10 +84,6 @@ Monitor::checkOption(Opt opt, i64 value)
             }
             return;
             
-        case Opt::MON_DOTMASK_BRIGHTNESS:
-            
-            return;
-            
         case Opt::MON_SCANLINES:
             
             if (!ScanlinesEnum::isValid(value)) {
@@ -110,12 +91,31 @@ Monitor::checkOption(Opt opt, i64 value)
             }
             return;
             
+        case Opt::MON_BRIGHTNESS:
+        case Opt::MON_CONTRAST:
+        case Opt::MON_SATURATION:
+        case Opt::MON_HCENTER:
+        case Opt::MON_VCENTER:
+        case Opt::MON_HZOOM:
+        case Opt::MON_VZOOM:
+        case Opt::MON_BLUR:
+        case Opt::MON_BLUR_RADIUS:
+        case Opt::MON_BLOOM:
+        case Opt::MON_BLOOM_RADIUS:
+        case Opt::MON_BLOOM_BRIGHTNESS:
+        case Opt::MON_BLOOM_WEIGHT:
+        case Opt::MON_DOTMASK_BRIGHTNESS:
         case Opt::MON_SCANLINE_BRIGHTNESS:
         case Opt::MON_SCANLINE_WEIGHT:
         case Opt::MON_DISALIGNMENT:
         case Opt::MON_DISALIGNMENT_H:
         case Opt::MON_DISALIGNMENT_V:
+        case Opt::MON_FLICKER:
+        case Opt::MON_FLICKER_WEIGHT:
             
+            if (value < 0 || value > 100) {
+                throw CoreError(Fault::OPT_INV_ARG, "0...100");
+            }
             return;
             
         default:
@@ -173,7 +173,12 @@ Monitor::setOption(Opt opt, i64 value)
             
             config.vZoom = isize(value);
             break;
+
+        case Opt::MON_ENHANCER:
             
+            config.enhancer = Upscaler(value);
+            break;
+
         case Opt::MON_UPSCALER:
             
             config.upscaler = Upscaler(value);
@@ -248,12 +253,22 @@ Monitor::setOption(Opt opt, i64 value)
             
             config.disalignmentV = isize(value);
             break;
+
+        case Opt::MON_FLICKER:
             
+            config.flicker = bool(value);
+            break;
+
+        case Opt::MON_FLICKER_WEIGHT:
+            
+            config.flickerWeight = isize(value);
+            break;
+
         default:
             fatalError;
     }
     
-    msgQueue.put(Msg::MON_SETTING, (i64)opt); 
+    msgQueue.put(Msg::MON_SETTING, (i64)opt, value);
 }
 
 void

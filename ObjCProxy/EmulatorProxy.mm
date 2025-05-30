@@ -2504,7 +2504,11 @@ NSString *EventSlotName(NSInteger slot)
 
 - (void)launch:(const void *)listener function:(Callback *)func
 {
-    [self emu]->launch(listener, func);
+    try {
+        [self emu]->launch(listener, func);
+    } catch (std::exception &e) {
+        printf("FATAL: %s\n", e.what());
+    }
 }
 
 - (NSInteger)get:(Opt)opt

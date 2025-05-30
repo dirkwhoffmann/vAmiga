@@ -66,6 +66,7 @@ enum class Opt : long
     MON_VCENTER,            ///< Vertical centering
     MON_HZOOM,              ///< Horizontal zoom
     MON_VZOOM,              ///< Vertical centering
+    MON_ENHANCER,           ///< Pixel upscaler
     MON_UPSCALER,           ///< Pixel upscaler
     MON_BLUR,               ///< Blur enable
     MON_BLUR_RADIUS,        ///< Blur radius
@@ -81,6 +82,8 @@ enum class Opt : long
     MON_DISALIGNMENT,       ///< Cathode ray disalignment enable
     MON_DISALIGNMENT_H,     ///< Horizontal cathode ray disalignment
     MON_DISALIGNMENT_V,     ///< Vertical cathode ray disalignment
+    MON_FLICKER,            ///< Interlace flicker enable
+    MON_FLICKER_WEIGHT,     ///< Interlace flicker intensity
 
     // DMA Debugger
     DMA_DEBUG_ENABLE,
@@ -265,6 +268,7 @@ struct OptEnum : Reflection<OptEnum, Opt>
             case Opt::MON_VCENTER:               return "MON.VCENTER";
             case Opt::MON_HZOOM:                 return "MON.HZOOM";
             case Opt::MON_VZOOM:                 return "MON.VZOOM";
+            case Opt::MON_ENHANCER:              return "MON.ENHANCER";
             case Opt::MON_UPSCALER:              return "MON.UPSCALER";
             case Opt::MON_BLUR:                  return "MON.BLUR";
             case Opt::MON_BLUR_RADIUS:           return "MON.BLUR_RADIUS";
@@ -280,6 +284,8 @@ struct OptEnum : Reflection<OptEnum, Opt>
             case Opt::MON_DISALIGNMENT:          return "MON.DISALIGNMENT";
             case Opt::MON_DISALIGNMENT_H:        return "MON.DISALIGNMENT_H";
             case Opt::MON_DISALIGNMENT_V:        return "MON.DISALIGNMENT_V";
+            case Opt::MON_FLICKER:               return "MON.FLICKER";
+            case Opt::MON_FLICKER_WEIGHT:        return "MON.FLICKER_WEIGHT";
 
             case Opt::DMA_DEBUG_ENABLE:          return "DMA.DEBUG_ENABLE";
             case Opt::DMA_DEBUG_MODE:            return "DMA.DEBUG_MODE";
@@ -442,6 +448,7 @@ struct OptEnum : Reflection<OptEnum, Opt>
             case Opt::MON_VCENTER:               return "Vertical center";
             case Opt::MON_HZOOM:                 return "Horizontal zoom";
             case Opt::MON_VZOOM:                 return "Vertical zoom";
+            case Opt::MON_ENHANCER:              return "Enhancer";
             case Opt::MON_UPSCALER:              return "Upscaler";
             case Opt::MON_BLUR:                  return "Blur";
             case Opt::MON_BLUR_RADIUS:           return "Blur radius";
@@ -457,6 +464,8 @@ struct OptEnum : Reflection<OptEnum, Opt>
             case Opt::MON_DISALIGNMENT:          return "Cathode rays disalignment";
             case Opt::MON_DISALIGNMENT_H:        return "Horizontal cathode ray shift";
             case Opt::MON_DISALIGNMENT_V:        return "Vertical cathode ray shift";
+            case Opt::MON_FLICKER:               return "Interlace flicker";
+            case Opt::MON_FLICKER_WEIGHT:        return "Interlace flicker intensity";
 
             case Opt::DMA_DEBUG_ENABLE:          return "DMA Debugger";
             case Opt::DMA_DEBUG_MODE:            return "DMA Debugger style";

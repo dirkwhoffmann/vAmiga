@@ -63,6 +63,7 @@ OptionParser::create(Opt opt, i64 arg)
         case Opt::MON_VCENTER:               return numParser();
         case Opt::MON_HZOOM:                 return numParser();
         case Opt::MON_VZOOM:                 return numParser();
+        case Opt::MON_ENHANCER:              return enumParser.template operator()<UpscalerEnum,Upscaler>();
         case Opt::MON_UPSCALER:              return enumParser.template operator()<UpscalerEnum,Upscaler>();
         case Opt::MON_BLUR:                  return boolParser();
         case Opt::MON_BLUR_RADIUS:           return numParser();
@@ -78,6 +79,8 @@ OptionParser::create(Opt opt, i64 arg)
         case Opt::MON_DISALIGNMENT:          return boolParser();
         case Opt::MON_DISALIGNMENT_H:        return numParser();
         case Opt::MON_DISALIGNMENT_V:        return numParser();
+        case Opt::MON_FLICKER:               return boolParser();
+        case Opt::MON_FLICKER_WEIGHT:        return numParser();
 
         case Opt::DMA_DEBUG_ENABLE:          return boolParser();
         case Opt::DMA_DEBUG_MODE:            return enumParser.template operator()<DmaDisplayModeEnum,DmaDisplayMode>();

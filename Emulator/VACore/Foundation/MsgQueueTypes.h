@@ -255,9 +255,9 @@ struct MsgEnum : Reflection<MsgEnum, Msg>
 typedef struct { u32 pc; u8 vector; } CpuMsg;
 typedef struct { i16 nr; i16 value; i16 volume; i16 pan; } DriveMsg;
 typedef struct { i16 nr; HdcState state; } HdcMsg;
-typedef struct { i16 hstrt; i16 vstrt; i16 hstop; i16 vstop; } ViewportMsg;
 typedef struct { isize line; i16 delay; } ScriptMsg;
 typedef struct { void *snapshot; } SnapshotMsg;
+typedef struct { i16 hstrt; i16 vstrt; i16 hstop; i16 vstop; } ViewportMsg;
 
 typedef struct
 {
@@ -266,13 +266,13 @@ typedef struct
     
     // Payload
     union {
-        i64 value;
+        struct { i64 value; i64 value2; };
         CpuMsg cpu;
         DriveMsg drive;
         HdcMsg hdc;
         ScriptMsg script;
-        ViewportMsg viewport;
         SnapshotMsg snapshot;
+        ViewportMsg viewport;
     };
 }
 Message;

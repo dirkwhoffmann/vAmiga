@@ -1430,18 +1430,22 @@ extension DefaultsProxy {
     func registerGeometryUserDefaults() {
 
         debug(.defaults)
+        // No GUI related keys in this category
 
+        
         register(Keys.Vid.zoom, 2)
         register(Keys.Vid.hZoom, 1.0)
         register(Keys.Vid.vZoom, 0.27)
         register(Keys.Vid.center, 1)
         register(Keys.Vid.hCenter, 0.6)
         register(Keys.Vid.vCenter, 0.47)
+        
     }
     
     func registerShaderUserDefaults() {
 
         debug(.defaults)
+        // No GUI related keys in this category
         
         register(Keys.Vid.enhancer, 0)
         register(Keys.Vid.upscaler, 0)
@@ -1496,6 +1500,7 @@ extension DefaultsProxy {
 
         debug(.defaults)
         
+        remove(.MON_ENHANCER)
         remove(.MON_UPSCALER)
         remove(.MON_BLUR)
         remove(.MON_BLUR_RADIUS)
@@ -1511,6 +1516,8 @@ extension DefaultsProxy {
         remove(.MON_DISALIGNMENT)
         remove(.MON_DISALIGNMENT_H)
         remove(.MON_DISALIGNMENT_V)
+        remove(.MON_FLICKER)
+        remove(.MON_FLICKER_WEIGHT)
     }
 }
 
@@ -1555,11 +1562,11 @@ extension Configuration {
         amiga.suspend()
                 
         defaults.set(Keys.Vid.zoom, zoom)
-        defaults.set(Keys.Vid.hZoom, hZoom)
-        defaults.set(Keys.Vid.vZoom, vZoom)
+        defaults.set(.MON_HZOOM, Int(hZoom))
+        defaults.set(.MON_VZOOM, Int(vZoom))
         defaults.set(Keys.Vid.center, center)
-        defaults.set(Keys.Vid.hCenter, hCenter)
-        defaults.set(Keys.Vid.vCenter, vCenter)
+        defaults.set(.MON_HCENTER, Int(hCenter))
+        defaults.set(.MON_VCENTER, Int(vCenter))
 
         defaults.save()
         
@@ -1629,11 +1636,11 @@ extension Configuration {
         amiga.suspend()
           
         zoom = defaults.int(Keys.Vid.zoom)
-        hZoom = defaults.float(Keys.Vid.hZoom)
-        vZoom = defaults.float(Keys.Vid.vZoom)
+        hZoom = Float(defaults.get(.MON_HZOOM))
+        vZoom = Float(defaults.get(.MON_VZOOM))
         center = defaults.int(Keys.Vid.center)
-        hCenter = defaults.float(Keys.Vid.hCenter)
-        vCenter = defaults.float(Keys.Vid.vCenter)
+        hCenter = Float(defaults.get(.MON_HCENTER))
+        vCenter = Float(defaults.get(.MON_VCENTER))
 
         amiga.resume()
     }
@@ -1645,24 +1652,24 @@ extension Configuration {
         
         amiga.suspend()
                         
-        enhancer = defaults.int(Keys.Vid.enhancer)
-        upscaler = defaults.int(Keys.Vid.upscaler)
-        blur = defaults.int(Keys.Vid.blur)
-        blurRadius = defaults.float(Keys.Vid.blurRadius)
-        bloom = defaults.int(Keys.Vid.bloom)
-        bloomRadius = defaults.float(Keys.Vid.bloomRadius)
-        bloomBrightness = defaults.float(Keys.Vid.bloomBrightness)
-        bloomWeight = defaults.float(Keys.Vid.bloomWeight)
-        flicker = defaults.int(Keys.Vid.flicker)
-        flickerWeight = defaults.float(Keys.Vid.flickerWeight)
-        dotMask = defaults.int(Keys.Vid.dotMask)
-        dotMaskBrightness = defaults.float(Keys.Vid.dotMaskBrightness)
-        scanlines = defaults.int(Keys.Vid.scanlines)
-        scanlineBrightness = defaults.float(Keys.Vid.scanlineBrightness)
-        scanlineWeight = defaults.float(Keys.Vid.scanlineWeight)
-        disalignment = defaults.int(Keys.Vid.disalignment)
-        disalignmentH = defaults.float(Keys.Vid.disalignmentH)
-        disalignmentV = defaults.float(Keys.Vid.disalignmentV)
+        enhancer = defaults.get(.MON_ENHANCER)
+        upscaler = defaults.get(.MON_UPSCALER)
+        blur = defaults.get(.MON_BLUR)
+        blurRadius = Float(defaults.get(.MON_BLUR_RADIUS))
+        bloom = defaults.get(.MON_BLOOM)
+        bloomRadius = Float(defaults.get(.MON_BLOOM_RADIUS))
+        bloomBrightness = Float(defaults.get(.MON_BLOOM_BRIGHTNESS))
+        bloomWeight = Float(defaults.get(.MON_BLOOM_WEIGHT))
+        flicker = defaults.get(.MON_FLICKER)
+        flickerWeight = Float(defaults.get(.MON_FLICKER_WEIGHT))
+        dotMask = defaults.get(.MON_DOTMASK)
+        dotMaskBrightness = Float(defaults.get(.MON_DOTMASK_BRIGHTNESS))
+        scanlines = defaults.get(.MON_SCANLINES)
+        scanlineBrightness = Float(defaults.get(.MON_SCANLINE_BRIGHTNESS))
+        scanlineWeight = Float(defaults.get(.MON_SCANLINE_WEIGHT))
+        disalignment = defaults.get(.MON_DISALIGNMENT)
+        disalignmentH = defaults.get(.MON_DISALIGNMENT_H)
+        disalignmentV = defaults.get(.MON_DISALIGNMENT_V)
         
         amiga.resume()
     }
