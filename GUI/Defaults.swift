@@ -1433,42 +1433,12 @@ extension DefaultsProxy {
 
         debug(.defaults)
         // No GUI related keys in this category
-
-        /*
-        register(Keys.Vid.zoom, 2)
-        register(Keys.Vid.hZoom, 1.0)
-        register(Keys.Vid.vZoom, 0.27)
-        register(Keys.Vid.center, 1)
-        register(Keys.Vid.hCenter, 0.6)
-        register(Keys.Vid.vCenter, 0.47)
-        */
     }
     
     func registerShaderUserDefaults() {
 
         debug(.defaults)
         // No GUI related keys in this category
-        
-        /*
-        register(Keys.Vid.enhancer, 0)
-        register(Keys.Vid.upscaler, 0)
-        register(Keys.Vid.blur, 1)
-        register(Keys.Vid.blurRadius, 0)
-        register(Keys.Vid.bloom, 0)
-        register(Keys.Vid.bloomRadius, 1.0)
-        register(Keys.Vid.bloomBrightness, 0.4)
-        register(Keys.Vid.bloomWeight, 1.21)
-        register(Keys.Vid.flicker, 1)
-        register(Keys.Vid.flickerWeight, 0.25)
-        register(Keys.Vid.dotMask, 0)
-        register(Keys.Vid.dotMaskBrightness, 0.55)
-        register(Keys.Vid.scanlines, 0)
-        register(Keys.Vid.scanlineBrightness, 0.55)
-        register(Keys.Vid.scanlineWeight, 0.11)
-        register(Keys.Vid.disalignment, 0)
-        register(Keys.Vid.disalignmentH, 0.001)
-        register(Keys.Vid.disalignmentV, 0.001)
-        */
     }
     
     func removeVideoUserDefaults() {
