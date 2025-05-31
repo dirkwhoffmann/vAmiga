@@ -11,6 +11,9 @@
 #include "Host.h"
 #include "Emulator.h"
 #include "IOUtils.h"
+#include "StringUtils.h"
+
+#include <unordered_set>
 
 namespace vamiga {
 
@@ -89,6 +92,62 @@ Host::_dump(Category category, std::ostream &os) const
 
         dumpConfig(os);
     }
+}
+
+fs::path
+Host::sanitize(const string &filename)
+{
+    auto isIllegalChar = [&](char c) {
+
+        static const std::unordered_set<char> illegal {
+            '<', '>', ':', '"', '\\', '|', '?', '*'
+        };
+
+        if (c < 32) return true;
+        if (c > 127) return true;
+        
+        return illegal.count(c) > 0;
+    };
+
+    auto isReserved = [&](const string& name) {
+        
+        static const std::unordered_set<std::string> reserved {
+            "CON", "PRN", "AUX", "NUL",
+            "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
+            "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
+        };
+        
+        return reserved.count(util::uppercased(name)) > 0;
+    };
+
+    std::stringstream ss;
+
+    for (char c : filename) {
+        
+        if (isIllegalChar(c)) {
+            
+            // Hex-escape illegal characters
+            ss << "_x" << std::hex << std::uppercase << int(u8(c));
+            
+        } else if (c == ' ') {
+            
+            // Replace spaces by underscored
+            ss << '_';
+            
+        } else {
+            
+            ss << c;
+        }
+    }
+    
+    // Strip trailing dots or spaces
+    std::string result = util::rtrim(ss.str(), ".");
+
+    // Avoid reserved Windows names
+    if (isReserved(result)) result += "_file";
+
+    // printf("sanitize(%s) = %s\n", filename.c_str(), result.c_str());
+    return fs::path(result);
 }
 
 void
