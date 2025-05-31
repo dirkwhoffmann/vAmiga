@@ -824,10 +824,10 @@ FSBlock::exportFileHeaderBlock(const fs::path &path)
     auto filename = device.getPath(this);
     
     // Make the name compatible with the host computer
-    filename = Host::sanitize(filename);
+    auto sanitized = Host::sanitize(filename);
 
     // Create the full path
-    auto fullname = path / filename;
+    auto fullname = path / sanitized;
     
     // Open file
     std::ofstream file(fullname, std::ofstream::binary);

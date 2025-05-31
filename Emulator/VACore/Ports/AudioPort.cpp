@@ -254,8 +254,8 @@ AudioPort::setOption(Opt option, i64 value)
 
         case Opt::AUD_BUFFER_SIZE:
                         
-            config.bufferSize = value;
-            stream.resize(value);
+            config.bufferSize = isize(value);
+            stream.resize(isize(value));
             return;
             
         case Opt::AUD_SAMPLING_METHOD:

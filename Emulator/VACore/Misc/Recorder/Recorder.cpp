@@ -46,6 +46,7 @@ Recorder::_dump(Category category, std::ostream &os) const
 i64
 Recorder::getOption(Opt option) const
 {
+    /*
     switch (option) {
             
         // case Option::RTC_MODEL:  return (long)config.model;
@@ -53,46 +54,34 @@ Recorder::getOption(Opt option) const
         default:
             fatalError;
     }
+    */
+    fatalError;
 }
 
 void
 Recorder::checkOption(Opt option, i64 value)
 {
+    /*
     switch (option) {
-
-            /*
-        case Option::RTC_MODEL:
-
-            if (!isPoweredOff()) {
-                throw Error(Fault::OPT_LOCKED);
-            }
-            if (!RTCRevisionEnum::isValid(value)) {
-                throw Error(Fault::OPT_INV_ARG, RTCRevisionEnum::keyList());
-            }
-            return;
-             */
             
         default:
             throw(Fault::OPT_UNSUPPORTED);
     }
+    */
+    throw(Fault::OPT_UNSUPPORTED);
 }
 
 void
 Recorder::setOption(Opt option, i64 value)
 {
+    /*
     switch (option) {
-            
-            /*
-        case Option::RTC_MODEL:
-
-            config.model = (RTCRevision)value;
-            mem.updateMemSrcTables();
-            return;
-             */
-            
+                        
         default:
             fatalError;
     }
+    */
+    fatalError;
 }
 
 string

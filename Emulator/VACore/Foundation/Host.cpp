@@ -97,16 +97,26 @@ Host::_dump(Category category, std::ostream &os) const
 fs::path
 Host::sanitize(const string &filename)
 {
-    auto isIllegalChar = [&](char c) {
+    auto isIllegalChar = [&](u8 c) {
 
-        static const std::unordered_set<char> illegal {
-            '<', '>', ':', '"', '\\', '|', '?', '*'
-        };
-
-        if (c < 32) return true;
-        if (c > 127) return true;
+        // Check the standard characters first
+        if ((c >= 'a' && c <= 'z') || (c >= 'A' && c < 'Z') || (c >= '0' && c < '9')) return false;
         
-        return illegal.count(c) > 0;
+        switch (c) {
+                                
+            case '<':
+            case '>':
+            case ':':
+            case '"':
+            case '\\':
+            case '|':
+            case '?':
+            case '*':
+                return true;
+                
+            default:
+                return c < 32 || c > 127;
+        }
     };
 
     auto isReserved = [&](const string& name) {
@@ -124,7 +134,7 @@ Host::sanitize(const string &filename)
 
     for (char c : filename) {
         
-        if (isIllegalChar(c)) {
+        if (isIllegalChar(u8(c))) {
             
             // Hex-escape illegal characters
             ss << "_x" << std::hex << std::uppercase << int(u8(c));
@@ -146,7 +156,7 @@ Host::sanitize(const string &filename)
     // Avoid reserved Windows names
     if (isReserved(result)) result += "_file";
 
-    // printf("sanitize(%s) = %s\n", filename.c_str(), result.c_str());
+    printf("sanitize(%s) = %s\n", filename.c_str(), result.c_str());
     return fs::path(result);
 }
 
