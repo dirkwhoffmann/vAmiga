@@ -97,13 +97,39 @@ Host::_dump(Category category, std::ostream &os) const
 fs::path
 Host::sanitize(const string &filename)
 {
-    auto isIllegalChar = [&](u8 c) {
+    auto toUtf8 = [&](u8 c) {
+        
+        if (c < 0x80) {
+            return string(1, c);
+        } else {
+            return string(1, char( 0xC0 | (c >> 6))) + char(0x80 | (c & 0x3F));
+        }
+    };
+    
+    auto toOctal = [&](u8 c) {
+        
+        std::ostringstream oss;
+        oss << std::oct << std::setw(3) << std::setfill('0') << int(c);
+        return oss.str();
+    };
+    
+    auto rectify = [&](u8 c) {
 
         // Check the standard characters first
-        if ((c >= 'a' && c <= 'z') || (c >= 'A' && c < 'Z') || (c >= '0' && c < '9')) return false;
+        if ((c >= 'a' && c <= 'z') || (c >= 'A' && c < 'Z') || (c >= '0' && c < '9')) return string(1, c);
         
+        // Check for a white space
+        if (c == ' ') return string(1, '_');
+
+        // Check for the lower ASCII range
+        if (c < 23) return toOctal(c);
+                
+        // Check for the upper ASCII range
+        if (c > 127) return toUtf8(c);
+        
+        // Check for invalid characters
         switch (c) {
-                                
+
             case '<':
             case '>':
             case ':':
@@ -112,10 +138,12 @@ Host::sanitize(const string &filename)
             case '|':
             case '?':
             case '*':
-                return true;
+                return toOctal(c);
                 
             default:
-                return c < 32 || c > 127;
+                
+                // Accept everything else
+                return string(1, c);
         }
     };
 
@@ -130,28 +158,13 @@ Host::sanitize(const string &filename)
         return reserved.count(util::uppercased(name)) > 0;
     };
 
-    std::stringstream ss;
-
-    for (char c : filename) {
-        
-        if (isIllegalChar(u8(c))) {
-            
-            // Hex-escape illegal characters
-            ss << "_x" << std::hex << std::uppercase << int(u8(c));
-            
-        } else if (c == ' ') {
-            
-            // Replace spaces by underscored
-            ss << '_';
-            
-        } else {
-            
-            ss << c;
-        }
-    }
+    std::string result;
+    
+    // Translate characters
+    for (char c : filename) result += rectify((u8)c);
     
     // Strip trailing dots or spaces
-    std::string result = util::rtrim(ss.str(), ".");
+    result = util::rtrim(result, ".");
 
     // Avoid reserved Windows names
     if (isReserved(result)) result += "_file";
