@@ -321,7 +321,7 @@ class Canvas: Layer {
         if renderer.shaderOptions.scanlines == 1 {
 
             scanlineFilter.apply(commandBuffer: buffer,
-                                 source: mergeTexture,
+                                 source: finalTexture,
                                  target: scanlineTexture,
                                  options: &renderer.shaderOptions,
                                  length: MemoryLayout<ShaderOptions>.stride)

@@ -648,16 +648,16 @@ kernel void inPlaceXbr(texture2d<half, access::read>  in   [[ texture(0) ]],
 // Scanline filters
 //
 
-kernel void scanlines(texture2d<half, access::read>  inTexture   [[ texture(0) ]],
-                      texture2d<half, access::write> outTexture  [[ texture(1) ]],
-                      constant ShaderOptions         &options    [[ buffer(0) ]],
-                      uint2                          gid         [[ thread_position_in_grid ]])
+kernel void scanlines(texture2d<half, access::read>  in       [[ texture(0) ]],
+                      texture2d<half, access::write> out      [[ texture(1) ]],
+                      constant ShaderOptions         &options [[ buffer(0) ]],
+                      uint2                          gid      [[ thread_position_in_grid ]])
 {
-    half4 color = inTexture.read(uint2(gid.x, gid.y));
+    half4 color = in.read(uint2(gid.x, gid.y));
     if (((gid.y + 1) % 4) < 2) {
         color *= options.scanlineBrightness;
     }
-    outTexture.write(color, gid);
+    out.write(color, gid);
 }
 
 //
