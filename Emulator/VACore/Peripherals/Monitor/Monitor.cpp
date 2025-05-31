@@ -129,8 +129,8 @@ Monitor::checkOption(Opt opt, i64 value)
         case Opt::MON_FLICKER:
         case Opt::MON_FLICKER_WEIGHT:
             
-            if (value < 0 || value > 100) {
-                throw CoreError(Fault::OPT_INV_ARG, "0...100");
+            if (value < 0 || value > 1000) {
+                throw CoreError(Fault::OPT_INV_ARG, "0...1000");
             }
             return;
             

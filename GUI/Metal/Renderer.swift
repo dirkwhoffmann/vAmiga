@@ -117,28 +117,28 @@ class Renderer: NSObject, MTKViewDelegate {
     
     func updateShaderOptions() {
         
-        updateShaderOptions(option: .MON_BLUR, value: Int64(config.blur))
-        updateShaderOptions(option: .MON_BLUR_RADIUS, value: Int64(config.blurRadius))
-        updateShaderOptions(option: .MON_BLOOM, value: Int64(config.bloom))
-        updateShaderOptions(option: .MON_BLOOM_RADIUS, value: Int64(config.bloomRadius))
-        updateShaderOptions(option: .MON_BLOOM_BRIGHTNESS, value: Int64(config.bloomBrightness))
-        updateShaderOptions(option: .MON_BLOOM_WEIGHT, value: Int64(config.bloomWeight))
-        updateShaderOptions(option: .MON_FLICKER, value: Int64(config.flicker))
-        updateShaderOptions(option: .MON_FLICKER_WEIGHT, value: Int64(config.flickerWeight))
-        updateShaderOptions(option: .MON_DOTMASK, value: Int64(config.dotMask))
-        updateShaderOptions(option: .MON_DOTMASK, value: Int64(config.dotMask))
-        updateShaderOptions(option: .MON_DOTMASK_BRIGHTNESS, value: Int64(config.dotMaskBrightness))
-        updateShaderOptions(option: .MON_SCANLINES, value: Int64(config.scanlines))
-        updateShaderOptions(option: .MON_SCANLINE_BRIGHTNESS, value: Int64(config.scanlineBrightness))
-        updateShaderOptions(option: .MON_SCANLINE_WEIGHT, value: Int64(config.scanlineWeight))
-        updateShaderOptions(option: .MON_DISALIGNMENT, value: Int64(config.disalignment))
-        updateShaderOptions(option: .MON_DISALIGNMENT_H, value: Int64(config.disalignmentH))
-        updateShaderOptions(option: .MON_DISALIGNMENT_V, value: Int64(config.disalignmentV))
+        updateShaderOption(.MON_BLUR, value: Int64(config.blur))
+        updateShaderOption(.MON_BLUR_RADIUS, value: Int64(config.blurRadius))
+        updateShaderOption(.MON_BLOOM, value: Int64(config.bloom))
+        updateShaderOption(.MON_BLOOM_RADIUS, value: Int64(config.bloomRadius))
+        updateShaderOption(.MON_BLOOM_BRIGHTNESS, value: Int64(config.bloomBrightness))
+        updateShaderOption(.MON_BLOOM_WEIGHT, value: Int64(config.bloomWeight))
+        updateShaderOption(.MON_FLICKER, value: Int64(config.flicker))
+        updateShaderOption(.MON_FLICKER_WEIGHT, value: Int64(config.flickerWeight))
+        updateShaderOption(.MON_DOTMASK, value: Int64(config.dotMask))
+        updateShaderOption(.MON_DOTMASK, value: Int64(config.dotMask))
+        updateShaderOption(.MON_DOTMASK_BRIGHTNESS, value: Int64(config.dotMaskBrightness))
+        updateShaderOption(.MON_SCANLINES, value: Int64(config.scanlines))
+        updateShaderOption(.MON_SCANLINE_BRIGHTNESS, value: Int64(config.scanlineBrightness))
+        updateShaderOption(.MON_SCANLINE_WEIGHT, value: Int64(config.scanlineWeight))
+        updateShaderOption(.MON_DISALIGNMENT, value: Int64(config.disalignment))
+        updateShaderOption(.MON_DISALIGNMENT_H, value: Int64(config.disalignmentH))
+        updateShaderOption(.MON_DISALIGNMENT_V, value: Int64(config.disalignmentV))
     }
     
-    func updateShaderOptions(option: Option, value: Int64)
+    func updateShaderOption(_ option: Option, value: Int64)
     {
-        func map(_ value: Int64, from source: ClosedRange<Int64> = 0...100, to target: ClosedRange<Float>) -> Float {
+        func map(_ value: Int64, from source: ClosedRange<Int64> = 0...1000, to target: ClosedRange<Float>) -> Float {
             
             let clamped = min(max(value, source.lowerBound), source.upperBound)
             let normalized = Float(clamped - source.lowerBound) / Float(source.upperBound - source.lowerBound)
@@ -334,7 +334,7 @@ class Renderer: NSObject, MTKViewDelegate {
                 canvas.updateTextureRect()
 
             default:
-                updateShaderOptions(option: option, value: msg.value2)
+                updateShaderOption(option, value: msg.value2)
             }
             
         default:

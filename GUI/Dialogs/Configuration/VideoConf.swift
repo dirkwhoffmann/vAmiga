@@ -308,12 +308,12 @@ extension ConfigurationController {
 
             debug(1, "ViewSonic VP191b")
             EmulatorProxy.defaults.removeGeometryUserDefaults()
-            defaults.set(Keys.Vid.zoom, 0)
-            defaults.set(Keys.Vid.hZoom, 0.6763221)
-            defaults.set(Keys.Vid.vZoom, 0.032)
-            defaults.set(Keys.Vid.center, 0)
-            defaults.set(Keys.Vid.hCenter, 0.39813587)
-            defaults.set(Keys.Vid.vCenter, 1.0)
+            defaults.set(.MON_ZOOM, 0)          // (Keys.Vid.zoom, 0)
+            defaults.set(.MON_HZOOM, 676)       // (Keys.Vid.hZoom, 0.6763221)
+            defaults.set(.MON_VZOOM, 032)       // (Keys.Vid.vZoom, 0.032)
+            defaults.set(.MON_CENTER, 0)        // (Keys.Vid.center, 0)
+            defaults.set(.MON_HCENTER, 398)     // (Keys.Vid.hCenter, 0.39813587)
+            defaults.set(.MON_VCENTER, 1000)    // (Keys.Vid.vCenter, 1.0)
 
         case 20: // Recommended settings (colors + shader)
 
@@ -329,10 +329,10 @@ extension ConfigurationController {
 
             EmulatorProxy.defaults.removeColorUserDefaults()
             EmulatorProxy.defaults.removeShaderUserDefaults()
-            defaults.set(Keys.Vid.blurRadius, 1.5)
-            defaults.set(Keys.Vid.bloom, 1)
-            defaults.set(Keys.Vid.dotMask, 1)
-            defaults.set(Keys.Vid.scanlines, 2)
+            defaults.set(.MON_BLUR_RADIUS, 330) // (Keys.Vid.blurRadius, 1.5)
+            defaults.set(.MON_BLOOM, 1)         // (Keys.Vid.bloom, 1)
+            defaults.set(.MON_DOTMASK, 1)       // (Keys.Vid.dotMask, 1)
+            defaults.set(.MON_SCANLINES, 2)     // (Keys.Vid.scanlines, 2)
 
         default:
             fatalError()

@@ -1379,6 +1379,7 @@ extension Keys {
     
     struct Vid {
 
+        /*
         // Geometry
         static let zoom               = "Geometry.Zoom"
         static let hZoom              = "Geometry.HZoom"
@@ -1406,6 +1407,7 @@ extension Keys {
         static let disalignment       = "Shaders.Disalignment"
         static let disalignmentH      = "Shaders.DisalignmentH"
         static let disalignmentV      = "Shaders.DisalignmentV"
+        */
     }
 }
 
@@ -1432,14 +1434,14 @@ extension DefaultsProxy {
         debug(.defaults)
         // No GUI related keys in this category
 
-        
+        /*
         register(Keys.Vid.zoom, 2)
         register(Keys.Vid.hZoom, 1.0)
         register(Keys.Vid.vZoom, 0.27)
         register(Keys.Vid.center, 1)
         register(Keys.Vid.hCenter, 0.6)
         register(Keys.Vid.vCenter, 0.47)
-        
+        */
     }
     
     func registerShaderUserDefaults() {
@@ -1447,6 +1449,7 @@ extension DefaultsProxy {
         debug(.defaults)
         // No GUI related keys in this category
         
+        /*
         register(Keys.Vid.enhancer, 0)
         register(Keys.Vid.upscaler, 0)
         register(Keys.Vid.blur, 1)
@@ -1465,6 +1468,7 @@ extension DefaultsProxy {
         register(Keys.Vid.disalignment, 0)
         register(Keys.Vid.disalignmentH, 0.001)
         register(Keys.Vid.disalignmentV, 0.001)
+        */
     }
     
     func removeVideoUserDefaults() {
@@ -1582,24 +1586,24 @@ extension Configuration {
         
         amiga.suspend()
                         
-        defaults.set(Keys.Vid.enhancer, enhancer)
-        defaults.set(Keys.Vid.upscaler, upscaler)
-        defaults.set(Keys.Vid.blur, blur)
-        defaults.set(Keys.Vid.blurRadius, blurRadius)
-        defaults.set(Keys.Vid.bloom, bloom)
-        defaults.set(Keys.Vid.bloomRadius, bloomRadius)
-        defaults.set(Keys.Vid.bloomBrightness, bloomBrightness)
-        defaults.set(Keys.Vid.bloomWeight, bloomWeight)
-        defaults.set(Keys.Vid.flicker, flicker)
-        defaults.set(Keys.Vid.flickerWeight, flickerWeight)
-        defaults.set(Keys.Vid.dotMask, dotMask)
-        defaults.set(Keys.Vid.dotMaskBrightness, dotMaskBrightness)
-        defaults.set(Keys.Vid.scanlines, scanlines)
-        defaults.set(Keys.Vid.scanlineBrightness, scanlineBrightness)
-        defaults.set(Keys.Vid.scanlineWeight, scanlineWeight)
-        defaults.set(Keys.Vid.disalignment, disalignment)
-        defaults.set(Keys.Vid.disalignmentH, disalignmentH)
-        defaults.set(Keys.Vid.disalignmentV, disalignmentV)
+        defaults.set(.MON_ENHANCER, enhancer)
+        defaults.set(.MON_UPSCALER, upscaler)
+        defaults.set(.MON_BLUR, blur)
+        defaults.set(.MON_BLUR_RADIUS, blurRadius)
+        defaults.set(.MON_BLOOM, bloom)
+        defaults.set(.MON_BLOOM_RADIUS, bloomRadius)
+        defaults.set(.MON_BLOOM_BRIGHTNESS, bloomBrightness)
+        defaults.set(.MON_BLOOM_WEIGHT, bloomWeight)
+        defaults.set(.MON_FLICKER, flicker)
+        defaults.set(.MON_FLICKER_WEIGHT, flickerWeight)
+        defaults.set(.MON_DOTMASK, dotMask)
+        defaults.set(.MON_DOTMASK_BRIGHTNESS, dotMaskBrightness)
+        defaults.set(.MON_SCANLINES, scanlines)
+        defaults.set(.MON_SCANLINE_BRIGHTNESS, scanlineBrightness)
+        defaults.set(.MON_SCANLINE_WEIGHT, scanlineWeight)
+        defaults.set(.MON_DISALIGNMENT, disalignment)
+        defaults.set(.MON_DISALIGNMENT_H, disalignmentH)
+        defaults.set(.MON_DISALIGNMENT_V, disalignmentV)
         
         defaults.save()
         
