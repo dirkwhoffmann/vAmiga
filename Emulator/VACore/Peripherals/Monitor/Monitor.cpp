@@ -110,6 +110,12 @@ Monitor::checkOption(Opt opt, i64 value)
         case Opt::MON_BRIGHTNESS:
         case Opt::MON_CONTRAST:
         case Opt::MON_SATURATION:
+            
+            if (value < 0 || value > 100) {
+                throw CoreError(Fault::OPT_INV_ARG, "0...100");
+            }
+            return;
+
         case Opt::MON_HCENTER:
         case Opt::MON_VCENTER:
         case Opt::MON_HZOOM:

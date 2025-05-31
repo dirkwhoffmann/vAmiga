@@ -23,32 +23,6 @@ class Configuration {
     var gamePadManager: GamePadManager { return parent.gamePadManager }
     var ressourceManager: RessourceManager { return renderer.ressourceManager }
     
-    /*
-    func map<T: BinaryFloatingPoint>(_ value: T, from: ClosedRange<T>, to: ClosedRange<T>) -> T {
-        
-        let proportion = (value - from.lowerBound) / (from.upperBound - from.lowerBound)
-        return to.lowerBound + proportion * (to.upperBound - to.lowerBound)
-    }
-    */
-    
-    /*
-    func map(_ value: Float, from: ClosedRange<Float>, to: ClosedRange<Float>) -> Float {
-        
-        let proportion = (value - from.lowerBound) / (from.upperBound - from.lowerBound)
-        return to.lowerBound + proportion * (to.upperBound - to.lowerBound)
-    }
-    
-    func map(_ value: Float, from: ClosedRange<Float>) -> Int {
-        
-        return Int(map(value, from: from, to: 0...100))
-    }
-
-    func map(_ value: Int, to: ClosedRange<Float>) -> Float {
-        
-        return map(Float(value), from: 0...100, to: to)
-    }
-    */
-    
     //
     // Roms
     //

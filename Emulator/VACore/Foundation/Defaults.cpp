@@ -42,9 +42,9 @@ Defaults::Defaults()
     setFallback(Opt::DENISE_FRAME_SKIPPING,      16);
 
     setFallback(Opt::MON_PALETTE,                (i64)Palette::COLOR);
-    setFallback(Opt::MON_BRIGHTNESS,             500);
-    setFallback(Opt::MON_CONTRAST,               1000);
-    setFallback(Opt::MON_SATURATION,             500);
+    setFallback(Opt::MON_BRIGHTNESS,             50);
+    setFallback(Opt::MON_CONTRAST,               100);
+    setFallback(Opt::MON_SATURATION,             50);
     setFallback(Opt::MON_CENTER,                 (i64)Center::AUTO);
     setFallback(Opt::MON_HCENTER,                600);
     setFallback(Opt::MON_VCENTER,                470);

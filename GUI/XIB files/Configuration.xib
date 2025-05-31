@@ -3644,7 +3644,7 @@ DQ
                                                             <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dOW-wJ-mRR">
                                                                 <rect key="frame" x="481" y="224" width="28" height="30"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                                                <sliderCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" maxValue="1000" sliderType="circular" id="xtY-if-gfI"/>
+                                                                <sliderCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" maxValue="100" sliderType="circular" id="xtY-if-gfI"/>
                                                                 <connections>
                                                                     <action selector="vidSaturationAction:" target="-2" id="AiN-oE-9My"/>
                                                                 </connections>
@@ -3652,7 +3652,7 @@ DQ
                                                             <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mnh-Qb-xHP">
                                                                 <rect key="frame" x="403" y="224" width="28" height="30"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                                                <sliderCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" maxValue="1000" sliderType="circular" id="qIK-h1-GO5"/>
+                                                                <sliderCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" maxValue="100" sliderType="circular" id="qIK-h1-GO5"/>
                                                                 <connections>
                                                                     <action selector="vidContrastAction:" target="-2" id="AZn-Nd-fVB"/>
                                                                 </connections>
@@ -3660,7 +3660,7 @@ DQ
                                                             <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zzU-KL-7dh">
                                                                 <rect key="frame" x="325" y="224" width="28" height="30"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                                                <sliderCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" maxValue="1000" sliderType="circular" id="aV3-Mg-z8p"/>
+                                                                <sliderCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" maxValue="100" sliderType="circular" id="aV3-Mg-z8p"/>
                                                                 <connections>
                                                                     <action selector="vidBrightnessAction:" target="-2" id="b8Z-ZI-JNc"/>
                                                                 </connections>
@@ -3831,7 +3831,7 @@ DQ
                                                             <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jms-qV-MhZ">
                                                                 <rect key="frame" x="403" y="83" width="28" height="30"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                                                <sliderCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" maxValue="1000" sliderType="circular" id="f2m-kS-Et4"/>
+                                                                <sliderCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" sliderType="circular" id="f2m-kS-Et4"/>
                                                                 <connections>
                                                                     <action selector="vidVCenterAction:" target="-2" id="Y1Z-e0-8zo"/>
                                                                 </connections>

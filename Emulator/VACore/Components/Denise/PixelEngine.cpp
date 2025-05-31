@@ -78,95 +78,6 @@ PixelEngine::_powerOn()
     clearAll();
 }
 
-/*
-i64
-PixelEngine::getOption(Opt option) const
-{
-    switch (option) {
-            
-        case Opt::MON_PALETTE:     return (i64)config.palette;
-        case Opt::MON_BRIGHTNESS:  return (i64)config.brightness;
-        case Opt::MON_CONTRAST:    return (i64)config.contrast;
-        case Opt::MON_SATURATION:  return (i64)config.saturation;
-
-        default:
-            fatalError;
-    }
-}
-
-void
-PixelEngine::checkOption(Opt opt, i64 value)
-{
-    switch (opt) {
-
-        case Opt::MON_PALETTE:
-
-            if (!PaletteEnum::isValid(value)) {
-                throw CoreError(Fault::OPT_INV_ARG, PaletteEnum::keyList());
-            }
-            return;
-
-        case Opt::MON_BRIGHTNESS:
-
-            if (value < 0 || value > 100) {
-                throw CoreError(Fault::OPT_INV_ARG, "0...100");
-            }
-            return;
-
-        case Opt::MON_CONTRAST:
-
-            if (value < 0 || value > 100) {
-                throw CoreError(Fault::OPT_INV_ARG, "0...100");
-            }
-            return;
-
-        case Opt::MON_SATURATION:
-
-            if (value < 0 || value > 100) {
-                throw CoreError(Fault::OPT_INV_ARG, "0...100");
-            }
-            return;
-
-        default:
-            throw(Fault::OPT_UNSUPPORTED);
-    }
-}
-
-void
-PixelEngine::setOption(Opt option, i64 value)
-{
-    switch (option) {
-            
-        case Opt::MON_PALETTE:
-
-            config.palette = (Palette)value;
-            updateRGBA();
-            return;
-
-        case Opt::MON_BRIGHTNESS:
-
-            config.brightness = (isize)value;
-            updateRGBA();
-            return;
-            
-        case Opt::MON_CONTRAST:
-
-            config.contrast = (isize)value;
-            updateRGBA();
-            return;
-
-        case Opt::MON_SATURATION:
-
-            config.saturation = (isize)value;
-            updateRGBA();
-            return;
-
-        default:
-            fatalError;
-    }
-}
-*/
-
 void
 PixelEngine::setColor(isize reg, u16 value)
 {
@@ -213,9 +124,9 @@ PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
     if (palette == Palette::RGB) return;
     
     // Normalize adjustment parameters
-    double brightness =  (monitor.getConfig().brightness - 500.0) / 10.0;
-    double contrast = monitor.getConfig().contrast / 1000.0;
-    double saturation = monitor.getConfig().saturation / 500.0;
+    double brightness =  (monitor.getConfig().brightness - 50.0);
+    double contrast = monitor.getConfig().contrast / 100.0;
+    double saturation = monitor.getConfig().saturation / 50.0;
 
     // Convert RGB to YUV
     double y =  0.299 * r + 0.587 * g + 0.114 * b;

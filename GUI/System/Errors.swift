@@ -82,6 +82,7 @@ enum Failure {
     case cantDetach
     case cantExport(url: URL)
     case cantInsert
+    case cantLaunch
     case cantOpen(url: URL)
     case cantRecord
     case cantRestore
@@ -152,6 +153,10 @@ enum Failure {
             
         case .cantInsert:
             return "Failed to insert disk."
+
+        case .cantLaunch:
+            return "Failed to lauch the emulator." +
+            "An unexpected exception has interrupted the internal startup procedure."
 
         case let .cantOpen(url):
             return "\"\(url.lastPathComponent)\" can't be opened."
@@ -307,6 +312,28 @@ extension MyDocument {
         alert.addButton(withTitle: "Cancel")
         
         return alert.runSheet(for: windowForSheet!)
+    }
+    
+    func showLaunchAlert(error: Error) {
+             
+        var reason: String
+        if let error = error as? CoreError {
+            reason = error.what
+        } else {
+            reason = error.localizedDescription
+        }
+        
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.icon = NSImage(named: "biohazard")
+        alert.messageText = "The emulator failed to launch."
+        alert.informativeText = "An unexpected exception interrupted the startup process. " +
+        "Please report the following error on GitHub:\n\n\(reason)"
+        alert.addButton(withTitle: "Exit")
+        
+        if alert.runSheet(for: windowForSheet!) == .alertFirstButtonReturn {
+            NSApp.terminate(self)
+        }
     }
     
     func proceedWithUnsavedFloppyDisks(drives: [FloppyDriveProxy]) -> Bool {

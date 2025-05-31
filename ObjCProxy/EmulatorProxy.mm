@@ -2497,18 +2497,16 @@ NSString *EventSlotName(NSInteger slot)
     [self emu]->finishFrame();
 }
 
-- (void)launch
+- (void)launch:(ExceptionWrapper *)ex
 {
-    [self emu]->launch();
+    try { [self emu]->launch(); }
+    catch (CoreError &error) { [ex save:error]; }
 }
 
-- (void)launch:(const void *)listener function:(Callback *)func
+- (void)launch:(const void *)listener function:(Callback *)func exception:(ExceptionWrapper *)ex
 {
-    try {
-        [self emu]->launch(listener, func);
-    } catch (std::exception &e) {
-        printf("FATAL: %s\n", e.what());
-    }
+    try { [self emu]->launch(listener, func); }
+    catch (CoreError &error) { [ex save:error]; }
 }
 
 - (NSInteger)get:(Opt)opt

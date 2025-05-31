@@ -260,8 +260,8 @@ NSString *EventSlotName(NSInteger slot);
 @property (readonly) BOOL warping;
 @property (readonly) BOOL tracking;
 
-- (void)launch;
-- (void)launch:(const void *)listener function:(Callback *)func;
+- (void)launch:(ExceptionWrapper *)ex;
+- (void)launch:(const void *)listener function:(Callback *)func exception:(ExceptionWrapper *)ex;
 - (void)wakeUp;
 
 - (void)isReady:(ExceptionWrapper *)ex;

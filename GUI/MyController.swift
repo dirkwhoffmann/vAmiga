@@ -194,6 +194,9 @@ extension MyController {
         // Setup window
         configureWindow()
 
+        // Create speed monitor
+        speedometer = Speedometer()
+        
         // Launch the emulator
         launch()
 
@@ -232,7 +235,7 @@ extension MyController {
         }
 
         // Create speed monitor
-        speedometer = Speedometer()
+        // speedometer = Speedometer()
         
         // Update toolbar
         toolbar.validateVisibleItems()
@@ -259,34 +262,42 @@ extension MyController {
     }
 
     func launch() {
+        
+        do {
 
-        // Pass in command line arguments as a RetroShell script
-        var script = ""
-        for arg in myAppDelegate.argv where arg.hasPrefix("-") {
-            script = script + arg.dropFirst() + "\n"
-        }
-        emu?.retroShell.execute(script)
+            // Pass in command line arguments as a RetroShell script
+            var script = ""
+            for arg in myAppDelegate.argv where arg.hasPrefix("-") {
+                script = script + arg.dropFirst() + "\n"
+            }
+            emu?.retroShell.execute(script)
 
-        if BuildSettings.msgCallback {
-            
-            // Convert 'self' to a void pointer
-            let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
-            
-            emu.launch(myself) { (ptr, msg: Message) in
+            if BuildSettings.msgCallback {
                 
-                // Convert void pointer back to 'self'
-                let myself = Unmanaged<MyController>.fromOpaque(ptr!).takeUnretainedValue()
+                // Convert 'self' to a void pointer
+                let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
                 
-                // Process message in the main thread
-                Task { @MainActor in myself.process(message: msg) }
+                try emu.launch(myself) { (ptr, msg: Message) in
+                    
+                    // Convert void pointer back to 'self'
+                    let myself = Unmanaged<MyController>.fromOpaque(ptr!).takeUnretainedValue()
+                    
+                    // Process message in the main thread
+                    Task { @MainActor in myself.process(message: msg) }
+                }
+                
+            } else {
+                
+                try emu.launch()
             }
             
-        } else {
-            
-            emu.launch()
+        } catch {
+         
+            // Something terrible happened
+            mydocument.showLaunchAlert(error: error)
         }
     }
-
+    
     //
     // Timer and message processing
     //

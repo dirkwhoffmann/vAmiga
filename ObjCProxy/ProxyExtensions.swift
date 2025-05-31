@@ -279,6 +279,20 @@ extension MakeWithFileSystem {
 
 extension EmulatorProxy {
 
+    func launch() throws {
+        
+        let exception = ExceptionWrapper()
+        launch(exception)
+        if exception.fault != .OK { throw CoreError(exception) }
+    }
+    
+    func launch(_ listener: UnsafeRawPointer, _ callback: @escaping @convention(c) (UnsafeRawPointer?, Message) -> Void) throws
+    {
+        let exception = ExceptionWrapper()
+        launch(listener, function: callback, exception: exception)
+        if exception.fault != .OK { throw CoreError(exception) }
+    }
+    
     func isReady() throws {
         
         let exception = ExceptionWrapper()
