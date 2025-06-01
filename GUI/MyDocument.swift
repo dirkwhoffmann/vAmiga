@@ -101,14 +101,14 @@ class MyDocument: NSDocument {
                 
                 return try MediaFileProxy.make(with: url, type: type)
                 
-            } catch let error as CoreError {
+            } catch let error as AppError {
                
                 if error.errorCode != .FILE_TYPE_MISMATCH { throw error }
             }
         }
         
         // None of the allowed types matched the file
-        throw CoreError(.FILE_TYPE_MISMATCH,
+        throw AppError(.FILE_TYPE_MISMATCH,
                       "The type of this file is not known to the emulator.")
     }
 
@@ -131,7 +131,7 @@ class MyDocument: NSDocument {
         do {
             try mm.addMedia(url: url, allowedTypes: [.WORKSPACE])
 
-        } catch let error as CoreError {
+        } catch let error as AppError {
 
             throw NSError(error: error)
         }
@@ -169,7 +169,7 @@ class MyDocument: NSDocument {
                 self.windowForSheet?.title = url.deletingPathExtension().lastPathComponent
                 self.updateChangeCount(.changeCleared)
                 
-            } catch let error as CoreError {
+            } catch let error as AppError {
                 
                 // Swift.print("Error: \(error.what)")
                 throw NSError(error: error)

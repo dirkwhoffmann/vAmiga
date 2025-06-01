@@ -361,7 +361,7 @@
 		50FAC7702515EBED00E47421 /* IMGFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC76E2515EBED00E47421 /* IMGFile.cpp */; };
 		50FAC77525160BBF00E47421 /* FloppyFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FAC77325160BBF00E47421 /* FloppyFile.cpp */; };
 		50FC046827DA02FD00C3E566 /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC046627DA02FD00C3E566 /* Buffer.cpp */; };
-		50FC047627DA10AD00C3E566 /* VAmigaCheck.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC047427DA108500C3E566 /* VAmigaCheck.cpp */; };
+		50FC047627DA10AD00C3E566 /* VAmigaHeadless.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC047427DA108500C3E566 /* VAmigaHeadless.cpp */; };
 		50FC047727DA129800C3E566 /* Buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50FC046627DA02FD00C3E566 /* Buffer.cpp */; };
 		50FC047827DA129B00C3E566 /* Chrono.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5072159F25EA9AE600787591 /* Chrono.cpp */; };
 		50FC047927DA129F00C3E566 /* Concurrency.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500C716E255EE2AC00DDEEB2 /* Concurrency.cpp */; };
@@ -1065,7 +1065,7 @@
 		50EAB95B26C10B9400BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50EAD99B256E76820053F9AC /* HDFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDFFile.h; sourceTree = "<group>"; };
 		50EAD99F256E76A40053F9AC /* HDFFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDFFile.cpp; sourceTree = "<group>"; };
-		50EAF5282C79B9BA005AC890 /* VAmigaCheckScripts.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VAmigaCheckScripts.h; sourceTree = "<group>"; };
+		50EAF5282C79B9BA005AC890 /* DiagnoseScripts.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiagnoseScripts.h; sourceTree = "<group>"; };
 		50EB8CC925306E8E0053988A /* VideoExporter.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoExporter.xib; sourceTree = "<group>"; };
 		50EB8CCD2530710E0053988A /* VideoExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoExporter.swift; sourceTree = "<group>"; };
 		50EC7A2F29C9EC3900060CAA /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
@@ -1129,8 +1129,8 @@
 		50FC046627DA02FD00C3E566 /* Buffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Buffer.cpp; sourceTree = "<group>"; };
 		50FC046727DA02FD00C3E566 /* Buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = "<group>"; };
 		50FC046D27DA0FA500C3E566 /* vAmigaCheck */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = vAmigaCheck; sourceTree = BUILT_PRODUCTS_DIR; };
-		50FC047427DA108500C3E566 /* VAmigaCheck.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VAmigaCheck.cpp; sourceTree = "<group>"; };
-		50FC050027DA205D00C3E566 /* VAmigaCheck.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VAmigaCheck.h; sourceTree = "<group>"; };
+		50FC047427DA108500C3E566 /* VAmigaHeadless.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VAmigaHeadless.cpp; sourceTree = "<group>"; };
+		50FC050027DA205D00C3E566 /* VAmigaHeadless.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VAmigaHeadless.h; sourceTree = "<group>"; };
 		50FC08AC27819CD100F0C567 /* AgnusInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusInfo.cpp; sourceTree = "<group>"; };
 		50FC08AE27819E2400F0C567 /* CopperInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperInfo.cpp; sourceTree = "<group>"; };
 		50FC08B027819E4100F0C567 /* BlitterInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlitterInfo.cpp; sourceTree = "<group>"; };
@@ -1698,9 +1698,9 @@
 				50DA83E72C1619E0001209AA /* VAmigaTypes.h */,
 				5099432B29C2116500867E8F /* VAmiga.h */,
 				50DA83E32C161961001209AA /* VAmiga.cpp */,
-				50FC050027DA205D00C3E566 /* VAmigaCheck.h */,
-				50FC047427DA108500C3E566 /* VAmigaCheck.cpp */,
-				50EAF5282C79B9BA005AC890 /* VAmigaCheckScripts.h */,
+				50FC050027DA205D00C3E566 /* VAmigaHeadless.h */,
+				50FC047427DA108500C3E566 /* VAmigaHeadless.cpp */,
+				50EAF5282C79B9BA005AC890 /* DiagnoseScripts.h */,
 				507A03F02D54ED820025D48E /* VACore */,
 			);
 			path = Emulator;
@@ -2842,7 +2842,7 @@
 				50FC04F827DA1A8F00C3E566 /* StateMachineEvents.cpp in Sources */,
 				5012DCE52D5C85CD00233B6A /* Compression.cpp in Sources */,
 				50EFB0D12C18E01E0013B73C /* Wakeable.cpp in Sources */,
-				50FC047627DA10AD00C3E566 /* VAmigaCheck.cpp in Sources */,
+				50FC047627DA10AD00C3E566 /* VAmigaHeadless.cpp in Sources */,
 				50FC049227DA196500C3E566 /* DeniseRegs.cpp in Sources */,
 				506407D02D1AD87E002FBC57 /* HttpServer.cpp in Sources */,
 				50FC04F727DA1A8F00C3E566 /* StateMachine.cpp in Sources */,

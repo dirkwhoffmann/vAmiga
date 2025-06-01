@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
 # Set the project name
-project(vAmigaCore)
+project(VACore)
 
 # Enable testing
 list(APPEND CMAKE_CTEST_ARGUMENTS "--verbose")
@@ -26,36 +26,36 @@ else()
 endif()
 
 # Add the emulator library
-add_library(vAmigaCore VAmiga.cpp VAmigaConfig.cpp)
+add_library(VACore VAmiga.cpp VAmigaConfig.cpp)
 
-# Add the self-test app (vAmiga vAmigaCheck)
-add_executable(vAmigaCheck VAmigaCheck.cpp VAmigaConfig.cpp)
-target_link_libraries(vAmigaCheck vAmigaCore)
+# Add the headless app
+add_executable(VAHeadless VAmigaHeadless.cpp VAmigaConfig.cpp)
+target_link_libraries(VAHeadless VACore)
 
 # Specify compile options
-target_compile_definitions(vAmigaCore PUBLIC _USE_MATH_DEFINES)
+target_compile_definitions(VACore PUBLIC _USE_MATH_DEFINES)
 if(WIN32)
-  target_link_libraries(vAmigaCheck ws2_32)
+  target_link_libraries(VAHeadless ws2_32)
 endif()
 if(MSVC)
-  target_compile_options(vAmigaCore PUBLIC /W4 /bigobj /Zc:preprocessor) # /WX disabled for now
-  target_compile_options(vAmigaCore PUBLIC /wd4100 /wd4201 /wd4324 /wd4458)
+  target_compile_options(VACore PUBLIC /W4 /bigobj /Zc:preprocessor) # /WX disabled for now
+  target_compile_options(VACore PUBLIC /wd4100 /wd4201 /wd4324 /wd4458)
   set_source_files_properties(CPU/Moira/Moira.cpp PROPERTIES COMPILE_FLAGS "/wd4127")
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  target_compile_options(vAmigaCore PUBLIC -Wall -Werror)
-  target_compile_options(vAmigaCore PUBLIC -Wno-restrict)
-  target_compile_options(vAmigaCore PUBLIC -Wno-unused-parameter)
-# target_compile_options(vAmigaCore PUBLIC -Wno-array-bounds)
-  target_compile_options(vAmigaCore PUBLIC -fconcepts)
+  target_compile_options(VACore PUBLIC -Wall -Werror)
+  target_compile_options(VACore PUBLIC -Wno-restrict)
+  target_compile_options(VACore PUBLIC -Wno-unused-parameter)
+# target_compile_options(VACore PUBLIC -Wno-array-bounds)
+  target_compile_options(VACore PUBLIC -fconcepts)
 else()
-  target_compile_options(vAmigaCore PUBLIC -Wall -Werror)
-  target_compile_options(vAmigaCore PUBLIC -Wno-unused-parameter)
-  target_compile_options(vAmigaCore PUBLIC -Wno-gnu-anonymous-struct)
-  target_compile_options(vAmigaCore PUBLIC -Wno-nested-anon-types)
+  target_compile_options(VACore PUBLIC -Wall -Werror)
+  target_compile_options(VACore PUBLIC -Wno-unused-parameter)
+  target_compile_options(VACore PUBLIC -Wno-gnu-anonymous-struct)
+  target_compile_options(VACore PUBLIC -Wno-nested-anon-types)
 endif()
 
 # Add include paths
-target_include_directories(vAmigaCore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(VACore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add subdirectories
 add_subdirectory(VACore)
@@ -63,19 +63,19 @@ add_subdirectory(VACore)
 # Add libraries
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
-target_link_libraries(vAmigaCore xdms Threads::Threads)
+target_link_libraries(VACore xdms Threads::Threads)
 
 # Link zlib if available
 if(ZLIB_FOUND)
-  target_link_libraries(vAmigaCore ZLIB::ZLIB)
-  target_link_libraries(vAmigaCheck ZLIB::ZLIB)
-  target_compile_definitions(vAmigaCore PUBLIC USE_ZLIB=1)  # Optional define for conditional compilation
+  target_link_libraries(VACore ZLIB::ZLIB)
+  target_link_libraries(VAHeadless ZLIB::ZLIB)
+  target_compile_definitions(VACore PUBLIC USE_ZLIB=1)  # Optional define for conditional compilation
 endif()
 
-target_link_libraries(vAmigaCore lz4)
-target_link_libraries(vAmigaCheck lz4)
+target_link_libraries(VACore lz4)
+target_link_libraries(VAHeadless lz4)
 
 # Add tests
-add_test(NAME SelfTest1 COMMAND vAmigaCheck --verbose --footprint)
-add_test(NAME SelfTest2 COMMAND vAmigaCheck --verbose --smoke)
-add_test(NAME SelfTest3 COMMAND vAmigaCheck --verbose --diagnose)
+add_test(NAME SelfTest1 COMMAND VAHeadless --verbose --footprint)
+add_test(NAME SelfTest2 COMMAND VAHeadless --verbose --smoke)
+add_test(NAME SelfTest3 COMMAND VAHeadless --verbose --diagnose)

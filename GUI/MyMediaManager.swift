@@ -283,7 +283,7 @@ class MediaManager {
         let type = MediaFileProxy.type(of: url)
         if !types.contains(type) {
             
-            throw CoreError(.FILE_TYPE_MISMATCH,
+            throw AppError(.FILE_TYPE_MISMATCH,
                             "The type of this file is not known to the emulator.")
         }
         

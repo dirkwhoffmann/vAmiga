@@ -9,8 +9,8 @@
 /// @file
 
 #include "VAmigaConfig.h"
-#include "VAmigaCheck.h"
-#include "VAmigaCheckScripts.h"
+#include "VAmigaHeadless.h"
+#include "DiagnoseScripts.h"
 #include "Amiga.h"
 #include "Script.h"
 #include "DiagRom.h"

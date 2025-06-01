@@ -42,7 +42,7 @@ public func warn(_ msg: String = "",
 // Exceptions
 //
 
-final class CoreError: Error {
+final class AppError: Error {
     
     let errorCode: ErrorCode
     let what: String
@@ -62,7 +62,7 @@ final class CoreError: Error {
 
 extension NSError {
     
-    convenience init(error: CoreError) {
+    convenience init(error: AppError) {
         
         self.init(domain: "vAmiga",
                   code: error.errorCode.rawValue,
@@ -270,7 +270,7 @@ extension MyDocument {
     func showAlert(_ failure: Failure, error: Error,
                    async: Bool = false, window: NSWindow? = nil) {
     
-        if let error = error as? CoreError {
+        if let error = error as? AppError {
             showAlert(failure, what: error.what, async:
                         async, window: window)
         } else {
@@ -317,7 +317,7 @@ extension MyDocument {
     func showLaunchAlert(error: Error) {
              
         var reason: String
-        if let error = error as? CoreError {
+        if let error = error as? AppError {
             reason = error.what
         } else {
             reason = error.localizedDescription

@@ -32,7 +32,7 @@ extension DefaultsProxy {
 
         let exception = ExceptionWrapper()
         load(url, exception: exception)
-        if exception.fault != .OK { throw CoreError(exception) }     
+        if exception.fault != .OK { throw AppError(exception) }     
 
         debug(.defaults, "Successfully loaded user defaults from \(url)")
     }
@@ -60,7 +60,7 @@ extension DefaultsProxy {
         
         let exception = ExceptionWrapper()
         save(url, exception: exception)
-        if exception.fault != .OK { throw CoreError(exception) }
+        if exception.fault != .OK { throw AppError(exception) }
 
         debug(.defaults, "Successfully saved user defaults to \(url)")
     }
@@ -742,13 +742,13 @@ extension Configuration {
 
             // Kickstart
             url = UserDefaults.romUrl
-            if url == nil { throw CoreError(.FILE_CANT_WRITE) }
+            if url == nil { throw AppError(.FILE_CANT_WRITE) }
             try? fm.removeItem(at: url!)
             if amiga.mem.info.hasRom { try amiga.mem.saveRom(url!) }
 
             // Kickstart extension
             url = UserDefaults.extUrl
-            if url == nil { throw CoreError(.FILE_CANT_WRITE) }
+            if url == nil { throw AppError(.FILE_CANT_WRITE) }
             try? fm.removeItem(at: url!)
             if amiga.mem.info.hasExt { try amiga.mem.saveExt(url!) }
 
