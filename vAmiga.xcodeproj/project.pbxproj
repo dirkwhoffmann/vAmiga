@@ -1128,7 +1128,7 @@
 		50FAC77425160BBF00E47421 /* FloppyFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FloppyFile.h; sourceTree = "<group>"; };
 		50FC046627DA02FD00C3E566 /* Buffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Buffer.cpp; sourceTree = "<group>"; };
 		50FC046727DA02FD00C3E566 /* Buffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Buffer.h; sourceTree = "<group>"; };
-		50FC046D27DA0FA500C3E566 /* vAmigaCheck */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = vAmigaCheck; sourceTree = BUILT_PRODUCTS_DIR; };
+		50FC046D27DA0FA500C3E566 /* Headless */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Headless; sourceTree = BUILT_PRODUCTS_DIR; };
 		50FC047427DA108500C3E566 /* VAmigaHeadless.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VAmigaHeadless.cpp; sourceTree = "<group>"; };
 		50FC050027DA205D00C3E566 /* VAmigaHeadless.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VAmigaHeadless.h; sourceTree = "<group>"; };
 		50FC08AC27819CD100F0C567 /* AgnusInfo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusInfo.cpp; sourceTree = "<group>"; };
@@ -1551,7 +1551,7 @@
 			isa = PBXGroup;
 			children = (
 				508FDE6421EA1FA40043D0E9 /* vAmiga.app */,
-				50FC046D27DA0FA500C3E566 /* vAmigaCheck */,
+				50FC046D27DA0FA500C3E566 /* Headless */,
 				509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */,
 			);
 			name = Products;
@@ -2316,9 +2316,9 @@
 			productReference = 509EA5432D51EFD40001BC50 /* QuickLookPlugIn.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
-		50FC046C27DA0FA500C3E566 /* vAmigaCheck */ = {
+		50FC046C27DA0FA500C3E566 /* Headless */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 50FC047127DA0FA500C3E566 /* Build configuration list for PBXNativeTarget "vAmigaCheck" */;
+			buildConfigurationList = 50FC047127DA0FA500C3E566 /* Build configuration list for PBXNativeTarget "Headless" */;
 			buildPhases = (
 				50FC046927DA0FA500C3E566 /* Sources */,
 				50FC046A27DA0FA500C3E566 /* Frameworks */,
@@ -2328,9 +2328,9 @@
 			);
 			dependencies = (
 			);
-			name = vAmigaCheck;
+			name = Headless;
 			productName = vAmigaCore;
-			productReference = 50FC046D27DA0FA500C3E566 /* vAmigaCheck */;
+			productReference = 50FC046D27DA0FA500C3E566 /* Headless */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -2372,7 +2372,7 @@
 			projectRoot = "";
 			targets = (
 				508FDE6321EA1FA40043D0E9 /* vAmiga */,
-				50FC046C27DA0FA500C3E566 /* vAmigaCheck */,
+				50FC046C27DA0FA500C3E566 /* Headless */,
 				509EA5422D51EFD40001BC50 /* QuickLookPlugIn */,
 			);
 		};
@@ -3393,7 +3393,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		50FC047127DA0FA500C3E566 /* Build configuration list for PBXNativeTarget "vAmigaCheck" */ = {
+		50FC047127DA0FA500C3E566 /* Build configuration list for PBXNativeTarget "Headless" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				50FC047227DA0FA500C3E566 /* Debug */,
