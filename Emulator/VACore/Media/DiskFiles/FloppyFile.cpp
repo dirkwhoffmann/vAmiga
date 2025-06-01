@@ -24,13 +24,13 @@ FloppyFile::make(const fs::path &path)
     FloppyFile *result = nullptr;
 
     if (!fs::exists(path)) {
-        throw CoreError(Fault::FILE_NOT_FOUND, path);
+        throw AppError(Fault::FILE_NOT_FOUND, path);
     }
 
     Buffer<u8> buffer(path);
     
     if (buffer.empty()) {
-        throw CoreError(Fault::FILE_CANT_READ, path);
+        throw AppError(Fault::FILE_CANT_READ, path);
     }
 
     switch (type(path)) {
@@ -42,7 +42,7 @@ FloppyFile::make(const fs::path &path)
         case FileType::EXE:  result = new EXEFile(buffer.ptr, buffer.size); break;
 
         default:
-            throw CoreError(Fault::FILE_TYPE_UNSUPPORTED);
+            throw AppError(Fault::FILE_TYPE_UNSUPPORTED);
     }
 
     result->path = path;

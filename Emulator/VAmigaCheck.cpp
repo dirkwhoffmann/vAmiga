@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
             std::cout << what << std::endl;
         }
 
-    } catch (vamiga::CoreError &e) {
+    } catch (vamiga::AppError &e) {
 
         std::cout << "Core Error: " << e.what() << std::endl;
 

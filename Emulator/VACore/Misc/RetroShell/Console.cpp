@@ -714,7 +714,7 @@ Console::describe(const std::exception &e, isize line, const string &cmd)
         return;
     }
 
-    if (auto err = dynamic_cast<const CoreError *>(&e)) {
+    if (auto err = dynamic_cast<const AppError *>(&e)) {
 
         *this << err->what();
         *this << '\n';
@@ -851,7 +851,7 @@ Console::initCommands(RetroShellCmd &root)
                 
                 auto path = host.makeAbsolute(argv.front());
                 auto stream = std::ifstream(path);
-                if (!stream.is_open()) throw CoreError(Fault::FILE_NOT_FOUND, path);
+                if (!stream.is_open()) throw AppError(Fault::FILE_NOT_FOUND, path);
                 retroShell.asyncExecScript(stream);
             }
         });

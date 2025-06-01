@@ -221,7 +221,7 @@ MutableFileSystem::allocate()
         if ((i = (i + 1) % numBlocks()) == ap) {
             
             debug(FS_DEBUG, "No more free blocks\n");
-            throw CoreError(Fault::FS_OUT_OF_SPACE);
+            throw AppError(Fault::FS_OUT_OF_SPACE);
         }
     }
     
@@ -249,7 +249,7 @@ MutableFileSystem::allocate(isize count, std::vector<Block> &result)
         if ((i = (i + 1) % numBlocks()) == ap && count) {
         
             debug(FS_DEBUG, "No more free blocks\n");
-            throw CoreError(Fault::FS_OUT_OF_SPACE);
+            throw AppError(Fault::FS_OUT_OF_SPACE);
         }
     }
     
@@ -400,7 +400,7 @@ MutableFileSystem::createDir(const string &name)
         return block;
     }
     
-    throw CoreError(Fault::FS_OUT_OF_SPACE);
+    throw AppError(Fault::FS_OUT_OF_SPACE);
 }
 
 FSBlock *
@@ -416,7 +416,7 @@ MutableFileSystem::createFile(const string &name)
         return block;
     }
     
-    throw CoreError(Fault::FS_OUT_OF_SPACE);
+    throw AppError(Fault::FS_OUT_OF_SPACE);
 }
 
 FSBlock *
@@ -579,13 +579,13 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
     debug(FS_DEBUG, "Importing file system...\n");
 
     // Only proceed if the (predicted) block size matches
-    if (size % bsize != 0) throw CoreError(Fault::FS_WRONG_BSIZE);
+    if (size % bsize != 0) throw AppError(Fault::FS_WRONG_BSIZE);
 
     // Only proceed if the source buffer contains the right amount of data
-    if (numBytes() != size) throw CoreError(Fault::FS_WRONG_CAPACITY);
+    if (numBytes() != size) throw AppError(Fault::FS_WRONG_CAPACITY);
 
     // Only proceed if all partitions contain a valid file system
-    if (dos == FSVolumeType::NODOS) throw CoreError(Fault::FS_UNSUPPORTED);
+    if (dos == FSVolumeType::NODOS) throw AppError(Fault::FS_UNSUPPORTED);
 
     // Import all blocks
     for (isize i = 0; i < numBlocks(); i++) {
@@ -621,7 +621,7 @@ MutableFileSystem::importDirectory(const fs::path &path, bool recursive)
     fs::directory_entry dir;
     
     try { dir = fs::directory_entry(path); }
-    catch (...) { throw CoreError(Fault::FILE_CANT_READ); }
+    catch (...) { throw AppError(Fault::FILE_CANT_READ); }
     
     // Add all files
     importDirectory(dir, recursive);
@@ -746,17 +746,17 @@ MutableFileSystem::exportDirectory(const fs::path &path, bool createDir) const
 {
     // Try to create the directory if it doesn't exist
     if (!util::isDirectory(path) && createDir && !util::createDirectory(path)) {
-        throw CoreError(Fault::FS_CANNOT_CREATE_DIR);
+        throw AppError(Fault::FS_CANNOT_CREATE_DIR);
     }
 
     // Only proceed if the directory exists
     if (!util::isDirectory(path)) {
-        throw CoreError(Fault::DIR_NOT_FOUND);
+        throw AppError(Fault::DIR_NOT_FOUND);
     }
     
     // Only proceed if path points to an empty directory
     if (util::numDirectoryItems(path) != 0) {
-        throw CoreError(Fault::FS_DIR_NOT_EMPTY);
+        throw AppError(Fault::FS_DIR_NOT_EMPTY);
     }
     
     // Collect all files and directories
@@ -767,7 +767,7 @@ MutableFileSystem::exportDirectory(const fs::path &path, bool createDir) const
     for (auto const& i : items) {
         
         if (Fault error = blockPtr(i)->exportBlock(path.c_str()); error != Fault::OK) {
-            throw CoreError(error);
+            throw AppError(error);
         }
     }
     

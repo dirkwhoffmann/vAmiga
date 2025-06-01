@@ -581,7 +581,7 @@ HdController::processInfoReq(u32 ptr)
         debug(HDR_DEBUG, "Requested info for driver %d\n", num);
 
         if (num >= drive.drivers.size()) {
-            throw CoreError(Fault::HDC_INIT, "Invalid driver number: " + std::to_string(num));
+            throw AppError(Fault::HDC_INIT, "Invalid driver number: " + std::to_string(num));
         }
         auto &driver = drive.drivers[num];
 
@@ -594,7 +594,7 @@ HdController::processInfoReq(u32 ptr)
         // We accept up to three hunks
         auto numHunks = descr.numHunks();
         if (numHunks == 0 || numHunks > 3) {
-            throw CoreError(Fault::HUNK_CORRUPTED);
+            throw AppError(Fault::HUNK_CORRUPTED);
         }
         
         // Pass the hunk information back to the driver
@@ -605,7 +605,7 @@ HdController::processInfoReq(u32 ptr)
             mem.patch(u32(ptr + fsinfo_hunk + 4 * i), descr.hunks[i].memRaw);
         }
 
-    } catch (CoreError &e) {
+    } catch (AppError &e) {
 
         warn("processInfoReq: %s\n", e.what());
     }
@@ -626,7 +626,7 @@ HdController::processInitSeg(u32 ptr)
         debug(HDR_DEBUG, "Processing driver %d\n", num);
 
         if (num >= drive.drivers.size()) {
-            throw CoreError(Fault::HDC_INIT, "Invalid driver number: " + std::to_string(num));
+            throw AppError(Fault::HDC_INIT, "Invalid driver number: " + std::to_string(num));
         }
 
         // Read driver
@@ -637,7 +637,7 @@ HdController::processInitSeg(u32 ptr)
         // We accept up to three hunks
         auto numHunks = descr.numHunks();
         if (numHunks == 0 || numHunks > 3) {
-            throw CoreError(Fault::HUNK_CORRUPTED);
+            throw AppError(Fault::HUNK_CORRUPTED);
         }
         
         // Extract pointers to the allocated memory
@@ -648,7 +648,7 @@ HdController::processInitSeg(u32 ptr)
             auto segPtr = mem.spypeek32 <Accessor::CPU> (segPtrAddr);
             
             if (segPtr == 0) {
-                throw CoreError(Fault::HDC_INIT, "Memory allocation failed inside AmigaOS");
+                throw AppError(Fault::HDC_INIT, "Memory allocation failed inside AmigaOS");
             }
             debug(HDR_DEBUG, "Allocated memory at %x\n", segPtr);
             segPtrs.push_back(segPtr);
@@ -681,7 +681,7 @@ HdController::processInitSeg(u32 ptr)
                 if (s.type == HUNK_RELOC32) {
                     
                     if (s.target >= numHunks) {
-                        throw CoreError(Fault::HDC_INIT, "Invalid relocation target");
+                        throw AppError(Fault::HDC_INIT, "Invalid relocation target");
                     }
                     debug(HDR_DEBUG, "Relocation target: %ld\n", s.target);
                     
@@ -700,7 +700,7 @@ HdController::processInitSeg(u32 ptr)
         // Remember a BPTR to the seglist
         drive.drivers[num].segList = (segPtrs[0] + 4) >> 2;
         
-    } catch (CoreError &e) {
+    } catch (AppError &e) {
 
         warn("processInitSeg: %s\n", e.what());
     }

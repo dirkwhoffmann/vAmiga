@@ -1194,23 +1194,23 @@ public:
     /// @name Loading and saving the key-value storage
 
     /** @brief  Loads a storage file from disk
-     *  @throw  CoreError (#Fault::FILE_NOT_FOUND)
-     *  @throw  CoreError (#Fault::SYNTAX)
+     *  @throw  AppError (#Fault::FILE_NOT_FOUND)
+     *  @throw  AppError (#Fault::SYNTAX)
      */
     void load(const fs::path &path);
 
     /** @brief  Loads a storage file from a stream
-     *  @throw  CoreError (#Fault::SYNTAX)
+     *  @throw  AppError (#Fault::SYNTAX)
      */
     void load(std::ifstream &stream);
 
     /** @brief  Loads a storage file from a string stream
-     *  @throw  CoreError (#Fault::SYNTAX)
+     *  @throw  AppError (#Fault::SYNTAX)
      */
     void load(std::stringstream &stream);
 
     /** @brief  Saves a storage file to disk
-     *  @throw  CoreError (#Fault::FILE_CANT_WRITE)
+     *  @throw  AppError (#Fault::FILE_CANT_WRITE)
      */
     void save(const fs::path &path);
 
@@ -1230,14 +1230,14 @@ public:
     /** @brief  Queries a key-value pair.
      *  @param  key     The key.
      *  @result The value as a string.
-     *  @throw  CoreError (#ERROR\_INVALID\_KEY)
+     *  @throw  AppError (#ERROR\_INVALID\_KEY)
      */
     string getRaw(const string &key) const;
 
     /** @brief  Queries a key-value pair.
      *  @param  key     The key.
      *  @result The value as an integer. 0 if the value cannot not be parsed.
-     *  @throw  CoreError (#ERROR\_INVALID\_KEY)
+     *  @throw  AppError (#ERROR\_INVALID\_KEY)
      */
     i64 get(const string &key) const;
 
@@ -1245,21 +1245,21 @@ public:
      *  @param  option  A config option whose name is used as the prefix of the key.
      *  @param  nr      Optional number that is appened to the key as suffix.
      *  @result The value as an integer.
-     *  @throw  CoreError (#ERROR\_INVALID\_KEY)
+     *  @throw  AppError (#ERROR\_INVALID\_KEY)
      */
     i64 get(Opt option, isize nr = 0) const;
 
     /** @brief  Queries a fallback key-value pair.
      *  @param  key     The key.
      *  @result The value as a string.
-     *  @throw  CoreError (#ERROR\_INVALID\_KEY)
+     *  @throw  AppError (#ERROR\_INVALID\_KEY)
      */
     string getFallbackRaw(const string &key) const;
 
     /** @brief  Queries a fallback key-value pair.
      *  @param  key     The key.
      *  @result The value as an integer. 0 if the value cannot not be parsed.
-     *  @throw  CoreError (#ERROR\_INVALID\_KEY)
+     *  @throw  AppError (#ERROR\_INVALID\_KEY)
      */
     i64 getFallback(const string &key) const;
 
@@ -1267,7 +1267,7 @@ public:
      *  @param  option  A config option whose name is used as the key.
      *  @param  nr      Optional number that is appened to the key as suffix.
      *  @result The value as an integer.
-     *  @throw  CoreError (#ERROR\_INVALID\_KEY)
+     *  @throw  AppError (#ERROR\_INVALID\_KEY)
      */
     i64 getFallback(Opt option, isize nr = 0) const;
 
@@ -1279,14 +1279,14 @@ public:
     /** @brief  Writes a key-value pair into the user storage.
      *  @param  key     The key, given as a string.
      *  @param  value   The value, given as a string.
-     *  @throw  CoreError (#Fault::INVALID_KEY)
+     *  @throw  AppError (#Fault::INVALID_KEY)
      */
     void set(const string &key, const string &value);
 
     /** @brief  Writes a key-value pair into the user storage.
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value, given as a string.
-     *  @throw  CoreError (#Fault::INVALID_KEY)
+     *  @throw  AppError (#Fault::INVALID_KEY)
      */
     void set(Opt opt, const string &value);
 
@@ -1294,14 +1294,14 @@ public:
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value for all pairs, given as a string.
      *  @param  objids  The keys are parameterized by adding the vector values as suffixes.
-     *  @throw  CoreError (#Fault::INVALID_KEY)
+     *  @throw  AppError (#Fault::INVALID_KEY)
      */
     void set(Opt opt, const string &value, std::vector<isize> objids);
 
     /** @brief  Writes a key-value pair into the user storage.
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value, given as an integer.
-     *  @throw  CoreError (#Fault::INVALID_KEY)
+     *  @throw  AppError (#Fault::INVALID_KEY)
      */
     void set(Opt opt, i64 value);
 
@@ -1309,7 +1309,7 @@ public:
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value for all pairs, given as an integer.
      *  @param  objids  The keys are parameterized by adding the vector values as suffixes.
-     *  @throw  CoreError (#Fault::INVALID_KEY)
+     *  @throw  AppError (#Fault::INVALID_KEY)
      */
     void set(Opt opt, i64 value, std::vector<isize> objids);
 
@@ -1322,7 +1322,7 @@ public:
     /** @brief  Writes a key-value pair into the fallback storage.
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value, given as an integer.
-     *  @throw  CoreError (#Fault::INVALID_KEY)
+     *  @throw  AppError (#Fault::INVALID_KEY)
      */
     void setFallback(Opt opt, const string &value);
 
@@ -1336,7 +1336,7 @@ public:
     /** @brief  Writes a key-value pair into the fallback storage.
      *  @param  opt     The option's name forms the prefix of the keys.
      *  @param  value   The value, given as an integer.
-     *  @throw  CoreError (#Fault::INVALID_KEY)
+     *  @throw  AppError (#Fault::INVALID_KEY)
      */
     void setFallback(Opt opt, i64 value);
 
@@ -1358,20 +1358,20 @@ public:
 
     /** @brief  Deletes a key-value pair
      *  @param  key     The key of the key-value pair.
-     *  @throw  CoreError (#Fault::INVALID_KEY)
+     *  @throw  AppError (#Fault::INVALID_KEY)
      */
     void remove(const string &key);
 
     /** @brief  Deletes a key-value pair
      *  @param  option  The option's name forms the key.
-     *  @throw  CoreError (#Fault::INVALID_KEY)
+     *  @throw  AppError (#Fault::INVALID_KEY)
      */
     void remove(Opt option);
 
     /** @brief  Deletes multiple key-value pairs.
      *  @param  option  The option's name forms the prefix of the keys.
      *  @param  objids  The keys are parameterized by adding the vector values as suffixes.
-     *  @throw  CoreError (#Fault::INVALID_KEY)
+     *  @throw  AppError (#Fault::INVALID_KEY)
      */
     void remove(Opt option, std::vector <isize> objids);
 

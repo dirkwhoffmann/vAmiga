@@ -61,7 +61,7 @@ void
 Emulator::initialize()
 {
     // Make sure this function is only called once
-    if (isInitialized()) throw CoreError(Fault::LAUNCH, "The emulator is already initialized.");
+    if (isInitialized()) throw AppError(Fault::LAUNCH, "The emulator is already initialized.");
     
     // Initialize all components
     main.initialize();
@@ -525,7 +525,7 @@ Emulator::getDebugVariable(DebugFlag flag)
         case DebugFlag::GDB_DEBUG:        return GDB_DEBUG;
             
         default:
-            throw CoreError(Fault::OPT_UNSUPPORTED,
+            throw AppError(Fault::OPT_UNSUPPORTED,
                         "Unhandled debug variable: " + string(DebugFlagEnum::key(flag)));
     }
     
@@ -674,7 +674,7 @@ Emulator::setDebugVariable(DebugFlag flag, bool val)
         case DebugFlag::GDB_DEBUG:        GDB_DEBUG = val; break;
             
         default:
-            throw CoreError(Fault::OPT_UNSUPPORTED,
+            throw AppError(Fault::OPT_UNSUPPORTED,
                         "Unhandled debug variable: " + string(DebugFlagEnum::key(flag)));
     }
     

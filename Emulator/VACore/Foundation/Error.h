@@ -14,7 +14,7 @@
 
 namespace vamiga {
 
-struct CoreException : public std::exception {
+struct AppException : public std::exception {
     
     // Payload
     i64 data;
@@ -22,21 +22,21 @@ struct CoreException : public std::exception {
     // Auxiliary information about the thrown errow
     string description;
     
-    CoreException(i64 d, const string &s) : data(d), description(s) { }
-    CoreException(i64 d) : data(d), description("") { }
-    CoreException(const string &s) : data(0), description(s) { }
-    CoreException() : data(0) { }
+    AppException(i64 d, const string &s) : data(d), description(s) { }
+    AppException(i64 d) : data(d), description("") { }
+    AppException(const string &s) : data(0), description(s) { }
+    AppException() : data(0) { }
     
     const char *what() const noexcept override { return description.c_str(); }
 };
 
-struct CoreError : public CoreException
+struct AppError : public AppException
 {
-    CoreError(Fault f, const string &s);
-    CoreError(Fault f, const char *s) : CoreError(f, string(s)) { };
-    CoreError(Fault f, const fs::path &p) : CoreError(f, p.string()) { };
-    CoreError(Fault f, std::integral auto v) : CoreError(f, std::to_string(v)) { };
-    CoreError(Fault f) : CoreError(f, "") { }
+    AppError(Fault f, const string &s);
+    AppError(Fault f, const char *s) : AppError(f, string(s)) { };
+    AppError(Fault f, const fs::path &p) : AppError(f, p.string()) { };
+    AppError(Fault f, std::integral auto v) : AppError(f, std::to_string(v)) { };
+    AppError(Fault f) : AppError(f, "") { }
     
     const char *what() const throw() override;
     Fault fault() const { return Fault(data); }

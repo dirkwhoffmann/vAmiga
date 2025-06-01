@@ -60,7 +60,7 @@ DiagBoard::checkOption(Opt opt, i64 value)
         case Opt::DIAG_BOARD:
 
             if (!isPoweredOff()) {
-                throw CoreError(Fault::OPT_LOCKED);
+                throw AppError(Fault::OPT_LOCKED);
             }
             return;
 
@@ -319,7 +319,7 @@ void
 DiagBoard::catchTask(const string &name)
 {
     if (!diagBoard.pluggedIn()) {
-        throw CoreError(Fault::OSDB, "Diagnose board is not plugged in.");
+        throw AppError(Fault::OSDB, "Diagnose board is not plugged in.");
     }
     if (std::find(targets.begin(), targets.end(), name) == targets.end()) {
         targets.push_back(name);

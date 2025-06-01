@@ -310,28 +310,28 @@ CPU::checkOption(Opt opt, i64 value)
         case Opt::CPU_REVISION:
 
             if (!CPURevEnum::isValid(value)) {
-                throw CoreError(Fault::OPT_INV_ARG, CPURevEnum::keyList());
+                throw AppError(Fault::OPT_INV_ARG, CPURevEnum::keyList());
             }
             return;
 
         case Opt::CPU_DASM_REVISION:
 
             if (!DasmRevEnum::isValid(value)) {
-                throw CoreError(Fault::OPT_INV_ARG, DasmRevEnum::keyList());
+                throw AppError(Fault::OPT_INV_ARG, DasmRevEnum::keyList());
             }
             return;
 
         case Opt::CPU_DASM_SYNTAX:
 
             if (!DasmSyntaxEnum::isValid(value)) {
-                throw CoreError(Fault::OPT_INV_ARG, DasmSyntaxEnum::keyList());
+                throw AppError(Fault::OPT_INV_ARG, DasmSyntaxEnum::keyList());
             }
             return;
 
         case Opt::CPU_DASM_NUMBERS:
 
             if (!DasmNumbersEnum::isValid(value)) {
-                throw CoreError(Fault::OPT_INV_ARG, DasmNumbersEnum::keyList());
+                throw AppError(Fault::OPT_INV_ARG, DasmNumbersEnum::keyList());
             }
             return;
 

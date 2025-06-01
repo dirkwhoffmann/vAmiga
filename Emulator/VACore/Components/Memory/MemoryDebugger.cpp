@@ -133,7 +133,7 @@ i64
 MemoryDebugger::memSearch(const string &pattern, u32 addr, isize align)
 {
     // Check alignment
-    if (align != 1 && IS_ODD(addr)) throw CoreError(Fault::ADDR_UNALIGNED);
+    if (align != 1 && IS_ODD(addr)) throw AppError(Fault::ADDR_UNALIGNED);
 
     if (isize length = isize(pattern.length()); length > 0) {
 
@@ -165,7 +165,7 @@ MemoryDebugger::read(u32 addr, isize sz)
     u32 result;
     
     // Check alignment
-    if (sz != 1 && IS_ODD(addr)) throw CoreError(Fault::ADDR_UNALIGNED);
+    if (sz != 1 && IS_ODD(addr)) throw AppError(Fault::ADDR_UNALIGNED);
     
     switch (sz) {
             
@@ -184,7 +184,7 @@ isize
 MemoryDebugger::write(u32 addr, u32 val, isize sz, isize repeats)
 {
     // Check alignment
-    if (sz != 1 && IS_ODD(addr)) throw CoreError(Fault::ADDR_UNALIGNED);
+    if (sz != 1 && IS_ODD(addr)) throw AppError(Fault::ADDR_UNALIGNED);
     
     for (isize i = 0, a = addr; i < repeats && a <= 0xFFFFFF; i++, a += sz) {
         
@@ -227,7 +227,7 @@ void
 MemoryDebugger::load(const fs::path &path, u32 addr)
 {
     std::ifstream stream(path, std::ifstream::binary);
-    if (!stream.is_open()) throw CoreError(Fault::FILE_NOT_FOUND, path);
+    if (!stream.is_open()) throw AppError(Fault::FILE_NOT_FOUND, path);
 
     load(stream, addr);
 }
@@ -246,7 +246,7 @@ void
 MemoryDebugger::save(const fs::path& path, u32 addr, isize count)
 {
     std::ofstream stream(path, std::ifstream::binary);
-    if (!stream.is_open()) throw CoreError(Fault::FILE_CANT_CREATE, path);
+    if (!stream.is_open()) throw AppError(Fault::FILE_CANT_CREATE, path);
 
     save(stream, addr, count);
 }
@@ -364,16 +364,16 @@ MemoryDebugger::isUnused(Reg reg) const
 u16
 MemoryDebugger::readCs(Reg reg) const
 {
-    if (isUnused(reg)) throw CoreError(Fault::REG_UNUSED, RegEnum::key(reg));
-    if (isWritable(reg)) throw CoreError(Fault::REG_WRITE_ONLY, RegEnum::key(reg));
+    if (isUnused(reg)) throw AppError(Fault::REG_UNUSED, RegEnum::key(reg));
+    if (isWritable(reg)) throw AppError(Fault::REG_WRITE_ONLY, RegEnum::key(reg));
 
     return mem.peekCustom16(u32(reg) << 1);
 }
 void
 MemoryDebugger::writeCs(Reg reg, u16 value)
 {
-    if (isUnused(reg)) throw CoreError(Fault::REG_UNUSED, RegEnum::key(reg));
-    if (isReadable(reg)) throw CoreError(Fault::REG_READ_ONLY, RegEnum::key(reg));
+    if (isUnused(reg)) throw AppError(Fault::REG_UNUSED, RegEnum::key(reg));
+    if (isReadable(reg)) throw AppError(Fault::REG_READ_ONLY, RegEnum::key(reg));
 
     return mem.pokeCustom16<Accessor::CPU>(u32(reg) << 1, value);
 }

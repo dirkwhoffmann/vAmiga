@@ -245,7 +245,7 @@ Defaults::load(const fs::path &path)
     auto fs = std::ifstream(path, std::ifstream::binary);
 
     if (!fs.is_open()) {
-        throw CoreError(Fault::FILE_NOT_FOUND);
+        throw AppError(Fault::FILE_NOT_FOUND);
     }
 
     debug(DEF_DEBUG, "Loading user defaults from %s...\n", path.string().c_str());
@@ -323,7 +323,7 @@ Defaults::load(std::stringstream &stream)
                 continue;
             }
             
-            throw CoreError(Fault::SYNTAX, line);
+            throw AppError(Fault::SYNTAX, line);
         }
 
         if (accepted || skipped) {
@@ -338,7 +338,7 @@ Defaults::save(const fs::path &path)
     auto fs = std::ofstream(path, std::ofstream::binary);
 
     if (!fs.is_open()) {
-        throw CoreError(Fault::FILE_CANT_WRITE);
+        throw AppError(Fault::FILE_CANT_WRITE);
     }
 
     save(fs);
@@ -409,7 +409,7 @@ Defaults::getRaw(const string &key) const
         if (values.contains(key)) return values.at(key);
         if (fallbacks.contains(key)) return fallbacks.at(key);
         
-        throw CoreError(Fault::INVALID_KEY, key);
+        throw AppError(Fault::INVALID_KEY, key);
     }
 }
 
@@ -449,7 +449,7 @@ Defaults::getFallbackRaw(const string &key) const
 
         if (fallbacks.contains(key)) return fallbacks.at(key);
         
-        throw CoreError(Fault::INVALID_KEY, key);
+        throw AppError(Fault::INVALID_KEY, key);
     }
 }
 
@@ -493,7 +493,7 @@ Defaults::set(const string &key, const string &value)
 
             warn("Invalid key: %s\n", key.c_str());
             assert(false);
-            throw CoreError(Fault::INVALID_KEY, key);
+            throw AppError(Fault::INVALID_KEY, key);
         }
 
         values[key] = value;
@@ -584,7 +584,7 @@ Defaults::remove(const string &key)
 
             warn("Invalid key: %s\n", key.c_str());
             assert(false);
-            throw CoreError(Fault::INVALID_KEY, key);
+            throw AppError(Fault::INVALID_KEY, key);
         }
         if (values.contains(key)) {
             values.erase(key);

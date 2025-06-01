@@ -91,7 +91,7 @@ Blitter::checkOption(Opt opt, i64 value)
         case Opt::BLITTER_ACCURACY:
 
             if (value < 0 || value > 2) {
-                throw CoreError(Fault::OPT_INV_ARG, "0, 1, 2");
+                throw AppError(Fault::OPT_INV_ARG, "0, 1, 2");
             }
             return;
 

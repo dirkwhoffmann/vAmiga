@@ -60,7 +60,7 @@ MediaFile::make(const fs::path &path, FileType type)
         case FileType::ROM:          return new RomFile(path);
 
         default:
-            throw CoreError(Fault::FILE_TYPE_MISMATCH, path);
+            throw AppError(Fault::FILE_TYPE_MISMATCH, path);
     }
 }
 
@@ -154,7 +154,7 @@ MediaFile::getDiskInfo() const
 
     } catch (...) {
 
-        throw CoreError(Fault::FILE_TYPE_MISMATCH);
+        throw AppError(Fault::FILE_TYPE_MISMATCH);
     }
 }
 
@@ -178,7 +178,7 @@ MediaFile::getFloppyDiskInfo() const
 
     } catch (...) {
 
-        throw CoreError(Fault::FILE_TYPE_MISMATCH);
+        throw AppError(Fault::FILE_TYPE_MISMATCH);
     }
 }
 
@@ -199,7 +199,7 @@ MediaFile::getHDFInfo() const
 
     } catch (...) {
 
-        throw CoreError(Fault::FILE_TYPE_MISMATCH);
+        throw AppError(Fault::FILE_TYPE_MISMATCH);
     }
 }
 

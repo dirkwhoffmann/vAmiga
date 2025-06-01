@@ -44,7 +44,7 @@ HDZFile::init(const class HDFFile &hdf) throws
         try {
             data.gzip();
         } catch (std::runtime_error &err) {
-            throw CoreError(Fault::ZLIB_ERROR, err.what());
+            throw AppError(Fault::ZLIB_ERROR, err.what());
         }
     }
     
@@ -61,7 +61,7 @@ HDZFile::finalizeRead()
         try {
             data.gunzip();
         } catch (std::runtime_error &err) {
-            throw CoreError(Fault::ZLIB_ERROR, err.what());
+            throw AppError(Fault::ZLIB_ERROR, err.what());
         }
     }
     

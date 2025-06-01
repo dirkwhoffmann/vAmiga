@@ -108,7 +108,7 @@ FSBlock::make(FileSystem &ref, Block nr, FSBlockType type)
             return new FSBlock(ref, nr, type);
             
         default:
-            throw CoreError(Fault::FS_INVALID_BLOCK_TYPE);
+            throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
     }
 }
 
@@ -130,7 +130,7 @@ FSBlock::objectName() const
         case FSBlockType::DATA_BLOCK_FFS:    return "FSBlock (FFF)";
             
         default:
-            throw CoreError(Fault::FS_INVALID_BLOCK_TYPE);
+            throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
     }
 }
 

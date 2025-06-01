@@ -127,17 +127,17 @@ Recorder::startRecording(isize x1, isize y1, isize x2, isize y2,
           x1, y1, x2, y2, bitRate, aspectX, aspectY);
     
     if (isRecording()) {
-        throw CoreError(Fault::REC_LAUNCH, "Recording in progress.");
+        throw AppError(Fault::REC_LAUNCH, "Recording in progress.");
     }
     
     // Create pipes
     debug(REC_DEBUG, "Creating pipes...\n");
     
     if (!videoPipe.create(videoPipePath())) {
-        throw CoreError(Fault::REC_LAUNCH, "Failed to create the video encoder pipe.");
+        throw AppError(Fault::REC_LAUNCH, "Failed to create the video encoder pipe.");
     }
     if (!audioPipe.create(audioPipePath())) {
-        throw CoreError(Fault::REC_LAUNCH, "Failed to create the video encoder pipe.");
+        throw AppError(Fault::REC_LAUNCH, "Failed to create the video encoder pipe.");
     }
     
     debug(REC_DEBUG, "Pipes created\n");
@@ -244,7 +244,7 @@ Recorder::startRecording(isize x1, isize y1, isize x2, isize y2,
     debug(REC_DEBUG, "%s\n", cmd1.c_str());
     
     if (!videoFFmpeg.launch(cmd1)) {
-        throw CoreError(Fault::REC_LAUNCH, "Unable to launch the FFmpeg video encoder.");
+        throw AppError(Fault::REC_LAUNCH, "Unable to launch the FFmpeg video encoder.");
     }
     
     // Launch the audio encoder
@@ -252,21 +252,21 @@ Recorder::startRecording(isize x1, isize y1, isize x2, isize y2,
     debug(REC_DEBUG, "%s\n", cmd2.c_str());
     
     if (!audioFFmpeg.launch(cmd2)) {
-        throw CoreError(Fault::REC_LAUNCH, "Unable to launch the FFmpeg audio encoder.");
+        throw AppError(Fault::REC_LAUNCH, "Unable to launch the FFmpeg audio encoder.");
     }
     
     // Open the video pipe
     debug(REC_DEBUG, "Opening video pipe\n");
     
     if (!videoPipe.open()) {
-        throw CoreError(Fault::REC_LAUNCH, "Unable to open the video pipe.");
+        throw AppError(Fault::REC_LAUNCH, "Unable to open the video pipe.");
     }
     
     // Open the audio pipe
     debug(REC_DEBUG, "Opening audio pipe\n");
     
     if (!audioPipe.open()) {
-        throw CoreError(Fault::REC_LAUNCH, "Unable to launch the audio pipe.");
+        throw AppError(Fault::REC_LAUNCH, "Unable to launch the audio pipe.");
     }
     
     debug(REC_DEBUG, "Success\n");

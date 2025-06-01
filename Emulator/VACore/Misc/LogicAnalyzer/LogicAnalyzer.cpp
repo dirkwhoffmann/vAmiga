@@ -81,7 +81,7 @@ LogicAnalyzer::checkOption(Opt opt, i64 value)
         case Opt::LA_PROBE3:
 
             if (!ProbeEnum::isValid(value)) {
-                throw CoreError(Fault::OPT_INV_ARG, ProbeEnum::keyList());
+                throw AppError(Fault::OPT_INV_ARG, ProbeEnum::keyList());
             }
             
         case Opt::LA_ADDR0:
