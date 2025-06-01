@@ -303,9 +303,9 @@ NSString *EventSlotName(NSInteger slot);
 - (void)put:(Cmd)cmd;
 - (void)put:(Cmd)type value:(NSInteger)value;
 - (void)put:(Cmd)type value:(NSInteger)value value2:(NSInteger)value2;
-- (void)put:(Cmd)type key:(KeyCommand)cmd;
-- (void)put:(Cmd)type action:(GamePadCommand)cmd;
-- (void)put:(Cmd)type coord:(CoordCommand)cmd;
+- (void)put:(Cmd)type key:(KeyCmd)cmd;
+- (void)put:(Cmd)type action:(GamePadCmd)cmd;
+- (void)put:(Cmd)type coord:(CoordCmd)cmd;
 
 @end
 

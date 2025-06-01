@@ -365,15 +365,15 @@ Keyboard::processCommand(const Command &cmd)
 {
     if (cmd.key.delay > 0) {
 
-        trace(KEY_DEBUG, "%s: Delayed for %f sec\n", CmdTypeEnum::key(cmd.type), cmd.key.delay);
+        trace(KEY_DEBUG, "%s: Delayed for %f sec\n", CmdEnum::key(cmd.type), cmd.key.delay);
 
         pending.insert(agnus.clock + SEC(cmd.key.delay),
-                       Command(cmd.type, KeyCommand { .keycode = cmd.key.keycode }));
+                       Command(cmd.type, KeyCmd { .keycode = cmd.key.keycode }));
         agnus.scheduleImm<SLOT_KEY>(KEY_AUTO_TYPE);
 
     } else {
 
-        trace(KEY_DEBUG, "%s\n", CmdTypeEnum::key(cmd.type));
+        trace(KEY_DEBUG, "%s\n", CmdEnum::key(cmd.type));
 
         switch (cmd.type) {
 

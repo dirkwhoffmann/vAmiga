@@ -483,8 +483,8 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
             auto code = KeyCode(parseNum(argv[0]));
-            emulator.put(Command(Cmd::KEY_PRESS, KeyCommand { .keycode = code, .delay = 0.0 }));
-            emulator.put(Command(Cmd::KEY_RELEASE, KeyCommand { .keycode = code, .delay = 0.5 }));
+            emulator.put(Command(Cmd::KEY_PRESS, KeyCmd { .keycode = code, .delay = 0.0 }));
+            emulator.put(Command(Cmd::KEY_RELEASE, KeyCmd { .keycode = code, .delay = 0.5 }));
         }
     });
     

@@ -2702,17 +2702,17 @@ NSString *EventSlotName(NSInteger slot)
     [self emu]->put(type, value, value2);
 }
 
-- (void)put:(Cmd)type key:(KeyCommand)cmd
+- (void)put:(Cmd)type key:(KeyCmd)cmd
 {
     [self emu]->put(type, cmd);
 }
 
-- (void)put:(Cmd)type coord:(CoordCommand)cmd
+- (void)put:(Cmd)type coord:(CoordCmd)cmd
 {
     [self emu]->put(type, cmd);
 }
 
-- (void)put:(Cmd)type action:(GamePadCommand)cmd
+- (void)put:(Cmd)type action:(GamePadCmd)cmd
 {
     [self emu]->put(type, cmd);
 }

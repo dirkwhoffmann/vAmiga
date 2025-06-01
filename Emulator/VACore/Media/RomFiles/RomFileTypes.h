@@ -116,7 +116,6 @@ struct RomVendorEnum : Reflection<RomVendorEnum, RomVendor> {
     
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(RomVendor::OTHER);
-    static bool isValid(auto value) { return value >= minVal && value <= maxVal; }
     
     static const char *_key(RomVendor value)
     {

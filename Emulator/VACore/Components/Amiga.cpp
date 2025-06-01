@@ -972,7 +972,7 @@ Amiga::update(CmdQueue &queue)
                 break;
 
             default:
-                fatal("Unhandled command: %s\n", CmdTypeEnum::key(cmd.type));
+                fatal("Unhandled command: %s\n", CmdEnum::key(cmd.type));
         }
     }
 

@@ -1056,11 +1056,11 @@ KeyboardAPI::press(KeyCode key, double delay, double duration)
 
     } else {
         
-        emu->put(Command(Cmd::KEY_PRESS, KeyCommand { .keycode = key, .delay = delay }));
+        emu->put(Command(Cmd::KEY_PRESS, KeyCmd { .keycode = key, .delay = delay }));
     }
     if (duration != 0.0) {
         
-        emu->put(Command(Cmd::KEY_RELEASE, KeyCommand { .keycode = key, .delay = delay + duration }));
+        emu->put(Command(Cmd::KEY_RELEASE, KeyCmd { .keycode = key, .delay = delay + duration }));
     }
 }
 
@@ -1075,11 +1075,11 @@ KeyboardAPI::toggle(KeyCode key, double delay, double duration)
         
     } else {
         
-        emu->put(Command(Cmd::KEY_TOGGLE, KeyCommand { .keycode = key, .delay = delay }));
+        emu->put(Command(Cmd::KEY_TOGGLE, KeyCmd { .keycode = key, .delay = delay }));
     }
     if (duration != 0.0) {
         
-        emu->put(Command(Cmd::KEY_TOGGLE, KeyCommand { .keycode = key, .delay = delay + duration }));
+        emu->put(Command(Cmd::KEY_TOGGLE, KeyCmd { .keycode = key, .delay = delay + duration }));
     }
 }
 
@@ -1094,7 +1094,7 @@ KeyboardAPI::release(KeyCode key, double delay)
         
     } else {
         
-        emu->put(Command(Cmd::KEY_RELEASE, KeyCommand { .keycode = key, .delay = delay }));
+        emu->put(Command(Cmd::KEY_RELEASE, KeyCmd { .keycode = key, .delay = delay }));
     }
 }
 
@@ -1386,7 +1386,7 @@ void
 JoystickAPI::trigger(GamePadAction event)
 {
     VAMIGA_PUBLIC
-    emu->put(Cmd::JOY_EVENT, GamePadCommand { .port = joystick->objid, .action = event });
+    emu->put(Cmd::JOY_EVENT, GamePadCmd { .port = joystick->objid, .action = event });
 }
 
 
@@ -1412,21 +1412,21 @@ void
 MouseAPI::setXY(double x, double y)
 {
     VAMIGA_PUBLIC
-    emu->put(Command(Cmd::MOUSE_MOVE_ABS, CoordCommand { .port = mouse->objid, .x = x, .y = y }));
+    emu->put(Command(Cmd::MOUSE_MOVE_ABS, CoordCmd { .port = mouse->objid, .x = x, .y = y }));
 }
 
 void 
 MouseAPI::setDxDy(double dx, double dy)
 {
     VAMIGA_PUBLIC
-    emu->put(Command(Cmd::MOUSE_MOVE_REL, CoordCommand { .port = mouse->objid, .x = dx, .y = dy }));
+    emu->put(Command(Cmd::MOUSE_MOVE_REL, CoordCmd { .port = mouse->objid, .x = dx, .y = dy }));
 }
 
 void 
 MouseAPI::trigger(GamePadAction action)
 {
     VAMIGA_PUBLIC
-    emu->put(Command(Cmd::MOUSE_BUTTON, GamePadCommand { .port = mouse->objid, .action = action }));
+    emu->put(Command(Cmd::MOUSE_BUTTON, GamePadCmd { .port = mouse->objid, .action = action }));
 }
 
 
@@ -2216,7 +2216,7 @@ VAmiga::set(Opt opt, i64 value)
 {
     VAMIGA_PUBLIC
     emu->check(opt, value);
-    put(Cmd::CONFIG_ALL, ConfigCommand { .option = opt, .value = value });
+    put(Cmd::CONFIG_ALL, ConfigCmd { .option = opt, .value = value });
     emu->isDirty = true;
 }
 
@@ -2225,7 +2225,7 @@ VAmiga::set(Opt opt, i64 value, long id)
 {
     VAMIGA_PUBLIC
     emu->check(opt, value, { id });
-    put(Cmd::CONFIG, ConfigCommand { .option = opt, .value = value, .id = id });
+    put(Cmd::CONFIG, ConfigCmd { .option = opt, .value = value, .id = id });
     emu->isDirty = true;
 }
 
