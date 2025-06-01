@@ -68,6 +68,8 @@ static constexpr bool emscripten = 1;
 static constexpr bool emscripten = 0;
 #endif
 
+namespace vamiga {
+
 // General
 extern debugflag XFILES;
 extern debugflag CNF_DEBUG;
@@ -231,5 +233,7 @@ extern debugflag FORCE_DMS_CANT_CREATE;
 extern debugflag FORCE_RECORDING_ERROR;
 extern debugflag FORCE_NO_FFMPEG;
 extern debugflag FORCE_ZLIB_ERROR;
+
+}
 
 #include <assert.h>

@@ -45,7 +45,7 @@ private:
     // Parses the command line arguments
     void parseArguments(int argc, char *argv[]);
 
-    // Checks all command line arguments for conistency
+    // Checks all command line arguments for conistency (may throw)
     void checkArguments();
 
     // Runs a RetroShell script

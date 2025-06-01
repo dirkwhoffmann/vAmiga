@@ -6,7 +6,7 @@ Emulator.cpp
 
 )
 
-add_subdirectory(Foundation)
+add_subdirectory(Infrastructure)
 add_subdirectory(Components)
 add_subdirectory(FileSystems)
 add_subdirectory(Media)

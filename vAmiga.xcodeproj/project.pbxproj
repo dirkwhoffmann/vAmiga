@@ -1217,7 +1217,7 @@
 			path = DiskFiles;
 			sourceTree = "<group>";
 		};
-		50104E8825ECDAA30047A9AA /* Foundation */ = {
+		50104E8825ECDAA30047A9AA /* Infrastructure */ = {
 			isa = PBXGroup;
 			children = (
 				50CF461F2620423300BB3B95 /* CMakeLists.txt */,
@@ -1269,7 +1269,7 @@
 				501B00182C63589500749664 /* GuardList.h */,
 				501B00172C63589500749664 /* GuardList.cpp */,
 			);
-			path = Foundation;
+			path = Infrastructure;
 			sourceTree = "<group>";
 		};
 		502F7DCF2221709700AEEC65 /* Denise */ = {
@@ -1475,7 +1475,7 @@
 				50DA83E02C160DCA001209AA /* Emulator.h */,
 				50DA83DF2C160DCA001209AA /* Emulator.cpp */,
 				50B14C0421EB212E002E32A6 /* Utilities */,
-				50104E8825ECDAA30047A9AA /* Foundation */,
+				50104E8825ECDAA30047A9AA /* Infrastructure */,
 				506436E329C1D90B00768528 /* Components */,
 				505B801D23FE628F002407FE /* Ports */,
 				50A2953C21FF12C20046BAA0 /* Peripherals */,

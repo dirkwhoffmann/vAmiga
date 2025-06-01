@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "VACore/Foundation/Reflection.h"
+#include "VACore/Infrastructure/Reflection.h"
 #include "Serializable.h"
 
 namespace vamiga {

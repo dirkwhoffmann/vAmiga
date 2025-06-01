@@ -9,6 +9,8 @@
 
 #include "VAmigaConfig.h"
 
+namespace vamiga {
+
 // General
 debugflag XFILES          = 0;
 debugflag CNF_DEBUG       = 0;
@@ -169,3 +171,5 @@ debugflag FORCE_DMS_CANT_CREATE          = 0;
 debugflag FORCE_RECORDING_ERROR          = 0;
 debugflag FORCE_NO_FFMPEG                = 0;
 debugflag FORCE_ZLIB_ERROR               = 0;
+
+}

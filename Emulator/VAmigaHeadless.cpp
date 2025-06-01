@@ -24,14 +24,14 @@ int main(int argc, char *argv[])
         
     } catch (vamiga::SyntaxError &e) {
         
-        std::cout << "Usage: vAmigaCheck [-fsdvm] [<script>]" << std::endl;
+        std::cout << "Usage: VAmigaHeadless [-fsdvm] [<script>]" << std::endl;
         std::cout << std::endl;
-        std::cout << "       -f or --footprint   Reports the size of certain objects" << std::endl;
-        std::cout << "       -s or --smoke       Runs some smoke tests to test the build" << std::endl;
+        std::cout << "       -f or --footprint   Report the size of objects" << std::endl;
+        std::cout << "       -s or --smoke       Run smoke tests to test the build" << std::endl;
         std::cout << "       -d or --diagnose    Run DiagRom in the background" << std::endl;
-        std::cout << "       -v or --verbose     Print executed script lines" << std::endl;
+        std::cout << "       -v or --verbose     Print the executed script lines" << std::endl;
         std::cout << "       -m or --messages    Observe the message queue" << std::endl;
-        std::cout << "       <script>            Execute this script instead of the default" << std::endl;
+        std::cout << "       <script>            Execute a custom script" << std::endl;
         std::cout << std::endl;
         
         if (auto what = std::string(e.what()); !what.empty()) {
@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 
     } catch (vamiga::AppError &e) {
 
-        std::cout << "Core Error: " << e.what() << std::endl;
+        std::cout << "Emulator Error: " << e.what() << std::endl;
 
     } catch (std::exception &e) {
 

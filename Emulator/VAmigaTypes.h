@@ -13,13 +13,13 @@
 #include "VACore/EmulatorTypes.h"
 
 // Foundation
-#include "VACore/Foundation/Constants.h"
-#include "VACore/Foundation/CmdQueueTypes.h"
-#include "VACore/Foundation/CoreComponentTypes.h"
-#include "VACore/Foundation/DumpableTypes.h"
-#include "VACore/Foundation/ErrorTypes.h"
-#include "VACore/Foundation/GuardListTypes.h"
-#include "VACore/Foundation/MsgQueueTypes.h"
+#include "VACore/Infrastructure/Constants.h"
+#include "VACore/Infrastructure/CmdQueueTypes.h"
+#include "VACore/Infrastructure/CoreComponentTypes.h"
+#include "VACore/Infrastructure/DumpableTypes.h"
+#include "VACore/Infrastructure/ErrorTypes.h"
+#include "VACore/Infrastructure/GuardListTypes.h"
+#include "VACore/Infrastructure/MsgQueueTypes.h"
 
 // Components
 #include "VACore/Components/AmigaTypes.h"

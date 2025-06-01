@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "VACore/Foundation/ThreadTypes.h"
+#include "VACore/Infrastructure/ThreadTypes.h"
 #include "VACore/Components/AmigaTypes.h"
 
 namespace vamiga {
