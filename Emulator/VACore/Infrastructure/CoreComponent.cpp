@@ -423,9 +423,15 @@ CoreComponent::exportConfig(std::ostream &ss, bool diff, std::vector<Class> excl
 }
 
 void
+CoreComponent::exportDiff(const fs::path &path, std::vector<Class> exclude) const
+{
+    exportConfig(path, true, exclude);
+}
+
+void
 CoreComponent::exportDiff(std::ostream &ss, std::vector<Class> exclude) const
 {
-    exportConfig(ss, true);
+    exportConfig(ss, true, exclude);
 }
 
 }

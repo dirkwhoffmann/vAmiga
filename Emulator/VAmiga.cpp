@@ -2099,20 +2099,6 @@ VAmiga::halt()
 }
 
 void
-VAmiga::suspend() const
-{
-    VAMIGA_PUBLIC
-    emu->suspend();
-}
-
-void
-VAmiga::resume() const
-{
-    VAMIGA_PUBLIC
-    emu->resume();
-}
-
-void
 VAmiga::warpOn(isize source)
 {
     VAMIGA_PUBLIC

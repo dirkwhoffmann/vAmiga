@@ -12,12 +12,11 @@
 #include "CoreComponentTypes.h"
 #include "EmulatorTypes.h"
 #include "CoreObject.h"
-#include "Inspectable.h"
-#include "Synchronizable.h"
-#include "Configurable.h"
-#include "Serializable.h"
 #include "Concurrency.h"
-#include <algorithm>
+#include "Configurable.h"
+#include "Inspectable.h"
+#include "Serializable.h"
+#include "Synchronizable.h"
 #include <functional>
 
 namespace vamiga {
@@ -213,11 +212,12 @@ public:
     // Compares two components and reports differences (for debugging)
     void diff(CoreComponent &other);
 
-    // Exports the current configuration in form of a script
+    // Exports the current configuration as a script
     void exportConfig(const fs::path &path, bool diff = false, std::vector<Class> exclude = {}) const;
     void exportConfig(std::ostream &ss, bool diff = false, std::vector<Class> exclude = {}) const;
 
     // Exports only those options that differ from the default config
+    void exportDiff(const fs::path &path, std::vector<Class> exclude = {}) const;
     void exportDiff(std::ostream &ss, std::vector<Class> exclude = {}) const;
 };
 

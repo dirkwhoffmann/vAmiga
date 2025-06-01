@@ -1723,20 +1723,6 @@ public:
      */
     void halt();
     
-    /** @brief   Suspends the emulator thread
-     *
-     *  See the \ref vc64::Suspendable "Suspendable" class for a detailes
-     *  description of the suspend-resume machanism.
-     */
-    void suspend() const;
-    
-    /** @brief   Suspends the emulator thread
-     *
-     *  See the \ref vc64::Suspendable "Suspendable" class for a detailes
-     *  description of the suspend-resume machanism.
-     */
-    void resume() const;
-    
     /** @brief  Enables warp mode.
      */
     void warpOn(isize source = 0);
