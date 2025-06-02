@@ -210,9 +210,9 @@ public:
     void printDirectory(bool recursive) const throws;
     
     // Returns the path of a file system item
-    string getPath(FSBlock *block) const;
-    string getPath(Block nr) const { return getPath(blockPtr(nr)); }
-    string getPath() const { return getPath(currentDirBlock()); }
+    fs::path getPath(FSBlock *block) const;
+    fs::path getPath(Block nr) const { return getPath(blockPtr(nr)); }
+    fs::path getPath() const { return getPath(currentDirBlock()); }
 
     // Seeks an item inside the current directory
     Block seekRef(FSName name) const;

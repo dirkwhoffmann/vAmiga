@@ -101,9 +101,12 @@ public:
 
 public:
 
-    // Sanitizes a file name
+    // Makes a file name compatible with the host file system
     static fs::path sanitize(const string &filename);
-    
+
+    // Makes a file name compatible with the Amiga file system
+    static string unsanitize(const fs::path &filename);
+
     // Sets the search path used in makeAbsolute
     void setSearchPath(const fs::path &path);
 

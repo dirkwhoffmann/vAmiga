@@ -808,9 +808,14 @@ FSBlock::exportBlock(const fs::path &path)
 Fault
 FSBlock::exportUserDirBlock(const fs::path &path)
 {
-    auto name = path / device.getPath(this);
+    // Get Amiga file name
+    auto filename = device.getPath(this);
     
-    if (!util::createDirectory(name.string())) {
+    // Create the full path
+    auto fullname = path / filename;
+    debug(FS_DEBUG >= 2, "Creating directory %s\n", fullname.string().c_str());
+    
+    if (!util::createDirectory(fullname)) {
         return Fault::FS_CANNOT_CREATE_DIR;
     }
 
@@ -823,12 +828,10 @@ FSBlock::exportFileHeaderBlock(const fs::path &path)
     // Get Amiga file name
     auto filename = device.getPath(this);
     
-    // Make the name compatible with the host computer
-    auto sanitized = Host::sanitize(filename);
-
     // Create the full path
-    auto fullname = path / sanitized;
-    
+    auto fullname = path / filename;
+    debug(FS_DEBUG >= 2, "  Exporting file %s\n", fullname.string().c_str());
+
     // Open file
     std::ofstream file(fullname, std::ofstream::binary);
     if (!file.is_open()) return Fault::FS_CANNOT_CREATE_FILE;

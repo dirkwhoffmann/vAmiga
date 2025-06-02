@@ -19,7 +19,7 @@ struct FSString {
     string str;
     
     // Maximum number of permitted characters
-    isize limit;
+    isize limit = 0;
 
     static char capital(char c);
 
@@ -39,12 +39,12 @@ struct FSString {
 
 struct FSName : FSString {
     
-    FSName(const string &cppString) : FSString(cppString, 30) { rectify(); }
-    FSName(const char *cString) : FSString(cString, 30) { rectify(); }
-    FSName(const u8 *bcplString) : FSString(bcplString, 30) { rectify(); }
-    
-    // Scans the given name and replaces invalid characters by dummy symbols
-    void rectify();
+    FSName(const string &cppString);
+    FSName(const char *cString);
+    FSName(const u8 *bcplString);
+    FSName(const fs::path &path);
+
+    fs::path path() const;
 };
 
 struct FSComment : FSString {

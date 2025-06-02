@@ -507,10 +507,10 @@ FileSystem::printDirectory(bool recursive) const
     msg("%zu items\n", items.size());
 }
 
-string
+fs::path
 FileSystem::getPath(FSBlock *block) const
 {
-    string result = "";
+    fs::path result;
     std::set<Block> visited;
 
     while(block) {
@@ -525,8 +525,8 @@ FileSystem::getPath(FSBlock *block) const
         visited.insert(block->nr);
 
         // Expand the path
-        string name = block->getName().c_str();
-        result = (result == "") ? name : name + "/" + result;
+        auto name = block->getName().path();
+        result = result.empty() ? name : name / result;
         
         // Continue with the parent block
         block = block->getParentDirBlock();

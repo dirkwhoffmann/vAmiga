@@ -12,8 +12,11 @@
 #include "FSBlock.h"
 #include "Chrono.h"
 #include "Macros.h"
+#include "Host.h"
+
 #include <algorithm>
 #include <cstring>
+#include <unordered_set>
 
 namespace vamiga {
 
@@ -22,21 +25,21 @@ FSString::FSString(const string &cpp, isize limit) : str(cpp), limit(limit)
     
 }
 
-FSString::FSString(const char *c, isize l) : limit(l)
+FSString::FSString(const char *c, isize limit) : limit(limit)
 {
     assert(c != nullptr);
     
-    str.assign(c, strnlen(c, l));
+    str.assign(c, strnlen(c, limit));
 }
 
-FSString::FSString(const u8 *bcpl, isize l) : limit(l)
+FSString::FSString(const u8 *bcpl, isize limit) : limit(limit)
 {
     assert(bcpl != nullptr);
     
     auto length = (isize)bcpl[0];
     auto firstChar = (const char *)(bcpl + 1);
     
-    str.assign(firstChar, std::min(length, l));
+    str.assign(firstChar, std::min(length, limit));
 }
 
 char
@@ -73,15 +76,15 @@ FSString::write(u8 *p)
     for (auto c : str) { *p++ = c; }
 }
 
-void
-FSName::rectify()
+FSName::FSName(const string &cpp) : FSString(cpp, 30) { }
+FSName::FSName(const char *c) : FSString(c, 30) { }
+FSName::FSName(const u8 *bcpl) : FSString(bcpl, 30) { }
+FSName::FSName(const fs::path &path) : FSString(Host::unsanitize(path), 30) { }
+
+fs::path
+FSName::path() const
 {
-    // Replace all symbols that are not permitted in Amiga filenames
-    /*
-    for (isize i = 0; i < isizeof(str); i++) {
-        if (str[i] == ':' || str[i] == '/') str[i] = '_';
-    }
-    */
+    return Host::sanitize(str);
 }
 
 FSTime::FSTime(time_t t)
