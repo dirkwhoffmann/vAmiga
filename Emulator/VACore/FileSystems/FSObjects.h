@@ -15,8 +15,9 @@ namespace vamiga {
 
 struct FSString {
     
-    // File system identifier stored as a C string
-    char str[92];
+    // File system identifier
+    // char str[92];
+    string str;
     
     // Maximum number of permitted characters
     isize limit;
@@ -27,10 +28,11 @@ struct FSString {
     FSString(const char *cString, isize limit);
     FSString(const u8 *bcplString, isize limit);
 
-    const char *c_str() { return str; }
-    string cpp_str() { return string(str); }
+    const char *c_str() { return str.c_str(); }
+    string cpp_str() { return str; }
     
     bool operator== (FSString &rhs) const;
+    isize length() const { return (isize)str.length(); }
     u32 hashValue() const;
     
     void write(u8 *p);

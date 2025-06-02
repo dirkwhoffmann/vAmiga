@@ -24,6 +24,9 @@ FSString::FSString(const string &cppString, isize limit) : FSString(cppString.c_
 FSString::FSString(const char *cStr, isize l) : limit(l)
 {
     assert(cStr != nullptr);
+
+    str.assign(cStr, strnlen(cStr, l));
+    /*
     assert(limit <= 91);
     
     isize i;
@@ -31,11 +34,18 @@ FSString::FSString(const char *cStr, isize l) : limit(l)
         str[i] = cStr[i];
     }
     str[i] = 0;
+    */
 }
 
 FSString::FSString(const u8 *bcplStr, isize l) : limit(l)
 {
     assert(bcplStr != nullptr);
+    
+    auto length = (isize)bcplStr[0];
+    auto firstChar = (const char *)(bcplStr + 1);
+    
+    str.assign(firstChar, std::min(length, l));
+    /*
     assert(limit <= 91);
 
     isize i;
@@ -43,6 +53,7 @@ FSString::FSString(const u8 *bcplStr, isize l) : limit(l)
         str[i] = bcplStr[i+1];
     }
     str[i] = 0;
+    */
 }
 
 char
@@ -56,23 +67,30 @@ FSString::operator== (FSString &rhs) const
 {
     isize n = 0;
     
+    return util::uppercased(str) == util::uppercased(rhs.str);
+    /*
     while (str[n] != 0 || rhs.str[n] != 0) {
         if (capital(str[n]) != capital(rhs.str[n])) return false;
         n++;
     }
     return true;
+    */
 }
 
 u32
 FSString::hashValue() const
 {
-    isize length = (isize)strlen(str);
-    u32 result = (u32)length;
-    
-    for (isize i = 0; i < length; i++) {
+    u32 result = (u32)length();
+    for (auto c : str) {
+        
+        result = (result * 13 + (u32)capital(c)) & 0x7FF;
+    }
+    /*
+    for (isize i = 0; i < length(); i++) {
         char c = capital(str[i]);
         result = (result * 13 + (u32)c) & 0x7FF;
     }
+    */
     return result;
 }
 
@@ -80,11 +98,11 @@ void
 FSString::write(u8 *p)
 {
     assert(p != nullptr);
-    assert(strlen(str) < sizeof(str));
-    
+        
     // Write name as a BCPL string (first byte is string length)
-    *p++ = (u8)strlen(str);
-    for (isize i = 0; str[i] != 0; i++) { *p++ = str[i]; }
+    *p++ = (u8)length();
+    for (auto c : str) { *p++ = c; }
+    // for (isize i = 0; i < length(); i++) { *p++ = str[i]; }
     *p = 0;
 }
 
@@ -92,9 +110,11 @@ void
 FSName::rectify()
 {
     // Replace all symbols that are not permitted in Amiga filenames
+    /*
     for (isize i = 0; i < isizeof(str); i++) {
         if (str[i] == ':' || str[i] == '/') str[i] = '_';
     }
+    */
 }
 
 FSTime::FSTime(time_t t)
