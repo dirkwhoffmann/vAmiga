@@ -313,12 +313,38 @@ MutableFileSystem::newUserDirBlock(const string &name)
 }
 
 FSBlock *
+MutableFileSystem::newUserDirBlock(const FSName &name)
+{
+    if (Block nr = allocate()) {
+
+        blocks[nr]->init(FSBlockType::USERDIR_BLOCK);
+        blocks[nr]->setName(name);
+        return blockPtr(nr);
+    }
+ 
+    return nullptr;
+}
+
+FSBlock *
 MutableFileSystem::newFileHeaderBlock(const string &name)
 {
     if (Block nr = allocate()) {
 
         blocks[nr]->init(FSBlockType::FILEHEADER_BLOCK);
         blocks[nr]->setName(FSName(name));
+        return blockPtr(nr);
+    }
+    
+    return nullptr;
+}
+
+FSBlock *
+MutableFileSystem::newFileHeaderBlock(const FSName &name)
+{
+    if (Block nr = allocate()) {
+
+        blocks[nr]->init(FSBlockType::FILEHEADER_BLOCK);
+        blocks[nr]->setName(name);
         return blockPtr(nr);
     }
     
@@ -388,7 +414,7 @@ MutableFileSystem::rectifyAllocationMap()
 }
     
 FSBlock *
-MutableFileSystem::createDir(const string &name)
+MutableFileSystem::createDir(const FSName &name)
 {
     FSBlock *cdb = currentDirBlock();
     FSBlock *block = newUserDirBlock(name);
@@ -404,7 +430,7 @@ MutableFileSystem::createDir(const string &name)
 }
 
 FSBlock *
-MutableFileSystem::createFile(const string &name)
+MutableFileSystem::createFile(const FSName &name)
 {
     FSBlock *cdb = currentDirBlock();
     FSBlock *block = newFileHeaderBlock(name);
@@ -420,7 +446,7 @@ MutableFileSystem::createFile(const string &name)
 }
 
 FSBlock *
-MutableFileSystem::createFile(const string &name, const u8 *buf, isize size)
+MutableFileSystem::createFile(const FSName &name, const u8 *buf, isize size)
 {
     assert(buf);
         
@@ -465,7 +491,7 @@ MutableFileSystem::createFile(const string &name, const u8 *buf, isize size)
 }
 
 FSBlock *
-MutableFileSystem::createFile(const string &name, const string &str)
+MutableFileSystem::createFile(const FSName &name, const string &str)
 {
     return createFile(name, (const u8 *)str.c_str(), (isize)str.size());
 }

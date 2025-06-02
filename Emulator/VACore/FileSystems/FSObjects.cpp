@@ -17,24 +17,24 @@
 
 namespace vamiga {
 
-FSString::FSString(const string &cppString, isize limit) : str(cppString), limit(limit)
+FSString::FSString(const string &cpp, isize limit) : str(cpp), limit(limit)
 {
     
 }
 
-FSString::FSString(const char *cStr, isize l) : limit(l)
+FSString::FSString(const char *c, isize l) : limit(l)
 {
-    assert(cStr != nullptr);
+    assert(c != nullptr);
     
-    str.assign(cStr, strnlen(cStr, l));
+    str.assign(c, strnlen(c, l));
 }
 
-FSString::FSString(const u8 *bcplStr, isize l) : limit(l)
+FSString::FSString(const u8 *bcpl, isize l) : limit(l)
 {
-    assert(bcplStr != nullptr);
+    assert(bcpl != nullptr);
     
-    auto length = (isize)bcplStr[0];
-    auto firstChar = (const char *)(bcplStr + 1);
+    auto length = (isize)bcpl[0];
+    auto firstChar = (const char *)(bcpl + 1);
     
     str.assign(firstChar, std::min(length, l));
 }

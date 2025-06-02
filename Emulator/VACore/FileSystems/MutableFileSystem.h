@@ -94,9 +94,11 @@ private:
     void addDataBlock(Block at, isize id, Block head, Block prev);
 
     // Creates a new block of a certain kind
-    FSBlock *newUserDirBlock(const string &name);
-    FSBlock *newFileHeaderBlock(const string &name);
-        
+    [[deprecated]] FSBlock *newUserDirBlock(const string &name);
+    FSBlock *newUserDirBlock(const FSName &name);
+    [[deprecated]] FSBlock *newFileHeaderBlock(const string &name);
+    FSBlock *newFileHeaderBlock(const FSName &name);
+
     
     //
     // Modifying boot blocks
@@ -132,12 +134,12 @@ public:
 public:
 
     // Creates a new directory
-    FSBlock *createDir(const string &name);
+    FSBlock *createDir(const FSName &name);
 
     // Creates a new file
-    FSBlock *createFile(const string &name);
-    FSBlock *createFile(const string &name, const u8 *buffer, isize size);
-    FSBlock *createFile(const string &name, const string &str);
+    FSBlock *createFile(const FSName &name);
+    FSBlock *createFile(const FSName &name, const u8 *buffer, isize size);
+    FSBlock *createFile(const FSName &name, const string &str);
 
 private:
     

@@ -16,7 +16,6 @@ namespace vamiga {
 struct FSString {
     
     // File system identifier
-    // char str[92];
     string str;
     
     // Maximum number of permitted characters
