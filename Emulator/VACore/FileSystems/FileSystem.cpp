@@ -502,7 +502,7 @@ FileSystem::printDirectory(bool recursive) const
     collect(cd, items);
     
     for (auto const& i : items) {
-        msg("%s\n", getPath(i).c_str());
+        msg("%s\n", getPath(i).string().c_str());
     }
     msg("%zu items\n", items.size());
 }

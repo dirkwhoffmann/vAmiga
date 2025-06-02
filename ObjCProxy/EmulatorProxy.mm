@@ -1999,7 +1999,7 @@ NSString *EventSlotName(NSInteger slot)
 {
     try {
         [self drive]->importFiles([url fileSystemRepresentation]);
-    }  catch (AppError &error) {
+    } catch (AppError &error) {
         [ex save:error];
     }
 }

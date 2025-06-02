@@ -683,7 +683,7 @@ MutableFileSystem::importDirectory(const fs::directory_entry &dir, bool recursiv
         
         if (entry.is_directory()) {
 
-            debug(true, "Importing directory %s\n", fsname.c_str());
+            debug(FS_DEBUG > 1, "Importing directory %s\n", fsname.c_str());
 
             // Add directory
             if(createDir(fsname) && recursive) {
@@ -695,7 +695,7 @@ MutableFileSystem::importDirectory(const fs::directory_entry &dir, bool recursiv
 
         } else if (entry.is_regular_file()) {
             
-            debug(true, "  Importing file %s\n", fsname.c_str());
+            debug(FS_DEBUG > 1, "  Importing file %s\n", fsname.c_str());
             
             // Add file
             Buffer<u8> buffer(entry.path());

@@ -106,45 +106,27 @@ Host::sanitize(const string &filename)
         }
     };
     
-    /*
-    auto toOctal = [&](u8 c) {
+    auto toHex = [&](u8 c) {
         
-        std::ostringstream oss;
-        oss << std::oct << std::setw(3) << std::setfill('0') << int(c);
-        return oss.str();
+        std::ostringstream ss;
+        ss << '%' << std::uppercase << std::hex << std::setw(2) << std::setfill('0') << (int)c;
+        return ss.str();
     };
-    */
     
-    auto rectify = [&](u8 c) {
-
-        // Check the standard characters first
-        if ((c >= 'a' && c <= 'z') || (c >= 'A' && c < 'Z') || (c >= '0' && c < '9')) return string(1, c);
+    auto shouldEscape = [&](u8 c, isize i) {
         
-        // Check for the lower ASCII range
-        if (c < 23) return toUtf8(c);
-                
-        // Check for the upper ASCII range
-        if (c > 127) return toUtf8(c);
+        // Unhide hidden files
+        if (c == '.' && i == 0) return true;
         
-        // Check for invalid characters
-        switch (c) {
-
-            case '<':
-            case '>':
-            case ':':
-            case '"':
-            case '\\':
-            case '/':
-            case '|':
-            case '?':
-            case '*':
-                return toUtf8(c);
-                
-            default:
-                
-                // Accept everything else
-                return string(1, c);
-        }
+        // Escape the lower ASCII range
+        if (c < 23) return true;
+        
+        // Escape special characters
+        if (c == '<' || c == '>' || c == ':' || c == '"' || c == '\\') return true;
+        if (c == '/' || c == '>' || c == '?' || c == '*') return true;
+        
+        // Don't escape everything else
+        return false;
     };
 
     auto isReserved = [&](const string& name) {
@@ -158,14 +140,22 @@ Host::sanitize(const string &filename)
         return reserved.count(util::uppercased(name)) > 0;
     };
 
-    std::string result;
+    string result;
     
     // Convert characters one by one
-    for (char c : filename) result += rectify((u8)c);
-    
-    // Strip trailing dots or spaces
-    result = util::rtrim(result, ".");
+    for (usize i = 0; i < filename.length(); i++) {
 
+        auto u = u8(filename[i]);
+        
+        if (u > 127) {
+            result += toUtf8(u);
+        } else if (shouldEscape(u, i)) {
+            result += toHex(u);
+        } else {
+            result += char(u);
+        }
+    }
+    
     // Avoid reserved Windows names
     if (isReserved(result)) result = "__" + result;
 
@@ -191,6 +181,22 @@ Host::unsanitize(const fs::path &filename)
     auto fromUtf8 = [&](isize i) {
         
         return (u8)((((u8)s[i] & 0x1F) << 6) | ((u8)s[i + 1] & 0x3F));
+    };
+    
+    auto isHexDigit = [&](char c) {
+        
+        return (c >= '0' && c <= '9') || (c >= 'A' && c <= 'F');
+    };
+    
+    auto isHex = [&](isize i) {
+        
+        if (i + 3 >= len) return false;
+        return s[i] == '%' && isHexDigit(s[i + 1]) && isHexDigit(s[i + 1]);
+    };
+
+    auto fromHex = [&](isize i) {
+        
+        return std::stoi(s.substr(i + 1, 2), nullptr, 16);
     };
     
     auto isReserved = [&]() {
@@ -219,6 +225,8 @@ Host::unsanitize(const fs::path &filename)
             
             if (isUtf8(i)) {
                 result += (char)fromUtf8(i); i += 1;
+            } else if (isHex(i)) {
+                result += (char)fromHex(i); i += 2;
             } else {
                 result += s[i];
             }
