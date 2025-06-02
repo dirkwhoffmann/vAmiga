@@ -17,24 +17,16 @@
 
 namespace vamiga {
 
-FSString::FSString(const string &cppString, isize limit) : FSString(cppString.c_str(), limit)
+FSString::FSString(const string &cppString, isize limit) : str(cppString), limit(limit)
 {
+    
 }
 
 FSString::FSString(const char *cStr, isize l) : limit(l)
 {
     assert(cStr != nullptr);
-
-    str.assign(cStr, strnlen(cStr, l));
-    /*
-    assert(limit <= 91);
     
-    isize i;
-    for (i = 0; i < limit && cStr[i] != 0; i++) {
-        str[i] = cStr[i];
-    }
-    str[i] = 0;
-    */
+    str.assign(cStr, strnlen(cStr, l));
 }
 
 FSString::FSString(const u8 *bcplStr, isize l) : limit(l)
@@ -45,15 +37,6 @@ FSString::FSString(const u8 *bcplStr, isize l) : limit(l)
     auto firstChar = (const char *)(bcplStr + 1);
     
     str.assign(firstChar, std::min(length, l));
-    /*
-    assert(limit <= 91);
-
-    isize i;
-    for (i = 0; i < limit && i < bcplStr[0]; i++) {
-        str[i] = bcplStr[i+1];
-    }
-    str[i] = 0;
-    */
 }
 
 char
@@ -65,16 +48,7 @@ FSString::capital(char c)
 bool
 FSString::operator== (FSString &rhs) const
 {
-    isize n = 0;
-    
     return util::uppercased(str) == util::uppercased(rhs.str);
-    /*
-    while (str[n] != 0 || rhs.str[n] != 0) {
-        if (capital(str[n]) != capital(rhs.str[n])) return false;
-        n++;
-    }
-    return true;
-    */
 }
 
 u32
@@ -85,12 +59,7 @@ FSString::hashValue() const
         
         result = (result * 13 + (u32)capital(c)) & 0x7FF;
     }
-    /*
-    for (isize i = 0; i < length(); i++) {
-        char c = capital(str[i]);
-        result = (result * 13 + (u32)c) & 0x7FF;
-    }
-    */
+
     return result;
 }
 
@@ -102,8 +71,6 @@ FSString::write(u8 *p)
     // Write name as a BCPL string (first byte is string length)
     *p++ = (u8)length();
     for (auto c : str) { *p++ = c; }
-    // for (isize i = 0; i < length(); i++) { *p++ = str[i]; }
-    *p = 0;
 }
 
 void

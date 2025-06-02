@@ -13,6 +13,7 @@
 #include "Defaults.h"
 #include "Checksum.h"
 #include "Option.h"
+#include <algorithm>
 
 namespace vamiga {
 
