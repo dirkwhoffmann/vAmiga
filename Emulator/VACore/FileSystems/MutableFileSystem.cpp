@@ -666,7 +666,9 @@ void
 MutableFileSystem::importDirectory(const fs::directory_entry &dir, bool recursive)
 {
     auto isHidden = [&](const fs::path &path) {
-        return path.string().c_str()[0] == '.';
+            
+        string s = path.filename().string();
+        return !s.empty() && s[0] == '.';
     };
     
     for (const auto& entry : fs::directory_iterator(dir)) {
@@ -676,25 +678,32 @@ MutableFileSystem::importDirectory(const fs::directory_entry &dir, bool recursiv
 
         // Skip all hidden files
         if (isHidden(name)) continue;
-
-        debug(FS_DEBUG, "Importing %s\n", path.c_str());
+        
+        FSName fsname = FSName(name);
         
         if (entry.is_directory()) {
-            
-            // Add directory
-            if(createDir(FSName(name)) && recursive) {
 
-                changeDir(name);
+            debug(true, "Importing directory %s\n", fsname.c_str());
+
+            // Add directory
+            if(createDir(fsname) && recursive) {
+
+                changeDir(fsname.str);
                 importDirectory(entry, recursive);
                 changeDir("..");
             }
-        }
 
-        if (entry.is_regular_file()) {
+        } else if (entry.is_regular_file()) {
+            
+            debug(true, "  Importing file %s\n", fsname.c_str());
             
             // Add file
-            Buffer<u8> buffer(path);
-            if (buffer) createFile(FSName(name), buffer.ptr, buffer.size);
+            Buffer<u8> buffer(entry.path());
+            if (buffer) {
+                createFile(fsname, buffer.ptr, buffer.size);
+            } else {
+                createFile(fsname);
+            }
         }
     }
 }
