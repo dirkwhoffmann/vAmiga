@@ -409,22 +409,11 @@ HdController::processInit(u32 ptr)
 
     auto assignDosName = [&](isize partition, char *name) {
 
-        name[0] = 'D';
-        name[1] = 'H';
+        if (objid >= 1) partition += amiga.hd0.numPartitions();
+        if (objid >= 2) partition += amiga.hd1.numPartitions();
+        if (objid >= 3) partition += amiga.hd2.numPartitions();
 
-        if (objid == 0) {
-
-            name[2] = '0' + char(partition);
-            name[3] = 0;
-            name[4] = 0;
-
-        } else {
-
-            name[2] = '0' + char(objid);
-            name[3] = '0' + char(partition);
-            name[4] = 0;
-
-        }
+        snprintf(name, 5, "DH%ld", partition);
     };
 
     // Keep in check with exprom.asm
