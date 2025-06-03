@@ -407,13 +407,13 @@ HdController::processInit(u32 ptr)
 {
     debug(HDR_DEBUG, "processInit(%x)\n", ptr);
 
-    auto assignDosName = [&](isize partition, char *name) {
+    auto assignDosName = [&](isize partition) {
 
         if (objid >= 1) partition += amiga.hd0.numPartitions();
         if (objid >= 2) partition += amiga.hd1.numPartitions();
         if (objid >= 3) partition += amiga.hd2.numPartitions();
 
-        snprintf(name, 5, "DH%ld", partition);
+        return string("DH") + std::to_string(partition) + (char)0;
     };
 
     // Keep in check with exprom.asm
@@ -448,11 +448,10 @@ HdController::processInit(u32 ptr)
         // Collect hard drive information
         auto &geometry = drive.geometry;
         auto &part = drive.ptable[unit];
-        char dosName[5];
-        assignDosName(unit, dosName);
+        auto dosName = assignDosName(unit);
 
         u32 name_ptr = mem.spypeek32 <Accessor::CPU> (ptr + devn_dosName);
-        for (isize i = 0; i < isizeof(dosName); i++) {
+        for (usize i = 0; i < dosName.length(); i++) {
             mem.patch(u32(name_ptr + i), u8(dosName[i]));
         }
 
