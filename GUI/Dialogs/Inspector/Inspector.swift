@@ -682,7 +682,7 @@ class Inspector: DialogController {
    
         // Enter debug mode
         emu.trackOn()
-        amiga.autoInspectionMask = 0xFF
+        amiga.autoInspectionMask = Int.max
         
         // Adjust window height to match what we see in interface builder
         if let window = self.window {

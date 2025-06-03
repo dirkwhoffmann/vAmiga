@@ -463,18 +463,18 @@ extension DiskExporter: NSFilePromiseProviderDelegate {
    
     func filePromiseProvider(_ filePromiseProvider: NSFilePromiseProvider, fileNameForType fileType: String) -> String {
         
-        var name: String
-        
+        var name = "Untitled" // vol?.name ?? "Untitled"
+
         switch formatPopup.selectedTag() {
             
-        case Format.hdf: name = "Untitled.hdf"
-        case Format.hdz: name = "Untitled.hdz"
-        case Format.adf: name = "Untitled.adf"
-        case Format.adz: name = "Untitled.adz"
-        case Format.ext: name = "Untitled.adf"
-        case Format.img: name = "Untitled.img"
-        case Format.ima: name = "Untitled.ima"
-        case Format.vol: name = "Untitled"
+        case Format.hdf: name += ".hdf"
+        case Format.hdz: name += ".hdz"
+        case Format.adf: name += ".adf"
+        case Format.adz: name += ".adz"
+        case Format.ext: name += ".adf"
+        case Format.img: name += ".img"
+        case Format.ima: name += ".ima"
+        case Format.vol: break
             
         default: fatalError()
         }

@@ -221,6 +221,11 @@ public:
     i64 getDeltaX();
     i64 getDeltaY();
 
+    // Queries the button state
+    bool LMB() const { return leftButton; }
+    bool MMB() const { return middleButton; }
+    bool RMB() const { return rightButton; }
+
     // Returns the mouse coordinates as they appear in the JOYDAT register
     u16 getXY();
     
