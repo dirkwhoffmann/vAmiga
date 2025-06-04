@@ -27,7 +27,7 @@ class DeniseDebugger final : public SubComponent {
         .shell          = ""
     }};
 
-    ConfigOptions options = {
+    Options options = {
 
     };
 
@@ -95,7 +95,7 @@ private:
 
 public:
 
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
 
 
     //

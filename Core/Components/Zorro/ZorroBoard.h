@@ -26,7 +26,7 @@ protected:
         .shell          = ""
     }};
 
-    ConfigOptions options = {
+    Options options = {
 
     };
 

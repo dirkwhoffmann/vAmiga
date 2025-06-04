@@ -25,7 +25,7 @@ class VideoPort final : public SubComponent, public Inspectable<VideoPortInfo, V
         .shell          = "video"
     }};
 
-    ConfigOptions options = {
+    Options options = {
 
         Opt::VID_WHITE_NOISE
     };
@@ -94,7 +94,7 @@ private:
 public:
 
     const VideoPortConfig &getConfig() const { return config; }
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
     i64 getOption(Opt opt) const override;
     void checkOption(Opt opt, i64 value) override;
     void setOption(Opt opt, i64 value) override;

@@ -43,7 +43,7 @@ class Agnus : public SubComponent, public Inspectable<AgnusInfo, AgnusStats> {
         .shell          = "agnus"
     }};
 
-    ConfigOptions options = {
+    Options options = {
 
         Opt::AGNUS_REVISION,
         Opt::AGNUS_PTR_DROPS
@@ -312,7 +312,7 @@ private:
 public:
     
     const AgnusConfig &getConfig() const { return config; }
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
     i64 getOption(Opt option) const override;
     void checkOption(Opt opt, i64 value) override;
     void setOption(Opt option, i64 value) override;

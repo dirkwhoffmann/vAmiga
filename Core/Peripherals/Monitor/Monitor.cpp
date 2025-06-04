@@ -304,7 +304,7 @@ Monitor::setOption(Opt opt, i64 value)
 }
 
 void
-Monitor::_dump(Category category, std::ostream& os) const
+Monitor::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
     

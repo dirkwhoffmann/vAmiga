@@ -13,7 +13,7 @@
 
 namespace vamiga {
 
-typedef std::vector<Opt> ConfigOptions;
+typedef std::vector<Opt> Options;
 
 class Configurable 
 {
@@ -23,7 +23,7 @@ public:
     virtual ~Configurable() = default;
 
     // Returns the available config options
-    virtual const ConfigOptions &getOptions() const = 0;
+    virtual const Options &getOptions() const = 0;
 
     // Returns true iff a specific option is available
     bool isValidOption(Opt opt) const;

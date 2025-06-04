@@ -25,7 +25,7 @@ class RegressionTester final : public SubComponent {
         .shell          = "regression"
     }};
 
-    ConfigOptions options = {
+    Options options = {
 
     };
 
@@ -93,7 +93,7 @@ public:
 
 public:
 
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
 
 
     //

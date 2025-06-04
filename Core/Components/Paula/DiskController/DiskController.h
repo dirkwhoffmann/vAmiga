@@ -25,7 +25,7 @@ class DiskController final : public SubComponent, public Inspectable<DiskControl
         .shell          = "paula dc"
     }};
 
-    ConfigOptions options = {
+    Options options = {
 
         Opt::DC_SPEED,
         Opt::DC_AUTO_DSKSYNC,
@@ -195,7 +195,7 @@ private:
 public:
 
     const DiskControllerConfig &getConfig() const { return config; }
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
     i64 getOption(Opt option) const override;
     void checkOption(Opt opt, i64 value) override;
     void setOption(Opt option, i64 value) override;

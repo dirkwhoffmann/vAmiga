@@ -55,7 +55,7 @@ class FloppyDrive final : public Drive, public Inspectable<FloppyDriveInfo> {
         }
     };
 
-    ConfigOptions options = {
+    Options options = {
 
         Opt::DRIVE_CONNECT,
         Opt::DRIVE_TYPE,
@@ -234,7 +234,7 @@ public:
 public:
     
     const FloppyDriveConfig &getConfig() const { return config; }
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
     i64 getOption(Opt option) const override;
     void checkOption(Opt opt, i64 value) override;
     void setOption(Opt option, i64 value) override;

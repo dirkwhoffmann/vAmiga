@@ -61,7 +61,7 @@ class AudioPort final : public SubComponent, public Inspectable<AudioPortInfo, A
         },
     };
 
-    ConfigOptions options = {
+    Options options = {
 
         Opt::AUD_PAN0,
         Opt::AUD_PAN1,
@@ -218,7 +218,7 @@ private:
 public:
     
     const AudioPortConfig &getConfig() const { return config; }
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
     i64 getOption(Opt option) const override;
     void checkOption(Opt opt, i64 value) override;
     void setOption(Opt option, i64 value) override;

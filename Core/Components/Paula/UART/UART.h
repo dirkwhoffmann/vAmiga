@@ -26,7 +26,7 @@ class UART final : public SubComponent, public Inspectable<UARTInfo> {
         .shell          = "uart"
     }};
 
-    ConfigOptions options = {
+    Options options = {
 
     };
 
@@ -122,7 +122,7 @@ private:
 
 public:
 
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
 
 
     //

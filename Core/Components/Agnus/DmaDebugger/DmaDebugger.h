@@ -28,7 +28,7 @@ class DmaDebugger final : public SubComponent, public Inspectable<DmaDebuggerInf
         .shell          = "dmadebugger"
     }};
     
-    ConfigOptions options = {
+    Options options = {
         
         Opt::DMA_DEBUG_ENABLE,
         Opt::DMA_DEBUG_MODE,
@@ -137,7 +137,7 @@ public:
 public:
     
     const DmaDebuggerConfig &getConfig() const { return config; }
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
     i64 getOption(Opt option) const override;
     void checkOption(Opt opt, i64 value) override;
     void setOption(Opt option, i64 value) override;

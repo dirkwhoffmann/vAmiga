@@ -29,7 +29,7 @@ class Copper final : public SubComponent, public Inspectable<CopperInfo>
         .shell          = "copper"
     }};
 
-    ConfigOptions options = {
+    Options options = {
 
     };
 
@@ -155,7 +155,7 @@ public:
 
 public:
 
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
 
 private:
 

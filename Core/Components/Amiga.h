@@ -67,7 +67,7 @@ class Amiga final : public CoreComponent, public Inspectable<AmigaInfo> {
         }
     };
 
-    ConfigOptions options = {
+    Options options = {
 
         Opt::AMIGA_VIDEO_FORMAT,
         Opt::AMIGA_WARP_BOOT,
@@ -317,7 +317,7 @@ public:
 public:
 
     const AmigaConfig &getConfig() const { return config; }
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
 
     i64 getOption(Opt option) const override;
     void checkOption(Opt opt, i64 value) override;

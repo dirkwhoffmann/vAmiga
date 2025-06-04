@@ -25,7 +25,7 @@ class LogicAnalyzer final : public SubComponent, public Inspectable<LogicAnalyze
         .shell          = "logicanalyzer"
     }};
 
-    ConfigOptions options = {
+    Options options = {
 
         Opt::LA_PROBE0,
         Opt::LA_PROBE1,
@@ -94,7 +94,7 @@ public:
 public:
 
     const LogicAnalyzerConfig &getConfig() const { return config; }
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
     i64 getOption(Opt option) const override;
     void checkOption(Opt opt, i64 value) override;
     void setOption(Opt option, i64 value) override;

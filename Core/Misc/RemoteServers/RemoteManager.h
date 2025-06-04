@@ -27,7 +27,7 @@ class RemoteManager final : public SubComponent, public Inspectable<RemoteManage
         .shell          = "server"
     }};
 
-    ConfigOptions options = {
+    Options options = {
 
     };
 
@@ -91,7 +91,7 @@ public:
 
 public:
 
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
 
 
     //

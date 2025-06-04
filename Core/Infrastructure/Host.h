@@ -29,7 +29,7 @@ class Host final : public SubComponent {
 
     }};
 
-    ConfigOptions options = {
+    Options options = {
 
         Opt::HOST_REFRESH_RATE,
         Opt::HOST_SAMPLE_RATE,
@@ -89,7 +89,7 @@ private:
 public:
 
     const HostConfig &getConfig() const { return config; }
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
     i64 getOption(Opt opt) const override;
     void checkOption(Opt opt, i64 value) override;
     void setOption(Opt opt, i64 value) override;

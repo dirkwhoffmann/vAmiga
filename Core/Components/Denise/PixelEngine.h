@@ -27,7 +27,7 @@ class PixelEngine final : public SubComponent {
         .shell          = "monitor"
     }};
 
-    ConfigOptions options = {
+    Options options = {
 
         /*
         Opt::MON_PALETTE,
@@ -170,7 +170,7 @@ private:
 public:
     
     const PixelEngineConfig &getConfig() const { return config; }
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
 
 
     //

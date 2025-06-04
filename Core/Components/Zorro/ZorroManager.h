@@ -26,7 +26,7 @@ class ZorroManager final : public SubComponent {
         .shell          = "zorro"
     }};
 
-    ConfigOptions options = {
+    Options options = {
 
     };
 
@@ -79,7 +79,7 @@ private:
 public:
 
     const Descriptions &getDescriptions() const override { return descriptions; }
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
 
     //
     // Accessing

@@ -30,7 +30,7 @@ class CPU : public moira::Moira, public Inspectable<CPUInfo>
         .shell          = "cpu"
     }};
 
-    ConfigOptions options = {
+    Options options = {
 
         Opt::CPU_REVISION,
         Opt::CPU_DASM_REVISION,
@@ -224,7 +224,7 @@ public:
 public:
     
     const CPUConfig &getConfig() const { return config; }
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
     i64 getOption(Opt opt) const override;
     void checkOption(Opt opt, i64 value) override;
     void setOption(Opt opt, i64 value) override;

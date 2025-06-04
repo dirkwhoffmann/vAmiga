@@ -112,7 +112,7 @@ class Memory final : public SubComponent, public Inspectable<MemInfo, MemStats> 
         .shell          = "mem"
     }};
 
-    ConfigOptions options = {
+    Options options = {
 
         Opt::MEM_CHIP_RAM,
         Opt::MEM_SLOW_RAM,
@@ -326,7 +326,7 @@ private:
 public:
     
     const MemConfig &getConfig() const { return config; }
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
     i64 getOption(Opt option) const override;
     void checkOption(Opt opt, i64 value) override;
     void setOption(Opt option, i64 value) override;

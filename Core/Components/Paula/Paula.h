@@ -31,7 +31,7 @@ class Paula final : public SubComponent, public Inspectable<PaulaInfo> {
         .shell          = "paula"
     }};
 
-    ConfigOptions options = {
+    Options options = {
 
     };
 
@@ -202,7 +202,7 @@ private:
 
 public:
 
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
 
 
     //

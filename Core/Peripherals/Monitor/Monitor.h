@@ -25,7 +25,7 @@ class Monitor final : public SubComponent {
         }
     };
 
-    ConfigOptions options = {
+    Options options = {
 
         Opt::MON_PALETTE,
         Opt::MON_BRIGHTNESS,
@@ -133,7 +133,7 @@ public:
 
 private:
 
-    void _dump(Category category, std::ostream& os) const override;
+    void _dump(Category category, std::ostream &os) const override;
     
 
     //
@@ -143,7 +143,7 @@ private:
 public:
 
     const MonitorConfig &getConfig() const { return config; }
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
     i64 getOption(Opt opt) const override;
     void checkOption(Opt opt, i64 value) override;
     void setOption(Opt opt, i64 value) override;

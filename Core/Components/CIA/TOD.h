@@ -36,7 +36,7 @@ class TOD final : public SubComponent, public Inspectable<TODInfo> {
         .shell          = "tod"
     }};
 
-    ConfigOptions options = {
+    Options options = {
 
     };
 
@@ -159,7 +159,7 @@ public:
 
 public:
 
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
 
 
     //

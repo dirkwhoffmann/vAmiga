@@ -24,7 +24,7 @@ class RTC final : public SubComponent {
         .shell          = "rtc"
     }};
 
-    ConfigOptions options = {
+    Options options = {
 
         Opt::RTC_MODEL
     };
@@ -133,7 +133,7 @@ private:
 public:
     
     const RTCConfig &getConfig() const { return config; }
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
     i64 getOption(Opt option) const override;
     void checkOption(Opt option, i64 value) override;
     void setOption(Opt option, i64 value) override;

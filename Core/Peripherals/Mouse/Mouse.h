@@ -59,7 +59,7 @@ class Mouse final : public SubComponent {
         }
     };
 
-    ConfigOptions options = {
+    Options options = {
 
         Opt::MOUSE_PULLUP_RESISTORS,
         Opt::MOUSE_SHAKE_DETECTION,
@@ -188,7 +188,7 @@ public:
 public:
     
     const MouseConfig &getConfig() const { return config; }
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
     i64 getOption(Opt option) const override;
     void checkOption(Opt opt, i64 value) override;
     void setOption(Opt option, i64 value) override;

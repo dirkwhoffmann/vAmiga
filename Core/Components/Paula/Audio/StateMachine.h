@@ -46,7 +46,7 @@ class StateMachine final : public SubComponent, public Inspectable<StateMachineI
         }
     };
 
-    ConfigOptions options = {
+    Options options = {
 
     };
 
@@ -196,7 +196,7 @@ public:
 
 public:
 
-    const ConfigOptions &getOptions() const override { return options; }
+    const Options &getOptions() const override { return options; }
 
 
     //
