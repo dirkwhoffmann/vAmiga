@@ -13,19 +13,26 @@ class MyToolbar: NSToolbar {
     var amiga: EmulatorProxy { return controller.emu }
     
     @IBOutlet weak var controller: MyController!
-    @IBOutlet weak var controlPort1: NSPopUpButton!
-    @IBOutlet weak var controlPort2: NSPopUpButton!
+
+    // References to toolbar items
     @IBOutlet weak var controlPort1Item: NSToolbarItem!
     @IBOutlet weak var controlPort2Item: NSToolbarItem!
-    @IBOutlet weak var keyboardButton: NSToolbarItem!
+    @IBOutlet weak var keyboardItem: NSToolbarItem!
+    @IBOutlet weak var preferencesItem: NSToolbarItem!
+    @IBOutlet weak var controlsItem: NSToolbarItem!
+
+    // Reference to toolbar item objects
+    @IBOutlet weak var controlPort1: NSPopUpButton!
+    @IBOutlet weak var controlPort2: NSPopUpButton!
     @IBOutlet weak var snapshotSegCtrl: NSSegmentedControl!
+    @IBOutlet weak var screenshotSegCtrl: NSSegmentedControl!
     @IBOutlet weak var controlsSegCtrl: NSSegmentedControl!
 
     override func validateVisibleItems() {
 
         // Disable the keyboard button if the virtual keyboard is open
         let visible = controller.virtualKeyboard?.window?.isVisible ?? false
-        let view = keyboardButton.view as? NSButton
+        let view = keyboardItem.view as? NSButton
         view?.isEnabled = !visible
 
         // Disable the snapshot revert button if no snapshots have been taken
@@ -36,6 +43,12 @@ class MyToolbar: NSToolbar {
         controller.gamePadManager.refresh(popup: controlPort2)
         controlPort1.selectItem(withTag: controller.config.gameDevice1)
         controlPort2.selectItem(withTag: controller.config.gameDevice2)
+
+        controlPort1Item.menuFormRepresentation = nil
+        controlPort2Item.menuFormRepresentation = nil
+        keyboardItem.menuFormRepresentation = nil
+        preferencesItem.menuFormRepresentation = nil
+        controlsItem.menuFormRepresentation = nil
     }
     
     func updateToolbar() {
