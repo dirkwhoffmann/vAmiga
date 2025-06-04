@@ -11,7 +11,6 @@
 #include "Macros.h"
 #include "IOUtils.h"
 #include <algorithm>
-#include <assert.h>
 #include <bitset>
 #include <fstream>
 #include <iomanip>
@@ -168,13 +167,13 @@ matchingStreamHeader(std::istream &is, const string &header, isize offset)
 }
 
 bool
-matchingBufferHeader(const u8 *buffer, const u8 *header, isize len, isize offset)
+matchingBufferHeader(const u8 *buf, const u8 *header, isize len, isize offset)
 {
-    assert(buffer != nullptr);
+    assert(buf != nullptr);
     assert(header != nullptr);
     
     for (isize i = 0; i < len; i++) {
-        if (buffer[offset + i] != header[i])
+        if (buf[offset + i] != header[i])
             return false;
     }
     return true;

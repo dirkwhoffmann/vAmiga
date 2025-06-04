@@ -28,6 +28,5 @@ u64 fnv64(const u8 *addr, isize size);
 // Computes a CRC checksum for a given buffer
 u16 crc16(const u8 *addr, isize size);
 u32 crc32(const u8 *addr, isize size);
-u32 crc32forByte(u32 r);
 
 }

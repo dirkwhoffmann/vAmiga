@@ -175,7 +175,7 @@ public:
     string ascii(Block nr, isize offset, isize len) const;
     
     // Predicts the type of a block by analyzing its number and data
-    FSBlockType predictBlockType(Block nr, const u8 *buffer) const;
+    FSBlockType predictBlockType(Block nr, const u8 *buf) const;
 
     
     //

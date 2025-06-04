@@ -1156,7 +1156,7 @@ BootBlockImage::BootBlockImage(const u8 *buf1, const u8 *buf2)
     }
 }
 
-BootBlockImage::BootBlockImage(const u8 *buffer) : BootBlockImage(buffer, buffer + 512)
+BootBlockImage::BootBlockImage(const u8 *buf) : BootBlockImage(buf, buf + 512)
 {
     
 }

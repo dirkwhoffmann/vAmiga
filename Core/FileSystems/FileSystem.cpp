@@ -839,9 +839,9 @@ FileSystem::seekCorruptedBlock(isize n) const
 }
 
 FSBlockType
-FileSystem::predictBlockType(Block nr, const u8 *buffer) const
+FileSystem::predictBlockType(Block nr, const u8 *buf) const
 {
-    assert(buffer != nullptr);
+    assert(buf != nullptr);
     
     // Is it a boot block?
     if (nr == 0 || nr == 1) return FSBlockType::BOOT_BLOCK;
@@ -855,8 +855,8 @@ FileSystem::predictBlockType(Block nr, const u8 *buffer) const
         return FSBlockType::BITMAP_EXT_BLOCK;
 
     // For all other blocks, check the type and subtype fields
-    u32 type = FSBlock::read32(buffer);
-    u32 subtype = FSBlock::read32(buffer + bsize - 4);
+    u32 type = FSBlock::read32(buf);
+    u32 subtype = FSBlock::read32(buf + bsize - 4);
 
     if (type == 2  && subtype == 1)       return FSBlockType::ROOT_BLOCK;
     if (type == 2  && subtype == 2)       return FSBlockType::USERDIR_BLOCK;
@@ -867,7 +867,7 @@ FileSystem::predictBlockType(Block nr, const u8 *buffer) const
     if (isOFS()) {
         if (type == 8) return FSBlockType::DATA_BLOCK_OFS;
     } else {
-        for (isize i = 0; i < bsize; i++) if (buffer[i]) return FSBlockType::DATA_BLOCK_FFS;
+        for (isize i = 0; i < bsize; i++) if (buf[i]) return FSBlockType::DATA_BLOCK_FFS;
     }
     
     return FSBlockType::EMPTY_BLOCK;

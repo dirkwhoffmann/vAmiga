@@ -52,7 +52,7 @@ bool matchingFileHeader(const fs::path &path, const u8 *header, isize len, isize
 bool matchingFileHeader(const fs::path &path, const string &header, isize offset = 0);
 bool matchingStreamHeader(std::istream &is, const u8 *header, isize len, isize offset = 0);
 bool matchingStreamHeader(std::istream &is, const string &header, isize offset = 0);
-bool matchingBufferHeader(const u8 *buffer, const u8 *header, isize len, isize offset = 0);
+bool matchingBufferHeader(const u8 *buf, const u8 *header, isize len, isize offset = 0);
 bool matchingBufferHeader(const u8 *buf, const string &header, isize offset = 0);
 bool matchingBufferHeader(const u8 *buf, isize blen, const string &header, isize offset = 0);
 

@@ -11,7 +11,6 @@
 
 #include "Infrastructure/Types.h"
 #include <functional>
-#include <vector>
 #include <map>
 
 /* The purpose of the Reflection interface is to make the symbolic names of

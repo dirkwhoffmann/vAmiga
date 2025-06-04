@@ -524,14 +524,14 @@ MutableFileSystem::addHashRef(FSBlock *newBlock)
 }
 
 isize
-MutableFileSystem::addData(Block nr, const u8 *buffer, isize size)
+MutableFileSystem::addData(Block nr, const u8 *buf, isize size)
 {
     FSBlock *block = blockPtr(nr);
-    return block ? addData(*block, buffer, size) : 0;
+    return block ? addData(*block, buf, size) : 0;
 }
 
 isize
-MutableFileSystem::addData(FSBlock &block, const u8 *buffer, isize size)
+MutableFileSystem::addData(FSBlock &block, const u8 *buf, isize size)
 {
     isize count = 0;
     
@@ -540,14 +540,14 @@ MutableFileSystem::addData(FSBlock &block, const u8 *buffer, isize size)
         case FSBlockType::DATA_BLOCK_OFS:
             
             count = std::min(bsize - 24, size);
-            std::memcpy(block.data.ptr + 24, buffer, count);
+            std::memcpy(block.data.ptr + 24, buf, count);
             block.setDataBytesInBlock((u32)count);
             break;
 
         case FSBlockType::DATA_BLOCK_FFS:
 
             count = std::min(bsize, size);
-            std::memcpy(block.data.ptr, buffer, count);
+            std::memcpy(block.data.ptr, buf, count);
             break;
 
         default:

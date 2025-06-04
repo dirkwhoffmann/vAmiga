@@ -138,7 +138,7 @@ public:
 
     // Creates a new file
     FSBlock *createFile(const FSName &name);
-    FSBlock *createFile(const FSName &name, const u8 *buffer, isize size);
+    FSBlock *createFile(const FSName &name, const u8 *buf, isize size);
     FSBlock *createFile(const FSName &name, const string &str);
 
 private:
@@ -148,8 +148,8 @@ private:
     void addHashRef(FSBlock *block);
 
     // Adds bytes to a data block
-    isize addData(Block nr, const u8 *buffer, isize size);
-    isize addData(FSBlock &block, const u8 *buffer, isize size);
+    isize addData(Block nr, const u8 *buf, isize size);
+    isize addData(FSBlock &block, const u8 *buf, isize size);
     
     // Allocates all blocks needed for a file
     void allocateFileBlocks(isize bytes, std::vector<Block> &listBlocks, std::vector<Block> &dataBlocks);

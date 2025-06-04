@@ -71,6 +71,13 @@ u16 crc16(const u8 *addr, isize size)
 u32
 crc32(const u8 *addr, isize size)
 {
+    auto crc32forByte = [&](u32 r) {
+        
+        for(int j = 0; j < 8; ++j)
+            r = (r & 1? 0: (u32)0xEDB88320L) ^ r >> 1;
+        return r ^ (u32)0xFF000000L;
+    };
+    
     if (addr == nullptr || size == 0) return 0;
 
     u32 result = 0;
@@ -84,14 +91,6 @@ crc32(const u8 *addr, isize size)
         result = table[(u8)result ^ addr[i]] ^ result >> 8;
 
     return result;
-}
-
-u32
-crc32forByte(u32 r)
-{
-    for(int j = 0; j < 8; ++j)
-        r = (r & 1? 0: (u32)0xEDB88320L) ^ r >> 1;
-    return r ^ (u32)0xFF000000L;
 }
 
 }
