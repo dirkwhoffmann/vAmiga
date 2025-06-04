@@ -1064,7 +1064,6 @@
 		50EAB95B26C10B9400BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50EAD99B256E76820053F9AC /* HDFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDFFile.h; sourceTree = "<group>"; };
 		50EAD99F256E76A40053F9AC /* HDFFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDFFile.cpp; sourceTree = "<group>"; };
-		50EAF5282C79B9BA005AC890 /* DiagnoseScripts.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiagnoseScripts.h; sourceTree = "<group>"; };
 		50EB8CC925306E8E0053988A /* VideoExporter.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoExporter.xib; sourceTree = "<group>"; };
 		50EB8CCD2530710E0053988A /* VideoExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoExporter.swift; sourceTree = "<group>"; };
 		50EC7A2F29C9EC3900060CAA /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
@@ -1682,7 +1681,6 @@
 				50DA83E32C161961001209AA /* VAmiga.cpp */,
 				50FC050027DA205D00C3E566 /* VAmigaHeadless.h */,
 				50FC047427DA108500C3E566 /* VAmigaHeadless.cpp */,
-				50EAF5282C79B9BA005AC890 /* DiagnoseScripts.h */,
 				50B14C0421EB212E002E32A6 /* Utilities */,
 				50104E8825ECDAA30047A9AA /* Infrastructure */,
 				506436E329C1D90B00768528 /* Components */,
@@ -3323,7 +3321,7 @@
 				DEVELOPMENT_TEAM = 3NG65ZLYW7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				HEADER_SEARCH_PATHS = Emulator;
+				HEADER_SEARCH_PATHS = Core;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3340,7 +3338,7 @@
 				DEVELOPMENT_TEAM = 3NG65ZLYW7;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				HEADER_SEARCH_PATHS = Emulator;
+				HEADER_SEARCH_PATHS = Core;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
