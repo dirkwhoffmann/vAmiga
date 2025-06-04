@@ -753,7 +753,6 @@
 		5078A5D42529E7FA00FCE384 /* Sampler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sampler.h; sourceTree = "<group>"; };
 		5078BEA6264D6F8200EDA161 /* CMakeLists.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		507957AB244AD25B007B8B8D /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
-		507A03F12D54EDDA0025D48E /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		507C01AB2D24268600E29933 /* InspectorToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorToolbar.swift; sourceTree = "<group>"; };
 		507C01AD2D25681000E29933 /* LogicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogicView.swift; sourceTree = "<group>"; };
 		507C01AF2D25683200E29933 /* LogicViewFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogicViewFormatter.swift; sourceTree = "<group>"; };
@@ -1221,6 +1220,9 @@
 			isa = PBXGroup;
 			children = (
 				50CF461F2620423300BB3B95 /* CMakeLists.txt */,
+				501C362F2C1C176C000FA274 /* EmulatorTypes.h */,
+				50DA83E02C160DCA001209AA /* Emulator.h */,
+				50DA83DF2C160DCA001209AA /* Emulator.cpp */,
 				50985ABE2C4D4FAA0079CFC5 /* Types.h */,
 				50CA602E260E02B700C4A22C /* Reflection.h */,
 				5082D83A21EF891200CF7692 /* Constants.h */,
@@ -1467,26 +1469,6 @@
 			path = Monitor;
 			sourceTree = "<group>";
 		};
-		507A03F02D54ED820025D48E /* VACore */ = {
-			isa = PBXGroup;
-			children = (
-				507A03F12D54EDDA0025D48E /* CMakeLists.txt */,
-				501C362F2C1C176C000FA274 /* EmulatorTypes.h */,
-				50DA83E02C160DCA001209AA /* Emulator.h */,
-				50DA83DF2C160DCA001209AA /* Emulator.cpp */,
-				50B14C0421EB212E002E32A6 /* Utilities */,
-				50104E8825ECDAA30047A9AA /* Infrastructure */,
-				506436E329C1D90B00768528 /* Components */,
-				505B801D23FE628F002407FE /* Ports */,
-				50A2953C21FF12C20046BAA0 /* Peripherals */,
-				508FE06621EA31E50043D0E9 /* Media */,
-				5056506925440FDE00A79D27 /* FileSystems */,
-				506436E129C1D82500768528 /* ThirdParty */,
-				50E98B52275A125700AA0CB9 /* Misc */,
-			);
-			path = VACore;
-			sourceTree = "<group>";
-		};
 		507C01B82D25C0AE00E29933 /* LogicAnalyzer */ = {
 			isa = PBXGroup;
 			children = (
@@ -1536,7 +1518,7 @@
 		508FDE5B21EA1FA40043D0E9 = {
 			isa = PBXGroup;
 			children = (
-				508FE06021EA318D0043D0E9 /* Emulator */,
+				508FE06021EA318D0043D0E9 /* Core */,
 				50B14C2421EB8F25002E32A6 /* ObjCProxy */,
 				508FDFDC21EA20600043D0E9 /* GUI */,
 				508FDE6621EA1FA40043D0E9 /* Resources */,
@@ -1689,7 +1671,7 @@
 			path = Dialogs;
 			sourceTree = "<group>";
 		};
-		508FE06021EA318D0043D0E9 /* Emulator */ = {
+		508FE06021EA318D0043D0E9 /* Core */ = {
 			isa = PBXGroup;
 			children = (
 				50CF461C2620420500BB3B95 /* CMakeLists.txt */,
@@ -1701,9 +1683,17 @@
 				50FC050027DA205D00C3E566 /* VAmigaHeadless.h */,
 				50FC047427DA108500C3E566 /* VAmigaHeadless.cpp */,
 				50EAF5282C79B9BA005AC890 /* DiagnoseScripts.h */,
-				507A03F02D54ED820025D48E /* VACore */,
+				50B14C0421EB212E002E32A6 /* Utilities */,
+				50104E8825ECDAA30047A9AA /* Infrastructure */,
+				506436E329C1D90B00768528 /* Components */,
+				505B801D23FE628F002407FE /* Ports */,
+				50A2953C21FF12C20046BAA0 /* Peripherals */,
+				508FE06621EA31E50043D0E9 /* Media */,
+				5056506925440FDE00A79D27 /* FileSystems */,
+				506436E129C1D82500768528 /* ThirdParty */,
+				50E98B52275A125700AA0CB9 /* Misc */,
 			);
-			path = Emulator;
+			path = Core;
 			sourceTree = "<group>";
 		};
 		508FE06621EA31E50043D0E9 /* Media */ = {
@@ -3181,10 +3171,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
-				HEADER_SEARCH_PATHS = (
-					Emulator,
-					ThirdParty,
-				);
+				HEADER_SEARCH_PATHS = Core;
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3235,10 +3222,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
-				HEADER_SEARCH_PATHS = (
-					Emulator,
-					ThirdParty,
-				);
+				HEADER_SEARCH_PATHS = Core;
 				INFOPLIST_FILE = Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
