@@ -45,8 +45,8 @@ protected:
     // Synchronization mutex
     mutable util::ReentrantMutex lock;
     mutable util::ReentrantMutex suspensionLock;
-
-    // Warp state and track state
+    
+    // Warp and track state
     u8 warp = 0;
     u8 track = 0;
 
@@ -57,7 +57,7 @@ protected:
 
     // Time stamps
     util::Time baseTime;
-
+    
     // Clocks for measuring the CPU load
     util::Clock nonstopClock;
     util::Clock loadClock;
@@ -94,13 +94,13 @@ protected:
     //
     // Executing
     //
-
+    
 public:
 
     // Returns true if this functions is called inside or outside the emulator thread
     bool isEmulatorThread() const { return std::this_thread::get_id() == thread.get_id(); }
     bool isUserThread() const { return std::this_thread::get_id() != thread.get_id(); }
-
+    
     // Performs a state change
     void switchState(ExecState newState);
 
@@ -152,7 +152,7 @@ public:
     /** Returns the current suspension state.
      */
     bool isSuspended() const { return suspendCounter > 0; }
-
+    
     /** Suspends the thread.
      *  The thread is temporarily suspended
      */
@@ -210,7 +210,7 @@ public:
      *  Wakes up the emulator thread.
      */
     void wakeUp();
-
+    
     // Wait until the thread has terminated
     void join() { if (thread.joinable()) thread.join(); }
 };

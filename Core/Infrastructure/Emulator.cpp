@@ -93,11 +93,11 @@ Emulator::_dump(Category category, std::ostream &os) const
     }
     
     if (category == Category::Defaults) {
-        
+
         defaults.dump(category, os);
     }
 
-     if (category == Category::RunAhead) {
+    if (category == Category::RunAhead) {
 
          auto &pos = main.agnus.pos;
          auto &rua = ahead.agnus.pos;
@@ -120,7 +120,7 @@ Emulator::_dump(Category category, std::ostream &os) const
      }
     
     if (category == Category::State) {
-        
+
         os << tab("Execution state");
         os << ExecStateEnum::key(state) << std::endl;
         os << tab("Power");
@@ -141,7 +141,7 @@ void
 Emulator::cacheInfo(EmulatorInfo &result) const
 {
     {   SYNCHRONIZED
-        
+
         result.state = state;
         result.powered = isPoweredOn();
         result.paused = isPaused();
@@ -156,7 +156,7 @@ void
 Emulator::cacheStats(EmulatorStats &result) const
 {
     {   SYNCHRONIZED
-        
+
         result.cpuLoad = cpuLoad;
         result.fps = fps;
         result.resyncs = resyncs;
@@ -255,13 +255,13 @@ Emulator::missingFrames() const
 
     // In VSYNC mode, compute exactly one frame per wakeup call
     if (config.vsync) return 1;
-    
+
     // Compute the elapsed time
     auto elapsed = util::Time::now() - baseTime;
-    
+
     // Compute which frame should be reached by now
     auto target = elapsed.asNanoseconds() * i64(main.refreshRate()) / 1000000000;
-    
+
     // Compute the number of missing frames
     return isize(target - frameCounter);
 }
