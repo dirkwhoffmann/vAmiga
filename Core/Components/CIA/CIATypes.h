@@ -10,6 +10,7 @@
 #pragma once
 
 #include "TODTypes.h"
+#include "Aliases.h"
 
 namespace vamiga {
 

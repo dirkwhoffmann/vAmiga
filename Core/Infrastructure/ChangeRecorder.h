@@ -14,6 +14,7 @@
 #include "AgnusTypes.h"
 #include "AmigaTypes.h"
 #include "MemoryTypes.h"
+#include "Aliases.h"
 #include <functional>
 
 namespace vamiga {

@@ -12,6 +12,7 @@
 #include "OptionTypes.h"
 #include "JoystickTypes.h"
 #include "KeyboardTypes.h"
+#include "Aliases.h"
 
 namespace vamiga {
 

@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "Types.h"
 #include "Serializable.h"
 
 namespace vamiga {

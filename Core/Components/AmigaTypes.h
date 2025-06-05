@@ -10,6 +10,7 @@
 #pragma once
 
 #include "ThreadTypes.h"
+#include "Aliases.h"
 
 namespace vamiga {
 
