@@ -29,7 +29,7 @@ public:
     static Defaults defaults;
 
 private:
-    
+
     // The main emulator instance
     Amiga main = Amiga(*this, 0);
 
@@ -59,11 +59,11 @@ public:
     void launch(const void *listener, Callback *func);
 
     // Initializes all components
-    void initialize();
+    void initialize() override;
 
     // Forces to recreate the run-ahead instance in the next frame
     void markAsDirty() { isDirty = true; }
-    
+
 
     //
     // Methods from CoreComponent
@@ -77,7 +77,7 @@ private:
 
     void _dump(Category category, std::ostream &os) const override;
 
-    
+
     //
     // Methods from Inspectable
     //
@@ -86,7 +86,7 @@ public:
 
     void cacheInfo(EmulatorInfo &result) const override;
     void cacheStats(EmulatorStats &result) const override;
-    
+
 
     //
     // Main API for configuring the emulator
@@ -107,12 +107,11 @@ public:
     void set(Opt opt, const string &value, const std::vector<isize> objids = { }) throws;
     void set(const string &opt, const string &value, const std::vector<isize> objids = { }) throws;
 
-    // Configures the emulator to match a specific Amiga model
-    void set(ConfigScheme model);
+    // Configures the emulator to match a specific configuration
+    void set(ConfigScheme scheme);
 
     // Powers off and reverts to the default configuration
     void revertToDefaultConfig();
-
 
 
     //
@@ -144,7 +143,7 @@ private:
     //
 
 private:
-    
+
     // Clones the run-ahead instance
     void cloneRunAheadInstance();
 
@@ -202,4 +201,3 @@ public:
 };
 
 }
-

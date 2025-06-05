@@ -11,6 +11,7 @@
 
 #include "ThreadTypes.h"
 #include "CoreComponent.h"
+#include "Concurrency.h"
 #include "Chrono.h"
 #include "Wakeable.h"
 
@@ -38,10 +39,13 @@ protected:
     // The current thread state
     ExecState state = ExecState::UNINIT;
 
+    // A latch controlling the launch procedure
+    std::latch initLatch {1};
+
     // Synchronization mutex
     mutable util::ReentrantMutex lock;
     mutable util::ReentrantMutex suspensionLock;
-    
+
     // Warp state and track state
     u8 warp = 0;
     u8 track = 0;
@@ -86,9 +90,6 @@ protected:
     // Launches the emulator thread
     void launch();
 
-    // Sanity check
-    // void assertLaunched();
-
 
     //
     // Executing
@@ -106,7 +107,7 @@ public:
 private:
 
     // Initializes the emulator (implemented by the subclass)
-    // virtual void initialize() = 0;
+    virtual void initialize() = 0;
 
     // Updates the emulator state (implemented by the subclass)
     virtual void update() = 0;
@@ -162,7 +163,8 @@ public:
      */
     void resume() const;
 
-    bool isInitialized() const { return state != ExecState::UNINIT; }
+    // bool isInitialized() const { return state != ExecState::UNINIT; }
+    bool isInitialized() const { return initLatch.try_wait(); }
     bool isPoweredOn() const { return state != ExecState::UNINIT && state != ExecState::OFF; }
     bool isPoweredOff() const { return state == ExecState::UNINIT || state == ExecState::OFF; }
     bool isPaused() const { return state == ExecState::PAUSED; }

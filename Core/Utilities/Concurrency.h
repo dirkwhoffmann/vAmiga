@@ -12,6 +12,7 @@
 #include "Chrono.h"
 #include <thread>
 #include <future>
+#include <latch>
 
 namespace vamiga::util {
 

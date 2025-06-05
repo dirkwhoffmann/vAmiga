@@ -37,6 +37,7 @@ enum class Category : long
     Partitions,
     Properties,
     Registers,
+    RunAhead,
     Sections,
     Segments,
     Signals,

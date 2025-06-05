@@ -30,7 +30,7 @@ Emulator::defaults;
 
 Emulator::Emulator()
 {
-    
+
 }
 
 Emulator::~Emulator()
@@ -44,52 +44,56 @@ Emulator::launch(const void *listener, Callback *func)
     if (FORCE_LAUNCH_ERROR) throw AppError(Fault::LAUNCH);
     
     // Initialize the emulator if needed
-    if (!isInitialized()) initialize();
-    
+    // if (!isInitialized()) initialize();
+
     // Connect the listener to the message queue of the main instance
     if (listener && func) { main.msgQueue.setListener(listener, func); }
-    
+
     // Disable the message queue of the run-ahead instance
     ahead.msgQueue.disable();
-    
+
     // Launch the emulator thread
     Thread::launch();
     
     // Schedule a hard reset
-    put(Cmd::HARD_RESET);
+    // put(Cmd::HARD_RESET);
 }
 
 void
 Emulator::initialize()
 {
+    baseTime = util::Time::now();
+
     // Make sure this function is only called once
     if (isInitialized()) throw AppError(Fault::LAUNCH, "The emulator is already initialized.");
-    
+
     // Initialize all components
     main.initialize();
     ahead.initialize();
-    
+
     // Setup the default configuration
-    main.resetConfig();
-        
+    revertToDefaultConfig();
+
     // Get the runahead instance up-to-date
     ahead = main;
 
     // Switch state
     state = ExecState::OFF;
-    assert(isInitialized());
+
+    // Mark the thread as initialized
+    initLatch.count_down();
 }
 
 void
 Emulator::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
-    
+
     if (category == Category::Debug) {
-        
-        for (isize i = DebugFlagEnum::minVal; i < DebugFlagEnum::maxVal; i++) {
-            
-            os << tab(DebugFlagEnum::key(DebugFlag(i)));
+
+        for (const auto &i : DebugFlagEnum::elements()) {
+
+            os << tab(DebugFlagEnum::key(i));
             os << dec(getDebugVariable(DebugFlag(i))) << std::endl;
         }
     }
@@ -98,31 +102,28 @@ Emulator::_dump(Category category, std::ostream &os) const
         
         defaults.dump(category, os);
     }
-    
-    /*
+
      if (category == Category::RunAhead) {
-     
-     os << "Primary instance:" << std::endl << std::endl;
-     
-     os << tab("Frame");
-     os << dec(main.frame) << std::endl;
-     os << tab("Beam");
-     os << "(" << dec(main.scanline) << "," << dec(main.rasterCycle) << ")" << std::endl;
-     os << tab("Cycle");
-     os << dec(main.cpu.clock) << std::endl << std::endl;
-     
-     os << "Run-ahead instance:" << std::endl << std::endl;
-     
-     os << tab("Clone nr");
-     os << dec(clones) << std::endl;
-     os << tab("Frame");
-     os << dec(ahead.frame) << std::endl;
-     os << tab("Beam");
-     os << " (" << dec(ahead.scanline) << "," << dec(ahead.rasterCycle) << ")" << std::endl;
-     os << tab("Cycle");
-     os << dec(ahead.cpu.clock) << std::endl;
+
+         auto &pos = main.agnus.pos;
+         auto &rua = ahead.agnus.pos;
+
+         os << "Primary instance:" << std::endl << std::endl;
+
+         os << tab("Frame");
+         os << dec(pos.frame) << std::endl;
+         os << tab("Beam");
+         os << "(" << dec(pos.v) << "," << dec(pos.h) << ")" << std::endl;
+
+         os << "Run-ahead instance:" << std::endl << std::endl;
+
+         os << tab("Clone nr");
+         os << dec(stats.clones) << std::endl;
+         os << tab("Frame");
+         os << dec(rua.frame) << std::endl;
+         os << tab("Beam");
+         os << " (" << dec(rua.v) << "," << dec(rua.h) << ")" << std::endl;
      }
-     */
     
     if (category == Category::State) {
         
@@ -235,7 +236,7 @@ Emulator::update()
 bool
 Emulator::shouldWarp() const
 {
-    auto config = main.getConfig();
+    auto &config = main.getConfig();
     
     if (main.agnus.clock < SEC(config.warpBoot)) {
         

@@ -173,7 +173,7 @@
 // Amiga-specific conversion macros
 //
 
-// Converts a certain unit to master cycles
+// Converts a certain unit to master cycles (DEPRECATED)
 #define USEC(delay)           (Cycle((i64)delay * 28))
 #define MSEC(delay)           (Cycle((i64)delay * 28000))
 #define SEC(delay)            (Cycle((double)delay * 28000000))
@@ -182,7 +182,7 @@
 #define CIA_CYCLES(cycles)    (Cycle(cycles) * 40)
 #define DMA_CYCLES(cycles)    (Cycle(cycles) << 3)
 
-// Converts master cycles to a certain unit
+// Converts master cycles to a certain unit (DEPRECATED)
 #define AS_USEC(delay)        ((delay) / 28)
 #define AS_MSEC(delay)        ((delay) / 28000)
 #define AS_SEC(delay)         ((delay) / 28000000)

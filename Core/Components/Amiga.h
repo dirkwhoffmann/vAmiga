@@ -189,6 +189,16 @@ public:
     // Returns a build number string for this release
     static string build();
 
+    // Converts a time span to the (approximate) number of master cycles
+    static Cycle usec(i64 delay) { return Cycle(delay * 28LL); }
+    static Cycle msec(i64 delay) { return Cycle(delay * 28000LL); }
+    static Cycle sec(double delay) { return Cycle(delay * 28000000LL); }
+
+    // Converts a number of master cycles to the (approximate) time span
+    static i64 asUsec(Cycle count) { return count / 28LL; }
+    static i64 asMsec(Cycle count) { return count / 28000LL; }
+    static double asSec(Cycle count) { return count / 28000000LL; }
+
 
     //
     // Initializing
