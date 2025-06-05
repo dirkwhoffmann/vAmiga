@@ -16,7 +16,7 @@
 
 namespace vamiga {
 
-struct Beam : Serializable
+struct Beam : SerializableStruct
 {
     // The vertical and horizontal beam position
     isize v = 0;

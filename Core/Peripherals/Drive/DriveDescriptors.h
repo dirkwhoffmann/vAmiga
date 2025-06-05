@@ -15,7 +15,7 @@
 
 namespace vamiga {
 
-struct GeometryDescriptor : Serializable {
+struct GeometryDescriptor : SerializableStruct {
 
     // Constants
     static constexpr isize cMin = HDR_C_MIN;
@@ -80,8 +80,8 @@ struct GeometryDescriptor : Serializable {
     void checkCompatibility() const;
 };
 
-struct PartitionDescriptor : Serializable {
-
+struct PartitionDescriptor : SerializableStruct
+{
     string name;
     u32 flags = 0;
     u32 sizeBlock = 128;
@@ -138,8 +138,8 @@ struct PartitionDescriptor : Serializable {
     void checkCompatibility(const GeometryDescriptor &geo) const;
 };
 
-struct DriverDescriptor : Serializable {
-
+struct DriverDescriptor : SerializableStruct
+{
     u32 dosType = 0;
     u32 dosVersion = 0;
     u32 patchFlags = 0;

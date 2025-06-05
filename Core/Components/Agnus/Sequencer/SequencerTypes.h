@@ -26,7 +26,7 @@ static constexpr u16 SIG_SHW            = 0b0010000000;
 static constexpr u16 SIG_RHW            = 0b0100000000;
 static constexpr u16 SIG_DONE           = 0b1000000000;
 
-struct DDFState : Serializable
+struct DDFState : SerializableStruct
 {
     bool bpv = false;
     bool bmapen = false;

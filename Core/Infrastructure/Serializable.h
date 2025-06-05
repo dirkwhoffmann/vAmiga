@@ -17,15 +17,15 @@
 
 namespace vamiga {
 
-struct Serializable {
+struct SerializableStruct {
 
 };
 
-class SerializableClass {
+class Serializable {
 
 public:
 
-    virtual ~SerializableClass() = default;
+    virtual ~Serializable() = default;
 
     // Serializers (to be implemented by the subclass)
     virtual void operator << (class SerCounter &worker) = 0;
@@ -241,14 +241,14 @@ public:
         return *this;
     }
 
-    template <std::derived_from<Serializable> T>
+    template <std::derived_from<SerializableStruct> T>
     SerCounter& operator<<(T &v)
     {
         v << *this;
         return *this;
     }
 
-    template <std::derived_from<SerializableClass> T>
+    template <std::derived_from<Serializable> T>
     SerCounter& operator<<(T &v)
     {
         v << *this;
@@ -374,14 +374,14 @@ public:
         return *this;
     }
 
-    template <std::derived_from<Serializable> T>
+    template <std::derived_from<SerializableStruct> T>
     SerChecker& operator<<(T &v)
     {
         v << *this;
         return *this;
     }
 
-    template <std::derived_from<SerializableClass> T>
+    template <std::derived_from<Serializable> T>
     SerChecker& operator<<(T &v)
     {
         v << *this;
@@ -528,14 +528,14 @@ public:
         return *this;
     }
 
-    template <std::derived_from<Serializable> T>
+    template <std::derived_from<SerializableStruct> T>
     SerReader& operator<<(T &v)
     {
         v << *this;
         return *this;
     }
 
-    template <std::derived_from<SerializableClass> T>
+    template <std::derived_from<Serializable> T>
     SerReader& operator<<(T &v)
     {
         v << *this;
@@ -674,14 +674,14 @@ public:
         return *this;
     }
 
-    template <std::derived_from<Serializable> T>
+    template <std::derived_from<SerializableStruct> T>
     SerWriter& operator<<(T &v)
     {
         v << *this;
         return *this;
     }
 
-    template <std::derived_from<SerializableClass> T>
+    template <std::derived_from<Serializable> T>
     SerWriter& operator<<(T &v)
     {
         v << *this;
@@ -803,14 +803,14 @@ public:
         v = (E)0;
         return *this;
     }
-    template <std::derived_from<Serializable> T>
+    template <std::derived_from<SerializableStruct> T>
     SerResetter & operator<<(T &v)
     {
         v << *this;
         return *this;
     }
 
-    template <std::derived_from<SerializableClass> T>
+    template <std::derived_from<Serializable> T>
     SerResetter& operator<<(T &v)
     {
         v << *this;

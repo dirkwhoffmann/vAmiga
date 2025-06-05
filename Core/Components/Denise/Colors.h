@@ -81,8 +81,8 @@ struct YuvColor {
 // Amiga color (native Amiga RGB format)
 //
 
-struct AmigaColor : Serializable {
-
+struct AmigaColor : SerializableStruct
+{
     u8 r;
     u8 g;
     u8 b;

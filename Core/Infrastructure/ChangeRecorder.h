@@ -40,7 +40,7 @@ namespace vamiga {
 // Register change recorder
 //
 
-struct RegChange : Serializable
+struct RegChange : SerializableStruct
 {
     Reg reg;
     u16 value;
