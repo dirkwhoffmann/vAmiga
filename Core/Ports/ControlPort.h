@@ -117,7 +117,7 @@ private:
         << chargeDX
         << chargeDY;
 
-    } SERIALIZERS(serialize, override);
+    } SERIALIZERS(serialize);
 
 public:
 

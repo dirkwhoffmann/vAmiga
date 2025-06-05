@@ -165,7 +165,7 @@ private:
 
         << clock;
 
-    } SERIALIZERS(serialize, override);
+    } SERIALIZERS(serialize);
 
 
     //

@@ -61,7 +61,7 @@ public:
         << lolToggle
         << type;
 
-    } SERIALIZERS(serialize);
+    } STRUCT_SERIALIZERS(serialize);
 
 
     //

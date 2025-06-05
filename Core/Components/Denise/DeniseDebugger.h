@@ -72,7 +72,7 @@ public:
     
 private:
     
-    template <class T> void serialize(T& worker) { } SERIALIZERS(serialize, override);
+    template <class T> void serialize(T& worker) { } SERIALIZERS(serialize);
 
 
     //

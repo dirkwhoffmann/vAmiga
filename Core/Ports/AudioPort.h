@@ -185,7 +185,7 @@ private:
         << volL.maximum
         << volR.maximum;
 
-    } SERIALIZERS(serialize, override);
+    } SERIALIZERS(serialize);
 
 
     //

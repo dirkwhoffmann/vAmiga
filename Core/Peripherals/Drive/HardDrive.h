@@ -238,7 +238,7 @@ private:
         << data
         << flags;
 
-    } SERIALIZERS(serialize, override);
+    } SERIALIZERS(serialize);
 
     void _didReset(bool hard) override;
     void _didLoad() override;

@@ -63,7 +63,7 @@ private:
     void serialize(T& worker)
     {
 
-    } SERIALIZERS(serialize, override);
+    } SERIALIZERS(serialize);
 
     void _didReset(bool hard) override;
 

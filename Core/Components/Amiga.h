@@ -279,7 +279,7 @@ public:
         << config.vsync
         << config.speedBoost;
 
-    } SERIALIZERS(serialize, override);
+    } SERIALIZERS(serialize);
 
 
     //

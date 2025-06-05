@@ -328,7 +328,7 @@ public:
 
         << config.accuracy;
 
-    } SERIALIZERS(serialize, override);
+    } SERIALIZERS(serialize);
 
     
     //

@@ -120,7 +120,7 @@ public:
         << config.disalignmentV;
 
 
-    } SERIALIZERS(serialize, override);
+    } SERIALIZERS(serialize);
 
 
     //

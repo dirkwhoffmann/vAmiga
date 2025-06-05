@@ -121,7 +121,7 @@ private:
             << config.autofireDelay;
         }
 
-    } SERIALIZERS(serialize, override);
+    } SERIALIZERS(serialize);
 
     void _didLoad() override;
 

@@ -98,7 +98,7 @@ struct DDFState : SerializableStruct
         << bplcon0
         << cnt;
 
-    } SERIALIZERS(serialize);
+    } STRUCT_SERIALIZERS(serialize);
 
 };
 

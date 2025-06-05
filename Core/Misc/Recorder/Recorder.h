@@ -130,7 +130,7 @@ public:
             worker << audioClock;
         }
 
-    } SERIALIZERS(serialize, override);
+    } SERIALIZERS(serialize);
 
 
     //

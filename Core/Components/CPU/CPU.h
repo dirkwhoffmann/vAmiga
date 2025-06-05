@@ -178,7 +178,7 @@ private:
         << config.overclocking
         << config.regResetVal;
 
-    } SERIALIZERS(serialize, override);
+    } SERIALIZERS(serialize);
 
 
     //

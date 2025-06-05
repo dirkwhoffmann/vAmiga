@@ -172,7 +172,7 @@ private:
 
         << audioClock;
 
-    } SERIALIZERS(serialize, override);
+    } SERIALIZERS(serialize);
 
 
     //

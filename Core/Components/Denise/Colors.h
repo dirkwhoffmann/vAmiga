@@ -109,7 +109,7 @@ public:
 
         << r << g << b;
 
-    } SERIALIZERS(serialize);
+    } STRUCT_SERIALIZERS(serialize);
 
 
 

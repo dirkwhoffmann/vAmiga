@@ -461,7 +461,7 @@ private:
         << config.clxSprPlf
         << config.clxPlfPlf;
 
-    } SERIALIZERS(serialize, override);
+    } SERIALIZERS(serialize);
 
 
     //

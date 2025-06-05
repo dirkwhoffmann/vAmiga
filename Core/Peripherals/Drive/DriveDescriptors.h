@@ -43,7 +43,7 @@ struct GeometryDescriptor : SerializableStruct {
         << sectors
         << bsize;
 
-    } SERIALIZERS(serialize);
+    } STRUCT_SERIALIZERS(serialize);
 
 
     // Returns a vector with compatible geometries for a given block count
@@ -119,7 +119,7 @@ struct PartitionDescriptor : SerializableStruct
         << bootPri
         << dosType;
 
-    } SERIALIZERS(serialize);
+    } STRUCT_SERIALIZERS(serialize);
 
 
     // Initializers
@@ -157,7 +157,7 @@ struct DriverDescriptor : SerializableStruct
         << blocks
         << segList;
 
-    } SERIALIZERS(serialize);
+    } STRUCT_SERIALIZERS(serialize);
 
 
     // Initializers

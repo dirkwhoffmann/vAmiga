@@ -62,7 +62,7 @@ public:
         << value
         << accessor;
 
-    } SERIALIZERS(serialize);
+    } STRUCT_SERIALIZERS(serialize);
 };
 
 template <isize capacity>

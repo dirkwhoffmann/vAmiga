@@ -159,7 +159,7 @@ public:
     COUNT64(const unsigned long long)
     COUNTD(const float)
     COUNTD(const double)
-
+       
     template <class T>
     auto& operator<<(util::Allocator<T> &a)
     {
@@ -515,12 +515,6 @@ public:
         return *this;
     }
 
-    void copy(void *dst, isize n)
-    {
-        std::memcpy(dst, (void *)ptr, n);
-        ptr += n;
-    }
-
     template <class E, class = std::enable_if_t<std::is_enum<E>{}>>
     SerReader& operator<<(E &v)
     {
@@ -540,6 +534,12 @@ public:
     {
         v << *this;
         return *this;
+    }
+
+    void copy(void *dst, isize n)
+    {
+        std::memcpy(dst, (void *)ptr, n);
+        ptr += n;
     }
 };
 
@@ -661,12 +661,6 @@ public:
         return *this;
     }
 
-    void copy(const void *src, isize n)
-    {
-        std::memcpy((void *)ptr, src, n);
-        ptr += n;
-    }
-
     template <class E, class = std::enable_if_t<std::is_enum<E>{}>>
     SerWriter& operator<<(E &v)
     {
@@ -686,6 +680,12 @@ public:
     {
         v << *this;
         return *this;
+    }
+
+    void copy(const void *src, isize n)
+    {
+        std::memcpy((void *)ptr, src, n);
+        ptr += n;
     }
 };
 
@@ -827,19 +827,28 @@ template <> inline bool isHardResetter(SerResetter &worker) { return worker.isHa
 
 }
 
-#define SERIALIZERS(fn, ...) \
-void operator << (SerChecker &worker) __VA_ARGS__ { fn(worker); } \
-void operator << (SerCounter &worker) __VA_ARGS__ { fn(worker); } \
-void operator << (SerResetter &worker) __VA_ARGS__ { fn(worker); } \
-void operator << (SerReader &worker) __VA_ARGS__ { fn(worker); } \
-void operator << (SerWriter &worker) __VA_ARGS__ { fn(worker); }
+#define SERIALIZERS(fn) \
+void operator << (SerChecker &worker) override { fn(worker); } \
+void operator << (SerCounter &worker) override { fn(worker); } \
+void operator << (SerResetter &worker) override { fn(worker); } \
+void operator << (SerReader &worker) override { fn(worker); } \
+void operator << (SerWriter &worker) override { fn(worker); }
 
+#define STRUCT_SERIALIZERS(fn) \
+void operator << (SerChecker &worker) { fn(worker); } \
+void operator << (SerCounter &worker) { fn(worker); } \
+void operator << (SerResetter &worker) { fn(worker); } \
+void operator << (SerReader &worker) { fn(worker); } \
+void operator << (SerWriter &worker) { fn(worker); }
+
+/*
 #define VIRTUAL_SERIALIZERS(fn, ...) \
 virtual void operator << (SerChecker &worker) __VA_ARGS__ { fn(worker); } \
 virtual void operator << (SerCounter &worker) __VA_ARGS__ { fn(worker); } \
 virtual void operator << (SerResetter &worker) __VA_ARGS__ { fn(worker); } \
 virtual void operator << (SerReader &worker) __VA_ARGS__ { fn(worker); } \
 virtual void operator << (SerWriter &worker) __VA_ARGS__ { fn(worker); }
+*/
 
 #define CLONE(x) x = other.x;
 #define CLONE_ARRAY(x) std::copy(std::begin(other.x), std::end(other.x), std::begin(x));
