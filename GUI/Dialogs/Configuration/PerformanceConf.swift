@@ -83,7 +83,7 @@ extension ConfigurationController {
 
 
     //
-    // Action methods (Performance Boosters)
+    // Action methods (Boosters)
     //
 
     @IBAction func prfCiaIdleSleepAction(_ sender: NSButton!) {
@@ -102,7 +102,7 @@ extension ConfigurationController {
     }
 
     //
-    // Action methods (Warp)
+    // Action methods (Compressor)
     //
 
     @IBAction func prfWsCompressorAction(_ sender: NSPopUpButton!) {

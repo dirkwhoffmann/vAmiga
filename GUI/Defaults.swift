@@ -733,7 +733,7 @@ extension Configuration {
         let fm = FileManager.default
         var url: URL?
 
-        amiga.suspend()
+        emu.suspend()
 
         defaults.set(.MEM_EXT_START, extStart)
         defaults.save()
@@ -744,21 +744,21 @@ extension Configuration {
             url = UserDefaults.romUrl
             if url == nil { throw AppError(.FILE_CANT_WRITE) }
             try? fm.removeItem(at: url!)
-            if amiga.mem.info.hasRom { try amiga.mem.saveRom(url!) }
+            if emu.mem.info.hasRom { try emu.mem.saveRom(url!) }
 
             // Kickstart extension
             url = UserDefaults.extUrl
             if url == nil { throw AppError(.FILE_CANT_WRITE) }
             try? fm.removeItem(at: url!)
-            if amiga.mem.info.hasExt { try amiga.mem.saveExt(url!) }
+            if emu.mem.info.hasExt { try emu.mem.saveExt(url!) }
 
         } catch {
 
-            amiga.resume()
+            emu.resume()
             throw error
         }
 
-        amiga.resume()
+        emu.resume()
     }
 }
 
@@ -833,7 +833,7 @@ extension Configuration {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
 
-        amiga.suspend()
+        emu.suspend()
 
         machineType = defaults.get(.AMIGA_VIDEO_FORMAT)
         cpuRev = defaults.get(.CPU_REVISION)
@@ -843,7 +843,7 @@ extension Configuration {
         ciaRev = defaults.get(.CIA_REVISION)
         rtClock = defaults.get(.RTC_MODEL)
         
-        amiga.resume()
+        emu.resume()
     }
 
     func saveChipsetUserDefaults() {
@@ -851,7 +851,7 @@ extension Configuration {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
 
-        amiga.suspend()
+        emu.suspend()
 
         defaults.set(.AMIGA_VIDEO_FORMAT, machineType)
         defaults.set(.CPU_REVISION, cpuRev)
@@ -862,7 +862,7 @@ extension Configuration {
         defaults.set(.RTC_MODEL, rtClock)
         defaults.save()
 
-        amiga.resume()
+        emu.resume()
     }
 }
 
@@ -900,7 +900,7 @@ extension Configuration {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
         
-        amiga.suspend()
+        emu.suspend()
         
         defaults.set(.MEM_CHIP_RAM, chipRam)
         defaults.set(.MEM_SLOW_RAM, slowRam)
@@ -910,7 +910,7 @@ extension Configuration {
         defaults.set(.MEM_UNMAPPING_TYPE, unmappingType)
         defaults.save()
         
-        amiga.resume()
+        emu.resume()
     }
     
     func applyMemoryUserDefaults() {
@@ -918,7 +918,7 @@ extension Configuration {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
 
-        amiga.suspend()
+        emu.suspend()
 
         chipRam = defaults.get(.MEM_CHIP_RAM)
         slowRam = defaults.get(.MEM_SLOW_RAM)
@@ -927,7 +927,7 @@ extension Configuration {
         bankMap = defaults.get(.MEM_BANKMAP)
         unmappingType = defaults.get(.MEM_UNMAPPING_TYPE)
 
-        amiga.resume()
+        emu.resume()
     }
 }
 
@@ -986,7 +986,7 @@ extension Configuration {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
 
-        amiga.suspend()
+        emu.suspend()
         
         defaults.set(.DRIVE_CONNECT, 0, df0Connected)
         defaults.set(.DRIVE_CONNECT, 1, df1Connected)
@@ -1026,7 +1026,7 @@ extension Configuration {
 
         defaults.save()
         
-        amiga.resume()
+        emu.resume()
     }
 
     func applyPeripheralsUserDefaults() {
@@ -1034,7 +1034,7 @@ extension Configuration {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
 
-        amiga.suspend()
+        emu.suspend()
 
         df0Connected = defaults.get(.DRIVE_CONNECT, 0) != 0
         df1Connected = defaults.get(.DRIVE_CONNECT, 1) != 0
@@ -1072,7 +1072,7 @@ extension Configuration {
         autofireBullets = defaults.get(.JOY_AUTOFIRE_BULLETS, 0)
         autofireDelay = defaults.get(.JOY_AUTOFIRE_DELAY, 0)
 
-        amiga.resume()
+        emu.resume()
     }
 }
 
@@ -1117,7 +1117,7 @@ extension Configuration {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
 
-        amiga.suspend()
+        emu.suspend()
 
         warpBoot = defaults.get(.AMIGA_WARP_BOOT)
         warpMode = defaults.get(.AMIGA_WARP_MODE)
@@ -1130,7 +1130,7 @@ extension Configuration {
         wsCompressor = defaults.get(.AMIGA_WS_COMPRESSION)
         snapCompressor = defaults.get(.AMIGA_SNAP_COMPRESSOR)
 
-        amiga.resume()
+        emu.resume()
     }
 
     func savePerformanceUserDefaults() {
@@ -1138,7 +1138,7 @@ extension Configuration {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
 
-        amiga.suspend()
+        emu.suspend()
 
         defaults.set(.AMIGA_WARP_MODE, warpMode)
         defaults.set(.AMIGA_WARP_BOOT, warpBoot)
@@ -1152,7 +1152,7 @@ extension Configuration {
         defaults.set(.AMIGA_SNAP_COMPRESSOR, snapCompressor)
         defaults.save()
 
-        amiga.resume()
+        emu.resume()
     }
 }
 
@@ -1198,7 +1198,7 @@ extension Configuration {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
         
-        amiga.suspend()
+        emu.suspend()
         
         defaults.set(.BLITTER_ACCURACY, blitterAccuracy)
         defaults.set(.AGNUS_PTR_DROPS, ptrDrops)
@@ -1216,7 +1216,7 @@ extension Configuration {
         defaults.set(.MEM_SLOW_RAM_MIRROR, slowRamMirror)
         defaults.save()
         
-        amiga.resume()
+        emu.resume()
     }
 
     func applyCompatibilityUserDefaults() {
@@ -1224,7 +1224,7 @@ extension Configuration {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
         
-        amiga.suspend()
+        emu.suspend()
         
         blitterAccuracy = defaults.get(.BLITTER_ACCURACY)
         ptrDrops = defaults.get(.AGNUS_PTR_DROPS) != 0
@@ -1241,7 +1241,7 @@ extension Configuration {
         slowRamDelay = defaults.get(.MEM_SLOW_RAM_DELAY) != 0
         slowRamMirror = defaults.get(.MEM_SLOW_RAM_MIRROR) != 0
 
-        amiga.resume()
+        emu.resume()
     }
 }
 
@@ -1293,7 +1293,7 @@ extension Configuration {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
 
-        amiga.suspend()
+        emu.suspend()
         
         defaults.set(.AUD_VOL0, vol0)
         defaults.set(.AUD_VOL1, vol1)
@@ -1324,7 +1324,7 @@ extension Configuration {
 
         defaults.save()
         
-        amiga.resume()
+        emu.resume()
     }
     
     func applyAudioUserDefaults() {
@@ -1332,7 +1332,7 @@ extension Configuration {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
 
-        amiga.suspend()
+        emu.suspend()
 
         vol0 = defaults.get(.AUD_VOL0)
         vol1 = defaults.get(.AUD_VOL1)
@@ -1366,7 +1366,7 @@ extension Configuration {
         audioBufferSize = defaults.get(.AUD_BUFFER_SIZE, audioBufferSize)
         asr = defaults.get(.AUD_ASR, asr)
 
-        amiga.resume()
+        emu.resume()
     }
 }
 
@@ -1504,13 +1504,13 @@ extension Configuration {
         
         debug(.defaults)
 
-        amiga.suspend()
+        emu.suspend()
 
         saveColorUserDefaults()
         saveGeometryUserDefaults()
         saveShaderUserDefaults()
 
-        amiga.resume()
+        emu.resume()
     }
     
     func saveColorUserDefaults() {
@@ -1518,7 +1518,7 @@ extension Configuration {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
         
-        amiga.suspend()
+        emu.suspend()
         
         defaults.set(.MON_PALETTE, palette)
         defaults.set(.MON_BRIGHTNESS, brightness)
@@ -1527,7 +1527,7 @@ extension Configuration {
 
         defaults.save()
         
-        amiga.resume()
+        emu.resume()
     }
     
     func saveGeometryUserDefaults() {
@@ -1535,7 +1535,7 @@ extension Configuration {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
         
-        amiga.suspend()
+        emu.suspend()
                 
         defaults.set(.MON_ZOOM, Int(zoom))
         defaults.set(.MON_HZOOM, Int(hZoom))
@@ -1546,7 +1546,7 @@ extension Configuration {
 
         defaults.save()
         
-        amiga.resume()
+        emu.resume()
     }
   
     func saveShaderUserDefaults() {
@@ -1554,7 +1554,7 @@ extension Configuration {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
         
-        amiga.suspend()
+        emu.suspend()
                         
         defaults.set(.MON_ENHANCER, enhancer)
         defaults.set(.MON_UPSCALER, upscaler)
@@ -1577,7 +1577,7 @@ extension Configuration {
         
         defaults.save()
         
-        amiga.resume()
+        emu.resume()
     }
     
     func applyVideoUserDefaults() {
@@ -1594,14 +1594,14 @@ extension Configuration {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
         
-        amiga.suspend()
+        emu.suspend()
         
         palette = defaults.get(.MON_PALETTE)
         brightness = defaults.get(.MON_BRIGHTNESS)
         contrast = defaults.get(.MON_CONTRAST)
         saturation = defaults.get(.MON_SATURATION)
 
-        amiga.resume()
+        emu.resume()
     }
 
     func applyGeometryUserDefaults() {
@@ -1609,7 +1609,7 @@ extension Configuration {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
         
-        amiga.suspend()
+        emu.suspend()
           
         zoom = defaults.get(.MON_ZOOM)
         hZoom = defaults.get(.MON_HZOOM)
@@ -1618,7 +1618,7 @@ extension Configuration {
         hCenter = defaults.get(.MON_HCENTER)
         vCenter = defaults.get(.MON_VCENTER)
 
-        amiga.resume()
+        emu.resume()
     }
 
     func applyShaderUserDefaults() {
@@ -1626,7 +1626,7 @@ extension Configuration {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
         
-        amiga.suspend()
+        emu.suspend()
                         
         enhancer = defaults.get(.MON_ENHANCER)
         upscaler = defaults.get(.MON_UPSCALER)
@@ -1647,6 +1647,6 @@ extension Configuration {
         disalignmentH = defaults.get(.MON_DISALIGNMENT_H)
         disalignmentV = defaults.get(.MON_DISALIGNMENT_V)
         
-        amiga.resume()
+        emu.resume()
     }
 }
