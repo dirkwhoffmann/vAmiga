@@ -133,7 +133,6 @@ split(const std::vector<string> &sv, char delimiter)
     return result;
 }
 
-
 string
 concat(std::vector<string> &s, string delimiter)
 {

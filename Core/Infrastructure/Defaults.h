@@ -23,34 +23,34 @@ class Defaults final : public CoreObject, public Synchronizable {
     // The default value storage
     std::map <string, string> fallbacks;
 
-    
+
     //
     // Initializing
     //
-    
+
 public:
-    
+
     Defaults();
     Defaults(Defaults const&) = delete;
     void operator=(Defaults const&) = delete;
-    
-    
+
+
     //
     // Methods from CoreObject
     //
 
 private:
-    
+
     const char *objectName() const override { return "Defaults"; }
     void _dump(Category category, std::ostream &os) const override;
 
-    
+
     //
     // Loading and saving
     //
-    
+
 public:
-    
+
     // Loads a properties file from disk
     void load(const fs::path &path) throws;
     void load(std::ifstream &stream) throws;
@@ -61,13 +61,13 @@ public:
     void save(std::ofstream &stream) throws;
     void save(std::stringstream &stream) throws;
 
-    
+
     //
     // Reading key-value pairs
     //
 
 public:
-    
+
     // Queries a key-value pair
     string getRaw(const string &key) const throws;
     i64 get(const string &key) const throws;

@@ -15,7 +15,7 @@ namespace vamiga {
 
 typedef std::vector<Opt> Options;
 
-class Configurable 
+class Configurable
 {
 
 public:

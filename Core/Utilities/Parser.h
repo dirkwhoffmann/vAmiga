@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "Annotations.h"
 #include "BasicTypes.h"
+#include "Annotations.h"
 #include <functional>
 
 namespace vamiga::util {

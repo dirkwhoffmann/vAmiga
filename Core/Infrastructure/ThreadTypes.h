@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "Infrastructure/Reflection.h"
+#include "Reflection.h"
 
 namespace vamiga {
 
@@ -30,11 +30,11 @@ struct ExecStateEnum : Reflection<ExecStateEnum, ExecState>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(ExecState::HALTED);
-    
+
     static const char *_key(ExecState value)
     {
         switch (value) {
-                
+
             case ExecState::OFF:          return "OFF";
             case ExecState::PAUSED:       return "PAUSED";
             case ExecState::RUNNING:      return "RUNNING";

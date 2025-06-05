@@ -242,7 +242,7 @@ OptionParser::argList(Opt opt)
 }
 
 string
-OptionParser::help(Opt opt, isize item)
+OptionParser::help(Opt opt, i64 item)
 {
     return create(opt)->help(item);
 }

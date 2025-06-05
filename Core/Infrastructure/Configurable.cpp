@@ -55,7 +55,7 @@ void
 Configurable::resetConfig(const Defaults &defaults, isize objid)
 {
     for (auto &option : getOptions()) {
-
+        
         try {
             setOption(option, defaults.get(option, objid));
         } catch (...) {

@@ -403,7 +403,7 @@ template <class T, isize capacity> struct RingBuffer
     {
         return &elements[r];
     }
-    
+
     const T& current(isize offset) const
     {
         return elements[(r + offset) % capacity];

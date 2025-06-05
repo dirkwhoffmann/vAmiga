@@ -32,11 +32,11 @@ struct Description {
 
 typedef std::vector<Description> Descriptions;
 
-class CoreComponent : 
+class CoreComponent :
 public CoreObject, public Serializable, public Synchronizable, public Configurable {
 
 public:
-    
+
     // Reference to the emulator this instance belongs to
     class Emulator &emulator;
 
@@ -50,7 +50,7 @@ public:
     //
     // Initializers
     //
-
+    
 public:
 
     CoreComponent(Emulator& ref, isize id = 0) : emulator(ref), objid(id) { }
@@ -80,7 +80,7 @@ public:
     const char *description() const override;
     const char *shellName() const;
     const std::vector<string> &shellHelp() const;
-
+    
     // State properties (see Thread class for details)
     virtual bool isInitialized() const;
     virtual bool isPoweredOff() const;
@@ -98,8 +98,8 @@ public:
     // Performs sanity checks
     bool isEmulatorThread() const;
     bool isUserThread() const;
+ 
 
-    
     //
     // Configuring
     //
@@ -145,7 +145,7 @@ public:
     //
 
 private:
-    
+
     virtual void _initialize() { }
     virtual void _isReady() const throws { }
     virtual void _powerOn() { }
@@ -164,9 +164,9 @@ private:
     //
     // Serializing
     //
-    
+
 public:
-    
+
     // Returns the size of the internal state in bytes
     isize size(bool recursive = true);
 
@@ -208,7 +208,7 @@ public:
     //
 
 public:
-
+    
     // Compares two components and reports differences (for debugging)
     void diff(CoreComponent &other);
 

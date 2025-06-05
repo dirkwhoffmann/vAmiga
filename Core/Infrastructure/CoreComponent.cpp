@@ -51,32 +51,6 @@ CoreComponent::shellHelp() const
     return getDescriptions().at(objid).help;
 }
 
-u64
-CoreComponent::checksum(bool recursive)
-{
-    SerChecker checker;
-
-    // Compute a checksum for the members of this component
-    *this << checker;
-
-    // Incoorporate subcomponents if requested
-    if (recursive) for (auto &c : subComponents) checker << c->checksum(recursive);
-
-    return checker.hash;
-}
-
-bool
-CoreComponent::isEmulatorThread() const
-{
-    return emulator.isEmulatorThread();
-}
-
-bool
-CoreComponent::isUserThread() const
-{
-    return emulator.isUserThread();
-}
-
 bool
 CoreComponent::isInitialized() const
 {
@@ -120,6 +94,32 @@ CoreComponent::isReady() const
     _isReady();
 }
 
+u64
+CoreComponent::checksum(bool recursive)
+{
+    SerChecker checker;
+
+    // Compute a checksum for the members of this component
+    *this << checker;
+
+    // Incoorporate subcomponents if requested
+    if (recursive) for (auto &c : subComponents) checker << c->checksum(recursive);
+
+    return checker.hash;
+}
+
+bool
+CoreComponent::isEmulatorThread() const
+{
+    return emulator.isEmulatorThread();
+}
+
+bool
+CoreComponent::isUserThread() const
+{
+    return emulator.isUserThread();
+}
+
 void
 CoreComponent::resetConfig()
 {
@@ -151,21 +151,6 @@ void
 CoreComponent::initialize()
 {
     postorderWalk([](CoreComponent *c) { c->_initialize(); });
-}
-
-void
-CoreComponent::reset(bool hard)
-{
-    SerResetter resetter(hard);
-    
-    // Call the pre-reset delegate
-    postorderWalk([hard](CoreComponent *c) { c->_willReset(hard); });
-    
-    // Revert to a clean state
-    postorderWalk([&resetter](CoreComponent *c) { *c << resetter; });
-    
-    // Call the post-reset delegate
-    postorderWalk([hard](CoreComponent *c) { c->_didReset(hard); });
 }
 
 void
@@ -251,6 +236,21 @@ CoreComponent::size(bool recursive)
     return result;
 }
 
+void
+CoreComponent::reset(bool hard)
+{
+    SerResetter resetter(hard);
+
+    // Call the pre-reset delegate
+    postorderWalk([hard](CoreComponent *c) { c->_willReset(hard); });
+
+    // Revert to a clean state
+    postorderWalk([&resetter](CoreComponent *c) { *c << resetter; });
+
+    // Call the post-reset delegate
+    postorderWalk([hard](CoreComponent *c) { c->_didReset(hard); });
+}
+
 isize
 CoreComponent::load(const u8 *buf)
 {
@@ -322,7 +322,7 @@ CoreComponent::save(u8 *buffer)
     return result;
 }
 
-std::vector<CoreComponent *> 
+std::vector<CoreComponent *>
 CoreComponent::collectComponents()
 {
     std::vector<CoreComponent *> result;

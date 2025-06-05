@@ -22,7 +22,7 @@ Allocator<T>::operator= (const Allocator<T>& other)
     // Reallocate buffer if needed
     if (size != other.size) alloc(other.size);
     assert(size == other.size);
-    
+
     // Copy buffer
     if (size) memcpy(ptr, other.ptr, size);
     return *this;
@@ -108,7 +108,7 @@ template <class T> void
 Allocator<T>::init(const std::vector<T> &vector)
 {
     isize vecsize = isize(vector.size());
-    
+
     alloc(vecsize);
     for (isize i = 0; i < vecsize; i++) ptr[i] = vector[i];
 }
@@ -125,7 +125,7 @@ Allocator<T>::init(const fs::path &path)
     // Read file contents into a string stream
     std::ostringstream sstr(std::ios::binary);
     sstr << stream.rdbuf();
-    
+
     // Call the proper init delegate
     init(sstr.str());
 }

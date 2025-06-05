@@ -818,6 +818,8 @@ public:
     }
 };
 
+template <class T> inline bool isChecker(T &worker) { return false; }
+template <> inline bool isChecker(SerChecker &worker) { return true; }
 template <class T> inline bool isResetter(T &worker) { return false; }
 template <> inline bool isResetter(SerResetter &worker) { return true; }
 template <class T> inline bool isSoftResetter(T &worker) { return false; }
@@ -840,15 +842,6 @@ void operator << (SerCounter &worker) { fn(worker); } \
 void operator << (SerResetter &worker) { fn(worker); } \
 void operator << (SerReader &worker) { fn(worker); } \
 void operator << (SerWriter &worker) { fn(worker); }
-
-/*
-#define VIRTUAL_SERIALIZERS(fn, ...) \
-virtual void operator << (SerChecker &worker) __VA_ARGS__ { fn(worker); } \
-virtual void operator << (SerCounter &worker) __VA_ARGS__ { fn(worker); } \
-virtual void operator << (SerResetter &worker) __VA_ARGS__ { fn(worker); } \
-virtual void operator << (SerReader &worker) __VA_ARGS__ { fn(worker); } \
-virtual void operator << (SerWriter &worker) __VA_ARGS__ { fn(worker); }
-*/
 
 #define CLONE(x) x = other.x;
 #define CLONE_ARRAY(x) std::copy(std::begin(other.x), std::end(other.x), std::begin(x));

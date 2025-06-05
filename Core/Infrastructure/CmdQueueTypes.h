@@ -63,15 +63,15 @@ enum class Cmd : long
     KEY_RELEASE,            ///< Release a key on the C64 keyboard
     KEY_RELEASE_ALL,        ///< Clear the keyboard matrix
     KEY_TOGGLE,             ///< Press or release a key on the C64 keyboard
-    
+
     // Mouse
     MOUSE_MOVE_ABS,         ///< Signal a mouse movement (absolute)
     MOUSE_MOVE_REL,         ///< Signal a mouse movement (relative)
     MOUSE_BUTTON,           ///< Signal a mouse button event
-    
+
     // Joystick
     JOY_EVENT,              ///< Signal a joystick button event
-    
+
     // Floppy disk
     DSK_TOGGLE_WP,          ///< Toggle write-protection
     DSK_MODIFIED,           ///< Signal that the disk has been saved
@@ -82,22 +82,22 @@ enum class Cmd : long
     
     // Experimental
     FUNC,
-    
+
     // Host machine
     FOCUS                   ///< The emulator windows got or lost focus
 };
 
 struct CmdEnum : Reflection<CmdEnum, Cmd> {
-    
+
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(Cmd::FOCUS);
-    
+
     static const char *_key(Cmd value)
     {
         switch (value) {
-                
+
             case Cmd::NONE:                  return "NONE";
-                
+
             case Cmd::CONFIG:                return "CONFIG";
             case Cmd::CONFIG_ALL:            return "CONFIG_ALL";
             case Cmd::CONFIG_SCHEME:         return "CONFIG_SCHEME";
@@ -132,13 +132,13 @@ struct CmdEnum : Reflection<CmdEnum, Cmd> {
             case Cmd::KEY_RELEASE:           return "KEY_RELEASE";
             case Cmd::KEY_RELEASE_ALL:       return "KEY_RELEASE_ALL";
             case Cmd::KEY_TOGGLE:            return "KEY_TOGGLE";
-                
+
             case Cmd::MOUSE_MOVE_ABS:        return "MOUSE_MOVE_ABS";
             case Cmd::MOUSE_MOVE_REL:        return "MOUSE_MOVE_REL";
             case Cmd::MOUSE_BUTTON:          return "MOUSE_BUTTON";
-                
+
             case Cmd::JOY_EVENT:             return "JOY_EVENT";
-                
+
             case Cmd::DSK_TOGGLE_WP:         return "DSK_TOGGLE_WP";
             case Cmd::DSK_MODIFIED:          return "DSK_MODIFIED";
             case Cmd::DSK_UNMODIFIED:        return "DSK_UNMODIFIED";
@@ -147,7 +147,7 @@ struct CmdEnum : Reflection<CmdEnum, Cmd> {
                 
             case Cmd::FUNC:                  return "FUNC";
             case Cmd::FOCUS:                 return "FOCUS";
-                
+
         }
         return "???";
     }
@@ -204,13 +204,13 @@ struct Command
 {
     // Header
     Cmd type;
-    
+
     // Sender
     void *sender;
     
     // Payload
     union {
-        
+
         struct { i64 value; i64 value2; };
         ConfigCmd config;
         KeyCmd key;
@@ -218,7 +218,7 @@ struct Command
         CoordCmd coord;
         AlarmCmd alarm;
     };
-        
+
     Command() { }
     Command(Cmd type, i64 v1 = 0, i64 v2 = 0) : type(type), value(v1), value2(v2) { }
     Command(Cmd type, void *s, i64 v1 = 0, i64 v2 = 0) : type(type), sender(s), value(v1), value2(v2) { }

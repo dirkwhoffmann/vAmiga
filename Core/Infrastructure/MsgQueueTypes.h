@@ -19,7 +19,7 @@ namespace vamiga {
 
 enum class Msg : long
 {
-    NONE = 0,
+    NONE,
     
     // Emulator state
     CONFIG,

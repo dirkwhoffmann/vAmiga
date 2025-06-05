@@ -144,9 +144,10 @@ void
 Thread::switchState(ExecState newState)
 {
     assert(isEmulatorThread() || !isRunning());
-        
-    auto invalid = [&]() {
 
+    auto invalid = [&]() {
+        
+        assert(false);
         fatal("Invalid state transition: %s -> %s\n",
               ExecStateEnum::key(state), ExecStateEnum::key(newState));
     };
@@ -213,6 +214,9 @@ Thread::switchState(ExecState newState)
                         invalid();
                 }
                 break;
+
+            default:
+                fatalError;
         }
     }
 
@@ -244,7 +248,7 @@ Thread::powerOff()
 
 void
 Thread::run()
-{    
+{
     debug(RUN_DEBUG, "run()\n");
 
     if (!isRunning()) {

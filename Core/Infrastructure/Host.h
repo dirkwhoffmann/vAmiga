@@ -65,7 +65,7 @@ public:
 public:
 
     template <class T> void serialize(T& worker) { } SERIALIZERS(serialize);
-    
+
 
     //
     // Methods from CoreComponent

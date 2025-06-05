@@ -17,24 +17,24 @@ enum class Fault : long
 {
     OK,                   ///< No error
     UNKNOWN,              ///< Unclassified error condition
-    
-    // Emulator state
+
+    // Execution state
     LAUNCH,               ///< Launch error
     POWERED_OFF,          ///< The emulator is powered off
     POWERED_ON,           ///< The emulator is powered on
     DEBUG_OFF,
     RUNNING,              ///< The emulator is running
-    
+
     // Configuration
     OPT_UNSUPPORTED,      ///< Unsupported configuration option
     OPT_INV_ARG,          ///< Invalid argument
     OPT_INV_ID,           ///< Invalid component id
     OPT_LOCKED,           ///< The option is temporarily locked
-    
+
     // Property storage
     INVALID_KEY,          ///< Invalid property key
     SYNTAX,               ///< Syntax error
-    
+
     // CPU
     CPU_UNSUPPORTED,      ///< Unsupported CPU model
     GUARD_NOT_FOUND,      ///< Guard is not set
@@ -45,11 +45,11 @@ enum class Fault : long
     WP_ALREADY_SET,       ///< Watchpoint is already set (DEPRECATED)
     CP_NOT_FOUND,         ///< Catchpoint is not set (DEPRECATED)
     CP_ALREADY_SET,       ///< Catchpoint is already set (DEPRECATED)
-    
+
     // Memory
     OUT_OF_MEMORY,        ///< Out of memory
-    
-    // File I/O
+
+    // File IO
     DIR_NOT_FOUND,        ///< Directory does not exist
     DIR_ACCESS_DENIED,    ///< File access denied
     DIR_CANT_CREATE,      ///< Unable to create a directory

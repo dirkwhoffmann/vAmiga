@@ -12,7 +12,6 @@
 #include <sys/types.h>
 #include <stdint.h>
 
-
 //
 // Integers
 //

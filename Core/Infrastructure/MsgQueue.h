@@ -26,7 +26,7 @@ class MsgQueue final : CoreObject, Synchronizable {
     
     // The registered callback function
     Callback *callback = nullptr;
-    
+
     // If disabled, no messages will be stored
     bool enabled = true;
 
@@ -34,9 +34,6 @@ class MsgQueue final : CoreObject, Synchronizable {
     //
     // Constructing
     //
-
-    // using SubComponent::SubComponent;
-
     
     //
     // Methods from CoreObject

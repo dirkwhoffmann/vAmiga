@@ -44,7 +44,7 @@ protected:
     virtual string asString() = 0;
     virtual string keyList() = 0;
     virtual string argList() = 0;
-    virtual string help(isize item) { return ""; }
+    virtual string help(i64 arg) { return ""; }
 
 public:
 
@@ -54,7 +54,7 @@ public:
     static string asString(Opt opt, i64 arg);
     static string keyList(Opt opt);
     static string argList(Opt opt);
-    static string help(Opt opt, isize item);
+    static string help(Opt opt, i64 arg);
 };
 
 class BoolParser : public OptionParser {
@@ -105,7 +105,7 @@ class EnumParser : public OptionParser {
     virtual string asString() override { return T::key(E(arg)); }
     virtual string keyList() override { return T::keyList(); }
     virtual string argList() override { return T::argList(); }
-    virtual string help(isize item) override { return T::help(E(item)); }
+    virtual string help(i64 arg) override { return T::help(E(arg)); }
 };
 
 }

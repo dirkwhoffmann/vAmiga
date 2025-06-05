@@ -16,16 +16,16 @@ void
 MsgQueue::setListener(const void *listener, Callback *callback)
 {
     {   SYNCHRONIZED
-        
+
         this->listener = listener;
         this->callback = callback;
-        
+
         // Send all pending messages
         while (!queue.isEmpty()) {
 
             Message &msg = queue.read();
             callback(listener, msg);
-        }        
+        }
     }
 }
 
@@ -33,7 +33,7 @@ bool
 MsgQueue::get(Message &msg)
 {
     if (!enabled) return false;
-    
+
     {   SYNCHRONIZED
 
         if (queue.isEmpty()) return false;
@@ -55,7 +55,7 @@ MsgQueue::put(const Message &msg)
         if (listener) {
 
             // Send the message immediately if a lister has been registered
-            callback(listener, msg); return;
+            callback(listener, msg);
 
         } else {
 
