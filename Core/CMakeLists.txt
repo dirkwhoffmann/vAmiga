@@ -26,10 +26,10 @@ else()
 endif()
 
 # Add the emulator library
-add_library(VACore VAmiga.cpp VAmigaConfig.cpp)
+add_library(VACore VAmiga.cpp config.cpp)
 
 # Add the headless app
-add_executable(VAHeadless VAmigaHeadless.cpp VAmigaConfig.cpp)
+add_executable(VAHeadless Headless.cpp config.cpp)
 target_link_libraries(VAHeadless VACore)
 
 # Specify compile options

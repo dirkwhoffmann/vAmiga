@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "VAmigaConfig.h"
+#include "config.h"
 #include "Buffer.h"
 #include "IOUtils.h"
 #include "MemUtils.h"

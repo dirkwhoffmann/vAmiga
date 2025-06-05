@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "VAmigaConfig.h"
+#include "config.h"
 #include "Emulator.h"
 #include "CIA.h"
 #include <cmath>

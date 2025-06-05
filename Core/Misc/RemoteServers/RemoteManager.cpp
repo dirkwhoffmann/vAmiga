@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "VAmigaConfig.h"
+#include "config.h"
 #include "RemoteManager.h"
 #include "IOUtils.h"
 #include "Agnus.h"

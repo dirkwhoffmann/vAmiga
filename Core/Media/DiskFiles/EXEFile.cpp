@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "VAmigaConfig.h"
+#include "config.h"
 #include "EXEFile.h"
 #include "MutableFileSystem.h"
 #include "IOUtils.h"

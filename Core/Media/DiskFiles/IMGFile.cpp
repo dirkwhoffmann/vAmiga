@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "VAmigaConfig.h"
+#include "config.h"
 #include "IMGFile.h"
 #include "Checksum.h"
 #include "FloppyDrive.h"

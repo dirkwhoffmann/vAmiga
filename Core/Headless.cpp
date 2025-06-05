@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 /// @file
 
-#include "VAmigaConfig.h"
+#include "config.h"
 #include "VAmigaHeadless.h"
 #include "Amiga.h"
 #include "Script.h"

@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "VAmigaConfig.h"
+#include "config.h"
 #include "ADFFile.h"
 #include "Amiga.h"
 #include "BootBlockImage.h"
