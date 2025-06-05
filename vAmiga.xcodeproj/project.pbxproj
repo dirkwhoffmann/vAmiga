@@ -2327,7 +2327,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 1640;
 				ORGANIZATIONNAME = "Dirk Hoffmann";
 				TargetAttributes = {
 					508FDE6321EA1FA40043D0E9 = {
@@ -3119,8 +3119,6 @@
 					"-DNDEBUG",
 				);
 				SDKROOT = macosx;
-				STRIP_INSTALLED_PRODUCT = NO;
-				STRIP_SWIFT_SYMBOLS = NO;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
