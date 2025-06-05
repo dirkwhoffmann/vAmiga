@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include "PixelEngineTypes.h"
 #include "SubComponent.h"
 #include "ChangeRecorder.h"
 #include "Constants.h"
@@ -38,9 +37,6 @@ class PixelEngine final : public SubComponent {
     };
 
     friend class Denise;
-
-    // Current configuration
-    PixelEngineConfig config = {};
 
 
     //
@@ -169,7 +165,6 @@ private:
 
 public:
     
-    const PixelEngineConfig &getConfig() const { return config; }
     const Options &getOptions() const override { return options; }
 
 

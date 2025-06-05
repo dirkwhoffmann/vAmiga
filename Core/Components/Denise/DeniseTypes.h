@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "PixelEngineTypes.h"
+#include "Reflection.h"
 
 namespace vamiga {
 

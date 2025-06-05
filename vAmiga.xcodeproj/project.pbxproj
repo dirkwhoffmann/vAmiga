@@ -867,7 +867,6 @@
 		50A2953E21FF12EF0046BAA0 /* ControlPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControlPort.h; sourceTree = "<group>"; };
 		50A493832374560D003ECD2C /* RTCTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTCTypes.h; sourceTree = "<group>"; };
 		50A5969724F7F9ED008632C0 /* PeripheralsConf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralsConf.swift; sourceTree = "<group>"; };
-		50A61413260CCF9B00A01428 /* PixelEngineTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PixelEngineTypes.h; sourceTree = "<group>"; };
 		50A6141A260CD4F300A01428 /* UARTTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UARTTypes.h; sourceTree = "<group>"; };
 		50A6141F260CD67600A01428 /* AudioFilterTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioFilterTypes.h; sourceTree = "<group>"; };
 		50A61421260CD74E00A01428 /* AudioPortTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioPortTypes.h; sourceTree = "<group>"; };
@@ -1282,7 +1281,6 @@
 				50AE6EE424D9B210000AA367 /* DeniseRegs.cpp */,
 				5027418E2297CACF0038E5AF /* Colors.h */,
 				5027418D2297CACF0038E5AF /* Colors.cpp */,
-				50A61413260CCF9B00A01428 /* PixelEngineTypes.h */,
 				502F7DD32221E52200AEEC65 /* PixelEngine.h */,
 				502F7DD22221E52200AEEC65 /* PixelEngine.cpp */,
 				50627FD4286EBAC000F2A835 /* FrameBufferTypes.h */,
