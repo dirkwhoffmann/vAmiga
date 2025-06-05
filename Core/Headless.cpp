@@ -9,7 +9,7 @@
 /// @file
 
 #include "config.h"
-#include "VAmigaHeadless.h"
+#include "Headless.h"
 #include "Amiga.h"
 #include "Script.h"
 #include "DiagRom.h"
