@@ -11,7 +11,7 @@
 
 #include "VideoPortTypes.h"
 #include "SubComponent.h"
-#include "FrameBuffer.h"
+#include "Texture.h"
 
 namespace vamiga {
 
@@ -34,8 +34,8 @@ class VideoPort final : public SubComponent, public Inspectable<VideoPortInfo, V
     VideoPortConfig config = { };
 
     // Predefined frame buffers
-    mutable FrameBuffer whiteNoise;
-    FrameBuffer blank;
+    mutable Texture whiteNoise;
+    Texture blank;
 
     //  White noise data
     Buffer <Texel> noise;
@@ -117,7 +117,7 @@ public:
 public:
 
     // Returns a pointer to the stable emulator texture
-    const class FrameBuffer &getTexture(isize offset = 0) const;
+    const class Texture &getTexture(isize offset = 0) const;
 
     // Informs the video port about a buffer swap
     void buffersWillSwap();

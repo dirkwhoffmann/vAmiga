@@ -12,7 +12,7 @@
 #include "SubComponent.h"
 #include "ChangeRecorder.h"
 #include "Constants.h"
-#include "FrameBuffer.h"
+#include "Texture.h"
 
 namespace vamiga {
 
@@ -53,7 +53,7 @@ private:
      * textures are considered stable. Once a frame is completed, the next
      * texture in the ring becomes the new working buffer.
      */
-    FrameBuffer emuTexture[NUM_TEXTURES];
+    Texture emuTexture[NUM_TEXTURES];
 
     // The currently active buffer
     isize activeBuffer = 0;
@@ -210,8 +210,8 @@ private:
 public:
 
     // Returns the working buffer or the stable buffer
-    FrameBuffer &getWorkingBuffer();
-    const FrameBuffer &getStableBuffer(isize offset = 0) const;
+    Texture &getWorkingBuffer();
+    const Texture &getStableBuffer(isize offset = 0) const;
 
     // Return a pointer into the pixel storage
     Texel *workingPtr(isize row = 0, isize col = 0);

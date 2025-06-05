@@ -168,7 +168,7 @@ public:
     // Audio and Video
     //
 
-    const FrameBuffer &getTexture() const;
+    const Texture &getTexture() const;
     void lockTexture() { textureLock.lock(); }
     void unlockTexture() { textureLock.unlock(); }
 

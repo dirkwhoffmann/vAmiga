@@ -197,14 +197,14 @@ PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
     b = u8(newB);
 }
 
-const FrameBuffer &
+const Texture &
 PixelEngine::getStableBuffer(isize offset) const
 {
     auto nr = activeBuffer + offset - 1;
     return emuTexture[(nr + NUM_TEXTURES) % NUM_TEXTURES];
 }
 
-FrameBuffer &
+Texture &
 PixelEngine::getWorkingBuffer()
 {
     return emuTexture[activeBuffer];
@@ -335,7 +335,7 @@ PixelEngine::colorize(isize line)
     // Wipe out the HBLANK area
     auto start = agnus.pos.pixel(HBLANK_MIN);
     auto stop  = agnus.pos.pixel(HBLANK_MAX);
-    for (pixel = start; pixel <= stop; pixel++) dst[pixel] = FrameBuffer::hblank;
+    for (pixel = start; pixel <= stop; pixel++) dst[pixel] = Texture::hblank;
 }
 
 void

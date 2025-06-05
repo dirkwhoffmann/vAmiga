@@ -86,8 +86,8 @@ RegressionTester::dumpTexture(Amiga &amiga, const fs::path &path)
 void
 RegressionTester::dumpTexture(Amiga &amiga, std::ostream &os)
 {
-    Texel grey2 = FrameBuffer::grey2;
-    Texel grey4 = FrameBuffer::grey4;
+    Texel grey2 = Texture::grey2;
+    Texel grey4 = Texture::grey4;
 
     auto checkerboard = [&](isize y, isize x) {
         return ((y >> 3) & 1) == ((x >> 3) & 1) ? (char *)&grey2 : (char *)&grey4;

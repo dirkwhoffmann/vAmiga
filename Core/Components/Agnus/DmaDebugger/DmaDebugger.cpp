@@ -447,7 +447,7 @@ DmaDebugger::vSyncHandler()
         auto *ptr = denise.pixelEngine.workingPtr(row);
         for (isize col = 0; col < HPIXELS; col++) {
 
-            ptr[col] = FrameBuffer::vblank;
+            ptr[col] = Texture::vblank;
         }
     }
 }

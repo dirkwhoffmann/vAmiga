@@ -19,7 +19,7 @@ VideoPort::VideoPort(Amiga &ref) : SubComponent(ref)
     // Create random noise data
     noise.alloc(2 * PIXELS);
     for (isize i = 0; i < noise.size; i++) {
-        noise[i] = rand() % 2 ? FrameBuffer::black : FrameBuffer::white;
+        noise[i] = rand() % 2 ? Texture::black : Texture::white;
     }
 
     // Setup the white-noise framebuffer (redirect the data source)
@@ -110,7 +110,7 @@ VideoPort::cacheStats(VideoPortStats &result) const
 
 }
 
-const FrameBuffer &
+const Texture &
 VideoPort::getTexture(isize offset) const
 {
     if (isPoweredOn()) {

@@ -386,7 +386,7 @@ Emulator::finishFrame()
     run();
 }
 
-const FrameBuffer &
+const Texture &
 Emulator::getTexture() const
 {
     if (isRunning()) {

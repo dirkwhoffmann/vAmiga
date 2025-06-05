@@ -8,17 +8,17 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FrameBuffer.h"
+#include "Texture.h"
 
 namespace vamiga {
 
-FrameBuffer::FrameBuffer()
+Texture::Texture()
 {
     pixels.alloc(PIXELS);
 }
 
 void
-FrameBuffer::clear()
+Texture::clear()
 {
     auto *ptr = pixels.ptr;
 
@@ -30,7 +30,7 @@ FrameBuffer::clear()
 }
 
 void
-FrameBuffer::clear(isize row)
+Texture::clear(isize row)
 {
     auto *ptr = pixels.ptr + row * HPIXELS;
 
@@ -40,7 +40,7 @@ FrameBuffer::clear(isize row)
 }
 
 void
-FrameBuffer::clear(isize row, isize cycle)
+Texture::clear(isize row, isize cycle)
 {
     auto *ptr = pixels.ptr + row * HPIXELS + 4 * cycle;
 

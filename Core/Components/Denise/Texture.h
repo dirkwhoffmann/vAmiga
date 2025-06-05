@@ -19,7 +19,7 @@ namespace vamiga {
 
 using util::Buffer;
 
-class FrameBuffer {
+class Texture {
 
 public:
     
@@ -53,7 +53,7 @@ public:
     // The long-frame bit of the previous frame
     bool prevlof = false;
 
-    FrameBuffer();
+    Texture();
 
     // Initializes (a portion of) the frame buffer with a checkerboard pattern
     void clear();
