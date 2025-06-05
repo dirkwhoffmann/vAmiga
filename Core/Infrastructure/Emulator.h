@@ -59,7 +59,7 @@ public:
     void launch(const void *listener, Callback *func);
 
     // Initializes all components
-    void initialize() override;
+    void initialize();
 
     // Forces to recreate the run-ahead instance in the next frame
     void markAsDirty() { isDirty = true; }
@@ -95,7 +95,7 @@ public:
 public:
 
     // Queries an option
-    i64 get(Opt opt, isize id = 0) const throws;
+    i64 get(Opt opt, isize objid = 0) const throws;
 
     // Checks an option
     void check(Opt opt, i64 value, const std::vector<isize> objids = { }) throws;
@@ -169,6 +169,7 @@ public:
     void lockTexture() { textureLock.lock(); }
     void unlockTexture() { textureLock.unlock(); }
 
+
     //
     // Command queue
     //
@@ -178,17 +179,11 @@ public:
     // Feeds a command into the command queue
     void put(const Command &cmd);
     void put(Cmd type, i64 payload = 0, i64 payload2 = 0) { put(Command(type, payload, payload2)); }
-    void put(Cmd type, ConfigCmd payload)  { put(Command(type, payload)); }
-    void put(Cmd type, KeyCmd payload)  { put(Command(type, payload)); }
-    void put(Cmd type, CoordCmd payload)  { put(Command(type, payload)); }
-    void put(Cmd type, GamePadCmd payload)  { put(Command(type, payload)); }
-    void put(Cmd type, AlarmCmd payload)  { put(Command(type, payload)); }
-
-
-private:
-
-    // Processes a command from the command queue
-    void process(const Command &cmd);
+    void put(Cmd type, ConfigCmd payload) { put(Command(type, payload)); }
+    void put(Cmd type, KeyCmd payload) { put(Command(type, payload)); }
+    void put(Cmd type, CoordCmd payload) { put(Command(type, payload)); }
+    void put(Cmd type, GamePadCmd payload) { put(Command(type, payload)); }
+    void put(Cmd type, AlarmCmd payload) { put(Command(type, payload)); }
 
 
     //

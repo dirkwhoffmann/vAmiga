@@ -41,6 +41,8 @@ Emulator::~Emulator()
 void
 Emulator::launch(const void *listener, Callback *func)
 {
+    if (FORCE_LAUNCH_ERROR) throw AppError(Fault::LAUNCH);
+    
     // Initialize the emulator if needed
     if (!isInitialized()) initialize();
     
@@ -72,10 +74,9 @@ Emulator::initialize()
         
     // Get the runahead instance up-to-date
     ahead = main;
-    
+
     // Switch state
     state = ExecState::OFF;
-    
     assert(isInitialized());
 }
 
@@ -165,13 +166,6 @@ Emulator::cacheStats(EmulatorStats &result) const
         result.fps = fps;
         result.resyncs = resyncs;
     }
-    
-}
-
-void
-Emulator::put(const Command &cmd)
-{
-    cmdQueue.put(cmd);
 }
 
 i64
@@ -262,24 +256,80 @@ Emulator::missingFrames() const
     return isize(target - frameCounter);
 }
 
-const FrameBuffer &
-Emulator::getTexture() const
+void
+Emulator::computeFrame()
 {
-    if (isRunning()) {
-        
-        // In run-ahead mode, return the texture from the run-ahead instance
-        if (main.config.runAhead > 0) {
-            return ahead.videoPort.getTexture();
+    auto &config = main.getConfig();
+
+    if (config.runAhead > 0) {
+
+        try {
+
+            // Run the main instance
+            main.computeFrame();
+
+            // Recreate the run-ahead instance if necessary
+            if (isDirty || RUA_ON_STEROIDS) recreateRunAheadInstance();
+
+            // Run the runahead instance
+            ahead.computeFrame();
+
+        } catch (StateChangeException &) {
+
+            isDirty = true;
+            throw;
         }
-        
-        // In run-behind mode, return a texture from the texture buffer
-        if (main.config.runAhead < 0) {
-            return main.videoPort.getTexture(main.config.runAhead);
-        }
+
+    } else {
+
+        // Only run the main instance
+        main.computeFrame();
     }
-    
-    // Return the most recent texture from the main instance
-    return main.videoPort.getTexture();
+}
+
+void
+Emulator::isReady()
+{
+    main.isReady();
+}
+
+void
+Emulator::cloneRunAheadInstance()
+{
+    stats.clones++;
+
+    // Recreate the runahead instance from scratch
+    ahead = main; isDirty = false;
+
+    if (RUA_CHECKSUM && ahead != main) {
+
+        main.diff(ahead);
+        fatal("Corrupted run-ahead clone detected");
+    }
+}
+
+void
+Emulator::recreateRunAheadInstance()
+{
+    assert(main.config.runAhead > 0);
+
+    auto &config = main.getConfig();
+
+    // Clone the main instance
+    if (RUA_DEBUG) {
+        util::StopWatch watch("Run-ahead: Clone");
+        cloneRunAheadInstance();
+    } else {
+        cloneRunAheadInstance();
+    }
+
+    // Advance to the proper frame
+    if (RUA_DEBUG) {
+        util::StopWatch watch("Run-ahead: Fast-forward");
+        ahead.fastForward(config.runAhead - 1);
+    } else {
+        ahead.fastForward(config.runAhead - 1);
+    }
 }
 
 void
@@ -326,80 +376,30 @@ Emulator::finishFrame()
     run();
 }
 
-void
-Emulator::computeFrame()
+const FrameBuffer &
+Emulator::getTexture() const
 {
-    auto &config = main.getConfig();
-    
-    if (config.runAhead > 0) {
-        
-        try {
-            
-            // Run the main instance
-            main.computeFrame();
-            
-            // Recreate the run-ahead instance if necessary
-            if (isDirty || RUA_ON_STEROIDS) recreateRunAheadInstance();
-            
-            // Run the runahead instance
-            ahead.computeFrame();
-            
-        } catch (StateChangeException &) {
-            
-            isDirty = true;
-            throw;
+    if (isRunning()) {
+
+        // In run-ahead mode, return the texture from the run-ahead instance
+        if (main.config.runAhead > 0) {
+            return ahead.videoPort.getTexture();
         }
-        
-    } else {
-        
-        // Only run the main instance
-        main.computeFrame();
+
+        // In run-behind mode, return a texture from the texture buffer
+        if (main.config.runAhead < 0) {
+            return main.videoPort.getTexture(main.config.runAhead);
+        }
     }
+
+    // Return the most recent texture from the main instance
+    return main.videoPort.getTexture();
 }
 
 void
-Emulator::cloneRunAheadInstance()
+Emulator::put(const Command &cmd)
 {
-    stats.clones++;
-    
-    // Recreate the runahead instance from scratch
-    ahead = main; isDirty = false;
-    
-    if (RUA_CHECKSUM && ahead != main) {
-        
-        main.diff(ahead);
-        fatal("Corrupted run-ahead clone detected");
-    }
-}
-
-void
-Emulator::recreateRunAheadInstance()
-{
-    assert(main.config.runAhead > 0);
-    
-    auto &config = main.getConfig();
-    
-    // Clone the main instance
-    if (RUA_DEBUG) {
-        util::StopWatch watch("Run-ahead: Clone");
-        cloneRunAheadInstance();
-    } else {
-        cloneRunAheadInstance();
-    }
-    
-    // Advance to the proper frame
-    if (RUA_DEBUG) {
-        util::StopWatch watch("Run-ahead: Fast-forward");
-        ahead.fastForward(config.runAhead - 1);
-    } else {
-        ahead.fastForward(config.runAhead - 1);
-    }
-}
-
-void
-Emulator::isReady()
-{
-    main.isReady();
+    cmdQueue.put(cmd);
 }
 
 int

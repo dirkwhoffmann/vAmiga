@@ -274,6 +274,12 @@ protected:
     template <typename T> long parseEnum(const string &argv, long fallback) {
         try { return util::parseEnum<T>(argv); } catch(...) { return fallback; }
     }
+    template <typename E, typename T> E parseEnum(const string &argv) {
+        return (E)util::parseEnum<T>(argv);
+    }
+    template <typename E, typename T> long parseEnum(const string &argv, E fallback) {
+        try { return (E)util::parseEnum<T>(argv); } catch(...) { return fallback; }
+    }
 
 
     //

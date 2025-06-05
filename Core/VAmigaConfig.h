@@ -208,6 +208,7 @@ extern debugflag GDB_DEBUG;
 // Forced error conditions
 //
 
+extern debugflag FORCE_LAUNCH_ERROR;
 extern debugflag FORCE_ROM_MISSING;
 extern debugflag FORCE_CHIP_RAM_MISSING;
 extern debugflag FORCE_AROS_NO_EXTROM;

@@ -252,11 +252,8 @@ CommandConsole::initCommands(RetroShellCmd &root)
         .args   = { ConfigSchemeEnum::argList() },
         .help   = { "Initializes the Amiga with a predefined scheme" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
-            
-            auto scheme = ConfigScheme(parseEnum <ConfigSchemeEnum> (argv[0]));
-            
-            emulator.powerOff();
-            emulator.set(scheme);
+
+            emulator.set(parseEnum<ConfigScheme, ConfigSchemeEnum>(argv[0]));
         }
     });
     
