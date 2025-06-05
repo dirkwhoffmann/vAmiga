@@ -42,9 +42,6 @@ void
 Emulator::launch(const void *listener, Callback *func)
 {
     if (FORCE_LAUNCH_ERROR) throw AppError(Fault::LAUNCH);
-    
-    // Initialize the emulator if needed
-    // if (!isInitialized()) initialize();
 
     // Connect the listener to the message queue of the main instance
     if (listener && func) { main.msgQueue.setListener(listener, func); }
@@ -54,9 +51,6 @@ Emulator::launch(const void *listener, Callback *func)
 
     // Launch the emulator thread
     Thread::launch();
-    
-    // Schedule a hard reset
-    // put(Cmd::HARD_RESET);
 }
 
 void

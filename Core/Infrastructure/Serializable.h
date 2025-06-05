@@ -13,19 +13,18 @@
 #include "MemUtils.h"
 #include "Buffer.h"
 #include "RingBuffer.h"
-#include <cassert>
 #include <concepts>
 
 namespace vamiga {
 
 struct Serializable {
-    
+
 };
 
 class SerializableClass {
 
 public:
-    
+
     virtual ~SerializableClass() = default;
 
     // Serializers (to be implemented by the subclass)
@@ -35,6 +34,7 @@ public:
     virtual void operator << (class SerReader &worker) = 0;
     virtual void operator << (class SerWriter &worker) = 0;
 };
+
 
 //
 // Basic memory buffer I/O
@@ -140,11 +140,11 @@ return *this; \
 class SerCounter
 {
 public:
-    
+
     isize count;
-    
+
     SerCounter() { count = 0; }
-    
+
     COUNT8(const bool)
     COUNT8(const char)
     COUNT8(const signed char)
@@ -159,14 +159,14 @@ public:
     COUNT64(const unsigned long long)
     COUNTD(const float)
     COUNTD(const double)
-    
+
     template <class T>
     auto& operator<<(util::Allocator<T> &a)
     {
         count += 8 + a.size;
         return *this;
     }
-    
+
     template <class T, isize N>
     auto& operator<<(util::Array<T, N> &a)
     {
@@ -174,7 +174,7 @@ public:
         *this << a.elements << a.w;
         return *this;
     }
-    
+
     template <class T, isize N>
     auto& operator<<(util::SortedArray<T, N> &a)
     {
@@ -183,7 +183,7 @@ public:
         *this << a.w;
         return *this;
     }
-    
+
     template <class T, isize N>
     auto& operator<<(util::RingBuffer<T, N> &a)
     {
@@ -191,7 +191,7 @@ public:
         *this << a.r << a.w;
         return *this;
     }
-    
+
     template <class T, isize N>
     auto& operator<<(util::SortedRingBuffer<T, N> &a)
     {
@@ -200,15 +200,14 @@ public:
         *this << a.r << a.w;
         return *this;
     }
-    
+
     auto& operator<<(string &v)
     {
         auto len = v.length();
-        assert(len < 256);
         count += 1 + isize(len);
         return *this;
     }
-    
+
     template <class T>
     auto& operator<<(std::optional<T> &v)
     {
@@ -216,7 +215,7 @@ public:
         count += 1;
         return *this;
     }
-    
+
     template <class T>
     auto& operator<<(std::vector <T> &v)
     {
@@ -225,7 +224,7 @@ public:
         count += 8;
         return *this;
     }
-    
+
     template <class T, isize N>
     SerCounter& operator<<(T (&v)[N])
     {
@@ -234,21 +233,21 @@ public:
         }
         return *this;
     }
-    
+
     template <class E, class = std::enable_if_t<std::is_enum<E>{}>>
     SerCounter& operator<<(E &v)
     {
         count += sizeof(u64);
         return *this;
     }
-    
+
     template <std::derived_from<Serializable> T>
     SerCounter& operator<<(T &v)
     {
         v << *this;
         return *this;
     }
-    
+
     template <std::derived_from<SerializableClass> T>
     SerCounter& operator<<(T &v)
     {
@@ -272,11 +271,11 @@ return *this; \
 class SerChecker
 {
 public:
-    
+
     u64 hash;
-    
+
     SerChecker() { hash = util::fnvInit64(); }
-    
+
     CHECK(const bool)
     CHECK(const char)
     CHECK(const signed char)
@@ -291,14 +290,14 @@ public:
     CHECK(const unsigned long long)
     CHECK(const float)
     CHECK(const double)
-    
+
     template <class T>
     auto& operator<<(util::Allocator<T> &a)
     {
         hash = util::fnvIt64(hash, a.fnv64());
         return *this;
     }
-    
+
     template <class T, isize N>
     auto& operator<<(util::Array<T, N> &a)
     {
@@ -306,7 +305,7 @@ public:
         *this << a.elements << a.w;
         return *this;
     }
-    
+
     template <class T, isize N>
     auto& operator<<(util::SortedArray<T, N> &a)
     {
@@ -315,7 +314,7 @@ public:
         *this << a.w;
         return *this;
     }
-    
+
     template <class T, isize N>
     auto& operator<<(util::RingBuffer<T, N> &a)
     {
@@ -323,7 +322,7 @@ public:
         *this << a.r << a.w;
         return *this;
     }
-    
+
     template <class T, isize N>
     auto& operator<<(util::SortedRingBuffer<T, N> &a)
     {
@@ -332,7 +331,7 @@ public:
         *this << a.r << a.w;
         return *this;
     }
-    
+
     auto& operator<<(string &v)
     {
         auto len = v.length();
@@ -341,14 +340,14 @@ public:
         }
         return *this;
     }
-    
+
     template <class T>
     auto& operator<<(std::optional <T> &v)
     {
         if (v) { *this << *v; }
         return *this;
     }
-    
+
     template <class T>
     auto& operator<<(std::vector <T> &v)
     {
@@ -358,7 +357,7 @@ public:
         }
         return *this;
     }
-    
+
     template <class T, isize N>
     SerChecker& operator<<(T (&v)[N])
     {
@@ -367,21 +366,21 @@ public:
         }
         return *this;
     }
-    
+
     template <class E, class = std::enable_if_t<std::is_enum<E>{}>>
     SerChecker& operator<<(E &v)
     {
         hash = util::fnvIt64(hash, u64(v));
         return *this;
     }
-    
+
     template <std::derived_from<Serializable> T>
     SerChecker& operator<<(T &v)
     {
         v << *this;
         return *this;
     }
-    
+
     template <std::derived_from<SerializableClass> T>
     SerChecker& operator<<(T &v)
     {
@@ -410,11 +409,11 @@ return *this; \
 class SerReader
 {
 public:
-    
+
     const u8 *ptr;
-    
+
     SerReader(const u8 *p) : ptr(p) { }
-    
+
     DESERIALIZE8(bool)
     DESERIALIZE8(char)
     DESERIALIZE8(signed char)
@@ -429,7 +428,7 @@ public:
     DESERIALIZE64(unsigned long long)
     DESERIALIZED(float)
     DESERIALIZED(double)
-    
+
     template <class T>
     auto& operator<<(util::Allocator<T> &a)
     {
@@ -439,7 +438,7 @@ public:
         ptr += len;
         return *this;
     }
-    
+
     template <class T, isize N>
     auto& operator<<(util::Array<T, N> &a)
     {
@@ -447,7 +446,7 @@ public:
         *this << a.elements << a.w;
         return *this;
     }
-    
+
     template <class T, isize N>
     auto& operator<<(util::SortedArray<T, N> &a)
     {
@@ -456,7 +455,7 @@ public:
         *this << a.w;
         return *this;
     }
-    
+
     template <class T, isize N>
     auto& operator<<(util::RingBuffer<T, N> &a)
     {
@@ -464,7 +463,7 @@ public:
         *this << a.r << a.w;
         return *this;
     }
-    
+
     template <class T, isize N>
     auto& operator<<(util::SortedRingBuffer<T, N> &a)
     {
@@ -473,13 +472,13 @@ public:
         *this << a.r << a.w;
         return *this;
     }
-    
+
     auto& operator<<(string &v)
     {
         v = readString(ptr);
         return *this;
     }
-    
+
     template <class T>
     auto& operator<<(std::optional <T> &v)
     {
@@ -492,7 +491,7 @@ public:
         }
         return *this;
     }
-    
+
     template <class T>
     auto& operator<<(std::vector <T> &v)
     {
@@ -506,7 +505,7 @@ public:
         }
         return *this;
     }
-    
+
     template <class T, isize N>
     SerReader& operator<<(T (&v)[N])
     {
@@ -515,27 +514,27 @@ public:
         }
         return *this;
     }
-    
+
     void copy(void *dst, isize n)
     {
         std::memcpy(dst, (void *)ptr, n);
         ptr += n;
     }
-    
+
     template <class E, class = std::enable_if_t<std::is_enum<E>{}>>
     SerReader& operator<<(E &v)
     {
         v = (E)read64(ptr);
         return *this;
     }
-    
+
     template <std::derived_from<Serializable> T>
     SerReader& operator<<(T &v)
     {
         v << *this;
         return *this;
     }
-    
+
     template <std::derived_from<SerializableClass> T>
     SerReader& operator<<(T &v)
     {
@@ -564,11 +563,11 @@ return *this; \
 class SerWriter
 {
 public:
-    
+
     u8 *ptr;
-    
+
     SerWriter(u8 *p) : ptr(p) { }
-    
+
     SERIALIZE8(const bool)
     SERIALIZE8(const char)
     SERIALIZE8(const signed char)
@@ -583,7 +582,7 @@ public:
     SERIALIZE64(const unsigned long long)
     SERIALIZED(const float)
     SERIALIZED(const double)
-    
+
     template <class T>
     auto& operator<<(util::Allocator<T> &a)
     {
@@ -592,7 +591,7 @@ public:
         ptr += a.size;
         return *this;
     }
-    
+
     template <class T, isize N>
     auto& operator<<(util::Array<T, N> &a)
     {
@@ -600,7 +599,7 @@ public:
         *this << a.elements << a.w;
         return *this;
     }
-    
+
     template <class T, isize N>
     auto& operator<<(util::SortedArray<T, N> &a)
     {
@@ -609,7 +608,7 @@ public:
         *this << a.w;
         return *this;
     }
-    
+
     template <class T, isize N>
     auto& operator<<(util::RingBuffer<T, N> &a)
     {
@@ -617,7 +616,7 @@ public:
         *this << a.r << a.w;
         return *this;
     }
-    
+
     template <class T, isize N>
     auto& operator<<(util::SortedRingBuffer<T, N> &a)
     {
@@ -626,13 +625,13 @@ public:
         *this << a.r << a.w;
         return *this;
     }
-    
+
     auto& operator<<(const string &v)
     {
         writeString(ptr, v);
         return *this;
     }
-    
+
     template <class T>
     auto& operator<<(std::optional <T> &v)
     {
@@ -641,7 +640,7 @@ public:
         if (b) { *this << *v; }
         return *this;
     }
-    
+
     template <class T>
     auto& operator<<(std::vector <T> &v)
     {
@@ -652,7 +651,7 @@ public:
         }
         return *this;
     }
-    
+
     template <class T, isize N>
     SerWriter& operator<<(T (&v)[N])
     {
@@ -661,27 +660,27 @@ public:
         }
         return *this;
     }
-    
+
     void copy(const void *src, isize n)
     {
         std::memcpy((void *)ptr, src, n);
         ptr += n;
     }
-    
+
     template <class E, class = std::enable_if_t<std::is_enum<E>{}>>
     SerWriter& operator<<(E &v)
     {
         write64(ptr, (long)v);
         return *this;
     }
-    
+
     template <std::derived_from<Serializable> T>
     SerWriter& operator<<(T &v)
     {
         v << *this;
         return *this;
     }
-    
+
     template <std::derived_from<SerializableClass> T>
     SerWriter& operator<<(T &v)
     {
@@ -705,14 +704,14 @@ return *this; \
 class SerResetter
 {
     bool hard;
-    
+
 public:
-    
+
     SerResetter(bool hard) : hard(hard) { };
-    
+
     bool isHard() { return hard; }
     bool isSoft() { return !isHard(); }
-    
+
     RESET(bool)
     RESET(char)
     RESET(signed char)
@@ -727,14 +726,14 @@ public:
     RESET(unsigned long long)
     RESET(float)
     RESET(double)
-    
+
     template <class T>
     auto& operator<<(util::Allocator<T> &a)
     {
         a.clear();
         return *this;
     }
-    
+
     template <class T, isize N>
     auto& operator<<(util::Array<T, N> &a)
     {
@@ -742,7 +741,7 @@ public:
         *this << a.elements << a.w;
         return *this;
     }
-    
+
     template <class T, isize N>
     auto& operator<<(util::SortedArray<T, N> &a)
     {
@@ -751,7 +750,7 @@ public:
         *this << a.w;
         return *this;
     }
-    
+
     template <class T, isize N>
     auto& operator<<(util::RingBuffer<T, N> &a)
     {
@@ -759,7 +758,7 @@ public:
         *this << a.r << a.w;
         return *this;
     }
-    
+
     template <class T, isize N>
     auto& operator<<(util::SortedRingBuffer<T, N> &a)
     {
@@ -768,27 +767,27 @@ public:
         *this << a.r << a.w;
         return *this;
     }
-    
+
     auto& operator<<(string &v)
     {
         v = "";
         return *this;
     }
-    
+
     template <class T>
     auto& operator<<(std::optional <T> &v)
     {
         v = { };
         return *this;
     }
-    
+
     template <class T>
     auto& operator<<(std::vector <T> &v)
     {
         v.clear();
         return *this;
     }
-    
+
     template <class T, isize N>
     SerResetter& operator<<(T (&v)[N])
     {
@@ -797,21 +796,20 @@ public:
         }
         return *this;
     }
-    
+
     template <class E, class = std::enable_if_t<std::is_enum<E>{}>>
     SerResetter& operator<<(E &v)
     {
         v = (E)0;
         return *this;
     }
-    
     template <std::derived_from<Serializable> T>
-    SerResetter& operator<<(T &v)
+    SerResetter & operator<<(T &v)
     {
         v << *this;
         return *this;
     }
-    
+
     template <std::derived_from<SerializableClass> T>
     SerResetter& operator<<(T &v)
     {

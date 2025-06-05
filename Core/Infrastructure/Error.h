@@ -10,7 +10,6 @@
 #pragma once
 
 #include "ErrorTypes.h"
-#include <filesystem>
 
 namespace vamiga {
 
@@ -32,14 +31,14 @@ struct AppException : public std::exception {
 
 struct AppError : public AppException
 {
-    AppError(Fault f, const string &s);
-    AppError(Fault f, const char *s) : AppError(f, string(s)) { };
-    AppError(Fault f, const fs::path &p) : AppError(f, p.string()) { };
-    AppError(Fault f, std::integral auto v) : AppError(f, std::to_string(v)) { };
-    AppError(Fault f) : AppError(f, "") { }
-    
-    const char *what() const throw() override;
+    AppError(Fault fault, const string &s);
+    AppError(Fault fault, const char *s) : AppError(fault, string(s)) { };
+    AppError(Fault fault, const fs::path &p) : AppError(fault, p.string()) { };
+    AppError(Fault fault, std::integral auto v) : AppError(fault, std::to_string(v)) { };
+    AppError(Fault fault) : AppError(fault, "") { }
+
     Fault fault() const { return Fault(data); }
+    const char *what() const throw() override;
 };
 
 }

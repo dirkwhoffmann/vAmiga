@@ -14,7 +14,6 @@
 #include "AmigaTypes.h"
 #include <sstream>
 #include <fstream>
-#include <filesystem>
 
 namespace vamiga {
 

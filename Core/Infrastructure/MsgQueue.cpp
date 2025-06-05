@@ -32,6 +32,8 @@ MsgQueue::setListener(const void *listener, Callback *callback)
 bool
 MsgQueue::get(Message &msg)
 {
+    if (!enabled) return false;
+    
     {   SYNCHRONIZED
 
         if (queue.isEmpty()) return false;

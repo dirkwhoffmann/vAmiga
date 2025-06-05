@@ -26,7 +26,6 @@ class Host final : public SubComponent {
         .name           = "Host",
         .description    = "Host Computer",
         .shell          = "host"
-
     }};
 
     Options options = {
@@ -36,7 +35,7 @@ class Host final : public SubComponent {
         Opt::HOST_FRAMEBUF_WIDTH,
         Opt::HOST_FRAMEBUF_HEIGHT
     };
-
+    
     // Current configuration
     HostConfig config = { };
 
@@ -79,7 +78,6 @@ public:
 private:
 
     void _dump(Category category, std::ostream &os) const override;
-
 
 
     //

@@ -163,7 +163,6 @@ public:
      */
     void resume() const;
 
-    // bool isInitialized() const { return state != ExecState::UNINIT; }
     bool isInitialized() const { return initLatch.try_wait(); }
     bool isPoweredOn() const { return state != ExecState::OFF; }
     bool isPoweredOff() const { return state == ExecState::OFF; }

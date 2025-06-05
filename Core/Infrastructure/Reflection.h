@@ -41,7 +41,7 @@ namespace vamiga {
 #define assert_enum(e,v) assert(e##Enum::isValid(v))
 
 template <class T, typename E> struct Reflection {
-            
+
     // Checks whether this enum is a bit fiels rather than a standard enum
     static constexpr bool isBitField() { return T::minVal == 1; }
 
@@ -73,7 +73,7 @@ template <class T, typename E> struct Reflection {
         
         return result;
     }
-
+    
     // Collects all key / value pairs
     static std::vector < std::pair<string,long> >
     pairs(bool withPrefix = false, std::function<bool(E)> filter = [](E){ return true; }) {

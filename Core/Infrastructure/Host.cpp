@@ -12,7 +12,6 @@
 #include "Emulator.h"
 #include "IOUtils.h"
 #include "StringUtils.h"
-
 #include <unordered_set>
 
 namespace vamiga {
@@ -41,11 +40,10 @@ Host::checkOption(Opt opt, i64 value)
         case Opt::HOST_SAMPLE_RATE:
         case Opt::HOST_FRAMEBUF_WIDTH:
         case Opt::HOST_FRAMEBUF_HEIGHT:
-            
             return;
 
         default:
-            throw(Fault::OPT_UNSUPPORTED);
+            throw AppError(Fault::OPT_UNSUPPORTED);
     }
 }
 
