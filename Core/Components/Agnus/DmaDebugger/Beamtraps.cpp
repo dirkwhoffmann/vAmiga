@@ -13,7 +13,7 @@
 
 namespace vamiga {
 
-Beamtraps::Beamtraps(Agnus& ref) : GuardList(ref.emulator), agnus(ref)
+Beamtraps::Beamtraps(Agnus& ref) : GuardList(ref.amiga), agnus(ref)
 {
 
 }

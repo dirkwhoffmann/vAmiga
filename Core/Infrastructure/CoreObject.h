@@ -84,7 +84,7 @@ fprintf(stderr, format __VA_OPT__(,) __VA_ARGS__); }}
 
 #define trace(enable, format, ...) \
 if (enable) { if (verbosity) { \
-prefix(5, objectName(),  __LINE__); \
+prefix(5, objectName(), __LINE__); \
 fprintf(stderr, format __VA_OPT__(,) __VA_ARGS__); }}
 
 #define xfiles(format, ...) \

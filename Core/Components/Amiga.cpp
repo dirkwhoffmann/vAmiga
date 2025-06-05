@@ -90,20 +90,13 @@ Amiga::prefix(isize level, const char *component, isize line) const
 {
     if (level) {
         
-        if (level >= 2) {
-            
-            if (isRunAheadInstance()) fprintf(stderr, "[Run-ahead] ");
-            fprintf(stderr, "%s:%ld", component, line);
-        }
+        if (isRunAheadInstance()) fprintf(stderr, "[Run-ahead] ");
+
         if (level >= 3) {
             
-            fprintf(stderr, " [%lld]", agnus.pos.frame);
+            fprintf(stderr, " [%lld] (%3ld,%3ld)", agnus.pos.frame, agnus.pos.v, agnus.pos.h);
         }
         if (level >= 4) {
-            
-            fprintf(stderr, " (%3ld,%3ld)", agnus.pos.v, agnus.pos.h);
-        }
-        if (level >= 5) {
             
             fprintf(stderr, " %06X ", cpu.getPC0());
             if (agnus.copper.servicing) {
@@ -111,7 +104,7 @@ Amiga::prefix(isize level, const char *component, isize line) const
             }
             fprintf(stderr, " %2X ", cpu.getIPL());
         }
-        if (level >= 6) {
+        if (level >= 5) {
             
             u16 dmacon = agnus.dmacon;
             bool dmaen = dmacon & DMAEN;
@@ -125,7 +118,10 @@ Amiga::prefix(isize level, const char *component, isize line) const
             
             fprintf(stderr, " %04X %04X", paula.intena, paula.intreq);
         }
-        fprintf(stderr, " ");
+        if (level >= 2) {
+            
+            fprintf(stderr, "%s:%ld ", component, line);
+        }
     }
 }
 

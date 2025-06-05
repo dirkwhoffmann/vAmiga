@@ -26,7 +26,10 @@ class GuardList {
 protected:
 
     // Reference to the emulator object
-    class Emulator &emu;
+    // class Emulator &emu;
+
+    // Reference to the emulator core
+    class Amiga &amiga;
 
     // Reference to the guard list
     moira::Guards &guards;
@@ -44,8 +47,8 @@ protected:
 
 public:
 
-    GuardList(Emulator &emu) : emu(emu), guards(_guards) { }
-    GuardList(Emulator &emu, moira::Guards &guards) : emu(emu), guards(guards) { }
+    GuardList(Amiga &amiga) : amiga(amiga), guards(_guards) { }
+    GuardList(Amiga &amiga, moira::Guards &guards) : amiga(amiga), guards(guards) { }
     virtual ~GuardList() { }
 
 

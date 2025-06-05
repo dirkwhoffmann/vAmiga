@@ -219,22 +219,19 @@ Defaults::Defaults()
 void
 Defaults::_dump(Category category, std::ostream &os) const
 {
-    {   SYNCHRONIZED
+    for (const auto &it: fallbacks) {
 
-        for (const auto &it: fallbacks) {
+        const string key = it.first;
 
-            const string key = it.first;
+        if (values.contains(key)) {
 
-            if (values.contains(key)) {
+            os << util::tab(key);
+            os << values.at(key) << std::endl;
 
-                os << util::tab(key);
-                os << values.at(key) << std::endl;
+        } else {
 
-            } else {
-
-                os << util::tab(key);
-                os << fallbacks.at(key) << " (Default)" << std::endl;
-            }
+            os << util::tab(key);
+            os << fallbacks.at(key) << " (Default)" << std::endl;
         }
     }
 }
@@ -312,7 +309,7 @@ Defaults::load(std::stringstream &stream)
                 // Check if the key is a known key
                 if (!fallbacks.contains(key)) {
 
-                    warn("Ignoring invalid key=value %s=%s\n", key.c_str(), value.c_str());
+                    warn("Ignoring invalid key %s = %s\n", key.c_str(), value.c_str());
                     skipped++;
                     continue;
                 }
@@ -404,13 +401,10 @@ Defaults::save(std::stringstream &stream)
 string
 Defaults::getRaw(const string &key) const
 {
-    {   SYNCHRONIZED
+    if (values.contains(key)) return values.at(key);
+    if (fallbacks.contains(key)) return fallbacks.at(key);
 
-        if (values.contains(key)) return values.at(key);
-        if (fallbacks.contains(key)) return fallbacks.at(key);
-        
-        throw AppError(Fault::INVALID_KEY, key);
-    }
+    throw AppError(Fault::INVALID_KEY, key);
 }
 
 i64
@@ -445,12 +439,9 @@ Defaults::get(Opt option, isize nr) const
 string
 Defaults::getFallbackRaw(const string &key) const
 {
-    {   SYNCHRONIZED
+    if (fallbacks.contains(key)) return fallbacks.at(key);
 
-        if (fallbacks.contains(key)) return fallbacks.at(key);
-        
-        throw AppError(Fault::INVALID_KEY, key);
-    }
+    throw AppError(Fault::INVALID_KEY, key);
 }
 
 i64

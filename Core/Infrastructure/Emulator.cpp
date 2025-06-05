@@ -215,10 +215,10 @@ Emulator::update()
 {
     // Switch warp mode on or off
     shouldWarp() ? warpOn() : warpOff();
-    
+
     // Mark the run-ahead instance dirty when the command queue has entries
     isDirty |= !cmdQueue.empty;
-    
+
     // Process all commands
     main.update(cmdQueue);
 }
@@ -247,8 +247,8 @@ Emulator::shouldWarp() const
 isize
 Emulator::missingFrames() const
 {
-    auto config = main.getConfig();
-    
+    auto &config = main.getConfig();
+
     // In VSYNC mode, compute exactly one frame per wakeup call
     if (config.vsync) return 1;
     
@@ -360,7 +360,7 @@ Emulator::computeFrame()
 void
 Emulator::cloneRunAheadInstance()
 {
-    // clones++;
+    stats.clones++;
     
     // Recreate the runahead instance from scratch
     ahead = main; isDirty = false;

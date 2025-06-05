@@ -654,7 +654,7 @@ MemoryAPI::loadRom(const fs::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND
     mem->loadRom(path);
-    emu->isDirty = true;
+    emu->markAsDirty();
 }
 
 void
@@ -662,7 +662,7 @@ MemoryAPI::loadExt(const fs::path &path)
 {
     VAMIGA_PUBLIC_SUSPEND
     mem->loadExt(path);
-    emu->isDirty = true;
+    emu->markAsDirty();
 }
 
 void
@@ -670,7 +670,7 @@ MemoryAPI::loadRom(MediaFile &file)
 {
     VAMIGA_PUBLIC_SUSPEND
     mem->loadRom(file);
-    emu->isDirty = true;
+    emu->markAsDirty();
 }
 
 void
@@ -678,7 +678,7 @@ MemoryAPI::loadExt(MediaFile &file)
 {
     VAMIGA_PUBLIC_SUSPEND
     mem->loadExt(file);
-    emu->isDirty = true;
+    emu->markAsDirty();
 }
 
 void
@@ -686,7 +686,7 @@ MemoryAPI::loadRom(const u8 *buf, isize len)
 {
     VAMIGA_PUBLIC_SUSPEND
     mem->loadRom(buf, len);
-    emu->isDirty = true;
+    emu->markAsDirty();
 }
 
 void
@@ -694,7 +694,7 @@ MemoryAPI::loadExt(const u8 *buf, isize len)
 {
     VAMIGA_PUBLIC_SUSPEND
     mem->loadExt(buf, len);
-    emu->isDirty = true;
+    emu->markAsDirty();
 }
 
 void
@@ -723,7 +723,7 @@ MemoryAPI::deleteRom()
 {
     VAMIGA_PUBLIC_SUSPEND
     mem->deleteRom();
-    emu->isDirty = true;
+    emu->markAsDirty();
 }
 
 void
@@ -731,7 +731,7 @@ MemoryAPI::deleteWom()
 {
     VAMIGA_PUBLIC_SUSPEND
     mem->deleteWom();
-    emu->isDirty = true;
+    emu->markAsDirty();
 }
 
 void
@@ -739,7 +739,7 @@ MemoryAPI::deleteExt()
 {
     VAMIGA_PUBLIC_SUSPEND
     mem->deleteExt();
-    emu->isDirty = true;
+    emu->markAsDirty();
 }
 
 
@@ -841,7 +841,7 @@ RTCAPI::update()
 {
     VAMIGA_PUBLIC_SUSPEND
     rtc->update();
-    emu->isDirty = true;
+    emu->markAsDirty();
 }
 
 
@@ -1052,7 +1052,7 @@ KeyboardAPI::press(KeyCode key, double delay, double duration)
     if (delay == 0.0) {
 
         keyboard->press(key);
-        emu->isDirty = true;
+        emu->markAsDirty();
 
     } else {
         
@@ -1071,7 +1071,7 @@ KeyboardAPI::toggle(KeyCode key, double delay, double duration)
     if (delay == 0.0) {
         
         keyboard->toggle(key);
-        emu->isDirty = true;
+        emu->markAsDirty();
         
     } else {
         
@@ -1090,7 +1090,7 @@ KeyboardAPI::release(KeyCode key, double delay)
     if (delay == 0.0) {
         
         keyboard->release(key);
-        emu->isDirty = true;
+        emu->markAsDirty();
         
     } else {
         
@@ -1156,7 +1156,7 @@ FloppyDriveAPI::setFlag(DiskFlags mask, bool value)
 {
     VAMIGA_PUBLIC_SUSPEND
     drive->setFlag(mask, value);
-    emu->isDirty = true;
+    emu->markAsDirty();
 }
 
 bool 
@@ -1171,7 +1171,7 @@ FloppyDriveAPI::insertBlankDisk(FSVolumeType fstype, BootBlockId bb, string name
 {
     VAMIGA_PUBLIC_SUSPEND
     drive->insertNew(fstype, bb, name, path);
-    emu->isDirty = true;
+    emu->markAsDirty();
 }
 
 void
@@ -1179,7 +1179,7 @@ FloppyDriveAPI::insertMedia(MediaFile &file, bool wp)
 {
     VAMIGA_PUBLIC_SUSPEND
     drive->insertMediaFile(file, wp);
-    emu->isDirty = true;
+    emu->markAsDirty();
 }
 
 void
@@ -1188,7 +1188,7 @@ FloppyDriveAPI::insert(const fs::path &path, bool wp)
     VAMIGA_PUBLIC_SUSPEND
     drive->swapDisk(path);
     if (drive->disk) drive->disk->setWriteProtection(wp);
-    emu->isDirty = true;
+    emu->markAsDirty();
 }
 
 void
@@ -2194,7 +2194,7 @@ VAmiga::set(ConfigScheme model)
 {
     VAMIGA_PUBLIC_SUSPEND
     emu->set(model);
-    emu->isDirty = true;
+    emu->markAsDirty();
 }
 
 void
@@ -2203,7 +2203,7 @@ VAmiga::set(Opt opt, i64 value)
     VAMIGA_PUBLIC
     emu->check(opt, value);
     put(Cmd::CONFIG_ALL, ConfigCmd { .option = opt, .value = value });
-    emu->isDirty = true;
+    emu->markAsDirty();
 }
 
 void
@@ -2212,7 +2212,7 @@ VAmiga::set(Opt opt, i64 value, long id)
     VAMIGA_PUBLIC
     emu->check(opt, value, { id });
     put(Cmd::CONFIG, ConfigCmd { .option = opt, .value = value, .id = id });
-    emu->isDirty = true;
+    emu->markAsDirty();
 }
 
 void
@@ -2253,7 +2253,7 @@ AmigaAPI::loadSnapshot(const MediaFile &snapshot)
 {
     VAMIGA_PUBLIC_SUSPEND
     
-    emu->isDirty = true;
+    emu->markAsDirty();
     
     try {
         

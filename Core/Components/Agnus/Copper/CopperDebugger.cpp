@@ -15,7 +15,7 @@
 
 namespace vamiga {
 
-CopperBreakpoints::CopperBreakpoints(Copper& ref) : GuardList(ref.emulator), copper(ref)
+CopperBreakpoints::CopperBreakpoints(Copper& ref) : GuardList(ref.amiga), copper(ref)
 {
 
 }
@@ -26,7 +26,7 @@ CopperBreakpoints::setNeedsCheck(bool value)
     copper.checkForBreakpoints = value;
 }
 
-CopperWatchpoints::CopperWatchpoints(Copper& ref) : GuardList(ref.emulator), copper(ref)
+CopperWatchpoints::CopperWatchpoints(Copper& ref) : GuardList(ref.amiga), copper(ref)
 {
 
 }

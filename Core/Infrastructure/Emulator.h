@@ -25,7 +25,12 @@ class Emulator : public Thread, public Synchronizable, public Inspectable<Emulat
 
 public:
 
-    // The virtual Amiga
+    // User default settings
+    static Defaults defaults;
+
+private:
+    
+    // The main emulator instance
     Amiga main = Amiga(*this, 0);
 
     // The run-ahead instance
@@ -33,9 +38,6 @@ public:
 
     // Indicates if the run-ahead instance needs to be updated
     bool isDirty = true;
-
-    // User default settings
-    static Defaults defaults;
 
     // Incoming external events
     CmdQueue cmdQueue;
@@ -59,6 +61,9 @@ public:
     // Initializes all components
     void initialize() override;
 
+    // Forces to recreate the run-ahead instance in the next frame
+    void markAsDirty() { isDirty = true; }
+    
 
     //
     // Methods from CoreComponent
