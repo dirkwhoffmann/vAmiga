@@ -560,7 +560,9 @@ void
 Amiga::set(ConfigScheme scheme)
 {
     assert_enum(ConfigScheme, scheme);
-    
+
+    emulator.revertToDefaultConfig();
+
     switch(scheme) {
             
         case ConfigScheme::A1000_OCS_1MB:
@@ -893,6 +895,12 @@ Amiga::update(CmdQueue &queue)
 
                 cmdConfig = true;
                 set(cmd.config.option, cmd.config.value, { });
+                break;
+
+            case Cmd::CONFIG_SCHEME:
+
+                cmdConfig = true;
+                set(ConfigScheme(cmd.value));
                 break;
 
             case Cmd::HARD_RESET:

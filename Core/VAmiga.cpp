@@ -2193,7 +2193,7 @@ void
 VAmiga::set(ConfigScheme model)
 {
     VAMIGA_PUBLIC_SUSPEND
-    emu->set(model);
+    put(Cmd::CONFIG_SCHEME, (i64)model);
     emu->markAsDirty();
 }
 

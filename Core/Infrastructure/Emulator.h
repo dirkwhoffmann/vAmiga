@@ -110,6 +110,10 @@ public:
     // Configures the emulator to match a specific Amiga model
     void set(ConfigScheme model);
 
+    // Powers off and reverts to the default configuration
+    void revertToDefaultConfig();
+
+
 
     //
     // Methods from Thread

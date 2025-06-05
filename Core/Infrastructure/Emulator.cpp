@@ -205,6 +205,21 @@ Emulator::set(ConfigScheme scheme)
 }
 
 void
+Emulator::revertToDefaultConfig()
+{
+    // Power off
+    powerOff();
+
+    // Setup the default configuration
+    main.resetConfig();
+    ahead.resetConfig();
+
+    // Perform a hard reset
+    main.hardReset();
+    ahead.hardReset();
+}
+
+void
 Emulator::update()
 {
     // Switch warp mode on or off
