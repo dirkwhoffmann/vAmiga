@@ -213,9 +213,6 @@ Thread::switchState(ExecState newState)
                         invalid();
                 }
                 break;
-                
-            case ExecState::UNINIT:
-                fatalError;
         }
     }
 
@@ -275,7 +272,7 @@ Thread::halt()
 {
     debug(RUN_DEBUG, "halt()\n");
 
-    if (state != ExecState::UNINIT && state != ExecState::HALTED) {
+    if (state != ExecState::HALTED) {
 
         switchState(ExecState::HALTED);
     }

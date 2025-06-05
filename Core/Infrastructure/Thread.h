@@ -37,7 +37,7 @@ protected:
     std::thread thread;
     
     // The current thread state
-    ExecState state = ExecState::UNINIT;
+    ExecState state = ExecState::OFF;
 
     // A latch controlling the launch procedure
     std::latch initLatch {1};
@@ -165,8 +165,8 @@ public:
 
     // bool isInitialized() const { return state != ExecState::UNINIT; }
     bool isInitialized() const { return initLatch.try_wait(); }
-    bool isPoweredOn() const { return state != ExecState::UNINIT && state != ExecState::OFF; }
-    bool isPoweredOff() const { return state == ExecState::UNINIT || state == ExecState::OFF; }
+    bool isPoweredOn() const { return state != ExecState::OFF; }
+    bool isPoweredOff() const { return state == ExecState::OFF; }
     bool isPaused() const { return state == ExecState::PAUSED; }
     bool isRunning() const { return state == ExecState::RUNNING; }
     bool isHalted() const { return state == ExecState::HALTED; }
