@@ -463,6 +463,17 @@ FileSystem::currentDirBlock() const
 }
 
 FSBlock *
+FileSystem::dirBlock(Block dir) const
+{
+    FSBlock *ptr = blockPtr(dir);
+
+    if (ptr && ptr->type == FSBlockType::ROOT_BLOCK) return ptr;
+    if (ptr && ptr->type == FSBlockType::USERDIR_BLOCK) return ptr;
+
+    return nullptr;
+}
+
+FSBlock *
 FileSystem::changeDir(const string &name)
 {
     FSBlock *cdb = currentDirBlock();
@@ -493,6 +504,40 @@ FileSystem::changeDir(const string &name)
     // Switch back to the root directory, as the reference is invalid
     cd = rootBlock;
     return blockPtr(cd);
+}
+
+Block
+FileSystem::changeDir(Block dir, const string &name) const
+{
+    return changeDir(blockPtr(dir), name)->nr;
+}
+
+FSBlock *
+FileSystem::changeDir(FSBlock *dir, const string &name) const
+{
+    FSBlock *result = nullptr;
+
+    auto isDirectory = [](FSBlock *b) {
+        return b && (b->type == FSBlockType::ROOT_BLOCK || b->type == FSBlockType::USERDIR_BLOCK);
+    };
+
+    if (!isDirectory(dir) || name == "/") {
+
+        // Move to the top level
+
+    } else if (name == "..") {
+
+        // Move one level up
+        result = dir->getParentDirBlock();
+
+    } else {
+
+        // Move one level down
+        result = seekDir(name);
+    }
+
+    // Return the new directory or the root block as a fall back
+    return isDirectory(result) ? result : blockPtr(rootBlock);
 }
 
 void

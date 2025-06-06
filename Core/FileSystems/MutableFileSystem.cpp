@@ -412,7 +412,8 @@ MutableFileSystem::rectifyAllocationMap()
         }
     }
 }
-    
+
+/*
 FSBlock *
 MutableFileSystem::createDir(const FSName &name)
 {
@@ -427,6 +428,23 @@ MutableFileSystem::createDir(const FSName &name)
     }
     
     throw AppError(Fault::FS_OUT_OF_SPACE);
+}
+*/
+
+FSBlock *
+MutableFileSystem::createDir(Block dir, const FSName &name)
+{
+    FSBlock *ptr = dirBlock(dir);
+    FSBlock *block = newUserDirBlock(name);
+
+    if (ptr && block) {
+
+        block->setParentDirRef(ptr->nr);
+        addHashRef(block->nr);
+        return block;
+    }
+
+    throw AppError(ptr ? Fault::FS_OUT_OF_SPACE : Fault::FS_INVALID_BLOCK_TYPE);
 }
 
 FSBlock *
@@ -494,6 +512,73 @@ FSBlock *
 MutableFileSystem::createFile(const FSName &name, const string &str)
 {
     return createFile(name, (const u8 *)str.c_str(), (isize)str.size());
+}
+
+FSBlock *
+MutableFileSystem::createFile(Block dir, const FSName &name)
+{
+    FSBlock *ptr = dirBlock(dir);
+    FSBlock *block = newFileHeaderBlock(name);
+
+    if (ptr && block) {
+
+        block->setParentDirRef(ptr->nr);
+        addHashRef(block->nr);
+        return block;
+    }
+
+    throw AppError(ptr ? Fault::FS_OUT_OF_SPACE : Fault::FS_INVALID_BLOCK_TYPE);
+}
+
+FSBlock *
+MutableFileSystem::createFile(Block dir, const FSName &name, const u8 *buf, isize size)
+{
+    assert(buf);
+
+    // Compute the number of data block references held in a file header or list block
+    const usize numRefs = ((bsize / 4) - 56);
+
+    // Create a file header block
+    FSBlock *fhb = createFile(dir, name);
+
+    // Set file size
+    fhb->setFileSize(u32(size));
+
+    // Allocate blocks
+    std::vector<Block> listBlocks;
+    std::vector<Block> dataBlocks;
+    allocateFileBlocks(size, listBlocks, dataBlocks);
+
+    for (usize i = 0; i < listBlocks.size(); i++) {
+
+        // Add a list block
+        addFileListBlock(listBlocks[i], fhb->nr, i == 0 ? fhb->nr : listBlocks[i-1]);
+    }
+
+    for (usize i = 0; i < dataBlocks.size(); i++) {
+
+        // Add a data block
+        addDataBlock(dataBlocks[i], i + 1, fhb->nr, i == 0 ? fhb->nr : dataBlocks[i-1]);
+
+        // Determine the list block managing this data block
+        FSBlock *lb = blockPtr((i < numRefs) ? fhb->nr : listBlocks[i / numRefs - 1]);
+
+        // Link the data block
+        lb->addDataBlockRef(dataBlocks[0], dataBlocks[i]);
+
+        // Add data bytes
+        isize written = addData(dataBlocks[i], buf, size);
+        buf += written;
+        size -= written;
+    }
+
+    return fhb;
+}
+
+FSBlock *
+MutableFileSystem::createFile(Block dir, const FSName &name, const string &str)
+{
+    return createFile(dir, name, (const u8 *)str.c_str(), (isize)str.size());
 }
 
 void

@@ -201,10 +201,13 @@ protected:
 public:
     
     // Returns the block representing the current directory
-    FSBlock *currentDirBlock() const;
-    
+    FSBlock *currentDirBlock() const; // DEPRECATED
+    FSBlock *dirBlock(Block dir) const;
+
     // Changes the current directory
-    FSBlock *changeDir(const string &name);
+    FSBlock *changeDir(const string &name); // DEPRECATED
+    Block changeDir(Block dir, const string &name) const;
+    FSBlock *changeDir(FSBlock *dir, const string &name) const;
 
     // Prints a directory listing
     void printDirectory(bool recursive) const throws;

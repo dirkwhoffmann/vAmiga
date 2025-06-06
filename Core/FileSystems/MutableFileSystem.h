@@ -134,12 +134,21 @@ public:
 public:
 
     // Creates a new directory
-    FSBlock *createDir(const FSName &name);
+    FSBlock *createDir(const FSName &name) { return createDir(cd, name); } // DEPRECATED
 
     // Creates a new file
-    FSBlock *createFile(const FSName &name);
-    FSBlock *createFile(const FSName &name, const u8 *buf, isize size);
-    FSBlock *createFile(const FSName &name, const string &str);
+    FSBlock *createFile(const FSName &name); // DEPRECATED
+    FSBlock *createFile(const FSName &name, const u8 *buf, isize size); // DEPRECATED
+    FSBlock *createFile(const FSName &name, const string &str); // DEPRECATED
+
+    // Creates a new directory
+    FSBlock *createDir(Block dir, const FSName &name);
+
+    // Creates a new file
+    FSBlock *createFile(Block dir, const FSName &name);
+    FSBlock *createFile(Block dir, const FSName &name, const u8 *buf, isize size);
+    FSBlock *createFile(Block dir, const FSName &name, const string &str);
+
 
 private:
     
