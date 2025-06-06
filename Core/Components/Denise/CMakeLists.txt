@@ -7,7 +7,7 @@ Denise.cpp
 DeniseDebugger.cpp
 DeniseInfo.cpp
 DeniseRegs.cpp
-FrameBuffer.cpp
 PixelEngine.cpp
+Texture.cpp
 
 )
