@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 @MainActor
-class SnapshotDialog: DialogController {
+class SnapshotViewer: DialogController {
     
     var now: Date!
 
@@ -190,7 +190,7 @@ class SnapshotDialog: DialogController {
 //
 
 @MainActor
-extension SnapshotDialog: @preconcurrency iCarouselDataSource, @preconcurrency iCarouselDelegate {
+extension SnapshotViewer: @preconcurrency iCarouselDataSource, @preconcurrency iCarouselDelegate {
     
     func numberOfItems(in carousel: iCarousel) -> Int {
                 

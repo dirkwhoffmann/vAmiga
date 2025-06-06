@@ -195,7 +195,6 @@ class Canvas: Layer {
         precondition(lfTexture != nil)
         precondition(sfTexture != nil)
 
-        // Get the emulator texture
         var buffer: UnsafePointer<UInt32>!
         var nr = 0
 

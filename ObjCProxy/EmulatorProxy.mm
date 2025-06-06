@@ -84,7 +84,7 @@ const VAmigaConstants VAMIGA = {
     .HDR.S_MAX = HDR_S_MAX,
 };
 
-NSString *EventSlotName(NSInteger slot)
+NSString *EventSlotName(EventSlot slot)
 {
     return @(EventSlotEnum::help(slot));
 }

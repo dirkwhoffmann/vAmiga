@@ -124,7 +124,7 @@ typedef struct {
 
 extern const VAmigaConstants VAMIGA;
 
-NSString *EventSlotName(NSInteger slot);
+NSString *EventSlotName(EventSlot slot);
 
 //
 // Exception wrapper

@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 @MainActor
-class ScreenshotDialog: DialogController {
+class ScreenshotViewer: DialogController {
     
     var now: Date!
 
@@ -184,7 +184,7 @@ class ScreenshotDialog: DialogController {
 //
 
 @MainActor
-extension ScreenshotDialog: @preconcurrency iCarouselDataSource, @preconcurrency iCarouselDelegate {
+extension ScreenshotViewer: @preconcurrency iCarouselDataSource, @preconcurrency iCarouselDelegate {
     
     func numberOfItems(in carousel: iCarousel) -> Int {
                 

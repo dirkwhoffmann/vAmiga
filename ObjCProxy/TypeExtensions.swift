@@ -80,7 +80,7 @@ extension Compressor: CustomStringConvertible {
 
 extension EventSlot: CustomStringConvertible {
 
-    public var description: String { return EventSlotName(self.rawValue) }
+    public var description: String { return EventSlotName(self) }
 }
 
 extension FileType {
