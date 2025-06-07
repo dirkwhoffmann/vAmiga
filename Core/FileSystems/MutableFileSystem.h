@@ -170,9 +170,7 @@ public:
     void importVolume(const u8 *src, isize size) throws;
 
     // Imports a directory from the host file system
-    // void importDirectory(const fs::path &path, bool recursive = true) throws; // DEPRECATED
-    // void importDirectory(const fs::directory_entry &dir, bool recursive) throws; // DEPRECATED
-
+    void importDirectory(const fs::path &path, bool recursive = true) throws;
     void importDirectory(const fs::path &path, const FSPath &dst, bool recursive = true) throws;
     void importDirectory(const fs::directory_entry &dir, const FSPath &dst, bool recursive) throws;
 

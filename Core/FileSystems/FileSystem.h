@@ -223,19 +223,14 @@ public:
     void printDirectory(bool recursive) const throws;
     
     // Returns the path of a file system item
-    fs::path getPath(FSBlock *block) const;
-    fs::path getPath(Block nr) const { return getPath(blockPtr(nr)); }
-    // [[deprecated]] fs::path getPath() const { return getPath(currentDirBlock()); }
+    fs::path getPath(FSBlock *block) const; // DEPRECATED
+    fs::path getPath(Block nr) const { return getPath(blockPtr(nr)); } // DEPRECATED
 
     // Seeks an item inside the current directory
-    /*
-    [[deprecated]] Block seekRef(FSName name) const;
-    [[deprecated]] Block seekRef(const string &name) const { return seekRef(FSName(name)); }
-    [[deprecated]] FSBlock *seek(const string &name) const { return blockPtr(seekRef(name)); }
-    [[deprecated]] FSBlock *seekDir(const string &name) const { return userDirBlockPtr(seekRef(name)); }
-    [[deprecated]] FSBlock *seekFile(const string &name) const { return fileHeaderBlockPtr(seekRef(name)); }
-    [[deprecated]] FSBlock *seekPath(const fs::path &path);
-    */
+    FSPath seek(const fs::path &path) { return rootDir().seek(path); }
+    FSPath seekDir(const fs::path &path) { return rootDir().seekDir(path); }
+    FSPath seekFile(const fs::path &path) { return rootDir().seekFile(path); }
+
 
     //
     // Integrity checking

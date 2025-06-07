@@ -1027,7 +1027,7 @@ FloppyDrive::catchFile(const fs::path &path)
     auto fs = MutableFileSystem(*this);
     
     // Seek file
-    auto file = fs.rootDir().seekFile(path).ptr();
+    auto file = fs.seekFile(path).ptr();
     
     // Extract file
     Buffer<u8> buffer;

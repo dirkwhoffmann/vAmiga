@@ -673,6 +673,12 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
 }
 
 void
+MutableFileSystem::importDirectory(const fs::path &path, bool recursive)
+{
+    importDirectory(path, rootDir(), recursive);
+}
+
+void
 MutableFileSystem::importDirectory(const fs::path &path, const FSPath &dst, bool recursive)
 {
     fs::directory_entry dir;
