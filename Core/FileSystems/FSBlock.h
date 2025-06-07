@@ -23,8 +23,8 @@ using util::Buffer;
 
 struct FSBlock : CoreObject {
 
-    // The device this block belongs to
-    class FileSystem &device;
+    // The file system this block belongs to
+    class FileSystem &fs;
 
     // The type of this block
     FSBlockType type = FSBlockType::UNKNOWN_BLOCK;
@@ -347,43 +347,43 @@ if (value > (u32)exp) \
 if (!FSVolumeTypeEnum::isValid((isize)value)) return Fault::FS_EXPECTED_DOS_REVISION; }
 
 #define EXPECT_REF { \
-if (!device.block(value)) return Fault::FS_EXPECTED_REF; }
+if (!fs.block(value)) return Fault::FS_EXPECTED_REF; }
 
 #define EXPECT_SELFREF { \
 if (value != nr) return Fault::FS_EXPECTED_SELFREF; }
 
 #define EXPECT_FILEHEADER_REF { \
-if (Fault e = device.checkBlockType(value, FSBlockType::FILEHEADER_BLOCK); e != Fault::OK) return e; }
+if (Fault e = fs.checkBlockType(value, FSBlockType::FILEHEADER_BLOCK); e != Fault::OK) return e; }
 
 #define EXPECT_HASH_REF { \
-if (Fault e = device.checkBlockType(value, FSBlockType::FILEHEADER_BLOCK, FSBlockType::USERDIR_BLOCK); e != Fault::OK) return e; }
+if (Fault e = fs.checkBlockType(value, FSBlockType::FILEHEADER_BLOCK, FSBlockType::USERDIR_BLOCK); e != Fault::OK) return e; }
 
 #define EXPECT_OPTIONAL_HASH_REF { \
 if (value) { EXPECT_HASH_REF } }
 
 #define EXPECT_PARENT_DIR_REF { \
-if (Fault e = device.checkBlockType(value, FSBlockType::ROOT_BLOCK, FSBlockType::USERDIR_BLOCK); e != Fault::OK) return e; }
+if (Fault e = fs.checkBlockType(value, FSBlockType::ROOT_BLOCK, FSBlockType::USERDIR_BLOCK); e != Fault::OK) return e; }
 
 #define EXPECT_FILELIST_REF { \
-if (Fault e = device.checkBlockType(value, FSBlockType::FILELIST_BLOCK); e != Fault::OK) return e; }
+if (Fault e = fs.checkBlockType(value, FSBlockType::FILELIST_BLOCK); e != Fault::OK) return e; }
 
 #define EXPECT_OPTIONAL_FILELIST_REF { \
 if (value) { EXPECT_FILELIST_REF } }
 
 #define EXPECT_BITMAP_REF { \
-if (Fault e = device.checkBlockType(value, FSBlockType::BITMAP_BLOCK); e != Fault::OK) return e; }
+if (Fault e = fs.checkBlockType(value, FSBlockType::BITMAP_BLOCK); e != Fault::OK) return e; }
 
 #define EXPECT_OPTIONAL_BITMAP_REF { \
 if (value) { EXPECT_BITMAP_REF } }
 
 #define EXPECT_BITMAP_EXT_REF { \
-if (Fault e = device.checkBlockType(value, FSBlockType::BITMAP_EXT_BLOCK); e != Fault::OK) return e; }
+if (Fault e = fs.checkBlockType(value, FSBlockType::BITMAP_EXT_BLOCK); e != Fault::OK) return e; }
 
 #define EXPECT_OPTIONAL_BITMAP_EXT_REF { \
 if (value) { EXPECT_BITMAP_EXT_REF } }
 
 #define EXPECT_DATABLOCK_REF { \
-if (Fault e = device.checkBlockType(value, FSBlockType::DATA_BLOCK_OFS, FSBlockType::DATA_BLOCK_FFS); e != Fault::OK) return e; }
+if (Fault e = fs.checkBlockType(value, FSBlockType::DATA_BLOCK_OFS, FSBlockType::DATA_BLOCK_FFS); e != Fault::OK) return e; }
 
 #define EXPECT_OPTIONAL_DATABLOCK_REF { \
 if (value) { EXPECT_DATABLOCK_REF } }

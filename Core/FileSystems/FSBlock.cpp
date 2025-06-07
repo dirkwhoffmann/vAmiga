@@ -15,7 +15,7 @@
 
 namespace vamiga {
 
-FSBlock::FSBlock(FileSystem &ref, Block nr, FSBlockType t) : device(ref)
+FSBlock::FSBlock(FileSystem &ref, Block nr, FSBlockType t) : fs(ref)
 {
     this->nr = nr;
     init(t);
@@ -36,11 +36,11 @@ FSBlock::init(FSBlockType t)
 
         case FSBlockType::BOOT_BLOCK:
             
-            if (nr == 0 && device.dos != FSVolumeType::NODOS) {
+            if (nr == 0 && fs.dos != FSVolumeType::NODOS) {
                 data[0] = 'D';
                 data[1] = 'O';
                 data[2] = 'S';
-                data[3] = (u8)device.dos;
+                data[3] = (u8)fs.dos;
             }
             break;
             
@@ -137,7 +137,7 @@ FSBlock::objectName() const
 isize
 FSBlock::bsize() const
 {
-    return device.bsize;
+    return fs.bsize;
 }
 
 isize
@@ -641,7 +641,7 @@ FSBlock::checksumBootBlock() const
     }
 
     // Second boot block
-    u8 *p = device.blocks[1]->data.ptr;
+    u8 *p = fs.blocks[1]->data.ptr;
     
     for (isize i = 0; i < bsize() / 4; i++) {
         
@@ -809,7 +809,7 @@ Fault
 FSBlock::exportUserDirBlock(const fs::path &path)
 {
     // Assemble the host file name
-    auto filename = path / FSPath(device, nr).getPath();
+    auto filename = path / FSPath(fs, nr).getPath();
     debug(FS_DEBUG >= 2, "Creating directory %s\n", filename.string().c_str());
 
     // Create directory
@@ -822,7 +822,7 @@ Fault
 FSBlock::exportFileHeaderBlock(const fs::path &path)
 {
     // Assemble the host file name
-    auto filename = path / FSPath(device, nr).getPath(); // device.getPath(this);
+    auto filename = path / FSPath(fs, nr).getPath(); // device.getPath(this);
     debug(FS_DEBUG >= 2, "  Exporting file %s\n", filename.string().c_str());
 
     // Open file
@@ -1079,7 +1079,7 @@ FSBlock *
 FSBlock::getParentDirBlock() const
 {
     Block nr = getParentDirRef();
-    return nr ? device.blockPtr(nr) : nullptr;
+    return nr ? fs.blockPtr(nr) : nullptr;
 }
 
 Block
@@ -1112,7 +1112,7 @@ FSBlock *
 FSBlock::getFileHeaderBlock() const
 {
     Block nr = getFileHeaderRef();
-    return nr ? device.fileHeaderBlockPtr(nr) : nullptr;
+    return nr ? fs.fileHeaderBlockPtr(nr) : nullptr;
 }
 
 Block
@@ -1150,7 +1150,7 @@ FSBlock *
 FSBlock::getNextHashBlock() const
 {
     Block nr = getNextHashRef();
-    return nr ? device.blockPtr(nr) : nullptr;
+    return nr ? fs.blockPtr(nr) : nullptr;
 }
 
 Block
@@ -1188,7 +1188,7 @@ FSBlock *
 FSBlock::getNextListBlock() const
 {
     Block nr = getNextListBlockRef();
-    return nr ? device.fileListBlockPtr(nr) : nullptr;
+    return nr ? fs.fileListBlockPtr(nr) : nullptr;
 }
 
 Block
@@ -1221,7 +1221,7 @@ FSBlock *
 FSBlock::getNextBmExtBlock() const
 {
     Block nr = getNextBmExtBlockRef();
-    return nr ? device.bitmapExtBlockPtr(nr) : nullptr;
+    return nr ? fs.bitmapExtBlockPtr(nr) : nullptr;
 }
 
 Block
@@ -1258,7 +1258,7 @@ FSBlock *
 FSBlock::getFirstDataBlock() const
 {
     Block nr = getFirstDataBlockRef();
-    return nr ? device.dataBlockPtr(nr) : nullptr;
+    return nr ? fs.dataBlockPtr(nr) : nullptr;
 }
 
 Block
@@ -1308,7 +1308,7 @@ FSBlock *
 FSBlock::getNextDataBlock() const
 {
     Block nr = getNextDataBlockRef();
-    return nr ? device.dataBlockPtr(nr) : nullptr;
+    return nr ? fs.dataBlockPtr(nr) : nullptr;
 }
 
 isize
@@ -1643,7 +1643,7 @@ FSBlock::writeData(Buffer<u8> &buf)
     // Start here and iterate through all connected file list blocks
     FSBlock *block = this;
     
-    while (block && blocksTotal < device.numBlocks()) {
+    while (block && blocksTotal < fs.numBlocks()) {
         
         blocksTotal++;
         
@@ -1652,7 +1652,7 @@ FSBlock::writeData(Buffer<u8> &buf)
         for (isize i = 0; i < num; i++) {
             
             Block ref = block->getDataBlockRef(i);
-            if (FSBlock *dataBlock = device.dataBlockPtr(ref)) {
+            if (FSBlock *dataBlock = fs.dataBlockPtr(ref)) {
 
                 isize bytesWritten = dataBlock->writeData(buf, bytesTotal, bytesRemaining);
                 bytesTotal += bytesWritten;
@@ -1712,7 +1712,7 @@ FSBlock::overwriteData(Buffer<u8> &buf)
     // Start here and iterate through all connected file list blocks
     FSBlock *block = this;
     
-    while (block && blocksTotal < device.numBlocks()) {
+    while (block && blocksTotal < fs.numBlocks()) {
         
         blocksTotal++;
         
@@ -1721,7 +1721,7 @@ FSBlock::overwriteData(Buffer<u8> &buf)
         for (isize i = 0; i < num; i++) {
 
             Block ref = block->getDataBlockRef(i);
-            if (FSBlock *dataBlock = device.dataBlockPtr(ref)) {
+            if (FSBlock *dataBlock = fs.dataBlockPtr(ref)) {
                 
                 isize bytesWritten = dataBlock->overwriteData(buf, bytesTotal, bytesRemaining);
                 bytesTotal += bytesWritten;
