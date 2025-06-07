@@ -18,7 +18,8 @@ struct FSPath
 {
     const class FileSystem &fs;
 
-    Block dir;
+    // The referenced block
+    Block ref;
 
     FSPath(const FSPath &);
     FSPath(const FileSystem &fs, Block dir);
@@ -27,13 +28,13 @@ struct FSPath
 
     FSPath &operator=(const FSPath &);
 
-    void selfcheck();
+    void selfcheck() const;
 
-    class FSBlock *ptr();
+    class FSBlock *ptr() const;
 
-    bool isRoot();
-    bool isFile();
-    bool isDirectory();
+    bool isRoot() const;
+    bool isFile() const;
+    bool isDirectory() const;
 
     Block seek(const FSName &name) const;
     FSPath seekDir(const FSName &name) const;

@@ -132,20 +132,20 @@ public:
 public:
 
     // Creates a new directory
-    FSPath createDir(const FSPath &dir, const FSName &name);
+    FSPath createDir(const FSPath &at, const FSName &name);
 
     // Creates a new file
-    FSPath createFile(const FSPath &dst, const FSName &name);
-    FSPath createFile(const FSPath &dst, const FSName &name, const Buffer<u8> &buf);
-    FSPath createFile(const FSPath &dst, const FSName &name, const u8 *buf, isize size);
-    FSPath createFile(const FSPath &dst, const FSName &name, const string &str);
+    FSPath createFile(const FSPath &at, const FSName &name);
+    FSPath createFile(const FSPath &at, const FSName &name, const Buffer<u8> &buf);
+    FSPath createFile(const FSPath &at, const FSName &name, const u8 *buf, isize size);
+    FSPath createFile(const FSPath &at, const FSName &name, const string &str);
 
 
 private:
 
     // Adds a reference to a directory
-    void addHashRef(const FSPath &dir, Block nr);
-    void addHashRef(const FSPath &dir, FSBlock *block);
+    void addHashRef(const FSPath &at, Block nr);
+    void addHashRef(const FSPath &at, FSBlock *block);
 
     // Adds bytes to a data block
     isize addData(Block nr, const u8 *buf, isize size);
@@ -164,9 +164,9 @@ public:
     void importVolume(const u8 *src, isize size) throws;
 
     // Imports a directory from the host file system
+    void importDirectory(const FSPath &at, const fs::path &path, bool recursive = true) throws;
+    void importDirectory(const FSPath &at, const fs::directory_entry &dir, bool recursive) throws;
     void importDirectory(const fs::path &path, bool recursive = true) throws;
-    void importDirectory(const fs::path &path, const FSPath &dst, bool recursive = true) throws;
-    void importDirectory(const fs::directory_entry &dir, const FSPath &dst, bool recursive) throws;
 
     // Exports the volume to a buffer
     bool exportVolume(u8 *dst, isize size) const;

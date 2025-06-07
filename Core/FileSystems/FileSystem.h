@@ -217,14 +217,14 @@ public:
     bool exists(const fs::path &path) const { return exists(rootDir(), path); }
 
     // Returns the block representing a directory
-    FSBlock *dirBlock(Block dir) const; // DEPRECATED
+    [[deprecated]] FSBlock *dirBlock(Block dir) const; // DEPRECATED
 
     // Prints a directory listing
     void printDirectory(bool recursive) const throws;
     
     // Returns the path of a file system item
-    fs::path getPath(FSBlock *block) const; // DEPRECATED
-    fs::path getPath(Block nr) const { return getPath(blockPtr(nr)); } // DEPRECATED
+    [[deprecated]] fs::path getPath(FSBlock *block) const; // DEPRECATED
+    [[deprecated]] fs::path getPath(Block nr) const { return getPath(blockPtr(nr)); } // DEPRECATED
 
 
     //

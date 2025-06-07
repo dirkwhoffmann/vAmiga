@@ -59,8 +59,8 @@ MutableFileSystem::init(FileSystemDescriptor &layout, const fs::path &path)
     if (!path.empty()) {
         
         // Add all files
-        importDirectory(path, rootDir());
-        
+        importDirectory(rootDir(), path);
+
         // Assign device name
         setName(FSName(path.filename().string()));
     }
@@ -382,45 +382,45 @@ MutableFileSystem::rectifyAllocationMap()
 }
 
 FSPath
-MutableFileSystem::createDir(const FSPath &dir, const FSName &name)
+MutableFileSystem::createDir(const FSPath &at, const FSName &name)
 {
-    FSBlock *ptr = dirBlock(dir.dir);
-    FSBlock *block = newUserDirBlock(name);
+    if (at.isDirectory()) {
 
-    if (ptr && block) {
+        if (FSBlock *block = newUserDirBlock(name); block) {
 
-        block->setParentDirRef(ptr->nr);
-        addHashRef(dir, block->nr);
-        return FSPath(*this, block);
+            block->setParentDirRef(at.ref);
+            addHashRef(at, block->nr);
+            return FSPath(*this, block);
+        }
+        throw AppError(Fault::FS_OUT_OF_SPACE);
     }
-
-    throw AppError(ptr ? Fault::FS_OUT_OF_SPACE : Fault::FS_INVALID_BLOCK_TYPE);
+    throw AppError(Fault::FS_INVALID_PATH);
 }
 
 FSPath
-MutableFileSystem::createFile(const FSPath &dst, const FSName &name)
+MutableFileSystem::createFile(const FSPath &at, const FSName &name)
 {
-    FSBlock *ptr = dirBlock(dst.dir);
-    FSBlock *block = newFileHeaderBlock(name);
+    if (at.isDirectory()) {
 
-    if (ptr && block) {
+        if (FSBlock *block = newFileHeaderBlock(name); block) {
 
-        block->setParentDirRef(ptr->nr);
-        addHashRef(dst, block->nr);
-        return FSPath(*this, block);
+            block->setParentDirRef(at.ref);
+            addHashRef(at, block->nr);
+            return FSPath(*this, block);
+        }
+        throw AppError(Fault::FS_OUT_OF_SPACE);
     }
-
-    throw AppError(ptr ? Fault::FS_OUT_OF_SPACE : Fault::FS_INVALID_BLOCK_TYPE);
+    throw AppError(Fault::FS_INVALID_PATH);
 }
 
 FSPath
-MutableFileSystem::createFile(const FSPath &dst, const FSName &name, const Buffer<u8> &buf)
+MutableFileSystem::createFile(const FSPath &at, const FSName &name, const Buffer<u8> &buf)
 {
-    return createFile(dst, name, buf.ptr, buf.size);
+    return createFile(at, name, buf.ptr, buf.size);
 }
 
 FSPath
-MutableFileSystem::createFile(const FSPath &dst, const FSName &name, const u8 *buf, isize size)
+MutableFileSystem::createFile(const FSPath &at, const FSName &name, const u8 *buf, isize size)
 {
     assert(buf);
 
@@ -428,7 +428,7 @@ MutableFileSystem::createFile(const FSPath &dst, const FSName &name, const u8 *b
     const usize numRefs = ((bsize / 4) - 56);
 
     // Create a file header block
-    auto file = createFile(dst, name);
+    auto file = createFile(at, name);
     auto fhb = file.ptr();
 
     // Set file size
@@ -466,24 +466,24 @@ MutableFileSystem::createFile(const FSPath &dst, const FSName &name, const u8 *b
 }
 
 FSPath
-MutableFileSystem::createFile(const FSPath &dst, const FSName &name, const string &str)
+MutableFileSystem::createFile(const FSPath &at, const FSName &name, const string &str)
 {
-    return createFile(dst, name, (const u8 *)str.c_str(), (isize)str.size());
+    return createFile(at, name, (const u8 *)str.c_str(), (isize)str.size());
 }
 
 void
-MutableFileSystem::addHashRef(const FSPath &dir, Block nr)
+MutableFileSystem::addHashRef(const FSPath &at, Block nr)
 {
     if (FSBlock *block = hashableBlockPtr(nr)) {
-        addHashRef(dir, block);
+        addHashRef(at, block);
     }
 }
 
 void
-MutableFileSystem::addHashRef(const FSPath &dir, FSBlock *newBlock)
+MutableFileSystem::addHashRef(const FSPath &at, FSBlock *newBlock)
 {
     // Only proceed if a hash table is present
-    FSBlock *bp = blockPtr(dir.dir);
+    FSBlock *bp = blockPtr(at.ref);
     if (!bp || bp->hashTableSize() == 0) { return; }
 
     // Read the item at the proper hash table location
@@ -617,13 +617,7 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
 }
 
 void
-MutableFileSystem::importDirectory(const fs::path &path, bool recursive)
-{
-    importDirectory(path, rootDir(), recursive);
-}
-
-void
-MutableFileSystem::importDirectory(const fs::path &path, const FSPath &dst, bool recursive)
+MutableFileSystem::importDirectory(const FSPath &at, const fs::path &path, bool recursive)
 {
     fs::directory_entry dir;
 
@@ -631,7 +625,7 @@ MutableFileSystem::importDirectory(const fs::path &path, const FSPath &dst, bool
     catch (...) { throw AppError(Fault::FILE_CANT_READ); }
 
     // Add all files
-    importDirectory(dir, dst, recursive);
+    importDirectory(at, dir, recursive);
 
     // Rectify the checksums of all blocks
     updateChecksums();
@@ -641,7 +635,7 @@ MutableFileSystem::importDirectory(const fs::path &path, const FSPath &dst, bool
 }
 
 void
-MutableFileSystem::importDirectory(const fs::directory_entry &dir, const FSPath &dst, bool recursive)
+MutableFileSystem::importDirectory(const FSPath &at, const fs::directory_entry &dir, bool recursive)
 {
     auto isHidden = [&](const fs::path &path) {
 
@@ -664,10 +658,10 @@ MutableFileSystem::importDirectory(const fs::directory_entry &dir, const FSPath 
             debug(FS_DEBUG > 1, "Importing directory %s\n", fsname.c_str());
 
             // Create new directory
-            auto subdir = createDir(dst, fsname);
+            auto subdir = createDir(at, fsname);
 
             // Import the subdirectory
-            if (recursive) importDirectory(entry, subdir, recursive);
+            if (recursive) importDirectory(subdir, entry, recursive);
 
         } else if (entry.is_regular_file()) {
 
@@ -676,12 +670,18 @@ MutableFileSystem::importDirectory(const fs::directory_entry &dir, const FSPath 
             // Add file
             Buffer<u8> buffer(entry.path());
             if (buffer) {
-                createFile(dst, fsname, buffer.ptr, buffer.size);
+                createFile(at, fsname, buffer.ptr, buffer.size);
             } else {
-                createFile(dst, fsname);
+                createFile(at, fsname);
             }
         }
     }
+}
+
+void
+MutableFileSystem::importDirectory(const fs::path &path, bool recursive)
+{
+    importDirectory(rootDir(), path, recursive);
 }
 
 bool

@@ -12,17 +12,17 @@
 
 namespace vamiga {
 
-FSPath::FSPath(const FSPath &path) : fs(path.fs), dir(path.dir)
+FSPath::FSPath(const FSPath &path) : fs(path.fs), ref(path.ref)
 {
 
 }
 
-FSPath::FSPath(const FileSystem &fs, Block dir) : fs(fs), dir(dir)
+FSPath::FSPath(const FileSystem &fs, Block dir) : fs(fs), ref(dir)
 {
     selfcheck();
 }
 
-FSPath::FSPath(const FileSystem &fs, class FSBlock *dir) : fs(fs), dir(dir->nr)
+FSPath::FSPath(const FileSystem &fs, class FSBlock *dir) : fs(fs), ref(dir->nr)
 {
     selfcheck();
 }
@@ -30,18 +30,18 @@ FSPath::FSPath(const FileSystem &fs, class FSBlock *dir) : fs(fs), dir(dir->nr)
 FSPath&
 FSPath::operator= (const FSPath &path)
 {
-    dir = path.dir;
+    ref = path.ref;
     return *this;
 }
 
 FSBlock *
-FSPath::ptr()
+FSPath::ptr() const
 {
-    return fs.blockPtr(dir);
+    return fs.blockPtr(ref);
 }
 
 void
-FSPath::selfcheck()
+FSPath::selfcheck() const
 {
     // Check if the block number is in the valid range
     if (!ptr()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
@@ -51,21 +51,21 @@ FSPath::selfcheck()
 }
 
 bool
-FSPath::isRoot()
+FSPath::isRoot() const
 {
-    return fs.blockType(dir) == FSBlockType::ROOT_BLOCK;
+    return fs.blockType(ref) == FSBlockType::ROOT_BLOCK;
 }
 
 bool
-FSPath::isFile()
+FSPath::isFile() const
 {
-    return fs.blockType(dir) == FSBlockType::FILEHEADER_BLOCK;
+    return fs.blockType(ref) == FSBlockType::FILEHEADER_BLOCK;
 }
 
 bool
-FSPath::isDirectory()
+FSPath::isDirectory() const
 {
-    return isRoot() || fs.blockType(dir) == FSBlockType::USERDIR_BLOCK;
+    return isRoot() || fs.blockType(ref) == FSBlockType::USERDIR_BLOCK;
 }
 
 Block
@@ -74,7 +74,7 @@ FSPath::seek(const FSName &name) const
     std::set<Block> visited;
 
     // Only proceed if a hash table is present
-    FSBlock *cdb = fs.blockPtr(dir);
+    FSBlock *cdb = fs.blockPtr(ref);
     if (!cdb || cdb->hashTableSize() == 0) return 0;
 
     // Compute the table position and read the item
@@ -147,7 +147,7 @@ FSPath::seekFile(const fs::path &path) const
 void
 FSPath::cd(FSName name)
 {
-    dir = seek(name);
+    ref = seek(name);
     selfcheck();
 }
 
@@ -166,7 +166,7 @@ FSPath::parent()
 {
     if (!isRoot()) {
 
-        dir = fs.blockPtr(dir)->getParentDirRef();
+        ref = fs.blockPtr(ref)->getParentDirRef();
         selfcheck();
     }
 }
@@ -192,7 +192,7 @@ FSPath::getPath() const
     fs::path result;
     std::set<Block> visited;
 
-    auto block = fs.blockPtr(dir);
+    auto block = fs.blockPtr(ref);
 
     while (block) {
 

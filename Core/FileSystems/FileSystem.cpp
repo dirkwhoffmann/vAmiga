@@ -518,7 +518,7 @@ FileSystem::collect(const FSPath &path, std::vector<Block> &result, bool recursi
     std::set<Block> visited;
 
     // Start with the items in this block
-    collectHashedRefs(path.dir, remainingItems, visited);
+    collectHashedRefs(path.ref, remainingItems, visited);
 
     // Move the collected items to the result list
     while (remainingItems.size() > 0) {
