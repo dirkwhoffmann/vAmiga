@@ -56,15 +56,13 @@ EXEFile::finalizeRead()
     auto dir = volume.rootDir();
 
     // Add the executable
-    FSBlock *file = volume.createFile(dir, "file", data);
-    if (!file) throw AppError(Fault::FS_OUT_OF_SPACE);
-    
+    volume.createFile(dir, "file", data);
+
     // Add a script directory
     dir = volume.createDir(dir, "s");
 
     // Add a startup sequence
-    file = volume.createFile(dir, "startup-sequence", "file");
-    if (!file) throw AppError(Fault::FS_OUT_OF_SPACE);
+    volume.createFile(dir, "startup-sequence", "file");
 
     // Finalize
     volume.updateChecksums();
