@@ -429,7 +429,7 @@ MutableFileSystem::createDir(Block dir, const FSName &name)
     throw AppError(ptr ? Fault::FS_OUT_OF_SPACE : Fault::FS_INVALID_BLOCK_TYPE);
 }
 
-FSBlock *
+FSPath
 MutableFileSystem::createDir(const FSPath &dir, const FSName &name)
 {
     FSBlock *ptr = dirBlock(dir.dir);
@@ -439,7 +439,7 @@ MutableFileSystem::createDir(const FSPath &dir, const FSName &name)
 
         block->setParentDirRef(ptr->nr);
         addHashRef(dir, block->nr);
-        return block;
+        return FSPath(*this, block);
     }
 
     throw AppError(ptr ? Fault::FS_OUT_OF_SPACE : Fault::FS_INVALID_BLOCK_TYPE);
@@ -515,19 +515,74 @@ MutableFileSystem::createFile(Block dir, const FSName &name, const string &str)
 FSBlock *
 MutableFileSystem::createFile(const FSPath &dst, const FSName &name)
 {
-    return createFile(dst.dir, name);
+    FSBlock *ptr = dirBlock(dst.dir);
+    FSBlock *block = newFileHeaderBlock(name);
+
+    if (ptr && block) {
+
+        block->setParentDirRef(ptr->nr);
+        addHashRef(dst, block->nr);
+        return block;
+    }
+
+    throw AppError(ptr ? Fault::FS_OUT_OF_SPACE : Fault::FS_INVALID_BLOCK_TYPE);
+}
+
+FSBlock *
+MutableFileSystem::createFile(const FSPath &dst, const FSName &name, const Buffer<u8> &buf)
+{
+    return createFile(dst, name, buf.ptr, buf.size);
 }
 
 FSBlock *
 MutableFileSystem::createFile(const FSPath &dst, const FSName &name, const u8 *buf, isize size)
 {
-    return createFile(dst.dir, name, buf, size);
+    assert(buf);
+
+    // Compute the number of data block references held in a file header or list block
+    const usize numRefs = ((bsize / 4) - 56);
+
+    // Create a file header block
+    FSBlock *fhb = createFile(dst, name);
+
+    // Set file size
+    fhb->setFileSize(u32(size));
+
+    // Allocate blocks
+    std::vector<Block> listBlocks;
+    std::vector<Block> dataBlocks;
+    allocateFileBlocks(size, listBlocks, dataBlocks);
+
+    for (usize i = 0; i < listBlocks.size(); i++) {
+
+        // Add a list block
+        addFileListBlock(listBlocks[i], fhb->nr, i == 0 ? fhb->nr : listBlocks[i-1]);
+    }
+
+    for (usize i = 0; i < dataBlocks.size(); i++) {
+
+        // Add a data block
+        addDataBlock(dataBlocks[i], i + 1, fhb->nr, i == 0 ? fhb->nr : dataBlocks[i-1]);
+
+        // Determine the list block managing this data block
+        FSBlock *lb = blockPtr((i < numRefs) ? fhb->nr : listBlocks[i / numRefs - 1]);
+
+        // Link the data block
+        lb->addDataBlockRef(dataBlocks[0], dataBlocks[i]);
+
+        // Add data bytes
+        isize written = addData(dataBlocks[i], buf, size);
+        buf += written;
+        size -= written;
+    }
+
+    return fhb;
 }
 
 FSBlock *
 MutableFileSystem::createFile(const FSPath &dst, const FSName &name, const string &str)
 {
-    return createFile(dst.dir, name, str);
+    return createFile(dst, name, (const u8 *)str.c_str(), (isize)str.size());
 }
 
 void
@@ -746,11 +801,11 @@ MutableFileSystem::importDirectory(const fs::directory_entry &dir, const FSPath 
 
             debug(FS_DEBUG > 1, "Importing directory %s\n", fsname.c_str());
 
-            // Add directory
-            if (createDir(dst, fsname) && recursive) {
+            // Create new directory
+            auto subdir = createDir(dst, fsname);
 
-                importDirectory(entry, dst / fsname, recursive);
-            }
+            // Import the subdirectory
+            if (recursive) importDirectory(entry, subdir, recursive);
 
         } else if (entry.is_regular_file()) {
 

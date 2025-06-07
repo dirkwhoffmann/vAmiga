@@ -51,24 +51,23 @@ EXEFile::finalizeRead()
     
     // Make the volume bootable
     volume.makeBootable(BootBlockId::AMIGADOS_13);
-    
+
+    // Start at the root directory
+    auto dir = volume.rootDir();
+
     // Add the executable
-    FSBlock *file = volume.createFile("file", data.ptr, data.size);
+    FSBlock *file = volume.createFile(dir, "file", data);
     if (!file) throw AppError(Fault::FS_OUT_OF_SPACE);
     
     // Add a script directory
-    volume.createDir("s");
-    volume.changeDir("s");
-    
+    dir = volume.createDir(dir, "s");
+
     // Add a startup sequence
-    file = volume.createFile("startup-sequence", "file");
+    file = volume.createFile(dir, "startup-sequence", "file");
     if (!file) throw AppError(Fault::FS_OUT_OF_SPACE);
 
     // Finalize
     volume.updateChecksums();
-    
-    // Move to the to root directory
-    volume.changeDir("/");
 
     // Print some debug information about the volume
     if (FS_DEBUG) {

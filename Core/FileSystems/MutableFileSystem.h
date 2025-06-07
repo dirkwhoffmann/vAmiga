@@ -134,16 +134,16 @@ public:
 public:
 
     // Creates a new directory
-    FSBlock *createDir(const FSName &name) { return createDir(cd, name); } // DEPRECATED
+    [[deprecated]] FSBlock *createDir(const FSName &name) { return createDir(cd, name); } // DEPRECATED
 
     // Creates a new file
-    FSBlock *createFile(const FSName &name) { return createFile(cd, name); } // DEPRECATED
-    FSBlock *createFile(const FSName &name, const u8 *buf, isize size) { return createFile(cd, name, buf, size); } // DEPRECATED
-    FSBlock *createFile(const FSName &name, const string &str) { return createFile(cd, name, str); } // DEPRECATED
+    [[deprecated]] FSBlock *createFile(const FSName &name) { return createFile(cd, name); } // DEPRECATED
+    [[deprecated]] FSBlock *createFile(const FSName &name, const u8 *buf, isize size) { return createFile(cd, name, buf, size); } // DEPRECATED
+    [[deprecated]] FSBlock *createFile(const FSName &name, const string &str) { return createFile(cd, name, str); } // DEPRECATED
 
     // Creates a new directory
-    FSBlock *createDir(Block dir, const FSName &name);
-    FSBlock *createDir(const FSPath &dir, const FSName &name);
+    [[deprecated]] FSBlock *createDir(Block dir, const FSName &name);
+    FSPath createDir(const FSPath &dir, const FSName &name);
 
     // Creates a new file
     FSBlock *createFile(Block dir, const FSName &name);
@@ -151,6 +151,7 @@ public:
     FSBlock *createFile(Block dir, const FSName &name, const string &str);
 
     FSBlock *createFile(const FSPath &dst, const FSName &name);
+    FSBlock *createFile(const FSPath &dst, const FSName &name, const Buffer<u8> &buf);
     FSBlock *createFile(const FSPath &dst, const FSName &name, const u8 *buf, isize size);
     FSBlock *createFile(const FSPath &dst, const FSName &name, const string &str);
 

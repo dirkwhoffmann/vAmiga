@@ -12,15 +12,41 @@
 
 namespace vamiga {
 
+FSPath::FSPath(const FSPath &path) : fs(path.fs), dir(path.dir)
+{
+
+}
 
 FSPath::FSPath(const FileSystem &fs, Block dir) : fs(fs), dir(dir)
 {
     selfcheck();
 }
 
+FSPath::FSPath(const FileSystem &fs, class FSBlock *dir) : fs(fs), dir(dir->nr)
+{
+    selfcheck();
+}
+
+FSPath&
+FSPath::operator= (const FSPath &path)
+{
+    dir = path.dir;
+    return *this;
+}
+
+FSBlock *
+FSPath::ptr()
+{
+    return fs.blockPtr(dir);
+}
+
 void
 FSPath::selfcheck()
 {
+    // Check if the block number is in the valid range
+    if (!ptr()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
+
+    // Check the block type
     if (!isRoot() && !isFile() && !isDirectory()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
 }
 
@@ -39,7 +65,7 @@ FSPath::isFile()
 bool
 FSPath::isDirectory()
 {
-    return fs.blockType(dir) == FSBlockType::USERDIR_BLOCK;
+    return isRoot() || fs.blockType(dir) == FSBlockType::USERDIR_BLOCK;
 }
 
 Block
