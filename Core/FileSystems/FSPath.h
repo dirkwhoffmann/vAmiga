@@ -21,47 +21,48 @@ struct FSPath
     // The referenced block
     Block ref;
 
+    // Constructors
     FSPath(const FSPath &);
     FSPath(const FileSystem &fs, Block dir);
-    FSPath(const FileSystem &fs, class FSBlock *dir);
-    // FSPath(const FileSystem &fs, const fs::path &path);
+    FSPath(const FileSystem &fs, struct FSBlock *dir);
+    FSPath(const FileSystem &fs, const fs::path &path);
 
-    FSPath &operator=(const FSPath &);
-
+    // Throws an exception if the object is invalid
     void selfcheck() const;
 
-    class FSBlock *ptr() const;
+    // Operator overloads
+    FSPath &operator=(const FSPath &);
+    FSPath& operator/=(const FSName &name);
+    FSPath operator/(const FSName &name) const;
 
+    // Informs about where this path points to
     bool isRoot() const;
     bool isFile() const;
     bool isDirectory() const;
 
+    // Returns a pointer to the corresponding FSBlock
+    class FSBlock *ptr() const;
+
+    // Converts the path to a host path
+    fs::path getPath() const;
+
+
+    //
+    // Traverses the directory tree
+    //
+
+    // Seeks a file or directory
     Block seek(const FSName &name) const;
     FSPath seekDir(const FSName &name) const;
     FSPath seekFile(const FSName &name) const;
-
     FSPath seek(const fs::path &path) const;
     FSPath seekDir(const fs::path &path) const;
     FSPath seekFile(const fs::path &path) const;
 
-    
-    //
-    // Working with directories
-    //
-
-    // Moves one level down in the directory tree
+    // Moves up or down in the directory tree
     void cd(FSName name);
     void cd(const fs::path &path);
-
-    // Operator overloads for the cd command
-    FSPath& operator/=(const FSName &name);
-    FSPath operator/(const FSName &name) const;
-
-    // Moves one level up in the directory tree
     void parent();
-
-    // Converts the path to a host path
-    fs::path getPath() const;
 };
 
 }

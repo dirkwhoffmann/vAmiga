@@ -22,22 +22,14 @@ FSPath::FSPath(const FileSystem &fs, Block dir) : fs(fs), ref(dir)
     selfcheck();
 }
 
-FSPath::FSPath(const FileSystem &fs, class FSBlock *dir) : fs(fs), ref(dir->nr)
+FSPath::FSPath(const FileSystem &fs, class FSBlock *dir) : FSPath(fs, dir->nr)
 {
-    selfcheck();
+
 }
 
-FSPath&
-FSPath::operator= (const FSPath &path)
+FSPath::FSPath(const FileSystem &fs, const fs::path &path) : FSPath(seek(path))
 {
-    ref = path.ref;
-    return *this;
-}
 
-FSBlock *
-FSPath::ptr() const
-{
-    return fs.blockPtr(ref);
 }
 
 void
@@ -48,6 +40,28 @@ FSPath::selfcheck() const
 
     // Check the block type
     if (!isRoot() && !isFile() && !isDirectory()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
+}
+
+FSPath&
+FSPath::operator=(const FSPath &path)
+{
+    ref = path.ref;
+    return *this;
+}
+
+FSPath&
+FSPath::operator/=(const FSName &name)
+{
+    cd(name);
+    return *this;
+}
+
+FSPath
+FSPath::operator/(const FSName &name) const
+{
+    FSPath result = *this;
+    result /= name;
+    return result;
 }
 
 bool
@@ -66,6 +80,42 @@ bool
 FSPath::isDirectory() const
 {
     return isRoot() || fs.blockType(ref) == FSBlockType::USERDIR_BLOCK;
+}
+
+FSBlock *
+FSPath::ptr() const
+{
+    return fs.blockPtr(ref);
+}
+
+fs::path
+FSPath::getPath() const
+{
+    fs::path result;
+    std::set<Block> visited;
+
+    auto block = fs.blockPtr(ref);
+
+    while (block) {
+
+        // Break the loop if this block has an invalid type
+        if (!fs.hashableBlockPtr(block->nr)) break;
+
+        // Break the loop if this block was visited before
+        if (visited.find(block->nr) != visited.end()) break;
+
+        // Add the block to the set of visited blocks
+        visited.insert(block->nr);
+
+        // Expand the path
+        auto name = block->getName().path();
+        result = result.empty() ? name : name / result;
+
+        // Continue with the parent block
+        block = block->getParentDirBlock();
+    }
+
+    return result;
 }
 
 Block
@@ -170,51 +220,5 @@ FSPath::parent()
         selfcheck();
     }
 }
-
-FSPath&
-FSPath::operator/= (const FSName &name)
-{
-    cd(name);
-    return *this;
-}
-
-FSPath
-FSPath::operator/ (const FSName &name) const
-{
-    FSPath result = *this;
-    result /= name;
-    return result;
-}
-
-fs::path
-FSPath::getPath() const
-{
-    fs::path result;
-    std::set<Block> visited;
-
-    auto block = fs.blockPtr(ref);
-
-    while (block) {
-
-        // Break the loop if this block has an invalid type
-        if (!fs.hashableBlockPtr(block->nr)) break;
-
-        // Break the loop if this block was visited before
-        if (visited.find(block->nr) != visited.end()) break;
-
-        // Add the block to the set of visited blocks
-        visited.insert(block->nr);
-
-        // Expand the path
-        auto name = block->getName().path();
-        result = result.empty() ? name : name / result;
-
-        // Continue with the parent block
-        block = block->getParentDirBlock();
-    }
-
-    return result;
-}
-
 
 }

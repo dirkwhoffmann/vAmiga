@@ -460,17 +460,6 @@ FileSystem::exists(const FSPath &top, const fs::path &path) const
     try { top.seek(path); return true; } catch (...) { return false; }
 }
 
-FSBlock *
-FileSystem::dirBlock(Block dir) const
-{
-    FSBlock *ptr = blockPtr(dir);
-
-    if (ptr && ptr->type == FSBlockType::ROOT_BLOCK) return ptr;
-    if (ptr && ptr->type == FSBlockType::USERDIR_BLOCK) return ptr;
-
-    return nullptr;
-}
-
 void
 FileSystem::printDirectory(bool recursive) const
 {
@@ -478,37 +467,9 @@ FileSystem::printDirectory(bool recursive) const
     collect(rootDir(), items);
 
     for (auto const& i : items) {
-        msg("%s\n", getPath(i).string().c_str());
+        msg("%s\n", FSPath(*this, i).getPath().string().c_str());
     }
     msg("%zu items\n", items.size());
-}
-
-fs::path
-FileSystem::getPath(FSBlock *block) const
-{
-    fs::path result;
-    std::set<Block> visited;
-
-    while(block) {
-
-        // Break the loop if this block has an invalid type
-        if (!hashableBlockPtr(block->nr)) break;
-
-        // Break the loop if this block was visited before
-        if (visited.find(block->nr) != visited.end()) break;
-        
-        // Add the block to the set of visited blocks
-        visited.insert(block->nr);
-
-        // Expand the path
-        auto name = block->getName().path();
-        result = result.empty() ? name : name / result;
-        
-        // Continue with the parent block
-        block = block->getParentDirBlock();
-    }
-    
-    return result;
 }
 
 void

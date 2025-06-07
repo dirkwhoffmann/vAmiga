@@ -808,16 +808,12 @@ FSBlock::exportBlock(const fs::path &path)
 Fault
 FSBlock::exportUserDirBlock(const fs::path &path)
 {
-    // Get Amiga file name
-    auto filename = device.getPath(this);
-    
-    // Create the full path
-    auto fullname = path / filename;
-    debug(FS_DEBUG >= 2, "Creating directory %s\n", fullname.string().c_str());
-    
-    if (!util::createDirectory(fullname)) {
-        return Fault::FS_CANNOT_CREATE_DIR;
-    }
+    // Assemble the host file name
+    auto filename = path / FSPath(device, nr).getPath();
+    debug(FS_DEBUG >= 2, "Creating directory %s\n", filename.string().c_str());
+
+    // Create directory
+    if (!util::createDirectory(filename)) return Fault::FS_CANNOT_CREATE_DIR;
 
     return Fault::OK;
 }
@@ -825,15 +821,12 @@ FSBlock::exportUserDirBlock(const fs::path &path)
 Fault
 FSBlock::exportFileHeaderBlock(const fs::path &path)
 {
-    // Get Amiga file name
-    auto filename = device.getPath(this);
-    
-    // Create the full path
-    auto fullname = path / filename;
-    debug(FS_DEBUG >= 2, "  Exporting file %s\n", fullname.string().c_str());
+    // Assemble the host file name
+    auto filename = path / FSPath(device, nr).getPath(); // device.getPath(this);
+    debug(FS_DEBUG >= 2, "  Exporting file %s\n", filename.string().c_str());
 
     // Open file
-    std::ofstream file(fullname, std::ofstream::binary);
+    std::ofstream file(filename, std::ofstream::binary);
     if (!file.is_open()) return Fault::FS_CANNOT_CREATE_FILE;
     
     // Write data
