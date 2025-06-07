@@ -130,6 +130,8 @@
 		506407D02D1AD87E002FBC57 /* HttpServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506407CE2D1AD87C002FBC57 /* HttpServer.cpp */; };
 		506436E529C1D92D00768528 /* CMakeLists.txt in Resources */ = {isa = PBXBuildFile; fileRef = 506436E429C1D92D00768528 /* CMakeLists.txt */; };
 		5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
+		50650F4A2DF378A1008AD660 /* FSPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50650F492DF3789F008AD660 /* FSPath.cpp */; };
+		50650F4B2DF378A1008AD660 /* FSPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50650F492DF3789F008AD660 /* FSPath.cpp */; };
 		50672CC02946100F004113F5 /* DebugConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50672CBF2946100F004113F5 /* DebugConsole.cpp */; };
 		50672CC12946100F004113F5 /* DebugConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50672CBF2946100F004113F5 /* DebugConsole.cpp */; };
 		5068EA332D4B5BF800B44FB5 /* Workspace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5068EA322D4B5BF600B44FB5 /* Workspace.cpp */; };
@@ -722,6 +724,8 @@
 		506436E429C1D92D00768528 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		5064850F21EC7A1700FC4AC3 /* Memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Memory.cpp; sourceTree = "<group>"; };
 		5064851021EC7A1700FC4AC3 /* Memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Memory.h; sourceTree = "<group>"; };
+		50650F482DF37898008AD660 /* FSPath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSPath.h; sourceTree = "<group>"; };
+		50650F492DF3789F008AD660 /* FSPath.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSPath.cpp; sourceTree = "<group>"; };
 		50672CBF2946100F004113F5 /* DebugConsole.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DebugConsole.cpp; sourceTree = "<group>"; };
 		5068EA312D4B5BED00B44FB5 /* Workspace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Workspace.h; sourceTree = "<group>"; };
 		5068EA322D4B5BF600B44FB5 /* Workspace.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Workspace.cpp; sourceTree = "<group>"; };
@@ -1343,6 +1347,8 @@
 				5056507A25459C8800A79D27 /* FSObjects.cpp */,
 				50565071254573E100A79D27 /* FSBlock.h */,
 				50565070254573E100A79D27 /* FSBlock.cpp */,
+				50650F482DF37898008AD660 /* FSPath.h */,
+				50650F492DF3789F008AD660 /* FSPath.cpp */,
 				50A6146E260DC91600A01428 /* BootBlockImageTypes.h */,
 				50A64B94257A63A600442964 /* BootBlockImage.h */,
 				50A64B95257A63A600442964 /* BootBlockImage.cpp */,
@@ -2438,6 +2444,7 @@
 				509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */,
 				50984B65263A9E9C00E37184 /* RegressionTester.cpp in Sources */,
 				50157EED28257B7C000E9DDD /* Config.swift in Sources */,
+				50650F4A2DF378A1008AD660 /* FSPath.cpp in Sources */,
 				508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */,
 				50AD904D276E10660011ECCB /* TextStorage.cpp in Sources */,
 				50B9C428260942D000A86C31 /* RetroShell.cpp in Sources */,
@@ -2828,6 +2835,7 @@
 				50EFB0D12C18E01E0013B73C /* Wakeable.cpp in Sources */,
 				50FC047627DA10AD00C3E566 /* Headless.cpp in Sources */,
 				50FC049227DA196500C3E566 /* DeniseRegs.cpp in Sources */,
+				50650F4B2DF378A1008AD660 /* FSPath.cpp in Sources */,
 				506407D02D1AD87E002FBC57 /* HttpServer.cpp in Sources */,
 				50FC04F727DA1A8F00C3E566 /* StateMachine.cpp in Sources */,
 				50FC04F527DA1A8F00C3E566 /* Sampler.cpp in Sources */,

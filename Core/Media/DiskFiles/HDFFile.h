@@ -11,7 +11,8 @@
 
 #include "DiskFile.h"
 #include "MediaFileTypes.h"
-#include "MutableFileSystem.h"
+// #include "MutableFileSystem.h"
+#include "FSDescriptors.h"
 #include "DriveTypes.h"
 
 namespace vamiga {

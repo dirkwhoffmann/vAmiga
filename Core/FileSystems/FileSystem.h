@@ -13,6 +13,7 @@
 #include "FSBlock.h"
 #include "FSDescriptors.h"
 #include "FSObjects.h"
+#include "FSPath.h"
 #include "ADFFile.h"
 #include "HDFFile.h"
 #include <stack>
@@ -199,7 +200,9 @@ protected:
     //
     
 public:
-    
+
+    FSPath rootDir() const;
+
     // Returns the block representing the current directory
     FSBlock *currentDirBlock() const; // DEPRECATED
     FSBlock *dirBlock(Block dir) const;

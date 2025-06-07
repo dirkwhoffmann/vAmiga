@@ -10,7 +10,7 @@
 #include "config.h"
 #include "HardDrive.h"
 #include "Emulator.h"
-#include "FileSystem.h"
+#include "MutableFileSystem.h"
 #include "HDFFile.h"
 #include "HDZFile.h"
 #include "IOUtils.h"
@@ -765,8 +765,8 @@ HardDrive::importFolder(const fs::path &path) throws
         auto fs = MutableFileSystem(layout);
         
         // Import all files and name the partition
-        fs.importDirectory(path);
-        
+        fs.importDirectory(path, fs.rootDir());
+
         // Name the file system
         fs.setName(traits.name);
         

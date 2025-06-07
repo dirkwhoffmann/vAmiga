@@ -143,18 +143,27 @@ public:
 
     // Creates a new directory
     FSBlock *createDir(Block dir, const FSName &name);
+    FSBlock *createDir(const FSPath &dir, const FSName &name);
 
     // Creates a new file
     FSBlock *createFile(Block dir, const FSName &name);
     FSBlock *createFile(Block dir, const FSName &name, const u8 *buf, isize size);
     FSBlock *createFile(Block dir, const FSName &name, const string &str);
 
+    FSBlock *createFile(const FSPath &dst, const FSName &name);
+    FSBlock *createFile(const FSPath &dst, const FSName &name, const u8 *buf, isize size);
+    FSBlock *createFile(const FSPath &dst, const FSName &name, const string &str);
+
 
 private:
     
     // Adds a reference to the current directory
-    void addHashRef(Block nr);
-    void addHashRef(FSBlock *block);
+    void addHashRef(Block nr); // DEPRECATED
+    void addHashRef(FSBlock *block); // DEPRECATED
+
+    // Adds a reference to a directory
+    void addHashRef(const FSPath &dir, Block nr);
+    void addHashRef(const FSPath &dir, FSBlock *block);
 
     // Adds bytes to a data block
     isize addData(Block nr, const u8 *buf, isize size);
@@ -173,9 +182,12 @@ public:
     void importVolume(const u8 *src, isize size) throws;
 
     // Imports a directory from the host file system
-    void importDirectory(const fs::path &path, bool recursive = true) throws;
-    void importDirectory(const fs::directory_entry &dir, bool recursive) throws;
-    
+    // void importDirectory(const fs::path &path, bool recursive = true) throws; // DEPRECATED
+    // void importDirectory(const fs::directory_entry &dir, bool recursive) throws; // DEPRECATED
+
+    void importDirectory(const fs::path &path, const FSPath &dst, bool recursive = true) throws;
+    void importDirectory(const fs::directory_entry &dir, const FSPath &dst, bool recursive) throws;
+
     // Exports the volume to a buffer
     bool exportVolume(u8 *dst, isize size) const;
     bool exportVolume(u8 *dst, isize size, Fault *error) const;

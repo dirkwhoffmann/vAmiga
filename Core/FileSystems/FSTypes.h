@@ -13,6 +13,8 @@
 
 namespace vamiga {
 
+typedef u32 Block;
+
 enum class FSVolumeType : long
 {
     OFS      = 0,    // Original File System

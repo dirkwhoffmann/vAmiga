@@ -62,7 +62,7 @@ MutableFileSystem::init(FileSystemDescriptor &layout, const fs::path &path)
     if (!path.empty()) {
         
         // Add all files
-        importDirectory(path);
+        importDirectory(path, rootDir());
         
         // Assign device name
         setName(FSName(path.filename().string()));
@@ -430,6 +430,22 @@ MutableFileSystem::createDir(Block dir, const FSName &name)
 }
 
 FSBlock *
+MutableFileSystem::createDir(const FSPath &dir, const FSName &name)
+{
+    FSBlock *ptr = dirBlock(dir.dir);
+    FSBlock *block = newUserDirBlock(name);
+
+    if (ptr && block) {
+
+        block->setParentDirRef(ptr->nr);
+        addHashRef(dir, block->nr);
+        return block;
+    }
+
+    throw AppError(ptr ? Fault::FS_OUT_OF_SPACE : Fault::FS_INVALID_BLOCK_TYPE);
+}
+
+FSBlock *
 MutableFileSystem::createFile(Block dir, const FSName &name)
 {
     FSBlock *ptr = dirBlock(dir);
@@ -496,6 +512,24 @@ MutableFileSystem::createFile(Block dir, const FSName &name, const string &str)
     return createFile(dir, name, (const u8 *)str.c_str(), (isize)str.size());
 }
 
+FSBlock *
+MutableFileSystem::createFile(const FSPath &dst, const FSName &name)
+{
+    return createFile(dst.dir, name);
+}
+
+FSBlock *
+MutableFileSystem::createFile(const FSPath &dst, const FSName &name, const u8 *buf, isize size)
+{
+    return createFile(dst.dir, name, buf, size);
+}
+
+FSBlock *
+MutableFileSystem::createFile(const FSPath &dst, const FSName &name, const string &str)
+{
+    return createFile(dst.dir, name, str);
+}
+
 void
 MutableFileSystem::addHashRef(Block nr)
 {
@@ -517,6 +551,33 @@ MutableFileSystem::addHashRef(FSBlock *newBlock)
 
     // If the slot is empty, put the reference there
     if (ref == 0) { cdb->setHashRef(hash, newBlock->nr); return; }
+
+    // Otherwise, put it into the last element of the block list chain
+    FSBlock *last = lastHashBlockInChain(ref);
+    if (last) last->setNextHashRef(newBlock->nr);
+}
+
+void
+MutableFileSystem::addHashRef(const FSPath &dir, Block nr)
+{
+    if (FSBlock *block = hashableBlockPtr(nr)) {
+        addHashRef(dir, block);
+    }
+}
+
+void
+MutableFileSystem::addHashRef(const FSPath &dir, FSBlock *newBlock)
+{
+    // Only proceed if a hash table is present
+    FSBlock *bp = blockPtr(dir.dir);
+    if (!bp || bp->hashTableSize() == 0) { return; }
+
+    // Read the item at the proper hash table location
+    u32 hash = newBlock->hashValue() % bp->hashTableSize();
+    u32 ref = bp->getHashRef(hash);
+
+    // If the slot is empty, put the reference there
+    if (ref == 0) { bp->setHashRef(hash, newBlock->nr); return; }
 
     // Otherwise, put it into the last element of the block list chain
     FSBlock *last = lastHashBlockInChain(ref);
@@ -642,67 +703,65 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
 }
 
 void
-MutableFileSystem::importDirectory(const fs::path &path, bool recursive)
+MutableFileSystem::importDirectory(const fs::path &path, const FSPath &dst, bool recursive)
 {
     fs::directory_entry dir;
-    
+
     try { dir = fs::directory_entry(path); }
     catch (...) { throw AppError(Fault::FILE_CANT_READ); }
-    
+
     // Add all files
-    importDirectory(dir, recursive);
-        
+    importDirectory(dir, dst, recursive);
+
     // Rectify the checksums of all blocks
     updateChecksums();
-    
+
     // Change back to the root directory
     changeDir("/");
-    
+
     // Verify the result
     if (FS_DEBUG) verify();
 }
 
 void
-MutableFileSystem::importDirectory(const fs::directory_entry &dir, bool recursive)
+MutableFileSystem::importDirectory(const fs::directory_entry &dir, const FSPath &dst, bool recursive)
 {
     auto isHidden = [&](const fs::path &path) {
-            
+
         string s = path.filename().string();
         return !s.empty() && s[0] == '.';
     };
-    
+
     for (const auto& entry : fs::directory_iterator(dir)) {
-        
+
         const auto path = entry.path().string();
         const auto name = entry.path().filename();
 
         // Skip all hidden files
         if (isHidden(name)) continue;
-        
+
         FSName fsname = FSName(name);
-        
+
         if (entry.is_directory()) {
 
             debug(FS_DEBUG > 1, "Importing directory %s\n", fsname.c_str());
 
             // Add directory
-            if(createDir(fsname) && recursive) {
+            if (createDir(dst, fsname) && recursive) {
 
-                changeDir(fsname.str);
-                importDirectory(entry, recursive);
-                changeDir("..");
+                importDirectory(entry, dst / fsname, recursive);
             }
 
         } else if (entry.is_regular_file()) {
-            
+
             debug(FS_DEBUG > 1, "  Importing file %s\n", fsname.c_str());
-            
+
             // Add file
             Buffer<u8> buffer(entry.path());
             if (buffer) {
-                createFile(fsname, buffer.ptr, buffer.size);
+                createFile(dst, fsname, buffer.ptr, buffer.size);
             } else {
-                createFile(fsname);
+                createFile(dst, fsname);
             }
         }
     }

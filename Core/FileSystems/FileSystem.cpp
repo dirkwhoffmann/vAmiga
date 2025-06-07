@@ -451,6 +451,12 @@ FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) const
     return bm;
 }
 
+FSPath
+FileSystem::rootDir() const
+{
+    return FSPath(*this, rootBlock);
+}
+
 FSBlock *
 FileSystem::currentDirBlock() const
 {

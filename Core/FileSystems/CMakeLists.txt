@@ -7,6 +7,7 @@ FileSystem.cpp
 MutableFileSystem.cpp
 FSObjects.cpp
 FSBlock.cpp
+FSPath.cpp
 BootBlockImage.cpp
 
 )
