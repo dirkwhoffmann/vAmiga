@@ -22,7 +22,7 @@ FSPath::FSPath(const FileSystem &fs, Block dir) : fs(fs), ref(dir)
     selfcheck();
 }
 
-FSPath::FSPath(const FileSystem &fs, class FSBlock *dir) : FSPath(fs, dir->nr)
+FSPath::FSPath(const FileSystem &fs, FSBlock *dir) : FSPath(fs, dir->nr)
 {
 
 }

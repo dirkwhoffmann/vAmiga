@@ -11,6 +11,7 @@
 
 #include "FSTypes.h"
 #include "FSObjects.h"
+#include "FSBlock.h"
 
 namespace vamiga {
 
@@ -41,7 +42,7 @@ struct FSPath
     bool isDirectory() const;
 
     // Returns a pointer to the corresponding FSBlock
-    class FSBlock *ptr() const;
+    FSBlock *ptr() const;
 
     // Converts the path to a host path
     fs::path getPath() const;
