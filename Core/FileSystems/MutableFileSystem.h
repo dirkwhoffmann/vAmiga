@@ -94,9 +94,7 @@ private:
     void addDataBlock(Block at, isize id, Block head, Block prev);
 
     // Creates a new block of a certain kind
-    [[deprecated]] FSBlock *newUserDirBlock(const string &name);
     FSBlock *newUserDirBlock(const FSName &name);
-    [[deprecated]] FSBlock *newFileHeaderBlock(const string &name);
     FSBlock *newFileHeaderBlock(const FSName &name);
 
     

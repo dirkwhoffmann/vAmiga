@@ -455,15 +455,9 @@ FileSystem::rootDir() const
 }
 
 bool
-FileSystem::hasDirectory(const fs::path &path) const
+FileSystem::exists(const FSPath &top, const fs::path &path) const
 {
-    try { rootDir().seekDir(path); return true; } catch (...) { return false; }
-}
-
-bool
-FileSystem::hasFile(const fs::path &path) const
-{
-    try { rootDir().seekFile(path); return true; } catch (...) { return false; }
+    try { top.seek(path); return true; } catch (...) { return false; }
 }
 
 FSBlock *
@@ -476,75 +470,6 @@ FileSystem::dirBlock(Block dir) const
 
     return nullptr;
 }
-
-/*
-FSBlock *
-FileSystem::changeDir(const string &name)
-{
-    FSBlock *cdb = currentDirBlock();
-    
-    if (name == "/") {
-        
-        // Move to top level
-        cd = rootBlock;
-        
-    } else if (name == "..") {
-        
-        // Move one level up
-        cd = cdb->getParentDirRef();
-        
-    } else if (FSBlock *subdir = seekDir(name); subdir) {
-        
-        // Move one level down
-        cd = subdir->nr;
-    }
-    
-    if (FSBlock *result = blockPtr(cd); result) {
-        
-        // Make sure we are still at a directory block
-        if (result->type == FSBlockType::ROOT_BLOCK)    return result;
-        if (result->type == FSBlockType::USERDIR_BLOCK) return result;
-    }
-    
-    // Switch back to the root directory, as the reference is invalid
-    cd = rootBlock;
-    return blockPtr(cd);
-}
-
-Block
-FileSystem::changeDir(Block dir, const string &name) const
-{
-    return changeDir(blockPtr(dir), name)->nr;
-}
-
-FSBlock *
-FileSystem::changeDir(FSBlock *dir, const string &name) const
-{
-    FSBlock *result = nullptr;
-
-    auto isDirectory = [](FSBlock *b) {
-        return b && (b->type == FSBlockType::ROOT_BLOCK || b->type == FSBlockType::USERDIR_BLOCK);
-    };
-
-    if (!isDirectory(dir) || name == "/") {
-
-        // Move to the top level
-
-    } else if (name == "..") {
-
-        // Move one level up
-        result = dir->getParentDirBlock();
-
-    } else {
-
-        // Move one level down
-        result = seekDir(name);
-    }
-
-    // Return the new directory or the root block as a fall back
-    return isDirectory(result) ? result : blockPtr(rootBlock);
-}
-*/
 
 void
 FileSystem::printDirectory(bool recursive) const

@@ -294,19 +294,6 @@ MutableFileSystem::addDataBlock(Block at, isize id, Block head, Block prev)
 }
 
 FSBlock *
-MutableFileSystem::newUserDirBlock(const string &name)
-{
-    if (Block nr = allocate()) {
-
-        blocks[nr]->init(FSBlockType::USERDIR_BLOCK);
-        blocks[nr]->setName(FSName(name));
-        return blockPtr(nr);
-    }
- 
-    return nullptr;
-}
-
-FSBlock *
 MutableFileSystem::newUserDirBlock(const FSName &name)
 {
     if (Block nr = allocate()) {
@@ -316,19 +303,6 @@ MutableFileSystem::newUserDirBlock(const FSName &name)
         return blockPtr(nr);
     }
  
-    return nullptr;
-}
-
-FSBlock *
-MutableFileSystem::newFileHeaderBlock(const string &name)
-{
-    if (Block nr = allocate()) {
-
-        blocks[nr]->init(FSBlockType::FILEHEADER_BLOCK);
-        blocks[nr]->setName(FSName(name));
-        return blockPtr(nr);
-    }
-    
     return nullptr;
 }
 

@@ -193,17 +193,28 @@ protected:
     
     
     //
-    // Managing directories and files
+    // Managing files and directories
     //
     
 public:
 
-    // Returns the top node of the directory tree
+    // Returns the root of the directory tree
     FSPath rootDir() const;
 
-    // Checks if a directory or a file exists
-    bool hasDirectory(const fs::path &path) const;
-    bool hasFile(const fs::path &path) const;
+    // Seeks an item in the directory tree
+    FSPath seek(const FSPath &top, const fs::path &path) const { return top.seek(path); }
+    FSPath seekDir(const FSPath &top, const fs::path &path) const { return top.seekDir(path); }
+    FSPath seekFile(const FSPath &top, const fs::path &path) const { return top.seekFile(path); }
+
+    // Seeks an item in the directory tree starting from the root
+    FSPath seek(const fs::path &path) const { return seek(rootDir(), path); }
+    FSPath seekDir(const fs::path &path) const { return seekDir(rootDir(), path); }
+    FSPath seekFile(const fs::path &path) const { return seekFile(rootDir(), path); }
+    FSPath cd(const fs::path &path) const { return seekDir(path); }
+
+    // Checks if a an item exists in the directory tree
+    bool exists(const FSPath &top, const fs::path &path) const;
+    bool exists(const fs::path &path) const { return exists(rootDir(), path); }
 
     // Returns the block representing a directory
     FSBlock *dirBlock(Block dir) const; // DEPRECATED
@@ -214,11 +225,6 @@ public:
     // Returns the path of a file system item
     fs::path getPath(FSBlock *block) const; // DEPRECATED
     fs::path getPath(Block nr) const { return getPath(blockPtr(nr)); } // DEPRECATED
-
-    // Seeks an item inside the current directory
-    FSPath seek(const fs::path &path) { return rootDir().seek(path); }
-    FSPath seekDir(const fs::path &path) { return rootDir().seekDir(path); }
-    FSPath seekFile(const fs::path &path) { return rootDir().seekFile(path); }
 
 
     //
