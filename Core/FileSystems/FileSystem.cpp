@@ -457,6 +457,18 @@ FileSystem::rootDir() const
     return FSPath(*this, rootBlock);
 }
 
+bool
+FileSystem::hasDirectory(const fs::path &path) const
+{
+    try { rootDir().seekDir(path); return true; } catch (...) { return false; }
+}
+
+bool
+FileSystem::hasFile(const fs::path &path) const
+{
+    try { rootDir().seekFile(path); return true; } catch (...) { return false; }
+}
+
 FSBlock *
 FileSystem::currentDirBlock() const
 {
@@ -479,6 +491,7 @@ FileSystem::dirBlock(Block dir) const
     return nullptr;
 }
 
+/*
 FSBlock *
 FileSystem::changeDir(const string &name)
 {
@@ -545,6 +558,7 @@ FileSystem::changeDir(FSBlock *dir, const string &name) const
     // Return the new directory or the root block as a fall back
     return isDirectory(result) ? result : blockPtr(rootBlock);
 }
+*/
 
 void
 FileSystem::printDirectory(bool recursive) const
@@ -586,6 +600,7 @@ FileSystem::getPath(FSBlock *block) const
     return result;
 }
 
+/*
 Block
 FileSystem::seekRef(FSName name) const
 {
@@ -634,6 +649,7 @@ FileSystem::seekPath(const fs::path &path)
     
     return block;
 }
+*/
 
 void
 FileSystem::collect(Block nr, std::vector<Block> &result, bool recursive) const

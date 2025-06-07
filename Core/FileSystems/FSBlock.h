@@ -164,7 +164,7 @@ public:
     
     FSName getName() const;
     void setName(FSName name);
-    bool isNamed(FSName &other) const;
+    bool isNamed(const FSName &other) const;
 
     FSComment getComment() const;
     void setComment(FSComment name);

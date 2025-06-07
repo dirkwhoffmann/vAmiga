@@ -69,7 +69,7 @@ FSPath::isDirectory()
 }
 
 Block
-FSPath::seekRef(FSName name) const
+FSPath::seek(const FSName &name) const
 {
     std::set<Block> visited;
 
@@ -96,11 +96,69 @@ FSPath::seekRef(FSName name) const
     return 0;
 }
 
+FSPath
+FSPath::seekDir(const FSName &name) const
+{
+    if (auto result = FSPath(fs, seek(name)); result.isDirectory()) return result;
+    throw AppError(Fault::DIR_NOT_FOUND);
+}
+
+FSPath
+FSPath::seekFile(const FSName &name) const
+{
+    if (auto result = FSPath(fs, seek(name)); result.isFile()) return result;
+    throw AppError(Fault::FILE_NOT_FOUND);
+}
+
+FSPath
+FSPath::seek(const fs::path &path) const
+{
+    FSPath result = fs.rootDir();
+
+    for (const auto& part : path) {
+
+        if (part == path.filename()) {
+            result = result.seekFile(FSName(part));
+        } else {
+            result = result.seekDir(FSName(part));
+        }
+    }
+    return result;
+}
+
+FSPath
+FSPath::seekDir(const fs::path &path) const
+{
+    if (FSPath result = seek(path); result.isDirectory()) {
+        return result;
+    }
+    throw AppError(Fault::DIR_NOT_FOUND);
+}
+
+FSPath
+FSPath::seekFile(const fs::path &path) const
+{
+    if (FSPath result = seek(path); result.isFile()) {
+        return result;
+    }
+    throw AppError(Fault::DIR_NOT_FOUND);
+}
+
 void
 FSPath::cd(FSName name)
 {
-    dir = seekRef(name);
+    dir = seek(name);
     selfcheck();
+}
+
+void
+FSPath::cd(const fs::path &path)
+{
+    if (!fs::is_directory(path)) return;
+
+    for (const auto& part : path) {
+        cd(FSName(part));
+    }
 }
 
 void

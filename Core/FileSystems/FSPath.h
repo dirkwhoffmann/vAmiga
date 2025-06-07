@@ -23,6 +23,7 @@ struct FSPath
     FSPath(const FSPath &);
     FSPath(const FileSystem &fs, Block dir);
     FSPath(const FileSystem &fs, class FSBlock *dir);
+    // FSPath(const FileSystem &fs, const fs::path &path);
 
     FSPath &operator=(const FSPath &);
 
@@ -34,14 +35,22 @@ struct FSPath
     bool isFile();
     bool isDirectory();
 
-    Block seekRef(FSName name) const;
+    Block seek(const FSName &name) const;
+    FSPath seekDir(const FSName &name) const;
+    FSPath seekFile(const FSName &name) const;
 
+    FSPath seek(const fs::path &path) const;
+    FSPath seekDir(const fs::path &path) const;
+    FSPath seekFile(const fs::path &path) const;
+
+    
     //
     // Working with directories
     //
 
     // Moves one level down in the directory tree
     void cd(FSName name);
+    void cd(const fs::path &path);
     FSPath& operator/=(const FSName &name);
     FSPath operator/(const FSName &name) const;
 

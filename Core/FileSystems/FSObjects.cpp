@@ -49,7 +49,7 @@ FSString::capital(char c)
 }
 
 bool
-FSString::operator== (FSString &rhs) const
+FSString::operator== (const FSString &rhs) const
 {
     return util::uppercased(str) == util::uppercased(rhs.str);
 }

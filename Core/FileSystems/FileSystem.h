@@ -201,34 +201,42 @@ protected:
     
 public:
 
+    // Returns the top node of the directory tree
     FSPath rootDir() const;
 
+    // Checks if a directory or a file exists
+    bool hasDirectory(const fs::path &path) const;
+    bool hasFile(const fs::path &path) const;
+
     // Returns the block representing the current directory
-    FSBlock *currentDirBlock() const; // DEPRECATED
+    [[deprecated]] FSBlock *currentDirBlock() const; // DEPRECATED
     FSBlock *dirBlock(Block dir) const;
 
     // Changes the current directory
-    FSBlock *changeDir(const string &name); // DEPRECATED
-    Block changeDir(Block dir, const string &name) const;
-    FSBlock *changeDir(FSBlock *dir, const string &name) const;
-
+    /*
+    [[deprecated]] FSBlock *changeDir(const string &name); // DEPRECATED
+    [[deprecated]] Block changeDir(Block dir, const string &name) const;
+    [[deprecated]] FSBlock *changeDir(FSBlock *dir, const string &name) const;
+    */
+    
     // Prints a directory listing
     void printDirectory(bool recursive) const throws;
     
     // Returns the path of a file system item
     fs::path getPath(FSBlock *block) const;
     fs::path getPath(Block nr) const { return getPath(blockPtr(nr)); }
-    fs::path getPath() const { return getPath(currentDirBlock()); }
+    // [[deprecated]] fs::path getPath() const { return getPath(currentDirBlock()); }
 
     // Seeks an item inside the current directory
-    Block seekRef(FSName name) const;
-    Block seekRef(const string &name) const { return seekRef(FSName(name)); }
-    FSBlock *seek(const string &name) const { return blockPtr(seekRef(name)); }
-    FSBlock *seekDir(const string &name) const { return userDirBlockPtr(seekRef(name)); }
-    FSBlock *seekFile(const string &name) const { return fileHeaderBlockPtr(seekRef(name)); }
-    FSBlock *seekPath(const fs::path &path);
-    
-    
+    /*
+    [[deprecated]] Block seekRef(FSName name) const;
+    [[deprecated]] Block seekRef(const string &name) const { return seekRef(FSName(name)); }
+    [[deprecated]] FSBlock *seek(const string &name) const { return blockPtr(seekRef(name)); }
+    [[deprecated]] FSBlock *seekDir(const string &name) const { return userDirBlockPtr(seekRef(name)); }
+    [[deprecated]] FSBlock *seekFile(const string &name) const { return fileHeaderBlockPtr(seekRef(name)); }
+    [[deprecated]] FSBlock *seekPath(const fs::path &path);
+    */
+
     //
     // Integrity checking
     //

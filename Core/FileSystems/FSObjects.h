@@ -30,7 +30,7 @@ struct FSString {
     const char *c_str() { return str.c_str(); }
     string cpp_str() { return str; }
     
-    bool operator== (FSString &rhs) const;
+    bool operator== (const FSString &rhs) const;
     isize length() const { return (isize)str.length(); }
     u32 hashValue() const;
     

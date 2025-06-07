@@ -66,9 +66,6 @@ MutableFileSystem::init(FileSystemDescriptor &layout, const fs::path &path)
         
         // Assign device name
         setName(FSName(path.filename().string()));
-        
-        // Change to the root directory
-        changeDir("/");
     }
 }
 
@@ -688,9 +685,6 @@ MutableFileSystem::importDirectory(const fs::path &path, const FSPath &dst, bool
 
     // Rectify the checksums of all blocks
     updateChecksums();
-
-    // Change back to the root directory
-    changeDir("/");
 
     // Verify the result
     if (FS_DEBUG) verify();

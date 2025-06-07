@@ -874,7 +874,7 @@ FSBlock::setName(FSName name)
 }
 
 bool
-FSBlock::isNamed(FSName &other) const
+FSBlock::isNamed(const FSName &other) const
 {
     switch (type) {
 
