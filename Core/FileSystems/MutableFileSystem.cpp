@@ -45,10 +45,7 @@ MutableFileSystem::init(FileSystemDescriptor &layout, const fs::path &path)
     
     // Create all blocks
     format();
-    
-    // Set the current directory to '/'
-    cd = rootBlock;
-    
+        
     // Start allocating blocks at the middle of the disk
     ap = rootBlock;
     
@@ -501,33 +498,6 @@ MutableFileSystem::createFile(const FSPath &dst, const FSName &name, const strin
 }
 
 void
-MutableFileSystem::addHashRef(Block nr)
-{
-    if (FSBlock *block = hashableBlockPtr(nr)) {
-        addHashRef(block);
-    }
-}
-
-void
-MutableFileSystem::addHashRef(FSBlock *newBlock)
-{
-    // Only proceed if a hash table is present
-    FSBlock *cdb = currentDirBlock();
-    if (!cdb || cdb->hashTableSize() == 0) { return; }
-
-    // Read the item at the proper hash table location
-    u32 hash = newBlock->hashValue() % cdb->hashTableSize();
-    u32 ref = cdb->getHashRef(hash);
-
-    // If the slot is empty, put the reference there
-    if (ref == 0) { cdb->setHashRef(hash, newBlock->nr); return; }
-
-    // Otherwise, put it into the last element of the block list chain
-    FSBlock *last = lastHashBlockInChain(ref);
-    if (last) last->setNextHashRef(newBlock->nr);
-}
-
-void
 MutableFileSystem::addHashRef(const FSPath &dir, Block nr)
 {
     if (FSBlock *block = hashableBlockPtr(nr)) {
@@ -832,7 +802,7 @@ MutableFileSystem::exportDirectory(const fs::path &path, bool createDir) const
     
     // Collect all files and directories
     std::vector<Block> items;
-    collect(rootBlock, items);
+    collect(rootDir(), items);
 
     // Export all items
     for (auto const& i : items) {

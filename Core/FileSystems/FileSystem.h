@@ -63,9 +63,6 @@ protected:
     // Location of the bitmap blocks and extended bitmap blocks
     std::vector<Block> bmBlocks;
     std::vector<Block> bmExtBlocks;
-
-    // The currently selected directory (reference to FSDirBlock)
-    Block cd = 0;
     
     
     //
@@ -208,17 +205,9 @@ public:
     bool hasDirectory(const fs::path &path) const;
     bool hasFile(const fs::path &path) const;
 
-    // Returns the block representing the current directory
-    [[deprecated]] FSBlock *currentDirBlock() const; // DEPRECATED
-    FSBlock *dirBlock(Block dir) const;
+    // Returns the block representing a directory
+    FSBlock *dirBlock(Block dir) const; // DEPRECATED
 
-    // Changes the current directory
-    /*
-    [[deprecated]] FSBlock *changeDir(const string &name); // DEPRECATED
-    [[deprecated]] Block changeDir(Block dir, const string &name) const;
-    [[deprecated]] FSBlock *changeDir(FSBlock *dir, const string &name) const;
-    */
-    
     // Prints a directory listing
     void printDirectory(bool recursive) const throws;
     
@@ -277,9 +266,9 @@ public:
     
 protected:
     
-    // Returns a collections of nodes for all items in the current directory
-    void collect(Block nr, std::vector<Block> &list, bool recursive = true) const throws;
-    
+    // Returns a collections of nodes for all items in a directory
+    void collect(const FSPath &path, std::vector<Block> &list, bool recursive = true) const throws;
+
 private:
     
     // Collects all references stored in a hash table

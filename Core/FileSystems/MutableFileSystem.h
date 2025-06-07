@@ -144,10 +144,6 @@ public:
 
 
 private:
-    
-    // Adds a reference to the current directory
-    [[deprecated]] void addHashRef(Block nr); // DEPRECATED
-    [[deprecated]] void addHashRef(FSBlock *block); // DEPRECATED
 
     // Adds a reference to a directory
     void addHashRef(const FSPath &dir, Block nr);

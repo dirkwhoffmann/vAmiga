@@ -51,12 +51,15 @@ struct FSPath
     // Moves one level down in the directory tree
     void cd(FSName name);
     void cd(const fs::path &path);
+
+    // Operator overloads for the cd command
     FSPath& operator/=(const FSName &name);
     FSPath operator/(const FSName &name) const;
 
     // Moves one level up in the directory tree
     void parent();
 
+    // Converts the path to a host path
     fs::path getPath() const;
 };
 

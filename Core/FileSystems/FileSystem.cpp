@@ -113,10 +113,7 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
         // Import block data
         blocks[i]->importBlock(data, bsize);
     }
-    
-    // Set the current directory to '/'
-    cd = rootBlock;
-    
+        
     // Print some debug information
     debug(FS_DEBUG, "Success\n");
     if (FS_DEBUG) printDirectory(true);
@@ -470,17 +467,6 @@ FileSystem::hasFile(const fs::path &path) const
 }
 
 FSBlock *
-FileSystem::currentDirBlock() const
-{
-    FSBlock *cdb = blockPtr(cd);
-    
-    assert(cdb != nullptr);
-    assert(cdb->type == FSBlockType::ROOT_BLOCK || cdb->type == FSBlockType::USERDIR_BLOCK);
-    
-    return cdb;
-}
-
-FSBlock *
 FileSystem::dirBlock(Block dir) const
 {
     FSBlock *ptr = blockPtr(dir);
@@ -564,8 +550,8 @@ void
 FileSystem::printDirectory(bool recursive) const
 {
     std::vector<Block> items;
-    collect(cd, items);
-    
+    collect(rootDir(), items);
+
     for (auto const& i : items) {
         msg("%s\n", getPath(i).string().c_str());
     }
@@ -600,69 +586,18 @@ FileSystem::getPath(FSBlock *block) const
     return result;
 }
 
-/*
-Block
-FileSystem::seekRef(FSName name) const
-{
-    std::set<Block> visited;
-    
-    // Only proceed if a hash table is present
-    FSBlock *cdb = currentDirBlock();
-    if (!cdb || cdb->hashTableSize() == 0) return 0;
-    
-    // Compute the table position and read the item
-    u32 hash = name.hashValue() % cdb->hashTableSize();
-    u32 ref = cdb->getHashRef(hash);
-    
-    // Traverse the linked list until the item has been found
-    while (ref && visited.find(ref) == visited.end())  {
-        
-        FSBlock *item = hashableBlockPtr(ref);
-        if (item == nullptr) break;
-        
-        if (item->isNamed(name)) return item->nr;
-
-        visited.insert(ref);
-        ref = item->getNextHashRef();
-    }
-
-    return 0;
-}
-
-FSBlock *
-FileSystem::seekPath(const fs::path &path)
-{
-    FSBlock *block = nullptr;
-
-    changeDir("/");
-
-    for (const auto& part : path) {
-        
-        if (part == path.filename()) {
-            block = seekFile(part.string());
-        } else {
-            block = changeDir(part.string());
-        }
-        
-        if (!block) break;
-    }
-    
-    return block;
-}
-*/
-
 void
-FileSystem::collect(Block nr, std::vector<Block> &result, bool recursive) const
+FileSystem::collect(const FSPath &path, std::vector<Block> &result, bool recursive) const
 {
     std::stack<Block> remainingItems;
     std::set<Block> visited;
-    
+
     // Start with the items in this block
-    collectHashedRefs(nr, remainingItems, visited);
-    
+    collectHashedRefs(path.dir, remainingItems, visited);
+
     // Move the collected items to the result list
     while (remainingItems.size() > 0) {
-        
+
         Block item = remainingItems.top();
         remainingItems.pop();
         result.push_back(item);
