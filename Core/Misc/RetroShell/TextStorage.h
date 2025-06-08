@@ -38,6 +38,9 @@ public:
     // Returns the number of stored lines
     isize size() const { return (isize)storage.size(); }
 
+    // Returns the number of trailing blank lines
+    isize trailingEmptyLines() const;
+
     // Returns a single line
     string operator [] (isize i) const;
     string& operator [] (isize i);

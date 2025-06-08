@@ -63,4 +63,10 @@ struct RetroShellKeyEnum : Reflection<RetroShellKeyEnum, RetroShellKey>
     }
 };
 
+//
+// Wrapper structures
+//
+
+struct vspace { isize lines; };
+// static constexpr VSpace vspace{1};
 }

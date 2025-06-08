@@ -38,28 +38,30 @@ CommandConsole::welcome()
     *this << '\n';
     
     printHelp();
-    *this << '\n';
 }
 
 void
 CommandConsole::printHelp()
 {
+    *this << vspace{0};
+
     storage << "Type 'help' or press 'TAB' twice for help.\n";
     storage << "Type '.' or press 'SHIFT+RETURN' to enter debug mode.";
     
     remoteManager.rshServer << "Type 'help' for help.\n";
     remoteManager.rshServer << "Type '.' to enter debug mode.";
-    
-    *this << '\n';
+
+    *this << vspace{1};
 }
 
 void
 CommandConsole::pressReturn(bool shift)
 {
     if (!shift && input.empty()) {
-        
-        printHelp();
-        
+
+        retroShell.asyncExec("helpstring");
+        // printHelp();
+
     } else {
         
         Console::pressReturn(shift);

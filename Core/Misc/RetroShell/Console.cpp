@@ -111,6 +111,16 @@ Console::operator<<(std::stringstream &stream)
     return *this;
 }
 
+Console&
+Console::operator<<(const vspace &value)
+{
+    auto blanks = storage.trailingEmptyLines();
+    while (blanks++ <= value.lines) {
+        *this << '\n';
+    }
+    return *this;
+}
+
 const char *
 Console::text()
 {
@@ -316,7 +326,6 @@ Console::press(char c)
             }
     }
 
-    tabPressed = false;
     needsDisplay();
 }
 
@@ -778,7 +787,18 @@ Console::initCommands(RetroShellCmd &root)
                 welcome();
             }
         });
-        
+
+        root.add({
+
+            .tokens = { "helpstring" },
+            .hidden = true,
+            .help   = { "Prints how to get help" },
+            .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+
+                printHelp();
+            }
+        });
+
         root.add({
             
             .tokens = { "." },

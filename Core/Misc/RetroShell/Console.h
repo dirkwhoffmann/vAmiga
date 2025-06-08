@@ -160,6 +160,7 @@ public:
     Console &operator<<(long long value);
     Console &operator<<(unsigned long long value);
     Console &operator<<(std::stringstream &stream);
+    Console &operator<<(const vspace &value);
 
     // Returns the prompt
     virtual string getPrompt() = 0;

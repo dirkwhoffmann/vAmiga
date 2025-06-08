@@ -272,6 +272,13 @@ RetroShell::operator<<(std::stringstream &stream)
     return *this;
 }
 
+RetroShell&
+RetroShell::operator<<(const vspace &value)
+{
+    *current << value;
+    return *this;
+}
+
 const char *
 RetroShell::text()
 {

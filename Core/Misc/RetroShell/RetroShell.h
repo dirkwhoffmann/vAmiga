@@ -164,6 +164,7 @@ public:
     RetroShell &operator<<(long long value);
     RetroShell &operator<<(unsigned long long value);
     RetroShell &operator<<(std::stringstream &stream);
+    RetroShell &operator<<(const vspace &value);
 
     const char *text();
     isize cursorRel();

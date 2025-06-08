@@ -13,6 +13,18 @@
 
 namespace vamiga {
 
+isize
+TextStorage::trailingEmptyLines() const
+{
+    isize result = 0;
+
+    for (auto it = storage.rbegin(); it != storage.rend() && it->empty(); it++) {
+        result++;
+    }
+
+    return result;
+}
+
 string
 TextStorage::operator [] (isize i) const
 {
