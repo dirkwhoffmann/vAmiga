@@ -418,12 +418,12 @@ extension MyController {
 
         case .RSH_CLOSE:
             renderer.console.close(delay: 0.25)
-            
+
         case .RSH_UPDATE:
             renderer.console.isDirty = true
             passToInspector()
             
-        case .RSH_DEBUGGER:
+        case .RSH_SWITCH:
             break
 
         case .RSH_WAIT:

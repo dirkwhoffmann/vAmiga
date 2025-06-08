@@ -24,13 +24,7 @@ NavigatorConsole::getPrompt()
 {
     std::stringstream ss;
 
-    ss << "(";
-    ss << std::right << std::setw(0) << std::dec << isize(agnus.pos.v);
-    ss << ",";
-    ss << std::right << std::setw(0) << std::dec << isize(agnus.pos.h);
-    ss << ") $";
-    ss << std::right << std::setw(6) << std::hex << std::setfill('0') << isize(cpu.getPC0());
-    ss << ": ";
+    ss << "/>";
 
     return ss.str();
 }
@@ -38,7 +32,7 @@ NavigatorConsole::getPrompt()
 void
 NavigatorConsole::welcome()
 {
-    storage << "vAmiga File system navigator\n";
+    *this << "vAmiga File system navigator\n";
 
     printHelp();
     *this << '\n';

@@ -21,7 +21,8 @@ RetroShell::RetroShell(Amiga& ref) : SubComponent(ref)
     subComponents = std::vector<CoreComponent *> {
 
         &commander,
-        &debugger
+        &debugger,
+        &navigator
     };
 }
 
@@ -42,37 +43,34 @@ RetroShell::cacheInfo(RetroShellInfo &result) const
 }
 
 void
-RetroShell::switchConsole() {
-
-    inCommandShell() ? enterDebugger() : enterCommander();
-}
-
-void 
-RetroShell::enterDebugger()
+RetroShell::enterConsole(isize nr)
 {
-    // Assign the new console
-    current = &debugger;
+    Console *newConsole = nullptr;
 
-    // Enter tracking mode
-    emulator.trackOn(1);
-    msgQueue.put(Msg::RSH_DEBUGGER, true);
-    
-    // Print the welcome message if entered the first time
-    if (current->isEmpty()) { current->exec("welcome"); *this << current->getPrompt(); }
-}
+    switch (nr) {
 
-void
-RetroShell::enterCommander()
-{
-    // Assign the new console
-    current = &commander;
+        case 0: newConsole = &commander; break;
+        case 1: newConsole = &debugger; break;
+        case 2: newConsole = &navigator; break;
 
-    // Leave tracking mode
-    emulator.trackOff(1);
-    msgQueue.put(Msg::RSH_DEBUGGER, false);
-    
-    // Print the welcome message if entered the first time
-    if (current->isEmpty()) { current->exec("welcome"); *this << current->getPrompt(); }
+        default:
+            fatalError;
+    }
+
+    if (current != newConsole) {
+
+        // Assign the new console
+        current = newConsole;
+
+        // Enter Leave tracking mode
+        nr == 1 ? emulator.trackOn(1) : emulator.trackOff(1);
+
+        // Print the welcome message if entered the first time
+        if (current->isEmpty()) { current->exec("welcome"); *this << current->getPrompt(); }
+
+        // Inform the GUI about the change
+        msgQueue.put(Msg::RSH_SWITCH, nr);
+    }
 }
 
 void
@@ -304,6 +302,25 @@ RetroShell::cursorRel()
 void
 RetroShell::press(RetroShellKey key, bool shift)
 {
+    if (shift) {
+
+        switch(key) {
+
+            case RetroShellKey::LEFT:
+
+                prevConsole();
+                return;
+
+            case RetroShellKey::RIGHT:
+
+                nextConsole();
+                return;
+
+            default:
+                break;
+        }
+    }
+
     current->press(key, shift);
 }
 
@@ -324,6 +341,7 @@ RetroShell::setStream(std::ostream &os)
 {
     commander.setStream(os);
     debugger.setStream(os);
+    navigator.setStream(os);
 }
 
 void

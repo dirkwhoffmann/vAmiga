@@ -66,11 +66,14 @@ private:
     std::vector<QueuedCmd> commands;
 
     // The currently active console
-    Console *current = &commander;
+    Console *current = nullptr;
+
+public:
 
     bool inCommandShell() { return current == &commander; }
     bool inDebugShell() { return current == &debugger; }
-
+    bool inNavigator() { return current == &navigator; }
+    
 
     //
     // Initializing
@@ -127,9 +130,14 @@ public:
     // Managing consoles
     //
 
-    void switchConsole();
-    void enterDebugger();
-    void enterCommander();
+public:
+
+    void enterConsole(isize nr);
+    void enterCommander() { enterConsole(0); }
+    void enterDebugger() { enterConsole(1); }
+    void enterNavigator() { enterConsole(2); }
+    void nextConsole() { enterConsole((current->objid + 1) % 3); }
+    void prevConsole() { enterConsole((current->objid + 2) % 3); }
 
 
     //

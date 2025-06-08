@@ -807,8 +807,12 @@ Console::initCommands(RetroShellCmd &root)
             .tokens = { "." },
             .help   = { "Enter or exit the debugger" },
             .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
-                
-                retroShell.switchConsole();
+
+                if (retroShell.inDebugShell()) {
+                    retroShell.enterCommander();
+                } else {
+                    retroShell.enterDebugger();
+                }
             }
         });
         
