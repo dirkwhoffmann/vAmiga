@@ -32,6 +32,16 @@ RetroShell::_initialize()
 }
 
 void
+RetroShell::cacheInfo(RetroShellInfo &result) const
+{
+    {   SYNCHRONIZED
+
+        result.console = current->objid;
+        result.cursorRel = current->cursorRel();
+    }
+}
+
+void
 RetroShell::switchConsole() {
 
     inCommandShell() ? enterDebugger() : enterCommander();

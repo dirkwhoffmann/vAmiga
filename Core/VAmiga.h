@@ -1395,6 +1395,12 @@ public:
     /// @name Querying the console
     /// @{
     ///
+
+    /** @brief  Returns the component's current state.
+     */
+    const RetroShellInfo &getInfo() const;
+    const RetroShellInfo &getCachedInfo() const;
+
     /** @brief  Returns a pointer to the text buffer.
      *  The text buffer contains the complete contents of the console. It
      *  will be expanded when new output is generated. When the buffer
@@ -1409,7 +1415,7 @@ public:
      *  cursor is at the front of the input line, the value matches the
      *  length of the input line.
      */
-    isize cursorRel();
+    // isize cursorRel();
 
     /// @}
     /// @name Typing characters and strings

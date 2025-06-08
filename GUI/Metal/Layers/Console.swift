@@ -16,8 +16,10 @@ class Console: Layer {
     var window: NSWindow { return controller.window! }
     var contentView: NSView { return window.contentView! }
     let scrollView = NSTextView.scrollableTextView()
-    var textView: NSTextView
 
+    var textView: NSTextView
+    var textColor = NSColor.white
+    var backgroundColor = NSColor(r: 0x80, g: 0x80, b: 0x80, a: 0x80)
     var isDirty = false
         
     //
@@ -28,7 +30,7 @@ class Console: Layer {
                 
         textView = (scrollView.documentView as? NSTextView)!
         textView.isEditable = false
-        textView.backgroundColor = NSColor(r: 0x80, g: 0x80, b: 0x80, a: 0x80)
+        textView.backgroundColor = backgroundColor
 
         super.init(renderer: renderer)
         
@@ -47,15 +49,24 @@ class Console: Layer {
         super.update(frames: frames)
 
         if isDirty {
-            
+
+            let info = emu.retroShell.info
+
+            switch info.console {
+            case 1:  textColor = NSColor(r: 0xFF, g: 0xC0, b: 0xC0, a: 0xFF)
+            case 2:  textColor = NSColor(r: 0xC0, g: 0xFF, b: 0xC0, a: 0xFF)
+            default: textColor = NSColor(r: 0xFF, g: 0xFF, b: 0xFF, a: 0xFF)
+            }
+
             if let text = emu.retroShell.getText() {
 
                 let cursorColor = NSColor(r: 255, g: 255, b: 255, a: 128)
+                // let cursorColor = textColor.withAlphaComponent(0.5)
                 let monoFont = NSFont.monospaced(ofSize: 14, weight: .medium)
-                let cpos = emu.retroShell.cursorRel - 1
-                
+                let cpos = info.cursorRel - 1 // emu.retroShell.cursorRel - 1
+
                 let attr = [
-                    NSAttributedString.Key.foregroundColor: NSColor.white,
+                    NSAttributedString.Key.foregroundColor: textColor,
                     NSAttributedString.Key.font: monoFont
                 ]
                 let string = NSMutableAttributedString(string: text, attributes: attr)
@@ -83,12 +94,10 @@ class Console: Layer {
     }
         
     override func alphaDidChange() {
-                
-        let a1 = Int(alpha.current * 0xFF)
-        let a2 = Int(alpha.current * 0.8 * 0xFF)
-        textView.textColor = NSColor(r: 0xFF, g: 0xFF, b: 0xFF, a: a1)
-        textView.backgroundColor = NSColor(r: 0x80, g: 0x80, b: 0x80, a: a2)
-        
+
+        textView.textColor = textColor.withAlphaComponent(CGFloat(alpha.current))
+        textView.backgroundColor = backgroundColor.withAlphaComponent(CGFloat(alpha.current * 0.8))
+
         if alpha.current > 0 && scrollView.superview == nil {
             contentView.addSubview(scrollView)
         }

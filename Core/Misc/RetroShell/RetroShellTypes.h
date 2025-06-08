@@ -37,11 +37,11 @@ struct RetroShellKeyEnum : Reflection<RetroShellKeyEnum, RetroShellKey>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(RetroShellKey::CR);
-    
+
     static const char *_key(RetroShellKey value)
     {
         switch (value) {
-                
+
             case RetroShellKey::UP:          return "UP";
             case RetroShellKey::DOWN:        return "DOWN";
             case RetroShellKey::LEFT:        return "LEFT";
@@ -64,9 +64,20 @@ struct RetroShellKeyEnum : Reflection<RetroShellKeyEnum, RetroShellKey>
 };
 
 //
-// Wrapper structures
+// Structures
 //
 
+typedef struct
+{
+    // Active console
+    isize console;
+
+    // Relative position of the cursor
+    isize cursorRel;
+}
+RetroShellInfo;
+
+// Used in operator overloads
 struct vspace { isize lines; };
-// static constexpr VSpace vspace{1};
+
 }

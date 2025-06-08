@@ -1725,6 +1725,20 @@ RemoteManagerAPI::getCachedInfo() const
 // RetroShellAPI
 //
 
+const RetroShellInfo &
+RetroShellAPI::getInfo() const
+{
+    VAMIGA_PUBLIC
+    return retroShell->getInfo();
+}
+
+const RetroShellInfo &
+RetroShellAPI::getCachedInfo() const
+{
+    VAMIGA_PUBLIC
+    return retroShell->getCachedInfo();
+}
+
 const char *
 RetroShellAPI::text()
 {
@@ -1732,12 +1746,14 @@ RetroShellAPI::text()
     return retroShell->text();
 }
 
+/*
 isize
 RetroShellAPI::cursorRel()
 {
     VAMIGA_PUBLIC_SUSPEND
     return retroShell->cursorRel();
 }
+*/
 
 void
 RetroShellAPI::press(RetroShellKey key, bool shift)

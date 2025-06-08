@@ -34,7 +34,7 @@
 
 namespace vamiga {
 
-class RetroShell final : public SubComponent {
+class RetroShell final : public SubComponent, public Inspectable<RetroShellInfo> {
 
     friend class RshServer;
 
@@ -102,6 +102,15 @@ private:
 
     void _dump(Category category, std::ostream &os) const override { }
     void _initialize() override;
+
+
+    //
+    // Methods from Inspectable
+    //
+
+private:
+
+    void cacheInfo(RetroShellInfo &result) const override;
 
 
     //

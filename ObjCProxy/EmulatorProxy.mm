@@ -1699,10 +1699,17 @@ NSString *EventSlotName(EventSlot slot)
     return proxy;
 }
 
+-(RetroShellInfo)info
+{
+    return [self shell]->getInfo();
+}
+
+/*
 -(NSInteger)cursorRel
 {
     return [self shell]->cursorRel();
 }
+*/
 
 -(NSString *)getText
 {

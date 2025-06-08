@@ -873,7 +873,8 @@ NSString *EventSlotName(EventSlot slot);
 
 @interface RetroShellProxy : Proxy { }
 
-@property (readonly) NSInteger cursorRel;
+@property (readonly) RetroShellInfo info;
+// @property (readonly) NSInteger cursorRel;
 
 - (NSString *)getText;
 - (void)pressKey:(char)c;
