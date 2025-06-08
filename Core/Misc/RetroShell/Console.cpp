@@ -348,8 +348,11 @@ Console::pressReturn(bool shift)
     if (shift) {
 
         // Switch the interpreter
-        // retroShell.switchConsole();
         retroShell.asyncExec(".");
+
+    } else if (input.empty()) {
+
+        retroShell.asyncExec("helpstring");
 
     } else {
 

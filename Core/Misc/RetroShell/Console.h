@@ -41,13 +41,19 @@ class Console : public SubComponent {
         {
             .type           = Class::Console,
             .name           = "CmdConsole",
-            .description    = "Command shell",
+            .description    = "Commander",
             .shell          = ""
         },
         {
             .type           = Class::Console,
             .name           = "DbgConsole",
-            .description    = "Debug shell",
+            .description    = "Debugger",
+            .shell          = ""
+        },
+        {
+            .type           = Class::Console,
+            .name           = "NavConsole",
+            .description    = "Navigator",
             .shell          = ""
         }
     };
@@ -324,7 +330,7 @@ protected:
     void _dump(CoreObject &component, Category category);
 };
 
-class CommandConsole final : public Console
+class CommanderConsole final : public Console
 {
     using Console::Console;
 
@@ -336,7 +342,19 @@ class CommandConsole final : public Console
     void pressReturn(bool shift) override;
 };
 
-class DebugConsole final : public Console
+class DebuggerConsole final : public Console
+{
+    using Console::Console;
+
+    virtual void initCommands(RetroShellCmd &root) override;
+    void _pause() override;
+    string getPrompt() override;
+    void welcome() override;
+    void printHelp() override;
+    void pressReturn(bool shift) override;
+};
+
+class NavigatorConsole final : public Console
 {
     using Console::Console;
 

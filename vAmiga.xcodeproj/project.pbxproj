@@ -132,8 +132,10 @@
 		5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
 		50650F4A2DF378A1008AD660 /* FSPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50650F492DF3789F008AD660 /* FSPath.cpp */; };
 		50650F4B2DF378A1008AD660 /* FSPath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50650F492DF3789F008AD660 /* FSPath.cpp */; };
-		50672CC02946100F004113F5 /* DebugConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50672CBF2946100F004113F5 /* DebugConsole.cpp */; };
-		50672CC12946100F004113F5 /* DebugConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50672CBF2946100F004113F5 /* DebugConsole.cpp */; };
+		50650F4E2DF5D076008AD660 /* NavigatorConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50650F4D2DF5D075008AD660 /* NavigatorConsole.cpp */; };
+		50650F4F2DF5D076008AD660 /* NavigatorConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50650F4D2DF5D075008AD660 /* NavigatorConsole.cpp */; };
+		50672CC02946100F004113F5 /* DebuggerConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50672CBF2946100F004113F5 /* DebuggerConsole.cpp */; };
+		50672CC12946100F004113F5 /* DebuggerConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50672CBF2946100F004113F5 /* DebuggerConsole.cpp */; };
 		5068EA332D4B5BF800B44FB5 /* Workspace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5068EA322D4B5BF600B44FB5 /* Workspace.cpp */; };
 		5068EA342D4B5BF800B44FB5 /* Workspace.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5068EA322D4B5BF600B44FB5 /* Workspace.cpp */; };
 		506ACE44279AC75100BA7877 /* SequencerDas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506ACE43279AC75100BA7877 /* SequencerDas.cpp */; };
@@ -223,7 +225,7 @@
 		5099432A29C2114C00867E8F /* Amiga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0E21EB410B002E32A6 /* Amiga.cpp */; };
 		509C365A260B1766004F160A /* RetroShellCmd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C3658260B1766004F160A /* RetroShellCmd.cpp */; };
 		509C365E260B177E004F160A /* Console.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C365C260B177E004F160A /* Console.cpp */; };
-		509C3663260B1D95004F160A /* CommandConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C3662260B1D95004F160A /* CommandConsole.cpp */; };
+		509C3663260B1D95004F160A /* CommanderConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C3662260B1D95004F160A /* CommanderConsole.cpp */; };
 		509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CC22083F9800C500F0 /* CPUPanel.swift */; };
 		509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CE220847C600C500F0 /* InstrTableView.swift */; };
 		509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4D02208487900C500F0 /* TraceTableView.swift */; };
@@ -454,7 +456,7 @@
 		50FC04D227DA19F600C3E566 /* BootBlockImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A64B95257A63A600442964 /* BootBlockImage.cpp */; };
 		50FC04D327DA19F600C3E566 /* FSObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056507A25459C8800A79D27 /* FSObjects.cpp */; };
 		50FC04D427DA19F600C3E566 /* FSBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50565070254573E100A79D27 /* FSBlock.cpp */; };
-		50FC04D527DA1A0000C3E566 /* CommandConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C3662260B1D95004F160A /* CommandConsole.cpp */; };
+		50FC04D527DA1A0000C3E566 /* CommanderConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C3662260B1D95004F160A /* CommanderConsole.cpp */; };
 		50FC04D627DA1A0000C3E566 /* RetroShellCmd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509C3658260B1766004F160A /* RetroShellCmd.cpp */; };
 		50FC04D827DA1A0000C3E566 /* RetroShell.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B9C426260942D000A86C31 /* RetroShell.cpp */; };
 		50FC04D927DA1A0000C3E566 /* TextStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AD904C276E10660011ECCB /* TextStorage.cpp */; };
@@ -726,7 +728,8 @@
 		5064851021EC7A1700FC4AC3 /* Memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Memory.h; sourceTree = "<group>"; };
 		50650F482DF37898008AD660 /* FSPath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSPath.h; sourceTree = "<group>"; };
 		50650F492DF3789F008AD660 /* FSPath.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSPath.cpp; sourceTree = "<group>"; };
-		50672CBF2946100F004113F5 /* DebugConsole.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DebugConsole.cpp; sourceTree = "<group>"; };
+		50650F4D2DF5D075008AD660 /* NavigatorConsole.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NavigatorConsole.cpp; sourceTree = "<group>"; };
+		50672CBF2946100F004113F5 /* DebuggerConsole.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DebuggerConsole.cpp; sourceTree = "<group>"; };
 		5068EA312D4B5BED00B44FB5 /* Workspace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Workspace.h; sourceTree = "<group>"; };
 		5068EA322D4B5BF600B44FB5 /* Workspace.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Workspace.cpp; sourceTree = "<group>"; };
 		506ACE43279AC75100BA7877 /* SequencerDas.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SequencerDas.cpp; sourceTree = "<group>"; };
@@ -856,7 +859,7 @@
 		509C3659260B1766004F160A /* RetroShellCmd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RetroShellCmd.h; sourceTree = "<group>"; };
 		509C365C260B177E004F160A /* Console.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Console.cpp; sourceTree = "<group>"; };
 		509C365D260B177E004F160A /* Console.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Console.h; sourceTree = "<group>"; };
-		509C3662260B1D95004F160A /* CommandConsole.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CommandConsole.cpp; sourceTree = "<group>"; };
+		509C3662260B1D95004F160A /* CommanderConsole.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CommanderConsole.cpp; sourceTree = "<group>"; };
 		509CF4CC22083F9800C500F0 /* CPUPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUPanel.swift; sourceTree = "<group>"; };
 		509CF4CE220847C600C500F0 /* InstrTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstrTableView.swift; sourceTree = "<group>"; };
 		509CF4D02208487900C500F0 /* TraceTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceTableView.swift; sourceTree = "<group>"; };
@@ -2056,8 +2059,9 @@
 				50B9C426260942D000A86C31 /* RetroShell.cpp */,
 				509C365D260B177E004F160A /* Console.h */,
 				509C365C260B177E004F160A /* Console.cpp */,
-				509C3662260B1D95004F160A /* CommandConsole.cpp */,
-				50672CBF2946100F004113F5 /* DebugConsole.cpp */,
+				509C3662260B1D95004F160A /* CommanderConsole.cpp */,
+				50672CBF2946100F004113F5 /* DebuggerConsole.cpp */,
+				50650F4D2DF5D075008AD660 /* NavigatorConsole.cpp */,
 				50AD904A276E104E0011ECCB /* TextStorage.h */,
 				50AD904C276E10660011ECCB /* TextStorage.cpp */,
 				509C3659260B1766004F160A /* RetroShellCmd.h */,
@@ -2441,6 +2445,7 @@
 				507215A925EAB4AC00787591 /* Chrono.cpp in Sources */,
 				50EFB0BA2C1811C90013B73C /* Configurable.cpp in Sources */,
 				50BF1CCE276DC7BB00386540 /* GdbServerCmds.cpp in Sources */,
+				50650F4E2DF5D076008AD660 /* NavigatorConsole.cpp in Sources */,
 				509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */,
 				50984B65263A9E9C00E37184 /* RegressionTester.cpp in Sources */,
 				50157EED28257B7C000E9DDD /* Config.swift in Sources */,
@@ -2468,7 +2473,7 @@
 				50EAD9A0256E76A40053F9AC /* HDFFile.cpp in Sources */,
 				5072CAFA2456D1C800C8F606 /* AudioConf.swift in Sources */,
 				508FDFD521EA20510043D0E9 /* Animation.swift in Sources */,
-				509C3663260B1D95004F160A /* CommandConsole.cpp in Sources */,
+				509C3663260B1D95004F160A /* CommanderConsole.cpp in Sources */,
 				50AE6EDF24D93EDD000AA367 /* AgnusRegs.cpp in Sources */,
 				50AEBEE024D3D9080037082D /* KeyboardEvents.cpp in Sources */,
 				501B00192C63589500749664 /* GuardList.cpp in Sources */,
@@ -2610,7 +2615,7 @@
 				50FC08AD27819CD100F0C567 /* AgnusInfo.cpp in Sources */,
 				50AE6F8525D71FBE0004AFBC /* Error.cpp in Sources */,
 				501B00152C629A0500749664 /* Beamtraps.cpp in Sources */,
-				50672CC02946100F004113F5 /* DebugConsole.cpp in Sources */,
+				50672CC02946100F004113F5 /* DebuggerConsole.cpp in Sources */,
 				5057E4C5243DF10A004005EB /* Primitives.swift in Sources */,
 				50826F7827F0B2AD005FBF3B /* DiagBoard.cpp in Sources */,
 				507957AC244AD25B007B8B8D /* Configuration.swift in Sources */,
@@ -2735,7 +2740,7 @@
 				50FC049D27DA197500C3E566 /* AgnusRegs.cpp in Sources */,
 				50FC04FB27DA1AA200C3E566 /* DiskControllerRegs.cpp in Sources */,
 				50FC04BE27DA19C900C3E566 /* Joystick.cpp in Sources */,
-				50672CC12946100F004113F5 /* DebugConsole.cpp in Sources */,
+				50672CC12946100F004113F5 /* DebuggerConsole.cpp in Sources */,
 				501B001A2C63589500749664 /* GuardList.cpp in Sources */,
 				50FC04F627DA1A8F00C3E566 /* AudioPort.cpp in Sources */,
 				50FC04DA27DA1A0000C3E566 /* Console.cpp in Sources */,
@@ -2773,6 +2778,7 @@
 				50FC04E727DA1A1400C3E566 /* u_deep.c in Sources */,
 				50FC04C527DA19DE00C3E566 /* RomFile.cpp in Sources */,
 				50FC04EA27DA1A3900C3E566 /* OSDebuggerDump.cpp in Sources */,
+				50650F4F2DF5D076008AD660 /* NavigatorConsole.cpp in Sources */,
 				50FC048C27DA195600C3E566 /* CIA.cpp in Sources */,
 				50EFB0BB2C1811C90013B73C /* Configurable.cpp in Sources */,
 				50FC049927DA197500C3E566 /* AgnusEvents.cpp in Sources */,
@@ -2888,7 +2894,7 @@
 				50CFF56B2C259FB900A47ECC /* Serializable.cpp in Sources */,
 				50FC04B427DA19A900C3E566 /* ZorroManager.cpp in Sources */,
 				50FC04B027DA199600C3E566 /* Memory.cpp in Sources */,
-				50FC04D527DA1A0000C3E566 /* CommandConsole.cpp in Sources */,
+				50FC04D527DA1A0000C3E566 /* CommanderConsole.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,19 +15,19 @@
 namespace vamiga {
 
 void
-CommandConsole::_pause()
+CommanderConsole::_pause()
 {
     
 }
 
 string
-CommandConsole::getPrompt()
+CommanderConsole::getPrompt()
 {
     return "vAmiga% ";
 }
 
 void
-CommandConsole::welcome()
+CommanderConsole::welcome()
 {
     storage << "vAmiga RetroShell ";
     remoteManager.rshServer << "vAmiga RetroShell Remote Server ";
@@ -41,7 +41,7 @@ CommandConsole::welcome()
 }
 
 void
-CommandConsole::printHelp()
+CommanderConsole::printHelp()
 {
     *this << vspace{0};
 
@@ -55,8 +55,9 @@ CommandConsole::printHelp()
 }
 
 void
-CommandConsole::pressReturn(bool shift)
+CommanderConsole::pressReturn(bool shift)
 {
+    /*
     if (!shift && input.empty()) {
 
         retroShell.asyncExec("helpstring");
@@ -66,10 +67,12 @@ CommandConsole::pressReturn(bool shift)
         
         Console::pressReturn(shift);
     }
+    */
+    Console::pressReturn(shift);
 }
 
 void
-CommandConsole::initCommands(RetroShellCmd &root)
+CommanderConsole::initCommands(RetroShellCmd &root)
 {
     Console::initCommands(root);
     

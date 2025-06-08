@@ -14,7 +14,7 @@
 namespace vamiga {
 
 void
-DebugConsole::_pause()
+DebuggerConsole::_pause()
 {
     *this << '\n' << '\n';
     exec("state");
@@ -22,7 +22,7 @@ DebugConsole::_pause()
 }
 
 string
-DebugConsole::getPrompt()
+DebuggerConsole::getPrompt()
 {
     std::stringstream ss;
     
@@ -38,14 +38,14 @@ DebugConsole::getPrompt()
 }
 
 void
-DebugConsole::welcome()
+DebuggerConsole::welcome()
 {
     printHelp();
     *this << '\n';
 }
 
 void
-DebugConsole::printHelp()
+DebuggerConsole::printHelp()
 {
     storage << "Type 'help' or press 'TAB' twice for help.\n";
     storage << "Type '.' or press 'SHIFT+RETURN' to exit debug mode.";
@@ -57,7 +57,7 @@ DebugConsole::printHelp()
 }
 
 void
-DebugConsole::pressReturn(bool shift)
+DebuggerConsole::pressReturn(bool shift)
 {
     if (!shift && input.empty()) {
 
@@ -70,7 +70,7 @@ DebugConsole::pressReturn(bool shift)
 }
 
 void
-DebugConsole::initCommands(RetroShellCmd &root)
+DebuggerConsole::initCommands(RetroShellCmd &root)
 {
     Console::initCommands(root);
     
