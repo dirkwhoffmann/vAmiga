@@ -802,8 +802,9 @@ Console::initCommands(RetroShellCmd &root)
             }
         });
 
+        /*
         root.add({
-            
+
             .tokens = { "." },
             .help   = { "Enter or exit the debugger" },
             .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
@@ -815,7 +816,38 @@ Console::initCommands(RetroShellCmd &root)
                 }
             }
         });
-        
+        */
+
+        root.add({
+
+            .tokens = { "commander" },
+            .help   = { "Enter or command console" },
+            .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+
+                    retroShell.enterCommander();
+            }
+        });
+
+        root.add({
+
+            .tokens = { "debugger" },
+            .help   = { "Enter or debug console" },
+            .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+
+                    retroShell.enterDebugger();
+            }
+        });
+
+        root.add({
+
+            .tokens = { "navigator" },
+            .help   = { "Enter the file system console" },
+            .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+
+                    retroShell.enterNavigator();
+            }
+        });
+
         root.add({
             
             .tokens = { "clear" },

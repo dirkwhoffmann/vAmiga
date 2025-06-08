@@ -53,8 +53,9 @@ class Console: Layer {
             let info = emu.retroShell.info
 
             switch info.console {
-            case 1:  textColor = NSColor(r: 0xFF, g: 0xC0, b: 0xC0, a: 0xFF)
-            case 2:  textColor = NSColor(r: 0xC0, g: 0xFF, b: 0xC0, a: 0xFF)
+            case 1:  textColor = NSColor(r: 0xFF, g: 0xD0, b: 0xD0, a: 0xFF)
+            // case 2:  textColor = NSColor(r: 0xD0, g: 0xFF, b: 0xD0, a: 0xFF)
+            case 2:  textColor = NSColor(r: 0xD0, g: 0xD0, b: 0xFF, a: 0xFF)
             default: textColor = NSColor(r: 0xFF, g: 0xFF, b: 0xFF, a: 0xFF)
             }
 

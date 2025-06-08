@@ -29,7 +29,7 @@ CommanderConsole::getPrompt()
 void
 CommanderConsole::welcome()
 {
-    storage << "vAmiga RetroShell ";
+    storage << "RetroShell Commander ";
     remoteManager.rshServer << "vAmiga RetroShell Remote Server ";
     *this << Amiga::build() << '\n';
     *this << '\n';
@@ -46,10 +46,9 @@ CommanderConsole::printHelp()
     *this << vspace{0};
 
     storage << "Type 'help' or press 'TAB' twice for help.\n";
-    storage << "Type '.' or press 'SHIFT+RETURN' to enter debug mode.";
-    
+    storage << "Press 'SHIFT+LEFT' or 'SHIFT+RIGHT' to switch to another console.";
+
     remoteManager.rshServer << "Type 'help' for help.\n";
-    remoteManager.rshServer << "Type '.' to enter debug mode.";
 
     *this << vspace{1};
 }

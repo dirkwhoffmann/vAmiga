@@ -40,20 +40,26 @@ DebuggerConsole::getPrompt()
 void
 DebuggerConsole::welcome()
 {
-    printHelp();
+    storage << "RetroShell Debugger ";
+    remoteManager.rshServer << "vAmiga RetroShell Remote Server ";
+    *this << Amiga::build() << '\n';
     *this << '\n';
+    *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
+    *this << "https://github.com/dirkwhoffmann/vAmiga" << '\n';
+    *this << '\n';
+    
+    printHelp();
 }
 
 void
 DebuggerConsole::printHelp()
 {
     storage << "Type 'help' or press 'TAB' twice for help.\n";
-    storage << "Type '.' or press 'SHIFT+RETURN' to exit debug mode.";
-    
+    storage << "Press 'SHIFT+LEFT' or 'SHIFT+RIGHT' to switch to another console.";
+
     remoteManager.rshServer << "Type 'help' for help.\n";
-    remoteManager.rshServer << "Type '.' to exit debug mode.";
-    
-    *this << '\n';
+
+    *this << vspace{1};
 }
 
 void
