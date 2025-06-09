@@ -135,6 +135,9 @@ MutableFileSystem::format(string name)
     
     // Compute checksums for all blocks
     updateChecksums();
+
+    // Set the current directory
+    curr = FSPath(*this, rootBlock);
 }
 
 void

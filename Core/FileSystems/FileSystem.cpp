@@ -113,7 +113,10 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
         // Import block data
         blocks[i]->importBlock(data, bsize);
     }
-        
+
+    // Set the current directory
+    curr = FSPath(*this, rootBlock);
+
     // Print some debug information
     debug(FS_DEBUG, "Success\n");
     if (FS_DEBUG) printDirectory(true);
@@ -458,6 +461,24 @@ bool
 FileSystem::exists(const FSPath &top, const fs::path &path) const
 {
     try { top.seek(path); return true; } catch (...) { return false; }
+}
+
+void
+FileSystem::cd(FSName name)
+{
+    curr = curr.seekDir(name);
+}
+
+void
+FileSystem::cd(const string &path)
+{
+
+}
+
+void
+FileSystem::cd(const fs::path &path)
+{
+    curr = curr.seekDir(path);
 }
 
 void

@@ -63,8 +63,11 @@ protected:
     // Location of the bitmap blocks and extended bitmap blocks
     std::vector<Block> bmBlocks;
     std::vector<Block> bmExtBlocks;
-    
-    
+
+    // The current directory (points to the root block by default)
+    FSPath curr = FSPath(*this);
+
+
     //
     // Initializing
     //
@@ -195,11 +198,13 @@ protected:
     //
     // Managing files and directories
     //
-    
+
 public:
 
     // Returns the root of the directory tree
     FSPath rootDir() const;
+
+public:
 
     // Seeks an item in the directory tree
     FSPath seek(const FSPath &top, const fs::path &path) const { return top.seek(path); }
@@ -210,7 +215,6 @@ public:
     FSPath seek(const fs::path &path) const { return seek(rootDir(), path); }
     FSPath seekDir(const fs::path &path) const { return seekDir(rootDir(), path); }
     FSPath seekFile(const fs::path &path) const { return seekFile(rootDir(), path); }
-    FSPath cd(const fs::path &path) const { return seekDir(path); }
 
     // Checks if a an item exists in the directory tree
     bool exists(const FSPath &top, const fs::path &path) const;
@@ -222,6 +226,14 @@ public:
 
     // Prints a directory listing for debugging (DEPRECATED)
     void printDirectory(bool recursive) const throws;
+
+    // Changes the working directory
+    void cd(FSName name);
+    void cd(const string &path);
+    void cd(const fs::path &path);
+
+    // Returns the working directory
+    FSPath pwd() { return curr; }
 
 
     //

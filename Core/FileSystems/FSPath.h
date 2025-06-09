@@ -24,6 +24,7 @@ struct FSPath
 
     // Constructors
     FSPath(const FSPath &);
+    FSPath(const FileSystem &fs);
     FSPath(const FileSystem &fs, Block dir);
     FSPath(const FileSystem &fs, struct FSBlock *dir);
     FSPath(const FileSystem &fs, const fs::path &path);
@@ -61,8 +62,8 @@ struct FSPath
     FSPath seekFile(const fs::path &path) const;
 
     // Moves up or down in the directory tree
-    void cd(FSName name);
-    void cd(const fs::path &path);
+    FSPath cd(FSName name);
+    FSPath cd(const fs::path &path);
     void parent();
 };
 

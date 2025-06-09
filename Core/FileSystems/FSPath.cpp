@@ -17,6 +17,11 @@ FSPath::FSPath(const FSPath &path) : fs(path.fs), ref(path.ref)
 
 }
 
+FSPath::FSPath(const FileSystem &fs) : fs(fs), ref(0)
+{
+
+}
+
 FSPath::FSPath(const FileSystem &fs, Block dir) : fs(fs), ref(dir)
 {
     selfcheck();
@@ -52,7 +57,7 @@ FSPath::operator=(const FSPath &path)
 FSPath&
 FSPath::operator/=(const FSName &name)
 {
-    cd(name);
+    *this = cd(name);
     return *this;
 }
 
@@ -191,24 +196,24 @@ FSPath::seekFile(const fs::path &path) const
     if (FSPath result = seek(path); result.isFile()) {
         return result;
     }
-    throw AppError(Fault::DIR_NOT_FOUND);
+    throw AppError(Fault::FILE_NOT_FOUND);
 }
 
-void
+FSPath
 FSPath::cd(FSName name)
 {
-    ref = seek(name);
-    selfcheck();
+    return FSPath(fs, seek(name));
 }
 
-void
+FSPath
 FSPath::cd(const fs::path &path)
 {
-    if (!fs::is_directory(path)) return;
+    if (!fs::is_directory(path)) throw AppError(Fault::FS_INVALID_PATH);
 
-    for (const auto& part : path) {
-        cd(FSName(part));
-    }
+    FSPath result(fs);
+    for (const auto& part : path) result = cd(FSName(part));
+
+    return result;
 }
 
 void
