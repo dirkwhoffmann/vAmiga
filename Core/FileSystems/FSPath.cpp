@@ -195,6 +195,32 @@ FSPath::refs() const
     return result;
 }
 
+string
+FSPath::getProtectionBitString() const
+{
+    auto bits = ptr()->getProtectionBits();
+
+    // From dos/dos.h (AmigaDOS)
+    constexpr isize FIBB_SCRIPT  = 6; // program is a script (execute) file
+    constexpr isize FIBB_PURE    = 5; // program is reentrant and rexecutable
+    constexpr isize FIBB_ARCHIVE = 4; // cleared whenever file is changed
+    constexpr isize FIBB_READ    = 3; // ignored by old filesystem
+    constexpr isize FIBB_WRITE   = 2; // ignored by old filesystem
+    constexpr isize FIBB_EXECUTE = 1; // ignored by system, used by Shell
+    constexpr isize FIBB_DELETE  = 0; // prevent file from being deleted
+
+    string result = "-";
+    result += (bits & (1 << FIBB_SCRIPT))  ? "s" : "-";
+    result += (bits & (1 << FIBB_PURE))    ? "p" : "-";
+    result += (bits & (1 << FIBB_ARCHIVE)) ? "a" : "-";
+    result += (bits & (1 << FIBB_READ))    ? "r" : "-";
+    result += (bits & (1 << FIBB_WRITE))   ? "w" : "-";
+    result += (bits & (1 << FIBB_EXECUTE)) ? "e" : "-";
+    result += (bits & (1 << FIBB_DELETE))  ? "d" : "-";
+
+    return result;
+}
+
 FSPath
 FSPath::seek(const FSName &name) const
 {

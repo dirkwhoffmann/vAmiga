@@ -221,8 +221,11 @@ public:
     bool exists(const fs::path &path) const { return exists(pwd(), path); }
 
     // Lists directory contents
-    void ls(std::ostream &os, const FSPath &path, bool verbose = false) const;
-    void ls(std::ostream &os, bool verbose = false) const { return ls(os, pwd(), verbose); }
+    void ls(std::ostream &os, const FSPath &path) const;
+    void ls(std::ostream &os) const { return ls(os, pwd()); }
+
+    void list(std::ostream &os, const FSPath &path) const;
+    void list(std::ostream &os) const { return list(os, pwd()); }
 
     // Changes the working directory
     void cd(const FSName &name);

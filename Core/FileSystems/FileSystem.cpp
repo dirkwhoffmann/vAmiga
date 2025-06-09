@@ -480,7 +480,7 @@ FileSystem::cd(const string &path)
 }
 
 void
-FileSystem::ls(std::ostream &os, const FSPath &path, bool verbose) const
+FileSystem::ls(std::ostream &os, const FSPath &path) const
 {
     isize col = 0;
 
@@ -503,6 +503,41 @@ FileSystem::ls(std::ostream &os, const FSPath &path, bool verbose) const
         if (!path.isDirectory()) {
             os << std::left << std::setw(35) << path.last();
             if (col++ % 2) { os << std::endl; }
+        }
+    }
+}
+
+void
+FileSystem::list(std::ostream &os, const FSPath &path) const
+{
+    auto print = [&](const FSPath &node, string size) {
+
+        os << std::left << std::setw(30) << node.last();
+        os << std::right << std::setw(7) << size;
+        os << " " << node.getProtectionBitString();
+        os << " " << node.ptr()->getModificationDate().dateStr();
+        os << " " << node.ptr()->getModificationDate().timeStr();
+        os << std::endl;
+    };
+
+    // Collect references of all items inside the specified directory
+    std::vector<Block> items; collect(path, items, false);
+
+    // List directories
+    for (auto const& i : items) {
+
+        if (auto node = FSPath(*this, i); node.isDirectory()) {
+            print(node, "Dir");
+        }
+    }
+
+    // List files
+    for (auto const& i : items) {
+
+        if (auto node = FSPath(*this, i); !node.isDirectory()) {
+
+            // auto blocks = (node.ptr()->getFileSize() + 511) / 512;
+            print(node, std::to_string(node.ptr()->getFileSize()));
         }
     }
 }

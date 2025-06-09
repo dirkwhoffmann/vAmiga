@@ -27,8 +27,6 @@ struct FSPath
     FSPath(const FileSystem &fs);
     FSPath(const FileSystem &fs, Block dir);
     FSPath(const FileSystem &fs, struct FSBlock *dir);
-    // FSPath(const FileSystem &fs, const string &path);
-    // FSPath(const FileSystem &fs, const fs::path &path);
 
     // Throws an exception if the object is invalid
     void selfcheck() const;
@@ -45,7 +43,7 @@ struct FSPath
 
 
     //
-    // Representing
+    // Representing the path
     //
 
     // Returns a pointer to the corresponding FSBlock
@@ -65,7 +63,14 @@ struct FSPath
 
 
     //
-    // Traverses the directory tree
+    // Querying block properties
+    //
+
+    string getProtectionBitString() const;
+
+
+    //
+    // Traversing the directory tree
     //
 
     // Seeks a file or directory

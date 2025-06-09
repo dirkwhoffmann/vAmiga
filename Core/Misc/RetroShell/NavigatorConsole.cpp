@@ -129,13 +129,26 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
     root.add({
 
-        .tokens = { "ls" },
+        .tokens = { "dir" },
         .extra  = { Arg::path },
-        .help   = { "Lists directory contents" },
+        .help   = { "Displays a sorted list of the files in a directory" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 
             std::stringstream ss;
             argv.empty() ? fs.ls(ss) : fs.ls(ss, fs.pwd().seek(argv[0]));
+            *this << ss;
+        }
+    });
+
+    root.add({
+
+        .tokens = { "list" },
+        .extra  = { Arg::path },
+        .help   = { "Lists specified information about directories and files" },
+        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+
+            std::stringstream ss;
+            argv.empty() ? fs.list(ss) : fs.list(ss, fs.pwd().seek(argv[0]));
             *this << ss;
         }
     });
