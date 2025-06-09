@@ -212,17 +212,17 @@ public:
     FSPath seekFile(const FSPath &top, const fs::path &path) const { return top.seekFile(path); }
 
     // Seeks an item in the directory tree starting from the root
-    FSPath seek(const fs::path &path) const { return seek(rootDir(), path); }
-    FSPath seekDir(const fs::path &path) const { return seekDir(rootDir(), path); }
-    FSPath seekFile(const fs::path &path) const { return seekFile(rootDir(), path); }
+    FSPath seek(const fs::path &path) const { return seek(pwd(), path); }
+    FSPath seekDir(const fs::path &path) const { return seekDir(pwd(), path); }
+    FSPath seekFile(const fs::path &path) const { return seekFile(pwd(), path); }
 
     // Checks if a an item exists in the directory tree
     bool exists(const FSPath &top, const fs::path &path) const;
-    bool exists(const fs::path &path) const { return exists(rootDir(), path); }
+    bool exists(const fs::path &path) const { return exists(pwd(), path); }
 
     // Lists directory contents
     void ls(const FSPath &path, std::ostream &os, bool verbose = false) const;
-    void ls(std::ostream &os, bool verbose = false) const { return ls(rootDir(), os, verbose); }
+    void ls(std::ostream &os, bool verbose = false) const { return ls(pwd(), os, verbose); }
 
     // Prints a directory listing for debugging (DEPRECATED)
     void printDirectory(bool recursive) const throws;
@@ -230,10 +230,10 @@ public:
     // Changes the working directory
     void cd(FSName name);
     void cd(const string &path);
-    void cd(const fs::path &path);
+    // void cd(const fs::path &path);
 
     // Returns the working directory
-    FSPath pwd() { return curr; }
+    FSPath pwd() const { return curr; }
 
 
     //

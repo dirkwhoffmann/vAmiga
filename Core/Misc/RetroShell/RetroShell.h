@@ -174,6 +174,7 @@ private:
 public:
     
     RetroShell &operator<<(char value);
+    RetroShell &operator<<(const char *value);
     RetroShell &operator<<(const string &value);
     RetroShell &operator<<(int value);
     RetroShell &operator<<(unsigned int value);

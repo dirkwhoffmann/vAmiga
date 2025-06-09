@@ -58,7 +58,8 @@ public:
     
     // Assigns the volume name
     void setName(FSName name);
-    
+    void setName(string name) { setName(FSName(name)); }
+
     
     //
     // Creating and deleting blocks

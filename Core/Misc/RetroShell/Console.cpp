@@ -60,6 +60,13 @@ Console::operator<<(const string& value)
 }
 
 Console&
+Console::operator<<(const char *value)
+{
+    *this << string(value);
+    return *this;
+}
+
+Console&
 Console::operator<<(int value)
 {
     *this << std::to_string(value);
@@ -108,6 +115,20 @@ Console::operator<<(std::stringstream &stream)
     while(std::getline(stream, line)) {
         *this << line << '\n';
     }
+    return *this;
+}
+
+Console&
+Console::operator<<(const FSName &value)
+{
+    *this << value.cpp_str();
+    return *this;
+}
+
+Console&
+Console::operator<<(const FSPath &value)
+{
+    *this << value.name();
     return *this;
 }
 

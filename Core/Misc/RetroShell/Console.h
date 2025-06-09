@@ -160,6 +160,7 @@ public:
     // Prints a message
     Console &operator<<(char value);
     Console &operator<<(const string &value);
+    Console &operator<<(const char *value);
     Console &operator<<(int value);
     Console &operator<<(unsigned int value);
     Console &operator<<(long value);
@@ -167,6 +168,8 @@ public:
     Console &operator<<(long long value);
     Console &operator<<(unsigned long long value);
     Console &operator<<(std::stringstream &stream);
+    Console &operator<<(const FSName &value);
+    Console &operator<<(const FSPath &value);
     Console &operator<<(const vspace &value);
 
     // Returns the prompt

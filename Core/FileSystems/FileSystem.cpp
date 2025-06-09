@@ -466,36 +466,37 @@ FileSystem::exists(const FSPath &top, const fs::path &path) const
 void
 FileSystem::cd(FSName name)
 {
-    curr = curr.seekDir(name);
+    curr = curr.cd(name);
 }
 
 void
 FileSystem::cd(const string &path)
 {
-
+    curr = curr.cd(path);
 }
 
+/*
 void
 FileSystem::cd(const fs::path &path)
 {
-    curr = curr.seekDir(path);
+    curr = curr.cd(path);
 }
+*/
 
 void
 FileSystem::ls(const FSPath &path, std::ostream &os, bool verbose) const
 {
     isize col = 0;
 
-    // Collect block references of all directory items
-    std::vector<Block> items;
-    collect(rootDir(), items, false);
+    // Collect references of all items inside the specified directory
+    std::vector<Block> items; collect(path, items, false);
 
     // List directories
     for (auto const& i : items) {
 
         auto path = FSPath(*this, i);
         if (path.isDirectory()) {
-            os << path.getPath().string() << " (dir)" << std::endl;
+            os << path.last() << " (dir)" << std::endl;
         }
     }
 
@@ -504,7 +505,7 @@ FileSystem::ls(const FSPath &path, std::ostream &os, bool verbose) const
 
         auto path = FSPath(*this, i);
         if (!path.isDirectory()) {
-            os << std::left << std::setw(35) << path.getPath().string();
+            os << std::left << std::setw(35) << path.last();
             if (col++ % 2) { os << std::endl; }
         }
     }

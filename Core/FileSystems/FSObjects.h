@@ -10,6 +10,7 @@
 #pragma once
 
 #include "CoreObject.h"
+#include <ostream>
 
 namespace vamiga {
 
@@ -27,9 +28,9 @@ struct FSString {
     FSString(const char *cString, isize limit);
     FSString(const u8 *bcplString, isize limit);
 
-    const char *c_str() { return str.c_str(); }
-    string cpp_str() { return str; }
-    
+    const char *c_str() const { return str.c_str(); }
+    string cpp_str() const { return str; }
+
     bool operator== (const FSString &rhs) const;
     isize length() const { return (isize)str.length(); }
     u32 hashValue() const;
@@ -45,6 +46,8 @@ struct FSName : FSString {
     FSName(const fs::path &path);
 
     fs::path path() const;
+
+    friend std::ostream &operator<<(std::ostream &os, const FSName &str);
 };
 
 struct FSComment : FSString {

@@ -225,6 +225,13 @@ RetroShell::operator<<(char value)
 }
 
 RetroShell &
+RetroShell::operator<<(const char *value)
+{
+    *current << value;
+    return *this;
+}
+
+RetroShell &
 RetroShell::operator<<(const string &value)
 {
     *current << value;

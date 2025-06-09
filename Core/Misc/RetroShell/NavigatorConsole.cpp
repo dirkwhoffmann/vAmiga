@@ -24,7 +24,7 @@ NavigatorConsole::getPrompt()
 {
     std::stringstream ss;
 
-    ss << "/> ";
+    ss << fs.pwd() << "> ";
 
     return ss.str();
 }
@@ -67,6 +67,12 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
     Console::initCommands(root);
 
+    //
+    // Importing and exporting
+    //
+
+    RetroShellCmd::currentGroup = "Import and export";
+
     root.add({ .tokens = { "import" }, .help = { "Import file system" } });
 
     for (isize i = 0; i < 4; i++) {
@@ -89,6 +95,18 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         });
     }
 
+    RetroShellCmd::currentGroup = "Directories";
+
+    root.add({
+
+        .tokens = { "pwd" },
+        .help   = { "Prints the name of the working directory" },
+        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+
+            *this << fs.pwd() << '\n';
+        }
+    });
+
     root.add({
 
         .tokens = { "ls" },
@@ -102,6 +120,16 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         }
     });
 
+    root.add({
+
+        .tokens = { "cd" },
+        .args   = { Arg::path },
+        .help   = { "Changes the working directory" },
+        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+
+            fs.cd(argv[0]);
+        }
+    });
 }
 
 }

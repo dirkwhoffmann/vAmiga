@@ -9,6 +9,7 @@
 
 #include "FSPath.h"
 #include "FileSystem.h"
+#include <ranges>
 
 namespace vamiga {
 
@@ -28,6 +29,11 @@ FSPath::FSPath(const FileSystem &fs, Block dir) : fs(fs), ref(dir)
 }
 
 FSPath::FSPath(const FileSystem &fs, FSBlock *dir) : FSPath(fs, dir->nr)
+{
+
+}
+
+FSPath::FSPath(const FileSystem &fs, const string &path) : FSPath(seek(path))
 {
 
 }
@@ -93,10 +99,45 @@ FSPath::ptr() const
     return fs.blockPtr(ref);
 }
 
+FSName
+FSPath::last() const
+{
+    return isRoot() ? "" : fs.blockPtr(ref)->getName();
+}
+
+/*
+FSName
+FSPath::name() const
+{
+    return fs.blockPtr(ref)->getName();
+}
+*/
+
+string
+FSPath::name() const
+{
+    string result;
+
+    for (auto &node : refs()) {
+
+        auto name = fs.blockPtr(node)->getName();
+        result = result + "/" + name.cpp_str();
+    }
+
+    return result.empty() ? "/" : result;
+}
+
 fs::path
 FSPath::getPath() const
 {
     fs::path result;
+
+    for (auto &node : refs()) {
+
+        auto name = fs.blockPtr(node)->getName().path();
+        result = result.empty() ? name : name / result;
+    }
+    /*
     std::set<Block> visited;
 
     auto block = fs.blockPtr(ref);
@@ -119,18 +160,47 @@ FSPath::getPath() const
         // Continue with the parent block
         block = block->getParentDirBlock();
     }
+    */
 
     return result;
 }
 
-Block
+std::vector<Block>
+FSPath::refs() const
+{
+    std::vector<Block> result;
+    std::set<Block> visited;
+    
+    auto block = ptr();
+
+    while (block) {
+
+        // Break the loop if this block has an invalid type
+        if (!fs.hashableBlockPtr(block->nr)) break;
+
+        // Break the loop if this block was visited before
+        if (visited.contains(block->nr)) break;
+
+        // Add the block
+        result.push_back(block->nr);
+        visited.insert(block->nr);
+
+        // Continue with the parent block
+        block = block->getParentDirBlock();
+    }
+
+    std::reverse(result.begin(), result.end());
+    return result;
+}
+
+FSPath
 FSPath::seek(const FSName &name) const
 {
     std::set<Block> visited;
 
     // Only proceed if a hash table is present
     FSBlock *cdb = fs.blockPtr(ref);
-    if (!cdb || cdb->hashTableSize() == 0) return 0;
+    if (!cdb || cdb->hashTableSize() == 0) return FSPath(fs);
 
     // Compute the table position and read the item
     u32 hash = name.hashValue() % cdb->hashTableSize();
@@ -142,26 +212,70 @@ FSPath::seek(const FSName &name) const
         FSBlock *item = fs.hashableBlockPtr(ref);
         if (item == nullptr) break;
 
-        if (item->isNamed(name)) return item->nr;
+        if (item->isNamed(name)) return FSPath(fs, item);
 
         visited.insert(ref);
         ref = item->getNextHashRef();
     }
 
-    return 0;
+    return FSPath(fs);
 }
 
 FSPath
 FSPath::seekDir(const FSName &name) const
 {
-    if (auto result = FSPath(fs, seek(name)); result.isDirectory()) return result;
+    if (auto result = seek(name); result.isDirectory()) return result;
     throw AppError(Fault::DIR_NOT_FOUND);
 }
 
 FSPath
 FSPath::seekFile(const FSName &name) const
 {
-    if (auto result = FSPath(fs, seek(name)); result.isFile()) return result;
+    if (auto result = seek(name); result.isFile()) return result;
+    throw AppError(Fault::FILE_NOT_FOUND);
+}
+
+FSPath
+FSPath::seek(const std::vector<FSName> &path) const
+{
+    FSPath result = *this;
+    for (auto &item : path) { result = result.seek(item); }
+    return result;
+}
+
+FSPath
+FSPath::seekDir(const std::vector<FSName> &path) const
+{
+    if (auto result = seek(path); result.isDirectory()) return result;
+    throw AppError(Fault::DIR_NOT_FOUND);
+}
+
+FSPath
+FSPath::seekFile(const std::vector<FSName> &path) const
+{
+    if (auto result = seek(path); result.isFile()) return result;
+    throw AppError(Fault::FILE_NOT_FOUND);
+}
+
+FSPath
+FSPath::seek(const std::vector<string> &path) const
+{
+    FSPath result = *this;
+    for (auto &item : path) { result = result.seek(FSName(item)); }
+    return result;
+}
+
+FSPath
+FSPath::seekDir(const std::vector<string> &path) const
+{
+    if (auto result = seek(path); result.isDirectory()) return result;
+    throw AppError(Fault::DIR_NOT_FOUND);
+}
+
+FSPath
+FSPath::seekFile(const std::vector<string> &path) const
+{
+    if (auto result = seek(path); result.isFile()) return result;
     throw AppError(Fault::FILE_NOT_FOUND);
 }
 
@@ -200,11 +314,66 @@ FSPath::seekFile(const fs::path &path) const
 }
 
 FSPath
-FSPath::cd(FSName name)
+FSPath::seek(const string &path) const
 {
-    return FSPath(fs, seek(name));
+    return seek(util::split(path, '/'));
 }
 
+FSPath
+FSPath::seekDir(const string &path) const
+{
+    return seekDir(util::split(path, '/'));
+}
+
+FSPath
+FSPath::seekFile(const string &path) const
+{
+    return seekFile(util::split(path, '/'));
+}
+
+FSPath
+FSPath::cd(FSName name)
+{
+    return seek(name);
+}
+
+FSPath
+FSPath::cd(const std::vector<FSName> &names)
+{
+    FSPath result = *this;
+    for (const auto& name : names) result = cd(name);
+    return result;
+}
+
+FSPath
+FSPath::cd(const std::vector<string> &names)
+{
+    FSPath result = *this;
+    for (const auto& name : names) result = cd(FSName(name));
+    return result;
+}
+
+FSPath
+FSPath::cd(const string &path)
+{
+    if (path == "")   return *this;
+    if (path == ".")  return *this;
+    if (path == "..") return parent();
+    if (path == "/")  return fs.rootDir();
+
+    FSPath result = *this;
+    string p = path;
+
+    // Start from the root if the path starts with '/'
+    if (p[0] == '/') { result = fs.rootDir(); p.erase(0, 1); }
+
+    auto parts = util::split(p, '/');
+    for (const auto& part : parts) result = cd(FSName(part));
+
+    return result;
+}
+
+/*
 FSPath
 FSPath::cd(const fs::path &path)
 {
@@ -215,15 +384,18 @@ FSPath::cd(const fs::path &path)
 
     return result;
 }
+*/
 
-void
+FSPath
 FSPath::parent()
 {
-    if (!isRoot()) {
+    return isRoot() ? *this : FSPath(fs, fs.blockPtr(ref)->getParentDirRef());
+}
 
-        ref = fs.blockPtr(ref)->getParentDirRef();
-        selfcheck();
-    }
+std::ostream &operator<<(std::ostream &os, const FSPath &path) {
+
+    os << path.name();
+    return os;
 }
 
 }

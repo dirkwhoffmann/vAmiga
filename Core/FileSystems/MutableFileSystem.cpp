@@ -132,7 +132,7 @@ MutableFileSystem::format(string name)
     
     // Set the volume name
     if (name != "") setName(name);
-    
+
     // Compute checksums for all blocks
     updateChecksums();
 

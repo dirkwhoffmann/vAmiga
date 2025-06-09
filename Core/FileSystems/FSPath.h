@@ -27,6 +27,7 @@ struct FSPath
     FSPath(const FileSystem &fs);
     FSPath(const FileSystem &fs, Block dir);
     FSPath(const FileSystem &fs, struct FSBlock *dir);
+    FSPath(const FileSystem &fs, const string &path);
     FSPath(const FileSystem &fs, const fs::path &path);
 
     // Throws an exception if the object is invalid
@@ -42,11 +43,25 @@ struct FSPath
     bool isFile() const;
     bool isDirectory() const;
 
+
+    //
+    // Representing
+    //
+
     // Returns a pointer to the corresponding FSBlock
     FSBlock *ptr() const;
 
+    // Returns the last path component
+    FSName last() const;
+
+    // Returns a string representation of this path
+    string name() const;
+
     // Converts the path to a host path
     fs::path getPath() const;
+
+    // Represents the path as a collections of block nodes, starting from the root
+    std::vector<Block> refs() const;
 
 
     //
@@ -54,17 +69,35 @@ struct FSPath
     //
 
     // Seeks a file or directory
-    Block seek(const FSName &name) const;
+    FSPath seek(const FSName &name) const;
     FSPath seekDir(const FSName &name) const;
     FSPath seekFile(const FSName &name) const;
+
+    FSPath seek(const std::vector<FSName> &path) const;
+    FSPath seekDir(const std::vector<FSName> &path) const;
+    FSPath seekFile(const std::vector<FSName> &path) const;
+
+    FSPath seek(const std::vector<string> &path) const;
+    FSPath seekDir(const std::vector<string> &path) const;
+    FSPath seekFile(const std::vector<string> &path) const;
+
     FSPath seek(const fs::path &path) const;
     FSPath seekDir(const fs::path &path) const;
     FSPath seekFile(const fs::path &path) const;
 
+    FSPath seek(const string &path) const;
+    FSPath seekDir(const string &path) const;
+    FSPath seekFile(const string &path) const;
+
+
     // Moves up or down in the directory tree
     FSPath cd(FSName name);
-    FSPath cd(const fs::path &path);
-    void parent();
+    FSPath cd(const std::vector<FSName> &names);
+    FSPath cd(const std::vector<string> &names);
+    FSPath cd(const string &path);
+    FSPath parent();
+
+    friend std::ostream &operator<<(std::ostream &os, const FSPath &str);
 };
 
 }

@@ -87,6 +87,12 @@ FSName::path() const
     return Host::sanitize(str);
 }
 
+std::ostream &operator<<(std::ostream &os, const FSName &str) {
+
+    os << str.cpp_str();
+    return os;
+}
+
 FSTime::FSTime(time_t t)
 {
     const u32 secPerDay = 24 * 60 * 60;
