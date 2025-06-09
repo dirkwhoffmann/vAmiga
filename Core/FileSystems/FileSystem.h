@@ -216,9 +216,13 @@ public:
     bool exists(const FSPath &top, const fs::path &path) const;
     bool exists(const fs::path &path) const { return exists(rootDir(), path); }
 
-    // Prints a directory listing
+    // Lists directory contents
+    void ls(const FSPath &path, std::ostream &os, bool verbose = false) const;
+    void ls(std::ostream &os, bool verbose = false) const { return ls(rootDir(), os, verbose); }
+
+    // Prints a directory listing for debugging (DEPRECATED)
     void printDirectory(bool recursive) const throws;
-    
+
 
     //
     // Integrity checking

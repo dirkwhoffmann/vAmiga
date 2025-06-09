@@ -14,6 +14,7 @@
 #include "RetroShellCmd.h"
 #include "Parser.h"
 #include "TextStorage.h"
+#include "MutableFileSystem.h"
 
 namespace vamiga {
 
@@ -356,6 +357,8 @@ class DebuggerConsole final : public Console
 
 class NavigatorConsole final : public Console
 {
+    MutableFileSystem fs;
+
     using Console::Console;
 
     virtual void initCommands(RetroShellCmd &root) override;

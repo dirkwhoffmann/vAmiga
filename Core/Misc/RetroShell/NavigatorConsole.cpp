@@ -63,7 +63,44 @@ NavigatorConsole::pressReturn(bool shift)
 void
 NavigatorConsole::initCommands(RetroShellCmd &root)
 {
+    std::vector<string> help;
+
     Console::initCommands(root);
+
+    root.add({ .tokens = { "import" }, .help = { "Import file system" } });
+
+    for (isize i = 0; i < 4; i++) {
+
+        i == 0 ? help = { "Floppy file system from drive n", "df[n]" } : help = { "" };
+
+        root.add({
+
+            .tokens = { "import", "df" + std::to_string(i) },
+            .help   = help,
+            .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+
+                auto n = values[0];
+
+                if (!df[n]->hasDisk()) throw AppError(Fault::DISK_MISSING);
+                fs.init(*df[n]);
+
+                *this << "Num blocks: " << std::to_string(fs.numBlocks()) << '\n';
+            }, .values = {i}
+        });
+    }
+
+    root.add({
+
+        .tokens = { "ls" },
+        // .args   = { "" },
+        .help   = { "Lists directory contents" },
+        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+
+            std::stringstream ss;
+            fs.ls(ss);
+            *this << ss;
+        }
+    });
 
 }
 

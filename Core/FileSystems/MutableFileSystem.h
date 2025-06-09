@@ -40,13 +40,12 @@ public:
     MutableFileSystem(FileSystemDescriptor &layout, const fs::path &path = {}) { init(layout, path); }
     MutableFileSystem(Diameter dia, Density den, FSVolumeType dos, const fs::path &path = {}) { init(dia, den, dos, path); }
 
-private:
-    
+    using FileSystem::init;
     void init(isize capacity);
     void init(FileSystemDescriptor &layout, const fs::path &path);
     void init(Diameter dia, Density den, FSVolumeType dos, const fs::path &path);
 
-
+    
     //
     // Formatting
     //
