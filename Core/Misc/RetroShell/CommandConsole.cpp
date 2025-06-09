@@ -729,7 +729,7 @@ CommandConsole::initCommands(RetroShellCmd &root)
             .help   = { "Inserts a floppy disk" },
             .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
                 
-                auto path = argv.front();
+                auto path = host.makeAbsolute(argv.front());
                 amiga.df[values[0]]->swapDisk(path);
                 
             }, .values = {i}
