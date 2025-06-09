@@ -104,8 +104,8 @@ FSTime::FSTime(time_t t)
     const u32 secPerDay = 24 * 60 * 60;
     
     // Shift reference point from Jan 1, 1970 (Unix) to Jan 1, 1978 (Amiga)
-    t -= (8 * 365 + 2) * secPerDay - 60 * 60;
-    
+    t -= (8 * 365 + 2) * secPerDay;
+
     days = (u32)(t / secPerDay);
     mins = (u32)((t % secPerDay) / 60);
     ticks = (u32)((t % secPerDay % 60) * 50);
@@ -126,9 +126,9 @@ FSTime::time() const
     const u32 secPerDay = 24 * 60 * 60;
     time_t t = days * secPerDay + mins * 60 + ticks / 50;
     
-    // Shift reference point from  Jan 1, 1978 (Amiga) to Jan 1, 1970 (Unix)
-    t += (8 * 365 + 2) * secPerDay - 60 * 60;
-    
+    // Shift reference point from Jan 1, 1978 (Amiga) to Jan 1, 1970 (Unix)
+    t += (8 * 365 + 2) * secPerDay;
+
     return t;
 }
 
@@ -145,14 +145,13 @@ FSTime::write(u8 *p)
 string
 FSTime::dateStr() const
 {
+    const char *month[12] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
     char tmp[32];
     
     time_t t = time();
     tm local = util::Time::local(t);
+    snprintf(tmp, sizeof(tmp), "%02d-%s-%02d", local.tm_mday, month[local.tm_mon % 12], local.tm_year);
 
-    snprintf(tmp, sizeof(tmp), "%04d-%02d-%02d",
-             1900 + local.tm_year, 1 + local.tm_mon, local.tm_mday);
-    
     return string(tmp);
 }
 
@@ -173,7 +172,7 @@ FSTime::timeStr() const
 string
 FSTime::str() const
 {
-    string result = dateStr() + "  " + timeStr();
+    string result = dateStr() + " " + timeStr();
     return result;
 }
 

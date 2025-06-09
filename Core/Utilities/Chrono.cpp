@@ -43,8 +43,9 @@ std::tm
 Time::local(const std::time_t &time)
 {
     std::tm local {};
-    localtime_r(&time, &local);
-    
+    // localtime_r(&time, &local);
+    gmtime_r(&time, &local);
+
     return local;
 }
     

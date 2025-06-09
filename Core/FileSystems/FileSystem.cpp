@@ -502,21 +502,34 @@ FileSystem::ls(std::ostream &os, const FSPath &path) const
 void
 FileSystem::list(std::ostream &os, const FSPath &path) const
 {
+    isize numDirs = 0;
+    isize numFiles = 0;
+    isize totalSize = 0;
+
     // Collect all items inside the specified directory
     std::vector<FSPath> items = path.collect();
 
     // List all items
     for (auto const& item : items) {
 
-        auto sizeStr = item.isDirectory() ? "Dir" : std::to_string(item.ptr()->getFileSize());
+        os << std::left << std::setw(25) << item.last();
 
-        os << std::left << std::setw(30) << item.last();
-        os << std::right << std::setw(7) << sizeStr;
+        if (item.isDirectory()) {
+
+            os << std::right << std::setw(7) << "Dir";
+            numDirs++;
+
+        } else {
+
+            os << std::right << std::setw(7) << std::to_string(item.ptr()->getFileSize());
+            totalSize += item.ptr()->getFileSize();
+            numFiles++;
+        }
         os << " " << item.getProtectionBitString();
-        os << " " << item.ptr()->getCreationDate().dateStr();
-        os << " " << item.ptr()->getCreationDate().timeStr();
+        os << " " << item.ptr()->getCreationDate().str();
         os << std::endl;
     }
+    os << numFiles << " files - " << numDirs << " directories " << std::endl;
 }
 
 void

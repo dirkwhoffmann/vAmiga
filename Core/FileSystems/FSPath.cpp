@@ -219,7 +219,6 @@ FSPath::getProtectionBitString() const
     result += (bits & (1 << FIBB_EXECUTE)) ? "-" : "e";
     result += (bits & (1 << FIBB_DELETE))  ? "-" : "d";
 
-    result += "(" + std::to_string(bits) + ")";
     return result;
 }
 
