@@ -589,7 +589,7 @@ Headless::smokeTestScript[] = {
     "server gdb set VERBOSE false",
 
     // Enter debugger
-    ".",
+    "debugger",
 
     "",
     "break",

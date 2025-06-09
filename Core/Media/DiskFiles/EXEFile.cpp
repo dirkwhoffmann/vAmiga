@@ -68,10 +68,7 @@ EXEFile::finalizeRead()
     volume.updateChecksums();
 
     // Print some debug information about the volume
-    if (FS_DEBUG) {
-        volume.dump(Category::State);
-        volume.printDirectory(true);
-    }
+    if (FS_DEBUG) volume.dump(Category::State);
     
     // Check file system integrity
     FSErrorReport report = volume.check(true);

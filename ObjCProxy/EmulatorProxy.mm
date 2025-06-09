@@ -1599,11 +1599,6 @@ NSString *EventSlotName(EventSlot slot)
     return [self fs]->prevCorrupted((u32)blockNr);
 }
 
-- (void)printDirectory:(BOOL) recursive
-{
-    return [self fs]->printDirectory(recursive);
-}
-
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset
 {
     return [self fs]->readByte((u32)block, offset);

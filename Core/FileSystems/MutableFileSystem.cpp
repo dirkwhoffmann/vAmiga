@@ -613,10 +613,6 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
     
     // Print some debug information
     debug(FS_DEBUG, "Success\n");
-    // info();
-    // dump();
-    // util::hexdump(blocks[0]->data, 512);
-    if (FS_DEBUG) { printDirectory(true); }
 }
 
 void

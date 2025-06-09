@@ -224,13 +224,10 @@ public:
     void ls(std::ostream &os, const FSPath &path, bool verbose = false) const;
     void ls(std::ostream &os, bool verbose = false) const { return ls(os, pwd(), verbose); }
 
-    // Prints a directory listing for debugging (DEPRECATED)
-    void printDirectory(bool recursive) const throws;
-
     // Changes the working directory
-    void cd(FSName name);
+    void cd(const FSName &name);
+    void cd(const FSPath &path);
     void cd(const string &path);
-    // void cd(const fs::path &path);
 
     // Returns the working directory
     FSPath pwd() const { return curr; }

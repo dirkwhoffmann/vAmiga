@@ -117,9 +117,7 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
     // Set the current directory
     curr = FSPath(*this, rootBlock);
 
-    // Print some debug information
     debug(FS_DEBUG, "Success\n");
-    if (FS_DEBUG) printDirectory(true);
 }
 
 FSTraits &
@@ -464,9 +462,15 @@ FileSystem::exists(const FSPath &top, const fs::path &path) const
 }
 
 void
-FileSystem::cd(FSName name)
+FileSystem::cd(const FSName &name)
 {
     curr = curr.cd(name);
+}
+
+void
+FileSystem::cd(const FSPath &path)
+{
+    curr = path;
 }
 
 void
@@ -474,14 +478,6 @@ FileSystem::cd(const string &path)
 {
     curr = curr.cd(path);
 }
-
-/*
-void
-FileSystem::cd(const fs::path &path)
-{
-    curr = curr.cd(path);
-}
-*/
 
 void
 FileSystem::ls(std::ostream &os, const FSPath &path, bool verbose) const
@@ -509,18 +505,6 @@ FileSystem::ls(std::ostream &os, const FSPath &path, bool verbose) const
             if (col++ % 2) { os << std::endl; }
         }
     }
-}
-
-void
-FileSystem::printDirectory(bool recursive) const
-{
-    std::vector<Block> items;
-    collect(rootDir(), items, recursive);
-
-    for (auto const& i : items) {
-        msg("%s\n", FSPath(*this, i).getPath().string().c_str());
-    }
-    msg("%zu items\n", items.size());
 }
 
 void
@@ -628,11 +612,8 @@ FileSystem::lastHashBlockInChain(FSBlock *block) const
 bool
 FileSystem::verify() const
 {
-    if (FS_DEBUG) {
-        
-        dump(Category::State);
-        printDirectory(true);
-    }
+    if (FS_DEBUG) dump(Category::State);
+
     if (FSErrorReport report = check(true); report.corruptedBlocks > 0) {
         
         warn("Found %ld corrupted blocks\n", report.corruptedBlocks);

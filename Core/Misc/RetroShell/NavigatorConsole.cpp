@@ -96,13 +96,13 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
                 if (!df[n]->hasDisk()) throw AppError(Fault::DISK_MISSING);
                 fs.init(*df[n]);
 
-                *this << "Num blocks: " << std::to_string(fs.numBlocks()) << '\n';
             }, .values = {i}
         });
     }
 
     RetroShellCmd::currentGroup = "Directories";
 
+    /*
     root.add({
 
         .tokens = { "pwd" },
@@ -110,6 +110,20 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 
             *this << fs.pwd() << '\n';
+        }
+    });
+    */
+
+    root.add({
+
+        .tokens = { "info" },
+        .help   = { "Prints a file system summary" },
+        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+
+            std::stringstream ss;
+            ss << "Type   Size            Used    Free    Full  Name" << std::endl;
+            fs.dump(Category::State, ss);
+            *this << ss;
         }
     });
 
@@ -129,11 +143,11 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "cd" },
-        .args   = { Arg::path },
+        .extra  = { Arg::path },
         .help   = { "Changes the working directory" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 
-            fs.cd(argv[0]);
+            argv.empty() ? fs.cd(fs.rootDir()) : fs.cd(argv[0]);
         }
     });
 }

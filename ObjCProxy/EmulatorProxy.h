@@ -840,7 +840,6 @@ NSString *EventSlotName(EventSlot slot);
 - (NSInteger)getCorrupted:(NSInteger)blockNr;
 - (NSInteger)nextCorrupted:(NSInteger)blockNr;
 - (NSInteger)prevCorrupted:(NSInteger)blockNr;
-- (void)printDirectory:(BOOL) recursive;
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
 - (NSString *)ascii:(NSInteger)block offset:(NSInteger)offset length:(NSInteger)len;
 - (void)export:(NSString *)path exception:(ExceptionWrapper *)ex;
