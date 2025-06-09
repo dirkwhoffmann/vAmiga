@@ -33,8 +33,9 @@ struct FSString {
 
     bool operator== (const FSString &rhs) const;
     isize length() const { return (isize)str.length(); }
+    bool empty() const { return str.empty(); }
     u32 hashValue() const;
-    
+
     void write(u8 *p);
 };
 

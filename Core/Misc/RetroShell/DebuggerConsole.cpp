@@ -1213,7 +1213,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
             }, .values = {i}
         });
     }
-    
+
     RetroShellCmd::currentGroup = "Miscellaneous";
     
     root.add({

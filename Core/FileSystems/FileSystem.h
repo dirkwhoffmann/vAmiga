@@ -221,8 +221,8 @@ public:
     bool exists(const fs::path &path) const { return exists(pwd(), path); }
 
     // Lists directory contents
-    void ls(const FSPath &path, std::ostream &os, bool verbose = false) const;
-    void ls(std::ostream &os, bool verbose = false) const { return ls(pwd(), os, verbose); }
+    void ls(std::ostream &os, const FSPath &path, bool verbose = false) const;
+    void ls(std::ostream &os, bool verbose = false) const { return ls(os, pwd(), verbose); }
 
     // Prints a directory listing for debugging (DEPRECATED)
     void printDirectory(bool recursive) const throws;

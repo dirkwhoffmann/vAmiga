@@ -24,8 +24,14 @@ NavigatorConsole::getPrompt()
 {
     std::stringstream ss;
 
-    ss << fs.pwd() << "> ";
+    if (fs.numBlocks()) {
 
+        auto fsName = fs.getName();
+        if (!fsName.empty()) ss << fsName << ":";
+        ss << fs.pwd();
+    }
+
+    ss << "> ";
     return ss.str();
 }
 
@@ -110,12 +116,12 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "ls" },
-        // .args   = { "" },
+        .extra  = { Arg::path },
         .help   = { "Lists directory contents" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 
             std::stringstream ss;
-            fs.ls(ss);
+            argv.empty() ? fs.ls(ss) : fs.ls(ss, fs.pwd().seek(argv[0]));
             *this << ss;
         }
     });

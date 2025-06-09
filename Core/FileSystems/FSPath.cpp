@@ -9,7 +9,7 @@
 
 #include "FSPath.h"
 #include "FileSystem.h"
-#include <ranges>
+#include <algorithm>
 
 namespace vamiga {
 
@@ -33,6 +33,7 @@ FSPath::FSPath(const FileSystem &fs, FSBlock *dir) : FSPath(fs, dir->nr)
 
 }
 
+/*
 FSPath::FSPath(const FileSystem &fs, const string &path) : FSPath(seek(path))
 {
 
@@ -42,6 +43,7 @@ FSPath::FSPath(const FileSystem &fs, const fs::path &path) : FSPath(seek(path))
 {
 
 }
+*/
 
 void
 FSPath::selfcheck() const
@@ -197,42 +199,45 @@ FSPath
 FSPath::seek(const FSName &name) const
 {
     std::set<Block> visited;
+    FSBlock *cdb = ptr();
 
     // Only proceed if a hash table is present
-    FSBlock *cdb = fs.blockPtr(ref);
-    if (!cdb || cdb->hashTableSize() == 0) return FSPath(fs);
+    if (cdb->hashTableSize() != 0) {
 
-    // Compute the table position and read the item
-    u32 hash = name.hashValue() % cdb->hashTableSize();
-    u32 ref = cdb->getHashRef(hash);
+        // Compute the table position and read the item
+        u32 hash = name.hashValue() % cdb->hashTableSize();
+        u32 ref = cdb->getHashRef(hash);
 
-    // Traverse the linked list until the item has been found
-    while (ref && visited.find(ref) == visited.end())  {
+        // Traverse the linked list until the item has been found
+        while (ref && visited.find(ref) == visited.end())  {
 
-        FSBlock *item = fs.hashableBlockPtr(ref);
-        if (item == nullptr) break;
+            FSBlock *item = fs.hashableBlockPtr(ref);
+            if (item == nullptr) break;
 
-        if (item->isNamed(name)) return FSPath(fs, item);
+            if (item->isNamed(name)) return FSPath(fs, item);
 
-        visited.insert(ref);
-        ref = item->getNextHashRef();
+            visited.insert(ref);
+            ref = item->getNextHashRef();
+        }
     }
 
-    return FSPath(fs);
+    throw AppError(Fault::FS_NOT_FOUND);
 }
 
 FSPath
 FSPath::seekDir(const FSName &name) const
 {
-    if (auto result = seek(name); result.isDirectory()) return result;
-    throw AppError(Fault::DIR_NOT_FOUND);
+    auto result = seek(name);
+    if (!result.isDirectory()) throw AppError(Fault::FS_NOT_A_DIRECTORY);
+    return result;
 }
 
 FSPath
 FSPath::seekFile(const FSName &name) const
 {
-    if (auto result = seek(name); result.isFile()) return result;
-    throw AppError(Fault::FILE_NOT_FOUND);
+    auto result = seek(name);
+    if (!result.isFile()) throw AppError(Fault::FS_NOT_A_FILE);
+    return result;
 }
 
 FSPath
@@ -246,15 +251,17 @@ FSPath::seek(const std::vector<FSName> &path) const
 FSPath
 FSPath::seekDir(const std::vector<FSName> &path) const
 {
-    if (auto result = seek(path); result.isDirectory()) return result;
-    throw AppError(Fault::DIR_NOT_FOUND);
+    auto result = seek(path);
+    if (!result.isDirectory()) throw AppError(Fault::FS_NOT_A_DIRECTORY);
+    return result;
 }
 
 FSPath
 FSPath::seekFile(const std::vector<FSName> &path) const
 {
-    if (auto result = seek(path); result.isFile()) return result;
-    throw AppError(Fault::FILE_NOT_FOUND);
+    auto result = seek(path);
+    if (!result.isFile()) throw AppError(Fault::FS_NOT_A_FILE);
+    return result;
 }
 
 FSPath
@@ -268,15 +275,17 @@ FSPath::seek(const std::vector<string> &path) const
 FSPath
 FSPath::seekDir(const std::vector<string> &path) const
 {
-    if (auto result = seek(path); result.isDirectory()) return result;
-    throw AppError(Fault::DIR_NOT_FOUND);
+    auto result = seek(path);
+    if (!result.isDirectory()) throw AppError(Fault::FS_NOT_A_DIRECTORY);
+    return result;
 }
 
 FSPath
 FSPath::seekFile(const std::vector<string> &path) const
 {
-    if (auto result = seek(path); result.isFile()) return result;
-    throw AppError(Fault::FILE_NOT_FOUND);
+    auto result = seek(path);
+    if (!result.isFile()) throw AppError(Fault::FS_NOT_A_FILE);
+    return result;
 }
 
 FSPath
@@ -301,7 +310,7 @@ FSPath::seekDir(const fs::path &path) const
     if (FSPath result = seek(path); result.isDirectory()) {
         return result;
     }
-    throw AppError(Fault::DIR_NOT_FOUND);
+    throw AppError(Fault::FS_NOT_FOUND);
 }
 
 FSPath
@@ -310,7 +319,7 @@ FSPath::seekFile(const fs::path &path) const
     if (FSPath result = seek(path); result.isFile()) {
         return result;
     }
-    throw AppError(Fault::FILE_NOT_FOUND);
+    throw AppError(Fault::FS_NOT_FOUND);
 }
 
 FSPath

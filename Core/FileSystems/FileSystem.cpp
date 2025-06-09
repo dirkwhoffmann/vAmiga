@@ -484,7 +484,7 @@ FileSystem::cd(const fs::path &path)
 */
 
 void
-FileSystem::ls(const FSPath &path, std::ostream &os, bool verbose) const
+FileSystem::ls(std::ostream &os, const FSPath &path, bool verbose) const
 {
     isize col = 0;
 

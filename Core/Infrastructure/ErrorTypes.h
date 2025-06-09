@@ -163,6 +163,8 @@ enum class Fault : long
     // File system
     FS_UNKNOWN,
     FS_INVALID_PATH,
+    FS_NOT_A_DIRECTORY,
+    FS_NOT_A_FILE,
     FS_NOT_FOUND,
 
     // File system (general errors)
@@ -340,6 +342,8 @@ struct FaultEnum : Reflection<FaultEnum, Fault>
                 
             case Fault::FS_UNKNOWN:                  return "FS_UNKNOWN";
             case Fault::FS_INVALID_PATH:             return "FS_INVALID_PATH";
+            case Fault::FS_NOT_A_DIRECTORY:          return "FS_NOT_A_DIRECTORY";
+            case Fault::FS_NOT_A_FILE:               return "FS_NOT_A_FILE";
             case Fault::FS_NOT_FOUND:                return "FS_NOT_FOUND";
 
             case Fault::FS_UNSUPPORTED:              return "FS_UNSUPPORTED";
