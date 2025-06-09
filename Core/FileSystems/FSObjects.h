@@ -48,6 +48,7 @@ struct FSName : FSString {
 
     fs::path path() const;
 
+    bool operator<(const FSName& other) const;
     friend std::ostream &operator<<(std::ostream &os, const FSName &str);
 };
 

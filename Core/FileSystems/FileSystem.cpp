@@ -484,24 +484,16 @@ FileSystem::ls(std::ostream &os, const FSPath &path) const
 {
     isize col = 0;
 
-    // Collect references of all items inside the specified directory
-    std::vector<Block> items; collect(path, items, false);
+    // Collect all items inside the specified directory
+    std::vector<FSPath> items = path.collect();
 
-    // List directories
-    for (auto const& i : items) {
+    // List all items
+    for (auto const& item : items) {
 
-        auto path = FSPath(*this, i);
-        if (path.isDirectory()) {
-            os << path.last() << " (dir)" << std::endl;
-        }
-    }
-
-    // List files
-    for (auto const& i : items) {
-
-        auto path = FSPath(*this, i);
-        if (!path.isDirectory()) {
-            os << std::left << std::setw(35) << path.last();
+        if (item.isDirectory()) {
+            os << item.last() << " (dir)" << std::endl;
+        } else {
+            os << std::left << std::setw(35) << item.last();
             if (col++ % 2) { os << std::endl; }
         }
     }
@@ -510,35 +502,20 @@ FileSystem::ls(std::ostream &os, const FSPath &path) const
 void
 FileSystem::list(std::ostream &os, const FSPath &path) const
 {
-    auto print = [&](const FSPath &node, string size) {
+    // Collect all items inside the specified directory
+    std::vector<FSPath> items = path.collect();
 
-        os << std::left << std::setw(30) << node.last();
-        os << std::right << std::setw(7) << size;
-        os << " " << node.getProtectionBitString();
-        os << " " << node.ptr()->getModificationDate().dateStr();
-        os << " " << node.ptr()->getModificationDate().timeStr();
+    // List all items
+    for (auto const& item : items) {
+
+        auto sizeStr = item.isDirectory() ? "Dir" : std::to_string(item.ptr()->getFileSize());
+
+        os << std::left << std::setw(30) << item.last();
+        os << std::right << std::setw(7) << sizeStr;
+        os << " " << item.getProtectionBitString();
+        os << " " << item.ptr()->getCreationDate().dateStr();
+        os << " " << item.ptr()->getCreationDate().timeStr();
         os << std::endl;
-    };
-
-    // Collect references of all items inside the specified directory
-    std::vector<Block> items; collect(path, items, false);
-
-    // List directories
-    for (auto const& i : items) {
-
-        if (auto node = FSPath(*this, i); node.isDirectory()) {
-            print(node, "Dir");
-        }
-    }
-
-    // List files
-    for (auto const& i : items) {
-
-        if (auto node = FSPath(*this, i); !node.isDirectory()) {
-
-            // auto blocks = (node.ptr()->getFileSize() + 511) / 512;
-            print(node, std::to_string(node.ptr()->getFileSize()));
-        }
     }
 }
 

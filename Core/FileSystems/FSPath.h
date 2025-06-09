@@ -94,13 +94,15 @@ struct FSPath
     FSPath seekDir(const string &path) const;
     FSPath seekFile(const string &path) const;
 
-
     // Moves up or down in the directory tree
     FSPath cd(FSName name);
     FSPath cd(const std::vector<FSName> &names);
     FSPath cd(const std::vector<string> &names);
     FSPath cd(const string &path);
     FSPath parent();
+
+    // Returns a collection of paths to all items in a directory
+    std::vector<FSPath> collect(bool recursive = false, bool sort = true) const;
 
     friend std::ostream &operator<<(std::ostream &os, const FSPath &str);
 };

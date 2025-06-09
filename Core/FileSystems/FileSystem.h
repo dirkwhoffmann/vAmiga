@@ -279,10 +279,10 @@ public:
     // Traversing the file system
     //
     
-protected:
-    
-    // Returns a collections of nodes for all items in a directory
-    void collect(const FSPath &path, std::vector<Block> &list, bool recursive = true) const throws;
+public:
+
+    // Returns a collection of nodes for all items in a directory
+    void collect(const FSPath &path, std::vector<Block> &list, bool recursive = false) const throws;
 
 private:
     

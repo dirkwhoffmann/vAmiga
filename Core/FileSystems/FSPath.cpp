@@ -209,15 +209,17 @@ FSPath::getProtectionBitString() const
     constexpr isize FIBB_EXECUTE = 1; // ignored by system, used by Shell
     constexpr isize FIBB_DELETE  = 0; // prevent file from being deleted
 
-    string result = "-";
+    string result;
+    result += (bits & (1 << 7))            ? "h" : "-";
     result += (bits & (1 << FIBB_SCRIPT))  ? "s" : "-";
     result += (bits & (1 << FIBB_PURE))    ? "p" : "-";
     result += (bits & (1 << FIBB_ARCHIVE)) ? "a" : "-";
-    result += (bits & (1 << FIBB_READ))    ? "r" : "-";
-    result += (bits & (1 << FIBB_WRITE))   ? "w" : "-";
-    result += (bits & (1 << FIBB_EXECUTE)) ? "e" : "-";
-    result += (bits & (1 << FIBB_DELETE))  ? "d" : "-";
+    result += (bits & (1 << FIBB_READ))    ? "-" : "r";
+    result += (bits & (1 << FIBB_WRITE))   ? "-" : "w";
+    result += (bits & (1 << FIBB_EXECUTE)) ? "-" : "e";
+    result += (bits & (1 << FIBB_DELETE))  ? "-" : "d";
 
+    result += "(" + std::to_string(bits) + ")";
     return result;
 }
 
@@ -425,6 +427,29 @@ FSPath
 FSPath::parent()
 {
     return isRoot() ? *this : FSPath(fs, fs.blockPtr(ref)->getParentDirRef());
+}
+
+std::vector<FSPath>
+FSPath::collect(bool recursive, bool sort) const
+{
+    // Collect all blocks
+    std::vector<Block> blocks; fs.collect(*this, blocks, recursive);
+
+    // Convert to paths
+    std::vector<FSPath> paths; for (auto &it : blocks) paths.push_back(FSPath(fs, it));
+
+    // Sort items
+    if (sort) {
+
+        std::sort(paths.begin(), paths.end(), [&](const FSPath &a, const FSPath &b) {
+
+            if ( a.isDirectory() && !b.isDirectory()) return true;
+            if (!a.isDirectory() &&  b.isDirectory()) return false;
+            return a.last() < b.last();
+        });
+    }
+
+    return paths;
 }
 
 std::ostream &operator<<(std::ostream &os, const FSPath &path) {

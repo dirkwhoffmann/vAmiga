@@ -87,6 +87,12 @@ FSName::path() const
     return Host::sanitize(str);
 }
 
+bool
+FSName::operator<(const FSName& other) const
+{
+    return util::uppercased(cpp_str()) < util::uppercased(other.cpp_str());
+}
+
 std::ostream &operator<<(std::ostream &os, const FSName &str) {
 
     os << str.cpp_str();
