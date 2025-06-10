@@ -214,6 +214,41 @@ Allocator<T>::patch(const char *seq, const char *subst)
 }
 
 template <class T> void
+Allocator<T>::dump(std::ostream &os, const char *fmt)
+{
+    util::dump(os, fmt, ptr, size);
+}
+
+template <class T> void
+Allocator<T>::ascDump(std::ostream &os)
+{
+    dump(os,
+         "%p: "
+         "%c%c%c%c%c%c%c%c" "%c%c%c%c%c%c%c%c"
+         "%c%c%c%c%c%c%c%c" "%c%c%c%c%c%c%c%c"
+         "%c%c%c%c%c%c%c%c" "%c%c%c%c%c%c%c%c"
+         "%c%c%c%c%c%c%c%c" "%c%c%c%c%c%c%c%c\n");
+}
+
+template <class T> void
+Allocator<T>::hexDump(std::ostream &os)
+{
+    dump(os,   
+         "%p: "
+         "%b %b %b %b %b %b %b %b %b %b %b %b %b %b %b %b\n");
+
+}
+
+template <class T> void
+Allocator<T>::memDump(std::ostream &os)
+{
+    dump(os,
+         "%p: "
+         "%b %b %b %b %b %b %b %b %b %b %b %b %b %b %b %b  "
+         "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n");
+}
+
+template <class T> void
 Allocator<T>::compress(std::function<void(u8 *, isize, vector<u8> &)> algo, isize offset)
 {
     std::vector<u8> compressed;
@@ -272,5 +307,9 @@ INSTANTIATE_ALLOCATOR(bool)
 
 template void Allocator<u8>::compress(std::function<void (u8 *, isize, std::vector<u8> &)>, isize);
 template void Allocator<u8>::uncompress(std::function<void (u8 *, isize, std::vector<u8> &, isize)>, isize, isize);
+template void Allocator<u8>::dump(std::ostream &os, const char *fmt);
+template void Allocator<u8>::ascDump(std::ostream &os);
+template void Allocator<u8>::hexDump(std::ostream &os);
+template void Allocator<u8>::memDump(std::ostream &os);
 
 }

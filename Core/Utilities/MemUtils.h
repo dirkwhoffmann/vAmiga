@@ -88,10 +88,14 @@ void replace(char *p, isize size, const char *sequence, const char *substitute);
 // Extracts all readable ASCII characters from a buffer
 void readAscii(const u8 *buf, isize len, char *result, char fill = '.');
 
-// Prints a hex dump of a buffer to the console
+// Prints a hex dump of a buffer to the console (DEPRECATED)
 void hexdump(u8 *p, isize size, isize cols, isize pad);
 void hexdump(u8 *p, isize size, isize cols = 32);
 void hexdumpWords(u8 *p, isize size, isize cols = 32);
 void hexdumpLongwords(u8 *p, isize size, isize cols = 32);
+
+// Dumps memory data in customizable formats
+void dump(std::ostream &os, const char *fmt, std::function<isize(isize,isize)> read);
+void dump(std::ostream &os, const char *fmt, u8 *buf, isize len);
 
 }

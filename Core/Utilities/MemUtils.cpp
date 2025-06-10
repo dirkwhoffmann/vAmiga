@@ -92,4 +92,102 @@ void hexdumpLongwords(u8 *p, isize size, isize cols)
     hexdump(p, size, cols, 4);
 }
 
+void dump(std::ostream &os, const char *fmt, std::function<isize(isize offset, isize bytes)> read)
+{
+    bool ctrl = false;
+    isize ccnt = 0, bcnt = 0;
+    char c;
+
+    while (1) {
+
+        const char *p = fmt;
+
+        // Break the loop if there is nothing left to print
+        if (read(bcnt, 1) == -1) break;
+
+        // Print one line of data
+        do {
+
+            c = *p++;
+
+            if (!ctrl) {
+
+                if (c == '%') { ctrl = true; } else { os << c; }
+                continue;
+            }
+
+            switch (c) {
+
+                case 'p': // Offset
+
+                    os << std::setw(8) << std::setfill('0') << std::dec << (u32)bcnt;
+                    break;
+
+                case 'c': // Character
+
+                    if (auto val = read(ccnt, 1); val != -1) {
+                        os << (isprint(int(val)) ? (char)val : '.');
+                        ccnt += 1;
+                    } else {
+                        os << ' ';
+                    }
+                    break;
+
+                case 'b': // Byte
+
+                    if (auto val = read(bcnt, 1); val != -1) {
+                        os << std::setw(2) << std::setfill('0') << std::hex << val;
+                        bcnt += 1;
+                    } else {
+                        os << std::setw(2) << std::setfill(' ') << " ";
+                    }
+                    break;
+
+                case 'w': // Word
+
+                    if (auto val = read(bcnt, 2); val != -1) {
+                        os << std::setw(4) << std::setfill('0') << std::hex << val;
+                        bcnt += 2;
+                    } else {
+                        os << std::setw(4) << std::setfill(' ') << " ";
+                    }
+                    break;
+
+                case 'l': // Long
+
+                    if (auto val = read(bcnt, 4); val != -1) {
+                        os << std::setw(8) << std::setfill('0') << std::hex << val;
+                        bcnt += 4;
+                    } else {
+                        os << std::setw(8) << std::setfill(' ') << " ";
+                    }
+                    break;
+
+                default:
+                    fatalError;
+            }
+
+            ctrl = false;
+
+        } while (c);
+    }
+}
+
+void dump(std::ostream &os, const char *fmt, u8 *buf, isize len)
+{
+    auto read = [&](isize offset, isize bytes) {
+
+        isize value = 0;
+
+        while (bytes-- > 0) {
+
+            if (offset >= len) return isize(-1);
+            value = value << 8 | buf[offset++];
+        }
+        return value;
+    };
+
+    dump(os, fmt, read);
+}
+
 }

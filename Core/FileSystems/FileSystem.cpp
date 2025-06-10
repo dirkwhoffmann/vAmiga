@@ -504,7 +504,6 @@ FileSystem::list(std::ostream &os, const FSPath &path) const
 {
     isize numDirs = 0;
     isize numFiles = 0;
-    isize totalSize = 0;
 
     // Collect all items inside the specified directory
     std::vector<FSPath> items = path.collect();
@@ -522,7 +521,6 @@ FileSystem::list(std::ostream &os, const FSPath &path) const
         } else {
 
             os << std::right << std::setw(7) << std::to_string(item.ptr()->getFileSize());
-            totalSize += item.ptr()->getFileSize();
             numFiles++;
         }
         os << " " << item.getProtectionBitString();

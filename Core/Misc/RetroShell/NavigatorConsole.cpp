@@ -163,6 +163,25 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
             argv.empty() ? fs.cd(fs.rootDir()) : fs.cd(argv[0]);
         }
     });
+
+    root.add({
+
+        .tokens = { "type" },
+        .extra  = { Arg::path },
+        .help   = { "Dumps the contents of a file" },
+        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+
+            auto file = fs.pwd().seekFile(argv[0]);
+
+            Buffer<u8> buffer;
+            file.ptr()->writeData(buffer);
+
+            std::stringstream ss;
+            buffer.memDump(ss);
+
+            *this << ss;
+        }
+    });
 }
 
 }
