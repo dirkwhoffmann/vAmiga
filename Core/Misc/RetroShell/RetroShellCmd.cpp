@@ -202,4 +202,20 @@ RetroShellCmd::usage() const
     return fullName + " " + arguments;
 }
 
+namespace rs {
+
+string
+Token::autoComplete(const string &prefix) const
+{
+    auto length = prefix.length();
+    if (length > token.length()) return "";
+    
+    for (usize i = 0; i < length; i++) {
+        if (std::toupper(prefix[i]) != std::toupper(token[i])) return "";
+    }
+    
+    return token;
+}
+}
+
 }

@@ -41,6 +41,51 @@ static const std::string string     = "<string>";
 
 };
 
+namespace rs {
+
+struct Token {
+
+    string token;
+
+    Token(const string &s) : token(s) { };
+    Token(const char *s) : token(string(s)) { };
+    string autoComplete(const string &prefix) const;
+};
+
+struct Argument {
+
+    string arg;
+
+    Argument(const char *s) : arg(string(s)) { };
+};
+
+struct String : Argument {
+
+    using Argument::Argument;
+};
+
+struct Addr : Argument {
+
+    using Argument::Argument;
+};
+
+struct Range : Argument {
+
+    isize min, max;
+
+    Range(const char *s, isize min, isize max) : Argument(s), min(min), max(max) { }
+};
+
+struct Switch {
+
+    Token name;
+    std::vector<Argument> args;
+
+    Switch(const char *s, Argument arg) : name(s), args({arg}) { }
+};
+
+}
+
 struct RetroShellCmdDescriptor {
     
     const std::vector<string> &tokens = {};
@@ -72,11 +117,20 @@ struct RetroShellCmd {
     // Help description of this command (e.g., "Eject disk")
     std::vector<string> help;
     
-    // List of required arguments
+    // List of required arguments (DEPRECATED)
     std::vector<string> requiredArgs;
 
-    // List of optional arguments
+    // List of optional arguments (DEPRECATED)
     std::vector<string> optionalArgs;
+
+    // Mandatory arguments (must appear in order)Add commentMore actions
+    std::vector<rs::Argument> args;
+
+    // Optional arguments (must appear in order)
+    std::vector<rs::Argument> extraArgs;
+
+    // Switches (may appear everywhere)Add commentMore actions
+    std::vector<rs::Switch> switches;
 
     // List of subcommands
     std::vector<RetroShellCmd> subCommands;
