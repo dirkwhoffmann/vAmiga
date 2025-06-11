@@ -52,7 +52,7 @@ struct RetroShellCmdDescriptor {
     const std::vector<isize> &values = {};
 };
     
-struct RetroShellCmd {
+struct RetroShellCmd { // DEPRECATED
 
     // Used during command registration
     static string currentGroup;
@@ -124,5 +124,105 @@ struct RetroShellCmd {
     // Returns a syntax string for this command
     string usage() const;
 };
+
+//
+// New code
+//
+
+namespace rs {
+
+struct Token {
+
+    string token;
+
+    Token(const string &s) : token(s) { };
+    Token(const char *s) : token(string(s)) { };
+    string autoComplete(const string &prefix) const;
+};
+
+struct Argument {
+
+    string arg;
+
+    Argument(const char *s) : arg(string(s)) { };
+};
+
+struct String : Argument {
+
+    using Argument::Argument;
+};
+
+struct Addr : Argument {
+
+    using Argument::Argument;
+};
+
+struct Range : Argument {
+
+    isize min, max;
+
+    Range(const char *s, isize min, isize max) : Argument(s), min(min), max(max) { }
+};
+
+struct Switch {
+
+    Token name;
+    std::vector<Argument> args;
+
+    Switch(const char *s, Argument arg) : name(s), args({arg}) { }
+};
+
+struct Command {
+
+    // Used during command registration
+    static string currentGroup;
+
+    // Parent command (if any)
+    Command *parent = nullptr;
+
+    // Group of this command
+    string groupName;
+
+    // Name (e.g. "goto")
+    string name;
+
+    // Name as displayed in help messages (e.g. "[g]oto")
+    string helpName;
+
+    // Command description
+    string help = "Help me!";
+
+    // Hidden flag
+    bool hidden = false;
+
+    // Subcommands (if any)
+    std::vector<Command> subcommands;
+
+    // Mandatory arguments (must appear in order)
+    std::vector<Argument> args;
+
+    // Optional arguments (must appear in order)
+    std::vector<Argument> extra;
+
+    // Switches (may appear everywhere)
+    std::vector<Switch> switches;
+
+    string fullName() const; 
+};
+
+struct Descriptor {
+
+    const std::vector<Token> &tokens = {};
+    bool hidden = false;
+    const std::vector<string> name = {};
+    const std::vector<Argument> &args = {};
+    const std::vector<Argument> &extra = {};
+    const std::vector<Switch> &switches = {};
+    const std::vector<string> help = {};
+    std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr;
+    const std::vector<isize> &values = {};
+};
+
+}
 
 }
