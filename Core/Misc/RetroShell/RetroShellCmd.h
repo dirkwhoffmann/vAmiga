@@ -41,7 +41,7 @@ static const std::string string     = "<string>";
 
 };
 
-namespace rs {
+namespace arg {
 
 struct Token {
 
@@ -56,7 +56,11 @@ struct Argument {
 
     string arg;
 
-    Argument(const char *s) : arg(string(s)) { };
+    Argument(const string &s) : arg(s) { }
+    Argument(const char *s) : arg(string(s)) { }
+    virtual ~Argument() { }
+
+    virtual string argStr() { return "<" + arg + ">"; }
 };
 
 struct String : Argument {
@@ -64,10 +68,32 @@ struct String : Argument {
     using Argument::Argument;
 };
 
+struct Path : Argument {
+
+    using Argument::Argument;
+    Path() : Argument("path") { }
+};
+static Path path;
+
 struct Addr : Argument {
 
     using Argument::Argument;
+    Addr() : Argument("address") { }
 };
+static Addr addr;
+
+struct num : Argument {
+
+    using Argument::Argument;
+    num(const string &arg) : Argument(arg) { }
+};
+
+struct Block : num {
+
+    using num::num;
+    Block() : num("nr") { }
+};
+static Block block;
 
 struct Range : Argument {
 
@@ -76,12 +102,12 @@ struct Range : Argument {
     Range(const char *s, isize min, isize max) : Argument(s), min(min), max(max) { }
 };
 
-struct Switch {
+struct Flag {
 
     Token name;
     std::vector<Argument> args;
 
-    Switch(const char *s, Argument arg) : name(s), args({arg}) { }
+    Flag(const char *s, Argument arg) : name(s), args({arg}) { }
 };
 
 }
@@ -90,8 +116,11 @@ struct RetroShellCmdDescriptor {
     
     const std::vector<string> &tokens = {};
     bool hidden = false;
-    const std::vector<string> &args = {};
-    const std::vector<string> &extra = {};
+    const std::vector<string> &args = {}; // DEPRECATED
+    const std::vector<string> &extra = {}; // DEPRECATED
+    const std::vector<arg::Argument> &argx = {}; // TODO: Rename to args
+    const std::vector<arg::Argument> &extrx = {}; // TODO: Rename to extra
+    const std::vector<arg::Flag> &flags = {};
     const std::vector<string> help = {};
     std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr;
     const std::vector<isize> &values = {};
@@ -124,13 +153,13 @@ struct RetroShellCmd {
     std::vector<string> optionalArgs;
 
     // Mandatory arguments (must appear in order)Add commentMore actions
-    std::vector<rs::Argument> args;
+    std::vector<arg::Argument> requiredArgx; // TODO: Rename to requiredArgs
 
     // Optional arguments (must appear in order)
-    std::vector<rs::Argument> extraArgs;
+    std::vector<arg::Argument> optionalArgx; // TODO: Rename to optionalArgs
 
-    // Switches (may appear everywhere)Add commentMore actions
-    std::vector<rs::Switch> switches;
+    // Flags (may appear everywhere)
+    std::vector<arg::Flag> flags;
 
     // List of subcommands
     std::vector<RetroShellCmd> subCommands;

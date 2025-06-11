@@ -10,6 +10,7 @@
 #include "config.h"
 #include "RetroShellCmd.h"
 #include "StringUtils.h"
+#include "Parser.h"
 #include <algorithm>
 #include <utility>
 
@@ -43,6 +44,9 @@ RetroShellCmd::add(const RetroShellCmdDescriptor &descriptor)
     cmd.groupName = currentGroup;
     cmd.requiredArgs = descriptor.args;
     cmd.optionalArgs = descriptor.extra;
+    cmd.requiredArgx = descriptor.argx;
+    cmd.optionalArgx = descriptor.extrx;
+    cmd.flags = descriptor.flags;
     cmd.help = descriptor.help;
     cmd.callback = descriptor.func;
     cmd.param = descriptor.values;
@@ -202,7 +206,7 @@ RetroShellCmd::usage() const
     return fullName + " " + arguments;
 }
 
-namespace rs {
+namespace arg {
 
 string
 Token::autoComplete(const string &prefix) const
@@ -216,6 +220,7 @@ Token::autoComplete(const string &prefix) const
     
     return token;
 }
+
 }
 
 }

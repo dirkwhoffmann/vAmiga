@@ -102,18 +102,6 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
     RetroShellCmd::currentGroup = "Directories";
 
-    /*
-    root.add({
-
-        .tokens = { "pwd" },
-        .help   = { "Prints the name of the working directory" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
-
-            *this << fs.pwd() << '\n';
-        }
-    });
-    */
-
     root.add({
 
         .tokens = { "info" },
@@ -131,6 +119,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
         .tokens = { "dir" },
         .extra  = { Arg::path },
+        .extrx  = { arg::path },
         .help   = { "Displays a sorted list of the files in a directory" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 
@@ -144,6 +133,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
         .tokens = { "list" },
         .extra  = { Arg::path },
+        .extrx  = { arg::path },
         .help   = { "Lists specified information about directories and files" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 
@@ -157,6 +147,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
         .tokens = { "cd" },
         .extra  = { Arg::path },
+        .extrx  = { arg::path },
         .help   = { "Changes the working directory" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 
@@ -168,6 +159,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
         .tokens = { "type" },
         .extra  = { Arg::path },
+        .extrx  = { arg::path },
         .help   = { "Prints the contents of a file" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 
@@ -187,6 +179,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
         .tokens = { "hexdump" },
         .extra  = { Arg::path },
+        .extrx  = { arg::path },
         .help   = { "Dumps the binary contents of a file" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 
@@ -212,6 +205,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
         .tokens = { "block", "dump" },
         .extra  = { Arg::nr },
+        .extrx  = { arg::block },
         .help   = { "Dumps the contents of a block" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 

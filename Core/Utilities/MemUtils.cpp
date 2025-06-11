@@ -11,6 +11,7 @@
 #include "MemUtils.h"
 #include "string.h"
 #include "IOUtils.h"
+#include <functional>
 
 namespace vamiga::util {
 
