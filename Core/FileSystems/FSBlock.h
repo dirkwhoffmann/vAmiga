@@ -123,7 +123,16 @@ private:
     u32 checksumStandard() const;
     u32 checksumBootBlock() const;
 
-    
+
+    //
+    // Printing
+    //
+
+public:
+
+    void hexDump(std::ostream &os);
+
+
     //
     // Debugging
     //

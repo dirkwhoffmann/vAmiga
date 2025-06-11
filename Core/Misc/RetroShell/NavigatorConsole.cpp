@@ -168,7 +168,26 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
         .tokens = { "type" },
         .extra  = { Arg::path },
-        .help   = { "Dumps the contents of a file" },
+        .help   = { "Prints the contents of a file" },
+        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+
+            auto file = fs.pwd().seekFile(argv[0]);
+
+            Buffer<u8> buffer;
+            file.ptr()->writeData(buffer);
+
+            std::stringstream ss;
+            buffer.dump(ss, "%c");
+
+            *this << ss;
+        }
+    });
+
+    root.add({
+
+        .tokens = { "hexdump" },
+        .extra  = { Arg::path },
+        .help   = { "Dumps the binary contents of a file" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 
             auto file = fs.pwd().seekFile(argv[0]);
@@ -182,6 +201,33 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
             *this << ss;
         }
     });
+
+    root.add({
+
+        .tokens = { "block" },
+        .help   = { "Manages blocks" }
+    });
+
+    root.add({
+
+        .tokens = { "block", "dump" },
+        .extra  = { Arg::nr },
+        .help   = { "Dumps the contents of a block" },
+        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+
+            if (auto ptr = fs.blockPtr((Block)parseNum(argv[0])); ptr) {
+
+                std::stringstream ss;
+                ptr->hexDump(ss);
+                *this << ss;
+
+            } else {
+
+                throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
+            }
+        }
+    });
+
 }
 
 }

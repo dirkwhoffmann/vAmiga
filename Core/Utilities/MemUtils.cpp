@@ -95,10 +95,11 @@ void hexdumpLongwords(u8 *p, isize size, isize cols)
 void dump(std::ostream &os, const char *fmt, std::function<isize(isize offset, isize bytes)> read)
 {
     bool ctrl = false;
+    bool lastLine = false;
     isize ccnt = 0, bcnt = 0;
     char c;
 
-    while (1) {
+    while (!lastLine) {
 
         const char *p = fmt;
 
@@ -130,6 +131,7 @@ void dump(std::ostream &os, const char *fmt, std::function<isize(isize offset, i
                         ccnt += 1;
                     } else {
                         os << ' ';
+                        lastLine = true;
                     }
                     break;
 
@@ -140,6 +142,7 @@ void dump(std::ostream &os, const char *fmt, std::function<isize(isize offset, i
                         bcnt += 1;
                     } else {
                         os << std::setw(2) << std::setfill(' ') << " ";
+                        lastLine = true;
                     }
                     break;
 
@@ -150,6 +153,7 @@ void dump(std::ostream &os, const char *fmt, std::function<isize(isize offset, i
                         bcnt += 2;
                     } else {
                         os << std::setw(4) << std::setfill(' ') << " ";
+                        lastLine = true;
                     }
                     break;
 
@@ -160,6 +164,7 @@ void dump(std::ostream &os, const char *fmt, std::function<isize(isize offset, i
                         bcnt += 4;
                     } else {
                         os << std::setw(8) << std::setfill(' ') << " ";
+                        lastLine = true;
                     }
                     break;
 

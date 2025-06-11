@@ -761,6 +761,12 @@ FSBlock::dump() const
 }
 
 void
+FSBlock::hexDump(std::ostream &os)
+{
+    data.memDump(os);
+}
+
+void
 FSBlock::dumpData() const
 {
     if (!data.empty()) util::hexdumpLongwords(data.ptr, 512);
