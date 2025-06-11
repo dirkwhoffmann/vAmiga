@@ -31,28 +31,6 @@ Console::_initialize()
     history.push_back( { "", 0 } );
 }
 
-rs::Command &
-Console::add(rs::Command &parent, const rs::Descriptor &descriptor)
-{
-    rs::Command cmd;
-
-    cmd.parent = &parent;
-    
-    cmd.hidden = descriptor.hidden;
-    cmd.groupName = rs::Command::currentGroup;
-    cmd.name = descriptor.name.front();
-    cmd.helpName = descriptor.name.back();
-    cmd.help = descriptor.help.empty() ? "" : descriptor.help.front();
-    cmd.args = descriptor.args;
-    cmd.extra = descriptor.extra;
-    cmd.switches = descriptor.switches;
-
-    if (!cmd.hidden) rs::Command::currentGroup = "";
-
-    parent.subcommands.push_back(cmd);
-    return parent.subcommands.back();
-}
-
 Console&
 Console::operator<<(char value)
 {
@@ -217,7 +195,7 @@ Console::isEmpty()
     return storage.isCleared();
 }
 
-bool
+bool 
 Console::lastLineIsEmpty()
 {
     return storage.lastLineIsEmpty();
@@ -456,109 +434,6 @@ Console::split(const string& userInput)
     return result;
 }
 
-/*
-rs::Command *
-Console::findCommand(Arguments &argv)
-{
-    rs::Command *result = nullptr;
-    auto &cmds = commands;
-
-    for (auto &arg : argv) {
-
-        // auto token = rs::Token(arg);
-        result = findCommand(cmds, rs::Token(arg));
-        if (!result) break;
-
-        cmds = result->subcommands;
-    }
-    return result;
-}
-
-rs::Command *
-Console::findCommand(std::vector<rs::Command> &cmds, const rs::Token &name)
-{
-    for (auto &cmd : commands) { if (cmd.name == name.token) return &cmd; }
-    return nullptr;
-}
-
-rs::Command *
-Console::findCommand(std::vector<rs::Command> &cmds, const Arguments &argv)
-{
-    if (!argv.empty()) {
-
-        if (auto *result = findCommand(cmds, argv[0]); result) {
-
-            if (argv.size() > 1) {
-                return findCommand(result->subcommands, Arguments(argv.begin() + 1, argv.end()));
-            } else {
-                return result;
-            }
-        }
-    }
-    return nullptr;
-}
-*/
-
-rs::Command *
-Console::findCommand(rs::Command &parent, const rs::Token &name)
-{
-    for (auto &cmd : parent.subcommands) { if (cmd.name == name.token) return &cmd; }
-    return nullptr;
-}
-
-rs::Command *
-Console::findCommand(rs::Command &parent, const Arguments &argv)
-{
-    if (argv.empty()) return &top;
-
-    if (auto *cmd = findCommand(parent, rs::Token(argv[0])); cmd) {
-        return findCommand(*cmd, Arguments(argv.begin() + 1, argv.end()));
-    }
-    return nullptr;
-}
-
-void
-Console::split(Arguments input, Arguments &cmd, Arguments &args)
-{
-    for (usize i = 0; i < input.size(); i++) {
-
-        cmd.push_back(input[i]);
-
-        if (!findCommand(cmd)) {
-
-            cmd.pop_back();
-            args = Arguments(input.begin() + i, input.end());
-            return;
-        }
-    }
-}
-
-std::vector<rs::Command *>
-Console::findCommands(rs::Command &cmd, std::function<bool(rs::Command &)> func)
-{
-    std::vector<rs::Command *> result;
-    for (auto &it : cmd.subcommands) { if (func(it)) result.push_back(&it); }
-    return result;
-}
-
-/*
-std::vector<rs::Command *>
-Console::filter(std::function<bool(rs::Command &)> func)
-{
-    std::vector<rs::Command *> result;
-    for (auto &cmd : commands) { if (func(cmd)) result.push_back(&cmd); }
-    return result;
-}
-
-std::vector<rs::Command *>
-Console::filter(std::vector<rs::Command *> vec, std::function<bool(rs::Command &)> func)
-{
-    std::vector<rs::Command *> result;
-    for (auto *cmd : vec) { if (func(*cmd)) result.push_back(cmd); }
-    return result;
-}
-*/
-
 string
 Console::autoComplete(const string& userInput)
 {
@@ -595,32 +470,6 @@ Console::autoComplete(Arguments &argv)
 
         *it = current->autoComplete(*it);
         current = current->seek(*it);
-    }
-}
-
-void
-Console::newAutoComplete(Arguments &argv)
-{
-    for (usize i = 0; i < argv.size(); i++) {
-        newAutoComplete(argv, i);
-    }
-}
-
-void
-Console::newAutoComplete(Arguments &argv, isize index)
-{
-    assert(index < (isize)argv.size());
-
-    if (auto *cmd = findCommand(Arguments(argv.begin(), argv.begin() + index)); cmd) {
-
-        std::vector<string> matches;
-
-        // Collect names of all matching subcommands
-        findCommands(*cmd, [&](rs::Command &c) {
-            if (c.name.starts_with(argv[index])) matches.push_back(c.name); return false;
-        });
-
-        argv[index] = util::commonPrefix(matches);
     }
 }
 
@@ -838,52 +687,6 @@ Console::help(const RetroShellCmd& current)
         (*this).tab(tab);
         *this << " : ";
         *this << it.help[0];
-        *this << '\n';
-    }
-
-    *this << '\n';
-}
-
-void
-Console::help(const rs::Command& current)
-{
-    auto indent = string("    ");
-
-    // Print the usage string
-    // TODO: usage(current);
-
-    // Determine tabular positions to align the output
-    isize tab = 0;
-    for (auto &it : current.subcommands) {
-        tab = std::max(tab, (isize)it.fullName().length());
-    }
-    tab += (isize)indent.size();
-
-    isize newlines = 1;
-
-    for (auto &it : current.subcommands) {
-
-        // Only proceed if the command is visible
-        if (it.hidden) continue;
-
-        // Print the group (if present)
-        if (!it.groupName.empty()) {
-
-            *this << '\n' << it.groupName << '\n';
-            newlines = 1;
-        }
-
-        // Print newlines
-        for (; newlines > 0; newlines--) {
-            *this << '\n';
-        }
-
-        // Print the command description
-        *this << indent;
-        *this << it.fullName();
-        (*this).tab(tab);
-        *this << " : ";
-        *this << it.help;
         *this << '\n';
     }
 

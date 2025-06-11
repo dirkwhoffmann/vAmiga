@@ -101,28 +101,6 @@ trim(const string &s, const string &characters)
     return ltrim(rtrim(s, characters), characters);
 }
 
-string
-commonPrefix(const string &s1, const string &s2)
-{
-    auto len = std::min(s1.length(), s2.length());
-
-    usize count = 0;
-    for (; count < len; count++) { if (s1[count] == s2[count]) count++; }
-
-    return s1.substr(0, count);
-}
-
-string
-commonPrefix(std::vector<string> vec)
-{
-    if (vec.empty()) return "";
-
-    string result = vec[0];
-    for (auto &s : vec) result = commonPrefix(result, s);
-
-    return result;
-}
-
 std::vector<string>
 split(const string &s, char delimiter)
 {

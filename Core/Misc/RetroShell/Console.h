@@ -65,14 +65,8 @@ class Console : public SubComponent {
 
 protected:
 
-    // Root node of the (old) command tree (DEPRECATED)
-    RetroShellCmd root;
-
-    // Registered commands
-    // std::vector<rs::Command> commands;
-
     // Root node of the command tree
-    rs::Command top {};
+    RetroShellCmd root;
 
     // Memory pointer for commands accpeting default addresses
     u32 current = 0;
@@ -155,15 +149,6 @@ protected:
 public:
 
     const Options &getOptions() const override { return options; }
-
-
-    //
-    // Registering commands (EXPERIMENTAL)
-    //
-
-    // Adds a command to the command tree
-    rs::Command &add(rs::Command &parent, const rs::Descriptor &descriptor);
-    rs::Command &add(const rs::Descriptor &descriptor) { return add( top, descriptor); }
 
 
     //
@@ -260,39 +245,16 @@ public:
 
 public:
 
-    // EXPERIMENTAL Returns the matching command for a user input (may be nullptr)
-    /*
-    rs::Command *findCommand(Arguments &argv);
-    rs::Command *findCommand(std::vector<rs::Command> &cmds, const rs::Token &name);
-    rs::Command *findCommand(std::vector<rs::Command> &cmds, const Arguments &argv);
-    */
-    rs::Command *findCommand(rs::Command &parent, const rs::Token &name);
-    rs::Command *findCommand(rs::Command &parent, const Arguments &argv);
-    rs::Command *findCommand(const rs::Token &name) { return findCommand(top, name); }
-    rs::Command *findCommand(const Arguments &argv) { return findCommand(top, argv); }
-
-    // Splits user input into a command part and an argument part
-    void split(Arguments input, Arguments &cmd, Arguments &args);
-
-    // EXPERIMENTAL
-    std::vector<rs::Command *> findCommands(rs::Command &cmd, std::function<bool(rs::Command &)> func);
-    // std::vector<rs::Command *> filter(std::function<bool(rs::Command &)> func);
-
     // Auto-completes a user command
-    virtual string autoComplete(const string& userInput);
-
+    string autoComplete(const string& userInput);
 
 protected:
 
     // Splits an input string into an argument list
     Arguments split(const string& userInput);
 
-    // Auto-completes an argument list (DEPRECATED)
-    void autoComplete(Arguments &argv);
-
     // Auto-completes an argument list
-    void newAutoComplete(Arguments &argv);
-    void newAutoComplete(Arguments &argv, isize index);
+    void autoComplete(Arguments &argv);
 
     // Checks or parses an argument of a certain type
     bool isBool(const string &argv);
@@ -350,10 +312,9 @@ protected:
     void usage(const RetroShellCmd &command);
 
     // Displays a help text for a (partially typed in) command
-    virtual void help(const string &command);
+    void help(const string &command);
     void help(const Arguments &argv);
-    void help(const RetroShellCmd &command); // DEPRECATED
-    void help(const rs::Command &command);
+    void help(const RetroShellCmd &command);
 
     // Prints a textual description of an error in the console
     void describe(const std::exception &exception, isize line = 0, const string &cmd = "");
@@ -409,9 +370,6 @@ class NavigatorConsole final : public Console
     void welcome() override;
     void printHelp() override;
     void pressReturn(bool shift) override;
-
-    void help(const string &command) override;
-    string autoComplete(const string& userInput) override;
 };
 
 }

@@ -67,93 +67,11 @@ NavigatorConsole::pressReturn(bool shift)
 }
 
 void
-NavigatorConsole::help(const string &userInput)
-{
-    // Extract tokens
-    Arguments tokens = split(userInput);
-
-    // Split into the command part and the argument part
-    Arguments cmds, args; split(tokens, cmds, args);
-
-    // Find the command
-    auto *cmd = findCommand(cmds);
-
-    // Print help message
-    if (cmd) Console::help(*cmd);
-}
-
-string
-NavigatorConsole::autoComplete(const string& userInput)
-{
-    string result;
-
-    // Extract tokens
-    Arguments tokens = split(userInput);
-
-    // Split into the command part and the argument part
-    // Arguments cmds, args; split(tokens, cmds, args);
-
-    // Complete all tokens
-    newAutoComplete(tokens);
-
-    // Recreate the command string
-    // for (const auto &it : tokens) { result += (result == "" ? "" : " ") + it; }
-    result = util::concat(tokens, " ");
-
-    // Add a space if the command has been fully completed ...
-    if (auto *cmd = findCommand(tokens)) {
-
-        // ... and there are additional subcommands or arguments
-        if (!cmd->args.empty() || !cmd->extra.empty() || !cmd->switches.empty()) result += " ";
-    }
-
-    return result;
-}
-
-
-void
 NavigatorConsole::initCommands(RetroShellCmd &root)
 {
-    using namespace rs;
-
     std::vector<string> help;
 
     Console::initCommands(root);
-
-    //
-    // Experimental test commands
-
-    rs::Command::currentGroup = "Import and export";
-
-    auto &cmd = add(top, { .name = { "import" }, .help = { "Import file system" } });
-
-    for (isize i = 0; i < 4; i++) {
-
-        // i == 0 ? help = { "Floppy file system from drive n", "df[n]" } : help = { "" };
-
-        add(cmd, {
-
-            // .tokens = { "import", "df" + std::to_string(i) },
-            .name   = { "df" + std::to_string(i), "df[n]" },
-            .help   = { "Floppy file system from drive n" },
-            .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
-
-                auto n = values[0];
-
-                if (!df[n]->hasDisk()) throw AppError(Fault::DISK_MISSING);
-                fs.init(*df[n]);
-
-            }, .values = {i}
-        });
-    }
-
-
-    add({
-        .name       = { "test", "me" },
-        .args       = { String("first"), Addr("second") },
-        .extra      = { Range("second", -1, 1) },
-        .switches   = { { "-v", "<level>" } }
-    });
 
     //
     // Importing and exporting
