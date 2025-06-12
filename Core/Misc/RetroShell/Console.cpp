@@ -650,10 +650,50 @@ Console::help(const Arguments &argv)
 void
 Console::help(const RetroShellCmd& current)
 {
-    auto indent = string("    ");
-
     // Print the usage string
     usage(current);
+
+    // Print the proper help message
+    current.subCommands.empty() ? helpArguments(current) : helpSubcommands(current);
+}
+
+void
+Console::helpArguments(const RetroShellCmd &current)
+{
+    string indent = "       "; // string("       ");
+    auto skip = [](const RSArgumentDescriptor &it) { return it.hidden || it.help.empty(); };
+
+    // Determine tabular positions to align the output
+    isize tab = 0;
+    for (auto &it : current.arguments) {
+        if (!skip(it)) tab = std::max(tab, (isize)it.keyValueStr().length());
+    }
+    tab += (isize)indent.size();
+
+    if (!current.help.empty()) {
+        *this << '\n' << indent << current.help[0] << "\n\n";
+    }
+
+    for (auto &it : current.arguments) {
+
+        if (skip(it)) continue;
+
+        // Print argument descriptions
+        *this << indent;
+        *this << it.keyValueStr(); //  (it.keyStr().empty() ? it.valueStr() : it.keyStr());
+        (*this).tab(tab);
+        *this << " : ";
+        *this << it.help[0];
+        *this << '\n';
+    }
+
+    *this << '\n';
+}
+
+void
+Console::helpSubcommands(const RetroShellCmd &current)
+{
+    auto indent = string("    ");
 
     // Determine tabular positions to align the output
     isize tab = 0;
@@ -681,7 +721,7 @@ Console::help(const RetroShellCmd& current)
             *this << '\n';
         }
 
-        // Print command descriptioon
+        // Print command description
         *this << indent;
         *this << it.fullName;
         (*this).tab(tab);

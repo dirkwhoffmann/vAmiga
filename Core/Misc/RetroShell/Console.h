@@ -315,6 +315,8 @@ protected:
     void help(const string &command);
     void help(const Arguments &argv);
     void help(const RetroShellCmd &command);
+    void helpArguments(const RetroShellCmd &command);
+    void helpSubcommands(const RetroShellCmd &command);
 
     // Prints a textual description of an error in the console
     void describe(const std::exception &exception, isize line = 0, const string &cmd = "");

@@ -52,6 +52,7 @@ struct Token {
     string autoComplete(const string &prefix) const;
 };
 
+/*
 struct Argument {
 
     string arg;
@@ -109,18 +110,26 @@ struct Flag {
 
     Flag(const char *s, Argument arg) : name(s), args({arg}) { }
 };
+*/
 
+enum class type { std, flag, keyval };
 }
 
 struct RSArgumentDescriptor {
 
     string name;
-    string help;
+    arg::type type;
+    string key;
+    string value;
+    std::vector<string> help;
+
     bool hidden {};
     bool required {};
-    bool flag {};
 
-    string usage() const; 
+    string keyStr() const;
+    string valueStr() const;
+    string keyValueStr() const;
+    string usageStr() const;
 };
 
 struct RetroShellCmdDescriptor {
@@ -130,9 +139,6 @@ struct RetroShellCmdDescriptor {
     const std::vector<string> &args = {}; // DEPRECATED
     const std::vector<string> &extra = {}; // DEPRECATED
     const std::vector<RSArgumentDescriptor> &argx = {}; // TODO: Rename to args
-    // const std::vector<arg::Argument> &argx = {};
-    // const std::vector<arg::Argument> &extrx = {}; // TODO: Rename to extra
-    const std::vector<arg::Flag> &flags = {};
     const std::vector<string> help = {};
     std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr;
     const std::vector<isize> &values = {};
@@ -174,7 +180,7 @@ struct RetroShellCmd {
     // std::vector<arg::Argument> optionalArgx; // TODO: Rename to optionalArgs
 
     // Flags (may appear everywhere)
-    std::vector<arg::Flag> flags;
+    // std::vector<arg::Flag> flags;
 
     // List of subcommands
     std::vector<RetroShellCmd> subCommands;
