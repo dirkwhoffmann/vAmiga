@@ -13,6 +13,7 @@
 #include "Checksum.h"
 #include "Macros.h"
 #include <bit>
+#include <functional>
 
 namespace vamiga::util {
 

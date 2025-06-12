@@ -19,29 +19,34 @@ class RetroShell;
 
 typedef std::vector<string> Arguments;
 
-namespace Arg {
-
-static const std::string address    = "<address>";
-static const std::string boolean    = "{ true | false }";
-static const std::string command    = "<command>";
-static const std::string count      = "<count>";
-static const std::string dst        = "<destination>";
-static const std::string ignores    = "<ignores>";
-static const std::string kb         = "<kb>";
-static const std::string nr         = "<nr>";
-static const std::string onoff      = "{ on | off }";
-static const std::string path       = "<path>";
-static const std::string process    = "<process>";
-static const std::string seconds    = "<seconds>";
-static const std::string value      = "<value>";
-static const std::string sequence   = "<byte sequence>";
-static const std::string src        = "<source>";
-static const std::string volume     = "<volume>";
-static const std::string string     = "<string>";
-
-};
-
 namespace arg {
+
+// enum class type { std, flag, keyval };
+
+static constexpr std::string address    = "<address>";
+static constexpr std::string boolean    = "{true|false}";
+static constexpr std::string command    = "<command>";
+static constexpr std::string count      = "<count>";
+static constexpr std::string dst        = "<destination>";
+static constexpr std::string ignores    = "<ignores>";
+static constexpr std::string kb         = "<kb>";
+static constexpr std::string nr         = "<nr>";
+static constexpr std::string onoff      = "{on|off}";
+static constexpr std::string path       = "<path>";
+static constexpr std::string process    = "<process>";
+static constexpr std::string seconds    = "<seconds>";
+static constexpr std::string value      = "<value>";
+static constexpr std::string sequence   = "<byte sequence>";
+static constexpr std::string src        = "<source>";
+static constexpr std::string volume     = "<volume>";
+static constexpr std::string string     = "<string>";
+
+static constexpr usize opt              = 1LL << 0;
+static constexpr usize keyval           = 1LL << 1;
+static constexpr usize hidden           = 1LL << 2 | opt;
+static constexpr usize flag             = 1LL << 3 | opt;
+
+}
 
 struct Token {
 
@@ -49,83 +54,26 @@ struct Token {
 
     Token(const string &s) : token(s) { };
     Token(const char *s) : token(string(s)) { };
-    string autoComplete(const string &prefix) const;
+    string autoComplete(const std::string &prefix) const;
 };
-
-/*
-struct Argument {
-
-    string arg;
-
-    Argument(const string &s) : arg(s) { }
-    Argument(const char *s) : arg(string(s)) { }
-    virtual ~Argument() { }
-
-    virtual string argStr() const { return "<" + arg + ">"; }
-};
-
-struct String : Argument {
-
-    using Argument::Argument;
-};
-
-struct Path : Argument {
-
-    using Argument::Argument;
-    Path() : Argument("path") { }
-};
-static Path path;
-
-struct Addr : Argument {
-
-    using Argument::Argument;
-    Addr() : Argument("address") { }
-};
-static Addr addr;
-
-struct num : Argument {
-
-    using Argument::Argument;
-    num(const string &arg) : Argument(arg) { }
-};
-
-struct Block : num {
-
-    using num::num;
-    Block() : num("nr") { }
-};
-static Block block;
-
-struct Range : Argument {
-
-    isize min, max;
-
-    Range(const char *s, isize min, isize max) : Argument(s), min(min), max(max) { }
-};
-
-struct Flag {
-
-    Token name;
-    std::vector<Argument> args;
-
-    Flag(const char *s, Argument arg) : name(s), args({arg}) { }
-};
-*/
-
-enum class type { std, flag, keyval };
-}
 
 struct RSArgumentDescriptor {
 
-    string name;
-    arg::type type;
+    std::vector<string> name;
+    // arg::type type;
     string key;
     string value;
-    std::vector<string> help;
+    usize flags;
 
-    bool hidden {};
-    bool required {};
+    bool isFlag() const { return (flags & arg::flag) == arg::flag; }
+    bool isKeyValuePair() const { return (flags & arg::keyval) == arg::keyval; }
+    bool isStdArg() const { return !isFlag() && !isKeyValuePair(); }
+    bool isHidden() const { return (flags & arg::hidden) == arg::hidden; }
+    bool isOptional() const { return (flags & arg::opt) == arg::opt; }
+    bool isRequired() const { return !isOptional(); }
 
+    string nameStr() const;
+    string helpStr() const;
     string keyStr() const;
     string valueStr() const;
     string keyValueStr() const;

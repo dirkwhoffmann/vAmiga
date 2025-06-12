@@ -660,30 +660,31 @@ Console::help(const RetroShellCmd& current)
 void
 Console::helpArguments(const RetroShellCmd &current)
 {
-    string indent = "       "; // string("       ");
-    auto skip = [](const RSArgumentDescriptor &it) { return it.hidden || it.help.empty(); };
+    auto indent = string("       ");
+    auto skip = [](const RSArgumentDescriptor &it) { return it.isHidden() || it.helpStr().empty(); };
 
-    // Determine tabular positions to align the output
+    // Determine the tabular position to align the output
     isize tab = 0;
     for (auto &it : current.arguments) {
         if (!skip(it)) tab = std::max(tab, (isize)it.keyValueStr().length());
     }
     tab += (isize)indent.size();
 
+    // Print command description
     if (!current.help.empty()) {
         *this << '\n' << indent << current.help[0] << "\n\n";
     }
 
+    // Print argument descriptions
     for (auto &it : current.arguments) {
 
         if (skip(it)) continue;
 
-        // Print argument descriptions
         *this << indent;
-        *this << it.keyValueStr(); //  (it.keyStr().empty() ? it.valueStr() : it.keyStr());
+        *this << it.keyValueStr();
         (*this).tab(tab);
         *this << " : ";
-        *this << it.help[0];
+        *this << it.helpStr();
         *this << '\n';
     }
 
@@ -932,7 +933,7 @@ Console::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { "help" },
-            .extra  = { Arg::command },
+            .extra  = { arg::command },
             .help   = { "Print usage information" },
             .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
                 
@@ -965,7 +966,7 @@ Console::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { "source" },
-            .args   = { Arg::path },
+            .args   = { arg::path },
             .help   = { "Process a command script" },
             .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
                 
@@ -980,7 +981,7 @@ Console::initCommands(RetroShellCmd &root)
                  
             .tokens = { "wait" },
             .hidden = true,
-            .args   = { Arg::value, Arg::seconds },
+            .args   = { arg::value, arg::seconds },
             .help   = { "Pause the execution of a command script" },
             .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
                 

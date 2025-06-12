@@ -19,16 +19,25 @@ namespace vamiga {
 string RetroShellCmd::currentGroup;
 
 string
+RSArgumentDescriptor::nameStr() const
+{
+    return name[0];
+}
+
+string
+RSArgumentDescriptor::helpStr() const
+{
+    return name.size() > 1 ? name[1] : "" ;
+}
+
+string
 RSArgumentDescriptor::keyStr() const
 {
     if (key.empty()) {
 
-        switch (type) {
-
-            case arg::type::std:    return "";
-            case arg::type::keyval: return name;
-            case arg::type::flag:   return "-" + name;
-        }
+        if (isStdArg())         return "";
+        if (isKeyValuePair())   return nameStr();
+        if (isFlag())           return "-" + nameStr();
     }
     return key;
 }
@@ -38,12 +47,9 @@ RSArgumentDescriptor::valueStr() const
 {
     if (value.empty()) {
 
-        switch (type) {
-
-            case arg::type::std:    return "<" + name + ">";
-            case arg::type::keyval: return "<arg>";
-            case arg::type::flag:   return "";
-        }
+        if (isStdArg())         return "<" + nameStr() + ">";
+        if (isKeyValuePair())   return "<arg>";
+        if (isFlag())           return "";
     }
     return value;
 }
@@ -53,12 +59,9 @@ RSArgumentDescriptor::keyValueStr() const
 {
     if (key.empty()) {
 
-        switch (type) {
-
-            case arg::type::std:    return valueStr();
-            case arg::type::keyval: return keyStr() + "=" + valueStr();
-            case arg::type::flag:   return keyStr();
-        }
+        if (isStdArg())         return valueStr();
+        if (isKeyValuePair())   return keyStr() + "=" + valueStr();
+        if (isFlag())           return keyStr();
     }
     return key;
 }
@@ -66,22 +69,7 @@ RSArgumentDescriptor::keyValueStr() const
 string
 RSArgumentDescriptor::usageStr() const
 {
-    string result = keyValueStr();
-    /*
-    string result = name;
-
-    switch (type) {
-
-        case arg::type::std:    result = keyStr(); break;
-        case arg::type::keyval: result = keyStr() + "=" + valueStr(); break;
-        case arg::type::flag:   result = keyStr(); break;
-    }
-    */
-
-    if (!required) result = "[" + result + "]";
-    if (hidden) result = "";
-
-    return result;
+    return isHidden() ? "" : isRequired() ? keyValueStr() : "[" + keyValueStr() + "]";
 }
 
 void
@@ -233,27 +221,27 @@ RetroShellCmd::autoComplete(const string& token)
 string
 RetroShellCmd::usage() const
 {
-    // Returns a usage string for a certain type of arguments
-    auto argStr = [&](arg::type T) {
-
-        std::vector<string> items;
-
-        for (auto &it : arguments) {
-            if (it.type == T) items.push_back(it.usageStr());
-        }
-        return util::concat(items);
-    };
-
     // Returns a common usage string for all flags
-    auto flgStr = [&](bool required) {
+    auto flgStr = [&]() {
 
         string flags = "";
 
         for (auto &it : arguments) {
-            if (it.type == arg::type::flag && it.required == required) flags += it.name;
+            if (it.isFlag()) flags += it.nameStr()[0];
         }
 
-        return flags.empty() ? "" : required ? ("-" + flags) : ("[-" + flags + "]");
+        return flags.empty() ? "" : "[-" + flags + "]";
+    };
+
+    // Returns a usage string for all other arguments
+    auto argStr = [&]() {
+
+        std::vector<string> items;
+
+        for (auto &it : arguments) {
+            if (!it.isFlag()) items.push_back(it.usageStr());
+        }
+        return util::concat(items);
     };
 
     // Returns a usage string for subcommands
@@ -327,13 +315,11 @@ RetroShellCmd::usage() const
     //
 
     if (subCommands.empty()) {
-        return util::concat({ fullName, flgStr(true), flgStr(false), argStr(arg::type::keyval), argStr(arg::type::std) });
+        return util::concat({ fullName, flgStr(), argStr() });
     } else {
         return util::concat({ fullName, cmdStr() });
     }
 }
-
-namespace arg {
 
 string
 Token::autoComplete(const string &prefix) const
@@ -346,8 +332,6 @@ Token::autoComplete(const string &prefix) const
     }
     
     return token;
-}
-
 }
 
 }

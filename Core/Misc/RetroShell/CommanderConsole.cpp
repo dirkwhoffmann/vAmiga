@@ -126,7 +126,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "regression", "setup" },
         .args   = { ConfigSchemeEnum::argList() },
-        .extra  = { Arg::path, Arg::path },
+        .extra  = { arg::path, arg::path },
         .help   = { "Initializes the test environment" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
@@ -141,7 +141,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "regression", "run" },
-        .args   = { Arg::path },
+        .args   = { arg::path },
         .help   = { "Launches a regression test" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
@@ -166,7 +166,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "screenshot", "set", "filename" },
-        .args   = { Arg::path },
+        .args   = { arg::path },
         .help   = { "Assign the screen shot filename" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
@@ -178,7 +178,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "screenshot", "set", "cutout" },
-        .args   = { Arg::value, Arg::value, Arg::value, Arg::value },
+        .args   = { arg::value, arg::value, arg::value, arg::value },
         .help   = { "Adjust the texture cutout" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
@@ -197,7 +197,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "screenshot", "save" },
-        .args   = { Arg::path },
+        .args   = { arg::path },
         .help   = { "Saves a screenshot and exits the emulator" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
@@ -232,7 +232,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { cmd, "power" },
-        .args   = { Arg::onoff },
+        .args   = { arg::onoff },
         .help   = { "Switches the Amiga on or off" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
@@ -277,7 +277,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { cmd, "load", "rom" },
-        .args   = { Arg::path },
+        .args   = { arg::path },
         .help   = { "Installs a Kickstart Rom" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
@@ -289,7 +289,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { cmd, "load", "ext" },
-        .args   = { Arg::path },
+        .args   = { arg::path },
         .help   = { "Installs an extension Rom" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
@@ -301,7 +301,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { cmd, "load", "bin" },
-        .args   = { Arg::path, Arg::address },
+        .args   = { arg::path, arg::address },
         .help   = { "Loads a chunk of memory" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
@@ -319,7 +319,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { cmd, "save", "rom" },
-        .args   = { Arg::path },
+        .args   = { arg::path },
         .help   = { "Saves the Kickstart Rom" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
@@ -331,7 +331,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { cmd, "save", "ext" },
-        .args   = { Arg::path },
+        .args   = { arg::path },
         .help   = { "Saves the extension Rom" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
@@ -343,7 +343,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { cmd, "save", "bin" },
-        .args   = { Arg::path, Arg::address, Arg::count },
+        .args   = { arg::path, arg::address, arg::count },
         .help   = { "Loads a chunk of memory" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
@@ -479,7 +479,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { cmd, "press" },
-        .args   = { Arg::value },
+        .args   = { arg::value },
         .help   = { "Sends a keycode to the keyboard" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
@@ -502,7 +502,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
         root.add({
                  
             .tokens = { cmd, "press" },
-            .args   = { Arg::value },
+            .args   = { arg::value },
             .help   = { "Presses a joystick button" },
             .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
                 
@@ -524,7 +524,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { cmd, "unpress" },
-            .args   = { Arg::value },
+            .args   = { arg::value },
             .help   = { "Releases a joystick button" },
             .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
                 
@@ -729,7 +729,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { cmd, "insert" },
-            .args   = { Arg::path },
+            .args   = { arg::path },
             .help   = { "Inserts a floppy disk" },
             .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
                 
@@ -796,7 +796,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { cmd, "attach" },
-            .args   = { Arg::path },
+            .args   = { arg::path },
             .help   = { "Attaches a hard drive image" },
             .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
                                 
@@ -935,7 +935,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { cmd, "searchpath" },
-        .args   = { Arg::path },
+        .args   = { arg::path },
         .help   = { "Sets the search path for media files" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
@@ -1037,7 +1037,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { cmd, "attach" },
-        .args   = { Arg::process },
+        .args   = { arg::process },
         .help   = { "Attaches the GDB server to a process" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
             
