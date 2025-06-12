@@ -347,6 +347,7 @@ Console::press(char c)
             }
     }
 
+    tabPressed = c == '\t';
     needsDisplay();
 }
 
@@ -437,8 +438,6 @@ Console::split(const string& userInput)
 string
 Console::autoComplete(const string& userInput)
 {
-    string result;
-
     // Split input string
     Arguments tokens = split(userInput);
 
@@ -446,15 +445,16 @@ Console::autoComplete(const string& userInput)
     autoComplete(tokens);
 
     // Recreate the command string
-    for (const auto &it : tokens) { result += (result == "" ? "" : " ") + it; }
+    string result = util::concat(tokens);
 
     // Add a space if the command has been fully completed ...
-    if (auto cmd = getRoot().seek(tokens); cmd != nullptr && !tokens.empty()) {
+    if (auto cmd = getRoot().seek(tokens); cmd && !tokens.empty()) {
         
         // ... and there are additional subcommands or arguments
-        if (cmd->subCommands.size() > 0 ||
-            cmd->requiredArgs.size() > 0 ||
-            cmd->optionalArgs.size()) { result += " "; }
+        if (!cmd->subCommands.empty() ||
+            !cmd->arguments.empty() ||
+            !cmd->requiredArgs.empty() ||
+            !cmd->optionalArgs.empty()) { result += " "; }
     }
 
     return result;

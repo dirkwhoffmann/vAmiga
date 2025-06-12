@@ -107,7 +107,7 @@ commonPrefix(const string &s1, const string &s2)
     auto len = std::min(s1.length(), s2.length());
 
     usize count = 0;
-    for (; count < len; count++) { if (s1[count] == s2[count]) count++; }
+    for (; count < len && s1[count] == s2[count]; count++);
 
     return s1.substr(0, count);
 }
@@ -118,7 +118,7 @@ commonPrefix(std::vector<string> vec)
     if (vec.empty()) return "";
 
     string result = vec[0];
-    for (auto &s : vec) result = commonPrefix(result, s);
+    for (usize i = 1; i < vec.size(); i++) result = commonPrefix(result, vec[i]);
 
     return result;
 }

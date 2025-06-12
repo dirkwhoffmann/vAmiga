@@ -153,6 +153,12 @@ RetroShellCmd::autoComplete(const string& token)
     string result;
 
     auto matches = filterPrefix(token);
+
+    std::vector<string> tokens;
+    for (auto &it : matches) { tokens.push_back(it->name); }
+
+    result = util::commonPrefix(tokens);
+    /*
     if (!matches.empty()) {
         
         const RetroShellCmd *first = matches.front();
@@ -166,7 +172,9 @@ RetroShellCmd::autoComplete(const string& token)
             result += first->name[i];
         }
     }
+    */
 
+    // return result;
     return result.size() >= token.size() ? result : token;
 }
 
