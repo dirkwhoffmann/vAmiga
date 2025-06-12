@@ -62,9 +62,12 @@ string commonPrefix(std::vector<string>);
 // Splitting and concatenating
 //
 
-std::vector<string> split(const string &s, char delimiter);
-std::vector<string> split(const std::vector<string> &sv, char delimiter);
-string concat(std::vector<string> &s, string delimiter);
+std::vector<string> split(const string &s, char delim);
+std::vector<string> split(const std::vector<string> &sv, char delim);
+
+// string concat(const std::vector<string> &s, const string &delim = " ");
+string concat(const std::vector<string> &s,
+              const string &delim = " ", const string &ldelim = "", const string &rdelim = "");
 
 
 //

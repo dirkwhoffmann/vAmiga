@@ -118,9 +118,9 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "dir" },
-        .extra  = { Arg::path },
-        .extrx  = { arg::path },
         .help   = { "Displays a sorted list of the files in a directory" },
+        .extra  = { Arg::path },
+        .argx   = { { .name = "<path>", .help = "Directory" } },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 
             std::stringstream ss;
@@ -132,9 +132,26 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "list" },
-        .extra  = { Arg::path },
-        .extrx  = { arg::path },
         .help   = { "Lists specified information about directories and files" },
+        .extra  = { Arg::path },
+        .argx   = { { .name = "path", .help = "Directory" } },
+        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+
+            std::stringstream ss;
+            argv.empty() ? fs.list(ss) : fs.list(ss, fs.pwd().seek(argv[0]));
+            *this << ss;
+        }
+    });
+
+    root.add({
+
+        .tokens = { "find" },
+        .help   = { "Searches for a directory item" },
+        .extra  = { Arg::path },
+        .argx   = {
+            { .name = "path", .help = "Directory" },
+            { .name = "name", .help = "Search by name", .flag = true },
+            { .name = "date", .help = "Search by date", .flag = true }},
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 
             std::stringstream ss;
@@ -147,7 +164,8 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
         .tokens = { "cd" },
         .extra  = { Arg::path },
-        .extrx  = { arg::path },
+        .argx   = {
+            { .name = "path", .help = "New working directory", .required = true }},
         .help   = { "Changes the working directory" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 
@@ -159,7 +177,9 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
         .tokens = { "type" },
         .extra  = { Arg::path },
-        .extrx  = { arg::path },
+        .argx   = {
+            { .name = "path", .help = "File path", .required = true },
+            { .name = "hex", .help = "Print hex dump", .flag = true }},
         .help   = { "Prints the contents of a file" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 
@@ -179,7 +199,8 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
         .tokens = { "hexdump" },
         .extra  = { Arg::path },
-        .extrx  = { arg::path },
+        .argx   = {
+            { .name = "path", .help = "File" }},
         .help   = { "Dumps the binary contents of a file" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 
@@ -205,7 +226,8 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
         .tokens = { "block", "dump" },
         .extra  = { Arg::nr },
-        .extrx  = { arg::block },
+        .argx   = {
+            { .name = "nr", .help = "Block number" }},
         .help   = { "Dumps the contents of a block" },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 

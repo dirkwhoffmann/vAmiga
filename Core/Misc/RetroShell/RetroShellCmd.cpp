@@ -18,6 +18,18 @@ namespace vamiga {
 
 string RetroShellCmd::currentGroup;
 
+string
+RSArgumentDescriptor::usage() const
+{
+    string result = name;
+
+    if (hidden) return "";
+    if (!flag) result = "<" + result + ">";
+    if (!required) result = "[" + result + "]";
+
+    return result;
+}
+
 void
 RetroShellCmd::add(const RetroShellCmdDescriptor &descriptor)
 {
@@ -44,8 +56,9 @@ RetroShellCmd::add(const RetroShellCmdDescriptor &descriptor)
     cmd.groupName = currentGroup;
     cmd.requiredArgs = descriptor.args;
     cmd.optionalArgs = descriptor.extra;
-    cmd.requiredArgx = descriptor.argx;
-    cmd.optionalArgx = descriptor.extrx;
+    cmd.arguments = descriptor.argx;
+    // cmd.requiredArgx = descriptor.argx;
+    // cmd.optionalArgx = descriptor.extrx;
     cmd.flags = descriptor.flags;
     cmd.help = descriptor.help;
     cmd.callback = descriptor.func;
@@ -160,50 +173,93 @@ RetroShellCmd::autoComplete(const string& token)
 string
 RetroShellCmd::usage() const
 {
-    string arguments;
+    // Returns a usage string for arguments
+    auto argString = [&](bool flag) {
 
-    if (subCommands.empty()) {
+        std::vector<string> items;
 
-        string required;
-        string optional;
+        for (auto &it : arguments) {
 
-        for (isize i = 0; i < minArgs(); i++) {
-
-            required += requiredArgs[i];
-            required += " ";
+            if (it.flag == flag) items.push_back(it.usage());
         }
-        for (isize i = 0; i < optArgs(); i++) {
+        return util::concat(items);
+    };
 
-            optional += optionalArgs[i];
-            optional += " ";
-        }
-        if (optional != "") optional = "[ " + optional + "]";
+    // Returns a usage string for subcommands
+    auto cmdString = [&]() {
 
-        arguments = required + optional;
+        std::vector<string> items; string ldelim, rdelim;
 
-    } else {
-
-        // Collect all sub-commands
-        isize count = 0;
         for (auto &it : subCommands) {
 
             if (it.hidden) continue;
+            if (it.name != "") { ldelim = "["; rdelim = "]"; continue; }
+            items.push_back(it.name);
+        }
+        return ldelim + util::concat(items, " | ", "{ ", " }") + rdelim;
+    };
 
-            if (it.name != "") {
+    //
+    // Old code
+    //
 
-                if (count++) arguments += " | ";
-                arguments += it.name;
+    string resultstr;
+
+    if (arguments.empty()) { // } requiredArgx.empty() && optionalArgx.empty() && flags.empty()) {
+
+        if (subCommands.empty()) {
+
+            string required;
+            string optional;
+
+            for (isize i = 0; i < minArgs(); i++) {
+
+                required += requiredArgs[i];
+                required += " ";
+            }
+            for (isize i = 0; i < optArgs(); i++) {
+
+                optional += optionalArgs[i];
+                optional += " ";
+            }
+            if (optional != "") optional = "[ " + optional + "]";
+
+            resultstr = required + optional;
+
+        } else {
+
+            // Collect all sub-commands
+            isize count = 0;
+            for (auto &it : subCommands) {
+
+                if (it.hidden) continue;
+
+                if (it.name != "") {
+
+                    if (count++) resultstr += " | ";
+                    resultstr += it.name;
+                }
+            }
+            if (count > 1) {
+                resultstr = "{" + resultstr + "}";
+            }
+            if (seek("") && resultstr != "") {
+                resultstr = "[ " + resultstr + " ]";
             }
         }
-        if (count > 1) {
-            arguments = "{" + arguments + "}";
-        }
-        if (seek("") && arguments != "") {
-            arguments = "[ " + arguments + " ]";
-        }
+
+        return fullName + " " + resultstr;
     }
 
-    return fullName + " " + arguments;
+    //
+    // New code
+    //
+
+    if (subCommands.empty()) {
+        return util::concat({ fullName, argString(true), argString(false) });
+    } else {
+        return util::concat({ fullName, cmdString() });
+    }
 }
 
 namespace arg {

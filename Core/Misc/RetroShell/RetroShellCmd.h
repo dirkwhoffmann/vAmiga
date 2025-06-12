@@ -60,7 +60,7 @@ struct Argument {
     Argument(const char *s) : arg(string(s)) { }
     virtual ~Argument() { }
 
-    virtual string argStr() { return "<" + arg + ">"; }
+    virtual string argStr() const { return "<" + arg + ">"; }
 };
 
 struct String : Argument {
@@ -112,14 +112,26 @@ struct Flag {
 
 }
 
+struct RSArgumentDescriptor {
+
+    string name;
+    string help;
+    bool hidden {};
+    bool required {};
+    bool flag {};
+
+    string usage() const; 
+};
+
 struct RetroShellCmdDescriptor {
     
     const std::vector<string> &tokens = {};
     bool hidden = false;
     const std::vector<string> &args = {}; // DEPRECATED
     const std::vector<string> &extra = {}; // DEPRECATED
-    const std::vector<arg::Argument> &argx = {}; // TODO: Rename to args
-    const std::vector<arg::Argument> &extrx = {}; // TODO: Rename to extra
+    const std::vector<RSArgumentDescriptor> &argx = {}; // TODO: Rename to args
+    // const std::vector<arg::Argument> &argx = {};
+    // const std::vector<arg::Argument> &extrx = {}; // TODO: Rename to extra
     const std::vector<arg::Flag> &flags = {};
     const std::vector<string> help = {};
     std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr;
@@ -152,11 +164,14 @@ struct RetroShellCmd {
     // List of optional arguments (DEPRECATED)
     std::vector<string> optionalArgs;
 
+    // Argument list
+    std::vector<RSArgumentDescriptor> arguments;
+
     // Mandatory arguments (must appear in order)Add commentMore actions
-    std::vector<arg::Argument> requiredArgx; // TODO: Rename to requiredArgs
+    // std::vector<arg::Argument> requiredArgx; // TODO: Rename to requiredArgs
 
     // Optional arguments (must appear in order)
-    std::vector<arg::Argument> optionalArgx; // TODO: Rename to optionalArgs
+    // std::vector<arg::Argument> optionalArgx; // TODO: Rename to optionalArgs
 
     // Flags (may appear everywhere)
     std::vector<arg::Flag> flags;
