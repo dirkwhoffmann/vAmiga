@@ -473,6 +473,80 @@ Console::autoComplete(Arguments &argv)
     }
 }
 
+std::map<string,string>
+Console::parse(const RetroShellCmd &cmd, const Arguments &args)
+{
+    std::map<string,string> map;
+
+    // Sort input tokens by type
+    std::vector<string> flags;
+    std::vector<string> keyVal;
+    std::vector<string> std;
+
+    auto isFlag = [](const string &input) { return input[0] == '-'; };
+    auto isKeyVal = [](const string &input) { return input.find('=') != std::string::npos; };
+
+    for (auto &it : args) {
+
+        isFlag(it) ? flags.push_back(it) : isKeyVal(it) ? keyVal.push_back(it) : std.push_back(it);
+    }
+
+    // Iterate over all argument descriptors
+    for (auto &descr : cmd.arguments) {
+
+        if (descr.isFlag())         { parseFlag(map, descr, flags); continue; }
+        if (descr.isKeyValuePair()) { parseKeyVal(map, descr, keyVal); continue; }
+        if (descr.isStdArg())       { parseStd(map, descr, std); continue; }
+    }
+
+    return map;
+}
+
+void
+Console::parseFlag(std::map<string,string> &map, const RSArgumentDescriptor &descr, const Arguments &args)
+{
+    auto keyStr = descr.keyStr();
+
+    for (auto &arg : args) {
+        // string name = arg.substr(1);
+        if (keyStr == arg) { map[descr.nameStr()] = "1"; return; }
+    }
+
+    if (descr.isRequired()){
+        throw util::ParseError("Missing flag " + keyStr);
+    }
+}
+
+void
+Console::parseKeyVal(std::map<string,string> &map, const RSArgumentDescriptor &descr, const Arguments &args)
+{
+
+    auto keyStr = descr.keyStr();
+
+    for (auto &arg : args) {
+
+        auto pos = arg.find('=');
+        auto key = arg.substr(0, pos);
+        auto val = arg.substr(pos + 1);
+
+        if (keyStr == key) { map[descr.nameStr()] = val; return; }
+    }
+
+    if (descr.isRequired()){
+        throw util::ParseError("Missing key-value pair " + keyStr + "=<value>\n");
+    }
+}
+
+void
+Console::parseStd(std::map<string,string> &map, const RSArgumentDescriptor &descr, const Arguments &args)
+{
+    if (!args.empty()) { map[descr.nameStr()] = args.front(); return; }
+
+    if (descr.isRequired()) {
+        throw util::ParseError("Not enough arguments");
+    }
+}
+
 bool
 Console::isBool(const string &argv)
 {
@@ -607,9 +681,26 @@ Console::exec(const Arguments &argv, bool verbose)
         throw TooFewArgumentsError(current->fullName);
     }
 
-    // Check the argument count
-    if ((isize)args.size() < current->minArgs()) throw TooFewArgumentsError(current->fullName);
-    if ((isize)args.size() > current->maxArgs()) throw TooManyArgumentsError(current->fullName);
+    if (current->arguments.empty()) {
+
+        // OLD CODE: Check the argument count (DEPRECATED)
+        if ((isize)args.size() < current->minArgs()) throw TooFewArgumentsError(current->fullName);
+        if ((isize)args.size() > current->maxArgs()) throw TooManyArgumentsError(current->fullName);
+
+    } else {
+
+        printf("Parsing arguments...\n");
+        try {
+            _argv = parse(*current, args);
+        } catch (std::exception &err) {
+            printf("Error: %s\n", err.what());
+        }
+
+        for (auto &it : _argv) {
+            printf("%s : %s\n", it.first.c_str(), it.second.c_str());
+        }
+
+    }
 
     // Call the command handler
     current->callback(args, current->param);

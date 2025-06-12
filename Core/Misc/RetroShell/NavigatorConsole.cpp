@@ -96,6 +96,8 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
                 if (!df[n]->hasDisk()) throw AppError(Fault::DISK_MISSING);
                 fs.init(*df[n]);
 
+                
+
             }, .values = {i}
         });
     }
@@ -118,7 +120,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "dir" },
-        .extra  = { arg::path },
+        // .extra  = { arg::path },
         .argx   = { { .name = { "path", "Path to directory" } } },
         .help   = { "Display a sorted list of the files in a directory." },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {

@@ -229,7 +229,7 @@ FSPath::seek(const FSName &name) const
     FSBlock *cdb = ptr();
 
     // Only proceed if a hash table is present
-    if (cdb->hashTableSize() != 0) {
+    if (cdb && cdb->hashTableSize() != 0) {
 
         // Compute the table position and read the item
         u32 hash = name.hashValue() % cdb->hashTableSize();

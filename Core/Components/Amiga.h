@@ -197,7 +197,7 @@ public:
     // Converts a number of master cycles to the (approximate) time span
     static i64 asUsec(Cycle count) { return count / 28LL; }
     static i64 asMsec(Cycle count) { return count / 28000LL; }
-    static double asSec(Cycle count) { return count / 28000000LL; }
+    static double asSec(Cycle count) { return count / 28000000.0; }
 
 
     //
