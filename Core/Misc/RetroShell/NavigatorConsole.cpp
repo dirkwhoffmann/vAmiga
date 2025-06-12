@@ -118,9 +118,9 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "dir" },
-        .help   = { "Display a sorted list of the files in a directory." },
         .extra  = { arg::path },
         .argx   = { { .name = { "path", "Path to directory" } } },
+        .help   = { "Display a sorted list of the files in a directory." },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 
             std::stringstream ss;
@@ -132,9 +132,9 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "list" },
-        .help   = { "List specified information about directories and files." },
         .extra  = { arg::path },
         .argx   = { { .name = { "path", "Path to directory" } } },
+        .help   = { "List specified information about directories and files." },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 
             std::stringstream ss;
@@ -146,12 +146,12 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "find" },
-        .help   = { "Search for a directory item." },
         .extra  = { arg::path },
         .argx   = {
             { .name = { "path", "Directory" } },
             { .name = { "n", "Search file by name" }, .flags = arg::flag },
             { .name = { "d", "Search file by date" }, .flags = arg::flag }},
+        .help   = { "Search for a directory item." },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 
             std::stringstream ss;
@@ -163,10 +163,10 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "cd" },
-        .help   = { "Change the working directory." },
         .extra  = { arg::path },
         .argx   = {
             { .name = { "path", "New working directory" }, .flags = arg::opt }},
+        .help   = { "Change the working directory." },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 
             argv.empty() ? fs.cd(fs.rootDir()) : fs.cd(argv[0]);
@@ -176,7 +176,6 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "type" },
-        .help   = { "Print the contents of a file." },
         .extra  = { arg::path },
         .argx   = {
             { .name = { "h", "Print hex dump" }, .flags = arg::flag },
@@ -184,7 +183,8 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
             { .name = { "format", "Display format" }, .value = "{OFS|FFS}", .flags = arg::keyval|arg::opt },
             { .name = { "path", "File path" }, }
         },
-            .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .help   = { "Print the contents of a file." },
+        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 
                 auto file = fs.pwd().seekFile(argv[0]);
 
@@ -201,13 +201,13 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "create" },
-        .help   = { "Create a new file system." },
         .extra  = { arg::path },
         .argx   = {
             { .name = { "c", "Number of cylinders" }, .value = arg::count, .flags = arg::keyval },
             { .name = { "h", "Number of heads" }, .value = arg::count, .flags = arg::keyval },
             { .name = { "s", "Number of sectors" }, .value = arg::count, .flags = arg::keyval }
         },
+        .help   = { "Create a new file system." },
         .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
 
             *this << "Holla, die Waldfee!\n";
