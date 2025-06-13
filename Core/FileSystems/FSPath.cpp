@@ -13,6 +13,11 @@
 
 namespace vamiga {
 
+FSPath::FSPath(const FileSystem &fs, Block dir) : fs(fs), ref(dir)
+{
+    selfcheck();
+}
+
 FSPath::FSPath(const FSPath &path) : fs(path.fs), ref(path.ref)
 {
 
@@ -21,11 +26,6 @@ FSPath::FSPath(const FSPath &path) : fs(path.fs), ref(path.ref)
 FSPath::FSPath(const FileSystem &fs) : fs(fs), ref(0)
 {
 
-}
-
-FSPath::FSPath(const FileSystem &fs, Block dir) : fs(fs), ref(dir)
-{
-    selfcheck();
 }
 
 FSPath::FSPath(const FileSystem &fs, FSBlock *dir) : FSPath(fs, dir->nr)
@@ -48,6 +48,10 @@ FSPath::FSPath(const FileSystem &fs, const fs::path &path) : FSPath(seek(path))
 void
 FSPath::selfcheck() const
 {
+    // Check if a file system is present
+    if (!fs.initialized()) throw AppError(Fault::FS_UNINITIALIZED);
+    if (!fs.formatted()) throw AppError(Fault::FS_UNFORMATTED);
+
     // Check if the block number is in the valid range
     if (!ptr()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
 

@@ -85,15 +85,19 @@ public:
     
 protected:
 
+    void init(FileSystemDescriptor layout, u8 *buf, isize len) throws;
     void init(const MediaFile &file, isize part) throws;
     void init(const ADFFile &adf) throws;
     void init(const HDFFile &hdn, isize part) throws;
     void init(FloppyDrive &dfn) throws;
     void init(const HardDrive &hdn, isize part) throws;
 
-    void init(FileSystemDescriptor layout, u8 *buf, isize len) throws;
+public:
 
-    
+    bool initialized() const;
+    bool formatted() const;
+
+
     //
     // Methods from CoreObject
     //

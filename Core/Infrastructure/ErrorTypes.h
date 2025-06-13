@@ -168,8 +168,9 @@ enum class Fault : long
     FS_NOT_FOUND,
 
     // File system (general errors)
-    FS_UNSUPPORTED,
+    FS_UNINITIALIZED,
     FS_UNFORMATTED,
+    FS_UNSUPPORTED,
     FS_WRONG_BSIZE,
     FS_WRONG_CAPACITY,
     FS_WRONG_DOS_TYPE,
@@ -346,8 +347,9 @@ struct FaultEnum : Reflection<FaultEnum, Fault>
             case Fault::FS_NOT_A_FILE:               return "FS_NOT_A_FILE";
             case Fault::FS_NOT_FOUND:                return "FS_NOT_FOUND";
 
-            case Fault::FS_UNSUPPORTED:              return "FS_UNSUPPORTED";
+            case Fault::FS_UNINITIALIZED:            return "FS_UNINITIALIZED";
             case Fault::FS_UNFORMATTED:              return "FS_UNFORMATTED";
+            case Fault::FS_UNSUPPORTED:              return "FS_UNSUPPORTED";
             case Fault::FS_WRONG_BSIZE:              return "FS_WRONG_BSIZE";
             case Fault::FS_WRONG_CAPACITY:           return "FS_WRONG_CAPACITY";
             case Fault::FS_WRONG_DOS_TYPE:           return "FS_WRONG_DOS_TYPE";

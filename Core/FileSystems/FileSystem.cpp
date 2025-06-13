@@ -120,6 +120,26 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
     debug(FS_DEBUG, "Success\n");
 }
 
+bool
+FileSystem::initialized() const
+{
+    // Check if the block storage is allocates
+    if (blocks.empty()) return false;
+
+    // Check if the root block is preset
+    if (auto *root = blockPtr(rootBlock); root) {
+
+        return  root->type == FSBlockType::ROOT_BLOCK;
+    }
+    return false;
+}
+
+bool
+FileSystem::formatted() const
+{
+    return initialized() && dos != FSVolumeType::NODOS;
+}
+
 FSTraits &
 FileSystem::getTraits()
 {

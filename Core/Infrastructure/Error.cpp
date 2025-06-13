@@ -368,12 +368,16 @@ AppError::AppError(Fault code, const string &s)
             description = "Corrupted hunk structure.";
             break;
 
-        case Fault::FS_UNSUPPORTED:
-            description = "Unsupported file system.";
+        case Fault::FS_UNINITIALIZED:
+            description = "No file system.";
             break;
 
         case Fault::FS_UNFORMATTED:
             description = "Unformatted device.";
+            break;
+
+        case Fault::FS_UNSUPPORTED:
+            description = "Unsupported file system.";
             break;
 
         case Fault::FS_WRONG_BSIZE:
