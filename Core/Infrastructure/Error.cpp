@@ -169,16 +169,6 @@ AppError::AppError(Fault code, const string &s)
             description = "No Extension Rom installed.";
             break;
 
-        case Fault::WT_BLOCKED:
-            description = "The storage file for the selected hard drive is";
-            description += " being used by another emulator instance. It cannot ";
-            description += " be shared among multiple emulator instances.";
-            break;
-
-        case Fault::WT:
-            description = "Write through: " + s;
-            break;
-
         case Fault::DISK_MISSING:
             description = "No disk in drive.";
             break;
@@ -329,15 +319,15 @@ AppError::AppError(Fault code, const string &s)
             break;
 
         case Fault::REG_READ_ONLY:
-            description = s + " is a read-only register";
+            description = s + " is a read-only register.";
             break;
 
         case Fault::REG_WRITE_ONLY:
-            description = s + " is a write-only register";
+            description = s + " is a write-only register.";
             break;
 
         case Fault::REG_UNUSED:
-            description = "Register " + s + " is unused";
+            description = "Register " + s + " is unused.";
             break;
 
         case Fault::ADDR_UNALIGNED:
@@ -369,7 +359,7 @@ AppError::AppError(Fault code, const string &s)
             break;
 
         case Fault::FS_UNINITIALIZED:
-            description = "No file system.";
+            description = "No file system present.";
             break;
 
         case Fault::FS_UNFORMATTED:

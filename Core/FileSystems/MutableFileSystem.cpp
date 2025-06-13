@@ -137,7 +137,10 @@ MutableFileSystem::format(string name)
     updateChecksums();
 
     // Set the current directory
-    curr = FSPath(*this, rootBlock);
+    curr = rootBlock;
+
+    // Check integrity (may throw)
+    (void)pwd();
 }
 
 void

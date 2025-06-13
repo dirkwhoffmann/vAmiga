@@ -65,7 +65,7 @@ protected:
     std::vector<Block> bmExtBlocks;
 
     // The current directory (points to the root block by default)
-    FSPath curr = FSPath(*this);
+    Block curr = 0;
 
 
     //
@@ -237,7 +237,7 @@ public:
     void cd(const string &path);
 
     // Returns the working directory
-    FSPath pwd() const { return curr; }
+    FSPath pwd() const { return FSPath(*this, curr); }
 
 
     //

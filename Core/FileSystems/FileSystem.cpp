@@ -114,8 +114,11 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
         blocks[i]->importBlock(data, bsize);
     }
 
-    // Set the current directory
-    curr = FSPath(*this, rootBlock);
+    // Set the current directory to '/'
+    curr = rootBlock;
+
+    // Check integrity (may throw)
+    (void)pwd();
 
     debug(FS_DEBUG, "Success\n");
 }
@@ -484,19 +487,19 @@ FileSystem::exists(const FSPath &top, const fs::path &path) const
 void
 FileSystem::cd(const FSName &name)
 {
-    curr = curr.cd(name);
+    curr = pwd().cd(name).ref;
 }
 
 void
 FileSystem::cd(const FSPath &path)
 {
-    curr = path;
+    curr = path.ref;
 }
 
 void
 FileSystem::cd(const string &path)
 {
-    curr = curr.cd(path);
+    curr = pwd().cd(path).ref;
 }
 
 void

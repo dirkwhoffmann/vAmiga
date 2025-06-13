@@ -72,11 +72,7 @@ enum class Fault : long
     // Rom
     ROM_MISSING,
     AROS_NO_EXTROM,
-    
-    // Drives
-    WT_BLOCKED,
-    WT,
-    
+
     // Floppy disks
     DISK_MISSING,
     DISK_INCOMPATIBLE,
@@ -265,10 +261,7 @@ struct FaultEnum : Reflection<FaultEnum, Fault>
                 
             case Fault::ROM_MISSING:                 return "ROM_MISSING";
             case Fault::AROS_NO_EXTROM:              return "AROS_NO_EXTROM";
-                
-            case Fault::WT_BLOCKED:                  return "WT_BLOCKED";
-            case Fault::WT:                          return "WT";
-                
+
             case Fault::DISK_MISSING:                return "DISK_MISSING";
             case Fault::DISK_INCOMPATIBLE:           return "DISK_INCOMPATIBLE";
             case Fault::DISK_INVALID_DIAMETER:       return "DISK_INVALID_DIAMETER";

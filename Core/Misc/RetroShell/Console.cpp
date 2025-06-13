@@ -494,14 +494,56 @@ Console::parse(const RetroShellCmd &cmd, const Arguments &args)
     // Iterate over all argument descriptors
     for (auto &descr : cmd.arguments) {
 
-        if (descr.isFlag())         { parseFlag(map, descr, flags); continue; }
-        if (descr.isKeyValuePair()) { parseKeyVal(map, descr, keyVal); continue; }
-        if (descr.isStdArg())       { parseStd(map, descr, std); continue; }
+        auto keyStr = descr.keyStr();
+        auto nameStr = descr.nameStr();
+
+        // Does the descriptor describe a flag?
+        if (descr.isFlag()) { //}        { parseFlag(map, descr, flags); continue; }
+
+            for (auto &arg : flags) {
+                if (keyStr == arg) { map[nameStr] = "true"; break; }
+            }
+            if (descr.isRequired()){
+                throw util::ParseError("Missing flag " + keyStr);
+            }
+            continue;
+        }
+
+        // Does the descriptor describe a key-value pair?
+        if (descr.isKeyValuePair()) { // parseKeyVal(map, descr, keyVal); continue; }
+
+            for (auto &arg : args) {
+
+                auto pos = arg.find('=');
+                auto key = arg.substr(0, pos);
+                auto val = arg.substr(pos + 1);
+
+                if (keyStr == key) { map[nameStr] = val; break; }
+            }
+            if (descr.isRequired()){
+                throw util::ParseError("Missing key-value pair " + keyStr + "=<value>\n");
+            }
+            continue;
+        }
+
+        // Does the descriptor describe a standard argument?
+        if (descr.isStdArg()) { // parseStd(map, descr, std); continue; }
+
+            if (!args.empty()) { map[nameStr] = args.front(); break; }
+
+            if (descr.isRequired()) {
+                throw TooFewArgumentsError(cmd.fullName);
+            }
+            continue;
+        }
+
+        fatalError;
     }
 
     return map;
 }
 
+/*
 void
 Console::parseFlag(std::map<string,string> &map, const RSArgumentDescriptor &descr, const Arguments &args)
 {
@@ -543,9 +585,10 @@ Console::parseStd(std::map<string,string> &map, const RSArgumentDescriptor &desc
     if (!args.empty()) { map[descr.nameStr()] = args.front(); return; }
 
     if (descr.isRequired()) {
-        throw util::ParseError("Not enough arguments");
+        throw TooFewArgumentsError("???");
     }
 }
+*/
 
 bool
 Console::isBool(const string &argv)
@@ -690,11 +733,14 @@ Console::exec(const Arguments &argv, bool verbose)
     } else {
 
         printf("Parsing arguments...\n");
+        _argv = parse(*current, args);
+        /*
         try {
             _argv = parse(*current, args);
         } catch (std::exception &err) {
             printf("Error: %s\n", err.what());
         }
+        */
 
         for (auto &it : _argv) {
             printf("%s : %s\n", it.first.c_str(), it.second.c_str());
@@ -832,42 +878,42 @@ Console::describe(const std::exception &e, isize line, const string &cmd)
 
     if (auto err = dynamic_cast<const TooFewArgumentsError *>(&e)) {
 
-        *this << err->what() << ": Too few arguments";
+        *this << err->what() << ": Too few arguments.";
         *this << '\n';
         return;
     }
 
     if (auto err = dynamic_cast<const TooManyArgumentsError *>(&e)) {
 
-        *this << err->what() << ": Too many arguments";
+        *this << err->what() << ": Too many arguments.";
         *this << '\n';
         return;
     }
 
     if (auto err = dynamic_cast<const util::EnumParseError *>(&e)) {
 
-        *this << err->token << " is not a valid key" << '\n';
+        *this << err->token << " is not a valid key." << '\n';
         *this << "Expected: " << err->expected << '\n';
         return;
     }
 
     if (auto err = dynamic_cast<const util::ParseNumError *>(&e)) {
 
-        *this << err->token << " is not a number";
+        *this << err->token << " is not a number.";
         *this << '\n';
         return;
     }
 
     if (auto err = dynamic_cast<const util::ParseBoolError *>(&e)) {
 
-        *this << err->token << " must be true or false";
+        *this << err->token << " must be true or false.";
         *this << '\n';
         return;
     }
 
     if (auto err = dynamic_cast<const util::ParseOnOffError *>(&e)) {
 
-        *this << "'" << err->token << "' must be on or off";
+        *this << "'" << err->token << "' must be on or off.";
         *this << '\n';
         return;
     }

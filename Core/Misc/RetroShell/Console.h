@@ -261,10 +261,11 @@ protected:
 
     // Parses an argument list
     std::map<string,string> parse(const RetroShellCmd &cmd, const Arguments &args);
+    /*
     void parseFlag(std::map<string,string> &map, const RSArgumentDescriptor &descr, const Arguments &args);
     void parseKeyVal(std::map<string,string> &map, const RSArgumentDescriptor &descr, const Arguments &args);
     void parseStd(std::map<string,string> &map, const RSArgumentDescriptor &descr, const Arguments &args);
-
+    */
 
     // Checks or parses an argument of a certain type
     bool isBool(const string &argv);
