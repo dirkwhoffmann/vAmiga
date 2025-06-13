@@ -145,6 +145,7 @@ enum class DebugFlag
     KEY_DEBUG,        ///< Keyboard key events
 
     // Misc
+    RSH_DEBUG,        ///< Retro shell
     REC_DEBUG,        ///< Screen recorder
     SCK_DEBUG,        ///< Sockets
     SRV_DEBUG,        ///< Remote server
@@ -285,6 +286,7 @@ struct DebugFlagEnum : Reflection<DebugFlagEnum, DebugFlag>
             case DebugFlag::KEY_DEBUG:        return "KEY_DEBUG";
 
                 // Misc
+            case DebugFlag::RSH_DEBUG:        return "RSH_DEBUG";
             case DebugFlag::REC_DEBUG:        return "REC_DEBUG";
             case DebugFlag::SCK_DEBUG:        return "SCK_DEBUG";
             case DebugFlag::SRV_DEBUG:        return "SRV_DEBUG";
@@ -423,6 +425,7 @@ struct DebugFlagEnum : Reflection<DebugFlagEnum, DebugFlag>
             case DebugFlag::KEY_DEBUG:        return "Keyboard key events";
 
                 // Misc
+            case DebugFlag::RSH_DEBUG:        return "RetroShell";
             case DebugFlag::REC_DEBUG:        return "Screen recorder";
             case DebugFlag::SCK_DEBUG:        return "Sockets";
             case DebugFlag::SRV_DEBUG:        return "Remote server";

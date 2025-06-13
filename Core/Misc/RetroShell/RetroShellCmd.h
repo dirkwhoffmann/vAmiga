@@ -22,30 +22,28 @@ typedef std::map<string,string> ParsedArguments;
 
 namespace arg {
 
-// enum class type { std, flag, keyval };
+static const std::string address    = "<address>";
+static const std::string boolean    = "{true|false}";
+static const std::string command    = "<command>";
+static const std::string count      = "<count>";
+static const std::string dst        = "<destination>";
+static const std::string ignores    = "<ignores>";
+static const std::string kb         = "<kb>";
+static const std::string nr         = "<nr>";
+static const std::string onoff      = "{on|off}";
+static const std::string path       = "<path>";
+static const std::string process    = "<process>";
+static const std::string seconds    = "<seconds>";
+static const std::string value      = "<value>";
+static const std::string sequence   = "<byte sequence>";
+static const std::string src        = "<source>";
+static const std::string volume     = "<volume>";
+static const std::string string     = "<string>";
 
-static constexpr std::string address    = "<address>";
-static constexpr std::string boolean    = "{true|false}";
-static constexpr std::string command    = "<command>";
-static constexpr std::string count      = "<count>";
-static constexpr std::string dst        = "<destination>";
-static constexpr std::string ignores    = "<ignores>";
-static constexpr std::string kb         = "<kb>";
-static constexpr std::string nr         = "<nr>";
-static constexpr std::string onoff      = "{on|off}";
-static constexpr std::string path       = "<path>";
-static constexpr std::string process    = "<process>";
-static constexpr std::string seconds    = "<seconds>";
-static constexpr std::string value      = "<value>";
-static constexpr std::string sequence   = "<byte sequence>";
-static constexpr std::string src        = "<source>";
-static constexpr std::string volume     = "<volume>";
-static constexpr std::string string     = "<string>";
-
-static constexpr usize opt              = 1LL << 0;
-static constexpr usize keyval           = 1LL << 1;
-static constexpr usize hidden           = 1LL << 2 | opt;
-static constexpr usize flag             = 1LL << 3 | opt;
+static const usize opt              = 1LL << 0;
+static const usize keyval           = 1LL << 1;
+static const usize hidden           = 1LL << 2 | opt;
+static const usize flag             = 1LL << 3 | opt;
 
 }
 

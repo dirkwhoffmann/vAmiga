@@ -724,22 +724,25 @@ Console::exec(const Arguments &argv, bool verbose)
         throw TooFewArgumentsError(current->fullName);
     }
 
-    // Parse arguments
-    ParsedArguments parsedArgs;
-
+    // OLD CODE: WILL GO AWAY
     if (current->arguments.empty()) {
 
-        // OLD CODE: Check the argument count (DEPRECATED)
         if ((isize)args.size() < current->minArgs()) throw TooFewArgumentsError(current->fullName);
         if ((isize)args.size() > current->maxArgs()) throw TooManyArgumentsError(current->fullName);
 
-    } else {
+        ParsedArguments parsedArgs; // empty
+        current->callback(args, parsedArgs, current->param);
+        return;
+    }
 
-        printf("Parsing arguments...\n");
-        parsedArgs = parse(*current, args);
+    // Parse arguments
+    ParsedArguments parsedArgs = parse(*current, args);
 
+    if (RSH_DEBUG) {
+
+        msg("Parsed arguments: %zu\n", parsedArgs.size());
         for (auto &it : parsedArgs) {
-            printf("%s : %s\n", it.first.c_str(), it.second.c_str());
+            msg("  '%s' = '%s'\n", it.first.c_str(), it.second.c_str());
         }
     }
 

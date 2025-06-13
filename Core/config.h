@@ -198,6 +198,7 @@ extern debugflag KBD_DEBUG;
 extern debugflag KEY_DEBUG;
 
 // Misc
+extern debugflag RSH_DEBUG;
 extern debugflag REC_DEBUG;
 extern debugflag SCK_DEBUG;
 extern debugflag SRV_DEBUG;
