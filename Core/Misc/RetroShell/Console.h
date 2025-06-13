@@ -28,6 +28,14 @@ struct TooManyArgumentsError : public util::ParseError {
     using ParseError::ParseError;
 };
 
+struct UnknownFlagError : public util::ParseError {
+    using ParseError::ParseError;
+};
+
+struct UnknownKeyValueError : public util::ParseError {
+    using ParseError::ParseError;
+};
+
 struct ScriptInterruption: AppException {
     using AppException::AppException;
 };

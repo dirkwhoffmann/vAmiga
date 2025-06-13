@@ -478,17 +478,20 @@ Console::parse(const RetroShellCmd &cmd, const Arguments &args)
 {
     std::map<string,string> map;
 
-    // Sort input tokens by type
     std::vector<string> flags;
     std::vector<string> keyVal;
     std::vector<string> std;
 
-    auto isFlag = [](const string &input) { return input[0] == '-'; };
-    auto isKeyVal = [](const string &input) { return input.find('=') != std::string::npos; };
+    // Sort input tokens by type
+    for (auto &token : args) {
 
-    for (auto &it : args) {
-
-        isFlag(it) ? flags.push_back(it) : isKeyVal(it) ? keyVal.push_back(it) : std.push_back(it);
+        if (token[0] == '-') {
+            for (usize i = 1; i < token.size(); i++) flags.push_back(string("-") + token[i]);
+        } else if (token.find('=') != std::string::npos) {
+            keyVal.push_back(token);
+        } else {
+            std.push_back(token);
+        }
     }
 
     // Iterate over all argument descriptors
@@ -498,10 +501,16 @@ Console::parse(const RetroShellCmd &cmd, const Arguments &args)
         auto nameStr = descr.nameStr();
 
         // Does the descriptor describe a flag?
-        if (descr.isFlag()) { //}        { parseFlag(map, descr, flags); continue; }
+        if (descr.isFlag()) {
 
-            for (auto &arg : flags) {
-                if (keyStr == arg) { map[nameStr] = "true"; break; }
+            for (auto it = flags.begin(); it != flags.end(); it++) {
+
+                if (keyStr == *it) {
+
+                    map[nameStr] = "true";
+                    flags.erase(it);
+                    break;
+                }
             }
             if (descr.isRequired()){
                 throw util::ParseError("Missing flag " + keyStr);
@@ -510,28 +519,37 @@ Console::parse(const RetroShellCmd &cmd, const Arguments &args)
         }
 
         // Does the descriptor describe a key-value pair?
-        if (descr.isKeyValuePair()) { // parseKeyVal(map, descr, keyVal); continue; }
+        if (descr.isKeyValuePair()) {
 
-            for (auto &arg : args) {
+            for (auto it = keyVal.begin(); it != keyVal.end(); it++) {
 
-                auto pos = arg.find('=');
-                auto key = arg.substr(0, pos);
-                auto val = arg.substr(pos + 1);
+                auto pos = it->find('=');
+                auto key = it->substr(0, pos);
+                auto val = it->substr(pos + 1);
 
-                if (keyStr == key) { map[nameStr] = val; break; }
+                if (keyStr == key) {
+
+                    map[nameStr] = val;
+                    keyVal.erase(it);
+                    break;
+                }
             }
-            if (descr.isRequired()){
-                throw util::ParseError("Missing key-value pair " + keyStr + "=<value>\n");
+            if (descr.isRequired()) {
+                throw util::ParseError("Missing key-value pair " + descr.keyValueStr());
             }
             continue;
         }
 
         // Does the descriptor describe a standard argument?
-        if (descr.isStdArg()) { // parseStd(map, descr, std); continue; }
+        if (descr.isStdArg()) {
 
-            if (!args.empty()) { map[nameStr] = args.front(); break; }
+            if (!std.empty()) {
 
-            if (descr.isRequired()) {
+                map[nameStr] = std.front();
+                std.erase(std.begin());
+
+            } else if (descr.isRequired()) {
+
                 throw TooFewArgumentsError(cmd.fullName);
             }
             continue;
@@ -540,55 +558,14 @@ Console::parse(const RetroShellCmd &cmd, const Arguments &args)
         fatalError;
     }
 
+    // Check for invalid or extra arguments
+    if (!flags.empty()) { throw UnknownFlagError(flags.front()); }
+    if (!keyVal.empty()) { throw UnknownKeyValueError(keyVal.front()); }
+    if (!std.empty()) { throw TooManyArgumentsError(cmd.fullName); }
+
+
     return map;
 }
-
-/*
-void
-Console::parseFlag(std::map<string,string> &map, const RSArgumentDescriptor &descr, const Arguments &args)
-{
-    auto keyStr = descr.keyStr();
-
-    for (auto &arg : args) {
-        // string name = arg.substr(1);
-        if (keyStr == arg) { map[descr.nameStr()] = "1"; return; }
-    }
-
-    if (descr.isRequired()){
-        throw util::ParseError("Missing flag " + keyStr);
-    }
-}
-
-void
-Console::parseKeyVal(std::map<string,string> &map, const RSArgumentDescriptor &descr, const Arguments &args)
-{
-
-    auto keyStr = descr.keyStr();
-
-    for (auto &arg : args) {
-
-        auto pos = arg.find('=');
-        auto key = arg.substr(0, pos);
-        auto val = arg.substr(pos + 1);
-
-        if (keyStr == key) { map[descr.nameStr()] = val; return; }
-    }
-
-    if (descr.isRequired()){
-        throw util::ParseError("Missing key-value pair " + keyStr + "=<value>\n");
-    }
-}
-
-void
-Console::parseStd(std::map<string,string> &map, const RSArgumentDescriptor &descr, const Arguments &args)
-{
-    if (!args.empty()) { map[descr.nameStr()] = args.front(); return; }
-
-    if (descr.isRequired()) {
-        throw TooFewArgumentsError("???");
-    }
-}
-*/
 
 bool
 Console::isBool(const string &argv)
@@ -884,6 +861,20 @@ Console::describe(const std::exception &e, isize line, const string &cmd)
     if (auto err = dynamic_cast<const TooManyArgumentsError *>(&e)) {
 
         *this << err->what() << ": Too many arguments.";
+        *this << '\n';
+        return;
+    }
+
+    if (auto err = dynamic_cast<const UnknownFlagError *>(&e)) {
+
+        *this << err->what() << " is not a valid flag.";
+        *this << '\n';
+        return;
+    }
+
+    if (auto err = dynamic_cast<const UnknownKeyValueError *>(&e)) {
+
+        *this << err->what() << " is not a valid key-value pair.";
         *this << '\n';
         return;
     }

@@ -152,7 +152,8 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .argx   = {
             { .name = { "path", "Directory" } },
             { .name = { "n", "Search file by name" }, .flags = arg::flag },
-            { .name = { "d", "Search file by date" }, .flags = arg::flag }},
+            { .name = { "d", "Search file by date" }, .flags = arg::flag }
+        },
         .help   = { "Search for a directory item." },
         .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
@@ -167,7 +168,8 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .tokens = { "cd" },
         .extra  = { arg::path },
         .argx   = {
-            { .name = { "path", "New working directory" }, .flags = arg::opt }},
+            { .name = { "path", "New working directory" }, .flags = arg::opt }
+        },
         .help   = { "Change the working directory." },
         .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
@@ -233,6 +235,21 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
             buffer.memDump(ss);
 
             *this << ss;
+        }
+    });
+
+    root.add({
+
+        .tokens = { "test" },
+        .argx   = {
+            { .name = { "path", "File" } },
+            { .name = { "dir", "Another param" } },
+            { .name = { "name", "Yet another param" }, .flags = arg::opt }
+        },
+        .help   = { "Dump the binary contents of a file." },
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+
+            *this << "Holla, die Waldfee";
         }
     });
 
