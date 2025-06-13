@@ -523,38 +523,35 @@ FileSystem::ls(std::ostream &os, const FSPath &path) const
 }
 
 void
-FileSystem::list(std::ostream &os, const FSPath &path) const
+FileSystem::list(std::ostream &os, const FSPath &path, const FSOpt &opt) const
 {
-    isize numDirs = 0;
-    isize numFiles = 0;
+    // Print header
+    os << "Directory " << path.name() << ":" << std::endl;
+
+    // Remove recursive flag from options
+    FSOpt nropt = opt; nropt.recursive = false;
 
     // Collect all items inside the specified directory
-    std::vector<FSPath> items = path.collect();
+    std::vector<FSPath> items = path.collect(nropt);
 
     // List all items
-    for (auto const& item : items) {
+    for (auto const& item : items) { os << opt.formatter(item) << std::endl; }
 
-        os << std::left << std::setw(25) << item.last();
+    // List all subdirectories if requested
+    if (opt.recursive) {
 
-        if (item.isDirectory()) {
+        for (auto const& item : items) {
 
-            os << std::right << std::setw(7) << "Dir";
-            numDirs++;
+            if (!item.isDirectory()) continue;
 
-        } else {
-
-            os << std::right << std::setw(7) << std::to_string(item.ptr()->getFileSize());
-            numFiles++;
+            os << std::endl;
+            if (item.isDirectory()) list(os, item, opt);
         }
-        os << " " << item.getProtectionBitString();
-        os << " " << item.ptr()->getCreationDate().str();
-        os << std::endl;
     }
-    os << numFiles << " files - " << numDirs << " directories " << std::endl;
 }
 
 void
-FileSystem::collect(const FSPath &path, std::vector<Block> &result, bool recursive) const
+FileSystem::collect(const FSPath &path, std::vector<Block> &result, const FSOpt &opt) const
 {
     std::stack<Block> remainingItems;
     std::set<Block> visited;
@@ -570,7 +567,7 @@ FileSystem::collect(const FSPath &path, std::vector<Block> &result, bool recursi
         result.push_back(item);
 
         // Add subdirectory items to the queue
-        if (userDirBlockPtr(item) && recursive) {
+        if (userDirBlockPtr(item) && opt.recursive) {
             collectHashedRefs(item, remainingItems, visited);
         }
     }

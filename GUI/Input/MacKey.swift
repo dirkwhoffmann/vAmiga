@@ -186,11 +186,11 @@ struct MacKey: Codable {
     
     // Modifier flags at the time the key was pressed
     var carbonFlags: Int = 0
-
+    
     init(keyCode: Int, flags: NSEvent.ModifierFlags = []) {
     
         self.keyCode = keyCode
-        
+
         if flags.contains(.shift) { carbonFlags |= shiftKey }
         if flags.contains(.control) { carbonFlags |= controlKey }
         if flags.contains(.option) { carbonFlags |= optionKey }

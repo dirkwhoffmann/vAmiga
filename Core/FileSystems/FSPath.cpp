@@ -433,16 +433,21 @@ FSPath::parent()
 }
 
 std::vector<FSPath>
-FSPath::collect(bool recursive, bool sort) const
+FSPath::collect(const FSOpt &opt) const
 {
     // Collect all blocks
-    std::vector<Block> blocks; fs.collect(*this, blocks, recursive);
+    std::vector<Block> blocks; fs.collect(*this, blocks, opt);
 
-    // Convert to paths
-    std::vector<FSPath> paths; for (auto &it : blocks) paths.push_back(FSPath(fs, it));
+    // Convert to paths and filter out unwanted items
+    std::vector<FSPath> paths; for (auto &it : blocks) {
+
+        auto path = FSPath(fs, it);
+        if (opt.filter && !opt.filter(path)) continue;
+        paths.push_back(FSPath(fs, it));
+    }
 
     // Sort items
-    if (sort) {
+    if (opt.sort) {
 
         std::sort(paths.begin(), paths.end(), [&](const FSPath &a, const FSPath &b) {
 

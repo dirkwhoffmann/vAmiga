@@ -23,6 +23,8 @@ enum class RetroShellKey
     DOWN,
     LEFT,
     RIGHT,
+    PAGE_UP,
+    PAGE_DOWN,
     DEL,
     CUT,
     BACKSPACE,
@@ -46,6 +48,8 @@ struct RetroShellKeyEnum : Reflection<RetroShellKeyEnum, RetroShellKey>
             case RetroShellKey::DOWN:        return "DOWN";
             case RetroShellKey::LEFT:        return "LEFT";
             case RetroShellKey::RIGHT:       return "RIGHT";
+            case RetroShellKey::PAGE_UP:     return "PAGE_UP";
+            case RetroShellKey::PAGE_DOWN:   return "PAGE_DOWN";
             case RetroShellKey::DEL:         return "DEL";
             case RetroShellKey::CUT:         return "CUT";
             case RetroShellKey::BACKSPACE:   return "BACKSPACE";

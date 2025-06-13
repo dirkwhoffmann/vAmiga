@@ -13,7 +13,18 @@
 
 namespace vamiga {
 
+struct FSPath;
 typedef u32 Block;
+typedef std::function<bool(const FSPath &)> FSPathFilter;
+typedef std::function<string(const FSPath &)> FSPathFormatter;
+
+struct FSOpt
+{
+    bool recursive;
+    bool sort;
+    FSPathFilter filter;
+    FSPathFormatter formatter;
+};
 
 enum class FSVolumeType : long
 {

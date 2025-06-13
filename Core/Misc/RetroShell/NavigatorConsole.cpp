@@ -120,13 +120,17 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "dir" },
-        // .extra  = { arg::path },
-        .argx   = { { .name = { "path", "Path to directory" } } },
+        .argx   = { { .name = { "path", "Path to directory" }, .flags = arg::opt } },
         .help   = { "Display a sorted list of the files in a directory." },
         .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             std::stringstream ss;
-            argv.empty() ? fs.ls(ss) : fs.ls(ss, fs.pwd().seek(argv[0]));
+
+            if (auto path = args.find("path"); path != args.end()) {
+                fs.ls(ss, fs.pwd().seek(path->second));
+            } else {
+                fs.ls(ss);
+            }
             *this << ss;
         }
     });
@@ -135,12 +139,59 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
         .tokens = { "list" },
         .extra  = { arg::path },
-        .argx   = { { .name = { "path", "Path to directory" } } },
+        .argx   = {
+            { .name = { "path", "Path to directory" }, .flags = arg::opt },
+            { .name = { "d", "List directories only" }, .flags = arg::flag },
+            { .name = { "f", "List files only" }, .flags = arg::flag },
+            { .name = { "r", "Traverse subdirectories" }, .flags = arg::flag },
+            { .name = { "k", "Display keys (start blocks)" }, .flags = arg::flag },
+            { .name = { "s", "Sort output" }, .flags = arg::flag } },
         .help   = { "List specified information about directories and files." },
         .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
+            auto path = fs.pwd();
+            if (auto arg = args.find("path"); arg != args.end()) {
+                path = path.seek(arg->second);
+            }
+            auto d = args.contains("d");
+            auto f = args.contains("f");
+            auto r = args.contains("r");
+            auto k = args.contains("k");
+            auto s = args.contains("s");
+
+            FSOpt opt;
+
+            if (s) opt.sort = true;
+            if (r) opt.recursive = true;
+
+            opt.filter = [&](const FSPath &item) {
+
+                return (!d || item.isDirectory()) && (!f || item.isFile());
+            };
+
+            opt.formatter = [&](const FSPath &item) {
+
+                std::stringstream ss;
+                ss << std::left << std::setw(25) << item.last();
+
+                if (k) { ss << std::right << std::setw(9) << ("[" + std::to_string(item.ref) + "] "); }
+
+                if (item.isDirectory()) {
+
+                    ss << std::right << std::setw(7) << "Dir";
+
+                } else {
+
+                    ss << std::right << std::setw(7) << std::to_string(item.ptr()->getFileSize());
+                }
+                ss << " " << item.getProtectionBitString();
+                ss << " " << item.ptr()->getCreationDate().str();
+
+                return ss.str();
+            };
+
             std::stringstream ss;
-            argv.empty() ? fs.list(ss) : fs.list(ss, fs.pwd().seek(argv[0]));
+            fs.list(ss, path, opt);
             *this << ss;
         }
     });

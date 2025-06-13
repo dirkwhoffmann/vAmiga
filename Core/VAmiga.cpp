@@ -1746,15 +1746,6 @@ RetroShellAPI::text()
     return retroShell->text();
 }
 
-/*
-isize
-RetroShellAPI::cursorRel()
-{
-    VAMIGA_PUBLIC_SUSPEND
-    return retroShell->cursorRel();
-}
-*/
-
 void
 RetroShellAPI::press(RetroShellKey key, bool shift)
 {

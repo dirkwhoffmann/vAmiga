@@ -249,6 +249,11 @@ Console::press(RetroShellKey key, bool shift)
             if (cursor < (isize)input.size()) cursor++;
             break;
 
+        case RetroShellKey::PAGE_UP:
+        case RetroShellKey::PAGE_DOWN:
+
+            break;
+
         case RetroShellKey::DEL:
 
             if (cursor < inputLength()) {
@@ -483,7 +488,10 @@ Console::parse(const RetroShellCmd &cmd, const Arguments &args)
     std::vector<string> std;
 
     // Sort input tokens by type
-    for (auto &token : args) {
+    for (usize i = 0; i < args.size(); i++) {
+
+        auto token = args[i];
+        map[std::to_string(i)] = token;
 
         if (token[0] == '-') {
             for (usize i = 1; i < token.size(); i++) flags.push_back(string("-") + token[i]);

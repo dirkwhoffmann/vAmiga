@@ -313,12 +313,15 @@ RetroShell::press(RetroShellKey key, bool shift)
 
         switch(key) {
 
-            case RetroShellKey::LEFT:
+            case RetroShellKey::UP:
+            case RetroShellKey::PAGE_UP:
 
                 prevConsole();
                 return;
 
-            case RetroShellKey::RIGHT:
+            case RetroShellKey::DOWN:
+            case RetroShellKey::PAGE_DOWN:
+            case RetroShellKey::TAB:
 
                 nextConsole();
                 return;

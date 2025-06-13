@@ -228,8 +228,8 @@ public:
     void ls(std::ostream &os, const FSPath &path) const;
     void ls(std::ostream &os) const { return ls(os, pwd()); }
 
-    void list(std::ostream &os, const FSPath &path) const;
-    void list(std::ostream &os) const { return list(os, pwd()); }
+    void list(std::ostream &os, const FSPath &path, const FSOpt &opt = {}) const;
+    void list(std::ostream &os, const FSOpt &opt = {}) const { return list(os, pwd(), opt); }
 
     // Changes the working directory
     void cd(const FSName &name);
@@ -286,7 +286,8 @@ public:
 public:
 
     // Returns a collection of nodes for all items in a directory
-    void collect(const FSPath &path, std::vector<Block> &list, bool recursive = false) const throws;
+    // void collect(const FSPath &path, std::vector<Block> &result, bool recursive = false) const throws;
+    void collect(const FSPath &path, std::vector<Block> &result, const FSOpt &opt = {}) const throws;
 
 private:
     

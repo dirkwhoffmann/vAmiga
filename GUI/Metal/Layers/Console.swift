@@ -130,19 +130,21 @@ class Console: Layer {
 
         switch macKey.keyCode {
 
-        case kVK_ANSI_A where ctrl: emu.retroShell.pressSpecialKey(.HOME)
-        case kVK_ANSI_E where ctrl: emu.retroShell.pressSpecialKey(.END)
-        case kVK_ANSI_K where ctrl: emu.retroShell.pressSpecialKey(.CUT)
+        case kVK_ANSI_A where ctrl: emu.retroShell.pressSpecialKey(.HOME, shift: shift)
+        case kVK_ANSI_E where ctrl: emu.retroShell.pressSpecialKey(.END, shift: shift)
+        case kVK_ANSI_K where ctrl: emu.retroShell.pressSpecialKey(.CUT, shift: shift)
         case kVK_UpArrow: emu.retroShell.pressSpecialKey(.UP, shift: shift)
         case kVK_DownArrow: emu.retroShell.pressSpecialKey(.DOWN, shift: shift)
         case kVK_LeftArrow: emu.retroShell.pressSpecialKey(.LEFT, shift: shift)
         case kVK_RightArrow: emu.retroShell.pressSpecialKey(.RIGHT, shift: shift)
-        case kVK_Home: emu.retroShell.pressSpecialKey(.HOME)
-        case kVK_End: emu.retroShell.pressSpecialKey(.END)
-        case kVK_Delete: emu.retroShell.pressSpecialKey(.BACKSPACE)
-        case kVK_ForwardDelete: emu.retroShell.pressSpecialKey(.DEL)
+        case kVK_PageUp: emu.retroShell.pressSpecialKey(.PAGE_UP, shift: shift)
+        case kVK_PageDown: emu.retroShell.pressSpecialKey(.PAGE_DOWN, shift: shift)
+        case kVK_Home: emu.retroShell.pressSpecialKey(.HOME, shift: shift)
+        case kVK_End: emu.retroShell.pressSpecialKey(.END, shift: shift)
+        case kVK_Delete: emu.retroShell.pressSpecialKey(.BACKSPACE, shift: shift)
+        case kVK_ForwardDelete: emu.retroShell.pressSpecialKey(.DEL, shift: shift)
         case kVK_Return: emu.retroShell.pressSpecialKey(.RETURN, shift: shift)
-        case kVK_Tab: emu.retroShell.pressSpecialKey(.TAB)
+        case kVK_Tab: emu.retroShell.pressSpecialKey(.TAB, shift: shift)
         case kVK_Escape: close()
         
         default:

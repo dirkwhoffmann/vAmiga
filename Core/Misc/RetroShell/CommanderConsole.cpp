@@ -45,8 +45,8 @@ CommanderConsole::printHelp()
 {
     *this << vspace{0};
 
-    storage << "Type 'help' or press 'TAB' twice for help.\n";
-    storage << "Press 'SHIFT+LEFT' or 'SHIFT+RIGHT' to switch to another console.";
+    storage << "Type 'help' or press 'Tab' twice for help.\n";
+    storage << "Press 'PgUp', 'PgDown', or 'Shift+Tab' to switch consoles.";
 
     remoteManager.rshServer << "Type 'help' for help.\n";
 
@@ -56,17 +56,6 @@ CommanderConsole::printHelp()
 void
 CommanderConsole::pressReturn(bool shift)
 {
-    /*
-    if (!shift && input.empty()) {
-
-        retroShell.asyncExec("helpstring");
-        // printHelp();
-
-    } else {
-        
-        Console::pressReturn(shift);
-    }
-    */
     Console::pressReturn(shift);
 }
 
