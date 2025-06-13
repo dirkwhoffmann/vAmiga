@@ -505,20 +505,28 @@ FileSystem::cd(const string &path)
 void
 FileSystem::ls(std::ostream &os, const FSPath &path) const
 {
-    isize col = 0;
-
     // Collect all items inside the specified directory
-    std::vector<FSPath> items = path.collect();
+    std::vector<FSPath> items = path.collect( { .sort = true } );
 
-    // List all items
+    // Split into directory and files
+    std::vector<FSName> directories, files;
     for (auto const& item : items) {
 
-        if (item.isDirectory()) {
-            os << item.last() << " (dir)" << std::endl;
-        } else {
-            os << std::left << std::setw(35) << item.last();
-            if (col++ % 2) { os << std::endl; }
-        }
+        if (item.isDirectory()) directories.push_back(item.last());
+        if (item.isFile()) files.push_back(item.last());
+    }
+
+    // List all directories
+    for (usize i = 0; i < directories.size(); i++) {
+
+        os << directories[i] << " (dir)" << std::endl;
+    }
+
+    // List all files
+    for (usize i = 0; i < files.size(); i += 2) {
+
+        os << std::left << std::setw(35) << files[i];
+        os << std::left << std::setw(35) << (i + 1 < files.size() ? files[i + 1] : "") << std::endl;
     }
 }
 

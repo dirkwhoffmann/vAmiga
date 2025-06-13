@@ -124,13 +124,13 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .help   = { "Display a sorted list of the files in a directory." },
         .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
-            std::stringstream ss;
+            auto path = fs.pwd();
 
-            if (auto path = args.find("path"); path != args.end()) {
-                fs.ls(ss, fs.pwd().seek(path->second));
-            } else {
-                fs.ls(ss);
+            if (auto arg = args.find("path"); arg != args.end()) {
+                path = path.seek(arg->second);
             }
+            std::stringstream ss;
+            fs.ls(ss, path);
             *this << ss;
         }
     });
