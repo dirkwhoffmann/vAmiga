@@ -96,9 +96,6 @@ protected:
     // Input line
     string input;
 
-    // Parsed user input (TODO: pass directly into command handlers)
-    std::map<string,string> _argv;
-
     // Cursor position
     isize cursor {};
 

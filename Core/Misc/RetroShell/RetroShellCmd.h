@@ -18,6 +18,7 @@ namespace vamiga {
 class RetroShell;
 
 typedef std::vector<string> Arguments;
+typedef std::map<string,string> ParsedArguments;
 
 namespace arg {
 
@@ -88,7 +89,7 @@ struct RetroShellCmdDescriptor {
     const std::vector<string> &extra = {}; // DEPRECATED
     const std::vector<RSArgumentDescriptor> &argx = {}; // TODO: Rename to args
     const std::vector<string> help = {};
-    std::function<void (Arguments&, const std::vector<isize> &)> func = nullptr;
+    std::function<void (Arguments&, const ParsedArguments &args, const std::vector<isize> &)> func = nullptr;
     const std::vector<isize> &values = {};
 };
     
@@ -134,7 +135,7 @@ struct RetroShellCmd {
     std::vector<RetroShellCmd> subCommands;
 
     // Command handler
-    std::function<void (Arguments&, const std::vector<isize> &)> callback = nullptr;
+    std::function<void (Arguments&, const ParsedArguments &args, const std::vector<isize> &)> callback = nullptr;
 
     // Additional argument passed to the command handler
     std::vector<isize> param;

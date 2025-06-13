@@ -91,7 +91,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "goto" },
         .extra  = { arg::value },
         .help   = { "Goto address", "g[oto]" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             argv.empty() ? emulator.run() : cpu.jump(parseAddr(argv[0]));
         }
@@ -103,7 +103,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "step" },
         .help   = { "Step into the next instruction", "s[tep]" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             emulator.stepInto();
         }
@@ -115,7 +115,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "next" },
         .help   = { "Step over the next instruction", "n[next]" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             emulator.stepOver();
         }
@@ -127,7 +127,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "eol" },
         .help   = { "Complete the current line" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dmaDebugger.eolTrap = true;
             emulator.run();
@@ -138,7 +138,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "eof" },
         .help   = { "Complete the current frame" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dmaDebugger.eofTrap = true;
             emulator.run();
@@ -159,7 +159,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "break", "" },
         .help   = { "List all breakpoints" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(amiga.cpu, Category::Breakpoints);
         }
@@ -171,7 +171,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .args   = { arg::address },
         .extra  = { arg::ignores },
         .help   = { "Set a breakpoint" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto addr = parseAddr(argv[0]);
             if (IS_ODD(addr)) throw AppError(Fault::ADDR_UNALIGNED);
@@ -184,7 +184,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "break", "delete" },
         .args   = { arg::nr },
         .help   = { "Delete breakpoints" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             cpu.breakpoints.remove(parseNum(argv[0]));
         }
@@ -195,7 +195,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "break", "toggle" },
         .args   = { arg::nr },
         .help   = { "Enable or disable breakpoints" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             cpu.breakpoints.toggle(parseNum(argv[0]));
         }
@@ -215,7 +215,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "watch", "" },
         .help   = { "Lists all watchpoints" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(amiga.cpu, Category::Watchpoints);
         }
@@ -227,7 +227,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .args   = { arg::address },
         .extra  = { arg::ignores },
         .help   = { "Set a watchpoint at the specified address" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto addr = parseAddr(argv[0]);
             cpu.watchpoints.setAt(addr, parseNum(argv, 1, 0));
@@ -239,7 +239,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "watch", "delete" },
         .args   = { arg::address },
         .help   = { "Delete a watchpoint" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             cpu.watchpoints.remove(parseNum(argv[0]));
         }
@@ -250,7 +250,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "watch", "toggle" },
         .args   = { arg::address },
         .help   = { "Enable or disable a watchpoint" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             cpu.watchpoints.toggle(parseNum(argv[0]));
         }
@@ -270,7 +270,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "catch", "" },
         .help   = { "List all catchpoints" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(amiga.cpu, Category::Catchpoints);
         }
@@ -282,7 +282,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .args   = { arg::value },
         .extra  = { arg::ignores },
         .help   = { "Catch an exception vector" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto nr = parseNum(argv[0]);
             if (nr < 0 || nr > 255) throw AppError(Fault::OPT_INV_ARG, "0...255");
@@ -296,7 +296,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .args   = { arg::value },
         .extra  = { arg::ignores },
         .help   = { "Catch an interrupt" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto nr = parseNum(argv[0]);
             if (nr < 1 || nr > 7) throw AppError(Fault::OPT_INV_ARG, "1...7");
@@ -310,7 +310,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .args   = { arg::value },
         .extra  = { arg::ignores },
         .help   = { "Catch a trap instruction" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto nr = parseNum(argv[0]);
             if (nr < 0 || nr > 15) throw AppError(Fault::OPT_INV_ARG, "0...15");
@@ -323,7 +323,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "catch", "delete" },
         .args   = { arg::value },
         .help   = { "Delete a catchpoint" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             cpu.catchpoints.remove(parseNum(argv[0]));
         }
@@ -334,7 +334,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "catch", "toggle" },
         .args   = { arg::value },
         .help   = { "Enable or disable a catchpoint" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             cpu.catchpoints.toggle(parseNum(argv[0]));
         }
@@ -355,7 +355,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "cbreak", "" },
         .help   = { "List all breakpoints" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(copper.debugger, Category::Breakpoints);
         }
@@ -367,7 +367,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .args   = { arg::value },
         .extra  = { arg::ignores },
         .help   = { "Set a breakpoint at the specified address" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto addr = parseAddr(argv[0]);
             if (IS_ODD(addr)) throw AppError(Fault::ADDR_UNALIGNED);
@@ -380,7 +380,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "cbreak", "delete" },
         .args   = { arg::value },
         .help   = { "Delete a breakpoint" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             copper.debugger.breakpoints.remove(parseNum(argv[0]));
         }
@@ -391,7 +391,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "cbreak", "toggle" },
         .args   = { arg::value },
         .help   = { "Enable or disable a breakpoint" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             copper.debugger.breakpoints.toggle(parseNum(argv[0]));
         }
@@ -412,7 +412,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "cwatch", "" },
         .help   = { "List all watchpoints" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(copper.debugger, Category::Watchpoints);
         }
@@ -424,7 +424,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .args   = { arg::value },
         .extra  = { arg::ignores },
         .help   = { "Set a watchpoint at the specified address" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto addr = parseAddr(argv[0]);
             if (IS_ODD(addr)) throw AppError(Fault::ADDR_UNALIGNED);
@@ -437,7 +437,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "cwatch", "delete" },
         .args   = { arg::value },
         .help   = { "Delete a watchpoint" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             copper.debugger.watchpoints.remove(parseNum(argv[0]));
         }
@@ -448,7 +448,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "cwatch", "toggle" },
         .args   = { arg::value },
         .help   = { "Enable or disable a watchpoint" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             copper.debugger.watchpoints.toggle(parseNum(argv[0]));
         }
@@ -469,7 +469,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "btrap", "" },
         .help   = { "List all beamtraps" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(agnus.dmaDebugger, Category::Beamtraps);
         }
@@ -481,7 +481,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .args   = { arg::value, arg::value },
         .extra  = { arg::ignores },
         .help   = { "Set a beamtrap at the specified coordinate" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto v = parseNum(argv[0]);
             auto h = parseNum(argv[1]);
@@ -494,7 +494,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "btrap", "delete"},
         .args   = { arg::value },
         .help   = { "Delete a beamtrap" },
-        .func    = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func    = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             agnus.dmaDebugger.beamtraps.remove(parseNum(argv[0]));
         }
@@ -505,7 +505,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "btrap", "toggle" },
         .args   = { arg::value },
         .help   = { "Enable or disable a beamtrap" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             agnus.dmaDebugger.beamtraps.toggle(parseNum(argv[0]));
         }
@@ -523,7 +523,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "d" },
         .extra  = { arg::address },
         .help   = { "Disassemble instructions" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             cpu.disassembleRange(ss, parseAddr(argv[0], cpu.getPC0()), 16);
@@ -536,7 +536,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "a" },
         .extra  = { arg::address },
         .help   = { "Dump memory in ASCII" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             if (argv.size() > 0) { current = parseAddr(argv[0]); }
 
@@ -551,7 +551,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = {"m"},
         .extra  = { arg::address },
         .help   = { "Dump memory", "m[.b|.w|.l]" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                         
             if (argv.size() > 0) { current = parseAddr(argv[0]); }
 
@@ -571,7 +571,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .args   = { arg::value },
         .extra  = { "{ " + arg::address + " | " + RegEnum::argList() + " }" },
         .help   = { "Write into a register or memory", "w[.b|.w|.l]" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             u32 addr = current;
             
@@ -604,7 +604,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "c" },
         .args   = { arg::src, arg::dst, arg::count },
         .help   = { "Copy a chunk of memory", "c[.b|.w|.l]" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto src = parseNum(argv[0]);
             auto dst = parseNum(argv[1]);
@@ -633,7 +633,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .args   = { arg::sequence },
         .extra  = { arg::address },
         .help   = { "Find a sequence in memory", "f[.b|.w|.l]" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto pattern = parseSeq(argv[0]);
             auto addr = u32(parseNum(argv, 1, current));
@@ -665,7 +665,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .args   = { arg::address, arg::count },
         .extra  = { arg::value },
         .help   = { "Erase memory", "e[.b|.w|.l]" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto addr = parseAddr(argv[0]);
             auto count = parseNum(argv[1]);
@@ -697,7 +697,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "amiga", "" },
         .help   = { "Inspects the internal state" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(amiga, Category::State );
         }
@@ -713,7 +713,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "memory", "" },
         .help   = { "Inspects the internal state" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(mem, Category::State );
         }
@@ -723,7 +723,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "memory", "bankmap" },
         .help   = { "Dumps the memory bank map" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(mem, Category::BankMap);
         }
@@ -739,7 +739,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "cpu", "" },
         .help   = { "Inspect the internal state" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(cpu, Category::State );
         }
@@ -758,7 +758,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
             
             .tokens = { "?", cia, "" },
             .help   = { "Inspect the internal state" },
-            .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 if (values[0] == 0) {
                     dump(ciaa, Category::State );
@@ -772,7 +772,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
             
             .tokens = { "?", cia, "tod" },
             .help   = { "Display the state of the 24-bit counter" },
-            .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 if (values[0] == 0) {
                     dump(ciaa.tod, Category::State );
@@ -793,7 +793,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "agnus", "" },
         .help   = { "Inspect the internal state" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(agnus, Category::State );
         }
@@ -803,7 +803,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "agnus", "beam" },
         .help   = { "Display the current beam position" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(amiga.agnus, Category::Beam);
         }
@@ -813,7 +813,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "agnus", "dma" },
         .help   = { "Print all scheduled DMA events" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(amiga.agnus, Category::Dma);
         }
@@ -823,7 +823,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "agnus", "sequencer" },
         .help   = { "Inspect the sequencer logic" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(amiga.agnus.sequencer, { Category::State, Category::Signals } );
         }
@@ -833,7 +833,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "agnus", "events" },
         .help   = { "Inspect the event scheduler" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(amiga.agnus, Category::Events);
         }
@@ -849,7 +849,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "blitter", "" },
         .help   = { "Inspect the internal state" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(blitter, Category::State );
         }
@@ -865,7 +865,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "copper", "" },
         .help   = { "Inspect the internal state" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(copper, Category::State );
         }
@@ -876,7 +876,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "?", "copper", "list" },
         .args   = { arg::value },
         .help   = { "Print the Copper list" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto nr = parseNum(argv[0]);
             
@@ -923,7 +923,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "paula", "audio", "" },
         .help   = { "Inspect the internal state" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(audioPort, Category::State );
         }
@@ -933,7 +933,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "paula", "audio", "filter" },
         .help   = { "Inspect the internal filter state" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(audioPort.filter, Category::State );
         }
@@ -943,7 +943,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "paula", "dc", "" },
         .help   = { "Inspect the internal state" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(diskController, Category::State );
         }
@@ -953,7 +953,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "paula", "uart", "" },
         .help   = { "Inspect the internal state" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(uart, Category::State);
         }
@@ -969,7 +969,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "denise", "" },
         .help   = { "Inspect the internal state" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(denise, Category::State );
         }
@@ -985,7 +985,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "rtc", "" },
         .help   = { "Inspect the internal state" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(rtc, Category::State );
         }
@@ -1001,7 +1001,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "zorro", "" },
         .help   = { "List all connected boards" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(zorro, Category::Slots);
         }
@@ -1012,7 +1012,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "?", "zorro", "board" },
         .args   = { arg::value },
         .help   = { "Inspect a specific Zorro board" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto nr = parseNum(argv[0]);
             
@@ -1043,7 +1043,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
             
             .tokens = { "?", "controlport", nr, "" },
             .help   = { "Inspect the internal state" },
-            .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 if (values[0] == 1) dump(controlPort1, Category::State);
                 if (values[0] == 2) dump(controlPort2, Category::State);
@@ -1062,7 +1062,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "serial", "" },
         .help   = { "Display the internal state" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(serialPort, Category::State );
         }
@@ -1080,7 +1080,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "keyboard", "" },
         .help   = { "Inspect the internal state" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(keyboard, Category::State );
         }
@@ -1106,7 +1106,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
             
             .tokens = { "?", "mouse", nr, "" },
             .help   = { "Inspect the internal state" },
-            .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 if (values[0] == 1) dump(controlPort1.mouse, Category::State );
                 if (values[0] == 2) dump(controlPort2.mouse, Category::State );
@@ -1134,7 +1134,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
             
             .tokens = { "?", "joystick", nr, "" },
             .help   = { "Inspect the internal state" },
-            .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 if (values[0] == 1) dump(controlPort1.joystick, Category::State);
                 if (values[0] == 2) dump(controlPort2.joystick, Category::State);
@@ -1156,7 +1156,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
             
             .tokens = { "?", df, "" },
             .help   = { "Inspect the internal state" },
-            .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 dump(*amiga.df[values[0]], Category::State );
             }, .values = {i}
@@ -1166,7 +1166,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
             
             .tokens = { "?", df, "disk" },
             .help   = { "Inspect the inserted disk" },
-            .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 dump(*amiga.df[values[0]], Category::Disk);
             }, .values = {i}
@@ -1187,7 +1187,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
             
             .tokens = { "?", hd, "" },
             .help   = { "Inspect the internal state" },
-            .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 dump(*amiga.hd[values[0]], Category::State );
             }, .values = {i}
@@ -1197,7 +1197,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
             
             .tokens = { "?", hd, "volumes" },
             .help   = { "Display summarized volume information" },
-            .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 dump(*amiga.df[values[0]], Category::Volumes);
             }, .values = {i}
@@ -1207,7 +1207,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
             
             .tokens = { "?", hd, "partitions" },
             .help   = { "Display information about all partitions" },
-            .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 dump(*amiga.hd[values[0]], Category::Partitions);
             }, .values = {i}
@@ -1226,7 +1226,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "thread", "" },
         .help   = { "Display information about the thread state" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(emulator, Category::State);
         }
@@ -1242,7 +1242,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "server", "" },
         .help   = { "Display a server status summary" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(remoteManager, Category::Status);
         }
@@ -1258,7 +1258,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "server", "serial", "" },
         .help   = { "Inspect the internal state" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(remoteManager.serServer, Category::State );
         }
@@ -1274,7 +1274,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "server", "rshell", "" },
         .help   = { "Inspect the internal state" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(remoteManager.rshServer, Category::State );
         }
@@ -1290,7 +1290,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "?", "server", "gdb", "" },
         .help   = { "Inspect the internal state" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(remoteManager.gdbServer, Category::State );
         }
@@ -1306,7 +1306,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "r", "cpu" },
         .help   = { "Motorola CPU" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(cpu, Category::Registers);
         }
@@ -1316,7 +1316,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "r", "ciaa" },
         .help   = { "Complex Interface Adapter A" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(ciaa, Category::Registers);
         }
@@ -1326,7 +1326,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "r", "ciab" },
         .help   = { "Complex Interface Adapter B" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(ciab, Category::Registers);
         }
@@ -1336,7 +1336,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "r", "agnus" },
         .help   = { "Custom Chipset" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(agnus, Category::Registers);
         }
@@ -1346,7 +1346,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "r", "blitter" },
         .help   = { "Coprocessor" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(blitter, Category::Registers);
         }
@@ -1356,7 +1356,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "r", "copper" },
         .help   = { "Coprocessor" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(copper, Category::Registers);
         }
@@ -1366,7 +1366,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "r", "paula" },
         .help   = { "Ports, Audio, Interrupts" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(paula, Category::Registers);
         }
@@ -1376,7 +1376,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "r", "denise" },
         .help   = { "Graphics" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(denise, Category::Registers);
         }
@@ -1386,7 +1386,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "r", "rtc" },
         .help   = { "Real-time clock" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(rtc, Category::Registers);
         }
@@ -1406,7 +1406,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
              
         .tokens = { "os", "info" },
         .help   = { "Display basic system information" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             osDebugger.dumpInfo(ss);
@@ -1417,7 +1417,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         .tokens = { "os", "execbase" },
         .help   = { "Display information about the ExecBase struct" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             osDebugger.dumpExecBase(ss);
@@ -1429,7 +1429,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "os", "interrupts" },
         .help   = { "List all interrupt handlers" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             osDebugger.dumpIntVectors(ss);
@@ -1442,7 +1442,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "os", "libraries" },
         .extra  = { "<library>" },
         .help   = { "List all libraries" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             isize num;
@@ -1464,7 +1464,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "os", "devices" },
         .extra  = { "<device>" },
         .help   = { "List all devices" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             isize num;
@@ -1486,7 +1486,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "os", "resources" },
         .extra  = { "<resource>" },
         .help   = { "List all resources" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             isize num;
@@ -1508,7 +1508,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "os", "tasks" },
         .extra  = { "<task>" },
         .help   = { "List all tasks" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             isize num;
@@ -1530,7 +1530,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "os", "processes" },
         .extra  = { "<process>" },
         .help   = { "List all processes" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             isize num;
@@ -1552,7 +1552,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "os", "catch" },
         .args   = { "<task>" },
         .help   = { "Pause emulation on task launch" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             diagBoard.catchTask(argv.back());
             retroShell << "Waiting for task '" << argv.back() << "' to start...\n";
@@ -1570,7 +1570,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "os", "set", "diagboard" },
         .args   = { arg::boolean },
         .help   = { "Attach or detach the debug expansion board" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             diagBoard.setOption(Opt::DIAG_BOARD, parseBool(argv[0]));
         }
@@ -1593,7 +1593,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "debug", "" },
         .help   = { "Display all debug variables" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(emulator, Category::Debug);
         }
@@ -1608,7 +1608,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
                 .tokens = { "debug", DebugFlagEnum::key(i) },
                 .args   = { arg::boolean },
                 .help   = { DebugFlagEnum::help(i) },
-                .func   = [] (Arguments& argv, const std::vector<isize> &values) {
+                .func   = [] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                     
                     Emulator::setDebugVariable(DebugFlag(values[0]), int(util::parseNum(argv[0])));
                     
@@ -1621,7 +1621,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
             .tokens = { "debug", "verbosity" },
             .args   = { arg::value },
             .help   = { "Set the verbosity level for generated debug output" },
-            .func   = [] (Arguments& argv, const std::vector<isize> &values) {
+            .func   = [] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 CoreObject::verbosity = isize(util::parseNum(argv[0]));
             }
@@ -1633,7 +1633,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = {"%"},
         .args   = { arg::value },
         .help   = { "Convert a value into different formats" },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             

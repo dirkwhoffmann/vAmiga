@@ -89,7 +89,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
             .tokens = { "import", "df" + std::to_string(i) },
             .help   = help,
-            .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
                 auto n = values[0];
 
@@ -108,7 +108,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
         .tokens = { "info" },
         .help   = { "Print a file system summary." },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             std::stringstream ss;
             ss << "Type   Size            Used    Free    Full  Name" << std::endl;
@@ -123,7 +123,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         // .extra  = { arg::path },
         .argx   = { { .name = { "path", "Path to directory" } } },
         .help   = { "Display a sorted list of the files in a directory." },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             std::stringstream ss;
             argv.empty() ? fs.ls(ss) : fs.ls(ss, fs.pwd().seek(argv[0]));
@@ -137,7 +137,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .extra  = { arg::path },
         .argx   = { { .name = { "path", "Path to directory" } } },
         .help   = { "List specified information about directories and files." },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             std::stringstream ss;
             argv.empty() ? fs.list(ss) : fs.list(ss, fs.pwd().seek(argv[0]));
@@ -154,7 +154,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
             { .name = { "n", "Search file by name" }, .flags = arg::flag },
             { .name = { "d", "Search file by date" }, .flags = arg::flag }},
         .help   = { "Search for a directory item." },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             std::stringstream ss;
             argv.empty() ? fs.list(ss) : fs.list(ss, fs.pwd().seek(argv[0]));
@@ -169,7 +169,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .argx   = {
             { .name = { "path", "New working directory" }, .flags = arg::opt }},
         .help   = { "Change the working directory." },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             argv.empty() ? fs.cd(fs.rootDir()) : fs.cd(argv[0]);
         }
@@ -186,7 +186,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
             { .name = { "path", "File path" }, }
         },
         .help   = { "Print the contents of a file." },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
                 auto file = fs.pwd().seekFile(argv[0]);
 
@@ -210,7 +210,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
             { .name = { "s", "Number of sectors" }, .value = arg::count, .flags = arg::keyval }
         },
         .help   = { "Create a new file system." },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             *this << "Holla, die Waldfee!\n";
         }
@@ -222,7 +222,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .extra  = { arg::path },
         .argx   = { { .name = { "path", "File" } } },
         .help   = { "Dump the binary contents of a file." },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             auto file = fs.pwd().seekFile(argv[0]);
 
@@ -248,7 +248,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .extra  = { arg::nr },
         .argx   = { { .name = { "nr", "Block number" } } },
         .help   = { "Dump the contents of a block." },
-        .func   = [this] (Arguments& argv, const std::vector<isize> &values) {
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             if (auto ptr = fs.blockPtr((Block)parseNum(argv[0])); ptr) {
 
