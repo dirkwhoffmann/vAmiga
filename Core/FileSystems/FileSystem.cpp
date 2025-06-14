@@ -212,18 +212,12 @@ FileSystem::_dump(Category category, std::ostream &os) const
         for (auto& it : bmExtBlocks) { os << dec(it) << " "; }
         os << std::endl;
     }
-    
+
     if (category == Category::Blocks) {
-        
-        for (isize i = 0; i < numBlocks(); i++)  {
-            
-            if (!isEmpty(Block(i))) {
-                
-                auto nr = blocks[i]->nr;
-                auto type = FSBlockTypeEnum::key(blocks[i]->type);
-                
-                msg("\nBlock %ld (%d): %s", i, nr, type);
-                blocks[i]->dump();
+
+        for (Block i = 0; i < numBlocks(); i++)  {
+            if (auto *ptr = blockPtr(i); ptr) {
+                if (ptr->type != FSBlockType::EMPTY_BLOCK) ptr->dump(os);
             }
         }
     }
@@ -533,27 +527,27 @@ FileSystem::ls(std::ostream &os, const FSPath &path) const
 void
 FileSystem::list(std::ostream &os, const FSPath &path, const FSOpt &opt) const
 {
-    // Print header
-    os << "Directory " << path.name() << ":" << std::endl;
+    // Collect all directories to list
+    std::vector<FSPath> directories = { path };
+    if (opt.recursive) collectDirs(path, directories, opt);
 
     // Remove recursive flag from options
-    FSOpt nropt = opt; nropt.recursive = false;
+    FSOpt optnr = opt; optnr.recursive = false;
 
-    // Collect all items inside the specified directory
-    std::vector<FSPath> items = path.collect(nropt);
+    for (usize i = 0; i < directories.size(); i++) {
 
-    // List all items
-    for (auto const& item : items) { os << opt.formatter(item) << std::endl; }
+        auto &dir = directories[i];
 
-    // List all subdirectories if requested
-    if (opt.recursive) {
+        // Collect all items inside the specified directory
+        std::vector<FSPath> items = dir.collect(optnr);
 
-        for (auto const& item : items) {
+        if (!items.empty()) {
 
-            if (!item.isDirectory()) continue;
+            // Print header
+            if (opt.recursive) os << std::endl << "Directory " << dir.name() << ":" << std::endl << std::endl;
 
-            os << std::endl;
-            if (item.isDirectory()) list(os, item, opt);
+            // List all items
+            for (auto const& item : items) os << opt.formatter(item) << std::endl;
         }
     }
 }
@@ -615,6 +609,53 @@ FileSystem::collect(const FSPath &path, std::vector<string> &result, const FSOpt
     }
 }
 
+void
+FileSystem::collectDirs(const FSPath &path, std::vector<FSPath> &result, const FSOpt &opt) const
+{
+    FSOpt newOpt = opt;
+
+    // Adjust the filter to only accept directories
+    newOpt.filter = [&](const FSPath &p) { return opt.filter(p) && p.isDirectory(); };
+
+    // Collect paths
+    collect(path, result, newOpt);
+}
+
+void
+FileSystem::collectDirs(const FSPath &path, std::vector<string> &result, const FSOpt &opt) const
+{
+    FSOpt newOpt = opt;
+
+    // Adjust the filter to only accept directories
+    newOpt.filter = [&](const FSPath &p) { return opt.filter(p) && p.isDirectory(); };
+
+    // Collect paths
+    collect(path, result, newOpt);
+}
+
+void
+FileSystem::collectFiles(const FSPath &path, std::vector<FSPath> &result, const FSOpt &opt) const
+{
+    FSOpt newOpt = opt;
+
+    // Adjust the filter to only accept files
+    newOpt.filter = [&](const FSPath &p) { return opt.filter(p) && p.isFile(); };
+
+    // Collect files
+    collect(path, result, newOpt);
+}
+
+void
+FileSystem::collectFiles(const FSPath &path, std::vector<string> &result, const FSOpt &opt) const
+{
+    FSOpt newOpt = opt;
+
+    // Adjust the filter to only accept files
+    newOpt.filter = [&](const FSPath &p) { return opt.filter(p) && p.isFile(); };
+
+    // Collect files
+    collect(path, result, newOpt);
+}
 
 void
 FileSystem::collectHashedRefs(Block nr,

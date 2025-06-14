@@ -660,31 +660,67 @@ FSBlock::updateChecksum()
 }
 
 void
-FSBlock::dump() const
+FSBlock::dump(std::ostream &os) const
 {
+    using namespace util;
+
+    auto printVector = [&](const std::vector<string> &values) {
+
+        usize max = 0;
+        for (const auto &v : values) max = std::max(max, v.size());
+        usize columns = 60 / (max + 1);
+
+        for (usize i = 0; i < values.size(); i++) {
+
+            if (i && i % columns == 0) os << std::endl << tab();
+            os << std::setfill(' ') << std::setw(int(max)) << values[i] << " ";
+        }
+        os << std::endl;
+    };
+
+    auto print = [&](isize count, std::function<isize(isize)> read) {
+
+        std::vector<string> values;
+        for (isize i = 0; i < count; i++) values.push_back(std::to_string(read(i)));
+        printVector(values);
+    };
+
+    os << tab("Block") << dec(nr) << std::endl;
+    os << tab("Type") << FSBlockTypeEnum::key(type) << std::endl;
+
     switch (type) {
 
         case FSBlockType::BOOT_BLOCK:
-            
-            msg("       Header : ");
-            for (isize i = 0; i < 8; i++) msg("%02X ", data[i]);
-            msg("\n");
+
+            os << tab("Header");
+            for (isize i = 0; i < 8; i++) os << hex(data[i]) << " ";
+            os << std::endl;
             break;
             
         case FSBlockType::ROOT_BLOCK:
-        {
-            msg("         Name : %s\n", getName().c_str());
-            msg("      Created : %s\n", getCreationDate().str().c_str());
-            msg("     Modified : %s\n", getModificationDate().str().c_str());
-            msg("   Hash table : "); dumpHashTable(); msg("\n");
-            msg("Bitmap blocks : ");
-            for (isize i = 0; i < 25; i++) {
-                if (isize ref = getBmBlockRef(i)) msg("%ld ", ref);
+
+            os << tab("Name");
+            os << getName() << std::endl;
+            os << tab("Created");
+            os << getCreationDate().str() << std::endl;
+            os << tab("Modified");
+            os << getCreationDate().str() << std::endl;
+            os << tab("Bitmap blocks");
+            os << FSBlock::rangeString(getBmBlockRefs()) << std::endl;
+            os << tab("Next bm extension block");
+            os << dec(getNextBmExtBlockRef()) << std::endl;
+
+            os << tab("Hash table");
+            for (isize i = 0, j = 0; i < hashTableSize(); i++) {
+                if (u32 value = read32(data.ptr + 24 + 4 * i); value) {
+                    if (j++) os << std::endl << tab();
+                    os << std::setfill(' ') << std::setw(2) << i << " -> ";
+                    os << std::setfill(' ') << std::setw(4) << value << " ";
+                }
             }
-            msg("\n");
-            msg("   Next BmExt : %d\n", getNextBmExtBlockRef());
+            os << std::endl;
             break;
-        }
+
         case FSBlockType::BITMAP_BLOCK:
         {
             isize count = 0;
@@ -695,64 +731,84 @@ FSBlock::dump() const
                     }
                 }
             }
-            msg("           Free : %ld blocks\n", count);
+            os << tab("Free") << dec(count) << " blocks" << std::endl;
             break;
         }
         case FSBlockType::BITMAP_EXT_BLOCK:
-        {
-            msg("Bitmap blocks : ");
-            for (isize i = 0; i < (bsize() / 4) - 1; i++) {
-                if (Block ref = getBmBlockRef(i)) msg("%d ", ref);
-            }
-            msg("\n");
-            msg("           Next : %d\n", getNextBmExtBlockRef());
+
+            os << tab("Bitmap blocks");
+            os << FSBlock::rangeString(getBmBlockRefs()) << std::endl;
+            os << tab("Next");
+            os << getNextBmExtBlockRef() << std::endl;
             break;
-        }
+
         case FSBlockType::USERDIR_BLOCK:
-            
-            msg("           Name : %s\n", getName().c_str());
-            msg("        Comment : %s\n", getComment().c_str());
-            msg("        Created : %s\n", getCreationDate().str().c_str());
-            msg("         Parent : %d\n", getParentDirRef());
-            msg("           Next : %d\n", getNextHashRef());
+
+            os << tab("Name");
+            os << getName() << std::endl;
+            os << tab("Comment");
+            os << getComment() << std::endl;
+            os << tab("Created");
+            os << getCreationDate().str() << std::endl;
+            os << tab("Parent");
+            os << dec(getParentDirRef()) << std::endl;
+            os << tab("Next");
+            os << dec(getNextHashRef()) << std::endl;
             break;
             
         case FSBlockType::FILEHEADER_BLOCK:
-            
-            msg("           Name : %s\n", getName().c_str());
-            msg("        Comment : %s\n", getComment().c_str());
-            msg("        Created : %s\n", getCreationDate().str().c_str());
-            msg("           Next : %d\n", getNextHashRef());
-            msg("      File size : %d\n", getFileSize());
 
-            msg("    Block count : %ld / %ld\n", getNumDataBlockRefs(), getMaxDataBlockRefs());
-            msg("          First : %d\n", getFirstDataBlockRef());
-            msg("     Parent dir : %d\n", getParentDirRef());
-            msg(" FileList block : %d\n", getNextListBlockRef());
-            
-            msg("    Data blocks : ");
-            for (isize i = 0; i < getNumDataBlockRefs(); i++) msg("%d ", getDataBlockRef(i));
-            msg("\n");
+            os << tab("Name");
+            os << getName() << std::endl;
+            os << tab("Comment");
+            os << getComment() << std::endl;
+            os << tab("Created");
+            os << getCreationDate().str() << std::endl;
+            os << tab("Next");
+            os << getNextHashRef() << std::endl;
+            os << tab("File size");
+            os << getFileSize() << std::endl;
+            os << tab("Block count");
+            os << getNumDataBlockRefs() << " / " << getMaxDataBlockRefs() << std::endl;
+            os << tab("First");
+            os << getFirstDataBlockRef() << std::endl;
+            os << tab("Parent dir");
+            os << getParentDirRef() << std::endl;
+            os << tab("FileList block");
+            os << getNextListBlockRef() << std::endl;
+            os << tab("Data blocks (old)");
+            print(getNumDataBlockRefs(), [&](isize i) { return getDataBlockRef(i); });
+            os << tab("Data blocks");
+            os << FSBlock::rangeString(getDataBlockRefs()) << std::endl;
             break;
-            
+
         case FSBlockType::FILELIST_BLOCK:
-            
-            msg("    Block count : %ld / %ld\n", getNumDataBlockRefs(), getMaxDataBlockRefs());
-            msg("          First : %d\n", getFirstDataBlockRef());
-            msg("   Header block : %d\n", getFileHeaderRef());
-            msg("      Extension : %d\n", getNextListBlockRef());
-            msg("    Data blocks : ");
-            for (isize i = 0; i < getNumDataBlockRefs(); i++) msg("%d ", getDataBlockRef(i));
-            msg("\n");
+
+            os << tab("Block count");
+            os << getNumDataBlockRefs() << " / " << getMaxDataBlockRefs() << std::endl;
+            os << tab("First");
+            os << getFirstDataBlockRef() << std::endl;
+            os << tab("Header block");
+            os << getFileHeaderRef() << std::endl;
+            os << tab("Extension");
+            os << getNextListBlockRef() << std::endl;
+            os << tab("Data blocks (old)");
+            print(getNumDataBlockRefs(), [&](isize i) { return getDataBlockRef(i); });
+            os << tab("Data blocks");
+            os << FSBlock::rangeString(getDataBlockRefs()) << std::endl;
+
             break;
-            
+
         case FSBlockType::DATA_BLOCK_OFS:
-            
-            msg("File header block : %d\n", getFileHeaderRef());
-            msg("     Chain number : %d\n", getDataBlockNr());
-            msg("       Data bytes : %d\n", getDataBytesInBlock());
-            msg("  Next data block : %d\n", getNextDataBlockRef());
-            msg("\n");
+
+            os << tab("File header block");
+            os << getFileHeaderRef() << std::endl;
+            os << tab("Chain number");
+            os << getDataBlockNr() << std::endl;
+            os << tab("Data bytes");
+            os << getDataBytesInBlock() << std::endl;
+            os << tab("Next data block");
+            os << getNextDataBlockRef() << std::endl;
             break;
             
         default:
@@ -766,10 +822,33 @@ FSBlock::hexDump(std::ostream &os)
     data.memDump(os);
 }
 
-void
-FSBlock::dumpData() const
+string
+FSBlock::rangeString(std::vector<Block> vec)
 {
-    if (!data.empty()) util::hexdumpLongwords(data.ptr, 512);
+    if (vec.empty()) return "";
+
+    // Create a sorted copy
+    std::vector<Block> v = vec;
+    std::sort(v.begin(), v.end());
+
+    // Replicate the last element to get the last interval right
+    v.push_back(v.back());
+
+    isize start = v[0], end = v[0];
+    std::vector<string> chunks;
+
+    for (usize i = 1; i < v.size(); i++) {
+
+        if (v[i - 1] + 1 != v[i]) {
+
+            if (start == end) chunks.push_back(std::to_string(start));
+            else chunks.push_back(std::to_string(start) + " - " + std::to_string(end));
+            start = v[i];
+        }
+        end = v[i];
+    }
+
+    return util::concat(chunks, ", ");
 }
 
 void
@@ -1360,18 +1439,6 @@ FSBlock::setHashRef(Block nr, u32 ref)
 }
 
 void
-FSBlock::dumpHashTable() const
-{
-    for (isize i = 0; i < hashTableSize(); i++) {
-        
-        u32 value = read32(data.ptr + 24 + 4 * i);
-        if (value) {
-            msg("%ld: %d ", i, value);
-        }
-    }
-}
-
-void
 FSBlock::writeBootBlock(BootBlockId id, isize page)
 {
     assert(page == 0 || page == 1);
@@ -1429,6 +1496,19 @@ FSBlock::addBitmapBlockRefs(std::vector<Block> &refs,
     }
 }
 
+isize
+FSBlock::numBmBlockRefs() const
+{
+    switch (type) {
+
+        case FSBlockType::ROOT_BLOCK:       return 25;
+        case FSBlockType::BITMAP_EXT_BLOCK: return (bsize() / 4) - 1;
+
+        default:
+            return 0;
+    }
+}
+
 Block
 FSBlock::getBmBlockRef(isize nr) const
 {
@@ -1465,6 +1545,20 @@ FSBlock::setBmBlockRef(isize nr, Block ref)
         default:
             fatalError;
     }
+}
+
+std::vector<Block>
+FSBlock::getBmBlockRefs() const
+{
+    isize maxRefs =
+    type == FSBlockType::ROOT_BLOCK ? 25 :
+    type == FSBlockType::BITMAP_EXT_BLOCK ? (bsize() / 4) - 1 : 0;
+
+    std::vector<Block> result;
+    for (isize i = 0; i < maxRefs; i++) {
+        if (auto ref = getBmBlockRef(i); ref) result.push_back(ref);
+    }
+    return result;
 }
 
 u32
@@ -1544,6 +1638,18 @@ FSBlock::incNumDataBlockRefs()
         default:
             break;
     }
+}
+
+std::vector<Block>
+FSBlock::getDataBlockRefs() const
+{
+    isize maxRefs = getNumDataBlockRefs();
+
+    std::vector<Block> result;
+    for (isize i = 0; i < maxRefs; i++) {
+        if (auto ref = getDataBlockRef(i); ref) result.push_back(ref);
+    }
+    return result;
 }
 
 void

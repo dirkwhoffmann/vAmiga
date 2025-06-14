@@ -84,6 +84,18 @@ FSString::write(u8 *p)
     for (auto c : str) { *p++ = c; }
 }
 
+bool
+FSString::operator<(const FSString& other) const
+{
+    return util::uppercased(cpp_str()) < util::uppercased(other.cpp_str());
+}
+
+std::ostream &operator<<(std::ostream &os, const FSString &str) {
+
+    os << str.cpp_str();
+    return os;
+}
+
 FSName::FSName(const string &cpp) : FSString(cpp, 30) { }
 FSName::FSName(const char *c) : FSString(c, 30) { }
 FSName::FSName(const u8 *bcpl) : FSString(bcpl, 30) { }
@@ -95,18 +107,6 @@ fs::path
 FSName::path() const
 {
     return Host::sanitize(str);
-}
-
-bool
-FSName::operator<(const FSName& other) const
-{
-    return util::uppercased(cpp_str()) < util::uppercased(other.cpp_str());
-}
-
-std::ostream &operator<<(std::ostream &os, const FSName &str) {
-
-    os << str.cpp_str();
-    return os;
 }
 
 FSPattern::FSPattern(const string glob)

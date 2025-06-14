@@ -39,6 +39,9 @@ struct FSString {
     u32 hashValue() const;
 
     void write(u8 *p);
+
+    bool operator<(const FSString& other) const;
+    friend std::ostream &operator<<(std::ostream &os, const FSString &str);
 };
 
 struct FSName : FSString {
@@ -50,9 +53,6 @@ struct FSName : FSString {
     FSName(const std::map<string,string> map, const string &cpp, const string fallback);
 
     fs::path path() const;
-
-    bool operator<(const FSName& other) const;
-    friend std::ostream &operator<<(std::ostream &os, const FSName &str);
 };
 
 struct FSComment : FSString {

@@ -132,6 +132,9 @@ public:
 
     void hexDump(std::ostream &os);
 
+    // Experimental
+    static string rangeString(std::vector<Block> vec);
+
 
     //
     // Debugging
@@ -140,8 +143,7 @@ public:
 public:
     
     // Prints some debug information for this block
-    void dump() const;
-    void dumpData() const;
+    void dump(std::ostream &os) const;
 
     
     //
@@ -258,10 +260,7 @@ public:
     u32 getHashRef(u32 nr) const;
     void setHashRef(u32 nr, u32 ref);
 
-    // Dumps the contents of the hash table for debugging
-    void dumpHashTable() const;
-
-
+ 
     //
     // Working with boot blocks
     //
@@ -279,10 +278,12 @@ public:
                             std::vector<Block>::iterator &it);
     
     //Gets or sets a link to a bitmap block
+    isize numBmBlockRefs() const;
     Block getBmBlockRef(isize nr) const;
     void setBmBlockRef(isize nr, Block ref);
+    std::vector<Block> getBmBlockRefs() const;
 
-    
+
     //
     // Working with data blocks
     //
@@ -298,6 +299,7 @@ public:
     isize getNumDataBlockRefs() const;
     void setNumDataBlockRefs(u32 val);
     void incNumDataBlockRefs();
+    std::vector<Block> getDataBlockRefs() const;
 
     // Adds a data block reference to this block
     bool addDataBlockRef(Block ref);

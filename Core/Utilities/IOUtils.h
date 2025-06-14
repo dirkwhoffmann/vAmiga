@@ -111,6 +111,7 @@ struct tab {
     
     tab(isize p, const string &s) : pads(p), str(s) { };
     tab(const string &s) : tab(24, s) { };
+    tab() : tab(24, "") { };
     std::ostream &operator()(std::ostream &os) const;
 };
 

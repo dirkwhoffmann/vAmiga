@@ -106,7 +106,6 @@ struct FSPath
     FSPath parent();
 
     // Returns a collection of paths to all items in a directory
-    // std::vector<FSPath> collect(bool recursive = false, bool sort = true, FSPathFilter filter = nullptr) const;
     std::vector<FSPath> collect(const FSOpt &opt = {}) const;
 
     friend std::ostream &operator<<(std::ostream &os, const FSPath &str);
