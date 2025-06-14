@@ -11,6 +11,7 @@
 
 #include "CoreObject.h"
 #include <ostream>
+#include <regex>
 
 namespace vamiga {
 
@@ -58,6 +59,15 @@ struct FSComment : FSString {
     
     FSComment(const char *cString) : FSString(cString, 91) { }
     FSComment(const u8 *bcplString) : FSString(bcplString, 91) { }
+};
+
+struct FSPattern {
+
+    std::regex regex;
+
+    FSPattern(const string str);
+
+    bool match(const FSName &name);
 };
 
 struct FSTime {

@@ -109,6 +109,44 @@ std::ostream &operator<<(std::ostream &os, const FSName &str) {
     return os;
 }
 
+FSPattern::FSPattern(const string glob)
+{
+    // Create regex string
+    std::string re = "^";
+
+    for (char c : glob) {
+
+        switch (c) {
+
+            case '*': re += ".*"; break;
+            case '?': re += "."; break;
+            case '.': re += "\\."; break;
+            case '\\': re += "\\\\"; break;
+
+            default:
+                if (std::isalnum(u8(c))) {
+                    re += c;
+                } else {
+                    re += '\\';
+                    re += c;
+                }
+        }
+    }
+    re += "$";
+
+    try {
+        regex = std::regex(re, std::regex::ECMAScript | std::regex::icase);
+    } catch (const std::regex_error& e) {
+        throw; // TODO: Throw proper parse error
+    }
+}
+
+bool
+FSPattern::match(const FSName &name)
+{
+    return std::regex_match(name.cpp_str(), regex);
+}
+
 FSTime::FSTime(time_t t)
 {
     const u32 secPerDay = 24 * 60 * 60;

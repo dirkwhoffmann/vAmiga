@@ -286,8 +286,10 @@ public:
 public:
 
     // Returns a collection of nodes for all items in a directory
+    std::vector<Block> collect(const FSPath &path, const FSOpt &opt = {}) const throws;
     void collect(const FSPath &path, std::vector<Block> &result, const FSOpt &opt = {}) const throws;
     void collect(const FSPath &path, std::vector<FSPath> &result, const FSOpt &opt = {}) const throws;
+    void collect(const FSPath &path, std::vector<string> &result, const FSOpt &opt = {}) const throws;
 
 private:
     

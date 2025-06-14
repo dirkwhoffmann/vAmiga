@@ -558,6 +558,14 @@ FileSystem::list(std::ostream &os, const FSPath &path, const FSOpt &opt) const
     }
 }
 
+std::vector<Block>
+FileSystem::collect(const FSPath &path, const FSOpt &opt) const
+{
+    std::vector<Block> result;
+    collect(path, result, opt);
+    return result;
+}
+
 void
 FileSystem::collect(const FSPath &path, std::vector<Block> &result, const FSOpt &opt) const
 {
@@ -584,8 +592,8 @@ FileSystem::collect(const FSPath &path, std::vector<Block> &result, const FSOpt 
 void
 FileSystem::collect(const FSPath &path, std::vector<FSPath> &result, const FSOpt &opt) const
 {
-    std::vector<Block> refs;
-    collect(path, refs, opt);
+    // Collect all block references
+    std::vector<Block> refs; collect(path, refs, opt);
 
     for (auto &it : refs) {
 
@@ -593,6 +601,20 @@ FileSystem::collect(const FSPath &path, std::vector<FSPath> &result, const FSOpt
         if (opt.filter(path)) result.push_back(path);
     }
 }
+
+void
+FileSystem::collect(const FSPath &path, std::vector<string> &result, const FSOpt &opt) const
+{
+    // Collect all block references
+    std::vector<Block> refs; collect(path, refs, opt);
+
+    for (auto &it : refs) {
+
+        auto path = FSPath(*this, it);
+        if (opt.filter(path)) result.push_back(opt.formatter(path));
+    }
+}
+
 
 void
 FileSystem::collectHashedRefs(Block nr,

@@ -10,6 +10,7 @@
 #include "config.h"
 #include "Console.h"
 #include "Emulator.h"
+#include <regex>
 
 namespace vamiga {
 
@@ -199,10 +200,9 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "find" },
-        .extra  = { arg::path },
         .argx   = {
-            { .name = { "name", "The searched item" } },
-            { .name = { "path", "Start searching here" }, .flags = arg::opt },
+            { .name = { "name", "Search pattern" } },
+            { .name = { "path", "Directory to search in" }, .flags = arg::opt },
             { .name = { "d", "Find directories only" }, .flags = arg::flag },
             { .name = { "f", "Find files only" }, .flags = arg::flag },
             { .name = { "r", "Search subdirectories, too" }, .flags = arg::flag },
@@ -210,7 +210,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .help   = { "Find files or directories." },
         .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
-            auto name = FSString(args, "name");
+            auto pattern = FSPattern(args.at("name"));
             auto path = FSString(args, "path", ".");
             auto d = args.contains("d");
             auto f = args.contains("f");
@@ -219,39 +219,28 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
             auto dir = fs.pwd().seek(path);
 
-            FSOpt opt;
+            FSOpt opt = {
 
-            opt.sort = s;
-            opt.recursive = r;
+                .sort = s,
+                .recursive = r,
 
-            opt.filter = [&](const FSPath &item) {
+                .filter = [&](const FSPath &item) {
 
-                printf("filter %s\n", item.name().c_str());
-                printf("   last %s\n", item.last().c_str());
-                printf("   name %s\n", name.c_str());
+                    return pattern.match(item.last()) &&
+                    (!d || item.isDirectory()) &&
+                    (!f || item.isFile());
+                },
 
-                return
-                item.last() == name &&
-                (!d || item.isDirectory()) &&
-                (!f || item.isFile());
-            };
+                .formatter = [&](const FSPath &item) {
 
-            opt.formatter = [&](const FSPath &item) {
-
-                std::stringstream ss;
-
-                if (item.isDirectory()) {
-                    ss << std::left << std::setw(30) << (item.name() + " (dir)");
-                } else {
-                    ss << std::left << std::setw(30) << item.name();
+                    std::stringstream ss;
+                    ss << item.name() + (item.isDirectory() ? " (dir)" : "");
+                    return ss.str();
                 }
-
-                return ss.str();
             };
 
             std::vector<FSPath> matches;
             fs.collect(dir, matches, opt);
-
             for (auto &it : matches) { *this << opt.formatter(it) << '\n'; }
         }
     });
