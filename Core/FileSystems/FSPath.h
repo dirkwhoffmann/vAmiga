@@ -78,6 +78,10 @@ struct FSPath
     FSPath seekDir(const FSName &name) const;
     FSPath seekFile(const FSName &name) const;
 
+    FSPath seek(const FSString &name) const;
+    FSPath seekDir(const FSString &name) const;
+    FSPath seekFile(const FSString &name) const;
+
     FSPath seek(const std::vector<FSName> &path) const;
     FSPath seekDir(const std::vector<FSName> &path) const;
     FSPath seekFile(const std::vector<FSName> &path) const;

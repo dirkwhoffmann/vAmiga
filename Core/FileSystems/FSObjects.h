@@ -24,9 +24,10 @@ struct FSString {
 
     static char capital(char c);
 
-    FSString(const string &cppString, isize limit);
-    FSString(const char *cString, isize limit);
-    FSString(const u8 *bcplString, isize limit);
+    FSString(const string &cppS, isize limit = 1024);
+    FSString(const char *c, isize limit = 1024);
+    FSString(const u8 *bcpl, isize limit = 1024);
+    FSString(const std::map<string,string> map, const string &cpp, const string alt = "", isize limit = 1024);
 
     const char *c_str() const { return str.c_str(); }
     string cpp_str() const { return str; }
@@ -41,10 +42,11 @@ struct FSString {
 
 struct FSName : FSString {
     
-    FSName(const string &cppString);
-    FSName(const char *cString);
-    FSName(const u8 *bcplString);
+    FSName(const string &cpp);
+    FSName(const char *c);
+    FSName(const u8 *bcpl);
     FSName(const fs::path &path);
+    FSName(const std::map<string,string> map, const string &cpp, const string fallback);
 
     fs::path path() const;
 

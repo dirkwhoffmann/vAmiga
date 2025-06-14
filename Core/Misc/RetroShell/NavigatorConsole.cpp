@@ -201,16 +201,58 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .tokens = { "find" },
         .extra  = { arg::path },
         .argx   = {
-            { .name = { "path", "Directory" } },
-            { .name = { "n", "Search file by name" }, .flags = arg::flag },
-            { .name = { "d", "Search file by date" }, .flags = arg::flag }
-        },
-        .help   = { "Search for a directory item." },
+            { .name = { "name", "The searched item" } },
+            { .name = { "path", "Start searching here" }, .flags = arg::opt },
+            { .name = { "d", "Find directories only" }, .flags = arg::flag },
+            { .name = { "f", "Find files only" }, .flags = arg::flag },
+            { .name = { "r", "Search subdirectories, too" }, .flags = arg::flag },
+            { .name = { "s", "Sort output" }, .flags = arg::flag } },
+        .help   = { "Find files or directories." },
         .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
-            std::stringstream ss;
-            argv.empty() ? fs.list(ss) : fs.list(ss, fs.pwd().seek(argv[0]));
-            *this << ss;
+            auto name = FSString(args, "name");
+            auto path = FSString(args, "path", ".");
+            auto d = args.contains("d");
+            auto f = args.contains("f");
+            auto r = args.contains("r");
+            auto s = args.contains("s");
+
+            auto dir = fs.pwd().seek(path);
+
+            FSOpt opt;
+
+            opt.sort = s;
+            opt.recursive = r;
+
+            opt.filter = [&](const FSPath &item) {
+
+                printf("filter %s\n", item.name().c_str());
+                printf("   last %s\n", item.last().c_str());
+                printf("   name %s\n", name.c_str());
+
+                return
+                item.last() == name &&
+                (!d || item.isDirectory()) &&
+                (!f || item.isFile());
+            };
+
+            opt.formatter = [&](const FSPath &item) {
+
+                std::stringstream ss;
+
+                if (item.isDirectory()) {
+                    ss << std::left << std::setw(30) << (item.name() + " (dir)");
+                } else {
+                    ss << std::left << std::setw(30) << item.name();
+                }
+
+                return ss.str();
+            };
+
+            std::vector<FSPath> matches;
+            fs.collect(dir, matches, opt);
+
+            for (auto &it : matches) { *this << opt.formatter(it) << '\n'; }
         }
     });
 

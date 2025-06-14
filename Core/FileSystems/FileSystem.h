@@ -286,8 +286,8 @@ public:
 public:
 
     // Returns a collection of nodes for all items in a directory
-    // void collect(const FSPath &path, std::vector<Block> &result, bool recursive = false) const throws;
     void collect(const FSPath &path, std::vector<Block> &result, const FSOpt &opt = {}) const throws;
+    void collect(const FSPath &path, std::vector<FSPath> &result, const FSOpt &opt = {}) const throws;
 
 private:
     

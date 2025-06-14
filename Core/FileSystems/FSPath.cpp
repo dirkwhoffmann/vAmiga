@@ -111,14 +111,6 @@ FSPath::last() const
     return isRoot() ? "" : fs.blockPtr(ref)->getName();
 }
 
-/*
-FSName
-FSPath::name() const
-{
-    return fs.blockPtr(ref)->getName();
-}
-*/
-
 string
 FSPath::name() const
 {
@@ -232,6 +224,9 @@ FSPath::seek(const FSName &name) const
     std::set<Block> visited;
     FSBlock *cdb = ptr();
 
+    // Check for special characters
+    if (name == ".") return *this;
+
     // Only proceed if a hash table is present
     if (cdb && cdb->hashTableSize() != 0) {
 
@@ -269,6 +264,24 @@ FSPath::seekFile(const FSName &name) const
     auto result = seek(name);
     if (!result.isFile()) throw AppError(Fault::FS_NOT_A_FILE);
     return result;
+}
+
+FSPath
+FSPath::seek(const FSString &name) const
+{
+    return seek(name.cpp_str());
+}
+
+FSPath
+FSPath::seekDir(const FSString &name) const
+{
+    return seekDir(name.cpp_str());
+}
+
+FSPath
+FSPath::seekFile(const FSString &name) const
+{
+    return seekFile(name.cpp_str());
 }
 
 FSPath

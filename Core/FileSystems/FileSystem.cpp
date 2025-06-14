@@ -582,6 +582,19 @@ FileSystem::collect(const FSPath &path, std::vector<Block> &result, const FSOpt 
 }
 
 void
+FileSystem::collect(const FSPath &path, std::vector<FSPath> &result, const FSOpt &opt) const
+{
+    std::vector<Block> refs;
+    collect(path, refs, opt);
+
+    for (auto &it : refs) {
+
+        auto path = FSPath(*this, it);
+        if (opt.filter(path)) result.push_back(path);
+    }
+}
+
+void
 FileSystem::collectHashedRefs(Block nr,
                               std::stack<Block> &result, std::set<Block> &visited) const
 {

@@ -42,6 +42,14 @@ FSString::FSString(const u8 *bcpl, isize limit) : limit(limit)
     str.assign(firstChar, std::min(length, limit));
 }
 
+FSString::FSString(const std::map<string,string> map, const string &cpp, const string alt, isize limit)
+{
+    auto item = map.find(cpp);
+
+    this->str = item != map.end() ? item->second : alt;
+    this->limit = limit;
+}
+
 char
 FSString::capital(char c)
 {
@@ -80,6 +88,8 @@ FSName::FSName(const string &cpp) : FSString(cpp, 30) { }
 FSName::FSName(const char *c) : FSString(c, 30) { }
 FSName::FSName(const u8 *bcpl) : FSString(bcpl, 30) { }
 FSName::FSName(const fs::path &path) : FSString(Host::unsanitize(path), 30) { }
+FSName::FSName(const std::map<string,string> map, const string &cpp, const string fallback) :
+FSString(map, cpp, fallback, 30) { }
 
 fs::path
 FSName::path() const
