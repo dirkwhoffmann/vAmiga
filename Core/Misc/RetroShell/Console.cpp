@@ -748,22 +748,24 @@ Console::exec(const Arguments &argv, bool verbose)
     current->callback(args, parsedArgs, current->param);
 }
 
+/*
 void
 Console::usage(const RetroShellCmd& current)
 {
     *this << '\r' << "Usage: " << current.usage() << '\n';
 }
+*/
 
 void
-Console::cmdUsage(const RetroShellCmd& current)
+Console::cmdUsage(const RetroShellCmd& current, const string &prefix)
 {
-    *this << '\r' << "Group:   " << current.cmdUsage() << '\n';
+    *this << '\r' << prefix << current.cmdUsage() << '\n';
 }
 
 void
-Console::argUsage(const RetroShellCmd& current)
+Console::argUsage(const RetroShellCmd& current, const string &prefix)
 {
-    *this << '\r' << "Command: " << current.argUsage() << '\n';
+    *this << '\r' << prefix << current.argUsage() << '\n';
 }
 
 void
@@ -795,30 +797,33 @@ Console::help(const Arguments &argv)
 void
 Console::help(const RetroShellCmd& current)
 {
+    string prefix ="Usage: ";
+
     if (current.subCommands.empty()) {
 
-        argUsage(current);
-        helpArguments(current);
+        argUsage(current, prefix);
+        helpArguments(current, prefix.size());
 
     } else {
 
-        cmdUsage(current);
-        helpSubcommands(current);
+        string prefix ="Usage: ";
+
+        cmdUsage(current, prefix);
+        helpSubcommands(current, prefix.size());
 
         if (auto *ptr = current.seek(""); ptr) {
 
-            argUsage(*ptr);
-            helpArguments(*ptr, false);
+            argUsage(*ptr, string(prefix.size(), ' '));
+            helpArguments(*ptr, prefix.size() + current.name.size() + 1, false);
         }
     }
 }
 
 void
-Console::helpArguments(const RetroShellCmd &current, bool verbose)
+Console::helpArguments(const RetroShellCmd &current, isize indent, bool verbose)
 {
     if (current.arguments.empty()) return;
 
-    auto indent = string("         ");
     auto skip = [](const RSArgumentDescriptor &it) { return it.isHidden() || it.helpStr().empty(); };
 
     // Determine the tabular position to align the output
@@ -826,11 +831,11 @@ Console::helpArguments(const RetroShellCmd &current, bool verbose)
     for (auto &it : current.arguments) {
         if (!skip(it)) tab = std::max(tab, (isize)it.keyValueStr().length());
     }
-    tab += (isize)indent.size();
+    tab += indent;
 
     // Print command description
     if (verbose && !current.help.empty()) {
-        *this << '\n' << indent << current.help[0] << '\n';
+        *this << '\n' << string(indent, ' ') << current.help[0] << '\n';
     }
     *this << '\n';
 
@@ -839,7 +844,7 @@ Console::helpArguments(const RetroShellCmd &current, bool verbose)
 
         if (skip(it)) continue;
 
-        *this << indent;
+        *this << string(indent, ' ');
         *this << it.keyValueStr();
         (*this).tab(tab);
         *this << " : ";
@@ -851,17 +856,17 @@ Console::helpArguments(const RetroShellCmd &current, bool verbose)
 }
 
 void
-Console::helpSubcommands(const RetroShellCmd &current)
+Console::helpSubcommands(const RetroShellCmd &current, isize indent, bool verbose)
 {
     if (current.subCommands.empty()) return;
 
     // Determine alignment parameters to get a properly formatted output
-    auto indent = string("         ");
+    // auto indent = string("         ");
     isize newlines = 1, tab = 0;
     for (auto &it : current.subCommands) {
         tab = std::max(tab, (isize)it.fullName.length());
     }
-    tab += (isize)indent.size();
+    tab += indent; //  (isize)indent.size();
 
     for (auto &it : current.subCommands) {
 
@@ -881,7 +886,7 @@ Console::helpSubcommands(const RetroShellCmd &current)
         }
 
         // Print command description
-        *this << indent;
+        *this << string(indent, ' ');
         *this << it.fullName;
         (*this).tab(tab);
         *this << " : ";

@@ -172,9 +172,6 @@ struct RetroShellCmd {
     // Automatically completes a partial token string
     string autoComplete(const string& token);
 
-    // Returns a syntax string for this command
-    [[deprecated]] string usage() const;
-
     // Returns a syntax description for subcommands or arguments
     string cmdUsage() const;
     string argUsage() const;

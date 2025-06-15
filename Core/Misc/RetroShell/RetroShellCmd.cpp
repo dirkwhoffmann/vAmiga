@@ -199,127 +199,7 @@ RetroShellCmd::autoComplete(const string& token)
     for (auto &it : matches) { tokens.push_back(it->name); }
 
     result = util::commonPrefix(tokens);
-    /*
-    if (!matches.empty()) {
-        
-        const RetroShellCmd *first = matches.front();
-        for (usize i = 0;; i++) {
-
-            for (auto m: matches) {
-                if (m->name.size() <= i || m->name[i] != first->name[i]) {
-                    return result;
-                }
-            }
-            result += first->name[i];
-        }
-    }
-    */
-
-    // return result;
     return result.size() >= token.size() ? result : token;
-}
-
-string
-RetroShellCmd::usage() const
-{
-    // Returns a common usage string for all flags
-    auto flgStr = [&]() {
-
-        string flags = "";
-
-        for (auto &it : arguments) {
-            if (it.isFlag()) flags += it.nameStr()[0];
-        }
-
-        return flags.empty() ? "" : "[-" + flags + "]";
-    };
-
-    // Returns a usage string for all other arguments
-    auto argStr = [&]() {
-
-        std::vector<string> items;
-
-        for (auto &it : arguments) {
-            if (!it.isFlag()) items.push_back(it.usageStr());
-        }
-        return util::concat(items);
-    };
-
-    // Returns a usage string for subcommands
-    auto cmdStr = [&]() {
-
-        std::vector<string> items; string ldelim, rdelim;
-
-        for (auto &it : subCommands) {
-
-            if (it.hidden) continue;
-            if (it.name != "") { ldelim = "["; rdelim = "]"; continue; }
-            items.push_back(it.name);
-        }
-        return ldelim + util::concat(items, " | ", "{ ", " }") + rdelim;
-    };
-
-    //
-    // Old code
-    //
-
-    string resultstr;
-
-    if (arguments.empty()) {
-
-        if (subCommands.empty()) {
-
-            string required;
-            string optional;
-
-            for (isize i = 0; i < minArgs(); i++) {
-
-                required += requiredArgs[i];
-                required += " ";
-            }
-            for (isize i = 0; i < optArgs(); i++) {
-
-                optional += optionalArgs[i];
-                optional += " ";
-            }
-            if (optional != "") optional = "[ " + optional + "]";
-
-            resultstr = required + optional;
-
-        } else {
-
-            // Collect all sub-commands
-            isize count = 0;
-            for (auto &it : subCommands) {
-
-                if (it.hidden) continue;
-
-                if (it.name != "") {
-
-                    if (count++) resultstr += " | ";
-                    resultstr += it.name;
-                }
-            }
-            if (count > 1) {
-                resultstr = "{" + resultstr + "}";
-            }
-            if (seek("") && resultstr != "") {
-                resultstr = "[ " + resultstr + " ]";
-            }
-        }
-
-        return fullName + " " + resultstr;
-    }
-
-    //
-    // New code
-    //
-
-    if (subCommands.empty()) {
-        return util::concat({ fullName, flgStr(), argStr() });
-    } else {
-        return util::concat({ fullName, cmdStr() });
-    }
 }
 
 string
@@ -356,7 +236,7 @@ RetroShellCmd::argUsage() const
         if (!it.isFlag()) items.push_back(it.usageStr());
     }
     string other = util::concat(items);
-    printf("other = '%s' '%s' fullname = '%s'\n", other.c_str(), util::concat({ fullName, flags, other }).c_str(), fullName.c_str());
+
     return util::concat({ fullName, flags, other });
 }
 
