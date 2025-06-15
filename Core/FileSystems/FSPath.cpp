@@ -225,7 +225,7 @@ FSPath::seek(const FSName &name) const
     FSBlock *cdb = ptr();
 
     // Check for special characters
-    if (name == ".") return *this;
+    // if (name == ".") return *this;
 
     // Only proceed if a hash table is present
     if (cdb && cdb->hashTableSize() != 0) {
@@ -387,6 +387,7 @@ FSPath::seekFile(const string &path) const
 FSPath
 FSPath::cd(FSName name)
 {
+    printf("cd: seek(%s)\n", name.c_str());
     return seek(name);
 }
 

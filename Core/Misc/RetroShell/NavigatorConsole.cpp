@@ -134,13 +134,22 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
         .tokens = { "cd" },
         .argx   = {
-            { .name = { "path", "New working directory" }, .flags = arg::opt }
+            { .name = { "path", "New working directory" }, .flags = arg::opt },
+            { .name = { "b", "Specify directory as a block number" }, .flags = arg::flag }
         },
         .help   = { "Change the working directory." },
         .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
-            auto path = FSString(args, "path", ".");
-            fs.cd(fs.pwd().seek(path));
+            string path;
+
+            if (!args.contains("path")) {
+                fs.cd(string("/"));
+            } else if (args.contains("b")) {
+                auto fspath = FSPath(fs, (Block)parseNum(args.at("path")));
+                fs.cd(fspath);
+            } else {
+                fs.cd(path);
+            }
         }
     });
 
@@ -271,22 +280,27 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .argx   = {
             { .name = { "h", "Print hex dump" }, .flags = arg::flag },
             { .name = { "c", "Print characters" }, .flags = arg::flag },
-            { .name = { "format", "Display format" }, .value = "{OFS|FFS}", .flags = arg::keyval|arg::opt },
             { .name = { "path", "File path" }, }
         },
         .help   = { "Print the contents of a file" },
         .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
-                auto file = fs.pwd().seekFile(argv[0]);
+            auto file = fs.pwd().seekFile(argv[0]);
 
-                Buffer<u8> buffer;
-                file.ptr()->writeData(buffer);
+            std::stringstream ss;
+            Buffer<u8> buffer;
+            file.ptr()->writeData(buffer);
 
-                std::stringstream ss;
-                buffer.dump(ss, "%c");
-
-                *this << ss;
+            if (args.contains("h")) {
+                buffer.memDump(ss);
+            } else if (args.contains("c")) {
+                buffer.ascDump(ss);
+            } else {
+                buffer.type(ss);
             }
+
+            *this << ss;
+        }
     });
 
     root.add({

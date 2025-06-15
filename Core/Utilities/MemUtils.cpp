@@ -120,7 +120,7 @@ void dump(std::ostream &os, const char *fmt, std::function<isize(isize offset, i
 
                 case 'p': // Offset
 
-                    os << std::setw(8) << std::setfill('0') << std::dec << (u32)bcnt;
+                    os << std::setw(8) << std::setfill('0') << std::dec << (u32)std::max(bcnt, ccnt);
                     break;
 
                 case 'c': // Character

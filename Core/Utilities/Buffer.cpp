@@ -249,6 +249,16 @@ Allocator<T>::memDump(std::ostream &os)
 }
 
 template <class T> void
+Allocator<T>::type(std::ostream &os)
+{
+    for (isize i = 0; i < size; i++) {
+
+        if (ptr[i] == '\n') os << std::endl;
+        else if (isprint((int)ptr[i])) os << ptr[i];
+    }
+}
+
+template <class T> void
 Allocator<T>::compress(std::function<void(u8 *, isize, vector<u8> &)> algo, isize offset)
 {
     std::vector<u8> compressed;
@@ -311,5 +321,6 @@ template void Allocator<u8>::dump(std::ostream &os, const char *fmt);
 template void Allocator<u8>::ascDump(std::ostream &os);
 template void Allocator<u8>::hexDump(std::ostream &os);
 template void Allocator<u8>::memDump(std::ostream &os);
+template void Allocator<u8>::type(std::ostream &os);
 
 }
