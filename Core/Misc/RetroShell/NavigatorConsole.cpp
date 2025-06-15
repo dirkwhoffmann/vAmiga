@@ -67,6 +67,22 @@ NavigatorConsole::pressReturn(bool shift)
     Console::pressReturn(shift);
 }
 
+Block
+NavigatorConsole::parseBlock(const string &argv)
+{
+    auto nr = Block(parseNum(argv));
+
+    if (!fs.blockPtr(nr)) {
+
+        if (!fs.initialized()) {
+            throw AppError(Fault::FS_UNINITIALIZED);
+        } else {
+            throw AppError(Fault::OPT_INV_ARG, "0..." + std::to_string(fs.numBlocks()));
+        }
+    }
+    return nr;
+}
+
 void
 NavigatorConsole::initCommands(RetroShellCmd &root)
 {
@@ -292,24 +308,11 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .help   = { "Manage file system blocks." },
         .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
-            printf("%s\n", FSBlock::rangeString({ 1,2,3,4,5 }).c_str());
-            printf("%s\n", FSBlock::rangeString({ 1,3,5,7,8 }).c_str());
-            printf("%s\n", FSBlock::rangeString({ 1,2,3,6,7 }).c_str());
-            printf("%s\n", FSBlock::rangeString({ 1,2,3,6,8,9,100 }).c_str());
+            auto nr = parseBlock(args.at("nr"));
 
-
-            auto nr = parseNum(args.at("nr"));
-            
-            if (auto *block = fs.blockPtr(Block(nr)); block) {
-                
-                std::stringstream ss;
-                block->dump(ss);
-                *this << '\n' << ss << '\n';
-
-            } else {
-                
-                throw AppError(Fault::OPT_INV_ARG, "0..." + std::to_string(fs.numBlocks()));
-            }
+            std::stringstream ss;
+            fs.blockPtr(nr)->dump(ss);
+            *this << '\n' << ss << '\n';
         }
     });
 

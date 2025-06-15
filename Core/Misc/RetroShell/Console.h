@@ -363,6 +363,10 @@ class DebuggerConsole final : public Console
 {
     using Console::Console;
 
+    //
+    // Methods from Console
+    //
+
     virtual void initCommands(RetroShellCmd &root) override;
     void _pause() override;
     string getPrompt() override;
@@ -377,12 +381,23 @@ class NavigatorConsole final : public Console
 
     using Console::Console;
 
+    //
+    // Methods from Console
+    //
+
     virtual void initCommands(RetroShellCmd &root) override;
     void _pause() override;
     string getPrompt() override;
     void welcome() override;
     void printHelp() override;
     void pressReturn(bool shift) override;
+
+
+    //
+    // Parsing input
+    //
+
+    Block parseBlock(const string &argv);
 };
 
 }

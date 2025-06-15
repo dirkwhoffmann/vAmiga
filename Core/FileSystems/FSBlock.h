@@ -202,7 +202,18 @@ public:
     u32 getFileSize() const;
     void setFileSize(u32 val);
 
-    
+
+    //
+    // Getting and setting meta information
+    //
+
+    u32 getHeaderKey() const;
+    void setHeaderKey(u32 val);
+
+    u32 getChecksum() const;
+    void setChecksum(u32 val);
+
+
     //
     // Chaining blocks
     //
