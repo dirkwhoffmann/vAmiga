@@ -215,8 +215,8 @@ FileSystem::_dump(Category category, std::ostream &os) const
 
     if (category == Category::Blocks) {
 
-        for (Block i = 0; i < numBlocks(); i++)  {
-            if (auto *ptr = blockPtr(i); ptr) {
+        for (isize i = 0; i < numBlocks(); i++)  {
+            if (auto *ptr = blockPtr(Block(i)); ptr) {
                 if (ptr->type != FSBlockType::EMPTY_BLOCK) ptr->dump(os);
             }
         }

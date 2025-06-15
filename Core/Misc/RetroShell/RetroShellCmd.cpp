@@ -93,7 +93,8 @@ RetroShellCmd::add(const RetroShellCmdDescriptor &descriptor)
     // Create the instruction
     RetroShellCmd cmd;
     cmd.name = name;
-    cmd.fullName = (node->fullName.empty() ? "" : node->fullName + " ") + helpName;
+    // cmd.fullName = (node->fullName.empty() ? "" : node->fullName + " ") + helpName;
+    cmd.fullName = util::concat({ node->fullName, helpName }, " ");
     cmd.helpName = helpName;
     cmd.groupName = currentGroup;
     cmd.requiredArgs = descriptor.args;
@@ -319,6 +320,44 @@ RetroShellCmd::usage() const
     } else {
         return util::concat({ fullName, cmdStr() });
     }
+}
+
+string
+RetroShellCmd::cmdUsage() const
+{
+    std::vector<string> items;
+    string ldelim = "{ ", rdelim = " }";
+
+    for (auto &it : subCommands) {
+
+        if (it.hidden) continue;
+        if (it.name == "") { ldelim = "[ "; rdelim = " ]"; continue; }
+        items.push_back(it.name);
+    }
+    auto combined = util::concat(items, " | ", ldelim, rdelim);
+    return  util::concat({ fullName, combined });
+}
+
+string
+RetroShellCmd::argUsage() const
+{
+    // Create a common usage string for all flags
+    string flags = "";
+
+    for (auto &it : arguments) {
+        if (it.isFlag()) flags += it.nameStr()[0];
+    }
+    if (!flags.empty()) flags = "[-" + flags + "]";
+
+    // Create a usage string for all other arguments
+    std::vector<string> items;
+
+    for (auto &it : arguments) {
+        if (!it.isFlag()) items.push_back(it.usageStr());
+    }
+    string other = util::concat(items);
+    printf("other = '%s' '%s' fullname = '%s'\n", other.c_str(), util::concat({ fullName, flags, other }).c_str(), fullName.c_str());
+    return util::concat({ fullName, flags, other });
 }
 
 string

@@ -755,6 +755,18 @@ Console::usage(const RetroShellCmd& current)
 }
 
 void
+Console::cmdUsage(const RetroShellCmd& current)
+{
+    *this << '\r' << "Group:   " << current.cmdUsage() << '\n';
+}
+
+void
+Console::argUsage(const RetroShellCmd& current)
+{
+    *this << '\r' << "Command: " << current.argUsage() << '\n';
+}
+
+void
 Console::help(const string& userInput)
 {
     // Split the command string
@@ -783,17 +795,30 @@ Console::help(const Arguments &argv)
 void
 Console::help(const RetroShellCmd& current)
 {
-    // Print the usage string
-    usage(current);
+    if (current.subCommands.empty()) {
 
-    // Print the proper help message
-    current.subCommands.empty() ? helpArguments(current) : helpSubcommands(current);
+        argUsage(current);
+        helpArguments(current);
+
+    } else {
+
+        cmdUsage(current);
+        helpSubcommands(current);
+
+        if (auto *ptr = current.seek(""); ptr) {
+
+            argUsage(*ptr);
+            helpArguments(*ptr, false);
+        }
+    }
 }
 
 void
-Console::helpArguments(const RetroShellCmd &current)
+Console::helpArguments(const RetroShellCmd &current, bool verbose)
 {
-    auto indent = string("       ");
+    if (current.arguments.empty()) return;
+
+    auto indent = string("         ");
     auto skip = [](const RSArgumentDescriptor &it) { return it.isHidden() || it.helpStr().empty(); };
 
     // Determine the tabular position to align the output
@@ -804,9 +829,10 @@ Console::helpArguments(const RetroShellCmd &current)
     tab += (isize)indent.size();
 
     // Print command description
-    if (!current.help.empty()) {
-        *this << '\n' << indent << current.help[0] << "\n\n";
+    if (verbose && !current.help.empty()) {
+        *this << '\n' << indent << current.help[0] << '\n';
     }
+    *this << '\n';
 
     // Print argument descriptions
     for (auto &it : current.arguments) {
@@ -827,16 +853,15 @@ Console::helpArguments(const RetroShellCmd &current)
 void
 Console::helpSubcommands(const RetroShellCmd &current)
 {
-    auto indent = string("    ");
+    if (current.subCommands.empty()) return;
 
-    // Determine tabular positions to align the output
-    isize tab = 0;
+    // Determine alignment parameters to get a properly formatted output
+    auto indent = string("         ");
+    isize newlines = 1, tab = 0;
     for (auto &it : current.subCommands) {
         tab = std::max(tab, (isize)it.fullName.length());
     }
     tab += (isize)indent.size();
-
-    isize newlines = 1;
 
     for (auto &it : current.subCommands) {
 

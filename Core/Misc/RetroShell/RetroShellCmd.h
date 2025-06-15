@@ -107,10 +107,10 @@ struct RetroShellCmd {
 
     // Name of this command as displayed in help messages (e.g., "[g]oto")
     string helpName;
-    
+
     // Help description of this command (e.g., "Eject disk")
     std::vector<string> help;
-    
+
     // List of required arguments (DEPRECATED)
     std::vector<string> requiredArgs;
 
@@ -148,12 +148,12 @@ struct RetroShellCmd {
 
     // Creates a new node in the command tree
     void add(const RetroShellCmdDescriptor &descriptor);
-    
-    // Registers an alias name for an existing command 
+
+    // Registers an alias name for an existing command
     void clone(const std::vector<string> &tokens,
                const string &alias,
                const std::vector<isize> &values = { });
-    
+
     // Returns arguments counts
     isize minArgs() const { return isize(requiredArgs.size()); }
     isize optArgs() const { return isize(optionalArgs.size()); }
@@ -173,7 +173,11 @@ struct RetroShellCmd {
     string autoComplete(const string& token);
 
     // Returns a syntax string for this command
-    string usage() const;
+    [[deprecated]] string usage() const;
+
+    // Returns a syntax description for subcommands or arguments
+    string cmdUsage() const;
+    string argUsage() const;
 };
 
 }

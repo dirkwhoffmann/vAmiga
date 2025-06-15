@@ -320,13 +320,15 @@ protected:
     void exec(const Arguments &argv, bool verbose = false) throws;
 
     // Prints a usage string for a command
-    void usage(const RetroShellCmd &command);
+    [[deprecated]] void usage(const RetroShellCmd &command);
+    void cmdUsage(const RetroShellCmd &command);
+    void argUsage(const RetroShellCmd &command);
 
     // Displays a help text for a (partially typed in) command
     void help(const string &command);
     void help(const Arguments &argv);
     void help(const RetroShellCmd &command);
-    void helpArguments(const RetroShellCmd &command);
+    void helpArguments(const RetroShellCmd &command, bool verbose = true);
     void helpSubcommands(const RetroShellCmd &command);
 
     // Prints a textual description of an error in the console

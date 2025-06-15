@@ -288,19 +288,27 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
             }
     });
 
+    /*
     root.add({
 
         .tokens = { "block" },
         .help   = { "Manage file system blocks." }
     });
+    */
 
     root.add({
 
-        .tokens = { "block", "info" },
+        .tokens = { "block" },
+        .help   = { "Access single blocks" }
+    });
+
+    root.add({
+
+        .tokens = { "block", "" },
         .argx   = {
             { .name = { "nr", "Block number" } },
         },
-        .help   = { "Manage file system blocks." },
+        .help   = { "Analyze a block." },
         .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             auto nr = parseBlock(args.at("nr"));
@@ -311,6 +319,42 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         }
     });
 
+    root.add({
+
+        .tokens = { "block", "root" },
+        .argx   = {
+            { .name = { "h", "List block contents in hex." }, .flags = arg::flag },
+        },
+        .help   = { "Analyze the root block." },
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+
+            std::stringstream ss;
+            fs.rootDir().ptr()->dump(ss);
+            *this << '\n' << ss << '\n';
+        }
+    });
+
+    root.add({
+
+        .tokens = { "block", "dump" },
+        .extra  = { arg::nr },
+        .argx   = { { .name = { "nr", "Block number" } } },
+        .help   = { "Dump the contents of a block." },
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+
+            if (auto ptr = fs.blockPtr((Block)parseNum(argv[0])); ptr) {
+
+                std::stringstream ss;
+                ptr->hexDump(ss);
+                *this << ss;
+
+            } else {
+
+                throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
+            }
+        }
+    });
+    
     root.add({
 
         .tokens = { "hexdump" },
@@ -345,34 +389,6 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
             *this << "Holla, die Waldfee";
         }
     });
-
-    root.add({
-
-        .tokens = { "block" },
-        .help   = { "Manages blocks" }
-    });
-
-    root.add({
-
-        .tokens = { "block", "dump" },
-        .extra  = { arg::nr },
-        .argx   = { { .name = { "nr", "Block number" } } },
-        .help   = { "Dump the contents of a block." },
-        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
-
-            if (auto ptr = fs.blockPtr((Block)parseNum(argv[0])); ptr) {
-
-                std::stringstream ss;
-                ptr->hexDump(ss);
-                *this << ss;
-
-            } else {
-
-                throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
-            }
-        }
-    });
-
 }
 
 }
