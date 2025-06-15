@@ -326,9 +326,9 @@ protected:
     // Displays a help text for a (partially typed in) command
     void help(const string &cmd);
     void help(const Arguments &argv);
-    void help(const RetroShellCmd &cmd);
-    void helpArguments(const RetroShellCmd &cmd, isize indent, bool verbose = true);
-    void helpSubcommands(const RetroShellCmd &cmd, isize indent, bool verbose = true);
+    void help(const RetroShellCmd &cmd); // TODO: MOVE TO RetroShellCmd
+    void helpArguments(const RetroShellCmd &cmd, isize indent, bool verbose = true); // TODO: MOVE TO RetroShellCmd
+    void helpSubcommands(const RetroShellCmd &cmd, isize indent, bool verbose = true); // TODO: MOVE TO RetroShellCmd
 
     // Prints a textual description of an error in the console
     void describe(const std::exception &exception, isize line = 0, const string &cmd = "");

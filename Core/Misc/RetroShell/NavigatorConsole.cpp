@@ -48,6 +48,7 @@ NavigatorConsole::welcome()
     *this << '\n';
 
     printHelp();
+    // retroShell.asyncExec("import df0");
 }
 
 void
@@ -288,14 +289,6 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
             }
     });
 
-    /*
-    root.add({
-
-        .tokens = { "block" },
-        .help   = { "Manage file system blocks." }
-    });
-    */
-
     root.add({
 
         .tokens = { "block" },
@@ -306,55 +299,29 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
         .tokens = { "block", "" },
         .argx   = {
-            { .name = { "nr", "Block number" } },
+            { .name = { "nr", "Block number" }, .flags = arg::opt },
+            { .name = { "h", "Print a hex dump" }, .flags = arg::flag },
         },
         .help   = { "Analyze a block" },
         .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
-            auto nr = parseBlock(args.at("nr"));
+            auto nr = args.contains("nr") ? parseBlock(args.at("nr")) : fs.pwd().ref;
 
-            std::stringstream ss;
-            fs.blockPtr(nr)->dump(ss);
-            *this << '\n' << ss << '\n';
-        }
-    });
-
-    root.add({
-
-        .tokens = { "block", "root" },
-        .argx   = {
-            { .name = { "h", "List block contents in hex" }, .flags = arg::flag },
-        },
-        .help   = { "Analyze the root block" },
-        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
-
-            std::stringstream ss;
-            fs.rootDir().ptr()->dump(ss);
-            *this << '\n' << ss << '\n';
-        }
-    });
-
-    root.add({
-
-        .tokens = { "block", "dump" },
-        .extra  = { arg::nr },
-        .argx   = { { .name = { "nr", "Block number" } } },
-        .help   = { "Dump the contents of a block" },
-        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
-
-            if (auto ptr = fs.blockPtr((Block)parseNum(argv[0])); ptr) {
+            if (auto ptr = fs.blockPtr(nr)) {
 
                 std::stringstream ss;
-                ptr->hexDump(ss);
-                *this << ss;
 
-            } else {
+                if (args.contains("h")) {
+                    ptr->hexDump(ss);
+                } else {
+                    ptr->dump(ss);
+                }
 
-                throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
+                *this << '\n' << ss << '\n';
             }
         }
     });
-    
+
     root.add({
 
         .tokens = { "hexdump" },

@@ -823,7 +823,9 @@ FloppyDrive::readyToStepDown() const
 
 void
 FloppyDrive::step(isize dir)
-{    
+{
+    bool didStep = false;
+
     // Update the disk change signal
     if (hasDisk()) dskchange = true;
 
@@ -836,6 +838,7 @@ FloppyDrive::step(isize dir)
         if (head.cylinder > 0) {
 
             head.cylinder--;
+            didStep = true;
             recordCylinder(head.cylinder);
 
             // Determine when the step will be completed
@@ -856,6 +859,7 @@ FloppyDrive::step(isize dir)
         if (head.cylinder < 83) {
 
             head.cylinder++;
+            didStep = true;
             recordCylinder(head.cylinder);
 
             // Determine when the step will be completed
@@ -868,21 +872,24 @@ FloppyDrive::step(isize dir)
         debug(DSK_CHECKSUM, "Stepping up to cylinder %ld\n", head.cylinder);
     }
     
-    // Push drive head forward
-    if (ALIGN_HEAD) head.offset = 0;
-    
-    // Notify the GUI
-    if (pollsForDisk()) {
-        
-        msgQueue.put(Msg::DRIVE_POLL, DriveMsg {
-            i16(objid), i16(head.cylinder), config.pollVolume, config.pan
-        });
-        
-    } else {
+    if (didStep) {
 
-        msgQueue.put(Msg::DRIVE_STEP, DriveMsg {
-            i16(objid), i16(head.cylinder), config.stepVolume, config.pan
-        });
+        // Push drive head forward
+        if (ALIGN_HEAD) head.offset = 0;
+
+        // Notify the GUI
+        if (pollsForDisk()) {
+
+            msgQueue.put(Msg::DRIVE_POLL, DriveMsg {
+                i16(objid), i16(head.cylinder), config.pollVolume, config.pan
+            });
+
+        } else {
+
+            msgQueue.put(Msg::DRIVE_STEP, DriveMsg {
+                i16(objid), i16(head.cylinder), config.stepVolume, config.pan
+            });
+        }
     }
 }
 

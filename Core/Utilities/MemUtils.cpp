@@ -96,25 +96,23 @@ void hexdumpLongwords(u8 *p, isize size, isize cols)
 void dump(std::ostream &os, const char *fmt, std::function<isize(isize offset, isize bytes)> read)
 {
     bool ctrl = false;
-    bool lastLine = false;
     isize ccnt = 0, bcnt = 0;
     char c;
 
-    while (!lastLine) {
+    // Continue as long as data is available
+    while (read(bcnt, 1) != -1 && read(ccnt, 1) != -1) {
 
+        // Rewind to the beginning of the format string
         const char *p = fmt;
 
-        // Break the loop if there is nothing left to print
-        if (read(bcnt, 1) == -1) break;
-
         // Print one line of data
-        do {
-
-            c = *p++;
+        while ((c = *p++) != '\0') {
 
             if (!ctrl) {
 
-                if (c == '%') { ctrl = true; } else { os << c; }
+                if (c == '%') { ctrl = true; } else {
+                    if (c == '\n') { os << std::endl; } else { os << c; }
+                }
                 continue;
             }
 
@@ -132,7 +130,6 @@ void dump(std::ostream &os, const char *fmt, std::function<isize(isize offset, i
                         ccnt += 1;
                     } else {
                         os << ' ';
-                        lastLine = true;
                     }
                     break;
 
@@ -143,7 +140,6 @@ void dump(std::ostream &os, const char *fmt, std::function<isize(isize offset, i
                         bcnt += 1;
                     } else {
                         os << std::setw(2) << std::setfill(' ') << " ";
-                        lastLine = true;
                     }
                     break;
 
@@ -154,7 +150,6 @@ void dump(std::ostream &os, const char *fmt, std::function<isize(isize offset, i
                         bcnt += 2;
                     } else {
                         os << std::setw(4) << std::setfill(' ') << " ";
-                        lastLine = true;
                     }
                     break;
 
@@ -165,7 +160,6 @@ void dump(std::ostream &os, const char *fmt, std::function<isize(isize offset, i
                         bcnt += 4;
                     } else {
                         os << std::setw(8) << std::setfill(' ') << " ";
-                        lastLine = true;
                     }
                     break;
 
@@ -174,8 +168,7 @@ void dump(std::ostream &os, const char *fmt, std::function<isize(isize offset, i
             }
 
             ctrl = false;
-
-        } while (c);
+        }
     }
 }
 

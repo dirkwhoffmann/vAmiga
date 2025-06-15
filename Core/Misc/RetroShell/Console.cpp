@@ -748,14 +748,6 @@ Console::exec(const Arguments &argv, bool verbose)
     current->callback(args, parsedArgs, current->param);
 }
 
-/*
-void
-Console::usage(const RetroShellCmd& current)
-{
-    *this << '\r' << "Usage: " << current.usage() << '\n';
-}
-*/
-
 void
 Console::cmdUsage(const RetroShellCmd& current, const string &prefix)
 {
@@ -801,20 +793,35 @@ Console::help(const RetroShellCmd& current)
 
     if (current.subCommands.empty()) {
 
+        // Describe the current command
         argUsage(current, prefix);
         helpArguments(current, prefix.size());
 
     } else {
 
-        string prefix ="Usage: ";
+        // Check if a command handler is among the subcommands
+        auto *ptr = current.seek("");
 
-        cmdUsage(current, prefix);
-        helpSubcommands(current, prefix.size());
+        bool hasProperSubcommands = current.subCommands.size() >= (ptr ? 2 : 1);
 
-        if (auto *ptr = current.seek(""); ptr) {
+        if (hasProperSubcommands) {
 
-            argUsage(*ptr, string(prefix.size(), ' '));
-            helpArguments(*ptr, prefix.size() + current.name.size() + 1, false);
+            // Describe all subcommands
+            cmdUsage(current, prefix);
+            helpSubcommands(current, prefix.size());
+
+            if (ptr) {
+
+                // Describe the current command
+                argUsage(*ptr, string(prefix.size(), ' '));
+                helpArguments(*ptr, prefix.size() + current.name.size() + 1, false);
+            }
+
+        } else if (ptr) {
+
+            // Describe the current command
+            argUsage(*ptr, string(prefix));
+            helpArguments(*ptr, prefix.size() + current.name.size() + 1);
         }
     }
 }
