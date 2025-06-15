@@ -664,8 +664,21 @@ FSBlock::dump(std::ostream &os) const
 {
     using namespace util;
 
-    os << tab("Block") << dec(nr) << std::endl;
-    os << tab("Type") << FSBlockTypeEnum::key(type) << std::endl;
+    os << tab("Block");
+    os << dec(nr) << std::endl;
+    os << tab("Type");
+    os << FSBlockTypeEnum::key(type) << std::endl;
+
+    if (hasHeaderKey()) {
+
+        os << tab("Header Key");
+        os << dec(getHeaderKey()) << std::endl;
+    }
+    if (hasChecksum()) {
+
+        os << tab("Checksum");
+        os << hex(getChecksum()) << std::endl;
+    }
 
     switch (type) {
 
@@ -674,22 +687,12 @@ FSBlock::dump(std::ostream &os) const
             os << tab("Header");
             for (isize i = 0; i < 8; i++) os << hex(data[i]) << " ";
             os << std::endl;
-
-            if (nr == 0) {
-
-                os << tab("Checksum");
-                os << hex(getChecksum()) << std::endl;
-            }
             break;
 
         case FSBlockType::ROOT_BLOCK:
 
             os << tab("Name");
             os << getName() << std::endl;
-            os << tab("Header Key");
-            os << getHeaderKey() << std::endl;
-            os << tab("Checksum");
-            os << hex(getChecksum()) << std::endl;
             os << tab("Created");
             os << getCreationDate().str() << std::endl;
             os << tab("Modified");
@@ -698,16 +701,6 @@ FSBlock::dump(std::ostream &os) const
             os << FSBlock::rangeString(getBmBlockRefs()) << std::endl;
             os << tab("Bitmap extension block");
             os << dec(getNextBmExtBlockRef()) << std::endl;
-            os << tab("Hash table");
-            for (isize i = 0, j = 0; i < hashTableSize(); i++) {
-                if (u32 value = read32(data.ptr + 24 + 4 * i); value) {
-                    if (j++) os << std::endl << tab();
-                    os << std::setfill(' ') << std::setw(2) << i << " -> ";
-                    os << std::setfill(' ') << std::setw(4) << value << " ";
-                }
-            }
-            os << std::endl;
-            os << tab("Hash table");
             break;
 
         case FSBlockType::BITMAP_BLOCK:
@@ -720,8 +713,6 @@ FSBlock::dump(std::ostream &os) const
                     }
                 }
             }
-            os << tab("Checksum");
-            os << getChecksum() << std::endl;
             os << tab("Free");
             os << dec(count) << " blocks" << std::endl;
             break;
@@ -731,17 +722,13 @@ FSBlock::dump(std::ostream &os) const
             os << tab("Bitmap blocks");
             os << FSBlock::rangeString(getBmBlockRefs()) << std::endl;
             os << tab("Next extension block");
-            os << getNextBmExtBlockRef() << std::endl;
+            os << dec(getNextBmExtBlockRef()) << std::endl;
             break;
 
         case FSBlockType::USERDIR_BLOCK:
 
             os << tab("Name");
             os << getName() << std::endl;
-            os << tab("Header Key");
-            os << getHeaderKey() << std::endl;
-            os << tab("Checksum");
-            os << hex(getChecksum()) << std::endl;
             os << tab("Comment");
             os << getComment() << std::endl;
             os << tab("Created");
@@ -756,10 +743,6 @@ FSBlock::dump(std::ostream &os) const
 
             os << tab("Name");
             os << getName() << std::endl;
-            os << tab("Header Key");
-            os << getHeaderKey() << std::endl;
-            os << tab("Checksum");
-            os << hex(getChecksum()) << std::endl;
             os << tab("Comment");
             os << getComment() << std::endl;
             os << tab("Created");
@@ -768,30 +751,26 @@ FSBlock::dump(std::ostream &os) const
             os << hex(HI_WORD(get32(-49))) << std::endl;
             os << tab("GID (Group ID)");
             os << hex(LO_WORD(get32(-49))) << std::endl;
-            os << tab("Protection bits");
+            os << tab("Protection flags");
             os << hex(getProtectionBits()) << std::endl;
             os << tab("File size");
-            os << getFileSize() << std::endl;
+            os << dec(getFileSize()) << " bytes" << std::endl;
             os << tab("First data block");
-            os << getFirstDataBlockRef() << std::endl;
+            os << dec(getFirstDataBlockRef()) << std::endl;
             os << tab("Data block count");
-            os << getNumDataBlockRefs() << " out of " << getMaxDataBlockRefs() << std::endl;
+            os << dec(getNumDataBlockRefs()) << " out of " << dec(getMaxDataBlockRefs()) << std::endl;
             os << tab("Data block refs");
             os << FSBlock::rangeString(getDataBlockRefs()) << std::endl;
             os << tab("First extension block");
-            os << getNextListBlockRef() << std::endl;
+            os << dec(getNextListBlockRef()) << std::endl;
             os << tab("Parent dir");
-            os << getParentDirRef() << std::endl;
+            os << dec(getParentDirRef()) << std::endl;
             os << tab("Next file");
-            os << getNextHashRef() << std::endl;
+            os << dec(getNextHashRef()) << std::endl;
             break;
 
         case FSBlockType::FILELIST_BLOCK:
 
-            os << tab("Header Key");
-            os << getHeaderKey() << std::endl;
-            os << tab("Checksum");
-            os << hex(getChecksum()) << std::endl;
             os << tab("Header block");
             os << getFileHeaderRef() << std::endl;
             os << tab("Data block count");
@@ -802,15 +781,10 @@ FSBlock::dump(std::ostream &os) const
             os << FSBlock::rangeString(getDataBlockRefs()) << std::endl;
             os << tab("Next extension block");
             os << getNextListBlockRef() << std::endl;
-
             break;
 
         case FSBlockType::DATA_BLOCK_OFS:
 
-            os << tab("Header Key");
-            os << getHeaderKey() << std::endl;
-            os << tab("Checksum");
-            os << hex(getChecksum()) << std::endl;
             os << tab("File header block");
             os << getFileHeaderRef() << std::endl;
             os << tab("Chain number");
@@ -823,6 +797,19 @@ FSBlock::dump(std::ostream &os) const
             
         default:
             break;
+    }
+
+    if (hashTableSize() > 0) {
+
+        os << tab("Hash table");
+        for (isize i = 0, j = 0; i < hashTableSize(); i++) {
+            if (u32 value = read32(data.ptr + 24 + 4 * i); value) {
+                if (j++) os << std::endl << tab();
+                os << std::setfill(' ') << std::setw(2) << i << " -> ";
+                os << std::setfill(' ') << std::setw(4) << value << " ";
+            }
+        }
+        os << std::endl;
     }
 }
 
@@ -1139,6 +1126,25 @@ FSBlock::setFileSize(u32 val)
     }
 }
 
+bool
+FSBlock::hasHeaderKey() const
+{
+    switch (type) {
+
+        case FSBlockType::ROOT_BLOCK:
+        case FSBlockType::USERDIR_BLOCK:
+        case FSBlockType::FILEHEADER_BLOCK:
+        case FSBlockType::FILELIST_BLOCK:
+        case FSBlockType::DATA_BLOCK_OFS:
+
+            return true;
+
+        default:
+
+            return false;
+    }
+}
+
 u32
 FSBlock::getHeaderKey() const
 {
@@ -1177,6 +1183,30 @@ FSBlock::setHeaderKey(u32 val)
     }
 }
 
+bool
+FSBlock::hasChecksum() const
+{
+    switch (type) {
+
+        case FSBlockType::BOOT_BLOCK:
+
+            return nr == 0;
+
+        case FSBlockType::BITMAP_BLOCK:
+        case FSBlockType::ROOT_BLOCK:
+        case FSBlockType::USERDIR_BLOCK:
+        case FSBlockType::FILEHEADER_BLOCK:
+        case FSBlockType::FILELIST_BLOCK:
+        case FSBlockType::DATA_BLOCK_OFS:
+
+            return true;
+
+        default:
+
+            return false;
+    }
+}
+
 u32
 FSBlock::getChecksum() const
 {
@@ -1184,7 +1214,7 @@ FSBlock::getChecksum() const
 
         case FSBlockType::BOOT_BLOCK:
 
-            return get32(1);
+            return nr == 0 ? get32(1) : 0;
 
         case FSBlockType::BITMAP_BLOCK:
 
@@ -1211,7 +1241,7 @@ FSBlock::setChecksum(u32 val)
 
         case FSBlockType::BOOT_BLOCK:
 
-            set32(1, val);
+            if (nr == 0) set32(1, val);
 
         case FSBlockType::BITMAP_BLOCK:
 

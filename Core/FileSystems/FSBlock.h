@@ -207,9 +207,11 @@ public:
     // Getting and setting meta information
     //
 
+    bool hasHeaderKey() const;
     u32 getHeaderKey() const;
     void setHeaderKey(u32 val);
 
+    bool hasChecksum() const;
     u32 getChecksum() const;
     void setChecksum(u32 val);
 

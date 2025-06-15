@@ -202,6 +202,19 @@ Console::lastLineIsEmpty()
 }
 
 void
+Console::printHelp()
+{
+    *this << vspace{0};
+
+    storage << "Type 'help' or press 'Tab' twice for help.\n";
+    storage << "Press 'PgUp', 'PgDown', or 'Shift+Tab' to switch consoles.";
+
+    remoteManager.rshServer << "Type 'help' for help.\n";
+
+    *this << vspace{1};
+}
+
+void
 Console::printState()
 {
     dump(amiga, Category::Trace);

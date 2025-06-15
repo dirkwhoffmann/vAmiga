@@ -53,12 +53,7 @@ NavigatorConsole::welcome()
 void
 NavigatorConsole::printHelp()
 {
-    storage << "Type 'help' or press 'TAB' twice for help.\n";
-    storage << "Press 'SHIFT+LEFT' or 'SHIFT+RIGHT' to switch to another console.";
-
-    remoteManager.rshServer << "Type 'help' for help.\n";
-
-    *this << vspace{1};
+    Console::printHelp();
 }
 
 void

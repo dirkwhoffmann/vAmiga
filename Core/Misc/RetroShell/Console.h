@@ -210,7 +210,7 @@ protected:
     virtual void welcome() = 0;
 
     // Prints the help line
-    virtual void printHelp() = 0;
+    virtual void printHelp();
 
     // Prints a state summary (used by the debug shell)
     void printState();
