@@ -789,40 +789,27 @@ Console::help(const Arguments &argv)
 void
 Console::help(const RetroShellCmd& current)
 {
-    string prefix ="Usage: ";
+    if (!current.subCommands.empty()) {
 
-    if (current.subCommands.empty()) {
+        // Describe all subcommands
+        string prefix = "Group: ";
+        cmdUsage(current, prefix);
+        helpSubcommands(current, prefix.size());
 
-        // Describe the current command
-        argUsage(current, prefix);
-        helpArguments(current, prefix.size());
-
-    } else {
-
-        // Check if a command handler is among the subcommands
-        auto *ptr = current.seek("");
-
-        bool hasProperSubcommands = current.subCommands.size() >= (ptr ? 2 : 1);
-
-        if (hasProperSubcommands) {
-
-            // Describe all subcommands
-            cmdUsage(current, prefix);
-            helpSubcommands(current, prefix.size());
-
-            if (ptr) {
-
-                // Describe the current command
-                argUsage(*ptr, string(prefix.size(), ' '));
-                helpArguments(*ptr, prefix.size() + current.name.size() + 1, false);
-            }
-
-        } else if (ptr) {
+        if (current.callback) {
 
             // Describe the current command
-            argUsage(*ptr, string(prefix));
-            helpArguments(*ptr, prefix.size() + current.name.size() + 1);
+            string prefix = "       Usage: ";
+            argUsage(current, prefix);
+            helpArguments(current, prefix.size(), false);
         }
+        
+    } else {
+
+        // Describe the current command
+        string prefix = "Usage: ";
+        argUsage(current, prefix);
+        helpArguments(current, prefix.size());
     }
 }
 
@@ -831,7 +818,7 @@ Console::helpArguments(const RetroShellCmd &current, isize indent, bool verbose)
 {
     if (current.arguments.empty()) return;
 
-    auto skip = [](const RSArgumentDescriptor &it) { return it.isHidden() || it.helpStr().empty(); };
+    auto skip = [](const RSArgDescriptor &it) { return it.isHidden() || it.helpStr().empty(); };
 
     // Determine the tabular position to align the output
     isize tab = 0;
@@ -867,23 +854,26 @@ Console::helpSubcommands(const RetroShellCmd &current, isize indent, bool verbos
 {
     if (current.subCommands.empty()) return;
 
-    // Determine alignment parameters to get a properly formatted output
-    // auto indent = string("         ");
-    isize newlines = 1, tab = 0;
+    // Collect all commands
+    std::vector<const RetroShellCmd *> cmds;
     for (auto &it : current.subCommands) {
-        tab = std::max(tab, (isize)it.fullName.length());
+        if (!it.hidden && !it.help.empty() && !it.help[0].empty()) cmds.push_back(&it);
     }
-    tab += indent; //  (isize)indent.size();
+    if (current.callback) cmds.push_back(&current);
 
-    for (auto &it : current.subCommands) {
+    // Determine alignment parameters to get a properly formatted output
+    isize newlines = 1, tab = 0;
+    for (auto &it : cmds) {
+        tab = std::max(tab, (isize)it->fullName.length());
+    }
+    tab += indent;
 
-        // Only proceed if the command is visible
-        if (it.hidden || it.help.empty() || it.help[0] == "") continue;
+    for (auto &it : cmds) {
 
         // Print the group (if present)
-        if (!it.groupName.empty()) {
+        if (!it->groupName.empty()) {
 
-            *this << '\n' << it.groupName << '\n';
+            *this << '\n' << it->groupName << '\n';
             newlines = 1;
         }
 
@@ -894,10 +884,10 @@ Console::helpSubcommands(const RetroShellCmd &current, isize indent, bool verbos
 
         // Print command description
         *this << string(indent, ' ');
-        *this << it.fullName;
+        *this << it->fullName;
         (*this).tab(tab);
         *this << " : ";
-        *this << it.help[0];
+        *this << (it == &current ? it->chelp : it->ghelp);
         *this << '\n';
     }
 

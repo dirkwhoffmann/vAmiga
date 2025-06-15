@@ -292,17 +292,12 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "block" },
-        .help   = { "Access single blocks" }
-    });
-
-    root.add({
-
-        .tokens = { "block", "" },
         .argx   = {
             { .name = { "nr", "Block number" }, .flags = arg::opt },
             { .name = { "h", "Print a hex dump" }, .flags = arg::flag },
         },
-        .help   = { "Analyze a block" },
+        .help   = { "Inspect a block" },
+        .ghelp  = { "Manage blocks" },
         .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             auto nr = args.contains("nr") ? parseBlock(args.at("nr")) : fs.pwd().ref;
@@ -319,6 +314,36 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
                 *this << '\n' << ss << '\n';
             }
+        }
+    });
+
+    root.add({
+
+        .tokens = { "block", "import" },
+        .argx   = {
+            { .name = { "nr", "Block number" } },
+            { .name = { "path", "File path" } },
+        },
+        .help   = { "Import a block from a file" },
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+
+            *this << "Holla, die Waldfee!" << '\n';
+            *this << "This is not implemented, yet!" << '\n';
+        }
+    });
+
+    root.add({
+
+        .tokens = { "block", "export" },
+        .argx   = {
+            { .name = { "nr", "Block number" } },
+            { .name = { "path", "File path" } },
+        },
+        .help   = { "Export a block to a file" },
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+
+            *this << "Holla, die Waldfee!" << '\n';
+            *this << "This is not implemented, yet!" << '\n';
         }
     });
 

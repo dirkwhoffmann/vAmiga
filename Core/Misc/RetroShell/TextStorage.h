@@ -20,7 +20,6 @@ class TextStorage {
     // Maximum number of stored lines
     static constexpr usize capacity = 512;
 
-public:// REMOVE ASAP
     // The stored lines
     std::vector<string> storage;
 

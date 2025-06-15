@@ -19,19 +19,19 @@ namespace vamiga {
 string RetroShellCmd::currentGroup;
 
 string
-RSArgumentDescriptor::nameStr() const
+RSArgDescriptor::nameStr() const
 {
     return name[0];
 }
 
 string
-RSArgumentDescriptor::helpStr() const
+RSArgDescriptor::helpStr() const
 {
     return name.size() > 1 ? name[1] : "" ;
 }
 
 string
-RSArgumentDescriptor::keyStr() const
+RSArgDescriptor::keyStr() const
 {
     if (key.empty()) {
 
@@ -43,7 +43,7 @@ RSArgumentDescriptor::keyStr() const
 }
 
 string
-RSArgumentDescriptor::valueStr() const
+RSArgDescriptor::valueStr() const
 {
     if (value.empty()) {
 
@@ -55,7 +55,7 @@ RSArgumentDescriptor::valueStr() const
 }
 
 string
-RSArgumentDescriptor::keyValueStr() const
+RSArgDescriptor::keyValueStr() const
 {
     if (key.empty()) {
 
@@ -67,13 +67,13 @@ RSArgumentDescriptor::keyValueStr() const
 }
 
 string
-RSArgumentDescriptor::usageStr() const
+RSArgDescriptor::usageStr() const
 {
     return isHidden() ? "" : isRequired() ? keyValueStr() : "[" + keyValueStr() + "]";
 }
 
 void
-RetroShellCmd::add(const RetroShellCmdDescriptor &descriptor)
+RetroShellCmd::add(const RSCmdDescriptor &descriptor)
 {
     assert(!descriptor.tokens.empty());
 
@@ -93,14 +93,16 @@ RetroShellCmd::add(const RetroShellCmdDescriptor &descriptor)
     // Create the instruction
     RetroShellCmd cmd;
     cmd.name = name;
-    // cmd.fullName = (node->fullName.empty() ? "" : node->fullName + " ") + helpName;
     cmd.fullName = util::concat({ node->fullName, helpName }, " ");
-    cmd.helpName = helpName;
+    // cmd.helpName = helpName;
     cmd.groupName = currentGroup;
     cmd.requiredArgs = descriptor.args;
     cmd.optionalArgs = descriptor.extra;
     cmd.arguments = descriptor.argx;
     cmd.help = descriptor.help;
+    cmd.chelp = descriptor.help.empty() ? "" : descriptor.help[0];
+    cmd.ghelp = descriptor.ghelp.empty() ? cmd.chelp : descriptor.ghelp;
+    cmd.thelp = helpName;
     cmd.callback = descriptor.func;
     cmd.param = descriptor.values;
     cmd.hidden = descriptor.hidden;
@@ -128,7 +130,7 @@ RetroShellCmd::clone(const std::vector<string> &tokens,
     newTokens.push_back(alias);
     
     // Create the instruction
-    add(RetroShellCmdDescriptor {
+    add(RSCmdDescriptor {
         
         .tokens = newTokens,
         .hidden = true,
@@ -206,15 +208,11 @@ string
 RetroShellCmd::cmdUsage() const
 {
     std::vector<string> items;
-    string ldelim = "{ ", rdelim = " }";
 
     for (auto &it : subCommands) {
-
-        if (it.hidden) continue;
-        if (it.name == "") { ldelim = "[ "; rdelim = " ]"; continue; }
-        items.push_back(it.name);
+        if (!it.hidden) items.push_back(it.name);
     }
-    auto combined = util::concat(items, " | ", ldelim, rdelim);
+    auto combined = util::concat(items, " | ", callback ? "[ " : "{ ", callback ? " ]" : " }");
     return  util::concat({ fullName, combined });
 }
 

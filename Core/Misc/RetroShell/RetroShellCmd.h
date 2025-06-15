@@ -56,10 +56,9 @@ struct Token {
     string autoComplete(const std::string &prefix) const;
 };
 
-struct RSArgumentDescriptor {
+struct RSArgDescriptor {
 
     std::vector<string> name;
-    // arg::type type;
     string key;
     string value;
     usize flags;
@@ -79,14 +78,15 @@ struct RSArgumentDescriptor {
     string usageStr() const;
 };
 
-struct RetroShellCmdDescriptor {
+struct RSCmdDescriptor {
     
     const std::vector<string> &tokens = {};
     bool hidden = false;
     const std::vector<string> &args = {}; // DEPRECATED
     const std::vector<string> &extra = {}; // DEPRECATED
-    const std::vector<RSArgumentDescriptor> &argx = {}; // TODO: Rename to args
+    const std::vector<RSArgDescriptor> &argx = {}; // TODO: Rename to args
     const std::vector<string> help = {};
+    string ghelp = {}; // Command group help
     std::function<void (Arguments&, const ParsedArguments &args, const std::vector<isize> &)> func = nullptr;
     const std::vector<isize> &values = {};
 };
@@ -106,10 +106,19 @@ struct RetroShellCmd {
     string fullName;
 
     // Name of this command as displayed in help messages (e.g., "[g]oto")
-    string helpName;
+    // string helpName;
 
-    // Help description of this command (e.g., "Eject disk")
+    // Help description of this command (e.g., "Eject disk") (DEPRECATED)
     std::vector<string> help;
+
+    // Command help
+    string chelp;
+
+    // Command group help (defaults to the command help)
+    string ghelp;
+
+    // Command token help (e.g. "[g]oto") (defaults to the command name)
+    string thelp;
 
     // List of required arguments (DEPRECATED)
     std::vector<string> requiredArgs;
@@ -118,7 +127,7 @@ struct RetroShellCmd {
     std::vector<string> optionalArgs;
 
     // Argument list
-    std::vector<RSArgumentDescriptor> arguments;
+    std::vector<RSArgDescriptor> arguments;
 
     // Mandatory arguments (must appear in order)Add commentMore actions
     // std::vector<arg::Argument> requiredArgx; // TODO: Rename to requiredArgs
@@ -147,7 +156,7 @@ struct RetroShellCmd {
     //
 
     // Creates a new node in the command tree
-    void add(const RetroShellCmdDescriptor &descriptor);
+    void add(const RSCmdDescriptor &descriptor);
 
     // Registers an alias name for an existing command
     void clone(const std::vector<string> &tokens,
