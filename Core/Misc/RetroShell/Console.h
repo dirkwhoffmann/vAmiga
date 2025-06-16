@@ -175,6 +175,7 @@ public:
     Console &operator<<(unsigned long value);
     Console &operator<<(long long value);
     Console &operator<<(unsigned long long value);
+    Console &operator<<(const std::vector<string> &vec);
     Console &operator<<(std::stringstream &stream);
     Console &operator<<(const FSName &value);
     Console &operator<<(const FSPath &value);
@@ -261,8 +262,14 @@ protected:
     // Splits an input string into an argument list
     Arguments split(const string& userInput);
 
+    // Splits an argument list into a command part and an argument part
+    //std::pair<Arguments, Arguments> split(const Arguments &argv);
+
     // Auto-completes an argument list
     void autoComplete(Arguments &argv);
+
+    // Strips off the command tokens and returns a pointer to the command
+    RetroShellCmd *seekCommand(std::vector<string> &argv);
 
     // Parses an argument list
     std::map<string,string> parse(const RetroShellCmd &cmd, const Arguments &args);

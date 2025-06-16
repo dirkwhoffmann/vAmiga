@@ -94,21 +94,21 @@ Amiga::prefix(isize level, const char *component, isize line) const
 
         if (level >= 3) {
             
-            fprintf(stderr, " [%lld] (%3ld,%3ld)", agnus.pos.frame, agnus.pos.v, agnus.pos.h);
+            fprintf(stderr, "[%lld] (%3ld,%3ld) ", agnus.pos.frame, agnus.pos.v, agnus.pos.h);
         }
         if (level >= 4) {
             
-            fprintf(stderr, " %06X ", cpu.getPC0());
+            fprintf(stderr, "%06X ", cpu.getPC0());
             if (agnus.copper.servicing) {
-                fprintf(stderr, " [%06X]", agnus.copper.getCopPC0());
+                fprintf(stderr, "[%06X] ", agnus.copper.getCopPC0());
             }
-            fprintf(stderr, " %2X ", cpu.getIPL());
+            fprintf(stderr, "%2X ", cpu.getIPL());
         }
         if (level >= 5) {
             
             u16 dmacon = agnus.dmacon;
             bool dmaen = dmacon & DMAEN;
-            fprintf(stderr, " %c%c%c%c%c%c",
+            fprintf(stderr, "%c%c%c%c%c%c ",
                     (dmacon & BPLEN) ? (dmaen ? 'B' : 'B') : '-',
                     (dmacon & COPEN) ? (dmaen ? 'C' : 'c') : '-',
                     (dmacon & BLTEN) ? (dmaen ? 'B' : 'b') : '-',
@@ -116,7 +116,7 @@ Amiga::prefix(isize level, const char *component, isize line) const
                     (dmacon & DSKEN) ? (dmaen ? 'D' : 'd') : '-',
                     (dmacon & AUDEN) ? (dmaen ? 'A' : 'a') : '-');
             
-            fprintf(stderr, " %04X %04X", paula.intena, paula.intreq);
+            fprintf(stderr, "%04X %04X ", paula.intena, paula.intreq);
         }
         if (level >= 2) {
             

@@ -109,6 +109,14 @@ Console::operator<<(unsigned long long value)
 }
 
 Console &
+Console::operator<<(const std::vector<string> &vec)
+{
+    *this << util::concat(vec);
+    return *this;
+}
+
+
+Console &
 Console::operator<<(std::stringstream &stream)
 {
     string line;
@@ -453,6 +461,35 @@ Console::split(const string& userInput)
     return result;
 }
 
+/*
+std::pair<Arguments, Arguments>
+Console::split(const Arguments &argv)
+{
+    Arguments cmds, args = argv;
+    auto *it = &root;
+
+    while (!args.empty() && (it = it->seek(args.front()))) {
+
+        cmds.push_back(args.front());
+        args.erase(args.begin());
+    }
+
+    return { cmds, args };
+}
+*/
+RetroShellCmd *
+Console::seekCommand(std::vector<string> &argv)
+{
+    RetroShellCmd *result = nullptr;
+
+    for (auto *it = &root; !argv.empty() && (it = it->seek(argv.front())); ) {
+
+        argv.erase(argv.begin());
+        result = it;
+    }
+    return result;
+}
+
 string
 Console::autoComplete(const string& userInput)
 {
@@ -579,11 +616,13 @@ Console::parse(const RetroShellCmd &cmd, const Arguments &args)
         fatalError;
     }
 
+    // Print some debug information
+    for (auto &it : map) debug(RSH_DEBUG, "arg['%s']='%s'\n", it.first.c_str(), it.second.c_str());
+
     // Check for invalid or extra arguments
     if (!flags.empty()) { throw UnknownFlagError(flags.front()); }
     if (!keyVal.empty()) { throw UnknownKeyValueError(keyVal.front()); }
     if (!std.empty()) { throw TooManyArgumentsError(cmd.fullName); }
-
 
     return map;
 }
@@ -694,58 +733,39 @@ Console::exec(const string& userInput, bool verbose)
 void
 Console::exec(const Arguments &argv, bool verbose)
 {
-    // In 'verbose' mode, print the token list
-    if (verbose) {
-        for (const auto &it : argv) *this << it << ' ';
-        *this << '\n';
-    }
-
-    // Skip empty lines
-    if (argv.empty()) return;
-
-    // Seek the command in the command tree
-    RetroShellCmd *current = &getRoot(), *next;
     Arguments args = argv;
 
-    while (!args.empty() && ((next = current->seek(args.front())) != nullptr)) {
+    // In 'verbose' mode, print the token list
+    if (verbose) *this << args << '\n';
 
-        current = current->seek(args.front());
-        args.erase(args.begin());
-    }
-    if ((next = current->seek(""))) current = next;
+    // Skip empty lines
+    if (args.empty()) return;
 
-    // Error out if no command handler is present
-    if (!current->callback && !args.empty()) {
-        throw util::ParseError(args.front());
-    }
-    if (!current->callback && args.empty()) {
-        throw TooFewArgumentsError(current->fullName);
-    }
+    // Find the command in the command tree
+    auto *cmd = seekCommand(args);
 
-    // OLD CODE: WILL GO AWAY
-    if (current->arguments.empty()) {
+    // OLD CODE. TODO: REMOVE WHEN ALL COMMAND HANDLER USE THE NEW COMMAND REGISTRATION STYLE
+    if (cmd->arguments.empty()) {
 
-        if ((isize)args.size() < current->minArgs()) throw TooFewArgumentsError(current->fullName);
-        if ((isize)args.size() > current->maxArgs()) throw TooManyArgumentsError(current->fullName);
+        if (auto next = cmd->seek("")) cmd = next;
+
+        if (!cmd->callback && args.empty()) {
+            throw TooFewArgumentsError(cmd->fullName);
+        }
+
+        if ((isize)args.size() < cmd->minArgs()) throw TooFewArgumentsError(cmd->fullName);
+        if ((isize)args.size() > cmd->maxArgs()) throw TooManyArgumentsError(cmd->fullName);
 
         ParsedArguments parsedArgs; // empty
-        current->callback(args, parsedArgs, current->param);
+        cmd->callback(args, parsedArgs, cmd->param);
         return;
     }
 
     // Parse arguments
-    ParsedArguments parsedArgs = parse(*current, args);
-
-    if (RSH_DEBUG) {
-
-        msg("Parsed arguments: %zu\n", parsedArgs.size());
-        for (auto &it : parsedArgs) {
-            msg("  '%s' = '%s'\n", it.first.c_str(), it.second.c_str());
-        }
-    }
+    ParsedArguments parsedArgs = parse(*cmd, args);
 
     // Call the command handler
-    current->callback(args, parsedArgs, current->param);
+    cmd->callback(args, parsedArgs, cmd->param);
 }
 
 void
