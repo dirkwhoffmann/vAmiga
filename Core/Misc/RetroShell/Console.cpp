@@ -742,30 +742,36 @@ Console::exec(const Arguments &argv, bool verbose)
     if (args.empty()) return;
 
     // Find the command in the command tree
-    auto *cmd = seekCommand(args);
+    if (auto *cmd = seekCommand(args); cmd) {
 
-    // OLD CODE. TODO: REMOVE WHEN ALL COMMAND HANDLER USE THE NEW COMMAND REGISTRATION STYLE
-    if (cmd->arguments.empty()) {
 
-        if (auto next = cmd->seek("")) cmd = next;
+        // OLD CODE. TODO: REMOVE WHEN ALL COMMAND HANDLER USE THE NEW COMMAND REGISTRATION STYLE
+        if (cmd->arguments.empty()) {
 
-        if (!cmd->callback && args.empty()) {
-            throw TooFewArgumentsError(cmd->fullName);
+            if (auto next = cmd->seek("")) cmd = next;
+
+            if (!cmd->callback && args.empty()) {
+                throw TooFewArgumentsError(cmd->fullName);
+            }
+
+            if ((isize)args.size() < cmd->minArgs()) throw TooFewArgumentsError(cmd->fullName);
+            if ((isize)args.size() > cmd->maxArgs()) throw TooManyArgumentsError(cmd->fullName);
+
+            ParsedArguments parsedArgs; // empty
+            cmd->callback(args, parsedArgs, cmd->param);
+            return;
         }
 
-        if ((isize)args.size() < cmd->minArgs()) throw TooFewArgumentsError(cmd->fullName);
-        if ((isize)args.size() > cmd->maxArgs()) throw TooManyArgumentsError(cmd->fullName);
+        // Parse arguments
+        ParsedArguments parsedArgs = parse(*cmd, args);
 
-        ParsedArguments parsedArgs; // empty
+        // Call the command handler
         cmd->callback(args, parsedArgs, cmd->param);
-        return;
+
+    } else {
+
+        throw util::ParseError(util::concat(argv));
     }
-
-    // Parse arguments
-    ParsedArguments parsedArgs = parse(*cmd, args);
-
-    // Call the command handler
-    cmd->callback(args, parsedArgs, cmd->param);
 }
 
 void

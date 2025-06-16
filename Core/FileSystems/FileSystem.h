@@ -225,8 +225,8 @@ public:
     bool exists(const fs::path &path) const { return exists(pwd(), path); }
 
     // Lists directory contents
-    void ls(std::ostream &os, const FSPath &path) const;
-    void ls(std::ostream &os) const { return ls(os, pwd()); }
+    void ls(std::ostream &os, const FSPath &path, const FSOpt &opt = {}) const;
+    void ls(std::ostream &os, const FSOpt &opt = {}) const { return ls(os, pwd(), opt); }
 
     void list(std::ostream &os, const FSPath &path, const FSOpt &opt = {}) const;
     void list(std::ostream &os, const FSOpt &opt = {}) const { return list(os, pwd(), opt); }

@@ -48,7 +48,7 @@ NavigatorConsole::welcome()
     *this << '\n';
 
     printHelp();
-    // retroShell.asyncExec("import df0");
+    retroShell.asyncExec("import df0");
 }
 
 void
@@ -148,7 +148,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
                 auto fspath = FSPath(fs, (Block)parseNum(args.at("path")));
                 fs.cd(fspath);
             } else {
-                fs.cd(path);
+                fs.cd(args.at("path"));
             }
         }
     });
@@ -156,14 +156,35 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "dir" },
-        .argx   = { { .name = { "path", "Path to directory" }, .flags = arg::opt } },
+        .argx   = {
+            { .name = { "path", "Path to directory" }, .flags = arg::opt },
+            { .name = { "d", "List directories only" }, .flags = arg::flag },
+            { .name = { "f", "List files only" }, .flags = arg::flag },
+            { .name = { "r", "Traverse subdirectories" }, .flags = arg::flag }
+        },
         .help   = { "Display a sorted list of the files in a directory" },
         .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
-            auto dir = fs.pwd().seek(FSString(args, "path", "."));
+            auto path = FSString(args, "path", ".");
+            auto d = args.contains("d");
+            auto f = args.contains("f");
+            auto r = args.contains("r");
+
+            auto dir = fs.pwd().seek(path);
+
+            FSOpt opt = {
+
+                .recursive = r,
+                .sort = true,
+                
+                .filter = [&](const FSPath &item) {
+
+                    return (!d || item.isDirectory()) && (!f || item.isFile());
+                }
+            };
 
             std::stringstream ss;
-            fs.ls(ss, dir);
+            fs.ls(ss, dir, opt);
             *this << ss;
         }
     });

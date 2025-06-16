@@ -69,7 +69,7 @@ FSPath::operator=(const FSPath &path)
 FSPath&
 FSPath::operator/=(const FSName &name)
 {
-    *this = cd(name);
+    *this = seek(name);
     return *this;
 }
 
@@ -219,13 +219,22 @@ FSPath::getProtectionBitString() const
 }
 
 FSPath
+FSPath::parent() const
+{
+    return isRoot() ? *this : FSPath(fs, fs.blockPtr(ref)->getParentDirRef());
+}
+
+FSPath
 FSPath::seek(const FSName &name) const
 {
     std::set<Block> visited;
     FSBlock *cdb = ptr();
 
-    // Check for special characters
-    // if (name == ".") return *this;
+    // Check for special tokens
+    if (name == "")   return *this;
+    if (name == ".")  return *this;
+    if (name == "..") return parent();
+    if (name == "/")  return fs.rootDir();
 
     // Only proceed if a hash table is present
     if (cdb && cdb->hashTableSize() != 0) {
@@ -251,163 +260,209 @@ FSPath::seek(const FSName &name) const
 }
 
 FSPath
-FSPath::seekDir(const FSName &name) const
-{
-    auto result = seek(name);
-    if (!result.isDirectory()) throw AppError(Fault::FS_NOT_A_DIRECTORY);
-    return result;
-}
-
-FSPath
-FSPath::seekFile(const FSName &name) const
-{
-    auto result = seek(name);
-    if (!result.isFile()) throw AppError(Fault::FS_NOT_A_FILE);
-    return result;
-}
-
-FSPath
 FSPath::seek(const FSString &name) const
 {
     return seek(name.cpp_str());
 }
 
 FSPath
-FSPath::seekDir(const FSString &name) const
-{
-    return seekDir(name.cpp_str());
-}
-
-FSPath
-FSPath::seekFile(const FSString &name) const
-{
-    return seekFile(name.cpp_str());
-}
-
-FSPath
-FSPath::seek(const std::vector<FSName> &path) const
+FSPath::seek(const std::vector<FSName> &name) const
 {
     FSPath result = *this;
-    for (auto &item : path) { result = result.seek(item); }
+    for (auto &it : name) { result = result.seek(it); }
     return result;
 }
 
 FSPath
-FSPath::seekDir(const std::vector<FSName> &path) const
-{
-    auto result = seek(path);
-    if (!result.isDirectory()) throw AppError(Fault::FS_NOT_A_DIRECTORY);
-    return result;
-}
-
-FSPath
-FSPath::seekFile(const std::vector<FSName> &path) const
-{
-    auto result = seek(path);
-    if (!result.isFile()) throw AppError(Fault::FS_NOT_A_FILE);
-    return result;
-}
-
-FSPath
-FSPath::seek(const std::vector<string> &path) const
+FSPath::seek(const std::vector<string> &name) const
 {
     FSPath result = *this;
-    for (auto &item : path) { result = result.seek(FSName(item)); }
+    for (auto &it : name) { result = result.seek(FSName(it)); }
     return result;
 }
 
 FSPath
-FSPath::seekDir(const std::vector<string> &path) const
-{
-    auto result = seek(path);
-    if (!result.isDirectory()) throw AppError(Fault::FS_NOT_A_DIRECTORY);
-    return result;
-}
-
-FSPath
-FSPath::seekFile(const std::vector<string> &path) const
-{
-    auto result = seek(path);
-    if (!result.isFile()) throw AppError(Fault::FS_NOT_A_FILE);
-    return result;
-}
-
-FSPath
-FSPath::seek(const fs::path &path) const
+FSPath::seek(const fs::path &name) const
 {
     FSPath result = fs.rootDir();
+    for (const auto &it : name) { result = result.seek(FSName(it)); }
+    /*
+    for (const auto& part : name) {
 
-    for (const auto& part : path) {
-
-        if (part == path.filename()) {
+        if (part == name.filename()) {
             result = result.seekFile(FSName(part));
         } else {
             result = result.seekDir(FSName(part));
         }
     }
+    */
     return result;
 }
 
 FSPath
-FSPath::seekDir(const fs::path &path) const
+FSPath::seek(const string &name) const
 {
-    if (FSPath result = seek(path); result.isDirectory()) {
+    return seek(util::split(name, '/'));
+}
+
+FSPath
+FSPath::seek(const char *name) const
+{
+    return seek(string(name));
+}
+
+FSPath
+FSPath::seekDir(const FSName &dir) const
+{
+    if (auto result = seek(dir); result.isDirectory()) {
         return result;
     }
-    throw AppError(Fault::FS_NOT_FOUND);
+    throw AppError(Fault::FS_NOT_A_DIRECTORY);
 }
 
 FSPath
-FSPath::seekFile(const fs::path &path) const
+FSPath::seekDir(const FSString &dir) const
 {
-    if (FSPath result = seek(path); result.isFile()) {
+    if (auto result = seek(dir); result.isDirectory()) {
         return result;
     }
-    throw AppError(Fault::FS_NOT_FOUND);
+    throw AppError(Fault::FS_NOT_A_DIRECTORY);
 }
 
 FSPath
-FSPath::seek(const string &path) const
+FSPath::seekDir(const std::vector<FSName> &dir) const
 {
-    return seek(util::split(path, '/'));
+    if (auto result = seek(dir); result.isDirectory()) {
+        return result;
+    }
+    throw AppError(Fault::FS_NOT_A_DIRECTORY);
 }
 
 FSPath
-FSPath::seekDir(const string &path) const
+FSPath::seekDir(const std::vector<string> &dir) const
 {
-    return seekDir(util::split(path, '/'));
+    if (auto result = seek(dir); result.isDirectory()) {
+        return result;
+    }
+    throw AppError(Fault::FS_NOT_A_DIRECTORY);
 }
 
 FSPath
-FSPath::seekFile(const string &path) const
+FSPath::seekDir(const fs::path &dir) const
 {
-    return seekFile(util::split(path, '/'));
+    if (auto result = seek(dir); result.isDirectory()) {
+        return result;
+    }
+    throw AppError(Fault::FS_NOT_A_DIRECTORY);
 }
 
 FSPath
-FSPath::cd(FSName name)
+FSPath::seekDir(const string &dir) const
 {
-    printf("cd: seek(%s)\n", name.c_str());
-    return seek(name);
+    if (auto result = seek(dir); result.isDirectory()) {
+        return result;
+    }
+    throw AppError(Fault::FS_NOT_A_DIRECTORY);
 }
 
 FSPath
-FSPath::cd(const std::vector<FSName> &names)
+FSPath::seekDir(const char *dir) const
 {
-    FSPath result = *this;
-    for (const auto& name : names) result = cd(name);
-    return result;
+    if (auto result = seek(dir); result.isDirectory()) {
+        return result;
+    }
+    throw AppError(Fault::FS_NOT_A_DIRECTORY);
 }
 
 FSPath
-FSPath::cd(const std::vector<string> &names)
+FSPath::seekFile(const FSName &file) const
 {
-    FSPath result = *this;
-    for (const auto& name : names) result = cd(FSName(name));
-    return result;
+    if (auto result = seek(file); result.isFile()) {
+        return result;
+    }
+    throw AppError(Fault::FS_NOT_A_FILE);
 }
 
 FSPath
+FSPath::seekFile(const FSString &file) const
+{
+    if (auto result = seek(file); result.isFile()) {
+        return result;
+    }
+    throw AppError(Fault::FS_NOT_A_FILE);
+}
+
+FSPath
+FSPath::seekFile(const std::vector<FSName> &file) const
+{
+    if (auto result = seek(file); result.isFile()) {
+        return result;
+    }
+    throw AppError(Fault::FS_NOT_A_FILE);
+}
+
+FSPath
+FSPath::seekFile(const std::vector<string> &file) const
+{
+    if (auto result = seek(file); result.isFile()) {
+        return result;
+    }
+    throw AppError(Fault::FS_NOT_A_FILE);
+}
+
+FSPath
+FSPath::seekFile(const fs::path &file) const
+{
+    if (auto result = seek(file); result.isFile()) {
+        return result;
+    }
+    throw AppError(Fault::FS_NOT_A_FILE);
+}
+
+FSPath
+FSPath::seekFile(const string &file) const
+{
+    if (auto result = seek(file); result.isFile()) {
+        return result;
+    }
+    throw AppError(Fault::FS_NOT_A_FILE);
+}
+
+FSPath
+FSPath::seekFile(const char *file) const
+{
+    if (auto result = seek(file); result.isFile()) {
+        return result;
+    }
+    throw AppError(Fault::FS_NOT_A_FILE);
+}
+
+/*
+void
+FSPath::cd(const FSName &name)
+{
+    ref = seek(name).ref;
+}
+
+void
+FSPath::cd(const FSString &name)
+{
+    ref = seek(name).ref;
+}
+
+void
+FSPath::cd(const std::vector<FSName> &name)
+{
+    ref = seek(name).ref;
+}
+
+void
+FSPath::cd(const std::vector<string> &name)
+{
+    ref = seek(name).ref;
+}
+
+void
 FSPath::cd(const string &path)
 {
     if (path == "")   return *this;
@@ -427,7 +482,6 @@ FSPath::cd(const string &path)
     return result;
 }
 
-/*
 FSPath
 FSPath::cd(const fs::path &path)
 {
@@ -440,24 +494,20 @@ FSPath::cd(const fs::path &path)
 }
 */
 
-FSPath
-FSPath::parent()
-{
-    return isRoot() ? *this : FSPath(fs, fs.blockPtr(ref)->getParentDirRef());
-}
-
 std::vector<FSPath>
 FSPath::collect(const FSOpt &opt) const
 {
+    std::vector<Block> blocks;
+    std::vector<FSPath> paths;
+
     // Collect all blocks
-    std::vector<Block> blocks; fs.collect(*this, blocks, opt);
+    fs.collect(*this, blocks, opt);
 
     // Convert to paths and filter out unwanted items
-    std::vector<FSPath> paths; for (auto &it : blocks) {
+    for (auto &it : blocks) {
 
         auto path = FSPath(fs, it);
-        if (opt.filter && !opt.filter(path)) continue;
-        paths.push_back(FSPath(fs, it));
+        if (opt.accept(path)) paths.push_back(FSPath(fs, it));
     }
 
     // Sort items
@@ -472,6 +522,26 @@ FSPath::collect(const FSOpt &opt) const
     }
 
     return paths;
+}
+
+std::vector<FSPath>
+FSPath::collectDirs(const FSOpt &opt) const
+{
+    auto eraser = [](const FSPath &p) { return !p.isDirectory(); };
+
+    auto result = collect(opt);
+    result.erase(std::remove_if(result.begin(), result.end(), eraser), result.end());
+    return result;
+}
+
+std::vector<FSPath>
+FSPath::collectFiles(const FSOpt &opt) const
+{
+    auto eraser = [](const FSPath &p) { return !p.isFile(); };
+
+    auto result = collect(opt);
+    result.erase(std::remove_if(result.begin(), result.end(), eraser), result.end());
+    return result;
 }
 
 std::ostream &operator<<(std::ostream &os, const FSPath &path) {

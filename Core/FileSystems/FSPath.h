@@ -73,40 +73,47 @@ struct FSPath
     // Traversing the directory tree
     //
 
+    // Returns the parent directory
+    FSPath parent() const;
+
     // Seeks a file or directory
     FSPath seek(const FSName &name) const;
-    FSPath seekDir(const FSName &name) const;
-    FSPath seekFile(const FSName &name) const;
-
     FSPath seek(const FSString &name) const;
-    FSPath seekDir(const FSString &name) const;
-    FSPath seekFile(const FSString &name) const;
+    FSPath seek(const std::vector<FSName> &name) const;
+    FSPath seek(const std::vector<string> &name) const;
+    FSPath seek(const fs::path &name) const;
+    FSPath seek(const string &name) const;
+    FSPath seek(const char *name) const;
 
-    FSPath seek(const std::vector<FSName> &path) const;
-    FSPath seekDir(const std::vector<FSName> &path) const;
-    FSPath seekFile(const std::vector<FSName> &path) const;
+    FSPath seekDir(const FSName &dir) const;
+    FSPath seekDir(const FSString &dir) const;
+    FSPath seekDir(const std::vector<FSName> &dir) const;
+    FSPath seekDir(const std::vector<string> &dir) const;
+    FSPath seekDir(const fs::path &dir) const;
+    FSPath seekDir(const string &dir) const;
+    FSPath seekDir(const char *dir) const;
 
-    FSPath seek(const std::vector<string> &path) const;
-    FSPath seekDir(const std::vector<string> &path) const;
-    FSPath seekFile(const std::vector<string> &path) const;
-
-    FSPath seek(const fs::path &path) const;
-    FSPath seekDir(const fs::path &path) const;
-    FSPath seekFile(const fs::path &path) const;
-
-    FSPath seek(const string &path) const;
-    FSPath seekDir(const string &path) const;
-    FSPath seekFile(const string &path) const;
+    FSPath seekFile(const FSName &file) const;
+    FSPath seekFile(const FSString &file) const;
+    FSPath seekFile(const std::vector<FSName> &file) const;
+    FSPath seekFile(const std::vector<string> &file) const;
+    FSPath seekFile(const fs::path &file) const;
+    FSPath seekFile(const string &file) const;
+    FSPath seekFile(const char *file) const;
 
     // Moves up or down in the directory tree
-    FSPath cd(FSName name);
-    FSPath cd(const std::vector<FSName> &names);
-    FSPath cd(const std::vector<string> &names);
-    FSPath cd(const string &path);
-    FSPath parent();
+    void cd(const FSName &name) { ref = seekDir(name).ref; }
+    void cd(const FSString &name) { ref = seekDir(name).ref; }
+    void cd(const std::vector<FSName> &name) { ref = seekDir(name).ref; }
+    void cd(const std::vector<string> &name) { ref = seekDir(name).ref; }
+    void cd(const fs::path &name) { ref = seekDir(name).ref; }
+    void cd(const string &name) { ref = seekDir(name).ref; }
+    void cd(const char *name) { ref = seekDir(name).ref; }
 
     // Returns a collection of paths to all items in a directory
     std::vector<FSPath> collect(const FSOpt &opt = {}) const;
+    std::vector<FSPath> collectDirs(const FSOpt &opt = {}) const;
+    std::vector<FSPath> collectFiles(const FSOpt &opt = {}) const;
 
     friend std::ostream &operator<<(std::ostream &os, const FSPath &str);
 };

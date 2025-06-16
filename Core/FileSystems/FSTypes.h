@@ -20,10 +20,13 @@ typedef std::function<string(const FSPath &)> FSPathFormatter;
 
 struct FSOpt
 {
-    bool recursive;
-    bool sort;
+    bool recursive = false;
+    bool sort = false;
     FSPathFilter filter;
     FSPathFormatter formatter;
+
+    bool accept(const FSPath &p) const { return filter ? filter(p) : true; }
+    bool skip(const FSPath &p) const { return filter ? !filter(p) : false; }
 };
 
 enum class FSVolumeType : long

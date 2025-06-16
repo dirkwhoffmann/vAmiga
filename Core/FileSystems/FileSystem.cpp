@@ -481,7 +481,7 @@ FileSystem::exists(const FSPath &top, const fs::path &path) const
 void
 FileSystem::cd(const FSName &name)
 {
-    curr = pwd().cd(name).ref;
+    curr = pwd().seek(name).ref;
 }
 
 void
@@ -493,45 +493,63 @@ FileSystem::cd(const FSPath &path)
 void
 FileSystem::cd(const string &path)
 {
-    curr = pwd().cd(path).ref;
+    curr = pwd().seek(path).ref;
 }
 
 void
-FileSystem::ls(std::ostream &os, const FSPath &path) const
+FileSystem::ls(std::ostream &os, const FSPath &path, const FSOpt &opt) const
 {
-    // Collect all items inside the specified directory
-    std::vector<FSPath> items = path.collect( { .sort = true } );
+    // Collect directories
+    std::vector<FSPath> directories;
+    if (opt.recursive) { directories = path.collectDirs({ .sort = true }); }
+    directories.insert(directories.begin(), path);
 
-    // Split into directory and files
-    std::vector<FSName> directories, files;
-    for (auto const& item : items) {
+    // Remove recursive flag from the options
+    FSOpt optnr = opt; optnr.recursive = false;
 
-        if (item.isDirectory()) directories.push_back(item.last());
-        if (item.isFile()) files.push_back(item.last());
-    }
-
-    // List all directories
     for (usize i = 0; i < directories.size(); i++) {
 
-        os << directories[i] << " (dir)" << std::endl;
-    }
+        auto &dir = directories[i];
 
-    // List all files
-    for (usize i = 0; i < files.size(); i += 2) {
+        // Collect all items inside the specified directory
+        std::vector<FSPath> items = dir.collect(optnr);
 
-        os << std::left << std::setw(35) << files[i];
-        os << std::left << std::setw(35) << (i + 1 < files.size() ? files[i + 1] : "") << std::endl;
+        if (!items.empty()) {
+
+            // Separate directories from files
+            std::vector<FSName> dirs, files;
+            for (auto const& it : items) {
+                it.isDirectory() ? dirs.push_back(it.last()) : files.push_back(it.last());
+            }
+
+            // Print header
+            if (opt.recursive) os << std::endl << "Directory " << dir.name() << ":" << std::endl << std::endl;
+
+            // List all directories
+            for (auto const& it : dirs) {
+
+                os << it << " (dir)" << std::endl;
+            }
+
+            // List all files
+            for (usize i = 0; i < files.size(); i += 2) {
+
+                os << std::left << std::setw(35) << files[i];
+                os << std::left << std::setw(35) << (i + 1 < files.size() ? files[i + 1] : "") << std::endl;
+            }
+        }
     }
 }
 
 void
 FileSystem::list(std::ostream &os, const FSPath &path, const FSOpt &opt) const
 {
-    // Collect all directories to list
-    std::vector<FSPath> directories = { path };
-    if (opt.recursive) collectDirs(path, directories, opt);
+    // Collect directories
+    std::vector<FSPath> directories;
+    if (opt.recursive) { directories = path.collectDirs({ .sort = true }); }
+    directories.insert(directories.begin(), path);
 
-    // Remove recursive flag from options
+    // Remove recursive flag from the options
     FSOpt optnr = opt; optnr.recursive = false;
 
     for (usize i = 0; i < directories.size(); i++) {
@@ -592,7 +610,7 @@ FileSystem::collect(const FSPath &path, std::vector<FSPath> &result, const FSOpt
     for (auto &it : refs) {
 
         auto path = FSPath(*this, it);
-        if (opt.filter(path)) result.push_back(path);
+        if (opt.accept(path)) result.push_back(path);
     }
 }
 
@@ -605,7 +623,7 @@ FileSystem::collect(const FSPath &path, std::vector<string> &result, const FSOpt
     for (auto &it : refs) {
 
         auto path = FSPath(*this, it);
-        if (opt.filter(path)) result.push_back(opt.formatter(path));
+        if (!opt.skip(path)) result.push_back(opt.formatter(path));
     }
 }
 
@@ -613,9 +631,9 @@ void
 FileSystem::collectDirs(const FSPath &path, std::vector<FSPath> &result, const FSOpt &opt) const
 {
     FSOpt newOpt = opt;
-
     // Adjust the filter to only accept directories
-    newOpt.filter = [&](const FSPath &p) { return opt.filter(p) && p.isDirectory(); };
+    newOpt.filter = [&](const FSPath &p) { return opt.accept(p) && p.isDirectory(); };
+    printf(".sort =%d\n", newOpt.sort);
 
     // Collect paths
     collect(path, result, newOpt);
@@ -627,7 +645,7 @@ FileSystem::collectDirs(const FSPath &path, std::vector<string> &result, const F
     FSOpt newOpt = opt;
 
     // Adjust the filter to only accept directories
-    newOpt.filter = [&](const FSPath &p) { return opt.filter(p) && p.isDirectory(); };
+    newOpt.filter = [&](const FSPath &p) { return opt.accept(p) && p.isDirectory(); };
 
     // Collect paths
     collect(path, result, newOpt);
@@ -639,7 +657,7 @@ FileSystem::collectFiles(const FSPath &path, std::vector<FSPath> &result, const 
     FSOpt newOpt = opt;
 
     // Adjust the filter to only accept files
-    newOpt.filter = [&](const FSPath &p) { return opt.filter(p) && p.isFile(); };
+    newOpt.filter = [&](const FSPath &p) { return opt.accept(p) && p.isFile(); };
 
     // Collect files
     collect(path, result, newOpt);
@@ -651,7 +669,7 @@ FileSystem::collectFiles(const FSPath &path, std::vector<string> &result, const 
     FSOpt newOpt = opt;
 
     // Adjust the filter to only accept files
-    newOpt.filter = [&](const FSPath &p) { return opt.filter(p) && p.isFile(); };
+    newOpt.filter = [&](const FSPath &p) { return opt.accept(p) && p.isFile(); };
 
     // Collect files
     collect(path, result, newOpt);
