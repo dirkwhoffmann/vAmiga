@@ -62,10 +62,10 @@ Moira::dasmFGen(StrWriter &str, u32 &addr, u16 op) const
     auto cmd  = _________xxxxxxx(ext);
     addr -= 2;
 
-    if (M == Mode::AN) {
+    if constexpr (M == Mode::AN) {
         if (ext & 0x4000) { dasmLineF<I, M, S>(str, addr, op); return; }
     }
-    if (M == Mode::IP) {
+    if constexpr (M == Mode::IP) {
         if (cod == 0b010) { dasmLineF<I, M, S>(str, addr, op); return; }
     }
 
@@ -266,7 +266,7 @@ Moira::dasmFGeneric(StrWriter &str, u32 &addr, u16 op) const
 
     if (ext & 0x4000) {
 
-        if (M == Mode::IM) {
+        if constexpr (M == Mode::IM) {
 
             u64 val;
 
@@ -332,7 +332,7 @@ Moira::dasmFGeneric2(StrWriter &str, u32 &addr, u16 op) const
 
         str << Ins<I>{} << Ffmt{src} << str.tab;
 
-        if (M == Mode::IM) {
+        if constexpr (M == Mode::IM) {
 
             u64 val;
 
@@ -395,7 +395,7 @@ Moira::dasmFGeneric3(StrWriter &str, u32 &addr, u16 op) const
 
     if (ext & 0x4000) {
 
-        if (M == Mode::IM) {
+        if constexpr (M == Mode::IM) {
 
             u64 val;
 
@@ -486,7 +486,7 @@ Moira::dasmFMove(StrWriter &str, u32 &addr, u16 op) const
             else if (fac == 0x44) str << Ins<Instr::FDMOVE>{} << Ffmt{src};
             else str << Ins<I>{} << Ffmt{src};
 
-            if (M == Mode::IM) {
+            if constexpr (M == Mode::IM) {
 
                 u64 val;
 

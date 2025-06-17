@@ -2492,7 +2492,7 @@ Moira::execJsr(u16 opcode)
             // Check for address errors
             if (misaligned<C>(ea) && misaligned<C>(reg.sp)) {
 
-                if (M == Mode::AI) {
+                if constexpr (M == Mode::AI) {
 
                     queue.irc = (u16)read<C, AddrSpace::PROG, Word>(ea & ~1);
                     throw AddressError(makeFrame<AE_SET_IF|AE_SET_RW>(ea));
@@ -3543,15 +3543,21 @@ Moira::execMoves(u16 opcode)
         updateAn<M, S>(dst);
 
         // Take care of some special cases
-        if (M == Mode::PI && src == (dst | 0x8)) {
+        if constexpr (M == Mode::PI) {
 
-            // MOVES An,(An)+
-            value += dst == 7 ? (S == Long ? 4 : 2) : S;
+            if (src == (dst | 0x8)) {
+
+                // MOVES An,(An)+
+                value += dst == 7 ? (S == Long ? 4 : 2) : S;
+            }
         }
-        if (M == Mode::PD && src == (dst | 0x8)) {
+        if constexpr (M == Mode::PD) {
 
-            // MOVES An,-(An)
-            value -= dst == 7 ? (S == Long ? 4 : 2) : S;
+            if (src == (dst | 0x8)) {
+
+                // MOVES An,-(An)
+                value -= dst == 7 ? (S == Long ? 4 : 2) : S;
+            }
         }
 
         if constexpr (M == Mode::AI) SYNC(6);
@@ -3673,9 +3679,9 @@ Moira::execMoveCcrEa(u16 opcode)
 
     int dst = _____________xxx(opcode);
 
-    if (M == Mode::AI) SYNC(2);
-    if (M == Mode::PI) SYNC(4);
-    if (M == Mode::PD) SYNC(2);
+    if constexpr (M == Mode::AI) SYNC(2);
+    if constexpr (M == Mode::PI) SYNC(4);
+    if constexpr (M == Mode::PD) SYNC(2);
 
     auto val = getCCR();
 
@@ -3787,9 +3793,9 @@ Moira::execMoveSrEa(u16 opcode)
 
     } else {
 
-        if (M == Mode::AI) SYNC(2);
-        if (M == Mode::PI) SYNC(4);
-        if (M == Mode::PD) SYNC(2);
+        if constexpr (M == Mode::AI) SYNC(2);
+        if constexpr (M == Mode::PI) SYNC(4);
+        if constexpr (M == Mode::PD) SYNC(2);
 
         auto val = getSR();
         u32 ea = computeEA<C, M, S>(dst);
@@ -4671,9 +4677,9 @@ Moira::execNbcdEa(u16 opcode)
     readOp<C, M, Byte>(reg, &ea, &data);
 
     if (looping<I>()) {
-        if (M == Mode::AI) noPrefetch<C>(4);
-        else if (M == Mode::PI) noPrefetch<C>(4);
-        else if (M == Mode::PD) noPrefetch<C>(4);
+        if constexpr (M == Mode::AI) noPrefetch<C>(4);
+        else if constexpr (M == Mode::PI) noPrefetch<C>(4);
+        else if constexpr (M == Mode::PD) noPrefetch<C>(4);
         else noPrefetch<C>(2);
     } else {
         prefetch<C, POLL>();

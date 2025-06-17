@@ -72,14 +72,17 @@ Moira::isValidExtMMU(Instr I, Mode M, u16 op, u32 ext) const
 
                     if ((ext & 0x300) == 0) {
                         if (preg() != 0) {
-                            if (M == Mode::PI || M == Mode::PD || M == Mode::IM || M == Mode::IP) return false;
+                            if (M == Mode::PI || M == Mode::PD || M == Mode::IM || M == Mode::IP) { return false;
+                            }
                         }
                     }
 
                     // Check register field (binutils accepts all M68851 registers)
                     if ((ext & 0x100) == 0) {
                         if (preg() != 0) {
-                            if (M == Mode::DN || M == Mode::AN) return false;
+                            if (M == Mode::DN || M == Mode::AN) {
+                                return false;
+                            }
                         }
                     }
                     return true;
