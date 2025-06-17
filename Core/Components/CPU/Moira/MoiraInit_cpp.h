@@ -90,57 +90,57 @@ for (int i = 0; i < 8; i++) ________XXXXXXXX((op) | i << 9, I, M, S, f, func); }
 
 #define __________MMMXXX(op,I,m,S,f,func) { \
 for (int j = 0; j < 8; j++) { \
-if ((m) & 0b100000000000) func((op) | 0 << 3 | j, f, I,  (Mode)0, S); \
-if ((m) & 0b010000000000) func((op) | 1 << 3 | j, f, I,  (Mode)1, S); \
-if ((m) & 0b001000000000) func((op) | 2 << 3 | j, f, I,  (Mode)2, S); \
-if ((m) & 0b000100000000) func((op) | 3 << 3 | j, f, I,  (Mode)3, S); \
-if ((m) & 0b000010000000) func((op) | 4 << 3 | j, f, I,  (Mode)4, S); \
-if ((m) & 0b000001000000) func((op) | 5 << 3 | j, f, I,  (Mode)5, S); \
-if ((m) & 0b000000100000) func((op) | 6 << 3 | j, f, I,  (Mode)6, S); \
+if constexpr ((m) & 0b100000000000) func((op) | 0 << 3 | j, f, I,  (Mode)0, S); \
+if constexpr ((m) & 0b010000000000) func((op) | 1 << 3 | j, f, I,  (Mode)1, S); \
+if constexpr ((m) & 0b001000000000) func((op) | 2 << 3 | j, f, I,  (Mode)2, S); \
+if constexpr ((m) & 0b000100000000) func((op) | 3 << 3 | j, f, I,  (Mode)3, S); \
+if constexpr ((m) & 0b000010000000) func((op) | 4 << 3 | j, f, I,  (Mode)4, S); \
+if constexpr ((m) & 0b000001000000) func((op) | 5 << 3 | j, f, I,  (Mode)5, S); \
+if constexpr ((m) & 0b000000100000) func((op) | 6 << 3 | j, f, I,  (Mode)6, S); \
 } \
-if ((m) & 0b000000010000) func((op) | 7 << 3 | 0, f, I,  (Mode)7, S); \
-if ((m) & 0b000000001000) func((op) | 7 << 3 | 1, f, I,  (Mode)8, S); \
-if ((m) & 0b000000000100) func((op) | 7 << 3 | 2, f, I,  (Mode)9, S); \
-if ((m) & 0b000000000010) func((op) | 7 << 3 | 3, f, I, (Mode)10, S); \
-if ((m) & 0b000000000001) func((op) | 7 << 3 | 4, f, I, (Mode)11, S); }
+if constexpr ((m) & 0b000000010000) func((op) | 7 << 3 | 0, f, I,  (Mode)7, S); \
+if constexpr ((m) & 0b000000001000) func((op) | 7 << 3 | 1, f, I,  (Mode)8, S); \
+if constexpr ((m) & 0b000000000100) func((op) | 7 << 3 | 2, f, I,  (Mode)9, S); \
+if constexpr ((m) & 0b000000000010) func((op) | 7 << 3 | 3, f, I, (Mode)10, S); \
+if constexpr ((m) & 0b000000000001) func((op) | 7 << 3 | 4, f, I, (Mode)11, S); }
 
 #define ____XXX___MMMXXX(op,I,m,S,f,func) { \
 for (int i = 0; i < 8; i++) __________MMMXXX((op) | i << 9, I, m, S, f, func) }
 
 #define ____XXX_SS___XXX(op,I,M,s,f,func) { \
-if ((s) & 0b100) ____XXX______XXX((op) | 2 << 6, I, M, Long, f, func); \
-if ((s) & 0b010) ____XXX______XXX((op) | 1 << 6, I, M, Word, f, func); \
-if ((s) & 0b001) ____XXX______XXX((op) | 0 << 6, I, M, Byte, f, func); }
+if constexpr ((s) & 0b100) ____XXX______XXX((op) | 2 << 6, I, M, Long, f, func); \
+if constexpr ((s) & 0b010) ____XXX______XXX((op) | 1 << 6, I, M, Word, f, func); \
+if constexpr ((s) & 0b001) ____XXX______XXX((op) | 0 << 6, I, M, Byte, f, func); }
 
 #define ________SSMMMXXX(op,I,m,s,f,func) { \
-if ((s) & 0b100) __________MMMXXX((op) | 2 << 6, I, m, Long, f, func); \
-if ((s) & 0b010) __________MMMXXX((op) | 1 << 6, I, m, Word, f, func); \
-if ((s) & 0b001) __________MMMXXX((op) | 0 << 6, I, m, Byte, f, func); }
+if constexpr ((s) & 0b100) __________MMMXXX((op) | 2 << 6, I, m, Long, f, func); \
+if constexpr ((s) & 0b010) __________MMMXXX((op) | 1 << 6, I, m, Word, f, func); \
+if constexpr ((s) & 0b001) __________MMMXXX((op) | 0 << 6, I, m, Byte, f, func); }
 
 #define ____XXX_SSMMMXXX(op,I,m,s,f,func) { \
-if ((s) & 0b100) ____XXX___MMMXXX((op) | 2 << 6, I, m, Long, f, func); \
-if ((s) & 0b010) ____XXX___MMMXXX((op) | 1 << 6, I, m, Word, f, func); \
-if ((s) & 0b001) ____XXX___MMMXXX((op) | 0 << 6, I, m, Byte, f, func); }
+if constexpr ((s) & 0b100) ____XXX___MMMXXX((op) | 2 << 6, I, m, Long, f, func); \
+if constexpr ((s) & 0b010) ____XXX___MMMXXX((op) | 1 << 6, I, m, Word, f, func); \
+if constexpr ((s) & 0b001) ____XXX___MMMXXX((op) | 0 << 6, I, m, Byte, f, func); }
 
 #define ____XXXS__MMMXXX(op,I,m,s,f,func) { \
-if ((s) & 0b100) ____XXX___MMMXXX((op) | 1 << 8, I, m, Long, f, func); \
-if ((s) & 0b010) ____XXX___MMMXXX((op) | 0 << 8, I, m, Word, f, func); \
-if ((s) & 0b001) assert(false); }
+if constexpr ((s) & 0b100) ____XXX___MMMXXX((op) | 1 << 8, I, m, Long, f, func); \
+if constexpr ((s) & 0b010) ____XXX___MMMXXX((op) | 0 << 8, I, m, Word, f, func); \
+if constexpr ((s) & 0b001) assert(false); }
 
 #define _____SS___MMMXXX(op,I,m,s,f,func) { \
-if ((s) & 0b100) __________MMMXXX((op) | 2 << 9, I, m, Long, f, func); \
-if ((s) & 0b010) __________MMMXXX((op) | 3 << 9, I, m, Word, f, func); \
-if ((s) & 0b001) __________MMMXXX((op) | 1 << 9, I, m, Byte, f, func); }
+if constexpr ((s) & 0b100) __________MMMXXX((op) | 2 << 9, I, m, Long, f, func); \
+if constexpr ((s) & 0b010) __________MMMXXX((op) | 3 << 9, I, m, Word, f, func); \
+if constexpr ((s) & 0b001) __________MMMXXX((op) | 1 << 9, I, m, Byte, f, func); }
 
 #define __SS______MMMXXX(op,I,m,s,f,func) { \
-if ((s) & 0b100) __________MMMXXX((op) | 2 << 12, I, m, Long, f, func); \
-if ((s) & 0b010) __________MMMXXX((op) | 3 << 12, I, m, Word, f, func); \
-if ((s) & 0b001) __________MMMXXX((op) | 1 << 12, I, m, Byte, f, func); }
+if constexpr ((s) & 0b100) __________MMMXXX((op) | 2 << 12, I, m, Long, f, func); \
+if constexpr ((s) & 0b010) __________MMMXXX((op) | 3 << 12, I, m, Word, f, func); \
+if constexpr ((s) & 0b001) __________MMMXXX((op) | 1 << 12, I, m, Byte, f, func); }
 
 #define __SSXXX___MMMXXX(op,I,m,s,f,func) { \
-if ((s) & 0b100) ____XXX___MMMXXX((op) | 2 << 12, I, m, Long, f, func); \
-if ((s) & 0b010) ____XXX___MMMXXX((op) | 3 << 12, I, m, Word, f, func); \
-if ((s) & 0b001) ____XXX___MMMXXX((op) | 1 << 12, I, m, Byte, f, func); }
+if constexpr ((s) & 0b100) ____XXX___MMMXXX((op) | 2 << 12, I, m, Long, f, func); \
+if constexpr ((s) & 0b010) ____XXX___MMMXXX((op) | 3 << 12, I, m, Word, f, func); \
+if constexpr ((s) & 0b001) ____XXX___MMMXXX((op) | 1 << 12, I, m, Byte, f, func); }
 
 
 static constexpr u16

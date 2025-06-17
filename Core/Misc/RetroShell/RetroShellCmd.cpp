@@ -204,6 +204,103 @@ RetroShellCmd::autoComplete(const string& token)
     return result.size() >= token.size() ? result : token;
 }
 
+void
+RetroShellCmd::printHelp(std::ostream &os)
+{
+    string prefix;
+
+    if (!subCommands.empty()) {
+
+        // Describe all subcommands
+        prefix = "Group: ";
+        os << prefix + cmdUsage() << std::endl;
+        printSubcmdHelp(os, prefix.size());
+
+        if (callback) {
+
+            // Describe the current command
+            prefix = "       Usage: ";
+            os << prefix + argUsage() << std::endl;
+            printArgumentHelp(os, prefix.size(), false);
+        }
+
+    } else {
+
+        // Describe the current command
+        prefix = "Usage: ";
+        os << prefix + argUsage() << std::endl;
+        printArgumentHelp(os, prefix.size());
+    }
+}
+
+void
+RetroShellCmd::printArgumentHelp(std::ostream &os, usize indent, bool verbose)
+{
+    if (arguments.empty()) return;
+
+    auto skip = [](const RSArgDescriptor &it) { return it.isHidden() || it.helpStr().empty(); };
+
+    // Determine the tabular position to align the output
+    isize tab = 0;
+    for (auto &it : arguments) {
+        if (!skip(it)) tab = std::max(tab, (isize)it.keyValueStr().length());
+    }
+
+    // Print command description
+    if (verbose && !help.empty()) {
+        os << std::endl << string(indent, ' ') << help[0] << std::endl;
+    }
+    os << std::endl;
+
+    // Print argument descriptions
+    for (auto &it : arguments) {
+
+        if (skip(it)) continue;
+
+        os << string(indent, ' ') << std::left << std::setw(int(tab)) << it.keyValueStr() << " : ";
+        os << it.helpStr() << std::endl;
+    }
+    os << std::endl;
+}
+
+void
+RetroShellCmd::printSubcmdHelp(std::ostream &os, usize indent, bool verbose)
+{
+    if (subCommands.empty()) return;
+
+    // Collect all commands
+    std::vector<const RetroShellCmd *> cmds;
+    for (auto &it : subCommands) {
+        if (!it.hidden && !it.help.empty() && !it.help[0].empty()) cmds.push_back(&it);
+    }
+    if (callback) cmds.push_back(this);
+
+    // Determine alignment parameters to get a properly formatted output
+    isize newlines = 1, tab = 0;
+    for (auto &it : cmds) {
+        tab = std::max(tab, (isize)it->fullName.length());
+    }
+
+    for (auto &it : cmds) {
+
+        // Print the group (if present)
+        if (!it->groupName.empty()) {
+
+            // *this << '\n' << it->groupName << '\n';
+            os << std::endl << it->groupName << std::endl;
+            newlines = 1;
+        }
+
+        // Print newlines
+        for (; newlines > 0; newlines--) os << std::endl;
+
+        // Print command description
+        os << string(indent, ' ') << std::left << std::setw(int(tab)) << it->fullName << " : ";
+        os << (it == this ? it->chelp : it->ghelp) << std::endl;
+    }
+    os << std::endl;
+}
+
 string
 RetroShellCmd::cmdUsage() const
 {

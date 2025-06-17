@@ -105,9 +105,6 @@ struct RetroShellCmd {
     // Full name of this command (e.g., "df0 eject")
     string fullName;
 
-    // Name of this command as displayed in help messages (e.g., "[g]oto")
-    // string helpName;
-
     // Help description of this command (e.g., "Eject disk") (DEPRECATED)
     std::vector<string> help;
 
@@ -129,15 +126,6 @@ struct RetroShellCmd {
     // Argument list
     std::vector<RSArgDescriptor> arguments;
 
-    // Mandatory arguments (must appear in order)Add commentMore actions
-    // std::vector<arg::Argument> requiredArgx; // TODO: Rename to requiredArgs
-
-    // Optional arguments (must appear in order)
-    // std::vector<arg::Argument> optionalArgx; // TODO: Rename to optionalArgs
-
-    // Flags (may appear everywhere)
-    // std::vector<arg::Flag> flags;
-
     // List of subcommands
     std::vector<RetroShellCmd> subCommands;
 
@@ -152,7 +140,7 @@ struct RetroShellCmd {
 
 
     //
-    // Methods
+    // Working with the command tree
     //
 
     // Creates a new node in the command tree
@@ -175,15 +163,37 @@ struct RetroShellCmd {
     RetroShellCmd *seek(const std::vector<string> &tokens);
     RetroShellCmd &operator/(const string& token) { return *seek(token); }
 
-    // Filters the argument list (used by auto-completion)
-    std::vector<const RetroShellCmd *> filterPrefix(const string& prefix) const;
+
+    //
+    // Auto-completing user input
+    //
+
+public:
 
     // Automatically completes a partial token string
     string autoComplete(const string& token);
 
+private:
+
+    // Filters the argument list (used by auto-completion)
+    std::vector<const RetroShellCmd *> filterPrefix(const string& prefix) const;
+
+
+    //
+    // Generating help messages
+    //
+
+public:
+
     // Returns a syntax description for subcommands or arguments
     string cmdUsage() const;
     string argUsage() const;
+
+    // Displays a help text for a (partially typed in) command
+    void printHelp(std::ostream &os);
+    void printArgumentHelp(std::ostream &os, usize indent, bool verbose = true);
+    void printSubcmdHelp(std::ostream &os, usize indent, bool verbose = true);
+
 };
 
 }

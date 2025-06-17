@@ -544,7 +544,7 @@ Console::parse(const RetroShellCmd &cmd, const Arguments &args)
         map[std::to_string(i)] = token;
 
         if (token[0] == '-') {
-            for (usize i = 1; i < token.size(); i++) flags.push_back(string("-") + token[i]);
+            for (usize j = 1; j < token.size(); j++) flags.push_back(string("-") + token[j]);
         } else if (token.find('=') != std::string::npos) {
             keyVal.push_back(token);
         } else {
@@ -809,115 +809,9 @@ Console::help(const Arguments &argv)
         if (current->seek(it) != nullptr) current = current->seek(it);
     }
 
-    help(*current);
-}
-
-void
-Console::help(const RetroShellCmd& current)
-{
-    if (!current.subCommands.empty()) {
-
-        // Describe all subcommands
-        string prefix = "Group: ";
-        cmdUsage(current, prefix);
-        helpSubcommands(current, prefix.size());
-
-        if (current.callback) {
-
-            // Describe the current command
-            string prefix = "       Usage: ";
-            argUsage(current, prefix);
-            helpArguments(current, prefix.size(), false);
-        }
-        
-    } else {
-
-        // Describe the current command
-        string prefix = "Usage: ";
-        argUsage(current, prefix);
-        helpArguments(current, prefix.size());
-    }
-}
-
-void
-Console::helpArguments(const RetroShellCmd &current, isize indent, bool verbose)
-{
-    if (current.arguments.empty()) return;
-
-    auto skip = [](const RSArgDescriptor &it) { return it.isHidden() || it.helpStr().empty(); };
-
-    // Determine the tabular position to align the output
-    isize tab = 0;
-    for (auto &it : current.arguments) {
-        if (!skip(it)) tab = std::max(tab, (isize)it.keyValueStr().length());
-    }
-    tab += indent;
-
-    // Print command description
-    if (verbose && !current.help.empty()) {
-        *this << '\n' << string(indent, ' ') << current.help[0] << '\n';
-    }
-    *this << '\n';
-
-    // Print argument descriptions
-    for (auto &it : current.arguments) {
-
-        if (skip(it)) continue;
-
-        *this << string(indent, ' ');
-        *this << it.keyValueStr();
-        (*this).tab(tab);
-        *this << " : ";
-        *this << it.helpStr();
-        *this << '\n';
-    }
-
-    *this << '\n';
-}
-
-void
-Console::helpSubcommands(const RetroShellCmd &current, isize indent, bool verbose)
-{
-    if (current.subCommands.empty()) return;
-
-    // Collect all commands
-    std::vector<const RetroShellCmd *> cmds;
-    for (auto &it : current.subCommands) {
-        if (!it.hidden && !it.help.empty() && !it.help[0].empty()) cmds.push_back(&it);
-    }
-    if (current.callback) cmds.push_back(&current);
-
-    // Determine alignment parameters to get a properly formatted output
-    isize newlines = 1, tab = 0;
-    for (auto &it : cmds) {
-        tab = std::max(tab, (isize)it->fullName.length());
-    }
-    tab += indent;
-
-    for (auto &it : cmds) {
-
-        // Print the group (if present)
-        if (!it->groupName.empty()) {
-
-            *this << '\n' << it->groupName << '\n';
-            newlines = 1;
-        }
-
-        // Print newlines
-        for (; newlines > 0; newlines--) {
-            *this << '\n';
-        }
-
-        // Print command description
-        *this << string(indent, ' ');
-        *this << it->fullName;
-        (*this).tab(tab);
-        *this << " : ";
-        *this << (it == &current ? it->chelp : it->ghelp);
-        *this << '\n';
-    }
-
-    *this << '\n';
+    std::stringstream ss;
+    current->printHelp(ss);
+    *this << '\r' << ss;
 }
 
 void

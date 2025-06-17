@@ -511,51 +511,6 @@ FileSystem::cd(const string &path)
 }
 
 void
-FileSystem::ls(std::ostream &os, const FSPath &path, const FSOpt &opt) const
-{
-    // Collect directories
-    std::vector<FSPath> directories;
-    if (opt.recursive) { directories = path.collectDirs({ .sort = sort::dafa }); }
-    directories.insert(directories.begin(), path);
-
-    // Remove recursive flag from the options
-    FSOpt optnr = opt; optnr.recursive = false;
-
-    for (usize i = 0; i < directories.size(); i++) {
-
-        auto &dir = directories[i];
-
-        // Collect all items inside the specified directory
-        std::vector<FSPath> items = dir.collect(optnr);
-
-        if (!items.empty()) {
-
-            // Separate directories from files
-            std::vector<FSName> dirs, files;
-            for (auto const& it : items) {
-                it.isDirectory() ? dirs.push_back(it.last()) : files.push_back(it.last());
-            }
-
-            // Print header
-            if (opt.recursive) os << std::endl << "Directory " << dir.name() << ":" << std::endl << std::endl;
-
-            // List all directories
-            for (auto const& it : dirs) {
-
-                os << it << " (dir)" << std::endl;
-            }
-
-            // List all files
-            for (usize i = 0; i < files.size(); i += 2) {
-
-                os << std::left << std::setw(35) << files[i];
-                os << std::left << std::setw(35) << (i + 1 < files.size() ? files[i + 1] : "") << std::endl;
-            }
-        }
-    }
-}
-
-void
 FileSystem::list(std::ostream &os, const FSPath &path, const FSOpt &opt) const
 {
     // Collect directories
@@ -580,7 +535,7 @@ FileSystem::list(std::ostream &os, const FSPath &path, const FSOpt &opt) const
             if (opt.recursive) os << std::endl << "Directory " << dir.name() << ":" << std::endl << std::endl;
 
             // Determine the longest entry
-            usize tab = 0; for (auto &it: strs) tab = std::max(tab, it.length());
+            int tab = 0; for (auto &it: strs) tab = std::max(tab, int(it.length()));
 
             // List all items
             for (auto &item : strs) {
@@ -589,13 +544,13 @@ FileSystem::list(std::ostream &os, const FSPath &path, const FSOpt &opt) const
                 if (item.back() == '\t') {
 
                     item.pop_back();
-                    os << std::left << std::setw(std::max(int(tab), 35)) << item;
+                    os << std::left << std::setw(std::max(tab, 35)) << item;
                     if (column++ > 0) { os << std::endl; column = 0; }
 
                 } else {
 
                     if (column > 0) { os << std::endl; column = 0; }
-                    os << std::left << std::setw(std::max(int(tab), 35)) << item << std::endl;
+                    os << std::left << std::setw(std::max(tab, 35)) << item << std::endl;
                 }
             }
         }
