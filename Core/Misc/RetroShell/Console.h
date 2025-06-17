@@ -86,7 +86,7 @@ protected:
 protected:
     
     // The text storage
-    TextStorage storage;
+    TextStorage &storage;
 
     // History buffer storing old input strings and cursor positions
     std::vector<std::pair<string,isize>> history;
@@ -117,7 +117,10 @@ protected:
 
 public:
 
-    using SubComponent::SubComponent;
+    // using SubComponent::SubComponent;
+
+    Console(Amiga &amiga, isize id, TextStorage &storage) : SubComponent(amiga, id), storage(storage) { };
+
     Console& operator= (const Console& other) { return *this; }
 
 protected:

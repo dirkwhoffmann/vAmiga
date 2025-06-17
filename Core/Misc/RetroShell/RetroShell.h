@@ -50,12 +50,14 @@ class RetroShell final : public SubComponent, public Inspectable<RetroShellInfo>
 
     };
 
+    TextStorage s1, s2, s3;
+
 public:
 
     // Consoles
-    CommanderConsole commander = CommanderConsole(amiga, 0);
-    DebuggerConsole debugger = DebuggerConsole(amiga, 1);
-    NavigatorConsole navigator = NavigatorConsole(amiga, 2);
+    CommanderConsole commander = CommanderConsole(amiga, 0, s1);
+    DebuggerConsole debugger = DebuggerConsole(amiga, 1, s2);
+    NavigatorConsole navigator = NavigatorConsole(amiga, 2, s3);
 
     // Indicates if one of the consoles has new contents
     bool isDirty = false;
