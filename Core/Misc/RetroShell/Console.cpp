@@ -723,9 +723,6 @@ Console::exec(const string& userInput, bool verbose)
     // Remove the 'try' keyword
     if (tokens.front() == "try") tokens.erase(tokens.begin());
 
-    // Auto complete the token list
-    autoComplete(tokens);
-
     // Process the command
     exec(tokens, verbose);
 }
@@ -791,9 +788,6 @@ Console::help(const string& userInput)
 {
     // Split the command string
     Arguments tokens = split(userInput);
-
-    // Auto complete the token list
-    autoComplete(tokens);
 
     // Process the command
     help(tokens);
