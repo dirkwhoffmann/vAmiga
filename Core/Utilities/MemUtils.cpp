@@ -186,9 +186,9 @@ void dump(std::ostream &os, const char *fmt,
     while (std::getline(ss, line)) { output.push_back(std::move(line)); }
 
     // Write the requested number of lines
-    isize count = std::min((isize)output.size(), lines);
-    isize start = tail ? output.size() - count : 0;
-    isize end   = tail ? output.size() : count;
+    isize count = std::min(isize(output.size()), lines);
+    isize start = tail ? isize(output.size()) - count : 0;
+    isize end   = tail ? isize(output.size()) : count;
     for (isize i = start; i < end; i++) std::cout << output[i] << '\n';
 }
 

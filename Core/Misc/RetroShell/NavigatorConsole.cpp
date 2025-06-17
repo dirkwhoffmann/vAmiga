@@ -291,6 +291,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .argx   = {
             { .name = { "name", "Search pattern" } },
             { .name = { "path", "Directory to search in" }, .flags = arg::opt },
+            { .name = { "b", "Specify the directory as a block number" }, .flags = arg::flag },
             { .name = { "d", "Find directories only" }, .flags = arg::flag },
             { .name = { "f", "Find files only" }, .flags = arg::flag },
             { .name = { "r", "Search subdirectories, too" }, .flags = arg::flag },
@@ -337,26 +338,38 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .extra  = { arg::path },
         .argx   = {
             { .name = { "path", "File path" } },
-            { .name = { "h", "Print hex dump" }, .flags = arg::flag },
-            { .name = { "c", "Print characters" }, .flags = arg::flag }
+            { .name = { "b", "Specify the directory as a block number" }, .flags = arg::flag },
+            { .name = { "a", "Output as ASCII dump" }, .flags = arg::flag },
+            { .name = { "d", "Output as decimal dump" }, .flags = arg::flag },
+            { .name = { "h", "Output as hex dump" }, .flags = arg::flag },
+            { .name = { "t", "Display the last part" }, .flags = arg::flag },
+            { .name = { "lines", "Output as hex dump" }, .flags = arg::keyval|arg::opt },
         },
         .help   = { "Print the contents of a file" },
         .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
-            auto file = fs.pwd().seekFile(args.at("path"));
+            // auto file = fs.pwd().seekFile(args.at("path"));
+            auto file = parsePath(args, "path", fs.pwd());
+            auto lines = args.contains("lines") ? parseNum(args.at("lines")) : -1;
+            auto a = args.contains("a");
+            auto d = args.contains("b");
+            auto h = args.contains("h");
+            auto t = args.contains("t");
 
             std::stringstream ss;
             Buffer<u8> buffer;
             file.ptr()->writeData(buffer);
 
-            if (args.contains("h")) {
-                buffer.memDump(ss);
-            } else if (args.contains("c")) {
-                buffer.ascDump(ss);
-            } else {
-                buffer.txtDump(ss);
-            }
+            if (!h && !d && !a) {
 
+                buffer.txtDump(ss);
+
+            } else {
+
+                if (h) { buffer.memDump(ss); }
+                if (d) { *this << "TODO\n"; }
+                if (a) { buffer.ascDump(ss); }
+            }
             *this << ss;
         }
     });

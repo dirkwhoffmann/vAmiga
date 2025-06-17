@@ -38,7 +38,7 @@ if(WIN32)
   target_link_libraries(VAHeadless ws2_32)
 endif()
 if(MSVC)
-  target_compile_options(VACore PUBLIC /W4 /bigobj /Zc:preprocessor) # /WX disabled for now
+  target_compile_options(VACore PUBLIC /W4 /WX /bigobj /Zc:preprocessor)
   target_compile_options(VACore PUBLIC /wd4100 /wd4201 /wd4458)
   # target_compile_options(VACore PUBLIC /wd4324)
   set_source_files_properties(CPU/Moira/Moira.cpp PROPERTIES COMPILE_FLAGS "/wd4127")
