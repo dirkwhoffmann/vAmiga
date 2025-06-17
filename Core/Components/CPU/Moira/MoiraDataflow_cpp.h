@@ -647,7 +647,7 @@ Moira::jumpToVector(int nr)
             
             throw DoubleFault();
             
-        } else if (C == Core::C68000) {
+        } else if constexpr (C == Core::C68000) {
 
             throw AddressError(makeFrame<F|AE_PROG>(reg.pc, vectorAddr));
 

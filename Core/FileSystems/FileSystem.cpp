@@ -495,19 +495,22 @@ FileSystem::exists(const FSPath &top, const fs::path &path) const
 void
 FileSystem::cd(const FSName &name)
 {
-    curr = pwd().seek(name).ref;
+    cd(pwd().seek(name));
 }
 
 void
 FileSystem::cd(const FSPath &path)
 {
-    curr = path.ref;
+    if (path.isDirectory()) {
+        curr = path.ref;
+    }
+    throw AppError(Fault::FS_NOT_A_DIRECTORY, path.name());
 }
 
 void
 FileSystem::cd(const string &path)
 {
-    curr = pwd().seek(path).ref;
+    cd(pwd().seek(path));
 }
 
 void

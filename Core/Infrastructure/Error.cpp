@@ -359,9 +359,29 @@ AppError::AppError(Fault code, const string &s)
             break;
 
         case Fault::FS_UNINITIALIZED:
-            description = "No file system present.";
+            description = "No file system.";
             break;
 
+        case Fault::FS_INVALID_PATH:
+            description = "Invalid path: " + s;
+            break;
+
+        case Fault::FS_INVALID_REGEX:
+            description = "Invalid search pattern: " + s;
+            break;
+
+        case Fault::FS_NOT_A_DIRECTORY:
+            description = s.empty() ? "Not a directory." : s + " is not a directory.";
+            break;
+
+        case Fault::FS_NOT_A_FILE:
+            description = s.empty() ? "Not a file." : s + " is not a file.";
+            break;
+
+        case Fault::FS_NOT_FOUND:
+            description = s.empty() ? "Not found." : s + " not found.";
+            break;
+            
         case Fault::FS_UNFORMATTED:
             description = "Unformatted device.";
             break;

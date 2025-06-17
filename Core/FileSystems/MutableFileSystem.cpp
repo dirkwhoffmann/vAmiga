@@ -400,7 +400,7 @@ MutableFileSystem::createDir(const FSPath &at, const FSName &name)
         }
         throw AppError(Fault::FS_OUT_OF_SPACE);
     }
-    throw AppError(Fault::FS_INVALID_PATH);
+    throw AppError(Fault::FS_NOT_A_DIRECTORY, at.name());
 }
 
 FSPath
@@ -416,7 +416,7 @@ MutableFileSystem::createFile(const FSPath &at, const FSName &name)
         }
         throw AppError(Fault::FS_OUT_OF_SPACE);
     }
-    throw AppError(Fault::FS_INVALID_PATH);
+    throw AppError(Fault::FS_NOT_A_DIRECTORY, at.name());
 }
 
 FSPath

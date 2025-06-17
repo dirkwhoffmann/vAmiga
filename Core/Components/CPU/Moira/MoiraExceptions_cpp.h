@@ -282,7 +282,7 @@ Moira::execAddressError(StackFrame frame, int delay)
     if (misaligned<C>(reg.sp)) throw DoubleFault();
 
     // Write stack frame
-    if (C == Core::C68000) {
+    if constexpr (C == Core::C68000) {
         writeStackFrameAEBE<C>(frame);
     } else {
         writeStackFrame1000<C>(frame, status, frame.pc, reg.pc0, 3, frame.addr);
@@ -319,7 +319,7 @@ Moira::execBusError(StackFrame frame, int delay)
     if (misaligned<C>(reg.sp)) throw DoubleFault();
 
     // Write stack frame
-    if (C == Core::C68000) {
+    if constexpr (C == Core::C68000) {
         writeStackFrameAEBE<C>(frame);
     } else {
         writeStackFrame1000<C>(frame, status, frame.pc, reg.pc0, 2, frame.addr);

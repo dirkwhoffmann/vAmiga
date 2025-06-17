@@ -1357,7 +1357,7 @@ Moira::execBsr(u16 opcode)
 
     SYNC(2);
 
-    if (C == Core::C68000) {
+    if constexpr (C == Core::C68000) {
 
         // Check for address errors
         if (misaligned<C>(reg.sp)) {
@@ -1568,7 +1568,7 @@ Moira::execChk(u16 opcode)
     } catch (const AddressError &) {
 
         // Rectify the stack frame
-        if (C == Core::C68000) {
+        if constexpr (C == Core::C68000) {
 
             SYNC(2);
             throw AddressError(makeFrame<STD_AE_FRAME>(ea));
@@ -1880,7 +1880,7 @@ Moira::execCmp(u16 opcode)
     u32 ea, data;
     readOp<C, M, S, STD_AE_FRAME>(src, &ea, &data);
 
-    if (C == Core::C68000) {
+    if constexpr (C == Core::C68000) {
 
         cmp<C, S>(data, readD<S>(dst));
         prefetch<C, POLL>();
@@ -2028,7 +2028,7 @@ Moira::execCmpm(u16 opcode)
 
     u32 ea1, ea2, data1, data2;
 
-    if (C == Core::C68000) {
+    if constexpr (C == Core::C68000) {
 
         readOp<C, M, S, AE_INC_PC>(src, &ea1, &data1);
         POLL_IPL;
@@ -3777,7 +3777,7 @@ Moira::execMoveSrEa(u16 opcode)
 
         int dst = _____________xxx(opcode);
 
-    if (C == Core::C68000) {
+    if constexpr (C == Core::C68000) {
 
         u32 ea, data;
         readOp<C, M, S, STD_AE_FRAME>(dst, &ea, &data);
@@ -3946,7 +3946,7 @@ Moira::execMulsMoira(u16 opcode)
 
     readOp<C, M, Word, STD_AE_FRAME>(src, &ea, &data);
 
-    if (C == Core::C68000) {
+    if constexpr (C == Core::C68000) {
 
         prefetch<C, POLL>();
         result = muls<C>(data, readD<Word>(dst));
@@ -4021,7 +4021,7 @@ Moira::execMuluMoira(u16 opcode)
 
     readOp<C, M, Word, STD_AE_FRAME>(src, &ea, &data);
 
-    if (C == Core::C68000) {
+    if constexpr (C == Core::C68000) {
 
         prefetch<C, POLL>();
         result = mulu<C>(data, readD<Word>(dst));
@@ -4231,7 +4231,7 @@ Moira::execDivsMoira(u16 opcode, bool *divByZero)
     try { readOp<C, M, Word>(src, &ea, &divisor); } catch (AddressError &exc) {
 
         // Rectify the stack frame
-        if (C == Core::C68000) {
+        if constexpr (C == Core::C68000) {
 
             SYNC(2);
             exc.stackFrame = makeFrame<STD_AE_FRAME>(ea);
@@ -4358,7 +4358,7 @@ Moira::execDivuMoira(u16 opcode, bool *divByZero)
     try { readOp<C, M, Word>(src, &ea, &divisor); } catch (AddressError &exc) {
 
         // Rectify the stack frame
-        if (C == Core::C68000) {
+        if constexpr (C == Core::C68000) {
 
             SYNC(2);
             exc.stackFrame = makeFrame<STD_AE_FRAME>(ea);
@@ -4847,7 +4847,7 @@ Moira::execPea(u16 opcode)
 
         U32_DEC(reg.sp, S);
 
-        if (C == Core::C68000) {
+        if constexpr (C == Core::C68000) {
 
             if (isAbsMode(M)) {
                 throw AddressError(makeFrame<AE_WRITE|AE_DATA>(reg.sp));
@@ -4873,7 +4873,7 @@ Moira::execPea(u16 opcode)
 
     if (isAbsMode(M)) {
 
-        if (C == Core::C68000) {
+        if constexpr (C == Core::C68000) {
 
             push <C, Long> (ea);
             prefetch<C, POLL>();
@@ -4887,7 +4887,7 @@ Moira::execPea(u16 opcode)
 
     } else if (isIdxMode(M)) {
 
-        if (C == Core::C68000) {
+        if constexpr (C == Core::C68000) {
 
             POLL_IPL;
             prefetch<C>();
@@ -5430,7 +5430,7 @@ Moira::execTasEa(u16 opcode)
 
     u32 ea, data;
 
-    if (C == Core::C68000) {
+    if constexpr (C == Core::C68000) {
 
         readOp<C, M, Byte>(dst, &ea, &data);
 
@@ -5494,7 +5494,7 @@ Moira::execTrapv(u16 opcode)
 
     if (reg.sr.v) {
 
-        if (C == Core::C68000) {
+        if constexpr (C == Core::C68000) {
             (void)read<C, AddrSpace::PROG, Word>(reg.pc + 2);
         } else {
             (void)read<C, AddrSpace::PROG, Word>(reg.pc + 2);

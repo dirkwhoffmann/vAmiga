@@ -256,7 +256,7 @@ FSPath::seek(const FSName &name) const
         }
     }
 
-    throw AppError(Fault::FS_NOT_FOUND);
+    throw AppError(Fault::FS_NOT_FOUND, name.cpp_str());
 }
 
 FSPath
@@ -317,7 +317,7 @@ FSPath::seekDir(const FSName &dir) const
     if (auto result = seek(dir); result.isDirectory()) {
         return result;
     }
-    throw AppError(Fault::FS_NOT_A_DIRECTORY);
+    throw AppError(Fault::FS_NOT_A_DIRECTORY, dir.cpp_str());
 }
 
 FSPath
@@ -326,7 +326,7 @@ FSPath::seekDir(const FSString &dir) const
     if (auto result = seek(dir); result.isDirectory()) {
         return result;
     }
-    throw AppError(Fault::FS_NOT_A_DIRECTORY);
+    throw AppError(Fault::FS_NOT_A_DIRECTORY, dir.cpp_str());
 }
 
 FSPath
@@ -353,7 +353,7 @@ FSPath::seekDir(const fs::path &dir) const
     if (auto result = seek(dir); result.isDirectory()) {
         return result;
     }
-    throw AppError(Fault::FS_NOT_A_DIRECTORY);
+    throw AppError(Fault::FS_NOT_A_DIRECTORY, dir.string());
 }
 
 FSPath
@@ -362,7 +362,7 @@ FSPath::seekDir(const string &dir) const
     if (auto result = seek(dir); result.isDirectory()) {
         return result;
     }
-    throw AppError(Fault::FS_NOT_A_DIRECTORY);
+    throw AppError(Fault::FS_NOT_A_DIRECTORY, dir);
 }
 
 FSPath
@@ -371,7 +371,7 @@ FSPath::seekDir(const char *dir) const
     if (auto result = seek(dir); result.isDirectory()) {
         return result;
     }
-    throw AppError(Fault::FS_NOT_A_DIRECTORY);
+    throw AppError(Fault::FS_NOT_A_DIRECTORY, string(dir));
 }
 
 FSPath
@@ -380,7 +380,7 @@ FSPath::seekFile(const FSName &file) const
     if (auto result = seek(file); result.isFile()) {
         return result;
     }
-    throw AppError(Fault::FS_NOT_A_FILE);
+    throw AppError(Fault::FS_NOT_A_FILE, file.cpp_str());
 }
 
 FSPath
@@ -389,7 +389,7 @@ FSPath::seekFile(const FSString &file) const
     if (auto result = seek(file); result.isFile()) {
         return result;
     }
-    throw AppError(Fault::FS_NOT_A_FILE);
+    throw AppError(Fault::FS_NOT_A_FILE, file.cpp_str());
 }
 
 FSPath
@@ -416,7 +416,7 @@ FSPath::seekFile(const fs::path &file) const
     if (auto result = seek(file); result.isFile()) {
         return result;
     }
-    throw AppError(Fault::FS_NOT_A_FILE);
+    throw AppError(Fault::FS_NOT_A_FILE, file.string());
 }
 
 FSPath
@@ -425,7 +425,7 @@ FSPath::seekFile(const string &file) const
     if (auto result = seek(file); result.isFile()) {
         return result;
     }
-    throw AppError(Fault::FS_NOT_A_FILE);
+    throw AppError(Fault::FS_NOT_A_FILE, file);
 }
 
 FSPath
@@ -434,7 +434,7 @@ FSPath::seekFile(const char *file) const
     if (auto result = seek(file); result.isFile()) {
         return result;
     }
-    throw AppError(Fault::FS_NOT_A_FILE);
+    throw AppError(Fault::FS_NOT_A_FILE, string(file));
 }
 
 std::vector<FSPath>
