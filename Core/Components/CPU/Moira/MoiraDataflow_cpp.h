@@ -32,7 +32,7 @@ Moira::computeEA(u32 n) {
         }
         case 4:  // -(An)
         {
-            if ((F & IMPL_DEC) == 0) SYNC(2);
+            if constexpr ((F & IMPL_DEC) == 0) SYNC(2);
             result = readA(n) - ((n == 7 && S == Byte) ? 2 : S);
             break;
         }
@@ -42,7 +42,7 @@ Moira::computeEA(u32 n) {
             i16  d = (i16)queue.irc;
 
             result = U32_ADD(an, d);
-            if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
+            if constexpr ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
             break;
         }
         case 6: // (d,An,Xi)
@@ -64,7 +64,7 @@ Moira::computeEA(u32 n) {
                 result = U32_ADD3(an, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
 
                 SYNC(2);
-                if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
+                if constexpr ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
             }
             break;
         }
@@ -73,7 +73,7 @@ Moira::computeEA(u32 n) {
             result = (i16)queue.irc;
             readBuffer = queue.irc;
 
-            if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
+            if constexpr ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
             break;
         }
         case 8: // ABS.L
@@ -83,7 +83,7 @@ Moira::computeEA(u32 n) {
             result |= queue.irc;
             readBuffer = queue.irc;
 
-            if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
+            if constexpr ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
             break;
         }
         case 9: // (d,PC)
@@ -91,7 +91,7 @@ Moira::computeEA(u32 n) {
             i16  d = (i16)queue.irc;
 
             result = U32_ADD(reg.pc, d);
-            if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
+            if constexpr ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
             break;
         }
         case 10: // (d,PC,Xi)
@@ -111,7 +111,7 @@ Moira::computeEA(u32 n) {
 
                 result = U32_ADD3(reg.pc, d, ((queue.irc & 0x800) ? xi : SEXT<Word>(xi)));
                 SYNC(2);
-                if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
+                if constexpr ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
             }
             break;
         }
@@ -148,7 +148,7 @@ Moira::computeEAbrief(u32 an)
     result = U32_ADD3(an, i8(disp), xn);
 
     SYNC(2);
-    if ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
+    if constexpr ((F & SKIP_LAST_RD) == 0) { readExt<C>(); } else { reg.pc += 2; }
 
     return result;
 }
@@ -380,14 +380,14 @@ Moira::read(u32 addr)
 
     if constexpr (S == Byte) {
 
-        if (F & POLL) POLL_IPL;
+        if constexpr (F & POLL) POLL_IPL;
         result = read8(addr & addrMask<C>());
         SYNC(2);
     }
 
     if constexpr (S == Word) {
 
-        if (F & POLL) POLL_IPL;
+        if constexpr (F & POLL) POLL_IPL;
         result = read16(addr & addrMask<C>());
         SYNC(2);
     }
@@ -396,7 +396,7 @@ Moira::read(u32 addr)
 
         result = read16(addr & addrMask<C>()) << 16;
         SYNC(4);
-        if (F & POLL) POLL_IPL;
+        if constexpr (F & POLL) POLL_IPL;
         result |= read16((addr + 2) & addrMask<C>());
         SYNC(2);
     }
@@ -433,25 +433,25 @@ Moira::write(u32 addr, u32 val)
 
     if constexpr (S == Byte) {
 
-        if (F & POLL) POLL_IPL;
+        if constexpr (F & POLL) POLL_IPL;
         write8(addr & addrMask<C>(), (u8)val);
         SYNC(2);
     }
 
     if constexpr (S == Word) {
 
-        if (F & POLL) POLL_IPL;
+        if constexpr (F & POLL) POLL_IPL;
         write16(addr & addrMask<C>(), (u16)val);
         SYNC(2);
     }
 
     if constexpr (S == Long) {
 
-        if (F & REVERSE) {
+        if constexpr (F & REVERSE) {
 
             write16((addr + 2) & addrMask<C>(), u16(val & 0xFFFF));
             SYNC(4);
-            if (F & POLL) POLL_IPL;
+            if constexpr (F & POLL) POLL_IPL;
             write16(addr & addrMask<C>(), u16(val >> 16));
             SYNC(2);
 
@@ -459,7 +459,7 @@ Moira::write(u32 addr, u32 val)
 
             write16(addr & addrMask<C>(), u16(val >> 16));
             SYNC(4);
-            if (F & POLL) POLL_IPL;
+            if constexpr (F & POLL) POLL_IPL;
             write16((addr + 2) & addrMask<C>(), u16(val & 0xFFFF));
             SYNC(2);
         }

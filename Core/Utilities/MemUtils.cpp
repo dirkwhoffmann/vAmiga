@@ -93,7 +93,8 @@ void hexdumpLongwords(u8 *p, isize size, isize cols)
     hexdump(p, size, cols, 4);
 }
 
-void dump(std::ostream &os, const char *fmt, std::function<isize(isize offset, isize bytes)> read)
+void dump(std::ostream &os, const char *fmt,
+          std::function<isize(isize offset, isize bytes)> read)
 {
     bool ctrl = false;
     isize ccnt = 0, bcnt = 0;
@@ -172,6 +173,25 @@ void dump(std::ostream &os, const char *fmt, std::function<isize(isize offset, i
     }
 }
 
+void dump(std::ostream &os, const char *fmt,
+          std::function<isize(isize offset, isize bytes)> read, isize lines, bool tail)
+{
+    // Redirect output into a string stream
+    std::stringstream ss;
+    dump(ss, fmt, read);
+
+    // Convert the string stream into a vector
+    std::vector<std::string> output;
+    std::string line;
+    while (std::getline(ss, line)) { output.push_back(std::move(line)); }
+
+    // Write the requested number of lines
+    isize count = std::min((isize)output.size(), lines);
+    isize start = tail ? output.size() - count : 0;
+    isize end   = tail ? output.size() : count;
+    for (isize i = start; i < end; i++) std::cout << output[i] << '\n';
+}
+
 void dump(std::ostream &os, const char *fmt, u8 *buf, isize len)
 {
     auto read = [&](isize offset, isize bytes) {
@@ -187,6 +207,23 @@ void dump(std::ostream &os, const char *fmt, u8 *buf, isize len)
     };
 
     dump(os, fmt, read);
+}
+
+void dump(std::ostream &os, const char *fmt, u8 *buf, isize len, isize lines, bool tail)
+{
+    auto read = [&](isize offset, isize bytes) {
+
+        isize value = 0;
+
+        while (bytes-- > 0) {
+
+            if (offset >= len) return isize(-1);
+            value = value << 8 | buf[offset++];
+        }
+        return value;
+    };
+
+    dump(os, fmt, read, lines, tail);
 }
 
 }

@@ -2498,13 +2498,13 @@ Moira::execJsr(u16 opcode)
                     throw AddressError(makeFrame<AE_SET_IF|AE_SET_RW>(ea));
                 }
 
-                if (isAbsMode(M)) {
+                else if (isAbsMode(M)) {
 
                     auto frame = makeFrame<AE_SET_IF|AE_SET_RW>(ea);
                     frame.pc -= 4;
                     throw AddressError(frame);
                 }
-                if (isDspMode(M)) {
+                else if (isDspMode(M)) {
 
                     throw AddressError(makeFrame<AE_DEC_PC|AE_SET_IF|AE_SET_RW>(ea));
 

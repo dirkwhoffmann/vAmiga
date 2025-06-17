@@ -21,6 +21,9 @@ namespace vamiga::util {
 string createStr(const u8 *buf, isize maxLen);
 string createAscii(const u8 *buf, isize len, char fill = '.');
 
+// Creates a string by repeating a substring multiple times
+string repeat(const string &s, isize times);
+
 
 //
 // Converting

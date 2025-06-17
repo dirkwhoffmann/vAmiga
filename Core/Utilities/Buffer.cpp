@@ -214,48 +214,62 @@ Allocator<T>::patch(const char *seq, const char *subst)
 }
 
 template <class T> void
-Allocator<T>::dump(std::ostream &os, const char *fmt)
+Allocator<T>::dump(std::ostream &os, const char *fmt, isize lines, bool tail)
 {
-    util::dump(os, fmt, ptr, size);
+    if (lines > 0) {
+        util::dump(os, fmt, ptr, size, lines, tail);
+    } else {
+        util::dump(os, fmt, ptr, size);
+    }
 }
 
 template <class T> void
-Allocator<T>::ascDump(std::ostream &os)
+Allocator<T>::ascDump(std::ostream &os, isize lines, bool tail)
 {
-    dump(os,
-         "%p: "
-         "%c%c%c%c%c%c%c%c" "%c%c%c%c%c%c%c%c"
-         "%c%c%c%c%c%c%c%c" "%c%c%c%c%c%c%c%c"
-         "%c%c%c%c%c%c%c%c" "%c%c%c%c%c%c%c%c"
-         "%c%c%c%c%c%c%c%c" "%c%c%c%c%c%c%c%c\n");
+    const char *fmt =
+    "%p: "
+    "%c%c%c%c%c%c%c%c" "%c%c%c%c%c%c%c%c"
+    "%c%c%c%c%c%c%c%c" "%c%c%c%c%c%c%c%c"
+    "%c%c%c%c%c%c%c%c" "%c%c%c%c%c%c%c%c"
+    "%c%c%c%c%c%c%c%c" "%c%c%c%c%c%c%c%c\n";
+
+    lines > 0 ? dump(os, fmt, lines, tail) : dump(os, fmt);
 }
 
 template <class T> void
-Allocator<T>::hexDump(std::ostream &os)
+Allocator<T>::hexDump(std::ostream &os, isize lines, bool tail)
 {
-    dump(os,   
-         "%p: "
-         "%b %b %b %b %b %b %b %b %b %b %b %b %b %b %b %b\n");
+    const char *fmt =
+    "%p: "
+    "%b %b %b %b %b %b %b %b %b %b %b %b %b %b %b %b\n";
 
+    lines > 0 ? dump(os, fmt, lines, tail) : dump(os, fmt);
 }
 
 template <class T> void
-Allocator<T>::memDump(std::ostream &os)
+Allocator<T>::memDump(std::ostream &os, isize lines, bool tail)
 {
-    dump(os,
-         "%p: "
-         "%b %b %b %b %b %b %b %b %b %b %b %b %b %b %b %b  "
-         "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n");
+    const char *fmt =
+    "%p: "
+    "%b %b %b %b %b %b %b %b %b %b %b %b %b %b %b %b  "
+    "%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n";
+
+    lines > 0 ? dump(os, fmt, lines, tail) : dump(os, fmt);
 }
 
 template <class T> void
-Allocator<T>::txtDump(std::ostream &os)
+Allocator<T>::txtDump(std::ostream &os, isize lines, bool tail)
 {
+    string fmt = util::repeat("%c", 80) + "\n";
+
+    lines > 0 ? dump(os, fmt.c_str(), lines, tail) : dump(os, fmt.c_str());
+    /*
     for (isize i = 0; i < size; i++) {
 
         if (ptr[i] == '\n') os << std::endl;
         else if (isprint((int)ptr[i])) os << ptr[i];
     }
+    */
 }
 
 template <class T> void
@@ -317,10 +331,10 @@ INSTANTIATE_ALLOCATOR(bool)
 
 template void Allocator<u8>::compress(std::function<void (u8 *, isize, std::vector<u8> &)>, isize);
 template void Allocator<u8>::uncompress(std::function<void (u8 *, isize, std::vector<u8> &, isize)>, isize, isize);
-template void Allocator<u8>::dump(std::ostream &os, const char *fmt);
-template void Allocator<u8>::ascDump(std::ostream &os);
-template void Allocator<u8>::hexDump(std::ostream &os);
-template void Allocator<u8>::memDump(std::ostream &os);
-template void Allocator<u8>::txtDump(std::ostream &os);
+template void Allocator<u8>::dump(std::ostream &, const char *, isize, bool);
+template void Allocator<u8>::ascDump(std::ostream &os, isize, bool);
+template void Allocator<u8>::hexDump(std::ostream &os, isize, bool);
+template void Allocator<u8>::memDump(std::ostream &os, isize, bool);
+template void Allocator<u8>::txtDump(std::ostream &os, isize, bool);
 
 }

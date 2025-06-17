@@ -96,7 +96,9 @@ void hexdumpWords(u8 *p, isize size, isize cols = 32);
 void hexdumpLongwords(u8 *p, isize size, isize cols = 32);
 
 // Dumps memory data in customizable formats
-void dump(std::ostream &os, const char *fmt, std::function<isize(isize,isize)> read);
+void dump(std::ostream &os, const char *fmt, std::function<isize(isize,isize)>);
+void dump(std::ostream &os, const char *fmt, std::function<isize(isize,isize)>, isize lines, bool tail);
 void dump(std::ostream &os, const char *fmt, u8 *buf, isize len);
+void dump(std::ostream &os, const char *fmt, u8 *buf, isize len, isize lines, bool tail);
 
 }

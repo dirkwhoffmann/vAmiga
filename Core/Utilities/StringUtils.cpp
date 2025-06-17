@@ -33,6 +33,14 @@ string createAscii(const u8 *buf, isize len, char fill)
     return result;
 }
 
+string repeat(const string &s, isize times) {
+
+    string result;
+    result.reserve(s.size() * times);
+    for (isize i = 0; i < times; i++) result += s;
+    return result;
+}
+
 bool
 parseHex(const string &s, isize *result)
 {
