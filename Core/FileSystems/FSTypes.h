@@ -21,12 +21,18 @@ typedef std::function<string(const FSPath &)> FSPathFormatter;
 struct FSOpt
 {
     bool recursive = false;
-    bool sort = false;
+    // bool sort = false;
+    std::function<bool(const FSPath &, const FSPath &)> sort;
     FSPathFilter filter;
     FSPathFormatter formatter;
 
     bool accept(const FSPath &p) const { return filter ? filter(p) : true; }
     bool skip(const FSPath &p) const { return filter ? !filter(p) : false; }
+
+    /*
+    static std::function<bool(const FSPath &, const FSPath &)> dafa;
+    static std::function<bool(const FSPath &, const FSPath &)> alpha;
+    */
 };
 
 enum class FSVolumeType : long

@@ -437,91 +437,32 @@ FSPath::seekFile(const char *file) const
     throw AppError(Fault::FS_NOT_A_FILE);
 }
 
-/*
-void
-FSPath::cd(const FSName &name)
-{
-    ref = seek(name).ref;
-}
-
-void
-FSPath::cd(const FSString &name)
-{
-    ref = seek(name).ref;
-}
-
-void
-FSPath::cd(const std::vector<FSName> &name)
-{
-    ref = seek(name).ref;
-}
-
-void
-FSPath::cd(const std::vector<string> &name)
-{
-    ref = seek(name).ref;
-}
-
-void
-FSPath::cd(const string &path)
-{
-    if (path == "")   return *this;
-    if (path == ".")  return *this;
-    if (path == "..") return parent();
-    if (path == "/")  return fs.rootDir();
-
-    FSPath result = *this;
-    string p = path;
-
-    // Start from the root if the path starts with '/'
-    if (p[0] == '/') { result = fs.rootDir(); p.erase(0, 1); }
-
-    auto parts = util::split(p, '/');
-    for (const auto& part : parts) result = cd(FSName(part));
-
-    return result;
-}
-
-FSPath
-FSPath::cd(const fs::path &path)
-{
-    if (!fs::is_directory(path)) throw AppError(Fault::FS_INVALID_PATH);
-
-    FSPath result(fs);
-    for (const auto& part : path) result = cd(FSName(part));
-
-    return result;
-}
-*/
-
 std::vector<FSPath>
 FSPath::collect(const FSOpt &opt) const
 {
-    std::vector<Block> blocks;
-    std::vector<FSPath> paths;
+    std::vector<FSPath> result;
+    std::set<Block> visited;
 
-    // Collect all blocks
-    fs.collect(*this, blocks, opt);
+    // Collect the blocks for all items in this directory
+    std::stack<Block> remainingItems;
+    fs.collectHashedRefs(ref, remainingItems, visited);
 
-    // Convert to paths and filter out unwanted items
-    for (auto &it : blocks) {
+    // Move the collected items to the result list
+    while (remainingItems.size() > 0) {
 
-        auto path = FSPath(fs, it);
-        if (opt.accept(path)) paths.push_back(FSPath(fs, it));
+        // Block item = remainingItems.top();
+        auto item = FSPath(fs, remainingItems.top());
+        remainingItems.pop();
+        result.push_back(item);
+
+        // Add subdirectory items to the queue
+        if (opt.recursive) fs.collectHashedRefs(item.ref, remainingItems, visited);
     }
 
     // Sort items
-    if (opt.sort) {
+    if (opt.sort) { std::sort(result.begin(), result.end(), opt.sort); }
 
-        std::sort(paths.begin(), paths.end(), [&](const FSPath &a, const FSPath &b) {
-
-            if ( a.isDirectory() && !b.isDirectory()) return true;
-            if (!a.isDirectory() &&  b.isDirectory()) return false;
-            return a.last() < b.last();
-        });
-    }
-
-    return paths;
+    return result;
 }
 
 std::vector<FSPath>

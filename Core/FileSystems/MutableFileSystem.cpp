@@ -777,15 +777,23 @@ MutableFileSystem::exportDirectory(const fs::path &path, bool createDir) const
     }
     
     // Collect all files and directories
+    auto items = rootDir().collect();
+    /*
     std::vector<Block> items;
     collect(rootDir(), items);
+    */
 
     // Export all items
     for (auto const& i : items) {
-        
+
+        if (Fault error = i.ptr()->exportBlock(path.c_str()); error != Fault::OK) {
+            throw AppError(error);
+        }
+        /*
         if (Fault error = blockPtr(i)->exportBlock(path.c_str()); error != Fault::OK) {
             throw AppError(error);
         }
+        */
     }
     
     debug(FS_DEBUG, "Exported %zu items", items.size());

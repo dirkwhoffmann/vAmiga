@@ -72,7 +72,7 @@ template <class T> struct Allocator {
     void ascDump(std::ostream &os);
     void hexDump(std::ostream &os);
     void memDump(std::ostream &os);
-    void type(std::ostream &os);
+    void txtDump(std::ostream &os);
 
     // Compresses or uncompresses a buffer
     void gzip(isize offset = 0) { compress(util::gzip, offset); }

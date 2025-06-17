@@ -19,6 +19,20 @@
 
 namespace vamiga {
 
+/*
+std::function<bool(const FSPath &a, const FSPath &b)> FSOpt::dafa = [](const FSPath &a, const FSPath &b) {
+
+    if ( a.isDirectory() && !b.isDirectory()) return true;
+    if (!a.isDirectory() &&  b.isDirectory()) return false;
+    return a.last() < b.last();
+};
+
+std::function<bool(const FSPath &a, const FSPath &b)> FSOpt::alpha = [](const FSPath &a, const FSPath &b) {
+
+    return a.last() < b.last();
+};
+*/
+
 FileSystem::~FileSystem()
 {
     for (auto &b : blocks) delete b;
@@ -501,7 +515,7 @@ FileSystem::ls(std::ostream &os, const FSPath &path, const FSOpt &opt) const
 {
     // Collect directories
     std::vector<FSPath> directories;
-    if (opt.recursive) { directories = path.collectDirs({ .sort = true }); }
+    if (opt.recursive) { directories = path.collectDirs({ .sort = sort::dafa }); }
     directories.insert(directories.begin(), path);
 
     // Remove recursive flag from the options
@@ -546,7 +560,7 @@ FileSystem::list(std::ostream &os, const FSPath &path, const FSOpt &opt) const
 {
     // Collect directories
     std::vector<FSPath> directories;
-    if (opt.recursive) { directories = path.collectDirs({ .sort = true }); }
+    if (opt.recursive) { directories = path.collectDirs({ .sort = sort::alpha }); }
     directories.insert(directories.begin(), path);
 
     // Remove recursive flag from the options
@@ -555,21 +569,40 @@ FileSystem::list(std::ostream &os, const FSPath &path, const FSOpt &opt) const
     for (usize i = 0; i < directories.size(); i++) {
 
         auto &dir = directories[i];
+        isize column = 0;
 
         // Collect all items inside the specified directory
-        std::vector<FSPath> items = dir.collect(optnr);
+        std::vector<string> strs; collect(dir, strs, optnr);
 
-        if (!items.empty()) {
+        if (!strs.empty()) {
 
             // Print header
             if (opt.recursive) os << std::endl << "Directory " << dir.name() << ":" << std::endl << std::endl;
 
+            // Determine the longest entry
+            usize tab = 0; for (auto &it: strs) tab = std::max(tab, it.length());
+
             // List all items
-            for (auto const& item : items) os << opt.formatter(item) << std::endl;
+            for (auto &item : strs) {
+
+                // Print in two columns if the name ends with a tab character
+                if (item.back() == '\t') {
+
+                    item.pop_back();
+                    os << std::left << std::setw(std::max(int(tab), 35)) << item;
+                    if (column++ > 0) { os << std::endl; column = 0; }
+
+                } else {
+
+                    if (column > 0) { os << std::endl; column = 0; }
+                    os << std::left << std::setw(std::max(int(tab), 35)) << item << std::endl;
+                }
+            }
         }
     }
 }
 
+/*
 std::vector<Block>
 FileSystem::collect(const FSPath &path, const FSOpt &opt) const
 {
@@ -577,7 +610,9 @@ FileSystem::collect(const FSPath &path, const FSOpt &opt) const
     collect(path, result, opt);
     return result;
 }
+*/
 
+/*
 void
 FileSystem::collect(const FSPath &path, std::vector<Block> &result, const FSOpt &opt) const
 {
@@ -600,10 +635,15 @@ FileSystem::collect(const FSPath &path, std::vector<Block> &result, const FSOpt 
         }
     }
 }
+*/
 
 void
 FileSystem::collect(const FSPath &path, std::vector<FSPath> &result, const FSOpt &opt) const
 {
+    auto paths = path.collect(opt);
+    result.insert(result.end(), paths.begin(), paths.end());
+
+    /*
     // Collect all block references
     std::vector<Block> refs; collect(path, refs, opt);
 
@@ -612,11 +652,19 @@ FileSystem::collect(const FSPath &path, std::vector<FSPath> &result, const FSOpt
         auto path = FSPath(*this, it);
         if (opt.accept(path)) result.push_back(path);
     }
+    */
 }
 
 void
 FileSystem::collect(const FSPath &path, std::vector<string> &result, const FSOpt &opt) const
 {
+    auto paths = path.collect(opt);
+
+    for (auto &it : paths) {
+        result.push_back(opt.formatter ? opt.formatter(it) : it.last().cpp_str());
+    }
+
+    /*
     // Collect all block references
     std::vector<Block> refs; collect(path, refs, opt);
 
@@ -625,23 +673,35 @@ FileSystem::collect(const FSPath &path, std::vector<string> &result, const FSOpt
         auto path = FSPath(*this, it);
         if (!opt.skip(path)) result.push_back(opt.formatter(path));
     }
+    */
 }
 
 void
 FileSystem::collectDirs(const FSPath &path, std::vector<FSPath> &result, const FSOpt &opt) const
 {
+    auto paths = path.collectDirs(opt);
+    result.insert(result.end(), paths.begin(), paths.end());
+
+    /*
     FSOpt newOpt = opt;
     // Adjust the filter to only accept directories
     newOpt.filter = [&](const FSPath &p) { return opt.accept(p) && p.isDirectory(); };
-    printf(".sort =%d\n", newOpt.sort);
 
     // Collect paths
     collect(path, result, newOpt);
+    */
 }
 
 void
 FileSystem::collectDirs(const FSPath &path, std::vector<string> &result, const FSOpt &opt) const
 {
+    auto paths = path.collectDirs(opt);
+
+    for (auto &it : paths) {
+        result.push_back(opt.formatter ? opt.formatter(it) : it.last().cpp_str());
+    }
+
+    /*
     FSOpt newOpt = opt;
 
     // Adjust the filter to only accept directories
@@ -649,11 +709,16 @@ FileSystem::collectDirs(const FSPath &path, std::vector<string> &result, const F
 
     // Collect paths
     collect(path, result, newOpt);
+    */
 }
 
 void
 FileSystem::collectFiles(const FSPath &path, std::vector<FSPath> &result, const FSOpt &opt) const
 {
+    auto paths = path.collectFiles(opt);
+    result.insert(result.end(), paths.begin(), paths.end());
+
+    /*
     FSOpt newOpt = opt;
 
     // Adjust the filter to only accept files
@@ -661,28 +726,38 @@ FileSystem::collectFiles(const FSPath &path, std::vector<FSPath> &result, const 
 
     // Collect files
     collect(path, result, newOpt);
+    */
 }
 
 void
 FileSystem::collectFiles(const FSPath &path, std::vector<string> &result, const FSOpt &opt) const
 {
+    auto paths = path.collectFiles(opt);
+
+    for (auto &it : paths) {
+        result.push_back(opt.formatter ? opt.formatter(it) : it.last().cpp_str());
+    }
+
+    /*
     FSOpt newOpt = opt;
 
     // Adjust the filter to only accept files
-    newOpt.filter = [&](const FSPath &p) { return opt.accept(p) && p.isFile(); };
+    newOpt.filter = [&](const FSPath &p) { freturn opt.accept(p) && p.isFile(); };
 
     // Collect files
     collect(path, result, newOpt);
+    */
 }
 
 void
 FileSystem::collectHashedRefs(Block nr,
                               std::stack<Block> &result, std::set<Block> &visited) const
 {
-    if (FSBlock *b = blockPtr(nr)) {
-        
+    if (FSBlock *b = blockPtr(nr); b && b->hashTableSize() > 0) {
+
         // Walk through the hash table in reverse order
-        for (isize i = (isize)b->hashTableSize(); i >= 0; i--) {
+        // for (isize i = (isize)b->hashTableSize(); i >= 0; i--) {
+        for (isize i = (isize)b->hashTableSize() - 1; i >= 0; i--) {
             collectRefsWithSameHashValue(b->getHashRef((u32)i), result, visited);
         }
     }

@@ -118,4 +118,26 @@ struct FSPath
     friend std::ostream &operator<<(std::ostream &os, const FSPath &str);
 };
 
+//
+// Comparison function used for sorting
+//
+
+namespace sort {
+
+inline std::function<bool(const FSPath &, const FSPath &)> dafa = [](const FSPath &a, const FSPath &b) {
+
+    if ( a.isDirectory() && !b.isDirectory()) return true;
+    if (!a.isDirectory() &&  b.isDirectory()) return false;
+    return a.last() < b.last();
+};
+
+inline std::function<bool(const FSPath &, const FSPath &)> alpha = [](const FSPath &a, const FSPath &b) {
+
+    return a.last() < b.last();
+};
+
+inline std::function<bool(const FSPath &, const FSPath &)> none = nullptr;
+
+}
+
 }

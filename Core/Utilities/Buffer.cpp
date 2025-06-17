@@ -249,7 +249,7 @@ Allocator<T>::memDump(std::ostream &os)
 }
 
 template <class T> void
-Allocator<T>::type(std::ostream &os)
+Allocator<T>::txtDump(std::ostream &os)
 {
     for (isize i = 0; i < size; i++) {
 
@@ -321,6 +321,6 @@ template void Allocator<u8>::dump(std::ostream &os, const char *fmt);
 template void Allocator<u8>::ascDump(std::ostream &os);
 template void Allocator<u8>::hexDump(std::ostream &os);
 template void Allocator<u8>::memDump(std::ostream &os);
-template void Allocator<u8>::type(std::ostream &os);
+template void Allocator<u8>::txtDump(std::ostream &os);
 
 }

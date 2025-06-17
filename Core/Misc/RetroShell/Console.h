@@ -406,6 +406,10 @@ class NavigatorConsole final : public Console
     //
 
     Block parseBlock(const string &argv);
+    Block parseBlock(const ParsedArguments &argv, const string &token);
+    Block parseBlock(const ParsedArguments &argv, const string &token, Block fallback);
+    FSPath parsePath(const ParsedArguments &argv, const string &token);
+    FSPath parsePath(const ParsedArguments &argv, const string &token, const FSPath &fallback);
 };
 
 }

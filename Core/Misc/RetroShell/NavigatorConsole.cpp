@@ -79,6 +79,48 @@ NavigatorConsole::parseBlock(const string &argv)
     return nr;
 }
 
+Block
+NavigatorConsole::parseBlock(const ParsedArguments &argv, const string &token)
+{
+    return parseBlock(argv, token, fs.pwd().ref);
+}
+
+Block
+NavigatorConsole::parseBlock(const ParsedArguments &argv, const string &token, Block fallback)
+{
+    auto nr = argv.contains(token) ? Block(parseNum(argv.at(token))) : fallback;
+
+    if (!fs.blockPtr(nr)) {
+
+        if (!fs.initialized()) {
+            throw AppError(Fault::FS_UNINITIALIZED);
+        } else {
+            throw AppError(Fault::OPT_INV_ARG, "0..." + std::to_string(fs.numBlocks()));
+        }
+    }
+    return nr;
+}
+
+FSPath
+NavigatorConsole::parsePath(const ParsedArguments &argv, const string &token)
+{
+    if (argv.contains("b")) {
+        return FSPath(fs, parseBlock(argv, token));
+    }
+    return parsePath(argv, token, fs.pwd());
+}
+
+FSPath
+NavigatorConsole::parsePath(const ParsedArguments &argv, const string &token, const FSPath &fallback)
+{
+    if (argv.contains("b")) {
+        return FSPath(fs, parseBlock(argv, token, fallback.ref));
+    }
+
+    auto path = argv.contains(token) ? fs.pwd().seek(argv.at(token)) : fallback;
+    return path;
+}
+
 void
 NavigatorConsole::initCommands(RetroShellCmd &root)
 {
@@ -135,21 +177,13 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .tokens = { "cd" },
         .argx   = {
             { .name = { "path", "New working directory" }, .flags = arg::opt },
-            { .name = { "b", "Specify directory as a block number" }, .flags = arg::flag }
+            { .name = { "b", "Specify the directory as a block number" }, .flags = arg::flag }
         },
         .help   = { "Change the working directory." },
         .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
-            string path;
-
-            if (!args.contains("path")) {
-                fs.cd(string("/"));
-            } else if (args.contains("b")) {
-                auto fspath = FSPath(fs, (Block)parseNum(args.at("path")));
-                fs.cd(fspath);
-            } else {
-                fs.cd(args.at("path"));
-            }
+            auto path = parsePath(args, "path", fs.rootDir());
+            fs.cd(path);
         }
     });
 
@@ -158,6 +192,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .tokens = { "dir" },
         .argx   = {
             { .name = { "path", "Path to directory" }, .flags = arg::opt },
+            { .name = { "b", "Specify the directory as a block number" }, .flags = arg::flag },
             { .name = { "d", "List directories only" }, .flags = arg::flag },
             { .name = { "f", "List files only" }, .flags = arg::flag },
             { .name = { "r", "Traverse subdirectories" }, .flags = arg::flag }
@@ -165,26 +200,29 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .help   = { "Display a sorted list of the files in a directory" },
         .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
-            auto path = FSString(args, "path", ".");
+            auto path = parsePath(args, "path", fs.pwd());
             auto d = args.contains("d");
             auto f = args.contains("f");
             auto r = args.contains("r");
 
-            auto dir = fs.pwd().seek(path);
-
             FSOpt opt = {
 
                 .recursive = r,
-                .sort = true,
-                
+                .sort = sort::dafa,
+
                 .filter = [&](const FSPath &item) {
 
                     return (!d || item.isDirectory()) && (!f || item.isFile());
+                },
+
+                .formatter = [&](const FSPath &item) {
+
+                    return item.last().cpp_str() + (item.isDirectory() ? " (dir)" : "\t");
                 }
             };
 
             std::stringstream ss;
-            fs.ls(ss, dir, opt);
+            fs.list(ss, path, opt);
             *this << ss;
         }
     });
@@ -194,6 +232,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .tokens = { "list" },
         .argx   = {
             { .name = { "path", "Path to directory" }, .flags = arg::opt },
+            { .name = { "b", "Specify the directory as a block number" }, .flags = arg::flag },
             { .name = { "d", "List directories only" }, .flags = arg::flag },
             { .name = { "f", "List files only" }, .flags = arg::flag },
             { .name = { "r", "Traverse subdirectories" }, .flags = arg::flag },
@@ -202,19 +241,17 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .help   = { "List specified information about directories and files" },
         .func   = [this](Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
-            auto path = FSString(args, "path", ".");
+            auto path = parsePath(args, "path", fs.pwd());
             auto d = args.contains("d");
             auto f = args.contains("f");
             auto r = args.contains("r");
             auto k = args.contains("k");
             auto s = args.contains("s");
 
-            auto dir = fs.pwd().seek(path);
-
             FSOpt opt = {
 
                 .recursive = r,
-                .sort = s,
+                .sort = s ? sort::alpha : sort::none,
 
                 .filter = [&](const FSPath &item) {
 
@@ -241,7 +278,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
             };
 
             std::stringstream ss;
-            fs.list(ss, dir, opt);
+            fs.list(ss, path, opt);
             *this << ss;
         }
     });
@@ -260,18 +297,16 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .func   = [this](Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             auto pattern = FSPattern(args.at("name"));
-            auto path = FSString(args, "path", ".");
+            auto path = parsePath(args, "path", fs.pwd());
             auto d = args.contains("d");
             auto f = args.contains("f");
             auto r = args.contains("r");
             auto s = args.contains("s");
 
-            auto dir = fs.pwd().seek(path);
-
             FSOpt opt = {
 
                 .recursive = r,
-                .sort = s,
+                .sort = s ? sort::alpha : sort::none,
 
                 .filter = [&](const FSPath &item) {
 
@@ -288,9 +323,9 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
                 }
             };
 
-            std::vector<FSPath> matches;
-            fs.collect(dir, matches, opt);
-            for (auto &it : matches) { *this << opt.formatter(it) << '\n'; }
+            std::vector<string> matches;
+            fs.collect(path, matches, opt);
+            for (auto &it : matches) { *this << it << '\n'; }
         }
     });
 
@@ -299,14 +334,14 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .tokens = { "type" },
         .extra  = { arg::path },
         .argx   = {
+            { .name = { "path", "File path" } },
             { .name = { "h", "Print hex dump" }, .flags = arg::flag },
-            { .name = { "c", "Print characters" }, .flags = arg::flag },
-            { .name = { "path", "File path" }, }
+            { .name = { "c", "Print characters" }, .flags = arg::flag }
         },
         .help   = { "Print the contents of a file" },
         .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
-            auto file = fs.pwd().seekFile(argv[0]);
+            auto file = fs.pwd().seekFile(args.at("path"));
 
             std::stringstream ss;
             Buffer<u8> buffer;
@@ -317,7 +352,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
             } else if (args.contains("c")) {
                 buffer.ascDump(ss);
             } else {
-                buffer.type(ss);
+                buffer.txtDump(ss);
             }
 
             *this << ss;
@@ -335,9 +370,10 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .ghelp  = { "Manage blocks" },
         .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
-            auto nr = args.contains("nr") ? parseBlock(args.at("nr")) : fs.pwd().ref;
+            // auto nr = args.contains("nr") ? parseBlock(args.at("nr")) : fs.pwd().ref;
+            auto nr = parseBlock(args, "nr");
 
-            if (auto ptr = fs.blockPtr(nr)) {
+            if (auto ptr = fs.blockPtr(nr); ptr) {
 
                 std::stringstream ss;
 
@@ -379,41 +415,6 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
             *this << "Holla, die Waldfee!" << '\n';
             *this << "This is not implemented, yet!" << '\n';
-        }
-    });
-
-    root.add({
-
-        .tokens = { "hexdump" },
-        .extra  = { arg::path },
-        .argx   = { { .name = { "path", "File" } } },
-        .help   = { "Dump the binary contents of a file" },
-        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
-
-            auto file = fs.pwd().seekFile(argv[0]);
-
-            Buffer<u8> buffer;
-            file.ptr()->writeData(buffer);
-
-            std::stringstream ss;
-            buffer.memDump(ss);
-
-            *this << ss;
-        }
-    });
-
-    root.add({
-
-        .tokens = { "test" },
-        .argx   = {
-            { .name = { "path", "File" } },
-            { .name = { "dir", "Another param" } },
-            { .name = { "name", "Yet another param" }, .flags = arg::opt }
-        },
-        .help   = { "Dump the binary contents of a file" },
-        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
-
-            *this << "Holla, die Waldfee";
         }
     });
 }
