@@ -12,6 +12,8 @@
 #include "Emulator.h"
 #include <regex>
 
+#include "Chrono.h"
+
 namespace vamiga {
 
 void

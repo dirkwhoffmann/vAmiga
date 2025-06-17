@@ -388,13 +388,13 @@ Moira::execAdda(u16 opcode)
         POLL_IPL;
         if constexpr (S == Word || isRegMode(M) || isImmMode(M)) SYNC(2);
         if (looping<I>()) {
-            if (M == Mode::DN && S == Long) noPrefetch<C>(6);
-            else if (M == Mode::AI && S == Long) noPrefetch<C>(6);
-            else if (M == Mode::AI && S != Long) noPrefetch<C>(4);
-            else if (M == Mode::PI && S == Long) noPrefetch<C>(6);
-            else if (M == Mode::PI && S != Long) noPrefetch<C>(4);
-            else if (M == Mode::PD && S == Long) noPrefetch<C>(6);
-            else if (M == Mode::PD && S != Long) noPrefetch<C>(4);
+            if constexpr (M == Mode::DN && S == Long) noPrefetch<C>(6);
+            else if constexpr (M == Mode::AI && S == Long) noPrefetch<C>(6);
+            else if constexpr (M == Mode::AI && S != Long) noPrefetch<C>(4);
+            else if constexpr (M == Mode::PI && S == Long) noPrefetch<C>(6);
+            else if constexpr (M == Mode::PI && S != Long) noPrefetch<C>(4);
+            else if constexpr (M == Mode::PD && S == Long) noPrefetch<C>(6);
+            else if constexpr (M == Mode::PD && S != Long) noPrefetch<C>(4);
             else noPrefetch<C>();
         } else {
             prefetch<C>();

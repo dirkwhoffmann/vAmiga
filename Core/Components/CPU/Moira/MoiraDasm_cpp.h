@@ -1009,10 +1009,13 @@ Moira::dasmBcc(StrWriter &str, u32 &addr, u16 op) const
 
         case  Syntax::MUSASHI:
 
-            if (S == Byte && (u8)op == 0xFF) {
+            if constexpr (S == Byte) {
 
-                dasmIllegal<I, M, S>(str, addr, op);
-                break;
+                if ((u8)op == 0xFF) {
+
+                    dasmIllegal<I, M, S>(str, addr, op);
+                    break;
+                }
             }
 
             str << Ins<I>{} << str.tab << UInt(dst) << Av<I, M, S>{};

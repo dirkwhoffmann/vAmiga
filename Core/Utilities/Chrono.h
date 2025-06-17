@@ -10,6 +10,7 @@
 #pragma once
 
 #include "BasicTypes.h"
+#include <chrono>
 #include <ctime>
 
 namespace vamiga::util {
@@ -29,7 +30,8 @@ public:
     static Time seconds(i64 value) { return Time(value * 1000000000); }
     static Time seconds(double value) { return Time(i64(value * 1000000000.f)); }
     static std::tm local(const std::time_t &time);
-    
+    static std::tm gmtime(const std::time_t &time);
+
     Time() { };
     Time(i64 value) : ticks(value) { };
     

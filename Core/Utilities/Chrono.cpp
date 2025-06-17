@@ -43,12 +43,20 @@ std::tm
 Time::local(const std::time_t &time)
 {
     std::tm local {};
-    // localtime_r(&time, &local);
-    gmtime_r(&time, &local);
+    localtime_r(&time, &local);
 
     return local;
 }
-    
+
+std::tm
+Time::gmtime(const std::time_t &time)
+{
+    std::tm gmtime {};
+    gmtime_r(&time, &gmtime);
+
+    return gmtime;
+}
+
 void
 Time::sleep()
 {
@@ -86,6 +94,15 @@ Time::local(const std::time_t &time)
     localtime_r(&time, &local);
     
     return local;
+}
+
+std::tm
+Time::gmtime(const std::time_t &time)
+{
+    std::tm gmtime {};
+    gmtime_r(&time, &gmtime);
+
+    return gmtime;
 }
 
 void
@@ -127,6 +144,15 @@ Time::local(const std::time_t &time)
     localtime_s(&local, &time);
     
     return local;
+}
+
+std::tm
+Time::gmtime(const std::time_t &time)
+{
+    std::tm gmtime {};
+    gmtime_r(&time, &gmtime);
+
+    return gmtime;
 }
 
 void

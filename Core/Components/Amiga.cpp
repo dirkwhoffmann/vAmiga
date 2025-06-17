@@ -410,7 +410,8 @@ Amiga::saveWorkspace(const fs::path &path)
         
     // Prepare the config script
     auto now = std::time(nullptr);
-    ss << "# Workspace setup (" << std::put_time(std::localtime(&now), "%c") << ")\n";
+    auto local = util::Time::local(now);
+    ss << "# Workspace setup (" << std::put_time(&local, "%c") << ")\n";
     ss << "# Generated with vAmiga " << Amiga::build() << "\n";
     ss << "\n";
 
@@ -1265,7 +1266,7 @@ Amiga::processCommand(const Command &cmd)
             if (cmd.value == 0) {
                 throw std::runtime_error("Source 0 is reserved for implementing config.warpMode.");
             }
-            emulator.warpOn(cmd.value);
+            emulator.warpOn(isize(cmd.value));
             break;
             
         case Cmd::WARP_OFF:
@@ -1273,7 +1274,7 @@ Amiga::processCommand(const Command &cmd)
             if (cmd.value == 0) {
                 throw std::runtime_error("Source 0 is reserved for implementing config.warpMode.");
             }
-            emulator.warpOff(cmd.value);
+            emulator.warpOff(isize(cmd.value));
             break;
 
         case Cmd::HALT:

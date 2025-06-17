@@ -383,7 +383,7 @@ Moira::execException(M68kException exc, int nr)
             SYNC(4);
 
             // Write stack frame
-            if (C == Core::C68010 || C == Core::C68020) {
+            if constexpr (C == Core::C68010 || C == Core::C68020) {
                 writeStackFrame0000<C>(status, reg.pc0, vector);
             } else {
                 writeStackFrame0000<C>(status, reg.pc - 2, vector);
