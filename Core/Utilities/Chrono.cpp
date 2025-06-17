@@ -150,7 +150,7 @@ std::tm
 Time::gmtime(const std::time_t &time)
 {
     std::tm gmtime {};
-    gmtime_r(&time, &gmtime);
+    gmtime_s(&gmtime, &time); 
 
     return gmtime;
 }

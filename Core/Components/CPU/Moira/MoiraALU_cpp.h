@@ -912,7 +912,7 @@ Moira::divluMusashi(u64 op1, u32 op2)
 {
     u64 quotient, remainder;
 
-    if (S == Word) {
+    if constexpr (S == Word) {
 
         quotient  = op1 / op2;
         remainder = op1 % op2;

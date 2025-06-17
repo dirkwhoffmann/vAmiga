@@ -102,8 +102,6 @@ FSName::FSName(const string &cpp) : FSString(cpp, 30) { }
 FSName::FSName(const char *c) : FSString(c, 30) { }
 FSName::FSName(const u8 *bcpl) : FSString(bcpl, 30) { }
 FSName::FSName(const fs::path &path) : FSString(Host::unsanitize(path), 30) { }
-// FSName::FSName(const std::map<string,string> map, const string &cpp, const string fallback) :
-// FSString(map, cpp, fallback, 30) { }
 
 fs::path
 FSName::path() const
@@ -138,8 +136,8 @@ FSPattern::FSPattern(const string glob)
 
     try {
         regex = std::regex(re, std::regex::ECMAScript | std::regex::icase);
-    } catch (const std::regex_error& e) {
-        throw; // TODO: Throw proper parse error
+    } catch (const std::regex_error &) {
+        throw AppError(Fault::FS_INVALID_REGEX);
     }
 }
 

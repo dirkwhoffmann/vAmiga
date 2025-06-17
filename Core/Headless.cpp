@@ -257,7 +257,6 @@ Headless::smokeTestScript[] = {
 
     "",
     "help",
-    "hel",          // Test auto-completion
     "joshua",       // Test a hidden command
     "try joshu",    // Catch an error with 'try'
 

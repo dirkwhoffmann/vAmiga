@@ -883,7 +883,7 @@ Moira::execBcc(u16 opcode)
 
         u32 disp = S == Byte ? (u8)opcode : queue.irc;
 
-        if (S == Long) {
+        if constexpr (S == Long) {
 
             readExt<C>();
             disp = disp << 16 | queue.irc;
@@ -1346,7 +1346,7 @@ Moira::execBsr(u16 opcode)
     u32 oldpc = reg.pc;
     u32 disp = S == Byte ? (u8)opcode : queue.irc;
 
-    if (S == Long) {
+    if constexpr (S == Long) {
 
         readExt<C>();
         disp = disp << 16 | queue.irc;
@@ -3581,7 +3581,10 @@ Moira::execMoves(u16 opcode)
         // Switch back to the old FC pin values
         fcSource = 0;
 
-        if (S == Long && (cpuModel == Model::M68020 || cpuModel == Model::M68EC020)) cp += 2;
+        if constexpr (S == Long) {
+
+            if (cpuModel == Model::M68020 || cpuModel == Model::M68EC020) cp += 2;
+        }
 
     } else {                    // Ea -> Rg
 

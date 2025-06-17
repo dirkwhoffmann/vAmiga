@@ -22,7 +22,7 @@ Moira::dasmFBcc(StrWriter &str, u32 &addr, u16 op) const
     auto dst = old + 2;
     U32_INC(dst, SEXT<S>(ext));
 
-    if (S == Long) {
+    if constexpr (S == Long) {
         str << Ins<I>{} << Fcc{cnd} << Sz<S>{} << str.tab << UInt(dst);
     } else {
         str << Ins<I>{} << Fcc{cnd} << str.tab << UInt(dst);

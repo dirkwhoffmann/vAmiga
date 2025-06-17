@@ -214,14 +214,14 @@ RetroShellCmd::printHelp(std::ostream &os)
         // Describe all subcommands
         prefix = "Group: ";
         os << prefix + cmdUsage() << std::endl;
-        printSubcmdHelp(os, prefix.size());
+        printSubcmdHelp(os, isize(prefix.size()));
 
         if (callback) {
 
             // Describe the current command
             prefix = "       Usage: ";
             os << prefix + argUsage() << std::endl;
-            printArgumentHelp(os, prefix.size(), false);
+            printArgumentHelp(os, isize(prefix.size()), false);
         }
 
     } else {
@@ -229,12 +229,12 @@ RetroShellCmd::printHelp(std::ostream &os)
         // Describe the current command
         prefix = "Usage: ";
         os << prefix + argUsage() << std::endl;
-        printArgumentHelp(os, prefix.size());
+        printArgumentHelp(os, isize(prefix.size()));
     }
 }
 
 void
-RetroShellCmd::printArgumentHelp(std::ostream &os, usize indent, bool verbose)
+RetroShellCmd::printArgumentHelp(std::ostream &os, isize indent, bool verbose)
 {
     if (arguments.empty()) return;
 
@@ -264,7 +264,7 @@ RetroShellCmd::printArgumentHelp(std::ostream &os, usize indent, bool verbose)
 }
 
 void
-RetroShellCmd::printSubcmdHelp(std::ostream &os, usize indent, bool verbose)
+RetroShellCmd::printSubcmdHelp(std::ostream &os, isize indent, bool verbose)
 {
     if (subCommands.empty()) return;
 

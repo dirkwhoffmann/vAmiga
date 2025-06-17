@@ -191,8 +191,8 @@ public:
 
     // Displays a help text for a (partially typed in) command
     void printHelp(std::ostream &os);
-    void printArgumentHelp(std::ostream &os, usize indent, bool verbose = true);
-    void printSubcmdHelp(std::ostream &os, usize indent, bool verbose = true);
+    void printArgumentHelp(std::ostream &os, isize indent, bool verbose = true);
+    void printSubcmdHelp(std::ostream &os, isize indent, bool verbose = true);
 
 };
 
