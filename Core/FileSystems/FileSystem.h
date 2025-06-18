@@ -83,8 +83,6 @@ public:
     FileSystem(const HardDrive &hdn, isize part = 0) throws { init(hdn, part); }
 
     virtual ~FileSystem();
-    
-protected:
 
     void init(FileSystemDescriptor layout, u8 *buf, isize len) throws;
     void init(const MediaFile &file, isize part) throws;
@@ -93,7 +91,7 @@ protected:
     void init(FloppyDrive &dfn) throws;
     void init(const HardDrive &hdn, isize part) throws;
 
-public:
+    void dealloc();
 
     bool initialized() const;
     bool formatted() const;

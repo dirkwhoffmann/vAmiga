@@ -38,7 +38,14 @@ FileSystem::~FileSystem()
     for (auto &b : blocks) delete b;
 }
 
-void 
+void
+FileSystem::dealloc()
+{
+    for (auto &b : blocks) delete b;
+    blocks = { };
+}
+
+void
 FileSystem::init(const MediaFile &file, isize part) throws
 {
     switch (file.type()) {
@@ -113,6 +120,7 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
     bmExtBlocks = layout.bmExtBlocks;
     
     // Create all blocks
+    dealloc();
     assert(blocks.empty());
     for (isize i = 0; i < layout.numBlocks; i++) {
         
@@ -501,10 +509,10 @@ FileSystem::cd(const FSName &name)
 void
 FileSystem::cd(const FSPath &path)
 {
-    if (path.isDirectory()) {
-        curr = path.ref;
+    if (!path.isDirectory()) {
+        throw AppError(Fault::FS_NOT_A_DIRECTORY, path.name());
     }
-    throw AppError(Fault::FS_NOT_A_DIRECTORY, path.name());
+    curr = path.ref;
 }
 
 void

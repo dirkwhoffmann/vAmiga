@@ -93,14 +93,54 @@ void hexdumpLongwords(u8 *p, isize size, isize cols)
     hexdump(p, size, cols, 4);
 }
 
-void dump(std::ostream &os, const char *fmt,
-          std::function<isize(isize offset, isize bytes)> read)
+void dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,isize)> read)
 {
+    string fmt;
+
+    // Assemble the format string
+    if (opt.offset) fmt += "%p: ";
+    if (opt.base)   fmt += util::repeat("%b ", opt.columns) + " ";
+    if (opt.ascii)  fmt += util::repeat("%c", opt.columns);
+    fmt += "\n";
+
+    dump(os, opt, read, fmt.c_str());
+}
+
+void dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,isize)> read, const char *fmt)
+{
+    printf("fmt = %s\n", fmt);
+
     bool ctrl = false;
     isize ccnt = 0, bcnt = 0;
     char c;
 
+    std::stringstream ss;
+    auto out = [&](isize value, isize size) {
+
+        int w = 0;
+        if (opt.base == 8)  w += size == 1 ? 3 : size == 2 ? 6 : 11;
+        if (opt.base == 10) w += size == 1 ? 3 : size == 2 ? 5 : 10;
+        if (opt.base == 16) w += size == 1 ? 2 : size == 2 ? 4 : 8;
+
+        if (value >= 0) {
+
+            if (opt.base == 8)  ss << std::setw(w) << std::setfill(' ') << std::oct << value;
+            if (opt.base == 10) ss << std::setw(w) << std::setfill(' ') << std::dec << value;
+            if (opt.base == 16) ss << std::setw(w) << std::setfill('0') << std::hex << value << std::setfill(' ');
+
+        } else {
+            
+            ss << std::setw(w) << " ";
+            /*
+            if (opt.base == 8)  ss << std::setw(w) << " " << " ";
+            if (opt.base == 10) ss << std::setw(w) << " " << " ";
+            if (opt.base == 16) ss << std::setw(w) << " " << " ";
+            */
+        }
+    };
+
     // Continue as long as data is available
+    // for (isize line = 0; read(bcnt, 1) != -1 && read(ccnt, 1) != -1; line++) {
     while (read(bcnt, 1) != -1 && read(ccnt, 1) != -1) {
 
         // Rewind to the beginning of the format string
@@ -112,7 +152,7 @@ void dump(std::ostream &os, const char *fmt,
             if (!ctrl) {
 
                 if (c == '%') { ctrl = true; } else {
-                    if (c == '\n') { os << std::endl; } else { os << c; }
+                    if (c == '\n') { ss << std::endl; } else { ss << c; }
                 }
                 continue;
             }
@@ -120,50 +160,52 @@ void dump(std::ostream &os, const char *fmt,
             switch (c) {
 
                 case 'p': // Offset
-
-                    os << std::setw(8) << std::setfill('0') << std::dec << (u32)std::max(bcnt, ccnt);
+                {
+                    ss << std::setw(5) << std::setfill(' ') << std::dec << std::max(bcnt, ccnt);
                     break;
-
-                case 'c': // Character
-
+                }
+                case 'a': // Character
+                {
                     if (auto val = read(ccnt, 1); val != -1) {
-                        os << (isprint(int(val)) ? (char)val : '.');
+                        ss << (val == '\n' || isprint(int(val)) ? (char)val : ' ');
                         ccnt += 1;
                     } else {
-                        os << ' ';
+                        ss << ' ';
                     }
                     break;
-
-                case 'b': // Byte
-
-                    if (auto val = read(bcnt, 1); val != -1) {
-                        os << std::setw(2) << std::setfill('0') << std::hex << val;
-                        bcnt += 1;
+                }
+                case 'c': // Character
+                {
+                    if (auto val = read(ccnt, 1); val != -1) {
+                        ss << (isprint(int(val)) ? (char)val : '.');
+                        ccnt += 1;
                     } else {
-                        os << std::setw(2) << std::setfill(' ') << " ";
+                        ss << ' ';
                     }
                     break;
-
-                case 'w': // Word
-
-                    if (auto val = read(bcnt, 2); val != -1) {
-                        os << std::setw(4) << std::setfill('0') << std::hex << val;
-                        bcnt += 2;
-                    } else {
-                        os << std::setw(4) << std::setfill(' ') << " ";
-                    }
+                }
+                case 'b': case '1': // Byte
+                {
+                    auto val = read(bcnt, 1);
+                    out(val, 1);
+                    bcnt += 1;
                     break;
+                }
+                case 'w': case '2': // Word
 
-                case 'l': // Long
-
-                    if (auto val = read(bcnt, 4); val != -1) {
-                        os << std::setw(8) << std::setfill('0') << std::hex << val;
-                        bcnt += 4;
-                    } else {
-                        os << std::setw(8) << std::setfill(' ') << " ";
-                    }
+                {
+                    auto val = read(bcnt, 2);
+                    out(val, 2);
+                    bcnt += 2;
                     break;
-
+                }
+                case 'l': case '4': // Long
+                {
+                    auto val = read(bcnt, 4);
+                    out(val, 4);
+                    bcnt += 4;
+                    break;
+                }
                 default:
                     fatalError;
             }
@@ -171,28 +213,29 @@ void dump(std::ostream &os, const char *fmt,
             ctrl = false;
         }
     }
-}
-
-void dump(std::ostream &os, const char *fmt,
-          std::function<isize(isize offset, isize bytes)> read, isize lines, bool tail)
-{
-    // Redirect output into a string stream
-    std::stringstream ss;
-    dump(ss, fmt, read);
 
     // Convert the string stream into a vector
     std::vector<std::string> output;
     std::string line;
     while (std::getline(ss, line)) { output.push_back(std::move(line)); }
 
+    for (auto &it : output) { printf("%s\n", it.c_str()); }
+
+    // Determine the print range
+    isize count = output.size();
+    if (opt.lines >= 0) count = std::min(count, opt.lines);
+    isize start = opt.tail ? isize(output.size()) - count : 0;
+    isize end = opt.tail ? isize(output.size()) : count;
+    int tab = (int)std::to_string(end).size();
+
     // Write the requested number of lines
-    isize count = std::min(isize(output.size()), lines);
-    isize start = tail ? isize(output.size()) - count : 0;
-    isize end   = tail ? isize(output.size()) : count;
-    for (isize i = start; i < end; i++) std::cout << output[i] << '\n';
+    for (isize i = start; i < end; i++) {
+        if (opt.nr) os << std::right << std::setw(tab) << std::to_string(i) << ": ";
+        os << output[i] << '\n';
+    }
 }
 
-void dump(std::ostream &os, const char *fmt, u8 *buf, isize len)
+void dump(std::ostream &os, const DumpOpt &opt, u8 *buf, isize len)
 {
     auto read = [&](isize offset, isize bytes) {
 
@@ -206,10 +249,10 @@ void dump(std::ostream &os, const char *fmt, u8 *buf, isize len)
         return value;
     };
 
-    dump(os, fmt, read);
+    dump(os, opt, read);
 }
 
-void dump(std::ostream &os, const char *fmt, u8 *buf, isize len, isize lines, bool tail)
+void dump(std::ostream &os, const DumpOpt &opt, u8 *buf, isize len, const char *fmt)
 {
     auto read = [&](isize offset, isize bytes) {
 
@@ -223,7 +266,7 @@ void dump(std::ostream &os, const char *fmt, u8 *buf, isize len, isize lines, bo
         return value;
     };
 
-    dump(os, fmt, read, lines, tail);
+    dump(os, opt, read, fmt);
 }
 
 }

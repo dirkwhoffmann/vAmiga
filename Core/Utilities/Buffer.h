@@ -12,6 +12,7 @@
 #include "BasicTypes.h"
 #include "Checksum.h"
 #include "Compression.h"
+#include "MemUtils.h"
 #include <functional>
 #include <ostream>
 
@@ -68,17 +69,13 @@ template <class T> struct Allocator {
     u32 crc32() const { return ptr ? util::crc32((u8 *)ptr, bytesize()) : 0; }
 
     // Pretty-printing the buffer contents
-    void dump(std::ostream &os, const char *fmt, isize lines = -1, bool tail = false);
-    /*
+    void dump(std::ostream &os, DumpOpt opt);
+    void dump(std::ostream &os, DumpOpt opt, const char *fmt);
     void ascDump(std::ostream &os);
     void hexDump(std::ostream &os);
     void memDump(std::ostream &os);
-    void txtDump(std::ostream &os);
-    */
-    void ascDump(std::ostream &os, isize lines = -1, bool tail = false);
-    void hexDump(std::ostream &os, isize lines = -1, bool tail = false);
-    void memDump(std::ostream &os, isize lines = -1, bool tail = false);
-    void txtDump(std::ostream &os, isize lines = -1, bool tail = false);
+    // void txtDump(std::ostream &os);
+    void type(std::ostream &os, DumpOpt opt);
 
     // Compresses or uncompresses a buffer
     void gzip(isize offset = 0) { compress(util::gzip, offset); }
