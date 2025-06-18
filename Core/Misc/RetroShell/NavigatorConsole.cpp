@@ -123,6 +123,70 @@ NavigatorConsole::parsePath(const ParsedArguments &argv, const string &token, co
     return path;
 }
 
+util::DumpOpt
+NavigatorConsole::parseDumpOpts(const ParsedArguments &argv)
+{
+    auto lines = argv.contains("lines") ? parseNum(argv.at("lines")) : -1;
+    auto a = argv.contains("a");
+    auto o = argv.contains("o");
+    auto d = argv.contains("d");
+    auto t = argv.contains("t");
+    auto w = argv.contains("w");
+    auto l = argv.contains("l");
+    auto size = l ? 4 : w ? 2 : 1;
+
+    if ((int)a + (int)o + (int)d > 1) {
+        throw util::ParseError("Flags -a, -o, -d are mutually exclusive.");
+    }
+    if ((int)a + (int)w + (int)l > 1) {
+        throw util::ParseError("Flags -a, -w, -l are mutually exclusive.");
+    }
+    if (o) return {
+
+        .base = 8,
+        .size = size,
+        .prefix = 2,
+        .columns = 16 / size,
+        .lines = lines,
+        .tail = t,
+        .offset = true,
+        .ascii = true
+    };
+    if (d) return {
+
+        .base = 10,
+        .size = size,
+        .prefix = 2,
+        .columns = 16 / size,
+        .lines = lines,
+        .tail = t,
+        .offset = true,
+        .ascii = true
+    };
+    if (a) return {
+
+        .base = 0,
+        .size = size,
+        .prefix = 2,
+        .columns = 64,
+        .lines = lines,
+        .tail = t,
+        .offset = true,
+        .ascii = true
+    };
+    return {
+
+        .base = 16,
+        .size = size,
+        .prefix = 2,
+        .columns = 16 / size,
+        .lines = lines,
+        .tail = t,
+        .offset = true,
+        .ascii = true
+    };
+}
+
 void
 NavigatorConsole::initCommands(RetroShellCmd &root)
 {
@@ -136,7 +200,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
     RetroShellCmd::currentGroup = "Import and export";
 
-    root.add({ .tokens = { "import" }, .help = { "Import a file system." } });
+    root.add({ .tokens = { "import" }, .help = { "Import a file system" } });
 
     for (isize i = 0; i < 4; i++) {
 
@@ -164,7 +228,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "info" },
-        .help   = { "Print a file system summary." },
+        .help   = { "Print a file system summary" },
         .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             std::stringstream ss;
@@ -339,80 +403,60 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .extra  = { arg::path },
         .argx   = {
             { .name = { "path", "File path" } },
-            { .name = { "b", "Specify the directory as a block number" }, .flags = arg::flag },
-            { .name = { "a", "Output as ASCII dump" }, .flags = arg::flag },
-            { .name = { "o", "Output as octal dump" }, .flags = arg::flag },
-            { .name = { "d", "Output as decimal dump" }, .flags = arg::flag },
-            { .name = { "h", "Output as hex dump" }, .flags = arg::flag },
+            { .name = { "b", "Specify the path as a block number" }, .flags = arg::flag },
+            { .name = { "l", "Display a line number in each row" }, .flags = arg::flag },
             { .name = { "t", "Display the last part" }, .flags = arg::flag },
-            { .name = { "lines", "Output as hex dump" }, .flags = arg::keyval|arg::opt },
+            { .name = { "lines", "Number of displayed rows" }, .flags = arg::keyval|arg::opt },
         },
         .help   = { "Print the contents of a file" },
         .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             auto file = parsePath(args, "path", fs.pwd());
             auto lines = args.contains("lines") ? parseNum(args.at("lines")) : -1;
-            auto a = args.contains("a");
-            auto o = args.contains("o");
-            auto d = args.contains("d");
-            auto h = args.contains("h");
-            auto t = args.contains("t");
 
             std::stringstream ss;
             Buffer<u8> buffer;
             file.ptr()->writeData(buffer);
 
-            if ((int)a + (int)o + (int)d + (int)h > 1) {
-                throw util::ParseError("Flags -a, -o, -d, -h are mutually exclusive.");
-            }
+            buffer.type(ss, {
 
-            if (o) { buffer.dump(ss, {
-
-                .columns = 16,
-                .base = 8,
                 .lines = lines,
-                .tail = t,
-                .offset = true,
-                .ascii = true
+                .nr = args.contains("l"),
+                .tail = args.contains("t")
             });
-
-            } else if (d) { buffer.dump(ss, {
-
-                .columns = 16,
-                .base = 10,
-                .lines = lines,
-                .tail = t,
-                .offset = true,
-                .ascii = true
-            });
-
-            } else if (h) { buffer.dump(ss, {
-
-                .columns = 16,
-                .base = 16,
-                .lines = lines,
-                .tail = t,
-                .offset = true,
-                .ascii = true
-            });
-
-            } else if (a) { buffer.dump(ss, {
-
-                .columns = 64,
-                .base = 0,
-                .lines = lines,
-                .tail = t,
-                .offset = true,
-                .ascii = true
-            });
-
-            } else { buffer.type(ss, {
-
-                .lines = lines,
-                .tail = t
-            }); }
 
             *this << ss;
+        }
+    });
+
+    root.add({
+
+        .tokens = { "dump" },
+        .extra  = { arg::path },
+        .argx   = {
+            { .name = { "path", "File path" } },
+            { .name = { "b", "Specify the path as a block number" }, .flags = arg::flag },
+            { .name = { "a", "Output in ASCII, only" }, .flags = arg::flag },
+            { .name = { "o", "Output numbers in octal" }, .flags = arg::flag },
+            { .name = { "d", "Output numbers in decimal" }, .flags = arg::flag },
+            { .name = { "w", "Print in word format" }, .flags = arg::flag },
+            { .name = { "l", "Print in long word format" }, .flags = arg::flag },
+            { .name = { "t", "Display the last part" }, .flags = arg::flag },
+            { .name = { "lines", "Number of displayed rows" }, .flags = arg::keyval|arg::opt },
+        },
+        .help   = { "Dump the contents of a file" },
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+
+            auto file = parsePath(args, "path", fs.pwd());
+            auto opt = parseDumpOpts(args);
+
+            std::stringstream ss;
+            Buffer<u8> buffer;
+
+            file.ptr()->writeData(buffer);
+            buffer.dump(ss, opt);
+
+            *this << '\n' << ss << '\n';
         }
     });
 
@@ -421,24 +465,46 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .tokens = { "block" },
         .argx   = {
             { .name = { "nr", "Block number" }, .flags = arg::opt },
-            { .name = { "h", "Print a hex dump" }, .flags = arg::flag },
         },
         .help   = { "Inspect a block" },
         .ghelp  = { "Manage blocks" },
         .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
-            // auto nr = args.contains("nr") ? parseBlock(args.at("nr")) : fs.pwd().ref;
             auto nr = parseBlock(args, "nr");
 
             if (auto ptr = fs.blockPtr(nr); ptr) {
 
                 std::stringstream ss;
+                ptr->dump(ss);
 
-                if (args.contains("h")) {
-                    ptr->hexDump(ss);
-                } else {
-                    ptr->dump(ss);
-                }
+                *this << '\n' << ss << '\n';
+            }
+        }
+    });
+
+    root.add({
+
+        .tokens = { "block", "dump" },
+        .argx   = {
+            { .name = { "nr", "Block number" } },
+            { .name = { "a", "Output in ASCII, only" }, .flags = arg::flag },
+            { .name = { "o", "Output numbers in octal" }, .flags = arg::flag },
+            { .name = { "d", "Output numbers in decimal" }, .flags = arg::flag },
+            { .name = { "w", "Print in word format" }, .flags = arg::flag },
+            { .name = { "l", "Print in long word format" }, .flags = arg::flag },
+            { .name = { "t", "Display the last part" }, .flags = arg::flag },
+            { .name = { "lines", "Number of displayed rows" }, .flags = arg::keyval|arg::opt },
+        },
+        .help   = { "Import a block from a file" },
+        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+
+            auto nr = parseBlock(args, "nr");
+            auto opt = parseDumpOpts(args);
+
+            if (auto ptr = fs.blockPtr(nr); ptr) {
+
+                std::stringstream ss;
+                ptr->hexDump(ss, opt);
 
                 *this << '\n' << ss << '\n';
             }

@@ -130,7 +130,7 @@ private:
 
 public:
 
-    void hexDump(std::ostream &os);
+    void hexDump(std::ostream &os, const util::DumpOpt &opt);
 
     // Experimental
     static string rangeString(std::vector<Block> vec);

@@ -98,9 +98,10 @@ void dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,isize)
     string fmt;
 
     // Assemble the format string
-    if (opt.offset) fmt += "%p: ";
-    if (opt.base)   fmt += util::repeat("%b ", opt.columns) + " ";
-    if (opt.ascii)  fmt += util::repeat("%c", opt.columns);
+    auto s = opt.size == 4 ? "%l " : opt.size == 2 ? "%w " : "%b ";
+    if (opt.offset) fmt += "%p:  ";
+    if (opt.base)   fmt += util::repeat(s, opt.columns / 2) + " " + util::repeat(s, opt.columns / 2) + " ";
+    if (opt.ascii)  fmt += "|" + util::repeat("%c", opt.columns * opt.size) + "|";
     fmt += "\n";
 
     dump(os, opt, read, fmt.c_str());
@@ -115,32 +116,29 @@ void dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,isize)
     char c;
 
     std::stringstream ss;
-    auto out = [&](isize value, isize size) {
+
+    auto out = [&](isize value, isize size, isize base = 0) {
+
+        base = base ? base : opt.base;
 
         int w = 0;
-        if (opt.base == 8)  w += size == 1 ? 3 : size == 2 ? 6 : 11;
-        if (opt.base == 10) w += size == 1 ? 3 : size == 2 ? 5 : 10;
-        if (opt.base == 16) w += size == 1 ? 2 : size == 2 ? 4 : 8;
+        if (base == 8)  w += size == 1 ? 3 : size == 2 ? 6 : 11;
+        if (base == 10) w += size == 1 ? 3 : size == 2 ? 5 : 10;
+        if (base == 16) w += size == 1 ? 2 : size == 2 ? 4 : 8;
 
         if (value >= 0) {
 
-            if (opt.base == 8)  ss << std::setw(w) << std::setfill(' ') << std::oct << value;
-            if (opt.base == 10) ss << std::setw(w) << std::setfill(' ') << std::dec << value;
-            if (opt.base == 16) ss << std::setw(w) << std::setfill('0') << std::hex << value << std::setfill(' ');
+            if (base == 8)  ss << std::setw(w) << std::setfill(' ') << std::oct << value;
+            if (base == 10) ss << std::setw(w) << std::setfill(' ') << std::dec << value;
+            if (base == 16) ss << std::setw(w) << std::setfill('0') << std::hex << value << std::setfill(' ');
 
         } else {
             
             ss << std::setw(w) << " ";
-            /*
-            if (opt.base == 8)  ss << std::setw(w) << " " << " ";
-            if (opt.base == 10) ss << std::setw(w) << " " << " ";
-            if (opt.base == 16) ss << std::setw(w) << " " << " ";
-            */
         }
     };
 
     // Continue as long as data is available
-    // for (isize line = 0; read(bcnt, 1) != -1 && read(ccnt, 1) != -1; line++) {
     while (read(bcnt, 1) != -1 && read(ccnt, 1) != -1) {
 
         // Rewind to the beginning of the format string
@@ -161,7 +159,8 @@ void dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,isize)
 
                 case 'p': // Offset
                 {
-                    ss << std::setw(5) << std::setfill(' ') << std::dec << std::max(bcnt, ccnt);
+                    out(std::max(bcnt, ccnt), 4, 16);
+                    // ss << std::setw(5) << std::setfill(' ') << std::dec << std::max(bcnt, ccnt);
                     break;
                 }
                 case 'a': // Character

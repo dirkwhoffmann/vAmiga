@@ -100,6 +100,8 @@ struct DumpOpt
 {
     // const char *fmt;
     isize base;
+    isize size;
+    isize prefix;
     isize columns;
     isize lines;
     bool tail;

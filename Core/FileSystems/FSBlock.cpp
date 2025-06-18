@@ -814,9 +814,9 @@ FSBlock::dump(std::ostream &os) const
 }
 
 void
-FSBlock::hexDump(std::ostream &os)
+FSBlock::hexDump(std::ostream &os, const util::DumpOpt &opt)
 {
-    // data.memDump(os);
+    data.dump(os, opt);
 }
 
 string
