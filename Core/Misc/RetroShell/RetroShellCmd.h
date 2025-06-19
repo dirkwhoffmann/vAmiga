@@ -87,7 +87,7 @@ struct RSCmdDescriptor {
     const std::vector<RSArgDescriptor> &argx = {}; // TODO: Rename to args
     const std::vector<string> help = {};
     string ghelp = {}; // Command group help
-    std::function<void (Arguments&, const ParsedArguments &args, const std::vector<isize> &)> func = nullptr;
+    std::function<void (std::ostream &os, Arguments&, const ParsedArguments &args, const std::vector<isize> &)> func = nullptr;
     const std::vector<isize> &values = {};
 };
     
@@ -130,7 +130,7 @@ struct RetroShellCmd {
     std::vector<RetroShellCmd> subCommands;
 
     // Command handler
-    std::function<void (Arguments&, const ParsedArguments &args, const std::vector<isize> &)> callback = nullptr;
+    std::function<void (std::ostream&, Arguments&, const ParsedArguments&, const std::vector<isize>&)> callback = nullptr;
 
     // Additional argument passed to the command handler
     std::vector<isize> param;

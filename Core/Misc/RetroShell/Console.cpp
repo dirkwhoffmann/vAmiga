@@ -755,7 +755,9 @@ Console::exec(const Arguments &argv, bool verbose)
             if ((isize)args.size() > cmd->maxArgs()) throw TooManyArgumentsError(cmd->fullName);
 
             ParsedArguments parsedArgs; // empty
-            cmd->callback(args, parsedArgs, cmd->param);
+            std::stringstream ss;
+            cmd->callback(ss, args, parsedArgs, cmd->param);
+            if (ss.peek() != EOF) { *this << vdelim << ss << vdelim; }
             return;
         }
 
@@ -763,7 +765,11 @@ Console::exec(const Arguments &argv, bool verbose)
         ParsedArguments parsedArgs = parse(*cmd, args);
 
         // Call the command handler
-        cmd->callback(args, parsedArgs, cmd->param);
+        std::stringstream ss;
+        cmd->callback(ss, args, parsedArgs, cmd->param);
+
+        // Dump the output to the console
+        if (ss.peek() == EOF) { *this << '\n'; } else { *this << vdelim << ss << vdelim; }
 
     } else {
 
@@ -811,77 +817,62 @@ Console::help(const Arguments &argv)
 void
 Console::describe(const std::exception &e, isize line, const string &cmd)
 {
+    *this << vdelim;
+
     if (line) *this << "Line " << line << ": " << cmd << '\n';
 
     if (auto err = dynamic_cast<const TooFewArgumentsError *>(&e)) {
 
         *this << err->what() << ": Too few arguments.";
         *this << '\n';
-        return;
-    }
 
-    if (auto err = dynamic_cast<const TooManyArgumentsError *>(&e)) {
+    } else if (auto err = dynamic_cast<const TooManyArgumentsError *>(&e)) {
 
         *this << err->what() << ": Too many arguments.";
         *this << '\n';
-        return;
-    }
 
-    if (auto err = dynamic_cast<const UnknownFlagError *>(&e)) {
+    } else if (auto err = dynamic_cast<const UnknownFlagError *>(&e)) {
 
         *this << err->what() << " is not a valid flag.";
         *this << '\n';
-        return;
-    }
 
-    if (auto err = dynamic_cast<const UnknownKeyValueError *>(&e)) {
+    } else if (auto err = dynamic_cast<const UnknownKeyValueError *>(&e)) {
 
         *this << err->what() << " is not a valid key-value pair.";
         *this << '\n';
-        return;
-    }
 
-    if (auto err = dynamic_cast<const util::EnumParseError *>(&e)) {
+    } else if (auto err = dynamic_cast<const util::EnumParseError *>(&e)) {
 
         *this << err->token << " is not a valid key." << '\n';
         *this << "Expected: " << err->expected << '\n';
-        return;
-    }
 
-    if (auto err = dynamic_cast<const util::ParseNumError *>(&e)) {
+    } else if (auto err = dynamic_cast<const util::ParseNumError *>(&e)) {
 
         *this << err->token << " is not a number.";
         *this << '\n';
-        return;
-    }
 
-    if (auto err = dynamic_cast<const util::ParseBoolError *>(&e)) {
+    } else if (auto err = dynamic_cast<const util::ParseBoolError *>(&e)) {
 
         *this << err->token << " must be true or false.";
         *this << '\n';
-        return;
-    }
 
-    if (auto err = dynamic_cast<const util::ParseOnOffError *>(&e)) {
+    } else if (auto err = dynamic_cast<const util::ParseOnOffError *>(&e)) {
 
         *this << "'" << err->token << "' must be on or off.";
         *this << '\n';
-        return;
-    }
 
-    if (auto err = dynamic_cast<const util::ParseError *>(&e)) {
+    } else if (auto err = dynamic_cast<const util::ParseError *>(&e)) {
 
         *this << err->what() << ": Syntax error";
         *this << '\n';
-        return;
-    }
 
-    if (auto err = dynamic_cast<const AppError *>(&e)) {
+    } else if (auto err = dynamic_cast<const AppError *>(&e)) {
 
         *this << err->what();
         *this << '\n';
-        return;
     }
+
+    *this << vdelim;
 }
 
 void
@@ -935,7 +926,7 @@ Console::initCommands(RetroShellCmd &root)
             .tokens = { "welcome" },
             .hidden = true,
             .help   = { "Prints the welcome message" },
-            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 welcome();
             }
@@ -946,7 +937,7 @@ Console::initCommands(RetroShellCmd &root)
             .tokens = { "helpstring" },
             .hidden = true,
             .help   = { "Prints how to get help" },
-            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
                 printHelp();
             }
@@ -957,7 +948,7 @@ Console::initCommands(RetroShellCmd &root)
 
             .tokens = { "." },
             .help   = { "Enter or exit the debugger" },
-            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
                 if (retroShell.inDebugShell()) {
                     retroShell.enterCommander();
@@ -972,7 +963,7 @@ Console::initCommands(RetroShellCmd &root)
 
             .tokens = { "commander" },
             .help   = { "Enter or command console" },
-            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
                     retroShell.enterCommander();
             }
@@ -982,7 +973,7 @@ Console::initCommands(RetroShellCmd &root)
 
             .tokens = { "debugger" },
             .help   = { "Enter or debug console" },
-            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
                     retroShell.enterDebugger();
             }
@@ -992,7 +983,7 @@ Console::initCommands(RetroShellCmd &root)
 
             .tokens = { "navigator" },
             .help   = { "Enter the file system console" },
-            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
                     retroShell.enterNavigator();
             }
@@ -1002,7 +993,7 @@ Console::initCommands(RetroShellCmd &root)
             
             .tokens = { "clear" },
             .help   = { "Clear the console window" },
-            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 clear();
             }
@@ -1012,7 +1003,7 @@ Console::initCommands(RetroShellCmd &root)
             
             .tokens = { "close" },
             .help   = { "Hide the console window" },
-            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 msgQueue.put(Msg::RSH_CLOSE);
             }
@@ -1023,7 +1014,7 @@ Console::initCommands(RetroShellCmd &root)
             .tokens = { "help" },
             .extra  = { arg::command },
             .help   = { "Print usage information" },
-            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 help(argv.empty() ? "" : argv.front());
             }
@@ -1033,7 +1024,7 @@ Console::initCommands(RetroShellCmd &root)
             
             .tokens = { "state" },
             .hidden = true,
-            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 printState();
             }
@@ -1043,7 +1034,7 @@ Console::initCommands(RetroShellCmd &root)
             
             .tokens = { "joshua" },
             .hidden = true,
-            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 *this << "\nGREETINGS PROFESSOR HOFFMANN.\n";
                 *this << "THE ONLY WINNING MOVE IS NOT TO PLAY.\n";
@@ -1056,7 +1047,7 @@ Console::initCommands(RetroShellCmd &root)
             .tokens = { "source" },
             .args   = { arg::path },
             .help   = { "Process a command script" },
-            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 auto path = host.makeAbsolute(argv.front());
                 auto stream = std::ifstream(path);
@@ -1071,7 +1062,7 @@ Console::initCommands(RetroShellCmd &root)
             .hidden = true,
             .args   = { arg::value, arg::seconds },
             .help   = { "Pause the execution of a command script" },
-            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 auto seconds = parseNum(argv[0]);
                 agnus.scheduleRel<SLOT_RSH>(SEC(seconds), RSH_WAKEUP);
@@ -1083,7 +1074,7 @@ Console::initCommands(RetroShellCmd &root)
                  
             .tokens = { "shutdown" },
             .help   = { "Terminates the application" },
-            .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 msgQueue.put(Msg::ABORT, 0);
             }
@@ -1119,7 +1110,7 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
             
             .tokens = { cmd, ""},
             .help   = { "Display the current configuration" },
-            .func   = [this, &c] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this, &c] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 retroShell.commander.dump(c, Category::Config);
             }
@@ -1145,7 +1136,7 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
                     .tokens = { cmd, "set", OptEnum::key(opt) },
                     .args   = { OptionParser::argList(opt) },
                     .help   = { OptEnum::help(opt) },
-                    .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+                    .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                         
                         emulator.set(Opt(values[0]), argv[0], { values[1] });
                         msgQueue.put(Msg::CONFIG);
@@ -1170,7 +1161,7 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
                         
                         .tokens = { cmd, "set", OptEnum::key(opt), first },
                         .help   = { help.empty() ? "Set to " + first : help },
-                        .func   = [this] (Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+                        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                             
                             emulator.set(Opt(values[0]), values[1], { values[2] });
                             msgQueue.put(Msg::CONFIG);

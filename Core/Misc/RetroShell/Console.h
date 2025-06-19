@@ -94,6 +94,8 @@ protected:
     // The currently active input string
     isize ipos = 0;
 
+    // Additional output inserted before and after command execution
+    string vdelim = "*\n";
 
     //
     // User input
