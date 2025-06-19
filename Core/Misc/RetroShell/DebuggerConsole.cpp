@@ -84,11 +84,12 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "goto" },
-        .extra  = { arg::value },
         .help   = { "Goto address", "g[oto]" },
+        .argx   = { { .name = { "address", "Memory address" }, .flags = arg::opt } },
+        .extra  = { arg::value },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            argv.empty() ? emulator.run() : cpu.jump(parseAddr(argv[0]));
+            argv.empty() ? emulator.run() : cpu.jump(parseAddr(args.at("address")));
         }
     });
     
@@ -163,36 +164,38 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "break", "at" },
-        .args   = { arg::address },
-        .extra  = { arg::ignores },
         .help   = { "Set a breakpoint" },
+        .argx   = {
+            { .name = { "address", "Memory address" } },
+            { .name = { "ignores", "Ignore count" }, .flags = arg::opt }
+        },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            auto addr = parseAddr(argv[0]);
+            auto addr = parseAddr(args.at("address"));
             if (IS_ODD(addr)) throw AppError(Fault::ADDR_UNALIGNED);
-            cpu.breakpoints.setAt(addr, parseNum(argv, 1, 0));
+            cpu.breakpoints.setAt(addr, parseNum(args, "ignores", 0));
         }
     });
     
     root.add({
         
         .tokens = { "break", "delete" },
-        .args   = { arg::nr },
         .help   = { "Delete breakpoints" },
+        .argx   = { { .name = { "nr", "Breakpoint number" } } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            cpu.breakpoints.remove(parseNum(argv[0]));
+            cpu.breakpoints.remove(parseNum(args.at("nr")));
         }
     });
     
     root.add({
         
         .tokens = { "break", "toggle" },
-        .args   = { arg::nr },
         .help   = { "Enable or disable breakpoints" },
+        .argx   = { { .name = { "nr", "Breakpoint number" } } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            cpu.breakpoints.toggle(parseNum(argv[0]));
+            cpu.breakpoints.toggle(parseNum(args.at("nr")));
         }
     });
     
@@ -219,35 +222,37 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "watch", "at" },
-        .args   = { arg::address },
-        .extra  = { arg::ignores },
         .help   = { "Set a watchpoint at the specified address" },
+        .argx   = {
+            { .name = { "address", "Memory address" } },
+            { .name = { "ignores", "Ignore count" }, .flags = arg::opt }
+        },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            auto addr = parseAddr(argv[0]);
-            cpu.watchpoints.setAt(addr, parseNum(argv, 1, 0));
+            auto addr = parseAddr(args, "address");
+            cpu.watchpoints.setAt(addr, parseNum(args, "ignores", 0));
         }
     });
     
     root.add({
         
         .tokens = { "watch", "delete" },
-        .args   = { arg::address },
         .help   = { "Delete a watchpoint" },
+        .argx   = { { .name = { "nr", "Watchpoint number" } } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            cpu.watchpoints.remove(parseNum(argv[0]));
+            cpu.watchpoints.remove(parseNum(args, "nr"));
         }
     });
     
     root.add({
         
         .tokens = { "watch", "toggle" },
-        .args   = { arg::address },
         .help   = { "Enable or disable a watchpoint" },
+        .argx   = { { .name = { "nr", "Watchpoint number" } } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            cpu.watchpoints.toggle(parseNum(argv[0]));
+            cpu.watchpoints.toggle(parseNum(args, "nr"));
         }
     });
     
@@ -274,64 +279,70 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "catch", "vector" },
-        .args   = { arg::value },
-        .extra  = { arg::ignores },
         .help   = { "Catch an exception vector" },
+        .argx   = {
+            { .name = { "vector", "Exception vector number" } },
+            { .name = { "ignores", "Ignore count" }, .flags = arg::opt }
+        },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            auto nr = parseNum(argv[0]);
+            auto nr = parseNum(args, "vector");
             if (nr < 0 || nr > 255) throw AppError(Fault::OPT_INV_ARG, "0...255");
-            cpu.catchpoints.setAt(u32(nr), parseNum(argv, 1, 0));
+            cpu.catchpoints.setAt(u32(nr), parseNum(args, "ignores", 0));
         }
     });
     
     root.add({
         
         .tokens = { "catch", "interrupt" },
-        .args   = { arg::value },
-        .extra  = { arg::ignores },
         .help   = { "Catch an interrupt" },
+        .argx   = {
+            { .name = { "interrupt", "Interrupt number" } },
+            { .name = { "ignores", "Ignore count" }, .flags = arg::opt }
+        },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            auto nr = parseNum(argv[0]);
+            auto nr = parseNum(args, "interrupt");
             if (nr < 1 || nr > 7) throw AppError(Fault::OPT_INV_ARG, "1...7");
-            cpu.catchpoints.setAt(u32(nr + 24), parseNum(argv, 1, 0));
+            cpu.catchpoints.setAt(u32(nr + 24), parseNum(args, "ignores", 0));
         }
     });
     
     root.add({
         
         .tokens = { "catch", "trap" },
-        .args   = { arg::value },
-        .extra  = { arg::ignores },
         .help   = { "Catch a trap instruction" },
+        .argx   = {
+            { .name = { "trap", "Trap number" } },
+            { .name = { "ignores", "Ignore count" }, .flags = arg::opt }
+        },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            auto nr = parseNum(argv[0]);
+            auto nr = parseNum(args, "trap");
             if (nr < 0 || nr > 15) throw AppError(Fault::OPT_INV_ARG, "0...15");
-            cpu.catchpoints.setAt(u32(nr + 32), parseNum(argv, 1, 0));
+            cpu.catchpoints.setAt(u32(nr + 32), parseNum(args, "ignores", 0));
         }
     });
     
     root.add({
         
         .tokens = { "catch", "delete" },
-        .args   = { arg::value },
         .help   = { "Delete a catchpoint" },
+        .argx   = { { .name = { "nr", "Catchpoint number" } } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            cpu.catchpoints.remove(parseNum(argv[0]));
+            cpu.catchpoints.remove(parseNum(args, "nr"));
         }
     });
     
     root.add({
         
         .tokens = { "catch", "toggle" },
-        .args   = { arg::value },
         .help   = { "Enable or disable a catchpoint" },
+        .argx   = { { .name = { "nr", "Catchpoint number" } } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            cpu.catchpoints.toggle(parseNum(argv[0]));
+            cpu.catchpoints.toggle(parseNum(args, "nr"));
         }
     });
     
@@ -359,36 +370,38 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "cbreak", "at" },
-        .args   = { arg::value },
-        .extra  = { arg::ignores },
         .help   = { "Set a breakpoint at the specified address" },
+        .argx   = {
+            { .name = { "address", "Memory address" } },
+            { .name = { "ignores", "Ignore count" }, .flags = arg::opt }
+        },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            auto addr = parseAddr(argv[0]);
+            auto addr = parseAddr(args, "address");
             if (IS_ODD(addr)) throw AppError(Fault::ADDR_UNALIGNED);
-            copper.debugger.breakpoints.setAt(addr, parseNum(argv, 1, 0));
+            copper.debugger.breakpoints.setAt(addr, parseNum(args, "ignores", 0));
         }
     });
     
     root.add({
         
         .tokens = { "cbreak", "delete" },
-        .args   = { arg::value },
         .help   = { "Delete a breakpoint" },
+        .argx   = { { .name = { "nr", "Copper breakpoint number" } } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            copper.debugger.breakpoints.remove(parseNum(argv[0]));
+            copper.debugger.breakpoints.remove(parseNum(args, "nr"));
         }
     });
     
     root.add({
         
         .tokens = { "cbreak", "toggle" },
-        .args   = { arg::value },
         .help   = { "Enable or disable a breakpoint" },
+        .argx   = { { .name = { "nr", "Copper breakpoint number" } } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            copper.debugger.breakpoints.toggle(parseNum(argv[0]));
+            copper.debugger.breakpoints.toggle(parseNum(args, "nr"));
         }
     });
     
@@ -416,36 +429,38 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "cwatch", "at" },
-        .args   = { arg::value },
-        .extra  = { arg::ignores },
         .help   = { "Set a watchpoint at the specified address" },
+        .argx   = {
+            { .name = { "address", "Memory address" } },
+            { .name = { "ignores", "Ignore count" }, .flags = arg::opt }
+        },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            auto addr = parseAddr(argv[0]);
+            auto addr = parseAddr(args, "address");
             if (IS_ODD(addr)) throw AppError(Fault::ADDR_UNALIGNED);
-            copper.debugger.watchpoints.setAt(addr, parseNum(argv, 1, 0));
+            copper.debugger.watchpoints.setAt(addr, parseNum(args, "ignores", 0));
         }
     });
     
     root.add({
         
         .tokens = { "cwatch", "delete" },
-        .args   = { arg::value },
         .help   = { "Delete a watchpoint" },
+        .argx   = { { .name = { "nr", "Copper watchpoint number" } } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            copper.debugger.watchpoints.remove(parseNum(argv[0]));
+            copper.debugger.watchpoints.remove(parseNum(args, "nr"));
         }
     });
     
     root.add({
         
         .tokens = { "cwatch", "toggle" },
-        .args   = { arg::value },
         .help   = { "Enable or disable a watchpoint" },
+        .argx   = { { .name = { "nr", "Copper watchpoint number" } } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            copper.debugger.watchpoints.toggle(parseNum(argv[0]));
+            copper.debugger.watchpoints.toggle(parseNum(args, "nr"));
         }
     });
     
@@ -473,36 +488,39 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "btrap", "at" },
-        .args   = { arg::value, arg::value },
-        .extra  = { arg::ignores },
         .help   = { "Set a beamtrap at the specified coordinate" },
+        .argx   = {
+            { .name = { "x", "Vertical trigger position" }, .flags = arg::keyval },
+            { .name = { "y", "Horizontal trigger position" }, .flags = arg::keyval },
+            { .name = { "ignores", "Ignore count" }, .flags = arg::opt }
+        },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            auto v = parseNum(argv[0]);
-            auto h = parseNum(argv[1]);
-            agnus.dmaDebugger.beamtraps.setAt(HI_W_LO_W(v, h), parseNum(argv, 2, 0));
+            auto h = parseNum(args, "x");
+            auto v = parseNum(args, "y");
+            agnus.dmaDebugger.beamtraps.setAt(HI_W_LO_W(v, h), parseNum(args, "ignores", 0));
         }
     });
     
     root.add({
         
         .tokens = { "btrap", "delete"},
-        .args   = { arg::value },
         .help   = { "Delete a beamtrap" },
+        .argx   = { { .name = { "nr", "Beamtrap number" } } },
         .func    = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            agnus.dmaDebugger.beamtraps.remove(parseNum(argv[0]));
+            agnus.dmaDebugger.beamtraps.remove(parseNum(args, "nr"));
         }
     });
     
     root.add({
         
         .tokens = { "btrap", "toggle" },
-        .args   = { arg::value },
         .help   = { "Enable or disable a beamtrap" },
+        .argx   = { { .name = { "nr", "Beamtrap number" } } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            agnus.dmaDebugger.beamtraps.toggle(parseNum(argv[0]));
+            agnus.dmaDebugger.beamtraps.toggle(parseNum(args, "nr"));
         }
     });
     
@@ -516,12 +534,12 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "d" },
-        .extra  = { arg::address },
         .help   = { "Disassemble instructions" },
+        .argx   = { { .name = { "address", "Memory address" }, .flags = arg::opt } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
-            cpu.disassembleRange(ss, parseAddr(argv[0], cpu.getPC0()), 16);
+            cpu.disassembleRange(ss, parseAddr(args, "address", cpu.getPC0()), 16);
             retroShell << '\n' << ss << '\n';
         }
     });
@@ -529,11 +547,11 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "a" },
-        .extra  = { arg::address },
         .help   = { "Dump memory in ASCII" },
+        .argx   = { { .name = { "address", "Memory address" }, .flags = arg::opt } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
-            if (argv.size() > 0) { current = parseAddr(argv[0]); }
+            if (argv.size() > 0) { current = parseAddr(args, "address"); }
 
             std::stringstream ss;
             current += (u32)mem.debugger.ascDump<Accessor::CPU>(ss, current, 16);
@@ -544,11 +562,11 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = {"m"},
-        .extra  = { arg::address },
         .help   = { "Dump memory", "m[.b|.w|.l]" },
+        .argx   = { { .name = { "address", "Memory address" }, .flags = arg::opt } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                         
-            if (argv.size() > 0) { current = parseAddr(argv[0]); }
+            if (argv.size() > 0) { current = parseAddr(args, "address"); }
 
             std::stringstream ss;
             current += (u32)mem.debugger.memDump<Accessor::CPU>(ss, current, 16, values[0]);
@@ -563,24 +581,29 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "w" },
+        .help   = { "Write into a register or memory", "w[.b|.w|.l]" },
+        .argx   = {
+            { .name = { "value", "Payload" } },
+            { .name = { "target", "Memory address or custom register" }, .flags = arg::opt } },
+        /*
         .args   = { arg::value },
         .extra  = { "{ " + arg::address + " | " + RegEnum::argList() + " }" },
-        .help   = { "Write into a register or memory", "w[.b|.w|.l]" },
+        */
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             u32 addr = current;
             
-            if (argv.size() > 1) {
-                
+            if (args.contains("target")) {
+
                 try {
                     
-                    addr = 0xDFF000 + u32(parseEnum<RegEnum>(argv[1]) << 1);
-                    mem.debugger.write(addr, u32(parseNum(argv[0])), values[0]);
+                    addr = 0xDFF000 + u32(parseEnum<RegEnum>(args.at("target")) << 1);
+                    mem.debugger.write(addr, u32(parseNum(args, "value")), values[0]);
                     return;
                     
                 } catch (...) {
                     
-                    addr = parseAddr(argv[1]);
+                    addr = parseAddr(args, "target");
                 };
             }
             
@@ -595,16 +618,20 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.clone({"w"}, "w.l", { 4 });
     
     root.add({
-        
+
         .tokens = { "c" },
-        .args   = { arg::src, arg::dst, arg::count },
         .help   = { "Copy a chunk of memory", "c[.b|.w|.l]" },
+        .argx   = {
+            { .name = { "src", "Source address" }, .flags = arg::keyval },
+            { .name = { "dest", "Destination address" }, .flags = arg::keyval },
+            { .name = { "count", "Number of bytes" }, .flags = arg::keyval } },
+
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            auto src = parseNum(argv[0]);
-            auto dst = parseNum(argv[1]);
-            auto cnt = parseNum(argv[2]) * values[0];
-            
+            auto src = parseNum(args.at("src"));
+            auto dst = parseNum(args.at("dest"));
+            auto cnt = parseNum(args.at("count")) * values[0];
+
             if (src < dst) {
                 
                 for (isize i = cnt - 1; i >= 0; i--)
@@ -625,13 +652,17 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "f" },
+        .help   = { "Find a sequence in memory", "f[.b|.w|.l]" },
         .args   = { arg::sequence },
         .extra  = { arg::address },
-        .help   = { "Find a sequence in memory", "f[.b|.w|.l]" },
+        .argx   = {
+            { .name = { "sequence", "Search string" } },
+            { .name = { "address", "Start address" }, .flags = arg::opt } },
+
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            auto pattern = parseSeq(argv[0]);
-            auto addr = u32(parseNum(argv, 1, current));
+            auto pattern = parseSeq(args.at("sequence"));
+            auto addr = u32(parseNum(args, "address", current));
             auto found = mem.debugger.memSearch(pattern, addr, values[0] == 1 ? 1 : 2);
             
             if (found >= 0) {
@@ -657,15 +688,22 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "e" },
+        /*
         .args   = { arg::address, arg::count },
         .extra  = { arg::value },
+        */
         .help   = { "Erase memory", "e[.b|.w|.l]" },
+        .argx   = {
+            { .name = { "address", "Start address" } },
+            { .name = { "count", "Number of bytes to erase" } },
+            { .name = { "value", "Replacement value" }, .flags = arg::opt } },
+
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
-            
-            auto addr = parseAddr(argv[0]);
-            auto count = parseNum(argv[1]);
-            auto val = u32(parseNum(argv, 2, 0));
-            
+
+            auto addr = parseAddr(args.at("address"));
+            auto count = parseNum(args, "count");
+            auto val = u32(parseNum(args, "value", 0));
+
             mem.debugger.write(addr, val, values[0], count);
         }, .values = {1}
     });
@@ -869,12 +907,12 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "?", "copper", "list" },
-        .args   = { arg::value },
         .help   = { "Print the Copper list" },
+        .argx   = { { .name = { "nr", "Copper list (1 or 2)" } } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            auto nr = parseNum(argv[0]);
-            
+            auto nr = parseNum(args, "nr");
+
             std::stringstream ss;
             
             switch (nr) {
@@ -1005,12 +1043,12 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "?", "zorro", "board" },
-        .args   = { arg::value },
         .help   = { "Inspect a specific Zorro board" },
+        .argx   = { { .name = { "nr", "Board number" } } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            auto nr = parseNum(argv[0]);
-            
+            auto nr = parseNum(args, "nr");
+
             if (auto board = zorro.getBoard(nr); board != nullptr) {
                 
                 dump(*board, { Category::Properties, Category::State, Category::Stats } );
@@ -1435,19 +1473,19 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "os", "libraries" },
-        .extra  = { "<library>" },
         .help   = { "List all libraries" },
+        .argx   = { { .name = { "nr", "Library number" }, .flags = arg::opt } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             isize num;
             
-            if (argv.empty()) {
+            if (!args.contains("nr")) {
                 osDebugger.dumpLibraries(ss);
-            } else if (util::parseHex(argv.front(), &num)) {
+            } else if (util::parseHex(args.at("nr"), &num)) {
                 osDebugger.dumpLibrary(ss, (u32)num);
             } else {
-                osDebugger.dumpLibrary(ss, argv.front());
+                osDebugger.dumpLibrary(ss, args.at("nr"));
             }
             
             retroShell << ss;
@@ -1457,19 +1495,19 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "os", "devices" },
-        .extra  = { "<device>" },
         .help   = { "List all devices" },
+        .argx   = { { .name = { "nr", "Device number" }, .flags = arg::opt } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             isize num;
             
-            if (argv.empty()) {
+            if (!args.contains("nr")) {
                 osDebugger.dumpDevices(ss);
-            } else if (util::parseHex(argv.front(), &num)) {
+            } else if (util::parseHex(args.at("nr"), &num)) {
                 osDebugger.dumpDevice(ss, (u32)num);
             } else {
-                osDebugger.dumpDevice(ss, argv.front());
+                osDebugger.dumpDevice(ss, args.at("nr"));
             }
             
             retroShell << ss;
@@ -1479,19 +1517,19 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "os", "resources" },
-        .extra  = { "<resource>" },
         .help   = { "List all resources" },
+        .argx   = { { .name = { "nr", "Resource number" }, .flags = arg::opt } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             isize num;
             
-            if (argv.empty()) {
+            if (!args.contains("nr")) {
                 osDebugger.dumpResources(ss);
-            } else if (util::parseHex(argv.front(), &num)) {
+            } else if (util::parseHex(args.at("nr"), &num)) {
                 osDebugger.dumpResource(ss, (u32)num);
             } else {
-                osDebugger.dumpResource(ss, argv.front());
+                osDebugger.dumpResource(ss, args.at("nr"));
             }
             
             retroShell << ss;
@@ -1501,19 +1539,19 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "os", "tasks" },
-        .extra  = { "<task>" },
         .help   = { "List all tasks" },
+        .argx   = { { .name = { "nr", "Task number" }, .flags = arg::opt } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             isize num;
             
-            if (argv.empty()) {
+            if (!args.contains("nr")) {
                 osDebugger.dumpTasks(ss);
-            } else if (util::parseHex(argv.front(), &num)) {
+            } else if (util::parseHex(args.at("nr"), &num)) {
                 osDebugger.dumpTask(ss, (u32)num);
             } else {
-                osDebugger.dumpTask(ss, argv.front());
+                osDebugger.dumpTask(ss, args.at("nr"));
             }
             
             retroShell << ss;
@@ -1523,19 +1561,19 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "os", "processes" },
-        .extra  = { "<process>" },
         .help   = { "List all processes" },
+        .argx   = { { .name = { "nr", "Process number" }, .flags = arg::opt } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             isize num;
             
-            if (argv.empty()) {
+            if (!args.contains("nr")) {
                 osDebugger.dumpProcesses(ss);
-            } else if (util::parseHex(argv.front(), &num)) {
+            } else if (util::parseHex(args.at("nr"), &num)) {
                 osDebugger.dumpProcess(ss, (u32)num);
             } else {
-                osDebugger.dumpProcess(ss, argv.front());
+                osDebugger.dumpProcess(ss, args.at("nr"));
             }
             
             retroShell << ss;
@@ -1545,12 +1583,13 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "os", "catch" },
-        .args   = { "<task>" },
         .help   = { "Pause emulation on task launch" },
+        .argx   = { { .name = { "task", "Task name" } } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
-            
-            diagBoard.catchTask(argv.back());
-            retroShell << "Waiting for task '" << argv.back() << "' to start...\n";
+
+            const auto &task = args.at("task");
+            diagBoard.catchTask(args.at(task));
+            retroShell << "Waiting for task '" << args.at(task) << "' to start...\n";
         }
     });
     
@@ -1563,11 +1602,12 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "os", "set", "diagboard" },
-        .args   = { arg::boolean },
         .help   = { "Attach or detach the debug expansion board" },
+        .argx   = { { .name = { "switch", "Is the board plugged in?" }, .key = arg::boolean } },
+        // .args   = { arg::boolean },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            diagBoard.setOption(Opt::DIAG_BOARD, parseBool(argv[0]));
+            diagBoard.setOption(Opt::DIAG_BOARD, parseBool(args.at("switch")));
         }
     });
     
@@ -1601,12 +1641,12 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
             root.add({
                 
                 .tokens = { "debug", DebugFlagEnum::key(i) },
-                .args   = { arg::boolean },
                 .help   = { DebugFlagEnum::help(i) },
-                .func   = [] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+                .argx   = { { .name = { "level", "Debug level" } } },
+                .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                     
-                    Emulator::setDebugVariable(DebugFlag(values[0]), int(util::parseNum(argv[0])));
-                    
+                    Emulator::setDebugVariable(DebugFlag(values[0]), int(parseNum(args, "level")));
+
                 }, .values = { isize(i) }
             });
         }
@@ -1614,11 +1654,11 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { "debug", "verbosity" },
-            .args   = { arg::value },
             .help   = { "Set the verbosity level for generated debug output" },
-            .func   = [] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
-                
-                CoreObject::verbosity = isize(util::parseNum(argv[0]));
+            .argx   = { { .name = { "level", "Verbosity level" } } },
+            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+
+                CoreObject::verbosity = isize(parseNum(args, "level"));
             }
         });
     }
@@ -1628,14 +1668,16 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = {"%"},
         .args   = { arg::value },
         .help   = { "Convert a value into different formats" },
+        .argx   = { { .name = { "value", "Payload" } } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
-            
-            if (isNum(argv[0])) {
-                mem.debugger.convertNumeric(ss, (u32)parseNum(argv[0]));
+            auto value = args.at("value");
+
+            if (isNum(value)) {
+                mem.debugger.convertNumeric(ss, (u32)parseNum(value));
             } else {
-                mem.debugger.convertNumeric(ss, argv.front());
+                mem.debugger.convertNumeric(ss, value);
             }
             
             retroShell << '\n' << ss << '\n';

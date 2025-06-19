@@ -560,14 +560,14 @@ Headless::smokeTestScript[] = {
     "hd0",
     "hd0 disconnect",
     "hd0 connect",
-    "hd0 geometry 320 2 32",
+    "hd0 geometry cylinders=320 heads=2 sectors=32",
     "hd0 set PAN 50",
     "hd0 set STEP_VOLUME 50",
 
     "hd1",
     "hd1 disconnect",
     "hd1 connect",
-    "hd1 geometry 320 2 32",
+    "hd1 geometry cylinders=320 heads=2 sectors=32",
     "hd1 set PAN 50",
     "hd1 set STEP_VOLUME 50",
 

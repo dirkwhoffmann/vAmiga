@@ -113,55 +113,7 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
 
     // User activity token obtained in applicationDidFinishLaunching()
     var token: NSObjectProtocol!
-    
-    /*
-    // List of recently inserted floppy disk URLs (all drives share the same list)
-    var insertedFloppyDisks: [URL] = [] {
-        didSet {
-            updateRecentUrlMenus([df0OpenRecent, df1OpenRecent, df2OpenRecent, df3OpenRecent],
-                                 urls: insertedFloppyDisks)
-        }
-    }
-    // List of export URLs  (one for each floppy drive)
-    var exportedFloppyDisks0: [URL] = [] {
-        didSet { updateRecentUrlMenu(df0ExportRecent, urls: exportedFloppyDisks0, nr: 0) }
-    }
-    var exportedFloppyDisks1: [URL] = [] {
-        didSet { updateRecentUrlMenu(df1ExportRecent, urls: exportedFloppyDisks1, nr: 1) }
-    }
-    var exportedFloppyDisks2: [URL] = [] {
-        didSet { updateRecentUrlMenu(df2ExportRecent, urls: exportedFloppyDisks2, nr: 2) }
-    }
-    var exportedFloppyDisks3: [URL] = [] {
-        didSet { updateRecentUrlMenu(df3ExportRecent, urls: exportedFloppyDisks3, nr: 3) }
-    }
-        
-    // List of recently attached hard drive URLs
-    var attachedHardDrives: [URL] = [] {
-        didSet {
-            updateRecentUrlMenus([hd0OpenRecent, hd1OpenRecent, hd2OpenRecent, hd3OpenRecent],
-                                 urls: attachedHardDrives)
-        }
-    }
-    // List of export URLs (one for each hard drive)
-    var exportedHardDrives0: [URL] = [] {
-        didSet { updateRecentUrlMenu(hd0ExportRecent, urls: exportedHardDrives0, nr: 0) }
-    }
-    var exportedHardDrives1: [URL] = [] {
-        didSet { updateRecentUrlMenu(hd1ExportRecent, urls: exportedHardDrives1, nr: 1) }
-    }
-    var exportedHardDrives2: [URL] = [] {
-        didSet { updateRecentUrlMenu(hd2ExportRecent, urls: exportedHardDrives2, nr: 2) }
-    }
-    var exportedHardDrives3: [URL] = [] {
-        didSet { updateRecentUrlMenu(hd3ExportRecent, urls: exportedHardDrives3, nr: 3) }
-    }
-        
-    // Pictograms used in menu items
-    var diskMenuImage = NSImage(named: "diskTemplate")!.resize(width: 16.0, height: 16.0)
-    var hdrMenuImage = NSImage(named: "hdrTemplate")!.resize(width: 16.0, height: 16.0)
-    */
-    
+
     override init() {
         
         super.init()

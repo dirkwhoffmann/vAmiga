@@ -561,16 +561,18 @@ Console::parse(const RetroShellCmd &cmd, const Arguments &args)
         // Does the descriptor describe a flag?
         if (descr.isFlag()) {
 
+            bool found = false;
             for (auto it = flags.begin(); it != flags.end(); it++) {
 
                 if (keyStr == *it) {
 
                     map[nameStr] = "true";
                     flags.erase(it);
+                    found = true;
                     break;
                 }
             }
-            if (descr.isRequired()){
+            if (!found && descr.isRequired()){
                 throw util::ParseError("Missing flag " + keyStr);
             }
             continue;
@@ -579,6 +581,7 @@ Console::parse(const RetroShellCmd &cmd, const Arguments &args)
         // Does the descriptor describe a key-value pair?
         if (descr.isKeyValuePair()) {
 
+            bool found = false;
             for (auto it = keyVal.begin(); it != keyVal.end(); it++) {
 
                 auto pos = it->find('=');
@@ -589,10 +592,11 @@ Console::parse(const RetroShellCmd &cmd, const Arguments &args)
 
                     map[nameStr] = val;
                     keyVal.erase(it);
+                    found = true;
                     break;
                 }
             }
-            if (descr.isRequired()) {
+            if (!found && descr.isRequired()) {
                 throw util::ParseError("Missing key-value pair " + descr.keyValueStr());
             }
             continue;
@@ -628,85 +632,154 @@ Console::parse(const RetroShellCmd &cmd, const Arguments &args)
 }
 
 bool
-Console::isBool(const string &argv)
+Console::isBool(const string &argv) const
 {
     return util::isBool(argv);
 }
 
 bool
-Console::isOnOff(const string  &argv)
+Console::isOnOff(const string  &argv) const
 {
     return util::isOnOff(argv);
 }
 
 long
-Console::isNum(const string &argv)
+Console::isNum(const string &argv) const
 {
     return util::isNum(argv);
 }
 
 bool
-Console::parseBool(const string &argv)
+Console::parseBool(const string &argv) const
 {
     return util::parseBool(argv);
 }
 
 bool
-Console::parseBool(const string &argv, bool fallback)
+Console::parseBool(const string &argv, bool fallback) const
 {
     try { return parseBool(argv); } catch(...) { return fallback; }
 }
 
 bool
-Console::parseBool(const Arguments &argv, long nr, long fallback)
+Console::parseBool(const Arguments &argv, long nr, long fallback) const
 {
     return nr < long(argv.size()) ? parseBool(argv[nr]) : fallback;
 }
 
 bool
-Console::parseOnOff(const string &argv)
+Console::parseBool(const ParsedArguments &argv, const string &key) const
+{
+    assert(argv.contains(key));
+    return parseBool(argv.at(key));
+}
+
+bool
+Console::parseBool(const ParsedArguments &argv, const string &key, long fallback) const
+{
+    return argv.contains(key) ? parseBool(argv.at(key)) : fallback;
+}
+
+bool
+Console::parseOnOff(const string &argv) const
 {
     return util::parseOnOff(argv);
 }
 
 bool
-Console::parseOnOff(const string &argv, bool fallback)
+Console::parseOnOff(const string &argv, bool fallback) const
 {
     try { return parseOnOff(argv); } catch(...) { return fallback; }
 }
 
 bool
-Console::parseOnOff(const Arguments &argv, long nr, long fallback)
+Console::parseOnOff(const Arguments &argv, long nr, long fallback) const
 {
     return nr < long(argv.size()) ? parseOnOff(argv[nr]) : fallback;
 }
 
+bool
+Console::parseOnOff(const ParsedArguments &argv, const string &key, long fallback) const
+{
+    return argv.contains(key) ? parseBool(argv.at(key)) : fallback;
+}
+
+bool
+Console::parseOnOff(const ParsedArguments &argv, const string &key) const
+{
+    assert(argv.contains(key));
+    return parseBool(argv.at(key));
+}
+
 long
-Console::parseNum(const string &argv)
+Console::parseNum(const string &argv) const
 {
     return util::parseNum(argv);
 }
 
 long
-Console::parseNum(const string &argv, long fallback)
+Console::parseNum(const string &argv, long fallback) const
 {
     try { return parseNum(argv); } catch(...) { return fallback; }
 }
 
 long
-Console::parseNum(const Arguments &argv, long nr, long fallback)
+Console::parseNum(const Arguments &argv, long nr, long fallback) const
 {
     return nr < long(argv.size()) ? parseNum(argv[nr]) : fallback;
 }
 
+long
+Console::parseNum(const ParsedArguments &argv, const string &key) const
+{
+    assert(argv.contains(key));
+    return parseNum(argv.at(key));
+}
+
+long
+Console::parseNum(const ParsedArguments &argv, const string &token, long fallback) const
+{
+    return argv.contains(token) ? parseNum(argv.at(token)) : fallback;
+}
+
+u32
+Console::parseAddr(const string &argv) const
+{
+    return (u32)parseNum(argv);
+}
+
+u32
+Console::parseAddr(const string &argv, long fallback) const
+{
+    return (u32)parseNum(argv, fallback);
+}
+u32
+Console::parseAddr(const Arguments &argv, long nr, long fallback) const
+{
+    return (u32)parseNum(argv, nr, fallback);
+}
+
+u32
+Console::parseAddr(const ParsedArguments &argv, const string &key) const
+{
+    assert(argv.contains(key));
+    return (u32)parseNum(argv, key);
+}
+
+u32
+Console::parseAddr(const ParsedArguments &argv, const string &key, long fallback) const
+{
+    return (u32)parseNum(argv, key, fallback);
+}
+
 string
-Console::parseSeq(const string &argv)
+Console::parseSeq(const string &argv) const
 {
     return util::parseSeq(argv);
 }
 
 string
-Console::parseSeq(const string &argv, const string &fallback)
+Console::parseSeq(const string &argv, const string &fallback) const
 {
     try { return parseSeq(argv); } catch(...) { return fallback; }
 }
@@ -924,8 +997,8 @@ Console::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { "welcome" },
-            .hidden = true,
             .help   = { "Prints the welcome message" },
+            .hidden = true,
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 welcome();
@@ -935,29 +1008,13 @@ Console::initCommands(RetroShellCmd &root)
         root.add({
 
             .tokens = { "helpstring" },
-            .hidden = true,
             .help   = { "Prints how to get help" },
+            .hidden = true,
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
                 printHelp();
             }
         });
-
-        /*
-        root.add({
-
-            .tokens = { "." },
-            .help   = { "Enter or exit the debugger" },
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
-
-                if (retroShell.inDebugShell()) {
-                    retroShell.enterCommander();
-                } else {
-                    retroShell.enterDebugger();
-                }
-            }
-        });
-        */
 
         root.add({
 
@@ -1012,8 +1069,8 @@ Console::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { "help" },
-            .extra  = { arg::command },
             .help   = { "Print usage information" },
+            .extra  = { arg::command },
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 help(argv.empty() ? "" : argv.front());
@@ -1045,8 +1102,8 @@ Console::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { "source" },
-            .args   = { arg::path },
             .help   = { "Process a command script" },
+            .args   = { arg::path },
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 auto path = host.makeAbsolute(argv.front());

@@ -238,11 +238,11 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "cd" },
+        .help   = { "Change the working directory." },
         .argx   = {
             { .name = { "path", "New working directory" }, .flags = arg::opt },
             { .name = { "b", "Specify the directory as a block number" }, .flags = arg::flag }
         },
-        .help   = { "Change the working directory." },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             auto path = parsePath(args, "path", fs.rootDir());
@@ -253,6 +253,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "dir" },
+        .help   = { "Display a sorted list of the files in a directory" },
         .argx   = {
             { .name = { "path", "Path to directory" }, .flags = arg::opt },
             { .name = { "b", "Specify the directory as a block number" }, .flags = arg::flag },
@@ -260,7 +261,6 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
             { .name = { "f", "List files only" }, .flags = arg::flag },
             { .name = { "r", "Traverse subdirectories" }, .flags = arg::flag }
         },
-        .help   = { "Display a sorted list of the files in a directory" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             auto path = parsePath(args, "path", fs.pwd());
@@ -291,6 +291,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "list" },
+        .help   = { "List specified information about directories and files" },
         .argx   = {
             { .name = { "path", "Path to directory" }, .flags = arg::opt },
             { .name = { "b", "Specify the directory as a block number" }, .flags = arg::flag },
@@ -299,7 +300,6 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
             { .name = { "r", "Traverse subdirectories" }, .flags = arg::flag },
             { .name = { "k", "Display keys (start blocks)" }, .flags = arg::flag },
             { .name = { "s", "Sort output" }, .flags = arg::flag } },
-        .help   = { "List specified information about directories and files" },
         .func   = [this](std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             auto path = parsePath(args, "path", fs.pwd());
@@ -345,6 +345,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "find" },
+        .help   = { "Find files or directories" },
         .argx   = {
             { .name = { "name", "Search pattern" } },
             { .name = { "path", "Directory to search in" }, .flags = arg::opt },
@@ -353,7 +354,6 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
             { .name = { "f", "Find files only" }, .flags = arg::flag },
             { .name = { "r", "Search subdirectories, too" }, .flags = arg::flag },
             { .name = { "s", "Sort output" }, .flags = arg::flag } },
-        .help   = { "Find files or directories" },
         .func   = [this](std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             auto pattern = FSPattern(args.at("name"));
@@ -392,6 +392,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "type" },
+        .help   = { "Print the contents of a file" },
         .extra  = { arg::path },
         .argx   = {
             { .name = { "path", "File path" } },
@@ -400,7 +401,6 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
             { .name = { "t", "Display the last part" }, .flags = arg::flag },
             { .name = { "lines", "Number of displayed rows" }, .flags = arg::keyval|arg::opt },
         },
-        .help   = { "Print the contents of a file" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             auto file = parsePath(args, "path", fs.pwd());
@@ -421,6 +421,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "dump" },
+        .help   = { "Dump the contents of a file" },
         .extra  = { arg::path },
         .argx   = {
             { .name = { "path", "File path" } },
@@ -433,7 +434,6 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
             { .name = { "t", "Display the last part" }, .flags = arg::flag },
             { .name = { "lines", "Number of displayed rows" }, .flags = arg::keyval|arg::opt },
         },
-        .help   = { "Dump the contents of a file" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             auto file = parsePath(args, "path", fs.pwd());
@@ -448,11 +448,11 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "block" },
+        .help   = { "Inspect a block" },
+        .ghelp  = { "Manage blocks" },
         .argx   = {
             { .name = { "nr", "Block number" }, .flags = arg::opt },
         },
-        .help   = { "Inspect a block" },
-        .ghelp  = { "Manage blocks" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             auto nr = parseBlock(args, "nr");
@@ -466,6 +466,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "block", "dump" },
+        .help   = { "Import a block from a file" },
         .argx   = {
             { .name = { "nr", "Block number" } },
             { .name = { "a", "Output in ASCII, only" }, .flags = arg::flag },
@@ -476,7 +477,6 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
             { .name = { "t", "Display the last part" }, .flags = arg::flag },
             { .name = { "lines", "Number of displayed rows" }, .flags = arg::keyval|arg::opt },
         },
-        .help   = { "Import a block from a file" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             auto nr = parseBlock(args, "nr");
@@ -492,11 +492,11 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "block", "import" },
+        .help   = { "Import a block from a file" },
         .argx   = {
             { .name = { "nr", "Block number" } },
             { .name = { "path", "File path" } },
         },
-        .help   = { "Import a block from a file" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             *this << "Holla, die Waldfee!" << '\n';
@@ -507,11 +507,11 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "block", "export" },
+        .help   = { "Export a block to a file" },
         .argx   = {
             { .name = { "nr", "Block number" } },
             { .name = { "path", "File path" } },
         },
-        .help   = { "Export a block to a file" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             *this << "Holla, die Waldfee!" << '\n';

@@ -214,6 +214,9 @@ RetroShellCmd::printHelp(std::ostream &os)
         // Describe all subcommands
         prefix = "Group: ";
         os << prefix + cmdUsage() << std::endl;
+        if (!ghelp.empty()) {
+            os << std::endl << string(prefix.size(), ' ') << ghelp << std::endl;
+        }
         printSubcmdHelp(os, isize(prefix.size()));
 
         if (callback) {

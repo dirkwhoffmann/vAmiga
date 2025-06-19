@@ -81,12 +81,12 @@ struct RSArgDescriptor {
 struct RSCmdDescriptor {
     
     const std::vector<string> &tokens = {};
+    const std::vector<string> help = {};
+    string ghelp = {}; // Command group help
     bool hidden = false;
     const std::vector<string> &args = {}; // DEPRECATED
     const std::vector<string> &extra = {}; // DEPRECATED
     const std::vector<RSArgDescriptor> &argx = {}; // TODO: Rename to args
-    const std::vector<string> help = {};
-    string ghelp = {}; // Command group help
     std::function<void (std::ostream &os, Arguments&, const ParsedArguments &args, const std::vector<isize> &)> func = nullptr;
     const std::vector<isize> &values = {};
 };

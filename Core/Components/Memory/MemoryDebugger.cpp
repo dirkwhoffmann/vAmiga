@@ -397,7 +397,7 @@ MemoryDebugger::convertNumeric(std::ostream &os, u32 value) const
 }
 
 void
-MemoryDebugger::convertNumeric(std::ostream &os, string s) const
+MemoryDebugger::convertNumeric(std::ostream &os, const string &s) const
 {
     auto len = s.length();
 
