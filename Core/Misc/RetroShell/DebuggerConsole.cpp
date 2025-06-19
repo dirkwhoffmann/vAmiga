@@ -84,7 +84,8 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "goto" },
-        .help   = { "Goto address", "g[oto]" },
+        .thelp  = { "g[oto]" },
+        .help   = { "Goto address" },
         .argx   = { { .name = { "address", "Memory address" }, .flags = arg::opt } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -97,7 +98,8 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "step" },
-        .help   = { "Step into the next instruction", "s[tep]" },
+        .thelp  = { "s[tep]" },
+        .help   = { "Step into the next instruction" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             emulator.stepInto();
@@ -107,9 +109,10 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.clone({ "step" }, "s");
     
     root.add({
-        
+
         .tokens = { "next" },
-        .help   = { "Step over the next instruction", "n[next]" },
+        .thelp  = { "n[next]" },
+        .help   = { "Step over the next instruction" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             emulator.stepOver();
@@ -530,8 +533,9 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     
     root.add({
         
-        .tokens = {"m"},
-        .help   = { "Dump memory", "m[.b|.w|.l]" },
+        .tokens = { "m" },
+        .thelp  = { "m[.b|.w|.l]" },
+        .help   = { "Dump memory" },
         .argx   = { { .name = { "address", "Memory address" }, .flags = arg::opt } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                         
@@ -550,7 +554,8 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "w" },
-        .help   = { "Write into a register or memory", "w[.b|.w|.l]" },
+        .thelp  = { "w[.b|.w|.l]" },
+        .help   = { "Write into a register or memory" },
         .argx   = {
             { .name = { "value", "Payload" } },
             { .name = { "target", "Memory address or custom register" }, .flags = arg::opt } },
@@ -589,7 +594,8 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "c" },
-        .help   = { "Copy a chunk of memory", "c[.b|.w|.l]" },
+        .thelp  = { "c[.b|.w|.l]" },
+        .help   = { "Copy a chunk of memory" },
         .argx   = {
             { .name = { "src", "Source address" }, .flags = arg::keyval },
             { .name = { "dest", "Destination address" }, .flags = arg::keyval },
@@ -621,7 +627,8 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "f" },
-        .help   = { "Find a sequence in memory", "f[.b|.w|.l]" },
+        .thelp  = {  "f[.b|.w|.l]" },
+        .help   = { "Find a sequence in memory" },
         .argx   = {
             { .name = { "sequence", "Search string" } },
             { .name = { "address", "Start address" }, .flags = arg::opt } },
@@ -655,11 +662,8 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "e" },
-        /*
-        .args   = { arg::address, arg::count },
-        .extra  = { arg::value },
-        */
-        .help   = { "Erase memory", "e[.b|.w|.l]" },
+        .thelp  = { "e[.b|.w|.l]" },
+        .help   = { "Erase memory" },
         .argx   = {
             { .name = { "address", "Start address" } },
             { .name = { "count", "Number of bytes to erase" } },
@@ -863,6 +867,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "?", "paula" },
+        .help   = { "" },
         .ghelp  = { "Ports, Audio, Interrupts" }
     });
 
@@ -1066,8 +1071,9 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { "?", df },
-            .ghelp  = "Floppy drive n",
-            .help   = { "Inspect the internal state", "df[n]" },
+            .thelp  = { "df[n]" },
+            .ghelp  = { "Floppy drive n" },
+            .help   = { "Inspect the internal state" },
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 dump(*amiga.df[values[0]], Category::State );
@@ -1100,8 +1106,9 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { "?", hd },
+            .thelp  = { "hd[n]" },
             .ghelp  = "Hard drive n",
-            .help   = { "Inspect the internal state", "hd[n]" },
+            .help   = { "Inspect the internal state" },
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 dump(*amiga.hd[values[0]], Category::State );

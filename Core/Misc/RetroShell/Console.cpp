@@ -1079,6 +1079,7 @@ Console::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { "state" },
+            .help   = { "Prints information about the current emulator state" },
             .hidden = true,
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
@@ -1089,12 +1090,13 @@ Console::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { "joshua" },
+            .help   = { "" },
             .hidden = true,
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
-                *this << "\nGREETINGS PROFESSOR HOFFMANN.\n";
-                *this << "THE ONLY WINNING MOVE IS NOT TO PLAY.\n";
-                *this << "HOW ABOUT A NICE GAME OF CHESS?\n\n";
+                os << "\nGREETINGS PROFESSOR HOFFMANN.\n";
+                os << "THE ONLY WINNING MOVE IS NOT TO PLAY.\n";
+                os << "HOW ABOUT A NICE GAME OF CHESS?\n\n";
             }
         });
 
@@ -1172,12 +1174,13 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
     }
     */
 
-    // In case this component has options...
+    // In case this component has no options...
     if (options.empty()) {
 
         root.add({
 
             .tokens = { cmd },
+            .help   = { "" },
             .ghelp = c.description()
         });
 
@@ -1230,8 +1233,7 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
                 root.add({
                     
                     .tokens = { cmd, "set", OptEnum::key(opt) },
-                    // .args   = { OptionParser::argList(opt) },
-                    .ghelp  = { OptEnum::help(opt) }
+                    .help   = { OptEnum::help(opt) }
                 });
                 
                 for (const auto& [first, second] : pairs) {

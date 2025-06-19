@@ -76,6 +76,7 @@ void
 RetroShellCmd::add(const RSCmdDescriptor &descriptor)
 {
     assert(!descriptor.tokens.empty());
+    assert(descriptor.help.size() == 1);
 
     // Cleanse the token list (convert { "aaa bbb" } into { "aaa", "bbb" }
     auto tokens = util::split(descriptor.tokens, ' ');
@@ -100,9 +101,9 @@ RetroShellCmd::add(const RSCmdDescriptor &descriptor)
     // cmd.optionalArgs = descriptor.extra;
     cmd.arguments = descriptor.argx;
     cmd.help = descriptor.help;
-    cmd.chelp = descriptor.help.empty() ? "" : descriptor.help[0];
-    cmd.ghelp = descriptor.ghelp.empty() ? cmd.chelp : descriptor.ghelp;
-    cmd.thelp = helpName;
+    cmd.thelp = !descriptor.thelp.empty() ? descriptor.thelp : name;
+    cmd.chelp = !descriptor.chelp.empty() ? descriptor.chelp : descriptor.help[0];
+    cmd.ghelp = !descriptor.ghelp.empty() ? descriptor.ghelp : cmd.chelp;
     cmd.callback = descriptor.func;
     cmd.param = descriptor.values;
     cmd.hidden = descriptor.hidden;
@@ -133,6 +134,10 @@ RetroShellCmd::clone(const std::vector<string> &tokens,
     add(RSCmdDescriptor {
         
         .tokens = newTokens,
+        .help   = cmd->help,
+        .thelp  = cmd->thelp,
+        .ghelp  = cmd->ghelp,
+        .chelp  = cmd->chelp,
         .hidden = true,
         .argx   = cmd->arguments,
         // .args   = cmd->requiredArgs,

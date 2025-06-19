@@ -204,11 +204,12 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
     for (isize i = 0; i < 4; i++) {
 
-        i == 0 ? help = { "Floppy file system from drive n", "df[n]" } : help = { "" };
+        i == 0 ? help = { "Floppy file system from drive n" } : help = { "" };
 
         root.add({
 
             .tokens = { "import", "df" + std::to_string(i) },
+            .thelp  = { "df[n]" },
             .help   = help,
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 

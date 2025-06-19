@@ -81,11 +81,12 @@ struct RSArgDescriptor {
 struct RSCmdDescriptor {
     
     const std::vector<string> &tokens = {};
-    const std::vector<string> help = {};
-    string ghelp = {}; // Command group help
-    bool hidden = false;
-    const std::vector<string> &args = {}; // DEPRECATED
-    const std::vector<string> &extra = {}; // DEPRECATED
+    const std::vector<string> help = {}; // DEPRECATED
+    string thelp = {};      // Command token help
+    string ghelp = {};      // Command group help
+    string chelp = {};      // Command help
+    bool hidden = false;    // Invisible in help, ignored in auto-completion
+    bool shadowed = false;  // Invisible in help, subject to auto-completion
     const std::vector<RSArgDescriptor> &argx = {}; // TODO: Rename to args
     std::function<void (std::ostream &os, Arguments&, const ParsedArguments &args, const std::vector<isize> &)> func = nullptr;
     const std::vector<isize> &values = {};
@@ -116,12 +117,6 @@ struct RetroShellCmd {
 
     // Command token help (e.g. "[g]oto") (defaults to the command name)
     string thelp;
-
-    // List of required arguments (DEPRECATED)
-   // [[deprecated]] std::vector<string> requiredArgs;
-
-    // List of optional arguments (DEPRECATED)
-    // [[deprecated]] std::vector<string> optionalArgs;
 
     // Argument list
     std::vector<RSArgDescriptor> arguments;

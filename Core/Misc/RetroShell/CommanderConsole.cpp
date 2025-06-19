@@ -124,6 +124,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "regression", "setup" },
+        .help   = { "" },
         .ghelp  = { "Initializes the test environment" },
     });
 
@@ -281,6 +282,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { cmd, "init" },
+        .help   = { "" },
         .ghelp  = { "Initializes the Amiga with a predefined scheme" },
     });
 
@@ -307,7 +309,8 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { cmd, "load" },
-        .help   = { "Loads memory contents from a file" }
+        .help   = { "" },
+        .ghelp  = { "Loads memory contents from a file" }
     });
     
     root.add({
