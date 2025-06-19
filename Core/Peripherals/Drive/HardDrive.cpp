@@ -459,13 +459,11 @@ HardDrive::_dump(Category category, std::ostream &os) const
     }
     
     if (category == Category::Volumes) {
-        
-        os << "Type   Size            Used    Free    Full  Name" << std::endl;
-        
+
         for (isize i = 0; i < isize(ptable.size()); i++) {
             
             auto fs = MutableFileSystem(*this, i);
-            fs.dump(Category::State, os);
+            fs.dump(i == 0 ? Category::Info : Category::State, os);
         }
         
         for (isize i = 0; i < isize(ptable.size()); i++) {

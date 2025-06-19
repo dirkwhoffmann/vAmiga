@@ -769,7 +769,7 @@ Console::exec(const Arguments &argv, bool verbose)
         cmd->callback(ss, args, parsedArgs, cmd->param);
 
         // Dump the output to the console
-        if (ss.peek() == EOF) { *this << '\n'; } else { *this << vdelim << ss << vdelim; }
+        if (ss.peek() != EOF) { *this << vdelim << ss << vdelim; }
 
     } else {
 

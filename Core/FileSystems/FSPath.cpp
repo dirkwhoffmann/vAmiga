@@ -450,13 +450,12 @@ FSPath::collect(const FSOpt &opt) const
     // Move the collected items to the result list
     while (remainingItems.size() > 0) {
 
-        // Block item = remainingItems.top();
-        auto item = FSPath(fs, remainingItems.top());
+        auto it = FSPath(fs, remainingItems.top());
+        if (opt.accept(it)) result.push_back(it);
         remainingItems.pop();
-        result.push_back(item);
 
         // Add subdirectory items to the queue
-        if (opt.recursive) fs.collectHashedRefs(item.ref, remainingItems, visited);
+        if (opt.recursive) fs.collectHashedRefs(it.ref, remainingItems, visited);
     }
 
     // Sort items

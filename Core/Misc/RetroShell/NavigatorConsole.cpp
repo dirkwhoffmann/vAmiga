@@ -214,10 +214,10 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
                 auto n = values[0];
 
-                if (!df[n]->hasDisk()) throw AppError(Fault::DISK_MISSING);
+                // if (!df[n]->hasDisk()) throw AppError(Fault::DISK_MISSING);
 
                 fs.init(*df[n]);
-
+                fs.dump(Category::Info, os);
 
             }, .values = {i}
         });
@@ -231,8 +231,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         .help   = { "Print a file system summary" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
-            os << "Type   Size            Used    Free    Full  Name" << std::endl;
-            fs.dump(Category::State, os);
+            fs.dump(Category::Info, os);
         }
     });
 
@@ -413,8 +412,8 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
             buffer.type(os, {
 
                 .lines = lines,
-                .nr = args.contains("l"),
-                .tail = args.contains("t")
+                .tail = args.contains("t"),
+                .nr = args.contains("l")
             });
         }
     });

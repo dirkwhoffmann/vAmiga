@@ -31,6 +31,7 @@ enum class Category : long
     FileSystem,
     Geometry,
     Hunks,
+    Info,
     List1,
     List2,
     Parameters,

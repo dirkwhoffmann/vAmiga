@@ -19,20 +19,6 @@
 
 namespace vamiga {
 
-/*
-std::function<bool(const FSPath &a, const FSPath &b)> FSOpt::dafa = [](const FSPath &a, const FSPath &b) {
-
-    if ( a.isDirectory() && !b.isDirectory()) return true;
-    if (!a.isDirectory() &&  b.isDirectory()) return false;
-    return a.last() < b.last();
-};
-
-std::function<bool(const FSPath &a, const FSPath &b)> FSOpt::alpha = [](const FSPath &a, const FSPath &b) {
-
-    return a.last() < b.last();
-};
-*/
-
 FileSystem::~FileSystem()
 {
     for (auto &b : blocks) delete b;
@@ -183,65 +169,76 @@ void
 FileSystem::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
-    
-    if (category == Category::State) {
-        
-        auto total = numBlocks();
-        auto used = usedBlocks();
-        auto free = freeBlocks();
-        auto fill = (isize)(100.0 * used / total);
-        
-        os << "DOS" << dec(isize(dos));
-        os << "   ";
-        os << std::setw(6) << std::left << std::setfill(' ') << total;
-        os << " (x ";
-        os << std::setw(3) << std::left << std::setfill(' ') << bsize;
-        os << ")  ";
-        os << std::setw(6) << std::left << std::setfill(' ') << used;
-        os << "  ";
-        os << std::setw(6) << std::left << std::setfill(' ') << free;
-        os << "  ";
-        os << std::setw(3) << std::right << std::setfill(' ') << fill;
-        os << "%  ";
-        os << getName().c_str() << std::endl;
-    }
-    
-    if (category == Category::Properties) {
-        
-        os << tab("Name");
-        os << getName().cpp_str() << std::endl;
-        os << tab("Created");
-        os << getCreationDate() << std::endl;
-        os << tab("Modified");
-        os << getModificationDate() << std::endl;
-        os << tab("Boot block");
-        os << getBootBlockName() << std::endl;
-        os << tab("Capacity");
-        os << util::byteCountAsString(numBytes()) << std::endl;
-        os << tab("Block size");
-        os << dec(bsize) << " Bytes" << std::endl;
-        os << tab("Blocks");
-        os << dec(numBlocks()) << std::endl;
-        os << tab("Used");
-        os << dec(usedBlocks());
-        os << " (" <<  std::fixed << std::setprecision(2) << fillLevel() << "%)" << std::endl;
-        os << tab("Root block");
-        os << dec(rootBlock) << std::endl;
-        os << tab("Bitmap blocks");
-        for (auto& it : bmBlocks) { os << dec(it) << " "; }
-        os << std::endl;
-        os << util::tab("Extension blocks");
-        for (auto& it : bmExtBlocks) { os << dec(it) << " "; }
-        os << std::endl;
-    }
 
-    if (category == Category::Blocks) {
+    switch (category) {
 
-        for (isize i = 0; i < numBlocks(); i++)  {
-            if (auto *ptr = blockPtr(Block(i)); ptr) {
-                if (ptr->type != FSBlockType::EMPTY_BLOCK) ptr->dump(os);
-            }
+        case Category::Info:
+
+            os << "Type   Size            Used    Free    Full  Name" << std::endl;
+            [[fallthrough]];
+
+        case Category::State:
+        {
+            auto total = numBlocks();
+            auto used = usedBlocks();
+            auto free = freeBlocks();
+            auto fill = (isize)(100.0 * used / total);
+
+            os << "DOS" << dec(isize(dos));
+            os << "   ";
+            os << std::setw(6) << std::left << std::setfill(' ') << total;
+            os << " (x ";
+            os << std::setw(3) << std::left << std::setfill(' ') << bsize;
+            os << ")  ";
+            os << std::setw(6) << std::left << std::setfill(' ') << used;
+            os << "  ";
+            os << std::setw(6) << std::left << std::setfill(' ') << free;
+            os << "  ";
+            os << std::setw(3) << std::right << std::setfill(' ') << fill;
+            os << "%  ";
+            os << getName().c_str() << std::endl;
+            break;
         }
+        case Category::Properties:
+
+            os << tab("Name");
+            os << getName().cpp_str() << std::endl;
+            os << tab("Created");
+            os << getCreationDate() << std::endl;
+            os << tab("Modified");
+            os << getModificationDate() << std::endl;
+            os << tab("Boot block");
+            os << getBootBlockName() << std::endl;
+            os << tab("Capacity");
+            os << util::byteCountAsString(numBytes()) << std::endl;
+            os << tab("Block size");
+            os << dec(bsize) << " Bytes" << std::endl;
+            os << tab("Blocks");
+            os << dec(numBlocks()) << std::endl;
+            os << tab("Used");
+            os << dec(usedBlocks());
+            os << " (" <<  std::fixed << std::setprecision(2) << fillLevel() << "%)" << std::endl;
+            os << tab("Root block");
+            os << dec(rootBlock) << std::endl;
+            os << tab("Bitmap blocks");
+            for (auto& it : bmBlocks) { os << dec(it) << " "; }
+            os << std::endl;
+            os << util::tab("Extension blocks");
+            for (auto& it : bmExtBlocks) { os << dec(it) << " "; }
+            os << std::endl;
+            break;
+
+        case Category::Blocks:
+
+            for (isize i = 0; i < numBlocks(); i++)  {
+                if (auto *ptr = blockPtr(Block(i)); ptr) {
+                    if (ptr->type != FSBlockType::EMPTY_BLOCK) ptr->dump(os);
+                }
+            }
+            break;
+
+        default:
+            break;
     }
 }
 
@@ -545,7 +542,7 @@ FileSystem::list(std::ostream &os, const FSPath &path, const FSOpt &opt) const
             // Print header
             if (opt.recursive) {
 
-                if (i) os << std::endl;
+                if (i) os << std::endl; if (column) os << std::endl;
                 os << "Directory " << dir.name() << ":" << std::endl << std::endl;
             }
 
