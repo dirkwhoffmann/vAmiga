@@ -82,6 +82,6 @@ typedef struct
 RetroShellInfo;
 
 // Used in operator overloads
-struct vspace { isize lines; };
+struct vspace { isize lines = 0; };
 
 }
