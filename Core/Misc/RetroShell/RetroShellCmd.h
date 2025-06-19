@@ -81,7 +81,7 @@ struct RSArgDescriptor {
 struct RSCmdDescriptor {
     
     const std::vector<string> &tokens = {};
-    const std::vector<string> help = {}; // DEPRECATED
+    // const std::vector<string> help = {}; // DEPRECATED
     string thelp = {};      // Command token help
     string ghelp = {};      // Command group help
     string chelp = {};      // Command help
@@ -107,7 +107,7 @@ struct RetroShellCmd {
     string fullName;
 
     // Help description of this command (e.g., "Eject disk") (DEPRECATED)
-    std::vector<string> help;
+    // std::vector<string> help;
 
     // Command help
     string chelp;

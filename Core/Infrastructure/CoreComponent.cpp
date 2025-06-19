@@ -48,7 +48,12 @@ const std::vector<string> &
 CoreComponent::shellHelp() const
 {
     assert(isize(getDescriptions().size()) > objid);
-    return getDescriptions().at(objid).help;
+    auto &descr = getDescriptions().at(objid);
+    if (descr.help.empty()) {
+        return { descr.description };
+    } else {
+        return descr.help;
+    }
 }
 
 bool

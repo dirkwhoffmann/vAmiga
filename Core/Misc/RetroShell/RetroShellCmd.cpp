@@ -76,7 +76,7 @@ void
 RetroShellCmd::add(const RSCmdDescriptor &descriptor)
 {
     assert(!descriptor.tokens.empty());
-    assert(descriptor.help.size() == 1);
+    assert(!descriptor.chelp.empty() || !descriptor.ghelp.empty());
 
     // Cleanse the token list (convert { "aaa bbb" } into { "aaa", "bbb" }
     auto tokens = util::split(descriptor.tokens, ' ');
@@ -85,7 +85,7 @@ RetroShellCmd::add(const RSCmdDescriptor &descriptor)
     auto name = tokens.back();
     
     // Determine how the token is displayed in help messages
-    auto helpName = descriptor.help.size() > 1 ? descriptor.help[1] : name;
+    // auto helpName = descriptor.help.size() > 1 ? descriptor.help[1] : name;
 
     // Traversing the command tree
     RetroShellCmd *node = seek(std::vector<string> { tokens.begin(), tokens.end() - 1 });
@@ -94,16 +94,16 @@ RetroShellCmd::add(const RSCmdDescriptor &descriptor)
     // Create the instruction
     RetroShellCmd cmd;
     cmd.name = name;
-    cmd.fullName = util::concat({ node->fullName, helpName }, " ");
+    cmd.fullName = util::concat({ node->fullName, name }, " ");
     // cmd.helpName = helpName;
     cmd.groupName = currentGroup;
     // cmd.requiredArgs = descriptor.args;
     // cmd.optionalArgs = descriptor.extra;
     cmd.arguments = descriptor.argx;
-    cmd.help = descriptor.help;
+    // cmd.help = descriptor.help;
     cmd.thelp = !descriptor.thelp.empty() ? descriptor.thelp : name;
-    cmd.chelp = !descriptor.chelp.empty() ? descriptor.chelp : descriptor.help[0];
-    cmd.ghelp = !descriptor.ghelp.empty() ? descriptor.ghelp : cmd.chelp;
+    cmd.ghelp = !descriptor.ghelp.empty() ? descriptor.ghelp : descriptor.chelp;
+    cmd.chelp = !descriptor.chelp.empty() ? descriptor.chelp : "???";
     cmd.callback = descriptor.func;
     cmd.param = descriptor.values;
     cmd.hidden = descriptor.hidden;
@@ -134,7 +134,7 @@ RetroShellCmd::clone(const std::vector<string> &tokens,
     add(RSCmdDescriptor {
         
         .tokens = newTokens,
-        .help   = cmd->help,
+        // .help   = cmd->help,
         .thelp  = cmd->thelp,
         .ghelp  = cmd->ghelp,
         .chelp  = cmd->chelp,
@@ -218,17 +218,19 @@ RetroShellCmd::printHelp(std::ostream &os)
     if (!subCommands.empty()) {
 
         // Describe all subcommands
-        prefix = "Group: ";
+        prefix = "Cmds: ";
         os << prefix + cmdUsage() << std::endl;
+        /*
         if (!ghelp.empty()) {
             os << std::endl << string(prefix.size(), ' ') << ghelp << std::endl;
         }
+        */
         printSubcmdHelp(os, isize(prefix.size()));
 
-        if (callback) {
+        if (callback && !arguments.empty()) {
 
             // Describe the current command
-            prefix = "       Usage: ";
+            prefix = string(prefix.size(), ' ') + "Usage: ";
             os << prefix + argUsage() << std::endl;
             printArgumentHelp(os, isize(prefix.size()), false);
         }
@@ -245,29 +247,31 @@ RetroShellCmd::printHelp(std::ostream &os)
 void
 RetroShellCmd::printArgumentHelp(std::ostream &os, isize indent, bool verbose)
 {
-    if (arguments.empty()) return;
+    // if (arguments.empty()) return;
 
     auto skip = [](const RSArgDescriptor &it) { return it.isHidden() || it.helpStr().empty(); };
 
+    // Gather all arguments with a help description
+    std::vector<RSArgDescriptor *> args;
+    for (auto &it : arguments) { if (!skip(it)) args.push_back(&it); }
+
     // Determine the tabular position to align the output
     isize tab = 0;
-    for (auto &it : arguments) {
-        if (!skip(it)) tab = std::max(tab, (isize)it.keyValueStr().length());
-    }
+    for (auto &it : args) { tab = std::max(tab, (isize)it->keyValueStr().length()); }
 
     // Print command description
-    if (verbose && !help.empty()) {
-        os << std::endl << string(indent, ' ') << help[0] << std::endl;
-    }
-    os << std::endl;
+    if (verbose) os << std::endl << string(indent, ' ') << chelp << std::endl;
 
-    // Print argument descriptions
-    for (auto &it : arguments) {
+    if (!args.empty()) {
 
-        if (skip(it)) continue;
+        os << std::endl;
 
-        os << string(indent, ' ') << std::left << std::setw(int(tab)) << it.keyValueStr() << " : ";
-        os << it.helpStr() << std::endl;
+        // Print argument descriptions
+        for (auto &it : args) {
+
+            os << string(indent, ' ') << std::left << std::setw(int(tab)) << it->keyValueStr() << " : ";
+            os << it->helpStr() << std::endl;
+        }
     }
     os << std::endl;
 }
@@ -279,10 +283,8 @@ RetroShellCmd::printSubcmdHelp(std::ostream &os, isize indent, bool verbose)
 
     // Collect all commands
     std::vector<const RetroShellCmd *> cmds;
-    for (auto &it : subCommands) {
-        if (!it.hidden && !it.help.empty() && !it.help[0].empty()) cmds.push_back(&it);
-    }
     if (callback) cmds.push_back(this);
+    for (auto &it : subCommands) { if (!it.hidden) cmds.push_back(&it); }
 
     // Determine alignment parameters to get a properly formatted output
     isize newlines = 1, tab = 0;
@@ -292,8 +294,8 @@ RetroShellCmd::printSubcmdHelp(std::ostream &os, isize indent, bool verbose)
 
     for (auto &it : cmds) {
 
-        // Print the group (if present)
-        if (!it->groupName.empty()) {
+        // For top-level commands, print the command group (if present)
+        if (!it->groupName.empty() && name.empty()) {
 
             // *this << '\n' << it->groupName << '\n';
             os << std::endl << it->groupName << std::endl;

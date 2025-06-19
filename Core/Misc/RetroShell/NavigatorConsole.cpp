@@ -200,7 +200,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
     RetroShellCmd::currentGroup = "Import and export";
 
-    root.add({ .tokens = { "import" }, .help = { "Import a file system" } });
+    root.add({ .tokens = { "import" }, .ghelp = { "Import a file system" } });
 
     for (isize i = 0; i < 4; i++) {
 
@@ -210,7 +210,8 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
             .tokens = { "import", "df" + std::to_string(i) },
             .thelp  = { "df[n]" },
-            .help   = help,
+            .chelp  = { "Floppy file system from drive n" },
+            .hidden = i != 0,
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
                 auto n = values[0];
@@ -229,7 +230,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "info" },
-        .help   = { "Print a file system summary" },
+        .chelp  = { "Print a file system summary" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
             fs.dump(Category::Info, os);
@@ -239,7 +240,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "cd" },
-        .help   = { "Change the working directory." },
+        .chelp  = { "Change the working directory." },
         .argx   = {
             { .name = { "path", "New working directory" }, .flags = arg::opt },
             { .name = { "b", "Specify the directory as a block number" }, .flags = arg::flag }
@@ -254,7 +255,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "dir" },
-        .help   = { "Display a sorted list of the files in a directory" },
+        .chelp  = { "Display a sorted list of the files in a directory" },
         .argx   = {
             { .name = { "path", "Path to directory" }, .flags = arg::opt },
             { .name = { "b", "Specify the directory as a block number" }, .flags = arg::flag },
@@ -292,7 +293,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "list" },
-        .help   = { "List specified information about directories and files" },
+        .chelp  = { "List specified information about directories and files" },
         .argx   = {
             { .name = { "path", "Path to directory" }, .flags = arg::opt },
             { .name = { "b", "Specify the directory as a block number" }, .flags = arg::flag },
@@ -346,7 +347,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "find" },
-        .help   = { "Find files or directories" },
+        .chelp  = { "Find files or directories" },
         .argx   = {
             { .name = { "name", "Search pattern" } },
             { .name = { "path", "Directory to search in" }, .flags = arg::opt },
@@ -393,7 +394,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "type" },
-        .help   = { "Print the contents of a file" },
+        .chelp  = { "Print the contents of a file" },
         .argx   = {
             { .name = { "path", "File path" } },
             { .name = { "b", "Specify the path as a block number" }, .flags = arg::flag },
@@ -421,7 +422,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "dump" },
-        .help   = { "Dump the contents of a file" },
+        .chelp  = { "Dump the contents of a file" },
         .argx   = {
             { .name = { "path", "File path" } },
             { .name = { "b", "Specify the path as a block number" }, .flags = arg::flag },
@@ -447,7 +448,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "block" },
-        .help   = { "Inspect a block" },
+        .chelp  = { "Inspect a block" },
         .ghelp  = { "Manage blocks" },
         .argx   = {
             { .name = { "nr", "Block number" }, .flags = arg::opt },
@@ -465,7 +466,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "block", "dump" },
-        .help   = { "Import a block from a file" },
+        .chelp  = { "Import a block from a file" },
         .argx   = {
             { .name = { "nr", "Block number" } },
             { .name = { "a", "Output in ASCII, only" }, .flags = arg::flag },
@@ -491,7 +492,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "block", "import" },
-        .help   = { "Import a block from a file" },
+        .chelp  = { "Import a block from a file" },
         .argx   = {
             { .name = { "nr", "Block number" } },
             { .name = { "path", "File path" } },
@@ -506,7 +507,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { "block", "export" },
-        .help   = { "Export a block to a file" },
+        .chelp  = { "Export a block to a file" },
         .argx   = {
             { .name = { "nr", "Block number" } },
             { .name = { "path", "File path" } },

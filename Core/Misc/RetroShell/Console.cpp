@@ -996,8 +996,9 @@ Console::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { "welcome" },
-            .help   = { "Prints the welcome message" },
+            .chelp  = { "Prints the welcome message" },
             .hidden = true,
+
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 welcome();
@@ -1007,8 +1008,9 @@ Console::initCommands(RetroShellCmd &root)
         root.add({
 
             .tokens = { "helpstring" },
-            .help   = { "Prints how to get help" },
+            .chelp  = { "Prints how to get help" },
             .hidden = true,
+
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
                 printHelp();
@@ -1018,7 +1020,8 @@ Console::initCommands(RetroShellCmd &root)
         root.add({
 
             .tokens = { "commander" },
-            .help   = { "Enter or command console" },
+            .chelp  = { "Enter or command console" },
+
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
                     retroShell.enterCommander();
@@ -1028,7 +1031,8 @@ Console::initCommands(RetroShellCmd &root)
         root.add({
 
             .tokens = { "debugger" },
-            .help   = { "Enter or debug console" },
+            .chelp  = { "Enter or debug console" },
+
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
                     retroShell.enterDebugger();
@@ -1038,7 +1042,8 @@ Console::initCommands(RetroShellCmd &root)
         root.add({
 
             .tokens = { "navigator" },
-            .help   = { "Enter the file system console" },
+            .chelp  = { "Enter the file system console" },
+
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
                     retroShell.enterNavigator();
@@ -1048,7 +1053,8 @@ Console::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { "clear" },
-            .help   = { "Clear the console window" },
+            .chelp  = { "Clear the console window" },
+
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 clear();
@@ -1058,7 +1064,8 @@ Console::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { "close" },
-            .help   = { "Hide the console window" },
+            .chelp  = { "Hide the console window" },
+
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 msgQueue.put(Msg::RSH_CLOSE);
@@ -1068,8 +1075,10 @@ Console::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { "help" },
-            .help   = { "Print usage information" },
-            .argx   = { { .name = { "command", "Command name" }, .flags = arg::opt } },
+            .chelp  = { "Print usage information" },
+            .argx   = {
+                { .name = { "command", "Command name" }, .flags = arg::opt }
+            },
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 help(args.contains("command") ? args.at("command") : "");
@@ -1079,8 +1088,9 @@ Console::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { "state" },
-            .help   = { "Prints information about the current emulator state" },
+            .chelp  = { "Prints information about the current emulator state" },
             .hidden = true,
+
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 printState();
@@ -1090,8 +1100,9 @@ Console::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { "joshua" },
-            .help   = { "" },
+            .chelp  = { "Easter egg" },
             .hidden = true,
+
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 os << "\nGREETINGS PROFESSOR HOFFMANN.\n";
@@ -1103,8 +1114,9 @@ Console::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { "source" },
-            .help   = { "Process a command script" },
+            .chelp  = { "Process a command script" },
             .argx   = { { .name = { "path", "Script file" } } },
+
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
                 auto path = host.makeAbsolute(args.at("path"));
@@ -1117,9 +1129,10 @@ Console::initCommands(RetroShellCmd &root)
         root.add({
                  
             .tokens = { "wait" },
+            .chelp  = { "Pause the execution of a command script" },
             .hidden = true,
             .argx   = { { .name = { "seconds", "Delay" } } },
-            .help   = { "Pause the execution of a command script" },
+
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 auto seconds = parseNum(args.at("seconds"));
@@ -1131,7 +1144,8 @@ Console::initCommands(RetroShellCmd &root)
         root.add({
                  
             .tokens = { "shutdown" },
-            .help   = { "Terminates the application" },
+            .chelp   = { "Terminates the application" },
+
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 msgQueue.put(Msg::ABORT, 0);
@@ -1180,7 +1194,7 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
         root.add({
 
             .tokens = { cmd },
-            .help   = { "" },
+            .chelp  = { "" },
             .ghelp = c.description()
         });
 
@@ -1190,8 +1204,9 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
         root.add({
             
             .tokens = { cmd },
-            .help   = { "Display the current configuration" },
+            .chelp  = { "Display the current configuration" },
             .ghelp  = c.description(),
+
             .func   = [this, &c] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 retroShell.commander.dump(c, Category::Config);
@@ -1202,7 +1217,7 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
         root.add({
             
             .tokens = { cmd, "set" },
-            .help   = { "Configure the component" }
+            .ghelp  = { "Configure the component" }
         });
         
         for (auto &opt : options) {
@@ -1216,9 +1231,9 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
                 root.add({
                     
                     .tokens = { cmd, "set", OptEnum::key(opt) },
-                    // .args   = { OptionParser::argList(opt) },
                     .argx   = { { .name = { "value", OptionParser::argList(opt) } } },
-                    .help   = { OptEnum::help(opt) },
+                    .chelp  = { OptEnum::help(opt) },
+
                     .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                         
                         emulator.set(Opt(values[0]), args.at("value"), { values[1] });
@@ -1233,7 +1248,7 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
                 root.add({
                     
                     .tokens = { cmd, "set", OptEnum::key(opt) },
-                    .help   = { OptEnum::help(opt) }
+                    .chelp  = { OptEnum::help(opt) }
                 });
                 
                 for (const auto& [first, second] : pairs) {
@@ -1242,7 +1257,8 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
                     root.add({
                         
                         .tokens = { cmd, "set", OptEnum::key(opt), first },
-                        .help   = { help.empty() ? "Set to " + first : help },
+                        .chelp  = { help.empty() ? "Set to " + first : help },
+
                         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                             
                             emulator.set(Opt(values[0]), values[1], { values[2] });
