@@ -911,12 +911,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "config" },
-        .help   = { "Virtual machine configuration" }
-    });
-    
-    root.add({
-        
-        .tokens = { "config", "" },
+        .ghelp  = { "Virtual machine configuration" },
         .help   = { "Displays the current configuration" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -1000,12 +995,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "server" },
-        .help   = { "Remote connections" }
-    });
-    
-    root.add({
-        
-        .tokens = { "server", "" },
+        .ghelp  = { "Remote connections" },
         .help   = { "Displays a server status summary" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             

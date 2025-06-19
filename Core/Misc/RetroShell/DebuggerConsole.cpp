@@ -147,12 +147,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "break" },
-        .help   = { "Manage CPU breakpoints" }
-    });
-    
-    root.add({
-        
-        .tokens = { "break", "" },
+        .ghelp  = { "Manage CPU breakpoints" },
         .help   = { "List all breakpoints" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -205,12 +200,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "watch" },
-        .help   = { "Manage CPU watchpoints" }
-    });
-    
-    root.add({
-        
-        .tokens = { "watch", "" },
+        .ghelp  = { "Manage CPU watchpoints" },
         .help   = { "Lists all watchpoints" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -262,12 +252,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "catch" },
-        .help   = { "Manage CPU catchpoints" }
-    });
-    
-    root.add({
-        
-        .tokens = { "catch", "" },
+        .ghelp  = { "Manage CPU catchpoints" },
         .help   = { "List all catchpoints" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -353,12 +338,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "cbreak" },
-        .help   = { "Manage Copper breakpoints" }
-    });
-    
-    root.add({
-        
-        .tokens = { "cbreak", "" },
+        .ghelp  = { "Manage Copper breakpoints" },
         .help   = { "List all breakpoints" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -412,12 +392,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "cwatch" },
-        .help   = { "Manage Copper watchpoints" }
-    });
-    
-    root.add({
-        
-        .tokens = { "cwatch", "" },
+        .ghelp  = { "Manage Copper watchpoints" },
         .help   = { "List all watchpoints" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -471,12 +446,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "btrap" },
-        .help   = { "Manage beamtraps" }
-    });
-    
-    root.add({
-        
-        .tokens = { "btrap", "" },
+        .ghelp   = { "Manage beamtraps" },
         .help   = { "List all beamtraps" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -720,12 +690,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "?", "amiga" },
-        .help   = { "Main computer" }
-    });
-    
-    root.add({
-        
-        .tokens = { "?", "amiga", "" },
+        .ghelp  = { "Main computer" },
         .help   = { "Inspects the internal state" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -736,12 +701,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "?", "memory" },
-        .help   = { "RAM and ROM" }
-    });
-    
-    root.add({
-        
-        .tokens = { "?", "memory", "" },
+        .ghelp  = { "RAM and ROM" },
         .help   = { "Inspects the internal state" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -762,12 +722,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "?", "cpu" },
-        .help   = { "Motorola CPU" }
-    });
-    
-    root.add({
-        
-        .tokens = { "?", "cpu", "" },
+        .ghelp  = { "Motorola CPU" },
         .help   = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -781,12 +736,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { "?", cia },
-            .help   = { "Complex Interface Adapter" }
-        });
-        
-        root.add({
-            
-            .tokens = { "?", cia, "" },
+            .ghelp  = { "Complex Interface Adapter" },
             .help   = { "Inspect the internal state" },
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
@@ -816,12 +766,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "?", "agnus" },
-        .help   = { "Custom Chipset" }
-    });
-    
-    root.add({
-        
-        .tokens = { "?", "agnus", "" },
+        .ghelp  = { "Custom Chipset" },
         .help   = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -872,12 +817,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "?", "blitter" },
-        .help   = { "Coprocessor" }
-    });
-    
-    root.add({
-        
-        .tokens = { "?", "blitter", "" },
+        .ghelp  = { "Coprocessor" },
         .help   = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -888,12 +828,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "?", "copper" },
-        .help   = { "Coprocessor" }
-    });
-    
-    root.add({
-        
-        .tokens = { "?", "copper", "" },
+        .ghelp  = { "Coprocessor" },
         .help   = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -928,37 +863,31 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "?", "paula" },
-        .help   = { "Ports, Audio, Interrupts" }
+        .ghelp  = { "Ports, Audio, Interrupts" }
     });
-    
-    root.add({
-        
-        .tokens = { "?", "paula", "audio" },
-        .help   = { "Audio unit" }
-    });
-    
-    root.add({
-        
-        .tokens = { "?", "paula", "dc" },
-        .help  = { "Disk controller" }
-    });
-    
+
     root.add({
         
         .tokens = { "?", "paula", "uart"},
-        .help   = { "Universal Asynchronous Receiver Transmitter" }
-    });
-    
-    root.add({
-        
-        .tokens = { "?", "paula", "audio", "" },
+        .ghelp  = { "Universal Asynchronous Receiver Transmitter" },
         .help   = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
+            dump(uart, Category::State);
+        }
+    });
+
+    root.add({
+
+        .tokens = { "?", "paula", "audio" },
+        .ghelp  = { "Audio unit" },
+        .help   = { "Inspect the internal state" },
+        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+
             dump(audioPort, Category::State );
         }
     });
-    
+
     root.add({
         
         .tokens = { "?", "paula", "audio", "filter" },
@@ -968,36 +897,22 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
             dump(audioPort.filter, Category::State );
         }
     });
-    
+
     root.add({
-        
-        .tokens = { "?", "paula", "dc", "" },
+
+        .tokens = { "?", "paula", "dc" },
+        .ghelp  = { "Disk controller" },
         .help   = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(diskController, Category::State );
         }
     });
-    
-    root.add({
-        
-        .tokens = { "?", "paula", "uart", "" },
-        .help   = { "Inspect the internal state" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
-            
-            dump(uart, Category::State);
-        }
-    });
-    
+
     root.add({
         
         .tokens = { "?", "denise"},
-        .help   = { "Graphics" }
-    });
-    
-    root.add({
-        
-        .tokens = { "?", "denise", "" },
+        .ghelp  = { "Graphics" },
         .help   = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -1008,12 +923,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "?", "rtc" },
-        .help   = { "Real-time clock" },
-    });
-    
-    root.add({
-        
-        .tokens = { "?", "rtc", "" },
+        .ghelp  = { "Real-time clock" },
         .help   = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -1024,12 +934,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "?", "zorro" },
-        .help   = { "Expansion boards" }
-    });
-    
-    root.add({
-        
-        .tokens = { "?", "zorro", "" },
+        .ghelp  = { "Expansion boards" },
         .help   = { "List all connected boards" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -1066,12 +971,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { "?", "controlport", nr },
-            .help   = { "Control port " + nr }
-        });
-        
-        root.add({
-            
-            .tokens = { "?", "controlport", nr, "" },
+            .ghelp  = { "Control port " + nr },
             .help   = { "Inspect the internal state" },
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
@@ -1084,13 +984,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "?", "serial" },
-        .help   = { "Serial port" }
-    });
-    
-    
-    root.add({
-        
-        .tokens = { "?", "serial", "" },
+        .ghelp  = { "Serial port" },
         .help   = { "Display the internal state" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -1103,12 +997,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "?", "keyboard" },
-        .help   = { "Keyboard" }
-    });
-    
-    root.add({
-        
-        .tokens = { "?", "keyboard", "" },
+        .ghelp   = { "Keyboard" },
         .help   = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -1129,12 +1018,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { "?", "mouse", nr },
-            .help   = { "Mouse in port " + nr }
-        });
-        
-        root.add({
-            
-            .tokens = { "?", "mouse", nr, "" },
+            .ghelp  = { "Mouse in port " + nr },
             .help   = { "Inspect the internal state" },
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
@@ -1157,12 +1041,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { "?", "joystick", nr },
-            .help   = { "Joystick in port " + nr }
-        });
-        
-        root.add({
-            
-            .tokens = { "?", "joystick", nr, "" },
+            .ghelp  = { "Joystick in port " + nr },
             .help   = { "Inspect the internal state" },
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
@@ -1175,17 +1054,20 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     for (isize i = 0; i < 4; i++) {
         
         string df = "df" + std::to_string(i);
-        
+
+        /*
         if (i == 0) {
             root.add({ .tokens = { "?", df }, .help = { "Floppy drive n", "df[n]" } });
         } else {
             root.add({ .tokens = { "?", df } });
         }
-        
+        */
+
         root.add({
             
-            .tokens = { "?", df, "" },
-            .help   = { "Inspect the internal state" },
+            .tokens = { "?", df },
+            .ghelp  = "Floppy drive n",
+            .help   = { "Inspect the internal state", "df[n]" },
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 dump(*amiga.df[values[0]], Category::State );
@@ -1206,17 +1088,20 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     for (isize i = 0; i < 4; i++) {
         
         string hd = "hd" + std::to_string(i);
-        
+
+        /*
         if (i == 0) {
             root.add({ .tokens = { "?", hd }, .help = { "Hard drive n", "hd[n]" } });
         } else {
             root.add({ .tokens = { "?", hd } });
         }
-        
+        */
+
         root.add({
             
-            .tokens = { "?", hd, "" },
-            .help   = { "Inspect the internal state" },
+            .tokens = { "?", hd },
+            .ghelp  = "Hard drive n",
+            .help   = { "Inspect the internal state", "hd[n]" },
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 dump(*amiga.hd[values[0]], Category::State );
@@ -1249,12 +1134,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "?", "thread" },
-        .help   = { "Emulator thread" }
-    });
-    
-    root.add({
-        
-        .tokens = { "?", "thread", "" },
+        .ghelp  = { "Emulator thread" },
         .help   = { "Display information about the thread state" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -1265,12 +1145,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "?", "server" },
-        .help   = { "Remote server" }
-    });
-    
-    root.add({
-        
-        .tokens = { "?", "server", "" },
+        .ghelp  = { "Remote server" },
         .help   = { "Display a server status summary" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -1281,12 +1156,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "?", "server", "serial" },
-        .help   = { "Serial port server" }
-    });
-    
-    root.add({
-        
-        .tokens = { "?", "server", "serial", "" },
+        .ghelp  = { "Serial port server" },
         .help   = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -1297,12 +1167,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "?", "server", "rshell" },
-        .help   = { "Retro shell server" }
-    });
-    
-    root.add({
-        
-        .tokens = { "?", "server", "rshell", "" },
+        .ghelp  = { "Retro shell server" },
         .help   = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -1313,12 +1178,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "?", "server", "gdb" },
-        .help   = { "GDB server" }
-    });
-    
-    root.add({
-        
-        .tokens = { "?", "server", "gdb", "" },
+        .ghelp  = { "GDB server" },
         .help   = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -1618,12 +1478,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = { "debug" },
-        .help   = { "Debug variables" }
-    });
-    
-    root.add({
-        
-        .tokens = { "debug", "" },
+        .ghelp  = { "Debug variables" },
         .help   = { "Display all debug variables" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             

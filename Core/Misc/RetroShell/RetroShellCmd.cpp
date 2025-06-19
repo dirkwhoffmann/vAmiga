@@ -96,8 +96,8 @@ RetroShellCmd::add(const RSCmdDescriptor &descriptor)
     cmd.fullName = util::concat({ node->fullName, helpName }, " ");
     // cmd.helpName = helpName;
     cmd.groupName = currentGroup;
-    cmd.requiredArgs = descriptor.args;
-    cmd.optionalArgs = descriptor.extra;
+    // cmd.requiredArgs = descriptor.args;
+    // cmd.optionalArgs = descriptor.extra;
     cmd.arguments = descriptor.argx;
     cmd.help = descriptor.help;
     cmd.chelp = descriptor.help.empty() ? "" : descriptor.help[0];
@@ -134,8 +134,9 @@ RetroShellCmd::clone(const std::vector<string> &tokens,
         
         .tokens = newTokens,
         .hidden = true,
-        .args   = cmd->requiredArgs,
-        .extra  = cmd->optionalArgs,
+        .argx   = cmd->arguments,
+        // .args   = cmd->requiredArgs,
+        // .extra  = cmd->optionalArgs,
         .func   = cmd->callback,
         .values = values
     });

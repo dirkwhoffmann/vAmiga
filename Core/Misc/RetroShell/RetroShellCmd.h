@@ -118,10 +118,10 @@ struct RetroShellCmd {
     string thelp;
 
     // List of required arguments (DEPRECATED)
-    [[deprecated]] std::vector<string> requiredArgs;
+   // [[deprecated]] std::vector<string> requiredArgs;
 
     // List of optional arguments (DEPRECATED)
-    [[deprecated]] std::vector<string> optionalArgs;
+    // [[deprecated]] std::vector<string> optionalArgs;
 
     // Argument list
     std::vector<RSArgDescriptor> arguments;
@@ -152,9 +152,11 @@ struct RetroShellCmd {
                const std::vector<isize> &values = { });
 
     // Returns arguments counts
+    /*
     isize minArgs() const { return isize(requiredArgs.size()); }
     isize optArgs() const { return isize(optionalArgs.size()); }
     isize maxArgs() const { return minArgs() + optArgs(); }
+    */
 
     // Seeks a command object inside the command object tree
     const RetroShellCmd *seek(const string& token) const;

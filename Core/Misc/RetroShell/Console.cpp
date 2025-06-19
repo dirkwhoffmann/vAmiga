@@ -506,10 +506,7 @@ Console::autoComplete(const string& userInput)
     if (auto cmd = getRoot().seek(tokens); cmd && !tokens.empty()) {
         
         // ... and there are additional subcommands or arguments
-        if (!cmd->subCommands.empty() ||
-            !cmd->arguments.empty() ||
-            !cmd->requiredArgs.empty() ||
-            !cmd->optionalArgs.empty()) { result += " "; }
+        if (!cmd->subCommands.empty() || !cmd->arguments.empty()) { result += " "; }
     }
 
     return result;
@@ -816,6 +813,7 @@ Console::exec(const Arguments &argv, bool verbose)
 
 
         // OLD CODE. TODO: REMOVE WHEN ALL COMMAND HANDLER USE THE NEW COMMAND REGISTRATION STYLE
+        /*
         if (cmd->arguments.empty()) {
 
             if (auto next = cmd->seek("")) cmd = next;
@@ -833,6 +831,7 @@ Console::exec(const Arguments &argv, bool verbose)
             if (ss.peek() != EOF) { *this << vdelim << ss << vdelim; }
             return;
         }
+        */
 
         // Parse arguments
         ParsedArguments parsedArgs = parse(*cmd, args);
@@ -1151,22 +1150,45 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
     // Get the shell name for this component
     auto cmd = c.shellName();
     assert(cmd != nullptr);
-    
+
     // Register a command with the proper name
+    /*
     if (c.shellHelp().empty()) {
         root.add( { .tokens = { cmd }, .help = { c.description() } } );
     } else {
         root.add( {.tokens = { cmd }, .help = c.shellHelp() } );
     }
+    */
+
+
+    auto &options = c.getOptions();
+
+    /*
+    std::vector<string> ghelp;
+    if (c.shellHelp().empty()) {
+        ghelp = { c.description() };
+    } else {
+        ghelp = shellHelp();
+    }
+    */
 
     // In case this component has options...
-    if (auto &options = c.getOptions(); !options.empty()) {
+    if (options.empty()) {
+
+        root.add({
+
+            .tokens = { cmd },
+            .ghelp = c.description()
+        });
+
+    } else {
 
         // Register a command for querying the current configuration
         root.add({
             
-            .tokens = { cmd, ""},
+            .tokens = { cmd },
             .help   = { "Display the current configuration" },
+            .ghelp  = c.description(),
             .func   = [this, &c] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 retroShell.commander.dump(c, Category::Config);
