@@ -86,7 +86,6 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .tokens = { "goto" },
         .help   = { "Goto address", "g[oto]" },
         .argx   = { { .name = { "address", "Memory address" }, .flags = arg::opt } },
-        .extra  = { arg::value },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             argv.empty() ? emulator.run() : cpu.jump(parseAddr(args.at("address")));
@@ -653,8 +652,6 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         
         .tokens = { "f" },
         .help   = { "Find a sequence in memory", "f[.b|.w|.l]" },
-        .args   = { arg::sequence },
-        .extra  = { arg::address },
         .argx   = {
             { .name = { "sequence", "Search string" } },
             { .name = { "address", "Start address" }, .flags = arg::opt } },
@@ -1666,7 +1663,6 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.add({
         
         .tokens = {"%"},
-        .args   = { arg::value },
         .help   = { "Convert a value into different formats" },
         .argx   = { { .name = { "value", "Payload" } } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {

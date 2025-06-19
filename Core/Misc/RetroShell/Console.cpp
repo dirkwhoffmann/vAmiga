@@ -1070,10 +1070,10 @@ Console::initCommands(RetroShellCmd &root)
             
             .tokens = { "help" },
             .help   = { "Print usage information" },
-            .extra  = { arg::command },
+            .argx   = { { .name = { "command", "Command name" }, .flags = arg::opt } },
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
-                help(argv.empty() ? "" : argv.front());
+                help(args.contains("command") ? args.at("command") : "");
             }
         });
 
@@ -1103,10 +1103,10 @@ Console::initCommands(RetroShellCmd &root)
             
             .tokens = { "source" },
             .help   = { "Process a command script" },
-            .args   = { arg::path },
+            .argx   = { { .name = { "path", "Script file" } } },
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
-                
-                auto path = host.makeAbsolute(argv.front());
+
+                auto path = host.makeAbsolute(args.at("path"));
                 auto stream = std::ifstream(path);
                 if (!stream.is_open()) throw AppError(Fault::FILE_NOT_FOUND, path);
                 retroShell.asyncExecScript(stream);
@@ -1117,11 +1117,11 @@ Console::initCommands(RetroShellCmd &root)
                  
             .tokens = { "wait" },
             .hidden = true,
-            .args   = { arg::value, arg::seconds },
+            .argx   = { { .name = { "seconds", "Delay" } } },
             .help   = { "Pause the execution of a command script" },
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
-                auto seconds = parseNum(argv[0]);
+                auto seconds = parseNum(args.at("seconds"));
                 agnus.scheduleRel<SLOT_RSH>(SEC(seconds), RSH_WAKEUP);
                 throw ScriptInterruption();
             }
@@ -1191,11 +1191,12 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
                 root.add({
                     
                     .tokens = { cmd, "set", OptEnum::key(opt) },
-                    .args   = { OptionParser::argList(opt) },
+                    // .args   = { OptionParser::argList(opt) },
+                    .argx   = { { .name = { "value", OptionParser::argList(opt) } } },
                     .help   = { OptEnum::help(opt) },
                     .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                         
-                        emulator.set(Opt(values[0]), argv[0], { values[1] });
+                        emulator.set(Opt(values[0]), args.at("value"), { values[1] });
                         msgQueue.put(Msg::CONFIG);
                         
                     }, .values = { isize(opt), c.objid }
@@ -1207,8 +1208,8 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
                 root.add({
                     
                     .tokens = { cmd, "set", OptEnum::key(opt) },
-                    .args   = { OptionParser::argList(opt) },
-                    .help   = { OptEnum::help(opt) }
+                    // .args   = { OptionParser::argList(opt) },
+                    .ghelp  = { OptEnum::help(opt) }
                 });
                 
                 for (const auto& [first, second] : pairs) {

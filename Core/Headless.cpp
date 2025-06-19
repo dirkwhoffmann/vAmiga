@@ -232,11 +232,11 @@ Headless::selfTestScript[] = {
     "amiga power on",
     "",
     "# Let DiagRom launch and press the right mouse button after a while",
-    "wait 15 seconds",
+    "wait 15",
     "mouse1 press right",
     ""
     "# Let DiagRom run for some more time",
-    "wait 10 seconds",
+    "wait 10",
     "",
     "# Enough testing. Terminate the application",
     "shutdown",

@@ -393,7 +393,6 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
         .tokens = { "type" },
         .help   = { "Print the contents of a file" },
-        .extra  = { arg::path },
         .argx   = {
             { .name = { "path", "File path" } },
             { .name = { "b", "Specify the path as a block number" }, .flags = arg::flag },
@@ -422,7 +421,6 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
         .tokens = { "dump" },
         .help   = { "Dump the contents of a file" },
-        .extra  = { arg::path },
         .argx   = {
             { .name = { "path", "File path" } },
             { .name = { "b", "Specify the path as a block number" }, .flags = arg::flag },

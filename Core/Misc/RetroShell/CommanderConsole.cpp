@@ -103,7 +103,8 @@ CommanderConsole::initCommands(RetroShellCmd &root)
         .help   = { "Runs the regression tester" },
         .hidden = releaseBuild
     });
-    
+
+    /*
     root.add({
         
         .tokens = { "regression", "setup" },
@@ -119,15 +120,42 @@ CommanderConsole::initCommands(RetroShellCmd &root)
             amiga.regressionTester.prepare(scheme, rom, ext);
         }
     });
-    
+    */
+    root.add({
+
+        .tokens = { "regression", "setup" },
+        .ghelp  = { "Initializes the test environment" },
+    });
+
+    for (auto &it : ConfigSchemeEnum::elements()) {
+
+        root.add({
+
+            .tokens = { "regression", "setup", ConfigSchemeEnum::key(it) },
+            .help   = { ConfigSchemeEnum::help(it) },
+            .argx   = {
+                { .name = { "rom", "ROM file" }, .flags = arg::keyval | arg::opt },
+                { .name = { "ext", "Extension ROM file" }, .flags = arg::keyval | arg::opt }
+            },
+            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+
+                auto rom = args.contains("rom") ? host.makeAbsolute(args.at("rom")) : "";
+                auto ext = args.contains("ext") ? host.makeAbsolute(args.at("ext")) : "";
+
+                amiga.regressionTester.prepare(ConfigScheme(values[0]), rom, ext);
+                emulator.set(ConfigScheme(values[0]));
+            }, .values = { isize(it) }
+        });
+    }
+
     root.add({
         
         .tokens = { "regression", "run" },
         .help   = { "Launches a regression test" },
-        .args   = { arg::path },
+        .argx   = { { .name = { "path", "Regression test script" } } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            auto path = host.makeAbsolute(argv.front());
+            auto path = host.makeAbsolute(args.at("path"));
             amiga.regressionTester.run(path);
         }
     });
@@ -167,7 +195,6 @@ CommanderConsole::initCommands(RetroShellCmd &root)
             { .name = { "y1", "Lower y coordinate" }, .flags = arg::keyval },
             { .name = { "y2", "Upper y coordinate" }, .flags = arg::keyval }
         },
-        .args   = { arg::value, arg::value, arg::value, arg::value },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             isize x1 = parseNum(args.at("x1"));
@@ -254,7 +281,6 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     root.add({
 
         .tokens = { cmd, "init" },
-        .help  = { "Holla, die Waldfee" },
         .ghelp  = { "Initializes the Amiga with a predefined scheme" },
     });
 
@@ -316,7 +342,6 @@ CommanderConsole::initCommands(RetroShellCmd &root)
             { .name = { "path", "File path" } },
             { .name = { "address", "Target memory address" } },
         },
-        .args   = { arg::path, arg::address },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto path = host.makeAbsolute(args.at("path"));
@@ -363,7 +388,6 @@ CommanderConsole::initCommands(RetroShellCmd &root)
             { .name = { "address", "Memory address" } },
             { .name = { "count", "Number of bytes" } },
         },
-        .args   = { arg::path, arg::address, arg::count },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             fs::path path(args.at("path"));

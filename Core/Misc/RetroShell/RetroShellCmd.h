@@ -118,10 +118,10 @@ struct RetroShellCmd {
     string thelp;
 
     // List of required arguments (DEPRECATED)
-    std::vector<string> requiredArgs;
+    [[deprecated]] std::vector<string> requiredArgs;
 
     // List of optional arguments (DEPRECATED)
-    std::vector<string> optionalArgs;
+    [[deprecated]] std::vector<string> optionalArgs;
 
     // Argument list
     std::vector<RSArgDescriptor> arguments;
