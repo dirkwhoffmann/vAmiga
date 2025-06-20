@@ -903,7 +903,6 @@ DebuggerConsole::initCommands(RSCommand &root)
     root.add({
         
         .tokens = { "?", "paula" },
-        .chelp  = { "" },
         .ghelp  = { "Ports, Audio, Interrupts" }
     });
 

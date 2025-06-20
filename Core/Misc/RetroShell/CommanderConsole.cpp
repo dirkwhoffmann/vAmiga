@@ -780,8 +780,10 @@ CommanderConsole::initCommands(RSCommand &root)
         root.add({
             
             .tokens = { cmd, "insert" },
-            .args   = { { .name = { "path", "File path" } } },
             .chelp  = { "Inserts a floppy disk" },
+            .args   = {
+                { .name = { "path", "File path" } }
+            },
             .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 auto path = host.makeAbsolute(args.at("path"));

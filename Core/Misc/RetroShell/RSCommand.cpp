@@ -207,7 +207,7 @@ RSCommand::printHelp(std::ostream &os)
     if (!subcommands.empty()) {
 
         // Describe all subcommands
-        prefix = "Usage: ";
+        prefix = "Commands: ";
         os << prefix + cmdUsage() << std::endl;
         printSubcmdHelp(os, isize(prefix.size()));
 

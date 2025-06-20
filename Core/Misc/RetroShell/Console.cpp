@@ -1161,9 +1161,9 @@ Console::registerComponent(CoreComponent &c, RSCommand &root, bool shadowed)
         root.add({
             
             .tokens = { cmd },
-            .shadow = shadowed,
-            .chelp  = { "Display the current configuration" },
             .ghelp  = descr,
+            .chelp  = { "Display the current configuration" },
+            .shadow = shadowed,
 
             .func   = [this, &c] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
@@ -1189,9 +1189,10 @@ Console::registerComponent(CoreComponent &c, RSCommand &root, bool shadowed)
                 root.add({
                     
                     .tokens = { cmd, "set", OptEnum::key(opt) },
-                    .args   = { { .name = { "value", OptionParser::argList(opt) } } },
                     .chelp  = { OptEnum::help(opt) },
-
+                    .args   = {
+                        { .name = { "value", OptionParser::argList(opt) } }
+                    },
                     .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                         
                         emulator.set(Opt(values[0]), args.at("value"), { values[1] });
