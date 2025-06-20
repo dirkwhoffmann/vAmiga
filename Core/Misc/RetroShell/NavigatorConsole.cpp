@@ -223,7 +223,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 fs.init(*df[n]);
                 fs.dump(Category::Info, os);
 
-            }, .values = {i}
+            }, .payload = {i}
         });
     }
 
@@ -499,7 +499,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "nr", "Block number" } },
             { .name = { "path", "File path" } },
         },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+        .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             os << "Not implemented, yet!" << '\n';
         }
@@ -513,7 +513,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "nr", "Block number" } },
             { .name = { "path", "File path" } },
         },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+        .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             os << "Not implemented, yet!" << '\n';
         }

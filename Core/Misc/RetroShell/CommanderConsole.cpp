@@ -127,7 +127,7 @@ CommanderConsole::initCommands(RSCommand &root)
 
                 amiga.regressionTester.prepare(ConfigScheme(values[0]), rom, ext);
                 emulator.set(ConfigScheme(values[0]));
-            }, .values = { isize(it) }
+            }, .payload = { isize(it) }
         });
     }
 
@@ -263,7 +263,7 @@ CommanderConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 emulator.set(ConfigScheme(values[0]));
-            }, .values = { isize(it) }
+            }, .payload = { isize(it) }
         });
     }
 
@@ -538,7 +538,7 @@ CommanderConsole::initCommands(RSCommand &root)
                     default:
                         throw AppError(Fault::OPT_INV_ARG, "1...3");
                 }
-            }, .values = {i}
+            }, .payload = {i}
         });
         
         root.add({
@@ -560,7 +560,7 @@ CommanderConsole::initCommands(RSCommand &root)
                     default:
                         throw AppError(Fault::OPT_INV_ARG, "1...3");
                 }
-            }, .values = {i}
+            }, .payload = {i}
         });
         
         root.add({
@@ -578,7 +578,7 @@ CommanderConsole::initCommands(RSCommand &root)
                 auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.joystick.trigger(GamePadAction::PULL_LEFT);
                 
-            }, .values = {i}
+            }, .payload = {i}
         });
         
         root.add({
@@ -590,7 +590,7 @@ CommanderConsole::initCommands(RSCommand &root)
                 auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.joystick.trigger(GamePadAction::PULL_RIGHT);
                 
-            }, .values = {i}
+            }, .payload = {i}
         });
         
         root.add({
@@ -602,7 +602,7 @@ CommanderConsole::initCommands(RSCommand &root)
                 auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.joystick.trigger(GamePadAction::PULL_UP);
                 
-            }, .values = {i}
+            }, .payload = {i}
         });
         
         root.add({
@@ -614,7 +614,7 @@ CommanderConsole::initCommands(RSCommand &root)
                 auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.joystick.trigger(GamePadAction::PULL_DOWN);
                 
-            }, .values = {i}
+            }, .payload = {i}
         });
         
         root.add({
@@ -632,7 +632,7 @@ CommanderConsole::initCommands(RSCommand &root)
                 auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.joystick.trigger(GamePadAction::RELEASE_X);
                 
-            }, .values = {i}
+            }, .payload = {i}
         });
         
         root.add({
@@ -644,7 +644,7 @@ CommanderConsole::initCommands(RSCommand &root)
                 auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.joystick.trigger(GamePadAction::RELEASE_Y);
                 
-            }, .values = {i}
+            }, .payload = {i}
         });
     }
     
@@ -680,7 +680,7 @@ CommanderConsole::initCommands(RSCommand &root)
                 auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.mouse.pressAndReleaseLeft();
                 
-            }, .values = {i}
+            }, .payload = {i}
         });
         
         root.add({
@@ -692,7 +692,7 @@ CommanderConsole::initCommands(RSCommand &root)
                 auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.mouse.pressAndReleaseMiddle();
                 
-            }, .values = {i}
+            }, .payload = {i}
         });
         
         root.add({
@@ -704,7 +704,7 @@ CommanderConsole::initCommands(RSCommand &root)
                 auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.mouse.pressAndReleaseRight();
                 
-            }, .values = {i}
+            }, .payload = {i}
         });
     }
     
@@ -734,7 +734,7 @@ CommanderConsole::initCommands(RSCommand &root)
                     
                     emulator.set(Opt::DRIVE_CONNECT, true, values);
                     
-                }, .values = {i}
+                }, .payload = {i}
             });
             
             root.add({
@@ -745,7 +745,7 @@ CommanderConsole::initCommands(RSCommand &root)
                     
                     emulator.set(Opt::DRIVE_CONNECT, false, values);
                     
-                }, .values = {i}
+                }, .payload = {i}
             });
         }
         
@@ -757,7 +757,7 @@ CommanderConsole::initCommands(RSCommand &root)
                 
                 amiga.df[values[0]]->ejectDisk();
                 
-            }, .values = {i}
+            }, .payload = {i}
         });
         
         root.add({
@@ -772,7 +772,7 @@ CommanderConsole::initCommands(RSCommand &root)
                 auto path = host.makeAbsolute(args.at("path"));
                 amiga.df[values[0]]->swapDisk(path);
                 
-            }, .values = {i}
+            }, .payload = {i}
         });
         
         root.add({
@@ -783,7 +783,7 @@ CommanderConsole::initCommands(RSCommand &root)
                 
                 amiga.df[values[0]]->setFlag(DiskFlags::PROTECTED, true);
                 
-            }, .values = {i}
+            }, .payload = {i}
         });
  
         root.add({
@@ -794,7 +794,7 @@ CommanderConsole::initCommands(RSCommand &root)
                 
                 amiga.df[values[0]]->setFlag(DiskFlags::PROTECTED, false);
                 
-            }, .values = {i}
+            }, .payload = {i}
         });
     }
     
@@ -822,7 +822,7 @@ CommanderConsole::initCommands(RSCommand &root)
                 
                 emulator.set(Opt::HDC_CONNECT, true, values);
                 
-            }, .values = {i}
+            }, .payload = {i}
         });
         
         root.add({
@@ -833,7 +833,7 @@ CommanderConsole::initCommands(RSCommand &root)
                 
                 emulator.set(Opt::HDC_CONNECT, false, values);
                 
-            }, .values = {i}
+            }, .payload = {i}
         });
         
         root.add({
@@ -850,7 +850,7 @@ CommanderConsole::initCommands(RSCommand &root)
                 auto path = host.makeAbsolute(args.at("path"));
                 amiga.hd[values[0]]->init(path);
                 
-            }, .values = {i}
+            }, .payload = {i}
         });
         
         root.add({
@@ -870,7 +870,7 @@ CommanderConsole::initCommands(RSCommand &root)
 
                 amiga.hd[values[0]]->changeGeometry(c, h, s);
                 
-            }, .values = {i}
+            }, .payload = {i}
         });
         
         root.add({
@@ -881,7 +881,7 @@ CommanderConsole::initCommands(RSCommand &root)
                 
                 amiga.hd[values[0]]->setFlag(DiskFlags::PROTECTED, true);
                 
-            }, .values = {i}
+            }, .payload = {i}
         });
  
         root.add({
@@ -892,7 +892,7 @@ CommanderConsole::initCommands(RSCommand &root)
                 
                 amiga.hd[values[0]]->setFlag(DiskFlags::PROTECTED, false);
                 
-            }, .values = {i}
+            }, .payload = {i}
         });
     }
     

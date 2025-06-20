@@ -72,14 +72,14 @@ struct RSCommandDescriptor {
     // Shadowed commands are not shown in help texts, but auto-completion works as usual
     bool shadow = false;
 
-    // Argument description of this command
+    // Argument descriptions of this command
     const std::vector<RSArgumentDescriptor> &args = {};
 
     // The command callback
     std::function<void (std::ostream&, const Arguments&, const std::vector<isize>&)> func = nullptr;
 
     // Addition values passed to the command callback as last argument
-    const std::vector<isize> &values = {};
+    const std::vector<isize> &payload = {};
 };
     
 struct RSCommand {
@@ -102,23 +102,31 @@ struct RSCommand {
     // Specific description of this command
     string chelp;
 
-    // Argument list
-    std::vector<RSArgumentDescriptor> arguments;
-
     // Hidden commands are not shown in help texts and are ingored in auto-completion
     bool hidden = false;
 
     // Shadowed commands are not shown in help texts, but auto-completion works as usual
     bool shadow = false;
 
+    // Argument descriptions of this command
+    std::vector<RSArgumentDescriptor> args;
+
     // Command handler
     std::function<void (std::ostream&, const Arguments&, const std::vector<isize>&)> callback = nullptr;
 
     // Addition values passed to the command callback as last argument
-    std::vector<isize> param;
+    std::vector<isize> payload;
 
     // List of subcommands
     std::vector<RSCommand> subcommands;
+
+
+    //
+    // Querying properties
+    //
+
+    bool isHidden() const { return hidden; } // (flags & arg::hidden) == arg::hidden; }
+    bool isShadowed() const { return shadow; }
 
 
     //

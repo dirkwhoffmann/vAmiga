@@ -508,7 +508,7 @@ Console::autoComplete(const string& userInput)
     if (auto cmd = getRoot().seek(tokens); cmd && !tokens.empty()) {
         
         // ... and there are additional subcommands or arguments
-        if (!cmd->subcommands.empty() || !cmd->arguments.empty()) { result += " "; }
+        if (!cmd->subcommands.empty() || !cmd->args.empty()) { result += " "; }
     }
 
     return result;
@@ -552,7 +552,7 @@ Console::parse(const RSCommand &cmd, const Tokens &args)
     }
 
     // Iterate over all argument descriptors
-    for (auto &descr : cmd.arguments) {
+    for (auto &descr : cmd.args) {
 
         auto keyStr = descr.keyStr();
         auto nameStr = descr.nameStr();
@@ -818,7 +818,7 @@ Console::exec(const Tokens &argv, bool verbose)
 
         // Call the command handler
         std::stringstream ss;
-        cmd->callback(ss, parsedArgs, cmd->param);
+        cmd->callback(ss, parsedArgs, cmd->payload);
 
         // Dump the output to the console
         if (ss.peek() != EOF) { *this << vdelim << ss << vdelim; }
@@ -1197,7 +1197,7 @@ Console::registerComponent(CoreComponent &c, RSCommand &root, bool shadowed)
                         emulator.set(Opt(values[0]), args.at("value"), { values[1] });
                         msgQueue.put(Msg::CONFIG);
                         
-                    }, .values = { isize(opt), c.objid }
+                    }, .payload = { isize(opt), c.objid }
                 });
 
             } else {
@@ -1222,7 +1222,7 @@ Console::registerComponent(CoreComponent &c, RSCommand &root, bool shadowed)
                             emulator.set(Opt(values[0]), values[1], { values[2] });
                             msgQueue.put(Msg::CONFIG);
                             
-                        },  .values = { isize(opt), isize(second), c.objid }
+                        },  .payload = { isize(opt), isize(second), c.objid }
                     });
                 }
             }

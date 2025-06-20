@@ -556,7 +556,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             std::stringstream ss;
             current += (u32)mem.debugger.memDump<Accessor::CPU>(ss, current, 16, values[0]);
             retroShell << '\n' << ss << '\n';
-        }, .values = {2}
+        }, .payload = {2}
     });
     
     root.clone({"m"}, "m.b", { 1 });
@@ -600,7 +600,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             mem.debugger.write(addr, u32(parseNum(args.at("value"))), values[0]);
             current = addr + u32(values[0]);
             
-        }, .values = {2}
+        }, .payload = {2}
     });
     
     root.clone({"w"}, "w.b", { 1 });
@@ -640,7 +640,7 @@ DebuggerConsole::initCommands(RSCommand &root)
                 for (isize i = 0; i <= cnt - 1; i++)
                     mem.poke8<Accessor::CPU>(u32(dst + i), mem.spypeek8<Accessor::CPU>(u32(src + i)));
             }
-        }, .values = {1}
+        }, .payload = {1}
     });
     
     root.clone({"c"}, "c.b", { 1 });
@@ -682,7 +682,7 @@ DebuggerConsole::initCommands(RSCommand &root)
                 ss << "Not found";
                 retroShell << ss;
             }
-        }, .values = {1}
+        }, .payload = {1}
     });
     
     root.clone({"f"}, "f.b", { 1 });
@@ -713,7 +713,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             auto val = u32(parseNum(args, "value", 0));
 
             mem.debugger.write(addr, val, values[0], count);
-        }, .values = {1}
+        }, .payload = {1}
     });
     
     root.clone({"e"}, "e.b", { 1 });
@@ -785,7 +785,7 @@ DebuggerConsole::initCommands(RSCommand &root)
                 } else {
                     dump(os, ciab, Category::State );
                 }
-            }, .values = {i}
+            }, .payload = {i}
         });
         
         root.add({
@@ -799,7 +799,7 @@ DebuggerConsole::initCommands(RSCommand &root)
                 } else {
                     dump(os, ciab.tod, Category::State );
                 }
-            }, .values = {i}
+            }, .payload = {i}
         });
     }
     
@@ -1013,7 +1013,7 @@ DebuggerConsole::initCommands(RSCommand &root)
                 
                 if (values[0] == 1) dump(os, controlPort1, Category::State);
                 if (values[0] == 2) dump(os, controlPort2, Category::State);
-            }, .values = {i}
+            }, .payload = {i}
         });
     }
     
@@ -1060,7 +1060,7 @@ DebuggerConsole::initCommands(RSCommand &root)
                 
                 if (values[0] == 1) dump(os, controlPort1.mouse, Category::State );
                 if (values[0] == 2) dump(os, controlPort2.mouse, Category::State );
-            }, .values = {i}
+            }, .payload = {i}
         });
     }
     
@@ -1083,7 +1083,7 @@ DebuggerConsole::initCommands(RSCommand &root)
                 
                 if (values[0] == 1) dump(os, controlPort1.joystick, Category::State);
                 if (values[0] == 2) dump(os, controlPort2.joystick, Category::State);
-            }, .values = {i}
+            }, .payload = {i}
         });
     }
 
@@ -1107,7 +1107,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 dump(os, *amiga.df[values[0]], Category::State );
-            }, .values = {i}
+            }, .payload = {i}
         });
         
         root.add({
@@ -1117,7 +1117,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 dump(os, *amiga.df[values[0]], Category::Disk);
-            }, .values = {i}
+            }, .payload = {i}
         });
     }
 
@@ -1141,7 +1141,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 dump(os, *amiga.hd[values[0]], Category::State );
-            }, .values = {i}
+            }, .payload = {i}
         });
                 
         root.add({
@@ -1151,7 +1151,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 dump(os, *amiga.df[values[0]], Category::Volumes);
-            }, .values = {i}
+            }, .payload = {i}
         });
         
         root.add({
@@ -1161,7 +1161,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 dump(os, *amiga.hd[values[0]], Category::Partitions);
-            }, .values = {i}
+            }, .payload = {i}
         });
     }
 
@@ -1565,7 +1565,7 @@ DebuggerConsole::initCommands(RSCommand &root)
                     
                     Emulator::setDebugVariable(DebugFlag(values[0]), int(parseNum(args, "level")));
 
-                }, .values = { isize(i) }
+                }, .payload = { isize(i) }
             });
         }
         
