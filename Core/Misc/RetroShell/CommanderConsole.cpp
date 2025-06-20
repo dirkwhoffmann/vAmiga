@@ -53,18 +53,6 @@ CommanderConsole::pressReturn(bool shift)
 }
 
 void
-CommanderConsole::switchNext()
-{
-    retroShell.asyncExec("debugger");
-}
-
-void
-CommanderConsole::switchPrev()
-{
-    retroShell.asyncExec("navigator");
-}
-
-void
 CommanderConsole::initCommands(RSCommand &root)
 {
     Console::initCommands(root);

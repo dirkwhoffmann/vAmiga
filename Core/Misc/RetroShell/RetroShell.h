@@ -61,8 +61,8 @@ public:
 
     // Consoles
     CommanderConsole commander = CommanderConsole(amiga, 0, s1);
-    DebuggerConsole debugger = DebuggerConsole(amiga, 1, s1);
-    NavigatorConsole navigator = NavigatorConsole(amiga, 2, s1);
+    DebuggerConsole debugger = DebuggerConsole(amiga, 1, s2);
+    NavigatorConsole navigator = NavigatorConsole(amiga, 2, s3);
 
     // Indicates if one of the consoles has new contents
     bool isDirty = false;
@@ -139,12 +139,12 @@ public:
 
 public:
 
-    void enterConsole(std::ostream &os, isize nr);
-    void enterCommander(std::ostream &os) { enterConsole(os, 0); }
-    void enterDebugger(std::ostream &os) { enterConsole(os, 1); }
-    void enterNavigator(std::ostream &os) { enterConsole(os, 2); }
-    void nextConsole(std::ostream &os) { enterConsole(os, (current->objid + 1) % 3); }
-    void prevConsole(std::ostream &os) { enterConsole(os, (current->objid + 2) % 3); }
+    void enterConsole(isize nr);
+    void enterCommander() { enterConsole(0); }
+    void enterDebugger() { enterConsole(1); }
+    void enterNavigator() { enterConsole(2); }
+    void nextConsole() { enterConsole((current->objid + 1) % 3); }
+    void prevConsole() { enterConsole((current->objid + 2) % 3); }
 
 
     //

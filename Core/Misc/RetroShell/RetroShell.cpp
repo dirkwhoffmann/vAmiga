@@ -29,9 +29,7 @@ RetroShell::RetroShell(Amiga& ref) : SubComponent(ref)
 void
 RetroShell::_initialize()
 {
-    // enterCommander();
-    current = &commander;
-    asyncExec("commander");
+    enterCommander();
 }
 
 void
@@ -45,7 +43,7 @@ RetroShell::cacheInfo(RetroShellInfo &result) const
 }
 
 void
-RetroShell::enterConsole(std::ostream &os, isize nr)
+RetroShell::enterConsole(isize nr)
 {
     Console *newConsole = nullptr;
 
@@ -68,9 +66,7 @@ RetroShell::enterConsole(std::ostream &os, isize nr)
         nr == 1 ? emulator.trackOn(1) : emulator.trackOff(1);
 
         // Print the welcome message if entered the first time
-        // if (current->isEmpty()) { current->exec("welcome"); *this << current->getPrompt(); }
-        // current->exec("welcome");
-        os << '\r' << current->getPrompt();
+        if (current->isEmpty()) { current->exec("welcome"); *this << current->getPrompt(); }
 
         // Inform the GUI about the change
         msgQueue.put(Msg::RSH_SWITCH, nr);
@@ -320,16 +316,14 @@ RetroShell::press(RSKey key, bool shift)
             case RSKey::UP:
             case RSKey::PAGE_UP:
 
-                //prevConsole();
-                current->switchNext();
+                prevConsole();
                 return;
 
             case RSKey::DOWN:
             case RSKey::PAGE_DOWN:
             case RSKey::TAB:
 
-                // nextConsole();
-                current->switchPrev();
+                nextConsole();
                 return;
 
             default:

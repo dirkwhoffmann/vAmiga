@@ -223,14 +223,6 @@ protected:
     
 
     //
-    // Managing consoles
-    //
-
-    virtual void switchNext() = 0;
-    virtual void switchPrev() = 0;
-
-
-    //
     // Managing user input
     //
 
@@ -376,8 +368,6 @@ class CommanderConsole final : public Console
     void welcome() override;
     void printHelp() override;
     void pressReturn(bool shift) override;
-    void switchNext() override;
-    void switchPrev() override;
 };
 
 class DebuggerConsole final : public Console
@@ -394,8 +384,6 @@ class DebuggerConsole final : public Console
     void welcome() override;
     void printHelp() override;
     void pressReturn(bool shift) override;
-    void switchNext() override;
-    void switchPrev() override;
 };
 
 class NavigatorConsole final : public Console
@@ -414,8 +402,6 @@ class NavigatorConsole final : public Console
     void welcome() override;
     void printHelp() override;
     void pressReturn(bool shift) override;
-    void switchNext() override;
-    void switchPrev() override;
 
 
     //

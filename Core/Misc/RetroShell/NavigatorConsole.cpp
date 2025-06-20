@@ -65,18 +65,6 @@ NavigatorConsole::pressReturn(bool shift)
     Console::pressReturn(shift);
 }
 
-void
-NavigatorConsole::switchNext()
-{
-    retroShell.asyncExec("commander");
-}
-
-void
-NavigatorConsole::switchPrev()
-{
-    retroShell.asyncExec("debugger");
-}
-
 Block
 NavigatorConsole::parseBlock(const string &argv)
 {

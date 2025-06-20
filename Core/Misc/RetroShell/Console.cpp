@@ -976,7 +976,7 @@ Console::initCommands(RSCommand &root)
 
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                    retroShell.enterCommander(os);
+                    retroShell.enterCommander();
             }
         });
 
@@ -987,7 +987,7 @@ Console::initCommands(RSCommand &root)
 
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                    retroShell.enterDebugger(os);
+                    retroShell.enterDebugger();
             }
         });
 
@@ -998,7 +998,7 @@ Console::initCommands(RSCommand &root)
 
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                    retroShell.enterNavigator(os);
+                    retroShell.enterNavigator();
             }
         });
 
