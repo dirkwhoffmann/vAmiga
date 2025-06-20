@@ -81,12 +81,12 @@ struct RSArgDescriptor {
 struct RSCmdDescriptor {
     
     const std::vector<string> &tokens = {};
-    // const std::vector<string> help = {}; // DEPRECATED
+    const std::vector<string> &hide = {};
     string thelp = {};      // Command token help
     string ghelp = {};      // Command group help
     string chelp = {};      // Command help
     bool hidden = false;    // Invisible in help, ignored in auto-completion
-    bool shadowed = false;  // Invisible in help, subject to auto-completion
+    bool shadow = false;    // Invisible in help, subject to auto-completion
     const std::vector<RSArgDescriptor> &argx = {}; // TODO: Rename to args
     std::function<void (std::ostream &os, Arguments&, const ParsedArguments &args, const std::vector<isize> &)> func = nullptr;
     const std::vector<isize> &values = {};
@@ -106,9 +106,6 @@ struct RetroShellCmd {
     // Full name of this command (e.g., "df0 eject")
     string fullName;
 
-    // Help description of this command (e.g., "Eject disk") (DEPRECATED)
-    // std::vector<string> help;
-
     // Command help
     string chelp;
 
@@ -116,7 +113,7 @@ struct RetroShellCmd {
     string ghelp;
 
     // Command token help (e.g. "[g]oto") (defaults to the command name)
-    string thelp;
+    // string thelp;
 
     // Argument list
     std::vector<RSArgDescriptor> arguments;
@@ -130,8 +127,11 @@ struct RetroShellCmd {
     // Additional argument passed to the command handler
     std::vector<isize> param;
 
-    // Indicates if this command appears in help descriptions
+    // Indicates if this command appears in help descriptions and is ignores in auto-completion
     bool hidden = false;
+
+    // Indicates if this command appears in help descriptions
+    bool shadowed = false;
 
 
     //

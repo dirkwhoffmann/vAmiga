@@ -25,29 +25,25 @@ class HardDrive final : public Drive, public Inspectable<HardDriveInfo> {
             .type           = Class::HardDrive,
             .name           = "HardDrive0",
             .description    = "Hard Drive 0",
-            .shell          = "hd0",
-            .help           = { "Hard Drive n", "hd[n]" }
+            .shell          = "hd0"
         },
         {
             .type           = Class::HardDrive,
             .name           = "HardDrive1",
             .description    = "Hard Drive 1",
-            .shell          = "hd1",
-            .help           = { "" }
+            .shell          = "hd1"
         },
         {
             .type           = Class::HardDrive,
             .name           = "HardDrive2",
             .description    = "Hard Drive 2",
-            .shell          = "hd2",
-            .help           = { "" }
+            .shell          = "hd2"
         },
         {
             .type           = Class::HardDrive,
             .name           = "HardDrive3",
             .description    = "Hard Drive 3",
-            .shell          = "hd3",
-            .help           = { "" }
+            .shell          = "hd3"
         }
     };
 

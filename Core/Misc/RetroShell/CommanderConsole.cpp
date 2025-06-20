@@ -523,12 +523,19 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     //
     // Peripherals (Joystick)
     //
-    
+
+    root.add({
+
+        .tokens = { "joystick[n]" },
+        .ghelp  = { "Joystick n" },
+        .chelp  = { "Commands: joystick1, joystick2" }
+    });
+
     for (isize i = 0; i <= 1; i++) {
         
-        if (i == 0) cmd = registerComponent(controlPort1.joystick);
-        if (i == 1) cmd = registerComponent(controlPort2.joystick);
-        
+        if (i == 0) cmd = registerComponent(controlPort1.joystick, true);
+        if (i == 1) cmd = registerComponent(controlPort2.joystick, true);
+
         root.add({
                  
             .tokens = { cmd, "press" },
@@ -662,12 +669,19 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     //
     // Peripherals (Mouse)
     //
-    
+
+    root.add({
+
+        .tokens = { "mouse[n]" },
+        .ghelp  = { "Mouse n" },
+        .chelp  = { "Commands: mouse1, mouse2" }
+    });
+
     for (isize i = 0; i <= 1; i++) {
         
-        if (i == 0) cmd = registerComponent(controlPort1.mouse);
-        if (i == 1) cmd = registerComponent(controlPort2.mouse);
-        
+        if (i == 0) cmd = registerComponent(controlPort1.mouse, true);
+        if (i == 1) cmd = registerComponent(controlPort2.mouse, true);
+
         root.add({
             
             .tokens = { cmd, "press" },
@@ -715,11 +729,18 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     //
     // Peripherals (Df0, Df1, Df2, Df3)
     //
-    
+
+    root.add({
+
+        .tokens = { "df[n]" },
+        .ghelp  = { "Floppy drive n" },
+        .chelp  = { "Commands: df0, df1, df2, df3" }
+    });
+
     for (isize i = 0; i <= 3; i++) {
         
-        cmd = registerComponent(*df[i]);
-        
+        cmd = registerComponent(*df[i], true);
+
         if (i >= 1 && i <= 3) {
             
             root.add({
@@ -796,11 +817,18 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     //
     // Peripherals (Hd0, Hd1, Hd2, Hd3)
     //
-    
+
+    root.add({
+
+        .tokens = { "hd[n]" },
+        .ghelp  = { "Hard drive n" },
+        .chelp  = { "Commands: hd0, hd1, hd2, hd3" }
+    });
+
     for (isize i = 0; i <= 3; i++) {
         
-        cmd = registerComponent(*hd[i]);
-        
+        cmd = registerComponent(*hd[i], true);
+
         root.add({
             
             .tokens = { cmd, "connect" },

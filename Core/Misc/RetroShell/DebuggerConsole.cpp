@@ -80,12 +80,14 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     //
     
     RetroShellCmd::currentGroup = "Program execution";
-    
+
+    root.add({ .tokens = { "g[oto]" }, .ghelp  = { "Goto address" }, .chelp  = { "g or goto" } });
+
     root.add({
         
         .tokens = { "goto" },
-        .thelp  = { "g[oto]" },
         .chelp  = { "Goto address" },
+        .shadow = true,
         .argx   = { { .name = { "address", "Memory address" }, .flags = arg::opt } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -94,24 +96,27 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     });
     
     root.clone({ "goto" }, "g");
-    
+
+    root.add({ .tokens = { "s[tep]" }, .ghelp  = { "Step into the next instruction" }, .chelp  = { "s or step" } });
+
     root.add({
         
         .tokens = { "step" },
-        .thelp  = { "s[tep]" },
         .chelp  = { "Step into the next instruction" },
+        .shadow = true,
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
             emulator.stepInto();
         }
     });
-    
+
     root.clone({ "step" }, "s");
-    
+
+    root.add({ .tokens = { "n[next]" }, .ghelp  = { "Step over the next instruction" }, .chelp  = { "n or next" } });
+
     root.add({
 
         .tokens = { "next" },
-        .thelp  = { "n[next]" },
         .chelp  = { "Step over the next instruction" },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
             
@@ -530,12 +535,19 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
             retroShell << '\n' << ss << '\n';
         }
     });
-    
+
+    root.add({
+
+        .tokens = { "m[.b|.w|.l]" },
+        .ghelp  = { "Dump memory" },
+        .chelp  = { "Commands: m, m.b, m.w, m.l" }
+    });
+
     root.add({
         
         .tokens = { "m" },
-        .thelp  = { "m[.b|.w|.l]" },
         .chelp  = { "Dump memory" },
+        .hidden = true,
         .argx   = { { .name = { "address", "Memory address" }, .flags = arg::opt } },
         .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                         
@@ -550,12 +562,19 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.clone({"m"}, "m.b", { 1 });
     root.clone({"m"}, "m.w", { 2 });
     root.clone({"m"}, "m.l", { 4 });
-    
+
+    root.add({
+
+        .tokens = { "w[.b|.w|.l]" },
+        .ghelp  = { "Write into a register or memory" },
+        .chelp  = { "Commands: w, w.b, w.w, w.l" }
+    });
+
     root.add({
         
         .tokens = { "w" },
-        .thelp  = { "w[.b|.w|.l]" },
         .chelp  = { "Write into a register or memory" },
+        .hidden = true,
         .argx   = {
             { .name = { "value", "Payload" } },
             { .name = { "target", "Memory address or custom register" }, .flags = arg::opt } },
@@ -587,12 +606,19 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.clone({"w"}, "w.b", { 1 });
     root.clone({"w"}, "w.w", { 2 });
     root.clone({"w"}, "w.l", { 4 });
-    
+
+    root.add({
+
+        .tokens = { "c[.b|.w|.l]" },
+        .ghelp  = { "Copy a chunk of memory" },
+        .chelp  = { "Commands: c, c.b, c.w, c.l" }
+    });
+
     root.add({
 
         .tokens = { "c" },
-        .thelp  = { "c[.b|.w|.l]" },
         .chelp  = { "Copy a chunk of memory" },
+        .hidden = true,
         .argx   = {
             { .name = { "src", "Source address" }, .flags = arg::keyval },
             { .name = { "dest", "Destination address" }, .flags = arg::keyval },
@@ -620,12 +646,19 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.clone({"c"}, "c.b", { 1 });
     root.clone({"c"}, "c.w", { 2 });
     root.clone({"c"}, "c.l", { 4 });
-    
+
+    root.add({
+
+        .tokens = { "f[.b|.w|.l]" },
+        .ghelp  = { "Find a sequence in memory" },
+        .chelp  = { "Commands: f, f.b, f.w, f.l" }
+    });
+
     root.add({
         
         .tokens = { "f" },
-        .thelp  = {  "f[.b|.w|.l]" },
         .chelp  = { "Find a sequence in memory" },
+        .hidden = true,
         .argx   = {
             { .name = { "sequence", "Search string" } },
             { .name = { "address", "Start address" }, .flags = arg::opt } },
@@ -655,12 +688,19 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     root.clone({"f"}, "f.b", { 1 });
     root.clone({"f"}, "f.w", { 2 });
     root.clone({"f"}, "f.l", { 4 });
-    
+
+    root.add({
+
+        .tokens = { "e[.b|.w|.l]" },
+        .ghelp  = { "Erase memory" },
+        .chelp  = { "Commands: e, e.b, e.w, e.l" }
+    });
+
     root.add({
         
         .tokens = { "e" },
-        .thelp  = { "e[.b|.w|.l]" },
         .chelp  = { "Erase memory" },
+        .hidden = true,
         .argx   = {
             { .name = { "address", "Start address" } },
             { .name = { "count", "Number of bytes to erase" } },
@@ -1051,25 +1091,24 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
             }, .values = {i}
         });
     }
-    
-    for (isize i = 0; i < 4; i++) {
-        
-        string df = "df" + std::to_string(i);
 
-        /*
-        if (i == 0) {
-            root.add({ .tokens = { "?", df }, .help = { "Floppy drive n", "df[n]" } });
-        } else {
-            root.add({ .tokens = { "?", df } });
-        }
-        */
+    root.add({
+
+        .tokens = { "?", "df[n]" },
+        .ghelp  = { "Floppy drive n" },
+        .chelp  = { "? df0, ? df1, ? df1, or ? df2" }
+    });
+
+    for (isize i = 0; i < 4; i++) {
+
+        string df = "df" + std::to_string(i);
 
         root.add({
             
             .tokens = { "?", df },
-            .thelp  = { "df[n]" },
             .ghelp  = { "Floppy drive n" },
             .chelp  = { "Inspect the internal state" },
+            .shadow = true,
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 dump(*amiga.df[values[0]], Category::State );
@@ -1086,7 +1125,14 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
             }, .values = {i}
         });
     }
-    
+
+    root.add({
+
+        .tokens = { "?", "hd[n]" },
+        .ghelp  = { "Hard drive n" },
+        .chelp  = { "? hd0, ? hd1, ? hd2, or ? hd3" }
+    });
+
     for (isize i = 0; i < 4; i++) {
         
         string hd = "hd" + std::to_string(i);
@@ -1094,9 +1140,9 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         root.add({
             
             .tokens = { "?", hd },
-            .thelp  = { "hd[n]" },
             .ghelp  = "Hard drive n",
             .chelp  = { "Inspect the internal state" },
+            .shadow = true,
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 dump(*amiga.hd[values[0]], Category::State );

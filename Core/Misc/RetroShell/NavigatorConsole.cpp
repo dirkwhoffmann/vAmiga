@@ -202,21 +202,23 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
 
     root.add({ .tokens = { "import" }, .ghelp = { "Import a file system" } });
 
-    for (isize i = 0; i < 4; i++) {
+    root.add({
 
-        i == 0 ? help = { "Floppy file system from drive n" } : help = { "" };
+        .tokens = { "import", "df[n]" },
+        .ghelp  = { "Floppy drive n" },
+        .chelp  = { "import { df0 | df1 | df1 | df2 }" }
+    });
+
+    for (isize i = 0; i < 4; i++) {
 
         root.add({
 
             .tokens = { "import", "df" + std::to_string(i) },
-            .thelp  = { "df[n]" },
             .chelp  = { "Floppy file system from drive n" },
             .hidden = i != 0,
             .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
 
                 auto n = values[0];
-
-                // if (!df[n]->hasDisk()) throw AppError(Fault::DISK_MISSING);
 
                 fs.init(*df[n]);
                 fs.dump(Category::Info, os);

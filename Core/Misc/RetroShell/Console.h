@@ -128,8 +128,9 @@ public:
 protected:
 
     virtual void initCommands(RetroShellCmd &root);
-    const char *registerComponent(CoreComponent &c);
-    const char *registerComponent(CoreComponent &c, RetroShellCmd &root);
+    const char *registerComponent(CoreComponent &c, bool shadowed = false);
+    const char *registerComponent(CoreComponent &c, RetroShellCmd &root, bool shadowed = false);
+    // const char *registerComponent(CoreComponent &c, RetroShellCmd &root, const string &thelp, const string &ghelp);
 
 
     //

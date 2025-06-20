@@ -1155,47 +1155,26 @@ Console::initCommands(RetroShellCmd &root)
 }
 
 const char *
-Console::registerComponent(CoreComponent &c)
+Console::registerComponent(CoreComponent &c, bool shadowed)
 {
-    return registerComponent(c, root);
+    return registerComponent(c, root, shadowed);
 }
 
 const char *
-Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
+Console::registerComponent(CoreComponent &c, RetroShellCmd &root, bool shadowed)
 {
-    // Get the shell name for this component
+    // Get the shell name and the options for this component
     auto cmd = c.shellName();
-    assert(cmd != nullptr);
-
-    // Register a command with the proper name
-    /*
-    if (c.shellHelp().empty()) {
-        root.add( { .tokens = { cmd }, .help = { c.description() } } );
-    } else {
-        root.add( {.tokens = { cmd }, .help = c.shellHelp() } );
-    }
-    */
-
-
+    auto descr = c.description();
     auto &options = c.getOptions();
 
-    /*
-    std::vector<string> ghelp;
-    if (c.shellHelp().empty()) {
-        ghelp = { c.description() };
-    } else {
-        ghelp = shellHelp();
-    }
-    */
-
-    // In case this component has no options...
+    // In case this component has no options, register a stub
     if (options.empty()) {
 
         root.add({
 
             .tokens = { cmd },
-            .chelp  = { "" },
-            .ghelp = c.description()
+            .ghelp  = { descr }
         });
 
     } else {
@@ -1204,11 +1183,12 @@ Console::registerComponent(CoreComponent &c, RetroShellCmd &root)
         root.add({
             
             .tokens = { cmd },
+            .shadow = shadowed,
             .chelp  = { "Display the current configuration" },
-            .ghelp  = c.description(),
+            .ghelp  = descr,
 
             .func   = [this, &c] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
-                
+
                 retroShell.commander.dump(c, Category::Config);
             }
         });
