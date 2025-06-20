@@ -1747,7 +1747,7 @@ RetroShellAPI::text()
 }
 
 void
-RetroShellAPI::press(RetroShellKey key, bool shift)
+RetroShellAPI::press(RSKey key, bool shift)
 {
     VAMIGA_PUBLIC_SUSPEND
     retroShell->press(key, shift);

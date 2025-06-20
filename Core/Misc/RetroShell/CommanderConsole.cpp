@@ -53,7 +53,7 @@ CommanderConsole::pressReturn(bool shift)
 }
 
 void
-CommanderConsole::initCommands(RetroShellCmd &root)
+CommanderConsole::initCommands(RSCommand &root)
 {
     Console::initCommands(root);
     
@@ -95,7 +95,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     // Regression tester
     //
     
-    RetroShellCmd::currentGroup = "Regression testing";
+    RSCommand::currentGroup = "Regression testing";
     
     root.add({
         
@@ -226,7 +226,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     // Components
     //
     
-    RetroShellCmd::currentGroup = "Components";
+    RSCommand::currentGroup = "Components";
     
     //
     // Components (Amiga)
@@ -450,7 +450,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     // Ports
     //
     
-    RetroShellCmd::currentGroup = "Ports";
+    RSCommand::currentGroup = "Ports";
     
     
     //
@@ -490,7 +490,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     // Peripherals
     //
     
-    RetroShellCmd::currentGroup = "Peripherals";
+    RSCommand::currentGroup = "Peripherals";
     
     
     //
@@ -916,7 +916,7 @@ CommanderConsole::initCommands(RetroShellCmd &root)
     // Miscellaneous
     //
     
-    RetroShellCmd::currentGroup = "Miscellaneous";
+    RSCommand::currentGroup = "Miscellaneous";
     
     
     //

@@ -188,7 +188,7 @@ NavigatorConsole::parseDumpOpts(const ParsedArguments &argv)
 }
 
 void
-NavigatorConsole::initCommands(RetroShellCmd &root)
+NavigatorConsole::initCommands(RSCommand &root)
 {
     std::vector<string> help;
 
@@ -198,7 +198,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
     // Importing and exporting
     //
 
-    RetroShellCmd::currentGroup = "Import and export";
+    RSCommand::currentGroup = "Import and export";
 
     root.add({ .tokens = { "import" }, .ghelp = { "Import a file system" } });
 
@@ -227,7 +227,7 @@ NavigatorConsole::initCommands(RetroShellCmd &root)
         });
     }
 
-    RetroShellCmd::currentGroup = "Directories";
+    RSCommand::currentGroup = "Directories";
 
     root.add({
 

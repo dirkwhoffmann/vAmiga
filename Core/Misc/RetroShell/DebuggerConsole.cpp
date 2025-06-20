@@ -71,7 +71,7 @@ DebuggerConsole::pressReturn(bool shift)
 }
 
 void
-DebuggerConsole::initCommands(RetroShellCmd &root)
+DebuggerConsole::initCommands(RSCommand &root)
 {
     Console::initCommands(root);
     
@@ -79,7 +79,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     // Program execution
     //
     
-    RetroShellCmd::currentGroup = "Program execution";
+    RSCommand::currentGroup = "Program execution";
 
     root.add({ .tokens = { "g[oto]" }, .ghelp  = { "Goto address" }, .chelp  = { "g or goto" } });
 
@@ -506,7 +506,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     // Monitoring
     //
     
-    RetroShellCmd::currentGroup = "Monitoring";
+    RSCommand::currentGroup = "Monitoring";
     
     root.add({
         
@@ -726,7 +726,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         .ghelp  = { "Inspect a component" }
     });
     
-    RetroShellCmd::currentGroup = "Components";
+    RSCommand::currentGroup = "Components";
     
     root.add({
         
@@ -1033,7 +1033,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         }
     });
     
-    RetroShellCmd::currentGroup = "Peripherals";
+    RSCommand::currentGroup = "Peripherals";
     
     root.add({
         
@@ -1170,7 +1170,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
         });
     }
 
-    RetroShellCmd::currentGroup = "Miscellaneous";
+    RSCommand::currentGroup = "Miscellaneous";
     
     root.add({
         
@@ -1541,7 +1541,7 @@ DebuggerConsole::initCommands(RetroShellCmd &root)
     // Miscellaneous
     //
     
-    RetroShellCmd::currentGroup = "Miscellaneous";
+    RSCommand::currentGroup = "Miscellaneous";
     
     root.add({
         

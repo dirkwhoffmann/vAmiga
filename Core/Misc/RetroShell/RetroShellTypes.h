@@ -17,7 +17,7 @@ namespace vamiga {
 // Enumerations
 //
 
-enum class RetroShellKey
+enum class RSKey
 {
     UP,
     DOWN,
@@ -35,33 +35,33 @@ enum class RetroShellKey
     CR
 };
 
-struct RetroShellKeyEnum : Reflection<RetroShellKeyEnum, RetroShellKey>
+struct RSKeyEnum : Reflection<RSKeyEnum, RSKey>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(RetroShellKey::CR);
+    static constexpr long maxVal = long(RSKey::CR);
 
-    static const char *_key(RetroShellKey value)
+    static const char *_key(RSKey value)
     {
         switch (value) {
 
-            case RetroShellKey::UP:          return "UP";
-            case RetroShellKey::DOWN:        return "DOWN";
-            case RetroShellKey::LEFT:        return "LEFT";
-            case RetroShellKey::RIGHT:       return "RIGHT";
-            case RetroShellKey::PAGE_UP:     return "PAGE_UP";
-            case RetroShellKey::PAGE_DOWN:   return "PAGE_DOWN";
-            case RetroShellKey::DEL:         return "DEL";
-            case RetroShellKey::CUT:         return "CUT";
-            case RetroShellKey::BACKSPACE:   return "BACKSPACE";
-            case RetroShellKey::HOME:        return "HOME";
-            case RetroShellKey::END:         return "END";
-            case RetroShellKey::TAB:         return "TAB";
-            case RetroShellKey::RETURN:      return "RETURN";
-            case RetroShellKey::CR:          return "CR";
+            case RSKey::UP:          return "UP";
+            case RSKey::DOWN:        return "DOWN";
+            case RSKey::LEFT:        return "LEFT";
+            case RSKey::RIGHT:       return "RIGHT";
+            case RSKey::PAGE_UP:     return "PAGE_UP";
+            case RSKey::PAGE_DOWN:   return "PAGE_DOWN";
+            case RSKey::DEL:         return "DEL";
+            case RSKey::CUT:         return "CUT";
+            case RSKey::BACKSPACE:   return "BACKSPACE";
+            case RSKey::HOME:        return "HOME";
+            case RSKey::END:         return "END";
+            case RSKey::TAB:         return "TAB";
+            case RSKey::RETURN:      return "RETURN";
+            case RSKey::CR:          return "CR";
         }
         return "???";
     }
-    static const char *help(RetroShellKey value)
+    static const char *help(RSKey value)
     {
         return "";
     }

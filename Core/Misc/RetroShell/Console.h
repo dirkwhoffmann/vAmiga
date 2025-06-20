@@ -11,7 +11,7 @@
 
 #include "RetroShellTypes.h"
 #include "SubComponent.h"
-#include "RetroShellCmd.h"
+#include "RSCommand.h"
 #include "Parser.h"
 #include "TextStorage.h"
 #include "MutableFileSystem.h"
@@ -74,7 +74,7 @@ class Console : public SubComponent {
 protected:
 
     // Root node of the command tree
-    RetroShellCmd root;
+    RSCommand root;
 
     // Memory pointer for commands accpeting default addresses
     u32 current = 0;
@@ -127,9 +127,9 @@ public:
 
 protected:
 
-    virtual void initCommands(RetroShellCmd &root);
+    virtual void initCommands(RSCommand &root);
     const char *registerComponent(CoreComponent &c, bool shadowed = false);
-    const char *registerComponent(CoreComponent &c, RetroShellCmd &root, bool shadowed = false);
+    const char *registerComponent(CoreComponent &c, RSCommand &root, bool shadowed = false);
     // const char *registerComponent(CoreComponent &c, RetroShellCmd &root, const string &thelp, const string &ghelp);
 
 
@@ -233,7 +233,7 @@ public:
     isize inputLength() { return (isize)input.length(); }
 
     // Presses a key or a series of keys
-    void press(RetroShellKey key, bool shift = false);
+    void press(RSKey key, bool shift = false);
     void press(char c);
     void press(const string &s);
 
@@ -275,10 +275,10 @@ protected:
     void autoComplete(Arguments &argv);
 
     // Strips off the command tokens and returns a pointer to the command
-    RetroShellCmd *seekCommand(std::vector<string> &argv);
+    RSCommand *seekCommand(std::vector<string> &argv);
 
     // Parses an argument list
-    std::map<string,string> parse(const RetroShellCmd &cmd, const Arguments &args);
+    std::map<string,string> parse(const RSCommand &cmd, const Arguments &args);
 
     // Checks or parses an argument of a certain type
     bool isBool(const string &argv) const;
@@ -332,7 +332,7 @@ protected:
 public:
 
     // Returns the root node of the instruction tree
-    RetroShellCmd &getRoot() { return root; }
+    RSCommand &getRoot() { return root; }
 
 protected:
 
@@ -341,8 +341,8 @@ protected:
     void exec(const Arguments &argv, bool verbose = false) throws;
 
     // Prints a usage string for a command
-    void cmdUsage(const RetroShellCmd &cmd, const string &prefix);
-    void argUsage(const RetroShellCmd &cmd, const string &prefix);
+    void cmdUsage(const RSCommand &cmd, const string &prefix);
+    void argUsage(const RSCommand &cmd, const string &prefix);
 
     // Displays a help text for a (partially typed in) command
     void help(const string &cmd);
@@ -370,7 +370,7 @@ class CommanderConsole final : public Console
 {
     using Console::Console;
 
-    virtual void initCommands(RetroShellCmd &root) override;
+    virtual void initCommands(RSCommand &root) override;
     void _pause() override;
     string getPrompt() override;
     void welcome() override;
@@ -386,7 +386,7 @@ class DebuggerConsole final : public Console
     // Methods from Console
     //
 
-    virtual void initCommands(RetroShellCmd &root) override;
+    virtual void initCommands(RSCommand &root) override;
     void _pause() override;
     string getPrompt() override;
     void welcome() override;
@@ -404,7 +404,7 @@ class NavigatorConsole final : public Console
     // Methods from Console
     //
 
-    virtual void initCommands(RetroShellCmd &root) override;
+    virtual void initCommands(RSCommand &root) override;
     void _pause() override;
     string getPrompt() override;
     void welcome() override;

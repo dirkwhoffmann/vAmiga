@@ -7,7 +7,7 @@ CommanderConsole.cpp
 DebuggerConsole.cpp
 NavigatorConsole.cpp
 RetroShell.cpp
-RetroShellCmd.cpp
+RSCommand.cpp
 TextStorage.cpp
 
 )

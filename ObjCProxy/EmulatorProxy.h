@@ -877,8 +877,8 @@ NSString *EventSlotName(EventSlot slot);
 
 - (NSString *)getText;
 - (void)pressKey:(char)c;
-- (void)pressSpecialKey:(RetroShellKey)key;
-- (void)pressSpecialKey:(RetroShellKey)key shift:(BOOL)shift;
+- (void)pressSpecialKey:(RSKey)key;
+- (void)pressSpecialKey:(RSKey)key shift:(BOOL)shift;
 - (void)executeScript:(MediaFileProxy *)file;
 - (void)executeString:(NSString *)string;
 

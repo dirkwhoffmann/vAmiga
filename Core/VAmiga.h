@@ -1425,7 +1425,7 @@ public:
      *  @param  key     The pressed key
      *  @param  shift   Status of the shift key
      */
-    void press(RetroShellKey key, bool shift = false);
+    void press(RSKey key, bool shift = false);
 
     /** @brief  Informs RetroShell that a key has been typed.
      *  @param  c       The pressed key

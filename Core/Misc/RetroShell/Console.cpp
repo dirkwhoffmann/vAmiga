@@ -229,15 +229,15 @@ Console::printState()
 }
 
 void
-Console::press(RetroShellKey key, bool shift)
+Console::press(RSKey key, bool shift)
 {
-    assert_enum(RetroShellKey, key);
+    assert_enum(RSKey, key);
     assert(ipos >= 0 && ipos < historyLength());
     assert(cursor >= 0 && cursor <= inputLength());
 
     switch(key) {
 
-        case RetroShellKey::UP:
+        case RSKey::UP:
 
             if (ipos > 0) {
 
@@ -250,7 +250,7 @@ Console::press(RetroShellKey key, bool shift)
             }
             break;
 
-        case RetroShellKey::DOWN:
+        case RSKey::DOWN:
 
             if (ipos < historyLength() - 1) {
 
@@ -260,53 +260,53 @@ Console::press(RetroShellKey key, bool shift)
             }
             break;
 
-        case RetroShellKey::LEFT:
+        case RSKey::LEFT:
 
             if (cursor > 0) cursor--;
             break;
 
-        case RetroShellKey::RIGHT:
+        case RSKey::RIGHT:
 
             if (cursor < (isize)input.size()) cursor++;
             break;
 
-        case RetroShellKey::PAGE_UP:
-        case RetroShellKey::PAGE_DOWN:
+        case RSKey::PAGE_UP:
+        case RSKey::PAGE_DOWN:
 
             break;
 
-        case RetroShellKey::DEL:
+        case RSKey::DEL:
 
             if (cursor < inputLength()) {
                 input.erase(input.begin() + cursor);
             }
             break;
 
-        case RetroShellKey::CUT:
+        case RSKey::CUT:
 
             if (cursor < inputLength()) {
                 input.erase(input.begin() + cursor, input.end());
             }
             break;
 
-        case RetroShellKey::BACKSPACE:
+        case RSKey::BACKSPACE:
 
             if (cursor > 0) {
                 input.erase(input.begin() + --cursor);
             }
             break;
 
-        case RetroShellKey::HOME:
+        case RSKey::HOME:
 
             cursor = 0;
             break;
 
-        case RetroShellKey::END:
+        case RSKey::END:
 
             cursor = (isize)input.length();
             break;
 
-        case RetroShellKey::TAB:
+        case RSKey::TAB:
 
             if (tabPressed) {
 
@@ -321,19 +321,19 @@ Console::press(RetroShellKey key, bool shift)
             }
             break;
 
-        case RetroShellKey::RETURN:
+        case RSKey::RETURN:
 
             pressReturn(shift);
             break;
 
-        case RetroShellKey::CR:
+        case RSKey::CR:
 
             input = "";
             cursor = 0;
             break;
     }
 
-    tabPressed = key == RetroShellKey::TAB;
+    tabPressed = key == RSKey::TAB;
     needsDisplay();
 
     assert(ipos >= 0 && ipos < historyLength());
@@ -347,17 +347,17 @@ Console::press(char c)
 
         case '\n':
 
-            press(RetroShellKey::RETURN);
+            press(RSKey::RETURN);
             break;
 
         case '\r':
 
-            press(RetroShellKey::CR);
+            press(RSKey::CR);
             break;
 
         case '\t':
 
-            press(RetroShellKey::TAB);
+            press(RSKey::TAB);
             break;
 
         default:
@@ -477,10 +477,10 @@ Console::split(const Arguments &argv)
     return { cmds, args };
 }
 */
-RetroShellCmd *
+RSCommand *
 Console::seekCommand(std::vector<string> &argv)
 {
-    RetroShellCmd *result = nullptr;
+    RSCommand *result = nullptr;
 
     for (auto *it = &root; !argv.empty() && (it = it->seek(argv.front())); ) {
 
@@ -515,7 +515,7 @@ Console::autoComplete(const string& userInput)
 void
 Console::autoComplete(Arguments &argv)
 {
-    RetroShellCmd *current = &getRoot();
+    RSCommand *current = &getRoot();
     string prefix, token;
 
     for (auto it = argv.begin(); current && it != argv.end(); it++) {
@@ -526,7 +526,7 @@ Console::autoComplete(Arguments &argv)
 }
 
 std::map<string,string>
-Console::parse(const RetroShellCmd &cmd, const Arguments &args)
+Console::parse(const RSCommand &cmd, const Arguments &args)
 {
     std::map<string,string> map;
 
@@ -850,13 +850,13 @@ Console::exec(const Arguments &argv, bool verbose)
 }
 
 void
-Console::cmdUsage(const RetroShellCmd& current, const string &prefix)
+Console::cmdUsage(const RSCommand& current, const string &prefix)
 {
     *this << '\r' << prefix << current.cmdUsage() << '\n';
 }
 
 void
-Console::argUsage(const RetroShellCmd& current, const string &prefix)
+Console::argUsage(const RSCommand& current, const string &prefix)
 {
     *this << '\r' << prefix << current.argUsage() << '\n';
 }
@@ -874,7 +874,7 @@ Console::help(const string& userInput)
 void
 Console::help(const Arguments &argv)
 {
-    RetroShellCmd *current = &getRoot();
+    RSCommand *current = &getRoot();
     string prefix, token;
 
     for (auto &it : argv) {
@@ -985,13 +985,13 @@ Console::_dump(CoreObject &component, Category category)
 }
 
 void
-Console::initCommands(RetroShellCmd &root)
+Console::initCommands(RSCommand &root)
 {
     //
     // Common commands
     //
 
-    {   RetroShellCmd::currentGroup = "Shell commands";
+    {   RSCommand::currentGroup = "Shell commands";
 
         root.add({
             
@@ -1161,7 +1161,7 @@ Console::registerComponent(CoreComponent &c, bool shadowed)
 }
 
 const char *
-Console::registerComponent(CoreComponent &c, RetroShellCmd &root, bool shadowed)
+Console::registerComponent(CoreComponent &c, RSCommand &root, bool shadowed)
 {
     // Get the shell name and the options for this component
     auto cmd = c.shellName();

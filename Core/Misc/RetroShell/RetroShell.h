@@ -189,7 +189,7 @@ public:
 
     const char *text();
     isize cursorRel();
-    void press(RetroShellKey key, bool shift = false);
+    void press(RSKey key, bool shift = false);
     void press(char c);
     void press(const string &s);
     void setStream(std::ostream &os);

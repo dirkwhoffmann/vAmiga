@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "RetroShellCmd.h"
+#include "RSCommand.h"
 #include "StringUtils.h"
 #include "Parser.h"
 #include <algorithm>
@@ -16,7 +16,7 @@
 
 namespace vamiga {
 
-string RetroShellCmd::currentGroup;
+string RSCommand::currentGroup;
 
 string
 RSArgDescriptor::nameStr() const
@@ -73,7 +73,7 @@ RSArgDescriptor::usageStr() const
 }
 
 void
-RetroShellCmd::add(const RSCmdDescriptor &descriptor)
+RSCommand::add(const RSCmdDescriptor &descriptor)
 {
     assert(!descriptor.tokens.empty());
     assert(!descriptor.chelp.empty() || !descriptor.ghelp.empty());
@@ -85,11 +85,11 @@ RetroShellCmd::add(const RSCmdDescriptor &descriptor)
     auto name = tokens.back();
 
     // Traversing the command tree
-    RetroShellCmd *node = seek(std::vector<string> { tokens.begin(), tokens.end() - 1 });
+    RSCommand *node = seek(std::vector<string> { tokens.begin(), tokens.end() - 1 });
     assert(node != nullptr);
     
     // Create the instruction
-    RetroShellCmd cmd;
+    RSCommand cmd;
     cmd.name = name;
     cmd.ghelp = !descriptor.ghelp.empty() ? descriptor.ghelp : descriptor.chelp;
     cmd.chelp = !descriptor.chelp.empty() ? descriptor.chelp : "???";
@@ -109,14 +109,14 @@ RetroShellCmd::add(const RSCmdDescriptor &descriptor)
 }
 
 void
-RetroShellCmd::clone(const std::vector<string> &tokens,
+RSCommand::clone(const std::vector<string> &tokens,
                      const string &alias,
                      const std::vector<isize> &values)
 {
     assert(!tokens.empty());
 
     // Find the command to clone
-    RetroShellCmd *cmd = seek(std::vector<string> { tokens.begin(), tokens.end() });
+    RSCommand *cmd = seek(std::vector<string> { tokens.begin(), tokens.end() });
     assert(cmd != nullptr);
     
     // Assemble the new token list
@@ -136,8 +136,8 @@ RetroShellCmd::clone(const std::vector<string> &tokens,
     });
 }
 
-const RetroShellCmd *
-RetroShellCmd::seek(const string& token) const
+const RSCommand *
+RSCommand::seek(const string& token) const
 {
     for (auto &it : subCommands) {
         if (it.name == token) return &it;
@@ -145,16 +145,16 @@ RetroShellCmd::seek(const string& token) const
     return nullptr;
 }
 
-RetroShellCmd *
-RetroShellCmd::seek(const string& token)
+RSCommand *
+RSCommand::seek(const string& token)
 {
-    return const_cast<RetroShellCmd *>(std::as_const(*this).seek(token));
+    return const_cast<RSCommand *>(std::as_const(*this).seek(token));
 }
 
-const RetroShellCmd *
-RetroShellCmd::seek(const std::vector<string> &tokens) const
+const RSCommand *
+RSCommand::seek(const std::vector<string> &tokens) const
 {
-    const RetroShellCmd *result = this;
+    const RSCommand *result = this;
     
     for (auto &it : tokens) {
         if ((result = result->seek(it)) == nullptr) break;
@@ -163,16 +163,16 @@ RetroShellCmd::seek(const std::vector<string> &tokens) const
     return result;
 }
 
-RetroShellCmd *
-RetroShellCmd::seek(const std::vector<string> &tokens)
+RSCommand *
+RSCommand::seek(const std::vector<string> &tokens)
 {
-    return const_cast<RetroShellCmd *>(std::as_const(*this).seek(tokens));
+    return const_cast<RSCommand *>(std::as_const(*this).seek(tokens));
 }
 
-std::vector<const RetroShellCmd *>
-RetroShellCmd::filterPrefix(const string& prefix) const
+std::vector<const RSCommand *>
+RSCommand::filterPrefix(const string& prefix) const
 {
-    std::vector<const RetroShellCmd *> result;
+    std::vector<const RSCommand *> result;
     auto uprefix = util::uppercased(prefix);
 
     for (auto &it : subCommands) {
@@ -186,7 +186,7 @@ RetroShellCmd::filterPrefix(const string& prefix) const
 }
 
 string
-RetroShellCmd::autoComplete(const string& token)
+RSCommand::autoComplete(const string& token)
 {
     string result;
 
@@ -200,7 +200,7 @@ RetroShellCmd::autoComplete(const string& token)
 }
 
 void
-RetroShellCmd::printHelp(std::ostream &os)
+RSCommand::printHelp(std::ostream &os)
 {
     string prefix;
 
@@ -229,7 +229,7 @@ RetroShellCmd::printHelp(std::ostream &os)
 }
 
 void
-RetroShellCmd::printArgumentHelp(std::ostream &os, isize indent, bool verbose)
+RSCommand::printArgumentHelp(std::ostream &os, isize indent, bool verbose)
 {
     auto skip = [](const RSArgDescriptor &it) { return it.isHidden() || it.helpStr().empty(); };
 
@@ -259,12 +259,12 @@ RetroShellCmd::printArgumentHelp(std::ostream &os, isize indent, bool verbose)
 }
 
 void
-RetroShellCmd::printSubcmdHelp(std::ostream &os, isize indent, bool verbose)
+RSCommand::printSubcmdHelp(std::ostream &os, isize indent, bool verbose)
 {
     if (subCommands.empty()) return;
 
     // Collect all commands
-    std::vector<const RetroShellCmd *> cmds;
+    std::vector<const RSCommand *> cmds;
     if (callback) cmds.push_back(this);
     for (auto &it : subCommands) { if (!it.hidden && !it.shadowed) cmds.push_back(&it); }
 
@@ -295,7 +295,7 @@ RetroShellCmd::printSubcmdHelp(std::ostream &os, isize indent, bool verbose)
 }
 
 string
-RetroShellCmd::cmdUsage() const
+RSCommand::cmdUsage() const
 {
     std::vector<string> items;
 
@@ -307,7 +307,7 @@ RetroShellCmd::cmdUsage() const
 }
 
 string
-RetroShellCmd::argUsage() const
+RSCommand::argUsage() const
 {
     // Create a common usage string for all flags
     string flags = "";

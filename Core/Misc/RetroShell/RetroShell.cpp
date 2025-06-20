@@ -307,21 +307,21 @@ RetroShell::cursorRel()
 }
 
 void
-RetroShell::press(RetroShellKey key, bool shift)
+RetroShell::press(RSKey key, bool shift)
 {
     if (shift) {
 
         switch(key) {
 
-            case RetroShellKey::UP:
-            case RetroShellKey::PAGE_UP:
+            case RSKey::UP:
+            case RSKey::PAGE_UP:
 
                 prevConsole();
                 return;
 
-            case RetroShellKey::DOWN:
-            case RetroShellKey::PAGE_DOWN:
-            case RetroShellKey::TAB:
+            case RSKey::DOWN:
+            case RSKey::PAGE_DOWN:
+            case RSKey::TAB:
 
                 nextConsole();
                 return;

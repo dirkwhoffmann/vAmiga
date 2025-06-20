@@ -92,7 +92,7 @@ struct RSCmdDescriptor {
     const std::vector<isize> &values = {};
 };
     
-struct RetroShellCmd {
+struct RSCommand {
 
     // Used during command registration
     static string currentGroup;
@@ -119,7 +119,7 @@ struct RetroShellCmd {
     std::vector<RSArgDescriptor> arguments;
 
     // List of subcommands
-    std::vector<RetroShellCmd> subCommands;
+    std::vector<RSCommand> subCommands;
 
     // Command handler
     std::function<void (std::ostream&, Arguments&, const ParsedArguments&, const std::vector<isize>&)> callback = nullptr;
@@ -154,11 +154,11 @@ struct RetroShellCmd {
     */
 
     // Seeks a command object inside the command object tree
-    const RetroShellCmd *seek(const string& token) const;
-    RetroShellCmd *seek(const string& token);
-    const RetroShellCmd *seek(const std::vector<string> &tokens) const;
-    RetroShellCmd *seek(const std::vector<string> &tokens);
-    RetroShellCmd &operator/(const string& token) { return *seek(token); }
+    const RSCommand *seek(const string& token) const;
+    RSCommand *seek(const string& token);
+    const RSCommand *seek(const std::vector<string> &tokens) const;
+    RSCommand *seek(const std::vector<string> &tokens);
+    RSCommand &operator/(const string& token) { return *seek(token); }
 
 
     //
@@ -173,7 +173,7 @@ public:
 private:
 
     // Filters the argument list (used by auto-completion)
-    std::vector<const RetroShellCmd *> filterPrefix(const string& prefix) const;
+    std::vector<const RSCommand *> filterPrefix(const string& prefix) const;
 
 
     //
