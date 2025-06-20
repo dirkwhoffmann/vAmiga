@@ -29,7 +29,9 @@ RetroShell::RetroShell(Amiga& ref) : SubComponent(ref)
 void
 RetroShell::_initialize()
 {
-    enterCommander();
+    // enterCommander();
+    current = &debugger;
+    asyncExec("commander");
 }
 
 void
@@ -57,20 +59,20 @@ RetroShell::enterConsole(isize nr)
             fatalError;
     }
 
-    if (current != newConsole) {
+    // Assign the new console
+    current = newConsole;
 
-        // Assign the new console
-        current = newConsole;
+    // Enter Leave tracking mode
+    nr == 1 ? emulator.trackOn(1) : emulator.trackOff(1);
 
-        // Enter Leave tracking mode
-        nr == 1 ? emulator.trackOn(1) : emulator.trackOff(1);
+    // Print the welcome message if entered the first time
+    if (current->isEmpty()) { current->exec("welcome"); *this << current->getPrompt(); }
 
-        // Print the welcome message if entered the first time
-        if (current->isEmpty()) { current->exec("welcome"); *this << current->getPrompt(); }
+    // Update prompt
+    *this << '\r' << current->getPrompt();
 
-        // Inform the GUI about the change
-        msgQueue.put(Msg::RSH_SWITCH, nr);
-    }
+    // Inform the GUI about the change
+    msgQueue.put(Msg::RSH_SWITCH, nr);
 }
 
 void
@@ -316,14 +318,20 @@ RetroShell::press(RSKey key, bool shift)
             case RSKey::UP:
             case RSKey::PAGE_UP:
 
-                prevConsole();
+                // prevConsole();
+                if (current == &commander) asyncExec("navigator");
+                if (current == &debugger) asyncExec("commander");
+                if (current == &navigator) asyncExec("debugger");
                 return;
 
             case RSKey::DOWN:
             case RSKey::PAGE_DOWN:
             case RSKey::TAB:
 
-                nextConsole();
+                // nextConsole();
+                if (current == &commander) asyncExec("debugger");
+                if (current == &debugger) asyncExec("navigator");
+                if (current == &navigator) asyncExec("commander");
                 return;
 
             default:

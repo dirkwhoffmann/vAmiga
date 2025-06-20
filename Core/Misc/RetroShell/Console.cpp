@@ -846,58 +846,60 @@ Console::help(const Tokens &argv)
 void
 Console::describe(const std::exception &e, isize line, const string &cmd)
 {
+    const util::ParseError *err;
+
     *this << vdelim;
 
     if (line) *this << "Line " << line << ": " << cmd << '\n';
 
-    if (auto err = dynamic_cast<const TooFewArgumentsError *>(&e)) {
+    if ((err = dynamic_cast<const TooFewArgumentsError *>(&e))) {
 
         *this << err->what() << ": Too few arguments.";
         *this << '\n';
 
-    } else if (auto err = dynamic_cast<const TooManyArgumentsError *>(&e)) {
+    } else if ((err = dynamic_cast<const TooManyArgumentsError *>(&e))) {
 
         *this << err->what() << ": Too many arguments.";
         *this << '\n';
 
-    } else if (auto err = dynamic_cast<const UnknownFlagError *>(&e)) {
+    } else if ((err = dynamic_cast<const UnknownFlagError *>(&e))) {
 
         *this << err->what() << " is not a valid flag.";
         *this << '\n';
 
-    } else if (auto err = dynamic_cast<const UnknownKeyValueError *>(&e)) {
+    } else if ((err = dynamic_cast<const UnknownKeyValueError *>(&e))) {
 
         *this << err->what() << " is not a valid key-value pair.";
         *this << '\n';
 
-    } else if (auto err = dynamic_cast<const util::EnumParseError *>(&e)) {
+    } else if ((err = dynamic_cast<const util::EnumParseError *>(&e))) {
 
         *this << err->token << " is not a valid key." << '\n';
         *this << "Expected: " << err->expected << '\n';
 
-    } else if (auto err = dynamic_cast<const util::ParseNumError *>(&e)) {
+    } else if ((err = dynamic_cast<const util::ParseNumError *>(&e))) {
 
         *this << err->token << " is not a number.";
         *this << '\n';
 
-    } else if (auto err = dynamic_cast<const util::ParseBoolError *>(&e)) {
+    } else if ((err = dynamic_cast<const util::ParseBoolError *>(&e))) {
 
         *this << err->token << " must be true or false.";
         *this << '\n';
 
-    } else if (auto err = dynamic_cast<const util::ParseOnOffError *>(&e)) {
+    } else if ((err = dynamic_cast<const util::ParseOnOffError *>(&e))) {
 
         *this << "'" << err->token << "' must be on or off.";
         *this << '\n';
 
-    } else if (auto err = dynamic_cast<const util::ParseError *>(&e)) {
+    } else if ((err = dynamic_cast<const util::ParseError *>(&e))) {
 
         *this << err->what() << ": Syntax error";
         *this << '\n';
 
-    } else if (auto err = dynamic_cast<const AppError *>(&e)) {
+    } else if (auto appErr = dynamic_cast<const AppError *>(&e)) {
 
-        *this << err->what();
+        *this << appErr->what();
         *this << '\n';
     }
 
