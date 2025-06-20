@@ -104,23 +104,6 @@ CommanderConsole::initCommands(RSCommand &root)
         .hidden = releaseBuild
     });
 
-    /*
-    root.add({
-        
-        .tokens = { "regression", "setup" },
-        .help   = { "Initializes the test environment" },
-        .args   = { ConfigSchemeEnum::argList() },
-        .extra  = { arg::path, arg::path },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
-            
-            auto scheme = ConfigScheme(parseEnum<ConfigSchemeEnum>(argv[0]));
-            auto rom = argv.size() > 1 ? host.makeAbsolute(argv[1]) : "";
-            auto ext = argv.size() > 2 ? host.makeAbsolute(argv[2]) : "";
-            
-            amiga.regressionTester.prepare(scheme, rom, ext);
-        }
-    });
-    */
     root.add({
 
         .tokens = { "regression", "setup" },
@@ -240,7 +223,7 @@ CommanderConsole::initCommands(RSCommand &root)
         .chelp  = { "Displays the user defaults storage" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(emulator, Category::Defaults);
+            dump(os, emulator, Category::Defaults);
         }
     });
     
@@ -1016,7 +999,7 @@ CommanderConsole::initCommands(RSCommand &root)
         .chelp  = { "Displays a server status summary" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(remoteManager, Category::Status);
+            dump(os, remoteManager, Category::Status);
         }
     });
     

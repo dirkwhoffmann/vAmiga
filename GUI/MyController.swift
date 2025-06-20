@@ -444,7 +444,7 @@ extension MyController {
             muted = value != 0
             refreshStatusBar()
 
-        case .WARP, .TRACK:
+        case .EASTER_EGG, .WARP, .TRACK:
             refreshStatusBar()
             
         case .POWER_LED_ON:

@@ -225,7 +225,9 @@ Console::printHelp()
 void
 Console::printState()
 {
-    dump(amiga, Category::Trace);
+    std::stringstream ss;
+    dump(ss, amiga, Category::Trace);
+    *this << '\n' << ss << '\n';
 }
 
 void
@@ -926,40 +928,35 @@ Console::describe(const std::exception &e, isize line, const string &cmd)
 }
 
 void
-Console::dump(CoreObject &component, Category category)
+Console::dump(std::ostream &os, CoreObject &component, Category category)
 {
-    *this << '\n';
-    _dump(component, category);
+    _dump(os, component, category);
 }
 
 void
-Console::dump(CoreObject &component, std::vector <Category> categories)
+Console::dump(std::ostream &os, CoreObject &component, std::vector <Category> categories)
 {
     *this << '\n';
-    for(auto &category : categories) _dump(component, category);
+    for(auto &category : categories) _dump(os, component, category);
 }
 
 void
-Console::_dump(CoreObject &component, Category category)
+Console::_dump(std::ostream &os, CoreObject &component, Category category)
 {
-    std::stringstream ss;
-
     switch (category) {
 
-        case Category::Slots:       ss << "Slots:\n\n"; break;
-        case Category::Config:      ss << "Configuration:\n\n"; break;
-        case Category::Properties:  ss << "Properties:\n\n"; break;
-        case Category::Registers:   ss << "Registers:\n\n"; break;
-        case Category::State:       ss << "State:\n\n"; break;
-        case Category::Stats:       ss << "Statistics:\n\n"; break;
+        case Category::Slots:       os << "Slots:\n\n"; break;
+        case Category::Config:      os << "Configuration:\n\n"; break;
+        case Category::Properties:  os << "Properties:\n\n"; break;
+        case Category::Registers:   os << "Registers:\n\n"; break;
+        case Category::State:       os << "State:\n\n"; break;
+        case Category::Stats:       os << "Statistics:\n\n"; break;
 
         default:
             break;
     }
 
-    component.dump(category, ss);
-
-    *this << ss << '\n';
+    component.dump(category, os);
 }
 
 void
@@ -1086,6 +1083,8 @@ Console::initCommands(RSCommand &root)
                 os << "\nGREETINGS PROFESSOR HOFFMANN.\n";
                 os << "THE ONLY WINNING MOVE IS NOT TO PLAY.\n";
                 os << "HOW ABOUT A NICE GAME OF CHESS?\n\n";
+
+                msgQueue.put(Msg::EASTER_EGG);
             }
         });
 
@@ -1167,7 +1166,7 @@ Console::registerComponent(CoreComponent &c, RSCommand &root, bool shadowed)
 
             .func   = [this, &c] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
-                retroShell.commander.dump(c, Category::Config);
+                retroShell.commander.dump(os, c, Category::Config);
             }
         });
 

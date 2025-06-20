@@ -159,7 +159,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "List all breakpoints" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(amiga.cpu, Category::Breakpoints);
+            dump(os, amiga.cpu, Category::Breakpoints);
         }
     });
     
@@ -212,7 +212,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Lists all watchpoints" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(amiga.cpu, Category::Watchpoints);
+            dump(os, amiga.cpu, Category::Watchpoints);
         }
     });
     
@@ -264,7 +264,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "List all catchpoints" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(amiga.cpu, Category::Catchpoints);
+            dump(os, amiga.cpu, Category::Catchpoints);
         }
     });
     
@@ -350,7 +350,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "List all breakpoints" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(copper.debugger, Category::Breakpoints);
+            dump(os, copper.debugger, Category::Breakpoints);
         }
     });
     
@@ -404,7 +404,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "List all watchpoints" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(copper.debugger, Category::Watchpoints);
+            dump(os, copper.debugger, Category::Watchpoints);
         }
     });
     
@@ -458,7 +458,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "List all beamtraps" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(agnus.dmaDebugger, Category::Beamtraps);
+            dump(os, agnus.dmaDebugger, Category::Beamtraps);
         }
     });
     
@@ -734,7 +734,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Inspects the internal state" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(amiga, Category::State );
+            dump(os, amiga, Category::State );
         }
     });
     
@@ -745,7 +745,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Inspects the internal state" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(mem, Category::State );
+            dump(os, mem, Category::State );
         }
     });
     
@@ -755,7 +755,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Dumps the memory bank map" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(mem, Category::BankMap);
+            dump(os, mem, Category::BankMap);
         }
     });
     
@@ -766,7 +766,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(cpu, Category::State );
+            dump(os, cpu, Category::State );
         }
     });
     
@@ -781,9 +781,9 @@ DebuggerConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 if (values[0] == 0) {
-                    dump(ciaa, Category::State );
+                    dump(os, ciaa, Category::State );
                 } else {
-                    dump(ciab, Category::State );
+                    dump(os, ciab, Category::State );
                 }
             }, .values = {i}
         });
@@ -795,9 +795,9 @@ DebuggerConsole::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 if (values[0] == 0) {
-                    dump(ciaa.tod, Category::State );
+                    dump(os, ciaa.tod, Category::State );
                 } else {
-                    dump(ciab.tod, Category::State );
+                    dump(os, ciab.tod, Category::State );
                 }
             }, .values = {i}
         });
@@ -810,7 +810,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(agnus, Category::State );
+            dump(os, agnus, Category::State );
         }
     });
     
@@ -820,7 +820,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Display the current beam position" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(amiga.agnus, Category::Beam);
+            dump(os, amiga.agnus, Category::Beam);
         }
     });
     
@@ -830,7 +830,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Print all scheduled DMA events" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(amiga.agnus, Category::Dma);
+            dump(os, amiga.agnus, Category::Dma);
         }
     });
     
@@ -840,7 +840,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Inspect the sequencer logic" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(amiga.agnus.sequencer, { Category::State, Category::Signals } );
+            dump(os, amiga.agnus.sequencer, { Category::State, Category::Signals } );
         }
     });
     
@@ -850,7 +850,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Inspect the event scheduler" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(amiga.agnus, Category::Events);
+            dump(os, amiga.agnus, Category::Events);
         }
     });
     
@@ -861,7 +861,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(blitter, Category::State );
+            dump(os, blitter, Category::State );
         }
     });
     
@@ -872,7 +872,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(copper, Category::State );
+            dump(os, copper, Category::State );
         }
     });
     
@@ -913,7 +913,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(uart, Category::State);
+            dump(os, uart, Category::State);
         }
     });
 
@@ -924,7 +924,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
-            dump(audioPort, Category::State );
+            dump(os, audioPort, Category::State );
         }
     });
 
@@ -934,7 +934,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Inspect the internal filter state" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(audioPort.filter, Category::State );
+            dump(os, audioPort.filter, Category::State );
         }
     });
 
@@ -945,7 +945,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(diskController, Category::State );
+            dump(os, diskController, Category::State );
         }
     });
 
@@ -956,7 +956,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(denise, Category::State );
+            dump(os, denise, Category::State );
         }
     });
     
@@ -967,7 +967,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(rtc, Category::State );
+            dump(os, rtc, Category::State );
         }
     });
     
@@ -978,7 +978,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "List all connected boards" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(zorro, Category::Slots);
+            dump(os, zorro, Category::Slots);
         }
     });
     
@@ -993,7 +993,7 @@ DebuggerConsole::initCommands(RSCommand &root)
 
             if (auto board = zorro.getBoard(nr); board != nullptr) {
                 
-                dump(*board, { Category::Properties, Category::State, Category::Stats } );
+                dump(os, *board, { Category::Properties, Category::State, Category::Stats } );
             }
         }
     });
@@ -1015,8 +1015,8 @@ DebuggerConsole::initCommands(RSCommand &root)
             .chelp  = { "Inspect the internal state" },
             .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
-                if (values[0] == 1) dump(controlPort1, Category::State);
-                if (values[0] == 2) dump(controlPort2, Category::State);
+                if (values[0] == 1) dump(os, controlPort1, Category::State);
+                if (values[0] == 2) dump(os, controlPort2, Category::State);
             }, .values = {i}
         });
     }
@@ -1028,7 +1028,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Display the internal state" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(serialPort, Category::State );
+            dump(os, serialPort, Category::State );
         }
     });
     
@@ -1041,7 +1041,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(keyboard, Category::State );
+            dump(os, keyboard, Category::State );
         }
     });
     
@@ -1062,8 +1062,8 @@ DebuggerConsole::initCommands(RSCommand &root)
             .chelp  = { "Inspect the internal state" },
             .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
-                if (values[0] == 1) dump(controlPort1.mouse, Category::State );
-                if (values[0] == 2) dump(controlPort2.mouse, Category::State );
+                if (values[0] == 1) dump(os, controlPort1.mouse, Category::State );
+                if (values[0] == 2) dump(os, controlPort2.mouse, Category::State );
             }, .values = {i}
         });
     }
@@ -1085,8 +1085,8 @@ DebuggerConsole::initCommands(RSCommand &root)
             .chelp  = { "Inspect the internal state" },
             .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
-                if (values[0] == 1) dump(controlPort1.joystick, Category::State);
-                if (values[0] == 2) dump(controlPort2.joystick, Category::State);
+                if (values[0] == 1) dump(os, controlPort1.joystick, Category::State);
+                if (values[0] == 2) dump(os, controlPort2.joystick, Category::State);
             }, .values = {i}
         });
     }
@@ -1110,7 +1110,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             .shadow = true,
             .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
-                dump(*amiga.df[values[0]], Category::State );
+                dump(os, *amiga.df[values[0]], Category::State );
             }, .values = {i}
         });
         
@@ -1120,7 +1120,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             .chelp  = { "Inspect the inserted disk" },
             .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
-                dump(*amiga.df[values[0]], Category::Disk);
+                dump(os, *amiga.df[values[0]], Category::Disk);
             }, .values = {i}
         });
     }
@@ -1144,7 +1144,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             .shadow = true,
             .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
-                dump(*amiga.hd[values[0]], Category::State );
+                dump(os, *amiga.hd[values[0]], Category::State );
             }, .values = {i}
         });
                 
@@ -1154,7 +1154,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             .chelp  = { "Display summarized volume information" },
             .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
-                dump(*amiga.df[values[0]], Category::Volumes);
+                dump(os, *amiga.df[values[0]], Category::Volumes);
             }, .values = {i}
         });
         
@@ -1164,7 +1164,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             .chelp  = { "Display information about all partitions" },
             .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
-                dump(*amiga.hd[values[0]], Category::Partitions);
+                dump(os, *amiga.hd[values[0]], Category::Partitions);
             }, .values = {i}
         });
     }
@@ -1178,7 +1178,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Display information about the thread state" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(emulator, Category::State);
+            dump(os, emulator, Category::State);
         }
     });
     
@@ -1189,7 +1189,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Display a server status summary" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(remoteManager, Category::Status);
+            dump(os, remoteManager, Category::Status);
         }
     });
     
@@ -1200,7 +1200,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .chelp  = { "Inspect the internal state" },
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(remoteManager.serServer, Category::State );
+            dump(os, remoteManager.serServer, Category::State );
         }
     });
     
@@ -1212,7 +1212,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(remoteManager.rshServer, Category::State );
+            dump(os, remoteManager.rshServer, Category::State );
         }
     });
     
@@ -1224,7 +1224,7 @@ DebuggerConsole::initCommands(RSCommand &root)
 
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(remoteManager.gdbServer, Category::State );
+            dump(os, remoteManager.gdbServer, Category::State );
         }
     });
     
@@ -1241,7 +1241,7 @@ DebuggerConsole::initCommands(RSCommand &root)
 
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(cpu, Category::Registers);
+            dump(os, cpu, Category::Registers);
         }
     });
     
@@ -1252,7 +1252,7 @@ DebuggerConsole::initCommands(RSCommand &root)
 
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(ciaa, Category::Registers);
+            dump(os, ciaa, Category::Registers);
         }
     });
     
@@ -1263,7 +1263,7 @@ DebuggerConsole::initCommands(RSCommand &root)
 
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(ciab, Category::Registers);
+            dump(os, ciab, Category::Registers);
         }
     });
     
@@ -1274,7 +1274,7 @@ DebuggerConsole::initCommands(RSCommand &root)
 
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(agnus, Category::Registers);
+            dump(os, agnus, Category::Registers);
         }
     });
     
@@ -1285,7 +1285,7 @@ DebuggerConsole::initCommands(RSCommand &root)
 
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(blitter, Category::Registers);
+            dump(os, blitter, Category::Registers);
         }
     });
     
@@ -1296,7 +1296,7 @@ DebuggerConsole::initCommands(RSCommand &root)
 
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(copper, Category::Registers);
+            dump(os, copper, Category::Registers);
         }
     });
     
@@ -1307,7 +1307,7 @@ DebuggerConsole::initCommands(RSCommand &root)
 
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(paula, Category::Registers);
+            dump(os, paula, Category::Registers);
         }
     });
     
@@ -1318,7 +1318,7 @@ DebuggerConsole::initCommands(RSCommand &root)
 
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(denise, Category::Registers);
+            dump(os, denise, Category::Registers);
         }
     });
     
@@ -1329,7 +1329,7 @@ DebuggerConsole::initCommands(RSCommand &root)
 
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(rtc, Category::Registers);
+            dump(os, rtc, Category::Registers);
         }
     });
     
@@ -1550,7 +1550,7 @@ DebuggerConsole::initCommands(RSCommand &root)
 
         .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            dump(emulator, Category::Debug);
+            dump(os, emulator, Category::Debug);
         }
     });
     

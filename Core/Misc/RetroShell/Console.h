@@ -357,12 +357,12 @@ protected:
 
 public:
 
-    void dump(CoreObject &component, std::vector <Category> categories);
-    void dump(CoreObject &component, Category category);
+    void dump(std::ostream &os, CoreObject &component, std::vector <Category> categories);
+    void dump(std::ostream &os, CoreObject &component, Category category);
 
 protected:
 
-    void _dump(CoreObject &component, Category category);
+    void _dump(std::ostream &os, CoreObject &component, Category category);
 };
 
 class CommanderConsole final : public Console

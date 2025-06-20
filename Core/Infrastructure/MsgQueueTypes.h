@@ -33,6 +33,7 @@ enum class Msg : long
     WARP,
     TRACK,
     MUTE,
+    EASTER_EGG,
     POWER_LED_ON,
     POWER_LED_DIM,
     POWER_LED_OFF,
@@ -43,7 +44,7 @@ enum class Msg : long
     RSH_SWITCH,         ///< RetroShell has switched to another console
     RSH_WAIT,           ///< Execution has peen postponed due to a wait command
     RSH_ERROR,          ///< Command execution has been aborted due to an error
-    
+
     // Amiga
     VIDEO_FORMAT,
     
@@ -157,6 +158,7 @@ struct MsgEnum : Reflection<MsgEnum, Msg>
             case Msg::WARP:                  return "WARP";
             case Msg::TRACK:                 return "TRACK";
             case Msg::MUTE:                  return "MUTE";
+            case Msg::EASTER_EGG:            return "EASTER_EGG";
             case Msg::POWER_LED_ON:          return "POWER_LED_ON";
             case Msg::POWER_LED_DIM:         return "POWER_LED_DIM";
             case Msg::POWER_LED_OFF:         return "POWER_LED_OFF";
