@@ -73,7 +73,7 @@ CommanderConsole::initCommands(RSCommand &root)
         .tokens = { "workspace init" },
         .chelp  = { "First command of a workspace script" },
         .hidden = releaseBuild,
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             amiga.initWorkspace();
         }
@@ -84,7 +84,7 @@ CommanderConsole::initCommands(RSCommand &root)
         .tokens = { "workspace activate" },
         .chelp  = { "Last command of a workspace script" },
         .hidden = releaseBuild,
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             amiga.activateWorkspace();
         }
@@ -120,7 +120,7 @@ CommanderConsole::initCommands(RSCommand &root)
                 { .name = { "rom", "ROM file" }, .flags = arg::keyval | arg::opt },
                 { .name = { "ext", "Extension ROM file" }, .flags = arg::keyval | arg::opt }
             },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 auto rom = args.contains("rom") ? host.makeAbsolute(args.at("rom")) : "";
                 auto ext = args.contains("ext") ? host.makeAbsolute(args.at("ext")) : "";
@@ -136,7 +136,7 @@ CommanderConsole::initCommands(RSCommand &root)
         .tokens = { "regression", "run" },
         .chelp  = { "Launches a regression test" },
         .args   = { { .name = { "path", "Regression test script" } } },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             auto path = host.makeAbsolute(args.at("path"));
             amiga.regressionTester.run(path);
@@ -161,7 +161,7 @@ CommanderConsole::initCommands(RSCommand &root)
         .tokens = { "screenshot", "set", "filename" },
         .chelp  = { "Assign the screenshot filename" },
         .args   = { { .name = { "path", "File path" } } },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             auto path = host.makeAbsolute(args.at("path"));
             amiga.regressionTester.dumpTexturePath = path;
@@ -178,7 +178,7 @@ CommanderConsole::initCommands(RSCommand &root)
             { .name = { "y1", "Lower y coordinate" }, .flags = arg::keyval },
             { .name = { "y2", "Upper y coordinate" }, .flags = arg::keyval }
         },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             isize x1 = parseNum(args.at("x1"));
             isize y1 = parseNum(args.at("y1"));
@@ -197,7 +197,7 @@ CommanderConsole::initCommands(RSCommand &root)
         .tokens = { "screenshot", "save" },
         .chelp  = { "Saves a screenshot and exits the emulator" },
         .args   = { { .name = { "path", "File path" } } },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             auto path = host.makeAbsolute(args.at("path"));
             amiga.regressionTester.dumpTexture(amiga, path);
@@ -221,7 +221,7 @@ CommanderConsole::initCommands(RSCommand &root)
         
         .tokens = { cmd, "defaults" },
         .chelp  = { "Displays the user defaults storage" },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             dump(os, emulator, Category::Defaults);
         }
@@ -232,7 +232,7 @@ CommanderConsole::initCommands(RSCommand &root)
         .tokens = { cmd, "power" },
         .chelp  = { "Switches the Amiga on or off" },
         .args   = { { .name = { "onoff", "Power switch state" }, .key = "{ on | off }" } },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             parseOnOff(args.at("onoff")) ? emulator.run() : emulator.powerOff();
         }
@@ -242,7 +242,7 @@ CommanderConsole::initCommands(RSCommand &root)
         
         .tokens = { cmd, "reset" },
         .chelp  = { "Performs a hard reset" },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             amiga.hardReset();
         }
@@ -260,7 +260,7 @@ CommanderConsole::initCommands(RSCommand &root)
 
             .tokens = { cmd, "init", ConfigSchemeEnum::key(it) },
             .chelp  = { ConfigSchemeEnum::help(it) },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 emulator.set(ConfigScheme(values[0]));
             }, .values = { isize(it) }
@@ -285,7 +285,7 @@ CommanderConsole::initCommands(RSCommand &root)
         .tokens = { cmd, "load", "rom" },
         .chelp  = { "Installs a Kickstart Rom" },
         .args   = { { .name = { "path", "File path" } } },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             auto path = host.makeAbsolute(args.at("path"));
             mem.loadRom(path);
@@ -297,7 +297,7 @@ CommanderConsole::initCommands(RSCommand &root)
         .tokens = { cmd, "load", "ext" },
         .chelp  = { "Installs an extension Rom" },
         .args   = { { .name = { "path", "File path" } } },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             auto path = host.makeAbsolute(args.at("path"));
             mem.loadExt(path);
@@ -312,7 +312,7 @@ CommanderConsole::initCommands(RSCommand &root)
             { .name = { "path", "File path" } },
             { .name = { "address", "Target memory address" } },
         },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             auto path = host.makeAbsolute(args.at("path"));
             mem.debugger.load(path, parseAddr(args.at("address")));
@@ -330,7 +330,7 @@ CommanderConsole::initCommands(RSCommand &root)
         .tokens = { cmd, "save", "rom" },
         .chelp  = { "Saves the Kickstart Rom" },
         .args   = { { .name = { "path", "File path" } } },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             auto path = host.makeAbsolute(args.at("path"));
             mem.saveRom(path);
@@ -342,7 +342,7 @@ CommanderConsole::initCommands(RSCommand &root)
         .tokens = { cmd, "save", "ext" },
         .chelp  = { "Saves the extension Rom" },
         .args   = { { .name = { "path", "File path" } } },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             auto path = host.makeAbsolute(args.at("path"));
             mem.saveExt(path);
@@ -358,7 +358,7 @@ CommanderConsole::initCommands(RSCommand &root)
             { .name = { "address", "Memory address" } },
             { .name = { "count", "Number of bytes" } },
         },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             fs::path path(args.at("path"));
             mem.debugger.save(path, parseAddr(args.at("address")), parseNum(args.at("count")));
@@ -462,7 +462,7 @@ CommanderConsole::initCommands(RSCommand &root)
         .tokens = { cmd, "send" },
         .chelp  = { "Sends a text to the serial port" },
         .args   = { { .name = { "text", "Text message" } } },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             amiga.serialPort << args.at("text");
         }
@@ -494,7 +494,7 @@ CommanderConsole::initCommands(RSCommand &root)
         .tokens = { cmd, "press" },
         .chelp  = { "Sends a keycode to the keyboard" },
         .args   = { { .name = { "keycode", "Numerical code of the Amiga key" } } },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             auto code = KeyCode(parseNum(args.at("keycode")));
             emulator.put(Command(Cmd::KEY_PRESS, KeyCmd { .keycode = code, .delay = 0.0 }));
@@ -524,7 +524,7 @@ CommanderConsole::initCommands(RSCommand &root)
             .tokens = { cmd, "press" },
             .chelp  = { "Presses a joystick button" },
             .args   = { { .name = { "button", "Button number" } } },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 auto nr = parseNum(args.at("button"));
@@ -546,7 +546,7 @@ CommanderConsole::initCommands(RSCommand &root)
             .tokens = { cmd, "unpress" },
             .chelp  = { "Releases a joystick button" },
             .args   = { { .name = { "button", "Button number" } } },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 auto nr = parseNum(args.at("button"));
@@ -573,7 +573,7 @@ CommanderConsole::initCommands(RSCommand &root)
             
             .tokens = { cmd, "pull", "left" },
             .chelp  = { "Pulls the joystick left" },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.joystick.trigger(GamePadAction::PULL_LEFT);
@@ -585,7 +585,7 @@ CommanderConsole::initCommands(RSCommand &root)
             
             .tokens = { cmd, "pull", "right" },
             .chelp  = { "Pulls the joystick right" },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.joystick.trigger(GamePadAction::PULL_RIGHT);
@@ -597,7 +597,7 @@ CommanderConsole::initCommands(RSCommand &root)
             
             .tokens = { cmd, "pull", "up" },
             .chelp  = { "Pulls the joystick up" },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.joystick.trigger(GamePadAction::PULL_UP);
@@ -609,7 +609,7 @@ CommanderConsole::initCommands(RSCommand &root)
             
             .tokens = { cmd, "pull", "down" },
             .chelp  = { "Pulls the joystick down" },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.joystick.trigger(GamePadAction::PULL_DOWN);
@@ -627,7 +627,7 @@ CommanderConsole::initCommands(RSCommand &root)
             
             .tokens = { cmd, "release", "x" },
             .chelp  = { "Releases the x-axis" },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.joystick.trigger(GamePadAction::RELEASE_X);
@@ -639,7 +639,7 @@ CommanderConsole::initCommands(RSCommand &root)
             
             .tokens = { cmd, "release", "y" },
             .chelp  = { "Releases the y-axis" },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.joystick.trigger(GamePadAction::RELEASE_Y);
@@ -675,7 +675,7 @@ CommanderConsole::initCommands(RSCommand &root)
             
             .tokens = { cmd, "press", "left" },
             .chelp  = { "Presses the left mouse button" },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.mouse.pressAndReleaseLeft();
@@ -687,7 +687,7 @@ CommanderConsole::initCommands(RSCommand &root)
             
             .tokens = { cmd, "press", "middle" },
             .chelp  = { "Presses the middle mouse button" },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.mouse.pressAndReleaseMiddle();
@@ -699,7 +699,7 @@ CommanderConsole::initCommands(RSCommand &root)
             
             .tokens = { cmd, "press", "right" },
             .chelp  = { "Presses the right mouse button" },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto &port = (values[0] == 0) ? amiga.controlPort1 : amiga.controlPort2;
                 port.mouse.pressAndReleaseRight();
@@ -730,7 +730,7 @@ CommanderConsole::initCommands(RSCommand &root)
                 
                 .tokens = { cmd, "connect" },
                 .chelp  = { "Connects the drive" },
-                .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+                .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                     
                     emulator.set(Opt::DRIVE_CONNECT, true, values);
                     
@@ -741,7 +741,7 @@ CommanderConsole::initCommands(RSCommand &root)
                 
                 .tokens = { cmd, "disconnect" },
                 .chelp  = { "Disconnects the drive" },
-                .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+                .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                     
                     emulator.set(Opt::DRIVE_CONNECT, false, values);
                     
@@ -753,7 +753,7 @@ CommanderConsole::initCommands(RSCommand &root)
             
             .tokens = { cmd, "eject" },
             .chelp  = { "Ejects a floppy disk" },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 amiga.df[values[0]]->ejectDisk();
                 
@@ -767,7 +767,7 @@ CommanderConsole::initCommands(RSCommand &root)
             .args   = {
                 { .name = { "path", "File path" } }
             },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto path = host.makeAbsolute(args.at("path"));
                 amiga.df[values[0]]->swapDisk(path);
@@ -779,7 +779,7 @@ CommanderConsole::initCommands(RSCommand &root)
             
             .tokens = { cmd, "protect" },
             .chelp  = { "Enables write protection" },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 amiga.df[values[0]]->setFlag(DiskFlags::PROTECTED, true);
                 
@@ -790,7 +790,7 @@ CommanderConsole::initCommands(RSCommand &root)
             
             .tokens = { cmd, "unprotect" },
             .chelp  = { "Disables write protection" },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 amiga.df[values[0]]->setFlag(DiskFlags::PROTECTED, false);
                 
@@ -818,7 +818,7 @@ CommanderConsole::initCommands(RSCommand &root)
             
             .tokens = { cmd, "connect" },
             .chelp  = { "Connects the hard drive" },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 emulator.set(Opt::HDC_CONNECT, true, values);
                 
@@ -829,7 +829,7 @@ CommanderConsole::initCommands(RSCommand &root)
             
             .tokens = { cmd, "disconnect" },
             .chelp  = { "Disconnects the hard drive" },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 emulator.set(Opt::HDC_CONNECT, false, values);
                 
@@ -841,7 +841,7 @@ CommanderConsole::initCommands(RSCommand &root)
             .tokens = { cmd, "attach" },
             .chelp  = { "Attaches a hard drive image" },
             .args   = { { .name = { "path", "Hard drive image file" } } },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                                 
                 // Make sure the hard-drive controller board is plugged in
                 emulator.set(Opt::HDC_CONNECT, true, values);
@@ -862,7 +862,7 @@ CommanderConsole::initCommands(RSCommand &root)
                 { .name = { "heads", "Number of drive heads" }, .flags = arg::keyval },
                 { .name = { "sectors", "Number of sectors per cylinder" }, .flags = arg::keyval },
             },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto c = util::parseNum(args.at("cylinders"));
                 auto h = util::parseNum(args.at("heads"));
@@ -877,7 +877,7 @@ CommanderConsole::initCommands(RSCommand &root)
             
             .tokens = { cmd, "protect" },
             .chelp  = { "Enables write protection" },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 amiga.hd[values[0]]->setFlag(DiskFlags::PROTECTED, true);
                 
@@ -888,7 +888,7 @@ CommanderConsole::initCommands(RSCommand &root)
             
             .tokens = { cmd, "unprotect" },
             .chelp  = { "Disables write protection" },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 amiga.hd[values[0]]->setFlag(DiskFlags::PROTECTED, false);
                 
@@ -913,11 +913,9 @@ CommanderConsole::initCommands(RSCommand &root)
         .tokens = { "config" },
         .ghelp  = { "Virtual machine configuration" },
         .chelp  = { "Displays the current configuration" },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
-            std::stringstream ss;
-            amiga.exportConfig(ss);
-            *this << ss;
+            amiga.exportConfig(os);
         }
     });
     
@@ -925,11 +923,9 @@ CommanderConsole::initCommands(RSCommand &root)
         
         .tokens = { "config", "diff" },
         .chelp  = { "Displays the difference to the default configuration" },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
-            std::stringstream ss;
-            amiga.exportDiff(ss);
-            *this << ss;
+            amiga.exportDiff(os);
         }
     });
     
@@ -944,7 +940,7 @@ CommanderConsole::initCommands(RSCommand &root)
         
         .tokens = { cmd, "open" },
         .chelp  = { "Opens the DMA debugger" },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             emulator.set(Opt::DMA_DEBUG_ENABLE, true);
         }
@@ -954,7 +950,7 @@ CommanderConsole::initCommands(RSCommand &root)
         
         .tokens = { cmd, "close" },
         .chelp  = { "Closes the DMA debugger" },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             emulator.set(Opt::DMA_DEBUG_ENABLE, false);
         }
@@ -979,7 +975,7 @@ CommanderConsole::initCommands(RSCommand &root)
         .tokens = { cmd, "searchpath" },
         .chelp  = { "Sets the search path for media files" },
         .args   = { { .name = { "path", "File path" } } },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             auto path = fs::path(args.at("path"));
             host.setSearchPath(path);
@@ -997,7 +993,7 @@ CommanderConsole::initCommands(RSCommand &root)
         .tokens = { "server" },
         .ghelp  = { "Remote connections" },
         .chelp  = { "Displays a server status summary" },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             dump(os, remoteManager, Category::Status);
         }
@@ -1011,7 +1007,7 @@ CommanderConsole::initCommands(RSCommand &root)
         
         .tokens = { cmd, "start" },
         .chelp  = { "Starts the retro shell server" },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             remoteManager.rshServer.start();
         }
@@ -1021,7 +1017,7 @@ CommanderConsole::initCommands(RSCommand &root)
         
         .tokens = { cmd, "stop" },
         .chelp  = { "Stops the retro shell server" },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             remoteManager.rshServer.stop();
         }
@@ -1031,7 +1027,7 @@ CommanderConsole::initCommands(RSCommand &root)
         
         .tokens = { cmd, "disconnect" },
         .chelp  = { "Disconnects a client" },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                  
                  remoteManager.rshServer.disconnect();
              }
@@ -1043,7 +1039,7 @@ CommanderConsole::initCommands(RSCommand &root)
         
         .tokens = { cmd, "start" },
         .chelp  = { "Starts the Prometheus server" },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             remoteManager.promServer.start();
         }
@@ -1053,7 +1049,7 @@ CommanderConsole::initCommands(RSCommand &root)
         
         .tokens = { cmd, "stop" },
         .chelp  = { "Stops the Prometheus server" },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             remoteManager.promServer.stop();
         }
@@ -1063,7 +1059,7 @@ CommanderConsole::initCommands(RSCommand &root)
         
         .tokens = { cmd, "disconnect" },
         .chelp  = { "Disconnects a client" },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             remoteManager.promServer.disconnect();
         }
@@ -1076,7 +1072,7 @@ CommanderConsole::initCommands(RSCommand &root)
         .tokens = { cmd, "attach" },
         .chelp  = { "Attaches the GDB server to a process" },
         .args   = { { .name = { "process", "Process number" } } },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             remoteManager.gdbServer.attach(args.at("process"));
         }
@@ -1086,7 +1082,7 @@ CommanderConsole::initCommands(RSCommand &root)
         
         .tokens = { cmd, "detach" },
         .chelp  = { "Detaches the GDB server from a process" },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             remoteManager.gdbServer.detach();
         }

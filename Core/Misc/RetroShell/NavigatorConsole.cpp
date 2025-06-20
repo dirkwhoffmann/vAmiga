@@ -82,13 +82,13 @@ NavigatorConsole::parseBlock(const string &argv)
 }
 
 Block
-NavigatorConsole::parseBlock(const ParsedArguments &argv, const string &token)
+NavigatorConsole::parseBlock(const Arguments &argv, const string &token)
 {
     return parseBlock(argv, token, fs.pwd().ref);
 }
 
 Block
-NavigatorConsole::parseBlock(const ParsedArguments &argv, const string &token, Block fallback)
+NavigatorConsole::parseBlock(const Arguments &argv, const string &token, Block fallback)
 {
     auto nr = argv.contains(token) ? Block(parseNum(argv.at(token))) : fallback;
 
@@ -104,7 +104,7 @@ NavigatorConsole::parseBlock(const ParsedArguments &argv, const string &token, B
 }
 
 FSPath
-NavigatorConsole::parsePath(const ParsedArguments &argv, const string &token)
+NavigatorConsole::parsePath(const Arguments &argv, const string &token)
 {
     if (argv.contains("b")) {
         return FSPath(fs, parseBlock(argv, token));
@@ -113,7 +113,7 @@ NavigatorConsole::parsePath(const ParsedArguments &argv, const string &token)
 }
 
 FSPath
-NavigatorConsole::parsePath(const ParsedArguments &argv, const string &token, const FSPath &fallback)
+NavigatorConsole::parsePath(const Arguments &argv, const string &token, const FSPath &fallback)
 {
     if (argv.contains("b")) {
         return FSPath(fs, parseBlock(argv, token, fallback.ref));
@@ -124,7 +124,7 @@ NavigatorConsole::parsePath(const ParsedArguments &argv, const string &token, co
 }
 
 util::DumpOpt
-NavigatorConsole::parseDumpOpts(const ParsedArguments &argv)
+NavigatorConsole::parseDumpOpts(const Arguments &argv)
 {
     auto lines = argv.contains("lines") ? parseNum(argv.at("lines")) : -1;
     auto a = argv.contains("a");
@@ -216,7 +216,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             .tokens = { "import", "df" + std::to_string(i) },
             .chelp  = { "Floppy file system from drive n" },
             .hidden = i != 0,
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 auto n = values[0];
 
@@ -233,7 +233,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "info" },
         .chelp  = { "Print a file system summary" },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             fs.dump(Category::Info, os);
         }
@@ -247,7 +247,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "path", "New working directory" }, .flags = arg::opt },
             { .name = { "b", "Specify the directory as a block number" }, .flags = arg::flag }
         },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             auto path = parsePath(args, "path", fs.rootDir());
             fs.cd(path);
@@ -265,7 +265,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "f", "List files only" }, .flags = arg::flag },
             { .name = { "r", "Traverse subdirectories" }, .flags = arg::flag }
         },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             auto path = parsePath(args, "path", fs.pwd());
             auto d = args.contains("d");
@@ -304,7 +304,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "r", "Traverse subdirectories" }, .flags = arg::flag },
             { .name = { "k", "Display keys (start blocks)" }, .flags = arg::flag },
             { .name = { "s", "Sort output" }, .flags = arg::flag } },
-        .func   = [this](std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this](std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             auto path = parsePath(args, "path", fs.pwd());
             auto d = args.contains("d");
@@ -358,7 +358,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "f", "Find files only" }, .flags = arg::flag },
             { .name = { "r", "Search subdirectories, too" }, .flags = arg::flag },
             { .name = { "s", "Sort output" }, .flags = arg::flag } },
-        .func   = [this](std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this](std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             auto pattern = FSPattern(args.at("name"));
             auto path = parsePath(args, "path", fs.pwd());
@@ -404,7 +404,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "t", "Display the last part" }, .flags = arg::flag },
             { .name = { "lines", "Number of displayed rows" }, .flags = arg::keyval|arg::opt },
         },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             auto file = parsePath(args, "path", fs.pwd());
             auto lines = args.contains("lines") ? parseNum(args.at("lines")) : -1;
@@ -436,7 +436,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "t", "Display the last part" }, .flags = arg::flag },
             { .name = { "lines", "Number of displayed rows" }, .flags = arg::keyval|arg::opt },
         },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             auto file = parsePath(args, "path", fs.pwd());
             auto opt = parseDumpOpts(args);
@@ -450,12 +450,12 @@ NavigatorConsole::initCommands(RSCommand &root)
     root.add({
 
         .tokens = { "block" },
-        .chelp  = { "Inspect a block" },
         .ghelp  = { "Manage blocks" },
+        .chelp  = { "Inspect a block" },
         .args   = {
             { .name = { "nr", "Block number" }, .flags = arg::opt },
         },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             auto nr = parseBlock(args, "nr");
 
@@ -479,7 +479,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "t", "Display the last part" }, .flags = arg::flag },
             { .name = { "lines", "Number of displayed rows" }, .flags = arg::keyval|arg::opt },
         },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             auto nr = parseBlock(args, "nr");
             auto opt = parseDumpOpts(args);
@@ -499,10 +499,9 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "nr", "Block number" } },
             { .name = { "path", "File path" } },
         },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            *this << "Holla, die Waldfee!" << '\n';
-            *this << "This is not implemented, yet!" << '\n';
+            os << "Not implemented, yet!" << '\n';
         }
     });
 
@@ -514,10 +513,9 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "nr", "Block number" } },
             { .name = { "path", "File path" } },
         },
-        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            *this << "Holla, die Waldfee!" << '\n';
-            *this << "This is not implemented, yet!" << '\n';
+            os << "Not implemented, yet!" << '\n';
         }
     });
 }

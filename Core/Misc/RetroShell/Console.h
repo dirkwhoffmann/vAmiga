@@ -95,7 +95,7 @@ protected:
     isize ipos = 0;
 
     // Additional output inserted before and after command execution
-    string vdelim = "*\n";
+    string vdelim = RSH_DEBUG ? "[DEBUG]\n" : "\n";
 
     //
     // User input
@@ -265,47 +265,47 @@ public:
 protected:
 
     // Splits an input string into an argument list
-    Arguments split(const string& userInput);
+    Tokens split(const string& userInput);
 
     // Splits an argument list into a command part and an argument part
     //std::pair<Arguments, Arguments> split(const Arguments &argv);
 
     // Auto-completes an argument list
-    void autoComplete(Arguments &argv);
+    void autoComplete(Tokens &argv);
 
     // Strips off the command tokens and returns a pointer to the command
     RSCommand *seekCommand(std::vector<string> &argv);
 
     // Parses an argument list
-    std::map<string,string> parse(const RSCommand &cmd, const Arguments &args);
+    std::map<string,string> parse(const RSCommand &cmd, const Tokens &args);
 
     // Checks or parses an argument of a certain type
     bool isBool(const string &argv) const;
     bool parseBool(const string  &argv) const;
     bool parseBool(const string  &argv, bool fallback) const;
-    [[deprecated]] bool parseBool(const Arguments &argv, long nr, long fallback) const;
-    bool parseBool(const ParsedArguments &argv, const string &key) const;
-    bool parseBool(const ParsedArguments &argv, const string &key, long fallback) const;
+    [[deprecated]] bool parseBool(const Tokens &argv, long nr, long fallback) const;
+    bool parseBool(const Arguments &argv, const string &key) const;
+    bool parseBool(const Arguments &argv, const string &key, long fallback) const;
 
     bool isOnOff(const string &argv) const;
     bool parseOnOff(const string &argv) const;
     bool parseOnOff(const string &argv, bool fallback) const;
-    [[deprecated]]  bool parseOnOff(const Arguments &argv, long nr, long fallback) const;
-    bool parseOnOff(const ParsedArguments &argv, const string &key) const;
-    bool parseOnOff(const ParsedArguments &argv, const string &key, long fallback) const;
+    [[deprecated]]  bool parseOnOff(const Tokens &argv, long nr, long fallback) const;
+    bool parseOnOff(const Arguments &argv, const string &key) const;
+    bool parseOnOff(const Arguments &argv, const string &key, long fallback) const;
 
     long isNum(const string &argv) const;
     long parseNum(const string &argv) const;
     long parseNum(const string &argv, long fallback) const;
-    [[deprecated]]  long parseNum(const Arguments &argv, long nr, long fallback) const;
-    long parseNum(const ParsedArguments &argv, const string &key) const;
-    long parseNum(const ParsedArguments &argv, const string &key, long fallback) const;
+    [[deprecated]]  long parseNum(const Tokens &argv, long nr, long fallback) const;
+    long parseNum(const Arguments &argv, const string &key) const;
+    long parseNum(const Arguments &argv, const string &key, long fallback) const;
 
     u32 parseAddr(const string &argv) const;
     u32 parseAddr(const string &argv, long fallback) const;
-    [[deprecated]] u32 parseAddr(const Arguments &argv, long nr, long fallback) const;
-    u32 parseAddr(const ParsedArguments &argv, const string &key) const;
-    u32 parseAddr(const ParsedArguments &argv, const string &key, long fallback) const;
+    [[deprecated]] u32 parseAddr(const Tokens &argv, long nr, long fallback) const;
+    u32 parseAddr(const Arguments &argv, const string &key) const;
+    u32 parseAddr(const Arguments &argv, const string &key, long fallback) const;
 
     string parseSeq(const string &argv) const;
     string parseSeq(const string &argv, const string &fallback) const;
@@ -337,7 +337,7 @@ protected:
 
     // Executes a single command
     void exec(const string& userInput, bool verbose = false) throws;
-    void exec(const Arguments &argv, bool verbose = false) throws;
+    void exec(const Tokens &argv, bool verbose = false) throws;
 
     // Prints a usage string for a command
     void cmdUsage(const RSCommand &cmd, const string &prefix);
@@ -345,7 +345,7 @@ protected:
 
     // Displays a help text for a (partially typed in) command
     void help(const string &cmd);
-    void help(const Arguments &argv);
+    void help(const Tokens &argv);
     
     // Prints a textual description of an error in the console
     void describe(const std::exception &exception, isize line = 0, const string &cmd = "");
@@ -416,11 +416,11 @@ class NavigatorConsole final : public Console
     //
 
     Block parseBlock(const string &argv);
-    Block parseBlock(const ParsedArguments &argv, const string &token);
-    Block parseBlock(const ParsedArguments &argv, const string &token, Block fallback);
-    FSPath parsePath(const ParsedArguments &argv, const string &token);
-    FSPath parsePath(const ParsedArguments &argv, const string &token, const FSPath &fallback);
-    util::DumpOpt parseDumpOpts(const ParsedArguments &argv);
+    Block parseBlock(const Arguments &argv, const string &token);
+    Block parseBlock(const Arguments &argv, const string &token, Block fallback);
+    FSPath parsePath(const Arguments &argv, const string &token);
+    FSPath parsePath(const Arguments &argv, const string &token, const FSPath &fallback);
+    util::DumpOpt parseDumpOpts(const Arguments &argv);
 };
 
 }

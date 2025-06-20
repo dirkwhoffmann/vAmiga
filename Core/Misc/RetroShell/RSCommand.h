@@ -17,28 +17,14 @@ namespace vamiga {
 
 class RetroShell;
 
-typedef std::vector<string> Arguments;
-typedef std::map<string,string> ParsedArguments;
+// Represents an uninterpreted sequence of tokens (e.g. "type -h lines=100")
+typedef std::vector<string> Tokens;
 
+// Parsed arguments (e.g. { {"h", "true"}, {"lines", "100"} })
+typedef std::map<string,string> Arguments;
+
+// Argument flags
 namespace arg {
-
-static const std::string address    = "<address>";
-static const std::string boolean    = "{true|false}";
-static const std::string command    = "<command>";
-static const std::string count      = "<count>";
-static const std::string dst        = "<destination>";
-static const std::string ignores    = "<ignores>";
-static const std::string kb         = "<kb>";
-static const std::string nr         = "<nr>";
-static const std::string onoff      = "{on|off}";
-static const std::string path       = "<path>";
-static const std::string process    = "<process>";
-static const std::string seconds    = "<seconds>";
-static const std::string value      = "<value>";
-static const std::string sequence   = "<byte sequence>";
-static const std::string src        = "<source>";
-static const std::string volume     = "<volume>";
-static const std::string string     = "<string>";
 
 static const usize opt              = 1LL << 0;
 static const usize keyval           = 1LL << 1;
@@ -47,16 +33,7 @@ static const usize flag             = 1LL << 3 | opt;
 
 }
 
-struct Token {
-
-    string token;
-
-    Token(const string &s) : token(s) { };
-    Token(const char *s) : token(string(s)) { };
-    string autoComplete(const std::string &prefix) const;
-};
-
-struct RSArgDescriptor {
+struct RSArgumentDescriptor {
 
     std::vector<string> name;
     string key;
@@ -78,17 +55,30 @@ struct RSArgDescriptor {
     string usageStr() const;
 };
 
-struct RSCmdDescriptor {
-    
-    const std::vector<string> &tokens = {};         // Tokens the command is composed of
-    string thelp = {};                              // Command token help
-    string ghelp = {};                              // Command group help
-    string chelp = {};                              // Command help
-    bool hidden = false;                            // Invisible in help, ignored in auto-completion
-    bool shadow = false;                            // Invisible in help, subject to auto-completion
-    const std::vector<RSArgDescriptor> &args = {};  // Arguments of this command
+struct RSCommandDescriptor {
 
-    std::function<void (std::ostream&, const ParsedArguments&, const std::vector<isize>&)> func = nullptr;
+    // Tokens the command is composed of
+    const std::vector<string> &tokens = {};
+
+    // General description of this command and all subcommands
+    string ghelp = {};
+
+    // Specific description of this command
+    string chelp = {};
+
+    // Hidden commands are not shown in help texts and are ingored in auto-completion
+    bool hidden = false;
+
+    // Shadowed commands are not shown in help texts, but auto-completion works as usual
+    bool shadow = false;
+
+    // Argument description of this command
+    const std::vector<RSArgumentDescriptor> &args = {};
+
+    // The command callback
+    std::function<void (std::ostream&, const Arguments&, const std::vector<isize>&)> func = nullptr;
+
+    // Addition values passed to the command callback as last argument
     const std::vector<isize> &values = {};
 };
     
@@ -106,29 +96,29 @@ struct RSCommand {
     // Full name of this command (e.g., "df0 eject")
     string fullName;
 
-    // Command help
-    string chelp;
-
-    // Command group help (defaults to the command help)
+    // General description of this command and all subcommands
     string ghelp;
 
+    // Specific description of this command
+    string chelp;
+
     // Argument list
-    std::vector<RSArgDescriptor> arguments;
+    std::vector<RSArgumentDescriptor> arguments;
+
+    // Hidden commands are not shown in help texts and are ingored in auto-completion
+    bool hidden = false;
+
+    // Shadowed commands are not shown in help texts, but auto-completion works as usual
+    bool shadow = false;
+
+    // Command handler
+    std::function<void (std::ostream&, const Arguments&, const std::vector<isize>&)> callback = nullptr;
+
+    // Addition values passed to the command callback as last argument
+    std::vector<isize> param;
 
     // List of subcommands
     std::vector<RSCommand> subcommands;
-
-    // Command handler
-    std::function<void (std::ostream&, const ParsedArguments&, const std::vector<isize>&)> callback = nullptr;
-
-    // Additional argument passed to the command handler
-    std::vector<isize> param;
-
-    // Indicates if this command appears in help descriptions and is ignores in auto-completion
-    bool hidden = false;
-
-    // Indicates if this command appears in help descriptions
-    bool shadowed = false;
 
 
     //
@@ -136,24 +126,19 @@ struct RSCommand {
     //
 
     // Creates a new node in the command tree
-    void add(const RSCmdDescriptor &descriptor);
+    void add(const RSCommandDescriptor &descriptor);
 
     // Registers an alias name for an existing command
     void clone(const std::vector<string> &tokens,
                const string &alias,
                const std::vector<isize> &values = { });
 
-    // Returns arguments counts
-    /*
-    isize minArgs() const { return isize(requiredArgs.size()); }
-    isize optArgs() const { return isize(optionalArgs.size()); }
-    isize maxArgs() const { return minArgs() + optArgs(); }
-    */
-
     // Seeks a command object inside the command object tree
     const RSCommand *seek(const string& token) const;
-    RSCommand *seek(const string& token);
     const RSCommand *seek(const std::vector<string> &tokens) const;
+    const RSCommand &operator/(const string& token) const { return *seek(token); }
+
+    RSCommand *seek(const string& token);
     RSCommand *seek(const std::vector<string> &tokens);
     RSCommand &operator/(const string& token) { return *seek(token); }
 
@@ -185,9 +170,11 @@ public:
 
     // Displays a help text for a (partially typed in) command
     void printHelp(std::ostream &os);
+
+private:
+
     void printArgumentHelp(std::ostream &os, isize indent, bool verbose = true);
     void printSubcmdHelp(std::ostream &os, isize indent, bool verbose = true);
-
 };
 
 }

@@ -423,11 +423,11 @@ Console::pressReturn(bool shift)
     }
 }
 
-Arguments
+Tokens
 Console::split(const string& userInput)
 {
     std::stringstream ss(userInput);
-    Arguments result;
+    Tokens result;
 
     string token;
     bool str = false; // String mode
@@ -496,7 +496,7 @@ string
 Console::autoComplete(const string& userInput)
 {
     // Split input string
-    Arguments tokens = split(userInput);
+    Tokens tokens = split(userInput);
 
     // Complete all tokens
     autoComplete(tokens);
@@ -515,7 +515,7 @@ Console::autoComplete(const string& userInput)
 }
 
 void
-Console::autoComplete(Arguments &argv)
+Console::autoComplete(Tokens &argv)
 {
     RSCommand *current = &getRoot();
     string prefix, token;
@@ -528,7 +528,7 @@ Console::autoComplete(Arguments &argv)
 }
 
 std::map<string,string>
-Console::parse(const RSCommand &cmd, const Arguments &args)
+Console::parse(const RSCommand &cmd, const Tokens &args)
 {
     std::map<string,string> map;
 
@@ -661,20 +661,20 @@ Console::parseBool(const string &argv, bool fallback) const
 }
 
 bool
-Console::parseBool(const Arguments &argv, long nr, long fallback) const
+Console::parseBool(const Tokens &argv, long nr, long fallback) const
 {
     return nr < long(argv.size()) ? parseBool(argv[nr]) : fallback;
 }
 
 bool
-Console::parseBool(const ParsedArguments &argv, const string &key) const
+Console::parseBool(const Arguments &argv, const string &key) const
 {
     assert(argv.contains(key));
     return parseBool(argv.at(key));
 }
 
 bool
-Console::parseBool(const ParsedArguments &argv, const string &key, long fallback) const
+Console::parseBool(const Arguments &argv, const string &key, long fallback) const
 {
     return argv.contains(key) ? parseBool(argv.at(key)) : fallback;
 }
@@ -692,19 +692,19 @@ Console::parseOnOff(const string &argv, bool fallback) const
 }
 
 bool
-Console::parseOnOff(const Arguments &argv, long nr, long fallback) const
+Console::parseOnOff(const Tokens &argv, long nr, long fallback) const
 {
     return nr < long(argv.size()) ? parseOnOff(argv[nr]) : fallback;
 }
 
 bool
-Console::parseOnOff(const ParsedArguments &argv, const string &key, long fallback) const
+Console::parseOnOff(const Arguments &argv, const string &key, long fallback) const
 {
     return argv.contains(key) ? parseBool(argv.at(key)) : fallback;
 }
 
 bool
-Console::parseOnOff(const ParsedArguments &argv, const string &key) const
+Console::parseOnOff(const Arguments &argv, const string &key) const
 {
     assert(argv.contains(key));
     return parseBool(argv.at(key));
@@ -723,20 +723,20 @@ Console::parseNum(const string &argv, long fallback) const
 }
 
 long
-Console::parseNum(const Arguments &argv, long nr, long fallback) const
+Console::parseNum(const Tokens &argv, long nr, long fallback) const
 {
     return nr < long(argv.size()) ? parseNum(argv[nr]) : fallback;
 }
 
 long
-Console::parseNum(const ParsedArguments &argv, const string &key) const
+Console::parseNum(const Arguments &argv, const string &key) const
 {
     assert(argv.contains(key));
     return parseNum(argv.at(key));
 }
 
 long
-Console::parseNum(const ParsedArguments &argv, const string &token, long fallback) const
+Console::parseNum(const Arguments &argv, const string &token, long fallback) const
 {
     return argv.contains(token) ? parseNum(argv.at(token)) : fallback;
 }
@@ -753,20 +753,20 @@ Console::parseAddr(const string &argv, long fallback) const
     return (u32)parseNum(argv, fallback);
 }
 u32
-Console::parseAddr(const Arguments &argv, long nr, long fallback) const
+Console::parseAddr(const Tokens &argv, long nr, long fallback) const
 {
     return (u32)parseNum(argv, nr, fallback);
 }
 
 u32
-Console::parseAddr(const ParsedArguments &argv, const string &key) const
+Console::parseAddr(const Arguments &argv, const string &key) const
 {
     assert(argv.contains(key));
     return (u32)parseNum(argv, key);
 }
 
 u32
-Console::parseAddr(const ParsedArguments &argv, const string &key, long fallback) const
+Console::parseAddr(const Arguments &argv, const string &key, long fallback) const
 {
     return (u32)parseNum(argv, key, fallback);
 }
@@ -787,7 +787,7 @@ void
 Console::exec(const string& userInput, bool verbose)
 {
     // Split the command string
-    Arguments tokens = split(userInput);
+    Tokens tokens = split(userInput);
 
     // Skip empty lines
     if (tokens.empty()) return;
@@ -800,9 +800,9 @@ Console::exec(const string& userInput, bool verbose)
 }
 
 void
-Console::exec(const Arguments &argv, bool verbose)
+Console::exec(const Tokens &argv, bool verbose)
 {
-    Arguments args = argv;
+    Tokens args = argv;
 
     // In 'verbose' mode, print the token list
     if (verbose) *this << args << '\n';
@@ -814,7 +814,7 @@ Console::exec(const Arguments &argv, bool verbose)
     if (auto *cmd = seekCommand(args); cmd) {
 
         // Parse arguments
-        ParsedArguments parsedArgs = parse(*cmd, args);
+        Arguments parsedArgs = parse(*cmd, args);
 
         // Call the command handler
         std::stringstream ss;
@@ -845,14 +845,14 @@ void
 Console::help(const string& userInput)
 {
     // Split the command string
-    Arguments tokens = split(userInput);
+    Tokens tokens = split(userInput);
 
     // Process the command
     help(tokens);
 }
 
 void
-Console::help(const Arguments &argv)
+Console::help(const Tokens &argv)
 {
     RSCommand *current = &getRoot();
     string prefix, token;
@@ -974,7 +974,7 @@ Console::initCommands(RSCommand &root)
             .chelp  = { "Prints the welcome message" },
             .hidden = true,
 
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 welcome();
             }
@@ -986,7 +986,7 @@ Console::initCommands(RSCommand &root)
             .chelp  = { "Prints how to get help" },
             .hidden = true,
 
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 printHelp();
             }
@@ -997,7 +997,7 @@ Console::initCommands(RSCommand &root)
             .tokens = { "commander" },
             .chelp  = { "Enter or command console" },
 
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                     retroShell.enterCommander();
             }
@@ -1008,7 +1008,7 @@ Console::initCommands(RSCommand &root)
             .tokens = { "debugger" },
             .chelp  = { "Enter or debug console" },
 
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                     retroShell.enterDebugger();
             }
@@ -1019,7 +1019,7 @@ Console::initCommands(RSCommand &root)
             .tokens = { "navigator" },
             .chelp  = { "Enter the file system console" },
 
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                     retroShell.enterNavigator();
             }
@@ -1030,7 +1030,7 @@ Console::initCommands(RSCommand &root)
             .tokens = { "clear" },
             .chelp  = { "Clear the console window" },
 
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 clear();
             }
@@ -1041,7 +1041,7 @@ Console::initCommands(RSCommand &root)
             .tokens = { "close" },
             .chelp  = { "Hide the console window" },
 
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 msgQueue.put(Msg::RSH_CLOSE);
             }
@@ -1054,7 +1054,7 @@ Console::initCommands(RSCommand &root)
             .args   = {
                 { .name = { "command", "Command name" }, .flags = arg::opt }
             },
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 help(args.contains("command") ? args.at("command") : "");
             }
@@ -1066,7 +1066,7 @@ Console::initCommands(RSCommand &root)
             .chelp  = { "Prints information about the current emulator state" },
             .hidden = true,
 
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 printState();
             }
@@ -1078,7 +1078,7 @@ Console::initCommands(RSCommand &root)
             .chelp  = { "Easter egg" },
             .hidden = true,
 
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 os << "\nGREETINGS PROFESSOR HOFFMANN.\n";
                 os << "THE ONLY WINNING MOVE IS NOT TO PLAY.\n";
@@ -1094,7 +1094,7 @@ Console::initCommands(RSCommand &root)
             .chelp  = { "Process a command script" },
             .args   = { { .name = { "path", "Script file" } } },
 
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 auto path = host.makeAbsolute(args.at("path"));
                 auto stream = std::ifstream(path);
@@ -1110,7 +1110,7 @@ Console::initCommands(RSCommand &root)
             .hidden = true,
             .args   = { { .name = { "seconds", "Delay" } } },
 
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 auto seconds = parseNum(args.at("seconds"));
                 agnus.scheduleRel<SLOT_RSH>(SEC(seconds), RSH_WAKEUP);
@@ -1123,7 +1123,7 @@ Console::initCommands(RSCommand &root)
             .tokens = { "shutdown" },
             .chelp   = { "Terminates the application" },
 
-            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
                 msgQueue.put(Msg::ABORT, 0);
             }
@@ -1164,7 +1164,7 @@ Console::registerComponent(CoreComponent &c, RSCommand &root, bool shadowed)
             .chelp  = { "Display the current configuration" },
             .shadow = shadowed,
 
-            .func   = [this, &c] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this, &c] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 retroShell.commander.dump(os, c, Category::Config);
             }
@@ -1192,7 +1192,7 @@ Console::registerComponent(CoreComponent &c, RSCommand &root, bool shadowed)
                     .args   = {
                         { .name = { "value", OptionParser::argList(opt) } }
                     },
-                    .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+                    .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                         
                         emulator.set(Opt(values[0]), args.at("value"), { values[1] });
                         msgQueue.put(Msg::CONFIG);
@@ -1217,7 +1217,7 @@ Console::registerComponent(CoreComponent &c, RSCommand &root, bool shadowed)
                         .tokens = { cmd, "set", OptEnum::key(opt), first },
                         .chelp  = { help.empty() ? "Set to " + first : help },
 
-                        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
+                        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                             
                             emulator.set(Opt(values[0]), values[1], { values[2] });
                             msgQueue.put(Msg::CONFIG);

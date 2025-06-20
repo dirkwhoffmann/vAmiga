@@ -19,19 +19,19 @@ namespace vamiga {
 string RSCommand::currentGroup;
 
 string
-RSArgDescriptor::nameStr() const
+RSArgumentDescriptor::nameStr() const
 {
     return name[0];
 }
 
 string
-RSArgDescriptor::helpStr() const
+RSArgumentDescriptor::helpStr() const
 {
     return name.size() > 1 ? name[1] : "" ;
 }
 
 string
-RSArgDescriptor::keyStr() const
+RSArgumentDescriptor::keyStr() const
 {
     if (key.empty()) {
 
@@ -43,7 +43,7 @@ RSArgDescriptor::keyStr() const
 }
 
 string
-RSArgDescriptor::valueStr() const
+RSArgumentDescriptor::valueStr() const
 {
     if (value.empty()) {
 
@@ -55,7 +55,7 @@ RSArgDescriptor::valueStr() const
 }
 
 string
-RSArgDescriptor::keyValueStr() const
+RSArgumentDescriptor::keyValueStr() const
 {
     if (key.empty()) {
 
@@ -67,13 +67,13 @@ RSArgDescriptor::keyValueStr() const
 }
 
 string
-RSArgDescriptor::usageStr() const
+RSArgumentDescriptor::usageStr() const
 {
     return isHidden() ? "" : isRequired() ? keyValueStr() : "[" + keyValueStr() + "]";
 }
 
 void
-RSCommand::add(const RSCmdDescriptor &descriptor)
+RSCommand::add(const RSCommandDescriptor &descriptor)
 {
     assert(!descriptor.tokens.empty());
     assert(!descriptor.chelp.empty() || !descriptor.ghelp.empty());
@@ -99,7 +99,7 @@ RSCommand::add(const RSCmdDescriptor &descriptor)
     cmd.callback = descriptor.func;
     cmd.param = descriptor.values;
     cmd.hidden = descriptor.hidden;
-    cmd.shadowed = descriptor.shadow;
+    cmd.shadow = descriptor.shadow;
 
     // Reset the group
     if (!cmd.hidden) currentGroup = "";
@@ -124,7 +124,7 @@ RSCommand::clone(const std::vector<string> &tokens,
     newTokens.push_back(alias);
     
     // Create the instruction
-    add(RSCmdDescriptor {
+    add(RSCommandDescriptor {
         
         .tokens = newTokens,
         .ghelp  = cmd->ghelp,
@@ -231,10 +231,10 @@ RSCommand::printHelp(std::ostream &os)
 void
 RSCommand::printArgumentHelp(std::ostream &os, isize indent, bool verbose)
 {
-    auto skip = [](const RSArgDescriptor &it) { return it.isHidden() || it.helpStr().empty(); };
+    auto skip = [](const RSArgumentDescriptor &it) { return it.isHidden() || it.helpStr().empty(); };
 
     // Gather all arguments with a help description
-    std::vector<RSArgDescriptor *> args;
+    std::vector<RSArgumentDescriptor *> args;
     for (auto &it : arguments) { if (!skip(it)) args.push_back(&it); }
 
     // Determine the tabular position to align the output
@@ -266,7 +266,7 @@ RSCommand::printSubcmdHelp(std::ostream &os, isize indent, bool verbose)
     // Collect all commands
     std::vector<const RSCommand *> cmds;
     if (callback) cmds.push_back(this);
-    for (auto &it : subcommands) { if (!it.hidden && !it.shadowed) cmds.push_back(&it); }
+    for (auto &it : subcommands) { if (!it.hidden && !it.shadow) cmds.push_back(&it); }
 
     // Determine alignment parameters to get a properly formatted output
     isize newlines = 1, tab = 0;
@@ -326,19 +326,6 @@ RSCommand::argUsage() const
     string other = util::concat(items);
 
     return util::concat({ fullName, flags, other });
-}
-
-string
-Token::autoComplete(const string &prefix) const
-{
-    auto length = prefix.length();
-    if (length > token.length()) return "";
-    
-    for (usize i = 0; i < length; i++) {
-        if (std::toupper(prefix[i]) != std::toupper(token[i])) return "";
-    }
-    
-    return token;
 }
 
 }
