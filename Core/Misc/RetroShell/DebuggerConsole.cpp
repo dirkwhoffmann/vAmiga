@@ -88,10 +88,10 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "goto" },
         .chelp  = { "Goto address" },
         .shadow = true,
-        .argx   = { { .name = { "address", "Memory address" }, .flags = arg::opt } },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .args   = { { .name = { "address", "Memory address" }, .flags = arg::opt } },
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
-            argv.empty() ? emulator.run() : cpu.jump(parseAddr(args.at("address")));
+            args.contains("address") ? emulator.run() : cpu.jump(parseAddr(args.at("address")));
         }
     });
     
@@ -104,7 +104,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "step" },
         .chelp  = { "Step into the next instruction" },
         .shadow = true,
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             emulator.stepInto();
         }
@@ -118,7 +118,7 @@ DebuggerConsole::initCommands(RSCommand &root)
 
         .tokens = { "next" },
         .chelp  = { "Step over the next instruction" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             emulator.stepOver();
         }
@@ -130,7 +130,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "eol" },
         .chelp  = { "Complete the current line" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dmaDebugger.eolTrap = true;
             emulator.run();
@@ -141,7 +141,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "eof" },
         .chelp  = { "Complete the current frame" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dmaDebugger.eofTrap = true;
             emulator.run();
@@ -157,7 +157,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "break" },
         .ghelp  = { "Manage CPU breakpoints" },
         .chelp  = { "List all breakpoints" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(amiga.cpu, Category::Breakpoints);
         }
@@ -167,11 +167,11 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "break", "at" },
         .chelp  = { "Set a breakpoint" },
-        .argx   = {
+        .args   = {
             { .name = { "address", "Memory address" } },
             { .name = { "ignores", "Ignore count" }, .flags = arg::opt }
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto addr = parseAddr(args.at("address"));
             if (IS_ODD(addr)) throw AppError(Fault::ADDR_UNALIGNED);
@@ -183,8 +183,8 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "break", "delete" },
         .chelp  = { "Delete breakpoints" },
-        .argx   = { { .name = { "nr", "Breakpoint number" } } },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .args   = { { .name = { "nr", "Breakpoint number" } } },
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             cpu.breakpoints.remove(parseNum(args.at("nr")));
         }
@@ -194,8 +194,8 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "break", "toggle" },
         .chelp  = { "Enable or disable breakpoints" },
-        .argx   = { { .name = { "nr", "Breakpoint number" } } },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .args   = { { .name = { "nr", "Breakpoint number" } } },
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             cpu.breakpoints.toggle(parseNum(args.at("nr")));
         }
@@ -210,7 +210,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "watch" },
         .ghelp  = { "Manage CPU watchpoints" },
         .chelp  = { "Lists all watchpoints" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(amiga.cpu, Category::Watchpoints);
         }
@@ -220,11 +220,11 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "watch", "at" },
         .chelp  = { "Set a watchpoint at the specified address" },
-        .argx   = {
+        .args   = {
             { .name = { "address", "Memory address" } },
             { .name = { "ignores", "Ignore count" }, .flags = arg::opt }
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto addr = parseAddr(args, "address");
             cpu.watchpoints.setAt(addr, parseNum(args, "ignores", 0));
@@ -235,8 +235,8 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "watch", "delete" },
         .chelp  = { "Delete a watchpoint" },
-        .argx   = { { .name = { "nr", "Watchpoint number" } } },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .args   = { { .name = { "nr", "Watchpoint number" } } },
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             cpu.watchpoints.remove(parseNum(args, "nr"));
         }
@@ -246,8 +246,8 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "watch", "toggle" },
         .chelp  = { "Enable or disable a watchpoint" },
-        .argx   = { { .name = { "nr", "Watchpoint number" } } },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .args   = { { .name = { "nr", "Watchpoint number" } } },
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             cpu.watchpoints.toggle(parseNum(args, "nr"));
         }
@@ -262,7 +262,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "catch" },
         .ghelp  = { "Manage CPU catchpoints" },
         .chelp  = { "List all catchpoints" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(amiga.cpu, Category::Catchpoints);
         }
@@ -272,11 +272,11 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "catch", "vector" },
         .chelp  = { "Catch an exception vector" },
-        .argx   = {
+        .args   = {
             { .name = { "vector", "Exception vector number" } },
             { .name = { "ignores", "Ignore count" }, .flags = arg::opt }
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto nr = parseNum(args, "vector");
             if (nr < 0 || nr > 255) throw AppError(Fault::OPT_INV_ARG, "0...255");
@@ -288,11 +288,11 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "catch", "interrupt" },
         .chelp  = { "Catch an interrupt" },
-        .argx   = {
+        .args   = {
             { .name = { "interrupt", "Interrupt number" } },
             { .name = { "ignores", "Ignore count" }, .flags = arg::opt }
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto nr = parseNum(args, "interrupt");
             if (nr < 1 || nr > 7) throw AppError(Fault::OPT_INV_ARG, "1...7");
@@ -304,11 +304,11 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "catch", "trap" },
         .chelp  = { "Catch a trap instruction" },
-        .argx   = {
+        .args   = {
             { .name = { "trap", "Trap number" } },
             { .name = { "ignores", "Ignore count" }, .flags = arg::opt }
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto nr = parseNum(args, "trap");
             if (nr < 0 || nr > 15) throw AppError(Fault::OPT_INV_ARG, "0...15");
@@ -320,8 +320,8 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "catch", "delete" },
         .chelp  = { "Delete a catchpoint" },
-        .argx   = { { .name = { "nr", "Catchpoint number" } } },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .args   = { { .name = { "nr", "Catchpoint number" } } },
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             cpu.catchpoints.remove(parseNum(args, "nr"));
         }
@@ -331,8 +331,8 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "catch", "toggle" },
         .chelp  = { "Enable or disable a catchpoint" },
-        .argx   = { { .name = { "nr", "Catchpoint number" } } },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .args   = { { .name = { "nr", "Catchpoint number" } } },
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             cpu.catchpoints.toggle(parseNum(args, "nr"));
         }
@@ -348,7 +348,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "cbreak" },
         .ghelp  = { "Manage Copper breakpoints" },
         .chelp  = { "List all breakpoints" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(copper.debugger, Category::Breakpoints);
         }
@@ -358,11 +358,11 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "cbreak", "at" },
         .chelp  = { "Set a breakpoint at the specified address" },
-        .argx   = {
+        .args   = {
             { .name = { "address", "Memory address" } },
             { .name = { "ignores", "Ignore count" }, .flags = arg::opt }
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto addr = parseAddr(args, "address");
             if (IS_ODD(addr)) throw AppError(Fault::ADDR_UNALIGNED);
@@ -374,8 +374,8 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "cbreak", "delete" },
         .chelp  = { "Delete a breakpoint" },
-        .argx   = { { .name = { "nr", "Copper breakpoint number" } } },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .args   = { { .name = { "nr", "Copper breakpoint number" } } },
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             copper.debugger.breakpoints.remove(parseNum(args, "nr"));
         }
@@ -385,8 +385,8 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "cbreak", "toggle" },
         .chelp  = { "Enable or disable a breakpoint" },
-        .argx   = { { .name = { "nr", "Copper breakpoint number" } } },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .args   = { { .name = { "nr", "Copper breakpoint number" } } },
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             copper.debugger.breakpoints.toggle(parseNum(args, "nr"));
         }
@@ -402,7 +402,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "cwatch" },
         .ghelp  = { "Manage Copper watchpoints" },
         .chelp  = { "List all watchpoints" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(copper.debugger, Category::Watchpoints);
         }
@@ -412,11 +412,11 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "cwatch", "at" },
         .chelp  = { "Set a watchpoint at the specified address" },
-        .argx   = {
+        .args   = {
             { .name = { "address", "Memory address" } },
             { .name = { "ignores", "Ignore count" }, .flags = arg::opt }
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto addr = parseAddr(args, "address");
             if (IS_ODD(addr)) throw AppError(Fault::ADDR_UNALIGNED);
@@ -428,8 +428,8 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "cwatch", "delete" },
         .chelp  = { "Delete a watchpoint" },
-        .argx   = { { .name = { "nr", "Copper watchpoint number" } } },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .args   = { { .name = { "nr", "Copper watchpoint number" } } },
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             copper.debugger.watchpoints.remove(parseNum(args, "nr"));
         }
@@ -439,8 +439,8 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "cwatch", "toggle" },
         .chelp  = { "Enable or disable a watchpoint" },
-        .argx   = { { .name = { "nr", "Copper watchpoint number" } } },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .args   = { { .name = { "nr", "Copper watchpoint number" } } },
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             copper.debugger.watchpoints.toggle(parseNum(args, "nr"));
         }
@@ -456,7 +456,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "btrap" },
         .ghelp  = { "Manage beamtraps" },
         .chelp  = { "List all beamtraps" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(agnus.dmaDebugger, Category::Beamtraps);
         }
@@ -466,12 +466,12 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "btrap", "at" },
         .chelp  = { "Set a beamtrap at the specified coordinate" },
-        .argx   = {
+        .args   = {
             { .name = { "x", "Vertical trigger position" }, .flags = arg::keyval },
             { .name = { "y", "Horizontal trigger position" }, .flags = arg::keyval },
             { .name = { "ignores", "Ignore count" }, .flags = arg::opt }
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto h = parseNum(args, "x");
             auto v = parseNum(args, "y");
@@ -483,8 +483,8 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "btrap", "delete"},
         .chelp  = { "Delete a beamtrap" },
-        .argx   = { { .name = { "nr", "Beamtrap number" } } },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .args   = { { .name = { "nr", "Beamtrap number" } } },
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             agnus.dmaDebugger.beamtraps.remove(parseNum(args, "nr"));
         }
@@ -494,8 +494,8 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "btrap", "toggle" },
         .chelp  = { "Enable or disable a beamtrap" },
-        .argx   = { { .name = { "nr", "Beamtrap number" } } },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .args   = { { .name = { "nr", "Beamtrap number" } } },
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             agnus.dmaDebugger.beamtraps.toggle(parseNum(args, "nr"));
         }
@@ -512,8 +512,8 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "d" },
         .chelp  = { "Disassemble instructions" },
-        .argx   = { { .name = { "address", "Memory address" }, .flags = arg::opt } },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .args   = { { .name = { "address", "Memory address" }, .flags = arg::opt } },
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             cpu.disassembleRange(ss, parseAddr(args, "address", cpu.getPC0()), 16);
@@ -525,10 +525,10 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "a" },
         .chelp  = { "Dump memory in ASCII" },
-        .argx   = { { .name = { "address", "Memory address" }, .flags = arg::opt } },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .args   = { { .name = { "address", "Memory address" }, .flags = arg::opt } },
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
-            if (argv.size() > 0) { current = parseAddr(args, "address"); }
+            if (args.contains("address")) { current = parseAddr(args, "address"); }
 
             std::stringstream ss;
             current += (u32)mem.debugger.ascDump<Accessor::CPU>(ss, current, 16);
@@ -548,10 +548,10 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "m" },
         .chelp  = { "Dump memory" },
         .hidden = true,
-        .argx   = { { .name = { "address", "Memory address" }, .flags = arg::opt } },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .args   = { { .name = { "address", "Memory address" }, .flags = arg::opt } },
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                         
-            if (argv.size() > 0) { current = parseAddr(args, "address"); }
+            if (args.contains("address")) { current = parseAddr(args, "address"); }
 
             std::stringstream ss;
             current += (u32)mem.debugger.memDump<Accessor::CPU>(ss, current, 16, values[0]);
@@ -575,11 +575,11 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "w" },
         .chelp  = { "Write into a register or memory" },
         .hidden = true,
-        .argx   = {
+        .args   = {
             { .name = { "value", "Payload" } },
             { .name = { "target", "Memory address or custom register" }, .flags = arg::opt } },
 
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
             u32 addr = current;
             
@@ -597,7 +597,7 @@ DebuggerConsole::initCommands(RSCommand &root)
                 };
             }
             
-            mem.debugger.write(addr, u32(parseNum(argv[0])), values[0]);
+            mem.debugger.write(addr, u32(parseNum(args.at("value"))), values[0]);
             current = addr + u32(values[0]);
             
         }, .values = {2}
@@ -619,12 +619,12 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "c" },
         .chelp  = { "Copy a chunk of memory" },
         .hidden = true,
-        .argx   = {
+        .args   = {
             { .name = { "src", "Source address" }, .flags = arg::keyval },
             { .name = { "dest", "Destination address" }, .flags = arg::keyval },
             { .name = { "count", "Number of bytes" }, .flags = arg::keyval } },
 
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto src = parseNum(args.at("src"));
             auto dst = parseNum(args.at("dest"));
@@ -659,11 +659,11 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "f" },
         .chelp  = { "Find a sequence in memory" },
         .hidden = true,
-        .argx   = {
+        .args   = {
             { .name = { "sequence", "Search string" } },
             { .name = { "address", "Start address" }, .flags = arg::opt } },
 
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto pattern = parseSeq(args.at("sequence"));
             auto addr = u32(parseNum(args, "address", current));
@@ -701,12 +701,12 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "e" },
         .chelp  = { "Erase memory" },
         .hidden = true,
-        .argx   = {
+        .args   = {
             { .name = { "address", "Start address" } },
             { .name = { "count", "Number of bytes to erase" } },
             { .name = { "value", "Replacement value" }, .flags = arg::opt } },
 
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
             auto addr = parseAddr(args.at("address"));
             auto count = parseNum(args, "count");
@@ -732,7 +732,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "?", "amiga" },
         .chelp  = { "Inspects the internal state" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(amiga, Category::State );
         }
@@ -743,7 +743,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "?", "memory" },
         .ghelp  = { "RAM and ROM" },
         .chelp  = { "Inspects the internal state" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(mem, Category::State );
         }
@@ -753,7 +753,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "?", "memory", "bankmap" },
         .chelp  = { "Dumps the memory bank map" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(mem, Category::BankMap);
         }
@@ -764,7 +764,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "?", "cpu" },
         .ghelp  = { "Motorola CPU" },
         .chelp  = { "Inspect the internal state" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(cpu, Category::State );
         }
@@ -778,7 +778,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             .tokens = { "?", cia },
             .ghelp  = { "Complex Interface Adapter" },
             .chelp  = { "Inspect the internal state" },
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 if (values[0] == 0) {
                     dump(ciaa, Category::State );
@@ -792,7 +792,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             
             .tokens = { "?", cia, "tod" },
             .chelp  = { "Display the state of the 24-bit counter" },
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 if (values[0] == 0) {
                     dump(ciaa.tod, Category::State );
@@ -808,7 +808,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "?", "agnus" },
         .ghelp  = { "Custom Chipset" },
         .chelp  = { "Inspect the internal state" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(agnus, Category::State );
         }
@@ -818,7 +818,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "?", "agnus", "beam" },
         .chelp  = { "Display the current beam position" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(amiga.agnus, Category::Beam);
         }
@@ -828,7 +828,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "?", "agnus", "dma" },
         .chelp  = { "Print all scheduled DMA events" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(amiga.agnus, Category::Dma);
         }
@@ -838,7 +838,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "?", "agnus", "sequencer" },
         .chelp  = { "Inspect the sequencer logic" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(amiga.agnus.sequencer, { Category::State, Category::Signals } );
         }
@@ -848,7 +848,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "?", "agnus", "events" },
         .chelp  = { "Inspect the event scheduler" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(amiga.agnus, Category::Events);
         }
@@ -859,7 +859,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "?", "blitter" },
         .ghelp  = { "Coprocessor" },
         .chelp  = { "Inspect the internal state" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(blitter, Category::State );
         }
@@ -870,7 +870,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "?", "copper" },
         .ghelp  = { "Coprocessor" },
         .chelp  = { "Inspect the internal state" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(copper, Category::State );
         }
@@ -880,8 +880,8 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "?", "copper", "list" },
         .chelp  = { "Print the Copper list" },
-        .argx   = { { .name = { "nr", "Copper list (1 or 2)" } } },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .args   = { { .name = { "nr", "Copper list (1 or 2)" } } },
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto nr = parseNum(args, "nr");
 
@@ -912,7 +912,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "?", "paula", "uart"},
         .ghelp  = { "Universal Asynchronous Receiver Transmitter" },
         .chelp  = { "Inspect the internal state" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(uart, Category::State);
         }
@@ -923,7 +923,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "?", "paula", "audio" },
         .ghelp  = { "Audio unit" },
         .chelp  = { "Inspect the internal state" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
             dump(audioPort, Category::State );
         }
@@ -933,7 +933,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "?", "paula", "audio", "filter" },
         .chelp  = { "Inspect the internal filter state" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(audioPort.filter, Category::State );
         }
@@ -944,7 +944,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "?", "paula", "dc" },
         .ghelp  = { "Disk controller" },
         .chelp  = { "Inspect the internal state" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(diskController, Category::State );
         }
@@ -955,7 +955,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "?", "denise"},
         .ghelp  = { "Graphics" },
         .chelp  = { "Inspect the internal state" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(denise, Category::State );
         }
@@ -966,7 +966,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "?", "rtc" },
         .ghelp  = { "Real-time clock" },
         .chelp  = { "Inspect the internal state" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(rtc, Category::State );
         }
@@ -977,7 +977,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "?", "zorro" },
         .ghelp  = { "Expansion boards" },
         .chelp  = { "List all connected boards" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(zorro, Category::Slots);
         }
@@ -987,8 +987,8 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "?", "zorro", "board" },
         .chelp  = { "Inspect a specific Zorro board" },
-        .argx   = { { .name = { "nr", "Board number" } } },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .args   = { { .name = { "nr", "Board number" } } },
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             auto nr = parseNum(args, "nr");
 
@@ -1014,7 +1014,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             .tokens = { "?", "controlport", nr },
             .ghelp  = { "Control port " + nr },
             .chelp  = { "Inspect the internal state" },
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 if (values[0] == 1) dump(controlPort1, Category::State);
                 if (values[0] == 2) dump(controlPort2, Category::State);
@@ -1027,7 +1027,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "?", "serial" },
         .ghelp  = { "Serial port" },
         .chelp  = { "Display the internal state" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(serialPort, Category::State );
         }
@@ -1040,7 +1040,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "?", "keyboard" },
         .ghelp  = { "Keyboard" },
         .chelp  = { "Inspect the internal state" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(keyboard, Category::State );
         }
@@ -1061,7 +1061,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             .tokens = { "?", "mouse", nr },
             .ghelp  = { "Mouse in port " + nr },
             .chelp  = { "Inspect the internal state" },
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 if (values[0] == 1) dump(controlPort1.mouse, Category::State );
                 if (values[0] == 2) dump(controlPort2.mouse, Category::State );
@@ -1084,7 +1084,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             .tokens = { "?", "joystick", nr },
             .ghelp  = { "Joystick in port " + nr },
             .chelp  = { "Inspect the internal state" },
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 if (values[0] == 1) dump(controlPort1.joystick, Category::State);
                 if (values[0] == 2) dump(controlPort2.joystick, Category::State);
@@ -1109,7 +1109,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             .ghelp  = { "Floppy drive n" },
             .chelp  = { "Inspect the internal state" },
             .shadow = true,
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 dump(*amiga.df[values[0]], Category::State );
             }, .values = {i}
@@ -1119,7 +1119,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             
             .tokens = { "?", df, "disk" },
             .chelp  = { "Inspect the inserted disk" },
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 dump(*amiga.df[values[0]], Category::Disk);
             }, .values = {i}
@@ -1143,7 +1143,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             .ghelp  = "Hard drive n",
             .chelp  = { "Inspect the internal state" },
             .shadow = true,
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 dump(*amiga.hd[values[0]], Category::State );
             }, .values = {i}
@@ -1153,7 +1153,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             
             .tokens = { "?", hd, "volumes" },
             .chelp  = { "Display summarized volume information" },
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 dump(*amiga.df[values[0]], Category::Volumes);
             }, .values = {i}
@@ -1163,7 +1163,7 @@ DebuggerConsole::initCommands(RSCommand &root)
             
             .tokens = { "?", hd, "partitions" },
             .chelp  = { "Display information about all partitions" },
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 dump(*amiga.hd[values[0]], Category::Partitions);
             }, .values = {i}
@@ -1177,7 +1177,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "?", "thread" },
         .ghelp  = { "Emulator thread" },
         .chelp  = { "Display information about the thread state" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(emulator, Category::State);
         }
@@ -1188,7 +1188,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "?", "server" },
         .ghelp  = { "Remote server" },
         .chelp  = { "Display a server status summary" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(remoteManager, Category::Status);
         }
@@ -1199,7 +1199,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "?", "server", "serial" },
         .ghelp  = { "Serial port server" },
         .chelp  = { "Inspect the internal state" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(remoteManager.serServer, Category::State );
         }
@@ -1211,7 +1211,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .ghelp  = { "Retro shell server" },
         .chelp  = { "Inspect the internal state" },
         
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(remoteManager.rshServer, Category::State );
         }
@@ -1223,7 +1223,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .ghelp  = { "GDB server" },
         .chelp  = { "Inspect the internal state" },
 
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(remoteManager.gdbServer, Category::State );
         }
@@ -1240,7 +1240,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "r", "cpu" },
         .chelp  = { "Motorola CPU" },
 
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(cpu, Category::Registers);
         }
@@ -1251,7 +1251,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "r", "ciaa" },
         .chelp  = { "Complex Interface Adapter A" },
 
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(ciaa, Category::Registers);
         }
@@ -1262,7 +1262,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "r", "ciab" },
         .chelp  = { "Complex Interface Adapter B" },
 
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(ciab, Category::Registers);
         }
@@ -1273,7 +1273,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "r", "agnus" },
         .chelp  = { "Custom Chipset" },
 
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(agnus, Category::Registers);
         }
@@ -1284,7 +1284,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "r", "blitter" },
         .chelp  = { "Coprocessor" },
 
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(blitter, Category::Registers);
         }
@@ -1295,7 +1295,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "r", "copper" },
         .chelp  = { "Coprocessor" },
 
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(copper, Category::Registers);
         }
@@ -1306,7 +1306,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "r", "paula" },
         .chelp  = { "Ports, Audio, Interrupts" },
 
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(paula, Category::Registers);
         }
@@ -1317,7 +1317,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "r", "denise" },
         .chelp  = { "Graphics" },
 
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(denise, Category::Registers);
         }
@@ -1328,7 +1328,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "r", "rtc" },
         .chelp  = { "Real-time clock" },
 
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(rtc, Category::Registers);
         }
@@ -1349,7 +1349,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "os", "info" },
         .chelp  = { "Display basic system information" },
 
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             osDebugger.dumpInfo(ss);
@@ -1361,7 +1361,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "os", "execbase" },
         .chelp  = { "Display information about the ExecBase struct" },
         
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             osDebugger.dumpExecBase(ss);
@@ -1374,7 +1374,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .tokens = { "os", "interrupts" },
         .chelp  = { "List all interrupt handlers" },
 
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             osDebugger.dumpIntVectors(ss);
@@ -1386,10 +1386,10 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "os", "libraries" },
         .chelp  = { "List all libraries" },
-        .argx   = {
+        .args   = {
             { .name = { "nr", "Library number" }, .flags = arg::opt }
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             isize num;
@@ -1410,10 +1410,10 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "os", "devices" },
         .chelp  = { "List all devices" },
-        .argx   = {
+        .args   = {
             { .name = { "nr", "Device number" }, .flags = arg::opt }
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             isize num;
@@ -1434,10 +1434,10 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "os", "resources" },
         .chelp  = { "List all resources" },
-        .argx   = {
+        .args   = {
             { .name = { "nr", "Resource number" }, .flags = arg::opt }
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             isize num;
@@ -1458,10 +1458,10 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "os", "tasks" },
         .chelp  = { "List all tasks" },
-        .argx   = {
+        .args   = {
             { .name = { "nr", "Task number" }, .flags = arg::opt }
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             isize num;
@@ -1482,10 +1482,10 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "os", "processes" },
         .chelp  = { "List all processes" },
-        .argx   = {
+        .args   = {
             { .name = { "nr", "Process number" }, .flags = arg::opt }
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             isize num;
@@ -1506,10 +1506,10 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "os", "catch" },
         .chelp  = { "Pause emulation on task launch" },
-        .argx   = {
+        .args   = {
             { .name = { "task", "Task name" } }
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
             const auto &task = args.at("task");
             diagBoard.catchTask(args.at(task));
@@ -1527,10 +1527,10 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = { "os", "set", "diagboard" },
         .chelp  = { "Attach or detach the debug expansion board" },
-        .argx   = {
+        .args   = {
             { .name = { "switch", "Is the board plugged in?" }, .key = arg::boolean }
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
             diagBoard.setOption(Opt::DIAG_BOARD, parseBool(args.at("switch")));
         }
@@ -1549,7 +1549,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .ghelp  = { "Debug variables" },
         .chelp  = { "Display all debug variables" },
 
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             dump(emulator, Category::Debug);
         }
@@ -1563,10 +1563,10 @@ DebuggerConsole::initCommands(RSCommand &root)
                 
                 .tokens = { "debug", DebugFlagEnum::key(i) },
                 .chelp  = { DebugFlagEnum::help(i) },
-                .argx   = {
+                .args   = {
                     { .name = { "level", "Debug level" } }
                 },
-                .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+                .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                     
                     Emulator::setDebugVariable(DebugFlag(values[0]), int(parseNum(args, "level")));
 
@@ -1578,10 +1578,10 @@ DebuggerConsole::initCommands(RSCommand &root)
             
             .tokens = { "debug", "verbosity" },
             .chelp  = { "Set the verbosity level for generated debug output" },
-            .argx   = {
+            .args   = {
                 { .name = { "level", "Verbosity level" } }
             },
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
                 CoreObject::verbosity = isize(parseNum(args, "level"));
             }
@@ -1592,10 +1592,10 @@ DebuggerConsole::initCommands(RSCommand &root)
         
         .tokens = {"%"},
         .chelp  = { "Convert a value into different formats" },
-        .argx   = {
+        .args   = {
             { .name = { "value", "Payload" } }
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
             
             std::stringstream ss;
             auto value = args.at("value");

@@ -80,15 +80,15 @@ struct RSArgDescriptor {
 
 struct RSCmdDescriptor {
     
-    const std::vector<string> &tokens = {};
-    const std::vector<string> &hide = {};
-    string thelp = {};      // Command token help
-    string ghelp = {};      // Command group help
-    string chelp = {};      // Command help
-    bool hidden = false;    // Invisible in help, ignored in auto-completion
-    bool shadow = false;    // Invisible in help, subject to auto-completion
-    const std::vector<RSArgDescriptor> &argx = {}; // TODO: Rename to args
-    std::function<void (std::ostream &os, Arguments&, const ParsedArguments &args, const std::vector<isize> &)> func = nullptr;
+    const std::vector<string> &tokens = {};         // Tokens the command is composed of
+    string thelp = {};                              // Command token help
+    string ghelp = {};                              // Command group help
+    string chelp = {};                              // Command help
+    bool hidden = false;                            // Invisible in help, ignored in auto-completion
+    bool shadow = false;                            // Invisible in help, subject to auto-completion
+    const std::vector<RSArgDescriptor> &args = {};  // Arguments of this command
+
+    std::function<void (std::ostream&, const ParsedArguments&, const std::vector<isize>&)> func = nullptr;
     const std::vector<isize> &values = {};
 };
     
@@ -112,17 +112,14 @@ struct RSCommand {
     // Command group help (defaults to the command help)
     string ghelp;
 
-    // Command token help (e.g. "[g]oto") (defaults to the command name)
-    // string thelp;
-
     // Argument list
     std::vector<RSArgDescriptor> arguments;
 
     // List of subcommands
-    std::vector<RSCommand> subCommands;
+    std::vector<RSCommand> subcommands;
 
     // Command handler
-    std::function<void (std::ostream&, Arguments&, const ParsedArguments&, const std::vector<isize>&)> callback = nullptr;
+    std::function<void (std::ostream&, const ParsedArguments&, const std::vector<isize>&)> callback = nullptr;
 
     // Additional argument passed to the command handler
     std::vector<isize> param;

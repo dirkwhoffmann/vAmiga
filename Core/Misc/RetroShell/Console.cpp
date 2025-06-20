@@ -506,7 +506,7 @@ Console::autoComplete(const string& userInput)
     if (auto cmd = getRoot().seek(tokens); cmd && !tokens.empty()) {
         
         // ... and there are additional subcommands or arguments
-        if (!cmd->subCommands.empty() || !cmd->arguments.empty()) { result += " "; }
+        if (!cmd->subcommands.empty() || !cmd->arguments.empty()) { result += " "; }
     }
 
     return result;
@@ -811,34 +811,12 @@ Console::exec(const Arguments &argv, bool verbose)
     // Find the command in the command tree
     if (auto *cmd = seekCommand(args); cmd) {
 
-
-        // OLD CODE. TODO: REMOVE WHEN ALL COMMAND HANDLER USE THE NEW COMMAND REGISTRATION STYLE
-        /*
-        if (cmd->arguments.empty()) {
-
-            if (auto next = cmd->seek("")) cmd = next;
-
-            if (!cmd->callback && args.empty()) {
-                throw TooFewArgumentsError(cmd->fullName);
-            }
-
-            if ((isize)args.size() < cmd->minArgs()) throw TooFewArgumentsError(cmd->fullName);
-            if ((isize)args.size() > cmd->maxArgs()) throw TooManyArgumentsError(cmd->fullName);
-
-            ParsedArguments parsedArgs; // empty
-            std::stringstream ss;
-            cmd->callback(ss, args, parsedArgs, cmd->param);
-            if (ss.peek() != EOF) { *this << vdelim << ss << vdelim; }
-            return;
-        }
-        */
-
         // Parse arguments
         ParsedArguments parsedArgs = parse(*cmd, args);
 
         // Call the command handler
         std::stringstream ss;
-        cmd->callback(ss, args, parsedArgs, cmd->param);
+        cmd->callback(ss, parsedArgs, cmd->param);
 
         // Dump the output to the console
         if (ss.peek() != EOF) { *this << vdelim << ss << vdelim; }
@@ -999,7 +977,7 @@ Console::initCommands(RSCommand &root)
             .chelp  = { "Prints the welcome message" },
             .hidden = true,
 
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 welcome();
             }
@@ -1011,7 +989,7 @@ Console::initCommands(RSCommand &root)
             .chelp  = { "Prints how to get help" },
             .hidden = true,
 
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
                 printHelp();
             }
@@ -1022,7 +1000,7 @@ Console::initCommands(RSCommand &root)
             .tokens = { "commander" },
             .chelp  = { "Enter or command console" },
 
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
                     retroShell.enterCommander();
             }
@@ -1033,7 +1011,7 @@ Console::initCommands(RSCommand &root)
             .tokens = { "debugger" },
             .chelp  = { "Enter or debug console" },
 
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
                     retroShell.enterDebugger();
             }
@@ -1044,7 +1022,7 @@ Console::initCommands(RSCommand &root)
             .tokens = { "navigator" },
             .chelp  = { "Enter the file system console" },
 
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
                     retroShell.enterNavigator();
             }
@@ -1055,7 +1033,7 @@ Console::initCommands(RSCommand &root)
             .tokens = { "clear" },
             .chelp  = { "Clear the console window" },
 
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 clear();
             }
@@ -1066,7 +1044,7 @@ Console::initCommands(RSCommand &root)
             .tokens = { "close" },
             .chelp  = { "Hide the console window" },
 
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 msgQueue.put(Msg::RSH_CLOSE);
             }
@@ -1076,10 +1054,10 @@ Console::initCommands(RSCommand &root)
             
             .tokens = { "help" },
             .chelp  = { "Print usage information" },
-            .argx   = {
+            .args   = {
                 { .name = { "command", "Command name" }, .flags = arg::opt }
             },
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 help(args.contains("command") ? args.at("command") : "");
             }
@@ -1091,7 +1069,7 @@ Console::initCommands(RSCommand &root)
             .chelp  = { "Prints information about the current emulator state" },
             .hidden = true,
 
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 printState();
             }
@@ -1103,7 +1081,7 @@ Console::initCommands(RSCommand &root)
             .chelp  = { "Easter egg" },
             .hidden = true,
 
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 os << "\nGREETINGS PROFESSOR HOFFMANN.\n";
                 os << "THE ONLY WINNING MOVE IS NOT TO PLAY.\n";
@@ -1115,9 +1093,9 @@ Console::initCommands(RSCommand &root)
             
             .tokens = { "source" },
             .chelp  = { "Process a command script" },
-            .argx   = { { .name = { "path", "Script file" } } },
+            .args   = { { .name = { "path", "Script file" } } },
 
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
                 auto path = host.makeAbsolute(args.at("path"));
                 auto stream = std::ifstream(path);
@@ -1131,9 +1109,9 @@ Console::initCommands(RSCommand &root)
             .tokens = { "wait" },
             .chelp  = { "Pause the execution of a command script" },
             .hidden = true,
-            .argx   = { { .name = { "seconds", "Delay" } } },
+            .args   = { { .name = { "seconds", "Delay" } } },
 
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 auto seconds = parseNum(args.at("seconds"));
                 agnus.scheduleRel<SLOT_RSH>(SEC(seconds), RSH_WAKEUP);
@@ -1146,7 +1124,7 @@ Console::initCommands(RSCommand &root)
             .tokens = { "shutdown" },
             .chelp   = { "Terminates the application" },
 
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                 
                 msgQueue.put(Msg::ABORT, 0);
             }
@@ -1187,7 +1165,7 @@ Console::registerComponent(CoreComponent &c, RSCommand &root, bool shadowed)
             .chelp  = { "Display the current configuration" },
             .ghelp  = descr,
 
-            .func   = [this, &c] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this, &c] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
                 retroShell.commander.dump(c, Category::Config);
             }
@@ -1211,10 +1189,10 @@ Console::registerComponent(CoreComponent &c, RSCommand &root, bool shadowed)
                 root.add({
                     
                     .tokens = { cmd, "set", OptEnum::key(opt) },
-                    .argx   = { { .name = { "value", OptionParser::argList(opt) } } },
+                    .args   = { { .name = { "value", OptionParser::argList(opt) } } },
                     .chelp  = { OptEnum::help(opt) },
 
-                    .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+                    .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                         
                         emulator.set(Opt(values[0]), args.at("value"), { values[1] });
                         msgQueue.put(Msg::CONFIG);
@@ -1239,7 +1217,7 @@ Console::registerComponent(CoreComponent &c, RSCommand &root, bool shadowed)
                         .tokens = { cmd, "set", OptEnum::key(opt), first },
                         .chelp  = { help.empty() ? "Set to " + first : help },
 
-                        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+                        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
                             
                             emulator.set(Opt(values[0]), values[1], { values[2] });
                             msgQueue.put(Msg::CONFIG);

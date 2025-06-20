@@ -95,7 +95,7 @@ RSCommand::add(const RSCmdDescriptor &descriptor)
     cmd.chelp = !descriptor.chelp.empty() ? descriptor.chelp : "???";
     cmd.fullName = util::concat({ node->fullName, name }, " ");
     cmd.groupName = currentGroup;
-    cmd.arguments = descriptor.argx;
+    cmd.arguments = descriptor.args;
     cmd.callback = descriptor.func;
     cmd.param = descriptor.values;
     cmd.hidden = descriptor.hidden;
@@ -105,7 +105,7 @@ RSCommand::add(const RSCmdDescriptor &descriptor)
     if (!cmd.hidden) currentGroup = "";
 
     // Register the instruction at the proper location
-    node->subCommands.push_back(cmd);
+    node->subcommands.push_back(cmd);
 }
 
 void
@@ -130,7 +130,7 @@ RSCommand::clone(const std::vector<string> &tokens,
         .ghelp  = cmd->ghelp,
         .chelp  = cmd->chelp,
         .hidden = true,
-        .argx   = cmd->arguments,
+        .args   = cmd->arguments,
         .func   = cmd->callback,
         .values = values
     });
@@ -139,7 +139,7 @@ RSCommand::clone(const std::vector<string> &tokens,
 const RSCommand *
 RSCommand::seek(const string& token) const
 {
-    for (auto &it : subCommands) {
+    for (auto &it : subcommands) {
         if (it.name == token) return &it;
     }
     return nullptr;
@@ -175,7 +175,7 @@ RSCommand::filterPrefix(const string& prefix) const
     std::vector<const RSCommand *> result;
     auto uprefix = util::uppercased(prefix);
 
-    for (auto &it : subCommands) {
+    for (auto &it : subcommands) {
         
         if (it.hidden) continue;
         auto substr = it.name.substr(0, prefix.size());
@@ -204,10 +204,10 @@ RSCommand::printHelp(std::ostream &os)
 {
     string prefix;
 
-    if (!subCommands.empty()) {
+    if (!subcommands.empty()) {
 
         // Describe all subcommands
-        prefix = "Cmds: ";
+        prefix = "Usage: ";
         os << prefix + cmdUsage() << std::endl;
         printSubcmdHelp(os, isize(prefix.size()));
 
@@ -261,12 +261,12 @@ RSCommand::printArgumentHelp(std::ostream &os, isize indent, bool verbose)
 void
 RSCommand::printSubcmdHelp(std::ostream &os, isize indent, bool verbose)
 {
-    if (subCommands.empty()) return;
+    if (subcommands.empty()) return;
 
     // Collect all commands
     std::vector<const RSCommand *> cmds;
     if (callback) cmds.push_back(this);
-    for (auto &it : subCommands) { if (!it.hidden && !it.shadowed) cmds.push_back(&it); }
+    for (auto &it : subcommands) { if (!it.hidden && !it.shadowed) cmds.push_back(&it); }
 
     // Determine alignment parameters to get a properly formatted output
     isize newlines = 1, tab = 0;
@@ -299,7 +299,7 @@ RSCommand::cmdUsage() const
 {
     std::vector<string> items;
 
-    for (auto &it : subCommands) {
+    for (auto &it : subcommands) {
         if (!it.hidden) items.push_back(it.name);
     }
     auto combined = util::concat(items, " | ", callback ? "[ " : "{ ", callback ? " ]" : " }");

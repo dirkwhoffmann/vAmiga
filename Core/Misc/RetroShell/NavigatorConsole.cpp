@@ -216,7 +216,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             .tokens = { "import", "df" + std::to_string(i) },
             .chelp  = { "Floppy file system from drive n" },
             .hidden = i != 0,
-            .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
                 auto n = values[0];
 
@@ -233,7 +233,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "info" },
         .chelp  = { "Print a file system summary" },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
             fs.dump(Category::Info, os);
         }
@@ -243,11 +243,11 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "cd" },
         .chelp  = { "Change the working directory." },
-        .argx   = {
+        .args   = {
             { .name = { "path", "New working directory" }, .flags = arg::opt },
             { .name = { "b", "Specify the directory as a block number" }, .flags = arg::flag }
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
             auto path = parsePath(args, "path", fs.rootDir());
             fs.cd(path);
@@ -258,14 +258,14 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "dir" },
         .chelp  = { "Display a sorted list of the files in a directory" },
-        .argx   = {
+        .args   = {
             { .name = { "path", "Path to directory" }, .flags = arg::opt },
             { .name = { "b", "Specify the directory as a block number" }, .flags = arg::flag },
             { .name = { "d", "List directories only" }, .flags = arg::flag },
             { .name = { "f", "List files only" }, .flags = arg::flag },
             { .name = { "r", "Traverse subdirectories" }, .flags = arg::flag }
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
             auto path = parsePath(args, "path", fs.pwd());
             auto d = args.contains("d");
@@ -296,7 +296,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "list" },
         .chelp  = { "List specified information about directories and files" },
-        .argx   = {
+        .args   = {
             { .name = { "path", "Path to directory" }, .flags = arg::opt },
             { .name = { "b", "Specify the directory as a block number" }, .flags = arg::flag },
             { .name = { "d", "List directories only" }, .flags = arg::flag },
@@ -304,7 +304,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "r", "Traverse subdirectories" }, .flags = arg::flag },
             { .name = { "k", "Display keys (start blocks)" }, .flags = arg::flag },
             { .name = { "s", "Sort output" }, .flags = arg::flag } },
-        .func   = [this](std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this](std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
             auto path = parsePath(args, "path", fs.pwd());
             auto d = args.contains("d");
@@ -350,7 +350,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "find" },
         .chelp  = { "Find files or directories" },
-        .argx   = {
+        .args   = {
             { .name = { "name", "Search pattern" } },
             { .name = { "path", "Directory to search in" }, .flags = arg::opt },
             { .name = { "b", "Specify the directory as a block number" }, .flags = arg::flag },
@@ -358,7 +358,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "f", "Find files only" }, .flags = arg::flag },
             { .name = { "r", "Search subdirectories, too" }, .flags = arg::flag },
             { .name = { "s", "Sort output" }, .flags = arg::flag } },
-        .func   = [this](std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this](std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
             auto pattern = FSPattern(args.at("name"));
             auto path = parsePath(args, "path", fs.pwd());
@@ -397,14 +397,14 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "type" },
         .chelp  = { "Print the contents of a file" },
-        .argx   = {
+        .args   = {
             { .name = { "path", "File path" } },
             { .name = { "b", "Specify the path as a block number" }, .flags = arg::flag },
             { .name = { "l", "Display a line number in each row" }, .flags = arg::flag },
             { .name = { "t", "Display the last part" }, .flags = arg::flag },
             { .name = { "lines", "Number of displayed rows" }, .flags = arg::keyval|arg::opt },
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
             auto file = parsePath(args, "path", fs.pwd());
             auto lines = args.contains("lines") ? parseNum(args.at("lines")) : -1;
@@ -425,7 +425,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "dump" },
         .chelp  = { "Dump the contents of a file" },
-        .argx   = {
+        .args   = {
             { .name = { "path", "File path" } },
             { .name = { "b", "Specify the path as a block number" }, .flags = arg::flag },
             { .name = { "a", "Output in ASCII, only" }, .flags = arg::flag },
@@ -436,7 +436,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "t", "Display the last part" }, .flags = arg::flag },
             { .name = { "lines", "Number of displayed rows" }, .flags = arg::keyval|arg::opt },
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
             auto file = parsePath(args, "path", fs.pwd());
             auto opt = parseDumpOpts(args);
@@ -452,10 +452,10 @@ NavigatorConsole::initCommands(RSCommand &root)
         .tokens = { "block" },
         .chelp  = { "Inspect a block" },
         .ghelp  = { "Manage blocks" },
-        .argx   = {
+        .args   = {
             { .name = { "nr", "Block number" }, .flags = arg::opt },
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
             auto nr = parseBlock(args, "nr");
 
@@ -469,7 +469,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "block", "dump" },
         .chelp  = { "Import a block from a file" },
-        .argx   = {
+        .args   = {
             { .name = { "nr", "Block number" } },
             { .name = { "a", "Output in ASCII, only" }, .flags = arg::flag },
             { .name = { "o", "Output numbers in octal" }, .flags = arg::flag },
@@ -479,7 +479,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "t", "Display the last part" }, .flags = arg::flag },
             { .name = { "lines", "Number of displayed rows" }, .flags = arg::keyval|arg::opt },
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
             auto nr = parseBlock(args, "nr");
             auto opt = parseDumpOpts(args);
@@ -495,11 +495,11 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "block", "import" },
         .chelp  = { "Import a block from a file" },
-        .argx   = {
+        .args   = {
             { .name = { "nr", "Block number" } },
             { .name = { "path", "File path" } },
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
             *this << "Holla, die Waldfee!" << '\n';
             *this << "This is not implemented, yet!" << '\n';
@@ -510,11 +510,11 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "block", "export" },
         .chelp  = { "Export a block to a file" },
-        .argx   = {
+        .args   = {
             { .name = { "nr", "Block number" } },
             { .name = { "path", "File path" } },
         },
-        .func   = [this] (std::ostream &os, Arguments& argv, const ParsedArguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const ParsedArguments &args, const std::vector<isize> &values) {
 
             *this << "Holla, die Waldfee!" << '\n';
             *this << "This is not implemented, yet!" << '\n';
