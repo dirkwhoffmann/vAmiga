@@ -267,9 +267,6 @@ protected:
     // Splits an input string into an argument list
     Tokens split(const string& userInput);
 
-    // Splits an argument list into a command part and an argument part
-    //std::pair<Arguments, Arguments> split(const Arguments &argv);
-
     // Auto-completes an argument list
     void autoComplete(Tokens &argv);
 
@@ -283,27 +280,23 @@ protected:
     bool isBool(const string &argv) const;
     bool parseBool(const string  &argv) const;
     bool parseBool(const string  &argv, bool fallback) const;
-    [[deprecated]] bool parseBool(const Tokens &argv, long nr, long fallback) const;
     bool parseBool(const Arguments &argv, const string &key) const;
     bool parseBool(const Arguments &argv, const string &key, long fallback) const;
 
     bool isOnOff(const string &argv) const;
     bool parseOnOff(const string &argv) const;
     bool parseOnOff(const string &argv, bool fallback) const;
-    [[deprecated]]  bool parseOnOff(const Tokens &argv, long nr, long fallback) const;
     bool parseOnOff(const Arguments &argv, const string &key) const;
     bool parseOnOff(const Arguments &argv, const string &key, long fallback) const;
 
     long isNum(const string &argv) const;
     long parseNum(const string &argv) const;
     long parseNum(const string &argv, long fallback) const;
-    [[deprecated]]  long parseNum(const Tokens &argv, long nr, long fallback) const;
     long parseNum(const Arguments &argv, const string &key) const;
     long parseNum(const Arguments &argv, const string &key, long fallback) const;
 
     u32 parseAddr(const string &argv) const;
     u32 parseAddr(const string &argv, long fallback) const;
-    [[deprecated]] u32 parseAddr(const Tokens &argv, long nr, long fallback) const;
     u32 parseAddr(const Arguments &argv, const string &key) const;
     u32 parseAddr(const Arguments &argv, const string &key, long fallback) const;
 

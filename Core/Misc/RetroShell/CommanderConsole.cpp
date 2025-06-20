@@ -65,14 +65,14 @@ CommanderConsole::initCommands(RSCommand &root)
         
         .tokens = { "workspace" },
         .ghelp  = { "Workspace management" },
-        .hidden = releaseBuild
+        .flags  = releaseBuild ? rs::hidden : 0
     });
     
     root.add({
         
         .tokens = { "workspace init" },
         .chelp  = { "First command of a workspace script" },
-        .hidden = releaseBuild,
+        .flags  = releaseBuild ? rs::hidden : 0,
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             amiga.initWorkspace();
@@ -83,7 +83,7 @@ CommanderConsole::initCommands(RSCommand &root)
         
         .tokens = { "workspace activate" },
         .chelp  = { "Last command of a workspace script" },
-        .hidden = releaseBuild,
+        .flags  = releaseBuild ? rs::hidden : 0,
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
             amiga.activateWorkspace();
@@ -101,7 +101,7 @@ CommanderConsole::initCommands(RSCommand &root)
         
         .tokens = { "regression" },
         .ghelp  = { "Runs the regression tester" },
-        .hidden = releaseBuild
+        .flags  = releaseBuild ? rs::hidden : 0
     });
 
     root.add({
@@ -117,8 +117,8 @@ CommanderConsole::initCommands(RSCommand &root)
             .tokens = { "regression", "setup", ConfigSchemeEnum::key(it) },
             .chelp  = { ConfigSchemeEnum::help(it) },
             .args   = {
-                { .name = { "rom", "ROM file" }, .flags = arg::keyval | arg::opt },
-                { .name = { "ext", "Extension ROM file" }, .flags = arg::keyval | arg::opt }
+                { .name = { "rom", "ROM file" }, .flags = rs::keyval | rs::opt },
+                { .name = { "ext", "Extension ROM file" }, .flags = rs::keyval | rs::opt }
             },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
@@ -147,7 +147,7 @@ CommanderConsole::initCommands(RSCommand &root)
         
         .tokens = { "screenshot" },
         .ghelp  = { "Manages screenshots" },
-        .hidden = releaseBuild
+        .flags  = releaseBuild ? rs::hidden : 0
     });
     
     root.add({
@@ -173,10 +173,10 @@ CommanderConsole::initCommands(RSCommand &root)
         .tokens = { "screenshot", "set", "cutout" },
         .chelp  = { "Adjust the texture cutout" },
         .args   = {
-            { .name = { "x1", "Left x coordinate" }, .flags = arg::keyval },
-            { .name = { "x2", "Right x coordinate" }, .flags = arg::keyval },
-            { .name = { "y1", "Lower y coordinate" }, .flags = arg::keyval },
-            { .name = { "y2", "Upper y coordinate" }, .flags = arg::keyval }
+            { .name = { "x1", "Left x coordinate" }, .flags = rs::keyval },
+            { .name = { "x2", "Right x coordinate" }, .flags = rs::keyval },
+            { .name = { "y1", "Lower y coordinate" }, .flags = rs::keyval },
+            { .name = { "y2", "Upper y coordinate" }, .flags = rs::keyval }
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
@@ -858,9 +858,9 @@ CommanderConsole::initCommands(RSCommand &root)
             .tokens = { cmd, "geometry" },
             .chelp  = { "Changes the disk geometry" },
             .args   = {
-                { .name = { "cylinders", "Number of cylinders" }, .flags = arg::keyval },
-                { .name = { "heads", "Number of drive heads" }, .flags = arg::keyval },
-                { .name = { "sectors", "Number of sectors per cylinder" }, .flags = arg::keyval },
+                { .name = { "cylinders", "Number of cylinders" }, .flags = rs::keyval },
+                { .name = { "heads", "Number of drive heads" }, .flags = rs::keyval },
+                { .name = { "sectors", "Number of sectors per cylinder" }, .flags = rs::keyval },
             },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 

@@ -23,13 +23,14 @@ typedef std::vector<string> Tokens;
 // Parsed arguments (e.g. { {"h", "true"}, {"lines", "100"} })
 typedef std::map<string,string> Arguments;
 
-// Argument flags
-namespace arg {
+// Command and argument flags
+namespace rs {
 
 static const usize opt              = 1LL << 0;
 static const usize keyval           = 1LL << 1;
-static const usize hidden           = 1LL << 2 | opt;
-static const usize flag             = 1LL << 3 | opt;
+static const usize flag             = 1LL << 2 | opt;
+static const usize hidden           = 1LL << 3 | opt;
+static const usize shadowed         = 1LL << 4;
 
 }
 
@@ -40,11 +41,11 @@ struct RSArgumentDescriptor {
     string value;
     usize flags;
 
-    bool isFlag() const { return (flags & arg::flag) == arg::flag; }
-    bool isKeyValuePair() const { return (flags & arg::keyval) == arg::keyval; }
+    bool isFlag() const { return (flags & rs::flag) == rs::flag; }
+    bool isKeyValuePair() const { return (flags & rs::keyval) == rs::keyval; }
     bool isStdArg() const { return !isFlag() && !isKeyValuePair(); }
-    bool isHidden() const { return (flags & arg::hidden) == arg::hidden; }
-    bool isOptional() const { return (flags & arg::opt) == arg::opt; }
+    bool isHidden() const { return (flags & rs::hidden) == rs::hidden; }
+    bool isOptional() const { return (flags & rs::opt) == rs::opt; }
     bool isRequired() const { return !isOptional(); }
 
     string nameStr() const;
@@ -66,11 +67,8 @@ struct RSCommandDescriptor {
     // Specific description of this command
     string chelp = {};
 
-    // Hidden commands are not shown in help texts and are ingored in auto-completion
-    bool hidden = false;
-
-    // Shadowed commands are not shown in help texts, but auto-completion works as usual
-    bool shadow = false;
+    // Command flags
+    usize flags = {};
 
     // Argument descriptions of this command
     const std::vector<RSArgumentDescriptor> &args = {};
@@ -96,17 +94,14 @@ struct RSCommand {
     // Full name of this command (e.g., "df0 eject")
     string fullName;
 
+    // Command flags
+    usize flags = {};
+
     // General description of this command and all subcommands
     string ghelp;
 
     // Specific description of this command
     string chelp;
-
-    // Hidden commands are not shown in help texts and are ingored in auto-completion
-    bool hidden = false;
-
-    // Shadowed commands are not shown in help texts, but auto-completion works as usual
-    bool shadow = false;
 
     // Argument descriptions of this command
     std::vector<RSArgumentDescriptor> args;
@@ -125,8 +120,9 @@ struct RSCommand {
     // Querying properties
     //
 
-    bool isHidden() const { return hidden; } // (flags & arg::hidden) == arg::hidden; }
-    bool isShadowed() const { return shadow; }
+    bool isHidden() const { return (flags & rs::hidden) == rs::hidden; }
+    bool isShadowed() const { return (flags & rs::shadowed) == rs::shadowed; }
+    bool isVisible() const { return !isHidden() && !isShadowed(); }
 
 
     //

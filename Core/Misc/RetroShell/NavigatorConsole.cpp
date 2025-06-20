@@ -215,7 +215,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
             .tokens = { "import", "df" + std::to_string(i) },
             .chelp  = { "Floppy file system from drive n" },
-            .hidden = i != 0,
+            .flags  = rs::shadowed,
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 auto n = values[0];
@@ -244,8 +244,8 @@ NavigatorConsole::initCommands(RSCommand &root)
         .tokens = { "cd" },
         .chelp  = { "Change the working directory." },
         .args   = {
-            { .name = { "path", "New working directory" }, .flags = arg::opt },
-            { .name = { "b", "Specify the directory as a block number" }, .flags = arg::flag }
+            { .name = { "path", "New working directory" }, .flags = rs::opt },
+            { .name = { "b", "Specify the directory as a block number" }, .flags = rs::flag }
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
@@ -259,11 +259,11 @@ NavigatorConsole::initCommands(RSCommand &root)
         .tokens = { "dir" },
         .chelp  = { "Display a sorted list of the files in a directory" },
         .args   = {
-            { .name = { "path", "Path to directory" }, .flags = arg::opt },
-            { .name = { "b", "Specify the directory as a block number" }, .flags = arg::flag },
-            { .name = { "d", "List directories only" }, .flags = arg::flag },
-            { .name = { "f", "List files only" }, .flags = arg::flag },
-            { .name = { "r", "Traverse subdirectories" }, .flags = arg::flag }
+            { .name = { "path", "Path to directory" }, .flags = rs::opt },
+            { .name = { "b", "Specify the directory as a block number" }, .flags = rs::flag },
+            { .name = { "d", "List directories only" }, .flags = rs::flag },
+            { .name = { "f", "List files only" }, .flags = rs::flag },
+            { .name = { "r", "Traverse subdirectories" }, .flags = rs::flag }
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
@@ -297,13 +297,13 @@ NavigatorConsole::initCommands(RSCommand &root)
         .tokens = { "list" },
         .chelp  = { "List specified information about directories and files" },
         .args   = {
-            { .name = { "path", "Path to directory" }, .flags = arg::opt },
-            { .name = { "b", "Specify the directory as a block number" }, .flags = arg::flag },
-            { .name = { "d", "List directories only" }, .flags = arg::flag },
-            { .name = { "f", "List files only" }, .flags = arg::flag },
-            { .name = { "r", "Traverse subdirectories" }, .flags = arg::flag },
-            { .name = { "k", "Display keys (start blocks)" }, .flags = arg::flag },
-            { .name = { "s", "Sort output" }, .flags = arg::flag } },
+            { .name = { "path", "Path to directory" }, .flags = rs::opt },
+            { .name = { "b", "Specify the directory as a block number" }, .flags = rs::flag },
+            { .name = { "d", "List directories only" }, .flags = rs::flag },
+            { .name = { "f", "List files only" }, .flags = rs::flag },
+            { .name = { "r", "Traverse subdirectories" }, .flags = rs::flag },
+            { .name = { "k", "Display keys (start blocks)" }, .flags = rs::flag },
+            { .name = { "s", "Sort output" }, .flags = rs::flag } },
         .func   = [this](std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             auto path = parsePath(args, "path", fs.pwd());
@@ -352,12 +352,12 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Find files or directories" },
         .args   = {
             { .name = { "name", "Search pattern" } },
-            { .name = { "path", "Directory to search in" }, .flags = arg::opt },
-            { .name = { "b", "Specify the directory as a block number" }, .flags = arg::flag },
-            { .name = { "d", "Find directories only" }, .flags = arg::flag },
-            { .name = { "f", "Find files only" }, .flags = arg::flag },
-            { .name = { "r", "Search subdirectories, too" }, .flags = arg::flag },
-            { .name = { "s", "Sort output" }, .flags = arg::flag } },
+            { .name = { "path", "Directory to search in" }, .flags = rs::opt },
+            { .name = { "b", "Specify the directory as a block number" }, .flags = rs::flag },
+            { .name = { "d", "Find directories only" }, .flags = rs::flag },
+            { .name = { "f", "Find files only" }, .flags = rs::flag },
+            { .name = { "r", "Search subdirectories, too" }, .flags = rs::flag },
+            { .name = { "s", "Sort output" }, .flags = rs::flag } },
         .func   = [this](std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             auto pattern = FSPattern(args.at("name"));
@@ -399,10 +399,10 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Print the contents of a file" },
         .args   = {
             { .name = { "path", "File path" } },
-            { .name = { "b", "Specify the path as a block number" }, .flags = arg::flag },
-            { .name = { "l", "Display a line number in each row" }, .flags = arg::flag },
-            { .name = { "t", "Display the last part" }, .flags = arg::flag },
-            { .name = { "lines", "Number of displayed rows" }, .flags = arg::keyval|arg::opt },
+            { .name = { "b", "Specify the path as a block number" }, .flags = rs::flag },
+            { .name = { "l", "Display a line number in each row" }, .flags = rs::flag },
+            { .name = { "t", "Display the last part" }, .flags = rs::flag },
+            { .name = { "lines", "Number of displayed rows" }, .flags = rs::keyval|rs::opt },
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
@@ -427,14 +427,14 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Dump the contents of a file" },
         .args   = {
             { .name = { "path", "File path" } },
-            { .name = { "b", "Specify the path as a block number" }, .flags = arg::flag },
-            { .name = { "a", "Output in ASCII, only" }, .flags = arg::flag },
-            { .name = { "o", "Output numbers in octal" }, .flags = arg::flag },
-            { .name = { "d", "Output numbers in decimal" }, .flags = arg::flag },
-            { .name = { "w", "Print in word format" }, .flags = arg::flag },
-            { .name = { "l", "Print in long word format" }, .flags = arg::flag },
-            { .name = { "t", "Display the last part" }, .flags = arg::flag },
-            { .name = { "lines", "Number of displayed rows" }, .flags = arg::keyval|arg::opt },
+            { .name = { "b", "Specify the path as a block number" }, .flags = rs::flag },
+            { .name = { "a", "Output in ASCII, only" }, .flags = rs::flag },
+            { .name = { "o", "Output numbers in octal" }, .flags = rs::flag },
+            { .name = { "d", "Output numbers in decimal" }, .flags = rs::flag },
+            { .name = { "w", "Print in word format" }, .flags = rs::flag },
+            { .name = { "l", "Print in long word format" }, .flags = rs::flag },
+            { .name = { "t", "Display the last part" }, .flags = rs::flag },
+            { .name = { "lines", "Number of displayed rows" }, .flags = rs::keyval|rs::opt },
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
@@ -453,7 +453,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .ghelp  = { "Manage blocks" },
         .chelp  = { "Inspect a block" },
         .args   = {
-            { .name = { "nr", "Block number" }, .flags = arg::opt },
+            { .name = { "nr", "Block number" }, .flags = rs::opt },
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
@@ -471,13 +471,13 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Import a block from a file" },
         .args   = {
             { .name = { "nr", "Block number" } },
-            { .name = { "a", "Output in ASCII, only" }, .flags = arg::flag },
-            { .name = { "o", "Output numbers in octal" }, .flags = arg::flag },
-            { .name = { "d", "Output numbers in decimal" }, .flags = arg::flag },
-            { .name = { "w", "Print in word format" }, .flags = arg::flag },
-            { .name = { "l", "Print in long word format" }, .flags = arg::flag },
-            { .name = { "t", "Display the last part" }, .flags = arg::flag },
-            { .name = { "lines", "Number of displayed rows" }, .flags = arg::keyval|arg::opt },
+            { .name = { "a", "Output in ASCII, only" }, .flags = rs::flag },
+            { .name = { "o", "Output numbers in octal" }, .flags = rs::flag },
+            { .name = { "d", "Output numbers in decimal" }, .flags = rs::flag },
+            { .name = { "w", "Print in word format" }, .flags = rs::flag },
+            { .name = { "l", "Print in long word format" }, .flags = rs::flag },
+            { .name = { "t", "Display the last part" }, .flags = rs::flag },
+            { .name = { "lines", "Number of displayed rows" }, .flags = rs::keyval|rs::opt },
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 

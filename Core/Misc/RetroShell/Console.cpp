@@ -661,12 +661,6 @@ Console::parseBool(const string &argv, bool fallback) const
 }
 
 bool
-Console::parseBool(const Tokens &argv, long nr, long fallback) const
-{
-    return nr < long(argv.size()) ? parseBool(argv[nr]) : fallback;
-}
-
-bool
 Console::parseBool(const Arguments &argv, const string &key) const
 {
     assert(argv.contains(key));
@@ -689,12 +683,6 @@ bool
 Console::parseOnOff(const string &argv, bool fallback) const
 {
     try { return parseOnOff(argv); } catch(...) { return fallback; }
-}
-
-bool
-Console::parseOnOff(const Tokens &argv, long nr, long fallback) const
-{
-    return nr < long(argv.size()) ? parseOnOff(argv[nr]) : fallback;
 }
 
 bool
@@ -723,12 +711,6 @@ Console::parseNum(const string &argv, long fallback) const
 }
 
 long
-Console::parseNum(const Tokens &argv, long nr, long fallback) const
-{
-    return nr < long(argv.size()) ? parseNum(argv[nr]) : fallback;
-}
-
-long
 Console::parseNum(const Arguments &argv, const string &key) const
 {
     assert(argv.contains(key));
@@ -751,11 +733,6 @@ u32
 Console::parseAddr(const string &argv, long fallback) const
 {
     return (u32)parseNum(argv, fallback);
-}
-u32
-Console::parseAddr(const Tokens &argv, long nr, long fallback) const
-{
-    return (u32)parseNum(argv, nr, fallback);
 }
 
 u32
@@ -972,7 +949,7 @@ Console::initCommands(RSCommand &root)
             
             .tokens = { "welcome" },
             .chelp  = { "Prints the welcome message" },
-            .hidden = true,
+            .flags  = rs::hidden,
 
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
@@ -984,7 +961,7 @@ Console::initCommands(RSCommand &root)
 
             .tokens = { "helpstring" },
             .chelp  = { "Prints how to get help" },
-            .hidden = true,
+            .flags  = rs::hidden,
 
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
@@ -1052,7 +1029,7 @@ Console::initCommands(RSCommand &root)
             .tokens = { "help" },
             .chelp  = { "Print usage information" },
             .args   = {
-                { .name = { "command", "Command name" }, .flags = arg::opt }
+                { .name = { "command", "Command name" }, .flags = rs::opt }
             },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
@@ -1064,7 +1041,7 @@ Console::initCommands(RSCommand &root)
             
             .tokens = { "state" },
             .chelp  = { "Prints information about the current emulator state" },
-            .hidden = true,
+            .flags  = rs::hidden,
 
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
@@ -1076,7 +1053,7 @@ Console::initCommands(RSCommand &root)
             
             .tokens = { "joshua" },
             .chelp  = { "Easter egg" },
-            .hidden = true,
+            .flags  = rs::hidden,
 
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
@@ -1107,7 +1084,7 @@ Console::initCommands(RSCommand &root)
                  
             .tokens = { "wait" },
             .chelp  = { "Pause the execution of a command script" },
-            .hidden = true,
+            .flags  = rs::hidden,
             .args   = { { .name = { "seconds", "Delay" } } },
 
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
@@ -1162,7 +1139,7 @@ Console::registerComponent(CoreComponent &c, RSCommand &root, bool shadowed)
             .tokens = { cmd },
             .ghelp  = descr,
             .chelp  = { "Display the current configuration" },
-            .shadow = shadowed,
+            .flags  = rs::shadowed,
 
             .func   = [this, &c] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 

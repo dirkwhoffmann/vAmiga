@@ -90,19 +90,18 @@ RSCommand::add(const RSCommandDescriptor &descriptor)
     
     // Create the instruction
     RSCommand cmd;
+    cmd.groupName = currentGroup;
     cmd.name = name;
+    cmd.fullName = util::concat({ node->fullName, name }, " ");
+    cmd.flags = descriptor.flags;
     cmd.ghelp = !descriptor.ghelp.empty() ? descriptor.ghelp : descriptor.chelp;
     cmd.chelp = !descriptor.chelp.empty() ? descriptor.chelp : "???";
-    cmd.fullName = util::concat({ node->fullName, name }, " ");
-    cmd.groupName = currentGroup;
     cmd.args = descriptor.args;
     cmd.callback = descriptor.func;
     cmd.payload = descriptor.payload;
-    cmd.hidden = descriptor.hidden;
-    cmd.shadow = descriptor.shadow;
 
     // Reset the group
-    if (!cmd.hidden) currentGroup = "";
+    if (cmd.isVisible()) currentGroup = "";
 
     // Register the instruction at the proper location
     node->subcommands.push_back(cmd);
@@ -129,7 +128,7 @@ RSCommand::clone(const std::vector<string> &tokens,
         .tokens = newTokens,
         .ghelp  = cmd->ghelp,
         .chelp  = cmd->chelp,
-        .hidden = true,
+        .flags  = rs::hidden,
         .args   = cmd->args,
         .func   = cmd->callback,
         .payload = values
@@ -177,7 +176,7 @@ RSCommand::filterPrefix(const string& prefix) const
 
     for (auto &it : subcommands) {
         
-        if (it.hidden) continue;
+        if (it.isHidden()) continue;
         auto substr = it.name.substr(0, prefix.size());
         if (util::uppercased(substr) == uprefix) result.push_back(&it);
     }
@@ -263,10 +262,10 @@ RSCommand::printSubcmdHelp(std::ostream &os, isize indent, bool verbose)
 {
     if (subcommands.empty()) return;
 
-    // Collect all commands
+    // Collect all commands that appear in the help description
     std::vector<const RSCommand *> cmds;
     if (callback) cmds.push_back(this);
-    for (auto &it : subcommands) { if (!it.hidden && !it.shadow) cmds.push_back(&it); }
+    for (auto &it : subcommands) { if (!it.isVisible()) cmds.push_back(&it); }
 
     // Determine alignment parameters to get a properly formatted output
     isize newlines = 1, tab = 0;
@@ -300,7 +299,7 @@ RSCommand::cmdUsage() const
     std::vector<string> items;
 
     for (auto &it : subcommands) {
-        if (!it.hidden) items.push_back(it.name);
+        if (it.isVisible()) items.push_back(it.name);
     }
     auto combined = util::concat(items, " | ", callback ? "[ " : "{ ", callback ? " ]" : " }");
     return  util::concat({ fullName, combined });
