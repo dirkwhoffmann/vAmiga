@@ -95,7 +95,7 @@ struct RSCommand {
     string fullName;
 
     // Command flags
-    usize flags = {};
+    usize flags;
 
     // General description of this command and all subcommands
     string ghelp;

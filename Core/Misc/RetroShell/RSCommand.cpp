@@ -203,7 +203,14 @@ RSCommand::printHelp(std::ostream &os)
 {
     string prefix;
 
-    if (!subcommands.empty()) {
+    if (subcommands.empty()) {
+
+        // Describe the current command
+        prefix = "Usage: ";
+        os << prefix + argUsage() << std::endl;
+        printArgumentHelp(os, isize(prefix.size()));
+
+    } else {
 
         // Describe all subcommands
         prefix = "Commands: ";
@@ -217,13 +224,6 @@ RSCommand::printHelp(std::ostream &os)
             os << prefix + argUsage() << std::endl;
             printArgumentHelp(os, isize(prefix.size()), false);
         }
-
-    } else {
-
-        // Describe the current command
-        prefix = "Usage: ";
-        os << prefix + argUsage() << std::endl;
-        printArgumentHelp(os, isize(prefix.size()));
     }
 }
 
@@ -265,7 +265,7 @@ RSCommand::printSubcmdHelp(std::ostream &os, isize indent, bool verbose)
     // Collect all commands that appear in the help description
     std::vector<const RSCommand *> cmds;
     if (callback) cmds.push_back(this);
-    for (auto &it : subcommands) { if (!it.isVisible()) cmds.push_back(&it); }
+    for (auto &it : subcommands) { if (it.isVisible()) cmds.push_back(&it); }
 
     // Determine alignment parameters to get a properly formatted output
     isize newlines = 1, tab = 0;

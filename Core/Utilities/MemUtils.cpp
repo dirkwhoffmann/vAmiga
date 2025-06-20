@@ -218,10 +218,8 @@ void dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,isize)
     std::string line;
     while (std::getline(ss, line)) { output.push_back(std::move(line)); }
 
-    for (auto &it : output) { printf("%s\n", it.c_str()); }
-
     // Determine the print range
-    isize count = output.size();
+    isize count = isize(output.size());
     if (opt.lines >= 0) count = std::min(count, opt.lines);
     isize start = opt.tail ? isize(output.size()) - count : 0;
     isize end = opt.tail ? isize(output.size()) : count;
