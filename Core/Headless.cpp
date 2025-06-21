@@ -253,12 +253,16 @@ Headless::smokeTestScript[] = {
     "# the compiled application. It runs several shell commands to check if ",
     "# anything breaks.",
     "# ",
-    "# Dirk W. Hoffmann, 2024",
+    "# Dirk W. Hoffmann",
 
     "",
     "help",
-    "joshua",       // Test a hidden command
-    "try joshu",    // Catch an error with 'try'
+
+    // Test a hidden command
+    "joshua",
+
+    // Catch an error with 'try'
+    "try joshu",
 
 #ifndef _WIN32
     "",
@@ -268,6 +272,16 @@ Headless::smokeTestScript[] = {
     "regression setup A500_PLUS_1MB",
 #endif
 
+    // Test console switching
+    "next",
+    "next",
+    "next",
+    "prev",
+    "prev",
+    "prev",
+
+    // Enter the commander console
+    "commander",
     "",
     "amiga",
     "amiga defaults",
@@ -702,6 +716,9 @@ Headless::smokeTestScript[] = {
     
     "? thread",
     "? server",
+
+    // Enter the avigator
+    "navigator",
 
     "shutdown",
 

@@ -42,18 +42,6 @@ void
 NavigatorConsole::welcome()
 {
     Console::welcome();
-    /*
-    storage << "RetroShell Navigator ";
-    remoteManager.rshServer << "vAmiga RetroShell Remote Server ";
-    *this << Amiga::build() << '\n';
-    *this << '\n';
-    *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
-    *this << "https://github.com/dirkwhoffmann/vAmiga" << '\n';
-    *this << '\n';
-
-    printHelp();
-    */
-    retroShell.asyncExec("import df0");
 }
 
 void
@@ -237,7 +225,7 @@ NavigatorConsole::initCommands(RSCommand &root)
     root.add({
 
         .tokens = { "import", "df[n]" },
-        .ghelp  = { "Floppy drive n" },
+        .ghelp  = { "Import file system from floppy drive n" },
         .chelp  = { "import { df0 | df1 | df1 | df2 }" }
     });
 
@@ -246,13 +234,38 @@ NavigatorConsole::initCommands(RSCommand &root)
         root.add({
 
             .tokens = { "import", "df" + std::to_string(i) },
-            .chelp  = { "Floppy file system from drive n" },
+            .chelp  = { "Import file system from floppy drive" + std::to_string(i) },
             .flags  = rs::shadowed,
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 auto n = values[0];
 
                 fs.init(*df[n]);
+                fs.dump(Category::Info, os);
+
+            }, .payload = {i}
+        });
+    }
+
+    root.add({
+
+        .tokens = { "import", "hd[n]" },
+        .ghelp  = { "Import file system from hard drive n" },
+        .chelp  = { "import { hd0 | hd1 | hd1 | hd2 }" }
+    });
+
+    for (isize i = 0; i < 4; i++) {
+
+        root.add({
+
+            .tokens = { "import", "hd" + std::to_string(i) },
+            .chelp  = { "Import file system from hard drive" + std::to_string(i) },
+            .flags  = rs::shadowed,
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                auto n = values[0];
+
+                fs.init(*hd[n], 0);
                 fs.dump(Category::Info, os);
 
             }, .payload = {i}
