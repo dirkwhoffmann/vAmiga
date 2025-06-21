@@ -29,17 +29,18 @@ struct FSPath
     FSPath(const FileSystem &fs, struct FSBlock *dir);
 
     // Throws an exception if the object is invalid
-    void selfcheck() const;
+    // void selfcheck() const;
 
     // Operator overloads
     FSPath &operator=(const FSPath &);
-    FSPath& operator/=(const FSName &name);
+    FSPath &operator/=(const FSName &name);
     FSPath operator/(const FSName &name) const;
 
     // Informs about where this path points to
     bool isRoot() const;
     bool isFile() const;
     bool isDirectory() const;
+    bool isRegular() const;
 
 
     //

@@ -822,7 +822,13 @@ FSBlock::dump(std::ostream &os) const
 void
 FSBlock::hexDump(std::ostream &os, const util::DumpOpt &opt)
 {
-    data.dump(os, opt);
+    if (type == FSBlockType::EMPTY_BLOCK) {
+
+        util::dump(os, opt, [&](isize offset, isize bytes) { return offset < bsize() ? 0 : -1; } );
+    } else {
+
+        data.dump(os, opt);
+    }
 }
 
 string

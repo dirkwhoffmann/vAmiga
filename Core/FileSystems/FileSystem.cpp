@@ -181,29 +181,47 @@ FileSystem::_dump(Category category, std::ostream &os) const
 
         case Category::Info:
 
-            os << "Type   Size            Used    Free    Full  Name" << std::endl;
+            if (!formatted()) {
+                os << "Type   Size" << std::endl;
+            } else {
+                os << "Type   Size            Used    Free    Full  Name" << std::endl;
+            }
             [[fallthrough]];
 
         case Category::State:
         {
-            auto total = numBlocks();
-            auto used = usedBlocks();
-            auto free = freeBlocks();
-            auto fill = (isize)(100.0 * used / total);
+            if (!formatted()) {
 
-            os << "DOS" << dec(isize(dos));
-            os << "   ";
-            os << std::setw(6) << std::left << std::setfill(' ') << total;
-            os << " (x ";
-            os << std::setw(3) << std::left << std::setfill(' ') << bsize;
-            os << ")  ";
-            os << std::setw(6) << std::left << std::setfill(' ') << used;
-            os << "  ";
-            os << std::setw(6) << std::left << std::setfill(' ') << free;
-            os << "  ";
-            os << std::setw(3) << std::right << std::setfill(' ') << fill;
-            os << "%  ";
-            os << getName().c_str() << std::endl;
+                auto total = numBlocks();
+
+                os << "NODOS";
+                os << "  ";
+                os << std::setw(6) << std::left << std::setfill(' ') << total;
+                os << " (x ";
+                os << std::setw(3) << std::left << std::setfill(' ') << bsize;
+                os << ")  ";
+
+            } else {
+                
+                auto total = numBlocks();
+                auto used = usedBlocks();
+                auto free = freeBlocks();
+                auto fill = (isize)(100.0 * used / total);
+
+                os << "DOS" << dec(isize(dos));
+                os << "   ";
+                os << std::setw(6) << std::left << std::setfill(' ') << total;
+                os << " (x ";
+                os << std::setw(3) << std::left << std::setfill(' ') << bsize;
+                os << ")  ";
+                os << std::setw(6) << std::left << std::setfill(' ') << used;
+                os << "  ";
+                os << std::setw(6) << std::left << std::setfill(' ') << free;
+                os << "  ";
+                os << std::setw(3) << std::right << std::setfill(' ') << fill;
+                os << "%  ";
+                os << getName().c_str() << std::endl;
+            }
             break;
         }
         case Category::Properties:
@@ -513,9 +531,11 @@ FileSystem::cd(const FSName &name)
 void
 FileSystem::cd(const FSPath &path)
 {
+    /*
     if (!path.isDirectory()) {
         throw AppError(Fault::FS_NOT_A_DIRECTORY, path.name());
     }
+    */
     curr = path.ref;
 }
 

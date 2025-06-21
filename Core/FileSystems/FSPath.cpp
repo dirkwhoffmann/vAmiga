@@ -15,17 +15,17 @@ namespace vamiga {
 
 FSPath::FSPath(const FileSystem &fs, Block dir) : fs(fs), ref(dir)
 {
-    selfcheck();
+    if (!ptr()) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 }
 
 FSPath::FSPath(const FSPath &path) : fs(path.fs), ref(path.ref)
 {
-
+    if (!ptr()) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 }
 
 FSPath::FSPath(const FileSystem &fs) : fs(fs), ref(0)
 {
-
+    if (!ptr()) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 }
 
 FSPath::FSPath(const FileSystem &fs, FSBlock *dir) : FSPath(fs, dir->nr)
@@ -34,30 +34,20 @@ FSPath::FSPath(const FileSystem &fs, FSBlock *dir) : FSPath(fs, dir->nr)
 }
 
 /*
-FSPath::FSPath(const FileSystem &fs, const string &path) : FSPath(seek(path))
-{
-
-}
-
-FSPath::FSPath(const FileSystem &fs, const fs::path &path) : FSPath(seek(path))
-{
-
-}
-*/
-
 void
 FSPath::selfcheck() const
 {
     // Check if a file system is present
-    if (!fs.initialized()) throw AppError(Fault::FS_UNINITIALIZED);
-    if (!fs.formatted()) throw AppError(Fault::FS_UNFORMATTED);
+    // if (!fs.initialized()) throw AppError(Fault::FS_UNINITIALIZED);
+    // if (!fs.formatted()) throw AppError(Fault::FS_UNFORMATTED);
 
     // Check if the block number is in the valid range
-    if (!ptr()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
+    if (!ptr()) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 
     // Check the block type
-    if (!isRoot() && !isFile() && !isDirectory()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
+    // if (!isRoot() && !isFile() && !isDirectory()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
 }
+*/
 
 FSPath&
 FSPath::operator=(const FSPath &path)
@@ -96,7 +86,13 @@ FSPath::isFile() const
 bool
 FSPath::isDirectory() const
 {
-    return isRoot() || fs.blockType(ref) == FSBlockType::USERDIR_BLOCK;
+    return fs.blockType(ref) == FSBlockType::USERDIR_BLOCK || isRoot();
+}
+
+bool
+FSPath::isRegular() const
+{
+    return isFile() || isDirectory();
 }
 
 FSBlock *

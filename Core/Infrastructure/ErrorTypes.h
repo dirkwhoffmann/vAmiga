@@ -184,6 +184,7 @@ enum class Fault : long
     
     // File system (block errors)
     FS_INVALID_BLOCK_TYPE,
+    FS_INVALID_BLOCK_REF,
     FS_EXPECTED_VALUE,
     FS_EXPECTED_SMALLER_VALUE,
     FS_EXPECTED_DOS_REVISION,
@@ -358,6 +359,7 @@ struct FaultEnum : Reflection<FaultEnum, Fault>
             case Fault::FS_CANNOT_CREATE_FILE:       return "FS_CANNOT_CREATE_FILE";
                 
             case Fault::FS_INVALID_BLOCK_TYPE:       return "FS_INVALID_BLOCK_TYPE";
+            case Fault::FS_INVALID_BLOCK_REF:        return "FS_INVALID_BLOCK_REF";
             case Fault::FS_EXPECTED_VALUE:           return "FS_EXPECTED_VALUE";
             case Fault::FS_EXPECTED_SMALLER_VALUE:   return "FS_EXPECTED_SMALLER_VALUE";
             case Fault::FS_EXPECTED_DOS_REVISION:    return "FS_EXPECTED_DOS_REVISION";

@@ -27,6 +27,21 @@ NavigatorConsole::getPrompt()
 {
     std::stringstream ss;
 
+    auto fsName = fs.getName();
+    if (!fsName.empty()) ss << fsName << ":";
+
+    if (fs.initialized()) {
+
+        if (fs.pwd().isDirectory()) {
+
+            ss << fs.pwd();
+
+        } else {
+
+            ss << "[" << std::to_string(fs.curr) << "]";
+        }
+    }
+    /*
     if (auto ptr = fs.blockPtr(fs.curr); ptr) {
 
         if (ptr->hasName()) {
@@ -40,6 +55,7 @@ NavigatorConsole::getPrompt()
             ss << "[" << std::to_string(fs.curr) << "] ";
         }
     }
+    */
 
     ss << "> ";
     return ss.str();
@@ -134,10 +150,10 @@ NavigatorConsole::parseDumpOpts(const Arguments &argv)
     auto size = l ? 4 : w ? 2 : 1;
 
     if ((int)a + (int)o + (int)d > 1) {
-        throw util::ParseError("Flags -a, -o, -d are mutually exclusive.");
+        throw util::ParseError("Flags -a, -o, -d are mutually exclusive");
     }
     if ((int)a + (int)w + (int)l > 1) {
-        throw util::ParseError("Flags -a, -w, -l are mutually exclusive.");
+        throw util::ParseError("Flags -a, -w, -l are mutually exclusive");
     }
     if (o) return {
 
@@ -240,6 +256,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             fs.init(FileSystemDescriptor(Diameter::INCH_525, Density::SD, FSVolumeType::NODOS));
+            fs.dump(Category::Info, os);
         }
     });
 
@@ -250,6 +267,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             fs.init(FileSystemDescriptor(Diameter::INCH_35, Density::DD, FSVolumeType::NODOS));
+            fs.dump(Category::Info, os);
         }
     });
 
@@ -260,6 +278,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             fs.init(FileSystemDescriptor(Diameter::INCH_35, Density::HD, FSVolumeType::NODOS));
+            fs.dump(Category::Info, os);
         }
     });
 
@@ -376,7 +395,7 @@ NavigatorConsole::initCommands(RSCommand &root)
     root.add({
 
         .tokens = { "block", "dump" },
-        .chelp  = { "Import a block from a file" },
+        .chelp  = { "Dump the contents of a block" },
         .args   = {
             { .name = { "nr", "Block number" } },
             { .name = { "a", "Output in ASCII, only" }, .flags = rs::flag },
@@ -432,7 +451,7 @@ NavigatorConsole::initCommands(RSCommand &root)
     root.add({
 
         .tokens = { "cd" },
-        .chelp  = { "Change the working directory." },
+        .chelp  = { "Change the working directory" },
         .args   = {
             { .name = { "path", "New working directory" }, .flags = rs::opt },
             { .name = { "b", "Specify the directory as a block number" }, .flags = rs::flag }

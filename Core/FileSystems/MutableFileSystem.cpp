@@ -48,7 +48,6 @@ MutableFileSystem::init(const FileSystemDescriptor &layout, const fs::path &path
 
     // Create all blocks
     init(isize(layout.numBlocks));
-    printf("Size: %d\n", (int)blocks.size());
 
     // Format the file system
     if (dos != FSVolumeType::NODOS) format();
