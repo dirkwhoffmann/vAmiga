@@ -143,11 +143,8 @@ public:
     void enterCommander() { enterConsole(0); }
     void enterDebugger() { enterConsole(1); }
     void enterNavigator() { enterConsole(2); }
-    /*
-    void nextConsole() { enterConsole((current->objid + 1) % 3); }
-    void prevConsole() { enterConsole((current->objid + 2) % 3); }
-    */
 
+    
     //
     // Executing commands
     //

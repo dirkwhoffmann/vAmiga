@@ -285,9 +285,6 @@ Memory::operator << (SerResetter &worker)
 
     if (isHardResetter(worker)) {
 
-        // Erase WOM (if any)
-        if (hasWom()) eraseWom();
-
         // Fill RAM with the proper startup pattern
         fillRamWithInitPattern();
     }
@@ -301,6 +298,14 @@ Memory::_didReset(bool hard)
 
     // Initialize statistical counters
     clearStats();
+}
+
+void
+Memory::_powerOn()
+{
+    // Erase WOM (if any)
+    if (hasWom()) eraseWom();
+    womIsLocked = false;
 }
 
 void

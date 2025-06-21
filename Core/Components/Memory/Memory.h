@@ -261,7 +261,7 @@ public:
     {
         worker
 
-        << womIsLocked
+        // << womIsLocked
         << cpuMemSrc
         << agnusMemSrc
         << dataBus;
@@ -269,6 +269,8 @@ public:
         if (isResetter(worker)) return;
 
         worker
+
+        << womIsLocked
 
         << romMask
         << womMask
@@ -289,8 +291,7 @@ public:
     void operator << (SerCounter &worker) override;
     void operator << (SerReader &worker) override;
     void operator << (SerWriter &worker) override;
-    void _didReset(bool hard) override;
-    
+
 
     //
     // Methods from CoreComponent
@@ -303,6 +304,8 @@ public:
 private:
 
     void _dump(Category category, std::ostream &os) const override;
+    void _powerOn() override;
+    void _didReset(bool hard) override;
 
 
     //
