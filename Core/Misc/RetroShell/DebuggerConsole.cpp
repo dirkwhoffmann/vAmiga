@@ -16,7 +16,7 @@ namespace vamiga {
 void
 DebuggerConsole::_pause()
 {
-    *this << '\n' << '\n';
+    *this << '\n';
     exec("state");
     *this << getPrompt();
 }
@@ -41,17 +41,6 @@ void
 DebuggerConsole::welcome()
 {
     Console::welcome();
-    /*
-    storage << "RetroShell Debugger ";
-    remoteManager.rshServer << "vAmiga RetroShell Remote Server ";
-    *this << Amiga::build() << '\n';
-    *this << '\n';
-    *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
-    *this << "https://github.com/dirkwhoffmann/vAmiga" << '\n';
-    *this << '\n';
-    
-    printHelp();
-    */
 }
 
 void
@@ -86,6 +75,7 @@ DebuggerConsole::initCommands(RSCommand &root)
 
         .tokens = { "next" },
         .chelp  = { "Switch to the next console" },
+        .flags  = rs::hidden,
 
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
@@ -97,6 +87,7 @@ DebuggerConsole::initCommands(RSCommand &root)
 
         .tokens = { "prev" },
         .chelp  = { "Switch to the previous console" },
+        .flags  = rs::hidden,
 
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 

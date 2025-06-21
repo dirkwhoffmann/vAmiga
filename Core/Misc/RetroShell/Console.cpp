@@ -240,13 +240,13 @@ Console::printHelp(isize tab)
     *this << vspace{1};
 }
 
+/*
 void
-Console::printState()
+Console::printState(std::ostream)
 {
-    std::stringstream ss;
-    dump(ss, amiga, Category::Trace);
-    *this << '\n' << ss << '\n';
+    dump(os, amiga, Category::Trace);
 }
+*/
 
 void
 Console::press(RSKey key, bool shift)
@@ -331,6 +331,7 @@ Console::press(RSKey key, bool shift)
             if (tabPressed) {
 
                 // TAB was pressed twice
+                *this << input << '\n';
                 retroShell.asyncExec("help \"" + input + "\"");
 
             } else {
@@ -837,17 +838,17 @@ Console::argUsage(const RSCommand& current, const string &prefix)
 }
 
 void
-Console::help(const string& userInput)
+Console::help(std::ostream &os, const string& userInput)
 {
     // Split the command string
     Tokens tokens = split(userInput);
 
     // Process the command
-    help(tokens);
+    help(os, tokens);
 }
 
 void
-Console::help(const Tokens &argv)
+Console::help(std::ostream &os, const Tokens &argv)
 {
     RSCommand *current = &getRoot();
     string prefix, token;
@@ -855,10 +856,7 @@ Console::help(const Tokens &argv)
     for (auto &it : argv) {
         if (current->seek(it) != nullptr) current = current->seek(it);
     }
-
-    std::stringstream ss;
-    current->printHelp(ss);
-    *this << '\r' << ss;
+    current->printHelp(os);
 }
 
 void
@@ -947,8 +945,11 @@ Console::dump(std::ostream &os, CoreObject &component, Category category)
 void
 Console::dump(std::ostream &os, CoreObject &component, std::vector <Category> categories)
 {
-    *this << '\n';
-    for(auto &category : categories) _dump(os, component, category);
+    for (usize i = 0; i < categories.size(); i++) {
+
+        if (i) os << std::endl;
+        _dump(os, component, categories[i]);
+    }
 }
 
 void
@@ -1067,7 +1068,7 @@ Console::initCommands(RSCommand &root)
             },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 
-                help(args.contains("command") ? args.at("command") : "");
+                help(os, args.contains("command") ? args.at("command") : "");
             }
         });
 
@@ -1078,8 +1079,9 @@ Console::initCommands(RSCommand &root)
             .flags  = rs::hidden,
 
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
-                printState();
+
+                dump(os, amiga, Category::Trace);
+                // printState();
             }
         });
 
@@ -1173,7 +1175,7 @@ Console::registerComponent(CoreComponent &c, RSCommand &root, bool shadowed)
             .tokens = { cmd },
             .ghelp  = descr,
             .chelp  = { "Display the current configuration" },
-            .flags  = rs::shadowed,
+            .flags  = shadowed ? rs::shadowed : 0,
 
             .func   = [this, &c] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 

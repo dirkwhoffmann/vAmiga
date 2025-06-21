@@ -205,6 +205,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "next" },
         .chelp  = { "Switch to the next console" },
+        .flags  = rs::hidden,
 
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
@@ -216,6 +217,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "prev" },
         .chelp  = { "Switch to the previous console" },
+        .flags  = rs::hidden,
 
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 

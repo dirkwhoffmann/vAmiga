@@ -219,8 +219,8 @@ protected:
     virtual void printHelp(isize tab = 0);
 
     // Prints a state summary (used by the debug shell)
-    void printState();
-    
+    // void printState(std::ostream);
+
 
     //
     // Managing user input
@@ -337,8 +337,8 @@ protected:
     void argUsage(const RSCommand &cmd, const string &prefix);
 
     // Displays a help text for a (partially typed in) command
-    void help(const string &cmd);
-    void help(const Tokens &argv);
+    void help(std::ostream &os, const string &cmd);
+    void help(std::ostream &os, const Tokens &argv);
     
     // Creates a textual description of an error
     void describe(const std::exception &exc, isize line = 0, const string &cmd = "");
