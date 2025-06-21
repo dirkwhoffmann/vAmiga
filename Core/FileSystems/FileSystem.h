@@ -65,6 +65,8 @@ protected:
     std::vector<Block> bmBlocks;
     std::vector<Block> bmExtBlocks;
 
+public: // CHANGE BACK TO PROTECTED ONCE EVERY BLOCK CAN BE 'PWD'
+
     // The current directory (points to the root block by default)
     Block curr = 0;
 

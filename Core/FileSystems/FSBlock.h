@@ -173,6 +173,7 @@ private:
     
 public:
     
+    bool hasName() const;
     FSName getName() const;
     void setName(FSName name);
     bool isNamed(const FSName &other) const;

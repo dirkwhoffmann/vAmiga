@@ -138,17 +138,24 @@ FileSystem::initialized() const
     if (blocks.empty()) return false;
 
     // Check if the root block is preset
-    if (auto *root = blockPtr(rootBlock); root) {
+    // if (rootBlockPtr(rootBlock) == nullptr) return false;
 
-        return  root->type == FSBlockType::ROOT_BLOCK;
-    }
-    return false;
+    return true;
 }
 
 bool
 FileSystem::formatted() const
 {
-    return initialized() && dos != FSVolumeType::NODOS;
+    // Check if the file system is initialized
+    if (!initialized()) return false;
+
+    // Check the DOS type
+    if (dos == FSVolumeType::NODOS) return false;
+
+    // Check if the root block is present
+    if (rootBlockPtr(rootBlock) == nullptr) return false;
+
+    return true;
 }
 
 FSTraits &

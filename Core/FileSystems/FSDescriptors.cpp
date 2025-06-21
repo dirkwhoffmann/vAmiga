@@ -154,8 +154,8 @@ GeometryDescriptor::GeometryDescriptor(isize size)
 
 GeometryDescriptor::GeometryDescriptor(Diameter type, Density density)
 {
-    if (type == Diameter::INCH_525 && density == Density::DD) {
-        
+    if (type == Diameter::INCH_525 && density == Density::SD) {
+
         cylinders = 40;
         heads = 2;
         sectors = 11;

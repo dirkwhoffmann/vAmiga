@@ -922,6 +922,23 @@ FSBlock::exportFileHeaderBlock(const fs::path &path)
     return Fault::OK;
 }
 
+bool
+FSBlock::hasName() const
+{
+    switch (type) {
+
+        case FSBlockType::ROOT_BLOCK:
+        case FSBlockType::USERDIR_BLOCK:
+        case FSBlockType::FILEHEADER_BLOCK:
+
+            return true;
+
+        default:
+
+            return false;
+    }
+}
+
 FSName
 FSBlock::getName() const
 {
@@ -934,6 +951,7 @@ FSBlock::getName() const
             return FSName(addr32(-20));
 
         default:
+            
             return FSName("");
     }
 }

@@ -27,11 +27,18 @@ NavigatorConsole::getPrompt()
 {
     std::stringstream ss;
 
-    if (fs.numBlocks()) {
+    if (auto ptr = fs.blockPtr(fs.curr); ptr) {
 
-        auto fsName = fs.getName();
-        if (!fsName.empty()) ss << fsName << ":";
-        ss << fs.pwd();
+        if (ptr->hasName()) {
+
+            auto fsName = fs.getName();
+            if (!fsName.empty()) ss << fsName << ":";
+            ss << fs.pwd();
+
+        } else {
+
+            ss << "[" << std::to_string(fs.curr) << "] ";
+        }
     }
 
     ss << "> ";
@@ -218,7 +225,71 @@ NavigatorConsole::initCommands(RSCommand &root)
     // Importing and exporting
     //
 
-    RSCommand::currentGroup = "Import and export";
+    RSCommand::currentGroup = "General";
+
+    root.add({
+
+        .tokens = { "create" },
+        .chelp  = { "Create a file system with a particular capacity" },
+    });
+
+    root.add({
+
+        .tokens = { "create", "SD" },
+        .chelp  = { "Create a file system for a single-density floppy disk" },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            fs.init(FileSystemDescriptor(Diameter::INCH_525, Density::SD, FSVolumeType::NODOS));
+        }
+    });
+
+    root.add({
+
+        .tokens = { "create", "DD" },
+        .chelp  = { "Create a file system for a double-density floppy disk" },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            fs.init(FileSystemDescriptor(Diameter::INCH_35, Density::DD, FSVolumeType::NODOS));
+        }
+    });
+
+    root.add({
+
+        .tokens = { "create", "HD" },
+        .chelp  = { "Create a file system for a high-density floppy disk" },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            fs.init(FileSystemDescriptor(Diameter::INCH_35, Density::HD, FSVolumeType::NODOS));
+        }
+    });
+
+    root.add({
+
+        .tokens = { "create", "capacity" },
+        .chelp  = { "Create a file system with a particular capacity" },
+        .args   = {
+            { .name = { "mb", "Capacity in MB" } },
+        },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            os << "Holla, die Waldfee" << std::endl;
+        }
+    });
+
+    root.add({
+
+        .tokens = { "create", "custom" },
+        .chelp  = { "Create a file system with a custom layout" },
+        .args   = {
+            { .name = { "cylinders", "Number of cylinders" }, .flags=rs::keyval },
+            { .name = { "heads", "Number of drive heads" }, .flags=rs::keyval },
+            { .name = { "sectors", "Number of sectors per cylinder" }, .flags=rs::keyval },
+        },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            os << "Holla, die Waldfee" << std::endl;
+        }
+    });
 
     root.add({ .tokens = { "import" }, .ghelp = { "Import a file system" } });
 
@@ -272,7 +343,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         });
     }
 
-    RSCommand::currentGroup = "Directories";
+    RSCommand::currentGroup = "Inspection";
 
     root.add({
 
@@ -283,6 +354,80 @@ NavigatorConsole::initCommands(RSCommand &root)
             fs.dump(Category::Info, os);
         }
     });
+
+    root.add({
+
+        .tokens = { "block" },
+        .ghelp  = { "Manage blocks" },
+        .chelp  = { "Inspect a block" },
+        .args   = {
+            { .name = { "nr", "Block number" }, .flags = rs::opt },
+        },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            auto nr = parseBlock(args, "nr");
+
+            if (auto ptr = fs.blockPtr(nr); ptr) {
+                ptr->dump(os);
+            }
+        }
+    });
+
+    root.add({
+
+        .tokens = { "block", "dump" },
+        .chelp  = { "Import a block from a file" },
+        .args   = {
+            { .name = { "nr", "Block number" } },
+            { .name = { "a", "Output in ASCII, only" }, .flags = rs::flag },
+            { .name = { "o", "Output numbers in octal" }, .flags = rs::flag },
+            { .name = { "d", "Output numbers in decimal" }, .flags = rs::flag },
+            { .name = { "w", "Print in word format" }, .flags = rs::flag },
+            { .name = { "l", "Print in long word format" }, .flags = rs::flag },
+            { .name = { "t", "Display the last part" }, .flags = rs::flag },
+            { .name = { "lines", "Number of displayed rows" }, .flags = rs::keyval|rs::opt },
+        },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            auto nr = parseBlock(args, "nr");
+            auto opt = parseDumpOpts(args);
+
+            if (auto ptr = fs.blockPtr(nr); ptr) {
+
+                ptr->hexDump(os, opt);
+            }
+        }
+    });
+
+    root.add({
+
+        .tokens = { "block", "import" },
+        .chelp  = { "Import a block from a file" },
+        .args   = {
+            { .name = { "nr", "Block number" } },
+            { .name = { "path", "File path" } },
+        },
+        .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            os << "Not implemented, yet!" << '\n';
+        }
+    });
+
+    root.add({
+
+        .tokens = { "block", "export" },
+        .chelp  = { "Export a block to a file" },
+        .args   = {
+            { .name = { "nr", "Block number" } },
+            { .name = { "path", "File path" } },
+        },
+        .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            os << "Not implemented, yet!" << '\n';
+        }
+    });
+
+    RSCommand::currentGroup = "Directories and files";
 
     root.add({
 
@@ -489,78 +634,6 @@ NavigatorConsole::initCommands(RSCommand &root)
             Buffer<u8> buffer;
             file.ptr()->writeData(buffer);
             buffer.dump(os, opt);
-        }
-    });
-
-    root.add({
-
-        .tokens = { "block" },
-        .ghelp  = { "Manage blocks" },
-        .chelp  = { "Inspect a block" },
-        .args   = {
-            { .name = { "nr", "Block number" }, .flags = rs::opt },
-        },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-            auto nr = parseBlock(args, "nr");
-
-            if (auto ptr = fs.blockPtr(nr); ptr) {
-                ptr->dump(os);
-            }
-        }
-    });
-
-    root.add({
-
-        .tokens = { "block", "dump" },
-        .chelp  = { "Import a block from a file" },
-        .args   = {
-            { .name = { "nr", "Block number" } },
-            { .name = { "a", "Output in ASCII, only" }, .flags = rs::flag },
-            { .name = { "o", "Output numbers in octal" }, .flags = rs::flag },
-            { .name = { "d", "Output numbers in decimal" }, .flags = rs::flag },
-            { .name = { "w", "Print in word format" }, .flags = rs::flag },
-            { .name = { "l", "Print in long word format" }, .flags = rs::flag },
-            { .name = { "t", "Display the last part" }, .flags = rs::flag },
-            { .name = { "lines", "Number of displayed rows" }, .flags = rs::keyval|rs::opt },
-        },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-            auto nr = parseBlock(args, "nr");
-            auto opt = parseDumpOpts(args);
-
-            if (auto ptr = fs.blockPtr(nr); ptr) {
-
-                ptr->hexDump(os, opt);
-            }
-        }
-    });
-
-    root.add({
-
-        .tokens = { "block", "import" },
-        .chelp  = { "Import a block from a file" },
-        .args   = {
-            { .name = { "nr", "Block number" } },
-            { .name = { "path", "File path" } },
-        },
-        .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-            os << "Not implemented, yet!" << '\n';
-        }
-    });
-
-    root.add({
-
-        .tokens = { "block", "export" },
-        .chelp  = { "Export a block to a file" },
-        .args   = {
-            { .name = { "nr", "Block number" } },
-            { .name = { "path", "File path" } },
-        },
-        .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-            os << "Not implemented, yet!" << '\n';
         }
     });
 }

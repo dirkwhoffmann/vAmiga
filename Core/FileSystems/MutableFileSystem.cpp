@@ -22,17 +22,20 @@ MutableFileSystem::init(isize capacity)
 {
     // Remove existing blocks (if any)
     for (auto &b : blocks) delete b;
-    
-    // Resize and initialize the block storage
+
+    // Resize the block storage
     blocks.reserve(capacity);
     blocks.assign(capacity, nullptr);
+
+    // Create new blocks
+    for (isize i = 0; i < capacity; i++) {
+        blocks[i] = new FSBlock(*this, Block(i), FSBlockType::EMPTY_BLOCK);
+    }
 }
 
 void
-MutableFileSystem::init(FileSystemDescriptor &layout, const fs::path &path)
+MutableFileSystem::init(const FileSystemDescriptor &layout, const fs::path &path)
 {
-    init((isize)layout.numBlocks);
-    
     if (FS_DEBUG) { layout.dump(); }
     
     // Copy layout parameters
@@ -42,10 +45,14 @@ MutableFileSystem::init(FileSystemDescriptor &layout, const fs::path &path)
     rootBlock   = layout.rootBlock;
     bmBlocks    = layout.bmBlocks;
     bmExtBlocks = layout.bmExtBlocks;
-    
+
     // Create all blocks
-    format();
-        
+    init(isize(layout.numBlocks));
+    printf("Size: %d\n", (int)blocks.size());
+
+    // Format the file system
+    if (dos != FSVolumeType::NODOS) format();
+
     // Start allocating blocks at the middle of the disk
     ap = rootBlock;
     
@@ -86,13 +93,15 @@ MutableFileSystem::format(FSVolumeType dos, string name)
 void
 MutableFileSystem::format(string name)
 {
-    // Start from scratch
-    init(isize(blocks.size()));
-    
+    if (!initialized()) throw AppError(Fault::FS_UNINITIALIZED);
+
     // Do some consistency checking
     assert(numBlocks() > 2);
-    for (isize i = 0; i < numBlocks(); i++) assert(blocks[i] == nullptr);
-    
+
+    // Trash all existing data
+    init(isize(blocks.size()));
+    for (auto &it : blocks) assert(it->type == FSBlockType::EMPTY_BLOCK);
+
     // Create boot blocks
     blocks[0] = new FSBlock(*this, 0, FSBlockType::BOOT_BLOCK);
     blocks[1] = new FSBlock(*this, 1, FSBlockType::BOOT_BLOCK);
@@ -122,10 +131,14 @@ MutableFileSystem::format(string name)
     
     // Add free blocks
     for (isize i = 0; i < numBlocks(); i++) {
-        
+
+        assert(blocks[i] != nullptr);
+        /*
         if (blocks[i] == nullptr) {
-            
             blocks[i] = new FSBlock(*this, Block(i), FSBlockType::EMPTY_BLOCK);
+        }
+        */
+        if (blocks[i]->type == FSBlockType::EMPTY_BLOCK) {
             markAsFree(Block(i));
         }
     }
