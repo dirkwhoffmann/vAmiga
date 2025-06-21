@@ -803,10 +803,16 @@ FSBlock::dump(std::ostream &os) const
 
         os << tab("Hash table");
         for (isize i = 0, j = 0; i < hashTableSize(); i++) {
-            if (u32 value = read32(data.ptr + 24 + 4 * i); value) {
+
+            if (Block ref = read32(data.ptr + 24 + 4 * i); ref) {
+
                 if (j++) os << std::endl << tab();
                 os << std::setfill(' ') << std::setw(2) << i << " -> ";
-                os << std::setfill(' ') << std::setw(4) << value << " ";
+                os << std::setfill(' ') << std::setw(4) << ref;
+
+                if (auto ptr = fs.blockPtr(ref); ptr) {
+                    os << " (" << ptr->getName().cpp_str() << ")";
+                }
             }
         }
         os << std::endl;
