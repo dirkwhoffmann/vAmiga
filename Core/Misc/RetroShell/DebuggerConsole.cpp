@@ -55,9 +55,9 @@ DebuggerConsole::welcome()
 }
 
 void
-DebuggerConsole::printHelp()
+DebuggerConsole::printHelp(isize tab)
 {
-    Console::printHelp();
+    Console::printHelp(tab);
 }
 
 void
@@ -77,7 +77,34 @@ void
 DebuggerConsole::initCommands(RSCommand &root)
 {
     Console::initCommands(root);
-    
+
+    //
+    // Console management
+    //
+
+    root.add({
+
+        .tokens = { "next" },
+        .chelp  = { "Switch to the next console" },
+
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            retroShell.enterNavigator();
+        }
+    });
+
+    root.add({
+
+        .tokens = { "prev" },
+        .chelp  = { "Switch to the previous console" },
+
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            retroShell.enterCommander();
+        }
+    });
+
+
     //
     // Program execution
     //

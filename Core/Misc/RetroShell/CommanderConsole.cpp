@@ -46,9 +46,9 @@ CommanderConsole::welcome()
 }
 
 void
-CommanderConsole::printHelp()
+CommanderConsole::printHelp(isize tab)
 {
-    Console::printHelp();
+    Console::printHelp(tab);
 }
 
 void
@@ -61,7 +61,34 @@ void
 CommanderConsole::initCommands(RSCommand &root)
 {
     Console::initCommands(root);
-    
+
+    //
+    // Console management
+    //
+
+    root.add({
+
+        .tokens = { "next" },
+        .chelp  = { "Switch to the next console" },
+
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            retroShell.enterDebugger();
+        }
+    });
+
+    root.add({
+
+        .tokens = { "prev" },
+        .chelp  = { "Switch to the previous console" },
+
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            retroShell.enterNavigator();
+        }
+    });
+
+
     //
     // Workspace management
     //

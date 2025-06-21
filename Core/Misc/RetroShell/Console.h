@@ -216,7 +216,7 @@ protected:
     virtual void welcome() = 0;
 
     // Prints the help line
-    virtual void printHelp();
+    virtual void printHelp(isize tab = 0);
 
     // Prints a state summary (used by the debug shell)
     void printState();
@@ -367,7 +367,7 @@ class CommanderConsole final : public Console
     void _pause() override;
     string getPrompt() override;
     void welcome() override;
-    void printHelp() override;
+    void printHelp(isize tab = 0) override;
     void pressReturn(bool shift) override;
 };
 
@@ -383,7 +383,7 @@ class DebuggerConsole final : public Console
     void _pause() override;
     string getPrompt() override;
     void welcome() override;
-    void printHelp() override;
+    void printHelp(isize tab = 0) override;
     void pressReturn(bool shift) override;
 };
 
@@ -401,7 +401,7 @@ class NavigatorConsole final : public Console
     void _pause() override;
     string getPrompt() override;
     void welcome() override;
-    void printHelp() override;
+    void printHelp(isize tab = 0) override;
     void pressReturn(bool shift) override;
 
 

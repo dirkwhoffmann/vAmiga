@@ -320,20 +320,14 @@ RetroShell::press(RSKey key, bool shift)
             case RSKey::UP:
             case RSKey::PAGE_UP:
 
-                // prevConsole();
-                if (current == &commander) asyncExec("navigator");
-                if (current == &debugger) asyncExec("commander");
-                if (current == &navigator) asyncExec("debugger");
+                asyncExec("prev");
                 return;
 
             case RSKey::DOWN:
             case RSKey::PAGE_DOWN:
             case RSKey::TAB:
 
-                // nextConsole();
-                if (current == &commander) asyncExec("debugger");
-                if (current == &debugger) asyncExec("navigator");
-                if (current == &navigator) asyncExec("commander");
+                asyncExec("next");
                 return;
 
             default:

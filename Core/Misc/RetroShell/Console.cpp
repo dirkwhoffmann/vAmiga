@@ -165,7 +165,7 @@ Console::welcome()
     *this << "    " << description() << " console" << "\n\n";
     // *this << "    vAmiga " << description() << "\n\n";
 
-    printHelp();
+    printHelp(4);
 }
 
 const char *
@@ -228,12 +228,12 @@ Console::lastLineIsEmpty()
 }
 
 void
-Console::printHelp()
+Console::printHelp(isize tab)
 {
     *this << vspace{0};
 
-    storage << "    Type 'help' or press 'Tab' twice for help.\n";
-    storage << "    Press 'PgUp', 'PgDown', or 'Shift+Tab' to switch consoles.";
+    storage << string(tab, ' ') << "Type 'help' or press 'Tab' twice for help.\n";
+    storage << string(tab, ' ') << "Press 'PgUp', 'PgDown', or 'Shift+Tab' to switch consoles.";
 
     remoteManager.rshServer << "Type 'help' for help.\n";
 

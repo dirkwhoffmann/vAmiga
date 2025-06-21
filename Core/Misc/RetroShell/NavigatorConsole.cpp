@@ -57,9 +57,9 @@ NavigatorConsole::welcome()
 }
 
 void
-NavigatorConsole::printHelp()
+NavigatorConsole::printHelp(isize tab)
 {
-    Console::printHelp();
+    Console::printHelp(tab);
 }
 
 void
@@ -196,6 +196,33 @@ NavigatorConsole::initCommands(RSCommand &root)
     std::vector<string> help;
 
     Console::initCommands(root);
+
+    //
+    // Console management
+    //
+
+    root.add({
+
+        .tokens = { "next" },
+        .chelp  = { "Switch to the next console" },
+
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            retroShell.enterCommander();
+        }
+    });
+
+    root.add({
+
+        .tokens = { "prev" },
+        .chelp  = { "Switch to the previous console" },
+
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            retroShell.enterDebugger();
+        }
+    });
+
 
     //
     // Importing and exporting
