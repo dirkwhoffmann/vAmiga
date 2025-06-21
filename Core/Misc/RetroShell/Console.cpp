@@ -162,12 +162,8 @@ Console::welcome()
     *this << "https://github.com/dirkwhoffmann/vAmiga" << '\n';
     *this << '\n';
 
-
-     switch (objid) {
-         case 0: *this << "    Command console" << "\n\n"; break;
-         case 1: *this << "    Debug console" << "\n\n"; break;
-         case 2: *this << "    File system navigator" << "\n\n"; break;
-     }
+    *this << "    " << description() << " console" << "\n\n";
+    // *this << "    vAmiga " << description() << "\n\n";
 
     printHelp();
 }

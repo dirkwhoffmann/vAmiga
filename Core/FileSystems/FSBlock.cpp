@@ -1877,8 +1877,8 @@ isize
 FSBlock::writeData(Buffer<u8> &buf)
 {
     // Only call this function for file header blocks
-    assert(type == FSBlockType::FILEHEADER_BLOCK);
-    
+    if (type != FSBlockType::FILEHEADER_BLOCK) throw AppError(Fault::FS_NOT_A_FILE);
+
     isize bytesRemaining = getFileSize();
     isize bytesTotal = 0;
     isize blocksTotal = 0;
