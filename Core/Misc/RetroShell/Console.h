@@ -340,8 +340,9 @@ protected:
     void help(const string &cmd);
     void help(const Tokens &argv);
     
-    // Prints a textual description of an error in the console
-    void describe(const std::exception &exception, isize line = 0, const string &cmd = "");
+    // Creates a textual description of an error
+    void describe(const std::exception &exc, isize line = 0, const string &cmd = "");
+    void describe(std::ostream &os, const std::exception &exc, isize line = 0, const string &cmd = "");
 
 
     //

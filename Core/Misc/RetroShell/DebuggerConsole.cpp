@@ -40,6 +40,8 @@ DebuggerConsole::getPrompt()
 void
 DebuggerConsole::welcome()
 {
+    Console::welcome();
+    /*
     storage << "RetroShell Debugger ";
     remoteManager.rshServer << "vAmiga RetroShell Remote Server ";
     *this << Amiga::build() << '\n';
@@ -49,6 +51,7 @@ DebuggerConsole::welcome()
     *this << '\n';
     
     printHelp();
+    */
 }
 
 void

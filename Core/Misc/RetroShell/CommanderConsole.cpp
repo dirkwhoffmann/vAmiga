@@ -29,6 +29,8 @@ CommanderConsole::getPrompt()
 void
 CommanderConsole::welcome()
 {
+    Console::welcome();
+    /*
     storage << "RetroShell Commander ";
     remoteManager.rshServer << "vAmiga RetroShell Remote Server ";
     *this << Amiga::build() << '\n';
@@ -36,8 +38,11 @@ CommanderConsole::welcome()
     *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
     *this << "https://github.com/dirkwhoffmann/vAmiga" << '\n';
     *this << '\n';
+    *this << "Command console" << '\n';
+    *this << '\n';
     
     printHelp();
+    */
 }
 
 void

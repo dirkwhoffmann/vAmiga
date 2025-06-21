@@ -41,6 +41,8 @@ NavigatorConsole::getPrompt()
 void
 NavigatorConsole::welcome()
 {
+    Console::welcome();
+    /*
     storage << "RetroShell Navigator ";
     remoteManager.rshServer << "vAmiga RetroShell Remote Server ";
     *this << Amiga::build() << '\n';
@@ -50,6 +52,7 @@ NavigatorConsole::welcome()
     *this << '\n';
 
     printHelp();
+    */
     retroShell.asyncExec("import df0");
 }
 

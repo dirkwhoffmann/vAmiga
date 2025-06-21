@@ -29,9 +29,11 @@ RetroShell::RetroShell(Amiga& ref) : SubComponent(ref)
 void
 RetroShell::_initialize()
 {
-    // enterCommander();
+    // Set the current console
     current = &debugger;
-    asyncExec("commander");
+
+    // Print the welcome message
+    current->exec("commander");
 }
 
 void

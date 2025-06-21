@@ -150,6 +150,28 @@ Console::operator<<(const vspace &value)
     return *this;
 }
 
+void
+Console::welcome()
+{
+    storage << "RetroShell ";
+    remoteManager.rshServer << "vAmiga RetroShell Remote Server ";
+    *this << Amiga::build() << '\n';
+    *this << '\n';
+
+    *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
+    *this << "https://github.com/dirkwhoffmann/vAmiga" << '\n';
+    *this << '\n';
+
+
+     switch (objid) {
+         case 0: *this << "    Command console" << "\n\n"; break;
+         case 1: *this << "    Debug console" << "\n\n"; break;
+         case 2: *this << "    File system navigator" << "\n\n"; break;
+     }
+
+    printHelp();
+}
+
 const char *
 Console::text()
 {
@@ -214,8 +236,8 @@ Console::printHelp()
 {
     *this << vspace{0};
 
-    storage << "Type 'help' or press 'Tab' twice for help.\n";
-    storage << "Press 'PgUp', 'PgDown', or 'Shift+Tab' to switch consoles.";
+    storage << "    Type 'help' or press 'Tab' twice for help.\n";
+    storage << "    Press 'PgUp', 'PgDown', or 'Shift+Tab' to switch consoles.";
 
     remoteManager.rshServer << "Type 'help' for help.\n";
 
@@ -844,66 +866,80 @@ Console::help(const Tokens &argv)
 }
 
 void
-Console::describe(const std::exception &e, isize line, const string &cmd)
+Console::describe(const std::exception &exc, isize line, const string &cmd)
 {
-    const util::ParseError *err;
+    std::stringstream ss;
+    describe(ss, exc, line, cmd);
+    *this << vdelim << ss.str() << vdelim;
+}
 
-    *this << vdelim;
+void
+Console::describe(std::ostream &ss, const std::exception &e, isize line, const string &cmd)
+{
+    if (line) ss << "Line " << line << ": " << cmd << '\n';
 
-    if (line) *this << "Line " << line << ": " << cmd << '\n';
+    if (auto err = dynamic_cast<const TooFewArgumentsError *>(&e)) {
 
-    if ((err = dynamic_cast<const TooFewArgumentsError *>(&e))) {
+        ss << err->what() << ": Too few arguments.";
+        ss << '\n';
+        return;
+    }
+    if (auto err = dynamic_cast<const TooManyArgumentsError *>(&e)) {
 
-        *this << err->what() << ": Too few arguments.";
-        *this << '\n';
+        ss << err->what() << ": Too many arguments.";
+        ss << '\n';
+        return;
+    }
+    if (auto err = dynamic_cast<const UnknownFlagError *>(&e)) {
 
-    } else if ((err = dynamic_cast<const TooManyArgumentsError *>(&e))) {
+        ss << err->what() << " is not a valid flag.";
+        ss << '\n';
+        return;
+    }
+    if (auto err = dynamic_cast<const UnknownKeyValueError *>(&e)) {
 
-        *this << err->what() << ": Too many arguments.";
-        *this << '\n';
+        ss << err->what() << " is not a valid key-value pair.";
+        ss << '\n';
+        return;
+    }
+    if (auto err = dynamic_cast<const util::EnumParseError *>(&e)) {
 
-    } else if ((err = dynamic_cast<const UnknownFlagError *>(&e))) {
+        ss << err->token << " is not a valid key." << '\n';
+        ss << "Expected: " << err->expected << '\n';
+        return;
+    }
+    if (auto err = dynamic_cast<const util::ParseNumError *>(&e)) {
 
-        *this << err->what() << " is not a valid flag.";
-        *this << '\n';
+        ss << err->token << " is not a number.";
+        ss << '\n';
+        return;
+    }
+    if (auto err = dynamic_cast<const util::ParseBoolError *>(&e)) {
 
-    } else if ((err = dynamic_cast<const UnknownKeyValueError *>(&e))) {
+        ss << err->token << " must be true or false.";
+        ss << '\n';
+        return;
+    }
+    if (auto err = dynamic_cast<const util::ParseOnOffError *>(&e)) {
 
-        *this << err->what() << " is not a valid key-value pair.";
-        *this << '\n';
+        ss << "'" << err->token << "' must be on or off.";
+        ss << '\n';
+        return;
+    }
+    if (auto err = dynamic_cast<const util::ParseError *>(&e)) {
 
-    } else if ((err = dynamic_cast<const util::EnumParseError *>(&e))) {
+        ss << err->what() << ": Syntax error";
+        ss << '\n';
+        return;
+    }
+    if (auto err = dynamic_cast<const AppError *>(&e)) {
 
-        *this << err->token << " is not a valid key." << '\n';
-        *this << "Expected: " << err->expected << '\n';
-
-    } else if ((err = dynamic_cast<const util::ParseNumError *>(&e))) {
-
-        *this << err->token << " is not a number.";
-        *this << '\n';
-
-    } else if ((err = dynamic_cast<const util::ParseBoolError *>(&e))) {
-
-        *this << err->token << " must be true or false.";
-        *this << '\n';
-
-    } else if ((err = dynamic_cast<const util::ParseOnOffError *>(&e))) {
-
-        *this << "'" << err->token << "' must be on or off.";
-        *this << '\n';
-
-    } else if ((err = dynamic_cast<const util::ParseError *>(&e))) {
-
-        *this << err->what() << ": Syntax error";
-        *this << '\n';
-
-    } else if (auto appErr = dynamic_cast<const AppError *>(&e)) {
-
-        *this << appErr->what();
-        *this << '\n';
+        ss << err->what();
+        ss << '\n';
+        return;
     }
 
-    *this << vdelim;
+    ss << e.what();
 }
 
 void
