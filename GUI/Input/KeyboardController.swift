@@ -26,6 +26,9 @@ class KeyboardController: NSObject {
     var leftCommand = false, rightCommand = false
     var capsLock    = false
 
+    // Remembers the warp mode when caps lock is pressed
+    var oldWarpMode: WarpMode?
+
     // Mapping from Unicode scalars to keycodes (used for auto-typing)
     var symKeyMap: [UnicodeScalar: UInt16] = [:]
     var symKeyMapShifted: [UnicodeScalar: UInt16] = [:]
@@ -178,12 +181,17 @@ class KeyboardController: NSObject {
 
     func capsLockDown() {
 
+        oldWarpMode = WarpMode(rawValue: parent.config.warpMode)
         parent.config.warpMode = WarpMode.ALWAYS.rawValue
     }
 
     func capsLockUp() {
 
-        parent.config.warpMode = WarpMode.NEVER.rawValue
+        if let oldWarpMode = oldWarpMode {
+            if parent.config.warpMode == WarpMode.ALWAYS.rawValue {
+                parent.config.warpMode = oldWarpMode.rawValue
+            }
+        }
     }
 
     func autoType(_ string: String, max: Int) {
