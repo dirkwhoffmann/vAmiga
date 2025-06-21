@@ -86,13 +86,9 @@ Thread::execute()
 void
 Thread::sleep()
 {
-    // Don't sleep if the emulator is running in warp mode and no suspension is pending
-    if (warp && isRunning() && suspensionLock.tryLock()) {
-        
-        suspensionLock.unlock();
-        return;
-    }
-    
+    // Don't sleep if the emulator is running in warp mode
+    if (warp && isRunning()) return;
+
     // Set a timeout to prevent the thread from stalling
     auto timeout = util::Time::milliseconds(50);
 
@@ -348,8 +344,7 @@ Thread::suspend() const
     assert(isUserThread());
 
     if (suspendCounter++ == 0) {
-        
-        suspensionLock.lock();
+
         lock.lock();
     }
 }
@@ -366,7 +361,6 @@ Thread::resume() const
         
     } else if (--suspendCounter == 0) {
         
-        suspensionLock.unlock();
         lock.unlock();
     }
 }
