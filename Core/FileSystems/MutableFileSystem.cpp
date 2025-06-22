@@ -99,7 +99,7 @@ MutableFileSystem::format(string name)
 
     // Trash all existing data
     init(isize(blocks.size()));
-    for (auto &it : blocks) assert(it->type == FSBlockType::EMPTY_BLOCK);
+    // for (auto &it : blocks) assert(it->type == FSBlockType::EMPTY_BLOCK);
 
     // Create boot blocks
     blocks[0] = new FSBlock(*this, 0, FSBlockType::BOOT_BLOCK);

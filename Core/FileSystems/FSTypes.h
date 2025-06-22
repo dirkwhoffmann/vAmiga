@@ -13,6 +13,7 @@
 
 namespace vamiga {
 
+struct FSBlock;
 struct FSPath;
 typedef u32 Block;
 typedef std::function<bool(const FSPath &)> FSPathFilter;

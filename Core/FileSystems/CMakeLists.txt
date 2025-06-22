@@ -2,12 +2,13 @@ target_include_directories(VACore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 target_sources(VACore PRIVATE
 
-FSDescriptors.cpp
+BlockStorage.cpp
+BootBlockImage.cpp
 FileSystem.cpp
-MutableFileSystem.cpp
+FSDescriptors.cpp
 FSObjects.cpp
 FSBlock.cpp
 FSPath.cpp
-BootBlockImage.cpp
+MutableFileSystem.cpp
 
 )

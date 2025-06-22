@@ -253,15 +253,6 @@ FileSystem::_dump(Category category, std::ostream &os) const
             os << std::endl;
             break;
 
-        case Category::Blocks:
-
-            for (isize i = 0; i < numBlocks(); i++)  {
-                if (auto *ptr = blockPtr(Block(i)); ptr) {
-                    if (ptr->type != FSBlockType::EMPTY_BLOCK) ptr->dump(os);
-                }
-            }
-            break;
-
         default:
             break;
     }
