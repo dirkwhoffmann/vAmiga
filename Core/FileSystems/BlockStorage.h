@@ -58,6 +58,8 @@ protected:
     // Querying properties
     //
 
+public:
+    
     // Gets or sets the block type
     FSBlockType getType(Block nr) const;
     void setType(Block nr, FSBlockType type);

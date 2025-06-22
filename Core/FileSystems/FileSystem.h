@@ -54,7 +54,7 @@ protected:
     BlockStorage storage = BlockStorage(*this);
 
     // Block storage (DEPRECATED)
-    [[deprecated]] std::vector<BlockPtr> blocks;
+    // [[deprecated]] std::vector<BlockPtr> blocks;
 
     // Size of a single block in bytes
     isize bsize = 512;
@@ -113,16 +113,6 @@ protected:
     void _dump(Category category, std::ostream &os) const override;
 
 
-    // TEMPORARY FUNCTIONS FOR ACCESSING THE STORAGE
-    FSBlockType getType(Block nr) const;
-    FSBlock &read(Block nr);
-    const FSBlock &read(Block nr) const;
-    FSBlock *pread(Block nr);
-    FSBlock *pread(Block nr, FSBlockType type);
-    const FSBlock *pread(Block nr) const;
-    const FSBlock *pread(Block nr, FSBlockType type) const;
-
-
     //
     // Querying file system properties
     //
@@ -132,7 +122,7 @@ public:
     FSTraits &getTraits();
 
     // Returns capacity information
-    isize numBlocks() const { return isize(blocks.size()); }
+    isize numBlocks() const { return storage.capacity(); } // isize(blocks.size()); }
     isize numBytes() const { return numBlocks() * bsize; }
     isize blockSize() const { return bsize; }
 
