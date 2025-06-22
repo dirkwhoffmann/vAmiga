@@ -300,14 +300,14 @@ FileSystem::getModificationDate() const
 string
 FileSystem::getBootBlockName() const
 {
-    return BootBlockImage(storage.read(0).data.ptr, storage.read(1).data.ptr).name;
+    return BootBlockImage(storage.read(0).data, storage.read(1).data).name;
     // return BootBlockImage(blocks[0]->data.ptr, blocks[1]->data.ptr).name;
 }
 
 BootBlockType
 FileSystem::bootBlockType() const
 {
-    return BootBlockImage(storage.read(0).data.ptr, storage.read(1).data.ptr).type;
+    return BootBlockImage(storage.read(0).data, storage.read(1).data).type;
     // return BootBlockImage(blocks[0]->data.ptr, blocks[1]->data.ptr).type;
 }
 
@@ -495,7 +495,7 @@ FileSystem::ascii(Block nr, isize offset, isize len) const
 {
     assert(offset + len <= bsize);
 
-    return  util::createAscii(storage.read(nr).data.ptr + offset, len);
+    return  util::createAscii(storage.read(nr).data + offset, len);
 
     /*
     if (blocks[nr]->data.ptr) {

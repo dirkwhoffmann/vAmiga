@@ -36,7 +36,7 @@ struct FSBlock : CoreObject {
     isize corrupted = 0;
 
     // Block data
-    Buffer<u8> data;
+    u8 *data = nullptr;
 
     
     //

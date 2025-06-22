@@ -274,7 +274,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .args   = {
             { .name = { "mb", "Capacity in MB" } },
         },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+        .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             os << "Holla, die Waldfee" << std::endl;
         }
@@ -289,7 +289,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "heads", "Number of drive heads" }, .flags=rs::keyval },
             { .name = { "sectors", "Number of sectors per cylinder" }, .flags=rs::keyval },
         },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+        .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             os << "Holla, die Waldfee" << std::endl;
         }
