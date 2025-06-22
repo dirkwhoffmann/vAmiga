@@ -58,15 +58,25 @@ protected:
     // Querying properties
     //
 
+    // Gets or sets the block type
+    FSBlockType getType(Block nr) const;
+    void setType(Block nr, FSBlockType type);
+
     // Returns the storage capacity in blocks
     isize capacity() const { return blocks.size(); }
 
     // Reads a block from the storage
     FSBlock &read(Block nr);
+    const FSBlock &read(Block nr) const;
 
     // Returns a block pointer or null if the block does not exist
     FSBlock *pread(Block nr);
     FSBlock *pread(Block nr, FSBlockType type);
+    const FSBlock *pread(Block nr) const;
+    const FSBlock *pread(Block nr, FSBlockType type) const;
+
+    // Write a block into the storage
+    void write(Block nr, FSBlock *block);
 };
 
 }

@@ -14,6 +14,7 @@
 #include "FSDescriptors.h"
 #include "FSObjects.h"
 #include "FSPath.h"
+#include "BlockStorage.h"
 #include "ADFFile.h"
 #include "HDFFile.h"
 #include <stack>
@@ -48,9 +49,12 @@ protected:
 
     // File system version
     FSVolumeType dos = FSVolumeType::NODOS;
-    
+
     // Block storage
-    std::vector<BlockPtr> blocks;
+    BlockStorage storage = BlockStorage(*this);
+
+    // Block storage (DEPRECATED)
+    [[deprecated]] std::vector<BlockPtr> blocks;
 
     // Size of a single block in bytes
     isize bsize = 512;
@@ -108,7 +112,17 @@ protected:
     const char *objectName() const override { return "FileSystem"; }
     void _dump(Category category, std::ostream &os) const override;
 
-    
+
+    // TEMPORARY FUNCTIONS FOR ACCESSING THE STORAGE
+    FSBlockType getType(Block nr) const;
+    FSBlock &read(Block nr);
+    const FSBlock &read(Block nr) const;
+    FSBlock *pread(Block nr);
+    FSBlock *pread(Block nr, FSBlockType type);
+    const FSBlock *pread(Block nr) const;
+    const FSBlock *pread(Block nr, FSBlockType type) const;
+
+
     //
     // Querying file system properties
     //

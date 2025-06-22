@@ -64,10 +64,22 @@ BlockStorage::_dump(Category category, std::ostream &os) const
     }
 }
 
+FSBlockType
+BlockStorage::getType(Block nr) const
+{
+    return nr < blocks.size() ? blocks[nr]->type : FSBlockType::UNKNOWN_BLOCK;
+}
+
+void
+BlockStorage::setType(Block nr, FSBlockType type)
+{
+    if (nr >= blocks.size()) throw AppError(Fault::FS_INVALID_BLOCK_REF);
+    blocks[nr]->init(type);
+}
+
 FSBlock &
 BlockStorage::read(Block nr)
 {
-    // Check if the block exists
     if (nr >= blocks.size()) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 
     // Get the block
@@ -79,6 +91,12 @@ BlockStorage::read(Block nr)
     return result;
 }
 
+const FSBlock &
+BlockStorage::read(Block nr) const
+{
+    return *pread(nr);
+}
+
 FSBlock *
 BlockStorage::pread(Block nr)
 {
@@ -88,6 +106,13 @@ BlockStorage::pread(Block nr)
     return nullptr;
 }
 
+const FSBlock *
+BlockStorage::pread(Block nr) const
+{
+    auto result = const_cast<BlockStorage *>(this)->pread(nr);
+    return const_cast<const FSBlock *>(result);
+}
+
 FSBlock *
 BlockStorage::pread(Block nr, FSBlockType type)
 {
@@ -95,6 +120,22 @@ BlockStorage::pread(Block nr, FSBlockType type)
         return blocks[nr];
     }
     return nullptr;
+}
+
+const FSBlock *
+BlockStorage::pread(Block nr, FSBlockType type) const
+{
+    auto result = const_cast<BlockStorage *>(this)->pread(nr, type);
+    return const_cast<const FSBlock *>(result);
+}
+
+void
+BlockStorage::write(Block nr, FSBlock *block)
+{
+    if (nr >= blocks.size()) throw AppError(Fault::FS_INVALID_BLOCK_REF);
+
+    if (blocks[nr]) delete blocks[nr];
+    blocks[nr] = block;
 }
 
 }

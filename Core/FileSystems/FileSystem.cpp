@@ -107,9 +107,9 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
     
     // Create all blocks
     dealloc();
-    assert(blocks.empty());
+
     for (isize i = 0; i < layout.numBlocks; i++) {
-        
+
         const u8 *data = buf + i * bsize;
 
         // Determine the type of the new block
@@ -134,13 +134,7 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
 bool
 FileSystem::initialized() const
 {
-    // Check if the block storage is allocates
-    if (blocks.empty()) return false;
-
-    // Check if the root block is preset
-    // if (rootBlockPtr(rootBlock) == nullptr) return false;
-
-    return true;
+    return blocks.size() > 0;
 }
 
 bool
@@ -301,13 +295,15 @@ FileSystem::getModificationDate() const
 string
 FileSystem::getBootBlockName() const
 {
-    return BootBlockImage(blocks[0]->data.ptr, blocks[1]->data.ptr).name;
+    return BootBlockImage(read(0).data.ptr, read(1).data.ptr).name;
+    // return BootBlockImage(blocks[0]->data.ptr, blocks[1]->data.ptr).name;
 }
 
 BootBlockType
 FileSystem::bootBlockType() const
 {
-    return BootBlockImage(blocks[0]->data.ptr, blocks[1]->data.ptr).type;
+    return BootBlockImage(read(0).data.ptr, read(1).data.ptr).type;
+    // return BootBlockImage(blocks[0]->data.ptr, blocks[1]->data.ptr).type;
 }
 
 FSBlockType
@@ -759,12 +755,16 @@ FileSystem::check(bool strict) const
     // Analyze all blocks
     for (isize i = 0; i < numBlocks(); i++) {
 
-        if (blocks[i]->check(strict) > 0) {
+        auto *block = const_cast<FSBlock *>(pread(Block(i)));
+
+        if (block->check(strict) > 0) {
+        // if (blocks[i]->check(strict) > 0) {
             min = std::min(min, i);
             max = std::max(max, i);
-            blocks[i]->corrupted = ++total;
+
+            block->corrupted = ++total;
         } else {
-            blocks[i]->corrupted = 0;
+            block->corrupted = 0;
         }
     }
 
@@ -785,7 +785,8 @@ FileSystem::check(bool strict) const
 Fault
 FileSystem::check(Block nr, isize pos, u8 *expected, bool strict) const
 {
-    return blocks[nr]->check(pos, expected, strict);
+    return read(nr).check(pos, expected, strict);
+    // return blocks[nr]->check(pos, expected, strict);
 }
 
 Fault
@@ -823,7 +824,8 @@ FileSystem::checkBlockType(Block nr, FSBlockType type, FSBlockType altType) cons
 isize
 FileSystem::getCorrupted(Block nr) const
 {
-    return blockPtr(nr) ? blocks[nr]->corrupted : 0;
+    return pread(nr) ? pread(nr)->corrupted : 0;
+    // return blockPtr(nr) ? blocks[nr]->corrupted : 0;
 }
 
 bool
@@ -982,8 +984,9 @@ FileSystem::analyzeBlockConsistency(u8 *buffer, isize len) const
  
     // Analyze all blocks
     for (isize i = 0, max = numBlocks(); i < max; i++) {
-        
-        auto corrupted = blocks[i]->corrupted;
+
+        auto corrupted = read(Block(i)).corrupted;
+        // auto corrupted = blocks[i]->corrupted;
         auto empty = isEmpty(Block(i));
         
         u8 val = empty ? 0 : corrupted ? 2 : 1;
@@ -1026,11 +1029,71 @@ FileSystem::nextCorruptedBlock(isize after) const
     
     do {
         result = (result + 1) % numBlocks();
-        if (blocks[result]->corrupted) return result;
+        if (read(Block(result)).corrupted) return result;
+        // if (blocks[result]->corrupted) return result;
         
     } while (result != after);
     
     return -1;
 }
 
+// REMOVE ONCE STORAGE IS UP AND RUNNING
+FSBlockType
+FileSystem::getType(Block nr) const
+{
+    return nr < blocks.size() ? blocks[nr]->type : FSBlockType::UNKNOWN_BLOCK;
+}
+
+FSBlock &
+FileSystem::read(Block nr)
+{
+    // Check if the block exists
+    if (nr >= blocks.size()) throw AppError(Fault::FS_INVALID_BLOCK_REF);
+
+    // Get the block
+    FSBlock &result = *blocks[nr];
+
+    // Allocate the buffer if necessary
+    if (result.data.size == 0) result.data.init(bsize, 0);
+
+    return result;
+}
+
+const FSBlock &
+FileSystem::read(Block nr) const
+{
+    return *pread(nr);
+}
+
+FSBlock *
+FileSystem::pread(Block nr)
+{
+    if (nr < blocks.size()) {
+        return blocks[nr];
+    }
+    return nullptr;
+}
+
+const FSBlock *
+FileSystem::pread(Block nr) const
+{
+    auto result = const_cast<FileSystem *>(this)->pread(nr);
+    return const_cast<const FSBlock *>(result);
+}
+
+FSBlock *
+FileSystem::pread(Block nr, FSBlockType type)
+{
+    if (nr < blocks.size() && blocks[nr]->type == type) {
+        return blocks[nr];
+    }
+    return nullptr;
+}
+
+const FSBlock *
+FileSystem::pread(Block nr, FSBlockType type) const
+{
+    auto result = const_cast<FileSystem *>(this)->pread(nr, type);
+    return const_cast<const FSBlock *>(result);
+}
 }
