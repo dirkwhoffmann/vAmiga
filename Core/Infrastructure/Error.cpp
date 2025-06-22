@@ -359,7 +359,7 @@ AppError::AppError(Fault code, const string &s)
             break;
 
         case Fault::FS_UNINITIALIZED:
-            description = "No file system.";
+            description = "No file system present.";
             break;
 
         case Fault::FS_INVALID_PATH:

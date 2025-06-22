@@ -109,8 +109,6 @@ void dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,isize)
 
 void dump(std::ostream &os, const DumpOpt &opt, std::function<isize(isize,isize)> read, const char *fmt)
 {
-    printf("fmt = %s\n", fmt);
-
     bool ctrl = false;
     isize ccnt = 0, bcnt = 0;
     char c;

@@ -15,16 +15,19 @@ namespace vamiga {
 
 FSPath::FSPath(const FileSystem &fs, Block dir) : fs(fs), ref(dir)
 {
+    if (!fs.initialized()) throw AppError(Fault::FS_UNINITIALIZED);
     if (!ptr()) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 }
 
 FSPath::FSPath(const FSPath &path) : fs(path.fs), ref(path.ref)
 {
+    if (!fs.initialized()) throw AppError(Fault::FS_UNINITIALIZED);
     if (!ptr()) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 }
 
 FSPath::FSPath(const FileSystem &fs) : fs(fs), ref(0)
 {
+    if (!fs.initialized()) throw AppError(Fault::FS_UNINITIALIZED);
     if (!ptr()) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 }
 

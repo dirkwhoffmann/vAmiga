@@ -550,10 +550,12 @@ std::map<string,string>
 Console::parse(const RSCommand &cmd, const Tokens &args)
 {
     std::map<string,string> map;
-
     std::vector<string> flags;
     std::vector<string> keyVal;
     std::vector<string> std;
+
+    // Check if a command handler is present
+    if (!cmd.callback && !args.empty()) throw util::ParseError(util::concat(args));
 
     // Sort input tokens by type
     for (usize i = 0; i < args.size(); i++) {
@@ -809,6 +811,15 @@ Console::exec(const Tokens &argv, bool verbose)
     // Find the command in the command tree
     if (auto *cmd = seekCommand(args); cmd) {
 
+        // Check if a command handler is present
+        /*
+        if (!cmd->callback) {
+
+            if (args.empty()) throw TooFewArgumentsError(util::concat(argv));
+            throw TooFewArgumentsError(util::concat(argv));
+        }
+        */
+
         // Parse arguments
         Arguments parsedArgs = parse(*cmd, args);
 
@@ -870,7 +881,10 @@ Console::describe(const std::exception &exc, isize line, const string &cmd)
 void
 Console::describe(std::ostream &ss, const std::exception &e, isize line, const string &cmd)
 {
-    if (line) ss << "Line " << line << ": " << cmd << '\n';
+    if (line) {
+        ss << "Line " << line << ": " << cmd << '\n';
+    }
+    // ss << "Error: ";
 
     if (auto err = dynamic_cast<const TooFewArgumentsError *>(&e)) {
 
@@ -922,8 +936,10 @@ Console::describe(std::ostream &ss, const std::exception &e, isize line, const s
     }
     if (auto err = dynamic_cast<const util::ParseError *>(&e)) {
 
-        ss << err->what() << ": Syntax error";
-        ss << '\n';
+        if (auto what = string(err->what()); !what.empty()) {
+            ss << err->what() << ": ";
+        }
+        ss << "Syntax error\n";
         return;
     }
     if (auto err = dynamic_cast<const AppError *>(&e)) {

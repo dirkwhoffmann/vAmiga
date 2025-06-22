@@ -27,35 +27,14 @@ NavigatorConsole::getPrompt()
 {
     std::stringstream ss;
 
-    auto fsName = fs.getName();
-    if (!fsName.empty()) ss << fsName << ":";
-
     if (fs.initialized()) {
 
-        if (fs.pwd().isDirectory()) {
+        ss << "[" << std::to_string(fs.curr) << "]";
 
-            ss << fs.pwd();
-
-        } else {
-
-            ss << "[" << std::to_string(fs.curr) << "]";
-        }
+        auto fsName = fs.getName();
+        if (!fsName.empty()) ss << fsName << ":";
+        if (fs.pwd().isDirectory()) ss << " " << fs.pwd();
     }
-    /*
-    if (auto ptr = fs.blockPtr(fs.curr); ptr) {
-
-        if (ptr->hasName()) {
-
-            auto fsName = fs.getName();
-            if (!fsName.empty()) ss << fsName << ":";
-            ss << fs.pwd();
-
-        } else {
-
-            ss << "[" << std::to_string(fs.curr) << "] ";
-        }
-    }
-    */
 
     ss << "> ";
     return ss.str();
@@ -129,12 +108,18 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token)
 FSPath
 NavigatorConsole::parsePath(const Arguments &argv, const string &token, const FSPath &fallback)
 {
-    if (argv.contains("b")) {
-        return FSPath(fs, parseBlock(argv, token, fallback.ref));
-    }
+    if (!argv.contains(token)) return fallback;
 
-    auto path = argv.contains(token) ? fs.pwd().seek(argv.at(token)) : fallback;
-    return path;
+    try {
+
+        // Try to find the directory by name
+        return fs.pwd().seek(argv.at(token));
+
+    } catch (AppError &err) {
+
+        // Treat the argument as a block number
+        return FSPath(fs, parseBlock(argv.at(token)));
+    }
 }
 
 util::DumpOpt
@@ -362,91 +347,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         });
     }
 
-    RSCommand::currentGroup = "Inspection";
-
-    root.add({
-
-        .tokens = { "info" },
-        .chelp  = { "Print a file system summary" },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-            fs.dump(Category::Info, os);
-        }
-    });
-
-    root.add({
-
-        .tokens = { "block" },
-        .ghelp  = { "Manage blocks" },
-        .chelp  = { "Inspect a block" },
-        .args   = {
-            { .name = { "nr", "Block number" }, .flags = rs::opt },
-        },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-            auto nr = parseBlock(args, "nr");
-
-            if (auto ptr = fs.blockPtr(nr); ptr) {
-                ptr->dump(os);
-            }
-        }
-    });
-
-    root.add({
-
-        .tokens = { "block", "dump" },
-        .chelp  = { "Dump the contents of a block" },
-        .args   = {
-            { .name = { "nr", "Block number" } },
-            { .name = { "a", "Output in ASCII, only" }, .flags = rs::flag },
-            { .name = { "o", "Output numbers in octal" }, .flags = rs::flag },
-            { .name = { "d", "Output numbers in decimal" }, .flags = rs::flag },
-            { .name = { "w", "Print in word format" }, .flags = rs::flag },
-            { .name = { "l", "Print in long word format" }, .flags = rs::flag },
-            { .name = { "t", "Display the last part" }, .flags = rs::flag },
-            { .name = { "lines", "Number of displayed rows" }, .flags = rs::keyval|rs::opt },
-        },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-            auto nr = parseBlock(args, "nr");
-            auto opt = parseDumpOpts(args);
-
-            if (auto ptr = fs.blockPtr(nr); ptr) {
-
-                ptr->hexDump(os, opt);
-            }
-        }
-    });
-
-    root.add({
-
-        .tokens = { "block", "import" },
-        .chelp  = { "Import a block from a file" },
-        .args   = {
-            { .name = { "nr", "Block number" } },
-            { .name = { "path", "File path" } },
-        },
-        .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-            os << "Not implemented, yet!" << '\n';
-        }
-    });
-
-    root.add({
-
-        .tokens = { "block", "export" },
-        .chelp  = { "Export a block to a file" },
-        .args   = {
-            { .name = { "nr", "Block number" } },
-            { .name = { "path", "File path" } },
-        },
-        .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-            os << "Not implemented, yet!" << '\n';
-        }
-    });
-
-    RSCommand::currentGroup = "Directories and files";
+    RSCommand::currentGroup = "Navigation";
 
     root.add({
 
@@ -454,7 +355,6 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Change the working directory" },
         .args   = {
             { .name = { "path", "New working directory" }, .flags = rs::opt },
-            { .name = { "b", "Specify the directory as a block number" }, .flags = rs::flag }
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
@@ -469,7 +369,6 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Display a sorted list of the files in a directory" },
         .args   = {
             { .name = { "path", "Path to directory" }, .flags = rs::opt },
-            { .name = { "b", "Specify the directory as a block number" }, .flags = rs::flag },
             { .name = { "d", "List directories only" }, .flags = rs::flag },
             { .name = { "f", "List files only" }, .flags = rs::flag },
             { .name = { "r", "Traverse subdirectories" }, .flags = rs::flag }
@@ -477,6 +376,10 @@ NavigatorConsole::initCommands(RSCommand &root)
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             auto path = parsePath(args, "path", fs.pwd());
+            if (!path.isDirectory()) {
+                throw AppError(Fault::FS_NOT_A_DIRECTORY, "Block " + std::to_string(path.ref));
+            }
+
             auto d = args.contains("d");
             auto f = args.contains("f");
             auto r = args.contains("r");
@@ -507,7 +410,6 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "List specified information about directories and files" },
         .args   = {
             { .name = { "path", "Path to directory" }, .flags = rs::opt },
-            { .name = { "b", "Specify the directory as a block number" }, .flags = rs::flag },
             { .name = { "d", "List directories only" }, .flags = rs::flag },
             { .name = { "f", "List files only" }, .flags = rs::flag },
             { .name = { "r", "Traverse subdirectories" }, .flags = rs::flag },
@@ -516,6 +418,10 @@ NavigatorConsole::initCommands(RSCommand &root)
         .func   = [this](std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             auto path = parsePath(args, "path", fs.pwd());
+            if (!path.isDirectory()) {
+                throw AppError(Fault::FS_NOT_A_DIRECTORY, "Block " + std::to_string(path.ref));
+            }
+
             auto d = args.contains("d");
             auto f = args.contains("f");
             auto r = args.contains("r");
@@ -562,7 +468,6 @@ NavigatorConsole::initCommands(RSCommand &root)
         .args   = {
             { .name = { "name", "Search pattern" } },
             { .name = { "path", "Directory to search in" }, .flags = rs::opt },
-            { .name = { "b", "Specify the directory as a block number" }, .flags = rs::flag },
             { .name = { "d", "Find directories only" }, .flags = rs::flag },
             { .name = { "f", "Find files only" }, .flags = rs::flag },
             { .name = { "r", "Search subdirectories, too" }, .flags = rs::flag },
@@ -607,8 +512,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .tokens = { "type" },
         .chelp  = { "Print the contents of a file" },
         .args   = {
-            { .name = { "path", "File path" } },
-            { .name = { "b", "Specify the path as a block number" }, .flags = rs::flag },
+            { .name = { "path", "File path" }, .flags = rs::opt },
             { .name = { "l", "Display a line number in each row" }, .flags = rs::flag },
             { .name = { "t", "Display the last part" }, .flags = rs::flag },
             { .name = { "lines", "Number of displayed rows" }, .flags = rs::keyval|rs::opt },
@@ -616,6 +520,10 @@ NavigatorConsole::initCommands(RSCommand &root)
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             auto file = parsePath(args, "path", fs.pwd());
+            if (!file.isFile()) {
+                throw AppError(Fault::FS_NOT_A_FILE, "Block " + std::to_string(file.ref));
+            }
+
             auto lines = args.contains("lines") ? parseNum(args.at("lines")) : -1;
 
             Buffer<u8> buffer;
@@ -630,13 +538,27 @@ NavigatorConsole::initCommands(RSCommand &root)
         }
     });
 
+    RSCommand::currentGroup = "Inspection";
+
     root.add({
 
-        .tokens = { "dump" },
+        .tokens = { "file" },
+        .ghelp  = { "Manage files" },
+        .chelp  = { "Inspect a single file" },
+        /*
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            fs.dump(Category::Info, os);
+        }
+        */
+    });
+
+    root.add({
+
+        .tokens = { "file", "dump" },
         .chelp  = { "Dump the contents of a file" },
         .args   = {
-            { .name = { "path", "File path" } },
-            { .name = { "b", "Specify the path as a block number" }, .flags = rs::flag },
+            { .name = { "path", "File path" }, .flags = rs::opt },
             { .name = { "a", "Output in ASCII, only" }, .flags = rs::flag },
             { .name = { "o", "Output numbers in octal" }, .flags = rs::flag },
             { .name = { "d", "Output numbers in decimal" }, .flags = rs::flag },
@@ -653,6 +575,96 @@ NavigatorConsole::initCommands(RSCommand &root)
             Buffer<u8> buffer;
             file.ptr()->writeData(buffer);
             buffer.dump(os, opt);
+        }
+    });
+
+    root.add({
+
+        .tokens = { "block" },
+        .ghelp  = { "Manage blocks" },
+        .chelp  = { "Inspect a block" },
+        .args   = {
+            { .name = { "nr", "Block number" }, .flags = rs::opt },
+        },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            auto nr = parseBlock(args, "nr");
+
+            if (auto ptr = fs.blockPtr(nr); ptr) {
+                ptr->dump(os);
+            }
+        }
+    });
+
+    root.add({
+
+        .tokens = { "block" },
+        .ghelp  = { "Manage blocks" },
+        .chelp  = { "Inspect a block" },
+        .args   = {
+            { .name = { "nr", "Block number" }, .flags = rs::opt },
+        },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            auto nr = parseBlock(args, "nr");
+
+            if (auto ptr = fs.blockPtr(nr); ptr) {
+                ptr->dump(os);
+            }
+        }
+    });
+
+    root.add({
+
+        .tokens = { "block", "dump" },
+        .chelp  = { "Dump the contents of a block" },
+        .args   = {
+            { .name = { "nr", "Block number" }, .flags = rs::opt },
+            { .name = { "a", "Output in ASCII, only" }, .flags = rs::flag },
+            { .name = { "o", "Output numbers in octal" }, .flags = rs::flag },
+            { .name = { "d", "Output numbers in decimal" }, .flags = rs::flag },
+            { .name = { "w", "Print in word format" }, .flags = rs::flag },
+            { .name = { "l", "Print in long word format" }, .flags = rs::flag },
+            { .name = { "t", "Display the last part" }, .flags = rs::flag },
+            { .name = { "lines", "Number of displayed rows" }, .flags = rs::keyval|rs::opt },
+        },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            auto nr = parseBlock(args, "nr", fs.pwd().ref);
+            auto opt = parseDumpOpts(args);
+
+            if (auto ptr = fs.blockPtr(nr); ptr) {
+
+                ptr->hexDump(os, opt);
+            }
+        }
+    });
+
+    root.add({
+
+        .tokens = { "block", "import" },
+        .chelp  = { "Import a block from a file" },
+        .args   = {
+            { .name = { "nr", "Block number" } },
+            { .name = { "path", "File path" } },
+        },
+        .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            os << "Not implemented, yet!" << '\n';
+        }
+    });
+
+    root.add({
+
+        .tokens = { "block", "export" },
+        .chelp  = { "Export a block to a file" },
+        .args   = {
+            { .name = { "nr", "Block number" } },
+            { .name = { "path", "File path" } },
+        },
+        .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            os << "Not implemented, yet!" << '\n';
         }
     });
 }
