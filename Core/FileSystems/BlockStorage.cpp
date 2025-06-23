@@ -75,51 +75,41 @@ BlockStorage::setType(Block nr, FSBlockType type)
 }
 
 FSBlock &
+BlockStorage::operator[](size_t nr)
+{
+    return *read(Block(nr));
+}
+
+const FSBlock &
+BlockStorage::operator[](size_t nr) const
+{
+    return *read(Block(nr));
+}
+
+FSBlock *
 BlockStorage::read(Block nr)
 {
-    if (isize(nr) >= _capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
+    if (nr >= size_t(_capacity)) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 
     // Create the block if it does not yet exist
     if (!blocks.contains(nr)) blocks.emplace(nr, FSBlock(fs, Block(nr), FSBlockType::EMPTY_BLOCK));
 
     // Return a block reference
-    return blocks.at(nr);
-    // FSBlock &result = blocks.at(nr);
-
-    // Allocate the buffer if necessary
-    // if (!result.bdata) result.bdata = new u8[_bsize];
-
-    //return result;
-}
-
-const FSBlock &
-BlockStorage::read(Block nr) const
-{
-    auto &result = const_cast<BlockStorage *>(this)->read(nr);
-    return const_cast<const FSBlock &>(result);
-}
-
-FSBlock *
-BlockStorage::pread(Block nr)
-{
-    if (isize(nr) >= _capacity) return nullptr;
-
-    return &read(nr);
+    return &blocks.at(nr);
 }
 
 const FSBlock *
-BlockStorage::pread(Block nr) const
+BlockStorage::read(Block nr) const
 {
-    auto result = const_cast<BlockStorage *>(this)->pread(nr);
-    return const_cast<const FSBlock *>(result);
+    return const_cast<const FSBlock *>(const_cast<BlockStorage *>(this)->read(nr));
 }
 
 FSBlock *
-BlockStorage::pread(Block nr, FSBlockType type)
+BlockStorage::read(Block nr, FSBlockType type)
 {
     if (isize(nr) < _capacity) {
 
-        auto &block = read(nr);
+        auto &block = (*this)[nr];
         if (block.type == type) return &block;
     }
 
@@ -127,9 +117,9 @@ BlockStorage::pread(Block nr, FSBlockType type)
 }
 
 const FSBlock *
-BlockStorage::pread(Block nr, FSBlockType type) const
+BlockStorage::read(Block nr, FSBlockType type) const
 {
-    auto result = const_cast<BlockStorage *>(this)->pread(nr, type);
+    auto result = const_cast<BlockStorage *>(this)->read(nr, type);
     return const_cast<const FSBlock *>(result);
 }
 
@@ -138,7 +128,7 @@ BlockStorage::write(Block nr, FSBlock *block)
 {
     if (isize(nr) >= _capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 
-    read(nr) = *block;
+    (*this)[nr] = *block;
 }
 
 }

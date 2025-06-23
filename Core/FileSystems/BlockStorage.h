@@ -74,14 +74,14 @@ public:
     isize bsize() const { return _bsize; }
 
     // Reads a block from the storage
-    FSBlock &read(Block nr);
-    const FSBlock &read(Block nr) const;
+    FSBlock &operator[](size_t nr);
+    const FSBlock &operator[](size_t nr) const;
 
     // Returns a block pointer or null if the block does not exist
-    FSBlock *pread(Block nr);
-    FSBlock *pread(Block nr, FSBlockType type);
-    const FSBlock *pread(Block nr) const;
-    const FSBlock *pread(Block nr, FSBlockType type) const;
+    FSBlock *read(Block nr);
+    FSBlock *read(Block nr, FSBlockType type);
+    const FSBlock *read(Block nr) const;
+    const FSBlock *read(Block nr, FSBlockType type) const;
 
     // Write a block into the storage
     void write(Block nr, FSBlock *block);

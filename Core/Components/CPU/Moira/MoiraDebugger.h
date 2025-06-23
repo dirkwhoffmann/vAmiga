@@ -10,6 +10,7 @@
 #include "MoiraTypes.h"
 #include "StrWriter.h"
 #include <map>
+#include <unordered_map>
 
 namespace vamiga::moira {
 

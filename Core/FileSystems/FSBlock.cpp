@@ -668,7 +668,7 @@ FSBlock::checksumBootBlock() const
     }
 
     // Second boot block
-    u8 *p = fs->storage.pread(1)->bdata;
+    u8 *p = fs->storage[1].data(); //   .read(1)->bdata;
     // u8 *p = fs.blocks[1]->data.ptr;
 
     for (isize i = 0; i < bsize() / 4; i++) {

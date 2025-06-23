@@ -12,7 +12,7 @@
 #include "SubComponent.h"
 #include "CPU.h"
 #include "MoiraDebugger.h"
-#include <map>
+#include <unordered_map>
 
 namespace vamiga {
 

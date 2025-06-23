@@ -120,11 +120,9 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
         
         // Create new block
         storage.write(Block(i), FSBlock::make(this, (Block)i, type));
-        // blocks.push_back(FSBlock::make(*this, (Block)i, type));
 
         // Import block data
-        storage.read(Block(i)).importBlock(data, bsize);
-        // blocks[i]->importBlock(data, bsize);
+        storage[i].importBlock(data, bsize);
     }
 
     // Set the current directory to '/'
@@ -300,117 +298,82 @@ FileSystem::getModificationDate() const
 string
 FileSystem::getBootBlockName() const
 {
-    return BootBlockImage(storage.read(0).data(), storage.read(1).data()).name;
-    // return BootBlockImage(blocks[0]->data.ptr, blocks[1]->data.ptr).name;
+    return BootBlockImage(storage[0].data(), storage[1].data()).name;
 }
 
 BootBlockType
 FileSystem::bootBlockType() const
 {
-    return BootBlockImage(storage.read(0).data(), storage.read(1).data()).type;
-    // return BootBlockImage(blocks[0]->data.ptr, blocks[1]->data.ptr).type;
+    return BootBlockImage(storage[0].data(), storage[1].data()).type;
 }
 
 FSBlockType
 FileSystem::blockType(Block nr) const
 {
     return storage.getType(nr);
-    // return blockPtr(nr) ? blocks[nr]->type : FSBlockType::UNKNOWN_BLOCK;
 }
 
 FSItemType
 FileSystem::itemType(Block nr, isize pos) const
 {
-    return storage.pread(nr) ? storage.pread(nr)->itemType(pos) : FSItemType::UNUSED;
-    // return blockPtr(nr) ? blocks[nr]->itemType(pos) : FSItemType::UNUSED;
+    return storage.read(nr) ? storage[nr].itemType(pos) : FSItemType::UNUSED;
 }
 
 FSBlock *
 FileSystem::blockPtr(Block nr) const
 {
-    return const_cast<FSBlock *>(storage.pread(nr));
-    // return nr < blocks.size() ? blocks[nr] : nullptr;
+    return const_cast<FSBlock *>(storage.read(nr));
 }
 
 FSBlock *
 FileSystem::bootBlockPtr(Block nr) const
 {
-    if (auto *p = const_cast<FSBlock *>(storage.pread(nr, FSBlockType::BOOT_BLOCK)); p) {
+    if (auto *p = const_cast<FSBlock *>(storage.read(nr, FSBlockType::BOOT_BLOCK)); p) {
         return p;
     }
     return nullptr;
-    /*
-    if (nr < blocks.size() && blocks[nr]->type == FSBlockType::BOOT_BLOCK) {
-        return blocks[nr];
-    }
-    return nullptr;
-    */
 }
 
 FSBlock *
 FileSystem::rootBlockPtr(Block nr) const
 {
-    if (auto *p = const_cast<FSBlock *>(storage.pread(nr, FSBlockType::ROOT_BLOCK)); p) {
+    if (auto *p = const_cast<FSBlock *>(storage.read(nr, FSBlockType::ROOT_BLOCK)); p) {
         return p;
     }
     return nullptr;
-    /*
-    if (nr < blocks.size() && blocks[nr]->type == FSBlockType::ROOT_BLOCK) {
-        return blocks[nr];
-    }
-    return nullptr
-    */
 }
 
 FSBlock *
 FileSystem::bitmapBlockPtr(Block nr) const
 {
-    if (auto *p = const_cast<FSBlock *>(storage.pread(nr, FSBlockType::BITMAP_BLOCK)); p) {
+    if (auto *p = const_cast<FSBlock *>(storage.read(nr, FSBlockType::BITMAP_BLOCK)); p) {
         return p;
     }
     return nullptr;
-    /*
-    if (nr < blocks.size() && blocks[nr]->type == FSBlockType::BITMAP_BLOCK) {
-        return blocks[nr];
-    }
-    return nullptr;
-    */
 }
 
 FSBlock *
 FileSystem::bitmapExtBlockPtr(Block nr) const
 {
-    if (auto *p = const_cast<FSBlock *>(storage.pread(nr, FSBlockType::BITMAP_EXT_BLOCK)); p) {
+    if (auto *p = const_cast<FSBlock *>(storage.read(nr, FSBlockType::BITMAP_EXT_BLOCK)); p) {
         return p;
     }
     return nullptr;
-    /*
-    if (nr < blocks.size() && blocks[nr]->type == FSBlockType::BITMAP_EXT_BLOCK) {
-        return blocks[nr];
-    }
-    return nullptr;
-    */
 }
 
 FSBlock *
 FileSystem::userDirBlockPtr(Block nr) const
 {
-    if (auto *p = const_cast<FSBlock *>(storage.pread(nr, FSBlockType::USERDIR_BLOCK)); p) {
+    if (auto *p = const_cast<FSBlock *>(storage.read(nr, FSBlockType::USERDIR_BLOCK)); p) {
         return p;
     }
     return nullptr;
-    /*
-    if (nr < blocks.size() && blocks[nr]->type == FSBlockType::USERDIR_BLOCK) {
-        return blocks[nr];
-    }
-    return nullptr;
-    */
 }
 
 FSBlock *
 FileSystem::fileHeaderBlockPtr(Block nr) const
 {
-    if (auto *p = const_cast<FSBlock *>(storage.pread(nr, FSBlockType::FILEHEADER_BLOCK)); p) {
+    if (auto *p = const_cast<FSBlock *>(storage.read(nr, FSBlockType::FILEHEADER_BLOCK)); p) {
         return p;
     }
     return nullptr;
@@ -425,7 +388,7 @@ FileSystem::fileHeaderBlockPtr(Block nr) const
 FSBlock *
 FileSystem::fileListBlockPtr(Block nr) const
 {
-    if (auto *p = const_cast<FSBlock *>(storage.pread(nr, FSBlockType::FILELIST_BLOCK)); p) {
+    if (auto *p = const_cast<FSBlock *>(storage.read(nr, FSBlockType::FILELIST_BLOCK)); p) {
         return p;
     }
     return nullptr;
@@ -440,7 +403,7 @@ FileSystem::fileListBlockPtr(Block nr) const
 FSBlock *
 FileSystem::dataBlockPtr(Block nr) const
 {
-    if (auto *p = const_cast<FSBlock *>(storage.pread(nr)); p) {
+    if (auto *p = const_cast<FSBlock *>(storage.read(nr)); p) {
         if (p->type == FSBlockType::DATA_BLOCK_OFS || p->type == FSBlockType::DATA_BLOCK_FFS) {
             return p;
         }
@@ -459,7 +422,7 @@ FileSystem::dataBlockPtr(Block nr) const
 FSBlock *
 FileSystem::hashableBlockPtr(Block nr) const
 {
-    if (auto *p = const_cast<FSBlock *>(storage.pread(nr)); p) {
+    if (auto *p = const_cast<FSBlock *>(storage.read(nr)); p) {
         if (p->type == FSBlockType::USERDIR_BLOCK || p->type == FSBlockType::FILEHEADER_BLOCK) {
             return p;
         }
@@ -478,16 +441,7 @@ FileSystem::hashableBlockPtr(Block nr) const
 u8
 FileSystem::readByte(Block nr, isize offset) const
 {
-    // assert(offset < bsize);
-    return (storage.pread(nr) && offset < bsize) ? storage.read(nr).data()[offset] : 0;
-
-    /*
-    if (isize(nr) < numBlocks()) {
-        return blocks[nr]->data.ptr ? blocks[nr]->data[offset] : 0;
-    }
-     
-    return 0;
-    */
+    return (storage.read(nr) && offset < bsize) ? storage[nr].data()[offset] : 0;
 }
 
 string
@@ -495,15 +449,7 @@ FileSystem::ascii(Block nr, isize offset, isize len) const
 {
     assert(offset + len <= bsize);
 
-    return  util::createAscii(storage.read(nr).data() + offset, len);
-
-    /*
-    if (blocks[nr]->data.ptr) {
-        return util::createAscii(blocks[nr]->data.ptr + offset, len);
-    } else {
-        return string(len, '.');
-    }
-    */
+    return  util::createAscii(storage[nr].data() + offset, len);
 }
 
 bool
@@ -827,7 +773,7 @@ FileSystem::check(bool strict) const
     // Analyze all blocks
     for (isize i = 0; i < numBlocks(); i++) {
 
-        auto *block = const_cast<FSBlock *>(storage.pread(Block(i)));
+        auto *block = const_cast<FSBlock *>(storage.read(Block(i)));
 
         if (block->check(strict) > 0) {
         // if (blocks[i]->check(strict) > 0) {
@@ -857,8 +803,7 @@ FileSystem::check(bool strict) const
 Fault
 FileSystem::check(Block nr, isize pos, u8 *expected, bool strict) const
 {
-    return storage.read(nr).check(pos, expected, strict);
-    // return blocks[nr]->check(pos, expected, strict);
+    return storage[nr].check(pos, expected, strict);
 }
 
 Fault
@@ -896,7 +841,7 @@ FileSystem::checkBlockType(Block nr, FSBlockType type, FSBlockType altType) cons
 isize
 FileSystem::getCorrupted(Block nr) const
 {
-    return storage.pread(nr) ? storage.pread(nr)->corrupted : 0;
+    return storage.read(nr) ? storage.read(nr)->corrupted : 0;
     // return blockPtr(nr) ? blocks[nr]->corrupted : 0;
 }
 
@@ -1058,8 +1003,7 @@ FileSystem::analyzeBlockConsistency(u8 *buffer, isize len) const
     // Analyze all blocks
     for (isize i = 0, max = numBlocks(); i < max; i++) {
 
-        auto corrupted = storage.read(Block(i)).corrupted;
-        // auto corrupted = blocks[i]->corrupted;
+        auto corrupted = storage[i].corrupted;
         auto empty = isEmpty(Block(i));
         
         u8 val = empty ? 0 : corrupted ? 2 : 1;
@@ -1103,8 +1047,7 @@ FileSystem::nextCorruptedBlock(isize after) const
     
     do {
         result = (result + 1) % numBlocks();
-        if (storage.read(Block(result)).corrupted) return result;
-        // if (blocks[result]->corrupted) return result;
+        if (storage[result].corrupted) return result;
         
     } while (result != after);
     
