@@ -165,8 +165,8 @@ public:
     FSBlock *blockPtr(Block nr) const;
 
     // Queries a pointer to a block of a certain type (may return nullptr)
-    FSBlock *bootBlockPtr(Block nr) const;
-    FSBlock *rootBlockPtr(Block nr) const;
+    [[deprecated]] FSBlock *bootBlockPtr(Block nr) const;
+    [[deprecated]] FSBlock *rootBlockPtr(Block nr) const;
     FSBlock *bitmapBlockPtr(Block nr) const;
     FSBlock *bitmapExtBlockPtr(Block nr) const;
     FSBlock *userDirBlockPtr(Block nr) const;

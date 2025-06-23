@@ -142,11 +142,6 @@ MutableFileSystem::format(string name)
         if (storage.getType(Block(i)) == FSBlockType::EMPTY_BLOCK) {
             markAsFree(Block(i));
         }
-        /*
-        if (blocks[i]->type == FSBlockType::EMPTY_BLOCK) {
-            markAsFree(Block(i));
-        }
-        */
     }
     
     // Set the volume name
@@ -165,7 +160,8 @@ MutableFileSystem::format(string name)
 void
 MutableFileSystem::setName(FSName name)
 {
-    FSBlock *rb = rootBlockPtr(rootBlock);
+    auto *rb = storage.read(rootBlock, FSBlockType::ROOT_BLOCK);
+    // FSBlock *rb = rootBlockPtr(rootBlock);
     assert(rb != nullptr);
     
     rb->setName(name);

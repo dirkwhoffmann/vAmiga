@@ -150,7 +150,8 @@ FileSystem::formatted() const
     if (dos == FSVolumeType::NODOS) return false;
 
     // Check if the root block is present
-    if (rootBlockPtr(rootBlock) == nullptr) return false;
+    if (!storage.read(rootBlock, FSBlockType::ROOT_BLOCK)) return false;
+    // if (rootBlockPtr(rootBlock) == nullptr) return false;
 
     return true;
 }
@@ -262,21 +263,24 @@ FileSystem::usedBlocks() const
 FSName
 FileSystem::getName() const
 {
-    FSBlock *rb = rootBlockPtr(rootBlock);
+    auto *rb = storage.read(rootBlock, FSBlockType::ROOT_BLOCK);
+    // FSBlock *rb = rootBlockPtr(rootBlock);
     return rb ? rb->getName() : FSName("");
 }
 
 string
 FileSystem::getCreationDate() const
 {
-    FSBlock *rb = rootBlockPtr(rootBlock);
+    auto *rb = storage.read(rootBlock, FSBlockType::ROOT_BLOCK);
+    // FSBlock *rb = rootBlockPtr(rootBlock);
     return rb ? rb->getCreationDate().str() : "";
 }
 
 string
 FileSystem::getModificationDate() const
 {
-    FSBlock *rb = rootBlockPtr(rootBlock);
+    auto *rb = storage.read(rootBlock, FSBlockType::ROOT_BLOCK);
+    // FSBlock *rb = rootBlockPtr(rootBlock);
     return rb ? rb->getModificationDate().str() : "";
 }
 
