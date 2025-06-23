@@ -137,7 +137,7 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
 bool
 FileSystem::initialized() const
 {
-    return storage.capacity() > 0;
+    return numBlocks() > 0;
 }
 
 bool
@@ -179,7 +179,7 @@ FileSystem::_dump(Category category, std::ostream &os) const
         case Category::Info:
 
             if (!formatted()) {
-                os << "Type   Size" << std::endl;
+                os << "Type   Size            Used    Free" << std::endl;
             } else {
                 os << "Type   Size            Used    Free    Full  Name" << std::endl;
             }
@@ -187,38 +187,23 @@ FileSystem::_dump(Category category, std::ostream &os) const
 
         case Category::State:
         {
-            if (!formatted()) {
+            auto total = formatted() ? numBlocks() : storage.numBlocks();
+            auto used = formatted() ? usedBlocks() : storage.usedBlocks();
+            auto free = formatted() ? freeBlocks() : storage.freeBlocks();
+            auto fill = formatted() ? fillLevel() : storage.fillLevel();
 
-                auto total = numBlocks();
-
-                os << "NODOS";
-                os << "  ";
-                os << std::setw(6) << std::left << std::setfill(' ') << total;
-                os << " (x ";
-                os << std::setw(3) << std::left << std::setfill(' ') << bsize;
-                os << ")  ";
-
-            } else {
-                
-                auto total = numBlocks();
-                auto used = usedBlocks();
-                auto free = freeBlocks();
-                auto fill = (isize)(100.0 * used / total);
-
-                os << "DOS" << dec(isize(dos));
-                os << "   ";
-                os << std::setw(6) << std::left << std::setfill(' ') << total;
-                os << " (x ";
-                os << std::setw(3) << std::left << std::setfill(' ') << bsize;
-                os << ")  ";
-                os << std::setw(6) << std::left << std::setfill(' ') << used;
-                os << "  ";
-                os << std::setw(6) << std::left << std::setfill(' ') << free;
-                os << "  ";
-                os << std::setw(3) << std::right << std::setfill(' ') << fill;
-                os << "%  ";
-                os << getName().c_str() << std::endl;
-            }
+            formatted() ? os << "DOS" << dec(isize(dos)) << "   " : os << "NODOS  ";
+            os << std::setw(6) << std::left << std::setfill(' ') << total;
+            os << " (x ";
+            os << std::setw(3) << std::left << std::setfill(' ') << bsize;
+            os << ")  ";
+            os << std::setw(6) << std::left << std::setfill(' ') << used;
+            os << "  ";
+            os << std::setw(6) << std::left << std::setfill(' ') << free;
+            os << "  ";
+            os << std::setw(3) << std::right << std::setfill(' ') << isize(fill);
+            os << "%  ";
+            os << getName().c_str() << std::endl;
             break;
         }
         case Category::Properties:

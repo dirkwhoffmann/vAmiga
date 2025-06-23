@@ -119,9 +119,9 @@ public:
     FSTraits &getTraits();
 
     // Returns capacity information
-    isize numBlocks() const { return storage.capacity(); } // isize(blocks.size()); }
-    isize numBytes() const { return numBlocks() * bsize; }
-    isize blockSize() const { return bsize; }
+    isize numBlocks() const { return storage.numBlocks(); }
+    isize numBytes() const { return storage.numBytes(); }
+    isize blockSize() const { return storage.blockSize(); }
 
     // Reports usage information
     isize freeBlocks() const;

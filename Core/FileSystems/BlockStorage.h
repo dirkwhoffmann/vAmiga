@@ -23,10 +23,10 @@ private:
     class FileSystem *fs = nullptr;
 
     // File system capacity in blocks
-    isize _capacity {};
+    isize capacity {};
 
     // Size of a single block in bytes
-    isize _bsize {};
+    isize bsize {};
 
     // Block storage
     std::unordered_map<usize, FSBlock> blocks;
@@ -38,7 +38,7 @@ private:
 
 public:
 
-    BlockStorage(FileSystem *fs) : fs(fs), _bsize(512) { };
+    BlockStorage(FileSystem *fs) : fs(fs), bsize(512) { };
     BlockStorage(FileSystem *fs, isize capacity, isize bsize = 512);
     virtual ~BlockStorage();
 
@@ -62,16 +62,28 @@ protected:
     //
 
 public:
-    
+
+    // Returns capacity information
+    isize numBlocks() const { return capacity; }
+    isize numBytes() const { return capacity * bsize; }
+    isize blockSize() const { return bsize; }
+
+    // Reports usage information
+    isize freeBlocks() const { return numBlocks() - usedBlocks(); }
+    isize usedBlocks() const { return blocks.size(); }
+    isize freeBytes() const { return freeBlocks() * blockSize(); }
+    isize usedBytes() const { return usedBlocks() * blockSize(); }
+    double fillLevel() const { return double(100) * usedBlocks() / numBlocks(); }
+
     // Gets or sets the block type
     FSBlockType getType(Block nr) const;
     void setType(Block nr, FSBlockType type);
 
     // Returns the storage capacity in blocks
-    isize capacity() const { return _capacity; }
+    // isize capacity() const { return capacity; }
 
     // Returns the block size in bytes
-    isize bsize() const { return _bsize; }
+    // isize bsize() const { return bsize; }
 
     // Reads a block from the storage
     FSBlock &operator[](size_t nr);

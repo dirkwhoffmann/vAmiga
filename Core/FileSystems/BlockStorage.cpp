@@ -31,14 +31,14 @@ BlockStorage::dealloc()
 void
 BlockStorage::init(isize capacity, isize bsize)
 {
-    this->_capacity = capacity;
-    this->_bsize = bsize;
+    this->capacity = capacity;
+    this->bsize = bsize;
 
     // Remove all existing blocks
     blocks = {};
 
     // Request a capacity change
-    blocks.reserve(_capacity);
+    blocks.reserve(capacity);
 }
 
 void
@@ -50,8 +50,8 @@ BlockStorage::_dump(Category category, std::ostream &os) const
 
         case Category::Blocks:
 
-            os << tab("Capacity") << capacity() << std::endl;
-            os << tab("Block size") << bsize() << std::endl;
+            os << tab("Capacity") << numBlocks() << " blocks" << std::endl;
+            os << tab("Block size") << bsize << " bytes" << std::endl;
             break;
 
         default:
@@ -62,7 +62,7 @@ BlockStorage::_dump(Category category, std::ostream &os) const
 FSBlockType
 BlockStorage::getType(Block nr) const
 {
-    if (isize(nr) >= _capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
+    if (isize(nr) >= capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 
     return blocks.contains(nr) ? blocks.at(nr).type : FSBlockType::EMPTY_BLOCK;
 }
@@ -70,7 +70,7 @@ BlockStorage::getType(Block nr) const
 void
 BlockStorage::setType(Block nr, FSBlockType type)
 {
-    if (isize(nr) >= _capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
+    if (isize(nr) >= capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
     blocks.at(nr).init(type);
 }
 
@@ -89,7 +89,7 @@ BlockStorage::operator[](size_t nr) const
 FSBlock *
 BlockStorage::read(Block nr)
 {
-    if (nr >= size_t(_capacity)) throw AppError(Fault::FS_INVALID_BLOCK_REF);
+    if (nr >= size_t(capacity)) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 
     // Create the block if it does not yet exist
     if (!blocks.contains(nr)) blocks.emplace(nr, FSBlock(fs, Block(nr), FSBlockType::EMPTY_BLOCK));
@@ -107,7 +107,7 @@ BlockStorage::read(Block nr) const
 FSBlock *
 BlockStorage::read(Block nr, FSBlockType type)
 {
-    if (isize(nr) < _capacity) {
+    if (isize(nr) < capacity) {
 
         auto &block = (*this)[nr];
         if (block.type == type) return &block;
@@ -126,7 +126,7 @@ BlockStorage::read(Block nr, FSBlockType type) const
 void
 BlockStorage::write(Block nr, FSBlock *block)
 {
-    if (isize(nr) >= _capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
+    if (isize(nr) >= capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 
     (*this)[nr] = *block;
 }

@@ -99,9 +99,6 @@ NavigatorConsole::parseBlock(const Arguments &argv, const string &token, Block f
 FSPath
 NavigatorConsole::parsePath(const Arguments &argv, const string &token)
 {
-    if (argv.contains("b")) {
-        return FSPath(fs, parseBlock(argv, token));
-    }
     return parsePath(argv, token, fs.pwd());
 }
 
@@ -120,6 +117,26 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token, const FS
         // Treat the argument as a block number
         return FSPath(fs, parseBlock(argv.at(token)));
     }
+}
+
+FSPath
+NavigatorConsole::parseDirectory(const Arguments &argv, const string &token)
+{
+    return parseDirectory(argv, token, fs.pwd());
+}
+
+FSPath
+NavigatorConsole::parseDirectory(const Arguments &argv, const string &token, const FSPath &fallback)
+{
+    if (!fs.formatted()) {
+        throw AppError(Fault::FS_UNFORMATTED);
+    }
+    auto path = parsePath(argv, token, fallback);
+
+    if (!path.isDirectory()) {
+        throw AppError(Fault::FS_NOT_A_DIRECTORY, "Block " + std::to_string(path.ref));
+    }
+    return path;
 }
 
 util::DumpOpt
@@ -375,11 +392,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto path = parsePath(args, "path", fs.pwd());
-            if (!path.isDirectory()) {
-                throw AppError(Fault::FS_NOT_A_DIRECTORY, "Block " + std::to_string(path.ref));
-            }
-
+            auto path = parseDirectory(args, "path");
             auto d = args.contains("d");
             auto f = args.contains("f");
             auto r = args.contains("r");
@@ -417,11 +430,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "s", "Sort output" }, .flags = rs::flag } },
         .func   = [this](std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto path = parsePath(args, "path", fs.pwd());
-            if (!path.isDirectory()) {
-                throw AppError(Fault::FS_NOT_A_DIRECTORY, "Block " + std::to_string(path.ref));
-            }
-
+            auto path = parseDirectory(args, "path");
             auto d = args.contains("d");
             auto f = args.contains("f");
             auto r = args.contains("r");
