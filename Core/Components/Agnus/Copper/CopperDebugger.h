@@ -60,7 +60,7 @@ class CopperDebugger final : public SubComponent {
     friend class Copper;
     
     // Cached Copper lists
-    std::map<u32, CopperList> cache;
+    std::unordered_map<u32, CopperList> cache;
 
     // The most recently used Copper list 1
     CopperList *current1 = nullptr;

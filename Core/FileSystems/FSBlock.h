@@ -35,14 +35,18 @@ struct FSBlock : CoreObject {
     // Outcome of the latest integrity check (0 = OK, n = n-th corrupted block)
     isize corrupted = 0;
 
+private:
+
     // Block data
-    u8 *data = nullptr;
+    u8 *bdata = nullptr;
 
     
     //
     // Constructing
     //
-    
+
+public:
+
     FSBlock(FileSystem *ref, Block nr, FSBlockType t);
     ~FSBlock();
 
@@ -95,6 +99,10 @@ public:
     //
     // Reading and writing block data
     //
+
+    // Provides the data of a block
+    u8 *data();
+    const u8 *data() const;
 
     // Reads or writes a long word in Big Endian format
     static u32 read32(const u8 *p);

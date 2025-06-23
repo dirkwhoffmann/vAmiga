@@ -62,7 +62,7 @@ BlockStorage::_dump(Category category, std::ostream &os) const
 FSBlockType
 BlockStorage::getType(Block nr) const
 {
-    if (nr >= _capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
+    if (isize(nr) >= _capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 
     return blocks.contains(nr) ? blocks.at(nr).type : FSBlockType::EMPTY_BLOCK;
 }
@@ -70,25 +70,26 @@ BlockStorage::getType(Block nr) const
 void
 BlockStorage::setType(Block nr, FSBlockType type)
 {
-    if (nr >= _capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
+    if (isize(nr) >= _capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
     blocks.at(nr).init(type);
 }
 
 FSBlock &
 BlockStorage::read(Block nr)
 {
-    if (nr >= _capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
+    if (isize(nr) >= _capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 
     // Create the block if it does not yet exist
     if (!blocks.contains(nr)) blocks.emplace(nr, FSBlock(fs, Block(nr), FSBlockType::EMPTY_BLOCK));
 
-    // Get a block reference
-    FSBlock &result = blocks.at(nr);
+    // Return a block reference
+    return blocks.at(nr);
+    // FSBlock &result = blocks.at(nr);
 
     // Allocate the buffer if necessary
-    if (!result.data) result.data = new u8[_bsize];
+    // if (!result.bdata) result.bdata = new u8[_bsize];
 
-    return result;
+    //return result;
 }
 
 const FSBlock &
@@ -101,10 +102,9 @@ BlockStorage::read(Block nr) const
 FSBlock *
 BlockStorage::pread(Block nr)
 {
-    if (nr < _capacity) {
-        return &read(nr);
-    }
-    return nullptr;
+    if (isize(nr) >= _capacity) return nullptr;
+
+    return &read(nr);
 }
 
 const FSBlock *
@@ -117,7 +117,7 @@ BlockStorage::pread(Block nr) const
 FSBlock *
 BlockStorage::pread(Block nr, FSBlockType type)
 {
-    if (nr < _capacity) {
+    if (isize(nr) < _capacity) {
 
         auto &block = read(nr);
         if (block.type == type) return &block;
@@ -136,7 +136,7 @@ BlockStorage::pread(Block nr, FSBlockType type) const
 void
 BlockStorage::write(Block nr, FSBlock *block)
 {
-    if (nr >= _capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
+    if (isize(nr) >= _capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 
     read(nr) = *block;
 }

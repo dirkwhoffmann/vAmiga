@@ -173,7 +173,7 @@ struct SoftwareTrap {
 
 struct SoftwareTraps {
 
-    std::map<u16, SoftwareTrap>traps;
+    std::unordered_map<u16, SoftwareTrap>traps;
 
     // Creates a new software trap for a given instruction
     u16 create(u16 instr);

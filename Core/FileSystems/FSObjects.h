@@ -28,7 +28,6 @@ struct FSString {
     FSString(const string &cppS, isize limit = 1024);
     FSString(const char *c, isize limit = 1024);
     FSString(const u8 *bcpl, isize limit = 1024);
-    // FSString(const std::map<string,string> map, const string &cpp, const string alt = "", isize limit = 1024);
 
     const char *c_str() const { return str.c_str(); }
     string cpp_str() const { return str; }

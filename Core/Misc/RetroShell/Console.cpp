@@ -115,7 +115,6 @@ Console::operator<<(const std::vector<string> &vec)
     return *this;
 }
 
-
 Console &
 Console::operator<<(std::stringstream &stream)
 {
@@ -163,7 +162,6 @@ Console::welcome()
     *this << '\n';
 
     *this << "    " << description() << " console" << "\n\n";
-    // *this << "    vAmiga " << description() << "\n\n";
 
     printHelp(4);
 }
@@ -239,14 +237,6 @@ Console::printHelp(isize tab)
 
     *this << vspace{1};
 }
-
-/*
-void
-Console::printState(std::ostream)
-{
-    dump(os, amiga, Category::Trace);
-}
-*/
 
 void
 Console::press(RSKey key, bool shift)

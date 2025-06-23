@@ -115,7 +115,7 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token, const FS
         // Try to find the directory by name
         return fs.pwd().seek(argv.at(token));
 
-    } catch (AppError &err) {
+    } catch (AppError &) {
 
         // Treat the argument as a block number
         return FSPath(fs, parseBlock(argv.at(token)));

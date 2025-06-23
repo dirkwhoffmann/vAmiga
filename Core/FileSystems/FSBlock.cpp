@@ -23,7 +23,7 @@ FSBlock::FSBlock(FileSystem *ref, Block nr, FSBlockType t) : fs(ref)
 
 FSBlock::~FSBlock()
 {
-    if (data) delete [] data;
+    if (bdata) delete [] bdata;
 }
 
 void
@@ -35,8 +35,8 @@ FSBlock::init(FSBlockType t)
     if (type == FSBlockType::EMPTY_BLOCK) return;
 
     // Allocate memory
-    delete [] (data);
-    data = new u8[bsize()]();
+    delete [] (bdata);
+    bdata = new u8[bsize()]();
     // data.init(type == FSBlockType::EMPTY_BLOCK ? 0 : bsize(), 0);
 
     // Initialize
@@ -45,10 +45,10 @@ FSBlock::init(FSBlockType t)
         case FSBlockType::BOOT_BLOCK:
             
             if (nr == 0 && fs->dos != FSVolumeType::NODOS) {
-                data[0] = 'D';
-                data[1] = 'O';
-                data[2] = 'S';
-                data[3] = (u8)fs->dos;
+                bdata[0] = 'D';
+                bdata[1] = 'O';
+                bdata[2] = 'S';
+                bdata[3] = (u8)fs->dos;
             }
             break;
             
@@ -372,7 +372,7 @@ FSBlock::check(isize byte, u8 *expected, bool strict) const
         case FSBlockType::BOOT_BLOCK:
         {
             isize word = byte / 4;
-            u32 value = data[byte];
+            u32 value = bdata[byte];
 
             if (nr == 0) {
 
@@ -560,7 +560,26 @@ FSBlock::check(isize byte, u8 *expected, bool strict) const
 u8 *
 FSBlock::addr32(isize nr) const
 {
-    return (data + 4 * nr) + (nr < 0 ? bsize() : 0);
+    return (bdata + 4 * nr) + (nr < 0 ? bsize() : 0);
+}
+
+u8 *
+FSBlock::data()
+{
+    // Allocate memory if needed
+    if (!bdata) bdata = new u8[bsize()]();
+
+    return bdata;
+}
+
+const u8 *
+FSBlock::data() const
+{
+    return const_cast<const u8 *>(const_cast<FSBlock *>(this)->data());
+    /*
+    auto result = const_cast<FSBlock *>(this)->data();
+    return const_cast<const u8 *>(result);
+    */
 }
 
 u32
@@ -649,7 +668,7 @@ FSBlock::checksumBootBlock() const
     }
 
     // Second boot block
-    u8 *p = fs->storage.pread(1)->data;
+    u8 *p = fs->storage.pread(1)->bdata;
     // u8 *p = fs.blocks[1]->data.ptr;
 
     for (isize i = 0; i < bsize() / 4; i++) {
@@ -694,7 +713,7 @@ FSBlock::dump(std::ostream &os) const
         case FSBlockType::BOOT_BLOCK:
 
             os << tab("Header");
-            for (isize i = 0; i < 8; i++) os << hex(data[i]) << " ";
+            for (isize i = 0; i < 8; i++) os << hex(bdata[i]) << " ";
             os << std::endl;
             break;
 
@@ -813,7 +832,7 @@ FSBlock::dump(std::ostream &os) const
         os << tab("Hash table");
         for (isize i = 0, j = 0; i < hashTableSize(); i++) {
 
-            if (Block ref = read32(data + 24 + 4 * i); ref) {
+            if (Block ref = read32(bdata + 24 + 4 * i); ref) {
 
                 if (j++) os << std::endl << tab();
                 os << std::setfill(' ') << std::setw(2) << i << " -> ";
@@ -837,7 +856,7 @@ FSBlock::hexDump(std::ostream &os, const util::DumpOpt &opt)
 
     } else {
 
-        util::dump(os, opt, data, bsize());
+        util::dump(os, opt, bdata, bsize());
     }
 }
 
@@ -876,7 +895,7 @@ FSBlock::importBlock(const u8 *src, isize size)
     assert(src);
     assert(size == bsize());
 
-    if (data) std::memcpy(data, src, size);
+    if (bdata) std::memcpy(bdata, src, size);
 }
 
 void
@@ -889,8 +908,8 @@ FSBlock::exportBlock(u8 *dst, isize size)
     updateChecksum();
 
     // Export the block
-    if (data) {
-        std::memcpy(dst, data, size);
+    if (bdata) {
+        std::memcpy(dst, bdata, size);
     } else {
         std::memset(dst, 0, size);
     }
@@ -1625,9 +1644,9 @@ FSBlock::writeBootBlock(BootBlockId id, isize page)
         auto image = BootBlockImage(id);
         
         if (page == 0) {
-            image.write(data + 4, 4, 511); // Write 508 bytes (skip header)
+            image.write(bdata + 4, 4, 511); // Write 508 bytes (skip header)
         } else {
-            image.write(data, 512, 1023);  // Write 512 bytes
+            image.write(bdata, 512, 1023);  // Write 512 bytes
         }
     }
 }
@@ -1900,12 +1919,12 @@ FSBlock::writeData(std::ostream &os, isize size)
             
         case FSBlockType::DATA_BLOCK_OFS:
             
-            os.write((char *)(data + 24), count);
+            os.write((char *)(bdata + 24), count);
             return count;
             
         case FSBlockType::DATA_BLOCK_FFS:
             
-            os.write((char *)data, count);
+            os.write((char *)bdata, count);
             return count;
             
         default:
@@ -1969,12 +1988,12 @@ FSBlock::writeData(Buffer<u8> &buf, isize offset, isize count)
             
         case FSBlockType::DATA_BLOCK_OFS:
             
-            std::memcpy((void *)(buf.ptr + offset), (void *)(data + 24), count);
+            std::memcpy((void *)(buf.ptr + offset), (void *)(bdata + 24), count);
             return count;
             
         case FSBlockType::DATA_BLOCK_FFS:
 
-            std::memcpy((void *)(buf.ptr + offset), (void *)(data), count);
+            std::memcpy((void *)(buf.ptr + offset), (void *)(bdata), count);
             return count;
             
         default:
@@ -2038,12 +2057,12 @@ FSBlock::overwriteData(Buffer<u8> &buf, isize offset, isize count)
             
         case FSBlockType::DATA_BLOCK_OFS:
             
-            std::memcpy((void *)(data + 24), (void *)(buf.ptr + offset), count);
+            std::memcpy((void *)(bdata + 24), (void *)(buf.ptr + offset), count);
             return count;
             
         case FSBlockType::DATA_BLOCK_FFS:
 
-            std::memcpy((void *)(data), (void *)(buf.ptr + offset), count);
+            std::memcpy((void *)(bdata), (void *)(buf.ptr + offset), count);
             return count;
             
         default:

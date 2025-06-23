@@ -385,8 +385,8 @@ MutableFileSystem::killVirus()
         storage.read(0).writeBootBlock(id, 0);
         storage.read(1).writeBootBlock(id, 1);
     } else {
-        std::memset(storage.read(0).data + 4, 0, bsize - 4);
-        std::memset(storage.read(1).data, 0, bsize);
+        std::memset(storage.read(0).data() + 4, 0, bsize - 4);
+        std::memset(storage.read(1).data(), 0, bsize);
      }
 }
 
@@ -396,7 +396,7 @@ MutableFileSystem::setAllocationBit(Block nr, bool value)
     isize byte, bit;
     
     if (FSBlock *bm = locateAllocationBit(nr, &byte, &bit)) {
-        REPLACE_BIT(bm->data[byte], bit, value);
+        REPLACE_BIT(bm->data()[byte], bit, value);
     }
 }
 
@@ -551,14 +551,14 @@ MutableFileSystem::addData(FSBlock &block, const u8 *buf, isize size)
         case FSBlockType::DATA_BLOCK_OFS:
             
             count = std::min(bsize - 24, size);
-            std::memcpy(block.data + 24, buf, count);
+            std::memcpy(block.data() + 24, buf, count);
             block.setDataBytesInBlock((u32)count);
             break;
 
         case FSBlockType::DATA_BLOCK_FFS:
 
             count = std::min(bsize, size);
-            std::memcpy(block.data, buf, count);
+            std::memcpy(block.data(), buf, count);
             break;
 
         default:

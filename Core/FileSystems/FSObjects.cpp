@@ -42,16 +42,6 @@ FSString::FSString(const u8 *bcpl, isize limit) : limit(limit)
     str.assign(firstChar, std::min(length, limit));
 }
 
-/*
-FSString::FSString(const std::map<string,string> map, const string &cpp, const string alt, isize limit)
-{
-    auto item = map.find(cpp);
-
-    this->str = item != map.end() ? item->second : alt;
-    this->limit = limit;
-}
-*/
-
 char
 FSString::capital(char c)
 {
