@@ -362,12 +362,6 @@ FileSystem::fileHeaderBlockPtr(Block nr) const
         return p;
     }
     return nullptr;
-    /*
-    if (nr < blocks.size() && blocks[nr]->type == FSBlockType::FILEHEADER_BLOCK) {
-        return blocks[nr];
-    }
-    return nullptr;
-    */
 }
 
 FSBlock *
@@ -377,12 +371,6 @@ FileSystem::fileListBlockPtr(Block nr) const
         return p;
     }
     return nullptr;
-    /*
-    if (nr < blocks.size() && blocks[nr]->type == FSBlockType::FILELIST_BLOCK) {
-        return blocks[nr];
-    }
-    return nullptr;
-    */
 }
 
 FSBlock *
@@ -394,14 +382,6 @@ FileSystem::dataBlockPtr(Block nr) const
         }
     }
     return nullptr;
-    /*
-    FSBlockType t = nr < blocks.size() ? blocks[nr]->type : FSBlockType::UNKNOWN_BLOCK;
-
-    if (t == FSBlockType::DATA_BLOCK_OFS || t == FSBlockType::DATA_BLOCK_FFS) {
-        return blocks[nr];
-    }
-    return nullptr;
-    */
 }
 
 FSBlock *
@@ -413,14 +393,6 @@ FileSystem::hashableBlockPtr(Block nr) const
         }
     }
     return nullptr;
-    /*
-    FSBlockType t = nr < blocks.size() ? blocks[nr]->type : FSBlockType::UNKNOWN_BLOCK;
-    
-    if (t == FSBlockType::USERDIR_BLOCK || t == FSBlockType::FILEHEADER_BLOCK) {
-        return blocks[nr];
-    }
-    return nullptr;
-    */
 }
 
 u8
@@ -518,11 +490,6 @@ FileSystem::cd(const FSName &name)
 void
 FileSystem::cd(const FSPath &path)
 {
-    /*
-    if (!path.isDirectory()) {
-        throw AppError(Fault::FS_NOT_A_DIRECTORY, path.name());
-    }
-    */
     curr = path.ref;
 }
 
@@ -642,7 +609,6 @@ FileSystem::collectHashedRefs(Block nr,
     if (FSBlock *b = blockPtr(nr); b && b->hashTableSize() > 0) {
 
         // Walk through the hash table in reverse order
-        // for (isize i = (isize)b->hashTableSize(); i >= 0; i--) {
         for (isize i = (isize)b->hashTableSize() - 1; i >= 0; i--) {
             collectRefsWithSameHashValue(b->getHashRef((u32)i), result, visited);
         }
@@ -716,7 +682,7 @@ FileSystem::lastHashBlockInChain(FSBlock *block) const
 }
 
 bool
-FileSystem::verify() const
+FileSystem::verify()
 {
     if (FS_DEBUG) dump(Category::State);
 
@@ -731,7 +697,7 @@ FileSystem::verify() const
 }
 
 FSErrorReport
-FileSystem::check(bool strict) const
+FileSystem::check(bool strict)
 {
     FSErrorReport result = { };
 
@@ -755,25 +721,27 @@ FileSystem::check(bool strict) const
     // Analyze all blocks
     for (isize i = 0; i < numBlocks(); i++) {
 
-        auto *block = const_cast<FSBlock *>(storage.read(Block(i)));
+        if (storage[i].check(strict) > 0) {
 
-        if (block->check(strict) > 0) {
-        // if (blocks[i]->check(strict) > 0) {
             min = std::min(min, i);
             max = std::max(max, i);
+            storage[i].corrupted = ++total;
 
-            block->corrupted = ++total;
         } else {
-            block->corrupted = 0;
+
+            storage[i].corrupted = 0;
         }
     }
 
     // Record findings
     if (total) {
+
         result.corruptedBlocks = total;
         result.firstErrorBlock = min;
         result.lastErrorBlock = max;
+
     } else {
+        
         result.corruptedBlocks = 0;
         result.firstErrorBlock = min;
         result.lastErrorBlock = max;

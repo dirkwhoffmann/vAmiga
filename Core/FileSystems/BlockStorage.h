@@ -70,7 +70,7 @@ public:
 
     // Reports usage information
     isize freeBlocks() const { return numBlocks() - usedBlocks(); }
-    isize usedBlocks() const { return blocks.size(); }
+    isize usedBlocks() const { return (isize)blocks.size(); }
     isize freeBytes() const { return freeBlocks() * blockSize(); }
     isize usedBytes() const { return usedBlocks() * blockSize(); }
     double fillLevel() const { return double(100) * usedBlocks() / numBlocks(); }
@@ -78,12 +78,6 @@ public:
     // Gets or sets the block type
     FSBlockType getType(Block nr) const;
     void setType(Block nr, FSBlockType type);
-
-    // Returns the storage capacity in blocks
-    // isize capacity() const { return capacity; }
-
-    // Returns the block size in bytes
-    // isize bsize() const { return bsize; }
 
     // Reads a block from the storage
     FSBlock &operator[](size_t nr);

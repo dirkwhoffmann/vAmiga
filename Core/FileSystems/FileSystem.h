@@ -246,10 +246,10 @@ public:
 public:
 
     // Performs a sanity check
-    bool verify() const;
+    bool verify();
     
     // Checks all blocks in this volume
-    FSErrorReport check(bool strict) const;
+    FSErrorReport check(bool strict);
 
     // Checks a single byte in a certain block
     Fault check(Block nr, isize pos, u8 *expected, bool strict) const;
