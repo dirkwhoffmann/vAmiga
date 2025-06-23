@@ -15,10 +15,15 @@
 
 namespace vamiga {
 
-FSBlock::FSBlock(FileSystem &ref, Block nr, FSBlockType t) : fs(ref)
+FSBlock::FSBlock(FileSystem *ref, Block nr, FSBlockType t) : fs(ref)
 {
     this->nr = nr;
     init(t);
+}
+
+FSBlock::~FSBlock()
+{
+    if (data) delete [] data;
 }
 
 void
@@ -39,11 +44,11 @@ FSBlock::init(FSBlockType t)
 
         case FSBlockType::BOOT_BLOCK:
             
-            if (nr == 0 && fs.dos != FSVolumeType::NODOS) {
+            if (nr == 0 && fs->dos != FSVolumeType::NODOS) {
                 data[0] = 'D';
                 data[1] = 'O';
                 data[2] = 'S';
-                data[3] = (u8)fs.dos;
+                data[3] = (u8)fs->dos;
             }
             break;
             
@@ -93,7 +98,7 @@ FSBlock::init(FSBlockType t)
 }
 
 FSBlock *
-FSBlock::make(FileSystem &ref, Block nr, FSBlockType type)
+FSBlock::make(FileSystem *ref, Block nr, FSBlockType type)
 {
     switch (type) {
 
@@ -140,7 +145,7 @@ FSBlock::objectName() const
 isize
 FSBlock::bsize() const
 {
-    return fs.bsize;
+    return fs->bsize;
 }
 
 isize
@@ -644,7 +649,7 @@ FSBlock::checksumBootBlock() const
     }
 
     // Second boot block
-    u8 *p = fs.storage.pread(1)->data;
+    u8 *p = fs->storage.pread(1)->data;
     // u8 *p = fs.blocks[1]->data.ptr;
 
     for (isize i = 0; i < bsize() / 4; i++) {
@@ -814,7 +819,7 @@ FSBlock::dump(std::ostream &os) const
                 os << std::setfill(' ') << std::setw(2) << i << " -> ";
                 os << std::setfill(' ') << std::setw(4) << ref;
 
-                if (auto ptr = fs.blockPtr(ref); ptr) {
+                if (auto ptr = fs->blockPtr(ref); ptr) {
                     os << " (" << ptr->getName().cpp_str() << ")";
                 }
             }
@@ -908,7 +913,7 @@ Fault
 FSBlock::exportUserDirBlock(const fs::path &path)
 {
     // Assemble the host file name
-    auto filename = path / FSPath(fs, nr).getPath();
+    auto filename = path / FSPath(*fs, nr).getPath();
     debug(FS_DEBUG >= 2, "Creating directory %s\n", filename.string().c_str());
 
     // Create directory
@@ -921,7 +926,7 @@ Fault
 FSBlock::exportFileHeaderBlock(const fs::path &path)
 {
     // Assemble the host file name
-    auto filename = path / FSPath(fs, nr).getPath(); // device.getPath(this);
+    auto filename = path / FSPath(*fs, nr).getPath(); // device.getPath(this);
     debug(FS_DEBUG >= 2, "  Exporting file %s\n", filename.string().c_str());
 
     // Open file
@@ -1331,7 +1336,7 @@ FSBlock *
 FSBlock::getParentDirBlock() const
 {
     Block nr = getParentDirRef();
-    return nr ? fs.blockPtr(nr) : nullptr;
+    return nr ? fs->blockPtr(nr) : nullptr;
 }
 
 Block
@@ -1364,7 +1369,7 @@ FSBlock *
 FSBlock::getFileHeaderBlock() const
 {
     Block nr = getFileHeaderRef();
-    return nr ? fs.fileHeaderBlockPtr(nr) : nullptr;
+    return nr ? fs->fileHeaderBlockPtr(nr) : nullptr;
 }
 
 Block
@@ -1402,7 +1407,7 @@ FSBlock *
 FSBlock::getNextHashBlock() const
 {
     Block nr = getNextHashRef();
-    return nr ? fs.blockPtr(nr) : nullptr;
+    return nr ? fs->blockPtr(nr) : nullptr;
 }
 
 Block
@@ -1440,7 +1445,7 @@ FSBlock *
 FSBlock::getNextListBlock() const
 {
     Block nr = getNextListBlockRef();
-    return nr ? fs.fileListBlockPtr(nr) : nullptr;
+    return nr ? fs->fileListBlockPtr(nr) : nullptr;
 }
 
 Block
@@ -1473,7 +1478,7 @@ FSBlock *
 FSBlock::getNextBmExtBlock() const
 {
     Block nr = getNextBmExtBlockRef();
-    return nr ? fs.bitmapExtBlockPtr(nr) : nullptr;
+    return nr ? fs->bitmapExtBlockPtr(nr) : nullptr;
 }
 
 Block
@@ -1510,7 +1515,7 @@ FSBlock *
 FSBlock::getFirstDataBlock() const
 {
     Block nr = getFirstDataBlockRef();
-    return nr ? fs.dataBlockPtr(nr) : nullptr;
+    return nr ? fs->dataBlockPtr(nr) : nullptr;
 }
 
 Block
@@ -1560,7 +1565,7 @@ FSBlock *
 FSBlock::getNextDataBlock() const
 {
     Block nr = getNextDataBlockRef();
-    return nr ? fs.dataBlockPtr(nr) : nullptr;
+    return nr ? fs->dataBlockPtr(nr) : nullptr;
 }
 
 isize
@@ -1923,8 +1928,8 @@ FSBlock::writeData(Buffer<u8> &buf)
     // Start here and iterate through all connected file list blocks
     FSBlock *block = this;
     
-    while (block && blocksTotal < fs.numBlocks()) {
-        
+    while (block && blocksTotal < fs->numBlocks()) {
+
         blocksTotal++;
         
         // Iterate through all data blocks references in this block
@@ -1932,7 +1937,7 @@ FSBlock::writeData(Buffer<u8> &buf)
         for (isize i = 0; i < num; i++) {
             
             Block ref = block->getDataBlockRef(i);
-            if (FSBlock *dataBlock = fs.dataBlockPtr(ref)) {
+            if (FSBlock *dataBlock = fs->dataBlockPtr(ref)) {
 
                 isize bytesWritten = dataBlock->writeData(buf, bytesTotal, bytesRemaining);
                 bytesTotal += bytesWritten;
@@ -1992,8 +1997,8 @@ FSBlock::overwriteData(Buffer<u8> &buf)
     // Start here and iterate through all connected file list blocks
     FSBlock *block = this;
     
-    while (block && blocksTotal < fs.numBlocks()) {
-        
+    while (block && blocksTotal < fs->numBlocks()) {
+
         blocksTotal++;
         
         // Iterate through all data blocks references in this block
@@ -2001,7 +2006,7 @@ FSBlock::overwriteData(Buffer<u8> &buf)
         for (isize i = 0; i < num; i++) {
 
             Block ref = block->getDataBlockRef(i);
-            if (FSBlock *dataBlock = fs.dataBlockPtr(ref)) {
+            if (FSBlock *dataBlock = fs->dataBlockPtr(ref)) {
                 
                 isize bytesWritten = dataBlock->overwriteData(buf, bytesTotal, bytesRemaining);
                 bytesTotal += bytesWritten;

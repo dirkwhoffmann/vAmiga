@@ -103,8 +103,8 @@ MutableFileSystem::format(string name)
     // init(isize(blocks.size()));
 
     // Create boot blocks
-    storage.write(0, new FSBlock(*this, 0, FSBlockType::BOOT_BLOCK));
-    storage.write(1, new FSBlock(*this, 1, FSBlockType::BOOT_BLOCK));
+    storage.write(0, new FSBlock(this, 0, FSBlockType::BOOT_BLOCK));
+    storage.write(1, new FSBlock(this, 1, FSBlockType::BOOT_BLOCK));
     /*
     blocks[0] = new FSBlock(*this, 0, FSBlockType::BOOT_BLOCK);
     blocks[1] = c;
@@ -112,15 +112,15 @@ MutableFileSystem::format(string name)
 
     // Create the root block
     assert(rootBlock != 0);
-    FSBlock *rb = new FSBlock(*this, rootBlock, FSBlockType::ROOT_BLOCK);
-    storage.write(rootBlock, new FSBlock(*this, rootBlock, FSBlockType::ROOT_BLOCK));
+    FSBlock *rb = new FSBlock(this, rootBlock, FSBlockType::ROOT_BLOCK);
+    storage.write(rootBlock, new FSBlock(this, rootBlock, FSBlockType::ROOT_BLOCK));
     // blocks[rootBlock] = rb;
 
     // Create bitmap blocks
     for (auto& ref : bmBlocks) {
         
         // blocks[ref] = new FSBlock(*this, ref, FSBlockType::BITMAP_BLOCK);
-        storage.write(ref, new FSBlock(*this, ref, FSBlockType::BITMAP_BLOCK));
+        storage.write(ref, new FSBlock(this, ref, FSBlockType::BITMAP_BLOCK));
     }
 
     // Add bitmap extension blocks
@@ -128,7 +128,7 @@ MutableFileSystem::format(string name)
     for (auto& ref : bmExtBlocks) {
         
         // blocks[ref] = new FSBlock(*this, ref, FSBlockType::BITMAP_EXT_BLOCK);
-        storage.write(ref, new FSBlock(*this, ref, FSBlockType::BITMAP_EXT_BLOCK));
+        storage.write(ref, new FSBlock(this, ref, FSBlockType::BITMAP_EXT_BLOCK));
         pred->setNextBmExtBlockRef(ref);
         pred = storage.pread(ref); //  blocks[ref];
     }
@@ -646,7 +646,7 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
         FSBlockType type = predictBlockType((Block)i, data);
         
         // Create new block
-        FSBlock *newBlock = FSBlock::make(*this, (Block)i, type);
+        FSBlock *newBlock = FSBlock::make(this, (Block)i, type);
 
         // Import block data
         newBlock->importBlock(data, bsize);

@@ -42,7 +42,7 @@ BlockStorage::init(isize capacity, isize bsize)
 
     // Create new blocks
     for (isize i = 0; i < capacity; i++) {
-        blocks[i] = new FSBlock(fs, Block(i), FSBlockType::EMPTY_BLOCK);
+        blocks[i] = new FSBlock(&fs, Block(i), FSBlockType::EMPTY_BLOCK);
         assert(blocks[i]->data == nullptr);
     }
 }
