@@ -29,9 +29,9 @@ private:
     isize _bsize {};
 
     // Block storage
-    std::vector<BlockPtr> blocks;
+    std::vector<FSBlock> blocks;
 
-    
+
     //
     // Initializing
     //
