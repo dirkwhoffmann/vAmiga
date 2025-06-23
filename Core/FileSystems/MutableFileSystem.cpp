@@ -95,48 +95,48 @@ MutableFileSystem::format(string name)
 {
     if (!initialized()) throw AppError(Fault::FS_UNINITIALIZED);
 
-    // Do some consistency checking
+    // Perform some consistency checks
     assert(numBlocks() > 2);
+    assert(rootBlock > 0);
 
     // Trash all existing data
     storage.init(numBlocks());
-    // init(isize(blocks.size()));
 
     // Create boot blocks
-    storage.write(0, new FSBlock(this, 0, FSBlockType::BOOT_BLOCK));
-    storage.write(1, new FSBlock(this, 1, FSBlockType::BOOT_BLOCK));
-    /*
-    blocks[0] = new FSBlock(*this, 0, FSBlockType::BOOT_BLOCK);
-    blocks[1] = c;
-    */
+    storage[0].init(FSBlockType::BOOT_BLOCK);
+    storage[1].init(FSBlockType::BOOT_BLOCK);
 
     // Create the root block
-    assert(rootBlock != 0);
-    FSBlock *rb = new FSBlock(this, rootBlock, FSBlockType::ROOT_BLOCK);
-    storage.write(rootBlock, new FSBlock(this, rootBlock, FSBlockType::ROOT_BLOCK));
-    // blocks[rootBlock] = rb;
+    // FSBlock *rb = new FSBlock(this, rootBlock, FSBlockType::ROOT_BLOCK);
+    // storage.write(rootBlock, new FSBlock(this, rootBlock, FSBlockType::ROOT_BLOCK));
+    storage[rootBlock].init(FSBlockType::ROOT_BLOCK);
 
     // Create bitmap blocks
     for (auto& ref : bmBlocks) {
         
-        // blocks[ref] = new FSBlock(*this, ref, FSBlockType::BITMAP_BLOCK);
-        storage.write(ref, new FSBlock(this, ref, FSBlockType::BITMAP_BLOCK));
+        // storage.write(ref, new FSBlock(this, ref, FSBlockType::BITMAP_BLOCK));
+        storage[ref].init(FSBlockType::BITMAP_BLOCK);
     }
 
     // Add bitmap extension blocks
-    FSBlock *pred = rb;
-    for (auto& ref : bmExtBlocks) {
-        
-        // blocks[ref] = new FSBlock(*this, ref, FSBlockType::BITMAP_EXT_BLOCK);
-        storage.write(ref, new FSBlock(this, ref, FSBlockType::BITMAP_EXT_BLOCK));
-        pred->setNextBmExtBlockRef(ref);
-        pred = storage.read(ref); //  blocks[ref];
+    // FSBlock *pred = rb;
+    Block pred = rootBlock;
+    for (auto &ref : bmExtBlocks) {
+
+        // storage.write(ref, new FSBlock(this, ref, FSBlockType::BITMAP_EXT_BLOCK));
+        // pred->setNextBmExtBlockRef(ref);
+        // pred = storage.read(ref);
+        storage[ref].init(FSBlockType::BITMAP_EXT_BLOCK);
+        storage[pred].setNextBmExtBlockRef(ref);
+        pred = ref;
     }
     
     // Add all bitmap block references
-    rb->addBitmapBlockRefs(bmBlocks);
-    
+    // rb->addBitmapBlockRefs(bmBlocks);
+    storage[rootBlock].addBitmapBlockRefs(bmBlocks);
+
     // Add free blocks
+    // TODO: CLEAN THIS UP. DON'T ITERATE THROUGH ALL BLOCKS
     for (isize i = 0; i < numBlocks(); i++) {
 
         if (storage.getType(Block(i)) == FSBlockType::EMPTY_BLOCK) {
@@ -152,9 +152,6 @@ MutableFileSystem::format(string name)
 
     // Set the current directory
     curr = rootBlock;
-
-    // Check integrity (may throw)
-    (void)pwd();
 }
 
 void
@@ -621,6 +618,11 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
         FSBlockType type = predictBlockType((Block)i, data);
         
         // Create new block
+        storage[i].init(type);
+        storage[i].importBlock(data, bsize);
+
+        /*
+        // Create new block
         FSBlock *newBlock = FSBlock::make(this, (Block)i, type);
 
         // Import block data
@@ -628,10 +630,6 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
 
         // Replace the existing block
         storage.write(Block(i), newBlock);
-        /*
-        assert(blocks[i] != nullptr);
-        delete blocks[i];
-        blocks[i] = newBlock;
         */
     }
     

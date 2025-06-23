@@ -88,9 +88,6 @@ public:
     FSBlock *read(Block nr, FSBlockType type);
     const FSBlock *read(Block nr) const;
     const FSBlock *read(Block nr, FSBlockType type) const;
-
-    // Write a block into the storage
-    void write(Block nr, FSBlock *block);
 };
 
 }

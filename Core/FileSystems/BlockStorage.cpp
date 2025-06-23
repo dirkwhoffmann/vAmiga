@@ -123,12 +123,4 @@ BlockStorage::read(Block nr, FSBlockType type) const
     return const_cast<const FSBlock *>(result);
 }
 
-void
-BlockStorage::write(Block nr, FSBlock *block)
-{
-    if (isize(nr) >= capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
-
-    (*this)[nr] = *block;
-}
-
 }

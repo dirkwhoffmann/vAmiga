@@ -119,7 +119,8 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
         FSBlockType type = predictBlockType((Block)i, data);
         
         // Create new block
-        storage.write(Block(i), FSBlock::make(this, (Block)i, type));
+        // storage.write(Block(i), FSBlock::make(this, (Block)i, type));
+        storage[i].init(type);
 
         // Import block data
         storage[i].importBlock(data, bsize);
