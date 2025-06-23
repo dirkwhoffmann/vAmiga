@@ -371,13 +371,6 @@ MutableFileSystem::makeBootable(BootBlockId id)
     assert(storage.getType(1) == FSBlockType::BOOT_BLOCK);
     storage.read(0).writeBootBlock(id, 0);
     storage.read(1).writeBootBlock(id, 1);
-    /*
-    assert(blocks[0]->type == FSBlockType::BOOT_BLOCK);
-    assert(blocks[1]->type == FSBlockType::BOOT_BLOCK);
-
-    blocks[0]->writeBootBlock(id, 0);
-    blocks[1]->writeBootBlock(id, 1);
-    */
 }
 
 void
@@ -385,22 +378,16 @@ MutableFileSystem::killVirus()
 {
     assert(storage.getType(0) == FSBlockType::BOOT_BLOCK);
     assert(storage.getType(1) == FSBlockType::BOOT_BLOCK);
-    // assert(blocks[0]->type == FSBlockType::BOOT_BLOCK);
-    // assert(blocks[1]->type == FSBlockType::BOOT_BLOCK);
 
     auto id = isOFS() ? BootBlockId::AMIGADOS_13 : isFFS() ? BootBlockId::AMIGADOS_20 : BootBlockId::NONE;
 
     if (id != BootBlockId::NONE) {
         storage.read(0).writeBootBlock(id, 0);
         storage.read(1).writeBootBlock(id, 1);
-        // blocks[0]->writeBootBlock(id, 0);
-        // blocks[1]->writeBootBlock(id, 1);
     } else {
         std::memset(storage.read(0).data + 4, 0, bsize - 4);
         std::memset(storage.read(1).data, 0, bsize);
-        // std::memset(blocks[0]->data.ptr + 4, 0, bsize - 4);
-        // std::memset(blocks[1]->data.ptr, 0, bsize);
-    }
+     }
 }
 
 void

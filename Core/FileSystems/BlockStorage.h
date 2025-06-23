@@ -29,7 +29,7 @@ private:
     isize _bsize {};
 
     // Block storage
-    std::vector<FSBlock> blocks;
+    std::unordered_map<usize, FSBlock> blocks;
 
 
     //
@@ -68,7 +68,7 @@ public:
     void setType(Block nr, FSBlockType type);
 
     // Returns the storage capacity in blocks
-    isize capacity() const { assert(_capacity == (isize)blocks.size()); return _capacity; }
+    isize capacity() const { return _capacity; }
 
     // Returns the block size in bytes
     isize bsize() const { return _bsize; }

@@ -24,6 +24,7 @@ BlockStorage::~BlockStorage()
 void
 BlockStorage::dealloc()
 {
+    fs = nullptr;
     blocks = { };
 }
 
@@ -34,19 +35,10 @@ BlockStorage::init(isize capacity, isize bsize)
     this->_bsize = bsize;
 
     // Remove all existing blocks
-    blocks = { };
+    blocks = {};
 
-    // Resize the block storage
+    // Request a capacity change
     blocks.reserve(_capacity);
-    // blocks.assign(_capacity, nullptr);
-
-    // Create new blocks
-    assert(blocks.size() == 0);
-    for (isize i = 0; i < _capacity; i++) {
-        blocks.push_back(FSBlock(fs, Block(i), FSBlockType::EMPTY_BLOCK));
-        assert(blocks[i].data == nullptr);
-    }
-    assert((isize)blocks.size() == _capacity);
 }
 
 void
@@ -70,29 +62,31 @@ BlockStorage::_dump(Category category, std::ostream &os) const
 FSBlockType
 BlockStorage::getType(Block nr) const
 {
-    assert(_capacity == (isize)blocks.size());
-    return nr < _capacity ? blocks[nr].type : FSBlockType::UNKNOWN_BLOCK;
+    if (nr >= _capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
+
+    return blocks.contains(nr) ? blocks.at(nr).type : FSBlockType::EMPTY_BLOCK;
 }
 
 void
 BlockStorage::setType(Block nr, FSBlockType type)
 {
-    assert(_capacity == (isize)blocks.size());
     if (nr >= _capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
-    blocks[nr].init(type);
+    blocks.at(nr).init(type);
 }
 
 FSBlock &
 BlockStorage::read(Block nr)
 {
-    assert(_capacity == (isize)blocks.size());
     if (nr >= _capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 
-    // Get the block
-    FSBlock &result = blocks[nr];
+    // Create the block if it does not yet exist
+    if (!blocks.contains(nr)) blocks.emplace(nr, FSBlock(fs, Block(nr), FSBlockType::EMPTY_BLOCK));
+
+    // Get a block reference
+    FSBlock &result = blocks.at(nr);
 
     // Allocate the buffer if necessary
-    if (!blocks[nr].data) blocks[nr].data = new u8[_bsize];
+    if (!result.data) result.data = new u8[_bsize];
 
     return result;
 }
@@ -100,16 +94,15 @@ BlockStorage::read(Block nr)
 const FSBlock &
 BlockStorage::read(Block nr) const
 {
-    return *pread(nr);
+    auto &result = const_cast<BlockStorage *>(this)->read(nr);
+    return const_cast<const FSBlock &>(result);
 }
 
 FSBlock *
 BlockStorage::pread(Block nr)
 {
-    assert(_capacity == (isize)blocks.size());
-
     if (nr < _capacity) {
-        return &blocks[nr];
+        return &read(nr);
     }
     return nullptr;
 }
@@ -124,10 +117,12 @@ BlockStorage::pread(Block nr) const
 FSBlock *
 BlockStorage::pread(Block nr, FSBlockType type)
 {
-    assert(_capacity == (isize)blocks.size());
-    if (nr < _capacity && blocks[nr].type == type) {
-        return &blocks[nr];
+    if (nr < _capacity) {
+
+        auto &block = read(nr);
+        if (block.type == type) return &block;
     }
+
     return nullptr;
 }
 
@@ -141,10 +136,9 @@ BlockStorage::pread(Block nr, FSBlockType type) const
 void
 BlockStorage::write(Block nr, FSBlock *block)
 {
-    assert(_capacity == (isize)blocks.size());
     if (nr >= _capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 
-    blocks[nr] = *block;
+    read(nr) = *block;
 }
 
 }
