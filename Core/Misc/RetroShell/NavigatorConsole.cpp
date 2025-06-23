@@ -115,7 +115,7 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token, const FS
     } catch (AppError &) {
 
         // Treat the argument as a block number
-        return FSPath(fs, parseBlock(argv.at(token)));
+        return FSPath(&fs, parseBlock(argv.at(token)));
     }
 }
 

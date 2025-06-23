@@ -13,44 +13,30 @@
 
 namespace vamiga {
 
-FSPath::FSPath(const FileSystem &fs, Block dir) : fs(fs), ref(dir)
+FSPath::FSPath(const FileSystem *fs, Block dir) : fs(fs), ref(dir)
 {
-    if (!fs.initialized()) throw AppError(Fault::FS_UNINITIALIZED);
+    if (!fs->initialized()) throw AppError(Fault::FS_UNINITIALIZED);
     if (!ptr()) throw AppError(Fault::FS_INVALID_BLOCK_REF);
-}
-
-FSPath::FSPath(const FSPath &path) : fs(path.fs), ref(path.ref)
-{
-    if (!fs.initialized()) throw AppError(Fault::FS_UNINITIALIZED);
-    if (!ptr()) throw AppError(Fault::FS_INVALID_BLOCK_REF);
-}
-
-FSPath::FSPath(const FileSystem &fs) : fs(fs), ref(0)
-{
-    if (!fs.initialized()) throw AppError(Fault::FS_UNINITIALIZED);
-    if (!ptr()) throw AppError(Fault::FS_INVALID_BLOCK_REF);
-}
-
-FSPath::FSPath(const FileSystem &fs, FSBlock *dir) : FSPath(fs, dir->nr)
-{
-
 }
 
 /*
-void
-FSPath::selfcheck() const
+FSPath::FSPath(const FSPath &path) : fs(path.fs), ref(path.ref)
 {
-    // Check if a file system is present
-    // if (!fs.initialized()) throw AppError(Fault::FS_UNINITIALIZED);
-    // if (!fs.formatted()) throw AppError(Fault::FS_UNFORMATTED);
-
-    // Check if the block number is in the valid range
+    if (!fs->initialized()) throw AppError(Fault::FS_UNINITIALIZED);
     if (!ptr()) throw AppError(Fault::FS_INVALID_BLOCK_REF);
-
-    // Check the block type
-    // if (!isRoot() && !isFile() && !isDirectory()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
 }
 */
+
+FSPath::FSPath(const FileSystem *fs) : fs(fs), ref(0)
+{
+    if (!fs->initialized()) throw AppError(Fault::FS_UNINITIALIZED);
+    if (!ptr()) throw AppError(Fault::FS_INVALID_BLOCK_REF);
+}
+
+FSPath::FSPath(const FileSystem *fs, FSBlock *dir) : FSPath(fs, dir->nr)
+{
+
+}
 
 FSPath&
 FSPath::operator=(const FSPath &path)
@@ -77,19 +63,19 @@ FSPath::operator/(const FSName &name) const
 bool
 FSPath::isRoot() const
 {
-    return fs.blockType(ref) == FSBlockType::ROOT_BLOCK;
+    return fs->blockType(ref) == FSBlockType::ROOT_BLOCK;
 }
 
 bool
 FSPath::isFile() const
 {
-    return fs.blockType(ref) == FSBlockType::FILEHEADER_BLOCK;
+    return fs->blockType(ref) == FSBlockType::FILEHEADER_BLOCK;
 }
 
 bool
 FSPath::isDirectory() const
 {
-    return fs.blockType(ref) == FSBlockType::USERDIR_BLOCK || isRoot();
+    return fs->blockType(ref) == FSBlockType::USERDIR_BLOCK || isRoot();
 }
 
 bool
@@ -101,13 +87,13 @@ FSPath::isRegular() const
 FSBlock *
 FSPath::ptr() const
 {
-    return fs.blockPtr(ref);
+    return fs->blockPtr(ref);
 }
 
 FSName
 FSPath::last() const
 {
-    return isRoot() ? "" : fs.blockPtr(ref)->getName();
+    return isRoot() ? "" : fs->blockPtr(ref)->getName();
 }
 
 string
@@ -117,7 +103,7 @@ FSPath::name() const
 
     for (auto &node : refs()) {
 
-        auto name = fs.blockPtr(node)->getName();
+        auto name = fs->blockPtr(node)->getName();
         result = result + "/" + name.cpp_str();
     }
 
@@ -131,34 +117,9 @@ FSPath::getPath() const
 
     for (auto &node : refs()) {
 
-        auto name = fs.blockPtr(node)->getName().path();
+        auto name = fs->blockPtr(node)->getName().path();
         result = result.empty() ? name : name / result;
     }
-    /*
-    std::set<Block> visited;
-
-    auto block = fs.blockPtr(ref);
-
-    while (block) {
-
-        // Break the loop if this block has an invalid type
-        if (!fs.hashableBlockPtr(block->nr)) break;
-
-        // Break the loop if this block was visited before
-        if (visited.find(block->nr) != visited.end()) break;
-
-        // Add the block to the set of visited blocks
-        visited.insert(block->nr);
-
-        // Expand the path
-        auto name = block->getName().path();
-        result = result.empty() ? name : name / result;
-
-        // Continue with the parent block
-        block = block->getParentDirBlock();
-    }
-    */
-
     return result;
 }
 
@@ -173,7 +134,7 @@ FSPath::refs() const
     while (block) {
 
         // Break the loop if this block has an invalid type
-        if (!fs.hashableBlockPtr(block->nr)) break;
+        if (!fs->hashableBlockPtr(block->nr)) break;
 
         // Break the loop if this block was visited before
         if (visited.contains(block->nr)) break;
@@ -220,7 +181,7 @@ FSPath::getProtectionBitString() const
 FSPath
 FSPath::parent() const
 {
-    return isRoot() ? *this : FSPath(fs, fs.blockPtr(ref)->getParentDirRef());
+    return isRoot() ? *this : FSPath(fs, fs->blockPtr(ref)->getParentDirRef());
 }
 
 FSPath
@@ -233,7 +194,7 @@ FSPath::seek(const FSName &name) const
     if (name == "")   return *this;
     if (name == ".")  return *this;
     if (name == "..") return parent();
-    if (name == "/")  return fs.rootDir();
+    if (name == "/")  return fs->rootDir();
 
     // Only proceed if a hash table is present
     if (cdb && cdb->hashTableSize() != 0) {
@@ -245,7 +206,7 @@ FSPath::seek(const FSName &name) const
         // Traverse the linked list until the item has been found
         while (ref && visited.find(ref) == visited.end())  {
 
-            FSBlock *item = fs.hashableBlockPtr(ref);
+            FSBlock *item = fs->hashableBlockPtr(ref);
             if (item == nullptr) break;
 
             if (item->isNamed(name)) return FSPath(fs, item);
@@ -283,18 +244,8 @@ FSPath::seek(const std::vector<string> &name) const
 FSPath
 FSPath::seek(const fs::path &name) const
 {
-    FSPath result = fs.rootDir();
+    FSPath result = fs->rootDir();
     for (const auto &it : name) { result = result.seek(FSName(it)); }
-    /*
-    for (const auto& part : name) {
-
-        if (part == name.filename()) {
-            result = result.seekFile(FSName(part));
-        } else {
-            result = result.seekDir(FSName(part));
-        }
-    }
-    */
     return result;
 }
 
@@ -444,7 +395,7 @@ FSPath::collect(const FSOpt &opt) const
 
     // Collect the blocks for all items in this directory
     std::stack<Block> remainingItems;
-    fs.collectHashedRefs(ref, remainingItems, visited);
+    fs->collectHashedRefs(ref, remainingItems, visited);
 
     // Move the collected items to the result list
     while (remainingItems.size() > 0) {
@@ -454,7 +405,7 @@ FSPath::collect(const FSOpt &opt) const
         remainingItems.pop();
 
         // Add subdirectory items to the queue
-        if (opt.recursive) fs.collectHashedRefs(it.ref, remainingItems, visited);
+        if (opt.recursive) fs->collectHashedRefs(it.ref, remainingItems, visited);
     }
 
     // Sort items

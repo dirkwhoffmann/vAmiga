@@ -418,7 +418,7 @@ MutableFileSystem::createDir(const FSPath &at, const FSName &name)
 
             block->setParentDirRef(at.ref);
             addHashRef(at, block->nr);
-            return FSPath(*this, block);
+            return FSPath(this, block);
         }
         throw AppError(Fault::FS_OUT_OF_SPACE);
     }
@@ -434,7 +434,7 @@ MutableFileSystem::createFile(const FSPath &at, const FSName &name)
 
             block->setParentDirRef(at.ref);
             addHashRef(at, block->nr);
-            return FSPath(*this, block);
+            return FSPath(this, block);
         }
         throw AppError(Fault::FS_OUT_OF_SPACE);
     }

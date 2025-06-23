@@ -236,7 +236,7 @@ public:
     void cd(const string &path);
 
     // Returns the working directory
-    FSPath pwd() const { return FSPath(*this, curr); }
+    FSPath pwd() const { return FSPath(this, curr); }
 
 
     //

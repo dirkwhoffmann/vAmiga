@@ -493,9 +493,6 @@ FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) const
     
     *byte = rByte;
     *bit = nr % 8;
-    
-    // debug(FS_DEBUG, "Alloc bit for %d: block: %d byte: %d bit: %d\n",
-    //       ref, bm->nr, *byte, *bit);
 
     return bm;
 }
@@ -503,7 +500,7 @@ FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) const
 FSPath
 FileSystem::rootDir() const
 {
-    return FSPath(*this, rootBlock);
+    return FSPath(this, rootBlock);
 }
 
 bool

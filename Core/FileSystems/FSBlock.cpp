@@ -932,7 +932,7 @@ Fault
 FSBlock::exportUserDirBlock(const fs::path &path)
 {
     // Assemble the host file name
-    auto filename = path / FSPath(*fs, nr).getPath();
+    auto filename = path / FSPath(fs, nr).getPath();
     debug(FS_DEBUG >= 2, "Creating directory %s\n", filename.string().c_str());
 
     // Create directory
@@ -945,7 +945,7 @@ Fault
 FSBlock::exportFileHeaderBlock(const fs::path &path)
 {
     // Assemble the host file name
-    auto filename = path / FSPath(*fs, nr).getPath(); // device.getPath(this);
+    auto filename = path / FSPath(fs, nr).getPath(); // device.getPath(this);
     debug(FS_DEBUG >= 2, "  Exporting file %s\n", filename.string().c_str());
 
     // Open file

@@ -17,16 +17,16 @@ namespace vamiga {
 
 struct FSPath
 {
-    const class FileSystem &fs;
+    const class FileSystem *fs = nullptr;
 
     // The referenced block
     Block ref;
 
     // Constructors
-    FSPath(const FSPath &);
-    FSPath(const FileSystem &fs);
-    FSPath(const FileSystem &fs, Block dir);
-    FSPath(const FileSystem &fs, struct FSBlock *dir);
+    // FSPath(const FSPath *);
+    FSPath(const FileSystem *fs);
+    FSPath(const FileSystem *fs, Block dir);
+    FSPath(const FileSystem *fs, struct FSBlock *dir);
 
     // Throws an exception if the object is invalid
     // void selfcheck() const;
