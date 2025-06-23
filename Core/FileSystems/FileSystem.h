@@ -51,10 +51,7 @@ protected:
     FSVolumeType dos = FSVolumeType::NODOS;
 
     // Block storage
-    BlockStorage storage = BlockStorage(*this);
-
-    // Block storage (DEPRECATED)
-    // [[deprecated]] std::vector<BlockPtr> blocks;
+    BlockStorage storage = BlockStorage(this);
 
     // Size of a single block in bytes
     isize bsize = 512;

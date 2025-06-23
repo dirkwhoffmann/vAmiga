@@ -20,13 +20,16 @@ class BlockStorage : public CoreObject {
 private:
 
     // Reference to the owner of this storage
-    class FileSystem &fs;
+    class FileSystem *fs = nullptr;
+
+    // File system capacity in blocks
+    isize _capacity {};
+
+    // Size of a single block in bytes
+    isize _bsize {};
 
     // Block storage
     std::vector<BlockPtr> blocks;
-
-    // Size of a single block in bytes
-    isize bsize;
 
     
     //
@@ -35,8 +38,8 @@ private:
 
 public:
 
-    BlockStorage(FileSystem &fs) : fs(fs), bsize(512) { };
-    BlockStorage(FileSystem &fs, isize capacity, isize bsize = 512);
+    BlockStorage(FileSystem *fs) : fs(fs), _bsize(512) { };
+    BlockStorage(FileSystem *fs, isize capacity, isize bsize = 512);
     virtual ~BlockStorage();
 
     void init(isize capacity, isize bsize = 512);
@@ -65,7 +68,10 @@ public:
     void setType(Block nr, FSBlockType type);
 
     // Returns the storage capacity in blocks
-    isize capacity() const { return blocks.size(); }
+    isize capacity() const { assert(_capacity == (isize)blocks.size()); return _capacity; }
+
+    // Returns the block size in bytes
+    isize bsize() const { return _bsize; }
 
     // Reads a block from the storage
     FSBlock &read(Block nr);

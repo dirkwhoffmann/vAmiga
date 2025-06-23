@@ -11,7 +11,7 @@
 
 namespace vamiga {
 
-BlockStorage::BlockStorage(FileSystem &fs, isize capacity, isize bsize) : fs(fs)
+BlockStorage::BlockStorage(FileSystem *fs, isize capacity, isize bsize) : fs(fs)
 {
     init(capacity, bsize);
 }
@@ -31,18 +31,19 @@ BlockStorage::dealloc()
 void
 BlockStorage::init(isize capacity, isize bsize)
 {
-    this->bsize = bsize;
+    this->_capacity = capacity;
+    this->_bsize = bsize;
 
     // Remove all existing blocks
     for (auto &b : blocks) delete b;
 
     // Resize the block storage
-    blocks.reserve(capacity);
-    blocks.assign(capacity, nullptr);
+    blocks.reserve(_capacity);
+    blocks.assign(_capacity, nullptr);
 
     // Create new blocks
-    for (isize i = 0; i < capacity; i++) {
-        blocks[i] = new FSBlock(&fs, Block(i), FSBlockType::EMPTY_BLOCK);
+    for (isize i = 0; i < _capacity; i++) {
+        blocks[i] = new FSBlock(fs, Block(i), FSBlockType::EMPTY_BLOCK);
         assert(blocks[i]->data == nullptr);
     }
 }
@@ -56,8 +57,8 @@ BlockStorage::_dump(Category category, std::ostream &os) const
 
         case Category::Blocks:
 
-            os << tab("Capacity") << blocks.size() << std::endl;
-            os << tab("Block size") << bsize << std::endl;
+            os << tab("Capacity") << capacity() << std::endl;
+            os << tab("Block size") << bsize() << std::endl;
             break;
 
         default:
@@ -68,26 +69,29 @@ BlockStorage::_dump(Category category, std::ostream &os) const
 FSBlockType
 BlockStorage::getType(Block nr) const
 {
-    return nr < blocks.size() ? blocks[nr]->type : FSBlockType::UNKNOWN_BLOCK;
+    assert(_capacity == (isize)blocks.size());
+    return nr < _capacity ? blocks[nr]->type : FSBlockType::UNKNOWN_BLOCK;
 }
 
 void
 BlockStorage::setType(Block nr, FSBlockType type)
 {
-    if (nr >= blocks.size()) throw AppError(Fault::FS_INVALID_BLOCK_REF);
+    assert(_capacity == (isize)blocks.size());
+    if (nr >= _capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
     blocks[nr]->init(type);
 }
 
 FSBlock &
 BlockStorage::read(Block nr)
 {
-    if (nr >= blocks.size()) throw AppError(Fault::FS_INVALID_BLOCK_REF);
+    assert(_capacity == (isize)blocks.size());
+    if (nr >= _capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 
     // Get the block
     FSBlock &result = *blocks[nr];
 
     // Allocate the buffer if necessary
-    if (!blocks[nr]->data) blocks[nr]->data = new u8[bsize];
+    if (!blocks[nr]->data) blocks[nr]->data = new u8[_bsize];
 
     return result;
 }
@@ -101,7 +105,9 @@ BlockStorage::read(Block nr) const
 FSBlock *
 BlockStorage::pread(Block nr)
 {
-    if (nr < blocks.size()) {
+    assert(_capacity == (isize)blocks.size());
+
+    if (nr < _capacity) {
         return blocks[nr];
     }
     return nullptr;
@@ -117,7 +123,8 @@ BlockStorage::pread(Block nr) const
 FSBlock *
 BlockStorage::pread(Block nr, FSBlockType type)
 {
-    if (nr < blocks.size() && blocks[nr]->type == type) {
+    assert(_capacity == (isize)blocks.size());
+    if (nr < _capacity && blocks[nr]->type == type) {
         return blocks[nr];
     }
     return nullptr;
@@ -133,7 +140,8 @@ BlockStorage::pread(Block nr, FSBlockType type) const
 void
 BlockStorage::write(Block nr, FSBlock *block)
 {
-    if (nr >= blocks.size()) throw AppError(Fault::FS_INVALID_BLOCK_REF);
+    assert(_capacity == (isize)blocks.size());
+    if (nr >= _capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 
     if (blocks[nr]) delete blocks[nr];
     blocks[nr] = block;
