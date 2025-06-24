@@ -12,10 +12,11 @@
 #include "FSTypes.h"
 #include "FSBlock.h"
 #include "CoreObject.h"
+#include "Inspectable.h"
 
 namespace vamiga {
 
-class BlockStorage : public CoreObject {
+class BlockStorage final : public CoreObject, public Inspectable<Void, BlockStorageStats> {
 
 private:
 
@@ -55,6 +56,15 @@ protected:
 
     const char *objectName() const override { return "BlockStorage"; }
     void _dump(Category category, std::ostream &os) const override;
+
+
+    //
+    // Methods from Inspectable
+    //
+
+public:
+
+    void cacheStats(BlockStorageStats &result) const override;
 
 
     //

@@ -294,11 +294,6 @@ MutableFileSystem::addDataBlock(Block at, isize id, Block head, Block prev)
         storage[at].init(isOFS() ? FSBlockType::DATA_BLOCK_OFS : FSBlockType::DATA_BLOCK_FFS);
         storage[at].setDataBlockNr((Block)id);
         storage[at].setFileHeaderRef(head);
-        /*
-        blocks[at]->init(isOFS() ? FSBlockType::DATA_BLOCK_OFS : FSBlockType::DATA_BLOCK_FFS);
-        blocks[at]->setDataBlockNr((Block)id);
-        blocks[at]->setFileHeaderRef(head);
-        */
         prevBlock->setNextDataBlockRef(at);
     }
 }

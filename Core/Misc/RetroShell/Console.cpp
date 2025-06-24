@@ -404,12 +404,7 @@ Console::cursorRel()
 void
 Console::pressReturn(bool shift)
 {
-    if (shift) {
-
-        // Switch the interpreter
-        retroShell.asyncExec(".");
-
-    } else if (input.empty()) {
+    if (input.empty()) {
 
         retroShell.asyncExec("helpstring");
 

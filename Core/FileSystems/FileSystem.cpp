@@ -228,6 +228,11 @@ FileSystem::_dump(Category category, std::ostream &os) const
             os << std::endl;
             break;
 
+        case Category::Blocks:
+
+            storage.dump(Category::Blocks, os);
+            break;
+
         default:
             break;
     }

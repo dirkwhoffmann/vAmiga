@@ -336,7 +336,6 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-
             // Determine the DOS type
             auto type = FSVolumeType::NODOS;
             auto dos = util::uppercased(args.at("dos"));
@@ -589,6 +588,24 @@ NavigatorConsole::initCommands(RSCommand &root)
     });
 
     RSCommand::currentGroup = "Inspection";
+
+    root.add({
+
+        .tokens = { "info" },
+        .chelp  = { "Print a file system summary" },
+        .args   = {
+            { .name = { "b", "Inspect the block storage" }, .flags = rs::flag },
+        },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            if (args.contains("b")) {
+                fs.dump(Category::Blocks, os);
+            } else {
+                fs.dump(Category::Info, os);
+            }
+
+        }
+    });
 
     root.add({
 

@@ -39,6 +39,9 @@ BlockStorage::init(isize capacity, isize bsize)
 
     // Request a capacity change
     blocks.reserve(capacity);
+
+    // Clear statistics
+    stats = {};
 }
 
 void
@@ -52,11 +55,19 @@ BlockStorage::_dump(Category category, std::ostream &os) const
 
             os << tab("Capacity") << numBlocks() << " blocks" << std::endl;
             os << tab("Block size") << bsize << " bytes" << std::endl;
+            os << tab("Hashed blocks") << blocks.size() << std::endl;
+            os << tab("Block reads") << stats.blockReads << std::endl;
             break;
 
         default:
             break;
     }
+}
+
+void
+BlockStorage::cacheStats(BlockStorageStats &result) const
+{
+
 }
 
 bool
@@ -99,6 +110,9 @@ BlockStorage::read(Block nr)
 
     // Create the block if it does not yet exist
     if (!blocks.contains(nr)) blocks.emplace(nr, FSBlock(fs, Block(nr), FSBlockType::EMPTY_BLOCK));
+
+    // Collect some statistical information
+    stats.blockReads++;
 
     // Return a block reference
     return &blocks.at(nr);

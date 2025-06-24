@@ -284,4 +284,10 @@ typedef struct
 }
 FSTraits;
 
+typedef struct
+{
+    isize blockReads;
+}
+BlockStorageStats;
+
 }
