@@ -107,8 +107,6 @@ MutableFileSystem::format(string name)
     storage[1].init(FSBlockType::BOOT_BLOCK);
 
     // Create the root block
-    // FSBlock *rb = new FSBlock(this, rootBlock, FSBlockType::ROOT_BLOCK);
-    // storage.write(rootBlock, new FSBlock(this, rootBlock, FSBlockType::ROOT_BLOCK));
     storage[rootBlock].init(FSBlockType::ROOT_BLOCK);
 
     // Create bitmap blocks
@@ -119,29 +117,21 @@ MutableFileSystem::format(string name)
     }
 
     // Add bitmap extension blocks
-    // FSBlock *pred = rb;
     Block pred = rootBlock;
     for (auto &ref : bmExtBlocks) {
 
         // storage.write(ref, new FSBlock(this, ref, FSBlockType::BITMAP_EXT_BLOCK));
-        // pred->setNextBmExtBlockRef(ref);
-        // pred = storage.read(ref);
         storage[ref].init(FSBlockType::BITMAP_EXT_BLOCK);
         storage[pred].setNextBmExtBlockRef(ref);
         pred = ref;
     }
     
     // Add all bitmap block references
-    // rb->addBitmapBlockRefs(bmBlocks);
     storage[rootBlock].addBitmapBlockRefs(bmBlocks);
 
-    // Add free blocks
-    // TODO: CLEAN THIS UP. DON'T ITERATE THROUGH ALL BLOCKS
+    // Mark free blocks as free in the bitmap block
     for (isize i = 0; i < numBlocks(); i++) {
-
-        if (storage.getType(Block(i)) == FSBlockType::EMPTY_BLOCK) {
-            markAsFree(Block(i));
-        }
+        if (storage.isEmpty(Block(i))) markAsFree(Block(i));
     }
     
     // Set the volume name
@@ -157,12 +147,11 @@ MutableFileSystem::format(string name)
 void
 MutableFileSystem::setName(FSName name)
 {
-    auto *rb = storage.read(rootBlock, FSBlockType::ROOT_BLOCK);
-    // FSBlock *rb = rootBlockPtr(rootBlock);
-    assert(rb != nullptr);
-    
-    rb->setName(name);
-    rb->updateChecksum();
+    if (auto *rb = storage.read(rootBlock, FSBlockType::ROOT_BLOCK); rb) {
+
+        rb->setName(name);
+        rb->updateChecksum();
+    }
 }
 
 isize
@@ -213,7 +202,6 @@ MutableFileSystem::allocatable(isize count) const
     while (count > 0) {
 
         if (storage.getType(Block(i)) == FSBlockType::EMPTY_BLOCK) {
-        // if (blocks[i]->type == FSBlockType::EMPTY_BLOCK) {
             if (--count == 0) break;
         }
         

@@ -59,6 +59,12 @@ BlockStorage::_dump(Category category, std::ostream &os) const
     }
 }
 
+bool
+BlockStorage::isEmpty(Block nr) const
+{
+    return getType(nr) == FSBlockType::EMPTY_BLOCK;
+}
+
 FSBlockType
 BlockStorage::getType(Block nr) const
 {

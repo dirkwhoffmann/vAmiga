@@ -58,7 +58,7 @@ protected:
 
 
     //
-    // Querying properties
+    // Querying devide properties
     //
 
 public:
@@ -73,7 +73,16 @@ public:
     isize usedBlocks() const { return (isize)blocks.size(); }
     isize freeBytes() const { return freeBlocks() * blockSize(); }
     isize usedBytes() const { return usedBlocks() * blockSize(); }
-    double fillLevel() const { return double(100) * usedBlocks() / numBlocks(); }
+    double fillLevel() const { return numBlocks() ? double(100) * usedBlocks() / numBlocks() : 0; }
+    bool isEmpty() const { return usedBlocks() == 0; }
+
+
+    //
+    // Accessing blocks
+    //
+
+    // Checks if a block is empty
+    bool isEmpty(Block nr) const;
 
     // Gets or sets the block type
     FSBlockType getType(Block nr) const;

@@ -32,7 +32,7 @@ NavigatorConsole::getPrompt()
         ss << "[" << std::to_string(fs.curr) << "]";
 
         auto fsName = fs.getName();
-        if (!fsName.empty()) ss << fsName << ":";
+        if (!fsName.empty()) ss << " " << fsName << ":";
         if (fs.pwd().isDirectory()) ss << " " << fs.pwd();
     }
 
@@ -291,9 +291,16 @@ NavigatorConsole::initCommands(RSCommand &root)
         .args   = {
             { .name = { "mb", "Capacity in MB" } },
         },
-        .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            os << "Holla, die Waldfee" << std::endl;
+            // Convert the provided capacity to bytes
+            auto mb = MB(parseNum(args.at("mb")));
+
+            // Compute the number of needed blocks
+            auto blocks = (mb + 511) / 512;
+
+            fs.init(FileSystemDescriptor(blocks, FSVolumeType::NODOS));
+            fs.dump(Category::Info, os);
         }
     });
 
@@ -306,9 +313,43 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "heads", "Number of drive heads" }, .flags=rs::keyval },
             { .name = { "sectors", "Number of sectors per cylinder" }, .flags=rs::keyval },
         },
-        .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            os << "Holla, die Waldfee" << std::endl;
+            isize c = parseNum(args.at("cylinders"));
+            isize h = parseNum(args.at("heads"));
+            isize s = parseNum(args.at("sectors"));
+            isize b = 512;
+
+            auto geometry = GeometryDescriptor(c, h, s, b);
+            fs.init(FileSystemDescriptor(geometry, FSVolumeType::NODOS));
+            fs.dump(Category::Info, os);
+        }
+    });
+
+    root.add({
+
+        .tokens = { "format" },
+        .chelp  = { "Format the file system" },
+        .args   = {
+            { .name = { "dos", "Amiga file system" }, .key = "{ OFS | FFS }" },
+            { .name = { "name", "File system name" }, .flags = rs::opt },
+        },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+
+            // Determine the DOS type
+            auto type = FSVolumeType::NODOS;
+            auto dos = util::uppercased(args.at("dos"));
+            if (dos == "OFS") type = FSVolumeType::OFS;
+            if (dos == "FFS") type = FSVolumeType::FFS;
+
+            if (type == FSVolumeType::NODOS) {
+                throw util::ParseError("Expected values: OFS or FFS");
+            }
+
+            // Format the device
+            fs.format(type, args.contains("name") ? args.at("name") : "New Disk");
+            fs.dump(Category::Info, os);
         }
     });
 

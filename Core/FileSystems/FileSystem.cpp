@@ -21,16 +21,7 @@ namespace vamiga {
 
 FileSystem::~FileSystem()
 {
-    // for (auto &b : blocks) delete b;
-}
 
-void
-FileSystem::dealloc()
-{
-    /*
-    for (auto &b : blocks) delete b;
-    blocks = { };
-    */
 }
 
 void
@@ -181,9 +172,9 @@ FileSystem::_dump(Category category, std::ostream &os) const
         case Category::Info:
 
             if (!formatted()) {
-                os << "Type   Size            Used    Free" << std::endl;
+                os << "Type   Size             Used    Free" << std::endl;
             } else {
-                os << "Type   Size            Used    Free    Full  Name" << std::endl;
+                os << "Type   Size             Used    Free    Full  Name" << std::endl;
             }
             [[fallthrough]];
 
@@ -195,7 +186,7 @@ FileSystem::_dump(Category category, std::ostream &os) const
             auto fill = formatted() ? fillLevel() : storage.fillLevel();
 
             formatted() ? os << "DOS" << dec(isize(dos)) << "   " : os << "NODOS  ";
-            os << std::setw(6) << std::left << std::setfill(' ') << total;
+            os << std::setw(7) << std::left << std::setfill(' ') << total;
             os << " (x ";
             os << std::setw(3) << std::left << std::setfill(' ') << bsize;
             os << ")  ";
@@ -265,7 +256,6 @@ FSName
 FileSystem::getName() const
 {
     auto *rb = storage.read(rootBlock, FSBlockType::ROOT_BLOCK);
-    // FSBlock *rb = rootBlockPtr(rootBlock);
     return rb ? rb->getName() : FSName("");
 }
 
@@ -273,7 +263,6 @@ string
 FileSystem::getCreationDate() const
 {
     auto *rb = storage.read(rootBlock, FSBlockType::ROOT_BLOCK);
-    // FSBlock *rb = rootBlockPtr(rootBlock);
     return rb ? rb->getCreationDate().str() : "";
 }
 

@@ -94,8 +94,6 @@ public:
     void init(FloppyDrive &dfn) throws;
     void init(const HardDrive &hdn, isize part) throws;
 
-    void dealloc();
-
     bool initialized() const;
     bool formatted() const;
 
