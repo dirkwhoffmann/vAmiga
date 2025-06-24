@@ -476,6 +476,91 @@ MutableFileSystem::createFile(const FSPath &at, const FSName &name, const string
 }
 
 void
+MutableFileSystem::deleteFile(const FSPath &item)
+{
+    if (!item.isFile()) return;
+
+    // Collect all blocks occupied by this file
+    auto blocks = dataBlocks(item);
+    blocks.push_back(item.ref);
+
+    // Remove the file from the hash table
+    deleteFromHashTable(item);
+
+    // Remove all blocks
+    for (auto &it : blocks) {
+
+        storage.erase(it);
+        markAsFree(it);
+    }
+}
+
+void
+MutableFileSystem::addToHashTable(const FSPath &item)
+{
+    addToHashTable(item.parent().ref, item.ref);
+}
+
+void
+MutableFileSystem::addToHashTable(Block parent, Block ref)
+{
+    FSBlock *pp = blockPtr(parent);
+    if (!pp) throw AppError(Fault::FS_INVALID_BLOCK_REF);
+    if (!pp->hasHashTable()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
+
+    FSBlock *pr = blockPtr(ref);
+    if (!pr) throw AppError(Fault::FS_INVALID_BLOCK_REF);
+    if (!pr->isHashable()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
+
+    // Read the linked list from the proper hash-table bucket
+    u32 hash = pr->hashValue() % pp->hashTableSize();
+    auto chain = hashBlockChain(pp->getHashRef(hash));
+
+    // If the bucket is empty, make the reference the first entry
+    if (chain.empty()) { pp->setHashRef(hash, ref); return; }
+
+    // Otherwise, put the referecne at the end of the linked list
+    blockPtr(chain.back())->setNextHashRef(ref);
+}
+
+void
+MutableFileSystem::deleteFromHashTable(const FSPath &item)
+{
+    deleteFromHashTable(item.parent().ref, item.ref);
+}
+
+void
+MutableFileSystem::deleteFromHashTable(Block parent, Block ref)
+{
+    FSBlock *pp = blockPtr(parent);
+    if (!pp) throw AppError(Fault::FS_INVALID_BLOCK_REF);
+    if (!pp->hasHashTable()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
+
+    FSBlock *pr = blockPtr(ref);
+    if (!pr) throw AppError(Fault::FS_INVALID_BLOCK_REF);
+    if (!pr->isHashable()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
+
+    // Read the linked list from the proper hash-table bucket
+    u32 hash = pr->hashValue() % pp->hashTableSize();
+    auto chain = hashBlockChain(pp->getHashRef(hash));
+
+    // Find the element
+    if (auto it = std::find(chain.begin(), chain.end(), ref); it != chain.end()) {
+
+
+        auto pred = it != chain.begin() ? *(it - 1) : 0;
+        auto succ = (it + 1) != chain.end() ? *(it + 1) : 0;
+
+        // Remove the element and rectify the list
+        if (!pred) {
+            pp->setHashRef(hash, succ);
+        } else {
+            blockPtr(pred)->setNextHashRef(succ);
+        }
+    }
+}
+
+void
 MutableFileSystem::addHashRef(const FSPath &at, Block nr)
 {
     if (FSBlock *block = hashableBlockPtr(nr)) {

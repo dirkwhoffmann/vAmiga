@@ -273,9 +273,13 @@ public:
     //
     // Working with hash tables
     //
-    
+
+    // Returns true if this block can be stored in a hash list
+    bool isHashable() const;
+
     // Returns the hash table size
     isize hashTableSize() const;
+    bool hasHashTable() const { return hashTableSize() != 0; }
 
     // Returns a hash value for this block
     u32 hashValue() const;

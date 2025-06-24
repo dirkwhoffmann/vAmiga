@@ -120,6 +120,26 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token, const FS
 }
 
 FSPath
+NavigatorConsole::parseFile(const Arguments &argv, const string &token)
+{
+    return parseFile(argv, token, fs.pwd());
+}
+
+FSPath
+NavigatorConsole::parseFile(const Arguments &argv, const string &token, const FSPath &fallback)
+{
+    if (!fs.formatted()) {
+        throw AppError(Fault::FS_UNFORMATTED);
+    }
+    auto path = parsePath(argv, token, fallback);
+
+    if (!path.isFile()) {
+        throw AppError(Fault::FS_NOT_A_FILE, "Block " + std::to_string(path.ref));
+    }
+    return path;
+}
+
+FSPath
 NavigatorConsole::parseDirectory(const Arguments &argv, const string &token)
 {
     return parseDirectory(argv, token, fs.pwd());
@@ -665,24 +685,6 @@ NavigatorConsole::initCommands(RSCommand &root)
 
     root.add({
 
-        .tokens = { "block" },
-        .ghelp  = { "Manage blocks" },
-        .chelp  = { "Inspect a block" },
-        .args   = {
-            { .name = { "nr", "Block number" }, .flags = rs::opt },
-        },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-            auto nr = parseBlock(args, "nr");
-
-            if (auto ptr = fs.blockPtr(nr); ptr) {
-                ptr->dump(os);
-            }
-        }
-    });
-
-    root.add({
-
         .tokens = { "block", "dump" },
         .chelp  = { "Dump the contents of a block" },
         .args   = {
@@ -734,6 +736,33 @@ NavigatorConsole::initCommands(RSCommand &root)
             os << "Not implemented, yet!" << '\n';
         }
     });
+
+    RSCommand::currentGroup = "Modify";
+
+    root.add({
+
+        .tokens = { "delete" },
+        .chelp  = { "Deletes a file" },
+        .args   = {
+            { .name = { "path", "File to delete" } },
+        },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            auto path = parsePath(args, "path");
+
+            if (path.isFile()) {
+
+                fs.deleteFile(path);
+
+            } else if (path.isDirectory()) {
+                throw AppError(Fault::FS_NOT_A_FILE, args.at("path"));
+            } else {
+                throw util::ParseError("Not a file or directory");
+            }
+
+        }
+    });
+
 }
 
 }

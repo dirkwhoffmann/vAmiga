@@ -107,6 +107,9 @@ public:
     FSBlock *read(Block nr, FSBlockType type);
     const FSBlock *read(Block nr) const;
     const FSBlock *read(Block nr, FSBlockType type) const;
+
+    // Wipes out a block (makes it an empty block)
+    void erase(Block nr);
 };
 
 }

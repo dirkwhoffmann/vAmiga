@@ -84,6 +84,14 @@ FSPath::isRegular() const
     return isFile() || isDirectory();
 }
 
+bool
+FSPath::isHashable() const
+{
+    return
+    fs->blockType(ref) == FSBlockType::FILEHEADER_BLOCK &&
+    fs->blockType(ref) == FSBlockType::USERDIR_BLOCK;
+}
+
 FSBlock *
 FSPath::ptr() const
 {

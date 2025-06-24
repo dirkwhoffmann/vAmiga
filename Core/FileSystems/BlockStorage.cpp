@@ -143,4 +143,10 @@ BlockStorage::read(Block nr, FSBlockType type) const
     return const_cast<const FSBlock *>(result);
 }
 
+void
+BlockStorage::erase(Block nr)
+{
+    if (blocks.contains(nr)) { blocks.erase(nr); }
+}
+
 }

@@ -41,8 +41,9 @@ struct FSPath
     bool isFile() const;
     bool isDirectory() const;
     bool isRegular() const;
+    bool isHashable() const;
 
-
+    
     //
     // Representing the path
     //

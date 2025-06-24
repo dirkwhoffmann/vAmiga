@@ -414,6 +414,8 @@ class NavigatorConsole final : public Console
     Block parseBlock(const Arguments &argv, const string &token, Block fallback);
     FSPath parsePath(const Arguments &argv, const string &token);
     FSPath parsePath(const Arguments &argv, const string &token, const FSPath &fallback);
+    FSPath parseFile(const Arguments &argv, const string &token);
+    FSPath parseFile(const Arguments &argv, const string &token, const FSPath &fallback);
     FSPath parseDirectory(const Arguments &argv, const string &token);
     FSPath parseDirectory(const Arguments &argv, const string &token, const FSPath &fallback);
     util::DumpOpt parseDumpOpts(const Arguments &argv);

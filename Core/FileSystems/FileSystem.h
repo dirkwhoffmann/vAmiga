@@ -182,7 +182,7 @@ public:
     // Predicts the type of a block by analyzing its number and data
     FSBlockType predictBlockType(Block nr, const u8 *buf) const;
 
-    
+
     //
     // Querying the block allocation bitmap
     //
@@ -235,6 +235,9 @@ public:
 
     // Returns the working directory
     FSPath pwd() const { return FSPath(this, curr); }
+
+    // Collects the data blocks belonging to a file
+    std::vector<Block> dataBlocks(const FSPath &path);
 
 
     //
@@ -308,10 +311,12 @@ private:
 protected:
     
     // Returns the last element in the list of extension blocks
+    // std::vector<Block> extBlockChain(const FSPath &at) const;
     FSBlock *lastFileListBlockInChain(Block start) const;
     FSBlock *lastFileListBlockInChain(FSBlock *block) const;
-    
+
     // Returns the last element in the list of blocks with the same hash
+    std::vector<Block> hashBlockChain(Block first) const;
     FSBlock *lastHashBlockInChain(Block start) const;
     FSBlock *lastHashBlockInChain(FSBlock *block) const;
     

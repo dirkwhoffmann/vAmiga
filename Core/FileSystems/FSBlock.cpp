@@ -1587,6 +1587,12 @@ FSBlock::getNextDataBlock() const
     return nr ? fs->dataBlockPtr(nr) : nullptr;
 }
 
+bool
+FSBlock::isHashable() const
+{
+    return type == FSBlockType::FILEHEADER_BLOCK || type == FSBlockType::USERDIR_BLOCK;
+}
+
 isize
 FSBlock::hashTableSize() const
 {

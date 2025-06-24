@@ -498,6 +498,38 @@ FileSystem::cd(const string &path)
     cd(pwd().seek(path));
 }
 
+std::vector<Block>
+FileSystem::dataBlocks(const FSPath &path)
+{
+    std::vector<Block> result;
+    std::set<Block> visited;
+
+    FSBlock *block = path.ptr();
+    while (block && visited.find(block->nr) == visited.end()) {
+
+        visited.insert(block->nr);
+
+        // Iterate through all data blocks references in this block
+        isize num = std::min(block->getNumDataBlockRefs(), block->getMaxDataBlockRefs());
+        for (isize i = 0; i < num; i++) {
+
+            Block ref = block->getDataBlockRef(i);
+            if (dataBlockPtr(ref) == nullptr) {
+
+                debug(FS_DEBUG, "Ignoring block %d (no data block)\n", ref);
+                continue;
+            }
+
+            result.push_back(ref);
+        }
+
+        // Continue with the next list block
+        block = block->getNextListBlock();
+    }
+
+    return result;
+}
+
 void
 FileSystem::list(std::ostream &os, const FSPath &path, const FSOpt &opt) const
 {
@@ -655,6 +687,23 @@ FileSystem::lastFileListBlockInChain(FSBlock *block) const
         block = next;
     }
     return nullptr;
+}
+
+std::vector<Block>
+FileSystem::hashBlockChain(Block first) const
+{
+    std::vector<Block> result;
+    std::set<Block> visited;
+
+    FSBlock *it = blockPtr(first);
+    while (it && it->isHashable() && visited.find(it->nr) == visited.end()) {
+
+        result.push_back(it->nr);
+        visited.insert(it->nr);
+        it = it->getNextHashBlock();
+    }
+
+    return result;
 }
 
 FSBlock *

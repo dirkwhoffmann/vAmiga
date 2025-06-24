@@ -140,12 +140,22 @@ public:
     FSPath createFile(const FSPath &at, const FSName &name, const u8 *buf, isize size);
     FSPath createFile(const FSPath &at, const FSName &name, const string &str);
 
+    // Delete a file
+    void deleteFile(const FSPath &at);
 
 private:
 
+    // Adds a hash-table entry for a given item
+    void addToHashTable(const FSPath &item);
+    void addToHashTable(Block parent, Block ref);
+
+    // Removes the hash-table entry for a given item
+    void deleteFromHashTable(const FSPath &item);
+    void deleteFromHashTable(Block parent, Block ref);
+
     // Adds a reference to a directory
-    void addHashRef(const FSPath &at, Block nr);
-    void addHashRef(const FSPath &at, FSBlock *block);
+    void addHashRef(const FSPath &at, Block nr); // DEPRECATED
+    void addHashRef(const FSPath &at, FSBlock *block); // DEPRECATED
 
     // Adds bytes to a data block
     isize addData(Block nr, const u8 *buf, isize size);
