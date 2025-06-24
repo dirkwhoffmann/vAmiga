@@ -476,6 +476,29 @@ MutableFileSystem::createFile(const FSPath &at, const FSName &name, const string
 }
 
 void
+MutableFileSystem::rename(const FSPath &item, const FSName &name)
+{
+    // Renaming the root node renames the name of the file system
+    if (item.isRoot()) { setName(name); return; }
+
+    // For files and directories, reposition the item in the hash table
+    move(item, item.parent(), name);
+}
+
+void
+MutableFileSystem::move(const FSPath &item, const FSPath &dest, const FSName &name)
+{
+    // Remove the item from the hash table
+    deleteFromHashTable(item);
+
+    // Rename if a new name is provided
+    if (name != "") item.ptr()->setName(name);
+
+    // Add the item to the new hash table
+    addToHashTable(dest.ref, item.ref);
+}
+
+void
 MutableFileSystem::deleteFile(const FSPath &item)
 {
     if (!item.isFile()) return;

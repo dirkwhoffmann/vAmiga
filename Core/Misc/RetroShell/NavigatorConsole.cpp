@@ -741,6 +741,22 @@ NavigatorConsole::initCommands(RSCommand &root)
 
     root.add({
 
+        .tokens = { "rename" },
+        .chelp  = { "Renames a file or directory" },
+        .args   = {
+            { .name = { "item", "Item to rename" } },
+            { .name = { "name", "New name" } },
+        },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            auto item = parsePath(args, "item");
+
+            fs.rename(item, args.at("name"));
+        }
+    });
+
+    root.add({
+
         .tokens = { "delete" },
         .chelp  = { "Deletes a file" },
         .args   = {

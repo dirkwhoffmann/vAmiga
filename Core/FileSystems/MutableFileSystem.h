@@ -140,6 +140,12 @@ public:
     FSPath createFile(const FSPath &at, const FSName &name, const u8 *buf, isize size);
     FSPath createFile(const FSPath &at, const FSName &name, const string &str);
 
+    // Renames a file or directory
+    void rename(const FSPath &item, const FSName &name);
+
+    // Moves a file or directory to another location
+    void move(const FSPath &item, const FSPath &dest, const FSName &name = "");
+
     // Delete a file
     void deleteFile(const FSPath &at);
 
