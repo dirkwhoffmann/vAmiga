@@ -174,7 +174,20 @@ NavigatorConsole::matchPath(const Arguments &argv, const string &token, Tokens &
 FSPath
 NavigatorConsole::matchPath(const string &path, Tokens &notFound)
 {
-    return fs.pwd();
+    if (!fs.formatted()) throw AppError(Fault::FS_UNFORMATTED);
+
+    auto tokens = util::split(path, '/');
+    if (!path.empty() && path[0] == '/') { tokens.insert(tokens.begin(), "/"); }
+
+    auto p = fs.pwd();
+    while (!tokens.empty()) {
+
+        try { p = p.seek(FSName(tokens.front())); } catch (...) { break; }
+        tokens.erase(tokens.begin());
+    }
+    notFound = tokens;
+
+    return p;
 }
 
 util::DumpOpt
@@ -814,8 +827,12 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            fs.createDir(fs.pwd(), args.at("name"));
+            Tokens missing;
+            auto path = matchPath(args.at("name"), missing);
 
+            for (auto &it: missing) {
+                path = fs.createDir(path, FSName(it));
+            }
         }
     });
 
