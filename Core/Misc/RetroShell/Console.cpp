@@ -540,7 +540,7 @@ Console::parse(const RSCommand &cmd, const Tokens &args)
     std::vector<string> std;
 
     // Check if a command handler is present
-    if (!cmd.callback && !args.empty()) throw util::ParseError(util::concat(args));
+    if (!cmd.callback)  { throw TooFewArgumentsError(cmd.fullName); }
 
     // Sort input tokens by type
     for (usize i = 0; i < args.size(); i++) {
@@ -795,15 +795,6 @@ Console::exec(const Tokens &argv, bool verbose)
 
     // Find the command in the command tree
     if (auto *cmd = seekCommand(args); cmd) {
-
-        // Check if a command handler is present
-        /*
-        if (!cmd->callback) {
-
-            if (args.empty()) throw TooFewArgumentsError(util::concat(argv));
-            throw TooFewArgumentsError(util::concat(argv));
-        }
-        */
 
         // Parse arguments
         Arguments parsedArgs = parse(*cmd, args);

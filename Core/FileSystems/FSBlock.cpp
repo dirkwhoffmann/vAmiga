@@ -1617,8 +1617,8 @@ FSBlock::hashValue() const
         case FSBlockType::USERDIR_BLOCK:
         case FSBlockType::FILEHEADER_BLOCK:
             
-            return getName().hashValue();
-            
+            return getName().hashValue(fs->getDos());
+
         default:
             return 0;
     }

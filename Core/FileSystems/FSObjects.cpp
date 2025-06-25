@@ -43,9 +43,13 @@ FSString::FSString(const u8 *bcpl, isize limit) : limit(limit)
 }
 
 char
-FSString::capital(char c)
+FSString::capital(char c, FSVolumeType dos)
 {
-    return (c >= 'a' && c <= 'z') ? c - ('a' - 'A') : c;
+    if (isINTLVolumeType(dos)) {
+        return (c >= 'a' && c <= 'z') || ((u8)c >= 224 && (u8)c <= 254 && (u8)c != 247) ? c - ('a' - 'A') : c ;
+    } else {
+        return (c >= 'a' && c <= 'z') ? c - ('a' - 'A') : c;
+    }
 }
 
 bool
@@ -54,6 +58,7 @@ FSString::operator== (const FSString &rhs) const
     return util::uppercased(str) == util::uppercased(rhs.str);
 }
 
+/*
 u32
 FSString::hashValue() const
 {
@@ -61,6 +66,19 @@ FSString::hashValue() const
     for (auto c : str) {
         
         result = (result * 13 + (u32)capital(c)) & 0x7FF;
+    }
+
+    return result;
+}
+*/
+
+u32
+FSString::hashValue(FSVolumeType dos) const
+{
+    u32 result = (u32)length();
+    for (auto c : str) {
+
+        result = (result * 13 + (u32)capital(c, dos)) & 0x7FF;
     }
 
     return result;

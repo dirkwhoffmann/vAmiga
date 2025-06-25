@@ -132,6 +132,7 @@ public:
     FSVolumeType getDos() const { return dos; }
     bool isOFS() const { return isOFSVolumeType(dos); }
     bool isFFS() const { return isFFSVolumeType(dos); }
+    bool isINTL() const { return isINTLVolumeType(dos); }
 
     // Reads information from the root block
     FSName getName() const;

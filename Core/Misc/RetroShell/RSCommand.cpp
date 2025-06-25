@@ -221,7 +221,7 @@ RSCommand::printHelp(std::ostream &os)
 
             // Describe the current command
             prefix = string(prefix.size(), ' ') + "Usage: ";
-            os << prefix + argUsage() << std::endl;
+            os << std::endl << prefix + argUsage() << std::endl;
             printArgumentHelp(os, isize(prefix.size()), false);
         }
     }
@@ -254,7 +254,7 @@ RSCommand::printArgumentHelp(std::ostream &os, isize indent, bool verbose)
             os << it->helpStr() << std::endl;
         }
     }
-    os << std::endl;
+    // os << std::endl;
 }
 
 void
@@ -290,7 +290,7 @@ RSCommand::printSubcmdHelp(std::ostream &os, isize indent, bool verbose)
         os << string(indent, ' ') << std::left << std::setw(int(tab)) << it->fullName << " : ";
         os << (it == this ? it->chelp : it->ghelp) << std::endl;
     }
-    os << std::endl;
+    // os << std::endl;
 }
 
 string

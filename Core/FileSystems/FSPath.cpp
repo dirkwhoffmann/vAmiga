@@ -208,7 +208,7 @@ FSPath::seek(const FSName &name) const
     if (cdb && cdb->hashTableSize() != 0) {
 
         // Compute the table position and read the item
-        u32 hash = name.hashValue() % cdb->hashTableSize();
+        u32 hash = name.hashValue(fs->getDos()) % cdb->hashTableSize();
         u32 ref = cdb->getHashRef(hash);
 
         // Traverse the linked list until the item has been found

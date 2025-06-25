@@ -112,7 +112,21 @@ inline bool isFFSVolumeType(FSVolumeType value)
         case FSVolumeType::FFS:
         case FSVolumeType::FFS_INTL:
         case FSVolumeType::FFS_DC:
-        case FSVolumeType::FFS_LNFS: return true;
+        case FSVolumeType::FFS_LNFS:    return true;
+        default:                        return false;
+    }
+}
+
+inline bool isINTLVolumeType(FSVolumeType value)
+{
+    switch (value) {
+
+        case FSVolumeType::OFS_INTL:
+        case FSVolumeType::FFS_INTL:
+        case FSVolumeType::OFS_DC:
+        case FSVolumeType::FFS_DC:
+        case FSVolumeType::OFS_LNFS:
+        case FSVolumeType::FFS_LNFS:    return true;
         default:                        return false;
     }
 }

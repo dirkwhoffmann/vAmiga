@@ -10,6 +10,7 @@
 #pragma once
 
 #include "CoreObject.h"
+#include "FSTypes.h"
 #include <ostream>
 #include <regex>
 
@@ -23,7 +24,7 @@ struct FSString {
     // Maximum number of permitted characters
     isize limit = 0;
 
-    static char capital(char c);
+    static char capital(char c, FSVolumeType dos);
 
     FSString(const string &cppS, isize limit = 1024);
     FSString(const char *c, isize limit = 1024);
@@ -35,7 +36,8 @@ struct FSString {
     bool operator== (const FSString &rhs) const;
     isize length() const { return (isize)str.length(); }
     bool empty() const { return str.empty(); }
-    u32 hashValue() const;
+    // [[deprecated]] u32 hashValue() const;
+    u32 hashValue(FSVolumeType dos) const;
 
     void write(u8 *p);
 

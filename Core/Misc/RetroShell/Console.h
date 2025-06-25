@@ -409,7 +409,7 @@ class NavigatorConsole final : public Console
     // Parsing input
     //
 
-    Block parseBlock(const string &argv);
+    Block parseBlock(const string &arg);
     Block parseBlock(const Arguments &argv, const string &token);
     Block parseBlock(const Arguments &argv, const string &token, Block fallback);
     FSPath parsePath(const Arguments &argv, const string &token);
@@ -419,6 +419,11 @@ class NavigatorConsole final : public Console
     FSPath parseDirectory(const Arguments &argv, const string &token);
     FSPath parseDirectory(const Arguments &argv, const string &token, const FSPath &fallback);
     util::DumpOpt parseDumpOpts(const Arguments &argv);
+
+    // Experimental
+    FSPath matchPath(const Arguments &argv, const string &token, Tokens &notFound);
+    FSPath matchPath(const Arguments &argv, const string &token, Tokens &notFound, const FSPath &fallback);
+    FSPath matchPath(const string &path, Tokens &notFound);
 };
 
 }

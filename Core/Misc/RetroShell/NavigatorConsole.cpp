@@ -159,6 +159,24 @@ NavigatorConsole::parseDirectory(const Arguments &argv, const string &token, con
     return path;
 }
 
+FSPath
+NavigatorConsole::matchPath(const Arguments &argv, const string &token, Tokens &notFound)
+{
+    return matchPath(argv.at(token), notFound);
+}
+
+FSPath
+NavigatorConsole::matchPath(const Arguments &argv, const string &token, Tokens &notFound, const FSPath &fallback)
+{
+    return argv.contains(token) ? matchPath(argv, token, notFound) : fallback;
+}
+
+FSPath
+NavigatorConsole::matchPath(const string &path, Tokens &notFound)
+{
+    return fs.pwd();
+}
+
 util::DumpOpt
 NavigatorConsole::parseDumpOpts(const Arguments &argv)
 {
@@ -419,6 +437,54 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                 fs.init(*hd[n], 0);
                 fs.dump(Category::Info, os);
+
+            }, .payload = {i}
+        });
+    }
+
+    root.add({ .tokens = { "export" }, .ghelp = { "Export a file system" } });
+
+    root.add({
+
+        .tokens = { "export", "df[n]" },
+        .ghelp  = { "Export the file system to floppy drive n" },
+        .chelp  = { "export { df0 | df1 | df1 | df2 }" }
+    });
+
+    for (isize i = 0; i < 4; i++) {
+
+        root.add({
+
+            .tokens = { "export", "df" + std::to_string(i) },
+            .chelp  = { "Export the file system to floppy drive" + std::to_string(i) },
+            .flags  = rs::shadowed,
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                auto n = values[0];
+                df[n]->insertMediaFile(ADFFile(fs), false);
+
+            }, .payload = {i}
+        });
+    }
+
+    root.add({
+
+        .tokens = { "export", "hd[n]" },
+        .ghelp  = { "Export the file system to hard drive n" },
+        .chelp  = { "export { hd0 | hd1 | hd1 | hd2 }" }
+    });
+
+    for (isize i = 0; i < 4; i++) {
+
+        root.add({
+
+            .tokens = { "export", "hd" + std::to_string(i) },
+            .chelp  = { "Export the file system to hard drive" + std::to_string(i) },
+            .flags  = rs::shadowed,
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                auto n = values[0];
+                hd[n]->init(fs);
 
             }, .payload = {i}
         });
@@ -738,6 +804,20 @@ NavigatorConsole::initCommands(RSCommand &root)
     });
 
     RSCommand::currentGroup = "Modify";
+
+    root.add({
+
+        .tokens = { "mkdir" },
+        .chelp  = { "Create a directory" },
+        .args   = {
+            { .name = { "name", "Name of the new directory" } },
+        },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            fs.createDir(fs.pwd(), args.at("name"));
+
+        }
+    });
 
     root.add({
 

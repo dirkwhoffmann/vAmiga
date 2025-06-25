@@ -367,7 +367,7 @@ public:
 
     // Inserts a new disk with an optional delay
     void insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay = 0) throws;
-    void insertMediaFile(class MediaFile &file, bool wp);
+    void insertMediaFile(const class MediaFile &file, bool wp);
 
     // Ejects the current disk with an optional delay
     void ejectDisk(Cycle delay = 0);

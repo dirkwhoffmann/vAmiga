@@ -1158,7 +1158,7 @@ FloppyDrive::swapDisk(const fs::path &path)
 }
 
 void
-FloppyDrive::insertMediaFile(class MediaFile &file, bool wp)
+FloppyDrive::insertMediaFile(const class MediaFile &file, bool wp)
 {
     try {
         
