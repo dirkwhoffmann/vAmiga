@@ -146,6 +146,10 @@ public:
     // Moves a file or directory to another location
     void move(const FSPath &item, const FSPath &dest, const FSName &name = "");
 
+    // Copies a file
+    void copy(const FSPath &item, const FSPath &dest);
+    void copy(const FSPath &item, const FSPath &dest, const FSName &name);
+
     // Delete a file
     void deleteFile(const FSPath &at);
 

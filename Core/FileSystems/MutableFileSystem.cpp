@@ -504,6 +504,25 @@ MutableFileSystem::move(const FSPath &item, const FSPath &dest, const FSName &na
 }
 
 void
+MutableFileSystem::copy(const FSPath &item, const FSPath &dest)
+{
+    copy(item, dest, item.last());
+}
+
+void
+MutableFileSystem::copy(const FSPath &item, const FSPath &dest, const FSName &name)
+{
+    if (!item.isFile()) throw AppError(Fault::FS_NOT_A_FILE, item.name());
+    if (!dest.isDirectory()) throw AppError(Fault::FS_NOT_A_DIRECTORY, dest.name());
+
+    // Read the file
+    Buffer<u8> buffer; item.ptr()->writeData(buffer);
+
+    // Recreate the file at the target location
+    createFile(dest, name, buffer);
+}
+
+void
 MutableFileSystem::deleteFile(const FSPath &item)
 {
     if (!item.isFile()) return;

@@ -842,6 +842,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         }
     });
 
+    /*
     root.add({
 
         .tokens = { "rename" },
@@ -857,6 +858,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             fs.rename(item, args.at("name"));
         }
     });
+    */
 
     root.add({
 
@@ -894,6 +896,43 @@ NavigatorConsole::initCommands(RSCommand &root)
                 debug(RSH_DEBUG, "Moving '%s' to '%s' / '%s'\n",
                       source.name().c_str(), path.name().c_str(), missing.back().c_str());
                 fs.move(source, path, missing.back());
+
+            } else {
+
+                throw AppError(Fault::FS_NOT_FOUND, missing.front());
+            }
+        }
+    });
+
+    root.add({
+
+        .tokens = { "copy" },
+        .chelp  = { "Copies a file" },
+        .args   = {
+            { .name = { "source", "Item to copy" } },
+            { .name = { "target", "New name or target directory" } },
+        },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            auto source = parsePath(args, "source");
+
+            Tokens missing;
+            auto path = matchPath(args.at("target"), missing);
+
+            if (missing.empty()) {
+
+                if (path.isFile()) {
+
+                    throw AppError(Fault::FS_EXISTS, args.at("target"));
+                }
+                if (path.isDirectory()) {
+
+                    fs.copy(source, path);
+                }
+
+            } else if (missing.size() == 1) {
+
+                fs.copy(source, path, missing.back());
 
             } else {
 
