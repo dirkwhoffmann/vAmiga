@@ -99,24 +99,30 @@ NavigatorConsole::parseBlock(const Arguments &argv, const string &token, Block f
 FSPath
 NavigatorConsole::parsePath(const Arguments &argv, const string &token)
 {
-    return parsePath(argv, token, fs.pwd());
+    assert(argv.contains(token));
+
+    try {
+        // Try to find the directory by name
+        return fs.pwd().seek(argv.at(token));
+
+    } catch (...) {
+
+        try {
+            // Treat the argument as a block number
+            return FSPath(&fs, parseBlock(argv.at(token)));
+
+        } catch (...) {
+
+            // The item does not exist
+            throw AppError(Fault::FS_NOT_FOUND, token);
+        }
+    }
 }
 
 FSPath
 NavigatorConsole::parsePath(const Arguments &argv, const string &token, const FSPath &fallback)
 {
-    if (!argv.contains(token)) return fallback;
-
-    try {
-
-        // Try to find the directory by name
-        return fs.pwd().seek(argv.at(token));
-
-    } catch (AppError &) {
-
-        // Treat the argument as a block number
-        return FSPath(&fs, parseBlock(argv.at(token)));
-    }
+    return argv.contains(token) ? parsePath(argv, token) : fallback;
 }
 
 FSPath
@@ -849,6 +855,50 @@ NavigatorConsole::initCommands(RSCommand &root)
             auto item = parsePath(args, "item");
 
             fs.rename(item, args.at("name"));
+        }
+    });
+
+    root.add({
+
+        .tokens = { "move" },
+        .chelp  = { "Moves a file or directory" },
+        .args   = {
+            { .name = { "source", "Item to move" } },
+            { .name = { "target", "New name or target directory" } },
+        },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            auto source = parsePath(args, "source");
+
+            Tokens missing;
+            auto path = matchPath(args.at("target"), missing);
+
+            printf("%s -> '%s' {", source.name().c_str(), path.name().c_str());
+            for (auto &it : missing) printf(" %s", it.c_str());
+            printf(" }\n");
+
+            if (missing.empty()) {
+
+                if (path.isFile()) {
+
+                    throw AppError(Fault::FS_EXISTS, args.at("target"));
+                }
+                if (path.isDirectory()) {
+
+                    debug(RSH_DEBUG, "Moving '%s' to '%s'\n", source.name().c_str(), path.name().c_str());
+                    fs.move(source, path);
+                }
+
+            } else if (missing.size() == 1) {
+
+                debug(RSH_DEBUG, "Moving '%s' to '%s' / '%s'\n",
+                      source.name().c_str(), path.name().c_str(), missing.back().c_str());
+                fs.move(source, path, missing.back());
+
+            } else {
+
+                throw AppError(Fault::FS_NOT_FOUND, missing.front());
+            }
         }
     });
 

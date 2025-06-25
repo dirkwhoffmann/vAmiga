@@ -488,6 +488,8 @@ MutableFileSystem::rename(const FSPath &item, const FSName &name)
 void
 MutableFileSystem::move(const FSPath &item, const FSPath &dest, const FSName &name)
 {
+    if (!dest.isDirectory()) throw AppError(Fault::FS_NOT_A_DIRECTORY, dest.name());
+
     // Remove the item from the hash table
     deleteFromHashTable(item);
 
@@ -496,6 +498,9 @@ MutableFileSystem::move(const FSPath &item, const FSPath &dest, const FSName &na
 
     // Add the item to the new hash table
     addToHashTable(dest.ref, item.ref);
+
+    // Assign the new parent directory
+    item.ptr()->setParentDirRef(dest.ref);
 }
 
 void
@@ -574,7 +579,7 @@ MutableFileSystem::deleteFromHashTable(Block parent, Block ref)
         auto pred = it != chain.begin() ? *(it - 1) : 0;
         auto succ = (it + 1) != chain.end() ? *(it + 1) : 0;
 
-        // Remove the element and rectify the list
+        // Remove the element from the list
         if (!pred) {
             pp->setHashRef(hash, succ);
         } else {

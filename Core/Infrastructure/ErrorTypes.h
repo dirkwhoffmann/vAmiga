@@ -163,6 +163,7 @@ enum class Fault : long
     FS_NOT_A_DIRECTORY,
     FS_NOT_A_FILE,
     FS_NOT_FOUND,
+    FS_EXISTS,
 
     // File system (general errors)
     FS_UNINITIALIZED,
@@ -173,7 +174,7 @@ enum class Fault : long
     FS_WRONG_DOS_TYPE,
     FS_HAS_CYCLES,
     FS_CORRUPTED,
-    
+
     // File system (import errors)
     FS_OUT_OF_SPACE,
     
@@ -342,6 +343,7 @@ struct FaultEnum : Reflection<FaultEnum, Fault>
             case Fault::FS_NOT_A_DIRECTORY:          return "FS_NOT_A_DIRECTORY";
             case Fault::FS_NOT_A_FILE:               return "FS_NOT_A_FILE";
             case Fault::FS_NOT_FOUND:                return "FS_NOT_FOUND";
+            case Fault::FS_EXISTS:                   return "FS_EXISTS";
 
             case Fault::FS_UNINITIALIZED:            return "FS_UNINITIALIZED";
             case Fault::FS_UNFORMATTED:              return "FS_UNFORMATTED";

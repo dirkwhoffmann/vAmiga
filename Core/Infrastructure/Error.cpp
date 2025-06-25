@@ -381,7 +381,11 @@ AppError::AppError(Fault code, const string &s)
         case Fault::FS_NOT_FOUND:
             description = s.empty() ? "Not found." : s + " not found.";
             break;
-            
+
+        case Fault::FS_EXISTS:
+            description = s.empty() ? "Item already exists." : s + " already exists.";
+            break;
+
         case Fault::FS_UNFORMATTED:
             description = "Unformatted device.";
             break;
