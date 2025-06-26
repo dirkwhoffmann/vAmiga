@@ -183,10 +183,10 @@ public:
     // Imports the volume from a buffer compatible with the ADF format
     void importVolume(const u8 *src, isize size) throws;
 
-    // Imports a directory from the host file system
-    void importDirectory(const FSPath &at, const fs::path &path, bool recursive = true) throws;
-    void importDirectory(const FSPath &at, const fs::directory_entry &dir, bool recursive) throws;
-    void importDirectory(const fs::path &path, bool recursive = true) throws;
+    // Imports files and folders from the host file system
+    void import(const FSPath &at, const fs::path &path, bool recursive = true, bool contents = false) throws;
+    void import(const FSPath &at, const fs::directory_entry &dir, bool recursive) throws;
+    // void import(const fs::path &path, bool recursive = true) throws;
 
     // Exports the volume to a buffer
     bool exportVolume(u8 *dst, isize size) const;

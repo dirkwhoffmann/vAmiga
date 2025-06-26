@@ -424,6 +424,16 @@ class NavigatorConsole final : public Console
     FSPath matchPath(const Arguments &argv, const string &token, Tokens &notFound);
     FSPath matchPath(const Arguments &argv, const string &token, Tokens &notFound, const FSPath &fallback);
     FSPath matchPath(const string &path, Tokens &notFound);
+
+
+    //
+    // Command handler helpers
+    //
+
+    // Checks for certain file system properties and throws on error
+    void assertInitialized();
+    void assertFormatted();
+
 };
 
 }

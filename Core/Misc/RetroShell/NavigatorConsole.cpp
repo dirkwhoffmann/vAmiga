@@ -196,6 +196,19 @@ NavigatorConsole::matchPath(const string &path, Tokens &notFound)
     return p;
 }
 
+void
+NavigatorConsole::assertInitialized()
+{
+    if (!fs.initialized()) throw AppError(Fault::FS_UNINITIALIZED);
+}
+
+void
+NavigatorConsole::assertFormatted()
+{
+    if (!fs.initialized()) throw AppError(Fault::FS_UNINITIALIZED);
+    if (!fs.formatted()) throw AppError(Fault::FS_UNFORMATTED);
+}
+
 util::DumpOpt
 NavigatorConsole::parseDumpOpts(const Arguments &argv)
 {
@@ -409,7 +422,26 @@ NavigatorConsole::initCommands(RSCommand &root)
         }
     });
 
-    root.add({ .tokens = { "import" }, .ghelp = { "Import a file system" } });
+    root.add({
+
+        .tokens = { "import" },
+        .ghelp  = { "Import a file system" },
+        .chelp  = { "Import a file or a folder from the host file system" },
+        .args   = {
+            { .name = { "path", "Host file system directory" } },
+            { .name = { "c", "Import contents rather than the folder itself" }, .flags = rs::flag },
+        },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            assertFormatted();
+
+            bool recursive = true;
+            bool contents = args.contains("c");
+
+            auto path = host.makeAbsolute(args.at("path"));
+            fs.import(fs.pwd(), path, recursive, contents);
+        }
+    });
 
     root.add({
 
@@ -461,8 +493,20 @@ NavigatorConsole::initCommands(RSCommand &root)
         });
     }
 
-    root.add({ .tokens = { "export" }, .ghelp = { "Export a file system" } });
+    root.add({
 
+        .tokens = { "export" },
+        .ghelp  = { "Export a file system" },
+        .chelp  = { "Export a file or a folder from the host file system" },
+        .args   = {
+            { .name = { "path", "Host file system directory" } },
+        },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            auto path = host.makeAbsolute(args.at("path"));
+            fs.exportDirectory(path); // TODO: EXPORT THE CURRENT DIRECTORY ONLY
+        }
+    });
     root.add({
 
         .tokens = { "export", "df[n]" },

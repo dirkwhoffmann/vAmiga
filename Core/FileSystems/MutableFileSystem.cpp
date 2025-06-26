@@ -21,20 +21,6 @@ void
 MutableFileSystem::init(isize capacity)
 {
     storage.init(capacity);
-
-    /*
-    // Remove existing blocks (if any)
-    for (auto &b : blocks) delete b;
-
-    // Resize the block storage
-    blocks.reserve(capacity);
-    blocks.assign(capacity, nullptr);
-
-    // Create new blocks
-    for (isize i = 0; i < capacity; i++) {
-        blocks[i] = new FSBlock(*this, Block(i), FSBlockType::EMPTY_BLOCK);
-    }
-    */
 }
 
 void
@@ -66,7 +52,7 @@ MutableFileSystem::init(const FileSystemDescriptor &layout, const fs::path &path
     if (!path.empty()) {
         
         // Add all files
-        importDirectory(rootDir(), path);
+        import(rootDir(), path);
 
         // Assign device name
         setName(FSName(path.filename().string()));
@@ -735,17 +721,6 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
         // Create new block
         storage[i].init(type);
         storage[i].importBlock(data, bsize);
-
-        /*
-        // Create new block
-        FSBlock *newBlock = FSBlock::make(this, (Block)i, type);
-
-        // Import block data
-        newBlock->importBlock(data, bsize);
-
-        // Replace the existing block
-        storage.write(Block(i), newBlock);
-        */
     }
     
     // Print some debug information
@@ -753,15 +728,25 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
 }
 
 void
-MutableFileSystem::importDirectory(const FSPath &at, const fs::path &path, bool recursive)
+MutableFileSystem::import(const FSPath &at, const fs::path &path, bool recursive, bool contents)
 {
     fs::directory_entry dir;
 
-    try { dir = fs::directory_entry(path); }
-    catch (...) { throw AppError(Fault::FILE_CANT_READ); }
+    // Get the directory item
+    try { dir = fs::directory_entry(path); } catch (...) {
+        throw AppError(Fault::FILE_CANT_READ);
+    }
 
-    // Add all files
-    importDirectory(at, dir, recursive);
+    if (dir.is_directory() && contents) {
+
+        // Add the directory contents
+        for (const auto& it : fs::directory_iterator(dir)) import(at, it, recursive);
+
+    } else {
+
+        // Add the file or directory as a whole
+        import(at, dir, recursive);
+    }
 
     // Rectify the checksums of all blocks
     updateChecksums();
@@ -771,7 +756,7 @@ MutableFileSystem::importDirectory(const FSPath &at, const fs::path &path, bool 
 }
 
 void
-MutableFileSystem::importDirectory(const FSPath &at, const fs::directory_entry &dir, bool recursive)
+MutableFileSystem::import(const FSPath &at, const fs::directory_entry &entry, bool recursive)
 {
     auto isHidden = [&](const fs::path &path) {
 
@@ -779,45 +764,37 @@ MutableFileSystem::importDirectory(const FSPath &at, const fs::directory_entry &
         return !s.empty() && s[0] == '.';
     };
 
-    for (const auto& entry : fs::directory_iterator(dir)) {
+    const auto path = entry.path().string();
+    const auto name = entry.path().filename();
+    FSName fsname = FSName(name);
 
-        const auto path = entry.path().string();
-        const auto name = entry.path().filename();
+    // Skip hidden files
+    if (isHidden(name)) return;
 
-        // Skip all hidden files
-        if (isHidden(name)) continue;
+    if (entry.is_regular_file()) {
 
-        FSName fsname = FSName(name);
+        debug(FS_DEBUG > 1, "  Importing file %s\n", path.c_str());
 
-        if (entry.is_directory()) {
+        Buffer<u8> buffer(entry.path());
+        if (buffer) {
+            createFile(at, fsname, buffer.ptr, buffer.size);
+        } else {
+            createFile(at, fsname);
+        }
 
-            debug(FS_DEBUG > 1, "Importing directory %s\n", fsname.c_str());
+    } else {
 
-            // Create new directory
-            auto subdir = createDir(at, fsname);
+        debug(FS_DEBUG > 1, "Importing directory %s\n", fsname.c_str());
 
-            // Import the subdirectory
-            if (recursive) importDirectory(subdir, entry, recursive);
+        // Create new directory
+        auto subdir = createDir(at, fsname);
 
-        } else if (entry.is_regular_file()) {
+        // Import all items
+        for (const auto& it : fs::directory_iterator(entry)) {
 
-            debug(FS_DEBUG > 1, "  Importing file %s\n", fsname.c_str());
-
-            // Add file
-            Buffer<u8> buffer(entry.path());
-            if (buffer) {
-                createFile(at, fsname, buffer.ptr, buffer.size);
-            } else {
-                createFile(at, fsname);
-            }
+            if (it.is_regular_file() || recursive) import(subdir, it, recursive);
         }
     }
-}
-
-void
-MutableFileSystem::importDirectory(const fs::path &path, bool recursive)
-{
-    importDirectory(rootDir(), path, recursive);
 }
 
 bool

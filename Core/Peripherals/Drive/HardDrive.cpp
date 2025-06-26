@@ -763,7 +763,7 @@ HardDrive::importFolder(const fs::path &path) throws
         auto fs = MutableFileSystem(layout);
         
         // Import all files and name the partition
-        fs.importDirectory(path);
+        fs.import(fs.rootDir(), path);
 
         // Name the file system
         fs.setName(traits.name);
