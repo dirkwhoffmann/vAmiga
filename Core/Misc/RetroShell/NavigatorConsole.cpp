@@ -61,36 +61,46 @@ NavigatorConsole::pressReturn(bool shift)
 void
 NavigatorConsole::autoComplete(Tokens &argv)
 {
+    printf("autoComplete(");
+    for (auto &it : argv) { printf("'%s',", it.c_str()); }
+    printf(")\n");
+
     // Only proceed if there is anything to complete
     if (argv.empty()) return;
 
-    // Split off the last token
-    auto [prefix, last] = util::splitLast(argv);
+    auto [cmd, remaining] = seekCommandNew(argv);
 
-    // For the prefix, seek the corresponding command
-    if (auto *cmd = getRoot().seek(prefix); cmd) {
+    printf("cmd = %p\n", (void *)cmd);
+    for (auto &it : remaining) printf(" '%s'\n", it.c_str());
+    printf("\n");
+
+    if (remaining.size() == 0) {
+
+        // There is nothing to complete
+        return;
+    }
+    if (remaining.size() == 1) {
 
         // Try to auto-complete the last token as a command
-        if (auto matches = cmd->autoComplete(last); matches) {
-
-            argv.back() = last;
-            return;
-        }
-
-        // Try to auto-complete the last token as a file name
-        auto pattern = FSPattern(last + "*");
-
-        std::vector<string> matches;
-        fs.collect(fs.pwd(), matches, {
-            .filter = [&](const FSPath &item) { return pattern.match(item.last()); },
-            .recursive = false
-        });
-        printf("Matches for %s\n", last.c_str());
-        for (auto &it : matches) printf("  Match: %s\n", it.c_str());
-        auto prefix = util::commonPrefix(matches);
-
-        if (prefix.size() > argv.back().size()) argv.back() = prefix;
+        if (auto matches = cmd->autoComplete(argv.back()); matches) return;
     }
+
+    auto last = remaining.back();
+    printf("Complete %s as a file\n", last.c_str());
+
+    // Try to auto-complete the last token as a file name
+    auto pattern = FSPattern(last + "*");
+
+    std::vector<string> matches;
+    fs.collect(fs.pwd(), matches, {
+        .filter = [&](const FSPath &item) { return pattern.match(item.last()); },
+        .recursive = false
+    });
+    printf("Matches for %s\n", last.c_str());
+    for (auto &it : matches) printf("  Match: %s\n", it.c_str());
+    auto prefix = util::commonPrefix(matches);
+
+    if (prefix.size() > argv.back().size()) argv.back() = prefix;
 }
 
 void

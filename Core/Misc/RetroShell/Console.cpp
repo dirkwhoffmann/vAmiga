@@ -462,7 +462,11 @@ Console::split(const string& userInput)
         }
         esc = false;
     }
-    if (!token.empty()) result.push_back(token);
+    // if (!token.empty()) result.push_back(token);
+    result.push_back(token);
+
+    // Add an empty token if the string ends with " "
+    // if (!userInput.empty() && userInput.back() == ' ') result.push_back("");
 
     return result;
 }
@@ -501,7 +505,7 @@ Console::seekCommandNew(const std::vector<string> &argv)
 {
     std::vector<string> arguments = argv;
     auto *cmd = seekCommand(arguments);
-    return { cmd, arguments };
+    return { cmd ? cmd : &root, arguments };
 }
 
 string
@@ -510,7 +514,11 @@ Console::autoComplete(const string& userInput)
     // Split the input string
     Tokens tokens = split(userInput);
 
-    // Complete all tokens
+    printf("Console::autoComplete(%s)\n", userInput.c_str());
+    for (auto &it : tokens) printf("'%s' ", it.c_str());
+    printf("\n");
+
+    // Complete the last token
     autoComplete(tokens);
 
     // Recreate the command string
