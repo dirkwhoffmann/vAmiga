@@ -61,26 +61,76 @@ NavigatorConsole::pressReturn(bool shift)
 void
 NavigatorConsole::autoComplete(Tokens &argv)
 {
-    RSCommand *current = &getRoot();
-    string prefix, token;
+    // Only proceed if there is anything to complete
+    if (argv.empty()) return;
 
-    for (auto it = argv.begin(); current && it != argv.end(); it++) {
+    // Split off the last token
+    auto [prefix, last] = util::splitLast(argv);
 
-        // Auto-complete the command tokens first
-        if (current->autoComplete(*it)) {
+    // For the prefix, seek the corresponding command
+    if (auto *cmd = getRoot().seek(prefix); cmd) {
 
-            current = current->seek(*it);
-            continue;
+        // Try to auto-complete the last token as a command
+        if (auto matches = cmd->autoComplete(last); matches) {
+
+            argv.back() = last;
+            return;
         }
 
-        // After that, auto-complete with a file name
-        auto pattern = FSPattern(*it + "*");
-        
+        // Try to auto-complete the last token as a file name
+        auto pattern = FSPattern(last + "*");
+
         std::vector<string> matches;
-        fs.collect(fs.pwd(), matches,
-                   { .filter = [&](const FSPath &item) { return pattern.match(item.last()); } });
-        if (!matches.empty()) *it = util::commonPrefix(matches);
-        break;
+        fs.collect(fs.pwd(), matches, {
+            .filter = [&](const FSPath &item) { return pattern.match(item.last()); },
+            .recursive = false
+        });
+        printf("Matches for %s\n", last.c_str());
+        for (auto &it : matches) printf("  Match: %s\n", it.c_str());
+        auto prefix = util::commonPrefix(matches);
+
+        if (prefix.size() > argv.back().size()) argv.back() = prefix;
+    }
+}
+
+void
+NavigatorConsole::help(std::ostream &os, const Tokens &argv)
+{
+    // if (argv.empty()) return;
+    printf("NavigatorConsole::help\n");
+    for (auto &it : argv) printf(" argv = %s\n", it.c_str());
+
+    auto [cmd, args] = seekCommandNew(argv);
+
+    printf("cmd = %p\n", (void *)cmd);
+    for (auto &it : args) printf(" arg = %s\n", it.c_str());
+
+    if (cmd && cmd->callback && !args.empty()) {
+
+        printf("Collect files...\n");
+
+        // Print all files matching the last token
+        FSOpt opt = {
+
+            .recursive = false,
+            .sort = sort::dafa,
+
+            .filter = [&](const FSPath &item) {
+
+                return item.last().cpp_str().starts_with(args.back());
+            },
+
+            .formatter = [&](const FSPath &item) {
+
+                return item.last().cpp_str() + (item.isDirectory() ? " (dir)" : "\t");
+            }
+        };
+
+        fs.list(os, fs.pwd(), opt);
+
+    } else {
+
+        Console::help(os, argv);
     }
 }
 

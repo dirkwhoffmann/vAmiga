@@ -49,7 +49,7 @@ string makePrintable(const string& s);
 
 
 //
-// Stripping off characters
+// Stripping off characters and 
 //
 
 string ltrim(const string &s, const string &characters = " ");
@@ -66,7 +66,9 @@ string commonPrefix(std::vector<string>);
 //
 
 std::vector<string> split(const string &s, char delim);
-std::vector<string> split(const std::vector<string> &sv, char delim);
+std::vector<string> split(const std::vector<string> &vec, char delim);
+
+std::pair<vector<string>, string> splitLast(const vector<string> &vec);
 
 string concat(const std::vector<string> &s,
               const string &delim = " ", const string &ldelim = "", const string &rdelim = "");

@@ -496,10 +496,18 @@ Console::seekCommand(std::vector<string> &argv)
     return result;
 }
 
+std::pair<RSCommand *, std::vector<string>>
+Console::seekCommandNew(const std::vector<string> &argv)
+{
+    std::vector<string> arguments = argv;
+    auto *cmd = seekCommand(arguments);
+    return { cmd, arguments };
+}
+
 string
 Console::autoComplete(const string& userInput)
 {
-    // Split input string
+    // Split the input string
     Tokens tokens = split(userInput);
 
     // Complete all tokens

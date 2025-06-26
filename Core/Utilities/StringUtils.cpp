@@ -163,7 +163,16 @@ split(const std::vector<string> &sv, char delimiter)
     return result;
 }
 
-string concat(const std::vector<string> &s, const string &delim, const string &ldelim, const string &rdelim)
+std::pair<vector<string>, string>
+splitLast(const vector<string> &vec)
+{
+    if (vec.empty()) return { vec, "" };
+    std::vector<string> prefix(vec.begin(), vec.end() - 1);
+    return { prefix, vec.back() };
+}
+
+string
+concat(const std::vector<string> &s, const string &delim, const string &ldelim, const string &rdelim)
 {
     string result;
     isize count = 0;
