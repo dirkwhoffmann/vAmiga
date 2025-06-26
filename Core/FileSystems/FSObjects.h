@@ -64,11 +64,12 @@ struct FSComment : FSString {
 
 struct FSPattern {
 
+    string glob;
     std::regex regex;
 
     FSPattern(const string str);
 
-    bool match(const FSName &name);
+    bool match(const FSString &name) const;
 };
 
 struct FSTime {

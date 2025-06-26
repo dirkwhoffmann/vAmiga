@@ -23,13 +23,9 @@ struct FSPath
     Block ref;
 
     // Constructors
-    // FSPath(const FSPath *);
     FSPath(const FileSystem *fs);
     FSPath(const FileSystem *fs, Block dir);
     FSPath(const FileSystem *fs, struct FSBlock *dir);
-
-    // Throws an exception if the object is invalid
-    // void selfcheck() const;
 
     // Operator overloads
     FSPath &operator=(const FSPath &);
@@ -43,7 +39,10 @@ struct FSPath
     bool isRegular() const;
     bool isHashable() const;
 
-    
+    // Checks if the path matches a search pattern
+    bool matches(const FSPattern &pattern) const;
+
+
     //
     // Representing the path
     //
@@ -51,17 +50,17 @@ struct FSPath
     // Returns a pointer to the corresponding FSBlock
     FSBlock *ptr() const;
 
-    // Returns the last path component
-    FSName last() const;
-
     // Returns a string representation of this path
-    string name() const;
+    FSName last() const; // RENAME TO name()
+    string absName() const;
+    string relName(const FSPath &root) const;
+    string relName() const;
 
     // Converts the path to a host path
     fs::path getPath() const;
 
-    // Represents the path as a collections of block nodes, starting from the root
-    std::vector<Block> refs() const;
+    // Represents the path as a collections of block nodes, starting from 'root'
+    std::vector<Block> refs(Block root = 0) const;
 
 
     //

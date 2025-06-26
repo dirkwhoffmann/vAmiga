@@ -758,12 +758,15 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "s", "Sort output" }, .flags = rs::flag } },
         .func   = [this](std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto pattern = FSPattern(args.at("name"));
+            auto name = args.at("name");
+            auto pattern = FSPattern(name);
+            auto abs = name[0] == '/';
             auto path = parsePath(args, "path", fs.pwd());
             auto d = args.contains("d");
             auto f = args.contains("f");
             auto r = args.contains("r");
             auto s = args.contains("s");
+
 
             FSOpt opt = {
 
@@ -772,7 +775,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                 .filter = [&](const FSPath &item) {
 
-                    return pattern.match(item.last()) &&
+                    return item.matches(pattern) && //  pattern.match(item.last()) &&
                     (!d || item.isDirectory()) &&
                     (!f || item.isFile());
                 },
@@ -780,7 +783,8 @@ NavigatorConsole::initCommands(RSCommand &root)
                 .formatter = [&](const FSPath &item) {
 
                     std::stringstream ss;
-                    ss << item.name() + (item.isDirectory() ? " (dir)" : "");
+                    ss << (abs ? item.absName() : item.relName());
+                    if (item.isDirectory()) ss << " (dir)";
                     return ss.str();
                 }
             };
@@ -1005,7 +1009,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             Tokens missing;
             auto path = matchPath(args.at("target"), missing);
 
-            printf("%s -> '%s' {", source.name().c_str(), path.name().c_str());
+            printf("%s -> '%s' {", source.absName().c_str(), path.absName().c_str());
             for (auto &it : missing) printf(" %s", it.c_str());
             printf(" }\n");
 
@@ -1017,14 +1021,14 @@ NavigatorConsole::initCommands(RSCommand &root)
                 }
                 if (path.isDirectory()) {
 
-                    debug(RSH_DEBUG, "Moving '%s' to '%s'\n", source.name().c_str(), path.name().c_str());
+                    debug(RSH_DEBUG, "Moving '%s' to '%s'\n", source.absName().c_str(), path.absName().c_str());
                     fs.move(source, path);
                 }
 
             } else if (missing.size() == 1) {
 
                 debug(RSH_DEBUG, "Moving '%s' to '%s' / '%s'\n",
-                      source.name().c_str(), path.name().c_str(), missing.back().c_str());
+                      source.absName().c_str(), path.absName().c_str(), missing.back().c_str());
                 fs.move(source, path, missing.back());
 
             } else {

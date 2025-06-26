@@ -384,7 +384,7 @@ MutableFileSystem::createDir(const FSPath &at, const FSName &name)
         }
         throw AppError(Fault::FS_OUT_OF_SPACE);
     }
-    throw AppError(Fault::FS_NOT_A_DIRECTORY, at.name());
+    throw AppError(Fault::FS_NOT_A_DIRECTORY, at.absName());
 }
 
 FSPath
@@ -400,7 +400,7 @@ MutableFileSystem::createFile(const FSPath &at, const FSName &name)
         }
         throw AppError(Fault::FS_OUT_OF_SPACE);
     }
-    throw AppError(Fault::FS_NOT_A_DIRECTORY, at.name());
+    throw AppError(Fault::FS_NOT_A_DIRECTORY, at.absName());
 }
 
 FSPath
@@ -474,7 +474,7 @@ MutableFileSystem::rename(const FSPath &item, const FSName &name)
 void
 MutableFileSystem::move(const FSPath &item, const FSPath &dest, const FSName &name)
 {
-    if (!dest.isDirectory()) throw AppError(Fault::FS_NOT_A_DIRECTORY, dest.name());
+    if (!dest.isDirectory()) throw AppError(Fault::FS_NOT_A_DIRECTORY, dest.absName());
 
     // Remove the item from the hash table
     deleteFromHashTable(item);
@@ -498,8 +498,8 @@ MutableFileSystem::copy(const FSPath &item, const FSPath &dest)
 void
 MutableFileSystem::copy(const FSPath &item, const FSPath &dest, const FSName &name)
 {
-    if (!item.isFile()) throw AppError(Fault::FS_NOT_A_FILE, item.name());
-    if (!dest.isDirectory()) throw AppError(Fault::FS_NOT_A_DIRECTORY, dest.name());
+    if (!item.isFile()) throw AppError(Fault::FS_NOT_A_FILE, item.absName());
+    if (!dest.isDirectory()) throw AppError(Fault::FS_NOT_A_DIRECTORY, dest.absName());
 
     // Read the file
     Buffer<u8> buffer; item.ptr()->writeData(buffer);

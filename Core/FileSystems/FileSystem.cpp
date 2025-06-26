@@ -556,7 +556,7 @@ FileSystem::list(std::ostream &os, const FSPath &path, const FSOpt &opt) const
 
                 if (i) os << std::endl;
                 if (column) os << std::endl;
-                os << "Directory " << dir.name() << ":" << std::endl << std::endl;
+                os << "Directory " << dir.absName() << ":" << std::endl << std::endl;
             }
 
             // Determine the longest entry

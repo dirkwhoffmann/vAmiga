@@ -92,6 +92,18 @@ FSPath::isHashable() const
     fs->blockType(ref) == FSBlockType::USERDIR_BLOCK;
 }
 
+bool
+FSPath::matches(const FSPattern &pattern) const
+{
+    if (pattern.glob[0] == '/') {
+        printf("Abs matching %s and %s\n", absName().c_str(), pattern.glob.c_str());
+       return pattern.match(absName());
+    } else {
+        printf("Rel matching %s and %s\n", relName().c_str(), pattern.glob.c_str());
+        return pattern.match(relName());
+    }
+}
+
 FSBlock *
 FSPath::ptr() const
 {
@@ -105,7 +117,7 @@ FSPath::last() const
 }
 
 string
-FSPath::name() const
+FSPath::absName() const
 {
     string result;
 
@@ -116,6 +128,26 @@ FSPath::name() const
     }
 
     return result.empty() ? "/" : result;
+}
+
+string
+FSPath::relName(const FSPath &root) const
+{
+    string result;
+
+    for (auto &node : refs(root.ref)) {
+
+        auto name = fs->blockPtr(node)->getName();
+        result = result.empty() ? name.cpp_str() : result + "/" + name.cpp_str();
+    }
+
+    return result;
+}
+
+string
+FSPath::relName() const
+{
+    return relName(fs->pwd());
 }
 
 fs::path
@@ -132,14 +164,14 @@ FSPath::getPath() const
 }
 
 std::vector<Block>
-FSPath::refs() const
+FSPath::refs(Block root) const
 {
     std::vector<Block> result;
     std::set<Block> visited;
     
     auto block = ptr();
 
-    while (block) {
+    while (block && block->nr != root) {
 
         // Break the loop if this block has an invalid type
         if (!fs->hashableBlockPtr(block->nr)) break;
@@ -444,7 +476,7 @@ FSPath::collectFiles(const FSOpt &opt) const
 
 std::ostream &operator<<(std::ostream &os, const FSPath &path) {
 
-    os << path.name();
+    os << path.absName();
     return os;
 }
 

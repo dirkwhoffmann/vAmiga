@@ -117,7 +117,7 @@ FSName::path() const
     return Host::sanitize(str);
 }
 
-FSPattern::FSPattern(const string glob)
+FSPattern::FSPattern(const string glob) : glob(glob)
 {
     // Create regex string
     std::string re = "^";
@@ -150,7 +150,7 @@ FSPattern::FSPattern(const string glob)
 }
 
 bool
-FSPattern::match(const FSName &name)
+FSPattern::match(const FSString &name) const
 {
     return std::regex_match(name.cpp_str(), regex);
 }

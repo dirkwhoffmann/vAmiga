@@ -135,7 +135,7 @@ Console::operator<<(const FSName &value)
 Console&
 Console::operator<<(const FSPath &value)
 {
-    *this << value.name();
+    *this << value.absName();
     return *this;
 }
 
