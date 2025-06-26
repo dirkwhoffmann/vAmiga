@@ -58,6 +58,32 @@ NavigatorConsole::pressReturn(bool shift)
     Console::pressReturn(shift);
 }
 
+void
+NavigatorConsole::autoComplete(Tokens &argv)
+{
+    RSCommand *current = &getRoot();
+    string prefix, token;
+
+    for (auto it = argv.begin(); current && it != argv.end(); it++) {
+
+        // Auto-complete the command tokens first
+        if (current->autoComplete(*it)) {
+
+            current = current->seek(*it);
+            continue;
+        }
+
+        // After that, auto-complete with a file name
+        auto pattern = FSPattern(*it + "*");
+        
+        std::vector<string> matches;
+        fs.collect(fs.pwd(), matches,
+                   { .filter = [&](const FSPath &item) { return pattern.match(item.last()); } });
+        if (!matches.empty()) *it = util::commonPrefix(matches);
+        break;
+    }
+}
+
 Block
 NavigatorConsole::parseBlock(const string &argv)
 {

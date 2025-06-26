@@ -153,8 +153,8 @@ struct RSCommand {
 
 public:
 
-    // Automatically completes a partial token string
-    string autoComplete(const string& token);
+    // Auto-completes a partial token string (returns the number of matches)
+    isize autoComplete(string &token);
 
 private:
 

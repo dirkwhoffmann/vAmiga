@@ -184,18 +184,16 @@ RSCommand::filterPrefix(const string& prefix) const
     return result;
 }
 
-string
-RSCommand::autoComplete(const string& token)
+isize
+RSCommand::autoComplete(string &token)
 {
-    string result;
+    std::vector<string> tokens;
 
     auto matches = filterPrefix(token);
-
-    std::vector<string> tokens;
     for (auto &it : matches) { tokens.push_back(it->name); }
 
-    result = util::commonPrefix(tokens);
-    return result.size() >= token.size() ? result : token;
+    if (!tokens.empty()) token = util::commonPrefix(tokens);
+    return  matches.size();
 }
 
 void

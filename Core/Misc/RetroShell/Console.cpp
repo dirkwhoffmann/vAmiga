@@ -526,7 +526,7 @@ Console::autoComplete(Tokens &argv)
 
     for (auto it = argv.begin(); current && it != argv.end(); it++) {
 
-        *it = current->autoComplete(*it);
+        current->autoComplete(*it);
         current = current->seek(*it);
     }
 }

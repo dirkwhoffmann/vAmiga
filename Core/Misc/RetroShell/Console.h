@@ -268,7 +268,7 @@ protected:
     Tokens split(const string& userInput);
 
     // Auto-completes an argument list
-    void autoComplete(Tokens &argv);
+    virtual void autoComplete(Tokens &argv);
 
     // Strips off the command tokens and returns a pointer to the command
     RSCommand *seekCommand(std::vector<string> &argv);
@@ -403,6 +403,7 @@ class NavigatorConsole final : public Console
     void welcome() override;
     void printHelp(isize tab = 0) override;
     void pressReturn(bool shift) override;
+    void autoComplete(Tokens &argv) override;
 
 
     //
