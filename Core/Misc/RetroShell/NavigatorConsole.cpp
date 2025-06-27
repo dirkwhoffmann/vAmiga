@@ -93,8 +93,8 @@ NavigatorConsole::autoComplete(Tokens &argv)
 
     std::vector<string> matches;
     fs.collect(fs.pwd(), matches, {
-        .filter = [&](const FSPath &item) { return pattern.match(item.last()); },
-        .recursive = false
+        .recursive = false,
+        .deprecatedFilter = [&](const FSPath &item) { return pattern.match(item.last()); }
     });
     printf("Matches for %s\n", last.c_str());
     for (auto &it : matches) printf("  Match: %s\n", it.c_str());
@@ -123,9 +123,9 @@ NavigatorConsole::help(std::ostream &os, const Tokens &argv)
         FSOpt opt = {
 
             .recursive = false,
-            .sort = sort::dafa,
+            .deprecatedSort = sort::dafa,
 
-            .filter = [&](const FSPath &item) {
+            .deprecatedFilter = [&](const FSPath &item) {
 
                 return item.last().cpp_str().starts_with(args.back());
             },
@@ -675,9 +675,9 @@ NavigatorConsole::initCommands(RSCommand &root)
             FSOpt opt = {
 
                 .recursive = r,
-                .sort = sort::dafa,
+                .deprecatedSort = sort::dafa,
 
-                .filter = [&](const FSPath &item) {
+                .deprecatedFilter = [&](const FSPath &item) {
 
                     return (!d || item.isDirectory()) && (!f || item.isFile());
                 },
@@ -715,9 +715,9 @@ NavigatorConsole::initCommands(RSCommand &root)
             FSOpt opt = {
 
                 .recursive = r,
-                .sort = s ? sort::alpha : sort::none,
+                .deprecatedSort = s ? sort::alpha : sort::none,
 
-                .filter = [&](const FSPath &item) {
+                .deprecatedFilter = [&](const FSPath &item) {
 
                     return (!d || item.isDirectory()) && (!f || item.isFile());
                 },
@@ -771,9 +771,9 @@ NavigatorConsole::initCommands(RSCommand &root)
             FSOpt opt = {
 
                 .recursive = r,
-                .sort = s ? sort::alpha : sort::none,
+                .deprecatedSort = s ? sort::alpha : sort::none,
 
-                .filter = [&](const FSPath &item) {
+                .deprecatedFilter = [&](const FSPath &item) {
 
                     return item.matches(pattern) && //  pattern.match(item.last()) &&
                     (!d || item.isDirectory()) &&

@@ -441,7 +441,7 @@ FSPath::collect(const FSOpt &opt) const
     while (remainingItems.size() > 0) {
 
         auto it = FSPath(fs, remainingItems.top());
-        if (opt.accept(it)) result.push_back(it);
+        if (opt.deprecatedAccept(it)) result.push_back(it);
         remainingItems.pop();
 
         // Add subdirectory items to the queue
@@ -449,7 +449,7 @@ FSPath::collect(const FSOpt &opt) const
     }
 
     // Sort items
-    if (opt.sort) { std::sort(result.begin(), result.end(), opt.sort); }
+    if (opt.deprecatedSort) { std::sort(result.begin(), result.end(), opt.deprecatedSort); }
 
     return result;
 }

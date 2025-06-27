@@ -9,6 +9,7 @@ FSDescriptors.cpp
 FSObjects.cpp
 FSBlock.cpp
 FSPath.cpp
+FSTree.cpp
 MutableFileSystem.cpp
 
 )

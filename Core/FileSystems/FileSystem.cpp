@@ -535,7 +535,7 @@ FileSystem::list(std::ostream &os, const FSPath &path, const FSOpt &opt) const
 {
     // Collect directories
     std::vector<FSPath> directories;
-    if (opt.recursive) { directories = path.collectDirs({ .sort = sort::alpha }); }
+    if (opt.recursive) { directories = path.collectDirs({ .deprecatedSort = sort::alpha }); }
     directories.insert(directories.begin(), path);
 
     // Remove recursive flag from the options
@@ -580,6 +580,38 @@ FileSystem::list(std::ostream &os, const FSPath &path, const FSOpt &opt) const
             }
         }
     }
+}
+
+FSTree
+FileSystem::traverse(const FSPath &path, const FSOpt &opt) const
+{
+    assert(path.isRegular());
+
+    FSTree tree(path.ref);
+
+    std::vector<FSPath> result;
+    std::set<Block> visited;
+
+    // Collect the blocks for all items in this directory
+    std::stack<Block> remainingItems;
+    collectHashedRefs(path.ref, remainingItems, visited);
+
+    // Move the collected items to the result list
+    while (remainingItems.size() > 0) {
+
+        auto it = remainingItems.top();
+        if (opt.accept(it)) tree.children.push_back(it);
+        remainingItems.pop();
+
+        // Add subdirectory items to the queue
+        if (opt.recursive) collectHashedRefs(it, remainingItems, visited);
+    }
+
+    // Sort items
+    tree.sort(opt.sort);
+    // if (opt.sort) { std::sort(tree.children.begin(), tree.children.end(), opt.sort); }
+
+    return tree;
 }
 
 void

@@ -14,6 +14,7 @@
 #include "FSDescriptors.h"
 #include "FSObjects.h"
 #include "FSPath.h"
+#include "FSTree.h"
 #include "BlockStorage.h"
 #include "ADFFile.h"
 #include "HDFFile.h"
@@ -285,6 +286,9 @@ public:
     //
     
 public:
+
+    // Creates a node tree resembling the directory structure
+    FSTree traverse(const FSPath &path, const FSOpt &opt = {}) const;
 
     // Returns a collection of nodes for all items in a directory
     void collect(const FSPath &path, std::vector<FSPath> &result, const FSOpt &opt = {}) const throws;

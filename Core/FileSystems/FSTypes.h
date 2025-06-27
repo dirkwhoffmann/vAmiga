@@ -16,19 +16,22 @@ namespace vamiga {
 struct FSBlock;
 struct FSPath;
 typedef u32 Block;
+typedef std::function<bool(Block)> FSBlockFilter;
 typedef std::function<bool(const FSPath &)> FSPathFilter;
 typedef std::function<string(const FSPath &)> FSPathFormatter;
 
 struct FSOpt
 {
     bool recursive = false;
-    // bool sort = false;
-    std::function<bool(const FSPath &, const FSPath &)> sort;
-    FSPathFilter filter;
+    std::function<bool(Block, Block)> sort;
+    std::function<bool(const FSPath &, const FSPath &)> deprecatedSort;
+    FSBlockFilter filter;
+    FSPathFilter deprecatedFilter;
     FSPathFormatter formatter;
 
-    bool accept(const FSPath &p) const { return filter ? filter(p) : true; }
-    bool skip(const FSPath &p) const { return filter ? !filter(p) : false; }
+    bool accept(Block b) const { return filter ? filter(b) : true; }
+    bool deprecatedAccept(const FSPath &p) const { return deprecatedFilter ? deprecatedFilter(p) : true; }
+    bool skip(const FSPath &p) const { return deprecatedFilter ? !deprecatedFilter(p) : false; }
 
     /*
     static std::function<bool(const FSPath &, const FSPath &)> dafa;
