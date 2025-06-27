@@ -33,10 +33,7 @@ struct FSOpt
     bool accept(FSBlock &b) const { return filter ? filter(b) : true; }
 
     // DEPRECATED
-    std::function<bool(const FSNode &, const FSNode &)> deprecatedSort;
-    FSPathFilter deprecatedFilter;
-    // FSPathFormatter deprecatedFormatter;
-    bool deprecatedAccept(const FSNode &p) const { return deprecatedFilter ? deprecatedFilter(p) : true; }
+    // std::function<bool(const FSNode &, const FSNode &)> deprecatedSort;
 };
 
 enum class FSVolumeType : long

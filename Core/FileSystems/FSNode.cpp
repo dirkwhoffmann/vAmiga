@@ -139,7 +139,7 @@ FSNode::relName(const FSNode &root) const
 string
 FSNode::relName() const
 {
-    return relName(fs->pwd());
+    return relName(fs->oldpwd());
 }
 
 fs::path
@@ -226,7 +226,7 @@ FSNode::seek(const FSName &name) const
     if (name == "")   return *this;
     if (name == ".")  return *this;
     if (name == "..") return parent();
-    if (name == "/")  return fs->rootDir();
+    if (name == "/")  return fs->oldRootDir();
 
     // Only proceed if a hash table is present
     if (cdb && cdb->hashTableSize() != 0) {
@@ -276,7 +276,7 @@ FSNode::seek(const std::vector<string> &name) const
 FSNode
 FSNode::seek(const fs::path &name) const
 {
-    FSNode result = fs->rootDir();
+    FSNode result = fs->oldRootDir();
     for (const auto &it : name) { result = result.seek(FSName(it)); }
     return result;
 }
@@ -433,7 +433,7 @@ FSNode::collect(const FSOpt &opt) const
     while (remainingItems.size() > 0) {
 
         auto it = FSNode(fs, remainingItems.top());
-        if (opt.deprecatedAccept(it)) result.push_back(it);
+        if (opt.accept(*it.ptr())) result.push_back(it);
         remainingItems.pop();
 
         // Add subdirectory items to the queue
@@ -441,7 +441,7 @@ FSNode::collect(const FSOpt &opt) const
     }
 
     // Sort items
-    if (opt.deprecatedSort) { std::sort(result.begin(), result.end(), opt.deprecatedSort); }
+    // if (opt.deprecatedSort) { std::sort(result.begin(), result.end(), opt.deprecatedSort); }
 
     return result;
 }

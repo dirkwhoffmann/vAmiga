@@ -175,13 +175,13 @@ FSBlock::pathName() const
 string
 FSBlock::absName() const
 {
-    return relName(*fs->rootDir().ptr());
+    return relName(*fs->rootDir());
 }
 
 string
 FSBlock::relName() const
 {
-    return relName(*fs->pwd().ptr());
+    return relName(fs->pwd());
 }
 
 string
@@ -191,12 +191,24 @@ FSBlock::relName(const FSBlock &top) const
 
     auto nodes = fs->collect(*this, [](FSBlock *node) { return node->getParentDirBlock(); });
 
-    for (auto it = nodes.rbegin(); it != nodes.rend(); it++) {
+    for (auto &it : nodes) {
 
-        result += (*it)->pathName();
-        if ((*it)->nr == top.nr) break;
+        auto name = it->pathName();
+        result =name + (result.empty() || name == "/" ? "" : "/") + result;
     }
     return result;
+}
+
+bool
+FSBlock::matches(const FSPattern &pattern) const
+{
+    if (pattern.glob[0] == '/') {
+        printf("Abs matching %s and %s\n", absName().c_str(), pattern.glob.c_str());
+       return pattern.match(absName());
+    } else {
+        printf("Rel matching %s and %s\n", relName().c_str(), pattern.glob.c_str());
+        return pattern.match(relName());
+    }
 }
 
 isize

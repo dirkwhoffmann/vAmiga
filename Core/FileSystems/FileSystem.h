@@ -165,8 +165,8 @@ public:
     FSBlock *blockPtr(Block nr) const;
 
     // Queries a pointer to a block of a certain type (may return nullptr)
-    [[deprecated]] FSBlock *bootBlockPtr(Block nr) const;
-    [[deprecated]] FSBlock *rootBlockPtr(Block nr) const;
+    // FSBlock *bootBlockPtr(Block nr) const;
+    // FSBlock *rootBlockPtr(Block nr) const;
     FSBlock *bitmapBlockPtr(Block nr) const;
     FSBlock *bitmapExtBlockPtr(Block nr) const;
     FSBlock *userDirBlockPtr(Block nr) const;
@@ -208,7 +208,8 @@ protected:
 public:
 
     // Returns the root of the directory tree
-    FSNode rootDir() const;
+    FSBlock *rootDir() const;
+    FSNode oldRootDir() const;
 
 public:
 
@@ -230,16 +231,16 @@ public:
     FSNode seekFile(const FSNode &top, const fs::path &path) const { return top.seekFile(path); }
 
     // Seeks an item in the directory tree starting from the root
-    FSNode seek(const fs::path &path) const { return seek(pwd(), path); }
-    FSNode seekDir(const fs::path &path) const { return seekDir(pwd(), path); }
-    FSNode seekFile(const fs::path &path) const { return seekFile(pwd(), path); }
+    FSNode seek(const fs::path &path) const { return seek(oldpwd(), path); }
+    FSNode seekDir(const fs::path &path) const { return seekDir(oldpwd(), path); }
+    FSNode seekFile(const fs::path &path) const { return seekFile(oldpwd(), path); }
 
     // Checks if a an item exists in the directory tree
     bool exists(const FSNode &top, const fs::path &path) const;
-    bool exists(const fs::path &path) const { return exists(pwd(), path); }
+    bool exists(const fs::path &path) const { return exists(oldpwd(), path); }
 
     // Lists the contents of a directory
-    void list(std::ostream &os, const FSNode &path, const FSOpt &opt = {}) const;
+    void list(std::ostream &os, const FSBlock &path, const FSOpt &opt = {}) const;
     void list(std::ostream &os, const FSOpt &opt = {}) const { return list(os, pwd(), opt); }
 
     // Changes the working directory
@@ -248,7 +249,8 @@ public:
     void cd(const string &path);
 
     // Returns the working directory
-    FSNode pwd() const { return FSNode(this, curr); }
+    FSNode oldpwd() const { return FSNode(this, curr); }
+    FSBlock &pwd() const { return *blockPtr(curr); }
 
     // Collects the data blocks belonging to a file
     std::vector<Block> dataBlocks(const FSNode &path);
@@ -300,7 +302,7 @@ public:
 public:
 
     // Creates a node tree resembling the directory structure
-    FSTree traverse(const FSNode &path, const FSOpt &opt = {}) const;
+    FSTree traverse(const FSBlock &path, const FSOpt &opt = {}) const;
 
     // Follows a linked list and collects all nodes
     std::vector<FSBlock *> collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> next);

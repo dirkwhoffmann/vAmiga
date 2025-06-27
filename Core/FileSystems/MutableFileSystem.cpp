@@ -52,7 +52,7 @@ MutableFileSystem::init(const FileSystemDescriptor &layout, const fs::path &path
     if (!path.empty()) {
         
         // Add all files
-        import(rootDir(), path);
+        import(oldRootDir(), path);
 
         // Assign device name
         setName(FSName(path.filename().string()));
@@ -889,7 +889,7 @@ MutableFileSystem::exportDirectory(const fs::path &path, bool createDir) const
     }
     
     // Collect all files and directories
-    auto items = rootDir().collect();
+    auto items = oldRootDir().collect();
     /*
     std::vector<Block> items;
     collect(rootDir(), items);

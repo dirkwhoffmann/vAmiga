@@ -82,6 +82,9 @@ public:
     string relName() const;
     string relName(const FSBlock &top) const;
 
+    // Checks if the path matches a search pattern
+    bool matches(const FSPattern &pattern) const;
+    
     // Returns the size of this block in bytes (usually 512)
     isize bsize() const;
 

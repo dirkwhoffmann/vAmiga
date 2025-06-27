@@ -121,7 +121,7 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
     curr = rootBlock;
 
     // Check integrity (may throw)
-    (void)pwd();
+    (void)oldpwd();
 
     debug(FS_DEBUG, "Success\n");
 }
@@ -309,6 +309,7 @@ FileSystem::blockPtr(Block nr) const
     return const_cast<FSBlock *>(storage.read(nr));
 }
 
+/*
 FSBlock *
 FileSystem::bootBlockPtr(Block nr) const
 {
@@ -326,6 +327,7 @@ FileSystem::rootBlockPtr(Block nr) const
     }
     return nullptr;
 }
+*/
 
 FSBlock *
 FileSystem::bitmapBlockPtr(Block nr) const
@@ -468,8 +470,14 @@ FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) const
     return bm;
 }
 
-FSNode
+FSBlock *
 FileSystem::rootDir() const
+{
+    return blockPtr(rootBlock);
+}
+
+FSNode
+FileSystem::oldRootDir() const
 {
     return FSNode(this, rootBlock);
 }
@@ -564,7 +572,7 @@ FileSystem::exists(const FSNode &top, const fs::path &path) const
 void
 FileSystem::cd(const FSName &name)
 {
-    cd(pwd().seek(name));
+    cd(oldpwd().seek(name));
 }
 
 void
@@ -576,7 +584,7 @@ FileSystem::cd(const FSNode &path)
 void
 FileSystem::cd(const string &path)
 {
-    cd(pwd().seek(path));
+    cd(oldpwd().seek(path));
 }
 
 std::vector<Block>
@@ -612,7 +620,7 @@ FileSystem::dataBlocks(const FSNode &path)
 }
 
 void
-FileSystem::list(std::ostream &os, const FSNode &path, const FSOpt &opt) const
+FileSystem::list(std::ostream &os, const FSBlock &path, const FSOpt &opt) const
 {
     // Collect all directory items to list
     auto tree = traverse(path, opt);
@@ -628,8 +636,8 @@ FileSystem::list(std::ostream &os, const FSNode &path, const FSOpt &opt) const
         // Print header
         if (opt.recursive) {
 
-            if (i) os << std::endl;
-            if (column) os << std::endl;
+            if (i++) os << std::endl;
+            if (column) { os << std::endl; column = 0; }
             os << "Directory " << t.node->absName() << ":" << std::endl << std::endl;
         }
 
@@ -662,18 +670,18 @@ FileSystem::list(std::ostream &os, const FSNode &path, const FSOpt &opt) const
 }
 
 FSTree
-FileSystem::traverse(const FSNode &path, const FSOpt &opt) const
+FileSystem::traverse(const FSBlock &path, const FSOpt &opt) const
 {
     assert(path.isRegular());
 
     // printf("traverse(%s)\n", path.last().c_str());
 
-    FSTree tree(path.ptr());
+    FSTree tree(blockPtr(path.nr));
 
     // Collect the blocks for all items in this directory
     std::stack<Block> remainingItems;
     std::set<Block> visited;
-    collectHashedRefs(path.ref, remainingItems, visited);
+    collectHashedRefs(path.nr, remainingItems, visited);
 
     // Move the collected items to the result list
     while (remainingItems.size() > 0) {
@@ -693,7 +701,7 @@ FileSystem::traverse(const FSNode &path, const FSOpt &opt) const
     if (opt.recursive) {
 
         for (auto &it : tree.children) {
-            if (it.node->isDirectory()) it = traverse(FSNode(this, it.node->nr));
+            if (it.node->isDirectory()) it = traverse(*it.node, opt);
         }
     }
 
@@ -705,8 +713,6 @@ FileSystem::collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> nex
 {
     std::vector<FSBlock *> result;
     std::set<Block> visited;
-
-    // auto block = blockPtr(node.nr);
 
     for (auto block = blockPtr(node.nr); block != nullptr; block = next(block)) {
 

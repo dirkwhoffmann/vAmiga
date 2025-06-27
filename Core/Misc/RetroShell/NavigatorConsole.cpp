@@ -33,7 +33,7 @@ NavigatorConsole::getPrompt()
 
         auto fsName = fs.getName();
         if (!fsName.empty()) ss << " " << fsName << ":";
-        if (fs.pwd().isDirectory()) ss << " " << fs.pwd();
+        if (fs.oldpwd().isDirectory()) ss << " " << fs.oldpwd();
     }
 
     ss << "> ";
@@ -92,9 +92,9 @@ NavigatorConsole::autoComplete(Tokens &argv)
     auto pattern = FSPattern(last + "*");
 
     std::vector<string> matches;
-    fs.collect(fs.pwd(), matches, {
+    fs.collect(fs.oldpwd(), matches, {
         .recursive = false,
-        .deprecatedFilter = [&](const FSNode &item) { return pattern.match(item.last()); }
+        .filter = [&](const FSBlock &item) { return pattern.match(item.pathName()); }
     });
     printf("Matches for %s\n", last.c_str());
     for (auto &it : matches) printf("  Match: %s\n", it.c_str());
@@ -174,7 +174,7 @@ NavigatorConsole::parseBlock(const string &argv)
 Block
 NavigatorConsole::parseBlock(const Arguments &argv, const string &token)
 {
-    return parseBlock(argv, token, fs.pwd().ref);
+    return parseBlock(argv, token, fs.oldpwd().ref);
 }
 
 Block
@@ -200,7 +200,7 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token)
 
     try {
         // Try to find the directory by name
-        return fs.pwd().seek(argv.at(token));
+        return fs.oldpwd().seek(argv.at(token));
 
     } catch (...) {
 
@@ -225,7 +225,7 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token, const FS
 FSNode
 NavigatorConsole::parseFile(const Arguments &argv, const string &token)
 {
-    return parseFile(argv, token, fs.pwd());
+    return parseFile(argv, token, fs.oldpwd());
 }
 
 FSNode
@@ -245,7 +245,7 @@ NavigatorConsole::parseFile(const Arguments &argv, const string &token, const FS
 FSNode
 NavigatorConsole::parseDirectory(const Arguments &argv, const string &token)
 {
-    return parseDirectory(argv, token, fs.pwd());
+    return parseDirectory(argv, token, fs.oldpwd());
 }
 
 FSNode
@@ -282,7 +282,7 @@ NavigatorConsole::matchPath(const string &path, Tokens &notFound)
     auto tokens = util::split(path, '/');
     if (!path.empty() && path[0] == '/') { tokens.insert(tokens.begin(), "/"); }
 
-    auto p = fs.pwd();
+    auto p = fs.oldpwd();
     while (!tokens.empty()) {
 
         try { p = p.seek(FSName(tokens.front())); } catch (...) { break; }
@@ -536,7 +536,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             bool contents = args.contains("c");
 
             auto path = host.makeAbsolute(args.at("path"));
-            fs.import(fs.pwd(), path, recursive, contents);
+            fs.import(fs.oldpwd(), path, recursive, contents);
         }
     });
 
@@ -661,7 +661,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto path = parsePath(args, "path", fs.rootDir());
+            auto path = parsePath(args, "path", fs.oldRootDir());
             fs.cd(path);
         }
     });
@@ -697,7 +697,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 }
             };
 
-            fs.list(os, path, opt);
+            fs.list(os, *path.ptr(), opt);
         }
     });
 
@@ -748,7 +748,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 }
             };
 
-            fs.list(os, path, opt);
+            fs.list(os, *path.ptr(), opt);
         }
     });
 
@@ -768,7 +768,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             auto name = args.at("name");
             auto pattern = FSPattern(name);
             auto abs = name[0] == '/';
-            auto path = parsePath(args, "path", fs.pwd());
+            auto path = parsePath(args, "path", fs.oldpwd());
             auto d = args.contains("d");
             auto f = args.contains("f");
             auto r = args.contains("r");
@@ -782,7 +782,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                 // .deprecatedSort = s ? sort::deprecatedAlpha : sort::deprecatedNone,
 
-                .deprecatedFilter = [&](const FSNode &item) {
+                .filter = [&](const FSBlock &item) {
 
                     return item.matches(pattern) && //  pattern.match(item.last()) &&
                     (!d || item.isDirectory()) &&
@@ -816,7 +816,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto file = parsePath(args, "path", fs.pwd());
+            auto file = parsePath(args, "path", fs.oldpwd());
             if (!file.isFile()) {
                 throw AppError(Fault::FS_NOT_A_FILE, "Block " + std::to_string(file.ref));
             }
@@ -884,7 +884,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto file = parsePath(args, "path", fs.pwd());
+            auto file = parsePath(args, "path", fs.oldpwd());
             auto opt = parseDumpOpts(args);
 
             Buffer<u8> buffer;
@@ -927,7 +927,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto nr = parseBlock(args, "nr", fs.pwd().ref);
+            auto nr = parseBlock(args, "nr", fs.oldpwd().ref);
             auto opt = parseDumpOpts(args);
 
             if (auto ptr = fs.blockPtr(nr); ptr) {
