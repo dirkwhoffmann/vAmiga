@@ -371,8 +371,8 @@ MutableFileSystem::rectifyAllocationMap()
     }
 }
 
-FSPath
-MutableFileSystem::createDir(const FSPath &at, const FSName &name)
+FSNode
+MutableFileSystem::createDir(const FSNode &at, const FSName &name)
 {
     if (at.isDirectory()) {
 
@@ -380,15 +380,15 @@ MutableFileSystem::createDir(const FSPath &at, const FSName &name)
 
             block->setParentDirRef(at.ref);
             addHashRef(at, block->nr);
-            return FSPath(this, block);
+            return FSNode(this, block);
         }
         throw AppError(Fault::FS_OUT_OF_SPACE);
     }
     throw AppError(Fault::FS_NOT_A_DIRECTORY, at.absName());
 }
 
-FSPath
-MutableFileSystem::createFile(const FSPath &at, const FSName &name)
+FSNode
+MutableFileSystem::createFile(const FSNode &at, const FSName &name)
 {
     if (at.isDirectory()) {
 
@@ -396,21 +396,21 @@ MutableFileSystem::createFile(const FSPath &at, const FSName &name)
 
             block->setParentDirRef(at.ref);
             addHashRef(at, block->nr);
-            return FSPath(this, block);
+            return FSNode(this, block);
         }
         throw AppError(Fault::FS_OUT_OF_SPACE);
     }
     throw AppError(Fault::FS_NOT_A_DIRECTORY, at.absName());
 }
 
-FSPath
-MutableFileSystem::createFile(const FSPath &at, const FSName &name, const Buffer<u8> &buf)
+FSNode
+MutableFileSystem::createFile(const FSNode &at, const FSName &name, const Buffer<u8> &buf)
 {
     return createFile(at, name, buf.ptr, buf.size);
 }
 
-FSPath
-MutableFileSystem::createFile(const FSPath &at, const FSName &name, const u8 *buf, isize size)
+FSNode
+MutableFileSystem::createFile(const FSNode &at, const FSName &name, const u8 *buf, isize size)
 {
     assert(buf);
 
@@ -455,14 +455,14 @@ MutableFileSystem::createFile(const FSPath &at, const FSName &name, const u8 *bu
     return file;
 }
 
-FSPath
-MutableFileSystem::createFile(const FSPath &at, const FSName &name, const string &str)
+FSNode
+MutableFileSystem::createFile(const FSNode &at, const FSName &name, const string &str)
 {
     return createFile(at, name, (const u8 *)str.c_str(), (isize)str.size());
 }
 
 void
-MutableFileSystem::rename(const FSPath &item, const FSName &name)
+MutableFileSystem::rename(const FSNode &item, const FSName &name)
 {
     // Renaming the root node renames the name of the file system
     if (item.isRoot()) { setName(name); return; }
@@ -472,7 +472,7 @@ MutableFileSystem::rename(const FSPath &item, const FSName &name)
 }
 
 void
-MutableFileSystem::move(const FSPath &item, const FSPath &dest, const FSName &name)
+MutableFileSystem::move(const FSNode &item, const FSNode &dest, const FSName &name)
 {
     if (!dest.isDirectory()) throw AppError(Fault::FS_NOT_A_DIRECTORY, dest.absName());
 
@@ -490,13 +490,13 @@ MutableFileSystem::move(const FSPath &item, const FSPath &dest, const FSName &na
 }
 
 void
-MutableFileSystem::copy(const FSPath &item, const FSPath &dest)
+MutableFileSystem::copy(const FSNode &item, const FSNode &dest)
 {
     copy(item, dest, item.last());
 }
 
 void
-MutableFileSystem::copy(const FSPath &item, const FSPath &dest, const FSName &name)
+MutableFileSystem::copy(const FSNode &item, const FSNode &dest, const FSName &name)
 {
     if (!item.isFile()) throw AppError(Fault::FS_NOT_A_FILE, item.absName());
     if (!dest.isDirectory()) throw AppError(Fault::FS_NOT_A_DIRECTORY, dest.absName());
@@ -509,7 +509,7 @@ MutableFileSystem::copy(const FSPath &item, const FSPath &dest, const FSName &na
 }
 
 void
-MutableFileSystem::deleteFile(const FSPath &item)
+MutableFileSystem::deleteFile(const FSNode &item)
 {
     if (!item.isFile()) return;
 
@@ -529,7 +529,7 @@ MutableFileSystem::deleteFile(const FSPath &item)
 }
 
 void
-MutableFileSystem::addToHashTable(const FSPath &item)
+MutableFileSystem::addToHashTable(const FSNode &item)
 {
     addToHashTable(item.parent().ref, item.ref);
 }
@@ -557,7 +557,7 @@ MutableFileSystem::addToHashTable(Block parent, Block ref)
 }
 
 void
-MutableFileSystem::deleteFromHashTable(const FSPath &item)
+MutableFileSystem::deleteFromHashTable(const FSNode &item)
 {
     deleteFromHashTable(item.parent().ref, item.ref);
 }
@@ -594,7 +594,7 @@ MutableFileSystem::deleteFromHashTable(Block parent, Block ref)
 }
 
 void
-MutableFileSystem::addHashRef(const FSPath &at, Block nr)
+MutableFileSystem::addHashRef(const FSNode &at, Block nr)
 {
     if (FSBlock *block = hashableBlockPtr(nr)) {
         addHashRef(at, block);
@@ -602,7 +602,7 @@ MutableFileSystem::addHashRef(const FSPath &at, Block nr)
 }
 
 void
-MutableFileSystem::addHashRef(const FSPath &at, FSBlock *newBlock)
+MutableFileSystem::addHashRef(const FSNode &at, FSBlock *newBlock)
 {
     // Only proceed if a hash table is present
     FSBlock *bp = blockPtr(at.ref);
@@ -728,7 +728,7 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
 }
 
 void
-MutableFileSystem::import(const FSPath &at, const fs::path &path, bool recursive, bool contents)
+MutableFileSystem::import(const FSNode &at, const fs::path &path, bool recursive, bool contents)
 {
     fs::directory_entry dir;
 
@@ -756,7 +756,7 @@ MutableFileSystem::import(const FSPath &at, const fs::path &path, bool recursive
 }
 
 void
-MutableFileSystem::import(const FSPath &at, const fs::directory_entry &entry, bool recursive)
+MutableFileSystem::import(const FSNode &at, const fs::directory_entry &entry, bool recursive)
 {
     auto isHidden = [&](const fs::path &path) {
 

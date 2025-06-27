@@ -183,7 +183,7 @@ public:
     Console &operator<<(const std::vector<string> &vec);
     Console &operator<<(std::stringstream &stream);
     Console &operator<<(const FSName &value);
-    Console &operator<<(const FSPath &value);
+    Console &operator<<(const FSNode &value);
     Console &operator<<(const vspace &value);
 
     // Returns the prompt
@@ -415,18 +415,18 @@ class NavigatorConsole final : public Console
     Block parseBlock(const string &arg);
     Block parseBlock(const Arguments &argv, const string &token);
     Block parseBlock(const Arguments &argv, const string &token, Block fallback);
-    FSPath parsePath(const Arguments &argv, const string &token);
-    FSPath parsePath(const Arguments &argv, const string &token, const FSPath &fallback);
-    FSPath parseFile(const Arguments &argv, const string &token);
-    FSPath parseFile(const Arguments &argv, const string &token, const FSPath &fallback);
-    FSPath parseDirectory(const Arguments &argv, const string &token);
-    FSPath parseDirectory(const Arguments &argv, const string &token, const FSPath &fallback);
+    FSNode parsePath(const Arguments &argv, const string &token);
+    FSNode parsePath(const Arguments &argv, const string &token, const FSNode &fallback);
+    FSNode parseFile(const Arguments &argv, const string &token);
+    FSNode parseFile(const Arguments &argv, const string &token, const FSNode &fallback);
+    FSNode parseDirectory(const Arguments &argv, const string &token);
+    FSNode parseDirectory(const Arguments &argv, const string &token, const FSNode &fallback);
     util::DumpOpt parseDumpOpts(const Arguments &argv);
 
     // Experimental
-    FSPath matchPath(const Arguments &argv, const string &token, Tokens &notFound);
-    FSPath matchPath(const Arguments &argv, const string &token, Tokens &notFound, const FSPath &fallback);
-    FSPath matchPath(const string &path, Tokens &notFound);
+    FSNode matchPath(const Arguments &argv, const string &token, Tokens &notFound);
+    FSNode matchPath(const Arguments &argv, const string &token, Tokens &notFound, const FSNode &fallback);
+    FSNode matchPath(const string &path, Tokens &notFound);
 
 
     //

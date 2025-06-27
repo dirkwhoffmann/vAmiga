@@ -14,14 +14,14 @@
 namespace vamiga {
 
 struct FSBlock;
-struct FSPath;
+struct FSNode;
 typedef u32 Block;
 typedef std::function<bool(FSBlock &)> FSBlockFilter;
 typedef std::function<string(FSBlock &)> FSBlockFormatter;
 typedef std::function<bool(FSBlock &, FSBlock &)> FSBlockSorter;
 
-typedef std::function<bool(const FSPath &)> FSPathFilter;
-typedef std::function<string(const FSPath &)> FSPathFormatter;
+typedef std::function<bool(const FSNode &)> FSPathFilter;
+typedef std::function<string(const FSNode &)> FSPathFormatter;
 
 struct FSOpt
 {
@@ -33,10 +33,10 @@ struct FSOpt
     bool accept(FSBlock &b) const { return filter ? filter(b) : true; }
 
     // DEPRECATED
-    std::function<bool(const FSPath &, const FSPath &)> deprecatedSort;
+    std::function<bool(const FSNode &, const FSNode &)> deprecatedSort;
     FSPathFilter deprecatedFilter;
     FSPathFormatter deprecatedFormatter;
-    bool deprecatedAccept(const FSPath &p) const { return deprecatedFilter ? deprecatedFilter(p) : true; }
+    bool deprecatedAccept(const FSNode &p) const { return deprecatedFilter ? deprecatedFilter(p) : true; }
 };
 
 enum class FSVolumeType : long

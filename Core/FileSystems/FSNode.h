@@ -15,7 +15,7 @@
 
 namespace vamiga {
 
-struct FSPath
+struct FSNode
 {
     const class FileSystem *fs = nullptr;
 
@@ -23,14 +23,14 @@ struct FSPath
     Block ref;
 
     // Constructors
-    FSPath(const FileSystem *fs);
-    FSPath(const FileSystem *fs, Block dir);
-    FSPath(const FileSystem *fs, struct FSBlock *dir);
+    FSNode(const FileSystem *fs);
+    FSNode(const FileSystem *fs, Block dir);
+    FSNode(const FileSystem *fs, struct FSBlock *dir);
 
     // Operator overloads
-    FSPath &operator=(const FSPath &);
-    FSPath &operator/=(const FSName &name);
-    FSPath operator/(const FSName &name) const;
+    FSNode &operator=(const FSNode &);
+    FSNode &operator/=(const FSName &name);
+    FSNode operator/(const FSName &name) const;
 
     // Informs about where this path points to
     bool isRoot() const;
@@ -53,7 +53,7 @@ struct FSPath
     // Returns a string representation of this path
     FSName last() const; // RENAME TO name()
     string absName() const;
-    string relName(const FSPath &root) const;
+    string relName(const FSNode &root) const;
     string relName() const;
 
     // Converts the path to a host path
@@ -75,32 +75,32 @@ struct FSPath
     //
 
     // Returns the parent directory
-    FSPath parent() const;
+    FSNode parent() const;
 
     // Seeks a file or directory
-    FSPath seek(const FSName &name) const;
-    FSPath seek(const FSString &name) const;
-    FSPath seek(const std::vector<FSName> &name) const;
-    FSPath seek(const std::vector<string> &name) const;
-    FSPath seek(const fs::path &name) const;
-    FSPath seek(const string &name) const;
-    FSPath seek(const char *name) const;
+    FSNode seek(const FSName &name) const;
+    FSNode seek(const FSString &name) const;
+    FSNode seek(const std::vector<FSName> &name) const;
+    FSNode seek(const std::vector<string> &name) const;
+    FSNode seek(const fs::path &name) const;
+    FSNode seek(const string &name) const;
+    FSNode seek(const char *name) const;
 
-    FSPath seekDir(const FSName &dir) const;
-    FSPath seekDir(const FSString &dir) const;
-    FSPath seekDir(const std::vector<FSName> &dir) const;
-    FSPath seekDir(const std::vector<string> &dir) const;
-    FSPath seekDir(const fs::path &dir) const;
-    FSPath seekDir(const string &dir) const;
-    FSPath seekDir(const char *dir) const;
+    FSNode seekDir(const FSName &dir) const;
+    FSNode seekDir(const FSString &dir) const;
+    FSNode seekDir(const std::vector<FSName> &dir) const;
+    FSNode seekDir(const std::vector<string> &dir) const;
+    FSNode seekDir(const fs::path &dir) const;
+    FSNode seekDir(const string &dir) const;
+    FSNode seekDir(const char *dir) const;
 
-    FSPath seekFile(const FSName &file) const;
-    FSPath seekFile(const FSString &file) const;
-    FSPath seekFile(const std::vector<FSName> &file) const;
-    FSPath seekFile(const std::vector<string> &file) const;
-    FSPath seekFile(const fs::path &file) const;
-    FSPath seekFile(const string &file) const;
-    FSPath seekFile(const char *file) const;
+    FSNode seekFile(const FSName &file) const;
+    FSNode seekFile(const FSString &file) const;
+    FSNode seekFile(const std::vector<FSName> &file) const;
+    FSNode seekFile(const std::vector<string> &file) const;
+    FSNode seekFile(const fs::path &file) const;
+    FSNode seekFile(const string &file) const;
+    FSNode seekFile(const char *file) const;
 
     // Moves up or down in the directory tree
     void cd(const FSName &name) { ref = seekDir(name).ref; }
@@ -112,11 +112,11 @@ struct FSPath
     void cd(const char *name) { ref = seekDir(name).ref; }
 
     // Returns a collection of paths to all items in a directory
-    std::vector<FSPath> collect(const FSOpt &opt = {}) const;
-    std::vector<FSPath> collectDirs(const FSOpt &opt = {}) const;
-    std::vector<FSPath> collectFiles(const FSOpt &opt = {}) const;
+    std::vector<FSNode> collect(const FSOpt &opt = {}) const;
+    std::vector<FSNode> collectDirs(const FSOpt &opt = {}) const;
+    std::vector<FSNode> collectFiles(const FSOpt &opt = {}) const;
 
-    friend std::ostream &operator<<(std::ostream &os, const FSPath &str);
+    friend std::ostream &operator<<(std::ostream &os, const FSNode &str);
 };
 
 //
@@ -127,8 +127,8 @@ namespace sort {
 
 inline std::function<bool(const FSBlock &, const FSBlock &)> dafa = [](const FSBlock &b1, const FSBlock &b2) {
 
-    auto a = FSPath(b1.fs, b1.nr);
-    auto b = FSPath(b2.fs, b2.nr);
+    auto a = FSNode(b1.fs, b1.nr);
+    auto b = FSNode(b2.fs, b2.nr);
     if ( a.isDirectory() && !b.isDirectory()) return true;
     if (!a.isDirectory() &&  b.isDirectory()) return false;
     return a.last() < b.last();
@@ -136,27 +136,27 @@ inline std::function<bool(const FSBlock &, const FSBlock &)> dafa = [](const FSB
 
 inline std::function<bool(const FSBlock &, const FSBlock &)> alpha = [](const FSBlock &b1, const FSBlock &b2) {
 
-    auto a = FSPath(b1.fs, b1.nr);
-    auto b = FSPath(b2.fs, b2.nr);
+    auto a = FSNode(b1.fs, b1.nr);
+    auto b = FSNode(b2.fs, b2.nr);
     return a.last() < b.last();
 };
 
 inline std::function<bool(const FSBlock &, const FSBlock &)> none = nullptr;
 
 
-inline std::function<bool(const FSPath &, const FSPath &)> deprecatedDafa = [](const FSPath &a, const FSPath &b) {
+inline std::function<bool(const FSNode &, const FSNode &)> deprecatedDafa = [](const FSNode &a, const FSNode &b) {
 
     if ( a.isDirectory() && !b.isDirectory()) return true;
     if (!a.isDirectory() &&  b.isDirectory()) return false;
     return a.last() < b.last();
 };
 
-inline std::function<bool(const FSPath &, const FSPath &)> deprecatedAlpha = [](const FSPath &a, const FSPath &b) {
+inline std::function<bool(const FSNode &, const FSNode &)> deprecatedAlpha = [](const FSNode &a, const FSNode &b) {
 
     return a.last() < b.last();
 };
 
-inline std::function<bool(const FSPath &, const FSPath &)> deprecatedNone = nullptr;
+inline std::function<bool(const FSNode &, const FSNode &)> deprecatedNone = nullptr;
 
 }
 

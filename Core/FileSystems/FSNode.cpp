@@ -7,85 +7,77 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "FSPath.h"
+#include "FSNode.h"
 #include "FileSystem.h"
 #include <algorithm>
 
 namespace vamiga {
 
-FSPath::FSPath(const FileSystem *fs, Block dir) : fs(fs), ref(dir)
+FSNode::FSNode(const FileSystem *fs, Block dir) : fs(fs), ref(dir)
 {
     if (!fs->initialized()) throw AppError(Fault::FS_UNINITIALIZED);
     if (!ptr()) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 }
 
-/*
-FSPath::FSPath(const FSPath &path) : fs(path.fs), ref(path.ref)
-{
-    if (!fs->initialized()) throw AppError(Fault::FS_UNINITIALIZED);
-    if (!ptr()) throw AppError(Fault::FS_INVALID_BLOCK_REF);
-}
-*/
-
-FSPath::FSPath(const FileSystem *fs) : fs(fs), ref(0)
+FSNode::FSNode(const FileSystem *fs) : fs(fs), ref(0)
 {
     if (!fs->initialized()) throw AppError(Fault::FS_UNINITIALIZED);
     if (!ptr()) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 }
 
-FSPath::FSPath(const FileSystem *fs, FSBlock *dir) : FSPath(fs, dir->nr)
+FSNode::FSNode(const FileSystem *fs, FSBlock *dir) : FSNode(fs, dir->nr)
 {
 
 }
 
-FSPath&
-FSPath::operator=(const FSPath &path)
+FSNode&
+FSNode::operator=(const FSNode &path)
 {
     ref = path.ref;
     return *this;
 }
 
-FSPath&
-FSPath::operator/=(const FSName &name)
+FSNode&
+FSNode::operator/=(const FSName &name)
 {
     *this = seek(name);
     return *this;
 }
 
-FSPath
-FSPath::operator/(const FSName &name) const
+FSNode
+FSNode::operator/(const FSName &name) const
 {
-    FSPath result = *this;
+    FSNode result = *this;
     result /= name;
     return result;
 }
 
 bool
-FSPath::isRoot() const
+FSNode::isRoot() const
 {
     return fs->blockType(ref) == FSBlockType::ROOT_BLOCK;
 }
 
 bool
-FSPath::isFile() const
+FSNode::isFile() const
 {
     return fs->blockType(ref) == FSBlockType::FILEHEADER_BLOCK;
 }
 
 bool
-FSPath::isDirectory() const
+FSNode::isDirectory() const
 {
     return fs->blockType(ref) == FSBlockType::USERDIR_BLOCK || isRoot();
 }
 
 bool
-FSPath::isRegular() const
+FSNode::isRegular() const
 {
     return isFile() || isDirectory();
 }
 
 bool
-FSPath::isHashable() const
+FSNode::isHashable() const
 {
     return
     fs->blockType(ref) == FSBlockType::FILEHEADER_BLOCK &&
@@ -93,7 +85,7 @@ FSPath::isHashable() const
 }
 
 bool
-FSPath::matches(const FSPattern &pattern) const
+FSNode::matches(const FSPattern &pattern) const
 {
     if (pattern.glob[0] == '/') {
         printf("Abs matching %s and %s\n", absName().c_str(), pattern.glob.c_str());
@@ -105,19 +97,19 @@ FSPath::matches(const FSPattern &pattern) const
 }
 
 FSBlock *
-FSPath::ptr() const
+FSNode::ptr() const
 {
     return fs->blockPtr(ref);
 }
 
 FSName
-FSPath::last() const
+FSNode::last() const
 {
     return isRoot() ? "" : fs->blockPtr(ref)->getName();
 }
 
 string
-FSPath::absName() const
+FSNode::absName() const
 {
     string result;
 
@@ -131,7 +123,7 @@ FSPath::absName() const
 }
 
 string
-FSPath::relName(const FSPath &root) const
+FSNode::relName(const FSNode &root) const
 {
     string result;
 
@@ -145,13 +137,13 @@ FSPath::relName(const FSPath &root) const
 }
 
 string
-FSPath::relName() const
+FSNode::relName() const
 {
     return relName(fs->pwd());
 }
 
 fs::path
-FSPath::getPath() const
+FSNode::getPath() const
 {
     fs::path result;
 
@@ -164,7 +156,7 @@ FSPath::getPath() const
 }
 
 std::vector<Block>
-FSPath::refs(Block root) const
+FSNode::refs(Block root) const
 {
     std::vector<Block> result;
     std::set<Block> visited;
@@ -192,7 +184,7 @@ FSPath::refs(Block root) const
 }
 
 string
-FSPath::getProtectionBitString() const
+FSNode::getProtectionBitString() const
 {
     auto bits = ptr()->getProtectionBits();
 
@@ -218,14 +210,14 @@ FSPath::getProtectionBitString() const
     return result;
 }
 
-FSPath
-FSPath::parent() const
+FSNode
+FSNode::parent() const
 {
-    return isRoot() ? *this : FSPath(fs, fs->blockPtr(ref)->getParentDirRef());
+    return isRoot() ? *this : FSNode(fs, fs->blockPtr(ref)->getParentDirRef());
 }
 
-FSPath
-FSPath::seek(const FSName &name) const
+FSNode
+FSNode::seek(const FSName &name) const
 {
     std::set<Block> visited;
     FSBlock *cdb = ptr();
@@ -249,7 +241,7 @@ FSPath::seek(const FSName &name) const
             FSBlock *item = fs->hashableBlockPtr(ref);
             if (item == nullptr) break;
 
-            if (item->isNamed(name)) return FSPath(fs, item);
+            if (item->isNamed(name)) return FSNode(fs, item);
 
             visited.insert(ref);
             ref = item->getNextHashRef();
@@ -259,50 +251,50 @@ FSPath::seek(const FSName &name) const
     throw AppError(Fault::FS_NOT_FOUND, name.cpp_str());
 }
 
-FSPath
-FSPath::seek(const FSString &name) const
+FSNode
+FSNode::seek(const FSString &name) const
 {
     return seek(name.cpp_str());
 }
 
-FSPath
-FSPath::seek(const std::vector<FSName> &name) const
+FSNode
+FSNode::seek(const std::vector<FSName> &name) const
 {
-    FSPath result = *this;
+    FSNode result = *this;
     for (auto &it : name) { result = result.seek(it); }
     return result;
 }
 
-FSPath
-FSPath::seek(const std::vector<string> &name) const
+FSNode
+FSNode::seek(const std::vector<string> &name) const
 {
-    FSPath result = *this;
+    FSNode result = *this;
     for (auto &it : name) { result = result.seek(FSName(it)); }
     return result;
 }
 
-FSPath
-FSPath::seek(const fs::path &name) const
+FSNode
+FSNode::seek(const fs::path &name) const
 {
-    FSPath result = fs->rootDir();
+    FSNode result = fs->rootDir();
     for (const auto &it : name) { result = result.seek(FSName(it)); }
     return result;
 }
 
-FSPath
-FSPath::seek(const string &name) const
+FSNode
+FSNode::seek(const string &name) const
 {
     return seek(util::split(name, '/'));
 }
 
-FSPath
-FSPath::seek(const char *name) const
+FSNode
+FSNode::seek(const char *name) const
 {
     return seek(string(name));
 }
 
-FSPath
-FSPath::seekDir(const FSName &dir) const
+FSNode
+FSNode::seekDir(const FSName &dir) const
 {
     if (auto result = seek(dir); result.isDirectory()) {
         return result;
@@ -310,8 +302,8 @@ FSPath::seekDir(const FSName &dir) const
     throw AppError(Fault::FS_NOT_A_DIRECTORY, dir.cpp_str());
 }
 
-FSPath
-FSPath::seekDir(const FSString &dir) const
+FSNode
+FSNode::seekDir(const FSString &dir) const
 {
     if (auto result = seek(dir); result.isDirectory()) {
         return result;
@@ -319,8 +311,8 @@ FSPath::seekDir(const FSString &dir) const
     throw AppError(Fault::FS_NOT_A_DIRECTORY, dir.cpp_str());
 }
 
-FSPath
-FSPath::seekDir(const std::vector<FSName> &dir) const
+FSNode
+FSNode::seekDir(const std::vector<FSName> &dir) const
 {
     if (auto result = seek(dir); result.isDirectory()) {
         return result;
@@ -328,8 +320,8 @@ FSPath::seekDir(const std::vector<FSName> &dir) const
     throw AppError(Fault::FS_NOT_A_DIRECTORY);
 }
 
-FSPath
-FSPath::seekDir(const std::vector<string> &dir) const
+FSNode
+FSNode::seekDir(const std::vector<string> &dir) const
 {
     if (auto result = seek(dir); result.isDirectory()) {
         return result;
@@ -337,8 +329,8 @@ FSPath::seekDir(const std::vector<string> &dir) const
     throw AppError(Fault::FS_NOT_A_DIRECTORY);
 }
 
-FSPath
-FSPath::seekDir(const fs::path &dir) const
+FSNode
+FSNode::seekDir(const fs::path &dir) const
 {
     if (auto result = seek(dir); result.isDirectory()) {
         return result;
@@ -346,8 +338,8 @@ FSPath::seekDir(const fs::path &dir) const
     throw AppError(Fault::FS_NOT_A_DIRECTORY, dir.string());
 }
 
-FSPath
-FSPath::seekDir(const string &dir) const
+FSNode
+FSNode::seekDir(const string &dir) const
 {
     if (auto result = seek(dir); result.isDirectory()) {
         return result;
@@ -355,8 +347,8 @@ FSPath::seekDir(const string &dir) const
     throw AppError(Fault::FS_NOT_A_DIRECTORY, dir);
 }
 
-FSPath
-FSPath::seekDir(const char *dir) const
+FSNode
+FSNode::seekDir(const char *dir) const
 {
     if (auto result = seek(dir); result.isDirectory()) {
         return result;
@@ -364,8 +356,8 @@ FSPath::seekDir(const char *dir) const
     throw AppError(Fault::FS_NOT_A_DIRECTORY, string(dir));
 }
 
-FSPath
-FSPath::seekFile(const FSName &file) const
+FSNode
+FSNode::seekFile(const FSName &file) const
 {
     if (auto result = seek(file); result.isFile()) {
         return result;
@@ -373,8 +365,8 @@ FSPath::seekFile(const FSName &file) const
     throw AppError(Fault::FS_NOT_A_FILE, file.cpp_str());
 }
 
-FSPath
-FSPath::seekFile(const FSString &file) const
+FSNode
+FSNode::seekFile(const FSString &file) const
 {
     if (auto result = seek(file); result.isFile()) {
         return result;
@@ -382,8 +374,8 @@ FSPath::seekFile(const FSString &file) const
     throw AppError(Fault::FS_NOT_A_FILE, file.cpp_str());
 }
 
-FSPath
-FSPath::seekFile(const std::vector<FSName> &file) const
+FSNode
+FSNode::seekFile(const std::vector<FSName> &file) const
 {
     if (auto result = seek(file); result.isFile()) {
         return result;
@@ -391,8 +383,8 @@ FSPath::seekFile(const std::vector<FSName> &file) const
     throw AppError(Fault::FS_NOT_A_FILE);
 }
 
-FSPath
-FSPath::seekFile(const std::vector<string> &file) const
+FSNode
+FSNode::seekFile(const std::vector<string> &file) const
 {
     if (auto result = seek(file); result.isFile()) {
         return result;
@@ -400,8 +392,8 @@ FSPath::seekFile(const std::vector<string> &file) const
     throw AppError(Fault::FS_NOT_A_FILE);
 }
 
-FSPath
-FSPath::seekFile(const fs::path &file) const
+FSNode
+FSNode::seekFile(const fs::path &file) const
 {
     if (auto result = seek(file); result.isFile()) {
         return result;
@@ -409,8 +401,8 @@ FSPath::seekFile(const fs::path &file) const
     throw AppError(Fault::FS_NOT_A_FILE, file.string());
 }
 
-FSPath
-FSPath::seekFile(const string &file) const
+FSNode
+FSNode::seekFile(const string &file) const
 {
     if (auto result = seek(file); result.isFile()) {
         return result;
@@ -418,8 +410,8 @@ FSPath::seekFile(const string &file) const
     throw AppError(Fault::FS_NOT_A_FILE, file);
 }
 
-FSPath
-FSPath::seekFile(const char *file) const
+FSNode
+FSNode::seekFile(const char *file) const
 {
     if (auto result = seek(file); result.isFile()) {
         return result;
@@ -427,10 +419,10 @@ FSPath::seekFile(const char *file) const
     throw AppError(Fault::FS_NOT_A_FILE, string(file));
 }
 
-std::vector<FSPath>
-FSPath::collect(const FSOpt &opt) const
+std::vector<FSNode>
+FSNode::collect(const FSOpt &opt) const
 {
-    std::vector<FSPath> result;
+    std::vector<FSNode> result;
     std::set<Block> visited;
 
     // Collect the blocks for all items in this directory
@@ -440,7 +432,7 @@ FSPath::collect(const FSOpt &opt) const
     // Move the collected items to the result list
     while (remainingItems.size() > 0) {
 
-        auto it = FSPath(fs, remainingItems.top());
+        auto it = FSNode(fs, remainingItems.top());
         if (opt.deprecatedAccept(it)) result.push_back(it);
         remainingItems.pop();
 
@@ -454,27 +446,27 @@ FSPath::collect(const FSOpt &opt) const
     return result;
 }
 
-std::vector<FSPath>
-FSPath::collectDirs(const FSOpt &opt) const
+std::vector<FSNode>
+FSNode::collectDirs(const FSOpt &opt) const
 {
-    auto eraser = [](const FSPath &p) { return !p.isDirectory(); };
+    auto eraser = [](const FSNode &p) { return !p.isDirectory(); };
 
     auto result = collect(opt);
     result.erase(std::remove_if(result.begin(), result.end(), eraser), result.end());
     return result;
 }
 
-std::vector<FSPath>
-FSPath::collectFiles(const FSOpt &opt) const
+std::vector<FSNode>
+FSNode::collectFiles(const FSOpt &opt) const
 {
-    auto eraser = [](const FSPath &p) { return !p.isFile(); };
+    auto eraser = [](const FSNode &p) { return !p.isFile(); };
 
     auto result = collect(opt);
     result.erase(std::remove_if(result.begin(), result.end(), eraser), result.end());
     return result;
 }
 
-std::ostream &operator<<(std::ostream &os, const FSPath &path) {
+std::ostream &operator<<(std::ostream &os, const FSNode &path) {
 
     os << path.absName();
     return os;

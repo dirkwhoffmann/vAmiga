@@ -132,40 +132,40 @@ public:
 public:
 
     // Creates a new directory
-    FSPath createDir(const FSPath &at, const FSName &name);
+    FSNode createDir(const FSNode &at, const FSName &name);
 
     // Creates a new file
-    FSPath createFile(const FSPath &at, const FSName &name);
-    FSPath createFile(const FSPath &at, const FSName &name, const Buffer<u8> &buf);
-    FSPath createFile(const FSPath &at, const FSName &name, const u8 *buf, isize size);
-    FSPath createFile(const FSPath &at, const FSName &name, const string &str);
+    FSNode createFile(const FSNode &at, const FSName &name);
+    FSNode createFile(const FSNode &at, const FSName &name, const Buffer<u8> &buf);
+    FSNode createFile(const FSNode &at, const FSName &name, const u8 *buf, isize size);
+    FSNode createFile(const FSNode &at, const FSName &name, const string &str);
 
     // Renames a file or directory
-    void rename(const FSPath &item, const FSName &name);
+    void rename(const FSNode &item, const FSName &name);
 
     // Moves a file or directory to another location
-    void move(const FSPath &item, const FSPath &dest, const FSName &name = "");
+    void move(const FSNode &item, const FSNode &dest, const FSName &name = "");
 
     // Copies a file
-    void copy(const FSPath &item, const FSPath &dest);
-    void copy(const FSPath &item, const FSPath &dest, const FSName &name);
+    void copy(const FSNode &item, const FSNode &dest);
+    void copy(const FSNode &item, const FSNode &dest, const FSName &name);
 
     // Delete a file
-    void deleteFile(const FSPath &at);
+    void deleteFile(const FSNode &at);
 
 private:
 
     // Adds a hash-table entry for a given item
-    void addToHashTable(const FSPath &item);
+    void addToHashTable(const FSNode &item);
     void addToHashTable(Block parent, Block ref);
 
     // Removes the hash-table entry for a given item
-    void deleteFromHashTable(const FSPath &item);
+    void deleteFromHashTable(const FSNode &item);
     void deleteFromHashTable(Block parent, Block ref);
 
     // Adds a reference to a directory
-    void addHashRef(const FSPath &at, Block nr); // DEPRECATED
-    void addHashRef(const FSPath &at, FSBlock *block); // DEPRECATED
+    void addHashRef(const FSNode &at, Block nr); // DEPRECATED
+    void addHashRef(const FSNode &at, FSBlock *block); // DEPRECATED
 
     // Adds bytes to a data block
     isize addData(Block nr, const u8 *buf, isize size);
@@ -184,8 +184,8 @@ public:
     void importVolume(const u8 *src, isize size) throws;
 
     // Imports files and folders from the host file system
-    void import(const FSPath &at, const fs::path &path, bool recursive = true, bool contents = false) throws;
-    void import(const FSPath &at, const fs::directory_entry &dir, bool recursive) throws;
+    void import(const FSNode &at, const fs::path &path, bool recursive = true, bool contents = false) throws;
+    void import(const FSNode &at, const fs::directory_entry &dir, bool recursive) throws;
     // void import(const fs::path &path, bool recursive = true) throws;
 
     // Exports the volume to a buffer

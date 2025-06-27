@@ -468,14 +468,14 @@ FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) const
     return bm;
 }
 
-FSPath
+FSNode
 FileSystem::rootDir() const
 {
-    return FSPath(this, rootBlock);
+    return FSNode(this, rootBlock);
 }
 
 bool
-FileSystem::exists(const FSPath &top, const fs::path &path) const
+FileSystem::exists(const FSNode &top, const fs::path &path) const
 {
     try { top.seek(path); return true; } catch (...) { return false; }
 }
@@ -487,7 +487,7 @@ FileSystem::cd(const FSName &name)
 }
 
 void
-FileSystem::cd(const FSPath &path)
+FileSystem::cd(const FSNode &path)
 {
     curr = path.ref;
 }
@@ -499,7 +499,7 @@ FileSystem::cd(const string &path)
 }
 
 std::vector<Block>
-FileSystem::dataBlocks(const FSPath &path)
+FileSystem::dataBlocks(const FSNode &path)
 {
     std::vector<Block> result;
     std::set<Block> visited;
@@ -531,7 +531,7 @@ FileSystem::dataBlocks(const FSPath &path)
 }
 
 void
-FileSystem::list(std::ostream &os, const FSPath &path, const FSOpt &opt) const
+FileSystem::list(std::ostream &os, const FSNode &path, const FSOpt &opt) const
 {
     // Collect all directory items to list
     auto tree = traverse(path, opt);
@@ -545,7 +545,7 @@ FileSystem::list(std::ostream &os, const FSPath &path, const FSOpt &opt) const
         if (t.children.empty()) return;
 
         // auto *dir = blockPtr(t.node);
-        auto dir = FSPath(this, t.node);
+        auto dir = FSNode(this, t.node);
 
         // Print header
         if (opt.recursive) {
@@ -558,7 +558,7 @@ FileSystem::list(std::ostream &os, const FSPath &path, const FSOpt &opt) const
         // Create display names
         std::vector<string> strs;
         for (auto &it : t.children) {
-            auto item = FSPath(this, it.node);
+            auto item = FSNode(this, it.node);
             strs.push_back(opt.deprecatedFormatter(item));
         }
 
@@ -581,126 +581,13 @@ FileSystem::list(std::ostream &os, const FSPath &path, const FSOpt &opt) const
                 os << std::left << std::setw(std::max(tab, 35)) << item << std::endl;
             }
         }
-            /*
-            os << blockPtr(t.node)->getName();
-            os << ":\n\n";
-
-            for (auto &it : t.children) {
-                os << blockPtr(it.node)->getName() << '\n';
-            }
-            os << "\n";
-        }
-        */
     };
 
     tree.bfsWalk(func);
-
-    /*
-    std::vector<FSPath> directories;
-    if (opt.recursive) { directories = path.collectDirs({ .deprecatedSort = sort::alpha }); }
-    directories.insert(directories.begin(), path);
-
-    // Remove recursive flag from the options
-    FSOpt optnr = opt; optnr.recursive = false;
-
-    for (usize i = 0; i < directories.size(); i++) {
-
-        auto &dir = directories[i];
-        isize column = 0;
-
-        // Collect all items inside the specified directory
-        std::vector<string> strs; collect(dir, strs, optnr);
-
-        if (!strs.empty()) {
-
-            // Print header
-            if (opt.recursive) {
-
-                if (i) os << std::endl;
-                if (column) os << std::endl;
-                os << "Directory " << dir.absName() << ":" << std::endl << std::endl;
-            }
-
-            // Determine the longest entry
-            int tab = 0; for (auto &it: strs) tab = std::max(tab, int(it.length()));
-
-            // List all items
-            for (auto &item : strs) {
-
-                // Print in two columns if the name ends with a tab character
-                if (item.back() == '\t') {
-
-                    item.pop_back();
-                    os << std::left << std::setw(std::max(tab, 35)) << item;
-                    if (column++ > 0) { os << std::endl; column = 0; }
-
-                } else {
-
-                    if (column > 0) { os << std::endl; column = 0; }
-                    os << std::left << std::setw(std::max(tab, 35)) << item << std::endl;
-                }
-            }
-        }
-    }
-    */
 }
-
-/*
-void
-FileSystem::list(std::ostream &os, const FSPath &path, const FSOpt &opt) const
-{
-    // Collect directories
-    std::vector<FSPath> directories;
-    if (opt.recursive) { directories = path.collectDirs({ .deprecatedSort = sort::alpha }); }
-    directories.insert(directories.begin(), path);
-
-    // Remove recursive flag from the options
-    FSOpt optnr = opt; optnr.recursive = false;
-
-    for (usize i = 0; i < directories.size(); i++) {
-
-        auto &dir = directories[i];
-        isize column = 0;
-
-        // Collect all items inside the specified directory
-        std::vector<string> strs; collect(dir, strs, optnr);
-
-        if (!strs.empty()) {
-
-            // Print header
-            if (opt.recursive) {
-
-                if (i) os << std::endl;
-                if (column) os << std::endl;
-                os << "Directory " << dir.absName() << ":" << std::endl << std::endl;
-            }
-
-            // Determine the longest entry
-            int tab = 0; for (auto &it: strs) tab = std::max(tab, int(it.length()));
-
-            // List all items
-            for (auto &item : strs) {
-
-                // Print in two columns if the name ends with a tab character
-                if (item.back() == '\t') {
-
-                    item.pop_back();
-                    os << std::left << std::setw(std::max(tab, 35)) << item;
-                    if (column++ > 0) { os << std::endl; column = 0; }
-
-                } else {
-
-                    if (column > 0) { os << std::endl; column = 0; }
-                    os << std::left << std::setw(std::max(tab, 35)) << item << std::endl;
-                }
-            }
-        }
-    }
-}
-*/
 
 FSTree
-FileSystem::traverse(const FSPath &path, const FSOpt &opt) const
+FileSystem::traverse(const FSNode &path, const FSOpt &opt) const
 {
     assert(path.isRegular());
 
@@ -733,14 +620,14 @@ FileSystem::traverse(const FSPath &path, const FSOpt &opt) const
 }
 
 void
-FileSystem::collect(const FSPath &path, std::vector<FSPath> &result, const FSOpt &opt) const
+FileSystem::collect(const FSNode &path, std::vector<FSNode> &result, const FSOpt &opt) const
 {
     auto paths = path.collect(opt);
     result.insert(result.end(), paths.begin(), paths.end());
 }
 
 void
-FileSystem::collect(const FSPath &path, std::vector<string> &result, const FSOpt &opt) const
+FileSystem::collect(const FSNode &path, std::vector<string> &result, const FSOpt &opt) const
 {
     auto paths = path.collect(opt);
 
@@ -750,14 +637,14 @@ FileSystem::collect(const FSPath &path, std::vector<string> &result, const FSOpt
 }
 
 void
-FileSystem::collectDirs(const FSPath &path, std::vector<FSPath> &result, const FSOpt &opt) const
+FileSystem::collectDirs(const FSNode &path, std::vector<FSNode> &result, const FSOpt &opt) const
 {
     auto paths = path.collectDirs(opt);
     result.insert(result.end(), paths.begin(), paths.end());
 }
 
 void
-FileSystem::collectDirs(const FSPath &path, std::vector<string> &result, const FSOpt &opt) const
+FileSystem::collectDirs(const FSNode &path, std::vector<string> &result, const FSOpt &opt) const
 {
     auto paths = path.collectDirs(opt);
 
@@ -767,14 +654,14 @@ FileSystem::collectDirs(const FSPath &path, std::vector<string> &result, const F
 }
 
 void
-FileSystem::collectFiles(const FSPath &path, std::vector<FSPath> &result, const FSOpt &opt) const
+FileSystem::collectFiles(const FSNode &path, std::vector<FSNode> &result, const FSOpt &opt) const
 {
     auto paths = path.collectFiles(opt);
     result.insert(result.end(), paths.begin(), paths.end());
 }
 
 void
-FileSystem::collectFiles(const FSPath &path, std::vector<string> &result, const FSOpt &opt) const
+FileSystem::collectFiles(const FSNode &path, std::vector<string> &result, const FSOpt &opt) const
 {
     auto paths = path.collectFiles(opt);
 

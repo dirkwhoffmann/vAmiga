@@ -94,7 +94,7 @@ NavigatorConsole::autoComplete(Tokens &argv)
     std::vector<string> matches;
     fs.collect(fs.pwd(), matches, {
         .recursive = false,
-        .deprecatedFilter = [&](const FSPath &item) { return pattern.match(item.last()); }
+        .deprecatedFilter = [&](const FSNode &item) { return pattern.match(item.last()); }
     });
     printf("Matches for %s\n", last.c_str());
     for (auto &it : matches) printf("  Match: %s\n", it.c_str());
@@ -126,16 +126,16 @@ NavigatorConsole::help(std::ostream &os, const Tokens &argv)
             .sort = sort::dafa,
             .filter = [&](const FSBlock &item) {
 
-                auto p = FSPath(&fs, item.nr);
+                auto p = FSNode(&fs, item.nr);
                 return p.last().cpp_str().starts_with(args.back());
             },
             // .deprecatedSort = sort::deprecatedDafa,
-            .deprecatedFilter = [&](const FSPath &item) {
+            .deprecatedFilter = [&](const FSNode &item) {
 
                 return item.last().cpp_str().starts_with(args.back());
             },
 
-            .deprecatedFormatter = [&](const FSPath &item) {
+            .deprecatedFormatter = [&](const FSNode &item) {
 
                 return item.last().cpp_str() + (item.isDirectory() ? " (dir)" : "\t");
             }
@@ -187,7 +187,7 @@ NavigatorConsole::parseBlock(const Arguments &argv, const string &token, Block f
     return nr;
 }
 
-FSPath
+FSNode
 NavigatorConsole::parsePath(const Arguments &argv, const string &token)
 {
     assert(argv.contains(token));
@@ -200,7 +200,7 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token)
 
         try {
             // Treat the argument as a block number
-            return FSPath(&fs, parseBlock(argv.at(token)));
+            return FSNode(&fs, parseBlock(argv.at(token)));
 
         } catch (...) {
 
@@ -210,20 +210,20 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token)
     }
 }
 
-FSPath
-NavigatorConsole::parsePath(const Arguments &argv, const string &token, const FSPath &fallback)
+FSNode
+NavigatorConsole::parsePath(const Arguments &argv, const string &token, const FSNode &fallback)
 {
     return argv.contains(token) ? parsePath(argv, token) : fallback;
 }
 
-FSPath
+FSNode
 NavigatorConsole::parseFile(const Arguments &argv, const string &token)
 {
     return parseFile(argv, token, fs.pwd());
 }
 
-FSPath
-NavigatorConsole::parseFile(const Arguments &argv, const string &token, const FSPath &fallback)
+FSNode
+NavigatorConsole::parseFile(const Arguments &argv, const string &token, const FSNode &fallback)
 {
     if (!fs.formatted()) {
         throw AppError(Fault::FS_UNFORMATTED);
@@ -236,14 +236,14 @@ NavigatorConsole::parseFile(const Arguments &argv, const string &token, const FS
     return path;
 }
 
-FSPath
+FSNode
 NavigatorConsole::parseDirectory(const Arguments &argv, const string &token)
 {
     return parseDirectory(argv, token, fs.pwd());
 }
 
-FSPath
-NavigatorConsole::parseDirectory(const Arguments &argv, const string &token, const FSPath &fallback)
+FSNode
+NavigatorConsole::parseDirectory(const Arguments &argv, const string &token, const FSNode &fallback)
 {
     if (!fs.formatted()) {
         throw AppError(Fault::FS_UNFORMATTED);
@@ -256,19 +256,19 @@ NavigatorConsole::parseDirectory(const Arguments &argv, const string &token, con
     return path;
 }
 
-FSPath
+FSNode
 NavigatorConsole::matchPath(const Arguments &argv, const string &token, Tokens &notFound)
 {
     return matchPath(argv.at(token), notFound);
 }
 
-FSPath
-NavigatorConsole::matchPath(const Arguments &argv, const string &token, Tokens &notFound, const FSPath &fallback)
+FSNode
+NavigatorConsole::matchPath(const Arguments &argv, const string &token, Tokens &notFound, const FSNode &fallback)
 {
     return argv.contains(token) ? matchPath(argv, token, notFound) : fallback;
 }
 
-FSPath
+FSNode
 NavigatorConsole::matchPath(const string &path, Tokens &notFound)
 {
     if (!fs.formatted()) throw AppError(Fault::FS_UNFORMATTED);
@@ -685,7 +685,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                     return (!d || item.isDirectory()) && (!f || item.isFile());
                 },
-                .deprecatedFormatter = [&](const FSPath &item) {
+                .deprecatedFormatter = [&](const FSNode &item) {
 
                     return item.last().cpp_str() + (item.isDirectory() ? " (dir)" : "\t");
                 }
@@ -723,7 +723,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                     return (!d || item.isDirectory()) && (!f || item.isFile());
                 },
-                .deprecatedFormatter = [&](const FSPath &item) {
+                .deprecatedFormatter = [&](const FSNode &item) {
 
                     std::stringstream ss;
                     ss << std::left << std::setw(25) << item.last();
@@ -774,14 +774,14 @@ NavigatorConsole::initCommands(RSCommand &root)
                 .recursive = r,
                 .deprecatedSort = s ? sort::deprecatedAlpha : sort::deprecatedNone,
 
-                .deprecatedFilter = [&](const FSPath &item) {
+                .deprecatedFilter = [&](const FSNode &item) {
 
                     return item.matches(pattern) && //  pattern.match(item.last()) &&
                     (!d || item.isDirectory()) &&
                     (!f || item.isFile());
                 },
 
-                .deprecatedFormatter = [&](const FSPath &item) {
+                .deprecatedFormatter = [&](const FSNode &item) {
 
                     std::stringstream ss;
                     ss << (abs ? item.absName() : item.relName());

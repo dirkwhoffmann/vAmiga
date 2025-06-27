@@ -13,7 +13,7 @@
 #include "FSBlock.h"
 #include "FSDescriptors.h"
 #include "FSObjects.h"
-#include "FSPath.h"
+#include "FSNode.h"
 #include "FSTree.h"
 #include "BlockStorage.h"
 #include "ADFFile.h"
@@ -39,7 +39,7 @@ class HardDrive;
 class FileSystem : public CoreObject {
     
     friend struct FSBlock;
-    friend struct FSPath;
+    friend struct FSNode;
     friend struct FSHashTable;
     friend struct FSPartition;
     
@@ -208,38 +208,38 @@ protected:
 public:
 
     // Returns the root of the directory tree
-    FSPath rootDir() const;
+    FSNode rootDir() const;
 
 public:
 
     // Seeks an item in the directory tree
-    FSPath seek(const FSPath &top, const fs::path &path) const { return top.seek(path); }
-    FSPath seekDir(const FSPath &top, const fs::path &path) const { return top.seekDir(path); }
-    FSPath seekFile(const FSPath &top, const fs::path &path) const { return top.seekFile(path); }
+    FSNode seek(const FSNode &top, const fs::path &path) const { return top.seek(path); }
+    FSNode seekDir(const FSNode &top, const fs::path &path) const { return top.seekDir(path); }
+    FSNode seekFile(const FSNode &top, const fs::path &path) const { return top.seekFile(path); }
 
     // Seeks an item in the directory tree starting from the root
-    FSPath seek(const fs::path &path) const { return seek(pwd(), path); }
-    FSPath seekDir(const fs::path &path) const { return seekDir(pwd(), path); }
-    FSPath seekFile(const fs::path &path) const { return seekFile(pwd(), path); }
+    FSNode seek(const fs::path &path) const { return seek(pwd(), path); }
+    FSNode seekDir(const fs::path &path) const { return seekDir(pwd(), path); }
+    FSNode seekFile(const fs::path &path) const { return seekFile(pwd(), path); }
 
     // Checks if a an item exists in the directory tree
-    bool exists(const FSPath &top, const fs::path &path) const;
+    bool exists(const FSNode &top, const fs::path &path) const;
     bool exists(const fs::path &path) const { return exists(pwd(), path); }
 
     // Lists the contents of a directory
-    void list(std::ostream &os, const FSPath &path, const FSOpt &opt = {}) const;
+    void list(std::ostream &os, const FSNode &path, const FSOpt &opt = {}) const;
     void list(std::ostream &os, const FSOpt &opt = {}) const { return list(os, pwd(), opt); }
 
     // Changes the working directory
     void cd(const FSName &name);
-    void cd(const FSPath &path);
+    void cd(const FSNode &path);
     void cd(const string &path);
 
     // Returns the working directory
-    FSPath pwd() const { return FSPath(this, curr); }
+    FSNode pwd() const { return FSNode(this, curr); }
 
     // Collects the data blocks belonging to a file
-    std::vector<Block> dataBlocks(const FSPath &path);
+    std::vector<Block> dataBlocks(const FSNode &path);
 
 
     //
@@ -288,15 +288,15 @@ public:
 public:
 
     // Creates a node tree resembling the directory structure
-    FSTree traverse(const FSPath &path, const FSOpt &opt = {}) const;
+    FSTree traverse(const FSNode &path, const FSOpt &opt = {}) const;
 
     // Returns a collection of nodes for all items in a directory
-    void collect(const FSPath &path, std::vector<FSPath> &result, const FSOpt &opt = {}) const throws;
-    void collect(const FSPath &path, std::vector<string> &result, const FSOpt &opt = {}) const throws;
-    void collectDirs(const FSPath &path, std::vector<FSPath> &result, const FSOpt &opt = {}) const throws;
-    void collectDirs(const FSPath &path, std::vector<string> &result, const FSOpt &opt = {}) const throws;
-    void collectFiles(const FSPath &path, std::vector<FSPath> &result, const FSOpt &opt = {}) const throws;
-    void collectFiles(const FSPath &path, std::vector<string> &result, const FSOpt &opt = {}) const throws;
+    void collect(const FSNode &path, std::vector<FSNode> &result, const FSOpt &opt = {}) const throws;
+    void collect(const FSNode &path, std::vector<string> &result, const FSOpt &opt = {}) const throws;
+    void collectDirs(const FSNode &path, std::vector<FSNode> &result, const FSOpt &opt = {}) const throws;
+    void collectDirs(const FSNode &path, std::vector<string> &result, const FSOpt &opt = {}) const throws;
+    void collectFiles(const FSNode &path, std::vector<FSNode> &result, const FSOpt &opt = {}) const throws;
+    void collectFiles(const FSNode &path, std::vector<string> &result, const FSOpt &opt = {}) const throws;
 
 private:
     
@@ -316,7 +316,6 @@ private:
 protected:
     
     // Returns the last element in the list of extension blocks
-    // std::vector<Block> extBlockChain(const FSPath &at) const;
     FSBlock *lastFileListBlockInChain(Block start) const;
     FSBlock *lastFileListBlockInChain(FSBlock *block) const;
 
