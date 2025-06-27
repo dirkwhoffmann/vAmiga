@@ -142,6 +142,36 @@ FSBlock::objectName() const
     }
 }
 
+bool
+FSBlock::isRoot() const
+{
+    return type == FSBlockType::ROOT_BLOCK;
+}
+
+bool
+FSBlock::isFile() const
+{
+    return type == FSBlockType::FILEHEADER_BLOCK;
+}
+
+bool
+FSBlock::isDirectory() const
+{
+    return type == FSBlockType::ROOT_BLOCK || type == FSBlockType::USERDIR_BLOCK;
+}
+
+bool
+FSBlock::isRegular() const
+{
+    return isFile() || isDirectory();
+}
+
+bool
+FSBlock::isHashable() const
+{
+    return type == FSBlockType::FILEHEADER_BLOCK && type == FSBlockType::USERDIR_BLOCK;
+}
+
 isize
 FSBlock::bsize() const
 {
@@ -1585,12 +1615,6 @@ FSBlock::getNextDataBlock() const
 {
     Block nr = getNextDataBlockRef();
     return nr ? fs->dataBlockPtr(nr) : nullptr;
-}
-
-bool
-FSBlock::isHashable() const
-{
-    return type == FSBlockType::FILEHEADER_BLOCK || type == FSBlockType::USERDIR_BLOCK;
 }
 
 isize

@@ -123,14 +123,19 @@ NavigatorConsole::help(std::ostream &os, const Tokens &argv)
         FSOpt opt = {
 
             .recursive = false,
-            .deprecatedSort = sort::dafa,
+            .sort = sort::dafa,
+            .filter = [&](const FSBlock &item) {
 
+                auto p = FSPath(&fs, item.nr);
+                return p.last().cpp_str().starts_with(args.back());
+            },
+            // .deprecatedSort = sort::deprecatedDafa,
             .deprecatedFilter = [&](const FSPath &item) {
 
                 return item.last().cpp_str().starts_with(args.back());
             },
 
-            .formatter = [&](const FSPath &item) {
+            .deprecatedFormatter = [&](const FSPath &item) {
 
                 return item.last().cpp_str() + (item.isDirectory() ? " (dir)" : "\t");
             }
@@ -675,14 +680,12 @@ NavigatorConsole::initCommands(RSCommand &root)
             FSOpt opt = {
 
                 .recursive = r,
-                .deprecatedSort = sort::dafa,
-
-                .deprecatedFilter = [&](const FSPath &item) {
+                .sort = sort::dafa,
+                .filter = [&](const FSBlock &item) {
 
                     return (!d || item.isDirectory()) && (!f || item.isFile());
                 },
-
-                .formatter = [&](const FSPath &item) {
+                .deprecatedFormatter = [&](const FSPath &item) {
 
                     return item.last().cpp_str() + (item.isDirectory() ? " (dir)" : "\t");
                 }
@@ -715,14 +718,12 @@ NavigatorConsole::initCommands(RSCommand &root)
             FSOpt opt = {
 
                 .recursive = r,
-                .deprecatedSort = s ? sort::alpha : sort::none,
-
-                .deprecatedFilter = [&](const FSPath &item) {
+                .sort = s ? sort::alpha : sort::none,
+                .filter = [&](const FSBlock &item) {
 
                     return (!d || item.isDirectory()) && (!f || item.isFile());
                 },
-
-                .formatter = [&](const FSPath &item) {
+                .deprecatedFormatter = [&](const FSPath &item) {
 
                     std::stringstream ss;
                     ss << std::left << std::setw(25) << item.last();
@@ -771,7 +772,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             FSOpt opt = {
 
                 .recursive = r,
-                .deprecatedSort = s ? sort::alpha : sort::none,
+                .deprecatedSort = s ? sort::deprecatedAlpha : sort::deprecatedNone,
 
                 .deprecatedFilter = [&](const FSPath &item) {
 
@@ -780,7 +781,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                     (!f || item.isFile());
                 },
 
-                .formatter = [&](const FSPath &item) {
+                .deprecatedFormatter = [&](const FSPath &item) {
 
                     std::stringstream ss;
                     ss << (abs ? item.absName() : item.relName());

@@ -10,27 +10,29 @@
 #pragma once
 
 #include "FSTypes.h"
-#include "FSObjects.h"
+#include "FSBlock.h"
 #include <functional>
 
 namespace vamiga {
 
 struct FSTree {
 
-    Block node;
+    FSBlock *node;
     std::vector<FSTree> children;
 
-    FSTree(Block node) : node(node) {}
+    FSTree(FSBlock *node) : node(node) {}
+
+    void addChild(FSBlock *node) { if (node) children.push_back(FSTree(node)); }
 
     // Traverses the tree and applies a function at each node
-    void bfsWalk(std::function<void(Block)>);
-    void dfsWalk(std::function<void(Block)>);
+    void bfsWalk(std::function<void(const FSTree &)>);
+    void dfsWalk(std::function<void(const FSTree &)>);
 
-    void sort(std::function<bool(Block,Block)>);
+    void sort(std::function<bool(FSBlock &,FSBlock &)>);
 
 private:
 
-    void bfsWalkRec(std::function<void(Block)>);
+    void bfsWalkRec(std::function<void(const FSTree &)>);
 };
 
 }

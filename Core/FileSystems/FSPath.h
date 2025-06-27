@@ -125,19 +125,38 @@ struct FSPath
 
 namespace sort {
 
-inline std::function<bool(const FSPath &, const FSPath &)> dafa = [](const FSPath &a, const FSPath &b) {
+inline std::function<bool(const FSBlock &, const FSBlock &)> dafa = [](const FSBlock &b1, const FSBlock &b2) {
+
+    auto a = FSPath(b1.fs, b1.nr);
+    auto b = FSPath(b2.fs, b2.nr);
+    if ( a.isDirectory() && !b.isDirectory()) return true;
+    if (!a.isDirectory() &&  b.isDirectory()) return false;
+    return a.last() < b.last();
+};
+
+inline std::function<bool(const FSBlock &, const FSBlock &)> alpha = [](const FSBlock &b1, const FSBlock &b2) {
+
+    auto a = FSPath(b1.fs, b1.nr);
+    auto b = FSPath(b2.fs, b2.nr);
+    return a.last() < b.last();
+};
+
+inline std::function<bool(const FSBlock &, const FSBlock &)> none = nullptr;
+
+
+inline std::function<bool(const FSPath &, const FSPath &)> deprecatedDafa = [](const FSPath &a, const FSPath &b) {
 
     if ( a.isDirectory() && !b.isDirectory()) return true;
     if (!a.isDirectory() &&  b.isDirectory()) return false;
     return a.last() < b.last();
 };
 
-inline std::function<bool(const FSPath &, const FSPath &)> alpha = [](const FSPath &a, const FSPath &b) {
+inline std::function<bool(const FSPath &, const FSPath &)> deprecatedAlpha = [](const FSPath &a, const FSPath &b) {
 
     return a.last() < b.last();
 };
 
-inline std::function<bool(const FSPath &, const FSPath &)> none = nullptr;
+inline std::function<bool(const FSPath &, const FSPath &)> deprecatedNone = nullptr;
 
 }
 

@@ -16,27 +16,27 @@ namespace vamiga {
 struct FSBlock;
 struct FSPath;
 typedef u32 Block;
-typedef std::function<bool(Block)> FSBlockFilter;
+typedef std::function<bool(FSBlock &)> FSBlockFilter;
+typedef std::function<string(FSBlock &)> FSBlockFormatter;
+typedef std::function<bool(FSBlock &, FSBlock &)> FSBlockSorter;
+
 typedef std::function<bool(const FSPath &)> FSPathFilter;
 typedef std::function<string(const FSPath &)> FSPathFormatter;
 
 struct FSOpt
 {
     bool recursive = false;
-    std::function<bool(Block, Block)> sort;
-    std::function<bool(const FSPath &, const FSPath &)> deprecatedSort;
+    FSBlockSorter sort;
     FSBlockFilter filter;
+    FSBlockFormatter formatter;
+
+    bool accept(FSBlock &b) const { return filter ? filter(b) : true; }
+
+    // DEPRECATED
+    std::function<bool(const FSPath &, const FSPath &)> deprecatedSort;
     FSPathFilter deprecatedFilter;
-    FSPathFormatter formatter;
-
-    bool accept(Block b) const { return filter ? filter(b) : true; }
+    FSPathFormatter deprecatedFormatter;
     bool deprecatedAccept(const FSPath &p) const { return deprecatedFilter ? deprecatedFilter(p) : true; }
-    bool skip(const FSPath &p) const { return deprecatedFilter ? !deprecatedFilter(p) : false; }
-
-    /*
-    static std::function<bool(const FSPath &, const FSPath &)> dafa;
-    static std::function<bool(const FSPath &, const FSPath &)> alpha;
-    */
 };
 
 enum class FSVolumeType : long

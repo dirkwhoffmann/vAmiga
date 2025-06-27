@@ -70,7 +70,14 @@ protected:
     //
 
 public:
-    
+
+    // Informs about the block type
+    bool isRoot() const;
+    bool isFile() const;
+    bool isDirectory() const;
+    bool isRegular() const;
+    bool isHashable() const;
+
     // Returns the size of this block in bytes (usually 512)
     isize bsize() const;
 
@@ -275,7 +282,7 @@ public:
     //
 
     // Returns true if this block can be stored in a hash list
-    bool isHashable() const;
+    // bool isHashable() const;
 
     // Returns the hash table size
     isize hashTableSize() const;

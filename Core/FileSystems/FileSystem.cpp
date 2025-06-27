@@ -533,6 +533,122 @@ FileSystem::dataBlocks(const FSPath &path)
 void
 FileSystem::list(std::ostream &os, const FSPath &path, const FSOpt &opt) const
 {
+    // Collect all directory items to list
+    auto tree = traverse(path, opt);
+
+    isize i = 0;
+    isize column = 0;
+
+    // Walk the tree
+    auto func = [&](const FSTree &t) {
+
+        if (t.children.empty()) return;
+
+        // auto *dir = blockPtr(t.node);
+        auto dir = FSPath(this, t.node);
+
+        // Print header
+        if (opt.recursive) {
+
+            if (i) os << std::endl;
+            if (column) os << std::endl;
+            os << "Directory " << dir.absName() << ":" << std::endl << std::endl;
+        }
+
+        // Create display names
+        std::vector<string> strs;
+        for (auto &it : t.children) {
+            auto item = FSPath(this, it.node);
+            strs.push_back(opt.deprecatedFormatter(item));
+        }
+
+        // Determine the longest entry
+        int tab = 0; for (auto &it: strs) tab = std::max(tab, int(it.length()));
+
+        // List all items
+        for (auto &item : strs) {
+
+            // Print in two columns if the name ends with a tab character
+            if (item.back() == '\t') {
+
+                item.pop_back();
+                os << std::left << std::setw(std::max(tab, 35)) << item;
+                if (column++ > 0) { os << std::endl; column = 0; }
+
+            } else {
+
+                if (column > 0) { os << std::endl; column = 0; }
+                os << std::left << std::setw(std::max(tab, 35)) << item << std::endl;
+            }
+        }
+            /*
+            os << blockPtr(t.node)->getName();
+            os << ":\n\n";
+
+            for (auto &it : t.children) {
+                os << blockPtr(it.node)->getName() << '\n';
+            }
+            os << "\n";
+        }
+        */
+    };
+
+    tree.bfsWalk(func);
+
+    /*
+    std::vector<FSPath> directories;
+    if (opt.recursive) { directories = path.collectDirs({ .deprecatedSort = sort::alpha }); }
+    directories.insert(directories.begin(), path);
+
+    // Remove recursive flag from the options
+    FSOpt optnr = opt; optnr.recursive = false;
+
+    for (usize i = 0; i < directories.size(); i++) {
+
+        auto &dir = directories[i];
+        isize column = 0;
+
+        // Collect all items inside the specified directory
+        std::vector<string> strs; collect(dir, strs, optnr);
+
+        if (!strs.empty()) {
+
+            // Print header
+            if (opt.recursive) {
+
+                if (i) os << std::endl;
+                if (column) os << std::endl;
+                os << "Directory " << dir.absName() << ":" << std::endl << std::endl;
+            }
+
+            // Determine the longest entry
+            int tab = 0; for (auto &it: strs) tab = std::max(tab, int(it.length()));
+
+            // List all items
+            for (auto &item : strs) {
+
+                // Print in two columns if the name ends with a tab character
+                if (item.back() == '\t') {
+
+                    item.pop_back();
+                    os << std::left << std::setw(std::max(tab, 35)) << item;
+                    if (column++ > 0) { os << std::endl; column = 0; }
+
+                } else {
+
+                    if (column > 0) { os << std::endl; column = 0; }
+                    os << std::left << std::setw(std::max(tab, 35)) << item << std::endl;
+                }
+            }
+        }
+    }
+    */
+}
+
+/*
+void
+FileSystem::list(std::ostream &os, const FSPath &path, const FSOpt &opt) const
+{
     // Collect directories
     std::vector<FSPath> directories;
     if (opt.recursive) { directories = path.collectDirs({ .deprecatedSort = sort::alpha }); }
@@ -581,26 +697,28 @@ FileSystem::list(std::ostream &os, const FSPath &path, const FSOpt &opt) const
         }
     }
 }
+*/
 
 FSTree
 FileSystem::traverse(const FSPath &path, const FSOpt &opt) const
 {
     assert(path.isRegular());
 
-    FSTree tree(path.ref);
-
-    std::vector<FSPath> result;
-    std::set<Block> visited;
+    FSTree tree(path.ptr());
 
     // Collect the blocks for all items in this directory
     std::stack<Block> remainingItems;
+    std::set<Block> visited;
     collectHashedRefs(path.ref, remainingItems, visited);
 
     // Move the collected items to the result list
     while (remainingItems.size() > 0) {
 
         auto it = remainingItems.top();
-        if (opt.accept(it)) tree.children.push_back(it);
+        if (auto *ptr = blockPtr(it); ptr) {
+            if (opt.accept(*ptr)) tree.children.push_back(ptr);
+        }
+        // printf("Adding %s\n", blockPtr(it)->getName().c_str());
         remainingItems.pop();
 
         // Add subdirectory items to the queue
@@ -627,7 +745,7 @@ FileSystem::collect(const FSPath &path, std::vector<string> &result, const FSOpt
     auto paths = path.collect(opt);
 
     for (auto &it : paths) {
-        result.push_back(opt.formatter ? opt.formatter(it) : it.last().cpp_str());
+        result.push_back(opt.deprecatedFormatter ? opt.deprecatedFormatter(it) : it.last().cpp_str());
     }
 }
 
@@ -644,7 +762,7 @@ FileSystem::collectDirs(const FSPath &path, std::vector<string> &result, const F
     auto paths = path.collectDirs(opt);
 
     for (auto &it : paths) {
-        result.push_back(opt.formatter ? opt.formatter(it) : it.last().cpp_str());
+        result.push_back(opt.deprecatedFormatter ? opt.deprecatedFormatter(it) : it.last().cpp_str());
     }
 }
 
@@ -661,7 +779,7 @@ FileSystem::collectFiles(const FSPath &path, std::vector<string> &result, const 
     auto paths = path.collectFiles(opt);
 
     for (auto &it : paths) {
-        result.push_back(opt.formatter ? opt.formatter(it) : it.last().cpp_str());
+        result.push_back(opt.deprecatedFormatter ? opt.deprecatedFormatter(it) : it.last().cpp_str());
     }
 }
 
