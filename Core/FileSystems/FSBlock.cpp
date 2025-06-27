@@ -166,10 +166,37 @@ FSBlock::isRegular() const
     return isFile() || isDirectory();
 }
 
-bool
-FSBlock::isHashable() const
+string
+FSBlock::pathName() const
 {
-    return type == FSBlockType::FILEHEADER_BLOCK || type == FSBlockType::USERDIR_BLOCK;
+    return isRoot() ? "/" : getName().cpp_str();
+}
+
+string
+FSBlock::absName() const
+{
+    return relName(*fs->rootDir().ptr());
+}
+
+string
+FSBlock::relName() const
+{
+    return relName(*fs->pwd().ptr());
+}
+
+string
+FSBlock::relName(const FSBlock &top) const
+{
+    string result;
+
+    auto nodes = fs->collect(*this, [](FSBlock *node) { return node->getParentDirBlock(); });
+
+    for (auto it = nodes.rbegin(); it != nodes.rend(); it++) {
+
+        result += (*it)->pathName();
+        if ((*it)->nr == top.nr) break;
+    }
+    return result;
 }
 
 isize
@@ -1186,6 +1213,33 @@ FSBlock::setProtectionBits(u32 val)
     }
 }
 
+string
+FSBlock::getProtectionBitString() const
+{
+    auto bits = getProtectionBits();
+
+    // From dos/dos.h (AmigaDOS)
+    constexpr isize FIBB_SCRIPT  = 6; // program is a script (execute) file
+    constexpr isize FIBB_PURE    = 5; // program is reentrant and rexecutable
+    constexpr isize FIBB_ARCHIVE = 4; // cleared whenever file is changed
+    constexpr isize FIBB_READ    = 3; // ignored by old filesystem
+    constexpr isize FIBB_WRITE   = 2; // ignored by old filesystem
+    constexpr isize FIBB_EXECUTE = 1; // ignored by system, used by Shell
+    constexpr isize FIBB_DELETE  = 0; // prevent file from being deleted
+
+    string result;
+    result += (bits & (1 << 7))            ? "h" : "-";
+    result += (bits & (1 << FIBB_SCRIPT))  ? "s" : "-";
+    result += (bits & (1 << FIBB_PURE))    ? "p" : "-";
+    result += (bits & (1 << FIBB_ARCHIVE)) ? "a" : "-";
+    result += (bits & (1 << FIBB_READ))    ? "-" : "r";
+    result += (bits & (1 << FIBB_WRITE))   ? "-" : "w";
+    result += (bits & (1 << FIBB_EXECUTE)) ? "-" : "e";
+    result += (bits & (1 << FIBB_DELETE))  ? "-" : "d";
+
+    return result;
+}
+
 u32
 FSBlock::getFileSize() const
 {
@@ -1615,6 +1669,12 @@ FSBlock::getNextDataBlock() const
 {
     Block nr = getNextDataBlockRef();
     return nr ? fs->dataBlockPtr(nr) : nullptr;
+}
+
+bool
+FSBlock::isHashable() const
+{
+    return type == FSBlockType::FILEHEADER_BLOCK || type == FSBlockType::USERDIR_BLOCK;
 }
 
 isize

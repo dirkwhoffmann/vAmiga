@@ -130,6 +130,11 @@ NavigatorConsole::help(std::ostream &os, const Tokens &argv)
                 return p.last().cpp_str().starts_with(args.back());
             },
             // .deprecatedSort = sort::deprecatedDafa,
+            .formatter = [&](const FSBlock &node) {
+
+                return node.pathName() + (node.isDirectory() ? " (dir)" : "\t");
+            }
+            /*
             .deprecatedFilter = [&](const FSNode &item) {
 
                 return item.last().cpp_str().starts_with(args.back());
@@ -139,6 +144,7 @@ NavigatorConsole::help(std::ostream &os, const Tokens &argv)
 
                 return item.last().cpp_str() + (item.isDirectory() ? " (dir)" : "\t");
             }
+            */
         };
 
         fs.list(os, fs.pwd(), opt);
@@ -685,9 +691,9 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                     return (!d || item.isDirectory()) && (!f || item.isFile());
                 },
-                .deprecatedFormatter = [&](const FSNode &item) {
+                .formatter = [&](const FSBlock &node) {
 
-                    return item.last().cpp_str() + (item.isDirectory() ? " (dir)" : "\t");
+                    return node.pathName() + (node.isDirectory() ? " (dir)" : "\t");
                 }
             };
 
@@ -723,20 +729,20 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                     return (!d || item.isDirectory()) && (!f || item.isFile());
                 },
-                .deprecatedFormatter = [&](const FSNode &item) {
+                .formatter = [&](const FSBlock &node) {
 
                     std::stringstream ss;
-                    ss << std::left << std::setw(25) << item.last();
+                    ss << std::left << std::setw(25) << node.pathName();
 
-                    if (k) { ss << std::right << std::setw(9) << ("[" + std::to_string(item.ref) + "] "); }
+                    if (k) { ss << std::right << std::setw(9) << ("[" + std::to_string(node.nr) + "] "); }
 
-                    if (item.isDirectory()) {
+                    if (node.isDirectory()) {
                         ss << std::right << std::setw(7) << "Dir";
                     } else {
-                        ss << std::right << std::setw(7) << std::to_string(item.ptr()->getFileSize());
+                        ss << std::right << std::setw(7) << std::to_string(node.getFileSize());
                     }
-                    ss << " " << item.getProtectionBitString();
-                    ss << " " << item.ptr()->getCreationDate().str();
+                    ss << " " << node.getProtectionBitString();
+                    ss << " " << node.getCreationDate().str();
 
                     return ss.str();
                 }
@@ -772,7 +778,9 @@ NavigatorConsole::initCommands(RSCommand &root)
             FSOpt opt = {
 
                 .recursive = r,
-                .deprecatedSort = s ? sort::deprecatedAlpha : sort::deprecatedNone,
+                .sort = s ? sort::alpha : sort::none,
+
+                // .deprecatedSort = s ? sort::deprecatedAlpha : sort::deprecatedNone,
 
                 .deprecatedFilter = [&](const FSNode &item) {
 
@@ -781,11 +789,11 @@ NavigatorConsole::initCommands(RSCommand &root)
                     (!f || item.isFile());
                 },
 
-                .deprecatedFormatter = [&](const FSNode &item) {
+                .formatter = [&](const FSBlock &node) {
 
                     std::stringstream ss;
-                    ss << (abs ? item.absName() : item.relName());
-                    if (item.isDirectory()) ss << " (dir)";
+                    ss << (abs ? node.absName() : node.relName());
+                    if (node.isDirectory()) ss << " (dir)";
                     return ss.str();
                 }
             };

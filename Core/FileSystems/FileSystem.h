@@ -212,6 +212,18 @@ public:
 
 public:
 
+    // Returns a pointer to the parent directory block
+    FSBlock *parentDir(const FSBlock &root) const;
+
+    // Seeks an item in the directory tree (returns nullptr if not found)
+    FSBlock *seekPtr(const FSBlock &root, const FSName &name) const;
+    FSBlock *seekPtr(const FSBlock &root, const FSString &name) const;
+    FSBlock *seekPtr(const FSBlock &root, const std::vector<FSName> &name) const;
+    FSBlock *seekPtr(const FSBlock &root, const std::vector<string> &name) const;
+    FSBlock *seekPtr(const FSBlock &root, const fs::path &name) const;
+    FSBlock *seekPtr(const FSBlock &root, const string &name) const;
+    FSBlock *seekPtr(const FSBlock &root, const char *name) const;
+
     // Seeks an item in the directory tree
     FSNode seek(const FSNode &top, const fs::path &path) const { return top.seek(path); }
     FSNode seekDir(const FSNode &top, const fs::path &path) const { return top.seekDir(path); }
@@ -290,7 +302,10 @@ public:
     // Creates a node tree resembling the directory structure
     FSTree traverse(const FSNode &path, const FSOpt &opt = {}) const;
 
-    // Returns a collection of nodes for all items in a directory
+    // Follows a linked list and collects all nodes
+    std::vector<FSBlock *> collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> next);
+
+    // Returns a collection of nodes for all items in a directory (DEPRECATED)
     void collect(const FSNode &path, std::vector<FSNode> &result, const FSOpt &opt = {}) const throws;
     void collect(const FSNode &path, std::vector<string> &result, const FSOpt &opt = {}) const throws;
     void collectDirs(const FSNode &path, std::vector<FSNode> &result, const FSOpt &opt = {}) const throws;

@@ -76,7 +76,11 @@ public:
     bool isFile() const;
     bool isDirectory() const;
     bool isRegular() const;
-    bool isHashable() const;
+
+    string pathName() const;
+    string absName() const;
+    string relName() const;
+    string relName(const FSBlock &top) const;
 
     // Returns the size of this block in bytes (usually 512)
     isize bsize() const;
@@ -216,6 +220,7 @@ public:
     
     u32 getProtectionBits() const;
     void setProtectionBits(u32 val);
+    string getProtectionBitString() const;
 
     u32 getFileSize() const;
     void setFileSize(u32 val);
@@ -282,7 +287,7 @@ public:
     //
 
     // Returns true if this block can be stored in a hash list
-    // bool isHashable() const;
+    bool isHashable() const;
 
     // Returns the hash table size
     isize hashTableSize() const;

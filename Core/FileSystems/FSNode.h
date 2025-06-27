@@ -51,7 +51,7 @@ struct FSNode
     FSBlock *ptr() const;
 
     // Returns a string representation of this path
-    FSName last() const; // RENAME TO name()
+    FSName last() const;
     string absName() const;
     string relName(const FSNode &root) const;
     string relName() const;
@@ -127,36 +127,17 @@ namespace sort {
 
 inline std::function<bool(const FSBlock &, const FSBlock &)> dafa = [](const FSBlock &b1, const FSBlock &b2) {
 
-    auto a = FSNode(b1.fs, b1.nr);
-    auto b = FSNode(b2.fs, b2.nr);
-    if ( a.isDirectory() && !b.isDirectory()) return true;
-    if (!a.isDirectory() &&  b.isDirectory()) return false;
-    return a.last() < b.last();
+    if ( b1.isDirectory() && !b2.isDirectory()) return true;
+    if (!b1.isDirectory() &&  b2.isDirectory()) return false;
+    return b1.pathName() < b2.pathName();
 };
 
 inline std::function<bool(const FSBlock &, const FSBlock &)> alpha = [](const FSBlock &b1, const FSBlock &b2) {
 
-    auto a = FSNode(b1.fs, b1.nr);
-    auto b = FSNode(b2.fs, b2.nr);
-    return a.last() < b.last();
+    return b1.pathName() < b2.pathName();
 };
 
 inline std::function<bool(const FSBlock &, const FSBlock &)> none = nullptr;
-
-
-inline std::function<bool(const FSNode &, const FSNode &)> deprecatedDafa = [](const FSNode &a, const FSNode &b) {
-
-    if ( a.isDirectory() && !b.isDirectory()) return true;
-    if (!a.isDirectory() &&  b.isDirectory()) return false;
-    return a.last() < b.last();
-};
-
-inline std::function<bool(const FSNode &, const FSNode &)> deprecatedAlpha = [](const FSNode &a, const FSNode &b) {
-
-    return a.last() < b.last();
-};
-
-inline std::function<bool(const FSNode &, const FSNode &)> deprecatedNone = nullptr;
 
 }
 

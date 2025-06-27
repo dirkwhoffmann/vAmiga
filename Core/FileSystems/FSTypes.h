@@ -35,7 +35,7 @@ struct FSOpt
     // DEPRECATED
     std::function<bool(const FSNode &, const FSNode &)> deprecatedSort;
     FSPathFilter deprecatedFilter;
-    FSPathFormatter deprecatedFormatter;
+    // FSPathFormatter deprecatedFormatter;
     bool deprecatedAccept(const FSNode &p) const { return deprecatedFilter ? deprecatedFilter(p) : true; }
 };
 

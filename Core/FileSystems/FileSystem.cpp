@@ -474,6 +474,87 @@ FileSystem::rootDir() const
     return FSNode(this, rootBlock);
 }
 
+FSBlock *
+FileSystem::parentDir(const FSBlock &root) const
+{
+    return root.isRoot() ? blockPtr(root.nr) : blockPtr(root.nr)->getParentDirBlock();
+}
+
+FSBlock *
+FileSystem::seekPtr(const FSBlock &root, const FSName &name) const
+{
+    std::set<Block> visited;
+
+    // Check for special tokens
+    if (name == "")   return blockPtr(root.nr);
+    if (name == ".")  return blockPtr(root.nr);
+    if (name == "..") return parentDir(root);
+    if (name == "/")  return blockPtr(rootBlock);
+
+    // Only proceed if a hash table is present
+    if (root.hasHashTable()) {
+
+        // Compute the table position and read the item
+        u32 hash = name.hashValue(getDos()) % root.hashTableSize();
+        u32 ref = root.getHashRef(hash);
+
+        // Traverse the linked list until the item has been found
+        while (ref && visited.find(ref) == visited.end())  {
+
+            FSBlock *block = hashableBlockPtr(ref);
+            if (block == nullptr) break;
+
+            if (block->isNamed(name)) return block;
+
+            visited.insert(ref);
+            ref = block->getNextHashRef();
+        }
+    }
+    return nullptr;
+}
+
+FSBlock *
+FileSystem::seekPtr(const FSBlock &root, const FSString &name) const
+{
+    return seekPtr(root, name.cpp_str());
+}
+
+FSBlock *
+FileSystem::seekPtr(const FSBlock &root, const std::vector<FSName> &name) const
+{
+    FSBlock *result = blockPtr(root.nr);
+    for (auto &it : name) { result = seekPtr(*result, it); }
+    return result;
+}
+
+FSBlock *
+FileSystem::seekPtr(const FSBlock &root, const std::vector<string> &name) const
+{
+    FSBlock *result = blockPtr(root.nr);
+    for (auto &it : name) { result = seekPtr(*result, FSName(it)); }
+    return result;
+}
+
+FSBlock *
+FileSystem::seekPtr(const FSBlock &root, const fs::path &name) const
+{
+    FSBlock *result = blockPtr(root.nr);
+    for (const auto &it : name) { result = seekPtr(*result, FSName(it)); }
+    return result;
+}
+
+FSBlock *
+FileSystem::seekPtr(const FSBlock &root, const string &name) const
+{
+    return seekPtr(root, util::split(name, '/'));
+}
+
+FSBlock *
+FileSystem::seekPtr(const FSBlock &root, const char *name) const
+{
+    return seekPtr(root, string(name));
+}
+
 bool
 FileSystem::exists(const FSNode &top, const fs::path &path) const
 {
@@ -544,23 +625,17 @@ FileSystem::list(std::ostream &os, const FSNode &path, const FSOpt &opt) const
 
         if (t.children.empty()) return;
 
-        // auto *dir = blockPtr(t.node);
-        auto dir = FSNode(this, t.node);
-
         // Print header
         if (opt.recursive) {
 
             if (i) os << std::endl;
             if (column) os << std::endl;
-            os << "Directory " << dir.absName() << ":" << std::endl << std::endl;
+            os << "Directory " << t.node->absName() << ":" << std::endl << std::endl;
         }
 
-        // Create display names
+        // Collect all displayed strings
         std::vector<string> strs;
-        for (auto &it : t.children) {
-            auto item = FSNode(this, it.node);
-            strs.push_back(opt.deprecatedFormatter(item));
-        }
+        for (auto &it : t.children) strs.push_back(opt.formatter(*it.node));
 
         // Determine the longest entry
         int tab = 0; for (auto &it: strs) tab = std::max(tab, int(it.length()));
@@ -591,6 +666,70 @@ FileSystem::traverse(const FSNode &path, const FSOpt &opt) const
 {
     assert(path.isRegular());
 
+    // printf("traverse(%s)\n", path.last().c_str());
+
+    FSTree tree(path.ptr());
+
+    // Collect the blocks for all items in this directory
+    std::stack<Block> remainingItems;
+    std::set<Block> visited;
+    collectHashedRefs(path.ref, remainingItems, visited);
+
+    // Move the collected items to the result list
+    while (remainingItems.size() > 0) {
+
+        auto it = remainingItems.top();
+        if (auto *ptr = blockPtr(it); ptr) {
+            if (opt.accept(*ptr)) tree.children.push_back(ptr);
+        }
+        // printf("Adding %s\n", blockPtr(it)->getName().c_str());
+        remainingItems.pop();
+    }
+
+    // Sort items
+    tree.sort(opt.sort);
+
+    // Add subdirectories if requested
+    if (opt.recursive) {
+
+        for (auto &it : tree.children) {
+            if (it.node->isDirectory()) it = traverse(FSNode(this, it.node->nr));
+        }
+    }
+
+    return tree;
+}
+
+std::vector<FSBlock *>
+FileSystem::collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> next)
+{
+    std::vector<FSBlock *> result;
+    std::set<Block> visited;
+
+    // auto block = blockPtr(node.nr);
+
+    for (auto block = blockPtr(node.nr); block != nullptr; block = next(block)) {
+
+        // Break the loop if this block has been visited before
+        if (visited.contains(block->nr)) break;
+
+        // Add the block
+        result.push_back(block);
+
+        // Remember the block as visited
+        visited.insert(block->nr);
+    }
+
+    return result;
+}
+
+
+/*
+FSTree
+FileSystem::traverse(const FSNode &path, const FSOpt &opt) const
+{
+    assert(path.isRegular());
+
     FSTree tree(path.ptr());
 
     // Collect the blocks for all items in this directory
@@ -614,10 +753,10 @@ FileSystem::traverse(const FSNode &path, const FSOpt &opt) const
 
     // Sort items
     tree.sort(opt.sort);
-    // if (opt.sort) { std::sort(tree.children.begin(), tree.children.end(), opt.sort); }
 
     return tree;
 }
+*/
 
 void
 FileSystem::collect(const FSNode &path, std::vector<FSNode> &result, const FSOpt &opt) const
@@ -632,7 +771,7 @@ FileSystem::collect(const FSNode &path, std::vector<string> &result, const FSOpt
     auto paths = path.collect(opt);
 
     for (auto &it : paths) {
-        result.push_back(opt.deprecatedFormatter ? opt.deprecatedFormatter(it) : it.last().cpp_str());
+        result.push_back(opt.formatter ? opt.formatter(*it.ptr()) : it.last().cpp_str());
     }
 }
 
@@ -649,7 +788,7 @@ FileSystem::collectDirs(const FSNode &path, std::vector<string> &result, const F
     auto paths = path.collectDirs(opt);
 
     for (auto &it : paths) {
-        result.push_back(opt.deprecatedFormatter ? opt.deprecatedFormatter(it) : it.last().cpp_str());
+        result.push_back(opt.formatter ? opt.formatter(*it.ptr()) : it.last().cpp_str());
     }
 }
 
@@ -666,7 +805,7 @@ FileSystem::collectFiles(const FSNode &path, std::vector<string> &result, const 
     auto paths = path.collectFiles(opt);
 
     for (auto &it : paths) {
-        result.push_back(opt.deprecatedFormatter ? opt.deprecatedFormatter(it) : it.last().cpp_str());
+        result.push_back(opt.formatter ? opt.formatter(*it.ptr()) : it.last().cpp_str());
     }
 }
 
