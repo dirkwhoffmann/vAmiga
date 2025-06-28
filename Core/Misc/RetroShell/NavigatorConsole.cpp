@@ -193,8 +193,77 @@ NavigatorConsole::parseBlock(const Arguments &argv, const string &token, Block f
     return nr;
 }
 
-FSNode
+FSBlock &
 NavigatorConsole::parsePath(const Arguments &argv, const string &token)
+{
+    assert(argv.contains(token));
+
+    try {
+        // Try to find the directory by name
+        return *fs.seekPtr(fs.pwd(), argv.at(token));
+
+    } catch (...) {
+
+        try {
+            // Treat the argument as a block number
+            return fs[parseBlock(argv.at(token))];
+
+        } catch (...) {
+
+            // The item does not exist
+            throw AppError(Fault::FS_NOT_FOUND, token);
+        }
+    }
+}
+
+FSBlock &
+NavigatorConsole::parsePath(const Arguments &argv, const string &token, FSBlock &fallback)
+{
+    return argv.contains(token) ? parsePath(argv, token) : fallback;
+}
+
+FSBlock &
+NavigatorConsole::parseFile(const Arguments &argv, const string &token)
+{
+    return parseFile(argv, token, fs.pwd());
+}
+
+FSBlock &
+NavigatorConsole::parseFile(const Arguments &argv, const string &token, FSBlock &fallback)
+{
+    if (!fs.formatted()) {
+        throw AppError(Fault::FS_UNFORMATTED);
+    }
+    auto &path = parsePath(argv, token, fallback);
+
+    if (!path.isFile()) {
+        throw AppError(Fault::FS_NOT_A_FILE, "Block " + std::to_string(path.nr));
+    }
+    return path;
+}
+
+FSBlock &
+NavigatorConsole::parseDirectory(const Arguments &argv, const string &token)
+{
+    return parseDirectory(argv, token, fs.pwd());
+}
+
+FSBlock &
+NavigatorConsole::parseDirectory(const Arguments &argv, const string &token, FSBlock &fallback)
+{
+    if (!fs.formatted()) {
+        throw AppError(Fault::FS_UNFORMATTED);
+    }
+    auto &path = parsePath(argv, token, fallback);
+
+    if (!path.isDirectory()) {
+        throw AppError(Fault::FS_NOT_A_DIRECTORY, "Block " + std::to_string(path.nr));
+    }
+    return path;
+}
+
+FSNode
+NavigatorConsole::oldParsePath(const Arguments &argv, const string &token)
 {
     assert(argv.contains(token));
 
@@ -217,24 +286,24 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token)
 }
 
 FSNode
-NavigatorConsole::parsePath(const Arguments &argv, const string &token, const FSNode &fallback)
+NavigatorConsole::oldParsePath(const Arguments &argv, const string &token, const FSNode &fallback)
 {
-    return argv.contains(token) ? parsePath(argv, token) : fallback;
+    return argv.contains(token) ? oldParsePath(argv, token) : fallback;
 }
 
 FSNode
-NavigatorConsole::parseFile(const Arguments &argv, const string &token)
+NavigatorConsole::oldParseFile(const Arguments &argv, const string &token)
 {
-    return parseFile(argv, token, fs.oldpwd());
+    return oldParseFile(argv, token, fs.oldpwd());
 }
 
 FSNode
-NavigatorConsole::parseFile(const Arguments &argv, const string &token, const FSNode &fallback)
+NavigatorConsole::oldParseFile(const Arguments &argv, const string &token, const FSNode &fallback)
 {
     if (!fs.formatted()) {
         throw AppError(Fault::FS_UNFORMATTED);
     }
-    auto path = parsePath(argv, token, fallback);
+    auto path = oldParsePath(argv, token, fallback);
 
     if (!path.isFile()) {
         throw AppError(Fault::FS_NOT_A_FILE, "Block " + std::to_string(path.ref));
@@ -243,18 +312,18 @@ NavigatorConsole::parseFile(const Arguments &argv, const string &token, const FS
 }
 
 FSNode
-NavigatorConsole::parseDirectory(const Arguments &argv, const string &token)
+NavigatorConsole::oldParseDirectory(const Arguments &argv, const string &token)
 {
-    return parseDirectory(argv, token, fs.oldpwd());
+    return oldParseDirectory(argv, token, fs.oldpwd());
 }
 
 FSNode
-NavigatorConsole::parseDirectory(const Arguments &argv, const string &token, const FSNode &fallback)
+NavigatorConsole::oldParseDirectory(const Arguments &argv, const string &token, const FSNode &fallback)
 {
     if (!fs.formatted()) {
         throw AppError(Fault::FS_UNFORMATTED);
     }
-    auto path = parsePath(argv, token, fallback);
+    auto path = oldParsePath(argv, token, fallback);
 
     if (!path.isDirectory()) {
         throw AppError(Fault::FS_NOT_A_DIRECTORY, "Block " + std::to_string(path.ref));
@@ -661,7 +730,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto path = parsePath(args, "path", fs.oldRootDir());
+            auto path = oldParsePath(args, "path", fs.oldRootDir());
             fs.cd(path);
         }
     });
@@ -678,7 +747,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto path = parseDirectory(args, "path");
+            auto path = oldParseDirectory(args, "path");
             auto d = args.contains("d");
             auto f = args.contains("f");
             auto r = args.contains("r");
@@ -714,7 +783,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "s", "Sort output" }, .flags = rs::flag } },
         .func   = [this](std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto path = parseDirectory(args, "path");
+            auto path = oldParseDirectory(args, "path");
             auto d = args.contains("d");
             auto f = args.contains("f");
             auto r = args.contains("r");
@@ -768,23 +837,21 @@ NavigatorConsole::initCommands(RSCommand &root)
             auto name = args.at("name");
             auto pattern = FSPattern(name);
             auto abs = name[0] == '/';
-            auto path = parsePath(args, "path", fs.oldpwd());
+            auto path = parsePath(args, "path", fs.pwd());
+
             auto d = args.contains("d");
             auto f = args.contains("f");
             auto r = args.contains("r");
             auto s = args.contains("s");
-
 
             FSOpt opt = {
 
                 .recursive = r,
                 .sort = s ? sort::alpha : sort::none,
 
-                // .deprecatedSort = s ? sort::deprecatedAlpha : sort::deprecatedNone,
-
                 .filter = [&](const FSBlock &item) {
 
-                    return item.matches(pattern) && //  pattern.match(item.last()) &&
+                    return item.matches(pattern) &&
                     (!d || item.isDirectory()) &&
                     (!f || item.isFile());
                 },
@@ -798,9 +865,10 @@ NavigatorConsole::initCommands(RSCommand &root)
                 }
             };
 
-            std::vector<string> matches;
-            fs.collect(path, matches, opt);
-            for (auto &it : matches) { os << it << '\n'; }
+            fs.find(os, path);
+            // std::vector<string> matches;
+            // fs.collect(path, matches, opt);
+            // for (auto &it : matches) { os << it << '\n'; }
         }
     });
 
@@ -816,7 +884,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto file = parsePath(args, "path", fs.oldpwd());
+            auto file = oldParsePath(args, "path", fs.oldpwd());
             if (!file.isFile()) {
                 throw AppError(Fault::FS_NOT_A_FILE, "Block " + std::to_string(file.ref));
             }
@@ -884,7 +952,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto file = parsePath(args, "path", fs.oldpwd());
+            auto file = oldParsePath(args, "path", fs.oldpwd());
             auto opt = parseDumpOpts(args);
 
             Buffer<u8> buffer;
@@ -996,7 +1064,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto item = parsePath(args, "item");
+            auto item = oldParsePath(args, "item");
 
             fs.rename(item, args.at("name"));
         }
@@ -1013,7 +1081,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto source = parsePath(args, "source");
+            auto source = oldParsePath(args, "source");
 
             Tokens missing;
             auto path = matchPath(args.at("target"), missing);
@@ -1057,7 +1125,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto source = parsePath(args, "source");
+            auto source = oldParsePath(args, "source");
 
             Tokens missing;
             auto path = matchPath(args.at("target"), missing);
@@ -1093,7 +1161,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto path = parsePath(args, "path");
+            auto path = oldParsePath(args, "path");
 
             if (path.isFile()) {
 

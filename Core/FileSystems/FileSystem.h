@@ -158,6 +158,14 @@ public:
     // Checks block properties
     bool isEmpty(Block nr) const { return blockType(nr) == FSBlockType::EMPTY_BLOCK; }
 
+    // Reads a block (of a certain type)
+    FSBlock *read(Block nr) { return storage.read(nr); }
+    FSBlock *read(Block nr, FSBlockType type) { return storage.read(nr, type); }
+    const FSBlock *read(Block nr) const;
+    const FSBlock *read(Block nr, FSBlockType type) const;
+    FSBlock &operator[](size_t nr) { return *read(Block(nr)); }
+    const FSBlock &operator[](size_t nr) const { return *read(Block(nr)); }
+
     // Returns the usage type of a certain byte in a certain block
     FSItemType itemType(Block nr, isize pos) const;
     
@@ -239,9 +247,13 @@ public:
     bool exists(const FSNode &top, const fs::path &path) const;
     bool exists(const fs::path &path) const { return exists(oldpwd(), path); }
 
-    // Lists the contents of a directory
+    // Lists the contents of a directory ('dir' command, 'list' command)
     void list(std::ostream &os, const FSBlock &path, const FSOpt &opt = {}) const;
     void list(std::ostream &os, const FSOpt &opt = {}) const { return list(os, pwd(), opt); }
+
+    // Searches the directory tree ('find' command)
+    void find(std::ostream &os, const FSBlock &path, const FSOpt &opt = {}) const;
+    void find(std::ostream &os, const FSOpt &opt = {}) const { return list(os, pwd(), opt); }
 
     // Changes the working directory
     void cd(const FSName &name);

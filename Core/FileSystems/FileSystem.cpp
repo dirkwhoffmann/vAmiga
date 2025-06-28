@@ -297,6 +297,18 @@ FileSystem::blockType(Block nr) const
     return storage.getType(nr);
 }
 
+const FSBlock *
+FileSystem::read(Block nr) const
+{
+    return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->read(nr));
+}
+
+const FSBlock *
+FileSystem::read(Block nr, FSBlockType type) const
+{
+    return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->read(nr, type));
+}
+
 FSItemType
 FileSystem::itemType(Block nr, isize pos) const
 {
@@ -666,6 +678,20 @@ FileSystem::list(std::ostream &os, const FSBlock &path, const FSOpt &opt) const
         }
     };
 
+    tree.bfsWalk(func);
+}
+
+void
+FileSystem::find(std::ostream &os, const FSBlock &path, const FSOpt &opt) const
+{
+    // Collect all directory items to list
+    auto tree = traverse(path, opt);
+
+    // Walk the tree
+    auto func = [&](const FSTree &t) {
+
+        os << std::left << t.node->relName(path) << std::endl;
+    };
     tree.bfsWalk(func);
 }
 

@@ -415,12 +415,19 @@ class NavigatorConsole final : public Console
     Block parseBlock(const string &arg);
     Block parseBlock(const Arguments &argv, const string &token);
     Block parseBlock(const Arguments &argv, const string &token, Block fallback);
-    FSNode parsePath(const Arguments &argv, const string &token);
-    FSNode parsePath(const Arguments &argv, const string &token, const FSNode &fallback);
-    FSNode parseFile(const Arguments &argv, const string &token);
-    FSNode parseFile(const Arguments &argv, const string &token, const FSNode &fallback);
-    FSNode parseDirectory(const Arguments &argv, const string &token);
-    FSNode parseDirectory(const Arguments &argv, const string &token, const FSNode &fallback);
+    FSBlock &parsePath(const Arguments &argv, const string &token);
+    FSBlock &parsePath(const Arguments &argv, const string &token, FSBlock &fallback);
+    FSBlock &parseFile(const Arguments &argv, const string &token);
+    FSBlock &parseFile(const Arguments &argv, const string &token, FSBlock &fallback);
+    FSBlock &parseDirectory(const Arguments &argv, const string &token);
+    FSBlock &parseDirectory(const Arguments &argv, const string &token, FSBlock &fallback);
+
+    FSNode oldParsePath(const Arguments &argv, const string &token);
+    FSNode oldParsePath(const Arguments &argv, const string &token, const FSNode &fallback);
+    FSNode oldParseFile(const Arguments &argv, const string &token);
+    FSNode oldParseFile(const Arguments &argv, const string &token, const FSNode &fallback);
+    FSNode oldParseDirectory(const Arguments &argv, const string &token);
+    FSNode oldParseDirectory(const Arguments &argv, const string &token, const FSNode &fallback);
     util::DumpOpt parseDumpOpts(const Arguments &argv);
 
     // Experimental
