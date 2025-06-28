@@ -53,16 +53,17 @@ EXEFile::finalizeRead()
     volume.makeBootable(BootBlockId::AMIGADOS_13);
 
     // Start at the root directory
-    auto dir = volume.oldRootDir();
+    if (auto dir = volume.rootDir(); dir) {
 
-    // Add the executable
-    volume.createFile(dir, FSName("file"), data);
+        // Add the executable
+        volume.createFile(*dir, FSName("file"), data);
 
-    // Add a script directory
-    dir = volume.createDir(dir, FSName("s"));
+        // Add a script directory
+        dir = &volume.createDir(*dir, FSName("s"));
 
-    // Add a startup sequence
-    volume.createFile(dir, "startup-sequence", "file");
+        // Add a startup sequence
+        volume.createFile(*dir, "startup-sequence", "file");
+    }
 
     // Finalize
     volume.updateChecksums();

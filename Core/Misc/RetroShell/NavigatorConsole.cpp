@@ -64,34 +64,28 @@ NavigatorConsole::autoComplete(Tokens &argv)
     // Only proceed if there is anything to complete
     if (argv.empty()) return;
 
-    auto [cmd, remaining] = seekCommandNew(argv);
+    if (auto [cmd, remaining] = seekCommandNew(argv); remaining.size() > 0) {
 
-    if (remaining.size() == 0) {
+        // First, try to auto-complete the last token with a command name
+        if (remaining.size() != 1 || !cmd->autoComplete(argv.back())) {
 
-        // There is nothing to complete
-        return;
+            // That didn't work, so try to auto-complete with a file name
+            auto pattern = FSPattern(remaining.back() + "*");
+            auto matches = fs.find(pattern, {});
+
+            // Collect the names for all matching directory items
+            std::vector<string> names;
+            if (pattern.isAbsolute()) {
+                for (auto &it : matches) names.push_back(fs.at(it).absName());
+            } else {
+                for (auto &it : matches) names.push_back(fs.at(it).relName());
+            }
+
+            // Auto-complete with the common prefix
+            auto prefix = util::commonPrefix(names);
+            if (prefix.size() > argv.back().size()) argv.back() = prefix;
+        }
     }
-    if (remaining.size() == 1) {
-
-        // Try to auto-complete the last token as a command
-        if (auto matches = cmd->autoComplete(argv.back()); matches) return;
-    }
-
-    // Try to auto-complete the last token as a file name
-    auto pattern = FSPattern(remaining.back() + "*");
-    auto matches = fs.find(pattern, {});
-
-    // Convert all matches to file names
-    std::vector<string> names;
-    if (pattern.isAbsolute()) {
-        for (auto &it : matches) names.push_back(fs.at(it).absName());
-    } else {
-        for (auto &it : matches) names.push_back(fs.at(it).relName());
-    }
-
-    // Auto-complete with the common prefix
-    auto prefix = util::commonPrefix(names);
-    if (prefix.size() > argv.back().size()) argv.back() = prefix;
 }
 
 void
@@ -99,7 +93,7 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
 {
     auto [cmd, args] = seekCommandNew(argv);
 
-    // Check which kind of help we should display
+    // Determine the kind of help to display
     bool displayFiles = (tabs % 2 == 0) && fs.formatted() && cmd && cmd->callback && !args.empty();
     bool displayCmds  = (tabs % 2 == 1) || !displayFiles;
 
@@ -1019,10 +1013,11 @@ NavigatorConsole::initCommands(RSCommand &root)
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             Tokens missing;
-            auto path = matchPath(args.at("name"), missing);
+            auto npath = matchPath(args.at("name"), missing);
+            auto *path = npath.ptr();
 
             for (auto &it: missing) {
-                path = fs.createDir(path, FSName(it));
+                path = &fs.createDir(*path, FSName(it));
             }
         }
     });
@@ -1099,7 +1094,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto source = oldParsePath(args, "source");
+            auto &source = parsePath(args, "source");
 
             Tokens missing;
             auto path = matchPath(args.at("target"), missing);
@@ -1112,12 +1107,12 @@ NavigatorConsole::initCommands(RSCommand &root)
                 }
                 if (path.isDirectory()) {
 
-                    fs.copy(source, path);
+                    fs.copy(source, *path.ptr());
                 }
 
             } else if (missing.size() == 1) {
 
-                fs.copy(source, path, missing.back());
+                fs.copy(source, *path.ptr(), missing.back());
 
             } else {
 

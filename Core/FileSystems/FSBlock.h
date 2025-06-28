@@ -48,9 +48,9 @@ private:
 public:
 
     FSBlock(const FSBlock&) = delete;             // Copy constructor
-    FSBlock& operator=(const FSBlock&) = delete;  // Copy assignment
+    // FSBlock& operator=(const FSBlock&) = delete;  // Copy assignment
     FSBlock(FSBlock&&) = delete;                  // Move constructor
-    FSBlock& operator=(FSBlock&&) = delete;       // Move assignment
+    // FSBlock& operator=(FSBlock&&) = delete;       // Move assignment
 
     FSBlock(FileSystem *ref, Block nr, FSBlockType t);
     ~FSBlock();
@@ -364,7 +364,7 @@ public:
     
     isize writeData(std::ostream &os);
     isize writeData(std::ostream &os, isize size);
-    isize writeData(Buffer<u8> &buf);
+    isize writeData(Buffer<u8> &buf) const;
     isize writeData(Buffer<u8> &buf, isize offset, isize count);
 
     

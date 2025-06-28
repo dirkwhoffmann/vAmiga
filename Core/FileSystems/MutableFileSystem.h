@@ -132,13 +132,13 @@ public:
 public:
 
     // Creates a new directory
-    FSNode createDir(const FSNode &at, const FSName &name);
+    FSBlock &createDir(const FSBlock &at, const FSName &name);
 
     // Creates a new file
-    FSNode createFile(const FSNode &at, const FSName &name);
-    FSNode createFile(const FSNode &at, const FSName &name, const Buffer<u8> &buf);
-    FSNode createFile(const FSNode &at, const FSName &name, const u8 *buf, isize size);
-    FSNode createFile(const FSNode &at, const FSName &name, const string &str);
+    FSBlock &createFile(const FSBlock &at, const FSName &name);
+    FSBlock &createFile(const FSBlock &at, const FSName &name, const Buffer<u8> &buf);
+    FSBlock &createFile(const FSBlock &at, const FSName &name, const u8 *buf, isize size);
+    FSBlock &createFile(const FSBlock &at, const FSName &name, const string &str);
 
     // Renames a file or directory
     void rename(const FSNode &item, const FSName &name);
@@ -147,8 +147,8 @@ public:
     void move(const FSNode &item, const FSNode &dest, const FSName &name = "");
 
     // Copies a file
-    void copy(const FSNode &item, const FSNode &dest);
-    void copy(const FSNode &item, const FSNode &dest, const FSName &name);
+    void copy(const FSBlock &item, const FSBlock &dest);
+    void copy(const FSBlock &item, const FSBlock &dest, const FSName &name);
 
     // Delete a file
     void deleteFile(const FSNode &at);
@@ -156,7 +156,7 @@ public:
 private:
 
     // Adds a hash-table entry for a given item
-    void addToHashTable(const FSNode &item);
+    void addToHashTable(const FSBlock &item);
     void addToHashTable(Block parent, Block ref);
 
     // Removes the hash-table entry for a given item
@@ -164,8 +164,8 @@ private:
     void deleteFromHashTable(Block parent, Block ref);
 
     // Adds a reference to a directory
-    void addHashRef(const FSNode &at, Block nr); // DEPRECATED
-    void addHashRef(const FSNode &at, FSBlock *block); // DEPRECATED
+    // void addHashRef(const FSNode &at, Block nr); // DEPRECATED
+    // void addHashRef(const FSNode &at, FSBlock *block); // DEPRECATED
 
     // Adds bytes to a data block
     isize addData(Block nr, const u8 *buf, isize size);

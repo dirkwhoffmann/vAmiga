@@ -371,46 +371,46 @@ MutableFileSystem::rectifyAllocationMap()
     }
 }
 
-FSNode
-MutableFileSystem::createDir(const FSNode &at, const FSName &name)
+FSBlock &
+MutableFileSystem::createDir(const FSBlock &at, const FSName &name)
 {
     if (at.isDirectory()) {
 
         if (FSBlock *block = newUserDirBlock(name); block) {
 
-            block->setParentDirRef(at.ref);
-            addHashRef(at, block->nr);
-            return FSNode(this, block);
+            block->setParentDirRef(at.nr);
+            addToHashTable(at.nr, block->nr);
+            return *block;
         }
         throw AppError(Fault::FS_OUT_OF_SPACE);
     }
     throw AppError(Fault::FS_NOT_A_DIRECTORY, at.absName());
 }
 
-FSNode
-MutableFileSystem::createFile(const FSNode &at, const FSName &name)
+FSBlock &
+MutableFileSystem::createFile(const FSBlock &at, const FSName &name)
 {
     if (at.isDirectory()) {
 
         if (FSBlock *block = newFileHeaderBlock(name); block) {
 
-            block->setParentDirRef(at.ref);
-            addHashRef(at, block->nr);
-            return FSNode(this, block);
+            block->setParentDirRef(at.nr);
+            addToHashTable(at.nr, block->nr);
+            return *block;
         }
         throw AppError(Fault::FS_OUT_OF_SPACE);
     }
     throw AppError(Fault::FS_NOT_A_DIRECTORY, at.absName());
 }
 
-FSNode
-MutableFileSystem::createFile(const FSNode &at, const FSName &name, const Buffer<u8> &buf)
+FSBlock &
+MutableFileSystem::createFile(const FSBlock &at, const FSName &name, const Buffer<u8> &buf)
 {
     return createFile(at, name, buf.ptr, buf.size);
 }
 
-FSNode
-MutableFileSystem::createFile(const FSNode &at, const FSName &name, const u8 *buf, isize size)
+FSBlock &
+MutableFileSystem::createFile(const FSBlock &at, const FSName &name, const u8 *buf, isize size)
 {
     assert(buf);
 
@@ -418,11 +418,10 @@ MutableFileSystem::createFile(const FSNode &at, const FSName &name, const u8 *bu
     const usize numRefs = ((bsize / 4) - 56);
 
     // Create a file header block
-    auto file = createFile(at, name);
-    auto fhb = file.ptr();
+    auto &file = createFile(at, name);
 
     // Set file size
-    fhb->setFileSize(u32(size));
+    file.setFileSize(u32(size));
 
     // Allocate blocks
     std::vector<Block> listBlocks;
@@ -432,16 +431,16 @@ MutableFileSystem::createFile(const FSNode &at, const FSName &name, const u8 *bu
     for (usize i = 0; i < listBlocks.size(); i++) {
 
         // Add a list block
-        addFileListBlock(listBlocks[i], fhb->nr, i == 0 ? fhb->nr : listBlocks[i-1]);
+        addFileListBlock(listBlocks[i], file.nr, i == 0 ? file.nr : listBlocks[i-1]);
     }
 
     for (usize i = 0; i < dataBlocks.size(); i++) {
 
         // Add a data block
-        addDataBlock(dataBlocks[i], i + 1, fhb->nr, i == 0 ? fhb->nr : dataBlocks[i-1]);
+        addDataBlock(dataBlocks[i], i + 1, file.nr, i == 0 ? file.nr : dataBlocks[i-1]);
 
         // Determine the list block managing this data block
-        FSBlock *lb = blockPtr((i < numRefs) ? fhb->nr : listBlocks[i / numRefs - 1]);
+        FSBlock *lb = blockPtr((i < numRefs) ? file.nr : listBlocks[i / numRefs - 1]);
 
         // Link the data block
         lb->addDataBlockRef(dataBlocks[0], dataBlocks[i]);
@@ -455,8 +454,8 @@ MutableFileSystem::createFile(const FSNode &at, const FSName &name, const u8 *bu
     return file;
 }
 
-FSNode
-MutableFileSystem::createFile(const FSNode &at, const FSName &name, const string &str)
+FSBlock &
+MutableFileSystem::createFile(const FSBlock &at, const FSName &name, const string &str)
 {
     return createFile(at, name, (const u8 *)str.c_str(), (isize)str.size());
 }
@@ -490,19 +489,19 @@ MutableFileSystem::move(const FSNode &item, const FSNode &dest, const FSName &na
 }
 
 void
-MutableFileSystem::copy(const FSNode &item, const FSNode &dest)
+MutableFileSystem::copy(const FSBlock &item, const FSBlock &dest)
 {
-    copy(item, dest, item.last());
+    copy(item, dest, item.pathName());
 }
 
 void
-MutableFileSystem::copy(const FSNode &item, const FSNode &dest, const FSName &name)
+MutableFileSystem::copy(const FSBlock &item, const FSBlock &dest, const FSName &name)
 {
     if (!item.isFile()) throw AppError(Fault::FS_NOT_A_FILE, item.absName());
     if (!dest.isDirectory()) throw AppError(Fault::FS_NOT_A_DIRECTORY, dest.absName());
 
     // Read the file
-    Buffer<u8> buffer; item.ptr()->writeData(buffer);
+    Buffer<u8> buffer; item.writeData(buffer);
 
     // Recreate the file at the target location
     createFile(dest, name, buffer);
@@ -529,9 +528,9 @@ MutableFileSystem::deleteFile(const FSNode &item)
 }
 
 void
-MutableFileSystem::addToHashTable(const FSNode &item)
+MutableFileSystem::addToHashTable(const FSBlock &item)
 {
-    addToHashTable(item.parent().ref, item.ref);
+    addToHashTable(item.getParentDirRef(), item.nr);
 }
 
 void
@@ -593,6 +592,7 @@ MutableFileSystem::deleteFromHashTable(Block parent, Block ref)
     }
 }
 
+/*
 void
 MutableFileSystem::addHashRef(const FSNode &at, Block nr)
 {
@@ -619,6 +619,7 @@ MutableFileSystem::addHashRef(const FSNode &at, FSBlock *newBlock)
     FSBlock *last = lastHashBlockInChain(ref);
     if (last) last->setNextHashRef(newBlock->nr);
 }
+*/
 
 isize
 MutableFileSystem::addData(Block nr, const u8 *buf, isize size)
@@ -777,9 +778,9 @@ MutableFileSystem::import(const FSNode &at, const fs::directory_entry &entry, bo
 
         Buffer<u8> buffer(entry.path());
         if (buffer) {
-            createFile(at, fsname, buffer.ptr, buffer.size);
+            createFile(*at.ptr(), fsname, buffer.ptr, buffer.size);
         } else {
-            createFile(at, fsname);
+            createFile(*at.ptr(), fsname);
         }
 
     } else {
@@ -787,12 +788,12 @@ MutableFileSystem::import(const FSNode &at, const fs::directory_entry &entry, bo
         debug(FS_DEBUG > 1, "Importing directory %s\n", fsname.c_str());
 
         // Create new directory
-        auto subdir = createDir(at, fsname);
+        auto &subdir = createDir(*at.ptr(), fsname);
 
         // Import all items
         for (const auto& it : fs::directory_iterator(entry)) {
 
-            if (it.is_regular_file() || recursive) import(subdir, it, recursive);
+            if (it.is_regular_file() || recursive) import(FSNode(this, subdir.nr), it, recursive);
         }
     }
 }

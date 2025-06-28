@@ -2037,7 +2037,7 @@ FSBlock::writeData(std::ostream &os, isize size)
 }
 
 isize
-FSBlock::writeData(Buffer<u8> &buf)
+FSBlock::writeData(Buffer<u8> &buf) const
 {
     // Only call this function for file header blocks
     if (type != FSBlockType::FILEHEADER_BLOCK) throw AppError(Fault::FS_NOT_A_FILE);
@@ -2049,7 +2049,7 @@ FSBlock::writeData(Buffer<u8> &buf)
     buf.init(bytesRemaining);
     
     // Start here and iterate through all connected file list blocks
-    FSBlock *block = this;
+    const FSBlock *block = this;
     
     while (block && blocksTotal < fs->numBlocks()) {
 

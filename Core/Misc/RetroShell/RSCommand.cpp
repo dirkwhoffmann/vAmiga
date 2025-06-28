@@ -193,7 +193,7 @@ RSCommand::autoComplete(string &token)
     for (auto &it : matches) { tokens.push_back(it->name); }
 
     if (!tokens.empty()) token = util::commonPrefix(tokens);
-    return matches.size();
+    return (isize)matches.size();
 }
 
 void
