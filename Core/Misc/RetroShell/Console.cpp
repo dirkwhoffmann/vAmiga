@@ -462,31 +462,11 @@ Console::split(const string& userInput)
         }
         esc = false;
     }
-    // if (!token.empty()) result.push_back(token);
-    result.push_back(token);
-
-    // Add an empty token if the string ends with " "
-    // if (!userInput.empty() && userInput.back() == ' ') result.push_back("");
+    if (!token.empty()) result.push_back(token);
 
     return result;
 }
 
-/*
-std::pair<Arguments, Arguments>
-Console::split(const Arguments &argv)
-{
-    Arguments cmds, args = argv;
-    auto *it = &root;
-
-    while (!args.empty() && (it = it->seek(args.front()))) {
-
-        cmds.push_back(args.front());
-        args.erase(args.begin());
-    }
-
-    return { cmds, args };
-}
-*/
 RSCommand *
 Console::seekCommand(std::vector<string> &argv)
 {
@@ -498,6 +478,12 @@ Console::seekCommand(std::vector<string> &argv)
         result = it;
     }
     return result;
+}
+
+std::pair<RSCommand *, std::vector<string>>
+Console::seekCommandNew(const string &argv)
+{
+    return seekCommandNew(split(argv));
 }
 
 std::pair<RSCommand *, std::vector<string>>
@@ -843,23 +829,9 @@ Console::argUsage(const RSCommand& current, const string &prefix)
 void
 Console::help(std::ostream &os, const string& userInput, isize tabs)
 {
-    // Split the command string
-    Tokens tokens = split(userInput);
-
-    // Process the command
-    help(os, tokens, tabs);
-}
-
-void
-Console::help(std::ostream &os, const Tokens &argv, isize tabs)
-{
-    RSCommand *current = &getRoot();
-    string prefix, token;
-
-    for (auto &it : argv) {
-        if (current->seek(it) != nullptr) current = current->seek(it);
+    if (auto [cmd, args] = seekCommandNew(userInput); cmd) {
+        cmd->printHelp(os);
     }
-    current->printHelp(os);
 }
 
 void

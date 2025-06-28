@@ -272,6 +272,7 @@ protected:
 
     // Strips off the command tokens and returns a pointer to the command
     RSCommand *seekCommand(std::vector<string> &argv);
+    std::pair<RSCommand *, std::vector<string>> seekCommandNew(const string &argv);
     std::pair<RSCommand *, std::vector<string>> seekCommandNew(const std::vector<string> &argv);
 
     // Parses an argument list
@@ -339,7 +340,6 @@ protected:
 
     // Displays a help text for a (partially typed in) command
     virtual void help(std::ostream &os, const string &cmd, isize tabs);
-    virtual void help(std::ostream &os, const Tokens &argv, isize tabs);
 
     // Creates a textual description of an error
     void describe(const std::exception &exc, isize line = 0, const string &cmd = "");
@@ -405,7 +405,7 @@ class NavigatorConsole final : public Console
     void printHelp(isize tab = 0) override;
     void pressReturn(bool shift) override;
     void autoComplete(Tokens &argv) override;
-    void help(std::ostream &os, const Tokens &argv, isize tabs) override;
+    void help(std::ostream &os, const string &argv, isize tabs) override;
 
 
     //

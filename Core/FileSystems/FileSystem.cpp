@@ -674,10 +674,6 @@ FileSystem::find(const FSPattern &pattern, const FSOpt &opt) const
 {
     std::vector<Block> result;
 
-    // Setup a filter for the provided pattern
-    auto options = opt;
-    // options.filter = [&](FSBlock &block) { return block.matches(pattern); };
-
     printf("Pattern = %s\n", pattern.glob.c_str());
     printf("isAbsolute() = %d\n", pattern.isAbsolute());
 
@@ -686,7 +682,7 @@ FileSystem::find(const FSPattern &pattern, const FSOpt &opt) const
     printf("top = %s\n", top.absName().c_str());
 
     // Collect all directory items
-    auto tree = traverse(top, options);
+    auto tree = traverse(top, opt);
     printf("traverse: %p\n", (void *)tree.node);
 
     // Translate into a vector

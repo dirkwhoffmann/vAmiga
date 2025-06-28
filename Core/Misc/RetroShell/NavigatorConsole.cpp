@@ -61,18 +61,10 @@ NavigatorConsole::pressReturn(bool shift)
 void
 NavigatorConsole::autoComplete(Tokens &argv)
 {
-    printf("autoComplete(");
-    for (auto &it : argv) { printf("'%s',", it.c_str()); }
-    printf(")\n");
-
     // Only proceed if there is anything to complete
     if (argv.empty()) return;
 
     auto [cmd, remaining] = seekCommandNew(argv);
-
-    printf("cmd = %p\n", (void *)cmd);
-    for (auto &it : remaining) printf(" '%s'\n", it.c_str());
-    printf("\n");
 
     if (remaining.size() == 0) {
 
@@ -85,11 +77,8 @@ NavigatorConsole::autoComplete(Tokens &argv)
         if (auto matches = cmd->autoComplete(argv.back()); matches) return;
     }
 
-    auto last = remaining.back();
-    printf("Complete %s as a file\n", last.c_str());
-
     // Try to auto-complete the last token as a file name
-    auto pattern = FSPattern(last + "*");
+    auto pattern = FSPattern(remaining.back() + "*");
     auto matches = fs.find(pattern, {});
 
     // Convert all matches to file names
@@ -100,16 +89,13 @@ NavigatorConsole::autoComplete(Tokens &argv)
         for (auto &it : matches) names.push_back(fs.at(it).relName());
     }
 
-    for (auto &it : names) { printf("Name: '%s'\n", it.c_str()); }
-
     // Auto-complete with the common prefix
     auto prefix = util::commonPrefix(names);
-    printf("prefix = %s (%s)\n", prefix.c_str(), argv.back().c_str());
     if (prefix.size() > argv.back().size()) argv.back() = prefix;
 }
 
 void
-NavigatorConsole::help(std::ostream &os, const Tokens &argv, isize tabs)
+NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
 {
     auto [cmd, args] = seekCommandNew(argv);
 
