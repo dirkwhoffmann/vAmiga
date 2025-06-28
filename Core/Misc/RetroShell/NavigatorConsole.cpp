@@ -106,8 +106,7 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
             .sort = sort::dafa,
             .filter = [&](const FSBlock &item) {
 
-                auto p = FSNode(&fs, item.nr);
-                return p.last().cpp_str().starts_with(args.back());
+                return fs.at(item.nr).pathName().starts_with(args.back());
             },
             .formatter = [&](const FSBlock &node) {
 
@@ -229,57 +228,6 @@ NavigatorConsole::parseDirectory(const Arguments &argv, const string &token, FSB
     }
     return path;
 }
-
-/*
-FSNode
-NavigatorConsole::oldParsePath(const Arguments &argv, const string &token)
-{
-    assert(argv.contains(token));
-
-    try {
-        // Try to find the directory by name
-        return fs.oldpwd().seek(argv.at(token));
-
-    } catch (...) {
-
-        try {
-            // Treat the argument as a block number
-            return FSNode(&fs, parseBlock(argv.at(token)));
-
-        } catch (...) {
-
-            // The item does not exist
-            throw AppError(Fault::FS_NOT_FOUND, token);
-        }
-    }
-}
-
-FSNode
-NavigatorConsole::oldParsePath(const Arguments &argv, const string &token, const FSNode &fallback)
-{
-    return argv.contains(token) ? oldParsePath(argv, token) : fallback;
-}
-
-FSNode
-NavigatorConsole::oldParseFile(const Arguments &argv, const string &token)
-{
-    return oldParseFile(argv, token, fs.oldpwd());
-}
-
-FSNode
-NavigatorConsole::oldParseFile(const Arguments &argv, const string &token, const FSNode &fallback)
-{
-    if (!fs.formatted()) {
-        throw AppError(Fault::FS_UNFORMATTED);
-    }
-    auto path = oldParsePath(argv, token, fallback);
-
-    if (!path.isFile()) {
-        throw AppError(Fault::FS_NOT_A_FILE, "Block " + std::to_string(path.ref));
-    }
-    return path;
-}
-*/
 
 FSBlock &
 NavigatorConsole::matchPath(const Arguments &argv, const string &token, Tokens &notFound)

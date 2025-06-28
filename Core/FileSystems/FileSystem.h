@@ -13,7 +13,6 @@
 #include "FSBlock.h"
 #include "FSDescriptors.h"
 #include "FSObjects.h"
-#include "FSNode.h"
 #include "FSTree.h"
 #include "BlockStorage.h"
 #include "ADFFile.h"
@@ -39,7 +38,6 @@ class HardDrive;
 class FileSystem : public CoreObject {
     
     friend struct FSBlock;
-    friend struct FSNode;
     friend struct FSHashTable;
     friend struct FSPartition;
     
@@ -239,7 +237,6 @@ public:
 
     // Returns the root of the directory tree
     FSBlock *rootDir() const;
-    FSNode oldRootDir() const;
 
 public:
 

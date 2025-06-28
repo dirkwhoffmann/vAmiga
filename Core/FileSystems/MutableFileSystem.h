@@ -163,10 +163,6 @@ private:
     void deleteFromHashTable(const FSBlock &item);
     void deleteFromHashTable(Block parent, Block ref);
 
-    // Adds a reference to a directory
-    // void addHashRef(const FSNode &at, Block nr); // DEPRECATED
-    // void addHashRef(const FSNode &at, FSBlock *block); // DEPRECATED
-
     // Adds bytes to a data block
     isize addData(Block nr, const u8 *buf, isize size);
     isize addData(FSBlock &block, const u8 *buf, isize size);

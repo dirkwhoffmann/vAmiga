@@ -8,7 +8,6 @@ FileSystem.cpp
 FSDescriptors.cpp
 FSObjects.cpp
 FSBlock.cpp
-FSNode.cpp
 FSTree.cpp
 MutableFileSystem.cpp
 

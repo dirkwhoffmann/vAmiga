@@ -473,12 +473,6 @@ FileSystem::rootDir() const
     return blockPtr(rootBlock);
 }
 
-FSNode
-FileSystem::oldRootDir() const
-{
-    return FSNode(this, rootBlock);
-}
-
 FSBlock *
 FileSystem::parentDir(const FSBlock &root) const
 {

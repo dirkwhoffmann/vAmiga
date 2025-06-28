@@ -133,7 +133,7 @@ Console::operator<<(const FSName &value)
 }
 
 Console&
-Console::operator<<(const FSNode &value)
+Console::operator<<(const FSBlock &value)
 {
     *this << value.absName();
     return *this;

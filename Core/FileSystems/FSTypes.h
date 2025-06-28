@@ -14,14 +14,10 @@
 namespace vamiga {
 
 struct FSBlock;
-struct FSNode;
 typedef u32 Block;
 typedef std::function<bool(FSBlock &)> FSBlockFilter;
 typedef std::function<string(FSBlock &)> FSBlockFormatter;
 typedef std::function<bool(FSBlock &, FSBlock &)> FSBlockSorter;
-
-// typedef std::function<bool(const FSNode &)> FSPathFilter;
-// typedef std::function<string(const FSNode &)> FSPathFormatter;
 
 struct FSOpt
 {
