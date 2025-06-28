@@ -426,8 +426,8 @@ class NavigatorConsole final : public Console
     FSNode oldParsePath(const Arguments &argv, const string &token, const FSNode &fallback);
     FSNode oldParseFile(const Arguments &argv, const string &token);
     FSNode oldParseFile(const Arguments &argv, const string &token, const FSNode &fallback);
-    FSNode oldParseDirectory(const Arguments &argv, const string &token);
-    FSNode oldParseDirectory(const Arguments &argv, const string &token, const FSNode &fallback);
+    // FSNode oldParseDirectory(const Arguments &argv, const string &token);
+    // FSNode oldParseDirectory(const Arguments &argv, const string &token, const FSNode &fallback);
     util::DumpOpt parseDumpOpts(const Arguments &argv);
 
     // Experimental

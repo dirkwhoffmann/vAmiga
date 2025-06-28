@@ -52,7 +52,7 @@ MutableFileSystem::init(const FileSystemDescriptor &layout, const fs::path &path
     if (!path.empty()) {
         
         // Add all files
-        import(oldRootDir(), path);
+        import(*rootDir(), path);
 
         // Assign device name
         setName(FSName(path.filename().string()));
@@ -461,17 +461,17 @@ MutableFileSystem::createFile(const FSBlock &at, const FSName &name, const strin
 }
 
 void
-MutableFileSystem::rename(const FSNode &item, const FSName &name)
+MutableFileSystem::rename(FSBlock &item, const FSName &name)
 {
     // Renaming the root node renames the name of the file system
     if (item.isRoot()) { setName(name); return; }
 
     // For files and directories, reposition the item in the hash table
-    move(item, item.parent(), name);
+    move(item, *item.getParentDirBlock(), name);
 }
 
 void
-MutableFileSystem::move(const FSNode &item, const FSNode &dest, const FSName &name)
+MutableFileSystem::move(FSBlock &item, const FSBlock &dest, const FSName &name)
 {
     if (!dest.isDirectory()) throw AppError(Fault::FS_NOT_A_DIRECTORY, dest.absName());
 
@@ -479,13 +479,13 @@ MutableFileSystem::move(const FSNode &item, const FSNode &dest, const FSName &na
     deleteFromHashTable(item);
 
     // Rename if a new name is provided
-    if (name != "") item.ptr()->setName(name);
+    if (name != "") item.setName(name);
 
     // Add the item to the new hash table
-    addToHashTable(dest.ref, item.ref);
+    addToHashTable(dest.nr, item.nr);
 
     // Assign the new parent directory
-    item.ptr()->setParentDirRef(dest.ref);
+    item.setParentDirRef(dest.nr);
 }
 
 void
@@ -508,13 +508,13 @@ MutableFileSystem::copy(const FSBlock &item, const FSBlock &dest, const FSName &
 }
 
 void
-MutableFileSystem::deleteFile(const FSNode &item)
+MutableFileSystem::deleteFile(const FSBlock &item)
 {
     if (!item.isFile()) return;
 
     // Collect all blocks occupied by this file
-    auto blocks = dataBlocks(item);
-    blocks.push_back(item.ref);
+    auto blocks = dataBlocks(FSNode(this, item.nr));
+    blocks.push_back(item.nr);
 
     // Remove the file from the hash table
     deleteFromHashTable(item);
@@ -556,9 +556,9 @@ MutableFileSystem::addToHashTable(Block parent, Block ref)
 }
 
 void
-MutableFileSystem::deleteFromHashTable(const FSNode &item)
+MutableFileSystem::deleteFromHashTable(const FSBlock &item)
 {
-    deleteFromHashTable(item.parent().ref, item.ref);
+    deleteFromHashTable(item.getParentDirRef(), item.nr);
 }
 
 void
@@ -729,7 +729,7 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
 }
 
 void
-MutableFileSystem::import(const FSNode &at, const fs::path &path, bool recursive, bool contents)
+MutableFileSystem::import(const FSBlock &at, const fs::path &path, bool recursive, bool contents)
 {
     fs::directory_entry dir;
 
@@ -757,7 +757,7 @@ MutableFileSystem::import(const FSNode &at, const fs::path &path, bool recursive
 }
 
 void
-MutableFileSystem::import(const FSNode &at, const fs::directory_entry &entry, bool recursive)
+MutableFileSystem::import(const FSBlock &at, const fs::directory_entry &entry, bool recursive)
 {
     auto isHidden = [&](const fs::path &path) {
 
@@ -778,9 +778,9 @@ MutableFileSystem::import(const FSNode &at, const fs::directory_entry &entry, bo
 
         Buffer<u8> buffer(entry.path());
         if (buffer) {
-            createFile(*at.ptr(), fsname, buffer.ptr, buffer.size);
+            createFile(at, fsname, buffer.ptr, buffer.size);
         } else {
-            createFile(*at.ptr(), fsname);
+            createFile(at, fsname);
         }
 
     } else {
@@ -788,12 +788,12 @@ MutableFileSystem::import(const FSNode &at, const fs::directory_entry &entry, bo
         debug(FS_DEBUG > 1, "Importing directory %s\n", fsname.c_str());
 
         // Create new directory
-        auto &subdir = createDir(*at.ptr(), fsname);
+        auto &subdir = createDir(at, fsname);
 
         // Import all items
         for (const auto& it : fs::directory_iterator(entry)) {
 
-            if (it.is_regular_file() || recursive) import(FSNode(this, subdir.nr), it, recursive);
+            if (it.is_regular_file() || recursive) import(subdir, it, recursive);
         }
     }
 }

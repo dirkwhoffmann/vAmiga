@@ -141,17 +141,17 @@ public:
     FSBlock &createFile(const FSBlock &at, const FSName &name, const string &str);
 
     // Renames a file or directory
-    void rename(const FSNode &item, const FSName &name);
+    void rename(FSBlock &item, const FSName &name);
 
     // Moves a file or directory to another location
-    void move(const FSNode &item, const FSNode &dest, const FSName &name = "");
+    void move(FSBlock &item, const FSBlock &dest, const FSName &name = "");
 
     // Copies a file
     void copy(const FSBlock &item, const FSBlock &dest);
     void copy(const FSBlock &item, const FSBlock &dest, const FSName &name);
 
     // Delete a file
-    void deleteFile(const FSNode &at);
+    void deleteFile(const FSBlock &at);
 
 private:
 
@@ -160,7 +160,7 @@ private:
     void addToHashTable(Block parent, Block ref);
 
     // Removes the hash-table entry for a given item
-    void deleteFromHashTable(const FSNode &item);
+    void deleteFromHashTable(const FSBlock &item);
     void deleteFromHashTable(Block parent, Block ref);
 
     // Adds a reference to a directory
@@ -184,9 +184,8 @@ public:
     void importVolume(const u8 *src, isize size) throws;
 
     // Imports files and folders from the host file system
-    void import(const FSNode &at, const fs::path &path, bool recursive = true, bool contents = false) throws;
-    void import(const FSNode &at, const fs::directory_entry &dir, bool recursive) throws;
-    // void import(const fs::path &path, bool recursive = true) throws;
+    void import(const FSBlock &at, const fs::path &path, bool recursive = true, bool contents = false) throws;
+    void import(const FSBlock &at, const fs::directory_entry &dir, bool recursive) throws;
 
     // Exports the volume to a buffer
     bool exportVolume(u8 *dst, isize size) const;
