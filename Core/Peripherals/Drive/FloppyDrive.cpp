@@ -1034,7 +1034,7 @@ FloppyDrive::catchFile(const fs::path &path)
     auto fs = MutableFileSystem(*this);
     
     // Seek file
-    auto file = fs.seekPtr(*fs.rootDir(), path);
+    auto file = fs.seekPtr(fs.root(), path);
     if (!file->isFile()) throw AppError(Fault::FS_NOT_A_FILE, path.string());
 
     // Extract file

@@ -52,7 +52,7 @@ MutableFileSystem::init(const FileSystemDescriptor &layout, const fs::path &path
     if (!path.empty()) {
         
         // Add all files
-        import(*rootDir(), path);
+        import(root(), path);
 
         // Assign device name
         setName(FSName(path.filename().string()));
@@ -864,7 +864,7 @@ MutableFileSystem::exportDirectory(const fs::path &path, bool createDir) const
     }
 
     // Collect all files and directories
-    auto tree = traverse(*rootDir(), { .recursive = true });
+    auto tree = traverse(root(), { .recursive = true });
 
     // Export all items
     tree.bfsWalk([&](const FSTree &t) {

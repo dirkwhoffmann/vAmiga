@@ -53,7 +53,7 @@ EXEFile::finalizeRead()
     volume.makeBootable(BootBlockId::AMIGADOS_13);
 
     // Start at the root directory
-    if (auto dir = volume.rootDir(); dir) {
+    if (auto *dir = &volume.root(); dir) {
 
         // Add the executable
         volume.createFile(*dir, FSName("file"), data);

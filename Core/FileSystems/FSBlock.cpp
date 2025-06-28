@@ -175,7 +175,7 @@ FSBlock::pathName() const
 string
 FSBlock::absName() const
 {
-    return "/" + relName(*fs->rootDir());
+    return "/" + relName(fs->root());
 }
 
 string

@@ -29,11 +29,13 @@ NavigatorConsole::getPrompt()
 
     if (fs.initialized()) {
 
-        ss << "[" << std::to_string(fs.curr) << "]";
+        auto &pwd = fs.pwd();
+
+        ss << "[" << std::to_string(pwd.nr) << "]";
 
         auto fsName = fs.getName();
         if (!fsName.empty()) ss << " " << fsName << ":";
-        if (fs.pwd().isDirectory()) ss << " " << fs.pwd().absName();
+        if (pwd.isDirectory()) ss << " " << pwd.absName();
     }
 
     ss << "> ";
@@ -628,7 +630,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto &path = parsePath(args, "path", *fs.rootDir());
+            auto &path = parsePath(args, "path", fs.root());
             fs.cd(path);
         }
     });

@@ -467,11 +467,13 @@ FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) const
     return bm;
 }
 
+/*
 FSBlock *
 FileSystem::rootDir() const
 {
     return blockPtr(rootBlock);
 }
+*/
 
 FSBlock *
 FileSystem::parentDir(const FSBlock &root) const
@@ -660,7 +662,7 @@ FileSystem::find(const FSPattern &pattern, const FSOpt &opt) const
     printf("isAbsolute() = %d\n", pattern.isAbsolute());
 
     // Determine the directory to start searching
-    auto &top = pattern.isAbsolute() ? *rootDir() : pwd();
+    auto &top = pattern.isAbsolute() ? root() : pwd();
     printf("top = %s\n", top.absName().c_str());
 
     // Collect all directory items

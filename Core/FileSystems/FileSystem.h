@@ -60,15 +60,13 @@ protected:
 
     // Location of the root block
     Block rootBlock = 0;
-    
-    // Location of the bitmap blocks and extended bitmap blocks
-    std::vector<Block> bmBlocks;
-    std::vector<Block> bmExtBlocks;
-
-public: // CHANGE BACK TO PROTECTED ONCE EVERY BLOCK CAN BE 'PWD'
 
     // The current directory (points to the root block by default)
     Block curr = 0;
+
+    // Location of the bitmap blocks and extended bitmap blocks
+    std::vector<Block> bmBlocks;
+    std::vector<Block> bmExtBlocks;
 
 
     //
@@ -236,7 +234,13 @@ protected:
 public:
 
     // Returns the root of the directory tree
-    FSBlock *rootDir() const;
+    FSBlock &root() { return at(rootBlock); }
+    const FSBlock &root() const { return at(rootBlock); }
+    // FSBlock *rootDir() const;
+
+    // Returns the working directory
+    FSBlock &pwd() { return at(curr); }
+    const FSBlock &pwd() const { return at(curr); }
 
 public:
 
@@ -269,10 +273,6 @@ public:
     void cd(const FSName &name);
     void cd(const FSBlock &path);
     void cd(const string &path);
-
-    // Returns the working directory
-    FSBlock &pwd() { return at(curr); }
-    const FSBlock &pwd() const { return at(curr); }
 
     // Collects the data blocks belonging to a file
     std::vector<Block> dataBlocks(const FSBlock &path);
