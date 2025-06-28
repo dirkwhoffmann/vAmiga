@@ -47,6 +47,11 @@ private:
 
 public:
 
+    FSBlock(const FSBlock&) = delete;             // Copy constructor
+    FSBlock& operator=(const FSBlock&) = delete;  // Copy assignment
+    FSBlock(FSBlock&&) = delete;                  // Move constructor
+    FSBlock& operator=(FSBlock&&) = delete;       // Move assignment
+
     FSBlock(FileSystem *ref, Block nr, FSBlockType t);
     ~FSBlock();
 

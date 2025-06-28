@@ -25,7 +25,7 @@ void
 BlockStorage::dealloc()
 {
     fs = nullptr;
-    blocks = { };
+    blocks.clear();
 }
 
 void
@@ -35,7 +35,7 @@ BlockStorage::init(isize capacity, isize bsize)
     this->bsize = bsize;
 
     // Remove all existing blocks
-    blocks = {};
+    blocks.clear();
 
     // Request a capacity change
     blocks.reserve(capacity);
@@ -81,14 +81,14 @@ BlockStorage::getType(Block nr) const
 {
     if (isize(nr) >= capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
 
-    return blocks.contains(nr) ? blocks.at(nr).type : FSBlockType::EMPTY_BLOCK;
+    return blocks.contains(nr) ? blocks.at(nr)->type : FSBlockType::EMPTY_BLOCK;
 }
 
 void
 BlockStorage::setType(Block nr, FSBlockType type)
 {
     if (isize(nr) >= capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
-    blocks.at(nr).init(type);
+    blocks.at(nr)->init(type);
 }
 
 FSBlock *
@@ -97,13 +97,13 @@ BlockStorage::read(Block nr) noexcept
     if (nr >= size_t(capacity)) return nullptr;
 
     // Create the block if it does not yet exist
-    if (!blocks.contains(nr)) blocks.emplace(nr, FSBlock(fs, Block(nr), FSBlockType::EMPTY_BLOCK));
+    if (!blocks.contains(nr)) blocks.emplace(nr, std::make_unique<FSBlock>(fs, nr, FSBlockType::EMPTY_BLOCK));
 
     // Collect some statistical information
     stats.blockReads++;
 
     // Return a block reference
-    return &blocks.at(nr);
+    return blocks.at(nr).get();
 }
 
 const FSBlock *

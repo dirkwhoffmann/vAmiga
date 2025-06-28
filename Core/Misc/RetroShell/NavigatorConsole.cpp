@@ -837,7 +837,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             auto name = args.at("name");
             auto pattern = FSPattern(name);
             auto abs = name[0] == '/';
-            auto path = parsePath(args, "path", fs.pwd());
+            auto &path = parsePath(args, "path", fs.pwd());
 
             auto d = args.contains("d");
             auto f = args.contains("f");

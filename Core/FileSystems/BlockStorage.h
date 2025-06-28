@@ -30,7 +30,7 @@ private:
     isize bsize {};
 
     // Block storage
-    std::unordered_map<usize, FSBlock> blocks;
+    std::unordered_map<usize, std::unique_ptr<FSBlock>> blocks;
 
 
     //
