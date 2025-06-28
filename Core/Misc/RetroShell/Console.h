@@ -431,9 +431,9 @@ class NavigatorConsole final : public Console
     util::DumpOpt parseDumpOpts(const Arguments &argv);
 
     // Experimental
-    FSNode matchPath(const Arguments &argv, const string &token, Tokens &notFound);
-    FSNode matchPath(const Arguments &argv, const string &token, Tokens &notFound, const FSNode &fallback);
-    FSNode matchPath(const string &path, Tokens &notFound);
+    FSBlock &matchPath(const Arguments &argv, const string &token, Tokens &notFound);
+    FSBlock &matchPath(const Arguments &argv, const string &token, Tokens &notFound, FSBlock &fallback);
+    FSBlock &matchPath(const string &path, Tokens &notFound);
 
 
     //

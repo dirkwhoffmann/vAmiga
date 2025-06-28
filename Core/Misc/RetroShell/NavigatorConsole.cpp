@@ -279,41 +279,19 @@ NavigatorConsole::oldParseFile(const Arguments &argv, const string &token, const
     return path;
 }
 
-/*
-FSNode
-NavigatorConsole::oldParseDirectory(const Arguments &argv, const string &token)
-{
-    return oldParseDirectory(argv, token, fs.oldpwd());
-}
-
-FSNode
-NavigatorConsole::oldParseDirectory(const Arguments &argv, const string &token, const FSNode &fallback)
-{
-    if (!fs.formatted()) {
-        throw AppError(Fault::FS_UNFORMATTED);
-    }
-    auto path = oldParsePath(argv, token, fallback);
-
-    if (!path.isDirectory()) {
-        throw AppError(Fault::FS_NOT_A_DIRECTORY, "Block " + std::to_string(path.ref));
-    }
-    return path;
-}
-*/
-
-FSNode
+FSBlock &
 NavigatorConsole::matchPath(const Arguments &argv, const string &token, Tokens &notFound)
 {
     return matchPath(argv.at(token), notFound);
 }
 
-FSNode
-NavigatorConsole::matchPath(const Arguments &argv, const string &token, Tokens &notFound, const FSNode &fallback)
+FSBlock &
+NavigatorConsole::matchPath(const Arguments &argv, const string &token, Tokens &notFound, FSBlock &fallback)
 {
     return argv.contains(token) ? matchPath(argv, token, notFound) : fallback;
 }
 
-FSNode
+FSBlock &
 NavigatorConsole::matchPath(const string &path, Tokens &notFound)
 {
     if (!fs.formatted()) throw AppError(Fault::FS_UNFORMATTED);
@@ -321,15 +299,15 @@ NavigatorConsole::matchPath(const string &path, Tokens &notFound)
     auto tokens = util::split(path, '/');
     if (!path.empty() && path[0] == '/') { tokens.insert(tokens.begin(), "/"); }
 
-    auto p = fs.oldpwd();
+    auto *p = &fs.pwd();
     while (!tokens.empty()) {
 
-        try { p = p.seek(FSName(tokens.front())); } catch (...) { break; }
+        if (p = fs.seekPtr(*p, FSName(tokens.front())); !p) { break; }
         tokens.erase(tokens.begin());
     }
     notFound = tokens;
 
-    return p;
+    return *p;
 }
 
 void
@@ -1015,11 +993,11 @@ NavigatorConsole::initCommands(RSCommand &root)
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             Tokens missing;
-            auto npath = matchPath(args.at("name"), missing);
-            auto *path = npath.ptr();
+            auto &path = matchPath(args.at("name"), missing);
 
+            auto *p = &path;
             for (auto &it: missing) {
-                path = &fs.createDir(*path, FSName(it));
+                if (p) p = &fs.createDir(*p, FSName(it));
             }
         }
     });
@@ -1055,7 +1033,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             auto &source = parsePath(args, "source");
 
             Tokens missing;
-            auto path = matchPath(args.at("target"), missing);
+            auto &path = matchPath(args.at("target"), missing);
 
             printf("%s -> '%s' {", source.absName().c_str(), path.absName().c_str());
             for (auto &it : missing) printf(" %s", it.c_str());
@@ -1070,14 +1048,14 @@ NavigatorConsole::initCommands(RSCommand &root)
                 if (path.isDirectory()) {
 
                     debug(RSH_DEBUG, "Moving '%s' to '%s'\n", source.absName().c_str(), path.absName().c_str());
-                    fs.move(source, *path.ptr());
+                    fs.move(source, path);
                 }
 
             } else if (missing.size() == 1) {
 
                 debug(RSH_DEBUG, "Moving '%s' to '%s' / '%s'\n",
                       source.absName().c_str(), path.absName().c_str(), missing.back().c_str());
-                fs.move(source, *path.ptr(), missing.back());
+                fs.move(source, path, missing.back());
 
             } else {
 
@@ -1099,7 +1077,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             auto &source = parsePath(args, "source");
 
             Tokens missing;
-            auto path = matchPath(args.at("target"), missing);
+            auto &path = matchPath(args.at("target"), missing);
 
             if (missing.empty()) {
 
@@ -1109,12 +1087,12 @@ NavigatorConsole::initCommands(RSCommand &root)
                 }
                 if (path.isDirectory()) {
 
-                    fs.copy(source, *path.ptr());
+                    fs.copy(source, path);
                 }
 
             } else if (missing.size() == 1) {
 
-                fs.copy(source, *path.ptr(), missing.back());
+                fs.copy(source, path, missing.back());
 
             } else {
 
