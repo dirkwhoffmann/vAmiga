@@ -121,7 +121,7 @@ commonPrefix(const string &s1, const string &s2)
 }
 
 string
-commonPrefix(std::vector<string> vec)
+commonPrefix(const std::vector<string> &vec)
 {
     if (vec.empty()) return "";
 

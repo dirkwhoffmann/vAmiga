@@ -58,7 +58,7 @@ string trim(const string &s, const string &characters = " ");
 
 // Returns the common prefix of multiple strings
 string commonPrefix(const string &s1, const string &s2);
-string commonPrefix(std::vector<string>);
+string commonPrefix(const std::vector<string> &vec);
 
 
 //

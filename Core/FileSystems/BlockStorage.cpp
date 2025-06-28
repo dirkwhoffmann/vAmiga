@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "BlockStorage.h"
+#include "FileSystem.h"
 
 namespace vamiga {
 
@@ -148,7 +149,12 @@ FSBlock &
 BlockStorage::at(Block nr)
 {
     if (auto *result = read(nr); result) return *result;
-    throw AppError(Fault::FS_INVALID_BLOCK_REF, std::to_string(nr));
+
+    if (!fs->initialized()) {
+        throw AppError(Fault::FS_UNINITIALIZED);
+    } else {
+        throw AppError(Fault::FS_INVALID_BLOCK_REF, std::to_string(nr));
+    }
 }
 
 FSBlock &
@@ -156,7 +162,9 @@ BlockStorage::at(Block nr, FSBlockType type)
 {
     if (auto *result = read(nr, type); result) return *result;
 
-    if (read(nr)) {
+    if (!fs->initialized()) {
+        throw AppError(Fault::FS_UNINITIALIZED);
+    } else if (read(nr)) {
         throw AppError(Fault::FS_INVALID_BLOCK_TYPE, std::to_string(nr));
     } else {
         throw AppError(Fault::FS_INVALID_BLOCK_REF, std::to_string(nr));
@@ -168,7 +176,9 @@ BlockStorage::at(Block nr, std::vector<FSBlockType> types)
 {
     if (auto *result = read(nr, types); result) return *result;
 
-    if (read(nr)) {
+    if (!fs->initialized()) {
+        throw AppError(Fault::FS_UNINITIALIZED);
+    } else if (read(nr)) {
         throw AppError(Fault::FS_INVALID_BLOCK_TYPE, std::to_string(nr));
     } else {
         throw AppError(Fault::FS_INVALID_BLOCK_REF, std::to_string(nr));

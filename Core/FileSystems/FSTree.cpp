@@ -14,22 +14,31 @@ namespace vamiga {
 void
 FSTree::dfsWalk(std::function<void(const FSTree &)> func)
 {
-    func(*this);
-    for (auto &it : children) it.dfsWalk(func);
+    if (!empty()) {
+
+        func(*this);
+        for (auto &it : children) it.dfsWalk(func);
+    }
 }
 
 void
 FSTree::bfsWalk(std::function<void(const FSTree &)> func)
 {
-    func(*this);
-    bfsWalkRec(func);
+    if (!empty()) {
+
+        func(*this);
+        bfsWalkRec(func);
+    }
 }
 
 void
 FSTree::bfsWalkRec(std::function<void(const FSTree &)> func)
 {
-    for (auto &it : children) { func(it); }
-    for (auto &it : children) { if (!it.children.empty()) it.bfsWalkRec(func); }
+    if (!empty()) {
+        
+        for (auto &it : children) { func(it); }
+        for (auto &it : children) { if (!it.children.empty()) it.bfsWalkRec(func); }
+    }
 }
 
 void

@@ -109,8 +109,8 @@ protected:
     // Cursor position
     isize cursor {};
 
-    // Indicates if TAB was the most recently pressed key
-    bool tabPressed {};
+    // Indicates how often TAB was pressed in a row
+    isize tabPressed {};
 
 
     //
@@ -338,8 +338,8 @@ protected:
     void argUsage(const RSCommand &cmd, const string &prefix);
 
     // Displays a help text for a (partially typed in) command
-    virtual void help(std::ostream &os, const string &cmd);
-    virtual void help(std::ostream &os, const Tokens &argv);
+    virtual void help(std::ostream &os, const string &cmd, isize tabs);
+    virtual void help(std::ostream &os, const Tokens &argv, isize tabs);
 
     // Creates a textual description of an error
     void describe(const std::exception &exc, isize line = 0, const string &cmd = "");
@@ -405,7 +405,7 @@ class NavigatorConsole final : public Console
     void printHelp(isize tab = 0) override;
     void pressReturn(bool shift) override;
     void autoComplete(Tokens &argv) override;
-    void help(std::ostream &os, const Tokens &argv) override;
+    void help(std::ostream &os, const Tokens &argv, isize tabs) override;
 
 
     //

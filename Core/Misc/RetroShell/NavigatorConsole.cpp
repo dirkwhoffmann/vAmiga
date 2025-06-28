@@ -90,37 +90,37 @@ NavigatorConsole::autoComplete(Tokens &argv)
 
     // Try to auto-complete the last token as a file name
     auto pattern = FSPattern(last + "*");
+    auto matches = fs.find(pattern, {});
 
-    std::vector<string> matches;
-    fs.collect(fs.oldpwd(), matches, {
-        .recursive = false,
-        .filter = [&](const FSBlock &item) { return pattern.match(item.pathName()); }
-    });
-    printf("Matches for %s\n", last.c_str());
-    for (auto &it : matches) printf("  Match: %s\n", it.c_str());
-    auto prefix = util::commonPrefix(matches);
+    // Convert all matches to file names
+    std::vector<string> names;
+    if (pattern.isAbsolute()) {
+        for (auto &it : matches) names.push_back(fs.at(it).absName());
+    } else {
+        for (auto &it : matches) names.push_back(fs.at(it).relName());
+    }
 
+    for (auto &it : names) { printf("Name: '%s'\n", it.c_str()); }
+
+    // Auto-complete with the common prefix
+    auto prefix = util::commonPrefix(names);
+    printf("prefix = %s (%s)\n", prefix.c_str(), argv.back().c_str());
     if (prefix.size() > argv.back().size()) argv.back() = prefix;
 }
 
 void
-NavigatorConsole::help(std::ostream &os, const Tokens &argv)
+NavigatorConsole::help(std::ostream &os, const Tokens &argv, isize tabs)
 {
-    // if (argv.empty()) return;
-    printf("NavigatorConsole::help\n");
-    for (auto &it : argv) printf(" argv = %s\n", it.c_str());
-
     auto [cmd, args] = seekCommandNew(argv);
 
-    printf("cmd = %p\n", (void *)cmd);
-    for (auto &it : args) printf(" arg = %s\n", it.c_str());
+    // Check which kind of help we should display
+    bool displayFiles = (tabs % 2 == 0) && fs.formatted() && cmd && cmd->callback && !args.empty();
+    bool displayCmds  = (tabs % 2 == 1) || !displayFiles;
 
-    if (cmd && cmd->callback && !args.empty()) {
-
-        printf("Collect files...\n");
+    if (displayFiles) {
 
         // Print all files matching the last token
-        FSOpt opt = {
+        fs.list(os, fs.pwd(), {
 
             .recursive = false,
             .sort = sort::dafa,
@@ -129,29 +129,17 @@ NavigatorConsole::help(std::ostream &os, const Tokens &argv)
                 auto p = FSNode(&fs, item.nr);
                 return p.last().cpp_str().starts_with(args.back());
             },
-            // .deprecatedSort = sort::deprecatedDafa,
             .formatter = [&](const FSBlock &node) {
 
                 return node.pathName() + (node.isDirectory() ? " (dir)" : "\t");
             }
-            /*
-            .deprecatedFilter = [&](const FSNode &item) {
+        });
+    }
 
-                return item.last().cpp_str().starts_with(args.back());
-            },
+    if (displayCmds) {
 
-            .deprecatedFormatter = [&](const FSNode &item) {
-
-                return item.last().cpp_str() + (item.isDirectory() ? " (dir)" : "\t");
-            }
-            */
-        };
-
-        fs.list(os, fs.pwd(), opt);
-
-    } else {
-
-        Console::help(os, argv);
+        // Display the standard command help
+        Console::help(os, argv, tabs);
     }
 }
 

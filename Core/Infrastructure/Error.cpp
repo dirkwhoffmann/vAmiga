@@ -378,6 +378,10 @@ AppError::AppError(Fault code, const string &s)
             description = s.empty() ? "Not a file." : s + " is not a file.";
             break;
 
+        case Fault::FS_NOT_A_FILE_OR_DIRECTORY:
+            description = s.empty() ? "Not a file or directory." : s + " is not a file or directory.";
+            break;
+
         case Fault::FS_NOT_FOUND:
             description = s.empty() ? "Not found." : s + " not found.";
             break;

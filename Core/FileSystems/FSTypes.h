@@ -20,8 +20,8 @@ typedef std::function<bool(FSBlock &)> FSBlockFilter;
 typedef std::function<string(FSBlock &)> FSBlockFormatter;
 typedef std::function<bool(FSBlock &, FSBlock &)> FSBlockSorter;
 
-typedef std::function<bool(const FSNode &)> FSPathFilter;
-typedef std::function<string(const FSNode &)> FSPathFormatter;
+// typedef std::function<bool(const FSNode &)> FSPathFilter;
+// typedef std::function<string(const FSNode &)> FSPathFormatter;
 
 struct FSOpt
 {
@@ -31,9 +31,6 @@ struct FSOpt
     FSBlockFormatter formatter;
 
     bool accept(FSBlock &b) const { return filter ? filter(b) : true; }
-
-    // DEPRECATED
-    // std::function<bool(const FSNode &, const FSNode &)> deprecatedSort;
 };
 
 enum class FSVolumeType : long

@@ -669,6 +669,36 @@ FileSystem::list(std::ostream &os, const FSBlock &path, const FSOpt &opt) const
     tree.bfsWalk(func);
 }
 
+std::vector<Block>
+FileSystem::find(const FSPattern &pattern, const FSOpt &opt) const
+{
+    std::vector<Block> result;
+
+    // Setup a filter for the provided pattern
+    auto options = opt;
+    // options.filter = [&](FSBlock &block) { return block.matches(pattern); };
+
+    printf("Pattern = %s\n", pattern.glob.c_str());
+    printf("isAbsolute() = %d\n", pattern.isAbsolute());
+
+    // Determine the directory to start searching
+    auto &top = pattern.isAbsolute() ? *rootDir() : pwd();
+    printf("top = %s\n", top.absName().c_str());
+
+    // Collect all directory items
+    auto tree = traverse(top, options);
+    printf("traverse: %p\n", (void *)tree.node);
+
+    // Translate into a vector
+    tree.bfsWalk([&](const FSTree &tree) {
+        if (tree.node->matches(pattern)) result.push_back(tree.node->nr);
+    });
+
+    printf("(1))");
+
+    return result;
+}
+
 void
 FileSystem::find(std::ostream &os, const FSBlock &path, const FSOpt &opt) const
 {
@@ -686,7 +716,9 @@ FileSystem::find(std::ostream &os, const FSBlock &path, const FSOpt &opt) const
 FSTree
 FileSystem::traverse(const FSBlock &path, const FSOpt &opt) const
 {
-    assert(path.isRegular());
+    if (!initialized()) throw AppError(Fault::FS_UNINITIALIZED);
+    if (!formatted()) throw AppError(Fault::FS_UNFORMATTED);
+    if (!path.isRegular()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
 
     // printf("traverse(%s)\n", path.last().c_str());
 
@@ -1115,6 +1147,27 @@ FileSystem::predictBlockType(Block nr, const u8 *buf) const
     
     return FSBlockType::EMPTY_BLOCK;
 }
+
+void
+FileSystem::REQUIRE_INITIALIZED() const
+{
+    if (!initialized()) throw AppError(Fault::FS_UNINITIALIZED);
+}
+
+void
+FileSystem::REQUIRE_FORMATTED() const
+{
+    if (!initialized()) throw AppError(Fault::FS_UNINITIALIZED);
+    if (!formatted()) throw AppError(Fault::FS_UNFORMATTED);
+}
+void
+FileSystem::REQUIRE_FILE_OR_DIRECTORY(FSBlock &node) const
+{
+    if (!initialized()) throw AppError(Fault::FS_UNINITIALIZED);
+    if (!formatted()) throw AppError(Fault::FS_UNFORMATTED);
+    if (!node.isRegular()) throw AppError(Fault::FS_NOT_A_FILE_OR_DIRECTORY);
+}
+
 
 void
 FileSystem::analyzeBlockUsage(u8 *buffer, isize len) const

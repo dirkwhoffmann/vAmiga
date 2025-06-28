@@ -318,11 +318,11 @@ Console::press(RSKey key, bool shift)
 
         case RSKey::TAB:
 
-            if (tabPressed) {
+            if (tabPressed++) {
 
-                // TAB was pressed twice
+                // TAB was pressed multiple times in a row
                 *this << input << '\n';
-                retroShell.asyncExec("help \"" + input + "\"");
+                retroShell.asyncExec("help \"" + input + "\" TAB=" + std::to_string(tabPressed));
 
             } else {
 
@@ -344,7 +344,7 @@ Console::press(RSKey key, bool shift)
             break;
     }
 
-    tabPressed = key == RSKey::TAB;
+    if (key != RSKey::TAB) tabPressed = 0;
     needsDisplay();
 
     assert(ipos >= 0 && ipos < historyLength());
@@ -841,17 +841,17 @@ Console::argUsage(const RSCommand& current, const string &prefix)
 }
 
 void
-Console::help(std::ostream &os, const string& userInput)
+Console::help(std::ostream &os, const string& userInput, isize tabs)
 {
     // Split the command string
     Tokens tokens = split(userInput);
 
     // Process the command
-    help(os, tokens);
+    help(os, tokens, tabs);
 }
 
 void
-Console::help(std::ostream &os, const Tokens &argv)
+Console::help(std::ostream &os, const Tokens &argv, isize tabs)
 {
     RSCommand *current = &getRoot();
     string prefix, token;
@@ -1072,11 +1072,12 @@ Console::initCommands(RSCommand &root)
             .tokens = { "help" },
             .chelp  = { "Print usage information" },
             .args   = {
-                { .name = { "command", "Command name" }, .flags = rs::opt }
+                { .name = { "command", "Command name" }, .flags = rs::opt },
+                { .name = { "TAB", "" }, .flags = rs::keyval | rs::hidden }
             },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-                
-                help(os, args.contains("command") ? args.at("command") : "");
+
+                help(os, args.contains("command") ? args.at("command") : "", parseNum(args, "TAB", 0));
             }
         });
 

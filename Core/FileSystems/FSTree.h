@@ -22,6 +22,8 @@ struct FSTree {
 
     FSTree(FSBlock *node) : node(node) {}
 
+    bool empty() { return node == nullptr; }
+
     void addChild(FSBlock *node) { if (node) children.push_back(FSTree(node)); }
 
     // Traverses the tree and applies a function at each node

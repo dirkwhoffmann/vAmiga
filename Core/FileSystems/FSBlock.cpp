@@ -169,13 +169,13 @@ FSBlock::isRegular() const
 string
 FSBlock::pathName() const
 {
-    return isRoot() ? "/" : getName().cpp_str();
+    return isRoot() ? "" : getName().cpp_str();
 }
 
 string
 FSBlock::absName() const
 {
-    return relName(*fs->rootDir());
+    return "/" + relName(*fs->rootDir());
 }
 
 string
@@ -194,19 +194,21 @@ FSBlock::relName(const FSBlock &top) const
     for (auto &it : nodes) {
 
         auto name = it->pathName();
-        result =name + (result.empty() || name == "/" ? "" : "/") + result;
+        result = name + "/" + result;
+        if (it == &top) break;
     }
-    return result;
+
+    return util::trim(result, "/");
 }
 
 bool
 FSBlock::matches(const FSPattern &pattern) const
 {
-    if (pattern.glob[0] == '/') {
-        printf("Abs matching %s and %s\n", absName().c_str(), pattern.glob.c_str());
+    if (pattern.isAbsolute()) {
+        printf("Abs matching %s and %s (%d)\n", absName().c_str(), pattern.glob.c_str(), pattern.match(absName()));
        return pattern.match(absName());
     } else {
-        printf("Rel matching %s and %s\n", relName().c_str(), pattern.glob.c_str());
+        printf("Rel matching %s and %s (%d)\n", relName().c_str(), pattern.glob.c_str(), pattern.match(relName()));
         return pattern.match(relName());
     }
 }

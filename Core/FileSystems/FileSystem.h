@@ -274,6 +274,7 @@ public:
     void list(std::ostream &os, const FSOpt &opt = {}) const { return list(os, pwd(), opt); }
 
     // Searches the directory tree ('find' command)
+    std::vector<Block> find(const FSPattern &pattern, const FSOpt &opt) const;
     void find(std::ostream &os, const FSBlock &path, const FSOpt &opt = {}) const;
     void find(std::ostream &os, const FSOpt &opt = {}) const { return list(os, pwd(), opt); }
 
@@ -284,7 +285,8 @@ public:
 
     // Returns the working directory
     FSNode oldpwd() const { return FSNode(this, curr); }
-    FSBlock &pwd() const { return *blockPtr(curr); }
+    FSBlock &pwd() { return at(curr); }
+    const FSBlock &pwd() const { return at(curr); }
 
     // Collects the data blocks belonging to a file
     std::vector<Block> dataBlocks(const FSNode &path);
@@ -374,7 +376,16 @@ protected:
     std::vector<Block> hashBlockChain(Block first) const;
     FSBlock *lastHashBlockInChain(Block start) const;
     FSBlock *lastHashBlockInChain(FSBlock *block) const;
-    
+
+
+    //
+    // Argument checking helpers
+    //
+
+    void REQUIRE_INITIALIZED() const;
+    void REQUIRE_FORMATTED() const;
+    void REQUIRE_FILE_OR_DIRECTORY(FSBlock &node) const;
+
 
     //
     // GUI helper functions

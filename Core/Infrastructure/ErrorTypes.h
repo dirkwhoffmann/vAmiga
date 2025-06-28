@@ -162,6 +162,7 @@ enum class Fault : long
     FS_INVALID_REGEX,
     FS_NOT_A_DIRECTORY,
     FS_NOT_A_FILE,
+    FS_NOT_A_FILE_OR_DIRECTORY,
     FS_NOT_FOUND,
     FS_EXISTS,
 
@@ -342,6 +343,7 @@ struct FaultEnum : Reflection<FaultEnum, Fault>
             case Fault::FS_INVALID_REGEX:            return "FS_INVALID_REGEX";
             case Fault::FS_NOT_A_DIRECTORY:          return "FS_NOT_A_DIRECTORY";
             case Fault::FS_NOT_A_FILE:               return "FS_NOT_A_FILE";
+            case Fault::FS_NOT_A_FILE_OR_DIRECTORY:  return "FS_NOT_A_FILE_OR_DIRECTORY";
             case Fault::FS_NOT_FOUND:                return "FS_NOT_FOUND";
             case Fault::FS_EXISTS:                   return "FS_EXISTS";
 
