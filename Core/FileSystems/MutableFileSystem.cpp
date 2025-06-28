@@ -595,35 +595,6 @@ MutableFileSystem::deleteFromHashTable(Block parent, Block ref)
     }
 }
 
-/*
-void
-MutableFileSystem::addHashRef(const FSNode &at, Block nr)
-{
-    if (FSBlock *block = hashableBlockPtr(nr)) {
-        addHashRef(at, block);
-    }
-}
-
-void
-MutableFileSystem::addHashRef(const FSNode &at, FSBlock *newBlock)
-{
-    // Only proceed if a hash table is present
-    FSBlock *bp = blockPtr(at.ref);
-    if (!bp || bp->hashTableSize() == 0) { return; }
-
-    // Read the item at the proper hash table location
-    u32 hash = newBlock->hashValue() % bp->hashTableSize();
-    u32 ref = bp->getHashRef(hash);
-
-    // If the slot is empty, put the reference there
-    if (ref == 0) { bp->setHashRef(hash, newBlock->nr); return; }
-
-    // Otherwise, put it into the last element of the block list chain
-    FSBlock *last = lastHashBlockInChain(ref);
-    if (last) last->setNextHashRef(newBlock->nr);
-}
-*/
-
 isize
 MutableFileSystem::addData(Block nr, const u8 *buf, isize size)
 {

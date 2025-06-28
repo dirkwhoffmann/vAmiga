@@ -279,7 +279,6 @@ public:
 
     // Collects the data blocks belonging to a file
     std::vector<Block> dataBlocks(const FSBlock &path);
-    std::vector<Block> oldDataBlocks(const FSNode &path);
 
 
     //
