@@ -11,6 +11,14 @@
 
 namespace vamiga {
 
+isize
+FSTree::size()
+{
+    isize result = 1;
+    for (auto &it : children) result += it.size();
+    return result;
+}
+
 void
 FSTree::dfsWalk(std::function<void(const FSTree &)> func)
 {

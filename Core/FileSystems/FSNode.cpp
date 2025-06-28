@@ -139,7 +139,7 @@ FSNode::relName(const FSNode &root) const
 string
 FSNode::relName() const
 {
-    return relName(fs->oldpwd());
+    return relName(FSNode(fs, fs->pwd().nr));
 }
 
 fs::path

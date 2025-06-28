@@ -255,19 +255,9 @@ public:
     FSBlock *seekPtr(const FSBlock &root, const string &name) const;
     FSBlock *seekPtr(const FSBlock &root, const char *name) const;
 
-    // Seeks an item in the directory tree
-    FSNode seek(const FSNode &top, const fs::path &path) const { return top.seek(path); }
-    FSNode seekDir(const FSNode &top, const fs::path &path) const { return top.seekDir(path); }
-    FSNode seekFile(const FSNode &top, const fs::path &path) const { return top.seekFile(path); }
-
-    // Seeks an item in the directory tree starting from the root
-    FSNode seek(const fs::path &path) const { return seek(oldpwd(), path); }
-    FSNode seekDir(const fs::path &path) const { return seekDir(oldpwd(), path); }
-    FSNode seekFile(const fs::path &path) const { return seekFile(oldpwd(), path); }
-
     // Checks if a an item exists in the directory tree
-    bool exists(const FSNode &top, const fs::path &path) const;
-    bool exists(const fs::path &path) const { return exists(oldpwd(), path); }
+    bool exists(const FSBlock &top, const fs::path &path) const;
+    bool exists(const fs::path &path) const { return exists(pwd(), path); }
 
     // Lists the contents of a directory ('dir' command, 'list' command)
     void list(std::ostream &os, const FSBlock &path, const FSOpt &opt = {}) const;
@@ -280,16 +270,16 @@ public:
 
     // Changes the working directory
     void cd(const FSName &name);
-    void cd(const FSNode &path);
+    void cd(const FSBlock &path);
     void cd(const string &path);
 
     // Returns the working directory
-    FSNode oldpwd() const { return FSNode(this, curr); }
     FSBlock &pwd() { return at(curr); }
     const FSBlock &pwd() const { return at(curr); }
 
     // Collects the data blocks belonging to a file
-    std::vector<Block> dataBlocks(const FSNode &path);
+    std::vector<Block> dataBlocks(const FSBlock &path);
+    std::vector<Block> oldDataBlocks(const FSNode &path);
 
 
     //
@@ -342,14 +332,6 @@ public:
 
     // Follows a linked list and collects all nodes
     std::vector<FSBlock *> collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> next);
-
-    // Returns a collection of nodes for all items in a directory (DEPRECATED)
-    void collect(const FSNode &path, std::vector<FSNode> &result, const FSOpt &opt = {}) const throws;
-    void collect(const FSNode &path, std::vector<string> &result, const FSOpt &opt = {}) const throws;
-    void collectDirs(const FSNode &path, std::vector<FSNode> &result, const FSOpt &opt = {}) const throws;
-    void collectDirs(const FSNode &path, std::vector<string> &result, const FSOpt &opt = {}) const throws;
-    void collectFiles(const FSNode &path, std::vector<FSNode> &result, const FSOpt &opt = {}) const throws;
-    void collectFiles(const FSNode &path, std::vector<string> &result, const FSOpt &opt = {}) const throws;
 
 private:
     

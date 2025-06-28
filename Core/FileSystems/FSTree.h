@@ -23,6 +23,7 @@ struct FSTree {
     FSTree(FSBlock *node) : node(node) {}
 
     bool empty() { return node == nullptr; }
+    isize size();
 
     void addChild(FSBlock *node) { if (node) children.push_back(FSTree(node)); }
 

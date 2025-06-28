@@ -120,9 +120,6 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
     // Set the current directory to '/'
     curr = rootBlock;
 
-    // Check integrity (may throw)
-    (void)oldpwd();
-
     debug(FS_DEBUG, "Success\n");
 }
 
@@ -539,7 +536,7 @@ FSBlock *
 FileSystem::seekPtr(const FSBlock &root, const std::vector<string> &name) const
 {
     FSBlock *result = blockPtr(root.nr);
-    for (auto &it : name) { result = seekPtr(*result, FSName(it)); }
+    for (auto &it : name) { if (result) { result = seekPtr(*result, FSName(it)); } }
     return result;
 }
 
@@ -547,7 +544,7 @@ FSBlock *
 FileSystem::seekPtr(const FSBlock &root, const fs::path &name) const
 {
     FSBlock *result = blockPtr(root.nr);
-    for (const auto &it : name) { result = seekPtr(*result, FSName(it)); }
+    for (const auto &it : name) { if (result) { result = seekPtr(*result, FSName(it)); } }
     return result;
 }
 
@@ -564,31 +561,54 @@ FileSystem::seekPtr(const FSBlock &root, const char *name) const
 }
 
 bool
-FileSystem::exists(const FSNode &top, const fs::path &path) const
+FileSystem::exists(const FSBlock &top, const fs::path &path) const
 {
-    try { top.seek(path); return true; } catch (...) { return false; }
+    return seekPtr(top, path) != nullptr;
 }
 
 void
 FileSystem::cd(const FSName &name)
 {
-    cd(oldpwd().seek(name));
+    if (auto ptr = seekPtr(pwd(), name); ptr) cd (*ptr);
+    throw AppError(Fault::FS_NOT_FOUND, name.cpp_str());
 }
 
 void
-FileSystem::cd(const FSNode &path)
+FileSystem::cd(const FSBlock &path)
 {
-    curr = path.ref;
+    curr = path.nr;
 }
 
 void
 FileSystem::cd(const string &path)
 {
-    cd(oldpwd().seek(path));
+    if (auto ptr = seekPtr(pwd(), path); ptr) cd (*ptr);
+    throw AppError(Fault::FS_NOT_FOUND, path);
 }
 
 std::vector<Block>
-FileSystem::dataBlocks(const FSNode &path)
+FileSystem::dataBlocks(const FSBlock &path)
+{
+    std::vector<Block> result;
+
+    // Collect all list blocks
+    auto listBlocks = collect(path, [&](FSBlock *block) { return block->getNextListBlock(); });
+
+    // Iterate through all list blocks and collect all data block references
+    for (auto &it : listBlocks) {
+
+        isize num = std::min(it->getNumDataBlockRefs(), it->getMaxDataBlockRefs());
+        for (isize i = 0; i < num; i++) {
+            if (Block ref = it->getDataBlockRef(i); ref) {
+                result.push_back(ref);
+            }
+        }
+    }
+    return result;
+}
+
+std::vector<Block>
+FileSystem::oldDataBlocks(const FSNode &path)
 {
     std::vector<Block> result;
     std::set<Block> visited;
@@ -769,92 +789,6 @@ FileSystem::collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> nex
     }
 
     return result;
-}
-
-
-/*
-FSTree
-FileSystem::traverse(const FSNode &path, const FSOpt &opt) const
-{
-    assert(path.isRegular());
-
-    FSTree tree(path.ptr());
-
-    // Collect the blocks for all items in this directory
-    std::stack<Block> remainingItems;
-    std::set<Block> visited;
-    collectHashedRefs(path.ref, remainingItems, visited);
-
-    // Move the collected items to the result list
-    while (remainingItems.size() > 0) {
-
-        auto it = remainingItems.top();
-        if (auto *ptr = blockPtr(it); ptr) {
-            if (opt.accept(*ptr)) tree.children.push_back(ptr);
-        }
-        // printf("Adding %s\n", blockPtr(it)->getName().c_str());
-        remainingItems.pop();
-
-        // Add subdirectory items to the queue
-        if (opt.recursive) collectHashedRefs(it, remainingItems, visited);
-    }
-
-    // Sort items
-    tree.sort(opt.sort);
-
-    return tree;
-}
-*/
-
-void
-FileSystem::collect(const FSNode &path, std::vector<FSNode> &result, const FSOpt &opt) const
-{
-    auto paths = path.collect(opt);
-    result.insert(result.end(), paths.begin(), paths.end());
-}
-
-void
-FileSystem::collect(const FSNode &path, std::vector<string> &result, const FSOpt &opt) const
-{
-    auto paths = path.collect(opt);
-
-    for (auto &it : paths) {
-        result.push_back(opt.formatter ? opt.formatter(*it.ptr()) : it.last().cpp_str());
-    }
-}
-
-void
-FileSystem::collectDirs(const FSNode &path, std::vector<FSNode> &result, const FSOpt &opt) const
-{
-    auto paths = path.collectDirs(opt);
-    result.insert(result.end(), paths.begin(), paths.end());
-}
-
-void
-FileSystem::collectDirs(const FSNode &path, std::vector<string> &result, const FSOpt &opt) const
-{
-    auto paths = path.collectDirs(opt);
-
-    for (auto &it : paths) {
-        result.push_back(opt.formatter ? opt.formatter(*it.ptr()) : it.last().cpp_str());
-    }
-}
-
-void
-FileSystem::collectFiles(const FSNode &path, std::vector<FSNode> &result, const FSOpt &opt) const
-{
-    auto paths = path.collectFiles(opt);
-    result.insert(result.end(), paths.begin(), paths.end());
-}
-
-void
-FileSystem::collectFiles(const FSNode &path, std::vector<string> &result, const FSOpt &opt) const
-{
-    auto paths = path.collectFiles(opt);
-
-    for (auto &it : paths) {
-        result.push_back(opt.formatter ? opt.formatter(*it.ptr()) : it.last().cpp_str());
-    }
 }
 
 void

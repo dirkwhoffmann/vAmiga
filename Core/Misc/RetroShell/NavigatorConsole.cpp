@@ -142,7 +142,7 @@ NavigatorConsole::parseBlock(const string &argv)
 Block
 NavigatorConsole::parseBlock(const Arguments &argv, const string &token)
 {
-    return parseBlock(argv, token, fs.oldpwd().ref);
+    return parseBlock(argv, token, fs.pwd().nr);
 }
 
 Block
@@ -230,6 +230,7 @@ NavigatorConsole::parseDirectory(const Arguments &argv, const string &token, FSB
     return path;
 }
 
+/*
 FSNode
 NavigatorConsole::oldParsePath(const Arguments &argv, const string &token)
 {
@@ -278,6 +279,7 @@ NavigatorConsole::oldParseFile(const Arguments &argv, const string &token, const
     }
     return path;
 }
+*/
 
 FSBlock &
 NavigatorConsole::matchPath(const Arguments &argv, const string &token, Tokens &notFound)
@@ -678,7 +680,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto path = oldParsePath(args, "path", fs.oldRootDir());
+            auto &path = parsePath(args, "path", *fs.rootDir());
             fs.cd(path);
         }
     });

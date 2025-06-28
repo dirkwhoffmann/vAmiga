@@ -201,6 +201,22 @@ FSBlock::relName(const FSBlock &top) const
     return util::trim(result, "/");
 }
 
+fs::path
+FSBlock::sanitizedPath() const
+{
+    fs::path result;
+
+    auto nodes = fs->collect(*this, [](FSBlock *node) { return node->getParentDirBlock(); });
+
+    for (auto &it : nodes) {
+
+        auto name = it->getName().path();
+        result = result.empty() ? name : name / result;
+    }
+
+    return result;
+}
+
 bool
 FSBlock::matches(const FSPattern &pattern) const
 {
@@ -1003,7 +1019,7 @@ Fault
 FSBlock::exportUserDirBlock(const fs::path &path)
 {
     // Assemble the host file name
-    auto filename = path / FSNode(fs, nr).getPath();
+    auto filename = path / sanitizedPath();
     debug(FS_DEBUG >= 2, "Creating directory %s\n", filename.string().c_str());
 
     // Create directory
@@ -1016,7 +1032,7 @@ Fault
 FSBlock::exportFileHeaderBlock(const fs::path &path)
 {
     // Assemble the host file name
-    auto filename = path / FSNode(fs, nr).getPath(); // device.getPath(this);
+    auto filename = path / sanitizedPath();
     debug(FS_DEBUG >= 2, "  Exporting file %s\n", filename.string().c_str());
 
     // Open file
@@ -2044,10 +2060,24 @@ FSBlock::writeData(Buffer<u8> &buf) const
 
     isize bytesRemaining = getFileSize();
     isize bytesTotal = 0;
-    isize blocksTotal = 0;
-    
+
     buf.init(bytesRemaining);
-    
+
+    for (auto &it : fs->dataBlocks(*this)) {
+
+        isize bytesWritten = fs->at(it).writeData(buf, bytesTotal, bytesRemaining);
+        bytesTotal += bytesWritten;
+        bytesRemaining -= bytesWritten;
+    }
+
+    if (bytesRemaining != 0) {
+        warn("%ld remaining bytes. Expected 0.\n", bytesRemaining);
+    }
+
+    return bytesTotal;
+
+    /*
+     isize blocksTotal = 0;
     // Start here and iterate through all connected file list blocks
     const FSBlock *block = this;
     
@@ -2079,8 +2109,9 @@ FSBlock::writeData(Buffer<u8> &buf) const
     if (bytesRemaining != 0) {
         warn("%ld remaining bytes. Expected 0.\n", bytesRemaining);
     }
-    
+
     return bytesTotal;
+     */
 }
 
 isize

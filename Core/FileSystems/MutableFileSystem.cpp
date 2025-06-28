@@ -508,18 +508,21 @@ MutableFileSystem::copy(const FSBlock &item, const FSBlock &dest, const FSName &
 }
 
 void
-MutableFileSystem::deleteFile(const FSBlock &item)
+MutableFileSystem::deleteFile(const FSBlock &node)
 {
-    if (!item.isFile()) return;
+    if (!node.isFile()) return;
 
     // Collect all blocks occupied by this file
-    auto blocks = dataBlocks(FSNode(this, item.nr));
-    blocks.push_back(item.nr);
+    auto blocks = dataBlocks(node);
 
     // Remove the file from the hash table
-    deleteFromHashTable(item);
+    deleteFromHashTable(node);
 
-    // Remove all blocks
+    // Remove the file header block
+    storage.erase(node.nr);
+    markAsFree(node.nr);
+
+    // Remove all data blocks
     for (auto &it : blocks) {
 
         storage.erase(it);
@@ -883,18 +886,26 @@ MutableFileSystem::exportDirectory(const fs::path &path, bool createDir) const
     if (!util::isDirectory(path)) {
         throw AppError(Fault::DIR_NOT_FOUND);
     }
-    
+
     // Only proceed if path points to an empty directory
     if (util::numDirectoryItems(path) != 0) {
         throw AppError(Fault::FS_DIR_NOT_EMPTY);
     }
-    
+
     // Collect all files and directories
-    auto items = oldRootDir().collect();
+    auto tree = traverse(*rootDir(), { .recursive = true });
+
+    // Export all items
+    tree.bfsWalk([&](const FSTree &t) {
+        if (Fault error = t.node->exportBlock(path.c_str()); error != Fault::OK) {
+            throw AppError(error);
+        }
+    });
+
+    debug(FS_DEBUG, "Exported %ld items", tree.size());
+
     /*
-    std::vector<Block> items;
-    collect(rootDir(), items);
-    */
+    auto items = oldRootDir().collect();
 
     // Export all items
     for (auto const& i : items) {
@@ -902,14 +913,9 @@ MutableFileSystem::exportDirectory(const fs::path &path, bool createDir) const
         if (Fault error = i.ptr()->exportBlock(path.c_str()); error != Fault::OK) {
             throw AppError(error);
         }
-        /*
-        if (Fault error = blockPtr(i)->exportBlock(path.c_str()); error != Fault::OK) {
-            throw AppError(error);
-        }
-        */
     }
-    
     debug(FS_DEBUG, "Exported %zu items", items.size());
+    */
 }
 
 }

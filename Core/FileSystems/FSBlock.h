@@ -48,9 +48,9 @@ private:
 public:
 
     FSBlock(const FSBlock&) = delete;             // Copy constructor
-    // FSBlock& operator=(const FSBlock&) = delete;  // Copy assignment
+    FSBlock& operator=(const FSBlock&) = delete;  // Copy assignment
     FSBlock(FSBlock&&) = delete;                  // Move constructor
-    // FSBlock& operator=(FSBlock&&) = delete;       // Move assignment
+    FSBlock& operator=(FSBlock&&) = delete;       // Move assignment
 
     FSBlock(FileSystem *ref, Block nr, FSBlockType t);
     ~FSBlock();
@@ -86,6 +86,9 @@ public:
     string absName() const;
     string relName() const;
     string relName(const FSBlock &top) const;
+
+    // Converts the path to a host path
+    fs::path sanitizedPath() const;
 
     // Checks if the path matches a search pattern
     bool matches(const FSPattern &pattern) const;
