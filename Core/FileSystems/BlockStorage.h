@@ -98,15 +98,25 @@ public:
     FSBlockType getType(Block nr) const;
     void setType(Block nr, FSBlockType type);
 
-    // Reads a block from the storage
-    FSBlock &operator[](size_t nr);
-    const FSBlock &operator[](size_t nr) const;
-
     // Returns a block pointer or null if the block does not exist
-    FSBlock *read(Block nr);
-    FSBlock *read(Block nr, FSBlockType type);
-    const FSBlock *read(Block nr) const;
-    const FSBlock *read(Block nr, FSBlockType type) const;
+    FSBlock *read(Block nr) noexcept;
+    FSBlock *read(Block nr, FSBlockType type) noexcept;
+    FSBlock *read(Block nr, std::vector<FSBlockType> types) noexcept;
+    const FSBlock *read(Block nr) const noexcept;
+    const FSBlock *read(Block nr, FSBlockType type) const noexcept;
+    const FSBlock *read(Block nr, std::vector<FSBlockType> types) const noexcept;
+
+    // Returns a reference to a stored block
+    FSBlock &at(Block nr);
+    FSBlock &at(Block nr, FSBlockType type);
+    FSBlock &at(Block nr, std::vector<FSBlockType> types);
+    const FSBlock &at(Block nr) const;
+    const FSBlock &at(Block nr, FSBlockType type) const;
+    const FSBlock &at(Block nr, std::vector<FSBlockType> types) const;
+
+    // Operator overload
+    FSBlock &operator[](size_t nr) { return at(Block(nr)); }
+    const FSBlock &operator[](size_t nr) const { return at(Block(nr)); }
 
     // Wipes out a block (makes it an empty block)
     void erase(Block nr);

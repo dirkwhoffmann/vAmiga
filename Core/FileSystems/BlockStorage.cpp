@@ -91,22 +91,10 @@ BlockStorage::setType(Block nr, FSBlockType type)
     blocks.at(nr).init(type);
 }
 
-FSBlock &
-BlockStorage::operator[](size_t nr)
-{
-    return *read(Block(nr));
-}
-
-const FSBlock &
-BlockStorage::operator[](size_t nr) const
-{
-    return *read(Block(nr));
-}
-
 FSBlock *
-BlockStorage::read(Block nr)
+BlockStorage::read(Block nr) noexcept
 {
-    if (nr >= size_t(capacity)) throw AppError(Fault::FS_INVALID_BLOCK_REF);
+    if (nr >= size_t(capacity)) return nullptr;
 
     // Create the block if it does not yet exist
     if (!blocks.contains(nr)) blocks.emplace(nr, FSBlock(fs, Block(nr), FSBlockType::EMPTY_BLOCK));
@@ -119,28 +107,90 @@ BlockStorage::read(Block nr)
 }
 
 const FSBlock *
-BlockStorage::read(Block nr) const
+BlockStorage::read(Block nr) const noexcept
 {
     return const_cast<const FSBlock *>(const_cast<BlockStorage *>(this)->read(nr));
 }
 
 FSBlock *
-BlockStorage::read(Block nr, FSBlockType type)
+BlockStorage::read(Block nr, FSBlockType type) noexcept
 {
-    if (isize(nr) < capacity) {
+    if (auto *ptr = read(nr); ptr) {
 
-        auto &block = (*this)[nr];
-        if (block.type == type) return &block;
+        if (ptr->type == type) { return ptr; }
     }
+    return nullptr;
+}
 
+FSBlock *
+BlockStorage::read(Block nr, std::vector<FSBlockType> types) noexcept
+{
+    if (auto *ptr = read(nr); ptr) {
+
+        for (auto &type: types) if (ptr->type == type) { return ptr; }
+    }
     return nullptr;
 }
 
 const FSBlock *
-BlockStorage::read(Block nr, FSBlockType type) const
+BlockStorage::read(Block nr, FSBlockType type) const noexcept
 {
-    auto result = const_cast<BlockStorage *>(this)->read(nr, type);
-    return const_cast<const FSBlock *>(result);
+    return const_cast<const FSBlock *>(const_cast<BlockStorage *>(this)->read(nr, type));
+}
+
+const FSBlock *
+BlockStorage::read(Block nr, std::vector<FSBlockType> types) const noexcept
+{
+    return const_cast<const FSBlock *>(const_cast<BlockStorage *>(this)->read(nr, types));
+}
+
+FSBlock &
+BlockStorage::at(Block nr)
+{
+    if (auto *result = read(nr); result) return *result;
+    throw AppError(Fault::FS_INVALID_BLOCK_REF, std::to_string(nr));
+}
+
+FSBlock &
+BlockStorage::at(Block nr, FSBlockType type)
+{
+    if (auto *result = read(nr, type); result) return *result;
+
+    if (read(nr)) {
+        throw AppError(Fault::FS_INVALID_BLOCK_TYPE, std::to_string(nr));
+    } else {
+        throw AppError(Fault::FS_INVALID_BLOCK_REF, std::to_string(nr));
+    }
+}
+
+FSBlock &
+BlockStorage::at(Block nr, std::vector<FSBlockType> types)
+{
+    if (auto *result = read(nr, types); result) return *result;
+
+    if (read(nr)) {
+        throw AppError(Fault::FS_INVALID_BLOCK_TYPE, std::to_string(nr));
+    } else {
+        throw AppError(Fault::FS_INVALID_BLOCK_REF, std::to_string(nr));
+    }
+}
+
+const FSBlock &
+BlockStorage::at(Block nr) const
+{
+    return const_cast<const FSBlock &>(const_cast<BlockStorage *>(this)->at(nr));
+}
+
+const FSBlock &
+BlockStorage::at(Block nr, FSBlockType type) const
+{
+    return const_cast<const FSBlock &>(const_cast<BlockStorage *>(this)->at(nr, type));
+}
+
+const FSBlock &
+BlockStorage::at(Block nr, std::vector<FSBlockType> types) const
+{
+    return const_cast<const FSBlock &>(const_cast<BlockStorage *>(this)->at(nr, types));
 }
 
 void

@@ -147,11 +147,31 @@ public:
 
     
     //
-    // Accessing blocks
+    // Accessing the block storage
     //
     
 public:
-    
+
+    // Returns a block pointer or null if the block does not exist
+    FSBlock *read(Block nr) noexcept { return storage.read(nr); }
+    FSBlock *read(Block nr, FSBlockType type) noexcept { return storage.read(nr, type); }
+    FSBlock *read(Block nr, std::vector<FSBlockType> types) noexcept { return storage.read(nr, types); }
+    const FSBlock *read(Block nr) const noexcept { return storage.read(nr); }
+    const FSBlock *read(Block nr, FSBlockType type) const noexcept { return storage.read(nr, type); }
+    const FSBlock *read(Block nr, std::vector<FSBlockType> types) const noexcept { return storage.read(nr, types); }
+
+    // Returns a reference to a stored block
+    FSBlock &at(Block nr) { return storage.at(nr); }
+    FSBlock &at(Block nr, FSBlockType type) { return storage.at(nr, type); }
+    FSBlock &at(Block nr, std::vector<FSBlockType> types) { return storage.at(nr, types); }
+    const FSBlock &at(Block nr) const { return storage.at(nr); }
+    const FSBlock &at(Block nr, FSBlockType type) const { return storage.at(nr, type); }
+    const FSBlock &at(Block nr, std::vector<FSBlockType> types) const { return storage.at(nr, types); }
+
+    // Operator overload
+    FSBlock &operator[](size_t nr) { return storage[nr]; }
+    const FSBlock &operator[](size_t nr) const { return storage[nr]; }
+
     // Returns the type of a certain block
     FSBlockType blockType(Block nr) const;
 
@@ -159,12 +179,14 @@ public:
     bool isEmpty(Block nr) const { return blockType(nr) == FSBlockType::EMPTY_BLOCK; }
 
     // Reads a block (of a certain type)
+    /*
     FSBlock *read(Block nr) { return storage.read(nr); }
     FSBlock *read(Block nr, FSBlockType type) { return storage.read(nr, type); }
     const FSBlock *read(Block nr) const;
     const FSBlock *read(Block nr, FSBlockType type) const;
     FSBlock &operator[](size_t nr) { return *read(Block(nr)); }
     const FSBlock &operator[](size_t nr) const { return *read(Block(nr)); }
+    */
 
     // Returns the usage type of a certain byte in a certain block
     FSItemType itemType(Block nr, isize pos) const;

@@ -297,18 +297,6 @@ FileSystem::blockType(Block nr) const
     return storage.getType(nr);
 }
 
-const FSBlock *
-FileSystem::read(Block nr) const
-{
-    return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->read(nr));
-}
-
-const FSBlock *
-FileSystem::read(Block nr, FSBlockType type) const
-{
-    return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->read(nr, type));
-}
-
 FSItemType
 FileSystem::itemType(Block nr, isize pos) const
 {
