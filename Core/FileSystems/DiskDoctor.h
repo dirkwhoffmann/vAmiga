@@ -32,6 +32,22 @@ private:
 
     const char *objectName() const override { return "DiskDoctor"; }
     void _dump(Category category, std::ostream &os) const override { }
+
+
+    //
+    // Integrity checking
+    //
+
+public:
+    
+    // Scans all long words in this block and returns the number of errors
+    isize check(Block ref, bool strict) const;
+
+    // Checks the integrity of a certain byte in this block
+    Fault check(Block ref, isize pos, u8 *expected, bool strict) const;
+
+
+
 };
 
 }

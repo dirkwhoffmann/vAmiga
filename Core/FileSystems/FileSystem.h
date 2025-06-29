@@ -41,7 +41,8 @@ class FileSystem : public CoreObject {
     friend struct FSBlock;
     friend struct FSHashTable;
     friend struct FSPartition;
-    
+    friend class DiskDoctor;
+
 protected:
 
     // File system information
