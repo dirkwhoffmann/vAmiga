@@ -278,7 +278,14 @@ class VolumeInspector: DialogController {
 
         // Run a file system check
         errorReport = vol.check(strict)
-        
+
+        // Experimental (test new API)
+        if let faultyBlocks = vol.xray(strict) {
+            for number in faultyBlocks {
+                print(number.intValue)
+            }
+        }
+
         // Compute images
         updateLayoutImage()
         updateAllocImage()

@@ -435,13 +435,13 @@ FSBlock::subtypeID() const
 isize
 FSBlock::check(bool strict) const
 {
-    return fs->doctor.check(nr, strict);
+    return fs->doctor.xray(nr, strict);
 }
 
 Fault
 FSBlock::check(isize byte, u8 *expected, bool strict) const
 {
-    return fs->doctor.check(nr, byte, expected, strict);
+    return fs->doctor.xray(nr, byte, strict, expected);
 }
 
 u8 *

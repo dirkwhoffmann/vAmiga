@@ -834,6 +834,8 @@ NSString *EventSlotName(EventSlot slot);
 - (void)killVirus;
 - (FSBlockType)blockType:(NSInteger)blockNr;
 - (FSItemType)itemType:(NSInteger)blockNr pos:(NSInteger)pos;
+
+- (NSArray<NSNumber *> *)xray:(BOOL)strict;
 - (FSErrorReport)check:(BOOL)strict;
 - (Fault)check:(NSInteger)nr pos:(NSInteger)pos expected:(unsigned char *)exp strict:(BOOL)strict;
 - (BOOL)isCorrupted:(NSInteger)blockNr;

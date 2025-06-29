@@ -1566,6 +1566,16 @@ NSString *EventSlotName(EventSlot slot)
     return [self fs]->itemType((u32)blockNr, pos);
 }
 
+- (NSArray<NSNumber *> *)xray:(BOOL)strict
+{
+    auto blocks = [self fs]->doctor.xray(strict);
+
+    NSMutableArray<NSNumber *> *array = [NSMutableArray arrayWithCapacity:blocks.size()];
+    for (Block value : blocks) { [array addObject:@(value)]; }
+
+    return [array copy];
+}
+
 - (FSErrorReport)check:(BOOL)strict
 {
     return [self fs]->check(strict);

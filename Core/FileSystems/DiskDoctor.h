@@ -39,15 +39,19 @@ private:
     //
 
 public:
-    
-    // Scans all long words in this block and returns the number of errors
-    isize check(Block ref, bool strict) const;
+
+    // Scans all blocks and returns the faulty ones
+    std::vector<Block> xray(bool strict) const;
+
+    // Scans a single block and returns the number of errors
+    isize xray(Block ref, bool strict) const;
+    isize xray(FSBlock &node, bool strict) const;
 
     // Checks the integrity of a certain byte in this block
-    Fault check(Block ref, isize pos, u8 *expected, bool strict) const;
-
-
-
+    Fault xray(Block ref, isize pos, bool strict) const;
+    Fault xray(Block ref, isize pos, bool strict, u8 *expected) const;
+    Fault xray(FSBlock &node, isize pos, bool strict) const;
+    Fault xray(FSBlock &node, isize pos, bool strict, u8 *expected) const;
 };
 
 }

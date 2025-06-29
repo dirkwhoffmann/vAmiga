@@ -43,6 +43,11 @@ class FileSystem : public CoreObject {
     friend struct FSPartition;
     friend class DiskDoctor;
 
+public:
+
+    // Analyzer and rectifier
+    DiskDoctor doctor = DiskDoctor(*this);
+
 protected:
 
     // File system information
@@ -53,9 +58,6 @@ protected:
 
     // Block storage
     BlockStorage storage = BlockStorage(this);
-
-    // Analyzer and rectifier
-    DiskDoctor doctor = DiskDoctor(*this);
 
     // Size of a single block in bytes
     isize bsize = 512;

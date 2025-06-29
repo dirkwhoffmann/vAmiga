@@ -18,16 +18,16 @@
 if (value != (exp)) { *expected = (exp); return Fault::FS_EXPECTED_VALUE; } }
 
 #define EXPECT_LONGWORD(exp) { \
-if ((byte % 4) == 0 && BYTE3(value) != BYTE3((u32)exp)) \
+if ((pos % 4) == 0 && BYTE3(value) != BYTE3((u32)exp)) \
 { *expected = (BYTE3((u32)exp)); return Fault::FS_EXPECTED_VALUE; } \
-if ((byte % 4) == 1 && BYTE2(value) != BYTE2((u32)exp)) \
+if ((pos % 4) == 1 && BYTE2(value) != BYTE2((u32)exp)) \
 { *expected = (BYTE2((u32)exp)); return Fault::FS_EXPECTED_VALUE; } \
-if ((byte % 4) == 2 && BYTE1(value) != BYTE1((u32)exp)) \
+if ((pos % 4) == 2 && BYTE1(value) != BYTE1((u32)exp)) \
 { *expected = (BYTE1((u32)exp)); return Fault::FS_EXPECTED_VALUE; } \
-if ((byte % 4) == 3 && BYTE0(value) != BYTE0((u32)exp)) \
+if ((pos % 4) == 3 && BYTE0(value) != BYTE0((u32)exp)) \
 { *expected = (BYTE0((u32)exp)); return Fault::FS_EXPECTED_VALUE; } }
 
-#define EXPECT_CHECKSUM EXPECT_LONGWORD(block.checksum())
+#define EXPECT_CHECKSUM EXPECT_LONGWORD(node.checksum())
 
 #define EXPECT_LESS_OR_EQUAL(exp) { \
 if (value > (u32)exp) \
@@ -86,21 +86,37 @@ if (value != 72) return Fault::FS_INVALID_HASHTABLE_SIZE; }
 
 namespace vamiga {
 
-isize
-DiskDoctor::check(Block ref, bool strict) const
+std::vector<Block>
+DiskDoctor::xray(bool strict) const
 {
-    Fault error;
+    std::vector<Block> result;
+
+    for (isize i = 0, capacity = fs.numBlocks(); i < capacity; i++) {
+
+        if (xray(Block(i), strict)) result.push_back(Block(i));
+    }
+
+    return result;
+}
+
+isize
+DiskDoctor::xray(Block ref, bool strict) const
+{
+    return xray(fs.at(ref), strict);
+}
+
+isize
+DiskDoctor::xray(FSBlock &node, bool strict) const
+{
     isize count = 0;
-    u8 expected;
 
-    FSBlock &block = fs.at(ref);
+    for (isize i = 0; i < node.bsize(); i++) {
 
-    for (isize i = 0; i < block.bsize(); i++) {
+        u8 expected;
+        if (Fault error = xray(node.nr, i, strict, &expected); error != Fault::OK) {
 
-        if ((error = check(ref, i, &expected, strict)) != Fault::OK) {
             count++;
-            debug(FS_DEBUG, "Block %d [%ld.%ld]: %s\n", ref, i / 4, i % 4,
-                  FaultEnum::key(error));
+            debug(FS_DEBUG, "Block %d [%ld.%ld]: %s\n", node.nr, i / 4, i % 4, FaultEnum::key(error));
         }
     }
 
@@ -108,31 +124,50 @@ DiskDoctor::check(Block ref, bool strict) const
 }
 
 Fault
-DiskDoctor::check(Block ref, isize byte, u8 *expected, bool strict) const
+DiskDoctor::xray(Block ref, isize pos, bool strict) const
 {
-    FSBlock &block = fs.at(ref);
+    return xray(fs.at(ref), pos, strict);
+}
 
-    switch (block.type) {
+Fault
+DiskDoctor::xray(Block ref, isize pos, bool strict, u8 *expected) const
+{
+    return xray(fs.at(ref), pos, strict, expected);
+}
+
+Fault
+DiskDoctor::xray(FSBlock &node, isize pos, bool strict) const
+{
+    u8 expected;
+    return xray(node, pos, strict, &expected);
+}
+
+Fault
+DiskDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
+{
+    auto ref = node.nr;
+
+    switch (node.type) {
 
         case FSBlockType::BOOT_BLOCK:
         {
-            isize word = byte / 4;
-            u32 value = block.bdata[byte];
+            isize word = pos / 4;
+            u32 value = node.bdata[pos];
 
             if (ref == 0) {
 
-                if (byte == 0) EXPECT_BYTE('D');
-                if (byte == 1) EXPECT_BYTE('O');
-                if (byte == 2) EXPECT_BYTE('S');
-                if (byte == 3) EXPECT_DOS_REVISION;
-                if (word == 1) { value = block.get32(1); EXPECT_CHECKSUM; }
+                if (pos == 0) EXPECT_BYTE('D');
+                if (pos == 1) EXPECT_BYTE('O');
+                if (pos == 2) EXPECT_BYTE('S');
+                if (pos == 3) EXPECT_DOS_REVISION;
+                if (word == 1) { value = node.get32(1); EXPECT_CHECKSUM; }
             }
             break;
         }
         case FSBlockType::ROOT_BLOCK:
         {
-            isize word = byte / 4; if (word >= 6) word -= block.bsize() / 4;
-            u32 value = block.get32(word);
+            isize word = pos / 4; if (word >= 6) word -= node.bsize() / 4;
+            u32 value = node.get32(word);
 
             switch (word) {
 
@@ -162,24 +197,24 @@ DiskDoctor::check(Block ref, isize byte, u8 *expected, bool strict) const
         }
         case FSBlockType::BITMAP_BLOCK:
         {
-            isize word = byte / 4;
-            u32 value = block.get32(word);
+            isize word = pos / 4;
+            u32 value = node.get32(word);
 
             if (word == 0) EXPECT_CHECKSUM;
             break;
         }
         case FSBlockType::BITMAP_EXT_BLOCK:
         {
-            isize word = byte / 4;
-            u32 value = block.get32(word);
+            isize word = pos / 4;
+            u32 value = node.get32(word);
 
-            if (word == (i32)(block.bsize() - 4)) EXPECT_OPTIONAL_BITMAP_EXT_REF;
+            if (word == (i32)(node.bsize() - 4)) EXPECT_OPTIONAL_BITMAP_EXT_REF;
             break;
         }
         case FSBlockType::USERDIR_BLOCK:
         {
-            isize word = byte / 4; if (word >= 6) word -= block.bsize() / 4;
-            u32 value = block.get32(word);
+            isize word = pos / 4; if (word >= 6) word -= node.bsize() / 4;
+            u32 value = node.get32(word);
 
             switch (word) {
                 case  0: EXPECT_LONGWORD(2);        break;
@@ -204,8 +239,8 @@ DiskDoctor::check(Block ref, isize byte, u8 *expected, bool strict) const
              */
 
             // Translate the byte index to a (signed) long word index
-            isize word = byte / 4; if (word >= 6) word -= block.bsize() / 4;
-            u32 value = block.get32(word);
+            isize word = pos / 4; if (word >= 6) word -= node.bsize() / 4;
+            u32 value = node.get32(word);
 
             switch (word) {
                 case   0: EXPECT_LONGWORD(2);                    break;
@@ -223,10 +258,10 @@ DiskDoctor::check(Block ref, isize byte, u8 *expected, bool strict) const
             // Data block reference area
             if (word <= -51 && value) EXPECT_DATABLOCK_REF;
             if (word == -51) {
-                if (value == 0 && block.getNumDataBlockRefs() > 0) {
+                if (value == 0 && node.getNumDataBlockRefs() > 0) {
                     return Fault::FS_EXPECTED_REF;
                 }
-                if (value != 0 && block.getNumDataBlockRefs() == 0) {
+                if (value != 0 && node.getNumDataBlockRefs() == 0) {
                     return Fault::FS_EXPECTED_NO_REF;
                 }
             }
@@ -240,8 +275,8 @@ DiskDoctor::check(Block ref, isize byte, u8 *expected, bool strict) const
              */
 
             // Translate 'pos' to a (signed) long word index
-            isize word = byte / 4; if (word >= 6) word -= block.bsize() / 4;
-            u32 value = block.get32(word);
+            isize word = pos / 4; if (word >= 6) word -= node.bsize() / 4;
+            u32 value = node.get32(word);
 
             switch (word) {
 
@@ -260,10 +295,10 @@ DiskDoctor::check(Block ref, isize byte, u8 *expected, bool strict) const
             // Data block references
             if (word <= -51 && value) EXPECT_DATABLOCK_REF;
             if (word == -51) {
-                if (value == 0 && block.getNumDataBlockRefs() > 0) {
+                if (value == 0 && node.getNumDataBlockRefs() > 0) {
                     return Fault::FS_EXPECTED_REF;
                 }
-                if (value != 0 && block.getNumDataBlockRefs() == 0) {
+                if (value != 0 && node.getNumDataBlockRefs() == 0) {
                     return Fault::FS_EXPECTED_NO_REF;
                 }
             }
@@ -277,17 +312,17 @@ DiskDoctor::check(Block ref, isize byte, u8 *expected, bool strict) const
              * to report this common inconsistency if 'strict' is set to false.
              */
 
-            if (byte < 24) {
+            if (pos < 24) {
 
-                isize word = byte / 4;
-                u32 value = block.get32(word);
+                isize word = pos / 4;
+                u32 value = node.get32(word);
 
                 switch (word) {
 
                     case 0: EXPECT_LONGWORD(8);                  break;
                     case 1: if (strict) EXPECT_FILEHEADER_REF;   break;
                     case 2: EXPECT_DATABLOCK_NUMBER;             break;
-                    case 3: EXPECT_LESS_OR_EQUAL(block.dsize()); break;
+                    case 3: EXPECT_LESS_OR_EQUAL(node.dsize()); break;
                     case 4: EXPECT_OPTIONAL_DATABLOCK_REF;       break;
                     case 5: EXPECT_CHECKSUM;                     break;
                 }
