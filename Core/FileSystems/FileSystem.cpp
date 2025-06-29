@@ -812,52 +812,20 @@ FileSystem::collectHashedRefs(Block nr,
 
         // Walk through the hash table in reverse order
         for (isize i = (isize)b->hashTableSize() - 1; i >= 0; i--) {
-            collectRefsWithSameHashValue(b->getHashRef((u32)i), result, visited);
+
+            Block ref = b->getHashRef((u32)i);
+
+            if (hashableBlockPtr(ref)) {
+
+                auto blocks = collect(ref, [&](FSBlock *p) { return p->getNextHashBlock(); });
+                for (auto it = blocks.rbegin(); it != blocks.rend(); ++it) {
+
+                    result.push(*it);
+                    visited.insert(*it);
+                }
+            }
         }
     }
-}
-
-void
-FileSystem::collectRefsWithSameHashValue(Block nr,
-                                         std::stack<Block> &result, std::unordered_set<Block> &visited) const
-{
-    std::stack<Block> refs;
-    
-    // Walk down the linked list
-    for (FSBlock *b = hashableBlockPtr(nr); b; b = b->getNextHashBlock()) {
-
-        // Only proceed if we haven't seen this block yet
-        if (visited.find(b->nr) != visited.end()) throw AppError(Fault::FS_HAS_CYCLES);
-
-        visited.insert(b->nr);
-        refs.push(b->nr);
-    }
-
-    // Push the collected elements onto the result stack
-    while (refs.size() > 0) { result.push(refs.top()); refs.pop(); }
-}
-
-FSBlock *
-FileSystem::lastFileListBlockInChain(Block start) const
-{
-    FSBlock *block = fileListBlockPtr(start);
-    return block ? lastFileListBlockInChain(block) : nullptr;
-}
-
-FSBlock *
-FileSystem::lastFileListBlockInChain(FSBlock *block) const
-{
-    std::unordered_set<Block> visited;
-
-    while (block && visited.find(block->nr) == visited.end()) {
-
-        FSBlock *next = block->getNextListBlock();
-        if (next == nullptr) return block;
-
-        visited.insert(block->nr);
-        block = next;
-    }
-    return nullptr;
 }
 
 std::vector<Block>
@@ -875,29 +843,6 @@ FileSystem::hashBlockChain(Block first) const
     }
 
     return result;
-}
-
-FSBlock *
-FileSystem::lastHashBlockInChain(Block start) const
-{
-    FSBlock *block = hashableBlockPtr(start);
-    return block ? lastHashBlockInChain(block) : nullptr;
-}
-
-FSBlock *
-FileSystem::lastHashBlockInChain(FSBlock *block) const
-{
-    std::unordered_set<Block> visited;
-
-    while (block && visited.find(block->nr) == visited.end()) {
-
-        FSBlock *next = block->getNextHashBlock();
-        if (next == nullptr) return block;
-
-        visited.insert(block->nr);
-        block =next;
-    }
-    return nullptr;
 }
 
 bool

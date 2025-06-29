@@ -337,10 +337,6 @@ private:
     void collectHashedRefs(Block nr, std::stack<Block> &list,
                            std::unordered_set<Block> &visited) const throws;
 
-    // Collects all references with the same hash value
-    void collectRefsWithSameHashValue(Block nr, std::stack<Block> &list,
-                                      std::unordered_set<Block> &visited) const throws;
-    
 
     //
     // Traversing linked lists
@@ -348,14 +344,8 @@ private:
     
 protected:
     
-    // Returns the last element in the list of extension blocks
-    FSBlock *lastFileListBlockInChain(Block start) const;
-    FSBlock *lastFileListBlockInChain(FSBlock *block) const;
-
     // Returns the last element in the list of blocks with the same hash
     std::vector<Block> hashBlockChain(Block first) const;
-    FSBlock *lastHashBlockInChain(Block start) const;
-    FSBlock *lastHashBlockInChain(FSBlock *block) const;
 
 
     //
