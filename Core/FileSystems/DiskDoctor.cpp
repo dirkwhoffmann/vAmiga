@@ -9,7 +9,9 @@
 
 #include "DiskDoctor.h"
 #include "FileSystem.h"
+#include <unordered_map>
 #include <unordered_set>
+
 //
 // Macros used inside the check() methods
 //
@@ -85,6 +87,168 @@ if (value == 0) return Fault::FS_EXPECTED_DATABLOCK_NR; }
 if (value != 72) return Fault::FS_INVALID_HASHTABLE_SIZE; }
 
 namespace vamiga {
+
+void
+DiskDoctor::dump(Block nr, std::ostream &os)
+{
+    using namespace util;
+
+    FSBlock &p = fs.at(nr);
+
+    os << tab("Block");
+    os << dec(nr) << std::endl;
+    os << tab("Type");
+    os << FSBlockTypeEnum::key(p.type) << std::endl;
+
+    if (p.hasHeaderKey()) {
+
+        os << tab("Header Key");
+        os << dec(p.getHeaderKey()) << std::endl;
+    }
+    if (p.hasChecksum()) {
+
+        os << tab("Checksum");
+        os << hex(p.getChecksum()) << std::endl;
+    }
+
+    switch (p.type) {
+
+        case FSBlockType::BOOT_BLOCK:
+
+            os << tab("Header");
+            for (isize i = 0; i < 8; i++) os << hex(p.bdata[i]) << " ";
+            os << std::endl;
+            break;
+
+        case FSBlockType::ROOT_BLOCK:
+
+            os << tab("Name");
+            os << p.getName() << std::endl;
+            os << tab("Created");
+            os << p.getCreationDate().str() << std::endl;
+            os << tab("Modified");
+            os << p.getCreationDate().str() << std::endl;
+            os << tab("Bitmap blocks");
+            os << FSBlock::rangeString(p.getBmBlockRefs()) << std::endl;
+            os << tab("Bitmap extension block");
+            os << dec(p.getNextBmExtBlockRef()) << std::endl;
+            break;
+
+        case FSBlockType::BITMAP_BLOCK:
+        {
+            isize count = 0;
+            for (isize i = 1; i < p.bsize() / 4; i++) {
+                if (u32 value = p.get32(i)) {
+                    for (isize j = 0; j < 32; j++) {
+                        if (GET_BIT(value, j)) count++;
+                    }
+                }
+            }
+            os << tab("Free");
+            os << dec(count) << " blocks" << std::endl;
+            break;
+        }
+        case FSBlockType::BITMAP_EXT_BLOCK:
+
+            os << tab("Bitmap blocks");
+            os << FSBlock::rangeString(p.getBmBlockRefs()) << std::endl;
+            os << tab("Next extension block");
+            os << dec(p.getNextBmExtBlockRef()) << std::endl;
+            break;
+
+        case FSBlockType::USERDIR_BLOCK:
+
+            os << tab("Name");
+            os << p.getName() << std::endl;
+            os << tab("Comment");
+            os << p.getComment() << std::endl;
+            os << tab("Created");
+            os << p.getCreationDate().str() << std::endl;
+            os << tab("Parent");
+            os << dec(p.getParentDirRef()) << std::endl;
+            os << tab("Next");
+            os << dec(p.getNextHashRef()) << std::endl;
+            break;
+
+        case FSBlockType::FILEHEADER_BLOCK:
+
+            os << tab("Name");
+            os << p.getName() << std::endl;
+            os << tab("Comment");
+            os << p.getComment() << std::endl;
+            os << tab("Created");
+            os << p.getCreationDate().str() << std::endl;
+            os << tab("UID (User ID)");
+            os << hex(HI_WORD(p.get32(-49))) << std::endl;
+            os << tab("GID (Group ID)");
+            os << hex(LO_WORD(p.get32(-49))) << std::endl;
+            os << tab("Protection flags");
+            os << hex(p.getProtectionBits()) << std::endl;
+            os << tab("File size");
+            os << dec(p.getFileSize()) << " bytes" << std::endl;
+            os << tab("First data block");
+            os << dec(p.getFirstDataBlockRef()) << std::endl;
+            os << tab("Data block count");
+            os << dec(p.getNumDataBlockRefs()) << " out of " << dec(p.getMaxDataBlockRefs()) << std::endl;
+            os << tab("Data block refs");
+            os << FSBlock::rangeString(p.getDataBlockRefs()) << std::endl;
+            os << tab("First extension block");
+            os << dec(p.getNextListBlockRef()) << std::endl;
+            os << tab("Parent dir");
+            os << dec(p.getParentDirRef()) << std::endl;
+            os << tab("Next file");
+            os << dec(p.getNextHashRef()) << std::endl;
+            break;
+
+        case FSBlockType::FILELIST_BLOCK:
+
+            os << tab("Header block");
+            os << p.getFileHeaderRef() << std::endl;
+            os << tab("Data block count");
+            os << p.getNumDataBlockRefs() << " out of " << p.getMaxDataBlockRefs() << std::endl;
+            os << tab("First");
+            os << p.getFirstDataBlockRef() << std::endl;
+            os << tab("Data blocks");
+            os << FSBlock::rangeString(p.getDataBlockRefs()) << std::endl;
+            os << tab("Next extension block");
+            os << p.getNextListBlockRef() << std::endl;
+            break;
+
+        case FSBlockType::DATA_BLOCK_OFS:
+
+            os << tab("File header block");
+            os << p.getFileHeaderRef() << std::endl;
+            os << tab("Chain number");
+            os << p.getDataBlockNr() << std::endl;
+            os << tab("Data bytes");
+            os << p.getDataBytesInBlock() << std::endl;
+            os << tab("Next data block");
+            os << p.getNextDataBlockRef() << std::endl;
+            break;
+
+        default:
+            break;
+    }
+
+    if (p.hashTableSize() > 0) {
+
+        os << tab("Hash table");
+        for (isize i = 0, j = 0; i < p.hashTableSize(); i++) {
+
+            if (Block ref = p.read32(p.bdata + 24 + 4 * i); ref) {
+
+                if (j++) os << std::endl << tab();
+                os << std::setfill(' ') << std::setw(2) << i << " -> ";
+                os << std::setfill(' ') << std::setw(4) << ref;
+
+                if (auto ptr = fs.blockPtr(ref); ptr) {
+                    os << " (" << ptr->getName().cpp_str() << ")";
+                }
+            }
+        }
+        os << std::endl;
+    }
+}
 
 std::vector<Block>
 DiskDoctor::xray(bool strict) const
@@ -337,10 +501,10 @@ DiskDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
     return Fault::OK;
 }
 
-std::vector<Block>
-DiskDoctor::checkBitmap() const
+std::unordered_map<Block,isize>
+DiskDoctor::checkBitmap(bool strict) const
 {
-    std::vector<Block> result;
+    std::unordered_map<Block,isize> result;
     std::unordered_set<Block> used;
 
     // Extract the directory tree
@@ -370,13 +534,11 @@ DiskDoctor::checkBitmap() const
 
         if (allocated && !contained) {
 
-            printf("ERROR: Block %ld is allocated, but not used.\n", i);
-            result.push_back(Block(i));
+            result[Block(i)] = 1;
 
         } else if (!allocated && contained) {
 
-            printf("ERROR: Block is not allocated, but used.\n");
-            result.push_back(Block(i));
+            result[Block(i)] = 2;
         }
     }
 

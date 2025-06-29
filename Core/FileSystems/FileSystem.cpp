@@ -1155,20 +1155,19 @@ void
 FileSystem::analyzeBlockAllocation(u8 *buffer, isize len) const
 {
     // Setup priorities
-    i8 pri[4] = { 0, 1, 2, 3 };
- 
+    u8 pri[4] = { 0, 1, 2, 3 };
+
+    // Analyze the block usage
+    auto map = doctor.checkBitmap(true);
+
     // Start from scratch
     for (isize i = 0; i < len; i++) buffer[i] = 255;
  
     // Analyze all blocks
     for (isize i = 0, max = numBlocks(); i < max; i++) {
-        
-        auto free = isFree(Block(i));
-        auto empty = isEmpty(Block(i));
-        
-        u8 val = (!empty && !free) ? 1 : (empty && !free) ? 2 : (!empty && free) ? 3 : 0;
+
+        u8 val = isFree(Block(i)) ? 0 : map.contains(Block(i)) ? u8(map[Block(i)] + 1) : 1;
         auto pos = i * (len - 1) / (max - 1);
-        
         if (buffer[pos] == 255 || pri[buffer[pos]] < pri[val]) buffer[pos] = val;
     }
     

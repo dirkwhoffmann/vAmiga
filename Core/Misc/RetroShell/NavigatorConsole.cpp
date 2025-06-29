@@ -1089,11 +1089,36 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto blocks = fs.doctor.checkBitmap();
+            auto rangeStr = [&](std::vector<Block> &vec) {
+                if (!vec.empty()) { os << " (" << FSBlock::rangeString(vec) << ")"; }
+                os << std::endl;
+            };
 
-            if (auto errors = blocks.size(); errors) {
-                os << errors << " bitmap anomalies found." << std::endl;
+            auto blocks = fs.doctor.checkBitmap(true);
+
+            std::vector<Block> canBeFreed;
+            std::vector<Block> mustBeAllocated;
+
+            for (const auto& [key, value] : blocks) {
+
+                if (value == 1) canBeFreed.push_back(key);
+                if (value == 2) mustBeAllocated.push_back(key);
+            }
+            if (auto total = canBeFreed.size() + mustBeAllocated.size(); total) {
+
+                os << util::tab("Bitmap anomalies:");
+                os << total << " blocks" << std::endl;
+
+                os << util::tab("Used but not allocated:");
+                os << mustBeAllocated.size() << " blocks";
+                rangeStr(mustBeAllocated);
+
+                os << util::tab("Allocated but not used:");
+                os << canBeFreed.size() << " blocks";
+                rangeStr(canBeFreed);
+
             } else {
+
                 os << "Bitmap check: Passed" << std::endl;
             }
         }

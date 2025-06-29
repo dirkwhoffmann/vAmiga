@@ -1576,6 +1576,16 @@ NSString *EventSlotName(EventSlot slot)
     return [array copy];
 }
 
+- (NSDictionary<NSNumber *, NSNumber *> *)checkBitmap:(BOOL)strict
+{
+    auto blocks = [self fs]->doctor.checkBitmap(strict);
+
+    NSMutableDictionary<NSNumber *, NSNumber *> *dict = [NSMutableDictionary dictionary];
+    for (const auto &[key, value] : blocks) { dict[@(key)] = @(value); }
+
+    return [dict copy];
+}
+
 - (FSErrorReport)check:(BOOL)strict
 {
     return [self fs]->check(strict);

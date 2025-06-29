@@ -11,6 +11,7 @@
 
 #include "FSTypes.h"
 #include "CoreObject.h"
+#include <unordered_map>
 
 namespace vamiga {
 
@@ -35,7 +36,16 @@ private:
 
 
     //
-    // Integrity checking
+    // Dumping debug information
+    //
+
+public:
+    
+    void dump(Block nr, std::ostream &os);
+
+
+    //
+    // Checking the file system integrity
     //
 
 public:
@@ -54,7 +64,7 @@ public:
     Fault xray(FSBlock &node, isize pos, bool strict, u8 *expected) const;
 
     // Checks the block allocation table
-    std::vector<Block> checkBitmap() const;
+    std::unordered_map<Block,isize> checkBitmap(bool strict) const;
 };
 
 }
