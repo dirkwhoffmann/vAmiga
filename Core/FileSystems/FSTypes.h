@@ -27,6 +27,7 @@ struct FSOpt
     FSBlockFormatter formatter;
 
     bool accept(FSBlock &b) const { return filter ? filter(b) : true; }
+    bool accept(FSBlock *b) const { return b ? (filter ? filter(*b) : true) : false; }
 };
 
 enum class FSVolumeType : long

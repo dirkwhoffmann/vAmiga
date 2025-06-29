@@ -728,24 +728,32 @@ FileSystem::traverse(const FSBlock &path, const FSOpt &opt) const
     if (!formatted()) throw AppError(Fault::FS_UNFORMATTED);
     if (!path.isRegular()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
 
-    // printf("traverse(%s)\n", path.last().c_str());
+    std::unordered_set<Block> visited;
+    return traverse(path, opt, visited);
+}
 
+FSTree
+FileSystem::traverse(const FSBlock &path, const FSOpt &opt, std::unordered_set<Block> &visited) const
+{
     FSTree tree(blockPtr(path.nr));
 
-    // Collect the blocks for all items in this directory
-    std::stack<Block> remainingItems;
-    std::unordered_set<Block> visited;
-    collectHashedRefs(path.nr, remainingItems, visited);
+    // Walk through the hash table in reverse order
+    for (isize i = (isize)path.hashTableSize() - 1; i >= 0; i--) {
 
-    // Move the collected items to the result list
-    while (remainingItems.size() > 0) {
+        // If the hash table has entries ...
+        if (FSBlock *node = hashableBlockPtr(path.getHashRef((u32)i)); node) {
 
-        auto it = remainingItems.top();
-        if (auto *ptr = blockPtr(it); ptr) {
-            if (opt.accept(*ptr)) tree.children.push_back(ptr);
+            // ... collect them ...
+            auto blocks = collect(*node, [&](FSBlock *p) { return p->getNextHashBlock(); });
+
+            // ... and add all accepted items to the tree
+            for (auto it = blocks.begin(); it != blocks.end(); it++) {
+
+                if (opt.accept(*it)) tree.children.push_back(*it);
+                if (visited.contains((*it)->nr)) throw AppError(Fault::FS_HAS_CYCLES);
+                visited.insert((*it)->nr);
+            }
         }
-        // printf("Adding %s\n", blockPtr(it)->getName().c_str());
-        remainingItems.pop();
     }
 
     // Sort items
@@ -755,7 +763,7 @@ FileSystem::traverse(const FSBlock &path, const FSOpt &opt) const
     if (opt.recursive) {
 
         for (auto &it : tree.children) {
-            if (it.node->isDirectory()) it = traverse(*it.node, opt);
+            if (it.node->isDirectory()) it = traverse(*it.node, opt, visited);
         }
     }
 
@@ -802,30 +810,6 @@ FileSystem::collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> nex
     }
 
     return result;
-}
-
-void
-FileSystem::collectHashedRefs(Block nr,
-                              std::stack<Block> &result, std::unordered_set<Block> &visited) const
-{
-    if (FSBlock *b = blockPtr(nr); b && b->hashTableSize() > 0) {
-
-        // Walk through the hash table in reverse order
-        for (isize i = (isize)b->hashTableSize() - 1; i >= 0; i--) {
-
-            Block ref = b->getHashRef((u32)i);
-
-            if (hashableBlockPtr(ref)) {
-
-                auto blocks = collect(ref, [&](FSBlock *p) { return p->getNextHashBlock(); });
-                for (auto it = blocks.rbegin(); it != blocks.rend(); ++it) {
-
-                    result.push(*it);
-                    visited.insert(*it);
-                }
-            }
-        }
-    }
 }
 
 std::vector<Block>

@@ -327,15 +327,16 @@ public:
     // Creates a node tree resembling the directory structure
     FSTree traverse(const FSBlock &path, const FSOpt &opt = {}) const;
 
+public:
+
     // Follows a linked list and collects all nodes
     std::vector<Block> collect(const Block nr, std::function<FSBlock *(FSBlock *)> next) const;
     std::vector<FSBlock *> collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> next) const;
 
 private:
-    
-    // Collects all references stored in a hash table
-    void collectHashedRefs(Block nr, std::stack<Block> &list,
-                           std::unordered_set<Block> &visited) const throws;
+
+    // Main traversal code
+    FSTree traverse(const FSBlock &path, const FSOpt &opt, std::unordered_set<Block> &visited) const;
 
 
     //
