@@ -12,7 +12,7 @@
 #include "MutableFileSystem.h"
 #include "MemUtils.h"
 #include <climits>
-#include <set>
+#include <unordered_set>
 #include <stack>
 
 namespace vamiga {

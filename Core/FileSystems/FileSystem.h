@@ -19,7 +19,7 @@
 #include "ADFFile.h"
 #include "HDFFile.h"
 #include <stack>
-#include <set>
+#include <unordered_set>
 
 namespace vamiga {
 
@@ -328,20 +328,20 @@ public:
     FSTree traverse(const FSBlock &path, const FSOpt &opt = {}) const;
 
     // Follows a linked list and collects all nodes
-    std::vector<Block> collect(const Block nr, std::function<FSBlock *(FSBlock *)> next);
-    std::vector<FSBlock *> collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> next);
+    std::vector<Block> collect(const Block nr, std::function<FSBlock *(FSBlock *)> next) const;
+    std::vector<FSBlock *> collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> next) const;
 
 private:
     
     // Collects all references stored in a hash table
     void collectHashedRefs(Block nr, std::stack<Block> &list,
-                           std::set<Block> &visited) const throws;
+                           std::unordered_set<Block> &visited) const throws;
 
     // Collects all references with the same hash value
     void collectRefsWithSameHashValue(Block nr, std::stack<Block> &list,
-                                      std::set<Block> &visited) const throws;
-
+                                      std::unordered_set<Block> &visited) const throws;
     
+
     //
     // Traversing linked lists
     //

@@ -489,7 +489,7 @@ FileSystem::parentPtr(const FSBlock &root) const
 FSBlock *
 FileSystem::seekPtr(const FSBlock &root, const FSName &name) const
 {
-    std::set<Block> visited;
+    std::unordered_set<Block> visited;
 
     // Check for special tokens
     if (name == "")   return blockPtr(root.nr);
@@ -734,7 +734,7 @@ FileSystem::traverse(const FSBlock &path, const FSOpt &opt) const
 
     // Collect the blocks for all items in this directory
     std::stack<Block> remainingItems;
-    std::set<Block> visited;
+    std::unordered_set<Block> visited;
     collectHashedRefs(path.nr, remainingItems, visited);
 
     // Move the collected items to the result list
@@ -763,7 +763,7 @@ FileSystem::traverse(const FSBlock &path, const FSOpt &opt) const
 }
 
 std::vector<Block>
-FileSystem::collect(const Block nr, std::function<FSBlock *(FSBlock *)> next)
+FileSystem::collect(const Block nr, std::function<FSBlock *(FSBlock *)> next) const
 {
     std::vector<Block> result;
     std::unordered_set<Block> visited;
@@ -784,7 +784,7 @@ FileSystem::collect(const Block nr, std::function<FSBlock *(FSBlock *)> next)
 }
 
 std::vector<FSBlock *>
-FileSystem::collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> next)
+FileSystem::collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> next) const
 {
     std::vector<FSBlock *> result;
     std::unordered_set<Block> visited;
@@ -806,7 +806,7 @@ FileSystem::collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> nex
 
 void
 FileSystem::collectHashedRefs(Block nr,
-                              std::stack<Block> &result, std::set<Block> &visited) const
+                              std::stack<Block> &result, std::unordered_set<Block> &visited) const
 {
     if (FSBlock *b = blockPtr(nr); b && b->hashTableSize() > 0) {
 
@@ -819,7 +819,7 @@ FileSystem::collectHashedRefs(Block nr,
 
 void
 FileSystem::collectRefsWithSameHashValue(Block nr,
-                                         std::stack<Block> &result, std::set<Block> &visited) const
+                                         std::stack<Block> &result, std::unordered_set<Block> &visited) const
 {
     std::stack<Block> refs;
     
@@ -847,7 +847,7 @@ FileSystem::lastFileListBlockInChain(Block start) const
 FSBlock *
 FileSystem::lastFileListBlockInChain(FSBlock *block) const
 {
-    std::set<Block> visited;
+    std::unordered_set<Block> visited;
 
     while (block && visited.find(block->nr) == visited.end()) {
 
@@ -864,7 +864,7 @@ std::vector<Block>
 FileSystem::hashBlockChain(Block first) const
 {
     std::vector<Block> result;
-    std::set<Block> visited;
+    std::unordered_set<Block> visited;
 
     FSBlock *it = blockPtr(first);
     while (it && it->isHashable() && visited.find(it->nr) == visited.end()) {
@@ -887,7 +887,7 @@ FileSystem::lastHashBlockInChain(Block start) const
 FSBlock *
 FileSystem::lastHashBlockInChain(FSBlock *block) const
 {
-    std::set<Block> visited;
+    std::unordered_set<Block> visited;
 
     while (block && visited.find(block->nr) == visited.end()) {
 
