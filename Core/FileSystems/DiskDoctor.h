@@ -52,6 +52,9 @@ public:
     Fault xray(Block ref, isize pos, bool strict, u8 *expected) const;
     Fault xray(FSBlock &node, isize pos, bool strict) const;
     Fault xray(FSBlock &node, isize pos, bool strict, u8 *expected) const;
+
+    // Checks the block allocation table
+    std::vector<Block> checkBitmap() const;
 };
 
 }

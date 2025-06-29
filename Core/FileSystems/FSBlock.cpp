@@ -598,8 +598,8 @@ FSBlock::_dump(Category category, std::ostream &os) const
             {
                 auto name = getName().cpp_str();
                 auto size = getFileSize();
-                auto listBlocks = fs->collectListBlocks(nr).size();
-                auto dataBlocks = fs->collectListBlocks(nr).size();
+                auto listBlocks = isize(fs->collectListBlocks(nr).size());
+                auto dataBlocks = isize(fs->collectListBlocks(nr).size());
                 auto totalBlocks = 1 + listBlocks + dataBlocks;
                 auto tab = int(name.size()) + 4;
 

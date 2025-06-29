@@ -1079,6 +1079,26 @@ NavigatorConsole::initCommands(RSCommand &root)
         }
     });
 
+    root.add({
+
+        .tokens = { "xray" },
+        .ghelp  = { "Examines the file system integrity" },
+        .chelp  = { "Inspects the entire file system" },
+        .args   = {
+            // { .name = { "nr", "Block number" }, .flags = rs::opt },
+        },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            auto blocks = fs.doctor.checkBitmap();
+
+            if (auto errors = blocks.size(); errors) {
+                os << errors << " bitmap anomalies found." << std::endl;
+            } else {
+                os << "Bitmap check: Passed" << std::endl;
+            }
+        }
+    });
+
 }
 
 }

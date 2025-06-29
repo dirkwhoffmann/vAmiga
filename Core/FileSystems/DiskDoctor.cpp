@@ -9,7 +9,7 @@
 
 #include "DiskDoctor.h"
 #include "FileSystem.h"
-
+#include <unordered_set>
 //
 // Macros used inside the check() methods
 //
@@ -335,6 +335,52 @@ DiskDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
     }
 
     return Fault::OK;
+}
+
+std::vector<Block>
+DiskDoctor::checkBitmap() const
+{
+    std::vector<Block> result;
+    std::unordered_set<Block> used;
+
+    // Extract the directory tree
+    auto tree = fs.traverse(fs.root(), { .recursive = true });
+
+    // Collect all used blocks
+    tree.bfsWalk( [&](const FSTree &it) {
+
+        used.insert(it.node->nr);
+
+        if (it.node->isFile()) {
+
+            auto listBlocks = fs.collectListBlocks(it.node->nr);
+            auto dataBlocks = fs.collectDataBlocks(it.node->nr);
+            used.insert(listBlocks.begin(), listBlocks.end());
+            used.insert(dataBlocks.begin(), dataBlocks.end());
+        }
+    });
+    used.insert(fs.bmBlocks.begin(), fs.bmBlocks.end());
+    used.insert(fs.bmExtBlocks.begin(), fs.bmExtBlocks.end());
+
+    // Check all blocks (ignoring the first two boot blocks)
+    for (isize i = 2, capacity = fs.numBlocks(); i < capacity; i++) {
+
+        bool allocated = fs.isAllocated(Block(i));
+        bool contained = used.contains(Block(i));
+
+        if (allocated && !contained) {
+
+            printf("ERROR: Block %ld is allocated, but not used.\n", i);
+            result.push_back(Block(i));
+
+        } else if (!allocated && contained) {
+
+            printf("ERROR: Block is not allocated, but used.\n");
+            result.push_back(Block(i));
+        }
+    }
+
+    return result;
 }
 
 }
