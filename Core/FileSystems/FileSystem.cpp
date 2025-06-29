@@ -588,12 +588,9 @@ FileSystem::cd(const string &path)
 }
 
 std::vector<FSBlock *>
-FileSystem::collectDataBlocks(const FSBlock &node)
+FileSystem::collectDataBlocks(const FSBlock &node) const
 {
     std::vector<FSBlock *> result;
-
-    // Collect all list blocks
-    auto listBlocks = collect(node, [&](FSBlock *block) { return block->getNextListBlock(); });
 
     // Iterate through all list blocks and collect all data block references
     for (auto &it : collectListBlocks(node)) {
@@ -609,7 +606,7 @@ FileSystem::collectDataBlocks(const FSBlock &node)
 }
 
 std::vector<Block>
-FileSystem::collectDataBlocks(Block ref)
+FileSystem::collectDataBlocks(Block ref) const
 {
     std::vector<Block> result;
     if (auto *ptr = blockPtr(ref)) {
@@ -619,17 +616,58 @@ FileSystem::collectDataBlocks(Block ref)
 }
 
 std::vector<FSBlock *>
-FileSystem::collectListBlocks(const FSBlock &node)
+FileSystem::collectListBlocks(const FSBlock &node) const
 {
     return collect(node, [&](FSBlock *block) { return block->getNextListBlock(); });
 }
 
 std::vector<Block>
-FileSystem::collectListBlocks(const Block ref)
+FileSystem::collectListBlocks(const Block ref) const
 {
     return collect(ref, [&](FSBlock *block) { return block->getNextListBlock(); });
 }
 
+std::vector<Block>
+FileSystem::collectHashedBlocks(Block ref, isize bucket) const
+{
+    std::vector<Block> result;
+    if (auto *ptr = blockPtr(ref)) {
+        for (auto &it: collectHashedBlocks(*ptr, bucket)) result.push_back(it->nr);
+    }
+    return result;
+}
+
+std::vector<FSBlock *>
+FileSystem::collectHashedBlocks(const FSBlock &node, isize bucket) const
+{
+    if (FSBlock *ptr = hashableBlockPtr(node.getHashRef((u32)bucket)); ptr) {
+        return collect(*ptr, [&](FSBlock *p) { return p->getNextHashBlock(); });
+    } else {
+        return {};
+    }
+}
+
+std::vector<Block>
+FileSystem::collectHashedBlocks(Block ref) const
+{
+    std::vector<Block> result;
+    if (auto *ptr = blockPtr(ref)) {
+        for (auto &it: collectHashedBlocks(*ptr)) result.push_back(it->nr);
+    }
+    return result;
+}
+
+std::vector<FSBlock *>
+FileSystem::collectHashedBlocks(const FSBlock &node) const
+{
+    std::vector<FSBlock *> result;
+
+    // Walk through all hash table buckets in reverse order
+    for (isize i = (isize)node.hashTableSize() - 1; i >= 0; i--) {
+        for (auto &it : collectHashedBlocks(node, i)) result.push_back(it);
+    }
+    return result;
+}
 
 void
 FileSystem::list(std::ostream &os, const FSBlock &path, const FSOpt &opt) const
@@ -737,31 +775,22 @@ FileSystem::traverse(const FSBlock &path, const FSOpt &opt, std::unordered_set<B
 {
     FSTree tree(blockPtr(path.nr));
 
-    // Walk through the hash table in reverse order
-    for (isize i = (isize)path.hashTableSize() - 1; i >= 0; i--) {
+    // Collect all items in the hash table
+    auto hashedBlocks = collectHashedBlocks(path);
 
-        // If the hash table has entries ...
-        if (FSBlock *node = hashableBlockPtr(path.getHashRef((u32)i)); node) {
+    // Add all accepted items to the tree
+    for (auto it = hashedBlocks.begin(); it != hashedBlocks.end(); it++) {
 
-            // ... collect them ...
-            auto blocks = collect(*node, [&](FSBlock *p) { return p->getNextHashBlock(); });
-
-            // ... and add all accepted items to the tree
-            for (auto it = blocks.begin(); it != blocks.end(); it++) {
-
-                if (opt.accept(*it)) tree.children.push_back(*it);
-                if (visited.contains((*it)->nr)) throw AppError(Fault::FS_HAS_CYCLES);
-                visited.insert((*it)->nr);
-            }
-        }
+        if (opt.accept(*it)) tree.children.push_back(*it);
+        if (visited.contains((*it)->nr)) throw AppError(Fault::FS_HAS_CYCLES);
+        visited.insert((*it)->nr);
     }
 
-    // Sort items
+    // Sort the items
     tree.sort(opt.sort);
 
     // Add subdirectories if requested
     if (opt.recursive) {
-
         for (auto &it : tree.children) {
             if (it.node->isDirectory()) it = traverse(*it.node, opt, visited);
         }

@@ -273,10 +273,14 @@ public:
     void find(std::ostream &os, const FSOpt &opt = {}) const { return list(os, pwd(), opt); }
 
     // Collects blocks of a certain type
-    std::vector<Block> collectDataBlocks(Block ref);
-    std::vector<FSBlock *> collectDataBlocks(const FSBlock &node);
-    std::vector<Block> collectListBlocks(Block ref);
-    std::vector<FSBlock *> collectListBlocks(const FSBlock &node);
+    std::vector<Block> collectDataBlocks(Block ref) const;
+    std::vector<FSBlock *> collectDataBlocks(const FSBlock &node) const;
+    std::vector<Block> collectListBlocks(Block ref) const;
+    std::vector<FSBlock *> collectListBlocks(const FSBlock &node) const;
+    std::vector<Block> collectHashedBlocks(Block ref, isize bucket) const;
+    std::vector<FSBlock *> collectHashedBlocks(const FSBlock &node, isize bucket) const;
+    std::vector<Block> collectHashedBlocks(Block ref) const;
+    std::vector<FSBlock *> collectHashedBlocks(const FSBlock &node) const;
 
 
     //
