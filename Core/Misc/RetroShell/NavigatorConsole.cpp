@@ -828,12 +828,14 @@ NavigatorConsole::initCommands(RSCommand &root)
         .tokens = { "file" },
         .ghelp  = { "Manage files" },
         .chelp  = { "Inspect a single file" },
-        /*
+        .args   = {
+            { .name = { "path", "File path" }, .flags = rs::opt },
+        },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            fs.dump(Category::Info, os);
+            auto &file = parseFile(args, "path");
+            file.dump(Category::Info, os);
         }
-        */
     });
 
     root.add({
@@ -852,7 +854,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto &file = parsePath(args, "path", fs.pwd());
+            auto &file = parseFile(args, "path", fs.pwd());
             auto opt = parseDumpOpts(args);
 
             Buffer<u8> buffer;
@@ -874,7 +876,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             auto nr = parseBlock(args, "nr");
 
             if (auto ptr = fs.blockPtr(nr); ptr) {
-                ptr->dump(os);
+                ptr->dump(Category::Blocks, os);
             }
         }
     });

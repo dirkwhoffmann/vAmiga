@@ -13,7 +13,7 @@
 #include "MemUtils.h"
 
 #include <climits>
-#include <set>
+#include <unordered_set>
 #include <stack>
 #include <algorithm>
 
@@ -87,7 +87,7 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
 
     // Check the cosistency of the file system descriptor
     layout.checkCompatibility();
-    
+
     // Only proceed if the volume is formatted
     if (layout.dos == FSVolumeType::NODOS) throw AppError(Fault::FS_UNFORMATTED);
 
@@ -97,7 +97,7 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
     rootBlock   = layout.rootBlock;
     bmBlocks    = layout.bmBlocks;
     bmExtBlocks = layout.bmExtBlocks;
-    
+
     // Create all blocks
     storage.init(layout.numBlocks);
     // dealloc();
@@ -108,7 +108,7 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
 
         // Determine the type of the new block
         FSBlockType type = predictBlockType((Block)i, data);
-        
+
         // Create new block
         // storage.write(Block(i), FSBlock::make(this, (Block)i, type));
         storage[i].init(type);
@@ -181,12 +181,12 @@ FileSystem::_dump(Category category, std::ostream &os) const
             auto used = formatted() ? usedBlocks() : storage.usedBlocks();
             auto free = formatted() ? freeBlocks() : storage.freeBlocks();
             auto fill = formatted() ? fillLevel() : storage.fillLevel();
+            auto size = std::to_string(total) + " (x " + std::to_string(bsize) + ")";
 
-            formatted() ? os << "DOS" << dec(isize(dos)) << "   " : os << "NODOS  ";
-            os << std::setw(7) << std::left << std::setfill(' ') << total;
-            os << " (x ";
-            os << std::setw(3) << std::left << std::setfill(' ') << bsize;
-            os << ")  ";
+            formatted() ? os << "DOS" << dec(isize(dos)) << " " : os << "NODOS";
+            os << "  ";
+            os << std::setw(15) << std::left << std::setfill(' ') << size;
+            os << "  ";
             os << std::setw(6) << std::left << std::setfill(' ') << used;
             os << "  ";
             os << std::setw(6) << std::left << std::setfill(' ') << free;
@@ -240,7 +240,7 @@ FileSystem::freeBlocks() const
 {
     isize result = 0;
     isize count = numBlocks();
-    
+
     for (isize i = 0; i < count; i++) {
         if (isFree((Block)i)) result++;
     }
@@ -307,24 +307,24 @@ FileSystem::blockPtr(Block nr) const
 }
 
 /*
-FSBlock *
-FileSystem::bootBlockPtr(Block nr) const
-{
-    if (auto *p = const_cast<FSBlock *>(storage.read(nr, FSBlockType::BOOT_BLOCK)); p) {
-        return p;
-    }
-    return nullptr;
-}
+ FSBlock *
+ FileSystem::bootBlockPtr(Block nr) const
+ {
+ if (auto *p = const_cast<FSBlock *>(storage.read(nr, FSBlockType::BOOT_BLOCK)); p) {
+ return p;
+ }
+ return nullptr;
+ }
 
-FSBlock *
-FileSystem::rootBlockPtr(Block nr) const
-{
-    if (auto *p = const_cast<FSBlock *>(storage.read(nr, FSBlockType::ROOT_BLOCK)); p) {
-        return p;
-    }
-    return nullptr;
-}
-*/
+ FSBlock *
+ FileSystem::rootBlockPtr(Block nr) const
+ {
+ if (auto *p = const_cast<FSBlock *>(storage.read(nr, FSBlockType::ROOT_BLOCK)); p) {
+ return p;
+ }
+ return nullptr;
+ }
+ */
 
 FSBlock *
 FileSystem::bitmapBlockPtr(Block nr) const
@@ -414,7 +414,7 @@ FileSystem::isFree(Block nr) const
 
     // The first two blocks are always allocated and not part of the bitmap
     if (nr < 2) return false;
-    
+
     // Locate the allocation bit in the bitmap block
     isize byte, bit;
     FSBlock *bm = locateAllocationBit(nr, &byte, &bit);
@@ -431,7 +431,7 @@ FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) const
     // The first two blocks are always allocated and not part of the map
     if (nr < 2) return nullptr;
     nr -= 2;
-    
+
     // Locate the bitmap block which stores the allocation bit
     isize bitsPerBlock = (bsize - 4) * 8;
     isize bmNr = nr / bitsPerBlock;
@@ -444,11 +444,11 @@ FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) const
         warn("bmNr = %ld\n", bmNr);
         return nullptr;
     }
-    
+
     // Locate the byte position (note: the long word ordering will be reversed)
     nr = nr % bitsPerBlock;
     isize rByte = nr / 8;
-    
+
     // Rectifiy the ordering
     switch (rByte % 4) {
         case 0: rByte += 3; break;
@@ -460,23 +460,28 @@ FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) const
     // Skip the checksum which is located in the first four bytes
     rByte += 4;
     assert(rByte >= 4 && rByte < bsize);
-    
+
     *byte = rByte;
     *bit = nr % 8;
 
     return bm;
 }
 
-/*
-FSBlock *
-FileSystem::rootDir() const
+FSBlock &
+FileSystem::parent(const FSBlock &node)
 {
-    return blockPtr(rootBlock);
+    auto *ptr = parentPtr(node);
+    return ptr ? *ptr : at(node.nr);
 }
-*/
+
+const FSBlock &
+FileSystem::parent(const FSBlock &node) const
+{
+    return const_cast<const FSBlock &>(const_cast<FileSystem *>(this)->parent(node));
+}
 
 FSBlock *
-FileSystem::parentDir(const FSBlock &root) const
+FileSystem::parentPtr(const FSBlock &root) const
 {
     return root.isRoot() ? blockPtr(root.nr) : blockPtr(root.nr)->getParentDirBlock();
 }
@@ -489,7 +494,7 @@ FileSystem::seekPtr(const FSBlock &root, const FSName &name) const
     // Check for special tokens
     if (name == "")   return blockPtr(root.nr);
     if (name == ".")  return blockPtr(root.nr);
-    if (name == "..") return parentDir(root);
+    if (name == "..") return parentPtr(root);
     if (name == "/")  return blockPtr(rootBlock);
 
     // Only proceed if a hash table is present
@@ -582,26 +587,49 @@ FileSystem::cd(const string &path)
     throw AppError(Fault::FS_NOT_FOUND, path);
 }
 
-std::vector<Block>
-FileSystem::dataBlocks(const FSBlock &path)
+std::vector<FSBlock *>
+FileSystem::collectDataBlocks(const FSBlock &node)
 {
-    std::vector<Block> result;
+    std::vector<FSBlock *> result;
 
     // Collect all list blocks
-    auto listBlocks = collect(path, [&](FSBlock *block) { return block->getNextListBlock(); });
+    auto listBlocks = collect(node, [&](FSBlock *block) { return block->getNextListBlock(); });
 
     // Iterate through all list blocks and collect all data block references
-    for (auto &it : listBlocks) {
+    for (auto &it : collectListBlocks(node)) {
 
         isize num = std::min(it->getNumDataBlockRefs(), it->getMaxDataBlockRefs());
         for (isize i = 0; i < num; i++) {
-            if (Block ref = it->getDataBlockRef(i); ref) {
-                result.push_back(ref);
+            if (auto *ptr = it->getDataBlock(i); ptr) {
+                result.push_back(ptr);
             }
         }
     }
     return result;
 }
+
+std::vector<Block>
+FileSystem::collectDataBlocks(Block ref)
+{
+    std::vector<Block> result;
+    if (auto *ptr = blockPtr(ref)) {
+        for (auto &it: collectDataBlocks(*ptr)) result.push_back(it->nr);
+    }
+    return result;
+}
+
+std::vector<FSBlock *>
+FileSystem::collectListBlocks(const FSBlock &node)
+{
+    return collect(node, [&](FSBlock *block) { return block->getNextListBlock(); });
+}
+
+std::vector<Block>
+FileSystem::collectListBlocks(const Block ref)
+{
+    return collect(ref, [&](FSBlock *block) { return block->getNextListBlock(); });
+}
+
 
 void
 FileSystem::list(std::ostream &os, const FSBlock &path, const FSOpt &opt) const
@@ -734,11 +762,32 @@ FileSystem::traverse(const FSBlock &path, const FSOpt &opt) const
     return tree;
 }
 
+std::vector<Block>
+FileSystem::collect(const Block nr, std::function<FSBlock *(FSBlock *)> next)
+{
+    std::vector<Block> result;
+    std::unordered_set<Block> visited;
+
+    for (auto block = blockPtr(nr); block; block = next(block)) {
+
+        // Break the loop if this block has been visited before
+        if (visited.contains(block->nr)) break;
+
+        // Add the block
+        result.push_back(block->nr);
+
+        // Remember the block as visited
+        visited.insert(block->nr);
+    }
+
+    return result;
+}
+
 std::vector<FSBlock *>
 FileSystem::collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> next)
 {
     std::vector<FSBlock *> result;
-    std::set<Block> visited;
+    std::unordered_set<Block> visited;
 
     for (auto block = blockPtr(node.nr); block != nullptr; block = next(block)) {
 

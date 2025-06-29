@@ -513,21 +513,16 @@ MutableFileSystem::deleteFile(const FSBlock &node)
     if (!node.isFile()) return;
 
     // Collect all blocks occupied by this file
-    auto blocks = dataBlocks(node);
+    auto dataBlocks = collectDataBlocks(node.nr);
+    auto listBlocks = collectListBlocks(node.nr);
 
     // Remove the file from the hash table
     deleteFromHashTable(node);
 
-    // Remove the file header block
-    storage.erase(node.nr);
-    markAsFree(node.nr);
-
-    // Remove all data blocks
-    for (auto &it : blocks) {
-
-        storage.erase(it);
-        markAsFree(it);
-    }
+    // Remove all blocks
+    storage.erase(node.nr); markAsFree(node.nr);
+    for (auto &it : dataBlocks) { storage.erase(it); markAsFree(it); }
+    for (auto &it : listBlocks) { storage.erase(it); markAsFree(it); }
 }
 
 void

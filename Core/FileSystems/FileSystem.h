@@ -15,6 +15,7 @@
 #include "FSObjects.h"
 #include "FSTree.h"
 #include "BlockStorage.h"
+#include "DiskDoctor.h"
 #include "ADFFile.h"
 #include "HDFFile.h"
 #include <stack>
@@ -51,6 +52,9 @@ protected:
 
     // Block storage
     BlockStorage storage = BlockStorage(this);
+
+    // Analyzer and rectifier
+    DiskDoctor doctor = DiskDoctor(*this);
 
     // Size of a single block in bytes
     isize bsize = 512;
@@ -174,16 +178,6 @@ public:
     // Checks block properties
     bool isEmpty(Block nr) const { return blockType(nr) == FSBlockType::EMPTY_BLOCK; }
 
-    // Reads a block (of a certain type)
-    /*
-    FSBlock *read(Block nr) { return storage.read(nr); }
-    FSBlock *read(Block nr, FSBlockType type) { return storage.read(nr, type); }
-    const FSBlock *read(Block nr) const;
-    const FSBlock *read(Block nr, FSBlockType type) const;
-    FSBlock &operator[](size_t nr) { return *read(Block(nr)); }
-    const FSBlock &operator[](size_t nr) const { return *read(Block(nr)); }
-    */
-
     // Returns the usage type of a certain byte in a certain block
     FSItemType itemType(Block nr, isize pos) const;
     
@@ -236,16 +230,22 @@ public:
     // Returns the root of the directory tree
     FSBlock &root() { return at(rootBlock); }
     const FSBlock &root() const { return at(rootBlock); }
-    // FSBlock *rootDir() const;
 
     // Returns the working directory
     FSBlock &pwd() { return at(curr); }
     const FSBlock &pwd() const { return at(curr); }
 
-public:
+    // Returns the working directory
+    FSBlock &parent(const FSBlock &node);
+    const FSBlock &parent(const FSBlock &node) const;
+
+    // Changes the working directory
+    void cd(const FSName &name);
+    void cd(const FSBlock &path);
+    void cd(const string &path);
 
     // Returns a pointer to the parent directory block
-    FSBlock *parentDir(const FSBlock &root) const;
+    FSBlock *parentPtr(const FSBlock &root) const;
 
     // Seeks an item in the directory tree (returns nullptr if not found)
     FSBlock *seekPtr(const FSBlock &root, const FSName &name) const;
@@ -265,17 +265,15 @@ public:
     void list(std::ostream &os, const FSOpt &opt = {}) const { return list(os, pwd(), opt); }
 
     // Searches the directory tree ('find' command)
-    std::vector<Block> find(const FSPattern &pattern, const FSOpt &opt) const;
+    std::vector<Block> find(const FSPattern &pattern, const FSOpt &opt = {}) const;
     void find(std::ostream &os, const FSBlock &path, const FSOpt &opt = {}) const;
     void find(std::ostream &os, const FSOpt &opt = {}) const { return list(os, pwd(), opt); }
 
-    // Changes the working directory
-    void cd(const FSName &name);
-    void cd(const FSBlock &path);
-    void cd(const string &path);
-
-    // Collects the data blocks belonging to a file
-    std::vector<Block> dataBlocks(const FSBlock &path);
+    // Collects blocks of a certain type
+    std::vector<Block> collectDataBlocks(Block ref);
+    std::vector<FSBlock *> collectDataBlocks(const FSBlock &node);
+    std::vector<Block> collectListBlocks(Block ref);
+    std::vector<FSBlock *> collectListBlocks(const FSBlock &node);
 
 
     //
@@ -327,6 +325,7 @@ public:
     FSTree traverse(const FSBlock &path, const FSOpt &opt = {}) const;
 
     // Follows a linked list and collects all nodes
+    std::vector<Block> collect(const Block nr, std::function<FSBlock *(FSBlock *)> next);
     std::vector<FSBlock *> collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> next);
 
 private:

@@ -4,6 +4,7 @@ target_sources(VACore PRIVATE
 
 BlockStorage.cpp
 BootBlockImage.cpp
+DiskDoctor.cpp
 FileSystem.cpp
 FSDescriptors.cpp
 FSObjects.cpp

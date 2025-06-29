@@ -67,7 +67,7 @@ public:
 protected:
     
     const char *objectName() const override;
-    void _dump(Category category, std::ostream &os) const override { }
+    void _dump(Category category, std::ostream &os) const override;
     
     
     //
@@ -175,7 +175,7 @@ public:
 public:
     
     // Prints some debug information for this block
-    void dump(std::ostream &os) const;
+    // void dump(std::ostream &os) const;
 
     
     //
@@ -286,6 +286,7 @@ public:
 
     Block getDataBlockRef(isize nr) const;
     void setDataBlockRef(isize nr, Block ref);
+    FSBlock *getDataBlock(isize nr) const;
 
     // Link to the next data block
     Block getNextDataBlockRef() const;
