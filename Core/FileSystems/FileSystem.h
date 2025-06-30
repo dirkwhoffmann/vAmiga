@@ -273,13 +273,8 @@ public:
     void list(std::ostream &os, const FSOpt &opt = {}) const { return list(os, pwd(), opt); }
 
     // Searches the directory tree ('find' command)
-    std::vector<Block> find(const FSPattern &pattern) const;
-    std::vector<Block> find(const FSBlock &start, const FSOpt &opt) const;
-
-    std::vector<Block> find(const FSPattern &pattern, const FSOpt &opt) const; // DEPRECATED
-
-    // void find(std::ostream &os, const FSBlock &path, const FSOpt &opt = {}) const; // DEPRECATED
-    // void find(std::ostream &os, const FSOpt &opt = {}) const { return list(os, pwd(), opt); } // DEPRECATED
+    std::vector<FSBlock *> find(const FSPattern &pattern) const;
+    std::vector<FSBlock *> find(const FSBlock &start, const FSOpt &opt) const;
 
     // Collects blocks of a certain type
     std::vector<Block> collectDataBlocks(Block ref) const;

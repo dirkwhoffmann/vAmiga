@@ -775,7 +775,7 @@ FileSystem::list(std::ostream &os, const FSBlock &path, const FSOpt &opt) const
     tree.bfsWalk(func);
 }
 
-std::vector<Block>
+std::vector<FSBlock *>
 FileSystem::find(const FSPattern &pattern) const
 {
     std::vector<Block> result;
@@ -784,13 +784,13 @@ FileSystem::find(const FSPattern &pattern) const
     auto &start = pattern.isAbsolute() ? root() : pwd();
 
     // Seek all files matching the provided pattern
-    return seek(start.nr, pattern);
+    return seek(start, pattern);
 }
 
-std::vector<Block>
+std::vector<FSBlock *>
 FileSystem::find(const FSBlock &start, const FSOpt &opt) const
 {
-    std::vector<Block> result;
+    std::vector<FSBlock *> result;
 
     // Collect all matching items
     auto tree = traverse(start, opt);
@@ -798,54 +798,12 @@ FileSystem::find(const FSBlock &start, const FSOpt &opt) const
 
     // Translate into a vector
     tree.bfsWalk([&](const FSTree &tree) {
-        result.push_back(tree.node->nr);
+        result.push_back(tree.node);
     });
 
     printf("FileSystem::find DONE\n");
     return result;
 }
-
-std::vector<Block>
-FileSystem::find(const FSPattern &pattern, const FSOpt &opt) const
-{
-    std::vector<Block> result;
-
-    printf("Pattern = %s\n", pattern.glob.c_str());
-    printf("isAbsolute() = %d\n", pattern.isAbsolute());
-
-    // Determine the directory to start searching
-    auto &top = pattern.isAbsolute() ? root() : pwd();
-    printf("top = %s\n", top.absName().c_str());
-
-    // Collect all matching items
-    auto tree = traverse(top, opt);
-    printf("traverse: %p\n", (void *)tree.node);
-
-    // Translate into a vector
-    tree.bfsWalk([&](const FSTree &tree) {
-        if (tree.node->matches(pattern)) result.push_back(tree.node->nr);
-    });
-
-    printf("(1))");
-
-    return result;
-}
-
-/*
-void
-FileSystem::find(std::ostream &os, const FSBlock &path, const FSOpt &opt) const
-{
-    // Collect all directory items to list
-    auto tree = traverse(path, opt);
-
-    // Walk the tree
-    auto func = [&](const FSTree &t) {
-
-        os << std::left << t.node->relName(path) << std::endl;
-    };
-    tree.bfsWalk(func);
-}
-*/
 
 FSTree
 FileSystem::traverse(const FSBlock &path, const FSOpt &opt) const

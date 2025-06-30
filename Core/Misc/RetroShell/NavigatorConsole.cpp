@@ -73,14 +73,14 @@ NavigatorConsole::autoComplete(Tokens &argv)
 
             // That didn't work, so try to auto-complete with a file name
             auto pattern = FSPattern(remaining.back() + "*");
-            auto matches = fs.find(pattern, {});
+            auto matches = fs.find(pattern);
 
             // Collect the names for all matching directory items
             std::vector<string> names;
             if (pattern.isAbsolute()) {
-                for (auto &it : matches) names.push_back(fs.at(it).absName());
+                for (auto &it : matches) names.push_back(it->absName());
             } else {
-                for (auto &it : matches) names.push_back(fs.at(it).relName());
+                for (auto &it : matches) names.push_back(it->relName());
             }
 
             // Auto-complete with the common prefix
@@ -727,51 +727,43 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Find files or directories" },
         .args   = {
             { .name = { "name", "Search pattern" } },
-            { .name = { "path", "Directory to search in" }, .flags = rs::opt },
             { .name = { "d", "Find directories only" }, .flags = rs::flag },
             { .name = { "f", "Find files only" }, .flags = rs::flag },
-            { .name = { "r", "Search subdirectories, too" }, .flags = rs::flag },
             { .name = { "s", "Sort output" }, .flags = rs::flag } },
         .func   = [this](std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto name = args.at("name");
-            auto pattern = FSPattern(name);
-            /*
-            auto abs = name[0] == '/';
-            auto &path = parsePath(args, "path", fs.pwd());
-
+            auto pattern = FSPattern(args.at("name"));
             auto d = args.contains("d");
             auto f = args.contains("f");
-            auto r = args.contains("r");
             auto s = args.contains("s");
-            */
-            /*
-            FSOpt opt = {
 
-                .recursive = r,
-                .sort = s ? sort::alpha : sort::none,
-
-                .filter = [&](const FSBlock &item) {
-
-                    return item.matches(pattern) &&
-                    (!d || item.isDirectory()) &&
-                    (!f || item.isFile());
-                },
-
-                .formatter = [&](const FSBlock &node) {
-
-                    std::stringstream ss;
-                    ss << (abs ? node.absName() : node.relName());
-                    if (node.isDirectory()) ss << " (dir)";
-                    return ss.str();
-                }
-            };
-            */
-
+            // Find all items matching the search pattern
             auto matches = fs.find(pattern);
-            // std::vector<string> matches;
-            // fs.collect(path, matches, opt);
-            for (auto &it : matches) { os << fs.at(it).absName() << '\n'; }
+
+            // Filter the result
+            matches.erase(std::remove_if(matches.begin(), matches.end(), [&](FSBlock *node) {
+                return (d && !node->isDirectory()) || (f && !node->isFile());
+            }), matches.end());
+
+            
+            if (args.contains("s")) {
+
+                int tab = 0;
+
+                std::sort(matches.begin(), matches.end(),
+                          [](FSBlock *b1, FSBlock *b2) { return b1->getName() < b2->getName(); });
+
+                for (auto &it : matches) {
+                    tab = std::max(int(it->pathName().size()), tab);
+                }
+                for (auto &it : matches) {
+                    os << std::setw(tab) << std::left << it->pathName() << " : " << it->absName() << '\n';
+                }
+
+            } else {
+
+                for (auto &it : matches) { os << it->absName() << '\n'; }
+            }
         }
     });
 
