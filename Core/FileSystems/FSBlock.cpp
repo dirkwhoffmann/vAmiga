@@ -37,7 +37,6 @@ FSBlock::init(FSBlockType t)
     // Allocate memory
     delete [] (bdata);
     bdata = new u8[bsize()]();
-    // data.init(type == FSBlockType::EMPTY_BLOCK ? 0 : bsize(), 0);
 
     // Initialize
     switch (type) {
@@ -143,6 +142,12 @@ FSBlock::objectName() const
 }
 
 bool
+FSBlock::is(FSBlockType type) const
+{
+    return this->type == type;
+}
+
+bool
 FSBlock::isRoot() const
 {
     return type == FSBlockType::ROOT_BLOCK;
@@ -225,7 +230,7 @@ FSBlock::matches(const FSPattern &pattern) const
        return pattern.match(absName());
     } else {
         printf("Rel matching %s and %s (%d)\n", relName().c_str(), pattern.glob.c_str(), pattern.match(relName()));
-        return pattern.match(relName());
+        return pattern.match(pathName());
     }
 }
 

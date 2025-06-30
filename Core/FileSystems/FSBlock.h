@@ -79,6 +79,7 @@ protected:
 public:
 
     // Informs about the block type
+    bool is(FSBlockType type) const;
     bool isRoot() const;
     bool isFile() const;
     bool isDirectory() const;

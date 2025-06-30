@@ -736,6 +736,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
             auto name = args.at("name");
             auto pattern = FSPattern(name);
+            /*
             auto abs = name[0] == '/';
             auto &path = parsePath(args, "path", fs.pwd());
 
@@ -743,7 +744,8 @@ NavigatorConsole::initCommands(RSCommand &root)
             auto f = args.contains("f");
             auto r = args.contains("r");
             auto s = args.contains("s");
-
+            */
+            /*
             FSOpt opt = {
 
                 .recursive = r,
@@ -764,11 +766,12 @@ NavigatorConsole::initCommands(RSCommand &root)
                     return ss.str();
                 }
             };
+            */
 
-            fs.find(os, path);
+            auto matches = fs.find(pattern);
             // std::vector<string> matches;
             // fs.collect(path, matches, opt);
-            // for (auto &it : matches) { os << it << '\n'; }
+            for (auto &it : matches) { os << fs.at(it).absName() << '\n'; }
         }
     });
 

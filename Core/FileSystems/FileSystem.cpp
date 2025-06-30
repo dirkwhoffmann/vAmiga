@@ -561,6 +561,50 @@ FileSystem::seekPtr(const FSBlock &root, const char *name) const
     return seekPtr(root, string(name));
 }
 
+std::vector<FSBlock *>
+FileSystem::seek(const FSBlock &root, const FSPattern &pattern) const
+{
+    if (!initialized()) throw AppError(Fault::FS_UNINITIALIZED);
+    if (!formatted()) throw AppError(Fault::FS_UNFORMATTED);
+    if (!root.isRegular()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
+
+    std::unordered_set<Block> visited;
+    return seek(root, pattern, visited);
+}
+
+std::vector<FSBlock *>
+FileSystem::seek(const FSBlock &root, const FSPattern &pattern, std::unordered_set<Block> &visited) const
+{
+    std::vector<FSBlock *> result;
+
+    // Collect all items in the hash table
+    auto hashedBlocks = collectHashedBlocks(root);
+
+    for (auto it = hashedBlocks.begin(); it != hashedBlocks.end(); it++) {
+
+        // Add item if accepted
+        if (pattern.match((*it)->pathName())) result.push_back(*it);
+
+        // Break the loop if this block has been visited before
+        if (visited.contains((*it)->nr)) throw AppError(Fault::FS_HAS_CYCLES);
+
+        // Remember the block as visited
+        visited.insert((*it)->nr);
+    }
+
+    // Search subdirectories
+    for (auto &it : hashedBlocks) {
+
+        if (it->isDirectory()) {
+
+            auto blocks = seek(*it, pattern, visited);
+            result.insert(result.end(), blocks.begin(), blocks.end());
+        }
+    }
+
+    return result;
+}
+
 bool
 FileSystem::exists(const FSBlock &top, const fs::path &path) const
 {
@@ -720,6 +764,41 @@ FileSystem::list(std::ostream &os, const FSBlock &path, const FSOpt &opt) const
 }
 
 std::vector<Block>
+FileSystem::find(const FSPattern &pattern) const
+{
+    std::vector<Block> result;
+
+    printf("FileSystem::find Pattern = %s\n", pattern.glob.c_str());
+    printf("FileSystem::find isAbsolute() = %d\n", pattern.isAbsolute());
+
+    // Determine the directory to start searching
+    auto &start = pattern.isAbsolute() ? root() : pwd();
+    printf("FileSystem::find start = %s\n", start.absName().c_str());
+
+    auto blocks = seek(start, pattern);
+    for (auto &it : blocks) result.push_back(it->nr);
+    return result;
+}
+
+std::vector<Block>
+FileSystem::find(const FSBlock &start, const FSOpt &opt) const
+{
+    std::vector<Block> result;
+
+    // Collect all matching items
+    auto tree = traverse(start, opt);
+    printf("FileSystem::find: %ld items in tree\n", tree.size());
+
+    // Translate into a vector
+    tree.bfsWalk([&](const FSTree &tree) {
+        result.push_back(tree.node->nr);
+    });
+
+    printf("FileSystem::find DONE\n");
+    return result;
+}
+
+std::vector<Block>
 FileSystem::find(const FSPattern &pattern, const FSOpt &opt) const
 {
     std::vector<Block> result;
@@ -731,7 +810,7 @@ FileSystem::find(const FSPattern &pattern, const FSOpt &opt) const
     auto &top = pattern.isAbsolute() ? root() : pwd();
     printf("top = %s\n", top.absName().c_str());
 
-    // Collect all directory items
+    // Collect all matching items
     auto tree = traverse(top, opt);
     printf("traverse: %p\n", (void *)tree.node);
 
@@ -745,6 +824,7 @@ FileSystem::find(const FSPattern &pattern, const FSOpt &opt) const
     return result;
 }
 
+/*
 void
 FileSystem::find(std::ostream &os, const FSBlock &path, const FSOpt &opt) const
 {
@@ -758,6 +838,7 @@ FileSystem::find(std::ostream &os, const FSBlock &path, const FSOpt &opt) const
     };
     tree.bfsWalk(func);
 }
+*/
 
 FSTree
 FileSystem::traverse(const FSBlock &path, const FSOpt &opt) const
@@ -778,11 +859,15 @@ FileSystem::traverse(const FSBlock &path, const FSOpt &opt, std::unordered_set<B
     // Collect all items in the hash table
     auto hashedBlocks = collectHashedBlocks(path);
 
-    // Add all accepted items to the tree
     for (auto it = hashedBlocks.begin(); it != hashedBlocks.end(); it++) {
 
+        // Add item to the tree
         if (opt.accept(*it)) tree.children.push_back(*it);
+
+        // Break the loop if this block has been visited before
         if (visited.contains((*it)->nr)) throw AppError(Fault::FS_HAS_CYCLES);
+
+        // Remember the block as visited
         visited.insert((*it)->nr);
     }
 

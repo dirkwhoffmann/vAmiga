@@ -259,6 +259,9 @@ public:
     FSBlock *seekPtr(const FSBlock &root, const string &name) const;
     FSBlock *seekPtr(const FSBlock &root, const char *name) const;
 
+    // Seeks all items satisfying a predicate
+    std::vector<FSBlock *> seek(const FSBlock &root, const FSPattern &pattern) const;
+
     // Checks if a an item exists in the directory tree
     bool exists(const FSBlock &top, const fs::path &path) const;
     bool exists(const fs::path &path) const { return exists(pwd(), path); }
@@ -268,9 +271,13 @@ public:
     void list(std::ostream &os, const FSOpt &opt = {}) const { return list(os, pwd(), opt); }
 
     // Searches the directory tree ('find' command)
-    std::vector<Block> find(const FSPattern &pattern, const FSOpt &opt = {}) const;
-    void find(std::ostream &os, const FSBlock &path, const FSOpt &opt = {}) const;
-    void find(std::ostream &os, const FSOpt &opt = {}) const { return list(os, pwd(), opt); }
+    std::vector<Block> find(const FSPattern &pattern) const;
+    std::vector<Block> find(const FSBlock &start, const FSOpt &opt) const;
+
+    std::vector<Block> find(const FSPattern &pattern, const FSOpt &opt) const; // DEPRECATED
+
+    // void find(std::ostream &os, const FSBlock &path, const FSOpt &opt = {}) const; // DEPRECATED
+    // void find(std::ostream &os, const FSOpt &opt = {}) const { return list(os, pwd(), opt); } // DEPRECATED
 
     // Collects blocks of a certain type
     std::vector<Block> collectDataBlocks(Block ref) const;
@@ -282,6 +289,10 @@ public:
     std::vector<Block> collectHashedBlocks(Block ref) const;
     std::vector<FSBlock *> collectHashedBlocks(const FSBlock &node) const;
 
+private:
+
+    std::vector<FSBlock *> seek(const FSBlock &root, const FSPattern &pattern,
+                                std::unordered_set<Block> &visited) const;
 
     //
     // Integrity checking
