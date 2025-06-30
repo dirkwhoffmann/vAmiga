@@ -85,6 +85,7 @@ public:
     bool isFile() const;
     bool isDirectory() const;
     bool isRegular() const;
+    bool isData() const;
 
     string pathName() const;
     string absName() const;

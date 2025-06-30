@@ -179,6 +179,12 @@ FSBlock::isRegular() const
     return isFile() || isDirectory();
 }
 
+bool
+FSBlock::isData() const
+{
+    return type == FSBlockType::DATA_BLOCK_OFS || type == FSBlockType::DATA_BLOCK_FFS;
+}
+
 string
 FSBlock::pathName() const
 {
@@ -1508,8 +1514,12 @@ FSBlock::setFirstDataBlockRef(Block ref)
 FSBlock *
 FSBlock::getFirstDataBlock() const
 {
+    if (auto *node = fs->read(getFirstDataBlockRef()); node->isData()) return node;
+    return nullptr;
+    /*
     Block nr = getFirstDataBlockRef();
     return nr ? fs->dataBlockPtr(nr) : nullptr;
+    */
 }
 
 Block
@@ -1546,8 +1556,12 @@ FSBlock::setDataBlockRef(isize nr, Block ref)
 FSBlock *
 FSBlock::getDataBlock(isize nr) const
 {
+    if (auto *node = fs->read(getDataBlockRef(nr)); node->isData()) return node;
+    return nullptr;
+    /*
     Block ref = getDataBlockRef(nr);
     return ref ? fs->dataBlockPtr(ref) : nullptr;
+    */
 }
 
 Block
@@ -1565,8 +1579,12 @@ FSBlock::setNextDataBlockRef(Block ref)
 FSBlock *
 FSBlock::getNextDataBlock() const
 {
+    if (auto *node = fs->read(getNextDataBlockRef()); node->isData()) return node;
+    return nullptr;
+    /*
     Block nr = getNextDataBlockRef();
     return nr ? fs->dataBlockPtr(nr) : nullptr;
+    */
 }
 
 bool
@@ -2028,7 +2046,7 @@ FSBlock::overwriteData(Buffer<u8> &buf)
         for (isize i = 0; i < num; i++) {
 
             Block ref = block->getDataBlockRef(i);
-            if (FSBlock *dataBlock = fs->dataBlockPtr(ref)) {
+            if (FSBlock *dataBlock = fs->read(ref); dataBlock->isData()) { //} dataBlockPtr(ref)) {
                 
                 isize bytesWritten = dataBlock->overwriteData(buf, bytesTotal, bytesRemaining);
                 bytesTotal += bytesWritten;
