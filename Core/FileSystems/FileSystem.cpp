@@ -324,7 +324,6 @@ FileSystem::blockPtr(Block nr) const
  }
  return nullptr;
  }
- */
 
 FSBlock *
 FileSystem::bitmapBlockPtr(Block nr) const
@@ -361,7 +360,6 @@ FileSystem::fileHeaderBlockPtr(Block nr) const
     }
     return nullptr;
 }
-
 FSBlock *
 FileSystem::fileListBlockPtr(Block nr) const
 {
@@ -370,6 +368,7 @@ FileSystem::fileListBlockPtr(Block nr) const
     }
     return nullptr;
 }
+ */
 
 FSBlock *
 FileSystem::dataBlockPtr(Block nr) const
@@ -417,14 +416,14 @@ FileSystem::isFree(Block nr) const
 
     // Locate the allocation bit in the bitmap block
     isize byte, bit;
-    FSBlock *bm = locateAllocationBit(nr, &byte, &bit);
+    auto *bm = locateAllocationBit(nr, &byte, &bit);
 
     // Read the bit
     return bm ? GET_BIT(bm->data()[byte], bit) : false;
 }
 
 FSBlock *
-FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) const
+FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit)
 {
     assert(isBlockNumber(nr));
 
@@ -437,8 +436,9 @@ FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) const
     isize bmNr = nr / bitsPerBlock;
 
     // Get the bitmap block
-    FSBlock *bm;
-    bm = (bmNr < (isize)bmBlocks.size()) ? bitmapBlockPtr(bmBlocks[bmNr]) : nullptr;
+    // FSBlock *bm;
+    // bm = (bmNr < (isize)bmBlocks.size()) ? bitmapBlockPtr(bmBlocks[bmNr]) : nullptr;
+    FSBlock *bm = (bmNr < (isize)bmBlocks.size()) ? read(bmBlocks[bmNr], FSBlockType::BITMAP_BLOCK) : nullptr;
     if (bm == nullptr) {
         warn("Failed to lookup allocation bit for block %d\n", nr);
         warn("bmNr = %ld\n", bmNr);
@@ -465,6 +465,12 @@ FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) const
     *bit = nr % 8;
 
     return bm;
+}
+
+const FSBlock *
+FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) const
+{
+    return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->locateAllocationBit(nr, byte, bit));
 }
 
 FSBlock &

@@ -476,10 +476,6 @@ const u8 *
 FSBlock::data() const
 {
     return const_cast<const u8 *>(const_cast<FSBlock *>(this)->data());
-    /*
-    auto result = const_cast<FSBlock *>(this)->data();
-    return const_cast<const u8 *>(result);
-    */
 }
 
 u32
@@ -1361,8 +1357,11 @@ FSBlock::setFileHeaderRef(Block ref)
 FSBlock *
 FSBlock::getFileHeaderBlock() const
 {
+    /*
     Block nr = getFileHeaderRef();
     return nr ? fs->fileHeaderBlockPtr(nr) : nullptr;
+    */
+    return fs->read(getFileHeaderRef(), FSBlockType::FILEHEADER_BLOCK);
 }
 
 Block
@@ -1437,8 +1436,9 @@ FSBlock::setNextListBlockRef(Block ref)
 FSBlock *
 FSBlock::getNextListBlock() const
 {
-    Block nr = getNextListBlockRef();
-    return nr ? fs->fileListBlockPtr(nr) : nullptr;
+    // Block nr = getNextListBlockRef();
+    // return nr ? fs->fileListBlockPtr(nr) : nullptr;
+    return fs->read(getNextListBlockRef(), FSBlockType::FILELIST_BLOCK);
 }
 
 Block
@@ -1471,7 +1471,8 @@ FSBlock *
 FSBlock::getNextBmExtBlock() const
 {
     Block nr = getNextBmExtBlockRef();
-    return nr ? fs->bitmapExtBlockPtr(nr) : nullptr;
+    // return nr ? fs->bitmapExtBlockPtr(nr) : nullptr;
+    return nr ? fs->read(nr, FSBlockType::BITMAP_EXT_BLOCK) : nullptr;
 }
 
 Block

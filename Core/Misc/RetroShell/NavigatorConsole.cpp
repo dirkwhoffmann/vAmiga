@@ -746,7 +746,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             }), matches.end());
 
             
-            if (args.contains("s")) {
+            if (s) {
 
                 int tab = 0;
 

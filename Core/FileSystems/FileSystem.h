@@ -190,11 +190,11 @@ public:
     // Queries a pointer to a block of a certain type (may return nullptr)
     // FSBlock *bootBlockPtr(Block nr) const;
     // FSBlock *rootBlockPtr(Block nr) const;
-    FSBlock *bitmapBlockPtr(Block nr) const;
-    FSBlock *bitmapExtBlockPtr(Block nr) const;
-    FSBlock *userDirBlockPtr(Block nr) const;
-    FSBlock *fileHeaderBlockPtr(Block nr) const;
-    FSBlock *fileListBlockPtr(Block nr) const;
+    // FSBlock *bitmapBlockPtr(Block nr) const;
+    // FSBlock *bitmapExtBlockPtr(Block nr) const;
+    // FSBlock *userDirBlockPtr(Block nr) const;
+    // FSBlock *fileHeaderBlockPtr(Block nr) const;
+    // FSBlock *fileListBlockPtr(Block nr) const;
     FSBlock *dataBlockPtr(Block nr) const;
     FSBlock *hashableBlockPtr(Block nr) const;
     
@@ -221,8 +221,9 @@ public:
 protected:
     
     // Locates the allocation bit for a certain block
-    FSBlock *locateAllocationBit(Block nr, isize *byte, isize *bit) const;
-    
+    FSBlock *locateAllocationBit(Block nr, isize *byte, isize *bit);
+    const FSBlock *locateAllocationBit(Block nr, isize *byte, isize *bit) const;
+
     
     //
     // Managing files and directories
