@@ -60,8 +60,9 @@ public:
     void init(FSBlockType t);
 
     static FSBlock *make(FileSystem *ref, Block nr, FSBlockType type) throws;
+    static std::vector<Block> refs(const std::vector<FSBlock *> blocks);
 
-    
+
     //
     // Methods from CoreObject
     //

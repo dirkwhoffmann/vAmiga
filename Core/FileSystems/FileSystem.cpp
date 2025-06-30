@@ -561,6 +561,18 @@ FileSystem::seekPtr(const FSBlock &root, const char *name) const
     return seekPtr(root, string(name));
 }
 
+std::vector<Block>
+FileSystem::seek(const Block root, const FSPattern &pattern) const
+{
+    return FSBlock::refs(seek(read(root), pattern));
+}
+
+std::vector<FSBlock *>
+FileSystem::seek(const FSBlock *root, const FSPattern &pattern) const
+{
+    return root ? seek(*root, pattern) : std::vector<FSBlock *>{};
+}
+
 std::vector<FSBlock *>
 FileSystem::seek(const FSBlock &root, const FSPattern &pattern) const
 {
@@ -768,16 +780,11 @@ FileSystem::find(const FSPattern &pattern) const
 {
     std::vector<Block> result;
 
-    printf("FileSystem::find Pattern = %s\n", pattern.glob.c_str());
-    printf("FileSystem::find isAbsolute() = %d\n", pattern.isAbsolute());
-
     // Determine the directory to start searching
     auto &start = pattern.isAbsolute() ? root() : pwd();
-    printf("FileSystem::find start = %s\n", start.absName().c_str());
 
-    auto blocks = seek(start, pattern);
-    for (auto &it : blocks) result.push_back(it->nr);
-    return result;
+    // Seek all files matching the provided pattern
+    return seek(start.nr, pattern);
 }
 
 std::vector<Block>

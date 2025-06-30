@@ -119,6 +119,14 @@ FSBlock::make(FileSystem *ref, Block nr, FSBlockType type)
     }
 }
 
+std::vector<Block>
+FSBlock::refs(const std::vector<FSBlock *> blocks)
+{
+    std::vector<Block> result;
+    for (auto &it : blocks) { if (it) result.push_back(it->nr); }
+    return result;
+}
+
 const char *
 FSBlock::objectName() const
 {

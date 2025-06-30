@@ -260,7 +260,9 @@ public:
     FSBlock *seekPtr(const FSBlock &root, const char *name) const;
 
     // Seeks all items satisfying a predicate
+    std::vector<FSBlock *> seek(const FSBlock *root, const FSPattern &pattern) const;
     std::vector<FSBlock *> seek(const FSBlock &root, const FSPattern &pattern) const;
+    std::vector<Block> seek(const Block root, const FSPattern &pattern) const;
 
     // Checks if a an item exists in the directory tree
     bool exists(const FSBlock &top, const fs::path &path) const;
