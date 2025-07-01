@@ -401,7 +401,7 @@ FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) const
 FSBlock &
 FileSystem::parent(const FSBlock &node)
 {
-    auto *ptr = parentPtr(node);
+    auto *ptr = parent(&node);
     return ptr ? *ptr : at(node.nr);
 }
 
@@ -412,28 +412,36 @@ FileSystem::parent(const FSBlock &node) const
 }
 
 FSBlock *
-FileSystem::parentPtr(const FSBlock &root) const
+FileSystem::parent(const FSBlock *node)
 {
-    return root.isRoot() ? blockPtr(root.nr) : blockPtr(root.nr)->getParentDirBlock();
+    return node->isRoot() ? blockPtr(node->nr) : blockPtr(node->nr)->getParentDirBlock();
+}
+
+const FSBlock *
+FileSystem::parent(const FSBlock *node) const
+{
+    return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->parent(node));
 }
 
 FSBlock *
-FileSystem::seekPtr(const FSBlock &root, const FSName &name) const
+FileSystem::seekPtr(const FSBlock *root, const FSName &name)
 {
+    if (!root) return nullptr;
+
     std::unordered_set<Block> visited;
 
     // Check for special tokens
-    if (name == "")   return blockPtr(root.nr);
-    if (name == ".")  return blockPtr(root.nr);
-    if (name == "..") return parentPtr(root);
+    if (name == "")   return blockPtr(root->nr);
+    if (name == ".")  return blockPtr(root->nr);
+    if (name == "..") return parent(root);
     if (name == "/")  return blockPtr(rootBlock);
 
     // Only proceed if a hash table is present
-    if (root.hasHashTable()) {
+    if (root->hasHashTable()) {
 
         // Compute the table position and read the item
-        u32 hash = name.hashValue(getDos()) % root.hashTableSize();
-        u32 ref = root.getHashRef(hash);
+        u32 hash = name.hashValue(getDos()) % root->hashTableSize();
+        u32 ref = root->getHashRef(hash);
 
         // Traverse the linked list until the item has been found
         while (ref && visited.find(ref) == visited.end())  {
@@ -450,78 +458,84 @@ FileSystem::seekPtr(const FSBlock &root, const FSName &name) const
     return nullptr;
 }
 
-/*
-FSBlock *
-FileSystem::seekPtr(const FSBlock &root, const FSString &name) const
+const FSBlock *
+FileSystem::seekPtr(const FSBlock *root, const FSName &name) const
 {
-    return seekPtr(root, name.cpp_str());
+    return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->seekPtr(root, name));
 }
-*/
 
 FSBlock *
-FileSystem::seekPtr(const FSBlock &root, const fs::path &name) const
+FileSystem::seekPtr(const FSBlock *root, const fs::path &name)
 {
-    FSBlock *result = blockPtr(root.nr);
-    for (const auto &it : name) { if (result) { result = seekPtr(*result, FSName(it)); } }
+    if (!root) return nullptr;
+
+    FSBlock *result = blockPtr(root->nr);
+    for (const auto &it : name) { if (result) { result = seekPtr(result, FSName(it)); } }
     return result;
 }
 
-FSBlock *
-FileSystem::seekPtr(const FSBlock &root, const string &name) const
+const FSBlock *
+FileSystem::seekPtr(const FSBlock *root, const fs::path &name) const
 {
+    return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->seekPtr(root, name));
+}
+
+FSBlock *
+FileSystem::seekPtr(const FSBlock *root, const string &name)
+{
+    if (!root) return nullptr;
+
     auto parts = util::split(name, '/');
 
-    FSBlock *result = blockPtr(root.nr);
-    for (auto &it : parts) { if (result) { result = seekPtr(*result, FSName(it)); } }
+    FSBlock *result = blockPtr(root->nr);
+    for (auto &it : parts) { if (result) { result = seekPtr(result, FSName(it)); } }
     return result;
 }
 
-/*
-FSBlock *
-FileSystem::seekPtr(const FSBlock &root, const char *name) const
+const FSBlock *
+FileSystem::seekPtr(const FSBlock *root, const string &name) const
 {
-    return seekPtr(root, string(name));
+    return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->seekPtr(root, name));
 }
-*/
 
 FSBlock &
+FileSystem::seek(const FSBlock &root, const FSName &name)
+{
+    if (auto *it = seekPtr(&root, name); it) return *it;
+    throw AppError(Fault::FS_NOT_FOUND, name.cpp_str());
+}
+
+const FSBlock &
 FileSystem::seek(const FSBlock &root, const FSName &name) const
 {
-    if (auto *it = seekPtr(root, name); it) return *it;
-    throw AppError(Fault::FS_NOT_FOUND, name.cpp_str());
+    return const_cast<const FSBlock &>(const_cast<FileSystem *>(this)->seek(root, name));
 }
 
-/*
 FSBlock &
-FileSystem::seek(const FSBlock &root, const FSString &name) const
+FileSystem::seek(const FSBlock &root, const fs::path &name)
 {
-    if (auto *it = seekPtr(root, name); it) return *it;
-    throw AppError(Fault::FS_NOT_FOUND, name.cpp_str());
-}
-*/
-
-FSBlock &
-FileSystem::seek(const FSBlock &root, const fs::path &name) const
-{
-    if (auto *it = seekPtr(root, name); it) return *it;
+    if (auto *it = seekPtr(&root, name); it) return *it;
     throw AppError(Fault::FS_NOT_FOUND, name.string());
 }
 
-FSBlock &
-FileSystem::seek(const FSBlock &root, const string &name) const
+const FSBlock &
+FileSystem::seek(const FSBlock &root, const fs::path &name) const
 {
-    if (auto *it = seekPtr(root, name); it) return *it;
+    return const_cast<const FSBlock &>(const_cast<FileSystem *>(this)->seek(root, name));
+}
+
+FSBlock &
+FileSystem::seek(const FSBlock &root, const string &name)
+{
+    if (auto *it = seekPtr(&root, name); it) return *it;
     throw AppError(Fault::FS_NOT_FOUND, name);
 }
 
-/*
-FSBlock &
-FileSystem::seek(const FSBlock &root, const char *name) const
+const FSBlock &
+FileSystem::seek(const FSBlock &root, const string &name) const
 {
-    if (auto *it = seekPtr(root, name); it) return *it;
-    throw AppError(Fault::FS_NOT_FOUND, string(name));
+    return const_cast<const FSBlock &>(const_cast<FileSystem *>(this)->seek(root, name));
 }
-*/
 
 std::vector<Block>
 FileSystem::seek(const Block root, const FSPattern &pattern) const
@@ -635,13 +649,13 @@ FileSystem::seek(const FSBlock &root, const FSPattern &pattern, std::unordered_s
 bool
 FileSystem::exists(const FSBlock &top, const fs::path &path) const
 {
-    return seekPtr(top, path) != nullptr;
+    return seekPtr(&top, path) != nullptr;
 }
 
 void
 FileSystem::cd(const FSName &name)
 {
-    if (auto ptr = seekPtr(pwd(), name); ptr) cd (*ptr);
+    if (auto ptr = seekPtr(&pwd(), name); ptr) cd (*ptr);
     throw AppError(Fault::FS_NOT_FOUND, name.cpp_str());
 }
 
@@ -654,7 +668,7 @@ FileSystem::cd(const FSBlock &path)
 void
 FileSystem::cd(const string &path)
 {
-    if (auto ptr = seekPtr(pwd(), path); ptr) cd (*ptr);
+    if (auto ptr = seekPtr(&pwd(), path); ptr) cd (*ptr);
     throw AppError(Fault::FS_NOT_FOUND, path);
 }
 

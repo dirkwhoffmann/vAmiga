@@ -280,7 +280,7 @@ NavigatorConsole::matchPath(const string &path, Tokens &notFound)
     auto *p = &fs.pwd();
     while (!tokens.empty()) {
 
-        if (p = fs.seekPtr(*p, FSName(tokens.front())); !p) { break; }
+        if (p = fs.seekPtr(p, FSName(tokens.front())); !p) { break; }
         tokens.erase(tokens.begin());
     }
     notFound = tokens;

@@ -231,27 +231,32 @@ public:
     FSBlock &pwd() { return at(curr); }
     const FSBlock &pwd() const { return at(curr); }
 
-    // Returns the working directory
+    // Returns the parent directory
     FSBlock &parent(const FSBlock &node);
+    FSBlock *parent(const FSBlock *node);
     const FSBlock &parent(const FSBlock &node) const;
+    const FSBlock *parent(const FSBlock *node) const;
 
     // Changes the working directory
     void cd(const FSName &name);
     void cd(const FSBlock &path);
     void cd(const string &path);
 
-    // Returns a pointer to the parent directory block
-    FSBlock *parentPtr(const FSBlock &root) const;
+    // Seeks an item in the directory tree (returns nullptr if not found)
+    FSBlock *seekPtr(const FSBlock *root, const FSName &name);
+    FSBlock *seekPtr(const FSBlock *root, const fs::path &name);
+    FSBlock *seekPtr(const FSBlock *root, const string &name);
+    const FSBlock *seekPtr(const FSBlock *root, const FSName &name) const;
+    const FSBlock *seekPtr(const FSBlock *root, const fs::path &name) const;
+    const FSBlock *seekPtr(const FSBlock *root, const string &name) const;
 
     // Seeks an item in the directory tree (returns nullptr if not found)
-    FSBlock *seekPtr(const FSBlock &root, const FSName &name) const;
-    FSBlock *seekPtr(const FSBlock &root, const fs::path &name) const;
-    FSBlock *seekPtr(const FSBlock &root, const string &name) const;
-
-    // Seeks an item in the directory tree (returns nullptr if not found)
-    FSBlock &seek(const FSBlock &root, const FSName &name) const;
-    FSBlock &seek(const FSBlock &root, const fs::path &name) const;
-    FSBlock &seek(const FSBlock &root, const string &name) const;
+    FSBlock &seek(const FSBlock &root, const FSName &name);
+    FSBlock &seek(const FSBlock &root, const fs::path &name);
+    FSBlock &seek(const FSBlock &root, const string &name);
+    const FSBlock &seek(const FSBlock &root, const FSName &name) const;
+    const FSBlock &seek(const FSBlock &root, const fs::path &name) const;
+    const FSBlock &seek(const FSBlock &root, const string &name) const;
 
     // Seeks all items satisfying a predicate
     std::vector<FSBlock *> seek(const FSBlock *root, const FSPattern &pattern) const;
