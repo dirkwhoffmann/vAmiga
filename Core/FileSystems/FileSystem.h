@@ -258,13 +258,19 @@ public:
     const FSBlock &seek(const FSBlock &root, const fs::path &name) const;
     const FSBlock &seek(const FSBlock &root, const string &name) const;
 
-    // Seeks all items satisfying a predicate
-    std::vector<FSBlock *> seek(const FSBlock *root, const FSPattern &pattern) const;
-    std::vector<FSBlock *> seek(const FSBlock &root, const FSPattern &pattern) const;
-    std::vector<Block> seek(const Block root, const FSPattern &pattern) const;
+    // Seeks all items with a pattern-matching predicate
+    std::vector<FSBlock *> find(const FSBlock *root, const FSOpt &opt) const;
+    std::vector<FSBlock *> find(const FSBlock &root, const FSOpt &opt) const;
+    std::vector<Block> find(const Block root, const FSOpt &opt) const;
 
-    // Collects all items with a pattern matching path
+    // Seeks all items with a pattern-matching name
+    std::vector<FSBlock *> find(const FSBlock *root, const FSPattern &pattern) const;
+    std::vector<FSBlock *> find(const FSBlock &root, const FSPattern &pattern) const;
+    std::vector<Block> find(const Block root, const FSPattern &pattern) const;
+
+    // Collects all items with a pattern-matching path
     std::vector<FSBlock *> match(const FSBlock *root, const FSPattern &pattern) const;
+    std::vector<FSBlock *> match(const FSBlock &root, const FSPattern &pattern) const;
     std::vector<FSBlock *> match(const FSBlock *root, std::vector<FSPattern>) const;
 
     // Checks if a an item exists in the directory tree
@@ -278,7 +284,6 @@ public:
 
     // Searches the directory tree ('find' command)
     std::vector<FSBlock *> find(const FSPattern &pattern) const;
-    std::vector<FSBlock *> find(const FSBlock &start, const FSOpt &opt) const;
 
     // Collects blocks of a certain type
     std::vector<Block> collectDataBlocks(Block ref) const;
@@ -292,7 +297,11 @@ public:
 
 private:
 
-    std::vector<FSBlock *> seek(const FSBlock &root, const FSPattern &pattern,
+    /*
+    std::vector<FSBlock *> find(const FSBlock *root, const FSPattern &pattern,
+                                std::unordered_set<Block> &visited) const;
+     */
+    std::vector<FSBlock *> find(const FSBlock *root, const FSOpt &opt,
                                 std::unordered_set<Block> &visited) const;
 
     //

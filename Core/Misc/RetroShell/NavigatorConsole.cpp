@@ -763,7 +763,6 @@ NavigatorConsole::initCommands(RSCommand &root)
             auto f = args.contains("f");
             auto s = args.contains("s");
 
-
             // Find all items matching the search pattern
             auto matches = fs.find(pattern);
 

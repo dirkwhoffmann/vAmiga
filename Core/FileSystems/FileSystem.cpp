@@ -538,9 +538,9 @@ FileSystem::seek(const FSBlock &root, const string &name) const
 }
 
 std::vector<Block>
-FileSystem::seek(const Block root, const FSPattern &pattern) const
+FileSystem::find(const Block root, const FSPattern &pattern) const
 {
-    return FSBlock::refs(seek(read(root), pattern));
+    return FSBlock::refs(find(read(root), pattern));
 }
 
 std::vector<FSBlock *>
@@ -551,6 +551,12 @@ FileSystem::match(const FSBlock *node, const FSPattern &pattern) const
     } else {
         return match(node, pattern.splitted());
     }
+}
+
+std::vector<FSBlock *>
+FileSystem::match(const FSBlock &node, const FSPattern &pattern) const
+{
+    return match(&node, pattern);
 }
 
 std::vector<FSBlock *>
@@ -597,29 +603,103 @@ FileSystem::match(const FSBlock *root, std::vector<FSPattern> patterns) const
 }
 
 std::vector<FSBlock *>
-FileSystem::seek(const FSBlock *root, const FSPattern &pattern) const
+FileSystem::find(const FSBlock &root, const FSOpt &opt) const
 {
-    return root ? seek(*root, pattern) : std::vector<FSBlock *>{};
+    return find(&root, opt);
 }
 
 std::vector<FSBlock *>
-FileSystem::seek(const FSBlock &root, const FSPattern &pattern) const
+FileSystem::find(const FSBlock *root, const FSOpt &opt) const
 {
+    if (!root) return {};
+
     if (!isInitialized()) throw AppError(Fault::FS_UNINITIALIZED);
     if (!isFormatted()) throw AppError(Fault::FS_UNFORMATTED);
-    if (!root.isRegular()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
+    if (!root->isRegular()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
 
     std::unordered_set<Block> visited;
-    return seek(root, pattern, visited);
+    return find(root, opt, visited);
+}
+
+std::vector<Block>
+FileSystem::find(const Block root, const FSOpt &opt) const
+{
+    return FSBlock::refs(find(read(root), opt));
 }
 
 std::vector<FSBlock *>
-FileSystem::seek(const FSBlock &root, const FSPattern &pattern, std::unordered_set<Block> &visited) const
+FileSystem::find(const FSBlock *root, const FSOpt &opt, std::unordered_set<Block> &visited) const
 {
     std::vector<FSBlock *> result;
 
     // Collect all items in the hash table
-    auto hashedBlocks = collectHashedBlocks(root);
+    auto hashedBlocks = collectHashedBlocks(*root);
+
+    for (auto it = hashedBlocks.begin(); it != hashedBlocks.end(); it++) {
+
+        // Add item if accepted
+        if (opt.accept(*it)) result.push_back(*it);
+
+        // Break the loop if this block has been visited before
+        if (visited.contains((*it)->nr)) throw AppError(Fault::FS_HAS_CYCLES);
+
+        // Remember the block as visited
+        visited.insert((*it)->nr);
+    }
+
+    // Search subdirectories
+    for (auto &it : hashedBlocks) {
+
+        if (it->isDirectory()) {
+
+            auto blocks = find(it, opt, visited);
+            result.insert(result.end(), blocks.begin(), blocks.end());
+        }
+    }
+
+    // Sort the result
+    if (opt.sort) {
+
+        std::sort(result.begin(), result.end(),
+                  [](FSBlock *b1, FSBlock *b2) { return b1->getName() < b2->getName(); });
+    }
+
+    return result;
+}
+
+std::vector<FSBlock *>
+FileSystem::find(const FSBlock &root, const FSPattern &pattern) const
+{
+    return find(&root, pattern);
+}
+
+std::vector<FSBlock *>
+FileSystem::find(const FSBlock *root, const FSPattern &pattern) const
+{
+    return find(root, {
+        .recursive = true,
+        .filter = [&](const FSBlock &item) { return pattern.match(item.pathName()); }
+    });
+    /*
+    if (!root) return {};
+
+    if (!isInitialized()) throw AppError(Fault::FS_UNINITIALIZED);
+    if (!isFormatted()) throw AppError(Fault::FS_UNFORMATTED);
+    if (!root->isRegular()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
+
+    std::unordered_set<Block> visited;
+    return find(root, pattern, visited);
+    */
+}
+
+/*
+std::vector<FSBlock *>
+FileSystem::find(const FSBlock *root, const FSPattern &pattern, std::unordered_set<Block> &visited) const
+{
+    std::vector<FSBlock *> result;
+
+    // Collect all items in the hash table
+    auto hashedBlocks = collectHashedBlocks(*root);
 
     for (auto it = hashedBlocks.begin(); it != hashedBlocks.end(); it++) {
 
@@ -638,13 +718,14 @@ FileSystem::seek(const FSBlock &root, const FSPattern &pattern, std::unordered_s
 
         if (it->isDirectory()) {
 
-            auto blocks = seek(*it, pattern, visited);
+            auto blocks = find(&(*it), pattern, visited);
             result.insert(result.end(), blocks.begin(), blocks.end());
         }
     }
 
     return result;
 }
+*/
 
 bool
 FileSystem::exists(const FSBlock &top, const fs::path &path) const
@@ -850,25 +931,7 @@ FileSystem::find(const FSPattern &pattern) const
     auto &start = pattern.isAbsolute() ? root() : pwd();
 
     // Seek all files matching the provided pattern
-    return seek(start, pattern);
-}
-
-std::vector<FSBlock *>
-FileSystem::find(const FSBlock &start, const FSOpt &opt) const
-{
-    std::vector<FSBlock *> result;
-
-    // Collect all matching items
-    auto tree = traverse(start, opt);
-    printf("FileSystem::find: %ld items in tree\n", tree.size());
-
-    // Translate into a vector
-    tree.bfsWalk([&](const FSTree &tree) {
-        result.push_back(tree.node);
-    });
-
-    printf("FileSystem::find DONE\n");
-    return result;
+    return find(start, pattern);
 }
 
 FSTree
