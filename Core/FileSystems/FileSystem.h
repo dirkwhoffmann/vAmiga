@@ -98,8 +98,8 @@ public:
     void init(FloppyDrive &dfn) throws;
     void init(const HardDrive &hdn, isize part) throws;
 
-    bool initialized() const;
-    bool formatted() const;
+    bool isInitialized() const;
+    bool isFormatted() const;
 
 
     //
@@ -163,7 +163,7 @@ public:
     const FSBlock *read(Block nr, FSBlockType type) const noexcept { return storage.read(nr, type); }
     const FSBlock *read(Block nr, std::vector<FSBlockType> types) const noexcept { return storage.read(nr, types); }
 
-    // Returns a reference to a stored block
+    // Returns a reference to a stored block (throws on error)
     FSBlock &at(Block nr) { return storage.at(nr); }
     FSBlock &at(Block nr, FSBlockType type) { return storage.at(nr, type); }
     FSBlock &at(Block nr, std::vector<FSBlockType> types) { return storage.at(nr, types); }
@@ -185,7 +185,7 @@ public:
     FSItemType itemType(Block nr, isize pos) const;
     
     // Queries a pointer from the block storage (may return nullptr)
-    FSBlock *blockPtr(Block nr) const;
+    FSBlock *blockPtr(Block nr) const; // DEPRECATED
 
     // Queries a pointer to a block of a certain type (may return nullptr)
     FSBlock *hashableBlockPtr(Block nr) const;
@@ -245,19 +245,13 @@ public:
 
     // Seeks an item in the directory tree (returns nullptr if not found)
     FSBlock *seekPtr(const FSBlock &root, const FSName &name) const;
-    FSBlock *seekPtr(const FSBlock &root, const FSString &name) const;
-    FSBlock *seekPtr(const FSBlock &root, const std::vector<FSName> &name) const;
-    FSBlock *seekPtr(const FSBlock &root, const std::vector<string> &name) const;
     FSBlock *seekPtr(const FSBlock &root, const fs::path &name) const;
     FSBlock *seekPtr(const FSBlock &root, const string &name) const;
-    FSBlock *seekPtr(const FSBlock &root, const char *name) const;
 
     // Seeks an item in the directory tree (returns nullptr if not found)
     FSBlock &seek(const FSBlock &root, const FSName &name) const;
-    FSBlock &seek(const FSBlock &root, const FSString &name) const;
     FSBlock &seek(const FSBlock &root, const fs::path &name) const;
     FSBlock &seek(const FSBlock &root, const string &name) const;
-    FSBlock &seek(const FSBlock &root, const char *name) const;
 
     // Seeks all items satisfying a predicate
     std::vector<FSBlock *> seek(const FSBlock *root, const FSPattern &pattern) const;

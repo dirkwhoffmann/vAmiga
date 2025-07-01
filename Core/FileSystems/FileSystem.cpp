@@ -124,16 +124,16 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
 }
 
 bool
-FileSystem::initialized() const
+FileSystem::isInitialized() const
 {
     return numBlocks() > 0;
 }
 
 bool
-FileSystem::formatted() const
+FileSystem::isFormatted() const
 {
     // Check if the file system is initialized
-    if (!initialized()) return false;
+    if (!isInitialized()) return false;
 
     // Check the DOS type
     if (dos == FSVolumeType::NODOS) return false;
@@ -168,7 +168,7 @@ FileSystem::_dump(Category category, std::ostream &os) const
 
         case Category::Info:
 
-            if (!formatted()) {
+            if (!isFormatted()) {
                 os << "Type   Size             Used    Free" << std::endl;
             } else {
                 os << "Type   Size             Used    Free    Full  Name" << std::endl;
@@ -177,13 +177,13 @@ FileSystem::_dump(Category category, std::ostream &os) const
 
         case Category::State:
         {
-            auto total = formatted() ? numBlocks() : storage.numBlocks();
-            auto used = formatted() ? usedBlocks() : storage.usedBlocks();
-            auto free = formatted() ? freeBlocks() : storage.freeBlocks();
-            auto fill = formatted() ? fillLevel() : storage.fillLevel();
+            auto total = isFormatted() ? numBlocks() : storage.numBlocks();
+            auto used = isFormatted() ? usedBlocks() : storage.usedBlocks();
+            auto free = isFormatted() ? freeBlocks() : storage.freeBlocks();
+            auto fill = isFormatted() ? fillLevel() : storage.fillLevel();
             auto size = std::to_string(total) + " (x " + std::to_string(bsize) + ")";
 
-            formatted() ? os << "DOS" << dec(isize(dos)) << " " : os << "NODOS";
+            isFormatted() ? os << "DOS" << dec(isize(dos)) << " " : os << "NODOS";
             os << "  ";
             os << std::setw(15) << std::left << std::setfill(' ') << size;
             os << "  ";
@@ -450,27 +450,13 @@ FileSystem::seekPtr(const FSBlock &root, const FSName &name) const
     return nullptr;
 }
 
+/*
 FSBlock *
 FileSystem::seekPtr(const FSBlock &root, const FSString &name) const
 {
     return seekPtr(root, name.cpp_str());
 }
-
-FSBlock *
-FileSystem::seekPtr(const FSBlock &root, const std::vector<FSName> &name) const
-{
-    FSBlock *result = blockPtr(root.nr);
-    for (auto &it : name) { result = seekPtr(*result, it); }
-    return result;
-}
-
-FSBlock *
-FileSystem::seekPtr(const FSBlock &root, const std::vector<string> &name) const
-{
-    FSBlock *result = blockPtr(root.nr);
-    for (auto &it : name) { if (result) { result = seekPtr(*result, FSName(it)); } }
-    return result;
-}
+*/
 
 FSBlock *
 FileSystem::seekPtr(const FSBlock &root, const fs::path &name) const
@@ -483,14 +469,20 @@ FileSystem::seekPtr(const FSBlock &root, const fs::path &name) const
 FSBlock *
 FileSystem::seekPtr(const FSBlock &root, const string &name) const
 {
-    return seekPtr(root, util::split(name, '/'));
+    auto parts = util::split(name, '/');
+
+    FSBlock *result = blockPtr(root.nr);
+    for (auto &it : parts) { if (result) { result = seekPtr(*result, FSName(it)); } }
+    return result;
 }
 
+/*
 FSBlock *
 FileSystem::seekPtr(const FSBlock &root, const char *name) const
 {
     return seekPtr(root, string(name));
 }
+*/
 
 FSBlock &
 FileSystem::seek(const FSBlock &root, const FSName &name) const
@@ -499,12 +491,14 @@ FileSystem::seek(const FSBlock &root, const FSName &name) const
     throw AppError(Fault::FS_NOT_FOUND, name.cpp_str());
 }
 
+/*
 FSBlock &
 FileSystem::seek(const FSBlock &root, const FSString &name) const
 {
     if (auto *it = seekPtr(root, name); it) return *it;
     throw AppError(Fault::FS_NOT_FOUND, name.cpp_str());
 }
+*/
 
 FSBlock &
 FileSystem::seek(const FSBlock &root, const fs::path &name) const
@@ -520,12 +514,14 @@ FileSystem::seek(const FSBlock &root, const string &name) const
     throw AppError(Fault::FS_NOT_FOUND, name);
 }
 
+/*
 FSBlock &
 FileSystem::seek(const FSBlock &root, const char *name) const
 {
     if (auto *it = seekPtr(root, name); it) return *it;
     throw AppError(Fault::FS_NOT_FOUND, string(name));
 }
+*/
 
 std::vector<Block>
 FileSystem::seek(const Block root, const FSPattern &pattern) const
@@ -595,8 +591,8 @@ FileSystem::seek(const FSBlock *root, const FSPattern &pattern) const
 std::vector<FSBlock *>
 FileSystem::seek(const FSBlock &root, const FSPattern &pattern) const
 {
-    if (!initialized()) throw AppError(Fault::FS_UNINITIALIZED);
-    if (!formatted()) throw AppError(Fault::FS_UNFORMATTED);
+    if (!isInitialized()) throw AppError(Fault::FS_UNINITIALIZED);
+    if (!isFormatted()) throw AppError(Fault::FS_UNFORMATTED);
     if (!root.isRegular()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
 
     std::unordered_set<Block> visited;
@@ -864,8 +860,8 @@ FileSystem::find(const FSBlock &start, const FSOpt &opt) const
 FSTree
 FileSystem::traverse(const FSBlock &path, const FSOpt &opt) const
 {
-    if (!initialized()) throw AppError(Fault::FS_UNINITIALIZED);
-    if (!formatted()) throw AppError(Fault::FS_UNFORMATTED);
+    if (!isInitialized()) throw AppError(Fault::FS_UNINITIALIZED);
+    if (!isFormatted()) throw AppError(Fault::FS_UNFORMATTED);
     if (!path.isRegular()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
 
     std::unordered_set<Block> visited;
@@ -1158,20 +1154,20 @@ FileSystem::predictBlockType(Block nr, const u8 *buf) const
 void
 FileSystem::REQUIRE_INITIALIZED() const
 {
-    if (!initialized()) throw AppError(Fault::FS_UNINITIALIZED);
+    if (!isInitialized()) throw AppError(Fault::FS_UNINITIALIZED);
 }
 
 void
 FileSystem::REQUIRE_FORMATTED() const
 {
-    if (!initialized()) throw AppError(Fault::FS_UNINITIALIZED);
-    if (!formatted()) throw AppError(Fault::FS_UNFORMATTED);
+    if (!isInitialized()) throw AppError(Fault::FS_UNINITIALIZED);
+    if (!isFormatted()) throw AppError(Fault::FS_UNFORMATTED);
 }
 void
 FileSystem::REQUIRE_FILE_OR_DIRECTORY(FSBlock &node) const
 {
-    if (!initialized()) throw AppError(Fault::FS_UNINITIALIZED);
-    if (!formatted()) throw AppError(Fault::FS_UNFORMATTED);
+    if (!isInitialized()) throw AppError(Fault::FS_UNINITIALIZED);
+    if (!isFormatted()) throw AppError(Fault::FS_UNFORMATTED);
     if (!node.isRegular()) throw AppError(Fault::FS_NOT_A_FILE_OR_DIRECTORY);
 }
 

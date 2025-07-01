@@ -28,7 +28,7 @@ NavigatorConsole::getPrompt()
 {
     std::stringstream ss;
 
-    if (fs.initialized()) {
+    if (fs.isInitialized()) {
 
         auto &pwd = fs.pwd();
 
@@ -123,7 +123,7 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
     auto [cmd, args] = seekCommandNew(argv);
 
     // Determine the kind of help to display
-    bool displayFiles = (tabs % 2 == 0) && fs.formatted() && cmd && cmd->callback && !args.empty();
+    bool displayFiles = (tabs % 2 == 0) && fs.isFormatted() && cmd && cmd->callback && !args.empty();
     bool displayCmds  = (tabs % 2 == 1) || !displayFiles;
 
     if (displayFiles) {
@@ -157,7 +157,7 @@ NavigatorConsole::parseBlock(const string &argv)
 
     if (!fs.blockPtr(nr)) {
 
-        if (!fs.initialized()) {
+        if (!fs.isInitialized()) {
             throw AppError(Fault::FS_UNINITIALIZED);
         } else {
             throw AppError(Fault::OPT_INV_ARG, "0..." + std::to_string(fs.numBlocks()));
@@ -179,7 +179,7 @@ NavigatorConsole::parseBlock(const Arguments &argv, const string &token, Block f
 
     if (!fs.blockPtr(nr)) {
 
-        if (!fs.initialized()) {
+        if (!fs.isInitialized()) {
             throw AppError(Fault::FS_UNINITIALIZED);
         } else {
             throw AppError(Fault::OPT_INV_ARG, "0..." + std::to_string(fs.numBlocks()));
@@ -226,7 +226,7 @@ NavigatorConsole::parseFile(const Arguments &argv, const string &token)
 FSBlock &
 NavigatorConsole::parseFile(const Arguments &argv, const string &token, FSBlock &fallback)
 {
-    if (!fs.formatted()) {
+    if (!fs.isFormatted()) {
         throw AppError(Fault::FS_UNFORMATTED);
     }
     auto &path = parsePath(argv, token, fallback);
@@ -246,7 +246,7 @@ NavigatorConsole::parseDirectory(const Arguments &argv, const string &token)
 FSBlock &
 NavigatorConsole::parseDirectory(const Arguments &argv, const string &token, FSBlock &fallback)
 {
-    if (!fs.formatted()) {
+    if (!fs.isFormatted()) {
         throw AppError(Fault::FS_UNFORMATTED);
     }
     auto &path = parsePath(argv, token, fallback);
@@ -272,7 +272,7 @@ NavigatorConsole::matchPath(const Arguments &argv, const string &token, Tokens &
 FSBlock &
 NavigatorConsole::matchPath(const string &path, Tokens &notFound)
 {
-    if (!fs.formatted()) throw AppError(Fault::FS_UNFORMATTED);
+    if (!fs.isFormatted()) throw AppError(Fault::FS_UNFORMATTED);
 
     auto tokens = util::split(path, '/');
     if (!path.empty() && path[0] == '/') { tokens.insert(tokens.begin(), "/"); }
@@ -291,14 +291,14 @@ NavigatorConsole::matchPath(const string &path, Tokens &notFound)
 void
 NavigatorConsole::assertInitialized()
 {
-    if (!fs.initialized()) throw AppError(Fault::FS_UNINITIALIZED);
+    if (!fs.isInitialized()) throw AppError(Fault::FS_UNINITIALIZED);
 }
 
 void
 NavigatorConsole::assertFormatted()
 {
-    if (!fs.initialized()) throw AppError(Fault::FS_UNINITIALIZED);
-    if (!fs.formatted()) throw AppError(Fault::FS_UNFORMATTED);
+    if (!fs.isInitialized()) throw AppError(Fault::FS_UNINITIALIZED);
+    if (!fs.isFormatted()) throw AppError(Fault::FS_UNFORMATTED);
 }
 
 util::DumpOpt
