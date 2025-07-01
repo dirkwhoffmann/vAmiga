@@ -10,6 +10,7 @@
 #include "config.h"
 #include "Console.h"
 #include "Emulator.h"
+#include "StringUtils.h"
 #include <regex>
 
 #include "Chrono.h"
@@ -71,6 +72,7 @@ NavigatorConsole::autoComplete(Tokens &argv)
         // First, try to auto-complete the last token with a command name
         if (remaining.size() != 1 || !cmd->autoComplete(argv.back())) {
 
+            /*
             // That didn't work, so try to auto-complete with a file name
             auto pattern = FSPattern(remaining.back() + "*");
             auto matches = fs.find(pattern);
@@ -85,9 +87,34 @@ NavigatorConsole::autoComplete(Tokens &argv)
 
             // Auto-complete with the common prefix
             auto prefix = util::commonPrefix(names);
+            */
+            auto prefix = autoCompleteFilename(argv.back());
+
             if (prefix.size() > argv.back().size()) argv.back() = prefix;
         }
     }
+}
+
+string
+NavigatorConsole::autoCompleteFilename(const string &input) const
+{
+    bool absolute = !input.empty() && input[0] == '/';
+
+    // Seek matching items
+    auto matches = fs.match(&fs.pwd(), input + "*");
+
+    // Extract names
+    std::vector<string> names;
+    for (auto &it : matches) {
+        names.push_back(absolute ? it->absName(): it->relName());
+    }
+
+    for (auto &it : names) {
+        printf("Match: %s\n", it.c_str());
+    }
+
+    printf("Common prefix: %s\n", util::commonPrefix(names, false).c_str());
+    return util::commonPrefix(names, false);
 }
 
 void
@@ -101,15 +128,14 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
 
     if (displayFiles) {
 
-        // Print all files matching the last token
-        fs.list(os, fs.pwd(), {
+        // Seek matching items
+        auto matches = fs.match(&fs.pwd(), args.back() + "*");
+
+        // Print all possible extensions
+        fs.list(os, matches, {
 
             .recursive = false,
             .sort = sort::dafa,
-            .filter = [&](const FSBlock &item) {
-
-                return fs.at(item.nr).pathName().starts_with(args.back());
-            },
             .formatter = [&](const FSBlock &node) {
 
                 return node.pathName() + (node.isDirectory() ? " (dir)" : "\t");
@@ -169,7 +195,7 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token)
 
     try {
         // Try to find the directory by name
-        return *fs.seekPtr(fs.pwd(), argv.at(token));
+        return fs.seek(fs.pwd(), argv.at(token));
 
     } catch (...) {
 
@@ -180,7 +206,7 @@ NavigatorConsole::parsePath(const Arguments &argv, const string &token)
         } catch (...) {
 
             // The item does not exist
-            throw AppError(Fault::FS_NOT_FOUND, token);
+            throw AppError(Fault::FS_NOT_FOUND, argv.at(token));
         }
     }
 }
@@ -736,6 +762,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             auto d = args.contains("d");
             auto f = args.contains("f");
             auto s = args.contains("s");
+
 
             // Find all items matching the search pattern
             auto matches = fs.find(pattern);

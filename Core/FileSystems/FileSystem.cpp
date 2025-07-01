@@ -492,10 +492,98 @@ FileSystem::seekPtr(const FSBlock &root, const char *name) const
     return seekPtr(root, string(name));
 }
 
+FSBlock &
+FileSystem::seek(const FSBlock &root, const FSName &name) const
+{
+    if (auto *it = seekPtr(root, name); it) return *it;
+    throw AppError(Fault::FS_NOT_FOUND, name.cpp_str());
+}
+
+FSBlock &
+FileSystem::seek(const FSBlock &root, const FSString &name) const
+{
+    if (auto *it = seekPtr(root, name); it) return *it;
+    throw AppError(Fault::FS_NOT_FOUND, name.cpp_str());
+}
+
+FSBlock &
+FileSystem::seek(const FSBlock &root, const fs::path &name) const
+{
+    if (auto *it = seekPtr(root, name); it) return *it;
+    throw AppError(Fault::FS_NOT_FOUND, name.string());
+}
+
+FSBlock &
+FileSystem::seek(const FSBlock &root, const string &name) const
+{
+    if (auto *it = seekPtr(root, name); it) return *it;
+    throw AppError(Fault::FS_NOT_FOUND, name);
+}
+
+FSBlock &
+FileSystem::seek(const FSBlock &root, const char *name) const
+{
+    if (auto *it = seekPtr(root, name); it) return *it;
+    throw AppError(Fault::FS_NOT_FOUND, string(name));
+}
+
 std::vector<Block>
 FileSystem::seek(const Block root, const FSPattern &pattern) const
 {
     return FSBlock::refs(seek(read(root), pattern));
+}
+
+std::vector<FSBlock *>
+FileSystem::match(const FSBlock *node, const FSPattern &pattern) const
+{
+    if (pattern.isAbsolute()) {
+        return match(&root(), pattern.splitted());
+    } else {
+        return match(node, pattern.splitted());
+    }
+}
+
+std::vector<FSBlock *>
+FileSystem::match(const FSBlock *root, std::vector<FSPattern> patterns) const
+{
+    std::vector<FSBlock *> result;
+
+    if (patterns.empty()) return {};
+
+    // Get all directory items
+    auto items = traverse(*root, { .recursive = false} );
+
+    printf("Directory %s\n", root->absName().c_str());
+
+    for (auto &item : items.children) {
+        printf("  Item %s\n", item.node->absName().c_str());
+    }
+    // Extract the first pattern
+    auto pattern = patterns.front(); patterns.erase(patterns.begin());
+
+    printf("pattern = %s\n", pattern.glob.c_str());
+
+    if (patterns.empty()) {
+
+        // Collect all matching items
+        for (auto &item : items.children) {
+            if (pattern.match(item.node->pathName())) {
+                result.push_back(item.node);
+            }
+        }
+
+    } else {
+
+        // Continue by searching all matching subdirectories
+        for (auto &item : items.children) {
+            if (item.node->isDirectory() && pattern.match(item.node->pathName())) {
+                auto subdirItems = match(item.node, patterns);
+                result.insert(result.end(), subdirItems.begin(), subdirItems.end());
+            }
+        }
+    }
+
+    return result;
 }
 
 std::vector<FSBlock *>
@@ -704,6 +792,43 @@ FileSystem::list(std::ostream &os, const FSBlock &path, const FSOpt &opt) const
     };
 
     tree.bfsWalk(func);
+}
+
+void
+FileSystem::list(std::ostream &os, std::vector<FSBlock *> items, const FSOpt &opt) const
+{
+    isize column = 0;
+
+    // Sort items
+    if (opt.sort) {
+        std::sort(items.begin(), items.end(), [&](FSBlock *a, FSBlock *b) {
+            return opt.sort(*a, *b);
+        });
+    }
+
+    // Collect all displayed strings
+    std::vector<string> strs;
+    for (auto &it : items) strs.push_back(opt.formatter(*it));
+
+    // Determine the longest entry
+    int tab = 0; for (auto &it: strs) tab = std::max(tab, int(it.length()));
+
+    // List all items
+    for (auto &item : strs) {
+
+        // Print in two columns if the name ends with a tab character
+        if (item.back() == '\t') {
+
+            item.pop_back();
+            os << std::left << std::setw(std::max(tab, 35)) << item;
+            if (column++ > 0) { os << std::endl; column = 0; }
+
+        } else {
+
+            if (column > 0) { os << std::endl; column = 0; }
+            os << std::left << std::setw(std::max(tab, 35)) << item << std::endl;
+        }
+    }
 }
 
 std::vector<FSBlock *>

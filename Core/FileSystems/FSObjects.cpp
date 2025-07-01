@@ -149,6 +149,25 @@ FSPattern::FSPattern(const string glob) : glob(glob)
     }
 }
 
+std::vector<FSPattern>
+FSPattern::splitted() const
+{
+    std::vector<FSPattern> result;
+    std::vector<string> parts;
+
+    /*
+    if (isAbsolute()) {
+        parts = util::split(glob.substr(1), '/');
+    } else {
+        parts = util::split(glob, '/');
+    }
+    */
+    for (auto &it : util::split(util::trim(glob, "/"), '/')) {
+        result.push_back(FSPattern(it));
+    }
+    return result;
+}
+
 bool
 FSPattern::match(const FSString &name) const
 {

@@ -218,9 +218,6 @@ protected:
     // Prints the help line
     virtual void printHelp(isize tab = 0);
 
-    // Prints a state summary (used by the debug shell)
-    // void printState(std::ostream);
-
 
     //
     // Managing user input
@@ -406,7 +403,10 @@ class NavigatorConsole final : public Console
     void pressReturn(bool shift) override;
     void autoComplete(Tokens &argv) override;
     void help(std::ostream &os, const string &argv, isize tabs) override;
-
+    string autoCompleteFilename(const string &input) const;
+    // std::vector<string> autoCompleteFilename(const string &input) const;
+    // std::vector<string> autoCompleteFilename(const string &path, const string &input) const;
+    // std::vector<string> autoCompleteFilename(const FSBlock *root, const string &input) const;
 
     //
     // Parsing input

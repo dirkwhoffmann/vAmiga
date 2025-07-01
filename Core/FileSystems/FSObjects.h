@@ -69,6 +69,7 @@ struct FSPattern {
 
     FSPattern(const string str);
 
+    std::vector<FSPattern> splitted() const;
     bool isAbsolute() const { return !glob.empty() && glob[0] == '/'; }
     bool match(const FSString &name) const;
 };

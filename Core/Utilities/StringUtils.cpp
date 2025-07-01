@@ -110,23 +110,27 @@ trim(const string &s, const string &characters)
 }
 
 string
-commonPrefix(const string &s1, const string &s2)
+commonPrefix(const string &s1, const string &s2, bool caseSensitive)
 {
     auto len = std::min(s1.length(), s2.length());
 
     usize count = 0;
-    for (; count < len && s1[count] == s2[count]; count++);
+    if (caseSensitive) {
+        for (; count < len && s1[count] == s2[count]; count++);
+    } else {
+        for (; count < len && std::toupper(s1[count]) == std::toupper(s2[count]); count++);
+    }
 
     return s1.substr(0, count);
 }
 
 string
-commonPrefix(const std::vector<string> &vec)
+commonPrefix(const std::vector<string> &vec, bool caseSensitive)
 {
     if (vec.empty()) return "";
 
     string result = vec[0];
-    for (usize i = 1; i < vec.size(); i++) result = commonPrefix(result, vec[i]);
+    for (usize i = 1; i < vec.size(); i++) result = commonPrefix(result, vec[i], caseSensitive);
 
     return result;
 }

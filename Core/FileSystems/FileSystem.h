@@ -252,10 +252,21 @@ public:
     FSBlock *seekPtr(const FSBlock &root, const string &name) const;
     FSBlock *seekPtr(const FSBlock &root, const char *name) const;
 
+    // Seeks an item in the directory tree (returns nullptr if not found)
+    FSBlock &seek(const FSBlock &root, const FSName &name) const;
+    FSBlock &seek(const FSBlock &root, const FSString &name) const;
+    FSBlock &seek(const FSBlock &root, const fs::path &name) const;
+    FSBlock &seek(const FSBlock &root, const string &name) const;
+    FSBlock &seek(const FSBlock &root, const char *name) const;
+
     // Seeks all items satisfying a predicate
     std::vector<FSBlock *> seek(const FSBlock *root, const FSPattern &pattern) const;
     std::vector<FSBlock *> seek(const FSBlock &root, const FSPattern &pattern) const;
     std::vector<Block> seek(const Block root, const FSPattern &pattern) const;
+
+    // Collects all items with a pattern matching path
+    std::vector<FSBlock *> match(const FSBlock *root, const FSPattern &pattern) const;
+    std::vector<FSBlock *> match(const FSBlock *root, std::vector<FSPattern>) const;
 
     // Checks if a an item exists in the directory tree
     bool exists(const FSBlock &top, const fs::path &path) const;
@@ -264,6 +275,7 @@ public:
     // Lists the contents of a directory ('dir' command, 'list' command)
     void list(std::ostream &os, const FSBlock &path, const FSOpt &opt = {}) const;
     void list(std::ostream &os, const FSOpt &opt = {}) const { return list(os, pwd(), opt); }
+    void list(std::ostream &os, std::vector<FSBlock *> items, const FSOpt &opt = {}) const;
 
     // Searches the directory tree ('find' command)
     std::vector<FSBlock *> find(const FSPattern &pattern) const;
