@@ -242,6 +242,10 @@ public:
     void cd(const FSBlock &path);
     void cd(const string &path);
 
+    // Checks if a an item exists in the directory tree
+    bool exists(const FSBlock &top, const fs::path &path) const;
+    bool exists(const fs::path &path) const { return exists(pwd(), path); }
+
     // Seeks an item in the directory tree (returns nullptr if not found)
     FSBlock *seekPtr(const FSBlock *root, const FSName &name);
     FSBlock *seekPtr(const FSBlock *root, const fs::path &name);
@@ -258,7 +262,8 @@ public:
     const FSBlock &seek(const FSBlock &root, const fs::path &name) const;
     const FSBlock &seek(const FSBlock &root, const string &name) const;
 
-    // Seeks all items with a pattern-matching predicate
+    // Seeks all items satisfying a predicate
+    std::vector<FSBlock *> find(const FSPattern &pattern) const;
     std::vector<FSBlock *> find(const FSBlock *root, const FSOpt &opt) const;
     std::vector<FSBlock *> find(const FSBlock &root, const FSOpt &opt) const;
     std::vector<Block> find(const Block root, const FSOpt &opt) const;
@@ -273,34 +278,14 @@ public:
     std::vector<FSBlock *> match(const FSBlock &root, const FSPattern &pattern) const;
     std::vector<FSBlock *> match(const FSBlock *root, std::vector<FSPattern>) const;
 
-    // Checks if a an item exists in the directory tree
-    bool exists(const FSBlock &top, const fs::path &path) const;
-    bool exists(const fs::path &path) const { return exists(pwd(), path); }
-
     // Lists the contents of a directory ('dir' command, 'list' command)
     void list(std::ostream &os, const FSBlock &path, const FSOpt &opt = {}) const;
     void list(std::ostream &os, const FSOpt &opt = {}) const { return list(os, pwd(), opt); }
-    void list(std::ostream &os, std::vector<FSBlock *> items, const FSOpt &opt = {}) const;
-
-    // Searches the directory tree ('find' command)
-    std::vector<FSBlock *> find(const FSPattern &pattern) const;
-
-    // Collects blocks of a certain type
-    std::vector<Block> collectDataBlocks(Block ref) const;
-    std::vector<FSBlock *> collectDataBlocks(const FSBlock &node) const;
-    std::vector<Block> collectListBlocks(Block ref) const;
-    std::vector<FSBlock *> collectListBlocks(const FSBlock &node) const;
-    std::vector<Block> collectHashedBlocks(Block ref, isize bucket) const;
-    std::vector<FSBlock *> collectHashedBlocks(const FSBlock &node, isize bucket) const;
-    std::vector<Block> collectHashedBlocks(Block ref) const;
-    std::vector<FSBlock *> collectHashedBlocks(const FSBlock &node) const;
+    void listDirectory(std::ostream &os, const FSBlock &path, const FSOpt &opt = {}) const;
+    void listItems(std::ostream &os, std::vector<FSBlock *> items, const FSOpt &opt = {}) const;
 
 private:
 
-    /*
-    std::vector<FSBlock *> find(const FSBlock *root, const FSPattern &pattern,
-                                std::unordered_set<Block> &visited) const;
-     */
     std::vector<FSBlock *> find(const FSBlock *root, const FSOpt &opt,
                                 std::unordered_set<Block> &visited) const;
 
@@ -354,13 +339,26 @@ public:
 
 public:
 
-    // Follows a linked list and collects all nodes
+    // Follows a linked list and collects all blocks
     std::vector<Block> collect(const Block nr, std::function<FSBlock *(FSBlock *)> next) const;
+
+    // TODO: Return const FSBlock *
     std::vector<FSBlock *> collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> next) const;
+
+    // Collects blocks of a certain type
+    std::vector<Block> collectDataBlocks(Block ref) const;
+    std::vector<FSBlock *> collectDataBlocks(const FSBlock &node) const;
+    std::vector<Block> collectListBlocks(Block ref) const;
+    std::vector<FSBlock *> collectListBlocks(const FSBlock &node) const;
+    std::vector<Block> collectHashedBlocks(Block ref, isize bucket) const;
+    std::vector<FSBlock *> collectHashedBlocks(const FSBlock &node, isize bucket) const;
+    std::vector<Block> collectHashedBlocks(Block ref) const;
+    std::vector<FSBlock *> collectHashedBlocks(const FSBlock &node) const;
 
 private:
 
     // Main traversal code
+    // TODO: MOVE TO FSTREE
     FSTree traverse(const FSBlock &path, const FSOpt &opt, std::unordered_set<Block> &visited) const;
 
 
@@ -370,7 +368,8 @@ private:
     
 protected:
     
-    // Returns the last element in the list of blocks with the same hash
+    // Returns
+    // TODO: DEPRECATE
     std::vector<Block> hashBlockChain(Block first) const;
 
 
@@ -378,6 +377,7 @@ protected:
     // Argument checking helpers
     //
 
+    // TODO: Prettify and use
     void REQUIRE_INITIALIZED() const;
     void REQUIRE_FORMATTED() const;
     void REQUIRE_FILE_OR_DIRECTORY(FSBlock &node) const;
@@ -390,18 +390,23 @@ protected:
 public:
 
     // Returns a block summary for creating the block usage image
+    // TODO: RENAME TO createUsageMap?
     void analyzeBlockUsage(u8 *buffer, isize len) const;
 
     // Returns a usage summary for creating the block allocation image
+    // TODO: RENAME TO createAllocationMap?
     void analyzeBlockAllocation(u8 *buffer, isize len) const;
 
     // Returns a block summary for creating the diagnose image
+    // TODO: RENAME TO createHealthMap?
     void analyzeBlockConsistency(u8 *buffer, isize len) const;
     
     // Searches the block list for a block of a specific type
+    // TODO: DEPRECATE. CLEAN UP CHECKER API
     isize nextBlockOfType(FSBlockType type, isize after) const;
 
     // Searches the block list for a corrupted block
+    // TODO: DEPRECATE. CLEAN UP CHECKER API
     isize nextCorruptedBlock(isize after) const;
 };
 

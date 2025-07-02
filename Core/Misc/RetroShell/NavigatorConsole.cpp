@@ -72,22 +72,7 @@ NavigatorConsole::autoComplete(Tokens &argv)
         // First, try to auto-complete the last token with a command name
         if (remaining.size() != 1 || !cmd->autoComplete(argv.back())) {
 
-            /*
-            // That didn't work, so try to auto-complete with a file name
-            auto pattern = FSPattern(remaining.back() + "*");
-            auto matches = fs.find(pattern);
-
-            // Collect the names for all matching directory items
-            std::vector<string> names;
-            if (pattern.isAbsolute()) {
-                for (auto &it : matches) names.push_back(it->absName());
-            } else {
-                for (auto &it : matches) names.push_back(it->relName());
-            }
-
-            // Auto-complete with the common prefix
-            auto prefix = util::commonPrefix(names);
-            */
+            // If that didn't work, try to auto-complete with a file name
             auto prefix = autoCompleteFilename(argv.back());
 
             if (prefix.size() > argv.back().size()) argv.back() = prefix;
@@ -132,7 +117,7 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
         auto matches = fs.match(&fs.pwd(), args.back() + "*");
 
         // Print all possible extensions
-        fs.list(os, matches, {
+        fs.listItems(os, matches, {
 
             .recursive = false,
             .sort = sort::dafa,

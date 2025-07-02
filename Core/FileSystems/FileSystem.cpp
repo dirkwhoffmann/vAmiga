@@ -361,8 +361,6 @@ FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit)
     isize bmNr = nr / bitsPerBlock;
 
     // Get the bitmap block
-    // FSBlock *bm;
-    // bm = (bmNr < (isize)bmBlocks.size()) ? bitmapBlockPtr(bmBlocks[bmNr]) : nullptr;
     FSBlock *bm = (bmNr < (isize)bmBlocks.size()) ? read(bmBlocks[bmNr], FSBlockType::BITMAP_BLOCK) : nullptr;
     if (bm == nullptr) {
         warn("Failed to lookup allocation bit for block %d\n", nr);
@@ -537,6 +535,18 @@ FileSystem::seek(const FSBlock &root, const string &name) const
     return const_cast<const FSBlock &>(const_cast<FileSystem *>(this)->seek(root, name));
 }
 
+std::vector<FSBlock *>
+FileSystem::find(const FSPattern &pattern) const
+{
+    std::vector<Block> result;
+
+    // Determine the directory to start searching
+    auto &start = pattern.isAbsolute() ? root() : pwd();
+
+    // Seek all files matching the provided pattern
+    return find(start, pattern);
+}
+
 std::vector<Block>
 FileSystem::find(const Block root, const FSPattern &pattern) const
 {
@@ -648,12 +658,15 @@ FileSystem::find(const FSBlock *root, const FSOpt &opt, std::unordered_set<Block
     }
 
     // Search subdirectories
-    for (auto &it : hashedBlocks) {
+    if (opt.recursive) {
 
-        if (it->isDirectory()) {
+        for (auto &it : hashedBlocks) {
 
-            auto blocks = find(it, opt, visited);
-            result.insert(result.end(), blocks.begin(), blocks.end());
+            if (it->isDirectory()) {
+
+                auto blocks = find(it, opt, visited);
+                result.insert(result.end(), blocks.begin(), blocks.end());
+            }
         }
     }
 
@@ -680,57 +693,6 @@ FileSystem::find(const FSBlock *root, const FSPattern &pattern) const
         .recursive = true,
         .filter = [&](const FSBlock &item) { return pattern.match(item.pathName()); }
     });
-    /*
-    if (!root) return {};
-
-    if (!isInitialized()) throw AppError(Fault::FS_UNINITIALIZED);
-    if (!isFormatted()) throw AppError(Fault::FS_UNFORMATTED);
-    if (!root->isRegular()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
-
-    std::unordered_set<Block> visited;
-    return find(root, pattern, visited);
-    */
-}
-
-/*
-std::vector<FSBlock *>
-FileSystem::find(const FSBlock *root, const FSPattern &pattern, std::unordered_set<Block> &visited) const
-{
-    std::vector<FSBlock *> result;
-
-    // Collect all items in the hash table
-    auto hashedBlocks = collectHashedBlocks(*root);
-
-    for (auto it = hashedBlocks.begin(); it != hashedBlocks.end(); it++) {
-
-        // Add item if accepted
-        if (pattern.match((*it)->pathName())) result.push_back(*it);
-
-        // Break the loop if this block has been visited before
-        if (visited.contains((*it)->nr)) throw AppError(Fault::FS_HAS_CYCLES);
-
-        // Remember the block as visited
-        visited.insert((*it)->nr);
-    }
-
-    // Search subdirectories
-    for (auto &it : hashedBlocks) {
-
-        if (it->isDirectory()) {
-
-            auto blocks = find(&(*it), pattern, visited);
-            result.insert(result.end(), blocks.begin(), blocks.end());
-        }
-    }
-
-    return result;
-}
-*/
-
-bool
-FileSystem::exists(const FSBlock &top, const fs::path &path) const
-{
-    return seekPtr(&top, path) != nullptr;
 }
 
 void
@@ -751,6 +713,12 @@ FileSystem::cd(const string &path)
 {
     if (auto ptr = seekPtr(&pwd(), path); ptr) cd (*ptr);
     throw AppError(Fault::FS_NOT_FOUND, path);
+}
+
+bool
+FileSystem::exists(const FSBlock &top, const fs::path &path) const
+{
+    return seekPtr(&top, path) != nullptr;
 }
 
 std::vector<FSBlock *>
@@ -838,55 +806,41 @@ FileSystem::collectHashedBlocks(const FSBlock &node) const
 void
 FileSystem::list(std::ostream &os, const FSBlock &path, const FSOpt &opt) const
 {
-    // Collect all directory items to list
-    auto tree = traverse(path, opt);
+    // List the top directory
+    listDirectory(os, path, opt);
 
-    isize i = 0;
-    isize column = 0;
+    if (opt.recursive) {
 
-    // Walk the tree
-    auto func = [&](const FSTree &t) {
+        // Find all directories to list
+        auto directories = find(path, {
 
-        if (t.children.empty()) return;
+            .recursive = true,
+            .filter = [&](const FSBlock &item) { return item.isDirectory(); }
+        });
 
-        // Print header
-        if (opt.recursive) {
+        for (auto &it : directories) {
 
-            if (i++) os << std::endl;
-            if (column) { os << std::endl; column = 0; }
-            os << "Directory " << t.node->absName() << ":" << std::endl << std::endl;
+            // Print header
+            os << "Directory " << it->absName() << ":" << std::endl << std::endl;
+
+            // Print directory
+            listDirectory(os, *it, opt);
         }
-
-        // Collect all displayed strings
-        std::vector<string> strs;
-        for (auto &it : t.children) strs.push_back(opt.formatter(*it.node));
-
-        // Determine the longest entry
-        int tab = 0; for (auto &it: strs) tab = std::max(tab, int(it.length()));
-
-        // List all items
-        for (auto &item : strs) {
-
-            // Print in two columns if the name ends with a tab character
-            if (item.back() == '\t') {
-
-                item.pop_back();
-                os << std::left << std::setw(std::max(tab, 35)) << item;
-                if (column++ > 0) { os << std::endl; column = 0; }
-
-            } else {
-
-                if (column > 0) { os << std::endl; column = 0; }
-                os << std::left << std::setw(std::max(tab, 35)) << item << std::endl;
-            }
-        }
-    };
-
-    tree.bfsWalk(func);
+    }
 }
 
 void
-FileSystem::list(std::ostream &os, std::vector<FSBlock *> items, const FSOpt &opt) const
+FileSystem::listDirectory(std::ostream &os, const FSBlock &path, const FSOpt &opt) const
+{
+    // Find all directory items
+    auto items = find(path, { .recursive = false, .filter = opt.filter } );
+
+    // List items
+    listItems(os, items, opt);
+}
+
+void
+FileSystem::listItems(std::ostream &os, std::vector<FSBlock *> items, const FSOpt &opt) const
 {
     isize column = 0;
 
@@ -920,18 +874,6 @@ FileSystem::list(std::ostream &os, std::vector<FSBlock *> items, const FSOpt &op
             os << std::left << std::setw(std::max(tab, 35)) << item << std::endl;
         }
     }
-}
-
-std::vector<FSBlock *>
-FileSystem::find(const FSPattern &pattern) const
-{
-    std::vector<Block> result;
-
-    // Determine the directory to start searching
-    auto &start = pattern.isAbsolute() ? root() : pwd();
-
-    // Seek all files matching the provided pattern
-    return find(start, pattern);
 }
 
 FSTree
