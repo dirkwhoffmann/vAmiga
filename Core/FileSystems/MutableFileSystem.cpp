@@ -127,7 +127,7 @@ MutableFileSystem::format(string name)
     updateChecksums();
 
     // Set the current directory
-    curr = rootBlock;
+    current = rootBlock;
 }
 
 void

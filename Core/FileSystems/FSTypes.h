@@ -15,9 +15,9 @@ namespace vamiga {
 
 struct FSBlock;
 typedef u32 Block;
-typedef std::function<bool(FSBlock &)> FSBlockFilter;
-typedef std::function<string(FSBlock &)> FSBlockFormatter;
-typedef std::function<bool(FSBlock &, FSBlock &)> FSBlockSorter;
+typedef std::function<bool(const FSBlock &)> FSBlockFilter;
+typedef std::function<string(const FSBlock &)> FSBlockFormatter;
+typedef std::function<bool(const FSBlock &, const FSBlock &)> FSBlockSorter;
 
 struct FSOpt
 {
@@ -26,8 +26,8 @@ struct FSOpt
     FSBlockFilter filter;
     FSBlockFormatter formatter;
 
-    bool accept(FSBlock &b) const { return filter ? filter(b) : true; }
-    bool accept(FSBlock *b) const { return b ? (filter ? filter(*b) : true) : false; }
+    bool accept(const FSBlock &b) const { return filter ? filter(b) : true; }
+    bool accept(const FSBlock *b) const { return b ? (filter ? filter(*b) : true) : false; }
 };
 
 enum class FSVolumeType : long

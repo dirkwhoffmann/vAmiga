@@ -118,7 +118,7 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
     }
 
     // Set the current directory to '/'
-    curr = rootBlock;
+    current = rootBlock;
 
     debug(FS_DEBUG, "Success\n");
 }
@@ -705,7 +705,7 @@ FileSystem::cd(const FSName &name)
 void
 FileSystem::cd(const FSBlock &path)
 {
-    curr = path.nr;
+    current = path.nr;
 }
 
 void

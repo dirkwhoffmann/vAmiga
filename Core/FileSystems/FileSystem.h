@@ -69,7 +69,7 @@ protected:
     Block rootBlock = 0;
 
     // The current directory (points to the root block by default)
-    Block curr = 0;
+    Block current = 0;
 
     // Location of the bitmap blocks and extended bitmap blocks
     std::vector<Block> bmBlocks;
@@ -228,8 +228,8 @@ public:
     const FSBlock &root() const { return at(rootBlock); }
 
     // Returns the working directory
-    FSBlock &pwd() { return at(curr); }
-    const FSBlock &pwd() const { return at(curr); }
+    FSBlock &pwd() { return at(current); }
+    const FSBlock &pwd() const { return at(current); }
 
     // Returns the parent directory
     FSBlock &parent(const FSBlock &node);
