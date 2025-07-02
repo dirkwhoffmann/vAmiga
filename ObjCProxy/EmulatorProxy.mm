@@ -1575,6 +1575,18 @@ NSString *EventSlotName(EventSlot slot)
 
     return [array copy];
 }
+/*
+ - (NSDictionary<NSNumber *, NSNumber *> *)xray:(BOOL)strict
+ {
+     auto blocks = [self fs]->doctor.xray(strict);
+
+     NSMutableDictionary<NSNumber *, NSNumber *> *dict = [NSMutableDictionary dictionaryWithCapacity:blocks.size()];
+     NSUInteger index = 0;
+     for (Block value : blocks) { dict[@(index)] = @(value); index++; }
+
+     return [dict copy];
+ }
+ */
 
 - (NSDictionary<NSNumber *, NSNumber *> *)checkBitmap:(BOOL)strict
 {
@@ -1604,6 +1616,7 @@ NSString *EventSlotName(EventSlot slot)
     return [self fs]->getCorrupted((u32)blockNr);
 }
 
+/*
 - (NSInteger)nextCorrupted:(NSInteger)blockNr
 {
     return [self fs]->nextCorrupted((u32)blockNr);
@@ -1613,6 +1626,7 @@ NSString *EventSlotName(EventSlot slot)
 {
     return [self fs]->prevCorrupted((u32)blockNr);
 }
+*/
 
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset
 {

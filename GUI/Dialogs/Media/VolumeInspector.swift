@@ -278,15 +278,12 @@ class VolumeInspector: DialogController {
         diagnoseSlider.maxValue = Double(vol.numBlocks - 1)
 
         // Run a file system check
-        //errorReport = vol.check(strict)
         erroneousBlocks = vol.xray(strict)!
         bitMapErrors = vol.checkBitmap(strict)!
 
         // Experimental (test new API)
-        if let faultyBlocks = vol.xray(strict) {
-            for number in faultyBlocks {
-                print(number.intValue)
-            }
+        for number in erroneousBlocks {
+            print(number)
         }
 
         // Compute images
@@ -496,8 +493,28 @@ class VolumeInspector: DialogController {
             
     @IBAction func gotoNextCorruptedBlockAction(_ sender: NSButton!) {
 
+        var low = 0
+        var high = erroneousBlocks.count
+
+        while low < high {
+
+            let mid = (low + high) / 2
+            if erroneousBlocks[mid].intValue > blockNr {
+                high = mid
+            } else {
+                low = mid + 1
+            }
+        }
+
+        if low < erroneousBlocks.count {
+            setBlock(erroneousBlocks[low].intValue)
+        } else if erroneousBlocks.count > 0 {
+            setBlock(erroneousBlocks[0].intValue)
+        }
+        /*
         let nextBlock = vol.nextCorruptedBlock(blockNr)
         if nextBlock != -1 { setBlock(nextBlock) }
+        */
     }
 
     @IBAction func rectifyAction(_ sender: NSButton!) {
