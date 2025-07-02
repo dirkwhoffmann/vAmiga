@@ -250,20 +250,72 @@ DiskDoctor::dump(Block nr, std::ostream &os)
     }
 }
 
-std::vector<Block>
-DiskDoctor::xray(bool strict) const
+isize
+DiskDoctor::xray(bool strict)
 {
-    /*
-    std::vector<Block> result;
+    return xrayBlocks(strict) && xrayBitmap(strict);
+}
+
+isize
+DiskDoctor::xrayBlocks(bool strict)
+{
+    diagnosis.blockErrors = {};
 
     for (isize i = 0, capacity = fs.numBlocks(); i < capacity; i++) {
 
-        if (xray(Block(i), strict)) result.push_back(Block(i));
+        if (xray(Block(i), strict)) diagnosis.blockErrors.push_back(Block(i));
     }
 
-    return result;
-    */
-    return { 12, 24, 42,43,44, 67,69};
+    return (isize)diagnosis.blockErrors.size();
+
+    // return { 12, 24, 42,43,44, 67,69};
+}
+
+isize
+DiskDoctor::xrayBitmap(bool strict)
+{
+    // std::unordered_map<Block,isize> result;
+    std::unordered_set<Block> used;
+
+    // Extract the directory tree
+    // auto tree = fs.traverse(fs.root(), { .recursive = true });
+    auto tree = FSTree(fs.root(), { .recursive = true });
+
+    // Collect all used blocks
+    tree.bfsWalk( [&](const FSTree &it) {
+
+        used.insert(it.node->nr);
+
+        if (it.node->isFile()) {
+
+            auto listBlocks = fs.collectListBlocks(it.node->nr);
+            auto dataBlocks = fs.collectDataBlocks(it.node->nr);
+            used.insert(listBlocks.begin(), listBlocks.end());
+            used.insert(dataBlocks.begin(), dataBlocks.end());
+        }
+    });
+    used.insert(fs.bmBlocks.begin(), fs.bmBlocks.end());
+    used.insert(fs.bmExtBlocks.begin(), fs.bmExtBlocks.end());
+
+    // Check all blocks (ignoring the first two boot blocks)
+    for (isize i = 2, capacity = fs.numBlocks(); i < capacity; i++) {
+
+        bool allocated = fs.isAllocated(Block(i));
+        bool contained = used.contains(Block(i));
+
+        if (allocated && !contained) {
+
+            // result[Block(i)] = 1;
+            diagnosis.bitmapErrors[Block(i)] = 1;
+
+        } else if (!allocated && contained) {
+
+            // result[Block(i)] = 2;
+            diagnosis.bitmapErrors[Block(i)] = 2;
+        }
+    }
+
+    return (isize)diagnosis.bitmapErrors.size();
 }
 
 isize
@@ -502,51 +554,6 @@ DiskDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
     }
 
     return Fault::OK;
-}
-
-std::unordered_map<Block,isize>
-DiskDoctor::xrayBitmap(bool strict) const
-{
-    std::unordered_map<Block,isize> result;
-    std::unordered_set<Block> used;
-
-    // Extract the directory tree
-    // auto tree = fs.traverse(fs.root(), { .recursive = true });
-    auto tree = FSTree(fs.root(), { .recursive = true });
-
-    // Collect all used blocks
-    tree.bfsWalk( [&](const FSTree &it) {
-
-        used.insert(it.node->nr);
-
-        if (it.node->isFile()) {
-
-            auto listBlocks = fs.collectListBlocks(it.node->nr);
-            auto dataBlocks = fs.collectDataBlocks(it.node->nr);
-            used.insert(listBlocks.begin(), listBlocks.end());
-            used.insert(dataBlocks.begin(), dataBlocks.end());
-        }
-    });
-    used.insert(fs.bmBlocks.begin(), fs.bmBlocks.end());
-    used.insert(fs.bmExtBlocks.begin(), fs.bmExtBlocks.end());
-
-    // Check all blocks (ignoring the first two boot blocks)
-    for (isize i = 2, capacity = fs.numBlocks(); i < capacity; i++) {
-
-        bool allocated = fs.isAllocated(Block(i));
-        bool contained = used.contains(Block(i));
-
-        if (allocated && !contained) {
-
-            result[Block(i)] = 1;
-
-        } else if (!allocated && contained) {
-
-            result[Block(i)] = 2;
-        }
-    }
-
-    return result;
 }
 
 }

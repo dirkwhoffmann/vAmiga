@@ -1566,31 +1566,25 @@ NSString *EventSlotName(EventSlot slot)
     return [self fs]->itemType((u32)blockNr, pos);
 }
 
-- (NSArray<NSNumber *> *)xray:(BOOL)strict
+- (NSInteger)xray:(BOOL)strict
 {
-    auto blocks = [self fs]->doctor.xray(strict);
+    return [self fs]->doctor.xray(strict);
+}
 
-    NSMutableArray<NSNumber *> *array = [NSMutableArray arrayWithCapacity:blocks.size()];
-    for (Block value : blocks) { [array addObject:@(value)]; }
+- (NSArray<NSNumber *> *)xrayBlocks
+{
+    // auto blocks = [self fs]->doctor.xrayBlocks(strict);
+    auto &errors = [self fs]->doctor.diagnosis.blockErrors;
+
+    NSMutableArray<NSNumber *> *array = [NSMutableArray arrayWithCapacity:errors.size()];
+    for (Block value : errors) { [array addObject:@(value)]; }
 
     return [array copy];
 }
-/*
- - (NSDictionary<NSNumber *, NSNumber *> *)xray:(BOOL)strict
- {
-     auto blocks = [self fs]->doctor.xray(strict);
 
-     NSMutableDictionary<NSNumber *, NSNumber *> *dict = [NSMutableDictionary dictionaryWithCapacity:blocks.size()];
-     NSUInteger index = 0;
-     for (Block value : blocks) { dict[@(index)] = @(value); index++; }
-
-     return [dict copy];
- }
- */
-
-- (NSDictionary<NSNumber *, NSNumber *> *)xrayBitmap:(BOOL)strict
+- (NSDictionary<NSNumber *, NSNumber *> *)xrayBitmap
 {
-    auto blocks = [self fs]->doctor.xrayBitmap(strict);
+    auto blocks = [self fs]->doctor.diagnosis.bitmapErrors; //  xrayBitmap(strict);
 
     NSMutableDictionary<NSNumber *, NSNumber *> *dict = [NSMutableDictionary dictionary];
     for (const auto &[key, value] : blocks) { dict[@(key)] = @(value); }

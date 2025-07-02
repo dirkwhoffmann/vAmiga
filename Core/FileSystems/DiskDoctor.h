@@ -21,6 +21,11 @@ class DiskDoctor final : public CoreObject {
 
 public:
 
+    // Result of the latest examination
+    FSDiagnosis diagnosis;
+
+public:
+
     DiskDoctor(FileSystem& fs) : fs(fs) { }
 
 
@@ -49,8 +54,14 @@ public:
 
 public:
 
-    // Scans all blocks and returns the faulty ones
-    std::vector<Block> xray(bool strict) const;
+    // Performs a full sanity check. Returns the number of errors. Stores details in 'diagnosis'
+    isize xray(bool strict);
+
+    // Scans all blocks. Returns the number of errors. Stores details in 'diagnosis'
+    isize xrayBlocks(bool strict);
+
+    // Checks the block allocation table. Returns the number of errors. Stores details in 'diagnosis'
+    isize xrayBitmap(bool strict);
 
     // Scans a single block and returns the number of errors
     isize xray(Block ref, bool strict) const;
@@ -61,9 +72,6 @@ public:
     Fault xray(Block ref, isize pos, bool strict, u8 *expected) const;
     Fault xray(FSBlock &node, isize pos, bool strict) const;
     Fault xray(FSBlock &node, isize pos, bool strict, u8 *expected) const;
-
-    // Checks the block allocation table
-    std::unordered_map<Block,isize> xrayBitmap(bool strict) const;
 };
 
 }

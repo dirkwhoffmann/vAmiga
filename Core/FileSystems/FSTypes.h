@@ -273,6 +273,15 @@ struct FSItemTypeEnum : Reflection<FSItemTypeEnum, FSItemType>
 
 typedef struct
 {
+    std::vector<Block> blockErrors;
+    std::unordered_map<Block,isize> bitmapErrors;
+}
+FSDiagnosis;
+
+
+// DEPRECATED
+typedef struct
+{
     long bitmapErrors;
     long corruptedBlocks;
     long firstErrorBlock;

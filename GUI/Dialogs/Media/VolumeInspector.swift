@@ -278,8 +278,9 @@ class VolumeInspector: DialogController {
         diagnoseSlider.maxValue = Double(vol.numBlocks - 1)
 
         // Run a file system check
-        erroneousBlocks = vol.xray(strict)!
-        bitMapErrors = vol.xrayBitmap(strict)!
+        vol.xray(strict)
+        erroneousBlocks = vol.xrayBlocks()
+        bitMapErrors = vol.xrayBitmap()
 
         // Experimental (test new API)
         for number in erroneousBlocks {
@@ -521,9 +522,10 @@ class VolumeInspector: DialogController {
     }
 
     @IBAction func strictAction(_ sender: NSButton!) {
-        
-        erroneousBlocks = vol.xray(strict)
-        bitMapErrors = vol.xrayBitmap(strict)
+
+        vol.xray(strict)
+        erroneousBlocks = vol.xrayBlocks()
+        bitMapErrors = vol.xrayBitmap()
 
         updateHealthImage()
         update()

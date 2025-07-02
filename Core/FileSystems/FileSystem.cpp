@@ -936,7 +936,9 @@ FileSystem::verify()
     if (FS_DEBUG) dump(Category::State);
 
     // Check file system integrity
-    if (auto erroneousBlocks = doctor.xray(true); !erroneousBlocks.empty()) {
+    doctor.xray(true);
+
+    if (auto erroneousBlocks = doctor.diagnosis.blockErrors; !erroneousBlocks.empty()) {
 
         warn("Found %ld corrupted blocks\n", erroneousBlocks.size());
         if (FS_DEBUG) dump(Category::Blocks);
@@ -945,6 +947,7 @@ FileSystem::verify()
     return true;
 }
 
+/*
 FSErrorReport
 FileSystem::check(bool strict)
 {
@@ -998,6 +1001,7 @@ FileSystem::check(bool strict)
     
     return result;
 }
+*/
 
 Fault
 FileSystem::check(Block nr, isize pos, u8 *expected, bool strict) const
@@ -1036,58 +1040,6 @@ FileSystem::checkBlockType(Block nr, FSBlockType type, FSBlockType altType) cons
 
     return Fault::OK;
 }
-
-/*
-isize
-FileSystem::getCorrupted(Block nr) const
-{
-    return storage.read(nr) ? storage.read(nr)->corrupted : 0;
-    // return blockPtr(nr) ? blocks[nr]->corrupted : 0;
-}
-*/
-/*
-bool
-FileSystem::isCorrupted(Block nr, isize n) const
-{
-    for (isize i = 0, cnt = 0; i < numBlocks(); i++) {
-        
-        if (isCorrupted((Block)i)) {
-            cnt++;
-            if ((i64)nr == i) return cnt == n;
-        }
-    }
-    return false;
-}
-
-Block
-FileSystem::nextCorrupted(Block nr) const
-{
-    isize i = (isize)nr;
-    while (++i < numBlocks()) { if (isCorrupted((Block)i)) return (Block)i; }
-    return nr;
-}
-
-Block
-FileSystem::prevCorrupted(Block nr) const
-{
-    isize i = (isize)nr - 1;
-    while (i-- >= 0) { if (isCorrupted((Block)i)) return (Block)i; }
-    return nr;
-}
-
-Block
-FileSystem::seekCorruptedBlock(isize n) const
-{
-    for (isize i = 0, cnt = 0; i < numBlocks(); i++) {
-
-        if (isCorrupted((Block)i)) {
-            cnt++;
-            if (cnt == n) return (Block)i;
-        }
-    }
-    return (Block)-1;
-}
-*/
 
 FSBlockType
 FileSystem::predictBlockType(Block nr, const u8 *buf) const
@@ -1146,7 +1098,7 @@ FileSystem::REQUIRE_FILE_OR_DIRECTORY(FSBlock &node) const
 
 
 void
-FileSystem::createUsageMap(u8 *buffer, isize len) const
+FileSystem::createUsageMap(u8 *buffer, isize len)
 {
     // Setup priorities
     i8 pri[12];
@@ -1185,13 +1137,12 @@ FileSystem::createUsageMap(u8 *buffer, isize len) const
 }
 
 void
-FileSystem::createAllocationMap(u8 *buffer, isize len) const
+FileSystem::createAllocationMap(u8 *buffer, isize len)
 {
     // Setup priorities
     u8 pri[4] = { 0, 1, 2, 3 };
 
-    // Analyze the block usage
-    auto map = doctor.xrayBitmap(true);
+    auto &map = doctor.diagnosis.bitmapErrors;
 
     // Start from scratch
     for (isize i = 0; i < len; i++) buffer[i] = 255;
@@ -1214,7 +1165,7 @@ FileSystem::createAllocationMap(u8 *buffer, isize len) const
 }
 
 void
-FileSystem::createHealthMap(u8 *buffer, isize len) const
+FileSystem::createHealthMap(u8 *buffer, isize len)
 {
     bool strict = true; // TODO: Allow non-strict checking
 

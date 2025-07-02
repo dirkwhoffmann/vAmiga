@@ -1091,7 +1091,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .ghelp  = { "Examines the file system integrity" },
         .chelp  = { "Inspects the entire file system" },
         .args   = {
-            // { .name = { "nr", "Block number" }, .flags = rs::opt },
+            { .name = { "s", "Strict checking" }, .flags = rs::flag },
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
@@ -1100,12 +1100,13 @@ NavigatorConsole::initCommands(RSCommand &root)
                 os << std::endl;
             };
 
-            auto blocks = fs.doctor.xrayBitmap(true);
+            // auto blocks = fs.doctor.xrayBitmap(true);
 
             std::vector<Block> canBeFreed;
             std::vector<Block> mustBeAllocated;
 
-            for (const auto& [key, value] : blocks) {
+            fs.doctor.xray(args.contains("s"));
+            for (const auto& [key, value] : fs.doctor.diagnosis.bitmapErrors) {
 
                 if (value == 1) canBeFreed.push_back(key);
                 if (value == 2) mustBeAllocated.push_back(key);
