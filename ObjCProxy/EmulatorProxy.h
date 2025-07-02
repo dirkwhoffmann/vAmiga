@@ -836,22 +836,17 @@ NSString *EventSlotName(EventSlot slot);
 - (FSItemType)itemType:(NSInteger)blockNr pos:(NSInteger)pos;
 
 - (NSArray<NSNumber *> *)xray:(BOOL)strict;
-- (NSDictionary<NSNumber *, NSNumber *> *)checkBitmap:(BOOL)strict;
+- (NSDictionary<NSNumber *, NSNumber *> *)xrayBitmap:(BOOL)strict;
 
 - (Fault)check:(NSInteger)nr pos:(NSInteger)pos expected:(unsigned char *)exp strict:(BOOL)strict;
-- (BOOL)isCorrupted:(NSInteger)blockNr;
-- (NSInteger)getCorrupted:(NSInteger)blockNr;
-// - (NSInteger)nextCorrupted:(NSInteger)blockNr;
-// - (NSInteger)prevCorrupted:(NSInteger)blockNr;
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
 - (NSString *)ascii:(NSInteger)block offset:(NSInteger)offset length:(NSInteger)len;
 - (void)export:(NSString *)path exception:(ExceptionWrapper *)ex;
 
-- (void)analyzeBlockUsage:(u8 *)buf length:(NSInteger)len;
-- (void)analyzeBlockAllocation:(u8 *)buf length:(NSInteger)len;
-- (void)analyzeBlockConsistency:(u8 *)buf length:(NSInteger)len;
+- (void)createUsageMap:(u8 *)buf length:(NSInteger)len;
+- (void)createAllocationMap:(u8 *)buf length:(NSInteger)len;
+- (void)createHealthMap:(u8 *)buf length:(NSInteger)len;
 - (NSInteger)nextBlockOfType:(FSBlockType)type after:(NSInteger)after;
-- (NSInteger)nextCorruptedBlock:(NSInteger)after;
 
 - (void)rectifyAllocationMap;
 

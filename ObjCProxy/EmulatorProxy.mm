@@ -1588,9 +1588,9 @@ NSString *EventSlotName(EventSlot slot)
  }
  */
 
-- (NSDictionary<NSNumber *, NSNumber *> *)checkBitmap:(BOOL)strict
+- (NSDictionary<NSNumber *, NSNumber *> *)xrayBitmap:(BOOL)strict
 {
-    auto blocks = [self fs]->doctor.checkBitmap(strict);
+    auto blocks = [self fs]->doctor.xrayBitmap(strict);
 
     NSMutableDictionary<NSNumber *, NSNumber *> *dict = [NSMutableDictionary dictionary];
     for (const auto &[key, value] : blocks) { dict[@(key)] = @(value); }
@@ -1605,28 +1605,6 @@ NSString *EventSlotName(EventSlot slot)
 {
     return [self fs]->check((u32)nr, pos, exp, strict);
 }
-
-- (BOOL)isCorrupted:(NSInteger)blockNr
-{
-    return [self fs]->isCorrupted((u32)blockNr);
-}
-
-- (NSInteger)getCorrupted:(NSInteger)blockNr
-{
-    return [self fs]->getCorrupted((u32)blockNr);
-}
-
-/*
-- (NSInteger)nextCorrupted:(NSInteger)blockNr
-{
-    return [self fs]->nextCorrupted((u32)blockNr);
-}
-
-- (NSInteger)prevCorrupted:(NSInteger)blockNr
-{
-    return [self fs]->prevCorrupted((u32)blockNr);
-}
-*/
 
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset
 {
@@ -1644,17 +1622,17 @@ NSString *EventSlotName(EventSlot slot)
     catch (AppError &error) { [ex save:error]; }
 }
 
-- (void)analyzeBlockUsage:(u8 *)buf length:(NSInteger)len
+- (void)createUsageMap:(u8 *)buf length:(NSInteger)len
 {
     [self fs]->createUsageMap((u8 *)buf, len);
 }
 
-- (void)analyzeBlockAllocation:(u8 *)buf length:(NSInteger)len
+- (void)createAllocationMap:(u8 *)buf length:(NSInteger)len
 {
     [self fs]->createAllocationMap((u8 *)buf, len);
 }
 
-- (void)analyzeBlockConsistency:(u8 *)buf length:(NSInteger)len
+- (void)createHealthMap:(u8 *)buf length:(NSInteger)len
 {
     [self fs]->createHealthMap((u8 *)buf, len);
 }
@@ -1662,11 +1640,6 @@ NSString *EventSlotName(EventSlot slot)
 - (NSInteger)nextBlockOfType:(FSBlockType)type after:(NSInteger)after
 {
     return [self fs]->nextBlockOfType(type, after);
-}
-
-- (NSInteger)nextCorruptedBlock:(NSInteger)after
-{
-    return [self fs]->nextCorruptedBlock(after);
 }
 
 - (void)rectifyAllocationMap

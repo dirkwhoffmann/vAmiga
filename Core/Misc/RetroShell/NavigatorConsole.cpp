@@ -1100,7 +1100,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 os << std::endl;
             };
 
-            auto blocks = fs.doctor.checkBitmap(true);
+            auto blocks = fs.doctor.xrayBitmap(true);
 
             std::vector<Block> canBeFreed;
             std::vector<Block> mustBeAllocated;

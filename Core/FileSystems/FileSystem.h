@@ -299,7 +299,7 @@ public:
     bool verify();
     
     // Checks all blocks in this volume
-    FSErrorReport check(bool strict);
+    [[deprecated]] FSErrorReport check(bool strict);
 
     // Checks a single byte in a certain block
     Fault check(Block nr, isize pos, u8 *expected, bool strict) const;
@@ -312,20 +312,20 @@ public:
     Fault checkBlockType(Block nr, FSBlockType type, FSBlockType altType) const;
 
     // Checks if a certain block is corrupted
-    bool isCorrupted(Block nr) const { return getCorrupted(nr) != 0; }
+    // bool isCorrupted(Block nr) const { return getCorrupted(nr) != 0; }
 
     // Returns the position in the corrupted block list (0 = OK)
-    isize getCorrupted(Block nr) const;
+    // isize getCorrupted(Block nr) const;
 
     // Returns a reference to the next or the previous corrupted block
-    Block nextCorrupted(Block nr) const;
-    Block prevCorrupted(Block nr) const;
+    // Block nextCorrupted(Block nr) const;
+    // Block prevCorrupted(Block nr) const;
 
     // Checks if a certain block is the n-th corrupted block
-    bool isCorrupted(Block nr, isize n) const;
+    // bool isCorrupted(Block nr, isize n) const;
 
     // Returns a reference to the n-th corrupted block
-    Block seekCorruptedBlock(isize n) const;
+    // Block seekCorruptedBlock(isize n) const;
 
     // Follows a linked list and collects all blocks
     std::vector<FSBlock *> collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> next) const;
@@ -380,9 +380,6 @@ public:
     
     // Searches the block list for a block of a specific type
     isize nextBlockOfType(FSBlockType type, isize after) const;
-
-    // Searches the block list for a corrupted block
-    isize nextCorruptedBlock(isize after) const;
 };
 
 }

@@ -505,7 +505,7 @@ DiskDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
 }
 
 std::unordered_map<Block,isize>
-DiskDoctor::checkBitmap(bool strict) const
+DiskDoctor::xrayBitmap(bool strict) const
 {
     std::unordered_map<Block,isize> result;
     std::unordered_set<Block> used;

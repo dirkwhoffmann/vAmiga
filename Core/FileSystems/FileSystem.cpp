@@ -932,15 +932,16 @@ FileSystem::hashBlockChain(Block first) const
 bool
 FileSystem::verify()
 {
+    // Print some debug information about the volume
     if (FS_DEBUG) dump(Category::State);
 
-    if (FSErrorReport report = check(true); report.corruptedBlocks > 0) {
-        
-        warn("Found %ld corrupted blocks\n", report.corruptedBlocks);
+    // Check file system integrity
+    if (auto erroneousBlocks = doctor.xray(true); !erroneousBlocks.empty()) {
+
+        warn("Found %ld corrupted blocks\n", erroneousBlocks.size());
         if (FS_DEBUG) dump(Category::Blocks);
         return false;
-    }
-    
+    }    
     return true;
 }
 
@@ -1036,13 +1037,15 @@ FileSystem::checkBlockType(Block nr, FSBlockType type, FSBlockType altType) cons
     return Fault::OK;
 }
 
+/*
 isize
 FileSystem::getCorrupted(Block nr) const
 {
     return storage.read(nr) ? storage.read(nr)->corrupted : 0;
     // return blockPtr(nr) ? blocks[nr]->corrupted : 0;
 }
-
+*/
+/*
 bool
 FileSystem::isCorrupted(Block nr, isize n) const
 {
@@ -1084,6 +1087,7 @@ FileSystem::seekCorruptedBlock(isize n) const
     }
     return (Block)-1;
 }
+*/
 
 FSBlockType
 FileSystem::predictBlockType(Block nr, const u8 *buf) const
@@ -1187,7 +1191,7 @@ FileSystem::createAllocationMap(u8 *buffer, isize len) const
     u8 pri[4] = { 0, 1, 2, 3 };
 
     // Analyze the block usage
-    auto map = doctor.checkBitmap(true);
+    auto map = doctor.xrayBitmap(true);
 
     // Start from scratch
     for (isize i = 0; i < len; i++) buffer[i] = 255;
@@ -1212,6 +1216,8 @@ FileSystem::createAllocationMap(u8 *buffer, isize len) const
 void
 FileSystem::createHealthMap(u8 *buffer, isize len) const
 {
+    bool strict = true; // TODO: Allow non-strict checking
+
     // Setup priorities
     i8 pri[3] = { 0, 1, 2 };
  
@@ -1221,7 +1227,7 @@ FileSystem::createHealthMap(u8 *buffer, isize len) const
     // Analyze all blocks
     for (isize i = 0, max = numBlocks(); i < max; i++) {
 
-        auto corrupted = storage[i].corrupted;
+        auto corrupted = doctor.xray(Block(i), strict); //  storage[i].corrupted;
         auto empty = isEmpty(Block(i));
         
         u8 val = empty ? 0 : corrupted ? 2 : 1;
@@ -1251,22 +1257,6 @@ FileSystem::nextBlockOfType(FSBlockType type, isize after) const
         if (storage.getType(Block(result)) == type) return result;
         // if (blocks[result]->type == type) return result;
 
-    } while (result != after);
-    
-    return -1;
-}
-
-isize
-FileSystem::nextCorruptedBlock(isize after) const
-{
-    assert(isBlockNumber(after));
-    
-    isize result = after;
-    
-    do {
-        result = (result + 1) % numBlocks();
-        if (storage[result].corrupted) return result;
-        
     } while (result != after);
     
     return -1;

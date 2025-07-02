@@ -63,7 +63,7 @@ public:
     Fault xray(FSBlock &node, isize pos, bool strict, u8 *expected) const;
 
     // Checks the block allocation table
-    std::unordered_map<Block,isize> checkBitmap(bool strict) const;
+    std::unordered_map<Block,isize> xrayBitmap(bool strict) const;
 };
 
 }

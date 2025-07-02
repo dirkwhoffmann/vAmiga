@@ -114,7 +114,7 @@ class VolumeInspector: DialogController {
                 
         data.withUnsafeMutableBytes { ptr in
             if let baseAddress = ptr.baseAddress {
-                vol.analyzeBlockUsage(baseAddress, length: Int(size.width))
+                vol.createUsageMap(baseAddress, length: Int(size.width))
             }
         }
                 
@@ -130,7 +130,7 @@ class VolumeInspector: DialogController {
                 
         data.withUnsafeMutableBytes { ptr in
             if let baseAddress = ptr.baseAddress {
-                vol.analyzeBlockAllocation(baseAddress, length: Int(size.width))
+                vol.createAllocationMap(baseAddress, length: Int(size.width))
             }
         }
         
@@ -152,7 +152,7 @@ class VolumeInspector: DialogController {
                 
         data.withUnsafeMutableBytes { ptr in
             if let baseAddress = ptr.baseAddress {
-                vol.analyzeBlockConsistency(baseAddress, length: Int(size.width))
+                vol.createHealthMap(baseAddress, length: Int(size.width))
             }
         }
         
@@ -279,7 +279,7 @@ class VolumeInspector: DialogController {
 
         // Run a file system check
         erroneousBlocks = vol.xray(strict)!
-        bitMapErrors = vol.checkBitmap(strict)!
+        bitMapErrors = vol.xrayBitmap(strict)!
 
         // Experimental (test new API)
         for number in erroneousBlocks {
@@ -511,10 +511,6 @@ class VolumeInspector: DialogController {
         } else if erroneousBlocks.count > 0 {
             setBlock(erroneousBlocks[0].intValue)
         }
-        /*
-        let nextBlock = vol.nextCorruptedBlock(blockNr)
-        if nextBlock != -1 { setBlock(nextBlock) }
-        */
     }
 
     @IBAction func rectifyAction(_ sender: NSButton!) {
@@ -526,9 +522,8 @@ class VolumeInspector: DialogController {
 
     @IBAction func strictAction(_ sender: NSButton!) {
         
-        // errorReport = vol.check(strict)
         erroneousBlocks = vol.xray(strict)
-        bitMapErrors = vol.checkBitmap(strict)
+        bitMapErrors = vol.xrayBitmap(strict)
 
         updateHealthImage()
         update()
