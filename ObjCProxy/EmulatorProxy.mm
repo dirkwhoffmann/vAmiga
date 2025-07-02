@@ -1573,7 +1573,6 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSArray<NSNumber *> *)xrayBlocks
 {
-    // auto blocks = [self fs]->doctor.xrayBlocks(strict);
     auto &errors = [self fs]->doctor.diagnosis.blockErrors;
 
     NSMutableArray<NSNumber *> *array = [NSMutableArray arrayWithCapacity:errors.size()];

@@ -279,8 +279,8 @@ class VolumeInspector: DialogController {
 
         // Run a file system check
         vol.xray(strict)
-        erroneousBlocks = vol.xrayBlocks()
-        bitMapErrors = vol.xrayBitmap()
+        erroneousBlocks = vol.xrayBlocks
+        bitMapErrors = vol.xrayBitmap
 
         // Experimental (test new API)
         for number in erroneousBlocks {
@@ -524,8 +524,8 @@ class VolumeInspector: DialogController {
     @IBAction func strictAction(_ sender: NSButton!) {
 
         vol.xray(strict)
-        erroneousBlocks = vol.xrayBlocks()
-        bitMapErrors = vol.xrayBitmap()
+        erroneousBlocks = vol.xrayBlocks
+        bitMapErrors = vol.xrayBitmap
 
         updateHealthImage()
         update()
