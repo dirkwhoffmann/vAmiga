@@ -1586,11 +1586,6 @@ NSString *EventSlotName(EventSlot slot)
     return [dict copy];
 }
 
-- (FSErrorReport)check:(BOOL)strict
-{
-    return [self fs]->check(strict);
-}
-
 - (Fault)check:(NSInteger)nr
                pos:(NSInteger)pos
           expected:(unsigned char *)exp
@@ -1637,17 +1632,17 @@ NSString *EventSlotName(EventSlot slot)
 
 - (void)analyzeBlockUsage:(u8 *)buf length:(NSInteger)len
 {
-    [self fs]->analyzeBlockUsage((u8 *)buf, len);
+    [self fs]->createUsageMap((u8 *)buf, len);
 }
 
 - (void)analyzeBlockAllocation:(u8 *)buf length:(NSInteger)len
 {
-    [self fs]->analyzeBlockAllocation((u8 *)buf, len);
+    [self fs]->createAllocationMap((u8 *)buf, len);
 }
 
 - (void)analyzeBlockConsistency:(u8 *)buf length:(NSInteger)len
 {
-    [self fs]->analyzeBlockConsistency((u8 *)buf, len);
+    [self fs]->createHealthMap((u8 *)buf, len);
 }
 
 - (NSInteger)nextBlockOfType:(FSBlockType)type after:(NSInteger)after

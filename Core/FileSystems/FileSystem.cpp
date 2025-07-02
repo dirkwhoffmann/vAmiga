@@ -870,50 +870,6 @@ FileSystem::listItems(std::ostream &os, std::vector<FSBlock *> items, const FSOp
     }
 }
 
-FSTree
-FileSystem::traverse(const FSBlock &path, const FSOpt &opt) const
-{
-    if (!isInitialized()) throw AppError(Fault::FS_UNINITIALIZED);
-    if (!isFormatted()) throw AppError(Fault::FS_UNFORMATTED);
-    if (!path.isRegular()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
-
-    std::unordered_set<Block> visited;
-    return traverse(path, opt, visited);
-}
-
-FSTree
-FileSystem::traverse(const FSBlock &path, const FSOpt &opt, std::unordered_set<Block> &visited) const
-{
-    FSTree tree(blockPtr(path.nr));
-
-    // Collect all items in the hash table
-    auto hashedBlocks = collectHashedBlocks(path);
-
-    for (auto it = hashedBlocks.begin(); it != hashedBlocks.end(); it++) {
-
-        // Add item to the tree
-        if (opt.accept(*it)) tree.children.push_back(*it);
-
-        // Break the loop if this block has been visited before
-        if (visited.contains((*it)->nr)) throw AppError(Fault::FS_HAS_CYCLES);
-
-        // Remember the block as visited
-        visited.insert((*it)->nr);
-    }
-
-    // Sort the items
-    tree.sort(opt.sort);
-
-    // Add subdirectories if requested
-    if (opt.recursive) {
-        for (auto &it : tree.children) {
-            if (it.node->isDirectory()) it = traverse(*it.node, opt, visited);
-        }
-    }
-
-    return tree;
-}
-
 std::vector<Block>
 FileSystem::collect(const Block nr, std::function<FSBlock *(FSBlock *)> next) const
 {
@@ -1186,7 +1142,7 @@ FileSystem::REQUIRE_FILE_OR_DIRECTORY(FSBlock &node) const
 
 
 void
-FileSystem::analyzeBlockUsage(u8 *buffer, isize len) const
+FileSystem::createUsageMap(u8 *buffer, isize len) const
 {
     // Setup priorities
     i8 pri[12];
@@ -1225,7 +1181,7 @@ FileSystem::analyzeBlockUsage(u8 *buffer, isize len) const
 }
 
 void
-FileSystem::analyzeBlockAllocation(u8 *buffer, isize len) const
+FileSystem::createAllocationMap(u8 *buffer, isize len) const
 {
     // Setup priorities
     u8 pri[4] = { 0, 1, 2, 3 };
@@ -1254,7 +1210,7 @@ FileSystem::analyzeBlockAllocation(u8 *buffer, isize len) const
 }
 
 void
-FileSystem::analyzeBlockConsistency(u8 *buffer, isize len) const
+FileSystem::createHealthMap(u8 *buffer, isize len) const
 {
     // Setup priorities
     i8 pri[3] = { 0, 1, 2 };

@@ -838,7 +838,6 @@ NSString *EventSlotName(EventSlot slot);
 - (NSArray<NSNumber *> *)xray:(BOOL)strict;
 - (NSDictionary<NSNumber *, NSNumber *> *)checkBitmap:(BOOL)strict;
 
-- (FSErrorReport)check:(BOOL)strict;
 - (Fault)check:(NSInteger)nr pos:(NSInteger)pos expected:(unsigned char *)exp strict:(BOOL)strict;
 - (BOOL)isCorrupted:(NSInteger)blockNr;
 - (NSInteger)getCorrupted:(NSInteger)blockNr;

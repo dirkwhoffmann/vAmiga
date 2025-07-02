@@ -82,8 +82,9 @@ class VolumeInspector: DialogController {
     var vol: FileSystemProxy!
     
     // Result of the consistency checker
-    var errorReport: FSErrorReport?
-    
+    var erroneousBlocks: [NSNumber] = []
+    var bitMapErrors: [NSNumber: NSNumber] = [:]
+
     var selection: Int?
     var selectedRow: Int? { return selection == nil ? nil : selection! / 16 }
     var selectedCol: Int? { return selection == nil ? nil : selection! % 16 }
@@ -277,7 +278,9 @@ class VolumeInspector: DialogController {
         diagnoseSlider.maxValue = Double(vol.numBlocks - 1)
 
         // Run a file system check
-        errorReport = vol.check(strict)
+        //errorReport = vol.check(strict)
+        erroneousBlocks = vol.xray(strict)!
+        bitMapErrors = vol.checkBitmap(strict)!
 
         // Experimental (test new API)
         if let faultyBlocks = vol.xray(strict) {
@@ -287,9 +290,9 @@ class VolumeInspector: DialogController {
         }
 
         // Compute images
-        updateLayoutImage()
+        updateUsageImage()
         updateAllocImage()
-        updateDiagnoseImage()
+        updateHealthImage()
         
         update()
     }
@@ -303,7 +306,7 @@ class VolumeInspector: DialogController {
         updateVolumeInfo()
         updateVirusInfo()
         updateAllocInfo()
-        updateDiagnoseInfo()
+        updateHealthInfo()
         
         // Update elements
         blockField.stringValue         = String(format: "%d", blockNr)
@@ -317,7 +320,7 @@ class VolumeInspector: DialogController {
         previewTable.reloadData()
     }
     
-    func updateLayoutImage() {
+    func updateUsageImage() {
              
         let size = NSSize(width: 16, height: 16)
         bootBlockButton.image = NSImage(color: palette[.BOOT_BLOCK]!, size: size)
@@ -340,12 +343,12 @@ class VolumeInspector: DialogController {
         allocImageButton.image = allocImage(size: allocImageButton.bounds.size)
     }
 
-    func updateDiagnoseImage() {
+    func updateHealthImage() {
             
         let size = NSSize(width: 16, height: 16)
         diagnosePassButton.image = NSImage(color: Palette.green, size: size)
         diagnoseFailButton.image = NSImage(color: Palette.red, size: size)
-        diagnoseImageButton.image = allocImage(size: diagnoseImageButton.bounds.size)
+        diagnoseImageButton.image = diagnoseImage(size: diagnoseImageButton.bounds.size)
     }
     
     func updateVolumeInfo() {
@@ -380,8 +383,9 @@ class VolumeInspector: DialogController {
     
     func updateAllocInfo() {
      
-        let total = errorReport?.bitmapErrors ?? 0
-        
+        // let total = errorReport?.bitmapErrors ?? 0
+        let total = bitMapErrors.count
+
         if total > 0 {
             
             let blocks = total == 1 ? "block" : "blocks"
@@ -393,10 +397,11 @@ class VolumeInspector: DialogController {
         allocRectifyButton.isHidden = total == 0
     }
     
-    func updateDiagnoseInfo() {
+    func updateHealthInfo() {
      
-        let total = errorReport?.corruptedBlocks ?? 0
-        
+        // let total = errorReport?.corruptedBlocks ?? 0
+        let total = erroneousBlocks.count
+
         if total > 0 {
             
             let blocks = total == 1 ? "block" : "blocks"
@@ -504,8 +509,11 @@ class VolumeInspector: DialogController {
 
     @IBAction func strictAction(_ sender: NSButton!) {
         
-        errorReport = vol.check(strict)
-        updateDiagnoseImage()
+        // errorReport = vol.check(strict)
+        erroneousBlocks = vol.xray(strict)
+        bitMapErrors = vol.checkBitmap(strict)
+
+        updateHealthImage()
         update()
     }
     

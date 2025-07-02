@@ -23,6 +23,10 @@ FSTree::init(const FSBlock &path, const FSOpt &opt, std::unordered_set<Block> &v
 {
     auto &fs = *path.fs;
 
+    if (!fs.isInitialized()) throw AppError(Fault::FS_UNINITIALIZED);
+    if (!fs.isFormatted()) throw AppError(Fault::FS_UNFORMATTED);
+    if (!path.isRegular()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
+
     node = fs.read(path.nr);
 
     // Collect all items in the hash table
@@ -46,7 +50,7 @@ FSTree::init(const FSBlock &path, const FSOpt &opt, std::unordered_set<Block> &v
     // Add subdirectories if requested
     if (opt.recursive) {
         for (auto &it : children) {
-            if (it.node->isDirectory()) { it = FSTree(); it.init(*it.node, opt, visited); }
+            if (it.node->isDirectory()) { it.init(*it.node, opt, visited); }
         }
     }
 }

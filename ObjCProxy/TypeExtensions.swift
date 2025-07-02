@@ -37,7 +37,6 @@ typealias FileType = vamiga.FileType
 typealias FloppyDriveInfo = vamiga.FloppyDriveInfo
 typealias FloppyDriveType = vamiga.FloppyDriveType
 typealias FSBlockType = vamiga.FSBlockType
-typealias FSErrorReport = vamiga.FSErrorReport
 typealias FSItemType = vamiga.FSItemType
 typealias FSVolumeType = vamiga.FSVolumeType
 typealias GamePadAction = vamiga.GamePadAction

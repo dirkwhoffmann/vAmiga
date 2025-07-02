@@ -326,18 +326,6 @@ public:
 
     // Returns a reference to the n-th corrupted block
     Block seekCorruptedBlock(isize n) const;
-    
-    
-    //
-    // Traversing the file system
-    //
-    
-public:
-
-    // Creates a node tree resembling the directory structure
-    [[deprecated]] FSTree traverse(const FSBlock &path, const FSOpt &opt = {}) const;
-
-public:
 
     // Follows a linked list and collects all blocks
     std::vector<FSBlock *> collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> next) const;
@@ -352,12 +340,6 @@ public:
     std::vector<Block> collectListBlocks(Block ref) const;
     std::vector<Block> collectHashedBlocks(Block ref, isize bucket) const;
     std::vector<Block> collectHashedBlocks(Block ref) const;
-
-private:
-
-    // Main traversal code
-    // TODO: MOVE TO FSTREE
-    FSTree traverse(const FSBlock &path, const FSOpt &opt, std::unordered_set<Block> &visited) const;
 
 
     //
@@ -388,23 +370,18 @@ protected:
 public:
 
     // Returns a block summary for creating the block usage image
-    // TODO: RENAME TO createUsageMap?
-    void analyzeBlockUsage(u8 *buffer, isize len) const;
+    void createUsageMap(u8 *buffer, isize len) const;
 
     // Returns a usage summary for creating the block allocation image
-    // TODO: RENAME TO createAllocationMap?
-    void analyzeBlockAllocation(u8 *buffer, isize len) const;
+    void createAllocationMap(u8 *buffer, isize len) const;
 
     // Returns a block summary for creating the diagnose image
-    // TODO: RENAME TO createHealthMap?
-    void analyzeBlockConsistency(u8 *buffer, isize len) const;
+    void createHealthMap(u8 *buffer, isize len) const;
     
     // Searches the block list for a block of a specific type
-    // TODO: DEPRECATE. CLEAN UP CHECKER API
     isize nextBlockOfType(FSBlockType type, isize after) const;
 
     // Searches the block list for a corrupted block
-    // TODO: DEPRECATE. CLEAN UP CHECKER API
     isize nextCorruptedBlock(isize after) const;
 };
 
