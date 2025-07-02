@@ -554,7 +554,7 @@ FileSystem::find(const Block root, const FSPattern &pattern) const
 }
 
 std::vector<FSBlock *>
-FileSystem::match(const FSBlock *node, const FSPattern &pattern) const
+FileSystem::match(const FSBlock *node, const FSPattern &pattern)
 {
     if (pattern.isAbsolute()) {
         return match(&root(), pattern.splitted());
@@ -564,13 +564,13 @@ FileSystem::match(const FSBlock *node, const FSPattern &pattern) const
 }
 
 std::vector<FSBlock *>
-FileSystem::match(const FSBlock &node, const FSPattern &pattern) const
+FileSystem::match(const FSBlock &node, const FSPattern &pattern)
 {
     return match(&node, pattern);
 }
 
 std::vector<FSBlock *>
-FileSystem::match(const FSBlock *root, std::vector<FSPattern> patterns) const
+FileSystem::match(const FSBlock *root, std::vector<FSPattern> patterns)
 {
     std::vector<FSBlock *> result;
 
@@ -609,6 +609,36 @@ FileSystem::match(const FSBlock *root, std::vector<FSPattern> patterns) const
         }
     }
 
+    return result;
+}
+
+std::vector<const FSBlock *>
+FileSystem::match(const FSBlock *root, const FSPattern &pattern) const
+{
+    std::vector<const FSBlock *> result;
+    for (auto &it : const_cast<FileSystem *>(this)->match(root, pattern)) {
+        result.push_back(it);
+    }
+    return result;
+}
+
+std::vector<const FSBlock *>
+FileSystem::match(const FSBlock &root, const FSPattern &pattern) const
+{
+    std::vector<const FSBlock *> result;
+    for (auto &it : const_cast<FileSystem *>(this)->match(root, pattern)) {
+        result.push_back(it);
+    }
+    return result;
+}
+
+std::vector<const FSBlock *>
+FileSystem::match(const FSBlock *root, std::vector<FSPattern> pattern) const
+{
+    std::vector<const FSBlock *> result;
+    for (auto &it : const_cast<FileSystem *>(this)->match(root, pattern)) {
+        result.push_back(it);
+    }
     return result;
 }
 

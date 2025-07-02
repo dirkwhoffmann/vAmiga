@@ -274,9 +274,12 @@ public:
     std::vector<Block> find(const Block root, const FSPattern &pattern) const;
 
     // Collects all items with a pattern-matching path
-    std::vector<FSBlock *> match(const FSBlock *root, const FSPattern &pattern) const;
-    std::vector<FSBlock *> match(const FSBlock &root, const FSPattern &pattern) const;
-    std::vector<FSBlock *> match(const FSBlock *root, std::vector<FSPattern>) const;
+    std::vector<FSBlock *> match(const FSBlock *root, const FSPattern &pattern);
+    std::vector<FSBlock *> match(const FSBlock &root, const FSPattern &pattern);
+    std::vector<FSBlock *> match(const FSBlock *root, std::vector<FSPattern> pattern);
+    std::vector<const FSBlock *> match(const FSBlock *root, const FSPattern &pattern) const;
+    std::vector<const FSBlock *> match(const FSBlock &root, const FSPattern &pattern) const;
+    std::vector<const FSBlock *> match(const FSBlock *root, std::vector<FSPattern> pattern) const;
 
     // Lists the contents of a directory ('dir' command, 'list' command)
     void list(std::ostream &os, const FSBlock &path, const FSOpt &opt = {}) const;
