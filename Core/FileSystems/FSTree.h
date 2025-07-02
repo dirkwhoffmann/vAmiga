@@ -12,6 +12,7 @@
 #include "FSTypes.h"
 #include "FSBlock.h"
 #include <functional>
+#include <unordered_set>
 
 namespace vamiga {
 
@@ -20,7 +21,11 @@ struct FSTree {
     FSBlock *node;
     std::vector<FSTree> children;
 
+    FSTree() : node(nullptr) {}
     FSTree(FSBlock *node) : node(node) {}
+    FSTree(const FSBlock &path, const FSOpt &opt);
+
+    void init(const FSBlock &path, const FSOpt &opt, std::unordered_set<Block> &visited);
 
     bool empty() { return node == nullptr; }
     isize size();

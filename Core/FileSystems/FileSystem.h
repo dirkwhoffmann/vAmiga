@@ -274,12 +274,9 @@ public:
     std::vector<Block> find(const Block root, const FSPattern &pattern) const;
 
     // Collects all items with a pattern-matching path
-    std::vector<FSBlock *> match(const FSBlock *root, const FSPattern &pattern);
-    std::vector<FSBlock *> match(const FSBlock &root, const FSPattern &pattern);
-    std::vector<FSBlock *> match(const FSBlock *root, std::vector<FSPattern> pattern);
-    std::vector<const FSBlock *> match(const FSBlock *root, const FSPattern &pattern) const;
-    std::vector<const FSBlock *> match(const FSBlock &root, const FSPattern &pattern) const;
-    std::vector<const FSBlock *> match(const FSBlock *root, std::vector<FSPattern> pattern) const;
+    std::vector<FSBlock *> match(const FSBlock *root, const FSPattern &pattern) const;
+    std::vector<FSBlock *> match(const FSBlock &root, const FSPattern &pattern) const;
+    std::vector<FSBlock *> match(const FSBlock *root, std::vector<FSPattern> pattern) const;
 
     // Lists the contents of a directory ('dir' command, 'list' command)
     void list(std::ostream &os, const FSBlock &path, const FSOpt &opt = {}) const;
@@ -338,25 +335,23 @@ public:
 public:
 
     // Creates a node tree resembling the directory structure
-    FSTree traverse(const FSBlock &path, const FSOpt &opt = {}) const;
+    [[deprecated]] FSTree traverse(const FSBlock &path, const FSOpt &opt = {}) const;
 
 public:
 
     // Follows a linked list and collects all blocks
+    std::vector<FSBlock *> collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> next) const;
     std::vector<Block> collect(const Block nr, std::function<FSBlock *(FSBlock *)> next) const;
 
-    // TODO: Return const FSBlock *
-    std::vector<FSBlock *> collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> next) const;
-
     // Collects blocks of a certain type
-    std::vector<Block> collectDataBlocks(Block ref) const;
     std::vector<FSBlock *> collectDataBlocks(const FSBlock &node) const;
-    std::vector<Block> collectListBlocks(Block ref) const;
     std::vector<FSBlock *> collectListBlocks(const FSBlock &node) const;
-    std::vector<Block> collectHashedBlocks(Block ref, isize bucket) const;
     std::vector<FSBlock *> collectHashedBlocks(const FSBlock &node, isize bucket) const;
-    std::vector<Block> collectHashedBlocks(Block ref) const;
     std::vector<FSBlock *> collectHashedBlocks(const FSBlock &node) const;
+    std::vector<Block> collectDataBlocks(Block ref) const;
+    std::vector<Block> collectListBlocks(Block ref) const;
+    std::vector<Block> collectHashedBlocks(Block ref, isize bucket) const;
+    std::vector<Block> collectHashedBlocks(Block ref) const;
 
 private:
 

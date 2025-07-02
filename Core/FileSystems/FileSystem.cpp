@@ -554,7 +554,7 @@ FileSystem::find(const Block root, const FSPattern &pattern) const
 }
 
 std::vector<FSBlock *>
-FileSystem::match(const FSBlock *node, const FSPattern &pattern)
+FileSystem::match(const FSBlock *node, const FSPattern &pattern) const
 {
     if (pattern.isAbsolute()) {
         return match(&root(), pattern.splitted());
@@ -564,30 +564,24 @@ FileSystem::match(const FSBlock *node, const FSPattern &pattern)
 }
 
 std::vector<FSBlock *>
-FileSystem::match(const FSBlock &node, const FSPattern &pattern)
+FileSystem::match(const FSBlock &node, const FSPattern &pattern) const
 {
     return match(&node, pattern);
 }
 
 std::vector<FSBlock *>
-FileSystem::match(const FSBlock *root, std::vector<FSPattern> patterns)
+FileSystem::match(const FSBlock *root, std::vector<FSPattern> patterns) const
 {
     std::vector<FSBlock *> result;
 
     if (patterns.empty()) return {};
 
     // Get all directory items
-    auto items = traverse(*root, { .recursive = false} );
+    // auto items = traverse(*root, { .recursive = false} );
+    auto items = FSTree(*root, { .recursive = false} );
 
-    printf("Directory %s\n", root->absName().c_str());
-
-    for (auto &item : items.children) {
-        printf("  Item %s\n", item.node->absName().c_str());
-    }
     // Extract the first pattern
     auto pattern = patterns.front(); patterns.erase(patterns.begin());
-
-    printf("pattern = %s\n", pattern.glob.c_str());
 
     if (patterns.empty()) {
 
@@ -609,36 +603,6 @@ FileSystem::match(const FSBlock *root, std::vector<FSPattern> patterns)
         }
     }
 
-    return result;
-}
-
-std::vector<const FSBlock *>
-FileSystem::match(const FSBlock *root, const FSPattern &pattern) const
-{
-    std::vector<const FSBlock *> result;
-    for (auto &it : const_cast<FileSystem *>(this)->match(root, pattern)) {
-        result.push_back(it);
-    }
-    return result;
-}
-
-std::vector<const FSBlock *>
-FileSystem::match(const FSBlock &root, const FSPattern &pattern) const
-{
-    std::vector<const FSBlock *> result;
-    for (auto &it : const_cast<FileSystem *>(this)->match(root, pattern)) {
-        result.push_back(it);
-    }
-    return result;
-}
-
-std::vector<const FSBlock *>
-FileSystem::match(const FSBlock *root, std::vector<FSPattern> pattern) const
-{
-    std::vector<const FSBlock *> result;
-    for (auto &it : const_cast<FileSystem *>(this)->match(root, pattern)) {
-        result.push_back(it);
-    }
     return result;
 }
 

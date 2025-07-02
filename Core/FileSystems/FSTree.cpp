@@ -8,8 +8,48 @@
 // -----------------------------------------------------------------------------
 
 #include "FSTree.h"
+#include "FileSystem.h"
 
 namespace vamiga {
+
+FSTree::FSTree(const FSBlock &path, const FSOpt &opt)
+{
+    std::unordered_set<Block> visited;
+    init(path, opt, visited);
+};
+
+void
+FSTree::init(const FSBlock &path, const FSOpt &opt, std::unordered_set<Block> &visited)
+{
+    auto &fs = *path.fs;
+
+    node = fs.read(path.nr);
+
+    // Collect all items in the hash table
+    auto hashedBlocks = fs.collectHashedBlocks(path);
+
+    for (auto it = hashedBlocks.begin(); it != hashedBlocks.end(); it++) {
+
+        // Add item to the tree
+        if (opt.accept(*it)) children.push_back(*it);
+
+        // Break the loop if this block has been visited before
+        if (visited.contains((*it)->nr)) throw AppError(Fault::FS_HAS_CYCLES);
+
+        // Remember the block as visited
+        visited.insert((*it)->nr);
+    }
+
+    // Sort the items
+    sort(opt.sort);
+
+    // Add subdirectories if requested
+    if (opt.recursive) {
+        for (auto &it : children) {
+            if (it.node->isDirectory()) { it = FSTree(); it.init(*it.node, opt, visited); }
+        }
+    }
+}
 
 isize
 FSTree::size()

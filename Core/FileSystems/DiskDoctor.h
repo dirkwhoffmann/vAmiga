@@ -11,7 +11,6 @@
 
 #include "FSTypes.h"
 #include "CoreObject.h"
-#include <unordered_map>
 
 namespace vamiga {
 

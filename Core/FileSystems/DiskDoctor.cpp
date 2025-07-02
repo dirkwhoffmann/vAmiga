@@ -508,7 +508,8 @@ DiskDoctor::checkBitmap(bool strict) const
     std::unordered_set<Block> used;
 
     // Extract the directory tree
-    auto tree = fs.traverse(fs.root(), { .recursive = true });
+    // auto tree = fs.traverse(fs.root(), { .recursive = true });
+    auto tree = FSTree(fs.root(), { .recursive = true });
 
     // Collect all used blocks
     tree.bfsWalk( [&](const FSTree &it) {

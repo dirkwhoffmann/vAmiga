@@ -859,7 +859,8 @@ MutableFileSystem::exportDirectory(const fs::path &path, bool createDir) const
     }
 
     // Collect all files and directories
-    auto tree = traverse(root(), { .recursive = true });
+    // auto tree = traverse(root(), { .recursive = true });
+    auto tree = FSTree(root(), { .recursive = true });
 
     // Export all items
     tree.bfsWalk([&](const FSTree &t) {
@@ -869,19 +870,6 @@ MutableFileSystem::exportDirectory(const fs::path &path, bool createDir) const
     });
 
     debug(FS_DEBUG, "Exported %ld items", tree.size());
-
-    /*
-    auto items = oldRootDir().collect();
-
-    // Export all items
-    for (auto const& i : items) {
-
-        if (Fault error = i.ptr()->exportBlock(path.c_str()); error != Fault::OK) {
-            throw AppError(error);
-        }
-    }
-    debug(FS_DEBUG, "Exported %zu items", items.size());
-    */
 }
 
 }
