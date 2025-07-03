@@ -196,4 +196,31 @@ BlockStorage::erase(Block nr)
     if (blocks.contains(nr)) { blocks.erase(nr); }
 }
 
+void
+BlockStorage::createAllocationMap(u8 *buffer, isize len) const
+{
+    auto &unusedButAllocated = fs->doctor.diagnosis.unusedButAllocated;
+    auto &usedButUnallocated = fs->doctor.diagnosis.usedButUnallocated;
+
+    isize max = numBlocks();
+
+    // Start from scratch
+    for (isize i = 0; i < len; i++) buffer[i] = 255;
+
+    // Mark all free blocks
+    for (isize i = 0; i < max; i++) buffer[i * (len - 1) / (max - 1)] = 0;
+
+    // Mark all used blocks
+    for (auto &it : blocks) buffer[it.first * (len - 1) / (max - 1)] = 1;
+
+    // Mark all erroneous blocks
+    for (auto &it : unusedButAllocated) buffer[it * (len - 1) / (max - 1)] = 2;
+    for (auto &it : usedButUnallocated) buffer[it * (len - 1) / (max - 1)] = 3;
+
+    // Fill gaps
+    for (isize pos = 1; pos < len; pos++) {
+        if (buffer[pos] == 255) buffer[pos] = buffer[pos - 1];
+    }
+}
+
 }

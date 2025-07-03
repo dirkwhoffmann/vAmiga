@@ -282,7 +282,7 @@ DiskDoctor::xrayBlocks(std::ostream &os, bool strict)
 {
     auto result = xrayBlocks(strict);
 
-    auto blocks = [&](usize s) { return std::to_string(s) + (s == 1 ? " block" : " blocks"); };
+    auto blocks = [&](size_t s) { return std::to_string(s) + (s == 1 ? " block" : " blocks"); };
 
     if (auto total = diagnosis.blockErrors.size(); total) {
 
@@ -348,7 +348,7 @@ DiskDoctor::xrayBitmap(std::ostream &os, bool strict)
     auto &usedButUnallocated = fs.doctor.diagnosis.usedButUnallocated;
     auto &unusedButAllocated = fs.doctor.diagnosis.unusedButAllocated;
 
-    auto blocks = [&](usize s) { return std::to_string(s) + (s == 1 ? " block" : " blocks"); };
+    auto blocks = [&](size_t s) { return std::to_string(s) + (s == 1 ? " block" : " blocks"); };
 
     if (auto total = usedButUnallocated.size() + unusedButAllocated.size(); total) {
 

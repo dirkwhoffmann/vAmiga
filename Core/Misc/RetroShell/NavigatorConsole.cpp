@@ -108,13 +108,13 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
     auto [cmd, args] = seekCommandNew(argv);
 
     // Determine the kind of help to display
-    bool displayFiles = (tabs % 2 == 0) && fs.isFormatted() && cmd && cmd->callback && !args.empty();
+    bool displayFiles = (tabs % 2 == 0) && fs.isFormatted() && cmd && cmd->callback;
     bool displayCmds  = (tabs % 2 == 1) || !displayFiles;
 
     if (displayFiles) {
 
         // Seek matching items
-        auto matches = fs.match(&fs.pwd(), args.back() + "*");
+        auto matches = fs.match(&fs.pwd(), args.empty() ? "*" : args.back() + "*");
 
         // Print all possible extensions
         fs.listItems(os, matches, {

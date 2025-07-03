@@ -34,7 +34,11 @@ class HardDrive;
  * class provides functions for analyzing the integrity of the volume as well
  * as functions for reading files and directories.
  *
- * See also: MutableFileSystem
+ * The MutableFileSystem class extends the FileSystem class with functions for
+ * modifiying the contents of the file system. It provides functions for
+ * creating empty file systems of a certain type as well as functions for
+ * manipulation files and directories, such as creating, deleting, or moving
+ * items.
  */
 class FileSystem : public CoreObject, public Inspectable<FSInfo, FSStats> {
 
@@ -76,7 +80,7 @@ public:
     FileSystem() { stats = {}; };
     FileSystem(const MediaFile &file, isize part = 0) : FileSystem() { init(file, part); }
     FileSystem(const ADFFile &adf) : FileSystem() { init(adf); }
-    FileSystem(const HDFFile &hdn, isize part = 0) : FileSystem() { init(hdn, part); }
+    FileSystem(const HDFFile &hdf, isize part = 0) : FileSystem() { init(hdf, part); }
     FileSystem(FloppyDrive &dfn) : FileSystem() { init(dfn); }
     FileSystem(const HardDrive &hdn, isize part = 0) : FileSystem() { init(hdn, part); }
 
@@ -85,7 +89,7 @@ public:
     void init(FileSystemDescriptor layout, u8 *buf, isize len) throws;
     void init(const MediaFile &file, isize part) throws;
     void init(const ADFFile &adf) throws;
-    void init(const HDFFile &hdn, isize part) throws;
+    void init(const HDFFile &hdf, isize part) throws;
     void init(FloppyDrive &dfn) throws;
     void init(const HardDrive &hdn, isize part) throws;
 
@@ -172,8 +176,6 @@ public:
 
     // Returns the type of a certain block
     FSBlockType blockType(Block nr) const;
-
-    // Checks block properties
     bool isEmpty(Block nr) const { return blockType(nr) == FSBlockType::EMPTY_BLOCK; }
 
     // Returns the usage type of a certain byte in a certain block
@@ -188,9 +190,6 @@ public:
     // Reads a single byte from a block
     u8 readByte(Block nr, isize offset) const;
 
-    // Returns a portion of the block as an ASCII dump
-    string ascii(Block nr, isize offset, isize len) const;
-    
     // Predicts the type of a block by analyzing its number and data
     FSBlockType predictBlockType(Block nr, const u8 *buf) const;
 
@@ -322,14 +321,17 @@ public:
 
 public:
 
+    // Returns a portion of the block as an ASCII dump
+    string ascii(Block nr, isize offset, isize len) const;
+
     // Returns a block summary for creating the block usage image
-    void createUsageMap(u8 *buffer, isize len);
+    void createUsageMap(u8 *buffer, isize len) const;
 
     // Returns a usage summary for creating the block allocation image
-    void createAllocationMap(u8 *buffer, isize len);
+    void createAllocationMap(u8 *buffer, isize len) const;
 
     // Returns a block summary for creating the diagnose image
-    void createHealthMap(u8 *buffer, isize len);
+    void createHealthMap(u8 *buffer, isize len) const;
     
     // Searches the block list for a block of a specific type
     isize nextBlockOfType(FSBlockType type, Block after) const;

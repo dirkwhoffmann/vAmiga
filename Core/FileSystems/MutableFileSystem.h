@@ -13,11 +13,6 @@
 
 namespace vamiga {
 
-/* The MutableFileSystem class extends the FileSystem class with functions for
- * modifiying the contents of the file system. It provides functions for
- * creating empty file systems of a certain type as well as functions for
- * creating files and directories.
- */
 class MutableFileSystem : public FileSystem {
     
     friend struct FSBlock;

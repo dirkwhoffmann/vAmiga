@@ -111,6 +111,16 @@ public:
 
     // Wipes out a block (makes it an empty block)
     void erase(Block nr);
+
+
+    //
+    // GUI helper functions
+    //
+
+public:
+
+    // Returns a usage summary for creating the block allocation image
+    void createAllocationMap(u8 *buffer, isize len) const;
 };
 
 }

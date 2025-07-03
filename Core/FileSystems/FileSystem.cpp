@@ -1072,7 +1072,7 @@ FileSystem::require_file_or_directory(const FSBlock &node) const
 }
 
 void
-FileSystem::createUsageMap(u8 *buffer, isize len)
+FileSystem::createUsageMap(u8 *buffer, isize len) const
 {
     // Setup priorities
     i8 pri[12];
@@ -1111,8 +1111,10 @@ FileSystem::createUsageMap(u8 *buffer, isize len)
 }
 
 void
-FileSystem::createAllocationMap(u8 *buffer, isize len)
+FileSystem::createAllocationMap(u8 *buffer, isize len) const
 {
+    storage.createAllocationMap(buffer, len);
+    /*
     // Setup priorities
     u8 pri[4] = { 0, 1, 2, 3 };
 
@@ -1124,7 +1126,7 @@ FileSystem::createAllocationMap(u8 *buffer, isize len)
     // Analyze all blocks
     for (isize i = 0, max = numBlocks(); i < max; i++) {
 
-        u8 val = isFree(Block(i)) ? 0 : map.contains(Block(i)) ? u8(map[Block(i)] + 1) : 1;
+        u8 val = isFree(Block(i)) ? 0 : map.contains(Block(i)) ? u8(map.at(Block(i)) + 1) : 1;
         auto pos = i * (len - 1) / (max - 1);
         if (buffer[pos] == 255 || pri[buffer[pos]] < pri[val]) buffer[pos] = val;
     }
@@ -1136,10 +1138,11 @@ FileSystem::createAllocationMap(u8 *buffer, isize len)
             buffer[pos] = buffer[pos - 1];
         }
     }
+    */
 }
 
 void
-FileSystem::createHealthMap(u8 *buffer, isize len)
+FileSystem::createHealthMap(u8 *buffer, isize len) const
 {
     bool strict = true; // TODO: Allow non-strict checking
 
@@ -1148,7 +1151,11 @@ FileSystem::createHealthMap(u8 *buffer, isize len)
  
     // Start from scratch
     for (isize i = 0; i < len; i++) buffer[i] = 255;
- 
+
+    // Mark all used blocks
+    // auto &map = storage.blocks;
+    // for (isize i = 0, max = numBlocks(); i < max; i++) {
+
     // Analyze all blocks
     for (isize i = 0, max = numBlocks(); i < max; i++) {
 
@@ -1181,7 +1188,7 @@ FileSystem::nextBlockOfType(FSBlockType type, Block after) const
         result = (result + 1) % numBlocks();
         if (storage.getType(Block(result)) == type) return result;
 
-    } while (result != after);
+    } while (result != isize(after));
     
     return -1;
 }
