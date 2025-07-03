@@ -45,37 +45,37 @@ if (!fs.block(value)) return Fault::FS_EXPECTED_REF; }
 if (value != ref) return Fault::FS_EXPECTED_SELFREF; }
 
 #define EXPECT_FILEHEADER_REF { \
-if (Fault e = fs.checkBlockType(value, FSBlockType::FILEHEADER_BLOCK); e != Fault::OK) return e; }
+if (Fault e = checkBlockType(value, FSBlockType::FILEHEADER_BLOCK); e != Fault::OK) return e; }
 
 #define EXPECT_HASH_REF { \
-if (Fault e = fs.checkBlockType(value, FSBlockType::FILEHEADER_BLOCK, FSBlockType::USERDIR_BLOCK); e != Fault::OK) return e; }
+if (Fault e = checkBlockType(value, FSBlockType::FILEHEADER_BLOCK, FSBlockType::USERDIR_BLOCK); e != Fault::OK) return e; }
 
 #define EXPECT_OPTIONAL_HASH_REF { \
 if (value) { EXPECT_HASH_REF } }
 
 #define EXPECT_PARENT_DIR_REF { \
-if (Fault e = fs.checkBlockType(value, FSBlockType::ROOT_BLOCK, FSBlockType::USERDIR_BLOCK); e != Fault::OK) return e; }
+if (Fault e = checkBlockType(value, FSBlockType::ROOT_BLOCK, FSBlockType::USERDIR_BLOCK); e != Fault::OK) return e; }
 
 #define EXPECT_FILELIST_REF { \
-if (Fault e = fs.checkBlockType(value, FSBlockType::FILELIST_BLOCK); e != Fault::OK) return e; }
+if (Fault e = checkBlockType(value, FSBlockType::FILELIST_BLOCK); e != Fault::OK) return e; }
 
 #define EXPECT_OPTIONAL_FILELIST_REF { \
 if (value) { EXPECT_FILELIST_REF } }
 
 #define EXPECT_BITMAP_REF { \
-if (Fault e = fs.checkBlockType(value, FSBlockType::BITMAP_BLOCK); e != Fault::OK) return e; }
+if (Fault e = checkBlockType(value, FSBlockType::BITMAP_BLOCK); e != Fault::OK) return e; }
 
 #define EXPECT_OPTIONAL_BITMAP_REF { \
 if (value) { EXPECT_BITMAP_REF } }
 
 #define EXPECT_BITMAP_EXT_REF { \
-if (Fault e = fs.checkBlockType(value, FSBlockType::BITMAP_EXT_BLOCK); e != Fault::OK) return e; }
+if (Fault e = checkBlockType(value, FSBlockType::BITMAP_EXT_BLOCK); e != Fault::OK) return e; }
 
 #define EXPECT_OPTIONAL_BITMAP_EXT_REF { \
 if (value) { EXPECT_BITMAP_EXT_REF } }
 
 #define EXPECT_DATABLOCK_REF { \
-if (Fault e = fs.checkBlockType(value, FSBlockType::DATA_BLOCK_OFS, FSBlockType::DATA_BLOCK_FFS); e != Fault::OK) return e; }
+if (Fault e = checkBlockType(value, FSBlockType::DATA_BLOCK_OFS, FSBlockType::DATA_BLOCK_FFS); e != Fault::OK) return e; }
 
 #define EXPECT_OPTIONAL_DATABLOCK_REF { \
 if (value) { EXPECT_DATABLOCK_REF } }
@@ -551,6 +551,38 @@ DiskDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
 
         default:
             break;
+    }
+
+    return Fault::OK;
+}
+
+Fault
+DiskDoctor::checkBlockType(Block nr, FSBlockType type) const
+{
+    return checkBlockType(nr, type, type);
+}
+
+Fault
+DiskDoctor::checkBlockType(Block nr, FSBlockType type, FSBlockType altType) const
+{
+    auto t = fs.blockType(nr);
+
+    if (t != type && t != altType) {
+
+        switch (t) {
+
+            case FSBlockType::EMPTY_BLOCK:      return Fault::FS_PTR_TO_EMPTY_BLOCK;
+            case FSBlockType::BOOT_BLOCK:       return Fault::FS_PTR_TO_BOOT_BLOCK;
+            case FSBlockType::ROOT_BLOCK:       return Fault::FS_PTR_TO_ROOT_BLOCK;
+            case FSBlockType::BITMAP_BLOCK:     return Fault::FS_PTR_TO_BITMAP_BLOCK;
+            case FSBlockType::BITMAP_EXT_BLOCK: return Fault::FS_PTR_TO_BITMAP_EXT_BLOCK;
+            case FSBlockType::USERDIR_BLOCK:    return Fault::FS_PTR_TO_USERDIR_BLOCK;
+            case FSBlockType::FILEHEADER_BLOCK: return Fault::FS_PTR_TO_FILEHEADER_BLOCK;
+            case FSBlockType::FILELIST_BLOCK:   return Fault::FS_PTR_TO_FILELIST_BLOCK;
+            case FSBlockType::DATA_BLOCK_OFS:   return Fault::FS_PTR_TO_DATA_BLOCK;
+            case FSBlockType::DATA_BLOCK_FFS:   return Fault::FS_PTR_TO_DATA_BLOCK;
+            default:                            return Fault::FS_PTR_TO_UNKNOWN_BLOCK;
+        }
     }
 
     return Fault::OK;

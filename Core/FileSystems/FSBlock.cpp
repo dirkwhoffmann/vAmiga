@@ -251,7 +251,7 @@ FSBlock::matches(const FSPattern &pattern) const
 isize
 FSBlock::bsize() const
 {
-    return fs->bsize;
+    return fs->traits.bsize;
 }
 
 isize
@@ -1617,7 +1617,7 @@ FSBlock::hashValue() const
         case FSBlockType::USERDIR_BLOCK:
         case FSBlockType::FILEHEADER_BLOCK:
             
-            return getName().hashValue(fs->getDos());
+            return getName().hashValue(fs->traits.dos);
 
         default:
             return 0;

@@ -45,30 +45,21 @@ class FileSystem : public CoreObject, public Inspectable<FSInfo, FSStats> {
 
 public:
 
-    // Analyzer and rectifier
+    // File system checker and rectifier
     DiskDoctor doctor = DiskDoctor(*this);
 
 protected:
 
-    // File system information
+    // Static file system properties
     FSTraits traits;
-
-    // File system version
-    // [[deprecated]] FSVolumeType dos = FSVolumeType::NODOS;
 
     // Block storage
     BlockStorage storage = BlockStorage(this);
 
-    // Size of a single block in bytes
-    isize bsize = 512;
-
-    // Number of reserved blocks
-    // [[deprecated]] isize numReserved = 0;
-
     // Location of the root block
     Block rootBlock = 0;
 
-    // The current directory (points to the root block by default)
+    // Location of the current directory
     Block current = 0;
 
     // Location of the bitmap blocks and extended bitmap blocks
@@ -128,7 +119,7 @@ public:
 
 public:
 
-    FSTraits &getTraits();
+    const FSTraits &getTraits() const { return traits; }
 
     // Returns capacity information
     isize numBlocks() const { return storage.numBlocks(); }
@@ -138,16 +129,9 @@ public:
     // Reports usage information
     isize freeBlocks() const;
     isize usedBlocks() const;
-    isize freeBytes() const { return freeBlocks() * bsize; }
-    isize usedBytes() const { return usedBlocks() * bsize; }
+    isize freeBytes() const { return freeBlocks() * traits.bsize; }
+    isize usedBytes() const { return usedBlocks() * traits.bsize; }
     double fillLevel() const { return double(100) * usedBlocks() / numBlocks(); }
-    
-    // Returns the DOS version
-    bool nodos() const { return traits.dos == FSVolumeType::NODOS; }
-    FSVolumeType getDos() const { return traits.dos; } // DEPRECATED
-    [[ deprecated]] bool isOFS() const { return isOFSVolumeType(traits.dos); } // DEPRECATED
-    [[ deprecated]] bool isFFS() const { return isFFSVolumeType(traits.dos); } // DEPRECATED
-    [[ deprecated]] bool isINTL() const { return isINTLVolumeType(traits.dos); } // DEPRECATED
 
     // Reads information from the root block
     FSName getName() const;
@@ -312,12 +296,9 @@ public:
     // Checks a single byte in a certain block
     Fault check(Block nr, isize pos, u8 *expected, bool strict) const;
 
-    // Checks if the block with the given number is part of the volume
-    bool isBlockNumber(isize nr) const { return nr >= 0 && nr < numBlocks(); }
-
     // Checks if the type of a block matches one of the provides types
-    Fault checkBlockType(Block nr, FSBlockType type) const;
-    Fault checkBlockType(Block nr, FSBlockType type, FSBlockType altType) const;
+    // Fault checkBlockType(Block nr, FSBlockType type) const;
+    // Fault checkBlockType(Block nr, FSBlockType type, FSBlockType altType) const;
 
     // Follows a linked list and collects all blocks
     std::vector<FSBlock *> collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> next) const;
@@ -371,7 +352,7 @@ public:
     void createHealthMap(u8 *buffer, isize len);
     
     // Searches the block list for a block of a specific type
-    isize nextBlockOfType(FSBlockType type, isize after) const;
+    isize nextBlockOfType(FSBlockType type, Block after) const;
 };
 
 }

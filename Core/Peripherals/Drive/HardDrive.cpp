@@ -132,8 +132,8 @@ HardDrive::init(const MutableFileSystem &fs)
         
     // Update the partition table
     ptable[0].name = fs.getName().cpp_str();
-    ptable[0].dosType = 0x444F5300 | (u32)fs.getDos();
-    
+    ptable[0].dosType = 0x444F5300 | (u32)fs.getTraits().dos;
+
     // Copy over all blocks
     fs.exportVolume(data.ptr, geometry.numBytes());
 }

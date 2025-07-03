@@ -18,8 +18,12 @@
 namespace vamiga {
 
 void
-MutableFileSystem::init(isize capacity)
+MutableFileSystem::init(isize capacity, isize bsize)
 {
+    traits.blocks   = capacity;
+    traits.bytes    = capacity * bsize;
+    traits.bsize    = bsize;
+
     storage.init(capacity);
 }
 
@@ -27,17 +31,16 @@ void
 MutableFileSystem::init(const FileSystemDescriptor &layout, const fs::path &path)
 {
     if (FS_DEBUG) { layout.dump(); }
-    
+
+    // Create all blocks
+    init(isize(layout.numBlocks));
+
     // Copy layout parameters
     traits.dos      = layout.dos;
-    traits.bsize    = layout.bsize;
     traits.reserved = layout.numReserved;
     rootBlock       = layout.rootBlock;
     bmBlocks        = layout.bmBlocks;
     bmExtBlocks     = layout.bmExtBlocks;
-
-    // Create all blocks
-    init(isize(layout.numBlocks));
 
     // Format the file system
     if (traits.dos != FSVolumeType::NODOS) format();
@@ -157,8 +160,8 @@ MutableFileSystem::requiredFileListBlocks(isize fileSize) const
     isize numBlocks = requiredDataBlocks(fileSize);
     
     // Compute the number of data block references in a single block
-    isize numRefs = (bsize / 4) - 56;
-    
+    isize numRefs = (traits.bsize / 4) - 56;
+
     // Small files do not require any file list block
     if (numBlocks <= numRefs) return 0;
     
@@ -250,8 +253,6 @@ MutableFileSystem::allocate(isize count, std::vector<Block> &result)
 void
 MutableFileSystem::deallocateBlock(Block nr)
 {
-    assert(isBlockNumber(nr));
-
     storage[nr].init(FSBlockType::EMPTY_BLOCK);
     markAsFree(nr);
 }
@@ -259,9 +260,7 @@ MutableFileSystem::deallocateBlock(Block nr)
 void
 MutableFileSystem::addFileListBlock(Block at, Block head, Block prev)
 {
-    FSBlock *prevBlock = blockPtr(prev);
-
-    if (prevBlock) {
+    if (auto *prevBlock = blockPtr(prev); prevBlock) {
 
         storage[at].init(FSBlockType::FILELIST_BLOCK);
         storage[at].setFileHeaderRef(head);
@@ -273,9 +272,7 @@ MutableFileSystem::addFileListBlock(Block at, Block head, Block prev)
 void
 MutableFileSystem::addDataBlock(Block at, isize id, Block head, Block prev)
 {
-    FSBlock *prevBlock = blockPtr(prev);
-
-    if (prevBlock) {
+    if (auto *prevBlock = blockPtr(prev); prevBlock) {
 
         storage[at].init(traits.ofs() ? FSBlockType::DATA_BLOCK_OFS : FSBlockType::DATA_BLOCK_FFS);
         storage[at].setDataBlockNr((Block)id);
@@ -341,8 +338,8 @@ MutableFileSystem::killVirus()
         storage[0].writeBootBlock(id, 0);
         storage[1].writeBootBlock(id, 1);
     } else {
-        std::memset(storage[0].data() + 4, 0, bsize - 4);
-        std::memset(storage[1].data(), 0, bsize);
+        std::memset(storage[0].data() + 4, 0, traits.bsize - 4);
+        std::memset(storage[1].data(), 0, traits.bsize);
      }
 }
 
@@ -417,7 +414,7 @@ MutableFileSystem::createFile(const FSBlock &at, const FSName &name, const u8 *b
     assert(buf);
 
     // Compute the number of data block references held in a file header or list block
-    const usize numRefs = ((bsize / 4) - 56);
+    const usize numRefs = ((traits.bsize / 4) - 56);
 
     // Create a file header block
     auto &file = createFile(at, name);
@@ -608,14 +605,14 @@ MutableFileSystem::addData(FSBlock &block, const u8 *buf, isize size)
             
         case FSBlockType::DATA_BLOCK_OFS:
             
-            count = std::min(bsize - 24, size);
+            count = std::min(traits.bsize - 24, size);
             std::memcpy(block.data() + 24, buf, count);
             block.setDataBytesInBlock((u32)count);
             break;
 
         case FSBlockType::DATA_BLOCK_FFS:
 
-            count = std::min(bsize, size);
+            count = std::min(traits.bsize, size);
             std::memcpy(block.data(), buf, count);
             break;
 
@@ -631,7 +628,7 @@ MutableFileSystem::allocateFileBlocks(isize bytes, std::vector<Block> &listBlock
 {
     isize numDataBlocks         = requiredDataBlocks(bytes);
     isize numListBlocks         = requiredFileListBlocks(bytes);
-    isize refsPerBlock          = (bsize / 4) - 56;
+    isize refsPerBlock          = (traits.bsize / 4) - 56;
     isize refsInHeaderBlock     = std::min(numDataBlocks, refsPerBlock);
     isize refsInListBlocks      = numDataBlocks - refsInHeaderBlock;
     isize refsInLastListBlock   = refsInListBlocks % refsPerBlock;
@@ -674,7 +671,7 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
     debug(FS_DEBUG, "Importing file system...\n");
 
     // Only proceed if the (predicted) block size matches
-    if (size % bsize != 0) throw AppError(Fault::FS_WRONG_BSIZE);
+    if (size % traits.bsize != 0) throw AppError(Fault::FS_WRONG_BSIZE);
 
     // Only proceed if the source buffer contains the right amount of data
     if (numBytes() != size) throw AppError(Fault::FS_WRONG_CAPACITY);
@@ -685,14 +682,14 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
     // Import all blocks
     for (isize i = 0; i < numBlocks(); i++) {
         
-        const u8 *data = src + i * bsize;
+        const u8 *data = src + i * traits.bsize;
 
         // Determine the type of the new block
         FSBlockType type = predictBlockType((Block)i, data);
         
         // Create new block
         storage[i].init(type);
-        storage[i].importBlock(data, bsize);
+        storage[i].importBlock(data, traits.bsize);
     }
     
     // Print some debug information
@@ -815,13 +812,13 @@ MutableFileSystem::exportBlocks(Block first, Block last, u8 *dst, isize size, Fa
     debug(FS_DEBUG, "Exporting %ld blocks (%d - %d)\n", count, first, last);
 
     // Only proceed if the (predicted) block size matches
-    if (size % bsize != 0) {
+    if (size % traits.bsize != 0) {
         if (err) *err = Fault::FS_WRONG_BSIZE;
         return false;
     }
 
     // Only proceed if the source buffer contains the right amount of data
-    if (count * bsize != size) {
+    if (count * traits.bsize != size) {
         if (err) *err = Fault::FS_WRONG_CAPACITY;
         return false;
     }
@@ -832,7 +829,7 @@ MutableFileSystem::exportBlocks(Block first, Block last, u8 *dst, isize size, Fa
     // Export all blocks
     for (isize i = 0; i < count; i++) {
 
-        const_cast<FSBlock *>(storage.read(Block(first + i)))->exportBlock(dst + i * bsize, bsize);
+        const_cast<FSBlock *>(storage.read(Block(first + i)))->exportBlock(dst + i * traits.bsize, traits.bsize);
         // blocks[first + i]->exportBlock(dst + i * bsize, bsize);
     }
 

@@ -85,7 +85,7 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
 
     debug(FS_DEBUG, "Importing %ld blocks from buffer...\n", layout.numBlocks);
 
-    // Check the cosistency of the file system descriptor
+    // Check the consistency of the file system descriptor
     layout.checkCompatibility();
 
     // Only proceed if the volume is formatted
@@ -93,6 +93,9 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
 
     // Copy layout parameters
     traits.dos      = layout.dos;
+    traits.blocks   = layout.numBlocks;
+    traits.bytes    = layout.numBlocks * layout.bsize;
+    traits.bsize    = layout.bsize;
     traits.reserved = layout.numReserved;
     rootBlock       = layout.rootBlock;
     bmBlocks        = layout.bmBlocks;
@@ -100,21 +103,19 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
 
     // Create all blocks
     storage.init(layout.numBlocks);
-    // dealloc();
 
     for (isize i = 0; i < layout.numBlocks; i++) {
 
-        const u8 *data = buf + i * bsize;
+        const u8 *data = buf + i * traits.bsize;
 
         // Determine the type of the new block
         FSBlockType type = predictBlockType((Block)i, data);
 
         // Create new block
-        // storage.write(Block(i), FSBlock::make(this, (Block)i, type));
         storage[i].init(type);
 
         // Import block data
-        storage[i].importBlock(data, bsize);
+        storage[i].importBlock(data, traits.bsize);
     }
 
     // Set the current directory to '/'
@@ -145,20 +146,6 @@ FileSystem::isFormatted() const
     return true;
 }
 
-FSTraits &
-FileSystem::getTraits()
-{
-    // traits.dos = dos;
-    // traits.ofs = isOFS();
-    // traits.ffs = isFFS();
-
-    traits.blocks = numBlocks();
-    traits.bytes = numBytes();
-    traits.bsize = blockSize();
-
-    return traits;
-}
-
 void
 FileSystem::_dump(Category category, std::ostream &os) const
 {
@@ -181,7 +168,7 @@ FileSystem::_dump(Category category, std::ostream &os) const
             auto used = isFormatted() ? usedBlocks() : storage.usedBlocks();
             auto free = isFormatted() ? freeBlocks() : storage.freeBlocks();
             auto fill = isFormatted() ? fillLevel() : storage.fillLevel();
-            auto size = std::to_string(total) + " (x " + std::to_string(bsize) + ")";
+            auto size = std::to_string(total) + " (x " + std::to_string(traits.bsize) + ")";
 
             isFormatted() ? os << "DOS" << dec(isize(traits.dos)) << " " : os << "NODOS";
             os << "  ";
@@ -209,7 +196,7 @@ FileSystem::_dump(Category category, std::ostream &os) const
             os << tab("Capacity");
             os << util::byteCountAsString(numBytes()) << std::endl;
             os << tab("Block size");
-            os << dec(bsize) << " Bytes" << std::endl;
+            os << dec(traits.bsize) << " Bytes" << std::endl;
             os << tab("Blocks");
             os << dec(numBlocks()) << std::endl;
             os << tab("Used");
@@ -441,13 +428,13 @@ FileSystem::hashableBlockPtr(Block nr) const
 u8
 FileSystem::readByte(Block nr, isize offset) const
 {
-    return (storage.read(nr) && offset < bsize) ? storage[nr].data()[offset] : 0;
+    return (storage.read(nr) && offset < traits.bsize) ? storage[nr].data()[offset] : 0;
 }
 
 string
 FileSystem::ascii(Block nr, isize offset, isize len) const
 {
-    assert(offset + len <= bsize);
+    assert(offset + len <= traits.bsize);
 
     return  util::createAscii(storage[nr].data() + offset, len);
 }
@@ -455,7 +442,7 @@ FileSystem::ascii(Block nr, isize offset, isize len) const
 bool
 FileSystem::isFree(Block nr) const
 {
-    assert(isBlockNumber(nr));
+    assert(nr < traits.blocks);
 
     // The first two blocks are always allocated and not part of the bitmap
     if (nr < 2) return false;
@@ -471,21 +458,20 @@ FileSystem::isFree(Block nr) const
 FSBlock *
 FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit)
 {
-    assert(isBlockNumber(nr));
+    assert(nr < traits.blocks);
 
     // The first two blocks are always allocated and not part of the map
     if (nr < 2) return nullptr;
     nr -= 2;
 
     // Locate the bitmap block which stores the allocation bit
-    isize bitsPerBlock = (bsize - 4) * 8;
+    isize bitsPerBlock = (traits.bsize - 4) * 8;
     isize bmNr = nr / bitsPerBlock;
 
     // Get the bitmap block
     FSBlock *bm = (bmNr < (isize)bmBlocks.size()) ? read(bmBlocks[bmNr], FSBlockType::BITMAP_BLOCK) : nullptr;
-    if (bm == nullptr) {
-        warn("Failed to lookup allocation bit for block %d\n", nr);
-        warn("bmNr = %ld\n", bmNr);
+    if (!bm) {
+        warn("Failed to lookup allocation bit for block %d (%ld)\n", nr, bmNr);
         return nullptr;
     }
 
@@ -503,7 +489,7 @@ FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit)
 
     // Skip the checksum which is located in the first four bytes
     rByte += 4;
-    assert(rByte >= 4 && rByte < bsize);
+    assert(rByte >= 4 && rByte < traits.bsize);
 
     *byte = rByte;
     *bit = nr % 8;
@@ -559,7 +545,7 @@ FileSystem::seekPtr(const FSBlock *root, const FSName &name)
     if (root->hasHashTable()) {
 
         // Compute the table position and read the item
-        u32 hash = name.hashValue(getDos()) % root->hashTableSize();
+        u32 hash = name.hashValue(traits.dos) % root->hashTableSize();
         u32 ref = root->getHashRef(hash);
 
         // Traverse the linked list until the item has been found
@@ -1074,38 +1060,6 @@ FileSystem::check(Block nr, isize pos, u8 *expected, bool strict) const
     return storage[nr].check(pos, expected, strict);
 }
 
-Fault
-FileSystem::checkBlockType(Block nr, FSBlockType type) const
-{
-    return checkBlockType(nr, type, type);
-}
-
-Fault
-FileSystem::checkBlockType(Block nr, FSBlockType type, FSBlockType altType) const
-{
-    FSBlockType t = blockType(nr);
-    
-    if (t != type && t != altType) {
-        
-        switch (t) {
-                
-            case FSBlockType::EMPTY_BLOCK:      return Fault::FS_PTR_TO_EMPTY_BLOCK;
-            case FSBlockType::BOOT_BLOCK:       return Fault::FS_PTR_TO_BOOT_BLOCK;
-            case FSBlockType::ROOT_BLOCK:       return Fault::FS_PTR_TO_ROOT_BLOCK;
-            case FSBlockType::BITMAP_BLOCK:     return Fault::FS_PTR_TO_BITMAP_BLOCK;
-            case FSBlockType::BITMAP_EXT_BLOCK: return Fault::FS_PTR_TO_BITMAP_EXT_BLOCK;
-            case FSBlockType::USERDIR_BLOCK:    return Fault::FS_PTR_TO_USERDIR_BLOCK;
-            case FSBlockType::FILEHEADER_BLOCK: return Fault::FS_PTR_TO_FILEHEADER_BLOCK;
-            case FSBlockType::FILELIST_BLOCK:   return Fault::FS_PTR_TO_FILELIST_BLOCK;
-            case FSBlockType::DATA_BLOCK_OFS:   return Fault::FS_PTR_TO_DATA_BLOCK;
-            case FSBlockType::DATA_BLOCK_FFS:   return Fault::FS_PTR_TO_DATA_BLOCK;
-            default:                            return Fault::FS_PTR_TO_UNKNOWN_BLOCK;
-        }
-    }
-
-    return Fault::OK;
-}
-
 FSBlockType
 FileSystem::predictBlockType(Block nr, const u8 *buf) const
 {
@@ -1124,7 +1078,7 @@ FileSystem::predictBlockType(Block nr, const u8 *buf) const
 
     // For all other blocks, check the type and subtype fields
     u32 type = FSBlock::read32(buf);
-    u32 subtype = FSBlock::read32(buf + bsize - 4);
+    u32 subtype = FSBlock::read32(buf + traits.bsize - 4);
 
     if (type == 2  && subtype == 1)       return FSBlockType::ROOT_BLOCK;
     if (type == 2  && subtype == 2)       return FSBlockType::USERDIR_BLOCK;
@@ -1135,7 +1089,7 @@ FileSystem::predictBlockType(Block nr, const u8 *buf) const
     if (traits.ofs()) {
         if (type == 8) return FSBlockType::DATA_BLOCK_OFS;
     } else {
-        for (isize i = 0; i < bsize; i++) if (buf[i]) return FSBlockType::DATA_BLOCK_FFS;
+        for (isize i = 0; i < traits.bsize; i++) if (buf[i]) return FSBlockType::DATA_BLOCK_FFS;
     }
     
     return FSBlockType::EMPTY_BLOCK;
@@ -1262,16 +1216,15 @@ FileSystem::createHealthMap(u8 *buffer, isize len)
 }
 
 isize
-FileSystem::nextBlockOfType(FSBlockType type, isize after) const
+FileSystem::nextBlockOfType(FSBlockType type, Block after) const
 {
-    assert(isBlockNumber(after));
+    assert(after < traits.blocks);
 
     isize result = after;
     
     do {
         result = (result + 1) % numBlocks();
         if (storage.getType(Block(result)) == type) return result;
-        // if (blocks[result]->type == type) return result;
 
     } while (result != after);
     

@@ -1508,17 +1508,17 @@ NSString *EventSlotName(EventSlot slot)
 
 - (FSVolumeType)dos
 {
-    return [self fs]->getTraits().dos; // getDos();
+    return [self fs]->getTraits().dos;
 }
 
 - (BOOL)isOFS
 {
-    return [self fs]->getTraits().ofs(); // isOFS();
+    return [self fs]->getTraits().ofs();
 }
 
 - (BOOL)isFFS
 {
-    return [self fs]->getTraits().ffs(); // isFFS();
+    return [self fs]->getTraits().ffs();
 }
 
 - (NSInteger)blockSize
@@ -1632,7 +1632,7 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSInteger)nextBlockOfType:(FSBlockType)type after:(NSInteger)after
 {
-    return [self fs]->nextBlockOfType(type, after);
+    return [self fs]->nextBlockOfType(type, Block(after));
 }
 
 - (void)rectifyAllocationMap
