@@ -29,18 +29,18 @@ MutableFileSystem::init(const FileSystemDescriptor &layout, const fs::path &path
     if (FS_DEBUG) { layout.dump(); }
     
     // Copy layout parameters
-    dos         = layout.dos;
-    bsize       = layout.bsize;
-    numReserved = layout.numReserved;
-    rootBlock   = layout.rootBlock;
-    bmBlocks    = layout.bmBlocks;
-    bmExtBlocks = layout.bmExtBlocks;
+    traits.dos      = layout.dos;
+    traits.bsize    = layout.bsize;
+    traits.reserved = layout.numReserved;
+    rootBlock       = layout.rootBlock;
+    bmBlocks        = layout.bmBlocks;
+    bmExtBlocks     = layout.bmExtBlocks;
 
     // Create all blocks
     init(isize(layout.numBlocks));
 
     // Format the file system
-    if (dos != FSVolumeType::NODOS) format();
+    if (traits.dos != FSVolumeType::NODOS) format();
 
     // Start allocating blocks at the middle of the disk
     ap = rootBlock;
@@ -72,7 +72,7 @@ MutableFileSystem::init(Diameter dia, Density den, FSVolumeType dos, const fs::p
 void
 MutableFileSystem::format(FSVolumeType dos, string name)
 {
-    this->dos = dos;
+    traits.dos = dos;
     format(name);
 }
 
@@ -144,8 +144,8 @@ isize
 MutableFileSystem::requiredDataBlocks(isize fileSize) const
 {
     // Compute the capacity of a single data block
-    isize numBytes = bsize - (isOFS() ? 24 : 0);
-    
+    isize numBytes = traits.bsize - (traits.ofs() ? 24 : 0);
+
     // Compute the required number of data blocks
     return (fileSize + numBytes - 1) / numBytes;
 }
@@ -277,7 +277,7 @@ MutableFileSystem::addDataBlock(Block at, isize id, Block head, Block prev)
 
     if (prevBlock) {
 
-        storage[at].init(isOFS() ? FSBlockType::DATA_BLOCK_OFS : FSBlockType::DATA_BLOCK_FFS);
+        storage[at].init(traits.ofs() ? FSBlockType::DATA_BLOCK_OFS : FSBlockType::DATA_BLOCK_FFS);
         storage[at].setDataBlockNr((Block)id);
         storage[at].setFileHeaderRef(head);
         prevBlock->setNextDataBlockRef(at);
@@ -333,7 +333,9 @@ MutableFileSystem::killVirus()
     assert(storage.getType(0) == FSBlockType::BOOT_BLOCK);
     assert(storage.getType(1) == FSBlockType::BOOT_BLOCK);
 
-    auto id = isOFS() ? BootBlockId::AMIGADOS_13 : isFFS() ? BootBlockId::AMIGADOS_20 : BootBlockId::NONE;
+    auto id =
+    traits.ofs() ? BootBlockId::AMIGADOS_13 :
+    traits.ffs() ? BootBlockId::AMIGADOS_20 : BootBlockId::NONE;
 
     if (id != BootBlockId::NONE) {
         storage[0].writeBootBlock(id, 0);
@@ -645,7 +647,7 @@ MutableFileSystem::allocateFileBlocks(isize bytes, std::vector<Block> &listBlock
     listBlocks.reserve(numListBlocks);
     dataBlocks.reserve(numDataBlocks);
 
-    if (isOFS()) {
+    if (traits.ofs()) {
 
         // Header block -> Data blocks -> List block -> Data blocks ... List block -> Data blocks
         allocate(refsInHeaderBlock, dataBlocks);
@@ -655,7 +657,7 @@ MutableFileSystem::allocateFileBlocks(isize bytes, std::vector<Block> &listBlock
         }
     }
     
-    if (isFFS()) {
+    if (traits.ffs()) {
         
         // Header block -> Data blocks -> All list block -> All remaining data blocks
         allocate(refsInHeaderBlock, dataBlocks);
@@ -678,7 +680,7 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
     if (numBytes() != size) throw AppError(Fault::FS_WRONG_CAPACITY);
 
     // Only proceed if all partitions contain a valid file system
-    if (dos == FSVolumeType::NODOS) throw AppError(Fault::FS_UNSUPPORTED);
+    if (traits.dos == FSVolumeType::NODOS) throw AppError(Fault::FS_UNSUPPORTED);
 
     // Import all blocks
     for (isize i = 0; i < numBlocks(); i++) {

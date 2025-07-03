@@ -43,11 +43,11 @@ FSBlock::init(FSBlockType t)
 
         case FSBlockType::BOOT_BLOCK:
             
-            if (nr == 0 && fs->dos != FSVolumeType::NODOS) {
+            if (nr == 0 && fs->traits.dos != FSVolumeType::NODOS) {
                 bdata[0] = 'D';
                 bdata[1] = 'O';
                 bdata[2] = 'S';
-                bdata[3] = (u8)fs->dos;
+                bdata[3] = (u8)fs->traits.dos;
             }
             break;
             

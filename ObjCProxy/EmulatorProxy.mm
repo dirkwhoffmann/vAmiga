@@ -1508,17 +1508,17 @@ NSString *EventSlotName(EventSlot slot)
 
 - (FSVolumeType)dos
 {
-    return [self fs]->getDos();
+    return [self fs]->getTraits().dos; // getDos();
 }
 
 - (BOOL)isOFS
 {
-    return [self fs]->isOFS();
+    return [self fs]->getTraits().ofs(); // isOFS();
 }
 
 - (BOOL)isFFS
 {
-    return [self fs]->isFFS();
+    return [self fs]->getTraits().ffs(); // isFFS();
 }
 
 - (NSInteger)blockSize

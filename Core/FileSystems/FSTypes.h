@@ -274,14 +274,16 @@ struct FSItemTypeEnum : Reflection<FSItemTypeEnum, FSItemType>
 struct FSTraits
 {
     FSVolumeType dos = FSVolumeType::NODOS;
-    bool ofs = false;
-    bool ffs = false;
 
     isize blocks = 0;
     isize bytes = 0;
     isize bsize = 512;
 
-    isize numReserved = 2;
+    isize reserved = 2;
+
+    bool ofs() const { return isOFSVolumeType(dos); }
+    bool ffs() const { return isFFSVolumeType(dos); }
+    bool intl() const { return isINTLVolumeType(dos); }
 };
 
 typedef struct

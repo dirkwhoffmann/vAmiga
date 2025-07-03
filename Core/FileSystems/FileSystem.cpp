@@ -92,11 +92,11 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
     if (layout.dos == FSVolumeType::NODOS) throw AppError(Fault::FS_UNFORMATTED);
 
     // Copy layout parameters
-    dos         = layout.dos;
-    numReserved = layout.numReserved;
-    rootBlock   = layout.rootBlock;
-    bmBlocks    = layout.bmBlocks;
-    bmExtBlocks = layout.bmExtBlocks;
+    traits.dos      = layout.dos;
+    traits.reserved = layout.numReserved;
+    rootBlock       = layout.rootBlock;
+    bmBlocks        = layout.bmBlocks;
+    bmExtBlocks     = layout.bmExtBlocks;
 
     // Create all blocks
     storage.init(layout.numBlocks);
@@ -136,7 +136,7 @@ FileSystem::isFormatted() const
     if (!isInitialized()) return false;
 
     // Check the DOS type
-    if (dos == FSVolumeType::NODOS) return false;
+    if (traits.dos == FSVolumeType::NODOS) return false;
 
     // Check if the root block is present
     if (!storage.read(rootBlock, FSBlockType::ROOT_BLOCK)) return false;
@@ -148,9 +148,9 @@ FileSystem::isFormatted() const
 FSTraits &
 FileSystem::getTraits()
 {
-    traits.dos = dos;
-    traits.ofs = isOFS();
-    traits.ffs = isFFS();
+    // traits.dos = dos;
+    // traits.ofs = isOFS();
+    // traits.ffs = isFFS();
 
     traits.blocks = numBlocks();
     traits.bytes = numBytes();
@@ -183,7 +183,7 @@ FileSystem::_dump(Category category, std::ostream &os) const
             auto fill = isFormatted() ? fillLevel() : storage.fillLevel();
             auto size = std::to_string(total) + " (x " + std::to_string(bsize) + ")";
 
-            isFormatted() ? os << "DOS" << dec(isize(dos)) << " " : os << "NODOS";
+            isFormatted() ? os << "DOS" << dec(isize(traits.dos)) << " " : os << "NODOS";
             os << "  ";
             os << std::setw(15) << std::left << std::setfill(' ') << size;
             os << "  ";
@@ -1132,7 +1132,7 @@ FileSystem::predictBlockType(Block nr, const u8 *buf) const
     if (type == 16 && subtype == (u32)-3) return FSBlockType::FILELIST_BLOCK;
 
     // Check if this block is a data block
-    if (isOFS()) {
+    if (traits.ofs()) {
         if (type == 8) return FSBlockType::DATA_BLOCK_OFS;
     } else {
         for (isize i = 0; i < bsize; i++) if (buf[i]) return FSBlockType::DATA_BLOCK_FFS;

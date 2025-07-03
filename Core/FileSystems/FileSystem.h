@@ -54,7 +54,7 @@ protected:
     FSTraits traits;
 
     // File system version
-    FSVolumeType dos = FSVolumeType::NODOS;
+    // [[deprecated]] FSVolumeType dos = FSVolumeType::NODOS;
 
     // Block storage
     BlockStorage storage = BlockStorage(this);
@@ -63,7 +63,7 @@ protected:
     isize bsize = 512;
 
     // Number of reserved blocks
-    isize numReserved = 0;
+    // [[deprecated]] isize numReserved = 0;
 
     // Location of the root block
     Block rootBlock = 0;
@@ -143,10 +143,11 @@ public:
     double fillLevel() const { return double(100) * usedBlocks() / numBlocks(); }
     
     // Returns the DOS version
-    FSVolumeType getDos() const { return dos; }
-    bool isOFS() const { return isOFSVolumeType(dos); }
-    bool isFFS() const { return isFFSVolumeType(dos); }
-    bool isINTL() const { return isINTLVolumeType(dos); }
+    bool nodos() const { return traits.dos == FSVolumeType::NODOS; }
+    FSVolumeType getDos() const { return traits.dos; } // DEPRECATED
+    [[ deprecated]] bool isOFS() const { return isOFSVolumeType(traits.dos); } // DEPRECATED
+    [[ deprecated]] bool isFFS() const { return isFFSVolumeType(traits.dos); } // DEPRECATED
+    [[ deprecated]] bool isINTL() const { return isINTLVolumeType(traits.dos); } // DEPRECATED
 
     // Reads information from the root block
     FSName getName() const;
