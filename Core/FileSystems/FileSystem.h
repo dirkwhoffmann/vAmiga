@@ -285,7 +285,7 @@ private:
                                 std::unordered_set<Block> &visited) const;
 
     //
-    // Integrity checking
+    // Traversing linked lists
     //
 
 public:
@@ -303,17 +303,6 @@ public:
     std::vector<Block> collectListBlocks(Block ref) const;
     std::vector<Block> collectHashedBlocks(Block ref, isize bucket) const;
     std::vector<Block> collectHashedBlocks(Block ref) const;
-
-
-    //
-    // Traversing linked lists
-    //
-    
-protected:
-    
-    // Returns
-    // TODO: DEPRECATE
-    std::vector<Block> hashBlockChain(Block first) const;
 
 
     //

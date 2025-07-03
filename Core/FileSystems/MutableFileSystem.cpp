@@ -543,13 +543,13 @@ MutableFileSystem::addToHashTable(Block parent, Block ref)
 
     // Read the linked list from the proper hash-table bucket
     u32 hash = pr->hashValue() % pp->hashTableSize();
-    auto chain = hashBlockChain(pp->getHashRef(hash));
+    auto chain = collectHashedBlocks(*pp, hash);
 
     // If the bucket is empty, make the reference the first entry
     if (chain.empty()) { pp->setHashRef(hash, ref); return; }
 
     // Otherwise, put the referecne at the end of the linked list
-    blockPtr(chain.back())->setNextHashRef(ref);
+    chain.back()->setNextHashRef(ref);
 }
 
 void
@@ -571,7 +571,7 @@ MutableFileSystem::deleteFromHashTable(Block parent, Block ref)
 
     // Read the linked list from the proper hash-table bucket
     u32 hash = pr->hashValue() % pp->hashTableSize();
-    auto chain = hashBlockChain(pp->getHashRef(hash));
+    auto chain = collectHashedBlocks(pp->nr, hash);
 
     // Find the element
     if (auto it = std::find(chain.begin(), chain.end(), ref); it != chain.end()) {

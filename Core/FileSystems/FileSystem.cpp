@@ -442,7 +442,7 @@ FileSystem::ascii(Block nr, isize offset, isize len) const
 bool
 FileSystem::isFree(Block nr) const
 {
-    assert(nr < traits.blocks);
+    assert(isize(nr) < traits.blocks);
 
     // The first two blocks are always allocated and not part of the bitmap
     if (nr < 2) return false;
@@ -458,7 +458,7 @@ FileSystem::isFree(Block nr) const
 FSBlock *
 FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit)
 {
-    assert(nr < traits.blocks);
+    assert(isize(nr) < traits.blocks);
 
     // The first two blocks are always allocated and not part of the map
     if (nr < 2) return nullptr;
@@ -1019,23 +1019,6 @@ FileSystem::collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> nex
     return result;
 }
 
-std::vector<Block>
-FileSystem::hashBlockChain(Block first) const
-{
-    std::vector<Block> result;
-    std::unordered_set<Block> visited;
-
-    FSBlock *it = blockPtr(first);
-    while (it && it->isHashable() && visited.find(it->nr) == visited.end()) {
-
-        result.push_back(it->nr);
-        visited.insert(it->nr);
-        it = it->getNextHashBlock();
-    }
-
-    return result;
-}
-
 FSBlockType
 FileSystem::predictBlockType(Block nr, const u8 *buf) const
 {
@@ -1194,7 +1177,7 @@ FileSystem::createHealthMap(u8 *buffer, isize len)
 isize
 FileSystem::nextBlockOfType(FSBlockType type, Block after) const
 {
-    assert(after < traits.blocks);
+    assert(isize(after) < traits.blocks);
 
     isize result = after;
     
