@@ -306,13 +306,14 @@ public:
 
 
     //
-    // Argument checking helpers
+    // Argument checkers
     //
 
-    // TODO: Prettify and use
-    void REQUIRE_INITIALIZED() const;
-    void REQUIRE_FORMATTED() const;
-    void REQUIRE_FILE_OR_DIRECTORY(FSBlock &node) const;
+public:
+
+    void require_initialized() const;
+    void require_formatted() const;
+    void require_file_or_directory(const FSBlock &node) const;
 
 
     //

@@ -138,17 +138,13 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
 Block
 NavigatorConsole::parseBlock(const string &argv)
 {
-    auto nr = Block(parseNum(argv));
+    fs.require_initialized();
 
-    if (!fs.blockPtr(nr)) {
-
-        if (!fs.isInitialized()) {
-            throw AppError(Fault::FS_UNINITIALIZED);
-        } else {
-            throw AppError(Fault::OPT_INV_ARG, "0..." + std::to_string(fs.numBlocks()));
-        }
+    if (auto nr = Block(parseNum(argv)); fs.blockPtr(nr)) {
+        return nr;
     }
-    return nr;
+
+    throw AppError(Fault::OPT_INV_ARG, "0..." + std::to_string(fs.numBlocks()));
 }
 
 Block
@@ -271,19 +267,6 @@ NavigatorConsole::matchPath(const string &path, Tokens &notFound)
     notFound = tokens;
 
     return *p;
-}
-
-void
-NavigatorConsole::assertInitialized()
-{
-    if (!fs.isInitialized()) throw AppError(Fault::FS_UNINITIALIZED);
-}
-
-void
-NavigatorConsole::assertFormatted()
-{
-    if (!fs.isInitialized()) throw AppError(Fault::FS_UNINITIALIZED);
-    if (!fs.isFormatted()) throw AppError(Fault::FS_UNFORMATTED);
 }
 
 util::DumpOpt
@@ -510,7 +493,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            assertFormatted();
+            fs.require_formatted();
 
             bool recursive = true;
             bool contents = args.contains("c");

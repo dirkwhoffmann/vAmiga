@@ -82,7 +82,7 @@ MutableFileSystem::format(FSVolumeType dos, string name)
 void
 MutableFileSystem::format(string name)
 {
-    if (!isInitialized()) throw AppError(Fault::FS_UNINITIALIZED);
+    require_initialized();
 
     // Perform some consistency checks
     assert(numBlocks() > 2);

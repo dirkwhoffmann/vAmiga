@@ -716,6 +716,7 @@ FileSystem::match(const FSBlock *root, std::vector<FSPattern> patterns) const
 std::vector<FSBlock *>
 FileSystem::find(const FSBlock &root, const FSOpt &opt) const
 {
+    require_file_or_directory(root);
     return find(&root, opt);
 }
 
@@ -723,11 +724,6 @@ std::vector<FSBlock *>
 FileSystem::find(const FSBlock *root, const FSOpt &opt) const
 {
     if (!root) return {};
-
-    if (!isInitialized()) throw AppError(Fault::FS_UNINITIALIZED);
-    if (!isFormatted()) throw AppError(Fault::FS_UNFORMATTED);
-    if (!root->isRegular()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
-
     std::unordered_set<Block> visited;
     return find(root, opt, visited);
 }
@@ -1055,25 +1051,25 @@ FileSystem::predictBlockType(Block nr, const u8 *buf) const
 }
 
 void
-FileSystem::REQUIRE_INITIALIZED() const
+FileSystem::require_initialized() const
 {
-    if (!isInitialized()) throw AppError(Fault::FS_UNINITIALIZED);
+    if (!isInitialized())   throw AppError(Fault::FS_UNINITIALIZED);
 }
 
 void
-FileSystem::REQUIRE_FORMATTED() const
+FileSystem::require_formatted() const
 {
-    if (!isInitialized()) throw AppError(Fault::FS_UNINITIALIZED);
-    if (!isFormatted()) throw AppError(Fault::FS_UNFORMATTED);
-}
-void
-FileSystem::REQUIRE_FILE_OR_DIRECTORY(FSBlock &node) const
-{
-    if (!isInitialized()) throw AppError(Fault::FS_UNINITIALIZED);
-    if (!isFormatted()) throw AppError(Fault::FS_UNFORMATTED);
-    if (!node.isRegular()) throw AppError(Fault::FS_NOT_A_FILE_OR_DIRECTORY);
+    if (!isInitialized())   throw AppError(Fault::FS_UNINITIALIZED);
+    if (!isFormatted())     throw AppError(Fault::FS_UNFORMATTED);
 }
 
+void
+FileSystem::require_file_or_directory(const FSBlock &node) const
+{
+    if (!isInitialized())   throw AppError(Fault::FS_UNINITIALIZED);
+    if (!isFormatted())     throw AppError(Fault::FS_UNFORMATTED);
+    if (!node.isRegular())  throw AppError(Fault::FS_NOT_A_FILE_OR_DIRECTORY);
+}
 
 void
 FileSystem::createUsageMap(u8 *buffer, isize len)
