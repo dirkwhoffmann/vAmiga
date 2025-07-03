@@ -56,12 +56,15 @@ public:
 
     // Performs a full sanity check. Returns the number of errors. Stores details in 'diagnosis'
     isize xray(bool strict);
+    isize xray(std::ostream &os, bool strict);
 
     // Scans all blocks. Returns the number of errors. Stores details in 'diagnosis'
     isize xrayBlocks(bool strict);
+    isize xrayBlocks(std::ostream &os, bool strict);
 
     // Checks the block allocation table. Returns the number of errors. Stores details in 'diagnosis'
     isize xrayBitmap(bool strict);
+    isize xrayBitmap(std::ostream &os, bool strict);
 
     // Scans a single block and returns the number of errors
     isize xray(Block ref, bool strict) const;

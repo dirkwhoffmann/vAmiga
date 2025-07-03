@@ -72,7 +72,7 @@ EXEFile::finalizeRead()
     if (FS_DEBUG) volume.dump(Category::State);
     
     // Check file system integrity
-    volume.verify();
+    if (FS_DEBUG) volume.doctor.xray(std::cout, true);
 
     // Convert the volume into an ADF
     adf.init(volume);

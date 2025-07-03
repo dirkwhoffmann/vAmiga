@@ -289,17 +289,7 @@ private:
     //
 
 public:
-
-    // Performs a sanity check
-    bool verify();
     
-    // Checks a single byte in a certain block
-    Fault check(Block nr, isize pos, u8 *expected, bool strict) const;
-
-    // Checks if the type of a block matches one of the provides types
-    // Fault checkBlockType(Block nr, FSBlockType type) const;
-    // Fault checkBlockType(Block nr, FSBlockType type, FSBlockType altType) const;
-
     // Follows a linked list and collects all blocks
     std::vector<FSBlock *> collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> next) const;
     std::vector<Block> collect(const Block nr, std::function<FSBlock *(FSBlock *)> next) const;

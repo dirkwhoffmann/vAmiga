@@ -1036,30 +1036,6 @@ FileSystem::hashBlockChain(Block first) const
     return result;
 }
 
-bool
-FileSystem::verify()
-{
-    // Print some debug information about the volume
-    if (FS_DEBUG) dump(Category::State);
-
-    // Check file system integrity
-    doctor.xray(true);
-
-    if (auto erroneousBlocks = doctor.diagnosis.blockErrors; !erroneousBlocks.empty()) {
-
-        warn("Found %ld corrupted blocks\n", erroneousBlocks.size());
-        if (FS_DEBUG) dump(Category::Blocks);
-        return false;
-    }    
-    return true;
-}
-
-Fault
-FileSystem::check(Block nr, isize pos, u8 *expected, bool strict) const
-{
-    return storage[nr].check(pos, expected, strict);
-}
-
 FSBlockType
 FileSystem::predictBlockType(Block nr, const u8 *buf) const
 {

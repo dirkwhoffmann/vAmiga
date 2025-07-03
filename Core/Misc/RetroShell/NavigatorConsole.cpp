@@ -1095,6 +1095,12 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
+            if (auto errors = fs.doctor.xray(os, args.contains("s")); errors == 0) {
+
+                os << "Passed. No errors found." << std::endl;
+            }
+
+            /*
             auto rangeStr = [&](std::vector<Block> &vec) {
                 if (!vec.empty()) { os << " (" << FSBlock::rangeString(vec) << ")"; }
                 os << std::endl;
@@ -1128,6 +1134,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                 os << "Bitmap check: Passed" << std::endl;
             }
+            */
         }
     });
 

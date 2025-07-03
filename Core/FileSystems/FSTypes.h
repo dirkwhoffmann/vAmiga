@@ -288,8 +288,14 @@ struct FSTraits
 
 typedef struct
 {
+    // Block errors
     std::vector<Block> blockErrors;
-    std::unordered_map<Block,isize> bitmapErrors;
+
+    // Bitmap errors
+    std::vector<Block> usedButUnallocated;
+    std::vector<Block> unusedButAllocated;
+
+    std::unordered_map<Block,isize> bitmapErrors; // DEPRECATED
 }
 FSDiagnosis;
 

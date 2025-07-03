@@ -451,18 +451,6 @@ FSBlock::subtypeID() const
     return type == FSBlockType::EMPTY_BLOCK ? 0 : get32((bsize() / 4) - 1);
 }
 
-isize
-FSBlock::check(bool strict) const
-{
-    return fs->doctor.xray(nr, strict);
-}
-
-Fault
-FSBlock::check(isize byte, u8 *expected, bool strict) const
-{
-    return fs->doctor.xray(nr, byte, strict, expected);
-}
-
 u8 *
 FSBlock::addr32(isize nr) const
 {
@@ -810,7 +798,7 @@ FSBlock::hexDump(std::ostream &os, const util::DumpOpt &opt)
 }
 
 string
-FSBlock::rangeString(std::vector<Block> vec)
+FSBlock::rangeString(const std::vector<Block> &vec)
 {
     if (vec.empty()) return "";
 

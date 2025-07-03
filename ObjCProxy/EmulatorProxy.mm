@@ -1596,7 +1596,8 @@ NSString *EventSlotName(EventSlot slot)
           expected:(unsigned char *)exp
             strict:(BOOL)strict
 {
-    return [self fs]->check((u32)nr, pos, exp, strict);
+    // return [self fs]->check((u32)nr, pos, exp, strict);
+    return [self fs]->doctor.xray((u32)nr, pos, strict, exp);
 }
 
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset

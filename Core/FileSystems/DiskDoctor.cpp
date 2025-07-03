@@ -253,7 +253,13 @@ DiskDoctor::dump(Block nr, std::ostream &os)
 isize
 DiskDoctor::xray(bool strict)
 {
-    return xrayBlocks(strict) && xrayBitmap(strict);
+    return xrayBlocks(strict) + xrayBitmap(strict);
+}
+
+isize
+DiskDoctor::xray(std::ostream &os, bool strict)
+{
+    return xrayBlocks(os, strict) + xrayBitmap(os, strict);
 }
 
 isize
@@ -272,13 +278,29 @@ DiskDoctor::xrayBlocks(bool strict)
 }
 
 isize
+DiskDoctor::xrayBlocks(std::ostream &os, bool strict)
+{
+    auto result = xrayBlocks(strict);
+
+    auto blocks = [&](usize s) { return std::to_string(s) + (s == 1 ? " block" : " blocks"); };
+
+    if (auto total = diagnosis.blockErrors.size(); total) {
+
+        os << util::tab("Block anomalies:");
+        os << blocks(total) << std::endl;
+        os << util::tab("Corrupted blocks:");
+        os << FSBlock::rangeString(diagnosis.blockErrors) << std::endl;
+    }
+    return result;
+}
+
+isize
 DiskDoctor::xrayBitmap(bool strict)
 {
     // std::unordered_map<Block,isize> result;
     std::unordered_set<Block> used;
 
     // Extract the directory tree
-    // auto tree = fs.traverse(fs.root(), { .recursive = true });
     auto tree = FSTree(fs.root(), { .recursive = true });
 
     // Collect all used blocks
@@ -305,17 +327,45 @@ DiskDoctor::xrayBitmap(bool strict)
 
         if (allocated && !contained) {
 
-            // result[Block(i)] = 1;
+            diagnosis.unusedButAllocated.push_back(Block(i));
             diagnosis.bitmapErrors[Block(i)] = 1;
 
         } else if (!allocated && contained) {
 
-            // result[Block(i)] = 2;
+            diagnosis.usedButUnallocated.push_back(Block(i));
             diagnosis.bitmapErrors[Block(i)] = 2;
         }
     }
 
     return (isize)diagnosis.bitmapErrors.size();
+}
+
+isize
+DiskDoctor::xrayBitmap(std::ostream &os, bool strict)
+{
+    auto result = xrayBitmap(strict);
+
+    auto &usedButUnallocated = fs.doctor.diagnosis.usedButUnallocated;
+    auto &unusedButAllocated = fs.doctor.diagnosis.unusedButAllocated;
+
+    auto blocks = [&](usize s) { return std::to_string(s) + (s == 1 ? " block" : " blocks"); };
+
+    if (auto total = usedButUnallocated.size() + unusedButAllocated.size(); total) {
+
+        os << util::tab("Bitmap anomalies:") << blocks(total) << std::endl;
+
+        if (!usedButUnallocated.empty()) {
+
+            os << util::tab("Used but unallocated:");
+            os << FSBlock::rangeString(usedButUnallocated) << std::endl;
+        }
+        if (!unusedButAllocated.empty()) {
+
+            os << util::tab("Allocated but unused:");
+            os << FSBlock::rangeString(unusedButAllocated) << std::endl;
+        }
+    }
+    return result;
 }
 
 isize

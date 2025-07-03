@@ -1090,7 +1090,7 @@ FloppyDrive::insertNew(FSVolumeType fs, BootBlockId bb, string name, const fs::p
     volume.makeBootable(bb);
     
     // Check file system consistency
-    volume.verify();
+    if (FS_DEBUG) volume.doctor.xray(std::cout, true);
 
     // Convert the file system into an ADF
     ADFFile adf(volume);

@@ -34,9 +34,6 @@ struct FSBlock : CoreObject {
     // The sector number of this block
     Block nr = 0;
     
-    // Outcome of the latest integrity check (0 = OK, n = n-th corrupted block)
-    [[deprecated]] isize corrupted = 0;
-
 private:
 
     // Block data
@@ -111,18 +108,7 @@ public:
     u32 typeID() const;
     u32 subtypeID() const;
     
-    
-    //
-    // Integrity checking
-    //
-
-    // Scans all long words in this block and returns the number of errors
-    isize check(bool strict) const;
-
-    // Checks the integrity of a certain byte in this block
-    Fault check(isize pos, u8 *expected, bool strict) const;
-
-    
+        
     //
     // Reading and writing block data
     //
@@ -170,7 +156,7 @@ public:
     void hexDump(std::ostream &os, const util::DumpOpt &opt);
 
     // Experimental
-    static string rangeString(std::vector<Block> vec);
+    static string rangeString(const std::vector<Block> &vec);
 
 
     //
