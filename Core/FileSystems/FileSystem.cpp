@@ -235,6 +235,28 @@ FileSystem::_dump(Category category, std::ostream &os) const
     }
 }
 
+void
+FileSystem::cacheInfo(FSInfo &result) const
+{
+    result.name = getName().cpp_str();
+    result.creationDate = getCreationDate();
+    result.modificationDate = getModificationDate();
+
+    /*
+    result.freeBlocks = freeBlocks();
+    result.usedBlocks = usedBlocks();
+    result.freeBytes = freeBytes();
+    result.usedBytes = usedBytes();
+    result.fillLevel = fillLevel();
+    */
+}
+
+void
+FileSystem::cacheStats(FSStats &result) const
+{
+
+}
+
 isize
 FileSystem::freeBlocks() const
 {
@@ -288,9 +310,108 @@ FileSystem::bootBlockType() const
     return BootBlockImage(storage[0].data(), storage[1].data()).type;
 }
 
+FSBlock *
+FileSystem::read(Block nr) noexcept
+{
+    stats.blockReads++;
+    return storage.read(nr);
+}
+
+FSBlock *
+FileSystem::read(Block nr, FSBlockType type) noexcept
+{
+    stats.blockReads++;
+    return storage.read(nr, type);
+}
+
+FSBlock *
+FileSystem::read(Block nr, std::vector<FSBlockType> types) noexcept
+{
+    stats.blockReads++;
+    return storage.read(nr, types);
+}
+
+const FSBlock *
+FileSystem::read(Block nr) const noexcept
+{
+    stats.blockReads++;
+    return storage.read(nr);
+}
+
+const FSBlock *
+FileSystem::read(Block nr, FSBlockType type) const noexcept
+{
+    stats.blockReads++;
+    return storage.read(nr, type);
+}
+
+const FSBlock *
+FileSystem::read(Block nr, std::vector<FSBlockType> types) const noexcept
+{
+    stats.blockReads++;
+    return storage.read(nr, types);
+}
+
+FSBlock &
+FileSystem::at(Block nr)
+{
+    stats.blockReads++;
+    return storage.at(nr);
+}
+
+FSBlock &
+FileSystem::at(Block nr, FSBlockType type)
+{
+    stats.blockReads++;
+    return storage.at(nr, type);
+}
+
+FSBlock &
+FileSystem::at(Block nr, std::vector<FSBlockType> types)
+{
+    stats.blockReads++;
+    return storage.at(nr, types);
+}
+
+const FSBlock &
+FileSystem::at(Block nr) const
+{
+    stats.blockReads++;
+    return storage.at(nr);
+}
+
+const FSBlock &
+FileSystem::at(Block nr, FSBlockType type) const
+{
+    stats.blockReads++;
+    return storage.at(nr, type);
+}
+
+const FSBlock &
+FileSystem::at(Block nr, std::vector<FSBlockType> types) const
+{
+    stats.blockReads++;
+    return storage.at(nr, types);
+}
+
+FSBlock &
+FileSystem::operator[](size_t nr)
+{
+    stats.blockReads++;
+    return storage[nr];
+}
+
+const FSBlock &
+FileSystem::operator[](size_t nr) const
+{
+    stats.blockReads++;
+    return storage[nr];
+}
+
 FSBlockType
 FileSystem::blockType(Block nr) const
 {
+    stats.blockReads++;
     return storage.getType(nr);
 }
 
@@ -946,62 +1067,6 @@ FileSystem::verify()
     }    
     return true;
 }
-
-/*
-FSErrorReport
-FileSystem::check(bool strict)
-{
-    FSErrorReport result = { };
-
-    isize total = 0, min = INT_MAX, max = 0;
-    
-    // Analyze the allocation table
-    for (isize i = 0; i < numBlocks(); i++) {
-
-        if (isEmpty(Block(i)) && !isFree(Block(i))) {
-            
-            result.bitmapErrors++;
-            debug(FS_DEBUG, "Empty block %ld is marked as allocated\n", i);
-        }
-        if (!isEmpty(Block(i)) && isFree(Block(i))) {
-            
-            result.bitmapErrors++;
-            debug(FS_DEBUG, "Non-empty block %ld is marked as free\n", i);
-        }
-    }
-
-    // Analyze all blocks
-    for (isize i = 0; i < numBlocks(); i++) {
-
-        if (storage[i].check(strict) > 0) {
-
-            min = std::min(min, i);
-            max = std::max(max, i);
-            storage[i].corrupted = ++total;
-
-        } else {
-
-            storage[i].corrupted = 0;
-        }
-    }
-
-    // Record findings
-    if (total) {
-
-        result.corruptedBlocks = total;
-        result.firstErrorBlock = min;
-        result.lastErrorBlock = max;
-
-    } else {
-        
-        result.corruptedBlocks = 0;
-        result.firstErrorBlock = min;
-        result.lastErrorBlock = max;
-    }
-    
-    return result;
-}
-*/
 
 Fault
 FileSystem::check(Block nr, isize pos, u8 *expected, bool strict) const

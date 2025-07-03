@@ -36,8 +36,8 @@ class HardDrive;
  *
  * See also: MutableFileSystem
  */
-class FileSystem : public CoreObject {
-    
+class FileSystem : public CoreObject, public Inspectable<FSInfo, FSStats> {
+
     friend struct FSBlock;
     friend struct FSHashTable;
     friend struct FSPartition;
@@ -82,12 +82,12 @@ protected:
     
 public:
     
-    FileSystem() { };
-    FileSystem(const MediaFile &file, isize part = 0) throws { init(file, part); }
-    FileSystem(const ADFFile &adf) throws { init(adf); }
-    FileSystem(const HDFFile &hdn, isize part = 0) throws { init(hdn, part); }
-    FileSystem(FloppyDrive &dfn) throws { init(dfn); }
-    FileSystem(const HardDrive &hdn, isize part = 0) throws { init(hdn, part); }
+    FileSystem() { stats = {}; };
+    FileSystem(const MediaFile &file, isize part = 0) : FileSystem() { init(file, part); }
+    FileSystem(const ADFFile &adf) : FileSystem() { init(adf); }
+    FileSystem(const HDFFile &hdn, isize part = 0) : FileSystem() { init(hdn, part); }
+    FileSystem(FloppyDrive &dfn) : FileSystem() { init(dfn); }
+    FileSystem(const HardDrive &hdn, isize part = 0) : FileSystem() { init(hdn, part); }
 
     virtual ~FileSystem();
 
@@ -110,6 +110,16 @@ protected:
     
     const char *objectName() const override { return "FileSystem"; }
     void _dump(Category category, std::ostream &os) const override;
+
+
+    //
+    // Methods from Inspectable
+    //
+
+public:
+
+    void cacheInfo(FSInfo &result) const override;
+    void cacheStats(FSStats &result) const override;
 
 
     //
@@ -156,24 +166,24 @@ public:
 public:
 
     // Returns a block pointer or null if the block does not exist
-    FSBlock *read(Block nr) noexcept { return storage.read(nr); }
-    FSBlock *read(Block nr, FSBlockType type) noexcept { return storage.read(nr, type); }
-    FSBlock *read(Block nr, std::vector<FSBlockType> types) noexcept { return storage.read(nr, types); }
-    const FSBlock *read(Block nr) const noexcept { return storage.read(nr); }
-    const FSBlock *read(Block nr, FSBlockType type) const noexcept { return storage.read(nr, type); }
-    const FSBlock *read(Block nr, std::vector<FSBlockType> types) const noexcept { return storage.read(nr, types); }
+    FSBlock *read(Block nr) noexcept;
+    FSBlock *read(Block nr, FSBlockType type) noexcept;
+    FSBlock *read(Block nr, std::vector<FSBlockType> types) noexcept;
+    const FSBlock *read(Block nr) const noexcept;
+    const FSBlock *read(Block nr, FSBlockType type) const noexcept;
+    const FSBlock *read(Block nr, std::vector<FSBlockType> types) const noexcept;
 
     // Returns a reference to a stored block (throws on error)
-    FSBlock &at(Block nr) { return storage.at(nr); }
-    FSBlock &at(Block nr, FSBlockType type) { return storage.at(nr, type); }
-    FSBlock &at(Block nr, std::vector<FSBlockType> types) { return storage.at(nr, types); }
-    const FSBlock &at(Block nr) const { return storage.at(nr); }
-    const FSBlock &at(Block nr, FSBlockType type) const { return storage.at(nr, type); }
-    const FSBlock &at(Block nr, std::vector<FSBlockType> types) const { return storage.at(nr, types); }
+    FSBlock &at(Block nr);
+    FSBlock &at(Block nr, FSBlockType type);
+    FSBlock &at(Block nr, std::vector<FSBlockType> types);
+    const FSBlock &at(Block nr) const;
+    const FSBlock &at(Block nr, FSBlockType type) const;
+    const FSBlock &at(Block nr, std::vector<FSBlockType> types) const;
 
     // Operator overload
-    FSBlock &operator[](size_t nr) { return storage[nr]; }
-    const FSBlock &operator[](size_t nr) const { return storage[nr]; }
+    FSBlock &operator[](size_t nr);
+    const FSBlock &operator[](size_t nr) const;
 
     // Returns the type of a certain block
     FSBlockType blockType(Block nr) const;
@@ -298,9 +308,6 @@ public:
     // Performs a sanity check
     bool verify();
     
-    // Checks all blocks in this volume
-    // [[deprecated]] FSErrorReport check(bool strict);
-
     // Checks a single byte in a certain block
     Fault check(Block nr, isize pos, u8 *expected, bool strict) const;
 

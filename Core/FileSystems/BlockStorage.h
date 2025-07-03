@@ -16,7 +16,7 @@
 
 namespace vamiga {
 
-class BlockStorage final : public CoreObject, public Inspectable<Void, BlockStorageStats> {
+class BlockStorage final : public CoreObject {
 
 private:
 
@@ -56,15 +56,6 @@ protected:
 
     const char *objectName() const override { return "BlockStorage"; }
     void _dump(Category category, std::ostream &os) const override;
-
-
-    //
-    // Methods from Inspectable
-    //
-
-public:
-
-    void cacheStats(BlockStorageStats &result) const override;
 
 
     //

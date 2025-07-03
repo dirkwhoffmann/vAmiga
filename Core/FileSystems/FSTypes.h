@@ -271,6 +271,19 @@ struct FSItemTypeEnum : Reflection<FSItemTypeEnum, FSItemType>
 // Structures
 //
 
+struct FSTraits
+{
+    FSVolumeType dos = FSVolumeType::NODOS;
+    bool ofs = false;
+    bool ffs = false;
+
+    isize blocks = 0;
+    isize bytes = 0;
+    isize bsize = 512;
+
+    isize numReserved = 2;
+};
+
 typedef struct
 {
     std::vector<Block> blockErrors;
@@ -278,33 +291,28 @@ typedef struct
 }
 FSDiagnosis;
 
-
-// DEPRECATED
 typedef struct
 {
-    long bitmapErrors;
-    long corruptedBlocks;
-    long firstErrorBlock;
-    long lastErrorBlock;
-}
-FSErrorReport;
+    // Name and time stamps
+    string name;
+    string creationDate;
+    string modificationDate;
 
-typedef struct
-{
-    FSVolumeType dos;
-    bool ofs;
-    bool ffs;
-    
-    isize blocks;
-    isize bytes;
-    isize bsize;
+    // Capacity information
+    /*
+    isize freeBlocks;
+    isize usedBlocks;
+    isize freeBytes;
+    isize usedBytes;
+    double fillLevel;
+    */
 }
-FSTraits;
+FSInfo;
 
 typedef struct
 {
     isize blockReads;
 }
-BlockStorageStats;
+FSStats;
 
 }
