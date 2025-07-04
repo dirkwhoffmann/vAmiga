@@ -94,10 +94,9 @@ public:
 
     // Returns a view for all keys in a particular range
     auto keys(Block min, Block max) const {
-
+        
         auto in_range = [=](Block key) { return key >= min && key <= max; };
-        auto view = std::views::keys(blocks) | std::views::filter(in_range);
-        return std::ranges::subrange(view.begin(), view.end());
+        return std::views::keys(blocks) | std::views::filter(in_range);
     }
 
     // Checks if a block is empty
