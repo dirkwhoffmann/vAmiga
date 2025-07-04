@@ -835,11 +835,11 @@ NSString *EventSlotName(EventSlot slot);
 - (FSBlockType)blockType:(NSInteger)blockNr;
 - (FSItemType)itemType:(NSInteger)blockNr pos:(NSInteger)pos;
 
-// - (FSDiagnosis) xray:(BOOL)strict;
-
 - (NSInteger)xray:(BOOL)strict;
+- (NSInteger)xrayBlocks:(BOOL)strict;
+- (NSInteger)xrayBitmap:(BOOL)strict;
 @property (readonly) NSArray<NSNumber *> *xrayBlocks;
-@property (readonly) NSDictionary<NSNumber *, NSNumber *> *xrayBitmap;
+@property (readonly) NSArray<NSNumber *> *xrayBitmap;
 
 - (Fault)check:(NSInteger)nr pos:(NSInteger)pos expected:(unsigned char *)exp strict:(BOOL)strict;
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;

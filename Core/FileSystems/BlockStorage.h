@@ -119,8 +119,14 @@ public:
 
 public:
 
+    // Returns a block summary for creating the block usage image
+    void createUsageMap(u8 *buffer, isize len) const;
+
     // Returns a usage summary for creating the block allocation image
     void createAllocationMap(u8 *buffer, isize len) const;
+
+    // Returns a block summary for creating the diagnose image
+    void createHealthMap(u8 *buffer, isize len) const;
 };
 
 }

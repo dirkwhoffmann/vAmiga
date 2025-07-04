@@ -1074,6 +1074,8 @@ FileSystem::require_file_or_directory(const FSBlock &node) const
 void
 FileSystem::createUsageMap(u8 *buffer, isize len) const
 {
+    storage.createUsageMap(buffer, len);
+/*
     // Setup priorities
     i8 pri[12];
     pri[isize(FSBlockType::UNKNOWN_BLOCK)]      = 0;
@@ -1108,6 +1110,7 @@ FileSystem::createUsageMap(u8 *buffer, isize len) const
             buffer[pos] = buffer[pos - 1];
         }
     }
+ */
 }
 
 void
@@ -1144,6 +1147,8 @@ FileSystem::createAllocationMap(u8 *buffer, isize len) const
 void
 FileSystem::createHealthMap(u8 *buffer, isize len) const
 {
+    storage.createHealthMap(buffer, len);
+/*
     bool strict = true; // TODO: Allow non-strict checking
 
     // Setup priorities
@@ -1175,6 +1180,7 @@ FileSystem::createHealthMap(u8 *buffer, isize len) const
             buffer[pos] = buffer[pos - 1];
         }
     }
+ */
 }
 
 isize

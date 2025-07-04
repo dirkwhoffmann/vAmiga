@@ -83,7 +83,7 @@ class VolumeInspector: DialogController {
     
     // Result of the consistency checker
     var erroneousBlocks: [NSNumber] = []
-    var bitMapErrors: [NSNumber: NSNumber] = [:]
+    var bitMapErrors: [NSNumber] = []
 
     var selection: Int?
     var selectedRow: Int? { return selection == nil ? nil : selection! / 16 }
@@ -278,10 +278,12 @@ class VolumeInspector: DialogController {
         diagnoseSlider.maxValue = Double(vol.numBlocks - 1)
 
         // Run a file system check
-        vol.xray(strict)
+        let errors1 = vol.xrayBlocks(strict)
+        let errors2 = vol.xrayBitmap(strict)
         erroneousBlocks = vol.xrayBlocks
         bitMapErrors = vol.xrayBitmap
-
+        print("erroneousBlocks.size = \(erroneousBlocks.count) \(errors1)")
+        print("erroneousBlocks.size = \(bitMapErrors.count) \(errors2)")
         // Experimental (test new API)
         for number in erroneousBlocks {
             print(number)

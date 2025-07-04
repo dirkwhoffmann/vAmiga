@@ -1571,6 +1571,16 @@ NSString *EventSlotName(EventSlot slot)
     return [self fs]->doctor.xray(strict);
 }
 
+- (NSInteger)xrayBlocks:(BOOL)strict
+{
+    return [self fs]->doctor.xrayBlocks(strict);
+}
+
+- (NSInteger)xrayBitmap:(BOOL)strict
+{
+    return [self fs]->doctor.xrayBitmap(strict);
+}
+
 - (NSArray<NSNumber *> *)xrayBlocks
 {
     auto &errors = [self fs]->doctor.diagnosis.blockErrors;
@@ -1581,6 +1591,19 @@ NSString *EventSlotName(EventSlot slot)
     return [array copy];
 }
 
+- (NSArray<NSNumber *> *)xrayBitmap
+{
+    auto &unusedButAllocated = [self fs]->doctor.diagnosis.unusedButAllocated;
+    auto &usedButUnallocated = [self fs]->doctor.diagnosis.usedButUnallocated;
+    auto size = unusedButAllocated.size() + usedButUnallocated.size();
+
+    NSMutableArray<NSNumber *> *array = [NSMutableArray arrayWithCapacity:size];
+    for (Block value : unusedButAllocated) { [array addObject:@(value)]; }
+    for (Block value : usedButUnallocated) { [array addObject:@(value)]; }
+
+    return [array sortedArrayUsingSelector:@selector(compare:)];
+}
+/*
 - (NSDictionary<NSNumber *, NSNumber *> *)xrayBitmap
 {
     auto blocks = [self fs]->doctor.diagnosis.bitmapErrors; //  xrayBitmap(strict);
@@ -1590,6 +1613,7 @@ NSString *EventSlotName(EventSlot slot)
 
     return [dict copy];
 }
+*/
 
 - (Fault)check:(NSInteger)nr
                pos:(NSInteger)pos

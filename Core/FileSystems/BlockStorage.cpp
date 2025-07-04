@@ -71,7 +71,6 @@ FSBlockType
 BlockStorage::getType(Block nr) const
 {
     if (isize(nr) >= capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
-
     return blocks.contains(nr) ? blocks.at(nr)->type : FSBlockType::EMPTY_BLOCK;
 }
 
@@ -197,6 +196,45 @@ BlockStorage::erase(Block nr)
 }
 
 void
+BlockStorage::createUsageMap(u8 *buffer, isize len) const
+{
+    isize max = numBlocks();
+
+    // Setup priorities
+    i8 pri[12];
+    pri[isize(FSBlockType::UNKNOWN_BLOCK)]      = 0;
+    pri[isize(FSBlockType::EMPTY_BLOCK)]        = 1;
+    pri[isize(FSBlockType::BOOT_BLOCK)]         = 8;
+    pri[isize(FSBlockType::ROOT_BLOCK)]         = 9;
+    pri[isize(FSBlockType::BITMAP_BLOCK)]       = 7;
+    pri[isize(FSBlockType::BITMAP_EXT_BLOCK)]   = 6;
+    pri[isize(FSBlockType::USERDIR_BLOCK)]      = 5;
+    pri[isize(FSBlockType::FILEHEADER_BLOCK)]   = 3;
+    pri[isize(FSBlockType::FILELIST_BLOCK)]     = 2;
+    pri[isize(FSBlockType::DATA_BLOCK_OFS)]     = 2;
+    pri[isize(FSBlockType::DATA_BLOCK_FFS)]     = 2;
+
+    // Start from scratch
+    for (isize i = 0; i < len; i++) buffer[i] = 0;
+
+    // Mark all used blocks
+    for (auto &it : blocks) {
+
+        auto i = Block(it.first);
+
+        auto val = u8(getType(Block(i)));
+        auto pos = i * (len - 1) / (max - 1);
+        if (pri[buffer[pos]] < pri[val]) buffer[pos] = val;
+        if (pri[buffer[pos]] == pri[val] && pos > 0 && buffer[pos-1] != val) buffer[pos] = val;
+    }
+
+    // Fill gaps
+    for (isize pos = 1; pos < len; pos++) {
+        if (buffer[pos] == u8(FSBlockType::UNKNOWN_BLOCK)) buffer[pos] = buffer[pos - 1];
+    }
+}
+
+void
 BlockStorage::createAllocationMap(u8 *buffer, isize len) const
 {
     auto &unusedButAllocated = fs->doctor.diagnosis.unusedButAllocated;
@@ -211,11 +249,36 @@ BlockStorage::createAllocationMap(u8 *buffer, isize len) const
     for (isize i = 0; i < max; i++) buffer[i * (len - 1) / (max - 1)] = 0;
 
     // Mark all used blocks
-    for (auto &it : blocks) buffer[it.first * (len - 1) / (max - 1)] = 1;
+    for (auto &it : blocks) { if (!isEmpty(Block(it.first))) buffer[it.first * (len - 1) / (max - 1)] = 1; }
 
     // Mark all erroneous blocks
     for (auto &it : unusedButAllocated) buffer[it * (len - 1) / (max - 1)] = 2;
     for (auto &it : usedButUnallocated) buffer[it * (len - 1) / (max - 1)] = 3;
+
+    // Fill gaps
+    for (isize pos = 1; pos < len; pos++) {
+        if (buffer[pos] == 255) buffer[pos] = buffer[pos - 1];
+    }
+}
+
+void
+BlockStorage::createHealthMap(u8 *buffer, isize len) const
+{
+    auto &blockErrors = fs->doctor.diagnosis.blockErrors;
+
+    isize max = numBlocks();
+
+    // Start from scratch
+    for (isize i = 0; i < len; i++) buffer[i] = 255;
+
+    // Mark all free blocks
+    for (isize i = 0; i < max; i++) buffer[i * (len - 1) / (max - 1)] = 0;
+
+    // Mark all used blocks
+    for (auto &it : blocks) { if (!isEmpty(Block(it.first))) buffer[it.first * (len - 1) / (max - 1)] = 1; }
+
+    // Mark all erroneous blocks
+    for (auto &it : blockErrors) buffer[it * (len - 1) / (max - 1)] = 2;
 
     // Fill gaps
     for (isize pos = 1; pos < len; pos++) {
