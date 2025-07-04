@@ -208,7 +208,7 @@ FSBlock::relName(const FSBlock &top) const
 {
     string result;
 
-    auto nodes = fs->collect(*this, [](FSBlock *node) { return node->getParentDirBlock(); });
+    auto nodes = fs->collect(*this, [](auto *node) { return node->getParentDirBlock(); });
 
     for (auto &it : nodes) {
 
@@ -225,7 +225,7 @@ FSBlock::sanitizedPath() const
 {
     fs::path result;
 
-    auto nodes = fs->collect(*this, [](FSBlock *node) { return node->getParentDirBlock(); });
+    auto nodes = fs->collect(*this, [](auto *node) { return node->getParentDirBlock(); });
 
     for (auto &it : nodes) {
 

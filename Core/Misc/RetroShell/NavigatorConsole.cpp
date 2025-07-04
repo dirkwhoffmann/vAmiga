@@ -739,7 +739,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             auto matches = fs.find(pattern);
 
             // Filter the result
-            matches.erase(std::remove_if(matches.begin(), matches.end(), [&](FSBlock *node) {
+            matches.erase(std::remove_if(matches.begin(), matches.end(), [&](auto *node) {
                 return (d && !node->isDirectory()) || (f && !node->isFile());
             }), matches.end());
 
@@ -749,7 +749,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 int tab = 0;
 
                 std::sort(matches.begin(), matches.end(),
-                          [](FSBlock *b1, FSBlock *b2) { return b1->getName() < b2->getName(); });
+                          [](auto *b1, auto *b2) { return b1->getName() < b2->getName(); });
 
                 for (auto &it : matches) {
                     tab = std::max(int(it->pathName().size()), tab);

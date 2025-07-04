@@ -776,7 +776,7 @@ FileSystem::find(const FSBlock *root, const FSOpt &opt, std::unordered_set<Block
     if (opt.sort) {
 
         std::sort(result.begin(), result.end(),
-                  [](FSBlock *b1, FSBlock *b2) { return b1->getName() < b2->getName(); });
+                  [](auto *b1, auto *b2) { return b1->getName() < b2->getName(); });
     }
 
     return result;
@@ -854,13 +854,13 @@ FileSystem::collectDataBlocks(Block ref) const
 std::vector<FSBlock *>
 FileSystem::collectListBlocks(const FSBlock &node) const
 {
-    return collect(node, [&](FSBlock *block) { return block->getNextListBlock(); });
+    return collect(node, [&](auto *block) { return block->getNextListBlock(); });
 }
 
 std::vector<Block>
 FileSystem::collectListBlocks(const Block ref) const
 {
-    return collect(ref, [&](FSBlock *block) { return block->getNextListBlock(); });
+    return collect(ref, [&](auto *block) { return block->getNextListBlock(); });
 }
 
 std::vector<Block>
@@ -877,7 +877,7 @@ std::vector<FSBlock *>
 FileSystem::collectHashedBlocks(const FSBlock &node, isize bucket) const
 {
     if (FSBlock *ptr = hashableBlockPtr(node.getHashRef((u32)bucket)); ptr) {
-        return collect(*ptr, [&](FSBlock *p) { return p->getNextHashBlock(); });
+        return collect(*ptr, [&](auto *p) { return p->getNextHashBlock(); });
     } else {
         return {};
     }
@@ -948,7 +948,7 @@ FileSystem::listItems(std::ostream &os, std::vector<FSBlock *> items, const FSOp
 
     // Sort items
     if (opt.sort) {
-        std::sort(items.begin(), items.end(), [&](FSBlock *a, FSBlock *b) {
+        std::sort(items.begin(), items.end(), [&](auto *a, FSBlock *b) {
             return opt.sort(*a, *b);
         });
     }
