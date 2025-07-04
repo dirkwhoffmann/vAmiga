@@ -836,14 +836,14 @@ FSBlock::importBlock(const u8 *src, isize size)
 }
 
 void
-FSBlock::exportBlock(u8 *dst, isize size)
+FSBlock::exportBlock(u8 *dst, isize size) const
 {
     assert(dst);
     assert(size == bsize());
 
     // Rectify the checksum
     // TODO: DON'T DO THIS HERE. ADD ASSERT. CHANGE METHOD TO CONST
-    updateChecksum();
+    const_cast<FSBlock *>(this)->updateChecksum();
 
     // Export the block
     if (bdata) {
@@ -854,7 +854,7 @@ FSBlock::exportBlock(u8 *dst, isize size)
 }
 
 Fault
-FSBlock::exportBlock(const fs::path &path)
+FSBlock::exportBlock(const fs::path &path) const
 {
     switch (type) {
             
@@ -867,7 +867,7 @@ FSBlock::exportBlock(const fs::path &path)
 }
 
 Fault
-FSBlock::exportUserDirBlock(const fs::path &path)
+FSBlock::exportUserDirBlock(const fs::path &path) const
 {
     // Assemble the host file name
     auto filename = path / sanitizedPath();
@@ -880,7 +880,7 @@ FSBlock::exportUserDirBlock(const fs::path &path)
 }
 
 Fault
-FSBlock::exportFileHeaderBlock(const fs::path &path)
+FSBlock::exportFileHeaderBlock(const fs::path &path) const
 {
     // Assemble the host file name
     auto filename = path / sanitizedPath();
@@ -1892,7 +1892,7 @@ FSBlock::setDataBytesInBlock(u32 val)
 }
 
 isize
-FSBlock::writeData(std::ostream &os)
+FSBlock::writeData(std::ostream &os) const
 {
     Buffer<u8> buffer;
     
@@ -1906,7 +1906,7 @@ FSBlock::writeData(std::ostream &os)
 }
 
 isize
-FSBlock::writeData(std::ostream &os, isize size)
+FSBlock::writeData(std::ostream &os, isize size) const
 {
     isize count = std::min(dsize(), size);
     
@@ -1990,7 +1990,7 @@ FSBlock::writeData(Buffer<u8> &buf) const
 }
 
 isize
-FSBlock::writeData(Buffer<u8> &buf, isize offset, isize count)
+FSBlock::writeData(Buffer<u8> &buf, isize offset, isize count) const
 {
     count = std::min(dsize(), count);
     

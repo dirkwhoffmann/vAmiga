@@ -179,15 +179,15 @@ public:
     void importBlock(const u8 *src, isize bsize);
 
     // Exports this block to a buffer (bsize must match the volume block size)
-    void exportBlock(u8 *dst, isize bsize);
-    
+    void exportBlock(u8 *dst, isize bsize) const;
+
     // Exports this block to the host file system
-    Fault exportBlock(const fs::path &path);
+    Fault exportBlock(const fs::path &path) const;
 
 private:
     
-    Fault exportUserDirBlock(const fs::path &path);
-    Fault exportFileHeaderBlock(const fs::path &path);
+    Fault exportUserDirBlock(const fs::path &path) const;
+    Fault exportFileHeaderBlock(const fs::path &path) const;
 
 
     //
@@ -357,10 +357,10 @@ public:
     // Exporting
     //
     
-    isize writeData(std::ostream &os);
-    isize writeData(std::ostream &os, isize size);
+    isize writeData(std::ostream &os) const;
+    isize writeData(std::ostream &os, isize size) const;
     isize writeData(Buffer<u8> &buf) const;
-    isize writeData(Buffer<u8> &buf, isize offset, isize count);
+    isize writeData(Buffer<u8> &buf, isize offset, isize count) const;
 
     
     //
