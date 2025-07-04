@@ -125,13 +125,13 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
 }
 
 bool
-FileSystem::isInitialized() const
+FileSystem::isInitialized() const noexcept
 {
     return numBlocks() > 0;
 }
 
 bool
-FileSystem::isFormatted() const
+FileSystem::isFormatted() const noexcept
 {
     // Check if the file system is initialized
     if (!isInitialized()) return false;
@@ -147,7 +147,7 @@ FileSystem::isFormatted() const
 }
 
 void
-FileSystem::_dump(Category category, std::ostream &os) const
+FileSystem::_dump(Category category, std::ostream &os) const noexcept
 {
     using namespace util;
 
@@ -223,7 +223,7 @@ FileSystem::_dump(Category category, std::ostream &os) const
 }
 
 void
-FileSystem::cacheInfo(FSInfo &result) const
+FileSystem::cacheInfo(FSInfo &result) const noexcept
 {
     result.name = getName().cpp_str();
     result.creationDate = getCreationDate();
@@ -239,13 +239,13 @@ FileSystem::cacheInfo(FSInfo &result) const
 }
 
 void
-FileSystem::cacheStats(FSStats &result) const
+FileSystem::cacheStats(FSStats &result) const noexcept
 {
 
 }
 
 isize
-FileSystem::freeBlocks() const
+FileSystem::freeBlocks() const noexcept
 {
     isize result = 0;
     isize count = numBlocks();
@@ -258,27 +258,27 @@ FileSystem::freeBlocks() const
 }
 
 isize
-FileSystem::usedBlocks() const
+FileSystem::usedBlocks() const noexcept
 {
     return numBlocks() - freeBlocks();
 }
 
 FSName
-FileSystem::getName() const
+FileSystem::getName() const noexcept
 {
     auto *rb = storage.read(rootBlock, FSBlockType::ROOT_BLOCK);
     return rb ? rb->getName() : FSName("");
 }
 
 string
-FileSystem::getCreationDate() const
+FileSystem::getCreationDate() const noexcept
 {
     auto *rb = storage.read(rootBlock, FSBlockType::ROOT_BLOCK);
     return rb ? rb->getCreationDate().str() : "";
 }
 
 string
-FileSystem::getModificationDate() const
+FileSystem::getModificationDate() const noexcept
 {
     auto *rb = storage.read(rootBlock, FSBlockType::ROOT_BLOCK);
     // FSBlock *rb = rootBlockPtr(rootBlock);
@@ -286,13 +286,13 @@ FileSystem::getModificationDate() const
 }
 
 string
-FileSystem::getBootBlockName() const
+FileSystem::getBootBlockName() const noexcept
 {
     return BootBlockImage(storage[0].data(), storage[1].data()).name;
 }
 
 BootBlockType
-FileSystem::bootBlockType() const
+FileSystem::bootBlockType() const noexcept
 {
     return BootBlockImage(storage[0].data(), storage[1].data()).type;
 }
@@ -396,26 +396,26 @@ FileSystem::operator[](size_t nr) const
 }
 
 FSBlockType
-FileSystem::blockType(Block nr) const
+FileSystem::blockType(Block nr) const noexcept
 {
     stats.blockReads++;
     return storage.getType(nr);
 }
 
 FSItemType
-FileSystem::itemType(Block nr, isize pos) const
+FileSystem::itemType(Block nr, isize pos) const noexcept
 {
     return storage.read(nr) ? storage[nr].itemType(pos) : FSItemType::UNUSED;
 }
 
 FSBlock *
-FileSystem::blockPtr(Block nr) const
+FileSystem::blockPtr(Block nr) const noexcept
 {
     return const_cast<FSBlock *>(storage.read(nr));
 }
 
 FSBlock *
-FileSystem::hashableBlockPtr(Block nr) const
+FileSystem::hashableBlockPtr(Block nr) const noexcept
 {
     if (auto *p = const_cast<FSBlock *>(storage.read(nr)); p) {
         if (p->type == FSBlockType::USERDIR_BLOCK || p->type == FSBlockType::FILEHEADER_BLOCK) {
@@ -426,13 +426,13 @@ FileSystem::hashableBlockPtr(Block nr) const
 }
 
 u8
-FileSystem::readByte(Block nr, isize offset) const
+FileSystem::readByte(Block nr, isize offset) const noexcept
 {
     return (storage.read(nr) && offset < traits.bsize) ? storage[nr].data()[offset] : 0;
 }
 
 string
-FileSystem::ascii(Block nr, isize offset, isize len) const
+FileSystem::ascii(Block nr, isize offset, isize len) const noexcept
 {
     assert(offset + len <= traits.bsize);
 
@@ -440,7 +440,7 @@ FileSystem::ascii(Block nr, isize offset, isize len) const
 }
 
 bool
-FileSystem::isFree(Block nr) const
+FileSystem::isFree(Block nr) const noexcept
 {
     assert(isize(nr) < traits.blocks);
 
@@ -456,7 +456,7 @@ FileSystem::isFree(Block nr) const
 }
 
 FSBlock *
-FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit)
+FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) noexcept
 {
     assert(isize(nr) < traits.blocks);
 
@@ -498,7 +498,7 @@ FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit)
 }
 
 const FSBlock *
-FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) const
+FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) const noexcept
 {
     return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->locateAllocationBit(nr, byte, bit));
 }
@@ -517,19 +517,19 @@ FileSystem::parent(const FSBlock &node) const
 }
 
 FSBlock *
-FileSystem::parent(const FSBlock *node)
+FileSystem::parent(const FSBlock *node) noexcept
 {
     return node->isRoot() ? blockPtr(node->nr) : blockPtr(node->nr)->getParentDirBlock();
 }
 
 const FSBlock *
-FileSystem::parent(const FSBlock *node) const
+FileSystem::parent(const FSBlock *node) const noexcept
 {
     return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->parent(node));
 }
 
 FSBlock *
-FileSystem::seekPtr(const FSBlock *root, const FSName &name)
+FileSystem::seekPtr(const FSBlock *root, const FSName &name) noexcept
 {
     if (!root) return nullptr;
 
@@ -564,13 +564,13 @@ FileSystem::seekPtr(const FSBlock *root, const FSName &name)
 }
 
 const FSBlock *
-FileSystem::seekPtr(const FSBlock *root, const FSName &name) const
+FileSystem::seekPtr(const FSBlock *root, const FSName &name) const noexcept
 {
     return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->seekPtr(root, name));
 }
 
 FSBlock *
-FileSystem::seekPtr(const FSBlock *root, const fs::path &name)
+FileSystem::seekPtr(const FSBlock *root, const fs::path &name) noexcept
 {
     if (!root) return nullptr;
 
@@ -580,13 +580,13 @@ FileSystem::seekPtr(const FSBlock *root, const fs::path &name)
 }
 
 const FSBlock *
-FileSystem::seekPtr(const FSBlock *root, const fs::path &name) const
+FileSystem::seekPtr(const FSBlock *root, const fs::path &name) const noexcept
 {
     return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->seekPtr(root, name));
 }
 
 FSBlock *
-FileSystem::seekPtr(const FSBlock *root, const string &name)
+FileSystem::seekPtr(const FSBlock *root, const string &name) noexcept
 {
     if (!root) return nullptr;
 
@@ -598,7 +598,7 @@ FileSystem::seekPtr(const FSBlock *root, const string &name)
 }
 
 const FSBlock *
-FileSystem::seekPtr(const FSBlock *root, const string &name) const
+FileSystem::seekPtr(const FSBlock *root, const string &name) const noexcept
 {
     return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->seekPtr(root, name));
 }
@@ -1016,7 +1016,7 @@ FileSystem::collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> nex
 }
 
 FSBlockType
-FileSystem::predictBlockType(Block nr, const u8 *buf) const
+FileSystem::predictBlockType(Block nr, const u8 *buf) const noexcept
 {
     assert(buf != nullptr);
     

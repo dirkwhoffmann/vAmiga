@@ -86,15 +86,15 @@ public:
 
     virtual ~FileSystem();
 
-    void init(FileSystemDescriptor layout, u8 *buf, isize len) throws;
-    void init(const MediaFile &file, isize part) throws;
-    void init(const ADFFile &adf) throws;
-    void init(const HDFFile &hdf, isize part) throws;
-    void init(FloppyDrive &dfn) throws;
-    void init(const HardDrive &hdn, isize part) throws;
+    void init(FileSystemDescriptor layout, u8 *buf, isize len);
+    void init(const MediaFile &file, isize part);
+    void init(const ADFFile &adf);
+    void init(const HDFFile &hdf, isize part);
+    void init(FloppyDrive &dfn);
+    void init(const HardDrive &hdn, isize part);
 
-    bool isInitialized() const;
-    bool isFormatted() const;
+    bool isInitialized() const noexcept;
+    bool isFormatted() const noexcept;
 
 
     //
@@ -103,8 +103,8 @@ public:
     
 protected:
     
-    const char *objectName() const override { return "FileSystem"; }
-    void _dump(Category category, std::ostream &os) const override;
+    const char *objectName() const noexcept override { return "FileSystem"; }
+    void _dump(Category category, std::ostream &os) const noexcept override;
 
 
     //
@@ -113,8 +113,8 @@ protected:
 
 public:
 
-    void cacheInfo(FSInfo &result) const override;
-    void cacheStats(FSStats &result) const override;
+    void cacheInfo(FSInfo &result) const noexcept override;
+    void cacheStats(FSStats &result) const noexcept override;
 
 
     //
@@ -123,29 +123,29 @@ public:
 
 public:
 
-    const FSTraits &getTraits() const { return traits; }
+    const FSTraits &getTraits() const noexcept { return traits; }
 
     // Returns capacity information
-    isize numBlocks() const { return storage.numBlocks(); }
-    isize numBytes() const { return storage.numBytes(); }
-    isize blockSize() const { return storage.blockSize(); }
+    isize numBlocks() const noexcept { return storage.numBlocks(); }
+    isize numBytes() const noexcept { return storage.numBytes(); }
+    isize blockSize() const noexcept { return storage.blockSize(); }
 
     // Reports usage information
-    isize freeBlocks() const;
-    isize usedBlocks() const;
-    isize freeBytes() const { return freeBlocks() * traits.bsize; }
-    isize usedBytes() const { return usedBlocks() * traits.bsize; }
-    double fillLevel() const { return double(100) * usedBlocks() / numBlocks(); }
+    isize freeBlocks() const noexcept;
+    isize usedBlocks() const noexcept;
+    isize freeBytes() const noexcept { return freeBlocks() * traits.bsize; }
+    isize usedBytes() const noexcept { return usedBlocks() * traits.bsize; }
+    double fillLevel() const noexcept { return double(100) * usedBlocks() / numBlocks(); }
 
     // Reads information from the root block
-    FSName getName() const;
-    string getCreationDate() const;
-    string getModificationDate() const;
-    
+    FSName getName() const noexcept;
+    string getCreationDate() const noexcept;
+    string getModificationDate() const noexcept;
+
     // Analyzes the boot block
-    string getBootBlockName() const;
-    BootBlockType bootBlockType() const;
-    bool hasVirus() const { return bootBlockType() == BootBlockType::VIRUS; }
+    string getBootBlockName() const noexcept;
+    BootBlockType bootBlockType() const noexcept;
+    bool hasVirus() const noexcept { return bootBlockType() == BootBlockType::VIRUS; }
 
     
     //
@@ -175,23 +175,23 @@ public:
     const FSBlock &operator[](size_t nr) const;
 
     // Returns the type of a certain block
-    FSBlockType blockType(Block nr) const;
-    bool isEmpty(Block nr) const { return blockType(nr) == FSBlockType::EMPTY_BLOCK; }
+    FSBlockType blockType(Block nr) const noexcept;
+    bool isEmpty(Block nr) const noexcept { return blockType(nr) == FSBlockType::EMPTY_BLOCK; }
 
     // Returns the usage type of a certain byte in a certain block
-    FSItemType itemType(Block nr, isize pos) const;
-    
+    FSItemType itemType(Block nr, isize pos) const noexcept;
+
     // Queries a pointer from the block storage (may return nullptr)
-    FSBlock *blockPtr(Block nr) const; // DEPRECATED
+    FSBlock *blockPtr(Block nr) const noexcept; // DEPRECATED
 
     // Queries a pointer to a block of a certain type (may return nullptr)
-    FSBlock *hashableBlockPtr(Block nr) const;
-    
+    FSBlock *hashableBlockPtr(Block nr) const noexcept;
+
     // Reads a single byte from a block
-    u8 readByte(Block nr, isize offset) const;
+    u8 readByte(Block nr, isize offset) const noexcept;
 
     // Predicts the type of a block by analyzing its number and data
-    FSBlockType predictBlockType(Block nr, const u8 *buf) const;
+    FSBlockType predictBlockType(Block nr, const u8 *buf) const noexcept;
 
 
     //
@@ -201,14 +201,14 @@ public:
 public:
     
     // Checks if a block is free or allocated
-    bool isFree(Block nr) const;
-    bool isAllocated(Block nr) const { return !isFree(nr); }
-    
+    bool isFree(Block nr) const noexcept;
+    bool isAllocated(Block nr) const noexcept { return !isFree(nr); }
+
 protected:
     
     // Locates the allocation bit for a certain block
-    FSBlock *locateAllocationBit(Block nr, isize *byte, isize *bit);
-    const FSBlock *locateAllocationBit(Block nr, isize *byte, isize *bit) const;
+    FSBlock *locateAllocationBit(Block nr, isize *byte, isize *bit) noexcept;
+    const FSBlock *locateAllocationBit(Block nr, isize *byte, isize *bit) const noexcept;
 
     
     //
@@ -227,9 +227,9 @@ public:
 
     // Returns the parent directory
     FSBlock &parent(const FSBlock &node);
-    FSBlock *parent(const FSBlock *node);
+    FSBlock *parent(const FSBlock *node) noexcept;
     const FSBlock &parent(const FSBlock &node) const;
-    const FSBlock *parent(const FSBlock *node) const;
+    const FSBlock *parent(const FSBlock *node) const noexcept;
 
     // Changes the working directory
     void cd(const FSName &name);
@@ -241,12 +241,12 @@ public:
     bool exists(const fs::path &path) const { return exists(pwd(), path); }
 
     // Seeks an item in the directory tree (returns nullptr if not found)
-    FSBlock *seekPtr(const FSBlock *root, const FSName &name);
-    FSBlock *seekPtr(const FSBlock *root, const fs::path &name);
-    FSBlock *seekPtr(const FSBlock *root, const string &name);
-    const FSBlock *seekPtr(const FSBlock *root, const FSName &name) const;
-    const FSBlock *seekPtr(const FSBlock *root, const fs::path &name) const;
-    const FSBlock *seekPtr(const FSBlock *root, const string &name) const;
+    FSBlock *seekPtr(const FSBlock *root, const FSName &name) noexcept;
+    FSBlock *seekPtr(const FSBlock *root, const fs::path &name) noexcept;
+    FSBlock *seekPtr(const FSBlock *root, const string &name) noexcept;
+    const FSBlock *seekPtr(const FSBlock *root, const FSName &name) const noexcept;
+    const FSBlock *seekPtr(const FSBlock *root, const fs::path &name) const noexcept;
+    const FSBlock *seekPtr(const FSBlock *root, const string &name) const noexcept;
 
     // Seeks an item in the directory tree (returns nullptr if not found)
     FSBlock &seek(const FSBlock &root, const FSName &name);
@@ -322,7 +322,7 @@ public:
 public:
 
     // Returns a portion of the block as an ASCII dump
-    string ascii(Block nr, isize offset, isize len) const;
+    string ascii(Block nr, isize offset, isize len) const noexcept;
 
     // Returns a block summary for creating the block usage image
     void createUsageMap(u8 *buffer, isize len) const;
