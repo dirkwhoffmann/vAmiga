@@ -647,7 +647,7 @@ FileSystem::seek(const FSBlock &root, const string &name) const
     return const_cast<const FSBlock &>(const_cast<FileSystem *>(this)->seek(root, name));
 }
 
-std::vector<FSBlock *>
+std::vector<const FSBlock *>
 FileSystem::find(const FSPattern &pattern) const
 {
     std::vector<Block> result;
@@ -665,7 +665,7 @@ FileSystem::find(const Block root, const FSPattern &pattern) const
     return FSBlock::refs(find(read(root), pattern));
 }
 
-std::vector<FSBlock *>
+std::vector<const FSBlock *>
 FileSystem::match(const FSBlock *node, const FSPattern &pattern) const
 {
     if (pattern.isAbsolute()) {
@@ -675,16 +675,16 @@ FileSystem::match(const FSBlock *node, const FSPattern &pattern) const
     }
 }
 
-std::vector<FSBlock *>
+std::vector<const FSBlock *>
 FileSystem::match(const FSBlock &node, const FSPattern &pattern) const
 {
     return match(&node, pattern);
 }
 
-std::vector<FSBlock *>
+std::vector<const FSBlock *>
 FileSystem::match(const FSBlock *root, std::vector<FSPattern> patterns) const
 {
-    std::vector<FSBlock *> result;
+    std::vector<const FSBlock *> result;
 
     if (patterns.empty()) return {};
 
@@ -718,14 +718,14 @@ FileSystem::match(const FSBlock *root, std::vector<FSPattern> patterns) const
     return result;
 }
 
-std::vector<FSBlock *>
+std::vector<const FSBlock *>
 FileSystem::find(const FSBlock &root, const FSOpt &opt) const
 {
     require_file_or_directory(root);
     return find(&root, opt);
 }
 
-std::vector<FSBlock *>
+std::vector<const FSBlock *>
 FileSystem::find(const FSBlock *root, const FSOpt &opt) const
 {
     if (!root) return {};
@@ -739,10 +739,10 @@ FileSystem::find(const Block root, const FSOpt &opt) const
     return FSBlock::refs(find(read(root), opt));
 }
 
-std::vector<FSBlock *>
+std::vector<const FSBlock *>
 FileSystem::find(const FSBlock *root, const FSOpt &opt, std::unordered_set<Block> &visited) const
 {
-    std::vector<FSBlock *> result;
+    std::vector<const FSBlock *> result;
 
     // Collect all items in the hash table
     auto hashedBlocks = collectHashedBlocks(*root);
@@ -782,13 +782,13 @@ FileSystem::find(const FSBlock *root, const FSOpt &opt, std::unordered_set<Block
     return result;
 }
 
-std::vector<FSBlock *>
+std::vector<const FSBlock *>
 FileSystem::find(const FSBlock &root, const FSPattern &pattern) const
 {
     return find(&root, pattern);
 }
 
-std::vector<FSBlock *>
+std::vector<const FSBlock *>
 FileSystem::find(const FSBlock *root, const FSPattern &pattern) const
 {
     return find(root, {
@@ -942,13 +942,13 @@ FileSystem::listDirectory(std::ostream &os, const FSBlock &path, const FSOpt &op
 }
 
 void
-FileSystem::listItems(std::ostream &os, std::vector<FSBlock *> items, const FSOpt &opt) const
+FileSystem::listItems(std::ostream &os, std::vector<const FSBlock *> items, const FSOpt &opt) const
 {
     isize column = 0;
 
     // Sort items
     if (opt.sort) {
-        std::sort(items.begin(), items.end(), [&](auto *a, FSBlock *b) {
+        std::sort(items.begin(), items.end(), [&](auto *a, auto *b) {
             return opt.sort(*a, *b);
         });
     }

@@ -120,7 +120,7 @@ FSBlock::make(FileSystem *ref, Block nr, FSBlockType type)
 }
 
 std::vector<Block>
-FSBlock::refs(const std::vector<FSBlock *> blocks)
+FSBlock::refs(const std::vector<const FSBlock *> blocks)
 {
     std::vector<Block> result;
     for (auto &it : blocks) { if (it) result.push_back(it->nr); }

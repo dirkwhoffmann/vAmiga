@@ -91,7 +91,7 @@ FSTree::bfsWalkRec(std::function<void(const FSTree &)> func)
 }
 
 void
-FSTree::sort(std::function<bool(FSBlock &,FSBlock &)> sort)
+FSTree::sort(std::function<bool(const FSBlock &,const FSBlock &)> sort)
 {
     if (sort == nullptr) return;
 

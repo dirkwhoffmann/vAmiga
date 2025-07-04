@@ -254,31 +254,31 @@ public:
     const FSBlock &seek(const FSBlock &root, const string &name) const;
 
     // Seeks all items satisfying a predicate
-    std::vector<FSBlock *> find(const FSPattern &pattern) const;
-    std::vector<FSBlock *> find(const FSBlock *root, const FSOpt &opt) const;
-    std::vector<FSBlock *> find(const FSBlock &root, const FSOpt &opt) const;
+    std::vector<const FSBlock *> find(const FSPattern &pattern) const;
+    std::vector<const FSBlock *> find(const FSBlock *root, const FSOpt &opt) const;
+    std::vector<const FSBlock *> find(const FSBlock &root, const FSOpt &opt) const;
     std::vector<Block> find(const Block root, const FSOpt &opt) const;
 
     // Seeks all items with a pattern-matching name
-    std::vector<FSBlock *> find(const FSBlock *root, const FSPattern &pattern) const;
-    std::vector<FSBlock *> find(const FSBlock &root, const FSPattern &pattern) const;
+    std::vector<const FSBlock *> find(const FSBlock *root, const FSPattern &pattern) const;
+    std::vector<const FSBlock *> find(const FSBlock &root, const FSPattern &pattern) const;
     std::vector<Block> find(const Block root, const FSPattern &pattern) const;
 
     // Collects all items with a pattern-matching path
-    std::vector<FSBlock *> match(const FSBlock *root, const FSPattern &pattern) const;
-    std::vector<FSBlock *> match(const FSBlock &root, const FSPattern &pattern) const;
-    std::vector<FSBlock *> match(const FSBlock *root, std::vector<FSPattern> pattern) const;
+    std::vector<const FSBlock *> match(const FSBlock *root, const FSPattern &pattern) const;
+    std::vector<const FSBlock *> match(const FSBlock &root, const FSPattern &pattern) const;
+    std::vector<const FSBlock *> match(const FSBlock *root, std::vector<FSPattern> pattern) const;
 
     // Lists the contents of a directory ('dir' command, 'list' command)
     void list(std::ostream &os, const FSBlock &path, const FSOpt &opt = {}) const;
     void list(std::ostream &os, const FSOpt &opt = {}) const { return list(os, pwd(), opt); }
     void listDirectory(std::ostream &os, const FSBlock &path, const FSOpt &opt = {}) const;
-    void listItems(std::ostream &os, std::vector<FSBlock *> items, const FSOpt &opt = {}) const;
+    void listItems(std::ostream &os, std::vector<const FSBlock *> items, const FSOpt &opt = {}) const;
 
 private:
 
-    std::vector<FSBlock *> find(const FSBlock *root, const FSOpt &opt,
-                                std::unordered_set<Block> &visited) const;
+    std::vector<const FSBlock *> find(const FSBlock *root, const FSOpt &opt,
+                                      std::unordered_set<Block> &visited) const;
 
     //
     // Traversing linked lists

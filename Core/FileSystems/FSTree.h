@@ -18,11 +18,11 @@ namespace vamiga {
 
 struct FSTree {
 
-    FSBlock *node;
+    const FSBlock *node;
     std::vector<FSTree> children;
 
     FSTree() : node(nullptr) {}
-    FSTree(FSBlock *node) : node(node) {}
+    FSTree(const FSBlock *node) : node(node) {}
     FSTree(const FSBlock &path, const FSOpt &opt);
 
     void init(const FSBlock &path, const FSOpt &opt, std::unordered_set<Block> &visited);
@@ -30,13 +30,13 @@ struct FSTree {
     bool empty() { return node == nullptr; }
     isize size();
 
-    void addChild(FSBlock *node) { if (node) children.push_back(FSTree(node)); }
+    void addChild(const FSBlock *node) { if (node) children.push_back(FSTree(node)); }
 
     // Traverses the tree and applies a function at each node
     void bfsWalk(std::function<void(const FSTree &)>);
     void dfsWalk(std::function<void(const FSTree &)>);
 
-    void sort(std::function<bool(FSBlock &,FSBlock &)>);
+    void sort(std::function<bool(const FSBlock &,const FSBlock &)>);
 
 private:
 
