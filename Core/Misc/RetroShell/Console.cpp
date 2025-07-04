@@ -467,31 +467,24 @@ Console::split(const string& userInput)
     return result;
 }
 
-RSCommand *
-Console::seekCommand(std::vector<string> &argv)
+std::pair<RSCommand *, std::vector<string>>
+Console::seekCommand(const string &argv)
 {
-    RSCommand *result = nullptr;
+    return seekCommand(split(argv));
+}
 
-    for (auto *it = &root; !argv.empty() && (it = it->seek(argv.front())); ) {
+std::pair<RSCommand *, std::vector<string>>
+Console::seekCommand(const std::vector<string> &argv)
+{
+    std::vector<string> args = argv;
+    RSCommand *cmd = nullptr;
 
-        argv.erase(argv.begin());
-        result = it;
+    for (auto *it = &root; !args.empty() && (it = it->seek(args.front())); ) {
+
+        args.erase(args.begin());
+        cmd = it;
     }
-    return result;
-}
-
-std::pair<RSCommand *, std::vector<string>>
-Console::seekCommandNew(const string &argv)
-{
-    return seekCommandNew(split(argv));
-}
-
-std::pair<RSCommand *, std::vector<string>>
-Console::seekCommandNew(const std::vector<string> &argv)
-{
-    std::vector<string> arguments = argv;
-    auto *cmd = seekCommand(arguments);
-    return { cmd ? cmd : &root, arguments };
+    return { cmd ? cmd : &root, args };
 }
 
 string
@@ -787,16 +780,16 @@ Console::exec(const string& userInput, bool verbose)
 void
 Console::exec(const Tokens &argv, bool verbose)
 {
-    Tokens args = argv;
+    // Tokens args = argv;
 
     // In 'verbose' mode, print the token list
-    if (verbose) *this << args << '\n';
+    if (verbose) *this << argv << '\n';
 
     // Skip empty lines
-    if (args.empty()) return;
+    if (argv.empty()) return;
 
     // Find the command in the command tree
-    if (auto *cmd = seekCommand(args); cmd) {
+    if (auto [cmd, args] = seekCommand(argv); cmd) {
 
         // Parse arguments
         Arguments parsedArgs = parse(*cmd, args);
@@ -829,7 +822,7 @@ Console::argUsage(const RSCommand& current, const string &prefix)
 void
 Console::help(std::ostream &os, const string& userInput, isize tabs)
 {
-    if (auto [cmd, args] = seekCommandNew(userInput); cmd) {
+    if (auto [cmd, args] = seekCommand(userInput); cmd) {
         cmd->printHelp(os);
     }
 }

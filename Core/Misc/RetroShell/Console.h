@@ -268,9 +268,8 @@ protected:
     virtual void autoComplete(Tokens &argv);
 
     // Strips off the command tokens and returns a pointer to the command
-    RSCommand *seekCommand(std::vector<string> &argv);
-    std::pair<RSCommand *, std::vector<string>> seekCommandNew(const string &argv);
-    std::pair<RSCommand *, std::vector<string>> seekCommandNew(const std::vector<string> &argv);
+    std::pair<RSCommand *, std::vector<string>> seekCommand(const string &argv);
+    std::pair<RSCommand *, std::vector<string>> seekCommand(const std::vector<string> &argv);
 
     // Parses an argument list
     std::map<string,string> parse(const RSCommand &cmd, const Tokens &args);

@@ -67,7 +67,7 @@ NavigatorConsole::autoComplete(Tokens &argv)
     // Only proceed if there is anything to complete
     if (argv.empty()) return;
 
-    if (auto [cmd, remaining] = seekCommandNew(argv); remaining.size() > 0) {
+    if (auto [cmd, remaining] = seekCommand(argv); remaining.size() > 0) {
 
         // First, try to auto-complete the last token with a command name
         if (remaining.size() != 1 || !cmd->autoComplete(argv.back())) {
@@ -105,7 +105,7 @@ NavigatorConsole::autoCompleteFilename(const string &input) const
 void
 NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
 {
-    auto [cmd, args] = seekCommandNew(argv);
+    auto [cmd, args] = seekCommand(argv);
 
     // Determine the kind of help to display
     bool displayFiles = (tabs % 2 == 0) && fs.isFormatted() && cmd && cmd->callback && (cmd->flags & rs::path);
