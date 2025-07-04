@@ -1320,7 +1320,7 @@ FSBlock *
 FSBlock::getParentDirBlock() const
 {
     Block nr = getParentDirRef();
-    return nr ? fs->blockPtr(nr) : nullptr;
+    return nr ? fs->read(nr) : nullptr;
 }
 
 Block
@@ -1394,7 +1394,7 @@ FSBlock *
 FSBlock::getNextHashBlock() const
 {
     Block nr = getNextHashRef();
-    return nr ? fs->blockPtr(nr) : nullptr;
+    return nr ? fs->read(nr) : nullptr;
 }
 
 Block

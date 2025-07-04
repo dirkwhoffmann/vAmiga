@@ -140,7 +140,7 @@ NavigatorConsole::parseBlock(const string &argv)
 {
     fs.require_initialized();
 
-    if (auto nr = Block(parseNum(argv)); fs.blockPtr(nr)) {
+    if (auto nr = Block(parseNum(argv)); fs.read(nr)) {
         return nr;
     }
 
@@ -158,7 +158,7 @@ NavigatorConsole::parseBlock(const Arguments &argv, const string &token, Block f
 {
     auto nr = argv.contains(token) ? Block(parseNum(argv.at(token))) : fallback;
 
-    if (!fs.blockPtr(nr)) {
+    if (!fs.read(nr)) {
 
         if (!fs.isInitialized()) {
             throw AppError(Fault::FS_UNINITIALIZED);
@@ -871,7 +871,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
             auto nr = parseBlock(args, "nr");
 
-            if (auto ptr = fs.blockPtr(nr); ptr) {
+            if (auto ptr = fs.read(nr); ptr) {
                 ptr->dump(Category::Blocks, os);
             }
         }
@@ -896,7 +896,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             auto nr = parseBlock(args, "nr", fs.pwd().nr);
             auto opt = parseDumpOpts(args);
 
-            if (auto ptr = fs.blockPtr(nr); ptr) {
+            if (auto ptr = fs.read(nr); ptr) {
 
                 ptr->hexDump(os, opt);
             }

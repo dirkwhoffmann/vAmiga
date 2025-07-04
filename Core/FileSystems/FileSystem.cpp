@@ -420,12 +420,6 @@ FileSystem::itemType(Block nr, isize pos) const noexcept
 }
 
 FSBlock *
-FileSystem::blockPtr(Block nr) const noexcept
-{
-    return const_cast<FSBlock *>(storage.read(nr));
-}
-
-FSBlock *
 FileSystem::hashableBlockPtr(Block nr) const noexcept
 {
     if (auto *p = const_cast<FSBlock *>(storage.read(nr)); p) {
@@ -530,7 +524,7 @@ FileSystem::parent(const FSBlock &node) const
 FSBlock *
 FileSystem::parent(const FSBlock *node) noexcept
 {
-    return node->isRoot() ? blockPtr(node->nr) : blockPtr(node->nr)->getParentDirBlock();
+    return node->isRoot() ? read(node->nr) : read(node->nr)->getParentDirBlock();
 }
 
 const FSBlock *
@@ -547,10 +541,10 @@ FileSystem::seekPtr(const FSBlock *root, const FSName &name) noexcept
     std::unordered_set<Block> visited;
 
     // Check for special tokens
-    if (name == "")   return blockPtr(root->nr);
-    if (name == ".")  return blockPtr(root->nr);
+    if (name == "/")  return read(rootBlock);
+    if (name == "")   return read(root->nr);
+    if (name == ".")  return read(root->nr);
     if (name == "..") return parent(root);
-    if (name == "/")  return blockPtr(rootBlock);
 
     // Only proceed if a hash table is present
     if (root->hasHashTable()) {
@@ -585,7 +579,7 @@ FileSystem::seekPtr(const FSBlock *root, const fs::path &name) noexcept
 {
     if (!root) return nullptr;
 
-    FSBlock *result = blockPtr(root->nr);
+    FSBlock *result = read(root->nr);
     for (const auto &it : name) { if (result) { result = seekPtr(result, FSName(it)); } }
     return result;
 }
@@ -603,7 +597,7 @@ FileSystem::seekPtr(const FSBlock *root, const string &name) noexcept
 
     auto parts = util::split(name, '/');
 
-    FSBlock *result = blockPtr(root->nr);
+    FSBlock *result = read(root->nr);
     for (auto &it : parts) { if (result) { result = seekPtr(result, FSName(it)); } }
     return result;
 }
@@ -851,7 +845,7 @@ std::vector<Block>
 FileSystem::collectDataBlocks(Block ref) const
 {
     std::vector<Block> result;
-    if (auto *ptr = blockPtr(ref)) {
+    if (auto *ptr = read(ref)) {
         for (auto &it: collectDataBlocks(*ptr)) result.push_back(it->nr);
     }
     return result;
@@ -873,7 +867,7 @@ std::vector<Block>
 FileSystem::collectHashedBlocks(Block ref, isize bucket) const
 {
     std::vector<Block> result;
-    if (auto *ptr = blockPtr(ref)) {
+    if (auto *ptr = read(ref)) {
         for (auto &it: collectHashedBlocks(*ptr, bucket)) result.push_back(it->nr);
     }
     return result;
@@ -893,7 +887,7 @@ std::vector<Block>
 FileSystem::collectHashedBlocks(Block ref) const
 {
     std::vector<Block> result;
-    if (auto *ptr = blockPtr(ref)) {
+    if (auto *ptr = read(ref)) {
         for (auto &it: collectHashedBlocks(*ptr)) result.push_back(it->nr);
     }
     return result;
@@ -990,7 +984,7 @@ FileSystem::collect(const Block nr, std::function<FSBlock *(FSBlock *)> next) co
     std::vector<Block> result;
     std::unordered_set<Block> visited;
 
-    for (auto block = blockPtr(nr); block; block = next(block)) {
+    for (auto block = const_cast<FSBlock *>(read(nr)); block; block = next(block)) {
 
         // Break the loop if this block has been visited before
         if (visited.contains(block->nr)) break;
@@ -1011,7 +1005,7 @@ FileSystem::collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> nex
     std::vector<FSBlock *> result;
     std::unordered_set<Block> visited;
 
-    for (auto block = blockPtr(node.nr); block != nullptr; block = next(block)) {
+    for (auto block = const_cast<FSBlock *>(read(node.nr)); block != nullptr; block = next(block)) {
 
         // Break the loop if this block has been visited before
         if (visited.contains(block->nr)) break;

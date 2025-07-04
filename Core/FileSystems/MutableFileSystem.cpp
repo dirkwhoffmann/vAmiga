@@ -216,10 +216,10 @@ MutableFileSystem::allocate()
         }
     }
     
-    blockPtr(Block(i))->type = FSBlockType::UNKNOWN_BLOCK;
-    markAsAllocated(Block(i));
+    read(i)->type = FSBlockType::UNKNOWN_BLOCK;
+    markAsAllocated(i);
     ap = (i + 1) % numBlocks();
-    return (Block(i));
+    return (i);
 }
 
 void
@@ -232,7 +232,7 @@ MutableFileSystem::allocate(isize count, std::vector<Block> &result)
         
         if (isEmpty(i)) {
             
-            blockPtr(Block(i))->type = FSBlockType::UNKNOWN_BLOCK;
+            read(i)->type = FSBlockType::UNKNOWN_BLOCK;
             result.push_back(Block(i));
             count--;
         }
@@ -261,7 +261,7 @@ MutableFileSystem::deallocateBlock(Block nr)
 void
 MutableFileSystem::addFileListBlock(Block at, Block head, Block prev)
 {
-    if (auto *prevBlock = blockPtr(prev); prevBlock) {
+    if (auto *prevBlock = read(prev); prevBlock) {
 
         storage[at].init(FSBlockType::FILELIST_BLOCK);
         storage[at].setFileHeaderRef(head);
@@ -273,7 +273,7 @@ MutableFileSystem::addFileListBlock(Block at, Block head, Block prev)
 void
 MutableFileSystem::addDataBlock(Block at, isize id, Block head, Block prev)
 {
-    if (auto *prevBlock = blockPtr(prev); prevBlock) {
+    if (auto *prevBlock = read(prev); prevBlock) {
 
         storage[at].init(traits.ofs() ? FSBlockType::DATA_BLOCK_OFS : FSBlockType::DATA_BLOCK_FFS);
         storage[at].setDataBlockNr((Block)id);
@@ -289,7 +289,7 @@ MutableFileSystem::newUserDirBlock(const FSName &name)
 
         storage[nr].init(FSBlockType::USERDIR_BLOCK);
         storage[nr].setName(name);
-        return blockPtr(nr);
+        return read(nr);
     }
  
     return nullptr;
@@ -302,7 +302,7 @@ MutableFileSystem::newFileHeaderBlock(const FSName &name)
 
         storage[nr].init(FSBlockType::FILEHEADER_BLOCK);
         storage[nr].setName(name);
-        return blockPtr(nr);
+        return read(nr);
     }
     
     return nullptr;
@@ -443,7 +443,7 @@ MutableFileSystem::createFile(const FSBlock &at, const FSName &name, const u8 *b
         addDataBlock(dataBlocks[i], i + 1, file.nr, i == 0 ? file.nr : dataBlocks[i-1]);
 
         // Determine the list block managing this data block
-        FSBlock *lb = blockPtr((i < numRefs) ? file.nr : listBlocks[i / numRefs - 1]);
+        FSBlock *lb = read((i < numRefs) ? file.nr : listBlocks[i / numRefs - 1]);
 
         // Link the data block
         lb->addDataBlockRef(dataBlocks[0], dataBlocks[i]);
@@ -537,11 +537,11 @@ MutableFileSystem::addToHashTable(const FSBlock &item)
 void
 MutableFileSystem::addToHashTable(Block parent, Block ref)
 {
-    FSBlock *pp = blockPtr(parent);
+    FSBlock *pp = read(parent);
     if (!pp) throw AppError(Fault::FS_INVALID_BLOCK_REF);
     if (!pp->hasHashTable()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
 
-    FSBlock *pr = blockPtr(ref);
+    FSBlock *pr = read(ref);
     if (!pr) throw AppError(Fault::FS_INVALID_BLOCK_REF);
     if (!pr->isHashable()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
 
@@ -565,11 +565,11 @@ MutableFileSystem::deleteFromHashTable(const FSBlock &item)
 void
 MutableFileSystem::deleteFromHashTable(Block parent, Block ref)
 {
-    FSBlock *pp = blockPtr(parent);
+    FSBlock *pp = read(parent);
     if (!pp) throw AppError(Fault::FS_INVALID_BLOCK_REF);
     if (!pp->hasHashTable()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
 
-    FSBlock *pr = blockPtr(ref);
+    FSBlock *pr = read(ref);
     if (!pr) throw AppError(Fault::FS_INVALID_BLOCK_REF);
     if (!pr->isHashable()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
 
@@ -588,7 +588,7 @@ MutableFileSystem::deleteFromHashTable(Block parent, Block ref)
         if (!pred) {
             pp->setHashRef(hash, succ);
         } else {
-            blockPtr(pred)->setNextHashRef(succ);
+            read(pred)->setNextHashRef(succ);
         }
     }
 }
@@ -596,7 +596,7 @@ MutableFileSystem::deleteFromHashTable(Block parent, Block ref)
 isize
 MutableFileSystem::addData(Block nr, const u8 *buf, isize size)
 {
-    FSBlock *block = blockPtr(nr);
+    FSBlock *block = read(nr);
     return block ? addData(*block, buf, size) : 0;
 }
 

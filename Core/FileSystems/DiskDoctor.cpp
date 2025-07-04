@@ -241,7 +241,7 @@ DiskDoctor::dump(Block nr, std::ostream &os)
                 os << std::setfill(' ') << std::setw(2) << i << " -> ";
                 os << std::setfill(' ') << std::setw(4) << ref;
 
-                if (auto ptr = fs.blockPtr(ref); ptr) {
+                if (auto ptr = fs.read(ref); ptr) {
                     os << " (" << ptr->getName().cpp_str() << ")";
                 }
             }

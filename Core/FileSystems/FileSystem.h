@@ -181,9 +181,6 @@ public:
     // Returns the usage type of a certain byte in a certain block
     FSItemType itemType(Block nr, isize pos) const noexcept;
 
-    // Queries a pointer from the block storage (may return nullptr)
-    FSBlock *blockPtr(Block nr) const noexcept; // DEPRECATED
-
     // Queries a pointer to a block of a certain type (may return nullptr)
     FSBlock *hashableBlockPtr(Block nr) const noexcept;
 
