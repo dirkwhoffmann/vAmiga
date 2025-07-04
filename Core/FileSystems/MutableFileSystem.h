@@ -80,7 +80,7 @@ public:
     void deallocateBlock(Block nr);
 
     // Updates the checksums in all blocks
-    void updateChecksums();
+    void updateChecksums() noexcept;
 
 private:
     

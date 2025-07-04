@@ -119,6 +119,7 @@ MutableFileSystem::format(string name)
     storage[rootBlock].addBitmapBlockRefs(bmBlocks);
 
     // Mark free blocks as free in the bitmap block
+    // TODO: SPEED THIS UP
     for (isize i = 0; i < numBlocks(); i++) {
         if (storage.isEmpty(Block(i))) markAsFree(Block(i));
     }
@@ -308,11 +309,14 @@ MutableFileSystem::newFileHeaderBlock(const FSName &name)
 }
 
 void
-MutableFileSystem::updateChecksums()
+MutableFileSystem::updateChecksums() noexcept
 {
+    storage.updateChecksums();
+    /*
     for (isize i = 0; i < numBlocks(); i++) {
         storage[i].updateChecksum();
     }
+    */
 }
 
 void
@@ -686,7 +690,8 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
 
         // Determine the type of the new block
         FSBlockType type = predictBlockType((Block)i, data);
-        
+
+        // TODO: ONLY INITIALIZE THE BLOCK IF IT IS NOT EMPTY!
         // Create new block
         storage[i].init(type);
         storage[i].importBlock(data, traits.bsize);
@@ -827,10 +832,14 @@ MutableFileSystem::exportBlocks(Block first, Block last, u8 *dst, isize size, Fa
     std::memset(dst, 0, size);
     
     // Export all blocks
+    // TODO: CAN WE GET AN ITERATOR FROM THE STORAGE? 
     for (isize i = 0; i < count; i++) {
 
-        const_cast<FSBlock *>(storage.read(Block(first + i)))->exportBlock(dst + i * traits.bsize, traits.bsize);
-        // blocks[first + i]->exportBlock(dst + i * bsize, bsize);
+        if (auto ref = Block(first + i); !storage.isEmpty(ref)) {
+
+            // TODO: REMOVE CONST_CAST ONCE EXPORT IS CONST
+            const_cast<FSBlock *>(storage.read(ref))->exportBlock(dst + i * traits.bsize, traits.bsize);
+        }
     }
 
     debug(FS_DEBUG, "Success\n");

@@ -87,7 +87,9 @@ BlockStorage::read(Block nr) noexcept
     if (nr >= size_t(capacity)) return nullptr;
 
     // Create the block if it does not yet exist
-    if (!blocks.contains(nr)) blocks.emplace(nr, std::make_unique<FSBlock>(fs, nr, FSBlockType::EMPTY_BLOCK));
+    if (!blocks.contains(nr)) {
+        blocks.emplace(nr, std::make_unique<FSBlock>(fs, nr, FSBlockType::EMPTY_BLOCK));
+    }
 
     // Return a block reference
     return blocks.at(nr).get();
@@ -193,6 +195,12 @@ void
 BlockStorage::erase(Block nr)
 {
     if (blocks.contains(nr)) { blocks.erase(nr); }
+}
+
+void
+BlockStorage::updateChecksums() noexcept
+{
+    for (auto &it : blocks) { it.second->updateChecksum(); }
 }
 
 void

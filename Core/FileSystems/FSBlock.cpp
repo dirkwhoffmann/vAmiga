@@ -842,6 +842,7 @@ FSBlock::exportBlock(u8 *dst, isize size)
     assert(size == bsize());
 
     // Rectify the checksum
+    // TODO: DON'T DO THIS HERE. ADD ASSERT. CHANGE METHOD TO CONST
     updateChecksum();
 
     // Export the block

@@ -114,6 +114,14 @@ public:
 
 
     //
+    // Maintainance
+    //
+
+    // Updates the checksums in all blocks
+    void updateChecksums() noexcept;
+
+
+    //
     // GUI helper functions
     //
 

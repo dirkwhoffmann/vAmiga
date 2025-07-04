@@ -107,15 +107,14 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
     for (isize i = 0; i < layout.numBlocks; i++) {
 
         const u8 *data = buf + i * traits.bsize;
+        if (auto type = predictBlockType((Block)i, data); type != FSBlockType::EMPTY_BLOCK) {
 
-        // Determine the type of the new block
-        FSBlockType type = predictBlockType((Block)i, data);
+            // Create new block
+            storage[i].init(type);
 
-        // Create new block
-        storage[i].init(type);
-
-        // Import block data
-        storage[i].importBlock(data, traits.bsize);
+            // Import block data
+            storage[i].importBlock(data, traits.bsize);
+        }
     }
 
     // Set the current directory to '/'
