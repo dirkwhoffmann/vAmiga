@@ -296,6 +296,18 @@ FileSystem::bootBlockType() const noexcept
     return BootBlockImage(storage[0].data(), storage[1].data()).type;
 }
 
+/*
+std::unordered_map<int, std::string>::const_iterator
+FileSystem::begin() const noexcept {
+    return storage.blocks.begin();
+}
+
+std::unordered_map<int, std::string>::const_iterator
+FileSystem::end() const noexcept {
+    return storage.blocks.end();
+}
+*/
+
 FSBlock *
 FileSystem::read(Block nr) noexcept
 {

@@ -13,6 +13,7 @@
 #include "FSBlock.h"
 #include "CoreObject.h"
 #include "Inspectable.h"
+#include <ranges>
 
 namespace vamiga {
 
@@ -30,7 +31,7 @@ private:
     isize bsize {};
 
     // Block storage
-    std::unordered_map<usize, std::unique_ptr<FSBlock>> blocks;
+    std::unordered_map<Block, std::unique_ptr<FSBlock>> blocks;
 
 
     //
@@ -81,6 +82,23 @@ public:
     //
     // Accessing blocks
     //
+
+    // Returns an iterator for the block storage
+    std::unordered_map<Block, std::unique_ptr<FSBlock>>::iterator begin() { return blocks.begin(); }
+    std::unordered_map<Block, std::unique_ptr<FSBlock>>::iterator end() { return blocks.end(); }
+    std::unordered_map<Block, std::unique_ptr<FSBlock>>::const_iterator begin() const { return blocks.begin(); }
+    std::unordered_map<Block, std::unique_ptr<FSBlock>>::const_iterator end() const { return blocks.end(); }
+
+    // Returns a view for all keys
+    auto keys() const { return std::views::keys(blocks); }
+
+    // Returns a view for all keys in a particular range
+    auto keys(Block min, Block max) const {
+
+        auto in_range = [=](Block key) { return key >= min && key <= max; };
+        auto view = std::views::keys(blocks) | std::views::filter(in_range);
+        return std::ranges::subrange(view.begin(), view.end());
+    }
 
     // Checks if a block is empty
     bool isEmpty(Block nr) const;

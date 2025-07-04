@@ -832,7 +832,23 @@ MutableFileSystem::exportBlocks(Block first, Block last, u8 *dst, isize size, Fa
     std::memset(dst, 0, size);
     
     // Export all blocks
-    // TODO: CAN WE GET AN ITERATOR FROM THE STORAGE? 
+    for (auto &block: storage.keys(first, last)) {
+
+        // TODO: REMOVE CONST_CAST ONCE EXPORT IS CONST
+        const_cast<FSBlock *>(storage.read(block))->exportBlock(dst + (block - first) * traits.bsize, traits.bsize);
+    }
+
+    /*
+    for (auto it = storage.begin(); it != storage.end(); ++it) {
+
+        if (auto i = Block((*it).first); i >= first && i <= last) {
+
+            // TODO: REMOVE CONST_CAST ONCE EXPORT IS CONST
+            const_cast<FSBlock *>(storage.read(i))->exportBlock(dst + (i - first) * traits.bsize, traits.bsize);
+        }
+    }
+    */
+    /*
     for (isize i = 0; i < count; i++) {
 
         if (auto ref = Block(first + i); !storage.isEmpty(ref)) {
@@ -841,6 +857,7 @@ MutableFileSystem::exportBlocks(Block first, Block last, u8 *dst, isize size, Fa
             const_cast<FSBlock *>(storage.read(ref))->exportBlock(dst + i * traits.bsize, traits.bsize);
         }
     }
+    */
 
     debug(FS_DEBUG, "Success\n");
 
