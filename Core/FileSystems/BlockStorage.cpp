@@ -243,10 +243,10 @@ BlockStorage::createUsageMap(u8 *buffer, isize len) const
 }
 
 void
-BlockStorage::createAllocationMap(u8 *buffer, isize len) const
+BlockStorage::createAllocationMap(u8 *buffer, isize len, const FSDiagnosis diagnosis) const
 {
-    auto &unusedButAllocated = fs->doctor.diagnosis.unusedButAllocated;
-    auto &usedButUnallocated = fs->doctor.diagnosis.usedButUnallocated;
+    auto &unusedButAllocated = diagnosis.unusedButAllocated;
+    auto &usedButUnallocated = diagnosis.usedButUnallocated;
 
     isize max = numBlocks();
 
@@ -270,9 +270,9 @@ BlockStorage::createAllocationMap(u8 *buffer, isize len) const
 }
 
 void
-BlockStorage::createHealthMap(u8 *buffer, isize len) const
+BlockStorage::createHealthMap(u8 *buffer, isize len, const FSDiagnosis diagnosis) const
 {
-    auto &blockErrors = fs->doctor.diagnosis.blockErrors;
+    auto &blockErrors = diagnosis.blockErrors;
 
     isize max = numBlocks();
 

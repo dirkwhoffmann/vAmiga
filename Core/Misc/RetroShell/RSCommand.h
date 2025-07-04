@@ -31,6 +31,7 @@ static const usize keyval           = 1LL << 1;
 static const usize flag             = 1LL << 2 | opt;
 static const usize hidden           = 1LL << 3 | opt;
 static const usize shadowed         = 1LL << 4;
+static const usize path             = 1LL << 5;
 
 }
 

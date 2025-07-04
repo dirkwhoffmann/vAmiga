@@ -108,7 +108,7 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
     auto [cmd, args] = seekCommandNew(argv);
 
     // Determine the kind of help to display
-    bool displayFiles = (tabs % 2 == 0) && fs.isFormatted() && cmd && cmd->callback;
+    bool displayFiles = (tabs % 2 == 0) && fs.isFormatted() && cmd && cmd->callback && (cmd->flags & rs::path);
     bool displayCmds  = (tabs % 2 == 1) || !displayFiles;
 
     if (displayFiles) {
@@ -619,6 +619,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "cd" },
         .chelp  = { "Change the working directory" },
+        .flags  = rs::path,
         .args   = {
             { .name = { "path", "New working directory" }, .flags = rs::opt },
         },
@@ -633,6 +634,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "dir" },
         .chelp  = { "Display a sorted list of the files in a directory" },
+        .flags  = rs::path,
         .args   = {
             { .name = { "path", "Path to directory" }, .flags = rs::opt },
             { .name = { "d", "List directories only" }, .flags = rs::flag },
@@ -668,6 +670,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "list" },
         .chelp  = { "List specified information about directories and files" },
+        .flags  = rs::path,
         .args   = {
             { .name = { "path", "Path to directory" }, .flags = rs::opt },
             { .name = { "d", "List directories only" }, .flags = rs::flag },
@@ -719,6 +722,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "find" },
         .chelp  = { "Find files or directories" },
+        .flags  = rs::path,
         .args   = {
             { .name = { "name", "Search pattern" } },
             { .name = { "d", "Find directories only" }, .flags = rs::flag },
@@ -765,6 +769,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "type" },
         .chelp  = { "Print the contents of a file" },
+        .flags  = rs::path,
         .args   = {
             { .name = { "path", "File path" }, .flags = rs::opt },
             { .name = { "l", "Display a line number in each row" }, .flags = rs::flag },
@@ -817,6 +822,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .tokens = { "file" },
         .ghelp  = { "Manage files" },
         .chelp  = { "Inspect a single file" },
+        .flags  = rs::path,
         .args   = {
             { .name = { "path", "File path" }, .flags = rs::opt },
         },
@@ -831,6 +837,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "file", "dump" },
         .chelp  = { "Dump the contents of a file" },
+        .flags  = rs::path,
         .args   = {
             { .name = { "path", "File path" }, .flags = rs::opt },
             { .name = { "a", "Output in ASCII, only" }, .flags = rs::flag },
@@ -930,6 +937,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "mkdir" },
         .chelp  = { "Create a directory" },
+        .flags  = rs::path,
         .args   = {
             { .name = { "name", "Name of the new directory" } },
         },
@@ -967,6 +975,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "move" },
         .chelp  = { "Moves a file or directory" },
+        .flags  = rs::path,
         .args   = {
             { .name = { "source", "Item to move" } },
             { .name = { "target", "New name or target directory" } },
@@ -1011,6 +1020,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "copy" },
         .chelp  = { "Copies a file" },
+        .flags  = rs::path,
         .args   = {
             { .name = { "source", "Item to copy" } },
             { .name = { "target", "New name or target directory" } },
@@ -1048,6 +1058,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "delete" },
         .chelp  = { "Deletes a file" },
+        .flags  = rs::path,
         .args   = {
             { .name = { "path", "File to delete" } },
         },
@@ -1073,6 +1084,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .tokens = { "xray" },
         .ghelp  = { "Examines the file system integrity" },
         .chelp  = { "Inspects the entire file system" },
+        .flags  = rs::path,
         .args   = {
             { .name = { "s", "Strict checking" }, .flags = rs::flag },
         },
@@ -1082,42 +1094,6 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                 os << "Passed. No errors found." << std::endl;
             }
-
-            /*
-            auto rangeStr = [&](std::vector<Block> &vec) {
-                if (!vec.empty()) { os << " (" << FSBlock::rangeString(vec) << ")"; }
-                os << std::endl;
-            };
-
-            // auto blocks = fs.doctor.xrayBitmap(true);
-
-            std::vector<Block> canBeFreed;
-            std::vector<Block> mustBeAllocated;
-
-            fs.doctor.xray(args.contains("s"));
-            for (const auto& [key, value] : fs.doctor.diagnosis.bitmapErrors) {
-
-                if (value == 1) canBeFreed.push_back(key);
-                if (value == 2) mustBeAllocated.push_back(key);
-            }
-            if (auto total = canBeFreed.size() + mustBeAllocated.size(); total) {
-
-                os << util::tab("Bitmap anomalies:");
-                os << total << " blocks" << std::endl;
-
-                os << util::tab("Used but not allocated:");
-                os << mustBeAllocated.size() << " blocks";
-                rangeStr(mustBeAllocated);
-
-                os << util::tab("Allocated but not used:");
-                os << canBeFreed.size() << " blocks";
-                rangeStr(canBeFreed);
-
-            } else {
-
-                os << "Bitmap check: Passed" << std::endl;
-            }
-            */
         }
     });
 
