@@ -648,6 +648,76 @@ FileSystem::seek(const FSBlock &root, const string &name) const
 }
 
 std::vector<const FSBlock *>
+FileSystem::find(const FSOpt &opt) const
+{
+    return find(pwd(), opt);
+}
+
+std::vector<const FSBlock *>
+FileSystem::find(const FSBlock &root, const FSOpt &opt) const
+{
+    require_file_or_directory(root);
+    return find(&root, opt);
+}
+
+std::vector<const FSBlock *>
+FileSystem::find(const FSBlock *root, const FSOpt &opt) const
+{
+    if (!root) return {};
+    std::unordered_set<Block> visited;
+    return find(root, opt, visited);
+}
+
+std::vector<Block>
+FileSystem::find(Block root, const FSOpt &opt) const
+{
+    return FSBlock::refs(find(read(root), opt));
+}
+
+std::vector<const FSBlock *>
+FileSystem::find(const FSBlock *root, const FSOpt &opt, std::unordered_set<Block> &visited) const
+{
+    std::vector<const FSBlock *> result;
+
+    // Collect all items in the hash table
+    auto hashedBlocks = collectHashedBlocks(*root);
+
+    for (auto it = hashedBlocks.begin(); it != hashedBlocks.end(); it++) {
+
+        // Add item if accepted
+        if (opt.accept(*it)) result.push_back(*it);
+
+        // Break the loop if this block has been visited before
+        if (visited.contains((*it)->nr)) throw AppError(Fault::FS_HAS_CYCLES);
+
+        // Remember the block as visited
+        visited.insert((*it)->nr);
+    }
+
+    // Search subdirectories
+    if (opt.recursive) {
+
+        for (auto &it : hashedBlocks) {
+
+            if (it->isDirectory()) {
+
+                auto blocks = find(it, opt, visited);
+                result.insert(result.end(), blocks.begin(), blocks.end());
+            }
+        }
+    }
+
+    // Sort the result
+    if (opt.sort) {
+
+        std::sort(result.begin(), result.end(),
+                  [](auto *b1, auto *b2) { return b1->getName() < b2->getName(); });
+    }
+
+    return result;
+}
+
+std::vector<const FSBlock *>
 FileSystem::find(const FSPattern &pattern) const
 {
     std::vector<Block> result;
@@ -659,10 +729,35 @@ FileSystem::find(const FSPattern &pattern) const
     return find(start, pattern);
 }
 
+std::vector<const FSBlock *>
+FileSystem::find(const FSBlock &root, const FSPattern &pattern) const
+{
+    return find(&root, pattern);
+}
+
+std::vector<const FSBlock *>
+FileSystem::find(const FSBlock *root, const FSPattern &pattern) const
+{
+    return find(root, {
+        .recursive = true,
+        .filter = [&](const FSBlock &item) { return pattern.match(item.pathName()); }
+    });
+}
+
 std::vector<Block>
-FileSystem::find(const Block root, const FSPattern &pattern) const
+FileSystem::find(Block root, const FSPattern &pattern) const
 {
     return FSBlock::refs(find(read(root), pattern));
+}
+
+std::vector<const FSBlock *>
+FileSystem::match(const FSPattern &pattern) const
+{
+    if (pattern.isAbsolute()) {
+        return match(&root(), pattern.splitted());
+    } else {
+        return match(&pwd(), pattern.splitted());
+    }
 }
 
 std::vector<const FSBlock *>
@@ -718,83 +813,10 @@ FileSystem::match(const FSBlock *root, std::vector<FSPattern> patterns) const
     return result;
 }
 
-std::vector<const FSBlock *>
-FileSystem::find(const FSBlock &root, const FSOpt &opt) const
-{
-    require_file_or_directory(root);
-    return find(&root, opt);
-}
-
-std::vector<const FSBlock *>
-FileSystem::find(const FSBlock *root, const FSOpt &opt) const
-{
-    if (!root) return {};
-    std::unordered_set<Block> visited;
-    return find(root, opt, visited);
-}
-
 std::vector<Block>
-FileSystem::find(const Block root, const FSOpt &opt) const
+FileSystem::match(Block root, const FSPattern &pattern) const
 {
-    return FSBlock::refs(find(read(root), opt));
-}
-
-std::vector<const FSBlock *>
-FileSystem::find(const FSBlock *root, const FSOpt &opt, std::unordered_set<Block> &visited) const
-{
-    std::vector<const FSBlock *> result;
-
-    // Collect all items in the hash table
-    auto hashedBlocks = collectHashedBlocks(*root);
-
-    for (auto it = hashedBlocks.begin(); it != hashedBlocks.end(); it++) {
-
-        // Add item if accepted
-        if (opt.accept(*it)) result.push_back(*it);
-
-        // Break the loop if this block has been visited before
-        if (visited.contains((*it)->nr)) throw AppError(Fault::FS_HAS_CYCLES);
-
-        // Remember the block as visited
-        visited.insert((*it)->nr);
-    }
-
-    // Search subdirectories
-    if (opt.recursive) {
-
-        for (auto &it : hashedBlocks) {
-
-            if (it->isDirectory()) {
-
-                auto blocks = find(it, opt, visited);
-                result.insert(result.end(), blocks.begin(), blocks.end());
-            }
-        }
-    }
-
-    // Sort the result
-    if (opt.sort) {
-
-        std::sort(result.begin(), result.end(),
-                  [](auto *b1, auto *b2) { return b1->getName() < b2->getName(); });
-    }
-
-    return result;
-}
-
-std::vector<const FSBlock *>
-FileSystem::find(const FSBlock &root, const FSPattern &pattern) const
-{
-    return find(&root, pattern);
-}
-
-std::vector<const FSBlock *>
-FileSystem::find(const FSBlock *root, const FSPattern &pattern) const
-{
-    return find(root, {
-        .recursive = true,
-        .filter = [&](const FSBlock &item) { return pattern.match(item.pathName()); }
-    });
+    return FSBlock::refs(match(read(root), pattern));
 }
 
 void

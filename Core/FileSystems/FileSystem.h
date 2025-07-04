@@ -254,20 +254,22 @@ public:
     const FSBlock &seek(const FSBlock &root, const string &name) const;
 
     // Seeks all items satisfying a predicate
-    std::vector<const FSBlock *> find(const FSPattern &pattern) const;
+    std::vector<const FSBlock *> find(const FSOpt &opt) const;
     std::vector<const FSBlock *> find(const FSBlock *root, const FSOpt &opt) const;
     std::vector<const FSBlock *> find(const FSBlock &root, const FSOpt &opt) const;
-    std::vector<Block> find(const Block root, const FSOpt &opt) const;
+    std::vector<Block> find(Block root, const FSOpt &opt) const;
 
     // Seeks all items with a pattern-matching name
+    std::vector<const FSBlock *> find(const FSPattern &pattern) const;
     std::vector<const FSBlock *> find(const FSBlock *root, const FSPattern &pattern) const;
     std::vector<const FSBlock *> find(const FSBlock &root, const FSPattern &pattern) const;
-    std::vector<Block> find(const Block root, const FSPattern &pattern) const;
+    std::vector<Block> find(Block root, const FSPattern &pattern) const;
 
     // Collects all items with a pattern-matching path
+    std::vector<const FSBlock *> match(const FSPattern &pattern) const;
     std::vector<const FSBlock *> match(const FSBlock *root, const FSPattern &pattern) const;
     std::vector<const FSBlock *> match(const FSBlock &root, const FSPattern &pattern) const;
-    std::vector<const FSBlock *> match(const FSBlock *root, std::vector<FSPattern> pattern) const;
+    std::vector<Block> match(Block root, const FSPattern &pattern) const;
 
     // Lists the contents of a directory ('dir' command, 'list' command)
     void list(std::ostream &os, const FSBlock &path, const FSOpt &opt = {}) const;
@@ -279,6 +281,10 @@ private:
 
     std::vector<const FSBlock *> find(const FSBlock *root, const FSOpt &opt,
                                       std::unordered_set<Block> &visited) const;
+
+    std::vector<const FSBlock *> match(const FSBlock *root,
+                                       std::vector<FSPattern> pattern) const;
+
 
     //
     // Traversing linked lists
