@@ -293,14 +293,14 @@ private:
 public:
     
     // Follows a linked list and collects all blocks
-    std::vector<FSBlock *> collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> next) const;
+    std::vector<const FSBlock *> collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> next) const;
     std::vector<Block> collect(const Block nr, std::function<FSBlock *(FSBlock *)> next) const;
 
     // Collects blocks of a certain type
-    std::vector<FSBlock *> collectDataBlocks(const FSBlock &node) const;
-    std::vector<FSBlock *> collectListBlocks(const FSBlock &node) const;
-    std::vector<FSBlock *> collectHashedBlocks(const FSBlock &node, isize bucket) const;
-    std::vector<FSBlock *> collectHashedBlocks(const FSBlock &node) const;
+    std::vector<const FSBlock *> collectDataBlocks(const FSBlock &node) const;
+    std::vector<const FSBlock *> collectListBlocks(const FSBlock &node) const;
+    std::vector<const FSBlock *> collectHashedBlocks(const FSBlock &node, isize bucket) const;
+    std::vector<const FSBlock *> collectHashedBlocks(const FSBlock &node) const;
     std::vector<Block> collectDataBlocks(Block ref) const;
     std::vector<Block> collectListBlocks(Block ref) const;
     std::vector<Block> collectHashedBlocks(Block ref, isize bucket) const;

@@ -547,13 +547,13 @@ MutableFileSystem::addToHashTable(Block parent, Block ref)
 
     // Read the linked list from the proper hash-table bucket
     u32 hash = pr->hashValue() % pp->hashTableSize();
-    auto chain = collectHashedBlocks(*pp, hash);
+    auto chain = collectHashedBlocks(pp->nr, hash);
 
     // If the bucket is empty, make the reference the first entry
     if (chain.empty()) { pp->setHashRef(hash, ref); return; }
 
     // Otherwise, put the referecne at the end of the linked list
-    chain.back()->setNextHashRef(ref);
+    read(chain.back())->setNextHashRef(ref);
 }
 
 void

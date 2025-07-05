@@ -845,10 +845,10 @@ FileSystem::exists(const FSBlock &top, const fs::path &path) const
     return seekPtr(&top, path) != nullptr;
 }
 
-std::vector<FSBlock *>
+std::vector<const FSBlock *>
 FileSystem::collectDataBlocks(const FSBlock &node) const
 {
-    std::vector<FSBlock *> result;
+    std::vector<const FSBlock *> result;
 
     // Iterate through all list blocks and collect all data block references
     for (auto &it : collectListBlocks(node)) {
@@ -873,7 +873,7 @@ FileSystem::collectDataBlocks(Block ref) const
     return result;
 }
 
-std::vector<FSBlock *>
+std::vector<const FSBlock *>
 FileSystem::collectListBlocks(const FSBlock &node) const
 {
     return collect(node, [&](auto *block) { return block->getNextListBlock(); });
@@ -895,10 +895,10 @@ FileSystem::collectHashedBlocks(Block ref, isize bucket) const
     return result;
 }
 
-std::vector<FSBlock *>
+std::vector<const FSBlock *>
 FileSystem::collectHashedBlocks(const FSBlock &node, isize bucket) const
 {
-    if (FSBlock *ptr = hashableBlockPtr(node.getHashRef((u32)bucket)); ptr) {
+    if (auto *ptr = hashableBlockPtr(node.getHashRef((u32)bucket)); ptr) {
         return collect(*ptr, [&](auto *p) { return p->getNextHashBlock(); });
     } else {
         return {};
@@ -915,10 +915,10 @@ FileSystem::collectHashedBlocks(Block ref) const
     return result;
 }
 
-std::vector<FSBlock *>
+std::vector<const FSBlock *>
 FileSystem::collectHashedBlocks(const FSBlock &node) const
 {
-    std::vector<FSBlock *> result;
+    std::vector<const FSBlock *> result;
 
     // Walk through all hash table buckets in reverse order
     for (isize i = (isize)node.hashTableSize() - 1; i >= 0; i--) {
@@ -1021,10 +1021,10 @@ FileSystem::collect(const Block nr, std::function<FSBlock *(FSBlock *)> next) co
     return result;
 }
 
-std::vector<FSBlock *>
+std::vector<const FSBlock *>
 FileSystem::collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> next) const
 {
-    std::vector<FSBlock *> result;
+    std::vector<const FSBlock *> result;
     std::unordered_set<Block> visited;
 
     for (auto block = const_cast<FSBlock *>(read(node.nr)); block != nullptr; block = next(block)) {
