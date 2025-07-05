@@ -23,7 +23,7 @@ using util::Buffer;
 
 struct FSBlock : CoreObject {
 
-    friend class DiskDoctor;
+    friend class FSDoctor;
     
     // The file system this block belongs to
     class FileSystem *fs = nullptr;

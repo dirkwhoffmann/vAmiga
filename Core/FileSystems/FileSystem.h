@@ -14,8 +14,8 @@
 #include "FSDescriptors.h"
 #include "FSObjects.h"
 #include "FSTree.h"
-#include "BlockStorage.h"
-#include "DiskDoctor.h"
+#include "FSStorage.h"
+#include "FSDoctor.h"
 #include "ADFFile.h"
 #include "HDFFile.h"
 #include <stack>
@@ -30,27 +30,26 @@ class HardDrive;
 
 /* An object of type FileSystem represents an Amiga file system (OFS or FFS).
  * It is a logical volume that can be created from an ADF or HDF. In the latter
- * case, each partition can be converted to a file system individually. The
- * class provides functions for analyzing the integrity of the volume as well
- * as functions for reading files and directories.
+ * case, each partition can be converted into a file system individually. The
+ * class provides functions for analyzing the volume's integrity, as well as
+ * for reading files and directories.
  *
- * The MutableFileSystem class extends the FileSystem class with functions for
- * modifiying the contents of the file system. It provides functions for
- * creating empty file systems of a certain type as well as functions for
- * manipulation files and directories, such as creating, deleting, or moving
- * items.
+ * The MutableFileSystem class extends FileSystem by adding functions for
+ * modifying the contents of the file system. It allows the creation of empty
+ * file systems of a specified type and provides functions for manipulating
+ * files and directories, such as creating, deleting, or moving items.
  */
 class FileSystem : public CoreObject, public Inspectable<FSInfo, FSStats> {
 
     friend struct FSBlock;
+    friend class  FSDoctor;
     friend struct FSHashTable;
     friend struct FSPartition;
-    friend class DiskDoctor;
 
 public:
 
-    // File system checker and rectifier
-    DiskDoctor doctor = DiskDoctor(*this);
+    // Disk doctor
+    FSDoctor doctor = FSDoctor(*this);
 
 protected:
 
@@ -58,7 +57,7 @@ protected:
     FSTraits traits;
 
     // Block storage
-    BlockStorage storage = BlockStorage(this);
+    FSStorage storage = FSStorage(this);
 
     // Location of the root block
     Block rootBlock = 0;
@@ -66,7 +65,7 @@ protected:
     // Location of the current directory
     Block current = 0;
 
-    // Location of the bitmap blocks and extended bitmap blocks
+    // Location of bitmap blocks and extended bitmap blocks
     std::vector<Block> bmBlocks;
     std::vector<Block> bmExtBlocks;
 
@@ -123,6 +122,7 @@ public:
 
 public:
 
+    // Returns static file system properties
     const FSTraits &getTraits() const noexcept { return traits; }
 
     // Returns capacity information
@@ -137,7 +137,7 @@ public:
     isize usedBytes() const noexcept { return usedBlocks() * traits.bsize; }
     double fillLevel() const noexcept { return double(100) * usedBlocks() / numBlocks(); }
 
-    // Reads information from the root block
+    // Analyzes the root block
     FSName getName() const noexcept;
     string getCreationDate() const noexcept;
     string getModificationDate() const noexcept;
@@ -158,12 +158,12 @@ public:
     FSBlockType typeof(Block nr) const noexcept;
     FSItemType typeof(Block nr, isize pos) const noexcept;
 
-    // Checks for an empty block
+    // Convenience wrappers
     bool isEmpty(Block nr) const noexcept { return typeof(nr) == FSBlockType::EMPTY_BLOCK; }
 
 protected:
 
-    // Predicts the type of a block by analyzing its number and data
+    // Predicts the type of a block
     FSBlockType predictType(Block nr, const u8 *buf) const noexcept;
 
 

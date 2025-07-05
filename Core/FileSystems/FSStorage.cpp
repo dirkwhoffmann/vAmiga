@@ -7,30 +7,30 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "BlockStorage.h"
+#include "FSStorage.h"
 #include "FileSystem.h"
 
 namespace vamiga {
 
-BlockStorage::BlockStorage(FileSystem *fs, isize capacity, isize bsize) : fs(fs)
+FSStorage::FSStorage(FileSystem *fs, isize capacity, isize bsize) : fs(fs)
 {
     init(capacity, bsize);
 }
 
-BlockStorage::~BlockStorage()
+FSStorage::~FSStorage()
 {
     dealloc();
 }
 
 void
-BlockStorage::dealloc()
+FSStorage::dealloc()
 {
     fs = nullptr;
     blocks.clear();
 }
 
 void
-BlockStorage::init(isize capacity, isize bsize)
+FSStorage::init(isize capacity, isize bsize)
 {
     this->capacity = capacity;
     this->bsize = bsize;
@@ -43,7 +43,7 @@ BlockStorage::init(isize capacity, isize bsize)
 }
 
 void
-BlockStorage::_dump(Category category, std::ostream &os) const
+FSStorage::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
 
@@ -62,27 +62,27 @@ BlockStorage::_dump(Category category, std::ostream &os) const
 }
 
 bool
-BlockStorage::isEmpty(Block nr) const
+FSStorage::isEmpty(Block nr) const
 {
     return getType(nr) == FSBlockType::EMPTY_BLOCK;
 }
 
 FSBlockType
-BlockStorage::getType(Block nr) const
+FSStorage::getType(Block nr) const
 {
     if (isize(nr) >= capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
     return blocks.contains(nr) ? blocks.at(nr)->type : FSBlockType::EMPTY_BLOCK;
 }
 
 void
-BlockStorage::setType(Block nr, FSBlockType type)
+FSStorage::setType(Block nr, FSBlockType type)
 {
     if (isize(nr) >= capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
     blocks.at(nr)->init(type);
 }
 
 FSBlock *
-BlockStorage::read(Block nr) noexcept
+FSStorage::read(Block nr) noexcept
 {
     if (nr >= size_t(capacity)) return nullptr;
 
@@ -96,13 +96,13 @@ BlockStorage::read(Block nr) noexcept
 }
 
 const FSBlock *
-BlockStorage::read(Block nr) const noexcept
+FSStorage::read(Block nr) const noexcept
 {
-    return const_cast<const FSBlock *>(const_cast<BlockStorage *>(this)->read(nr));
+    return const_cast<const FSBlock *>(const_cast<FSStorage *>(this)->read(nr));
 }
 
 FSBlock *
-BlockStorage::read(Block nr, FSBlockType type) noexcept
+FSStorage::read(Block nr, FSBlockType type) noexcept
 {
     if (auto *ptr = read(nr); ptr) {
 
@@ -112,7 +112,7 @@ BlockStorage::read(Block nr, FSBlockType type) noexcept
 }
 
 FSBlock *
-BlockStorage::read(Block nr, std::vector<FSBlockType> types) noexcept
+FSStorage::read(Block nr, std::vector<FSBlockType> types) noexcept
 {
     if (auto *ptr = read(nr); ptr) {
 
@@ -122,19 +122,19 @@ BlockStorage::read(Block nr, std::vector<FSBlockType> types) noexcept
 }
 
 const FSBlock *
-BlockStorage::read(Block nr, FSBlockType type) const noexcept
+FSStorage::read(Block nr, FSBlockType type) const noexcept
 {
-    return const_cast<const FSBlock *>(const_cast<BlockStorage *>(this)->read(nr, type));
+    return const_cast<const FSBlock *>(const_cast<FSStorage *>(this)->read(nr, type));
 }
 
 const FSBlock *
-BlockStorage::read(Block nr, std::vector<FSBlockType> types) const noexcept
+FSStorage::read(Block nr, std::vector<FSBlockType> types) const noexcept
 {
-    return const_cast<const FSBlock *>(const_cast<BlockStorage *>(this)->read(nr, types));
+    return const_cast<const FSBlock *>(const_cast<FSStorage *>(this)->read(nr, types));
 }
 
 FSBlock &
-BlockStorage::at(Block nr)
+FSStorage::at(Block nr)
 {
     if (auto *result = read(nr); result) return *result;
 
@@ -146,7 +146,7 @@ BlockStorage::at(Block nr)
 }
 
 FSBlock &
-BlockStorage::at(Block nr, FSBlockType type)
+FSStorage::at(Block nr, FSBlockType type)
 {
     if (auto *result = read(nr, type); result) return *result;
 
@@ -160,7 +160,7 @@ BlockStorage::at(Block nr, FSBlockType type)
 }
 
 FSBlock &
-BlockStorage::at(Block nr, std::vector<FSBlockType> types)
+FSStorage::at(Block nr, std::vector<FSBlockType> types)
 {
     if (auto *result = read(nr, types); result) return *result;
 
@@ -174,37 +174,37 @@ BlockStorage::at(Block nr, std::vector<FSBlockType> types)
 }
 
 const FSBlock &
-BlockStorage::at(Block nr) const
+FSStorage::at(Block nr) const
 {
-    return const_cast<const FSBlock &>(const_cast<BlockStorage *>(this)->at(nr));
+    return const_cast<const FSBlock &>(const_cast<FSStorage *>(this)->at(nr));
 }
 
 const FSBlock &
-BlockStorage::at(Block nr, FSBlockType type) const
+FSStorage::at(Block nr, FSBlockType type) const
 {
-    return const_cast<const FSBlock &>(const_cast<BlockStorage *>(this)->at(nr, type));
+    return const_cast<const FSBlock &>(const_cast<FSStorage *>(this)->at(nr, type));
 }
 
 const FSBlock &
-BlockStorage::at(Block nr, std::vector<FSBlockType> types) const
+FSStorage::at(Block nr, std::vector<FSBlockType> types) const
 {
-    return const_cast<const FSBlock &>(const_cast<BlockStorage *>(this)->at(nr, types));
+    return const_cast<const FSBlock &>(const_cast<FSStorage *>(this)->at(nr, types));
 }
 
 void
-BlockStorage::erase(Block nr)
+FSStorage::erase(Block nr)
 {
     if (blocks.contains(nr)) { blocks.erase(nr); }
 }
 
 void
-BlockStorage::updateChecksums() noexcept
+FSStorage::updateChecksums() noexcept
 {
     for (auto &it : blocks) { it.second->updateChecksum(); }
 }
 
 void
-BlockStorage::createUsageMap(u8 *buffer, isize len) const
+FSStorage::createUsageMap(u8 *buffer, isize len) const
 {
     isize max = numBlocks();
 
@@ -243,7 +243,7 @@ BlockStorage::createUsageMap(u8 *buffer, isize len) const
 }
 
 void
-BlockStorage::createAllocationMap(u8 *buffer, isize len, const FSDiagnosis diagnosis) const
+FSStorage::createAllocationMap(u8 *buffer, isize len, const FSDiagnosis diagnosis) const
 {
     auto &unusedButAllocated = diagnosis.unusedButAllocated;
     auto &usedButUnallocated = diagnosis.usedButUnallocated;
@@ -270,7 +270,7 @@ BlockStorage::createAllocationMap(u8 *buffer, isize len, const FSDiagnosis diagn
 }
 
 void
-BlockStorage::createHealthMap(u8 *buffer, isize len, const FSDiagnosis diagnosis) const
+FSStorage::createHealthMap(u8 *buffer, isize len, const FSDiagnosis diagnosis) const
 {
     auto &blockErrors = diagnosis.blockErrors;
 

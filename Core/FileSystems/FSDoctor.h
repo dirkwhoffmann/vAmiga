@@ -14,7 +14,7 @@
 
 namespace vamiga {
 
-class DiskDoctor final : public CoreObject {
+class FSDoctor final : public CoreObject {
 
     // Reference to the patient
     class FileSystem &fs;
@@ -26,7 +26,7 @@ public:
 
 public:
 
-    DiskDoctor(FileSystem& fs) : fs(fs) { }
+    FSDoctor(FileSystem& fs) : fs(fs) { }
 
 
     //

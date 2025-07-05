@@ -116,8 +116,8 @@
 		505C83F927739ED0001F8159 /* RemoteManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505C83F727739ED0001F8159 /* RemoteManager.cpp */; };
 		505C83FD2773C9BA001F8159 /* SerServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505C83FB2773C9BA001F8159 /* SerServer.cpp */; };
 		505CEF5E26BD12430078FF52 /* DropZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505CEF5D26BD12430078FF52 /* DropZone.swift */; };
-		505DD69D2E0815B800D9E8B2 /* BlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505DD69C2E0815B600D9E8B2 /* BlockStorage.cpp */; };
-		505DD69E2E0815B800D9E8B2 /* BlockStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505DD69C2E0815B600D9E8B2 /* BlockStorage.cpp */; };
+		505DD69D2E0815B800D9E8B2 /* FSStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505DD69C2E0815B600D9E8B2 /* FSStorage.cpp */; };
+		505DD69E2E0815B800D9E8B2 /* FSStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505DD69C2E0815B600D9E8B2 /* FSStorage.cpp */; };
 		50627FD3286EBA7300F2A835 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50627FD1286EBA7300F2A835 /* Texture.cpp */; };
 		50627FD5286EBACA00F2A835 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50627FD1286EBA7300F2A835 /* Texture.cpp */; };
 		5062DB1224370FE400ACEEE2 /* MyControllerSnapshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */; };
@@ -236,8 +236,8 @@
 		509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* RomFile.cpp */; };
 		50A0F71C2E0E689000972CBC /* FSTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A0F71B2E0E688D00972CBC /* FSTree.cpp */; };
 		50A0F71D2E0E689000972CBC /* FSTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A0F71B2E0E688D00972CBC /* FSTree.cpp */; };
-		50A0F7202E11158E00972CBC /* DiskDoctor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A0F71F2E11158D00972CBC /* DiskDoctor.cpp */; };
-		50A0F7212E11158E00972CBC /* DiskDoctor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A0F71F2E11158D00972CBC /* DiskDoctor.cpp */; };
+		50A0F7202E11158E00972CBC /* FSDoctor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A0F71F2E11158D00972CBC /* FSDoctor.cpp */; };
+		50A0F7212E11158E00972CBC /* FSDoctor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A0F71F2E11158D00972CBC /* FSDoctor.cpp */; };
 		50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */; };
 		50A5969824F7F9ED008632C0 /* PeripheralsConf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A5969724F7F9ED008632C0 /* PeripheralsConf.swift */; };
 		50A61463260DB7F900A01428 /* Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A61461260DB7F900A01428 /* Parser.cpp */; };
@@ -709,8 +709,8 @@
 		505C83FB2773C9BA001F8159 /* SerServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SerServer.cpp; sourceTree = "<group>"; };
 		505C83FC2773C9BA001F8159 /* SerServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SerServer.h; sourceTree = "<group>"; };
 		505CEF5D26BD12430078FF52 /* DropZone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropZone.swift; sourceTree = "<group>"; };
-		505DD69B2E0815AC00D9E8B2 /* BlockStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlockStorage.h; sourceTree = "<group>"; };
-		505DD69C2E0815B600D9E8B2 /* BlockStorage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlockStorage.cpp; sourceTree = "<group>"; };
+		505DD69B2E0815AC00D9E8B2 /* FSStorage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSStorage.h; sourceTree = "<group>"; };
+		505DD69C2E0815B600D9E8B2 /* FSStorage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSStorage.cpp; sourceTree = "<group>"; };
 		50627FD1286EBA7300F2A835 /* Texture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
 		50627FD2286EBA7300F2A835 /* Texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		50627FD4286EBAC000F2A835 /* FrameBufferTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FrameBufferTypes.h; sourceTree = "<group>"; };
@@ -876,8 +876,8 @@
 		509F7F1C21EDEA0200A530E4 /* RomFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RomFile.h; sourceTree = "<group>"; };
 		50A0F71A2E0E688800972CBC /* FSTree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSTree.h; sourceTree = "<group>"; };
 		50A0F71B2E0E688D00972CBC /* FSTree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSTree.cpp; sourceTree = "<group>"; };
-		50A0F71E2E11157D00972CBC /* DiskDoctor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskDoctor.h; sourceTree = "<group>"; };
-		50A0F71F2E11158D00972CBC /* DiskDoctor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskDoctor.cpp; sourceTree = "<group>"; };
+		50A0F71E2E11157D00972CBC /* FSDoctor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSDoctor.h; sourceTree = "<group>"; };
+		50A0F71F2E11158D00972CBC /* FSDoctor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSDoctor.cpp; sourceTree = "<group>"; };
 		50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ControlPort.cpp; sourceTree = "<group>"; };
 		50A2953E21FF12EF0046BAA0 /* ControlPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControlPort.h; sourceTree = "<group>"; };
 		50A493832374560D003ECD2C /* RTCTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTCTypes.h; sourceTree = "<group>"; };
@@ -1360,10 +1360,10 @@
 				50565070254573E100A79D27 /* FSBlock.cpp */,
 				50A0F71A2E0E688800972CBC /* FSTree.h */,
 				50A0F71B2E0E688D00972CBC /* FSTree.cpp */,
-				505DD69B2E0815AC00D9E8B2 /* BlockStorage.h */,
-				505DD69C2E0815B600D9E8B2 /* BlockStorage.cpp */,
-				50A0F71E2E11157D00972CBC /* DiskDoctor.h */,
-				50A0F71F2E11158D00972CBC /* DiskDoctor.cpp */,
+				505DD69B2E0815AC00D9E8B2 /* FSStorage.h */,
+				505DD69C2E0815B600D9E8B2 /* FSStorage.cpp */,
+				50A0F71E2E11157D00972CBC /* FSDoctor.h */,
+				50A0F71F2E11158D00972CBC /* FSDoctor.cpp */,
 				50A6146E260DC91600A01428 /* BootBlockImageTypes.h */,
 				50A64B94257A63A600442964 /* BootBlockImage.h */,
 				50A64B95257A63A600442964 /* BootBlockImage.cpp */,
@@ -2557,7 +2557,7 @@
 				50EFB0D02C18E01E0013B73C /* Wakeable.cpp in Sources */,
 				50AD905A2771B2770011ECCB /* RshServer.cpp in Sources */,
 				508FE05221EA22CC0043D0E9 /* RomDropView.swift in Sources */,
-				505DD69E2E0815B800D9E8B2 /* BlockStorage.cpp in Sources */,
+				505DD69E2E0815B800D9E8B2 /* FSStorage.cpp in Sources */,
 				508FDFD621EA20510043D0E9 /* DragAndDrop.swift in Sources */,
 				508FE01821EA227B0043D0E9 /* MyController.swift in Sources */,
 				507C01AE2D25681400E29933 /* LogicView.swift in Sources */,
@@ -2627,7 +2627,7 @@
 				50FC08AD27819CD100F0C567 /* AgnusInfo.cpp in Sources */,
 				50AE6F8525D71FBE0004AFBC /* Error.cpp in Sources */,
 				501B00152C629A0500749664 /* Beamtraps.cpp in Sources */,
-				50A0F7212E11158E00972CBC /* DiskDoctor.cpp in Sources */,
+				50A0F7212E11158E00972CBC /* FSDoctor.cpp in Sources */,
 				50672CC02946100F004113F5 /* DebuggerConsole.cpp in Sources */,
 				5057E4C5243DF10A004005EB /* Primitives.swift in Sources */,
 				50826F7827F0B2AD005FBF3B /* DiagBoard.cpp in Sources */,
@@ -2872,7 +2872,7 @@
 				50FC04A527DA198100C3E566 /* CopperInfo.cpp in Sources */,
 				50C9A6362C6A747F00007A12 /* SampleRateDetector.cpp in Sources */,
 				50FC04F327DA1A8F00C3E566 /* AudioFilter.cpp in Sources */,
-				50A0F7202E11158E00972CBC /* DiskDoctor.cpp in Sources */,
+				50A0F7202E11158E00972CBC /* FSDoctor.cpp in Sources */,
 				501B00162C629A0500749664 /* Beamtraps.cpp in Sources */,
 				50FC04E627DA1A1400C3E566 /* pfile.c in Sources */,
 				50FC04AF27DA199200C3E566 /* DmaDebugger.cpp in Sources */,
@@ -2903,7 +2903,7 @@
 				50FC04F027DA1A4500C3E566 /* RemoteServer.cpp in Sources */,
 				50FC04D427DA19F600C3E566 /* FSBlock.cpp in Sources */,
 				50FC04C127DA19DA00C3E566 /* Snapshot.cpp in Sources */,
-				505DD69D2E0815B800D9E8B2 /* BlockStorage.cpp in Sources */,
+				505DD69D2E0815B800D9E8B2 /* FSStorage.cpp in Sources */,
 				50FC04EB27DA1A4500C3E566 /* RshServer.cpp in Sources */,
 				50FC04E827DA1A3500C3E566 /* OSDebugger.cpp in Sources */,
 				50FC04F427DA1A8F00C3E566 /* AudioStream.cpp in Sources */,

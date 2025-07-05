@@ -7,7 +7,7 @@
 // See https://mozilla.org/MPL/2.0 for license information
 // -----------------------------------------------------------------------------
 
-#include "DiskDoctor.h"
+#include "FSDoctor.h"
 #include "FileSystem.h"
 #include <unordered_map>
 #include <unordered_set>
@@ -89,7 +89,7 @@ if (value != 72) return Fault::FS_INVALID_HASHTABLE_SIZE; }
 namespace vamiga {
 
 void
-DiskDoctor::dump(Block nr, std::ostream &os)
+FSDoctor::dump(Block nr, std::ostream &os)
 {
     using namespace util;
 
@@ -251,19 +251,19 @@ DiskDoctor::dump(Block nr, std::ostream &os)
 }
 
 isize
-DiskDoctor::xray(bool strict)
+FSDoctor::xray(bool strict)
 {
     return xrayBlocks(strict) + xrayBitmap(strict);
 }
 
 isize
-DiskDoctor::xray(std::ostream &os, bool strict)
+FSDoctor::xray(std::ostream &os, bool strict)
 {
     return xrayBlocks(os, strict) + xrayBitmap(os, strict);
 }
 
 isize
-DiskDoctor::xrayBlocks(bool strict)
+FSDoctor::xrayBlocks(bool strict)
 {
     diagnosis.blockErrors = {};
 
@@ -278,7 +278,7 @@ DiskDoctor::xrayBlocks(bool strict)
 }
 
 isize
-DiskDoctor::xrayBlocks(std::ostream &os, bool strict)
+FSDoctor::xrayBlocks(std::ostream &os, bool strict)
 {
     auto result = xrayBlocks(strict);
 
@@ -295,7 +295,7 @@ DiskDoctor::xrayBlocks(std::ostream &os, bool strict)
 }
 
 isize
-DiskDoctor::xrayBitmap(bool strict)
+FSDoctor::xrayBitmap(bool strict)
 {
     // std::unordered_map<Block,isize> result;
     std::unordered_set<Block> used;
@@ -341,7 +341,7 @@ DiskDoctor::xrayBitmap(bool strict)
 }
 
 isize
-DiskDoctor::xrayBitmap(std::ostream &os, bool strict)
+FSDoctor::xrayBitmap(std::ostream &os, bool strict)
 {
     auto result = xrayBitmap(strict);
 
@@ -369,13 +369,13 @@ DiskDoctor::xrayBitmap(std::ostream &os, bool strict)
 }
 
 isize
-DiskDoctor::xray(Block ref, bool strict) const
+FSDoctor::xray(Block ref, bool strict) const
 {
     return xray(fs.at(ref), strict);
 }
 
 isize
-DiskDoctor::xray(FSBlock &node, bool strict) const
+FSDoctor::xray(FSBlock &node, bool strict) const
 {
     isize count = 0;
 
@@ -393,26 +393,26 @@ DiskDoctor::xray(FSBlock &node, bool strict) const
 }
 
 Fault
-DiskDoctor::xray(Block ref, isize pos, bool strict) const
+FSDoctor::xray(Block ref, isize pos, bool strict) const
 {
     return xray(fs.at(ref), pos, strict);
 }
 
 Fault
-DiskDoctor::xray(Block ref, isize pos, bool strict, u8 *expected) const
+FSDoctor::xray(Block ref, isize pos, bool strict, u8 *expected) const
 {
     return xray(fs.at(ref), pos, strict, expected);
 }
 
 Fault
-DiskDoctor::xray(FSBlock &node, isize pos, bool strict) const
+FSDoctor::xray(FSBlock &node, isize pos, bool strict) const
 {
     u8 expected;
     return xray(node, pos, strict, &expected);
 }
 
 Fault
-DiskDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
+FSDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
 {
     auto ref = node.nr;
 
@@ -607,13 +607,13 @@ DiskDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
 }
 
 Fault
-DiskDoctor::checkBlockType(Block nr, FSBlockType type) const
+FSDoctor::checkBlockType(Block nr, FSBlockType type) const
 {
     return checkBlockType(nr, type, type);
 }
 
 Fault
-DiskDoctor::checkBlockType(Block nr, FSBlockType type, FSBlockType altType) const
+FSDoctor::checkBlockType(Block nr, FSBlockType type, FSBlockType altType) const
 {
     auto t = fs.typeof(nr);
 
