@@ -43,7 +43,7 @@ MutableFileSystem::init(const FileSystemDescriptor &layout, const fs::path &path
     bmExtBlocks     = layout.bmExtBlocks;
 
     // Format the file system
-    if (traits.dos != FSVolumeType::NODOS) format();
+    format();
 
     // Start allocating blocks at the middle of the disk
     ap = rootBlock;
@@ -51,7 +51,7 @@ MutableFileSystem::init(const FileSystemDescriptor &layout, const fs::path &path
     // Print some debug information
     if (FS_DEBUG) { dump(Category::State); }
     
-    // Import files if applicable
+    // Import files if a path is given
     if (!path.empty()) {
         
         // Add all files
@@ -73,16 +73,18 @@ MutableFileSystem::init(Diameter dia, Density den, FSVolumeType dos, const fs::p
 }
 
 void
-MutableFileSystem::format(FSVolumeType dos, string name)
+MutableFileSystem::format(string name)
 {
-    traits.dos = dos;
-    format(name);
+    format(traits.dos);
 }
 
 void
-MutableFileSystem::format(string name)
-{
+MutableFileSystem::format(FSVolumeType dos, string name){
+
     require_initialized();
+
+    traits.dos = dos;
+    if (dos == FSVolumeType::NODOS) return;
 
     // Perform some consistency checks
     assert(numBlocks() > 2);
@@ -312,11 +314,6 @@ void
 MutableFileSystem::updateChecksums() noexcept
 {
     storage.updateChecksums();
-    /*
-    for (isize i = 0; i < numBlocks(); i++) {
-        storage[i].updateChecksum();
-    }
-    */
 }
 
 void
@@ -689,12 +686,12 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
         const u8 *data = src + i * traits.bsize;
 
         // Determine the type of the new block
-        FSBlockType type = predictType((Block)i, data);
+        if (FSBlockType type = predictType((Block)i, data); type != FSBlockType::EMPTY_BLOCK) {
 
-        // TODO: ONLY INITIALIZE THE BLOCK IF IT IS NOT EMPTY!
-        // Create new block
-        storage[i].init(type);
-        storage[i].importBlock(data, traits.bsize);
+            // Create new block
+            storage[i].init(type);
+            storage[i].importBlock(data, traits.bsize);
+        }
     }
     
     // Print some debug information

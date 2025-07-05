@@ -195,14 +195,18 @@ public:
 
 
     //
-    // Querying the block allocation bitmap
+    // Managing the block allocation bitmap
     //
 
 public:
     
-    // Checks if a block is free or allocated
-    bool isFree(Block nr) const noexcept;
+    // Checks if a block is allocated or unallocated
+    bool isFree(Block nr) const noexcept; // TODO: RENAME TO isUnallocated
     bool isAllocated(Block nr) const noexcept { return !isFree(nr); }
+
+    // Returns the number of allocated or unallocated blocks
+    isize numUnallocated() const noexcept;
+    // isize numAllocated() const noexcept;
 
 protected:
     

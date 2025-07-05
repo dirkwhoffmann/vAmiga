@@ -48,9 +48,9 @@ public:
 public:
 
     // Formats the volume
-    void format(FSVolumeType dos, string name = "");
     void format(string name = "");
-    
+    void format(FSVolumeType dos, string name = "");
+
     // Assigns the volume name
     void setName(FSName name);
     void setName(string name) { setName(FSName(name)); }

@@ -246,6 +246,8 @@ FileSystem::cacheStats(FSStats &result) const noexcept
 isize
 FileSystem::freeBlocks() const noexcept
 {
+    return numUnallocated();
+    /*
     isize result = 0;
     isize count = numBlocks();
 
@@ -253,7 +255,11 @@ FileSystem::freeBlocks() const noexcept
         if (isFree((Block)i)) result++;
     }
 
+    auto newValue = numUnallocated();
+    printf("freeBlocks = %ld numUnallocated = %ld\n", result, newValue);
+
     return result;
+    */
 }
 
 isize
@@ -476,6 +482,47 @@ const FSBlock *
 FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) const noexcept
 {
     return const_cast<const FSBlock *>(const_cast<FileSystem *>(this)->locateAllocationBit(nr, byte, bit));
+}
+
+isize
+FileSystem::numUnallocated() const noexcept
+{
+    isize result = 0;
+
+    isize longwordsPerBitmapBlock = (traits.bsize - 4) / 4;
+    isize remaining = numBlocks() - 2;
+
+    // Iterate through all bitmap blocks
+    for (auto &it : bmBlocks) {
+
+        if (auto *bm = read(it, FSBlockType::BITMAP_BLOCK); bm) {
+
+            auto *data = bm->data();
+
+            // Determine the number of long words we need to scan
+            auto longwords = std::min(remaining / 32, longwordsPerBitmapBlock);
+
+            // Count the '1' bits
+            for (isize i = 0; i < longwords * 4; i++) result += util::popcount(data[i + 4]);
+
+            // How many block remain to be checked?
+            remaining -= 32 * longwords;
+        }
+    }
+
+    // Separately check all remaining blocks
+    printf("Remaining to count: %ld\n", remaining);
+    for (isize i = 1; i <= remaining; i++) result += isFree(Block(numBlocks() - i));
+
+    if (FS_DEBUG) {
+
+        isize count = 0;
+        for (isize i = 0; i < numBlocks(); i++) { if (isFree(Block(i))) count++; }
+        debug(true, "Unallocated blocks: Fast code: %ld Slow code: %ld\n", result, count);
+        assert(count == result);
+    }
+
+    return result;
 }
 
 FSBlock &
