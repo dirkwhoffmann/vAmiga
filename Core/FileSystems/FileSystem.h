@@ -214,7 +214,10 @@ protected:
     FSBlock *locateAllocationBit(Block nr, isize *byte, isize *bit) noexcept;
     const FSBlock *locateAllocationBit(Block nr, isize *byte, isize *bit) const noexcept;
 
-    
+    // Translate the bitmap into to a vector with the n-bit set iff the n-th block is free
+    std::vector<u32> serializeBitmap() const;
+
+
     //
     // Managing files and directories
     //
