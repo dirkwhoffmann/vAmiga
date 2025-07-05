@@ -908,6 +908,8 @@ FileSystem::collectHashedBlocks(const FSBlock &node) const
 void
 FileSystem::list(std::ostream &os, const FSBlock &path, const FSOpt &opt) const
 {
+    FSTree(path, opt).list(os, opt);
+    /*
     // List the top directory
     listDirectory(os, path, opt);
 
@@ -929,8 +931,10 @@ FileSystem::list(std::ostream &os, const FSBlock &path, const FSOpt &opt) const
             listDirectory(os, *it, opt);
         }
     }
+    */
 }
 
+/*
 void
 FileSystem::listDirectory(std::ostream &os, const FSBlock &path, const FSOpt &opt) const
 {
@@ -977,6 +981,7 @@ FileSystem::listItems(std::ostream &os, std::vector<const FSBlock *> items, cons
         }
     }
 }
+*/
 
 std::vector<Block>
 FileSystem::collect(const Block nr, std::function<const FSBlock *(FSBlock const *)> next) const

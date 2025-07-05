@@ -94,11 +94,12 @@ NavigatorConsole::autoCompleteFilename(const string &input) const
         names.push_back(absolute ? it->absName(): it->relName());
     }
 
+    /*
     for (auto &it : names) {
         printf("Match: %s\n", it.c_str());
     }
-
     printf("Common prefix: %s\n", util::commonPrefix(names, false).c_str());
+    */
     return util::commonPrefix(names, false);
 }
 
@@ -116,6 +117,10 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
         // Seek matching items
         auto matches = fs.match(&fs.pwd(), args.empty() ? "*" : args.back() + "*");
 
+        // List all nodes
+        FSTree(matches, { .sort = sort::dafa }).list(os);
+
+        /*
         // Print all possible extensions
         fs.listItems(os, matches, {
 
@@ -126,6 +131,7 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
                 return node.pathName() + (node.isDirectory() ? " (dir)" : "\t");
             }
         });
+        */
     }
 
     if (displayCmds) {

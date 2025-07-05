@@ -18,6 +18,12 @@ FSTree::FSTree(const FSBlock &path, const FSOpt &opt)
     init(path, opt, visited);
 };
 
+FSTree::FSTree(const std::vector<const FSBlock *> nodes, const FSOpt &opt) : node(nullptr)
+{
+    for (auto &it : nodes) addChild(it);
+    sort(opt.sort);
+}
+
 void
 FSTree::init(const FSBlock &path, const FSOpt &opt, std::unordered_set<Block> &visited)
 {
@@ -53,7 +59,7 @@ FSTree::init(const FSBlock &path, const FSOpt &opt, std::unordered_set<Block> &v
 }
 
 isize
-FSTree::size()
+FSTree::size() const
 {
     isize result = 1;
     for (auto &it : children) result += it.size();
@@ -97,6 +103,69 @@ FSTree::sort(std::function<bool(const FSBlock &,const FSBlock &)> sort)
 
     auto comperator = [sort](const FSTree &b1, const FSTree &b2) { return sort(*b1.node, *b2.node); };
     std::sort(children.begin(), children.end(), comperator);
+}
+
+void
+FSTree::list(std::ostream &os, const FSOpt &opt) const
+{
+    auto options = opt;
+
+    if (!options.formatter) {
+
+        // Assign a default formatter as none is given
+        options.formatter = [&](const FSBlock &node) {
+            return node.pathName() + (node.isDirectory() ? " (dir)" : "\t");
+        };
+    }
+
+    listRec(os, options);
+}
+
+void
+FSTree::listRec(std::ostream &os, const FSOpt &opt) const
+{
+    // Print header
+    if (opt.recursive) {
+        os << "Directory " << node->absName() << ":" << std::endl << std::endl;
+    }
+
+    // Print all directoy items
+    listItems(os, opt);
+
+    // Print all non-empty subdirectories
+    for (auto &it : children)  {
+        if (!it.children.empty()) { os << std::endl; it.listRec(os, opt); }
+    }
+}
+
+void
+FSTree::listItems(std::ostream &os, const FSOpt &opt) const
+{
+    // Collect all displayed strings
+    std::vector<string> strs;
+    for (auto &it : children) strs.push_back(opt.formatter(*it.node));
+
+    // Determine the longest entry
+    int tab = 0; for (auto &it: strs) tab = std::max(tab, int(it.length()));
+
+    // List all items
+    isize column = 0; for (auto &item : strs) {
+
+        // Print in two columns if the name ends with a tab character
+        if (item.back() == '\t') {
+
+            item.pop_back();
+            os << std::left << std::setw(std::max(tab, 35)) << item;
+            if (column++ > 0) { os << std::endl; column = 0; }
+
+        } else {
+
+            if (column > 0) { os << std::endl; column = 0; }
+            os << std::left << std::setw(std::max(tab, 35)) << item << std::endl;
+        }
+    }
+
+    if (column) os << std::endl;
 }
 
 }

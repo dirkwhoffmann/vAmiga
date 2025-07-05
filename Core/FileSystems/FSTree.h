@@ -24,11 +24,12 @@ struct FSTree {
     FSTree() : node(nullptr) {}
     FSTree(const FSBlock *node) : node(node) {}
     FSTree(const FSBlock &path, const FSOpt &opt);
+    FSTree(const std::vector<const FSBlock *> nodes, const FSOpt &opt);
 
     void init(const FSBlock &path, const FSOpt &opt, std::unordered_set<Block> &visited);
 
-    bool empty() { return node == nullptr; }
-    isize size();
+    bool empty() const { return node == nullptr; }
+    isize size() const;
 
     void addChild(const FSBlock *node) { if (node) children.push_back(FSTree(node)); }
 
@@ -38,9 +39,17 @@ struct FSTree {
 
     void sort(std::function<bool(const FSBlock &,const FSBlock &)>);
 
+    // Pretty-prints the tree ('dir' command, 'list' command)
+    void list(std::ostream &os, const FSOpt &opt = {}) const;
+
+
 private:
 
+
     void bfsWalkRec(std::function<void(const FSTree &)>);
+
+    void listRec(std::ostream &os, const FSOpt &opt) const;
+    void listItems(std::ostream &os, const FSOpt &opt) const;
 };
 
 }

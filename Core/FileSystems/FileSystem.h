@@ -271,8 +271,8 @@ public:
     // Lists the contents of a directory ('dir' command, 'list' command)
     void list(std::ostream &os, const FSBlock &path, const FSOpt &opt = {}) const;
     void list(std::ostream &os, const FSOpt &opt = {}) const { return list(os, pwd(), opt); }
-    void listDirectory(std::ostream &os, const FSBlock &path, const FSOpt &opt = {}) const;
-    void listItems(std::ostream &os, std::vector<const FSBlock *> items, const FSOpt &opt = {}) const;
+    //void listDirectory(std::ostream &os, const FSBlock &path, const FSOpt &opt = {}) const;
+    // void listItems(std::ostream &os, std::vector<const FSBlock *> items, const FSOpt &opt = {}) const;
 
 private:
 
