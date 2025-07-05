@@ -570,7 +570,7 @@ extension VolumeInspector: NSTableViewDataSource {
             
         default:
             if let col = columnNr(tableColumn) {
-                
+
                 let byte = vol.readByte(blockNr, offset: 16 * row + col)
                 return String(format: "%02X", byte)
             }

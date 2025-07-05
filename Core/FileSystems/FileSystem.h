@@ -147,7 +147,26 @@ public:
     BootBlockType bootBlockType() const noexcept;
     bool hasVirus() const noexcept { return bootBlockType() == BootBlockType::VIRUS; }
 
-    
+
+    //
+    // Querying block properties
+    //
+
+public:
+
+    // Returns the type of a certain block or a block item
+    FSBlockType typeof(Block nr) const noexcept;
+    FSItemType typeof(Block nr, isize pos) const noexcept;
+
+    // Checks for an empty block
+    bool isEmpty(Block nr) const noexcept { return typeof(nr) == FSBlockType::EMPTY_BLOCK; }
+
+protected:
+
+    // Predicts the type of a block by analyzing its number and data
+    FSBlockType predictType(Block nr, const u8 *buf) const noexcept;
+
+
     //
     // Accessing the block storage
     //
@@ -173,19 +192,6 @@ public:
     // Operator overload
     FSBlock &operator[](size_t nr);
     const FSBlock &operator[](size_t nr) const;
-
-    // Returns the type of a certain block
-    FSBlockType blockType(Block nr) const noexcept;
-    bool isEmpty(Block nr) const noexcept { return blockType(nr) == FSBlockType::EMPTY_BLOCK; }
-
-    // Returns the usage type of a certain byte in a certain block
-    FSItemType itemType(Block nr, isize pos) const noexcept;
-
-    // Reads a single byte from a block
-    u8 readByte(Block nr, isize offset) const noexcept;
-
-    // Predicts the type of a block by analyzing its number and data
-    FSBlockType predictBlockType(Block nr, const u8 *buf) const noexcept;
 
 
     //

@@ -107,7 +107,7 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
     for (isize i = 0; i < layout.numBlocks; i++) {
 
         const u8 *data = buf + i * traits.bsize;
-        if (auto type = predictBlockType((Block)i, data); type != FSBlockType::EMPTY_BLOCK) {
+        if (auto type = predictType((Block)i, data); type != FSBlockType::EMPTY_BLOCK) {
 
             // Create new block
             storage[i].init(type);
@@ -395,22 +395,15 @@ FileSystem::operator[](size_t nr) const
 }
 
 FSBlockType
-FileSystem::blockType(Block nr) const noexcept
+FileSystem::typeof(Block nr) const noexcept
 {
-    stats.blockReads++;
     return storage.getType(nr);
 }
 
 FSItemType
-FileSystem::itemType(Block nr, isize pos) const noexcept
+FileSystem::typeof(Block nr, isize pos) const noexcept
 {
     return storage.read(nr) ? storage[nr].itemType(pos) : FSItemType::UNUSED;
-}
-
-u8
-FileSystem::readByte(Block nr, isize offset) const noexcept
-{
-    return (storage.read(nr) && offset < traits.bsize) ? storage[nr].data()[offset] : 0;
 }
 
 string
@@ -948,7 +941,7 @@ FileSystem::collect(const FSBlock &node, std::function<const FSBlock *(const FSB
 }
 
 FSBlockType
-FileSystem::predictBlockType(Block nr, const u8 *buf) const noexcept
+FileSystem::predictType(Block nr, const u8 *buf) const noexcept
 {
     assert(buf != nullptr);
     

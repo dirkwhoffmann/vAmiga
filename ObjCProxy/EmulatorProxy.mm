@@ -1558,12 +1558,12 @@ NSString *EventSlotName(EventSlot slot)
 
 - (FSBlockType)blockType:(NSInteger)blockNr
 {
-    return [self fs]->blockType((u32)blockNr);
+    return [self fs]->typeof((u32)blockNr);
 }
 
 - (FSItemType)itemType:(NSInteger)blockNr pos:(NSInteger)pos
 {
-    return [self fs]->itemType((u32)blockNr, pos);
+    return [self fs]->typeof((u32)blockNr, pos);
 }
 
 - (NSInteger)xray:(BOOL)strict
@@ -1626,7 +1626,11 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset
 {
-    return [self fs]->readByte((u32)block, offset);
+    if (auto *ptr = [self fs]->read(Block(block)); ptr && offset < 512) {
+        return ptr->data()[offset];
+    }
+    return 0;
+    // return [self fs]->read8((u32)block, offset);
 }
 
 - (NSString *)ascii:(NSInteger)block offset:(NSInteger)offset length:(NSInteger)len

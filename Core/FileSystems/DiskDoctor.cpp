@@ -615,7 +615,7 @@ DiskDoctor::checkBlockType(Block nr, FSBlockType type) const
 Fault
 DiskDoctor::checkBlockType(Block nr, FSBlockType type, FSBlockType altType) const
 {
-    auto t = fs.blockType(nr);
+    auto t = fs.typeof(nr);
 
     if (t != type && t != altType) {
 
