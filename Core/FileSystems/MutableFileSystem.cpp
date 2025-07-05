@@ -94,17 +94,17 @@ MutableFileSystem::format(FSVolumeType dos, string name){
     storage.init(numBlocks());
 
     // Create boot blocks
-    storage[0].init(FSBlockType::BOOT_BLOCK);
-    storage[1].init(FSBlockType::BOOT_BLOCK);
+    storage[0].init(FSBlockType::BOOT);
+    storage[1].init(FSBlockType::BOOT);
 
     // Create the root block
-    storage[rootBlock].init(FSBlockType::ROOT_BLOCK);
+    storage[rootBlock].init(FSBlockType::ROOT);
 
     // Create bitmap blocks
     for (auto& ref : bmBlocks) {
         
         // storage.write(ref, new FSBlock(this, ref, FSBlockType::BITMAP_BLOCK));
-        storage[ref].init(FSBlockType::BITMAP_BLOCK);
+        storage[ref].init(FSBlockType::BITMAP);
     }
 
     // Add bitmap extension blocks
@@ -112,7 +112,7 @@ MutableFileSystem::format(FSVolumeType dos, string name){
     for (auto &ref : bmExtBlocks) {
 
         // storage.write(ref, new FSBlock(this, ref, FSBlockType::BITMAP_EXT_BLOCK));
-        storage[ref].init(FSBlockType::BITMAP_EXT_BLOCK);
+        storage[ref].init(FSBlockType::BITMAP_EXT);
         storage[pred].setNextBmExtBlockRef(ref);
         pred = ref;
     }
@@ -139,7 +139,7 @@ MutableFileSystem::format(FSVolumeType dos, string name){
 void
 MutableFileSystem::setName(FSName name)
 {
-    if (auto *rb = storage.read(rootBlock, FSBlockType::ROOT_BLOCK); rb) {
+    if (auto *rb = storage.read(rootBlock, FSBlockType::ROOT); rb) {
 
         rb->setName(name);
         rb->updateChecksum();
@@ -193,7 +193,7 @@ MutableFileSystem::allocatable(isize count) const
     
     while (count > 0) {
 
-        if (storage.getType(Block(i)) == FSBlockType::EMPTY_BLOCK) {
+        if (storage.getType(Block(i)) == FSBlockType::EMPTY) {
             if (--count == 0) break;
         }
         
@@ -218,7 +218,7 @@ MutableFileSystem::allocate()
         }
     }
     
-    read(i)->type = FSBlockType::UNKNOWN_BLOCK;
+    read(i)->type = FSBlockType::UNKNOWN;
     markAsAllocated(i);
     ap = (i + 1) % numBlocks();
     return (i);
@@ -234,7 +234,7 @@ MutableFileSystem::allocate(isize count, std::vector<Block> &result)
         
         if (isEmpty(i)) {
             
-            read(i)->type = FSBlockType::UNKNOWN_BLOCK;
+            read(i)->type = FSBlockType::UNKNOWN;
             result.push_back(Block(i));
             count--;
         }
@@ -256,7 +256,7 @@ MutableFileSystem::allocate(isize count, std::vector<Block> &result)
 void
 MutableFileSystem::deallocateBlock(Block nr)
 {
-    storage[nr].init(FSBlockType::EMPTY_BLOCK);
+    storage[nr].init(FSBlockType::EMPTY);
     markAsFree(nr);
 }
 
@@ -265,7 +265,7 @@ MutableFileSystem::addFileListBlock(Block at, Block head, Block prev)
 {
     if (auto *prevBlock = read(prev); prevBlock) {
 
-        storage[at].init(FSBlockType::FILELIST_BLOCK);
+        storage[at].init(FSBlockType::FILELIST);
         storage[at].setFileHeaderRef(head);
 
         prevBlock->setNextListBlockRef(at);
@@ -277,7 +277,7 @@ MutableFileSystem::addDataBlock(Block at, isize id, Block head, Block prev)
 {
     if (auto *prevBlock = read(prev); prevBlock) {
 
-        storage[at].init(traits.ofs() ? FSBlockType::DATA_BLOCK_OFS : FSBlockType::DATA_BLOCK_FFS);
+        storage[at].init(traits.ofs() ? FSBlockType::DATA_OFS : FSBlockType::DATA_FFS);
         storage[at].setDataBlockNr((Block)id);
         storage[at].setFileHeaderRef(head);
         prevBlock->setNextDataBlockRef(at);
@@ -289,7 +289,7 @@ MutableFileSystem::newUserDirBlock(const FSName &name)
 {
     if (Block nr = allocate()) {
 
-        storage[nr].init(FSBlockType::USERDIR_BLOCK);
+        storage[nr].init(FSBlockType::USERDIR);
         storage[nr].setName(name);
         return read(nr);
     }
@@ -302,7 +302,7 @@ MutableFileSystem::newFileHeaderBlock(const FSName &name)
 {
     if (Block nr = allocate()) {
 
-        storage[nr].init(FSBlockType::FILEHEADER_BLOCK);
+        storage[nr].init(FSBlockType::FILEHEADER);
         storage[nr].setName(name);
         return read(nr);
     }
@@ -319,8 +319,8 @@ MutableFileSystem::updateChecksums() noexcept
 void
 MutableFileSystem::makeBootable(BootBlockId id)
 {
-    assert(storage.getType(0) == FSBlockType::BOOT_BLOCK);
-    assert(storage.getType(1) == FSBlockType::BOOT_BLOCK);
+    assert(storage.getType(0) == FSBlockType::BOOT);
+    assert(storage.getType(1) == FSBlockType::BOOT);
     storage[0].writeBootBlock(id, 0);
     storage[1].writeBootBlock(id, 1);
 }
@@ -328,8 +328,8 @@ MutableFileSystem::makeBootable(BootBlockId id)
 void
 MutableFileSystem::killVirus()
 {
-    assert(storage.getType(0) == FSBlockType::BOOT_BLOCK);
-    assert(storage.getType(1) == FSBlockType::BOOT_BLOCK);
+    assert(storage.getType(0) == FSBlockType::BOOT);
+    assert(storage.getType(1) == FSBlockType::BOOT);
 
     auto id =
     traits.ofs() ? BootBlockId::AMIGADOS_13 :
@@ -359,7 +359,7 @@ MutableFileSystem::rectifyAllocationMap()
 {
     for (isize i = 0, max = numBlocks(); i < max; i++) {
         
-        auto free = isFree(Block(i));
+        auto free = isUnallocated(Block(i));
         auto empty = isEmpty(Block(i));
 
         if (empty && !free) {
@@ -604,14 +604,14 @@ MutableFileSystem::addData(FSBlock &block, const u8 *buf, isize size)
     
     switch (block.type) {
             
-        case FSBlockType::DATA_BLOCK_OFS:
+        case FSBlockType::DATA_OFS:
             
             count = std::min(traits.bsize - 24, size);
             std::memcpy(block.data() + 24, buf, count);
             block.setDataBytesInBlock((u32)count);
             break;
 
-        case FSBlockType::DATA_BLOCK_FFS:
+        case FSBlockType::DATA_FFS:
 
             count = std::min(traits.bsize, size);
             std::memcpy(block.data(), buf, count);
@@ -686,7 +686,7 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
         const u8 *data = src + i * traits.bsize;
 
         // Determine the type of the new block
-        if (FSBlockType type = predictType((Block)i, data); type != FSBlockType::EMPTY_BLOCK) {
+        if (FSBlockType type = predictType((Block)i, data); type != FSBlockType::EMPTY) {
 
             // Create new block
             storage[i].init(type);

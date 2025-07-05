@@ -107,7 +107,7 @@ FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
     for (isize i = 0; i < layout.numBlocks; i++) {
 
         const u8 *data = buf + i * traits.bsize;
-        if (auto type = predictType((Block)i, data); type != FSBlockType::EMPTY_BLOCK) {
+        if (auto type = predictType((Block)i, data); type != FSBlockType::EMPTY) {
 
             // Create new block
             storage[i].init(type);
@@ -139,7 +139,7 @@ FileSystem::isFormatted() const noexcept
     if (traits.dos == FSVolumeType::NODOS) return false;
 
     // Check if the root block is present
-    if (!storage.read(rootBlock, FSBlockType::ROOT_BLOCK)) return false;
+    if (!storage.read(rootBlock, FSBlockType::ROOT)) return false;
     // if (rootBlockPtr(rootBlock) == nullptr) return false;
 
     return true;
@@ -271,21 +271,21 @@ FileSystem::usedBlocks() const noexcept
 FSName
 FileSystem::getName() const noexcept
 {
-    auto *rb = storage.read(rootBlock, FSBlockType::ROOT_BLOCK);
+    auto *rb = storage.read(rootBlock, FSBlockType::ROOT);
     return rb ? rb->getName() : FSName("");
 }
 
 string
 FileSystem::getCreationDate() const noexcept
 {
-    auto *rb = storage.read(rootBlock, FSBlockType::ROOT_BLOCK);
+    auto *rb = storage.read(rootBlock, FSBlockType::ROOT);
     return rb ? rb->getCreationDate().str() : "";
 }
 
 string
 FileSystem::getModificationDate() const noexcept
 {
-    auto *rb = storage.read(rootBlock, FSBlockType::ROOT_BLOCK);
+    auto *rb = storage.read(rootBlock, FSBlockType::ROOT);
     // FSBlock *rb = rootBlockPtr(rootBlock);
     return rb ? rb->getModificationDate().str() : "";
 }
@@ -421,7 +421,7 @@ FileSystem::ascii(Block nr, isize offset, isize len) const noexcept
 }
 
 bool
-FileSystem::isFree(Block nr) const noexcept
+FileSystem::isUnallocated(Block nr) const noexcept
 {
     assert(isize(nr) < traits.blocks);
 
@@ -450,7 +450,7 @@ FileSystem::locateAllocationBit(Block nr, isize *byte, isize *bit) noexcept
     isize bmNr = nr / bitsPerBlock;
 
     // Get the bitmap block
-    FSBlock *bm = (bmNr < (isize)bmBlocks.size()) ? read(bmBlocks[bmNr], FSBlockType::BITMAP_BLOCK) : nullptr;
+    FSBlock *bm = (bmNr < (isize)bmBlocks.size()) ? read(bmBlocks[bmNr], FSBlockType::BITMAP) : nullptr;
     if (!bm) {
         warn("Failed to lookup allocation bit for block %d (%ld)\n", nr, bmNr);
         return nullptr;
@@ -493,7 +493,7 @@ FileSystem::numUnallocated() const noexcept
     if (FS_DEBUG) {
 
         isize count = 0;
-        for (isize i = 0; i < numBlocks(); i++) { if (isFree(Block(i))) count++; }
+        for (isize i = 0; i < numBlocks(); i++) { if (isUnallocated(Block(i))) count++; }
         debug(true, "Unallocated blocks: Fast code: %ld Slow code: %ld\n", result, count);
         assert(count == result);
     }
@@ -514,7 +514,7 @@ FileSystem::serializeBitmap() const
     isize j = 0;
     for (auto &it : bmBlocks) {
 
-        if (auto *bm = read(it, FSBlockType::BITMAP_BLOCK); bm) {
+        if (auto *bm = read(it, FSBlockType::BITMAP); bm) {
 
             auto *data = bm->data();
             for (isize i = 4; i < traits.bsize; i += 4) {
@@ -582,7 +582,7 @@ FileSystem::seekPtr(const FSBlock *root, const FSName &name) noexcept
         // Traverse the linked list until the item has been found
         while (ref && visited.find(ref) == visited.end())  {
 
-            auto *block = read(ref, { FSBlockType::USERDIR_BLOCK, FSBlockType::FILEHEADER_BLOCK });
+            auto *block = read(ref, { FSBlockType::USERDIR, FSBlockType::FILEHEADER });
             if (block == nullptr) break;
 
             if (block->isNamed(name)) return block;
@@ -925,7 +925,7 @@ std::vector<const FSBlock *>
 FileSystem::collectHashedBlocks(const FSBlock &node, isize bucket) const
 {
     auto first = node.getHashRef((u32)bucket);
-    if (auto *ptr = read(first, { FSBlockType::USERDIR_BLOCK, FSBlockType::FILEHEADER_BLOCK }); ptr) {
+    if (auto *ptr = read(first, { FSBlockType::USERDIR, FSBlockType::FILEHEADER }); ptr) {
         return collect(*ptr, [&](auto *p) { return p->getNextHashBlock(); });
     } else {
         return {};
@@ -1002,33 +1002,33 @@ FileSystem::predictType(Block nr, const u8 *buf) const noexcept
     assert(buf != nullptr);
     
     // Is it a boot block?
-    if (nr == 0 || nr == 1) return FSBlockType::BOOT_BLOCK;
+    if (nr == 0 || nr == 1) return FSBlockType::BOOT;
     
     // Is it a bitmap block?
     if (std::find(bmBlocks.begin(), bmBlocks.end(), nr) != bmBlocks.end())
-        return FSBlockType::BITMAP_BLOCK;
+        return FSBlockType::BITMAP;
     
     // Is it a bitmap extension block?
     if (std::find(bmExtBlocks.begin(), bmExtBlocks.end(), nr) != bmExtBlocks.end())
-        return FSBlockType::BITMAP_EXT_BLOCK;
+        return FSBlockType::BITMAP_EXT;
 
     // For all other blocks, check the type and subtype fields
     u32 type = FSBlock::read32(buf);
     u32 subtype = FSBlock::read32(buf + traits.bsize - 4);
 
-    if (type == 2  && subtype == 1)       return FSBlockType::ROOT_BLOCK;
-    if (type == 2  && subtype == 2)       return FSBlockType::USERDIR_BLOCK;
-    if (type == 2  && subtype == (u32)-3) return FSBlockType::FILEHEADER_BLOCK;
-    if (type == 16 && subtype == (u32)-3) return FSBlockType::FILELIST_BLOCK;
+    if (type == 2  && subtype == 1)       return FSBlockType::ROOT;
+    if (type == 2  && subtype == 2)       return FSBlockType::USERDIR;
+    if (type == 2  && subtype == (u32)-3) return FSBlockType::FILEHEADER;
+    if (type == 16 && subtype == (u32)-3) return FSBlockType::FILELIST;
 
     // Check if this block is a data block
     if (traits.ofs()) {
-        if (type == 8) return FSBlockType::DATA_BLOCK_OFS;
+        if (type == 8) return FSBlockType::DATA_OFS;
     } else {
-        for (isize i = 0; i < traits.bsize; i++) if (buf[i]) return FSBlockType::DATA_BLOCK_FFS;
+        for (isize i = 0; i < traits.bsize; i++) if (buf[i]) return FSBlockType::DATA_FFS;
     }
     
-    return FSBlockType::EMPTY_BLOCK;
+    return FSBlockType::EMPTY;
 }
 
 void

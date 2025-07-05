@@ -127,39 +127,39 @@ inline bool isINTLVolumeType(FSVolumeType value)
 
 enum class FSBlockType : long
 {
-    UNKNOWN_BLOCK,
-    EMPTY_BLOCK,
-    BOOT_BLOCK,
-    ROOT_BLOCK,
-    BITMAP_BLOCK,
-    BITMAP_EXT_BLOCK,
-    USERDIR_BLOCK,
-    FILEHEADER_BLOCK,
-    FILELIST_BLOCK,
-    DATA_BLOCK_OFS,
-    DATA_BLOCK_FFS
+    UNKNOWN,
+    EMPTY,
+    BOOT,
+    ROOT,
+    BITMAP,
+    BITMAP_EXT,
+    USERDIR,
+    FILEHEADER,
+    FILELIST,
+    DATA_OFS,
+    DATA_FFS
 };
 
 struct FSBlockTypeEnum : Reflection<FSBlockTypeEnum, FSBlockType>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(FSBlockType::DATA_BLOCK_FFS);
+    static constexpr long maxVal = long(FSBlockType::DATA_FFS);
     
     static const char *_key(FSBlockType value)
     {
         switch (value) {
                 
-            case FSBlockType::UNKNOWN_BLOCK:     return "UNKNOWN_BLOCK";
-            case FSBlockType::EMPTY_BLOCK:       return "EMPTY_BLOCK";
-            case FSBlockType::BOOT_BLOCK:        return "BOOT_BLOCK";
-            case FSBlockType::ROOT_BLOCK:        return "ROOT_BLOCK";
-            case FSBlockType::BITMAP_BLOCK:      return "BITMAP_BLOCK";
-            case FSBlockType::BITMAP_EXT_BLOCK:  return "BITMAP_EXT_BLOCK";
-            case FSBlockType::USERDIR_BLOCK:     return "USERDIR_BLOCK";
-            case FSBlockType::FILEHEADER_BLOCK:  return "FILEHEADER_BLOCK";
-            case FSBlockType::FILELIST_BLOCK:    return "FILELIST_BLOCK";
-            case FSBlockType::DATA_BLOCK_OFS:    return "DATA_BLOCK_OFS";
-            case FSBlockType::DATA_BLOCK_FFS:    return "DATA_BLOCK_FFS";
+            case FSBlockType::UNKNOWN:     return "UNKNOWN";
+            case FSBlockType::EMPTY:       return "EMPTY";
+            case FSBlockType::BOOT:        return "BOOT";
+            case FSBlockType::ROOT:        return "ROOT";
+            case FSBlockType::BITMAP:      return "BITMAP";
+            case FSBlockType::BITMAP_EXT:  return "BITMAP_EXT";
+            case FSBlockType::USERDIR:     return "USERDIR";
+            case FSBlockType::FILEHEADER:  return "FILEHEADER";
+            case FSBlockType::FILELIST:    return "FILELIST";
+            case FSBlockType::DATA_OFS:    return "DATA_OFS";
+            case FSBlockType::DATA_FFS:    return "DATA_FFS";
         }
         return "???";
     }

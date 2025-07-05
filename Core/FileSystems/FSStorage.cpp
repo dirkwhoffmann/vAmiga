@@ -64,14 +64,14 @@ FSStorage::_dump(Category category, std::ostream &os) const
 bool
 FSStorage::isEmpty(Block nr) const
 {
-    return getType(nr) == FSBlockType::EMPTY_BLOCK;
+    return getType(nr) == FSBlockType::EMPTY;
 }
 
 FSBlockType
 FSStorage::getType(Block nr) const
 {
     if (isize(nr) >= capacity) throw AppError(Fault::FS_INVALID_BLOCK_REF);
-    return blocks.contains(nr) ? blocks.at(nr)->type : FSBlockType::EMPTY_BLOCK;
+    return blocks.contains(nr) ? blocks.at(nr)->type : FSBlockType::EMPTY;
 }
 
 void
@@ -88,7 +88,7 @@ FSStorage::read(Block nr) noexcept
 
     // Create the block if it does not yet exist
     if (!blocks.contains(nr)) {
-        blocks.emplace(nr, std::make_unique<FSBlock>(fs, nr, FSBlockType::EMPTY_BLOCK));
+        blocks.emplace(nr, std::make_unique<FSBlock>(fs, nr, FSBlockType::EMPTY));
     }
 
     // Return a block reference
@@ -210,17 +210,17 @@ FSStorage::createUsageMap(u8 *buffer, isize len) const
 
     // Setup priorities
     i8 pri[12];
-    pri[isize(FSBlockType::UNKNOWN_BLOCK)]      = 0;
-    pri[isize(FSBlockType::EMPTY_BLOCK)]        = 1;
-    pri[isize(FSBlockType::BOOT_BLOCK)]         = 8;
-    pri[isize(FSBlockType::ROOT_BLOCK)]         = 9;
-    pri[isize(FSBlockType::BITMAP_BLOCK)]       = 7;
-    pri[isize(FSBlockType::BITMAP_EXT_BLOCK)]   = 6;
-    pri[isize(FSBlockType::USERDIR_BLOCK)]      = 5;
-    pri[isize(FSBlockType::FILEHEADER_BLOCK)]   = 3;
-    pri[isize(FSBlockType::FILELIST_BLOCK)]     = 2;
-    pri[isize(FSBlockType::DATA_BLOCK_OFS)]     = 2;
-    pri[isize(FSBlockType::DATA_BLOCK_FFS)]     = 2;
+    pri[isize(FSBlockType::UNKNOWN)]      = 0;
+    pri[isize(FSBlockType::EMPTY)]        = 1;
+    pri[isize(FSBlockType::BOOT)]         = 8;
+    pri[isize(FSBlockType::ROOT)]         = 9;
+    pri[isize(FSBlockType::BITMAP)]       = 7;
+    pri[isize(FSBlockType::BITMAP_EXT)]   = 6;
+    pri[isize(FSBlockType::USERDIR)]      = 5;
+    pri[isize(FSBlockType::FILEHEADER)]   = 3;
+    pri[isize(FSBlockType::FILELIST)]     = 2;
+    pri[isize(FSBlockType::DATA_OFS)]     = 2;
+    pri[isize(FSBlockType::DATA_FFS)]     = 2;
 
     // Start from scratch
     for (isize i = 0; i < len; i++) buffer[i] = 0;
@@ -238,7 +238,7 @@ FSStorage::createUsageMap(u8 *buffer, isize len) const
 
     // Fill gaps
     for (isize pos = 1; pos < len; pos++) {
-        if (buffer[pos] == u8(FSBlockType::UNKNOWN_BLOCK)) buffer[pos] = buffer[pos - 1];
+        if (buffer[pos] == u8(FSBlockType::UNKNOWN)) buffer[pos] = buffer[pos - 1];
     }
 }
 

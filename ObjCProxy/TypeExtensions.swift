@@ -121,17 +121,17 @@ extension FSBlockType: CustomStringConvertible {
     public var description: String {
         
         switch self {
-        case .UNKNOWN_BLOCK:    return "Unknown block type"
-        case .EMPTY_BLOCK:      return "Empty Block"
-        case .BOOT_BLOCK:       return "Boot Block"
-        case .ROOT_BLOCK:       return "Root Block"
-        case .BITMAP_BLOCK:     return "Bitmap Block"
-        case .BITMAP_EXT_BLOCK: return "Bitmap Extension Block"
-        case .USERDIR_BLOCK:    return "User Directory Block"
-        case .FILEHEADER_BLOCK: return "File Header Block"
-        case .FILELIST_BLOCK:   return "File List Block"
-        case .DATA_BLOCK_OFS:   return "Data Block (OFS)"
-        case .DATA_BLOCK_FFS:   return "Data Block (FFS)"
+        case .UNKNOWN:    return "Unknown block type"
+        case .EMPTY:      return "Empty Block"
+        case .BOOT:       return "Boot Block"
+        case .ROOT:       return "Root Block"
+        case .BITMAP:     return "Bitmap Block"
+        case .BITMAP_EXT: return "Bitmap Extension Block"
+        case .USERDIR:    return "User Directory Block"
+        case .FILEHEADER: return "File Header Block"
+        case .FILELIST:   return "File List Block"
+        case .DATA_OFS:   return "Data Block (OFS)"
+        case .DATA_FFS:   return "Data Block (FFS)"
         default:                fatalError()
         }
     }

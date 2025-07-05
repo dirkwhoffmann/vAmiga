@@ -45,37 +45,37 @@ if (!fs.block(value)) return Fault::FS_EXPECTED_REF; }
 if (value != ref) return Fault::FS_EXPECTED_SELFREF; }
 
 #define EXPECT_FILEHEADER_REF { \
-if (Fault e = checkBlockType(value, FSBlockType::FILEHEADER_BLOCK); e != Fault::OK) return e; }
+if (Fault e = checkBlockType(value, FSBlockType::FILEHEADER); e != Fault::OK) return e; }
 
 #define EXPECT_HASH_REF { \
-if (Fault e = checkBlockType(value, FSBlockType::FILEHEADER_BLOCK, FSBlockType::USERDIR_BLOCK); e != Fault::OK) return e; }
+if (Fault e = checkBlockType(value, FSBlockType::FILEHEADER, FSBlockType::USERDIR); e != Fault::OK) return e; }
 
 #define EXPECT_OPTIONAL_HASH_REF { \
 if (value) { EXPECT_HASH_REF } }
 
 #define EXPECT_PARENT_DIR_REF { \
-if (Fault e = checkBlockType(value, FSBlockType::ROOT_BLOCK, FSBlockType::USERDIR_BLOCK); e != Fault::OK) return e; }
+if (Fault e = checkBlockType(value, FSBlockType::ROOT, FSBlockType::USERDIR); e != Fault::OK) return e; }
 
 #define EXPECT_FILELIST_REF { \
-if (Fault e = checkBlockType(value, FSBlockType::FILELIST_BLOCK); e != Fault::OK) return e; }
+if (Fault e = checkBlockType(value, FSBlockType::FILELIST); e != Fault::OK) return e; }
 
 #define EXPECT_OPTIONAL_FILELIST_REF { \
 if (value) { EXPECT_FILELIST_REF } }
 
 #define EXPECT_BITMAP_REF { \
-if (Fault e = checkBlockType(value, FSBlockType::BITMAP_BLOCK); e != Fault::OK) return e; }
+if (Fault e = checkBlockType(value, FSBlockType::BITMAP); e != Fault::OK) return e; }
 
 #define EXPECT_OPTIONAL_BITMAP_REF { \
 if (value) { EXPECT_BITMAP_REF } }
 
 #define EXPECT_BITMAP_EXT_REF { \
-if (Fault e = checkBlockType(value, FSBlockType::BITMAP_EXT_BLOCK); e != Fault::OK) return e; }
+if (Fault e = checkBlockType(value, FSBlockType::BITMAP_EXT); e != Fault::OK) return e; }
 
 #define EXPECT_OPTIONAL_BITMAP_EXT_REF { \
 if (value) { EXPECT_BITMAP_EXT_REF } }
 
 #define EXPECT_DATABLOCK_REF { \
-if (Fault e = checkBlockType(value, FSBlockType::DATA_BLOCK_OFS, FSBlockType::DATA_BLOCK_FFS); e != Fault::OK) return e; }
+if (Fault e = checkBlockType(value, FSBlockType::DATA_OFS, FSBlockType::DATA_FFS); e != Fault::OK) return e; }
 
 #define EXPECT_OPTIONAL_DATABLOCK_REF { \
 if (value) { EXPECT_DATABLOCK_REF } }
@@ -113,14 +113,14 @@ FSDoctor::dump(Block nr, std::ostream &os)
 
     switch (p.type) {
 
-        case FSBlockType::BOOT_BLOCK:
+        case FSBlockType::BOOT:
 
             os << tab("Header");
             for (isize i = 0; i < 8; i++) os << hex(p.bdata[i]) << " ";
             os << std::endl;
             break;
 
-        case FSBlockType::ROOT_BLOCK:
+        case FSBlockType::ROOT:
 
             os << tab("Name");
             os << p.getName() << std::endl;
@@ -134,7 +134,7 @@ FSDoctor::dump(Block nr, std::ostream &os)
             os << dec(p.getNextBmExtBlockRef()) << std::endl;
             break;
 
-        case FSBlockType::BITMAP_BLOCK:
+        case FSBlockType::BITMAP:
         {
             isize count = 0;
             for (isize i = 1; i < p.bsize() / 4; i++) {
@@ -148,7 +148,7 @@ FSDoctor::dump(Block nr, std::ostream &os)
             os << dec(count) << " blocks" << std::endl;
             break;
         }
-        case FSBlockType::BITMAP_EXT_BLOCK:
+        case FSBlockType::BITMAP_EXT:
 
             os << tab("Bitmap blocks");
             os << FSBlock::rangeString(p.getBmBlockRefs()) << std::endl;
@@ -156,7 +156,7 @@ FSDoctor::dump(Block nr, std::ostream &os)
             os << dec(p.getNextBmExtBlockRef()) << std::endl;
             break;
 
-        case FSBlockType::USERDIR_BLOCK:
+        case FSBlockType::USERDIR:
 
             os << tab("Name");
             os << p.getName() << std::endl;
@@ -170,7 +170,7 @@ FSDoctor::dump(Block nr, std::ostream &os)
             os << dec(p.getNextHashRef()) << std::endl;
             break;
 
-        case FSBlockType::FILEHEADER_BLOCK:
+        case FSBlockType::FILEHEADER:
 
             os << tab("Name");
             os << p.getName() << std::endl;
@@ -200,7 +200,7 @@ FSDoctor::dump(Block nr, std::ostream &os)
             os << dec(p.getNextHashRef()) << std::endl;
             break;
 
-        case FSBlockType::FILELIST_BLOCK:
+        case FSBlockType::FILELIST:
 
             os << tab("Header block");
             os << p.getFileHeaderRef() << std::endl;
@@ -214,7 +214,7 @@ FSDoctor::dump(Block nr, std::ostream &os)
             os << p.getNextListBlockRef() << std::endl;
             break;
 
-        case FSBlockType::DATA_BLOCK_OFS:
+        case FSBlockType::DATA_OFS:
 
             os << tab("File header block");
             os << p.getFileHeaderRef() << std::endl;
@@ -418,7 +418,7 @@ FSDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
 
     switch (node.type) {
 
-        case FSBlockType::BOOT_BLOCK:
+        case FSBlockType::BOOT:
         {
             isize word = pos / 4;
             u32 value = node.bdata[pos];
@@ -433,7 +433,7 @@ FSDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
             }
             break;
         }
-        case FSBlockType::ROOT_BLOCK:
+        case FSBlockType::ROOT:
         {
             isize word = pos / 4; if (word >= 6) word -= node.bsize() / 4;
             u32 value = node.get32(word);
@@ -464,7 +464,7 @@ FSDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
             }
             break;
         }
-        case FSBlockType::BITMAP_BLOCK:
+        case FSBlockType::BITMAP:
         {
             isize word = pos / 4;
             u32 value = node.get32(word);
@@ -472,7 +472,7 @@ FSDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
             if (word == 0) EXPECT_CHECKSUM;
             break;
         }
-        case FSBlockType::BITMAP_EXT_BLOCK:
+        case FSBlockType::BITMAP_EXT:
         {
             isize word = pos / 4;
             u32 value = node.get32(word);
@@ -480,7 +480,7 @@ FSDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
             if (word == (i32)(node.bsize() - 4)) EXPECT_OPTIONAL_BITMAP_EXT_REF;
             break;
         }
-        case FSBlockType::USERDIR_BLOCK:
+        case FSBlockType::USERDIR:
         {
             isize word = pos / 4; if (word >= 6) word -= node.bsize() / 4;
             u32 value = node.get32(word);
@@ -500,7 +500,7 @@ FSDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
             if (word <= -51) EXPECT_OPTIONAL_HASH_REF;
             break;
         }
-        case FSBlockType::FILEHEADER_BLOCK:
+        case FSBlockType::FILEHEADER:
         {
             /* Note: At locations -4 and -3, many disks reference the bitmap
              * block which is wrong. We ignore to report this common
@@ -536,7 +536,7 @@ FSDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
             }
             break;
         }
-        case FSBlockType::FILELIST_BLOCK:
+        case FSBlockType::FILELIST:
         {
             /* Note: At location -3, many disks reference the bitmap
              * block which is wrong. We ignore to report this common
@@ -574,7 +574,7 @@ FSDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
             break;
         }
 
-        case FSBlockType::DATA_BLOCK_OFS:
+        case FSBlockType::DATA_OFS:
         {
             /* Note: At location 1, many disks store a reference to the bitmap
              * block instead of a reference to the file header block. We ignore
@@ -621,16 +621,16 @@ FSDoctor::checkBlockType(Block nr, FSBlockType type, FSBlockType altType) const
 
         switch (t) {
 
-            case FSBlockType::EMPTY_BLOCK:      return Fault::FS_PTR_TO_EMPTY_BLOCK;
-            case FSBlockType::BOOT_BLOCK:       return Fault::FS_PTR_TO_BOOT_BLOCK;
-            case FSBlockType::ROOT_BLOCK:       return Fault::FS_PTR_TO_ROOT_BLOCK;
-            case FSBlockType::BITMAP_BLOCK:     return Fault::FS_PTR_TO_BITMAP_BLOCK;
-            case FSBlockType::BITMAP_EXT_BLOCK: return Fault::FS_PTR_TO_BITMAP_EXT_BLOCK;
-            case FSBlockType::USERDIR_BLOCK:    return Fault::FS_PTR_TO_USERDIR_BLOCK;
-            case FSBlockType::FILEHEADER_BLOCK: return Fault::FS_PTR_TO_FILEHEADER_BLOCK;
-            case FSBlockType::FILELIST_BLOCK:   return Fault::FS_PTR_TO_FILELIST_BLOCK;
-            case FSBlockType::DATA_BLOCK_OFS:   return Fault::FS_PTR_TO_DATA_BLOCK;
-            case FSBlockType::DATA_BLOCK_FFS:   return Fault::FS_PTR_TO_DATA_BLOCK;
+            case FSBlockType::EMPTY:      return Fault::FS_PTR_TO_EMPTY_BLOCK;
+            case FSBlockType::BOOT:       return Fault::FS_PTR_TO_BOOT_BLOCK;
+            case FSBlockType::ROOT:       return Fault::FS_PTR_TO_ROOT_BLOCK;
+            case FSBlockType::BITMAP:     return Fault::FS_PTR_TO_BITMAP_BLOCK;
+            case FSBlockType::BITMAP_EXT: return Fault::FS_PTR_TO_BITMAP_EXT_BLOCK;
+            case FSBlockType::USERDIR:    return Fault::FS_PTR_TO_USERDIR_BLOCK;
+            case FSBlockType::FILEHEADER: return Fault::FS_PTR_TO_FILEHEADER_BLOCK;
+            case FSBlockType::FILELIST:   return Fault::FS_PTR_TO_FILELIST_BLOCK;
+            case FSBlockType::DATA_OFS:   return Fault::FS_PTR_TO_DATA_BLOCK;
+            case FSBlockType::DATA_FFS:   return Fault::FS_PTR_TO_DATA_BLOCK;
             default:                            return Fault::FS_PTR_TO_UNKNOWN_BLOCK;
         }
     }

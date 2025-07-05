@@ -95,17 +95,17 @@ class VolumeInspector: DialogController {
     
     let palette: [FSBlockType: NSColor] = [
         
-        .UNKNOWN_BLOCK: Palette.white,
-        .EMPTY_BLOCK: Palette.gray,
-        .BOOT_BLOCK: Palette.orange,
-        .ROOT_BLOCK: Palette.red,
-        .BITMAP_BLOCK: Palette.purple,
-        .BITMAP_EXT_BLOCK: Palette.pink,
-        .USERDIR_BLOCK: Palette.yellow,
-        .FILEHEADER_BLOCK: Palette.blue,
-        .FILELIST_BLOCK: Palette.dgreen, //  Palette.cyan,
-        .DATA_BLOCK_OFS: Palette.green,
-        .DATA_BLOCK_FFS: Palette.green
+        .UNKNOWN: Palette.white,
+        .EMPTY: Palette.gray,
+        .BOOT: Palette.orange,
+        .ROOT: Palette.red,
+        .BITMAP: Palette.purple,
+        .BITMAP_EXT: Palette.pink,
+        .USERDIR: Palette.yellow,
+        .FILEHEADER: Palette.blue,
+        .FILELIST: Palette.dgreen, //  Palette.cyan,
+        .DATA_OFS: Palette.green,
+        .DATA_FFS: Palette.green
     ]
 
     func layoutImage(size: NSSize) -> NSImage? {
@@ -120,7 +120,7 @@ class VolumeInspector: DialogController {
                 
         return createImage(data: data, size: size, colorize: { (x: UInt8) -> NSColor in
             
-            return palette[FSBlockType(rawValue: Int(x)) ?? .UNKNOWN_BLOCK]!
+            return palette[FSBlockType(rawValue: Int(x)) ?? .UNKNOWN]!
         })
     }
 
@@ -323,14 +323,14 @@ class VolumeInspector: DialogController {
     func updateUsageImage() {
              
         let size = NSSize(width: 16, height: 16)
-        bootBlockButton.image = NSImage(color: palette[.BOOT_BLOCK]!, size: size)
-        rootBlockButton.image = NSImage(color: palette[.ROOT_BLOCK]!, size: size)
-        bmBlockButton.image = NSImage(color: palette[.BITMAP_BLOCK]!, size: size)
-        bmExtBlockButton.image = NSImage(color: palette[.BITMAP_EXT_BLOCK]!, size: size)
-        fileListBlockButton.image = NSImage(color: palette[.FILELIST_BLOCK]!, size: size)
-        fileHeaderBlockButton.image = NSImage(color: palette[.FILEHEADER_BLOCK]!, size: size)
-        userDirBlockButton.image = NSImage(color: palette[.USERDIR_BLOCK]!, size: size)
-        dataBlockButton.image = NSImage(color: palette[.DATA_BLOCK_OFS]!, size: size)
+        bootBlockButton.image = NSImage(color: palette[.BOOT]!, size: size)
+        rootBlockButton.image = NSImage(color: palette[.ROOT]!, size: size)
+        bmBlockButton.image = NSImage(color: palette[.BITMAP]!, size: size)
+        bmExtBlockButton.image = NSImage(color: palette[.BITMAP_EXT]!, size: size)
+        fileListBlockButton.image = NSImage(color: palette[.FILELIST]!, size: size)
+        fileHeaderBlockButton.image = NSImage(color: palette[.FILEHEADER]!, size: size)
+        userDirBlockButton.image = NSImage(color: palette[.USERDIR]!, size: size)
+        dataBlockButton.image = NSImage(color: palette[.DATA_OFS]!, size: size)
         blockImageButton.image = layoutImage(size: blockImageButton.bounds.size.scaled(x: 2.0))
     }
 
@@ -476,8 +476,8 @@ class VolumeInspector: DialogController {
         var type = FSBlockType(rawValue: sender.tag)!
 
         // Make sure we search the correct data block type
-        if type == .DATA_BLOCK_OFS && vol.isFFS { type = .DATA_BLOCK_FFS }
-        if type == .DATA_BLOCK_FFS && vol.isOFS { type = .DATA_BLOCK_OFS }
+        if type == .DATA_OFS && vol.isFFS { type = .DATA_FFS }
+        if type == .DATA_FFS && vol.isOFS { type = .DATA_OFS }
 
         // Goto the next block of the requested type
         let nextBlock = vol.nextBlock(of: type, after: blockNr)

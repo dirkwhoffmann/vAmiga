@@ -29,7 +29,7 @@ struct FSBlock : CoreObject {
     class FileSystem *fs = nullptr;
 
     // The type of this block
-    FSBlockType type = FSBlockType::UNKNOWN_BLOCK;
+    FSBlockType type = FSBlockType::UNKNOWN;
 
     // The sector number of this block
     Block nr = 0;

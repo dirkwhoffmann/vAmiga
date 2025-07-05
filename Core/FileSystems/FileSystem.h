@@ -159,7 +159,7 @@ public:
     FSItemType typeof(Block nr, isize pos) const noexcept;
 
     // Convenience wrappers
-    bool isEmpty(Block nr) const noexcept { return typeof(nr) == FSBlockType::EMPTY_BLOCK; }
+    bool isEmpty(Block nr) const noexcept { return typeof(nr) == FSBlockType::EMPTY; }
 
 protected:
 
@@ -201,12 +201,12 @@ public:
 public:
     
     // Checks if a block is allocated or unallocated
-    bool isFree(Block nr) const noexcept; // TODO: RENAME TO isUnallocated
-    bool isAllocated(Block nr) const noexcept { return !isFree(nr); }
+    bool isUnallocated(Block nr) const noexcept;
+    bool isAllocated(Block nr) const noexcept { return !isUnallocated(nr); }
 
     // Returns the number of allocated or unallocated blocks
     isize numUnallocated() const noexcept;
-    // isize numAllocated() const noexcept;
+    isize numAllocated() const noexcept { return numBlocks() - numUnallocated(); }
 
 protected:
     
