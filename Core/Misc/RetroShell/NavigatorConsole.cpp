@@ -120,18 +120,6 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
         // List all nodes
         FSTree(matches, { .sort = sort::dafa }).list(os);
 
-        /*
-        // Print all possible extensions
-        fs.listItems(os, matches, {
-
-            .recursive = false,
-            .sort = sort::dafa,
-            .formatter = [&](const FSBlock &node) {
-
-                return node.pathName() + (node.isDirectory() ? " (dir)" : "\t");
-            }
-        });
-        */
     }
 
     if (displayCmds) {
@@ -668,7 +656,8 @@ NavigatorConsole::initCommands(RSCommand &root)
                 }
             };
 
-            fs.list(os, path, opt);
+            FSTree(path, opt).list(os, opt);
+            // fs.list(os, path, opt);
         }
     });
 
@@ -720,7 +709,8 @@ NavigatorConsole::initCommands(RSCommand &root)
                 }
             };
 
-            fs.list(os, path, opt);
+            FSTree(path, opt).list(os, opt);
+            // fs.list(os, path, opt);
         }
     });
 
