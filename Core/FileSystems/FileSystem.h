@@ -181,9 +181,6 @@ public:
     // Returns the usage type of a certain byte in a certain block
     FSItemType itemType(Block nr, isize pos) const noexcept;
 
-    // Queries a pointer to a block of a certain type (may return nullptr)
-    FSBlock *hashableBlockPtr(Block nr) const noexcept;
-
     // Reads a single byte from a block
     u8 readByte(Block nr, isize offset) const noexcept;
 
@@ -293,8 +290,10 @@ private:
 public:
     
     // Follows a linked list and collects all blocks
-    std::vector<const FSBlock *> collect(const FSBlock &node, std::function<FSBlock *(FSBlock *)> next) const;
-    std::vector<Block> collect(const Block nr, std::function<FSBlock *(FSBlock *)> next) const;
+    std::vector<const FSBlock *> collect(const FSBlock &node,
+                                         std::function<const FSBlock *(const FSBlock *)> next) const;
+    std::vector<Block> collect(const Block nr,
+                               std::function<const FSBlock *(const FSBlock *)> next) const;
 
     // Collects blocks of a certain type
     std::vector<const FSBlock *> collectDataBlocks(const FSBlock &node) const;
