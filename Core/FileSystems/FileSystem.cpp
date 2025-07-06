@@ -155,7 +155,7 @@ FileSystem::_dump(Category category, std::ostream &os) const noexcept
         case Category::Info:
 
             if (!isFormatted()) {
-                os << "Type   Size             Used    Free" << std::endl;
+                os << "Type   Size             Used    Free    Full" << std::endl;
             } else {
                 os << "Type   Size             Used    Free    Full  Name" << std::endl;
             }

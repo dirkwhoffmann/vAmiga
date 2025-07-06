@@ -48,10 +48,13 @@ DebuggerConsole::summary()
 {
     std::stringstream ss;
 
+    // ss << "RetroShell Debugger" << std::endl << std::endl;
     amiga.dump(Category::Current, ss);
 
     *this << vspace{1};
-    *this << ss;
+    string line;
+    while(std::getline(ss, line)) { *this << "    " << line << '\n'; }
+    // *this << ss;
     *this << vspace{1};
 }
 

@@ -51,7 +51,8 @@ class Console: Layer {
         let colorTable: [Int: (NSColor, NSColor)] = [
 
             // Commander console
-            0: (NSColor(r: 0xEF, g: 0xEF, b: 0xEF, a: 0xFF),
+            0: (NSColor(r: 0xCF, g: 0xCF, b: 0xFF, a: 0xFF),
+                // NSColor(r: 0xEF, g: 0xEF, b: 0xEF, a: 0xFF),
                 NSColor(r: 0x60, g: 0x60, b: 0x60, a: 0xD0)),
             /*
             0: (NSColor(r: 0xCF, g: 0xFF, b: 0xCF, a: 0xFF),
@@ -59,14 +60,16 @@ class Console: Layer {
              */
             
             // Debugger console
-            1: (NSColor(r: 0xEF, g: 0xEF, b: 0xEF, a: 0xFF),
+            1: (NSColor(r: 0xFF, g: 0xDF, b: 0xDF, a: 0xFF),
+                // NSColor(r: 0xEF, g: 0xEF, b: 0xEF, a: 0xFF),
                 NSColor(r: 0x60, g: 0x60, b: 0x60, a: 0xD0)),
             /*
             1: (NSColor(r: 0xFF, g: 0xCF, b: 0xCF, a: 0xFF),
                 NSColor(r: 0x90, g: 0x30, b: 0x30, a: 0xD0)),
             */
             // Navigator console
-            2: (NSColor(r: 0xEF, g: 0xEF, b: 0xEF, a: 0xFF),
+            2: (NSColor(r: 0xDF, g: 0xFF, b: 0xDF, a: 0xFF),
+                // NSColor(r: 0xEF, g: 0xEF, b: 0xEF, a: 0xFF),
                 NSColor(r: 0x60, g: 0x60, b: 0x60, a: 0xD0)),
             /*
             2: (NSColor(r: 0xCF, g: 0xCF, b: 0xFF, a: 0xFF),

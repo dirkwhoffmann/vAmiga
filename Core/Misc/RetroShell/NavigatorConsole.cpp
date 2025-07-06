@@ -54,10 +54,14 @@ NavigatorConsole::summary()
 {
     std::stringstream ss;
 
+    // ss << "RetroShell File System Navigator" << std::endl << std::endl;
     fs.dump(Category::Info, ss);
 
     *this << vspace{1};
-    *this << ss;
+
+    string line;
+    while(std::getline(ss, line)) { *this << "    " << line << '\n'; }
+    // *this << ss;
     *this << vspace{1};
 }
 

@@ -273,12 +273,12 @@ Headless::smokeTestScript[] = {
 #endif
 
     // Test console switching
-    ".",
-    ".",
-    ".",
-    "..",
-    "..",
-    "..",
+    // ".",
+    // ".",
+    // ".",
+    // "..",
+    // "..",
+    // "..",
 
     // Enter the commander console
     "commander",

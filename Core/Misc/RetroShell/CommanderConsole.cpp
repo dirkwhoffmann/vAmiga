@@ -37,6 +37,8 @@ CommanderConsole::summary()
 {
     std::stringstream ss;
 
+    // ss << "RetroShell Commander" << std::endl << std::endl;
+
     ss << "Model   Chip    Slow    Fast    Agnus   Denise  ROM" << std::endl;
     ss << std::setw(8) << std::left << BankMapEnum::key(BankMap(amiga.get(Opt::MEM_BANKMAP)));
     ss << std::setw(8) << std::left << (std::to_string(amiga.get(Opt::MEM_CHIP_RAM)) + " MB");
@@ -47,7 +49,9 @@ CommanderConsole::summary()
     ss << mem.getRomTraits().title << std::endl;
 
     *this << vspace{1};
-    *this << ss;
+    string line;
+    while(std::getline(ss, line)) { *this << "    " << line << '\n'; }
+    // *this << ss;
     *this << vspace{1};
 }
 
@@ -72,6 +76,7 @@ CommanderConsole::initCommands(RSCommand &root)
     // Console management
     //
 
+    /*
     root.add({
 
         .tokens = { "." },
@@ -95,8 +100,9 @@ CommanderConsole::initCommands(RSCommand &root)
             retroShell.enterNavigator();
         }
     });
+    */
 
-
+    
     //
     // Workspace management
     //

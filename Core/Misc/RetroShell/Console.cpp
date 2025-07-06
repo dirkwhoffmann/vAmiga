@@ -163,7 +163,7 @@ Console::welcome()
 
     // *this << "    " << description() << " console" << "\n\n";
 
-    printHelp(4);
+    printHelp(0);
 }
 
 const char *
@@ -230,10 +230,9 @@ Console::printHelp(isize tab)
 {
     *this << vspace{1};
 
-    *this << "RetroShell " << description() << "\n\n";
-    storage << string(tab, ' ') << "Type 'help' or press 'Tab' twice for help.\n";
-    // storage << string(tab, ' ') << "Press 'PgUp', 'PgDown', or 'Shift+Tab' to switch consoles.";
-    storage << string(tab, ' ') << "Press 'Shift+Tab' or type '.' to switch consoles.";
+    *this << "RetroShell " << description() << " " << Amiga::version() << "\n\n";
+    storage << string(tab + 4, ' ') << "Type 'help' or press 'Tab' twice for help.\n";
+    storage << string(tab + 4, ' ') << "Press 'Shift+Tab' to switch consoles.";
 
     remoteManager.rshServer << "Type 'help' for help.\n";
 
@@ -975,7 +974,7 @@ Console::initCommands(RSCommand &root)
 
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                printHelp(4);
+                printHelp(0);
             }
         });
 

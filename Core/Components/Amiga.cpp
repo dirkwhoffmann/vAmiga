@@ -746,9 +746,8 @@ Amiga::_dump(Category category, std::ostream &os) const
         (void)cpu.disassembleSR(sr);
 
         os << std::setfill('0');
-        os << "   DMACON  INTREQ / INTENA  STATUS REGISTER  IPL FCP" << std::endl;
+        os << "DMACON  INTREQ / INTENA  STATUS REGISTER  IPL FCP" << std::endl;
 
-        os << "   ";
         os << ((dmacon & BPLEN) ? (dmaen ? 'B' : 'b') : empty);
         os << ((dmacon & COPEN) ? (dmaen ? 'C' : 'c') : empty);
         os << ((dmacon & BLTEN) ? (dmaen ? 'B' : 'b') : empty);
@@ -787,10 +786,14 @@ Amiga::_dump(Category category, std::ostream &os) const
     }
     
     if (category == Category::Trace) {
-        
+
+        std::stringstream ss;
+        string line;
+
         cpu.dumpLogBuffer(os, 8);
         os << "\n";
-        dump(Category::Current, os);
+        dump(Category::Current, ss);
+        while(std::getline(ss, line)) { os << "   " << line << '\n'; }
         os << "\n";
         cpu.disassembleRange(os, cpu.getPC0(), 8);
     }

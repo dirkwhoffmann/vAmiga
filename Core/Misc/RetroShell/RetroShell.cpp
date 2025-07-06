@@ -336,7 +336,11 @@ RetroShell::press(RSKey key, bool shift)
                 
             case RSKey::TAB:
 
-                asyncExec(".");
+                // asyncExec(".");
+                if (current->objid == 0) current->input = "debugger";
+                if (current->objid == 1) current->input = "navigator";
+                if (current->objid == 2) current->input = "commander";
+                current->pressReturn(false);
                 return;
 
             default:
