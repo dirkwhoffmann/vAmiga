@@ -48,7 +48,7 @@ public:
     FileType type() const override { return FileType::HDZ; }
     u64 fnv64() const override { return hdf.fnv64(); }
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
-    bool isCompatibleBuffer(const u8 *buf, isize len) override { return isCompatible(buf, len); }
+    bool isCompatibleBuffer(const u8 *buf, isize len) const override { return isCompatible(buf, len); }
     void finalizeRead() throws override;
 
     

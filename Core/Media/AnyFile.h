@@ -91,7 +91,7 @@ public:
 protected:
     
     virtual bool isCompatiblePath(const fs::path &path) const = 0;
-    virtual bool isCompatibleBuffer(const u8 *buf, isize len) = 0;
+    virtual bool isCompatibleBuffer(const u8 *buf, isize len) const = 0;
     bool isCompatibleBuffer(const Buffer<u8> &buffer);
     isize readFromBuffer(const u8 *buf, isize len) throws override;
     isize readFromBuffer(const Buffer<u8> &buffer) throws;

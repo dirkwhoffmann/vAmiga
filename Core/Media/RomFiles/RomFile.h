@@ -47,7 +47,7 @@ public:
 
     FileType type() const override { return FileType::ROM; }
     bool isCompatiblePath(const fs::path &path) const override { return isCompatible(path); }
-    bool isCompatibleBuffer(const u8 *buf, isize len) override { return isCompatible(buf, len); }
+    bool isCompatibleBuffer(const u8 *buf, isize len) const override { return isCompatible(buf, len); }
 
 
     //
