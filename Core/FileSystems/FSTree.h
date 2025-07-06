@@ -35,6 +35,7 @@ struct FSTree {
 
     // Traverses the tree and applies a function at each node
     void bfsWalk(std::function<void(const FSTree &)>);
+    void bfsWalkRec(std::function<void(const FSTree &)>);
     void dfsWalk(std::function<void(const FSTree &)>);
 
     void sort(std::function<bool(const FSBlock &,const FSBlock &)>);
@@ -44,9 +45,6 @@ struct FSTree {
 
 
 private:
-
-
-    void bfsWalkRec(std::function<void(const FSTree &)>);
 
     void listRec(std::ostream &os, const FSOpt &opt) const;
     void listItems(std::ostream &os, const FSOpt &opt) const;

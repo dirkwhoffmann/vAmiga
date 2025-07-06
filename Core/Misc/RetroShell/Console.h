@@ -90,7 +90,6 @@ protected:
 
     // History buffer storing old input strings and cursor positions
     std::vector<std::pair<string,isize>> history;
-
     // The currently active input string
     isize ipos = 0;
 

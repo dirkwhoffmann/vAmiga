@@ -16,9 +16,12 @@ namespace vamiga {
 void
 DebuggerConsole::_pause()
 {
-    *this << '\n';
-    exec("state");
-    *this << getPrompt();
+    if (retroShell.inDebugShell()) {
+
+        *this << '\n';
+        exec("state");
+        *this << getPrompt();
+    }
 }
 
 string

@@ -212,9 +212,9 @@ FSBlock::relName(const FSBlock &top) const
 
     for (auto &it : nodes) {
 
+        if (it == &top) break;
         auto name = it->pathName();
         result = name + "/" + result;
-        if (it == &top) break;
     }
 
     return util::trim(result, "/");
@@ -226,6 +226,9 @@ FSBlock::sanitizedPath() const
     fs::path result;
 
     auto nodes = fs->collect(*this, [](auto *node) { return node->getParentDirBlock(); });
+
+    // Delete the root node
+    if (!nodes.empty()) nodes.pop_back();
 
     for (auto &it : nodes) {
 

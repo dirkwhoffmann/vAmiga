@@ -89,9 +89,11 @@ NavigatorConsole::autoComplete(Tokens &argv)
         if (remaining.size() != 1 || !cmd->autoComplete(argv.back())) {
 
             // If that didn't work, try to auto-complete with a file name
-            auto prefix = autoCompleteFilename(argv.back());
+            try {
+                auto prefix = autoCompleteFilename(argv.back());
+                if (prefix.size() > argv.back().size()) argv.back() = prefix;
 
-            if (prefix.size() > argv.back().size()) argv.back() = prefix;
+            } catch (...) { }
         }
     }
 }
@@ -271,8 +273,11 @@ NavigatorConsole::matchPath(const string &path, Tokens &notFound)
     auto *p = &fs.pwd();
     while (!tokens.empty()) {
 
-        if (p = fs.seekPtr(p, FSName(tokens.front())); !p) { break; }
+        auto *next = fs.seekPtr(p, FSName(tokens.front()));
+        if (!next) break;
+
         tokens.erase(tokens.begin());
+        p = next;
     }
     notFound = tokens;
 
@@ -915,6 +920,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         }
     });
 
+    /* TODO: IMPLEMENT IT! (DO NOT DELETE)
     root.add({
 
         .tokens = { "block", "import" },
@@ -942,6 +948,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             os << "Not implemented, yet!" << '\n';
         }
     });
+    */
 
     RSCommand::currentGroup = "Modify";
 

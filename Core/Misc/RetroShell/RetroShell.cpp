@@ -67,12 +67,17 @@ RetroShell::enterConsole(isize nr)
     // Enter Leave tracking mode
     nr == 1 ? emulator.trackOn(1) : emulator.trackOff(1);
 
-    // Print the welcome message if entered the first time
-    if (current->isEmpty()) { current->exec("welcome"); *this << current->getPrompt(); }
+    if (current->isEmpty()) {
 
-    // Print the summary message
-    current->summary();
-    
+        // Print the welcome message if entered the first time
+        current->exec("welcome"); *this << current->getPrompt();
+
+    } else {
+
+        // Otherwise, print the summary message
+        current->summary();
+    }
+
     // Update prompt
     *this << '\r' << current->getPrompt();
 
@@ -320,20 +325,6 @@ RetroShell::press(RSKey key, bool shift)
 
         switch(key) {
 
-            /*
-            case RSKey::UP:
-            case RSKey::PAGE_UP:
-
-                asyncExec("..");
-                return;
-
-            case RSKey::DOWN:
-            case RSKey::PAGE_DOWN:
-
-                asyncExec(".");
-                return;
-            */
-                
             case RSKey::TAB:
 
                 // asyncExec(".");

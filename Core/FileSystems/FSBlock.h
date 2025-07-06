@@ -384,12 +384,12 @@ inline std::function<bool(const FSBlock &, const FSBlock &)> dafa = [](const FSB
 
     if ( b1.isDirectory() && !b2.isDirectory()) return true;
     if (!b1.isDirectory() &&  b2.isDirectory()) return false;
-    return b1.pathName() < b2.pathName();
+    return b1.getName() < b2.getName();
 };
 
 inline std::function<bool(const FSBlock &, const FSBlock &)> alpha = [](const FSBlock &b1, const FSBlock &b2) {
 
-    return b1.pathName() < b2.pathName();
+    return b1.getName() < b2.getName();
 };
 
 inline std::function<bool(const FSBlock &, const FSBlock &)> none = nullptr;

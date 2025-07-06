@@ -282,12 +282,6 @@ class VolumeInspector: DialogController {
         let errors2 = vol.xrayBitmap(strict)
         erroneousBlocks = vol.xrayBlocks
         bitMapErrors = vol.xrayBitmap
-        print("erroneousBlocks.size = \(erroneousBlocks.count) \(errors1)")
-        print("erroneousBlocks.size = \(bitMapErrors.count) \(errors2)")
-        // Experimental (test new API)
-        for number in erroneousBlocks {
-            print(number)
-        }
 
         // Compute images
         updateUsageImage()

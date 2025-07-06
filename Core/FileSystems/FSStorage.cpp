@@ -51,8 +51,7 @@ FSStorage::_dump(Category category, std::ostream &os) const
 
         case Category::Blocks:
 
-            os << tab("Capacity") << numBlocks() << " blocks" << std::endl;
-            os << tab("Block size") << bsize << " bytes" << std::endl;
+            os << tab("Capacity") << numBlocks() << " blocks (x " << bsize << " bytes)" << std::endl;
             os << tab("Hashed blocks") << blocks.size() << std::endl;
             break;
 

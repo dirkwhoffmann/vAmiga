@@ -173,7 +173,7 @@ private:
     
 public:
 
-    // Imports the volume from a buffer compatible with the ADF format
+    // Imports the volume from a buffer compatible with the ADF or HDF format
     void importVolume(const u8 *src, isize size) throws;
 
     // Imports files and folders from the host file system

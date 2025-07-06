@@ -91,7 +91,7 @@ debugflag DSK_CHECKSUM    = 0;
 debugflag DSKREG_DEBUG    = 0;
 debugflag DSK_DEBUG       = 0;
 debugflag MFM_DEBUG       = 0;
-debugflag FS_DEBUG        = 1;
+debugflag FS_DEBUG        = 0;
 
 // Hard Drives
 debugflag HDR_ACCEPT_ALL  = 0;
