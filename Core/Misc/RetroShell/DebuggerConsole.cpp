@@ -67,9 +67,10 @@ DebuggerConsole::printHelp(isize tab)
 void
 DebuggerConsole::pressReturn(bool shift)
 {
-    if (!shift && input.empty()) {
+    if (emulator.isPaused() && !shift && input.empty()) {
 
-        emulator.isRunning() ? emulator.put(Cmd::PAUSE) : emulator.stepInto();
+        emulator.stepInto();
+        // emulator.isRunning() ? emulator.put(Cmd::PAUSE) : emulator.stepInto();
 
     } else {
         
@@ -117,6 +118,21 @@ DebuggerConsole::initCommands(RSCommand &root)
     
     RSCommand::currentGroup = "Program execution";
 
+    root.add({ .tokens = { "p[ause]" }, .ghelp  = { "Pause emulation" }, .chelp  = { "p or pause" } });
+
+    root.add({
+
+        .tokens = { "pause" },
+        .chelp  = { "Pause emulation" },
+        .flags  = rs::shadowed,
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            if (emulator.isRunning()) emulator.put(Cmd::PAUSE);
+        }
+    });
+
+    root.clone({ "pause" }, "p");
+
     root.add({ .tokens = { "g[oto]" }, .ghelp  = { "Goto address" }, .chelp  = { "g or goto" } });
 
     root.add({
@@ -127,7 +143,7 @@ DebuggerConsole::initCommands(RSCommand &root)
         .args   = { { .name = { "address", "Memory address" }, .flags = rs::opt } },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
             
-            args.contains("address") ? emulator.run() : cpu.jump(parseAddr(args.at("address")));
+            args.contains("address") ? cpu.jump(parseAddr(args.at("address"))) : emulator.run();
         }
     });
     
