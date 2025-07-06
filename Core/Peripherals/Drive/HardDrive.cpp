@@ -333,7 +333,7 @@ HardDrive::connect()
         
         debug(WT_DEBUG, "Creating default disk...\n");
         init(MB(10));
-        format(FSVolumeType::OFS, defaultName());
+        format(FSFormat::OFS, defaultName());
     }
 }
 
@@ -548,19 +548,19 @@ HardDrive::defaultName(isize partition) const
 }
 
 void
-HardDrive::format(FSVolumeType fsType, string name)
+HardDrive::format(FSFormat fsType, string name)
 {
     if (HDR_DEBUG) {
 
         msg("Formatting hard drive\n");
-        msg("    File system : %s\n", FSVolumeTypeEnum::key(fsType));
+        msg("    File system : %s\n", FSFormatEnum::key(fsType));
         msg("           Name : %s\n", name.c_str());
     }
     
     // Only proceed if a disk is present
     if (!data.ptr) return;
 
-    if (fsType != FSVolumeType::NODOS) {
+    if (fsType != FSFormat::NODOS) {
         
         // Create a device descriptor matching this drive
         auto layout = FileSystemDescriptor(geometry, fsType);

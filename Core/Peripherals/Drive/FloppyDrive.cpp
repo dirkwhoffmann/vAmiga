@@ -1076,11 +1076,11 @@ FloppyDrive::insertDisk(std::unique_ptr<FloppyDisk> disk, Cycle delay)
 }
 
 void
-FloppyDrive::insertNew(FSVolumeType fs, BootBlockId bb, string name, const fs::path &path)
+FloppyDrive::insertNew(FSFormat fs, BootBlockId bb, string name, const fs::path &path)
 {
     debug(DSK_DEBUG,
           "insertNew(%s, %s, %s, %s)\n",
-          FSVolumeTypeEnum::key(fs), BootBlockIdEnum::key(bb), name.c_str(), path.string().c_str());
+          FSFormatEnum::key(fs), BootBlockIdEnum::key(bb), name.c_str(), path.string().c_str());
     
     
     // Create a file system and import the directory
@@ -1143,7 +1143,7 @@ FloppyDrive::swapDisk(const fs::path &path)
         
     try {
 
-        insertNew(FSVolumeType::OFS, BootBlockId::AMIGADOS_13, path.filename().string(), path);
+        insertNew(FSFormat::OFS, BootBlockId::AMIGADOS_13, path.filename().string(), path);
 
     }  catch (AppError &err) {
         

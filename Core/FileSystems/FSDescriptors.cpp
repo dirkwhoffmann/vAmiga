@@ -13,17 +13,17 @@
 
 namespace vamiga {
 
-FileSystemDescriptor::FileSystemDescriptor(isize numBlocks, FSVolumeType dos)
+FileSystemDescriptor::FileSystemDescriptor(isize numBlocks, FSFormat dos)
 {
     init(numBlocks, dos);
 }
 
-FileSystemDescriptor::FileSystemDescriptor(Diameter dia, Density den, FSVolumeType dos)
+FileSystemDescriptor::FileSystemDescriptor(Diameter dia, Density den, FSFormat dos)
 {
     init(dia, den, dos);
 }
 
-FileSystemDescriptor::FileSystemDescriptor(const GeometryDescriptor &geometry, FSVolumeType dos)
+FileSystemDescriptor::FileSystemDescriptor(const GeometryDescriptor &geometry, FSFormat dos)
 {
     init(geometry, dos);
 }
@@ -35,7 +35,7 @@ FileSystemDescriptor::FileSystemDescriptor(const PartitionDescriptor &des)
 
 
 void
-FileSystemDescriptor::init(isize numBlocks, FSVolumeType dos)
+FileSystemDescriptor::init(isize numBlocks, FSFormat dos)
 {
     // Copy parameters
     this->numBlocks = numBlocks;
@@ -66,7 +66,7 @@ FileSystemDescriptor::init(isize numBlocks, FSVolumeType dos)
 }
 
 void
-FileSystemDescriptor::init(const GeometryDescriptor &geometry, FSVolumeType dos)
+FileSystemDescriptor::init(const GeometryDescriptor &geometry, FSFormat dos)
 {
     init(geometry.numBlocks(), dos);
 }
@@ -79,7 +79,7 @@ FileSystemDescriptor::init(const PartitionDescriptor &des)
 }
 
 void
-FileSystemDescriptor::init(Diameter dia, Density den, FSVolumeType dos)
+FileSystemDescriptor::init(Diameter dia, Density den, FSFormat dos)
 {
     init(GeometryDescriptor(dia, den), dos);
 }
@@ -103,7 +103,7 @@ FileSystemDescriptor::dump(std::ostream &os) const
     os << tab("Reserved");
     os << dec(numReserved) << std::endl;
     os << tab("DOS version");
-    os << FSVolumeTypeEnum::key(dos) << std::endl;
+    os << FSFormatEnum::key(dos) << std::endl;
     os << tab("Root block");
     os << dec(rootBlock) << std::endl;
     os << tab("Bitmap blocks");
@@ -121,7 +121,7 @@ FileSystemDescriptor::checkCompatibility() const
     if (bsize != 512 || FORCE_FS_WRONG_BSIZE) {
         throw AppError(Fault::FS_WRONG_BSIZE);
     }
-    if (!FSVolumeTypeEnum::isValid(dos) || FORCE_FS_WRONG_DOS_TYPE) {
+    if (!FSFormatEnum::isValid(dos) || FORCE_FS_WRONG_DOS_TYPE) {
         throw AppError(Fault::FS_WRONG_DOS_TYPE);
     }
 }

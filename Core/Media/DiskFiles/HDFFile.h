@@ -167,7 +167,7 @@ private:
     std::optional<string> rdbString(isize offset, isize len) const;
 
     // Extracts the DOS revision number from a certain block
-    FSVolumeType dos(isize nr) const;
+    FSFormat dos(isize nr) const;
 
     
     //

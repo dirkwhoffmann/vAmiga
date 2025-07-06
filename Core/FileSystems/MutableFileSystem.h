@@ -33,12 +33,12 @@ public:
 
     MutableFileSystem(isize capacity, isize bsize = 512) { init(capacity, bsize); }
     MutableFileSystem(const FileSystemDescriptor &layout, const fs::path &path = {}) { init(layout, path); }
-    MutableFileSystem(Diameter dia, Density den, FSVolumeType dos, const fs::path &path = {}) { init(dia, den, dos, path); }
+    MutableFileSystem(Diameter dia, Density den, FSFormat dos, const fs::path &path = {}) { init(dia, den, dos, path); }
 
     using FileSystem::init;
     void init(isize capacity, isize bsize = 512);
     void init(const FileSystemDescriptor &layout, const fs::path &path = {});
-    void init(Diameter dia, Density den, FSVolumeType dos, const fs::path &path = {});
+    void init(Diameter dia, Density den, FSFormat dos, const fs::path &path = {});
 
     
     //
@@ -49,7 +49,7 @@ public:
 
     // Formats the volume
     void format(string name = "");
-    void format(FSVolumeType dos, string name = "");
+    void format(FSFormat dos, string name = "");
 
     // Assigns the volume name
     void setName(FSName name);

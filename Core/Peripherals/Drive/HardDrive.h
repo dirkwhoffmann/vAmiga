@@ -166,15 +166,15 @@ public:
         
         switch (descr.dosType) {
                 
-            case 0x444F5300: traits.fsType = FSVolumeType::OFS; break;
-            case 0x444F5301: traits.fsType = FSVolumeType::FFS; break;
-            case 0x444F5302: traits.fsType = FSVolumeType::OFS_INTL; break;
-            case 0x444F5303: traits.fsType = FSVolumeType::FFS_INTL; break;
-            case 0x444F5304: traits.fsType = FSVolumeType::OFS_DC; break;
-            case 0x444F5305: traits.fsType = FSVolumeType::FFS_DC; break;
-            case 0x444F5306: traits.fsType = FSVolumeType::OFS_LNFS; break;
-            case 0x444F5307: traits.fsType = FSVolumeType::FFS_LNFS; break;
-            default:         traits.fsType = FSVolumeType::NODOS; break;
+            case 0x444F5300: traits.fsType = FSFormat::OFS; break;
+            case 0x444F5301: traits.fsType = FSFormat::FFS; break;
+            case 0x444F5302: traits.fsType = FSFormat::OFS_INTL; break;
+            case 0x444F5303: traits.fsType = FSFormat::FFS_INTL; break;
+            case 0x444F5304: traits.fsType = FSFormat::OFS_DC; break;
+            case 0x444F5305: traits.fsType = FSFormat::FFS_DC; break;
+            case 0x444F5306: traits.fsType = FSFormat::OFS_LNFS; break;
+            case 0x444F5307: traits.fsType = FSFormat::FFS_LNFS; break;
+            default:         traits.fsType = FSFormat::NODOS; break;
         }
         
         return traits;
@@ -336,7 +336,7 @@ public:
     string defaultName(isize partition = 0) const;
 
     // Formats the disk
-    void format(FSVolumeType fs, string name) throws;
+    void format(FSFormat fs, string name) throws;
 
     // Change the drive geometry
     void changeGeometry(isize c, isize h, isize s, isize b = 512) throws;

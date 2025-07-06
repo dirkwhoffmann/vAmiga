@@ -89,7 +89,7 @@ FileSystem::init(const FileSystemDescriptor &layout, u8 *buf, isize len)
     layout.checkCompatibility();
 
     // Only proceed if the volume is formatted
-    if (layout.dos == FSVolumeType::NODOS) throw AppError(Fault::FS_UNFORMATTED);
+    if (layout.dos == FSFormat::NODOS) throw AppError(Fault::FS_UNFORMATTED);
 
     // Copy layout parameters
     traits.dos      = layout.dos;
@@ -136,7 +136,7 @@ FileSystem::isFormatted() const noexcept
     if (!isInitialized()) return false;
 
     // Check the DOS type
-    if (traits.dos == FSVolumeType::NODOS) return false;
+    if (traits.dos == FSFormat::NODOS) return false;
 
     // Check if the root block is present
     if (!storage.read(rootBlock, FSBlockType::ROOT)) return false;
@@ -163,26 +163,25 @@ FileSystem::_dump(Category category, std::ostream &os) const noexcept
 
         case Category::State:
         {
-            auto total = isFormatted() ? numBlocks() : storage.numBlocks();
-            auto used = isFormatted() ? usedBlocks() : storage.usedBlocks();
-            auto free = isFormatted() ? freeBlocks() : storage.freeBlocks();
-            auto fill = isFormatted() ? fillLevel() : storage.fillLevel();
-            auto size = std::to_string(total) + " (x " + std::to_string(traits.bsize) + ")";
+            auto info = getInfo();
+            auto size = std::to_string(info.numBlocks) + " (x " + std::to_string(traits.bsize) + ")";
 
             isFormatted() ? os << "DOS" << dec(isize(traits.dos)) << " " : os << "NODOS";
             os << "  ";
             os << std::setw(15) << std::left << std::setfill(' ') << size;
             os << "  ";
-            os << std::setw(6) << std::left << std::setfill(' ') << used;
+            os << std::setw(6) << std::left << std::setfill(' ') << info.usedBlocks;
             os << "  ";
-            os << std::setw(6) << std::left << std::setfill(' ') << free;
+            os << std::setw(6) << std::left << std::setfill(' ') << info.freeBlocks;
             os << "  ";
-            os << std::setw(3) << std::right << std::setfill(' ') << isize(fill);
+            os << std::setw(3) << std::right << std::setfill(' ') << isize(info.fillLevel);
             os << "%  ";
             os << getName().c_str() << std::endl;
             break;
         }
         case Category::Properties:
+        {
+            auto info = getInfo();
 
             os << tab("Name");
             os << getName().cpp_str() << std::endl;
@@ -193,14 +192,16 @@ FileSystem::_dump(Category category, std::ostream &os) const noexcept
             os << tab("Boot block");
             os << getBootBlockName() << std::endl;
             os << tab("Capacity");
-            os << util::byteCountAsString(numBytes()) << std::endl;
+            os << util::byteCountAsString(info.numBlocks * traits.bsize) << std::endl;
             os << tab("Block size");
             os << dec(traits.bsize) << " Bytes" << std::endl;
             os << tab("Blocks");
-            os << dec(numBlocks()) << std::endl;
+            os << dec(info.numBlocks) << std::endl;
             os << tab("Used");
-            os << dec(usedBlocks());
-            os << " (" <<  std::fixed << std::setprecision(2) << fillLevel() << "%)" << std::endl;
+            os << dec(info.usedBlocks);
+            os << tab("Free");
+            os << dec(info.freeBlocks);
+            os << " (" <<  std::fixed << std::setprecision(2) << info.fillLevel << "%)" << std::endl;
             os << tab("Root block");
             os << dec(rootBlock) << std::endl;
             os << tab("Bitmap blocks");
@@ -210,7 +211,7 @@ FileSystem::_dump(Category category, std::ostream &os) const noexcept
             for (auto& it : bmExtBlocks) { os << dec(it) << " "; }
             os << std::endl;
             break;
-
+        }
         case Category::Blocks:
 
             storage.dump(Category::Blocks, os);
@@ -228,44 +229,18 @@ FileSystem::cacheInfo(FSInfo &result) const noexcept
     result.creationDate = getCreationDate();
     result.modificationDate = getModificationDate();
 
-    /*
-    result.freeBlocks = freeBlocks();
-    result.usedBlocks = usedBlocks();
-    result.freeBytes = freeBytes();
-    result.usedBytes = usedBytes();
-    result.fillLevel = fillLevel();
-    */
+    result.numBlocks = storage.numBlocks();
+    result.freeBlocks = numUnallocated();
+    result.usedBlocks = result.numBlocks - result.freeBlocks;
+    result.freeBytes = result.freeBlocks * traits.bsize;
+    result.usedBytes = result.usedBlocks * traits.bsize;
+    result.fillLevel = double(100) * result.usedBlocks / result.numBlocks;
 }
 
 void
 FileSystem::cacheStats(FSStats &result) const noexcept
 {
 
-}
-
-isize
-FileSystem::freeBlocks() const noexcept
-{
-    return numUnallocated();
-    /*
-    isize result = 0;
-    isize count = numBlocks();
-
-    for (isize i = 0; i < count; i++) {
-        if (isFree((Block)i)) result++;
-    }
-
-    auto newValue = numUnallocated();
-    printf("freeBlocks = %ld numUnallocated = %ld\n", result, newValue);
-
-    return result;
-    */
-}
-
-isize
-FileSystem::usedBlocks() const noexcept
-{
-    return numBlocks() - freeBlocks();
 }
 
 FSName

@@ -65,8 +65,8 @@ public:
     // Methods from FloppyFile
     //
     
-    FSVolumeType getDos() const override { return adf.getDos(); }
-    void setDos(FSVolumeType dos) override { adf.setDos(dos); }
+    FSFormat getDos() const override { return adf.getDos(); }
+    void setDos(FSFormat dos) override { adf.setDos(dos); }
     Diameter getDiameter() const override { return adf.getDiameter(); }
     Density getDensity() const override { return adf.getDensity(); }
     BootBlockType bootBlockType() const override { return adf.bootBlockType(); }

@@ -130,13 +130,6 @@ public:
     isize numBytes() const noexcept { return storage.numBytes(); }
     isize blockSize() const noexcept { return storage.blockSize(); }
 
-    // Reports usage information
-    isize freeBlocks() const noexcept;
-    isize usedBlocks() const noexcept;
-    isize freeBytes() const noexcept { return freeBlocks() * traits.bsize; }
-    isize usedBytes() const noexcept { return usedBlocks() * traits.bsize; }
-    double fillLevel() const noexcept { return double(100) * usedBlocks() / numBlocks(); }
-
     // Analyzes the root block
     FSName getName() const noexcept;
     string getCreationDate() const noexcept;

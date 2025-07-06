@@ -24,7 +24,7 @@ struct FSString {
     // Maximum number of permitted characters
     isize limit = 0;
 
-    static char capital(char c, FSVolumeType dos);
+    static char capital(char c, FSFormat dos);
 
     FSString(const string &cppS, isize limit = 1024);
     FSString(const char *c, isize limit = 1024);
@@ -36,7 +36,7 @@ struct FSString {
     bool operator== (const FSString &rhs) const;
     isize length() const { return (isize)str.length(); }
     bool empty() const { return str.empty(); }
-    u32 hashValue(FSVolumeType dos) const;
+    u32 hashValue(FSFormat dos) const;
 
     void write(u8 *p);
 

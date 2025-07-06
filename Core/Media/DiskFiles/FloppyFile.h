@@ -35,8 +35,8 @@ public:
 public:
 
     // Gets or sets the file system for this disk
-    virtual FSVolumeType getDos() const = 0;
-    virtual void setDos(FSVolumeType dos) = 0;
+    virtual FSFormat getDos() const = 0;
+    virtual void setDos(FSFormat dos) = 0;
 
 
     //

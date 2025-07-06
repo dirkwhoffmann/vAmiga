@@ -1354,7 +1354,7 @@ NSString *EventSlotName(EventSlot slot)
     return [self drive]->isInsertable(type, density);
 }
 
-- (void)insertBlankDisk:(FSVolumeType)fs bootBlock:(BootBlockId)bb name:(NSString *)name url:(NSURL *)url exception:(ExceptionWrapper *)ex
+- (void)insertBlankDisk:(FSFormat)fs bootBlock:(BootBlockId)bb name:(NSString *)name url:(NSURL *)url exception:(ExceptionWrapper *)ex
 {
     try {
         if (url) {
@@ -1502,11 +1502,11 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSString *)fillLevelString
 {
-    auto str = util::fillLevelAsString([self fs]->fillLevel());
+    auto str = util::fillLevelAsString([self fs]->getInfo().fillLevel);
     return @(str.c_str());
 }
 
-- (FSVolumeType)dos
+- (FSFormat)dos
 {
     return [self fs]->getTraits().dos;
 }
@@ -1538,12 +1538,12 @@ NSString *EventSlotName(EventSlot slot)
 
 - (NSInteger)usedBlocks
 {
-    return [self fs]->usedBlocks();
+    return [self fs]->getInfo().usedBlocks;
 }
 
 - (double)fillLevel
 {
-    return [self fs]->fillLevel();
+    return [self fs]->getInfo().fillLevel;
 }
 
 - (BOOL)hasVirus
@@ -2049,7 +2049,7 @@ NSString *EventSlotName(EventSlot slot)
     }
 }
 
-- (void)format:(FSVolumeType)fs name:(NSString *)name exception:(ExceptionWrapper *)ex
+- (void)format:(FSFormat)fs name:(NSString *)name exception:(ExceptionWrapper *)ex
 {
     auto str = string([name UTF8String]);
 

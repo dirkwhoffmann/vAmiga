@@ -43,7 +43,7 @@ FSString::FSString(const u8 *bcpl, isize limit) : limit(limit)
 }
 
 char
-FSString::capital(char c, FSVolumeType dos)
+FSString::capital(char c, FSFormat dos)
 {
     if (isINTLVolumeType(dos)) {
         return (c >= 'a' && c <= 'z') || ((u8)c >= 224 && (u8)c <= 254 && (u8)c != 247) ? c - ('a' - 'A') : c ;
@@ -73,7 +73,7 @@ FSString::hashValue() const
 */
 
 u32
-FSString::hashValue(FSVolumeType dos) const
+FSString::hashValue(FSFormat dos) const
 {
     u32 result = (u32)length();
     for (auto c : str) {

@@ -118,7 +118,7 @@ typedef struct
     string name;
     isize lowerCyl;
     isize upperCyl;
-    FSVolumeType fsType;
+    FSFormat fsType;
 }
 PartitionTraits;
 

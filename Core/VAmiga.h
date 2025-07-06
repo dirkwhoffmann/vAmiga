@@ -673,7 +673,7 @@ public:
      *  @param  name  Name of the disk
      *  @param  path Optional folder to import
      */
-    void insertBlankDisk(FSVolumeType fstype, BootBlockId id, string name, const std::filesystem::path &path = {});
+    void insertBlankDisk(FSFormat fstype, BootBlockId id, string name, const std::filesystem::path &path = {});
 
     /** @brief  Inserts a disk created from a media file.
      *  @param  file    A media file wrapper object.
@@ -776,7 +776,7 @@ public:
 
     /** @brief  Formats the hard drive
      */
-    void format(FSVolumeType fs, const string &name);
+    void format(FSFormat fs, const string &name);
     
     /** @brief  Attaches a hard drive provided by an URL to a media file.
      *  @param  path    Path to the media file.

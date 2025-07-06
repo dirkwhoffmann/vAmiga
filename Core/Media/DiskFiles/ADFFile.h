@@ -95,8 +95,8 @@ public:
     
 public:
     
-    FSVolumeType getDos() const override;
-    void setDos(FSVolumeType dos) override;
+    FSFormat getDos() const override;
+    void setDos(FSFormat dos) override;
     Diameter getDiameter() const override;
     Density getDensity() const override;
     BootBlockType bootBlockType() const override;
@@ -131,7 +131,7 @@ public:
 
 public:
     
-    void formatDisk(FSVolumeType fs, BootBlockId id, string name) throws;
+    void formatDisk(FSFormat fs, BootBlockId id, string name) throws;
 
     
     //

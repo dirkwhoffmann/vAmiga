@@ -63,7 +63,7 @@ MutableFileSystem::init(const FileSystemDescriptor &layout, const fs::path &path
 }
 
 void
-MutableFileSystem::init(Diameter dia, Density den, FSVolumeType dos, const fs::path &path)
+MutableFileSystem::init(Diameter dia, Density den, FSFormat dos, const fs::path &path)
 {
     // Get a device descriptor
     auto descriptor = FileSystemDescriptor(dia, den, dos);
@@ -79,12 +79,12 @@ MutableFileSystem::format(string name)
 }
 
 void
-MutableFileSystem::format(FSVolumeType dos, string name){
+MutableFileSystem::format(FSFormat dos, string name){
 
     require_initialized();
 
     traits.dos = dos;
-    if (dos == FSVolumeType::NODOS) return;
+    if (dos == FSFormat::NODOS) return;
 
     // Perform some consistency checks
     assert(numBlocks() > 2);
@@ -678,7 +678,7 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
     if (numBytes() != size) throw AppError(Fault::FS_WRONG_CAPACITY);
 
     // Only proceed if all partitions contain a valid file system
-    if (traits.dos == FSVolumeType::NODOS) throw AppError(Fault::FS_UNSUPPORTED);
+    if (traits.dos == FSFormat::NODOS) throw AppError(Fault::FS_UNSUPPORTED);
 
     // Import all blocks
     for (isize i = 0; i < numBlocks(); i++) {

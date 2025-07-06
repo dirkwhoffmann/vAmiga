@@ -43,7 +43,7 @@ FSBlock::init(FSBlockType t)
 
         case FSBlockType::BOOT:
             
-            if (nr == 0 && fs->traits.dos != FSVolumeType::NODOS) {
+            if (nr == 0 && fs->traits.dos != FSFormat::NODOS) {
                 bdata[0] = 'D';
                 bdata[1] = 'O';
                 bdata[2] = 'S';

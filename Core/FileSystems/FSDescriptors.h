@@ -39,7 +39,7 @@ struct FileSystemDescriptor {
     isize numReserved = 0;
 
     // File system type
-    FSVolumeType dos = FSVolumeType::NODOS;
+    FSFormat dos = FSFormat::NODOS;
 
     // Location of the root block
     Block rootBlock = 0;
@@ -50,15 +50,15 @@ struct FileSystemDescriptor {
     
     // Initializing
     FileSystemDescriptor() { };
-    FileSystemDescriptor(isize numBlocks, FSVolumeType dos);
-    FileSystemDescriptor(const GeometryDescriptor &geometry, FSVolumeType dos);
+    FileSystemDescriptor(isize numBlocks, FSFormat dos);
+    FileSystemDescriptor(const GeometryDescriptor &geometry, FSFormat dos);
     FileSystemDescriptor(const PartitionDescriptor &des);
-    FileSystemDescriptor(Diameter dia, Density den, FSVolumeType dos);
+    FileSystemDescriptor(Diameter dia, Density den, FSFormat dos);
     
-    void init(isize numBlocks, FSVolumeType dos);
-    void init(const GeometryDescriptor &geometry, FSVolumeType dos);
+    void init(isize numBlocks, FSFormat dos);
+    void init(const GeometryDescriptor &geometry, FSFormat dos);
     void init(const PartitionDescriptor &des);
-    void init(Diameter type, Density density, FSVolumeType dos);
+    void init(Diameter type, Density density, FSFormat dos);
 
     // Computed values
     isize numBytes() const { return numBlocks * bsize; }

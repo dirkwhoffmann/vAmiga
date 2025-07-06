@@ -160,10 +160,10 @@ EADFFile::finalizeRead()
     } catch (...) { }
 }
 
-FSVolumeType
+FSFormat
 EADFFile::getDos() const
 {
-    return adf ? adf.getDos() : FSVolumeType::NODOS;
+    return adf ? adf.getDos() : FSFormat::NODOS;
 }
 
 Diameter

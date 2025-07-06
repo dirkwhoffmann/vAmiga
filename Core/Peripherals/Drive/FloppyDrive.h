@@ -381,7 +381,7 @@ public:
     void swapDisk(const fs::path &path) throws;
 
     // Replaces the current disk with a factory-fresh disk
-    void insertNew(FSVolumeType fs, BootBlockId bb, string name, const fs::path &path = {}) throws;
+    void insertNew(FSFormat fs, BootBlockId bb, string name, const fs::path &path = {}) throws;
     
 private:
     

@@ -30,7 +30,7 @@ struct FSOpt
     bool accept(const FSBlock *b) const { return b ? (filter ? filter(*b) : true) : false; }
 };
 
-enum class FSVolumeType : long
+enum class FSFormat : long
 {
     OFS      = 0,    // Original File System
     FFS      = 1,    // Fast File System
@@ -43,85 +43,85 @@ enum class FSVolumeType : long
     NODOS
 };
 
-struct FSVolumeTypeEnum : Reflection<FSVolumeTypeEnum, FSVolumeType>
+struct FSFormatEnum : Reflection<FSFormatEnum, FSFormat>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(FSVolumeType::NODOS);
+    static constexpr long maxVal = long(FSFormat::NODOS);
     
-    static const char *_key(FSVolumeType value)
+    static const char *_key(FSFormat value)
     {
         switch (value) {
                 
-            case FSVolumeType::OFS:       return "OFS";
-            case FSVolumeType::FFS:       return "FFS";
-            case FSVolumeType::OFS_INTL:  return "OFS_INTL";
-            case FSVolumeType::FFS_INTL:  return "FFS_INTL";
-            case FSVolumeType::OFS_DC:    return "OFS_DC";
-            case FSVolumeType::FFS_DC:    return "FFS_DC";
-            case FSVolumeType::OFS_LNFS:  return "OFS_LNFS";
-            case FSVolumeType::FFS_LNFS:  return "FFS_LNFS";
-            case FSVolumeType::NODOS:     return "NODOS";
+            case FSFormat::OFS:       return "OFS";
+            case FSFormat::FFS:       return "FFS";
+            case FSFormat::OFS_INTL:  return "OFS_INTL";
+            case FSFormat::FFS_INTL:  return "FFS_INTL";
+            case FSFormat::OFS_DC:    return "OFS_DC";
+            case FSFormat::FFS_DC:    return "FFS_DC";
+            case FSFormat::OFS_LNFS:  return "OFS_LNFS";
+            case FSFormat::FFS_LNFS:  return "FFS_LNFS";
+            case FSFormat::NODOS:     return "NODOS";
         }
         return "???";
     }
     
-    static const char *help(FSVolumeType value)
+    static const char *help(FSFormat value)
     {
         return "";
     }
     
-    static FSVolumeType fromDosType(u32 value)
+    static FSFormat fromDosType(u32 value)
     {
         switch (value) {
                 
-            case 0x444F5300:    return FSVolumeType::OFS;
-            case 0x444F5301:    return FSVolumeType::FFS;
-            case 0x444F5302:    return FSVolumeType::OFS_INTL;
-            case 0x444F5303:    return FSVolumeType::FFS_INTL;
-            case 0x444F5304:    return FSVolumeType::OFS_DC;
-            case 0x444F5305:    return FSVolumeType::FFS_DC;
-            case 0x444F5306:    return FSVolumeType::OFS_LNFS;
-            case 0x444F5307:    return FSVolumeType::FFS_LNFS;
-            default:            return FSVolumeType::NODOS;
+            case 0x444F5300:    return FSFormat::OFS;
+            case 0x444F5301:    return FSFormat::FFS;
+            case 0x444F5302:    return FSFormat::OFS_INTL;
+            case 0x444F5303:    return FSFormat::FFS_INTL;
+            case 0x444F5304:    return FSFormat::OFS_DC;
+            case 0x444F5305:    return FSFormat::FFS_DC;
+            case 0x444F5306:    return FSFormat::OFS_LNFS;
+            case 0x444F5307:    return FSFormat::FFS_LNFS;
+            default:            return FSFormat::NODOS;
         }
     }
 };
 
-inline bool isOFSVolumeType(FSVolumeType value)
+inline bool isOFSVolumeType(FSFormat value)
 {
     switch (value) {
             
-        case FSVolumeType::OFS:
-        case FSVolumeType::OFS_INTL:
-        case FSVolumeType::OFS_DC:
-        case FSVolumeType::OFS_LNFS:    return true;
-        default:                        return false;
+        case FSFormat::OFS:
+        case FSFormat::OFS_INTL:
+        case FSFormat::OFS_DC:
+        case FSFormat::OFS_LNFS:    return true;
+        default:                    return false;
     }
 }
 
-inline bool isFFSVolumeType(FSVolumeType value)
+inline bool isFFSVolumeType(FSFormat value)
 {
     switch (value) {
             
-        case FSVolumeType::FFS:
-        case FSVolumeType::FFS_INTL:
-        case FSVolumeType::FFS_DC:
-        case FSVolumeType::FFS_LNFS:    return true;
-        default:                        return false;
+        case FSFormat::FFS:
+        case FSFormat::FFS_INTL:
+        case FSFormat::FFS_DC:
+        case FSFormat::FFS_LNFS:    return true;
+        default:                    return false;
     }
 }
 
-inline bool isINTLVolumeType(FSVolumeType value)
+inline bool isINTLVolumeType(FSFormat value)
 {
     switch (value) {
 
-        case FSVolumeType::OFS_INTL:
-        case FSVolumeType::FFS_INTL:
-        case FSVolumeType::OFS_DC:
-        case FSVolumeType::FFS_DC:
-        case FSVolumeType::OFS_LNFS:
-        case FSVolumeType::FFS_LNFS:    return true;
-        default:                        return false;
+        case FSFormat::OFS_INTL:
+        case FSFormat::FFS_INTL:
+        case FSFormat::OFS_DC:
+        case FSFormat::FFS_DC:
+        case FSFormat::OFS_LNFS:
+        case FSFormat::FFS_LNFS:    return true;
+        default:                    return false;
     }
 }
 
@@ -273,7 +273,7 @@ struct FSItemTypeEnum : Reflection<FSItemTypeEnum, FSItemType>
 
 struct FSTraits
 {
-    FSVolumeType dos = FSVolumeType::NODOS;
+    FSFormat dos = FSFormat::NODOS;
 
     isize blocks = 0;
     isize bytes = 0;
@@ -307,13 +307,12 @@ typedef struct
     string modificationDate;
 
     // Capacity information
-    /*
+    isize numBlocks;
     isize freeBlocks;
     isize usedBlocks;
     isize freeBytes;
     isize usedBytes;
     double fillLevel;
-    */
 }
 FSInfo;
 

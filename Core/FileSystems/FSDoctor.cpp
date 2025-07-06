@@ -36,7 +36,7 @@ if (value > (u32)exp) \
 { *expected = (u8)(exp); return Fault::FS_EXPECTED_SMALLER_VALUE; } }
 
 #define EXPECT_DOS_REVISION { \
-if (!FSVolumeTypeEnum::isValid((isize)value)) return Fault::FS_EXPECTED_DOS_REVISION; }
+if (!FSFormatEnum::isValid((isize)value)) return Fault::FS_EXPECTED_DOS_REVISION; }
 
 #define EXPECT_REF { \
 if (!fs.block(value)) return Fault::FS_EXPECTED_REF; }

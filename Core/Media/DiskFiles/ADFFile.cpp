@@ -187,20 +187,20 @@ ADFFile::numSectors() const
     }
 }
 
-FSVolumeType
+FSFormat
 ADFFile::getDos() const
 {
     if (strncmp((const char *)data.ptr, "DOS", 3) || data[3] > 7) {
-        return FSVolumeType::NODOS;
+        return FSFormat::NODOS;
     }
 
-    return (FSVolumeType)data[3];
+    return (FSFormat)data[3];
 }
 
 void
-ADFFile::setDos(FSVolumeType dos)
+ADFFile::setDos(FSFormat dos)
 {
-    if (dos == FSVolumeType::NODOS) {
+    if (dos == FSFormat::NODOS) {
         std::memset(data.ptr, 0, 4);
     } else {
         std::memcpy(data.ptr, "DOS", 3);
@@ -282,15 +282,15 @@ ADFFile::killVirus()
 }
 
 void
-ADFFile::formatDisk(FSVolumeType fs, BootBlockId id, string name)
+ADFFile::formatDisk(FSFormat fs, BootBlockId id, string name)
 {
-    assert_enum(FSVolumeType, fs);
+    assert_enum(FSFormat, fs);
 
     debug(ADF_DEBUG,
-          "Formatting disk (%ld, %s)\n", numBlocks(), FSVolumeTypeEnum::key(fs));
+          "Formatting disk (%ld, %s)\n", numBlocks(), FSFormatEnum::key(fs));
 
     // Only proceed if a file system is given
-    if (fs == FSVolumeType::NODOS) return;
+    if (fs == FSFormat::NODOS) return;
     
     // Get a device descriptor for this ADF
     auto descriptor = getFileSystemDescriptor();

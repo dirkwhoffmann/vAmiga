@@ -99,7 +99,7 @@ FloppyDiskDescriptor;
 
 typedef struct
 {
-    FSVolumeType dos;
+    FSFormat dos;
     Diameter diameter;
     Density density;
     BootBlockType bootBlockType;

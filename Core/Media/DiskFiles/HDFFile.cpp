@@ -253,7 +253,7 @@ HDFFile::getFileSystemDescriptor(isize nr) const
     result.dos = dos(first);
 
     // Only proceed if the hard drive is formatted
-    if (dos(first) == FSVolumeType::NODOS) return result;
+    if (dos(first) == FSFormat::NODOS) return result;
     
     // Determine the location of the root block
     i64 highKey = result.numBlocks - 1;
@@ -474,18 +474,18 @@ HDFFile::rdbString(isize offset, isize len) const
     return { };
 }
 
-FSVolumeType
+FSFormat
 HDFFile::dos(isize blockNr) const
 {
     if (auto block = seekBlock(blockNr); block) {
         
         if (strncmp((const char *)block, "DOS", 3) || block[3] > 7) {
-            return FSVolumeType::NODOS;
+            return FSFormat::NODOS;
         }
-        return (FSVolumeType)block[3];
+        return (FSFormat)block[3];
     }
     
-    return FSVolumeType::NODOS;
+    return FSFormat::NODOS;
 }
 
 isize
