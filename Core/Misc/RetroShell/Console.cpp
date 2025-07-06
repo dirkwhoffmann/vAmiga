@@ -161,7 +161,7 @@ Console::welcome()
     *this << "https://github.com/dirkwhoffmann/vAmiga" << '\n';
     *this << '\n';
 
-    *this << "    " << description() << " console" << "\n\n";
+    // *this << "    " << description() << " console" << "\n\n";
 
     printHelp(4);
 }
@@ -228,10 +228,12 @@ Console::lastLineIsEmpty()
 void
 Console::printHelp(isize tab)
 {
-    *this << vspace{0};
+    *this << vspace{1};
 
+    *this << "RetroShell " << description() << "\n\n";
     storage << string(tab, ' ') << "Type 'help' or press 'Tab' twice for help.\n";
-    storage << string(tab, ' ') << "Press 'PgUp', 'PgDown', or 'Shift+Tab' to switch consoles.";
+    // storage << string(tab, ' ') << "Press 'PgUp', 'PgDown', or 'Shift+Tab' to switch consoles.";
+    storage << string(tab, ' ') << "Press 'Shift+Tab' or type '.' to switch consoles.";
 
     remoteManager.rshServer << "Type 'help' for help.\n";
 
@@ -973,7 +975,7 @@ Console::initCommands(RSCommand &root)
 
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                printHelp();
+                printHelp(4);
             }
         });
 

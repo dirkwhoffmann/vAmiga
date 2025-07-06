@@ -55,7 +55,7 @@ CommanderConsole::initCommands(RSCommand &root)
 
     root.add({
 
-        .tokens = { "next" },
+        .tokens = { "." },
         .chelp  = { "Switch to the next console" },
         .flags  = rs::hidden,
 
@@ -67,7 +67,7 @@ CommanderConsole::initCommands(RSCommand &root)
 
     root.add({
 
-        .tokens = { "prev" },
+        .tokens = { ".." },
         .chelp  = { "Switch to the previous console" },
         .flags  = rs::hidden,
 

@@ -59,38 +59,25 @@ class Console: Layer {
              */
             
             // Debugger console
+            1: (NSColor(r: 0xEF, g: 0xEF, b: 0xEF, a: 0xFF),
+                NSColor(r: 0x60, g: 0x60, b: 0x60, a: 0xD0)),
+            /*
             1: (NSColor(r: 0xFF, g: 0xCF, b: 0xCF, a: 0xFF),
                 NSColor(r: 0x90, g: 0x30, b: 0x30, a: 0xD0)),
-
+            */
             // Navigator console
+            2: (NSColor(r: 0xEF, g: 0xEF, b: 0xEF, a: 0xFF),
+                NSColor(r: 0x60, g: 0x60, b: 0x60, a: 0xD0)),
+            /*
             2: (NSColor(r: 0xCF, g: 0xCF, b: 0xFF, a: 0xFF),
                 NSColor(r: 0x30, g: 0x30, b: 0x90, a: 0xD0))
+             */
         ]
 
         if isDirty {
 
             let info = emu.retroShell.info
 
-            /*
-            switch info.console {
-            case 1:
-
-                // textColor = NSColor(r: 0xFF, g: 0xD0, b: 0xD0, a: 0xFF)
-                textColor = NSColor(r: 0xFF, g: 0xFF, b: 0xFF, a: 0xFF)
-                backgroundColor = NSColor(r: 0xFF, g: 0x80, b: 0x80, a: 0x80)
-
-            // case 2:  textColor = NSColor(r: 0xD0, g: 0xFF, b: 0xD0, a: 0xFF)
-            case 2:
-
-                textColor = NSColor(r: 0xD0, g: 0xD0, b: 0xFF, a: 0xFF)
-                backgroundColor = NSColor(r: 0x80, g: 0x80, b: 0x80, a: 0x80)
-
-            default:
-
-                textColor = NSColor(r: 0xFF, g: 0xFF, b: 0xFF, a: 0xFF)
-                backgroundColor = NSColor(r: 0x80, g: 0x80, b: 0x80, a: 0x80)
-            }
-            */
             (textColor, backgroundColor) = colorTable[info.console]!
             textView.backgroundColor = backgroundColor
 

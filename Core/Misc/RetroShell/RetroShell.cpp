@@ -317,17 +317,23 @@ RetroShell::press(RSKey key, bool shift)
 
         switch(key) {
 
+            /*
             case RSKey::UP:
             case RSKey::PAGE_UP:
 
-                asyncExec("prev");
+                asyncExec("..");
                 return;
 
             case RSKey::DOWN:
             case RSKey::PAGE_DOWN:
+
+                asyncExec(".");
+                return;
+            */
+                
             case RSKey::TAB:
 
-                asyncExec("next");
+                asyncExec(".");
                 return;
 
             default:
