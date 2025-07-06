@@ -54,15 +54,22 @@ NavigatorConsole::summary()
 {
     std::stringstream ss;
 
-    // ss << "RetroShell File System Navigator" << std::endl << std::endl;
-    fs.dump(Category::Info, ss);
+    if (fs.isInitialized()) {
 
-    *this << vspace{1};
+        fs.dump(Category::Info, ss);
 
-    string line;
-    while(std::getline(ss, line)) { *this << "    " << line << '\n'; }
-    // *this << ss;
-    *this << vspace{1};
+        *this << vspace{1};
+        string line;
+        while(std::getline(ss, line)) { *this << "    " << line << '\n'; }
+        *this << vspace{1};
+
+    } else {
+
+        *this << vspace{1};
+        *this << "    No file system present.\n";
+        *this << "    Use the 'import' command to load one.";
+        *this << vspace{1};
+    }
 }
 
 void
@@ -673,7 +680,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 },
                 .formatter = [&](const FSBlock &node) {
 
-                    return node.pathName() + (node.isDirectory() ? " (dir)" : "\t");
+                    return node.cppName() + (node.isDirectory() ? " (dir)" : "\t");
                 }
             };
 
@@ -714,7 +721,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 .formatter = [&](const FSBlock &node) {
 
                     std::stringstream ss;
-                    ss << std::left << std::setw(25) << node.pathName();
+                    ss << std::left << std::setw(25) << node.cppName();
 
                     if (k) { ss << std::right << std::setw(9) << ("[" + std::to_string(node.nr) + "] "); }
 
@@ -769,10 +776,10 @@ NavigatorConsole::initCommands(RSCommand &root)
                           [](auto *b1, auto *b2) { return b1->getName() < b2->getName(); });
 
                 for (auto &it : matches) {
-                    tab = std::max(int(it->pathName().size()), tab);
+                    tab = std::max(int(it->cppName().size()), tab);
                 }
                 for (auto &it : matches) {
-                    os << std::setw(tab) << std::left << it->pathName() << " : " << it->absName() << '\n';
+                    os << std::setw(tab) << std::left << it->cppName() << " : " << it->absName() << '\n';
                 }
 
             } else {

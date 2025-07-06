@@ -84,7 +84,8 @@ public:
     bool isRegular() const;
     bool isData() const;
 
-    string pathName() const;
+    FSName name() const;
+    string cppName() const;
     string absName() const;
     string relName() const;
     string relName(const FSBlock &top) const;

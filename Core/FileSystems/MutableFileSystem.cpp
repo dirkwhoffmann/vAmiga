@@ -491,7 +491,7 @@ MutableFileSystem::move(FSBlock &item, const FSBlock &dest, const FSName &name)
 void
 MutableFileSystem::copy(const FSBlock &item, const FSBlock &dest)
 {
-    copy(item, dest, item.pathName());
+    copy(item, dest, item.cppName());
 }
 
 void

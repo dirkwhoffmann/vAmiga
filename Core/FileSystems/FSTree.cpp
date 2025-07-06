@@ -114,7 +114,7 @@ FSTree::list(std::ostream &os, const FSOpt &opt) const
 
         // Assign a default formatter as none is given
         options.formatter = [&](const FSBlock &node) {
-            return node.pathName() + (node.isDirectory() ? " (dir)" : "\t");
+            return node.cppName() + (node.isDirectory() ? " (dir)" : "\t");
         };
     }
 

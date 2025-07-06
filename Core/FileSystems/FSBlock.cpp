@@ -185,8 +185,14 @@ FSBlock::isData() const
     return type == FSBlockType::DATA_OFS || type == FSBlockType::DATA_FFS;
 }
 
+FSName
+FSBlock::name() const
+{
+    return isRoot() ? "" : getName();
+}
+
 string
-FSBlock::pathName() const
+FSBlock::cppName() const
 {
     return isRoot() ? "" : getName().cpp_str();
 }
@@ -213,7 +219,7 @@ FSBlock::relName(const FSBlock &top) const
     for (auto &it : nodes) {
 
         if (it == &top) break;
-        auto name = it->pathName();
+        auto name = it->cppName();
         result = name + "/" + result;
     }
 
@@ -247,7 +253,7 @@ FSBlock::matches(const FSPattern &pattern) const
        return pattern.match(absName());
     } else {
         printf("Rel matching %s and %s (%d)\n", relName().c_str(), pattern.glob.c_str(), pattern.match(relName()));
-        return pattern.match(pathName());
+        return pattern.match(cppName());
     }
 }
 

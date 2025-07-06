@@ -741,7 +741,7 @@ FileSystem::find(const FSBlock *root, const FSPattern &pattern) const
 {
     return find(root, {
         .recursive = true,
-        .filter = [&](const FSBlock &item) { return pattern.match(item.pathName()); }
+        .filter = [&](const FSBlock &item) { return pattern.match(item.cppName()); }
     });
 }
 
@@ -795,7 +795,7 @@ FileSystem::match(const FSBlock *root, std::vector<FSPattern> patterns) const
 
         // Collect all matching items
         for (auto &item : items.children) {
-            if (pattern.match(item.node->pathName())) {
+            if (pattern.match(item.node->cppName())) {
                 result.push_back(item.node);
             }
         }
@@ -804,7 +804,7 @@ FileSystem::match(const FSBlock *root, std::vector<FSPattern> patterns) const
 
         // Continue by searching all matching subdirectories
         for (auto &item : items.children) {
-            if (item.node->isDirectory() && pattern.match(item.node->pathName())) {
+            if (item.node->isDirectory() && pattern.match(item.node->cppName())) {
                 auto subdirItems = match(item.node, patterns);
                 result.insert(result.end(), subdirItems.begin(), subdirItems.end());
             }
