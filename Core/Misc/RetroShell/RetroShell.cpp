@@ -70,6 +70,9 @@ RetroShell::enterConsole(isize nr)
     // Print the welcome message if entered the first time
     if (current->isEmpty()) { current->exec("welcome"); *this << current->getPrompt(); }
 
+    // Print the summary message
+    current->summary();
+    
     // Update prompt
     *this << '\r' << current->getPrompt();
 

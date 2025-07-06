@@ -50,6 +50,18 @@ NavigatorConsole::welcome()
 }
 
 void
+NavigatorConsole::summary()
+{
+    std::stringstream ss;
+
+    fs.dump(Category::Info, ss);
+
+    *this << vspace{1};
+    *this << ss;
+    *this << vspace{1};
+}
+
+void
 NavigatorConsole::printHelp(isize tab)
 {
     Console::printHelp(tab);

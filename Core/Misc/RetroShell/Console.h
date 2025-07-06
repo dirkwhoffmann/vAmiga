@@ -215,6 +215,9 @@ protected:
     // Prints the welcome message
     virtual void welcome() = 0;
 
+    // Prints the status summary
+    virtual void summary() = 0;
+
     // Prints the help line
     virtual void printHelp(isize tab = 0);
 
@@ -364,6 +367,7 @@ class CommanderConsole final : public Console
     void _pause() override;
     string getPrompt() override;
     void welcome() override;
+    void summary() override;
     void printHelp(isize tab = 0) override;
     void pressReturn(bool shift) override;
 };
@@ -380,6 +384,7 @@ class DebuggerConsole final : public Console
     void _pause() override;
     string getPrompt() override;
     void welcome() override;
+    void summary() override;
     void printHelp(isize tab = 0) override;
     void pressReturn(bool shift) override;
 };
@@ -398,14 +403,12 @@ class NavigatorConsole final : public Console
     void _pause() override;
     string getPrompt() override;
     void welcome() override;
+    void summary() override;
     void printHelp(isize tab = 0) override;
     void pressReturn(bool shift) override;
     void autoComplete(Tokens &argv) override;
     void help(std::ostream &os, const string &argv, isize tabs) override;
     string autoCompleteFilename(const string &input) const;
-    // std::vector<string> autoCompleteFilename(const string &input) const;
-    // std::vector<string> autoCompleteFilename(const string &path, const string &input) const;
-    // std::vector<string> autoCompleteFilename(const FSBlock *root, const string &input) const;
 
     //
     // Parsing input
@@ -427,7 +430,6 @@ class NavigatorConsole final : public Console
     FSBlock &matchPath(const Arguments &argv, const string &token, Tokens &notFound);
     FSBlock &matchPath(const Arguments &argv, const string &token, Tokens &notFound, FSBlock &fallback);
     FSBlock &matchPath(const string &path, Tokens &notFound);
-
 };
 
 }

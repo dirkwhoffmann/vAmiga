@@ -479,7 +479,7 @@ FileSystem::numUnallocated() const noexcept
 std::vector<u32>
 FileSystem::serializeBitmap() const
 {
-    require_formatted();
+    if (!isFormatted()) return {};
 
     auto longwords = ((numBlocks() - 2) + 31) / 32;
     std::vector<u32> result;

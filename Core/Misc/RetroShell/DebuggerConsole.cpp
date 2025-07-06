@@ -44,6 +44,18 @@ DebuggerConsole::welcome()
 }
 
 void
+DebuggerConsole::summary()
+{
+    std::stringstream ss;
+
+    amiga.dump(Category::Current, ss);
+
+    *this << vspace{1};
+    *this << ss;
+    *this << vspace{1};
+}
+
+void
 DebuggerConsole::printHelp(isize tab)
 {
     Console::printHelp(tab);
