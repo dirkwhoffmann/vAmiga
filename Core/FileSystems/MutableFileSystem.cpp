@@ -28,7 +28,7 @@ MutableFileSystem::init(isize capacity, isize bsize)
 }
 
 void
-MutableFileSystem::init(const FileSystemDescriptor &layout, const fs::path &path)
+MutableFileSystem::init(const FSDescriptor &layout, const fs::path &path)
 {
     if (FS_DEBUG) { layout.dump(); }
 
@@ -66,7 +66,7 @@ void
 MutableFileSystem::init(Diameter dia, Density den, FSFormat dos, const fs::path &path)
 {
     // Get a device descriptor
-    auto descriptor = FileSystemDescriptor(dia, den, dos);
+    auto descriptor = FSDescriptor(dia, den, dos);
     
     // Create the device
     init(descriptor, path);

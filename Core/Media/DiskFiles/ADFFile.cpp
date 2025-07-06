@@ -220,10 +220,10 @@ ADFFile::getDensity() const
     return (data.size & ~1) == ADFSIZE_35_HD ? Density::HD : Density::DD;
 }
 
-FileSystemDescriptor
+FSDescriptor
 ADFFile::getFileSystemDescriptor() const
 {
-    FileSystemDescriptor result;
+    FSDescriptor result;
     
     // Determine the root block location
     Block root = data.size < ADFSIZE_35_HD ? 880 : 1760;

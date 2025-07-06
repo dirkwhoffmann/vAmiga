@@ -122,7 +122,7 @@ private:
 public:
     
     // Returns a file system descriptor for this volume
-    struct FileSystemDescriptor getFileSystemDescriptor() const;
+    struct FSDescriptor getFileSystemDescriptor() const;
 
     
     //

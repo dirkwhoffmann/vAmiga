@@ -11,8 +11,7 @@
 
 #include "DiskFile.h"
 #include "MediaFileTypes.h"
-// #include "MutableFileSystem.h"
-#include "FSDescriptors.h"
+#include "FSDescriptor.h"
 #include "DriveTypes.h"
 
 namespace vamiga {
@@ -89,7 +88,7 @@ public:
     std::vector<PartitionDescriptor> getPartitionDescriptors() const;
     DriverDescriptor getDriverDescriptor(isize driver = 0) const;
     std::vector<DriverDescriptor> getDriverDescriptors() const;
-    FileSystemDescriptor getFileSystemDescriptor(isize part = 0) const;
+    FSDescriptor getFileSystemDescriptor(isize part = 0) const;
 
 
     //

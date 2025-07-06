@@ -563,7 +563,7 @@ HardDrive::format(FSFormat fsType, string name)
     if (fsType != FSFormat::NODOS) {
         
         // Create a device descriptor matching this drive
-        auto layout = FileSystemDescriptor(geometry, fsType);
+        auto layout = FSDescriptor(geometry, fsType);
 
         // Create an empty file system
         auto fs = MutableFileSystem(layout);
@@ -757,7 +757,7 @@ HardDrive::importFolder(const fs::path &path) throws
         auto traits = getPartitionTraits(0);
                 
         // Create a device descriptor matching this drive
-        FileSystemDescriptor layout(geometry, traits.fsType);
+        FSDescriptor layout(geometry, traits.fsType);
         
         // Create a new file system
         auto fs = MutableFileSystem(layout);

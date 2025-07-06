@@ -229,10 +229,10 @@ HDFFile::getDriverDescriptors() const
     return result;
 }
 
-FileSystemDescriptor
+FSDescriptor
 HDFFile::getFileSystemDescriptor(isize nr) const
 {
-    FileSystemDescriptor result;
+    FSDescriptor result;
 
     auto &part = ptable[nr];
     

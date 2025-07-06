@@ -32,12 +32,12 @@ public:
     using FileSystem::FileSystem;
 
     MutableFileSystem(isize capacity, isize bsize = 512) { init(capacity, bsize); }
-    MutableFileSystem(const FileSystemDescriptor &layout, const fs::path &path = {}) { init(layout, path); }
+    MutableFileSystem(const FSDescriptor &layout, const fs::path &path = {}) { init(layout, path); }
     MutableFileSystem(Diameter dia, Density den, FSFormat dos, const fs::path &path = {}) { init(dia, den, dos, path); }
 
     using FileSystem::init;
     void init(isize capacity, isize bsize = 512);
-    void init(const FileSystemDescriptor &layout, const fs::path &path = {});
+    void init(const FSDescriptor &layout, const fs::path &path = {});
     void init(Diameter dia, Density den, FSFormat dos, const fs::path &path = {});
 
     
@@ -59,13 +59,8 @@ public:
     //
     // Creating and deleting blocks
     //
-    
+
 public:
-    
-    // Returns the number of required blocks to store a file of certain size
-    isize requiredDataBlocks(isize fileSize) const;
-    isize requiredFileListBlocks(isize fileSize) const;
-    isize requiredBlocks(isize fileSize) const;
 
     // Returns true if at least 'count' free blocks are available
     bool allocatable(isize count) const;
@@ -83,7 +78,12 @@ public:
     void updateChecksums() noexcept;
 
 private:
-    
+
+    // Returns the number of required blocks to store a file of certain size
+    isize requiredDataBlocks(isize fileSize) const;
+    isize requiredFileListBlocks(isize fileSize) const;
+    isize requiredBlocks(isize fileSize) const;
+
     // Adds a new block of a certain kind
     void addFileListBlock(Block at, Block head, Block prev);
     void addDataBlock(Block at, isize id, Block head, Block prev);
@@ -98,6 +98,7 @@ private:
     //
     
 public:
+
     // Installs a boot block
     void makeBootable(BootBlockId id);
 
@@ -164,6 +165,7 @@ private:
     
     // Allocates all blocks needed for a file
     void allocateFileBlocks(isize bytes, std::vector<Block> &listBlocks, std::vector<Block> &dataBlocks);
+
     
     //
     // Importing and exporting the volume

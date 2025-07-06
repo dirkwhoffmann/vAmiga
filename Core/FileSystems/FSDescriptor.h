@@ -19,15 +19,15 @@
 namespace vamiga {
 
 /* To create a FileSystem, several layout parameters need to to be provided.
- * This is done by passing a FileSystemDescriptor which contains the necessary
+ * This is done by passing a FSDescriptor which contains the necessary
  * information.
  *
- * A FileSystemDescriptor can be obtained in several ways. If a descriptor for
+ * A FSDescriptor can be obtained in several ways. If a descriptor for
  * a floppy disk is needed, it can be created by specifiying the form factor
  * and density of the disk. In addition, a suitabe descriptors can be extracted
  * directly from an ADF or HDF.
  */
-struct FileSystemDescriptor {
+struct FSDescriptor {
 
     // Capacity of the file system in blocks
     isize numBlocks = 0;
@@ -49,11 +49,11 @@ struct FileSystemDescriptor {
     std::vector<Block> bmExtBlocks;
     
     // Initializing
-    FileSystemDescriptor() { };
-    FileSystemDescriptor(isize numBlocks, FSFormat dos);
-    FileSystemDescriptor(const GeometryDescriptor &geometry, FSFormat dos);
-    FileSystemDescriptor(const PartitionDescriptor &des);
-    FileSystemDescriptor(Diameter dia, Density den, FSFormat dos);
+    FSDescriptor() { };
+    FSDescriptor(isize numBlocks, FSFormat dos);
+    FSDescriptor(const GeometryDescriptor &geometry, FSFormat dos);
+    FSDescriptor(const PartitionDescriptor &des);
+    FSDescriptor(Diameter dia, Density den, FSFormat dos);
     
     void init(isize numBlocks, FSFormat dos);
     void init(const GeometryDescriptor &geometry, FSFormat dos);

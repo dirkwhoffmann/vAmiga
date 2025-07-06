@@ -79,7 +79,7 @@ FileSystem::init(const HardDrive &hdn, isize part)
 }
 
 void
-FileSystem::init(const FileSystemDescriptor &layout, u8 *buf, isize len)
+FileSystem::init(const FSDescriptor &layout, u8 *buf, isize len)
 {
     assert(buf);
 

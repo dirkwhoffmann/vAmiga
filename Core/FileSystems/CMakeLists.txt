@@ -6,7 +6,7 @@ FileSystem.cpp
 MutableFileSystem.cpp
 BootBlockImage.cpp
 FSBlock.cpp
-FSDescriptors.cpp
+FSDescriptor.cpp
 FSDoctor.cpp
 FSObjects.cpp
 FSStorage.cpp

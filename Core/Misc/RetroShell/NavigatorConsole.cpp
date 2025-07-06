@@ -381,7 +381,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Create a file system for a single-density floppy disk" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            fs.init(FileSystemDescriptor(Diameter::INCH_525, Density::SD, FSFormat::NODOS));
+            fs.init(FSDescriptor(Diameter::INCH_525, Density::SD, FSFormat::NODOS));
             fs.dump(Category::Info, os);
         }
     });
@@ -392,7 +392,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Create a file system for a double-density floppy disk" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            fs.init(FileSystemDescriptor(Diameter::INCH_35, Density::DD, FSFormat::NODOS));
+            fs.init(FSDescriptor(Diameter::INCH_35, Density::DD, FSFormat::NODOS));
             fs.dump(Category::Info, os);
         }
     });
@@ -403,7 +403,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Create a file system for a high-density floppy disk" },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            fs.init(FileSystemDescriptor(Diameter::INCH_35, Density::HD, FSFormat::NODOS));
+            fs.init(FSDescriptor(Diameter::INCH_35, Density::HD, FSFormat::NODOS));
             fs.dump(Category::Info, os);
         }
     });
@@ -423,7 +423,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             // Compute the number of needed blocks
             auto blocks = (mb + 511) / 512;
 
-            fs.init(FileSystemDescriptor(blocks, FSFormat::NODOS));
+            fs.init(FSDescriptor(blocks, FSFormat::NODOS));
             fs.dump(Category::Info, os);
         }
     });
@@ -445,7 +445,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             isize b = 512;
 
             auto geometry = GeometryDescriptor(c, h, s, b);
-            fs.init(FileSystemDescriptor(geometry, FSFormat::NODOS));
+            fs.init(FSDescriptor(geometry, FSFormat::NODOS));
             fs.dump(Category::Info, os);
         }
     });

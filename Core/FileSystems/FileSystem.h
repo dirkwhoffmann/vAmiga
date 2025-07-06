@@ -11,7 +11,7 @@
 
 #include "FSTypes.h"
 #include "FSBlock.h"
-#include "FSDescriptors.h"
+#include "FSDescriptor.h"
 #include "FSObjects.h"
 #include "FSTree.h"
 #include "FSStorage.h"
@@ -85,7 +85,7 @@ public:
 
     virtual ~FileSystem();
 
-    void init(const FileSystemDescriptor &layout, u8 *buf, isize len);
+    void init(const FSDescriptor &layout, u8 *buf, isize len);
     void init(const MediaFile &file, isize part);
     void init(const ADFFile &adf);
     void init(const HDFFile &hdf, isize part);

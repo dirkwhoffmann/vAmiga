@@ -8,34 +8,34 @@
 // -----------------------------------------------------------------------------
 
 #include "config.h"
-#include "FSDescriptors.h"
+#include "FSDescriptor.h"
 #include "IOUtils.h"
 
 namespace vamiga {
 
-FileSystemDescriptor::FileSystemDescriptor(isize numBlocks, FSFormat dos)
+FSDescriptor::FSDescriptor(isize numBlocks, FSFormat dos)
 {
     init(numBlocks, dos);
 }
 
-FileSystemDescriptor::FileSystemDescriptor(Diameter dia, Density den, FSFormat dos)
+FSDescriptor::FSDescriptor(Diameter dia, Density den, FSFormat dos)
 {
     init(dia, den, dos);
 }
 
-FileSystemDescriptor::FileSystemDescriptor(const GeometryDescriptor &geometry, FSFormat dos)
+FSDescriptor::FSDescriptor(const GeometryDescriptor &geometry, FSFormat dos)
 {
     init(geometry, dos);
 }
 
-FileSystemDescriptor::FileSystemDescriptor(const PartitionDescriptor &des)
+FSDescriptor::FSDescriptor(const PartitionDescriptor &des)
 {
     init(des);
 }
 
 
 void
-FileSystemDescriptor::init(isize numBlocks, FSFormat dos)
+FSDescriptor::init(isize numBlocks, FSFormat dos)
 {
     // Copy parameters
     this->numBlocks = numBlocks;
@@ -66,33 +66,33 @@ FileSystemDescriptor::init(isize numBlocks, FSFormat dos)
 }
 
 void
-FileSystemDescriptor::init(const GeometryDescriptor &geometry, FSFormat dos)
+FSDescriptor::init(const GeometryDescriptor &geometry, FSFormat dos)
 {
     init(geometry.numBlocks(), dos);
 }
 
 void
-FileSystemDescriptor::init(const PartitionDescriptor &des)
+FSDescriptor::init(const PartitionDescriptor &des)
 {
 
     init(des.numBlocks(), dos);
 }
 
 void
-FileSystemDescriptor::init(Diameter dia, Density den, FSFormat dos)
+FSDescriptor::init(Diameter dia, Density den, FSFormat dos)
 {
     init(GeometryDescriptor(dia, den), dos);
 }
 
 
 void
-FileSystemDescriptor::dump() const
+FSDescriptor::dump() const
 {
     dump(std::cout);
 }
 
 void
-FileSystemDescriptor::dump(std::ostream &os) const
+FSDescriptor::dump(std::ostream &os) const
 {
     using namespace util;
     
@@ -113,7 +113,7 @@ FileSystemDescriptor::dump(std::ostream &os) const
 }
 
 void
-FileSystemDescriptor::checkCompatibility() const
+FSDescriptor::checkCompatibility() const
 {
     if (numBytes() > MB(504) || FORCE_FS_WRONG_CAPACITY) {
         throw AppError(Fault::FS_WRONG_CAPACITY);
