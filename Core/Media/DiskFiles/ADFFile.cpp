@@ -107,7 +107,7 @@ ADFFile::init(const FloppyDiskDescriptor &descr)
 }
 
 void
-ADFFile::init(FloppyDisk &disk)
+ADFFile::init(const FloppyDisk &disk)
 {
     init(disk.getDiameter(), disk.getDensity());
     
@@ -118,14 +118,14 @@ ADFFile::init(FloppyDisk &disk)
 }
 
 void
-ADFFile::init(FloppyDrive &drive)
+ADFFile::init(const FloppyDrive &drive)
 {
     if (drive.disk == nullptr) throw AppError(Fault::DISK_MISSING);
     init(*drive.disk);
 }
 
 void
-ADFFile::init(MutableFileSystem &volume)
+ADFFile::init(const MutableFileSystem &volume)
 {
     switch (volume.numBlocks()) {
             
@@ -438,12 +438,12 @@ ADFFile::dumpSector(Sector s) const
 }
 
 void
-ADFFile::decodeDisk(FloppyDisk &disk)
+ADFFile::decodeDisk(const FloppyDisk &disk)
 {
     long tracks = numTracks();
-    
+
     debug(ADF_DEBUG, "Decoding Amiga disk with %ld tracks\n", tracks);
-    
+
     if (disk.getDiameter() != getDiameter()) {
         throw AppError(Fault::DISK_INVALID_DIAMETER);
     }
@@ -451,11 +451,14 @@ ADFFile::decodeDisk(FloppyDisk &disk)
         throw AppError(Fault::DISK_INVALID_DENSITY);
     }
 
+    // Make a copy of the disk which can modify
+    auto diskCopy = disk;
+
     // Make the MFM stream scannable beyond the track end
-    disk.repeatTracks();
+    diskCopy.repeatTracks();
 
     // Decode all tracks
-    for (Track t = 0; t < tracks; t++) decodeTrack(disk, t);
+    for (Track t = 0; t < tracks; t++) decodeTrack(diskCopy, t);
 }
 
 void

@@ -239,7 +239,7 @@ EADFFile::encodeExtendedTrack(class FloppyDisk &disk, Track t) const
 }
 
 void
-EADFFile::decodeDisk(FloppyDisk &disk)
+EADFFile::decodeDisk(const FloppyDisk &disk)
 {
     assert(!data.empty());
     

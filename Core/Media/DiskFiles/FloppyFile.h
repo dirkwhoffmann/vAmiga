@@ -73,7 +73,7 @@ public:
 public:
 
     virtual void encodeDisk(FloppyDisk &disk) const throws { fatalError; }
-    virtual void decodeDisk(FloppyDisk &disk) throws { fatalError; }
+    virtual void decodeDisk(const FloppyDisk &disk) throws { fatalError; }
 };
 
 }

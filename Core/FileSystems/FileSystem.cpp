@@ -59,7 +59,7 @@ FileSystem::init(const HDFFile &hdf, isize part)
 }
 
 void
-FileSystem::init(FloppyDrive &dfn)
+FileSystem::init(const FloppyDrive &dfn)
 {
     // Convert the floppy drive into an ADF
     auto adf = ADFFile(dfn);
@@ -79,7 +79,7 @@ FileSystem::init(const HardDrive &hdn, isize part)
 }
 
 void
-FileSystem::init(FileSystemDescriptor layout, u8 *buf, isize len)
+FileSystem::init(const FileSystemDescriptor &layout, u8 *buf, isize len)
 {
     assert(buf);
 

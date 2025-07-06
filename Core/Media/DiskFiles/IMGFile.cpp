@@ -204,7 +204,7 @@ IMGFile::encodeSector(FloppyDisk &disk, Track t, Sector s) const
 }
 
 void
-IMGFile::decodeDisk(FloppyDisk &disk)
+IMGFile::decodeDisk(const FloppyDisk &disk)
 {
     long tracks = numTracks();
     
@@ -216,12 +216,15 @@ IMGFile::decodeDisk(FloppyDisk &disk)
     if (disk.getDensity() != getDensity()) {
         throw AppError(Fault::DISK_INVALID_DENSITY);
     }
-    
+
+    // Make a copy of the disk which can modify
+    auto diskCopy = disk;
+
     // Make the MFM stream scannable beyond the track end
-    disk.repeatTracks();
+    diskCopy.repeatTracks();
 
     // Decode all tracks
-    for (Track t = 0; t < tracks; t++) decodeTrack(disk, t);
+    for (Track t = 0; t < tracks; t++) decodeTrack(diskCopy, t);
 }
 
 void

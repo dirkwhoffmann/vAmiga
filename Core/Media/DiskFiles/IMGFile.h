@@ -82,7 +82,7 @@ public:
     Diameter getDiameter() const override { return Diameter::INCH_35; }
     Density getDensity() const override { return Density::DD; }
     void encodeDisk(class FloppyDisk &disk) const throws override;
-    void decodeDisk(class FloppyDisk &disk) throws override;
+    void decodeDisk(const class FloppyDisk &disk) throws override;
 
 private:
     

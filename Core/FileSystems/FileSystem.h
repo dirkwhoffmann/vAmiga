@@ -80,16 +80,16 @@ public:
     FileSystem(const MediaFile &file, isize part = 0) : FileSystem() { init(file, part); }
     FileSystem(const ADFFile &adf) : FileSystem() { init(adf); }
     FileSystem(const HDFFile &hdf, isize part = 0) : FileSystem() { init(hdf, part); }
-    FileSystem(FloppyDrive &dfn) : FileSystem() { init(dfn); }
+    FileSystem(const FloppyDrive &dfn) : FileSystem() { init(dfn); }
     FileSystem(const HardDrive &hdn, isize part = 0) : FileSystem() { init(hdn, part); }
 
     virtual ~FileSystem();
 
-    void init(FileSystemDescriptor layout, u8 *buf, isize len);
+    void init(const FileSystemDescriptor &layout, u8 *buf, isize len);
     void init(const MediaFile &file, isize part);
     void init(const ADFFile &adf);
     void init(const HDFFile &hdf, isize part);
-    void init(FloppyDrive &dfn);
+    void init(const FloppyDrive &dfn);
     void init(const HardDrive &hdn, isize part);
 
     bool isInitialized() const noexcept;

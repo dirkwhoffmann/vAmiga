@@ -49,15 +49,15 @@ public:
     ADFFile(const u8 *buf, isize len) throws { init(buf, len); }
     ADFFile(Diameter dia, Density den) throws { init(dia, den); }
     ADFFile(const FloppyDiskDescriptor &descr) throws { init(descr); }
-    ADFFile(class FloppyDisk &disk) throws { init(disk); }
-    ADFFile(class FloppyDrive &drive) throws { init(drive); }
-    ADFFile(MutableFileSystem &volume) throws { init(volume); }
+    ADFFile(const class FloppyDisk &disk) throws { init(disk); }
+    ADFFile(const class FloppyDrive &drive) throws { init(drive); }
+    ADFFile(const MutableFileSystem &volume) throws { init(volume); }
     
     void init(Diameter dia, Density den) throws;
     void init(const FloppyDiskDescriptor &descr) throws;
-    void init(FloppyDisk &disk) throws;
-    void init(FloppyDrive &drive) throws;
-    void init(MutableFileSystem &volume) throws;
+    void init(const FloppyDisk &disk) throws;
+    void init(const FloppyDrive &drive) throws;
+    void init(const MutableFileSystem &volume) throws;
 
     
     //
@@ -104,7 +104,7 @@ public:
     void killVirus() override;
 
     void encodeDisk(class FloppyDisk &disk) const throws override;
-    void decodeDisk(class FloppyDisk &disk) throws override;
+    void decodeDisk(const class FloppyDisk &disk) throws override;
 
 private:
     

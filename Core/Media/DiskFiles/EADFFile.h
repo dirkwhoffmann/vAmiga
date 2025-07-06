@@ -115,7 +115,7 @@ public:
     void readSector(u8 *dst, isize t, isize s) const override { }
     
     void encodeDisk(class FloppyDisk &disk) const throws override;
-    void decodeDisk(class FloppyDisk &disk) throws override;
+    void decodeDisk(const class FloppyDisk &disk) throws override;
     
 private:
     
