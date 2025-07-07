@@ -535,12 +535,12 @@ void
 MutableFileSystem::addToHashTable(Block parent, Block ref)
 {
     FSBlock *pp = read(parent);
-    if (!pp) throw AppError(Fault::FS_INVALID_BLOCK_REF);
-    if (!pp->hasHashTable()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
+    if (!pp) throw AppError(Fault::FS_OUT_OF_RANGE);
+    if (!pp->hasHashTable()) throw AppError(Fault::FS_WRONG_BLOCK_TYPE);
 
     FSBlock *pr = read(ref);
-    if (!pr) throw AppError(Fault::FS_INVALID_BLOCK_REF);
-    if (!pr->isHashable()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
+    if (!pr) throw AppError(Fault::FS_OUT_OF_RANGE);
+    if (!pr->isHashable()) throw AppError(Fault::FS_WRONG_BLOCK_TYPE);
 
     // Read the linked list from the proper hash-table bucket
     u32 hash = pr->hashValue() % pp->hashTableSize();
@@ -563,12 +563,12 @@ void
 MutableFileSystem::deleteFromHashTable(Block parent, Block ref)
 {
     FSBlock *pp = read(parent);
-    if (!pp) throw AppError(Fault::FS_INVALID_BLOCK_REF);
-    if (!pp->hasHashTable()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
+    if (!pp) throw AppError(Fault::FS_OUT_OF_RANGE);
+    if (!pp->hasHashTable()) throw AppError(Fault::FS_WRONG_BLOCK_TYPE);
 
     FSBlock *pr = read(ref);
-    if (!pr) throw AppError(Fault::FS_INVALID_BLOCK_REF);
-    if (!pr->isHashable()) throw AppError(Fault::FS_INVALID_BLOCK_TYPE);
+    if (!pr) throw AppError(Fault::FS_OUT_OF_RANGE);
+    if (!pr->isHashable()) throw AppError(Fault::FS_WRONG_BLOCK_TYPE);
 
     // Read the linked list from the proper hash-table bucket
     u32 hash = pr->hashValue() % pp->hashTableSize();

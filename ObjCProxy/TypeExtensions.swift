@@ -36,6 +36,7 @@ typealias EventSlotInfo = vamiga.EventSlotInfo
 typealias FileType = vamiga.FileType
 typealias FloppyDriveInfo = vamiga.FloppyDriveInfo
 typealias FloppyDriveType = vamiga.FloppyDriveType
+typealias FSBlockError = vamiga.FSBlockError
 typealias FSBlockType = vamiga.FSBlockType
 typealias FSItemType = vamiga.FSItemType
 typealias FSVolumeType = vamiga.FSFormat
@@ -189,46 +190,46 @@ extension FSItemType: CustomStringConvertible {
     }
 }
 
-extension ErrorCode {
-    
+extension FSBlockError {
+
     func description(expected exp: Int = 0) -> String {
         
         switch self {
         case .OK:
             return ""
-        case .FS_EXPECTED_VALUE:
+        case .EXPECTED_VALUE:
             return String(format: "Expected $%02X", exp)
-        case .FS_EXPECTED_SMALLER_VALUE:
+        case .EXPECTED_SMALLER_VALUE:
             return String(format: "Expected a value less or equal $%02X", exp)
-        case .FS_EXPECTED_DOS_REVISION:
+        case .EXPECTED_DOS_REVISION:
             return "Expected a value between 0 and 7"
-        case .FS_EXPECTED_NO_REF:
+        case .EXPECTED_NO_REF:
             return "Did not expect a block reference here"
-        case .FS_EXPECTED_REF:
+        case .EXPECTED_REF:
             return "Expected a block reference"
-        case .FS_EXPECTED_SELFREF:
+        case .EXPECTED_SELFREF:
             return "Expected a self-reference"
-        case .FS_PTR_TO_UNKNOWN_BLOCK:
+        case .PTR_TO_UNKNOWN_BLOCK:
             return "This reference points to a block of unknown type"
-        case .FS_PTR_TO_EMPTY_BLOCK:
+        case .PTR_TO_EMPTY_BLOCK:
             return "This reference points to an empty block"
-        case .FS_PTR_TO_BOOT_BLOCK:
+        case .PTR_TO_BOOT_BLOCK:
             return "This reference points to a boot block"
-        case .FS_PTR_TO_ROOT_BLOCK:
+        case .PTR_TO_ROOT_BLOCK:
             return "This reference points to the root block"
-        case .FS_PTR_TO_BITMAP_BLOCK:
+        case .PTR_TO_BITMAP_BLOCK:
             return "This reference points to a bitmap block"
-        case .FS_PTR_TO_USERDIR_BLOCK:
+        case .PTR_TO_USERDIR_BLOCK:
             return "This reference points to a user directory block"
-        case .FS_PTR_TO_FILEHEADER_BLOCK:
+        case .PTR_TO_FILEHEADER_BLOCK:
             return "This reference points to a file header block"
-        case .FS_PTR_TO_FILELIST_BLOCK:
+        case .PTR_TO_FILELIST_BLOCK:
             return "This reference points to a file header block"
-        case .FS_PTR_TO_DATA_BLOCK:
+        case .PTR_TO_DATA_BLOCK:
             return "This reference points to a data block"
-        case .FS_EXPECTED_DATABLOCK_NR:
+        case .EXPECTED_DATABLOCK_NR:
             return "Invalid data block position number"
-        case .FS_INVALID_HASHTABLE_SIZE:
+        case .INVALID_HASHTABLE_SIZE:
             return "Expected $48 (72 hash table entries)"
         default:
             warn("\(self)")

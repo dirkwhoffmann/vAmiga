@@ -75,19 +75,19 @@ public:
     isize xray(FSBlock &node, std::ostream &os, bool strict) const;
 
     // Checks the integrity of a certain byte in this block
-    Fault xray(Block ref, isize pos, bool strict) const;
-    Fault xray(Block ref, isize pos, bool strict, optional<u8> &expected) const;
-    Fault xray(FSBlock &node, isize pos, bool strict) const;
-    Fault xray(FSBlock &node, isize pos, bool strict, optional<u8> &expected) const;
+    FSBlockError xray(Block ref, isize pos, bool strict) const;
+    FSBlockError xray(Block ref, isize pos, bool strict, optional<u8> &expected) const;
+    FSBlockError xray(FSBlock &node, isize pos, bool strict) const;
+    FSBlockError xray(FSBlock &node, isize pos, bool strict, optional<u8> &expected) const;
 
-    Fault xray32(FSBlock &node, isize pos, bool strict) const;
-    Fault xray32(FSBlock &node, isize pos, bool strict, optional<u32> &expected) const;
+    FSBlockError xray32(FSBlock &node, isize pos, bool strict) const;
+    FSBlockError xray32(FSBlock &node, isize pos, bool strict, optional<u32> &expected) const;
 
 private:
 
     // Checks if the type of a block matches one of the provides types
-    Fault checkBlockType(Block nr, FSBlockType type) const;
-    Fault checkBlockType(Block nr, FSBlockType type, FSBlockType altType) const;
+    FSBlockError checkBlockType(Block nr, FSBlockType type) const;
+    FSBlockError checkBlockType(Block nr, FSBlockType type, FSBlockType altType) const;
 
 };
 

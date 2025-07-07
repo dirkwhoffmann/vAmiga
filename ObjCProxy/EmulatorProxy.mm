@@ -1604,10 +1604,10 @@ NSString *EventSlotName(EventSlot slot)
     return [array sortedArrayUsingSelector:@selector(compare:)];
 }
 
-- (Fault)check:(NSInteger)nr
-               pos:(NSInteger)pos
-          expected:(unsigned char *)exp
-            strict:(BOOL)strict
+- (FSBlockError)check:(NSInteger)nr
+                  pos:(NSInteger)pos
+             expected:(unsigned char *)exp
+               strict:(BOOL)strict
 {
     std::optional<u8> expected;
     auto result = [self fs]->doctor.xray((u32)nr, pos, strict, expected);

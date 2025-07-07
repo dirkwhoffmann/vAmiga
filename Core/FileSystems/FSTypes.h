@@ -314,6 +314,72 @@ struct FSItemTypeEnum : Reflection<FSItemTypeEnum, FSItemType>
 };
 
 
+enum class FSBlockError : long
+{
+    FS_OK,
+    FS_INVALID_BLOCK_TYPE,
+    FS_INVALID_BLOCK_REF,
+    FS_EXPECTED_VALUE,
+    FS_EXPECTED_SMALLER_VALUE,
+    FS_EXPECTED_DOS_REVISION,
+    FS_EXPECTED_NO_REF,
+    FS_EXPECTED_REF,
+    FS_EXPECTED_SELFREF,
+    FS_PTR_TO_UNKNOWN_BLOCK,
+    FS_PTR_TO_EMPTY_BLOCK,
+    FS_PTR_TO_BOOT_BLOCK,
+    FS_PTR_TO_ROOT_BLOCK,
+    FS_PTR_TO_BITMAP_BLOCK,
+    FS_PTR_TO_BITMAP_EXT_BLOCK,
+    FS_PTR_TO_USERDIR_BLOCK,
+    FS_PTR_TO_FILEHEADER_BLOCK,
+    FS_PTR_TO_FILELIST_BLOCK,
+    FS_PTR_TO_DATA_BLOCK,
+    FS_EXPECTED_DATABLOCK_NR,
+    FS_INVALID_HASHTABLE_SIZE
+};
+
+struct FSBlockErrorEnum : Reflection<FSBlockErrorEnum, FSBlockError>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = long(FSBlockError::FS_INVALID_HASHTABLE_SIZE);
+
+    static const char *_key(FSBlockError value)
+    {
+        switch (value) {
+
+            case FSBlockError::FS_OK:                       return "FS_OK";
+            case FSBlockError::FS_INVALID_BLOCK_TYPE:       return "FS_INVALID_BLOCK_TYPE";
+            case FSBlockError::FS_INVALID_BLOCK_REF:        return "FS_INVALID_BLOCK_REF";
+            case FSBlockError::FS_EXPECTED_VALUE:           return "FS_EXPECTED_VALUE";
+            case FSBlockError::FS_EXPECTED_SMALLER_VALUE:   return "FS_EXPECTED_SMALLER_VALUE";
+            case FSBlockError::FS_EXPECTED_DOS_REVISION:    return "FS_EXPECTED_DOS_REVISION";
+            case FSBlockError::FS_EXPECTED_NO_REF:          return "FS_EXPECTED_NO_REF";
+            case FSBlockError::FS_EXPECTED_REF:             return "FS_EXPECTED_REF";
+            case FSBlockError::FS_EXPECTED_SELFREF:         return "FS_EXPECTED_SELFREF";
+            case FSBlockError::FS_PTR_TO_UNKNOWN_BLOCK:     return "FS_PTR_TO_UNKNOWN_BLOCK";
+            case FSBlockError::FS_PTR_TO_EMPTY_BLOCK:       return "FS_PTR_TO_EMPTY_BLOCK";
+            case FSBlockError::FS_PTR_TO_BOOT_BLOCK:        return "FS_PTR_TO_BOOT_BLOCK";
+            case FSBlockError::FS_PTR_TO_ROOT_BLOCK:        return "FS_PTR_TO_ROOT_BLOCK";
+            case FSBlockError::FS_PTR_TO_BITMAP_BLOCK:      return "FS_PTR_TO_BITMAP_BLOCK";
+            case FSBlockError::FS_PTR_TO_BITMAP_EXT_BLOCK:  return "FS_PTR_TO_BITMAP_EXT_BLOCK";
+            case FSBlockError::FS_PTR_TO_USERDIR_BLOCK:     return "FS_PTR_TO_USERDIR_BLOCK";
+            case FSBlockError::FS_PTR_TO_FILEHEADER_BLOCK:  return "FS_PTR_TO_FILEHEADER_BLOCK";
+            case FSBlockError::FS_PTR_TO_FILELIST_BLOCK:    return "FS_PTR_TO_FILELIST_BLOCK";
+            case FSBlockError::FS_PTR_TO_DATA_BLOCK:        return "FS_PTR_TO_DATA_BLOCK";
+            case FSBlockError::FS_EXPECTED_DATABLOCK_NR:    return "FS_EXPECTED_DATABLOCK_NR";
+            case FSBlockError::FS_INVALID_HASHTABLE_SIZE:   return "FS_INVALID_HASHTABLE_SIZE";
+        }
+        return "???";
+    }
+
+    static const char *help(FSBlockType value)
+    {
+        return "";
+    }
+};
+
+
 //
 // Structures
 //

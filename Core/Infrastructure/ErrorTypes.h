@@ -158,6 +158,7 @@ enum class Fault : long
     
     // File system
     FS_UNKNOWN,
+    FS_OUT_OF_RANGE,
     FS_INVALID_PATH,
     FS_INVALID_REGEX,
     FS_NOT_A_DIRECTORY,
@@ -173,6 +174,7 @@ enum class Fault : long
     FS_WRONG_BSIZE,
     FS_WRONG_CAPACITY,
     FS_WRONG_DOS_TYPE,
+    FS_WRONG_BLOCK_TYPE,
     FS_HAS_CYCLES,
     FS_CORRUPTED,
 
@@ -182,35 +184,13 @@ enum class Fault : long
     // File system (export errors)
     FS_DIR_NOT_EMPTY,
     FS_CANNOT_CREATE_DIR,
-    FS_CANNOT_CREATE_FILE,
-    
-    // File system (block errors)
-    FS_INVALID_BLOCK_TYPE,
-    FS_INVALID_BLOCK_REF,
-    FS_EXPECTED_VALUE,
-    FS_EXPECTED_SMALLER_VALUE,
-    FS_EXPECTED_DOS_REVISION,
-    FS_EXPECTED_NO_REF,
-    FS_EXPECTED_REF,
-    FS_EXPECTED_SELFREF,
-    FS_PTR_TO_UNKNOWN_BLOCK,
-    FS_PTR_TO_EMPTY_BLOCK,
-    FS_PTR_TO_BOOT_BLOCK,
-    FS_PTR_TO_ROOT_BLOCK,
-    FS_PTR_TO_BITMAP_BLOCK,
-    FS_PTR_TO_BITMAP_EXT_BLOCK,
-    FS_PTR_TO_USERDIR_BLOCK,
-    FS_PTR_TO_FILEHEADER_BLOCK,
-    FS_PTR_TO_FILELIST_BLOCK,
-    FS_PTR_TO_DATA_BLOCK,
-    FS_EXPECTED_DATABLOCK_NR,
-    FS_INVALID_HASHTABLE_SIZE
+    FS_CANNOT_CREATE_FILE
 };
 
 struct FaultEnum : Reflection<FaultEnum, Fault>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(Fault::FS_INVALID_HASHTABLE_SIZE);
+    static constexpr long maxVal = long(Fault::FS_CANNOT_CREATE_FILE);
     
     static const char *_key(Fault value)
     {
@@ -339,6 +319,7 @@ struct FaultEnum : Reflection<FaultEnum, Fault>
             case Fault::GDB_UNSUPPORTED_CMD:         return "GDB_UNSUPPORTED_CMD";
                 
             case Fault::FS_UNKNOWN:                  return "FS_UNKNOWN";
+            case Fault::FS_OUT_OF_RANGE:             return "FS_OUT_OF_RANGE";
             case Fault::FS_INVALID_PATH:             return "FS_INVALID_PATH";
             case Fault::FS_INVALID_REGEX:            return "FS_INVALID_REGEX";
             case Fault::FS_NOT_A_DIRECTORY:          return "FS_NOT_A_DIRECTORY";
@@ -353,6 +334,7 @@ struct FaultEnum : Reflection<FaultEnum, Fault>
             case Fault::FS_WRONG_BSIZE:              return "FS_WRONG_BSIZE";
             case Fault::FS_WRONG_CAPACITY:           return "FS_WRONG_CAPACITY";
             case Fault::FS_WRONG_DOS_TYPE:           return "FS_WRONG_DOS_TYPE";
+            case Fault::FS_WRONG_BLOCK_TYPE:         return "FS_WRONG_BLOCK_TYPE";
             case Fault::FS_HAS_CYCLES:               return "FS_HAS_CYCLES";
             case Fault::FS_CORRUPTED:                return "FS_CORRUPTED";
                 
@@ -361,27 +343,6 @@ struct FaultEnum : Reflection<FaultEnum, Fault>
             case Fault::FS_DIR_NOT_EMPTY:            return "FS_DIR_NOT_EMPTY";
             case Fault::FS_CANNOT_CREATE_DIR:        return "FS_CANNOT_CREATE_DIR";
             case Fault::FS_CANNOT_CREATE_FILE:       return "FS_CANNOT_CREATE_FILE";
-                
-            case Fault::FS_INVALID_BLOCK_TYPE:       return "FS_INVALID_BLOCK_TYPE";
-            case Fault::FS_INVALID_BLOCK_REF:        return "FS_INVALID_BLOCK_REF";
-            case Fault::FS_EXPECTED_VALUE:           return "FS_EXPECTED_VALUE";
-            case Fault::FS_EXPECTED_SMALLER_VALUE:   return "FS_EXPECTED_SMALLER_VALUE";
-            case Fault::FS_EXPECTED_DOS_REVISION:    return "FS_EXPECTED_DOS_REVISION";
-            case Fault::FS_EXPECTED_NO_REF:          return "FS_EXPECTED_NO_REF";
-            case Fault::FS_EXPECTED_REF:             return "FS_EXPECTED_REF";
-            case Fault::FS_EXPECTED_SELFREF:         return "FS_EXPECTED_SELFREF";
-            case Fault::FS_PTR_TO_UNKNOWN_BLOCK:     return "FS_PTR_TO_UNKNOWN_BLOCK";
-            case Fault::FS_PTR_TO_EMPTY_BLOCK:       return "FS_PTR_TO_EMPTY_BLOCK";
-            case Fault::FS_PTR_TO_BOOT_BLOCK:        return "FS_PTR_TO_BOOT_BLOCK";
-            case Fault::FS_PTR_TO_ROOT_BLOCK:        return "FS_PTR_TO_ROOT_BLOCK";
-            case Fault::FS_PTR_TO_BITMAP_BLOCK:      return "FS_PTR_TO_BITMAP_BLOCK";
-            case Fault::FS_PTR_TO_BITMAP_EXT_BLOCK:  return "FS_PTR_TO_BITMAP_EXT_BLOCK";
-            case Fault::FS_PTR_TO_USERDIR_BLOCK:     return "FS_PTR_TO_USERDIR_BLOCK";
-            case Fault::FS_PTR_TO_FILEHEADER_BLOCK:  return "FS_PTR_TO_FILEHEADER_BLOCK";
-            case Fault::FS_PTR_TO_FILELIST_BLOCK:    return "FS_PTR_TO_FILELIST_BLOCK";
-            case Fault::FS_PTR_TO_DATA_BLOCK:        return "FS_PTR_TO_DATA_BLOCK";
-            case Fault::FS_EXPECTED_DATABLOCK_NR:    return "FS_EXPECTED_DATABLOCK_NR";
-            case Fault::FS_INVALID_HASHTABLE_SIZE:   return "FS_INVALID_HASHTABLE_SIZE";
         }
         return "???";
     }

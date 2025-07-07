@@ -841,7 +841,7 @@ NSString *EventSlotName(EventSlot slot);
 @property (readonly) NSArray<NSNumber *> *xrayBlocks;
 @property (readonly) NSArray<NSNumber *> *xrayBitmap;
 
-- (Fault)check:(NSInteger)nr pos:(NSInteger)pos expected:(unsigned char *)exp strict:(BOOL)strict;
+- (FSBlockError)check:(NSInteger)nr pos:(NSInteger)pos expected:(unsigned char *)exp strict:(BOOL)strict;
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
 - (NSString *)ascii:(NSInteger)block offset:(NSInteger)offset length:(NSInteger)len;
 - (void)export:(NSString *)path exception:(ExceptionWrapper *)ex;
