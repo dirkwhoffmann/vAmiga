@@ -205,8 +205,6 @@ FSStorage::updateChecksums() noexcept
 void
 FSStorage::createUsageMap(u8 *buffer, isize len) const
 {
-    isize max = numBlocks();
-
     // Setup priorities
     i8 pri[12];
     pri[isize(FSBlockType::UNKNOWN)]      = 0;
@@ -221,8 +219,13 @@ FSStorage::createUsageMap(u8 *buffer, isize len) const
     pri[isize(FSBlockType::DATA_OFS)]     = 2;
     pri[isize(FSBlockType::DATA_FFS)]     = 2;
 
+    isize max = numBlocks();
+
     // Start from scratch
-    for (isize i = 0; i < len; i++) buffer[i] = 0;
+    for (isize i = 0; i < len; i++) buffer[i] = (u8)FSBlockType::UNKNOWN;
+
+    // Mark all free blocks
+    for (isize i = 0; i < max; i++) buffer[i * (len - 1) / (max - 1)] = (u8)FSBlockType::EMPTY;
 
     // Mark all used blocks
     for (auto &it : blocks) {
@@ -237,7 +240,7 @@ FSStorage::createUsageMap(u8 *buffer, isize len) const
 
     // Fill gaps
     for (isize pos = 1; pos < len; pos++) {
-        if (buffer[pos] == u8(FSBlockType::UNKNOWN)) buffer[pos] = buffer[pos - 1];
+        if (buffer[pos] == (u8)FSBlockType::UNKNOWN) buffer[pos] = buffer[pos - 1];
     }
 }
 
