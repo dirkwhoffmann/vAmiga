@@ -149,6 +149,7 @@ public:
 
     // Returns the type of a certain block or a block item
     FSBlockType typeof(Block nr) const noexcept;
+    bool is(Block nr, FSBlockType t) const noexcept { return typeof(nr) == t; }
     FSItemType typeof(Block nr, isize pos) const noexcept;
 
     // Convenience wrappers

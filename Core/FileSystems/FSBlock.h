@@ -125,13 +125,14 @@ public:
     static void dec32(u8 *p) { write32(p, read32(p) - 1); }
 
     // Computes the address of a long word inside the block
-    u8 *addr32(isize nr) const;
-    
+    const u8 *addr32(isize nr) const;
+    u8 *addr32(isize nr);
+
     // Reads, writes, or modifies the n-th long word
     u32 get32(isize n) const { return read32(addr32(n)); }
-    void set32(isize n, u32 val) const { write32(addr32(n), val); }
-    void inc32(isize n) const { inc32(addr32(n)); }
-    void dec32(isize n) const { dec32(addr32(n)); }
+    void set32(isize n, u32 val) { write32(addr32(n), val); }
+    void inc32(isize n) { inc32(addr32(n)); }
+    void dec32(isize n) { dec32(addr32(n)); }
 
     // Returns the location of the checksum inside this block
     isize checksumLocation() const;

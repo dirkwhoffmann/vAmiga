@@ -325,6 +325,14 @@ enum class FSBlockError : long
     FS_EXPECTED_NO_REF,
     FS_EXPECTED_REF,
     FS_EXPECTED_SELFREF,
+    FS_EXPECTED_BITMAP_BLOCK,
+    FS_EXPECTED_BITMAP_EXT_BLOCK,
+    FS_EXPECTED_HASHABLE_BLOCK,
+    FS_EXPECTED_USERDIR_OR_ROOT,
+    FS_EXPECTED_DATA_BLOCK,
+    FS_EXPECTED_FILE_HEADER_BLOCK,
+    FS_EXPECTED_FILE_LIST_BLOCK,
+
     FS_PTR_TO_UNKNOWN_BLOCK,
     FS_PTR_TO_EMPTY_BLOCK,
     FS_PTR_TO_BOOT_BLOCK,
@@ -357,6 +365,14 @@ struct FSBlockErrorEnum : Reflection<FSBlockErrorEnum, FSBlockError>
             case FSBlockError::FS_EXPECTED_NO_REF:          return "FS_EXPECTED_NO_REF";
             case FSBlockError::FS_EXPECTED_REF:             return "FS_EXPECTED_REF";
             case FSBlockError::FS_EXPECTED_SELFREF:         return "FS_EXPECTED_SELFREF";
+            case FSBlockError::FS_EXPECTED_BITMAP_BLOCK:    return "FS_EXPECTED_BITMAP_BLOCK";
+            case FSBlockError::FS_EXPECTED_BITMAP_EXT_BLOCK:return "FS_EXPECTED_BITMAP_EXT_BLOCK";
+            case FSBlockError::FS_EXPECTED_HASHABLE_BLOCK:  return "FS_EXPECTED_HASHABLE_BLOCK";
+            case FSBlockError::FS_EXPECTED_USERDIR_OR_ROOT: return "FS_EXPECTED_USERDIR_OR_ROOT";
+            case FSBlockError::FS_EXPECTED_DATA_BLOCK:      return "FS_EXPECTED_DATA_BLOCK";
+            case FSBlockError::FS_EXPECTED_FILE_HEADER_BLOCK: return "FS_EXPECTED_FILE_HEADER_BLOCK";
+            case FSBlockError::FS_EXPECTED_FILE_LIST_BLOCK: return "FS_EXPECTED_FILE_LIST_BLOCK";
+
             case FSBlockError::FS_PTR_TO_UNKNOWN_BLOCK:     return "FS_PTR_TO_UNKNOWN_BLOCK";
             case FSBlockError::FS_PTR_TO_EMPTY_BLOCK:       return "FS_PTR_TO_EMPTY_BLOCK";
             case FSBlockError::FS_PTR_TO_BOOT_BLOCK:        return "FS_PTR_TO_BOOT_BLOCK";

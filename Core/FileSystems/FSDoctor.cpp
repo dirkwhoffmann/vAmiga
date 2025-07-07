@@ -32,40 +32,48 @@ if (!FSFormatEnum::isValid((isize)value)) return FSBlockError::FS_EXPECTED_DOS_R
 if (!fs.block(value)) return FSBlockError::FS_EXPECTED_REF; }
 
 #define EXPECT_SELFREF { \
-if (value != ref) return FSBlockError::FS_EXPECTED_SELFREF; }
+if (value != ref) { expected = ref; return FSBlockError::FS_EXPECTED_SELFREF; } }
 
 #define EXPECT_FILEHEADER_REF { \
-if (auto e = checkBlockType(value, FSBlockType::FILEHEADER); e != FSBlockError::FS_OK) return e; }
+if (!fs.is(value, FSBlockType::FILEHEADER)) { \
+return FSBlockError::FS_EXPECTED_FILE_HEADER_BLOCK; } }
 
 #define EXPECT_HASH_REF { \
-if (auto e = checkBlockType(value, FSBlockType::FILEHEADER, FSBlockType::USERDIR); e != FSBlockError::FS_OK) return e; }
+if (!fs.is(value, FSBlockType::FILEHEADER) && !fs.is(value, FSBlockType::USERDIR)) { \
+return FSBlockError::FS_EXPECTED_HASHABLE_BLOCK; } }
 
 #define EXPECT_OPTIONAL_HASH_REF { \
 if (value) { EXPECT_HASH_REF } }
 
 #define EXPECT_PARENT_DIR_REF { \
-if (auto e = checkBlockType(value, FSBlockType::ROOT, FSBlockType::USERDIR); e != FSBlockError::FS_OK) return e; }
+if (!fs.is(value, FSBlockType::ROOT) && !fs.is(value, FSBlockType::USERDIR)) { \
+return FSBlockError::FS_EXPECTED_USERDIR_OR_ROOT; } }
 
 #define EXPECT_FILELIST_REF { \
-if (auto e = checkBlockType(value, FSBlockType::FILELIST); e != FSBlockError::FS_OK) return e; }
+if (!fs.is(value, FSBlockType::FILELIST)) { \
+return FSBlockError::FS_EXPECTED_FILE_LIST_BLOCK; } }
 
 #define EXPECT_OPTIONAL_FILELIST_REF { \
 if (value) { EXPECT_FILELIST_REF } }
 
-#define EXPECT_BITMAP_REF { \
-if (auto e = checkBlockType(value, FSBlockType::BITMAP); e != FSBlockError::FS_OK) return e; }
+#define EXPECT_BITMAP_REF(nr) { \
+if (!fs.is(value, FSBlockType::BITMAP)) { \
+if (fs.bmBlocks.size() > usize(nr)) { expected = fs.bmBlocks[nr]; } \
+return FSBlockError::FS_EXPECTED_BITMAP_BLOCK; } }
 
-#define EXPECT_OPTIONAL_BITMAP_REF { \
-if (value) { EXPECT_BITMAP_REF } }
+#define EXPECT_OPTIONAL_BITMAP_REF(nr) { \
+if (value) { EXPECT_BITMAP_REF(nr) } }
 
 #define EXPECT_BITMAP_EXT_REF { \
-if (auto e = checkBlockType(value, FSBlockType::BITMAP_EXT); e != FSBlockError::FS_OK) return e; }
+if (!fs.is(value, FSBlockType::BITMAP_EXT)) { \
+return FSBlockError::FS_EXPECTED_BITMAP_EXT_BLOCK; } }
 
 #define EXPECT_OPTIONAL_BITMAP_EXT_REF { \
 if (value) { EXPECT_BITMAP_EXT_REF } }
 
 #define EXPECT_DATABLOCK_REF { \
-if (auto e = checkBlockType(value, FSBlockType::DATA_OFS, FSBlockType::DATA_FFS); e != FSBlockError::FS_OK) return e; }
+if (!fs.is(value, FSBlockType::DATA_OFS) && !fs.is(value, FSBlockType::DATA_FFS)) { \
+return FSBlockError::FS_EXPECTED_DATA_BLOCK; } }
 
 #define EXPECT_OPTIONAL_DATABLOCK_REF { \
 if (value) { EXPECT_DATABLOCK_REF } }
@@ -73,8 +81,9 @@ if (value) { EXPECT_DATABLOCK_REF } }
 #define EXPECT_DATABLOCK_NUMBER { \
 if (value == 0) return FSBlockError::FS_EXPECTED_DATABLOCK_NR; }
 
-#define EXPECT_HASHTABLE_SIZE { \
-if (value != 72) return FSBlockError::FS_INVALID_HASHTABLE_SIZE; }
+#define EXPECT_HTABLE_SIZE { \
+if (value != (fs.traits.bsize / 4) - 56) { \
+expected = u32((fs.traits.bsize / 4) - 56); return FSBlockError::FS_INVALID_HASHTABLE_SIZE; } }
 
 namespace vamiga {
 
@@ -287,7 +296,6 @@ FSDoctor::xrayBlocks(std::ostream &os, bool strict)
 isize
 FSDoctor::xrayBitmap(bool strict)
 {
-    // std::unordered_map<Block,isize> result;
     std::unordered_set<Block> used;
 
     // Extract the directory tree
@@ -372,7 +380,7 @@ FSDoctor::xray(FSBlock &node, bool strict) const
     for (isize i = 0; i < node.bsize(); i++) {
 
         std::optional<u8> expected;
-        if (auto error = xray(node.nr, i, strict, expected); error != FSBlockError::FS_OK) {
+        if (auto error = xray(node, i, strict, expected); error != FSBlockError::FS_OK) {
 
             count++;
             debug(FS_DEBUG, "Block %d [%ld.%ld]: %s\n", node.nr, i / 4, i % 4, FSBlockErrorEnum::key(error));
@@ -423,13 +431,13 @@ FSDoctor::xray32(FSBlock &node, isize pos, bool strict, optional<u32> &expected)
     assert(pos % 4 == 0);
 
     isize word = pos / 4;
+    isize sword = word - (node.bsize() / 4);
+    u32 value = node.get32(word);
     auto ref = node.nr;
 
     switch (node.type) {
 
         case FSBlockType::BOOT:
-        {
-            u32 value = node.get32(word);
 
             if (ref == 0) {
 
@@ -439,169 +447,177 @@ FSDoctor::xray32(FSBlock &node, isize pos, bool strict, optional<u32> &expected)
                 if (word == 1) { value = node.get32(1); EXPECT_CHECKSUM; }
             }
             break;
-        }
+
         case FSBlockType::ROOT:
-        {
-            if (word >= 6) word -= node.bsize() / 4;
-            u32 value = node.get32(word);
 
             switch (word) {
 
-                case 0:   EXPECT_VALUE(2);                break;
-                case 1:
-                case 2:   if (strict) EXPECT_VALUE(0);    break;
-                case 3:   if (strict) EXPECT_HASHTABLE_SIZE; break;
-                case 4:   EXPECT_VALUE(0);                break;
-                case 5:   EXPECT_CHECKSUM;                   break;
-                case -50:                                    break;
-                case -49: EXPECT_BITMAP_REF;                 break;
-                case -24: EXPECT_OPTIONAL_BITMAP_EXT_REF;    break;
+                case 0:   EXPECT_VALUE(2);                  break;
+                case 1:   if (strict) EXPECT_VALUE(0);      break;
+                case 2:   if (strict) EXPECT_VALUE(0);      break;
+                case 3:   if (strict) EXPECT_HTABLE_SIZE;   break;
+                case 4:   EXPECT_VALUE(0);                  break;
+                case 5:   EXPECT_CHECKSUM;                  break;
+            }
+            switch (sword) {
+
+                case -50:                                   break;
+                case -49: EXPECT_BITMAP_REF(0);             break;
+                case -24: EXPECT_OPTIONAL_BITMAP_EXT_REF;   break;
                 case -4:
                 case -3:
-                case -2:  if (strict) EXPECT_VALUE(0);    break;
-                case -1:  EXPECT_VALUE(1);                break;
-
-                default:
-
-                    // Hash table area
-                    if (word <= -51) { EXPECT_OPTIONAL_HASH_REF; break; }
-
-                    // Bitmap block area
-                    if (word <= -25) { EXPECT_OPTIONAL_BITMAP_REF; break; }
+                case -2:  if (strict) EXPECT_VALUE(0);      break;
+                case -1:  EXPECT_VALUE(1);                  break;
             }
+
+            // Hash table area
+            if (word >= 6 && sword <= -51) { EXPECT_OPTIONAL_HASH_REF; }
+
+            // Bitmap block area
+            if (sword >= -49 && sword <= -25) { EXPECT_OPTIONAL_BITMAP_REF(word + 49); }
             break;
-        }
+
         case FSBlockType::BITMAP:
-        {
-            u32 value = node.get32(word);
 
             if (word == 0) EXPECT_CHECKSUM;
             break;
-        }
+
         case FSBlockType::BITMAP_EXT:
-        {
-            u32 value = node.get32(word);
 
             if (word == (i32)(node.bsize() - 4)) EXPECT_OPTIONAL_BITMAP_EXT_REF;
             break;
-        }
+
         case FSBlockType::USERDIR:
-        {
-            if (word >= 6) word -= node.bsize() / 4;
-            u32 value = node.get32(word);
 
             switch (word) {
-                case  0: EXPECT_VALUE(2);        break;
+
+                case  0: EXPECT_VALUE(2);           break;
                 case  1: EXPECT_SELFREF;            break;
-                case  2:
-                case  3:
-                case  4: EXPECT_VALUE(0);            break;
+                case  2: EXPECT_VALUE(0);           break;
+                case  3: EXPECT_VALUE(0);           break;
+                case  4: EXPECT_VALUE(0);           break;
                 case  5: EXPECT_CHECKSUM;           break;
+            }
+            switch (sword) {
+
                 case -4: EXPECT_OPTIONAL_HASH_REF;  break;
                 case -3: EXPECT_PARENT_DIR_REF;     break;
-                case -2: EXPECT_VALUE(0);            break;
-                case -1: EXPECT_VALUE(2);        break;
+                case -2: EXPECT_VALUE(0);           break;
+                case -1: EXPECT_VALUE(2);           break;
             }
             if (word <= -51) EXPECT_OPTIONAL_HASH_REF;
             break;
-        }
+
         case FSBlockType::FILEHEADER:
-        {
+
             /* Note: At locations -4 and -3, many disks reference the bitmap
              * block which is wrong. We ignore to report this common
              * inconsistency if 'strict' is set to false.
              */
-
-            // Translate the byte index to a (signed) long word index
-            if (word >= 6) word -= node.bsize() / 4;
-            u32 value = node.get32(word);
-
             switch (word) {
-                case   0: EXPECT_VALUE(2);                    break;
-                case   1: EXPECT_SELFREF;                        break;
-                case   3: EXPECT_VALUE(0);                        break;
-                case   4: EXPECT_DATABLOCK_REF;                  break;
-                case   5: EXPECT_CHECKSUM;                       break;
-                case -50: EXPECT_VALUE(0);                        break;
-                case  -4: if (strict) EXPECT_OPTIONAL_HASH_REF;  break;
-                case  -3: if (strict) EXPECT_PARENT_DIR_REF;     break;
-                case  -2: EXPECT_OPTIONAL_FILELIST_REF;          break;
-                case  -1: EXPECT_VALUE(-3);                   break;
+
+                case   0: EXPECT_VALUE(2);                      break;
+                case   1: EXPECT_SELFREF;                       break;
+                case   3: EXPECT_VALUE(0);                      break;
+                // case   4: EXPECT_DATABLOCK_REF;                 break;
+                case   5: EXPECT_CHECKSUM;                      break;
+            }
+            switch (sword) {
+
+                case -50: EXPECT_VALUE(0);                      break;
+                case  -4: if (strict) EXPECT_OPTIONAL_HASH_REF; break;
+                case  -3: if (strict) EXPECT_PARENT_DIR_REF;    break;
+                case  -2: EXPECT_OPTIONAL_FILELIST_REF;         break;
+                case  -1: EXPECT_VALUE(-3);                     break;
+            }
+
+            // First data block reference
+            if (word == 4) {
+
+                if (node.getNumDataBlockRefs()) {
+                    EXPECT_DATABLOCK_REF;
+                } else {
+                    EXPECT_VALUE(0);
+                }
             }
 
             // Data block reference area
-            if (word <= -51 && value) EXPECT_DATABLOCK_REF;
-            if (word == -51) {
-                if (value == 0 && node.getNumDataBlockRefs() > 0) {
-                    return FSBlockError::FS_EXPECTED_REF;
-                }
-                if (value != 0 && node.getNumDataBlockRefs() == 0) {
-                    return FSBlockError::FS_EXPECTED_NO_REF;
+            if (word >= 6 && sword <= -51) {
+
+                // Map the index position to the corresponding data block number.
+                // The first data block pointer is at -51, the second at -52 etc.
+                auto index = -51 - sword;
+
+                if (index < node.getNumDataBlockRefs()) {
+                    EXPECT_DATABLOCK_REF;
+                } else {
+                    EXPECT_VALUE(0);
                 }
             }
             break;
-        }
+
         case FSBlockType::FILELIST:
-        {
+
             /* Note: At location -3, many disks reference the bitmap
              * block which is wrong. We ignore to report this common
              * inconsistency if 'strict' is set to false.
              */
-
-            // Translate 'pos' to a (signed) long word index
-            if (word >= 6) word -= node.bsize() / 4;
-            u32 value = node.get32(word);
-
             switch (word) {
 
-                case   0: EXPECT_VALUE(16);                break;
-                case   1: EXPECT_SELFREF;                     break;
-                case   3: EXPECT_VALUE(0);                     break;
-                case   4: EXPECT_OPTIONAL_DATABLOCK_REF;      break;
-                case   5: EXPECT_CHECKSUM;                    break;
-                case -50:
-                case  -4: EXPECT_VALUE(0);                     break;
-                case  -3: if (strict) EXPECT_FILEHEADER_REF;  break;
-                case  -2: EXPECT_OPTIONAL_FILELIST_REF;       break;
-                case  -1: EXPECT_VALUE(-3);                break;
+                case   0: EXPECT_VALUE(16);                     break;
+                case   1: EXPECT_SELFREF;                       break;
+                case   3: EXPECT_VALUE(0);                      break;
+                case   4: EXPECT_OPTIONAL_DATABLOCK_REF;        break;
+                case   5: EXPECT_CHECKSUM;                      break;
+            }
+            switch (sword) {
+
+                case  -3: if (strict) EXPECT_FILEHEADER_REF;    break;
+                case  -2: EXPECT_OPTIONAL_FILELIST_REF;         break;
+                case  -1: EXPECT_VALUE(-3);                     break;
             }
 
             // Data block references
-            if (word <= -51 && value) EXPECT_DATABLOCK_REF;
-            if (word == -51) {
-                if (value == 0 && node.getNumDataBlockRefs() > 0) {
-                    return FSBlockError::FS_EXPECTED_REF;
-                }
-                if (value != 0 && node.getNumDataBlockRefs() == 0) {
-                    return FSBlockError::FS_EXPECTED_NO_REF;
+            if (word >= 6 && sword <= -51) {
+
+                // Map the index position to the corresponding data block number.
+                // The first data block pointer is at -51, the second at -52 etc.
+                auto index = -51 - sword;
+
+                if (index < node.getNumDataBlockRefs()) {
+                    EXPECT_DATABLOCK_REF;
+                } else {
+                    EXPECT_VALUE(0);
                 }
             }
+
+            // Unused area
+            if (sword >= -50 && sword <= -4) {
+                EXPECT_VALUE(0);
+            }
             break;
-        }
 
         case FSBlockType::DATA_OFS:
-        {
+
             /* Note: At location 1, many disks store a reference to the bitmap
              * block instead of a reference to the file header block. We ignore
              * to report this common inconsistency if 'strict' is set to false.
              */
-
             if (pos < 24) {
 
                 u32 value = node.get32(word);
 
                 switch (word) {
 
-                    case 0: EXPECT_VALUE(8);                  break;
-                    case 1: if (strict) EXPECT_FILEHEADER_REF;   break;
-                    case 2: EXPECT_DATABLOCK_NUMBER;             break;
-                    case 3: EXPECT_LESS_OR_EQUAL(node.dsize());  break;
-                    case 4: EXPECT_OPTIONAL_DATABLOCK_REF;       break;
-                    case 5: EXPECT_CHECKSUM;                     break;
+                    case 0: EXPECT_VALUE(8);                    break;
+                    case 1: if (strict) EXPECT_FILEHEADER_REF;  break;
+                    case 2: EXPECT_DATABLOCK_NUMBER;            break;
+                    case 3: EXPECT_LESS_OR_EQUAL(node.dsize()); break;
+                    case 4: EXPECT_OPTIONAL_DATABLOCK_REF;      break;
+                    case 5: EXPECT_CHECKSUM;                    break;
                 }
             }
             break;
-        }
 
         default:
             break;
@@ -635,39 +651,18 @@ FSDoctor::xray(FSBlock &node, std::ostream &os, bool strict) const
 
     auto describe = [&](FSBlockError fault, const optional<u32> &value) {
 
+        if (value) { hex4(*value); return; }
+
         switch (fault) {
 
-            case FSBlockError::FS_OK:                       break;
-            case FSBlockError::FS_EXPECTED_VALUE:          hex4(*value); break;
-            case FSBlockError::FS_EXPECTED_SMALLER_VALUE:  ss << "< " << *value; break;
-            case FSBlockError::FS_EXPECTED_NO_REF:
-                ss << "Did not expect a block reference here"; break;
-            case FSBlockError::FS_EXPECTED_REF:
-                ss << "Expected a block reference"; break;
-            case FSBlockError::FS_EXPECTED_SELFREF:
-                ss << "Expected a self-reference"; break;
-            case FSBlockError::FS_PTR_TO_UNKNOWN_BLOCK:
-                ss << "This reference points to a block of unknown type"; break;
-            case FSBlockError::FS_PTR_TO_EMPTY_BLOCK:
-                ss << "This reference points to an empty block"; break;
-            case FSBlockError::FS_PTR_TO_BOOT_BLOCK:
-                ss << "This reference points to a boot block"; break;
-            case FSBlockError::FS_PTR_TO_ROOT_BLOCK:
-                ss << "This reference points to the root block"; break;
-            case FSBlockError::FS_PTR_TO_BITMAP_BLOCK:
-                ss << "This reference points to a bitmap block"; break;
-            case FSBlockError::FS_PTR_TO_USERDIR_BLOCK:
-                ss << "This reference points to a user directory block"; break;
-            case FSBlockError::FS_PTR_TO_FILEHEADER_BLOCK:
-                ss << "This reference points to a file header block"; break;
-            case FSBlockError::FS_PTR_TO_FILELIST_BLOCK:
-                ss << "This reference points to a file header block"; break;
-            case FSBlockError::FS_PTR_TO_DATA_BLOCK:
-                ss << "This reference points to a data block"; break;
-            case FSBlockError::FS_EXPECTED_DATABLOCK_NR:
-                ss << "Invalid data block position number"; break;
-            case FSBlockError::FS_INVALID_HASHTABLE_SIZE:
-                ss << "Expected $48 (72 hash table entries)"; break;
+            case FSBlockError::FS_EXPECTED_BITMAP_BLOCK:        ss << "Link to a bitmap block"; break;
+            case FSBlockError::FS_EXPECTED_BITMAP_EXT_BLOCK:    ss << "Link to a bitmap extension block"; break;
+            case FSBlockError::FS_EXPECTED_HASHABLE_BLOCK:      ss << "Link to a file header or directory block"; break;
+            case FSBlockError::FS_EXPECTED_USERDIR_OR_ROOT:     ss << "Link to a directory or the root block"; break;
+            case FSBlockError::FS_EXPECTED_DATA_BLOCK:          ss << "Link to a data block"; break;
+            case FSBlockError::FS_EXPECTED_FILE_HEADER_BLOCK:   ss << "Link to a file header block"; break;
+            case FSBlockError::FS_EXPECTED_FILE_LIST_BLOCK:     ss << "Link to a file extension block"; break;
+            case FSBlockError::FS_EXPECTED_DATABLOCK_NR:        ss << "Data block number"; break;
 
             default:
                 ss << "???";
@@ -685,7 +680,7 @@ FSDoctor::xray(FSBlock &node, std::ostream &os, bool strict) const
 
             ss << "+";
             hex(4, i, "  ");
-            hex4(((u32 *)data)[i], "  ");
+            hex4(node.read32(data + i), "  ");
 
             ss << std::setw(36) << std::left << std::setfill(' ') << FSItemTypeEnum::help(type);
             describe(fault, expected);
@@ -698,7 +693,7 @@ FSDoctor::xray(FSBlock &node, std::ostream &os, bool strict) const
     if (errors) {
 
         os << "Entry  Data         Item type                           Expected" << std::endl;
-        os << string(80, '-') << std::endl;
+        os << string(67, '-') << std::endl;
         string line;
         while(std::getline(ss, line)) os << line << '\n';
 
@@ -738,7 +733,6 @@ FSDoctor::checkBlockType(Block nr, FSBlockType type, FSBlockType altType) const
             default:                      return FSBlockError::FS_PTR_TO_UNKNOWN_BLOCK;
         }
     }
-
     return FSBlockError::FS_OK;
 }
 

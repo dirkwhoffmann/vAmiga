@@ -460,10 +460,16 @@ FSBlock::subtypeID() const
     return type == FSBlockType::EMPTY ? 0 : get32((bsize() / 4) - 1);
 }
 
-u8 *
+const u8 *
 FSBlock::addr32(isize nr) const
 {
-    return (bdata + 4 * nr) + (nr < 0 ? bsize() : 0);
+    return (data() + 4 * nr) + (nr < 0 ? bsize() : 0);
+}
+
+u8 *
+FSBlock::addr32(isize nr)
+{
+    return (data() + 4 * nr) + (nr < 0 ? bsize() : 0);
 }
 
 u8 *
@@ -537,8 +543,8 @@ FSBlock::checksumStandard() const
     
     // Wipe out the old checksum
     u32 old = get32(pos);
-    set32(pos, 0);
-    
+    const_cast<FSBlock *>(this)->set32(pos, 0); // TODO: DON'T DO THIS
+
     // Compute the new checksum
     u32 result = 0;
     for (isize i = 0; i < bsize() / 4; i++) U32_INC(result, get32(i));
@@ -546,8 +552,8 @@ FSBlock::checksumStandard() const
     U32_INC(result, 1);
     
     // Undo the modification
-    set32(pos, old);
-    
+    const_cast<FSBlock *>(this)->set32(pos, old); // TODO: DON'T DO THIS
+
     return result;
 }
 
