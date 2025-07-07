@@ -250,12 +250,12 @@ public:
     
 public:
     
-    static void encodeMFM(u8 *dst, u8 *src, isize count);
-    static void decodeMFM(u8 *dst, u8 *src, isize count);
+    static void encodeMFM(u8 *dst, const u8 *src, isize count);
+    static void decodeMFM(u8 *dst, const u8 *src, isize count);
     
-    static void encodeOddEven(u8 *dst, u8 *src, isize count);
-    static void decodeOddEven(u8 *dst, u8 *src, isize count);
-    
+    static void encodeOddEven(u8 *dst, const u8 *src, isize count);
+    static void decodeOddEven(u8 *dst, const u8 *src, isize count);
+
     static void addClockBits(u8 *dst, isize count);
     static u8 addClockBits(u8 value, u8 previous);
     

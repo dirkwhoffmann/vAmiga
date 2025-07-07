@@ -440,6 +440,7 @@ ADFFile::dumpSector(Sector s) const
 void
 ADFFile::decodeDisk(const FloppyDisk &disk)
 {
+    printf("ADFFile::decodeDisk\n");
     long tracks = numTracks();
 
     debug(ADF_DEBUG, "Decoding Amiga disk with %ld tracks\n", tracks);
@@ -451,26 +452,24 @@ ADFFile::decodeDisk(const FloppyDisk &disk)
         throw AppError(Fault::DISK_INVALID_DENSITY);
     }
 
-    // Make a copy of the disk which can modify
-    auto diskCopy = disk;
-
     // Make the MFM stream scannable beyond the track end
-    diskCopy.repeatTracks();
+    // TODO: THINK ABOUT OF DECODING WITHOUT MODIFYING THE DISK
+    const_cast<FloppyDisk &>(disk).repeatTracks();
 
     // Decode all tracks
-    for (Track t = 0; t < tracks; t++) decodeTrack(diskCopy, t);
+    for (Track t = 0; t < tracks; t++) decodeTrack(disk, t);
 }
 
 void
-ADFFile::decodeTrack(FloppyDisk &disk, Track t)
+ADFFile::decodeTrack(const FloppyDisk &disk, Track t)
 { 
     long sectors = numSectors();
 
     debug(ADF_DEBUG, "Decoding track %ld\n", t);
     
-    u8 *src = disk.data.track[t];
-    u8 *dst = data.ptr + t * sectors * 512;
-    
+    auto *src = disk.data.track[t];
+    auto *dst = data.ptr + t * sectors * 512;
+
     // Seek all sync marks
     std::vector<isize> sectorStart(sectors);
     isize nr = 0; isize index = 0;
@@ -504,7 +503,7 @@ ADFFile::decodeTrack(FloppyDisk &disk, Track t)
 }
 
 void
-ADFFile::decodeSector(u8 *dst, u8 *src)
+ADFFile::decodeSector(u8 *dst, const u8 *src)
 {
     assert(dst != nullptr);
     assert(src != nullptr);

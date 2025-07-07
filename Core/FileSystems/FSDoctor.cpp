@@ -17,41 +17,38 @@
 //
 
 #define EXPECT_VALUE(exp) { \
-if (value != u32(exp)) { expected = u32(exp); return FSBlockError::FS_EXPECTED_VALUE; } }
+if (value != u32(exp)) { expected = u32(exp); return FSBlockError::EXPECTED_VALUE; } }
 
 #define EXPECT_CHECKSUM EXPECT_VALUE(node.checksum())
 
 #define EXPECT_LESS_OR_EQUAL(exp) { \
 if (value > (u32)exp) \
-{ expected = (u8)(exp); return FSBlockError::FS_EXPECTED_SMALLER_VALUE; } }
-
-#define EXPECT_DOS_REVISION { \
-if (!FSFormatEnum::isValid((isize)value)) return FSBlockError::FS_EXPECTED_DOS_REVISION; }
+{ expected = (u8)(exp); return FSBlockError::EXPECTED_SMALLER_VALUE; } }
 
 #define EXPECT_REF { \
-if (!fs.block(value)) return FSBlockError::FS_EXPECTED_REF; }
+if (!fs.block(value)) return FSBlockError::EXPECTED_REF; }
 
 #define EXPECT_SELFREF { \
-if (value != ref) { expected = ref; return FSBlockError::FS_EXPECTED_SELFREF; } }
+if (value != ref) { expected = ref; return FSBlockError::EXPECTED_SELFREF; } }
 
 #define EXPECT_FILEHEADER_REF { \
 if (!fs.is(value, FSBlockType::FILEHEADER)) { \
-return FSBlockError::FS_EXPECTED_FILE_HEADER_BLOCK; } }
+return FSBlockError::EXPECTED_FILE_HEADER_BLOCK; } }
 
 #define EXPECT_HASH_REF { \
 if (!fs.is(value, FSBlockType::FILEHEADER) && !fs.is(value, FSBlockType::USERDIR)) { \
-return FSBlockError::FS_EXPECTED_HASHABLE_BLOCK; } }
+return FSBlockError::EXPECTED_HASHABLE_BLOCK; } }
 
 #define EXPECT_OPTIONAL_HASH_REF { \
 if (value) { EXPECT_HASH_REF } }
 
 #define EXPECT_PARENT_DIR_REF { \
 if (!fs.is(value, FSBlockType::ROOT) && !fs.is(value, FSBlockType::USERDIR)) { \
-return FSBlockError::FS_EXPECTED_USERDIR_OR_ROOT; } }
+return FSBlockError::EXPECTED_USERDIR_OR_ROOT; } }
 
 #define EXPECT_FILELIST_REF { \
 if (!fs.is(value, FSBlockType::FILELIST)) { \
-return FSBlockError::FS_EXPECTED_FILE_LIST_BLOCK; } }
+return FSBlockError::EXPECTED_FILE_LIST_BLOCK; } }
 
 #define EXPECT_OPTIONAL_FILELIST_REF { \
 if (value) { EXPECT_FILELIST_REF } }
@@ -59,31 +56,31 @@ if (value) { EXPECT_FILELIST_REF } }
 #define EXPECT_BITMAP_REF(nr) { \
 if (!fs.is(value, FSBlockType::BITMAP)) { \
 if (fs.bmBlocks.size() > usize(nr)) { expected = fs.bmBlocks[nr]; } \
-return FSBlockError::FS_EXPECTED_BITMAP_BLOCK; } }
+return FSBlockError::EXPECTED_BITMAP_BLOCK; } }
 
 #define EXPECT_OPTIONAL_BITMAP_REF(nr) { \
 if (value) { EXPECT_BITMAP_REF(nr) } }
 
 #define EXPECT_BITMAP_EXT_REF { \
 if (!fs.is(value, FSBlockType::BITMAP_EXT)) { \
-return FSBlockError::FS_EXPECTED_BITMAP_EXT_BLOCK; } }
+return FSBlockError::EXPECTED_BITMAP_EXT_BLOCK; } }
 
 #define EXPECT_OPTIONAL_BITMAP_EXT_REF { \
 if (value) { EXPECT_BITMAP_EXT_REF } }
 
 #define EXPECT_DATABLOCK_REF { \
 if (!fs.is(value, FSBlockType::DATA_OFS) && !fs.is(value, FSBlockType::DATA_FFS)) { \
-return FSBlockError::FS_EXPECTED_DATA_BLOCK; } }
+return FSBlockError::EXPECTED_DATA_BLOCK; } }
 
 #define EXPECT_OPTIONAL_DATABLOCK_REF { \
 if (value) { EXPECT_DATABLOCK_REF } }
 
 #define EXPECT_DATABLOCK_NUMBER { \
-if (value == 0) return FSBlockError::FS_EXPECTED_DATABLOCK_NR; }
+if (value == 0) return FSBlockError::EXPECTED_DATABLOCK_NR; }
 
 #define EXPECT_HTABLE_SIZE { \
-if (value != (fs.traits.bsize / 4) - 56) { \
-expected = u32((fs.traits.bsize / 4) - 56); return FSBlockError::FS_INVALID_HASHTABLE_SIZE; } }
+if (isize(value) != (fs.traits.bsize / 4) - 56) { \
+expected = u32((fs.traits.bsize / 4) - 56); return FSBlockError::INVALID_HASHTABLE_SIZE; } }
 
 namespace vamiga {
 
@@ -380,7 +377,7 @@ FSDoctor::xray(FSBlock &node, bool strict) const
     for (isize i = 0; i < node.bsize(); i++) {
 
         std::optional<u8> expected;
-        if (auto error = xray(node, i, strict, expected); error != FSBlockError::FS_OK) {
+        if (auto error = xray(node, i, strict, expected); error != FSBlockError::OK) {
 
             count++;
             debug(FS_DEBUG, "Block %d [%ld.%ld]: %s\n", node.nr, i / 4, i % 4, FSBlockErrorEnum::key(error));
@@ -603,19 +600,14 @@ FSDoctor::xray32(FSBlock &node, isize pos, bool strict, optional<u32> &expected)
              * block instead of a reference to the file header block. We ignore
              * to report this common inconsistency if 'strict' is set to false.
              */
-            if (pos < 24) {
+            switch (word) {
 
-                u32 value = node.get32(word);
-
-                switch (word) {
-
-                    case 0: EXPECT_VALUE(8);                    break;
-                    case 1: if (strict) EXPECT_FILEHEADER_REF;  break;
-                    case 2: EXPECT_DATABLOCK_NUMBER;            break;
-                    case 3: EXPECT_LESS_OR_EQUAL(node.dsize()); break;
-                    case 4: EXPECT_OPTIONAL_DATABLOCK_REF;      break;
-                    case 5: EXPECT_CHECKSUM;                    break;
-                }
+                case 0: EXPECT_VALUE(8);                    break;
+                case 1: if (strict) EXPECT_FILEHEADER_REF;  break;
+                case 2: EXPECT_DATABLOCK_NUMBER;            break;
+                case 3: EXPECT_LESS_OR_EQUAL(node.dsize()); break;
+                case 4: EXPECT_OPTIONAL_DATABLOCK_REF;      break;
+                case 5: EXPECT_CHECKSUM;                    break;
             }
             break;
 
@@ -623,7 +615,7 @@ FSDoctor::xray32(FSBlock &node, isize pos, bool strict, optional<u32> &expected)
             break;
     }
 
-    return FSBlockError::FS_OK;
+    return FSBlockError::OK;
 }
 
 isize
@@ -655,14 +647,14 @@ FSDoctor::xray(FSBlock &node, std::ostream &os, bool strict) const
 
         switch (fault) {
 
-            case FSBlockError::FS_EXPECTED_BITMAP_BLOCK:        ss << "Link to a bitmap block"; break;
-            case FSBlockError::FS_EXPECTED_BITMAP_EXT_BLOCK:    ss << "Link to a bitmap extension block"; break;
-            case FSBlockError::FS_EXPECTED_HASHABLE_BLOCK:      ss << "Link to a file header or directory block"; break;
-            case FSBlockError::FS_EXPECTED_USERDIR_OR_ROOT:     ss << "Link to a directory or the root block"; break;
-            case FSBlockError::FS_EXPECTED_DATA_BLOCK:          ss << "Link to a data block"; break;
-            case FSBlockError::FS_EXPECTED_FILE_HEADER_BLOCK:   ss << "Link to a file header block"; break;
-            case FSBlockError::FS_EXPECTED_FILE_LIST_BLOCK:     ss << "Link to a file extension block"; break;
-            case FSBlockError::FS_EXPECTED_DATABLOCK_NR:        ss << "Data block number"; break;
+            case FSBlockError::EXPECTED_BITMAP_BLOCK:        ss << "Link to a bitmap block"; break;
+            case FSBlockError::EXPECTED_BITMAP_EXT_BLOCK:    ss << "Link to a bitmap extension block"; break;
+            case FSBlockError::EXPECTED_HASHABLE_BLOCK:      ss << "Link to a file header or directory block"; break;
+            case FSBlockError::EXPECTED_USERDIR_OR_ROOT:     ss << "Link to a directory or the root block"; break;
+            case FSBlockError::EXPECTED_DATA_BLOCK:          ss << "Link to a data block"; break;
+            case FSBlockError::EXPECTED_FILE_HEADER_BLOCK:   ss << "Link to a file header block"; break;
+            case FSBlockError::EXPECTED_FILE_LIST_BLOCK:     ss << "Link to a file extension block"; break;
+            case FSBlockError::EXPECTED_DATABLOCK_NR:        ss << "Data block number"; break;
 
             default:
                 ss << "???";
@@ -673,7 +665,7 @@ FSDoctor::xray(FSBlock &node, std::ostream &os, bool strict) const
 
         optional<u32> expected;
 
-        if (auto fault = xray32(node, i, strict, expected); fault != FSBlockError::FS_OK) {
+        if (auto fault = xray32(node, i, strict, expected); fault != FSBlockError::OK) {
 
             auto *data = node.data();
             auto type = fs.typeof(node.nr, i);
@@ -703,37 +695,6 @@ FSDoctor::xray(FSBlock &node, std::ostream &os, bool strict) const
     }
 
     return errors;
-}
-
-FSBlockError
-FSDoctor::checkBlockType(Block nr, FSBlockType type) const
-{
-    return checkBlockType(nr, type, type);
-}
-
-FSBlockError
-FSDoctor::checkBlockType(Block nr, FSBlockType type, FSBlockType altType) const
-{
-    auto t = fs.typeof(nr);
-
-    if (t != type && t != altType) {
-
-        switch (t) {
-
-            case FSBlockType::EMPTY:      return FSBlockError::FS_PTR_TO_EMPTY_BLOCK;
-            case FSBlockType::BOOT:       return FSBlockError::FS_PTR_TO_BOOT_BLOCK;
-            case FSBlockType::ROOT:       return FSBlockError::FS_PTR_TO_ROOT_BLOCK;
-            case FSBlockType::BITMAP:     return FSBlockError::FS_PTR_TO_BITMAP_BLOCK;
-            case FSBlockType::BITMAP_EXT: return FSBlockError::FS_PTR_TO_BITMAP_EXT_BLOCK;
-            case FSBlockType::USERDIR:    return FSBlockError::FS_PTR_TO_USERDIR_BLOCK;
-            case FSBlockType::FILEHEADER: return FSBlockError::FS_PTR_TO_FILEHEADER_BLOCK;
-            case FSBlockType::FILELIST:   return FSBlockError::FS_PTR_TO_FILELIST_BLOCK;
-            case FSBlockType::DATA_OFS:   return FSBlockError::FS_PTR_TO_DATA_BLOCK;
-            case FSBlockType::DATA_FFS:   return FSBlockError::FS_PTR_TO_DATA_BLOCK;
-            default:                      return FSBlockError::FS_PTR_TO_UNKNOWN_BLOCK;
-        }
-    }
-    return FSBlockError::FS_OK;
 }
 
 }

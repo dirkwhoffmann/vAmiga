@@ -82,13 +82,6 @@ public:
 
     FSBlockError xray32(FSBlock &node, isize pos, bool strict) const;
     FSBlockError xray32(FSBlock &node, isize pos, bool strict, optional<u32> &expected) const;
-
-private:
-
-    // Checks if the type of a block matches one of the provides types
-    FSBlockError checkBlockType(Block nr, FSBlockType type) const;
-    FSBlockError checkBlockType(Block nr, FSBlockType type, FSBlockType altType) const;
-
 };
 
 }

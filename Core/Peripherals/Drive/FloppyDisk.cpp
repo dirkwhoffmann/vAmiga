@@ -316,7 +316,7 @@ FloppyDisk::shiftTracks(isize offset)
 }
 
 void
-FloppyDisk::encodeMFM(u8 *dst, u8 *src, isize count)
+FloppyDisk::encodeMFM(u8 *dst, const u8 *src, isize count)
 {
     for(isize i = 0; i < count; i++) {
         
@@ -336,7 +336,7 @@ FloppyDisk::encodeMFM(u8 *dst, u8 *src, isize count)
 }
 
 void
-FloppyDisk::decodeMFM(u8 *dst, u8 *src, isize count)
+FloppyDisk::decodeMFM(u8 *dst, const u8 *src, isize count)
 {
     for(isize i = 0; i < count; i++) {
         
@@ -357,7 +357,7 @@ FloppyDisk::decodeMFM(u8 *dst, u8 *src, isize count)
 }
 
 void
-FloppyDisk::encodeOddEven(u8 *dst, u8 *src, isize count)
+FloppyDisk::encodeOddEven(u8 *dst, const u8 *src, isize count)
 {
     // Encode odd bits
     for(isize i = 0; i < count; i++)
@@ -369,7 +369,7 @@ FloppyDisk::encodeOddEven(u8 *dst, u8 *src, isize count)
 }
 
 void
-FloppyDisk::decodeOddEven(u8 *dst, u8 *src, isize count)
+FloppyDisk::decodeOddEven(u8 *dst, const u8 *src, isize count)
 {
     // Decode odd bits
     for(isize i = 0; i < count; i++)

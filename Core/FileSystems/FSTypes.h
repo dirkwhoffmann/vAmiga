@@ -316,75 +316,47 @@ struct FSItemTypeEnum : Reflection<FSItemTypeEnum, FSItemType>
 
 enum class FSBlockError : long
 {
-    FS_OK,
-    FS_INVALID_BLOCK_TYPE,
-    FS_INVALID_BLOCK_REF,
-    FS_EXPECTED_VALUE,
-    FS_EXPECTED_SMALLER_VALUE,
-    FS_EXPECTED_DOS_REVISION,
-    FS_EXPECTED_NO_REF,
-    FS_EXPECTED_REF,
-    FS_EXPECTED_SELFREF,
-    FS_EXPECTED_BITMAP_BLOCK,
-    FS_EXPECTED_BITMAP_EXT_BLOCK,
-    FS_EXPECTED_HASHABLE_BLOCK,
-    FS_EXPECTED_USERDIR_OR_ROOT,
-    FS_EXPECTED_DATA_BLOCK,
-    FS_EXPECTED_FILE_HEADER_BLOCK,
-    FS_EXPECTED_FILE_LIST_BLOCK,
-
-    FS_PTR_TO_UNKNOWN_BLOCK,
-    FS_PTR_TO_EMPTY_BLOCK,
-    FS_PTR_TO_BOOT_BLOCK,
-    FS_PTR_TO_ROOT_BLOCK,
-    FS_PTR_TO_BITMAP_BLOCK,
-    FS_PTR_TO_BITMAP_EXT_BLOCK,
-    FS_PTR_TO_USERDIR_BLOCK,
-    FS_PTR_TO_FILEHEADER_BLOCK,
-    FS_PTR_TO_FILELIST_BLOCK,
-    FS_PTR_TO_DATA_BLOCK,
-    FS_EXPECTED_DATABLOCK_NR,
-    FS_INVALID_HASHTABLE_SIZE
+    OK,
+    EXPECTED_VALUE,
+    EXPECTED_SMALLER_VALUE,
+    EXPECTED_NO_REF,
+    EXPECTED_REF,
+    EXPECTED_SELFREF,
+    EXPECTED_BITMAP_BLOCK,
+    EXPECTED_BITMAP_EXT_BLOCK,
+    EXPECTED_HASHABLE_BLOCK,
+    EXPECTED_USERDIR_OR_ROOT,
+    EXPECTED_DATA_BLOCK,
+    EXPECTED_FILE_HEADER_BLOCK,
+    EXPECTED_FILE_LIST_BLOCK,
+    EXPECTED_DATABLOCK_NR,
+    INVALID_HASHTABLE_SIZE
 };
 
 struct FSBlockErrorEnum : Reflection<FSBlockErrorEnum, FSBlockError>
 {
     static constexpr long minVal = 0;
-    static constexpr long maxVal = long(FSBlockError::FS_INVALID_HASHTABLE_SIZE);
+    static constexpr long maxVal = long(FSBlockError::INVALID_HASHTABLE_SIZE);
 
     static const char *_key(FSBlockError value)
     {
         switch (value) {
 
-            case FSBlockError::FS_OK:                       return "FS_OK";
-            case FSBlockError::FS_INVALID_BLOCK_TYPE:       return "FS_INVALID_BLOCK_TYPE";
-            case FSBlockError::FS_INVALID_BLOCK_REF:        return "FS_INVALID_BLOCK_REF";
-            case FSBlockError::FS_EXPECTED_VALUE:           return "FS_EXPECTED_VALUE";
-            case FSBlockError::FS_EXPECTED_SMALLER_VALUE:   return "FS_EXPECTED_SMALLER_VALUE";
-            case FSBlockError::FS_EXPECTED_DOS_REVISION:    return "FS_EXPECTED_DOS_REVISION";
-            case FSBlockError::FS_EXPECTED_NO_REF:          return "FS_EXPECTED_NO_REF";
-            case FSBlockError::FS_EXPECTED_REF:             return "FS_EXPECTED_REF";
-            case FSBlockError::FS_EXPECTED_SELFREF:         return "FS_EXPECTED_SELFREF";
-            case FSBlockError::FS_EXPECTED_BITMAP_BLOCK:    return "FS_EXPECTED_BITMAP_BLOCK";
-            case FSBlockError::FS_EXPECTED_BITMAP_EXT_BLOCK:return "FS_EXPECTED_BITMAP_EXT_BLOCK";
-            case FSBlockError::FS_EXPECTED_HASHABLE_BLOCK:  return "FS_EXPECTED_HASHABLE_BLOCK";
-            case FSBlockError::FS_EXPECTED_USERDIR_OR_ROOT: return "FS_EXPECTED_USERDIR_OR_ROOT";
-            case FSBlockError::FS_EXPECTED_DATA_BLOCK:      return "FS_EXPECTED_DATA_BLOCK";
-            case FSBlockError::FS_EXPECTED_FILE_HEADER_BLOCK: return "FS_EXPECTED_FILE_HEADER_BLOCK";
-            case FSBlockError::FS_EXPECTED_FILE_LIST_BLOCK: return "FS_EXPECTED_FILE_LIST_BLOCK";
-
-            case FSBlockError::FS_PTR_TO_UNKNOWN_BLOCK:     return "FS_PTR_TO_UNKNOWN_BLOCK";
-            case FSBlockError::FS_PTR_TO_EMPTY_BLOCK:       return "FS_PTR_TO_EMPTY_BLOCK";
-            case FSBlockError::FS_PTR_TO_BOOT_BLOCK:        return "FS_PTR_TO_BOOT_BLOCK";
-            case FSBlockError::FS_PTR_TO_ROOT_BLOCK:        return "FS_PTR_TO_ROOT_BLOCK";
-            case FSBlockError::FS_PTR_TO_BITMAP_BLOCK:      return "FS_PTR_TO_BITMAP_BLOCK";
-            case FSBlockError::FS_PTR_TO_BITMAP_EXT_BLOCK:  return "FS_PTR_TO_BITMAP_EXT_BLOCK";
-            case FSBlockError::FS_PTR_TO_USERDIR_BLOCK:     return "FS_PTR_TO_USERDIR_BLOCK";
-            case FSBlockError::FS_PTR_TO_FILEHEADER_BLOCK:  return "FS_PTR_TO_FILEHEADER_BLOCK";
-            case FSBlockError::FS_PTR_TO_FILELIST_BLOCK:    return "FS_PTR_TO_FILELIST_BLOCK";
-            case FSBlockError::FS_PTR_TO_DATA_BLOCK:        return "FS_PTR_TO_DATA_BLOCK";
-            case FSBlockError::FS_EXPECTED_DATABLOCK_NR:    return "FS_EXPECTED_DATABLOCK_NR";
-            case FSBlockError::FS_INVALID_HASHTABLE_SIZE:   return "FS_INVALID_HASHTABLE_SIZE";
+            case FSBlockError::OK:                          return "OK";
+            case FSBlockError::EXPECTED_VALUE:              return "EXPECTED_VALUE";
+            case FSBlockError::EXPECTED_SMALLER_VALUE:      return "EXPECTED_SMALLER_VALUE";
+            case FSBlockError::EXPECTED_NO_REF:             return "EXPECTED_NO_REF";
+            case FSBlockError::EXPECTED_REF:                return "EXPECTED_REF";
+            case FSBlockError::EXPECTED_SELFREF:            return "EXPECTED_SELFREF";
+            case FSBlockError::EXPECTED_BITMAP_BLOCK:       return "EXPECTED_BITMAP_BLOCK";
+            case FSBlockError::EXPECTED_BITMAP_EXT_BLOCK:   return "EXPECTED_BITMAP_EXT_BLOCK";
+            case FSBlockError::EXPECTED_HASHABLE_BLOCK:     return "EXPECTED_HASHABLE_BLOCK";
+            case FSBlockError::EXPECTED_USERDIR_OR_ROOT:    return "EXPECTED_USERDIR_OR_ROOT";
+            case FSBlockError::EXPECTED_DATA_BLOCK:         return "EXPECTED_DATA_BLOCK";
+            case FSBlockError::EXPECTED_FILE_HEADER_BLOCK:  return "EXPECTED_FILE_HEADER_BLOCK";
+            case FSBlockError::EXPECTED_FILE_LIST_BLOCK:    return "EXPECTED_FILE_LIST_BLOCK";
+            case FSBlockError::EXPECTED_DATABLOCK_NR:       return "EXPECTED_DATABLOCK_NR";
+            case FSBlockError::INVALID_HASHTABLE_SIZE:      return "INVALID_HASHTABLE_SIZE";
         }
         return "???";
     }
