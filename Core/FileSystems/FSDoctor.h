@@ -70,11 +70,18 @@ public:
     isize xray(Block ref, bool strict) const;
     isize xray(FSBlock &node, bool strict) const;
 
+    // Prints an error report and returns the number of errors found
+    isize xray(Block ref, std::ostream &os, bool strict) const;
+    isize xray(FSBlock &node, std::ostream &os, bool strict) const;
+
     // Checks the integrity of a certain byte in this block
     Fault xray(Block ref, isize pos, bool strict) const;
-    Fault xray(Block ref, isize pos, bool strict, u8 *expected) const;
+    Fault xray(Block ref, isize pos, bool strict, optional<u8> &expected) const;
     Fault xray(FSBlock &node, isize pos, bool strict) const;
-    Fault xray(FSBlock &node, isize pos, bool strict, u8 *expected) const;
+    Fault xray(FSBlock &node, isize pos, bool strict, optional<u8> &expected) const;
+
+    Fault xray32(FSBlock &node, isize pos, bool strict) const;
+    Fault xray32(FSBlock &node, isize pos, bool strict, optional<u32> &expected) const;
 
 private:
 

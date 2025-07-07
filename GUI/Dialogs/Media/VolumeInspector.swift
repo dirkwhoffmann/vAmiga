@@ -278,8 +278,6 @@ class VolumeInspector: DialogController {
         diagnoseSlider.maxValue = Double(vol.numBlocks - 1)
 
         // Run a file system check
-        let errors1 = vol.xrayBlocks(strict)
-        let errors2 = vol.xrayBitmap(strict)
         erroneousBlocks = vol.xrayBlocks
         bitMapErrors = vol.xrayBitmap
 

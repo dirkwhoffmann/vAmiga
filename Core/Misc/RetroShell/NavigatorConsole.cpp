@@ -1109,16 +1109,26 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "xray" },
         .ghelp  = { "Examines the file system integrity" },
-        .chelp  = { "Inspects the entire file system" },
+        .chelp  = { "Inspects the entire file system or a single block" },
         .flags  = rs::path,
         .args   = {
             { .name = { "s", "Strict checking" }, .flags = rs::flag },
+            { .name = { "nr", "Block number" }, .flags = rs::opt }
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            if (auto errors = fs.doctor.xray(os, args.contains("s")); errors == 0) {
+            bool strict = args.contains("s");
 
-                os << "Passed. No errors found." << std::endl;
+            if (args.contains("nr")) {
+
+                auto nr = parseBlock(args, "nr");
+                fs.doctor.xray(nr, os, strict);
+
+            } else {
+
+                if (auto errors = fs.doctor.xray(os, strict); errors == 0) {
+                    os << "Passed. No errors found." << std::endl;
+                }
             }
         }
     });

@@ -16,9 +16,12 @@
 // Macros used inside the check() methods
 //
 
+// DEPRECATED
 #define EXPECT_BYTE(exp) { \
 if (value != (exp)) { *expected = (exp); return Fault::FS_EXPECTED_VALUE; } }
 
+// RENAME TO EXPECT_VALUE
+/*
 #define EXPECT_LONGWORD(exp) { \
 if ((pos % 4) == 0 && BYTE3(value) != BYTE3((u32)exp)) \
 { *expected = (BYTE3((u32)exp)); return Fault::FS_EXPECTED_VALUE; } \
@@ -28,12 +31,15 @@ if ((pos % 4) == 2 && BYTE1(value) != BYTE1((u32)exp)) \
 { *expected = (BYTE1((u32)exp)); return Fault::FS_EXPECTED_VALUE; } \
 if ((pos % 4) == 3 && BYTE0(value) != BYTE0((u32)exp)) \
 { *expected = (BYTE0((u32)exp)); return Fault::FS_EXPECTED_VALUE; } }
+*/
+#define EXPECT_LONGWORD(exp) { \
+if (value != u32(exp)) { expected = u32(exp); return Fault::FS_EXPECTED_VALUE; } }
 
 #define EXPECT_CHECKSUM EXPECT_LONGWORD(node.checksum())
 
 #define EXPECT_LESS_OR_EQUAL(exp) { \
 if (value > (u32)exp) \
-{ *expected = (u8)(exp); return Fault::FS_EXPECTED_SMALLER_VALUE; } }
+{ expected = (u8)(exp); return Fault::FS_EXPECTED_SMALLER_VALUE; } }
 
 #define EXPECT_DOS_REVISION { \
 if (!FSFormatEnum::isValid((isize)value)) return Fault::FS_EXPECTED_DOS_REVISION; }
@@ -381,8 +387,8 @@ FSDoctor::xray(FSBlock &node, bool strict) const
 
     for (isize i = 0; i < node.bsize(); i++) {
 
-        u8 expected;
-        if (Fault error = xray(node.nr, i, strict, &expected); error != Fault::OK) {
+        std::optional<u8> expected;
+        if (Fault error = xray(node.nr, i, strict, expected); error != Fault::OK) {
 
             count++;
             debug(FS_DEBUG, "Block %d [%ld.%ld]: %s\n", node.nr, i / 4, i % 4, FaultEnum::key(error));
@@ -399,7 +405,7 @@ FSDoctor::xray(Block ref, isize pos, bool strict) const
 }
 
 Fault
-FSDoctor::xray(Block ref, isize pos, bool strict, u8 *expected) const
+FSDoctor::xray(Block ref, isize pos, bool strict, optional<u8> &expected) const
 {
     return xray(fs.at(ref), pos, strict, expected);
 }
@@ -407,14 +413,20 @@ FSDoctor::xray(Block ref, isize pos, bool strict, u8 *expected) const
 Fault
 FSDoctor::xray(FSBlock &node, isize pos, bool strict) const
 {
-    u8 expected;
-    return xray(node, pos, strict, &expected);
+    optional<u8> expected;
+    return xray(node, pos, strict, expected);
 }
 
 Fault
-FSDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
+FSDoctor::xray(FSBlock &node, isize pos, bool strict, optional<u8> &expected) const
 {
-    auto ref = node.nr;
+    optional<u32> exp;
+    auto result = xray32(node, pos & ~3, strict, exp);
+    if (exp) expected = GET_BYTE(*exp, 3 - (pos & 3));
+    return result;
+
+    /*
+    ref = node.nr;
 
     switch (node.type) {
 
@@ -502,13 +514,200 @@ FSDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
         }
         case FSBlockType::FILEHEADER:
         {
+            // Translate the byte index to a (signed) long word index
+            isize word = pos / 4; if (word >= 6) word -= node.bsize() / 4;
+            u32 value = node.get32(word);
+
+            switch (word) {
+                case   0: EXPECT_LONGWORD(2);                    break;
+                case   1: EXPECT_SELFREF;                        break;
+                case   3: EXPECT_BYTE(0);                        break;
+                case   4: EXPECT_DATABLOCK_REF;                  break;
+                case   5: EXPECT_CHECKSUM;                       break;
+                case -50: EXPECT_BYTE(0);                        break;
+                case  -4: if (strict) EXPECT_OPTIONAL_HASH_REF;  break;
+                case  -3: if (strict) EXPECT_PARENT_DIR_REF;     break;
+                case  -2: EXPECT_OPTIONAL_FILELIST_REF;          break;
+                case  -1: EXPECT_LONGWORD(-3);                   break;
+            }
+
+            // Data block reference area
+            if (word <= -51 && value) EXPECT_DATABLOCK_REF;
+            if (word == -51) {
+                if (value == 0 && node.getNumDataBlockRefs() > 0) {
+                    return Fault::FS_EXPECTED_REF;
+                }
+                if (value != 0 && node.getNumDataBlockRefs() == 0) {
+                    return Fault::FS_EXPECTED_NO_REF;
+                }
+            }
+            break;
+        }
+        case FSBlockType::FILELIST:
+        {
+            // Translate 'pos' to a (signed) long word index
+            isize word = pos / 4; if (word >= 6) word -= node.bsize() / 4;
+            u32 value = node.get32(word);
+
+            switch (word) {
+
+                case   0: EXPECT_LONGWORD(16);                break;
+                case   1: EXPECT_SELFREF;                     break;
+                case   3: EXPECT_BYTE(0);                     break;
+                case   4: EXPECT_OPTIONAL_DATABLOCK_REF;      break;
+                case   5: EXPECT_CHECKSUM;                    break;
+                case -50:
+                case  -4: EXPECT_BYTE(0);                     break;
+                case  -3: if (strict) EXPECT_FILEHEADER_REF;  break;
+                case  -2: EXPECT_OPTIONAL_FILELIST_REF;       break;
+                case  -1: EXPECT_LONGWORD(-3);                break;
+            }
+
+            // Data block references
+            if (word <= -51 && value) EXPECT_DATABLOCK_REF;
+            if (word == -51) {
+                if (value == 0 && node.getNumDataBlockRefs() > 0) {
+                    return Fault::FS_EXPECTED_REF;
+                }
+                if (value != 0 && node.getNumDataBlockRefs() == 0) {
+                    return Fault::FS_EXPECTED_NO_REF;
+                }
+            }
+            break;
+        }
+
+        case FSBlockType::DATA_OFS:
+        {
+            if (pos < 24) {
+
+                isize word = pos / 4;
+                u32 value = node.get32(word);
+
+                switch (word) {
+
+                    case 0: EXPECT_LONGWORD(8);                  break;
+                    case 1: if (strict) EXPECT_FILEHEADER_REF;   break;
+                    case 2: EXPECT_DATABLOCK_NUMBER;             break;
+                    case 3: EXPECT_LESS_OR_EQUAL(node.dsize());  break;
+                    case 4: EXPECT_OPTIONAL_DATABLOCK_REF;       break;
+                    case 5: EXPECT_CHECKSUM;                     break;
+                }
+            }
+            break;
+        }
+
+        default:
+            break;
+    }
+
+    return Fault::OK;
+     */
+}
+
+Fault
+FSDoctor::xray32(FSBlock &node, isize pos, bool strict) const
+{
+    optional<u32> expected;
+    return xray32(node, pos, strict, expected);
+}
+
+Fault
+FSDoctor::xray32(FSBlock &node, isize pos, bool strict, optional<u32> &expected) const
+{
+    assert(pos % 4 == 0);
+
+    isize word = pos / 4;
+    auto ref = node.nr;
+
+    switch (node.type) {
+
+        case FSBlockType::BOOT:
+        {
+            u32 value = node.get32(word);
+
+            if (ref == 0) {
+
+                constexpr u32 DOS = u32('D') << 24 | u32('O') << 16 | u32('S') << 8;
+
+                if (word == 0) { EXPECT_LONGWORD(DOS | u32(fs.traits.dos)); }
+                if (word == 1) { value = node.get32(1); EXPECT_CHECKSUM; }
+            }
+            break;
+        }
+        case FSBlockType::ROOT:
+        {
+            if (word >= 6) word -= node.bsize() / 4;
+            u32 value = node.get32(word);
+
+            switch (word) {
+
+                case 0:   EXPECT_LONGWORD(2);                break;
+                case 1:
+                case 2:   if (strict) EXPECT_LONGWORD(0);    break;
+                case 3:   if (strict) EXPECT_HASHTABLE_SIZE; break;
+                case 4:   EXPECT_LONGWORD(0);                break;
+                case 5:   EXPECT_CHECKSUM;                   break;
+                case -50:                                    break;
+                case -49: EXPECT_BITMAP_REF;                 break;
+                case -24: EXPECT_OPTIONAL_BITMAP_EXT_REF;    break;
+                case -4:
+                case -3:
+                case -2:  if (strict) EXPECT_LONGWORD(0);    break;
+                case -1:  EXPECT_LONGWORD(1);                break;
+
+                default:
+
+                    // Hash table area
+                    if (word <= -51) { EXPECT_OPTIONAL_HASH_REF; break; }
+
+                    // Bitmap block area
+                    if (word <= -25) { EXPECT_OPTIONAL_BITMAP_REF; break; }
+            }
+            break;
+        }
+        case FSBlockType::BITMAP:
+        {
+            u32 value = node.get32(word);
+
+            if (word == 0) EXPECT_CHECKSUM;
+            break;
+        }
+        case FSBlockType::BITMAP_EXT:
+        {
+            u32 value = node.get32(word);
+
+            if (word == (i32)(node.bsize() - 4)) EXPECT_OPTIONAL_BITMAP_EXT_REF;
+            break;
+        }
+        case FSBlockType::USERDIR:
+        {
+            if (word >= 6) word -= node.bsize() / 4;
+            u32 value = node.get32(word);
+
+            switch (word) {
+                case  0: EXPECT_LONGWORD(2);        break;
+                case  1: EXPECT_SELFREF;            break;
+                case  2:
+                case  3:
+                case  4: EXPECT_BYTE(0);            break;
+                case  5: EXPECT_CHECKSUM;           break;
+                case -4: EXPECT_OPTIONAL_HASH_REF;  break;
+                case -3: EXPECT_PARENT_DIR_REF;     break;
+                case -2: EXPECT_BYTE(0);            break;
+                case -1: EXPECT_LONGWORD(2);        break;
+            }
+            if (word <= -51) EXPECT_OPTIONAL_HASH_REF;
+            break;
+        }
+        case FSBlockType::FILEHEADER:
+        {
             /* Note: At locations -4 and -3, many disks reference the bitmap
              * block which is wrong. We ignore to report this common
              * inconsistency if 'strict' is set to false.
              */
 
             // Translate the byte index to a (signed) long word index
-            isize word = pos / 4; if (word >= 6) word -= node.bsize() / 4;
+            if (word >= 6) word -= node.bsize() / 4;
             u32 value = node.get32(word);
 
             switch (word) {
@@ -544,7 +743,7 @@ FSDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
              */
 
             // Translate 'pos' to a (signed) long word index
-            isize word = pos / 4; if (word >= 6) word -= node.bsize() / 4;
+            if (word >= 6) word -= node.bsize() / 4;
             u32 value = node.get32(word);
 
             switch (word) {
@@ -583,7 +782,6 @@ FSDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
 
             if (pos < 24) {
 
-                isize word = pos / 4;
                 u32 value = node.get32(word);
 
                 switch (word) {
@@ -591,7 +789,7 @@ FSDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
                     case 0: EXPECT_LONGWORD(8);                  break;
                     case 1: if (strict) EXPECT_FILEHEADER_REF;   break;
                     case 2: EXPECT_DATABLOCK_NUMBER;             break;
-                    case 3: EXPECT_LESS_OR_EQUAL(node.dsize()); break;
+                    case 3: EXPECT_LESS_OR_EQUAL(node.dsize());  break;
                     case 4: EXPECT_OPTIONAL_DATABLOCK_REF;       break;
                     case 5: EXPECT_CHECKSUM;                     break;
                 }
@@ -604,6 +802,106 @@ FSDoctor::xray(FSBlock &node, isize pos, bool strict, u8 *expected) const
     }
 
     return Fault::OK;
+}
+
+isize
+FSDoctor::xray(Block ref, std::ostream &os, bool strict) const
+{
+    return xray(fs.at(ref), os, strict);
+}
+
+isize
+FSDoctor::xray(FSBlock &node, std::ostream &os, bool strict) const
+{
+    isize errors = 0;
+
+    std::stringstream ss;
+
+    auto hex = [&](int width, isize value, string delim = "") {
+        ss << std::setw(width) << std::right << std::setfill('0') << std::hex << value << delim;
+    };
+    auto hex4 = [&](u32 value, string delim = "") {
+        hex(2, BYTE3(value), " ");
+        hex(2, BYTE2(value), " ");
+        hex(2, BYTE1(value), " ");
+        hex(2, BYTE0(value), delim);
+    };
+
+    auto describe = [&](Fault fault, const optional<u32> &value) {
+
+        switch (fault) {
+
+            case Fault::OK:                         break;
+            case Fault::FS_EXPECTED_VALUE:          hex4(*value); break;
+            case Fault::FS_EXPECTED_SMALLER_VALUE:  ss << "< " << *value; break;
+            case Fault::FS_EXPECTED_NO_REF:
+                ss << "Did not expect a block reference here"; break;
+            case Fault::FS_EXPECTED_REF:
+                ss << "Expected a block reference"; break;
+            case Fault::FS_EXPECTED_SELFREF:
+                ss << "Expected a self-reference"; break;
+            case Fault::FS_PTR_TO_UNKNOWN_BLOCK:
+                ss << "This reference points to a block of unknown type"; break;
+            case Fault::FS_PTR_TO_EMPTY_BLOCK:
+                ss << "This reference points to an empty block"; break;
+            case Fault::FS_PTR_TO_BOOT_BLOCK:
+                ss << "This reference points to a boot block"; break;
+            case Fault::FS_PTR_TO_ROOT_BLOCK:
+                ss << "This reference points to the root block"; break;
+            case Fault::FS_PTR_TO_BITMAP_BLOCK:
+                ss << "This reference points to a bitmap block"; break;
+            case Fault::FS_PTR_TO_USERDIR_BLOCK:
+                ss << "This reference points to a user directory block"; break;
+            case Fault::FS_PTR_TO_FILEHEADER_BLOCK:
+                ss << "This reference points to a file header block"; break;
+            case Fault::FS_PTR_TO_FILELIST_BLOCK:
+                ss << "This reference points to a file header block"; break;
+            case Fault::FS_PTR_TO_DATA_BLOCK:
+                ss << "This reference points to a data block"; break;
+            case Fault::FS_EXPECTED_DATABLOCK_NR:
+                ss << "Invalid data block position number"; break;
+            case Fault::FS_INVALID_HASHTABLE_SIZE:
+                ss << "Expected $48 (72 hash table entries)"; break;
+
+            default:
+                ss << "???";
+        }
+    };
+
+    for (isize i = 0; i < fs.traits.bsize / 4; i += 4) {
+
+        optional<u32> expected;
+
+        if (auto fault = xray32(node, i, strict, expected); fault != Fault::OK) {
+
+            auto *data = node.data();
+            auto type = fs.typeof(node.nr, i);
+
+            ss << "+";
+            hex(4, i, "  ");
+            hex4(((u32 *)data)[i], "  ");
+
+            ss << std::setw(36) << std::left << std::setfill(' ') << FSItemTypeEnum::help(type);
+            describe(fault, expected);
+            ss << std::endl;
+
+            errors++;
+        }
+    }
+
+    if (errors) {
+
+        os << "Entry  Data         Item type                           Expected" << std::endl;
+        os << string(80, '-') << std::endl;
+        string line;
+        while(std::getline(ss, line)) os << line << '\n';
+
+    } else {
+
+        os << "No errors found" << std::endl;
+    }
+
+    return errors;
 }
 
 Fault

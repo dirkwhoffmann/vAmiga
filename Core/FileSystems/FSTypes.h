@@ -264,6 +264,53 @@ struct FSItemTypeEnum : Reflection<FSItemTypeEnum, FSItemType>
         }
         return "???";
     }
+
+    static const char *help(FSItemType value)
+    {
+        switch (value) {
+
+            case FSItemType::UNKNOWN:               return "Unknown";
+            case FSItemType::UNUSED:                return "Unused";
+            case FSItemType::DOS_HEADER:            return "AmigaDOS header signature";
+            case FSItemType::DOS_VERSION:           return "AmigaDOS version number";
+            case FSItemType::BOOTCODE:              return "Boot code instruction";
+            case FSItemType::TYPE_ID:               return "Type identifier";
+            case FSItemType::SUBTYPE_ID:            return "Subtype identifier";
+            case FSItemType::SELF_REF:              return "Block reference to itself";
+            case FSItemType::CHECKSUM:              return "Checksum";
+            case FSItemType::HASHTABLE_SIZE:        return "Hashtable size";
+            case FSItemType::HASH_REF:              return "Hashtable entry";
+            case FSItemType::PROT_BITS:             return "Protection status bits";
+            case FSItemType::BCPL_STRING_LENGTH:    return "BCPL string Length";
+            case FSItemType::BCPL_DISK_NAME:        return "Disk name (BCPL character)";
+            case FSItemType::BCPL_DIR_NAME:         return "Directory name (BCPL character)";
+            case FSItemType::BCPL_FILE_NAME:        return "File name (BCPL character)";
+            case FSItemType::BCPL_COMMENT:          return "Comment (BCPL character)";
+            case FSItemType::CREATED_DAY:           return "Creation date (days)";
+            case FSItemType::CREATED_MIN:           return "Creation date (minutes)";
+            case FSItemType::CREATED_TICKS:         return "Creation date (ticks)";
+            case FSItemType::MODIFIED_DAY:          return "Modification date (day)";
+            case FSItemType::MODIFIED_MIN:          return "Modification date (minutes)";
+            case FSItemType::MODIFIED_TICKS:        return "Modification date (ticks)";
+            case FSItemType::NEXT_HASH_REF:         return "Reference to the next hash block";
+            case FSItemType::PARENT_DIR_REF:        return "Parent directory block reference";
+            case FSItemType::FILEHEADER_REF:        return "File header block reference";
+            case FSItemType::EXT_BLOCK_REF:         return "Next extension block reference";
+            case FSItemType::BITMAP_BLOCK_REF:      return "Bitmap block reference";
+            case FSItemType::BITMAP_EXT_BLOCK_REF:  return "Extension bitmap block reference";
+            case FSItemType::BITMAP_VALIDITY:       return "Bitmap validity bits";
+            case FSItemType::DATA_BLOCK_REF_COUNT:  return "Number of data block references";
+            case FSItemType::FILESIZE:              return "File size";
+            case FSItemType::DATA_BLOCK_NUMBER:     return "Position in the data block chain";
+            case FSItemType::DATA_BLOCK_REF:        return "Data block reference";
+            case FSItemType::FIRST_DATA_BLOCK_REF:  return "Reference to the first data block";
+            case FSItemType::NEXT_DATA_BLOCK_REF:   return "Reference to next data block";
+            case FSItemType::DATA_COUNT:            return "Number of stored data bytes";
+            case FSItemType::DATA:                  return "Data byte";
+            case FSItemType::BITMAP:                return "Block allocation table";
+        }
+        return "???";
+    }
 };
 
 

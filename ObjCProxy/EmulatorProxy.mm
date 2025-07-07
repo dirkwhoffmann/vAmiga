@@ -1603,25 +1603,17 @@ NSString *EventSlotName(EventSlot slot)
 
     return [array sortedArrayUsingSelector:@selector(compare:)];
 }
-/*
-- (NSDictionary<NSNumber *, NSNumber *> *)xrayBitmap
-{
-    auto blocks = [self fs]->doctor.diagnosis.bitmapErrors; //  xrayBitmap(strict);
-
-    NSMutableDictionary<NSNumber *, NSNumber *> *dict = [NSMutableDictionary dictionary];
-    for (const auto &[key, value] : blocks) { dict[@(key)] = @(value); }
-
-    return [dict copy];
-}
-*/
 
 - (Fault)check:(NSInteger)nr
                pos:(NSInteger)pos
           expected:(unsigned char *)exp
             strict:(BOOL)strict
 {
-    // return [self fs]->check((u32)nr, pos, exp, strict);
-    return [self fs]->doctor.xray((u32)nr, pos, strict, exp);
+    std::optional<u8> expected;
+    auto result = [self fs]->doctor.xray((u32)nr, pos, strict, expected);
+    if (expected) *exp = *expected;
+
+    return result;
 }
 
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset
