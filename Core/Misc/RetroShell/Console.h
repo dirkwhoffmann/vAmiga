@@ -40,6 +40,27 @@ struct ScriptInterruption: AppException {
     using AppException::AppException;
 };
 
+class HistoryBuffer {
+
+    // History buffer storing old input strings and cursor positions
+    std::vector<std::pair<string,isize>> history = { { "", 0 } };
+
+    // The currently active input string
+    isize ipos = 0;
+
+public:
+
+    // Returns the current selection
+    std::pair<string,isize> current() const { return history[ipos]; }
+
+    // Iterate through the buffer
+    void up(string &input, isize &ipos);
+    void down(string &input, isize &ipos);
+
+    // Add an entry to the buffer
+    void add(const string &input);
+};
+
 class Console : public SubComponent {
 
     friend class RetroShell;
@@ -89,9 +110,7 @@ protected:
     TextStorage &storage;
 
     // History buffer storing old input strings and cursor positions
-    std::vector<std::pair<string,isize>> history;
-    // The currently active input string
-    isize ipos = 0;
+    HistoryBuffer historyBuffer;
 
     // Additional output inserted before and after command execution
     string vdelim = RSH_DEBUG ? "[DEBUG]\n" : "\n";
@@ -241,15 +260,6 @@ public:
 protected:
 
     virtual void pressReturn(bool shift);
-
-
-    //
-    // Working with the history buffer
-    //
-
-public:
-
-    isize historyLength() { return (isize)history.size(); }
 
 
     //

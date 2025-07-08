@@ -19,6 +19,39 @@
 namespace vamiga {
 
 void
+HistoryBuffer::up(string &input, isize &cursor)
+{
+    if (ipos > 0) {
+
+        // Save the input line if it is currently shown
+        if (ipos == isize(history.size() - 1)) history.back() = { input, cursor };
+
+        auto &item = history[--ipos];
+        input = item.first;
+        cursor = item.second;
+    }
+}
+
+void
+HistoryBuffer::down(string &input, isize &cursor)
+{
+    if (ipos < isize(history.size() - 1)) {
+
+        auto &item = history[++ipos];
+        input = item.first;
+        cursor = item.second;
+    }
+}
+
+void
+HistoryBuffer::add(const string &input)
+{
+    history.back() = { input, (isize)input.size() };
+    history.push_back( { "", 0 } );
+    ipos = (isize)history.size() - 1;
+}
+
+void
 Console::_initialize()
 {
     // Register commands
@@ -26,9 +59,6 @@ Console::_initialize()
 
     // Initialize the text storage
     clear();
-
-    // Initialize the input buffer
-    history.push_back( { "", 0 } );
 }
 
 Console&
@@ -243,32 +273,19 @@ void
 Console::press(RSKey key, bool shift)
 {
     assert_enum(RSKey, key);
-    assert(ipos >= 0 && ipos < historyLength());
+    // assert(ipos >= 0 && ipos < historyLength());
     assert(cursor >= 0 && cursor <= inputLength());
 
     switch(key) {
 
         case RSKey::UP:
 
-            if (ipos > 0) {
-
-                // Save the input line if it is currently shown
-                if (ipos == historyLength() - 1) history.back() = { input, cursor };
-
-                auto &item = history[--ipos];
-                input = item.first;
-                cursor = item.second;
-            }
+            historyBuffer.up(input, cursor);
             break;
 
         case RSKey::DOWN:
 
-            if (ipos < historyLength() - 1) {
-
-                auto &item = history[++ipos];
-                input = item.first;
-                cursor = item.second;
-            }
+            historyBuffer.down(input, cursor);
             break;
 
         case RSKey::LEFT:
@@ -348,7 +365,6 @@ Console::press(RSKey key, bool shift)
     if (key != RSKey::TAB) tabPressed = 0;
     needsDisplay();
 
-    assert(ipos >= 0 && ipos < historyLength());
     assert(cursor >= 0 && cursor <= inputLength());
 }
 
@@ -414,10 +430,8 @@ Console::pressReturn(bool shift)
         // Add the command to the text storage
         *this << input << '\n';
 
-        // Add the command to the history buffer
-        history.back() = { input, (isize)input.size() };
-        history.push_back( { "", 0 } );
-        ipos = (isize)history.size() - 1;
+        // Remember the command
+        historyBuffer.add(input);
 
         // Feed the command into the command queue
         retroShell.asyncExec(input);
