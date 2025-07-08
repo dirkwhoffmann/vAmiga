@@ -835,7 +835,6 @@ NSString *EventSlotName(EventSlot slot);
 - (FSBlockType)blockType:(NSInteger)blockNr;
 - (FSItemType)itemType:(NSInteger)blockNr pos:(NSInteger)pos;
 
-- (NSInteger)xray:(BOOL)strict;
 - (NSInteger)xrayBlocks:(BOOL)strict;
 - (NSInteger)xrayBitmap:(BOOL)strict;
 @property (readonly) NSArray<NSNumber *> *xrayBlocks;

@@ -723,7 +723,7 @@ MutableFileSystem::import(const FSBlock &at, const fs::path &path, bool recursiv
     updateChecksums();
 
     // Verify the result
-    if (FS_DEBUG) doctor.xray(std::cout, true);
+    if (FS_DEBUG) doctor.xray(true, std::cout);
 }
 
 void

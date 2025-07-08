@@ -398,6 +398,10 @@ AppError::AppError(Fault code, const string &s)
             description = "Unsupported file system.";
             break;
 
+        case Fault::FS_READ_ONLY:
+            description = "Read-only file system.";
+            break;
+
         case Fault::FS_WRONG_BSIZE:
             description = "Invalid block size.";
             break;

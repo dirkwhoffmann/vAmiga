@@ -1566,14 +1566,9 @@ NSString *EventSlotName(EventSlot slot)
     return [self fs]->typeof((u32)blockNr, pos);
 }
 
-- (NSInteger)xray:(BOOL)strict
-{
-    return [self fs]->doctor.xray(strict);
-}
-
 - (NSInteger)xrayBlocks:(BOOL)strict
 {
-    return [self fs]->doctor.xrayBlocks(strict);
+    return [self fs]->doctor.xray(strict);
 }
 
 - (NSInteger)xrayBitmap:(BOOL)strict
@@ -1610,7 +1605,7 @@ NSString *EventSlotName(EventSlot slot)
                strict:(BOOL)strict
 {
     std::optional<u8> expected;
-    auto result = [self fs]->doctor.xray((u32)nr, pos, strict, expected);
+    auto result = [self fs]->doctor.xray8((u32)nr, pos, strict, expected);
     if (expected) *exp = *expected;
 
     return result;

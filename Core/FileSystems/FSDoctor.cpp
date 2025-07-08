@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "FSDoctor.h"
-#include "FileSystem.h"
+#include "MutableFileSystem.h"
 #include <unordered_map>
 #include <unordered_set>
 
@@ -249,20 +249,9 @@ FSDoctor::dump(Block nr, std::ostream &os)
 isize
 FSDoctor::xray(bool strict)
 {
-    return xrayBlocks(strict) + xrayBitmap(strict);
-}
-
-isize
-FSDoctor::xray(std::ostream &os, bool strict)
-{
-    return xrayBlocks(os, strict) + xrayBitmap(os, strict);
-}
-
-isize
-FSDoctor::xrayBlocks(bool strict)
-{
     diagnosis.blockErrors = {};
 
+    // TODO: Use the range iterator 
     for (isize i = 0, capacity = fs.numBlocks(); i < capacity; i++) {
 
         if (xray(Block(i), strict)) diagnosis.blockErrors.push_back(Block(i));
@@ -274,9 +263,9 @@ FSDoctor::xrayBlocks(bool strict)
 }
 
 isize
-FSDoctor::xrayBlocks(std::ostream &os, bool strict)
+FSDoctor::xray(bool strict, std::ostream &os)
 {
-    auto result = xrayBlocks(strict);
+    auto result = xray(strict);
 
     auto blocks = [&](size_t s) { return std::to_string(s) + (s == 1 ? " block" : " blocks"); };
 
@@ -336,7 +325,7 @@ FSDoctor::xrayBitmap(bool strict)
 }
 
 isize
-FSDoctor::xrayBitmap(std::ostream &os, bool strict)
+FSDoctor::xrayBitmap(bool strict, std::ostream &os)
 {
     auto result = xrayBitmap(strict);
 
@@ -377,7 +366,7 @@ FSDoctor::xray(FSBlock &node, bool strict) const
     for (isize i = 0; i < node.bsize(); i++) {
 
         std::optional<u8> expected;
-        if (auto error = xray(node, i, strict, expected); error != FSBlockError::OK) {
+        if (auto error = xray8(node, i, strict, expected); error != FSBlockError::OK) {
 
             count++;
             debug(FS_DEBUG, "Block %d [%ld.%ld]: %s\n", node.nr, i / 4, i % 4, FSBlockErrorEnum::key(error));
@@ -388,26 +377,14 @@ FSDoctor::xray(FSBlock &node, bool strict) const
 }
 
 FSBlockError
-FSDoctor::xray(Block ref, isize pos, bool strict) const
+FSDoctor::xray8(Block ref, isize pos, bool strict, optional<u8> &expected) const
 {
-    return xray(fs.at(ref), pos, strict);
+    return xray8(fs.at(ref), pos, strict, expected);
 }
 
-FSBlockError
-FSDoctor::xray(Block ref, isize pos, bool strict, optional<u8> &expected) const
-{
-    return xray(fs.at(ref), pos, strict, expected);
-}
 
 FSBlockError
-FSDoctor::xray(FSBlock &node, isize pos, bool strict) const
-{
-    optional<u8> expected;
-    return xray(node, pos, strict, expected);
-}
-
-FSBlockError
-FSDoctor::xray(FSBlock &node, isize pos, bool strict, optional<u8> &expected) const
+FSDoctor::xray8(FSBlock &node, isize pos, bool strict, optional<u8> &expected) const
 {
     optional<u32> exp;
     auto result = xray32(node, pos & ~3, strict, exp);
@@ -416,10 +393,9 @@ FSDoctor::xray(FSBlock &node, isize pos, bool strict, optional<u8> &expected) co
 }
 
 FSBlockError
-FSDoctor::xray32(FSBlock &node, isize pos, bool strict) const
+FSDoctor::xray32(Block ref, isize pos, bool strict, optional<u32> &expected) const
 {
-    optional<u32> expected;
-    return xray32(node, pos, strict, expected);
+    return xray32(fs.at(ref), pos, strict, expected);
 }
 
 FSBlockError
@@ -619,13 +595,13 @@ FSDoctor::xray32(FSBlock &node, isize pos, bool strict, optional<u32> &expected)
 }
 
 isize
-FSDoctor::xray(Block ref, std::ostream &os, bool strict) const
+FSDoctor::xray(Block ref, bool strict, std::ostream &os) const
 {
-    return xray(fs.at(ref), os, strict);
+    return xray(fs.at(ref), strict, os);
 }
 
 isize
-FSDoctor::xray(FSBlock &node, std::ostream &os, bool strict) const
+FSDoctor::xray(FSBlock &node, bool strict, std::ostream &os) const
 {
     isize errors = 0;
 
@@ -691,10 +667,64 @@ FSDoctor::xray(FSBlock &node, std::ostream &os, bool strict) const
 
     } else {
 
-        os << "No errors found" << std::endl;
+        // os << "No errors found" << std::endl;
     }
 
     return errors;
+}
+
+void
+FSDoctor::rectify(bool strict)
+{
+    auto *mfs = dynamic_cast<MutableFileSystem *>(&fs);
+    if (!mfs) throw AppError(Fault::FS_READ_ONLY);
+
+    xray(strict);
+
+    // Rectify all erroneous blocks
+    for (auto &it : diagnosis.blockErrors) rectify(it, strict);
+}
+
+void
+FSDoctor::rectify(Block ref, bool strict)
+{
+    rectify(fs.at(ref), strict);
+}
+
+void
+FSDoctor::rectify(FSBlock &node, bool strict)
+{
+    auto *mfs = dynamic_cast<MutableFileSystem *>(&fs);
+    if (!mfs) throw AppError(Fault::FS_READ_ONLY);
+
+    for (isize i = 0; i < fs.traits.bsize / 4; i += 4) {
+
+        optional<u32> expected;
+
+        if (auto fault = xray32(node, i, strict, expected); fault != FSBlockError::OK) {
+
+            if (expected) {
+                auto *data = node.data();
+                node.write32(data + i, *expected);
+            }
+        }
+    }
+}
+
+void
+FSDoctor::rectifyBitmap(bool strict)
+{
+    auto *mfs = dynamic_cast<MutableFileSystem *>(&fs);
+    if (!mfs) throw AppError(Fault::FS_READ_ONLY);
+
+    xrayBitmap(strict);
+
+    for (auto &it : diagnosis.unusedButAllocated) {
+        mfs->markAsFree(Block(it));
+    }
+    for (auto &it : diagnosis.usedButUnallocated) {
+        mfs->markAsAllocated(Block(it));
+    }
 }
 
 }

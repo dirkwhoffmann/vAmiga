@@ -1113,6 +1113,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .flags  = rs::path,
         .args   = {
             { .name = { "s", "Strict checking" }, .flags = rs::flag },
+            { .name = { "r", "Rectify errors" }, .flags = rs::flag },
             { .name = { "nr", "Block number" }, .flags = rs::opt }
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
@@ -1122,12 +1123,16 @@ NavigatorConsole::initCommands(RSCommand &root)
             if (args.contains("nr")) {
 
                 auto nr = parseBlock(args, "nr");
-                fs.doctor.xray(nr, os, strict);
+                if (args.contains("r")) fs.doctor.rectify(nr, strict);
+                if (auto errors = fs.doctor.xray(nr, strict, os); !errors) {
+                    os << "No findings." << std::endl;
+                }
 
             } else {
 
-                if (auto errors = fs.doctor.xray(os, strict); errors == 0) {
-                    os << "Passed. No errors found." << std::endl;
+                if (args.contains("r")) fs.doctor.rectify(strict);
+                if (auto errors = fs.doctor.xray(strict, os); !errors) {
+                    os << "No findings." << std::endl;
                 }
             }
         }

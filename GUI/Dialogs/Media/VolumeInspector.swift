@@ -517,8 +517,12 @@ class VolumeInspector: DialogController {
 
     @IBAction func strictAction(_ sender: NSButton!) {
 
-        vol.xray(strict)
+        // Examine all blocks
+        vol.xrayBlocks(strict)
         erroneousBlocks = vol.xrayBlocks
+
+        // Examime the bitmap
+        vol.xrayBitmap(strict)
         bitMapErrors = vol.xrayBitmap
 
         updateHealthImage()
