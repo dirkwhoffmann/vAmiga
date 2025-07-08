@@ -1123,6 +1123,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             if (args.contains("nr")) {
 
                 auto nr = parseBlock(args, "nr");
+                
                 if (args.contains("r")) fs.doctor.rectify(nr, strict);
                 if (auto errors = fs.doctor.xray(nr, strict, os); !errors) {
                     os << "No findings." << std::endl;

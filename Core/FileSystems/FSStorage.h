@@ -100,10 +100,10 @@ public:
     }
 
     // Checks if a block is empty
-    bool isEmpty(Block nr) const;
+    bool isEmpty(Block nr) const noexcept;
 
     // Gets or sets the block type
-    FSBlockType getType(Block nr) const;
+    FSBlockType getType(Block nr) const noexcept;
     void setType(Block nr, FSBlockType type);
 
     // Returns a block pointer or null if the block does not exist

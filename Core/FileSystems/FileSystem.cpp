@@ -114,6 +114,14 @@ FileSystem::init(const FSDescriptor &layout, u8 *buf, isize len)
 
             // Import block data
             storage[i].importBlock(data, traits.bsize);
+
+            // Emulate errors
+            /*
+            auto *data = storage[i].data();
+            for (isize i = 0; i < 20; i++) {
+                data[rand() % 512] = rand() & 0xFF;
+            }
+            */
         }
     }
 

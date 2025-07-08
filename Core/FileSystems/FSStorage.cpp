@@ -61,15 +61,15 @@ FSStorage::_dump(Category category, std::ostream &os) const
 }
 
 bool
-FSStorage::isEmpty(Block nr) const
+FSStorage::isEmpty(Block nr) const noexcept
 {
     return getType(nr) == FSBlockType::EMPTY;
 }
 
 FSBlockType
-FSStorage::getType(Block nr) const
+FSStorage::getType(Block nr) const noexcept
 {
-    if (isize(nr) >= capacity) throw AppError(Fault::FS_OUT_OF_RANGE);
+    if (isize(nr) >= capacity) return FSBlockType::UNKNOWN;
     return blocks.contains(nr) ? blocks.at(nr)->type : FSBlockType::EMPTY;
 }
 
