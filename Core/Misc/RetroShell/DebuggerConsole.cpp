@@ -73,7 +73,6 @@ DebuggerConsole::pressReturn(bool shift)
     if (emulator.isPaused() && !shift && input.empty()) {
 
         emulator.stepInto();
-        // emulator.isRunning() ? emulator.put(Cmd::PAUSE) : emulator.stepInto();
 
     } else {
         

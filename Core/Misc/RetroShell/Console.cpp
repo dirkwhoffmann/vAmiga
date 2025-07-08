@@ -18,6 +18,9 @@
 
 namespace vamiga {
 
+HistoryBuffer
+Console::historyBuffer;
+
 void
 HistoryBuffer::up(string &input, isize &cursor)
 {
@@ -352,6 +355,9 @@ Console::press(RSKey key, bool shift)
 
         case RSKey::RETURN:
 
+            // Remember the command
+            historyBuffer.add(input);
+
             pressReturn(shift);
             break;
 
@@ -431,7 +437,7 @@ Console::pressReturn(bool shift)
         *this << input << '\n';
 
         // Remember the command
-        historyBuffer.add(input);
+        // historyBuffer.add(input);
 
         // Feed the command into the command queue
         retroShell.asyncExec(input);

@@ -110,7 +110,7 @@ protected:
     TextStorage &storage;
 
     // History buffer storing old input strings and cursor positions
-    HistoryBuffer historyBuffer;
+    static HistoryBuffer historyBuffer;
 
     // Additional output inserted before and after command execution
     string vdelim = RSH_DEBUG ? "[DEBUG]\n" : "\n";
