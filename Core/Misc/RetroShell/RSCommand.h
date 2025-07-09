@@ -31,7 +31,9 @@ static const usize keyval           = 1LL << 1;
 static const usize flag             = 1LL << 2 | opt;
 static const usize hidden           = 1LL << 3 | opt;
 static const usize shadowed         = 1LL << 4;
-static const usize path             = 1LL << 5;
+static const usize acdir            = 1LL << 5;
+static const usize acfile           = 1LL << 6;
+static const usize ac                   = acdir | acfile;
 
 }
 
