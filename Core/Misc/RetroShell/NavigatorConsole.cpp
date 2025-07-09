@@ -927,18 +927,20 @@ NavigatorConsole::initCommands(RSCommand &root)
         }
     });
 
-    /* TODO: IMPLEMENT IT! (DO NOT DELETE)
     root.add({
 
         .tokens = { "block", "import" },
         .chelp  = { "Import a block from a file" },
         .args   = {
-            { .name = { "nr", "Block number" } },
+            { .name = { "nr", "Block number" }, .flags = rs::opt },
             { .name = { "path", "File path" } },
         },
-        .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+        .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            os << "Not implemented, yet!" << '\n';
+            auto path = host.makeAbsolute(args.at("path"));
+            auto nr = parseBlock(args, "nr", fs.pwd().nr);
+
+            fs.exportBlock(nr, path);
         }
     });
 
@@ -947,15 +949,17 @@ NavigatorConsole::initCommands(RSCommand &root)
         .tokens = { "block", "export" },
         .chelp  = { "Export a block to a file" },
         .args   = {
-            { .name = { "nr", "Block number" } },
+            { .name = { "nr", "Block number" }, .flags = rs::opt },
             { .name = { "path", "File path" } },
         },
-        .func   = [] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+        .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            os << "Not implemented, yet!" << '\n';
+            auto path = host.makeAbsolute(args.at("path"));
+            auto nr = parseBlock(args, "nr", fs.pwd().nr);
+
+            fs.importBlock(nr, path);
         }
     });
-    */
 
     RSCommand::currentGroup = "Modify";
 

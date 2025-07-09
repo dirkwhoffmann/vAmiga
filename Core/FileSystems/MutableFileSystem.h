@@ -180,6 +180,9 @@ public:
     void import(const FSBlock &at, const fs::path &path, bool recursive = true, bool contents = false) throws;
     void import(const FSBlock &at, const fs::directory_entry &dir, bool recursive) throws;
 
+    // Imports a single block
+    void importBlock(Block nr, const fs::path &path);
+
     // Exports the volume to a buffer
     bool exportVolume(u8 *dst, isize size) const;
     bool exportVolume(u8 *dst, isize size, Fault *error) const;
@@ -189,6 +192,7 @@ public:
     bool exportBlock(Block nr, u8 *dst, isize size, Fault *error) const;
     bool exportBlocks(Block first, Block last, u8 *dst, isize size) const;
     bool exportBlocks(Block first, Block last, u8 *dst, isize size, Fault *error) const;
+    void exportBlock(Block nr, const fs::path &path) const;
 
     // Exports the volume to a directory of the host file system
     void exportDirectory(const fs::path &path, bool createDir = true) const throws;

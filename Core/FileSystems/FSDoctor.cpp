@@ -249,22 +249,31 @@ FSDoctor::dump(Block nr, std::ostream &os)
 isize
 FSDoctor::xray(bool strict)
 {
-    diagnosis.blockErrors = {};
-
-    // TODO: Use the range iterator 
-    for (isize i = 0, capacity = fs.numBlocks(); i < capacity; i++) {
-
-        if (xray(Block(i), strict)) diagnosis.blockErrors.push_back(Block(i));
-    }
-
-    return (isize)diagnosis.blockErrors.size();
-
-    // return { 12, 24, 42,43,44, 67,69};
+    std::stringstream ss;
+    return xray(strict, ss);
 }
 
 isize
 FSDoctor::xray(bool strict, std::ostream &os)
 {
+    diagnosis.blockErrors = {};
+
+    for (auto &it : fs.storage.keys()) {
+
+        if (auto errors = xray(it, strict); errors) {
+
+            diagnosis.blockErrors.push_back(Block(it));
+
+            os << "Block " << std::setw(5) << std::left << (std::to_string(it) + ": ");
+            os << errors << " anomalies" << std::endl;
+        }
+    }
+
+    return isize(diagnosis.blockErrors.size());
+
+    // return { 12, 24, 42,43,44, 67,69};
+
+    /*
     auto result = xray(strict);
 
     auto blocks = [&](size_t s) { return std::to_string(s) + (s == 1 ? " block" : " blocks"); };
@@ -277,6 +286,7 @@ FSDoctor::xray(bool strict, std::ostream &os)
         os << FSBlock::rangeString(diagnosis.blockErrors) << std::endl;
     }
     return result;
+    */
 }
 
 isize
@@ -363,13 +373,13 @@ FSDoctor::xray(FSBlock &node, bool strict) const
 {
     isize count = 0;
 
-    for (isize i = 0; i < node.bsize(); i++) {
+    for (isize i = 0; i < node.bsize(); i += 4) {
 
-        std::optional<u8> expected;
-        if (auto error = xray8(node, i, strict, expected); error != FSBlockError::OK) {
+        std::optional<u32> expected;
+        if (auto error = xray32(node, i, strict, expected); error != FSBlockError::OK) {
 
             count++;
-            debug(FS_DEBUG, "Block %d [%ld.%ld]: %s\n", node.nr, i / 4, i % 4, FSBlockErrorEnum::key(error));
+            debug(FS_DEBUG, "Block %d [%ld]: %s\n", node.nr, i, FSBlockErrorEnum::key(error));
         }
     }
 
@@ -661,7 +671,7 @@ FSDoctor::xray(FSBlock &node, bool strict, std::ostream &os) const
     if (errors) {
 
         os << "Entry  Data         Item type                           Expected" << std::endl;
-        os << string(67, '-') << std::endl;
+        // os << string(67, '-') << std::endl;
         string line;
         while(std::getline(ss, line)) os << line << '\n';
 

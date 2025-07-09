@@ -840,6 +840,40 @@ MutableFileSystem::exportBlocks(Block first, Block last, u8 *dst, isize size, Fa
 }
 
 void
+MutableFileSystem::importBlock(Block nr, const fs::path &path)
+{
+    std::ifstream stream(path, std::ios::binary);
+
+    if (!stream.is_open()) {
+        throw AppError(Fault::FILE_CANT_READ, path);
+    }
+
+    auto *data = at(nr).data();
+    stream.read((char *)data, traits.bsize);
+
+    if (!stream) {
+        throw AppError(Fault::FILE_CANT_READ, path);
+    }
+}
+
+void
+MutableFileSystem::exportBlock(Block nr, const fs::path &path) const
+{
+    std::ofstream stream(path, std::ios::binary);
+
+    if (!stream.is_open()) {
+        throw AppError(Fault::FILE_CANT_CREATE, path);
+    }
+
+    auto *data = at(nr).data();
+    stream.write((const char *)data, traits.bsize);
+
+    if (!stream) {
+        throw AppError(Fault::FILE_CANT_WRITE, path);
+    }
+}
+
+void
 MutableFileSystem::exportDirectory(const fs::path &path, bool createDir) const
 {
     // Try to create the directory if it doesn't exist
