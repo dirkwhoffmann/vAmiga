@@ -162,11 +162,14 @@ FileSystem::_dump(Category category, std::ostream &os) const noexcept
 
         case Category::Info:
 
+            /*
             if (!isFormatted()) {
                 os << "Type   Size             Used    Free    Full" << std::endl;
             } else {
                 os << "Type   Size             Used    Free    Full  Name" << std::endl;
             }
+            */
+            os << "Type   Size             Used    Free    Full  Name" << std::endl;
             [[fallthrough]];
 
         case Category::State:
@@ -174,17 +177,34 @@ FileSystem::_dump(Category category, std::ostream &os) const noexcept
             auto info = getInfo();
             auto size = std::to_string(info.numBlocks) + " (x " + std::to_string(traits.bsize) + ")";
 
-            isFormatted() ? os << "DOS" << dec(isize(traits.dos)) << " " : os << "NODOS";
-            os << "  ";
-            os << std::setw(15) << std::left << std::setfill(' ') << size;
-            os << "  ";
-            os << std::setw(6) << std::left << std::setfill(' ') << info.usedBlocks;
-            os << "  ";
-            os << std::setw(6) << std::left << std::setfill(' ') << info.freeBlocks;
-            os << "  ";
-            os << std::setw(3) << std::right << std::setfill(' ') << isize(info.fillLevel);
-            os << "%  ";
-            os << getName().c_str() << std::endl;
+            if (isFormatted()) {
+
+                os << std::setw(5) << std::left << ("DOS" + std::to_string(isize(traits.dos)));
+                os << "  ";
+                os << std::setw(15) << std::left << std::setfill(' ') << size;
+                os << "  ";
+                os << std::setw(6) << std::left << std::setfill(' ') << info.usedBlocks;
+                os << "  ";
+                os << std::setw(6) << std::left << std::setfill(' ') << info.freeBlocks;
+                os << "  ";
+                os << std::setw(3) << std::right << std::setfill(' ') << isize(info.fillLevel);
+                os << "%  ";
+                os << getName().c_str() << std::endl;
+
+            } else {
+
+                os << std::setw(5) << std::left << "NODOS";
+                os << "  ";
+                os << std::setw(15) << std::left << std::setfill(' ') << "--";
+                os << "  ";
+                os << std::setw(6) << std::left << std::setfill(' ') << "--";
+                os << "  ";
+                os << std::setw(6) << std::left << std::setfill(' ') << "--";
+                os << "  ";
+                os << std::setw(3) << std::left << std::setfill(' ') << "--";
+                os << "   ";
+                os << "--" << std::endl;
+            }
             break;
         }
         case Category::Properties:

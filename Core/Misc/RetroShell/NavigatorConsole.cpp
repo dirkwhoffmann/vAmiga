@@ -515,17 +515,17 @@ NavigatorConsole::initCommands(RSCommand &root)
         .chelp  = { "Import a file or a folder from the host file system" },
         .args   = {
             { .name = { "path", "Host file system directory" } },
-            { .name = { "c", "Import contents rather than the folder itself" }, .flags = rs::flag },
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             fs.require_formatted();
 
+            auto path = args.at("path");
+            auto hostPath = host.makeAbsolute(args.at("path"));
             bool recursive = true;
-            bool contents = args.contains("c");
+            bool contents = path.back() == '/';
 
-            auto path = host.makeAbsolute(args.at("path"));
-            fs.import(fs.pwd(), path, recursive, contents);
+            fs.import(fs.pwd(), hostPath, recursive, contents);
         }
     });
 

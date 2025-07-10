@@ -178,7 +178,6 @@ public:
 
     // Imports files and folders from the host file system
     void import(FSBlock &top, const fs::path &path, bool recursive = true, bool contents = false) throws;
-    void import(FSBlock &top, const fs::directory_entry &dir, bool recursive) throws;
 
     // Imports a single block
     void importBlock(Block nr, const fs::path &path);
@@ -194,6 +193,10 @@ public:
     void exportBlock(Block nr, const fs::path &path) const;
     bool exportBlocks(Block first, Block last, u8 *dst, isize size) const;
     bool exportBlocks(Block first, Block last, u8 *dst, isize size, Fault *error) const;
+
+private:
+
+    void import(FSBlock &top, const fs::directory_entry &dir, bool recursive) throws;
 };
 
 }
