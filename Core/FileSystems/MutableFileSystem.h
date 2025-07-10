@@ -186,23 +186,14 @@ public:
     // Exports the volume to a buffer
     bool exportVolume(u8 *dst, isize size) const;
     bool exportVolume(u8 *dst, isize size, Fault *error) const;
+    void exportVolume(const fs::path &path) const;
 
     // Exports a single block or a range of blocks
     bool exportBlock(Block nr, u8 *dst, isize size) const;
     bool exportBlock(Block nr, u8 *dst, isize size, Fault *error) const;
+    void exportBlock(Block nr, const fs::path &path) const;
     bool exportBlocks(Block first, Block last, u8 *dst, isize size) const;
     bool exportBlocks(Block first, Block last, u8 *dst, isize size, Fault *error) const;
-    void exportBlock(Block nr, const fs::path &path) const;
-
-    // Exports the current directory of the host file system
-    void exportDirectory(const fs::path &path, bool createDir = true) const throws;
-
-    // Exports a single file to the host file system
-    void exportFile(const FSBlock &node, const fs::path &path) const throws;
-
-    // Exports a directory or a file to the host file system (MOVE TO FSTree)
-    void exportItem(const FSBlock &node, const fs::path &path, bool createDir = true) const; // DEPRECATED
-    void exportDirectory(const FSBlock &node, const fs::path &path, bool createDir = true) const; // DEPRECATED
 };
 
 }

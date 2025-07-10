@@ -1617,7 +1617,6 @@ NSString *EventSlotName(EventSlot slot)
         return ptr->data()[offset];
     }
     return 0;
-    // return [self fs]->read8((u32)block, offset);
 }
 
 - (NSString *)ascii:(NSInteger)block offset:(NSInteger)offset length:(NSInteger)len
@@ -1627,7 +1626,7 @@ NSString *EventSlotName(EventSlot slot)
 
 - (void)export:(NSString *)path exception:(ExceptionWrapper *)ex
 {
-    try { return [self fs]->exportDirectory(string([path fileSystemRepresentation])); }
+    try { return [self fs]->exportVolume([path fileSystemRepresentation]); }
     catch (AppError &error) { [ex save:error]; }
 }
 

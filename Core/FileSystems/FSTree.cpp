@@ -225,8 +225,20 @@ FSTree::saveDir(const fs::path &path, const FSOpt &opt) const
 void
 FSTree::saveFile(const fs::path &path, const FSOpt &opt) const
 {
-    // Save file
-    node->exportBlock(path);
+    // Get data
+    Buffer<u8> buffer; node->extractData(buffer);
+
+    // Open file
+    std::ofstream stream(path, std::ios::binary);
+    if (!stream.is_open()) {
+        throw AppError(Fault::FILE_CANT_CREATE, path);
+    }
+
+    // Write data
+    stream.write((const char *)buffer.ptr, buffer.size);
+    if (!stream) {
+        throw AppError(Fault::FILE_CANT_WRITE, path);
+    }
 }
 
 }

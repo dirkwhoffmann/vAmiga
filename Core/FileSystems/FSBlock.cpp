@@ -1912,7 +1912,7 @@ FSBlock::writeData(std::ostream &os) const
     Buffer<u8> buffer;
     
     // Write block into buffer
-    writeData(buffer);
+    extractData(buffer);
     
     // Export the buffer
     os << buffer;
@@ -1943,7 +1943,7 @@ FSBlock::writeData(std::ostream &os, isize size) const
 }
 
 isize
-FSBlock::writeData(Buffer<u8> &buf) const
+FSBlock::extractData(Buffer<u8> &buf) const
 {
     // Only call this function for file header blocks
     if (type != FSBlockType::FILEHEADER) throw AppError(Fault::FS_NOT_A_FILE);

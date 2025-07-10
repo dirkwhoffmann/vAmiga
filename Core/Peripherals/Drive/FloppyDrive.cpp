@@ -1039,7 +1039,7 @@ FloppyDrive::catchFile(const fs::path &path)
 
     // Extract file
     Buffer<u8> buffer;
-    file->writeData(buffer);
+    file->extractData(buffer);
     
     // Parse hunks
     auto descr = ProgramUnitDescriptor(buffer);

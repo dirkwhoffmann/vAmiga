@@ -816,7 +816,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             auto lines = args.contains("lines") ? parseNum(args.at("lines")) : -1;
 
             Buffer<u8> buffer;
-            file.writeData(buffer);
+            file.extractData(buffer);
 
             buffer.type(os, {
 
@@ -897,7 +897,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             auto opt = parseDumpOpts(args);
 
             Buffer<u8> buffer;
-            file.writeData(buffer);
+            file.extractData(buffer);
             buffer.dump(os, opt);
         }
     });
