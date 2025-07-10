@@ -227,10 +227,10 @@ public:
     const FSBlock &pwd() const { return at(current); }
 
     // Returns the parent directory
-    FSBlock &parent(const FSBlock &node);
-    FSBlock *parent(const FSBlock *node) noexcept;
-    const FSBlock &parent(const FSBlock &node) const;
-    const FSBlock *parent(const FSBlock *node) const noexcept;
+    FSBlock &parent(const FSBlock &block);
+    FSBlock *parent(const FSBlock *block) noexcept;
+    const FSBlock &parent(const FSBlock &block) const;
+    const FSBlock *parent(const FSBlock *block) const noexcept;
 
     // Changes the working directory
     void cd(const FSName &name);
@@ -242,20 +242,20 @@ public:
     bool exists(const fs::path &path) const { return exists(pwd(), path); }
 
     // Seeks an item in the directory tree (returns nullptr if not found)
-    FSBlock *seekPtr(const FSBlock *root, const FSName &name) noexcept;
-    FSBlock *seekPtr(const FSBlock *root, const fs::path &name) noexcept;
-    FSBlock *seekPtr(const FSBlock *root, const string &name) noexcept;
-    const FSBlock *seekPtr(const FSBlock *root, const FSName &name) const noexcept;
-    const FSBlock *seekPtr(const FSBlock *root, const fs::path &name) const noexcept;
-    const FSBlock *seekPtr(const FSBlock *root, const string &name) const noexcept;
+    FSBlock *seekPtr(const FSBlock *top, const FSName &name) noexcept;
+    FSBlock *seekPtr(const FSBlock *top, const fs::path &name) noexcept;
+    FSBlock *seekPtr(const FSBlock *top, const string &name) noexcept;
+    const FSBlock *seekPtr(const FSBlock *top, const FSName &name) const noexcept;
+    const FSBlock *seekPtr(const FSBlock *top, const fs::path &name) const noexcept;
+    const FSBlock *seekPtr(const FSBlock *top, const string &name) const noexcept;
 
     // Seeks an item in the directory tree (returns nullptr if not found)
-    FSBlock &seek(const FSBlock &root, const FSName &name);
-    FSBlock &seek(const FSBlock &root, const fs::path &name);
-    FSBlock &seek(const FSBlock &root, const string &name);
-    const FSBlock &seek(const FSBlock &root, const FSName &name) const;
-    const FSBlock &seek(const FSBlock &root, const fs::path &name) const;
-    const FSBlock &seek(const FSBlock &root, const string &name) const;
+    FSBlock &seek(const FSBlock &top, const FSName &name);
+    FSBlock &seek(const FSBlock &top, const fs::path &name);
+    FSBlock &seek(const FSBlock &top, const string &name);
+    const FSBlock &seek(const FSBlock &top, const FSName &name) const;
+    const FSBlock &seek(const FSBlock &top, const fs::path &name) const;
+    const FSBlock &seek(const FSBlock &v, const string &name) const;
 
     // Seeks all items satisfying a predicate
     std::vector<const FSBlock *> find(const FSOpt &opt) const;
@@ -265,22 +265,22 @@ public:
 
     // Seeks all items with a pattern-matching name
     std::vector<const FSBlock *> find(const FSPattern &pattern) const;
-    std::vector<const FSBlock *> find(const FSBlock *root, const FSPattern &pattern) const;
-    std::vector<const FSBlock *> find(const FSBlock &root, const FSPattern &pattern) const;
+    std::vector<const FSBlock *> find(const FSBlock *top, const FSPattern &pattern) const;
+    std::vector<const FSBlock *> find(const FSBlock &top, const FSPattern &pattern) const;
     std::vector<Block> find(Block root, const FSPattern &pattern) const;
 
     // Collects all items with a pattern-matching path
     std::vector<const FSBlock *> match(const FSPattern &pattern) const;
-    std::vector<const FSBlock *> match(const FSBlock *root, const FSPattern &pattern) const;
-    std::vector<const FSBlock *> match(const FSBlock &root, const FSPattern &pattern) const;
+    std::vector<const FSBlock *> match(const FSBlock *top, const FSPattern &pattern) const;
+    std::vector<const FSBlock *> match(const FSBlock &top, const FSPattern &pattern) const;
     std::vector<Block> match(Block root, const FSPattern &pattern) const;
 
 private:
 
-    std::vector<const FSBlock *> find(const FSBlock *root, const FSOpt &opt,
+    std::vector<const FSBlock *> find(const FSBlock *top, const FSOpt &opt,
                                       std::unordered_set<Block> &visited) const;
 
-    std::vector<const FSBlock *> match(const FSBlock *root,
+    std::vector<const FSBlock *> match(const FSBlock *top,
                                        std::vector<FSPattern> pattern) const;
 
 
@@ -291,20 +291,20 @@ private:
 public:
     
     // Follows a linked list and collects all blocks
-    std::vector<const FSBlock *> collect(const FSBlock &node,
+    std::vector<const FSBlock *> collect(const FSBlock &block,
                                          std::function<const FSBlock *(const FSBlock *)> next) const;
     std::vector<Block> collect(const Block nr,
                                std::function<const FSBlock *(const FSBlock *)> next) const;
 
     // Collects blocks of a certain type
-    std::vector<const FSBlock *> collectDataBlocks(const FSBlock &node) const;
-    std::vector<const FSBlock *> collectListBlocks(const FSBlock &node) const;
-    std::vector<const FSBlock *> collectHashedBlocks(const FSBlock &node, isize bucket) const;
-    std::vector<const FSBlock *> collectHashedBlocks(const FSBlock &node) const;
-    std::vector<Block> collectDataBlocks(Block ref) const;
-    std::vector<Block> collectListBlocks(Block ref) const;
-    std::vector<Block> collectHashedBlocks(Block ref, isize bucket) const;
-    std::vector<Block> collectHashedBlocks(Block ref) const;
+    std::vector<const FSBlock *> collectDataBlocks(const FSBlock &block) const;
+    std::vector<const FSBlock *> collectListBlocks(const FSBlock &block) const;
+    std::vector<const FSBlock *> collectHashedBlocks(const FSBlock &block, isize bucket) const;
+    std::vector<const FSBlock *> collectHashedBlocks(const FSBlock &block) const;
+    std::vector<Block> collectDataBlocks(Block nr) const;
+    std::vector<Block> collectListBlocks(Block nr) const;
+    std::vector<Block> collectHashedBlocks(Block nr, isize bucket) const;
+    std::vector<Block> collectHashedBlocks(Block nr) const;
 
 
     //
@@ -315,7 +315,7 @@ public:
 
     void require_initialized() const;
     void require_formatted() const;
-    void require_file_or_directory(const FSBlock &node) const;
+    void require_file_or_directory(const FSBlock &block) const;
 
 
     //

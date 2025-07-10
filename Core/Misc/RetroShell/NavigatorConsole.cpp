@@ -1136,6 +1136,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .flags  = rs::ac,
         .args   = {
             { .name = { "s", "Strict checking" }, .flags = rs::flag },
+            { .name = { "v", "Verbose output" }, .flags = rs::flag },
             { .name = { "r", "Rectify errors" }, .flags = rs::flag },
             { .name = { "nr", "Block number" }, .flags = rs::opt }
         },
@@ -1155,7 +1156,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             } else {
 
                 if (args.contains("r")) fs.doctor.rectify(strict);
-                if (auto errors = fs.doctor.xray(strict, os); !errors) {
+                if (auto errors = fs.doctor.xray(strict, os, args.contains("v")); !errors) {
                     os << "No findings." << std::endl;
                 }
             }

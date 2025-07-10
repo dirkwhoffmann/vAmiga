@@ -547,12 +547,20 @@ FSBlock::checksumStandard() const
 
     // Compute the new checksum
     u32 result = 0;
-    for (isize i = 0; i < bsize() / 4; i++) U32_INC(result, get32(i));
+    for (isize i = 0; i < bsize() / 4; i++)  U32_INC(result, get32(i));
     result = ~result;
     U32_INC(result, 1);
-    
+
     // Undo the modification
     const_cast<FSBlock *>(this)->set32(pos, old); // TODO: DON'T DO THIS
+
+    // Compute the new checksum
+    u32 result2 = 0;
+    for (isize i = 0; i < bsize() / 4; i++)  if (i != pos) U32_INC(result2, get32(i));
+    result2 = ~result2;
+    U32_INC(result2, 1);
+
+    assert(result == result2);
 
     return result;
 }
@@ -573,8 +581,7 @@ FSBlock::checksumBootBlock() const
     }
 
     // Second boot block
-    u8 *p = fs->storage[1].data(); //   .read(1)->bdata;
-    // u8 *p = fs.blocks[1]->data.ptr;
+    u8 *p = fs->storage[1].data();
 
     for (isize i = 0; i < bsize() / 4; i++) {
         
@@ -641,162 +648,6 @@ FSBlock::_dump(Category category, std::ostream &os) const
 
         fs->doctor.dump(nr, os);
     }
-        /*
-         os << tab("Block");
-         os << dec(nr) << std::endl;
-         os << tab("Type");
-         os << FSBlockTypeEnum::key(type) << std::endl;
-
-         if (hasHeaderKey()) {
-
-         os << tab("Header Key");
-         os << dec(getHeaderKey()) << std::endl;
-         }
-         if (hasChecksum()) {
-
-         os << tab("Checksum");
-         os << hex(getChecksum()) << std::endl;
-         }
-
-         switch (type) {
-
-         case FSBlockType::BOOT_BLOCK:
-
-         os << tab("Header");
-         for (isize i = 0; i < 8; i++) os << hex(bdata[i]) << " ";
-         os << std::endl;
-         break;
-
-         case FSBlockType::ROOT_BLOCK:
-
-         os << tab("Name");
-         os << getName() << std::endl;
-         os << tab("Created");
-         os << getCreationDate().str() << std::endl;
-         os << tab("Modified");
-         os << getCreationDate().str() << std::endl;
-         os << tab("Bitmap blocks");
-         os << FSBlock::rangeString(getBmBlockRefs()) << std::endl;
-         os << tab("Bitmap extension block");
-         os << dec(getNextBmExtBlockRef()) << std::endl;
-         break;
-
-         case FSBlockType::BITMAP_BLOCK:
-         {
-         isize count = 0;
-         for (isize i = 1; i < bsize() / 4; i++) {
-         if (u32 value = get32(i)) {
-         for (isize j = 0; j < 32; j++) {
-         if (GET_BIT(value, j)) count++;
-         }
-         }
-         }
-         os << tab("Free");
-         os << dec(count) << " blocks" << std::endl;
-         break;
-         }
-         case FSBlockType::BITMAP_EXT_BLOCK:
-
-         os << tab("Bitmap blocks");
-         os << FSBlock::rangeString(getBmBlockRefs()) << std::endl;
-         os << tab("Next extension block");
-         os << dec(getNextBmExtBlockRef()) << std::endl;
-         break;
-
-         case FSBlockType::USERDIR_BLOCK:
-
-         os << tab("Name");
-         os << getName() << std::endl;
-         os << tab("Comment");
-         os << getComment() << std::endl;
-         os << tab("Created");
-         os << getCreationDate().str() << std::endl;
-         os << tab("Parent");
-         os << dec(getParentDirRef()) << std::endl;
-         os << tab("Next");
-         os << dec(getNextHashRef()) << std::endl;
-         break;
-
-         case FSBlockType::FILEHEADER_BLOCK:
-
-         os << tab("Name");
-         os << getName() << std::endl;
-         os << tab("Comment");
-         os << getComment() << std::endl;
-         os << tab("Created");
-         os << getCreationDate().str() << std::endl;
-         os << tab("UID (User ID)");
-         os << hex(HI_WORD(get32(-49))) << std::endl;
-         os << tab("GID (Group ID)");
-         os << hex(LO_WORD(get32(-49))) << std::endl;
-         os << tab("Protection flags");
-         os << hex(getProtectionBits()) << std::endl;
-         os << tab("File size");
-         os << dec(getFileSize()) << " bytes" << std::endl;
-         os << tab("First data block");
-         os << dec(getFirstDataBlockRef()) << std::endl;
-         os << tab("Data block count");
-         os << dec(getNumDataBlockRefs()) << " out of " << dec(getMaxDataBlockRefs()) << std::endl;
-         os << tab("Data block refs");
-         os << FSBlock::rangeString(getDataBlockRefs()) << std::endl;
-         os << tab("First extension block");
-         os << dec(getNextListBlockRef()) << std::endl;
-         os << tab("Parent dir");
-         os << dec(getParentDirRef()) << std::endl;
-         os << tab("Next file");
-         os << dec(getNextHashRef()) << std::endl;
-         break;
-
-         case FSBlockType::FILELIST_BLOCK:
-
-         os << tab("Header block");
-         os << getFileHeaderRef() << std::endl;
-         os << tab("Data block count");
-         os << getNumDataBlockRefs() << " out of " << getMaxDataBlockRefs() << std::endl;
-         os << tab("First");
-         os << getFirstDataBlockRef() << std::endl;
-         os << tab("Data blocks");
-         os << FSBlock::rangeString(getDataBlockRefs()) << std::endl;
-         os << tab("Next extension block");
-         os << getNextListBlockRef() << std::endl;
-         break;
-
-         case FSBlockType::DATA_BLOCK_OFS:
-
-         os << tab("File header block");
-         os << getFileHeaderRef() << std::endl;
-         os << tab("Chain number");
-         os << getDataBlockNr() << std::endl;
-         os << tab("Data bytes");
-         os << getDataBytesInBlock() << std::endl;
-         os << tab("Next data block");
-         os << getNextDataBlockRef() << std::endl;
-         break;
-
-         default:
-         break;
-         }
-         }
-
-         if (hashTableSize() > 0) {
-
-         os << tab("Hash table");
-         for (isize i = 0, j = 0; i < hashTableSize(); i++) {
-
-         if (Block ref = read32(bdata + 24 + 4 * i); ref) {
-
-         if (j++) os << std::endl << tab();
-         os << std::setfill(' ') << std::setw(2) << i << " -> ";
-         os << std::setfill(' ') << std::setw(4) << ref;
-
-         if (auto ptr = fs->blockPtr(ref); ptr) {
-         os << " (" << ptr->getName().cpp_str() << ")";
-         }
-         }
-         }
-         os << std::endl;
-         }
-         */
 }
 
 void
@@ -847,7 +698,10 @@ FSBlock::importBlock(const u8 *src, isize size)
     assert(src);
     assert(size == bsize());
 
-    if (bdata) std::memcpy(bdata, src, size);
+    if (bdata) {
+
+        std::memcpy(bdata, src, size);
+    }
 }
 
 void
@@ -855,10 +709,6 @@ FSBlock::exportBlock(u8 *dst, isize size) const
 {
     assert(dst);
     assert(size == bsize());
-
-    // Rectify the checksum
-    // TODO: DON'T DO THIS HERE. ADD ASSERT. CHANGE METHOD TO CONST
-    const_cast<FSBlock *>(this)->updateChecksum();
 
     // Export the block
     if (bdata) {
@@ -1215,9 +1065,9 @@ FSBlock::setHeaderKey(u32 val)
         case FSBlockType::DATA_OFS:
 
             set32(1, val);
+            break;
 
         default:
-
             break;
     }
 }
@@ -1356,9 +1206,16 @@ FSBlock::setFileHeaderRef(Block ref)
 {
     switch (type) {
 
-        case FSBlockType::FILELIST:  set32(-3, ref); break;
-        case FSBlockType::DATA_OFS:  set32(1, ref); break;
-            
+        case FSBlockType::FILELIST:
+
+            set32(-3, ref);
+            break;
+
+        case FSBlockType::DATA_OFS:
+
+            set32(1, ref);
+            break;
+
         default:
             break;
     }
@@ -1367,10 +1224,6 @@ FSBlock::setFileHeaderRef(Block ref)
 FSBlock *
 FSBlock::getFileHeaderBlock() const
 {
-    /*
-    Block nr = getFileHeaderRef();
-    return nr ? fs->fileHeaderBlockPtr(nr) : nullptr;
-    */
     return fs->read(getFileHeaderRef(), FSBlockType::FILEHEADER);
 }
 
@@ -1446,8 +1299,6 @@ FSBlock::setNextListBlockRef(Block ref)
 FSBlock *
 FSBlock::getNextListBlock() const
 {
-    // Block nr = getNextListBlockRef();
-    // return nr ? fs->fileListBlockPtr(nr) : nullptr;
     return fs->read(getNextListBlockRef(), FSBlockType::FILELIST);
 }
 
@@ -1469,9 +1320,16 @@ FSBlock::setNextBmExtBlockRef(Block ref)
 {
     switch (type) {
             
-        case FSBlockType::ROOT:        set32(-24, ref); break;
-        case FSBlockType::BITMAP_EXT:  set32(-1, ref); break;
-            
+        case FSBlockType::ROOT:
+
+            set32(-24, ref);
+            break;
+
+        case FSBlockType::BITMAP_EXT:
+
+            set32(-1, ref);
+            break;
+
         default:
             break;
     }
@@ -1481,7 +1339,6 @@ FSBlock *
 FSBlock::getNextBmExtBlock() const
 {
     Block nr = getNextBmExtBlockRef();
-    // return nr ? fs->bitmapExtBlockPtr(nr) : nullptr;
     return nr ? fs->read(nr, FSBlockType::BITMAP_EXT) : nullptr;
 }
 
@@ -1506,7 +1363,7 @@ FSBlock::setFirstDataBlockRef(Block ref)
     switch (type) {
 
         case FSBlockType::FILEHEADER:
-            
+
             set32(4, ref);
             break;
             
@@ -1520,10 +1377,6 @@ FSBlock::getFirstDataBlock() const
 {
     if (auto *node = fs->read(getFirstDataBlockRef()); node->isData()) return node;
     return nullptr;
-    /*
-    Block nr = getFirstDataBlockRef();
-    return nr ? fs->dataBlockPtr(nr) : nullptr;
-    */
 }
 
 Block
@@ -1562,10 +1415,6 @@ FSBlock::getDataBlock(isize nr) const
 {
     if (auto *node = fs->read(getDataBlockRef(nr)); node->isData()) return node;
     return nullptr;
-    /*
-    Block ref = getDataBlockRef(nr);
-    return ref ? fs->dataBlockPtr(ref) : nullptr;
-    */
 }
 
 Block
@@ -1577,7 +1426,10 @@ FSBlock::getNextDataBlockRef() const
 void
 FSBlock::setNextDataBlockRef(Block ref)
 {
-    if (type == FSBlockType::DATA_OFS) set32(4, ref);
+    if (type == FSBlockType::DATA_OFS) {
+
+        set32(4, ref);
+    }
 }
 
 FSBlock *
@@ -1585,10 +1437,6 @@ FSBlock::getNextDataBlock() const
 {
     if (auto *node = fs->read(getNextDataBlockRef()); node->isData()) return node;
     return nullptr;
-    /*
-    Block nr = getNextDataBlockRef();
-    return nr ? fs->dataBlockPtr(nr) : nullptr;
-    */
 }
 
 bool
@@ -1637,7 +1485,10 @@ FSBlock::getHashRef(Block nr) const
 void
 FSBlock::setHashRef(Block nr, u32 ref)
 {
-    if (nr < (Block)hashTableSize()) set32(6 + nr, ref);
+    if (nr < (Block)hashTableSize()) {
+
+        set32(6 + nr, ref);
+    }
 }
 
 void
@@ -1680,7 +1531,6 @@ FSBlock::addBitmapBlockRefs(std::vector<Block> &refs)
         ext->addBitmapBlockRefs(refs, it);
         ext = getNextBmExtBlock();
     }
-    
     return it == refs.end();
 }
 

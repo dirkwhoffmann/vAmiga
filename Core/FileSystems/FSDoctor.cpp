@@ -250,11 +250,11 @@ isize
 FSDoctor::xray(bool strict)
 {
     std::stringstream ss;
-    return xray(strict, ss);
+    return xray(strict, ss, false);
 }
 
 isize
-FSDoctor::xray(bool strict, std::ostream &os)
+FSDoctor::xray(bool strict, std::ostream &os, bool verbose)
 {
     diagnosis.blockErrors = {};
 
@@ -262,31 +262,22 @@ FSDoctor::xray(bool strict, std::ostream &os)
 
         if (auto errors = xray(it, strict); errors) {
 
-            diagnosis.blockErrors.push_back(Block(it));
+            if (verbose) {
 
-            os << "Block " << std::setw(5) << std::left << (std::to_string(it) + ": ");
-            os << errors << " anomalies" << std::endl;
+                if (!diagnosis.blockErrors.empty()) os << std::endl;
+                xray(it, strict, os);
+
+            } else {
+
+                os << "Block " << std::setw(5) << std::left << (std::to_string(it) + ": ");
+                os << errors << " anomalies" << std::endl;
+            }
+
+            diagnosis.blockErrors.push_back(Block(it));
         }
     }
 
     return isize(diagnosis.blockErrors.size());
-
-    // return { 12, 24, 42,43,44, 67,69};
-
-    /*
-    auto result = xray(strict);
-
-    auto blocks = [&](size_t s) { return std::to_string(s) + (s == 1 ? " block" : " blocks"); };
-
-    if (auto total = diagnosis.blockErrors.size(); total) {
-
-        os << util::tab("Block anomalies:");
-        os << blocks(total) << std::endl;
-        os << util::tab("Corrupted blocks:");
-        os << FSBlock::rangeString(diagnosis.blockErrors) << std::endl;
-    }
-    return result;
-    */
 }
 
 isize
@@ -656,6 +647,8 @@ FSDoctor::xray(FSBlock &node, bool strict, std::ostream &os) const
             auto *data = node.data();
             auto type = fs.typeof(node.nr, i);
 
+            //hex(6, node.nr, ":+");
+            ss << std::setw(7) << std::left << std::to_string(node.nr);
             ss << "+";
             hex(4, i, "  ");
             hex4(node.read32(data + i), "  ");
@@ -670,8 +663,7 @@ FSDoctor::xray(FSBlock &node, bool strict, std::ostream &os) const
 
     if (errors) {
 
-        os << "Entry  Data         Item type                           Expected" << std::endl;
-        // os << string(67, '-') << std::endl;
+        os << "Block  Entry  Data         Item type                           Expected" << std::endl;
         string line;
         while(std::getline(ss, line)) os << line << '\n';
 

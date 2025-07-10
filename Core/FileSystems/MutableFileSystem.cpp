@@ -130,8 +130,12 @@ MutableFileSystem::format(FSFormat dos, string name){
     // Set the volume name
     if (name != "") setName(name);
 
-    // Compute checksums for all blocks
-    updateChecksums();
+    // Rectify checksums
+    storage[0].updateChecksum();
+    storage[1].updateChecksum();
+    storage[rootBlock].updateChecksum();
+    for (auto& ref : bmBlocks) { storage[ref].updateChecksum(); }
+    for (auto& ref : bmExtBlocks) { storage[ref].updateChecksum(); }
 
     // Set the current directory
     current = rootBlock;
@@ -373,7 +377,7 @@ MutableFileSystem::rectifyAllocationMap()
 }
 
 FSBlock &
-MutableFileSystem::createDir(const FSBlock &at, const FSName &name)
+MutableFileSystem::createDir(FSBlock &at, const FSName &name)
 {
     if (at.isDirectory()) {
 
@@ -389,7 +393,7 @@ MutableFileSystem::createDir(const FSBlock &at, const FSName &name)
 }
 
 FSBlock &
-MutableFileSystem::createFile(const FSBlock &at, const FSName &name)
+MutableFileSystem::createFile(FSBlock &at, const FSName &name)
 {
     if (at.isDirectory()) {
 
@@ -405,13 +409,13 @@ MutableFileSystem::createFile(const FSBlock &at, const FSName &name)
 }
 
 FSBlock &
-MutableFileSystem::createFile(const FSBlock &at, const FSName &name, const Buffer<u8> &buf)
+MutableFileSystem::createFile(FSBlock &at, const FSName &name, const Buffer<u8> &buf)
 {
     return createFile(at, name, buf.ptr, buf.size);
 }
 
 FSBlock &
-MutableFileSystem::createFile(const FSBlock &at, const FSName &name, const u8 *buf, isize size)
+MutableFileSystem::createFile(FSBlock &top, const FSName &name, const u8 *buf, isize size)
 {
     assert(buf);
 
@@ -419,7 +423,7 @@ MutableFileSystem::createFile(const FSBlock &at, const FSName &name, const u8 *b
     const usize numRefs = ((traits.bsize / 4) - 56);
 
     // Create a file header block
-    auto &file = createFile(at, name);
+    auto &file = createFile(top, name);
 
     // Set file size
     file.setFileSize(u32(size));
@@ -452,13 +456,19 @@ MutableFileSystem::createFile(const FSBlock &at, const FSName &name, const u8 *b
         size -= written;
     }
 
+    // Rectify checksums
+    for (auto &it : listBlocks) { at(it).updateChecksum(); }
+    for (auto &it : dataBlocks) { at(it).updateChecksum(); }
+    file.updateChecksum();
+    // top.updateChecksum();
+
     return file;
 }
 
 FSBlock &
-MutableFileSystem::createFile(const FSBlock &at, const FSName &name, const string &str)
+MutableFileSystem::createFile(FSBlock &top, const FSName &name, const string &str)
 {
-    return createFile(at, name, (const u8 *)str.c_str(), (isize)str.size());
+    return createFile(top, name, (const u8 *)str.c_str(), (isize)str.size());
 }
 
 void
@@ -490,13 +500,13 @@ MutableFileSystem::move(FSBlock &item, const FSBlock &dest, const FSName &name)
 }
 
 void
-MutableFileSystem::copy(const FSBlock &item, const FSBlock &dest)
+MutableFileSystem::copy(const FSBlock &item, FSBlock &dest)
 {
     copy(item, dest, item.cppName());
 }
 
 void
-MutableFileSystem::copy(const FSBlock &item, const FSBlock &dest, const FSName &name)
+MutableFileSystem::copy(const FSBlock &item, FSBlock &dest, const FSName &name)
 {
     if (!item.isFile()) throw AppError(Fault::FS_NOT_A_FILE, item.absName());
     if (!dest.isDirectory()) throw AppError(Fault::FS_NOT_A_DIRECTORY, dest.absName());
@@ -547,11 +557,18 @@ MutableFileSystem::addToHashTable(Block parent, Block ref)
     u32 hash = pr->hashValue() % pp->hashTableSize();
     auto chain = collectHashedBlocks(pp->nr, hash);
 
-    // If the bucket is empty, make the reference the first entry
-    if (chain.empty()) { pp->setHashRef(hash, ref); return; }
+    if (chain.empty()) {
 
-    // Otherwise, put the referecne at the end of the linked list
-    read(chain.back())->setNextHashRef(ref);
+        // If the bucket is empty, make the reference the first entry
+        pp->setHashRef(hash, ref);
+        pp->updateChecksum();
+
+    } else {
+
+        // Otherwise, put the reference at the end of the linked list
+        read(chain.back())->setNextHashRef(ref);
+        read(chain.back())->updateChecksum();
+    }
 }
 
 void
@@ -578,15 +595,19 @@ MutableFileSystem::deleteFromHashTable(Block parent, Block ref)
     // Find the element
     if (auto it = std::find(chain.begin(), chain.end(), ref); it != chain.end()) {
 
-
         auto pred = it != chain.begin() ? *(it - 1) : 0;
         auto succ = (it + 1) != chain.end() ? *(it + 1) : 0;
 
         // Remove the element from the list
         if (!pred) {
+
             pp->setHashRef(hash, succ);
+            pp->updateChecksum();
+
         } else {
+
             read(pred)->setNextHashRef(succ);
+            read(pred)->updateChecksum();
         }
     }
 }
@@ -610,6 +631,7 @@ MutableFileSystem::addData(FSBlock &block, const u8 *buf, isize size)
             count = std::min(traits.bsize - 24, size);
             std::memcpy(block.data() + 24, buf, count);
             block.setDataBytesInBlock((u32)count);
+            block.updateChecksum();
             break;
 
         case FSBlockType::DATA_FFS:
@@ -663,6 +685,10 @@ MutableFileSystem::allocateFileBlocks(isize bytes, std::vector<Block> &listBlock
         allocate(numListBlocks, listBlocks);
         allocate(refsInListBlocks, dataBlocks);
     }
+
+    // Rectify checksums
+    for (auto &it : bmBlocks) at(it).updateChecksum();
+    for (auto &it : bmExtBlocks) at(it).updateChecksum();
 }
 
 void
@@ -700,7 +726,7 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
 }
 
 void
-MutableFileSystem::import(const FSBlock &at, const fs::path &path, bool recursive, bool contents)
+MutableFileSystem::import(FSBlock &top, const fs::path &path, bool recursive, bool contents)
 {
     fs::directory_entry dir;
 
@@ -712,23 +738,23 @@ MutableFileSystem::import(const FSBlock &at, const fs::path &path, bool recursiv
     if (dir.is_directory() && contents) {
 
         // Add the directory contents
-        for (const auto& it : fs::directory_iterator(dir)) import(at, it, recursive);
+        for (const auto& it : fs::directory_iterator(dir)) import(top, it, recursive);
 
     } else {
 
         // Add the file or directory as a whole
-        import(at, dir, recursive);
+        import(top, dir, recursive);
     }
 
     // Rectify the checksums of all blocks
     updateChecksums();
 
     // Verify the result
-    if (FS_DEBUG) doctor.xray(true, std::cout);
+    if (FS_DEBUG) doctor.xray(true, std::cout, false);
 }
 
 void
-MutableFileSystem::import(const FSBlock &at, const fs::directory_entry &entry, bool recursive)
+MutableFileSystem::import(FSBlock &top, const fs::directory_entry &entry, bool recursive)
 {
     auto isHidden = [&](const fs::path &path) {
 
@@ -749,9 +775,9 @@ MutableFileSystem::import(const FSBlock &at, const fs::directory_entry &entry, b
 
         Buffer<u8> buffer(entry.path());
         if (buffer) {
-            createFile(at, fsname, buffer.ptr, buffer.size);
+            createFile(top, fsname, buffer.ptr, buffer.size);
         } else {
-            createFile(at, fsname);
+            createFile(top, fsname);
         }
 
     } else {
@@ -759,7 +785,7 @@ MutableFileSystem::import(const FSBlock &at, const fs::directory_entry &entry, b
         debug(FS_DEBUG > 1, "Importing directory %s\n", fsname.c_str());
 
         // Create new directory
-        auto &subdir = createDir(at, fsname);
+        auto &subdir = createDir(top, fsname);
 
         // Import all items
         for (const auto& it : fs::directory_iterator(entry)) {

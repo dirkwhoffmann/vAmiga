@@ -128,13 +128,13 @@ public:
 public:
 
     // Creates a new directory
-    FSBlock &createDir(const FSBlock &at, const FSName &name);
+    FSBlock &createDir(FSBlock &at, const FSName &name);
 
     // Creates a new file
-    FSBlock &createFile(const FSBlock &at, const FSName &name);
-    FSBlock &createFile(const FSBlock &at, const FSName &name, const Buffer<u8> &buf);
-    FSBlock &createFile(const FSBlock &at, const FSName &name, const u8 *buf, isize size);
-    FSBlock &createFile(const FSBlock &at, const FSName &name, const string &str);
+    FSBlock &createFile(FSBlock &at, const FSName &name);
+    FSBlock &createFile(FSBlock &at, const FSName &name, const Buffer<u8> &buf);
+    FSBlock &createFile(FSBlock &at, const FSName &name, const u8 *buf, isize size);
+    FSBlock &createFile(FSBlock &at, const FSName &name, const string &str);
 
     // Renames a file or directory
     void rename(FSBlock &item, const FSName &name);
@@ -143,8 +143,8 @@ public:
     void move(FSBlock &item, const FSBlock &dest, const FSName &name = "");
 
     // Copies a file
-    void copy(const FSBlock &item, const FSBlock &dest);
-    void copy(const FSBlock &item, const FSBlock &dest, const FSName &name);
+    void copy(const FSBlock &item, FSBlock &dest);
+    void copy(const FSBlock &item, FSBlock &dest, const FSName &name);
 
     // Delete a file
     void deleteFile(const FSBlock &at);
@@ -177,8 +177,8 @@ public:
     void importVolume(const u8 *src, isize size) throws;
 
     // Imports files and folders from the host file system
-    void import(const FSBlock &at, const fs::path &path, bool recursive = true, bool contents = false) throws;
-    void import(const FSBlock &at, const fs::directory_entry &dir, bool recursive) throws;
+    void import(FSBlock &top, const fs::path &path, bool recursive = true, bool contents = false) throws;
+    void import(FSBlock &top, const fs::directory_entry &dir, bool recursive) throws;
 
     // Imports a single block
     void importBlock(Block nr, const fs::path &path);

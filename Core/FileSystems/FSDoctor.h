@@ -56,7 +56,7 @@ public:
 
     // Scans all blocks. Returns the number of errors. Stores details in 'diagnosis'
     isize xray(bool strict);
-    isize xray(bool strict, std::ostream &os);
+    isize xray(bool strict, std::ostream &os, bool verbose);
 
     // Scans a single block and returns the number of errors
     isize xray(Block ref, bool strict) const;
