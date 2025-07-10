@@ -46,6 +46,7 @@ enum class Category : long
     State,
     Stats,
     Status,
+    Storage,
     SwTraps,
     Tod,
     Trace,

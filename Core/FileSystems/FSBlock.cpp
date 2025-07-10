@@ -604,18 +604,18 @@ FSBlock::_dump(Category category, std::ostream &os) const
 {
     using namespace util;
 
+    auto byteStr = [&os](isize num) {
+
+        auto str = std::to_string(num) + " Byte" + (num == 1 ? "" : "s");
+        os << std::setw(13) << std::left << std::setfill(' ') << str;
+    };
+    auto blockStr = [&os](isize num) {
+
+        auto str = std::to_string(num) + " Block" + (num == 1 ? "" : "s");
+        os << std::setw(13) << std::left << std::setfill(' ') << str;
+    };
+
     if (category == Category::Info) {
-
-        auto byteStr = [&os](isize num) {
-
-            auto str = std::to_string(num) + " Byte" + (num == 1 ? "" : "s");
-            os << std::setw(13) << std::left << std::setfill(' ') << str;
-        };
-        auto blockStr = [&os](isize num) {
-
-            auto str = std::to_string(num) + " Block" + (num == 1 ? "" : "s");
-            os << std::setw(13) << std::left << std::setfill(' ') << str;
-        };
 
         switch (type) {
 
@@ -624,7 +624,7 @@ FSBlock::_dump(Category category, std::ostream &os) const
                 auto name = getName().cpp_str();
                 auto size = getFileSize();
                 auto listBlocks = isize(fs->collectListBlocks(nr).size());
-                auto dataBlocks = isize(fs->collectListBlocks(nr).size());
+                auto dataBlocks = isize(fs->collectDataBlocks(nr).size());
                 auto totalBlocks = 1 + listBlocks + dataBlocks;
                 auto tab = int(name.size()) + 4;
 
@@ -645,6 +645,35 @@ FSBlock::_dump(Category category, std::ostream &os) const
     }
 
     if (category == Category::Blocks) {
+
+        switch (type) {
+
+            case FSBlockType::FILEHEADER:
+            {
+                auto size = getFileSize();
+                auto listBlocks = fs->collectListBlocks(nr);
+                auto dataBlocks = fs->collectDataBlocks(nr);
+                auto totalBlocks = 1 + listBlocks.size() + dataBlocks.size();
+
+                os << util::tab("Name");
+                os << getName().cpp_str() << std::endl;
+                os << util::tab("Blocks");
+                os << totalBlocks << " Block" << (totalBlocks == 1 ? "" : "s") << std::endl;
+                os << util::tab("Size");
+                os << size << " Byte" << (size == 1 ? "" : "s") << std::endl;
+                os << util::tab("File header block");
+                os << nr << std::endl;
+                os << util::tab("File list blocks");
+                os << FSBlock::rangeString(listBlocks) << std::endl;
+                os << util::tab("Data blocks");
+                os << FSBlock::rangeString(dataBlocks) << std::endl;
+            }
+            default:
+                break;
+        }
+    }
+
+    if (category == Category::Storage) {
 
         fs->doctor.dump(nr, os);
     }

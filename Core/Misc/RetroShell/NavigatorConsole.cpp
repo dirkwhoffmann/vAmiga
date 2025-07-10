@@ -839,7 +839,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             if (args.contains("b")) {
-                fs.dump(Category::Blocks, os);
+                fs.dump(Category::Storage, os);
             } else {
                 fs.dump(Category::Info, os);
             }
@@ -860,19 +860,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             auto &file = parseFile(args, "path");
-            file.dump(Category::Info, os);
-
-            auto dataBlocks = fs.collectDataBlocks(file.nr);
-            auto listBlocks = fs.collectListBlocks(file.nr);
-
-            if (args.contains("v")) {
-
-                os << std::endl;
-                os << util::tab("File list blocks");
-                os << FSBlock::rangeString(listBlocks) << std::endl;
-                os << util::tab("Data blocks");
-                os << FSBlock::rangeString(dataBlocks) << std::endl;
-            }
+            file.dump(args.contains("v") ? Category::Blocks : Category::Info, os);
         }
     });
 
