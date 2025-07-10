@@ -583,14 +583,16 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "export" },
         .ghelp  = { "Export a file system" },
-        .chelp  = { "Export a file or a folder from the host file system" },
+        .chelp  = { "Export the current directory to the host file system" },
         .args   = {
             { .name = { "path", "Host file system directory" } },
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             auto path = host.makeAbsolute(args.at("path"));
-            fs.exportDirectory(path); // TODO: EXPORT THE CURRENT DIRECTORY ONLY
+
+            FSTree tree(fs.pwd(), { .recursive = true });
+            tree.save(path);
         }
     });
     root.add({
@@ -853,11 +855,24 @@ NavigatorConsole::initCommands(RSCommand &root)
         .flags  = rs::ac,
         .args   = {
             { .name = { "path", "File path" }, .flags = rs::opt },
+            { .name = { "v", "Verbose output" }, .flags = rs::flag },
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             auto &file = parseFile(args, "path");
             file.dump(Category::Info, os);
+
+            auto dataBlocks = fs.collectDataBlocks(file.nr);
+            auto listBlocks = fs.collectListBlocks(file.nr);
+
+            if (args.contains("v")) {
+
+                os << std::endl;
+                os << util::tab("File list blocks");
+                os << FSBlock::rangeString(listBlocks) << std::endl;
+                os << util::tab("Data blocks");
+                os << FSBlock::rangeString(dataBlocks) << std::endl;
+            }
         }
     });
 
@@ -944,7 +959,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             auto path = host.makeAbsolute(args.at("path"));
             auto nr = parseBlock(args, "nr", fs.pwd().nr);
 
-            fs.exportBlock(nr, path);
+            fs.importBlock(nr, path);
         }
     });
 
@@ -961,7 +976,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             auto path = host.makeAbsolute(args.at("path"));
             auto nr = parseBlock(args, "nr", fs.pwd().nr);
 
-            fs.importBlock(nr, path);
+            fs.exportBlock(nr, path);
         }
     });
 

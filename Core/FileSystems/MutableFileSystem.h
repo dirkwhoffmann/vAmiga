@@ -14,19 +14,19 @@
 namespace vamiga {
 
 class MutableFileSystem : public FileSystem {
-    
+
     friend struct FSBlock;
     friend struct FSHashTable;
     friend struct FSPartition;
 
     // Allocation pointer (used by the allocator to select the next block)
     Block ap = 0;
-    
-    
+
+
     //
     // Initializing
     //
-    
+
 public:
 
     using FileSystem::FileSystem;
@@ -40,7 +40,7 @@ public:
     void init(const FSDescriptor &layout, const fs::path &path = {});
     void init(Diameter dia, Density den, FSFormat dos, const fs::path &path = {});
 
-    
+
     //
     // Formatting
     //
@@ -55,7 +55,7 @@ public:
     void setName(FSName name);
     void setName(string name) { setName(FSName(name)); }
 
-    
+
     //
     // Creating and deleting blocks
     //
@@ -64,13 +64,13 @@ public:
 
     // Returns true if at least 'count' free blocks are available
     bool allocatable(isize count) const;
-    
+
     // Seeks a free block and marks it as allocated
     Block allocate();
 
     // Allocates multiple blocks
     void allocate(isize count, std::vector<Block> &result);
-    
+
     // Deallocates a block
     void deallocateBlock(Block nr);
 
@@ -92,11 +92,11 @@ private:
     FSBlock *newUserDirBlock(const FSName &name);
     FSBlock *newFileHeaderBlock(const FSName &name);
 
-    
+
     //
     // Modifying boot blocks
     //
-    
+
 public:
 
     // Installs a boot block
@@ -105,7 +105,7 @@ public:
     // Removes a boot block virus from the current partition (if any)
     void killVirus();
 
-    
+
     //
     // Editing the block allocation bitmap
     //
@@ -124,7 +124,7 @@ public:
     //
     // Managing directories and files
     //
-    
+
 public:
 
     // Creates a new directory
@@ -162,15 +162,15 @@ private:
     // Adds bytes to a data block
     isize addData(Block nr, const u8 *buf, isize size);
     isize addData(FSBlock &block, const u8 *buf, isize size);
-    
+
     // Allocates all blocks needed for a file
     void allocateFileBlocks(isize bytes, std::vector<Block> &listBlocks, std::vector<Block> &dataBlocks);
 
-    
+
     //
     // Importing and exporting the volume
     //
-    
+
 public:
 
     // Imports the volume from a buffer compatible with the ADF or HDF format
@@ -194,8 +194,15 @@ public:
     bool exportBlocks(Block first, Block last, u8 *dst, isize size, Fault *error) const;
     void exportBlock(Block nr, const fs::path &path) const;
 
-    // Exports the volume to a directory of the host file system
+    // Exports the current directory of the host file system
     void exportDirectory(const fs::path &path, bool createDir = true) const throws;
+
+    // Exports a single file to the host file system
+    void exportFile(const FSBlock &node, const fs::path &path) const throws;
+
+    // Exports a directory or a file to the host file system (MOVE TO FSTree)
+    void exportItem(const FSBlock &node, const fs::path &path, bool createDir = true) const; // DEPRECATED
+    void exportDirectory(const FSBlock &node, const fs::path &path, bool createDir = true) const; // DEPRECATED
 };
 
 }

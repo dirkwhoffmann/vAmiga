@@ -10,6 +10,7 @@
 #include "config.h"
 #include "IOUtils.h"
 #include "MutableFileSystem.h"
+#include "Host.h"
 #include "MemUtils.h"
 #include <climits>
 #include <unordered_set>
@@ -876,6 +877,29 @@ MutableFileSystem::exportBlock(Block nr, const fs::path &path) const
 void
 MutableFileSystem::exportDirectory(const fs::path &path, bool createDir) const
 {
+    exportDirectory(pwd(), path, createDir);
+}
+
+void
+MutableFileSystem::exportItem(const FSBlock &node, const fs::path &path, bool createDir) const
+{
+    if (node.isDirectory()) {
+        exportDirectory(node, path, createDir);
+    } else if (node.isFile()) {
+        exportFile(node, path);
+    } else {
+        throw AppError(Fault::FS_NOT_A_FILE_OR_DIRECTORY);
+    }
+}
+
+void
+MutableFileSystem::exportDirectory(const FSBlock &node, const fs::path &path, bool createDir) const
+{
+    // Only proceed if the provide node is a directory block
+    if (!node.isDirectory()) {
+        throw AppError(Fault::FS_NOT_A_DIRECTORY);
+    }
+
     // Try to create the directory if it doesn't exist
     if (!util::isDirectory(path) && createDir && !util::createDirectory(path)) {
         throw AppError(Fault::FS_CANNOT_CREATE_DIR);
@@ -892,18 +916,35 @@ MutableFileSystem::exportDirectory(const fs::path &path, bool createDir) const
     }
 
     // Collect all files and directories
-    // auto tree = traverse(root(), { .recursive = true });
-    auto tree = FSTree(root(), { .recursive = true });
+    auto tree = FSTree(node, { .recursive = true });
 
     // Export all items
     tree.bfsWalkRec([&](const FSTree &t) {
-        printf("Node: %s\n", t.node->relName(root()).c_str());
+
+        printf("Export %s (%s)\n", t.node->relName(node).c_str(), Host::sanitize(t.node->relName(node)).c_str());
         if (Fault error = t.node->exportBlock(path.c_str()); error != Fault::OK) {
-            throw AppError(error);
+            throw AppError(error, t.node->absName());
         }
     });
 
     debug(FS_DEBUG, "Exported %ld items", tree.size());
+}
+
+void
+MutableFileSystem::exportFile(const FSBlock &node, const fs::path &path) const
+{
+    printf("MutableFileSystem::exportFile(%s,%s)\n", node.absName().c_str(), path.string().c_str());
+
+    // Only proceed if the provide node is a file header block
+    if (!node.isFile()) throw AppError(Fault::FS_NOT_A_FILE);
+
+    // Determine file name
+    auto filename = fs::is_directory(path) ? path / Host::sanitize(node.name().cpp_str()) : path;
+
+    // Export file
+    if (Fault error = node.exportBlock(path / filename); error != Fault::OK) {
+        throw AppError(error);
+    }
 }
 
 }

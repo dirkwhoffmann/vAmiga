@@ -898,7 +898,7 @@ Fault
 FSBlock::exportFileHeaderBlock(const fs::path &path) const
 {
     // Assemble the host file name
-    auto filename = path / sanitizedPath();
+    auto filename = path; //  / sanitizedPath();
     debug(FS_DEBUG >= 2, "  Exporting file %s\n", filename.string().c_str());
 
     // Open file

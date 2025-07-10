@@ -9,6 +9,7 @@
 
 #include "FSTree.h"
 #include "FileSystem.h"
+#include "Host.h"
 
 namespace vamiga {
 
@@ -66,6 +67,14 @@ FSTree::size() const
     return result;
 }
 
+fs::path
+FSTree::hostName() const
+{
+    if (!node) return {};
+    return Host::sanitize(node->name().cpp_str());
+}
+
+
 void
 FSTree::dfsWalk(std::function<void(const FSTree &)> func)
 {
@@ -117,7 +126,6 @@ FSTree::list(std::ostream &os, const FSOpt &opt) const
             return node.cppName() + (node.isDirectory() ? " (dir)" : "\t");
         };
     }
-
     listRec(os, options);
 }
 
@@ -166,6 +174,59 @@ FSTree::listItems(std::ostream &os, const FSOpt &opt) const
     }
 
     if (column) os << std::endl;
+}
+
+void
+FSTree::save(const fs::path &path, const FSOpt &opt) const
+{
+    if (isDirectory()) {
+
+        if (fs::exists(path)) {
+
+            if (!fs::is_directory(path)) {
+                throw AppError(Fault::FS_NOT_A_DIRECTORY, path.string());
+            }
+            if (!fs::is_empty(path)) {
+                throw AppError(Fault::FS_DIR_NOT_EMPTY, path.string());
+            }
+
+        } else {
+
+            fs::create_directories(path);
+        }
+        saveDir(path, opt);
+    }
+
+    if (isFile()) {
+
+        if (fs::exists(path)) {
+            throw AppError(Fault::FS_EXISTS, path.string());
+        }
+        saveFile(path, opt);
+    }
+}
+
+void
+FSTree::saveDir(const fs::path &path, const FSOpt &opt) const
+{
+    // Save files
+    for (auto &it : children) {
+        if (it.isFile()) it.node->exportBlock(path / it.hostName());
+    }
+
+    // Save directories
+    if (opt.recursive) {
+        for (auto &it : children) {
+            if (it.isDirectory()) it.save(path / it.hostName());
+        }
+    }
+}
+
+void
+FSTree::saveFile(const fs::path &path, const FSOpt &opt) const
+{
+    // Save file
+    node->exportBlock(path);
 }
 
 }

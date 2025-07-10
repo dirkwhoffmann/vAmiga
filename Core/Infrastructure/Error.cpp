@@ -390,6 +390,10 @@ AppError::AppError(Fault code, const string &s)
             description = s.empty() ? "Item already exists." : s + " already exists.";
             break;
 
+        case Fault::FS_CANNOT_OPEN:
+            description = "Cannot open file" + (s.empty() ? "" : " " + s) + ".";
+            break;
+
         case Fault::FS_UNFORMATTED:
             description = "Unformatted device.";
             break;
