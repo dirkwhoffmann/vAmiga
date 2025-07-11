@@ -13,10 +13,10 @@
 
 namespace vamiga {
 
-FSTree::FSTree(const FSBlock &path, const FSOpt &opt)
+FSTree::FSTree(const FSBlock &top, const FSOpt &opt)
 {
     std::unordered_set<Block> visited;
-    init(path, opt, visited);
+    init(top, opt, visited);
 };
 
 FSTree::FSTree(const std::vector<const FSBlock *> nodes, const FSOpt &opt) : node(nullptr)
@@ -26,15 +26,15 @@ FSTree::FSTree(const std::vector<const FSBlock *> nodes, const FSOpt &opt) : nod
 }
 
 void
-FSTree::init(const FSBlock &path, const FSOpt &opt, std::unordered_set<Block> &visited)
+FSTree::init(const FSBlock &top, const FSOpt &opt, std::unordered_set<Block> &visited)
 {
-    auto &fs = *path.fs;
+    auto &fs = *top.fs;
 
-    path.fs->require_file_or_directory(path);
-    node = fs.read(path.nr);
+    top.fs->require_file_or_directory(top);
+    node = fs.read(top.nr);
 
     // Collect all items in the hash table
-    auto hashedBlocks = fs.collectHashedBlocks(path);
+    auto hashedBlocks = fs.collectHashedBlocks(top);
 
     for (auto it = hashedBlocks.begin(); it != hashedBlocks.end(); it++) {
 
@@ -132,17 +132,23 @@ FSTree::list(std::ostream &os, const FSOpt &opt) const
 void
 FSTree::listRec(std::ostream &os, const FSOpt &opt) const
 {
-    // Print header
     if (opt.recursive) {
+
+        // Print header
         os << "Directory " << node->absName() << ":" << std::endl << std::endl;
-    }
 
-    // Print all directoy items
-    listItems(os, opt);
+        // Print all directoy items
+        listItems(os, opt);
 
-    // Print all non-empty subdirectories
-    for (auto &it : children)  {
-        if (!it.children.empty()) { os << std::endl; it.listRec(os, opt); }
+        // Print all non-empty subdirectories
+        for (auto &it : children) {
+            if (it.isDirectory()) { os << std::endl; it.listRec(os, opt); }
+        }
+
+    } else {
+
+        // Print all directoy items
+        listItems(os, opt);
     }
 }
 
@@ -151,7 +157,8 @@ FSTree::listItems(std::ostream &os, const FSOpt &opt) const
 {
     // Collect all displayed strings
     std::vector<string> strs;
-    for (auto &it : children) strs.push_back(opt.formatter(*it.node));
+    for (auto &it : children) { if (opt.accept(it.node)) strs.push_back(opt.formatter(*it.node)); }
+    if (strs.empty()) return;
 
     // Determine the longest entry
     int tab = 0; for (auto &it: strs) tab = std::max(tab, int(it.length()));

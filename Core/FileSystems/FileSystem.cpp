@@ -625,6 +625,7 @@ FileSystem::seekPtr(const FSBlock *root, const string &name) noexcept
     if (!root) return nullptr;
 
     auto parts = util::split(name, '/');
+    if (!name.empty() && name[0] == '/') { parts.insert(parts.begin(), "/"); }
 
     FSBlock *result = read(root->nr);
     for (auto &it : parts) { if (result) { result = seekPtr(result, FSName(it)); } }

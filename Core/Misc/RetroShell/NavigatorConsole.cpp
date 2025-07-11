@@ -682,6 +682,20 @@ NavigatorConsole::initCommands(RSCommand &root)
                 .sort = sort::dafa,
                 .filter = [&](const FSBlock &item) {
 
+                    return true;
+                },
+                .formatter = [&](const FSBlock &node) {
+
+                    return node.cppName() + (node.isDirectory() ? " (dir)" : "\t");
+                }
+            };
+
+            FSOpt opt2 = {
+
+                .recursive = r,
+                .sort = sort::dafa,
+                .filter = [&](const FSBlock &item) {
+
                     return (!d || item.isDirectory()) && (!f || item.isFile());
                 },
                 .formatter = [&](const FSBlock &node) {
@@ -690,8 +704,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                 }
             };
 
-            FSTree(path, opt).list(os, opt);
-            // fs.list(os, path, opt);
+            FSTree(path, opt).list(os, opt2);
         }
     });
 
