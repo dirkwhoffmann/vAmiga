@@ -97,7 +97,7 @@ NavigatorConsole::autoComplete(Tokens &argv)
 
             // If that didn't work, try to auto-complete with a file name
             try {
-                auto prefix = autoCompleteFilename(argv.back());
+                auto prefix = autoCompleteFilename(argv.back(), cmd->flags);
                 if (prefix.size() > argv.back().size()) argv.back() = prefix;
 
             } catch (...) { }
@@ -106,20 +106,35 @@ NavigatorConsole::autoComplete(Tokens &argv)
 }
 
 string
-NavigatorConsole::autoCompleteFilename(const string &input) const
+NavigatorConsole::autoCompleteFilename(const string &input, usize flags) const
 {
     bool absolute = !input.empty() && input[0] == '/';
 
     // Seek matching items
     auto matches = fs.match(&fs.pwd(), input + "*");
 
+    // Filter out unwanted items
+    if (!matches.empty()) {
+        matches.erase(std::remove_if(matches.begin(), matches.end(), [flags](const FSBlock *node) {
+
+            return
+            (!(flags & rs::acdir) && node->isDirectory()) ||
+            (!(flags & rs::acfile) && node->isFile());
+
+        }), matches.end());
+    }
+
     // Extract names
     std::vector<string> names;
     for (auto &it : matches) {
-        names.push_back(absolute ? it->absName(): it->relName());
+        names.push_back(absolute ? it->acabsName(): it->acrelName());
+        printf("Names: %s\n", names.back().c_str());
     }
 
-    return util::commonPrefix(names, false);
+    // Auto-complete all common characters
+    auto completed = util::commonPrefix(names, false);
+
+    return completed;
 }
 
 void
@@ -136,7 +151,8 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
         // Seek matching items
         auto matches = fs.match(&fs.pwd(), args.empty() ? "*" : args.back() + "*");
 
-        // Filter out unwanted items    
+        /*
+        // Filter out unwanted items
         if (!matches.empty()) {
             matches.erase(std::remove_if(matches.begin(), matches.end(), [cmd](const FSBlock *node) {
 
@@ -146,6 +162,7 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
 
             }), matches.end());
         }
+        */
 
         // List all nodes
         FSTree(matches, { .sort = sort::dafa }).list(os);

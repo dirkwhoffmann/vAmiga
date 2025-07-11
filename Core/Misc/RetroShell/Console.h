@@ -417,7 +417,7 @@ class NavigatorConsole final : public Console
     void pressReturn(bool shift) override;
     void autoComplete(Tokens &argv) override;
     void help(std::ostream &os, const string &argv, isize tabs) override;
-    string autoCompleteFilename(const string &input) const;
+    string autoCompleteFilename(const string &input, usize flags) const;
 
     //
     // Parsing input

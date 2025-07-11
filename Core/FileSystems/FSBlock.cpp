@@ -210,6 +210,18 @@ FSBlock::relName() const
 }
 
 string
+FSBlock::acabsName() const
+{
+    return absName() + (isDirectory() ? "/" : "");
+}
+
+string
+FSBlock::acrelName() const
+{
+    return relName() + (isDirectory() ? "/" : "");
+}
+
+string
 FSBlock::relName(const FSBlock &top) const
 {
     string result;

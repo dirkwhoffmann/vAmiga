@@ -90,6 +90,10 @@ public:
     string relName() const;
     string relName(const FSBlock &top) const;
 
+    // Experimental
+    string acabsName() const;
+    string acrelName() const;
+
     // Converts the path to a host path
     fs::path sanitizedPath() const;
 
