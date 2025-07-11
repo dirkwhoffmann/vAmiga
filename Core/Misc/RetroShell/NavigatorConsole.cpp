@@ -143,35 +143,27 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
     auto [cmd, args] = seekCommand(argv);
 
     // Determine the kind of help to display
+    /*
     bool displayFiles = (tabs % 2 == 0) && fs.isFormatted() && cmd && cmd->callback && (cmd->flags & rs::ac);
     bool displayCmds  = (tabs % 2 == 1) || !displayFiles;
+    */
+    bool displayFiles = fs.isFormatted() && cmd && cmd->callback && (cmd->flags & rs::ac);
+    bool displayCmds  = true;
+
+    if (displayCmds) {
+
+        // Display the standard command help
+        Console::help(os, argv, tabs);
+    }
 
     if (displayFiles) {
 
         // Seek matching items
         auto matches = fs.match(&fs.pwd(), args.empty() ? "*" : args.back() + "*");
 
-        /*
-        // Filter out unwanted items
-        if (!matches.empty()) {
-            matches.erase(std::remove_if(matches.begin(), matches.end(), [cmd](const FSBlock *node) {
-
-                return
-                (!(cmd->flags & rs::acdir) && node->isDirectory()) ||
-                (!(cmd->flags & rs::acfile) && node->isFile());
-
-            }), matches.end());
-        }
-        */
-
         // List all nodes
+        if (!matches.empty() && displayCmds) *this << '\n';
         FSTree(matches, { .sort = sort::dafa }).list(os);
-    }
-
-    if (displayCmds) {
-
-        // Display the standard command help
-        Console::help(os, argv, tabs);
     }
 }
 

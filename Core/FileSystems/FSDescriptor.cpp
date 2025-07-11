@@ -124,6 +124,9 @@ FSDescriptor::checkCompatibility() const
     if (!FSFormatEnum::isValid(dos) || FORCE_FS_WRONG_DOS_TYPE) {
         throw AppError(Fault::FS_WRONG_DOS_TYPE);
     }
+    if (rootBlock >= numBlocks) {
+        throw AppError(Fault::FS_OUT_OF_RANGE);
+    }
 }
 
 GeometryDescriptor::GeometryDescriptor(isize c, isize h, isize s, isize b)

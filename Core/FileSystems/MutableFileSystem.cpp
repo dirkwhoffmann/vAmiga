@@ -26,6 +26,9 @@ MutableFileSystem::init(isize capacity, isize bsize)
     traits.bsize    = bsize;
 
     storage.init(capacity);
+
+    if (rootBlock >= capacity) rootBlock = 0;
+    if (current >= capacity) current = 0;
 }
 
 void

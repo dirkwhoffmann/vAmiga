@@ -162,13 +162,6 @@ FileSystem::_dump(Category category, std::ostream &os) const noexcept
 
         case Category::Info:
 
-            /*
-            if (!isFormatted()) {
-                os << "Type   Size             Used    Free    Full" << std::endl;
-            } else {
-                os << "Type   Size             Used    Free    Full  Name" << std::endl;
-            }
-            */
             os << "Type   Size             Used    Free    Full  Name" << std::endl;
             [[fallthrough]];
 
@@ -195,7 +188,7 @@ FileSystem::_dump(Category category, std::ostream &os) const noexcept
 
                 os << std::setw(5) << std::left << "NODOS";
                 os << "  ";
-                os << std::setw(15) << std::left << std::setfill(' ') << "--";
+                os << std::setw(15) << std::left << std::setfill(' ') << size;
                 os << "  ";
                 os << std::setw(6) << std::left << std::setfill(' ') << "--";
                 os << "  ";
