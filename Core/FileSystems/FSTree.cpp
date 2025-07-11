@@ -170,11 +170,13 @@ FSTree::listItems(std::ostream &os, const FSOpt &opt) const
         if (item.back() == '\t') {
 
             item.pop_back();
+            if (column == 0) os << string(opt.indent, ' ');
             os << std::left << std::setw(std::max(tab, 35)) << item;
             if (column++ > 0) { os << std::endl; column = 0; }
 
         } else {
 
+            if (column == 0) os << string(opt.indent, ' ');
             if (column > 0) { os << std::endl; column = 0; }
             os << std::left << std::setw(std::max(tab, 35)) << item << std::endl;
         }

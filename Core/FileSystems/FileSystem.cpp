@@ -148,7 +148,6 @@ FileSystem::isFormatted() const noexcept
 
     // Check if the root block is present
     if (!storage.read(rootBlock, FSBlockType::ROOT)) return false;
-    // if (rootBlockPtr(rootBlock) == nullptr) return false;
 
     return true;
 }

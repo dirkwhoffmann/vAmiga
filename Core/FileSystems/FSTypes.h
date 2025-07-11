@@ -22,6 +22,7 @@ typedef std::function<bool(const FSBlock &, const FSBlock &)> FSBlockSorter;
 struct FSOpt
 {
     bool recursive = false;
+    isize indent = 0;
     FSBlockSorter sort;
     FSBlockFilter filter;
     FSBlockFormatter formatter;

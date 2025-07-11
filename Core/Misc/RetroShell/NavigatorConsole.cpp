@@ -162,8 +162,8 @@ NavigatorConsole::help(std::ostream &os, const string &argv, isize tabs)
         auto matches = fs.match(&fs.pwd(), args.empty() ? "*" : args.back() + "*");
 
         // List all nodes
-        if (!matches.empty() && displayCmds) *this << '\n';
-        FSTree(matches, { .sort = sort::dafa }).list(os);
+        if (!matches.empty() && displayCmds) os << std::endl;
+        FSTree(matches, { .sort = sort::dafa }).list(os, { .indent = 7 });
     }
 }
 
