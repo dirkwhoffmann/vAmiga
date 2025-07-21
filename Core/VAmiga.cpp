@@ -861,6 +861,20 @@ AudioPortAPI::getConfig() const
     return port->getConfig();
 }
 
+const AudioPortInfo &
+AudioPortAPI::getInfo() const
+{
+    VAMIGA_PUBLIC
+    return port->getInfo();
+}
+
+const AudioPortInfo &
+AudioPortAPI::getCachedInfo() const
+{
+    VAMIGA_PUBLIC
+    return port->getCachedInfo();
+}
+
 const AudioPortStats &
 AudioPortAPI::getStats() const
 {
@@ -1982,6 +1996,13 @@ VAmiga::getStats() const
 {
     VAMIGA_PUBLIC
     return emu->getStats();
+}
+
+bool
+VAmiga::getMsg(Message &msg)
+{
+    VAMIGA_PUBLIC
+    return emu->main.msgQueue.get(msg);
 }
 
 bool
