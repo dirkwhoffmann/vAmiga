@@ -258,7 +258,7 @@ FSDoctor::xray(bool strict, std::ostream &os, bool verbose)
 {
     diagnosis.blockErrors = {};
 
-    for (auto &it : fs.storage.keys()) {
+    for (auto &it : fs.storage.sortedKeys()) {
 
         if (auto errors = xray(it, strict); errors) {
 
@@ -269,8 +269,8 @@ FSDoctor::xray(bool strict, std::ostream &os, bool verbose)
 
             } else {
 
-                os << "Block " << std::setw(5) << std::left << (std::to_string(it) + ": ");
-                os << errors << " anomalies" << std::endl;
+                os << util::tab("Block " + std::to_string(it) + "");
+                os << errors << (errors == 1 ? " anomaly" : " anomalies") << std::endl;
             }
 
             diagnosis.blockErrors.push_back(Block(it));
@@ -638,7 +638,7 @@ FSDoctor::xray(FSBlock &node, bool strict, std::ostream &os) const
         }
     };
 
-    for (isize i = 0; i < fs.traits.bsize / 4; i += 4) {
+    for (isize i = 0; i < fs.traits.bsize; i += 4) {
 
         optional<u32> expected;
 

@@ -60,6 +60,18 @@ FSStorage::_dump(Category category, std::ostream &os) const
     }
 }
 
+std::vector<Block>
+FSStorage::sortedKeys() const
+{
+    std::vector<Block> result;
+    result.reserve(blocks.size());
+
+    for (const auto& [key, _] : blocks) result.push_back(key);
+    std::ranges::sort(result);
+
+    return result;
+}
+
 bool
 FSStorage::isEmpty(Block nr) const noexcept
 {

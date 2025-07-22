@@ -99,6 +99,9 @@ public:
         return std::views::keys(blocks) | std::views::filter(in_range);
     }
 
+    // Returns a vector with all keys in sorted order
+    std::vector<Block> sortedKeys() const;
+
     // Checks if a block is empty
     bool isEmpty(Block nr) const noexcept;
 
