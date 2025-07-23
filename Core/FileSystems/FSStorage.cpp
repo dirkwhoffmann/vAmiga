@@ -9,6 +9,7 @@
 
 #include "FSStorage.h"
 #include "FileSystem.h"
+#include <algorithm>
 
 namespace vamiga {
 

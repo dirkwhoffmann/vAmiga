@@ -43,6 +43,21 @@ MsgQueue::get(Message &msg)
     }
 }
 
+isize
+MsgQueue::get(isize count, Message *buffer)
+{
+    if (!enabled) return false;
+
+    {   SYNCHRONIZED
+
+        auto max = std::min(queue.count(), count);
+        for (isize i = 0; i < max; i++) {
+            buffer[i] = queue.read();
+        }
+        return max;
+    }
+}
+
 void
 MsgQueue::put(const Message &msg)
 {

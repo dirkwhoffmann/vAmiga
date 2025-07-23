@@ -10,6 +10,7 @@
 #pragma once
 
 #include "VAmigaTypes.h"
+#include "Error.h"
 
 namespace vamiga {
 
@@ -507,12 +508,12 @@ public:
     void loadRom(const fs::path &path);
     void loadExt(const fs::path &path);
 
-    /** @brief  Loads a ROM, provided by a RomFile
+    /** @brief  Loads a ROM provided by a RomFile
      */
     void loadRom(MediaFile &file);
     void loadExt(MediaFile &file);
 
-    /** @brief  Loads a ROM, provided by a memory buffer
+    /** @brief  Loads a ROM provided by a memory buffer
      */
     void loadRom(const u8 *buf, isize len);
     void loadExt(const u8 *buf, isize len);
@@ -1639,6 +1640,12 @@ public:
     /** @brief  Reads a message from the message queue
      */
     bool getMsg(Message &msg);
+    void lockMsgQueue();
+    void unlockMsgQueue();
+
+    /** @brief  Reads multiple messages from the message queue
+     */
+    isize getMsg(isize count, Message *buffer);
 
 
     /// @}

@@ -2005,6 +2005,13 @@ VAmiga::getMsg(Message &msg)
     return emu->main.msgQueue.get(msg);
 }
 
+isize
+VAmiga::getMsg(isize count, Message *buffer)
+{
+    VAMIGA_PUBLIC
+    return emu->main.msgQueue.get(count, buffer);
+}
+
 bool
 VAmiga::isPoweredOn() const
 {

@@ -228,7 +228,7 @@ AudioPort::setOption(Opt option, i64 value)
 
             config.vol[channel] = std::clamp(value, 0LL, 100LL);
             vol[channel] = float(pow(config.vol[channel] / 100.0, 1.4) * 0.000025);
-            if (emscripten) vol[channel] *= 0.15f;
+            if (wasmBuild) vol[channel] *= 0.15f;
             return;
 
         case Opt::AUD_VOLL:

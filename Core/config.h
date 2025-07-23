@@ -63,9 +63,9 @@ typedef int debugflag;
 #endif
 
 #ifdef __EMSCRIPTEN__
-static constexpr bool emscripten = 1;
+static constexpr bool wasmBuild = 1;
 #else
-static constexpr bool emscripten = 0;
+static constexpr bool wasmBuild = 0;
 #endif
 
 namespace vamiga {
