@@ -182,7 +182,12 @@ FSBlock::isRegular() const
 bool
 FSBlock::isData() const
 {
-    return type == FSBlockType::DATA_OFS || type == FSBlockType::DATA_FFS;
+    if (fs->traits.ofs()) {
+        return type == FSBlockType::DATA_OFS;
+    }
+
+    // Note: As FFS data blocks have no header, each block can be a data block.
+    return true;
 }
 
 FSName

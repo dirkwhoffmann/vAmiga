@@ -69,7 +69,7 @@ return FSBlockError::EXPECTED_BITMAP_EXT_BLOCK; } }
 if (value) { EXPECT_BITMAP_EXT_REF } }
 
 #define EXPECT_DATABLOCK_REF { \
-if (!fs.is(value, FSBlockType::DATA_OFS) && !fs.is(value, FSBlockType::DATA_FFS)) { \
+if (fs.traits.ofs() && !fs.is(value, FSBlockType::DATA_OFS)) { \
 return FSBlockError::EXPECTED_DATA_BLOCK; } }
 
 #define EXPECT_OPTIONAL_DATABLOCK_REF { \
