@@ -1414,15 +1414,6 @@ public:
      */
     const char *text();
 
-    /** @brief  Returns the relative cursor position.
-     *  The returned value is relative to the end of the input line. A value
-     *  of 0 indicates that the cursor is at the rightmost position, that
-     *  is, one character after the last character of the input line. If the
-     *  cursor is at the front of the input line, the value matches the
-     *  length of the input line.
-     */
-    // isize cursorRel();
-
     /// @}
     /// @name Typing characters and strings
     /// @{
@@ -1468,6 +1459,21 @@ public:
     void execScript(const std::ifstream &fs);
     void execScript(const string &contents);
     void execScript(const MediaFile &file);
+
+    /// @}
+    /// @name Misc
+    /// @{
+
+    /** @brief  Installs a file system in the file system navigator
+     */
+    void import(const FloppyDrive &dfn);
+    void import(const HardDrive &hdn, isize part);
+    void importDf(isize n);
+    void importHd(isize n, isize part);
+
+    /** @brief  Exports the file system in the file system navigator
+     */
+    void exportBlocks(const std::filesystem::path &path);
 
     /// @}
 };

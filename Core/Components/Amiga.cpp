@@ -337,7 +337,7 @@ Amiga::loadWorkspace(const fs::path &path)
     }
 
     // Execute the setup script
-    retroShell.asyncExec("commander"); // enterCommander();
+    retroShell.asyncExec("commander");
     retroShell.asyncExecScript(ss);
 }
 

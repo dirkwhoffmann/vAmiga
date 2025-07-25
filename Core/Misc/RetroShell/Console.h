@@ -439,6 +439,17 @@ class NavigatorConsole final : public Console
     FSBlock &matchPath(const Arguments &argv, const string &token, Tokens &notFound);
     FSBlock &matchPath(const Arguments &argv, const string &token, Tokens &notFound, FSBlock &fallback);
     FSBlock &matchPath(const string &path, Tokens &notFound);
+
+public:
+
+    // Imports the file system from a floppy drive or hard drive
+    void import(const FloppyDrive &dfn);
+    void import(const HardDrive &hdn, isize part);
+    void importDf(isize n);
+    void importHd(isize n, isize part);
+
+    // Exports the file system
+    void exportBlocks(fs::path path);
 };
 
 }

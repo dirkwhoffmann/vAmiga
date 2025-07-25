@@ -263,9 +263,17 @@ Console::printHelp(isize tab)
 {
     *this << vspace{1};
 
-    *this << "RetroShell " << description() << " " << Amiga::version() << "\n\n";
-    storage << string(tab + 4, ' ') << "Type 'help' or press 'Tab' twice for help.\n";
-    storage << string(tab + 4, ' ') << "Press 'Shift+Tab' to switch consoles.";
+    if constexpr (vAmigaDOS) {
+
+        storage << "Type 'help' or press 'Tab' twice for help.\n";
+        storage << "Press 'Shift+Tab' to switch consoles.";
+
+    } else {
+
+        *this << "RetroShell " << description() << " " << Amiga::version() << "\n\n";
+        storage << string(tab + 4, ' ') << "Type 'help' or press 'Tab' twice for help.\n";
+        storage << string(tab + 4, ' ') << "Press 'Shift+Tab' to switch consoles.";
+    }
 
     remoteManager.rshServer << "Type 'help' for help.\n";
 
@@ -1002,6 +1010,7 @@ Console::initCommands(RSCommand &root)
 
             .tokens = { "commander" },
             .chelp  = { "Enter or command console" },
+            .flags  = vAmigaDOS ? rs::hidden : 0,
 
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
@@ -1013,6 +1022,7 @@ Console::initCommands(RSCommand &root)
 
             .tokens = { "debugger" },
             .chelp  = { "Enter or debug console" },
+            .flags  = vAmigaDOS ? rs::hidden : 0,
 
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
@@ -1024,6 +1034,7 @@ Console::initCommands(RSCommand &root)
 
             .tokens = { "navigator" },
             .chelp  = { "Enter the file system console" },
+            .flags  = vAmigaDOS ? rs::hidden : 0,
 
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 

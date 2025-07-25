@@ -144,7 +144,7 @@ public:
     void enterDebugger() { enterConsole(1); }
     void enterNavigator() { enterConsole(2); }
 
-    
+
     //
     // Executing commands
     //

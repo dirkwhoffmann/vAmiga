@@ -185,14 +185,20 @@ public:
     // Exports the volume to a buffer
     bool exportVolume(u8 *dst, isize size) const;
     bool exportVolume(u8 *dst, isize size, Fault *error) const;
-    void exportVolume(const fs::path &path) const;
 
-    // Exports a single block or a range of blocks
+    // Exports a single block or a range of blocks to a buffer
     bool exportBlock(Block nr, u8 *dst, isize size) const;
     bool exportBlock(Block nr, u8 *dst, isize size, Fault *error) const;
-    void exportBlock(Block nr, const fs::path &path) const;
     bool exportBlocks(Block first, Block last, u8 *dst, isize size) const;
     bool exportBlocks(Block first, Block last, u8 *dst, isize size, Fault *error) const;
+
+    // Exports a single block or a range of blocks to a file
+    void exportBlock(Block nr, const fs::path &path) const;
+    void exportBlocks(Block first, Block last, const fs::path &path) const;
+    void exportBlocks(const fs::path &path) const;
+
+    // Exports the volume to a buffer
+    void exportFolder(const fs::path &path) const;
 
 private:
 

@@ -1626,7 +1626,7 @@ NSString *EventSlotName(EventSlot slot)
 
 - (void)export:(NSString *)path exception:(ExceptionWrapper *)ex
 {
-    try { return [self fs]->exportVolume([path fileSystemRepresentation]); }
+    try { return [self fs]->exportFolder([path fileSystemRepresentation]); }
     catch (AppError &error) { [ex save:error]; }
 }
 

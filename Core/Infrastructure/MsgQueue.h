@@ -19,7 +19,7 @@ namespace vamiga {
 class MsgQueue final : CoreObject, Synchronizable {
 
     // Ring buffer storing all pending messages
-    util::RingBuffer <Message, 512> queue;
+    util::RingBuffer <Message, 4096> queue;
 
     // The registered listener
     const void *listener = nullptr;

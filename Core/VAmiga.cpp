@@ -1810,6 +1810,41 @@ RetroShellAPI::execScript(const MediaFile &file)
 }
 
 void
+RetroShellAPI::import(const FloppyDrive &dfn)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    retroShell->navigator.import(dfn);
+}
+
+void
+RetroShellAPI::import(const HardDrive &hdn, isize part)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    retroShell->navigator.import(hdn, part);
+}
+
+void
+RetroShellAPI::importDf(isize n)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    retroShell->navigator.importDf(n);
+}
+
+void
+RetroShellAPI::importHd(isize n, isize part)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    retroShell->navigator.importHd(n, part);
+}
+
+void
+RetroShellAPI::exportBlocks(const std::filesystem::path &path)
+{
+    VAMIGA_PUBLIC_SUSPEND
+    retroShell->navigator.exportBlocks(path);
+}
+
+void
 RetroShellAPI::setStream(std::ostream &os)
 {
     VAMIGA_PUBLIC_SUSPEND
@@ -2005,11 +2040,18 @@ VAmiga::getMsg(Message &msg)
     return emu->main.msgQueue.get(msg);
 }
 
-isize
-VAmiga::getMsg(isize count, Message *buffer)
+void 
+VAmiga::lockMsgQueue()
 {
     VAMIGA_PUBLIC
-    return emu->main.msgQueue.get(count, buffer);
+    return emu->main.msgQueue.lock();
+}
+ 
+void 
+VAmiga::unlockMsgQueue()
+{
+    VAMIGA_PUBLIC
+    return emu->main.msgQueue.unlock();
 }
 
 bool

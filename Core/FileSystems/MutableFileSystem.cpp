@@ -816,12 +816,6 @@ MutableFileSystem::exportBlock(Block nr, u8 *dst, isize size) const
     return exportBlocks(nr, nr, dst, size);
 }
 
-void
-MutableFileSystem::exportVolume(const fs::path &path) const
-{
-    FSTree(pwd(), {.recursive = true}).save(path);
-}
-
 bool
 MutableFileSystem::exportBlock(Block nr, u8 *dst, isize size, Fault *error) const
 {
@@ -876,6 +870,46 @@ MutableFileSystem::exportBlocks(Block first, Block last, u8 *dst, isize size, Fa
 }
 
 void
+MutableFileSystem::exportBlock(Block nr, const fs::path &path) const
+{
+    exportBlocks(nr, nr, path);
+}
+
+void
+MutableFileSystem::exportBlocks(Block first, Block last, const fs::path &path) const
+{
+    std::ofstream stream(path, std::ios::binary);
+
+    if (!stream.is_open()) {
+        throw AppError(Fault::FILE_CANT_CREATE, path);
+    }
+
+    for (Block i = first; i <= last; i++) {
+
+        auto *data = at(i).data();
+        stream.write((const char *)data, traits.bsize);
+    }
+
+    if (!stream) {
+        throw AppError(Fault::FILE_CANT_WRITE, path);
+    }
+}
+
+void
+MutableFileSystem::exportBlocks(const fs::path &path) const
+{
+    if (traits.blocks) {
+        exportBlocks(0, Block(traits.blocks - 1), path);
+    }
+}
+
+void
+MutableFileSystem::exportFolder(const fs::path &path) const
+{
+    FSTree(pwd(), {.recursive = true}).save(path);
+}
+
+void
 MutableFileSystem::importBlock(Block nr, const fs::path &path)
 {
     std::ifstream stream(path, std::ios::binary);
@@ -889,23 +923,6 @@ MutableFileSystem::importBlock(Block nr, const fs::path &path)
 
     if (!stream) {
         throw AppError(Fault::FILE_CANT_READ, path);
-    }
-}
-
-void
-MutableFileSystem::exportBlock(Block nr, const fs::path &path) const
-{
-    std::ofstream stream(path, std::ios::binary);
-
-    if (!stream.is_open()) {
-        throw AppError(Fault::FILE_CANT_CREATE, path);
-    }
-
-    auto *data = at(nr).data();
-    stream.write((const char *)data, traits.bsize);
-
-    if (!stream) {
-        throw AppError(Fault::FILE_CANT_WRITE, path);
     }
 }
 

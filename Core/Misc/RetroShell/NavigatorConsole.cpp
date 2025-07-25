@@ -46,7 +46,20 @@ NavigatorConsole::getPrompt()
 void
 NavigatorConsole::welcome()
 {
-    Console::welcome();
+    if (vAmigaDOS) {
+
+        storage << "vAmigaDOS File System Navigator ";
+        *this << Amiga::build() << '\n';
+        *this << '\n';
+
+        *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
+        *this << "https://github.com/dirkwhoffmann/vAmiga" << '\n';
+        *this << '\n';
+
+    } else {
+
+        Console::welcome();
+    }
 }
 
 void
@@ -268,6 +281,38 @@ NavigatorConsole::parseDirectory(const Arguments &argv, const string &token, FSB
         throw AppError(Fault::FS_NOT_A_DIRECTORY, "Block " + std::to_string(path.nr));
     }
     return path;
+}
+
+void
+NavigatorConsole::import(const FloppyDrive &dfn)
+{
+    fs.init(dfn);
+}
+
+void
+NavigatorConsole::import(const HardDrive &hdn, isize part)
+{
+    fs.init(hdn, part);
+}
+
+void
+NavigatorConsole::importDf(isize n)
+{
+    assert(n >= 0 && n <= 3);
+    import(*amiga.df[n]);
+}
+
+void
+NavigatorConsole::importHd(isize n, isize part)
+{
+    assert(n >= 0 && n <= 3);
+    import(*amiga.hd[n], part);
+}
+
+void
+NavigatorConsole::exportBlocks(fs::path path)
+{
+    fs.exportBlocks(path);
 }
 
 FSBlock &
