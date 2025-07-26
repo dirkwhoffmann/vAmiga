@@ -33,7 +33,7 @@ RetroShell::_initialize()
     current = &debugger;
 
     // Switch the console to let the welcome message appear
-    current->exec(wasmBuild ? "navigator" : "commander");
+    current->exec(vAmigaDOS ? "navigator" : "commander");
 }
 
 void

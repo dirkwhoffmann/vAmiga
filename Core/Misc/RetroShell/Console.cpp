@@ -1006,7 +1006,7 @@ Console::initCommands(RSCommand &root)
 
             .tokens = { "commander" },
             .chelp  = { "Enter or command console" },
-            .flags  = vAmigaDOS ? rs::hidden : 0,
+            .flags  = vAmigaDOS ? rs::disabled : 0,
 
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
@@ -1018,7 +1018,7 @@ Console::initCommands(RSCommand &root)
 
             .tokens = { "debugger" },
             .chelp  = { "Enter or debug console" },
-            .flags  = vAmigaDOS ? rs::hidden : 0,
+            .flags  = vAmigaDOS ? rs::disabled : 0,
 
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
@@ -1108,6 +1108,7 @@ Console::initCommands(RSCommand &root)
             .tokens = { "source" },
             .chelp  = { "Process a command script" },
             .args   = { { .name = { "path", "Script file" } } },
+            .flags  = vAmigaDOS ? rs::disabled : 0,
 
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
@@ -1122,7 +1123,7 @@ Console::initCommands(RSCommand &root)
                  
             .tokens = { "wait" },
             .chelp  = { "Pause the execution of a command script" },
-            .flags  = rs::hidden,
+            .flags  = vAmigaDOS ? rs::disabled : rs::hidden,
             .args   = { { .name = { "seconds", "Delay" } } },
 
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
@@ -1137,6 +1138,7 @@ Console::initCommands(RSCommand &root)
                  
             .tokens = { "shutdown" },
             .chelp   = { "Terminates the application" },
+            .flags  = vAmigaDOS ? rs::disabled : 0,
 
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
                 

@@ -78,6 +78,9 @@ RSCommand::add(const RSCommandDescriptor &descriptor)
     assert(!descriptor.tokens.empty());
     assert(!descriptor.chelp.empty() || !descriptor.ghelp.empty());
 
+    // Only register enabled commands
+    if (descriptor.flags & rs::disabled) return;
+
     // Cleanse the token list (convert { "aaa bbb" } into { "aaa", "bbb" }
     auto tokens = util::split(descriptor.tokens, ' ');
 

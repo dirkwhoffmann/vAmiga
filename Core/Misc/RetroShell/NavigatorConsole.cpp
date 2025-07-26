@@ -695,7 +695,8 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "export", "df[n]" },
         .ghelp  = { "Export the file system to floppy drive n" },
-        .chelp  = { "export { df0 | df1 | df1 | df2 }" }
+        .chelp  = { "export { df0 | df1 | df1 | df2 }" },
+        .flags  = vAmigaDOS ? rs::disabled : 0
     });
 
     for (isize i = 0; i < 4; i++) {
@@ -704,7 +705,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
             .tokens = { "export", "df" + std::to_string(i) },
             .chelp  = { "Export the file system to floppy drive" + std::to_string(i) },
-            .flags  = rs::shadowed,
+            .flags  = vAmigaDOS ? rs::disabled : rs::shadowed,
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 auto n = values[0];
@@ -718,7 +719,8 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "export", "hd[n]" },
         .ghelp  = { "Export the file system to hard drive n" },
-        .chelp  = { "export { hd0 | hd1 | hd1 | hd2 }" }
+        .chelp  = { "export { hd0 | hd1 | hd1 | hd2 }" },
+        .flags  = vAmigaDOS ? rs::disabled : 0
     });
 
     for (isize i = 0; i < 4; i++) {
@@ -727,7 +729,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
             .tokens = { "export", "hd" + std::to_string(i) },
             .chelp  = { "Export the file system to hard drive" + std::to_string(i) },
-            .flags  = rs::shadowed,
+            .flags  = vAmigaDOS ? rs::disabled : rs::shadowed,
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 auto n = values[0];
