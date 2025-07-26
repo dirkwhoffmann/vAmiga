@@ -103,6 +103,10 @@ RSCommand::add(const RSCommandDescriptor &descriptor)
     cmd.callback = descriptor.func;
     cmd.payload = descriptor.payload;
 
+    // Remove all disabled arguments
+    cmd.args.erase(std::remove_if(cmd.args.begin(), cmd.args.end(), [](const RSArgumentDescriptor& arg) {
+        return arg.flags & rs::disabled; }), cmd.args.end());
+
     // Reset the group
     if (cmd.isVisible()) currentGroup = "";
 

@@ -501,17 +501,17 @@ NavigatorConsole::initCommands(RSCommand &root)
         .args   = {
             { .name = { "mb", "Capacity in MB" } },
         },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            // Convert the provided capacity to bytes
-            auto mb = MB(parseNum(args.at("mb")));
+                // Convert the provided capacity to bytes
+                auto mb = MB(parseNum(args.at("mb")));
 
-            // Compute the number of needed blocks
-            auto blocks = (mb + 511) / 512;
+                // Compute the number of needed blocks
+                auto blocks = (mb + 511) / 512;
 
-            fs.init(FSDescriptor(blocks, FSFormat::NODOS));
-            fs.dump(Category::Info, os);
-        }
+                fs.init(FSDescriptor(blocks, FSFormat::NODOS));
+                fs.dump(Category::Info, os);
+            }
     });
 
     root.add({
@@ -523,17 +523,17 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "heads", "Number of drive heads" }, .flags=rs::keyval },
             { .name = { "sectors", "Number of sectors per cylinder" }, .flags=rs::keyval },
         },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            isize c = parseNum(args.at("cylinders"));
-            isize h = parseNum(args.at("heads"));
-            isize s = parseNum(args.at("sectors"));
-            isize b = 512;
+                isize c = parseNum(args.at("cylinders"));
+                isize h = parseNum(args.at("heads"));
+                isize s = parseNum(args.at("sectors"));
+                isize b = 512;
 
-            auto geometry = GeometryDescriptor(c, h, s, b);
-            fs.init(FSDescriptor(geometry, FSFormat::NODOS));
-            fs.dump(Category::Info, os);
-        }
+                auto geometry = GeometryDescriptor(c, h, s, b);
+                fs.init(FSDescriptor(geometry, FSFormat::NODOS));
+                fs.dump(Category::Info, os);
+            }
     });
 
     root.add({
@@ -544,22 +544,22 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "dos", "Amiga file system" }, .key = "{ OFS | FFS }" },
             { .name = { "name", "File system name" }, .flags = rs::opt },
         },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            // Determine the DOS type
-            auto type = FSFormat::NODOS;
-            auto dos = util::uppercased(args.at("dos"));
-            if (dos == "OFS") type = FSFormat::OFS;
-            if (dos == "FFS") type = FSFormat::FFS;
+                // Determine the DOS type
+                auto type = FSFormat::NODOS;
+                auto dos = util::uppercased(args.at("dos"));
+                if (dos == "OFS") type = FSFormat::OFS;
+                if (dos == "FFS") type = FSFormat::FFS;
 
-            if (type == FSFormat::NODOS) {
-                throw util::ParseError("Expected values: OFS or FFS");
+                if (type == FSFormat::NODOS) {
+                    throw util::ParseError("Expected values: OFS or FFS");
+                }
+
+                // Format the device
+                fs.format(type, args.contains("name") ? args.at("name") : "New Disk");
+                fs.dump(Category::Info, os);
             }
-
-            // Format the device
-            fs.format(type, args.contains("name") ? args.at("name") : "New Disk");
-            fs.dump(Category::Info, os);
-        }
     });
 
     root.add({
@@ -567,27 +567,29 @@ NavigatorConsole::initCommands(RSCommand &root)
         .tokens = { "import" },
         .ghelp  = { "Import a file system" },
         .chelp  = { "Import a file or a folder from the host file system" },
+        .flags  = vAmigaDOS ? rs::disabled : 0,
         .args   = {
             { .name = { "path", "Host file system directory" } },
         },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            fs.require_formatted();
+                fs.require_formatted();
 
-            auto path = args.at("path");
-            auto hostPath = host.makeAbsolute(args.at("path"));
-            bool recursive = true;
-            bool contents = path.back() == '/';
+                auto path = args.at("path");
+                auto hostPath = host.makeAbsolute(args.at("path"));
+                bool recursive = true;
+                bool contents = path.back() == '/';
 
-            fs.import(fs.pwd(), hostPath, recursive, contents);
-        }
+                fs.import(fs.pwd(), hostPath, recursive, contents);
+            }
     });
 
     root.add({
 
         .tokens = { "import", "df[n]" },
         .ghelp  = { "Import file system from floppy drive n" },
-        .chelp  = { "import { df0 | df1 | df1 | df2 }" }
+        .chelp  = { "import { df0 | df1 | df1 | df2 }" },
+        .flags  = vAmigaDOS ? rs::disabled : 0
     });
 
     for (isize i = 0; i < 4; i++) {
@@ -596,7 +598,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
             .tokens = { "import", "df" + std::to_string(i) },
             .chelp  = { "Import file system from floppy drive" + std::to_string(i) },
-            .flags  = rs::shadowed,
+            .flags  = vAmigaDOS ? rs::disabled : rs::shadowed,
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 auto n = values[0];
@@ -612,7 +614,8 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "import", "hd[n]" },
         .ghelp  = { "Import file system from hard drive n" },
-        .chelp  = { "import { hd0 | hd1 | hd1 | hd2 }" }
+        .chelp  = { "import { hd0 | hd1 | hd1 | hd2 }" },
+        .flags  = vAmigaDOS ? rs::disabled : 0
     });
 
     for (isize i = 0; i < 4; i++) {
@@ -621,7 +624,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
             .tokens = { "import", "hd" + std::to_string(i) },
             .chelp  = { "Import file system from hard drive" + std::to_string(i) },
-            .flags  = rs::shadowed,
+            .flags  = vAmigaDOS ? rs::disabled : rs::shadowed,
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 auto n = values[0];
@@ -635,60 +638,78 @@ NavigatorConsole::initCommands(RSCommand &root)
 
     root.add({
 
+        .tokens = { "import", "block" },
+        .chelp  = { "Import a block from a file" },
+        .flags  = vAmigaDOS ? rs::disabled : 0,
+        .args   = {
+            { .name = { "nr", "Block number" }, .flags = rs::opt },
+            { .name = { "path", "File path" } },
+        },
+            .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                auto path = host.makeAbsolute(args.at("path"));
+                auto nr = parseBlock(args, "nr", fs.pwd().nr);
+
+                fs.importBlock(nr, path);
+            }
+    });
+
+    root.add({
+
         .tokens = { "export" },
-        .ghelp  = { "Export a file system" },
+        .ghelp  = { "Export files, directories, or blocks" },
         .chelp  = { "Export a file or directory to the host file system" },
         .flags  = rs::ac,
         .args   = {
             { .name = { "file", "Export item" } },
-            { .name = { "path", "Host file system directory" } },
-            { .name = { "r", "Traverse subdirectories" }, .flags = rs::flag }
+            { .name = { "path", "Host file system location" }, .flags = vAmigaDOS ? rs::disabled : 0 },
+            { .name = { "r", "Export subdirectories" }, .flags = rs::flag }
         },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto path = args.at("path");
-            auto hostPath = host.makeAbsolute(args.at("path"));
-            bool c = args.at("file").back() == '/';
-            bool r = args.contains("r");
+                auto path = args.at("path");
+                auto hostPath = host.makeAbsolute(args.at("path"));
+                bool c = args.at("file").back() == '/';
+                bool r = args.contains("r");
 
-            auto &item = parsePath(args, "file");
+                auto &item = parsePath(args, "file");
 
-            if (item.isDirectory()) {
+                if (item.isDirectory()) {
 
-                debug(RSH_DEBUG,
-                      "Exporting directory %s to %s (export contents = %d)\n",
-                      item.absName().c_str(), hostPath.string().c_str(), c);
+                    debug(RSH_DEBUG,
+                          "Exporting directory %s to %s (export contents = %d)\n",
+                          item.absName().c_str(), hostPath.string().c_str(), c);
 
-                // Extend path with the folder name if the user did not specify a trailing '/'
-                if (!c) { hostPath /= item.cppName(); }
+                    // Extend path with the folder name if the user did not specify a trailing '/'
+                    if (!c) { hostPath /= item.cppName(); }
 
-                if (!fs::exists(hostPath)) {
-                    fs::create_directories(hostPath);
+                    if (!fs::exists(hostPath)) {
+                        fs::create_directories(hostPath);
+                    }
+
+                    FSTree tree(item, { .recursive = r });
+                    tree.save(hostPath);
                 }
 
-                FSTree tree(item, { .recursive = r });
-                tree.save(hostPath);
-            }
+                if (item.isFile())  {
 
-            if (item.isFile())  {
+                    debug(RSH_DEBUG,
+                          "Exporting file %s to %s\n",
+                          item.absName().c_str(), hostPath.string().c_str());
 
-                debug(RSH_DEBUG,
-                      "Exporting file %s to %s\n",
-                      item.absName().c_str(), hostPath.string().c_str());
+                    // Report an error if the user appended '/' to the name of a file
+                    if (c) throw AppError(Fault::FS_NOT_A_DIRECTORY, item.absName());
 
-                // Report an error if the user appended '/' to the name of a file
-                if (c) throw AppError(Fault::FS_NOT_A_DIRECTORY, item.absName());
+                    if (fs::is_directory(hostPath)) {
 
-                if (fs::is_directory(hostPath)) {
+                        hostPath /= item.cppName();
+                        printf("Directory exists. Exporting to %s\n", hostPath.string().c_str());
+                    }
 
-                    hostPath /= item.cppName();
-                    printf("Directory exists. Exporting to %s\n", hostPath.string().c_str());
+                    FSTree tree(item, { });
+                    tree.save(hostPath);
                 }
-
-                FSTree tree(item, { });
-                tree.save(hostPath);
             }
-        }
     });
 
     root.add({
@@ -739,44 +760,31 @@ NavigatorConsole::initCommands(RSCommand &root)
         });
     }
 
-    if constexpr (wasmBuild) {
+    root.add({
 
-        root.add({
+        .tokens = { "export", "block" },
+        .chelp  = { "Export a block to a file" },
+        .args   = {
+            { .name = { "nr", "Block number" }, .flags = rs::opt },
+            { .name = { "path", "File path" }, .flags = vAmigaDOS ? rs::disabled : 0 },
+        },
+            .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            .tokens = { "export", "block" },
-            .chelp  = { "Export a block to a file" },
-            .args   = {
-                { .name = { "nr", "Block number" }, .flags = rs::opt },
-            },
-                .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+                auto nr = parseBlock(args, "nr", fs.pwd().nr);
 
-                    auto nr = parseBlock(args, "nr", fs.pwd().nr);
+                if constexpr (wasmBuild) {
+
+                    auto path = host.makeAbsolute(args.at("path"));
+                    fs.exportBlock(nr, path);
+
+                } else {
+
                     fs.exportBlock(nr, "blob");
-
                     msgQueue.setPayload( { "blob", std::to_string(nr) + ".bin" } );
                     msgQueue.put(Msg::RSH_EXPORT);
                 }
-        });
-
-    } else {
-
-        root.add({
-
-            .tokens = { "export", "block" },
-            .chelp  = { "Export a block to a file" },
-            .args   = {
-                { .name = { "nr", "Block number" }, .flags = rs::opt },
-                { .name = { "path", "File path" } },
-            },
-                .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-                    auto path = host.makeAbsolute(args.at("path"));
-                    auto nr = parseBlock(args, "nr", fs.pwd().nr);
-
-                    fs.exportBlock(nr, path);
-                }
-        });
-    };
+            }
+    });
 
     RSCommand::currentGroup = "Navigation";
 
@@ -804,7 +812,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "path", "Path to directory" }, .flags = rs::opt },
             { .name = { "d", "List directories only" }, .flags = rs::flag },
             { .name = { "f", "List files only" }, .flags = rs::flag },
-            { .name = { "r", "Traverse subdirectories" }, .flags = rs::flag }
+            { .name = { "r", "Display subdirectories" }, .flags = rs::flag }
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
@@ -854,7 +862,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             { .name = { "path", "Path to directory" }, .flags = rs::opt },
             { .name = { "d", "List directories only" }, .flags = rs::flag },
             { .name = { "f", "List files only" }, .flags = rs::flag },
-            { .name = { "r", "Traverse subdirectories" }, .flags = rs::flag },
+            { .name = { "r", "List subdirectories" }, .flags = rs::flag },
             { .name = { "k", "Display keys (start blocks)" }, .flags = rs::flag },
             { .name = { "s", "Sort output" }, .flags = rs::flag } },
         .func   = [this](std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
@@ -1081,23 +1089,6 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                 ptr->hexDump(os, opt);
             }
-        }
-    });
-
-    root.add({
-
-        .tokens = { "block", "import" },
-        .chelp  = { "Import a block from a file" },
-        .args   = {
-            { .name = { "nr", "Block number" }, .flags = rs::opt },
-            { .name = { "path", "File path" } },
-        },
-        .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-            auto path = host.makeAbsolute(args.at("path"));
-            auto nr = parseBlock(args, "nr", fs.pwd().nr);
-
-            fs.importBlock(nr, path);
         }
     });
 
