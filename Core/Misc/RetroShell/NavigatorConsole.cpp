@@ -642,59 +642,43 @@ NavigatorConsole::initCommands(RSCommand &root)
         .args   = {
             { .name = { "file", "Export item" } },
             { .name = { "path", "Host file system directory" } },
+            { .name = { "r", "Traverse subdirectories" }, .flags = rs::flag }
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
             auto path = args.at("path");
             auto hostPath = host.makeAbsolute(args.at("path"));
-            bool recursive = true;
-            bool contents = path.back() == '/';
+            bool c = args.at("file").back() == '/';
+            bool r = args.contains("r");
 
             auto &item = parsePath(args, "file");
 
-            // Case 1: Export an entire directory to a folder (e.g. "export . /tmp")
-            if (item.isDirectory() && !contents) {
+            if (item.isDirectory()) {
 
-                printf("Exporting directory %s to %s\n",
-                       item.absName().c_str(), hostPath.string().c_str());
+                debug(RSH_DEBUG,
+                      "Exporting directory %s to %s (export contents = %d)\n",
+                      item.absName().c_str(), hostPath.string().c_str(), c);
+
+                // Extend path with the folder name if the user did not specify a trailing '/'
+                if (!c) { hostPath /= item.cppName(); }
 
                 if (!fs::exists(hostPath)) {
                     fs::create_directories(hostPath);
                 }
 
-                FSTree tree(item, { .recursive = recursive });
+                FSTree tree(item, { .recursive = r });
                 tree.save(hostPath);
             }
 
-            // Case 2: Export the contents of a directory to a folder (e.g. "export ./ /tmp/MyDisk")
-            if (item.isDirectory() && contents) {
-
-                printf("Exporting contents of directory %s to %s\n",
-                       item.absName().c_str(), hostPath.string().c_str());
-
-                if (!fs::exists(hostPath)) {
-                    fs::create_directories(hostPath);
-                }
-                if (!fs::is_directory(hostPath)) {
-                    throw AppError(Fault::FS_NOT_A_DIRECTORY, hostPath);
-                }
-                if (!fs::is_empty(hostPath)) {
-                    throw AppError(Fault::FS_DIR_NOT_EMPTY, hostPath);
-                }
-
-                FSTree tree(item, { .recursive = recursive });
-                for (auto &it : tree.children) { it.save(hostPath); }
-            }
-
-            // Case 3: Export a single file to a folder (e.g. "export clock.info /tmp")
             if (item.isFile())  {
 
-                printf("Exporting file %s to %s\n",
-                       item.absName().c_str(), hostPath.string().c_str());
+                debug(RSH_DEBUG,
+                      "Exporting file %s to %s\n",
+                      item.absName().c_str(), hostPath.string().c_str());
 
-                if (contents) {
-                    throw AppError(Fault::FS_NOT_A_DIRECTORY, item.absName());
-                }
+                // Report an error if the user appended '/' to the name of a file
+                if (c) throw AppError(Fault::FS_NOT_A_DIRECTORY, item.absName());
+
                 if (fs::is_directory(hostPath)) {
 
                     hostPath /= item.cppName();
