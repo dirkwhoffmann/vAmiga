@@ -33,7 +33,7 @@ static const usize hidden           = 1LL << 3 | opt;
 static const usize shadowed         = 1LL << 4;
 static const usize acdir            = 1LL << 5;
 static const usize acfile           = 1LL << 6;
-static const usize ac                   = acdir | acfile;
+static const usize ac               = acdir | acfile;
 
 }
 

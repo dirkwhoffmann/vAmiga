@@ -287,6 +287,7 @@ FSBlock::dsize() const
             
         case FSBlockType::DATA_OFS: return bsize() - 24;
         case FSBlockType::DATA_FFS: return bsize();
+        case FSBlockType::EMPTY:    return bsize();
 
         default:
             fatalError;
@@ -1916,7 +1917,12 @@ FSBlock::writeData(Buffer<u8> &buf, isize offset, isize count) const
 
             std::memcpy((void *)(buf.ptr + offset), (void *)(bdata), count);
             return count;
-            
+
+        case FSBlockType::EMPTY:
+
+            std::memset((void *)(buf.ptr + offset), 0, count);
+            return count;
+
         default:
             fatalError;
     }

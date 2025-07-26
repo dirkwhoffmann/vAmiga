@@ -637,18 +637,76 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         .tokens = { "export" },
         .ghelp  = { "Export a file system" },
-        .chelp  = { "Export the current directory to the host file system" },
+        .chelp  = { "Export a file or directory to the host file system" },
+        .flags  = rs::ac,
         .args   = {
+            { .name = { "file", "Export item" } },
             { .name = { "path", "Host file system directory" } },
         },
         .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            auto path = host.makeAbsolute(args.at("path"));
+            auto path = args.at("path");
+            auto hostPath = host.makeAbsolute(args.at("path"));
+            bool recursive = true;
+            bool contents = path.back() == '/';
 
-            FSTree tree(fs.pwd(), { .recursive = true });
-            tree.save(path);
+            auto &item = parsePath(args, "file");
+
+            // Case 1: Export an entire directory to a folder (e.g. "export . /tmp")
+            if (item.isDirectory() && !contents) {
+
+                printf("Exporting directory %s to %s\n",
+                       item.absName().c_str(), hostPath.string().c_str());
+
+                if (!fs::exists(hostPath)) {
+                    fs::create_directories(hostPath);
+                }
+
+                FSTree tree(item, { .recursive = recursive });
+                tree.save(hostPath);
+            }
+
+            // Case 2: Export the contents of a directory to a folder (e.g. "export ./ /tmp/MyDisk")
+            if (item.isDirectory() && contents) {
+
+                printf("Exporting contents of directory %s to %s\n",
+                       item.absName().c_str(), hostPath.string().c_str());
+
+                if (!fs::exists(hostPath)) {
+                    fs::create_directories(hostPath);
+                }
+                if (!fs::is_directory(hostPath)) {
+                    throw AppError(Fault::FS_NOT_A_DIRECTORY, hostPath);
+                }
+                if (!fs::is_empty(hostPath)) {
+                    throw AppError(Fault::FS_DIR_NOT_EMPTY, hostPath);
+                }
+
+                FSTree tree(item, { .recursive = recursive });
+                for (auto &it : tree.children) { it.save(hostPath); }
+            }
+
+            // Case 3: Export a single file to a folder (e.g. "export clock.info /tmp")
+            if (item.isFile())  {
+
+                printf("Exporting file %s to %s\n",
+                       item.absName().c_str(), hostPath.string().c_str());
+
+                if (contents) {
+                    throw AppError(Fault::FS_NOT_A_DIRECTORY, item.absName());
+                }
+                if (fs::is_directory(hostPath)) {
+
+                    hostPath /= item.cppName();
+                    printf("Directory exists. Exporting to %s\n", hostPath.string().c_str());
+                }
+
+                FSTree tree(item, { });
+                tree.save(hostPath);
+            }
         }
     });
+
     root.add({
 
         .tokens = { "export", "df[n]" },
@@ -694,6 +752,45 @@ NavigatorConsole::initCommands(RSCommand &root)
             }, .payload = {i}
         });
     }
+
+    if constexpr (wasmBuild) {
+
+        root.add({
+
+            .tokens = { "export", "block" },
+            .chelp  = { "Export a block to a file" },
+            .args   = {
+                { .name = { "nr", "Block number" }, .flags = rs::opt },
+            },
+                .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                    auto nr = parseBlock(args, "nr", fs.pwd().nr);
+                    fs.exportBlock(nr, "blob");
+
+                    msgQueue.setPayload( { "blob", std::to_string(nr) + ".bin" } );
+                    msgQueue.put(Msg::RSH_EXPORT);
+                }
+        });
+
+    } else {
+
+        root.add({
+
+            .tokens = { "export", "block" },
+            .chelp  = { "Export a block to a file" },
+            .args   = {
+                { .name = { "nr", "Block number" }, .flags = rs::opt },
+                { .name = { "path", "File path" } },
+            },
+                .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                    auto path = host.makeAbsolute(args.at("path"));
+                    auto nr = parseBlock(args, "nr", fs.pwd().nr);
+
+                    fs.exportBlock(nr, path);
+                }
+        });
+    };
 
     RSCommand::currentGroup = "Navigation";
 
@@ -1017,45 +1114,6 @@ NavigatorConsole::initCommands(RSCommand &root)
             fs.importBlock(nr, path);
         }
     });
-
-    if constexpr (wasmBuild) {
-
-        root.add({
-
-            .tokens = { "block", "export" },
-            .chelp  = { "Export a block to a file" },
-            .args   = {
-                { .name = { "nr", "Block number" }, .flags = rs::opt },
-            },
-                .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-                    auto nr = parseBlock(args, "nr", fs.pwd().nr);
-                    fs.exportBlock(nr, "blob");
-
-                    msgQueue.setPayload( { "blob", std::to_string(nr) + ".bin" } );
-                    msgQueue.put(Msg::RSH_EXPORT);
-                }
-        });
-
-    } else {
-
-        root.add({
-
-            .tokens = { "block", "export" },
-            .chelp  = { "Export a block to a file" },
-            .args   = {
-                { .name = { "nr", "Block number" }, .flags = rs::opt },
-                { .name = { "path", "File path" } },
-            },
-                .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-                    auto path = host.makeAbsolute(args.at("path"));
-                    auto nr = parseBlock(args, "nr", fs.pwd().nr);
-
-                    fs.exportBlock(nr, path);
-                }
-        });
-    };
 
     RSCommand::currentGroup = "Modify";
 
