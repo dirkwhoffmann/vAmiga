@@ -44,6 +44,7 @@ enum class Msg : long
     RSH_SWITCH,         ///< RetroShell has switched to another console
     RSH_WAIT,           ///< Execution has peen postponed due to a wait command
     RSH_ERROR,          ///< Command execution has been aborted due to an error
+    RSH_EXPORT,         ///< Data has been exported to the file system
 
     // Amiga
     VIDEO_FORMAT,
@@ -168,6 +169,7 @@ struct MsgEnum : Reflection<MsgEnum, Msg>
             case Msg::RSH_SWITCH:            return "RSH_SWITCH";
             case Msg::RSH_WAIT:              return "RSH_WAIT";
             case Msg::RSH_ERROR:             return "RSH_ERROR";
+            case Msg::RSH_EXPORT:            return "RSH_EXPORT";
                 
             case Msg::VIDEO_FORMAT:          return "VIDEO_FORMAT";
                 

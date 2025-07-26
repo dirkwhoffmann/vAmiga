@@ -21,6 +21,9 @@ class MsgQueue final : CoreObject, Synchronizable {
     // Ring buffer storing all pending messages
     util::RingBuffer <Message, 4096> queue;
 
+    // Used by WASM builds to pass additional parameters
+    std::vector<string> payload;
+
     // The registered listener
     const void *listener = nullptr;
     
@@ -74,6 +77,10 @@ public:
     void put(Msg type, ScriptMsg payload);
     void put(Msg type, ViewportMsg payload);
     void put(Msg type, SnapshotMsg payload);
+
+    // Gets or sets the payload
+    string getPayload(isize index);
+    void setPayload(const std::vector<string> &payload);
 };
 
 }

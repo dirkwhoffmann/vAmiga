@@ -1138,6 +1138,38 @@ public:
 
 
 //
+// Misc (MsgQueue)
+//
+
+class MsgQueueAPI : public API {
+
+    friend class VAmiga;
+    class MsgQueue *msgQueue = nullptr;
+
+public:
+
+    /** @brief  Locks the message queue
+     */
+    void lockMsgQueue();
+
+    /** @brief  Unlocks the message queue
+     */
+    void unlockMsgQueue();
+
+    /** @brief  Reads a message from the message queue
+     */
+    bool getMsg(Message &msg);
+
+    /** @brief  Used by the WASM builds to pass additional data
+     */
+    string getPayload(isize index);
+
+    /** @brief  Reads multiple messages from the message queue
+     */
+    // isize getMsg(isize count, Message *buffer);
+};
+
+//
 // Misc (Debugger)
 //
 
@@ -1156,6 +1188,7 @@ public:
     string memDump(Accessor acc, u32 addr, isize bytes, isize sz = 1) const;
      */
 };
+
 
 //
 // Misc (Defaults)
@@ -1589,19 +1622,20 @@ public:
     
     // Ports
     AudioPortAPI audioPort;
-    VideoPortAPI videoPort;
     ControlPortAPI controlPort1;
     ControlPortAPI controlPort2;
-    GuardsAPI copperBreakpoints;
-    DebuggerAPI debugger;
     SerialPortAPI serialPort;
-    
+    VideoPortAPI videoPort;
+
     // Peripherals
     FloppyDriveAPI df0, df1, df2, df3;
     HardDriveAPI hd0, hd1, hd2, hd3;
     KeyboardAPI keyboard;
     
     // Misc
+    GuardsAPI copperBreakpoints; // TODO: Move inside AgnusAPI
+    MsgQueueAPI msgQueue;
+    DebuggerAPI debugger; // TODO: No longer needed? It's not 'wired'
     RecorderAPI recorder;
     RemoteManagerAPI remoteManager;
     RetroShellAPI retroShell;
@@ -1642,17 +1676,6 @@ public:
     /** @brief  Returns statistical information about the components.
      */
     const EmulatorStats &getStats() const;
-
-    /** @brief  Reads a message from the message queue
-     */
-    bool getMsg(Message &msg);
-    void lockMsgQueue();
-    void unlockMsgQueue();
-
-    /** @brief  Reads multiple messages from the message queue
-     */
-    isize getMsg(isize count, Message *buffer);
-
 
     /// @}
     /// @name Querying the emulator state

@@ -1405,7 +1405,7 @@ JoystickAPI::trigger(GamePadAction event)
 
 
 //
-// Mouse
+// Peripherals (Mouse)
 //
 
 bool 
@@ -1441,6 +1441,38 @@ MouseAPI::trigger(GamePadAction action)
 {
     VAMIGA_PUBLIC
     emu->put(Command(Cmd::MOUSE_BUTTON, GamePadCmd { .port = mouse->objid, .action = action }));
+}
+
+//
+// Misc (MsgQueue)
+//
+
+bool
+MsgQueueAPI::getMsg(Message &msg)
+{
+    VAMIGA_PUBLIC
+    return msgQueue->get(msg);
+}
+
+void
+MsgQueueAPI::lockMsgQueue()
+{
+    VAMIGA_PUBLIC
+    return msgQueue->lock();
+}
+
+void
+MsgQueueAPI::unlockMsgQueue()
+{
+    VAMIGA_PUBLIC
+    return msgQueue->unlock();
+}
+
+string
+MsgQueueAPI::getPayload(isize index)
+{
+    VAMIGA_PUBLIC
+    return msgQueue->getPayload(index);
 }
 
 
@@ -1883,6 +1915,41 @@ VAmiga::VAmiga() {
     ciaB.emu = emu;
     ciaB.cia = &emu->main.ciaB;
 
+    cpu.emu = emu;
+    cpu.cpu = &emu->main.cpu;
+    cpu.debugger.emu = emu;
+    cpu.debugger.cpu = &emu->main.cpu;
+    cpu.breakpoints.emu = emu;
+    cpu.breakpoints.guards = &emu->main.cpu.breakpoints;
+    cpu.watchpoints.emu = emu;
+    cpu.watchpoints.guards = &emu->main.cpu.watchpoints;
+
+    denise.emu = emu;
+    denise.denise = &emu->main.denise;
+
+    mem.emu = emu;
+    mem.mem = &emu->main.mem;
+    mem.debugger.emu = emu;
+    mem.debugger.mem = &emu->main.mem;
+
+    paula.emu = emu;
+    paula.paula = &emu->main.paula;
+    paula.audioChannel0.emu = emu;
+    paula.audioChannel0.paula = &emu->main.paula;
+    paula.audioChannel1.emu = emu;
+    paula.audioChannel1.paula = &emu->main.paula;
+    paula.audioChannel2.emu = emu;
+    paula.audioChannel2.paula = &emu->main.paula;
+    paula.audioChannel3.emu = emu;
+    paula.audioChannel3.paula = &emu->main.paula;
+    paula.diskController.emu = emu;
+    paula.diskController.diskController = &emu->main.paula.diskController;
+    paula.uart.emu = emu;
+    paula.uart.uart = &emu->main.paula.uart;
+
+    rtc.emu = emu;
+    rtc.rtc = &emu->main.rtc;
+
     // Ports
     audioPort.emu = emu;
     audioPort.port = &emu->main.audioPort;
@@ -1901,21 +1968,13 @@ VAmiga::VAmiga() {
     controlPort2.mouse.emu = emu;
     controlPort2.mouse.mouse = &emu->main.controlPort2.mouse;
 
-    copperBreakpoints.emu = emu;
-    copperBreakpoints.guards = &emu->main.agnus.copper.debugger.breakpoints;
+    serialPort.emu = emu;
+    serialPort.serialPort = &emu->main.serialPort;
 
-    cpu.emu = emu;
-    cpu.cpu = &emu->main.cpu;
-    cpu.debugger.emu = emu;
-    cpu.debugger.cpu = &emu->main.cpu;
-    cpu.breakpoints.emu = emu;
-    cpu.breakpoints.guards = &emu->main.cpu.breakpoints;
-    cpu.watchpoints.emu = emu;
-    cpu.watchpoints.guards = &emu->main.cpu.watchpoints;
+    videoPort.emu = emu;
+    videoPort.videoPort = &emu->main.videoPort;
 
-    denise.emu = emu;
-    denise.denise = &emu->main.denise;
-
+    // Peripherals
     df0.emu = emu;
     df0.drive = &emu->main.df0;
 
@@ -1951,31 +2010,12 @@ VAmiga::VAmiga() {
     keyboard.emu = emu;
     keyboard.keyboard = &emu->main.keyboard;
 
-    mem.emu = emu;
-    mem.mem = &emu->main.mem;
-    mem.debugger.emu = emu;
-    mem.debugger.mem = &emu->main.mem;
+    // Misc
+    copperBreakpoints.emu = emu;
+    copperBreakpoints.guards = &emu->main.agnus.copper.debugger.breakpoints;
 
-    paula.emu = emu;
-    paula.paula = &emu->main.paula;
-    paula.audioChannel0.emu = emu;
-    paula.audioChannel0.paula = &emu->main.paula;
-    paula.audioChannel1.emu = emu;
-    paula.audioChannel1.paula = &emu->main.paula;
-    paula.audioChannel2.emu = emu;
-    paula.audioChannel2.paula = &emu->main.paula;
-    paula.audioChannel3.emu = emu;
-    paula.audioChannel3.paula = &emu->main.paula;
-    paula.diskController.emu = emu;
-    paula.diskController.diskController = &emu->main.paula.diskController;
-    paula.uart.emu = emu;
-    paula.uart.uart = &emu->main.paula.uart;
-
-    retroShell.emu = emu;
-    retroShell.retroShell = &emu->main.retroShell;
-
-    rtc.emu = emu;
-    rtc.rtc = &emu->main.rtc;
+    msgQueue.emu = emu;
+    msgQueue.msgQueue = &emu->main.msgQueue;
 
     recorder.emu = emu;
     recorder.recorder = &emu->main.denise.screenRecorder;
@@ -1983,14 +2023,8 @@ VAmiga::VAmiga() {
     remoteManager.emu = emu;
     remoteManager.remoteManager = &emu->main.remoteManager;
 
-    serialPort.emu = emu;
-    serialPort.serialPort = &emu->main.serialPort;
-
-    videoPort.emu = emu;
-    videoPort.videoPort = &emu->main.videoPort;
-    
-    // watchpoints.emu = emu;
-    // watchpoints.guards = &emu->main.cpu.debugger.watchpoints;
+    retroShell.emu = emu;
+    retroShell.retroShell = &emu->main.retroShell;
 }
 
 VAmiga::~VAmiga()
@@ -2031,27 +2065,6 @@ VAmiga::getStats() const
 {
     VAMIGA_PUBLIC
     return emu->getStats();
-}
-
-bool
-VAmiga::getMsg(Message &msg)
-{
-    VAMIGA_PUBLIC
-    return emu->main.msgQueue.get(msg);
-}
-
-void 
-VAmiga::lockMsgQueue()
-{
-    VAMIGA_PUBLIC
-    return emu->main.msgQueue.lock();
-}
- 
-void 
-VAmiga::unlockMsgQueue()
-{
-    VAMIGA_PUBLIC
-    return emu->main.msgQueue.unlock();
 }
 
 bool

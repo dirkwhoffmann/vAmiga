@@ -29,11 +29,11 @@ RetroShell::RetroShell(Amiga& ref) : SubComponent(ref)
 void
 RetroShell::_initialize()
 {
-    // Set the current console
+    // Set a console
     current = &debugger;
 
-    // Print the welcome message
-    current->exec(INITIAL_CONSOLE);
+    // Switch the console to let the welcome message appear
+    current->exec(wasmBuild ? "navigator" : "commander");
 }
 
 void

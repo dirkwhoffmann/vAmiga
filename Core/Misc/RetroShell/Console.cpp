@@ -522,10 +522,6 @@ Console::autoComplete(const string& userInput)
     // Split the input string
     Tokens tokens = split(userInput);
 
-    printf("Console::autoComplete(%s)\n", userInput.c_str());
-    for (auto &it : tokens) printf("'%s' ", it.c_str());
-    printf("\n");
-
     // Complete the last token
     autoComplete(tokens);
 

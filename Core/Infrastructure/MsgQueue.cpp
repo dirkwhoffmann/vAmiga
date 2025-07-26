@@ -131,4 +131,22 @@ MsgQueue::put(Msg type, SnapshotMsg payload)
     put( Message { .type = type, .snapshot = payload } );
 }
 
+string
+MsgQueue::getPayload(isize index)
+{
+    {   SYNCHRONIZED
+
+        return (isize)payload.size() > index ? payload[index] : string("");
+    }
+}
+
+void
+MsgQueue::setPayload(const std::vector<string> &payload)
+{
+    {   SYNCHRONIZED
+
+        this->payload = payload;
+    }
+}
+
 }

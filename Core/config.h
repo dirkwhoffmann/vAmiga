@@ -44,7 +44,6 @@ static constexpr int SNP_BETA       = 1;
 
 static constexpr int        DIAG_BOARD       = 0;           // Plug in the diagnose board
 static constexpr int        ALLOW_ALL_ROMS   = 0;           // Disable the magic bytes check
-static constexpr const char *INITIAL_CONSOLE = "commander"; // The first console to show
 
 
 //

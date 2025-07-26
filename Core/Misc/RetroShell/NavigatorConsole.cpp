@@ -48,12 +48,12 @@ NavigatorConsole::welcome()
 {
     if (vAmigaDOS) {
 
-        storage << "vAmigaDOS File System Navigator ";
+        storage << "File System Navigator ";
         *this << Amiga::build() << '\n';
         *this << '\n';
 
         *this << "Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de" << '\n';
-        *this << "https://github.com/dirkwhoffmann/vAmiga" << '\n';
+        *this << "https://github.com/vAmigaDOS/vAmigaDOS" << '\n';
         *this << '\n';
 
     } else {
@@ -1018,22 +1018,44 @@ NavigatorConsole::initCommands(RSCommand &root)
         }
     });
 
-    root.add({
+    if constexpr (wasmBuild) {
 
-        .tokens = { "block", "export" },
-        .chelp  = { "Export a block to a file" },
-        .args   = {
-            { .name = { "nr", "Block number" }, .flags = rs::opt },
-            { .name = { "path", "File path" } },
-        },
-        .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+        root.add({
 
-            auto path = host.makeAbsolute(args.at("path"));
-            auto nr = parseBlock(args, "nr", fs.pwd().nr);
+            .tokens = { "block", "export" },
+            .chelp  = { "Export a block to a file" },
+            .args   = {
+                { .name = { "nr", "Block number" }, .flags = rs::opt },
+            },
+                .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-            fs.exportBlock(nr, path);
-        }
-    });
+                    auto nr = parseBlock(args, "nr", fs.pwd().nr);
+                    fs.exportBlock(nr, "blob");
+
+                    msgQueue.setPayload( { "blob", std::to_string(nr) + ".bin" } );
+                    msgQueue.put(Msg::RSH_EXPORT);
+                }
+        });
+
+    } else {
+
+        root.add({
+
+            .tokens = { "block", "export" },
+            .chelp  = { "Export a block to a file" },
+            .args   = {
+                { .name = { "nr", "Block number" }, .flags = rs::opt },
+                { .name = { "path", "File path" } },
+            },
+                .func   = [&] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                    auto path = host.makeAbsolute(args.at("path"));
+                    auto nr = parseBlock(args, "nr", fs.pwd().nr);
+
+                    fs.exportBlock(nr, path);
+                }
+        });
+    };
 
     RSCommand::currentGroup = "Modify";
 

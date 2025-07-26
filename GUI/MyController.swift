@@ -433,6 +433,9 @@ extension MyController {
             NSSound.beep()
             renderer.console.isDirty = true
 
+        case .RSH_EXPORT:
+            break;
+
         case .SHUTDOWN:
             shutDown()
             
