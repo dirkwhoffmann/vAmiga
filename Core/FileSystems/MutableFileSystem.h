@@ -198,7 +198,10 @@ public:
     void exportBlocks(const fs::path &path) const;
 
     // Exports the volume to a buffer
-    void exportFolder(const fs::path &path) const;
+    void exportFiles(Block nr, const fs::path &path, bool recursive = true, bool contents = false) const;
+    void exportFiles(const FSBlock &top, const fs::path &path, bool recursive = true, bool contents = false) const;
+    void exportFiles(const fs::path &path, bool recursive = true, bool contents = false) const;
+    void exportFolder(const fs::path &path) const; // DEPRECATED
 
 private:
 

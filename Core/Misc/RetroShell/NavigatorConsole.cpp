@@ -667,13 +667,24 @@ NavigatorConsole::initCommands(RSCommand &root)
         },
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                auto path = args.at("path");
-                auto hostPath = host.makeAbsolute(args.at("path"));
-                bool c = args.at("file").back() == '/';
-                bool r = args.contains("r");
-
                 auto &item = parsePath(args, "file");
+                bool recursive = args.contains("r");
+                bool contents = args.at("file").back() == '/';
 
+                if constexpr (vAmigaDOS) {
+
+                    fs.exportFiles(item, "/export", recursive, contents);
+                    msgQueue.setPayload( { "/export", item.cppName() } );
+                    msgQueue.put(Msg::RSH_EXPORT);
+
+                } else {
+
+                    auto path = args.at("path");
+                    auto hostPath = host.makeAbsolute(args.at("path"));
+                    fs.exportFiles(item, hostPath, recursive, contents);
+                }
+
+                /*
                 if (item.isDirectory()) {
 
                     debug(RSH_DEBUG,
@@ -709,6 +720,7 @@ NavigatorConsole::initCommands(RSCommand &root)
                     FSTree tree(item, { });
                     tree.save(hostPath);
                 }
+                */
             }
     });
 

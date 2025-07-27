@@ -904,6 +904,40 @@ MutableFileSystem::exportBlocks(const fs::path &path) const
 }
 
 void
+MutableFileSystem::exportFiles(Block nr, const fs::path &path, bool recursive, bool contents) const
+{
+    const FSBlock *block = read(nr);
+    exportFiles(*block, path, recursive, contents);
+
+}
+
+void
+MutableFileSystem::exportFiles(const FSBlock &item, const fs::path &path, bool recursive, bool contents) const
+{
+    fs::path hostPath;
+
+    if (item.isDirectory()) {
+
+        hostPath = contents ? path : path / item.cppName();
+        if (!fs::exists(hostPath)) fs::create_directories(hostPath);
+
+    } else if (item.isFile())  {
+
+        hostPath = fs::is_directory(path) ? path / item.cppName() : path;
+    }
+
+    debug(FS_DEBUG, "Exporting %s to %s\n", item.absName().c_str(), hostPath.string().c_str());
+    FSTree tree(item, { .recursive = recursive });
+    tree.save(hostPath);
+}
+
+void
+MutableFileSystem::exportFiles(const fs::path &path, bool recursive, bool contents) const
+{
+    exportFiles(pwd(), path, recursive, contents);
+}
+
+void
 MutableFileSystem::exportFolder(const fs::path &path) const
 {
     FSTree(pwd(), {.recursive = true}).save(path);
