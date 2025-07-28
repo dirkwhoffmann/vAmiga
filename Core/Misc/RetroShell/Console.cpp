@@ -816,6 +816,9 @@ Console::exec(const Tokens &argv, bool verbose)
     // Find the command in the command tree
     if (auto [cmd, args] = seekCommand(argv); cmd) {
 
+        // Check if a command has been found
+        if (cmd == nullptr || cmd == &root) throw util::ParseError(argv[0]);
+
         // Parse arguments
         Arguments parsedArgs = parse(*cmd, args);
 

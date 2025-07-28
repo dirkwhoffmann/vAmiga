@@ -61,7 +61,7 @@ AppError::AppError(Fault code, const string &s)
             break;
             
         case Fault::SYNTAX:
-            description = "Syntax error in line " + s + ".";
+            description = "Syntax error" + (s.empty() ? "" : " in line " + s + ".");
             break;
 
         case Fault::CPU_UNSUPPORTED:
