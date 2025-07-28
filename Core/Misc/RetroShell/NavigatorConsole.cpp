@@ -458,7 +458,7 @@ NavigatorConsole::initCommands(RSCommand &root)
     // Importing and exporting
     //
 
-    RSCommand::currentGroup = "General";
+    RSCommand::currentGroup = "Create";
 
     root.add({
 
@@ -796,7 +796,7 @@ NavigatorConsole::initCommands(RSCommand &root)
             }
     });
 
-    RSCommand::currentGroup = "Navigation";
+    RSCommand::currentGroup = "Navigate";
 
     root.add({
 
@@ -912,7 +912,6 @@ NavigatorConsole::initCommands(RSCommand &root)
             };
 
             FSTree(path, opt).list(os, opt);
-            // fs.list(os, path, opt);
         }
     });
 
@@ -963,39 +962,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         }
     });
 
-    root.add({
-
-        .tokens = { "type" },
-        .chelp  = { "Print the contents of a file" },
-        .flags  = rs::ac,
-        .args   = {
-            { .name = { "path", "File path" }, .flags = rs::opt },
-            { .name = { "l", "Display a line number in each row" }, .flags = rs::flag },
-            { .name = { "t", "Display the last part" }, .flags = rs::flag },
-            { .name = { "lines", "Number of displayed rows" }, .flags = rs::keyval|rs::opt },
-        },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-            auto &file = parsePath(args, "path", fs.pwd());
-            if (!file.isFile()) {
-                throw AppError(Fault::FS_NOT_A_FILE, "Block " + std::to_string(file.nr));
-            }
-
-            auto lines = args.contains("lines") ? parseNum(args.at("lines")) : -1;
-
-            Buffer<u8> buffer;
-            file.extractData(buffer);
-
-            buffer.type(os, {
-
-                .lines = lines,
-                .tail = args.contains("t"),
-                .nr = args.contains("l")
-            });
-        }
-    });
-
-    RSCommand::currentGroup = "Inspection";
+    RSCommand::currentGroup = "Inspect";
 
     root.add({
 
@@ -1034,7 +1001,54 @@ NavigatorConsole::initCommands(RSCommand &root)
 
     root.add({
 
-        .tokens = { "file", "dump" },
+        .tokens = { "block" },
+        .ghelp  = { "Manage blocks" },
+        .chelp  = { "Inspect a block" },
+        .args   = {
+            { .name = { "nr", "Block number" }, .flags = rs::opt },
+        },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            auto nr = parseBlock(args, "nr");
+            fs.doctor.dump(nr, os);
+        }
+    });
+
+    root.add({
+
+        .tokens = { "type" },
+        .chelp  = { "Print the contents of a file" },
+        .flags  = rs::ac,
+        .args   = {
+            { .name = { "path", "File path" }, .flags = rs::opt },
+            { .name = { "l", "Display a line number in each row" }, .flags = rs::flag },
+            { .name = { "t", "Display the last part" }, .flags = rs::flag },
+            { .name = { "lines", "Number of displayed rows" }, .flags = rs::keyval|rs::opt },
+        },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            auto &file = parsePath(args, "path", fs.pwd());
+            if (!file.isFile()) {
+                throw AppError(Fault::FS_NOT_A_FILE, "Block " + std::to_string(file.nr));
+            }
+
+            auto lines = args.contains("lines") ? parseNum(args.at("lines")) : -1;
+
+            Buffer<u8> buffer;
+            file.extractData(buffer);
+
+            buffer.type(os, {
+
+                .lines = lines,
+                .tail = args.contains("t"),
+                .nr = args.contains("l")
+            });
+        }
+    });
+
+    root.add({
+
+        .tokens = { "dump" },
         .chelp  = { "Dump the contents of a file" },
         .flags  = rs::ac,
         .args   = {
@@ -1060,25 +1074,7 @@ NavigatorConsole::initCommands(RSCommand &root)
 
     root.add({
 
-        .tokens = { "block" },
-        .ghelp  = { "Manage blocks" },
-        .chelp  = { "Inspect a block" },
-        .args   = {
-            { .name = { "nr", "Block number" }, .flags = rs::opt },
-        },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-            auto nr = parseBlock(args, "nr");
-
-            if (auto ptr = fs.read(nr); ptr) {
-                ptr->dump(Category::Blocks, os);
-            }
-        }
-    });
-
-    root.add({
-
-        .tokens = { "block", "dump" },
+        .tokens = { "dump", "block" },
         .chelp  = { "Dump the contents of a block" },
         .args   = {
             { .name = { "nr", "Block number" }, .flags = rs::opt },
@@ -1098,6 +1094,41 @@ NavigatorConsole::initCommands(RSCommand &root)
             if (auto ptr = fs.read(nr); ptr) {
 
                 ptr->hexDump(os, opt);
+            }
+        }
+    });
+
+    root.add({
+
+        .tokens = { "xray" },
+        .ghelp  = { "Examines the file system integrity" },
+        .chelp  = { "Inspects the entire file system or a single block" },
+        .flags  = rs::ac,
+        .args   = {
+            { .name = { "s", "Strict checking" }, .flags = rs::flag },
+            { .name = { "v", "Verbose output" }, .flags = rs::flag },
+            { .name = { "r", "Rectify errors" }, .flags = rs::flag },
+            { .name = { "nr", "Block number" }, .flags = rs::opt }
+        },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            bool strict = args.contains("s");
+
+            if (args.contains("nr")) {
+
+                auto nr = parseBlock(args, "nr");
+
+                if (args.contains("r")) fs.doctor.rectify(nr, strict);
+                if (auto errors = fs.doctor.xray(nr, strict, os); !errors) {
+                    os << "No findings." << std::endl;
+                }
+
+            } else {
+
+                if (args.contains("r")) fs.doctor.rectify(strict);
+                if (auto errors = fs.doctor.xray(strict, os, args.contains("v")); !errors) {
+                    os << "No findings." << std::endl;
+                }
             }
         }
     });
@@ -1126,24 +1157,6 @@ NavigatorConsole::initCommands(RSCommand &root)
             }
         }
     });
-
-    /*
-    root.add({
-
-        .tokens = { "rename" },
-        .chelp  = { "Renames a file or directory" },
-        .args   = {
-            { .name = { "item", "Item to rename" } },
-            { .name = { "name", "New name" } },
-        },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-            auto item = oldParsePath(args, "item");
-
-            fs.rename(item, args.at("name"));
-        }
-    });
-    */
 
     root.add({
 
@@ -1252,42 +1265,6 @@ NavigatorConsole::initCommands(RSCommand &root)
 
         }
     });
-
-    root.add({
-
-        .tokens = { "xray" },
-        .ghelp  = { "Examines the file system integrity" },
-        .chelp  = { "Inspects the entire file system or a single block" },
-        .flags  = rs::ac,
-        .args   = {
-            { .name = { "s", "Strict checking" }, .flags = rs::flag },
-            { .name = { "v", "Verbose output" }, .flags = rs::flag },
-            { .name = { "r", "Rectify errors" }, .flags = rs::flag },
-            { .name = { "nr", "Block number" }, .flags = rs::opt }
-        },
-        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
-
-            bool strict = args.contains("s");
-
-            if (args.contains("nr")) {
-
-                auto nr = parseBlock(args, "nr");
-                
-                if (args.contains("r")) fs.doctor.rectify(nr, strict);
-                if (auto errors = fs.doctor.xray(nr, strict, os); !errors) {
-                    os << "No findings." << std::endl;
-                }
-
-            } else {
-
-                if (args.contains("r")) fs.doctor.rectify(strict);
-                if (auto errors = fs.doctor.xray(strict, os, args.contains("v")); !errors) {
-                    os << "No findings." << std::endl;
-                }
-            }
-        }
-    });
-
 }
 
 }
