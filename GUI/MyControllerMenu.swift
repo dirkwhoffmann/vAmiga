@@ -748,10 +748,12 @@ extension MyController: NSMenuItemValidation {
 
     func exportRecentAction(hd n: Int, slot: Int) {
         
-        debug(.media, "hd\(n) slot: \(slot)")
+        debug(1, "hd\(n) slot: \(slot)")
 
         if let url = mm.getRecentlyExportedHdrURL(slot, hd: n) {
-            
+
+            debug(1, "url: \(url)")
+
             do {
                 try mydocument.export(hardDrive: n, to: url)
 

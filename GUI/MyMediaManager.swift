@@ -51,42 +51,52 @@ class MediaManager {
     var insertedFloppyDisks: [URL] = [] {
         didSet {
             updateRecentUrlMenus([df0OpenRecent, df1OpenRecent, df2OpenRecent, df3OpenRecent],
-                                 urls: insertedFloppyDisks)
+                                 urls: insertedFloppyDisks,
+                                 action: #selector(MyController.insertRecentDiskAction(_ :)))
         }
     }
     // List of export URLs  (one for each floppy drive)
     var exportedFloppyDisks0: [URL] = [] {
-        didSet { updateRecentUrlMenu(df0ExportRecent, urls: exportedFloppyDisks0, nr: 0) }
+        didSet { updateRecentUrlMenu(df0ExportRecent, urls: exportedFloppyDisks0, nr: 0,
+                                     action: #selector(MyController.exportRecentDiskAction(_:))) }
     }
     var exportedFloppyDisks1: [URL] = [] {
-        didSet { updateRecentUrlMenu(df1ExportRecent, urls: exportedFloppyDisks1, nr: 1) }
+        didSet { updateRecentUrlMenu(df1ExportRecent, urls: exportedFloppyDisks1, nr: 1,
+                                     action: #selector(MyController.exportRecentDiskAction(_:))) }
     }
     var exportedFloppyDisks2: [URL] = [] {
-        didSet { updateRecentUrlMenu(df2ExportRecent, urls: exportedFloppyDisks2, nr: 2) }
+        didSet { updateRecentUrlMenu(df2ExportRecent, urls: exportedFloppyDisks2, nr: 2,
+                                     action: #selector(MyController.exportRecentDiskAction(_:))) }
     }
     var exportedFloppyDisks3: [URL] = [] {
-        didSet { updateRecentUrlMenu(df3ExportRecent, urls: exportedFloppyDisks3, nr: 3) }
+        didSet { updateRecentUrlMenu(df3ExportRecent, urls: exportedFloppyDisks3, nr: 3,
+                                     action: #selector(MyController.exportRecentDiskAction(_:))) }
     }
         
     // List of recently attached hard drive URLs
     var attachedHardDrives: [URL] = [] {
         didSet {
             updateRecentUrlMenus([hd0OpenRecent, hd1OpenRecent, hd2OpenRecent, hd3OpenRecent],
-                                 urls: attachedHardDrives)
+                                 urls: attachedHardDrives,
+                                 action: #selector(MyController.insertRecentDiskAction(_ :)))
         }
     }
     // List of export URLs (one for each hard drive)
     var exportedHardDrives0: [URL] = [] {
-        didSet { updateRecentUrlMenu(hd0ExportRecent, urls: exportedHardDrives0, nr: 0) }
+        didSet { updateRecentUrlMenu(hd0ExportRecent, urls: exportedHardDrives0, nr: 0,
+                                     action: #selector(MyController.exportRecentHdrAction(_ :))) }
     }
     var exportedHardDrives1: [URL] = [] {
-        didSet { updateRecentUrlMenu(hd1ExportRecent, urls: exportedHardDrives1, nr: 1) }
+        didSet { updateRecentUrlMenu(hd1ExportRecent, urls: exportedHardDrives1, nr: 1,
+                                     action: #selector(MyController.exportRecentHdrAction(_ :))) }
     }
     var exportedHardDrives2: [URL] = [] {
-        didSet { updateRecentUrlMenu(hd2ExportRecent, urls: exportedHardDrives2, nr: 2) }
+        didSet { updateRecentUrlMenu(hd2ExportRecent, urls: exportedHardDrives2, nr: 2,
+                                     action: #selector(MyController.exportRecentHdrAction(_ :))) }
     }
     var exportedHardDrives3: [URL] = [] {
-        didSet { updateRecentUrlMenu(hd3ExportRecent, urls: exportedHardDrives3, nr: 3) }
+        didSet { updateRecentUrlMenu(hd3ExportRecent, urls: exportedHardDrives3, nr: 3,
+                                     action: #selector(MyController.exportRecentHdrAction(_ :))) }
     }
     
     // Pictograms used in menu items
@@ -231,8 +241,8 @@ class MediaManager {
         }
     }
 
-    func updateRecentUrlMenu(_ menuItem: NSMenuItem, urls: [URL], nr: Int, clearMenu: Bool = false) {
-        
+    func updateRecentUrlMenu(_ menuItem: NSMenuItem, urls: [URL], nr: Int, action selector: Selector?) {
+
         let menu = menuItem.submenu!
         menu.removeAllItems()
         
@@ -242,16 +252,13 @@ class MediaManager {
                 
                 let isHdf = url.pathExtension == "hdf" || url.pathExtension == "hdz"
                 
-                let item = NSMenuItem(title:  url.lastPathComponent,
-                                      action: #selector(MyController.insertRecentDiskAction(_ :)),
-                                      keyEquivalent: "")
-                
-                
+                let item = NSMenuItem(title:  url.lastPathComponent, action: selector, keyEquivalent: "")
                 item.tag = nr << 16 | index
                 item.image = isHdf ? hdrMenuImage : diskMenuImage
                 menu.addItem(item)
             }
 
+            /*
             if clearMenu {
                 
                 menu.addItem(NSMenuItem.separator())
@@ -259,14 +266,15 @@ class MediaManager {
                                         action: #selector(MyController.clearRecentlyInsertedDisksAction(_ :)),
                                         keyEquivalent: ""))
             }
+            */
         }
     }
     
-    func updateRecentUrlMenus(_ menus: [NSMenuItem], urls: [URL]) {
-        
+    func updateRecentUrlMenus(_ menus: [NSMenuItem], urls: [URL], action selector: Selector?) {
+
         for (index, menu) in menus.enumerated() {
      
-            updateRecentUrlMenu(menu, urls: urls, nr: index, clearMenu: true)
+            updateRecentUrlMenu(menu, urls: urls, nr: index, action: selector)
         }
     }
 
