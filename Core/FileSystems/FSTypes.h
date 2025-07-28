@@ -386,6 +386,7 @@ struct FSTraits
     bool ofs() const { return isOFSVolumeType(dos); }
     bool ffs() const { return isFFSVolumeType(dos); }
     bool intl() const { return isINTLVolumeType(dos); }
+    bool adf() const;
 };
 
 typedef struct

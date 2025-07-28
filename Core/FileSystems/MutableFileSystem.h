@@ -177,6 +177,7 @@ public:
     void importVolume(const u8 *src, isize size) throws;
 
     // Imports files and folders from the host file system
+    void import(const fs::path &path, bool recursive = true, bool contents = false) throws;
     void import(FSBlock &top, const fs::path &path, bool recursive = true, bool contents = false) throws;
 
     // Imports a single block

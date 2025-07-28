@@ -141,7 +141,6 @@ NavigatorConsole::autoCompleteFilename(const string &input, usize flags) const
     std::vector<string> names;
     for (auto &it : matches) {
         names.push_back(absolute ? it->acabsName(): it->acrelName());
-        printf("Names: %s\n", names.back().c_str());
     }
 
     // Auto-complete all common characters
@@ -307,6 +306,12 @@ NavigatorConsole::importHd(isize n, isize part)
 {
     assert(n >= 0 && n <= 3);
     import(*amiga.hd[n], part);
+}
+
+void
+NavigatorConsole::import(const fs::path &path, bool recursive, bool contents)
+{
+    fs.import(path, recursive, contents);
 }
 
 void
@@ -567,7 +572,7 @@ NavigatorConsole::initCommands(RSCommand &root)
         .tokens = { "import" },
         .ghelp  = { "Import a file system" },
         .chelp  = { "Import a file or a folder from the host file system" },
-        .flags  = vAmigaDOS ? rs::disabled : 0,
+        .flags  = vAmigaDOS ? rs::hidden : 0,
         .args   = {
             { .name = { "path", "Host file system directory" } },
         },
@@ -654,75 +659,68 @@ NavigatorConsole::initCommands(RSCommand &root)
             }
     });
 
-    root.add({
+    if constexpr (vAmigaDOS) {
 
-        .tokens = { "export" },
-        .ghelp  = { "Export files, directories, or blocks" },
-        .chelp  = { "Export a file or directory to the host file system" },
-        .flags  = rs::ac,
-        .args   = {
-            { .name = { "file", "Export item" } },
-            { .name = { "path", "Host file system location" }, .flags = vAmigaDOS ? rs::disabled : 0 },
-            { .name = { "r", "Export subdirectories" }, .flags = rs::flag }
-        },
-            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+        root.add({
 
-                auto &item = parsePath(args, "file");
-                bool recursive = args.contains("r");
-                bool contents = args.at("file").back() == '/';
+            .tokens = { "export" },
+            .ghelp  = { "Export the volume, files, directories, or blocks" },
+            .chelp  = { "Export the volume, single files or directories" },
+            .flags  = rs::ac,
+            .args   = {
+                { .name = { "file", "Export item" }, .flags = rs::opt },
+                { .name = { "r", "Export subdirectories" }, .flags = rs::flag }
+            },
+                .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
-                if constexpr (vAmigaDOS) {
+                    bool recursive = args.contains("r");
+                    std::filesystem::remove_all("/export");
 
-                    fs.exportFiles(item, "/export", recursive, contents);
-                    msgQueue.setPayload( { "/export", item.cppName() } );
+                    if (args.contains("file")) {
+
+                        auto &item = parsePath(args, "file");
+                        auto name = item.cppName();
+                        if (name.empty()) name = fs.getName().cpp_str();
+                        fs.exportFiles(item, "/export", recursive, true);
+                        msgQueue.setPayload( { "/export", name } );
+
+                    } else {
+
+                        fs.exportBlocks("/export");
+                        auto name = fs.getName().cpp_str();
+                        name += fs.getTraits().adf() ? ".adf" : ".hdf";
+                        msgQueue.setPayload( { "/export", name } );
+                    }
+                    
                     msgQueue.put(Msg::RSH_EXPORT);
+                }
+        });
 
-                } else {
+    } else {
+
+        root.add({
+
+            .tokens = { "export" },
+            .ghelp  = { "Export files, directories, or blocks" },
+            .chelp  = { "Export a file or directory to the host file system" },
+            .flags  = rs::ac,
+            .args   = {
+                { .name = { "file", "Export item" } },
+                { .name = { "path", "Host file system location" } },
+                { .name = { "r", "Export subdirectories" }, .flags = rs::flag }
+            },
+                .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                    auto &item = parsePath(args, "file");
+                    bool recursive = args.contains("r");
+                    bool contents = args.at("file").back() == '/';
 
                     auto path = args.at("path");
                     auto hostPath = host.makeAbsolute(args.at("path"));
                     fs.exportFiles(item, hostPath, recursive, contents);
                 }
-
-                /*
-                if (item.isDirectory()) {
-
-                    debug(RSH_DEBUG,
-                          "Exporting directory %s to %s (export contents = %d)\n",
-                          item.absName().c_str(), hostPath.string().c_str(), c);
-
-                    // Extend path with the folder name if the user did not specify a trailing '/'
-                    if (!c) { hostPath /= item.cppName(); }
-
-                    if (!fs::exists(hostPath)) {
-                        fs::create_directories(hostPath);
-                    }
-
-                    FSTree tree(item, { .recursive = r });
-                    tree.save(hostPath);
-                }
-
-                if (item.isFile())  {
-
-                    debug(RSH_DEBUG,
-                          "Exporting file %s to %s\n",
-                          item.absName().c_str(), hostPath.string().c_str());
-
-                    // Report an error if the user appended '/' to the name of a file
-                    if (c) throw AppError(Fault::FS_NOT_A_DIRECTORY, item.absName());
-
-                    if (fs::is_directory(hostPath)) {
-
-                        hostPath /= item.cppName();
-                        printf("Directory exists. Exporting to %s\n", hostPath.string().c_str());
-                    }
-
-                    FSTree tree(item, { });
-                    tree.save(hostPath);
-                }
-                */
-            }
-    });
+        });
+    }
 
     root.add({
 
@@ -1119,6 +1117,9 @@ NavigatorConsole::initCommands(RSCommand &root)
             Tokens missing;
             auto &path = matchPath(args.at("name"), missing);
 
+            if (missing.empty()) {
+                throw(AppError(Fault::FS_EXISTS, args.at("name")));
+            }
             auto *p = &path;
             for (auto &it: missing) {
                 if (p) p = &fs.createDir(*p, FSName(it));

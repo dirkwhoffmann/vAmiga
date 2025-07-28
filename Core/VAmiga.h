@@ -1503,6 +1503,8 @@ public:
     void import(const HardDrive &hdn, isize part);
     void importDf(isize n);
     void importHd(isize n, isize part);
+    void import(const fs::path &path, bool recursive = true, bool contents = false);
+
 
     /** @brief  Exports the file system in the file system navigator
      */

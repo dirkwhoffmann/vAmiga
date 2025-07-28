@@ -19,6 +19,20 @@
 
 namespace vamiga {
 
+bool
+FSTraits::adf() const
+{
+    auto size = blocks * bsize;
+    
+    return
+    size == ADFFile::ADFSIZE_35_DD ||
+    size == ADFFile::ADFSIZE_35_DD_81 ||
+    size == ADFFile::ADFSIZE_35_DD_82 ||
+    size == ADFFile::ADFSIZE_35_DD_83 ||
+    size == ADFFile::ADFSIZE_35_DD_84 ||
+    size == ADFFile::ADFSIZE_35_HD;
+}
+
 FileSystem::~FileSystem()
 {
 

@@ -384,6 +384,9 @@ MutableFileSystem::createDir(FSBlock &at, const FSName &name)
 {
     if (at.isDirectory()) {
 
+        // Error out if the file already exists
+        if (seekPtr(&at, name)) throw(AppError(Fault::FS_EXISTS, name.cpp_str()));
+
         if (FSBlock *block = newUserDirBlock(name); block) {
 
             block->setParentDirRef(at.nr);
@@ -399,6 +402,9 @@ FSBlock &
 MutableFileSystem::createFile(FSBlock &at, const FSName &name)
 {
     if (at.isDirectory()) {
+
+        // Error out if the file already exists
+        if (seekPtr(&at, name)) throw(AppError(Fault::FS_EXISTS, name.cpp_str()));
 
         if (FSBlock *block = newFileHeaderBlock(name); block) {
 
@@ -726,6 +732,12 @@ MutableFileSystem::importVolume(const u8 *src, isize size)
     
     // Print some debug information
     debug(FS_DEBUG, "Success\n");
+}
+
+void
+MutableFileSystem::import(const fs::path &path, bool recursive, bool contents)
+{
+    import(pwd(), path, recursive, contents);
 }
 
 void
