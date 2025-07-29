@@ -202,7 +202,6 @@ public:
     void exportFiles(Block nr, const fs::path &path, bool recursive = true, bool contents = false) const;
     void exportFiles(const FSBlock &top, const fs::path &path, bool recursive = true, bool contents = false) const;
     void exportFiles(const fs::path &path, bool recursive = true, bool contents = false) const;
-    void exportFolder(const fs::path &path) const; // DEPRECATED
 
 private:
 

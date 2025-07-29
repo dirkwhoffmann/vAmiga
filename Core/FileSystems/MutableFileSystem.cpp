@@ -950,12 +950,6 @@ MutableFileSystem::exportFiles(const fs::path &path, bool recursive, bool conten
 }
 
 void
-MutableFileSystem::exportFolder(const fs::path &path) const
-{
-    FSTree(pwd(), {.recursive = true}).save(path);
-}
-
-void
 MutableFileSystem::importBlock(Block nr, const fs::path &path)
 {
     std::ifstream stream(path, std::ios::binary);
