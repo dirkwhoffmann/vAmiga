@@ -226,7 +226,7 @@ FSTree::saveDir(const fs::path &path, const FSOpt &opt) const
     // Save directories
     if (opt.recursive) {
         for (auto &it : children) {
-            if (it.isDirectory()) it.save(path / it.hostName());
+            if (it.isDirectory()) it.save(path / it.hostName(), opt);
         }
     }
 }

@@ -843,7 +843,7 @@ NSString *EventSlotName(EventSlot slot);
 - (FSBlockError)check:(NSInteger)nr pos:(NSInteger)pos expected:(unsigned char *)exp strict:(BOOL)strict;
 - (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
 - (NSString *)ascii:(NSInteger)block offset:(NSInteger)offset length:(NSInteger)len;
-- (void)export:(NSString *)path exception:(ExceptionWrapper *)ex;
+- (void)export:(NSString *)path recursive:(BOOL)rec contents:(BOOL)con exception:(ExceptionWrapper *)ex;
 
 - (void)createUsageMap:(u8 *)buf length:(NSInteger)len;
 - (void)createAllocationMap:(u8 *)buf length:(NSInteger)len;

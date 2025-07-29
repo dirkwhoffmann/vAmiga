@@ -940,7 +940,7 @@ MutableFileSystem::exportFiles(const FSBlock &item, const fs::path &path, bool r
 
     debug(FS_DEBUG, "Exporting %s to %s\n", item.absName().c_str(), hostPath.string().c_str());
     FSTree tree(item, { .recursive = recursive });
-    tree.save(hostPath);
+    tree.save(hostPath, { .recursive = recursive });
 }
 
 void

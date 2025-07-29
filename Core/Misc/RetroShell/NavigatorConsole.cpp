@@ -782,16 +782,16 @@ NavigatorConsole::initCommands(RSCommand &root)
 
                 auto nr = parseBlock(args, "nr", fs.pwd().nr);
 
-                if constexpr (wasmBuild) {
-
-                    auto path = host.makeAbsolute(args.at("path"));
-                    fs.exportBlock(nr, path);
-
-                } else {
+                if constexpr (vAmigaDOS) {
 
                     fs.exportBlock(nr, "blob");
                     msgQueue.setPayload( { "blob", std::to_string(nr) + ".bin" } );
                     msgQueue.put(Msg::RSH_EXPORT);
+
+                } else {
+
+                    auto path = host.makeAbsolute(args.at("path"));
+                    fs.exportBlock(nr, path);
                 }
             }
     });

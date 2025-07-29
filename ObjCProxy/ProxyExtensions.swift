@@ -510,10 +510,10 @@ extension FileSystemProxy {
         return result!
     }
 
-    func export(url: URL) throws {
-            
+    func export(url: URL, recursive: Bool = true, contents: Bool = true) throws {
+
         let exception = ExceptionWrapper()
-        export(url.path, exception: exception)
+        export(url.path, recursive: recursive, contents: contents, exception: exception)
         if exception.fault != .OK { throw AppError(exception) }
     }
 }
