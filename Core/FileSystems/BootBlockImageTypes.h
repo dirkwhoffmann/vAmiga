@@ -73,7 +73,15 @@ struct BootBlockIdEnum : Reflection<BootBlockIdEnum, BootBlockId>
     }
     static const char *help(BootBlockId value)
     {
-        return "";
+        switch (value) {
+
+            case BootBlockId::NONE:         return "Empty block";
+            case BootBlockId::AMIGADOS_13:  return "Kickstart 1.3 boot block";
+            case BootBlockId::AMIGADOS_20:  return "Kickstart 2.0 boot block";
+            case BootBlockId::SCA:          return "SCA Virus";
+            case BootBlockId::BYTE_BANDIT:  return "Byte Bandit Virus";
+        }
+        return "???";
     }
 };
 

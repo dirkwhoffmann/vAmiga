@@ -1128,9 +1128,9 @@ BootBlockImage::BootBlockImage(const u8 *buf1, const u8 *buf2)
         
         if (bbRecord[i].type == BootBlockType::STANDARD && bbRecord[i].image) {
             
-            // For standard boot blocks, we require a perfect match
-            if (std::memcmp(data, bbRecord[i].image, bbRecord[i].size) == 0) {
-                
+            // For standard boot blocks, we require a perfect match (except DOS type and checksum)
+            if (std::memcmp(data + 8, bbRecord[i].image + 8, bbRecord[i].size - 8) == 0) {
+
                 type = bbRecord[i].type;
                 name = bbRecord[i].name;
                 return;

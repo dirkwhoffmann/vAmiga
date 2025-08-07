@@ -1016,6 +1016,55 @@ NavigatorConsole::initCommands(RSCommand &root)
 
     root.add({
 
+        .tokens = { "boot" },
+        .ghelp  = { "Manage the boot block" },
+    });
+
+    root.add({
+
+        .tokens = { "boot", "install" },
+        .chelp  = { "Installs a block block" },
+    });
+
+    for (const auto& [key, value] : BootBlockIdEnum::pairs()) {
+
+        root.add({
+
+            .tokens = { "boot", "install", key },
+            .chelp  = { BootBlockIdEnum::help(BootBlockId(value)) },
+            .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+                fs.require_formatted();
+                fs.makeBootable(BootBlockId(values[0]));
+
+            },  .payload = { value }
+        });
+    }
+
+    root.add({
+
+        .tokens = { "boot", "scan" },
+        .chelp  = { "Scan a boot block for viruses" },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            fs.require_formatted();
+            os << "Boot block: " << fs.getBootBlockName() << std::endl;
+        }
+    });
+
+    root.add({
+
+        .tokens = { "boot", "kill" },
+        .chelp  = { "Kills a boot block virus" },
+        .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
+
+            fs.require_formatted();
+            fs.killVirus();
+        }
+    });
+
+    root.add({
+
         .tokens = { "type" },
         .chelp  = { "Print the contents of a file" },
         .flags  = rs::ac,
