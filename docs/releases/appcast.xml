@@ -1,0 +1,14 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>vAmiga</title>
+        <item>
+            <title>2.0b1</title>
+            <pubDate>Wed, 16 Mar 2022 16:33:59 +0100</pubDate>
+            <sparkle:version>220316</sparkle:version>
+            <sparkle:shortVersionString>2.0b1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>10.15</sparkle:minimumSystemVersion>
+            <enclosure url="https://dirkwhoffmann.github.io/vAmiga/releases/vAmiga2.0b1.zip" length="16079387" type="application/octet-stream" sparkle:edSignature="dmWnwAh9oKLCyPz1nPP2mGov6RHRQbLhv37L/opanqSnyFPSR1ceWk0SQnIbtbpKmENNJOJQWQnXkxxNPXcZAQ=="/>
+        </item>
+    </channel>
+</rss>

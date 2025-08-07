@@ -1,0 +1,524 @@
+<!DOCTYPE HTML>
+<!--
+	Arcana by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+
+<head>
+	<!-- <title>Arcana by HTML5 UP</title> -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="assets/css/main.css" />
+</head>
+
+<!-- web emulator view stuff start-->
+<style>
+	.emulator_view {
+		width: 100%;
+	}
+
+	#vAmigaWeb {
+		border-radius: 10px;
+	}
+
+	#player_container {
+		background-color: gray;
+		border-radius: 10px;
+		box-shadow: inset 0 0 0.1em black, 1em 1em 2em #2a2a2a;
+		animation: player_launch 0.5s ease-in;
+	}
+
+	@keyframes player_launch {
+		0% {
+			box-shadow: inset 0 0 0.1em black, 0 0 0.2em gray;
+		}
+		100% {
+			box-shadow: inset 0 0 0.1em black, 1em 1em 2em #222222;
+		}
+	}
+
+	.teaser_img {
+		width: 100%;
+		aspect-ratio: 320 / 232;
+		border-radius: 10px;
+	}
+
+
+	#player_container div:last-child {
+		margin-left: 5px;
+		margin-right: 5px;
+	}
+
+	.player_icon_btn {
+		background-color: transparent;
+		color: #eeeeee;
+		cursor: grab;
+	}
+
+	[player="on"] #titleBar{
+		position: absolute; /* otherwise fixed and on small devices sticks over the running player*/ 
+	}
+	
+
+	[player_expanded="on"] .style1,
+	[player_expanded="on"] .style2,
+	[player_expanded="on"] #header, 
+	[player_expanded="on"] #footer {
+		background-color: #555555;
+		color: #999999;
+		animation: go_dark 5s ease-out;
+	}
+
+	[player_expanded="off"] .style1,
+	[player_expanded="off"] .style2,
+	[player_expanded="off"] #header, 
+	[player_expanded="off"] #footer {
+		animation: go_light 1s ease-in;
+	}
+
+	[player_expanded="on"] a {
+		color: #cccccc;
+		animation: a_go_dark 2s ease-out;
+	}
+
+	[player_expanded="off"] a {
+		animation: a_go_light 1s ease-in;
+	}
+
+	@keyframes a_go_dark {
+		0% {
+			color: #448DBC;
+		}
+
+		100% {
+			color: #cccccc;
+		}
+	}
+
+	@keyframes a_go_light {
+		0% {
+			color: #cccccc;
+		}
+
+		100% {
+			color: #448DBC;
+		}
+	}
+
+	@keyframes go_dark {
+		0% {
+			background-color: #ffffff;
+			color: #474747;
+		}
+
+		100% {
+			background-color: #555555;
+			color: #999999;
+		}
+	}
+
+	@keyframes go_light {
+		0% {
+			background-color: #555555;
+			color: #999999;
+		}
+
+		100% {
+			background-color: #ffffff;
+			color: #474747;
+		}
+
+	}
+	
+</style>
+<script src="https://vamigaweb.github.io/js/vAmigaWeb_player.js"></script>
+<script>
+	function switch_cinema_display() {
+		var observer = new MutationObserver(function (mutations) {
+			let player_on = false;
+			for (var mutation of mutations) {
+				for (var node of mutation.addedNodes) {
+					if (node.id == "player_container") {
+						player_on = true;
+						break;
+					}
+				};
+			}
+			document.body.setAttribute("player", player_on ? "on" : "off");
+		});
+		var emulator_views = document.querySelectorAll(".emulator_view");
+		for (emulator_view of emulator_views)
+			observer.observe(emulator_view, { childList: true });
+	}
+</script>
+<!-- web emulator view stuff end-->
+
+<body class="is-preload" onload="switch_cinema_display()">
+	<div id="page-wrapper">
+
+		<!-- Header -->
+		<div id="header">
+
+			<!-- Logo -->
+			<h1><a href="index.html" id="logo">vAmiga<em> for macOS</em></a></h1>
+
+			<!-- Nav -->
+			<nav id="nav">
+				<ul>
+					<li class="current"><a href="index.html">About</a></li>
+					<li><a href="news.html">News</a></li>
+					<li><a href="docs/index.html">Documentation</a></li>
+					<li><a href="https://github.com/dirkwhoffmann/vAmiga">Code</a></li>
+					<li><a href="https://github.com/dirkwhoffmann/vAmiga/issues">Issues</a></li>
+					<li><a href="https://github.com/dirkwhoffmann/vAmiga/discussions">Discussions</a></li>
+					<li><a href="impressum.html">Impressum</a></li>
+				</ul>
+			</nav>
+		</div>
+
+		<!-- Banner -->
+		<section id="banner">
+			<header>
+				<h2><em>Download the latest version</em></h2>
+				<a href="https://github.com/dirkwhoffmann/vAmiga/releases/download/v4.2.1/vAmiga.app.zip"
+					class="button">vAmiga 4.2.1</a>
+				</header>
+			</section>
+
+			<!-- Gigantic Heading -->
+			<section class="wrapper style2">
+				<div class="container">
+					<header class="major">
+						<h2>Welcome to the world of friendly emulation</h2>
+						<p>Say Hello to vAmiga</p>
+					</header>
+				</div>
+			</section>
+
+			<!-- Grid -->
+			<section class="wrapper style1">
+				<div class="container">
+					<div class="row">
+						<section class="col-6 col-12-narrower">
+							<div class="box post">
+								<a href="#" class="image left"><img src="images/icon-va.jpg" alt="" /></a>
+								<div class="inner">
+									<h3>About</h3>
+									<p>vAmiga emulates a Commodore Amiga 500, 1000 or 2000 on your Mac. Development begun in
+										January 2019 and has made great progress since then. Bug reports on GitHub
+									are greatly appreciated.</p>
+								</div>
+							</div>
+						</section>
+						<section class="col-6 col-12-narrower">
+							<div class="box post">
+								<a href="#" class="image left"><img src="images/roms-va.jpg" alt="" /></a>
+								<div class="inner">
+									<h3>Kickstart</h3>
+									<p>To run the emulator, a Kickstart Rom is required. The original Amiga Roms are the
+										intellectual property of Cloanto. By purchasing a license of Amiga
+										Forever&trade; you can acquire a legal Kickstart license. Rom image files can be
+									added to vAmiga via drag and drop.</p>
+								</div>
+							</div>
+						</section>
+					</div>
+					<div class="row">
+						<section class="col-6 col-12-narrower">
+							<div class="box post">
+								<a href="#" class="image left"><img src="images/joy.jpg" alt="" /></a>
+								<div class="inner">
+									<h3>Input devices</h3>
+									<p>To use a joystick within the emulator, either enable keyboard emulation or connect an
+										external USB joystick. The emulator has been tested with the Speedlink Competition
+										Pro SL-6602 and various game console controllers. vAmiga also supports the RetroFun!
+										USB
+									adapter, which allows the connection of original Commodore joysticks.</p>
+								</div>
+							</div>
+						</section>
+						<section class="col-6 col-12-narrower">
+							<div class="box post">
+								<a href="#" class="image left"><img src="images/gnu.jpg" alt="" /></a>
+								<div class="inner">
+									<h3>License</h3>
+									<p>vAmiga is open-source and published under the terms of the GNU General Public
+									License.</p>
+								</div>
+							</div>
+						</section>
+					</div>
+				</div>
+			</section>
+
+			<!-- Gigantic Heading -->
+			<section class="wrapper style2">
+				<div class="container">
+					<header class="major">
+						<h2>Related projects</h2>
+						<p>by the same author</p>
+					</header>
+				</div>
+			</section>
+
+<!-- Highlights -->
+			<section class="wrapper style1">
+				<div class="container">
+					<div class="row gtr-400">
+						<section class="col-3 col-12-narrower">
+							<div class="box highlight">
+								<span class="image featured"><img src="images/ad-va-net.png" alt="vAmiga.net" /></span>
+								<footer><a href="https://vamiganet.github.io" class="button">vAmiga.net</a>
+								</footer>
+								<p>vAmiga.net is my personal web port of vAmiga, based on WASM, Svelte-Kit, Typescript and Tailwind. Run it in your browser right away.</p>
+							</div>
+						</section>
+						<section class="col-3 col-12-narrower">
+							<div class="box highlight">
+								<span class="image featured"><img src="images/ad-va-dos.png" alt="vAmiga.dos" /></span>
+								<footer><a href="https://vamigados.github.io" class="button">vAmiga.dos</a>
+								</footer>
+								<p>vAmiga.dos is an online tool for analyzing and modifying ADF and HDF files in a shell-like environment.</p>
+							</div>
+						</section>
+						<!--
+					</div>
+				</div>
+				<div class="container">
+					<div class="row gtr-200 justify-content-center">
+						-->
+						<section class="col-3 col-12-narrower">
+							<div class="box highlight">
+								<span class="image featured"><img src="images/ad-vc.png" alt="VirtualC64" /></span>
+								<footer><a href="https://dirkwhoffmann.github.io/virtualc64" class="button">VirtualC64</a>
+								</footer>
+								<p>VirtualC64 is a Commodore 64 emulator which is as user-friendly as vAmiga. Check it out
+								today.</p>
+							</div>
+						</section>
+						<!--
+						<section class="col-3 col-12-narrower">
+							<div class="box highlight">
+								<span class="image featured"><img src="images/ad-pe.png" alt="Peddle" /></span>
+								<footer><a href="https://dirkwhoffmann.github.io/Peddle" class="button">Peddle</a></footer>
+								<p>Peddle is the virtual MOS 6510 CPU driving VirtualC64. The CPU core is maintained in a
+								seperate repository and is as easy to integrate into your own application as Moira.</p>
+							</div>
+						</section>
+						-->
+						<section class="col-3 col-12-narrower">
+							<div class="box highlight">
+								<span class="image featured"><img src="images/ad-mo.png" alt="Moira" /></span>
+								<footer><a href="https://dirkwhoffmann.github.io/Moira" class="button">Moira</a></footer>
+								<p>Moira is the virtual Motorola 68k CPU driving vAmiga. The CPU core is maintained in a
+								seperate repository and is easily integratable into your own application.</p>
+							</div>
+						</section>
+					</div>
+				</div>
+			</section>
+
+			<!-- Gigantic Heading -->
+			<section class="wrapper style2">
+				<div class="container">
+					<header class="major">
+						<h2>Spin-offs</h2>
+						<p>by other authors</p>
+					</header>
+				</div>
+			</section>
+
+			<!-- Grid -->
+			<section class="wrapper style1">
+				<div class="container">
+					<div class="row">
+						<section class="col-6 col-12-narrower">
+							<div class="box post">
+								<a href="#https://vamigaweb.github.io/doc/about.html" class="image left"><img src="images/ad-we.png" alt="" /></a>
+								<div class="inner">
+									<h3>vAmigaWeb</h3>
+									<p>vAmigaWeb is a WebAssembly port of vAmiga by GitHub user Mithrendal.
+										The emulator runs in your browsers or on your mobile device as a progressive web
+										app.
+										It is also possible to embed vAmigaWeb as a web player as you can see right here:
+									</p>
+									<div id="player_swipe_view">
+
+										<div id="emuview0" class="emulator_view">
+											<a href="#" ontouchstart="touched=true" style="border-bottom: none" onclick="										let config={
+												AROS:true,warpto:250,
+												navbar:false,
+												wide:true,
+												gpu:true,
+												display:'standard',
+												startup_script: `df_mount_list=['Batman_Rises_disk1.adf','Batman_Rises_disk2.adf']`,
+												url:'https://vamigaweb.github.io/doc/media/batman_rises.zip'
+											}; 
+											vAmigaWeb_player.load(this,encodeURIComponent(JSON.stringify(config)));
+											return false;" 
+											>
+											<img src="images/arrow.png" class="teaser_img" style="background-size: 100% 100%;background-image:url(images/batman_rises.jpg);">
+										</a>
+									</div>
+
+									<div id="emuview1" class="emulator_view" style="display: none;">
+										<a href="#" ontouchstart="touched=true" style="border-bottom: none" onclick="
+										let touch=(typeof touched!='undefined')?touched:false;touched=false;
+										let config={
+											touch:touch,
+											AROS:true,
+											warpto:2000,
+											navbar:false,
+											wide:true,
+											display:'standard',
+											url:'https://vamigaweb.github.io/doc/media/Rink_a_Dink-REDUX_by_Lemon-Point_(final).adf'
+										}; 
+										vAmigaWeb_player.load(this,encodeURIComponent(JSON.stringify(config)));
+										return false;" 
+										>
+										<img src="images/rinkadink.png" class="teaser_img">
+									</a>
+								</div>
+
+								<div id="emuview2" class="emulator_view" style="display: none;">
+									<a href="#" ontouchstart="touched=true" style="border-bottom: none" onclick="
+									let touch=(typeof touched!='undefined')?touched:false;touched=false;
+									let config={
+										touch:touch,
+										mouse:true,
+										AROS:true,
+										warpto:2000,
+										navbar:false,
+										wide:true,
+										display:'standard',
+										url:'https://vamigaweb.github.io/doc/media/SysInfo4.4.adf'
+									}; 
+									vAmigaWeb_player.load(this,encodeURIComponent(JSON.stringify(config)));
+									return false;" 
+									>
+									<img src="images/arrow.png" class="teaser_img" style="background-size: 100% 100%;background-image:url(images/sysinfo.jpg);">
+
+								</a>
+							</div>
+
+
+							<style>
+								.chooser li {
+									font-size: small;
+									color: #dddddd;
+									cursor: pointer;
+									padding: 0;
+								}
+								.chooser li:hover {
+									color: #aaaaaa;
+								}	
+								[player="on"] .chooser li{
+									display: none;
+								}
+							</style>
+							<script>
+								function activate(li,id){
+									document.querySelectorAll(".emulator_view").forEach((e)=>e.style='display:none');
+									document.getElementById(id).style='display:unset';
+									document.querySelectorAll(".chooser li").forEach((e)=>e.style.color='');	
+									li.style.color="#555555";
+								}
+
+								let touchstartX = 0;
+								let touchendX = 0;
+								let touchstartY = 0;
+								let touchendY = 0;   
+								let visible_emuview=0; let emuview_count=3;
+								function checkDirection() {
+									let difX = touchstartX - touchendX;
+									let difY = touchstartY - touchendY;
+									if (Math.abs(difX) > Math.abs(difY)) {
+		if (touchendX < touchstartX) {/*swipe left*/ visible_emuview++;}
+		if (touchendX > touchstartX) {/*swipe right*/ visible_emuview--;}
+										if(visible_emuview<0) visible_emuview=emuview_count-1;
+										else if(visible_emuview>=emuview_count) visible_emuview=0; 
+										activate(document.getElementById('dot'+visible_emuview),'emuview'+visible_emuview);
+									}
+								};
+								document.getElementById('player_swipe_view').addEventListener('touchstart', e => {
+									touchstartX = e.changedTouches[0].screenX;
+									touchstartY = e.changedTouches[0].screenY;
+								});
+
+								document.getElementById('player_swipe_view').addEventListener('touchend', e => {
+									touchendX = e.changedTouches[0].screenX;
+									touchendY = e.changedTouches[0].screenY;
+									checkDirection();
+								});
+							</script>
+							<div style="display:flex;justify-content: center;">
+								<ul class="chooser" style="display:flex;justify-content: space-evenly;padding:0;width:30%;list-style: none;">
+									<li id="dot0" onclick="activate(this,'emuview0')" style="color: #555555">&#11044;</li>
+									<li id="dot1" onclick="activate(this,'emuview1')">&#11044;</li>
+									<li id="dot2" onclick="activate(this,'emuview2')">&#11044;</li>
+								</ul>
+							</div>							
+						</div>
+						<footer><a href="https://vamigaweb.github.io/doc/about.html" class="button">Learn
+						More</a></footer>
+					</div>
+				</div>
+			</section>
+			<section class="col-6 col-12-narrower">
+				<div class="box post">
+					<a href="#https://www.neoartcr.com" class="image left"><img src="images/ad-we.png" alt="" /></a>
+					<div class="inner">
+						<h3>Neoartcr</h3>
+						<p>This is another web WebAssembly port of vAmiga written by Christian Corti.
+							The emulator has been optimized for running in web browsers and provides
+							easy access to various Amiga games from within the application.
+						</p>
+						<footer><a href="https://www.neoartcr.com" class="button">Learn More</a></footer>
+					</div>
+				</div>
+			</section>
+		</div>
+	</div>
+</section>
+
+<!-- Footer -->
+<div id="footer">
+
+	<!-- Icons -->
+	<ul class="icons">
+		<li>
+			<a href="https://www.amazon.de/Dirk-W-Hoffmann/e/B004580IPU" class="icon brands fa-amazon"><span class="label">Amazon</span></a>
+		</li>
+		<li>
+			<a href="https://github.com/dirkwhoffmann" class="icon brands fa-github"><span class="label">GitHub</span></a>
+		</li>
+		<li>
+			<a href="https://www.youtube.com/channel/UCk9tUTMPMSQdxhKeeJRpNAA" class="icon brands fa-youtube"><span class="label">Youtube</span></a>
+		</li>			
+	</ul>
+
+	<!-- Copyright -->
+	<div class="copyright">
+		<ul class="menu">
+			<li>&copy; <a href="http://www.dirkwhoffmann.de">Dirk W. Hoffmann</a></li>
+			<li><a href="impressum.html">Impressum</a></li>
+			<li><a href="impressum.html">Datenschutz</a></li>
+			<li><a href="http://html5up.net">HTML5 UP</a></li>
+		</ul>
+	</div>
+</div>
+</div>
+
+<!-- Scripts -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/jquery.dropotron.min.js"></script>
+<script src="assets/js/browser.min.js"></script>
+<script src="assets/js/breakpoints.min.js"></script>
+<script src="assets/js/util.js"></script>
+<script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,332 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>The Message Queue &#8212; vAmiga 2.4</title>
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/insipid.css" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script defer src="../_static/insipid.js"></script>
+    <script defer src="../_static/insipid-sidebar.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The Run Loop" href="RunLoop.html" />
+    <link rel="prev" title="The Thread Class" href="ThreadClass.html" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+  </head><body>
+    <script type="text/javascript">
+        document.body.classList.add('js');
+    </script>
+    <input type="checkbox" id="sidebar-checkbox" style="display: none;">
+    <label id="overlay" for="sidebar-checkbox"></label>
+    <div class="sidebar-resize-handle"></div>
+    <script type="text/javascript">
+        try {
+            let sidebar = localStorage.getItem('sphinx-sidebar');
+            const sidebar_width = localStorage.getItem('sphinx-sidebar-width');
+            if (sidebar_width) {
+                document.documentElement.style.setProperty('--sidebar-width', sidebar_width);
+            }
+            // show sidebar on wide screen
+            if (!sidebar && window.matchMedia('(min-width: 0)').matches) {
+                sidebar = 'visible';
+                // NB: We don't store the value in localStorage!
+            }
+            if (sidebar === 'visible') {
+                document.getElementById('sidebar-checkbox').checked = true;
+            }
+        } catch(e) {
+            console.info(e);
+        }
+    </script>
+    <header id="topbar-placeholder">
+      <div id="topbar">
+        <div id="titlebar">
+          <div class="buttons">
+            <label for="sidebar-checkbox" id="sidebar-button" role="button" tabindex="0" aria-controls="sphinxsidebar" accesskey="M">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg>
+            </label>
+            <button id="search-button" type="button" title="Search" aria-label="Search" aria-expanded="false" aria-controls="search-form" accesskey="S">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+            </button>
+          </div>
+          <div class="title">
+            <a class="parent" href="../index.html" accesskey="U">vAmiga 2.4</a>
+            <a class="top" href="#">The Message Queue</a>
+          </div>
+          <div class="buttons">
+            <button id="fullscreen-button" type="button" aria-hidden="true">
+              <span class="enable">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M212.686 315.314L120 408l32.922 31.029c15.12 15.12 4.412 40.971-16.97 40.971h-112C10.697 480 0 469.255 0 456V344c0-21.382 25.803-32.09 40.922-16.971L72 360l92.686-92.686c6.248-6.248 16.379-6.248 22.627 0l25.373 25.373c6.249 6.248 6.249 16.378 0 22.627zm22.628-118.628L328 104l-32.922-31.029C279.958 57.851 290.666 32 312.048 32h112C437.303 32 448 42.745 448 56v112c0 21.382-25.803 32.09-40.922 16.971L376 152l-92.686 92.686c-6.248 6.248-16.379 6.248-22.627 0l-25.373-25.373c-6.249-6.248-6.249-16.378 0-22.627z"/></svg>
+              </span>
+              <span class="disable">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M4.686 427.314L104 328l-32.922-31.029C55.958 281.851 66.666 256 88.048 256h112C213.303 256 224 266.745 224 280v112c0 21.382-25.803 32.09-40.922 16.971L152 376l-99.314 99.314c-6.248 6.248-16.379 6.248-22.627 0L4.686 449.941c-6.248-6.248-6.248-16.379 0-22.627zM443.314 84.686L344 184l32.922 31.029c15.12 15.12 4.412 40.971-16.97 40.971h-112C234.697 256 224 245.255 224 232V120c0-21.382 25.803-32.09 40.922-16.971L296 136l99.314-99.314c6.248-6.248 16.379-6.248 22.627 0l25.373 25.373c6.248 6.248 6.248 16.379 0 22.627z"/></svg>
+              </span>
+            </button>
+          </div>
+        </div>
+        <div id="searchbox" role="search">
+          <form id="search-form" class="search" style="display: none" action="../search.html" method="get">
+            <input type="search" name="q" placeholder="Search ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            <button>Go</button>
+          </form>
+        </div>
+      </div>
+    </header>
+    <nav>
+      <a href="ThreadClass.html" class="nav-icon previous" title="previous:&#13;The Thread Class" aria-label="Previous topic" accesskey="P" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z"/></svg>
+      </a>
+      <a href="RunLoop.html" class="nav-icon next" title="next:&#13;The Run Loop" aria-label="Next topic" accesskey="N" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"/></svg>
+      </a>
+    </nav>
+
+    <nav class="relbar">
+      <a class="previous" href="ThreadClass.html" aria-label="Previous topic" >
+        <div class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M257.5 445.1l-22.2 22.2c-9.4 9.4-24.6 9.4-33.9 0L7 273c-9.4-9.4-9.4-24.6 0-33.9L201.4 44.7c9.4-9.4 24.6-9.4 33.9 0l22.2 22.2c9.5 9.5 9.3 25-.4 34.3L136.6 216H424c13.3 0 24 10.7 24 24v32c0 13.3-10.7 24-24 24H136.6l120.5 114.8c9.8 9.3 10 24.8.4 34.3z"/></svg>
+        </div>
+        <div class="title">
+          <span class="text">
+            <span class="direction">previous</span>
+            The Thread Class
+          </span>
+        </div>
+      </a>
+      <a class="next" href="RunLoop.html" aria-label="Next topic" >
+        <div class="title">
+          <span class="text">
+            <span class="direction">next</span>
+            The Run Loop
+          </span>
+        </div>
+        <div class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"/></svg>
+        </div>
+      </a>
+    </nav>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+<section id="the-message-queue">
+<h1>The Message Queue<a class="headerlink" href="#the-message-queue" title="Permalink to this heading">¶</a></h1>
+<p>In this document we will examine how vAmiga communicates with the graphical user interface. Sending commands from the GUI to the emulator core is simple. The GUI simply calls one of the API functions of the <code class="docutils literal notranslate"><span class="pre">Amiga</span></code> instance or one of its subcomponents.</p>
+<p>The other way is a bit more sophisticated. The emulator communicates with the GUI via a message queue. The message queue is implemented by the <code class="docutils literal notranslate"><span class="pre">MsgQueue</span></code> class, which stores all pending messages in a ring buffer.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MsgQueue</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">SubComponent</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="c1">// Ring buffer storing all pending messages</span>
+<span class="w">    </span><span class="n">util</span><span class="o">::</span><span class="n">RingBuffer</span><span class="w"> </span><span class="o">&lt;</span><span class="n">Message</span><span class="p">,</span><span class="w"> </span><span class="mi">512</span><span class="o">&gt;</span><span class="w"> </span><span class="n">queue</span><span class="p">;</span>
+
+<span class="w">    </span><span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Class <code class="docutils literal notranslate"><span class="pre">MsgQueue</span></code> supports two different access methods: <em>Polling</em> or <em>Subscribing</em>.</p>
+<section id="polling-the-message-queue">
+<h2>Polling the message queue<a class="headerlink" href="#polling-the-message-queue" title="Permalink to this heading">¶</a></h2>
+<p>The message queue provides a public function <code class="docutils literal notranslate"><span class="pre">bool</span> <span class="pre">MsgQueue::get(Message</span> <span class="pre">&amp;msg)</span></code> for reading a message. If the queue contains at least one message, <code class="docutils literal notranslate"><span class="pre">true</span></code> is returned and the oldest message is copied over to <code class="docutils literal notranslate"><span class="pre">msg</span></code>. If the queue is empty, the function returns <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p>The polling method is utilized by <a class="reference external" href="https://vamiganet.github.io">vAmiga.net</a>, a web port of vAmiga based on WebAssembly. The corresponding JavaScript code looks like this:</p>
+<div class="highlight-js notranslate"><div class="highlight"><pre><span></span><span class="k">export</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">doAnimationFrame</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="c1">// Process pending messages</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="mf">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="nx">msg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">$amiga</span><span class="p">.</span><span class="nx">readMessage</span><span class="p">();</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">0</span><span class="p">)</span><span class="w"> </span><span class="k">break</span><span class="p">;</span>
+
+<span class="w">        </span><span class="nx">$proxy</span><span class="p">.</span><span class="nx">processMsg</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Function <code class="docutils literal notranslate"><span class="pre">$amiga.readMessage()</span></code> is a small C++ wrapper around the <code class="docutils literal notranslate"><span class="pre">get</span></code> function:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">Message</span><span class="w"> </span><span class="nf">AmigaProxy::readMessage</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">Message</span><span class="w"> </span><span class="n">msg</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">amiga</span><span class="o">-&gt;</span><span class="n">msgQueue</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">msg</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">msg</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">msg</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>On a positive note, polling ensures that message processing is always done in a separate thread. That is, it is never performed within the emulator thread itself. However, polling the queue is subject to potential message loss. If the GUI thread does not keep up with polling the queue, the ring buffer may overflow, resulting in lost messages. This drawback is solved by the subscription method, which we will discuss below.</p>
+</section>
+<section id="subscribing-to-the-message-queue">
+<h2>Subscribing to the message queue<a class="headerlink" href="#subscribing-to-the-message-queue" title="Permalink to this heading">¶</a></h2>
+<p>As an alternative to storing pending messages in a ring buffer, the message queue also supports a callback mechanism. In this mode, sent messages are no longer written to the ring buffer. Instead, the registered callback function is called with the sent message as parameter.</p>
+<p>Subscribing to the message queue works by specifying the callback function as an argument to the <code class="docutils literal notranslate"><span class="pre">Amiga::launch</span></code> function, which we have already discussed earlier:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">launch</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">listener</span><span class="p">,</span><span class="w"> </span><span class="n">Callback</span><span class="w"> </span><span class="o">*</span><span class="n">func</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Callback</span></code> is a type alias which is defined as follows:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">Callback</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">Message</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Whenever the emulator sends a message, the provided callback function is invoked. The first argument is the raw pointer passed as the first argument to <code class="docutils literal notranslate"><span class="pre">Amiga::launch</span></code>. The second argument is an instance of the class <code class="docutils literal notranslate"><span class="pre">Message</span></code>.</p>
+<p>The subscription method is used by both the Mac version of vAmiga and <em>vAmiga Headless</em>. The latter is a small wrapper around the core emulator used mainly for testing the integrity of nightly builds. <em>vAmiga Headless</em> first creates an instance of the Amiga class on the stack:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Headless</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="p">...</span>
+
+<span class="w">    </span><span class="c1">// The emulator instance</span>
+<span class="w">    </span><span class="n">Amiga</span><span class="w"> </span><span class="n">amiga</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Subscribing to the message queue happens in the <code class="docutils literal notranslate"><span class="pre">main</span></code> function:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span>
+<span class="nf">Headless::main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+
+<span class="w">    </span><span class="c1">// Launch the emulator thread</span>
+<span class="w">    </span><span class="n">amiga</span><span class="p">.</span><span class="n">launch</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">vamiga</span><span class="o">::</span><span class="n">process</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The first argument of the <code class="docutils literal notranslate"><span class="pre">launch</span></code> function is a pointer to the instance of the calling object. The second argument is a pointer to a global function called <code class="docutils literal notranslate"><span class="pre">process</span></code>, which is defined as follows:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span>
+<span class="nf">process</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">listener</span><span class="p">,</span><span class="w"> </span><span class="n">Message</span><span class="w"> </span><span class="n">msg</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="p">((</span><span class="n">Headless</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">listener</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">process</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The implementation of this function is fairly straightforward. It converts the provided raw pointer (which was set to <code class="docutils literal notranslate"><span class="pre">this</span></code> above) back to the correct type and calls the <code class="docutils literal notranslate"><span class="pre">process</span></code> function for that object. The implementation of this function looks like this:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span>
+<span class="nf">Headless::process</span><span class="p">(</span><span class="n">Message</span><span class="w"> </span><span class="n">msg</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="no">MSG_SCRIPT_DONE</span><span class="p">:</span>
+<span class="w">            </span><span class="p">...</span>
+
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Subscribing to the message queue has the advantage of preventing any message from being lost. However, it is important to note that the message processing code is executed inside the emulator thread. This may cause problems if the message processing code calls functions of the public API of the <code class="docutils literal notranslate"><span class="pre">Amiga</span></code> class, since many of these functions assume that they are <em>not</em> called by the emulator thread itself. The Mac version of vAmiga solves this problem by passing all incoming messages to the GUI thread before execution. The relevant code is encapsulated in the <code class="docutils literal notranslate"><span class="pre">MyController.launch()</span></code> function, which is part of the Swift UI:</p>
+<div class="highlight-Swift notranslate"><div class="highlight"><pre><span></span>    <span class="kd">func</span> <span class="nf">launch</span><span class="p">()</span> <span class="p">{</span>
+
+        <span class="c1">// Convert &#39;self&#39; to a void pointer</span>
+        <span class="kd">let</span> <span class="nv">myself</span> <span class="p">=</span> <span class="n">UnsafeRawPointer</span><span class="p">(</span><span class="nb">Unmanaged</span><span class="p">.</span><span class="n">passUnretained</span><span class="p">(</span><span class="kc">self</span><span class="p">).</span><span class="n">toOpaque</span><span class="p">())</span>
+
+        <span class="n">amiga</span><span class="p">.</span><span class="n">launch</span><span class="p">(</span><span class="n">myself</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="n">ptr</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">Message</span><span class="p">)</span> <span class="k">in</span>
+
+            <span class="c1">// Convert void pointer back to &#39;self&#39;</span>
+            <span class="kd">let</span> <span class="nv">myself</span> <span class="p">=</span> <span class="nb">Unmanaged</span><span class="p">&lt;</span><span class="n">MyController</span><span class="p">&gt;.</span><span class="n">fromOpaque</span><span class="p">(</span><span class="n">ptr</span><span class="p">!).</span><span class="n">takeUnretainedValue</span><span class="p">()</span>
+
+            <span class="c1">// Process message in the main thread</span>
+            <span class="n">DispatchQueue</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="k">async</span> <span class="p">{</span>
+                <span class="n">myself</span><span class="p">.</span><span class="n">processMessage</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/icon.png" alt="Logo"/>
+            </a></p>
+          <div class="sidebar-resize-handle"></div>
+
+<h3><a href="../index.html">Table of Contents</a></h3>
+<p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Overview/About.html">About</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/GettingStarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Tutorials/Exploring.html">Exploring the User Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">How-to guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../HowTo/MappingCmd.html">Mapping the Command keys</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../HowTo/NullModemCable.html">Connecting Two Amigas</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../References/Preferences/index.html">Emulator Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../References/Configuration/index.html">Virtual Machine Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../References/FileFormats.html">Supported File Formats</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developers Corner</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ClassHierarchy.html">The Class Hierarchy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ThreadClass.html">The Thread Class</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">The Message Queue</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RunLoop.html">The Run Loop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="EventScheduler.html">The Event Scheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="SuperHires.html">SuperHires mode</a></li>
+</ul>
+
+<div><hr class="docutils"></div>
+<ul>
+  <li class="toctree-l1"><a class="reference internal" href="../genindex.html" accesskey="I">General Index</a></li>
+</ul>
+<div id="ethical-ad-placement"></div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <nav class="relbar">
+      <a class="previous" href="ThreadClass.html" aria-label="Previous topic" >
+        <div class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M257.5 445.1l-22.2 22.2c-9.4 9.4-24.6 9.4-33.9 0L7 273c-9.4-9.4-9.4-24.6 0-33.9L201.4 44.7c9.4-9.4 24.6-9.4 33.9 0l22.2 22.2c9.5 9.5 9.3 25-.4 34.3L136.6 216H424c13.3 0 24 10.7 24 24v32c0 13.3-10.7 24-24 24H136.6l120.5 114.8c9.8 9.3 10 24.8.4 34.3z"/></svg>
+        </div>
+        <div class="title">
+          <span class="text">
+            <span class="direction">previous</span>
+            The Thread Class
+          </span>
+        </div>
+      </a>
+      <a class="next" href="RunLoop.html" aria-label="Next topic" >
+        <div class="title">
+          <span class="text">
+            <span class="direction">next</span>
+            The Run Loop
+          </span>
+        </div>
+        <div class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"/></svg>
+        </div>
+      </a>
+    </nav>
+
+    <footer role="contentinfo">
+      &#169; Copyright 2023, Dirk W. Hoffmann.
+      Created using <a class="reference external" href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
+      <a class="reference external" href="https://insipid-sphinx-theme.readthedocs.io/">Insipid Theme</a>.
+<a class="reference internal" href="../_sources/Developer/MessageQueue.md.txt" rel="nofollow">Show Source</a>.
+    </footer>
+  </body>
+</html>
