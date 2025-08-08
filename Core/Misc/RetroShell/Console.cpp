@@ -1110,7 +1110,7 @@ Console::initCommands(RSCommand &root)
             
             .tokens = { "source" },
             .chelp  = { "Process a command script" },
-            .flags  = vAmigaDOS ? rs::disabled : 0,
+            .flags  = vAmigaDOS ? rs::hidden : 0,
             .args   = { { .name = { "path", "Script file" } } },
 
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {

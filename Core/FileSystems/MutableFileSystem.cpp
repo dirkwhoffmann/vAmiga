@@ -339,17 +339,20 @@ MutableFileSystem::killVirus()
     assert(storage.getType(0) == FSBlockType::BOOT);
     assert(storage.getType(1) == FSBlockType::BOOT);
 
-    auto id =
-    traits.ofs() ? BootBlockId::AMIGADOS_13 :
-    traits.ffs() ? BootBlockId::AMIGADOS_20 : BootBlockId::NONE;
+    if (bootBlockType() == BootBlockType::VIRUS) {
 
-    if (id != BootBlockId::NONE) {
-        storage[0].writeBootBlock(id, 0);
-        storage[1].writeBootBlock(id, 1);
-    } else {
-        std::memset(storage[0].data() + 4, 0, traits.bsize - 4);
-        std::memset(storage[1].data(), 0, traits.bsize);
-     }
+        auto id =
+        traits.ofs() ? BootBlockId::AMIGADOS_13 :
+        traits.ffs() ? BootBlockId::AMIGADOS_20 : BootBlockId::NONE;
+
+        if (id != BootBlockId::NONE) {
+            storage[0].writeBootBlock(id, 0);
+            storage[1].writeBootBlock(id, 1);
+        } else {
+            std::memset(storage[0].data() + 4, 0, traits.bsize - 4);
+            std::memset(storage[1].data(), 0, traits.bsize);
+        }
+    }
 }
 
 void
