@@ -122,6 +122,12 @@ static std::vector<RomTraits> roms = {
         .released   = "March 1990",
         .model      = ""
     },{
+        .crc        = CRC32_KICK201_36_143,
+        .title      = "Kickstart 2.01",
+        .revision   = "Rev 36.143",
+        .released   = "August 1990",
+        .model      = "Amiga 3000"
+    },{
         .crc        = CRC32_KICK202_36_207_A3000,
         .title      = "Kickstart 2.02",
         .revision   = "Rev 36.207",
@@ -139,6 +145,12 @@ static std::vector<RomTraits> roms = {
         .revision   = "Rev 37.175",
         .released   = "May 1991",
         .model      = "A3000"
+    },{
+        .crc        = CRC32_KICK20x_37_210_A600,
+        .title      = "Kickstart 2.0?",
+        .revision   = "Rev 37.210",
+        .released   = "November 1991",
+        .model      = "A600"
     },{
         .crc        = CRC32_KICK205_37_299_A600,
         .title      = "Kickstart 2.05",
@@ -169,6 +181,18 @@ static std::vector<RomTraits> roms = {
         .revision   = "Rev 39.106",
         .released   = "September 1992",
         .model      = "A4000"
+    },{
+        .crc        = CRC32_KICK31_40_055_A3000,
+        .title      = "Kickstart 3.1",
+        .revision   = "Rev 40.055",
+        .released   = "May 1993",
+        .model      = "A3000"
+    },{
+        .crc        = CRC32_KICK31_40_060_CD32,
+        .title      = "Kickstart 3.1",
+        .revision   = "Rev 40.060",
+        .released   = "May 1993",
+        .model      = "CD32"
     },{
         .crc        = CRC32_KICK31_40_063_A500,
         .title      = "Kickstart 3.1",
@@ -205,6 +229,12 @@ static std::vector<RomTraits> roms = {
         .revision   = "Rev 40.070",
         .released   = "February 1994",
         .model      = "A4000T"
+    },{
+        .crc        = CRC32_CDTV_EXT_ROM_1_0,
+        .title      = "CDTV Extended ROM",
+        .revision   = "Rev 1.0",
+        .released   = "March 1991",
+        .model      = "CDTV"
     },{
         .crc        = CRC32_HYP314_46_143_A500,
         .title      = "Kickstart 3.1.4 (Hyperion)",

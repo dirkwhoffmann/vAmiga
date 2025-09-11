@@ -30,7 +30,7 @@ const u8 RomFile::bootRomHeaders[1][8] = {
 // Kickstart Roms
 //
 
-const u8 RomFile::kickRomHeaders[12][7] = {
+const u8 RomFile::kickRomHeaders[13][7] = {
 
     // AROS Kickstart replacement
     { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00 }, // Aros Rom and Aros extended Rom

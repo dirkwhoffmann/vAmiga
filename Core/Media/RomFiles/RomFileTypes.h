@@ -40,16 +40,19 @@ static const u32 CRC32_KICK12_33_180_G11R       = 0x85067666;
 static const u32 CRC32_KICK13_34_005_G12R       = 0x74680D37;
 
 static const u32 CRC32_KICK20_36_028            = 0xB4113910;
-
+static const u32 CRC32_KICK201_36_143           = 0xB333D3C6;
 static const u32 CRC32_KICK202_36_207_A3000     = 0x9A15519D;
 static const u32 CRC32_KICK204_37_175_A500      = 0xC3BDB240;
 static const u32 CRC32_KICK204_37_175_A3000     = 0x234A7233;
+static const u32 CRC32_KICK20x_37_210_A600      = 0x4C0C1603;
 static const u32 CRC32_KICK205_37_299_A600      = 0x83028FB5;
 static const u32 CRC32_KICK205_37_300_A600HD    = 0x64466C2A;
 static const u32 CRC32_KICK205_37_350_A600HD    = 0x43B0DF7B;
 
 static const u32 CRC32_KICK30_39_106_A1200      = 0x6C9B07D2;
 static const u32 CRC32_KICK30_39_106_A4000      = 0x9E6AC152;
+static const u32 CRC32_KICK31_40_055_A3000      = 0x3ADDF0D6;
+static const u32 CRC32_KICK31_40_060_CD32       = 0x1E62D4A5;
 static const u32 CRC32_KICK31_40_063_A500       = 0xFC24AE0D;
 static const u32 CRC32_KICK31_40_063_A500_R     = 0x88136CA9;
 static const u32 CRC32_KICK31_40_068_A1200      = 0x1483A091;
@@ -57,7 +60,8 @@ static const u32 CRC32_KICK31_40_068_A3000      = 0xEFB239CC;
 static const u32 CRC32_KICK31_40_068_A4000      = 0xD6BAE334;
 static const u32 CRC32_KICK31_40_070_A4000T     = 0x75932C3A;
 
-// static const u32 CRC32_HYP314_46_143_A500       = 0xD52B52FD;
+static const u32 CRC32_CDTV_EXT_ROM_1_0         = 0x42BAA124;
+
 static const u32 CRC32_HYP314_46_143_A500       = 0x568F8786;
 static const u32 CRC32_HYP314_46_143_A1200      = 0xF17FA97F;
 static const u32 CRC32_HYP314_46_143_A2000      = 0xC25939AC;
