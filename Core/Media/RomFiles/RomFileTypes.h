@@ -31,6 +31,9 @@ static const u32 CRC32_KICK121_34_004           = 0xDB4C8033;
 static const u32 CRC32_KICK13_34_005_A500       = 0xC4F0F55F;
 static const u32 CRC32_KICK13_34_005_A3000      = 0xE0F37258;
 
+static const u32 CRC32_KICK14_36_015            = 0xA3BA6116;
+static const u32 CRC32_KICK14_36_002            = 0x39779507;
+
 static const u32 CRC32_KICK12_33_180_MRAS       = 0xF80F0FC5;
 
 static const u32 CRC32_KICK12_33_180_G11R       = 0x85067666;

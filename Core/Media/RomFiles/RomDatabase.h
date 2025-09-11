@@ -84,6 +84,18 @@ static std::vector<RomTraits> roms = {
         .released   = "December 1987",
         .model      = "A3000"
     },{
+        .crc        = CRC32_KICK14_36_015,
+        .title      = "Kickstart 1.4 Alpha 15",
+        .revision   = "Rev 36.015",
+        .released   = "May 1989",
+        .model      = "A2000"
+    },{
+        .crc        = CRC32_KICK14_36_002,
+        .title      = "Kickstart 1.4 Alpha 18",
+        .revision   = "Rev 36.020",
+        .released   = "December 1989",
+        .model      = "A3000"
+    },{
         .crc        = CRC32_KICK12_33_180_MRAS,
         .title      = "Kickstart 1.2",
         .revision   = "Rev 33.180",
