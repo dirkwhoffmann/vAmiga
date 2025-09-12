@@ -66,6 +66,19 @@ static std::vector<RomTraits> roms = {
         .released   = "October 1986",
         .model      = "A500, A1000, A2000"
     },{
+        .crc        = CRC32_KICK12_33_180_MRAS,
+        .title      = "Kickstart 1.2",
+        .revision   = "Rev 33.180",
+        .released   = "2022",
+        .model      = "MRAS patch"
+    },{
+        .crc        = CRC32_KICK12_33_180_G11R,
+        .title      = "Kickstart 1.2",
+        .revision   = "Rev 33.180 (Guardian patch)",
+        .released   = "1988",
+        .model      = "",
+        .patched    = true
+    },{
         .crc        = CRC32_KICK121_34_004,
         .title      = "Kickstart 1.2",
         .revision   = "Rev 34.004",
@@ -84,6 +97,13 @@ static std::vector<RomTraits> roms = {
         .released   = "December 1987",
         .model      = "A3000"
     },{
+        .crc        = CRC32_KICK13_34_005_G12R,
+        .title      = "Kickstart 1.3",
+        .revision   = "Rev 34.005 (Guardian patch)",
+        .released   = "1988",
+        .model      = "",
+        .patched    = true
+    },{
         .crc        = CRC32_KICK14_36_015,
         .title      = "Kickstart 1.4 Alpha 15",
         .revision   = "Rev 36.015",
@@ -95,26 +115,6 @@ static std::vector<RomTraits> roms = {
         .revision   = "Rev 36.020",
         .released   = "December 1989",
         .model      = "A3000"
-    },{
-        .crc        = CRC32_KICK12_33_180_MRAS,
-        .title      = "Kickstart 1.2",
-        .revision   = "Rev 33.180",
-        .released   = "2022",
-        .model      = "MRAS patch"
-    },{
-        .crc        = CRC32_KICK12_33_180_G11R,
-        .title      = "Kickstart 1.2",
-        .revision   = "Rev 33.180 (Guardian patch)",
-        .released   = "1988",
-        .model      = "",
-        .patched    = true
-    },{
-        .crc        = CRC32_KICK13_34_005_G12R,
-        .title      = "Kickstart 1.3",
-        .revision   = "Rev 34.005 (Guardian patch)",
-        .released   = "1988",
-        .model      = "",
-        .patched    = true
     },{
         .crc        = CRC32_KICK20_36_028,
         .title      = "Kickstart 2.0",
@@ -224,11 +224,24 @@ static std::vector<RomTraits> roms = {
         .released   = "December 1993",
         .model      = "A4000"
     },{
+        .crc        = CRC32_KICK31_40_069_A1200,
+        .title      = "Kickstart 3.1",
+        .revision   = "Rev 40.069 Beta",
+        .released   = "December 1993",
+        .model      = "A1200"
+    },{
         .crc        = CRC32_KICK31_40_070_A4000T,
         .title      = "Kickstart 3.1",
         .revision   = "Rev 40.070",
         .released   = "February 1994",
         .model      = "A4000T"
+    },{
+        .crc        = CRC32_KICK35_40_071_A4000,
+        .title      = "Fake Kickstart 3.5",
+        .revision   = "Rev 40.071",
+        .released   = "",
+        .model      = "A4000",
+        .patched    = true
     },{
         .crc        = CRC32_CDTV_EXT_ROM_1_0,
         .title      = "CDTV Extended ROM",

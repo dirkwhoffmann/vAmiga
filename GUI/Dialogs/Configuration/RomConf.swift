@@ -56,21 +56,21 @@ extension ConfigurationController {
         // Icons
         romDropView.image =
         isRelocatedRom  ? romRelocated :
+        hasPatchedRom   ? romPatched :
         hasHyperionRom  ? romHyperion :
         hasEmutosRom    ? romEmutos :
         hasArosRom      ? romAros :
         hasDiagRom      ? romDiag :
         hasDemoRom      ? romDemo :
         hasCommodoreRom ? romOrig :
-        hasPatchedRom   ? romPatched :
         hasRom          ? romUnknown : romMissing
 
         extDropView.image =
+        hasPatchedExt   ? romPatched :
         hasHyperionExt  ? romHyperion :
         hasArosExt      ? romAros :
         hasDiagExt      ? romDiag :
         hasCommodoreExt ? romOrig :
-        hasPatchedExt   ? romPatched :
         hasExt          ? romUnknown : romMissing
 
         // Titles and subtitles
