@@ -22,6 +22,7 @@ class ConfigurationController: DialogController {
         
     // Rom info
     @IBOutlet weak var romDropView: RomDropView!
+    // @IBOutlet weak var romAuxIcon: NSImageView!
     @IBOutlet weak var romTitle: NSTextField!
     @IBOutlet weak var romSubtitle: NSTextField!
     @IBOutlet weak var romSubsubtitle: NSTextField!
