@@ -43,11 +43,9 @@ extension ConfigurationController {
         let romAros         = NSImage(named: "rom_aros")
         let romDemo         = NSImage(named: "rom_demo")
         let romDiag         = NSImage(named: "rom_diag")
-        // let romPatched      = NSImage(named: "rom_patched")
         let romUnknown      = NSImage(named: "rom_unknown")
-        // let romRelocated    = NSImage(named: "rom_broken")
         let patched         = NSImage(named: "patched")
-        let relocated       = NSImage(named: "rom_broken")
+        let relocated       = NSImage(named: "relocated")
 
         // Lock controls if emulator is powered on
         romDropView.isEnabled = poweredOff
