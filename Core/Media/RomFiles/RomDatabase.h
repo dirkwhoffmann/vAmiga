@@ -249,6 +249,18 @@ static std::vector<RomTraits> roms = {
         .released   = "March 1991",
         .model      = "CDTV"
     },{
+        .crc        = CRC32_CDTV_EXT_ROM_2_3,
+        .title      = "CDTV Extended ROM",
+        .revision   = "Rev 2.3",
+        .released   = "1992",
+        .model      = "CDTV"
+    },{
+        .crc        = CRC32_CDTV_EXT_ROM_2_7,
+        .title      = "CDTV Extended ROM",
+        .revision   = "Rev 2.7",
+        .released   = "1992",
+        .model      = "CDTV"
+    },{
         .crc        = CRC32_HYP314_46_143_A500,
         .title      = "Kickstart 3.1.4 (Hyperion)",
         .revision   = "Rev 46.143",

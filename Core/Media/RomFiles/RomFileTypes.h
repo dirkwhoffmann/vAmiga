@@ -67,6 +67,8 @@ static const u32 CRC32_KICK31_40_070_A4000T     = 0x75932C3A;
 static const u32 CRC32_KICK35_40_071_A4000      = 0xE75A53F4;
 
 static const u32 CRC32_CDTV_EXT_ROM_1_0         = 0x42BAA124;
+static const u32 CRC32_CDTV_EXT_ROM_2_3         = 0x30B54232;
+static const u32 CRC32_CDTV_EXT_ROM_2_7         = 0xCEAE68D2;
 
 static const u32 CRC32_HYP314_46_143_A500       = 0x568F8786;
 static const u32 CRC32_HYP314_46_143_A1200      = 0xF17FA97F;
