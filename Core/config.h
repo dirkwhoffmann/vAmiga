@@ -43,7 +43,7 @@ static constexpr int SNP_BETA       = 0;
 //
 
 static constexpr int        DIAG_BOARD       = 0;           // Plug in the diagnose board
-static constexpr int        ALLOW_ALL_ROMS   = 0;           // Disable the magic bytes check
+static constexpr int        ALLOW_ALL_ROMS   = 1;           // Disable the magic bytes check
 
 
 //

@@ -214,7 +214,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="646" height="496"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1470" height="919"/>
             <value key="minSize" type="size" width="646" height="486"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="0.0" width="646" height="496"/>
@@ -260,8 +260,14 @@ DQ
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="rom_missing" id="gB6-P0-9eW"/>
                                                         <connections>
+                                                            <outlet property="auxIcon" destination="x9l-2a-Dhd" id="AZs-6o-trU"/>
                                                             <outlet property="parent" destination="-2" id="xo8-tE-pEJ"/>
                                                         </connections>
+                                                    </imageView>
+                                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x9l-2a-Dhd">
+                                                        <rect key="frame" x="68" y="4" width="40" height="40"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="relocated" id="O8u-ke-5SZ"/>
                                                     </imageView>
                                                 </subviews>
                                             </view>
@@ -323,8 +329,14 @@ DQ
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="rom_missing" id="q1V-67-8We"/>
                                                         <connections>
+                                                            <outlet property="auxIcon" destination="8x7-7u-Q4r" id="JJB-Jz-gfD"/>
                                                             <outlet property="parent" destination="-2" id="owk-3r-TQl"/>
                                                         </connections>
+                                                    </imageView>
+                                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8x7-7u-Q4r">
+                                                        <rect key="frame" x="68" y="4" width="40" height="40"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="patched" id="wc1-sl-LIH"/>
                                                     </imageView>
                                                 </subviews>
                                             </view>
@@ -4324,6 +4336,8 @@ DQ
         <image name="devMouseTemplate" width="20" height="20"/>
         <image name="devNoneTemplate" width="24" height="24"/>
         <image name="devRetroShellTemplate" width="24" height="24"/>
+        <image name="patched" width="256" height="256"/>
+        <image name="relocated" width="256" height="256"/>
         <image name="rom_medium" width="129" height="157"/>
         <image name="rom_missing" width="129" height="157"/>
         <image name="trashTemplate" width="174" height="214"/>

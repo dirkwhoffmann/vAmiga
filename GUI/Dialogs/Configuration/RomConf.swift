@@ -26,7 +26,7 @@ extension ConfigurationController {
         let hasHyperionRom  = romTraits.vendor == .HYPERION
         let hasEmutosRom    = romTraits.vendor == .EMUTOS
         let hasPatchedRom   = romTraits.patched
-        let isRelocatedRom  = romTraits.relocated
+        let hasRelocatedRom = romTraits.relocated
 
         let hasExt          = extTraits.crc != 0
         let hasArosExt      = extTraits.vendor == .AROS
@@ -34,6 +34,7 @@ extension ConfigurationController {
         let hasCommodoreExt = extTraits.vendor == .COMMODORE
         let hasHyperionExt  = extTraits.vendor == .HYPERION
         let hasPatchedExt   = extTraits.patched
+        let hasRelocatedExt = extTraits.relocated
 
         let romMissing      = NSImage(named: "rom_missing")
         let romOrig         = NSImage(named: "rom_original")
@@ -42,9 +43,9 @@ extension ConfigurationController {
         let romAros         = NSImage(named: "rom_aros")
         let romDemo         = NSImage(named: "rom_demo")
         let romDiag         = NSImage(named: "rom_diag")
-        let romPatched      = NSImage(named: "rom_patched")
         let romUnknown      = NSImage(named: "rom_unknown")
-        let romRelocated    = NSImage(named: "rom_broken")
+        let patched         = NSImage(named: "patched")
+        let relocated       = NSImage(named: "relocated")
 
         // Lock controls if emulator is powered on
         romDropView.isEnabled = poweredOff
@@ -55,24 +56,29 @@ extension ConfigurationController {
         
         // Icons
         romDropView.image =
-        isRelocatedRom  ? romRelocated :
         hasHyperionRom  ? romHyperion :
         hasEmutosRom    ? romEmutos :
         hasArosRom      ? romAros :
         hasDiagRom      ? romDiag :
         hasDemoRom      ? romDemo :
         hasCommodoreRom ? romOrig :
-        hasPatchedRom   ? romPatched :
         hasRom          ? romUnknown : romMissing
 
+        romDropView.auxIcon.image =
+        hasPatchedRom ? patched :
+        hasRelocatedRom ? relocated : nil
+        
         extDropView.image =
         hasHyperionExt  ? romHyperion :
         hasArosExt      ? romAros :
         hasDiagExt      ? romDiag :
         hasCommodoreExt ? romOrig :
-        hasPatchedExt   ? romPatched :
         hasExt          ? romUnknown : romMissing
 
+        extDropView.auxIcon.image =
+        hasPatchedExt ? patched :
+        hasRelocatedExt ? relocated : nil
+        
         // Titles and subtitles
         romTitle.stringValue = String(cString: romTraits.title)
         romSubtitle.stringValue = String(cString: romTraits.revision)
@@ -106,7 +112,7 @@ extension ConfigurationController {
         romPowerButton.isHidden = !bootable
 
         // Explanation
-        if isRelocatedRom {
+        if hasRelocatedRom {
             romExpImage.image = NSImage(named: "NSCaution")
             romExpImage.isHidden = false
             romExpInfo1.stringValue = "The selected Kickstart Rom is a relocation image."
