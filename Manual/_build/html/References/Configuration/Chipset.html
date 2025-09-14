@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Chipset Panel &#8212; vAmiga 2.4</title>
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d75fae25" />
+    <link rel="stylesheet" type="text/css" href="../../_static/insipid.css?v=b2d00be7" />
+
+    <script src="../../_static/documentation_options.js?v=8a448e45"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script defer src="../../_static/insipid.js"></script>
+    <script defer src="../../_static/insipid-sidebar.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Memory Panel" href="Memory.html" />
+    <link rel="prev" title="ROM Panel" href="Roms.html" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+  </head><body>
+    <script type="text/javascript">
+        document.body.classList.add('js');
+    </script>
+    <input type="checkbox" id="sidebar-checkbox" style="display: none;">
+    <label id="overlay" for="sidebar-checkbox"></label>
+    <div class="sidebar-resize-handle"></div>
+    <script type="text/javascript">
+        try {
+            let sidebar = localStorage.getItem('sphinx-sidebar');
+            const sidebar_width = localStorage.getItem('sphinx-sidebar-width');
+            if (sidebar_width) {
+                document.documentElement.style.setProperty('--sidebar-width', sidebar_width);
+            }
+            // show sidebar on wide screen
+            if (!sidebar && window.matchMedia('(min-width: 0)').matches) {
+                sidebar = 'visible';
+                // NB: We don't store the value in localStorage!
+            }
+            if (sidebar === 'visible') {
+                document.getElementById('sidebar-checkbox').checked = true;
+            }
+        } catch(e) {
+            console.info(e);
+        }
+    </script>
+    <header id="topbar-placeholder">
+      <div id="topbar">
+        <div id="titlebar">
+          <div class="buttons">
+            <label for="sidebar-checkbox" id="sidebar-button" role="button" tabindex="0" aria-controls="sphinxsidebar" accesskey="M">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"/></svg>
+            </label>
+            <button id="search-button" type="button" title="Search" aria-label="Search" aria-expanded="false" aria-controls="search-form" accesskey="S">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+            </button>
+          </div>
+          <div class="title">
+            <a class="parent" href="index.html" accesskey="U">Virtual Machine Settings</a>
+            <a class="top" href="#">Chipset Panel</a>
+          </div>
+          <div class="buttons">
+            <button id="fullscreen-button" type="button" aria-hidden="true">
+              <span class="enable">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M212.686 315.314L120 408l32.922 31.029c15.12 15.12 4.412 40.971-16.97 40.971h-112C10.697 480 0 469.255 0 456V344c0-21.382 25.803-32.09 40.922-16.971L72 360l92.686-92.686c6.248-6.248 16.379-6.248 22.627 0l25.373 25.373c6.249 6.248 6.249 16.378 0 22.627zm22.628-118.628L328 104l-32.922-31.029C279.958 57.851 290.666 32 312.048 32h112C437.303 32 448 42.745 448 56v112c0 21.382-25.803 32.09-40.922 16.971L376 152l-92.686 92.686c-6.248 6.248-16.379 6.248-22.627 0l-25.373-25.373c-6.249-6.248-6.249-16.378 0-22.627z"/></svg>
+              </span>
+              <span class="disable">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M4.686 427.314L104 328l-32.922-31.029C55.958 281.851 66.666 256 88.048 256h112C213.303 256 224 266.745 224 280v112c0 21.382-25.803 32.09-40.922 16.971L152 376l-99.314 99.314c-6.248 6.248-16.379 6.248-22.627 0L4.686 449.941c-6.248-6.248-6.248-16.379 0-22.627zM443.314 84.686L344 184l32.922 31.029c15.12 15.12 4.412 40.971-16.97 40.971h-112C234.697 256 224 245.255 224 232V120c0-21.382 25.803-32.09 40.922-16.971L296 136l99.314-99.314c6.248-6.248 16.379-6.248 22.627 0l25.373 25.373c6.248 6.248 6.248 16.379 0 22.627z"/></svg>
+              </span>
+            </button>
+          </div>
+        </div>
+        <div id="searchbox" role="search">
+          <form id="search-form" class="search" style="display: none" action="../../search.html" method="get">
+            <input type="search" name="q" placeholder="Search ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            <button>Go</button>
+          </form>
+        </div>
+      </div>
+    </header>
+    <nav>
+      <a href="Roms.html" class="nav-icon previous" title="previous:&#13;ROM Panel" aria-label="Previous topic" accesskey="P" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M31.7 239l136-136c9.4-9.4 24.6-9.4 33.9 0l22.6 22.6c9.4 9.4 9.4 24.6 0 33.9L127.9 256l96.4 96.4c9.4 9.4 9.4 24.6 0 33.9L201.7 409c-9.4 9.4-24.6 9.4-33.9 0l-136-136c-9.5-9.4-9.5-24.6-.1-34z"/></svg>
+      </a>
+      <a href="Memory.html" class="nav-icon next" title="next:&#13;Memory Panel" aria-label="Next topic" accesskey="N" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"/></svg>
+      </a>
+    </nav>
+
+    <nav class="relbar">
+      <a class="previous" href="Roms.html" aria-label="Previous topic" >
+        <div class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M257.5 445.1l-22.2 22.2c-9.4 9.4-24.6 9.4-33.9 0L7 273c-9.4-9.4-9.4-24.6 0-33.9L201.4 44.7c9.4-9.4 24.6-9.4 33.9 0l22.2 22.2c9.5 9.5 9.3 25-.4 34.3L136.6 216H424c13.3 0 24 10.7 24 24v32c0 13.3-10.7 24-24 24H136.6l120.5 114.8c9.8 9.3 10 24.8.4 34.3z"/></svg>
+        </div>
+        <div class="title">
+          <span class="text">
+            <span class="direction">previous</span>
+            ROM Panel
+          </span>
+        </div>
+      </a>
+      <a class="next" href="Memory.html" aria-label="Next topic" >
+        <div class="title">
+          <span class="text">
+            <span class="direction">next</span>
+            Memory Panel
+          </span>
+        </div>
+        <div class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"/></svg>
+        </div>
+      </a>
+    </nav>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+<section id="chipset-panel">
+<h1>Chipset Panel<a class="headerlink" href="#chipset-panel" title="Link to this heading">¶</a></h1>
+<p>Use this panel to configure the CPU and the custom chips of the virtual Amiga.</p>
+<p><img alt="Chipset Panel" src="../../_images/chipsetPanel.png" /></p>
+<section id="cpu">
+<h2>CPU<a class="headerlink" href="#cpu" title="Link to this heading">¶</a></h2>
+<p>vAmiga supports three different CPU revisions:</p>
+<ul>
+<li><p><strong>M68000</strong></p>
+<p>The M68000 is a 16/32-bit CISC microprocessor introduced by Motorola in 1979. Commodore has used this CPU in all classic Amiga models. Choose this revision to emulate the classic Amigas at the highest precision.</p>
+</li>
+<li><p><strong>M68010</strong></p>
+<p>The MC68010 processor was released in 1982 as the successor to the Motorola 68000. It was never officially used by Commodore in any Amiga model. However, since the M68010 was pin-compatible with the M68000, it can be used as a replacement for the M68000 in all classic Amigas. The following image shows one of my test machines that has been upgraded with a M68010. I’ve used this machine extensively while adding M68010 support in vAmiga:</p>
+<p><img alt="M68010" src="../../_images/68010.png" /></p>
+<p>Using the M68010 instead of the M68000 results in a speed gain of about 10%. Among other things, this is due to a special operating mode, called <em>loop mode</em>, which is entered automatically when certain loop constructs are executed. In this mode, some redundant memory accesses are skipped, resulting in faster execution speed. Please note that the M68010 is not 100% software compatible with the M68000. Therefore, some games or demos may not work when this CPU is selected.</p>
+</li>
+<li><p><strong>68EC020</strong></p>
+<p>The M68EC020 is a lower-cost version of the Motorola 68020 processor, which was launched in 1984. It was used by Commodore in the Amiga 1200 with a clock frequency of 14MHz. The 68020 was a significant improvement over the M68010, as it was the first CPU in the M68K series to have an on-board cache. vAmiga emulates the M68EC020, but with less precision than the M68000 and M68010. The first two models can be emulated by vAmiga with exact cycle precision, which means that all instructions not only consume the proper number of CPU cycles, but also access memory during the exact same DMA cycle as the real machine does. In 68020 mode, the CPU is emulated with lower accuracy. For example, vAmiga does not emulate caching, yet.</p>
+</li>
+<li><p><strong>Warp mode</strong></p>
+<p>In warp mode vAmiga runs at maximum speed, i.e. it starts computing the next frame right after the current frame has been completed. Warp mode can be configured as <strong>always off</strong>, <strong>always on</strong> or <strong>automatically enabled</strong>. In auto mode, warp mode is linked to the disk drive logic. It turns on and off just as the drive motor does. This mode significantly reduces loading times and works quite well in most cases. However, some applications are coded to not turn off the drive motor even when no data is being transmitted. In such cases, auto mode must be turned off manually by the user.</p>
+</li>
+</ul>
+<p>The next two options choose the emulated chip revisions of Agnus and Denise, two of the so-called <em>custom chips</em>. These chips were extremely important for the Amiga, as they were one of the main reasons for its competitive computing power back in the day. Without the custom chips, the Amiga would never have taken the prominent place in computer history it occupies today.</p>
+<p>All custom chips can be classified into one of three generations. The first chip generation is called OCS (Original Chip Set). All original Amigas were equipped with these chips. The second generation is called ECS (Enhanced Chip Set) and was used by Commodore in the A500+ and the A600. Some ECS chips were also used in later revisions of the A500 and the A2000. Commodore shipped them with an ECS Agnus and an OCS Denise. My test computer pictured above also belongs to these models. It is equipped with an Agnus 8372A, a revision of the ECS generation. Denise, however, has revision number 8362R8, which is the OCS version of this chip.
+The third generation of custom chips was called AGA (Advanced Graphics Architecture). Commodore equipped the A1200 and A4000 with these chips.</p>
+<p>Both the OCS and ECS chipsets are supported by vAmiga. The AGA chipset is currently <em>not</em> supported and probably will never be.</p>
+</section>
+<section id="agnus">
+<h2>Agnus<a class="headerlink" href="#agnus" title="Link to this heading">¶</a></h2>
+<p>Agnus can be considered the boss among the custom chips, because it controls the interaction of all other components. It also acts as a data provider for the other chips, as it performs all DMA accesses.</p>
+<p>vAmiga is able to emulate the following revisions of this chip:</p>
+<ul>
+<li><p><strong>Early OCS</strong></p>
+<p>This option emulates the MOS 8367. It was used in the A1000 and in a very early version of the A2000, usually called the A2000A.</p>
+</li>
+<li><p><strong>OCS</strong></p>
+<p>This option emulates the MOS 8371 which was used by Commodore in many revisions of the A500 and A2000. It is the most commonly used OCS version of this chip.</p>
+</li>
+<li><p><strong>ECS (1MB)</strong></p>
+<p>This option emulates the MOS 8372A. It is the first ECS revision of this chip. Apart from some minor details, the ECS variant differs mainly in the size of the addressable memory space. While the OCS models can only address 512 KB of Chip Ram, the ECS version was capable of addressing twice as much.</p>
+</li>
+<li><p><strong>ECS (2MB)</strong></p>
+<p>This option emulates the MOS 8375, which increased the range of addressable Chip Ram to 2 MB. It is used in the A500+ and A600, released in 1991 and 1992 respectively.</p>
+</li>
+</ul>
+</section>
+<section id="denise">
+<h2>Denise<a class="headerlink" href="#denise" title="Link to this heading">¶</a></h2>
+<ul>
+<li><p><strong>OCS</strong></p>
+<p>This option selects the MOS 8362R8 which was used in all revisions of the Amiga 1000, Amiga 500, and Amiga 2000.</p>
+</li>
+<li><p><strong>ECS</strong></p>
+<p>This option selects the MOS 8373R4. The chip is sometimes referred to as <em>HiRes Denise</em> and was used in the Amiga 500+ and the Amiga 3000. Compared to its predecessor, it supports additional graphics modes and features an advanced sprite unit. It also offers a special <em>Border Blank</em> mode, which causes the border to be drawn in black color instead of the currently selected background color. Some games use this feature to surround the drawing area with a nicer looking border.</p>
+</li>
+</ul>
+</section>
+<section id="cias">
+<h2>CIAs<a class="headerlink" href="#cias" title="Link to this heading">¶</a></h2>
+<p>The Amiga utilizes MOS 8520 CIAs to interact with peripheral devices. These chips are similar to the well-known MOS 6526 revisions used in the C64. However, there are subtle differences. For example, Commodore replaced the TOD clock with a native 24-bit counter and supplied the CIA timers with an auto-start mechanism.</p>
+<ul>
+<li><p><strong>DIP</strong></p>
+<p>This option selects the DIP version of the MOS 8520. The DIP models are the default option as they were used in all classic Amigas.</p>
+</li>
+<li><p><strong>PLCC</strong></p>
+<p>This option selects the PLCC version of the MOS 8520, which was used e.g. in the Amiga 600. The differences to the DIP version are extremely subtle.</p>
+</li>
+</ul>
+</section>
+<section id="rtc">
+<h2>RTC<a class="headerlink" href="#rtc" title="Link to this heading">¶</a></h2>
+<p>The term RTC refers to the Amiga’s real-time clock. The first Amiga, the Amiga 1000, never shipped with such a device and it was quite cumbersome to add one. For the Amiga 500, adding an RTC was easy, as many trapdoor memory expansion cards shipped with such a device on board. They are easily recognized by the battery needed to keep the register contents alive. In the Amiga 2000, the real-time clock was soldered directly to the motherboard. In hindsight, this was a bad idea, as the battery, which was also soldered directly to the motherboard, is now the number one death bringer of such machines. Many of us have lost their beloved devices because of the damage caused by the acid of a leaking battery.</p>
+<p>vAmiga offers the following configuration options:</p>
+<ul>
+<li><p><strong>None</strong></p>
+<p>If this option is selected, no real-time clock is emulated.</p>
+</li>
+<li><p><strong>Oki</strong></p>
+<p>This option emulates a MSM6242B real-time clock, manufactured by Oki Semiconductor. Commodore used this chip in the A2000 and the A500+.</p>
+</li>
+<li><p><strong>Ricoh</strong></p>
+<p>This option emulates a RF5C01A real-time clock, manufactured by Ricoh, Ltd. Commodore used this chip in the A3000 and the A4000.</p>
+</li>
+</ul>
+</section>
+</section>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/icon.png" alt="Logo of vAmiga"/>
+            </a></p>
+          <div class="sidebar-resize-handle"></div>
+
+<h3><a href="../../index.html">Table of Contents</a></h3>
+<p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Overview/About.html">About</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Tutorials/GettingStarted.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Tutorials/Exploring.html">Exploring the User Interface</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">How-to guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../HowTo/MappingCmd.html">Mapping the Command keys</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../HowTo/NullModemCable.html">Connecting Two Amigas</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Preferences/index.html">Emulator Settings</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Virtual Machine Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../FileFormats.html">Supported File Formats</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developers Corner</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer/ClassHierarchy.html">The Class Hierarchy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer/ThreadClass.html">The Thread Class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer/MessageQueue.html">The Message Queue</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer/RunLoop.html">The Run Loop</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer/EventScheduler.html">The Event Scheduler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Developer/SuperHires.html">SuperHires mode</a></li>
+</ul>
+
+<div><hr class="docutils"></div>
+<ul>
+  <li class="toctree-l1"><a class="reference internal" href="../../genindex.html" accesskey="I">General Index</a></li>
+</ul>
+<div id="ethical-ad-placement"></div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <nav class="relbar">
+      <a class="previous" href="Roms.html" aria-label="Previous topic" >
+        <div class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M257.5 445.1l-22.2 22.2c-9.4 9.4-24.6 9.4-33.9 0L7 273c-9.4-9.4-9.4-24.6 0-33.9L201.4 44.7c9.4-9.4 24.6-9.4 33.9 0l22.2 22.2c9.5 9.5 9.3 25-.4 34.3L136.6 216H424c13.3 0 24 10.7 24 24v32c0 13.3-10.7 24-24 24H136.6l120.5 114.8c9.8 9.3 10 24.8.4 34.3z"/></svg>
+        </div>
+        <div class="title">
+          <span class="text">
+            <span class="direction">previous</span>
+            ROM Panel
+          </span>
+        </div>
+      </a>
+      <a class="next" href="Memory.html" aria-label="Next topic" >
+        <div class="title">
+          <span class="text">
+            <span class="direction">next</span>
+            Memory Panel
+          </span>
+        </div>
+        <div class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Free 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"/></svg>
+        </div>
+      </a>
+    </nav>
+
+    <footer role="contentinfo">
+      &#169; Copyright 2023, Dirk W. Hoffmann.
+      Created using <a class="reference external" href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+      <a class="reference external" href="https://insipid-sphinx-theme.readthedocs.io/">Insipid Theme</a>.
+<a class="reference internal" href="../../_sources/References/Configuration/Chipset.md.txt" rel="nofollow">Show Source</a>.
+    </footer>
+  </body>
+</html>

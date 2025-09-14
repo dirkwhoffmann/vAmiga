@@ -1124,6 +1124,8 @@ Denise::markBorderBufferAsDirty(isize lines)
 template <int x> void
 Denise::checkS2SCollisions(Pixel start, Pixel end)
 {
+    if (start < 0) return;
+
     // For odd sprites, only proceed if collision detection is enabled
     if constexpr (IS_ODD(x)) if (!GET_BIT(clxcon, 12 + (x/2))) return;
 
@@ -1167,6 +1169,8 @@ Denise::checkS2SCollisions(Pixel start, Pixel end)
 template <int x> void
 Denise::checkS2PCollisions(Pixel start, Pixel end)
 {
+    if (start < 0) return;
+
     // For the odd sprites, only proceed if collision detection is enabled
     if constexpr (IS_ODD(x)) if (!ensp<x>()) return;
     
