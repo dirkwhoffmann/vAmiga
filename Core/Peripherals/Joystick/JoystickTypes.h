@@ -28,6 +28,31 @@ enum class HIDEvent
     HATSWITCH,
 };
 
+struct HIDEventEnum : Reflection<HIDEventEnum, HIDEvent>
+{
+    static constexpr long minVal = 0;
+    static constexpr long maxVal = long(HIDEvent::HATSWITCH);
+
+    static const char *_key(HIDEvent value)
+    {
+        switch (value) {
+
+            case HIDEvent::AXIS:        return "AXIS";
+            case HIDEvent::BUTTON:      return "BUTTON";
+            case HIDEvent::DPAD_UP:     return "DPAD_UP";
+            case HIDEvent::DPAD_DOWN:   return "DPAD_DOWN";
+            case HIDEvent::DPAD_RIGHT:  return "DPAD_RIGHT";
+            case HIDEvent::DPAD_LEFT:   return "DPAD_LEFT";
+            case HIDEvent::HATSWITCH:   return "HATSWITCH";
+        }
+        return "???";
+    }
+    static const char *help(HIDEvent value)
+    {
+        return "";
+    }
+};
+
 enum class GamePadAction : long
 {
     PULL_UP = 0,    // Pull the joystick up

@@ -63,6 +63,24 @@ typealias UARTInfo = vamiga.UARTInfo
 typealias VideoFormat = vamiga.TV
 typealias WarpMode = vamiga.Warp
 
+extension HIDEvent: CustomStringConvertible {
+
+    public var description: String {
+
+        guard let key = HIDEvent(rawValue: self.rawValue) else { return "nil" }
+        return String(cString: vamiga.HIDEventEnum._key(key))
+    }
+}
+
+extension GamePadAction: CustomStringConvertible {
+
+    public var description: String {
+
+        guard let key = GamePadAction(rawValue: self.rawValue) else { return "nil" }
+        return String(cString: vamiga.GamePadActionEnum._key(key))
+    }
+}
+
 extension Compressor: CustomStringConvertible {
 
     public var description: String {
