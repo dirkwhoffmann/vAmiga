@@ -45,7 +45,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var timestamp = CACurrentMediaTime()
 
     // Frame synchronization semaphore
-    var semaphore = DispatchSemaphore(value: 1)
+    let semaphore = DispatchSemaphore(value: 1)
 
     //
     // Metal entities
@@ -298,7 +298,11 @@ class Renderer: NSObject, MTKViewDelegate {
         encoder.endEncoding()
         
         // Commit the command buffer
-        buffer.addCompletedHandler { _ in self.semaphore.signal() }
+        buffer.addCompletedHandler { @Sendable [weak self] buffer in
+
+            self?.semaphore.signal()
+        }
+
         buffer.present(drawable)
         buffer.commit()
     }
