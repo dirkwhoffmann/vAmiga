@@ -11,13 +11,59 @@ import Foundation
 import Carbon.HIToolbox
 
 @MainActor
+class TripleTextView: NSView {
+
+    @IBOutlet private weak var contentView: NSView!
+
+    @IBOutlet weak var splitView: NSSplitView!
+    @IBOutlet weak var textView1: NSTextView!
+    @IBOutlet weak var textView2: NSTextView!
+    @IBOutlet weak var textView3: NSTextView!
+
+    override init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+        commonInit()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
+    }
+
+    private func commonInit() {
+        // Load the xib with owner = self so IB connects outlets into this instance.
+        var topLevelObjects: NSArray? = nil
+        let nibName = "TripleTextView" // make sure this matches the xib filename
+
+        Bundle.main.loadNibNamed(nibName, owner: self, topLevelObjects: &topLevelObjects)
+
+        // contentView should now be hooked up by the nib. Add it as a child view.
+        if let content = contentView {
+            content.frame = bounds
+            content.autoresizingMask = [.width, .height]
+            addSubview(content)
+        } else {
+            // Fallback: if the outlet isn't connected, try to pick the first top-level NSView
+            if let objects = topLevelObjects as? [Any] {
+                if let found = objects.first(where: { $0 is NSView }) as? NSView {
+                    found.frame = bounds
+                    found.autoresizingMask = [.width, .height]
+                    addSubview(found)
+                }
+            }
+        }
+    }
+}
+
+@MainActor
 class Console: Layer {
      
     var window: NSWindow { return controller.window! }
     var contentView: NSView { return window.contentView! }
     let scrollView = NSTextView.scrollableTextView()
 
-    var textView: NSTextView
+    // var textView: NSTextView
+    var textView: NSTextView { tripleTextView.textView1 }
     var textColor = NSColor.white
     var backgroundColor = NSColor(r: 0x80, g: 0x80, b: 0x80, a: 0x80)
     var isDirty = false
@@ -27,13 +73,13 @@ class Console: Layer {
     //
     
     override init(renderer: Renderer) {
-                
-        textView = (scrollView.documentView as? NSTextView)!
+
+        super.init(renderer: renderer)
+
+        // textView = (scrollView.documentView as? NSTextView)!
         textView.isEditable = false
         textView.backgroundColor = backgroundColor
 
-        super.init(renderer: renderer)
-        
         resize()
         isDirty = true
     }
@@ -118,7 +164,27 @@ class Console: Layer {
             isDirty = false
         }
     }
-        
+
+    private var tripleTextView = TripleTextView(frame: .zero)
+
+    override func alphaDidChange() {
+        [tripleTextView.textView1, tripleTextView.textView2, tripleTextView.textView3].forEach { tv in
+            tv?.textColor = textColor.withAlphaComponent(CGFloat(alpha.current))
+            tv?.backgroundColor = backgroundColor.withAlphaComponent(CGFloat(alpha.current * 0.8))
+        }
+
+        if alpha.current > 0 && tripleTextView.superview == nil {
+            contentView.addSubview(tripleTextView)
+            tripleTextView.frame = contentView.bounds
+            tripleTextView.autoresizingMask = [.width, .height]
+        }
+
+        if alpha.current == 0 && tripleTextView.superview != nil {
+            tripleTextView.removeFromSuperview()
+        }
+    }
+
+    /*
     override func alphaDidChange() {
 
         textView.textColor = textColor.withAlphaComponent(CGFloat(alpha.current))
@@ -132,7 +198,7 @@ class Console: Layer {
             scrollView.removeFromSuperview()
         }
     }
-    
+    */
     func resize() {
                 
         let size = controller.metal.frame.size

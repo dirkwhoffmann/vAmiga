@@ -307,6 +307,7 @@
 		50DA83E52C161961001209AA /* VAmiga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50DA83E32C161961001209AA /* VAmiga.cpp */; };
 		50DA83E62C161961001209AA /* VAmiga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50DA83E32C161961001209AA /* VAmiga.cpp */; };
 		50DAED232D2D17660044B922 /* DashboardDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DAED222D2D175E0044B922 /* DashboardDataProvider.swift */; };
+		50DBEE8D2E7B46AF00E5274F /* TripleTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DBEE8C2E7B46AF00E5274F /* TripleTextView.xib */; };
 		50DD1EE22525E3E1000180F6 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DD1EE12525E3E1000180F6 /* Preferences.xib */; };
 		50DD33CC2756113300AE18B4 /* pfile.c in Sources */ = {isa = PBXBuildFile; fileRef = 50DD33CB27560EE600AE18B4 /* pfile.c */; };
 		50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DED6AE2202EBA200B8195F /* Inspector.xib */; };
@@ -1021,6 +1022,7 @@
 		50DA83E32C161961001209AA /* VAmiga.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VAmiga.cpp; sourceTree = "<group>"; };
 		50DA83E72C1619E0001209AA /* VAmigaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VAmigaTypes.h; sourceTree = "<group>"; };
 		50DAED222D2D175E0044B922 /* DashboardDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardDataProvider.swift; sourceTree = "<group>"; };
+		50DBEE8C2E7B46AF00E5274F /* TripleTextView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TripleTextView.xib; sourceTree = "<group>"; };
 		50DD1EE12525E3E1000180F6 /* Preferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
 		50DD33CB27560EE600AE18B4 /* pfile.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = pfile.c; sourceTree = "<group>"; };
 		50DED6AE2202EBA200B8195F /* Inspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Inspector.xib; sourceTree = "<group>"; };
@@ -1607,6 +1609,7 @@
 				5050EC3E27BE876F00394F4F /* HardDiskCreator.xib */,
 				501C513A27C0084200DF1DD5 /* HardDiskConfigurator.xib */,
 				50D715A027CCA5AA0085C1AA /* PartitionSelector.xib */,
+				50DBEE8C2E7B46AF00E5274F /* TripleTextView.xib */,
 			);
 			path = "XIB files";
 			sourceTree = "<group>";
@@ -2392,6 +2395,7 @@
 				500A4EAD2447364E002A4DE1 /* eject.aiff in Resources */,
 				5050EC3F27BE876F00394F4F /* HardDiskCreator.xib in Resources */,
 				50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */,
+				50DBEE8D2E7B46AF00E5274F /* TripleTextView.xib in Resources */,
 				50D715A127CCA5AA0085C1AA /* PartitionSelector.xib in Resources */,
 				504FC7D52D314F2E00F0B733 /* Dashboard.storyboard in Resources */,
 				50B14C1F21EB8445002E32A6 /* drive_click.aiff in Resources */,
