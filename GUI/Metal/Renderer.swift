@@ -45,7 +45,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var timestamp = CACurrentMediaTime()
 
     // Frame synchronization semaphore
-    let semaphore = DispatchSemaphore(value: 1)
+    let semaphore = DispatchSemaphore(value: 3)
 
     //
     // Metal entities
