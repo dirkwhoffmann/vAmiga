@@ -70,6 +70,10 @@ public:
         CLONE(debt)
         CLONE(slowCycles)
 
+        CLONE(cpuModel)
+        CLONE(dasmModel)
+        CLONE(instrStyle)
+        CLONE(dataStyle)
         CLONE(clock)
         CLONE(reg.pc)
         CLONE(reg.pc0)
