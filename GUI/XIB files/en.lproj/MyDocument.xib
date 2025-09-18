@@ -286,7 +286,7 @@
                         <segmentedControl key="view" verticalHuggingPriority="750" id="MNc-2l-pfj">
                             <rect key="frame" x="0.0" y="14" width="125" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="momentary" id="3Uk-v8-yDJ">
+                            <segmentedCell key="cell" alignment="left" style="texturedSquare" trackingMode="momentary" id="3Uk-v8-yDJ">
                                 <font key="font" metaFont="system"/>
                                 <segments>
                                     <segment toolTip="Open Inspector" image="inspectTemplate" width="40"/>
@@ -306,7 +306,7 @@
                         <segmentedControl key="view" verticalHuggingPriority="750" id="Hbj-1i-i1y" userLabel="clickTemplate, ttGalleryTemplate">
                             <rect key="frame" x="0.0" y="14" width="91" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="momentary" id="bCK-Ap-v2u">
+                            <segmentedCell key="cell" alignment="left" style="texturedSquare" trackingMode="momentary" id="bCK-Ap-v2u">
                                 <font key="font" metaFont="system"/>
                                 <segments>
                                     <segment toolTip="Take Screenshot" image="clickTemplate" width="40"/>
@@ -323,7 +323,7 @@
                         <segmentedControl key="view" verticalHuggingPriority="750" id="AHD-MB-nXC">
                             <rect key="frame" x="0.0" y="14" width="136" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="momentary" id="yaX-4D-cAY">
+                            <segmentedCell key="cell" alignment="left" style="texturedSquare" trackingMode="momentary" id="yaX-4D-cAY">
                                 <font key="font" metaFont="system"/>
                                 <segments>
                                     <segment toolTip="Take Snapshot" image="pushTemplate" width="40" tag="2"/>
@@ -343,7 +343,7 @@
                         <popUpButton key="view" tag="10" id="L2b-nG-yBo" userLabel="Port 1">
                             <rect key="frame" x="0.0" y="14" width="49" height="24"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="VD3-Wr-Ufe" id="Oxd-8A-P5o" userLabel="PopupButtonCell">
+                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="VD3-Wr-Ufe" id="Oxd-8A-P5o" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="message"/>
                                 <menu key="menu" autoenablesItems="NO" id="zHf-yH-YTM">
@@ -413,7 +413,7 @@
                         <button key="view" verticalHuggingPriority="750" id="rao-xk-L5n">
                             <rect key="frame" x="14" y="14" width="30" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="keyboardTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="wG4-oJ-FGJ">
+                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="keyboardTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="wG4-oJ-FGJ">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system"/>
                             </buttonCell>
@@ -427,7 +427,7 @@
                         <segmentedControl key="view" verticalHuggingPriority="750" id="EgW-z1-uFY">
                             <rect key="frame" x="0.0" y="14" width="91" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="momentary" id="DyT-NH-Vuk">
+                            <segmentedCell key="cell" alignment="left" style="texturedSquare" trackingMode="momentary" id="DyT-NH-Vuk">
                                 <font key="font" metaFont="system"/>
                                 <segments>
                                     <segment toolTip="Open Preferences" image="prefTemplate" width="40"/>
@@ -444,7 +444,7 @@
                         <segmentedControl key="view" verticalHuggingPriority="750" id="xdt-LW-MS0">
                             <rect key="frame" x="0.0" y="14" width="136" height="23"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="momentary" id="3Zp-pa-1qS">
+                            <segmentedCell key="cell" alignment="left" style="texturedSquare" trackingMode="momentary" id="3Zp-pa-1qS">
                                 <font key="font" metaFont="system"/>
                                 <segments>
                                     <segment image="pauseTemplate" width="40" tag="2"/>
