@@ -36,8 +36,14 @@ class SidebarViewController: NSViewController {
         outlineView.delegate = self
         outlineView.dataSource = self
         outlineView.usesAutomaticRowHeights = false
-        outlineView.rowHeight = 48
+        // outlineView.rowHeight = 48
         outlineView.rowSizeStyle = .custom
+
+        outlineView.backgroundColor = .clear
+        // outlineView.isOpaque = false
+        outlineView.usesAlternatingRowBackgroundColors = false
+        // outlineView.enclosingScrollView?.drawsBackground = false
+        
         // tableView.reloadData()
 
         // Select first item by default
@@ -45,10 +51,15 @@ class SidebarViewController: NSViewController {
     }
 }
 
-extension SidebarViewController: NSOutlineViewDataSource, NSOutlineViewDelegate {
+extension SidebarViewController: NSOutlineViewDataSource {
 
     func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
         return items.count
+    }
+
+    func outlineView(_ outlineView: NSOutlineView, heightOfRowByItem item: Any) -> CGFloat {
+
+        return 48
     }
 
     func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool {
@@ -56,13 +67,21 @@ extension SidebarViewController: NSOutlineViewDataSource, NSOutlineViewDelegate 
     }
 
     func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any {
-        return "Item \(index)"
+        return items[index]
     }
+}
+
+extension SidebarViewController: NSOutlineViewDelegate {
 
     func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
 
         let cell = outlineView.makeView(withIdentifier: NSUserInterfaceItemIdentifier("SidebarCell"), owner: self) as? NSTableCellView
-        cell?.textField?.stringValue = item as? String ?? ""
+
+        if let sidebarItem = item as? SidebarItem {
+            cell?.textField?.stringValue = sidebarItem.title
+        } else {
+            cell?.textField?.stringValue = "???"
+        }
         return cell
     }
 
