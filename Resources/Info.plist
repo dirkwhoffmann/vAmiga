@@ -197,8 +197,6 @@
 	<string>public.app-category.entertainment</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
-	<key>NSAppleEventsUsageDescription</key>
-	<string></string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2025 Dirk Hoffmann. All rights reserved.</string>
 	<key>NSMainNibFile</key>
