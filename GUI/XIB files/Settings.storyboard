@@ -11,7 +11,7 @@
         <scene sceneID="5Qc-K9-l5S">
             <objects>
                 <windowController storyboardIdentifier="SettingsWindowController" id="3md-5x-CLM" customClass="SettingsWindowController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
-                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="Rfa-Pi-9iE">
+                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" titlebarAppearsTransparent="YES" titleVisibility="hidden" id="Rfa-Pi-9iE">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" fullSizeContentView="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="207" y="263" width="480" height="270"/>
@@ -20,21 +20,6 @@
                             <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </view>
-                        <toolbar key="toolbar" implicitIdentifier="09D11707-F4A3-4FD5-970E-AC5832E91C2B" autosavesConfiguration="NO" showsBaselineSeparator="NO" displayMode="iconAndLabel" sizeMode="regular" id="EjN-Y7-1B6">
-                            <allowedToolbarItems>
-                                <toolbarItem implicitItemIdentifier="NSToolbarShowColorsItem" id="kJi-pV-2bc"/>
-                                <toolbarItem implicitItemIdentifier="NSToolbarShowFontsItem" id="Vxm-Z2-mt0"/>
-                                <toolbarItem implicitItemIdentifier="NSToolbarPrintItem" id="Fxc-cT-B8i"/>
-                                <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="Jg3-Hb-NBl"/>
-                                <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="uS9-RJ-M6c"/>
-                            </allowedToolbarItems>
-                            <defaultToolbarItems>
-                                <toolbarItem reference="kJi-pV-2bc"/>
-                                <toolbarItem reference="Vxm-Z2-mt0"/>
-                                <toolbarItem reference="uS9-RJ-M6c"/>
-                                <toolbarItem reference="Fxc-cT-B8i"/>
-                            </defaultToolbarItems>
-                        </toolbar>
                         <connections>
                             <outlet property="delegate" destination="3md-5x-CLM" id="rLa-T5-Mty"/>
                         </connections>
@@ -106,7 +91,7 @@
                                                             <rect key="frame" x="8" y="0.0" width="130" height="42"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GQl-eS-sZn">
+                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GQl-eS-sZn">
                                                                     <rect key="frame" x="46" y="13" width="84" height="16"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="jUa-V7-nwV">
@@ -132,7 +117,7 @@
                                     </subviews>
                                 </clipView>
                                 <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="f7n-Ug-slC">
-                                    <rect key="frame" x="1" y="198" width="147" height="15"/>
+                                    <rect key="frame" x="1" y="284" width="147" height="15"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="qob-Qv-03X">
@@ -169,7 +154,7 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" image="NSColorPanel" id="hIC-J7-i59"/>
                             </imageView>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9mJ-ka-po8">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9mJ-ka-po8">
                                 <rect key="frame" x="94" y="284" width="114" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Holla, die Waldfee" id="Jjw-uQ-Twg">

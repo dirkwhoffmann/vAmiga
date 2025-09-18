@@ -301,7 +301,8 @@ class GamePad {
 
         if usagePage == kHIDPage_Button {
 
-            hidEvent = (.BUTTON, usage, intValue)
+            // usage - 1 yields the button number with 0 = first button
+            hidEvent = (.BUTTON, usage - 1, intValue)
         }
         
         if usagePage == kHIDPage_GenericDesktop {

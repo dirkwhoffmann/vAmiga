@@ -38,6 +38,16 @@
 // Mapping scheme: HIDEvent -> Item -> Value -> [Actions]
 typealias HIDMapping = [ HIDEvent: [ Int: [ Int: [GamePadAction] ] ] ]
 
+func printHIDMapping(_ mapping: HIDMapping) {
+
+    for (event, keys) in mapping {
+        print("\(event):")
+        for (key, value) in keys {
+            print("  \(key): \(value)")
+        }
+    }
+}
+
 class DeviceDatabase {
 
     // Known devices
@@ -244,29 +254,30 @@ class DeviceDatabase {
             case "a3~": result[.AXIS]![3] = mapAxis(key: pair[0], rev: true)
             case "a4~": result[.AXIS]![4] = mapAxis(key: pair[0], rev: true)
             case "a5~": result[.AXIS]![5] = mapAxis(key: pair[0], rev: true)
-            case "b0":  result[.BUTTON]![1] = mapButton(key: pair[0])
-            case "b1":  result[.BUTTON]![2] = mapButton(key: pair[0])
-            case "b2":  result[.BUTTON]![3] = mapButton(key: pair[0])
-            case "b3":  result[.BUTTON]![4] = mapButton(key: pair[0])
-            case "b4":  result[.BUTTON]![5] = mapButton(key: pair[0])
-            case "b5":  result[.BUTTON]![6] = mapButton(key: pair[0])
-            case "b6":  result[.BUTTON]![7] = mapButton(key: pair[0])
-            case "b7":  result[.BUTTON]![8] = mapButton(key: pair[0])
-            case "b8":  result[.BUTTON]![9] = mapButton(key: pair[0])
-            case "b9":  result[.BUTTON]![10] = mapButton(key: pair[0])
-            case "b10": result[.BUTTON]![11] = mapButton(key: pair[0])
-            case "b11": result[.BUTTON]![12] = mapButton(key: pair[0])
-            case "b12": result[.BUTTON]![13] = mapButton(key: pair[0])
-            case "b13": result[.BUTTON]![14] = mapButton(key: pair[0])
-            case "b14": result[.BUTTON]![15] = mapButton(key: pair[0])
-            case "b15": result[.BUTTON]![16] = mapButton(key: pair[0])
-            case "b16": result[.BUTTON]![17] = mapButton(key: pair[0])
+            case "b0":  result[.BUTTON]![0] = mapButton(key: pair[0])
+            case "b1":  result[.BUTTON]![1] = mapButton(key: pair[0])
+            case "b2":  result[.BUTTON]![2] = mapButton(key: pair[0])
+            case "b3":  result[.BUTTON]![3] = mapButton(key: pair[0])
+            case "b4":  result[.BUTTON]![4] = mapButton(key: pair[0])
+            case "b5":  result[.BUTTON]![5] = mapButton(key: pair[0])
+            case "b6":  result[.BUTTON]![6] = mapButton(key: pair[0])
+            case "b7":  result[.BUTTON]![7] = mapButton(key: pair[0])
+            case "b8":  result[.BUTTON]![8] = mapButton(key: pair[0])
+            case "b9":  result[.BUTTON]![9] = mapButton(key: pair[0])
+            case "b10": result[.BUTTON]![10] = mapButton(key: pair[0])
+            case "b11": result[.BUTTON]![11] = mapButton(key: pair[0])
+            case "b12": result[.BUTTON]![12] = mapButton(key: pair[0])
+            case "b13": result[.BUTTON]![13] = mapButton(key: pair[0])
+            case "b14": result[.BUTTON]![14] = mapButton(key: pair[0])
+            case "b15": result[.BUTTON]![15] = mapButton(key: pair[0])
+            case "b16": result[.BUTTON]![16] = mapButton(key: pair[0])
 
             default:
                 break
             }
         }
 
+        // printHIDMapping(result)
         return result
     }
 
@@ -305,7 +316,7 @@ class DeviceDatabase {
 
         switch (key) {
 
-        case "a", "b", "leftshoulder", "rightshoulder":
+        case "a", "b", "x", "y", "leftshoulder", "rightshoulder":
             return [0: [.RELEASE_FIRE], 1: [.PRESS_FIRE]]
         case "dpdown":
             return [0: [.RELEASE_Y], 1: [.PULL_DOWN]]
