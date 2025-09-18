@@ -29,6 +29,11 @@
 		5012DCE52D5C85CD00233B6A /* Compression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5012DCE32D5C85CB00233B6A /* Compression.cpp */; };
 		5012DCE72D5D435800233B6A /* CapturesPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5012DCE62D5D434F00233B6A /* CapturesPrefs.swift */; };
 		501429D92445F12B00FBDC90 /* TextureToolbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501429D82445F12B00FBDC90 /* TextureToolbox.swift */; };
+		50144E342E7BE4F1009E15B4 /* Settings.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50144E332E7BE4F1009E15B4 /* Settings.storyboard */; };
+		50144E362E7BE5EA009E15B4 /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50144E352E7BE5E5009E15B4 /* SettingsWindowController.swift */; };
+		50144E392E7BE6C4009E15B4 /* SettingsSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50144E382E7BE6BC009E15B4 /* SettingsSplitViewController.swift */; };
+		50144E3B2E7BE709009E15B4 /* GeneralSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50144E3A2E7BE703009E15B4 /* GeneralSettings.swift */; };
+		50144E3D2E7BEA8D009E15B4 /* SidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50144E3C2E7BEA85009E15B4 /* SidebarViewController.swift */; };
 		5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DD1321F3625200BC14BA /* Keyboard.cpp */; };
 		50157EED28257B7C000E9DDD /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50157EEC28257B7C000E9DDD /* Config.swift */; };
 		5019B1F0254B292D00A7AB95 /* EXEFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5019B1EE254B292D00A7AB95 /* EXEFile.cpp */; };
@@ -575,6 +580,11 @@
 		5012DCE32D5C85CB00233B6A /* Compression.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Compression.cpp; sourceTree = "<group>"; };
 		5012DCE62D5D434F00233B6A /* CapturesPrefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturesPrefs.swift; sourceTree = "<group>"; };
 		501429D82445F12B00FBDC90 /* TextureToolbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureToolbox.swift; sourceTree = "<group>"; };
+		50144E332E7BE4F1009E15B4 /* Settings.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Settings.storyboard; sourceTree = "<group>"; };
+		50144E352E7BE5E5009E15B4 /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
+		50144E382E7BE6BC009E15B4 /* SettingsSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSplitViewController.swift; sourceTree = "<group>"; };
+		50144E3A2E7BE703009E15B4 /* GeneralSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettings.swift; sourceTree = "<group>"; };
+		50144E3C2E7BEA85009E15B4 /* SidebarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarViewController.swift; sourceTree = "<group>"; };
 		5014DD1321F3625200BC14BA /* Keyboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Keyboard.cpp; sourceTree = "<group>"; };
 		5014DD1421F3625200BC14BA /* Keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Keyboard.h; sourceTree = "<group>"; };
 		50157EEC28257B7C000E9DDD /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
@@ -1285,6 +1295,17 @@
 			path = Infrastructure;
 			sourceTree = "<group>";
 		};
+		50144E372E7BE5F2009E15B4 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				50144E3C2E7BEA85009E15B4 /* SidebarViewController.swift */,
+				50144E3A2E7BE703009E15B4 /* GeneralSettings.swift */,
+				50144E382E7BE6BC009E15B4 /* SettingsSplitViewController.swift */,
+				50144E352E7BE5E5009E15B4 /* SettingsWindowController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		502F7DCF2221709700AEEC65 /* Denise */ = {
 			isa = PBXGroup;
 			children = (
@@ -1607,6 +1628,7 @@
 				5050EC3E27BE876F00394F4F /* HardDiskCreator.xib */,
 				501C513A27C0084200DF1DD5 /* HardDiskConfigurator.xib */,
 				50D715A027CCA5AA0085C1AA /* PartitionSelector.xib */,
+				50144E332E7BE4F1009E15B4 /* Settings.storyboard */,
 			);
 			path = "XIB files";
 			sourceTree = "<group>";
@@ -1681,6 +1703,7 @@
 				509F7F1521ED141F00A530E4 /* Inspector */,
 				5099123C24BA46E10007CAB6 /* Preferences */,
 				5099123D24BA46EB0007CAB6 /* Configuration */,
+				50144E372E7BE5F2009E15B4 /* Settings */,
 				509731472C932F1B008D5634 /* Captures */,
 				509731482C932F71008D5634 /* Media */,
 			);
@@ -2404,6 +2427,7 @@
 				501C514627C2AA4A00DF1DD5 /* DiskExporter.xib in Resources */,
 				50EB8CCA25306E8E0053988A /* VideoExporter.xib in Resources */,
 				508FDFBE21EA1FF10043D0E9 /* MyDocument.xib in Resources */,
+				50144E342E7BE4F1009E15B4 /* Settings.storyboard in Resources */,
 				508FDFC521EA1FF10043D0E9 /* A500ISO.xib in Resources */,
 				50D263CE21F6378100FA167F /* A1000ISO.xib in Resources */,
 				506436E529C1D92D00768528 /* CMakeLists.txt in Resources */,
@@ -2449,6 +2473,7 @@
 				50CC209727ECCD6D00AEA010 /* OSDescriptors.cpp in Sources */,
 				506ACE44279AC75100BA7877 /* SequencerDas.cpp in Sources */,
 				501C514A27C38FE500DF1DD5 /* DragImageView.swift in Sources */,
+				50144E362E7BE5EA009E15B4 /* SettingsWindowController.swift in Sources */,
 				509C365E260B177E004F160A /* Console.cpp in Sources */,
 				508FE02521EA227B0043D0E9 /* MemoryPanel.swift in Sources */,
 				5057551025EAFF7900280977 /* Checksum.cpp in Sources */,
@@ -2603,6 +2628,7 @@
 				5029C6E627CA6209002F6CCC /* FileSystem.cpp in Sources */,
 				50DA83E52C161961001209AA /* VAmiga.cpp in Sources */,
 				50912FFD2525B7AD0049805B /* Recorder.cpp in Sources */,
+				50144E392E7BE6C4009E15B4 /* SettingsSplitViewController.swift in Sources */,
 				507727EE242F2CE4009D01DA /* iCarousel.m in Sources */,
 				50EB8CCE2530710E0053988A /* VideoExporter.swift in Sources */,
 				50B14C0721EB218E002E32A6 /* CoreObject.cpp in Sources */,
@@ -2678,6 +2704,7 @@
 				50E1D2C226CCF830001FE199 /* DatatypeExtensions.swift in Sources */,
 				508FE05321EA22CC0043D0E9 /* VideoConf.swift in Sources */,
 				50357BB823912929007E7563 /* RendererSetup.swift in Sources */,
+				50144E3B2E7BE709009E15B4 /* GeneralSettings.swift in Sources */,
 				50D2B85226D292B7008040E5 /* DeniseDebugger.cpp in Sources */,
 				508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */,
 				508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */,
@@ -2719,6 +2746,7 @@
 				500C0A562259402D000121CD /* DiskController.cpp in Sources */,
 				5019B1F0254B292D00A7AB95 /* EXEFile.cpp in Sources */,
 				50EFB0CC2C18D95B0013B73C /* Inspectable.cpp in Sources */,
+				50144E3D2E7BEA8D009E15B4 /* SidebarViewController.swift in Sources */,
 				5010A78222B50B690041388B /* PortPanel.swift in Sources */,
 				509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */,
 				50F580662431D1A000E7D84D /* Screenshot.swift in Sources */,

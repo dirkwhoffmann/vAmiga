@@ -133,7 +133,19 @@ extension MyController: NSMenuItemValidation {
         myAppDelegate.prefController!.showWindow(self)
         myAppDelegate.prefController!.refresh()
     }
-    
+
+    @IBAction func settingsAction(_ sender: Any?) {
+
+        let storyboard = NSStoryboard(name: "Settings", bundle: nil)
+        if let wc = storyboard.instantiateController(withIdentifier: "SettingsWindowController") as? NSWindowController {
+
+            wc.window?.level = .floating
+            wc.showWindow(self)
+            wc.window?.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
+        }
+    }
+
     @IBAction func factorySettingsAction(_ sender: Any!) {
         
         let defaults = EmulatorProxy.defaults!
