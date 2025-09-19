@@ -18,7 +18,11 @@ struct SidebarItem {
 
 class SidebarViewController: NSViewController {
 
-    @IBOutlet weak var outlineView: NSOutlineView!
+    @IBOutlet weak var outlineView: SettingsOutlineView!
+
+    var splitViewController: SettingsSplitViewController? {
+        parent as? SettingsSplitViewController
+    }
 
     let items: [SidebarItem] = [
         SidebarItem(title: "General", iconName: "generalPrefs", identifier: .init("general")),
@@ -80,7 +84,7 @@ extension SidebarViewController: NSOutlineViewDelegate {
     }
 
     func outlineViewSelectionDidChange(_ notification: Notification) {
-
+        
         let selectedIndex = outlineView.selectedRow
         if selectedIndex >= 0 {
             selectionHandler?(items[selectedIndex])

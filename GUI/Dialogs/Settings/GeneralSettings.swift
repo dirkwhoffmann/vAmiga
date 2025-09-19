@@ -48,8 +48,6 @@ class GeneralSettingsViewController: SettingsViewController {
     //
 
     override func refresh() {
-
-        print("GeneralSettingsViewController::refresh")
         
         // Snapshots
         snapshotStorage.integerValue = pref.snapshotStorage

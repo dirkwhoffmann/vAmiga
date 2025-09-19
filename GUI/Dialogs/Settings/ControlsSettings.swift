@@ -61,8 +61,6 @@ class ControlsSettingsViewController: SettingsViewController {
 
     override func refresh() {
 
-        print("ControlsSettingsViewController::refresh")
-
         // Mouse button keyset
         refreshKey(map: 0, dir: .PRESS_LEFT, button: mouseLeftButton, txt: mouseLeft)
         refreshKey(map: 0, dir: .PRESS_MIDDLE, button: mouseMiddleButton, txt: mouseMiddle)

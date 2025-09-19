@@ -23,7 +23,7 @@ class SettingsSplitViewController: NSSplitViewController {
         return main.instantiateController(withIdentifier: "DevicesSettingsViewController") as! DevicesSettingsViewController
     }()
 
-    var currentVC: SettingsViewController?
+    var current: SettingsViewController?
 
     private var sidebarVC: SidebarViewController? {
         return splitViewItems.first?.viewController as? SidebarViewController
@@ -39,15 +39,11 @@ class SettingsSplitViewController: NSSplitViewController {
 
     private func showContent(for item: SidebarItem) {
 
-        // let newVC: SettingsViewController
-
-        print("showContent")
-
         switch item.identifier.rawValue {
 
-        case "general":     currentVC = generalVC
-        case "controls":    currentVC = controlsVC
-        case "devices":     currentVC = devicesVC
+        case "general":     current = generalVC
+        case "controls":    current = controlsVC
+        case "devices":     current = devicesVC
         default:            fatalError()
         }
 
@@ -55,19 +51,31 @@ class SettingsSplitViewController: NSSplitViewController {
         removeSplitViewItem(splitViewItems[1])
 
         // Create a new split view item for the new content
-        let newItem = NSSplitViewItem(viewController: currentVC!)
+        let newItem = NSSplitViewItem(viewController: current!)
         addSplitViewItem(newItem)
-        currentVC!.activate()
+        current!.activate()
         /*
-        currentVC!.view.window?.makeFirstResponder(currentVC)
-        currentVC!.refresh()
+        current!.view.window?.makeFirstResponder(currentVC)
+        current!.refresh()
         */
+    }
+
+    override func keyDown(with event: NSEvent) {
+
+        print("keyDown: \(event)")
+        current?.keyDown(with: event)
+    }
+
+    override func flagsChanged(with event: NSEvent) {
+
+        print("flagsChanged: \(event)")
+        current?.flagsChanged(with: event)
     }
 
     @IBAction func presetAction(_ sender: NSPopUpButton) {
 
         print("presetAction")
-        currentVC?.preset(tag: sender.selectedTag())
-        currentVC?.refresh()
+        current?.preset(tag: sender.selectedTag())
+        current?.refresh()
     }
 }

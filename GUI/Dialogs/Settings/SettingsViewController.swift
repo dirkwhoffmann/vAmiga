@@ -16,11 +16,14 @@ class SettingsViewController: NSViewController {
 
     func activate() {
 
-        view.window?.makeFirstResponder(self)
+        // view.window?.makeFirstResponder(self)
         refresh()
     }
 
     func refresh() { }
+    override func keyDown(with event: NSEvent) { }
+    override func flagsChanged(with event: NSEvent) { }
     func preset(tag: Int) { }
     func save() { }
+    
 }

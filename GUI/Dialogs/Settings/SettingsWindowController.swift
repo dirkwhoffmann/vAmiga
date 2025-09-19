@@ -15,7 +15,7 @@ class SettingsWindowController: NSWindowController {
         self.contentViewController as? SettingsSplitViewController
     }
     var devicesVC: DevicesSettingsViewController? { splitViewController?.devicesVC }
-    var currentVC: SettingsViewController? { splitViewController?.currentVC }
+    var currentVC: SettingsViewController? { splitViewController?.current }
     var isVisible: Bool { window?.isVisible ?? false }
 
     required init?(coder: NSCoder) {
