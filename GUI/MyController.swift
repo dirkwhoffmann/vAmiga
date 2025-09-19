@@ -22,7 +22,7 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Reference to the connected document
     var mydocument: MyDocument!
-    
+
     // File panels
     let myOpenPanel = MyOpenPanel()
     let mySavePanel = MySavePanel()
@@ -160,15 +160,14 @@ extension MyController {
     //
         
     override open func windowDidLoad() {
-        
-        debug(.lifetime)
-        commonInit()
+
+        if !initialized { commonInit() }
     }
     
     func commonInit() {
         
-        if initialized { return }
-        
+        assert(!initialized, "Double-initialization of MyController")
+
         mydocument = document as? MyDocument
         
         config = Configuration(with: self)

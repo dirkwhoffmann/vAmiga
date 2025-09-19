@@ -51,9 +51,7 @@ class MyDocument: NSDocument {
     //
 
     override init() {
-        
-        debug(.lifetime)
-        
+
         super.init()
 
         // Check for OS compatibility

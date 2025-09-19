@@ -159,9 +159,15 @@ extension MyAppDelegate {
     var proxies: [EmulatorProxy] {
         return documents.map({ $0.emu })
     }
-    
+
+    static var currentController: MyController?
+
+
+    /*
     func windowDidBecomeMain(_ window: NSWindow) {
-        
+
+        debug(.lifetime)
+
         for c in controllers {
             
             if c.window == window {
@@ -175,6 +181,7 @@ extension MyAppDelegate {
             }
         }
     }
+    */
     
     // Callen when a HID device has been added
     func deviceAdded() {

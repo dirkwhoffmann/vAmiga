@@ -15,14 +15,21 @@ extension MyController: NSWindowDelegate {
     public func windowDidBecomeMain(_ notification: Notification) {
         
         debug(.lifetime)
-        
-        commonInit()
-        
+
+        // Initialize if this window becomes active the first time
+        if !initialized { commonInit() }
+
         guard let window = notification.object as? NSWindow else { return }
-        
-        // Inform the application delegate
-        myAppDelegate.windowDidBecomeMain(window)
-        
+
+        // Declare this controller the active one
+        MyAppDelegate.currentController = self
+
+        // Inform the emulator (unmutes audio)
+        emu?.put(.FOCUS, value: 1)
+
+        // Update the menu bar
+        hideOrShowDriveMenus()
+
         // Restart the emulator if it was paused when the window lost focus
         if pref.pauseInBackground && pauseInBackgroundSavedState { try? emu.run() }
 
@@ -39,6 +46,13 @@ extension MyController: NSWindowDelegate {
     public func windowDidResignMain(_ notification: Notification) {
 
         debug(.lifetime)
+
+        if MyAppDelegate.currentController === self {
+            MyAppDelegate.currentController = nil
+        }
+
+        // Inform the emulator (mutes audio)
+        emu?.put(.FOCUS, value: 0)
 
         // Stop emulator if it is configured to pause in background
         if emu != nil {
