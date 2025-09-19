@@ -1,0 +1,238 @@
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
+//
+// Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
+// Licensed under the GNU General Public License v3
+//
+// See https://www.gnu.org for license information
+// -----------------------------------------------------------------------------
+
+class ControlsSettingsViewController: SettingsViewController {
+
+    // Tag of the button that is currently being recorded
+    var conRecordedKey: Int?
+
+    // Emulation keys
+    @IBOutlet weak var left1: NSTextField!
+    @IBOutlet weak var left1button: NSButton!
+    @IBOutlet weak var right1: NSTextField!
+    @IBOutlet weak var right1button: NSButton!
+    @IBOutlet weak var up1: NSTextField!
+    @IBOutlet weak var up1button: NSButton!
+    @IBOutlet weak var down1: NSTextField!
+    @IBOutlet weak var down1button: NSButton!
+    @IBOutlet weak var fire1: NSTextField!
+    @IBOutlet weak var fire1button: NSButton!
+
+    @IBOutlet weak var left2: NSTextField!
+    @IBOutlet weak var left2button: NSButton!
+    @IBOutlet weak var right2: NSTextField!
+    @IBOutlet weak var right2button: NSButton!
+    @IBOutlet weak var up2: NSTextField!
+    @IBOutlet weak var up2button: NSButton!
+    @IBOutlet weak var down2: NSTextField!
+    @IBOutlet weak var down2button: NSButton!
+    @IBOutlet weak var fire2: NSTextField!
+    @IBOutlet weak var fire2button: NSButton!
+
+    @IBOutlet weak var mouseLeft: NSTextField!
+    @IBOutlet weak var mouseLeftButton: NSButton!
+    @IBOutlet weak var mouseMiddle: NSTextField!
+    @IBOutlet weak var mouseMiddleButton: NSButton!
+    @IBOutlet weak var mouseRight: NSTextField!
+    @IBOutlet weak var mouseRightButton: NSButton!
+
+    @IBOutlet weak var disconnectKeys: NSButton!
+
+    // Mouse
+    @IBOutlet weak var retainMouseKeyComb: NSPopUpButton!
+    @IBOutlet weak var retainMouseWithKeys: NSButton!
+    @IBOutlet weak var retainMouseByClick: NSButton!
+    @IBOutlet weak var retainMouseByEntering: NSButton!
+    @IBOutlet weak var releaseMouseKeyComb: NSPopUpButton!
+    @IBOutlet weak var releaseMouseWithKeys: NSButton!
+    @IBOutlet weak var releaseMouseByShaking: NSButton!
+
+    //
+    // Refresh
+    //
+
+    override func refresh() {
+
+        print("GeneralSettingsViewController::refresh")
+
+        // Mouse button keyset
+        refreshKey(map: 0, dir: .PRESS_LEFT, button: mouseLeftButton, txt: mouseLeft)
+        refreshKey(map: 0, dir: .PRESS_MIDDLE, button: mouseMiddleButton, txt: mouseMiddle)
+        refreshKey(map: 0, dir: .PRESS_RIGHT, button: mouseRightButton, txt: mouseRight)
+
+        // First joystick keyset
+        refreshKey(map: 1, dir: .PULL_UP, button: up1button, txt: up1)
+        refreshKey(map: 1, dir: .PULL_DOWN, button: down1button, txt: down1)
+        refreshKey(map: 1, dir: .PULL_LEFT, button: left1button, txt: left1)
+        refreshKey(map: 1, dir: .PULL_RIGHT, button: right1button, txt: right1)
+        refreshKey(map: 1, dir: .PRESS_FIRE, button: fire1button, txt: fire1)
+
+        // Second joystick keyset
+        refreshKey(map: 2, dir: .PULL_UP, button: up2button, txt: up2)
+        refreshKey(map: 2, dir: .PULL_DOWN, button: down2button, txt: down2)
+        refreshKey(map: 2, dir: .PULL_LEFT, button: left2button, txt: left2)
+        refreshKey(map: 2, dir: .PULL_RIGHT, button: right2button, txt: right2)
+        refreshKey(map: 2, dir: .PRESS_FIRE, button: fire2button, txt: fire2)
+
+        disconnectKeys.state = pref.disconnectJoyKeys ? .on : .off
+
+        // Mouse
+        retainMouseKeyComb.selectItem(withTag: pref.retainMouseKeyComb)
+        retainMouseKeyComb.isEnabled = pref.retainMouseWithKeys
+        retainMouseWithKeys.state = pref.retainMouseWithKeys ? .on : .off
+        retainMouseByClick.state = pref.retainMouseByClick ? .on : .off
+        retainMouseByEntering.state = pref.retainMouseByEntering ? .on : .off
+        releaseMouseKeyComb.selectItem(withTag: pref.releaseMouseKeyComb)
+        releaseMouseKeyComb.isEnabled = pref.releaseMouseWithKeys
+        releaseMouseWithKeys.state = pref.releaseMouseWithKeys ? .on : .off
+        releaseMouseByShaking.state = pref.releaseMouseByShaking ? .on : .off
+    }
+
+    func refreshKey(map: Int, dir: GamePadAction, button: NSButton, txt: NSTextField) {
+
+        var keyDesc = ""
+        var keyCode = ""
+
+        // Which MacKey is assigned to this joystick action?
+        for (key, direction) in pref.keyMaps[map] where direction == dir.rawValue {
+
+            keyCode = NSString(format: "%02X", key.keyCode) as String
+            keyDesc = key.stringValue
+            break
+        }
+
+        // Update text and button image
+        if button.tag == conRecordedKey {
+
+            button.title = ""
+            button.image = NSImage(named: "recordKeyRed")
+            button.imageScaling = .scaleAxesIndependently
+
+        } else {
+
+            button.image = NSImage(named: "recordKey")
+            button.imageScaling = .scaleAxesIndependently
+        }
+        button.title = keyCode
+        txt.stringValue = keyDesc
+    }
+
+    // Translates a button tag back to the related slot and gamepad action
+    func gamePadAction(for tag: Int) -> (Int, GamePadAction) {
+
+        switch tag {
+        case 7...9:   return (0, GamePadAction(rawValue: tag)!)      // Mouse
+        case 0...4:   return (1, GamePadAction(rawValue: tag)!)      // Joy 1
+        case 10...14: return (2, GamePadAction(rawValue: tag - 10)!) // Joy 2
+        default:      fatalError()
+        }
+    }
+    
+    //
+    // Keyboard events
+    //
+
+    /* Handles a key press event.
+     * Returns true if the controller has responded to this key.
+     */
+    func keyDown(with macKey: MacKey) -> Bool {
+
+        // Only proceed if a recording sessing is in progress
+        if conRecordedKey == nil { return false }
+
+        // Record the key if it is not the ESC key
+        /* TODO: COMMENT IN ASAP
+        if macKey != MacKey.escape {
+            let (slot, action) = gamePadAction(for: conRecordedKey!)
+            gamePadManager.gamePads[slot]?.bind(key: macKey, action: action)
+        }
+        */
+
+        conRecordedKey = nil
+        refresh()
+        return true
+    }
+
+    //
+    // Action methods
+    //
+
+    @IBAction func recordKeyAction(_ sender: NSButton!) {
+
+        conRecordedKey = sender.tag
+        refresh()
+    }
+
+    @IBAction func disconnectKeysAction(_ sender: NSButton!) {
+
+        pref.disconnectJoyKeys = (sender.state == .on)
+        refresh()
+    }
+
+    @IBAction func deleteKeysetAction(_ sender: NSButton!) {
+
+        assert(sender.tag >= 0 && sender.tag <= 2)
+
+        pref.keyMaps[sender.tag] = [:]
+        refresh()
+    }
+
+    @IBAction func retainMouseKeyCombAction(_ sender: NSPopUpButton!) {
+
+        pref.retainMouseKeyComb = sender.selectedTag()
+        refresh()
+    }
+
+    @IBAction func retainMouseAction(_ sender: NSButton!) {
+
+        switch sender.tag {
+
+        case 0: pref.retainMouseWithKeys   = (sender.state == .on)
+        case 1: pref.retainMouseByClick    = (sender.state == .on)
+        case 2: pref.retainMouseByEntering = (sender.state == .on)
+        default: fatalError()
+        }
+
+        refresh()
+    }
+
+    @IBAction func releaseMouseKeyCombAction(_ sender: NSPopUpButton!) {
+
+        pref.releaseMouseKeyComb = sender.selectedTag()
+        refresh()
+    }
+
+    @IBAction func releaseMouseAction(_ sender: NSButton!) {
+
+        switch sender.tag {
+
+        case 0: pref.releaseMouseWithKeys  = (sender.state == .on)
+        case 1: pref.releaseMouseByShaking = (sender.state == .on)
+        default: fatalError()
+        }
+
+        refresh()
+    }
+
+    //
+    // Action methods (Misc)
+    //
+
+    @IBAction func presetAction(_ sender: NSPopUpButton!) {
+
+        assert(sender.selectedTag() == 0)
+
+        // Revert to standard settings
+        EmulatorProxy.defaults.removeControlsUserDefaults()
+
+        // Apply the new settings
+        pref.applyControlsUserDefaults()
+        refresh()
+    }
+}

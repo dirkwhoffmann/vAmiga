@@ -37,7 +37,9 @@ extension MyController: NSWindowDelegate {
     }
     
     public func windowDidResignMain(_ notification: Notification) {
-        
+
+        debug(.lifetime)
+
         // Stop emulator if it is configured to pause in background
         if emu != nil {
             pauseInBackgroundSavedState = emu.running

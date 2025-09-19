@@ -118,9 +118,6 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
         
         super.init()
         pref = Preferences()
-        
-        // diskMenuImage.isTemplate = true
-        // hdrMenuImage.isTemplate = true
     }
     
     public func application(_ application: NSApplication, open urls: [URL]) {

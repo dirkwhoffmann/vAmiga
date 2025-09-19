@@ -7,9 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class GeneralSettingsViewController: NSViewController {
-
-    var pref: Preferences { return myAppDelegate.pref }
+class GeneralSettingsViewController: SettingsViewController {
 
     // Workspaces
     @IBOutlet weak var compressWorkspaces: NSButton!
@@ -49,9 +47,40 @@ class GeneralSettingsViewController: NSViewController {
     // Refresh
     //
 
-    func refresh() {
+    override func refresh() {
 
         print("GeneralSettingsViewController::refresh")
+        
+        // Snapshots
+        snapshotStorage.integerValue = pref.snapshotStorage
+        autoSnapshots.state = pref.autoSnapshots ? .on : .off
+        snapshotInterval.integerValue = pref.snapshotInterval
+        snapshotInterval.isEnabled = pref.autoSnapshots
+
+        // Fullscreen
+        aspectRatioButton.state = pref.keepAspectRatio ? .on : .off
+        exitOnEscButton.state = pref.exitOnEsc ? .on : .off
+
+        // Miscellaneous
+        ejectWithoutAskingButton.state = pref.ejectWithoutAsking ? .on : .off
+        detachWithoutAskingButton.state = pref.detachWithoutAsking ? .on : .off
+        closeWithoutAskingButton.state = pref.closeWithoutAsking ? .on : .off
+        pauseInBackground.state = pref.pauseInBackground ? .on : .off
+
+        // Screenshots
+        let framebuffer = pref.screenshotSource == .framebuffer
+        let custom = pref.screenshotCutout == .custom
+        screenshotFormatPopup.selectItem(withTag: pref.screenshotFormatIntValue)
+        screenshotSourcePopup.selectItem(withTag: pref.screenshotSourceIntValue)
+        screenshotCutoutPopup.selectItem(withTag: pref.screenshotCutoutIntValue)
+        screenshotCutoutPopup.isHidden = framebuffer
+        screenshotCutoutText.isHidden = framebuffer
+        screenshotWidth.integerValue = pref.screenshotWidth
+        screenshotWidth.isHidden = !custom || framebuffer
+        screenshotWidthText.isHidden = !custom || framebuffer
+        screenshotHeight.integerValue = pref.screenshotHeight
+        screenshotHeight.isHidden = !custom || framebuffer
+        screenshotHeightText.isHidden = !custom || framebuffer
     }
 
     //

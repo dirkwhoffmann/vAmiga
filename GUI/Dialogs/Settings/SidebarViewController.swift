@@ -22,10 +22,8 @@ class SidebarViewController: NSViewController {
 
     let items: [SidebarItem] = [
         SidebarItem(title: "General", iconName: "CategoryGeneral", identifier: .init("general")),
-        /*
-        SidebarItem(title: "Shader", iconName: "CategoryShader", identifier: .init("shader")),
-        SidebarItem(title: "Recorder", iconName: "CategoryRecorder", identifier: .init("recorder"))
-        */
+        SidebarItem(title: "Controls", iconName: "CategoryGeneral", identifier: .init("controls")),
+        SidebarItem(title: "Devices", iconName: "CategoryGeneral", identifier: .init("devices"))
     ]
 
     var selectionHandler: ((SidebarItem) -> Void)?
@@ -47,7 +45,7 @@ class SidebarViewController: NSViewController {
         // tableView.reloadData()
 
         // Select first item by default
-        // outlineView.selectRowIndexes(IndexSet(integer: 0), byExtendingSelection: false)
+        outlineView.selectRowIndexes(IndexSet(integer: 0), byExtendingSelection: false)
     }
 }
 

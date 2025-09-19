@@ -16,15 +16,12 @@ class SettingsSplitViewController: NSSplitViewController {
     private lazy var generalVC: GeneralSettingsViewController = {
         return main.instantiateController(withIdentifier: "GeneralSettingsViewController") as! GeneralSettingsViewController
     }()
-
-    /*
-    private lazy var shaderVC: ShaderPreferencesViewController = {
-        return main.instantiateController(withIdentifier: "ShaderPreferencesViewController") as! ShaderPreferencesViewController
+    private lazy var controlsVC: ControlsSettingsViewController = {
+        return main.instantiateController(withIdentifier: "ControlsSettingsViewController") as! ControlsSettingsViewController
     }()
-    private lazy var recorderVC: RecorderPreferencesViewController = {
-        return main.instantiateController(withIdentifier: "RecorderPreferencesViewController") as! RecorderPreferencesViewController
+    private lazy var devicesVC: DevicesSettingsViewController = {
+        return main.instantiateController(withIdentifier: "DevicesSettingsViewController") as! DevicesSettingsViewController
     }()
-    */
 
     private var sidebarVC: SidebarViewController? {
         return splitViewItems.first?.viewController as? SidebarViewController
@@ -39,19 +36,17 @@ class SettingsSplitViewController: NSSplitViewController {
     }
 
     private func showContent(for item: SidebarItem) {
-        let newVC: NSViewController
+
+        let newVC: SettingsViewController
+
+        print("showContent")
 
         switch item.identifier.rawValue {
-        case "general":
-            newVC = generalVC
-            /*
-        case "shader":
-            newVC = shaderVC
-        case "recorder":
-            newVC = recorderVC
-             */
-        default:
-            newVC = NSViewController()
+
+        case "general":     newVC = generalVC
+        case "controls":    newVC = controlsVC
+        case "devices":     newVC = devicesVC
+        default:            newVC = generalVC
         }
 
         // Remove the old content pane
@@ -60,5 +55,6 @@ class SettingsSplitViewController: NSSplitViewController {
         // Create a new split view item for the new content
         let newItem = NSSplitViewItem(viewController: newVC)
         addSplitViewItem(newItem)
+        newVC.refresh()
     }
 }
