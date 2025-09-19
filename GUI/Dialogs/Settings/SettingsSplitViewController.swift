@@ -23,6 +23,8 @@ class SettingsSplitViewController: NSSplitViewController {
         return main.instantiateController(withIdentifier: "DevicesSettingsViewController") as! DevicesSettingsViewController
     }()
 
+    var currentVC: SettingsViewController?
+
     private var sidebarVC: SidebarViewController? {
         return splitViewItems.first?.viewController as? SidebarViewController
     }
@@ -37,24 +39,31 @@ class SettingsSplitViewController: NSSplitViewController {
 
     private func showContent(for item: SidebarItem) {
 
-        let newVC: SettingsViewController
+        // let newVC: SettingsViewController
 
         print("showContent")
 
         switch item.identifier.rawValue {
 
-        case "general":     newVC = generalVC
-        case "controls":    newVC = controlsVC
-        case "devices":     newVC = devicesVC
-        default:            newVC = generalVC
+        case "general":     currentVC = generalVC
+        case "controls":    currentVC = controlsVC
+        case "devices":     currentVC = devicesVC
+        default:            fatalError()
         }
 
         // Remove the old content pane
         removeSplitViewItem(splitViewItems[1])
 
         // Create a new split view item for the new content
-        let newItem = NSSplitViewItem(viewController: newVC)
+        let newItem = NSSplitViewItem(viewController: currentVC!)
         addSplitViewItem(newItem)
-        newVC.refresh()
+        currentVC!.refresh()
+    }
+
+    @IBAction func presetAction(_ sender: NSPopUpButton) {
+
+        print("presetAction")
+        currentVC?.preset(tag: sender.selectedTag())
+        currentVC?.refresh()
     }
 }

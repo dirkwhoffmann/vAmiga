@@ -175,16 +175,14 @@ class GeneralSettingsViewController: SettingsViewController {
         refresh()
     }
 
-    @IBAction func generalPresetAction(_ sender: NSPopUpButton!) {
+    override func preset(tag: Int) {
 
-        assert(sender.selectedTag() == 0)
-
+        print("preset")
+        
         // Revert to standard settings
         EmulatorProxy.defaults.removeGeneralUserDefaults()
 
         // Apply the new settings
         pref.applyGeneralUserDefaults()
-
-        refresh()
     }
 }

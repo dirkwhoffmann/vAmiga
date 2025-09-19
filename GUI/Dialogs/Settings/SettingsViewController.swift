@@ -14,5 +14,7 @@ class SettingsViewController: NSViewController {
     var gamePadManager: GamePadManager? { controller?.gamePadManager }
     var emu: EmulatorProxy? { controller?.emu }
 
-    func refresh() { print("SettingsViewController::refresh") }
+    func refresh() { }
+    func preset(tag: Int) { }
+    func save() { }
 }

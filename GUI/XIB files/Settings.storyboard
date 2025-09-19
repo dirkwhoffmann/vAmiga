@@ -11,7 +11,7 @@
         <scene sceneID="5Qc-K9-l5S">
             <objects>
                 <windowController storyboardIdentifier="SettingsWindowController" id="3md-5x-CLM" customClass="SettingsWindowController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
-                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" titlebarAppearsTransparent="YES" titleVisibility="hidden" id="Rfa-Pi-9iE">
+                    <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" titleVisibility="hidden" id="Rfa-Pi-9iE">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" fullSizeContentView="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="207" y="263" width="480" height="270"/>
@@ -20,6 +20,48 @@
                             <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </view>
+                        <toolbar key="toolbar" implicitIdentifier="B63AB41B-3245-49A0-ACD4-018986E9024B" autosavesConfiguration="NO" showsBaselineSeparator="NO" displayMode="iconAndLabel" sizeMode="regular" id="mnC-gO-vw2" customClass="SettingsToolbar" customModule="vAmiga" customModuleProvider="target">
+                            <allowedToolbarItems>
+                                <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="xyr-lT-ZX5"/>
+                                <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="k9h-ti-9MJ"/>
+                                <toolbarItem implicitItemIdentifier="CDF5EA26-2334-4830-834C-0A2B61F49325" label="Revert" paletteLabel="Revert" title="Revert to..." sizingBehavior="auto" id="YLG-2V-hid">
+                                    <nil key="toolTip"/>
+                                    <popUpButton key="view" verticalHuggingPriority="750" id="WxC-Ec-5gz">
+                                        <rect key="frame" x="0.0" y="14" width="107" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <popUpButtonCell key="cell" type="roundTextured" title="Revert to..." bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" tag="-1" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="xtY-8X-nMC">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="menu"/>
+                                            <menu key="menu" id="5df-E4-o7r">
+                                                <items>
+                                                    <menuItem title="Revert to..." tag="-1" hidden="YES" id="kEv-rh-h4z"/>
+                                                    <menuItem title="Standard Settings" id="VW5-fY-BQg"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                        <connections>
+                                            <action selector="presetAction:" target="mnC-gO-vw2" id="Wwl-yU-PJr"/>
+                                        </connections>
+                                    </popUpButton>
+                                </toolbarItem>
+                                <toolbarItem implicitItemIdentifier="B9FB8593-6BFF-4631-8416-904FBBBE52E5" label="Use As Default" paletteLabel="Use As Default" image="square.and.arrow.down" catalog="system" title="Use As Default" sizingBehavior="auto" id="6KW-pR-X8H">
+                                    <nil key="toolTip"/>
+                                    <button key="view" verticalHuggingPriority="750" id="P9e-3Y-eM5">
+                                        <rect key="frame" x="0.0" y="14" width="140" height="26"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <buttonCell key="cell" type="roundTextured" title="Use As Default" bezelStyle="texturedRounded" image="square.and.arrow.down" catalog="system" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="wGS-Rn-DK5">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                    </button>
+                                </toolbarItem>
+                            </allowedToolbarItems>
+                            <defaultToolbarItems>
+                                <toolbarItem reference="YLG-2V-hid"/>
+                                <toolbarItem reference="k9h-ti-9MJ"/>
+                                <toolbarItem reference="6KW-pR-X8H"/>
+                            </defaultToolbarItems>
+                        </toolbar>
                         <connections>
                             <outlet property="delegate" destination="3md-5x-CLM" id="rLa-T5-Mty"/>
                         </connections>
@@ -467,39 +509,6 @@
                                     <action selector="screenshotFormatAction:" target="ejc-Ml-G1m" id="D4w-bO-VYM"/>
                                 </connections>
                             </popUpButton>
-                            <box verticalHuggingPriority="750" boxType="separator" id="7dJ-hG-Uyk">
-                                <rect key="frame" x="21" y="58" width="599" height="5"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            </box>
-                            <popUpButton id="heO-cX-4a0" userLabel="System">
-                                <rect key="frame" x="17" y="16" width="128" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="6oz-aM-lGH" id="o0n-f5-t2b" userLabel="System">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="message"/>
-                                    <menu key="menu" title="Restore" id="IFs-Ok-LGS">
-                                        <items>
-                                            <menuItem title="Revert to..." hidden="YES" id="6oz-aM-lGH">
-                                                <attributedString key="attributedTitle"/>
-                                            </menuItem>
-                                            <menuItem title="Standard Settings" id="yM7-of-f8u">
-                                                <attributedString key="attributedTitle"/>
-                                            </menuItem>
-                                        </items>
-                                    </menu>
-                                </popUpButtonCell>
-                                <connections>
-                                    <action selector="generalPresetAction:" target="ejc-Ml-G1m" id="LRO-j6-6jA"/>
-                                </connections>
-                            </popUpButton>
-                            <button verticalHuggingPriority="750" id="lYB-7k-rk9">
-                                <rect key="frame" x="499" y="13" width="128" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                <buttonCell key="cell" type="push" title="Use As Default" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="hM6-zP-c0X">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="OQN-pg-dYB"/>
                         <viewLayoutGuide key="layoutMargins" id="YTQ-IG-ZDo"/>
@@ -1466,6 +1475,7 @@
         <image name="joystick2" width="261" height="300"/>
         <image name="mouse" width="128" height="128"/>
         <image name="recordKey" width="36" height="36"/>
+        <image name="square.and.arrow.down" catalog="system" width="15" height="17"/>
         <image name="trashTemplate" width="174" height="214"/>
     </resources>
 </document>
