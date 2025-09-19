@@ -9,7 +9,10 @@
 
 class SettingsViewController: NSViewController {
 
-    var pref: Preferences { return myAppDelegate.pref }
+    var pref: Preferences { myAppDelegate.pref }
+    var controller: MyController? { MyAppDelegate.currentController }
+    var gamePadManager: GamePadManager? { controller?.gamePadManager }
+    var emu: EmulatorProxy? { controller?.emu }
 
     func refresh() { print("SettingsViewController::refresh") }
 }

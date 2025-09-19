@@ -7,10 +7,12 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+import Carbon.HIToolbox
+
 class ControlsSettingsViewController: SettingsViewController {
 
     // Tag of the button that is currently being recorded
-    var conRecordedKey: Int?
+    var recordedKey: Int?
 
     // Emulation keys
     @IBOutlet weak var left1: NSTextField!
@@ -108,7 +110,7 @@ class ControlsSettingsViewController: SettingsViewController {
         }
 
         // Update text and button image
-        if button.tag == conRecordedKey {
+        if button.tag == recordedKey {
 
             button.title = ""
             button.image = NSImage(named: "recordKeyRed")
@@ -138,23 +140,48 @@ class ControlsSettingsViewController: SettingsViewController {
     // Keyboard events
     //
 
-    /* Handles a key press event.
-     * Returns true if the controller has responded to this key.
-     */
+    override func keyDown(with event: NSEvent) {
+
+        if keyDown(with: MacKey(event: event)) {
+            return
+        }
+
+        // The controller wasn't interested. Process it as usual
+        interpretKeyEvents([event])
+    }
+
+    override func flagsChanged(with event: NSEvent) {
+
+        switch Int(event.keyCode) {
+
+        case kVK_Shift where event.modifierFlags.contains(.shift):
+            keyDown(with: MacKey.shift)
+        case kVK_RightShift where event.modifierFlags.contains(.shift):
+            keyDown(with: MacKey.rightShift)
+        case kVK_Option where event.modifierFlags.contains(.option):
+            keyDown(with: MacKey.option)
+        case kVK_RightOption where event.modifierFlags.contains(.option):
+            keyDown(with: MacKey.rightOption)
+
+        default:
+            break
+        }
+    }
+
+    @discardableResult
     func keyDown(with macKey: MacKey) -> Bool {
 
         // Only proceed if a recording sessing is in progress
-        if conRecordedKey == nil { return false }
+        guard let key = recordedKey else { return false }
 
         // Record the key if it is not the ESC key
-        /* TODO: COMMENT IN ASAP
         if macKey != MacKey.escape {
-            let (slot, action) = gamePadAction(for: conRecordedKey!)
-            gamePadManager.gamePads[slot]?.bind(key: macKey, action: action)
-        }
-        */
 
-        conRecordedKey = nil
+            let (slot, action) = gamePadAction(for: key)
+            gamePadManager?.gamePads[slot]?.bind(key: macKey, action: action)
+        }
+
+        recordedKey = nil
         refresh()
         return true
     }
@@ -165,7 +192,7 @@ class ControlsSettingsViewController: SettingsViewController {
 
     @IBAction func recordKeyAction(_ sender: NSButton!) {
 
-        conRecordedKey = sender.tag
+        recordedKey = sender.tag
         refresh()
     }
 
