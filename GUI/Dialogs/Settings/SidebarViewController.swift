@@ -21,9 +21,9 @@ class SidebarViewController: NSViewController {
     @IBOutlet weak var outlineView: NSOutlineView!
 
     let items: [SidebarItem] = [
-        SidebarItem(title: "General", iconName: "CategoryGeneral", identifier: .init("general")),
-        SidebarItem(title: "Controls", iconName: "CategoryGeneral", identifier: .init("controls")),
-        SidebarItem(title: "Devices", iconName: "CategoryGeneral", identifier: .init("devices"))
+        SidebarItem(title: "General", iconName: "generalPrefs", identifier: .init("general")),
+        SidebarItem(title: "Controls", iconName: "controlsPrefs", identifier: .init("controls")),
+        SidebarItem(title: "Devices", iconName: "devicesPrefs", identifier: .init("devices"))
     ]
 
     var selectionHandler: ((SidebarItem) -> Void)?
@@ -34,15 +34,9 @@ class SidebarViewController: NSViewController {
         outlineView.delegate = self
         outlineView.dataSource = self
         outlineView.usesAutomaticRowHeights = false
-        // outlineView.rowHeight = 48
         outlineView.rowSizeStyle = .custom
-
         outlineView.backgroundColor = .clear
-        // outlineView.isOpaque = false
         outlineView.usesAlternatingRowBackgroundColors = false
-        // outlineView.enclosingScrollView?.drawsBackground = false
-        
-        // tableView.reloadData()
 
         // Select first item by default
         outlineView.selectRowIndexes(IndexSet(integer: 0), byExtendingSelection: false)
@@ -77,8 +71,10 @@ extension SidebarViewController: NSOutlineViewDelegate {
 
         if let sidebarItem = item as? SidebarItem {
             cell?.textField?.stringValue = sidebarItem.title
+            cell?.imageView?.image = NSImage(named: sidebarItem.iconName)
         } else {
             cell?.textField?.stringValue = "???"
+            cell?.imageView?.image = nil
         }
         return cell
     }
