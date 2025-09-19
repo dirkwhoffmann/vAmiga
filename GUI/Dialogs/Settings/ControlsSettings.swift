@@ -61,7 +61,7 @@ class ControlsSettingsViewController: SettingsViewController {
 
     override func refresh() {
 
-        print("GeneralSettingsViewController::refresh")
+        print("ControlsSettingsViewController::refresh")
 
         // Mouse button keyset
         refreshKey(map: 0, dir: .PRESS_LEFT, button: mouseLeftButton, txt: mouseLeft)
@@ -178,7 +178,7 @@ class ControlsSettingsViewController: SettingsViewController {
         if macKey != MacKey.escape {
 
             let (slot, action) = gamePadAction(for: key)
-            gamePadManager?.gamePads[slot]?.bind(key: macKey, action: action)
+            gamePadManager?.gamePads[slot]!.bind(key: macKey, action: action)
         }
 
         recordedKey = nil
@@ -247,19 +247,17 @@ class ControlsSettingsViewController: SettingsViewController {
         refresh()
     }
 
-    //
-    // Action methods (Misc)
-    //
-
-    @IBAction func presetAction(_ sender: NSPopUpButton!) {
-
-        assert(sender.selectedTag() == 0)
+    override func preset(tag: Int) {
 
         // Revert to standard settings
         EmulatorProxy.defaults.removeControlsUserDefaults()
 
         // Apply the new settings
         pref.applyControlsUserDefaults()
-        refresh()
+    }
+
+    override func save() {
+
+        pref.saveControlsUserDefaults()
     }
 }

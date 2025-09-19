@@ -103,8 +103,9 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
 
     // Preferences
     var pref: Preferences!
-    var prefController: PreferencesController?
-    
+    var prefController: PreferencesController? // DEPRECATED
+    var settingsController: SettingsWindowController?
+
     // Information provider for connected HID devices
     var database = DeviceDatabase()
     
@@ -160,7 +161,14 @@ extension MyAppDelegate {
         return documents.map({ $0.emu })
     }
 
-    static var currentController: MyController?
+    static var currentController: MyController? {
+        didSet {
+            if currentController !== oldValue {
+                oldValue?.emu?.put(.FOCUS, value: 0)
+                currentController?.emu?.put(.FOCUS, value: 1)
+            }
+        }
+    }
 
 
     /*
@@ -186,11 +194,13 @@ extension MyAppDelegate {
     // Callen when a HID device has been added
     func deviceAdded() {
         prefController?.refresh()
+        settingsController?.refresh()
     }
     
     // Callen when a HID device has been removed
     func deviceRemoved() {
         prefController?.refresh()
+        settingsController?.refresh()
     }
 
     // Callen when a HID event comes in

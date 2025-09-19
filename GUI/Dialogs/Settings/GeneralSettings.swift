@@ -103,6 +103,7 @@ class GeneralSettingsViewController: SettingsViewController {
 
     @IBAction func snapshotIntervalAction(_ sender: NSTextField!) {
 
+        print("snapshotIntervalAction: \(sender.integerValue)")
         if sender.integerValue > 0 {
             pref.snapshotInterval = sender.integerValue
         }
@@ -184,5 +185,10 @@ class GeneralSettingsViewController: SettingsViewController {
 
         // Apply the new settings
         pref.applyGeneralUserDefaults()
+    }
+
+    override func save() {
+
+        pref.saveGeneralUserDefaults()
     }
 }

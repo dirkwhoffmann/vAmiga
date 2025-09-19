@@ -25,7 +25,7 @@ extension MyController: NSWindowDelegate {
         MyAppDelegate.currentController = self
 
         // Inform the emulator (unmutes audio)
-        emu?.put(.FOCUS, value: 1)
+        // emu?.put(.FOCUS, value: 1)
 
         // Update the menu bar
         hideOrShowDriveMenus()
@@ -47,13 +47,15 @@ extension MyController: NSWindowDelegate {
 
         debug(.lifetime)
 
+        /*
         if MyAppDelegate.currentController === self {
             MyAppDelegate.currentController = nil
         }
 
         // Inform the emulator (mutes audio)
         emu?.put(.FOCUS, value: 0)
-
+        */
+        
         // Stop emulator if it is configured to pause in background
         if emu != nil {
             pauseInBackgroundSavedState = emu.running

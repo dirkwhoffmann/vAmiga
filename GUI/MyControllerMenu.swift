@@ -136,13 +136,21 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func settingsAction(_ sender: Any?) {
 
-        let storyboard = NSStoryboard(name: "Settings", bundle: nil)
-        if let wc = storyboard.instantiateController(withIdentifier: "SettingsWindowController") as? NSWindowController {
+        if myAppDelegate.settingsController == nil {
 
-            wc.window?.level = .floating
-            wc.showWindow(self)
-            wc.window?.makeKeyAndOrderFront(nil)
-            NSApp.activate(ignoringOtherApps: true)
+            let sb = NSStoryboard(name: "Settings", bundle: nil)
+            let id = "SettingsWindowController"
+
+            myAppDelegate.settingsController =
+            sb.instantiateController(withIdentifier: id) as? SettingsWindowController
+
+            if let sc = myAppDelegate.settingsController {
+
+                sc.window?.level = .floating
+                sc.showWindow(self)
+                sc.window?.makeKeyAndOrderFront(nil)
+                NSApp.activate(ignoringOtherApps: true)
+            }
         }
     }
 

@@ -365,6 +365,9 @@ class GamePad {
 
             // Notify the GUI
             if notify { myAppDelegate.hidEvent(event: hid.0, nr: hid.1, value: hid.2) }
+            if let controller = myAppDelegate.settingsController, controller.isVisible {
+                controller.devicesVC?.refreshDeviceEvent(event: hid.0, nr: hid.1, value: hid.2)
+            }
 
             // Map the HID event to an action list
             if let events = mapping?[hid.0]?[hid.1]?[hid.2] {
@@ -393,6 +396,10 @@ class GamePad {
         if port == 2 { for e in events { amiga.controlPort2.joystick.trigger(e) } }
         
         // Notify the GUI
+        if let controller = myAppDelegate.settingsController, controller.isVisible {
+            controller.devicesVC?.refreshDeviceActions(actions: events)
+        }
+
         if notify { myAppDelegate.devicePulled(events: events) }
 
         return events != []

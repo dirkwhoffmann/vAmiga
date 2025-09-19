@@ -9,8 +9,31 @@
 
 class DevicesSettingsViewController: SettingsViewController {
 
-    /*
-    var pad: GamePad? { return gamePadManager.gamePads[devSelector.selectedTag()] }
+    @IBOutlet weak var selector: NSSegmentedControl!
+
+    // Property Box
+    @IBOutlet weak var infoBox: NSBox!
+    @IBOutlet weak var infoBoxTitle: NSTextField!
+    @IBOutlet weak var manufacturer: NSTextField!
+    @IBOutlet weak var product: NSTextField!
+    @IBOutlet weak var version: NSTextField!
+    @IBOutlet weak var vendorID: NSTextField!
+    @IBOutlet weak var productID: NSTextField!
+    @IBOutlet weak var transport: NSTextField!
+    @IBOutlet weak var usage: NSTextField!
+    @IBOutlet weak var usagePage: NSTextField!
+    @IBOutlet weak var locationID: NSTextField!
+    @IBOutlet weak var uniqueID: NSTextField!
+
+    // Controller
+    @IBOutlet weak var image: NSImageView!
+    @IBOutlet weak var action: NSTextField!
+    @IBOutlet weak var action2: NSTextField!
+    @IBOutlet weak var hidEvent: NSTextField!
+    @IBOutlet weak var hidMapping: NSTextView!
+    @IBOutlet weak var hidMappingScrollView: NSScrollView!
+
+    var pad: GamePad? { return gamePadManager?.gamePads[selector.selectedTag()] }
     var db: DeviceDatabase { return myAppDelegate.database }
     var guid: GUID {return pad?.guid ?? GUID() }
 
@@ -22,46 +45,43 @@ class DevicesSettingsViewController: SettingsViewController {
         return pad?.device?.usageDescription ?? property(kIOHIDPrimaryUsageKey)
     }
 
-    func refreshDevicesTab() {
-
-        // Let us notify when the device is pulled
-        pad?.notify = true
+    override func refresh() {
 
         // Device properties
-        devManufacturer.stringValue = property(kIOHIDManufacturerKey)
-        devProduct.stringValue = property(kIOHIDProductKey)
-        devVersion.stringValue = property(kIOHIDVersionNumberKey)
-        devVendorID.stringValue = property(kIOHIDVendorIDKey)
-        devProductID.stringValue = property(kIOHIDProductIDKey)
-        devTransport.stringValue = property(kIOHIDTransportKey)
-        devUsagePage.stringValue = property(kIOHIDPrimaryUsagePageKey)
-        devLocationID.stringValue = property(kIOHIDLocationIDKey)
-        devUniqueID.stringValue = property(kIOHIDUniqueIDKey)
-        devUsage.stringValue = usageDescription
+        manufacturer.stringValue = property(kIOHIDManufacturerKey)
+        product.stringValue = property(kIOHIDProductKey)
+        version.stringValue = property(kIOHIDVersionNumberKey)
+        vendorID.stringValue = property(kIOHIDVendorIDKey)
+        productID.stringValue = property(kIOHIDProductIDKey)
+        transport.stringValue = property(kIOHIDTransportKey)
+        usagePage.stringValue = property(kIOHIDPrimaryUsagePageKey)
+        locationID.stringValue = property(kIOHIDLocationIDKey)
+        uniqueID.stringValue = property(kIOHIDUniqueIDKey)
+        usage.stringValue = usageDescription
 
         // Controller mapping
-        devHidMapping.focusRingType = .none
-        devHidMapping.string = pad?.db.seek(guid: guid, withDelimiter: ",\n") ?? ""
+        hidMapping.focusRingType = .none
+        hidMapping.string = pad?.db.seek(guid: guid, withDelimiter: ",\n") ?? ""
 
         // Information messages
         if pad?.isKnown == true {
-            devInfoBoxTitle.stringValue = ""
-            devInfoBoxTitle.textColor = .secondaryLabelColor
+            infoBoxTitle.stringValue = ""
+            infoBoxTitle.textColor = .secondaryLabelColor
         } else if pad?.isKnown == false {
-            devInfoBoxTitle.stringValue = "This device is not known to the emulator. It may or may not work."
-            devInfoBoxTitle.textColor = .warning
+            infoBoxTitle.stringValue = "This device is not known to the emulator. It may or may not work."
+            infoBoxTitle.textColor = .warning
         } else {
-            devInfoBoxTitle.stringValue = "Not connected"
-            devInfoBoxTitle.textColor = .secondaryLabelColor
+            infoBoxTitle.stringValue = "Not connected"
+            infoBoxTitle.textColor = .secondaryLabelColor
         }
 
         // Hide some controls
         let hide = pad == nil || pad?.isMouse == true
-        devImage.isHidden = hide
-        devHidMappingScrollView.isHidden = hide
-        devHidEvent.isHidden = hide
-        devAction.isHidden = hide
-        devAction2.isHidden = hide
+        image.isHidden = hide
+        hidMappingScrollView.isHidden = hide
+        hidEvent.isHidden = hide
+        action.isHidden = hide
+        action2.isHidden = hide
     }
 
     func refreshDeviceEvent(event: HIDEvent, nr: Int, value: Int) {
@@ -80,7 +100,7 @@ class DevicesSettingsViewController: SettingsViewController {
         default: text = ""
         }
 
-        devHidEvent.stringValue = text
+        hidEvent?.stringValue = text
     }
 
     func refreshDeviceActions(actions: [GamePadAction]) {
@@ -101,18 +121,9 @@ class DevicesSettingsViewController: SettingsViewController {
         if actions.contains(.RELEASE_XY) { add(" Release Axis ") }
         if actions.contains(.RELEASE_FIRE) { add(" Release Fire ") }
 
-        devAction.stringValue = activity
-        devAction2.stringValue = activity2
+        action?.stringValue = activity
+        action2?.stringValue = activity2
     }
-
-    func selectDevicesTab() {
-
-        devHidEvent.stringValue = ""
-        devAction.stringValue = ""
-        devAction2.stringValue = ""
-        refreshDevicesTab()
-    }
-    */
 
     //
     // Action methods (Misc)
@@ -120,28 +131,32 @@ class DevicesSettingsViewController: SettingsViewController {
 
     @IBAction func selectDeviceAction(_ sender: Any!) {
 
+        hidEvent.stringValue = ""
+        action.stringValue = ""
+        action2.stringValue = ""
         refresh()
     }
 
-    @IBAction func devPresetAction(_ sender: NSPopUpButton!) {
-
-        /*
-        assert(sender.selectedTag() == 0)
+    override func preset(tag: Int) {
 
         // Reset the database
         myAppDelegate.database.reset()
 
         // Make the change effective
-        gamePadManager.updateHidMapping()
+        gamePadManager?.updateHidMapping()
 
         refresh()
-        */
+    }
+
+    override func save() {
+
+        pref.saveDevicesUserDefaults()
+        myAppDelegate.database.save()
     }
 }
 
 extension DevicesSettingsViewController : NSTextViewDelegate {
 
-    /*
     func textDidChange(_ notification: Notification) {
 
         if let textView = notification.object as? NSTextView {
@@ -150,8 +165,7 @@ extension DevicesSettingsViewController : NSTextViewDelegate {
             db.update(line: textView.string)
 
             // Make the change effective
-            gamePadManager.updateHidMapping()
+            gamePadManager?.updateHidMapping()
         }
     }
-    */
 }

@@ -13,13 +13,13 @@ class SettingsSplitViewController: NSSplitViewController {
 
     let main = NSStoryboard(name: "Settings", bundle: nil)
 
-    private lazy var generalVC: GeneralSettingsViewController = {
+    lazy var generalVC: GeneralSettingsViewController = {
         return main.instantiateController(withIdentifier: "GeneralSettingsViewController") as! GeneralSettingsViewController
     }()
-    private lazy var controlsVC: ControlsSettingsViewController = {
+    lazy var controlsVC: ControlsSettingsViewController = {
         return main.instantiateController(withIdentifier: "ControlsSettingsViewController") as! ControlsSettingsViewController
     }()
-    private lazy var devicesVC: DevicesSettingsViewController = {
+    lazy var devicesVC: DevicesSettingsViewController = {
         return main.instantiateController(withIdentifier: "DevicesSettingsViewController") as! DevicesSettingsViewController
     }()
 
@@ -57,7 +57,11 @@ class SettingsSplitViewController: NSSplitViewController {
         // Create a new split view item for the new content
         let newItem = NSSplitViewItem(viewController: currentVC!)
         addSplitViewItem(newItem)
+        currentVC!.activate()
+        /*
+        currentVC!.view.window?.makeFirstResponder(currentVC)
         currentVC!.refresh()
+        */
     }
 
     @IBAction func presetAction(_ sender: NSPopUpButton) {

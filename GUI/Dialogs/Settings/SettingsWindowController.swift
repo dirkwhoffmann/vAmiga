@@ -14,7 +14,9 @@ class SettingsWindowController: NSWindowController {
     var splitViewController: SettingsSplitViewController? {
         self.contentViewController as? SettingsSplitViewController
     }
+    var devicesVC: DevicesSettingsViewController? { splitViewController?.devicesVC }
     var currentVC: SettingsViewController? { splitViewController?.currentVC }
+    var isVisible: Bool { window?.isVisible ?? false }
 
     required init?(coder: NSCoder) {
 
@@ -37,12 +39,13 @@ class SettingsWindowController: NSWindowController {
         NSApp.activate(ignoringOtherApps: true)
     }
 
-    /*
-    @IBAction func presetAction(_ sender: Any) {
+    func refresh() {
 
-        print("presetAction")
-        // currentVC?.preset(tag: sender.selectedTag())
-        // currentVC?.refresh()
+        currentVC?.refresh()
     }
-    */
+
+    func refreshDeviceEvent(event: HIDEvent, nr: Int, value: Int) {
+
+        devicesVC?.refreshDeviceEvent(event: event, nr: nr, value: value)
+    }
 }

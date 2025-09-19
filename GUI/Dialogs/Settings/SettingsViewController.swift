@@ -14,6 +14,12 @@ class SettingsViewController: NSViewController {
     var gamePadManager: GamePadManager? { controller?.gamePadManager }
     var emu: EmulatorProxy? { controller?.emu }
 
+    func activate() {
+
+        view.window?.makeFirstResponder(self)
+        refresh()
+    }
+
     func refresh() { }
     func preset(tag: Int) { }
     func save() { }

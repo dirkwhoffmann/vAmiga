@@ -23,6 +23,7 @@
 		500B0D252E7C9852008FC5E1 /* ControlsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D242E7C9848008FC5E1 /* ControlsSettings.swift */; };
 		500B0D272E7C9D5B008FC5E1 /* DevicesSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D262E7C9D56008FC5E1 /* DevicesSettings.swift */; };
 		500B0D292E7D6EB7008FC5E1 /* SettingsToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D282E7D6EB3008FC5E1 /* SettingsToolbar.swift */; };
+		500B0D2B2E7DC83F008FC5E1 /* LiveTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D2A2E7DC839008FC5E1 /* LiveTextField.swift */; };
 		500C0A562259402D000121CD /* DiskController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500C0A542259402D000121CD /* DiskController.cpp */; };
 		500C7170255EE2AC00DDEEB2 /* Concurrency.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500C716E255EE2AC00DDEEB2 /* Concurrency.cpp */; };
 		500CE876259252ED00462836 /* DevicesPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500CE875259252ED00462836 /* DevicesPrefs.swift */; };
@@ -574,6 +575,7 @@
 		500B0D242E7C9848008FC5E1 /* ControlsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlsSettings.swift; sourceTree = "<group>"; };
 		500B0D262E7C9D56008FC5E1 /* DevicesSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicesSettings.swift; sourceTree = "<group>"; };
 		500B0D282E7D6EB3008FC5E1 /* SettingsToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsToolbar.swift; sourceTree = "<group>"; };
+		500B0D2A2E7DC839008FC5E1 /* LiveTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTextField.swift; sourceTree = "<group>"; };
 		500C0A542259402D000121CD /* DiskController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskController.cpp; sourceTree = "<group>"; };
 		500C0A552259402D000121CD /* DiskController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskController.h; sourceTree = "<group>"; };
 		500C716E255EE2AC00DDEEB2 /* Concurrency.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Concurrency.cpp; sourceTree = "<group>"; };
@@ -1453,6 +1455,7 @@
 		505B801E23FE6582002407FE /* System */ = {
 			isa = PBXGroup;
 			children = (
+				500B0D2A2E7DC839008FC5E1 /* LiveTextField.swift */,
 				5042FB122D4E4E8200E4A167 /* FilePanel.swift */,
 				508FDFEB21EA22780043D0E9 /* Speedometer.swift */,
 				50E8199225B350DA00D2E3A5 /* Errors.swift */,
@@ -2612,6 +2615,7 @@
 				501B821D2262FFB200042871 /* RTC.cpp in Sources */,
 				50EFB0C82C18D72C0013B73C /* Dumpable.cpp in Sources */,
 				50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */,
+				500B0D2B2E7DC83F008FC5E1 /* LiveTextField.swift in Sources */,
 				5031FFD3279F3D95002EF894 /* PerformanceConf.swift in Sources */,
 				5012DCE02D5B33C200233B6A /* HDZFile.cpp in Sources */,
 				508FE02B21EA227B0043D0E9 /* MyWindowDelegate.swift in Sources */,
