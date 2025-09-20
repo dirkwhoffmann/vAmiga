@@ -192,6 +192,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cq9-uJ-RdM">
+                                <rect key="frame" x="0.0" y="0.0" width="640" height="240"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageAlignment="bottomRight" imageScaling="axesIndependently" image="generalBg" id="SV0-ce-M0a"/>
+                            </imageView>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cuS-D1-EPc">
                                 <rect key="frame" x="19" y="387" width="231" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
@@ -1077,6 +1082,11 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="usK-n3-9O2">
+                                <rect key="frame" x="0.0" y="0.0" width="640" height="240"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageAlignment="bottomLeft" imageScaling="proportionallyDown" image="controlsBg" id="KH7-Wh-Kkx"/>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Pbn-6l-mTx"/>
                         <viewLayoutGuide key="layoutMargins" id="4Wk-j0-W1H"/>
@@ -1130,6 +1140,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TEO-6n-cal">
+                                <rect key="frame" x="0.0" y="0.0" width="640" height="240"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageAlignment="bottomRight" imageScaling="axesIndependently" image="devicesBg" id="XDm-X1-Ciw"/>
+                            </imageView>
                             <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hD1-rB-sbV">
                                 <rect key="frame" x="187" y="405" width="266" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1345,6 +1360,11 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xGa-NK-teS">
+                                <rect key="frame" x="25" y="39" width="286" height="169"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyUpOrDown" image="gamepad" id="5Kb-EL-vcV"/>
+                            </imageView>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k18-Lb-Fy1">
                                 <rect key="frame" x="105" y="58" width="116" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1400,11 +1420,6 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xGa-NK-teS">
-                                <rect key="frame" x="25" y="39" width="286" height="169"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyUpOrDown" image="gamepad" id="5Kb-EL-vcV"/>
-                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="mDd-kn-hlX"/>
                         <viewLayoutGuide key="layoutMargins" id="zHI-IT-dfL"/>
@@ -1438,7 +1453,10 @@
     </scenes>
     <resources>
         <image name="NSAdvanced" width="32" height="32"/>
+        <image name="controlsBg" width="640" height="240"/>
+        <image name="devicesBg" width="640" height="240"/>
         <image name="gamepad" width="244" height="151"/>
+        <image name="generalBg" width="640" height="240"/>
         <image name="joystick2" width="261" height="300"/>
         <image name="mouse" width="128" height="128"/>
         <image name="recordKey" width="36" height="36"/>
