@@ -101,6 +101,7 @@ public:
         CLONE(queue.irc)
         CLONE(queue.ird)
 
+        CLONE(irqMode)
         CLONE(ipl)
         CLONE(fcl)
         CLONE(fcSource)
@@ -162,6 +163,7 @@ private:
         << queue.irc
         << queue.ird
 
+        << irqMode
         << ipl
         << fcl
         << fcSource
