@@ -193,9 +193,9 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cq9-uJ-RdM">
-                                <rect key="frame" x="0.0" y="0.0" width="640" height="240"/>
+                                <rect key="frame" x="0.0" y="0.0" width="640" height="454"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageAlignment="bottomRight" imageScaling="axesIndependently" image="generalBg" id="SV0-ce-M0a"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageAlignment="bottom" imageScaling="proportionallyUpOrDown" image="vAmigaBg" id="SV0-ce-M0a"/>
                             </imageView>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cuS-D1-EPc">
                                 <rect key="frame" x="19" y="387" width="231" height="20"/>
@@ -1083,9 +1083,9 @@
                                 </textFieldCell>
                             </textField>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="usK-n3-9O2">
-                                <rect key="frame" x="0.0" y="0.0" width="640" height="240"/>
+                                <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageAlignment="bottomLeft" imageScaling="proportionallyDown" image="controlsBg" id="KH7-Wh-Kkx"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageAlignment="bottom" imageScaling="proportionallyUpOrDown" image="vAmigaBg" id="KH7-Wh-Kkx"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Pbn-6l-mTx"/>
@@ -1141,9 +1141,9 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TEO-6n-cal">
-                                <rect key="frame" x="0.0" y="0.0" width="640" height="240"/>
+                                <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageAlignment="bottomRight" imageScaling="axesIndependently" image="devicesBg" id="XDm-X1-Ciw"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageAlignment="bottom" imageScaling="proportionallyUpOrDown" image="vAmigaBg" id="XDm-X1-Ciw"/>
                             </imageView>
                             <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hD1-rB-sbV">
                                 <rect key="frame" x="187" y="405" width="266" height="24"/>
@@ -1453,14 +1453,12 @@
     </scenes>
     <resources>
         <image name="NSAdvanced" width="32" height="32"/>
-        <image name="controlsBg" width="640" height="240"/>
-        <image name="devicesBg" width="640" height="240"/>
         <image name="gamepad" width="244" height="151"/>
-        <image name="generalBg" width="640" height="240"/>
         <image name="joystick2" width="261" height="300"/>
         <image name="mouse" width="128" height="128"/>
         <image name="recordKey" width="36" height="36"/>
         <image name="square.and.arrow.down" catalog="system" width="15" height="17"/>
         <image name="trashTemplate" width="174" height="214"/>
+        <image name="vAmigaBg" width="780" height="505"/>
     </resources>
 </document>
