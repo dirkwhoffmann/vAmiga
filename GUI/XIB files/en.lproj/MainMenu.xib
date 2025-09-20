@@ -63,13 +63,7 @@
                             </menuItem>
                             <menuItem title="Settings..." keyEquivalent="," id="L87-Y8-Gla">
                                 <connections>
-                                    <action selector="preferencesAction:" target="-1" id="x7k-IT-b56"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="New Settings..." id="R4k-ts-2Nm">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="settingsAction:" target="-1" id="tWz-gV-9yM"/>
+                                    <action selector="settingsAction:" target="-1" id="OfN-2v-Mn8"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="l4o-aX-0h9">

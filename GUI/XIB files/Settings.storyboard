@@ -54,6 +54,9 @@
                                             <font key="font" metaFont="system"/>
                                         </buttonCell>
                                     </button>
+                                    <connections>
+                                        <action selector="saveAction:" target="mnC-gO-vw2" id="CsK-cL-oXa"/>
+                                    </connections>
                                 </toolbarItem>
                             </allowedToolbarItems>
                             <defaultToolbarItems>

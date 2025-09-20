@@ -1250,6 +1250,17 @@
 			path = DiskFiles;
 			sourceTree = "<group>";
 		};
+		500B0D2E2E7EB089008FC5E1 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				500B0D222E7C9274008FC5E1 /* SettingsViewController.swift */,
+				50144E3A2E7BE703009E15B4 /* GeneralSettings.swift */,
+				500B0D242E7C9848008FC5E1 /* ControlsSettings.swift */,
+				500B0D262E7C9D56008FC5E1 /* DevicesSettings.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
 		50104E8825ECDAA30047A9AA /* Infrastructure */ = {
 			isa = PBXGroup;
 			children = (
@@ -1315,10 +1326,7 @@
 				50144E352E7BE5E5009E15B4 /* SettingsWindowController.swift */,
 				50144E3C2E7BEA85009E15B4 /* SidebarViewController.swift */,
 				50144E382E7BE6BC009E15B4 /* SettingsSplitViewController.swift */,
-				500B0D222E7C9274008FC5E1 /* SettingsViewController.swift */,
-				50144E3A2E7BE703009E15B4 /* GeneralSettings.swift */,
-				500B0D242E7C9848008FC5E1 /* ControlsSettings.swift */,
-				500B0D262E7C9D56008FC5E1 /* DevicesSettings.swift */,
+				500B0D2E2E7EB089008FC5E1 /* ViewControllers */,
 			);
 			path = Settings;
 			sourceTree = "<group>";

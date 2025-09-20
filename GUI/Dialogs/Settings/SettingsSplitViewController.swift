@@ -78,4 +78,11 @@ class SettingsSplitViewController: NSSplitViewController {
         current?.preset(tag: sender.selectedTag())
         current?.refresh()
     }
+
+    @IBAction func saveAction(_ sender: Any) {
+
+        print("saveAction")
+        current?.save()
+        current?.refresh()
+    }
 }

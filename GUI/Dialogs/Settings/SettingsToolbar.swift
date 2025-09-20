@@ -13,18 +13,8 @@ class SettingsToolbar: NSToolbar {
     var windowController: SettingsWindowController!
     var splitViewController: SettingsSplitViewController? {windowController.splitViewController }
 
-    /*
-    @IBOutlet weak var timeStamp: NSButton!
-    @IBOutlet weak var execSegCtrl: NSSegmentedControl!
-    @IBOutlet weak var selectorPopup: NSPopUpButton!
-    @IBOutlet weak var selectorToolbarItem: NSToolbarItem!
-    @IBOutlet weak var formatPopup: NSPopUpButton!
-    @IBOutlet weak var formatToolbarItem: NSToolbarItem!
-    */
-
     override func validateVisibleItems() {
 
-        // print("validateVisibleItems")
     }
 
     //
@@ -34,8 +24,6 @@ class SettingsToolbar: NSToolbar {
     @IBAction
     func presetAction(_ sender: NSPopUpButton) {
 
-        print("Toolbar: presetAction")
-        if splitViewController == nil { print("splitViewController is nil") }
         splitViewController?.presetAction(sender)
 
     }
@@ -43,6 +31,6 @@ class SettingsToolbar: NSToolbar {
     @IBAction
     func saveAction(_ sender: Any) {
 
-        print("saveAction")
+        splitViewController?.saveAction(sender)
     }
 }
