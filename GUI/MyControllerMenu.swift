@@ -123,7 +123,8 @@ extension MyController: NSMenuItemValidation {
     //
     // Action methods (App menu)
     //
-    
+
+    /*
     @IBAction func preferencesAction(_ sender: Any!) {
         
         if myAppDelegate.prefController == nil {
@@ -133,6 +134,7 @@ extension MyController: NSMenuItemValidation {
         myAppDelegate.prefController!.showWindow(self)
         myAppDelegate.prefController!.refresh()
     }
+    */
 
     @IBAction func settingsAction(_ sender: Any?) {
 
@@ -143,14 +145,14 @@ extension MyController: NSMenuItemValidation {
 
             myAppDelegate.settingsController =
             sb.instantiateController(withIdentifier: id) as? SettingsWindowController
+        }
 
-            if let sc = myAppDelegate.settingsController {
+        if let sc = myAppDelegate.settingsController {
 
-                sc.window?.level = .floating
-                sc.showWindow(self)
-                sc.window?.makeKeyAndOrderFront(nil)
-                NSApp.activate(ignoringOtherApps: true)
-            }
+            sc.window?.level = .floating
+            sc.showWindow(self)
+            sc.window?.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
         }
     }
 
@@ -479,7 +481,7 @@ extension MyController: NSMenuItemValidation {
         }
 
         refreshStatusBar()
-        myAppDelegate.prefController?.refresh()
+        // myAppDelegate.prefController?.refresh()
     }
     
     //

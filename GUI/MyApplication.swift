@@ -103,7 +103,7 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
 
     // Preferences
     var pref: Preferences!
-    var prefController: PreferencesController? // DEPRECATED
+    // var prefController: PreferencesController? // DEPRECATED
     var settingsController: SettingsWindowController?
 
     // Information provider for connected HID devices
@@ -170,7 +170,6 @@ extension MyAppDelegate {
         }
     }
 
-
     /*
     func windowDidBecomeMain(_ window: NSWindow) {
 
@@ -193,16 +192,17 @@ extension MyAppDelegate {
     
     // Callen when a HID device has been added
     func deviceAdded() {
-        prefController?.refresh()
+        // prefController?.refresh()
         settingsController?.refresh()
     }
     
     // Callen when a HID device has been removed
     func deviceRemoved() {
-        prefController?.refresh()
+        // prefController?.refresh()
         settingsController?.refresh()
     }
 
+    /*
     // Callen when a HID event comes in
     func hidEvent(event: HIDEvent, nr: Int, value: Int) {
         prefController?.refreshDeviceEvent(event: event, nr: nr, value: value)
@@ -212,6 +212,7 @@ extension MyAppDelegate {
     func devicePulled(events: [GamePadAction]) {
         prefController?.refreshDeviceActions(actions: events)
     }
+    */
 }
 
 @MainActor var myApp: MyApplication { return NSApp as! MyApplication }

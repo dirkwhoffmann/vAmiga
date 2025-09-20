@@ -148,7 +148,7 @@ class MyToolbar: NSToolbar {
 
         switch sender.selectedSegment {
 
-        case 0: controller.preferencesAction(sender)
+        case 0: controller.settingsAction(sender)
         case 1: controller.openConfiguratorAsSheet()
 
         default:
