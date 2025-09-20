@@ -174,6 +174,13 @@ class GeneralSettingsViewController: SettingsViewController {
         refresh()
     }
 
+    @IBAction func retroVisorAction(_ sender: Any!) {
+
+        if let url = URL(string: "https://dirkwhoffmann.github.io/RetroVisor/") {
+            NSWorkspace.shared.open(url)
+        }
+    }
+
     override func preset(tag: Int) {
 
         print("preset")
