@@ -196,7 +196,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cq9-uJ-RdM">
-                                <rect key="frame" x="0.0" y="0.0" width="640" height="454"/>
+                                <rect key="frame" x="-20" y="6" width="640" height="454"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageAlignment="bottom" imageScaling="proportionallyUpOrDown" image="vAmigaBg" id="SV0-ce-M0a"/>
                             </imageView>
@@ -531,7 +531,7 @@
                                 </connections>
                             </popUpButton>
                             <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fZR-FY-PIn">
-                                <rect key="frame" x="332" y="214" width="276" height="70"/>
+                                <rect key="frame" x="332" y="212" width="276" height="70"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" controlSize="small" selectable="YES" alignment="center" id="RvK-5d-03d">
                                     <font key="font" metaFont="smallSystem"/>
@@ -540,16 +540,24 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zrr-Ln-t9y">
-                                <rect key="frame" x="364" y="35" width="222" height="171"/>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B2o-ap-rtV">
+                                <rect key="frame" x="421" y="32" width="98" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="ad-rv" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="C6W-Yg-aNx">
+                                <buttonCell key="cell" type="push" title="Learn more..." bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="9mb-It-xiz">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="retroVisorAction:" target="ejc-Ml-G1m" id="525-bY-Fwa"/>
+                                    <action selector="retroVisorAction:" target="ejc-Ml-G1m" id="w3I-aR-PEC"/>
                                 </connections>
+                            </button>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zrr-Ln-t9y">
+                                <rect key="frame" x="344" y="68" width="252" height="135"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="retrovisor" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="C6W-Yg-aNx">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="OQN-pg-dYB"/>
@@ -1486,11 +1494,11 @@
     </scenes>
     <resources>
         <image name="NSAdvanced" width="32" height="32"/>
-        <image name="ad-rv" width="542" height="542"/>
         <image name="gamepad" width="244" height="151"/>
         <image name="joystick2" width="261" height="300"/>
         <image name="mouse" width="128" height="128"/>
         <image name="recordKey" width="36" height="36"/>
+        <image name="retrovisor" width="1201" height="631"/>
         <image name="square.and.arrow.down" catalog="system" width="15" height="17"/>
         <image name="trashTemplate" width="174" height="214"/>
         <image name="vAmigaBg" width="780" height="505"/>

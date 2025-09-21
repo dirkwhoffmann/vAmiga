@@ -94,7 +94,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="196" y="240" width="646" height="495"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1496" height="933"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1083"/>
             <value key="minSize" type="size" width="646" height="495"/>
             <value key="maxSize" type="size" width="646" height="495"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
@@ -1256,11 +1256,11 @@
                                             <rect key="frame" x="17" y="244" width="569" height="123"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="Sf3-3T-kwN">
-                                                <rect key="frame" x="4" y="5" width="561" height="115"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="569" height="123"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q7W-l5-jgx">
-                                                        <rect key="frame" x="8" y="51" width="84" height="14"/>
+                                                        <rect key="frame" x="8" y="59" width="84" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Version:" id="kS1-Cj-des">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1269,7 +1269,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q0V-tw-fIp">
-                                                        <rect key="frame" x="8" y="31" width="84" height="14"/>
+                                                        <rect key="frame" x="8" y="39" width="84" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Vendor ID:" id="rpj-gj-1IH">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1278,7 +1278,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tHE-Zh-Rey">
-                                                        <rect key="frame" x="8" y="11" width="84" height="14"/>
+                                                        <rect key="frame" x="8" y="19" width="84" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Product ID:" id="qDB-sp-Z8h">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1287,7 +1287,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TLx-IP-1i8">
-                                                        <rect key="frame" x="96" y="31" width="178" height="14"/>
+                                                        <rect key="frame" x="96" y="39" width="178" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="Sk0-L2-7v4">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1296,7 +1296,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BtT-aK-Ch9">
-                                                        <rect key="frame" x="96" y="11" width="178" height="14"/>
+                                                        <rect key="frame" x="96" y="19" width="178" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="CPq-gE-23u">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1305,7 +1305,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D3z-db-hZJ">
-                                                        <rect key="frame" x="298" y="31" width="80" height="14"/>
+                                                        <rect key="frame" x="298" y="39" width="80" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Location ID:" id="GFw-rd-RIc">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1314,7 +1314,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="89G-Zo-zi4">
-                                                        <rect key="frame" x="383" y="31" width="171" height="14"/>
+                                                        <rect key="frame" x="383" y="39" width="171" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="EZT-Gq-fSi">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1323,7 +1323,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bgS-et-bx0">
-                                                        <rect key="frame" x="96" y="51" width="182" height="14"/>
+                                                        <rect key="frame" x="96" y="59" width="182" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="Kfs-Y6-1ID">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1332,7 +1332,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6b6-n1-Fmr">
-                                                        <rect key="frame" x="8" y="91" width="84" height="14"/>
+                                                        <rect key="frame" x="8" y="99" width="84" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Manufacturer:" id="95m-xI-brG">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1341,7 +1341,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8au-Ie-5cT">
-                                                        <rect key="frame" x="8" y="71" width="84" height="14"/>
+                                                        <rect key="frame" x="8" y="79" width="84" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Product:" id="n25-x7-Pky">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1350,7 +1350,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="flc-Ub-7kc">
-                                                        <rect key="frame" x="298" y="91" width="80" height="14"/>
+                                                        <rect key="frame" x="298" y="99" width="80" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Transport:" id="Kc1-NQ-bDf">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1359,7 +1359,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="86Q-HP-rT8">
-                                                        <rect key="frame" x="383" y="91" width="171" height="14"/>
+                                                        <rect key="frame" x="383" y="99" width="171" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="gyL-p6-GI8">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1368,7 +1368,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TDE-1j-5mW">
-                                                        <rect key="frame" x="298" y="11" width="80" height="14"/>
+                                                        <rect key="frame" x="298" y="19" width="80" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Unique ID:" id="YjA-jL-2al">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1377,7 +1377,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VBn-jK-C6j">
-                                                        <rect key="frame" x="383" y="11" width="171" height="14"/>
+                                                        <rect key="frame" x="383" y="19" width="171" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="Qd5-hj-c5x">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1386,7 +1386,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DwP-8K-kAG">
-                                                        <rect key="frame" x="298" y="71" width="80" height="14"/>
+                                                        <rect key="frame" x="298" y="79" width="80" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Usage:" id="ig9-LS-qzx">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1395,7 +1395,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LaK-9m-Dv1">
-                                                        <rect key="frame" x="383" y="71" width="171" height="14"/>
+                                                        <rect key="frame" x="383" y="79" width="171" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="drB-eu-6C3">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1404,7 +1404,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5Lz-5x-jpS">
-                                                        <rect key="frame" x="298" y="51" width="80" height="14"/>
+                                                        <rect key="frame" x="298" y="59" width="80" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Usage Page:" id="dJk-Sx-gTq">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1413,7 +1413,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kYE-yr-ZBU">
-                                                        <rect key="frame" x="383" y="51" width="171" height="14"/>
+                                                        <rect key="frame" x="383" y="59" width="171" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="jcl-Wa-v2I">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1422,7 +1422,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="11v-Tj-lGr">
-                                                        <rect key="frame" x="96" y="91" width="182" height="14"/>
+                                                        <rect key="frame" x="96" y="99" width="182" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="tq5-Xq-svw">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1431,7 +1431,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ydf-e9-8Kf">
-                                                        <rect key="frame" x="96" y="71" width="182" height="14"/>
+                                                        <rect key="frame" x="96" y="79" width="182" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum dolor sit amet" id="gEe-q7-mKH">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -1503,15 +1503,15 @@
                                             <rect key="frame" x="305" y="79" width="278" height="149"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <clipView key="contentView" drawsBackground="NO" id="ZbA-Ci-i6F">
-                                                <rect key="frame" x="0.0" y="0.0" width="263" height="149"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="278" height="149"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textView wantsLayer="YES" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="lue-lV-Oit">
-                                                        <rect key="frame" x="0.0" y="0.0" width="263" height="149"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="278" height="149"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                        <size key="minSize" width="263" height="149"/>
+                                                        <size key="minSize" width="278" height="149"/>
                                                         <size key="maxSize" width="278" height="10000000"/>
                                                         <connections>
                                                             <outlet property="delegate" destination="-2" id="sDV-l9-oMY"/>
@@ -1524,7 +1524,7 @@
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                             <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="8Eo-NY-Mg1">
-                                                <rect key="frame" x="263" y="0.0" width="15" height="149"/>
+                                                <rect key="frame" x="261" y="0.0" width="17" height="149"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                         </scrollView>
