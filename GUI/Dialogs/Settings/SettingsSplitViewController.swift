@@ -11,6 +11,16 @@ import Cocoa
 
 class SettingsSplitViewController: NSSplitViewController {
 
+    var windowController: SettingsWindowController? {
+        view.window?.windowController as? SettingsWindowController
+    }
+    var toolbar: SettingsToolbar? {
+        windowController?.window?.toolbar as? SettingsToolbar
+    }
+    private var sidebarVC: SidebarViewController? {
+        return splitViewItems.first?.viewController as? SidebarViewController
+    }
+
     let main = NSStoryboard(name: "Settings", bundle: nil)
 
     lazy var generalVC: GeneralSettingsViewController = {
@@ -22,12 +32,11 @@ class SettingsSplitViewController: NSSplitViewController {
     lazy var devicesVC: DevicesSettingsViewController = {
         return main.instantiateController(withIdentifier: "DevicesSettingsViewController") as! DevicesSettingsViewController
     }()
+    lazy var hardwareVC: HardwareSettingsViewController = {
+        return main.instantiateController(withIdentifier: "HardwareSettingsViewController") as! HardwareSettingsViewController
+    }()
 
     var current: SettingsViewController?
-
-    private var sidebarVC: SidebarViewController? {
-        return splitViewItems.first?.viewController as? SidebarViewController
-    }
 
     override func viewDidLoad() {
 
@@ -44,6 +53,7 @@ class SettingsSplitViewController: NSSplitViewController {
         case "general":     current = generalVC
         case "controls":    current = controlsVC
         case "devices":     current = devicesVC
+        case "hardware":    current = hardwareVC
         default:            fatalError()
         }
 
@@ -54,6 +64,9 @@ class SettingsSplitViewController: NSSplitViewController {
         let newItem = NSSplitViewItem(viewController: current!)
         addSplitViewItem(newItem)
         current!.activate()
+
+        toolbar!.update(presets: current?.presets ?? [])
+
         /*
         current!.view.window?.makeFirstResponder(currentVC)
         current!.refresh()

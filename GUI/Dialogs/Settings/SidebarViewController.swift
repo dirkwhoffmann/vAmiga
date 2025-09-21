@@ -25,9 +25,11 @@ class SidebarViewController: NSViewController {
     }
 
     let items: [SidebarItem] = [
+        
         SidebarItem(title: "General", iconName: "generalPrefs", identifier: .init("general")),
         SidebarItem(title: "Controls", iconName: "controlsPrefs", identifier: .init("controls")),
-        SidebarItem(title: "Devices", iconName: "devicesPrefs", identifier: .init("devices"))
+        SidebarItem(title: "Devices", iconName: "devicesPrefs", identifier: .init("devices")),
+        SidebarItem(title: "Hardware", iconName: "hardwarePrefs", identifier: .init("hardware"))
     ]
 
     var selectionHandler: ((SidebarItem) -> Void)?

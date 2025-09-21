@@ -11,8 +11,11 @@ class SettingsViewController: NSViewController {
 
     var pref: Preferences { myAppDelegate.pref }
     var controller: MyController? { MyAppDelegate.currentController }
+    var config: Configuration? { return controller?.config }
     var gamePadManager: GamePadManager? { controller?.gamePadManager }
     var emu: EmulatorProxy? { controller?.emu }
+
+    var presets: [(String,Int)] { [ ("Standard settings", 0) ] }
 
     func activate() {
 

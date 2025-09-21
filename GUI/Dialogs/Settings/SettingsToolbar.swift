@@ -10,11 +10,36 @@
 @MainActor
 class SettingsToolbar: NSToolbar {
 
+    @IBOutlet weak var presetsPopup: NSPopUpButton!
+
     var windowController: SettingsWindowController!
     var splitViewController: SettingsSplitViewController? {windowController.splitViewController }
 
     override func validateVisibleItems() {
 
+    }
+
+    func update(presets: [ (String, Int) ]) {
+
+        print("updatePresets")
+
+        // Remove any items set in Interface Builder
+        presetsPopup.removeAllItems()
+
+        // Add the first (disabled) row
+        presetsPopup.menu?.addItem(withTitle: "Revert to...", action: nil, keyEquivalent: "")
+
+        // Add new presets
+        for (title, tag) in presets {
+
+            if title == "" {
+                presetsPopup.menu?.addItem(NSMenuItem.separator())
+            } else {
+                let item = NSMenuItem(title: title, action: nil, keyEquivalent: "")
+                item.tag = tag
+                presetsPopup.menu?.addItem(item)
+            }
+        }
     }
 
     //

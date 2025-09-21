@@ -25,6 +25,13 @@
 		500B0D292E7D6EB7008FC5E1 /* SettingsToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D282E7D6EB3008FC5E1 /* SettingsToolbar.swift */; };
 		500B0D2B2E7DC83F008FC5E1 /* LiveTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D2A2E7DC839008FC5E1 /* LiveTextField.swift */; };
 		500B0D2D2E7DF5BA008FC5E1 /* SettingsOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D2C2E7DF5B5008FC5E1 /* SettingsOutlineView.swift */; };
+		500B0D302E801780008FC5E1 /* HardwareSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D2F2E80177A008FC5E1 /* HardwareSettings.swift */; };
+		500B0D322E80178F008FC5E1 /* MemorySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D312E801787008FC5E1 /* MemorySettings.swift */; };
+		500B0D342E8017AB008FC5E1 /* PeripheralsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D332E8017A6008FC5E1 /* PeripheralsSettings.swift */; };
+		500B0D362E8017BC008FC5E1 /* PerformanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D352E8017B2008FC5E1 /* PerformanceSettings.swift */; };
+		500B0D382E8017E9008FC5E1 /* CompatibilitySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D372E8017E1008FC5E1 /* CompatibilitySettings.swift */; };
+		500B0D3A2E80180E008FC5E1 /* AudioSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D392E801808008FC5E1 /* AudioSettings.swift */; };
+		500B0D3C2E801818008FC5E1 /* VideoSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D3B2E801815008FC5E1 /* VideoSettings.swift */; };
 		500C0A562259402D000121CD /* DiskController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500C0A542259402D000121CD /* DiskController.cpp */; };
 		500C7170255EE2AC00DDEEB2 /* Concurrency.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500C716E255EE2AC00DDEEB2 /* Concurrency.cpp */; };
 		500CE876259252ED00462836 /* DevicesPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500CE875259252ED00462836 /* DevicesPrefs.swift */; };
@@ -579,6 +586,13 @@
 		500B0D282E7D6EB3008FC5E1 /* SettingsToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsToolbar.swift; sourceTree = "<group>"; };
 		500B0D2A2E7DC839008FC5E1 /* LiveTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTextField.swift; sourceTree = "<group>"; };
 		500B0D2C2E7DF5B5008FC5E1 /* SettingsOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsOutlineView.swift; sourceTree = "<group>"; };
+		500B0D2F2E80177A008FC5E1 /* HardwareSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardwareSettings.swift; sourceTree = "<group>"; };
+		500B0D312E801787008FC5E1 /* MemorySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemorySettings.swift; sourceTree = "<group>"; };
+		500B0D332E8017A6008FC5E1 /* PeripheralsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralsSettings.swift; sourceTree = "<group>"; };
+		500B0D352E8017B2008FC5E1 /* PerformanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceSettings.swift; sourceTree = "<group>"; };
+		500B0D372E8017E1008FC5E1 /* CompatibilitySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilitySettings.swift; sourceTree = "<group>"; };
+		500B0D392E801808008FC5E1 /* AudioSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSettings.swift; sourceTree = "<group>"; };
+		500B0D3B2E801815008FC5E1 /* VideoSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoSettings.swift; sourceTree = "<group>"; };
 		500C0A542259402D000121CD /* DiskController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskController.cpp; sourceTree = "<group>"; };
 		500C0A552259402D000121CD /* DiskController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskController.h; sourceTree = "<group>"; };
 		500C716E255EE2AC00DDEEB2 /* Concurrency.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Concurrency.cpp; sourceTree = "<group>"; };
@@ -1260,6 +1274,13 @@
 				500B0D242E7C9848008FC5E1 /* ControlsSettings.swift */,
 				500B0D262E7C9D56008FC5E1 /* DevicesSettings.swift */,
 				501D20112E7FEE13007B1242 /* RomSettings.swift */,
+				500B0D2F2E80177A008FC5E1 /* HardwareSettings.swift */,
+				500B0D312E801787008FC5E1 /* MemorySettings.swift */,
+				500B0D332E8017A6008FC5E1 /* PeripheralsSettings.swift */,
+				500B0D352E8017B2008FC5E1 /* PerformanceSettings.swift */,
+				500B0D372E8017E1008FC5E1 /* CompatibilitySettings.swift */,
+				500B0D392E801808008FC5E1 /* AudioSettings.swift */,
+				500B0D3B2E801815008FC5E1 /* VideoSettings.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -2525,6 +2546,7 @@
 				5030891121EFA74600FEAD12 /* Paula.cpp in Sources */,
 				5042FB132D4E4E8500E4A167 /* FilePanel.swift in Sources */,
 				50AE6EE324D9B08C000AA367 /* PaulaRegs.cpp in Sources */,
+				500B0D362E8017BC008FC5E1 /* PerformanceSettings.swift in Sources */,
 				508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */,
 				50565072254573E100A79D27 /* FSBlock.cpp in Sources */,
 				50E1905F277F69CA00B8DBE2 /* NamedPipe.cpp in Sources */,
@@ -2572,6 +2594,7 @@
 				505554AC2264C47600CB07E0 /* Mouse.cpp in Sources */,
 				509C365A260B1766004F160A /* RSCommand.cpp in Sources */,
 				50B81E0A24E6BEA5004384C9 /* CIARegs.cpp in Sources */,
+				500B0D382E8017E9008FC5E1 /* CompatibilitySettings.swift in Sources */,
 				508FE01521EA227B0043D0E9 /* GamePad.swift in Sources */,
 				5054DB6827FE98B100DAF784 /* MyControllerMedia.swift in Sources */,
 				50DF2CA02269135800795256 /* SpriteTableView.swift in Sources */,
@@ -2627,6 +2650,7 @@
 				50AE6EE124D9407F000AA367 /* BlitterRegs.cpp in Sources */,
 				504FC7D72D31887900F0B733 /* DashboardToolbar.swift in Sources */,
 				501B821D2262FFB200042871 /* RTC.cpp in Sources */,
+				500B0D3A2E80180E008FC5E1 /* AudioSettings.swift in Sources */,
 				50EFB0C82C18D72C0013B73C /* Dumpable.cpp in Sources */,
 				50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */,
 				500B0D2B2E7DC83F008FC5E1 /* LiveTextField.swift in Sources */,
@@ -2683,6 +2707,7 @@
 				50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */,
 				507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */,
 				5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */,
+				500B0D342E8017AB008FC5E1 /* PeripheralsSettings.swift in Sources */,
 				50FC08AD27819CD100F0C567 /* AgnusInfo.cpp in Sources */,
 				50AE6F8525D71FBE0004AFBC /* Error.cpp in Sources */,
 				501B00152C629A0500749664 /* Beamtraps.cpp in Sources */,
@@ -2711,6 +2736,7 @@
 				502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */,
 				5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */,
 				5041C6282791AF0800D3C494 /* SequencerRegs.cpp in Sources */,
+				500B0D302E801780008FC5E1 /* HardwareSettings.swift in Sources */,
 				508FE01B21EA227B0043D0E9 /* MyDocument.swift in Sources */,
 				9C47C0332D6215B100E57B41 /* lz4.c in Sources */,
 				508FDFDB21EA20510043D0E9 /* Shaders.swift in Sources */,
@@ -2728,6 +2754,7 @@
 				50F54B2A24B5D31D0078FDC9 /* u_init.c in Sources */,
 				507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */,
 				5062DB1224370FE400ACEEE2 /* MyControllerSnapshots.swift in Sources */,
+				500B0D322E80178F008FC5E1 /* MemorySettings.swift in Sources */,
 				508FE06521EA318D0043D0E9 /* AnyFile.cpp in Sources */,
 				50A64B96257A63A600442964 /* BootBlockImage.cpp in Sources */,
 				50627FD3286EBA7300F2A835 /* Texture.cpp in Sources */,
@@ -2753,6 +2780,7 @@
 				50F6EEB821F4F5C60091155D /* FloppyDisk.cpp in Sources */,
 				50E1E5D22242B9DA008EF4B0 /* FastBlitter.cpp in Sources */,
 				502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */,
+				500B0D3C2E801818008FC5E1 /* VideoSettings.swift in Sources */,
 				50F54B2824B5D31D0078FDC9 /* u_medium.c in Sources */,
 				5039924325B2164E0084B808 /* MyDocumentController.swift in Sources */,
 				508FE01921EA227B0043D0E9 /* MyControllerMenu.swift in Sources */,

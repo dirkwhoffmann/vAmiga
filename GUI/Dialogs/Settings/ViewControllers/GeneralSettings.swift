@@ -183,8 +183,8 @@ class GeneralSettingsViewController: SettingsViewController {
 
     override func preset(tag: Int) {
 
-        print("preset")
-        
+        print("preset(tag: \(tag))")
+
         // Revert to standard settings
         EmulatorProxy.defaults.removeGeneralUserDefaults()
 
