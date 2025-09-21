@@ -633,7 +633,7 @@ extension MyController {
             window?.backgroundColor = .windowBackgroundColor
             window?.styleMask.insert(.resizable)
             refreshStatusBar()
-            exportVideoAction(self)
+            // exportVideoAction(self)
 
         case .RECORDING_ABORTED:
             refreshStatusBar()

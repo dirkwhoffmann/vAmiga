@@ -212,13 +212,6 @@
                                     <action selector="browseScreenshotsAction:" target="-1" id="3HP-fd-Hqk"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="ESe-zb-coU"/>
-                            <menuItem title="Record video" id="RH5-Pm-o1U">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="captureScreenAction:" target="-1" id="1Q3-p1-pur"/>
-                                </connections>
-                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="MBQ-pb-t04"/>
                             <menuItem title="Configure..." keyEquivalent="" id="Y6J-U9-htE" userLabel="Configure...">
                                 <modifierMask key="keyEquivalentModifierMask"/>

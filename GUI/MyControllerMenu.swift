@@ -21,11 +21,6 @@ extension MyController: NSMenuItemValidation {
         var hdn: HardDriveProxy { return emu.hd(item.tag)! }
 
         switch item.action {
-            
-            // Machine menu
-        case #selector(MyController.captureScreenAction(_:)):
-            item.title = recording ? "Stop Recording" : "Record Screen"
-            return true
 
             // Edit menu
         case #selector(MyController.stopAndGoAction(_:)):
@@ -377,7 +372,8 @@ extension MyController: NSMenuItemValidation {
         }
         screenshotBrowser?.showAsSheet()
     }
-    
+
+    /*
     @IBAction func captureScreenAction(_ sender: Any!) {
 
         if emu.recorder.recording {
@@ -412,7 +408,8 @@ extension MyController: NSMenuItemValidation {
         let exporter = VideoExporter(with: self, nibName: "VideoExporter")
         exporter?.showAsSheet()
     }
-    
+    */
+
     //
     // Action methods (Edit menu)
     //
