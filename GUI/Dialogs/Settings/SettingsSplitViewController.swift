@@ -32,6 +32,9 @@ class SettingsSplitViewController: NSSplitViewController {
     lazy var devicesVC: DevicesSettingsViewController = {
         return main.instantiateController(withIdentifier: "DevicesSettingsViewController") as! DevicesSettingsViewController
     }()
+    lazy var romsVC: RomSettingsViewController = {
+        return main.instantiateController(withIdentifier: "RomSettingsViewController") as! RomSettingsViewController
+    }()
     lazy var hardwareVC: HardwareSettingsViewController = {
         return main.instantiateController(withIdentifier: "HardwareSettingsViewController") as! HardwareSettingsViewController
     }()
@@ -53,6 +56,7 @@ class SettingsSplitViewController: NSSplitViewController {
         case "general":     current = generalVC
         case "controls":    current = controlsVC
         case "devices":     current = devicesVC
+        case "roms":        current = romsVC
         case "hardware":    current = hardwareVC
         default:            fatalError()
         }

@@ -29,6 +29,7 @@ class SidebarViewController: NSViewController {
         SidebarItem(title: "General", iconName: "generalPrefs", identifier: .init("general")),
         SidebarItem(title: "Controls", iconName: "controlsPrefs", identifier: .init("controls")),
         SidebarItem(title: "Devices", iconName: "devicesPrefs", identifier: .init("devices")),
+        SidebarItem(title: "Roms", iconName: "romPrefs", identifier: .init("roms")),
         SidebarItem(title: "Hardware", iconName: "hardwarePrefs", identifier: .init("hardware"))
     ]
 

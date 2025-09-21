@@ -30,3 +30,32 @@ class SettingsViewController: NSViewController {
     func save() { }
     
 }
+
+class SettingsView: NSView {
+
+    private var bgLayer: CALayer?
+
+    override func viewDidMoveToSuperview() {
+
+        super.viewDidMoveToSuperview()
+        wantsLayer = true
+
+        if let layer = self.layer, bgLayer == nil {
+
+            let background = CALayer()
+            background.contents = NSImage(named: "vAmigaBg")
+            background.contentsGravity = .resizeAspectFill
+            background.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
+            layer.insertSublayer(background, at: 0)
+            bgLayer = background
+        }
+    }
+
+    override func layout() {
+
+        super.layout()
+        bgLayer?.frame = CGRect(x: 0, y: 0,
+                                width: bounds.width,
+                                height: bounds.height - 32)
+    }
+}
