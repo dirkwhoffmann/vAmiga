@@ -15,7 +15,7 @@ extension MyController: NSMenuItemValidation {
         let powered = emu.poweredOn
         let running = emu.running
         let paused = emu.paused
-        let recording = emu.recorder.recording
+        // let recording = emu.recorder.recording
 
         var dfn: FloppyDriveProxy { return emu.df(item.tag)! }
         var hdn: HardDriveProxy { return emu.hd(item.tag)! }

@@ -59,6 +59,7 @@
 		501C514A27C38FE500DF1DD5 /* DragImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501C514927C38FE500DF1DD5 /* DragImageView.swift */; };
 		501C514C27C4248300DF1DD5 /* FloppyCreator.xib in Resources */ = {isa = PBXBuildFile; fileRef = 501C514B27C4248300DF1DD5 /* FloppyCreator.xib */; };
 		501C514E27C4259F00DF1DD5 /* FloppyCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501C514D27C4259F00DF1DD5 /* FloppyCreator.swift */; };
+		501D20122E7FEE19007B1242 /* RomSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501D20112E7FEE13007B1242 /* RomSettings.swift */; };
 		501D686028085131000BB5E9 /* Defaults.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E5B9BD2807E65800502787 /* Defaults.cpp */; };
 		501FB312275E460100D0A57B /* OSDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB310275E460100D0A57B /* OSDebugger.cpp */; };
 		501FB3172762008C00D0A57B /* OSDebuggerRead.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501FB3162762008C00D0A57B /* OSDebuggerRead.cpp */; };
@@ -623,6 +624,7 @@
 		501C514927C38FE500DF1DD5 /* DragImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragImageView.swift; sourceTree = "<group>"; };
 		501C514B27C4248300DF1DD5 /* FloppyCreator.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FloppyCreator.xib; sourceTree = "<group>"; };
 		501C514D27C4259F00DF1DD5 /* FloppyCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloppyCreator.swift; sourceTree = "<group>"; };
+		501D20112E7FEE13007B1242 /* RomSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomSettings.swift; sourceTree = "<group>"; };
 		501E715022671FC20070B17D /* DeniseTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeniseTypes.h; sourceTree = "<group>"; };
 		501FB310275E460100D0A57B /* OSDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OSDebugger.cpp; sourceTree = "<group>"; };
 		501FB311275E460100D0A57B /* OSDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OSDebugger.h; sourceTree = "<group>"; };
@@ -1257,6 +1259,7 @@
 				50144E3A2E7BE703009E15B4 /* GeneralSettings.swift */,
 				500B0D242E7C9848008FC5E1 /* ControlsSettings.swift */,
 				500B0D262E7C9D56008FC5E1 /* DevicesSettings.swift */,
+				501D20112E7FEE13007B1242 /* RomSettings.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -2782,6 +2785,7 @@
 				5010A78222B50B690041388B /* PortPanel.swift in Sources */,
 				509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */,
 				50F580662431D1A000E7D84D /* Screenshot.swift in Sources */,
+				501D20122E7FEE19007B1242 /* RomSettings.swift in Sources */,
 				506407CF2D1AD87E002FBC57 /* HttpServer.cpp in Sources */,
 				50AEBEC724D3D39D0037082D /* BlitterEvents.cpp in Sources */,
 				501C513F27C0C63A00DF1DD5 /* HardDiskConfigurator.swift in Sources */,
