@@ -91,6 +91,11 @@ static const u32 CRC32_HYP322_47_111_A1200      = 0x5C40328A;
 static const u32 CRC32_HYP322_47_111_A3000      = 0x46335B57;
 static const u32 CRC32_HYP322_47_111_A4000      = 0x4BEA9798;
 static const u32 CRC32_HYP322_47_111_A4000T     = 0x36BBCD8A;
+static const u32 CRC32_HYP323_47_115_A500       = 0xE1F50B0B;
+static const u32 CRC32_HYP323_47_115_A1200      = 0xB18D3B67;
+static const u32 CRC32_HYP323_47_115_A3000      = 0x74C0B23F;
+static const u32 CRC32_HYP323_47_115_A4000      = 0xB6A4698E;
+static const u32 CRC32_HYP323_47_115_A4000T     = 0x588A5E6D;
 
 static const u32 CRC32_AROS_54705               = 0x9CE0F009;
 static const u32 CRC32_AROS_54705_EXT           = 0xE2C7F70A;

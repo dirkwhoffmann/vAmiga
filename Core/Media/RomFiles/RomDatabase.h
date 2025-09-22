@@ -408,6 +408,41 @@ static std::vector<RomTraits> roms = {
         .model      = "A4000T",
         .vendor     = RomVendor::HYPERION
     },{
+        .crc        = CRC32_HYP323_47_115_A500,
+        .title      = "Kickstart 3.2.3 (Hyperion)",
+        .revision   = "Rev 47.115",
+        .released   = "April 2025",
+        .model      = "A500, A600, A1000, A2000, CDTV",
+        .vendor     = RomVendor::HYPERION
+    },{
+        .crc        = CRC32_HYP323_47_115_A1200,
+        .title      = "Kickstart 3.2.3 (Hyperion)",
+        .revision   = "Rev 47.115",
+        .released   = "April 2025",
+        .model      = "A1200",
+        .vendor     = RomVendor::HYPERION
+    },{
+        .crc        = CRC32_HYP323_47_115_A3000,
+        .title      = "Kickstart 3.2.3 (Hyperion)",
+        .revision   = "Rev 47.115",
+        .released   = "April 2025",
+        .model      = "A3000",
+        .vendor     = RomVendor::HYPERION
+    },{
+        .crc        = CRC32_HYP323_47_115_A4000,
+        .title      = "Kickstart 3.2.3 (Hyperion)",
+        .revision   = "Rev 47.115",
+        .released   = "April 2025",
+        .model      = "A4000",
+        .vendor     = RomVendor::HYPERION
+    },{
+        .crc        = CRC32_HYP323_47_115_A4000T,
+        .title      = "Kickstart 3.2.3 (Hyperion)",
+        .revision   = "Rev 47.115",
+        .released   = "April 2025",
+        .model      = "A4000T",
+        .vendor     = RomVendor::HYPERION
+    },{
         .crc        = CRC32_AROS_54705,
         .title      = "AROS Kickstart replacement",
         .revision   = "SVN 54705",
