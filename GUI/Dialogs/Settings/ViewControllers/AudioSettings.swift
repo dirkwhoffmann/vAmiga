@@ -54,11 +54,11 @@ class AudioSettingsViewController: SettingsViewController {
     
     override func viewDidLoad() {
 
-        print("AudioSettingsViewController::viewDidLoad")
+        log(.lifetime)
     }
 
     //
-    // Refresh
+    // Methods from SettingsViewController
     //
 
     override func refresh() {
@@ -66,17 +66,11 @@ class AudioSettingsViewController: SettingsViewController {
         super.refresh()
     }
 
-    //
-    // Action methods
-    //
-
     override func preset(tag: Int) {
 
-        print("AudioSettingsViewController::preset")
     }
 
     override func save() {
 
-        print("AudioSettingsViewController::preset")
     }
 }

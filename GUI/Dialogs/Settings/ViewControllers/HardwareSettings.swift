@@ -10,64 +10,84 @@
 class HardwareSettingsViewController: SettingsViewController {
 
     // CPU
-    @IBOutlet weak var csCpuRevision: NSPopUpButton!
-    @IBOutlet weak var csCpuSpeed: NSPopUpButton!
-    @IBOutlet weak var csCpuInfo1: NSTextField!
-    @IBOutlet weak var csCpuInfo2: NSTextField!
+    @IBOutlet weak var cpuRevision: NSPopUpButton!
+    @IBOutlet weak var cpuSpeed: NSPopUpButton!
+    @IBOutlet weak var cpuInfo1: NSTextField!
+    @IBOutlet weak var cpuInfo2: NSTextField!
 
     // Agnus
-    @IBOutlet weak var csAgnusRevision: NSPopUpButton!
-    @IBOutlet weak var csMachineType: NSPopUpButton!
-    @IBOutlet weak var csAgnusInfo1: NSTextField!
-    @IBOutlet weak var csAgnusInfo2: NSTextField!
+    @IBOutlet weak var agnusRevision: NSPopUpButton!
+    @IBOutlet weak var machineType: NSPopUpButton!
+    @IBOutlet weak var agnusInfo1: NSTextField!
+    @IBOutlet weak var agnusInfo2: NSTextField!
 
     // Denise
-    @IBOutlet weak var csDeniseRevision: NSPopUpButton!
-    @IBOutlet weak var csDeniseInfo1: NSTextField!
-    @IBOutlet weak var csDeniseInfo2: NSTextField!
+    @IBOutlet weak var deniseRevision: NSPopUpButton!
+    @IBOutlet weak var deniseInfo1: NSTextField!
+    @IBOutlet weak var deniseInfo2: NSTextField!
 
     // CIAs
-    @IBOutlet weak var csCiaRevision: NSPopUpButton!
-    @IBOutlet weak var csCiaInfo1: NSTextField!
-    @IBOutlet weak var csCiaInfo2: NSTextField!
+    @IBOutlet weak var ciaRevision: NSPopUpButton!
+    @IBOutlet weak var ciaInfo1: NSTextField!
+    @IBOutlet weak var ciaInfo2: NSTextField!
 
     // RTC
-    @IBOutlet weak var csRtcRevision: NSPopUpButton!
-    @IBOutlet weak var csRtcInfo1: NSTextField!
-    @IBOutlet weak var csRtcInfo2: NSTextField!
-    @IBOutlet weak var csRtcIcon: NSButton!
+    @IBOutlet weak var rtcRevision: NSPopUpButton!
+    @IBOutlet weak var rtcInfo1: NSTextField!
+    @IBOutlet weak var rtcInfo2: NSTextField!
+    @IBOutlet weak var rtcIcon: NSButton!
 
-    // RAM
-    @IBOutlet weak var memChipRamPopup: NSPopUpButton!
-    @IBOutlet weak var memSlowRamPopup: NSPopUpButton!
-    @IBOutlet weak var memFastRamPopup: NSPopUpButton!
+    // Chip RAM
+    @IBOutlet weak var chipRamPopup: NSPopUpButton!
+    @IBOutlet weak var chipRamInfo1: NSTextField!
+    @IBOutlet weak var chipRamInfo2: NSTextField!
 
-    // Memory handling
-    @IBOutlet weak var memRamInitPattern: NSPopUpButton!
-    @IBOutlet weak var memBankMap: NSPopUpButton!
-    @IBOutlet weak var memUnmappingType: NSPopUpButton!
+    // Slow RAM
+    @IBOutlet weak var slowRamPopup: NSPopUpButton!
+    @IBOutlet weak var slowRamInfo1: NSTextField!
+    @IBOutlet weak var slowRamInfo2: NSTextField!
+    @IBOutlet weak var slowRamIcon: NSButton!
+
+    // Fast RAM
+    @IBOutlet weak var fastRamPopup: NSPopUpButton!
+    @IBOutlet weak var fastRamInfo1: NSTextField!
+    @IBOutlet weak var fastRamInfo2: NSTextField!
+    @IBOutlet weak var fastRamIcon: NSButton!
+
+    // Memory Properties
+    @IBOutlet weak var ramInitPattern: NSPopUpButton!
+    @IBOutlet weak var bankMap: NSPopUpButton!
+    @IBOutlet weak var unmappingType: NSPopUpButton!
 
     // Warning
-    @IBOutlet weak var memWarnImage: NSButton!
+    @IBOutlet weak var warnImage: NSButton!
     
     override func viewDidLoad() {
 
-        print("HardwareSettingsViewController::viewDidLoad")
+        log(.lifetime)
     }
 
     //
-    // Refresh
+    // Methods from SettingsViewController
     //
 
+    /*
     var bootable: Bool {
 
         do { try emu?.isReady() } catch { return false }
         return emu?.poweredOff ?? false
     }
+    */
 
     override func refresh() {
 
         super.refresh()
+
+        refreshChipset()
+        refreshMemory()
+    }
+
+    func refreshChipset() {
 
         guard let emu = emu, let config = config else { return }
 
@@ -75,177 +95,152 @@ class HardwareSettingsViewController: SettingsViewController {
         let pal = config.machineType == VideoFormat.PAL.rawValue
 
         // CPU
-        csCpuRevision.selectItem(withTag: config.cpuRev)
-        csCpuSpeed.selectItem(withTag: config.cpuSpeed)
+        cpuRevision.selectItem(withTag: config.cpuRev)
+        cpuSpeed.selectItem(withTag: config.cpuSpeed)
         switch CPURevision(rawValue: config.cpuRev) {
 
         case ._68000:
-            csCpuInfo1.stringValue = "Motorola MC68000"
-            csCpuInfo2.stringValue = "Original Amigas"
+            cpuInfo1.stringValue = "Motorola MC68000"
+            cpuInfo2.stringValue = "Original Amigas"
 
         case ._68010:
-            csCpuInfo1.stringValue = "Motorola MC68010"
-            csCpuInfo2.stringValue = ""
+            cpuInfo1.stringValue = "Motorola MC68010"
+            cpuInfo2.stringValue = ""
 
         case ._68EC020:
-            csCpuInfo1.stringValue = "Motorola 68EC020"
-            csCpuInfo2.stringValue = "A1200, A2500"
+            cpuInfo1.stringValue = "Motorola 68EC020"
+            cpuInfo2.stringValue = "A1200, A2500"
 
         default:
-            csCpuInfo1.stringValue = "Invalid"
-            csCpuInfo2.stringValue = ""
+            cpuInfo1.stringValue = "Invalid"
+            cpuInfo2.stringValue = ""
         }
 
         // Agnus
-        csMachineType.selectItem(withTag: config.machineType)
-        csAgnusRevision.selectItem(withTag: config.agnusRev)
+        machineType.selectItem(withTag: config.machineType)
+        agnusRevision.selectItem(withTag: config.agnusRev)
         switch AgnusRevision(rawValue: config.agnusRev) {
 
         case .OCS_OLD:
-            csAgnusInfo1.stringValue = pal ? "MOS 8367" : "MOS 8361"
-            csAgnusInfo2.stringValue = "A1000, A2000A"
+            agnusInfo1.stringValue = pal ? "MOS 8367" : "MOS 8361"
+            agnusInfo2.stringValue = "A1000, A2000A"
 
         case .OCS:
-            csAgnusInfo1.stringValue = pal ? "MOS 8371" : "MOS 8370"
-            csAgnusInfo2.stringValue = "Early A500, A2000"
+            agnusInfo1.stringValue = pal ? "MOS 8371" : "MOS 8370"
+            agnusInfo2.stringValue = "Early A500, A2000"
 
         case .ECS_1MB:
-            csAgnusInfo1.stringValue = "MOS 8372A"
-            csAgnusInfo2.stringValue = "Later A500, A2000"
+            agnusInfo1.stringValue = "MOS 8372A"
+            agnusInfo2.stringValue = "Later A500, A2000"
 
         case .ECS_2MB:
-            csAgnusInfo1.stringValue = "MOS 8375"
-            csAgnusInfo2.stringValue = "A500+, A600"
+            agnusInfo1.stringValue = "MOS 8375"
+            agnusInfo2.stringValue = "A500+, A600"
 
         default:
-            csAgnusInfo1.stringValue = "Invalid"
-            csAgnusInfo2.stringValue = ""
+            agnusInfo1.stringValue = "Invalid"
+            agnusInfo2.stringValue = ""
         }
 
         // Denise
-        csDeniseRevision.selectItem(withTag: config.deniseRev)
+        deniseRevision.selectItem(withTag: config.deniseRev)
         switch DeniseRevision(rawValue: config.deniseRev) {
 
         case .OCS:
-            csDeniseInfo1.stringValue = "MOS 8362R8"
-            csDeniseInfo2.stringValue = "A500, A1000, A2000"
+            deniseInfo1.stringValue = "MOS 8362R8"
+            deniseInfo2.stringValue = "A500, A1000, A2000"
 
         case .ECS:
-            csDeniseInfo1.stringValue = "MOS 8373R4"
-            csDeniseInfo2.stringValue = "A500+, A600"
+            deniseInfo1.stringValue = "MOS 8373R4"
+            deniseInfo2.stringValue = "A500+, A600"
 
         default:
-            csDeniseInfo1.stringValue = "Invalid"
-            csDeniseInfo2.stringValue = ""
+            deniseInfo1.stringValue = "Invalid"
+            deniseInfo2.stringValue = ""
         }
 
         // CIAs
-        csCiaRevision.selectItem(withTag: config.ciaRev)
+        ciaRevision.selectItem(withTag: config.ciaRev)
         switch CIARevision(rawValue: config.ciaRev) {
 
         case .MOS_8520_DIP:
-            csCiaInfo1.stringValue = "MOS 8520"
-            csCiaInfo2.stringValue = "A500, A1000, A2000, A500+"
+            ciaInfo1.stringValue = "MOS 8520"
+            ciaInfo2.stringValue = "A500, A1000, A2000, A500+"
 
         case .MOS_8520_PLCC:
-            csCiaInfo1.stringValue = "MOS 8520PL"
-            csCiaInfo2.stringValue = "A600"
+            ciaInfo1.stringValue = "MOS 8520PL"
+            ciaInfo2.stringValue = "A600"
 
         default:
-            csCiaInfo1.stringValue = "Invalid"
-            csCiaInfo2.stringValue = ""
+            ciaInfo1.stringValue = "Invalid"
+            ciaInfo2.stringValue = ""
         }
 
         // RTC
-        csRtcRevision.selectItem(withTag: config.rtClock)
+        rtcRevision.selectItem(withTag: config.rtClock)
         switch RTCRevision(rawValue: config.rtClock) {
 
         case .NONE:
-            csRtcInfo1.stringValue = ""
-            csRtcInfo2.stringValue = ""
-            csRtcIcon.isHidden = true
+            rtcInfo1.stringValue = ""
+            rtcInfo2.stringValue = ""
+            rtcIcon.isHidden = true
 
         case .OKI:
-            csRtcInfo1.stringValue = "MSM6242B"
-            csRtcInfo2.stringValue = "A2000, A500+"
-            csRtcIcon.isHidden = false
+            rtcInfo1.stringValue = "MSM6242B"
+            rtcInfo2.stringValue = "A2000, A500+"
+            rtcIcon.isHidden = false
 
         case .RICOH:
-            csRtcInfo1.stringValue = "RF5C01A"
-            csRtcInfo2.stringValue = "A3000, A4000"
-            csRtcIcon.isHidden = false
+            rtcInfo1.stringValue = "RF5C01A"
+            rtcInfo2.stringValue = "A3000, A4000"
+            rtcIcon.isHidden = false
 
         default:
-            csRtcInfo1.stringValue = "Invalid"
-            csRtcInfo2.stringValue = ""
-            csRtcIcon.isHidden = true
+            rtcInfo1.stringValue = "Invalid"
+            rtcInfo2.stringValue = ""
+            rtcIcon.isHidden = true
         }
 
         // Disable some controls if emulator is powered on
-        csAgnusRevision.isEnabled = poweredOff
-        csDeniseRevision.isEnabled = poweredOff
-        csCiaRevision.isEnabled = poweredOff
-        csRtcRevision.isEnabled = poweredOff
-
-        // Lock
-        /*
-        hwLockImage.isHidden = emu.poweredOff
-        hwLockInfo1.isHidden = emu.poweredOff
-        hwLockInfo2.isHidden = emu.poweredOff
-        */
-
-        // Buttons
-        // hwPowerButton.isHidden = !bootable
+        agnusRevision.isEnabled = poweredOff
+        deniseRevision.isEnabled = poweredOff
+        ciaRevision.isEnabled = poweredOff
+        rtcRevision.isEnabled = poweredOff
     }
 
-    @IBAction func hwPresetAction(_ sender: NSPopUpButton!) {
+    func refreshMemory() {
 
-        csPresetAction(sender)
+        guard let emu = emu, let config = config else { return }
+
+        let poweredOff = emu.poweredOff
+        let traits = emu.agnus.traits
+        let badAgnus = traits.chipRamLimit < config.chipRam
+
+        // Memory
+        chipRamPopup.selectItem(withTag: config.chipRam)
+        slowRamPopup.selectItem(withTag: config.slowRam)
+        fastRamPopup.selectItem(withTag: config.fastRam)
+        ramInitPattern.selectItem(withTag: config.ramInitPattern)
+        bankMap.selectItem(withTag: config.bankMap)
+        unmappingType.selectItem(withTag: config.unmappingType)
+
+        // Disable some controls if emulator is powered on
+        chipRamPopup.isEnabled = poweredOff
+        slowRamPopup.isEnabled = poweredOff
+        fastRamPopup.isEnabled = poweredOff
+        ramInitPattern.isEnabled = poweredOff
+        bankMap.isEnabled = poweredOff
+        unmappingType.isEnabled = poweredOff
+
+        // Memory warning
+        print("badAgnus: \(badAgnus) \(config.chipRam)")
+        warnImage.isHidden = !badAgnus
+        warnImage.toolTip =
+        "Chip Ram is not fully usable. " +
+        "The selected Agnus revision is limited to address \(traits.chipRamLimit) KB."
     }
 
-    /*
-    @IBAction func hwDefaultsAction(_ sender: NSButton!) {
-
-        csDefaultsAction(sender)
-    }
-    */
-
-    @IBAction func csCpuRevAction(_ sender: NSPopUpButton!) {
-
-        config?.cpuRev = sender.selectedTag()
-    }
-
-    @IBAction func csCpuSpeedAction(_ sender: NSPopUpButton!) {
-
-        config?.cpuSpeed = sender.selectedTag()
-    }
-
-    @IBAction func csAgnusRevAction(_ sender: NSPopUpButton!) {
-
-        config?.agnusRev = sender.selectedTag()
-    }
-
-    @IBAction func csMachineTypeAction(_ sender: NSPopUpButton!) {
-
-        config?.machineType = sender.selectedTag()
-    }
-
-    @IBAction func csDeniseRevAction(_ sender: NSPopUpButton!) {
-
-        config?.deniseRev = sender.selectedTag()
-    }
-
-    @IBAction func csCiaRevAction(_ sender: NSPopUpButton!) {
-
-        config?.ciaRev = sender.selectedTag()
-    }
-
-    @IBAction func csRealTimeClockAction(_ sender: NSPopUpButton!) {
-
-        config?.rtClock = sender.selectedTag()
-    }
-
-    @IBAction func csPresetAction(_ sender: NSPopUpButton!) {
+    override func preset(tag: Int) {
 
         let defaults = EmulatorProxy.defaults!
 
@@ -253,7 +248,7 @@ class HardwareSettingsViewController: SettingsViewController {
         EmulatorProxy.defaults.removeChipsetUserDefaults()
 
         // Modify some settings
-        switch sender.selectedTag() {
+        switch tag {
 
         case 0:
 
@@ -291,18 +286,82 @@ class HardwareSettingsViewController: SettingsViewController {
         config?.applyChipsetUserDefaults()
     }
 
-    //
-    // Action methods
-    //
-
-    override func preset(tag: Int) {
-
-        print("HardwareSettingsViewController::preset")
-    }
-
     override func save() {
 
-        print("HardwareSettingsViewController::preset")
+        log(.lifetime)
         config?.saveChipsetUserDefaults()
+    }
+
+    //
+    // Action function (Chipset)
+    //
+
+    @IBAction func cpuRevAction(_ sender: NSPopUpButton!) {
+
+        config?.cpuRev = sender.selectedTag()
+    }
+
+    @IBAction func cpuSpeedAction(_ sender: NSPopUpButton!) {
+
+        config?.cpuSpeed = sender.selectedTag()
+    }
+
+    @IBAction func agnusRevAction(_ sender: NSPopUpButton!) {
+
+        config?.agnusRev = sender.selectedTag()
+    }
+
+    @IBAction func machineTypeAction(_ sender: NSPopUpButton!) {
+
+        config?.machineType = sender.selectedTag()
+    }
+
+    @IBAction func deniseRevAction(_ sender: NSPopUpButton!) {
+
+        config?.deniseRev = sender.selectedTag()
+    }
+
+    @IBAction func ciaRevAction(_ sender: NSPopUpButton!) {
+
+        config?.ciaRev = sender.selectedTag()
+    }
+
+    @IBAction func realTimeClockAction(_ sender: NSPopUpButton!) {
+
+        config?.rtClock = sender.selectedTag()
+    }
+
+    //
+    // Action function (Memory)
+    //
+
+    @IBAction func chipRamAction(_ sender: NSPopUpButton!) {
+
+        config?.chipRam = sender.selectedTag()
+    }
+
+    @IBAction func slowRamAction(_ sender: NSPopUpButton!) {
+
+        config?.slowRam = sender.selectedTag()
+    }
+
+    @IBAction func fastRamAction(_ sender: NSPopUpButton!) {
+
+        config?.fastRam = sender.selectedTag()
+    }
+
+    @IBAction func bankMapAction(_ sender: NSPopUpButton!) {
+
+        config?.bankMap = sender.selectedTag()
+    }
+
+    @IBAction func unmappingTypeAction(_ sender: NSPopUpButton!) {
+
+        config?.unmappingType = sender.selectedTag()
+    }
+
+    @IBAction func ramInitPatternAction(_ sender: NSPopUpButton!) {
+
+        config?.ramInitPattern = sender.selectedTag()
     }
 }

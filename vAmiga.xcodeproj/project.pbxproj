@@ -26,7 +26,6 @@
 		500B0D2B2E7DC83F008FC5E1 /* LiveTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D2A2E7DC839008FC5E1 /* LiveTextField.swift */; };
 		500B0D2D2E7DF5BA008FC5E1 /* SettingsOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D2C2E7DF5B5008FC5E1 /* SettingsOutlineView.swift */; };
 		500B0D302E801780008FC5E1 /* HardwareSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D2F2E80177A008FC5E1 /* HardwareSettings.swift */; };
-		500B0D322E80178F008FC5E1 /* MemorySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D312E801787008FC5E1 /* MemorySettings.swift */; };
 		500B0D342E8017AB008FC5E1 /* PeripheralsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D332E8017A6008FC5E1 /* PeripheralsSettings.swift */; };
 		500B0D362E8017BC008FC5E1 /* PerformanceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D352E8017B2008FC5E1 /* PerformanceSettings.swift */; };
 		500B0D382E8017E9008FC5E1 /* CompatibilitySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D372E8017E1008FC5E1 /* CompatibilitySettings.swift */; };
@@ -588,7 +587,6 @@
 		500B0D2A2E7DC839008FC5E1 /* LiveTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTextField.swift; sourceTree = "<group>"; };
 		500B0D2C2E7DF5B5008FC5E1 /* SettingsOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsOutlineView.swift; sourceTree = "<group>"; };
 		500B0D2F2E80177A008FC5E1 /* HardwareSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardwareSettings.swift; sourceTree = "<group>"; };
-		500B0D312E801787008FC5E1 /* MemorySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemorySettings.swift; sourceTree = "<group>"; };
 		500B0D332E8017A6008FC5E1 /* PeripheralsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralsSettings.swift; sourceTree = "<group>"; };
 		500B0D352E8017B2008FC5E1 /* PerformanceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceSettings.swift; sourceTree = "<group>"; };
 		500B0D372E8017E1008FC5E1 /* CompatibilitySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilitySettings.swift; sourceTree = "<group>"; };
@@ -1278,7 +1276,6 @@
 				500B0D262E7C9D56008FC5E1 /* DevicesSettings.swift */,
 				501D20112E7FEE13007B1242 /* RomSettings.swift */,
 				500B0D2F2E80177A008FC5E1 /* HardwareSettings.swift */,
-				500B0D312E801787008FC5E1 /* MemorySettings.swift */,
 				500B0D332E8017A6008FC5E1 /* PeripheralsSettings.swift */,
 				500B0D352E8017B2008FC5E1 /* PerformanceSettings.swift */,
 				500B0D372E8017E1008FC5E1 /* CompatibilitySettings.swift */,
@@ -2758,7 +2755,6 @@
 				50F54B2A24B5D31D0078FDC9 /* u_init.c in Sources */,
 				507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */,
 				5062DB1224370FE400ACEEE2 /* MyControllerSnapshots.swift in Sources */,
-				500B0D322E80178F008FC5E1 /* MemorySettings.swift in Sources */,
 				508FE06521EA318D0043D0E9 /* AnyFile.cpp in Sources */,
 				50A64B96257A63A600442964 /* BootBlockImage.cpp in Sources */,
 				50627FD3286EBA7300F2A835 /* Texture.cpp in Sources */,

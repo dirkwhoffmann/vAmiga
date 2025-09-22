@@ -45,6 +45,10 @@ class DevicesSettingsViewController: SettingsViewController {
         return pad?.device?.usageDescription ?? property(kIOHIDPrimaryUsageKey)
     }
 
+    //
+    // Methods from SettingsViewController
+    //
+
     override func refresh() {
 
         super.refresh()

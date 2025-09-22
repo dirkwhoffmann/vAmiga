@@ -43,11 +43,11 @@ class RomSettingsViewController: SettingsViewController {
 
     override func viewDidLoad() {
 
-        print("RomSettingsViewController::viewDidLoad")
+        log(.lifetime)
     }
-
+    
     //
-    // Refresh
+    // Methods from SettingsViewController
     //
 
     override func refresh() {
@@ -55,17 +55,11 @@ class RomSettingsViewController: SettingsViewController {
         super.refresh()
     }
 
-    //
-    // Action methods
-    //
-
     override func preset(tag: Int) {
 
-        print("RomSettingsViewController::preset")
     }
 
     override func save() {
 
-        print("RomSettingsViewController::preset")
     }
 }

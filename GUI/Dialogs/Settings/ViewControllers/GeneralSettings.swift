@@ -30,7 +30,7 @@ class GeneralSettingsViewController: SettingsViewController {
 
     override func viewDidLoad() {
 
-        print("GeneralSettingsViewController::viewDidLoad")
+        log(.lifetime)
     }
 
     //

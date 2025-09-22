@@ -47,7 +47,7 @@ class ControlsSettingsViewController: SettingsViewController {
     @IBOutlet weak var disconnectKeys: NSButton!
 
     //
-    // Refresh
+    // Methods from SettingsViewController
     //
 
     override func refresh() {

@@ -307,6 +307,15 @@ struct Keys {
         static let keepAspectRatio        = "General.FullscreenKeepAspectRatio"
         static let exitOnEsc              = "General.FullscreenExitOnEsc"
 
+        // Mouse
+        static let retainMouseKeyComb    = "General.RetainMouseKeyComb"
+        static let retainMouseWithKeys   = "General.RetainMouseWithKeys"
+        static let retainMouseByClick    = "General.RetainMouseByClick"
+        static let retainMouseByEntering = "General.RetainMouseByEntering"
+        static let releaseMouseKeyComb   = "General.ReleaseMouseKeyComb"
+        static let releaseMouseWithKeys  = "General.ReleaseMouseWithKeys"
+        static let releaseMouseByShaking = "General.ReleaseMouseByShaking"
+
         // Miscellaneous
         static let ejectWithoutAsking     = "General.EjectWithoutAsking"
         static let detachWithoutAsking    = "General.DetachWithoutAsking"
@@ -326,6 +335,15 @@ extension DefaultsProxy {
         register(Keys.Gen.keepAspectRatio, false)
         register(Keys.Gen.exitOnEsc, true)
 
+        // Mouse
+        register(Keys.Gen.retainMouseKeyComb, 0)
+        register(Keys.Gen.retainMouseWithKeys, true)
+        register(Keys.Gen.retainMouseByClick, true)
+        register(Keys.Gen.retainMouseByEntering, false)
+        register(Keys.Gen.releaseMouseKeyComb, 0)
+        register(Keys.Gen.releaseMouseWithKeys, true)
+        register(Keys.Gen.releaseMouseByShaking, true)
+
         // Misc
         register(Keys.Gen.ejectWithoutAsking, false)
         register(Keys.Gen.detachWithoutAsking, false)
@@ -339,6 +357,14 @@ extension DefaultsProxy {
         
         let keys = [ Keys.Gen.keepAspectRatio,
                      Keys.Gen.exitOnEsc,
+
+                     Keys.Gen.retainMouseKeyComb,
+                     Keys.Gen.retainMouseWithKeys,
+                     Keys.Gen.retainMouseByClick,
+                     Keys.Gen.retainMouseByEntering,
+                     Keys.Gen.releaseMouseKeyComb,
+                     Keys.Gen.releaseMouseWithKeys,
+                     Keys.Gen.releaseMouseByShaking,
 
                      Keys.Gen.ejectWithoutAsking,
                      Keys.Gen.detachWithoutAsking,
@@ -361,6 +387,14 @@ extension Preferences {
         defaults.set(Keys.Gen.keepAspectRatio, keepAspectRatio)
         defaults.set(Keys.Gen.exitOnEsc, exitOnEsc)
 
+        defaults.set(Keys.Gen.retainMouseKeyComb, retainMouseKeyComb)
+        defaults.set(Keys.Gen.retainMouseWithKeys, retainMouseWithKeys)
+        defaults.set(Keys.Gen.retainMouseByClick, retainMouseByClick)
+        defaults.set(Keys.Gen.retainMouseByEntering, retainMouseByEntering)
+        defaults.set(Keys.Gen.releaseMouseKeyComb, releaseMouseKeyComb)
+        defaults.set(Keys.Gen.releaseMouseWithKeys, releaseMouseWithKeys)
+        defaults.set(Keys.Gen.releaseMouseByShaking, releaseMouseByShaking)
+
         defaults.set(Keys.Gen.ejectWithoutAsking, ejectWithoutAsking)
         defaults.set(Keys.Gen.detachWithoutAsking, detachWithoutAsking)
         defaults.set(Keys.Gen.closeWithoutAsking, closeWithoutAsking)
@@ -376,6 +410,14 @@ extension Preferences {
 
         keepAspectRatio = defaults.bool(Keys.Gen.keepAspectRatio)
         exitOnEsc = defaults.bool(Keys.Gen.exitOnEsc)
+
+        retainMouseKeyComb = defaults.int(Keys.Gen.retainMouseKeyComb)
+        retainMouseWithKeys = defaults.bool(Keys.Gen.retainMouseWithKeys)
+        retainMouseByClick = defaults.bool(Keys.Gen.retainMouseByClick)
+        retainMouseByEntering = defaults.bool(Keys.Gen.retainMouseByEntering)
+        releaseMouseKeyComb = defaults.int(Keys.Gen.releaseMouseKeyComb)
+        releaseMouseWithKeys = defaults.bool(Keys.Gen.releaseMouseWithKeys)
+        releaseMouseByShaking = defaults.bool(Keys.Gen.releaseMouseByShaking)
 
         ejectWithoutAsking = defaults.bool(Keys.Gen.ejectWithoutAsking)
         detachWithoutAsking = defaults.bool(Keys.Gen.detachWithoutAsking)
@@ -504,15 +546,6 @@ extension Keys {
         static let autofireBursts        = "Controls.AutofireBursts"
         static let autofireBullets       = "Controls.AutofireBullets"
         static let autofireFrequency     = "Controls.AutofireFrequency"
-        
-        // Mouse
-        static let retainMouseKeyComb    = "Controls.RetainMouseKeyComb"
-        static let retainMouseWithKeys   = "Controls.RetainMouseWithKeys"
-        static let retainMouseByClick    = "Controls.RetainMouseByClick"
-        static let retainMouseByEntering = "Controls.RetainMouseByEntering"
-        static let releaseMouseKeyComb   = "Controls.ReleaseMouseKeyComb"
-        static let releaseMouseWithKeys  = "Controls.ReleaseMouseWithKeys"
-        static let releaseMouseByShaking = "Controls.ReleaseMouseByShaking"
     }
 }
 
@@ -554,15 +587,6 @@ extension DefaultsProxy {
         register(Keys.Con.autofireBursts, false)
         register(Keys.Con.autofireBullets, 3)
         register(Keys.Con.autofireFrequency, 25)
-
-        // Mouse
-        register(Keys.Con.retainMouseKeyComb, 0)
-        register(Keys.Con.retainMouseWithKeys, true)
-        register(Keys.Con.retainMouseByClick, true)
-        register(Keys.Con.retainMouseByEntering, false)
-        register(Keys.Con.releaseMouseKeyComb, 0)
-        register(Keys.Con.releaseMouseWithKeys, true)
-        register(Keys.Con.releaseMouseByShaking, true)
     }
     
     func removeControlsUserDefaults() {
@@ -576,15 +600,7 @@ extension DefaultsProxy {
                      
                      Keys.Con.autofire,
                      Keys.Con.autofireBullets,
-                     Keys.Con.autofireFrequency,
-                     
-                     Keys.Con.retainMouseKeyComb,
-                     Keys.Con.retainMouseWithKeys,
-                     Keys.Con.retainMouseByClick,
-                     Keys.Con.retainMouseByEntering,
-                     Keys.Con.releaseMouseKeyComb,
-                     Keys.Con.releaseMouseWithKeys,
-                     Keys.Con.releaseMouseByShaking ]
+                     Keys.Con.autofireFrequency ]
 
         for key in keys { removeKey(key) }
     }
@@ -608,14 +624,6 @@ extension Preferences {
         defaults.set(Keys.Con.autofireBullets, autofireBullets)
         defaults.set(Keys.Con.autofireFrequency, autofireFrequency)
 
-        defaults.set(Keys.Con.retainMouseKeyComb, retainMouseKeyComb)
-        defaults.set(Keys.Con.retainMouseWithKeys, retainMouseWithKeys)
-        defaults.set(Keys.Con.retainMouseByClick, retainMouseByClick)
-        defaults.set(Keys.Con.retainMouseByEntering, retainMouseByEntering)
-        defaults.set(Keys.Con.releaseMouseKeyComb, releaseMouseKeyComb)
-        defaults.set(Keys.Con.releaseMouseWithKeys, releaseMouseWithKeys)
-        defaults.set(Keys.Con.releaseMouseByShaking, releaseMouseByShaking)
-        
         defaults.save()
     }
     
@@ -633,14 +641,6 @@ extension Preferences {
         autofireBursts = defaults.bool(Keys.Con.autofireBursts)
         autofireBullets = defaults.int(Keys.Con.autofireBullets)
         autofireFrequency = defaults.int(Keys.Con.autofireFrequency)
-
-        retainMouseKeyComb = defaults.int(Keys.Con.retainMouseKeyComb)
-        retainMouseWithKeys = defaults.bool(Keys.Con.retainMouseWithKeys)
-        retainMouseByClick = defaults.bool(Keys.Con.retainMouseByClick)
-        retainMouseByEntering = defaults.bool(Keys.Con.retainMouseByEntering)
-        releaseMouseKeyComb = defaults.int(Keys.Con.releaseMouseKeyComb)
-        releaseMouseWithKeys = defaults.bool(Keys.Con.releaseMouseWithKeys)
-        releaseMouseByShaking = defaults.bool(Keys.Con.releaseMouseByShaking)
     }
 }
 

@@ -58,29 +58,23 @@ class PeripheralsSettingsViewController: SettingsViewController {
     
     override func viewDidLoad() {
 
-        print("PeripheralsSettingsViewController::viewDidLoad")
+        log(.lifetime)
     }
 
     //
-    // Refresh
+    // Methods from SettingsViewController
     //
-
+    
     override func refresh() {
 
         super.refresh()
     }
 
-    //
-    // Action methods
-    //
-
     override func preset(tag: Int) {
 
-        print("PeripheralsSettingsViewController::preset")
     }
 
     override func save() {
 
-        print("PeripheralsSettingsViewController::preset")
     }
 }

@@ -67,11 +67,11 @@ class VideoSettingsViewController: SettingsViewController {
 
     override func viewDidLoad() {
 
-        print("VideoSettingsViewController::viewDidLoad")
+        log(.lifetime)
     }
 
     //
-    // Refresh
+    // Methods from SettingsViewController
     //
 
     override func refresh() {
@@ -79,17 +79,11 @@ class VideoSettingsViewController: SettingsViewController {
         super.refresh()
     }
 
-    //
-    // Action methods
-    //
-
     override func preset(tag: Int) {
 
-        print("VideoSettingsViewController::preset")
     }
 
     override func save() {
 
-        print("VideoSettingsViewController::preset")
     }
 }

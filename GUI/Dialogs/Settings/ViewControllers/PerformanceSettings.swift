@@ -42,11 +42,11 @@ class PerformanceSettingsViewController: SettingsViewController {
     
     override func viewDidLoad() {
 
-        print("PerformanceSettingsViewController::viewDidLoad")
+        log(.lifetime)
     }
 
     //
-    // Refresh
+    // Methods from SettingsViewController
     //
 
     override func refresh() {
@@ -54,17 +54,11 @@ class PerformanceSettingsViewController: SettingsViewController {
         super.refresh()
     }
 
-    //
-    // Action methods
-    //
-
     override func preset(tag: Int) {
 
-        print("PerformanceSettingsViewController::preset")
     }
 
     override func save() {
 
-        print("PerformanceSettingsViewController::preset")
     }
 }

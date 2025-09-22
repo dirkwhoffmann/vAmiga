@@ -1905,7 +1905,7 @@
                                     </menu>
                                 </popUpButtonCell>
                                 <connections>
-                                    <action selector="csCiaRevAction:" target="Fvs-sb-K8m" id="8zv-NS-bnP"/>
+                                    <action selector="ciaRevAction:" target="Fvs-sb-K8m" id="8zv-NS-bnP"/>
                                 </connections>
                             </popUpButton>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MXo-nx-Ean">
@@ -1940,7 +1940,7 @@
                                     </menu>
                                 </popUpButtonCell>
                                 <connections>
-                                    <action selector="csDeniseRevAction:" target="Fvs-sb-K8m" id="OOa-fq-GQx"/>
+                                    <action selector="deniseRevAction:" target="Fvs-sb-K8m" id="OOa-fq-GQx"/>
                                 </connections>
                             </popUpButton>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cnZ-sv-h6D">
@@ -1976,7 +1976,7 @@
                                     </menu>
                                 </popUpButtonCell>
                                 <connections>
-                                    <action selector="csRealTimeClockAction:" target="Fvs-sb-K8m" id="ciu-cN-OtM"/>
+                                    <action selector="realTimeClockAction:" target="Fvs-sb-K8m" id="ciu-cN-OtM"/>
                                 </connections>
                             </popUpButton>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vzx-lr-m0E">
@@ -2026,7 +2026,7 @@
                                     </menu>
                                 </popUpButtonCell>
                                 <connections>
-                                    <action selector="csAgnusRevAction:" target="Fvs-sb-K8m" id="UIS-4I-DED"/>
+                                    <action selector="agnusRevAction:" target="Fvs-sb-K8m" id="UIS-4I-DED"/>
                                 </connections>
                             </popUpButton>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jVd-ja-vbl">
@@ -2111,7 +2111,7 @@
                                     </menu>
                                 </popUpButtonCell>
                                 <connections>
-                                    <action selector="csMachineTypeAction:" target="Fvs-sb-K8m" id="zTC-sP-jHj"/>
+                                    <action selector="machineTypeAction:" target="Fvs-sb-K8m" id="zTC-sP-jHj"/>
                                 </connections>
                             </popUpButton>
                             <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nnM-oD-oh9" userLabel="System">
@@ -2135,7 +2135,7 @@
                                     </menu>
                                 </popUpButtonCell>
                                 <connections>
-                                    <action selector="csCpuRevAction:" target="Fvs-sb-K8m" id="lpK-lu-cR6"/>
+                                    <action selector="cpuRevAction:" target="Fvs-sb-K8m" id="lpK-lu-cR6"/>
                                 </connections>
                             </popUpButton>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aba-1f-AWq">
@@ -2192,7 +2192,7 @@
                                     </menu>
                                 </popUpButtonCell>
                                 <connections>
-                                    <action selector="csCpuSpeedAction:" target="Fvs-sb-K8m" id="EkF-mo-Jjz"/>
+                                    <action selector="cpuSpeedAction:" target="Fvs-sb-K8m" id="EkF-mo-Jjz"/>
                                 </connections>
                             </popUpButton>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Iez-tc-aU5">
@@ -2227,6 +2227,9 @@
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
+                                <connections>
+                                    <action selector="slowRamAction:" target="Fvs-sb-K8m" id="xWY-4A-Rte"/>
+                                </connections>
                             </popUpButton>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VqW-P4-EWt">
                                 <rect key="frame" x="400" y="361" width="66" height="16"/>
@@ -2260,6 +2263,9 @@
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
+                                <connections>
+                                    <action selector="chipRamAction:" target="Fvs-sb-K8m" id="QcU-Tv-ecK"/>
+                                </connections>
                             </popUpButton>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kAs-cK-RFY">
                                 <rect key="frame" x="401" y="288" width="64" height="16"/>
@@ -2308,6 +2314,9 @@
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
+                                <connections>
+                                    <action selector="fastRamAction:" target="Fvs-sb-K8m" id="0sQ-e0-NSY"/>
+                                </connections>
                             </popUpButton>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J00-4A-i3v">
                                 <rect key="frame" x="393" y="182" width="71" height="20"/>
@@ -2341,6 +2350,9 @@
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
+                                <connections>
+                                    <action selector="bankMapAction:" target="Fvs-sb-K8m" id="lzp-zy-Dqb"/>
+                                </connections>
                             </popUpButton>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W4n-aq-Ftq">
                                 <rect key="frame" x="468" y="106" width="156" height="25"/>
@@ -2356,6 +2368,9 @@
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
+                                <connections>
+                                    <action selector="unmappingTypeAction:" target="Fvs-sb-K8m" id="BvV-k3-HPW"/>
+                                </connections>
                             </popUpButton>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PUH-x8-OWd">
                                 <rect key="frame" x="360" y="112" width="104" height="16"/>
@@ -2380,6 +2395,9 @@
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
+                                <connections>
+                                    <action selector="ramInitPatternAction:" target="Fvs-sb-K8m" id="KH7-0Y-ck4"/>
+                                </connections>
                             </popUpButton>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ffw-5r-Fbt">
                                 <rect key="frame" x="386" y="150" width="78" height="16"/>
@@ -2430,27 +2448,34 @@
                         <viewLayoutGuide key="layoutMargins" id="Q3s-aq-icm"/>
                     </view>
                     <connections>
-                        <outlet property="csAgnusInfo1" destination="jVd-ja-vbl" id="6ew-YK-udu"/>
-                        <outlet property="csAgnusInfo2" destination="u1d-al-X8D" id="6tQ-uC-jxn"/>
-                        <outlet property="csAgnusRevision" destination="6Cl-qO-xiJ" id="2w5-ws-Ttf"/>
-                        <outlet property="csCiaInfo1" destination="XbH-EN-dYp" id="PpF-HS-weg"/>
-                        <outlet property="csCiaInfo2" destination="FBl-Zz-Om5" id="Chb-eq-r4f"/>
-                        <outlet property="csCiaRevision" destination="sa4-1t-GfK" id="v62-zD-6H8"/>
-                        <outlet property="csCpuInfo1" destination="Lfk-3F-DFm" id="3sF-Zi-3co"/>
-                        <outlet property="csCpuInfo2" destination="pAu-sq-J0k" id="U4U-Az-nbR"/>
-                        <outlet property="csCpuRevision" destination="nnM-oD-oh9" id="blQ-vq-c79"/>
-                        <outlet property="csCpuSpeed" destination="AoV-n0-N1W" id="dqN-HS-JmI"/>
-                        <outlet property="csDeniseInfo1" destination="cnZ-sv-h6D" id="tGh-l2-hBI"/>
-                        <outlet property="csDeniseInfo2" destination="Ae0-54-J80" id="n4K-5s-pM5"/>
-                        <outlet property="csDeniseRevision" destination="h2k-VD-Wsd" id="0b7-Vp-nl7"/>
-                        <outlet property="csMachineType" destination="wOW-z9-ocw" id="utk-Vk-yFp"/>
-                        <outlet property="csRtcIcon" destination="7xc-HP-4Ri" id="RL0-Em-pqa"/>
-                        <outlet property="csRtcInfo1" destination="Vzx-lr-m0E" id="oLB-N5-oCd"/>
-                        <outlet property="csRtcInfo2" destination="uSO-5S-ftR" id="KsJ-OP-wic"/>
-                        <outlet property="csRtcRevision" destination="lyw-Dz-Y4p" id="nsd-eK-xhj"/>
+                        <outlet property="agnusInfo1" destination="jVd-ja-vbl" id="6ew-YK-udu"/>
+                        <outlet property="agnusInfo2" destination="u1d-al-X8D" id="6tQ-uC-jxn"/>
+                        <outlet property="agnusRevision" destination="6Cl-qO-xiJ" id="2w5-ws-Ttf"/>
+                        <outlet property="bankMap" destination="0bR-tN-uPQ" id="o8v-gy-ku5"/>
+                        <outlet property="chipRamPopup" destination="zP5-Iy-tAR" id="aYW-Lf-GZb"/>
+                        <outlet property="ciaInfo1" destination="XbH-EN-dYp" id="PpF-HS-weg"/>
+                        <outlet property="ciaInfo2" destination="FBl-Zz-Om5" id="Chb-eq-r4f"/>
+                        <outlet property="ciaRevision" destination="sa4-1t-GfK" id="v62-zD-6H8"/>
+                        <outlet property="cpuInfo1" destination="Lfk-3F-DFm" id="3sF-Zi-3co"/>
+                        <outlet property="cpuInfo2" destination="pAu-sq-J0k" id="U4U-Az-nbR"/>
+                        <outlet property="cpuRevision" destination="nnM-oD-oh9" id="blQ-vq-c79"/>
+                        <outlet property="cpuSpeed" destination="AoV-n0-N1W" id="dqN-HS-JmI"/>
+                        <outlet property="deniseInfo1" destination="cnZ-sv-h6D" id="tGh-l2-hBI"/>
+                        <outlet property="deniseInfo2" destination="Ae0-54-J80" id="n4K-5s-pM5"/>
+                        <outlet property="deniseRevision" destination="h2k-VD-Wsd" id="0b7-Vp-nl7"/>
+                        <outlet property="fastRamPopup" destination="aef-ae-Axj" id="dZX-Tk-0cG"/>
                         <outlet property="lockImage" destination="4nv-uz-AqV" id="3qd-yI-YBc"/>
                         <outlet property="lockInfo1" destination="fCH-ya-jkW" id="ZFf-9E-kEt"/>
                         <outlet property="lockInfo2" destination="mfo-sG-Rhf" id="xZd-9A-P7b"/>
+                        <outlet property="machineType" destination="wOW-z9-ocw" id="utk-Vk-yFp"/>
+                        <outlet property="ramInitPattern" destination="jmT-m1-e7Z" id="fqf-BV-COe"/>
+                        <outlet property="rtcIcon" destination="7xc-HP-4Ri" id="RL0-Em-pqa"/>
+                        <outlet property="rtcInfo1" destination="Vzx-lr-m0E" id="oLB-N5-oCd"/>
+                        <outlet property="rtcInfo2" destination="uSO-5S-ftR" id="KsJ-OP-wic"/>
+                        <outlet property="rtcRevision" destination="lyw-Dz-Y4p" id="nsd-eK-xhj"/>
+                        <outlet property="slowRamPopup" destination="WnY-gT-aEh" id="Jsj-iq-tCG"/>
+                        <outlet property="unmappingType" destination="W4n-aq-Ftq" id="FYq-YO-QGf"/>
+                        <outlet property="warnImage" destination="tcr-nI-OSY" id="wDd-zT-BS2"/>
                     </connections>
                 </viewController>
                 <customObject id="leA-G2-lrm" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

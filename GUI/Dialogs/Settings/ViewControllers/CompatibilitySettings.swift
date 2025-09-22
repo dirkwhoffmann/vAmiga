@@ -43,11 +43,11 @@ class CompatibilitySettingsViewController: SettingsViewController {
     
     override func viewDidLoad() {
 
-        print("CompatibilitySettingsViewController::viewDidLoad")
+        log(.lifetime)
     }
 
     //
-    // Refresh
+    // Methods from SettingsViewController
     //
 
     override func refresh() {
@@ -55,17 +55,11 @@ class CompatibilitySettingsViewController: SettingsViewController {
         super.refresh()
     }
 
-    //
-    // Action methods
-    //
-
     override func preset(tag: Int) {
 
-        print("CompatibilitySettingsViewController::preset")
     }
 
     override func save() {
 
-        print("CompatibilitySettingsViewController::preset")
     }
 }

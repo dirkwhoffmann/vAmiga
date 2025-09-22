@@ -27,11 +27,11 @@ class CapturesSettingsViewController: SettingsViewController {
 
     override func viewDidLoad() {
 
-        print("CapturesSettingsViewController::viewDidLoad")
+        log(.lifetime)
     }
 
     //
-    // Refresh
+    // Methods from SettingsViewController
     //
 
     override func refresh() {
