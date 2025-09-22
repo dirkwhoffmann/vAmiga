@@ -70,10 +70,8 @@ public:
         CLONE(debt)
         CLONE(slowCycles)
 
-        CLONE(cpuModel)
-        CLONE(dasmModel)
-        CLONE(instrStyle)
-        CLONE(dataStyle)
+        // CLONE(instrStyle)
+        // CLONE(dataStyle)
         CLONE(clock)
         CLONE(reg.pc)
         CLONE(reg.pc0)
@@ -113,6 +111,12 @@ public:
         CLONE(flags)
 
         CLONE(config)
+
+        if (cpuModel != other.cpuModel) {
+
+            setModel((moira::Model)other.config.revision,
+                     (moira::Model)other.config.dasmRevision);
+        }
 
         return *this;
     }
