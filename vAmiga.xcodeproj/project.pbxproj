@@ -32,6 +32,7 @@
 		500B0D382E8017E9008FC5E1 /* CompatibilitySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D372E8017E1008FC5E1 /* CompatibilitySettings.swift */; };
 		500B0D3A2E80180E008FC5E1 /* AudioSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D392E801808008FC5E1 /* AudioSettings.swift */; };
 		500B0D3C2E801818008FC5E1 /* VideoSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D3B2E801815008FC5E1 /* VideoSettings.swift */; };
+		500B0D402E8099AA008FC5E1 /* CapturesSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D3F2E8099A1008FC5E1 /* CapturesSettings.swift */; };
 		500C0A562259402D000121CD /* DiskController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500C0A542259402D000121CD /* DiskController.cpp */; };
 		500C7170255EE2AC00DDEEB2 /* Concurrency.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500C716E255EE2AC00DDEEB2 /* Concurrency.cpp */; };
 		500CE876259252ED00462836 /* DevicesPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500CE875259252ED00462836 /* DevicesPrefs.swift */; };
@@ -593,6 +594,7 @@
 		500B0D372E8017E1008FC5E1 /* CompatibilitySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilitySettings.swift; sourceTree = "<group>"; };
 		500B0D392E801808008FC5E1 /* AudioSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSettings.swift; sourceTree = "<group>"; };
 		500B0D3B2E801815008FC5E1 /* VideoSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoSettings.swift; sourceTree = "<group>"; };
+		500B0D3F2E8099A1008FC5E1 /* CapturesSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturesSettings.swift; sourceTree = "<group>"; };
 		500C0A542259402D000121CD /* DiskController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskController.cpp; sourceTree = "<group>"; };
 		500C0A552259402D000121CD /* DiskController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskController.h; sourceTree = "<group>"; };
 		500C716E255EE2AC00DDEEB2 /* Concurrency.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Concurrency.cpp; sourceTree = "<group>"; };
@@ -1271,6 +1273,7 @@
 			children = (
 				500B0D222E7C9274008FC5E1 /* SettingsViewController.swift */,
 				50144E3A2E7BE703009E15B4 /* GeneralSettings.swift */,
+				500B0D3F2E8099A1008FC5E1 /* CapturesSettings.swift */,
 				500B0D242E7C9848008FC5E1 /* ControlsSettings.swift */,
 				500B0D262E7C9D56008FC5E1 /* DevicesSettings.swift */,
 				501D20112E7FEE13007B1242 /* RomSettings.swift */,
@@ -2736,6 +2739,7 @@
 				502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */,
 				5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */,
 				5041C6282791AF0800D3C494 /* SequencerRegs.cpp in Sources */,
+				500B0D402E8099AA008FC5E1 /* CapturesSettings.swift in Sources */,
 				500B0D302E801780008FC5E1 /* HardwareSettings.swift in Sources */,
 				508FE01B21EA227B0043D0E9 /* MyDocument.swift in Sources */,
 				9C47C0332D6215B100E57B41 /* lz4.c in Sources */,

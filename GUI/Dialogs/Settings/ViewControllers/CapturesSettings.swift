@@ -7,11 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class GeneralSettingsViewController: SettingsViewController {
-
-    // Fullscreen
-    @IBOutlet weak var aspectRatioButton: NSButton!
-    @IBOutlet weak var exitOnEscButton: NSButton!
+class CapturesSettingsViewController: SettingsViewController {
 
     // Snapshots
     @IBOutlet weak var snapshotCompressor: NSPopUpButton!
@@ -29,15 +25,9 @@ class GeneralSettingsViewController: SettingsViewController {
     @IBOutlet weak var screenshotHeight: NSTextField!
     @IBOutlet weak var screenshotHeightText: NSTextField!
 
-    // Misc
-    @IBOutlet weak var ejectWithoutAskingButton: NSButton!
-    @IBOutlet weak var detachWithoutAskingButton: NSButton!
-    @IBOutlet weak var closeWithoutAskingButton: NSButton!
-    @IBOutlet weak var pauseInBackground: NSButton!
-
     override func viewDidLoad() {
 
-        print("GeneralSettingsViewController::viewDidLoad")
+        print("CapturesSettingsViewController::viewDidLoad")
     }
 
     //
@@ -45,7 +35,8 @@ class GeneralSettingsViewController: SettingsViewController {
     //
 
     override func refresh() {
-        
+
+        /*
         // Snapshots
         snapshotStorage.integerValue = pref.snapshotStorage
         autoSnapshots.state = pref.autoSnapshots ? .on : .off
@@ -76,6 +67,7 @@ class GeneralSettingsViewController: SettingsViewController {
         screenshotHeight.integerValue = pref.screenshotHeight
         screenshotHeight.isHidden = !custom || framebuffer
         screenshotHeightText.isHidden = !custom || framebuffer
+        */
     }
 
     //
@@ -102,42 +94,6 @@ class GeneralSettingsViewController: SettingsViewController {
         if sender.integerValue > 0 {
             pref.snapshotInterval = sender.integerValue
         }
-        refresh()
-    }
-
-    @IBAction func aspectRatioAction(_ sender: NSButton!) {
-
-        pref.keepAspectRatio = (sender.state == .on)
-        refresh()
-    }
-
-    @IBAction func exitOnEscAction(_ sender: NSButton!) {
-
-        pref.exitOnEsc = (sender.state == .on)
-        refresh()
-    }
-
-    @IBAction func ejectWithoutAskingAction(_ sender: NSButton!) {
-
-        pref.ejectWithoutAsking = (sender.state == .on)
-        refresh()
-    }
-
-    @IBAction func detachWithoutAskingAction(_ sender: NSButton!) {
-
-        pref.detachWithoutAsking = (sender.state == .on)
-        refresh()
-    }
-
-    @IBAction func closeWithoutAskingAction(_ sender: NSButton!) {
-
-        pref.closeWithoutAsking = (sender.state == .on)
-        refresh()
-    }
-
-    @IBAction func pauseInBackgroundAction(_ sender: NSButton!) {
-
-        pref.pauseInBackground = (sender.state == .on)
         refresh()
     }
 
