@@ -216,10 +216,34 @@ class HardwareSettingsViewController: SettingsViewController {
         let traits = emu.agnus.traits
         let badAgnus = traits.chipRamLimit < config.chipRam
 
-        // Memory
+        // Chip RAM
+        let chipStart = 0
+        let chipEnd = chipStart + config.chipRam * 1024
         chipRamPopup.selectItem(withTag: config.chipRam)
+        chipRamInfo1.stringValue = "DRAM"
+        chipRamInfo2.stringValue = String(format: "%06X - %06X", chipStart, chipEnd - 1)
+
+        // Slow RAM
+        let slowStart = 0xC00000
+        let slowEnd = slowStart + config.slowRam * 1024
         slowRamPopup.selectItem(withTag: config.slowRam)
+        slowRamInfo1.stringValue = "DRAM"
+        slowRamInfo2.stringValue = String(format: "%06X - %06X", slowStart, slowEnd - 1)
+        slowRamIcon.isHidden = config.slowRam == 0
+        slowRamInfo1.isHidden = config.slowRam == 0
+        slowRamInfo2.isHidden = config.slowRam == 0
+
+        // Fast RAM
+        let fastStart = 0x200000
+        let fastEnd = fastStart + config.fastRam * 1024
         fastRamPopup.selectItem(withTag: config.fastRam)
+        fastRamInfo1.stringValue = "DRAM"
+        fastRamInfo2.stringValue = String(format: "%06X - %06X", fastStart, fastEnd - 1)
+        fastRamIcon.isHidden = config.fastRam == 0
+        fastRamInfo1.isHidden = config.fastRam == 0
+        fastRamInfo2.isHidden = config.fastRam == 0
+
+        // Memory properties
         ramInitPattern.selectItem(withTag: config.ramInitPattern)
         bankMap.selectItem(withTag: config.bankMap)
         unmappingType.selectItem(withTag: config.unmappingType)
@@ -233,7 +257,6 @@ class HardwareSettingsViewController: SettingsViewController {
         unmappingType.isEnabled = poweredOff
 
         // Memory warning
-        print("badAgnus: \(badAgnus) \(config.chipRam)")
         warnImage.isHidden = !badAgnus
         warnImage.toolTip =
         "Chip Ram is not fully usable. " +

@@ -10,52 +10,42 @@
 class PeripheralsSettingsViewController: SettingsViewController {
 
     // Flopp drives
-    @IBOutlet weak var perDf0Type: NSPopUpButton!
-    @IBOutlet weak var perDf1Connect: NSButton!
-    @IBOutlet weak var perDf1Type: NSPopUpButton!
-    @IBOutlet weak var perDf2Connect: NSButton!
-    @IBOutlet weak var perDf2Type: NSPopUpButton!
-    @IBOutlet weak var perDf3Connect: NSButton!
-    @IBOutlet weak var perDf3Type: NSPopUpButton!
+    @IBOutlet weak var df0Type: NSPopUpButton!
+    @IBOutlet weak var df1Connect: NSButton!
+    @IBOutlet weak var df1Type: NSPopUpButton!
+    @IBOutlet weak var df2Connect: NSButton!
+    @IBOutlet weak var df2Type: NSPopUpButton!
+    @IBOutlet weak var df3Connect: NSButton!
+    @IBOutlet weak var df3Type: NSPopUpButton!
 
     // Hard drives
-    @IBOutlet weak var perHd0Connect: NSButton!
-    @IBOutlet weak var perHd0Type: NSPopUpButton!
-    @IBOutlet weak var perHd1Connect: NSButton!
-    @IBOutlet weak var perHd1Type: NSPopUpButton!
-    @IBOutlet weak var perHd2Connect: NSButton!
-    @IBOutlet weak var perHd2Type: NSPopUpButton!
-    @IBOutlet weak var perHd3Connect: NSButton!
-    @IBOutlet weak var perHd3Type: NSPopUpButton!
+    @IBOutlet weak var hd0Connect: NSButton!
+    @IBOutlet weak var hd0Type: NSPopUpButton!
+    @IBOutlet weak var hd1Connect: NSButton!
+    @IBOutlet weak var hd1Type: NSPopUpButton!
+    @IBOutlet weak var hd2Connect: NSButton!
+    @IBOutlet weak var hd2Type: NSPopUpButton!
+    @IBOutlet weak var hd3Connect: NSButton!
+    @IBOutlet weak var hd3Type: NSPopUpButton!
 
     // Ports
-    @IBOutlet weak var perGameDevice1: NSPopUpButton!
-    @IBOutlet weak var perGameDevice2: NSPopUpButton!
-    @IBOutlet weak var perSerialDevice: NSPopUpButton!
-    @IBOutlet weak var perSerialPort: NSTextField!
-    @IBOutlet weak var perSerialPortText: NSTextField!
+    @IBOutlet weak var gameDevice1: NSPopUpButton!
+    @IBOutlet weak var gameDevice2: NSPopUpButton!
+    @IBOutlet weak var serialDevice: NSPopUpButton!
+    @IBOutlet weak var serialPort: NSTextField!
+    @IBOutlet weak var serialPortText: NSTextField!
 
     // Joystick
-    @IBOutlet weak var perAutofire: NSButton!
-    @IBOutlet weak var perAutofireText: NSTextField!
-    @IBOutlet weak var perAutofireFrequency: NSSlider!
-    @IBOutlet weak var perAutofireFrequencyText1: NSTextField!
-    @IBOutlet weak var perAutofireFrequencyText2: NSTextField!
-    @IBOutlet weak var perAutofireCease: NSButton!
-    @IBOutlet weak var perAutofireCeaseText: NSTextField!
-    @IBOutlet weak var perAutofireBullets: NSTextField!
-    @IBOutlet weak var perAutofireBulletsText: NSTextField!
+    @IBOutlet weak var autofire: NSButton!
+    @IBOutlet weak var autofireText: NSTextField!
+    @IBOutlet weak var autofireFrequency: NSSlider!
+    @IBOutlet weak var autofireFrequencyText1: NSTextField!
+    @IBOutlet weak var autofireFrequencyText2: NSTextField!
+    @IBOutlet weak var autofireCease: NSButton!
+    @IBOutlet weak var autofireCeaseText: NSTextField!
+    @IBOutlet weak var autofireBullets: NSTextField!
+    @IBOutlet weak var autofireBulletsText: NSTextField!
 
-    // Lock
-    @IBOutlet weak var perLockImage: NSButton!
-    @IBOutlet weak var perLockInfo1: NSTextField!
-    @IBOutlet weak var perLockInfo2: NSTextField!
-
-    // Buttons
-    @IBOutlet weak var perFactorySettingsPopup: NSPopUpButton!
-    @IBOutlet weak var perOKButton: NSButton!
-    @IBOutlet weak var perPowerButton: NSButton!
-    
     override func viewDidLoad() {
 
         log(.lifetime)
@@ -67,7 +57,82 @@ class PeripheralsSettingsViewController: SettingsViewController {
     
     override func refresh() {
 
+        func update(_ component: NSTextField, enable: Bool = true, hidden: Bool = false) {
+            component.textColor = enable ? .controlTextColor : .disabledControlTextColor
+            component.isEnabled = enable
+            component.isHidden = hidden
+        }
+        func update(_ component: NSControl, enable: Bool = true, hidden: Bool = false) {
+            component.isEnabled = enable
+            component.isHidden = hidden
+        }
+
         super.refresh()
+
+        guard let emu = emu, let config = config else { return }
+        let poweredOff = emu.poweredOff
+
+        // Floppy drives
+        df1Connect.state = config.df1Connected ? .on : .off
+        df2Connect.state = config.df2Connected ? .on : .off
+        df3Connect.state = config.df3Connected ? .on : .off
+        df0Type.selectItem(withTag: config.df0Type)
+        df1Type.selectItem(withTag: config.df1Type)
+        df2Type.selectItem(withTag: config.df2Type)
+        df3Type.selectItem(withTag: config.df3Type)
+
+        // Hard drives
+        hd0Connect.state = config.hd0Connected ? .on : .off
+        hd1Connect.state = config.hd1Connected ? .on : .off
+        hd2Connect.state = config.hd2Connected ? .on : .off
+        hd3Connect.state = config.hd3Connected ? .on : .off
+        hd0Type.selectItem(withTag: config.hd0Type)
+        hd1Type.selectItem(withTag: config.hd1Type)
+        hd2Type.selectItem(withTag: config.hd2Type)
+        hd3Type.selectItem(withTag: config.hd3Type)
+
+        // Ports
+        let nullmodem = SerialPortDevice.NULLMODEM.rawValue
+        gamePadManager?.refresh(popup: gameDevice1, hide: true)
+        gamePadManager?.refresh(popup: gameDevice2, hide: true)
+        gameDevice1.selectItem(withTag: config.gameDevice1)
+        gameDevice2.selectItem(withTag: config.gameDevice2)
+        serialDevice.selectItem(withTag: config.serialDevice)
+        serialPort.integerValue = config.serialDevicePort
+        serialPort.isHidden = config.serialDevice != nullmodem
+        serialPortText.isHidden = config.serialDevice != nullmodem
+
+        // Joysticks
+        // let autofire = config.autofire
+        // let bursts = config.autofireBursts
+        autofire.state = config.autofire ? .on : .off
+        autofireCease.state = config.autofireBursts ? .on : .off
+        autofireBullets.integerValue = config.autofireBullets
+        autofireFrequency.integerValue = config.autofireDelay
+        update(autofireFrequency, hidden: !config.autofire)
+        update(autofireFrequencyText1, hidden: !config.autofire)
+        update(autofireFrequencyText2, hidden: !config.autofire)
+        update(autofireCease, hidden: !config.autofire)
+        update(autofireCeaseText, hidden: !config.autofire)
+        update(autofireBullets, hidden: !config.autofire || !config.autofireBursts)
+        update(autofireBulletsText, hidden: !config.autofire || !config.autofireBursts)
+
+        // Lock controls if emulator is powered on
+        df1Connect.isEnabled = poweredOff
+        df2Connect.isEnabled = poweredOff && df1Connect.state == .on
+        df3Connect.isEnabled = poweredOff && df2Connect.state == .on
+        df0Type.isEnabled = poweredOff
+        df1Type.isEnabled = poweredOff && config.df1Connected
+        df2Type.isEnabled = poweredOff && config.df2Connected
+        df3Type.isEnabled = poweredOff && config.df3Connected
+        hd0Connect.isEnabled = poweredOff
+        hd1Connect.isEnabled = poweredOff // && perHd0Connect.state == .on
+        hd2Connect.isEnabled = poweredOff // && perHd1Connect.state == .on
+        hd3Connect.isEnabled = poweredOff // && perHd2Connect.state == .on
+        hd0Type.isEnabled = poweredOff
+        hd1Type.isEnabled = poweredOff // && config.hd1Connected
+        hd2Type.isEnabled = poweredOff // && config.hd2Connected
+        hd3Type.isEnabled = poweredOff // && config.hd3Connected
     }
 
     override func preset(tag: Int) {
@@ -76,5 +141,111 @@ class PeripheralsSettingsViewController: SettingsViewController {
 
     override func save() {
 
+    }
+
+    //
+    // Action methods
+    //
+
+    @IBAction func perDriveConnectAction(_ sender: NSButton!) {
+
+        guard let config = config else { return }
+
+        switch sender.tag {
+        case 0: config.df0Connected = sender.state == .on
+        case 1: config.df1Connected = sender.state == .on
+        case 2: config.df2Connected = sender.state == .on
+        case 3: config.df3Connected = sender.state == .on
+        default: fatalError()
+        }
+
+        // Disconnect df(n+1) if dfn is disconnected
+        if !config.df1Connected { config.df2Connected = false }
+        if !config.df2Connected { config.df3Connected = false }
+    }
+
+    @IBAction func perDriveTypeAction(_ sender: NSPopUpButton!) {
+
+        switch sender.tag {
+        case 0: config?.df0Type = sender.selectedTag()
+        case 1: config?.df1Type = sender.selectedTag()
+        case 2: config?.df2Type = sender.selectedTag()
+        case 3: config?.df3Type = sender.selectedTag()
+        default: fatalError()
+        }
+    }
+
+    @IBAction func perHdrConnectAction(_ sender: NSButton!) {
+
+        switch sender.tag {
+        case 0: config?.hd0Connected = sender.state == .on
+        case 1: config?.hd1Connected = sender.state == .on
+        case 2: config?.hd2Connected = sender.state == .on
+        case 3: config?.hd3Connected = sender.state == .on
+        default: fatalError()
+        }
+    }
+
+    @IBAction func perHdrTypeAction(_ sender: NSPopUpButton!) {
+
+    }
+
+    @IBAction func perGameDeviceAction(_ sender: NSPopUpButton!) {
+
+        switch sender.tag {
+        case 1: config?.gameDevice1 = sender.selectedTag()
+        case 2: config?.gameDevice2 = sender.selectedTag()
+        default: fatalError()
+        }
+    }
+
+    @IBAction func perAutofireAction(_ sender: NSButton!) {
+
+        config?.autofire = (sender.state == .on)
+    }
+
+    @IBAction func perAutofireCeaseAction(_ sender: NSButton!) {
+
+        config?.autofireBursts = (sender.state == .on)
+    }
+
+    @IBAction func perAutofireBulletsAction(_ sender: NSTextField!) {
+
+        config?.autofireBullets = sender.integerValue
+    }
+
+    @IBAction func perAutofireFrequencyAction(_ sender: NSSlider!) {
+
+        config?.autofireDelay = sender.integerValue
+    }
+
+    @IBAction func perSerialDeviceAction(_ sender: NSPopUpButton!) {
+
+        config?.serialDevice = sender.selectedTag()
+    }
+
+    @IBAction func perSerialDevicePortAction(_ sender: NSTextField!) {
+
+        if sender.integerValue > 0 && sender.integerValue < 65536 {
+            config?.serialDevicePort = sender.integerValue
+        }
+    }
+
+    @IBAction func perPresetAction(_ sender: NSPopUpButton!) {
+
+        emu?.suspend()
+
+        // Revert to standard settings
+        EmulatorProxy.defaults.removePeripheralsUserDefaults()
+
+        // Update the configuration
+        config?.applyPeripheralsUserDefaults()
+
+        emu?.resume()
+    }
+
+    @IBAction func perDefaultsAction(_ sender: NSButton!) {
+
+        config?.savePeripheralsUserDefaults()
     }
 }
