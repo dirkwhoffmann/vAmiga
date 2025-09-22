@@ -10,26 +10,26 @@
 class PerformanceSettingsViewController: SettingsViewController {
 
     // Warp
-    @IBOutlet weak var prfWarpMode: NSPopUpButton!
-    @IBOutlet weak var prfWarpBoot: NSTextField!
+    @IBOutlet weak var warpMode: NSPopUpButton!
+    @IBOutlet weak var warpBoot: NSTextField!
 
     // Threading
-    @IBOutlet weak var prfVSync: NSButton!
-    @IBOutlet weak var prfSpeedBoost: NSSlider!
-    @IBOutlet weak var prfSpeedBoostInfo: NSTextField!
-    @IBOutlet weak var prfRunAheadLabel: NSTextField!
-    @IBOutlet weak var prfRunAhead: NSSlider!
-    @IBOutlet weak var prfRunAheadInfo: NSTextField!
+    @IBOutlet weak var vSync: NSButton!
+    @IBOutlet weak var speedBoost: NSSlider!
+    @IBOutlet weak var speedBoostInfo: NSTextField!
+    @IBOutlet weak var runAheadLabel: NSTextField!
+    @IBOutlet weak var runAheadSlider: NSSlider!
+    @IBOutlet weak var runAheadInfo: NSTextField!
 
     // Boosters
-    @IBOutlet weak var prfCiaIdleSleep: NSButton!
-    @IBOutlet weak var prfFrameSkipping: NSButton!
-    @IBOutlet weak var prfAudioFastPath: NSButton!
+    @IBOutlet weak var ciaIdleSleep: NSButton!
+    @IBOutlet weak var frameSkipping: NSButton!
+    @IBOutlet weak var audioFastPath: NSButton!
 
     // Compression
-    @IBOutlet weak var prfWsCompressor: NSPopUpButton!
-    @IBOutlet weak var prfSnapCompressor: NSPopUpButton!
-    
+    @IBOutlet weak var wsCompressor: NSPopUpButton!
+    @IBOutlet weak var snapCompressor: NSPopUpButton!
+
     override func viewDidLoad() {
 
         log(.lifetime)
@@ -46,29 +46,29 @@ class PerformanceSettingsViewController: SettingsViewController {
         guard let config = config else { return }
 
         // Warp
-        prfWarpMode.selectItem(withTag: config.warpMode)
-        prfWarpBoot.integerValue = config.warpBoot
+        warpMode.selectItem(withTag: config.warpMode)
+        warpBoot.integerValue = config.warpBoot
 
         // Threading
         let vsync = config.vsync
         let runAhead = config.runAhead
-        prfVSync.state = config.vsync ? .on : .off
-        prfSpeedBoost.integerValue = config.speedBoost
-        prfSpeedBoostInfo.stringValue = "\(config.speedBoost) %"
-        prfSpeedBoost.isEnabled = !vsync
-        prfSpeedBoostInfo.textColor = vsync ? .tertiaryLabelColor : .labelColor
-        prfRunAheadLabel.stringValue = runAhead >= 0 ? "Run ahead:" : "Run behind:"
-        prfRunAhead.integerValue = runAhead
-        prfRunAheadInfo.stringValue = "\(abs(runAhead)) frame" + (abs(runAhead) == 1 ? "" : "s")
+        vSync.state = config.vsync ? .on : .off
+        speedBoost.integerValue = config.speedBoost
+        speedBoostInfo.stringValue = "\(config.speedBoost) %"
+        speedBoost.isEnabled = !vsync
+        speedBoostInfo.textColor = vsync ? .tertiaryLabelColor : .labelColor
+        runAheadLabel.stringValue = runAhead >= 0 ? "Run ahead:" : "Run behind:"
+        runAheadSlider.integerValue = runAhead
+        runAheadInfo.stringValue = "\(abs(runAhead)) frame" + (abs(runAhead) == 1 ? "" : "s")
 
         // Boosters
-        prfCiaIdleSleep.state = config.ciaIdleSleep ? .on : .off
-        prfFrameSkipping.state = config.frameSkipping > 0 ? .on : .off
-        prfAudioFastPath.state = config.audioFastPath ? .on : .off
+        ciaIdleSleep.state = config.ciaIdleSleep ? .on : .off
+        frameSkipping.state = config.frameSkipping > 0 ? .on : .off
+        audioFastPath.state = config.audioFastPath ? .on : .off
 
         // Compression
-        prfWsCompressor.selectItem(withTag: config.wsCompressor)
-        prfSnapCompressor.selectItem(withTag: config.snapCompressor)
+        wsCompressor.selectItem(withTag: config.wsCompressor)
+        snapCompressor.selectItem(withTag: config.snapCompressor)
     }
 
     override func preset(tag: Int) {
@@ -93,12 +93,12 @@ class PerformanceSettingsViewController: SettingsViewController {
     // Action methods (Warp)
     //
 
-    @IBAction func prfWarpModeAction(_ sender: NSPopUpButton!) {
+    @IBAction func warpModeAction(_ sender: NSPopUpButton!) {
 
         config?.warpMode = sender.selectedTag()
     }
 
-    @IBAction func prfWarpBootAction(_ sender: NSTextField!) {
+    @IBAction func warpBootAction(_ sender: NSTextField!) {
 
         config?.warpBoot = sender.integerValue
     }
@@ -107,17 +107,17 @@ class PerformanceSettingsViewController: SettingsViewController {
     // Action methods (Threading)
     //
 
-    @IBAction func prfVSyncAction(_ sender: NSButton!) {
+    @IBAction func vSyncAction(_ sender: NSButton!) {
 
         config?.vsync = sender.state == .on
     }
 
-    @IBAction func prfspeedBoostAction(_ sender: NSSlider!) {
+    @IBAction func speedBoostAction(_ sender: NSSlider!) {
 
         config?.speedBoost = sender.integerValue
     }
 
-    @IBAction func prfRunAheadAction(_ sender: NSSlider!) {
+    @IBAction func runAheadAction(_ sender: NSSlider!) {
 
         config?.runAhead = sender.integerValue
     }
@@ -127,17 +127,17 @@ class PerformanceSettingsViewController: SettingsViewController {
     // Action methods (Boosters)
     //
 
-    @IBAction func prfCiaIdleSleepAction(_ sender: NSButton!) {
+    @IBAction func ciaIdleSleepAction(_ sender: NSButton!) {
 
         config?.ciaIdleSleep = sender.state == .on
     }
 
-    @IBAction func prfFrameSkippingAction(_ sender: NSButton!) {
+    @IBAction func frameSkippingAction(_ sender: NSButton!) {
 
         config?.frameSkipping = sender.state == .on ? 16 : 0
     }
 
-    @IBAction func prfAudioFastPathAction(_ sender: NSButton!) {
+    @IBAction func audioFastPathAction(_ sender: NSButton!) {
 
         config?.audioFastPath = sender.state == .on
     }
@@ -146,12 +146,12 @@ class PerformanceSettingsViewController: SettingsViewController {
     // Action methods (Compressor)
     //
 
-    @IBAction func prfWsCompressorAction(_ sender: NSPopUpButton!) {
+    @IBAction func wsCompressorAction(_ sender: NSPopUpButton!) {
 
         config?.wsCompressor = sender.selectedTag()
     }
 
-    @IBAction func prfSnapCompressorAction(_ sender: NSPopUpButton!) {
+    @IBAction func snapCompressorAction(_ sender: NSPopUpButton!) {
 
         config?.snapCompressor = sender.selectedTag()
     }

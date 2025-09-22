@@ -103,8 +103,6 @@ class PeripheralsSettingsViewController: SettingsViewController {
         serialPortText.isHidden = config.serialDevice != nullmodem
 
         // Joysticks
-        // let autofire = config.autofire
-        // let bursts = config.autofireBursts
         autofire.state = config.autofire ? .on : .off
         autofireCease.state = config.autofireBursts ? .on : .off
         autofireBullets.integerValue = config.autofireBullets
@@ -137,17 +135,27 @@ class PeripheralsSettingsViewController: SettingsViewController {
 
     override func preset(tag: Int) {
 
+        emu?.suspend()
+
+        // Revert to standard settings
+        EmulatorProxy.defaults.removePeripheralsUserDefaults()
+
+        // Update the configuration
+        config?.applyPeripheralsUserDefaults()
+
+        emu?.resume()
     }
 
     override func save() {
 
+        config?.savePeripheralsUserDefaults()
     }
 
     //
     // Action methods
     //
 
-    @IBAction func perDriveConnectAction(_ sender: NSButton!) {
+    @IBAction func driveConnectAction(_ sender: NSButton!) {
 
         guard let config = config else { return }
 
@@ -164,7 +172,7 @@ class PeripheralsSettingsViewController: SettingsViewController {
         if !config.df2Connected { config.df3Connected = false }
     }
 
-    @IBAction func perDriveTypeAction(_ sender: NSPopUpButton!) {
+    @IBAction func driveTypeAction(_ sender: NSPopUpButton!) {
 
         switch sender.tag {
         case 0: config?.df0Type = sender.selectedTag()
@@ -175,7 +183,7 @@ class PeripheralsSettingsViewController: SettingsViewController {
         }
     }
 
-    @IBAction func perHdrConnectAction(_ sender: NSButton!) {
+    @IBAction func hdrConnectAction(_ sender: NSButton!) {
 
         switch sender.tag {
         case 0: config?.hd0Connected = sender.state == .on
@@ -186,11 +194,11 @@ class PeripheralsSettingsViewController: SettingsViewController {
         }
     }
 
-    @IBAction func perHdrTypeAction(_ sender: NSPopUpButton!) {
+    @IBAction func hdrTypeAction(_ sender: NSPopUpButton!) {
 
     }
 
-    @IBAction func perGameDeviceAction(_ sender: NSPopUpButton!) {
+    @IBAction func gameDeviceAction(_ sender: NSPopUpButton!) {
 
         switch sender.tag {
         case 1: config?.gameDevice1 = sender.selectedTag()
@@ -199,53 +207,35 @@ class PeripheralsSettingsViewController: SettingsViewController {
         }
     }
 
-    @IBAction func perAutofireAction(_ sender: NSButton!) {
+    @IBAction func autofireAction(_ sender: NSButton!) {
 
         config?.autofire = (sender.state == .on)
     }
 
-    @IBAction func perAutofireCeaseAction(_ sender: NSButton!) {
+    @IBAction func autofireCeaseAction(_ sender: NSButton!) {
 
         config?.autofireBursts = (sender.state == .on)
     }
 
-    @IBAction func perAutofireBulletsAction(_ sender: NSTextField!) {
+    @IBAction func autofireBulletsAction(_ sender: NSTextField!) {
 
         config?.autofireBullets = sender.integerValue
     }
 
-    @IBAction func perAutofireFrequencyAction(_ sender: NSSlider!) {
+    @IBAction func autofireFrequencyAction(_ sender: NSSlider!) {
 
         config?.autofireDelay = sender.integerValue
     }
 
-    @IBAction func perSerialDeviceAction(_ sender: NSPopUpButton!) {
+    @IBAction func serialDeviceAction(_ sender: NSPopUpButton!) {
 
         config?.serialDevice = sender.selectedTag()
     }
 
-    @IBAction func perSerialDevicePortAction(_ sender: NSTextField!) {
+    @IBAction func serialDevicePortAction(_ sender: NSTextField!) {
 
         if sender.integerValue > 0 && sender.integerValue < 65536 {
             config?.serialDevicePort = sender.integerValue
         }
-    }
-
-    @IBAction func perPresetAction(_ sender: NSPopUpButton!) {
-
-        emu?.suspend()
-
-        // Revert to standard settings
-        EmulatorProxy.defaults.removePeripheralsUserDefaults()
-
-        // Update the configuration
-        config?.applyPeripheralsUserDefaults()
-
-        emu?.resume()
-    }
-
-    @IBAction func perDefaultsAction(_ sender: NSButton!) {
-
-        config?.savePeripheralsUserDefaults()
     }
 }

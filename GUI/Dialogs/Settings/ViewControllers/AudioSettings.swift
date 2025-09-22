@@ -10,48 +10,44 @@
 class AudioSettingsViewController: SettingsViewController {
 
     // In
-    @IBOutlet weak var audVol0: NSSlider!
-    @IBOutlet weak var audVol1: NSSlider!
-    @IBOutlet weak var audVol2: NSSlider!
-    @IBOutlet weak var audVol3: NSSlider!
-    @IBOutlet weak var audPan0: NSSlider!
-    @IBOutlet weak var audPan1: NSSlider!
-    @IBOutlet weak var audPan2: NSSlider!
-    @IBOutlet weak var audPan3: NSSlider!
+    @IBOutlet weak var vol0: NSSlider!
+    @IBOutlet weak var vol1: NSSlider!
+    @IBOutlet weak var vol2: NSSlider!
+    @IBOutlet weak var vol3: NSSlider!
+    @IBOutlet weak var pan0: NSSlider!
+    @IBOutlet weak var pan1: NSSlider!
+    @IBOutlet weak var pan2: NSSlider!
+    @IBOutlet weak var pan3: NSSlider!
 
     // Out
-    @IBOutlet weak var audVolL: NSSlider!
-    @IBOutlet weak var audVolR: NSSlider!
+    @IBOutlet weak var volL: NSSlider!
+    @IBOutlet weak var volR: NSSlider!
 
     // Drive volumes
-    @IBOutlet weak var audStepVolume: NSSlider!
-    @IBOutlet weak var audPollVolume: NSSlider!
-    @IBOutlet weak var audEjectVolume: NSSlider!
-    @IBOutlet weak var audInsertVolume: NSSlider!
-    @IBOutlet weak var audDf0Pan: NSSlider!
-    @IBOutlet weak var audDf1Pan: NSSlider!
-    @IBOutlet weak var audDf2Pan: NSSlider!
-    @IBOutlet weak var audDf3Pan: NSSlider!
-    @IBOutlet weak var audHd0Pan: NSSlider!
-    @IBOutlet weak var audHd1Pan: NSSlider!
-    @IBOutlet weak var audHd2Pan: NSSlider!
-    @IBOutlet weak var audHd3Pan: NSSlider!
+    @IBOutlet weak var stepVolume: NSSlider!
+    @IBOutlet weak var pollVolume: NSSlider!
+    @IBOutlet weak var ejectVolume: NSSlider!
+    @IBOutlet weak var insertVolume: NSSlider!
+    @IBOutlet weak var df0Pan: NSSlider!
+    @IBOutlet weak var df1Pan: NSSlider!
+    @IBOutlet weak var df2Pan: NSSlider!
+    @IBOutlet weak var df3Pan: NSSlider!
+    @IBOutlet weak var hd0Pan: NSSlider!
+    @IBOutlet weak var hd1Pan: NSSlider!
+    @IBOutlet weak var hd2Pan: NSSlider!
+    @IBOutlet weak var hd3Pan: NSSlider!
 
     // Filter
-    @IBOutlet weak var audFilterType: NSPopUpButton!
+    @IBOutlet weak var filterType: NSPopUpButton!
 
     // Mixer
-    @IBOutlet weak var audSamplingMethod: NSPopUpButton!
-    @IBOutlet weak var audSamplingMethodText: NSTextField!
-    @IBOutlet weak var audASR: NSPopUpButton!
-    @IBOutlet weak var audASRText: NSTextField!
-    @IBOutlet weak var audCapacity: NSSlider!
-    @IBOutlet weak var audCapacityText: NSTextField!
+    @IBOutlet weak var samplingMethod: NSPopUpButton!
+    @IBOutlet weak var samplingMethodHelp: NSButton!
+    @IBOutlet weak var ASR: NSPopUpButton!
+    @IBOutlet weak var ASRHelp: NSButton!
+    @IBOutlet weak var capacity: NSSlider!
+    @IBOutlet weak var capacityText: NSTextField!
 
-    // Buttons
-    @IBOutlet weak var audOKButton: NSButton!
-    @IBOutlet weak var audPowerButton: NSButton!
-    
     override func viewDidLoad() {
 
         log(.lifetime)
@@ -72,63 +68,62 @@ class AudioSettingsViewController: SettingsViewController {
         //
 
         // In
-        audVol0.integerValue = config.vol0
-        audVol1.integerValue = config.vol1
-        audVol2.integerValue = config.vol2
-        audVol3.integerValue = config.vol3
-        audPan0.integerValue = config.pan0
-        audPan1.integerValue = config.pan1
-        audPan2.integerValue = config.pan2
-        audPan3.integerValue = config.pan3
+        vol0.integerValue = config.vol0
+        vol1.integerValue = config.vol1
+        vol2.integerValue = config.vol2
+        vol3.integerValue = config.vol3
+        pan0.integerValue = config.pan0
+        pan1.integerValue = config.pan1
+        pan2.integerValue = config.pan2
+        pan3.integerValue = config.pan3
 
         // Out
-        audVolL.integerValue = config.volL
-        audVolR.integerValue = config.volR
+        volL.integerValue = config.volL
+        volR.integerValue = config.volR
 
         // Drives
-        audStepVolume.integerValue = config.stepVolume
-        audPollVolume.integerValue = config.pollVolume
-        audInsertVolume.integerValue = config.insertVolume
-        audEjectVolume.integerValue = config.ejectVolume
-        audDf0Pan.integerValue = config.df0Pan
-        audDf1Pan.integerValue = config.df1Pan
-        audDf2Pan.integerValue = config.df2Pan
-        audDf3Pan.integerValue = config.df3Pan
-        audHd0Pan.integerValue = config.hd0Pan
-        audHd1Pan.integerValue = config.hd1Pan
-        audHd2Pan.integerValue = config.hd2Pan
-        audHd3Pan.integerValue = config.hd3Pan
+        stepVolume.integerValue = config.stepVolume
+        pollVolume.integerValue = config.pollVolume
+        insertVolume.integerValue = config.insertVolume
+        ejectVolume.integerValue = config.ejectVolume
+        df0Pan.integerValue = config.df0Pan
+        df1Pan.integerValue = config.df1Pan
+        df2Pan.integerValue = config.df2Pan
+        df3Pan.integerValue = config.df3Pan
+        hd0Pan.integerValue = config.hd0Pan
+        hd1Pan.integerValue = config.hd1Pan
+        hd2Pan.integerValue = config.hd2Pan
+        hd3Pan.integerValue = config.hd3Pan
 
         // Audio filter
-        audFilterType.selectItem(withTag: config.filterType)
+        filterType.selectItem(withTag: config.filterType)
 
         //
         // Sampler
         //
 
-        audSamplingMethod.selectItem(withTag: config.samplingMethod)
-        audASR.selectItem(withTag: config.asr)
-        audCapacity.integerValue = config.audioBufferSize
-        audCapacityText.stringValue = "\(config.audioBufferSize) samples"
+        samplingMethod.selectItem(withTag: config.samplingMethod)
+        ASR.selectItem(withTag: config.asr)
+        capacity.integerValue = config.audioBufferSize
+        capacityText.stringValue = "\(config.audioBufferSize) samples"
 
-        /*
         switch SamplingMethod(rawValue: Int32(config.samplingMethod)) {
         case .NONE:
-            audSamplingMethodText.stringValue = "Instructs the sampler to select the most recent sample from the ring buffer. This minimizes latency but may introduce jitter when the sample rate fluctuates."
+            samplingMethodHelp.toolTip = "Instructs the sampler to select the most recent sample from the ring buffer. This minimizes latency but may introduce jitter when the sample rate fluctuates."
         case .NEAREST:
-            audSamplingMethodText.stringValue = "Instructs the sampler to pick the sample closest to the target timestamp. It improves timing accuracy over the latest-sample method but may still have minor mismatches."
+            samplingMethodHelp.toolTip = "Instructs the sampler to pick the sample closest to the target timestamp. It improves timing accuracy over the latest-sample method but may still have minor mismatches."
         case .LINEAR:
-            audSamplingMethodText.stringValue = "Instructs the sampler to compute a value between two neighboring samples for smoother output. Increases computation slightly but reduces artifacts and improves fidelity."
+            samplingMethodHelp.toolTip = "Instructs the sampler to compute a value between two neighboring samples for smoother output. Increases computation slightly but reduces artifacts and improves fidelity."
         default:
             break
         }
 
         switch (config.asr) {
         case 0:
-            audASRText.stringValue = "Audio samples are synthesized at a constant sampling rate, ignoring drift between emulated and real-time playback rates. This may cause buffer underflows and overflows over time, leading to audio stutter or glitches."
+            ASRHelp.toolTip = "Audio samples are synthesized at a constant sampling rate, ignoring drift between emulated and real-time playback rates. This may cause buffer underflows and overflows over time, leading to audio stutter or glitches."
         default:
-            audASRText.stringValue = "ASR (Adaptive Sample Rate) dynamically adjusts the sampling rate to maintain audio sync. This prevents buffer underflows and overflows by adapting to slight drift between emulated and real-time playback rates."
-       */
+            ASRHelp.toolTip = "ASR (Adaptive Sample Rate) dynamically adjusts the sampling rate to maintain audio sync. This prevents buffer underflows and overflows by adapting to slight drift between emulated and real-time playback rates."
+        }
     }
 
     override func preset(tag: Int) {
@@ -179,57 +174,39 @@ class AudioSettingsViewController: SettingsViewController {
     // Action functions (Mixer)
     //
 
-    @IBAction func audVol0Action(_ sender: NSSlider!) {
+    @IBAction func volAction(_ sender: NSSlider!) {
 
-        config?.vol0 = sender.integerValue
+        switch sender.tag {
+        case 0: config?.vol0 = sender.integerValue
+        case 1: config?.vol1 = sender.integerValue
+        case 2: config?.vol2 = sender.integerValue
+        case 3: config?.vol3 = sender.integerValue
+        default: fatalError()
+        }
     }
 
-    @IBAction func audVol1Action(_ sender: NSSlider!) {
+    @IBAction func panAction(_ sender: NSSlider!) {
 
-        config?.vol1 = sender.integerValue
+        switch sender.tag {
+        case 0: config?.pan0 = sender.integerValue
+        case 1: config?.pan1 = sender.integerValue
+        case 2: config?.pan2 = sender.integerValue
+        case 3: config?.pan3 = sender.integerValue
+        default: fatalError()
+        }
     }
 
-    @IBAction func audVol2Action(_ sender: NSSlider!) {
-
-        config?.vol2 = sender.integerValue
-    }
-
-    @IBAction func audVol3Action(_ sender: NSSlider!) {
-
-        config?.vol3 = sender.integerValue
-    }
-
-    @IBAction func audPan0Action(_ sender: NSSlider!) {
-
-        config?.pan0 = sender.integerValue
-    }
-
-    @IBAction func audPan1Action(_ sender: NSSlider!) {
-
-        config?.pan1 = sender.integerValue
-    }
-
-    @IBAction func audPan2Action(_ sender: NSSlider!) {
-
-        config?.pan2 = sender.integerValue
-    }
-
-    @IBAction func audPan3Action(_ sender: NSSlider!) {
-
-        config?.pan3 = sender.integerValue
-    }
-
-    @IBAction func audVolLAction(_ sender: NSSlider!) {
+    @IBAction func volLAction(_ sender: NSSlider!) {
 
         config?.volL = sender.integerValue
     }
 
-    @IBAction func audVolRAction(_ sender: NSSlider!) {
+    @IBAction func volRAction(_ sender: NSSlider!) {
 
         config?.volR = sender.integerValue
     }
 
-    @IBAction func audDrivePanAction(_ sender: NSSlider!) {
+    @IBAction func dfPanAction(_ sender: NSSlider!) {
 
         switch sender.tag {
         case 0: config?.df0Pan = sender.integerValue
@@ -240,7 +217,7 @@ class AudioSettingsViewController: SettingsViewController {
         }
     }
 
-    @IBAction func audHdPanAction(_ sender: NSSlider!) {
+    @IBAction func hdPanAction(_ sender: NSSlider!) {
 
         switch sender.tag {
         case 0: config?.hd0Pan = sender.integerValue
@@ -251,27 +228,27 @@ class AudioSettingsViewController: SettingsViewController {
         }
     }
 
-    @IBAction func audStepVolumeAction(_ sender: NSSlider!) {
+    @IBAction func stepVolumeAction(_ sender: NSSlider!) {
 
         config?.stepVolume = sender.integerValue
     }
 
-    @IBAction func audPollVolumeAction(_ sender: NSSlider!) {
+    @IBAction func pollVolumeAction(_ sender: NSSlider!) {
 
         config?.pollVolume = sender.integerValue
     }
 
-    @IBAction func audInsertVolumeAction(_ sender: NSSlider!) {
+    @IBAction func insertVolumeAction(_ sender: NSSlider!) {
 
         config?.insertVolume = sender.integerValue
     }
 
-    @IBAction func audEjectVolumeAction(_ sender: NSSlider!) {
+    @IBAction func ejectVolumeAction(_ sender: NSSlider!) {
 
         config?.ejectVolume = sender.integerValue
     }
 
-    @IBAction func audFilterTypeAction(_ sender: NSPopUpButton!) {
+    @IBAction func filterTypeAction(_ sender: NSPopUpButton!) {
 
         config?.filterType = sender.selectedTag()
     }
@@ -280,17 +257,17 @@ class AudioSettingsViewController: SettingsViewController {
     // Action functions (Sampler)
     //
 
-    @IBAction func audSamplingMethodAction(_ sender: NSPopUpButton!) {
+    @IBAction func samplingMethodAction(_ sender: NSPopUpButton!) {
 
         config?.samplingMethod = sender.selectedTag()
     }
 
-    @IBAction func audASRAction(_ sender: NSPopUpButton!) {
+    @IBAction func ASRAction(_ sender: NSPopUpButton!) {
 
         config?.asr = sender.selectedTag()
     }
 
-    @IBAction func audCapacityAction(_ sender: NSSlider!) {
+    @IBAction func capacityAction(_ sender: NSSlider!) {
 
         config?.audioBufferSize = sender.integerValue
     }

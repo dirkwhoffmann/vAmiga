@@ -10,60 +10,56 @@
 class VideoSettingsViewController: SettingsViewController {
 
     // Palette
-    @IBOutlet weak var vidPalettePopUp: NSPopUpButton!
-    @IBOutlet weak var vidBrightnessSlider: NSSlider!
-    @IBOutlet weak var vidContrastSlider: NSSlider!
-    @IBOutlet weak var vidSaturationSlider: NSSlider!
-    @IBOutlet weak var vidBrightnessLabel: NSTextField!
-    @IBOutlet weak var vidContrastLabel: NSTextField!
-    @IBOutlet weak var vidSaturationLabel: NSTextField!
+    @IBOutlet weak var palettePopUp: NSPopUpButton!
+    @IBOutlet weak var brightnessSlider: NSSlider!
+    @IBOutlet weak var contrastSlider: NSSlider!
+    @IBOutlet weak var saturationSlider: NSSlider!
+    @IBOutlet weak var brightnessLabel: NSTextField!
+    @IBOutlet weak var contrastLabel: NSTextField!
+    @IBOutlet weak var saturationLabel: NSTextField!
 
     // Geometry
-    @IBOutlet weak var vidZoom: NSPopUpButton!
-    @IBOutlet weak var vidHZoom: NSSlider!
-    @IBOutlet weak var vidVZoom: NSSlider!
-    @IBOutlet weak var vidHZoomLabel: NSTextField!
-    @IBOutlet weak var vidVZoomLabel: NSTextField!
-    @IBOutlet weak var vidCenter: NSPopUpButton!
-    @IBOutlet weak var vidHCenter: NSSlider!
-    @IBOutlet weak var vidVCenter: NSSlider!
-    @IBOutlet weak var vidHCenterLabel: NSTextField!
-    @IBOutlet weak var vidVCenterLabel: NSTextField!
+    @IBOutlet weak var zoom: NSPopUpButton!
+    @IBOutlet weak var hZoom: NSSlider!
+    @IBOutlet weak var vZoom: NSSlider!
+    @IBOutlet weak var hZoomLabel: NSTextField!
+    @IBOutlet weak var vZoomLabel: NSTextField!
+    @IBOutlet weak var center: NSPopUpButton!
+    @IBOutlet weak var hCenter: NSSlider!
+    @IBOutlet weak var vCenter: NSSlider!
+    @IBOutlet weak var hCenterLabel: NSTextField!
+    @IBOutlet weak var vCenterLabel: NSTextField!
 
     // Frame rate
-    @IBOutlet weak var vidSyncMode: NSPopUpButton!
-    @IBOutlet weak var vidFpsSlider: NSSlider!
-    @IBOutlet weak var vidFpsMin: NSTextField!
-    @IBOutlet weak var vidFpsMax: NSTextField!
+    @IBOutlet weak var syncMode: NSPopUpButton!
+    @IBOutlet weak var fpsSlider: NSSlider!
+    @IBOutlet weak var fpsMin: NSTextField!
+    @IBOutlet weak var fpsMax: NSTextField!
 
     // Effects
-    @IBOutlet weak var vidEnhancerPopUp: NSPopUpButton!
-    @IBOutlet weak var vidUpscalerPopUp: NSPopUpButton!
-    @IBOutlet weak var vidBlurPopUp: NSPopUpButton!
-    @IBOutlet weak var vidBlurRadiusSlider: NSSlider!
+    @IBOutlet weak var enhancerPopUp: NSPopUpButton!
+    @IBOutlet weak var upscalerPopUp: NSPopUpButton!
+    @IBOutlet weak var blurPopUp: NSPopUpButton!
+    @IBOutlet weak var blurRadiusSlider: NSSlider!
 
-    @IBOutlet weak var vidBloomPopUp: NSPopUpButton!
-    @IBOutlet weak var vidBloomRadiusSlider: NSSlider!
-    @IBOutlet weak var vidBloomBrightnessSlider: NSSlider!
-    @IBOutlet weak var vidBloomWeightSlider: NSSlider!
+    @IBOutlet weak var bloomPopUp: NSPopUpButton!
+    @IBOutlet weak var bloomRadiusSlider: NSSlider!
+    @IBOutlet weak var bloomBrightnessSlider: NSSlider!
+    @IBOutlet weak var bloomWeightSlider: NSSlider!
 
-    @IBOutlet weak var vidFlickerPopUp: NSPopUpButton!
-    @IBOutlet weak var vidFlickerWeightSlider: NSSlider!
+    @IBOutlet weak var flickerPopUp: NSPopUpButton!
+    @IBOutlet weak var flickerWeightSlider: NSSlider!
 
-    @IBOutlet weak var vidDotMaskPopUp: NSPopUpButton!
-    @IBOutlet weak var vidDotMaskBrightnessSlider: NSSlider!
+    @IBOutlet weak var dotMaskPopUp: NSPopUpButton!
+    @IBOutlet weak var dotMaskBrightnessSlider: NSSlider!
 
-    @IBOutlet weak var vidScanlinesPopUp: NSPopUpButton!
-    @IBOutlet weak var vidScanlineBrightnessSlider: NSSlider!
-    @IBOutlet weak var vidScanlineWeightSlider: NSSlider!
+    @IBOutlet weak var scanlinesPopUp: NSPopUpButton!
+    @IBOutlet weak var scanlineBrightnessSlider: NSSlider!
+    @IBOutlet weak var scanlineWeightSlider: NSSlider!
 
-    @IBOutlet weak var vidMisalignmentPopUp: NSPopUpButton!
-    @IBOutlet weak var vidMisalignmentXSlider: NSSlider!
-    @IBOutlet weak var vidMisalignmentYSlider: NSSlider!
-
-    // Buttons
-    @IBOutlet weak var vidOKButton: NSButton!
-    @IBOutlet weak var vidPowerButton: NSButton!
+    @IBOutlet weak var misalignmentPopUp: NSPopUpButton!
+    @IBOutlet weak var misalignmentXSlider: NSSlider!
+    @IBOutlet weak var misalignmentYSlider: NSSlider!
 
     override func viewDidLoad() {
 
@@ -78,7 +74,7 @@ class VideoSettingsViewController: SettingsViewController {
         // Check for available enhancers
         let enhancers = controller.renderer.ressourceManager.enhancerGallery
         for i in 0 ..< enhancers.count {
-            if let item = vidEnhancerPopUp.menu?.item(withTag: i) {
+            if let item = enhancerPopUp.menu?.item(withTag: i) {
                 item.isEnabled = (enhancers[i] != nil)
             }
         }
@@ -86,7 +82,7 @@ class VideoSettingsViewController: SettingsViewController {
         // Check for available upscalers
         let upscalers = controller.renderer.ressourceManager.upscalerGallery
         for i in 0 ..< upscalers.count {
-            if let item = vidUpscalerPopUp.menu?.item(withTag: i) {
+            if let item = upscalerPopUp.menu?.item(withTag: i) {
                 item.isEnabled = (upscalers[i] != nil)
             }
         }
@@ -109,72 +105,72 @@ class VideoSettingsViewController: SettingsViewController {
         let adjustable = palette != Palette.RGB.rawValue
 
         // Colors
-        vidPalettePopUp.selectItem(withTag: palette)
-        vidBrightnessSlider.integerValue = config.brightness
-        vidContrastSlider.integerValue = config.contrast
-        vidSaturationSlider.integerValue = config.saturation
-        vidBrightnessSlider.isEnabled = adjustable
-        vidContrastSlider.isEnabled = adjustable
-        vidSaturationSlider.isEnabled = adjustable
-        vidBrightnessLabel.textColor = adjustable ? .labelColor : .disabledControlTextColor
-        vidContrastLabel.textColor = adjustable ? .labelColor : .disabledControlTextColor
-        vidSaturationLabel.textColor = adjustable ? .labelColor : .disabledControlTextColor
+        palettePopUp.selectItem(withTag: palette)
+        brightnessSlider.integerValue = config.brightness
+        contrastSlider.integerValue = config.contrast
+        saturationSlider.integerValue = config.saturation
+        brightnessSlider.isEnabled = adjustable
+        contrastSlider.isEnabled = adjustable
+        saturationSlider.isEnabled = adjustable
+        brightnessLabel.textColor = adjustable ? .labelColor : .disabledControlTextColor
+        contrastLabel.textColor = adjustable ? .labelColor : .disabledControlTextColor
+        saturationLabel.textColor = adjustable ? .labelColor : .disabledControlTextColor
 
         // Geometry
-        vidZoom.selectItem(withTag: config.zoom)
-        vidHZoom.integerValue = config.hZoom
-        vidVZoom.integerValue = config.vZoom
-        vidHZoom.isEnabled = config.zoom == 0
-        vidVZoom.isEnabled = config.zoom == 0
-        vidHZoomLabel.textColor = config.zoom == 0 ? .labelColor : .disabledControlTextColor
-        vidVZoomLabel.textColor = config.zoom == 0 ? .labelColor : .disabledControlTextColor
-        vidCenter.selectItem(withTag: config.center)
-        vidHCenter.integerValue = config.hCenter
-        vidVCenter.integerValue = config.vCenter
-        vidHCenter.isEnabled = config.center == 0
-        vidVCenter.isEnabled = config.center == 0
-        vidHCenterLabel.textColor = config.center == 0 ? .labelColor : .disabledControlTextColor
-        vidVCenterLabel.textColor = config.center == 0 ? .labelColor : .disabledControlTextColor
+        zoom.selectItem(withTag: config.zoom)
+        hZoom.integerValue = config.hZoom
+        vZoom.integerValue = config.vZoom
+        hZoom.isEnabled = config.zoom == 0
+        vZoom.isEnabled = config.zoom == 0
+        hZoomLabel.textColor = config.zoom == 0 ? .labelColor : .disabledControlTextColor
+        vZoomLabel.textColor = config.zoom == 0 ? .labelColor : .disabledControlTextColor
+        center.selectItem(withTag: config.center)
+        hCenter.integerValue = config.hCenter
+        vCenter.integerValue = config.vCenter
+        hCenter.isEnabled = config.center == 0
+        vCenter.isEnabled = config.center == 0
+        hCenterLabel.textColor = config.center == 0 ? .labelColor : .disabledControlTextColor
+        vCenterLabel.textColor = config.center == 0 ? .labelColor : .disabledControlTextColor
 
         // Upscalers
-        vidEnhancerPopUp.selectItem(withTag: config.enhancer)
-        vidUpscalerPopUp.selectItem(withTag: config.upscaler)
+        enhancerPopUp.selectItem(withTag: config.enhancer)
+        upscalerPopUp.selectItem(withTag: config.upscaler)
 
         // Effects
-        vidBlurPopUp.selectItem(withTag: Int(config.blur))
-        vidBlurRadiusSlider.integerValue = config.blurRadius
-        vidBlurRadiusSlider.isEnabled = config.blur > 0
+        blurPopUp.selectItem(withTag: Int(config.blur))
+        blurRadiusSlider.integerValue = config.blurRadius
+        blurRadiusSlider.isEnabled = config.blur > 0
 
-        vidBloomPopUp.selectItem(withTag: Int(config.bloom))
-        vidBloomRadiusSlider.integerValue = config.bloomRadius
-        vidBloomRadiusSlider.isEnabled = config.bloom > 0
-        vidBloomBrightnessSlider.integerValue = config.bloomBrightness
-        vidBloomBrightnessSlider.isEnabled = config.bloom > 0
-        vidBloomWeightSlider.integerValue = config.bloomWeight
-        vidBloomWeightSlider.isEnabled = config.bloom > 0
+        bloomPopUp.selectItem(withTag: Int(config.bloom))
+        bloomRadiusSlider.integerValue = config.bloomRadius
+        bloomRadiusSlider.isEnabled = config.bloom > 0
+        bloomBrightnessSlider.integerValue = config.bloomBrightness
+        bloomBrightnessSlider.isEnabled = config.bloom > 0
+        bloomWeightSlider.integerValue = config.bloomWeight
+        bloomWeightSlider.isEnabled = config.bloom > 0
 
-        vidFlickerPopUp.selectItem(withTag: Int(config.flicker))
-        vidFlickerWeightSlider.integerValue = config.flickerWeight
-        vidFlickerWeightSlider.isEnabled = config.flicker > 0
+        flickerPopUp.selectItem(withTag: Int(config.flicker))
+        flickerWeightSlider.integerValue = config.flickerWeight
+        flickerWeightSlider.isEnabled = config.flicker > 0
 
-        vidDotMaskPopUp.selectItem(withTag: Int(config.dotMask))
+        dotMaskPopUp.selectItem(withTag: Int(config.dotMask))
         for i in 0 ... 4 {
-            vidDotMaskPopUp.item(at: i)?.image = renderer.ressourceManager.dotmaskImages[i]
+            dotMaskPopUp.item(at: i)?.image = renderer.ressourceManager.dotmaskImages[i]
         }
-        vidDotMaskBrightnessSlider.integerValue = config.dotMaskBrightness
-        vidDotMaskBrightnessSlider.isEnabled = config.dotMask > 0
+        dotMaskBrightnessSlider.integerValue = config.dotMaskBrightness
+        dotMaskBrightnessSlider.isEnabled = config.dotMask > 0
 
-        vidScanlinesPopUp.selectItem(withTag: Int(config.scanlines))
-        vidScanlineBrightnessSlider.integerValue = config.scanlineBrightness
-        vidScanlineBrightnessSlider.isEnabled = config.scanlines > 0
-        vidScanlineWeightSlider.integerValue = config.scanlineWeight
-        vidScanlineWeightSlider.isEnabled = config.scanlines == 2
+        scanlinesPopUp.selectItem(withTag: Int(config.scanlines))
+        scanlineBrightnessSlider.integerValue = config.scanlineBrightness
+        scanlineBrightnessSlider.isEnabled = config.scanlines > 0
+        scanlineWeightSlider.integerValue = config.scanlineWeight
+        scanlineWeightSlider.isEnabled = config.scanlines == 2
 
-        vidMisalignmentPopUp.selectItem(withTag: Int(config.disalignment))
-        vidMisalignmentXSlider.integerValue = config.disalignmentH
-        vidMisalignmentXSlider.isEnabled = config.disalignment > 0
-        vidMisalignmentYSlider.integerValue = config.disalignmentV
-        vidMisalignmentYSlider.isEnabled = config.disalignment > 0
+        misalignmentPopUp.selectItem(withTag: Int(config.disalignment))
+        misalignmentXSlider.integerValue = config.disalignmentH
+        misalignmentXSlider.isEnabled = config.disalignment > 0
+        misalignmentYSlider.integerValue = config.disalignmentV
+        misalignmentYSlider.isEnabled = config.disalignment > 0
     }
 
     override func preset(tag: Int) {
@@ -237,22 +233,22 @@ class VideoSettingsViewController: SettingsViewController {
     // Action methods (Colors)
     //
 
-    @IBAction func vidPaletteAction(_ sender: NSPopUpButton!) {
+    @IBAction func paletteAction(_ sender: NSPopUpButton!) {
 
         config?.palette = sender.selectedTag()
     }
 
-    @IBAction func vidBrightnessAction(_ sender: NSSlider!) {
+    @IBAction func brightnessAction(_ sender: NSSlider!) {
 
         config?.brightness = sender.integerValue
     }
 
-    @IBAction func vidContrastAction(_ sender: NSSlider!) {
+    @IBAction func contrastAction(_ sender: NSSlider!) {
 
         config?.contrast = sender.integerValue
     }
 
-    @IBAction func vidSaturationAction(_ sender: NSSlider!) {
+    @IBAction func saturationAction(_ sender: NSSlider!) {
 
         config?.saturation = sender.integerValue
     }
@@ -261,37 +257,37 @@ class VideoSettingsViewController: SettingsViewController {
     // Action methods (Geometry)
     //
 
-    @IBAction func vidZoomAction(_ sender: NSPopUpButton) {
+    @IBAction func zoomAction(_ sender: NSPopUpButton) {
 
         config?.zoom = sender.selectedTag()
         refresh()
     }
 
-    @IBAction func vidHZoomAction(_ sender: NSSlider!) {
+    @IBAction func hZoomAction(_ sender: NSSlider!) {
 
         config?.hZoom = sender.integerValue
         refresh()
     }
 
-    @IBAction func vidVZoomAction(_ sender: NSSlider!) {
+    @IBAction func vZoomAction(_ sender: NSSlider!) {
 
         config?.vZoom = sender.integerValue
         refresh()
     }
 
-    @IBAction func vidCenterAction(_ sender: NSPopUpButton) {
+    @IBAction func centerAction(_ sender: NSPopUpButton) {
 
         config?.center = sender.selectedTag()
         refresh()
     }
 
-    @IBAction func vidHCenterAction(_ sender: NSSlider!) {
+    @IBAction func hCenterAction(_ sender: NSSlider!) {
 
         config?.hCenter = sender.integerValue
         refresh()
     }
 
-    @IBAction func vidVCenterAction(_ sender: NSSlider!) {
+    @IBAction func vCenterAction(_ sender: NSSlider!) {
 
         config?.vCenter = sender.integerValue
         refresh()
@@ -301,109 +297,109 @@ class VideoSettingsViewController: SettingsViewController {
     // Action methods (Effects)
     //
 
-    @IBAction func vidEnhancerAction(_ sender: NSPopUpButton!) {
+    @IBAction func enhancerAction(_ sender: NSPopUpButton!) {
 
         config?.enhancer = sender.selectedTag()
         refresh()
     }
 
-    @IBAction func vidUpscalerAction(_ sender: NSPopUpButton!) {
+    @IBAction func upscalerAction(_ sender: NSPopUpButton!) {
 
         config?.upscaler = sender.selectedTag()
         refresh()
     }
 
-    @IBAction func vidBlurAction(_ sender: NSPopUpButton!) {
+    @IBAction func blurAction(_ sender: NSPopUpButton!) {
 
         config?.blur = sender.selectedTag()
         refresh()
     }
 
-    @IBAction func vidBlurRadiusAction(_ sender: NSSlider!) {
+    @IBAction func blurRadiusAction(_ sender: NSSlider!) {
 
         config?.blurRadius = sender.integerValue
         refresh()
     }
 
-    @IBAction func vidBloomAction(_ sender: NSPopUpButton!) {
+    @IBAction func bloomAction(_ sender: NSPopUpButton!) {
 
         config?.bloom = sender.selectedTag()
         refresh()
     }
 
-    @IBAction func vidBloomRadiusAction(_ sender: NSSlider!) {
+    @IBAction func bloomRadiusAction(_ sender: NSSlider!) {
 
         config?.bloomRadius = sender.integerValue
         refresh()
     }
 
-    @IBAction func vidBloomBrightnessAction(_ sender: NSSlider!) {
+    @IBAction func bloomBrightnessAction(_ sender: NSSlider!) {
 
         config?.bloomBrightness = sender.integerValue
         refresh()
     }
 
-    @IBAction func vidBloomWeightAction(_ sender: NSSlider!) {
+    @IBAction func bloomWeightAction(_ sender: NSSlider!) {
 
         config?.bloomWeight = sender.integerValue
         refresh()
     }
 
-    @IBAction func vidFlickerAction(_ sender: NSPopUpButton!) {
+    @IBAction func flickerAction(_ sender: NSPopUpButton!) {
 
         config?.flicker = sender.selectedTag()
         refresh()
     }
 
-    @IBAction func vidFlickerWeightAction(_ sender: NSSlider!) {
+    @IBAction func flickerWeightAction(_ sender: NSSlider!) {
 
         config?.flickerWeight = sender.integerValue
         refresh()
     }
 
-    @IBAction func vidDotMaskAction(_ sender: NSPopUpButton!) {
+    @IBAction func dotMaskAction(_ sender: NSPopUpButton!) {
 
         config?.dotMask = sender.selectedTag()
         refresh()
     }
 
-    @IBAction func vidDotMaskBrightnessAction(_ sender: NSSlider!) {
+    @IBAction func dotMaskBrightnessAction(_ sender: NSSlider!) {
 
         config?.dotMaskBrightness = sender.integerValue
         refresh()
     }
 
-    @IBAction func vidScanlinesAction(_ sender: NSPopUpButton!) {
+    @IBAction func scanlinesAction(_ sender: NSPopUpButton!) {
 
         config?.scanlines = sender.selectedTag()
         refresh()
     }
 
-    @IBAction func vidScanlineBrightnessAction(_ sender: NSSlider!) {
+    @IBAction func scanlineBrightnessAction(_ sender: NSSlider!) {
 
         config?.scanlineBrightness = sender.integerValue
         refresh()
     }
 
-    @IBAction func vidScanlineWeightAction(_ sender: NSSlider!) {
+    @IBAction func scanlineWeightAction(_ sender: NSSlider!) {
 
         config?.scanlineWeight = sender.integerValue
         refresh()
     }
 
-    @IBAction func vidDisalignmentAction(_ sender: NSPopUpButton!) {
+    @IBAction func disalignmentAction(_ sender: NSPopUpButton!) {
 
         config?.disalignment = sender.selectedTag()
         refresh()
     }
 
-    @IBAction func vidDisalignmentHAction(_ sender: NSSlider!) {
+    @IBAction func disalignmentHAction(_ sender: NSSlider!) {
 
         config?.disalignmentH = sender.integerValue
         refresh()
     }
 
-    @IBAction func vidDisalignmentVAction(_ sender: NSSlider!) {
+    @IBAction func disalignmentVAction(_ sender: NSSlider!) {
 
         config?.disalignmentV = sender.integerValue
         refresh()
