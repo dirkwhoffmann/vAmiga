@@ -9,18 +9,6 @@
 
 class HardwareSettingsViewController: SettingsViewController {
 
-    // Lock
-    @IBOutlet weak var hwLockImage: NSButton!
-    @IBOutlet weak var hwLockInfo1: NSTextField!
-    @IBOutlet weak var hwLockInfo2: NSTextField!
-
-    // Buttons
-    /*
-    @IBOutlet weak var hwFactorySettingsPopup: NSPopUpButton!
-    @IBOutlet weak var hwOKButton: NSButton!
-    @IBOutlet weak var hwPowerButton: NSButton!
-    */
-
     // CPU
     @IBOutlet weak var csCpuRevision: NSPopUpButton!
     @IBOutlet weak var csCpuSpeed: NSPopUpButton!
@@ -43,16 +31,24 @@ class HardwareSettingsViewController: SettingsViewController {
     @IBOutlet weak var csCiaInfo1: NSTextField!
     @IBOutlet weak var csCiaInfo2: NSTextField!
 
-    // RT clock
+    // RTC
     @IBOutlet weak var csRtcRevision: NSPopUpButton!
     @IBOutlet weak var csRtcInfo1: NSTextField!
     @IBOutlet weak var csRtcInfo2: NSTextField!
     @IBOutlet weak var csRtcIcon: NSButton!
 
-    override var presets: [(String,Int)] {
-        [ ("A500", 0), ("A1000", 1), ("A2000", 2), ("", 0), ("A500+", 3) ]
-    }
+    // RAM
+    @IBOutlet weak var memChipRamPopup: NSPopUpButton!
+    @IBOutlet weak var memSlowRamPopup: NSPopUpButton!
+    @IBOutlet weak var memFastRamPopup: NSPopUpButton!
 
+    // Memory handling
+    @IBOutlet weak var memRamInitPattern: NSPopUpButton!
+    @IBOutlet weak var memBankMap: NSPopUpButton!
+    @IBOutlet weak var memUnmappingType: NSPopUpButton!
+
+    // Warning
+    @IBOutlet weak var memWarnImage: NSButton!
     
     override func viewDidLoad() {
 
@@ -70,6 +66,8 @@ class HardwareSettingsViewController: SettingsViewController {
     }
 
     override func refresh() {
+
+        super.refresh()
 
         guard let emu = emu, let config = config else { return }
 

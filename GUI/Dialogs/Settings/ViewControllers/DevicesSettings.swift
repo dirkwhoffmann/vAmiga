@@ -47,6 +47,8 @@ class DevicesSettingsViewController: SettingsViewController {
 
     override func refresh() {
 
+        super.refresh()
+        
         // Device properties
         manufacturer.stringValue = property(kIOHIDManufacturerKey)
         product.stringValue = property(kIOHIDProductKey)

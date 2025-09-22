@@ -39,7 +39,10 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Configuration panel of this emulator instance
     var configurator: ConfigurationController?
-    
+
+    // Settings panel
+    var settings: SettingsWindowController? { myAppDelegate.settingsController }
+
     // Snapshot and screenshot browsers
     var snapshotBrowser: SnapshotViewer?
     var screenshotBrowser: ScreenshotViewer?
@@ -380,6 +383,7 @@ extension MyController {
             refreshStatusBar()
             passToInspector()
             passToDashboard()
+            settings?.refresh()
 
         case .POWER:
             if value != 0 {
@@ -395,6 +399,7 @@ extension MyController {
             clearInfo()
             passToInspector()
             configurator?.refresh()
+            settings?.refresh()
 
         case .RUN:
             toolbar.updateToolbar()

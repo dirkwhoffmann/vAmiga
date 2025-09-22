@@ -52,6 +52,7 @@ class CompatibilitySettingsViewController: SettingsViewController {
 
     override func refresh() {
 
+        super.refresh()
     }
 
     //

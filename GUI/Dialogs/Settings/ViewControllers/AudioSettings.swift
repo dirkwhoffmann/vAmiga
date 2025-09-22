@@ -63,6 +63,7 @@ class AudioSettingsViewController: SettingsViewController {
 
     override func refresh() {
 
+        super.refresh()
     }
 
     //

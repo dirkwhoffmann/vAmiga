@@ -52,6 +52,7 @@ class RomSettingsViewController: SettingsViewController {
 
     override func refresh() {
 
+        super.refresh()
     }
 
     //

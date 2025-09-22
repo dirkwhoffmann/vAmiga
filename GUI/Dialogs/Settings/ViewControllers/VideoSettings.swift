@@ -64,7 +64,7 @@ class VideoSettingsViewController: SettingsViewController {
     // Buttons
     @IBOutlet weak var vidOKButton: NSButton!
     @IBOutlet weak var vidPowerButton: NSButton!
-    
+
     override func viewDidLoad() {
 
         print("VideoSettingsViewController::viewDidLoad")
@@ -76,6 +76,7 @@ class VideoSettingsViewController: SettingsViewController {
 
     override func refresh() {
 
+        super.refresh()
     }
 
     //

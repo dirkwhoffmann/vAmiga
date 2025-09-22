@@ -46,21 +46,14 @@ class ControlsSettingsViewController: SettingsViewController {
 
     @IBOutlet weak var disconnectKeys: NSButton!
 
-    // Mouse
-    @IBOutlet weak var retainMouseKeyComb: NSPopUpButton!
-    @IBOutlet weak var retainMouseWithKeys: NSButton!
-    @IBOutlet weak var retainMouseByClick: NSButton!
-    @IBOutlet weak var retainMouseByEntering: NSButton!
-    @IBOutlet weak var releaseMouseKeyComb: NSPopUpButton!
-    @IBOutlet weak var releaseMouseWithKeys: NSButton!
-    @IBOutlet weak var releaseMouseByShaking: NSButton!
-
     //
     // Refresh
     //
 
     override func refresh() {
 
+        super.refresh()
+        
         // Mouse button keyset
         refreshKey(map: 0, dir: .PRESS_LEFT, button: mouseLeftButton, txt: mouseLeft)
         refreshKey(map: 0, dir: .PRESS_MIDDLE, button: mouseMiddleButton, txt: mouseMiddle)
@@ -81,17 +74,6 @@ class ControlsSettingsViewController: SettingsViewController {
         refreshKey(map: 2, dir: .PRESS_FIRE, button: fire2button, txt: fire2)
 
         disconnectKeys.state = pref.disconnectJoyKeys ? .on : .off
-
-        // Mouse
-        retainMouseKeyComb.selectItem(withTag: pref.retainMouseKeyComb)
-        retainMouseKeyComb.isEnabled = pref.retainMouseWithKeys
-        retainMouseWithKeys.state = pref.retainMouseWithKeys ? .on : .off
-        retainMouseByClick.state = pref.retainMouseByClick ? .on : .off
-        retainMouseByEntering.state = pref.retainMouseByEntering ? .on : .off
-        releaseMouseKeyComb.selectItem(withTag: pref.releaseMouseKeyComb)
-        releaseMouseKeyComb.isEnabled = pref.releaseMouseWithKeys
-        releaseMouseWithKeys.state = pref.releaseMouseWithKeys ? .on : .off
-        releaseMouseByShaking.state = pref.releaseMouseByShaking ? .on : .off
     }
 
     func refreshKey(map: Int, dir: GamePadAction, button: NSButton, txt: NSTextField) {
@@ -208,42 +190,7 @@ class ControlsSettingsViewController: SettingsViewController {
         refresh()
     }
 
-    @IBAction func retainMouseKeyCombAction(_ sender: NSPopUpButton!) {
 
-        pref.retainMouseKeyComb = sender.selectedTag()
-        refresh()
-    }
-
-    @IBAction func retainMouseAction(_ sender: NSButton!) {
-
-        switch sender.tag {
-
-        case 0: pref.retainMouseWithKeys   = (sender.state == .on)
-        case 1: pref.retainMouseByClick    = (sender.state == .on)
-        case 2: pref.retainMouseByEntering = (sender.state == .on)
-        default: fatalError()
-        }
-
-        refresh()
-    }
-
-    @IBAction func releaseMouseKeyCombAction(_ sender: NSPopUpButton!) {
-
-        pref.releaseMouseKeyComb = sender.selectedTag()
-        refresh()
-    }
-
-    @IBAction func releaseMouseAction(_ sender: NSButton!) {
-
-        switch sender.tag {
-
-        case 0: pref.releaseMouseWithKeys  = (sender.state == .on)
-        case 1: pref.releaseMouseByShaking = (sender.state == .on)
-        default: fatalError()
-        }
-
-        refresh()
-    }
 
     override func preset(tag: Int) {
 

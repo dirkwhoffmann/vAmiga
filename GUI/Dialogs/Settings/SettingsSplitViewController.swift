@@ -11,6 +11,12 @@ import Cocoa
 
 class SettingsSplitViewController: NSSplitViewController {
 
+    func instantiate(_ identifier: String) -> Any {
+
+        let main = NSStoryboard(name: "Settings", bundle: nil)
+        return main.instantiateController(withIdentifier: identifier)
+    }
+
     var windowController: SettingsWindowController? {
         view.window?.windowController as? SettingsWindowController
     }
@@ -21,23 +27,38 @@ class SettingsSplitViewController: NSSplitViewController {
         return splitViewItems.first?.viewController as? SidebarViewController
     }
 
-    let main = NSStoryboard(name: "Settings", bundle: nil)
+    // let main = NSStoryboard(name: "Settings", bundle: nil)
 
     lazy var generalVC: GeneralSettingsViewController = {
-        return main.instantiateController(withIdentifier: "GeneralSettingsViewController") as! GeneralSettingsViewController
+        instantiate("General") as! GeneralSettingsViewController
+    }()
+    lazy var capturesVC: CapturesSettingsViewController = {
+        instantiate("Captures") as! CapturesSettingsViewController
     }()
     lazy var controlsVC: ControlsSettingsViewController = {
-        return main.instantiateController(withIdentifier: "ControlsSettingsViewController") as! ControlsSettingsViewController
+        instantiate("Controls") as! ControlsSettingsViewController
     }()
     lazy var devicesVC: DevicesSettingsViewController = {
-        return main.instantiateController(withIdentifier: "DevicesSettingsViewController") as! DevicesSettingsViewController
+        instantiate("Devices") as! DevicesSettingsViewController
     }()
     lazy var romsVC: RomSettingsViewController = {
-        return main.instantiateController(withIdentifier: "RomSettingsViewController") as! RomSettingsViewController
+        instantiate("Roms") as! RomSettingsViewController
     }()
+    lazy var hardwareVC = instantiate("Hardware") as! HardwareSettingsViewController
+    /*
     lazy var hardwareVC: HardwareSettingsViewController = {
-        return main.instantiateController(withIdentifier: "HardwareSettingsViewController") as! HardwareSettingsViewController
+        instantiate("Hardware") as! HardwareSettingsViewController
     }()
+     */
+    lazy var peripheralsVC: PeripheralsSettingsViewController = {
+        instantiate("Peripherals") as! PeripheralsSettingsViewController
+    }()
+    lazy var compatibilityVC: CompatibilitySettingsViewController = {
+        instantiate("Compatibility") as! CompatibilitySettingsViewController
+    }()
+    lazy var performanceVC = instantiate("Performance") as! PerformanceSettingsViewController
+    lazy var audioVC = instantiate("Audio") as! AudioSettingsViewController
+    lazy var videoVC = instantiate("Video") as! VideoSettingsViewController
 
     var current: SettingsViewController?
 
@@ -51,13 +72,20 @@ class SettingsSplitViewController: NSSplitViewController {
 
     private func showContent(for item: SidebarItem) {
 
-        switch item.identifier.rawValue {
+        switch item.title {
 
-        case "general":     current = generalVC
-        case "controls":    current = controlsVC
-        case "devices":     current = devicesVC
-        case "roms":        current = romsVC
-        case "hardware":    current = hardwareVC
+        case "General":         current = generalVC
+        case "Captures":        current = capturesVC
+        case "Controls":        current = controlsVC
+        case "Devices":         current = devicesVC
+        case "Roms":            current = romsVC
+        case "Hardware":        current = hardwareVC
+        case "Peripherals":     current = peripheralsVC
+        case "Performance":     current = performanceVC
+        case "Compatibility":   current = compatibilityVC
+        case "Audio":           current = audioVC
+        case "Video":           current = videoVC
+
         default:            fatalError()
         }
 
@@ -69,12 +97,7 @@ class SettingsSplitViewController: NSSplitViewController {
         addSplitViewItem(newItem)
         current!.activate()
 
-        toolbar!.update(presets: current?.presets ?? [])
-
-        /*
-        current!.view.window?.makeFirstResponder(currentVC)
-        current!.refresh()
-        */
+        // toolbar!.update(presets: current?.presets ?? [])
     }
 
     override func keyDown(with event: NSEvent) {

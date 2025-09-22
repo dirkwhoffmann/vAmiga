@@ -9,13 +9,17 @@
 
 class SettingsViewController: NSViewController {
 
+    @IBOutlet weak var lockImage: NSButton!
+    @IBOutlet weak var lockInfo1: NSTextField!
+    @IBOutlet weak var lockInfo2: NSTextField!
+
     var pref: Preferences { myAppDelegate.pref }
     var controller: MyController? { MyAppDelegate.currentController }
     var config: Configuration? { return controller?.config }
     var gamePadManager: GamePadManager? { controller?.gamePadManager }
     var emu: EmulatorProxy? { controller?.emu }
 
-    var presets: [(String,Int)] { [ ("Standard settings", 0) ] }
+    var showLock: Bool { true }
 
     func activate() {
 
@@ -23,12 +27,37 @@ class SettingsViewController: NSViewController {
         refresh()
     }
 
-    func refresh() { }
+    func refresh() {
+
+        let poweredOff = emu?.poweredOff ?? false
+        lockInfo1.isHidden = !showLock || poweredOff
+        lockInfo2.isHidden = !showLock || poweredOff
+        lockImage.isHidden = !showLock || poweredOff
+    }
+
     override func keyDown(with event: NSEvent) { }
     override func flagsChanged(with event: NSEvent) { }
     func preset(tag: Int) { }
     func save() { }
-    
+
+    @IBAction
+    func presetAction(_ sender: NSPopUpButton) {
+
+        preset(tag: sender.selectedTag())
+    }
+
+    @IBAction
+    func saveAction(_ sender: Any) {
+
+        save()
+    }
+
+    @IBAction func unlockAction(_ sender: Any!) {
+
+        emu?.pause()
+        emu?.powerOff()
+        refresh()
+    }
 }
 
 class SettingsView: NSView {

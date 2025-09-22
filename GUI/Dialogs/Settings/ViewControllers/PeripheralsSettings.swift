@@ -67,6 +67,7 @@ class PeripheralsSettingsViewController: SettingsViewController {
 
     override func refresh() {
 
+        super.refresh()
     }
 
     //

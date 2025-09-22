@@ -13,21 +13,14 @@ class GeneralSettingsViewController: SettingsViewController {
     @IBOutlet weak var aspectRatioButton: NSButton!
     @IBOutlet weak var exitOnEscButton: NSButton!
 
-    // Snapshots
-    @IBOutlet weak var snapshotCompressor: NSPopUpButton!
-    @IBOutlet weak var autoSnapshots: NSButton!
-    @IBOutlet weak var snapshotInterval: NSTextField!
-    @IBOutlet weak var snapshotStorage: NSTextField!
-
-    // Screenshots
-    @IBOutlet weak var screenshotFormatPopup: NSPopUpButton!
-    @IBOutlet weak var screenshotSourcePopup: NSPopUpButton!
-    @IBOutlet weak var screenshotCutoutPopup: NSPopUpButton!
-    @IBOutlet weak var screenshotCutoutText: NSTextField!
-    @IBOutlet weak var screenshotWidth: NSTextField!
-    @IBOutlet weak var screenshotWidthText: NSTextField!
-    @IBOutlet weak var screenshotHeight: NSTextField!
-    @IBOutlet weak var screenshotHeightText: NSTextField!
+    // Mouse
+    @IBOutlet weak var retainMouseKeyComb: NSPopUpButton!
+    @IBOutlet weak var retainMouseWithKeys: NSButton!
+    @IBOutlet weak var retainMouseByClick: NSButton!
+    @IBOutlet weak var retainMouseByEntering: NSButton!
+    @IBOutlet weak var releaseMouseKeyComb: NSPopUpButton!
+    @IBOutlet weak var releaseMouseWithKeys: NSButton!
+    @IBOutlet weak var releaseMouseByShaking: NSButton!
 
     // Misc
     @IBOutlet weak var ejectWithoutAskingButton: NSButton!
@@ -41,16 +34,12 @@ class GeneralSettingsViewController: SettingsViewController {
     }
 
     //
-    // Refresh
+    // Methods from SettingsViewController
     //
 
     override func refresh() {
-        
-        // Snapshots
-        snapshotStorage.integerValue = pref.snapshotStorage
-        autoSnapshots.state = pref.autoSnapshots ? .on : .off
-        snapshotInterval.integerValue = pref.snapshotInterval
-        snapshotInterval.isEnabled = pref.autoSnapshots
+
+        super.refresh()
 
         // Fullscreen
         aspectRatioButton.state = pref.keepAspectRatio ? .on : .off
@@ -62,48 +51,21 @@ class GeneralSettingsViewController: SettingsViewController {
         closeWithoutAskingButton.state = pref.closeWithoutAsking ? .on : .off
         pauseInBackground.state = pref.pauseInBackground ? .on : .off
 
-        // Screenshots
-        let framebuffer = pref.screenshotSource == .framebuffer
-        let custom = pref.screenshotCutout == .custom
-        screenshotFormatPopup.selectItem(withTag: pref.screenshotFormatIntValue)
-        screenshotSourcePopup.selectItem(withTag: pref.screenshotSourceIntValue)
-        screenshotCutoutPopup.selectItem(withTag: pref.screenshotCutoutIntValue)
-        screenshotCutoutPopup.isHidden = framebuffer
-        screenshotCutoutText.isHidden = framebuffer
-        screenshotWidth.integerValue = pref.screenshotWidth
-        screenshotWidth.isHidden = !custom || framebuffer
-        screenshotWidthText.isHidden = !custom || framebuffer
-        screenshotHeight.integerValue = pref.screenshotHeight
-        screenshotHeight.isHidden = !custom || framebuffer
-        screenshotHeightText.isHidden = !custom || framebuffer
+        // Mouse
+        retainMouseKeyComb.selectItem(withTag: pref.retainMouseKeyComb)
+        retainMouseKeyComb.isEnabled = pref.retainMouseWithKeys
+        retainMouseWithKeys.state = pref.retainMouseWithKeys ? .on : .off
+        retainMouseByClick.state = pref.retainMouseByClick ? .on : .off
+        retainMouseByEntering.state = pref.retainMouseByEntering ? .on : .off
+        releaseMouseKeyComb.selectItem(withTag: pref.releaseMouseKeyComb)
+        releaseMouseKeyComb.isEnabled = pref.releaseMouseWithKeys
+        releaseMouseWithKeys.state = pref.releaseMouseWithKeys ? .on : .off
+        releaseMouseByShaking.state = pref.releaseMouseByShaking ? .on : .off
     }
 
     //
-    // Action methods
+    // Action methods (Fullscreen)
     //
-
-    @IBAction func snapshotStorageAction(_ sender: NSTextField!) {
-
-        if sender.integerValue > 0 {
-            pref.snapshotStorage = sender.integerValue
-        }
-        refresh()
-    }
-
-    @IBAction func autoSnapshotAction(_ sender: NSButton!) {
-
-        pref.autoSnapshots = sender.state == .on
-        refresh()
-    }
-
-    @IBAction func snapshotIntervalAction(_ sender: NSTextField!) {
-
-        print("snapshotIntervalAction: \(sender.integerValue)")
-        if sender.integerValue > 0 {
-            pref.snapshotInterval = sender.integerValue
-        }
-        refresh()
-    }
 
     @IBAction func aspectRatioAction(_ sender: NSButton!) {
 
@@ -116,6 +78,51 @@ class GeneralSettingsViewController: SettingsViewController {
         pref.exitOnEsc = (sender.state == .on)
         refresh()
     }
+
+    //
+    // Action methods (Mouse)
+    //
+
+    @IBAction func retainMouseKeyCombAction(_ sender: NSPopUpButton!) {
+
+        pref.retainMouseKeyComb = sender.selectedTag()
+        refresh()
+    }
+
+    @IBAction func retainMouseAction(_ sender: NSButton!) {
+
+        switch sender.tag {
+
+        case 0: pref.retainMouseWithKeys   = (sender.state == .on)
+        case 1: pref.retainMouseByClick    = (sender.state == .on)
+        case 2: pref.retainMouseByEntering = (sender.state == .on)
+        default: fatalError()
+        }
+
+        refresh()
+    }
+
+    @IBAction func releaseMouseKeyCombAction(_ sender: NSPopUpButton!) {
+
+        pref.releaseMouseKeyComb = sender.selectedTag()
+        refresh()
+    }
+
+    @IBAction func releaseMouseAction(_ sender: NSButton!) {
+
+        switch sender.tag {
+
+        case 0: pref.releaseMouseWithKeys  = (sender.state == .on)
+        case 1: pref.releaseMouseByShaking = (sender.state == .on)
+        default: fatalError()
+        }
+
+        refresh()
+    }
+
+    //
+    // Action methods (Misc)
+    //
 
     @IBAction func ejectWithoutAskingAction(_ sender: NSButton!) {
 
@@ -169,13 +176,6 @@ class GeneralSettingsViewController: SettingsViewController {
 
         pref.aspectY = sender.integerValue
         refresh()
-    }
-
-    @IBAction func retroVisorAction(_ sender: Any!) {
-
-        if let url = URL(string: "https://dirkwhoffmann.github.io/RetroVisor/") {
-            NSWorkspace.shared.open(url)
-        }
     }
 
     override func preset(tag: Int) {

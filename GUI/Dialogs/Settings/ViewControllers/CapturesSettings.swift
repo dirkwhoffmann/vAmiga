@@ -36,22 +36,13 @@ class CapturesSettingsViewController: SettingsViewController {
 
     override func refresh() {
 
-        /*
+        super.refresh()
+        
         // Snapshots
         snapshotStorage.integerValue = pref.snapshotStorage
         autoSnapshots.state = pref.autoSnapshots ? .on : .off
         snapshotInterval.integerValue = pref.snapshotInterval
         snapshotInterval.isEnabled = pref.autoSnapshots
-
-        // Fullscreen
-        aspectRatioButton.state = pref.keepAspectRatio ? .on : .off
-        exitOnEscButton.state = pref.exitOnEsc ? .on : .off
-
-        // Miscellaneous
-        ejectWithoutAskingButton.state = pref.ejectWithoutAsking ? .on : .off
-        detachWithoutAskingButton.state = pref.detachWithoutAsking ? .on : .off
-        closeWithoutAskingButton.state = pref.closeWithoutAsking ? .on : .off
-        pauseInBackground.state = pref.pauseInBackground ? .on : .off
 
         // Screenshots
         let framebuffer = pref.screenshotSource == .framebuffer
@@ -67,7 +58,6 @@ class CapturesSettingsViewController: SettingsViewController {
         screenshotHeight.integerValue = pref.screenshotHeight
         screenshotHeight.isHidden = !custom || framebuffer
         screenshotHeightText.isHidden = !custom || framebuffer
-        */
     }
 
     //

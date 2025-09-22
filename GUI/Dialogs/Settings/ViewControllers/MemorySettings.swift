@@ -9,11 +9,6 @@
 
 class MemorySettingsViewController: SettingsViewController {
 
-    // Lock
-    @IBOutlet weak var hwLockImage: NSButton!
-    @IBOutlet weak var hwLockInfo1: NSTextField!
-    @IBOutlet weak var hwLockInfo2: NSTextField!
-
     // RAM
     @IBOutlet weak var memChipRamPopup: NSPopUpButton!
     @IBOutlet weak var memSlowRamPopup: NSPopUpButton!
@@ -40,6 +35,7 @@ class MemorySettingsViewController: SettingsViewController {
 
     override func refresh() {
 
+        super.refresh()
     }
 
     //

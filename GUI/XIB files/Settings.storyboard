@@ -193,7 +193,7 @@
         <!--General Settings View Controller-->
         <scene sceneID="KyA-Dk-9mk">
             <objects>
-                <viewController storyboardIdentifier="GeneralSettingsViewController" id="ejc-Ml-G1m" customClass="GeneralSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="General" id="ejc-Ml-G1m" customClass="GeneralSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="2Zg-h3-obC" customClass="SettingsView" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -285,6 +285,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="unlockAction:" target="ejc-Ml-G1m" id="H59-FF-Xlr"/>
+                                            </connections>
                                         </button>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4dY-xf-XJf">
                                             <rect key="frame" x="393" y="23" width="191" height="14"/>
@@ -316,24 +319,23 @@
                                         <popUpButton id="cLL-35-SMA" userLabel="System">
                                             <rect key="frame" x="17" y="10" width="53" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="6Hr-Tc-QXK" id="nhe-uv-biX" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="nhe-uv-biX" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="message"/>
                                                 <menu key="menu" title="Restore" id="hzg-I1-bOi">
                                                     <items>
-                                                        <menuItem title="Revert..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="6Hr-Tc-QXK">
+                                                        <menuItem title="Revert to..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="6Hr-Tc-QXK">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga 500" id="nYD-RC-oP8">
+                                                        <menuItem title="Standard Settings" id="nYD-RC-oP8">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga 1000" tag="1" id="eBP-IX-6VZ"/>
-                                                        <menuItem title="Amiga 2000" tag="2" id="Y8H-Le-jpx"/>
-                                                        <menuItem isSeparatorItem="YES" id="yE5-HO-dxZ"/>
-                                                        <menuItem title="Amiga 500+" tag="3" id="zxg-aZ-A7c"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
+                                            <connections>
+                                                <action selector="presetAction:" target="ejc-Ml-G1m" id="l9g-Bq-ed3"/>
+                                            </connections>
                                         </popUpButton>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5v2-RQ-JUQ">
                                             <rect key="frame" x="64" y="7" width="60" height="32"/>
@@ -342,6 +344,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="saveAction:" target="ejc-Ml-G1m" id="NIx-7b-ad9"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                 </view>
@@ -381,7 +386,7 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="retainMouseAction:" target="EGi-z1-MUh" id="t3T-ZO-qM3"/>
+                                    <action selector="retainMouseAction:" target="ejc-Ml-G1m" id="eep-Ve-xCF"/>
                                 </connections>
                             </button>
                             <button tag="1" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4zq-Mu-KH3">
@@ -392,7 +397,7 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="retainMouseAction:" target="EGi-z1-MUh" id="LSO-gF-J0t"/>
+                                    <action selector="retainMouseAction:" target="ejc-Ml-G1m" id="hfy-jT-NSb"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0hd-SS-u3P">
@@ -403,7 +408,7 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="releaseMouseAction:" target="EGi-z1-MUh" id="c7O-hY-YFh"/>
+                                    <action selector="releaseMouseAction:" target="ejc-Ml-G1m" id="ysA-mC-yZV"/>
                                 </connections>
                             </button>
                             <button tag="1" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xfi-fe-Zfd">
@@ -414,7 +419,7 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="releaseMouseAction:" target="EGi-z1-MUh" id="vj9-dS-iii"/>
+                                    <action selector="releaseMouseAction:" target="ejc-Ml-G1m" id="9ne-vG-0YM"/>
                                 </connections>
                             </button>
                             <button tag="2" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ftI-2N-rZ1">
@@ -425,7 +430,7 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="retainMouseAction:" target="EGi-z1-MUh" id="rsW-fm-Inq"/>
+                                    <action selector="retainMouseAction:" target="ejc-Ml-G1m" id="mmN-hm-W93"/>
                                 </connections>
                             </button>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nUG-qz-3Po">
@@ -446,7 +451,7 @@
                                     </menu>
                                 </popUpButtonCell>
                                 <connections>
-                                    <action selector="retainMouseKeyCombAction:" target="EGi-z1-MUh" id="UvX-1V-4Ll"/>
+                                    <action selector="retainMouseKeyCombAction:" target="ejc-Ml-G1m" id="gIQ-XD-6IZ"/>
                                 </connections>
                             </popUpButton>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="boU-G9-by9">
@@ -467,7 +472,7 @@
                                     </menu>
                                 </popUpButtonCell>
                                 <connections>
-                                    <action selector="releaseMouseKeyCombAction:" target="EGi-z1-MUh" id="ZIn-Nl-dYG"/>
+                                    <action selector="releaseMouseKeyCombAction:" target="ejc-Ml-G1m" id="TcO-Yx-mDc"/>
                                 </connections>
                             </popUpButton>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GPX-5p-xjO">
@@ -500,7 +505,17 @@
                         <outlet property="detachWithoutAskingButton" destination="uRR-9c-eOJ" id="fYR-TC-qZE"/>
                         <outlet property="ejectWithoutAskingButton" destination="z47-6n-Ras" id="Wtt-Gx-M7p"/>
                         <outlet property="exitOnEscButton" destination="pif-Sc-82g" id="26e-Xs-HVg"/>
+                        <outlet property="lockImage" destination="Ojw-M6-Jyd" id="8ri-cF-Dpw"/>
+                        <outlet property="lockInfo1" destination="4dY-xf-XJf" id="ndb-zB-YJU"/>
+                        <outlet property="lockInfo2" destination="6i1-l2-YLF" id="i7M-ss-Btg"/>
                         <outlet property="pauseInBackground" destination="eMj-ay-62P" id="bNi-vt-ZBt"/>
+                        <outlet property="releaseMouseByShaking" destination="Xfi-fe-Zfd" id="j69-Bf-aBE"/>
+                        <outlet property="releaseMouseKeyComb" destination="boU-G9-by9" id="vDc-cW-ZYa"/>
+                        <outlet property="releaseMouseWithKeys" destination="0hd-SS-u3P" id="AH8-l9-tgr"/>
+                        <outlet property="retainMouseByClick" destination="4zq-Mu-KH3" id="vyG-xO-QMY"/>
+                        <outlet property="retainMouseByEntering" destination="ftI-2N-rZ1" id="YkL-Ld-tgv"/>
+                        <outlet property="retainMouseKeyComb" destination="nUG-qz-3Po" id="yey-dI-aIg"/>
+                        <outlet property="retainMouseWithKeys" destination="eCD-eh-9KG" id="WDf-i2-0hh"/>
                     </connections>
                 </viewController>
                 <customObject id="HWW-o5-5Il" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -510,7 +525,7 @@
         <!--Controls Settings View Controller-->
         <scene sceneID="5Ms-Hm-ccL">
             <objects>
-                <viewController storyboardIdentifier="ControlsSettingsViewController" id="EGi-z1-MUh" customClass="ControlsSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Controls" id="EGi-z1-MUh" customClass="ControlsSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="seD-Mp-HVA" customClass="SettingsView" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -529,6 +544,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="unlockAction:" target="EGi-z1-MUh" id="ydy-ne-6bZ"/>
+                                            </connections>
                                         </button>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cci-ko-T8z">
                                             <rect key="frame" x="393" y="23" width="191" height="14"/>
@@ -549,9 +567,9 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J65-Af-S0T">
-                                            <rect key="frame" x="130" y="11" width="232" height="26"/>
+                                            <rect key="frame" x="130" y="11" width="149" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Joystick Emulation Keys" id="I6b-95-T2y">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Emulation Keys" id="I6b-95-T2y">
                                                 <font key="font" textStyle="title1" name=".SFNS-Regular"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -563,24 +581,23 @@
                             <popUpButton id="HLM-4A-gjU" userLabel="System">
                                 <rect key="frame" x="17" y="441" width="53" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <popUpButtonCell key="cell" type="push" title="Revert..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="p6U-vu-mLE" id="aaM-1N-kXl" userLabel="System">
+                                <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="aaM-1N-kXl" userLabel="System">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="message"/>
                                     <menu key="menu" title="Restore" id="PxB-gy-RxI">
                                         <items>
-                                            <menuItem title="Revert..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="p6U-vu-mLE">
+                                            <menuItem title="Revert to..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="p6U-vu-mLE">
                                                 <attributedString key="attributedTitle"/>
                                             </menuItem>
-                                            <menuItem title="Amiga 500" id="do5-cu-PM0">
+                                            <menuItem title="Standard Settings" id="do5-cu-PM0">
                                                 <attributedString key="attributedTitle"/>
                                             </menuItem>
-                                            <menuItem title="Amiga 1000" tag="1" id="fmH-KH-TLg"/>
-                                            <menuItem title="Amiga 2000" tag="2" id="GaM-DI-i60"/>
-                                            <menuItem isSeparatorItem="YES" id="keP-iT-bZf"/>
-                                            <menuItem title="Amiga 500+" tag="3" id="Q8e-pB-7P8"/>
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
+                                <connections>
+                                    <action selector="presetAction:" target="EGi-z1-MUh" id="zAa-ej-mgr"/>
+                                </connections>
                             </popUpButton>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c5x-hG-v7s">
                                 <rect key="frame" x="64" y="438" width="60" height="32"/>
@@ -589,9 +606,12 @@
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="saveAction:" target="EGi-z1-MUh" id="dsM-pT-uRO"/>
+                                </connections>
                             </button>
                             <button tag="1" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ekf-Vj-jps">
-                                <rect key="frame" x="294" y="307" width="16" height="16"/>
+                                <rect key="frame" x="295" y="307" width="16" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="trashTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" imageScaling="proportionallyDown" inset="2" id="cV9-AF-8eO">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -602,7 +622,7 @@
                                 </connections>
                             </button>
                             <button tag="2" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pjw-fJ-yBQ">
-                                <rect key="frame" x="294" y="195" width="16" height="16"/>
+                                <rect key="frame" x="590" y="306" width="16" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="trashTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" imageScaling="proportionallyDown" inset="2" id="r6H-QI-ong">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -613,7 +633,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ge5-sT-OZn">
-                                <rect key="frame" x="294" y="100" width="16" height="16"/>
+                                <rect key="frame" x="294" y="167" width="16" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="trashTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" refusesFirstResponder="YES" state="on" imageScaling="proportionallyDown" inset="2" id="xpi-pz-TFp">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -623,8 +643,26 @@
                                     <action selector="deleteKeysetAction:" target="EGi-z1-MUh" id="95E-dU-tcC"/>
                                 </connections>
                             </button>
+                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Hm-Ng-ASS">
+                                <rect key="frame" x="25" y="389" width="264" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Joystick Emulation keys" id="LhQ-f7-owo">
+                                    <font key="font" metaFont="systemBold"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lJW-eZ-ECj">
+                                <rect key="frame" x="25" y="224" width="263" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Mouse Emulation keys" id="zeV-eq-cu7">
+                                    <font key="font" metaFont="systemBold"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wyG-QZ-vhP">
-                                <rect key="frame" x="43" y="43" width="213" height="18"/>
+                                <rect key="frame" x="43" y="49" width="213" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Disconnect keys from keyboard" bezelStyle="regularSquare" imagePosition="left" refusesFirstResponder="YES" state="on" inset="2" id="CXM-iP-oW3">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -635,7 +673,7 @@
                                 </connections>
                             </button>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AAi-LP-TeW">
-                                <rect key="frame" x="43" y="306" width="65" height="17"/>
+                                <rect key="frame" x="44" y="306" width="65" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Keyset 1:" id="thS-KA-204">
                                     <font key="font" metaFont="system"/>
@@ -644,7 +682,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f16-nz-tHJ">
-                                <rect key="frame" x="43" y="194" width="65" height="17"/>
+                                <rect key="frame" x="339" y="305" width="65" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Keyset 2:" id="0hW-1m-9Vc">
                                     <font key="font" metaFont="system"/>
@@ -653,7 +691,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D0P-ZV-93O">
-                                <rect key="frame" x="43" y="100" width="61" height="17"/>
+                                <rect key="frame" x="43" y="167" width="61" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Buttons:" id="YgR-pg-m8O">
                                     <font key="font" metaFont="system"/>
@@ -662,7 +700,7 @@
                                 </textFieldCell>
                             </textField>
                             <button tag="10" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gD1-dW-bLJ">
-                                <rect key="frame" x="160" y="220" width="32" height="32"/>
+                                <rect key="frame" x="456" y="331" width="32" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="Lvc-zr-6u2">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -673,7 +711,7 @@
                                 </connections>
                             </button>
                             <button tag="11" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xal-kF-Pjk">
-                                <rect key="frame" x="160" y="152" width="32" height="32"/>
+                                <rect key="frame" x="456" y="263" width="32" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="TY1-qj-5Xx">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -684,7 +722,7 @@
                                 </connections>
                             </button>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xlv-hH-v2W">
-                                <rect key="frame" x="191" y="229" width="18" height="14"/>
+                                <rect key="frame" x="487" y="340" width="18" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="X" id="3JC-l0-qAs">
                                     <font key="font" metaFont="label" size="11"/>
@@ -693,7 +731,7 @@
                                 </textFieldCell>
                             </textField>
                             <button tag="12" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G5b-Qt-bDe">
-                                <rect key="frame" x="124" y="186" width="32" height="32"/>
+                                <rect key="frame" x="420" y="297" width="32" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="vvj-hX-poV">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -704,7 +742,7 @@
                                 </connections>
                             </button>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kjr-fd-s1t">
-                                <rect key="frame" x="191" y="161" width="18" height="14"/>
+                                <rect key="frame" x="487" y="272" width="18" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="X" id="wUR-er-Iqe">
                                     <font key="font" metaFont="label" size="11"/>
@@ -713,7 +751,7 @@
                                 </textFieldCell>
                             </textField>
                             <button tag="13" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZsJ-O3-sHB">
-                                <rect key="frame" x="196" y="186" width="32" height="32"/>
+                                <rect key="frame" x="492" y="297" width="32" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="5vE-0k-0th">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -724,7 +762,7 @@
                                 </connections>
                             </button>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dUR-OV-zY8">
-                                <rect key="frame" x="108" y="195" width="18" height="14"/>
+                                <rect key="frame" x="404" y="306" width="18" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="X" id="e3j-Jx-HCR">
                                     <font key="font" metaFont="label" size="11"/>
@@ -733,7 +771,7 @@
                                 </textFieldCell>
                             </textField>
                             <button tag="14" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lpR-Fv-g6t">
-                                <rect key="frame" x="255" y="186" width="32" height="32"/>
+                                <rect key="frame" x="551" y="297" width="32" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="V4A-Zz-r8T">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -744,7 +782,7 @@
                                 </connections>
                             </button>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gau-aG-aZQ">
-                                <rect key="frame" x="227" y="195" width="18" height="14"/>
+                                <rect key="frame" x="523" y="306" width="18" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="X" id="cKj-2j-Tvc">
                                     <font key="font" metaFont="label" size="11"/>
@@ -753,12 +791,12 @@
                                 </textFieldCell>
                             </textField>
                             <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LxH-iW-XU5">
-                                <rect key="frame" x="162" y="188" width="28" height="28"/>
+                                <rect key="frame" x="458" y="299" width="28" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyUpOrDown" image="joystick2" id="Tcs-Yv-MbZ"/>
                             </imageView>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cRB-si-MhS">
-                                <rect key="frame" x="262" y="171" width="18" height="14"/>
+                                <rect key="frame" x="558" y="282" width="18" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="X" id="doE-Ps-HWn">
                                     <font key="font" metaFont="label" size="11"/>
@@ -767,7 +805,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9QD-vk-DWk">
-                                <rect key="frame" x="255" y="217" width="31" height="17"/>
+                                <rect key="frame" x="551" y="328" width="31" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Fire" id="WsV-mF-TaC">
                                     <font key="font" metaFont="label" size="11"/>
@@ -776,7 +814,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="des-5P-WeK">
-                                <rect key="frame" x="160" y="332" width="32" height="32"/>
+                                <rect key="frame" x="161" y="332" width="32" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="bJS-np-3kN">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -787,7 +825,7 @@
                                 </connections>
                             </button>
                             <button tag="1" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qiN-Vt-cZ9">
-                                <rect key="frame" x="160" y="264" width="32" height="32"/>
+                                <rect key="frame" x="161" y="264" width="32" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7p8-if-sKB">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -798,7 +836,7 @@
                                 </connections>
                             </button>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2KZ-RC-RM2">
-                                <rect key="frame" x="191" y="341" width="18" height="14"/>
+                                <rect key="frame" x="192" y="341" width="18" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="X" id="zbp-mw-KR2">
                                     <font key="font" metaFont="label" size="11"/>
@@ -807,7 +845,7 @@
                                 </textFieldCell>
                             </textField>
                             <button tag="2" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="piy-oU-ZMj">
-                                <rect key="frame" x="124" y="298" width="32" height="32"/>
+                                <rect key="frame" x="125" y="298" width="32" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="pMv-gq-6d9">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -818,7 +856,7 @@
                                 </connections>
                             </button>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b46-7O-DaP">
-                                <rect key="frame" x="191" y="273" width="18" height="14"/>
+                                <rect key="frame" x="192" y="273" width="18" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="X" id="taY-ij-fve">
                                     <font key="font" metaFont="label" size="11"/>
@@ -827,7 +865,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3ys-4I-9C8">
-                                <rect key="frame" x="108" y="307" width="18" height="14"/>
+                                <rect key="frame" x="109" y="307" width="18" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="X" id="Pec-Md-x6b">
                                     <font key="font" metaFont="label" size="11"/>
@@ -836,7 +874,7 @@
                                 </textFieldCell>
                             </textField>
                             <button tag="4" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Z8s-ms-5Vh">
-                                <rect key="frame" x="255" y="298" width="32" height="32"/>
+                                <rect key="frame" x="256" y="298" width="32" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="zO3-cU-e8q">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -847,7 +885,7 @@
                                 </connections>
                             </button>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="71z-v3-JRS">
-                                <rect key="frame" x="227" y="307" width="18" height="14"/>
+                                <rect key="frame" x="228" y="307" width="18" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="X" id="vje-9Y-HJO">
                                     <font key="font" metaFont="label" size="11"/>
@@ -856,7 +894,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4gR-iS-qhI">
-                                <rect key="frame" x="263" y="283" width="18" height="14"/>
+                                <rect key="frame" x="264" y="283" width="18" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="X" id="TCD-Ki-O6j">
                                     <font key="font" metaFont="label" size="11"/>
@@ -865,12 +903,12 @@
                                 </textFieldCell>
                             </textField>
                             <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ia7-Z8-FpS">
-                                <rect key="frame" x="162" y="299" width="28" height="28"/>
+                                <rect key="frame" x="163" y="299" width="28" height="28"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyUpOrDown" image="joystick2" id="Sa3-MT-0Fo"/>
                             </imageView>
                             <button tag="3" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ab8-Bs-wb6">
-                                <rect key="frame" x="196" y="298" width="32" height="32"/>
+                                <rect key="frame" x="197" y="298" width="32" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="gEr-iG-iQ5">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -881,7 +919,7 @@
                                 </connections>
                             </button>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sPC-Rg-Jlb">
-                                <rect key="frame" x="256" y="329" width="31" height="17"/>
+                                <rect key="frame" x="257" y="329" width="31" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Fire" id="DF1-gN-KGb">
                                     <font key="font" metaFont="label" size="11"/>
@@ -890,7 +928,7 @@
                                 </textFieldCell>
                             </textField>
                             <button tag="7" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iem-XV-yfz">
-                                <rect key="frame" x="124" y="91" width="32" height="32"/>
+                                <rect key="frame" x="124" y="158" width="32" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="DEJ-bJ-A4U">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -901,7 +939,7 @@
                                 </connections>
                             </button>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fda-DD-Sfl">
-                                <rect key="frame" x="131" y="75" width="18" height="14"/>
+                                <rect key="frame" x="131" y="142" width="18" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="X" id="fiB-zn-AfQ">
                                     <font key="font" metaFont="label" size="11"/>
@@ -910,7 +948,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xpp-hS-h9R">
-                                <rect key="frame" x="124" y="125" width="31" height="14"/>
+                                <rect key="frame" x="124" y="192" width="31" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Left" id="qLg-f9-oyT">
                                     <font key="font" metaFont="label" size="11"/>
@@ -919,7 +957,7 @@
                                 </textFieldCell>
                             </textField>
                             <button tag="8" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dp6-1e-tQl">
-                                <rect key="frame" x="160" y="92" width="32" height="32"/>
+                                <rect key="frame" x="160" y="159" width="32" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="3Nc-90-ox4">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -930,7 +968,7 @@
                                 </connections>
                             </button>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sIX-dT-uCo">
-                                <rect key="frame" x="167" y="76" width="18" height="14"/>
+                                <rect key="frame" x="167" y="143" width="18" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="X" id="sy7-IC-FBa">
                                     <font key="font" metaFont="label" size="11"/>
@@ -939,7 +977,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g4H-1t-A0G">
-                                <rect key="frame" x="151" y="126" width="49" height="14"/>
+                                <rect key="frame" x="151" y="193" width="49" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Mid" id="Etg-6E-Xoz">
                                     <font key="font" metaFont="label" size="11"/>
@@ -948,7 +986,7 @@
                                 </textFieldCell>
                             </textField>
                             <button tag="9" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nob-Tt-Dql">
-                                <rect key="frame" x="196" y="91" width="32" height="32"/>
+                                <rect key="frame" x="196" y="158" width="32" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="squareTextured" title="132" bezelStyle="texturedSquare" image="recordKey" imagePosition="overlaps" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="axesIndependently" inset="2" id="z4G-20-jm8">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -959,7 +997,7 @@
                                 </connections>
                             </button>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2ec-7X-hmN">
-                                <rect key="frame" x="203" y="75" width="18" height="14"/>
+                                <rect key="frame" x="203" y="142" width="18" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="X" id="kt0-l4-1eA">
                                     <font key="font" metaFont="label" size="11"/>
@@ -968,7 +1006,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wWC-hp-y6G">
-                                <rect key="frame" x="193" y="125" width="39" height="14"/>
+                                <rect key="frame" x="193" y="192" width="39" height="14"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Right" id="Pmz-z1-zUF">
                                     <font key="font" metaFont="label" size="11"/>
@@ -977,14 +1015,14 @@
                                 </textFieldCell>
                             </textField>
                             <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pqm-Bw-vqW">
-                                <rect key="frame" x="229" y="92" width="32" height="32"/>
+                                <rect key="frame" x="229" y="159" width="32" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyUpOrDown" image="mouse" id="GeF-Nj-4yZ"/>
                             </imageView>
-                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8Hm-Ng-ASS">
-                                <rect key="frame" x="31" y="381" width="148" height="17"/>
+                            <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vgh-3g-o6q">
+                                <rect key="frame" x="25" y="81" width="263" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Emulation keys" id="LhQ-f7-owo">
+                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Keyboard Interaction" id="gXU-QG-kNh">
                                     <font key="font" metaFont="systemBold"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -1008,6 +1046,9 @@
                         <outlet property="left1button" destination="piy-oU-ZMj" id="dEw-oC-t1I"/>
                         <outlet property="left2" destination="dUR-OV-zY8" id="X0m-cl-RZB"/>
                         <outlet property="left2button" destination="G5b-Qt-bDe" id="qMq-IF-EyX"/>
+                        <outlet property="lockImage" destination="rfv-wP-MEN" id="RFR-if-zeP"/>
+                        <outlet property="lockInfo1" destination="Cci-ko-T8z" id="6vX-9M-UOX"/>
+                        <outlet property="lockInfo2" destination="KDl-V6-mjv" id="0ca-y4-W7g"/>
                         <outlet property="mouseLeft" destination="Fda-DD-Sfl" id="bJV-yO-wsW"/>
                         <outlet property="mouseLeftButton" destination="iem-XV-yfz" id="MaR-ld-p1K"/>
                         <outlet property="mouseMiddle" destination="sIX-dT-uCo" id="pzM-LU-alL"/>
@@ -1031,7 +1072,7 @@
         <!--Devices Settings View Controller-->
         <scene sceneID="zYT-Ba-jYc">
             <objects>
-                <viewController storyboardIdentifier="DevicesSettingsViewController" id="di1-gt-ffY" customClass="DevicesSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Devices" id="di1-gt-ffY" customClass="DevicesSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="CiI-3k-XWp" customClass="SettingsView" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1329,6 +1370,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="unlockAction:" target="di1-gt-ffY" id="oeg-d0-v9S"/>
+                                            </connections>
                                         </button>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UWQ-Tc-usa">
                                             <rect key="frame" x="393" y="23" width="191" height="14"/>
@@ -1351,24 +1395,23 @@
                                         <popUpButton id="LMg-T0-pWl" userLabel="System">
                                             <rect key="frame" x="17" y="10" width="53" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="o34-ib-cla" id="5Sw-M1-G2O" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="5Sw-M1-G2O" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="message"/>
                                                 <menu key="menu" title="Restore" id="vDX-YG-xDL">
                                                     <items>
-                                                        <menuItem title="Revert..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="o34-ib-cla">
+                                                        <menuItem title="Revert to..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="o34-ib-cla">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga 500" id="SJb-zz-gZA">
+                                                        <menuItem title="Standard Settings" id="SJb-zz-gZA">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga 1000" tag="1" id="Ouc-IU-X6m"/>
-                                                        <menuItem title="Amiga 2000" tag="2" id="tgA-Fa-HTH"/>
-                                                        <menuItem isSeparatorItem="YES" id="eIh-EA-qdG"/>
-                                                        <menuItem title="Amiga 500+" tag="3" id="Khp-1O-ucM"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
+                                            <connections>
+                                                <action selector="presetAction:" target="di1-gt-ffY" id="lSg-8G-aH6"/>
+                                            </connections>
                                         </popUpButton>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mtd-iu-pGW">
                                             <rect key="frame" x="64" y="7" width="60" height="32"/>
@@ -1377,6 +1420,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="saveAction:" target="di1-gt-ffY" id="x7R-6U-F1h"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                 </view>
@@ -1400,6 +1446,9 @@
                         <outlet property="infoBox" destination="QzM-IS-kUv" id="L1V-pN-AhN"/>
                         <outlet property="infoBoxTitle" destination="bZN-XK-pxL" id="eoS-dj-6ZV"/>
                         <outlet property="locationID" destination="iyK-1t-a9U" id="pOa-O0-plU"/>
+                        <outlet property="lockImage" destination="6KJ-Gg-uiE" id="otd-cy-uqt"/>
+                        <outlet property="lockInfo1" destination="UWQ-Tc-usa" id="OO7-HA-FxQ"/>
+                        <outlet property="lockInfo2" destination="2ph-l4-3Yl" id="iaH-K3-49c"/>
                         <outlet property="manufacturer" destination="Aum-fZ-3e5" id="Boi-rS-YKR"/>
                         <outlet property="product" destination="hW5-fm-wnP" id="FHm-fn-xUw"/>
                         <outlet property="productID" destination="VCi-NG-fhb" id="LFo-xQ-jvA"/>
@@ -1419,7 +1468,7 @@
         <!--Rom Settings View Controller-->
         <scene sceneID="Kl3-Ll-qlE">
             <objects>
-                <viewController storyboardIdentifier="RomSettingsViewController" id="wtk-Jg-WAA" customClass="RomSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Roms" id="wtk-Jg-WAA" customClass="RomSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="WaE-Rt-qDK" customClass="SettingsView" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1644,6 +1693,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="unlockAction:" target="wtk-Jg-WAA" id="5LA-a2-pGv"/>
+                                            </connections>
                                         </button>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Sc-75-E3J">
                                             <rect key="frame" x="393" y="23" width="191" height="14"/>
@@ -1666,24 +1718,23 @@
                                         <popUpButton id="PSx-TD-ktW" userLabel="System">
                                             <rect key="frame" x="17" y="10" width="53" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="Crg-CA-Wmz" id="sJS-y0-wcl" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="sJS-y0-wcl" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="message"/>
                                                 <menu key="menu" title="Restore" id="0Gw-i7-tye">
                                                     <items>
-                                                        <menuItem title="Revert..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="Crg-CA-Wmz">
+                                                        <menuItem title="Revert to..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="Crg-CA-Wmz">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga 500" id="eLW-fM-x1w">
+                                                        <menuItem title="Standard Settings" id="eLW-fM-x1w">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga 1000" tag="1" id="w7D-Zn-hkH"/>
-                                                        <menuItem title="Amiga 2000" tag="2" id="6Cf-UI-0Y5"/>
-                                                        <menuItem isSeparatorItem="YES" id="DAy-5G-CsO"/>
-                                                        <menuItem title="Amiga 500+" tag="3" id="Qs3-PW-TB5"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
+                                            <connections>
+                                                <action selector="presetAction:" target="wtk-Jg-WAA" id="tfY-UQ-yn0"/>
+                                            </connections>
                                         </popUpButton>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T6r-rh-pbJ">
                                             <rect key="frame" x="64" y="7" width="60" height="32"/>
@@ -1692,6 +1743,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="saveAction:" target="wtk-Jg-WAA" id="BHh-2Y-Cfp"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                 </view>
@@ -1726,6 +1780,11 @@
                         <viewLayoutGuide key="safeArea" id="4Xh-kn-X3b"/>
                         <viewLayoutGuide key="layoutMargins" id="fnm-fq-Tod"/>
                     </view>
+                    <connections>
+                        <outlet property="lockImage" destination="l5c-bZ-iYF" id="ash-rb-Pww"/>
+                        <outlet property="lockInfo1" destination="6Sc-75-E3J" id="4n9-oB-S7P"/>
+                        <outlet property="lockInfo2" destination="bbr-sI-IhY" id="eIH-Bc-cGB"/>
+                    </connections>
                 </viewController>
                 <customObject id="PjL-cE-FKx" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1734,7 +1793,7 @@
         <!--Hardware Settings View Controller-->
         <scene sceneID="thV-pB-7pc">
             <objects>
-                <viewController storyboardIdentifier="HardwareSettingsViewController" id="Fvs-sb-K8m" customClass="HardwareSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Hardware" id="Fvs-sb-K8m" customClass="HardwareSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="Y3o-UP-oW2" customClass="SettingsView" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1753,6 +1812,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="unlockAction:" target="Fvs-sb-K8m" id="ZiF-ok-Vb2"/>
+                                            </connections>
                                         </button>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fCH-ya-jkW">
                                             <rect key="frame" x="393" y="24" width="191" height="14"/>
@@ -1784,12 +1846,12 @@
                                         <popUpButton id="q7f-oT-loi" userLabel="System">
                                             <rect key="frame" x="17" y="10" width="53" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="6Eb-jH-Sog" id="n3J-DY-92G" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="6Eb-jH-Sog" id="n3J-DY-92G" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="message"/>
                                                 <menu key="menu" title="Restore" id="Cl5-cU-aZM">
                                                     <items>
-                                                        <menuItem title="Revert..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="6Eb-jH-Sog">
+                                                        <menuItem title="Revert to..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="6Eb-jH-Sog">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
                                                         <menuItem title="Amiga 500" id="4yd-he-NQW">
@@ -1802,6 +1864,9 @@
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
+                                            <connections>
+                                                <action selector="presetAction:" target="Fvs-sb-K8m" id="J1y-9b-CKm"/>
+                                            </connections>
                                         </popUpButton>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sPY-Yp-qJs">
                                             <rect key="frame" x="64" y="7" width="60" height="32"/>
@@ -1809,6 +1874,9 @@
                                             <buttonCell key="cell" type="push" bezelStyle="rounded" image="square.and.arrow.down" catalog="system" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ncy-bb-byQ">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
+                                                <connections>
+                                                    <action selector="saveAction:" target="Fvs-sb-K8m" id="wMA-jA-JBe"/>
+                                                </connections>
                                             </buttonCell>
                                         </button>
                                     </subviews>
@@ -2380,6 +2448,9 @@
                         <outlet property="csRtcInfo1" destination="Vzx-lr-m0E" id="oLB-N5-oCd"/>
                         <outlet property="csRtcInfo2" destination="uSO-5S-ftR" id="KsJ-OP-wic"/>
                         <outlet property="csRtcRevision" destination="lyw-Dz-Y4p" id="nsd-eK-xhj"/>
+                        <outlet property="lockImage" destination="4nv-uz-AqV" id="3qd-yI-YBc"/>
+                        <outlet property="lockInfo1" destination="fCH-ya-jkW" id="ZFf-9E-kEt"/>
+                        <outlet property="lockInfo2" destination="mfo-sG-Rhf" id="xZd-9A-P7b"/>
                     </connections>
                 </viewController>
                 <customObject id="leA-G2-lrm" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -2389,7 +2460,7 @@
         <!--Peripherals Settings View Controller-->
         <scene sceneID="7x4-Pn-cxU">
             <objects>
-                <viewController storyboardIdentifier="PeripheralsSettingsViewController" id="oqP-PU-J20" customClass="PeripheralsSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Peripherals" id="oqP-PU-J20" customClass="PeripheralsSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="k7q-GU-jxL" customClass="SettingsView" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -2408,6 +2479,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="unlockAction:" target="oqP-PU-J20" id="JR0-Sk-eWU"/>
+                                            </connections>
                                         </button>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sGw-18-UFg">
                                             <rect key="frame" x="393" y="24" width="191" height="14"/>
@@ -2439,24 +2513,21 @@
                                         <popUpButton id="YdP-Hg-hXf" userLabel="System">
                                             <rect key="frame" x="17" y="10" width="53" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="Rl4-hg-4Gg" id="t8a-gI-jk6" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="t8a-gI-jk6" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="message"/>
                                                 <menu key="menu" title="Restore" id="IEG-EA-wDT">
                                                     <items>
-                                                        <menuItem title="Revert..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="Rl4-hg-4Gg">
+                                                        <menuItem title="Revert to..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="Rl4-hg-4Gg">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga 500" id="ZN5-1d-lJt">
-                                                            <attributedString key="attributedTitle"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1000" tag="1" id="ECu-sb-gbG"/>
-                                                        <menuItem title="Amiga 2000" tag="2" id="ghG-eI-LtU"/>
-                                                        <menuItem isSeparatorItem="YES" id="CoZ-Db-XBY"/>
-                                                        <menuItem title="Amiga 500+" tag="3" id="Wom-kx-lgb"/>
+                                                        <menuItem title="Standard Settings" id="Wom-kx-lgb"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
+                                            <connections>
+                                                <action selector="presetAction:" target="oqP-PU-J20" id="f5r-hp-0RC"/>
+                                            </connections>
                                         </popUpButton>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YUC-Td-2ug">
                                             <rect key="frame" x="64" y="7" width="60" height="32"/>
@@ -2464,6 +2535,9 @@
                                             <buttonCell key="cell" type="push" bezelStyle="rounded" image="square.and.arrow.down" catalog="system" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="wIg-st-j69">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
+                                                <connections>
+                                                    <action selector="saveAction:" target="oqP-PU-J20" id="KY9-Vs-Fgm"/>
+                                                </connections>
                                             </buttonCell>
                                         </button>
                                     </subviews>
@@ -2942,6 +3016,11 @@
                         <viewLayoutGuide key="safeArea" id="oHf-cK-UwD"/>
                         <viewLayoutGuide key="layoutMargins" id="3qX-7S-P6K"/>
                     </view>
+                    <connections>
+                        <outlet property="lockImage" destination="BdG-3m-nLJ" id="6EB-Sd-VBv"/>
+                        <outlet property="lockInfo1" destination="sGw-18-UFg" id="Uin-3G-DYW"/>
+                        <outlet property="lockInfo2" destination="U3S-J8-UsE" id="bxe-OD-Q2V"/>
+                    </connections>
                 </viewController>
                 <customObject id="Ccg-CF-bza" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -2950,7 +3029,7 @@
         <!--Performance Settings View Controller-->
         <scene sceneID="Wa3-R2-PW1">
             <objects>
-                <viewController storyboardIdentifier="PerformanceSettingsViewController" id="Rvf-AP-e5x" customClass="PerformanceSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Performance" id="Rvf-AP-e5x" customClass="PerformanceSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="1Fw-Ey-1IR" customClass="SettingsView" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -2969,6 +3048,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="unlockAction:" target="Rvf-AP-e5x" id="38d-ya-5Vl"/>
+                                            </connections>
                                         </button>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5Jw-Xr-BNs">
                                             <rect key="frame" x="393" y="24" width="191" height="14"/>
@@ -3000,24 +3082,23 @@
                                         <popUpButton id="ajS-fa-pN5" userLabel="System">
                                             <rect key="frame" x="17" y="10" width="53" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="n7H-KM-5XA" id="pwm-uU-vRW" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="pwm-uU-vRW" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="message"/>
                                                 <menu key="menu" title="Restore" id="9qu-eR-GJ2">
                                                     <items>
-                                                        <menuItem title="Revert..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="n7H-KM-5XA">
+                                                        <menuItem title="Revert to..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="n7H-KM-5XA">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga 500" id="zdS-5P-TI1">
+                                                        <menuItem title="Standard Settings" id="zdS-5P-TI1">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga 1000" tag="1" id="mRi-4z-7lc"/>
-                                                        <menuItem title="Amiga 2000" tag="2" id="KTF-xf-zSf"/>
-                                                        <menuItem isSeparatorItem="YES" id="Lgy-Is-jsJ"/>
-                                                        <menuItem title="Amiga 500+" tag="3" id="Uzh-tj-Jo9"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
+                                            <connections>
+                                                <action selector="presetAction:" target="Rvf-AP-e5x" id="G20-OJ-Vdp"/>
+                                            </connections>
                                         </popUpButton>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n2z-Bo-YHP">
                                             <rect key="frame" x="64" y="7" width="60" height="32"/>
@@ -3026,6 +3107,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="saveAction:" target="Rvf-AP-e5x" id="rXd-GZ-Us7"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                 </view>
@@ -3275,6 +3359,11 @@
                         <viewLayoutGuide key="safeArea" id="oWx-tZ-CyK"/>
                         <viewLayoutGuide key="layoutMargins" id="5h0-Xy-bwc"/>
                     </view>
+                    <connections>
+                        <outlet property="lockImage" destination="HdI-rw-DQS" id="CXH-rZ-oq3"/>
+                        <outlet property="lockInfo1" destination="5Jw-Xr-BNs" id="cZs-ZM-f9h"/>
+                        <outlet property="lockInfo2" destination="0sn-kT-dLO" id="vgY-yM-dP9"/>
+                    </connections>
                 </viewController>
                 <customObject id="APd-0T-Iwj" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -3283,7 +3372,7 @@
         <!--Compatibility Settings View Controller-->
         <scene sceneID="Ok4-oB-5kn">
             <objects>
-                <viewController storyboardIdentifier="CompatibilitySettingsViewController" id="vdW-qO-aAE" customClass="CompatibilitySettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Compatibility" id="vdW-qO-aAE" customClass="CompatibilitySettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="fL1-a7-HBw" customClass="SettingsView" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -3302,6 +3391,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="unlockAction:" target="vdW-qO-aAE" id="xQS-AD-c4S"/>
+                                            </connections>
                                         </button>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="02Q-cD-aNI">
                                             <rect key="frame" x="393" y="24" width="191" height="14"/>
@@ -3333,24 +3425,26 @@
                                         <popUpButton id="Xp9-lN-EbF" userLabel="System">
                                             <rect key="frame" x="17" y="10" width="53" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="gcy-86-jnI" id="SZE-41-ZIO" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="SZE-41-ZIO" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="message"/>
                                                 <menu key="menu" title="Restore" id="sxH-Wp-YJo">
                                                     <items>
-                                                        <menuItem title="Revert..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="gcy-86-jnI">
+                                                        <menuItem title="Revert to..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="gcy-86-jnI">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga 500" id="mID-Lp-k6m">
+                                                        <menuItem title="Standard Settings" id="mID-Lp-k6m">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga 1000" tag="1" id="eHB-Y4-Cdb"/>
-                                                        <menuItem title="Amiga 2000" tag="2" id="soi-6e-ck5"/>
                                                         <menuItem isSeparatorItem="YES" id="geF-H0-L30"/>
-                                                        <menuItem title="Amiga 500+" tag="3" id="e3e-xr-lT8"/>
+                                                        <menuItem title="High-Accuracy Settings" tag="1" id="eHB-Y4-Cdb"/>
+                                                        <menuItem title="High-Performance Settings" tag="2" id="soi-6e-ck5"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
+                                            <connections>
+                                                <action selector="presetAction:" target="vdW-qO-aAE" id="dG2-eH-FVH"/>
+                                            </connections>
                                         </popUpButton>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WRE-PP-IKD">
                                             <rect key="frame" x="64" y="7" width="60" height="32"/>
@@ -3359,6 +3453,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="saveAction:" target="vdW-qO-aAE" id="Scq-kU-VPO"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                 </view>
@@ -3602,6 +3699,11 @@
                         <viewLayoutGuide key="safeArea" id="gix-9R-i6z"/>
                         <viewLayoutGuide key="layoutMargins" id="Ghx-vB-gpm"/>
                     </view>
+                    <connections>
+                        <outlet property="lockImage" destination="8nZ-Xm-cjt" id="w0C-hd-oqI"/>
+                        <outlet property="lockInfo1" destination="02Q-cD-aNI" id="5Xb-2e-uvk"/>
+                        <outlet property="lockInfo2" destination="2Pm-QZ-lnO" id="nd2-uS-dld"/>
+                    </connections>
                 </viewController>
                 <customObject id="HOD-qg-na5" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -3610,7 +3712,7 @@
         <!--Audio Settings View Controller-->
         <scene sceneID="REA-Nm-3M5">
             <objects>
-                <viewController storyboardIdentifier="AudioSettingsViewController" id="6tV-Y9-evD" customClass="AudioSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Audio" id="6tV-Y9-evD" customClass="AudioSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="tya-dM-caJ" customClass="SettingsView" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -3629,6 +3731,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="unlockAction:" target="6tV-Y9-evD" id="Rk3-rC-Kju"/>
+                                            </connections>
                                         </button>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LIp-Rj-9ZZ">
                                             <rect key="frame" x="393" y="24" width="191" height="14"/>
@@ -3660,24 +3765,26 @@
                                         <popUpButton id="BeN-Df-PQN" userLabel="System">
                                             <rect key="frame" x="17" y="10" width="53" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="wye-YE-lcL" id="ifE-Si-fEf" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="ifE-Si-fEf" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="message"/>
                                                 <menu key="menu" title="Restore" id="TSe-kn-T9i">
                                                     <items>
-                                                        <menuItem title="Revert..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="wye-YE-lcL">
+                                                        <menuItem title="Revert to..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="wye-YE-lcL">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga 500" id="boR-ys-I6V">
+                                                        <menuItem title="Standard Settings" id="boR-ys-I6V">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga 1000" tag="1" id="wU5-o0-MU9"/>
-                                                        <menuItem title="Amiga 2000" tag="2" id="GES-Er-Z3M"/>
                                                         <menuItem isSeparatorItem="YES" id="5lZ-UL-hAW"/>
-                                                        <menuItem title="Amiga 500+" tag="3" id="JKx-LI-zIw"/>
+                                                        <menuItem title="Stereo Settings" tag="1" id="wU5-o0-MU9"/>
+                                                        <menuItem title="Mono Settings" tag="2" id="GES-Er-Z3M"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
+                                            <connections>
+                                                <action selector="presetAction:" target="6tV-Y9-evD" id="sjy-3g-OlS"/>
+                                            </connections>
                                         </popUpButton>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GtC-6H-vu2">
                                             <rect key="frame" x="64" y="7" width="60" height="32"/>
@@ -3686,6 +3793,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="saveAction:" target="6tV-Y9-evD" id="Kod-UB-zvf"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                 </view>
@@ -4336,6 +4446,11 @@
                         <viewLayoutGuide key="safeArea" id="X3F-ro-Pc8"/>
                         <viewLayoutGuide key="layoutMargins" id="9Yl-i2-ZrK"/>
                     </view>
+                    <connections>
+                        <outlet property="lockImage" destination="7Gc-sf-7gp" id="lMF-MX-VBC"/>
+                        <outlet property="lockInfo1" destination="LIp-Rj-9ZZ" id="vFh-9u-SHM"/>
+                        <outlet property="lockInfo2" destination="oGL-zH-dDf" id="xbI-eO-zAX"/>
+                    </connections>
                 </viewController>
                 <customObject id="dBj-2G-4jV" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -4344,7 +4459,7 @@
         <!--Video Settings View Controller-->
         <scene sceneID="ESt-vt-bGg">
             <objects>
-                <viewController storyboardIdentifier="VideoSettingsViewController" id="jN5-7w-doh" customClass="VideoSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Video" id="jN5-7w-doh" customClass="VideoSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="MIK-Pc-cLu" customClass="SettingsView" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -4363,6 +4478,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="unlockAction:" target="jN5-7w-doh" id="xpN-dt-xvz"/>
+                                            </connections>
                                         </button>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0RP-dC-y8H">
                                             <rect key="frame" x="393" y="24" width="191" height="14"/>
@@ -4391,28 +4509,6 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <popUpButton id="Gim-VQ-pZo" userLabel="System">
-                                            <rect key="frame" x="17" y="10" width="53" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="Pc3-P9-rEf" id="zTt-hN-mfZ" userLabel="System">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="message"/>
-                                                <menu key="menu" title="Restore" id="h9W-gl-K7G">
-                                                    <items>
-                                                        <menuItem title="Revert..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="Pc3-P9-rEf">
-                                                            <attributedString key="attributedTitle"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 500" id="3FK-ik-jrk">
-                                                            <attributedString key="attributedTitle"/>
-                                                        </menuItem>
-                                                        <menuItem title="Amiga 1000" tag="1" id="DhF-Yc-Ar3"/>
-                                                        <menuItem title="Amiga 2000" tag="2" id="aVO-4n-hk2"/>
-                                                        <menuItem isSeparatorItem="YES" id="31B-BE-JYr"/>
-                                                        <menuItem title="Amiga 500+" tag="3" id="eiE-Rg-G6E"/>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                        </popUpButton>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ReK-7g-Vfu">
                                             <rect key="frame" x="64" y="7" width="60" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
@@ -4420,7 +4516,81 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="saveAction:" target="jN5-7w-doh" id="vlC-oh-Tmd"/>
+                                            </connections>
                                         </button>
+                                        <popUpButton id="A16-l5-S5t" userLabel="System">
+                                            <rect key="frame" x="17" y="10" width="53" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="E5E-ay-rOh" id="Ub6-Ik-k63" userLabel="System">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="message"/>
+                                                <menu key="menu" title="Restore" id="Tdz-fL-C4i">
+                                                    <items>
+                                                        <menuItem title="Revert to..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="E5E-ay-rOh">
+                                                            <attributedString key="attributedTitle"/>
+                                                        </menuItem>
+                                                        <menuItem title="Recommended Settings" id="3L2-8U-CGA">
+                                                            <attributedString key="attributedTitle"/>
+                                                            <connections>
+                                                                <action selector="vidPresetAction:" target="MST-dZ-0J2" id="VnZ-RY-0Tx"/>
+                                                            </connections>
+                                                        </menuItem>
+                                                        <menuItem isSeparatorItem="YES" id="0Ow-uH-SBL"/>
+                                                        <menuItem title="Geometry" id="wnu-hG-kde">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                            <menu key="submenu" title="Geometry" id="yBI-0X-MUF">
+                                                                <items>
+                                                                    <menuItem title="Recommended Settings" tag="10" id="FeW-WN-jDT">
+                                                                        <attributedString key="attributedTitle"/>
+                                                                        <connections>
+                                                                            <action selector="vidPresetAction:" target="MST-dZ-0J2" id="9bY-do-Gop"/>
+                                                                        </connections>
+                                                                    </menuItem>
+                                                                    <menuItem isSeparatorItem="YES" id="lyj-VY-Q1u"/>
+                                                                    <menuItem title="ViewSonic VP191b" tag="11" id="8Rj-R7-X7Z">
+                                                                        <attributedString key="attributedTitle"/>
+                                                                        <connections>
+                                                                            <action selector="vidPresetAction:" target="MST-dZ-0J2" id="dYv-SC-d3e"/>
+                                                                        </connections>
+                                                                    </menuItem>
+                                                                </items>
+                                                            </menu>
+                                                        </menuItem>
+                                                        <menuItem title="Appearance" id="cjF-Da-yAU">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                            <menu key="submenu" title="Appearance" id="ujJ-ac-zQE">
+                                                                <items>
+                                                                    <menuItem title="Recommended Settings" tag="20" id="nXo-ra-Ycg">
+                                                                        <attributedString key="attributedTitle"/>
+                                                                        <connections>
+                                                                            <action selector="vidPresetAction:" target="MST-dZ-0J2" id="Az8-TC-Dec"/>
+                                                                        </connections>
+                                                                    </menuItem>
+                                                                    <menuItem isSeparatorItem="YES" id="nJB-P4-YVZ"/>
+                                                                    <menuItem title="TFT Monitor" tag="21" id="gB9-lK-8yh">
+                                                                        <attributedString key="attributedTitle"/>
+                                                                        <connections>
+                                                                            <action selector="vidPresetAction:" target="MST-dZ-0J2" id="FtA-ht-4Qb"/>
+                                                                        </connections>
+                                                                    </menuItem>
+                                                                    <menuItem title="CRT Monitor" tag="22" id="RYD-M3-mOH">
+                                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                                        <connections>
+                                                                            <action selector="vidPresetAction:" target="MST-dZ-0J2" id="hbo-wf-W9g"/>
+                                                                        </connections>
+                                                                    </menuItem>
+                                                                </items>
+                                                            </menu>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="presetAction:" target="jN5-7w-doh" id="Dg1-Gf-OM2"/>
+                                            </connections>
+                                        </popUpButton>
                                     </subviews>
                                 </view>
                             </box>
@@ -5029,6 +5199,11 @@
                         <viewLayoutGuide key="safeArea" id="jqR-ya-eLb"/>
                         <viewLayoutGuide key="layoutMargins" id="ULC-s8-HyK"/>
                     </view>
+                    <connections>
+                        <outlet property="lockImage" destination="WjM-sm-Gv7" id="V2i-6M-mfY"/>
+                        <outlet property="lockInfo1" destination="0RP-dC-y8H" id="jbv-yU-rPj"/>
+                        <outlet property="lockInfo2" destination="cA9-kr-hS4" id="gYI-gi-Q1P"/>
+                    </connections>
                 </viewController>
                 <customObject id="MST-dZ-0J2" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -5037,7 +5212,7 @@
         <!--Captures Settings View Controller-->
         <scene sceneID="49g-Bh-hVy">
             <objects>
-                <viewController storyboardIdentifier="CapturesSettingsViewController" id="xGL-wo-7T8" customClass="CapturesSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Captures" id="xGL-wo-7T8" customClass="CapturesSettingsViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="Q4X-PC-yna" customClass="SettingsView" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="640" height="480"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -5323,6 +5498,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="unlockAction:" target="xGL-wo-7T8" id="P5y-oA-Cco"/>
+                                            </connections>
                                         </button>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZZm-Ev-QCL">
                                             <rect key="frame" x="393" y="23" width="191" height="14"/>
@@ -5354,24 +5532,23 @@
                                         <popUpButton id="s9S-lJ-nHQ" userLabel="System">
                                             <rect key="frame" x="17" y="10" width="53" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="SUf-s2-nQS" id="chs-GI-PPC" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="chs-GI-PPC" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="message"/>
                                                 <menu key="menu" title="Restore" id="ffK-3i-I8D">
                                                     <items>
-                                                        <menuItem title="Revert..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="SUf-s2-nQS">
+                                                        <menuItem title="Revert to..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="SUf-s2-nQS">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga 500" id="Fdh-iM-H3G">
+                                                        <menuItem title="Standard Settings" id="Fdh-iM-H3G">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga 1000" tag="1" id="dEZ-d6-JOg"/>
-                                                        <menuItem title="Amiga 2000" tag="2" id="w8s-iS-Rr6"/>
-                                                        <menuItem isSeparatorItem="YES" id="ErY-5y-i75"/>
-                                                        <menuItem title="Amiga 500+" tag="3" id="gsf-C6-SdB"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
+                                            <connections>
+                                                <action selector="presetAction:" target="xGL-wo-7T8" id="WFu-WZ-LaF"/>
+                                            </connections>
                                         </popUpButton>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dYt-Ik-nm5">
                                             <rect key="frame" x="64" y="7" width="60" height="32"/>
@@ -5380,6 +5557,9 @@
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="saveAction:" target="xGL-wo-7T8" id="ZRr-VQ-XJb"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                 </view>
@@ -5402,6 +5582,9 @@
                     </view>
                     <connections>
                         <outlet property="autoSnapshots" destination="XR8-OU-a6W" id="TMc-0l-en0"/>
+                        <outlet property="lockImage" destination="OOb-k4-Reo" id="zqz-4f-1We"/>
+                        <outlet property="lockInfo1" destination="ZZm-Ev-QCL" id="Ph3-g1-wtU"/>
+                        <outlet property="lockInfo2" destination="Z7d-PD-wIK" id="Wei-zk-E8W"/>
                         <outlet property="screenshotCutoutPopup" destination="x21-NE-1Tz" id="RUG-LD-e5T"/>
                         <outlet property="screenshotCutoutText" destination="1IE-nx-5wc" id="7p6-Ze-Lpr"/>
                         <outlet property="screenshotFormatPopup" destination="2lN-ml-qxk" id="oA1-Ve-Sbb"/>

@@ -51,6 +51,7 @@ class PerformanceSettingsViewController: SettingsViewController {
 
     override func refresh() {
 
+        super.refresh()
     }
 
     //

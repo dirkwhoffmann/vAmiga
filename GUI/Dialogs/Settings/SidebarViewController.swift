@@ -13,7 +13,7 @@ struct SidebarItem {
 
     let title: String
     let iconName: String
-    let identifier: NSUserInterfaceItemIdentifier
+    // let identifier: NSUserInterfaceItemIdentifier
 }
 
 class SidebarViewController: NSViewController {
@@ -26,11 +26,17 @@ class SidebarViewController: NSViewController {
 
     let items: [SidebarItem] = [
         
-        SidebarItem(title: "General", iconName: "generalPrefs", identifier: .init("general")),
-        SidebarItem(title: "Controls", iconName: "controlsPrefs", identifier: .init("controls")),
-        SidebarItem(title: "Devices", iconName: "devicesPrefs", identifier: .init("devices")),
-        SidebarItem(title: "Roms", iconName: "romPrefs", identifier: .init("roms")),
-        SidebarItem(title: "Hardware", iconName: "hardwarePrefs", identifier: .init("hardware"))
+        SidebarItem(title: "General",       iconName: "iconGeneral"),
+        SidebarItem(title: "Captures",      iconName: "iconCaptures"),
+        SidebarItem(title: "Controls",      iconName: "iconControls"),
+        SidebarItem(title: "Devices",       iconName: "iconDevices"),
+        SidebarItem(title: "Roms",          iconName: "iconRoms"),
+        SidebarItem(title: "Hardware",      iconName: "iconHardware"),
+        SidebarItem(title: "Peripherals",   iconName: "iconPeripherals"),
+        SidebarItem(title: "Performance",   iconName: "iconPerformance"),
+        SidebarItem(title: "Compatibility", iconName: "iconCompatibility"),
+        SidebarItem(title: "Audio",         iconName: "iconAudio"),
+        SidebarItem(title: "Video",         iconName: "iconVideo")
     ]
 
     var selectionHandler: ((SidebarItem) -> Void)?
