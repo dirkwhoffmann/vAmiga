@@ -18,7 +18,7 @@ class MyToolbar: NSToolbar {
     @IBOutlet weak var controlPort1Item: NSToolbarItem!
     @IBOutlet weak var controlPort2Item: NSToolbarItem!
     @IBOutlet weak var keyboardItem: NSToolbarItem!
-    @IBOutlet weak var preferencesItem: NSToolbarItem!
+    @IBOutlet weak var settingsItem: NSToolbarItem!
     @IBOutlet weak var controlsItem: NSToolbarItem!
 
     // Reference to toolbar item objects
@@ -47,7 +47,7 @@ class MyToolbar: NSToolbar {
         controlPort1Item.menuFormRepresentation = nil
         controlPort2Item.menuFormRepresentation = nil
         keyboardItem.menuFormRepresentation = nil
-        preferencesItem.menuFormRepresentation = nil
+        settingsItem.menuFormRepresentation = nil
         controlsItem.menuFormRepresentation = nil
     }
     
@@ -144,16 +144,9 @@ class MyToolbar: NSToolbar {
     }
     
     @IBAction
-    func preferencesAction(_ sender: NSSegmentedControl) {
+    func preferencesAction(_ sender: Any!) {
 
-        switch sender.selectedSegment {
-
-        case 0: controller.settingsAction(sender)
-        case 1: controller.openConfiguratorAsSheet()
-
-        default:
-            fatalError()
-        }
+        controller.settingsAction(sender)
     }
 
     @IBAction

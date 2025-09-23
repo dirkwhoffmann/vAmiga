@@ -68,8 +68,21 @@ class SettingsSplitViewController: NSSplitViewController {
         sidebarVC?.selectionHandler = { [weak self] item in
             self?.showContent(for: item)
         }
+        splitView.delegate = self
     }
 
+    override func splitView(_ splitView: NSSplitView,
+                            canCollapseSubview subview: NSView) -> Bool {
+        return false
+    }
+
+    override func splitView(_ splitView: NSSplitView,
+                            constrainSplitPosition proposedPosition: CGFloat,
+                            ofSubviewAt dividerIndex: Int) -> CGFloat {
+
+        return splitView.subviews[dividerIndex].frame.size.width
+    }
+    
     private func showContent(for item: SidebarItem) {
 
         switch item.title {
@@ -99,8 +112,6 @@ class SettingsSplitViewController: NSSplitViewController {
         let newItem = NSSplitViewItem(viewController: current!)
         addSplitViewItem(newItem)
         current!.activate()
-
-        // toolbar!.update(presets: current?.presets ?? [])
     }
 
     override func keyDown(with event: NSEvent) {

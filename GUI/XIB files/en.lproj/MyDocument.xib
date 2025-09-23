@@ -378,7 +378,7 @@
                         <popUpButton key="view" tag="11" id="4MP-rV-xX2" userLabel="Port 2">
                             <rect key="frame" x="0.0" y="14" width="49" height="24"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
+                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="message"/>
                                 <menu key="menu" autoenablesItems="NO" id="L3K-on-eyR">
@@ -424,22 +424,21 @@
                             </connections>
                         </button>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="E58BE7CC-80A0-4160-88DB-486199BE286E" label="Preferences" paletteLabel="Preferences" sizingBehavior="auto" id="Tmo-Cs-EVn" userLabel="Preferences">
+                    <toolbarItem implicitItemIdentifier="945E5264-1ACE-41D0-88DD-CD64AD0404D6" label="Settings" paletteLabel="Settings" image="prefTemplate" id="BhF-mx-b92">
                         <nil key="toolTip"/>
-                        <segmentedControl key="view" verticalHuggingPriority="750" id="EgW-z1-uFY">
-                            <rect key="frame" x="0.0" y="14" width="91" height="23"/>
+                        <size key="minSize" width="22" height="22"/>
+                        <size key="maxSize" width="36" height="36"/>
+                        <button key="view" verticalHuggingPriority="750" id="Obn-ki-6ww">
+                            <rect key="frame" x="8" y="14" width="36" height="36"/>
                             <autoresizingMask key="autoresizingMask"/>
-                            <segmentedCell key="cell" alignment="left" style="texturedSquare" trackingMode="momentary" id="DyT-NH-Vuk">
+                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="prefTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="tKP-b4-gVx">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system"/>
-                                <segments>
-                                    <segment toolTip="Open Preferences" image="prefTemplate" width="40"/>
-                                    <segment toolTip="Configure Virtual Machine" image="confTemplate" width="40" tag="1"/>
-                                </segments>
-                            </segmentedCell>
+                            </buttonCell>
                             <connections>
-                                <action selector="preferencesAction:" target="1845" id="MAH-hb-8Fz"/>
+                                <action selector="preferencesAction:" target="1845" id="Dic-QG-VL4"/>
                             </connections>
-                        </segmentedControl>
+                        </button>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="74F68049-821E-4F86-A15C-F4678F2ED8AD" label="Controls" paletteLabel="Controls" sizingBehavior="auto" id="9Rb-b3-ubi">
                         <nil key="toolTip"/>
@@ -470,7 +469,7 @@
                     <toolbarItem reference="1851"/>
                     <toolbarItem reference="Ckl-d3-vFW"/>
                     <toolbarItem reference="1851"/>
-                    <toolbarItem reference="Tmo-Cs-EVn"/>
+                    <toolbarItem reference="BhF-mx-b92"/>
                     <toolbarItem reference="1851"/>
                     <toolbarItem reference="9Rb-b3-ubi"/>
                 </defaultToolbarItems>
@@ -483,7 +482,7 @@
                     <outlet property="controlsItem" destination="9Rb-b3-ubi" id="jfC-Vg-VA6"/>
                     <outlet property="controlsSegCtrl" destination="xdt-LW-MS0" id="sxA-d1-Y55"/>
                     <outlet property="keyboardItem" destination="Ckl-d3-vFW" id="eGJ-Rq-2Sq"/>
-                    <outlet property="preferencesItem" destination="Tmo-Cs-EVn" id="7iv-aV-69p"/>
+                    <outlet property="settingsItem" destination="BhF-mx-b92" id="ZXw-Ub-UE0"/>
                     <outlet property="snapshotSegCtrl" destination="AHD-MB-nXC" id="Gpg-sH-vaL"/>
                 </connections>
             </toolbar>
@@ -497,7 +496,6 @@
     <resources>
         <image name="clickTemplate" width="36" height="36"/>
         <image name="cmdKeyTemplate" width="240" height="262"/>
-        <image name="confTemplate" width="37" height="36"/>
         <image name="consoleTemplate" width="176" height="176"/>
         <image name="devGamepad1Template" width="20" height="21"/>
         <image name="devGamepad2Template" width="20" height="21"/>

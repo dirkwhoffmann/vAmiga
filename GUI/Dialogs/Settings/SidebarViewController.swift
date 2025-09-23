@@ -9,7 +9,7 @@
 
 import Cocoa
 
-struct SidebarItem {
+class SidebarItem {
 
     let title: String
     let iconName: String
@@ -56,15 +56,20 @@ class SidebarViewController: NSViewController {
     override func viewDidLoad() {
 
         super.viewDidLoad()
+
         outlineView.delegate = self
         outlineView.dataSource = self
         outlineView.usesAutomaticRowHeights = false
         outlineView.rowSizeStyle = .custom
         outlineView.backgroundColor = .clear
         outlineView.usesAlternatingRowBackgroundColors = false
+        outlineView.reloadData()
 
         // Select first item by default
         outlineView.selectRowIndexes(IndexSet(integer: 0), byExtendingSelection: false)
+
+        // Expand all items
+        for item in self.items { outlineView.expandItem(item, expandChildren: true) }
     }
 }
 

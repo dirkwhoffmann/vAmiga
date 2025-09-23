@@ -14,10 +14,12 @@
                     <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" titlebarAppearsTransparent="YES" titleVisibility="hidden" id="Rfa-Pi-9iE">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" fullSizeContentView="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="207" y="263" width="480" height="270"/>
+                        <rect key="contentRect" x="207" y="263" width="860" height="480"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1496" height="933"/>
+                        <value key="minSize" type="size" width="860" height="480"/>
+                        <value key="maxSize" type="size" width="860" height="480"/>
                         <view key="contentView" id="HTR-kR-beV">
-                            <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                            <rect key="frame" x="0.0" y="0.0" width="860" height="480"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </view>
                         <toolbar key="toolbar" implicitIdentifier="B63AB41B-3245-49A0-ACD4-018986E9024B" autosavesConfiguration="NO" allowsUserCustomization="NO" showsBaselineSeparator="NO" prefersToBeShown="NO" displayMode="iconOnly" sizeMode="regular" id="mnC-gO-vw2" customClass="SettingsToolbar" customModule="vAmiga" customModuleProvider="target">
@@ -85,7 +87,7 @@
             <objects>
                 <splitViewController id="6Ix-Eg-bJj" customClass="SettingsSplitViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
                     <splitViewItems>
-                        <splitViewItem canCollapse="YES" holdingPriority="260" behavior="sidebar" id="sCS-25-NXL"/>
+                        <splitViewItem holdingPriority="260" behavior="sidebar" id="sCS-25-NXL"/>
                         <splitViewItem id="XxS-my-e3s"/>
                     </splitViewItems>
                     <splitView key="splitView" dividerStyle="thin" vertical="YES" id="UUt-4t-t0W">
