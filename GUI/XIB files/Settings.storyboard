@@ -173,7 +173,7 @@
                                     <rect key="frame" x="1" y="346" width="218" height="15"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="qob-Qv-03X">
+                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.49673202636162572" horizontal="NO" id="qob-Qv-03X">
                                     <rect key="frame" x="224" y="17" width="15" height="102"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -1743,39 +1743,39 @@
                                                 <menu key="menu" autoenablesItems="NO" id="fMI-RT-Oq2">
                                                     <items>
                                                         <menuItem state="on" image="arrow.counterclockwise" catalog="system" hidden="YES" id="n53-So-Gkv"/>
-                                                        <menuItem title="Amiga Kickstart 1.2" image="chipTemplate" tag="2798523958" id="3gk-Ja-fOF">
+                                                        <menuItem title="Amiga Kickstart 1.2" tag="2798523958" id="3gk-Ja-fOF">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga Kickstart 1.3" image="chipTemplate" tag="3304125791" id="zaF-5V-2I8">
+                                                        <menuItem title="Amiga Kickstart 1.3" tag="3304125791" id="zaF-5V-2I8">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga Kickstart 2.04" image="chipTemplate" tag="3283989056" id="LcO-ub-Lvw">
+                                                        <menuItem title="Amiga Kickstart 2.04" tag="3283989056" id="LcO-ub-Lvw">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga Kickstart 3.1" image="chipTemplate" tag="4230262285" id="1CZ-ss-YcG">
+                                                        <menuItem title="Amiga Kickstart 3.1" tag="4230262285" id="1CZ-ss-YcG">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                         <menuItem isSeparatorItem="YES" id="Xeu-w3-w8O"/>
-                                                        <menuItem title="Hyperion Kickstart 3.14" image="chipTemplate" tag="3576386301" id="1vS-9P-uD5">
+                                                        <menuItem title="Hyperion Kickstart 3.14" tag="3576386301" id="1vS-9P-uD5">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Hyperion Kickstart 3.2.2" image="chipTemplate" tag="3829761122" id="opJ-Dh-Am0">
+                                                        <menuItem title="Hyperion Kickstart 3.2.2" tag="3829761122" id="opJ-Dh-Am0">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                         <menuItem isSeparatorItem="YES" id="pi2-7E-wUG"/>
-                                                        <menuItem title="Aros Kickstart Replacement Feb. 2025" image="chipTemplate" tag="2736990563" id="jud-ZU-sNk"/>
-                                                        <menuItem title="Aros Kickstart Replacement SVN 54705" image="chipTemplate" tag="2631987209" id="jP5-fK-heq"/>
-                                                        <menuItem title="Aros Kickstart Replacement SVN 55696" image="chipTemplate" tag="1062194186" id="mtf-Y7-2l0"/>
+                                                        <menuItem title="Aros Kickstart Replacement Feb. 2025" tag="2736990563" id="jud-ZU-sNk"/>
+                                                        <menuItem title="Aros Kickstart Replacement SVN 54705" tag="2631987209" id="jP5-fK-heq"/>
+                                                        <menuItem title="Aros Kickstart Replacement SVN 55696" tag="1062194186" id="mtf-Y7-2l0"/>
                                                         <menuItem isSeparatorItem="YES" id="2in-8L-yTZ"/>
-                                                        <menuItem title="emuTOS 1.3" image="chipTemplate" tag="1898168769" id="4Eo-FY-NMU"/>
+                                                        <menuItem title="emuTOS 1.3" tag="1898168769" id="4Eo-FY-NMU"/>
                                                         <menuItem isSeparatorItem="YES" id="xQq-Sf-ymw"/>
-                                                        <menuItem title="DiagRom 1.2.1" image="chipTemplate" tag="2231503309" id="15M-sx-SLh">
+                                                        <menuItem title="DiagRom 1.2.1" tag="2231503309" id="15M-sx-SLh">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="DiagRom 1.3" image="chipTemplate" tag="1440932135" id="DIE-Fg-JHe">
+                                                        <menuItem title="DiagRom 1.3" tag="1440932135" id="DIE-Fg-JHe">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Logica Diagnostic Rom 2.0" image="chipTemplate" tag="2223305766" id="Tz3-P8-K0A">
+                                                        <menuItem title="Logica Diagnostic Rom 2.0" tag="2223305766" id="Tz3-P8-K0A">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -6169,7 +6169,6 @@
         <image name="NSInfo" width="32" height="32"/>
         <image name="ad-rv" width="542" height="542"/>
         <image name="arrow.counterclockwise" catalog="system" width="14" height="16"/>
-        <image name="chipTemplate" width="24" height="24"/>
         <image name="devCableLoopTemplate" width="24" height="24"/>
         <image name="devCableTemplate" width="24" height="24"/>
         <image name="devCommanderTemplate" width="24" height="24"/>

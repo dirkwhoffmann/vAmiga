@@ -183,9 +183,11 @@ class RomSettingsViewController: SettingsViewController {
             }
 
             if item.isEnabled {
-                item.image = NSImage(named: "chipTemplate")
+                item.image = NSImage(systemSymbolName: "memorychip", 
+                                     accessibilityDescription: "Unlocked Kickstart")
             } else {
-                item.image = NSImage(named: "lockTemplate")
+                item.image = NSImage(systemSymbolName: "lock",
+                                     accessibilityDescription: "Locked Kickstart")
             }
         }
     }

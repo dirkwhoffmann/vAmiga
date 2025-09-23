@@ -110,11 +110,8 @@ extension SidebarViewController: NSOutlineViewDelegate {
 
         if let sidebarItem = item as? SidebarItem {
             cell?.textField?.stringValue = sidebarItem.title
-            cell?.imageView?.image = NSImage(
-                systemSymbolName: sidebarItem.iconName,
-                accessibilityDescription: sidebarItem.title
-            )
-            // cell?.imageView?.contentTintColor = .secondaryLabelColor
+            cell?.imageView?.image = NSImage(systemSymbolName: sidebarItem.iconName,
+                                             accessibilityDescription: sidebarItem.title)
         } else {
             cell?.textField?.stringValue = "???"
             cell?.imageView?.image = nil
