@@ -20,7 +20,7 @@ class SettingsViewController: NSViewController {
     var gamePadManager: GamePadManager? { controller?.gamePadManager }
     var emu: EmulatorProxy? { controller?.emu }
 
-    var showLock: Bool { true }
+    var showLock: Bool { false }
 
     func activate() {
 

@@ -31,8 +31,7 @@ class RomSettingsViewController: SettingsViewController {
     @IBOutlet weak var romExpInfo1: NSTextField!
     @IBOutlet weak var romExpInfo2: NSTextField!
 
-    // Buttons
-    // @IBOutlet weak var romArosPopup: NSPopUpButton!
+    override var showLock: Bool { true }
 
     override func viewDidLoad() {
 

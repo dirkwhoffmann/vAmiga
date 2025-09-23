@@ -60,7 +60,7 @@ class VideoSettingsViewController: SettingsViewController {
     @IBOutlet weak var misalignmentPopUp: NSPopUpButton!
     @IBOutlet weak var misalignmentXSlider: NSSlider!
     @IBOutlet weak var misalignmentYSlider: NSSlider!
-
+    
     override func viewDidLoad() {
 
         log(.lifetime)

@@ -46,6 +46,8 @@ class PeripheralsSettingsViewController: SettingsViewController {
     @IBOutlet weak var autofireBullets: NSTextField!
     @IBOutlet weak var autofireBulletsText: NSTextField!
 
+    override var showLock: Bool { true }
+    
     override func viewDidLoad() {
 
         log(.lifetime)

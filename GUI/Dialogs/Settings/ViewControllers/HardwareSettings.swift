@@ -61,6 +61,8 @@ class HardwareSettingsViewController: SettingsViewController {
 
     // Warning
     @IBOutlet weak var warnImage: NSButton!
+
+    override var showLock: Bool { true }
     
     override func viewDidLoad() {
 

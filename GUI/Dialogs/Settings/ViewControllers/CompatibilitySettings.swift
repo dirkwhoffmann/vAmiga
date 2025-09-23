@@ -36,7 +36,7 @@ class CompatibilitySettingsViewController: SettingsViewController {
     @IBOutlet weak var clxSprSpr: NSButton!
     @IBOutlet weak var clxSprPlf: NSButton!
     @IBOutlet weak var clxPlfPlf: NSButton!
-
+    
     override func viewDidLoad() {
 
         log(.lifetime)
