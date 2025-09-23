@@ -10,10 +10,14 @@
 class CapturesSettingsViewController: SettingsViewController {
 
     // Snapshots
-    @IBOutlet weak var snapshotCompressor: NSPopUpButton!
+    @IBOutlet weak var snapshotsAutoDelete: NSButton!
+    @IBOutlet weak var snapshotHelp: NSTextField!
+    /*
+    @IBOutlet weak var snapshotCapacity: NSSlider!
+    @IBOutlet weak var snapshotAutoDelete: NSButton!
     @IBOutlet weak var autoSnapshots: NSButton!
     @IBOutlet weak var snapshotInterval: NSTextField!
-    @IBOutlet weak var snapshotStorage: NSTextField!
+    */
 
     // Screenshots
     @IBOutlet weak var screenshotFormatPopup: NSPopUpButton!
@@ -39,10 +43,27 @@ class CapturesSettingsViewController: SettingsViewController {
         super.refresh()
         
         // Snapshots
-        snapshotStorage.integerValue = pref.snapshotStorage
+        if pref.snapshotAutoDelete {
+
+            snapshotsAutoDelete.state = .on
+            snapshotHelp.stringValue =
+            "vAmiga stores up to \(MyDocument.maxSnapshots) snapshots. " +
+            "The oldest is deleted automatically once the limit is reached."
+
+        } else {
+
+            snapshotsAutoDelete.state = .off
+            snapshotHelp.stringValue =
+            "vAmiga stores up to \(MyDocument.maxSnapshots) snapshots. " +
+            "Manual deletion is required to add another."
+        }
+            /*
+        snapshotCapacity.integerValue = pref.snapshotStorage
+        snapshotAutoDelete.state = pref.snapshotAutoDelete ? .on : .off
         autoSnapshots.state = pref.autoSnapshots ? .on : .off
         snapshotInterval.integerValue = pref.snapshotInterval
         snapshotInterval.isEnabled = pref.autoSnapshots
+        */
 
         // Screenshots
         let framebuffer = pref.screenshotSource == .framebuffer
@@ -64,6 +85,13 @@ class CapturesSettingsViewController: SettingsViewController {
     // Action methods
     //
 
+    @IBAction func autoDeleteSnapshotAction(_ sender: NSButton!) {
+
+        pref.snapshotAutoDelete = sender.state == .on
+        refresh()
+    }
+
+    /*
     @IBAction func snapshotStorageAction(_ sender: NSTextField!) {
 
         if sender.integerValue > 0 {
@@ -86,6 +114,7 @@ class CapturesSettingsViewController: SettingsViewController {
         }
         refresh()
     }
+    */
 
     @IBAction func screenshotSourceAction(_ sender: NSPopUpButton!) {
 

@@ -244,7 +244,8 @@ extension PreferencesController {
 }
     
 extension PreferencesController: NSTextFieldDelegate {
-    
+
+    /*
     func controlTextDidChange(_ obj: Notification) {
                 
         if let view = obj.object as? NSTextField {
@@ -264,4 +265,5 @@ extension PreferencesController: NSTextFieldDelegate {
             }
         }
     }
+    */
 }

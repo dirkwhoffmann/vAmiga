@@ -28,8 +28,9 @@ class Preferences {
     //
     // General
     //
-    
+
     // Snapshots
+    /*
     var autoSnapshots = false {
         didSet {
             for emu in myAppDelegate.proxies {
@@ -49,7 +50,14 @@ class Preferences {
             c.mydocument.snapshots.maxSize = snapshotStorage * 1024 * 1024 }
         }
     }
-        
+    var snapshotSlots = 0 {
+        didSet { for c in myAppDelegate.controllers {
+            c.mydocument.snapshots.maxCount = snapshotSlots }
+        }
+    }
+    */
+    var snapshotAutoDelete: Bool = true
+
     // Fullscreen
     var keepAspectRatio = false
     var exitOnEsc = false

@@ -288,7 +288,12 @@ extension MyController: NSMenuItemValidation {
             NSSound.beep()
             return
         }
-        mydocument.snapshots.append(snapshot, size: snapshot.size)
+        if !mydocument.appendSnapshot(file: snapshot) {
+
+            NSSound.beep()
+            return
+        }
+        
         renderer.flash()
     }
     

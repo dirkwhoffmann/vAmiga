@@ -79,11 +79,18 @@ class SnapshotViewer: DialogController {
             message.stringValue = ""
         }
 
+        let count = myDocument.snapshots.count
+        let max = MyDocument.maxSnapshots
+        let fill = 100.0 * Double(count) / Double(max)
+        indicator.doubleValue = fill
+        indicatorText.stringValue = "\(count) / \(max)"
+        /*
         let fill = myDocument.snapshots.fill
         let size = myDocument.snapshots.used / MB
         let max = myDocument.snapshots.maxSize / MB
         indicator.doubleValue = fill
         indicatorText.stringValue = "\(size) MB / \(max) MB"
+        */
 
         text1.isHidden  = empty
         text2.isHidden  = empty

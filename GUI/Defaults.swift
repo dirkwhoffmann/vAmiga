@@ -436,9 +436,10 @@ extension Keys {
     struct Cap {
 
         // Snapshots
-        static let snapshotStorage        = "Cap.SnapshotStorage"
-        static let autoSnapshots          = "Cap.AutoSnapshots"
-        static let autoSnapshotInterval   = "Cap.ScreenshotInterval"
+        static let snapshotAutoDelete     = "Cap.SnapshotAutoDelete"
+        // static let snapshotStorage        = "Cap.SnapshotStorage"
+        // static let autoSnapshots          = "Cap.AutoSnapshots"
+        // static let autoSnapshotInterval   = "Cap.ScreenshotInterval"
 
         // Screenshots
         static let screenshotFormat       = "Cap.ScreenshotFormat"
@@ -457,9 +458,10 @@ extension DefaultsProxy {
         debug(.defaults)
 
         // Snapshots
-        register(Keys.Cap.snapshotStorage, 512)
-        register(Keys.Cap.autoSnapshots, false)
-        register(Keys.Cap.autoSnapshotInterval, 20)
+        register(Keys.Cap.snapshotAutoDelete, true)
+        // register(Keys.Cap.snapshotStorage, 512)
+        // register(Keys.Cap.autoSnapshots, false)
+        // register(Keys.Cap.autoSnapshotInterval, 20)
 
         // Screenshots
         register(Keys.Cap.screenshotFormat, NSBitmapImageRep.FileType.png.rawValue)
@@ -473,9 +475,10 @@ extension DefaultsProxy {
         
         debug(.defaults)
         
-        let keys = [ Keys.Cap.snapshotStorage,
-                     Keys.Cap.autoSnapshots,
-                     Keys.Cap.autoSnapshotInterval,
+        let keys = [ Keys.Cap.snapshotAutoDelete,
+                     // Keys.Cap.snapshotStorage,
+                     // Keys.Cap.autoSnapshots,
+                     // Keys.Cap.autoSnapshotInterval,
 
                      Keys.Cap.screenshotFormat,
                      Keys.Cap.screenshotSource,
@@ -496,9 +499,10 @@ extension Preferences {
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
 
-        defaults.set(Keys.Cap.snapshotStorage, snapshotStorage)
-        defaults.set(Keys.Cap.autoSnapshots, autoSnapshots)
-        defaults.set(Keys.Cap.autoSnapshotInterval, snapshotInterval)
+        defaults.set(Keys.Cap.snapshotAutoDelete, snapshotAutoDelete)
+        // defaults.set(Keys.Cap.snapshotStorage, snapshotStorage)
+        // defaults.set(Keys.Cap.autoSnapshots, autoSnapshots)
+        // defaults.set(Keys.Cap.autoSnapshotInterval, snapshotInterval)
 
         defaults.set(Keys.Cap.screenshotFormat, screenshotFormatIntValue)
         defaults.set(Keys.Cap.screenshotSource, screenshotSourceIntValue)
@@ -513,10 +517,11 @@ extension Preferences {
         
         debug(.defaults)
         let defaults = EmulatorProxy.defaults!
-                
-        snapshotStorage = defaults.int(Keys.Cap.snapshotStorage)
-        autoSnapshots = defaults.bool(Keys.Cap.autoSnapshots)
-        snapshotInterval = defaults.int(Keys.Cap.autoSnapshotInterval)
+
+        snapshotAutoDelete = defaults.bool(Keys.Cap.snapshotAutoDelete)
+        // snapshotStorage = defaults.int(Keys.Cap.snapshotStorage)
+        // autoSnapshots = defaults.bool(Keys.Cap.autoSnapshots)
+        // snapshotInterval = defaults.int(Keys.Cap.autoSnapshotInterval)
 
         screenshotFormatIntValue = defaults.int(Keys.Cap.screenshotFormat)
         screenshotSourceIntValue = defaults.int(Keys.Cap.screenshotSource)

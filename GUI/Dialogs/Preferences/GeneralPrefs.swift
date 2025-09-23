@@ -13,11 +13,13 @@ extension PreferencesController {
     func refreshGeneralTab() {
         
         // Snapshots
+        /*
         genSnapshotStorage.integerValue = pref.snapshotStorage
         genAutoSnapshots.state = pref.autoSnapshots ? .on : .off
         genSnapshotInterval.integerValue = pref.snapshotInterval
         genSnapshotInterval.isEnabled = pref.autoSnapshots
-        
+        */
+
         // Fullscreen
         genAspectRatioButton.state = pref.keepAspectRatio ? .on : .off
         genExitOnEscButton.state = pref.exitOnEsc ? .on : .off
@@ -37,7 +39,8 @@ extension PreferencesController {
     //
     // Action methods (Snapshots)
     //
-    
+
+    /*
     @IBAction func genSnapshotStorageAction(_ sender: NSTextField!) {
 
         if sender.integerValue > 0 {
@@ -59,6 +62,7 @@ extension PreferencesController {
         }
         refresh()
     }
+    */
     
     //
     // Action methods (Fullscreen)

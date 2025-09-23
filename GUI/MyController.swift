@@ -618,8 +618,10 @@ extension MyController {
         case .SNAPSHOT_TAKEN:
             let ptr = msg.snapshot.snapshot
             let proxy = MediaFileProxy.init(ptr)!
-            mydocument.snapshots.append(proxy, size: proxy.size)
-            
+            if !mydocument.appendSnapshot(file: proxy) {
+                NSSound.beep()
+            }
+
         case .SNAPSHOT_RESTORED:
             renderer.flash(steps: 40)
             hideOrShowDriveMenus()

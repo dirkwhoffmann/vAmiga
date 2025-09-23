@@ -29,9 +29,10 @@ class ManagedArray<Element> {
         elements = []
     }
     
-    var count: Int { return elements.count }
-    var used: Int { return elements.reduce(0) { $0 + $1.1 } }
-    var fill: Double { return 100 * Double(used) / Double(maxSize) }
+    var count: Int { elements.count }
+    var used: Int { elements.reduce(0) { $0 + $1.1 } }
+    var fill: Double { 100 * Double(used) / Double(maxSize) }
+    var full: Bool { count >= maxCount || used >= maxSize }
 
     func element(at index: Int) -> Element? {
         
