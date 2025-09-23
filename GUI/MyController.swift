@@ -209,7 +209,7 @@ extension MyController {
         do {
 
             // Install Aros if no Kickstart is present
-            if emu.mem.info.hasRom { installAros() }
+            if !emu.mem.info.hasRom { installAros() }
 
             // Switch the Amiga on
             emu.powerOn()
