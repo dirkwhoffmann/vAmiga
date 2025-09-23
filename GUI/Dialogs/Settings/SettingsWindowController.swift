@@ -26,10 +26,6 @@ class SettingsWindowController: NSWindowController {
     override func windowDidLoad() {
 
         super.windowDidLoad()
-
-        if let toolbar = window?.toolbar as? SettingsToolbar {
-            toolbar.windowController = self
-        }
     }
 
     func show() {

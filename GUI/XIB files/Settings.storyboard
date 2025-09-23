@@ -22,54 +22,6 @@
                             <rect key="frame" x="0.0" y="0.0" width="860" height="480"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </view>
-                        <toolbar key="toolbar" implicitIdentifier="B63AB41B-3245-49A0-ACD4-018986E9024B" autosavesConfiguration="NO" allowsUserCustomization="NO" showsBaselineSeparator="NO" prefersToBeShown="NO" displayMode="iconOnly" sizeMode="regular" id="mnC-gO-vw2" customClass="SettingsToolbar" customModule="vAmiga" customModuleProvider="target">
-                            <allowedToolbarItems>
-                                <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="xyr-lT-ZX5"/>
-                                <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="k9h-ti-9MJ"/>
-                                <toolbarItem implicitItemIdentifier="CDF5EA26-2334-4830-834C-0A2B61F49325" label="Revert" paletteLabel="Revert" title="Revert to..." sizingBehavior="auto" id="YLG-2V-hid">
-                                    <nil key="toolTip"/>
-                                    <popUpButton key="view" verticalHuggingPriority="750" id="WxC-Ec-5gz">
-                                        <rect key="frame" x="0.0" y="14" width="102" height="25"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <popUpButtonCell key="cell" type="roundTextured" title="Revert to..." bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" tag="-1" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="xtY-8X-nMC">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="message"/>
-                                            <menu key="menu" id="5df-E4-o7r">
-                                                <items>
-                                                    <menuItem title="Revert to..." tag="-1" hidden="YES" id="kEv-rh-h4z"/>
-                                                    <menuItem title="Standard Settings" id="VW5-fY-BQg"/>
-                                                </items>
-                                            </menu>
-                                        </popUpButtonCell>
-                                        <connections>
-                                            <action selector="presetAction:" target="mnC-gO-vw2" id="Wwl-yU-PJr"/>
-                                        </connections>
-                                    </popUpButton>
-                                </toolbarItem>
-                                <toolbarItem implicitItemIdentifier="B9FB8593-6BFF-4631-8416-904FBBBE52E5" label="Use As Default" paletteLabel="Use As Default" image="square.and.arrow.down" catalog="system" title="Use As Default" sizingBehavior="auto" id="6KW-pR-X8H">
-                                    <nil key="toolTip"/>
-                                    <button key="view" verticalHuggingPriority="750" id="P9e-3Y-eM5">
-                                        <rect key="frame" x="0.0" y="14" width="123" height="23"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <buttonCell key="cell" type="roundTextured" title="Use As Default" bezelStyle="texturedRounded" image="square.and.arrow.down" catalog="system" imagePosition="leading" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="wGS-Rn-DK5">
-                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                            <font key="font" metaFont="system"/>
-                                        </buttonCell>
-                                    </button>
-                                    <connections>
-                                        <action selector="saveAction:" target="mnC-gO-vw2" id="CsK-cL-oXa"/>
-                                    </connections>
-                                </toolbarItem>
-                            </allowedToolbarItems>
-                            <defaultToolbarItems>
-                                <toolbarItem reference="YLG-2V-hid"/>
-                                <toolbarItem reference="k9h-ti-9MJ"/>
-                                <toolbarItem reference="6KW-pR-X8H"/>
-                            </defaultToolbarItems>
-                            <connections>
-                                <outlet property="presetsPopup" destination="WxC-Ec-5gz" id="b94-Tk-T5x"/>
-                            </connections>
-                        </toolbar>
                         <connections>
                             <outlet property="delegate" destination="3md-5x-CLM" id="rLa-T5-Mty"/>
                         </connections>

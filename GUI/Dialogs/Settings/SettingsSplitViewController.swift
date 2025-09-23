@@ -20,42 +20,19 @@ class SettingsSplitViewController: NSSplitViewController {
     var windowController: SettingsWindowController? {
         view.window?.windowController as? SettingsWindowController
     }
-    var toolbar: SettingsToolbar? {
-        windowController?.window?.toolbar as? SettingsToolbar
-    }
+
     private var sidebarVC: SidebarViewController? {
         return splitViewItems.first?.viewController as? SidebarViewController
     }
 
-    // let main = NSStoryboard(name: "Settings", bundle: nil)
-
-    lazy var generalVC: GeneralSettingsViewController = {
-        instantiate("General") as! GeneralSettingsViewController
-    }()
-    lazy var capturesVC: CapturesSettingsViewController = {
-        instantiate("Captures") as! CapturesSettingsViewController
-    }()
-    lazy var controlsVC: ControlsSettingsViewController = {
-        instantiate("Controls") as! ControlsSettingsViewController
-    }()
-    lazy var devicesVC: DevicesSettingsViewController = {
-        instantiate("Devices") as! DevicesSettingsViewController
-    }()
-    lazy var romsVC: RomSettingsViewController = {
-        instantiate("Roms") as! RomSettingsViewController
-    }()
+    lazy var generalVC = instantiate("General") as! GeneralSettingsViewController
+    lazy var capturesVC = instantiate("Captures") as! CapturesSettingsViewController
+    lazy var controlsVC = instantiate("Controls") as! ControlsSettingsViewController
+    lazy var devicesVC = instantiate("Devices") as! DevicesSettingsViewController
+    lazy var romsVC = instantiate("Roms") as! RomSettingsViewController
     lazy var hardwareVC = instantiate("Hardware") as! HardwareSettingsViewController
-    /*
-    lazy var hardwareVC: HardwareSettingsViewController = {
-        instantiate("Hardware") as! HardwareSettingsViewController
-    }()
-     */
-    lazy var peripheralsVC: PeripheralsSettingsViewController = {
-        instantiate("Peripherals") as! PeripheralsSettingsViewController
-    }()
-    lazy var compatibilityVC: CompatibilitySettingsViewController = {
-        instantiate("Compatibility") as! CompatibilitySettingsViewController
-    }()
+    lazy var peripheralsVC = instantiate("Peripherals") as! PeripheralsSettingsViewController
+    lazy var compatibilityVC = instantiate("Compatibility") as! CompatibilitySettingsViewController
     lazy var performanceVC = instantiate("Performance") as! PerformanceSettingsViewController
     lazy var audioVC = instantiate("Audio") as! AudioSettingsViewController
     lazy var videoVC = instantiate("Video") as! VideoSettingsViewController

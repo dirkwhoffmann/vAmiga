@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+/*
 @MainActor
 class SettingsToolbar: NSToolbar {
 
@@ -59,3 +60,4 @@ class SettingsToolbar: NSToolbar {
         splitViewController?.saveAction(sender)
     }
 }
+*/

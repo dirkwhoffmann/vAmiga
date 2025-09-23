@@ -44,7 +44,7 @@ class MyDocument: NSDocument {
     var emu: EmulatorProxy!
 
     // Snapshots
-    static let maxSnapshots: Int = 4
+    static let maxSnapshots: Int = 16
     private(set) var snapshots = ManagedArray<MediaFileProxy>(maxCount: maxSnapshots)
     // private(set) var snapshots = ManagedArray<MediaFileProxy>(maxSize: 512 * 1024 * 1024)
 

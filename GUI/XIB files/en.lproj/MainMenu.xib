@@ -213,12 +213,6 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="MBQ-pb-t04"/>
-                            <menuItem title="Configure..." keyEquivalent="" id="Y6J-U9-htE" userLabel="Configure...">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="configureAction:" target="-1" id="63m-54-OYh"/>
-                                </connections>
-                            </menuItem>
                             <menuItem title="Restore Factory Settings" id="I7G-yt-j3x">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
