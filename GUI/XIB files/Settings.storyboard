@@ -5023,7 +5023,7 @@
                                                         <menuItem title="Recommended Settings" id="3L2-8U-CGA">
                                                             <attributedString key="attributedTitle"/>
                                                             <connections>
-                                                                <action selector="vidPresetAction:" target="MST-dZ-0J2" id="VnZ-RY-0Tx"/>
+                                                                <action selector="presetMenuAction:" target="jN5-7w-doh" id="czF-dc-48T"/>
                                                             </connections>
                                                         </menuItem>
                                                         <menuItem isSeparatorItem="YES" id="0Ow-uH-SBL"/>
@@ -5034,14 +5034,14 @@
                                                                     <menuItem title="Recommended Settings" tag="10" id="FeW-WN-jDT">
                                                                         <attributedString key="attributedTitle"/>
                                                                         <connections>
-                                                                            <action selector="vidPresetAction:" target="MST-dZ-0J2" id="9bY-do-Gop"/>
+                                                                            <action selector="presetMenuAction:" target="jN5-7w-doh" id="C4z-9s-M2I"/>
                                                                         </connections>
                                                                     </menuItem>
                                                                     <menuItem isSeparatorItem="YES" id="lyj-VY-Q1u"/>
                                                                     <menuItem title="ViewSonic VP191b" tag="11" id="8Rj-R7-X7Z">
                                                                         <attributedString key="attributedTitle"/>
                                                                         <connections>
-                                                                            <action selector="vidPresetAction:" target="MST-dZ-0J2" id="dYv-SC-d3e"/>
+                                                                            <action selector="presetMenuAction:" target="jN5-7w-doh" id="ici-bE-efW"/>
                                                                         </connections>
                                                                     </menuItem>
                                                                 </items>
@@ -5054,20 +5054,20 @@
                                                                     <menuItem title="Recommended Settings" tag="20" id="nXo-ra-Ycg">
                                                                         <attributedString key="attributedTitle"/>
                                                                         <connections>
-                                                                            <action selector="vidPresetAction:" target="MST-dZ-0J2" id="Az8-TC-Dec"/>
+                                                                            <action selector="presetMenuAction:" target="jN5-7w-doh" id="aoT-tu-M9S"/>
                                                                         </connections>
                                                                     </menuItem>
                                                                     <menuItem isSeparatorItem="YES" id="nJB-P4-YVZ"/>
                                                                     <menuItem title="TFT Monitor" tag="21" id="gB9-lK-8yh">
                                                                         <attributedString key="attributedTitle"/>
                                                                         <connections>
-                                                                            <action selector="vidPresetAction:" target="MST-dZ-0J2" id="FtA-ht-4Qb"/>
+                                                                            <action selector="presetMenuAction:" target="jN5-7w-doh" id="hxc-Fr-b4L"/>
                                                                         </connections>
                                                                     </menuItem>
                                                                     <menuItem title="CRT Monitor" tag="22" id="RYD-M3-mOH">
                                                                         <modifierMask key="keyEquivalentModifierMask"/>
                                                                         <connections>
-                                                                            <action selector="vidPresetAction:" target="MST-dZ-0J2" id="hbo-wf-W9g"/>
+                                                                            <action selector="presetMenuAction:" target="jN5-7w-doh" id="WwX-nk-DHB"/>
                                                                         </connections>
                                                                     </menuItem>
                                                                 </items>

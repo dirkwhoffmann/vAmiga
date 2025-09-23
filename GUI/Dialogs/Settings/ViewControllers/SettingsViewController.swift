@@ -40,14 +40,17 @@ class SettingsViewController: NSViewController {
     func preset(tag: Int) { }
     func save() { }
 
-    @IBAction
-    func presetAction(_ sender: NSPopUpButton) {
+    @IBAction func presetAction(_ sender: NSPopUpButton) {
 
         preset(tag: sender.selectedTag())
     }
 
-    @IBAction
-    func saveAction(_ sender: Any) {
+    @IBAction func presetMenuAction(_ sender: NSMenuItem!) {
+
+        preset(tag: sender.tag)
+    }
+
+    @IBAction func saveAction(_ sender: Any) {
 
         save()
     }

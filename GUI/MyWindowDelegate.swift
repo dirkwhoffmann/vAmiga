@@ -24,8 +24,8 @@ extension MyController: NSWindowDelegate {
         // Declare this controller the active one
         MyAppDelegate.currentController = self
 
-        // Inform the emulator (unmutes audio)
-        // emu?.put(.FOCUS, value: 1)
+        // Update the preferences window (if open)
+        myAppDelegate.settingsController?.refresh()
 
         // Update the menu bar
         hideOrShowDriveMenus()
