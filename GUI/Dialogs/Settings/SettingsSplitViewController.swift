@@ -59,10 +59,15 @@ class SettingsSplitViewController: NSSplitViewController {
 
         return splitView.subviews[dividerIndex].frame.size.width
     }
-    
-    private func showContent(for item: SidebarItem) {
 
-        switch item.title {
+    func showContent(for item: SidebarItem) {
+
+        showContent(title: item.title)
+    }
+
+    func showContent(title: String) {
+
+        switch title {
 
         case "Emulator":        current = generalVC
         case "Virtual Machine": current = romsVC

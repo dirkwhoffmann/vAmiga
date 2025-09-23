@@ -22,7 +22,6 @@
 		500B0D232E7C927A008FC5E1 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D222E7C9274008FC5E1 /* SettingsViewController.swift */; };
 		500B0D252E7C9852008FC5E1 /* ControlsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D242E7C9848008FC5E1 /* ControlsSettings.swift */; };
 		500B0D272E7C9D5B008FC5E1 /* DevicesSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D262E7C9D56008FC5E1 /* DevicesSettings.swift */; };
-		500B0D292E7D6EB7008FC5E1 /* SettingsToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D282E7D6EB3008FC5E1 /* SettingsToolbar.swift */; };
 		500B0D2B2E7DC83F008FC5E1 /* LiveTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D2A2E7DC839008FC5E1 /* LiveTextField.swift */; };
 		500B0D2D2E7DF5BA008FC5E1 /* SettingsOutlineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D2C2E7DF5B5008FC5E1 /* SettingsOutlineView.swift */; };
 		500B0D302E801780008FC5E1 /* HardwareSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B0D2F2E80177A008FC5E1 /* HardwareSettings.swift */; };
@@ -583,7 +582,6 @@
 		500B0D222E7C9274008FC5E1 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		500B0D242E7C9848008FC5E1 /* ControlsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlsSettings.swift; sourceTree = "<group>"; };
 		500B0D262E7C9D56008FC5E1 /* DevicesSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicesSettings.swift; sourceTree = "<group>"; };
-		500B0D282E7D6EB3008FC5E1 /* SettingsToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsToolbar.swift; sourceTree = "<group>"; };
 		500B0D2A2E7DC839008FC5E1 /* LiveTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveTextField.swift; sourceTree = "<group>"; };
 		500B0D2C2E7DF5B5008FC5E1 /* SettingsOutlineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsOutlineView.swift; sourceTree = "<group>"; };
 		500B0D2F2E80177A008FC5E1 /* HardwareSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardwareSettings.swift; sourceTree = "<group>"; };
@@ -1281,6 +1279,7 @@
 				500B0D372E8017E1008FC5E1 /* CompatibilitySettings.swift */,
 				500B0D392E801808008FC5E1 /* AudioSettings.swift */,
 				500B0D3B2E801815008FC5E1 /* VideoSettings.swift */,
+				508FE03F21EA22CC0043D0E9 /* RomDropView.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -1346,7 +1345,6 @@
 			isa = PBXGroup;
 			children = (
 				500B0D2C2E7DF5B5008FC5E1 /* SettingsOutlineView.swift */,
-				500B0D282E7D6EB3008FC5E1 /* SettingsToolbar.swift */,
 				50144E352E7BE5E5009E15B4 /* SettingsWindowController.swift */,
 				50144E3C2E7BEA85009E15B4 /* SidebarViewController.swift */,
 				50144E382E7BE6BC009E15B4 /* SettingsSplitViewController.swift */,
@@ -1858,7 +1856,6 @@
 				502BB09D229C00C800A8DFCD /* CompatibilityConf.swift */,
 				5072CAF92456D1C800C8F606 /* AudioConf.swift */,
 				508FE04021EA22CC0043D0E9 /* VideoConf.swift */,
-				508FE03F21EA22CC0043D0E9 /* RomDropView.swift */,
 			);
 			path = Configuration;
 			sourceTree = "<group>";
@@ -2724,7 +2721,6 @@
 				50B70CAD252CE0BF006B5191 /* AudioPort.cpp in Sources */,
 				501D686028085131000BB5E9 /* Defaults.cpp in Sources */,
 				508FE04F21EA22CC0043D0E9 /* GeneralPrefs.swift in Sources */,
-				500B0D292E7D6EB7008FC5E1 /* SettingsToolbar.swift in Sources */,
 				5042F2DD26BE57E600126C05 /* Thread.cpp in Sources */,
 				502023EA27B6BDEA00820DB6 /* ZorroBoard.cpp in Sources */,
 				50A0F71C2E0E689000972CBC /* FSTree.cpp in Sources */,

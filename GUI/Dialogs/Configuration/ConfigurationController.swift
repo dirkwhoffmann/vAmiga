@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+/*
 import AppKit
 
 @MainActor
@@ -438,3 +439,4 @@ extension ConfigurationController: NSTextFieldDelegate {
         }
     }
 }
+*/

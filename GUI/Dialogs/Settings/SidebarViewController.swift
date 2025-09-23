@@ -66,7 +66,8 @@ class SidebarViewController: NSViewController {
         outlineView.reloadData()
 
         // Select first item by default
-        outlineView.selectRowIndexes(IndexSet(integer: 0), byExtendingSelection: false)
+        // outlineView.selectRowIndexes(IndexSet(integer: 0), byExtendingSelection: false)
+        outlineView.selectRowIndexes(IndexSet(integer: 1), byExtendingSelection: false)
 
         // Expand all items
         for item in self.items { outlineView.expandItem(item, expandChildren: true) }

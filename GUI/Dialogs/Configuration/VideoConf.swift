@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+/*
 @MainActor
 extension ConfigurationController {
     
@@ -346,3 +347,4 @@ extension ConfigurationController {
         config.saveVideoUserDefaults()
     }
 }
+*/

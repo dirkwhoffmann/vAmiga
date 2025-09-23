@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+/*
 @MainActor
 extension ConfigurationController {
     
@@ -271,3 +272,4 @@ extension ConfigurationController {
         try? emu.mem.loadExt(buffer: data)
     }
 }
+*/

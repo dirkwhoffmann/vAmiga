@@ -194,7 +194,8 @@ extension MyController: NSMenuItemValidation {
     //
     // Action methods (Machine menu)
     //
-    
+
+    /*
     func openConfiguratorAsSheet(tab: String = "") {
         
         if configurator == nil {
@@ -215,6 +216,7 @@ extension MyController: NSMenuItemValidation {
         
         openConfiguratorAsWindow()
     }
+    */
 
     func addInspector() {
     

@@ -14,6 +14,7 @@ class SettingsWindowController: NSWindowController {
     var splitViewController: SettingsSplitViewController? {
         self.contentViewController as? SettingsSplitViewController
     }
+    var romsVC: RomSettingsViewController? { splitViewController?.romsVC }
     var devicesVC: DevicesSettingsViewController? { splitViewController?.devicesVC }
     var currentVC: SettingsViewController? { splitViewController?.current }
     var isVisible: Bool { window?.isVisible ?? false }

@@ -38,7 +38,7 @@ class MyController: NSWindowController, MessageReceiver {
     var dashboards: [Dashboard] = []
     
     // Configuration panel of this emulator instance
-    var configurator: ConfigurationController?
+    // var configurator: ConfigurationController?
 
     // Settings panel
     var settings: SettingsWindowController? { myAppDelegate.settingsController }
@@ -207,6 +207,10 @@ extension MyController {
         config.applyUserDefaults()
 
         do {
+
+            // Install Aros if no Kickstart is present
+            if emu.mem.info.hasRom { installAros() }
+
             // Switch the Amiga on
             emu.powerOn()
         
@@ -217,13 +221,6 @@ extension MyController {
             
             // Switch the Amiga off
             emu.powerOff()
-            
-            // Open the Rom dialog after a small delay
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                
-                self.openConfiguratorAsSheet(tab: "Roms")
-                self.configurator!.installAros()
-            }
         }
 
         // Add media file (if provided on startup)
@@ -236,9 +233,6 @@ extension MyController {
             }
         }
 
-        // Create speed monitor
-        // speedometer = Speedometer()
-        
         // Update toolbar
         toolbar.validateVisibleItems()
         
@@ -379,7 +373,7 @@ extension MyController {
         switch msg.type {
                         
         case .CONFIG:
-            configurator?.refresh()
+            // configurator?.refresh()
             refreshStatusBar()
             passToInspector()
             passToDashboard()
@@ -398,7 +392,7 @@ extension MyController {
             }
             clearInfo()
             passToInspector()
-            configurator?.refresh()
+            // configurator?.refresh()
             settings?.refresh()
 
         case .RUN:
