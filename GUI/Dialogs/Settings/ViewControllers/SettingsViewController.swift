@@ -9,6 +9,7 @@
 
 class SettingsViewController: NSViewController {
 
+    @IBOutlet weak var presetPopup: NSPopUpButton!
     @IBOutlet weak var lockImage: NSButton!
     @IBOutlet weak var lockInfo1: NSTextField!
     @IBOutlet weak var lockInfo2: NSTextField!

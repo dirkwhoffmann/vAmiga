@@ -12,7 +12,7 @@ extension Inspector {
 
     private func cacheEvents() {
 
-        // eventInfo = amiga.agnus.eventInfo
+        // eventInfo = emu.agnus.eventInfo
         agnusInfo = emu.paused ? emu.agnus.info : emu.agnus.cachedInfo
         // eventInfo = agnusInfo.eventInfo
     }

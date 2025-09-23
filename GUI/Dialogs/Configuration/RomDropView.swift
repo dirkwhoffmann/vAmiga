@@ -23,9 +23,9 @@ extension NSDraggingInfo {
 @MainActor
 class DropView: NSImageView {
     
-    @IBOutlet var parent: ConfigurationController!
+    @IBOutlet var parent: RomSettingsViewController!
     @IBOutlet var auxIcon: NSImageView!
-    var amiga: EmulatorProxy { return parent.emu }
+    var emu: EmulatorProxy? { return parent.emu }
 
     var oldImage: NSImage?
     
@@ -75,31 +75,30 @@ class DropView: NSImageView {
 class RomDropView: DropView {
 
     override func acceptDragSource(url: URL) -> Bool {
-        
-        if !amiga.poweredOff { return false }
-        return amiga.mem.isRom(url)
+
+        guard let emu = emu else { return false }
+        return !emu.poweredOff ? false : emu.mem.isRom(url)
     }
     
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
 
-        // guard let url = sender.url?.unpacked else { return false }
-        guard let url = sender.url else { return false }
+        guard let emu = emu, let url = sender.url else { return false }
 
         do {
             
             let rom = try MediaFileProxy.make(with: url)
-            try amiga.mem.loadRom(rom)
+            try emu.mem.loadRom(rom)
 
             // Check if we should keep this Rom
-            let hash = Int(amiga.mem.romTraits.crc)
+            let hash = Int(emu.mem.romTraits.crc)
 
-            for item in parent.romArosPopup.itemArray {
+            for item in parent.presetPopup.itemArray {
 
                 if item.tag == hash && hash != 0 {
 
                     if let url = UserDefaults.romUrl(fingerprint: hash) {
                         debug(1, "Saving \(url)")
-                        try? amiga.mem.saveRom(url)
+                        try? emu.mem.saveRom(url)
                         parent.refreshRomSelector()
                     }
                 }
@@ -107,12 +106,12 @@ class RomDropView: DropView {
             return true
             
         } catch {
-            
+
             image = oldImage
-            parent.parent.showAlert(.cantOpen(url: url),
-                                    error: error,
-                                    async: true,
-                                    window: parent.window)
+            parent.controller?.showAlert(.cantOpen(url: url),
+                                         error: error,
+                                         async: true,
+                                         window: parent.controller!.window)
             return false
         }
     }
@@ -122,27 +121,26 @@ class ExtRomDropView: DropView {
 
     override func acceptDragSource(url: URL) -> Bool {
 
-        if !amiga.poweredOff { return false }
-        return amiga.mem.isRom(url)
+        guard let emu = emu else { return false }
+        return !emu.poweredOff ? false : emu.mem.isRom(url)
     }
     
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
         
-        // guard let url = sender.url?.unpacked else { return false }
-        guard let url = sender.url else { return false }
+        guard let emu = emu, let url = sender.url else { return false }
 
         do {
             
             let ext = try MediaFileProxy.make(with: url)
-            try amiga.mem.loadExt(ext)
+            try emu.mem.loadExt(ext)
             return true
-            
+
         } catch {
-            
-            parent.parent.showAlert(.cantOpen(url: url),
-                                    error: error,
-                                    async: true,
-                                    window: parent.window)
+
+            parent.controller?.showAlert(.cantOpen(url: url),
+                                         error: error,
+                                         async: true,
+                                         window: parent.controller!.window)
             return false
         }
     }
