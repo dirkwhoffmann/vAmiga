@@ -13,7 +13,13 @@ struct SidebarItem {
 
     let title: String
     let iconName: String
-    // let identifier: NSUserInterfaceItemIdentifier
+    let children: [SidebarItem]
+
+    init(title: String, icon: String, children: [SidebarItem] = []) {
+        self.title = title
+        self.iconName = icon
+        self.children = children
+    }
 }
 
 class SidebarViewController: NSViewController {
@@ -25,18 +31,24 @@ class SidebarViewController: NSViewController {
     }
 
     let items: [SidebarItem] = [
-        
-        SidebarItem(title: "General",       iconName: "iconGeneral"),
-        SidebarItem(title: "Captures",      iconName: "iconCaptures"),
-        SidebarItem(title: "Controls",      iconName: "iconControls"),
-        SidebarItem(title: "Devices",       iconName: "iconDevices"),
-        SidebarItem(title: "Roms",          iconName: "iconRoms"),
-        SidebarItem(title: "Hardware",      iconName: "iconHardware"),
-        SidebarItem(title: "Peripherals",   iconName: "iconPeripherals"),
-        SidebarItem(title: "Performance",   iconName: "iconPerformance"),
-        SidebarItem(title: "Compatibility", iconName: "iconCompatibility"),
-        SidebarItem(title: "Audio",         iconName: "iconAudio"),
-        SidebarItem(title: "Video",         iconName: "iconVideo")
+
+        SidebarItem(title: "Emulator", icon: "house", children: [
+
+            SidebarItem(title: "General",       icon: "gear"),
+            SidebarItem(title: "Captures",      icon: "binoculars.fill"),
+            SidebarItem(title: "Controls",      icon: "arrowkeys"),
+            SidebarItem(title: "Devices",       icon: "gamecontroller")
+        ]),
+        SidebarItem(title: "Virtual Machine", icon: "sparkles.tv", children: [
+
+            SidebarItem(title: "Roms",          icon: "memorychip"),
+            SidebarItem(title: "Hardware",      icon: "engine.combustion"),
+            SidebarItem(title: "Peripherals",   icon: "externaldrive"),
+            SidebarItem(title: "Performance",   icon: "hare"),
+            SidebarItem(title: "Compatibility", icon: "compass.drawing"),
+            SidebarItem(title: "Audio",         icon: "waveform"),
+            SidebarItem(title: "Video",         icon: "eye")
+        ])
     ]
 
     var selectionHandler: ((SidebarItem) -> Void)?
@@ -59,7 +71,12 @@ class SidebarViewController: NSViewController {
 extension SidebarViewController: NSOutlineViewDataSource {
 
     func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
-        return items.count
+
+        if let sidebarItem = item as? SidebarItem {
+            return sidebarItem.children.count
+        } else {
+            return items.count
+        }
     }
 
     func outlineView(_ outlineView: NSOutlineView, heightOfRowByItem item: Any) -> CGFloat {
@@ -68,11 +85,20 @@ extension SidebarViewController: NSOutlineViewDataSource {
     }
 
     func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool {
+
+        if let sidebarItem = item as? SidebarItem {
+            return !sidebarItem.children.isEmpty
+        }
         return false
     }
 
     func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any {
-        return items[index]
+
+        if let sidebarItem = item as? SidebarItem {
+            return sidebarItem.children[index]
+        } else {
+            return items[index]
+        }
     }
 }
 
@@ -84,7 +110,11 @@ extension SidebarViewController: NSOutlineViewDelegate {
 
         if let sidebarItem = item as? SidebarItem {
             cell?.textField?.stringValue = sidebarItem.title
-            cell?.imageView?.image = NSImage(named: sidebarItem.iconName)
+            cell?.imageView?.image = NSImage(
+                systemSymbolName: sidebarItem.iconName,
+                accessibilityDescription: sidebarItem.title
+            )
+            // cell?.imageView?.contentTintColor = .secondaryLabelColor
         } else {
             cell?.textField?.stringValue = "???"
             cell?.imageView?.image = nil
@@ -93,10 +123,18 @@ extension SidebarViewController: NSOutlineViewDelegate {
     }
 
     func outlineViewSelectionDidChange(_ notification: Notification) {
-        
+
+        let selectedIndex = outlineView.selectedRow
+        if selectedIndex >= 0 {
+            if let item = outlineView.item(atRow: selectedIndex) as? SidebarItem {
+                selectionHandler?(item)
+            }
+        }
+        /*
         let selectedIndex = outlineView.selectedRow
         if selectedIndex >= 0 {
             selectionHandler?(items[selectedIndex])
         }
+        */
     }
 }

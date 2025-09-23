@@ -24,7 +24,6 @@ class SettingsViewController: NSViewController {
 
     func activate() {
 
-        // view.window?.makeFirstResponder(self)
         refresh()
     }
 

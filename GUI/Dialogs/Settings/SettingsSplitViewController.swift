@@ -74,6 +74,9 @@ class SettingsSplitViewController: NSSplitViewController {
 
         switch item.title {
 
+        case "Emulator":        current = generalVC
+        case "Virtual Machine": current = romsVC
+
         case "General":         current = generalVC
         case "Captures":        current = capturesVC
         case "Controls":        current = controlsVC
