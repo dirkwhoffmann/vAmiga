@@ -1,7 +1,59 @@
 
-@MainActor
-class OnboardingView: NSView {
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
+//
+// Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
+// Licensed under the GNU General Public License v3
+//
+// See https://www.gnu.org for license information
+// -----------------------------------------------------------------------------
 
+@MainActor
+class OnboardingLayerView: NSView {
+
+    override func mouseDown(with event: NSEvent) {
+
+        print("OnboardingLayerView: mouseDown")
+    }
+
+    override func mouseUp(with event: NSEvent) {
+
+        print("OnboardingLayerView: mouseUp")
+    }
+
+    private var bgLayer: CALayer?
+
+    override func viewDidMoveToWindow() {
+
+        /*
+        super.viewDidMoveToWindow()
+        wantsLayer = true
+
+        if let layer = self.layer, bgLayer == nil {
+
+            let background = CALayer()
+            background.contents = NSImage(named: "a1000board")
+            background.contentsGravity = .resizeAspectFill
+            background.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
+            layer.insertSublayer(background, at: 0)
+            bgLayer = background
+        }
+         */
+    }
+
+    override func layout() {
+
+        super.layout()
+        bgLayer?.frame = CGRect(x: 0, y: 0,
+                                width: bounds.width,
+                                height: bounds.height)
+    }
+}
+
+@MainActor
+class OnboardingPageContainerView: NSView {
+
+    /*
     private var bgLayer: CALayer?
 
     override func viewDidMoveToWindow() {
@@ -27,11 +79,12 @@ class OnboardingView: NSView {
                                 width: bounds.width,
                                 height: bounds.height - 32)
     }
+    */
 }
 
 class OnboardingLayerViewController: NSViewController {
 
-    @IBOutlet weak var pageContainerView: OnboardingView!
+    @IBOutlet weak var pageContainerView: OnboardingPageContainerView!
     @IBOutlet weak var pageDotIndicator: PageDotsIndicator!
 
     // var pageController: NSPageController!
@@ -187,10 +240,13 @@ class OnboardingViewController1: NSViewController {
     @IBOutlet weak var a2000Text: NSTextField!
     @IBOutlet weak var a2000Icon: NSButton!
 
-    @IBAction func modelAction(_ sender: NSButton) {
+    @IBAction func a500Action(_ sender: Any) { print("a500action"); model = 0 }
+    @IBAction func a1000Action(_ sender: Any) { print("a1000action"); model = 1 }
+    @IBAction func a2000Action(_ sender: Any) { print("a2000action"); model = 2 }
 
-        print("modelAction \(sender.tag)")
-        model = sender.tag
+    override func viewDidLoad() {
+
+        refresh()
     }
 
     func refresh() {

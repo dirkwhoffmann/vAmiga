@@ -10,19 +10,24 @@
         <scene sceneID="EIO-6M-sJX">
             <objects>
                 <viewController storyboardIdentifier="OnboardingLayerViewController" id="FDy-lQ-BwN" customClass="OnboardingLayerViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" id="ubt-89-El8">
+                    <view key="view" id="ubt-89-El8" customClass="OnboardingLayerView" customModule="vAmiga" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UQz-GW-66a">
+                                <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" image="amigaBall" id="2Bm-rU-uxm"/>
+                            </imageView>
                             <box fixedFrame="YES" title="Box" titlePosition="noTitle" transparent="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g3y-uc-41P">
                                 <rect key="frame" x="100" y="130" width="600" height="472"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                <view key="contentView" id="aJw-Xr-hX4" customClass="OnboardingView" customModule="vAmiga" customModuleProvider="target">
+                                <view key="contentView" id="aJw-Xr-hX4" customClass="OnboardingPageContainerView" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="4" y="5" width="592" height="464"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uot-uQ-lVb">
-                                            <rect key="frame" x="0.0" y="74" width="600" height="320"/>
+                                            <rect key="frame" x="-4" y="74" width="600" height="320"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         </customView>
                                         <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vad-mh-PS5" customClass="PageDotsIndicator" customModule="vAmiga" customModuleProvider="target">
@@ -43,31 +48,31 @@ DQ
                                                 <action selector="nextPage:" target="FDy-lQ-BwN" id="ykq-lI-pOH"/>
                                             </connections>
                                         </button>
-                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Z3E-sm-lCI">
-                                            <rect key="frame" x="2" y="-1" width="25" height="26"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="arrowshape.backward.circle" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="wUJ-QA-sC1">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="previousPage:" target="FDy-lQ-BwN" id="RYM-SF-RVu"/>
-                                            </connections>
-                                        </button>
-                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DYH-SO-7ZG">
-                                            <rect key="frame" x="565" y="-1" width="25" height="26"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="xmark.octagon.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="EvN-iR-fCo">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="previousPage:" target="FDy-lQ-BwN" id="mNB-NJ-0OX"/>
-                                            </connections>
-                                        </button>
                                     </subviews>
                                 </view>
                             </box>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Z3E-sm-lCI">
+                                <rect key="frame" x="20" y="17" width="25" height="26"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="arrowshape.backward.circle" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="wUJ-QA-sC1">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="previousPage:" target="FDy-lQ-BwN" id="RYM-SF-RVu"/>
+                                </connections>
+                            </button>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DYH-SO-7ZG">
+                                <rect key="frame" x="761" y="17.5" width="25" height="26"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="xmark.octagon.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="EvN-iR-fCo">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="previousPage:" target="FDy-lQ-BwN" id="mNB-NJ-0OX"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                     <connections>
@@ -110,9 +115,6 @@ DQ
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
-                                            <connections>
-                                                <action selector="modelAction:" target="KL4-sg-GCT" id="R38-Ai-xPb"/>
-                                            </connections>
                                         </button>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eyv-64-nvf">
                                             <rect key="frame" x="37" y="15" width="79" height="19"/>
@@ -123,10 +125,21 @@ DQ
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
+                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bMj-mA-7xM">
+                                            <rect key="frame" x="0.0" y="0.0" width="152" height="152"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="bevel" bezelStyle="rounded" alignment="center" imageScaling="proportionallyDown" inset="2" id="wBW-OT-0wL">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="a500Action:" target="KL4-sg-GCT" id="l1o-oT-8Rd"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                 </view>
                             </box>
-                            <box fixedFrame="YES" title="Box" titlePosition="noTitle" transparent="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uhC-t1-UUj">
+                            <box fixedFrame="YES" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="uhC-t1-UUj">
                                 <rect key="frame" x="220" y="5" width="160" height="160"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <view key="contentView" id="32P-Gx-cTR">
@@ -134,7 +147,7 @@ DQ
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XdC-BT-HGr">
-                                            <rect key="frame" x="29" y="22" width="86" height="19"/>
+                                            <rect key="frame" x="33" y="15" width="86" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Amiga 1000" id="uMa-Cv-n1w">
                                                 <font key="font" textStyle="title3" name=".SFNS-Regular"/>
@@ -143,20 +156,28 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <button tag="1" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SXZ-ZK-xYO">
-                                            <rect key="frame" x="22" y="49" width="100" height="100"/>
+                                            <rect key="frame" x="26" y="42" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="iconGeneral" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="VJ2-Ib-mzU">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                        </button>
+                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2qn-9H-KRc">
+                                            <rect key="frame" x="0.0" y="0.0" width="152" height="152"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="bevel" bezelStyle="rounded" alignment="center" imageScaling="proportionallyDown" inset="2" id="Qi4-hk-RFx">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
                                             <connections>
-                                                <action selector="modelAction:" target="KL4-sg-GCT" id="G9y-Wx-a9x"/>
+                                                <action selector="a1000Action:" target="KL4-sg-GCT" id="0AE-0I-xkM"/>
                                             </connections>
                                         </button>
                                     </subviews>
                                 </view>
                             </box>
-                            <box fixedFrame="YES" title="Box" titlePosition="noTitle" transparent="YES" translatesAutoresizingMaskIntoConstraints="NO" id="27s-3E-phC">
+                            <box fixedFrame="YES" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="27s-3E-phC">
                                 <rect key="frame" x="394" y="5" width="160" height="160"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <view key="contentView" id="DSF-Gy-abv">
@@ -164,7 +185,7 @@ DQ
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sVI-l2-Cwy">
-                                            <rect key="frame" x="29" y="22" width="88" height="19"/>
+                                            <rect key="frame" x="32" y="15" width="88" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Amiga 2000" id="Hpm-Ow-fjK">
                                                 <font key="font" textStyle="title3" name=".SFNS-Regular"/>
@@ -173,14 +194,22 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <button tag="2" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xh3-vg-UEy">
-                                            <rect key="frame" x="26" y="49" width="100" height="100"/>
+                                            <rect key="frame" x="26" y="42" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="iconGeneral" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="TbM-3c-QML">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                        </button>
+                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="03v-fO-bZe">
+                                            <rect key="frame" x="0.0" y="0.0" width="152" height="152"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="bevel" bezelStyle="rounded" alignment="center" imageScaling="proportionallyDown" inset="2" id="LYY-Zu-oP4">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
                                             <connections>
-                                                <action selector="modelAction:" target="KL4-sg-GCT" id="n9p-d5-Fec"/>
+                                                <action selector="a2000Action:" target="KL4-sg-GCT" id="g2i-Zd-pjC"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -306,6 +335,7 @@ DQ
         </scene>
     </scenes>
     <resources>
+        <image name="amigaBall" width="263" height="265"/>
         <image name="arrowshape.backward.circle" catalog="system" width="15" height="15"/>
         <image name="iconGeneral" width="256" height="256"/>
         <image name="rom_aros" width="129" height="157"/>
