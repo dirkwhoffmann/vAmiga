@@ -99,6 +99,9 @@
 		5043154D2D2ACF47006C14FF /* WaveformPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043154C2D2ACF3E006C14FF /* WaveformPanel.swift */; };
 		5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043F6C4221972F90047CC30 /* MyToolbar.swift */; };
 		5045D55D2D33C73000596D1E /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5045D55C2D33C72C00596D1E /* DashboardViewController.swift */; };
+		5045FB2F2E83C67400131505 /* Tutorial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5045FB2E2E83C67000131505 /* Tutorial.swift */; };
+		5045FB312E83CC1A00131505 /* Tutorial.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5045FB302E83CC1A00131505 /* Tutorial.storyboard */; };
+		5045FB332E83DFF000131505 /* PageDotsIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5045FB322E83DFEA00131505 /* PageDotsIndicator.swift */; };
 		504C48B424143AB4008ADAB3 /* AgnusDma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 504C48B324143AB4008ADAB3 /* AgnusDma.cpp */; };
 		504CC8C12D5A819F00C2AC9A /* ADZFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 504CC8C02D5A819D00C2AC9A /* ADZFile.cpp */; };
 		504CC8C22D5A819F00C2AC9A /* ADZFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 504CC8C02D5A819D00C2AC9A /* ADZFile.cpp */; };
@@ -679,6 +682,9 @@
 		5043154C2D2ACF3E006C14FF /* WaveformPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveformPanel.swift; sourceTree = "<group>"; };
 		5043F6C4221972F90047CC30 /* MyToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolbar.swift; sourceTree = "<group>"; };
 		5045D55C2D33C72C00596D1E /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
+		5045FB2E2E83C67000131505 /* Tutorial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tutorial.swift; sourceTree = "<group>"; };
+		5045FB302E83CC1A00131505 /* Tutorial.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Tutorial.storyboard; sourceTree = "<group>"; };
+		5045FB322E83DFEA00131505 /* PageDotsIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageDotsIndicator.swift; sourceTree = "<group>"; };
 		504C48B324143AB4008ADAB3 /* AgnusDma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusDma.cpp; sourceTree = "<group>"; };
 		504CC8BF2D5A819200C2AC9A /* ADZFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ADZFile.h; sourceTree = "<group>"; };
 		504CC8C02D5A819D00C2AC9A /* ADZFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ADZFile.cpp; sourceTree = "<group>"; };
@@ -1462,6 +1468,7 @@
 		505B801E23FE6582002407FE /* System */ = {
 			isa = PBXGroup;
 			children = (
+				5045FB322E83DFEA00131505 /* PageDotsIndicator.swift */,
 				500B0D2A2E7DC839008FC5E1 /* LiveTextField.swift */,
 				5042FB122D4E4E8200E4A167 /* FilePanel.swift */,
 				508FDFEB21EA22780043D0E9 /* Speedometer.swift */,
@@ -1632,6 +1639,7 @@
 			children = (
 				508FDFB121EA1FF10043D0E9 /* MainMenu.xib */,
 				508FDFAF21EA1FF10043D0E9 /* MyDocument.xib */,
+				5045FB302E83CC1A00131505 /* Tutorial.storyboard */,
 				50DD1EE12525E3E1000180F6 /* Preferences.xib */,
 				50144E332E7BE4F1009E15B4 /* Settings.storyboard */,
 				500217B72449CF7000E1A096 /* Configuration.xib */,
@@ -2127,6 +2135,7 @@
 			isa = PBXGroup;
 			children = (
 				50C8C4492607396200F4E012 /* Layer.swift */,
+				5045FB2E2E83C67000131505 /* Tutorial.swift */,
 				50C8C44E260740AC00F4E012 /* SplashScreen.swift */,
 				50C8C451260747EA00F4E012 /* Canvas.swift */,
 				5026EDBE2608DC8E00D90CE1 /* Console.swift */,
@@ -2423,6 +2432,7 @@
 				50B14C2021EB8445002E32A6 /* drive_head.aiff in Resources */,
 				50AD904B276E104E0011ECCB /* TextStorage.h in Resources */,
 				5029C6E127CA2EAB002F6CCC /* DiskInspector.xib in Resources */,
+				5045FB312E83CC1A00131505 /* Tutorial.storyboard in Resources */,
 				500A4E9F24470713002A4DE1 /* disk_eject.aiff in Resources */,
 				508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */,
 				501C514C27C4248300DF1DD5 /* FloppyCreator.xib in Resources */,
@@ -2526,6 +2536,7 @@
 				508FDFDA21EA20510043D0E9 /* ImageToolbox.swift in Sources */,
 				500B0D232E7C927A008FC5E1 /* SettingsViewController.swift in Sources */,
 				505554AC2264C47600CB07E0 /* Mouse.cpp in Sources */,
+				5045FB332E83DFF000131505 /* PageDotsIndicator.swift in Sources */,
 				509C365A260B1766004F160A /* RSCommand.cpp in Sources */,
 				50B81E0A24E6BEA5004384C9 /* CIARegs.cpp in Sources */,
 				500B0D382E8017E9008FC5E1 /* CompatibilitySettings.swift in Sources */,
@@ -2664,6 +2675,7 @@
 				50F54B2524B5D31D0078FDC9 /* u_heavy.c in Sources */,
 				502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */,
 				5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */,
+				5045FB2F2E83C67400131505 /* Tutorial.swift in Sources */,
 				5041C6282791AF0800D3C494 /* SequencerRegs.cpp in Sources */,
 				500B0D402E8099AA008FC5E1 /* CapturesSettings.swift in Sources */,
 				500B0D302E801780008FC5E1 /* HardwareSettings.swift in Sources */,

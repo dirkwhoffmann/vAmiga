@@ -70,6 +70,7 @@ extension Renderer {
     func buildLayers() {
         
         splashScreen = SplashScreen(renderer: self)
+        tutorial = Tutorial(renderer: self)
         canvas = Canvas(renderer: self)
         console = Console(renderer: self)
         dropZone = DropZone(renderer: self)

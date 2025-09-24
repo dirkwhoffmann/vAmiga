@@ -208,6 +208,9 @@ extension MyController {
 
         do {
 
+            // Experimental
+            renderer.tutorial.open(delay: 1)
+
             // Install Aros if no Kickstart is present
             if !emu.mem.info.hasRom { installAros() }
 
