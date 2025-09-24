@@ -1,6 +1,6 @@
 
 @MainActor
-class TutorialLayerViewController: NSViewController {
+class OnboardingLayerViewController: NSViewController {
 
     @IBOutlet weak var pageContainerView: NSView!
 
@@ -17,7 +17,7 @@ class TutorialLayerViewController: NSViewController {
 
         func instantiate(_ id: String) -> NSViewController {
 
-            let storyboard = NSStoryboard(name: "Tutorial", bundle: nil)
+            let storyboard = NSStoryboard(name: "Onboarding", bundle: nil)
             return storyboard.instantiateController(withIdentifier: id) as! NSViewController
         }
 
@@ -91,43 +91,43 @@ class TutorialLayerViewController: NSViewController {
 }
 
 @MainActor
-class Tutorial: Layer {
+class Onboarding: Layer {
 
     var window: NSWindow { controller.window! }
     var contentView: NSView { window.contentView! }
-    var storyboard: NSStoryboard { NSStoryboard(name: "Tutorial", bundle: nil) }
+    var storyboard: NSStoryboard { NSStoryboard(name: "Onboarding", bundle: nil) }
 
-    var tutorialVC: TutorialLayerViewController!
+    var onboardingVC: OnboardingLayerViewController!
 
     override init(renderer: Renderer) {
 
         super.init(renderer: renderer)
 
-        tutorialVC = storyboard.instantiateController(withIdentifier: "TutorialLayerViewController") as? TutorialLayerViewController
-        tutorialVC.view.wantsLayer = true
-        tutorialVC.view.layer?.backgroundColor = NSColor.windowBackgroundColor.cgColor
+        onboardingVC = storyboard.instantiateController(withIdentifier: "OnboardingLayerViewController") as? OnboardingLayerViewController
+        onboardingVC.view.wantsLayer = true
+        onboardingVC.view.layer?.backgroundColor = NSColor.windowBackgroundColor.cgColor
     }
 
     override func alphaDidChange() {
 
-        tutorialVC.view.alphaValue = CGFloat(alpha.current)
+        onboardingVC.view.alphaValue = CGFloat(alpha.current)
 
-        if alpha.current > 0 && tutorialVC.view.superview == nil {
+        if alpha.current > 0 && onboardingVC.view.superview == nil {
 
-            contentView.addSubview(tutorialVC.view)
+            contentView.addSubview(onboardingVC.view)
 
-            tutorialVC.view.translatesAutoresizingMaskIntoConstraints = false
+            onboardingVC.view.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
-                tutorialVC.view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-                tutorialVC.view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-                tutorialVC.view.topAnchor.constraint(equalTo: contentView.topAnchor),
-                tutorialVC.view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+                onboardingVC.view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                onboardingVC.view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                onboardingVC.view.topAnchor.constraint(equalTo: contentView.topAnchor),
+                onboardingVC.view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
             ])
         }
 
-        if alpha.current == 0 && tutorialVC.view.superview != nil {
+        if alpha.current == 0 && onboardingVC.view.superview != nil {
 
-            tutorialVC.view.removeFromSuperview()
+            onboardingVC.view.removeFromSuperview()
         }
     }
 }
