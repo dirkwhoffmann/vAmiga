@@ -6,67 +6,57 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Page Controller-->
-        <scene sceneID="78i-AV-nm1">
+        <!--Tutorial Layer View Controller-->
+        <scene sceneID="EIO-6M-sJX">
             <objects>
-                <pagecontroller storyboardIdentifier="Tutorial" id="cOZ-wM-iIy" sceneMemberID="viewController">
-                    <view key="view" id="Q6Y-Wl-kyS">
-                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </view>
-                </pagecontroller>
-                <customObject id="lGb-hX-XEs" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="43" y="71"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="fxo-bF-4xO">
-            <objects>
-                <viewController storyboardIdentifier="Step1" id="Acy-jd-INL" sceneMemberID="viewController">
-                    <view key="view" id="roN-xu-tCF">
+                <viewController storyboardIdentifier="TutorialLayerViewController" id="FDy-lQ-BwN" customClass="TutorialLayerViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="ubt-89-El8">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yeI-Hh-fCk">
-                                <rect key="frame" x="123" y="218" width="124" height="16"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Welcome to vAmiga" id="hXv-eW-r3f">
-                                    <font key="font" usesAppearanceFont="YES"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BhN-Gp-tr1">
-                                <rect key="frame" x="177" y="55" width="75" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="AYv-ee-pp4">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                            </button>
-                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oUa-l4-3ai" customClass="PageDotsIndicator" customModule="vAmiga" customModuleProvider="target">
-                                <rect key="frame" x="133" y="102" width="163" height="96"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uot-uQ-lVb">
+                                <rect key="frame" x="20" y="51" width="410" height="235"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </customView>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3nQ-8D-kKB">
+                                <rect key="frame" x="18" y="20" width="114" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Holla, die Waldfee" id="x5H-Qp-N34">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                     </view>
+                    <connections>
+                        <outlet property="pageContainerView" destination="Uot-uQ-lVb" id="bvy-nm-GHT"/>
+                    </connections>
                 </viewController>
-                <customObject id="0ze-hb-QXc" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <customObject id="Ba7-d5-KMO" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="136" y="466"/>
+            <point key="canvasLocation" x="558" y="455"/>
+        </scene>
+        <!--Page Controller-->
+        <scene sceneID="RsY-Kc-gYU">
+            <objects>
+                <pagecontroller storyboardIdentifier="Tutorial" id="Xb2-0l-P5P" sceneMemberID="viewController"/>
+                <customObject id="KoK-Ir-FjX" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="558" y="823"/>
         </scene>
         <!--View Controller-->
-        <scene sceneID="sLG-iQ-ZkL">
+        <scene sceneID="LiP-Vf-ECF">
             <objects>
-                <viewController storyboardIdentifier="Step2" id="MRl-Lr-zel" sceneMemberID="viewController">
-                    <view key="view" id="u1H-w9-ox8">
+                <viewController storyboardIdentifier="Step1" id="KL4-sg-GCT" sceneMemberID="viewController">
+                    <view key="view" id="HIV-aB-hge">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z9P-cn-iAP">
-                                <rect key="frame" x="184" y="182" width="44" height="16"/>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IEP-16-MDS">
+                                <rect key="frame" x="189" y="151" width="37" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Step 2" id="Uxd-hX-LTG">
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="psj-7I-R83">
                                     <font key="font" usesAppearanceFont="YES"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -75,9 +65,33 @@
                         </subviews>
                     </view>
                 </viewController>
-                <customObject id="tfA-qt-VHQ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <customObject id="Ls3-jX-HZO" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="622" y="466"/>
+            <point key="canvasLocation" x="558" y="1222"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="WyJ-XW-O8U">
+            <objects>
+                <viewController storyboardIdentifier="Step2" id="OdN-Uv-fbm" sceneMemberID="viewController">
+                    <view key="view" id="ZFP-lg-r4I">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sYn-tQ-i13">
+                                <rect key="frame" x="159" y="91" width="44" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Step 2" id="XZR-t7-Hj3">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                </viewController>
+                <customObject id="d25-ry-8sN" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1047" y="1222"/>
         </scene>
     </scenes>
 </document>
