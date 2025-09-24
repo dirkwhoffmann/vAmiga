@@ -209,6 +209,7 @@ extension MyController {
         do {
 
             // Experimental
+            renderer.tutorial.alpha.current = -0.5
             renderer.tutorial.open(delay: 1)
 
             // Install Aros if no Kickstart is present

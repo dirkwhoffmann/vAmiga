@@ -2135,8 +2135,8 @@
 			isa = PBXGroup;
 			children = (
 				50C8C4492607396200F4E012 /* Layer.swift */,
-				5045FB2E2E83C67000131505 /* Tutorial.swift */,
 				50C8C44E260740AC00F4E012 /* SplashScreen.swift */,
+				5045FB2E2E83C67000131505 /* Tutorial.swift */,
 				50C8C451260747EA00F4E012 /* Canvas.swift */,
 				5026EDBE2608DC8E00D90CE1 /* Console.swift */,
 				505CEF5D26BD12430078FF52 /* DropZone.swift */,

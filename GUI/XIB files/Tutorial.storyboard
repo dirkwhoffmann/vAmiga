@@ -15,11 +15,11 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uot-uQ-lVb">
-                                <rect key="frame" x="20" y="51" width="410" height="235"/>
+                                <rect key="frame" x="0.0" y="60" width="450" height="240"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </customView>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3nQ-8D-kKB">
-                                <rect key="frame" x="18" y="20" width="114" height="16"/>
+                                <rect key="frame" x="168" y="13" width="114" height="16"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Holla, die Waldfee" id="x5H-Qp-N34">
                                     <font key="font" usesAppearanceFont="YES"/>
@@ -27,6 +27,28 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uLF-wu-8Hx">
+                                <rect key="frame" x="20" y="13" width="62" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <buttonCell key="cell" type="push" title="Prev" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="KnB-pF-VYB">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="previousPage:" target="FDy-lQ-BwN" id="aMm-Nk-l1F"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PDd-Tl-hJY">
+                                <rect key="frame" x="375" y="13" width="63" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <buttonCell key="cell" type="push" title="Next" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="uNG-NU-wF9">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="nextPage:" target="FDy-lQ-BwN" id="ykq-lI-pOH"/>
+                                </connections>
+                            </button>
                         </subviews>
                     </view>
                     <connections>
@@ -37,14 +59,6 @@
             </objects>
             <point key="canvasLocation" x="558" y="455"/>
         </scene>
-        <!--Page Controller-->
-        <scene sceneID="RsY-Kc-gYU">
-            <objects>
-                <pagecontroller storyboardIdentifier="Tutorial" id="Xb2-0l-P5P" sceneMemberID="viewController"/>
-                <customObject id="KoK-Ir-FjX" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="558" y="823"/>
-        </scene>
         <!--View Controller-->
         <scene sceneID="LiP-Vf-ECF">
             <objects>
@@ -53,11 +67,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rbz-Kv-agQ">
+                                <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" image="aros_half" id="bds-y4-QIo"/>
+                            </imageView>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IEP-16-MDS">
-                                <rect key="frame" x="189" y="151" width="37" height="16"/>
+                                <rect key="frame" x="201" y="134" width="78" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="psj-7I-R83">
-                                    <font key="font" usesAppearanceFont="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Page 1" id="psj-7I-R83">
+                                    <font key="font" textStyle="largeTitle" name=".SFNS-Regular"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -67,7 +86,7 @@
                 </viewController>
                 <customObject id="Ls3-jX-HZO" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="558" y="1222"/>
+            <point key="canvasLocation" x="558" y="825"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="WyJ-XW-O8U">
@@ -77,11 +96,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
+                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cdz-NB-v4E">
+                                <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="vAmigaBg" id="Zv0-Mi-7ok"/>
+                            </imageView>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sYn-tQ-i13">
-                                <rect key="frame" x="159" y="91" width="44" height="16"/>
+                                <rect key="frame" x="181" y="134" width="77" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Step 2" id="XZR-t7-Hj3">
-                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <font key="font" textStyle="largeTitle" name=".SFNS-Regular"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -91,7 +115,11 @@
                 </viewController>
                 <customObject id="d25-ry-8sN" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1047" y="1222"/>
+            <point key="canvasLocation" x="1041" y="825"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="aros_half" width="79" height="62"/>
+        <image name="vAmigaBg" width="780" height="505"/>
+    </resources>
 </document>
