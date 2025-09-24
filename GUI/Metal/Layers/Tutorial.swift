@@ -5,11 +5,8 @@ class TutorialLayerViewController: NSViewController {
     @IBOutlet weak var pageContainerView: NSView!
 
     var pageController: NSPageController!
-
     private var pages: [NSViewController] = []
     private var currentPageIndex: Int = 0
-
-    // var objects: [String] = ["Step1", "Step2"]
 
     override func viewDidLoad() {
 
@@ -34,48 +31,50 @@ class TutorialLayerViewController: NSViewController {
         guard pages.indices.contains(index) else { return }
 
         let newPage = pages[index]
-
-        if children.isEmpty {
-            // First page, just add it
-            addChild(newPage)
-            newPage.view.frame = pageContainerView.bounds
-            newPage.view.autoresizingMask = [.width, .height]
-            pageContainerView.addSubview(newPage.view)
-            currentPageIndex = index
-            return
-        }
-
-        let oldPage = children[0]
+        let oldPage = children.isEmpty ? nil : children[0]
 
         addChild(newPage)
         newPage.view.frame = pageContainerView.bounds
         newPage.view.autoresizingMask = [.width, .height]
 
-        let options: NSViewController.TransitionOptions =
-        [index > currentPageIndex ? .slideLeft : .slideRight, .allowUserInteraction]
+        if let oldPage = oldPage {
 
-        if animated {
-            NSAnimationContext.runAnimationGroup({ context in
-                context.duration = 1.0
-                context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-                self.transition(from: oldPage,
-                                to: newPage,
-                                options: options,
-                                completionHandler: nil)
-            }, completionHandler: {
-                Task { @MainActor in
-                    oldPage.removeFromParent()
-                    self.currentPageIndex = index
-                }
-            })
+            // Transition from the old to the new page
+            if animated {
+
+                let options: NSViewController.TransitionOptions =
+                [index > currentPageIndex ? .slideLeft : .slideRight, .allowUserInteraction]
+                NSAnimationContext.runAnimationGroup({ context in
+
+                    context.duration = 0.8
+                    context.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                    self.transition(from: oldPage,
+                                    to: newPage,
+                                    options: options,
+                                    completionHandler: nil)
+
+                }, completionHandler: {
+
+                    Task { @MainActor in oldPage.removeFromParent() }
+                })
+
+            } else {
+
+                transition(from: oldPage, to: newPage, options: [], completionHandler: nil)
+                oldPage.removeFromParent()
+            }
+
         } else {
-            transition(from: oldPage, to: newPage, options: [], completionHandler: nil)
-            oldPage.removeFromParent()
-            currentPageIndex = index
+
+            // First page, just add it
+            pageContainerView.addSubview(newPage.view)
         }
+
+        currentPageIndex = index
     }
 
     @IBAction func nextPage(_ sender: Any?) {
+
         let nextIndex = currentPageIndex + 1
         if pages.indices.contains(nextIndex) {
             showPage(at: nextIndex)
@@ -83,6 +82,7 @@ class TutorialLayerViewController: NSViewController {
     }
 
     @IBAction func previousPage(_ sender: Any?) {
+
         let prevIndex = currentPageIndex - 1
         if pages.indices.contains(prevIndex) {
             showPage(at: prevIndex)
@@ -116,29 +116,17 @@ class Tutorial: Layer {
 
             contentView.addSubview(tutorialVC.view)
 
-            /*
-            tutorialVC.view.frame = contentView.bounds
-            tutorialVC.view.autoresizingMask = [.width, .height]
-            tutorialVC.view.needsLayout = true
-            tutorialVC.view.layoutSubtreeIfNeeded()
-             */
             tutorialVC.view.translatesAutoresizingMaskIntoConstraints = false
-            contentView.addSubview(tutorialVC.view)
-
             NSLayoutConstraint.activate([
                 tutorialVC.view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
                 tutorialVC.view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
                 tutorialVC.view.topAnchor.constraint(equalTo: contentView.topAnchor),
                 tutorialVC.view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
             ])
-
-            // Force immediate layout
-            contentView.layoutSubtreeIfNeeded()
-
-            // tutorialVC.setupPageController()
         }
 
         if alpha.current == 0 && tutorialVC.view.superview != nil {
+
             tutorialVC.view.removeFromSuperview()
         }
     }
