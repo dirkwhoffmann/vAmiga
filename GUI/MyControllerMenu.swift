@@ -842,7 +842,7 @@ extension MyController: NSMenuItemValidation {
     //
 
     // Resizes the window such that every texture line hits a display line
-    @IBAction func autoResizeWindow(_ sender: NSMenuItem!) {
+    @IBAction func autoResizeWindow(_ sender: Any) {
 
         let height = renderer.canvas.visible.height * 2
 

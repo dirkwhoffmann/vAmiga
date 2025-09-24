@@ -1,11 +1,40 @@
 
 @MainActor
+class OnboardingView: NSView {
+
+    private var bgLayer: CALayer?
+
+    override func viewDidMoveToWindow() {
+
+        super.viewDidMoveToWindow()
+        wantsLayer = true
+
+        if let layer = self.layer, bgLayer == nil {
+
+            let background = CALayer()
+            background.contents = NSImage(named: "vAmigaBg")
+            background.contentsGravity = .resizeAspectFill
+            background.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
+            layer.insertSublayer(background, at: 0)
+            bgLayer = background
+        }
+    }
+
+    override func layout() {
+
+        super.layout()
+        bgLayer?.frame = CGRect(x: 0, y: 0,
+                                width: bounds.width,
+                                height: bounds.height - 32)
+    }
+}
+
 class OnboardingLayerViewController: NSViewController {
 
-    @IBOutlet weak var pageContainerView: NSView!
+    @IBOutlet weak var pageContainerView: OnboardingView!
     @IBOutlet weak var pageDotIndicator: PageDotsIndicator!
 
-    var pageController: NSPageController!
+    // var pageController: NSPageController!
     private var pages: [NSViewController] = []
     private var currentPageIndex: Int = 0 {
         didSet { pageDotIndicator.currentPage = currentPageIndex }
@@ -136,3 +165,49 @@ class Onboarding: Layer {
         }
     }
 }
+
+@MainActor
+class OnboardingViewController1: NSViewController {
+
+    var model = 0 { didSet { refresh() } }
+
+    var a500: Bool { model == 0 }
+    var a1000: Bool { model == 1 }
+    var a2000: Bool { model == 2 }
+
+    @IBOutlet weak var a500Box: NSBox!
+    @IBOutlet weak var a500Text: NSTextField!
+    @IBOutlet weak var a500Icon: NSButton!
+
+    @IBOutlet weak var a1000Box: NSBox!
+    @IBOutlet weak var a1000Text: NSTextField!
+    @IBOutlet weak var a1000Icon: NSButton!
+
+    @IBOutlet weak var a2000Box: NSBox!
+    @IBOutlet weak var a2000Text: NSTextField!
+    @IBOutlet weak var a2000Icon: NSButton!
+
+    @IBAction func modelAction(_ sender: NSButton) {
+
+        print("modelAction \(sender.tag)")
+        model = sender.tag
+    }
+
+    func refresh() {
+
+        print("refresh")
+
+        a500Box.isTransparent = !a500
+        a500Text.isEnabled = a500
+        a500Icon.isEnabled = a500
+
+        a1000Box.isTransparent = !a1000
+        a1000Text.isEnabled = a1000
+        a1000Icon.isEnabled = a1000
+
+        a2000Box.isTransparent = !a2000
+        a2000Text.isEnabled = a2000
+        a2000Icon.isEnabled = a2000
+    }
+}
+

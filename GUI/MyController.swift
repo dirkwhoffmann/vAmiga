@@ -209,7 +209,6 @@ extension MyController {
         do {
 
             // Experimental
-            renderer.onboarding.alpha.current = -0.5
             renderer.onboarding.open(delay: 1)
 
             // Install Aros if no Kickstart is present
@@ -251,12 +250,15 @@ extension MyController {
         window?.setContentBorderThickness(32.0, for: .minY)
         statusBar = true
         
-        // Adjust size and enable auto-save for window coordinates
+        // Adjust size
+        // autoResizeWindow(self)
         adjustWindowSize()
         window?.windowController?.shouldCascadeWindows = false // true ?!
-        let name = NSWindow.FrameAutosaveName("dirkwhoffmann.de.vAmiga.window")
-        window?.setFrameAutosaveName(name)
-        
+
+        // Enable auto-save for window coordinates
+        // let name = NSWindow.FrameAutosaveName("dirkwhoffmann.de.vAmiga.window")
+        // window?.setFrameAutosaveName(name)
+
         // Enable fullscreen mode
         window?.collectionBehavior = .fullScreenPrimary
     }

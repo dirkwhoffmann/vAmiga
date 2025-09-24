@@ -11,49 +11,60 @@
             <objects>
                 <viewController storyboardIdentifier="OnboardingLayerViewController" id="FDy-lQ-BwN" customClass="OnboardingLayerViewController" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="ubt-89-El8">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="631"/>
+                        <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Z3E-sm-lCI">
-                                <rect key="frame" x="20" y="32" width="25" height="26"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="arrowshape.backward.circle" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="wUJ-QA-sC1">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="previousPage:" target="FDy-lQ-BwN" id="RYM-SF-RVu"/>
-                                </connections>
-                            </button>
-                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vad-mh-PS5" customClass="PageDotsIndicator" customModule="vAmiga" customModuleProvider="target">
-                                <rect key="frame" x="165" y="77" width="163" height="25"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </customView>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PDd-Tl-hJY">
-                                <rect key="frame" x="183" y="29" width="124" height="40"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <buttonCell key="cell" type="push" title="Continue" bezelStyle="rounded" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="uNG-NU-wF9">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" textStyle="title3" name=".SFNS-Regular"/>
-                                    <string key="keyEquivalent" base64-UTF8="YES">
-DQ
-</string>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="nextPage:" target="FDy-lQ-BwN" id="ykq-lI-pOH"/>
-                                </connections>
-                            </button>
-                            <box fixedFrame="YES" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="g3y-uc-41P">
-                                <rect key="frame" x="-3" y="150" width="486" height="330"/>
+                            <box fixedFrame="YES" title="Box" titlePosition="noTitle" transparent="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g3y-uc-41P">
+                                <rect key="frame" x="100" y="130" width="600" height="472"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                <view key="contentView" id="aJw-Xr-hX4">
-                                    <rect key="frame" x="4" y="5" width="478" height="322"/>
+                                <view key="contentView" id="aJw-Xr-hX4" customClass="OnboardingView" customModule="vAmiga" customModuleProvider="target">
+                                    <rect key="frame" x="4" y="5" width="592" height="464"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uot-uQ-lVb">
-                                            <rect key="frame" x="0.0" y="2" width="480" height="320"/>
+                                            <rect key="frame" x="0.0" y="74" width="600" height="320"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         </customView>
+                                        <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vad-mh-PS5" customClass="PageDotsIndicator" customModule="vAmiga" customModuleProvider="target">
+                                            <rect key="frame" x="215" y="41" width="163" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </customView>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PDd-Tl-hJY">
+                                            <rect key="frame" x="234" y="-4" width="124" height="40"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Continue" bezelStyle="rounded" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="uNG-NU-wF9">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" textStyle="title3" name=".SFNS-Regular"/>
+                                                <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="nextPage:" target="FDy-lQ-BwN" id="ykq-lI-pOH"/>
+                                            </connections>
+                                        </button>
+                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Z3E-sm-lCI">
+                                            <rect key="frame" x="2" y="-1" width="25" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="arrowshape.backward.circle" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="wUJ-QA-sC1">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="previousPage:" target="FDy-lQ-BwN" id="RYM-SF-RVu"/>
+                                            </connections>
+                                        </button>
+                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DYH-SO-7ZG">
+                                            <rect key="frame" x="565" y="-1" width="25" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="xmark.octagon.fill" catalog="system" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="EvN-iR-fCo">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="previousPage:" target="FDy-lQ-BwN" id="mNB-NJ-0OX"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                 </view>
                             </box>
@@ -66,70 +77,239 @@ DQ
                 </viewController>
                 <customObject id="Ba7-d5-KMO" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="543" y="273.5"/>
+            <point key="canvasLocation" x="543" y="273"/>
         </scene>
-        <!--View Controller-->
+        <!--Onboarding View Controller1-->
         <scene sceneID="LiP-Vf-ECF">
             <objects>
-                <viewController storyboardIdentifier="Step1" id="KL4-sg-GCT" sceneMemberID="viewController">
-                    <view key="view" id="HIV-aB-hge">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="320"/>
+                <viewController storyboardIdentifier="Step1" id="KL4-sg-GCT" customClass="OnboardingViewController1" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="HIV-aB-hge" customClass="OnboardingAmigaModelView" customModule="vAmiga" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="320"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rbz-Kv-agQ">
-                                <rect key="frame" x="0.0" y="0.0" width="480" height="320"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" image="aros_half" id="bds-y4-QIo"/>
-                            </imageView>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IEP-16-MDS">
-                                <rect key="frame" x="201" y="154" width="78" height="31"/>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IXq-8M-6a9">
+                                <rect key="frame" x="34" y="191" width="4" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Page 1" id="psj-7I-R83">
+                                <textFieldCell key="cell" lineBreakMode="clipping" id="mVI-W1-Jd1">
+                                    <font key="font" textStyle="title2" name=".SFNS-Regular"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <box fixedFrame="YES" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="BJt-XJ-nUg">
+                                <rect key="frame" x="47" y="5" width="160" height="160"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <view key="contentView" id="GyN-Xx-MjJ">
+                                    <rect key="frame" x="4" y="5" width="152" height="152"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aG8-83-RGu">
+                                            <rect key="frame" x="26" y="42" width="100" height="100"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="iconGeneral" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="nG7-eM-9M0">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="modelAction:" target="KL4-sg-GCT" id="R38-Ai-xPb"/>
+                                            </connections>
+                                        </button>
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eyv-64-nvf">
+                                            <rect key="frame" x="37" y="15" width="79" height="19"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Amiga 500" id="4QY-wn-qGH">
+                                                <font key="font" textStyle="title3" name=".SFNS-Regular"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                    </subviews>
+                                </view>
+                            </box>
+                            <box fixedFrame="YES" title="Box" titlePosition="noTitle" transparent="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uhC-t1-UUj">
+                                <rect key="frame" x="220" y="5" width="160" height="160"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <view key="contentView" id="32P-Gx-cTR">
+                                    <rect key="frame" x="4" y="5" width="152" height="152"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XdC-BT-HGr">
+                                            <rect key="frame" x="29" y="22" width="86" height="19"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Amiga 1000" id="uMa-Cv-n1w">
+                                                <font key="font" textStyle="title3" name=".SFNS-Regular"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <button tag="1" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SXZ-ZK-xYO">
+                                            <rect key="frame" x="22" y="49" width="100" height="100"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="iconGeneral" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="VJ2-Ib-mzU">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="modelAction:" target="KL4-sg-GCT" id="G9y-Wx-a9x"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                </view>
+                            </box>
+                            <box fixedFrame="YES" title="Box" titlePosition="noTitle" transparent="YES" translatesAutoresizingMaskIntoConstraints="NO" id="27s-3E-phC">
+                                <rect key="frame" x="394" y="5" width="160" height="160"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <view key="contentView" id="DSF-Gy-abv">
+                                    <rect key="frame" x="4" y="5" width="152" height="152"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sVI-l2-Cwy">
+                                            <rect key="frame" x="29" y="22" width="88" height="19"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Amiga 2000" id="Hpm-Ow-fjK">
+                                                <font key="font" textStyle="title3" name=".SFNS-Regular"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <button tag="2" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xh3-vg-UEy">
+                                            <rect key="frame" x="26" y="49" width="100" height="100"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="iconGeneral" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="TbM-3c-QML">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="modelAction:" target="KL4-sg-GCT" id="n9p-d5-Fec"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                </view>
+                            </box>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IEP-16-MDS">
+                                <rect key="frame" x="187" y="289" width="226" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Welcome to vAmiga" id="psj-7I-R83">
                                     <font key="font" textStyle="largeTitle" name=".SFNS-Regular"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="24e-iW-3NA">
+                                <rect key="frame" x="65" y="201" width="470" height="53"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" selectable="YES" alignment="center" title="This setup wizard will have you ready in just a few easy steps. Please start by selecting the Amiga model you want to emulate." id="aes-Tn-02o">
+                                    <font key="font" textStyle="title3" name=".SFNS-Regular"/>
+                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                     </view>
+                    <connections>
+                        <outlet property="a1000Box" destination="uhC-t1-UUj" id="CjD-9f-Ou1"/>
+                        <outlet property="a1000Icon" destination="SXZ-ZK-xYO" id="Nls-cZ-kzJ"/>
+                        <outlet property="a1000Text" destination="XdC-BT-HGr" id="Dvj-9J-hHz"/>
+                        <outlet property="a2000Box" destination="27s-3E-phC" id="s7o-hz-jJw"/>
+                        <outlet property="a2000Icon" destination="Xh3-vg-UEy" id="tDa-Ot-AiD"/>
+                        <outlet property="a2000Text" destination="sVI-l2-Cwy" id="M59-0a-OTN"/>
+                        <outlet property="a500Box" destination="BJt-XJ-nUg" id="X3v-b6-ycB"/>
+                        <outlet property="a500Icon" destination="aG8-83-RGu" id="d5v-bC-v9q"/>
+                        <outlet property="a500Text" destination="eyv-64-nvf" id="t1A-NX-npU"/>
+                    </connections>
                 </viewController>
                 <customObject id="Ls3-jX-HZO" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="558" y="825"/>
+            <point key="canvasLocation" x="443" y="888"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="WyJ-XW-O8U">
             <objects>
                 <viewController storyboardIdentifier="Step2" id="OdN-Uv-fbm" sceneMemberID="viewController">
                     <view key="view" id="ZFP-lg-r4I">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="320"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="320"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cdz-NB-v4E">
-                                <rect key="frame" x="0.0" y="0.0" width="480" height="320"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="vAmigaBg" id="Zv0-Mi-7ok"/>
-                            </imageView>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sYn-tQ-i13">
-                                <rect key="frame" x="181" y="154" width="77" height="31"/>
+                                <rect key="frame" x="249" y="289" width="103" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Step 2" id="XZR-t7-Hj3">
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Kickstart" id="XZR-t7-Hj3">
                                     <font key="font" textStyle="largeTitle" name=".SFNS-Regular"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RlB-z9-9CI">
+                                <rect key="frame" x="62" y="199" width="476" height="59"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" selectable="YES" alignment="center" id="B7E-NL-dFO">
+                                    <font key="font" textStyle="title3" name=".SFNS-Regular"/>
+                                    <string key="title">For legal reasons, vAmiga does not include original Amiga ROMs. Choose to start with the AROS Kickstart or DiagROM, and add your own ROMs later in Settings.</string>
+                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <box fixedFrame="YES" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="xAG-fm-bKA">
+                                <rect key="frame" x="131" y="3" width="160" height="160"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <view key="contentView" id="Z7G-Ng-7E0">
+                                    <rect key="frame" x="4" y="5" width="152" height="152"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="smL-sr-Pex">
+                                            <rect key="frame" x="20" y="30" width="112" height="112"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="rom_aros" id="yE7-d2-Zi6"/>
+                                        </imageView>
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iBC-PR-W9v">
+                                            <rect key="frame" x="41" y="10" width="71" height="19"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Aros Rom" id="7lF-eW-Red">
+                                                <font key="font" textStyle="title3" name=".SFNS-Regular"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                    </subviews>
+                                </view>
+                            </box>
+                            <box fixedFrame="YES" title="Box" titlePosition="noTitle" transparent="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JrV-Ah-70z">
+                                <rect key="frame" x="318" y="3" width="160" height="160"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <view key="contentView" id="Gdf-3r-Kiq">
+                                    <rect key="frame" x="4" y="5" width="152" height="152"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Ee-QU-7iz">
+                                            <rect key="frame" x="20" y="30" width="112" height="112"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="rom_diag" id="d50-IZ-ute"/>
+                                        </imageView>
+                                        <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1XG-rT-ilC">
+                                            <rect key="frame" x="41" y="10" width="70" height="19"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Diag Rom" id="7KJ-pa-zd1">
+                                                <font key="font" textStyle="title3" name=".SFNS-Regular"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                    </subviews>
+                                </view>
+                            </box>
                         </subviews>
                     </view>
                 </viewController>
                 <customObject id="d25-ry-8sN" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1208" y="825"/>
+            <point key="canvasLocation" x="1077" y="888"/>
         </scene>
     </scenes>
     <resources>
-        <image name="aros_half" width="79" height="62"/>
         <image name="arrowshape.backward.circle" catalog="system" width="15" height="15"/>
-        <image name="vAmigaBg" width="780" height="505"/>
+        <image name="iconGeneral" width="256" height="256"/>
+        <image name="rom_aros" width="129" height="157"/>
+        <image name="rom_diag" width="129" height="157"/>
+        <image name="xmark.octagon.fill" catalog="system" width="17" height="15"/>
     </resources>
 </document>
