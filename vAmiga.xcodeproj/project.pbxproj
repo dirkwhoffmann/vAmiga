@@ -1468,8 +1468,8 @@
 		505B801E23FE6582002407FE /* System */ = {
 			isa = PBXGroup;
 			children = (
-				5045FB322E83DFEA00131505 /* PageDotsIndicator.swift */,
 				500B0D2A2E7DC839008FC5E1 /* LiveTextField.swift */,
+				5045FB322E83DFEA00131505 /* PageDotsIndicator.swift */,
 				5042FB122D4E4E8200E4A167 /* FilePanel.swift */,
 				508FDFEB21EA22780043D0E9 /* Speedometer.swift */,
 				50E8199225B350DA00D2E3A5 /* Errors.swift */,

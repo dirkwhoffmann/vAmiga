@@ -37,14 +37,18 @@ class PageDotsIndicator: NSView {
         stack.translatesAutoresizingMaskIntoConstraints = false
         addSubview(stack)
 
+        /*
         NSLayoutConstraint.activate([
             stack.leadingAnchor.constraint(equalTo: leadingAnchor),
             stack.trailingAnchor.constraint(equalTo: trailingAnchor),
             stack.topAnchor.constraint(equalTo: topAnchor),
             stack.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-
-        numberOfPages = 4
+         */
+        NSLayoutConstraint.activate([
+            stack.centerXAnchor.constraint(equalTo: centerXAnchor),
+            stack.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
     }
 
     private func rebuildDots() {

@@ -3,10 +3,13 @@
 class OnboardingLayerViewController: NSViewController {
 
     @IBOutlet weak var pageContainerView: NSView!
+    @IBOutlet weak var pageDotIndicator: PageDotsIndicator!
 
     var pageController: NSPageController!
     private var pages: [NSViewController] = []
-    private var currentPageIndex: Int = 0
+    private var currentPageIndex: Int = 0 {
+        didSet { pageDotIndicator.currentPage = currentPageIndex }
+    }
 
     override func viewDidLoad() {
 
@@ -23,6 +26,8 @@ class OnboardingLayerViewController: NSViewController {
 
         super.viewDidAppear()
         pages = [instantiate("Step1"), instantiate("Step2")]
+        pageDotIndicator.numberOfPages = pages.count
+
         showPage(at: 0)
     }
 
