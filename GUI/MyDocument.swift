@@ -130,7 +130,6 @@ class MyDocument: NSDocument {
     
     override open func read(from url: URL, ofType typeName: String) throws {
              
-        Swift.print("read(from url: \(url.path))")
         debug(.media)
     }
     
@@ -181,7 +180,6 @@ class MyDocument: NSDocument {
                 
             } catch let error as AppError {
                 
-                // Swift.print("Error: \(error.what)")
                 throw NSError(error: error)
             }
         }
@@ -221,7 +219,7 @@ class MyDocument: NSDocument {
     
     func processWorkspaceFile(url: URL, force: Bool = false) throws {
         
-        Swift.print("processWorkspaceFile \(url) force: \(force)")
+        // Swift.print("processWorkspaceFile \(url) force: \(force)")
         
         // Load workspace
         try emu.amiga.loadWorkspace(url: url)

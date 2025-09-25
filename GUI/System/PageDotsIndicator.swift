@@ -104,7 +104,6 @@ private class DotView: NSView {
 
     override func mouseDown(with event: NSEvent) {
 
-        print("mouseDown")
         onClick?()
     }
 }

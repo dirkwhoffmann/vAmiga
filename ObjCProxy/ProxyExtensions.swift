@@ -188,7 +188,6 @@ extension MediaFileProxy {
         case .ADF, .ADZ, .EADF, .IMG:
 
             let info = floppyDiskInfo
-            print("info = \(info)")
             name = (info.density == .HD ? "hd" : "dd") +
             (type == .IMG ? "_dos" : info.dos == .NODOS ? "_other" : "_adf")
 

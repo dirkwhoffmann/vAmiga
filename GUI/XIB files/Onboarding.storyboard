@@ -179,7 +179,7 @@ DQ
                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="iconGeneral" id="se2-Le-8wf"/>
                                     </imageView>
                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="516-A9-sFl">
-                                        <rect key="frame" x="42" y="20" width="88" height="19"/>
+                                        <rect key="frame" x="42" y="19" width="88" height="19"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Amiga 2000" id="Fph-W3-yhf">
                                             <font key="font" textStyle="title3" name=".SFNS-Regular"/>
@@ -238,16 +238,16 @@ DQ
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OSh-wY-c44" customClass="OnboardingButton" customModule="vAmiga" customModuleProvider="target">
-                                <rect key="frame" x="99" y="0.0" width="172" height="172"/>
+                                <rect key="frame" x="99" y="1" width="172" height="172"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="smL-sr-Pex">
-                                        <rect key="frame" x="28" y="36" width="116" height="116"/>
+                                        <rect key="frame" x="28" y="37" width="116" height="116"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="rom_aros" id="yE7-d2-Zi6"/>
                                     </imageView>
                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iBC-PR-W9v">
-                                        <rect key="frame" x="51" y="9" width="71" height="19"/>
+                                        <rect key="frame" x="51" y="14" width="71" height="19"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Aros Rom" id="7lF-eW-Red">
                                             <font key="font" textStyle="title3" name=".SFNS-Regular"/>
@@ -272,12 +272,12 @@ DQ
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dH8-lh-L3c">
-                                        <rect key="frame" x="28" y="36" width="116" height="116"/>
+                                        <rect key="frame" x="28" y="37" width="116" height="116"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyUpOrDown" image="rom_diag" id="qU8-ra-9Ap"/>
                                     </imageView>
                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AWq-R4-zgg">
-                                        <rect key="frame" x="52" y="9" width="69" height="19"/>
+                                        <rect key="frame" x="52" y="14" width="69" height="19"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="DiagROM" id="d5V-Ca-ErP">
                                             <font key="font" textStyle="title3" name=".SFNS-Regular"/>

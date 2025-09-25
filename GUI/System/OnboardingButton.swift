@@ -66,13 +66,11 @@ class OnboardingButton: NSControl {
 
     @objc private func buttonClicked() {
 
-        print("Button clicked")
         sendAction(action, to: target)
     }
 
     private func update() {
 
-        print("updating state: \(state)")
         switch state {
 
         case .on:

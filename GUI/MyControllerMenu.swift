@@ -110,11 +110,7 @@ extension MyController: NSMenuItemValidation {
         myAppDelegate.hd2Menu.isHidden = !config.hd2Connected
         myAppDelegate.hd3Menu.isHidden = !config.hd3Connected
     }
-    
-    @IBAction func testAction(_ sender: NSMenuItem!) {
-        print("test")
-    }
-    
+        
     //
     // Action methods (App menu)
     //
