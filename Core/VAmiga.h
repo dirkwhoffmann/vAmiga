@@ -1515,71 +1515,6 @@ public:
 
 
 //
-// Misc (Recorder)
-//
-
-class RecorderAPI : public API {
-
-    friend class VAmiga;
-    class Recorder *recorder = nullptr;
-
-public:
-    
-    /** @brief  Returns the component's configuration.
-     */
-    const RecorderConfig &getConfig() const;
-
-    /** @brief  Returns the component's current state.
-     */
-    // const RecorderInfo &getInfo() const;
-    // const RecorderInfo &getCachedInfo() const;
-
-    const std::vector<fs::path> &paths() const;
-    bool hasFFmpeg() const;
-
-    /** @brief  Returns the path to the FFmpeg executable.
-     */
-    const fs::path getExecPath() const;
-
-    /** @brief  Sets the path to the FFmpeg executable.
-     */
-    void setExecPath(const fs::path &path);
-
-    // INTEGRATE INTO RecorderInfo, RecorderConfig
-    double getDuration() const;
-    /*
-    isize getFrameRate() const;
-    isize getBitRate() const;
-    isize getSampleRate() const;
-    */
-    bool isRecording() const;
-
-    /** @brief  Starts the recorder.
-     *  @param  x1      Horizontal start coordinate of the recorded area
-     *  @param  y1      Vertical start coordinate of the recorded area
-     *  @param  x2      Horizontal end coordinate of the recorded area
-     *  @param  y2      Vertical stop coordinate of the recorded area
-     *  @param  bitRate To be removed
-     *  @param  aspectX To be removed
-     *  @param  aspectY To be removed
-     */
-    void startRecording(isize x1, isize y1, isize x2, isize y2,
-                        isize bitRate,
-                        isize aspectX, isize aspectY);
-
-    /** @brief  Interrupts a recording in progress.
-     */
-    void stopRecording();
-
-    /** @brief  Exports the recorded video to a file.
-     *  @param  path    The export destination.
-     *  @return true on success.
-     */
-    bool exportAs(const fs::path &path);
-};
-
-
-//
 // Misc (RemoteManager)
 //
 
@@ -1638,7 +1573,6 @@ public:
     GuardsAPI copperBreakpoints; // TODO: Move inside AgnusAPI
     MsgQueueAPI msgQueue;
     DebuggerAPI debugger; // TODO: No longer needed? It's not 'wired'
-    RecorderAPI recorder;
     RemoteManagerAPI remoteManager;
     RetroShellAPI retroShell;
 
