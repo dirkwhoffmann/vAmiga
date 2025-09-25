@@ -76,8 +76,11 @@ DQ
                         </subviews>
                     </view>
                     <connections>
+                        <outlet property="nextButton" destination="PDd-Tl-hJY" id="Hc8-IX-Odw"/>
                         <outlet property="pageContainerView" destination="Uot-uQ-lVb" id="bvy-nm-GHT"/>
                         <outlet property="pageDotIndicator" destination="vad-mh-PS5" id="iGw-vp-icG"/>
+                        <outlet property="prevButton" destination="Z3E-sm-lCI" id="CSU-IQ-rNI"/>
+                        <outlet property="skipButton" destination="DYH-SO-7ZG" id="I7C-Xc-cgf"/>
                     </connections>
                 </viewController>
                 <customObject id="Ba7-d5-KMO" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

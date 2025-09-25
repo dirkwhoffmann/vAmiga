@@ -59,6 +59,10 @@ class OnboardingLayerViewController: NSViewController {
 
     @IBOutlet weak var pageContainerView: OnboardingPageContainerView!
     @IBOutlet weak var pageDotIndicator: PageDotsIndicator!
+    @IBOutlet weak var nextButton: NSButton!
+    @IBOutlet weak var prevButton: NSButton!
+    @IBOutlet weak var skipButton: NSButton!
+
     var layer: Onboarding!
 
     private var pages: [NSViewController] = []
@@ -73,15 +77,13 @@ class OnboardingLayerViewController: NSViewController {
 
     override func viewDidAppear() {
 
-        print("View did appear...")
-
         func instantiate(_ id: String) -> NSViewController {
 
             let storyboard = NSStoryboard(name: "Onboarding", bundle: nil)
             return storyboard.instantiateController(withIdentifier: id) as! NSViewController
         }
 
-        // Remove all child view controllers and their views
+        // Start over by removing all child view controllers and their views
         for child in children {
             child.view.removeFromSuperview()
             child.removeFromParent()
@@ -139,6 +141,8 @@ class OnboardingLayerViewController: NSViewController {
         }
 
         currentPageIndex = index
+        prevButton.isEnabled = currentPageIndex > 0
+        nextButton.title = currentPageIndex == pages.count - 1 ? "Finish" : "Continue"
     }
 
     @IBAction func nextPage(_ sender: Any?) {
