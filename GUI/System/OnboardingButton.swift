@@ -75,12 +75,12 @@ class OnboardingButton: NSControl {
 
         case .on:
             box.isTransparent = false
-            label?.isEnabled = false
+            label?.textColor = .labelColor
             icon?.isEnabled = true
 
         default:
             box.isTransparent = true
-            label?.isEnabled = false
+            label?.textColor = .secondaryLabelColor
             icon?.isEnabled = false
         }
     }
