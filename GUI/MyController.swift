@@ -209,7 +209,9 @@ extension MyController {
         do {
 
             // Experimental
-            renderer.onboarding.open(delay: 1)
+            renderer.splashScreen.shouldRender = false
+            renderer.canvas.shouldRender = false
+            renderer.onboarding.open(delay: 1.0)
 
             // Install Aros if no Kickstart is present
             if !emu.mem.info.hasRom { installAros() }

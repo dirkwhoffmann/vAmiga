@@ -36,6 +36,8 @@ class OnboardingButton: NSControl {
         setup()
     }
 
+    var myFont: NSFont?
+
     private func setup() {
 
         wantsLayer = true

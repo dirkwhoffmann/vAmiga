@@ -58,7 +58,9 @@ class SplashScreen: Layer {
     }
     
     func render(_ encoder: MTLRenderCommandEncoder) {
-        
+
+        if !shouldRender { return }
+
         // Configure vertex shader
         encoder.setVertexBytes(&vertexUniforms,
                                length: MemoryLayout<VertexUniforms>.stride,

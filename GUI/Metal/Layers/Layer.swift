@@ -22,6 +22,9 @@ class Layer: NSObject {
     // Alpha channel of this layer
     var alpha: AnimatedFloat = AnimatedFloat(0.0)
 
+    // Indicates if this layer should be rendered
+    var shouldRender = true
+
     //
     // Initializing
     //

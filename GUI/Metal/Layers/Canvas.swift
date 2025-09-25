@@ -359,6 +359,8 @@ class Canvas: Layer {
     }
 
     func render(_ encoder: MTLRenderCommandEncoder) {
+
+        if !shouldRender { return }
         
         // Configure the vertex shader
         encoder.setVertexBytes(&vertexUniforms2D,

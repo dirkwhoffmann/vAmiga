@@ -51,10 +51,16 @@ extension Renderer {
     }
 
     func buildDescriptors() {
-        
-        // Render pass descriptor
+
+        // Get the default background color
+        let bgColor = NSColor.windowBackgroundColor.usingColorSpace(.deviceRGB) ?? .black
+        let r = Double(bgColor.redComponent)
+        let g = Double(bgColor.greenComponent)
+        let b = Double(bgColor.blueComponent)
+
+        // Create the render pass descriptor
         descriptor = MTLRenderPassDescriptor()
-        descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0, 0, 0, 1)
+        descriptor.colorAttachments[0].clearColor = MTLClearColorMake(r, g, b, 1.0)
         descriptor.colorAttachments[0].loadAction = MTLLoadAction.clear
         descriptor.colorAttachments[0].storeAction = MTLStoreAction.store
         descriptor.depthAttachment.clearDepth = 1

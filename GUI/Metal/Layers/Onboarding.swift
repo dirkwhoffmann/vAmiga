@@ -53,41 +53,14 @@ class OnboardingLayerView: NSView {
 @MainActor
 class OnboardingPageContainerView: NSView {
 
-    /*
-    private var bgLayer: CALayer?
-
-    override func viewDidMoveToWindow() {
-
-        super.viewDidMoveToWindow()
-        wantsLayer = true
-
-        if let layer = self.layer, bgLayer == nil {
-
-            let background = CALayer()
-            background.contents = NSImage(named: "vAmigaBg")
-            background.contentsGravity = .resizeAspectFill
-            background.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
-            layer.insertSublayer(background, at: 0)
-            bgLayer = background
-        }
-    }
-
-    override func layout() {
-
-        super.layout()
-        bgLayer?.frame = CGRect(x: 0, y: 0,
-                                width: bounds.width,
-                                height: bounds.height - 32)
-    }
-    */
 }
 
 class OnboardingLayerViewController: NSViewController {
 
     @IBOutlet weak var pageContainerView: OnboardingPageContainerView!
     @IBOutlet weak var pageDotIndicator: PageDotsIndicator!
+    var layer: Onboarding!
 
-    // var pageController: NSPageController!
     private var pages: [NSViewController] = []
     private var currentPageIndex: Int = 0 {
         didSet { pageDotIndicator.currentPage = currentPageIndex }
@@ -100,10 +73,18 @@ class OnboardingLayerViewController: NSViewController {
 
     override func viewDidAppear() {
 
+        print("View did appear...")
+
         func instantiate(_ id: String) -> NSViewController {
 
             let storyboard = NSStoryboard(name: "Onboarding", bundle: nil)
             return storyboard.instantiateController(withIdentifier: id) as! NSViewController
+        }
+
+        // Remove all child view controllers and their views
+        for child in children {
+            child.view.removeFromSuperview()
+            child.removeFromParent()
         }
 
         super.viewDidAppear()
@@ -175,6 +156,12 @@ class OnboardingLayerViewController: NSViewController {
             showPage(at: prevIndex)
         }
     }
+
+    @IBAction func skipAction(_ sender: Any?) {
+
+        print("skip")
+        layer!.close(delay: 1.0)
+    }
 }
 
 @MainActor
@@ -193,6 +180,21 @@ class Onboarding: Layer {
         onboardingVC = storyboard.instantiateController(withIdentifier: "OnboardingLayerViewController") as? OnboardingLayerViewController
         onboardingVC.view.wantsLayer = true
         onboardingVC.view.layer?.backgroundColor = NSColor.windowBackgroundColor.cgColor
+        onboardingVC.layer = self
+    }
+
+    override func open(delay: Double) {
+
+        super.open(delay: delay)
+
+        print("open")
+    }
+
+    override func layerDidOpen() {
+
+        print("layerDidOpen")
+        renderer.canvas.shouldRender = true
+        renderer.splashScreen.shouldRender = true
     }
 
     override func alphaDidChange() {

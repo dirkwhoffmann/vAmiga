@@ -297,8 +297,9 @@ class Renderer: NSObject, MTKViewDelegate {
         // Render the scene
         if canvas.isTransparent { splashScreen.render(encoder) }
         if canvas.isVisible { canvas.render(encoder) }
+
         encoder.endEncoding()
-        
+
         // Commit the command buffer
         buffer.addCompletedHandler { @Sendable [weak self] buffer in
 

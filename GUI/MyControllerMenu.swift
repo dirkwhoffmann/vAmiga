@@ -168,8 +168,13 @@ extension MyController: NSMenuItemValidation {
         pref.applyUserDefaults()
         
         // Power on
+        /*
         emu.powerOn()
         try? emu.run()
+        */
+
+        // Launch the onboarding agent
+        renderer.onboarding.open(delay: 1.0)
     }
 
     @IBAction func importScriptAction(_ sender: Any!) {
