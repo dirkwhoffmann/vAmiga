@@ -163,6 +163,7 @@
 		506E5B1D2DE8E3C300CEA916 /* Monitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506E5B182DE8D6B000CEA916 /* Monitor.cpp */; };
 		506E5B1E2DE8E3C300CEA916 /* Monitor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 506E5B182DE8D6B000CEA916 /* Monitor.cpp */; };
 		5071B7872621F88800D6FB54 /* CopperDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5071B7852621F88800D6FB54 /* CopperDebugger.cpp */; };
+		507201812E85197600BB8A58 /* OnboardingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507201802E85196800BB8A58 /* OnboardingButton.swift */; };
 		507215A925EAB4AC00787591 /* Chrono.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5072159F25EA9AE600787591 /* Chrono.cpp */; };
 		507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CA2216F91E001D26E9 /* AgnusPanel.swift */; };
 		507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CC2216F938001D26E9 /* DenisePanel.swift */; };
@@ -772,6 +773,7 @@
 		506E5B1C2DE8D73600CEA916 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		5071B7852621F88800D6FB54 /* CopperDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperDebugger.cpp; sourceTree = "<group>"; };
 		5071B7862621F88800D6FB54 /* CopperDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CopperDebugger.h; sourceTree = "<group>"; };
+		507201802E85196800BB8A58 /* OnboardingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingButton.swift; sourceTree = "<group>"; };
 		5072159F25EA9AE600787591 /* Chrono.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Chrono.cpp; sourceTree = "<group>"; };
 		507215A025EA9AE600787591 /* Chrono.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Chrono.h; sourceTree = "<group>"; };
 		507215A525EA9DD900787591 /* RingBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RingBuffer.h; sourceTree = "<group>"; };
@@ -1468,6 +1470,7 @@
 		505B801E23FE6582002407FE /* System */ = {
 			isa = PBXGroup;
 			children = (
+				507201802E85196800BB8A58 /* OnboardingButton.swift */,
 				500B0D2A2E7DC839008FC5E1 /* LiveTextField.swift */,
 				5045FB322E83DFEA00131505 /* PageDotsIndicator.swift */,
 				5042FB122D4E4E8200E4A167 /* FilePanel.swift */,
@@ -2483,6 +2486,7 @@
 				50BF1CCE276DC7BB00386540 /* GdbServerCmds.cpp in Sources */,
 				50650F4E2DF5D076008AD660 /* NavigatorConsole.cpp in Sources */,
 				509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */,
+				507201812E85197600BB8A58 /* OnboardingButton.swift in Sources */,
 				50984B65263A9E9C00E37184 /* RegressionTester.cpp in Sources */,
 				50157EED28257B7C000E9DDD /* Config.swift in Sources */,
 				508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */,

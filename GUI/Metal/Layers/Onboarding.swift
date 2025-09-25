@@ -228,21 +228,15 @@ class OnboardingViewController1: NSViewController {
     var a1000: Bool { model == 1 }
     var a2000: Bool { model == 2 }
 
-    @IBOutlet weak var a500Box: NSBox!
-    @IBOutlet weak var a500Text: NSTextField!
-    @IBOutlet weak var a500Icon: NSButton!
+    @IBOutlet weak var a500Button: OnboardingButton!
+    @IBOutlet weak var a1000Button: OnboardingButton!
+    @IBOutlet weak var a2000Button: OnboardingButton!
 
-    @IBOutlet weak var a1000Box: NSBox!
-    @IBOutlet weak var a1000Text: NSTextField!
-    @IBOutlet weak var a1000Icon: NSButton!
+    @IBAction func modelAction(_ sender: NSControl) {
 
-    @IBOutlet weak var a2000Box: NSBox!
-    @IBOutlet weak var a2000Text: NSTextField!
-    @IBOutlet weak var a2000Icon: NSButton!
-
-    @IBAction func a500Action(_ sender: Any) { print("a500action"); model = 0 }
-    @IBAction func a1000Action(_ sender: Any) { print("a1000action"); model = 1 }
-    @IBAction func a2000Action(_ sender: Any) { print("a2000action"); model = 2 }
+        print("modelAction \(sender.tag)")
+        model = sender.tag
+    }
 
     override func viewDidLoad() {
 
@@ -253,17 +247,39 @@ class OnboardingViewController1: NSViewController {
 
         print("refresh")
 
-        a500Box.isTransparent = !a500
-        a500Text.isEnabled = a500
-        a500Icon.isEnabled = a500
+        a500Button.state = a500 ? .on : .off
+        a1000Button.state = a1000 ? .on : .off
+        a2000Button.state = a2000 ? .on : .off
+    }
+}
 
-        a1000Box.isTransparent = !a1000
-        a1000Text.isEnabled = a1000
-        a1000Icon.isEnabled = a1000
+@MainActor
+class OnboardingViewController2: NSViewController {
 
-        a2000Box.isTransparent = !a2000
-        a2000Text.isEnabled = a2000
-        a2000Icon.isEnabled = a2000
+    var rom = 0 { didSet { refresh() } }
+
+    var aros: Bool { rom == 0 }
+    var diag: Bool { rom == 1 }
+
+    @IBOutlet weak var arosButton: OnboardingButton!
+    @IBOutlet weak var diagButton: OnboardingButton!
+
+    @IBAction func romAction(_ sender: NSControl) {
+
+        print("romAction \(sender.tag)")
+        rom = sender.tag
+    }
+
+    override func viewDidLoad() {
+
+        refresh()
+    }
+
+    func refresh() {
+
+        print("refresh")
+        arosButton.state = aros ? .on : .off
+        diagButton.state = diag ? .on : .off
     }
 }
 
