@@ -208,14 +208,6 @@ extension MyController {
 
         do {
 
-            // Experimental
-            renderer.splashScreen.shouldRender = false
-            renderer.canvas.shouldRender = false
-            renderer.onboarding.open(delay: 1.0)
-
-            // Install Aros if no Kickstart is present
-            if !emu.mem.info.hasRom { installAros() }
-
             // Switch the Amiga on
             emu.powerOn()
         
@@ -226,6 +218,11 @@ extension MyController {
             
             // Switch the Amiga off
             emu.powerOff()
+
+            // Open the onboarding agent
+            renderer.splashScreen.shouldRender = false
+            renderer.canvas.shouldRender = false
+            renderer.onboarding.open(delay: 1.0)
         }
 
         // Add media file (if provided on startup)

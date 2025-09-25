@@ -15,7 +15,7 @@ extension MyController {
         installAros(crc32: vamiga.CRC32_AROS_20250219)
     }
 
-    func installAros(crc32: UInt32) {
+    func installAros(crc32: UInt32 = vamiga.CRC32_AROS_20250219) {
 
         switch crc32 {
 
@@ -27,6 +27,21 @@ extension MyController {
 
         case vamiga.CRC32_AROS_20250219:    // 2025 version
             installAros(rom: "aros-20250219-rom", ext: "aros-20250219-ext")
+
+        default:
+            fatalError()
+        }
+    }
+
+    func installDiagRom(crc32: UInt32 = vamiga.CRC32_DIAG13) {
+
+        switch crc32 {
+
+        case vamiga.CRC32_DIAG121:
+            install(rom: "diagrom-121")
+
+        case vamiga.CRC32_DIAG13:
+            install(rom: "diagrom-13")
 
         default:
             fatalError()

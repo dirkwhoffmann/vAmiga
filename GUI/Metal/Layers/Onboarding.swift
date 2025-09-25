@@ -64,6 +64,7 @@ class OnboardingLayerViewController: NSViewController {
     @IBOutlet weak var skipButton: NSButton!
 
     var layer: Onboarding!
+    var emu: EmulatorProxy! { layer.emu }
 
     private var pages: [NSViewController] = []
     private var currentPageIndex: Int = 0 {
@@ -77,10 +78,12 @@ class OnboardingLayerViewController: NSViewController {
 
     override func viewDidAppear() {
 
-        func instantiate(_ id: String) -> NSViewController {
+        func instantiate(_ id: String) -> OnboardingViewController {
 
             let storyboard = NSStoryboard(name: "Onboarding", bundle: nil)
-            return storyboard.instantiateController(withIdentifier: id) as! NSViewController
+            let result = storyboard.instantiateController(withIdentifier: id) as! OnboardingViewController
+            result.layer = layer
+            return result
         }
 
         // Start over by removing all child view controllers and their views
@@ -142,15 +145,24 @@ class OnboardingLayerViewController: NSViewController {
 
         currentPageIndex = index
         prevButton.isEnabled = currentPageIndex > 0
-        nextButton.title = currentPageIndex == pages.count - 1 ? "Finish" : "Continue"
+        nextButton.title = currentPageIndex == pages.count - 1 ? "Launch" : "Continue"
     }
 
     @IBAction func nextPage(_ sender: Any?) {
 
         let nextIndex = currentPageIndex + 1
+
         if pages.indices.contains(nextIndex) {
             showPage(at: nextIndex)
+        } else {
+            finish()
         }
+    }
+
+    func finish() {
+
+        layer.close(delay: 1.0)
+        try? emu.run()
     }
 
     @IBAction func previousPage(_ sender: Any?) {
@@ -164,7 +176,7 @@ class OnboardingLayerViewController: NSViewController {
     @IBAction func skipAction(_ sender: Any?) {
 
         print("skip")
-        layer!.close(delay: 1.0)
+        finish()
     }
 }
 
@@ -226,10 +238,24 @@ class Onboarding: Layer {
 }
 
 @MainActor
-class OnboardingViewController1: NSViewController {
+class OnboardingViewController: NSViewController {
 
-    var model = 0 { didSet { refresh() } }
+    var layer: Onboarding!
+    var config: Configuration { layer.controller.config }
 
+    override func viewDidLoad() {
+
+        print("View did load")
+        apply()
+    }
+
+    func apply() { }
+}
+
+@MainActor
+class OnboardingViewController1: OnboardingViewController {
+
+    var model = 0 { didSet { apply() } }
     var a500: Bool { model == 0 }
     var a1000: Bool { model == 1 }
     var a2000: Bool { model == 2 }
@@ -240,12 +266,13 @@ class OnboardingViewController1: NSViewController {
 
     @IBAction func modelAction(_ sender: NSControl) {
 
-        print("modelAction \(sender.tag)")
         model = sender.tag
+
     }
 
-    override func viewDidLoad() {
+    override func apply() {
 
+        config.revertTo(model: model)
         refresh()
     }
 
@@ -260,9 +287,9 @@ class OnboardingViewController1: NSViewController {
 }
 
 @MainActor
-class OnboardingViewController2: NSViewController {
+class OnboardingViewController2: OnboardingViewController {
 
-    var rom = 0 { didSet { refresh() } }
+    var rom = 0 { didSet { apply() } }
 
     var aros: Bool { rom == 0 }
     var diag: Bool { rom == 1 }
@@ -274,9 +301,16 @@ class OnboardingViewController2: NSViewController {
 
         print("romAction \(sender.tag)")
         rom = sender.tag
+
     }
 
-    override func viewDidLoad() {
+    override func apply() {
+
+        switch rom {
+        case 0: layer.controller.installAros()
+        case 1: layer.controller.installDiagRom()
+        default: fatalError()
+        }
 
         refresh()
     }

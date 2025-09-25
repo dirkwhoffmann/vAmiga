@@ -22,11 +22,11 @@ class Configuration {
     var renderer: Renderer { return parent.renderer }
     var gamePadManager: GamePadManager { return parent.gamePadManager }
     var ressourceManager: RessourceManager { return renderer.ressourceManager }
-    
+
     //
     // Roms
     //
-        
+
     var extStart: Int {
         get { return emu.get(.MEM_EXT_START) }
         set { emu.set(.MEM_EXT_START, value: newValue) }
@@ -253,7 +253,7 @@ class Configuration {
 
     var gameDevice1 = -1 {
         didSet {
-                         
+
             // Try to connect the device (may disconnect the other device)
             gamePadManager.connect(slot: gameDevice1, port: 1)
 
@@ -261,14 +261,14 @@ class Configuration {
             if gameDevice1 != -1 && gameDevice1 == gameDevice2 {
                 gameDevice2 = -1
             }
-            
+
             parent.toolbar.validateVisibleItems()
         }
     }
 
     var gameDevice2 = -1 {
         didSet {
- 
+
             // Try to connect the device (may disconnect the other device)
             gamePadManager.connect(slot: gameDevice2, port: 2)
 
@@ -276,7 +276,7 @@ class Configuration {
             if gameDevice2 != -1 && gameDevice2 == gameDevice1 {
                 gameDevice1 = -1
             }
-            
+
             parent.toolbar.validateVisibleItems()
         }
     }
@@ -645,6 +645,49 @@ class Configuration {
         get { return emu.get(.MON_DISALIGNMENT_V) }
         set { emu.set(.MON_DISALIGNMENT_V, value: newValue) }
     }
-    
+
     init(with controller: MyController) { parent = controller }
+
+    func revertTo(model: Int) {
+
+        print("revertTo \(model)")
+        
+        switch model {
+            
+        case 0:
+
+            // Amiga 500
+            agnusRev = AgnusRevision.ECS_1MB.rawValue
+            deniseRev = DeniseRevision.OCS.rawValue
+            rtClock = RTCRevision.NONE.rawValue
+            bankMap = BankMap.A500.rawValue
+
+        case 1:
+
+            // Amiga 1000
+            agnusRev = AgnusRevision.OCS_OLD.rawValue
+            deniseRev = DeniseRevision.OCS.rawValue
+            rtClock = RTCRevision.NONE.rawValue
+            bankMap = BankMap.A1000.rawValue
+
+        case 2:
+
+            // Amiga 2000
+            agnusRev = AgnusRevision.ECS_2MB.rawValue
+            deniseRev = DeniseRevision.OCS.rawValue
+            rtClock = RTCRevision.OKI.rawValue
+            bankMap = BankMap.A2000B.rawValue
+
+        case 3:
+
+            // Amiga 500+
+            agnusRev = AgnusRevision.ECS_2MB.rawValue
+            deniseRev = DeniseRevision.ECS.rawValue
+            rtClock = RTCRevision.OKI.rawValue
+            bankMap = BankMap.A500.rawValue
+
+        default:
+            fatalError()
+        }
+    }
 }
