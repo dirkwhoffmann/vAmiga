@@ -381,43 +381,7 @@ extension MyController: NSMenuItemValidation {
         screenshotBrowser?.showAsSheet()
     }
 
-    /*
-    @IBAction func captureScreenAction(_ sender: Any!) {
-
-        if emu.recorder.recording {
-            
-            emu.recorder.stopRecording()
-            return
-        }
-        
-        if !emu.recorder.hasFFmpeg {
-
-            if pref.ffmpegPath != "" {
-                showAlert(.noFFmpegFound(exec: pref.ffmpegPath))
-            } else {
-                showAlert(.noFFmpegInstalled)
-            }
-            return
-        }
-
-        do {
-            try emu.recorder.startRecording(rect: renderer.recordingRect,
-                                              rate: pref.bitRate,
-                                              ax: pref.aspectX,
-                                              ay: pref.aspectY)
-        } catch {
-            
-            showAlert(.cantRecord, error: error)
-        }
-    }
     
-    @IBAction func exportVideoAction(_ sender: Any!) {
-
-        let exporter = VideoExporter(with: self, nibName: "VideoExporter")
-        exporter?.showAsSheet()
-    }
-    */
-
     //
     // Action methods (Edit menu)
     //

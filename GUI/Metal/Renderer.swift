@@ -149,23 +149,7 @@ class Renderer: NSObject, MTKViewDelegate {
         ressourceManager.buildDepthBuffer()
     }
 
-    var recordingRect: CGRect {
-
-        var result: CGRect
-
-        switch prefs.captureSource {
-
-        case .visible:  result = canvas.textureRectAbs
-        case .entire:   result = canvas.entire
-        }
-
-        // Make sure the screen dimensions are even
-        if Int(result.size.width) % 2 == 1 { result.size.width -= 1 }
-        if Int(result.size.height) % 2 == 1 { result.size.height -= 1 }
-
-        return result
-    }
-
+ 
     //
     //  Drawing
     //

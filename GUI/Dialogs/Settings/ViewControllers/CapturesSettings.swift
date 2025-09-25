@@ -136,13 +136,13 @@ class CapturesSettingsViewController: SettingsViewController {
 
     @IBAction func screenshotWidthAction(_ sender: NSTextField!) {
 
-        pref.aspectX = sender.integerValue
+        pref.screenshotWidth = sender.integerValue
         refresh()
     }
 
     @IBAction func screenshotHeightAction(_ sender: NSTextField!) {
 
-        pref.aspectY = sender.integerValue
+        pref.screenshotHeight = sender.integerValue
         refresh()
     }
 

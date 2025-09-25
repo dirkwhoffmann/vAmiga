@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+/*
 @MainActor
 class VideoExporter: DialogController {
 
@@ -120,3 +121,4 @@ extension VideoExporter: NSFilePromiseProviderDelegate {
         }
     }
 }
+*/

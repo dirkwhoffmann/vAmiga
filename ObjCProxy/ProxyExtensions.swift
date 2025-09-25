@@ -517,15 +517,6 @@ extension FileSystemProxy {
     }
 }
 
-extension RecorderProxy {
-    
-    func startRecording(rect: NSRect, rate: Int, ax: Int, ay: Int) throws {
-        
-        let exception = ExceptionWrapper()
-        startRecording(rect, bitRate: rate, aspectX: ax, aspectY: ay, exception: exception)
-        if exception.fault != .OK { throw AppError(exception) }
-    }
-}
 
 //
 // Other extensions

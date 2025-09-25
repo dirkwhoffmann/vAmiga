@@ -103,13 +103,7 @@ class Preferences {
     }
 
     // Videos
-    var ffmpegPath = "" {
-        didSet {
-            for proxy in myAppDelegate.proxies {
-                proxy.recorder.path = ffmpegPath
-            }
-        }
-    }
+    /*
     var captureSource: CaptureSource = .visible
     var captureSourceIntValue: Int {
         get { return Int(captureSource.rawValue) }
@@ -133,6 +127,7 @@ class Preferences {
             if aspectY > 999 { aspectY = 999 }
         }
     }
+    */
     
     //
     // Controls

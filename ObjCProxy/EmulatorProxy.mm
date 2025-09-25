@@ -866,108 +866,6 @@ NSString *EventSlotName(EventSlot slot)
 
 
 //
-// Recorder
-//
-
-@implementation RecorderProxy
-
-- (RecorderAPI *)recorder
-{
-    return (RecorderAPI *)obj;
-}
-
-- (RecorderConfig)config
-{
-    return [self recorder]->getConfig();
-}
-
-- (NSString *)path
-{
-    auto path = [self recorder]->getExecPath(); // FFmpeg::getExecPath();
-    return @(path.c_str());
-}
-
-- (void)setPath:(NSString *)path
-{
-    if ([path length] == 0) {
-        [self recorder]->setExecPath("");
-    } else {
-        [self recorder]->setExecPath([path fileSystemRepresentation]);
-    }
-}
-
-- (NSString *)findFFmpeg:(NSInteger)nr
-{
-    auto &paths = [self recorder]->paths();
-
-    if (nr < (NSInteger)paths.size()) {
-        return @(paths[nr].c_str());
-    } else {
-        return nil;
-    }
-}
-
-- (BOOL)hasFFmpeg
-{
-    return [self recorder]->hasFFmpeg();
-}
-
-- (BOOL)recording
-{
-    return [self recorder]->isRecording();
-}
-
-- (double)duration
-{
-    return [self recorder]->getDuration();
-}
-
-/*
-- (NSInteger)frameRate
-{
-    return [self recorder]->getFrameRate();
-}
-
-- (NSInteger)bitRate
-{
-    return [self recorder]->getBitRate();
-}
-
-- (NSInteger)sampleRate
-{
-    return [self recorder]->getSampleRate();
-}
-*/
-
-- (void)startRecording:(NSRect)rect
-               bitRate:(NSInteger)rate
-               aspectX:(NSInteger)aspectX
-               aspectY:(NSInteger)aspectY
-             exception:(ExceptionWrapper *)ex
-{
-    auto x1 = isize(rect.origin.x);
-    auto y1 = isize(rect.origin.y);
-    auto x2 = isize(x1 + (int)rect.size.width);
-    auto y2 = isize(y1 + (int)rect.size.height);
-    
-    try { return [self recorder]->startRecording(x1, y1, x2, y2, rate, aspectX, aspectY); }
-    catch (AppError &error) { [ex save:error]; }
-}
-
-- (void)stopRecording
-{
-    [self recorder]->stopRecording();
-}
-
-- (BOOL)exportAs:(NSString *)path
-{
-    return [self recorder]->exportAs(string([path fileSystemRepresentation]));
-}
-
-@end
-
-
-//
 // Paula proxy
 //
 
@@ -2350,7 +2248,6 @@ NSString *EventSlotName(EventSlot slot)
 @synthesize retroShell;
 @synthesize rtc;
 @synthesize serialPort;
-@synthesize recorder;
 @synthesize videoPort;
 @synthesize watchpoints;
 
@@ -2393,7 +2290,6 @@ NSString *EventSlotName(EventSlot slot)
     paula = [[PaulaProxy alloc] initWith:&vamiga->paula];
     retroShell = [[RetroShellProxy alloc] initWith:&vamiga->retroShell];
     rtc = [[RtcProxy alloc] initWith:&vamiga->rtc];
-    recorder = [[RecorderProxy alloc] initWith:&vamiga->recorder];
     remoteManager = [[RemoteManagerProxy alloc] initWith:&vamiga->remoteManager];
     serialPort = [[SerialPortProxy alloc] initWith:&vamiga->serialPort];
     videoPort = [[VideoPortProxy alloc] initWith:&vamiga->videoPort];

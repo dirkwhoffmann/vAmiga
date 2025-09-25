@@ -48,7 +48,6 @@ using namespace vamiga;
 @class RemoteManagerProxy;
 @class RetroShellProxy;
 @class RtcProxy;
-@class RecorderProxy;
 @class SerialPortProxy;
 @class VideoPortProxy;
 
@@ -199,7 +198,6 @@ NSString *EventSlotName(EventSlot slot);
     RemoteManagerProxy *remoteManager;
     RetroShellProxy *retroShell;
     RtcProxy *rtc;
-    RecorderProxy *recorder;
     SerialPortProxy *serialPort;
     VideoPortProxy *videoPort;
 }
@@ -235,7 +233,6 @@ NSString *EventSlotName(EventSlot slot);
 @property (readonly, strong) RemoteManagerProxy *remoteManager;
 @property (readonly, strong) RetroShellProxy *retroShell;
 @property (readonly, strong) RtcProxy *rtc;
-@property (readonly, strong) RecorderProxy *recorder;
 @property (readonly, strong) SerialPortProxy *serialPort;
 @property (readonly, strong) VideoPortProxy *videoPort;
 
@@ -571,35 +568,6 @@ NSString *EventSlotName(EventSlot slot);
 @property (readonly) DeniseInfo cachedInfo;
 - (SpriteInfo)getSpriteInfo:(NSInteger)nr;
 - (SpriteInfo)getCachedSpriteInfo:(NSInteger)nr;
-
-@end
-
-
-//
-// Recorder
-//
-
-@interface RecorderProxy : Proxy { }
-
-@property (readonly) RecorderConfig config;
-@property NSString *path;
-- (NSString *)findFFmpeg:(NSInteger)nr;
-@property (readonly) BOOL hasFFmpeg;
-@property (readonly) BOOL recording;
-@property (readonly) double duration;
-/*
-@property (readonly) NSInteger frameRate;
-@property (readonly) NSInteger bitRate;
-@property (readonly) NSInteger sampleRate;
-*/
-
-- (void)startRecording:(NSRect)rect
-               bitRate:(NSInteger)rate
-               aspectX:(NSInteger)aspectX
-               aspectY:(NSInteger)aspectY
-             exception:(ExceptionWrapper *)ex;
-- (void)stopRecording;
-- (BOOL)exportAs:(NSString *)path;
 
 @end
 
