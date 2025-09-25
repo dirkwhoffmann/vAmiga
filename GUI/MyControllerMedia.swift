@@ -12,7 +12,7 @@ extension MyController {
 
     func installAros() {
 
-        installAros(crc32: vamiga.CRC32_AROS_20250219)
+        installAros(crc32: vamiga.CRC32_AROS_55696)
     }
 
     func installAros(crc32: UInt32 = vamiga.CRC32_AROS_20250219) {

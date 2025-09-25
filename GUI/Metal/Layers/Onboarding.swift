@@ -65,6 +65,12 @@ class OnboardingLayerViewController: NSViewController {
 
     var layer: Onboarding!
     var emu: EmulatorProxy! { layer.emu }
+    var controller: MyController { layer.controller }
+    var config: Configuration { controller.config }
+
+    // Onboarding settings
+    var amigaModel = 0
+    var rom = 0
 
     private var pages: [NSViewController] = []
     private var currentPageIndex: Int = 0 {
@@ -155,7 +161,23 @@ class OnboardingLayerViewController: NSViewController {
         if pages.indices.contains(nextIndex) {
             showPage(at: nextIndex)
         } else {
+            apply()
             finish()
+        }
+    }
+
+    func apply() {
+
+        print("apply")
+
+        // Amiga model
+        config.revertTo(model: amigaModel)
+
+        // Kickstart
+        switch rom {
+        case 0: controller.installAros()
+        case 1: controller.installDiagRom()
+        default: fatalError()
         }
     }
 
@@ -177,6 +199,81 @@ class OnboardingLayerViewController: NSViewController {
 
         print("skip")
         finish()
+    }
+}
+
+@MainActor
+class OnboardingViewController: NSViewController {
+
+    var layer: Onboarding!
+    var config: Configuration { layer.controller.config }
+
+    func refresh() { }
+
+    override func viewDidLoad() {
+
+        print("View did load")
+        refresh()
+    }
+}
+
+@MainActor
+class OnboardingViewController1: OnboardingViewController {
+
+    var amigaModel: Int {
+        get { layer.onboardingVC.amigaModel }
+        set { layer.onboardingVC.amigaModel = newValue; refresh() }
+    }
+    var a500: Bool { amigaModel == 0 }
+    var a1000: Bool { amigaModel == 1 }
+    var a2000: Bool { amigaModel == 2 }
+
+    @IBOutlet weak var a500Button: OnboardingButton!
+    @IBOutlet weak var a1000Button: OnboardingButton!
+    @IBOutlet weak var a2000Button: OnboardingButton!
+
+    @IBAction func modelAction(_ sender: NSControl) {
+
+        amigaModel = sender.tag
+
+    }
+
+    override func refresh() {
+
+        print("refresh")
+
+        a500Button.state = a500 ? .on : .off
+        a1000Button.state = a1000 ? .on : .off
+        a2000Button.state = a2000 ? .on : .off
+    }
+}
+
+@MainActor
+class OnboardingViewController2: OnboardingViewController {
+
+    var rom: Int {
+        get { layer.onboardingVC.rom }
+        set { layer.onboardingVC.rom = newValue; refresh() }
+    }
+
+    var aros: Bool { rom == 0 }
+    var diag: Bool { rom == 1 }
+
+    @IBOutlet weak var arosButton: OnboardingButton!
+    @IBOutlet weak var diagButton: OnboardingButton!
+
+    @IBAction func romAction(_ sender: NSControl) {
+
+        print("romAction \(sender.tag)")
+        rom = sender.tag
+
+    }
+
+    override func refresh() {
+
+        print("refresh")
+        arosButton.state = aros ? .on : .off
+        diagButton.state = diag ? .on : .off
     }
 }
 
@@ -234,92 +331,6 @@ class Onboarding: Layer {
 
             onboardingVC.view.removeFromSuperview()
         }
-    }
-}
-
-@MainActor
-class OnboardingViewController: NSViewController {
-
-    var layer: Onboarding!
-    var config: Configuration { layer.controller.config }
-
-    override func viewDidLoad() {
-
-        print("View did load")
-        apply()
-    }
-
-    func apply() { }
-}
-
-@MainActor
-class OnboardingViewController1: OnboardingViewController {
-
-    var model = 0 { didSet { apply() } }
-    var a500: Bool { model == 0 }
-    var a1000: Bool { model == 1 }
-    var a2000: Bool { model == 2 }
-
-    @IBOutlet weak var a500Button: OnboardingButton!
-    @IBOutlet weak var a1000Button: OnboardingButton!
-    @IBOutlet weak var a2000Button: OnboardingButton!
-
-    @IBAction func modelAction(_ sender: NSControl) {
-
-        model = sender.tag
-
-    }
-
-    override func apply() {
-
-        config.revertTo(model: model)
-        refresh()
-    }
-
-    func refresh() {
-
-        print("refresh")
-
-        a500Button.state = a500 ? .on : .off
-        a1000Button.state = a1000 ? .on : .off
-        a2000Button.state = a2000 ? .on : .off
-    }
-}
-
-@MainActor
-class OnboardingViewController2: OnboardingViewController {
-
-    var rom = 0 { didSet { apply() } }
-
-    var aros: Bool { rom == 0 }
-    var diag: Bool { rom == 1 }
-
-    @IBOutlet weak var arosButton: OnboardingButton!
-    @IBOutlet weak var diagButton: OnboardingButton!
-
-    @IBAction func romAction(_ sender: NSControl) {
-
-        print("romAction \(sender.tag)")
-        rom = sender.tag
-
-    }
-
-    override func apply() {
-
-        switch rom {
-        case 0: layer.controller.installAros()
-        case 1: layer.controller.installDiagRom()
-        default: fatalError()
-        }
-
-        refresh()
-    }
-
-    func refresh() {
-
-        print("refresh")
-        arosButton.state = aros ? .on : .off
-        diagButton.state = diag ? .on : .off
     }
 }
 
