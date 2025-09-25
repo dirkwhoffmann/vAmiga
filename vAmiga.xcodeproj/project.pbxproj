@@ -337,8 +337,6 @@
 		50EA98F929D4883500FE99B0 /* A1000ANSI.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50EA98F829D4883500FE99B0 /* A1000ANSI.xib */; };
 		50EAD99C256E76820053F9AC /* HDFFile.h in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99B256E76820053F9AC /* HDFFile.h */; };
 		50EAD9A0256E76A40053F9AC /* HDFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99F256E76A40053F9AC /* HDFFile.cpp */; };
-		50EB8CCA25306E8E0053988A /* VideoExporter.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50EB8CC925306E8E0053988A /* VideoExporter.xib */; };
-		50EB8CCE2530710E0053988A /* VideoExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EB8CCD2530710E0053988A /* VideoExporter.swift */; };
 		50EF2236281595AA00440C4D /* Defaults.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E5B9BD2807E65800502787 /* Defaults.cpp */; };
 		50EF2237281595B800440C4D /* DiagBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50826F7627F0B2AD005FBF3B /* DiagBoard.cpp */; };
 		50EFB0BA2C1811C90013B73C /* Configurable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EFB0B82C1811C90013B73C /* Configurable.cpp */; };
@@ -1079,8 +1077,6 @@
 		50EAB95B26C10B9400BFA9D8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50EAD99B256E76820053F9AC /* HDFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDFFile.h; sourceTree = "<group>"; };
 		50EAD99F256E76A40053F9AC /* HDFFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDFFile.cpp; sourceTree = "<group>"; };
-		50EB8CC925306E8E0053988A /* VideoExporter.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoExporter.xib; sourceTree = "<group>"; };
-		50EB8CCD2530710E0053988A /* VideoExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoExporter.swift; sourceTree = "<group>"; };
 		50EC7A2F29C9EC3900060CAA /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		50EFB0B82C1811C90013B73C /* Configurable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Configurable.cpp; sourceTree = "<group>"; };
 		50EFB0B92C1811C90013B73C /* Configurable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Configurable.h; sourceTree = "<group>"; };
@@ -1639,7 +1635,6 @@
 				501C514527C2AA4A00DF1DD5 /* DiskExporter.xib */,
 				5029C6E027CA2EAB002F6CCC /* DiskInspector.xib */,
 				506B47172562E06A009FEFC3 /* VolumeInspector.xib */,
-				50EB8CC925306E8E0053988A /* VideoExporter.xib */,
 				50D263CB21F6377600FA167F /* A500ANSI.xib */,
 				508FDFB821EA1FF10043D0E9 /* A500ISO.xib */,
 				50EA98F829D4883500FE99B0 /* A1000ANSI.xib */,
@@ -1778,7 +1773,6 @@
 			children = (
 				509F41E9243B0FF700AD0FE4 /* ScreenshotViewer.swift */,
 				50B9354A243481AB000C78B8 /* SnapshotViewer.swift */,
-				50EB8CCD2530710E0053988A /* VideoExporter.swift */,
 				507727EC242F2CE3009D01DA /* iCarousel.h */,
 				507727ED242F2CE3009D01DA /* iCarousel.m */,
 			);
@@ -2396,7 +2390,6 @@
 				500A4EA024470713002A4DE1 /* disk_insert.aiff in Resources */,
 				509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */,
 				501C514627C2AA4A00DF1DD5 /* DiskExporter.xib in Resources */,
-				50EB8CCA25306E8E0053988A /* VideoExporter.xib in Resources */,
 				508FDFBE21EA1FF10043D0E9 /* MyDocument.xib in Resources */,
 				50144E342E7BE4F1009E15B4 /* Settings.storyboard in Resources */,
 				508FDFC521EA1FF10043D0E9 /* A500ISO.xib in Resources */,
@@ -2600,7 +2593,6 @@
 				50DA83E52C161961001209AA /* VAmiga.cpp in Sources */,
 				50144E392E7BE6C4009E15B4 /* SettingsSplitViewController.swift in Sources */,
 				507727EE242F2CE4009D01DA /* iCarousel.m in Sources */,
-				50EB8CCE2530710E0053988A /* VideoExporter.swift in Sources */,
 				50B14C0721EB218E002E32A6 /* CoreObject.cpp in Sources */,
 				50B36395277760320030A50C /* BlitterPanel.swift in Sources */,
 				508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */,
