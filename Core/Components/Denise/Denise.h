@@ -15,7 +15,6 @@
 #include "DeniseDebugger.h"
 #include "Memory.h"
 #include "PixelEngine.h"
-#include "Recorder.h"
 
 namespace vamiga {
 
@@ -61,9 +60,6 @@ public:
     // Sprite tracker
     DeniseDebugger debugger = DeniseDebugger(amiga);
     
-    // A screen recorder for creating video streams
-    // Recorder screenRecorder = Recorder(amiga);
-
     
     //
     // Counters
