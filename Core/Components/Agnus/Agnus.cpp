@@ -730,11 +730,7 @@ Agnus::eofHandler()
 
     scheduleStrobe0Event();
 
-    // Run the screen recorder
-    denise.screenRecorder.vsyncHandler(clock - 50 * DMA_CYCLES(PAL::HPOS_CNT));
     denise.eofHandler();
-
-    // Let the other components finish the current frame
     paula.eofHandler();
     sequencer.eofHandler();
     copper.eofHandler();

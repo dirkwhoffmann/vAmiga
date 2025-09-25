@@ -62,7 +62,7 @@ public:
     DeniseDebugger debugger = DeniseDebugger(amiga);
     
     // A screen recorder for creating video streams
-    Recorder screenRecorder = Recorder(amiga);
+    // Recorder screenRecorder = Recorder(amiga);
 
     
     //
@@ -336,7 +336,6 @@ public:
 
         CLONE(pixelEngine)
         CLONE(debugger)
-        CLONE(screenRecorder)
 
         CLONE(clock)
 
