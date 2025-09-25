@@ -13,12 +13,10 @@ class OnboardingLayerView: NSView {
 
     override func mouseDown(with event: NSEvent) {
 
-        print("OnboardingLayerView: mouseDown")
     }
 
     override func mouseUp(with event: NSEvent) {
 
-        print("OnboardingLayerView: mouseUp")
     }
 
     private var bgLayer: CALayer?
@@ -80,6 +78,7 @@ class OnboardingLayerViewController: NSViewController {
     override func viewDidLoad() {
 
         super.viewDidLoad()
+        pageDotIndicator.delegate = self
     }
 
     override func viewDidAppear() {
@@ -168,8 +167,6 @@ class OnboardingLayerViewController: NSViewController {
 
     func apply() {
 
-        print("apply")
-
         // Amiga model
         config.revertTo(model: amigaModel)
 
@@ -197,8 +194,16 @@ class OnboardingLayerViewController: NSViewController {
 
     @IBAction func skipAction(_ sender: Any?) {
 
-        print("skip")
         finish()
+    }
+}
+
+@MainActor
+extension OnboardingLayerViewController: PageDotsIndicatorDelegate {
+
+    func pageDotsIndicator(_ pageDotsIndicator: PageDotsIndicator, didSelectPage index: Int) {
+
+        showPage(at: index)
     }
 }
 
@@ -212,7 +217,6 @@ class OnboardingViewController: NSViewController {
 
     override func viewDidLoad() {
 
-        print("View did load")
         refresh()
     }
 }
@@ -240,8 +244,6 @@ class OnboardingViewController1: OnboardingViewController {
 
     override func refresh() {
 
-        print("refresh")
-
         a500Button.state = a500 ? .on : .off
         a1000Button.state = a1000 ? .on : .off
         a2000Button.state = a2000 ? .on : .off
@@ -264,14 +266,12 @@ class OnboardingViewController2: OnboardingViewController {
 
     @IBAction func romAction(_ sender: NSControl) {
 
-        print("romAction \(sender.tag)")
         rom = sender.tag
 
     }
 
     override func refresh() {
 
-        print("refresh")
         arosButton.state = aros ? .on : .off
         diagButton.state = diag ? .on : .off
     }
@@ -299,13 +299,10 @@ class Onboarding: Layer {
     override func open(delay: Double) {
 
         super.open(delay: delay)
-
-        print("open")
     }
 
     override func layerDidOpen() {
 
-        print("layerDidOpen")
         renderer.canvas.shouldRender = true
         renderer.splashScreen.shouldRender = true
     }

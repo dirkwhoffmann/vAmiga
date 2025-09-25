@@ -19,38 +19,6 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" image="amigaBall" id="2Bm-rU-uxm"/>
                             </imageView>
-                            <box fixedFrame="YES" title="Box" titlePosition="noTitle" transparent="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g3y-uc-41P">
-                                <rect key="frame" x="100" y="130" width="600" height="472"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                <view key="contentView" id="aJw-Xr-hX4" customClass="OnboardingPageContainerView" customModule="vAmiga" customModuleProvider="target">
-                                    <rect key="frame" x="4" y="5" width="592" height="464"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    <subviews>
-                                        <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uot-uQ-lVb">
-                                            <rect key="frame" x="-4" y="74" width="600" height="320"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                        </customView>
-                                        <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vad-mh-PS5" customClass="PageDotsIndicator" customModule="vAmiga" customModuleProvider="target">
-                                            <rect key="frame" x="215" y="41" width="163" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        </customView>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PDd-Tl-hJY">
-                                            <rect key="frame" x="234" y="-4" width="124" height="40"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <buttonCell key="cell" type="push" title="Continue" bezelStyle="rounded" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="uNG-NU-wF9">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" textStyle="title3" name=".SFNS-Regular"/>
-                                                <string key="keyEquivalent" base64-UTF8="YES">
-DQ
-</string>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="nextPage:" target="FDy-lQ-BwN" id="ykq-lI-pOH"/>
-                                            </connections>
-                                        </button>
-                                    </subviews>
-                                </view>
-                            </box>
                             <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Z3E-sm-lCI">
                                 <rect key="frame" x="20" y="17" width="25" height="26"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -73,6 +41,38 @@ DQ
                                     <action selector="skipAction:" target="FDy-lQ-BwN" id="4R7-nN-Fbj"/>
                                 </connections>
                             </button>
+                            <box fixedFrame="YES" title="Box" titlePosition="noTitle" transparent="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g3y-uc-41P">
+                                <rect key="frame" x="100" y="91" width="600" height="415"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" id="aJw-Xr-hX4" customClass="OnboardingPageContainerView" customModule="vAmiga" customModuleProvider="target">
+                                    <rect key="frame" x="4" y="5" width="592" height="407"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uot-uQ-lVb">
+                                            <rect key="frame" x="-3" y="87" width="600" height="320"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        </customView>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PDd-Tl-hJY">
+                                            <rect key="frame" x="234" y="-6" width="124" height="40"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Continue" bezelStyle="rounded" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="uNG-NU-wF9">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" textStyle="title3" name=".SFNS-Regular"/>
+                                                <string key="keyEquivalent" base64-UTF8="YES">
+DQ
+</string>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="nextPage:" target="FDy-lQ-BwN" id="ykq-lI-pOH"/>
+                                            </connections>
+                                        </button>
+                                        <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vad-mh-PS5" customClass="PageDotsIndicator" customModule="vAmiga" customModuleProvider="target">
+                                            <rect key="frame" x="215" y="46" width="163" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        </customView>
+                                    </subviews>
+                                </view>
+                            </box>
                         </subviews>
                     </view>
                     <connections>

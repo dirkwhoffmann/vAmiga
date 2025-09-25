@@ -9,10 +9,19 @@
 
 import Cocoa
 
+@MainActor
+protocol PageDotsIndicatorDelegate: AnyObject {
+
+    func pageDotsIndicator(_ indicator: PageDotsIndicator, didSelectPage page: Int)
+}
+
+@MainActor
 class PageDotsIndicator: NSView {
 
     var numberOfPages: Int = 0 { didSet { rebuildDots() } }
     var currentPage: Int = 0 { didSet { updateDots() } }
+
+    var delegate: PageDotsIndicatorDelegate?
 
     private let stack = NSStackView()
     private var dots: [DotView] = []
@@ -37,14 +46,6 @@ class PageDotsIndicator: NSView {
         stack.translatesAutoresizingMaskIntoConstraints = false
         addSubview(stack)
 
-        /*
-        NSLayoutConstraint.activate([
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: trailingAnchor),
-            stack.topAnchor.constraint(equalTo: topAnchor),
-            stack.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
-         */
         NSLayoutConstraint.activate([
             stack.centerXAnchor.constraint(equalTo: centerXAnchor),
             stack.centerYAnchor.constraint(equalTo: centerYAnchor)
@@ -56,12 +57,17 @@ class PageDotsIndicator: NSView {
         stack.arrangedSubviews.forEach { $0.removeFromSuperview() }
         dots.removeAll()
 
-        for _ in 0..<numberOfPages {
+        for i in 0..<numberOfPages {
 
             let dot = DotView()
             dot.translatesAutoresizingMaskIntoConstraints = false
             dot.widthAnchor.constraint(equalToConstant: 12).isActive = true
             dot.heightAnchor.constraint(equalToConstant: 12).isActive = true
+            dot.onClick = { [weak self] in
+
+                self?.currentPage = i
+                self?.delegate?.pageDotsIndicator(self!, didSelectPage: i)
+            }
             stack.addArrangedSubview(dot)
             dots.append(dot)
         }
@@ -80,6 +86,8 @@ private class DotView: NSView {
 
     var isActive = false { didSet { needsDisplay = true } }
 
+    var onClick: (() -> Void)?
+
     override var intrinsicContentSize: NSSize {
 
         return NSSize(width: 12, height: 12)
@@ -92,5 +100,11 @@ private class DotView: NSView {
         let color = isActive ? NSColor.labelColor : NSColor.secondaryLabelColor.withAlphaComponent(0.3)
         color.setFill()
         path.fill()
+    }
+
+    override func mouseDown(with event: NSEvent) {
+
+        print("mouseDown")
+        onClick?()
     }
 }
