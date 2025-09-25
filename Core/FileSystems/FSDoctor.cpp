@@ -645,7 +645,7 @@ FSDoctor::xray(FSBlock &node, bool strict, std::ostream &os) const
         if (auto fault = xray32(node, i, strict, expected); fault != FSBlockError::OK) {
 
             auto *data = node.data();
-            auto type = fs.typeof(node.nr, i);
+            auto type = fs.typeOf(node.nr, i);
 
             //hex(6, node.nr, ":+");
             ss << std::setw(7) << std::left << std::to_string(node.nr);

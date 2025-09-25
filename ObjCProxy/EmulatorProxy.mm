@@ -1456,12 +1456,12 @@ NSString *EventSlotName(EventSlot slot)
 
 - (FSBlockType)blockType:(NSInteger)blockNr
 {
-    return [self fs]->typeof((u32)blockNr);
+    return [self fs]->typeOf((u32)blockNr);
 }
 
 - (FSItemType)itemType:(NSInteger)blockNr pos:(NSInteger)pos
 {
-    return [self fs]->typeof((u32)blockNr, pos);
+    return [self fs]->typeOf((u32)blockNr, pos);
 }
 
 - (NSInteger)xrayBlocks:(BOOL)strict

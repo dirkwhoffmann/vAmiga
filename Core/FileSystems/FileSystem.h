@@ -148,12 +148,12 @@ public:
 public:
 
     // Returns the type of a certain block or a block item
-    FSBlockType typeof(Block nr) const noexcept;
-    bool is(Block nr, FSBlockType t) const noexcept { return typeof(nr) == t; }
-    FSItemType typeof(Block nr, isize pos) const noexcept;
+    FSBlockType typeOf(Block nr) const noexcept;
+    bool is(Block nr, FSBlockType t) const noexcept { return typeOf(nr) == t; }
+    FSItemType typeOf(Block nr, isize pos) const noexcept;
 
     // Convenience wrappers
-    bool isEmpty(Block nr) const noexcept { return typeof(nr) == FSBlockType::EMPTY; }
+    bool isEmpty(Block nr) const noexcept { return typeOf(nr) == FSBlockType::EMPTY; }
 
 protected:
 

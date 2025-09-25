@@ -410,13 +410,13 @@ FileSystem::operator[](size_t nr) const
 }
 
 FSBlockType
-FileSystem::typeof(Block nr) const noexcept
+FileSystem::typeOf(Block nr) const noexcept
 {
     return storage.getType(nr);
 }
 
 FSItemType
-FileSystem::typeof(Block nr, isize pos) const noexcept
+FileSystem::typeOf(Block nr, isize pos) const noexcept
 {
     return storage.read(nr) ? storage[nr].itemType(pos) : FSItemType::UNUSED;
 }
