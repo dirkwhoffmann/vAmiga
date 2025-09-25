@@ -629,22 +629,7 @@ extension MyController {
 
         case .WORKSPACE_SAVED, .WORKSPACE_LOADED:
             break
-            
-        case .RECORDING_STARTED:
-            window?.backgroundColor = .warning
-            window?.styleMask.remove(.resizable)
-            refreshStatusBar()
-            
-        case .RECORDING_STOPPED:
-            window?.backgroundColor = .windowBackgroundColor
-            window?.styleMask.insert(.resizable)
-            refreshStatusBar()
-            // exportVideoAction(self)
 
-        case .RECORDING_ABORTED:
-            refreshStatusBar()
-            showAlert(.recorderAborted)
-            
         case .SHAKING:
             metal.lastShake = DispatchTime(uptimeNanoseconds: 0)
             if pref.releaseMouseByShaking {

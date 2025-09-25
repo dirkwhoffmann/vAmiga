@@ -170,8 +170,6 @@ debugflag FORCE_FS_WRONG_BSIZE           = 0;
 debugflag FORCE_FS_WRONG_CAPACITY        = 0;
 debugflag FORCE_FS_WRONG_DOS_TYPE        = 0;
 debugflag FORCE_DMS_CANT_CREATE          = 0;
-debugflag FORCE_RECORDING_ERROR          = 0;
-debugflag FORCE_NO_FFMPEG                = 0;
 debugflag FORCE_ZLIB_ERROR               = 0;
 
 }

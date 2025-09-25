@@ -120,11 +120,6 @@ enum class Msg : long
     WORKSPACE_LOADED,
     WORKSPACE_SAVED,
 
-    // Screen recording
-    RECORDING_STARTED,
-    RECORDING_STOPPED,
-    RECORDING_ABORTED,
-    
     // DMA Debugging
     DMA_DEBUG,
     
@@ -229,11 +224,7 @@ struct MsgEnum : Reflection<MsgEnum, Msg>
                 
             case Msg::WORKSPACE_LOADED:      return "WORKSPACE_LOADED";
             case Msg::WORKSPACE_SAVED:       return "WORKSPACE_SAVED";
-                
-            case Msg::RECORDING_STARTED:     return "RECORDING_STARTED";
-            case Msg::RECORDING_STOPPED:     return "RECORDING_STOPPED";
-            case Msg::RECORDING_ABORTED:     return "RECORDING_ABORTED";
-                
+
             case Msg::DMA_DEBUG:             return "DMA_DEBUG";
                 
             case Msg::SRV_STATE:             return "SRV_STATE";
