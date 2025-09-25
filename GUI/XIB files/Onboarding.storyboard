@@ -42,7 +42,7 @@
                                 </connections>
                             </button>
                             <box fixedFrame="YES" title="Box" titlePosition="noTitle" transparent="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g3y-uc-41P">
-                                <rect key="frame" x="100" y="60" width="600" height="478"/>
+                                <rect key="frame" x="100" y="64" width="600" height="478"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" id="aJw-Xr-hX4" customClass="OnboardingPageContainerView" customModule="vAmiga" customModuleProvider="target">
                                     <rect key="frame" x="4" y="5" width="592" height="470"/>
@@ -53,25 +53,22 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="push" title="Continue" bezelStyle="rounded" alignment="center" controlSize="large" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="uNG-NU-wF9">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" textStyle="title3" name=".SFNS-Regular"/>
-                                                <string key="keyEquivalent" base64-UTF8="YES">
-DQ
-</string>
+                                                <font key="font" size="15" name="Optima-Regular"/>
                                             </buttonCell>
                                             <connections>
                                                 <action selector="nextPage:" target="FDy-lQ-BwN" id="ykq-lI-pOH"/>
                                             </connections>
                                         </button>
                                         <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vad-mh-PS5" customClass="PageDotsIndicator" customModule="vAmiga" customModuleProvider="target">
-                                            <rect key="frame" x="215" y="46" width="163" height="25"/>
+                                            <rect key="frame" x="215" y="42" width="163" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         </customView>
                                         <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uot-uQ-lVb">
-                                            <rect key="frame" x="0.0" y="90" width="600" height="320"/>
+                                            <rect key="frame" x="0.0" y="82" width="600" height="320"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         </customView>
                                         <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qJh-cj-HCv">
-                                            <rect key="frame" x="275" y="428" width="42" height="42"/>
+                                            <rect key="frame" x="264" y="406" width="64" height="64"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="logo" id="YGI-39-aQd"/>
                                         </imageView>
@@ -122,7 +119,7 @@ DQ
                                         <rect key="frame" x="46" y="19" width="79" height="19"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Amiga 500" id="vK6-Jy-ZzN">
-                                            <font key="font" textStyle="title3" name=".SFNS-Regular"/>
+                                            <font key="font" size="15" name="Optima-Regular"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
@@ -140,14 +137,14 @@ DQ
                                 </connections>
                             </customView>
                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DIx-c2-1e2" customClass="OnboardingButton" customModule="vAmiga" customModuleProvider="target">
-                                <rect key="frame" x="216" y="0.0" width="172" height="172"/>
+                                <rect key="frame" x="215" y="0.0" width="172" height="172"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H2t-Og-Ow4">
                                         <rect key="frame" x="43" y="19" width="86" height="19"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Amiga 1000" id="ISU-AL-2ZG">
-                                            <font key="font" textStyle="title3" name=".SFNS-Regular"/>
+                                            <font key="font" size="15" name="Optima-Regular"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
@@ -182,7 +179,7 @@ DQ
                                         <rect key="frame" x="42" y="19" width="88" height="19"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Amiga 2000" id="Fph-W3-yhf">
-                                            <font key="font" textStyle="title3" name=".SFNS-Regular"/>
+                                            <font key="font" size="15" name="Optima-Regular"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
@@ -200,19 +197,19 @@ DQ
                                 </connections>
                             </customView>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MPP-aL-sNx">
-                                <rect key="frame" x="212" y="289" width="176" height="31"/>
+                                <rect key="frame" x="183" y="261" width="235" height="43"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Getting Started" id="hxe-bT-8uW">
-                                    <font key="font" textStyle="largeTitle" name=".SFNS-Regular"/>
+                                    <font key="font" size="36" name="Optima-Regular"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="24e-iW-3NA">
-                                <rect key="frame" x="65" y="218" width="470" height="39"/>
+                                <rect key="frame" x="66" y="199" width="470" height="45"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" selectable="YES" alignment="center" title="We’ll have you ready in just a few steps. Start by selecting the Amiga model you want to emulate." id="aes-Tn-02o">
-                                    <font key="font" textStyle="title3" name=".SFNS-Regular"/>
+                                    <font key="font" size="15" name="Optima-Regular"/>
                                     <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
@@ -250,7 +247,7 @@ DQ
                                         <rect key="frame" x="51" y="14" width="71" height="19"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Aros Rom" id="7lF-eW-Red">
-                                            <font key="font" textStyle="title3" name=".SFNS-Regular"/>
+                                            <font key="font" size="15" name="Optima-Regular"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
@@ -268,7 +265,7 @@ DQ
                                 </connections>
                             </customView>
                             <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VnZ-AB-D80" customClass="OnboardingButton" customModule="vAmiga" customModuleProvider="target">
-                                <rect key="frame" x="322" y="1" width="172" height="172"/>
+                                <rect key="frame" x="330" y="1" width="172" height="172"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dH8-lh-L3c">
@@ -280,7 +277,7 @@ DQ
                                         <rect key="frame" x="52" y="14" width="69" height="19"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" lineBreakMode="clipping" title="DiagROM" id="d5V-Ca-ErP">
-                                            <font key="font" textStyle="title3" name=".SFNS-Regular"/>
+                                            <font key="font" size="15" name="Optima-Regular"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
@@ -297,22 +294,22 @@ DQ
                                     <outlet property="label" destination="AWq-R4-zgg" id="lna-F5-KST"/>
                                 </connections>
                             </customView>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sYn-tQ-i13">
-                                <rect key="frame" x="249" y="289" width="103" height="31"/>
+                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RlB-z9-9CI">
+                                <rect key="frame" x="62" y="194" width="476" height="59"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Kickstart" id="XZR-t7-Hj3">
-                                    <font key="font" textStyle="largeTitle" name=".SFNS-Regular"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <textFieldCell key="cell" selectable="YES" alignment="center" id="B7E-NL-dFO">
+                                    <font key="font" size="15" name="Optima-Regular"/>
+                                    <string key="title">For legal reasons, vAmiga does not include original Amiga ROMs. Choose to start with the AROS Kickstart replacement or DiagROM, and add your own ROMs later in Settings.</string>
+                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField focusRingType="none" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RlB-z9-9CI">
-                                <rect key="frame" x="62" y="209" width="476" height="59"/>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sYn-tQ-i13">
+                                <rect key="frame" x="232" y="261" width="136" height="43"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" selectable="YES" alignment="center" id="B7E-NL-dFO">
-                                    <font key="font" textStyle="title3" name=".SFNS-Regular"/>
-                                    <string key="title">For legal reasons, vAmiga does not include original Amiga ROMs. Choose to start with the AROS Kickstart replacement or DiagROM, and add your own ROMs later in Settings.</string>
-                                    <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Kickstart" id="XZR-t7-Hj3">
+                                    <font key="font" size="36" name="Optima-Regular"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
@@ -332,7 +329,7 @@ DQ
         <image name="amigaBall" width="263" height="265"/>
         <image name="arrowshape.backward.circle" catalog="system" width="15" height="15"/>
         <image name="iconGeneral" width="256" height="256"/>
-        <image name="logo" width="516" height="516"/>
+        <image name="logo" width="1024" height="638"/>
         <image name="rom_aros" width="129" height="157"/>
         <image name="rom_diag" width="129" height="157"/>
         <image name="xmark.octagon.fill" catalog="system" width="17" height="15"/>
