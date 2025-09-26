@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="24128"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="NSView safe area layout guides" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -261,8 +262,40 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
+                                        <popUpButton toolTip="Revert To..." fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6kF-O8-iYV">
+                                            <rect key="frame" x="17" y="6" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" id="eIS-Vg-ZcX">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                                <menu key="menu" id="c2I-Rb-8jW">
+                                                    <items>
+                                                        <menuItem title="Revert to..." state="on" hidden="YES" id="hse-kj-yw0">
+                                                            <imageReference key="image" image="book" catalog="system" symbolScale="large"/>
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Standard Settings" id="RmW-rp-WSC"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="presetAction:" target="ejc-Ml-G1m" id="bWs-p7-98p"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <button toolTip="Use As Default" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3cV-4o-LP2">
+                                            <rect key="frame" x="59" y="6" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="PUy-jx-NKF">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                                <imageReference key="image" image="square.and.arrow.down" catalog="system" symbolScale="large"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="saveAction:" target="ejc-Ml-G1m" id="fMx-2V-Uwu"/>
+                                            </connections>
+                                        </button>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CMQ-m7-DA2">
-                                            <rect key="frame" x="130" y="11" width="79" height="26"/>
+                                            <rect key="frame" x="112" y="11" width="79" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="General" id="2eM-ed-hF9">
                                                 <font key="font" textStyle="title1" name=".SFNS-Regular"/>
@@ -270,38 +303,6 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <popUpButton id="cLL-35-SMA" userLabel="System">
-                                            <rect key="frame" x="17" y="10" width="53" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="nhe-uv-biX" userLabel="System">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="message"/>
-                                                <menu key="menu" title="Restore" id="hzg-I1-bOi">
-                                                    <items>
-                                                        <menuItem title="Revert to..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="6Hr-Tc-QXK">
-                                                            <attributedString key="attributedTitle"/>
-                                                        </menuItem>
-                                                        <menuItem title="Standard Settings" id="nYD-RC-oP8">
-                                                            <attributedString key="attributedTitle"/>
-                                                        </menuItem>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="presetAction:" target="ejc-Ml-G1m" id="l9g-Bq-ed3"/>
-                                            </connections>
-                                        </popUpButton>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5v2-RQ-JUQ">
-                                            <rect key="frame" x="64" y="7" width="60" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                            <buttonCell key="cell" type="push" bezelStyle="rounded" image="square.and.arrow.down" catalog="system" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nqK-fj-Fge">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="saveAction:" target="ejc-Ml-G1m" id="NIx-7b-ad9"/>
-                                            </connections>
-                                        </button>
                                     </subviews>
                                 </view>
                             </box>
@@ -521,7 +522,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J65-Af-S0T">
-                                            <rect key="frame" x="130" y="11" width="149" height="26"/>
+                                            <rect key="frame" x="112" y="11" width="149" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Emulation Keys" id="I6b-95-T2y">
                                                 <font key="font" textStyle="title1" name=".SFNS-Regular"/>
@@ -530,15 +531,16 @@
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton id="HLM-4A-gjU" userLabel="System">
-                                            <rect key="frame" x="17" y="10" width="53" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="aaM-1N-kXl" userLabel="System">
+                                            <rect key="frame" x="17" y="6" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" id="aaM-1N-kXl" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="message"/>
                                                 <menu key="menu" title="Restore" id="PxB-gy-RxI">
                                                     <items>
-                                                        <menuItem title="Revert to..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="p6U-vu-mLE">
+                                                        <menuItem title="Revert to..." hidden="YES" id="p6U-vu-mLE">
                                                             <attributedString key="attributedTitle"/>
+                                                            <imageReference key="image" image="book" catalog="system" symbolScale="large"/>
                                                         </menuItem>
                                                         <menuItem title="Standard Settings" id="do5-cu-PM0">
                                                             <attributedString key="attributedTitle"/>
@@ -550,12 +552,13 @@
                                                 <action selector="presetAction:" target="EGi-z1-MUh" id="zAa-ej-mgr"/>
                                             </connections>
                                         </popUpButton>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c5x-hG-v7s">
-                                            <rect key="frame" x="64" y="7" width="60" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                            <buttonCell key="cell" type="push" bezelStyle="rounded" image="square.and.arrow.down" catalog="system" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Jvl-gZ-4M9">
+                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c5x-hG-v7s">
+                                            <rect key="frame" x="59" y="6" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Jvl-gZ-4M9">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
+                                                <imageReference key="image" image="square.and.arrow.down" catalog="system" symbolScale="large"/>
                                             </buttonCell>
                                             <connections>
                                                 <action selector="saveAction:" target="EGi-z1-MUh" id="dsM-pT-uRO"/>
@@ -1347,15 +1350,16 @@
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton id="LMg-T0-pWl" userLabel="System">
-                                            <rect key="frame" x="17" y="10" width="53" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="5Sw-M1-G2O" userLabel="System">
+                                            <rect key="frame" x="17" y="6" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" id="5Sw-M1-G2O" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="message"/>
                                                 <menu key="menu" title="Restore" id="vDX-YG-xDL">
                                                     <items>
-                                                        <menuItem title="Revert to..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="o34-ib-cla">
+                                                        <menuItem title="Revert to..." hidden="YES" id="o34-ib-cla">
                                                             <attributedString key="attributedTitle"/>
+                                                            <imageReference key="image" image="book" catalog="system" symbolScale="large"/>
                                                         </menuItem>
                                                         <menuItem title="Standard Settings" id="SJb-zz-gZA">
                                                             <attributedString key="attributedTitle"/>
@@ -1367,12 +1371,13 @@
                                                 <action selector="presetAction:" target="di1-gt-ffY" id="lSg-8G-aH6"/>
                                             </connections>
                                         </popUpButton>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mtd-iu-pGW">
-                                            <rect key="frame" x="64" y="7" width="60" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                            <buttonCell key="cell" type="push" bezelStyle="rounded" image="square.and.arrow.down" catalog="system" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="KDz-DR-ctH">
+                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mtd-iu-pGW">
+                                            <rect key="frame" x="59" y="6" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="KDz-DR-ctH">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
+                                                <imageReference key="image" image="square.and.arrow.down" catalog="system" symbolScale="large"/>
                                             </buttonCell>
                                             <connections>
                                                 <action selector="saveAction:" target="di1-gt-ffY" id="x7R-6U-F1h"/>
@@ -1640,7 +1645,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CPy-Jq-kxD">
-                                            <rect key="frame" x="130" y="12" width="59" height="26"/>
+                                            <rect key="frame" x="112" y="11" width="59" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Roms" id="Z1h-Ud-oWJ">
                                                 <font key="font" textStyle="title1" name=".SFNS-Regular"/>
@@ -1677,26 +1682,31 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T6r-rh-pbJ">
-                                            <rect key="frame" x="64" y="7" width="60" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                            <buttonCell key="cell" type="push" bezelStyle="rounded" image="square.and.arrow.down" catalog="system" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Cve-wW-rN7">
+                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T6r-rh-pbJ">
+                                            <rect key="frame" x="59" y="6" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="square.and.arrow.down" catalog="system" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Cve-wW-rN7">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <symbolConfiguration key="symbolConfiguration" scale="large">
+                                                <nil key="locale"/>
+                                            </symbolConfiguration>
                                             <connections>
                                                 <action selector="saveAction:" target="wtk-Jg-WAA" id="BHh-2Y-Cfp"/>
                                             </connections>
                                         </button>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xvG-oM-4ob">
-                                            <rect key="frame" x="17" y="10" width="53" height="25"/>
+                                        <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xvG-oM-4ob">
+                                            <rect key="frame" x="17" y="6" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" autoenablesItems="NO" selectedItem="n53-So-Gkv" id="BGP-1P-xjp">
-                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <popUpButtonCell key="cell" type="bevel" bezelStyle="regularSquare" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" autoenablesItems="NO" selectedItem="n53-So-Gkv" id="BGP-1P-xjp">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="message"/>
                                                 <menu key="menu" autoenablesItems="NO" id="fMI-RT-Oq2">
                                                     <items>
-                                                        <menuItem state="on" image="arrow.counterclockwise" catalog="system" hidden="YES" id="n53-So-Gkv"/>
+                                                        <menuItem state="on" hidden="YES" id="n53-So-Gkv">
+                                                            <imageReference key="image" image="book" catalog="system" symbolScale="large"/>
+                                                        </menuItem>
                                                         <menuItem title="Amiga Kickstart 1.2" tag="2798523958" id="3gk-Ja-fOF">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
@@ -1827,7 +1837,7 @@
                                             </connections>
                                         </button>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BCd-a6-UvB">
-                                            <rect key="frame" x="130" y="11" width="96" height="26"/>
+                                            <rect key="frame" x="112" y="11" width="96" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Hardware" id="j2k-V2-PkW">
                                                 <font key="font" textStyle="title1" name=".SFNS-Regular"/>
@@ -1836,15 +1846,16 @@
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton id="q7f-oT-loi" userLabel="System">
-                                            <rect key="frame" x="17" y="10" width="53" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="6Eb-jH-Sog" id="n3J-DY-92G" userLabel="System">
+                                            <rect key="frame" x="17" y="6" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" selectedItem="6Eb-jH-Sog" id="n3J-DY-92G" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="message"/>
                                                 <menu key="menu" title="Restore" id="Cl5-cU-aZM">
                                                     <items>
-                                                        <menuItem title="Revert to..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="6Eb-jH-Sog">
+                                                        <menuItem title="Revert to..." hidden="YES" id="6Eb-jH-Sog">
                                                             <attributedString key="attributedTitle"/>
+                                                            <imageReference key="image" image="book" catalog="system" symbolScale="large"/>
                                                         </menuItem>
                                                         <menuItem title="Amiga 500" id="4yd-he-NQW">
                                                             <attributedString key="attributedTitle"/>
@@ -1860,12 +1871,13 @@
                                                 <action selector="presetAction:" target="Fvs-sb-K8m" id="J1y-9b-CKm"/>
                                             </connections>
                                         </popUpButton>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sPY-Yp-qJs">
-                                            <rect key="frame" x="64" y="7" width="60" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                            <buttonCell key="cell" type="push" bezelStyle="rounded" image="square.and.arrow.down" catalog="system" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ncy-bb-byQ">
+                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sPY-Yp-qJs">
+                                            <rect key="frame" x="59" y="6" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ncy-bb-byQ">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
+                                                <imageReference key="image" image="square.and.arrow.down" catalog="system" symbolScale="large"/>
                                                 <connections>
                                                     <action selector="saveAction:" target="Fvs-sb-K8m" id="wMA-jA-JBe"/>
                                                 </connections>
@@ -2623,7 +2635,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O7c-KH-FzX">
-                                            <rect key="frame" x="130" y="11" width="111" height="26"/>
+                                            <rect key="frame" x="112" y="11" width="111" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Peripherals" id="Pln-cL-U5X">
                                                 <font key="font" textStyle="title1" name=".SFNS-Regular"/>
@@ -2632,15 +2644,16 @@
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton id="YdP-Hg-hXf" userLabel="System">
-                                            <rect key="frame" x="17" y="10" width="53" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="t8a-gI-jk6" userLabel="System">
+                                            <rect key="frame" x="17" y="6" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" id="t8a-gI-jk6" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="message"/>
                                                 <menu key="menu" title="Restore" id="IEG-EA-wDT">
                                                     <items>
-                                                        <menuItem title="Revert to..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="Rl4-hg-4Gg">
+                                                        <menuItem title="Revert to..." hidden="YES" id="Rl4-hg-4Gg">
                                                             <attributedString key="attributedTitle"/>
+                                                            <imageReference key="image" image="book" catalog="system" symbolScale="large"/>
                                                         </menuItem>
                                                         <menuItem title="Standard Settings" id="Wom-kx-lgb"/>
                                                     </items>
@@ -2650,12 +2663,13 @@
                                                 <action selector="presetAction:" target="oqP-PU-J20" id="f5r-hp-0RC"/>
                                             </connections>
                                         </popUpButton>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YUC-Td-2ug">
-                                            <rect key="frame" x="64" y="7" width="60" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                            <buttonCell key="cell" type="push" bezelStyle="rounded" image="square.and.arrow.down" catalog="system" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="wIg-st-j69">
+                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YUC-Td-2ug">
+                                            <rect key="frame" x="59" y="6" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="wIg-st-j69">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
+                                                <imageReference key="image" image="square.and.arrow.down" catalog="system" symbolScale="large"/>
                                                 <connections>
                                                     <action selector="saveAction:" target="oqP-PU-J20" id="KY9-Vs-Fgm"/>
                                                 </connections>
@@ -3290,7 +3304,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zXO-O0-oWI">
-                                            <rect key="frame" x="130" y="11" width="126" height="26"/>
+                                            <rect key="frame" x="112" y="11" width="126" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Performance" id="5XO-35-Pr5">
                                                 <font key="font" textStyle="title1" name=".SFNS-Regular"/>
@@ -3299,15 +3313,16 @@
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton id="ajS-fa-pN5" userLabel="System">
-                                            <rect key="frame" x="17" y="10" width="53" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="pwm-uU-vRW" userLabel="System">
+                                            <rect key="frame" x="17" y="6" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" id="pwm-uU-vRW" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="message"/>
                                                 <menu key="menu" title="Restore" id="9qu-eR-GJ2">
                                                     <items>
-                                                        <menuItem title="Revert to..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="n7H-KM-5XA">
+                                                        <menuItem title="Revert to..." hidden="YES" id="n7H-KM-5XA">
                                                             <attributedString key="attributedTitle"/>
+                                                            <imageReference key="image" image="book" catalog="system" symbolScale="large"/>
                                                         </menuItem>
                                                         <menuItem title="Standard Settings" id="zdS-5P-TI1">
                                                             <attributedString key="attributedTitle"/>
@@ -3319,12 +3334,13 @@
                                                 <action selector="presetAction:" target="Rvf-AP-e5x" id="G20-OJ-Vdp"/>
                                             </connections>
                                         </popUpButton>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n2z-Bo-YHP">
-                                            <rect key="frame" x="64" y="7" width="60" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                            <buttonCell key="cell" type="push" bezelStyle="rounded" image="square.and.arrow.down" catalog="system" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ZdL-Lr-6WI">
+                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n2z-Bo-YHP">
+                                            <rect key="frame" x="59" y="6" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ZdL-Lr-6WI">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
+                                                <imageReference key="image" image="square.and.arrow.down" catalog="system" symbolScale="large"/>
                                             </buttonCell>
                                             <connections>
                                                 <action selector="saveAction:" target="Rvf-AP-e5x" id="rXd-GZ-Us7"/>
@@ -3676,7 +3692,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bLX-kG-hIo">
-                                            <rect key="frame" x="130" y="11" width="130" height="26"/>
+                                            <rect key="frame" x="112" y="11" width="130" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Compatibility" id="5lH-7v-VgI">
                                                 <font key="font" textStyle="title1" name=".SFNS-Regular"/>
@@ -3685,15 +3701,16 @@
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton id="Xp9-lN-EbF" userLabel="System">
-                                            <rect key="frame" x="17" y="10" width="53" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="SZE-41-ZIO" userLabel="System">
+                                            <rect key="frame" x="17" y="6" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" id="SZE-41-ZIO" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="message"/>
                                                 <menu key="menu" title="Restore" id="sxH-Wp-YJo">
                                                     <items>
-                                                        <menuItem title="Revert to..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="gcy-86-jnI">
+                                                        <menuItem title="Revert to..." hidden="YES" id="gcy-86-jnI">
                                                             <attributedString key="attributedTitle"/>
+                                                            <imageReference key="image" image="book" catalog="system" symbolScale="large"/>
                                                         </menuItem>
                                                         <menuItem title="Standard Settings" id="mID-Lp-k6m">
                                                             <attributedString key="attributedTitle"/>
@@ -3708,12 +3725,13 @@
                                                 <action selector="presetAction:" target="vdW-qO-aAE" id="dG2-eH-FVH"/>
                                             </connections>
                                         </popUpButton>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WRE-PP-IKD">
-                                            <rect key="frame" x="64" y="7" width="60" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                            <buttonCell key="cell" type="push" bezelStyle="rounded" image="square.and.arrow.down" catalog="system" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aS3-Kt-RwM">
+                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WRE-PP-IKD">
+                                            <rect key="frame" x="59" y="6" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aS3-Kt-RwM">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
+                                                <imageReference key="image" image="square.and.arrow.down" catalog="system" symbolScale="large"/>
                                             </buttonCell>
                                             <connections>
                                                 <action selector="saveAction:" target="vdW-qO-aAE" id="Scq-kU-VPO"/>
@@ -4074,7 +4092,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="htg-H3-XaI">
-                                            <rect key="frame" x="130" y="11" width="59" height="26"/>
+                                            <rect key="frame" x="112" y="11" width="59" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Audio" id="mbt-CS-Qhp">
                                                 <font key="font" textStyle="title1" name=".SFNS-Regular"/>
@@ -4083,15 +4101,16 @@
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton id="BeN-Df-PQN" userLabel="System">
-                                            <rect key="frame" x="17" y="10" width="53" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="ifE-Si-fEf" userLabel="System">
+                                            <rect key="frame" x="17" y="6" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" id="ifE-Si-fEf" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="message"/>
                                                 <menu key="menu" title="Restore" id="TSe-kn-T9i">
                                                     <items>
-                                                        <menuItem title="Revert to..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="wye-YE-lcL">
+                                                        <menuItem title="Revert to..." hidden="YES" id="wye-YE-lcL">
                                                             <attributedString key="attributedTitle"/>
+                                                            <imageReference key="image" image="book" catalog="system" symbolScale="large"/>
                                                         </menuItem>
                                                         <menuItem title="Standard Settings" id="boR-ys-I6V">
                                                             <attributedString key="attributedTitle"/>
@@ -4106,12 +4125,13 @@
                                                 <action selector="presetAction:" target="6tV-Y9-evD" id="sjy-3g-OlS"/>
                                             </connections>
                                         </popUpButton>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GtC-6H-vu2">
-                                            <rect key="frame" x="64" y="7" width="60" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                            <buttonCell key="cell" type="push" bezelStyle="rounded" image="square.and.arrow.down" catalog="system" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="TGH-du-r7g">
+                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GtC-6H-vu2">
+                                            <rect key="frame" x="59" y="6" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="TGH-du-r7g">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
+                                                <imageReference key="image" image="square.and.arrow.down" catalog="system" symbolScale="large"/>
                                             </buttonCell>
                                             <connections>
                                                 <action selector="saveAction:" target="6tV-Y9-evD" id="Kod-UB-zvf"/>
@@ -4944,7 +4964,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1A9-en-JkD">
-                                            <rect key="frame" x="130" y="11" width="59" height="26"/>
+                                            <rect key="frame" x="112" y="11" width="59" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Video" id="NEO-RR-y4O">
                                                 <font key="font" textStyle="title1" name=".SFNS-Regular"/>
@@ -4952,27 +4972,29 @@
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ReK-7g-Vfu">
-                                            <rect key="frame" x="64" y="7" width="60" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                            <buttonCell key="cell" type="push" bezelStyle="rounded" image="square.and.arrow.down" catalog="system" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2Xr-A9-kgF">
+                                        <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ReK-7g-Vfu">
+                                            <rect key="frame" x="59" y="6" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2Xr-A9-kgF">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
+                                                <imageReference key="image" image="square.and.arrow.down" catalog="system" symbolScale="large"/>
                                             </buttonCell>
                                             <connections>
                                                 <action selector="saveAction:" target="jN5-7w-doh" id="vlC-oh-Tmd"/>
                                             </connections>
                                         </button>
                                         <popUpButton id="A16-l5-S5t" userLabel="System">
-                                            <rect key="frame" x="17" y="10" width="53" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="E5E-ay-rOh" id="Ub6-Ik-k63" userLabel="System">
+                                            <rect key="frame" x="17" y="6" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" selectedItem="E5E-ay-rOh" id="Ub6-Ik-k63" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="message"/>
                                                 <menu key="menu" title="Restore" id="Tdz-fL-C4i">
                                                     <items>
-                                                        <menuItem title="Revert to..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="E5E-ay-rOh">
+                                                        <menuItem title="Revert to..." hidden="YES" id="E5E-ay-rOh">
                                                             <attributedString key="attributedTitle"/>
+                                                            <imageReference key="image" image="book" catalog="system" symbolScale="large"/>
                                                         </menuItem>
                                                         <menuItem title="Recommended Settings" id="3L2-8U-CGA">
                                                             <attributedString key="attributedTitle"/>
@@ -6016,7 +6038,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Apa-Ka-Qub">
-                                            <rect key="frame" x="130" y="11" width="91" height="26"/>
+                                            <rect key="frame" x="112" y="11" width="91" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Captures" id="aYd-sB-IAk">
                                                 <font key="font" textStyle="title1" name=".SFNS-Regular"/>
@@ -6025,15 +6047,16 @@
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton id="s9S-lJ-nHQ" userLabel="System">
-                                            <rect key="frame" x="17" y="10" width="53" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="chs-GI-PPC" userLabel="System">
+                                            <rect key="frame" x="17" y="6" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" id="chs-GI-PPC" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="message"/>
                                                 <menu key="menu" title="Restore" id="ffK-3i-I8D">
                                                     <items>
-                                                        <menuItem title="Revert to..." image="arrow.counterclockwise" catalog="system" hidden="YES" id="SUf-s2-nQS">
+                                                        <menuItem title="Revert to..." hidden="YES" id="SUf-s2-nQS">
                                                             <attributedString key="attributedTitle"/>
+                                                            <imageReference key="image" image="book" catalog="system" symbolScale="large"/>
                                                         </menuItem>
                                                         <menuItem title="Standard Settings" id="Fdh-iM-H3G">
                                                             <attributedString key="attributedTitle"/>
@@ -6045,15 +6068,16 @@
                                                 <action selector="presetAction:" target="xGL-wo-7T8" id="WFu-WZ-LaF"/>
                                             </connections>
                                         </popUpButton>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dYt-Ik-nm5">
-                                            <rect key="frame" x="64" y="7" width="60" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                            <buttonCell key="cell" type="push" bezelStyle="rounded" image="square.and.arrow.down" catalog="system" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="g3s-iC-wcw">
+                                        <button toolTip="Use As Default" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KcU-QB-xhu">
+                                            <rect key="frame" x="59" y="6" width="40" height="34"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ozE-Lf-zJg">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
+                                                <imageReference key="image" image="square.and.arrow.down" catalog="system" symbolScale="large"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="saveAction:" target="xGL-wo-7T8" id="ZRr-VQ-XJb"/>
+                                                <action selector="saveAction:" target="xGL-wo-7T8" id="S7t-S5-qlx"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -6122,7 +6146,7 @@
         <image name="NSCaution" width="32" height="32"/>
         <image name="NSInfo" width="32" height="32"/>
         <image name="ad-rv" width="542" height="542"/>
-        <image name="arrow.counterclockwise" catalog="system" width="14" height="16"/>
+        <image name="book" catalog="system" width="22" height="18"/>
         <image name="devCableLoopTemplate" width="24" height="24"/>
         <image name="devCableTemplate" width="24" height="24"/>
         <image name="devCommanderTemplate" width="24" height="24"/>
