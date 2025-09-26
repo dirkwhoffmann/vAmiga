@@ -93,7 +93,7 @@
         <scene sceneID="LiP-Vf-ECF">
             <objects>
                 <viewController storyboardIdentifier="Step1" id="KL4-sg-GCT" customClass="OnboardingViewController1" customModule="vAmiga" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" id="HIV-aB-hge" customClass="OnboardingAmigaModelView" customModule="vAmiga" customModuleProvider="target">
+                    <view key="view" id="HIV-aB-hge">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="320"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>

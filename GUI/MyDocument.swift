@@ -86,7 +86,12 @@ class MyDocument: NSDocument {
         // Create an emulator instance
         emu = EmulatorProxy()
     }
- 
+
+    override class var autosavesInPlace: Bool {
+
+        return false
+    }
+
     override open func makeWindowControllers() {
                 
         debug(.lifetime)

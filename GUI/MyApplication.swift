@@ -120,7 +120,12 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
         super.init()
         pref = Preferences()
     }
-    
+
+    public func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
+
+        return true
+    }
+
     public func application(_ application: NSApplication, open urls: [URL]) {
         
         debug(.lifetime, "application(open urls: \(urls))")
