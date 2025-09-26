@@ -29,10 +29,22 @@ class SettingsViewController: NSViewController {
 
     func refresh() {
 
-        let poweredOff = emu?.poweredOff ?? false
-        lockInfo1.isHidden = !showLock || poweredOff
-        lockInfo2.isHidden = !showLock || poweredOff
-        lockImage.isHidden = !showLock || poweredOff
+        if emu?.poweredOff == true {
+
+            lockInfo1.isHidden = true
+            lockInfo2.isHidden = true
+            lockImage.isHidden = false
+            lockImage.image = NSImage(systemSymbolName: "power",
+                                      accessibilityDescription: "Power")
+
+        } else {
+
+            lockInfo1.isHidden = !showLock
+            lockInfo2.isHidden = !showLock
+            lockImage.isHidden = !showLock
+            lockImage.image = NSImage(systemSymbolName: "lock.fill",
+                                      accessibilityDescription: "Lock")
+        }
     }
 
     override func keyDown(with event: NSEvent) { }
@@ -57,8 +69,11 @@ class SettingsViewController: NSViewController {
 
     @IBAction func unlockAction(_ sender: Any!) {
 
-        emu?.pause()
-        emu?.powerOff()
+        if emu?.poweredOff == true {
+            try? emu?.run()
+        } else {
+            emu?.powerOff()
+        }
         refresh()
     }
 }
