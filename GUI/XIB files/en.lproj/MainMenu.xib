@@ -20,31 +20,24 @@
                 <outlet property="df1ExportRecent" destination="ZTR-D1-rJ5" id="SIP-og-UUi"/>
                 <outlet property="df1Menu" destination="fYA-pX-q72" id="GdQ-P8-yMU"/>
                 <outlet property="df1OpenRecent" destination="JUv-7d-Kov" id="ZUP-z1-Rib"/>
-                <outlet property="df1OpenRecentMenu" destination="zdh-sU-yJe" id="aUf-zx-dke"/>
                 <outlet property="df2ExportRecent" destination="R9H-6V-FXf" id="BZq-eU-7YZ"/>
                 <outlet property="df2Menu" destination="gYR-sU-A3s" id="vfb-ge-033"/>
                 <outlet property="df2OpenRecent" destination="tsI-Ny-Jes" id="drc-QU-4Qe"/>
-                <outlet property="df2OpenRecentMenu" destination="whL-sI-gQo" id="59B-VY-g63"/>
                 <outlet property="df3ExportRecent" destination="Non-0K-biL" id="gGx-mX-ScZ"/>
                 <outlet property="df3Menu" destination="2h1-jT-0o6" id="dfO-xV-ieM"/>
                 <outlet property="df3OpenRecent" destination="7lX-EE-IhD" id="bLG-cB-7x9"/>
-                <outlet property="df3OpenRecentMenu" destination="Qqw-GD-95a" id="sLV-wo-4rx"/>
                 <outlet property="hd0ExportRecent" destination="z1v-QA-WrJ" id="TDm-0r-IfB"/>
                 <outlet property="hd0Menu" destination="OYE-xa-ahL" id="ehz-vZ-bPG"/>
                 <outlet property="hd0OpenRecent" destination="hRI-K9-ade" id="XyM-DK-4j7"/>
-                <outlet property="hd0OpenRecentMenu" destination="2XC-d7-5Cc" id="n0d-Q6-MZO"/>
                 <outlet property="hd1ExportRecent" destination="7Wg-3m-VRk" id="NxV-Y4-h2r"/>
                 <outlet property="hd1Menu" destination="SoY-x2-Dd4" id="exs-xD-zqz"/>
                 <outlet property="hd1OpenRecent" destination="6hN-sv-cg3" id="rtY-uI-5Rn"/>
-                <outlet property="hd1OpenRecentMenu" destination="w26-SP-RmU" id="qxZ-Cu-l20"/>
                 <outlet property="hd2ExportRecent" destination="Wjq-Ug-rnk" id="lIP-0k-Ryj"/>
                 <outlet property="hd2Menu" destination="Cna-Xa-SNM" id="jSm-kb-ROd"/>
                 <outlet property="hd2OpenRecent" destination="7xT-JF-SMY" id="NXj-uj-FOF"/>
-                <outlet property="hd2OpenRecentMenu" destination="Qts-fA-Imk" id="gcm-oV-TjV"/>
                 <outlet property="hd3ExportRecent" destination="yIE-F0-g9J" id="cED-rb-lAm"/>
                 <outlet property="hd3Menu" destination="zgt-H4-oPS" id="AIW-bD-wSR"/>
                 <outlet property="hd3OpenRecent" destination="kf6-jr-Wzq" id="X1s-Ar-nwM"/>
-                <outlet property="hd3OpenRecentMenu" destination="dmS-te-RpF" id="pWL-QJ-UMl"/>
             </connections>
         </customObject>
         <menu title="MainMenu" systemMenu="main" id="29" userLabel="MainMenu">
