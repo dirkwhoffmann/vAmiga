@@ -18,34 +18,6 @@ class OnboardingLayerView: NSView {
     override func mouseUp(with event: NSEvent) {
 
     }
-
-    private var bgLayer: CALayer?
-
-    override func viewDidMoveToWindow() {
-
-        /*
-        super.viewDidMoveToWindow()
-        wantsLayer = true
-
-        if let layer = self.layer, bgLayer == nil {
-
-            let background = CALayer()
-            background.contents = NSImage(named: "a1000board")
-            background.contentsGravity = .resizeAspectFill
-            background.autoresizingMask = [.layerWidthSizable, .layerHeightSizable]
-            layer.insertSublayer(background, at: 0)
-            bgLayer = background
-        }
-         */
-    }
-
-    override func layout() {
-
-        super.layout()
-        bgLayer?.frame = CGRect(x: 0, y: 0,
-                                width: bounds.width,
-                                height: bounds.height)
-    }
 }
 
 @MainActor
@@ -62,14 +34,15 @@ class OnboardingLayerViewController: NSViewController {
     @IBOutlet weak var skipButton: NSButton!
 
     var layer: Onboarding!
-    var emu: EmulatorProxy! { layer.emu }
     var controller: MyController { layer.controller }
     var config: Configuration { controller.config }
+    var emu: EmulatorProxy! { layer.emu }
 
     // Onboarding settings
     var amigaModel = 0
     var rom = 0
 
+    // Array holding the individual view controllers for each panel
     private var pages: [NSViewController] = []
     private var currentPageIndex: Int = 0 {
         didSet { pageDotIndicator.currentPage = currentPageIndex }
@@ -299,12 +272,26 @@ class Onboarding: Layer {
     override func open(delay: Double) {
 
         super.open(delay: delay)
+
+        if let toolbar = window.toolbar as? MyToolbar {
+            toolbar.isVisible = true
+            toolbar.globalDisable = true
+            toolbar.validateVisibleItems()
+        }
     }
 
     override func layerDidOpen() {
 
         renderer.canvas.shouldRender = true
         renderer.splashScreen.shouldRender = true
+    }
+
+    override func layerDidClose() {
+
+        if let toolbar = window.toolbar as? MyToolbar {
+            toolbar.globalDisable = false
+            toolbar.validateVisibleItems()
+        }
     }
 
     override func alphaDidChange() {

@@ -9,9 +9,12 @@
 
 @MainActor
 class MyToolbar: NSToolbar {
-    
+
     var amiga: EmulatorProxy { return controller.emu }
-    
+
+    // Set to true to gray out all toolbar items
+    var globalDisable = false
+
     @IBOutlet weak var controller: MyController!
 
     // References to toolbar items
@@ -30,10 +33,13 @@ class MyToolbar: NSToolbar {
 
     override func validateVisibleItems() {
 
+        // Take care of the global disable flag
+        for item in items { item.isEnabled = !globalDisable }
+
         // Disable the keyboard button if the virtual keyboard is open
-        let visible = controller.virtualKeyboard?.window?.isVisible ?? false
-        let view = keyboardItem.view as? NSButton
-        view?.isEnabled = !visible
+        if  controller.virtualKeyboard?.window?.isVisible == true {
+            (keyboardItem.view as? NSButton)?.isEnabled = false
+        }
 
         // Disable the snapshot revert button if no snapshots have been taken
         snapshotSegCtrl.setEnabled(controller.snapshotCount > 0, forSegment: 1)
