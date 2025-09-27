@@ -9,9 +9,9 @@
 
 extension NSImage {
 
-    static func sf(_ name: String, description: String? = nil) -> NSImage {
+    static func sf(_ name: String, size: Int = 28, description: String? = nil) -> NSImage {
 
-        let config = NSImage.SymbolConfiguration(pointSize: 28, weight: .light, scale: .small)
+        let config = NSImage.SymbolConfiguration(pointSize: CGFloat(size), weight: .light, scale: .small)
         let img = NSImage(systemSymbolName: name, accessibilityDescription: description)!
         return img.withSymbolConfiguration(config)!
     }
@@ -26,9 +26,6 @@ extension NSToolbarItem.Identifier {
     static let keyboard = NSToolbarItem.Identifier("Keyboard")
     static let settings = NSToolbarItem.Identifier("Settings")
     static let controls = NSToolbarItem.Identifier("Controls")
-
-    static let myItem = NSToolbarItem.Identifier("MyItem")
-    static let myOtherItem = NSToolbarItem.Identifier("MyOtherItem")
 }
 
 func image(_ name: String, description: String? = nil) -> NSImage {
@@ -55,6 +52,7 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
     // Set to true to gray out all toolbar items
     var globalDisable = false
 
+    /*
     let images: [NSImage] = [
         image("magnifyingglass"),
         image("gauge.with.needle"),
@@ -66,6 +64,7 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
         #selector(gearAction),
         #selector(gearAction)
     ]
+    */
 
     init() {
 
@@ -103,7 +102,7 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
                  .port2,
                  .keyboard,
                  .settings,
-                 .controls ,
+                 .controls,
                  .flexibleSpace ]
     }
 
@@ -120,6 +119,15 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
     func toolbar(_ toolbar: NSToolbar,
                  itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier,
                  willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
+
+        let portItems = [ (NSImage.sf("nosign", size: 22), "None"),
+                          (NSImage.sf("computermouse.fill", size: 22), "Mouse"),
+                          (NSImage.sf("arrowkeys", size: 22), "Keyset 1"),
+                          (NSImage.sf("arrowkeys", size: 22), "Keyset 2"),
+                          (NSImage.sf("gamecontroller.fill", size: 22), "Gamepad 1"),
+                          (NSImage.sf("gamecontroller.fill", size: 22), "Gamepad 2"),
+                          (NSImage.sf("gamecontroller.fill", size: 22), "Gamepad 3"),
+                          (NSImage.sf("gamecontroller.fill", size: 22), "Gamepad 4") ]
 
         switch itemIdentifier {
 
@@ -163,28 +171,28 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
             ]
 
             snapshots = MyToolbarItemGroup(identifier: .snapshots,
-                                         images: images,
-                                         actions: actions,
-                                         target: self,
-                                         label: "Snapshots")
+                                           images: images,
+                                           actions: actions,
+                                           target: self,
+                                           label: "Snapshots")
             return snapshots
 
         case .port1:
 
-            port1 = MyToolbarItemGroup(identifier: .port1,
-                                     images: [image("keyboard")],
-                                     actions: [#selector(port1Action)],
+            port1 = ToolbarPopupItem(identifier: .port1,
+                                     menuItems: portItems,
+                                     image: image("gear"),
+                                     action: #selector(port1Action),
                                      target: self,
                                      label: "Port 1")
-
             return port1
 
         case .port2:
 
             port2 = ToolbarPopupItem(identifier: .port2,
-                                     menuItems: ["Hey", "Du", "Ja"],
+                                     menuItems: portItems,
                                      image: image("gear"),
-                                     action: #selector(gearAction),
+                                     action: #selector(port2Action),
                                      target: self,
                                      label: "Port 2")
             return port2
@@ -192,55 +200,43 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
         case .keyboard:
 
             keyboard = MyToolbarItemGroup(identifier: .keyboard,
-                                        images: [image("keyboard")],
-                                        actions: [#selector(gearAction)],
-                                        target: self,
-                                        label: "Keyboard")
-
+                                          images: [image("keyboard")],
+                                          actions: [#selector(keyboardAction)],
+                                          target: self,
+                                          label: "Keyboard")
             return keyboard
 
         case .settings:
 
-            let item = NSToolbarItem(itemIdentifier: itemIdentifier)
-            item.label = "Settings"
-            item.paletteLabel = "Settings"
-            // item.toolTip = ""
-            item.image = image("gear")
-            item.target = self
-            // item.action = #selector()
-            return item
+            settings = MyToolbarItemGroup(identifier: .settings,
+                                          images: [image("gear")],
+                                          actions: [#selector(settingsAction)],
+                                          target: self,
+                                          label: "Settings")
+            return settings
 
-        case .port2, .controls:
+        case .controls:
 
-            let item = NSToolbarItem(itemIdentifier: itemIdentifier)
-            item.label = "ToDo"
-            item.paletteLabel = "ToDo"
-            // item.toolTip = ""
-            item.image = NSImage(systemSymbolName: "star", accessibilityDescription: nil)
-            item.target = self
-            // item.action = #selector()
-            return item
+            let images: [NSImage] = [
 
-        case .myItem:
+                image("pause.circle"), // play.circle
+                image("arrow.counterclockwise.circle"),
+                image("power")
+            ]
 
-            let item = NSToolbarItem(itemIdentifier: .myItem)
-            item.label = "My Action"
-            item.paletteLabel = "My Action"
-            item.toolTip = "Does something cool"
-            item.image = NSImage(systemSymbolName: "star", accessibilityDescription: nil)
-            item.target = self
-            item.action = #selector(myAction)
-            return item
+            let actions: [Selector] = [
 
-        case .myOtherItem:
+                #selector(runAction),
+                #selector(resetAction),
+                #selector(powerAction)
+            ]
 
-            let item = NSToolbarItem(itemIdentifier: .myOtherItem)
-            item.label = "Other"
-            item.paletteLabel = "Other"
-            item.image = NSImage(systemSymbolName: "gearshape", accessibilityDescription: nil)
-            item.target = self
-            item.action = #selector(myOtherAction)
-            return item
+            controls = MyToolbarItemGroup(identifier: .controls,
+                                           images: images,
+                                           actions: actions,
+                                           target: self,
+                                           label: "Controls")
+            return controls
 
         default:
             return nil
@@ -306,30 +302,41 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
     }
 
     @objc private func port1Action() {
+
         print("port1Action")
-
-        let menu = NSMenu()
-        menu.addItem(withTitle: "Item 1", action: #selector(menuAction), keyEquivalent: "")
-        menu.addItem(withTitle: "Item 2", action: #selector(menuAction), keyEquivalent: "")
-
-
+        // controller.browseSnapshotsAction(self)
     }
 
-    @objc private func menuAction() {
-        print("My menuAction triggered")
+    @objc private func port2Action() {
+
+        print("port2Action")
+        // controller.browseSnapshotsAction(self)
     }
 
-    @objc private func gearAction() {
-        print("My gearAction triggered")
+    @objc private func keyboardAction() {
+
+        print("keyboardAction")
+        // controller.browseSnapshotsAction(self)
     }
 
-    @objc private func myAction() {
-        print("My Action triggered")
+    @objc private func settingsAction() {
+
+        print("settingsAction")
+        // controller.browseSnapshotsAction(self)
     }
 
-    @objc private func myOtherAction() {
-        print("Other Action triggered")
+    @objc private func runAction() {
+        print("My runAction triggered")
     }
+
+    @objc private func resetAction() {
+        print("My resetAction triggered")
+    }
+
+    @objc private func powerAction() {
+        print("My powerAction triggered")
+    }
+
 
     /*
 

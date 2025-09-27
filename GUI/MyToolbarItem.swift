@@ -149,10 +149,10 @@ class MyToolbarItemGroup: NSToolbarItem {
 
 class ToolbarPopupItem: MyToolbarItemGroup {
 
-    var items: [String] = []
+    var items: [(NSImage, String)] = []
 
     convenience init(identifier: NSToolbarItem.Identifier,
-                     menuItems: [String],
+                     menuItems: [(NSImage, String)],
                      image: NSImage, action: Selector, target: AnyObject?,
                      label: String, paletteLabel: String? = nil) {
 
@@ -174,10 +174,11 @@ class ToolbarPopupItem: MyToolbarItemGroup {
         print("showMenu:")
 
         let menu = NSMenu()
-        for (index, title) in items.enumerated() {
+        for (index, (image, title)) in items.enumerated() {
 
             let item = menu.addItem(withTitle: title, action: #selector(menuAction), keyEquivalent: "")
             item.tag = index
+            item.image = image
             item.target = self
         }
         
