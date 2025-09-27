@@ -7,13 +7,234 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+extension NSToolbarItem.Identifier {
+
+    static let inspectors = NSToolbarItem.Identifier("Inspectors")
+    static let snapshots = NSToolbarItem.Identifier("Snapshots")
+    static let port1 = NSToolbarItem.Identifier("Port1")
+    static let port2 = NSToolbarItem.Identifier("Port2")
+    static let keyboard = NSToolbarItem.Identifier("Keyboard")
+    static let settings = NSToolbarItem.Identifier("Settings")
+    static let controls = NSToolbarItem.Identifier("Controls")
+
+    static let myItem = NSToolbarItem.Identifier("MyItem")
+    static let myOtherItem = NSToolbarItem.Identifier("MyOtherItem")
+}
+
+func image(_ name: String, description: String? = nil) -> NSImage {
+
+    let config = NSImage.SymbolConfiguration(pointSize: 28, weight: .light, scale: .small)
+    let img = NSImage(systemSymbolName: name, accessibilityDescription: description)!
+    return img.withSymbolConfiguration(config)!
+}
+
 @MainActor
-class MyToolbar: NSToolbar {
+class MyToolbar: NSToolbar, NSToolbarDelegate {
 
-    var amiga: EmulatorProxy { return controller.emu }
-
+    // var amiga: EmulatorProxy { return controller.emu }
     // Set to true to gray out all toolbar items
     var globalDisable = false
+
+    let images: [NSImage] = [
+        image("magnifyingglass"),
+        image("gauge.with.needle"),
+        image("text.alignleft")
+    ]
+
+    let actions: [Selector] = [
+        #selector(starAction),
+        #selector(gearAction),
+        #selector(gearAction)
+    ]
+
+    init() {
+
+        print("MyToolbar: init()")
+        super.init(identifier: "MyToolbar")
+        self.delegate = self
+        self.allowsUserCustomization = true
+        self.displayMode = .iconAndLabel
+    }
+
+    override init(identifier: NSToolbar.Identifier) {
+
+        print("MyToolbar: init(identifier:)")
+        super.init(identifier: identifier)
+        self.delegate = self
+        self.allowsUserCustomization = true
+        self.displayMode = .iconAndLabel
+    }
+
+    /*
+    required init?(coder: NSCoder) {
+
+        super.init(coder: coder)
+        self.delegate = self
+    }
+    */
+
+    // MARK: - NSToolbarDelegate
+
+    func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
+
+        return [ .inspectors,
+                 .snapshots,
+                 .port1,
+                 .port2,
+                 .keyboard,
+                 .settings,
+                 .controls ,
+                 .flexibleSpace ]
+    }
+
+    func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
+
+        return [ .inspectors, .flexibleSpace,
+                 .snapshots, .flexibleSpace,
+                 .port1, .port2, .flexibleSpace,
+                 .keyboard, .flexibleSpace,
+                 .settings, .flexibleSpace,
+                 .controls ]
+    }
+
+    func toolbar(_ toolbar: NSToolbar,
+                 itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier,
+                 willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
+
+        switch itemIdentifier {
+
+        case .inspectors:
+
+            let groupedItem = ToolbarItemGroup(identifier: .inspectors,
+                                               images: images,
+                                               actions: actions,
+                                               target: self)
+
+            groupedItem.label = "Inspectors"
+            groupedItem.paletteLabel = "Inspectors"
+
+            return groupedItem
+
+        case .snapshots:
+
+            let item = NSToolbarItem(itemIdentifier: .snapshots)
+            item.label = "Snapshots"
+            item.paletteLabel = "Snapshots"
+            // item.toolTip = ""
+            item.image = NSImage(systemSymbolName: "star", accessibilityDescription: nil)
+            item.target = self
+            // item.action = #selector()
+            return item
+
+        case .keyboard:
+
+            let groupedItem = ToolbarItemGroup(identifier: .keyboard,
+                                               images: images,
+                                               actions: actions,
+                                               target: self)
+            groupedItem.label = "Keyboard"
+            groupedItem.paletteLabel = "Keyboard"
+            groupedItem.image = image("keyboard")
+            groupedItem.target = self
+            return groupedItem
+            /*
+            let item = NSToolbarItem(itemIdentifier: itemIdentifier)
+            item.label = "Keyboard"
+            item.paletteLabel = "Keyboard"
+            // item.toolTip = ""
+            item.image = image("keyboard")
+            item.target = self
+            // item.action = #selector()
+             /
+            return item
+             */
+        case .settings:
+
+            let item = NSToolbarItem(itemIdentifier: itemIdentifier)
+            item.label = "Settings"
+            item.paletteLabel = "Settings"
+            // item.toolTip = ""
+            item.image = image("gear")
+            item.target = self
+            // item.action = #selector()
+            return item
+
+        case .port1,.port2, .controls:
+
+            let item = NSToolbarItem(itemIdentifier: itemIdentifier)
+            item.label = "ToDo"
+            item.paletteLabel = "ToDo"
+            // item.toolTip = ""
+            item.image = NSImage(systemSymbolName: "star", accessibilityDescription: nil)
+            item.target = self
+            // item.action = #selector()
+            return item
+
+        case .myItem:
+
+            let item = NSToolbarItem(itemIdentifier: .myItem)
+            item.label = "My Action"
+            item.paletteLabel = "My Action"
+            item.toolTip = "Does something cool"
+            item.image = NSImage(systemSymbolName: "star", accessibilityDescription: nil)
+            item.target = self
+            item.action = #selector(myAction)
+            return item
+
+        case .myOtherItem:
+
+            let item = NSToolbarItem(itemIdentifier: .myOtherItem)
+            item.label = "Other"
+            item.paletteLabel = "Other"
+            item.image = NSImage(systemSymbolName: "gearshape", accessibilityDescription: nil)
+            item.target = self
+            item.action = #selector(myOtherAction)
+            return item
+
+        default:
+            return nil
+        }
+    }
+
+    //
+    // Actions
+    //
+
+    @objc private func inspectorsAction(_ sender: NSSegmentedControl) {
+
+        let index = sender.selectedSegment
+        switch index {
+        case 0:
+            print("First button pressed")
+            // call your first action here
+        case 1:
+            print("Second button pressed")
+            // call your second action here
+        case 2:
+            print("Third button pressed")
+            // call your third action here
+        default:
+            break
+        }
+    }
+
+    @objc private func starAction() {
+        print("My starAction triggered")
+    }
+
+    @objc private func gearAction() {
+        print("My gearAction triggered")
+    }
+
+    @objc private func myAction() {
+        print("My Action triggered")
+    }
+
+    @objc private func myOtherAction() {
+        print("Other Action triggered")
+    }
+
+    /*
 
     @IBOutlet weak var controller: MyController!
 
@@ -56,9 +277,11 @@ class MyToolbar: NSToolbar {
         settingsItem.menuFormRepresentation = nil
         controlsItem.menuFormRepresentation = nil
     }
-    
+    */
+
     func updateToolbar() {
-        
+
+        /*
         if amiga.poweredOn {
             controlsSegCtrl.setEnabled(true, forSegment: 0) // Pause
             controlsSegCtrl.setEnabled(true, forSegment: 1) // Reset
@@ -75,12 +298,14 @@ class MyToolbar: NSToolbar {
             controlsSegCtrl.setToolTip("Run", forSegment: 0)
             controlsSegCtrl.setImage(NSImage(named: "runTemplate"), forSegment: 0)
         }
+        */
     }
     
     //
     // Action methods
     //
-    
+
+    /*
     @IBAction
     func inspectAction(_ sender: NSSegmentedControl) {
 
@@ -168,4 +393,5 @@ class MyToolbar: NSToolbar {
             fatalError()
         }
     }
+    */
 }

@@ -126,8 +126,9 @@ class MyController: NSWindowController, MessageReceiver {
     @IBOutlet weak var speedStepper: NSStepper!
 
     // Toolbar
-    @IBOutlet weak var toolbar: MyToolbar!
-    
+   // @IBOutlet weak var toolbar: MyToolbar!
+    var toolbar: MyToolbar { (window?.toolbar as? MyToolbar)! }
+
     // Quick-access references
     var ledSlot: [NSButton]!
     var cylSlot: [NSTextField]!
@@ -172,13 +173,16 @@ extension MyController {
         assert(!initialized, "Double-initialization of MyController")
 
         mydocument = document as? MyDocument
-        
+
         config = Configuration(with: self)
         macAudio = MacAudio(with: self)
         
         ledSlot = [ ledSlot0, ledSlot1, letSlot2, ledSlot3 ]
         cylSlot = [ cylSlot0, cylSlot1, cylSlot2, cylSlot3 ]
         iconSlot = [ iconSlot0, iconSlot1, iconSlot2, iconSlot3 ]
+
+        // Create the toolbar
+        window?.toolbar = MyToolbar(identifier: "MyToolbar")
 
         // Create keyboard controller
         keyboard = KeyboardController(parent: self)

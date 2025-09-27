@@ -31,7 +31,6 @@
                 <outlet property="powerLED" destination="1208" id="hey-Hi-zTq"/>
                 <outlet property="serverIcon" destination="cdG-NT-T3J" id="Oxi-mf-eZE"/>
                 <outlet property="speedStepper" destination="6l7-xP-CGV" id="81R-1K-SNm"/>
-                <outlet property="toolbar" destination="1845" id="JVx-NQ-tw7"/>
                 <outlet property="trackIcon" destination="iho-fa-H5O" id="esY-x7-awJ"/>
                 <outlet property="warpIcon" destination="1052" id="QGs-ln-NvN"/>
                 <outlet property="window" destination="5" id="2164"/>
@@ -279,213 +278,6 @@
                     </stepper>
                 </subviews>
             </view>
-            <toolbar key="toolbar" implicitIdentifier="562FDE63-25B0-4E4E-80C7-EF6E742B5F6F" showsBaselineSeparator="NO" displayMode="iconAndLabel" sizeMode="regular" id="1845" customClass="MyToolbar" customModule="vAmiga" customModuleProvider="target">
-                <allowedToolbarItems>
-                    <toolbarItem implicitItemIdentifier="9054C81F-F3B3-47C7-867A-1B9C59B2173C" label="Inspectors" paletteLabel="Inspectors" sizingBehavior="auto" id="EzM-bM-4na">
-                        <nil key="toolTip"/>
-                        <segmentedControl key="view" verticalHuggingPriority="750" id="MNc-2l-pfj">
-                            <rect key="frame" x="0.0" y="14" width="125" height="23"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <segmentedCell key="cell" alignment="left" style="texturedSquare" trackingMode="momentary" id="3Uk-v8-yDJ">
-                                <font key="font" metaFont="system"/>
-                                <segments>
-                                    <segment toolTip="Open Inspector" image="inspectTemplate" width="40"/>
-                                    <segment toolTip="Open Monitor" image="monitorTemplate" width="40" tag="1"/>
-                                    <segment image="consoleTemplate" tag="2">
-                                        <nil key="label"/>
-                                    </segment>
-                                </segments>
-                            </segmentedCell>
-                            <connections>
-                                <action selector="inspectAction:" target="1845" id="XVN-Zd-6h5"/>
-                            </connections>
-                        </segmentedControl>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="A118822F-35DB-424C-89D6-CD7D30B4BD7E" label="Screenshots" paletteLabel="Screenshots" sizingBehavior="auto" id="SPM-UH-LKw">
-                        <nil key="toolTip"/>
-                        <segmentedControl key="view" verticalHuggingPriority="750" id="Hbj-1i-i1y" userLabel="clickTemplate, ttGalleryTemplate">
-                            <rect key="frame" x="0.0" y="14" width="91" height="23"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <segmentedCell key="cell" alignment="left" style="texturedSquare" trackingMode="momentary" id="bCK-Ap-v2u">
-                                <font key="font" metaFont="system"/>
-                                <segments>
-                                    <segment toolTip="Take Screenshot" image="clickTemplate" width="40"/>
-                                    <segment toolTip="Open Screenshot Browser" image="galleryTemplate" width="40" tag="1"/>
-                                </segments>
-                            </segmentedCell>
-                            <connections>
-                                <action selector="screenshotAction:" target="1845" id="88L-xe-dG2"/>
-                            </connections>
-                        </segmentedControl>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="B72B6037-7F6A-47AE-B78F-2C5FE590098E" label="Snapshots" paletteLabel="Snapshots" sizingBehavior="auto" id="nxb-IG-KLe">
-                        <nil key="toolTip"/>
-                        <segmentedControl key="view" verticalHuggingPriority="750" id="AHD-MB-nXC">
-                            <rect key="frame" x="0.0" y="14" width="136" height="23"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <segmentedCell key="cell" alignment="left" style="texturedSquare" trackingMode="momentary" id="yaX-4D-cAY">
-                                <font key="font" metaFont="system"/>
-                                <segments>
-                                    <segment toolTip="Take Snapshot" image="pushTemplate" width="40" tag="2"/>
-                                    <segment toolTip="Revert To Most Recent Snapshot" image="popTemplate" width="40" tag="1"/>
-                                    <segment toolTip="Open Snapshot Browser" image="timeMachineTemplate" width="40"/>
-                                </segments>
-                            </segmentedCell>
-                            <connections>
-                                <action selector="snapshotAction:" target="1845" id="1Ip-wm-4jP"/>
-                            </connections>
-                        </segmentedControl>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="1850"/>
-                    <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="1851"/>
-                    <toolbarItem implicitItemIdentifier="F19B641C-3162-47E1-8228-6B75CA6F1A5A" label="Port 1" paletteLabel="Port 1" tag="10" image="devNoneTemplate" title="None" sizingBehavior="auto" id="kR6-IR-lNs">
-                        <nil key="toolTip"/>
-                        <popUpButton key="view" tag="10" id="L2b-nG-yBo" userLabel="Port 1">
-                            <rect key="frame" x="0.0" y="14" width="49" height="24"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="VD3-Wr-Ufe" id="Oxd-8A-P5o" userLabel="PopupButtonCell">
-                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="message"/>
-                                <menu key="menu" autoenablesItems="NO" id="zHf-yH-YTM">
-                                    <items>
-                                        <menuItem title="None" state="on" image="devNoneTemplate" tag="-1" id="VD3-Wr-Ufe"/>
-                                        <menuItem title="Mouse" image="devMouseTemplate" id="yOc-MG-77p"/>
-                                        <menuItem title="Joystick Keyset 1" image="devKeys1Template" tag="1" id="L2h-xt-iO6"/>
-                                        <menuItem title="Joystick Keyset 2" image="devKeys2Template" tag="2" id="Ohe-Pi-c1S"/>
-                                        <menuItem title="USB device" image="devGamepad1Template" tag="3" id="1PP-xx-NoT" userLabel="USB Joystick 1">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                        </menuItem>
-                                        <menuItem title="USB device" image="devGamepad2Template" tag="4" id="7sJ-UA-Pfj">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                        </menuItem>
-                                        <menuItem title="USB device" image="devGamepad2Template" tag="5" id="lrS-Hd-EqN">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                        </menuItem>
-                                        <menuItem title="USB device" image="devGamepad2Template" tag="6" id="wsd-ge-Hpw">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                        </menuItem>
-                                    </items>
-                                </menu>
-                            </popUpButtonCell>
-                            <color key="contentTintColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                            <connections>
-                                <action selector="port1Action:" target="1845" id="P9O-Oa-i61"/>
-                            </connections>
-                        </popUpButton>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="B42FBC61-316F-46F4-B1B7-C136C71316EC" label="Port 2" paletteLabel="Port 2" tag="11" image="devNoneTemplate" title="None" sizingBehavior="auto" id="Klt-YL-0mv" userLabel="Port 2">
-                        <nil key="toolTip"/>
-                        <popUpButton key="view" tag="11" id="4MP-rV-xX2" userLabel="Port 2">
-                            <rect key="frame" x="0.0" y="14" width="49" height="24"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
-                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="message"/>
-                                <menu key="menu" autoenablesItems="NO" id="L3K-on-eyR">
-                                    <items>
-                                        <menuItem title="None" state="on" image="devNoneTemplate" tag="-1" id="xyt-eC-0im"/>
-                                        <menuItem title="Mouse" image="devMouseTemplate" id="JM3-8Y-xZU"/>
-                                        <menuItem title="Joystick Keyset 1" image="devKeys1Template" tag="1" id="PAa-za-K8O"/>
-                                        <menuItem title="Joystick Keyset 2" image="devKeys2Template" tag="2" id="1M8-Dz-dop"/>
-                                        <menuItem title="USB device" image="devGamepad1Template" tag="3" id="Ahc-WA-2jp">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                        </menuItem>
-                                        <menuItem title="USB device" image="devGamepad2Template" tag="4" id="L3T-8p-gOj">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                        </menuItem>
-                                        <menuItem title="USB device" image="devGamepad2Template" tag="5" id="grO-r3-dQc">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                        </menuItem>
-                                        <menuItem title="USB device" image="devGamepad2Template" tag="6" id="Q85-B8-HQ4">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                        </menuItem>
-                                    </items>
-                                </menu>
-                            </popUpButtonCell>
-                            <color key="contentTintColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                            <connections>
-                                <action selector="port2Action:" target="1845" id="rTJ-wk-Gs9"/>
-                            </connections>
-                        </popUpButton>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="173C7588-F1F5-45F4-9A0F-C42BA4D023EB" label="Keyboard" paletteLabel="Keyboard" image="keyboardTemplate" id="Ckl-d3-vFW">
-                        <nil key="toolTip"/>
-                        <size key="minSize" width="22" height="22"/>
-                        <size key="maxSize" width="36" height="36"/>
-                        <button key="view" verticalHuggingPriority="750" id="rao-xk-L5n">
-                            <rect key="frame" x="11" y="14" width="36" height="36"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="keyboardTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="wG4-oJ-FGJ">
-                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system"/>
-                            </buttonCell>
-                            <connections>
-                                <action selector="keyboardAction:" target="1845" id="Y8i-UY-hzz"/>
-                            </connections>
-                        </button>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="945E5264-1ACE-41D0-88DD-CD64AD0404D6" label="Settings" paletteLabel="Settings" image="prefTemplate" id="BhF-mx-b92">
-                        <nil key="toolTip"/>
-                        <size key="minSize" width="22" height="22"/>
-                        <size key="maxSize" width="36" height="36"/>
-                        <button key="view" verticalHuggingPriority="750" id="Obn-ki-6ww">
-                            <rect key="frame" x="8" y="14" width="36" height="36"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="prefTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" id="tKP-b4-gVx">
-                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system"/>
-                            </buttonCell>
-                            <connections>
-                                <action selector="preferencesAction:" target="1845" id="Dic-QG-VL4"/>
-                            </connections>
-                        </button>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="74F68049-821E-4F86-A15C-F4678F2ED8AD" label="Controls" paletteLabel="Controls" sizingBehavior="auto" id="9Rb-b3-ubi">
-                        <nil key="toolTip"/>
-                        <segmentedControl key="view" verticalHuggingPriority="750" id="xdt-LW-MS0">
-                            <rect key="frame" x="0.0" y="14" width="136" height="23"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                            <segmentedCell key="cell" alignment="left" style="texturedSquare" trackingMode="momentary" id="3Zp-pa-1qS">
-                                <font key="font" metaFont="system"/>
-                                <segments>
-                                    <segment image="pauseTemplate" width="40" tag="2"/>
-                                    <segment toolTip="Reset" image="resetTemplate" width="40" tag="1"/>
-                                    <segment image="powerTemplate" width="40"/>
-                                </segments>
-                            </segmentedCell>
-                            <connections>
-                                <action selector="controlsAction:" target="1845" id="qDN-a9-DQQ"/>
-                            </connections>
-                        </segmentedControl>
-                    </toolbarItem>
-                </allowedToolbarItems>
-                <defaultToolbarItems>
-                    <toolbarItem reference="EzM-bM-4na"/>
-                    <toolbarItem reference="1851"/>
-                    <toolbarItem reference="nxb-IG-KLe"/>
-                    <toolbarItem reference="1851"/>
-                    <toolbarItem reference="kR6-IR-lNs"/>
-                    <toolbarItem reference="Klt-YL-0mv"/>
-                    <toolbarItem reference="1851"/>
-                    <toolbarItem reference="Ckl-d3-vFW"/>
-                    <toolbarItem reference="1851"/>
-                    <toolbarItem reference="BhF-mx-b92"/>
-                    <toolbarItem reference="1851"/>
-                    <toolbarItem reference="9Rb-b3-ubi"/>
-                </defaultToolbarItems>
-                <connections>
-                    <outlet property="controlPort1" destination="L2b-nG-yBo" id="LaW-Wo-oKb"/>
-                    <outlet property="controlPort1Item" destination="kR6-IR-lNs" id="68t-8L-4mp"/>
-                    <outlet property="controlPort2" destination="4MP-rV-xX2" id="SJk-D4-9MF"/>
-                    <outlet property="controlPort2Item" destination="Klt-YL-0mv" id="Efg-fi-zkQ"/>
-                    <outlet property="controller" destination="-2" id="V0k-GF-uXZ"/>
-                    <outlet property="controlsItem" destination="9Rb-b3-ubi" id="jfC-Vg-VA6"/>
-                    <outlet property="controlsSegCtrl" destination="xdt-LW-MS0" id="sxA-d1-Y55"/>
-                    <outlet property="keyboardItem" destination="Ckl-d3-vFW" id="eGJ-Rq-2Sq"/>
-                    <outlet property="settingsItem" destination="BhF-mx-b92" id="ZXw-Ub-UE0"/>
-                    <outlet property="snapshotSegCtrl" destination="AHD-MB-nXC" id="Gpg-sH-vaL"/>
-                </connections>
-            </toolbar>
             <connections>
                 <outlet property="delegate" destination="-2" id="2165"/>
                 <outlet property="initialFirstResponder" destination="DD4-5B-w9h" id="SkX-P7-Vr8"/>
@@ -494,32 +286,13 @@
         </window>
     </objects>
     <resources>
-        <image name="clickTemplate" width="36" height="36"/>
         <image name="cmdKeyTemplate" width="240" height="262"/>
-        <image name="consoleTemplate" width="176" height="176"/>
-        <image name="devGamepad1Template" width="20" height="21"/>
-        <image name="devGamepad2Template" width="20" height="21"/>
-        <image name="devKeys1Template" width="20" height="20"/>
-        <image name="devKeys2Template" width="20" height="20"/>
-        <image name="devMouseTemplate" width="20" height="20"/>
-        <image name="devNoneTemplate" width="24" height="24"/>
         <image name="diskTemplate" width="217" height="217"/>
-        <image name="galleryTemplate" width="36" height="36"/>
         <image name="haltTemplate" width="240" height="241"/>
         <image name="hourglass1Template" width="240" height="241"/>
-        <image name="inspectTemplate" width="36" height="36"/>
-        <image name="keyboardTemplate" width="36" height="36"/>
         <image name="ledGrey" width="100" height="50"/>
         <image name="magnifyingglass" catalog="system" width="16" height="15"/>
-        <image name="monitorTemplate" width="36" height="36"/>
         <image name="muteTemplate" width="240" height="241"/>
-        <image name="pauseTemplate" width="36" height="36"/>
-        <image name="popTemplate" width="36" height="36"/>
-        <image name="powerTemplate" width="36" height="36"/>
-        <image name="prefTemplate" width="36" height="36"/>
-        <image name="pushTemplate" width="36" height="36"/>
-        <image name="resetTemplate" width="36" height="36"/>
         <image name="srvConnectTemplate" width="48" height="49"/>
-        <image name="timeMachineTemplate" width="36" height="36"/>
     </resources>
 </document>
