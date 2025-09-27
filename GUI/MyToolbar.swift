@@ -9,9 +9,9 @@
 
 extension NSImage {
 
-    static func sf(_ name: String, size: Int = 28, description: String? = nil) -> NSImage {
+    static func sf(_ name: String, size: Int = 24, description: String? = nil) -> NSImage {
 
-        let config = NSImage.SymbolConfiguration(pointSize: CGFloat(size), weight: .light, scale: .small)
+        let config = NSImage.SymbolConfiguration(pointSize: CGFloat(28), weight: .light, scale: .small)
         let img = NSImage(systemSymbolName: name, accessibilityDescription: description)!
         return img.withSymbolConfiguration(config)!
     }
@@ -28,12 +28,14 @@ extension NSToolbarItem.Identifier {
     static let controls = NSToolbarItem.Identifier("Controls")
 }
 
+/*
 func image(_ name: String, description: String? = nil) -> NSImage {
 
     let config = NSImage.SymbolConfiguration(pointSize: 28, weight: .light, scale: .small)
     let img = NSImage(systemSymbolName: name, accessibilityDescription: description)!
     return img.withSymbolConfiguration(config)!
 }
+*/
 
 @MainActor
 class MyToolbar: NSToolbar, NSToolbarDelegate {
@@ -95,13 +97,13 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
                  willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
 
         let portItems = [ (NSImage.sf("nosign", size: 22), "None", -1),
-                          (NSImage.sf("computermouse.fill", size: 22), "Mouse", 0),
+                          (NSImage.sf("computermouse", size: 22), "Mouse", 0),
                           (NSImage.sf("arrowkeys", size: 22), "Keyset 1", 1),
                           (NSImage.sf("arrowkeys", size: 22), "Keyset 2", 2),
-                          (NSImage.sf("gamecontroller.fill", size: 22), "Gamepad 1", 3),
-                          (NSImage.sf("gamecontroller.fill", size: 22), "Gamepad 2", 4),
-                          (NSImage.sf("gamecontroller.fill", size: 22), "Gamepad 3", 5),
-                          (NSImage.sf("gamecontroller.fill", size: 22), "Gamepad 4", 6) ]
+                          (NSImage.sf("gamecontroller", size: 22), "Gamepad 1", 3),
+                          (NSImage.sf("gamecontroller", size: 22), "Gamepad 2", 4),
+                          (NSImage.sf("gamecontroller", size: 22), "Gamepad 3", 5),
+                          (NSImage.sf("gamecontroller", size: 22), "Gamepad 4", 6) ]
 
         switch itemIdentifier {
 
@@ -109,9 +111,9 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
 
             let images: [NSImage] = [
 
-                image("magnifyingglass"),
-                image("gauge.with.needle"),
-                image("text.alignleft")
+                NSImage.sf("magnifyingglass"),
+                NSImage.sf("gauge.with.needle"),
+                NSImage.sf("text.alignleft")
             ]
 
             let actions: [Selector] = [
@@ -132,9 +134,9 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
 
             let images: [NSImage] = [
 
-                image("tray.and.arrow.down.fill"),
-                image("tray.and.arrow.up.fill"),
-                image("clock.arrow.trianglehead.counterclockwise.rotate.90")
+                NSImage.sf("arrow.down.circle"), // tray.and.arrow.down.fill"),
+                NSImage.sf("arrow.up.circle"),
+                NSImage.sf("clock.arrow.trianglehead.counterclockwise.rotate.90")
             ]
 
             let actions: [Selector] = [
@@ -155,7 +157,7 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
 
             port1 = MyToolbarPopupItem(identifier: .port1,
                                      menuItems: portItems,
-                                     image: image("gear"),
+                                     image: NSImage.sf("gear"),
                                      action: #selector(port1Action(_:)),
                                      target: self,
                                      label: "Port 1")
@@ -165,7 +167,7 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
 
             port2 = MyToolbarPopupItem(identifier: .port2,
                                      menuItems: portItems,
-                                     image: image("gear"),
+                                     image: NSImage.sf("gear"),
                                      action: #selector(port2Action(_:)),
                                      target: self,
                                      label: "Port 2")
@@ -174,7 +176,7 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
         case .keyboard:
 
             keyboard = MyToolbarItemGroup(identifier: .keyboard,
-                                          images: [image("keyboard")],
+                                          images: [NSImage.sf("keyboard")],
                                           actions: [#selector(keyboardAction)],
                                           target: self,
                                           label: "Keyboard")
@@ -183,7 +185,7 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
         case .settings:
 
             settings = MyToolbarItemGroup(identifier: .settings,
-                                          images: [image("gear")],
+                                          images: [NSImage.sf("gear")],
                                           actions: [#selector(settingsAction)],
                                           target: self,
                                           label: "Settings")
@@ -193,9 +195,9 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
 
             let images: [NSImage] = [
 
-                image("pause.circle"), // play.circle
-                image("arrow.counterclockwise.circle"),
-                image("power")
+                NSImage.sf("pause.circle"), // play.circle
+                NSImage.sf("arrow.counterclockwise.circle"),
+                NSImage.sf("power")
             ]
 
             let actions: [Selector] = [

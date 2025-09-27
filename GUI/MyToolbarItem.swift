@@ -22,6 +22,7 @@ class MyToolbarButton: NSButton {
         self.isBordered = true
         self.bezelStyle = .smallSquare
         self.imagePosition = .imageOnly
+        self.imageScaling = .scaleProportionallyDown
         self.title = ""
         self.translatesAutoresizingMaskIntoConstraints = false
         self.wantsLayer = true
