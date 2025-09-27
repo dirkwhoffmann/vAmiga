@@ -52,12 +52,12 @@ class MyToolbarButton: NSButton {
 /* This class represents a single “grouped” toolbar item, similar to a
  * segmented control but with independent views.
  */
-class ToolbarItemGroup: NSToolbarItem {
+class MyToolbarItemGroup: NSToolbarItem {
 
     let debug = false
 
     /// Maximum of 3 views (mimicking a segmented control)
-    private var buttons: [NSButton] = []
+    var buttons: [NSButton] = []
 
     /// Container view for Auto Layout
     private let container: NSView = {
@@ -68,13 +68,17 @@ class ToolbarItemGroup: NSToolbarItem {
     }()
 
     init(identifier: NSToolbarItem.Identifier,
-         images: [NSImage], actions: [Selector], target: AnyObject?) {
+         images: [NSImage],
+         actions: [Selector],
+         target: AnyObject? = nil,
+         label: String,
+         paletteLabel: String? = nil) {
 
         super.init(itemIdentifier: identifier)
 
         self.view = container
-        self.label = ""
-        self.paletteLabel = ""
+        self.label = label
+        self.paletteLabel = paletteLabel ?? label
 
         let count = min(images.count, 3)
         for i in 0..<count {
@@ -100,15 +104,20 @@ class ToolbarItemGroup: NSToolbarItem {
 
     }
 
+    convenience init(identifier: NSToolbarItem.Identifier,
+                     image: NSImage, action: Selector, target: AnyObject? = nil,
+                     label: String, paletteLabel: String? = nil) {
+
+        self.init(identifier: identifier, images: [image], actions: [action],
+             target: target, label: label, paletteLabel: paletteLabel)
+    }
+
     private func setupConstraints() {
 
         guard !buttons.isEmpty else { return }
 
-        // let buttonHeight: CGFloat = 40   // increase height
-        // let buttonWidth: CGFloat = 40    // optional: fixed width for square buttons
         let horizontalPadding: CGFloat = 6
         let spacing: CGFloat = 4
-        // let verticalPadding: CGFloat = 0
 
         container.heightAnchor.constraint(equalToConstant: 42).isActive = true
 
@@ -135,5 +144,44 @@ class ToolbarItemGroup: NSToolbarItem {
 
         guard index >= 0 && index < buttons.count else { return nil }
         return buttons[index]
+    }
+}
+
+class ToolbarPopupItem: MyToolbarItemGroup {
+
+    var items: [String] = []
+
+    convenience init(identifier: NSToolbarItem.Identifier,
+                     menuItems: [String],
+                     image: NSImage, action: Selector, target: AnyObject?,
+                     label: String, paletteLabel: String? = nil) {
+
+        self.init(identifier: identifier,
+                  image: image, action: #selector(showMenu),
+                  label: label, paletteLabel: paletteLabel)
+
+        self.items = menuItems
+        self.buttons[0].target = self
+        // self.buttons[0].action = #selector(showMenu)
+    }
+
+    @objc func menuAction(_ sender: NSMenuItem) {
+        print("Selected: \(sender.tag)")
+    }
+
+    @objc func showMenu() {
+
+        print("showMenu:")
+
+        let menu = NSMenu()
+        for (index, title) in items.enumerated() {
+
+            let item = menu.addItem(withTitle: title, action: #selector(menuAction), keyEquivalent: "")
+            item.tag = index
+            item.target = self
+        }
+        
+        let point = NSPoint(x: 0, y: self.buttons[0].bounds.height)
+        menu.popUp(positioning: nil, at: point, in: self.buttons[0])
     }
 }

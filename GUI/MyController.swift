@@ -182,7 +182,9 @@ extension MyController {
         iconSlot = [ iconSlot0, iconSlot1, iconSlot2, iconSlot3 ]
 
         // Create the toolbar
-        window?.toolbar = MyToolbar(identifier: "MyToolbar")
+        let tb = MyToolbar(identifier: "MyToolbar")
+        tb.controller = self
+        window?.toolbar = tb
 
         // Create keyboard controller
         keyboard = KeyboardController(parent: self)
