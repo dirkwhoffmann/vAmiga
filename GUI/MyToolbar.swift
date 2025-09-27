@@ -9,9 +9,9 @@
 
 extension NSImage {
 
-    static func sf(_ name: String, size: Int = 24, description: String? = nil) -> NSImage {
+    static func sf(_ name: String, size: CGFloat = 28, description: String? = nil) -> NSImage {
 
-        let config = NSImage.SymbolConfiguration(pointSize: CGFloat(28), weight: .light, scale: .small)
+        let config = NSImage.SymbolConfiguration(pointSize: size, weight: .thin, scale: .small)
         let img = NSImage(systemSymbolName: name, accessibilityDescription: description)!
         return img.withSymbolConfiguration(config)!
     }
@@ -27,15 +27,6 @@ extension NSToolbarItem.Identifier {
     static let settings = NSToolbarItem.Identifier("Settings")
     static let controls = NSToolbarItem.Identifier("Controls")
 }
-
-/*
-func image(_ name: String, description: String? = nil) -> NSImage {
-
-    let config = NSImage.SymbolConfiguration(pointSize: 28, weight: .light, scale: .small)
-    let img = NSImage(systemSymbolName: name, accessibilityDescription: description)!
-    return img.withSymbolConfiguration(config)!
-}
-*/
 
 @MainActor
 class MyToolbar: NSToolbar, NSToolbarDelegate {
@@ -96,14 +87,14 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
                  itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier,
                  willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
 
-        let portItems = [ (NSImage.sf("nosign", size: 22), "None", -1),
-                          (NSImage.sf("computermouse", size: 22), "Mouse", 0),
-                          (NSImage.sf("arrowkeys", size: 22), "Keyset 1", 1),
-                          (NSImage.sf("arrowkeys", size: 22), "Keyset 2", 2),
-                          (NSImage.sf("gamecontroller", size: 22), "Gamepad 1", 3),
-                          (NSImage.sf("gamecontroller", size: 22), "Gamepad 2", 4),
-                          (NSImage.sf("gamecontroller", size: 22), "Gamepad 3", 5),
-                          (NSImage.sf("gamecontroller", size: 22), "Gamepad 4", 6) ]
+        let portItems = [ (NSImage.sf("nosign"), "None", -1),
+                          (NSImage.sf("computermouse"), "Mouse", 0),
+                          (NSImage.sf("arrowkeys"), "Keyset 1", 1),
+                          (NSImage.sf("arrowkeys"), "Keyset 2", 2),
+                          (NSImage.sf("gamecontroller"), "Gamepad 1", 3),
+                          (NSImage.sf("gamecontroller"), "Gamepad 2", 4),
+                          (NSImage.sf("gamecontroller"), "Gamepad 3", 5),
+                          (NSImage.sf("gamecontroller"), "Gamepad 4", 6) ]
 
         switch itemIdentifier {
 
@@ -134,7 +125,7 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
 
             let images: [NSImage] = [
 
-                NSImage.sf("arrow.down.circle"), // tray.and.arrow.down.fill"),
+                NSImage.sf("arrow.down.circle"),
                 NSImage.sf("arrow.up.circle"),
                 NSImage.sf("clock.arrow.trianglehead.counterclockwise.rotate.90")
             ]
@@ -222,7 +213,7 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
     override func validateVisibleItems() {
 
         // REMOVE ASAP
-        globalDisable = false
+        // globalDisable = false
 
         // Take care of the global disable flag
         for item in items { item.isEnabled = !globalDisable }
@@ -251,18 +242,25 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
     func updateToolbar() {
 
         if amiga.poweredOn {
+
             controls.setEnabled(true, forSegment: 0) // Pause
             controls.setEnabled(true, forSegment: 1) // Reset
             controls.setToolTip("Power off", forSegment: 2) // Power
+
         } else {
+
             controls.setEnabled(false, forSegment: 0) // Pause
             controls.setEnabled(false, forSegment: 1) // Reset
             controls.setToolTip("Power on", forSegment: 2) // Power
         }
+
         if amiga.running {
+
             controls.setToolTip("Pause", forSegment: 0)
             controls.setImage(NSImage.sf("pause.circle"), forSegment: 0)
+
         } else {
+
             controls.setToolTip("Run", forSegment: 0)
             controls.setImage(NSImage.sf("play.circle"), forSegment: 0)
         }
@@ -274,55 +272,46 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
 
     @objc private func inspectorAction() {
 
-        print("inspectorAction")
         controller.inspectorAction(self)
     }
 
     @objc private func dashboardAction() {
 
-        print("inspectorAction")
         controller.dashboardAction(self)
     }
 
     @objc private func consoleAction() {
 
-        print("consoleAction")
         controller.consoleAction(self)
     }
 
     @objc private func takeSnapshotAction() {
 
-        print("takeSnapshotAction")
         controller.takeSnapshotAction(self)
     }
 
     @objc private func restoreSnapshotAction() {
 
-        print("restoreSnapshotAction")
         controller.restoreSnapshotAction(self)
     }
 
     @objc private func browseSnapshotAction() {
 
-        print("browseSnapshotAction")
         controller.browseSnapshotsAction(self)
     }
 
     @objc private func port1Action(_ sender: NSMenuItem) {
 
-        print("port1Action \(sender.tag)")
         controller.config.gameDevice1 = sender.tag
     }
 
     @objc private func port2Action(_ sender: NSMenuItem) {
 
-        print("port2Action \(sender.tag)")
         controller.config.gameDevice2 = sender.tag
     }
 
     @objc private func keyboardAction() {
 
-        print("keyboardAction")
         if controller.virtualKeyboard == nil {
             controller.virtualKeyboard = VirtualKeyboardController.make(parent: controller)
         }
@@ -333,25 +322,21 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
 
     @objc private func settingsAction() {
 
-        print("settingsAction")
         controller.settingsAction(self)
     }
 
     @objc private func runAction() {
 
-        print("My runAction triggered")
         controller.stopAndGoAction(self)
     }
 
     @objc private func resetAction() {
 
-        print("My resetAction triggered")
         controller.resetAction(self)
     }
 
     @objc private func powerAction() {
 
-        print("My powerAction triggered")
         controller.powerAction(self)
     }
 }

@@ -19,14 +19,22 @@ class MyToolbarButton: NSButton {
         self.target = target as AnyObject
         self.action = action
 
-        self.isBordered = true
+        self.isBordered = false
         self.bezelStyle = .smallSquare
         self.imagePosition = .imageOnly
         self.imageScaling = .scaleProportionallyDown
         self.title = ""
         self.translatesAutoresizingMaskIntoConstraints = false
         self.wantsLayer = true
+
+        // Layer setup
+        /*
+        self.wantsLayer = true
         self.layer?.backgroundColor = NSColor.clear.cgColor
+        self.layer?.borderColor = NSColor.red.cgColor
+        self.layer?.borderWidth = 0.0
+        self.layer?.cornerRadius = 4.0
+        */
     }
 
     required init?(coder: NSCoder) {
@@ -34,6 +42,7 @@ class MyToolbarButton: NSButton {
         super.init(coder: coder)
     }
 
+    /*
     override func draw(_ dirtyRect: NSRect) {
 
         // Instead of calling super.draw(_:), manually draw the image
@@ -48,6 +57,7 @@ class MyToolbarButton: NSButton {
             image.draw(in: imageRect)
         }
     }
+    */
 }
 
 /* This class represents a single “grouped” toolbar item, similar to a
@@ -58,6 +68,11 @@ class MyToolbarItemGroup: NSToolbarItem {
     let debug = false
 
     var buttons: [NSButton] = []
+
+    override var isEnabled: Bool {
+        get { super.isEnabled }
+        set { super.isEnabled = newValue; for button in buttons { button.isEnabled = newValue } }
+    }
 
     /// Container view for Auto Layout
     private let container: NSView = {
@@ -116,10 +131,11 @@ class MyToolbarItemGroup: NSToolbarItem {
 
         guard !buttons.isEmpty else { return }
 
-        let horizontalPadding: CGFloat = 6
-        let spacing: CGFloat = 4
+        let height: CGFloat = 32
+        let horizontalPadding: CGFloat = 2
+        let spacing: CGFloat = 12
 
-        container.heightAnchor.constraint(equalToConstant: 42).isActive = true
+        container.heightAnchor.constraint(equalToConstant: height).isActive = true
 
         for (index, button) in buttons.enumerated() {
 
