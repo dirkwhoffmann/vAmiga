@@ -11,7 +11,7 @@ extension NSImage {
 
     static func sf(_ name: String, size: CGFloat = 28, description: String? = nil) -> NSImage {
 
-        let config = NSImage.SymbolConfiguration(pointSize: size, weight: .thin, scale: .small)
+        let config = NSImage.SymbolConfiguration(pointSize: size, weight: .light, scale: .small)
         let img = NSImage(systemSymbolName: name, accessibilityDescription: description)!
         return img.withSymbolConfiguration(config)!
     }
@@ -75,11 +75,17 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
 
     func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
 
-        return [ .inspectors, .flexibleSpace,
-                 .snapshots, .flexibleSpace,
-                 .port1, .port2, .flexibleSpace,
-                 .keyboard, .flexibleSpace,
-                 .settings, .flexibleSpace,
+        return [ .inspectors,
+                 .flexibleSpace,
+                 .snapshots,
+                 .flexibleSpace,
+                 .port1,
+                 .port2,
+                 .flexibleSpace,
+                 .keyboard,
+                 .flexibleSpace,
+                 .settings,
+                 .flexibleSpace,
                  .controls ]
     }
 
