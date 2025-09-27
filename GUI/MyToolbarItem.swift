@@ -56,7 +56,6 @@ class MyToolbarItemGroup: NSToolbarItem {
 
     let debug = false
 
-    /// Maximum of 3 views (mimicking a segmented control)
     var buttons: [NSButton] = []
 
     /// Container view for Auto Layout
@@ -139,20 +138,38 @@ class MyToolbarItemGroup: NSToolbarItem {
         }
     }
 
-    /// Access buttons if needed (e.g., enable/disable)
+    func setEnabled(_ enabled: Bool, forSegment segment: Int) {
+
+        buttons[segment].isEnabled = enabled
+    }
+
+    func setToolTip(_ toolTip: String, forSegment segment: Int) {
+
+        buttons[segment].toolTip = toolTip
+    }
+
     func button(at index: Int) -> NSButton? {
 
         guard index >= 0 && index < buttons.count else { return nil }
         return buttons[index]
     }
+
+    func setImage(_ image: NSImage?, forSegment segment: Int) {
+
+        buttons[segment].image = image
+    }
 }
 
-class ToolbarPopupItem: MyToolbarItemGroup {
+class MyToolbarPopupItem: MyToolbarItemGroup {
 
-    var items: [(NSImage, String)] = []
+    var items: [(NSImage, String, Int)] = []
+    var finalAction: Selector?
+    var finalTarget: AnyObject?
+
+    var menu = NSMenu()
 
     convenience init(identifier: NSToolbarItem.Identifier,
-                     menuItems: [(NSImage, String)],
+                     menuItems: [(NSImage, String, Int)],
                      image: NSImage, action: Selector, target: AnyObject?,
                      label: String, paletteLabel: String? = nil) {
 
@@ -161,27 +178,34 @@ class ToolbarPopupItem: MyToolbarItemGroup {
                   label: label, paletteLabel: paletteLabel)
 
         self.items = menuItems
+        self.finalAction = action
+        self.finalTarget = target
         self.buttons[0].target = self
-        // self.buttons[0].action = #selector(showMenu)
+
+        for (image, title, tag) in items {
+
+            let item = menu.addItem(withTitle: title, action: #selector(menuAction), keyEquivalent: "")
+            item.tag = tag
+            item.image = image
+            item.target = self
+        }
+    }
+
+    func selectItem(withTag tag: Int) {
+
+        for item in menu.items {
+            item.state = item.tag == tag ? .on : .off
+        }
+        buttons[0].image = menu.item(withTag: tag)?.image
     }
 
     @objc func menuAction(_ sender: NSMenuItem) {
-        print("Selected: \(sender.tag)")
+
+        NSApp.sendAction(finalAction!, to: finalTarget!, from: sender)
     }
 
     @objc func showMenu() {
 
-        print("showMenu:")
-
-        let menu = NSMenu()
-        for (index, (image, title)) in items.enumerated() {
-
-            let item = menu.addItem(withTitle: title, action: #selector(menuAction), keyEquivalent: "")
-            item.tag = index
-            item.image = image
-            item.target = self
-        }
-        
         let point = NSPoint(x: 0, y: self.buttons[0].bounds.height)
         menu.popUp(positioning: nil, at: point, in: self.buttons[0])
     }

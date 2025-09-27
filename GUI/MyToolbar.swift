@@ -38,37 +38,22 @@ func image(_ name: String, description: String? = nil) -> NSImage {
 @MainActor
 class MyToolbar: NSToolbar, NSToolbarDelegate {
 
-    var inspectors: NSToolbarItem!
-    var snapshots: NSToolbarItem!
-    var port1: NSToolbarItem!
-    var port2: NSToolbarItem!
-    var keyboard: NSToolbarItem!
-    var settings: NSToolbarItem!
-    var controls: NSToolbarItem!
-
     var controller: MyController!
+    var amiga: EmulatorProxy { return controller.emu }
 
-    // var amiga: EmulatorProxy { return controller.emu }
+    var inspectors: MyToolbarItemGroup!
+    var snapshots: MyToolbarItemGroup!
+    var port1: MyToolbarPopupItem!
+    var port2: MyToolbarPopupItem!
+    var keyboard: MyToolbarItemGroup!
+    var settings: MyToolbarItemGroup!
+    var controls: MyToolbarItemGroup!
+
     // Set to true to gray out all toolbar items
     var globalDisable = false
 
-    /*
-    let images: [NSImage] = [
-        image("magnifyingglass"),
-        image("gauge.with.needle"),
-        image("text.alignleft")
-    ]
-
-    let actions: [Selector] = [
-        #selector(inspectorAction),
-        #selector(gearAction),
-        #selector(gearAction)
-    ]
-    */
-
     init() {
 
-        print("MyToolbar: init()")
         super.init(identifier: "MyToolbar")
         self.delegate = self
         self.allowsUserCustomization = true
@@ -77,22 +62,11 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
 
     override init(identifier: NSToolbar.Identifier) {
 
-        print("MyToolbar: init(identifier:)")
         super.init(identifier: identifier)
         self.delegate = self
         self.allowsUserCustomization = true
         self.displayMode = .iconAndLabel
     }
-
-    /*
-    required init?(coder: NSCoder) {
-
-        super.init(coder: coder)
-        self.delegate = self
-    }
-    */
-
-    // MARK: - NSToolbarDelegate
 
     func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
 
@@ -120,14 +94,14 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
                  itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier,
                  willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
 
-        let portItems = [ (NSImage.sf("nosign", size: 22), "None"),
-                          (NSImage.sf("computermouse.fill", size: 22), "Mouse"),
-                          (NSImage.sf("arrowkeys", size: 22), "Keyset 1"),
-                          (NSImage.sf("arrowkeys", size: 22), "Keyset 2"),
-                          (NSImage.sf("gamecontroller.fill", size: 22), "Gamepad 1"),
-                          (NSImage.sf("gamecontroller.fill", size: 22), "Gamepad 2"),
-                          (NSImage.sf("gamecontroller.fill", size: 22), "Gamepad 3"),
-                          (NSImage.sf("gamecontroller.fill", size: 22), "Gamepad 4") ]
+        let portItems = [ (NSImage.sf("nosign", size: 22), "None", -1),
+                          (NSImage.sf("computermouse.fill", size: 22), "Mouse", 0),
+                          (NSImage.sf("arrowkeys", size: 22), "Keyset 1", 1),
+                          (NSImage.sf("arrowkeys", size: 22), "Keyset 2", 2),
+                          (NSImage.sf("gamecontroller.fill", size: 22), "Gamepad 1", 3),
+                          (NSImage.sf("gamecontroller.fill", size: 22), "Gamepad 2", 4),
+                          (NSImage.sf("gamecontroller.fill", size: 22), "Gamepad 3", 5),
+                          (NSImage.sf("gamecontroller.fill", size: 22), "Gamepad 4", 6) ]
 
         switch itemIdentifier {
 
@@ -179,20 +153,20 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
 
         case .port1:
 
-            port1 = ToolbarPopupItem(identifier: .port1,
+            port1 = MyToolbarPopupItem(identifier: .port1,
                                      menuItems: portItems,
                                      image: image("gear"),
-                                     action: #selector(port1Action),
+                                     action: #selector(port1Action(_:)),
                                      target: self,
                                      label: "Port 1")
             return port1
 
         case .port2:
 
-            port2 = ToolbarPopupItem(identifier: .port2,
+            port2 = MyToolbarPopupItem(identifier: .port2,
                                      menuItems: portItems,
                                      image: image("gear"),
-                                     action: #selector(port2Action),
+                                     action: #selector(port2Action(_:)),
                                      target: self,
                                      label: "Port 2")
             return port2
@@ -243,27 +217,58 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
         }
     }
 
-    //
-    // Actions
-    //
+    override func validateVisibleItems() {
 
-    @objc private func inspectorsAction(_ sender: NSSegmentedControl) {
+        // REMOVE ASAP
+        globalDisable = false
 
-        let index = sender.selectedSegment
-        switch index {
-        case 0:
-            print("First button pressed")
-            // call your first action here
-        case 1:
-            print("Second button pressed")
-            // call your second action here
-        case 2:
-            print("Third button pressed")
-            // call your third action here
-        default:
-            break
+        // Take care of the global disable flag
+        for item in items { item.isEnabled = !globalDisable }
+
+        // Disable the keyboard button if the virtual keyboard is open
+        if  controller.virtualKeyboard?.window?.isVisible == true {
+            (keyboard.view as? NSButton)?.isEnabled = false
+        }
+
+        // Disable the snapshot revert button if no snapshots have been taken
+        snapshots.setEnabled(controller.snapshotCount > 0, forSegment: 1)
+
+        // Update input devices
+        controller.gamePadManager.refresh(menu: port1.menu)
+        controller.gamePadManager.refresh(menu: port2.menu)
+        port1.selectItem(withTag: controller.config.gameDevice1)
+        port2.selectItem(withTag: controller.config.gameDevice2)
+
+        port1.menuFormRepresentation = nil
+        port2.menuFormRepresentation = nil
+        keyboard.menuFormRepresentation = nil
+        settings.menuFormRepresentation = nil
+        controls.menuFormRepresentation = nil
+    }
+
+    func updateToolbar() {
+
+        if amiga.poweredOn {
+            controls.setEnabled(true, forSegment: 0) // Pause
+            controls.setEnabled(true, forSegment: 1) // Reset
+            controls.setToolTip("Power off", forSegment: 2) // Power
+        } else {
+            controls.setEnabled(false, forSegment: 0) // Pause
+            controls.setEnabled(false, forSegment: 1) // Reset
+            controls.setToolTip("Power on", forSegment: 2) // Power
+        }
+        if amiga.running {
+            controls.setToolTip("Pause", forSegment: 0)
+            controls.setImage(NSImage.sf("pause.circle"), forSegment: 0)
+        } else {
+            controls.setToolTip("Run", forSegment: 0)
+            controls.setImage(NSImage.sf("play.circle"), forSegment: 0)
         }
     }
+
+    //
+    // Action methods
+    //
 
     @objc private func inspectorAction() {
 
@@ -301,175 +306,21 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
         controller.browseSnapshotsAction(self)
     }
 
-    @objc private func port1Action() {
+    @objc private func port1Action(_ sender: NSMenuItem) {
 
-        print("port1Action")
-        // controller.browseSnapshotsAction(self)
+        print("port1Action \(sender.tag)")
+        controller.config.gameDevice1 = sender.tag
     }
 
-    @objc private func port2Action() {
+    @objc private func port2Action(_ sender: NSMenuItem) {
 
-        print("port2Action")
-        // controller.browseSnapshotsAction(self)
+        print("port2Action \(sender.tag)")
+        controller.config.gameDevice2 = sender.tag
     }
 
     @objc private func keyboardAction() {
 
         print("keyboardAction")
-        // controller.browseSnapshotsAction(self)
-    }
-
-    @objc private func settingsAction() {
-
-        print("settingsAction")
-        // controller.browseSnapshotsAction(self)
-    }
-
-    @objc private func runAction() {
-        print("My runAction triggered")
-    }
-
-    @objc private func resetAction() {
-        print("My resetAction triggered")
-    }
-
-    @objc private func powerAction() {
-        print("My powerAction triggered")
-    }
-
-
-    /*
-
-    @IBOutlet weak var controller: MyController!
-
-    // References to toolbar items
-    @IBOutlet weak var controlPort1Item: NSToolbarItem!
-    @IBOutlet weak var controlPort2Item: NSToolbarItem!
-    @IBOutlet weak var keyboardItem: NSToolbarItem!
-    @IBOutlet weak var settingsItem: NSToolbarItem!
-    @IBOutlet weak var controlsItem: NSToolbarItem!
-
-    // Reference to toolbar item objects
-    @IBOutlet weak var controlPort1: NSPopUpButton!
-    @IBOutlet weak var controlPort2: NSPopUpButton!
-    @IBOutlet weak var snapshotSegCtrl: NSSegmentedControl!
-    @IBOutlet weak var screenshotSegCtrl: NSSegmentedControl!
-    @IBOutlet weak var controlsSegCtrl: NSSegmentedControl!
-
-    override func validateVisibleItems() {
-
-        // Take care of the global disable flag
-        for item in items { item.isEnabled = !globalDisable }
-
-        // Disable the keyboard button if the virtual keyboard is open
-        if  controller.virtualKeyboard?.window?.isVisible == true {
-            (keyboardItem.view as? NSButton)?.isEnabled = false
-        }
-
-        // Disable the snapshot revert button if no snapshots have been taken
-        snapshotSegCtrl.setEnabled(controller.snapshotCount > 0, forSegment: 1)
-
-        // Update input devices
-        controller.gamePadManager.refresh(popup: controlPort1)
-        controller.gamePadManager.refresh(popup: controlPort2)
-        controlPort1.selectItem(withTag: controller.config.gameDevice1)
-        controlPort2.selectItem(withTag: controller.config.gameDevice2)
-
-        controlPort1Item.menuFormRepresentation = nil
-        controlPort2Item.menuFormRepresentation = nil
-        keyboardItem.menuFormRepresentation = nil
-        settingsItem.menuFormRepresentation = nil
-        controlsItem.menuFormRepresentation = nil
-    }
-    */
-
-    func updateToolbar() {
-
-        /*
-        if amiga.poweredOn {
-            controlsSegCtrl.setEnabled(true, forSegment: 0) // Pause
-            controlsSegCtrl.setEnabled(true, forSegment: 1) // Reset
-            controlsSegCtrl.setToolTip("Power off", forSegment: 2) // Power
-        } else {
-            controlsSegCtrl.setEnabled(false, forSegment: 0) // Pause
-            controlsSegCtrl.setEnabled(false, forSegment: 1) // Reset
-            controlsSegCtrl.setToolTip("Power on", forSegment: 2) // Power
-        }
-        if amiga.running {
-            controlsSegCtrl.setToolTip("Pause", forSegment: 0)
-            controlsSegCtrl.setImage(NSImage(named: "pauseTemplate"), forSegment: 0)
-        } else {
-            controlsSegCtrl.setToolTip("Run", forSegment: 0)
-            controlsSegCtrl.setImage(NSImage(named: "runTemplate"), forSegment: 0)
-        }
-        */
-    }
-    
-    //
-    // Action methods
-    //
-
-    /*
-    @IBAction
-    func inspectAction(_ sender: NSSegmentedControl) {
-
-        switch sender.selectedSegment {
-
-        case 0: controller.inspectorAction(sender)
-        case 1: controller.dashboardAction(sender)
-        case 2: controller.consoleAction(sender)
-
-        default:
-            fatalError()
-        }
-    }
-    
-    @IBAction
-    func snapshotAction(_ sender: NSSegmentedControl) {
-        
-        switch sender.selectedSegment {
-            
-        case 0: controller.takeSnapshotAction(self)
-        case 1: controller.restoreSnapshotAction(self)
-        case 2: controller.browseSnapshotsAction(self)
-            
-        default:
-            fatalError()
-        }
-    }
-    
-    @IBAction
-    func screenshotAction(_ sender: NSSegmentedControl) {
-                
-        switch sender.selectedSegment {
-            
-        case 0: controller.takeScreenshotAction(self)
-        case 1: controller.browseScreenshotsAction(self)
-            
-        default:
-            fatalError()
-        }
-    }
-
-    @IBAction
-    func port1Action(_ sender: Any) {
-        
-        if let popup = sender as? NSPopUpButton {
-            controller.config.gameDevice1 = popup.selectedTag()
-        }
-    }
- 
-    @IBAction
-    func port2Action(_ sender: Any) {
-        
-        if let popup = sender as? NSPopUpButton {
-            controller.config.gameDevice2 = popup.selectedTag()
-        }
-    }
-            
-    @IBAction
-    func keyboardAction(_ sender: Any!) {
-        
         if controller.virtualKeyboard == nil {
             controller.virtualKeyboard = VirtualKeyboardController.make(parent: controller)
         }
@@ -477,25 +328,28 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
             controller.virtualKeyboard?.showAsSheet()
         }
     }
-    
-    @IBAction
-    func preferencesAction(_ sender: Any!) {
 
-        controller.settingsAction(sender)
+    @objc private func settingsAction() {
+
+        print("settingsAction")
+        controller.settingsAction(self)
     }
 
-    @IBAction
-    func controlsAction(_ sender: NSSegmentedControl) {
+    @objc private func runAction() {
 
-        switch sender.selectedSegment {
-
-        case 0: controller.stopAndGoAction(self)
-        case 1: controller.resetAction(self)
-        case 2: controller.powerAction(self)
-
-        default:
-            fatalError()
-        }
+        print("My runAction triggered")
+        controller.stopAndGoAction(self)
     }
-    */
+
+    @objc private func resetAction() {
+
+        print("My resetAction triggered")
+        controller.resetAction(self)
+    }
+
+    @objc private func powerAction() {
+
+        print("My powerAction triggered")
+        controller.powerAction(self)
+    }
 }

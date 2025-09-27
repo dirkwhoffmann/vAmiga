@@ -364,7 +364,6 @@ class GamePad {
         if let hid = hidEvent {
 
             // Notify the GUI
-            // if notify { myAppDelegate.hidEvent(event: hid.0, nr: hid.1, value: hid.2) }
             if let controller = myAppDelegate.settingsController, controller.isVisible {
                 controller.devicesVC?.refreshDeviceEvent(event: hid.0, nr: hid.1, value: hid.2)
             }

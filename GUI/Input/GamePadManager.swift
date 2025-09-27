@@ -262,7 +262,8 @@ class GamePadManager {
             dev.dump()
         }
     }
-    
+
+    // DEPRECATED
     func refresh(popup: NSPopUpButton, hide: Bool = false) {
         
         let slots = [
@@ -277,6 +278,28 @@ class GamePadManager {
                 
         for s in slots {
             if let item = popup.menu?.item(withTag: s) {
+                item.title = name(slot: s)
+                item.image = icon(slot: s)
+                item.isEnabled = isUsed(slot: s)
+                item.isHidden = isEmpty(slot: s) && hide
+            }
+        }
+    }
+
+    func refresh(menu: NSMenu, hide: Bool = false) {
+
+        let slots = [
+            InputDevice.mouse,
+            InputDevice.keyset1,
+            InputDevice.keyset2,
+            InputDevice.joystick1,
+            InputDevice.joystick2,
+            InputDevice.joystick3,
+            InputDevice.joystick4
+        ]
+
+        for s in slots {
+            if let item = menu.item(withTag: s) {
                 item.title = name(slot: s)
                 item.image = icon(slot: s)
                 item.isEnabled = isUsed(slot: s)
