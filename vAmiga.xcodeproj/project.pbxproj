@@ -316,7 +316,7 @@
 		50DAED232D2D17660044B922 /* DashboardDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DAED222D2D175E0044B922 /* DashboardDataProvider.swift */; };
 		50DD1EE22525E3E1000180F6 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DD1EE12525E3E1000180F6 /* Preferences.xib */; };
 		50DD33CC2756113300AE18B4 /* pfile.c in Sources */ = {isa = PBXBuildFile; fileRef = 50DD33CB27560EE600AE18B4 /* pfile.c */; };
-		50DE553A2E874647001789C9 /* MyToolbarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DE55392E874641001789C9 /* MyToolbarItem.swift */; };
+		50DE553A2E874647001789C9 /* MyToolbarItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DE55392E874641001789C9 /* MyToolbarItems.swift */; };
 		50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DED6AE2202EBA200B8195F /* Inspector.xib */; };
 		50DED6B12202EC3100B8195F /* Inspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DED6B02202EC3100B8195F /* Inspector.swift */; };
 		50DF2CA02269135800795256 /* SpriteTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DF2C9F2269135800795256 /* SpriteTableView.swift */; };
@@ -1029,7 +1029,7 @@
 		50DAED222D2D175E0044B922 /* DashboardDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardDataProvider.swift; sourceTree = "<group>"; };
 		50DD1EE12525E3E1000180F6 /* Preferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
 		50DD33CB27560EE600AE18B4 /* pfile.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = pfile.c; sourceTree = "<group>"; };
-		50DE55392E874641001789C9 /* MyToolbarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolbarItem.swift; sourceTree = "<group>"; };
+		50DE55392E874641001789C9 /* MyToolbarItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolbarItems.swift; sourceTree = "<group>"; };
 		50DED6AE2202EBA200B8195F /* Inspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Inspector.xib; sourceTree = "<group>"; };
 		50DED6B02202EC3100B8195F /* Inspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inspector.swift; sourceTree = "<group>"; };
 		50DF2C9E2268CFC000795256 /* AgnusTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgnusTypes.h; sourceTree = "<group>"; };
@@ -1685,7 +1685,7 @@
 				50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */,
 				5062DB1124370FE400ACEEE2 /* MyControllerSnapshots.swift */,
 				5043F6C4221972F90047CC30 /* MyToolbar.swift */,
-				50DE55392E874641001789C9 /* MyToolbarItem.swift */,
+				50DE55392E874641001789C9 /* MyToolbarItems.swift */,
 				50F7D84E2DE25C0B00CD6B41 /* MyMediaManager.swift */,
 				505B801E23FE6582002407FE /* System */,
 				508FDFCB21EA20510043D0E9 /* Metal */,
@@ -2493,7 +2493,7 @@
 				509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */,
 				5023519024485BBF00F6C088 /* Preferences.swift in Sources */,
 				50AFEBBE278EF6CB00F422D5 /* SequencerInfo.cpp in Sources */,
-				50DE553A2E874647001789C9 /* MyToolbarItem.swift in Sources */,
+				50DE553A2E874647001789C9 /* MyToolbarItems.swift in Sources */,
 				50B2BC8925EC3D590032EEFE /* IOUtils.cpp in Sources */,
 				50C50B86220479E000D796DA /* BankTableView.swift in Sources */,
 				508FE05A21EA22CC0043D0E9 /* DialogController.swift in Sources */,

@@ -52,6 +52,15 @@ class OnboardingLayerViewController: NSViewController {
 
         super.viewDidLoad()
         pageDotIndicator.delegate = self
+
+        view.wantsLayer = true
+        view.layer!.backgroundColor = NSColor.red.cgColor
+
+        /*
+        let r = Double(34.0 / 255.0)
+        let g = Double(84.0 / 255.0)
+        let b = Double(164.0 / 255.0)
+         */
     }
 
     override func viewDidAppear() {

@@ -56,7 +56,6 @@ class MyToolbarButton: NSButton {
         self.imagePosition = .imageOnly
         self.imageScaling = .scaleProportionallyDown
         self.translatesAutoresizingMaskIntoConstraints = false
-        // self.wantsLayer = true
     }
 
     required init?(coder: NSCoder) {
@@ -87,11 +86,12 @@ class MyToolbarItemGroup: NSToolbarItem {
     var buttons: [NSButton] = []
 
     override var isEnabled: Bool {
+
         get { super.isEnabled }
         set { super.isEnabled = newValue; for button in buttons { button.isEnabled = newValue } }
     }
 
-    /// Container view for Auto Layout
+    // Container view holding the buttons
     private let container: NSView = {
 
         let view = NSView()
@@ -100,11 +100,10 @@ class MyToolbarItemGroup: NSToolbarItem {
     }()
 
     init(identifier: NSToolbarItem.Identifier,
-         images: [String],
-         actions: [Selector],
-         target: AnyObject? = nil,
-         label: String,
-         paletteLabel: String? = nil) {
+         images: [String], actions: [Selector], target: AnyObject? = nil,
+         label: String, paletteLabel: String? = nil) {
+
+        assert(images.count == actions.count, "Mismatch in images and actions")
 
         super.init(itemIdentifier: identifier)
 
@@ -132,19 +131,18 @@ class MyToolbarItemGroup: NSToolbarItem {
         }
 
         setupConstraints()
-
     }
 
     private func setupConstraints() {
 
-        guard !buttons.isEmpty else { return }
-
         let height: CGFloat = 26
-        let horizontalPadding: CGFloat = 8
+        let padding: CGFloat = 8
         let spacing: CGFloat = 16
 
+        // Container contraints
         container.heightAnchor.constraint(equalToConstant: height).isActive = true
 
+        // Button constraints
         for (index, button) in buttons.enumerated() {
 
             // Height
@@ -152,13 +150,15 @@ class MyToolbarItemGroup: NSToolbarItem {
 
             // Width
             if index == 0 {
-                button.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: horizontalPadding).isActive = true
+                button.leadingAnchor.constraint(equalTo: container.leadingAnchor,
+                                                constant: padding).isActive = true
             } else {
-                button.leadingAnchor.constraint(equalTo: buttons[index - 1].trailingAnchor, constant: spacing).isActive = true
+                button.leadingAnchor.constraint(equalTo: buttons[index - 1].trailingAnchor,
+                                                constant: spacing).isActive = true
             }
-
             if index == buttons.count - 1 {
-                button.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -horizontalPadding).isActive = true
+                button.trailingAnchor.constraint(equalTo: container.trailingAnchor,
+                                                 constant: -padding).isActive = true
             }
         }
     }
