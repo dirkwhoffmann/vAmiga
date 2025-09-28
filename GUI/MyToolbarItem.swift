@@ -9,9 +9,40 @@
 
 import Cocoa
 
+/* This file provides wrapper classes for all toolbar elements.
+ *
+ * - MyToolbarButton
+ *     A custom button used in all other elements.
+ *
+ * - MyToolbarItem
+ *     A toolbar item containing a single button.
+ *
+ * - MyToolbarItemGroup
+ *     A toolbar item with multiple buttons, mimicking the behavior of a
+ *     segmented control.
+ *
+ * - MyToolbarMenuItem
+ *     A toolbar item with an attached pull-down menu.
+ */
+
+extension NSImage {
+
+    static func sf(_ name: String, size: CGFloat = 25, description: String? = nil) -> NSImage {
+
+        let config = NSImage.SymbolConfiguration(pointSize: size, weight: .light, scale: .small)
+        let img = NSImage(systemSymbolName: name, accessibilityDescription: description)!
+        return img.withSymbolConfiguration(config)!
+    }
+}
+
 class MyToolbarButton: NSButton {
 
-    init(image: NSImage, target: Any?, action: Selector?) {
+    convenience init(image: String, target: Any?, action: Selector?) {
+
+        self.init(NSImage.sf(image), target: target, action: action)
+    }
+
+    private init(_ image: NSImage, target: Any?, action: Selector?) {
 
         super.init(frame: .zero)
 
@@ -19,50 +50,36 @@ class MyToolbarButton: NSButton {
         self.target = target as AnyObject
         self.action = action
 
+        self.title = ""
         self.isBordered = false
         self.bezelStyle = .smallSquare
         self.imagePosition = .imageOnly
         self.imageScaling = .scaleProportionallyDown
-        self.title = ""
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.wantsLayer = true
-
-        // Layer setup
-        /*
-        self.wantsLayer = true
-        self.layer?.backgroundColor = NSColor.clear.cgColor
-        self.layer?.borderColor = NSColor.red.cgColor
-        self.layer?.borderWidth = 0.0
-        self.layer?.cornerRadius = 4.0
-        */
+        // self.wantsLayer = true
     }
 
     required init?(coder: NSCoder) {
 
         super.init(coder: coder)
     }
-
-    /*
-    override func draw(_ dirtyRect: NSRect) {
-
-        // Instead of calling super.draw(_:), manually draw the image
-        if let image = self.image {
-
-            let imageRect = NSRect(
-                x: (bounds.width - image.size.width) / 2,
-                y: (bounds.height - image.size.height) / 2,
-                width: image.size.width,
-                height: image.size.height
-            )
-            image.draw(in: imageRect)
-        }
-    }
-    */
 }
 
-/* This class represents a single “grouped” toolbar item, similar to a
- * segmented control but with independent views.
- */
+//
+// Toolbar button or button group
+//
+
+class MyToolbarItem: MyToolbarItemGroup {
+
+    convenience init(identifier: NSToolbarItem.Identifier,
+                     image: String, action: Selector, target: AnyObject? = nil,
+                     label: String, paletteLabel: String? = nil) {
+
+        self.init(identifier: identifier, images: [image], actions: [action],
+                  target: target, label: label, paletteLabel: paletteLabel)
+    }
+}
+
 class MyToolbarItemGroup: NSToolbarItem {
 
     let debug = false
@@ -83,7 +100,7 @@ class MyToolbarItemGroup: NSToolbarItem {
     }()
 
     init(identifier: NSToolbarItem.Identifier,
-         images: [NSImage],
+         images: [String],
          actions: [Selector],
          target: AnyObject? = nil,
          label: String,
@@ -95,8 +112,7 @@ class MyToolbarItemGroup: NSToolbarItem {
         self.label = label
         self.paletteLabel = paletteLabel ?? label
 
-        let count = min(images.count, 3)
-        for i in 0..<count {
+        for i in 0..<images.count {
 
             let button = MyToolbarButton(image: images[i], target: target, action: actions[i])
 
@@ -119,21 +135,13 @@ class MyToolbarItemGroup: NSToolbarItem {
 
     }
 
-    convenience init(identifier: NSToolbarItem.Identifier,
-                     image: NSImage, action: Selector, target: AnyObject? = nil,
-                     label: String, paletteLabel: String? = nil) {
-
-        self.init(identifier: identifier, images: [image], actions: [action],
-             target: target, label: label, paletteLabel: paletteLabel)
-    }
-
     private func setupConstraints() {
 
         guard !buttons.isEmpty else { return }
 
-        let height: CGFloat = 32
-        let horizontalPadding: CGFloat = 2
-        let spacing: CGFloat = 12
+        let height: CGFloat = 26
+        let horizontalPadding: CGFloat = 8
+        let spacing: CGFloat = 16
 
         container.heightAnchor.constraint(equalToConstant: height).isActive = true
 
@@ -177,7 +185,11 @@ class MyToolbarItemGroup: NSToolbarItem {
     }
 }
 
-class MyToolbarPopupItem: MyToolbarItemGroup {
+//
+// MyToolbarMenuItem
+//
+
+class MyToolbarMenuItem: MyToolbarItem {
 
     var items: [(NSImage, String, Int)] = []
     var finalAction: Selector?
@@ -187,7 +199,7 @@ class MyToolbarPopupItem: MyToolbarItemGroup {
 
     convenience init(identifier: NSToolbarItem.Identifier,
                      menuItems: [(NSImage, String, Int)],
-                     image: NSImage, action: Selector, target: AnyObject?,
+                     image: String, action: Selector, target: AnyObject?,
                      label: String, paletteLabel: String? = nil) {
 
         self.init(identifier: identifier,
