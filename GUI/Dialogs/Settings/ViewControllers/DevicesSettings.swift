@@ -49,6 +49,15 @@ class DevicesSettingsViewController: SettingsViewController {
     // Methods from SettingsViewController
     //
 
+    override func activate() {
+
+        action.stringValue = ""
+        action2.stringValue = ""
+        hidEvent.stringValue = ""
+
+        refresh()
+    }
+
     override func refresh() {
 
         super.refresh()
