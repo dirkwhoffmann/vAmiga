@@ -111,10 +111,10 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
             ]
 
             inspectors = MyToolbarItemGroup(identifier: .inspectors,
-                                          images: images,
-                                          actions: actions,
-                                          target: self,
-                                          label: "Inspectors")
+                                            images: images,
+                                            actions: actions,
+                                            target: self,
+                                            label: "Inspectors")
             return inspectors
 
         case .snapshots:
@@ -143,21 +143,21 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
         case .port1:
 
             port1 = MyToolbarMenuItem(identifier: .port1,
-                                     menuItems: portItems,
-                                     image: "gear",
-                                     action: #selector(port1Action(_:)),
-                                     target: self,
-                                     label: "Port 1")
+                                      menuItems: portItems,
+                                      image: "gear",
+                                      action: #selector(port1Action(_:)),
+                                      target: self,
+                                      label: "Port 1")
             return port1
 
         case .port2:
 
             port2 = MyToolbarMenuItem(identifier: .port2,
-                                     menuItems: portItems,
-                                     image: "gear",
-                                     action: #selector(port2Action(_:)),
-                                     target: self,
-                                     label: "Port 2")
+                                      menuItems: portItems,
+                                      image: "gear",
+                                      action: #selector(port2Action(_:)),
+                                      target: self,
+                                      label: "Port 2")
             return port2
 
         case .keyboard:
@@ -195,10 +195,10 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
             ]
 
             controls = MyToolbarItemGroup(identifier: .controls,
-                                           images: images,
-                                           actions: actions,
-                                           target: self,
-                                           label: "Controls")
+                                          images: images,
+                                          actions: actions,
+                                          target: self,
+                                          label: "Controls")
             return controls
 
         default:
@@ -207,9 +207,6 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
     }
 
     override func validateVisibleItems() {
-
-        // REMOVE ASAP
-        // globalDisable = false
 
         // Take care of the global disable flag
         for item in items { item.isEnabled = !globalDisable }

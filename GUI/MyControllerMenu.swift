@@ -95,7 +95,7 @@ extension MyController: NSMenuItemValidation {
             return hdn.info.hasDisk
 
         default:
-            return true
+            return item.isEnabled
         }
     }
     

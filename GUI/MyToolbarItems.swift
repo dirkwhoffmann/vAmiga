@@ -238,4 +238,9 @@ class MyToolbarMenuItem: MyToolbarItem {
         let point = NSPoint(x: 0, y: self.buttons[0].bounds.height)
         menu.popUp(positioning: nil, at: point, in: self.buttons[0])
     }
+
+    override func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+
+        return menuItem.isEnabled
+    }
 }
