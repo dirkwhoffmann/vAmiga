@@ -265,7 +265,7 @@ extension MyController {
 
         // Get window frame
         guard var frame = window?.frame else { return }
-        let yCorrection = height - metal.frame.height
+        let yCorrection = round(height) - metal.frame.height
 
         // Modify the frame height
         let borderHeight = frame.height - metal.frame.height

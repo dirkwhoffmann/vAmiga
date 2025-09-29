@@ -111,10 +111,10 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
             ]
 
             inspectors = MyToolbarItemGroup(identifier: .inspectors,
-                                          images: images,
-                                          actions: actions,
-                                          target: self,
-                                          label: "Inspectors")
+                                            images: images,
+                                            actions: actions,
+                                            target: self,
+                                            label: "Inspectors")
             return inspectors
 
         case .snapshots:
@@ -195,10 +195,10 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
             ]
 
             controls = MyToolbarItemGroup(identifier: .controls,
-                                           images: images,
-                                           actions: actions,
-                                           target: self,
-                                           label: "Controls")
+                                          images: images,
+                                          actions: actions,
+                                          target: self,
+                                          label: "Controls")
             return controls
 
         default:
@@ -207,9 +207,6 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
     }
 
     override func validateVisibleItems() {
-
-        // REMOVE ASAP
-        // globalDisable = false
 
         // Take care of the global disable flag
         for item in items { item.isEnabled = !globalDisable }
