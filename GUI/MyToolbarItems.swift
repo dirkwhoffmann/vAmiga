@@ -25,8 +25,10 @@ import Cocoa
  *     A toolbar item with an attached pull-down menu.
  */
 
+/*
 extension NSImage {
 
+    @available(*, deprecated)
     static func sf(_ name: String, size: CGFloat = 25, description: String? = nil) -> NSImage {
 
         let config = NSImage.SymbolConfiguration(pointSize: size, weight: .light, scale: .small)
@@ -34,19 +36,15 @@ extension NSImage {
         return img.withSymbolConfiguration(config)!
     }
 }
+*/
 
 class MyToolbarButton: NSButton {
 
-    convenience init(image: String, target: Any?, action: Selector?) {
-
-        self.init(NSImage.sf(image), target: target, action: action)
-    }
-
-    private init(_ image: NSImage, target: Any?, action: Selector?) {
+    init(image: SFSymbol, target: Any?, action: Selector?) {
 
         super.init(frame: .zero)
 
-        self.image = image
+        self.image = SFSymbol.get(image)
         self.target = target as AnyObject
         self.action = action
 
@@ -71,7 +69,7 @@ class MyToolbarButton: NSButton {
 class MyToolbarItem: MyToolbarItemGroup {
 
     convenience init(identifier: NSToolbarItem.Identifier,
-                     image: String, action: Selector, target: AnyObject? = nil,
+                     image: SFSymbol, action: Selector, target: AnyObject? = nil,
                      label: String, paletteLabel: String? = nil) {
 
         self.init(identifier: identifier, images: [image], actions: [action],
@@ -100,7 +98,7 @@ class MyToolbarItemGroup: NSToolbarItem {
     }()
 
     init(identifier: NSToolbarItem.Identifier,
-         images: [String], actions: [Selector], target: AnyObject? = nil,
+         images: [SFSymbol], actions: [Selector], target: AnyObject? = nil,
          label: String, paletteLabel: String? = nil) {
 
         assert(images.count == actions.count, "Mismatch in images and actions")
@@ -191,15 +189,15 @@ class MyToolbarItemGroup: NSToolbarItem {
 
 class MyToolbarMenuItem: MyToolbarItem {
 
-    var items: [(NSImage, String, Int)] = []
+    var items: [(SFSymbol, String, Int)] = []
     var finalAction: Selector?
     var finalTarget: AnyObject?
 
     var menu = NSMenu()
 
     convenience init(identifier: NSToolbarItem.Identifier,
-                     menuItems: [(NSImage, String, Int)],
-                     image: String, action: Selector, target: AnyObject?,
+                     menuItems: [(SFSymbol, String, Int)],
+                     image: SFSymbol, action: Selector, target: AnyObject?,
                      label: String, paletteLabel: String? = nil) {
 
         self.init(identifier: identifier,
@@ -215,7 +213,7 @@ class MyToolbarMenuItem: MyToolbarItem {
 
             let item = menu.addItem(withTitle: title, action: #selector(menuAction), keyEquivalent: "")
             item.tag = tag
-            item.image = image
+            item.image = SFSymbol.get(image)
             item.target = self
         }
     }

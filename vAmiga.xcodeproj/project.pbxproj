@@ -291,6 +291,7 @@
 		50BE4B7424E815CA008F39C9 /* CIAEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */; };
 		50BF1CC8276D174200386540 /* GdbServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF1CC6276D174200386540 /* GdbServer.cpp */; };
 		50BF1CCE276DC7BB00386540 /* GdbServerCmds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BF1CCD276DC7BB00386540 /* GdbServerCmds.cpp */; };
+		50C246032E8ABACB00B134F6 /* Symbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C246022E8ABAC600B134F6 /* Symbols.swift */; };
 		50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */; };
 		50C50B86220479E000D796DA /* BankTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C50B85220479E000D796DA /* BankTableView.swift */; };
 		50C8C44A2607396200F4E012 /* Layer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C8C4492607396200F4E012 /* Layer.swift */; };
@@ -974,6 +975,7 @@
 		50BF1CCD276DC7BB00386540 /* GdbServerCmds.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GdbServerCmds.cpp; sourceTree = "<group>"; };
 		50C0B78025EC367000CDE1F2 /* IOUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IOUtils.cpp; sourceTree = "<group>"; };
 		50C0B78125EC367000CDE1F2 /* IOUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOUtils.h; sourceTree = "<group>"; };
+		50C246022E8ABAC600B134F6 /* Symbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbols.swift; sourceTree = "<group>"; };
 		50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStatusBar.swift; sourceTree = "<group>"; };
 		50C50B85220479E000D796DA /* BankTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTableView.swift; sourceTree = "<group>"; };
 		50C8C42C2605D51A00F4E012 /* BasicTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BasicTypes.h; sourceTree = "<group>"; };
@@ -1408,6 +1410,7 @@
 		5058A916281C774600C223C9 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				50C246022E8ABAC600B134F6 /* Symbols.swift */,
 				50E1D2C126CCF830001FE199 /* DatatypeExtensions.swift */,
 				50E1D2C326CCF8C9001FE199 /* FileExtensions.swift */,
 				50E1D2C526CCF942001FE199 /* FontExtensions.swift */,
@@ -2686,6 +2689,7 @@
 				502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */,
 				500B0D3C2E801818008FC5E1 /* VideoSettings.swift in Sources */,
 				50F54B2824B5D31D0078FDC9 /* u_medium.c in Sources */,
+				50C246032E8ABACB00B134F6 /* Symbols.swift in Sources */,
 				5039924325B2164E0084B808 /* MyDocumentController.swift in Sources */,
 				508FE01921EA227B0043D0E9 /* MyControllerMenu.swift in Sources */,
 				50EAD99C256E76820053F9AC /* HDFFile.h in Sources */,

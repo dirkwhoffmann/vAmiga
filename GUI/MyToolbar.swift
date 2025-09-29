@@ -83,24 +83,24 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
                  itemForItemIdentifier itemIdentifier: NSToolbarItem.Identifier,
                  willBeInsertedIntoToolbar flag: Bool) -> NSToolbarItem? {
 
-        let portItems = [ (NSImage.sf("nosign"), "None", -1),
-                          (NSImage.sf("computermouse"), "Mouse", 0),
-                          (NSImage.sf("arrowkeys"), "Keyset 1", 1),
-                          (NSImage.sf("arrowkeys"), "Keyset 2", 2),
-                          (NSImage.sf("gamecontroller"), "Gamepad 1", 3),
-                          (NSImage.sf("gamecontroller"), "Gamepad 2", 4),
-                          (NSImage.sf("gamecontroller"), "Gamepad 3", 5),
-                          (NSImage.sf("gamecontroller"), "Gamepad 4", 6) ]
+        let portItems = [ (SFSymbol.nosign, "None", -1),
+                          (SFSymbol.mouse, "Mouse", 0),
+                          (SFSymbol.arrowkeys, "Keyset 1", 1),
+                          (SFSymbol.arrowkeys, "Keyset 2", 2),
+                          (SFSymbol.gamecontroller, "Gamepad 1", 3),
+                          (SFSymbol.gamecontroller, "Gamepad 2", 4),
+                          (SFSymbol.gamecontroller, "Gamepad 3", 5),
+                          (SFSymbol.gamecontroller, "Gamepad 4", 6) ]
 
         switch itemIdentifier {
 
         case .inspectors:
 
-            let images: [String] = [
+            let images: [SFSymbol] = [
 
-                "magnifyingglass",
-                "gauge.with.needle",
-                "text.alignleft"
+                .magnifyingglass,
+                .gauge,
+                .console
             ]
 
             let actions: [Selector] = [
@@ -119,11 +119,11 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
 
         case .snapshots:
 
-            let images: [String] = [
+            let images: [SFSymbol] = [
 
-                "arrow.down.circle",
-                "arrow.up.circle",
-                "clock.arrow.trianglehead.counterclockwise.rotate.90"
+                .arrowDown,
+                .arrowUp,
+                .arrowClock
             ]
 
             let actions: [Selector] = [
@@ -144,7 +144,7 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
 
             port1 = MyToolbarMenuItem(identifier: .port1,
                                       menuItems: portItems,
-                                      image: "gear",
+                                      image: .gear,
                                       action: #selector(port1Action(_:)),
                                       target: self,
                                       label: "Port 1")
@@ -154,7 +154,7 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
 
             port2 = MyToolbarMenuItem(identifier: .port2,
                                       menuItems: portItems,
-                                      image: "gear",
+                                      image: .gear,
                                       action: #selector(port2Action(_:)),
                                       target: self,
                                       label: "Port 2")
@@ -163,7 +163,7 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
         case .keyboard:
 
             keyboard = MyToolbarItemGroup(identifier: .keyboard,
-                                          images: ["keyboard"],
+                                          images: [.keyboard],
                                           actions: [#selector(keyboardAction)],
                                           target: self,
                                           label: "Keyboard")
@@ -172,7 +172,7 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
         case .settings:
 
             settings = MyToolbarItemGroup(identifier: .settings,
-                                          images: ["gear"],
+                                          images: [.keyboard],
                                           actions: [#selector(settingsAction)],
                                           target: self,
                                           label: "Settings")
@@ -180,11 +180,11 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
 
         case .controls:
 
-            let images: [String] = [
+            let images: [SFSymbol] = [
 
-                "pause.circle",
-                "arrow.counterclockwise.circle",
-                "power"
+                .pause,
+                .reset,
+                .power
             ]
 
             let actions: [Selector] = [
@@ -250,12 +250,12 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
         if amiga.running {
 
             controls.setToolTip("Pause", forSegment: 0)
-            controls.setImage(NSImage.sf("pause.circle"), forSegment: 0)
+            controls.setImage(SFSymbol.get(.pause), forSegment: 0)
 
         } else {
 
             controls.setToolTip("Run", forSegment: 0)
-            controls.setImage(NSImage.sf("play.circle"), forSegment: 0)
+            controls.setImage(SFSymbol.get(.play), forSegment: 0)
         }
     }
 
