@@ -264,6 +264,7 @@ class Onboarding: Layer {
 
     var window: NSWindow { controller.window! }
     var contentView: NSView { window.contentView! }
+    var backgroundView: NSView = NSView()
     var storyboard: NSStoryboard { NSStoryboard(name: "Onboarding", bundle: nil) }
 
     var onboardingVC: OnboardingLayerViewController!
@@ -271,6 +272,10 @@ class Onboarding: Layer {
     override init(renderer: Renderer) {
 
         super.init(renderer: renderer)
+
+        backgroundView.wantsLayer = true
+        backgroundView.layer?.backgroundColor = NSColor.windowBackgroundColor.cgColor
+        backgroundView.translatesAutoresizingMaskIntoConstraints = false
 
         onboardingVC = storyboard.instantiateController(withIdentifier: "OnboardingLayerViewController") as? OnboardingLayerViewController
         onboardingVC.view.wantsLayer = true
@@ -291,8 +296,8 @@ class Onboarding: Layer {
 
     override func layerDidOpen() {
 
-        renderer.canvas.shouldRender = true
-        renderer.splashScreen.shouldRender = true
+        // renderer.canvas.shouldRender = true
+        // renderer.splashScreen.shouldRender = true
     }
 
     override func layerDidClose() {
@@ -309,8 +314,15 @@ class Onboarding: Layer {
 
         if alpha.current > 0 && onboardingVC.view.superview == nil {
 
-            contentView.addSubview(onboardingVC.view)
+            contentView.addSubview(backgroundView)
+            NSLayoutConstraint.activate([
+                backgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                backgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                backgroundView.topAnchor.constraint(equalTo: contentView.topAnchor),
+                backgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            ])
 
+            contentView.addSubview(onboardingVC.view)
             onboardingVC.view.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 onboardingVC.view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -322,6 +334,7 @@ class Onboarding: Layer {
 
         if alpha.current == 0 && onboardingVC.view.superview != nil {
 
+            backgroundView.removeFromSuperview()
             onboardingVC.view.removeFromSuperview()
         }
     }

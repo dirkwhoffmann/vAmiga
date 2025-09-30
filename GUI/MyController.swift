@@ -226,8 +226,8 @@ extension MyController {
             emu.powerOff()
 
             // Open the onboarding agent
-            renderer.splashScreen.shouldRender = false
-            renderer.canvas.shouldRender = false
+            // renderer.splashScreen.shouldRender = false
+            // renderer.canvas.shouldRender = false
             renderer.onboarding.open(delay: 1.0)
         }
 
