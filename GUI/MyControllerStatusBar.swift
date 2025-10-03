@@ -58,12 +58,6 @@ extension MyController {
             refreshStatusBar(drive: n, icon: hdn.templateIcon, toolTip: hdn.toolTip)
         }
 
-        // Command key icon
-        let mapLeft = myAppDelegate.mapLeftCmdKey
-        let mapRight = myAppDelegate.mapRightCmdKey
-        cmdLeftIcon.image = cmdKeyIcon(mapLeft)
-        cmdRightIcon.image = cmdKeyIcon(mapRight)
-
         // Track icon
         trackIcon.toolTip = info
         trackIcon.contentTintColor = info == nil ? nil : NSColor.warning
@@ -101,8 +95,6 @@ extension MyController {
 
             haltIcon: cpuinfo.halt,
             trackIcon: tracking,
-            cmdLeftIcon: false,
-            cmdRightIcon: false,
             serverIcon: true,
             muteIcon: warp || muted,
 

@@ -11,8 +11,6 @@
                 <outlet property="activityBar" destination="212" id="Enu-fB-P92"/>
                 <outlet property="activityInfo" destination="oNV-mZ-JGc" id="HDY-Cq-tSN"/>
                 <outlet property="activityType" destination="0go-7K-IPf" id="caX-Zm-vUc"/>
-                <outlet property="cmdLeftIcon" destination="dpd-DV-6eT" id="Ixb-aG-SB3"/>
-                <outlet property="cmdRightIcon" destination="1Ke-5u-05P" id="G6a-dT-XWP"/>
                 <outlet property="cylSlot0" destination="f19-16-42W" id="qi6-Qi-Wnz"/>
                 <outlet property="cylSlot1" destination="f7g-mT-LE7" id="L3Z-kO-mNv"/>
                 <outlet property="cylSlot2" destination="P62-wC-T1P" id="CiL-FT-qxc"/>
@@ -202,14 +200,6 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
-                    <button tag="2" id="1Ke-5u-05P" userLabel="Halt">
-                        <rect key="frame" x="459" y="3" width="20" height="20"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="cmdKeyTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="I2d-4O-y9r">
-                            <behavior key="behavior" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                    </button>
                     <button toolTip="Warp mode" id="1052">
                         <rect key="frame" x="689" y="4" width="18" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
@@ -252,14 +242,6 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button tag="2" id="dpd-DV-6eT" userLabel="Halt">
-                        <rect key="frame" x="437" y="3" width="20" height="20"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="cmdKeyTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="R0x-fF-Es0">
-                            <behavior key="behavior" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                    </button>
                     <button tag="2" id="9cr-37-7RV" userLabel="Mute">
                         <rect key="frame" x="571" y="2" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
@@ -286,7 +268,6 @@
         </window>
     </objects>
     <resources>
-        <image name="cmdKeyTemplate" width="240" height="262"/>
         <image name="diskTemplate" width="217" height="217"/>
         <image name="haltTemplate" width="240" height="241"/>
         <image name="hourglass1Template" width="240" height="241"/>

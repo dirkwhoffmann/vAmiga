@@ -46,12 +46,6 @@ extension MyController: NSMenuItemValidation {
             return true
             
             // Keyboard menu
-        case #selector(MyController.mapLeftCmdKeyAction(_:)):
-            item.state = myAppDelegate.mapLeftCmdKey ? .on : .off
-            return true
-        case #selector(MyController.mapRightCmdKeyAction(_:)):
-            item.state = myAppDelegate.mapRightCmdKey ? .on : .off
-            return true
         case #selector(MyController.mapCapsLockWarpAction(_:)):
             item.state = myAppDelegate.mapCapsLockWarp ? .on : .off
             return true
@@ -465,18 +459,6 @@ extension MyController: NSMenuItemValidation {
             debug(.lifetime, "Opeining virtual keyboard as a window")
         }
         virtualKeyboard?.showAsWindow()
-    }
-
-    @IBAction func mapLeftCmdKeyAction(_ sender: NSMenuItem!) {
-
-        myAppDelegate.mapLeftCmdKey = !myAppDelegate.mapLeftCmdKey
-        refreshStatusBar()
-    }
-
-    @IBAction func mapRightCmdKeyAction(_ sender: NSMenuItem!) {
-
-        myAppDelegate.mapRightCmdKey = !myAppDelegate.mapRightCmdKey
-        refreshStatusBar()
     }
 
     @IBAction func mapCapsLockWarpAction(_ sender: NSMenuItem!) {

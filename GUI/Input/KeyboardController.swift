@@ -140,18 +140,6 @@ class KeyboardController: NSObject {
                 rightAmiga = false
             }
 
-            /*
-        case kVK_Command where myAppDelegate.mapLeftCmdKey:
-            leftCommand = event.modifierFlags.contains(.command) ? !leftCommand : false
-            myApp.disableCmdKey = leftCommand
-            leftCommand ? keyDown(with: MacKey.command) : keyUp(with: MacKey.command)
-            
-        case kVK_RightCommand where myAppDelegate.mapRightCmdKey:
-            rightCommand = event.modifierFlags.contains(.command) ? !rightCommand : false
-            myApp.disableCmdKey = rightCommand
-            rightCommand ? keyDown(with: MacKey.rightCommand) : keyUp(with: MacKey.rightCommand)
-            */
-
         case kVK_CapsLock where myAppDelegate.mapCapsLockWarp:
             capsLock = event.modifierFlags.contains(.capsLock)
             capsLock ? capsLockDown() : capsLockUp()

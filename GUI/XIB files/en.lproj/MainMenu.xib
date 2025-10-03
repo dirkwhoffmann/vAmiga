@@ -350,18 +350,6 @@ CQ
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="9ee-jY-6ug"/>
-                            <menuItem title="Map Left ⌘ Key to Left Amiga Key" id="510">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="mapLeftCmdKeyAction:" target="-1" id="6t5-eB-ZYU"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Map Right ⌘ Key to Right Amiga Key" id="PbJ-of-yYs">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="mapRightCmdKeyAction:" target="-1" id="Z3K-od-06m"/>
-                                </connections>
-                            </menuItem>
                             <menuItem title="Control Warp Mode with Caps Lock Key" id="QzJ-1p-Opa">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>

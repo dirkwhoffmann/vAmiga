@@ -114,8 +114,6 @@ class MyController: NSWindowController, MessageReceiver {
     
     @IBOutlet weak var haltIcon: NSButton!
     @IBOutlet weak var trackIcon: NSButton!
-    @IBOutlet weak var cmdLeftIcon: NSButton!
-    @IBOutlet weak var cmdRightIcon: NSButton!
     @IBOutlet weak var serverIcon: NSButton!
     @IBOutlet weak var muteIcon: NSButton!
     
