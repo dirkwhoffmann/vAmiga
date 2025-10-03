@@ -172,7 +172,7 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
         case .settings:
 
             settings = MyToolbarItemGroup(identifier: .settings,
-                                          images: [.keyboard],
+                                          images: [.gear],
                                           actions: [#selector(settingsAction)],
                                           target: self,
                                           label: "Settings")

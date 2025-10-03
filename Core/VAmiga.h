@@ -61,6 +61,19 @@ public:
      */
     void dump(Category category, std::ostream &os) const;
 
+
+    /// @}
+    /// @name Accessing the message queue
+    /// @{
+
+    /** @brief  Reads a message from the message queue
+     *
+     *  @param  msg    The returned message (if any)
+     *  @return True if a message could be read, false if the queue was empty
+     */
+    bool getMsg(Message &msg);
+
+
     /// @}
     /// @name Managing workspaces and snapshots
     /// @{
@@ -118,8 +131,6 @@ public:
     void setAutoInspectionMask(u64 mask);
     
     /// @}
-    
-    bool getMsg(Message &msg);
 };
 
 

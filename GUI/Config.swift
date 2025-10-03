@@ -27,6 +27,7 @@ struct BuildSettings {
 
 public extension Int {
 
+    static let audio        = 0     // Audio unit
     static let config       = 0     // Configuration
     static let defaults     = 0     // User defaults
     static let dragndrop    = 0     // Drag and drop
