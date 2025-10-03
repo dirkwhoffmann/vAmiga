@@ -309,11 +309,9 @@ struct Keys {
 
         // Mouse
         static let retainMouseKeyComb    = "General.RetainMouseKeyComb"
-        static let retainMouseWithKeys   = "General.RetainMouseWithKeys"
         static let retainMouseByClick    = "General.RetainMouseByClick"
         static let retainMouseByEntering = "General.RetainMouseByEntering"
         static let releaseMouseKeyComb   = "General.ReleaseMouseKeyComb"
-        static let releaseMouseWithKeys  = "General.ReleaseMouseWithKeys"
         static let releaseMouseByShaking = "General.ReleaseMouseByShaking"
 
         // Miscellaneous
@@ -337,11 +335,9 @@ extension DefaultsProxy {
 
         // Mouse
         register(Keys.Gen.retainMouseKeyComb, 0)
-        register(Keys.Gen.retainMouseWithKeys, true)
         register(Keys.Gen.retainMouseByClick, true)
         register(Keys.Gen.retainMouseByEntering, false)
         register(Keys.Gen.releaseMouseKeyComb, 0)
-        register(Keys.Gen.releaseMouseWithKeys, true)
         register(Keys.Gen.releaseMouseByShaking, true)
 
         // Misc
@@ -359,11 +355,9 @@ extension DefaultsProxy {
                      Keys.Gen.exitOnEsc,
 
                      Keys.Gen.retainMouseKeyComb,
-                     Keys.Gen.retainMouseWithKeys,
                      Keys.Gen.retainMouseByClick,
                      Keys.Gen.retainMouseByEntering,
                      Keys.Gen.releaseMouseKeyComb,
-                     Keys.Gen.releaseMouseWithKeys,
                      Keys.Gen.releaseMouseByShaking,
 
                      Keys.Gen.ejectWithoutAsking,
@@ -388,11 +382,9 @@ extension Preferences {
         defaults.set(Keys.Gen.exitOnEsc, exitOnEsc)
 
         defaults.set(Keys.Gen.retainMouseKeyComb, retainMouseKeyComb)
-        defaults.set(Keys.Gen.retainMouseWithKeys, retainMouseWithKeys)
         defaults.set(Keys.Gen.retainMouseByClick, retainMouseByClick)
         defaults.set(Keys.Gen.retainMouseByEntering, retainMouseByEntering)
         defaults.set(Keys.Gen.releaseMouseKeyComb, releaseMouseKeyComb)
-        defaults.set(Keys.Gen.releaseMouseWithKeys, releaseMouseWithKeys)
         defaults.set(Keys.Gen.releaseMouseByShaking, releaseMouseByShaking)
 
         defaults.set(Keys.Gen.ejectWithoutAsking, ejectWithoutAsking)
@@ -412,11 +404,9 @@ extension Preferences {
         exitOnEsc = defaults.bool(Keys.Gen.exitOnEsc)
 
         retainMouseKeyComb = defaults.int(Keys.Gen.retainMouseKeyComb)
-        retainMouseWithKeys = defaults.bool(Keys.Gen.retainMouseWithKeys)
         retainMouseByClick = defaults.bool(Keys.Gen.retainMouseByClick)
         retainMouseByEntering = defaults.bool(Keys.Gen.retainMouseByEntering)
         releaseMouseKeyComb = defaults.int(Keys.Gen.releaseMouseKeyComb)
-        releaseMouseWithKeys = defaults.bool(Keys.Gen.releaseMouseWithKeys)
         releaseMouseByShaking = defaults.bool(Keys.Gen.releaseMouseByShaking)
 
         ejectWithoutAsking = defaults.bool(Keys.Gen.ejectWithoutAsking)

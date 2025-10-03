@@ -15,11 +15,9 @@ class GeneralSettingsViewController: SettingsViewController {
 
     // Mouse
     @IBOutlet weak var retainMouseKeyComb: NSPopUpButton!
-    @IBOutlet weak var retainMouseWithKeys: NSButton!
     @IBOutlet weak var retainMouseByClick: NSButton!
     @IBOutlet weak var retainMouseByEntering: NSButton!
     @IBOutlet weak var releaseMouseKeyComb: NSPopUpButton!
-    @IBOutlet weak var releaseMouseWithKeys: NSButton!
     @IBOutlet weak var releaseMouseByShaking: NSButton!
 
     // Misc
@@ -53,13 +51,9 @@ class GeneralSettingsViewController: SettingsViewController {
 
         // Mouse
         retainMouseKeyComb.selectItem(withTag: pref.retainMouseKeyComb)
-        retainMouseKeyComb.isEnabled = pref.retainMouseWithKeys
-        retainMouseWithKeys.state = pref.retainMouseWithKeys ? .on : .off
         retainMouseByClick.state = pref.retainMouseByClick ? .on : .off
         retainMouseByEntering.state = pref.retainMouseByEntering ? .on : .off
         releaseMouseKeyComb.selectItem(withTag: pref.releaseMouseKeyComb)
-        releaseMouseKeyComb.isEnabled = pref.releaseMouseWithKeys
-        releaseMouseWithKeys.state = pref.releaseMouseWithKeys ? .on : .off
         releaseMouseByShaking.state = pref.releaseMouseByShaking ? .on : .off
     }
 
@@ -93,7 +87,6 @@ class GeneralSettingsViewController: SettingsViewController {
 
         switch sender.tag {
 
-        case 0: pref.retainMouseWithKeys   = (sender.state == .on)
         case 1: pref.retainMouseByClick    = (sender.state == .on)
         case 2: pref.retainMouseByEntering = (sender.state == .on)
         default: fatalError()
@@ -112,7 +105,6 @@ class GeneralSettingsViewController: SettingsViewController {
 
         switch sender.tag {
 
-        case 0: pref.releaseMouseWithKeys  = (sender.state == .on)
         case 1: pref.releaseMouseByShaking = (sender.state == .on)
         default: fatalError()
         }

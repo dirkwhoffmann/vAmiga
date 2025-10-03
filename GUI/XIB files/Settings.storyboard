@@ -325,7 +325,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AW9-dC-ar1">
-                                <rect key="frame" x="26" y="143" width="42" height="17"/>
+                                <rect key="frame" x="28" y="141" width="42" height="17"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" lineBreakMode="clipping" title="Retain" id="WgM-ZR-amB">
                                     <font key="font" metaFont="system"/>
@@ -333,17 +333,6 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eCD-eh-9KG">
-                                <rect key="frame" x="72" y="141" width="92" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="by pressing" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="weV-U0-8SQ">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="retainMouseAction:" target="ejc-Ml-G1m" id="eep-Ve-xCF"/>
-                                </connections>
-                            </button>
                             <button tag="1" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4zq-Mu-KH3">
                                 <rect key="frame" x="72" y="115" width="206" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -353,17 +342,6 @@
                                 </buttonCell>
                                 <connections>
                                     <action selector="retainMouseAction:" target="ejc-Ml-G1m" id="hfy-jT-NSb"/>
-                                </connections>
-                            </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0hd-SS-u3P">
-                                <rect key="frame" x="73" y="212" width="92" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="by pressing" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="u3V-ug-rkp">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="releaseMouseAction:" target="ejc-Ml-G1m" id="ysA-mC-yZV"/>
                                 </connections>
                             </button>
                             <button tag="1" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xfi-fe-Zfd">
@@ -389,17 +367,14 @@
                                 </connections>
                             </button>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nUG-qz-3Po">
-                                <rect key="frame" x="170" y="139" width="72" height="19"/>
+                                <rect key="frame" x="152" y="139" width="72" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <popUpButtonCell key="cell" type="roundRect" title="Alt+Cmd" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" selectedItem="wQP-TH-gNR" id="vAa-WH-gaV">
+                                <popUpButtonCell key="cell" type="roundRect" title="⌘G" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" selectedItem="wQP-TH-gNR" id="vAa-WH-gaV">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="label" size="11"/>
                                     <menu key="menu" id="pTR-Mg-G1o">
                                         <items>
-                                            <menuItem title="Alt+Cmd" state="on" id="wQP-TH-gNR">
-                                                <modifierMask key="keyEquivalentModifierMask"/>
-                                            </menuItem>
-                                            <menuItem title="Alt+Ctrl" tag="1" id="5tz-hB-MrS">
+                                            <menuItem title="⌘G" state="on" id="wQP-TH-gNR">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
                                         </items>
@@ -410,17 +385,14 @@
                                 </connections>
                             </popUpButton>
                             <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="boU-G9-by9">
-                                <rect key="frame" x="171" y="210" width="72" height="19"/>
+                                <rect key="frame" x="152" y="210" width="72" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <popUpButtonCell key="cell" type="roundRect" title="Alt+Cmd" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" selectedItem="h9S-S4-7cE" id="NgS-jq-d3N">
+                                <popUpButtonCell key="cell" type="roundRect" title="⌘G" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" selectedItem="h9S-S4-7cE" id="NgS-jq-d3N">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="label" size="11"/>
                                     <menu key="menu" id="bC6-ly-6Vn">
                                         <items>
-                                            <menuItem title="Alt+Cmd" state="on" id="h9S-S4-7cE">
-                                                <modifierMask key="keyEquivalentModifierMask"/>
-                                            </menuItem>
-                                            <menuItem title="Alt+Ctrl" tag="1" id="Jkt-SV-7lT">
+                                            <menuItem title="⌘G" state="on" id="h9S-S4-7cE">
                                                 <modifierMask key="keyEquivalentModifierMask"/>
                                             </menuItem>
                                         </items>
@@ -430,15 +402,6 @@
                                     <action selector="releaseMouseKeyCombAction:" target="ejc-Ml-G1m" id="TcO-Yx-mDc"/>
                                 </connections>
                             </popUpButton>
-                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GPX-5p-xjO">
-                                <rect key="frame" x="18" y="212" width="52" height="17"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <textFieldCell key="cell" lineBreakMode="clipping" title="Release" id="IaL-oK-NTi">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eMj-ay-62P">
                                 <rect key="frame" x="332" y="205" width="249" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
@@ -450,6 +413,33 @@
                                     <action selector="pauseInBackgroundAction:" target="ejc-Ml-G1m" id="8rO-Hb-O6F"/>
                                 </connections>
                             </button>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HLc-y5-flB">
+                                <rect key="frame" x="73" y="142" width="74" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="by pressing" id="Wfc-6z-LeM">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GPX-5p-xjO">
+                                <rect key="frame" x="18" y="212" width="52" height="17"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="Release" id="IaL-oK-NTi">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hOd-OU-Dq5">
+                                <rect key="frame" x="73" y="213" width="74" height="16"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" lineBreakMode="clipping" title="by pressing" id="5RE-uF-dIt">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="OQN-pg-dYB"/>
                         <viewLayoutGuide key="layoutMargins" id="YTQ-IG-ZDo"/>
@@ -466,11 +456,9 @@
                         <outlet property="pauseInBackground" destination="eMj-ay-62P" id="bNi-vt-ZBt"/>
                         <outlet property="releaseMouseByShaking" destination="Xfi-fe-Zfd" id="j69-Bf-aBE"/>
                         <outlet property="releaseMouseKeyComb" destination="boU-G9-by9" id="vDc-cW-ZYa"/>
-                        <outlet property="releaseMouseWithKeys" destination="0hd-SS-u3P" id="AH8-l9-tgr"/>
                         <outlet property="retainMouseByClick" destination="4zq-Mu-KH3" id="vyG-xO-QMY"/>
                         <outlet property="retainMouseByEntering" destination="ftI-2N-rZ1" id="YkL-Ld-tgv"/>
                         <outlet property="retainMouseKeyComb" destination="nUG-qz-3Po" id="yey-dI-aIg"/>
-                        <outlet property="retainMouseWithKeys" destination="eCD-eh-9KG" id="WDf-i2-0hh"/>
                     </connections>
                 </viewController>
                 <customObject id="HWW-o5-5Il" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -6204,7 +6192,7 @@
         <image name="relocated" width="276" height="276"/>
         <image name="rom_medium" width="129" height="157"/>
         <image name="rom_missing" width="129" height="157"/>
-        <image name="square.and.arrow.down" catalog="system" width="19" height="22"/>
+        <image name="square.and.arrow.down" catalog="system" width="15" height="17"/>
         <image name="trashTemplate" width="174" height="214"/>
     </resources>
 </document>

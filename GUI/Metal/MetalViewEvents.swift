@@ -181,7 +181,8 @@ public extension MetalView {
 
         mouseMoved(with: event)
     }
-    
+
+    /*
     func checkForMouseKeys(with event: NSEvent) -> Bool {
                 
         if !gotMouse && prefs.retainMouseWithKeys {
@@ -212,4 +213,5 @@ public extension MetalView {
         }
         return false
     }
+    */
 }

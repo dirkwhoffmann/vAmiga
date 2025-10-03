@@ -174,10 +174,8 @@ class Preferences {
 
     // Mouse
     var retainMouseKeyComb: Int! // DEPRECATED
-    var retainMouseWithKeys: Bool! // DEPRECATED
     var retainMouseByClick: Bool!
     var retainMouseByEntering: Bool!
     var releaseMouseKeyComb: Int! // DEPRECATED
-    var releaseMouseWithKeys: Bool! // DEPRECATED
     var releaseMouseByShaking: Bool!
 }
