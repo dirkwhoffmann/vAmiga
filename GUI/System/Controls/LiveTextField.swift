@@ -9,6 +9,7 @@
 
 import AppKit
 
+@MainActor
 class LiveTextField: NSTextField {
 
     override func textDidChange(_ notification: Notification) {

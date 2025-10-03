@@ -36,6 +36,7 @@ class OnboardingLayerViewController: NSViewController {
     var layer: Onboarding!
     var controller: MyController { layer.controller }
     var config: Configuration { controller.config }
+    var mm: MediaManager {  controller.mm }
     var emu: EmulatorProxy! { layer.emu }
 
     // Onboarding settings
@@ -154,8 +155,8 @@ class OnboardingLayerViewController: NSViewController {
 
         // Kickstart
         switch rom {
-        case 0: controller.installAros()
-        case 1: controller.installDiagRom()
+        case 0: mm.installAros()
+        case 1: mm.installDiagRom()
         default: fatalError()
         }
     }
