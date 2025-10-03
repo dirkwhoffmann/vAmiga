@@ -20,7 +20,6 @@ class GamePad {
 
     // References
     var manager: GamePadManager
-    var amiga: EmulatorProxy? { return manager.controller.emu }
     var prefs: Preferences { return manager.controller.pref }
     var config: Configuration { return manager.controller.config }
     var db: DeviceDatabase { return myAppDelegate.database }

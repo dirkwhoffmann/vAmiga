@@ -197,7 +197,6 @@ class FloppyCreator: DialogController {
 class DfDropView: NSImageView {
     
     @IBOutlet var parent: FloppyCreator!
-    var amiga: EmulatorProxy { return parent.emu }
 
     var oldImage: NSImage?
     

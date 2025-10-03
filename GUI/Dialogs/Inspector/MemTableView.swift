@@ -12,7 +12,7 @@ class MemTableView: NSTableView {
 
     @IBOutlet weak var inspector: Inspector!
 
-    var amiga: EmulatorProxy { return inspector.emu}
+    var emu: EmulatorProxy { return inspector.emu}
 
     // Displayed memory bank
     var bank = 0
@@ -43,18 +43,18 @@ class MemTableView: NSTableView {
         let rows = numberOfRows(in: self)
 
         // Continously update the RTC to get live register updates
-        if amiga.mem.memSrc(inspector.accessor, addr: addr) == .RTC {
-            amiga.rtc.update()
+        if emu.mem.memSrc(inspector.accessor, addr: addr) == .RTC {
+            emu.rtc.update()
         }
         
         for i in 0 ..< rows {
 
             addrInRow[i] = addr
-            asciiInRow[i] = amiga.mem.ascDump(inspector.accessor, addr: addr, bytes: 16)
+            asciiInRow[i] = emu.mem.ascDump(inspector.accessor, addr: addr, bytes: 16)
 
             for _ in 0 ..< 8 {
 
-                dataInAddr[addr] = amiga.mem.spypeek16(inspector.accessor, addr: addr)
+                dataInAddr[addr] = emu.mem.spypeek16(inspector.accessor, addr: addr)
                 addr += 2
             }
         }

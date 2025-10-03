@@ -19,9 +19,9 @@ class CopperTableView: NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
     
-    var amiga: EmulatorProxy { return inspector.emu }
-    var copper: CopperProxy { return amiga.copper }
-    var breakpoints: GuardsProxy { return amiga.copperBreakpoints }
+    var emu: EmulatorProxy { return inspector.emu }
+    var copper: CopperProxy { return emu.copper }
+    var breakpoints: GuardsProxy { return emu.copperBreakpoints }
     
     // Length of the Copper list as proposed by the Copper debugger
     var nativeLength = 0

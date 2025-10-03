@@ -280,7 +280,6 @@ class HardDiskCreator: DialogController {
 class HdDropView: NSImageView {
     
     @IBOutlet var parent: HardDiskCreator!
-    var amiga: EmulatorProxy { return parent.emu }
 
     var oldImage: NSImage?
     

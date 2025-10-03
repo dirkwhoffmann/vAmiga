@@ -11,7 +11,7 @@
 class GuardTableView: NSTableView {
 
     @IBOutlet weak var inspector: Inspector!
-    var amiga: EmulatorProxy? { return inspector.parent.emu }
+    var emu: EmulatorProxy? { return inspector.parent.emu }
 
     // Data caches
     var disabledCache: [Int: Bool] = [:]
@@ -126,7 +126,7 @@ extension GuardTableView: NSTableViewDelegate {
 
 class BreakTableView: GuardTableView {
 
-    var breakpoints: GuardsProxy? { return amiga?.breakpoints }
+    var breakpoints: GuardsProxy? { return emu?.breakpoints }
 
     override func cache() {
 
@@ -142,7 +142,7 @@ class BreakTableView: GuardTableView {
 
     override func click(row: Int, col: Int) {
 
-        guard let amiga = amiga, let breakpoints = breakpoints else { return }
+        guard let amiga = emu, let breakpoints = breakpoints else { return }
 
         amiga.suspend()
         
@@ -179,7 +179,7 @@ class BreakTableView: GuardTableView {
 
     override func edit(row: Int, addr: Int) {
 
-        guard let amiga = amiga, let breakpoints = breakpoints else { return }
+        guard let amiga = emu, let breakpoints = breakpoints else { return }
 
         // Breakpoint addresses must be even
         let bpAddr = addr & ~1
@@ -204,7 +204,7 @@ class BreakTableView: GuardTableView {
 
 class WatchTableView: GuardTableView {
 
-    var watchpoints: GuardsProxy? { return amiga?.watchpoints }
+    var watchpoints: GuardsProxy? { return emu?.watchpoints }
 
     override func cache() {
 
@@ -220,7 +220,7 @@ class WatchTableView: GuardTableView {
 
     override func click(row: Int, col: Int) {
 
-        guard let amiga = amiga, let watchpoints = watchpoints else { return }
+        guard let amiga = emu, let watchpoints = watchpoints else { return }
 
         amiga.suspend()
         
@@ -247,7 +247,7 @@ class WatchTableView: GuardTableView {
     
     override func edit(row: Int, addr: Int) {
 
-        guard let amiga = amiga, let watchpoints = watchpoints else { return }
+        guard let amiga = emu, let watchpoints = watchpoints else { return }
 
         // Abort if a watchpoint is already set
         if watchpoints.isSet(at: addr) { NSSound.beep(); return }
@@ -267,7 +267,7 @@ class WatchTableView: GuardTableView {
 
 class CopperBreakTableView: GuardTableView {
     
-    var breakpoints: GuardsProxy? { return amiga?.copperBreakpoints }
+    var breakpoints: GuardsProxy? { return emu?.copperBreakpoints }
 
     override func cache() {
 
@@ -283,7 +283,7 @@ class CopperBreakTableView: GuardTableView {
     
     override func click(row: Int, col: Int) {
 
-        guard let amiga = amiga, let breakpoints = breakpoints else { return }
+        guard let amiga = emu, let breakpoints = breakpoints else { return }
 
         amiga.suspend()
                 
@@ -320,7 +320,7 @@ class CopperBreakTableView: GuardTableView {
     
     override func edit(row: Int, addr: Int) {
 
-        guard let amiga = amiga, let breakpoints = breakpoints else { return }
+        guard let amiga = emu, let breakpoints = breakpoints else { return }
 
         // Breakpoint addresses must be even
         let bpAddr = addr & ~1

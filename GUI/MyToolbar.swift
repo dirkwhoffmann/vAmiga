@@ -22,7 +22,7 @@ extension NSToolbarItem.Identifier {
 class MyToolbar: NSToolbar, NSToolbarDelegate {
 
     var controller: MyController!
-    var amiga: EmulatorProxy! { return controller.emu! }
+    var emu: EmulatorProxy! { return controller.emu! }
 
     var inspectors: MyToolbarItemGroup!
     var snapshots: MyToolbarItemGroup!
@@ -234,7 +234,7 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
 
     func updateToolbar() {
 
-        if amiga.poweredOn {
+        if emu.poweredOn {
 
             controls.setEnabled(true, forSegment: 0) // Pause
             controls.setEnabled(true, forSegment: 1) // Reset
@@ -247,7 +247,7 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
             controls.setToolTip("Power on", forSegment: 2) // Power
         }
 
-        if amiga.running {
+        if emu.running {
 
             controls.setToolTip("Pause", forSegment: 0)
             controls.setImage(SFSymbol.get(.pause), forSegment: 0)
