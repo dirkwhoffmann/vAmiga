@@ -1,7 +1,0 @@
-language: swift
-osx_image: xcode12.2
-xcode_project: vAmiga.xcodeproj
-xcode_scheme: vAmiga
-xcode_destination: platform=macOS
-script: 
-- set -o pipefail && xcodebuild -project vAmiga.xcodeproj -scheme vAmiga -destination platform\=macOS build | xcpretty
