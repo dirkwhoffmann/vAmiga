@@ -12,10 +12,10 @@ class InstrTableView: NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
     
-    var amiga: EmulatorProxy { return inspector.parent.emu }
-    var cpu: CPUProxy { return amiga.cpu }
-    var breakpoints: GuardsProxy { return amiga.breakpoints }
-    
+    var amiga: EmulatorProxy? { return inspector.parent.emu }
+    var cpu: CPUProxy? { return amiga?.cpu }
+    var breakpoints: GuardsProxy? { return amiga?.breakpoints }
+
     enum BreakpointType {
         
         case none
@@ -59,9 +59,11 @@ class InstrTableView: NSTableView {
     
     private func cache() {
         
+        guard let cpu = cpu else { return }
+
         numRows = 256
         rowForAddr = [:]
-        
+
         var addr = addrInFirstRow
         for i in 0 ..< numRows {
             
@@ -69,9 +71,9 @@ class InstrTableView: NSTableView {
             instrInRow[i] = cpu.disassembleInstr(addr, length: &bytes)
             dataInRow[i] = cpu.disassembleWords(addr, length: bytes / 2)
                         
-            if breakpoints.isDisabled(at: addr) {
+            if breakpoints!.isDisabled(at: addr) {
                 bpInRow[i] = BreakpointType.disabled
-            } else if breakpoints.isSet(at: addr) {
+            } else if breakpoints!.isSet(at: addr) {
                 bpInRow[i] = BreakpointType.enabled
             } else {
                 bpInRow[i] = BreakpointType.none
@@ -139,6 +141,8 @@ class InstrTableView: NSTableView {
 
     func clickAction(row: Int) {
 
+        guard let breakpoints = breakpoints else { return }
+
         if let addr = addrInRow[row] {
 
             if !breakpoints.isSet(at: addr) {
@@ -163,6 +167,8 @@ class InstrTableView: NSTableView {
 
     func doubleClickAction(row: Int) {
 
+        guard let breakpoints = breakpoints else { return }
+        
         if let addr = addrInRow[row] {
 
             if breakpoints.isSet(at: addr) {

@@ -11,9 +11,9 @@
 class TraceTableView: NSTableView {
 
     @IBOutlet weak var inspector: Inspector!
-    var amiga: EmulatorProxy { return inspector.parent.emu }
-    var cpu: CPUProxy { return amiga.cpu }
-    
+    var amiga: EmulatorProxy? { return inspector.parent.emu }
+    var cpu: CPUProxy? { return amiga?.cpu }
+
     // Data caches
     var numRows = 0
     var addrInRow: [Int: String] = [:]
@@ -31,14 +31,16 @@ class TraceTableView: NSTableView {
         
     private func cache() {
 
+        guard let cpu = cpu else { return }
+
         numRows = cpu.loggedInstructions
 
         for i in 0 ..< numRows {
             
             var len = 0
-            addrInRow[i] = amiga.cpu.disassembleRecordedPC(i)
-            instrInRow[i] = amiga.cpu.disassembleRecordedInstr(i, length: &len)
-            flagsInRow[i] = amiga.cpu.disassembleRecordedFlags(i)
+            addrInRow[i] = cpu.disassembleRecordedPC(i)
+            instrInRow[i] = cpu.disassembleRecordedInstr(i, length: &len)
+            flagsInRow[i] = cpu.disassembleRecordedFlags(i)
         }
     }
 

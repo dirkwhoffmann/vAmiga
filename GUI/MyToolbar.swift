@@ -22,7 +22,7 @@ extension NSToolbarItem.Identifier {
 class MyToolbar: NSToolbar, NSToolbarDelegate {
 
     var controller: MyController!
-    var amiga: EmulatorProxy { return controller.emu }
+    var amiga: EmulatorProxy! { return controller.emu! }
 
     var inspectors: MyToolbarItemGroup!
     var snapshots: MyToolbarItemGroup!

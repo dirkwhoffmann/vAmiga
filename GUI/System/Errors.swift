@@ -401,6 +401,7 @@ extension MyController {
     }
 
     func proceedWithUnsavedHardDisk(drive: Int) -> Bool {
+        guard let emu = emu else { return true }
         return mydocument.proceedWithUnsavedHardDisk(drive: emu.hd(drive)!)
     }
 

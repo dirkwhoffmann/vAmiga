@@ -18,7 +18,7 @@
 class Configuration {
 
     var parent: MyController!
-    var emu: EmulatorProxy { return parent.emu }
+    var emu: EmulatorProxy? { return parent.emu }
     var renderer: Renderer { return parent.renderer }
     var gamePadManager: GamePadManager { return parent.gamePadManager }
     var ressourceManager: RessourceManager { return renderer.ressourceManager }
@@ -28,8 +28,8 @@ class Configuration {
     //
 
     var extStart: Int {
-        get { return emu.get(.MEM_EXT_START) }
-        set { emu.set(.MEM_EXT_START, value: newValue) }
+        get { return emu?.get(.MEM_EXT_START) ?? 0 }
+        set { emu?.set(.MEM_EXT_START, value: newValue) }
     }
 
     //
@@ -37,64 +37,64 @@ class Configuration {
     //
 
     var machineType: Int {
-        get { return emu.get(.AMIGA_VIDEO_FORMAT) }
-        set { emu.set(.AMIGA_VIDEO_FORMAT, value: newValue) }
+        get { return emu?.get(.AMIGA_VIDEO_FORMAT) ?? 0 }
+        set { emu?.set(.AMIGA_VIDEO_FORMAT, value: newValue) }
     }
     var cpuRev: Int {
-        get { return emu.get(.CPU_REVISION) }
-        set { emu.set(.CPU_REVISION, value: newValue) }
+        get { return emu?.get(.CPU_REVISION) ?? 0 }
+        set { emu?.set(.CPU_REVISION, value: newValue) }
     }
     var cpuDasmRev: Int {
-        get { return emu.get(.CPU_DASM_REVISION) }
-        set { emu.set(.CPU_DASM_REVISION, value: newValue) }
+        get { return emu?.get(.CPU_DASM_REVISION) ?? 0 }
+        set { emu?.set(.CPU_DASM_REVISION, value: newValue) }
     }
     var cpuSpeed: Int {
-        get { return emu.get(.CPU_OVERCLOCKING) }
-        set { emu.set(.CPU_OVERCLOCKING, value: newValue) }
+        get { return emu?.get(.CPU_OVERCLOCKING) ?? 0 }
+        set { emu?.set(.CPU_OVERCLOCKING, value: newValue) }
     }
     var agnusRev: Int {
-        get { return emu.get(.AGNUS_REVISION) }
-        set { emu.set(.AGNUS_REVISION, value: newValue) }
+        get { return emu?.get(.AGNUS_REVISION) ?? 0 }
+        set { emu?.set(.AGNUS_REVISION, value: newValue) }
     }
     var deniseRev: Int {
-        get { return emu.get(.DENISE_REVISION) }
-        set { emu.set(.DENISE_REVISION, value: newValue) }
+        get { return emu?.get(.DENISE_REVISION) ?? 0 }
+        set { emu?.set(.DENISE_REVISION, value: newValue) }
     }
     var ciaRev: Int {
-        get { return emu.get(.CIA_REVISION) }
-        set { emu.set(.CIA_REVISION, value: newValue) }
+        get { return emu?.get(.CIA_REVISION) ?? 0 }
+        set { emu?.set(.CIA_REVISION, value: newValue) }
     }
     var rtClock: Int {
-        get { return emu.get(.RTC_MODEL) }
-        set { emu.set(.RTC_MODEL, value: newValue) }
+        get { return emu?.get(.RTC_MODEL) ?? 0 }
+        set { emu?.set(.RTC_MODEL, value: newValue) }
     }
     var filterType: Int {
-        get { return emu.get(.AUD_FILTER_TYPE) }
-        set { emu.set(.AUD_FILTER_TYPE, value: newValue) }
+        get { return emu?.get(.AUD_FILTER_TYPE) ?? 0 }
+        set { emu?.set(.AUD_FILTER_TYPE, value: newValue) }
     }
     var chipRam: Int {
-        get { return emu.get(.MEM_CHIP_RAM) }
-        set { emu.set(.MEM_CHIP_RAM, value: newValue) }
+        get { return emu?.get(.MEM_CHIP_RAM) ?? 0 }
+        set { emu?.set(.MEM_CHIP_RAM, value: newValue) }
     }
     var slowRam: Int {
-        get { return emu.get(.MEM_SLOW_RAM) }
-        set { emu.set(.MEM_SLOW_RAM, value: newValue) }
+        get { return emu?.get(.MEM_SLOW_RAM) ?? 0 }
+        set { emu?.set(.MEM_SLOW_RAM, value: newValue) }
     }
     var fastRam: Int {
-        get { return emu.get(.MEM_FAST_RAM) }
-        set { emu.set(.MEM_FAST_RAM, value: newValue) }
+        get { return emu?.get(.MEM_FAST_RAM) ?? 0 }
+        set { emu?.set(.MEM_FAST_RAM, value: newValue) }
     }
     var bankMap: Int {
-        get { return emu.get(.MEM_BANKMAP) }
-        set { emu.set(.MEM_BANKMAP, value: newValue) }
+        get { return emu?.get(.MEM_BANKMAP) ?? 0 }
+        set { emu?.set(.MEM_BANKMAP, value: newValue) }
     }
     var ramInitPattern: Int {
-        get { return emu.get(.MEM_RAM_INIT_PATTERN) }
-        set { emu.set(.MEM_RAM_INIT_PATTERN, value: newValue) }
+        get { return emu?.get(.MEM_RAM_INIT_PATTERN) ?? 0 }
+        set { emu?.set(.MEM_RAM_INIT_PATTERN, value: newValue) }
     }
     var unmappingType: Int {
-        get { return emu.get(.MEM_UNMAPPING_TYPE) }
-        set { emu.set(.MEM_UNMAPPING_TYPE, value: newValue) }
+        get { return emu?.get(.MEM_UNMAPPING_TYPE) ?? 0 }
+        set { emu?.set(.MEM_UNMAPPING_TYPE, value: newValue) }
     }
 
     //
@@ -103,52 +103,52 @@ class Configuration {
 
     func dfnConnected(_ n: Int) -> Bool {
         precondition(0 <= n && n <= 3)
-        return emu.get(.DRIVE_CONNECT, drive: n) != 0
+        return emu?.get(.DRIVE_CONNECT, drive: n) != 0
     }
 
     func setDfnConnected(_ n: Int, connect: Bool) {
         precondition(0 <= n && n <= 3)
-        emu.set(.DRIVE_CONNECT, drive: n, enable: connect)
+        emu?.set(.DRIVE_CONNECT, drive: n, enable: connect)
     }
 
     func dfnType(_ n: Int) -> Int {
         precondition(0 <= n && n <= 3)
-        return emu.get(.DRIVE_TYPE, drive: n)
+        return emu?.get(.DRIVE_TYPE, drive: n) ?? 0
     }
 
     func setDfnType(_ n: Int, type: Int) {
         precondition(0 <= n && n <= 3)
-        emu.set(.DRIVE_TYPE, drive: n, value: type)
+        emu?.set(.DRIVE_TYPE, drive: n, value: type)
     }
 
     func dfnRpm(_ n: Int) -> Int {
         precondition(0 <= n && n <= 3)
-        return emu.get(.DRIVE_RPM, drive: n)
+        return emu?.get(.DRIVE_RPM, drive: n) ?? 0
     }
 
     func setDfnRpm(_ n: Int, type: Int) {
         precondition(0 <= n && n <= 3)
-        emu.set(.DRIVE_RPM, drive: n, value: type)
+        emu?.set(.DRIVE_RPM, drive: n, value: type)
     }
 
     func hdnConnected(_ n: Int) -> Bool {
         precondition(0 <= n && n <= 3)
-        return emu.get(.HDC_CONNECT, drive: n) != 0
+        return emu?.get(.HDC_CONNECT, drive: n) != 0
     }
 
     func setHdnConnected(_ n: Int, connect: Bool) {
         precondition(0 <= n && n <= 3)
-        emu.set(.HDC_CONNECT, drive: n, enable: connect)
+        emu?.set(.HDC_CONNECT, drive: n, enable: connect)
     }
 
     func hdnType(_ n: Int) -> Int {
         precondition(0 <= n && n <= 3)
-        return emu.get(.HDR_TYPE, drive: n)
+        return emu?.get(.HDR_TYPE, drive: n) ?? 0
     }
 
     func setHdnType(_ n: Int, type: Int) {
         precondition(0 <= n && n <= 3)
-        emu.set(.HDR_TYPE, drive: n, value: type)
+        emu?.set(.HDR_TYPE, drive: n, value: type)
     }
 
     var df0Connected: Bool {
@@ -282,33 +282,33 @@ class Configuration {
     }
 
     var autofire: Bool {
-        get { return emu.get(.JOY_AUTOFIRE, id: 1) != 0 }
-        set { emu.set(.JOY_AUTOFIRE, enable: newValue) }
+        get { return emu?.get(.JOY_AUTOFIRE, id: 1) != 0 }
+        set { emu?.set(.JOY_AUTOFIRE, enable: newValue) }
     }
 
     var autofireBursts: Bool {
-        get { return emu.get(.JOY_AUTOFIRE_BURSTS, id: 1) != 0 }
-        set { emu.set(.JOY_AUTOFIRE_BURSTS, enable: newValue) }
+        get { return emu?.get(.JOY_AUTOFIRE_BURSTS, id: 1) != 0 }
+        set { emu?.set(.JOY_AUTOFIRE_BURSTS, enable: newValue) }
     }
 
     var autofireBullets: Int {
-        get { return emu.get(.JOY_AUTOFIRE_BULLETS, id: 1) }
-        set { emu.set(.JOY_AUTOFIRE_BULLETS, value: newValue) }
+        get { return emu?.get(.JOY_AUTOFIRE_BULLETS, id: 1) ?? 0 }
+        set { emu?.set(.JOY_AUTOFIRE_BULLETS, value: newValue) }
     }
 
     var autofireDelay: Int {
-        get { return emu.get(.JOY_AUTOFIRE_DELAY, id: 1) }
-        set { emu.set(.JOY_AUTOFIRE_DELAY, value: newValue) }
+        get { return emu?.get(.JOY_AUTOFIRE_DELAY, id: 1) ?? 0 }
+        set { emu?.set(.JOY_AUTOFIRE_DELAY, value: newValue) }
     }
 
     var serialDevice: Int {
-        get { return emu.get(.SER_DEVICE) }
-        set { emu.set(.SER_DEVICE, value: newValue) }
+        get { return emu?.get(.SER_DEVICE) ?? 0 }
+        set { emu?.set(.SER_DEVICE, value: newValue) }
     }
 
     var serialDevicePort: Int {
-        get { return emu.get(.SRV_PORT, id: ServerType.SER.rawValue) }
-        set { emu.set(.SRV_PORT, id: ServerType.SER.rawValue, value: newValue) }
+        get { return emu?.get(.SRV_PORT, id: ServerType.SER.rawValue) ?? 0 }
+        set { emu?.set(.SRV_PORT, id: ServerType.SER.rawValue, value: newValue) }
     }
 
     //
@@ -316,56 +316,56 @@ class Configuration {
     //
 
     var warpMode: Int {
-        get { return emu.get(.AMIGA_WARP_MODE) }
-        set { emu.set(.AMIGA_WARP_MODE, value: newValue) }
+        get { return emu?.get(.AMIGA_WARP_MODE) ?? 0 }
+        set { emu?.set(.AMIGA_WARP_MODE, value: newValue) }
     }
     var warpBoot: Int {
-        get { return emu.get(.AMIGA_WARP_BOOT) }
-        set { emu.set(.AMIGA_WARP_BOOT, value: newValue) }
+        get { return emu?.get(.AMIGA_WARP_BOOT) ?? 0 }
+        set { emu?.set(.AMIGA_WARP_BOOT, value: newValue) }
     }
     var clxSprSpr: Bool {
-        get { return emu.get(.DENISE_CLX_SPR_SPR) != 0 }
-        set { emu.set(.DENISE_CLX_SPR_SPR, enable: newValue) }
+        get { return emu?.get(.DENISE_CLX_SPR_SPR) != 0 }
+        set { emu?.set(.DENISE_CLX_SPR_SPR, enable: newValue) }
     }
     var clxSprPlf: Bool {
-        get { return emu.get(.DENISE_CLX_SPR_PLF) != 0 }
-        set { emu.set(.DENISE_CLX_SPR_PLF, enable: newValue) }
+        get { return emu?.get(.DENISE_CLX_SPR_PLF) != 0 }
+        set { emu?.set(.DENISE_CLX_SPR_PLF, enable: newValue) }
     }
     var clxPlfPlf: Bool {
-        get { return emu.get(.DENISE_CLX_PLF_PLF) != 0 }
-        set { emu.set(.DENISE_CLX_PLF_PLF, enable: newValue) }
+        get { return emu?.get(.DENISE_CLX_PLF_PLF) != 0 }
+        set { emu?.set(.DENISE_CLX_PLF_PLF, enable: newValue) }
     }
     var ciaIdleSleep: Bool {
-        get { return emu.get(.CIA_IDLE_SLEEP) != 0 }
-        set { emu.set(.CIA_IDLE_SLEEP, enable: newValue) }
+        get { return emu?.get(.CIA_IDLE_SLEEP) != 0 }
+        set { emu?.set(.CIA_IDLE_SLEEP, enable: newValue) }
     }
     var frameSkipping: Int {
-        get { return emu.get(.DENISE_FRAME_SKIPPING) }
-        set { emu.set(.DENISE_FRAME_SKIPPING, value: newValue) }
+        get { return emu?.get(.DENISE_FRAME_SKIPPING) ?? 0 }
+        set { emu?.set(.DENISE_FRAME_SKIPPING, value: newValue) }
     }
     var audioFastPath: Bool {
-        get { return emu.get(.AUD_FASTPATH) != 0 }
-        set { emu.set(.AUD_FASTPATH, enable: newValue) }
+        get { return emu?.get(.AUD_FASTPATH) != 0 }
+        set { emu?.set(.AUD_FASTPATH, enable: newValue) }
     }
     var vsync: Bool {
-        get { return emu.get(.AMIGA_VSYNC) != 0 }
-        set { emu.set(.AMIGA_VSYNC, enable: newValue) }
+        get { return emu?.get(.AMIGA_VSYNC) != 0 }
+        set { emu?.set(.AMIGA_VSYNC, enable: newValue) }
     }
     var speedBoost: Int {
-        get { return emu.get(.AMIGA_SPEED_BOOST) }
-        set { emu.set(.AMIGA_SPEED_BOOST, value: newValue) }
+        get { return emu?.get(.AMIGA_SPEED_BOOST) ?? 0 }
+        set { emu?.set(.AMIGA_SPEED_BOOST, value: newValue) }
     }
     var runAhead: Int {
-        get { return emu.get(.AMIGA_RUN_AHEAD) }
-        set { emu.set(.AMIGA_RUN_AHEAD, value: newValue) }
+        get { return emu?.get(.AMIGA_RUN_AHEAD) ?? 0 }
+        set { emu?.set(.AMIGA_RUN_AHEAD, value: newValue) }
     }
     var wsCompressor: Int {
-        get { return emu.get(.AMIGA_WS_COMPRESSION) }
-        set { emu.set(.AMIGA_WS_COMPRESSION, value: newValue) }
+        get { return emu?.get(.AMIGA_WS_COMPRESSION) ?? 0 }
+        set { emu?.set(.AMIGA_WS_COMPRESSION, value: newValue) }
     }
     var snapCompressor: Int {
-        get { return emu.get(.AMIGA_SNAP_COMPRESSOR) }
-        set { emu.set(.AMIGA_SNAP_COMPRESSOR, value: newValue) }
+        get { return emu?.get(.AMIGA_SNAP_COMPRESSOR) ?? 0 }
+        set { emu?.set(.AMIGA_SNAP_COMPRESSOR, value: newValue) }
     }
 
     //
@@ -373,53 +373,53 @@ class Configuration {
     //
 
     var blitterAccuracy: Int {
-        get { return emu.get(.BLITTER_ACCURACY) }
-        set { emu.set(.BLITTER_ACCURACY, value: newValue) }
+        get { return emu?.get(.BLITTER_ACCURACY) ?? 0 }
+        set { emu?.set(.BLITTER_ACCURACY, value: newValue) }
     }
     var todBug: Bool {
-        get { return emu.get(.CIA_TODBUG) != 0 }
-        set { emu.set(.CIA_TODBUG, enable: newValue) }
+        get { return emu?.get(.CIA_TODBUG) != 0 }
+        set { emu?.set(.CIA_TODBUG, enable: newValue) }
     }
     var ptrDrops: Bool {
-        get { return emu.get(.AGNUS_PTR_DROPS) != 0 }
-        set { emu.set(.AGNUS_PTR_DROPS, enable: newValue) }
+        get { return emu?.get(.AGNUS_PTR_DROPS) != 0 }
+        set { emu?.set(.AGNUS_PTR_DROPS, enable: newValue) }
     }
     var eClockSyncing: Bool {
-        get { return emu.get(.CIA_ECLOCK_SYNCING) != 0 }
-        set { emu.set(.CIA_ECLOCK_SYNCING, enable: newValue) }
+        get { return emu?.get(.CIA_ECLOCK_SYNCING) != 0 }
+        set { emu?.set(.CIA_ECLOCK_SYNCING, enable: newValue) }
     }
     var slowRamDelay: Bool {
-        get { return emu.get(.MEM_SLOW_RAM_DELAY) != 0 }
-        set { emu.set(.MEM_SLOW_RAM_DELAY, enable: newValue) }
+        get { return emu?.get(.MEM_SLOW_RAM_DELAY) != 0 }
+        set { emu?.set(.MEM_SLOW_RAM_DELAY, enable: newValue) }
     }
     var slowRamMirror: Bool {
-        get { return emu.get(.MEM_SLOW_RAM_MIRROR) != 0 }
-        set { emu.set(.MEM_SLOW_RAM_MIRROR, enable: newValue) }
+        get { return emu?.get(.MEM_SLOW_RAM_MIRROR) != 0 }
+        set { emu?.set(.MEM_SLOW_RAM_MIRROR, enable: newValue) }
     }
     var driveSpeed: Int {
-        get { return emu.get(.DC_SPEED) }
-        set { emu.set(.DC_SPEED, value: newValue) }
+        get { return emu?.get(.DC_SPEED) ?? 0 }
+        set { emu?.set(.DC_SPEED, value: newValue) }
     }
     var driveMechanics: Int {
-        get { return emu.get(.DRIVE_MECHANICS, drive: 0) }
+        get { return emu?.get(.DRIVE_MECHANICS, drive: 0) ?? 0 }
         set {
-            emu.set(.DRIVE_MECHANICS, drive: 0, value: newValue)
-            emu.set(.DRIVE_MECHANICS, drive: 1, value: newValue)
-            emu.set(.DRIVE_MECHANICS, drive: 2, value: newValue)
-            emu.set(.DRIVE_MECHANICS, drive: 3, value: newValue)
+            emu?.set(.DRIVE_MECHANICS, drive: 0, value: newValue)
+            emu?.set(.DRIVE_MECHANICS, drive: 1, value: newValue)
+            emu?.set(.DRIVE_MECHANICS, drive: 2, value: newValue)
+            emu?.set(.DRIVE_MECHANICS, drive: 3, value: newValue)
         }
     }
     var lockDskSync: Bool {
-        get { return emu.get(.DC_LOCK_DSKSYNC) != 0 }
-        set { emu.set(.DC_LOCK_DSKSYNC, enable: newValue) }
+        get { return emu?.get(.DC_LOCK_DSKSYNC) != 0 }
+        set { emu?.set(.DC_LOCK_DSKSYNC, enable: newValue) }
     }
     var autoDskSync: Bool {
-        get { return emu.get(.DC_AUTO_DSKSYNC) != 0 }
-        set { emu.set(.DC_AUTO_DSKSYNC, enable: newValue) }
+        get { return emu?.get(.DC_AUTO_DSKSYNC) != 0 }
+        set { emu?.set(.DC_AUTO_DSKSYNC, enable: newValue) }
     }
     var accurateKeyboard: Bool {
-        get { return emu.get(.KBD_ACCURACY) != 0 }
-        set { emu.set(.KBD_ACCURACY, enable: newValue) }
+        get { return emu?.get(.KBD_ACCURACY) != 0 }
+        set { emu?.set(.KBD_ACCURACY, enable: newValue) }
     }
 
     //
@@ -427,106 +427,106 @@ class Configuration {
     //
 
     var vol0: Int {
-        get { return emu.get(.AUD_VOL0) }
-        set { emu.set(.AUD_VOL0, value: newValue) }
+        get { return emu?.get(.AUD_VOL0)  ?? 0}
+        set { emu?.set(.AUD_VOL0, value: newValue) }
     }
     var vol1: Int {
-        get { return emu.get(.AUD_VOL1) }
-        set { emu.set(.AUD_VOL1, value: newValue) }
+        get { return emu?.get(.AUD_VOL1) ?? 0 }
+        set { emu?.set(.AUD_VOL1, value: newValue) }
     }
     var vol2: Int {
-        get { return emu.get(.AUD_VOL2) }
-        set { emu.set(.AUD_VOL2, value: newValue) }
+        get { return emu?.get(.AUD_VOL2) ?? 0 }
+        set { emu?.set(.AUD_VOL2, value: newValue) }
     }
     var vol3: Int {
-        get { return emu.get(.AUD_VOL3) }
-        set { emu.set(.AUD_VOL3, value: newValue) }
+        get { return emu?.get(.AUD_VOL3) ?? 0 }
+        set { emu?.set(.AUD_VOL3, value: newValue) }
     }
     var pan0: Int {
-        get { return emu.get(.AUD_PAN0) }
-        set { emu.set(.AUD_PAN0, value: newValue) }
+        get { return emu?.get(.AUD_PAN0) ?? 0 }
+        set { emu?.set(.AUD_PAN0, value: newValue) }
     }
     var pan1: Int {
-        get { return emu.get(.AUD_PAN1) }
-        set { emu.set(.AUD_PAN1, value: newValue) }
+        get { return emu?.get(.AUD_PAN1) ?? 0 }
+        set { emu?.set(.AUD_PAN1, value: newValue) }
     }
     var pan2: Int {
-        get { return emu.get(.AUD_PAN2) }
-        set { emu.set(.AUD_PAN2, value: newValue) }
+        get { return emu?.get(.AUD_PAN2) ?? 0 }
+        set { emu?.set(.AUD_PAN2, value: newValue) }
     }
     var pan3: Int {
-        get { return emu.get(.AUD_PAN3) }
-        set { emu.set(.AUD_PAN3, value: newValue) }
+        get { return emu?.get(.AUD_PAN3) ?? 0 }
+        set { emu?.set(.AUD_PAN3, value: newValue) }
     }
     var volL: Int {
-        get { return emu.get(.AUD_VOLL) }
-        set { emu.set(.AUD_VOLL, value: newValue) }
+        get { return emu?.get(.AUD_VOLL) ?? 0 }
+        set { emu?.set(.AUD_VOLL, value: newValue) }
     }
     var volR: Int {
-        get { return emu.get(.AUD_VOLR) }
-        set { emu.set(.AUD_VOLR, value: newValue) }
+        get { return emu?.get(.AUD_VOLR) ?? 0 }
+        set { emu?.set(.AUD_VOLR, value: newValue) }
     }
     var df0Pan: Int {
-        get { return emu.get(.DRIVE_PAN, drive: 0) }
-        set { emu.set(.DRIVE_PAN, id: 0, value: newValue) }
+        get { return emu?.get(.DRIVE_PAN, drive: 0) ?? 0 }
+        set { emu?.set(.DRIVE_PAN, id: 0, value: newValue) }
     }
     var df1Pan: Int {
-        get { return emu.get(.DRIVE_PAN, drive: 1) }
-        set { emu.set(.DRIVE_PAN, id: 1, value: newValue) }
+        get { return emu?.get(.DRIVE_PAN, drive: 1) ?? 0 }
+        set { emu?.set(.DRIVE_PAN, id: 1, value: newValue) }
     }
     var df2Pan: Int {
-        get { return emu.get(.DRIVE_PAN, drive: 2) }
-        set { emu.set(.DRIVE_PAN, id: 2, value: newValue) }
+        get { return emu?.get(.DRIVE_PAN, drive: 2) ?? 0 }
+        set { emu?.set(.DRIVE_PAN, id: 2, value: newValue) }
     }
     var df3Pan: Int {
-        get { return emu.get(.DRIVE_PAN, drive: 3) }
-        set { emu.set(.DRIVE_PAN, id: 3, value: newValue) }
+        get { return emu?.get(.DRIVE_PAN, drive: 3) ?? 0 }
+        set { emu?.set(.DRIVE_PAN, id: 3, value: newValue) }
     }
     var hd0Pan: Int {
-        get { return emu.get(.HDR_PAN, drive: 0) }
-        set { emu.set(.HDR_PAN, id: 0, value: newValue) }
+        get { return emu?.get(.HDR_PAN, drive: 0) ?? 0 }
+        set { emu?.set(.HDR_PAN, id: 0, value: newValue) }
     }
     var hd1Pan: Int {
-        get { return emu.get(.HDR_PAN, drive: 1) }
-        set { emu.set(.HDR_PAN, id: 1, value: newValue) }
+        get { return emu?.get(.HDR_PAN, drive: 1) ?? 0 }
+        set { emu?.set(.HDR_PAN, id: 1, value: newValue) }
     }
     var hd2Pan: Int {
-        get { return emu.get(.HDR_PAN, drive: 2) }
-        set { emu.set(.HDR_PAN, id: 2, value: newValue) }
+        get { return emu?.get(.HDR_PAN, drive: 2) ?? 0 }
+        set { emu?.set(.HDR_PAN, id: 2, value: newValue) }
     }
     var hd3Pan: Int {
-        get { return emu.get(.HDR_PAN, drive: 3) }
-        set { emu.set(.HDR_PAN, id: 3, value: newValue) }
+        get { return emu?.get(.HDR_PAN, drive: 3) ?? 0 }
+        set { emu?.set(.HDR_PAN, id: 3, value: newValue) }
     }
     var stepVolume: Int {
-        get { return emu.get(.DRIVE_STEP_VOLUME, drive: 0) }
-        set { emu.set(.DRIVE_STEP_VOLUME, value: newValue)
-            emu.set(.HDR_STEP_VOLUME, value: newValue)
+        get { return emu?.get(.DRIVE_STEP_VOLUME, drive: 0)  ?? 0}
+        set { emu?.set(.DRIVE_STEP_VOLUME, value: newValue)
+            emu?.set(.HDR_STEP_VOLUME, value: newValue)
         }
     }
     var pollVolume: Int {
-        get { return emu.get(.DRIVE_POLL_VOLUME, drive: 0) }
-        set { emu.set(.DRIVE_POLL_VOLUME, value: newValue) }
+        get { return emu?.get(.DRIVE_POLL_VOLUME, drive: 0) ?? 0 }
+        set { emu?.set(.DRIVE_POLL_VOLUME, value: newValue) }
     }
     var insertVolume: Int {
-        get { return emu.get(.DRIVE_INSERT_VOLUME, drive: 0) }
-        set { emu.set(.DRIVE_INSERT_VOLUME, value: newValue) }
+        get { return emu?.get(.DRIVE_INSERT_VOLUME, drive: 0) ?? 0 }
+        set { emu?.set(.DRIVE_INSERT_VOLUME, value: newValue) }
     }
     var ejectVolume: Int {
-        get { return emu.get(.DRIVE_EJECT_VOLUME, drive: 0) }
-        set { emu.set(.DRIVE_EJECT_VOLUME, value: newValue) }
+        get { return emu?.get(.DRIVE_EJECT_VOLUME, drive: 0) ?? 0 }
+        set { emu?.set(.DRIVE_EJECT_VOLUME, value: newValue) }
     }
     var samplingMethod: Int {
-        get { return emu.get(.AUD_SAMPLING_METHOD) }
-        set { emu.set(.AUD_SAMPLING_METHOD, value: newValue) }
+        get { return emu?.get(.AUD_SAMPLING_METHOD) ?? 0 }
+        set { emu?.set(.AUD_SAMPLING_METHOD, value: newValue) }
     }
     var asr: Int {
-        get { return emu.get(.AUD_ASR) }
-        set { emu.set(.AUD_ASR, value: newValue) }
+        get { return emu?.get(.AUD_ASR) ?? 0 }
+        set { emu?.set(.AUD_ASR, value: newValue) }
     }
     var audioBufferSize: Int {
-        get { return emu.get(.AUD_BUFFER_SIZE) }
-        set { emu.set(.AUD_BUFFER_SIZE, value: newValue) }
+        get { return emu?.get(.AUD_BUFFER_SIZE) ?? 0 }
+        set { emu?.set(.AUD_BUFFER_SIZE, value: newValue) }
     }
 
     //
@@ -534,116 +534,116 @@ class Configuration {
     //
 
     var palette: Int {
-        get { return emu.get(.MON_PALETTE) }
-        set { emu.set(.MON_PALETTE, value: newValue) }
+        get { return emu?.get(.MON_PALETTE) ?? 0 }
+        set { emu?.set(.MON_PALETTE, value: newValue) }
     }
     var brightness: Int {
-        get { return emu.get(.MON_BRIGHTNESS) }
-        set { emu.set(.MON_BRIGHTNESS, value: newValue) }
+        get { return emu?.get(.MON_BRIGHTNESS) ?? 0 }
+        set { emu?.set(.MON_BRIGHTNESS, value: newValue) }
     }
     var contrast: Int {
-        get { return emu.get(.MON_CONTRAST) }
-        set { emu.set(.MON_CONTRAST, value: newValue) }
+        get { return emu?.get(.MON_CONTRAST) ?? 0 }
+        set { emu?.set(.MON_CONTRAST, value: newValue) }
     }
     var saturation: Int {
-        get { return emu.get(.MON_SATURATION) }
-        set { emu.set(.MON_SATURATION, value: newValue) }
+        get { return emu?.get(.MON_SATURATION) ?? 0 }
+        set { emu?.set(.MON_SATURATION, value: newValue) }
     }
     var zoom: Int {
-        get { return emu.get(.MON_ZOOM) }
-        set { emu.set(.MON_ZOOM, value: newValue) }
+        get { return emu?.get(.MON_ZOOM) ?? 0 }
+        set { emu?.set(.MON_ZOOM, value: newValue) }
     }
     var hZoom: Int {
-        get { return emu.get(.MON_HZOOM) }
-        set { emu.set(.MON_HZOOM, value: newValue) }
+        get { return emu?.get(.MON_HZOOM) ?? 0 }
+        set { emu?.set(.MON_HZOOM, value: newValue) }
     }
     var vZoom: Int {
-        get { return emu.get(.MON_VZOOM) }
-        set { emu.set(.MON_VZOOM, value: newValue) }
+        get { return emu?.get(.MON_VZOOM) ?? 0 }
+        set { emu?.set(.MON_VZOOM, value: newValue) }
     }
     var center: Int {
-        get { return emu.get(.MON_CENTER) }
-        set { emu.set(.MON_CENTER, value: newValue) }
+        get { return emu?.get(.MON_CENTER) ?? 0 }
+        set { emu?.set(.MON_CENTER, value: newValue) }
     }
     var hCenter: Int {
-        get { return emu.get(.MON_HCENTER) }
-        set { emu.set(.MON_HCENTER, value: newValue) }
+        get { return emu?.get(.MON_HCENTER) ?? 0 }
+        set { emu?.set(.MON_HCENTER, value: newValue) }
     }
     var vCenter: Int {
-        get { return emu.get(.MON_VCENTER) }
-        set { emu.set(.MON_VCENTER, value: newValue) }
+        get { return emu?.get(.MON_VCENTER) ?? 0 }
+        set { emu?.set(.MON_VCENTER, value: newValue) }
     }
     var enhancer: Int {
-        get { return emu.get(.MON_ENHANCER) }
-        set { emu.set(.MON_ENHANCER, value: newValue) }
+        get { return emu?.get(.MON_ENHANCER) ?? 0 }
+        set { emu?.set(.MON_ENHANCER, value: newValue) }
     }
     var upscaler: Int {
-        get { return emu.get(.MON_UPSCALER) }
-        set { emu.set(.MON_UPSCALER, value: newValue) }
+        get { return emu?.get(.MON_UPSCALER) ?? 0 }
+        set { emu?.set(.MON_UPSCALER, value: newValue) }
     }
     var blur: Int {
-        get { return emu.get(.MON_BLUR) }
-        set { emu.set(.MON_BLUR, value: newValue) }
+        get { return emu?.get(.MON_BLUR) ?? 0 }
+        set { emu?.set(.MON_BLUR, value: newValue) }
     }
     var blurRadius: Int {
-        get { return emu.get(.MON_BLUR_RADIUS) }
-        set { emu.set(.MON_BLUR_RADIUS, value: newValue) }
+        get { return emu?.get(.MON_BLUR_RADIUS) ?? 0 }
+        set { emu?.set(.MON_BLUR_RADIUS, value: newValue) }
     }
     var bloom: Int {
-        get { return emu.get(.MON_BLOOM) }
-        set { emu.set(.MON_BLOOM, value: newValue) }
+        get { return emu?.get(.MON_BLOOM) ?? 0 }
+        set { emu?.set(.MON_BLOOM, value: newValue) }
     }
     var bloomRadius: Int {
-        get { return emu.get(.MON_BLOOM_RADIUS) }
-        set { emu.set(.MON_BLOOM_RADIUS, value: newValue) }
+        get { return emu?.get(.MON_BLOOM_RADIUS) ?? 0 }
+        set { emu?.set(.MON_BLOOM_RADIUS, value: newValue) }
     }
     var bloomBrightness: Int {
-        get { return emu.get(.MON_BLOOM_BRIGHTNESS) }
-        set { emu.set(.MON_BLOOM_BRIGHTNESS, value: newValue) }
+        get { return emu?.get(.MON_BLOOM_BRIGHTNESS) ?? 0 }
+        set { emu?.set(.MON_BLOOM_BRIGHTNESS, value: newValue) }
     }
     var bloomWeight: Int {
-        get { return emu.get(.MON_BLOOM_WEIGHT) }
-        set { emu.set(.MON_BLOOM_WEIGHT, value: newValue) }
+        get { return emu?.get(.MON_BLOOM_WEIGHT) ?? 0 }
+        set { emu?.set(.MON_BLOOM_WEIGHT, value: newValue) }
     }
     var flicker: Int {
-        get { return emu.get(.MON_FLICKER) }
-        set { emu.set(.MON_FLICKER, value: newValue) }
+        get { return emu?.get(.MON_FLICKER) ?? 0 }
+        set { emu?.set(.MON_FLICKER, value: newValue) }
     }
     var flickerWeight: Int {
-        get { return emu.get(.MON_FLICKER_WEIGHT) }
-        set { emu.set(.MON_FLICKER_WEIGHT, value: newValue) }
+        get { return emu?.get(.MON_FLICKER_WEIGHT) ?? 0 }
+        set { emu?.set(.MON_FLICKER_WEIGHT, value: newValue) }
     }
     var dotMask: Int {
-        get { return emu.get(.MON_DOTMASK) }
-        set { emu.set(.MON_DOTMASK, value: newValue) }
+        get { return emu?.get(.MON_DOTMASK) ?? 0 }
+        set { emu?.set(.MON_DOTMASK, value: newValue) }
     }
     var dotMaskBrightness: Int {
-        get { return emu.get(.MON_DOTMASK_BRIGHTNESS) }
-        set { emu.set(.MON_DOTMASK_BRIGHTNESS, value: newValue) }
+        get { return emu?.get(.MON_DOTMASK_BRIGHTNESS) ?? 0 }
+        set { emu?.set(.MON_DOTMASK_BRIGHTNESS, value: newValue) }
     }
     var scanlines: Int {
-        get { return emu.get(.MON_SCANLINES) }
-        set { emu.set(.MON_SCANLINES, value: newValue) }
+        get { return emu?.get(.MON_SCANLINES) ?? 0 }
+        set { emu?.set(.MON_SCANLINES, value: newValue) }
     }
     var scanlineBrightness: Int {
-        get { return emu.get(.MON_SCANLINE_BRIGHTNESS) }
-        set { emu.set(.MON_SCANLINE_BRIGHTNESS, value: newValue) }
+        get { return emu?.get(.MON_SCANLINE_BRIGHTNESS) ?? 0 }
+        set { emu?.set(.MON_SCANLINE_BRIGHTNESS, value: newValue) }
     }
     var scanlineWeight: Int {
-        get { return emu.get(.MON_SCANLINE_WEIGHT) }
-        set { emu.set(.MON_SCANLINE_WEIGHT, value: newValue) }
+        get { return emu?.get(.MON_SCANLINE_WEIGHT) ?? 0 }
+        set { emu?.set(.MON_SCANLINE_WEIGHT, value: newValue) }
     }
     var disalignment: Int {
-        get { return emu.get(.MON_DISALIGNMENT) }
-        set { emu.set(.MON_DISALIGNMENT, value: newValue) }
+        get { return emu?.get(.MON_DISALIGNMENT) ?? 0 }
+        set { emu?.set(.MON_DISALIGNMENT, value: newValue) }
     }
     var disalignmentH: Int {
-        get { return emu.get(.MON_DISALIGNMENT_H) }
-        set { emu.set(.MON_DISALIGNMENT_H, value: newValue) }
+        get { return emu?.get(.MON_DISALIGNMENT_H) ?? 0 }
+        set { emu?.set(.MON_DISALIGNMENT_H, value: newValue) }
     }
     var disalignmentV: Int {
-        get { return emu.get(.MON_DISALIGNMENT_V) }
-        set { emu.set(.MON_DISALIGNMENT_V, value: newValue) }
+        get { return emu?.get(.MON_DISALIGNMENT_V) ?? 0 }
+        set { emu?.set(.MON_DISALIGNMENT_V, value: newValue) }
     }
 
     init(with controller: MyController) { parent = controller }

@@ -97,7 +97,6 @@ class MyDocument: NSDocument {
         debug(.lifetime)
         
         let controller = MyController(windowNibName: "MyDocument")
-        controller.emu = emu
         self.addWindowController(controller)
     }
   

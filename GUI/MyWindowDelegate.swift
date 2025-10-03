@@ -31,7 +31,7 @@ extension MyController: NSWindowDelegate {
         hideOrShowDriveMenus()
 
         // Restart the emulator if it was paused when the window lost focus
-        if pref.pauseInBackground && pauseInBackgroundSavedState { try? emu.run() }
+        if pref.pauseInBackground && pauseInBackgroundSavedState { try? emu?.run() }
 
         // Register to receive mouse movement events
         window.acceptsMouseMovedEvents = true
@@ -57,7 +57,8 @@ extension MyController: NSWindowDelegate {
         */
         
         // Stop emulator if it is configured to pause in background
-        if emu != nil {
+        if let emu = emu {
+
             pauseInBackgroundSavedState = emu.running
             if pref.pauseInBackground { emu.pause() }
         }
@@ -112,8 +113,8 @@ extension MyController: NSWindowDelegate {
                 
         debug(.shutdown, "Removing proxy...")
         
-        emu.kill()
-        emu = nil
+        emu?.kill()
+        // emu = nil
     }
     
     public func windowWillEnterFullScreen(_ notification: Notification) {

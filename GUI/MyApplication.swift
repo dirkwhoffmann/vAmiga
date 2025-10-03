@@ -55,7 +55,6 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
 
     // Preferences
     var pref: Preferences!
-    // var prefController: PreferencesController? // DEPRECATED
     var settingsController: SettingsWindowController?
 
     // Information provider for connected HID devices
@@ -84,16 +83,19 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
     }
     
     public func applicationDidFinishLaunching(_ aNotification: Notification) {
-                
-        token = ProcessInfo.processInfo.beginActivity(options: [ .userInitiated ], reason: "Running vAmiga")
+
+        token = ProcessInfo.processInfo.beginActivity(options: [ .idleSystemSleepDisabled, .suddenTerminationDisabled ], reason: "Running vAmiga")
         argv = Array(CommandLine.arguments.dropFirst())
         
-        debug(.lifetime, "vAmiga launched with arguments \(argv)")
+        debug(.lifetime, "Launched with arguments \(argv)")
     }
     
     public func applicationWillTerminate(_ aNotification: Notification) {
 
-        debug(.lifetime)
+        debug(.shutdown, "Delay a bit to let audio fade out...")
+        usleep(250000)
+        debug(.shutdown, "OK...")
+
         ProcessInfo.processInfo.endActivity(token)
     }
 }

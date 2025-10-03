@@ -17,18 +17,19 @@ extension MyController {
 
     var hourglassIcon: NSImage? {
 
+        guard let emu = emu else { return nil }
+
         if WarpMode(rawValue: config.warpMode) == .AUTO {
-
             return NSImage(named: emu.warping ? "hourglass3Template" : "hourglass1Template")
-
         } else {
-
             return NSImage(named: emu.warping ? "warpOnTemplate" : "warpOffTemplate")
         }
     }
     
     func refreshStatusBar() {
-        
+
+        guard let emu = emu else { return }
+
         let running = emu.running
         let tracking = emu.tracking
         let cpuinfo = emu.cpu.info
@@ -139,13 +140,16 @@ extension MyController {
         
         for n in 0...3 where drv[n] != nil {
             
-            let dfn = emu.df(n)!
-            refreshStatusBar(drive: n, led: dfn.ledIcon)
-        }            
+            if let dfn = emu?.df(n) {
+                refreshStatusBar(drive: n, led: dfn.ledIcon)
+            }
+        }
     }
             
     func assignSlots() {
-    
+
+        guard let emu = emu else { return }
+
         // Wipe out the slot assignment table
         drv = Array(repeating: nil, count: 8)
         var nr = 0
@@ -227,8 +231,9 @@ extension MyController {
             activityBar.fillColor = color[index]
         }
 
-        let state = emu.cpu.info
+        guard let emu = emu else { return }
 
+        let state = emu.cpu.info
         speedometer.updateWith(cycle: state.clock,
                                emuFrame: Int64(emu.agnus.info.frame),
                                gpuFrame: renderer.frames)
@@ -317,7 +322,7 @@ extension MyController {
     @IBAction
     func infoAction(_ sender: Any!) {
                 
-        if let info = info {
+        if let emu = emu, let info = info {
                 
             // Get some auxiliary debug information from the emulator
             let attributes: [NSAttributedString.Key: Any] = [

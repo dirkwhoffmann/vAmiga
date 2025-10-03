@@ -22,14 +22,16 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Reference to the connected document
     var mydocument: MyDocument!
+    var initialized: Bool { return mydocument != nil }
 
     // File panels
     let myOpenPanel = MyOpenPanel()
     let mySavePanel = MySavePanel()
-    
-    // Amiga proxy (bridge between the Swift frontend and the C++ backend)
-    var emu: EmulatorProxy!
-    
+
+    // Emulator proxy (bridge between the Swift frontend and the C++ backend)
+    // var emu: EmulatorProxy!
+    var emu: EmulatorProxy? { return mydocument.emu }
+
     // Media manager (handles the import and export of media files)
     var mm: MediaManager { return mydocument.mm }
 
@@ -137,12 +139,10 @@ class MyController: NSWindowController, MessageReceiver {
     var drvLED: [NSButton?] = Array(repeating: nil, count: 8)
     var drvCyl: [NSTextField?] = Array(repeating: nil, count: 8)
     var drvIcon: [NSButton?] = Array(repeating: nil, count: 8)
-    
-    var initialized: Bool { return mydocument != nil }
 }
 
 extension MyController {
-    
+
     // Indicates if the emulator needs saving
     var needsSaving: Bool {
         get {
@@ -156,25 +156,24 @@ extension MyController {
             }
         }
     }
-    
+
     //
     // Initializing
     //
-        
+
     override open func windowDidLoad() {
 
         if !initialized { commonInit() }
     }
-    
+
     func commonInit() {
-        
+
         assert(!initialized, "Double-initialization of MyController")
 
         mydocument = document as? MyDocument
-
         config = Configuration(with: self)
         macAudio = MacAudio(with: self)
-        
+
         ledSlot = [ ledSlot0, ledSlot1, letSlot2, ledSlot3 ]
         cylSlot = [ cylSlot0, cylSlot1, cylSlot2, cylSlot3 ]
         iconSlot = [ iconSlot0, iconSlot1, iconSlot2, iconSlot3 ]
@@ -187,11 +186,11 @@ extension MyController {
         // Create keyboard controller
         keyboard = KeyboardController(parent: self)
         assert(keyboard != nil, "Failed to create keyboard controller")
-        
+
         // Create game pad manager
         gamePadManager = GamePadManager(parent: self)
         assert(gamePadManager != nil, "Failed to create game pad manager")
-        
+
         // Setup renderer
         renderer = Renderer(view: metal,
                             device: MTLCreateSystemDefaultDevice()!,
@@ -202,7 +201,7 @@ extension MyController {
 
         // Create speed monitor
         speedometer = Speedometer()
-        
+
         // Launch the emulator
         launch()
 
@@ -213,15 +212,15 @@ extension MyController {
         do {
 
             // Switch the Amiga on
-            emu.powerOn()
-        
+            emu?.powerOn()
+
             // Start emulation
-            try emu.run()
-            
+            try emu?.run()
+
         } catch {
-            
+
             // Switch the Amiga off
-            emu.powerOff()
+            emu?.powerOff()
 
             // Open the onboarding agent
             // renderer.splashScreen.shouldRender = false
@@ -233,7 +232,7 @@ extension MyController {
         if let url = mydocument.mediaURL {
 
             debug(.media, "Media URL = \(url)")
-            
+
             do { try mm.addMedia(url: url) } catch {
                 self.showAlert(.cantOpen(url: url), error: error, async: true)
             }
@@ -241,18 +240,18 @@ extension MyController {
 
         // Update toolbar
         toolbar.validateVisibleItems()
-        
+
         // Update status bar
         refreshStatusBar()
     }
-    
+
     func configureWindow() {
-        
+
         // Add status bar
         window?.autorecalculatesContentBorderThickness(for: .minY)
         window?.setContentBorderThickness(32.0, for: .minY)
         statusBar = true
-        
+
         // Adjust size
         // autoResizeWindow(self)
         adjustWindowSize()
@@ -267,7 +266,7 @@ extension MyController {
     }
 
     func launch() {
-        
+
         do {
 
             // Pass in command line arguments as a RetroShell script
@@ -278,36 +277,38 @@ extension MyController {
             emu?.retroShell.execute(script)
 
             if BuildSettings.msgCallback {
-                
+
                 // Convert 'self' to a void pointer
                 let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
-                
-                try emu.launch(myself) { (ptr, msg: Message) in
-                    
+
+                try emu?.launch(myself) { (ptr, msg: Message) in
+
                     // Convert void pointer back to 'self'
                     let myself = Unmanaged<MyController>.fromOpaque(ptr!).takeUnretainedValue()
-                    
+
                     // Process message in the main thread
                     Task { @MainActor in myself.process(message: msg) }
                 }
-                
+
             } else {
-                
-                try emu.launch()
+
+                try emu?.launch()
             }
-            
+
         } catch {
-         
+
             // Something terrible happened
             mydocument.showLaunchAlert(error: error)
         }
     }
-    
+
     //
     // Timer and message processing
     //
-    
+
     func update(frames: Int64) {
+
+        guard let emu = emu else { return }
 
         if frames % 5 == 0 {
 
@@ -317,7 +318,7 @@ extension MyController {
             // Animate the dashboards
             for dashboard in dashboards { dashboard.continuousRefresh() }
         }
-        
+
         // Do less times...
         if frames % 16 == 0 {
 
@@ -326,7 +327,7 @@ extension MyController {
 
         // Do less times...
         if frames % 32 == 0 {
-        
+
             if pref.closeWithoutAsking {
                 needsSaving = false
             } else {
@@ -341,10 +342,10 @@ extension MyController {
                 emu.hd3.getFlag(.MODIFIED)
             }
         }
-        
+
         // Do lesser times...
         if frames % 256 == 0 {
-            
+
             // Let the cursor disappear in fullscreen mode
             if renderer.fullscreen &&
                 CGEventSource.secondsSinceLastEventType(.combinedSessionState,
@@ -353,11 +354,12 @@ extension MyController {
             }
         }
     }
-    
+
     func process(message msg: Message) {
-            
+
         MainActor.assertIsolated()
-        
+
+        guard let emu = emu else { return }
         var value: Int { return Int(msg.value) }
         var nr: Int { return Int(msg.drive.nr) }
         var cyl: Int { return Int(msg.drive.value) }
@@ -368,19 +370,16 @@ extension MyController {
         var pan: Int { return Int(msg.drive.pan) }
         var acceleration: Double { return Double(msg.value == 0 ? 1 : msg.value) }
         var pos: String { return "(\(emu.amiga.info.vpos),\(emu.amiga.info.hpos))" }
-        
+
         func passToInspector() {
             for inspector in inspectors { inspector.processMessage(msg) }
         }
         func passToDashboard() {
             for dashboard in dashboards { dashboard.processMessage(msg) }
         }
-        
-        // Only proceed if the proxy object is still alive
-        if emu == nil { return }
-        
+
         switch msg.type {
-                        
+
         case .CONFIG:
             // configurator?.refresh()
             refreshStatusBar()
@@ -390,7 +389,7 @@ extension MyController {
 
         case .POWER:
             if value != 0 {
-                
+
                 if let fileUrl = document?.fileURL, let _ = fileUrl {
                     renderer.canvas.open(delay: 0)
                 } else {
@@ -414,11 +413,11 @@ extension MyController {
             toolbar.updateToolbar()
             refreshStatusBar()
             passToInspector()
-            
+
         case .STEP:
             clearInfo()
             passToInspector()
-            
+
         case .RESET:
             clearInfo()
             passToInspector()
@@ -429,7 +428,7 @@ extension MyController {
         case .RSH_UPDATE:
             renderer.console.isDirty = true
             passToInspector()
-            
+
         case .RSH_SWITCH:
             break
 
@@ -445,27 +444,27 @@ extension MyController {
 
         case .SHUTDOWN:
             shutDown()
-            
+
         case .ABORT:
             debug(.shutdown, "Aborting with exit code \(value)")
             exit(Int32(value))
-            
+
         case .MUTE:
             muted = value != 0
             refreshStatusBar()
 
         case .EASTER_EGG, .WARP, .TRACK:
             refreshStatusBar()
-            
+
         case .POWER_LED_ON:
             powerLED.image = NSImage(named: "ledRed")
-            
+
         case .POWER_LED_DIM:
             powerLED.image = NSImage(named: "ledBlack")
-            
+
         case .POWER_LED_OFF:
             powerLED.image = NSImage(named: "ledGrey")
-                        
+
         case .DMA_DEBUG:
             msg.value != 0 ? renderer.zoomTextureOut() : renderer.zoomTextureIn()
 
@@ -475,15 +474,15 @@ extension MyController {
         case .OVERCLOCKING:
             speedometer.acceleration = acceleration
             activityBar.maxValue = 140.0 * acceleration
-            activityBar.warningValue = 77.0 * acceleration 
+            activityBar.warningValue = 77.0 * acceleration
             activityBar.criticalValue = 105.0 * acceleration
-            
+
         case .COPPERBP_UPDATED, .COPPERWP_UPDATED, .GUARD_UPDATED:
             passToInspector()
-            
+
         case .BREAKPOINT_REACHED:
             setInfo("Breakpoint reached", "Interrupted at address \(pcHex)")
-            
+
         case .WATCHPOINT_REACHED:
             setInfo("Watchpoint reached", "Interrupted at address \(pcHex)")
 
@@ -511,7 +510,7 @@ extension MyController {
 
         case .CPU_HALT:
             refreshStatusBar()
-                        
+
         case .VIEWPORT:
             renderer.canvas.updateTextureRect(hstrt: Int(msg.viewport.hstrt),
                                               vstrt: Int(msg.viewport.vstrt),
@@ -520,7 +519,7 @@ extension MyController {
 
         case .MEM_LAYOUT:
             passToInspector()
-            
+
         case .DRIVE_CONNECT:
 
             if msg.value != 0 {
@@ -538,27 +537,27 @@ extension MyController {
 
         case .DRIVE_SELECT:
             refreshStatusBar(writing: nil)
-            
+
         case .DRIVE_READ:
             refreshStatusBar(writing: false)
-            
+
         case .DRIVE_WRITE:
             refreshStatusBar(writing: true)
 
         case .DRIVE_LED:
             refreshStatusBar()
-            
+
         case .DRIVE_MOTOR:
             refreshStatusBar()
 
         case .DRIVE_STEP:
             macAudio.playSound(MacAudio.Sounds.step, volume: volume, pan: pan)
             refreshStatusBar(drive: nr, cylinder: cyl)
-            
+
         case .DRIVE_POLL:
             macAudio.playSound(MacAudio.Sounds.step, volume: volume, pan: pan)
             refreshStatusBar(drive: nr, cylinder: cyl)
-            
+
         case .DISK_INSERT:
             macAudio.playSound(MacAudio.Sounds.insert, volume: volume, pan: pan)
             refreshStatusBar()
@@ -566,10 +565,10 @@ extension MyController {
         case .DISK_EJECT:
             macAudio.playSound(MacAudio.Sounds.eject, volume: volume, pan: pan)
             refreshStatusBar()
-            
+
         case .DISK_PROTECTED:
             refreshStatusBar()
-            
+
         case .HDC_CONNECT:
 
             if msg.value != 0 {
@@ -584,7 +583,7 @@ extension MyController {
                 assignSlots()
                 refreshStatusBar()
             }
-            
+
         case .HDC_STATE:
             refreshStatusBar()
 
@@ -594,16 +593,16 @@ extension MyController {
 
         case .HDR_IDLE, .HDR_READ:
             refreshStatusBar()
-            
+
         case .HDR_WRITE:
             refreshStatusBar()
-            
+
         case .MON_SETTING:
             renderer.processMessage(msg)
-            
+
         case .CTRL_AMIGA_AMIGA:
             resetAction(self)
-            
+
         case .SER_IN:
             var c = emu.serialPort.readIncomingPrintableByte()
             while c != -1 {
@@ -639,10 +638,10 @@ extension MyController {
             if pref.releaseMouseByShaking {
                 metal.releaseMouse()
             }
-            
+
         case .SRV_STATE:
             refreshStatusBar()
-            
+
         case .SRV_RECEIVE, .SRV_SEND:
             break
 
@@ -654,16 +653,16 @@ extension MyController {
             fatalError()
         }
     }
-    
+
     func setInfo(_ text: String?, _ text2: String? = nil) {
-        
+
         info = text
         info2 = text2
         refreshStatusBar()
     }
-    
+
     func clearInfo() {
-        
+
         info = nil
         info2 = nil
     }

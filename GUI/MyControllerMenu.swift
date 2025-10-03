@@ -11,11 +11,12 @@
 extension MyController: NSMenuItemValidation {
     
     open func validateMenuItem(_ item: NSMenuItem) -> Bool {
-        
+
+        guard let emu = emu else { return true }
+
         let powered = emu.poweredOn
         let running = emu.running
         let paused = emu.paused
-        // let recording = emu.recorder.recording
 
         var dfn: FloppyDriveProxy { return emu.df(item.tag)! }
         var hdn: HardDriveProxy { return emu.hd(item.tag)! }
@@ -261,8 +262,8 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func takeSnapshotAction(_ sender: Any!) {
         
-        guard let snapshot = emu.amiga.takeSnapshot() else {
-            
+        guard let snapshot = emu?.amiga.takeSnapshot() else {
+
             NSSound.beep()
             return
         }
@@ -300,7 +301,7 @@ extension MyController: NSMenuItemValidation {
             if result == .OK, let url = self.myOpenPanel.url {
 
                 do {
-                    try self.emu.amiga.loadSnapshot(url: url)
+                    try self.emu?.amiga.loadSnapshot(url: url)
                 } catch {
                     self.showAlert(.cantOpen(url: url), error: error, async: true)
                 }
@@ -321,7 +322,7 @@ extension MyController: NSMenuItemValidation {
             if result == .OK, let url = self.mySavePanel.url {
                 
                 do {
-                    try self.emu.amiga.saveSnapshot(url: url)
+                    try self.emu?.amiga.saveSnapshot(url: url)
                 } catch {
                     self.showAlert(.cantExport(url: url), error: error, async: true)
                 }
@@ -387,30 +388,30 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func stepIntoAction(_ sender: Any!) {
         
-       emu.stepInto()
+       emu?.stepInto()
     }
     
     @IBAction func stepOverAction(_ sender: Any!) {
         
-        emu.stepOver()
+        emu?.stepOver()
     }
     
     @IBAction func resetAction(_ sender: Any!) {
         
-        emu.hardReset()
-        try? emu.run()
+        emu?.hardReset()
+        try? emu?.run()
     }
     
     @IBAction func powerAction(_ sender: Any!) {
         
-        if emu.poweredOn {
-            
-            emu.powerOff()
-            
+        if emu?.poweredOn == true {
+
+            emu?.powerOff()
+
         } else {
 
             do {
-                try emu.run()
+                try emu?.run()
             } catch {
                 showAlert(.cantRun, error: error)
             }
@@ -469,7 +470,7 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func clearKeyboardMatrixAction(_ sender: Any!) {
         
-        emu.keyboard.releaseAll()
+        emu?.keyboard.releaseAll()
     }
     
     @IBAction func delKeyAction(_ sender: Any!) {
@@ -486,9 +487,9 @@ extension MyController: NSMenuItemValidation {
         
         Task { @MainActor in
 
-            self.emu.keyboard.press(keyCode)
+            self.emu?.keyboard.press(keyCode)
             usleep(useconds_t(20000))
-            self.emu.keyboard.release(keyCode)
+            self.emu?.keyboard.release(keyCode)
             completion?()
         }
     }
@@ -499,35 +500,37 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func newDiskAction(_ sender: NSMenuItem!) {
 
-        let drive = emu.df(sender.tag)!
+        if let drive = emu?.df(sender.tag) {
 
-        // Ask the user if a modified hard drive should be detached
-        if !proceedWithUnsavedFloppyDisk(drive: drive) { return }
+            // Ask the user if a modified hard drive should be detached
+            if !proceedWithUnsavedFloppyDisk(drive: drive) { return }
 
-        let panel = FloppyCreator(with: self, nibName: "FloppyCreator")
-        panel?.showSheet(forDrive: sender.tag)
+            let panel = FloppyCreator(with: self, nibName: "FloppyCreator")
+            panel?.showSheet(forDrive: sender.tag)
+        }
     }
 
     @IBAction func insertDiskAction(_ sender: NSMenuItem!) {
 
-        let drive = emu.df(sender.tag)!
-        
-        // Ask the user if an unsafed disk should be replaced
-        if !proceedWithUnsavedFloppyDisk(drive: drive) { return }
-        
-        myOpenPanel.configure(types: [.adf, .adz, .img, .dms, .exe ], prompt: "Insert")
-        myOpenPanel.panel.canChooseDirectories = true
-        myOpenPanel.open(for: window, { result in
-            
-            if result == .OK, let url = self.myOpenPanel.url {
+        if let drive = emu?.df(sender.tag) {
 
-                do {
-                    try self.mm.addMedia(df: sender.tag, url: url)
-                } catch {
-                    self.showAlert(.cantInsert, error: error, async: true)
+            // Ask the user if an unsafed disk should be replaced
+            if !proceedWithUnsavedFloppyDisk(drive: drive) { return }
+
+            myOpenPanel.configure(types: [.adf, .adz, .img, .dms, .exe ], prompt: "Insert")
+            myOpenPanel.panel.canChooseDirectories = true
+            myOpenPanel.open(for: window, { result in
+
+                if result == .OK, let url = self.myOpenPanel.url {
+
+                    do {
+                        try self.mm.addMedia(df: sender.tag, url: url)
+                    } catch {
+                        self.showAlert(.cantInsert, error: error, async: true)
+                    }
                 }
-            }
-        })
+            })
+        }
     }
     
     @IBAction func insertRecentDiskDummyAction(_ sender: NSMenuItem!) {}
@@ -557,8 +560,9 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func writeProtectAction(_ sender: NSMenuItem!) {
         
-        let dfn = emu.df(sender)!
-        dfn.setFlag(.PROTECTED, value: !dfn.getFlag(.PROTECTED))
+        if let dfn = emu?.df(sender) {
+            dfn.setFlag(.PROTECTED, value: !dfn.getFlag(.PROTECTED))
+        }
     }
 
     @IBAction func exportRecentDiskDummyAction(_ sender: NSMenuItem!) {}
@@ -594,12 +598,13 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func ejectDiskAction(_ sender: NSMenuItem!) {
         
-        let drive = emu.df(sender.tag)!
-        
-        if proceedWithUnsavedFloppyDisk(drive: drive) {
-            
-            drive.eject()
-            mm.clearRecentlyExportedDiskURLs(df: drive.info.nr)
+        if let drive = emu?.df(sender.tag) {
+
+            if proceedWithUnsavedFloppyDisk(drive: drive) {
+
+                drive.eject()
+                mm.clearRecentlyExportedDiskURLs(df: drive.info.nr)
+            }
         }
     }
     
@@ -635,40 +640,42 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func newHdrAction(_ sender: NSMenuItem!) {
 
-        let drive = emu.hd(sender.tag)!
-        
-        // Ask the user if an unsafed disk should be discarded
-        if !proceedWithUnsavedHardDisk(drive: drive) { return }
-        
-        // Power off the emulator if the user doesn't object
-        if !askToPowerOff() { return }
-        
-        let panel = HardDiskCreator(with: self, nibName: "HardDiskCreator")
-        panel?.show(forDrive: drive.traits.nr)
+        if let drive = emu?.hd(sender.tag) {
+
+            // Ask the user if an unsafed disk should be discarded
+            if !proceedWithUnsavedHardDisk(drive: drive) { return }
+
+            // Power off the emulator if the user doesn't object
+            if !askToPowerOff() { return }
+
+            let panel = HardDiskCreator(with: self, nibName: "HardDiskCreator")
+            panel?.show(forDrive: drive.traits.nr)
+        }
     }
-    
+
     @IBAction func attachHdrAction(_ sender: NSMenuItem!) {
         
-        let drive = emu.hd(sender.tag)!
-        
-        // Ask the user if an unsafed disk should be discarded
-        if !proceedWithUnsavedHardDisk(drive: drive) { return }
+        if let drive = emu?.hd(sender.tag) {
 
-        myOpenPanel.configure(types: [ .hdf, .hdz, .zip, .gzip ], prompt: "Attach")
-        myOpenPanel.open(for: window, { result in
-            
-            if result == .OK, let url = self.myOpenPanel.url {
-                
-                DispatchQueue.main.async {
-                    
-                    do {
-                        try self.mm.addMedia(hd: sender.tag, url: url)
-                    } catch {
-                        self.showAlert(.cantAttach, error: error, async: true)
+            // Ask the user if an unsafed disk should be discarded
+            if !proceedWithUnsavedHardDisk(drive: drive) { return }
+
+            myOpenPanel.configure(types: [ .hdf, .hdz, .zip, .gzip ], prompt: "Attach")
+            myOpenPanel.open(for: window, { result in
+
+                if result == .OK, let url = self.myOpenPanel.url {
+
+                    DispatchQueue.main.async {
+
+                        do {
+                            try self.mm.addMedia(hd: sender.tag, url: url)
+                        } catch {
+                            self.showAlert(.cantAttach, error: error, async: true)
+                        }
                     }
                 }
-            }
-        })
+            })
+        }
     }
     
     @IBAction func attachRecentHdrDummyAction(_ sender: NSMenuItem!) {}
@@ -766,8 +773,9 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func writeProtectHdrAction(_ sender: NSMenuItem!) {
         
-        let hdn = emu.hd(sender)!
-        hdn.setFlag(.PROTECTED, value: !hdn.getFlag(.PROTECTED))
+        if let hdn = emu?.hd(sender) {
+            hdn.setFlag(.PROTECTED, value: !hdn.getFlag(.PROTECTED))
+        }
     }
 
     //

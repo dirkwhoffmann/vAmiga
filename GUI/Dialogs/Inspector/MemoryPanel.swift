@@ -41,7 +41,7 @@ extension Inspector {
     @MainActor
     func memSrc(bank: Int) -> MemorySource {
 
-        return parent.emu.mem.memSrc(accessor, addr: bank << 16)
+        return parent.emu?.mem.memSrc(accessor, addr: bank << 16) ?? .NONE
     }
     
     @MainActor

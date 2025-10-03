@@ -77,6 +77,8 @@ class Console: Layer {
              */
         ]
 
+        guard let emu = emu else { return }
+
         if isDirty {
 
             let info = emu.retroShell.info
@@ -143,12 +145,13 @@ class Console: Layer {
         scrollView.frame.origin = CGPoint(x: origin.x, y: origin.y)
         
         let drawableSize = controller.metal.drawableSize
-        emu.set(.HOST_FRAMEBUF_WIDTH, value: Int(drawableSize.width))
-        emu.set(.HOST_FRAMEBUF_HEIGHT, value: Int(drawableSize.height))
+        emu?.set(.HOST_FRAMEBUF_WIDTH, value: Int(drawableSize.width))
+        emu?.set(.HOST_FRAMEBUF_HEIGHT, value: Int(drawableSize.height))
     }
     
     func keyDown(with event: NSEvent) {
-        
+
+        guard let emu = emu else { return }
         let macKey = MacKey(event: event)
         let shift  = macKey.modifierFlags.contains(.shift)
         let ctrl   = macKey.modifierFlags.contains(.control)
@@ -189,7 +192,7 @@ class Console: Layer {
 
         open()
 
-        emu.retroShell.executeScript(script)
+        emu?.retroShell.executeScript(script)
         isDirty = true
     }
 }

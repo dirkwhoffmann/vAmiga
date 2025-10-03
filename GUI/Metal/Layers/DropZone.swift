@@ -62,7 +62,9 @@ class DropZone: Layer {
 
     private func zoneImage(zone: Int) -> NSImage? {
 
-        let isHD = [.HDF, .HDZ].contains(type)
+        guard let emu = emu else { return nil }
+
+        let isHD = [.HDF,.HDZ].contains(type)
         
         if !enabled[zone] {
             return isHD ? hdDisabled : dfDisabled
@@ -84,6 +86,8 @@ class DropZone: Layer {
     }
 
     func open(type: FileType, delay: Double) {
+
+        guard let emu = emu else { return }
 
         self.type = type
         

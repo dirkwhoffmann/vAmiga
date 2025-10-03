@@ -33,7 +33,7 @@ class Renderer: NSObject, MTKViewDelegate {
     
     var prefs: Preferences { return parent.pref }
     var config: Configuration { return parent.config }
-    var amiga: EmulatorProxy { return parent.emu }
+    var amiga: EmulatorProxy? { return parent.emu }
 
     // Number of drawn frames since power up
     var frames: Int64 = 0
@@ -188,7 +188,7 @@ class Renderer: NSObject, MTKViewDelegate {
             
             // Process all pending messages
             var msg = Message()
-            while amiga.amiga.getMessage(&msg) {
+            while amiga?.amiga.getMessage(&msg) == true {
                 parent.process(message: msg)
             }
         }
@@ -221,8 +221,8 @@ class Renderer: NSObject, MTKViewDelegate {
                 if [50, 60, 100, 120, 200, 240].contains(newfps) {
 
                     fps = newfps
-                    amiga.set(.HOST_REFRESH_RATE, value: Int(fps))
-                    debug(.vsync, "New GPU frame rate: \(amiga.get(.HOST_REFRESH_RATE))")
+                    amiga?.set(.HOST_REFRESH_RATE, value: Int(fps))
+                    debug(.vsync, "New GPU frame rate: \(fps)")
                 }
             }
         }
