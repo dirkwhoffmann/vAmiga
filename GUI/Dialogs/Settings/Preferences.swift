@@ -139,30 +139,30 @@ class Preferences {
     // Joystick
     var autofire: Bool! {
         didSet {
-            for amiga in myAppDelegate.proxies {
-                amiga.set(.JOY_AUTOFIRE, enable: autofire)
+            for emu in myAppDelegate.proxies {
+                emu?.set(.JOY_AUTOFIRE, enable: autofire)
             }
         }
     }
     var autofireBursts: Bool! {
         didSet {
-            for amiga in myAppDelegate.proxies {
-                amiga.set(.JOY_AUTOFIRE_BURSTS, enable: autofireBursts)
+            for emu in myAppDelegate.proxies {
+                emu?.set(.JOY_AUTOFIRE_BURSTS, enable: autofireBursts)
             }
         }
     }
     var autofireBullets: Int! {
         didSet {
-            for amiga in myAppDelegate.proxies {
-                amiga.set(.JOY_AUTOFIRE_BULLETS, value: autofireBullets)
+            for emu in myAppDelegate.proxies {
+                emu?.set(.JOY_AUTOFIRE_BULLETS, value: autofireBullets)
             }
         }
     }
     var autofireFrequency: Int! {
         didSet {
             autofireFrequency = autofireFrequency.clamped(4, 50)
-            for amiga in myAppDelegate.proxies {
-                amiga.set(.JOY_AUTOFIRE_DELAY, value: autofireFrequency)
+            for emu in myAppDelegate.proxies {
+                emu?.set(.JOY_AUTOFIRE_DELAY, value: autofireFrequency)
             }
         }
     }

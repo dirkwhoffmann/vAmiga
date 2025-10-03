@@ -84,18 +84,24 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
     
     public func applicationDidFinishLaunching(_ aNotification: Notification) {
 
-        token = ProcessInfo.processInfo.beginActivity(options: [ .idleSystemSleepDisabled, .suddenTerminationDisabled ], reason: "Running vAmiga")
+        token = ProcessInfo.processInfo.beginActivity(options: [ .idleSystemSleepDisabled, .suddenTerminationDisabled ], reason: "Running an emulator")
         argv = Array(CommandLine.arguments.dropFirst())
         
         debug(.lifetime, "Launched with arguments \(argv)")
     }
-    
-    public func applicationWillTerminate(_ aNotification: Notification) {
+
+    public func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
 
         debug(.shutdown, "Delay a bit to let audio fade out...")
         usleep(250000)
         debug(.shutdown, "OK...")
 
+        return .terminateNow
+    }
+
+    public func applicationWillTerminate(_ aNotification: Notification) {
+
+        debug(.lifetime)
         ProcessInfo.processInfo.endActivity(token)
     }
 }
@@ -116,7 +122,7 @@ extension MyAppDelegate {
     var controllers: [MyController] {
         return documents.compactMap({ $0.windowForSheet?.windowController as? MyController })
     }
-    var proxies: [EmulatorProxy] {
+    var proxies: [EmulatorProxy?] {
         return documents.map({ $0.emu })
     }
 
@@ -128,50 +134,16 @@ extension MyAppDelegate {
             }
         }
     }
-
-    /*
-    func windowDidBecomeMain(_ window: NSWindow) {
-
-        debug(.lifetime)
-
-        for c in controllers {
-            
-            if c.window == window {
-                
-                c.emu?.put(.FOCUS, value: 1)
-                c.hideOrShowDriveMenus()
-
-            } else {
-                
-                c.emu?.put(.FOCUS, value: 0)
-            }
-        }
-    }
-    */
     
     // Callen when a HID device has been added
     func deviceAdded() {
-        // prefController?.refresh()
         settingsController?.refresh()
     }
     
     // Callen when a HID device has been removed
     func deviceRemoved() {
-        // prefController?.refresh()
         settingsController?.refresh()
     }
-
-    /*
-    // Callen when a HID event comes in
-    func hidEvent(event: HIDEvent, nr: Int, value: Int) {
-        prefController?.refreshDeviceEvent(event: event, nr: nr, value: value)
-    }
-
-    // Callen when a HID device triggers joystick actions
-    func devicePulled(events: [GamePadAction]) {
-        prefController?.refreshDeviceActions(actions: events)
-    }
-    */
 }
 
 @MainActor var myApp: MyApplication { return NSApp as! MyApplication }

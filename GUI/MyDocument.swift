@@ -41,7 +41,7 @@ class MyDocument: NSDocument {
     var mm: MediaManager!
 
     // Gateway to the core emulator
-    var emu: EmulatorProxy!
+    var emu: EmulatorProxy?
 
     // Snapshots
     static let maxSnapshots: Int = 16
@@ -162,7 +162,7 @@ class MyDocument: NSDocument {
 
             do {
                 // Save the workspace
-                try emu.amiga.saveWorkspace(url: url)
+                try emu?.amiga.saveWorkspace(url: url)
 
                 // Add a screenshot to the workspace bundle
                 if let image = canvas.screenshot(source: .emulator, cutout: .visible) {
@@ -190,7 +190,9 @@ class MyDocument: NSDocument {
     }
     
     func saveMachineDescription(to url: URL) {
-        
+
+        guard let emu = emu else { return }
+
         var dictionary: [String: Any] = [:]
 
         let bankMap = BankMap(rawValue: emu.get(.MEM_BANKMAP))
@@ -226,8 +228,8 @@ class MyDocument: NSDocument {
         // Swift.print("processWorkspaceFile \(url) force: \(force)")
         
         // Load workspace
-        try emu.amiga.loadWorkspace(url: url)
-        
+        try emu?.amiga.loadWorkspace(url: url)
+
         // Update the document's title and save status
         self.fileURL = url
         self.windowForSheet?.title = url.deletingPathExtension().lastPathComponent
@@ -260,7 +262,7 @@ class MyDocument: NSDocument {
     
     func processSnapshotFile(file: MediaFileProxy) throws {
 
-        try emu.amiga.loadSnapshot(file)
+        try emu?.amiga.loadSnapshot(file)
         appendSnapshot(file: file)
     }
 
@@ -298,39 +300,42 @@ class MyDocument: NSDocument {
     //
     
     func export(drive nr: Int, to url: URL) throws {
-                        
-        var df: MediaFileProxy?
+
+        guard let dfn = emu?.df(nr) else { return }
+
+        var file: MediaFileProxy?
         switch url.pathExtension.uppercased() {
         case "ADF":
-            df = try MediaFileProxy.make(with: emu.df(nr)!, type: .ADF)
+            file = try MediaFileProxy.make(with: dfn, type: .ADF)
         case "IMG", "IMA":
-            df = try MediaFileProxy.make(with: emu.df(nr)!, type: .IMG)
+            file = try MediaFileProxy.make(with: dfn, type: .IMG)
         default:
             warn("Invalid path extension")
             return
         }
         
-        try export(fileProxy: df!, to: url)
-        emu.df(nr)!.setFlag(.MODIFIED, value: false)
+        try export(fileProxy: file!, to: url)
+        dfn.setFlag(.MODIFIED, value: false)
         mm.noteNewRecentlyExportedDiskURL(url, df: nr)
         
         debug(.media, "Disk exported successfully")
     }
 
     func export(hardDrive nr: Int, to url: URL) throws {
-        
-        let hdn = emu.hd(nr)!
-        var dh: MediaFileProxy?
+
+        guard let hdn = emu?.hd(nr) else { return }
+
+        var file: MediaFileProxy?
 
         switch url.pathExtension.uppercased() {
         case "HDF":
-            dh = try MediaFileProxy.make(with: emu.hd(nr)!, type: .HDF)
+            file = try MediaFileProxy.make(with: hdn, type: .HDF)
         default:
             warn("Invalid path extension")
             return
         }
         
-        try export(fileProxy: dh!, to: url)
+        try export(fileProxy: file!, to: url)
 
         hdn.setFlag(.MODIFIED, value: false)
         mm.noteNewRecentlyExportedHdrURL(url, hd: nr)

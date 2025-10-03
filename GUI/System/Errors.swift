@@ -331,7 +331,8 @@ extension MyDocument {
     }
             
     func proceedWithUnsavedFloppyDisks() -> Bool {
-        
+
+        guard let emu = emu else { return true }
         let drives = [emu.df0!, emu.df1!, emu.df2!, emu.df3!]
         return proceedWithUnsavedFloppyDisks(drives: drives)
     }
@@ -358,15 +359,18 @@ extension MyDocument {
     }
     
     func proceedWithUnsavedHardDisks() -> Bool {
-        
+
+        guard let emu = emu else { return true }
         let drives = [emu.hd0!, emu.hd1!, emu.hd2!, emu.hd3!]
         return proceedWithUnsavedHardDisks(drives: drives)
     }
     
     func askToPowerOff() -> Bool {
-        
+
+        guard let emu = emu else { return true }
+
         if emu.poweredOn {
-            
+
             let alert = NSAlert()
             
             alert.alertStyle = .informational
