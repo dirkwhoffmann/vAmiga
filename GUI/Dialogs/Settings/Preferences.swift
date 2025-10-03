@@ -137,7 +137,6 @@ class Preferences {
     var keyMaps: [[MacKey: Int]] = [ [:], [:], [:] ]
 
     // Joystick
-    var disconnectJoyKeys: Bool!
     var autofire: Bool! {
         didSet {
             for amiga in myAppDelegate.proxies {
@@ -168,12 +167,17 @@ class Preferences {
         }
     }
 
+    // Keyboard
+    var disconnectJoyKeys: Bool!
+    var amigaKeysCombEnable: Bool!
+    var amigaKeysComb: Int!
+
     // Mouse
-    var retainMouseKeyComb: Int!
-    var retainMouseWithKeys: Bool!
+    var retainMouseKeyComb: Int! // DEPRECATED
+    var retainMouseWithKeys: Bool! // DEPRECATED
     var retainMouseByClick: Bool!
     var retainMouseByEntering: Bool!
-    var releaseMouseKeyComb: Int!
-    var releaseMouseWithKeys: Bool!
+    var releaseMouseKeyComb: Int! // DEPRECATED
+    var releaseMouseWithKeys: Bool! // DEPRECATED
     var releaseMouseByShaking: Bool!
 }

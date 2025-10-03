@@ -618,17 +618,6 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wyG-QZ-vhP">
-                                <rect key="frame" x="43" y="59" width="213" height="18"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <buttonCell key="cell" type="check" title="Disconnect keys from keyboard" bezelStyle="regularSquare" imagePosition="left" refusesFirstResponder="YES" state="on" inset="2" id="CXM-iP-oW3">
-                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="disconnectKeysAction:" target="EGi-z1-MUh" id="T5E-d6-91h"/>
-                                </connections>
-                            </button>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AAi-LP-TeW">
                                 <rect key="frame" x="44" y="306" width="65" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
@@ -976,8 +965,19 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyUpOrDown" image="mouse" id="GeF-Nj-4yZ"/>
                             </imageView>
+                            <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wyG-QZ-vhP">
+                                <rect key="frame" x="43" y="65" width="213" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="Disconnect keys from keyboard" bezelStyle="regularSquare" imagePosition="left" refusesFirstResponder="YES" state="on" inset="2" id="CXM-iP-oW3">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="disconnectKeysAction:" target="EGi-z1-MUh" id="Yax-cw-V17"/>
+                                </connections>
+                            </button>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vgh-3g-o6q">
-                                <rect key="frame" x="25" y="91" width="263" height="17"/>
+                                <rect key="frame" x="25" y="97" width="263" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Keyboard" id="gXU-QG-kNh">
                                     <font key="font" metaFont="systemBold"/>
@@ -985,43 +985,42 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cXg-I2-nu4">
-                                <rect key="frame" x="223" y="29" width="72" height="19"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <popUpButtonCell key="cell" type="roundRect" title="option" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" selectedItem="ls7-uv-Nel" id="A06-W1-Dfm">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="label" size="11"/>
-                                    <menu key="menu" id="fhr-1H-v6K">
-                                        <items>
-                                            <menuItem title="option" state="on" id="ls7-uv-Nel">
-                                                <modifierMask key="keyEquivalentModifierMask"/>
-                                            </menuItem>
-                                            <menuItem title="fn+option" tag="1" id="G3G-T6-qvo">
-                                                <modifierMask key="keyEquivalentModifierMask"/>
-                                            </menuItem>
-                                        </items>
-                                    </menu>
-                                </popUpButtonCell>
-                                <connections>
-                                    <action selector="releaseMouseKeyCombAction:" target="ejc-Ml-G1m" id="1hv-49-sLy"/>
-                                </connections>
-                            </popUpButton>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WEG-nC-wA5">
-                                <rect key="frame" x="43" y="31" width="177" height="18"/>
+                                <rect key="frame" x="43" y="37" width="177" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Emulate Amiga keys with" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Xtq-2U-2Ac">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="releaseMouseAction:" target="ejc-Ml-G1m" id="Hzd-jB-6TI"/>
+                                    <action selector="amigaKeysCombEnableAction:" target="EGi-z1-MUh" id="iVZ-4y-uUX"/>
                                 </connections>
                             </button>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cXg-I2-nu4">
+                                <rect key="frame" x="223" y="35" width="72" height="19"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <popUpButtonCell key="cell" type="roundRect" title="⌘ ⌥" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" selectedItem="ls7-uv-Nel" id="A06-W1-Dfm">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="label" size="11"/>
+                                    <menu key="menu" id="fhr-1H-v6K">
+                                        <items>
+                                            <menuItem title="⌘ ⌥" state="on" id="ls7-uv-Nel">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                            </menuItem>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <connections>
+                                    <action selector="amigaKeysCombPopupAction:" target="EGi-z1-MUh" id="Dvy-mB-CLd"/>
+                                </connections>
+                            </popUpButton>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Pbn-6l-mTx"/>
                         <viewLayoutGuide key="layoutMargins" id="4Wk-j0-W1H"/>
                     </view>
                     <connections>
+                        <outlet property="amigaKeysCombButton" destination="cXg-I2-nu4" id="f9G-es-crb"/>
+                        <outlet property="amigaKeysCombEnable" destination="WEG-nC-wA5" id="Jsi-fV-ywg"/>
                         <outlet property="disconnectKeys" destination="wyG-QZ-vhP" id="iSC-p6-NaP"/>
                         <outlet property="down1" destination="b46-7O-DaP" id="Xbm-uP-Nvj"/>
                         <outlet property="down1button" destination="qiN-Vt-cZ9" id="mjd-z5-PT3"/>
@@ -6205,7 +6204,7 @@
         <image name="relocated" width="276" height="276"/>
         <image name="rom_medium" width="129" height="157"/>
         <image name="rom_missing" width="129" height="157"/>
-        <image name="square.and.arrow.down" catalog="system" width="15" height="17"/>
+        <image name="square.and.arrow.down" catalog="system" width="19" height="22"/>
         <image name="trashTemplate" width="174" height="214"/>
     </resources>
 </document>

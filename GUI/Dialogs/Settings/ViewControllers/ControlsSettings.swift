@@ -45,6 +45,8 @@ class ControlsSettingsViewController: SettingsViewController {
     @IBOutlet weak var mouseRightButton: NSButton!
 
     @IBOutlet weak var disconnectKeys: NSButton!
+    @IBOutlet weak var amigaKeysCombEnable: NSButton!
+    @IBOutlet weak var amigaKeysCombButton: NSPopUpButton!
 
     //
     // Methods from SettingsViewController
@@ -74,6 +76,8 @@ class ControlsSettingsViewController: SettingsViewController {
         refreshKey(map: 2, dir: .PRESS_FIRE, button: fire2button, txt: fire2)
 
         disconnectKeys.state = pref.disconnectJoyKeys ? .on : .off
+        amigaKeysCombEnable.state = pref.amigaKeysCombEnable ? .on : .off
+        amigaKeysCombButton.selectItem(withTag: pref.amigaKeysComb)
     }
 
     func refreshKey(map: Int, dir: GamePadAction, button: NSButton, txt: NSTextField) {
@@ -176,12 +180,6 @@ class ControlsSettingsViewController: SettingsViewController {
         refresh()
     }
 
-    @IBAction func disconnectKeysAction(_ sender: NSButton!) {
-
-        pref.disconnectJoyKeys = (sender.state == .on)
-        refresh()
-    }
-
     @IBAction func deleteKeysetAction(_ sender: NSButton!) {
 
         assert(sender.tag >= 0 && sender.tag <= 2)
@@ -190,7 +188,23 @@ class ControlsSettingsViewController: SettingsViewController {
         refresh()
     }
 
+    @IBAction func disconnectKeysAction(_ sender: NSButton!) {
 
+        pref.disconnectJoyKeys = (sender.state == .on)
+        refresh()
+    }
+
+    @IBAction func amigaKeysCombEnableAction(_ sender: NSButton!) {
+
+        pref.amigaKeysCombEnable = sender.state == .on
+        refresh()
+    }
+
+    @IBAction func amigaKeysCombPopupAction(_ sender: NSButton!) {
+
+        pref.amigaKeysComb = sender.tag
+        refresh()
+    }
 
     override func preset(tag: Int) {
 

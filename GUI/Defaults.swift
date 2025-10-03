@@ -545,7 +545,9 @@ extension Keys {
         static let joyKeyMap1            = "Controls.JoyKeyMap1"
         static let joyKeyMap2            = "Controls.JoyKeyMap2"
         static let disconnectJoyKeys     = "Controls.DisconnectKeys"
-        
+        static let amigaKeysCombEnable   = "Controls.AmigaKeysCombEnable"
+        static let amigaKeysComb         = "Controls.AmigaKeysComb"
+
         // Joysticks
         static let autofire              = "Controls.Autofire"
         static let autofireBursts        = "Controls.AutofireBursts"
@@ -586,7 +588,9 @@ extension DefaultsProxy {
         register(Keys.Con.joyKeyMap1, encodable: stdKeyMap1)
         register(Keys.Con.joyKeyMap2, encodable: stdKeyMap2)
         register(Keys.Con.disconnectJoyKeys, true)
-        
+        register(Keys.Con.amigaKeysCombEnable, true)
+        register(Keys.Con.amigaKeysComb, 0)
+
         // Joysticks
         register(Keys.Con.autofire, false)
         register(Keys.Con.autofireBursts, false)
@@ -602,7 +606,9 @@ extension DefaultsProxy {
                      Keys.Con.joyKeyMap1,
                      Keys.Con.joyKeyMap2,
                      Keys.Con.disconnectJoyKeys,
-                     
+                     Keys.Con.amigaKeysCombEnable,
+                     Keys.Con.amigaKeysComb,
+
                      Keys.Con.autofire,
                      Keys.Con.autofireBullets,
                      Keys.Con.autofireFrequency ]
@@ -623,6 +629,8 @@ extension Preferences {
         defaults.encode(Keys.Con.joyKeyMap1, keyMaps[1])
         defaults.encode(Keys.Con.joyKeyMap2, keyMaps[2])
         defaults.set(Keys.Con.disconnectJoyKeys, disconnectJoyKeys)
+        defaults.set(Keys.Con.amigaKeysCombEnable, amigaKeysCombEnable)
+        defaults.set(Keys.Con.amigaKeysComb, amigaKeysComb)
 
         defaults.set(Keys.Con.autofire, autofire)
         defaults.set(Keys.Con.autofireBursts, autofireBursts)
@@ -641,7 +649,9 @@ extension Preferences {
         defaults.decode(Keys.Con.joyKeyMap1, &keyMaps[1])
         defaults.decode(Keys.Con.joyKeyMap2, &keyMaps[2])
         disconnectJoyKeys = defaults.bool(Keys.Con.disconnectJoyKeys)
-        
+        amigaKeysCombEnable = defaults.bool(Keys.Con.amigaKeysCombEnable)
+        amigaKeysComb = defaults.int(Keys.Con.amigaKeysComb)
+
         autofire = defaults.bool(Keys.Con.autofire)
         autofireBursts = defaults.bool(Keys.Con.autofireBursts)
         autofireBullets = defaults.int(Keys.Con.autofireBullets)

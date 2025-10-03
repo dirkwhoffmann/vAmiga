@@ -26,6 +26,9 @@ class KeyboardController: NSObject {
     var leftCommand = false, rightCommand = false
     var capsLock    = false
 
+    // Remembers the state of the two virtual Amiga keys
+    var leftAmiga   = false, rightAmiga   = false
+
     // Remembers the warp mode when caps lock is pressed
     var oldWarpMode: WarpMode?
 
@@ -89,7 +92,9 @@ class KeyboardController: NSObject {
     
     func flagsChanged(with event: NSEvent) {
 
-        print("flagsChanged: \(event)")
+        var cmd: Bool { event.modifierFlags.contains(.command) }
+
+        // print("flagsChanged: \(event)")
         // Intercept if the console is open
         if renderer.console.isVisible { return }
 
@@ -117,28 +122,35 @@ class KeyboardController: NSObject {
             
         case kVK_Option:
             leftOption = event.modifierFlags.contains(.option) ? !leftOption : false
-            leftOption ? keyDown(with: MacKey.option) : keyUp(with: MacKey.option)
-
-            if event.modifierFlags.contains(.command) {
-                print("kVK_Option + Cmd: \(leftOption)")
-            }
-            if event.modifierFlags.contains(.function) {
-                print("kVK_Option + Fn: \(leftOption)")
+            if leftOption {
+                leftAmiga = cmd && pref.amigaKeysCombEnable && pref.amigaKeysComb == 0
+                leftAmiga ? keyDown(with: MacKey.command) : keyDown(with: MacKey.option)
+            } else {
+                leftAmiga ? keyUp(with: MacKey.command) : keyUp(with: MacKey.option)
+                leftAmiga = false
             }
 
         case kVK_RightOption:
             rightOption = event.modifierFlags.contains(.option) ? !rightOption : false
-            rightOption ? keyDown(with: MacKey.rightOption) : keyUp(with: MacKey.rightOption)
-            
+            if rightOption {
+                rightAmiga = cmd && pref.amigaKeysCombEnable && pref.amigaKeysComb == 0
+                rightAmiga ? keyDown(with: MacKey.rightCommand) : keyDown(with: MacKey.rightOption)
+            } else {
+                rightAmiga ? keyUp(with: MacKey.rightCommand) : keyUp(with: MacKey.rightOption)
+                rightAmiga = false
+            }
+
+            /*
         case kVK_Command where myAppDelegate.mapLeftCmdKey:
             leftCommand = event.modifierFlags.contains(.command) ? !leftCommand : false
-            // myApp.disableCmdKey = leftCommand
+            myApp.disableCmdKey = leftCommand
             leftCommand ? keyDown(with: MacKey.command) : keyUp(with: MacKey.command)
             
         case kVK_RightCommand where myAppDelegate.mapRightCmdKey:
             rightCommand = event.modifierFlags.contains(.command) ? !rightCommand : false
-            // myApp.disableCmdKey = rightCommand
+            myApp.disableCmdKey = rightCommand
             rightCommand ? keyDown(with: MacKey.rightCommand) : keyUp(with: MacKey.rightCommand)
+            */
 
         case kVK_CapsLock where myAppDelegate.mapCapsLockWarp:
             capsLock = event.modifierFlags.contains(.capsLock)
@@ -148,8 +160,15 @@ class KeyboardController: NSObject {
             break
         }
     }
-    
+
     func keyDown(with macKey: MacKey) {
+
+        /*
+        if macKey == .command { print("keyDown: command") }
+        if macKey == .option { print("keyDown: option") }
+        if macKey == .rightCommand { print("keyDown: rightCommand") }
+        if macKey == .rightOption { print("keyDown: rightOption") }
+        */
 
         // Check if this key is used to emulate a game device
         if parent.gamePad1?.processKeyDownEvent(macKey: macKey) == true {
@@ -164,6 +183,13 @@ class KeyboardController: NSObject {
     }
     
     func keyUp(with macKey: MacKey) {
+
+        /*
+        if macKey == .command { print("keyUp: command") }
+        if macKey == .option { print("keyUp: option") }
+        if macKey == .rightCommand { print("keyUp: rightCommand") }
+        if macKey == .rightOption { print("keyUp: rightOption") }
+        */
 
         // Check if this key is used to emulate a game device
         if parent.gamePad1?.processKeyUpEvent(macKey: macKey) == true {
