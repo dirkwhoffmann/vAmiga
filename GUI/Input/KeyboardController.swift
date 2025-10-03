@@ -55,6 +55,8 @@ class KeyboardController: NSObject {
     
     func keyDown(with event: NSEvent) {
 
+        print("keyDown: \(event)")
+
         // Intercept if the console is open
         if renderer.console.isVisible { renderer.console.keyDown(with: event); return }
                 
@@ -77,6 +79,8 @@ class KeyboardController: NSObject {
     
     func keyUp(with event: NSEvent) {
 
+        print("keyUp: \(event)")
+
         // Intercept if the console is open
         if renderer.console.isVisible { renderer.console.keyUp(with: event); return }
 
@@ -85,11 +89,12 @@ class KeyboardController: NSObject {
     
     func flagsChanged(with event: NSEvent) {
 
+        print("flagsChanged: \(event)")
         // Intercept if the console is open
         if renderer.console.isVisible { return }
 
         // Check for a mouse controlling key combination
-        if parent.metal.checkForMouseKeys(with: event) { return }
+        // if parent.metal.checkForMouseKeys(with: event) { return }
 
         // Determine the pressed or released key
         switch Int(event.keyCode) {
@@ -114,18 +119,25 @@ class KeyboardController: NSObject {
             leftOption = event.modifierFlags.contains(.option) ? !leftOption : false
             leftOption ? keyDown(with: MacKey.option) : keyUp(with: MacKey.option)
 
+            if event.modifierFlags.contains(.command) {
+                print("kVK_Option + Cmd: \(leftOption)")
+            }
+            if event.modifierFlags.contains(.function) {
+                print("kVK_Option + Fn: \(leftOption)")
+            }
+
         case kVK_RightOption:
             rightOption = event.modifierFlags.contains(.option) ? !rightOption : false
             rightOption ? keyDown(with: MacKey.rightOption) : keyUp(with: MacKey.rightOption)
             
         case kVK_Command where myAppDelegate.mapLeftCmdKey:
             leftCommand = event.modifierFlags.contains(.command) ? !leftCommand : false
-            myApp.disableCmdKey = leftCommand
+            // myApp.disableCmdKey = leftCommand
             leftCommand ? keyDown(with: MacKey.command) : keyUp(with: MacKey.command)
             
         case kVK_RightCommand where myAppDelegate.mapRightCmdKey:
             rightCommand = event.modifierFlags.contains(.command) ? !rightCommand : false
-            myApp.disableCmdKey = rightCommand
+            // myApp.disableCmdKey = rightCommand
             rightCommand ? keyDown(with: MacKey.rightCommand) : keyUp(with: MacKey.rightCommand)
 
         case kVK_CapsLock where myAppDelegate.mapCapsLockWarp:

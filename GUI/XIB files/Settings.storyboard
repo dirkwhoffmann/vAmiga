@@ -234,7 +234,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ojw-M6-Jyd">
-                                            <rect key="frame" x="582" y="20" width="28" height="28"/>
+                                            <rect key="frame" x="582" y="13" width="28" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Lock" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="Etc-fU-8dI">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -263,7 +263,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton toolTip="Revert To..." fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6kF-O8-iYV">
-                                            <rect key="frame" x="17" y="14" width="40" height="34"/>
+                                            <rect key="frame" x="17" y="7" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" id="eIS-Vg-ZcX">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -283,7 +283,7 @@
                                             </connections>
                                         </popUpButton>
                                         <button toolTip="Use As Default" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3cV-4o-LP2">
-                                            <rect key="frame" x="59" y="14" width="40" height="34"/>
+                                            <rect key="frame" x="59" y="7" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="PUy-jx-NKF">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -493,7 +493,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rfv-wP-MEN">
-                                            <rect key="frame" x="582" y="20" width="28" height="28"/>
+                                            <rect key="frame" x="582" y="13" width="28" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Lock" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="C83-du-ezt">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -531,7 +531,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton id="HLM-4A-gjU" userLabel="System">
-                                            <rect key="frame" x="17" y="14" width="40" height="34"/>
+                                            <rect key="frame" x="17" y="7" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" id="aaM-1N-kXl" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -553,7 +553,7 @@
                                             </connections>
                                         </popUpButton>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c5x-hG-v7s">
-                                            <rect key="frame" x="59" y="14" width="40" height="34"/>
+                                            <rect key="frame" x="59" y="7" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Jvl-gZ-4M9">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -619,7 +619,7 @@
                                 </textFieldCell>
                             </textField>
                             <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wyG-QZ-vhP">
-                                <rect key="frame" x="43" y="49" width="213" height="18"/>
+                                <rect key="frame" x="43" y="59" width="213" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="check" title="Disconnect keys from keyboard" bezelStyle="regularSquare" imagePosition="left" refusesFirstResponder="YES" state="on" inset="2" id="CXM-iP-oW3">
                                     <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -977,14 +977,46 @@
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyUpOrDown" image="mouse" id="GeF-Nj-4yZ"/>
                             </imageView>
                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vgh-3g-o6q">
-                                <rect key="frame" x="25" y="81" width="263" height="17"/>
+                                <rect key="frame" x="25" y="91" width="263" height="17"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Keyboard Interaction" id="gXU-QG-kNh">
+                                <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Keyboard" id="gXU-QG-kNh">
                                     <font key="font" metaFont="systemBold"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cXg-I2-nu4">
+                                <rect key="frame" x="223" y="29" width="72" height="19"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <popUpButtonCell key="cell" type="roundRect" title="option" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" selectedItem="ls7-uv-Nel" id="A06-W1-Dfm">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="label" size="11"/>
+                                    <menu key="menu" id="fhr-1H-v6K">
+                                        <items>
+                                            <menuItem title="option" state="on" id="ls7-uv-Nel">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                            </menuItem>
+                                            <menuItem title="fn+option" tag="1" id="G3G-T6-qvo">
+                                                <modifierMask key="keyEquivalentModifierMask"/>
+                                            </menuItem>
+                                        </items>
+                                    </menu>
+                                </popUpButtonCell>
+                                <connections>
+                                    <action selector="releaseMouseKeyCombAction:" target="ejc-Ml-G1m" id="1hv-49-sLy"/>
+                                </connections>
+                            </popUpButton>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WEG-nC-wA5">
+                                <rect key="frame" x="43" y="31" width="177" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="check" title="Emulate Amiga keys with" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Xtq-2U-2Ac">
+                                    <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="releaseMouseAction:" target="ejc-Ml-G1m" id="Hzd-jB-6TI"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Pbn-6l-mTx"/>
                         <viewLayoutGuide key="layoutMargins" id="4Wk-j0-W1H"/>
@@ -1321,7 +1353,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6KJ-Gg-uiE">
-                                            <rect key="frame" x="582" y="20" width="28" height="28"/>
+                                            <rect key="frame" x="582" y="13" width="28" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Lock" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="Fka-18-qrd">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1358,7 +1390,7 @@
                                             </buttonCell>
                                         </button>
                                         <popUpButton id="LMg-T0-pWl" userLabel="System">
-                                            <rect key="frame" x="17" y="14" width="40" height="34"/>
+                                            <rect key="frame" x="17" y="7" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" id="5Sw-M1-G2O" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1380,7 +1412,7 @@
                                             </connections>
                                         </popUpButton>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mtd-iu-pGW">
-                                            <rect key="frame" x="59" y="14" width="40" height="34"/>
+                                            <rect key="frame" x="59" y="7" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="KDz-DR-ctH">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1662,7 +1694,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l5c-bZ-iYF">
-                                            <rect key="frame" x="582" y="20" width="28" height="28"/>
+                                            <rect key="frame" x="582" y="13" width="28" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Lock" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="02N-HS-Y4m">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1691,7 +1723,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T6r-rh-pbJ">
-                                            <rect key="frame" x="59" y="14" width="40" height="34"/>
+                                            <rect key="frame" x="59" y="7" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="square.and.arrow.down" catalog="system" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Cve-wW-rN7">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1705,7 +1737,7 @@
                                             </connections>
                                         </button>
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xvG-oM-4ob">
-                                            <rect key="frame" x="17" y="14" width="40" height="34"/>
+                                            <rect key="frame" x="17" y="7" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <popUpButtonCell key="cell" type="bevel" bezelStyle="regularSquare" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" autoenablesItems="NO" selectedItem="n53-So-Gkv" id="BGP-1P-xjp">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1834,7 +1866,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4nv-uz-AqV">
-                                            <rect key="frame" x="582" y="20" width="28" height="28"/>
+                                            <rect key="frame" x="582" y="13" width="28" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Lock" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="zgN-QD-ANu">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1854,7 +1886,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton id="q7f-oT-loi" userLabel="System">
-                                            <rect key="frame" x="17" y="14" width="40" height="34"/>
+                                            <rect key="frame" x="17" y="7" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" selectedItem="6Eb-jH-Sog" id="n3J-DY-92G" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1880,7 +1912,7 @@
                                             </connections>
                                         </popUpButton>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sPY-Yp-qJs">
-                                            <rect key="frame" x="59" y="14" width="40" height="34"/>
+                                            <rect key="frame" x="59" y="7" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ncy-bb-byQ">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2614,7 +2646,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BdG-3m-nLJ">
-                                            <rect key="frame" x="582" y="20" width="28" height="28"/>
+                                            <rect key="frame" x="582" y="13" width="28" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Lock" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="YrC-P4-WNM">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2652,7 +2684,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton id="YdP-Hg-hXf" userLabel="System">
-                                            <rect key="frame" x="17" y="14" width="40" height="34"/>
+                                            <rect key="frame" x="17" y="7" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" id="t8a-gI-jk6" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -2672,7 +2704,7 @@
                                             </connections>
                                         </popUpButton>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YUC-Td-2ug">
-                                            <rect key="frame" x="59" y="14" width="40" height="34"/>
+                                            <rect key="frame" x="59" y="7" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="wIg-st-j69">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -3283,7 +3315,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HdI-rw-DQS">
-                                            <rect key="frame" x="582" y="20" width="28" height="28"/>
+                                            <rect key="frame" x="582" y="13" width="28" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Lock" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="dtA-Qi-0aD">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -3321,7 +3353,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton id="ajS-fa-pN5" userLabel="System">
-                                            <rect key="frame" x="17" y="14" width="40" height="34"/>
+                                            <rect key="frame" x="17" y="7" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" id="pwm-uU-vRW" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -3343,7 +3375,7 @@
                                             </connections>
                                         </popUpButton>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n2z-Bo-YHP">
-                                            <rect key="frame" x="59" y="14" width="40" height="34"/>
+                                            <rect key="frame" x="59" y="7" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ZdL-Lr-6WI">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -3671,7 +3703,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8nZ-Xm-cjt">
-                                            <rect key="frame" x="582" y="20" width="28" height="28"/>
+                                            <rect key="frame" x="582" y="13" width="28" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Lock" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="7x8-kW-8It">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -3709,7 +3741,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton id="Xp9-lN-EbF" userLabel="System">
-                                            <rect key="frame" x="17" y="14" width="40" height="34"/>
+                                            <rect key="frame" x="17" y="7" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" id="SZE-41-ZIO" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -3734,7 +3766,7 @@
                                             </connections>
                                         </popUpButton>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WRE-PP-IKD">
-                                            <rect key="frame" x="59" y="14" width="40" height="34"/>
+                                            <rect key="frame" x="59" y="7" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aS3-Kt-RwM">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -4071,7 +4103,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Gc-sf-7gp">
-                                            <rect key="frame" x="582" y="20" width="28" height="28"/>
+                                            <rect key="frame" x="582" y="13" width="28" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Lock" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="WxO-CN-I8r">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -4109,7 +4141,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton id="BeN-Df-PQN" userLabel="System">
-                                            <rect key="frame" x="17" y="14" width="40" height="34"/>
+                                            <rect key="frame" x="17" y="7" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" id="ifE-Si-fEf" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -4134,7 +4166,7 @@
                                             </connections>
                                         </popUpButton>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GtC-6H-vu2">
-                                            <rect key="frame" x="59" y="14" width="40" height="34"/>
+                                            <rect key="frame" x="59" y="7" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="TGH-du-r7g">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -4943,7 +4975,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WjM-sm-Gv7">
-                                            <rect key="frame" x="582" y="20" width="28" height="28"/>
+                                            <rect key="frame" x="582" y="13" width="28" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Lock" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="ekO-z0-mc2">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -4981,7 +5013,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ReK-7g-Vfu">
-                                            <rect key="frame" x="59" y="14" width="40" height="34"/>
+                                            <rect key="frame" x="59" y="7" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2Xr-A9-kgF">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -4993,7 +5025,7 @@
                                             </connections>
                                         </button>
                                         <popUpButton id="A16-l5-S5t" userLabel="System">
-                                            <rect key="frame" x="17" y="14" width="40" height="34"/>
+                                            <rect key="frame" x="17" y="7" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" selectedItem="E5E-ay-rOh" id="Ub6-Ik-k63" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -6017,7 +6049,7 @@
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OOb-k4-Reo">
-                                            <rect key="frame" x="582" y="20" width="28" height="28"/>
+                                            <rect key="frame" x="582" y="13" width="28" height="28"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="Lock" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="MUF-UL-kxg">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -6055,7 +6087,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton id="s9S-lJ-nHQ" userLabel="System">
-                                            <rect key="frame" x="17" y="14" width="40" height="34"/>
+                                            <rect key="frame" x="17" y="7" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <popUpButtonCell key="cell" type="bevel" title="Revert to..." bezelStyle="regularSquare" imagePosition="only" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" arrowPosition="noArrow" id="chs-GI-PPC" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -6077,7 +6109,7 @@
                                             </connections>
                                         </popUpButton>
                                         <button toolTip="Use As Default" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KcU-QB-xhu">
-                                            <rect key="frame" x="59" y="14" width="40" height="34"/>
+                                            <rect key="frame" x="59" y="7" width="40" height="34"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ozE-Lf-zJg">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -6173,7 +6205,7 @@
         <image name="relocated" width="276" height="276"/>
         <image name="rom_medium" width="129" height="157"/>
         <image name="rom_missing" width="129" height="157"/>
-        <image name="square.and.arrow.down" catalog="system" width="19" height="22"/>
+        <image name="square.and.arrow.down" catalog="system" width="15" height="17"/>
         <image name="trashTemplate" width="174" height="214"/>
     </resources>
 </document>

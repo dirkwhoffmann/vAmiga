@@ -27,6 +27,7 @@ class MyApplication: NSApplication {
      * Application class. This delegation function is called early enough in
      * the command chain to hide any Command key events from the Mac app.
      */
+/*
     var disableCmdKey = false
 
     override func sendEvent(_ event: NSEvent) {
@@ -56,6 +57,7 @@ class MyApplication: NSApplication {
         }
         super.sendEvent(event)
     }
+ */
 }
 
 @MainActor @main @objc

@@ -23,6 +23,10 @@ extension MyController: NSMenuItemValidation {
         switch item.action {
 
             // Edit menu
+        case #selector(MyController.grabMouseAction(_:)):
+            item.title = metal.gotMouse ? "Release Mouse" : "Retain Mouse"
+            return true
+
         case #selector(MyController.stopAndGoAction(_:)):
             item.title = running ? "Pause" : "Continue"
             return true
@@ -195,29 +199,6 @@ extension MyController: NSMenuItemValidation {
     //
     // Action methods (Machine menu)
     //
-
-    /*
-    func openConfiguratorAsSheet(tab: String = "") {
-        
-        if configurator == nil {
-            configurator = ConfigurationController(with: self, nibName: "Configuration")
-        }
-        configurator?.showSheet(tab: tab)
-    }
-
-    func openConfiguratorAsWindow() {
-
-        if configurator == nil {
-            configurator = ConfigurationController(with: self, nibName: "Configuration")
-        }
-        configurator?.showAsWindow()
-    }
-
-    @IBAction func configureAction(_ sender: Any!) {
-        
-        openConfiguratorAsWindow()
-    }
-    */
 
     func addInspector() {
     
@@ -397,7 +378,12 @@ extension MyController: NSMenuItemValidation {
         
         keyboard.autoType(text, max: 256)
     }
-    
+
+    @IBAction func grabMouseAction(_ sender: Any!) {
+
+        metal.gotMouse ? metal.releaseMouse() : metal.retainMouse()
+    }
+
     @IBAction func stopAndGoAction(_ sender: Any!) {
 
         if let emu = emu {
