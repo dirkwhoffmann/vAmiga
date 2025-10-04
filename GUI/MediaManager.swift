@@ -9,20 +9,19 @@
 
 @MainActor
 class MediaManager {
-    
+
     struct Option: OptionSet {
-        
+
         let rawValue: Int
-        
+
         static let force       = Option(rawValue: 1 << 0)
         static let remember    = Option(rawValue: 1 << 1)
         static let protect     = Option(rawValue: 1 << 2)
     }
-    
+
     // References to other objects
     var mydocument: MyDocument!
-    var emu: EmulatorProxy! { return mydocument.emu }
-    var mm: MediaManager! { return mydocument.mm }
+    var emu: EmulatorProxy? { return mydocument.emu }
     var mycontroller: MyController { return mydocument.controller }
     var console: Console { return mycontroller.renderer.console }
 
@@ -36,7 +35,7 @@ class MediaManager {
     var df1ExportRecent: NSMenuItem! { return myAppDelegate.df1ExportRecent }
     var df2ExportRecent: NSMenuItem! { return myAppDelegate.df2ExportRecent }
     var df3ExportRecent: NSMenuItem! { return myAppDelegate.df3ExportRecent }
-    
+
     var hd0OpenRecent: NSMenuItem! { return myAppDelegate.hd0OpenRecent }
     var hd1OpenRecent: NSMenuItem! { return myAppDelegate.hd1OpenRecent }
     var hd2OpenRecent: NSMenuItem! { return myAppDelegate.hd2OpenRecent }
@@ -46,16 +45,19 @@ class MediaManager {
     var hd1ExportRecent: NSMenuItem! { return myAppDelegate.hd1ExportRecent }
     var hd2ExportRecent: NSMenuItem! { return myAppDelegate.hd2ExportRecent }
     var hd3ExportRecent: NSMenuItem! { return myAppDelegate.hd3ExportRecent }
-    
-    // List of recently inserted floppy disk URLs (all drives share the same list)
-    var insertedFloppyDisks: [URL] = [] {
+
+    // Shared list of recently inserted floppy disk URLs
+    static var insertedFloppyDisks: [URL] = []
+    /* {
         didSet {
             updateRecentUrlMenus([df0OpenRecent, df1OpenRecent, df2OpenRecent, df3OpenRecent],
                                  urls: insertedFloppyDisks,
                                  action: #selector(MyController.insertRecentDiskAction(_ :)))
         }
     }
-    // List of export URLs  (one for each floppy drive)
+    */
+
+    // Unshared list of export URLs (one for each floppy drive)
     var exportedFloppyDisks0: [URL] = [] {
         didSet { updateRecentUrlMenu(df0ExportRecent, urls: exportedFloppyDisks0, nr: 0,
                                      action: #selector(MyController.exportRecentDiskAction(_:))) }
@@ -72,16 +74,19 @@ class MediaManager {
         didSet { updateRecentUrlMenu(df3ExportRecent, urls: exportedFloppyDisks3, nr: 3,
                                      action: #selector(MyController.exportRecentDiskAction(_:))) }
     }
-        
-    // List of recently attached hard drive URLs
-    var attachedHardDrives: [URL] = [] {
+
+    // Shared list of recently attached hard drive URLs
+    static var attachedHardDrives: [URL] = []
+    /* {
         didSet {
             updateRecentUrlMenus([hd0OpenRecent, hd1OpenRecent, hd2OpenRecent, hd3OpenRecent],
                                  urls: attachedHardDrives,
                                  action: #selector(MyController.insertRecentDiskAction(_ :)))
         }
     }
-    // List of export URLs (one for each hard drive)
+    */
+
+    // Unshared list of export URLs (one for each hard drive)
     var exportedHardDrives0: [URL] = [] {
         didSet { updateRecentUrlMenu(hd0ExportRecent, urls: exportedHardDrives0, nr: 0,
                                      action: #selector(MyController.exportRecentHdrAction(_ :))) }
@@ -98,7 +103,7 @@ class MediaManager {
         didSet { updateRecentUrlMenu(hd3ExportRecent, urls: exportedHardDrives3, nr: 3,
                                      action: #selector(MyController.exportRecentHdrAction(_ :))) }
     }
-    
+
     // Pictograms used in menu items
     var diskMenuImage = NSImage(named: "diskTemplate")!.resize(width: 16.0, height: 16.0)
     var hdrMenuImage = NSImage(named: "hdrTemplate")!.resize(width: 16.0, height: 16.0)
@@ -111,50 +116,92 @@ class MediaManager {
 
         debug(.lifetime, "Creating media manager")
         self.mydocument = document
-        
+
         diskMenuImage.isTemplate = true
         hdrMenuImage.isTemplate = true
+
+        initUrlMenus([df0OpenRecent, df1OpenRecent, df2OpenRecent, df3OpenRecent], count: 10,
+                     action: #selector(MyController.insertRecentDiskAction(_:)))
+        initUrlMenus([df0ExportRecent, df1ExportRecent, df2ExportRecent, df3ExportRecent], count: 1,
+                     action: #selector(MyController.exportRecentDiskAction(_:)))
+        initUrlMenus([hd0OpenRecent, hd1OpenRecent, hd2OpenRecent, hd3OpenRecent], count: 10,
+                     action: #selector(MyController.attachRecentHdrAction(_:)))
+        initUrlMenus([hd0ExportRecent, hd1ExportRecent, hd2ExportRecent, hd3ExportRecent], count: 1,
+                     action: #selector(MyController.exportRecentHdrAction(_:)))
+    }
+
+    func initUrlMenus(_ menus: [NSMenuItem], count: Int,
+                      action: Selector?, clearAction: Selector? = nil) {
+
+        for (index, menu) in menus.enumerated() {
+
+            initUrlMenu(menu, count: count, tag: index, action: action, clearAction: clearAction)
+        }
     }
     
+    func initUrlMenu(_ menuItem: NSMenuItem, count: Int, tag: Int,
+                     action: Selector?, clearAction: Selector? = nil) {
+
+        let menu = menuItem.submenu!
+        menu.removeAllItems()
+
+        for index in 0..<count {
+
+            let item = NSMenuItem(title: "\(index)", action: action, keyEquivalent: "")
+            item.tag = tag << 16 | index
+            menu.addItem(item)
+        }
+
+        if let clearAction = clearAction {
+
+            menu.addItem(NSMenuItem.separator())
+            menu.addItem(NSMenuItem(title: "Clear Menu", action: clearAction, keyEquivalent: ""))
+        }
+    }
+
     //
     // Handling lists of recently used URLs
     //
-    
-    private func noteRecentlyUsedURL(_ url: URL, to list: inout [URL], size: Int) {
-        
+
+    static func noteRecentlyUsedURL(_ url: URL, to list: inout [URL], size: Int) {
+
         if !list.contains(url) {
 
             // Shorten the list if it is too large
             if list.count == size { list.remove(at: size - 1) }
-            
+
             // Add new item at the beginning
             list.insert(url, at: 0)
         }
     }
+
+    static func getRecentlyUsedURL(_ pos: Int, from list: [URL]) -> URL? {
+        return (pos < list.count) ? list[pos] : nil
+    }
     
-    func noteNewRecentlyInsertedDiskURL(_ url: URL) {
+    static func noteNewRecentlyInsertedDiskURL(_ url: URL) {
         noteRecentlyUsedURL(url, to: &insertedFloppyDisks, size: 10)
     }
-    
-    func getRecentlyInsertedDiskURL(_ pos: Int) -> URL? {
+
+    static func getRecentlyInsertedDiskURL(_ pos: Int) -> URL? {
         return insertedFloppyDisks.at(pos)
     }
-    
-    func clearRecentlyInsertedDiskURLs() {
+
+    static func clearRecentlyInsertedDiskURLs() {
         insertedFloppyDisks = []
-        
+
     }
     func noteNewRecentlyExportedDiskURL(_ url: URL, df n: Int) {
 
         switch n {
-        case 0: noteRecentlyUsedURL(url, to: &exportedFloppyDisks0, size: 1)
-        case 1: noteRecentlyUsedURL(url, to: &exportedFloppyDisks1, size: 1)
-        case 2: noteRecentlyUsedURL(url, to: &exportedFloppyDisks2, size: 1)
-        case 3: noteRecentlyUsedURL(url, to: &exportedFloppyDisks3, size: 1)
+        case 0: MediaManager.noteRecentlyUsedURL(url, to: &exportedFloppyDisks0, size: 1)
+        case 1: MediaManager.noteRecentlyUsedURL(url, to: &exportedFloppyDisks1, size: 1)
+        case 2: MediaManager.noteRecentlyUsedURL(url, to: &exportedFloppyDisks2, size: 1)
+        case 3: MediaManager.noteRecentlyUsedURL(url, to: &exportedFloppyDisks3, size: 1)
         default: fatalError()
         }
     }
-    
+
     func getRecentlyExportedDiskURL(_ pos: Int, df n: Int) -> URL? {
         switch n {
         case 0: return exportedFloppyDisks0.at(pos)
@@ -164,7 +211,7 @@ class MediaManager {
         default: fatalError()
         }
     }
-    
+
     func clearRecentlyExportedDiskURLs(df n: Int) {
         switch n {
         case 0: exportedFloppyDisks0 = []
@@ -174,29 +221,29 @@ class MediaManager {
         default: fatalError()
         }
     }
-    
-    func noteNewRecentlyAttachedHdrURL(_ url: URL) {
-        noteRecentlyUsedURL(url, to: &attachedHardDrives, size: 10)
+
+    static func noteNewRecentlyAttachedHdrURL(_ url: URL) {
+        MediaManager.noteRecentlyUsedURL(url, to: &attachedHardDrives, size: 10)
     }
-    
-    func getRecentlyAttachedHdrURL(_ pos: Int) -> URL? {
+
+    static func getRecentlyAttachedHdrURL(_ pos: Int) -> URL? {
         return attachedHardDrives.at(pos)
     }
-    
-    func clearRecentlyAttachedHdrURLs() {
+
+    static func clearRecentlyAttachedHdrURLs() {
         attachedHardDrives = []
     }
-    
+
     func noteNewRecentlyExportedHdrURL(_ url: URL, hd n: Int) {
         switch n {
-        case 0: noteRecentlyUsedURL(url, to: &exportedHardDrives0, size: 1)
-        case 1: noteRecentlyUsedURL(url, to: &exportedHardDrives1, size: 1)
-        case 2: noteRecentlyUsedURL(url, to: &exportedHardDrives2, size: 1)
-        case 3: noteRecentlyUsedURL(url, to: &exportedHardDrives3, size: 1)
+        case 0: MediaManager.noteRecentlyUsedURL(url, to: &exportedHardDrives0, size: 1)
+        case 1: MediaManager.noteRecentlyUsedURL(url, to: &exportedHardDrives1, size: 1)
+        case 2: MediaManager.noteRecentlyUsedURL(url, to: &exportedHardDrives2, size: 1)
+        case 3: MediaManager.noteRecentlyUsedURL(url, to: &exportedHardDrives3, size: 1)
         default: fatalError()
         }
     }
-    
+
     func getRecentlyExportedHdrURL(_ pos: Int, hd n: Int) -> URL? {
         switch n {
         case 0: return exportedHardDrives0.at(pos)
@@ -206,7 +253,7 @@ class MediaManager {
         default: fatalError()
         }
     }
-    
+
     func clearRecentlyExportedHdrURLs(hd n: Int) {
         switch n {
         case 0: exportedHardDrives0 = []
@@ -216,42 +263,44 @@ class MediaManager {
         default: fatalError()
         }
     }
-    
+
     func noteNewRecentlyOpenedURL(_ url: URL, type: FileType) {
-        
+
         switch type {
-            
-        case .ADF, .ADZ, .EADF, .DMS, .EXE, .IMG, .ST: noteNewRecentlyInsertedDiskURL(url)
-        case .HDF, .HDZ:                               noteNewRecentlyAttachedHdrURL(url)
-            
+
+        case .ADF, .ADZ, .EADF, .DMS, .EXE, .IMG, .ST: MediaManager.noteNewRecentlyInsertedDiskURL(url)
+        case .HDF, .HDZ:                               MediaManager.noteNewRecentlyAttachedHdrURL(url)
+
         default:
             break
         }
     }
 
     func noteNewRecentlyExportedURL(_ url: URL, nr: Int, type: FileType) {
-        
+
         switch type {
-            
+
         case .ADF, .ADZ, .EADF, .DMS, .EXE, .IMG, .ST: noteNewRecentlyExportedDiskURL(url, df: nr)
         case .HDF, .HDZ:                               noteNewRecentlyExportedHdrURL(url, hd: nr)
-            
+
         default:
             break
         }
     }
 
+
+    // DEPRECATED
     func updateRecentUrlMenu(_ menuItem: NSMenuItem, urls: [URL], nr: Int, action selector: Selector?) {
 
         let menu = menuItem.submenu!
         menu.removeAllItems()
-        
+
         if !urls.isEmpty {
 
             for (index, url) in urls.enumerated() {
-                
+
                 let isHdf = url.pathExtension == "hdf" || url.pathExtension == "hdz"
-                
+
                 let item = NSMenuItem(title:  url.lastPathComponent, action: selector, keyEquivalent: "")
                 item.tag = nr << 16 | index
                 item.image = isHdf ? hdrMenuImage : diskMenuImage
@@ -259,21 +308,22 @@ class MediaManager {
             }
 
             /*
-            if clearMenu {
-                
-                menu.addItem(NSMenuItem.separator())
-                menu.addItem(NSMenuItem(title: "Clear Menu",
-                                        action: #selector(MyController.clearRecentlyInsertedDisksAction(_ :)),
-                                        keyEquivalent: ""))
-            }
-            */
+             if clearMenu {
+
+             menu.addItem(NSMenuItem.separator())
+             menu.addItem(NSMenuItem(title: "Clear Menu",
+             action: #selector(MyController.clearRecentlyInsertedDisksAction(_ :)),
+             keyEquivalent: ""))
+             }
+             */
         }
     }
-    
+
+    // DEPRECATED
     func updateRecentUrlMenus(_ menus: [NSMenuItem], urls: [URL], action selector: Selector?) {
 
         for (index, menu) in menus.enumerated() {
-     
+
             updateRecentUrlMenu(menu, urls: urls, nr: index, action: selector)
         }
     }
@@ -281,20 +331,20 @@ class MediaManager {
     //
     // Adding media files
     //
-    
+
     func addMedia(url: URL,
                   allowedTypes types: [FileType] = FileType.all,
                   drive: Int = 0,
                   force: Bool = false,
                   remember: Bool = true) throws {
-        
+
         let type = MediaFileProxy.type(of: url)
         if !types.contains(type) {
-            
+
             throw AppError(.FILE_TYPE_MISMATCH,
-                            "The type of this file is not known to the emulator.")
+                           "The type of this file is not known to the emulator.")
         }
-        
+
         switch type {
 
         case .WORKSPACE:
@@ -305,7 +355,7 @@ class MediaManager {
 
         case .SCRIPT:
             try mydocument.processScriptFile(url: url)
-            
+
         case .HDF, .HDZ:
             try addMedia(hd: drive, url: url, force: force, remember: remember)
 
@@ -316,8 +366,10 @@ class MediaManager {
             break
         }
     }
-    
+
     func addMedia(df n: Int, url: URL, force: Bool = false, remember: Bool = true) throws {
+
+        guard let emu = emu else { return }
 
         var dfn: FloppyDriveProxy { return emu.df(n)! }
 
@@ -325,15 +377,17 @@ class MediaManager {
 
             try dfn.swap(url: url)
         }
-        
+
         if remember {
-        
-            mm.noteNewRecentlyInsertedDiskURL(url)
-            mm.noteNewRecentlyExportedDiskURL(url, df: n)
+
+            MediaManager.noteNewRecentlyInsertedDiskURL(url)
+            noteNewRecentlyExportedDiskURL(url, df: n)
         }
     }
-    
+
     func addMedia(hd n: Int, url: URL, force: Bool = false, remember: Bool = true) throws {
+
+        guard let emu = emu else { return }
 
         var hdn: HardDriveProxy { return emu.hd(n)! }
 
@@ -357,15 +411,17 @@ class MediaManager {
                 try emu.run()
             }
         }
-        
+
         if remember {
-        
-            mm.noteNewRecentlyAttachedHdrURL(url)
-            mm.noteNewRecentlyExportedHdrURL(url, hd: n)
+
+            MediaManager.noteNewRecentlyAttachedHdrURL(url)
+            noteNewRecentlyExportedHdrURL(url, hd: n)
         }
     }
-    
+
     func importFolder(hd n: Int, url: URL, force: Bool = false) throws {
+
+        guard let emu = emu else { return }
 
         var hdn: HardDriveProxy { return emu.hd(n)! }
 
@@ -374,24 +430,26 @@ class MediaManager {
             try hdn.importFiles(url: url)
         }
     }
-    
+
     func detach(hd n: Int, force: Bool = false) throws {
-        
+
+        guard let emu = emu else { return }
+
         var hdn: HardDriveProxy { return emu.hd(n)! }
 
         func detach() throws {
-                      
+
             emu.set(.HDC_CONNECT, drive: n, enable: false)
         }
-        
+
         if force || proceedWithUnsavedHardDisk(drive: hdn) {
-            
+
             if emu.poweredOff {
-                
+
                 try detach()
-                
+
             } else if force || askToPowerOff() {
-                
+
                 emu.powerOff()
                 try detach()
                 emu.powerOn()

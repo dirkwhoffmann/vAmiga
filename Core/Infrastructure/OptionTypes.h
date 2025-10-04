@@ -34,9 +34,9 @@ enum class Opt : long
     AMIGA_RUN_AHEAD,        ///< Number of run-ahead frames
     
     // Snapshots
-    AMIGA_SNAP_AUTO,        ///< Automatically take a snapshots
-    AMIGA_SNAP_DELAY,       ///< Delay between two snapshots in seconds
-    AMIGA_SNAP_COMPRESSOR,  ///< Snapshot compression method
+    AMIGA_SNAP_AUTO,              ///< Automatically take a snapshots
+    AMIGA_SNAP_DELAY,             ///< Delay between two snapshots in seconds
+    AMIGA_SNAP_COMPRESSOR,        ///< Snapshot compression method
 
     // Workspaces
     AMIGA_WS_COMPRESSION,   ///< Workspace media file compression

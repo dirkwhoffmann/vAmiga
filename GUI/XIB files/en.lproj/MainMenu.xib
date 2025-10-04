@@ -403,16 +403,7 @@ CQ
                             </menuItem>
                             <menuItem title="Export To" id="Hkb-4l-9Ts">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Export To" id="pDh-nd-HeL">
-                                    <items>
-                                        <menuItem title="0" id="qCl-TJ-dqC">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="exportRecentDiskAction:" target="-1" id="COa-hQ-08A"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
+                                <menu key="submenu" title="Export To" id="pDh-nd-HeL"/>
                                 <connections>
                                     <action selector="exportRecentDiskDummyAction:" target="-1" id="gkZ-nj-POS"/>
                                 </connections>
