@@ -234,7 +234,7 @@ extension MyController {
 
             debug(.media, "Media URL = \(url)")
 
-            do { try mm.addMedia(url: url) } catch {
+            do { try mm.mount(url: url) } catch {
                 self.showAlert(.cantOpen(url: url), error: error, async: true)
             }
         }
@@ -398,7 +398,7 @@ extension MyController {
 
                 if let url = mydocument.launchURL {
 
-                    try? mm.addMedia(url: url, force: true)
+                    try? mm.mount(url: url, options: [.remember, .force])
                     mydocument.launchURL = nil
                 }
 

@@ -97,32 +97,6 @@ class MyDocument: NSDocument {
         let controller = MyController(windowNibName: "MyDocument")
         self.addWindowController(controller)
     }
-    
-    //
-    // Creating file proxys
-    //
-    
-    func createMediaFileProxy(from url: URL, allowedTypes: [FileType]) throws -> MediaFileProxy {
-        
-        debug(.media, "Reading file \(url.lastPathComponent)")
-        
-        // Iterate through all allowed file types
-        for type in allowedTypes {
-            
-            do {
-                
-                return try MediaFileProxy.make(with: url, type: type)
-                
-            } catch let error as AppError {
-                
-                if error.errorCode != .FILE_TYPE_MISMATCH { throw error }
-            }
-        }
-        
-        // None of the allowed types matched the file
-        throw AppError(.FILE_TYPE_MISMATCH,
-                       "The type of this file is not known to the emulator.")
-    }
 
     func shutDown() {
 
@@ -149,7 +123,7 @@ class MyDocument: NSDocument {
         debug(.media)
         
         do {
-            try mm.addMedia(url: url, allowedTypes: [.WORKSPACE])
+            try mm.mount(url: url, allowedTypes: [.WORKSPACE])
             
         } catch let error as AppError {
             
@@ -263,7 +237,7 @@ class MyDocument: NSDocument {
     
     func processSnapshotFile(url: URL) throws {
         
-        let file = try createMediaFileProxy(from: url, allowedTypes: [.SNAPSHOT])
+        let file = try MediaManager.createFileProxy(from: url, type: .SNAPSHOT)
         try processSnapshotFile(file: file)
     }
     
@@ -293,7 +267,7 @@ class MyDocument: NSDocument {
     
     func processScriptFile(url: URL, force: Bool = false) throws {
         
-        let file = try createMediaFileProxy(from: url, allowedTypes: [.SCRIPT])
+        let file = try MediaManager.createFileProxy(from: url, type: .SCRIPT)
         try processScriptFile(file: file, force: force)
     }
     

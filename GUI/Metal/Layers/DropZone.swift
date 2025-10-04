@@ -196,9 +196,9 @@ class DropZone: Layer {
         do {
             
             if let nr = metal.dropZone {
-                try mm.addMedia(url: url, allowedTypes: [type], drive: nr)
+                try mm.mount(url: url, allowedTypes: [type], drive: nr)
             } else {
-                try mm.addMedia(url: url, allowedTypes: [type])
+                try mm.mount(url: url, allowedTypes: [type])
             }
             
         } catch {

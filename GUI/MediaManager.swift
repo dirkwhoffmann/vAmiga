@@ -138,7 +138,9 @@ class MediaManager {
     static func getRecentlyUsedURL(_ pos: Int, from list: [URL]) -> URL? {
         return (pos < list.count) ? list[pos] : nil
     }
-    
+
+    // Import URLs (shared among all emulator instances and drives)
+
     static func noteNewRecentlyInsertedDiskURL(_ url: URL) {
         noteRecentlyUsedURL(url, to: &insertedFloppyDisks, size: 10)
     }
@@ -149,8 +151,10 @@ class MediaManager {
 
     static func clearRecentlyInsertedDiskURLs() {
         insertedFloppyDisks = []
-
     }
+
+    // Export URLs (not shared)
+
     func noteNewRecentlyExportedDiskURL(_ url: URL, df n: Int) {
 
         switch n {
@@ -163,6 +167,7 @@ class MediaManager {
     }
 
     func getRecentlyExportedDiskURLs(df n: Int) -> [URL] {
+
         switch n {
         case 0: return exportedFloppyDisks0
         case 1: return exportedFloppyDisks1
@@ -257,14 +262,43 @@ class MediaManager {
     }
 
     //
-    // Adding media files
+    // Creating media files from URLs
     //
 
-    func addMedia(url: URL,
-                  allowedTypes types: [FileType] = FileType.all,
-                  drive: Int = 0,
-                  force: Bool = false,
-                  remember: Bool = true) throws {
+    static func createFileProxy(from url: URL, type: FileType) throws -> MediaFileProxy {
+
+        return try createFileProxy(from: url, allowedTypes: [type])
+    }
+
+    static func createFileProxy(from url: URL, allowedTypes: [FileType]) throws -> MediaFileProxy {
+
+        debug(.media, "Reading file \(url.lastPathComponent)")
+
+        // Iterate through all allowed file types
+        for type in allowedTypes {
+
+            do {
+                return try MediaFileProxy.make(with: url, type: type)
+            } catch let error as AppError {
+                if error.errorCode != .FILE_TYPE_MISMATCH { throw error }
+            }
+        }
+
+        // None of the allowed types matched the file
+        throw AppError(.FILE_TYPE_MISMATCH,
+                       "The type of this file is not known to the emulator.")
+    }
+
+    //
+    // Mouting media files
+    //
+
+    func mount(url: URL,
+               allowedTypes types: [FileType] = FileType.all,
+               drive n: Int = 0,
+               options: [Option] = [.remember]) throws {
+
+        debug(.media, "url = \(url) types = \(types)")
 
         let type = MediaFileProxy.type(of: url)
         if !types.contains(type) {
@@ -285,35 +319,35 @@ class MediaManager {
             try mydocument.processScriptFile(url: url)
 
         case .HDF, .HDZ:
-            try addMedia(hd: drive, url: url, force: force, remember: remember)
+            try mount(hd: n, url: url, options: options)
 
         case .ADF, .ADZ, .DMS, .EXE, .EADF, .IMG, .ST, .DIR:
-            try addMedia(df: drive, url: url, force: force, remember: remember)
+            try mount(df: n, url: url, options: options)
 
         default:
             break
         }
     }
 
-    func addMedia(df n: Int, url: URL, force: Bool = false, remember: Bool = true) throws {
+    func mount(df n: Int, url: URL, options: [Option] = [.remember]) throws {
 
         guard let emu = emu else { return }
 
         var dfn: FloppyDriveProxy { return emu.df(n)! }
 
-        if force || proceedWithUnsavedFloppyDisk(drive: dfn) {
+        if options.contains(.force) || proceedWithUnsavedFloppyDisk(drive: dfn) {
 
             try dfn.swap(url: url)
         }
 
-        if remember {
+        if options.contains(.remember) {
 
             MediaManager.noteNewRecentlyInsertedDiskURL(url)
             noteNewRecentlyExportedDiskURL(url, df: n)
         }
     }
 
-    func addMedia(hd n: Int, url: URL, force: Bool = false, remember: Bool = true) throws {
+    func mount(hd n: Int, url: URL, options: [Option] = [.remember]) throws {
 
         guard let emu = emu else { return }
 
@@ -325,13 +359,13 @@ class MediaManager {
             try hdn.attach(url: url)
         }
 
-        if force || proceedWithUnsavedHardDisk(drive: hdn) {
+        if options.contains(.force) || proceedWithUnsavedHardDisk(drive: hdn) {
 
             if emu.poweredOff {
 
                 try attach()
 
-            } else if force || askToPowerOff() {
+            } else if options.contains(.force) || askToPowerOff() {
 
                 emu.powerOff()
                 try attach()
@@ -340,7 +374,7 @@ class MediaManager {
             }
         }
 
-        if remember {
+        if options.contains(.remember) {
 
             MediaManager.noteNewRecentlyAttachedHdrURL(url)
             noteNewRecentlyExportedHdrURL(url, hd: n)

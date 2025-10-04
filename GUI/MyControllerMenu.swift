@@ -198,7 +198,7 @@ extension MyController: NSMenuItemValidation {
             if result == .OK, let url = self.myOpenPanel.url {
 
                 do {
-                    try self.mm.addMedia(url: url, allowedTypes: [.SCRIPT])
+                    try self.mm.mount(url: url, allowedTypes: [.SCRIPT])
                 } catch {
                     self.showAlert(.cantOpen(url: url), error: error, async: true)
                 }
@@ -539,7 +539,7 @@ extension MyController: NSMenuItemValidation {
                 if result == .OK, let url = self.myOpenPanel.url {
 
                     do {
-                        try self.mm.addMedia(df: sender.tag, url: url)
+                        try self.mm.mount(df: sender.tag, url: url)
                     } catch {
                         self.showAlert(.cantInsert, error: error, async: true)
                     }
@@ -566,7 +566,7 @@ extension MyController: NSMenuItemValidation {
         if let url = MediaManager.getRecentlyInsertedDiskURL(slot) {
 
             do {
-                try self.mm.addMedia(url: url, allowedTypes: types, drive: n)
+                try self.mm.mount(url: url, allowedTypes: types, drive: n)
             } catch {
                 self.showAlert(.cantInsert, error: error)
             }
@@ -683,7 +683,7 @@ extension MyController: NSMenuItemValidation {
                     DispatchQueue.main.async {
 
                         do {
-                            try self.mm.addMedia(hd: sender.tag, url: url)
+                            try self.mm.mount(hd: sender.tag, url: url)
                         } catch {
                             self.showAlert(.cantAttach, error: error, async: true)
                         }
@@ -709,7 +709,7 @@ extension MyController: NSMenuItemValidation {
         if let url = MediaManager.getRecentlyAttachedHdrURL(slot) {
 
             do {
-                try self.mm.addMedia(hd: n, url: url)
+                try self.mm.mount(hd: n, url: url)
             } catch {
                 self.showAlert(.cantAttach, error: error)
             }
