@@ -468,16 +468,7 @@ CQ
                             </menuItem>
                             <menuItem title="Export To" tag="1" id="ZTR-D1-rJ5">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Export To" id="bgq-nN-pbJ">
-                                    <items>
-                                        <menuItem title="0" tag="10" id="KKB-IG-ytS">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="exportRecentDiskAction:" target="-1" id="vNT-eP-y7y"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
+                                <menu key="submenu" title="Export To" id="bgq-nN-pbJ"/>
                                 <connections>
                                     <action selector="exportRecentDiskDummyAction:" target="-1" id="teB-Fm-xmM"/>
                                 </connections>
@@ -520,17 +511,17 @@ CQ
                                     <action selector="insertDiskAction:" target="-1" id="tnT-cp-Ucy"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Eject" tag="2" id="E2J-Rc-2L4">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="ejectDiskAction:" target="-1" id="Mty-vo-k95"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Insert Recent" tag="2" id="tsI-Ny-Jes">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Insert Recent" id="whL-sI-gQo"/>
                                 <connections>
                                     <action selector="insertRecentDiskDummyAction:" target="-1" id="XCm-qz-Tls"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Eject" tag="2" id="E2J-Rc-2L4">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="ejectDiskAction:" target="-1" id="Mty-vo-k95"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="X6d-pV-1XU"/>
@@ -542,16 +533,7 @@ CQ
                             </menuItem>
                             <menuItem title="Export To" tag="2" id="R9H-6V-FXf">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Export To" id="Yve-kj-w1H">
-                                    <items>
-                                        <menuItem title="0" tag="20" id="EjO-Lp-hf9">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="exportRecentDiskAction:" target="-1" id="O3c-Mv-fbT"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
+                                <menu key="submenu" title="Export To" id="Yve-kj-w1H"/>
                                 <connections>
                                     <action selector="exportRecentDiskDummyAction:" target="-1" id="SJd-oK-ENN"/>
                                 </connections>
@@ -616,16 +598,7 @@ CQ
                             </menuItem>
                             <menuItem title="Export To" tag="3" id="Non-0K-biL">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Export To" id="Vfk-95-hI3">
-                                    <items>
-                                        <menuItem title="0" tag="30" id="EAL-ZQ-aF7">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="exportRecentDiskAction:" target="-1" id="4w8-Th-3kW"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
+                                <menu key="submenu" title="Export To" id="Vfk-95-hI3"/>
                                 <connections>
                                     <action selector="exportRecentDiskDummyAction:" target="-1" id="Z5e-Ri-ZqE"/>
                                 </connections>

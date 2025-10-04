@@ -747,7 +747,7 @@ extension MyController: NSMenuItemValidation {
 
     func exportRecentAction(hd n: Int, slot: Int) {
 
-        debug(.media, "exportRecentAction(drive: \(n), slot: \(slot)")
+        debug(.media, "exportRecentAction(hd: \(n), slot: \(slot))")
 
         if let url = mm.getRecentlyExportedHdrURL(slot, hd: n) {
 
