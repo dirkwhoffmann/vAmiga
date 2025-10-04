@@ -30,7 +30,7 @@ class MyDocumentController: NSDocumentController {
             doc = try super.makeDocument(withContentsOf: url, ofType: typeName)
         }
 
-        (doc as? MyDocument)?.mediaURL = url
+        (doc as? MyDocument)?.launchURL = url
         return doc
     }
 }

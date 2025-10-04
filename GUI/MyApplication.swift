@@ -16,7 +16,7 @@ class MyApplication: NSApplication {
 
 @MainActor @main @objc
 public class MyAppDelegate: NSObject, NSApplicationDelegate {
-    
+
     @IBOutlet weak var df0Menu: NSMenuItem!
     @IBOutlet weak var df1Menu: NSMenuItem!
     @IBOutlet weak var df2Menu: NSMenuItem!
@@ -31,12 +31,12 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var df1ExportRecent: NSMenuItem!
     @IBOutlet weak var df2ExportRecent: NSMenuItem!
     @IBOutlet weak var df3ExportRecent: NSMenuItem!
-    
+
     @IBOutlet weak var hd0Menu: NSMenuItem!
     @IBOutlet weak var hd1Menu: NSMenuItem!
     @IBOutlet weak var hd2Menu: NSMenuItem!
     @IBOutlet weak var hd3Menu: NSMenuItem!
-    
+
     @IBOutlet weak var hd0OpenRecent: NSMenuItem!
     @IBOutlet weak var hd1OpenRecent: NSMenuItem!
     @IBOutlet weak var hd2OpenRecent: NSMenuItem!
@@ -59,7 +59,7 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
 
     // Information provider for connected HID devices
     var database = DeviceDatabase()
-    
+
     // Command line arguments
     var argv: [String] = []
 
@@ -67,7 +67,7 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
     var token: NSObjectProtocol!
 
     override init() {
-        
+
         super.init()
         pref = Preferences()
     }
@@ -78,15 +78,15 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
     }
 
     public func application(_ application: NSApplication, open urls: [URL]) {
-        
+
         debug(.lifetime, "application(open urls: \(urls))")
     }
-    
+
     public func applicationDidFinishLaunching(_ aNotification: Notification) {
 
         token = ProcessInfo.processInfo.beginActivity(options: [ .idleSystemSleepDisabled, .suddenTerminationDisabled ], reason: "Running an emulator")
         argv = Array(CommandLine.arguments.dropFirst())
-        
+
         debug(.lifetime, "Launched with arguments \(argv)")
     }
 
@@ -112,7 +112,7 @@ public class MyAppDelegate: NSObject, NSApplicationDelegate {
 
 @MainActor
 extension MyAppDelegate {
-    
+
     var documents: [MyDocument] {
         return NSDocumentController.shared.documents as? [MyDocument] ?? []
     }
@@ -134,12 +134,12 @@ extension MyAppDelegate {
             }
         }
     }
-    
+
     // Callen when a HID device has been added
     func deviceAdded() {
         settingsController?.refresh()
     }
-    
+
     // Callen when a HID device has been removed
     func deviceRemoved() {
         settingsController?.refresh()

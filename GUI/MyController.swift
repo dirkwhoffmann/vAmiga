@@ -67,7 +67,7 @@ class MyController: NSWindowController, MessageReceiver {
     var virtualKeyboard: VirtualKeyboardController?
         
     // Speedometer to measure clock frequence and frames per second
-    var speedometer: Speedometer!
+    var speedometer = Speedometer()
 
     // Remembers if audio is muted
     var muted = false
@@ -200,7 +200,7 @@ extension MyController {
         configureWindow()
 
         // Create speed monitor
-        speedometer = Speedometer()
+        // speedometer = Speedometer()
 
         // Launch the emulator
         launch()
@@ -229,7 +229,8 @@ extension MyController {
         }
 
         // Add media file (if provided on startup)
-        if let url = mydocument.mediaURL {
+        /*
+        if let url = mydocument.launchURL {
 
             debug(.media, "Media URL = \(url)")
 
@@ -237,6 +238,7 @@ extension MyController {
                 self.showAlert(.cantOpen(url: url), error: error, async: true)
             }
         }
+        */
 
         // Update toolbar
         toolbar.validateVisibleItems()
@@ -388,16 +390,23 @@ extension MyController {
             settings?.refresh()
 
         case .POWER:
+
             if value != 0 {
 
-                if let fileUrl = document?.fileURL, let _ = fileUrl {
-                    renderer.canvas.open(delay: 0)
-                } else {
-                    renderer.canvas.open(delay: 1.5)
+                let delay = document?.fileURL != nil ? 1.5 : 1.5
+                renderer.canvas.open(delay: delay)
+
+                if let url = mydocument.launchURL {
+
+                    try? mm.addMedia(url: url, force: true)
+                    mydocument.launchURL = nil
                 }
+
+                virtualKeyboard = nil
                 serialIn = ""
                 serialOut = ""
             }
+            
             clearInfo()
             passToInspector()
             // configurator?.refresh()

@@ -11,7 +11,7 @@
 class SnapshotViewer: DialogController {
     
     var now: Date!
-
+    
     @IBOutlet weak var carousel: iCarousel!
     @IBOutlet weak var moveUp: NSButton!
     @IBOutlet weak var moveDown: NSButton!
@@ -37,17 +37,17 @@ class SnapshotViewer: DialogController {
     var takeSnapshots = false
     
     override func dialogDidShow() {
-
+        
         super.dialogDidShow()
-
+        
         now = Date()
         
         // Don't let the emulator take snapshots while the dialog is open
         takeSnapshots = emu?.get(.AMIGA_SNAP_AUTO) != 0
         emu?.set(.AMIGA_SNAP_AUTO, enable: false)
-
+        
         updateLabels()
-
+        
         self.carousel.type = iCarouselType.timeMachine
         self.carousel.isHidden = false
         self.updateCarousel(goto: myDocument.snapshots.count - 1, animated: false)
@@ -56,11 +56,11 @@ class SnapshotViewer: DialogController {
     func updateLabels() {
         
         let MB = 1024 * 1024
-
+        
         moveUp.isEnabled = currentItem >= 0 && currentItem < lastItem
         moveDown.isEnabled = currentItem > 0
         nr.stringValue = "Snapshot \(currentItem + 1) / \(numItems)"
-
+        
         if let snapshot = myDocument.snapshots.element(at: currentItem) {
             
             let takenAt = snapshot.timeStamp
@@ -78,20 +78,13 @@ class SnapshotViewer: DialogController {
             nr.stringValue = "No snapshots taken"
             message.stringValue = ""
         }
-
+        
         let count = myDocument.snapshots.count
         let max = MyDocument.maxSnapshots
         let fill = 100.0 * Double(count) / Double(max)
         indicator.doubleValue = fill
         indicatorText.stringValue = "\(count) / \(max)"
-        /*
-        let fill = myDocument.snapshots.fill
-        let size = myDocument.snapshots.used / MB
-        let max = myDocument.snapshots.maxSize / MB
-        indicator.doubleValue = fill
-        indicatorText.stringValue = "\(size) MB / \(max) MB"
-        */
-
+        
         text1.isHidden  = empty
         text2.isHidden  = empty
         text3.isHidden  = empty
@@ -101,7 +94,7 @@ class SnapshotViewer: DialogController {
         trash.isHidden = empty
         revert.isHidden = empty
     }
-      
+    
     func updateCarousel(goto item: Int, animated: Bool) {
         
         carousel.reloadData()
@@ -112,21 +105,21 @@ class SnapshotViewer: DialogController {
         carousel.layOutItemViews()
         updateLabels()
     }
-
+    
     func updateCarousel(animated: Bool = false) {
         
         updateCarousel(goto: -1, animated: animated)
     }
     
     func timeInfo(date: Date?) -> String {
-         
-         guard let date else { return "" }
-         
-         let formatter = DateFormatter()
-         formatter.timeZone = TimeZone.current
-         formatter.dateFormat = "HH:mm:ss"
-         
-         return formatter.string(from: date)
+        
+        guard let date else { return "" }
+        
+        let formatter = DateFormatter()
+        formatter.timeZone = TimeZone.current
+        formatter.dateFormat = "HH:mm:ss"
+        
+        return formatter.string(from: date)
     }
     
     func timeInfo(time: time_t) -> String {
@@ -135,32 +128,32 @@ class SnapshotViewer: DialogController {
     }
     
     @IBAction func selectorAction(_ sender: NSSegmentedControl!) {
-                
+        
         updateCarousel(goto: Int.max, animated: false)
     }
     
     @IBAction func moveUpAction(_ sender: NSButton!) {
-                
+        
         if currentItem < lastItem {
             carousel.scrollToItem(at: currentItem + 1, animated: true)
         }
     }
-
+    
     @IBAction func moveDownAction(_ sender: NSButton!) {
-                
+        
         if currentItem > 0 {
             carousel.scrollToItem(at: currentItem - 1, animated: true)
         }
     }
-        
+    
     @IBAction func trashAction(_ sender: NSButton!) {
-
+        
         myDocument.snapshots.remove(at: currentItem)
         updateCarousel()
     }
     
     @IBAction func revertAction(_ sender: NSButton!) {
-                
+        
         do {
             try parent.restoreSnapshot(item: currentItem)
             hide()
@@ -168,13 +161,13 @@ class SnapshotViewer: DialogController {
             NSSound.beep()
         }
     }
-
+    
     @IBAction override func cancelAction(_ sender: Any!) {
-
+        
         hide()
-
+        
         emu?.set(.AMIGA_SNAP_AUTO, enable: takeSnapshots)
-
+        
         // Hide some controls
         let items: [NSView] = [
             
@@ -200,7 +193,7 @@ class SnapshotViewer: DialogController {
 extension SnapshotViewer: @preconcurrency iCarouselDataSource, @preconcurrency iCarouselDelegate {
     
     func numberOfItems(in carousel: iCarousel) -> Int {
-                
+        
         return myDocument.snapshots.count
     }
     
@@ -213,10 +206,10 @@ extension SnapshotViewer: @preconcurrency iCarouselDataSource, @preconcurrency i
         itemView.image = myDocument.snapshots.element(at: index)?.previewImage?.roundCorners()
         
         /*
-        itemView.wantsLayer = true
-        itemView.layer?.cornerRadius = 10.0
-        itemView.layer?.masksToBounds = true
-        */
+         itemView.wantsLayer = true
+         itemView.layer?.cornerRadius = 10.0
+         itemView.layer?.masksToBounds = true
+         */
         
         return itemView
     }

@@ -35,9 +35,7 @@ extension Canvas {
     // Returns the largest visibile texture area (excluding HBLANK and VBLANK)
     var largestVisible: CGRect {
 
-        guard let emu = emu else { return .zero }
-
-        let pal = emu.agnus.traits.isPAL
+        let pal = emu?.agnus.traits.isPAL ?? true
         let x1 = 4 * Int(TPP) * VAMIGA.HBLANK.CNT
         let x2 = 4 * Int(TPP) * VAMIGA.PAL.HPOS.CNT
         let y1 = pal ? VAMIGA.PAL.VBLANK.CNT : VAMIGA.NTSC.VBLANK.CNT
