@@ -21,7 +21,7 @@ extension MyController: NSMenuItemValidation {
         var dfn: FloppyDriveProxy { return emu.df(item.tag)! }
         var hdn: HardDriveProxy { return emu.hd(item.tag)! }
 
-        func validateURLlist(_ list: [URL], image: NSImage) -> Bool {
+        func validateURLlist(_ list: [URL], image: NSImage) {
 
             let slot = item.tag & 0xFF
 
@@ -34,8 +34,6 @@ extension MyController: NSMenuItemValidation {
                 item.isHidden = true
                 item.image = nil
             }
-
-            return true
         }
 
         switch item.action {
@@ -68,52 +66,43 @@ extension MyController: NSMenuItemValidation {
             item.state = myAppDelegate.mapCapsLockWarp ? .on : .off
             return true
 
-            // Df<n> menu
-        case #selector(MyController.insertRecentDiskAction(_:)):
-            return validateURLlist(MediaManager.insertedFloppyDisks, image: smallDisk)
+            // Dfn menus
+        case #selector(MyController.insertRecentDiskDummyAction(_:)):
+            validateURLlist(MediaManager.insertedFloppyDisks, image: smallDisk)
+            return true
 
-        case  #selector(MyController.ejectDiskAction(_:)),
+        case #selector(MyController.exportRecentDiskDummyAction(_:)):
+            let empty = mm.getRecentlyExportedDiskURL(0, df: item.tag) == nil
+            return dfn.info.hasDisk && !empty
+
+        case #selector(MyController.exportRecentDiskAction(_:)):
+            let urls = mm.getRecentlyExportedDiskURLs(df: item.tag >> 16)
+            validateURLlist(urls, image: smallDisk)
+            return true
+
+        case #selector(MyController.ejectDiskAction(_:)),
             #selector(MyController.exportFloppyDiskAction(_:)),
             #selector(MyController.inspectFloppyDiskAction(_:)),
             #selector(MyController.inspectDfnVolumeAction(_:)):
             return dfn.info.hasDisk
 
-            /*
-        case #selector(MyController.insertRecentDiskDummyAction(_:)):
-            return !mm.insertedFloppyDisks.isEmpty
-             */
-
-        case #selector(MyController.exportRecentDiskDummyAction(_:)):
-            let empty = mm.getRecentlyExportedDiskURL(0, df: item.tag) == nil
-            return dfn.info.hasDisk && !empty
-            /*
-            if !dfn.info.hasDisk { return false }
-            switch item.tag {
-            case 0: return !mm.exportedFloppyDisks0.isEmpty
-            case 1: return !mm.exportedFloppyDisks1.isEmpty
-            case 2: return !mm.exportedFloppyDisks2.isEmpty
-            case 3: return !mm.exportedFloppyDisks3.isEmpty
-            default: fatalError()
-            }
-            */
-
         case #selector(MyController.writeProtectAction(_:)):
             item.state = dfn.info.hasProtectedDisk ? .on : .off
             return dfn.info.hasDisk
 
-            // Hd<n> menu
+            // Hdn menus
         case #selector(MyController.attachRecentHdrDummyAction(_:)):
-            return validateURLlist(MediaManager.attachedHardDrives, image: smallDisk)
+            validateURLlist(MediaManager.attachedHardDrives, image: smallHdr)
+            return true
 
         case #selector(MyController.exportRecentHdrDummyAction(_:)):
-            if !hdn.info.hasDisk { return false }
-            switch item.tag {
-            case 0: return !mm.exportedHardDrives0.isEmpty
-            case 1: return !mm.exportedHardDrives1.isEmpty
-            case 2: return !mm.exportedHardDrives2.isEmpty
-            case 3: return !mm.exportedHardDrives3.isEmpty
-            default: fatalError()
-            }
+            let empty = mm.getRecentlyExportedHdrURL(0, hd: item.tag) == nil
+            return hdn.info.hasDisk && !empty
+
+        case #selector(MyController.exportRecentHdrAction(_:)):
+            let urls = mm.getRecentlyExportedHdrURLs(hd: item.tag >> 16)
+            validateURLlist(urls, image: smallHdr)
+            return true
 
         case #selector(MyController.writeProtectHdrAction(_:)):
             item.state = hdn.info.hasProtectedDisk ? .on : .off
