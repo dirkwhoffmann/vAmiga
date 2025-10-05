@@ -39,11 +39,11 @@ struct RSKeyEnum : Reflection<RSKeyEnum, RSKey>
 {
     static constexpr long minVal = 0;
     static constexpr long maxVal = long(RSKey::CR);
-
+    
     static const char *_key(RSKey value)
     {
         switch (value) {
-
+                
             case RSKey::UP:          return "UP";
             case RSKey::DOWN:        return "DOWN";
             case RSKey::LEFT:        return "LEFT";
@@ -75,7 +75,7 @@ typedef struct
 {
     // Active console
     isize console;
-
+    
     // Relative position of the cursor
     isize cursorRel;
 }

@@ -90,7 +90,7 @@ RSCommand::add(const RSCommandDescriptor &descriptor)
     // Traversing the command tree
     RSCommand *node = seek(std::vector<string> { tokens.begin(), tokens.end() - 1 });
     assert(node != nullptr);
-    
+
     // Create the instruction
     RSCommand cmd;
     cmd.groupName = currentGroup;
@@ -116,22 +116,22 @@ RSCommand::add(const RSCommandDescriptor &descriptor)
 
 void
 RSCommand::clone(const std::vector<string> &tokens,
-                     const string &alias,
-                     const std::vector<isize> &values)
+                 const string &alias,
+                 const std::vector<isize> &values)
 {
     assert(!tokens.empty());
 
     // Find the command to clone
     RSCommand *cmd = seek(std::vector<string> { tokens.begin(), tokens.end() });
     assert(cmd != nullptr);
-    
+
     // Assemble the new token list
     auto newTokens = std::vector<string> { tokens.begin(), tokens.end() - 1 };
     newTokens.push_back(alias);
-    
+
     // Create the instruction
     add(RSCommandDescriptor {
-        
+
         .tokens = newTokens,
         .ghelp  = cmd->ghelp,
         .chelp  = cmd->chelp,
@@ -161,11 +161,11 @@ const RSCommand *
 RSCommand::seek(const std::vector<string> &tokens) const
 {
     const RSCommand *result = this;
-    
+
     for (auto &it : tokens) {
         if ((result = result->seek(it)) == nullptr) break;
     }
-    
+
     return result;
 }
 
@@ -182,7 +182,7 @@ RSCommand::filterPrefix(const string& prefix) const
     auto uprefix = util::uppercased(prefix);
 
     for (auto &it : subcommands) {
-        
+
         if (it.isHidden()) continue;
         auto substr = it.name.substr(0, prefix.size());
         if (util::uppercased(substr) == uprefix) result.push_back(&it);
@@ -323,7 +323,7 @@ RSCommand::argUsage() const
 
     // Create a usage string for all other arguments
     std::vector<string> items;
-
+    
     for (auto &it : args) {
         if (!it.isFlag()) items.push_back(it.usageStr());
     }

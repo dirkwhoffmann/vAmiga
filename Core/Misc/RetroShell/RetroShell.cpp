@@ -19,7 +19,7 @@ namespace vamiga {
 RetroShell::RetroShell(Amiga& ref) : SubComponent(ref)
 {
     subComponents = std::vector<CoreComponent *> {
-
+        
         &commander,
         &debugger,
         &navigator
@@ -31,7 +31,7 @@ RetroShell::_initialize()
 {
     // Set a console
     current = &debugger;
-
+    
     // Switch the console to let the welcome message appear
     current->exec(vAmigaDOS ? "navigator" : "commander");
 }
@@ -40,7 +40,7 @@ void
 RetroShell::cacheInfo(RetroShellInfo &result) const
 {
     {   SYNCHRONIZED
-
+        
         result.console = current->objid;
         result.cursorRel = current->cursorRel();
     }
@@ -50,37 +50,37 @@ void
 RetroShell::enterConsole(isize nr)
 {
     Console *newConsole = nullptr;
-
+    
     switch (nr) {
-
+            
         case 0: newConsole = &commander; break;
         case 1: newConsole = &debugger; break;
         case 2: newConsole = &navigator; break;
-
+            
         default:
             fatalError;
     }
-
+    
     // Assign the new console
     current = newConsole;
-
+    
     // Enter Leave tracking mode
     nr == 1 ? emulator.trackOn(1) : emulator.trackOff(1);
-
+    
     if (current->isEmpty()) {
-
+        
         // Print the welcome message if entered the first time
         current->exec("welcome"); *this << current->getPrompt();
-
+        
     } else {
-
+        
         // Otherwise, print the summary message
         current->summary();
     }
-
+    
     // Update prompt
     *this << '\r' << current->getPrompt();
-
+    
     // Inform the GUI about the change
     msgQueue.put(Msg::RSH_SWITCH, nr);
 }
@@ -94,7 +94,7 @@ RetroShell::asyncExec(const string &command, bool append)
     } else {
         commands.insert(commands.begin(), { 0, command});
     }
-
+    
     // Process the command queue in the next update cycle
     emulator.put(Command(Cmd::RSH_EXECUTE));
 }
@@ -136,17 +136,17 @@ void
 RetroShell::asyncExecScript(const MediaFile &file)
 {
     string s;
-
+    
     switch (file.type()) {
-
+            
         case FileType::SCRIPT:
-
+            
             s = string((char *)file.getData(), file.getSize());
             asyncExecScript(s);
             break;
-
+            
         default:
-
+            
             throw AppError(Fault::FILE_TYPE_MISMATCH);
     }
 }
@@ -155,9 +155,9 @@ void
 RetroShell::abortScript()
 {
     {   SYNCHRONIZED
-
+        
         if (!commands.empty()) {
-
+            
             commands.clear();
             agnus.cancel<SLOT_RSH>();
         }
@@ -205,25 +205,25 @@ RetroShell::exec(QueuedCmd cmd)
 {
     auto line = cmd.first;
     auto command = cmd.second;
-
+    
     try {
-
+        
         // Print the command if it comes from a script
         if (line) *this << command << '\n';
-
+        
         // Call the interpreter
         current->exec(command);
-
+        
     } catch (ScriptInterruption &) {
-
+        
         // Rethrow the exception
         throw;
-
+        
     } catch (std::exception &err) {
-
+        
         // Print error message
         current->describe(err, line, command);
-
+        
         // Rethrow the exception if the command is not prefixed with 'try'
         if (command.rfind("try", 0)) throw;
     }
@@ -322,23 +322,23 @@ void
 RetroShell::press(RSKey key, bool shift)
 {
     if (shift) {
-
+        
         switch(key) {
-
+                
             case RSKey::TAB:
-
+                
                 // asyncExec(".");
                 if (current->objid == 0) current->input = "debugger";
                 if (current->objid == 1) current->input = "navigator";
                 if (current->objid == 2) current->input = "commander";
                 current->pressReturn(false);
                 return;
-
+                
             default:
                 break;
         }
     }
-
+    
     current->press(key, shift);
 }
 

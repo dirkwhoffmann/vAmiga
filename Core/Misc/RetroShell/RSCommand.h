@@ -39,19 +39,19 @@ static const usize ac               = acdir | acfile;
 }
 
 struct RSArgumentDescriptor {
-
+    
     std::vector<string> name;
     string key;
     string value;
     usize flags;
-
+    
     bool isFlag() const { return (flags & rs::flag) == rs::flag; }
     bool isKeyValuePair() const { return (flags & rs::keyval) == rs::keyval; }
     bool isStdArg() const { return !isFlag() && !isKeyValuePair(); }
     bool isHidden() const { return (flags & rs::hidden) == rs::hidden; }
     bool isOptional() const { return (flags & rs::opt) == rs::opt; }
     bool isRequired() const { return !isOptional(); }
-
+    
     string nameStr() const;
     string helpStr() const;
     string keyStr() const;
@@ -61,126 +61,126 @@ struct RSArgumentDescriptor {
 };
 
 struct RSCommandDescriptor {
-
+    
     // Tokens the command is composed of
     const std::vector<string> &tokens = {};
-
+    
     // General description of this command and all subcommands
     string ghelp = {};
-
+    
     // Specific description of this command
     string chelp = {};
-
+    
     // Command flags
     usize flags = {};
-
+    
     // Argument descriptions of this command
     const std::vector<RSArgumentDescriptor> &args = {};
-
+    
     // The command callback
     std::function<void (std::ostream&, const Arguments&, const std::vector<isize>&)> func = nullptr;
-
+    
     // Addition values passed to the command callback as last argument
     const std::vector<isize> &payload = {};
 };
-    
-struct RSCommand {
 
+struct RSCommand {
+    
     // Used during command registration
     static string currentGroup;
-
+    
     // Group of this command
     string groupName;
-
+    
     // Name of this command (e.g., "eject")
     string name;
-
+    
     // Full name of this command (e.g., "df0 eject")
     string fullName;
-
+    
     // Command flags
     usize flags;
-
+    
     // General description of this command and all subcommands
     string ghelp;
-
+    
     // Specific description of this command
     string chelp;
-
+    
     // Argument descriptions of this command
     std::vector<RSArgumentDescriptor> args;
-
+    
     // Command handler
     std::function<void (std::ostream&, const Arguments&, const std::vector<isize>&)> callback = nullptr;
-
+    
     // Addition values passed to the command callback as last argument
     std::vector<isize> payload;
-
+    
     // List of subcommands
     std::vector<RSCommand> subcommands;
-
-
+    
+    
     //
     // Querying properties
     //
-
+    
     bool isHidden() const { return (flags & rs::hidden) == rs::hidden; }
     bool isShadowed() const { return (flags & rs::shadowed) == rs::shadowed; }
     bool isVisible() const { return !isHidden() && !isShadowed(); }
-
-
+    
+    
     //
     // Working with the command tree
     //
-
+    
     // Creates a new node in the command tree
     void add(const RSCommandDescriptor &descriptor);
-
+    
     // Registers an alias name for an existing command
     void clone(const std::vector<string> &tokens,
                const string &alias,
                const std::vector<isize> &values = { });
-
+    
     // Seeks a command object inside the command object tree
     const RSCommand *seek(const string& token) const;
     const RSCommand *seek(const std::vector<string> &tokens) const;
     const RSCommand &operator/(const string& token) const { return *seek(token); }
-
+    
     RSCommand *seek(const string& token);
     RSCommand *seek(const std::vector<string> &tokens);
     RSCommand &operator/(const string& token) { return *seek(token); }
-
-
+    
+    
     //
     // Auto-completing user input
     //
-
+    
 public:
-
+    
     // Auto-completes a partial token string (returns the number of matches)
     isize autoComplete(string &token);
-
+    
 private:
-
+    
     // Filters the argument list (used by auto-completion)
     std::vector<const RSCommand *> filterPrefix(const string& prefix) const;
-
-
+    
+    
     //
     // Generating help messages
     //
-
+    
 public:
-
+    
     // Returns a syntax description for subcommands or arguments
     string cmdUsage() const;
     string argUsage() const;
-
+    
     // Displays a help text for a (partially typed in) command
     void printHelp(std::ostream &os);
-
+    
 private:
-
+    
     void printArgumentHelp(std::ostream &os, isize indent, bool verbose = true);
     void printSubcmdHelp(std::ostream &os, isize indent, bool verbose = true);
 };
