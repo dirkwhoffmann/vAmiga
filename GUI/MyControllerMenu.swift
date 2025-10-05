@@ -67,7 +67,7 @@ extension MyController: NSMenuItemValidation {
             return true
 
             // Dfn menus
-        case #selector(MyController.insertRecentDiskDummyAction(_:)):
+        case #selector(MyController.insertRecentDiskAction(_:)):
             validateURLlist(MediaManager.insertedFloppyDisks, image: smallDisk)
             return true
 
@@ -91,7 +91,7 @@ extension MyController: NSMenuItemValidation {
             return dfn.info.hasDisk
 
             // Hdn menus
-        case #selector(MyController.attachRecentHdrDummyAction(_:)):
+        case #selector(MyController.attachRecentHdrAction(_:)):
             validateURLlist(MediaManager.attachedHardDrives, image: smallHdr)
             return true
 
