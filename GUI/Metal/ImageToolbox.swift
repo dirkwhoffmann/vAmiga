@@ -384,6 +384,11 @@ public extension NSImage {
                            cutout: cutout)
     }
 
+    func resize(size: CGSize) -> NSImage {
+
+        return resize(width: size.width, height: size.height)
+    }
+    
     func resizeSharp(width: CGFloat, height: CGFloat) -> NSImage {
 
         let cutout = NSRect(x: 0, y: 0, width: width, height: height)

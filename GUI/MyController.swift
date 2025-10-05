@@ -29,7 +29,6 @@ class MyController: NSWindowController, MessageReceiver {
     let mySavePanel = MySavePanel()
 
     // Emulator proxy (bridge between the Swift frontend and the C++ backend)
-    // var emu: EmulatorProxy!
     var emu: EmulatorProxy? { return mydocument.emu }
 
     // Media manager (handles the import and export of media files)
@@ -38,9 +37,6 @@ class MyController: NSWindowController, MessageReceiver {
     // Auxiliary windows of this emulator instance
     var inspectors: [Inspector] = []
     var dashboards: [Dashboard] = []
-    
-    // Configuration panel of this emulator instance
-    // var configurator: ConfigurationController?
 
     // Settings panel
     var settings: SettingsWindowController? { myAppDelegate.settingsController }
@@ -69,19 +65,23 @@ class MyController: NSWindowController, MessageReceiver {
     // Speedometer to measure clock frequence and frames per second
     var speedometer = Speedometer()
 
+    // Indicates if the CPU is halted
+    var jammed: Bool { emu?.cpu.info.halt ?? false }
+
     // Remembers if audio is muted
     var muted = false
-    
+
     // Indicates if a status bar is shown
     var statusBar = true
     
     // Information message shown in the status bar
-    var info: String? = nil
-    var info2: String? = nil
+    var infoText: String?
+    var infoText2: String?
     
     // Pictograms for being used in NSMenuItems (MOVED TO AppDelegate)
-    var smallDisk = NSImage(named: "diskTemplate")!.resize(width: 16.0, height: 16.0)
-    var smallHdr = NSImage(named: "hdrTemplate")!.resize(width: 16.0, height: 16.0)
+    static let iconSize = CGSize(width: 16, height: 16)
+    var smallDisk = NSImage(named: "diskTemplate")!.resize(size: iconSize)
+    var smallHdr = NSImage(named: "hdrTemplate")!.resize(size: iconSize)
 
     // Serial input and output
     var serialIn = ""
@@ -126,7 +126,6 @@ class MyController: NSWindowController, MessageReceiver {
     @IBOutlet weak var speedStepper: NSStepper!
 
     // Toolbar
-   // @IBOutlet weak var toolbar: MyToolbar!
     var toolbar: MyToolbar { (window?.toolbar as? MyToolbar)! }
 
     // Quick-access references
@@ -178,10 +177,8 @@ extension MyController {
         cylSlot = [ cylSlot0, cylSlot1, cylSlot2, cylSlot3 ]
         iconSlot = [ iconSlot0, iconSlot1, iconSlot2, iconSlot3 ]
 
-        // Create the toolbar
-        let tb = MyToolbar(identifier: "MyToolbar")
-        tb.controller = self
-        window?.toolbar = tb
+        // Create toolbar
+        window?.toolbar = MyToolbar(controller: self)
 
         // Create keyboard controller
         keyboard = KeyboardController(parent: self)
@@ -665,14 +662,14 @@ extension MyController {
 
     func setInfo(_ text: String?, _ text2: String? = nil) {
 
-        info = text
-        info2 = text2
+        infoText = text
+        infoText2 = text2
         refreshStatusBar()
     }
 
     func clearInfo() {
 
-        info = nil
-        info2 = nil
+        infoText = nil
+        infoText2 = nil
     }
 }

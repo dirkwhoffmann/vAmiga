@@ -435,11 +435,11 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func warpAction(_ sender: Any!) {
 
-        switch WarpMode(rawValue: config.warpMode) {
+        switch Warp(rawValue: config.warpMode) {
 
-        case .AUTO: config.warpMode = WarpMode.NEVER.rawValue
-        case .NEVER: config.warpMode = WarpMode.ALWAYS.rawValue
-        case .ALWAYS: config.warpMode = WarpMode.AUTO.rawValue
+        case .AUTO: config.warpMode = Warp.NEVER.rawValue
+        case .NEVER: config.warpMode = Warp.ALWAYS.rawValue
+        case .ALWAYS: config.warpMode = Warp.AUTO.rawValue
 
         default:
             fatalError()
@@ -465,7 +465,6 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func stickyKeyboardAction(_ sender: Any!) {
         
-        // Create keyboard if neccessary
         if virtualKeyboard == nil {
             virtualKeyboard = VirtualKeyboardController.make(parent: self)
         }

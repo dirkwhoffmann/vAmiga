@@ -30,7 +30,7 @@ class KeyboardController: NSObject {
     var leftAmiga   = false, rightAmiga   = false
 
     // Remembers the warp mode when caps lock is pressed
-    var oldWarpMode: WarpMode?
+    var oldWarpMode: Warp?
 
     // Mapping from Unicode scalars to keycodes (used for auto-typing)
     var symKeyMap: [UnicodeScalar: UInt16] = [:]
@@ -207,14 +207,14 @@ class KeyboardController: NSObject {
 
     func capsLockDown() {
 
-        oldWarpMode = WarpMode(rawValue: parent.config.warpMode)
-        parent.config.warpMode = WarpMode.ALWAYS.rawValue
+        oldWarpMode = Warp(rawValue: parent.config.warpMode)
+        parent.config.warpMode = Warp.ALWAYS.rawValue
     }
 
     func capsLockUp() {
 
         if let oldWarpMode = oldWarpMode {
-            if parent.config.warpMode == WarpMode.ALWAYS.rawValue {
+            if parent.config.warpMode == Warp.ALWAYS.rawValue {
                 parent.config.warpMode = oldWarpMode.rawValue
             }
         }

@@ -2153,6 +2153,13 @@ NSString *EventSlotName(EventSlot slot)
     return [self amiga]->setAutoInspectionMask(u64(mask));
 }
 
+- (NSString *)stateString
+{
+    std::stringstream ss;
+    [self amiga]->dump(Category::Trace, ss);
+    return @(ss.str().c_str());
+}
+
 - (MediaFileProxy *)takeSnapshot
 {
     try {
@@ -2194,13 +2201,6 @@ NSString *EventSlotName(EventSlot slot)
 {
     try { [self amiga]->saveWorkspace([url fileSystemRepresentation]); }
     catch (AppError &error) { [ex save:error]; }
-}
-
-- (NSString *)stateString
-{
-    std::stringstream ss;
-    [self amiga]->dump(Category::Trace, ss);
-    return @(ss.str().c_str());
 }
 
 - (BOOL)getMessage:(Message *)msg

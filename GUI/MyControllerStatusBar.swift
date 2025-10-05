@@ -10,16 +10,11 @@
 @MainActor
 extension MyController {
 
-    func cmdKeyIcon(_ state: Bool) -> NSImage? {
-
-        return NSImage(named: state ? "amigaKeyTemplate" : "cmdKeyTemplate")
-    }
-
     var hourglassIcon: NSImage? {
 
         guard let emu = emu else { return nil }
 
-        if WarpMode(rawValue: config.warpMode) == .AUTO {
+        if Warp(rawValue: config.warpMode) == .AUTO {
             return NSImage(named: emu.warping ? "hourglass3Template" : "hourglass1Template")
         } else {
             return NSImage(named: emu.warping ? "warpOnTemplate" : "warpOffTemplate")
@@ -30,11 +25,11 @@ extension MyController {
 
         guard let emu = emu else { return }
 
-        let running = emu.running
-        let tracking = emu.tracking
-        let cpuinfo = emu.cpu.info
-        let warp = emu.warping
-        let speedBoost = emu.get(.AMIGA_SPEED_BOOST)
+        let info = emu.info
+        let running = info.running
+        let tracking = info.tracking
+        let warping = info.warping
+        let boost = emu.get(.AMIGA_SPEED_BOOST)
         let width = renderer.parent.window?.frame.size.width ?? 0
 
         // Df0 - Df3
@@ -60,21 +55,19 @@ extension MyController {
         }
 
         // Track icon
-        trackIcon.toolTip = info
-        trackIcon.contentTintColor = info == nil ? nil : NSColor.warning
+        trackIcon.toolTip = infoText
+        trackIcon.contentTintColor = infoText == nil ? nil : NSColor.warning
         if let image = NSImage(systemSymbolName: "waveform.badge.magnifyingglass", accessibilityDescription: nil) {
             trackIcon.image = image
         }
  
-        // Remote server icon
+        // Icons
         serverIcon.image = emu.remoteManager.icon
-        
-        // Warp mode icon
         warpIcon.image = hourglassIcon
         
-        // Speed adjust
-        speedStepper.integerValue = speedBoost
-        speedStepper.toolTip = "\(speedBoost) %"
+        // Speed stepper
+        speedStepper.integerValue = boost
+        speedStepper.toolTip = "\(boost) %"
 
         // Visibility
         let items: [NSView: Bool] = [
@@ -94,10 +87,10 @@ extension MyController {
             cylSlot2: width > 500,
             cylSlot3: width > 600,
 
-            haltIcon: cpuinfo.halt,
+            haltIcon: jammed,
             trackIcon: tracking,
             serverIcon: true,
-            muteIcon: warp || muted,
+            muteIcon: warping || muted,
 
             warpIcon: running,
             activityType: running,
@@ -320,10 +313,16 @@ extension MyController {
     }
 
     @IBAction
+    func speedResetAction(_ sender: Any!) {
+
+        emu?.set(.AMIGA_SPEED_BOOST, value: 100)
+    }
+
+    @IBAction
     func infoAction(_ sender: Any!) {
-                
-        if let emu = emu, let info = info {
-                
+
+        if let emu = emu, let info = infoText {
+
             // Get some auxiliary debug information from the emulator
             let attributes: [NSAttributedString.Key: Any] = [
                 .font: NSFont.monospaced(ofSize: 11, weight: .semibold),
@@ -337,25 +336,18 @@ extension MyController {
             accessory.textStorage?.setAttributedString(text)
             accessory.drawsBackground = false
             accessory.isEditable = false
-            
+
             // Create an alert
             let alert = NSAlert()
             alert.messageText = info
-            alert.informativeText = info2 ?? ""
+            alert.informativeText = infoText2 ?? ""
             alert.alertStyle = .informational
             alert.icon = NSImage(systemSymbolName: "waveform.badge.magnifyingglass",
-                                      accessibilityDescription: nil)
+                                 accessibilityDescription: nil)
             alert.addButton(withTitle: "OK")
             alert.accessoryView = accessory
-  
+
             alert.runModal()
         }
     }
-    
-    @IBAction
-    func speedResetAction(_ sender: Any!) {
-
-        emu?.set(.AMIGA_SPEED_BOOST, value: 100)
-    }
-
 }

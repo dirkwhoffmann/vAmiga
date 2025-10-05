@@ -402,6 +402,7 @@ NSString *EventSlotName(EventSlot slot);
 @property (readonly) AmigaInfo info;
 @property (readonly) AmigaInfo cachedInfo;
 @property NSInteger autoInspectionMask;
+@property (readonly) NSString *stateString;
 
 - (MediaFileProxy *) takeSnapshot;
 - (void)loadSnapshot:(MediaFileProxy *)proxy exception:(ExceptionWrapper *)ex;
@@ -410,9 +411,6 @@ NSString *EventSlotName(EventSlot slot);
 
 - (void)loadWorkspace:(NSURL *)url exception:(ExceptionWrapper *)ex;
 - (void)saveWorkspace:(NSURL *)url exception:(ExceptionWrapper *)ex;
-
-
-@property (readonly) NSString *stateString;
 
 - (BOOL) getMessage:(Message *)msg;
 

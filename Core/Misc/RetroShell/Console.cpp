@@ -1086,7 +1086,6 @@ Console::initCommands(RSCommand &root)
             .func   = [this] (std::ostream &os, const Arguments &args, const std::vector<isize> &values) {
 
                 dump(os, amiga, Category::Trace);
-                // printState();
             }
         });
 

@@ -20,7 +20,7 @@ struct InputDevice {
 }
 
 /* An object of this class holds and manages an array of GamePad objects.
- * Up to five gamepads are managed. The first three gamepads are initialized
+ * Up to seven gamepads are managed. The first three gamepads are initialized
  * by default and represent a mouse and two keyboard emulated joysticks.
  * All remaining gamepads are added dynamically when HID devices are connected.
  */
@@ -263,9 +263,10 @@ class GamePadManager {
         }
     }
 
-    // DEPRECATED
     func refresh(popup: NSPopUpButton, hide: Bool = false) {
-        
+
+        refresh(menu: popup.menu!, hide: hide)
+        /*
         let slots = [
             InputDevice.mouse,
             InputDevice.keyset1,
@@ -284,6 +285,7 @@ class GamePadManager {
                 item.isHidden = isEmpty(slot: s) && hide
             }
         }
+        */
     }
 
     func refresh(menu: NSMenu, hide: Bool = false) {

@@ -25,19 +25,6 @@ import Cocoa
  *     A toolbar item with an attached pull-down menu.
  */
 
-/*
-extension NSImage {
-
-    @available(*, deprecated)
-    static func sf(_ name: String, size: CGFloat = 25, description: String? = nil) -> NSImage {
-
-        let config = NSImage.SymbolConfiguration(pointSize: size, weight: .light, scale: .small)
-        let img = NSImage(systemSymbolName: name, accessibilityDescription: description)!
-        return img.withSymbolConfiguration(config)!
-    }
-}
-*/
-
 class MyToolbarButton: NSButton {
 
     init(image: SFSymbol, target: Any?, action: Selector?) {

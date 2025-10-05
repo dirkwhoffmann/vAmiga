@@ -61,7 +61,7 @@ typealias SpriteInfo = vamiga.SpriteInfo
 typealias StateMachineInfo = vamiga.StateMachineInfo
 typealias UARTInfo = vamiga.UARTInfo
 typealias VideoFormat = vamiga.TV
-typealias WarpMode = vamiga.Warp
+typealias Warp = vamiga.Warp
 
 extension HIDEvent: CustomStringConvertible {
 

@@ -51,6 +51,12 @@ class MyToolbar: NSToolbar, NSToolbarDelegate {
         self.displayMode = .iconAndLabel
     }
 
+    convenience init(controller: MyController) {
+
+        self.init(identifier: "MyToolbar")
+        self.controller = controller
+    }
+    
     func toolbarAllowedItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {
 
         return [ .inspectors,
