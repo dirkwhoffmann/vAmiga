@@ -1607,13 +1607,6 @@ NSString *EventSlotName(EventSlot slot)
     return [self shell]->getInfo();
 }
 
-/*
--(NSInteger)cursorRel
-{
-    return [self shell]->cursorRel();
-}
-*/
-
 -(NSString *)getText
 {
     const char *str = [self shell]->text();

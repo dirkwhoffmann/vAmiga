@@ -178,7 +178,8 @@ class Console: Layer {
         default:
             
             if let c = event.characters?.utf8CString.first {
-                emu.retroShell.pressKey(c)              }
+                    emu.retroShell.pressKey(c)
+                }
         }
         
         isDirty = true

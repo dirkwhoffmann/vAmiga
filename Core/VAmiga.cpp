@@ -1682,6 +1682,7 @@ RemoteManagerAPI::getCachedInfo() const
 }
 
 
+//
 // RetroShellAPI
 //
 
