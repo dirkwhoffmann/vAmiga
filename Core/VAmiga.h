@@ -38,9 +38,10 @@ public:
 class AmigaAPI : public API {
 
     friend class VAmiga;
-    class Amiga *amiga = nullptr;
     
 public:
+
+    class Amiga *amiga = nullptr;
     
     /// @name Analyzing the emulator
     /// @{
@@ -130,9 +131,10 @@ public:
 class DmaDebuggerAPI : public API {
 
     friend class VAmiga;
-    class DmaDebugger *dmaDebugger = nullptr;
-
+    
 public:
+
+    class DmaDebugger *dmaDebugger = nullptr;
     
     /** @brief  Returns the component's current configuration.
      */
@@ -147,9 +149,10 @@ public:
 class LogicAnalyzerAPI : public API {
 
     friend class VAmiga;
-    class LogicAnalyzer *logicAnalyzer = nullptr;
-
+    
 public:
+
+    class LogicAnalyzer *logicAnalyzer = nullptr;
     
     /** @brief  Returns the component's current configuration.
      */
@@ -164,9 +167,10 @@ public:
 class BlitterAPI : public API {
 
     friend class VAmiga;
-    class Blitter *blitter = nullptr;
-
+    
 public:
+
+    class Blitter *blitter = nullptr;
     
     /** @brief  Returns the component's current configuration.
      */
@@ -181,9 +185,10 @@ public:
 class CopperAPI : public API {
 
     friend class VAmiga;
-    class Copper *copper = nullptr;
-
+    
 public:
+
+    class Copper *copper = nullptr;
 
     /** @brief  Returns the component's current state.
      */
@@ -218,9 +223,10 @@ public:
 class AgnusAPI : public API {
 
     friend class VAmiga;
-    class Agnus *agnus = nullptr;
-
+    
 public:
+
+    class Agnus *agnus = nullptr;
     
     CopperAPI copper;
     BlitterAPI blitter;
@@ -253,9 +259,10 @@ public:
 class CIAAPI : public API {
 
     friend class VAmiga;
-    class CIA *cia = nullptr;
-
+    
 public:
+
+    class CIA *cia = nullptr;
     
     /** @brief  Returns the component's current configuration.
      */
@@ -281,9 +288,10 @@ namespace moira { class Guards; class Debugger; }
 class GuardsAPI : public API {
 
     friend class VAmiga;
-    class GuardList *guards = nullptr;
-
+    
 public:
+
+    class GuardList *guards = nullptr;
     
     /** @brief  Returns the number of guards in the guard list.
      */
@@ -363,9 +371,10 @@ public:
 class CPUDebuggerAPI : public API {
 
     friend class VAmiga;
-    class CPU *cpu = nullptr;
-
+    
 public:
+
+    class CPU *cpu = nullptr;
 
     /** @brief  Returns the number of instructions in the record buffer.
      *  @note   The record buffer is only filled in track mode. To save
@@ -399,9 +408,10 @@ public:
 class CPUAPI : public API {
 
     friend class VAmiga;
-    class CPU *cpu = nullptr;
-
+    
 public:
+
+    class CPU *cpu = nullptr;
 
     CPUDebuggerAPI debugger;
     GuardsAPI breakpoints;
@@ -420,9 +430,10 @@ public:
 class DeniseAPI : public API {
 
     friend class VAmiga;
-    class Denise *denise = nullptr;
-
+    
 public:
+
+    class Denise *denise = nullptr;
     
     /** @brief  Returns the component's current configuration.
      */
@@ -442,9 +453,10 @@ public:
 class MemoryDebuggerAPI : public API {
 
     friend class VAmiga;
-    class Memory *mem = nullptr;
-
+    
 public:
+
+    class Memory *mem = nullptr;
     
     /// @name Debugging memory
     /// @{
@@ -470,9 +482,10 @@ public:
 class MemoryAPI : public API {
 
     friend class VAmiga;
-    class Memory *mem = nullptr;
-
+    
 public:
+
+    class Memory *mem = nullptr;
     
     MemoryDebuggerAPI debugger;
 
@@ -540,10 +553,11 @@ public:
 class AudioChannelAPI : public API {
 
     friend class VAmiga;
-    class Paula *paula = nullptr;
     isize channel = 0;
-
+    
 public:
+
+    class Paula *paula = nullptr;
     
     AudioChannelAPI(isize channel) : API(), channel(channel) { }
 
@@ -556,9 +570,10 @@ public:
 class DiskControllerAPI : public API {
 
     friend class VAmiga;
-    class DiskController *diskController = nullptr;
-
+    
 public:
+
+    class DiskController *diskController = nullptr;
     
     /** @brief  Returns the component's current configuration.
      */
@@ -573,9 +588,10 @@ public:
 class UARTAPI : public API {
 
     friend class VAmiga;
-    class UART *uart = nullptr;
-
+    
 public:
+
+    class UART *uart = nullptr;
     
     /** @brief  Returns the component's current state.
      */
@@ -586,9 +602,10 @@ public:
 class PaulaAPI : public API {
 
     friend class VAmiga;
-    class Paula *paula = nullptr;
-
+    
 public:
+
+    class Paula *paula = nullptr;
     
     AudioChannelAPI audioChannel0 = AudioChannelAPI(0);
     AudioChannelAPI audioChannel1 = AudioChannelAPI(1);
@@ -610,9 +627,10 @@ public:
 class RTCAPI : public API {
 
     friend class VAmiga;
-    class RTC *rtc = nullptr;
-
+    
 public:
+
+    class RTC *rtc = nullptr;
     
     /** @brief  Returns the component's current configuration.
      */
@@ -637,9 +655,10 @@ public:
 class FloppyDriveAPI : public API {
 
     friend class VAmiga;
-    class FloppyDrive *drive = nullptr;
-
+    
 public:
+
+    class FloppyDrive *drive = nullptr;
     
     /** @brief  Returns the component's current configuration.
      */
@@ -708,9 +727,10 @@ public:
 class HdControllerAPI : public API {
 
     friend class VAmiga;
-    class HdController *controller = nullptr;
-
+    
 public:
+
+    class HdController *controller = nullptr;
     
     /** @brief  Provides details about the controller
      */
@@ -729,9 +749,10 @@ public:
 class HardDriveAPI : public API {
 
     friend class VAmiga;
-    class HardDrive *drive = nullptr;
-
+    
 public:
+
+    class HardDrive *drive = nullptr;
     
     HdControllerAPI controller;
 
@@ -819,9 +840,10 @@ public:
 class JoystickAPI : public API {
 
     friend class VAmiga;
-    class Joystick *joystick = nullptr;
-
+    
 public:
+
+    class Joystick *joystick = nullptr;
     
     /** @brief  Returns the component's current configuration.
      */
@@ -845,9 +867,10 @@ public:
 class KeyboardAPI : public API {
 
     friend class VAmiga;
-    class Keyboard *keyboard = nullptr;
-
+    
 public:
+
+    class Keyboard *keyboard = nullptr;
     
     /** @brief  Returns the component's current configuration.
      */
@@ -900,9 +923,10 @@ public:
 class MouseAPI : public API {
 
     friend class VAmiga;
-    class Mouse *mouse = nullptr;
-
+    
 public:
+
+    class Mouse *mouse = nullptr;
     
     /** @brief  Returns the component's current configuration.
      */
@@ -968,9 +992,10 @@ public:
 class AudioPortAPI : public API {
 
     friend class VAmiga;
-    class AudioPort *port = nullptr;
-
+    
 public:
+
+    class AudioPort *port = nullptr;
     
     /** @brief  Returns the component's current configuration.
      */
@@ -1039,9 +1064,10 @@ public:
 class ControlPortAPI : public API {
 
     friend class VAmiga;
-    class ControlPort *controlPort = nullptr;
-
+    
 public:
+
+    class ControlPort *controlPort = nullptr;
     
     JoystickAPI joystick;
     MouseAPI mouse;
@@ -1060,9 +1086,10 @@ public:
 class SerialPortAPI : public API {
 
     friend class VAmiga;
-    class SerialPort *serialPort = nullptr;
-
+    
 public:
+
+    class SerialPort *serialPort = nullptr;
     
     /** @brief  Returns the component's current configuration.
      */
@@ -1085,9 +1112,10 @@ public:
 class VideoPortAPI : public API {
 
     friend class VAmiga;
-    class VideoPort *videoPort = nullptr;
-
+    
 public:
+
+    class VideoPort *videoPort = nullptr;
     
     /** @brief  Returns the component's current configuration.
      */
@@ -1144,9 +1172,10 @@ public:
 class MsgQueueAPI : public API {
 
     friend class VAmiga;
-    class MsgQueue *msgQueue = nullptr;
-
+    
 public:
+
+    class MsgQueue *msgQueue = nullptr;
 
     /** @brief  Locks the message queue
      */
@@ -1176,9 +1205,10 @@ public:
 class DebuggerAPI : public API {
 
     friend class VAmiga;
-    class Debugger *debugger = nullptr;
-
+    
 public:
+
+    class Debugger *debugger = nullptr;
     
     /** @brief  Returns a string representations for a portion of memory.
      */
@@ -1222,9 +1252,10 @@ public:
 class DefaultsAPI : public API {
 
     friend class VAmiga;
-    class Defaults *defaults = nullptr;
-
+    
 public:
+
+    class Defaults *defaults = nullptr;
     
     DefaultsAPI(Defaults *defaults) : defaults(defaults) { }
 
@@ -1427,9 +1458,10 @@ public:
 class RetroShellAPI : public API {
 
     friend class VAmiga;
-    class RetroShell *retroShell = nullptr;
-
+    
 public:
+
+    class RetroShell *retroShell = nullptr;
     
     /// @name Querying the console
     /// @{
@@ -1521,9 +1553,10 @@ public:
 class RemoteManagerAPI : public API {
 
     friend class VAmiga;
-    class RemoteManager *remoteManager = nullptr;
-
+    
 public:
+
+    class RemoteManager *remoteManager = nullptr;
     
     /// @name Analyzing the emulator
     /// @{
